@@ -20,6 +20,7 @@
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <boost/property_tree/json_parser.hpp>
@@ -1806,6 +1807,45 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf76636_2)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTextTable->getRows()->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), xTextTable->getColumns()->getCount());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf143574)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf143574.odt");
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xGroup, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.GroupShape"),
+                         xShapeDescriptor->getShapeType());
+
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xModel);
+    uno::Reference<frame::XController> xController = xModel->getCurrentController();
+    CPPUNIT_ASSERT(xController);
+    uno::Reference<view::XSelectionSupplier> xSelection(xController, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xSelection);
+
+    CPPUNIT_ASSERT(xSelection->select(uno::Any(getShape(1))));
+
+    dispatchCommand(mxComponent, ".uno:EnterGroup", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Make sure that one shape is selected.
+    CPPUNIT_ASSERT(xSelection->select(xGroup->getByIndex(0)));
+    Scheduler::ProcessEventsToIdle();
+
+    // At this point Writer crashed here before the fix.
+    dispatchCommand(mxComponent, ".uno:AddTextBox", {});
+    Scheduler::ProcessEventsToIdle();
+
+    uno::Reference<beans::XPropertySet> xShapeProps(xGroup->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(true, xShapeProps->getPropertyValue("TextBox").get<bool>());
+
+    dispatchCommand(mxComponent, ".uno:RemoveTextBox", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(false, xShapeProps->getPropertyValue("TextBox").get<bool>());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf140828)
