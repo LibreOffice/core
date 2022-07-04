@@ -16,6 +16,24 @@
       "message": "under testing after that and approval of Jenkins it can be submitted",
       "revId": "48cdd15bd3108b34099c858274edf8fa2d2291f3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "512f212e_f19b860d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-07-04T15:46:45Z",
+      "side": 1,
+      "message": "original patch were there: https://gerrit.libreoffice.org/c/core/+/125808",
+      "parentUuid": "06430877_c19ee645",
+      "revId": "48cdd15bd3108b34099c858274edf8fa2d2291f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
