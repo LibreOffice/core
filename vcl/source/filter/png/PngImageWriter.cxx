@@ -110,8 +110,9 @@ static bool pngWrite(SvStream& rStream, BitmapEx& rBitmapEx, int nCompressionLev
             case ScanlineFormat::N8BitPal:
             {
                 if (!aBitmap.HasGreyPalette8Bit())
-                    return false;
-                colorType = PNG_COLOR_TYPE_GRAY;
+                    colorType = PNG_COLOR_TYPE_PALETTE;
+                else
+                    colorType = PNG_COLOR_TYPE_GRAY;
                 bitDepth = 8;
                 break;
             }
