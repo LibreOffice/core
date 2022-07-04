@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06430877_c19ee645",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-07-04T15:43:47Z",
+      "side": 1,
+      "message": "under testing after that and approval of Jenkins it can be submitted",
+      "revId": "48cdd15bd3108b34099c858274edf8fa2d2291f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
