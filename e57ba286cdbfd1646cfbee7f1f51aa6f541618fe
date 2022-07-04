@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5dfaf98_a23ad55d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-07-04T21:54:26Z",
+      "side": 1,
+      "message": "Btw I did export files for both this and the 1 bit test and they are correct. They are paletted (checked with online png metadata tool) with the correct amount of palette entries and they look as expected.",
+      "revId": "e57ba286cdbfd1646cfbee7f1f51aa6f541618fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
