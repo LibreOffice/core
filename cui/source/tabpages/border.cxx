@@ -806,7 +806,11 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
             m_xLbLineStyle->SelectEntry( nStyle );
         }
         else
+        {
+            // tdf#136054 - reset line width default to SvxBorderLineWidth::Hairline
+            SetLineWidth(m_aLineWidths[0]);
             m_xLbLineStyle->SelectEntry(SvxBorderLineStyle::SOLID);
+        }
 
         // Do all visible lines show the same line color?
         Color aColor;
