@@ -76,16 +76,130 @@
                   <object class="GtkGrid" id="grid1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="row_spacing">5</property>
-                    <property name="column_spacing">12</property>
                     <child>
-                      <object class="GtkLabel" id="base">
+                      <object class="GtkGrid" id="grid2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes" context="langtoolconfigpage|base">Base URL:</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">baseurl</property>
+                        <property name="row_spacing">5</property>
+                        <property name="column_spacing">12</property>
+                        <child>
+                          <object class="GtkLabel" id="base">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes" context="langtoolconfigpage|base">Base URL:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">baseurl</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="baseurl">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="hexpand">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="usernamelbl">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes" context="langtoolconfigpage|usernamelbl">User name:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">username</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="apikeylbl">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes" context="langtoolconfigpage|apikeylbl">API key:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">apikey</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">4</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="username">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="apikey">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">4</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="urldesc">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes" context="langtoolconfigpage|urldesc">Please use the base URL e.g. without "/check" at the end.</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="usernamedesc">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes" context="langtoolconfigpage|usernamedesc">Your LanguageTool account's username for premium usage.</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">3</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="apikeydesc">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes" context="langtoolconfigpage|apikeydesc">Your LanguageTool account's api key for premium usage.</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">5</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -93,120 +207,19 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry" id="baseurl">
+                      <object class="GtkCheckButton" id="verifyssl">
+                        <property name="label" translatable="yes" context="langtoolconfigpage|verifyssl">Disable SSL Certificate Verification</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="truncate-multiline">True</property>
-                        <property name="hexpand">True</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="usernamelbl">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="receives_default">False</property>
                         <property name="halign">start</property>
-                        <property name="label" translatable="yes" context="langtoolconfigpage|usernamelbl">Username:</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">username</property>
+                        <property name="margin_top">5</property>
+                        <property name="draw_indicator">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
-                        <property name="top_attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="apikeylbl">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes" context="langtoolconfigpage|apikeylbl">API key:</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">apikey</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">4</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="username">
-                        <property name="visible">True</property>
-                        <property name="truncate-multiline">True</property>
-                        <property name="can_focus">True</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="apikey">
-                        <property name="visible">True</property>
-                        <property name="truncate-multiline">True</property>
-                        <property name="can_focus">True</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">4</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="urldesc">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes" context="langtoolconfigpage|urldesc">Please use the base URL, i.e., without “/check”, at the end.</property>
-                        <attributes>
-                          <attribute name="scale" value="0.9"/>
-                        </attributes>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
                         <property name="top_attach">1</property>
                       </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="usernamedesc">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes" context="langtoolconfigpage|usernamedesc">Your LanguageTool account’s username for premium usage.</property>
-                        <attributes>
-                          <attribute name="scale" value="0.9"/>
-                        </attributes>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="apikeydesc">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes" context="langtoolconfigpage|apikeydesc">Your LanguageTool account’s API key for premium usage.</property>
-                        <attributes>
-                          <attribute name="scale" value="0.9"/>
-                        </attributes>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">5</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
                     </child>
                   </object>
                 </child>

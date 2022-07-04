@@ -32,15 +32,14 @@ struct LanguageToolOptions_Impl
     OUString sUsername;
     OUString sApiKey;
     bool bEnabled;
+    bool bSSLCertVerificatrionEnabled;
 };
 
 const Sequence<OUString>& SvxLanguageToolOptions::GetPropertyNames()
 {
     static Sequence<OUString> const aNames{
-        "LanguageTool/BaseURL",
-        "LanguageTool/Username",
-        "LanguageTool/ApiKey",
-        "LanguageTool/IsEnabled",
+        "LanguageTool/BaseURL",   "LanguageTool/Username",      "LanguageTool/ApiKey",
+        "LanguageTool/IsEnabled", "LanguageTool/SSLCertVerify",
     };
     return aNames;
 }
@@ -74,6 +73,17 @@ void SvxLanguageToolOptions::setApiKey(const OUString& rVal)
 }
 
 bool SvxLanguageToolOptions::getEnabled() const { return pImpl->bEnabled; }
+
+bool SvxLanguageToolOptions::getSSLVerification() const
+{
+    return pImpl->bSSLCertVerificatrionEnabled;
+}
+
+void SvxLanguageToolOptions::setSSLVerification(bool bEnabled)
+{
+    pImpl->bSSLCertVerificatrionEnabled = bEnabled;
+    SetModified();
+}
 
 void SvxLanguageToolOptions::setEnabled(bool bEnabled)
 {
@@ -129,6 +139,9 @@ void SvxLanguageToolOptions::Load(const css::uno::Sequence<OUString>& aNames)
             case 3:
                 pValues[nProp] >>= pImpl->bEnabled;
                 break;
+            case 4:
+                pValues[nProp] >>= pImpl->bSSLCertVerificatrionEnabled;
+                break;
             default:
                 break;
         }
@@ -155,6 +168,9 @@ void SvxLanguageToolOptions::ImplCommit()
                 break;
             case 3:
                 pValues[nProp] <<= pImpl->bEnabled;
+                break;
+            case 4:
+                pValues[nProp] <<= pImpl->bSSLCertVerificatrionEnabled;
                 break;
             default:
                 break;

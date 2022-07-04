@@ -315,6 +315,10 @@ certain functionality.
 @li @c jfw.level1
 @li @c jfw.level2
 
+@section LanguageTool
+
+@li @c languagetool
+
 @section LibreOfficeKit
 
 @li @c lok

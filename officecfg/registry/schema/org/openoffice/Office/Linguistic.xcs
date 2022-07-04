@@ -422,6 +422,13 @@
             </info>
             <value>false</value>
           </prop>
+          <prop oor:name="SSLCertVerify" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Enable or disable SSL certificate verification for HTTPS requests</desc>
+              <label>API SSL verification control</label>
+            </info>
+            <value>true</value>
+          </prop>
       </group>
     </group>
     <group oor:name="Translation">
