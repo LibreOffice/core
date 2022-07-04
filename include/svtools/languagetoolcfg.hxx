@@ -51,6 +51,9 @@ public:
     bool getEnabled() const;
     void setEnabled(bool enabled);
 
+    bool getSSLVerification() const;
+    void setSSLVerification(bool enabled);
+
 private:
     std::unique_ptr<LanguageToolOptions_Impl> pImpl;
     void Load(const css::uno::Sequence<OUString>& rPropertyNames);
