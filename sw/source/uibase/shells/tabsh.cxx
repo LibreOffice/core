@@ -18,6 +18,7 @@
  */
 
 #include <hintids.hxx>
+#include <svl/imageitm.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/stritem.hxx>
@@ -1356,6 +1357,15 @@ void SwTableShell::GetState(SfxItemSet &rSet)
                     if ( SwFrameSize::Variable == pSz->GetHeightSizeType() )
                         rSet.DisableItem( nSlot );
                 }
+                break;
+            }
+            case FN_TABLE_INSERT_COL_BEFORE:
+            case FN_TABLE_INSERT_COL_AFTER:
+            {
+                SfxImageItem aImageItem(nSlot);
+                if (pFormat->GetFrameDir().GetValue() == SvxFrameDirection::Horizontal_RL_TB)
+                    aImageItem.SetMirrored(true);
+                rSet.Put(aImageItem);
                 break;
             }
             case FN_TABLE_INSERT_ROW:

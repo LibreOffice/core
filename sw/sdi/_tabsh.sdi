@@ -141,7 +141,7 @@ interface BaseTextTable
     FN_TABLE_INSERT_COL_BEFORE // status(final|play)
     [
         ExecMethod = Execute ;
-        StateMethod = NoState ;
+        StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
@@ -156,7 +156,7 @@ interface BaseTextTable
     FN_TABLE_INSERT_COL_AFTER // status(final|play)
     [
         ExecMethod = Execute ;
-        StateMethod = NoState ;
+        StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
