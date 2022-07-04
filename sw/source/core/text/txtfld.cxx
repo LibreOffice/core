@@ -406,7 +406,12 @@ SwLinePortion *SwTextFormatter::NewExtraPortion( SwTextFormatInfo &rInf )
     }
     if( !pRet )
     {
-        pRet = new SwFieldPortion( "" );
+        auto pFieldPortion = new SwFieldPortion( "" );
+        if (pHint->Which() == RES_TXTATR_CONTENTCONTROL)
+        {
+            pFieldPortion->SetContentControl(true);
+        }
+        pRet = pFieldPortion;
         rInf.SetLen(TextFrameIndex(1));
     }
     return pRet;
