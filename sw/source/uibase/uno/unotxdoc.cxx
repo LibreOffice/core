@@ -3428,7 +3428,7 @@ void SwXTextDocument::executeContentControlEvent(const StringMap& rArguments)
 
         // The current placeholder is selected, so this will replace, not insert.
         SfxStringItem aItem(SID_INSERT_GRAPHIC, it->second);
-        pView->GetViewFrame()->GetDispatcher()->ExecuteList(SID_INSERT_GRAPHIC,
+        pView->GetViewFrame()->GetDispatcher()->ExecuteList(SID_CHANGE_PICTURE,
                                                             SfxCallMode::SYNCHRON, { &aItem });
     }
     else if (it->second == "date")
