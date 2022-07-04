@@ -135,7 +135,7 @@ public:
     static FormulaGroupInterpreter *getStatic();
 #if HAVE_FEATURE_OPENCL
     static void fillOpenCLInfo(std::vector<OpenCLPlatformInfo>& rPlatforms);
-    static bool switchOpenCLDevice(const OUString& rDeviceId, bool bAutoSelect, bool bForceEvaluation = false);
+    static bool switchOpenCLDevice(std::u16string_view rDeviceId, bool bAutoSelect, bool bForceEvaluation = false);
     // This is intended to be called from opencl-test.cxx only
     static void enableOpenCL_UnitTestsOnly();
     static void disableOpenCL_UnitTestsOnly();

@@ -760,14 +760,12 @@ bool canUseOpenCL()
     return !getenv("SAL_DISABLE_OPENCL") && officecfg::Office::Common::Misc::UseOpenCL::get();
 }
 
-bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEvaluation, OUString& rOutSelectedDeviceVersionIDString)
+bool switchOpenCLDevice(std::u16string_view aDevice, bool bAutoSelect, bool bForceEvaluation, OUString& rOutSelectedDeviceVersionIDString)
 {
     if (!canUseOpenCL() || fillOpenCLInfo().empty())
         return false;
 
-    cl_device_id pDeviceId = nullptr;
-    if(pDevice)
-        pDeviceId = findDeviceIdByDeviceString(*pDevice, fillOpenCLInfo());
+    cl_device_id pDeviceId = findDeviceIdByDeviceString(aDevice, fillOpenCLInfo());
 
     if(!pDeviceId || bAutoSelect)
     {

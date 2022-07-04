@@ -3347,7 +3347,7 @@ void ScModelObj::enableOpenCL(sal_Bool bEnable)
     ScInterpreter::SetGlobalConfig(aConfig);
 
 #if HAVE_FEATURE_OPENCL
-    sc::FormulaGroupInterpreter::switchOpenCLDevice(OUString(), true);
+    sc::FormulaGroupInterpreter::switchOpenCLDevice(u"", true);
 #endif
 
     ScDocument* pDoc = GetDocument();
@@ -3366,7 +3366,7 @@ void ScModelObj::enableAutomaticDeviceSelection(sal_Bool bForce)
 #if !HAVE_FEATURE_OPENCL
     (void) bForce;
 #else
-    sc::FormulaGroupInterpreter::switchOpenCLDevice(OUString(), true, bForce);
+    sc::FormulaGroupInterpreter::switchOpenCLDevice(u"", true, bForce);
 #endif
 }
 
