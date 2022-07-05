@@ -1365,6 +1365,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTrackChangesEmptyParagraphsInADeletion)
                     "/w:document/w:body/w:p[" + OString::number(i) + "]/w:pPr/w:rPr/w:del");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf149708)
+{
+    loadAndSave("tdf149708.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:rPr/w:ins");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf70234)
 {
     loadAndSave("tdf70234.docx");
