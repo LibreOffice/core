@@ -42,7 +42,7 @@ ContextHandlerRef RichStringContext::onCreateContext( sal_Int32 nElement, const 
                 mxPhonetic = mxString->importPhoneticRun( rAttribs );
                 return this;
             case XLS_TOKEN( phoneticPr ):
-                mxString->importPhoneticPr( rAttribs );
+                mxString->importPhoneticPr( rAttribs, *this );
             break;
         }
     }

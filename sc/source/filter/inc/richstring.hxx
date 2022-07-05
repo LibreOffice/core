@@ -144,10 +144,10 @@ private:
 };
 
 /** Contains text data and positioning information for a phonetic text portion. */
-class RichStringPhonetic : public WorkbookHelper
+class RichStringPhonetic
 {
 public:
-    explicit            RichStringPhonetic( const WorkbookHelper& rHelper );
+    RichStringPhonetic();
 
     /** Sets text data for this phonetic portion. */
     void                setText( const OUString& rText );
@@ -203,10 +203,9 @@ private:
 };
 
 /** Contains string data and a list of formatting runs for a rich formatted string. */
-class RichString : public WorkbookHelper
+class RichString
 {
 public:
-    explicit            RichString( const WorkbookHelper& rHelper );
 
     /** Appends and returns an index of a portion object for a plain string (t element). */
     sal_Int32 importText();
@@ -215,13 +214,13 @@ public:
     /** Appends and returns a phonetic text object for a new phonetic run (rPh element). */
     RichStringPhoneticRef importPhoneticRun( const AttributeList& rAttribs );
     /** Imports phonetic settings from the rPhoneticPr element. */
-    void                importPhoneticPr( const AttributeList& rAttribs );
+    void                importPhoneticPr( const AttributeList& rAttribs, const WorkbookHelper& rHelper );
 
     /** Imports a Unicode rich-string from the passed record stream. */
-    void                importString( SequenceInputStream& rStrm, bool bRich );
+    void                importString( SequenceInputStream& rStrm, bool bRich, const WorkbookHelper& rHelper );
 
     /** Final processing after import of all strings. */
-    void                finalizeImport();
+    void                finalizeImport(const WorkbookHelper& rHelper);
 
     /** Tries to extract a plain string from this object. Returns the string,
         if there is only one unformatted portion. */
@@ -252,7 +251,7 @@ private:
     typedef RefVector< RichStringPhonetic > PhoneticVector;
 
     std::vector<RichStringPortion>  maTextPortions; /// String portions with font data.
-    PhoneticSettings    maPhonSettings; /// Phonetic settings for this string.
+    std::unique_ptr<PhoneticSettings> mxPhonSettings; /// Phonetic settings for this string.
     PhoneticVector      maPhonPortions; /// Phonetic text portions.
 };
 
