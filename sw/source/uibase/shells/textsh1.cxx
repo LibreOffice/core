@@ -78,6 +78,8 @@
 #include <editeng/acorrcfg.hxx>
 #include <swabstdlg.hxx>
 #include <sfx2/sfxdlg.hxx>
+#include <com/sun/star/text/XTextContent.hpp>
+#include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
@@ -103,6 +105,17 @@
 #include <bookmark.hxx>
 #include <linguistic/misc.hxx>
 #include <authfld.hxx>
+#include <unoparagraph.hxx>
+#include <ndtxt.hxx>
+#include <shellio.hxx>
+#include <curl/curl.h>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
+#include <translatelangselect.hxx>
+#include <swwait.hxx>
+#include <svtools/deeplcfg.hxx>
+#include <vcl/htmltransferable.hxx>
+
 
 using namespace ::com::sun::star;
 using namespace com::sun::star::beans;
@@ -1501,6 +1514,167 @@ void SwTextShell::Execute(SfxRequest &rReq)
             aReq.AppendItem( SfxBoolItem( SID_FM_CTL_PROPERTIES, true ) );
             rWrtSh.GetView().GetFormShell()->Execute( aReq );
         }
+    }
+    break;
+    case SID_FM_TRANSLATE:
+    {
+        // TODO
+        // move htmltransferable to sw/
+        SvxDeeplOptions& rDeeplOptions = SvxDeeplOptions::Get();
+        if (rDeeplOptions.getAPIUrl().isEmpty() || rDeeplOptions.getAuthKey().isEmpty())
+        {
+            SAL_WARN("deepl", "API options are not set");
+            break;
+        }
+        OString aAPIUrl = OUStringToOString(OUString(rDeeplOptions.getAPIUrl() + "?tag_handling=html"), RTL_TEXTENCODING_UTF8).trim();
+        OString aAuthKey = OUStringToOString(rDeeplOptions.getAuthKey(), RTL_TEXTENCODING_UTF8).trim();
+        SwPaM *pPaM = nullptr;
+        if (rWrtSh.HasSelection())
+        {
+            pPaM = rWrtSh.GetCursor();
+        }
+        auto replacePara = [&rWrtSh, aAuthKey, aAPIUrl](const OString& res, const OString& targetLang, SwPaM *pCursor, bool isSelection = false) {
+            // curl deepl
+            std::unique_ptr<CURL, std::function<void(CURL*)>> curl(curl_easy_init(),
+                                                           [](CURL* p) { curl_easy_cleanup(p); });
+            curl_easy_setopt(curl.get(), CURLOPT_URL, aAPIUrl.getStr());
+            curl_easy_setopt(curl.get(), CURLOPT_FAILONERROR, 1L);
+            std::string response_body;
+            curl_easy_setopt(curl.get(), CURLOPT_WRITEFUNCTION, +[](void *buffer, size_t size, size_t nmemb, void *userp) -> size_t
+            {
+                if (!userp)
+                    return 0;
+                std::string* response = static_cast<std::string*>(userp);
+                size_t real_size = size * nmemb;
+                response->append(static_cast<char*>(buffer), real_size);
+                return real_size;
+            });
+            curl_easy_setopt(curl.get(), CURLOPT_WRITEDATA, static_cast<void*>(&response_body));
+            OString aPostData("auth_key=" + aAuthKey + "&target_lang=" + targetLang + "&text=" + OString(curl_easy_escape(curl.get(), res.getStr(), res.getLength())));
+            curl_easy_setopt(curl.get(), CURLOPT_POSTFIELDS, aPostData.getStr());
+            CURLcode cc = curl_easy_perform(curl.get());
+            if (cc != CURLE_OK)
+            {
+                SAL_WARN("deepl", "CURL perform returned with error: " << static_cast<sal_Int32>(cc));
+                return;
+            }
+            tools::Long nStatusCode;
+            curl_easy_getinfo(curl.get(), CURLINFO_RESPONSE_CODE, &nStatusCode);
+            if (nStatusCode != 200)
+            {
+                SAL_WARN("deepl", "CURL request returned with status code: " << nStatusCode);
+                return;
+            }
+            // parse the response
+            boost::property_tree::ptree root;
+            std::stringstream aStream(response_body.data());
+            boost::property_tree::read_json(aStream, root);
+            boost::property_tree::ptree& translations = root.get_child("translations");
+            size_t size = translations.size();
+            if (size <= 0)
+            {
+                SAL_WARN("deepl", "API did not return any translations");
+            }
+            // take the first one
+            const boost::property_tree::ptree& translation = translations.begin()->second;
+            const std::string text = translation.get<std::string>("text");
+            OString translatedData(text);
+            rtl::Reference<vcl::unohelper::HtmlTransferable> pHtmlTransferable = new vcl::unohelper::HtmlTransferable( translatedData );
+            if ( pHtmlTransferable.is() )
+            {
+                TransferableDataHelper aDataHelper( pHtmlTransferable );
+                if( aDataHelper.GetXTransferable().is() && SwTransferable::IsPasteSpecial( rWrtSh, aDataHelper ) )
+                {
+                    if (isSelection != true)
+                    {
+                        rWrtSh.SetSelection(*pCursor);
+                    }
+                    SwTransferable::Paste(rWrtSh, aDataHelper);
+                    rWrtSh.KillSelection(nullptr, false);
+                }
+            }
+        };
+        auto exportAndReplace = [&rWrtSh, replacePara] (const OString& targetLang, SwPaM *pCursor)
+        {
+            // freeze everything
+            SwWait aWait( *rWrtSh.GetView().GetDocShell(), true );
+            OString aResult;
+            auto const& pNodes = rWrtSh.GetNodes();
+            WriterRef xWrt;
+            GetHTMLWriter( OUString("NoLineLimit,SkipHeaderFooter"), OUString(), xWrt );
+            SwNode* pNode = nullptr;
+            if (pCursor != nullptr)
+            {
+                SvMemoryStream aMemoryStream;
+                SwWriter aWriter(aMemoryStream, *pCursor);
+                ErrCode nError = aWriter.Write(xWrt);
+                if (nError.IsError())
+                {
+                    SAL_WARN("deepl", "failed to export selection to HTML");
+                    return;
+                }
+                aResult = OString(static_cast<const char*>(aMemoryStream.GetData()), aMemoryStream.GetSize());
+                replacePara(aResult, targetLang, pCursor, true);
+                return;
+            }
+            for (SwNodeOffset n(0); ; ++n)
+            {
+                if (n >= rWrtSh.GetNodes().Count())
+                    break;
+
+                if (!pNodes[n])
+                    break;
+
+                pNode = pNodes[n];
+                if (pNode->IsTextNode())
+                {
+                    if (pNode->GetTextNode()->GetText() == "")
+                        continue;
+                    auto cursor = Writer::NewUnoCursor(*rWrtSh.GetDoc(), pNode->GetIndex(), pNode->GetIndex());
+                    SvMemoryStream aMemoryStream;
+                    SwWriter aWriter(aMemoryStream, *cursor);
+                    ErrCode nError = aWriter.Write(xWrt);
+                    if (nError.IsError())
+                    {
+                        SAL_WARN("deepl", "failed to export the paragraph to HTML");
+                        continue;
+                    }
+                    aResult = OString(static_cast<const char*>(aMemoryStream.GetData()), aMemoryStream.GetSize());
+                    // replace <p> with <scan> to avoid newlines on paste, hacky but no other option
+                    aResult = aResult.replaceAll("<p", "<span");
+                    aResult = aResult.replaceAll("</p>", "</span>");
+                    replacePara(aResult, targetLang, cursor.get());
+                }
+            }
+        };
+
+        const SfxPoolItem* pTargetLangStringItem = nullptr;
+        if (pArgs && SfxItemState::SET == pArgs->GetItemState(SID_ATTR_TARGETLANG_STR, false, &pTargetLangStringItem))
+        {
+            OString targetLang = OUStringToOString(static_cast<const SfxStringItem*>(pTargetLangStringItem)->GetValue(), RTL_TEXTENCODING_UTF8);
+            exportAndReplace(targetLang, pPaM);
+        }
+        else
+        {
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            std::shared_ptr<AbstractSwTranslateLangSelectDlg> pAbstractDialog(pFact->CreateSwTranslateLangSelectDlg(GetView().GetFrameWeld()));
+            std::shared_ptr<weld::DialogController> pDialogController(pAbstractDialog->getDialogController());
+            weld::DialogController::runAsync(pDialogController, [exportAndReplace, pAbstractDialog, pPaM] (sal_Int32 nResult)
+            {
+                if (nResult != RET_OK)
+                {
+                    return;
+                }
+                auto languageItem = pAbstractDialog->GetSelectedLanguage();
+                if (!languageItem.has_value())
+                {
+                    return;
+                }
+                const OString targetLang = languageItem->getLanguage();
+                exportAndReplace(targetLang, pPaM);
+            });
+        }
+
     }
     break;
     case SID_SPELLCHECK_IGNORE:

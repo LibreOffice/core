@@ -446,6 +446,7 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:PageDialog"/>
       <menu:menuitem menu:id=".uno:TitlePageDialog" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:Translate" menu:style="text"/>
       <menu:menuitem menu:id=".uno:FormatAllNotes" menu:style="text"/>
       <menu:menuitem menu:id=".uno:RubyDialog" menu:style="text"/>
       <menu:menuitem menu:id=".uno:FormatColumns" menu:style="text"/>

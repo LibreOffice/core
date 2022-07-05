@@ -570,7 +570,7 @@ class SdrAngleItem;
 #define SID_FM_FILECONTROL                              ( SID_SVX_START + 605 )
 //( SID_SVX_START + 606 ) is used by SID_DRAWTBX_REDACTED_EXPORT
 #define SID_FM_NAVIGATIONBAR                            ( SID_SVX_START + 607 )
-//FREE
+#define SID_FM_TRANSLATE                                ( SID_SVX_START + 608 )
 //FREE
 #define SID_FM_DELETEROWS                               ( SID_SVX_START + 610 )
 //FREE

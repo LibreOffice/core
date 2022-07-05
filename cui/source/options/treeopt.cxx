@@ -64,6 +64,7 @@
 #include <treeopt.hxx>
 #include "optbasic.hxx"
 #include "optlanguagetool.hxx"
+#include "optdeepl.hxx"
 
 #include <com/sun/star/awt/XContainerWindowEventHandler.hpp>
 #include <com/sun/star/awt/ContainerWindowProvider.hpp>
@@ -299,6 +300,7 @@ static std::unique_ptr<SfxTabPage> CreateGeneralTabPage(sal_uInt16 nId, weld::Co
         case RID_SVXPAGE_ACCESSIBILITYCONFIG:       fnCreate = &SvxAccessibilityOptionsTabPage::Create; break;
         case RID_SVXPAGE_OPTIONS_CTL:               fnCreate = &SvxCTLOptionsPage::Create ; break;
         case RID_SVXPAGE_LANGTOOL_OPTIONS:          fnCreate = &OptLanguageToolTabPage::Create ; break;
+        case RID_SVXPAGE_DEEPL_OPTIONS:             fnCreate = &OptDeeplTabPage::Create ; break;
         case RID_SVXPAGE_OPTIONS_JAVA:              fnCreate = &SvxJavaOptionsPage::Create ; break;
 #if HAVE_FEATURE_OPENCL
         case RID_SVXPAGE_OPENCL:                    fnCreate = &SvxOpenCLTabPage::Create ; break;

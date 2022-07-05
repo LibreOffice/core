@@ -128,6 +128,7 @@
 #include <svtools/ctrltool.hxx>
 #include <svtools/langtab.hxx>
 #include <svtools/languagetoolcfg.hxx>
+#include <svtools/deeplcfg.hxx>
 #include <vcl/fontcharmap.hxx>
 #include <vcl/graphicfilter.hxx>
 #ifdef IOS
@@ -6597,6 +6598,28 @@ void setLanguageToolConfig()
     }
 }
 
+void setDeeplConfig()
+{
+    const char* pAPIUrlString = ::getenv("DEEPL_API_URL");
+    const char* pAuthKeyString = ::getenv("DEEPL_AUTH_KEY");
+    if (pAPIUrlString && pAuthKeyString)
+    {
+        OUString aAPIUrl = OStringToOUString(pAPIUrlString, RTL_TEXTENCODING_UTF8);
+        OUString aAuthKey = OStringToOUString(pAuthKeyString, RTL_TEXTENCODING_UTF8);
+        try
+        {
+            SvxDeeplOptions& rDeeplOptions = SvxDeeplOptions::Get();
+            rDeeplOptions.setAPIUrl(aAPIUrl);
+            rDeeplOptions.setAuthKey(aAuthKey);
+        }
+        catch(uno::Exception const& rException)
+        {
+            SAL_WARN("lok", "Failed to set Deepl API settings: " << rException.Message);
+        }
+    }
+}
+
+
 }
 
 static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char* pUserProfileUrl)
@@ -6912,6 +6935,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
 
     setCertificateDir();
     setLanguageToolConfig();
+    setDeeplConfig();
 
     if (bNotebookbar)
     {

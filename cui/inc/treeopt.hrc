@@ -55,7 +55,8 @@ const std::pair<TranslateId, sal_uInt16> SID_LANGUAGE_OPTIONS_RES[] =
     { NC_("SID_LANGUAGE_OPTIONS_RES", "Searching in Japanese"),  RID_SVXPAGE_JSEARCH_OPTIONS },
     { NC_("SID_LANGUAGE_OPTIONS_RES", "Asian Layout"),  RID_SVXPAGE_ASIAN_LAYOUT },
     { NC_("SID_LANGUAGE_OPTIONS_RES", "Complex Text Layout"),  RID_SVXPAGE_OPTIONS_CTL },
-    { NC_("SID_LANGUAGE_OPTIONS_RES", "LanguageTool Server Settings"),  RID_SVXPAGE_LANGTOOL_OPTIONS }
+    { NC_("SID_LANGUAGE_OPTIONS_RES", "LanguageTool Server Settings"),  RID_SVXPAGE_LANGTOOL_OPTIONS },
+    { NC_("SID_LANGUAGE_OPTIONS_RES", "DeepL Server Settings"),  RID_SVXPAGE_DEEPL_OPTIONS }
 };
 
 const std::pair<TranslateId, sal_uInt16> SID_INET_DLG_RES[] =

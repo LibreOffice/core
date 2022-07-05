@@ -150,6 +150,7 @@ $(eval $(call gb_Library_add_exception_objects,swui,\
     sw/source/ui/misc/pgfnote \
     sw/source/ui/misc/pggrid \
     sw/source/ui/misc/srtdlg \
+    sw/source/ui/misc/translatelangselect \
     sw/source/ui/misc/swmodalredlineacceptdlg \
     sw/source/ui/misc/titlepage \
     sw/source/ui/table/colwd \

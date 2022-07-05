@@ -375,6 +375,18 @@ public:
     virtual sal_uInt16          GetRestartPage() const = 0;
 };
 
+class SwLanguageListItem;
+
+class AbstractSwTranslateLangSelectDlg
+{
+protected:
+    virtual ~AbstractSwTranslateLangSelectDlg() = default;
+public:
+    virtual std::shared_ptr<weld::DialogController> getDialogController() = 0;
+    virtual std::optional<SwLanguageListItem> GetSelectedLanguage() = 0;
+};
+
+
 class SwAbstractDialogFactory
 {
 public:
@@ -398,6 +410,7 @@ public:
     CreateSwContentControlListItemDlg(weld::Window* pParent, SwContentControlListItem& rItem) = 0;
 
     virtual std::shared_ptr<AbstractSwBreakDlg> CreateSwBreakDlg(weld::Window *pParent, SwWrtShell &rSh) = 0;
+    virtual std::shared_ptr<AbstractSwTranslateLangSelectDlg> CreateSwTranslateLangSelectDlg(weld::Window *pParent) = 0;
     virtual VclPtr<VclAbstractDialog> CreateSwChangeDBDlg(SwView& rVw) = 0;
     virtual VclPtr<SfxAbstractTabDialog>  CreateSwCharDlg(weld::Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet,
         SwCharDlgMode nDialogMode, const OUString* pFormatStr = nullptr) = 0;
