@@ -100,7 +100,7 @@ ContextHandlerRef CommentsFragment::onCreateRecordContext( sal_Int32 nRecId, Seq
         break;
         case BIFF12_ID_COMMENT:
             if( (nRecId == BIFF12_ID_COMMENTTEXT) && mxComment )
-                mxComment->createText()->importString( rStrm, true );
+                mxComment->createText()->importString( rStrm, true, *this );
         break;
     }
     return nullptr;

@@ -340,8 +340,7 @@ void PhoneticSettings::importStringData( SequenceInputStream& rStrm )
     maModel.setBiffData( extractValue< sal_Int32 >( nFlags, 0, 2 ), extractValue< sal_Int32 >( nFlags, 2, 2 ) );
 }
 
-RichStringPhonetic::RichStringPhonetic( const WorkbookHelper& rHelper ) :
-    WorkbookHelper( rHelper ),
+RichStringPhonetic::RichStringPhonetic() :
     mnBasePos( -1 ),
     mnBaseEnd( -1 )
 {
@@ -404,12 +403,6 @@ void PhoneticPortionModelList::importPortions( SequenceInputStream& rStrm )
     }
 }
 
-RichString::RichString( const WorkbookHelper& rHelper ) :
-    WorkbookHelper( rHelper ),
-    maPhonSettings( rHelper )
-{
-}
-
 sal_Int32 RichString::importText()
 {
     return createPortion();
@@ -427,12 +420,14 @@ RichStringPhoneticRef RichString::importPhoneticRun( const AttributeList& rAttri
     return xPhonetic;
 }
 
-void RichString::importPhoneticPr( const AttributeList& rAttribs )
+void RichString::importPhoneticPr( const AttributeList& rAttribs, const WorkbookHelper& rHelper )
 {
-    maPhonSettings.importPhoneticPr( rAttribs );
+    if (!mxPhonSettings)
+        mxPhonSettings.reset(new PhoneticSettings(rHelper));
+    mxPhonSettings->importPhoneticPr( rAttribs );
 }
 
-void RichString::importString( SequenceInputStream& rStrm, bool bRich )
+void RichString::importString( SequenceInputStream& rStrm, bool bRich, const WorkbookHelper& rHelper )
 {
     sal_uInt8 nFlags = bRich ? rStrm.readuInt8() : 0;
     OUString aBaseText = BiffHelper::readString( rStrm );
@@ -453,15 +448,17 @@ void RichString::importString( SequenceInputStream& rStrm, bool bRich )
         OUString aPhoneticText = BiffHelper::readString( rStrm );
         PhoneticPortionModelList aPortions;
         aPortions.importPortions( rStrm );
-        maPhonSettings.importStringData( rStrm );
+        if (!mxPhonSettings)
+            mxPhonSettings.reset(new PhoneticSettings(rHelper));
+        mxPhonSettings->importStringData( rStrm );
         createPhoneticPortions( aPhoneticText, aPortions, aBaseText.getLength() );
     }
 }
 
-void RichString::finalizeImport()
+void RichString::finalizeImport(const WorkbookHelper& rHelper)
 {
     for (RichStringPortion& rPortion : maTextPortions)
-        rPortion.finalizeImport( *this );
+        rPortion.finalizeImport( rHelper );
 }
 
 bool RichString::extractPlainString( OUString& orString, const oox::xls::Font* pFirstPortionFont ) const
@@ -533,7 +530,7 @@ sal_Int32 RichString::createPortion()
 
 RichStringPhoneticRef RichString::createPhonetic()
 {
-    RichStringPhoneticRef xPhonetic = std::make_shared<RichStringPhonetic>( *this );
+    RichStringPhoneticRef xPhonetic = std::make_shared<RichStringPhonetic>();
     maPhonPortions.push_back( xPhonetic );
     return xPhonetic;
 }
