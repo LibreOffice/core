@@ -148,12 +148,6 @@ RowModel::RowModel() :
 {
 }
 
-void RowModel::insertColSpan( const ValueRange& rColSpan )
-{
-    if( (0 <= rColSpan.mnFirst) && (rColSpan.mnFirst <= rColSpan.mnLast) )
-        maColSpans.insert( rColSpan );
-}
-
 bool RowModel::isMergeable( const RowModel& rModel ) const
 {
     return
@@ -900,8 +894,6 @@ void WorksheetGlobals::setRowModel( const RowModel& rModel )
                 maRowModels[ nRow ] = RowModelRange( rModel, nRow );
             // set row formatting
             maSheetData.setRowFormat( nRow, rModel.mnXfId, rModel.mbCustomFormat );
-            // set column spans
-            maSheetData.setColSpans( nRow, rModel.maColSpans );
         }
     }
 

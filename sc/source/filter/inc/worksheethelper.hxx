@@ -85,7 +85,6 @@ struct ColumnModel
 struct RowModel
 {
     sal_Int32           mnRow;              /// 1-based (!) index of the described row.
-    ValueRangeSet       maColSpans;         /// 0-based (!) column ranges of used cells.
     double              mfHeight;           /// Row height in points.
     sal_Int32           mnXfId;             /// Row default formatting (see mbIsFormatted).
     sal_Int32           mnLevel;            /// Row outline level.
@@ -99,8 +98,6 @@ struct RowModel
 
     explicit            RowModel();
 
-    /** Inserts the passed column span into the row model. */
-    void                insertColSpan( const ValueRange& rColSpan );
     /** Returns true, if this entry can be merged with the passed row range (row settings are equal). */
     bool                isMergeable( const RowModel& rModel ) const;
 };
