@@ -299,6 +299,7 @@
 #define STR_DELETE_NOTE_AUTHOR                  NC_("STR_DELETE_NOTE_AUTHOR", "Delete ~All Comments by $1")
 #define STR_HIDE_NOTE_AUTHOR                    NC_("STR_HIDE_NOTE_AUTHOR", "H~ide All Comments by $1")
 #define STR_OUTLINE_NUMBERING                   NC_("STR_OUTLINE_NUMBERING", "Chapter Numbering")
+#define STR_STATSTR_SWTRANSLATE                 NC_("STR_STATSTR_SWTRANSLATE", "Translating document...")
 /* To translators: $1 == will be replaced by STR_WORDCOUNT_WORDARG, and $2 by STR_WORDCOUNT_COLARG
    e.g. Selected: 1 word, 2 characters */
 #define STR_WORDCOUNT                           NC_("STR_WORDCOUNT", "Selected: $1, $2")
