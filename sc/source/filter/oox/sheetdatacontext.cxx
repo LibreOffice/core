@@ -287,7 +287,6 @@ void SheetDataContext::importRow( const AttributeList& rAttribs )
 
     // decode the column spans (space-separated list of colon-separated integer pairs)
     OUString aColSpansText = rAttribs.getString( XML_spans, OUString() );
-    sal_Int32 nMaxCol = mrAddressConv.getMaxApiAddress().Col();
     sal_Int32 nIndex = 0;
     while( nIndex >= 0 )
     {
@@ -302,7 +301,6 @@ void SheetDataContext::importRow( const AttributeList& rAttribs )
             {
                 const sal_Int32 nCol2 = o3tl::toInt32(aColSpanToken.substr( nSepPos + 1 )) - 1;
                 mrAddressConv.checkCol( nCol2, true);
-                aModel.insertColSpan( ValueRange( nCol1, ::std::min( nCol2, nMaxCol )));
             }
         }
     }
@@ -396,16 +394,13 @@ void SheetDataContext::importRow( SequenceInputStream& rStrm )
     aModel.mbThickBottom  = getFlag( nFlags1, BIFF12_ROW_THICKBOTTOM );
 
     // read the column spans
-    sal_Int32 nMaxCol = mrAddressConv.getMaxApiAddress().Col();
     for( sal_Int32 nSpanIdx = 0; (nSpanIdx < nSpanCount) && !rStrm.isEof(); ++nSpanIdx )
     {
         sal_Int32 nFirstCol, nLastCol;
         nFirstCol = rStrm.readInt32();
-        const bool bValid1 = mrAddressConv.checkCol( nFirstCol, true);
+        mrAddressConv.checkCol( nFirstCol, true);
         nLastCol = rStrm.readInt32();
         mrAddressConv.checkCol( nLastCol, true);
-        if (bValid1)
-            aModel.insertColSpan( ValueRange( nFirstCol, ::std::min( nLastCol, nMaxCol ) ) );
     }
 
     // set row properties in the current sheet
