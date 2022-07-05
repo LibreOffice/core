@@ -160,8 +160,7 @@ OUString lcl_unEscapeUnicodeChars(const OUString& rSrc)
 
 } // namespace
 
-RichStringPortion::RichStringPortion( const WorkbookHelper& rHelper ) :
-    WorkbookHelper( rHelper ),
+RichStringPortion::RichStringPortion() :
     mnFontId( -1 ),
     mbConverted( false )
 {
@@ -172,9 +171,9 @@ void RichStringPortion::setText( const OUString& rText )
     maText = lcl_unEscapeUnicodeChars(rText);
 }
 
-FontRef const & RichStringPortion::createFont()
+FontRef const & RichStringPortion::createFont(const WorkbookHelper& rHelper)
 {
-    mxFont = std::make_shared<Font>( *this, false );
+    mxFont = std::make_shared<Font>( rHelper, false );
     return mxFont;
 }
 
@@ -183,12 +182,12 @@ void RichStringPortion::setFontId( sal_Int32 nFontId )
     mnFontId = nFontId;
 }
 
-void RichStringPortion::finalizeImport()
+void RichStringPortion::finalizeImport(const WorkbookHelper& rHelper)
 {
     if( mxFont )
         mxFont->finalizeImport();
     else if( mnFontId >= 0 )
-        mxFont = getStyles().getFont( mnFontId );
+        mxFont = rHelper.getStyles().getFont( mnFontId );
 }
 
 void RichStringPortion::convert( const Reference< XText >& rxText, bool bReplace )
@@ -411,12 +410,12 @@ RichString::RichString( const WorkbookHelper& rHelper ) :
 {
 }
 
-RichStringPortionRef RichString::importText()
+sal_Int32 RichString::importText()
 {
     return createPortion();
 }
 
-RichStringPortionRef RichString::importRun()
+sal_Int32 RichString::importRun()
 {
     return createPortion();
 }
@@ -446,7 +445,7 @@ void RichString::importString( SequenceInputStream& rStrm, bool bRich )
     }
     else
     {
-        createPortion()->setText( aBaseText );
+        getPortion(createPortion()).setText( aBaseText );
     }
 
     if( !rStrm.isEof() && getFlag( nFlags, BIFF12_STRINGFLAG_PHONETICS ) )
@@ -461,7 +460,8 @@ void RichString::importString( SequenceInputStream& rStrm, bool bRich )
 
 void RichString::finalizeImport()
 {
-    maTextPortions.forEachMem( &RichStringPortion::finalizeImport );
+    for (RichStringPortion& rPortion : maTextPortions)
+        rPortion.finalizeImport( *this );
 }
 
 bool RichString::extractPlainString( OUString& orString, const oox::xls::Font* pFirstPortionFont ) const
@@ -473,50 +473,50 @@ bool RichString::extractPlainString( OUString& orString, const oox::xls::Font* p
         orString.clear();
         return true;
     }
-    if( (maTextPortions.size() == 1) && !maTextPortions.front()->hasFont() && !lclNeedsRichTextFormat( pFirstPortionFont ) )
+    if( (maTextPortions.size() == 1) && !maTextPortions.front().hasFont() && !lclNeedsRichTextFormat( pFirstPortionFont ) )
     {
-        orString = maTextPortions.front()->getText();
+        orString = maTextPortions.front().getText();
         return orString.indexOf( '\x0A' ) < 0;
     }
     return false;
 }
 
-void RichString::convert( const Reference< XText >& rxText ) const
+void RichString::convert( const Reference< XText >& rxText )
 {
     if (maTextPortions.size() == 1)
     {
         // Set text directly to the cell when the string has only one portion.
         // It's much faster this way.
-        RichStringPortion& rPtn = *maTextPortions.front();
+        const RichStringPortion& rPtn = maTextPortions.front();
         rxText->setString(rPtn.getText());
         rPtn.writeFontProperties(rxText);
         return;
     }
 
     bool bReplaceOld = true;
-    for( const auto& rxTextPortion : maTextPortions )
+    for( auto& rTextPortion : maTextPortions )
     {
-        rxTextPortion->convert( rxText, bReplaceOld );
+        rTextPortion.convert( rxText, bReplaceOld );
         bReplaceOld = false;    // do not replace first portion text with following portions
     }
 }
 
-std::unique_ptr<EditTextObject> RichString::convert( ScEditEngineDefaulter& rEE, const oox::xls::Font* pFirstPortionFont ) const
+std::unique_ptr<EditTextObject> RichString::convert( ScEditEngineDefaulter& rEE, const oox::xls::Font* pFirstPortionFont )
 {
     ESelection aSelection;
 
     OUStringBuffer sString;
-    for( const auto& rxTextPortion : maTextPortions )
-        sString.append(rxTextPortion->getText());
+    for( auto& rTextPortion : maTextPortions )
+        sString.append(rTextPortion.getText());
 
     // fdo#84370 - diving into editeng is not thread safe.
     SolarMutexGuard aGuard;
 
     rEE.SetTextCurrentDefaults( sString.makeStringAndClear() );
 
-    for( const auto& rxTextPortion : maTextPortions )
+    for( auto& rTextPortion : maTextPortions )
     {
-        rxTextPortion->convert( rEE, aSelection, pFirstPortionFont );
+        rTextPortion.convert( rEE, aSelection, pFirstPortionFont );
         pFirstPortionFont = nullptr;
     }
 
@@ -525,11 +525,10 @@ std::unique_ptr<EditTextObject> RichString::convert( ScEditEngineDefaulter& rEE,
 
 // private --------------------------------------------------------------------
 
-RichStringPortionRef RichString::createPortion()
+sal_Int32 RichString::createPortion()
 {
-    RichStringPortionRef xPortion = std::make_shared<RichStringPortion>( *this );
-    maTextPortions.push_back( xPortion );
-    return xPortion;
+    maTextPortions.emplace_back();
+    return maTextPortions.size() - 1;
 }
 
 RichStringPhoneticRef RichString::createPhonetic()
@@ -558,9 +557,9 @@ void RichString::createTextPortions( const OUString& rText, FontPortionModelList
         sal_Int32 nPortionLen = (aIt + 1)->mnPos - aIt->mnPos;
         if( (0 < nPortionLen) && (aIt->mnPos + nPortionLen <= nStrLen) )
         {
-            RichStringPortionRef xPortion = createPortion();
-            xPortion->setText( rText.copy( aIt->mnPos, nPortionLen ) );
-            xPortion->setFontId( aIt->mnFontId );
+            RichStringPortion& rPortion = getPortion(createPortion());
+            rPortion.setText( rText.copy( aIt->mnPos, nPortionLen ) );
+            rPortion.setFontId( aIt->mnFontId );
         }
     }
 }
