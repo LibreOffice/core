@@ -51,6 +51,7 @@ $(eval $(call gb_Library_use_externals,lng,\
 	boost_headers \
 	icuuc \
 	icu_headers \
+	curl \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,lng,\
@@ -72,6 +73,7 @@ $(eval $(call gb_Library_add_exception_objects,lng,\
 	linguistic/source/spelldsp \
 	linguistic/source/spelldta \
 	linguistic/source/thesdsp \
+	linguistic/source/translate \
 ))
 
 # vim: set noet sw=4 ts=4:

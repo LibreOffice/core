@@ -743,6 +743,8 @@
       <menu:menuitem menu:id=".uno:WordCountDialog"/>
       <menu:menuitem menu:id=".uno:AccessibilityCheck"/>
       <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:Translate"/>
+      <menu:menuseparator/>
       <menu:menu menu:id=".uno:AutoFormatMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:OnlineAutoFormat"/>
