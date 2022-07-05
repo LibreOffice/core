@@ -207,6 +207,8 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
         pObj->SetGraphicLink( rFileName, ""/*TODO?*/, rFilterName );
 }
 
+#if HAVE_FEATURE_AVMEDIA
+
 static void lcl_InsertMedia( const OUString& rMediaURL, bool bApi,
                       ScTabViewShell* pViewSh, const vcl::Window* pWindow, SdrView* pView,
                       const Size& rPrefSize, bool const bLink )
@@ -241,12 +243,8 @@ static void lcl_InsertMedia( const OUString& rMediaURL, bool bApi,
     {
         uno::Reference<frame::XModel> const xModel(
                 rData.GetDocument().GetDocumentShell()->GetModel());
-#if HAVE_FEATURE_AVMEDIA
         bool const bRet = ::avmedia::EmbedMedia(xModel, rMediaURL, realURL);
         if (!bRet) { return; }
-#else
-        return;
-#endif
     }
 
     SdrMediaObj* pObj = new SdrMediaObj(
@@ -256,6 +254,7 @@ static void lcl_InsertMedia( const OUString& rMediaURL, bool bApi,
     pObj->setURL( realURL, ""/*TODO?*/ );
     pView->InsertObjectAtView( pObj, *pPV, bApi ? SdrInsertFlags::DONTMARK : SdrInsertFlags::NONE );
 }
+#endif
 
 FuInsertGraphic::FuInsertGraphic( ScTabViewShell&   rViewSh,
                                   vcl::Window*      pWin,

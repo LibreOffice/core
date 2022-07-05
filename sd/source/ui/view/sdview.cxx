@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
@@ -136,6 +138,14 @@ View::~View()
 
     // release content of selection clipboard, if we own the content
     UpdateSelectionClipboard( true );
+
+#if HAVE_FEATURE_AVMEDIA
+    if (mxDropMediaSizeListener)
+    {
+        suppress_fun_call_w_exception(mxDropMediaSizeListener->dispose());
+        mxDropMediaSizeListener.clear();
+    }
+#endif
 
     maDropErrorIdle.Stop();
     maDropInsertFileIdle.Stop();
