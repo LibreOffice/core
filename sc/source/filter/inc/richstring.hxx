@@ -35,20 +35,20 @@ namespace oox { class SequenceInputStream; }
 namespace oox::xls {
 
 /** Contains text data and font attributes for a part of a rich formatted string. */
-class RichStringPortion : public WorkbookHelper
+class RichStringPortion
 {
 public:
-    explicit            RichStringPortion( const WorkbookHelper& rHelper );
+    RichStringPortion();
 
     /** Sets text data for this portion. */
     void                setText( const OUString& rText );
     /** Creates and returns a new font formatting object. */
-    FontRef const &     createFont();
+    FontRef const &     createFont(const WorkbookHelper& rHelper);
     /** Links this portion to a font object from the global font list. */
     void                setFontId( sal_Int32 nFontId );
 
     /** Final processing after import of all strings. */
-    void                finalizeImport();
+    void                finalizeImport(const WorkbookHelper& rHelper);
 
     /** Returns the text data of this portion. */
     const OUString& getText() const { return maText; }
@@ -70,8 +70,6 @@ private:
     sal_Int32           mnFontId;       /// Link to global font list.
     bool                mbConverted;    /// Without repeatedly convert
 };
-
-typedef std::shared_ptr< RichStringPortion > RichStringPortionRef;
 
 /** Represents a position in a rich-string containing current font identifier.
 
@@ -210,10 +208,10 @@ class RichString : public WorkbookHelper
 public:
     explicit            RichString( const WorkbookHelper& rHelper );
 
-    /** Appends and returns a portion object for a plain string (t element). */
-    RichStringPortionRef importText();
-    /** Appends and returns a portion object for a new formatting run (r element). */
-    RichStringPortionRef importRun();
+    /** Appends and returns an index of a portion object for a plain string (t element). */
+    sal_Int32 importText();
+    /** Appends and returns an index of a portion object for a new formatting run (r element). */
+    sal_Int32 importRun();
     /** Appends and returns a phonetic text object for a new phonetic run (rPh element). */
     RichStringPhoneticRef importPhoneticRun( const AttributeList& rAttribs );
     /** Imports phonetic settings from the rPhoneticPr element. */
@@ -234,12 +232,14 @@ public:
     /** Converts the string and writes it into the passed XText, replace old contents of the text object,.
         @param rxText  The XText interface of the target object.
      */
-    void                convert( const css::uno::Reference< css::text::XText >& rxText ) const;
-    std::unique_ptr<EditTextObject> convert( ScEditEngineDefaulter& rEE, const oox::xls::Font* pFont ) const;
+    void                convert( const css::uno::Reference< css::text::XText >& rxText );
+    std::unique_ptr<EditTextObject> convert( ScEditEngineDefaulter& rEE, const oox::xls::Font* pFont );
+
+    RichStringPortion& getPortion(sal_Int32 nPortionIdx) { return maTextPortions[nPortionIdx]; }
 
 private:
     /** Creates, appends, and returns a new empty string portion. */
-    RichStringPortionRef createPortion();
+    sal_Int32 createPortion();
     /** Creates, appends, and returns a new empty phonetic text portion. */
     RichStringPhoneticRef createPhonetic();
 
@@ -249,10 +249,9 @@ private:
     void                createPhoneticPortions( const OUString& rText, PhoneticPortionModelList& rPortions, sal_Int32 nBaseLen );
 
 private:
-    typedef RefVector< RichStringPortion >  PortionVector;
     typedef RefVector< RichStringPhonetic > PhoneticVector;
 
-    PortionVector       maTextPortions; /// String portions with font data.
+    std::vector<RichStringPortion>  maTextPortions; /// String portions with font data.
     PhoneticSettings    maPhonSettings; /// Phonetic settings for this string.
     PhoneticVector      maPhonPortions; /// Phonetic text portions.
 };

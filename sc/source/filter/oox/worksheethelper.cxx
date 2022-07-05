@@ -1599,7 +1599,7 @@ void WorksheetHelper::setCellFormulaValue(
     getFormulaBuffer().setCellFormulaValue(rAddress, rValueStr, nCellType);
 }
 
-void WorksheetHelper::putRichString( const ScAddress& rAddress, const RichString& rString, const oox::xls::Font* pFirstPortionFont )
+void WorksheetHelper::putRichString( const ScAddress& rAddress, RichString& rString, const oox::xls::Font* pFirstPortionFont )
 {
     ScEditEngineDefaulter& rEE = getEditEngine();
 
