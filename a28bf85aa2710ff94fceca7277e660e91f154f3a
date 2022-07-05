@@ -34,6 +34,23 @@
       "parentUuid": "609a3c2a_94ca142d",
       "revId": "a28bf85aa2710ff94fceca7277e660e91f154f3a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5287134_54a6a132",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-07-05T18:12:49Z",
+      "side": 1,
+      "message": "@Aman: You need to remove references to queryredlinedialog.ui to fix build issue.",
+      "revId": "a28bf85aa2710ff94fceca7277e660e91f154f3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
