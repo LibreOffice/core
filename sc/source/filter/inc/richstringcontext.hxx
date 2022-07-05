@@ -37,7 +37,7 @@ protected:
 
 private:
     RichStringRef       mxString;       /// Processed string.
-    RichStringPortionRef mxPortion;     /// Processed portion in the string.
+    sal_Int32           mnPortionIdx = -1;     /// Processed portion in the string.
     RichStringPhoneticRef mxPhonetic;   /// Processed phonetic text portion.
 };
 
