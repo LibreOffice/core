@@ -91,33 +91,10 @@ DataTableModel::DataTableModel() :
 {
 }
 
-CellBlockBuffer::CellBlockBuffer( const WorksheetHelper& rHelper ) :
-    WorksheetHelper( rHelper ),
-    mnCurrRow( -1 )
-{
-}
-
-void CellBlockBuffer::setColSpans( sal_Int32 nRow, const ValueRangeSet& rColSpans )
-{
-    OSL_ENSURE( maColSpans.count( nRow ) == 0, "CellBlockBuffer::setColSpans - multiple column spans for the same row" );
-    OSL_ENSURE( (mnCurrRow < nRow) && (maColSpans.empty() || (maColSpans.rbegin()->first < nRow)), "CellBlockBuffer::setColSpans - rows are unsorted" );
-    if( mnCurrRow >= nRow )
-        return;
-    auto pair = maColSpans.try_emplace(nRow, rColSpans.getRanges());
-    if( pair.second ) // insert happened
-        mnCurrRow = nRow;
-}
-
 SheetDataBuffer::SheetDataBuffer( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper ),
-    maCellBlocks( rHelper ),
     mbPendingSharedFmla( false )
 {
-}
-
-void SheetDataBuffer::setColSpans( sal_Int32 nRow, const ValueRangeSet& rColSpans )
-{
-    maCellBlocks.setColSpans( nRow, rColSpans );
 }
 
 void SheetDataBuffer::setBlankCell( const CellModel& rModel )

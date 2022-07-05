@@ -409,7 +409,7 @@ private:
     /** Creates a dummy sheet that will be filled with the pivot cache data. */
     void                prepareSourceDataSheet();
     /** Checks, if the row index has changed since last call, and initializes the sheet data buffer. */
-    void                updateSourceDataRow( const WorksheetHelper& rSheetHelper, sal_Int32 nRow ) const;
+    void                updateSourceDataRow( sal_Int32 nRow ) const;
 
 private:
     typedef RefVector< PivotCacheField >    PivotCacheFieldVector;
