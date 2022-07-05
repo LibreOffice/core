@@ -50,7 +50,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="popupnohelp">
-                <property name="label" translatable="yes" context="optgeneralpage|popupnohelp">Show "No offline help installed" popup</property>
+                <property name="label" translatable="yes" context="optgeneralpage|popupnohelp">Warn if local help is not installed</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
