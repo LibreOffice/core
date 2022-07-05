@@ -62,7 +62,7 @@ ContextHandlerRef SharedStringsFragment::onCreateRecordContext( sal_Int32 nRecId
 
         case BIFF12_ID_SST:
             if( nRecId == BIFF12_ID_SI )
-                getSharedStrings().createRichString()->importString( rStrm, true );
+                getSharedStrings().createRichString()->importString( rStrm, true, *this );
         break;
     }
     return nullptr;

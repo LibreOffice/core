@@ -92,7 +92,7 @@ ContextHandlerRef SheetDataContext::onCreateContext( sal_Int32 nElement, const A
             switch( nElement )
             {
                 case XLS_TOKEN( is ):
-                    mxInlineStr = std::make_shared<RichString>( *this );
+                    mxInlineStr = std::make_shared<RichString>();
                     return new RichStringContext( *this, mxInlineStr );
                 case XLS_TOKEN( v ):
                     return this;    // characters contain cell value
@@ -201,7 +201,7 @@ void SheetDataContext::onEndElement()
     }
     else if( (maCellData.mnCellType == XML_inlineStr) && mxInlineStr )
     {
-        mxInlineStr->finalizeImport();
+        mxInlineStr->finalizeImport(*this);
         mrSheetData.setStringCell( maCellData, mxInlineStr );
     }
     else
@@ -502,9 +502,9 @@ void SheetDataContext::importCellRString( SequenceInputStream& rStrm, CellType e
     if( readCellHeader( rStrm, eCellType ) )
     {
         maCellData.mnCellType = XML_inlineStr;
-        RichStringRef xString = std::make_shared<RichString>( *this );
-        xString->importString( rStrm, true );
-        xString->finalizeImport();
+        RichStringRef xString = std::make_shared<RichString>();
+        xString->importString( rStrm, true, *this );
+        xString->finalizeImport( *this );
         mrSheetData.setStringCell( maCellData, xString );
     }
 }
@@ -525,9 +525,9 @@ void SheetDataContext::importCellString( SequenceInputStream& rStrm, CellType eC
     {
         maCellData.mnCellType = XML_inlineStr;
         // always import the string, stream will point to formula afterwards, if existing
-        RichStringRef xString = std::make_shared<RichString>( *this );
-        xString->importString( rStrm, false );
-        xString->finalizeImport();
+        RichStringRef xString = std::make_shared<RichString>();
+        xString->importString( rStrm, false, *this );
+        xString->finalizeImport( *this );
         if( eCellType == CELLTYPE_FORMULA )
             mrSheetData.setFormulaCell( maCellData, readCellFormula( rStrm ) );
         else
