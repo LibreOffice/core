@@ -73,31 +73,12 @@ struct DataTableModel
     explicit            DataTableModel();
 };
 
-/** Manages all cell blocks currently in use. */
-class CellBlockBuffer : public WorksheetHelper
-{
-public:
-    explicit            CellBlockBuffer( const WorksheetHelper& rHelper );
-
-    /** Sets column span information for a row. */
-    void                setColSpans( sal_Int32 nRow, const ValueRangeSet& rColSpans );
-
-private:
-    typedef ::std::map< sal_Int32, ValueRangeVector >   ColSpanVectorMap;
-
-    ColSpanVectorMap    maColSpans;             /// Buffered column spans, mapped by row index.
-    sal_Int32           mnCurrRow;              /// Current row index used for buffered cell import.
-};
-
 /** Manages the cell contents and cell formatting of a sheet.
  */
 class SheetDataBuffer : public WorksheetHelper
 {
 public:
     explicit            SheetDataBuffer( const WorksheetHelper& rHelper );
-
-    /** Sets column span information for a row. */
-    void                setColSpans( sal_Int32 nRow, const ValueRangeSet& rColSpans );
 
     /** Inserts a blank cell (with formatting) into the sheet. */
     void                setBlankCell( const CellModel& rModel );
@@ -224,7 +205,6 @@ private:
     typedef ::std::vector< MergedRange > MergedRangeVector;
 
     ColStyles           maStylesPerColumn;      /// Stores cell styles by column ( in row ranges )
-    CellBlockBuffer     maCellBlocks;           /// Manages all open cell blocks.
     ArrayFormulaVector  maArrayFormulas;        /// All array formulas in the sheet.
     std::vector< TableOperation >
                         maTableOperations;      /// All table operations in the sheet.

@@ -1057,7 +1057,7 @@ void PivotCache::writeSourceHeaderCells( const WorksheetHelper& rSheetHelper ) c
     SCCOL nMaxCol = getAddressConverter().getMaxApiAddress().Col();
     SCROW nRow = maSheetSrcModel.maRange.aStart.Row();
     mnCurrRow = -1;
-    updateSourceDataRow( rSheetHelper, nRow );
+    updateSourceDataRow( nRow );
     for( const auto& rxDatabaseField : maDatabaseFields )
     {
         if (nCol > nMaxCol)
@@ -1073,7 +1073,7 @@ void PivotCache::writeSourceDataCell( const WorksheetHelper& rSheetHelper, sal_I
     OSL_ENSURE( ( maSheetSrcModel.maRange.aStart.Col() <= nCol ) && ( nCol <= maSheetSrcModel.maRange.aEnd.Col() ), "PivotCache::writeSourceDataCell - invalid column index" );
     SCROW nRow = maSheetSrcModel.maRange.aStart.Row() + nRowIdx;
     OSL_ENSURE( ( maSheetSrcModel.maRange.aStart.Row() < nRow ) && ( nRow <= maSheetSrcModel.maRange.aEnd.Row() ), "PivotCache::writeSourceDataCell - invalid row index" );
-    updateSourceDataRow( rSheetHelper, nRow );
+    updateSourceDataRow( nRow );
     if( const PivotCacheField* pCacheField = maDatabaseFields.get( nColIdx ).get() )
         pCacheField->writeSourceDataCell( rSheetHelper, nCol, nRow, rItem );
 }
@@ -1167,11 +1167,10 @@ void PivotCache::prepareSourceDataSheet()
     }
 }
 
-void PivotCache::updateSourceDataRow( const WorksheetHelper& rSheetHelper, sal_Int32 nRow ) const
+void PivotCache::updateSourceDataRow( sal_Int32 nRow ) const
 {
     if( mnCurrRow != nRow )
     {
-        rSheetHelper.getSheetData().setColSpans( nRow, maColSpans );
         mnCurrRow = nRow;
     }
 }
