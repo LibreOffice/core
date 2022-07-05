@@ -125,10 +125,21 @@ static bool InitializeFontWorkData(
                 for ( i = 0; i < nParagraphs; ++i, ++j )
                 {
                     FWParagraphData aParagraphData;
-                    aParagraphData.aString = rTextObj.GetText( j );
-
                     const SfxItemSet& rParaSet = rTextObj.GetParaAttribs( j );  // retrieving some paragraph attributes
                     aParagraphData.nFrameDirection = rParaSet.Get( EE_PARA_WRITINGDIR ).GetValue();
+
+                    // Handle line breaks as new paragraph
+                    OUString sText = rTextObj.GetText(j);
+                    sal_Int32 nIndex = sText.indexOf(1, 0);
+                    while( nIndex > -1)
+                    {
+                        aParagraphData.aString = sText.copy(0, nIndex);
+                        aTextArea.vParagraphs.push_back( aParagraphData );
+                        sText = sText.copy(nIndex + 1, sText.getLength() - nIndex - 1);
+                        nIndex = sText.indexOf(1, 0);
+                        rFWData.nMaxParagraphsPerTextArea++; // It will be used for font size calculation in case bScaleX is false.
+                    }
+                    aParagraphData.aString = sText;
                     aTextArea.vParagraphs.push_back( aParagraphData );
                 }
                 rFWData.vTextAreas.push_back( aTextArea );
