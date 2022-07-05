@@ -1205,13 +1205,14 @@ void SwContentFrame::Cut()
                 // find if there are pages without content following pPage
                 // and if so request a call to CheckPageDescs()
                 SwPageFrame const* pNext(pPage);
-                if (pRoot->GetCurrShell()->Imp()->IsAction())
+                SwViewShell *pSh = pRoot->GetCurrShell();
+                if (pSh && pSh->Imp()->IsAction())
                 {
                     while ((pNext = static_cast<SwPageFrame const*>(pNext->GetNext())))
                     {
                         if (!sw::IsPageFrameEmpty(*pNext) && !pNext->IsFootnotePage())
                         {
-                            pRoot->GetCurrShell()->Imp()->GetLayAction().SetCheckPageNum(pPage->GetPhyPageNum());
+                            pSh->Imp()->GetLayAction().SetCheckPageNum(pPage->GetPhyPageNum());
                             break;
                         }
                     }
