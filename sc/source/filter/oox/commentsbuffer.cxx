@@ -141,7 +141,7 @@ void Comment::importComment( SequenceInputStream& rStrm )
 
 RichStringRef const & Comment::createText()
 {
-    maModel.mxText = std::make_shared<RichString>( *this );
+    maModel.mxText = std::make_shared<RichString>();
     return maModel.mxText;
 }
 
@@ -196,7 +196,7 @@ void Comment::finalizeImport()
             pDocShell->GetDocFunc().ShowNote( maModel.maRange.aStart, bVisible );
 
         // insert text and convert text formatting
-        maModel.mxText->finalizeImport();
+        maModel.mxText->finalizeImport(*this);
         Reference< XText > xAnnoText( xAnnoShape, UNO_QUERY_THROW );
         Reference< css::document::XActionLockable > xAnnoLock( xAnnoShape, UNO_QUERY_THROW );
         xAnnoLock->addActionLock();
