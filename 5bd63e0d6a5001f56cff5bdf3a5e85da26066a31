@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "008f0aeb_771cce8c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-07-05T04:48:09Z",
+      "side": 1,
+      "message": "This patch requires I9aa632ff5751e603bf2a4f201b96b9a0369efc91 to be submitted before to solve the ui test issue.",
+      "revId": "5bd63e0d6a5001f56cff5bdf3a5e85da26066a31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
