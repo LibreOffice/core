@@ -16,6 +16,24 @@
       "message": "\u003e Patch Set 5: Verified-1\n\u003e \n\u003e Build Failed \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/118076/ : ABORTED\n\nclang-format is whining, see the cosmetic tips in https://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/116899/console for sc/qa/unit/subsequent_export_test.cxx",
       "revId": "82fd72c845b4b57e93fbd336d9d26f52b60bd62e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c9d2c3f_34dba826",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003557
+      },
+      "writtenOn": "2022-07-05T17:33:01Z",
+      "side": 1,
+      "message": "Should be ok now.",
+      "parentUuid": "0684d43d_74ad5340",
+      "revId": "82fd72c845b4b57e93fbd336d9d26f52b60bd62e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
