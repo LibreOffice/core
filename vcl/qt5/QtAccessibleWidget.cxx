@@ -1480,8 +1480,15 @@ int QtAccessibleWidget::rowIndex() const
 
 QAccessibleInterface* QtAccessibleWidget::table() const
 {
-    SAL_WARN("vcl.qt", "Unsupported QAccessibleTableCellInterface::table");
-    return nullptr;
+    Reference<XAccessibleTable> xTable = getAccessibleTableForParent();
+    if (!xTable.is())
+        return nullptr;
+
+    Reference<XAccessible> xTableAcc(xTable, UNO_QUERY);
+    if (!xTableAcc.is())
+        return nullptr;
+
+    return QAccessible::queryAccessibleInterface(new QtXAccessible(xTableAcc));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
