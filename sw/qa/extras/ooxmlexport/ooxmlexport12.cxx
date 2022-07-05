@@ -1359,6 +1359,15 @@ CPPUNIT_TEST_FIXTURE(Test, testTrackChangesEmptyParagraphsInADeletion)
                     "/w:document/w:body/w:p[" + OString::number(i) + "]/w:pPr/w:rPr/w:del");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf149708)
+{
+    loadAndSave("tdf149708.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // keep tracked insertion of a list item
+    // This was 0 (missing tracked insertion of the paragraph mark)
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:rPr/w:ins");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf70234)
 {
     loadAndSave("tdf70234.docx");
@@ -1493,8 +1502,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128156)
 {
     loadAndSave("tdf128156.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    // import change tracking in frames
-    assertXPath(pXmlDoc, "//w:ins");
+    // keep tracked insertion of a paragraph
+    // This was 0 before 350972a8bffc1a74b531e0336954bf54b1356025,
+    // and 1 later (missing tracked insertion of the paragraph mark)
+    assertXPath(pXmlDoc, "//w:ins", 2);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf125546)
