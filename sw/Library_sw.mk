@@ -694,6 +694,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/uibase/shells/grfsh \
     sw/source/uibase/shells/grfshex \
     sw/source/uibase/shells/langhelper \
+    sw/source/uibase/shells/translatehelper \
     sw/source/uibase/shells/listsh \
     sw/source/uibase/shells/mediash \
     sw/source/uibase/shells/navsh \
