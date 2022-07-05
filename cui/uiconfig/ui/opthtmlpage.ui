@@ -505,7 +505,7 @@
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="starbasic-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|starbasic">Mark this check box to include the Basic instructions when exporting to HTML format.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|starbasic">Check this box to include the BASIC instructions when exporting to HTML format.</property>
                       </object>
                     </child>
                   </object>
