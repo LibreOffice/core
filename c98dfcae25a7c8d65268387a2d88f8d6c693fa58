@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a635860a_9d4248c6",
+        "filename": "include/osl/profile.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-07-05T07:40:08Z",
+      "side": 1,
+      "message": "Sorry, that missing line was an oversight. I have updated the description to be more accurate, is this better?",
+      "parentUuid": "9ebeab8b_fac7afbb",
+      "revId": "c98dfcae25a7c8d65268387a2d88f8d6c693fa58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a4214483_1f77415b",
         "filename": "include/osl/socket.h",
         "patchSetId": 1
@@ -54,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1ec5c6f7_96960b10",
+        "filename": "include/osl/socket.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 835,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-07-05T07:40:08Z",
+      "side": 1,
+      "message": "Removed \"lookup\" altogether, make it \"host name\".",
+      "parentUuid": "a4214483_1f77415b",
+      "revId": "c98dfcae25a7c8d65268387a2d88f8d6c693fa58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2462d5ba_29f5ff8e",
         "filename": "include/osl/socket_decl.hxx",
         "patchSetId": 1
@@ -65,6 +101,30 @@
       "writtenOn": "2022-07-04T08:05:04Z",
       "side": 1,
       "message": "You must spell the @param argument the same way as the parameter in the function prototype.",
+      "range": {
+        "startLine": 179,
+        "startChar": 19,
+        "endLine": 179,
+        "endChar": 26
+      },
+      "revId": "c98dfcae25a7c8d65268387a2d88f8d6c693fa58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0a4d903_184bd84b",
+        "filename": "include/osl/socket_decl.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-07-05T07:40:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2462d5ba_29f5ff8e",
       "range": {
         "startLine": 179,
         "startChar": 19,
@@ -94,6 +154,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "33cb46e3_8b036c8c",
+        "filename": "include/rtl/alloc.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-07-05T07:40:08Z",
+      "side": 1,
+      "message": "Updated the description, is this more accurate?",
+      "parentUuid": "fb93cd5e_f720c0c3",
+      "revId": "c98dfcae25a7c8d65268387a2d88f8d6c693fa58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c0cc0965_e1a7163d",
         "filename": "include/rtl/alloc.h",
         "patchSetId": 1
@@ -105,6 +183,30 @@
       "writtenOn": "2022-07-04T08:05:04Z",
       "side": 1,
       "message": "why close with a semicolon here?",
+      "range": {
+        "startLine": 143,
+        "startChar": 51,
+        "endLine": 143,
+        "endChar": 52
+      },
+      "revId": "c98dfcae25a7c8d65268387a2d88f8d6c693fa58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d279cce_53ba896b",
+        "filename": "include/rtl/alloc.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-07-05T07:40:08Z",
+      "side": 1,
+      "message": "oops! sorry",
+      "parentUuid": "c0cc0965_e1a7163d",
       "range": {
         "startLine": 143,
         "startChar": 51,
