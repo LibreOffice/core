@@ -104,7 +104,7 @@ const ErrMsgCode RID_ERRHDL[] =
     { NC_("RID_ERRHDL", "This document has already been opened for editing.") , ERRCODE_SFX_ALREADYOPEN },
     { NC_("RID_ERRHDL", "The wrong password has been entered.") , ERRCODE_SFX_WRONGPASSWORD },
     { NC_("RID_ERRHDL", "Error reading file.") , ERRCODE_SFX_DOLOADFAILED },
-    { NC_("RID_ERRHDL", "The document was opened as read-only.") , ERRCODE_SFX_DOCUMENTREADONLY },
+    { NC_("RID_ERRHDL", "Document opened as read-only cannot be saved over itself.") , ERRCODE_SFX_DOCUMENTREADONLY },
     { NC_("RID_ERRHDL", "General OLE Error.") , ERRCODE_SFX_OLEGENERAL },
     { NC_("RID_ERRHDL", "The host name $(ARG1) could not be resolved.") , ERRCODE_INET_NAME_RESOLVE },
     { NC_("RID_ERRHDL", "Could not establish Internet connection to $(ARG1).") , ERRCODE_INET_CONNECT },
