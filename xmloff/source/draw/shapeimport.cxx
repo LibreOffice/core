@@ -515,8 +515,9 @@ struct ZOrderHint
 {
     sal_Int32 nIs;
     sal_Int32 nShould;
-    /// The hint is for this shape.
-    uno::Reference<drawing::XShape> xShape;
+    /// The hint is for this shape. We don't use uno::Reference here to speed up
+    /// some operations, and because this shape is always held by mxShapes
+    drawing::XShape* pShape;
 
     bool operator<(const ZOrderHint& rComp) const { return nShould < rComp.nShould; }
 };
@@ -731,7 +732,7 @@ void XMLShapeImportHelper::shapeWithZIndexAdded( css::uno::Reference< css::drawi
     ZOrderHint aNewHint;
     aNewHint.nIs = mpImpl->mpGroupContext->mnCurrentZ++;
     aNewHint.nShould = nZIndex;
-    aNewHint.xShape = xShape;
+    aNewHint.pShape = xShape.get();
 
     if( nZIndex == -1 )
     {
@@ -749,7 +750,7 @@ void XMLShapeImportHelper::shapeRemoved(const uno::Reference<drawing::XShape>& x
 {
     auto it = std::find_if(mpImpl->mpGroupContext->maZOrderList.begin(), mpImpl->mpGroupContext->maZOrderList.end(), [&xShape](const ZOrderHint& rHint)
     {
-        return rHint.xShape == xShape;
+        return rHint.pShape == xShape.get();
     });
     if (it == mpImpl->mpGroupContext->maZOrderList.end())
         // Part of the unsorted list, nothing to do.
