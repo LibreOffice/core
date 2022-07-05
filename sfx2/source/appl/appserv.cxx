@@ -186,8 +186,10 @@ namespace
             SfxStringItem aURL(SID_FILE_NAME, ".component:Bibliography/View1");
             SfxStringItem aRef(SID_REFERER, "private:user");
             SfxStringItem aTarget(SID_TARGETNAME, "_blank");
-            SfxViewFrame::Current()->GetDispatcher()->ExecuteList(SID_OPENDOC,
-                SfxCallMode::ASYNCHRON, { &aURL, &aRef, &aTarget });
+            const SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+            if ( pViewFrame )
+                pViewFrame->GetDispatcher()->ExecuteList(SID_OPENDOC,
+                        SfxCallMode::ASYNCHRON, { &aURL, &aRef, &aTarget });
         }
         catch (const Exception &)
         {
