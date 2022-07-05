@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "609a3c2a_94ca142d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-07-05T08:08:04Z",
+      "side": 1,
+      "message": "You need to remove it from sw/UIConfig_swriter.mk as well. Guess static/CustomTarget_emscripten_fs_image.mk is create at compilation time...",
+      "revId": "a28bf85aa2710ff94fceca7277e660e91f154f3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
