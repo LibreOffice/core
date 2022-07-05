@@ -139,6 +139,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/optgeneralpage \
 	cui/uiconfig/ui/opthtmlpage \
 	cui/uiconfig/ui/langtoolconfigpage \
+	cui/uiconfig/ui/deepltabpage \
 	cui/uiconfig/ui/optionsdialog \
 	cui/uiconfig/ui/optjsearchpage \
 	cui/uiconfig/ui/optlanguagespage \

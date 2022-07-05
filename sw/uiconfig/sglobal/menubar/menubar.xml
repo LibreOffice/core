@@ -720,6 +720,8 @@
       <menu:menuitem menu:id=".uno:WordCountDialog" menu:style="text"/>
       <menu:menuitem menu:id=".uno:AccessibilityCheck"/>
       <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:Translate" menu:style="text"/>
+      <menu:menuseparator/>
       <menu:menu menu:id=".uno:AutoFormatMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:OnlineAutoFormat"/>

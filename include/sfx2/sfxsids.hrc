@@ -208,6 +208,7 @@ class SvxSearchItem;
 #define SID_VIEW_DATA_SOURCE_BROWSER        (SID_SFX_START + 1660)
 #define SID_UNPACK                          (SID_SFX_START + 1662)
 // (SID_SFX_START + 1663) used further down
+#define SID_ATTR_TARGETLANG_STR             (SID_SFX_START + 1664)
     // FREE
 #define SID_OUTPUTSTREAM                    (SID_SFX_START + 1666)
 #define SID_IMAGE_ORIENTATION               (SID_SFX_START + 1667)
