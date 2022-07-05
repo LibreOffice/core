@@ -16,6 +16,23 @@
       "message": "This patch requires I9aa632ff5751e603bf2a4f201b96b9a0369efc91 to be submitted before to solve the ui test issue.",
       "revId": "5bd63e0d6a5001f56cff5bdf3a5e85da26066a31",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6306ce92_b5df09ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-07-05T04:53:42Z",
+      "side": 1,
+      "message": "Thanks; I’ve cherry-picked that now.",
+      "revId": "5bd63e0d6a5001f56cff5bdf3a5e85da26066a31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
