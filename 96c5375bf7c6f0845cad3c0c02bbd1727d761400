@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c592179_cd961fda",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2022-07-05T13:50:22Z",
+      "side": 1,
+      "message": "I have some remarks:\na) The number of paragraphs is used to determine nMaxParagraphsPerTextArea. That is later used to calculate font height. Have you tested cases were turning line breaks to paragraphs produce a lot of new paragraphs?\nb) Currently the paragraphs are distributed evenly over the sub-paths of the geometry. Will that change with your patch? (It would be an interesting feature  giving the user the ability to group paragraphs.) You should test the behavior with type \"Button\" and write the text so, that the text for the horizontal bar has several line breaks.\nc) Have you considered to make the change from line breaks to paragraphs not in the rendering part but in the import filter? \nd) Making such change in the rendering part is a significant change in the general behavior of Fontwork. Therefore it needs a release note.",
+      "revId": "96c5375bf7c6f0845cad3c0c02bbd1727d761400",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
