@@ -444,6 +444,28 @@
           </prop>
       </group>
     </group>
+    <group oor:name="Translation">
+      <info>
+        <desc>Contains translation relevant settings.</desc>
+      </info>
+      <group oor:name="Deepl">
+        <info>
+          <desc>Contains DeepL API relevant settings.</desc>
+        </info>
+        <prop oor:name="ApiURL" oor:type="xs:string">
+          <info>
+            <desc>Deepl Translator API URL</desc>
+            <label>URL for the Deepl translator api</label>
+          </info>
+        </prop>
+        <prop oor:name="AuthKey" oor:type="xs:string">
+          <info>
+            <desc>Deepl Translator API URL Authkey</desc>
+            <label>Auth key for the Deepl translator api</label>
+          </info>
+        </prop>
+      </group>
+    </group>
     <group oor:name="Hyphenation">
       <info>
         <desc>Contains hyphenation relevant settings.</desc>

@@ -1802,5 +1802,11 @@ interface BaseText
         StateMethod = GetState ;
     ]
 
+    SID_FM_TRANSLATE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
 }  // end of interface text
 
