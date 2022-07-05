@@ -187,6 +187,19 @@ public:
     virtual std::shared_ptr<weld::DialogController> getDialogController() override { return m_xDlg; }
 };
 
+class AbstractSwTranslateLangSelectDlg_Impl : public AbstractSwTranslateLangSelectDlg
+{
+    std::shared_ptr<weld::DialogController> m_xDlg;
+public:
+    explicit AbstractSwTranslateLangSelectDlg_Impl(std::shared_ptr<weld::DialogController> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+
+    virtual std::shared_ptr<weld::DialogController> getDialogController() override { return m_xDlg; }
+    virtual std::optional<SwLanguageListItem> GetSelectedLanguage() override;
+};
+
 class AbstractSwTableWidthDlg_Impl : public VclAbstractDialog
 {
     std::unique_ptr<SwTableWidthDlg> m_xDlg;
@@ -684,6 +697,7 @@ public:
                                       SwContentControlListItem& rItem) override;
 
     virtual std::shared_ptr<AbstractSwBreakDlg> CreateSwBreakDlg(weld::Window *pParent, SwWrtShell &rSh) override;
+    virtual std::shared_ptr<AbstractSwTranslateLangSelectDlg> CreateSwTranslateLangSelectDlg(weld::Window *pParent, SwWrtShell &rSh) override;
     virtual VclPtr<VclAbstractDialog> CreateSwChangeDBDlg(SwView& rVw) override;
     virtual VclPtr<SfxAbstractTabDialog>  CreateSwCharDlg(weld::Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet,
         SwCharDlgMode nDialogMode, const OUString* pFormatStr = nullptr) override;
