@@ -24,6 +24,8 @@
 """
 Collection of Python helper functions called from the ScriptForge Basic libraries
 to execute specific services that are not or not easily available from Basic directly.
+When relevant, the methods present in the ScripForge Python module might call the
+functions below for compatibility reasons.
 """
 
 import getpass
@@ -154,6 +156,16 @@ def _SF_FileSystem__HashFile(filename: str, algorithm: str) -> str:  # used by S
             return ''
     except Exception:
         return ''
+
+
+def _SF_FileSystem__Normalize(systemfilepath: str) -> str:
+    # used by SF_FileSystem.Normalize() Basic method
+    """
+    Normalize a pathname by collapsing redundant separators and up-level references so that
+    A//B, A/B/, A/./B and A/foo/../B all become A/B.
+    On Windows, it converts forward slashes to backward slashes.
+    """
+    return os.path.normpath(systemfilepath)
 
 
 # #################################################################
@@ -300,8 +312,9 @@ if __name__ == "__main__":
     print(_SF_Platform('PythonVersion'))
     #
     print(hashlib.algorithms_guaranteed)
-    print(_SF_FileSystem__HashFile('/opt/libreoffice6.4/program/libbootstraplo.so', 'md5'))
-    print(_SF_FileSystem__HashFile('/opt/libreoffice6.4/share/Scripts/python/Capitalise.py', 'sha512'))
+    print(_SF_FileSystem__HashFile('/opt/libreoffice7.3/program/libbootstraplo.so', 'md5'))
+    print(_SF_FileSystem__HashFile('/opt/libreoffice7.3/share/Scripts/python/Capitalise.py', 'sha512'))
+    print(_SF_FileSystem__Normalize('A/foo/../B/C/./D//E'))
     #
     print(_SF_String__HashStr('œ∑¡™£¢∞§¶•ªº–≠œ∑´®†¥¨ˆøπ“‘åß∂ƒ©˙∆˚¬', 'MD5'))    # 616eb9c513ad07cd02924b4d285b9987
     #

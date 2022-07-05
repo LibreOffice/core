@@ -227,8 +227,8 @@ Private Sub Class_Initialize()
 	Set TestTimer = Nothing
 	Set SuiteTimer = Nothing
 	Set CaseTimer = Nothing
-	Set Exception = CreateScriptService(&quot;ScriptForge.Exception&quot;)
-	Set Session = CreateScriptService(&quot;ScriptForge.Session&quot;)
+	Set Exception = ScriptForge.SF_Exception	&apos;	Do not use CreateScriptService to allow New SF_UnitTest from other libraries
+	Set Session = ScriptForge.SF_Session
 End Sub		&apos;	SFUnitTests.SF_UnitTest Constructor
 
 REM -----------------------------------------------------------------------------
