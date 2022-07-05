@@ -97,7 +97,7 @@
 #define STR_NONAME                              NC_("STR_NONAME", "Untitled")
 #define STR_STANDARD_SHORTCUT                   NC_("STR_STANDARD_SHORTCUT", "Standard")
 #define STR_BYTES                               NC_("STR_BYTES", "Bytes")
-#define STR_KB                                  NC_("STR_KB", "KB")
+#define STR_KB                                  NC_("STR_KB", "kB")
 #define STR_MB                                  NC_("STR_MB", "MB")
 #define STR_GB                                  NC_("STR_GB", "GB")
 #define STR_QUERY_LASTVERSION                   NC_("STR_QUERY_LASTVERSION", "Cancel all changes?")

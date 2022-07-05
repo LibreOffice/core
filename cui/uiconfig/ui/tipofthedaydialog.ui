@@ -5,7 +5,7 @@
   <object class="GtkDialog" id="TipOfTheDayDialog">
     <property name="can-focus">False</property>
     <property name="border-width">6</property>
-    <property name="title" translatable="yes" context="TipOfTheDayDialog|Name">Tip of the day</property>
+    <property name="title" translatable="yes" context="TipOfTheDayDialog|Name">Tip of the Day</property>
     <property name="resizable">False</property>
     <property name="modal">False</property>
     <property name="window-position">center-on-parent</property>
@@ -26,7 +26,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
-                <property name="tooltip-text" translatable="yes" context="TipOfTheDay|Checkbox_Tooltip">Enable the dialog again at Tools &gt; Options &gt; General, or Help &gt; Show Tip of the Day</property>
+                <property name="tooltip-text" translatable="yes" context="TipOfTheDay|Checkbox_Tooltip">Enable the dialog again at Tools ▸ Options ▸ General, or Help ▸ Show Tip of the Day</property>
                 <property name="use-underline">True</property>
                 <property name="active">True</property>
                 <property name="draw-indicator">True</property>
