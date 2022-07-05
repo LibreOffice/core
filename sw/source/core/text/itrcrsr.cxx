@@ -411,7 +411,7 @@ void SwTextCursor::AddExtraBlankWidth()
     {
         pNextPos = pPos->GetNextPortion();
         // Do it only if it is the last portion that able to handle the cursor,
-        // else the next portion would misscalculate the cursor position
+        // else the next portion would miscalculate the cursor position
         if (pPos->ExtraBlankWidth() && (!pNextPos || pNextPos->IsMarginPortion()))
         {
             pPos->Width(pPos->Width() + pPos->ExtraBlankWidth());
