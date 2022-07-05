@@ -1157,6 +1157,9 @@ class SFScriptForge:
         def MoveFile(self, source, destination):
             return self.ExecMethod(self.vbMethod, 'MoveFile', source, destination)
 
+        def Normalize(self, filename):
+            return self.ExecMethod(self.vbMethod, 'Normalize', filename)
+
         def MoveFolder(self, source, destination):
             return self.ExecMethod(self.vbMethod, 'MoveFolder', source, destination)
 

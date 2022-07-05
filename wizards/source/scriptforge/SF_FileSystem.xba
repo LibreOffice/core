@@ -1268,6 +1268,7 @@ Public Function Methods() As Variant
 					, &quot;HashFile&quot; _
 					, &quot;MoveFile&quot; _
 					, &quot;MoveFolder&quot; _
+					, &quot;Normalize&quot; _
 					, &quot;OpenTextFile&quot; _
 					, &quot;PickFile&quot; _
 					, &quot;PickFolder&quot; _
@@ -1382,6 +1383,47 @@ Finally:
 Catch:
 	GoTo Finally
 End Function    &apos;   ScriptForge.SF_FileSystem.MoveFolder
+
+REM -----------------------------------------------------------------------------
+Public Function Normalize(Optional ByVal FileName As Variant) As String
+&apos;&apos;&apos;	Normalize a pathname by collapsing redundant separators and up-level references
+&apos;&apos;&apos;	so that A//B, A/B/, A/./B and A/foo/../B all become A/B. 
+&apos;&apos;&apos;	On Windows, it converts forward slashes to backward slashes.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		FileName: a string representing a file. The file may not exist.
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		The normalized filename in filenaming notation
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		Print SF_FileSystem.Normalize(&quot;A/foo/../B/C/./D//E&quot;)	&apos;	A/B/C/D/E
+
+Dim sNorm As String			&apos;	Return value
+Const cstPyHelper = &quot;$&quot; &amp; &quot;_SF_FileSystem__Normalize&quot;
+Const cstThisSub = &quot;FileSystem.Normalize&quot;
+Const cstSubArgs = &quot;FileName&quot;
+
+	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	sNorm = &quot;&quot;
+
+Check:
+	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not SF_Utils._ValidateFile(FileName, &quot;FileName&quot;) Then GoTo Finally
+	End If
+
+Try:
+	With ScriptForge.SF_Session
+		sNorm = .ExecutePythonScript(.SCRIPTISSHARED, _SF_.PythonHelper &amp; cstPyHelper _
+						, _ConvertFromUrl(FileName))
+		&apos;	The Python os.path expects and returns a file name in os notation
+		If SF_FileSystem.FileNaming &lt;&gt; &quot;SYS&quot; Then sNorm = ConvertToUrl(sNorm)
+	End With
+
+Finally:
+	Normalize = sNorm
+	SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function    &apos;   ScriptForge.SF_FileSystem.Normalize
 
 REM -----------------------------------------------------------------------------
 Public Function OpenTextFile(Optional ByVal FileName As Variant _
@@ -1759,7 +1801,7 @@ End Function	&apos;	ScriptForge.FileSystem._ConvertFromUrl
 REM -----------------------------------------------------------------------------
 Private Function _ConvertToUrl(psFile) As String
 &apos;&apos;&apos;	Execute the builtin ConvertToUrl function only when relevant
-&apos;&apos;&apos;		i.e. when FileNaming (how arguments and return values are provided) = &quot;SYS&quot;
+&apos;&apos;&apos;		i.e. when FileNaming (how arguments and return values are provided) &lt;&gt; &quot;URL&quot;
 &apos;&apos;&apos;	Called at the top of methods receiving file names as arguments
 &apos;&apos;&apos;	Remark: psFile might contain wildcards
 
