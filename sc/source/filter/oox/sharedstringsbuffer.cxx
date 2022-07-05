@@ -28,14 +28,15 @@ SharedStringsBuffer::SharedStringsBuffer( const WorkbookHelper& rHelper ) :
 
 RichStringRef SharedStringsBuffer::createRichString()
 {
-    RichStringRef xString = std::make_shared<RichString>( *this );
+    RichStringRef xString = std::make_shared<RichString>();
     maStrings.push_back( xString );
     return xString;
 }
 
 void SharedStringsBuffer::finalizeImport()
 {
-    maStrings.forEachMem( &RichString::finalizeImport );
+    for (auto & rString : maStrings)
+        rString->finalizeImport(*this);
 }
 
 RichStringRef SharedStringsBuffer::getString( sal_Int32 nStringId ) const
