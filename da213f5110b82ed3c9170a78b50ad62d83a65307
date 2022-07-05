@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "481b949d_4de10c3b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-07-05T10:11:19Z",
+      "side": 1,
+      "message": "I know this is kind of a “grab bag” commit, but it consists of long-postponed changes (effing procrastination) and we’re close to the string freeze.",
+      "revId": "da213f5110b82ed3c9170a78b50ad62d83a65307",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
