@@ -2078,14 +2078,25 @@ bool ScColumn::ParseString(
         bool bNumeric = false;
         if (aParam.mbHandleApostrophe)
         {
-            // Cell format is not 'Text', and the first char
-            // is an apostrophe. Check if the input is considered a number.
-            OUString aTest = rString.copy(1);
-            double fTest;
-            bNumeric = aParam.mpNumFormatter->IsNumberFormat(aTest, nIndex, fTest);
-            if (bNumeric)
-                // This is a number. Strip out the first char.
-                rCell.set(rPool.intern(aTest));
+            // Cell format is not 'Text', and the first char is an apostrophe.
+            // Check if the input is considered a number with all leading
+            // apostrophes removed. All because ''1 should produce '1 not ''1,
+            // thus '''1 be ''1 and so on.
+            // NOTE: this corresponds with sc/source/ui/view/tabvwsha.cxx
+            // ScTabViewShell::UpdateInputHandler() prepending an apostrophe if
+            // necessary.
+            sal_Int32 i = 1;
+            while (i < rString.getLength() && rString[i] == '\'')
+                ++i;
+            if (i < rString.getLength())
+            {
+                OUString aTest = rString.copy(i);
+                double fTest;
+                bNumeric = aParam.mpNumFormatter->IsNumberFormat(aTest, nIndex, fTest);
+                if (bNumeric)
+                    // This is a number. Strip out the first apostrophe.
+                    rCell.set(rPool.intern(rString.copy(1)));
+            }
         }
         if (!bNumeric)
             // This is normal text. Take it as-is.
