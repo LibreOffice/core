@@ -3335,7 +3335,7 @@ SdrObject* SdrObjFactory::MakeNewObject(
 
     if(bSetSnapRect && nullptr != pSnapRect)
     {
-        pObj->SetSnapRect(*pSnapRect);
+        pObj->NbcSetSnapRect(*pSnapRect);
     }
 
     return pObj;
