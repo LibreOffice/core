@@ -24,6 +24,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b020238d_64a7c5f1",
+        "filename": "svx/source/accessibility/AccessibleShape.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1017,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-07-06T16:39:00Z",
+      "side": 0,
+      "message": "fixed",
+      "parentUuid": "ee636eca_245e94ba",
+      "range": {
+        "startLine": 1013,
+        "startChar": 0,
+        "endLine": 1017,
+        "endChar": 62
+      },
+      "revId": "6124dccb7bb20688f98f5517c2604f510dd6f4fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ea7ccd81_c4a6ca3e",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-07-06T10:37:09Z",
       "side": 0,
       "message": "Didn\u0027t actually test it, but doesnt AccessibilityTools::debugAccessibleStateSet (used where AccessibilityTools::debugName used to be used earlier) now just return \"unknown\" when more than one state is set, while the above was able to handle multiple states and concatenated them into one string?",
+      "range": {
+        "startLine": 466,
+        "startChar": 0,
+        "endLine": 478,
+        "endChar": 1
+      },
+      "revId": "6124dccb7bb20688f98f5517c2604f510dd6f4fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e04c5493_04064fbc",
+        "filename": "toolkit/qa/cppunit/a11y/AccessibilityTools.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-07-06T16:39:00Z",
+      "side": 0,
+      "message": "good point, fixed debugAccessibleStateSet to print out all the states",
+      "parentUuid": "ea7ccd81_c4a6ca3e",
       "range": {
         "startLine": 466,
         "startChar": 0,

@@ -36,6 +36,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9849a066_299a0bfe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-07-06T16:39:00Z",
+      "side": 1,
+      "message": "great!",
+      "parentUuid": "5261efe5_94797968",
+      "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7ef5d9d9_16e8f4cb",
@@ -49,6 +67,30 @@
       "writtenOn": "2022-07-06T08:23:09Z",
       "side": 1,
       "message": "That method might profit from a new name, now that it doesn\u0027t create a state set helper any more.",
+      "range": {
+        "startLine": 252,
+        "startChar": 0,
+        "endLine": 252,
+        "endChar": 49
+      },
+      "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89b9673d_42af1b24",
+        "filename": "accessibility/inc/extended/AccessibleBrowseBoxBase.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-07-06T16:39:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ef5d9d9_16e8f4cb",
       "range": {
         "startLine": 252,
         "startChar": 0,
@@ -82,6 +124,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "19ceb2d0_4ab90e77",
+        "filename": "accessibility/inc/extended/AccessibleGridControlBase.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-07-06T16:39:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b932dd30_e0cfbaf7",
+      "range": {
+        "startLine": 215,
+        "startChar": 0,
+        "endLine": 215,
+        "endChar": 49
+      },
+      "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e0859ee1_1c4670b4",
@@ -95,6 +161,30 @@
       "writtenOn": "2022-07-06T08:23:09Z",
       "side": 1,
       "message": "This comment looks obsolete (and m_aStateSet has already been dropped earlier).",
+      "range": {
+        "startLine": 302,
+        "startChar": 0,
+        "endLine": 305,
+        "endChar": 7
+      },
+      "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d380ea9e_a67eb63c",
+        "filename": "chart2/source/controller/inc/AccessibleBase.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-07-06T16:39:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e0859ee1_1c4670b4",
       "range": {
         "startLine": 302,
         "startChar": 0,
@@ -128,6 +218,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d866b0d9_05b82737",
+        "filename": "editeng/source/accessibility/AccessibleParaManager.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-07-06T16:39:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f0ed6bf_83129603",
+      "range": {
+        "startLine": 245,
+        "startChar": 0,
+        "endLine": 246,
+        "endChar": 41
+      },
+      "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f244cc57_741bcdff",
@@ -141,6 +255,30 @@
       "writtenOn": "2022-07-06T08:23:09Z",
       "side": 1,
       "message": "Maybe might make sense to adapt or drop this?",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 13
+      },
+      "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8acbf16_f1fbe3d1",
+        "filename": "offapi/com/sun/star/accessibility/AccessibleStateType.idl",
+        "patchSetId": 7
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-07-06T16:39:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f244cc57_741bcdff",
       "range": {
         "startLine": 30,
         "startChar": 0,
@@ -174,6 +312,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce0dcb9e_14f2ffe3",
+        "filename": "offapi/com/sun/star/accessibility/XAccessibleContext.idl",
+        "patchSetId": 7
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-07-06T16:39:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "394bcd62_ec4be46c",
+      "range": {
+        "startLine": 155,
+        "startChar": 11,
+        "endLine": 156,
+        "endChar": 71
+      },
+      "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b18a87fb_2e1826fd",
@@ -187,6 +349,30 @@
       "writtenOn": "2022-07-06T08:23:09Z",
       "side": 1,
       "message": "This doesn\u0027t fit any more.",
+      "range": {
+        "startLine": 161,
+        "startChar": 0,
+        "endLine": 162,
+        "endChar": 37
+      },
+      "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0674347_79e3c4c0",
+        "filename": "offapi/com/sun/star/accessibility/XAccessibleContext.idl",
+        "patchSetId": 7
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-07-06T16:39:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b18a87fb_2e1826fd",
       "range": {
         "startLine": 161,
         "startChar": 0,
@@ -220,6 +406,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b721768b_4ff55610",
+        "filename": "sc/source/ui/Accessibility/AccessibleCsvControl.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1359,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-07-06T16:39:00Z",
+      "side": 1,
+      "message": "good catch, fixed",
+      "parentUuid": "b35e41a0_20a840c0",
+      "range": {
+        "startLine": 1359,
+        "startChar": 4,
+        "endLine": 1359,
+        "endChar": 28
+      },
+      "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eaeed6cf_c986077e",
@@ -233,6 +443,30 @@
       "writtenOn": "2022-07-06T10:37:09Z",
       "side": 1,
       "message": "It\u0027s a bit confusing the original code didn\u0027t use the reference right away, but do I understand correctly that the original code was modifying the states in mxStateSet right away (via the `pComposedStates` pointer), while this now operates on a local copy only (that is then unused in the end)?",
+      "range": {
+        "startLine": 770,
+        "startChar": 0,
+        "endLine": 777,
+        "endChar": 106
+      },
+      "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c32e574_6d962b98",
+        "filename": "svx/source/accessibility/AccessibleControlShape.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 777,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-07-06T16:39:00Z",
+      "side": 1,
+      "message": "fixed",
+      "parentUuid": "eaeed6cf_c986077e",
       "range": {
         "startLine": 770,
         "startChar": 0,
@@ -266,6 +500,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb32c487_8a9a7cf5",
+        "filename": "svx/source/accessibility/AccessibleControlShape.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 792,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-07-06T16:39:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d129fc44_02d3f15a",
+      "range": {
+        "startLine": 792,
+        "startChar": 65,
+        "endLine": 792,
+        "endChar": 96
+      },
+      "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "07b52475_b1580c85",
@@ -279,6 +537,30 @@
       "writtenOn": "2022-07-06T10:37:09Z",
       "side": 1,
       "message": "Somewhat similar to AccessibleControlShape::initializeComposedState: IIUC, the original version was at least in the beginning setting states internally as well, and then only creating a copy later (and setting the SELECTED state only on the copy for the `mpParent \u0026\u0026 mpParent-\u003eIsDocumentSelAll()` case, which I don\u0027t see below any more at all), while this sets the states only in the copy right from the beginning?",
+      "range": {
+        "startLine": 389,
+        "startChar": 0,
+        "endLine": 389,
+        "endChar": 37
+      },
+      "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "16b6707b_05c2f195",
+        "filename": "svx/source/accessibility/AccessibleShape.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-07-06T16:39:00Z",
+      "side": 1,
+      "message": "fixed",
+      "parentUuid": "07b52475_b1580c85",
       "range": {
         "startLine": 389,
         "startChar": 0,
@@ -312,6 +594,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a2ef547_3cd01213",
+        "filename": "toolkit/qa/cppunit/a11y/XAccessibleContextTester.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-07-06T16:39:00Z",
+      "side": 1,
+      "message": "yeah, removed the assert now, there is no longer a way to not have a stateset",
+      "parentUuid": "92e9c2f2_8b137bac",
+      "range": {
+        "startLine": 149,
+        "startChar": 51,
+        "endLine": 149,
+        "endChar": 65
+      },
+      "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e4b5d04a_2d382c54",
@@ -325,6 +631,30 @@
       "writtenOn": "2022-07-06T10:37:09Z",
       "side": 1,
       "message": "Don\u0027t know whether it makes any difference in practice, but IIUC, the original code would also have called the below for an empty set of states. (same for `detachRecursive` below)",
+      "range": {
+        "startLine": 134,
+        "startChar": 1,
+        "endLine": 134,
+        "endChar": 23
+      },
+      "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1d9807b_aabb1e6c",
+        "filename": "vcl/osx/documentfocuslistener.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-07-06T16:39:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e4b5d04a_2d382c54",
       "range": {
         "startLine": 134,
         "startChar": 1,
@@ -358,6 +688,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8734284_03313fde",
+        "filename": "winaccessibility/source/UAccCOM/MAccessible.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-07-06T16:39:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "87c3d65a_8ae38316",
+      "range": {
+        "startLine": 164,
+        "startChar": 20,
+        "endLine": 164,
+        "endChar": 38
+      },
+      "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c06c0701_6c11a1c8",
@@ -381,6 +735,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "20d6fc6b_a4884e89",
+        "filename": "winaccessibility/source/UAccCOM/MAccessible.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 2962,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-07-06T16:39:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c06c0701_6c11a1c8",
+      "range": {
+        "startLine": 2959,
+        "startChar": 0,
+        "endLine": 2962,
+        "endChar": 5
+      },
+      "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4f606229_dbdc2757",
@@ -394,6 +772,30 @@
       "writtenOn": "2022-07-06T10:37:09Z",
       "side": 1,
       "message": "This results in IncreaseState() no longer getting called for all states except the one explicitly mentioned above, so IIRC, they will be missing elsewhere and then not be exposed to AT.",
+      "range": {
+        "startLine": 784,
+        "startChar": 0,
+        "endLine": 808,
+        "endChar": 5
+      },
+      "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b0ad874_1bc9ac3d",
+        "filename": "winaccessibility/source/service/AccObject.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 808,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-07-06T16:39:00Z",
+      "side": 1,
+      "message": "fixed",
+      "parentUuid": "4f606229_dbdc2757",
       "range": {
         "startLine": 784,
         "startChar": 0,
