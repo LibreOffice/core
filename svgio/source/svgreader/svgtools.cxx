@@ -1072,9 +1072,18 @@ namespace svgio::svgreader
                 const sal_Int32 nLen(rCandidate.getLength());
                 sal_Int32 nPos(strlen(aStrUrl));
 
-                skip_char(rCandidate, '(', '#', nPos, nLen);
+                skip_char(rCandidate, '(', nPos, nLen);
+                sal_Unicode aLimiter(')');
+
+                if('"' == rCandidate[nPos])
+                    aLimiter = '"';
+
+                skip_char(rCandidate, '"', nPos, nLen);
+                skip_char(rCandidate, '#', nPos, nLen);
                 OUStringBuffer aTokenValue;
-                copyToLimiter(rCandidate, ')', nPos, aTokenValue, nLen);
+
+                copyToLimiter(rCandidate, aLimiter, nPos, aTokenValue, nLen);
+
                 rURL = aTokenValue.makeStringAndClear();
 
                 return true;
