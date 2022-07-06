@@ -16,6 +16,208 @@
       "message": "michael, this is ready for review (if you feel like doing that)",
       "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5261efe5_94797968",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-06T08:23:09Z",
+      "side": 1,
+      "message": "Thanks, I\u0027m on it right now (currently about half way through, so maybe a few more comments to come later).",
+      "parentUuid": "b8c52ab5_2b1a15c0",
+      "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ef5d9d9_16e8f4cb",
+        "filename": "accessibility/inc/extended/AccessibleBrowseBoxBase.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-06T08:23:09Z",
+      "side": 1,
+      "message": "That method might profit from a new name, now that it doesn\u0027t create a state set helper any more.",
+      "range": {
+        "startLine": 252,
+        "startChar": 0,
+        "endLine": 252,
+        "endChar": 49
+      },
+      "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b932dd30_e0cfbaf7",
+        "filename": "accessibility/inc/extended/AccessibleGridControlBase.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-06T08:23:09Z",
+      "side": 1,
+      "message": "same here (name doesn\u0027t really fit any more)",
+      "range": {
+        "startLine": 215,
+        "startChar": 0,
+        "endLine": 215,
+        "endChar": 49
+      },
+      "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0859ee1_1c4670b4",
+        "filename": "chart2/source/controller/inc/AccessibleBase.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-06T08:23:09Z",
+      "side": 1,
+      "message": "This comment looks obsolete (and m_aStateSet has already been dropped earlier).",
+      "range": {
+        "startLine": 302,
+        "startChar": 0,
+        "endLine": 305,
+        "endChar": 7
+      },
+      "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f0ed6bf_83129603",
+        "filename": "editeng/source/accessibility/AccessibleParaManager.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-06T08:23:09Z",
+      "side": 1,
+      "message": "IIUC, this changes semantics (and should rather stay a loop?), since AccessibleEditableTextPara::SetState already won\u0027t do anything if at least one of the given states is already set, so any others in mnChildStates won\u0027t get set any more.",
+      "range": {
+        "startLine": 245,
+        "startChar": 0,
+        "endLine": 246,
+        "endChar": 41
+      },
+      "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f244cc57_741bcdff",
+        "filename": "offapi/com/sun/star/accessibility/AccessibleStateType.idl",
+        "patchSetId": 7
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-06T08:23:09Z",
+      "side": 1,
+      "message": "Maybe might make sense to adapt or drop this?",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 13
+      },
+      "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "394bcd62_ec4be46c",
+        "filename": "offapi/com/sun/star/accessibility/XAccessibleContext.idl",
+        "patchSetId": 7
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-06T08:23:09Z",
+      "side": 1,
+      "message": "This sentence can be dropped IMHO, since its clear when just returning a number instead of a reference.",
+      "range": {
+        "startLine": 155,
+        "startChar": 11,
+        "endLine": 156,
+        "endChar": 71
+      },
+      "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b18a87fb_2e1826fd",
+        "filename": "offapi/com/sun/star/accessibility/XAccessibleContext.idl",
+        "patchSetId": 7
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-06T08:23:09Z",
+      "side": 1,
+      "message": "This doesn\u0027t fit any more.",
+      "range": {
+        "startLine": 161,
+        "startChar": 0,
+        "endLine": 162,
+        "endChar": 37
+      },
+      "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b35e41a0_20a840c0",
+        "filename": "sc/source/ui/Accessibility/AccessibleCsvControl.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1359,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-06T08:23:09Z",
+      "side": 1,
+      "message": "Is there a reason to no longer call implCreateStateSet() here, which might already set some states?",
+      "range": {
+        "startLine": 1359,
+        "startChar": 4,
+        "endLine": 1359,
+        "endChar": 28
+      },
+      "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
