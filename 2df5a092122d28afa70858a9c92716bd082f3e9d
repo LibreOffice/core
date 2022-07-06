@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a06e944_e11d26be",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-07-06T18:22:49Z",
+      "side": 1,
+      "message": "I did some digging, looks to me like this needs to be sal_uInt16. Stephan, am I on the right track?",
+      "revId": "2df5a092122d28afa70858a9c92716bd082f3e9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
