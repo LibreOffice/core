@@ -16,6 +16,24 @@
       "message": "I did some digging, looks to me like this needs to be sal_uInt16. Stephan, am I on the right track?",
       "revId": "2df5a092122d28afa70858a9c92716bd082f3e9d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c218a0d_b5e7e08c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-07-06T19:41:17Z",
+      "side": 1,
+      "message": "\u003e I did some digging, looks to me like this needs to be sal_uInt16. Stephan, am I on the right track?\n\nI\u0027ll defer to Thorsten.",
+      "parentUuid": "4a06e944_e11d26be",
+      "revId": "2df5a092122d28afa70858a9c92716bd082f3e9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
