@@ -700,7 +700,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf144308)
 
     xGlobalSheetSettings->setDoAutoComplete(true);
 
-    pDoc->SetString(ScAddress(0, 0, 0), "ABC");
+    insertStringToCell(*pModelObj, "A1", "ABC");
 
     insertStringToCell(*pModelObj, "A2", "A");
 
