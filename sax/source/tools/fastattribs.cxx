@@ -181,7 +181,7 @@ sal_Bool FastAttributeList::hasAttribute( ::sal_Int32 Token )
 
 sal_Int32 FastAttributeList::getValueToken( ::sal_Int32 Token )
 {
-    for (size_t i = 0; i < maAttributeTokens.size(); ++i)
+    for (size_t i = 0, n = maAttributeTokens.size(); i < n; ++i)
         if (maAttributeTokens[i] == Token)
             return FastTokenHandlerBase::getTokenFromChars(
                        mpTokenHandler,
@@ -193,7 +193,7 @@ sal_Int32 FastAttributeList::getValueToken( ::sal_Int32 Token )
 
 sal_Int32 FastAttributeList::getOptionalValueToken( ::sal_Int32 Token, ::sal_Int32 Default )
 {
-    for (size_t i = 0; i < maAttributeTokens.size(); ++i)
+    for (size_t i = 0, n = maAttributeTokens.size(); i < n; ++i)
         if (maAttributeTokens[i] == Token)
             return FastTokenHandlerBase::getTokenFromChars(
                        mpTokenHandler,
@@ -207,14 +207,14 @@ sal_Int32 FastAttributeList::getOptionalValueToken( ::sal_Int32 Token, ::sal_Int
 bool FastAttributeList::getAsInteger( sal_Int32 nToken, sal_Int32 &rInt) const
 {
     rInt = 0;
-    for (size_t i = 0; i < maAttributeTokens.size(); ++i)
+    for (size_t i = 0, n = maAttributeTokens.size(); i < n; ++i)
         if (maAttributeTokens[i] == nToken)
         {
-            sal_Int64 n = rtl_str_toInt64_WithLength( getFastAttributeValue(i), 10, AttributeValueLength(i) );
-            if (n < SAL_MIN_INT32 || n > SAL_MAX_INT32) {
-                n = 0;
+            sal_Int64 nVal = rtl_str_toInt64_WithLength( getFastAttributeValue(i), 10, AttributeValueLength(i) );
+            if (nVal < SAL_MIN_INT32 || nVal > SAL_MAX_INT32) {
+                nVal = 0;
             }
-            rInt = n;
+            rInt = nVal;
             return true;
         }
     return false;
@@ -232,7 +232,7 @@ sal_Int32 FastAttributeList::getAsIntegerByIndex( sal_Int32 nTokenIndex ) const
 bool FastAttributeList::getAsDouble( sal_Int32 nToken, double &rDouble) const
 {
     rDouble = 0.0;
-    for (size_t i = 0; i < maAttributeTokens.size(); ++i)
+    for (size_t i = 0, n = maAttributeTokens.size(); i < n; ++i)
         if (maAttributeTokens[i] == nToken)
         {
             auto const p = getFastAttributeValue(i);
@@ -265,7 +265,7 @@ const char* FastAttributeList::getAsCharByIndex( sal_Int32 nTokenIndex ) const
 
 OUString FastAttributeList::getValue( ::sal_Int32 Token )
 {
-    for (size_t i = 0; i < maAttributeTokens.size(); ++i)
+    for (size_t i = 0, n = maAttributeTokens.size(); i < n; ++i)
         if (maAttributeTokens[i] == Token)
             return OUString( getFastAttributeValue(i), AttributeValueLength(i), RTL_TEXTENCODING_UTF8 );
 
@@ -279,7 +279,7 @@ OUString FastAttributeList::getValueByIndex( ::sal_Int32 nTokenIndex ) const
 
 OUString FastAttributeList::getOptionalValue( ::sal_Int32 Token )
 {
-    for (size_t i = 0; i < maAttributeTokens.size(); ++i)
+    for (size_t i = 0, n = maAttributeTokens.size(); i < n; ++i)
         if (maAttributeTokens[i] == Token)
             return OUString( getFastAttributeValue(i), AttributeValueLength(i), RTL_TEXTENCODING_UTF8 );
 
@@ -300,7 +300,7 @@ Sequence< FastAttribute > FastAttributeList::getFastAttributes(  )
 {
     Sequence< FastAttribute > aSeq( maAttributeTokens.size() );
     FastAttribute* pAttr = aSeq.getArray();
-    for (size_t i = 0; i < maAttributeTokens.size(); ++i)
+    for (size_t i = 0, n = maAttributeTokens.size(); i < n; ++i)
     {
         pAttr->Token = maAttributeTokens[i];
         pAttr->Value = OUString( getFastAttributeValue(i), AttributeValueLength(i), RTL_TEXTENCODING_UTF8 );
@@ -311,7 +311,7 @@ Sequence< FastAttribute > FastAttributeList::getFastAttributes(  )
 
 FastAttributeList::FastAttributeIter FastAttributeList::find( sal_Int32 nToken ) const
 {
-    for (size_t i = 0; i < maAttributeTokens.size(); ++i)
+    for (size_t i = 0, n = maAttributeTokens.size(); i < n; ++i)
         if( maAttributeTokens[i] == nToken )
             return FastAttributeIter(*this, i);
     return end();
