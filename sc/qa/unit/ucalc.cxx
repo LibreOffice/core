@@ -189,6 +189,7 @@ public:
     void testSetBackgroundColor();
     void testRenameTable();
 
+    void testTdf149665();
     void testTdf64001();
     void testAutoFill();
     void testAutoFillSimple();
@@ -295,6 +296,7 @@ public:
     CPPUNIT_TEST(testJumpToPrecedentsDependents);
     CPPUNIT_TEST(testSetBackgroundColor);
     CPPUNIT_TEST(testRenameTable);
+    CPPUNIT_TEST(testTdf149665);
     CPPUNIT_TEST(testTdf64001);
     CPPUNIT_TEST(testAutoFill);
     CPPUNIT_TEST(testAutoFillSimple);
@@ -4465,6 +4467,20 @@ void Test::testJumpToPrecedentsDependents()
         CPPUNIT_ASSERT_MESSAGE("C1:C2 should be the only dependent of A1.",
                                hasRange(m_pDoc, aRefTokens, ScRange(2, 0, 0, 2, 1, 0), aA1));
     }
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testTdf149665()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    m_pDoc->SetString(0, 0, 0, "''1");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: '1
+    // - Actual  : ''1
+    CPPUNIT_ASSERT_EQUAL( OUString("'1"), m_pDoc->GetString( 0, 0, 0 ) );
 
     m_pDoc->DeleteTab(0);
 }
