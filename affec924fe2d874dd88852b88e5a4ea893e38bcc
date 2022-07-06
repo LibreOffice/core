@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1bede28_311a7303",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-07-06T08:38:22Z",
+      "side": 1,
+      "message": "You forgot sw/UIConfig_swriter.mk",
+      "revId": "affec924fe2d874dd88852b88e5a4ea893e38bcc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
