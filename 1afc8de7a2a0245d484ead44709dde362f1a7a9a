@@ -33,6 +33,24 @@
       "message": "I\u0027d revert this to `long` as originally used in \u003chttps://git.libreoffice.org/core/+/e81359a9a3240187bf3a02fdb48b8709238bdc51%5E!/\u003e \"added registerImpl() re-entered warning\" and then apparently accidentally broken in the mass conversion \u003chttps://git.libreoffice.org/core/+/e25fd7782ad04dc363b4265e1bd08d6e092b50c5%5E!/\u003e \"long-\u003etools::Long in hwpfilter..oox\".  (And mention that history in the commit message.)",
       "revId": "1afc8de7a2a0245d484ead44709dde362f1a7a9a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38073cac_ef264e41",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-07-06T17:57:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "25a74d1a_424a18a9",
+      "revId": "1afc8de7a2a0245d484ead44709dde362f1a7a9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
