@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d14b060e_bbfa4bf8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-07-06T14:44:56Z",
+      "side": 1,
+      "message": "This crashes on gtk3/4 but not kf5/gen. The get_toggle() function returns 7 and seems to miss the -1 column whatever. How do I add this?",
+      "revId": "2814de320a2bdc872bb81aad3eb565f1d6719077",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
