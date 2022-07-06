@@ -274,7 +274,7 @@ void SlideBackgroundFillPrimitive2D::create2DDecomposition(
             // since the defining geometry is the getB2DPolyPolygon() one.
             // We have already checked above that it's no empty and overlaps
             // somehow.
-            // It also might be completely insinde the PageRange. If not, we
+            // It also might be completely inside the PageRange. If not, we
             // additionally would need to mask the content against PageBounds,
             // so using potentially two different MaskPrimitive2D's.
             // Since in this case we have a PolyPolygon and a B2DRange it is cheaper
@@ -294,7 +294,7 @@ void SlideBackgroundFillPrimitive2D::create2DDecomposition(
             // create MaskPrimitive2D to limit display to PolygonGeometry
             const Primitive2DReference aMasked(
                 new MaskPrimitive2D(
-                    aPolyPolygon,
+                    std::move(aPolyPolygon),
                     std::move(rContainer)));
 
             rContainer = Primitive2DContainer { aMasked };
@@ -332,10 +332,10 @@ void SlideBackgroundFillPrimitive2D::get2DDecomposition(
     }
 
     // tdf#149650 allow remember/detect of potential recursion for content creation.
-    // use a std::set association - instead of a single bool or adress - due to the
+    // use a std::set association - instead of a single bool or address - due to the
     // possibility of multiple SlideBackgroundFillPrimitive2D's being used at the same
     // refresh. Also possible would be a local member (bool), but that just makes the
-    // class more complicated. Working wth the adress is not a problem here since below
+    // class more complicated. Working with the address is not a problem here since below
     // it reliably gets added/removed while being incarnated only.
     static std::set<const SlideBackgroundFillPrimitive2D*> potentiallyActiveRecursion;
 
