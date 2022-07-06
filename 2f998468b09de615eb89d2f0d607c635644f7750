@@ -16,6 +16,24 @@
       "message": "Do we need \u0027queryredlinedialog.ui\u0027 anymore? It is not referenced elsewhere. Then, you may have to remove the file, and also remove its name from the makefile(s).",
       "revId": "2f998468b09de615eb89d2f0d607c635644f7750",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4c5376f_5ea6cacd",
+        "filename": "sw/source/uibase/shells/textsh1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-07-06T19:43:54Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "67db6d66_f77fb9a7",
+      "revId": "2f998468b09de615eb89d2f0d607c635644f7750",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
