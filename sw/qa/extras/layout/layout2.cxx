@@ -2245,6 +2245,29 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf124261)
 #endif
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testDecimalTabulator)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf120972.docx");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDocShell* pShell = pTextDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 4
+    // - Actual  : 3
+    // - In<>, XPath '//textarray' number of nodes is incorrect
+    assertXPath(pXmlDoc, "//textarray", 4);
+
+    // The X position of the two paragraphs should have equal.
+    sal_Int32 nFirstParX = getXPath(pXmlDoc, "//textarray[1]", "x").toInt32();
+    sal_Int32 nSecondParX = getXPath(pXmlDoc, "//textarray[3]", "x").toInt32();
+    CPPUNIT_ASSERT_EQUAL(nFirstParX, nSecondParX);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

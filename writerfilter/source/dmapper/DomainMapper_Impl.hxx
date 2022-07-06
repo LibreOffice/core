@@ -289,9 +289,10 @@ struct DeletableTabStop : public css::style::TabStop
     explicit DeletableTabStop()
         : bDeleted(false)
     {
-        // same defaults as SvxXMLTabStopContext_Impl
-        FillChar = ' ';
-        DecimalChar = ',';
+        FillChar = ' ';    // same default as SvxXMLTabStopContext_Impl
+
+        // tdf#120972 OOXML does not support custom decimal separator.
+        DecimalChar = '\0';
     }
     DeletableTabStop(const css::style::TabStop& rTabStop)
         : TabStop(rTabStop),
