@@ -1020,6 +1020,7 @@
 #define RID_SVXSTR_RECOVFAILED                              NC_("RID_SVXSTR_RECOVFAILED", "Recovery failed")
 #define RID_SVXSTR_RECOVINPROGR                             NC_("RID_SVXSTR_RECOVINPROGR", "Recovery in progress")
 #define RID_SVXSTR_NOTRECOVYET                              NC_("RID_SVXSTR_NOTRECOVYET", "Not recovered yet")
+#define RID_SVXSTR_WILLDISCARD                              NC_("RID_SVXSTR_WILLDISCARD", "Will be discarded")
 #define RID_SVXSTR_RECOVERY_INPROGRESS                      NC_("RID_SVXSTR_RECOVERY_INPROGRESS", "%PRODUCTNAME %PRODUCTVERSION has begun recovering your documents. Depending on the size of the documents this process can take some time.")
 #define RID_SVXSTR_RECOVERYONLY_FINISH_DESCR                NC_("RID_SVXSTR_RECOVERYONLY_FINISH_DESCR", "Recovery of your documents was finished. Click 'Finish' to see your documents.")
 #define RID_SVXSTR_RECOVERYONLY_FINISH                      NC_("RID_SVXSTR_RECOVERYONLY_FINISH", "~Finish")
