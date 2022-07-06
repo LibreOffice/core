@@ -32,7 +32,7 @@ def main():
     user = config["CrashReport"]["User"]
     password = config["CrashReport"]["Password"]
 
-    files = {'symbols': open(args.symbol_dir, 'rb')}
+    files = {'symbols': open(args.symbols_dir, 'rb')}
     data = {'version': args.version,
             'system': args.system,
             'platform': platform.system() if args.platform is None else args.platform}
