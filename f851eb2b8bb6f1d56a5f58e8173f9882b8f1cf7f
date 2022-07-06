@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3fc6fca5_f14a0851",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2022-07-06T15:20:08Z",
+      "side": 1,
+      "message": "Hmm - is it possible that this has a translation impact ? it\u0027s not really the world\u0027s most urgent bug fix I think ;-)",
+      "revId": "f851eb2b8bb6f1d56a5f58e8173f9882b8f1cf7f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
