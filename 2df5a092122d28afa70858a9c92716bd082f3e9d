@@ -34,6 +34,24 @@
       "parentUuid": "4a06e944_e11d26be",
       "revId": "2df5a092122d28afa70858a9c92716bd082f3e9d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05d4dd78_50bc6098",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-07-06T22:08:52Z",
+      "side": 1,
+      "message": "Yep, change makes sense - helper function solely used for gui zoom foo, so why not use their int type.",
+      "parentUuid": "9c218a0d_b5e7e08c",
+      "revId": "2df5a092122d28afa70858a9c92716bd082f3e9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
