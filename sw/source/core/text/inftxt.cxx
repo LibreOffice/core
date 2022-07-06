@@ -1653,10 +1653,12 @@ TextFrameIndex SwTextFormatInfo::ScanPortionEnd(TextFrameIndex const nStart,
 
     // Used for decimal tab handling:
     const sal_Unicode cTabDec = GetLastTab() ? GetTabDecimal() : 0;
-    const sal_Unicode cThousandSep  = ',' == cTabDec ? '.' : ',';
+
+    // tdf#120972 Don't use a thousand separator if the decimal separotor is the unit separator (31).
+    const sal_Unicode cThousandSep = ',' == cTabDec ? '.' : '\31' == cTabDec ? '\0' : ',';
 
     // #i45951# German (Switzerland) uses ' as thousand separator
-    const sal_Unicode cThousandSep2 = ',' == cTabDec ? '.' : '\'';
+    const sal_Unicode cThousandSep2 = ',' == cTabDec ? '.' : '\31' == cTabDec ? '\0' : '\'';
 
     bool bNumFound = false;
     const bool bTabCompat = GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::TAB_COMPAT);
