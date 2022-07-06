@@ -4,22 +4,29 @@
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkTreeStore" id="liststore1">
     <columns>
-      <!-- column-name image -->
+      <!-- column-name checkbox -->
+      <column type="gboolean"/>
+      <!-- column-name standardimage -->
       <column type="GdkPixbuf"/>
-      <!-- column-name text -->
+      <!-- column-name displayname -->
       <column type="gchararray"/>
-      <!-- column-name image2 -->
+      <!-- column-name statustimage -->
       <column type="GdkPixbuf"/>
-      <!-- column-name text1 -->
+      <!-- column-name statustext -->
       <column type="gchararray"/>
       <!-- column-name id -->
       <column type="gchararray"/>
+      <!-- column-name chkVis -->
+      <column type="gboolean"/>
+      <!-- column-name chkTri -->
+      <column type="gboolean"/>
     </columns>
   </object>
   <object class="GtkDialog" id="DocRecoveryRecoverDialog">
     <property name="can-focus">False</property>
     <property name="border-width">6</property>
     <property name="title" translatable="yes" context="docrecoveryrecoverdialog|DocRecoveryRecoverDialog">%PRODUCTNAME %PRODUCTVERSION Document Recovery</property>
+    <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="default-width">0</property>
     <property name="default-height">0</property>
@@ -35,7 +42,7 @@
             <property name="layout-style">end</property>
             <child>
               <object class="GtkButton" id="cancel">
-                <property name="label" translatable="yes" context="docrecoveryrecoverdialog|cancel">_Discard</property>
+                <property name="label" translatable="yes" context="docrecoveryrecoverdialog|cancel">_Discard All</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="can-default">True</property>
@@ -50,7 +57,7 @@
             </child>
             <child>
               <object class="GtkButton" id="next">
-                <property name="label" translatable="yes" context="docrecoveryrecoverdialog|next">_Start</property>
+                <property name="label" translatable="yes" context="docrecoveryrecoverdialog|next">_Recover Selected</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="can-default">True</property>
@@ -69,11 +76,11 @@
             <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="pack-type">end</property>
-            <property name="position">0</property>
+            <property name="position">2</property>
           </packing>
         </child>
         <child>
-          <!-- n-columns=1 n-rows=4 -->
+          <!-- n-columns=1 n-rows=3 -->
           <object class="GtkGrid" id="grid1">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -84,7 +91,7 @@
               <object class="GtkLabel" id="desc">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="docrecoveryrecoverdialog|desc">%PRODUCTNAME will attempt to recover the state of the files you were working on before it crashed. Click 'Start' to begin the process, or click 'Discard' to cancel the recovery.</property>
+                <property name="label" translatable="yes" context="docrecoveryrecoverdialog|desc">%PRODUCTNAME will attempt to recover the state of the files you were working on before it crashed. Click 'Recover Selected' to begin the process, or click 'Discard' to cancel the recovery.</property>
                 <property name="wrap">True</property>
                 <property name="width-chars">70</property>
                 <property name="max-width-chars">70</property>
@@ -93,17 +100,6 @@
               <packing>
                 <property name="left-attach">0</property>
                 <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkProgressBar" id="progress">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="hexpand">True</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
               </packing>
             </child>
             <child>
@@ -117,7 +113,7 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">2</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
             <child>
@@ -142,43 +138,45 @@
                       <object class="GtkTreeSelection" id="treeview-selection2"/>
                     </child>
                     <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumn0">
+                      <object class="GtkTreeViewColumn" id="colRecover">
+                        <property name="title" translatable="yes" context="docrecoveryrecoverdialog|recoverft">Recover Document</property>
                         <child>
-                          <object class="GtkCellRendererPixbuf" id="cellrenderertext9"/>
+                          <object class="GtkCellRendererToggle" id="cellrenderertoggle"/>
                           <attributes>
-                            <attribute name="pixbuf">0</attribute>
+                            <attribute name="active">0</attribute>
+                          </attributes>
+                        </child>
+                        <child>
+                          <object class="GtkCellRendererPixbuf" id="cellrendererstandardimage"/>
+                          <attributes>
+                            <attribute name="pixbuf">1</attribute>
+                          </attributes>
+                        </child>
+                        <child>
+                          <object class="GtkCellRendererText" id="cellrendererdisplayname"/>
+                          <attributes>
+                            <attribute name="text">2</attribute>
                           </attributes>
                         </child>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumn1">
-                        <property name="title" translatable="yes" context="docrecoveryrecoverdialog|nameft">Document Name</property>
+                      <object class="GtkTreeViewColumn" id="colStatusImage">
                         <child>
-                          <object class="GtkCellRendererText" id="cellrenderertext2"/>
+                          <object class="GtkCellRendererPixbuf" id="cellrendererstatusimage"/>
                           <attributes>
-                            <attribute name="text">1</attribute>
+                            <attribute name="pixbuf">3</attribute>
                           </attributes>
                         </child>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumn2">
-                        <child>
-                          <object class="GtkCellRendererPixbuf" id="cellrenderertext4"/>
-                          <attributes>
-                            <attribute name="pixbuf">2</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumn3">
+                      <object class="GtkTreeViewColumn" id="colStatusText">
                         <property name="title" translatable="yes" context="docrecoveryrecoverdialog|statusft">Status</property>
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderertext3"/>
                           <attributes>
-                            <attribute name="text">3</attribute>
+                            <attribute name="text">4</attribute>
                           </attributes>
                         </child>
                       </object>
@@ -188,9 +186,20 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">3</property>
+                <property name="top-attach">2</property>
               </packing>
             </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkProgressBar" id="progress">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
           </object>
           <packing>
             <property name="expand">False</property>
