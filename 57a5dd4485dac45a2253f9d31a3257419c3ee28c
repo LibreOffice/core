@@ -218,6 +218,190 @@
       },
       "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eaeed6cf_c986077e",
+        "filename": "svx/source/accessibility/AccessibleControlShape.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 777,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-06T10:37:09Z",
+      "side": 1,
+      "message": "It\u0027s a bit confusing the original code didn\u0027t use the reference right away, but do I understand correctly that the original code was modifying the states in mxStateSet right away (via the `pComposedStates` pointer), while this now operates on a local copy only (that is then unused in the end)?",
+      "range": {
+        "startLine": 770,
+        "startChar": 0,
+        "endLine": 777,
+        "endChar": 106
+      },
+      "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d129fc44_02d3f15a",
+        "filename": "svx/source/accessibility/AccessibleControlShape.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 792,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-06T10:37:09Z",
+      "side": 1,
+      "message": "This check looks superfluous now, since the |\u003d below doesn\u0027t hurt if the state is already set.",
+      "range": {
+        "startLine": 792,
+        "startChar": 65,
+        "endLine": 792,
+        "endChar": 96
+      },
+      "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07b52475_b1580c85",
+        "filename": "svx/source/accessibility/AccessibleShape.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-06T10:37:09Z",
+      "side": 1,
+      "message": "Somewhat similar to AccessibleControlShape::initializeComposedState: IIUC, the original version was at least in the beginning setting states internally as well, and then only creating a copy later (and setting the SELECTED state only on the copy for the `mpParent \u0026\u0026 mpParent-\u003eIsDocumentSelAll()` case, which I don\u0027t see below any more at all), while this sets the states only in the copy right from the beginning?",
+      "range": {
+        "startLine": 389,
+        "startChar": 0,
+        "endLine": 389,
+        "endChar": 37
+      },
+      "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92e9c2f2_8b137bac",
+        "filename": "toolkit/qa/cppunit/a11y/XAccessibleContextTester.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-06T10:37:09Z",
+      "side": 1,
+      "message": "IIUC, an empty set would have been OK earlier, but wouldn\u0027t be any more now.",
+      "range": {
+        "startLine": 149,
+        "startChar": 51,
+        "endLine": 149,
+        "endChar": 65
+      },
+      "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4b5d04a_2d382c54",
+        "filename": "vcl/osx/documentfocuslistener.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-06T10:37:09Z",
+      "side": 1,
+      "message": "Don\u0027t know whether it makes any difference in practice, but IIUC, the original code would also have called the below for an empty set of states. (same for `detachRecursive` below)",
+      "range": {
+        "startLine": 134,
+        "startChar": 1,
+        "endLine": 134,
+        "endChar": 23
+      },
+      "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87c3d65a_8ae38316",
+        "filename": "winaccessibility/source/UAccCOM/MAccessible.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-06T10:37:09Z",
+      "side": 1,
+      "message": "these comments mentioning specific sal_Int16 values are now wrong (and were probably never particularly useful in the first place...), maybe best to remove them.",
+      "range": {
+        "startLine": 164,
+        "startChar": 20,
+        "endLine": 164,
+        "endChar": 38
+      },
+      "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c06c0701_6c11a1c8",
+        "filename": "winaccessibility/source/UAccCOM/MAccessible.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 2962,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-06T10:37:09Z",
+      "side": 1,
+      "message": "I tend to think this should probably be dropped so 0x0 is assigned to `states` if no states are set, as happened previously with an empty set of states.",
+      "range": {
+        "startLine": 2959,
+        "startChar": 0,
+        "endLine": 2962,
+        "endChar": 5
+      },
+      "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f606229_dbdc2757",
+        "filename": "winaccessibility/source/service/AccObject.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 808,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-06T10:37:09Z",
+      "side": 1,
+      "message": "This results in IncreaseState() no longer getting called for all states except the one explicitly mentioned above, so IIRC, they will be missing elsewhere and then not be exposed to AT.",
+      "range": {
+        "startLine": 784,
+        "startChar": 0,
+        "endLine": 808,
+        "endChar": 5
+      },
+      "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
