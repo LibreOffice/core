@@ -11,6 +11,7 @@
 
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <unotools/localedatawrapper.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -209,6 +210,22 @@ CPPUNIT_TEST_FIXTURE(Test, testStyleLink)
     // - Actual  :
     // i.e. the linked style was lost on import.
     CPPUNIT_ASSERT_EQUAL(OUString("List Paragraph Char"), getProperty<OUString>(aParaStyle, "LinkStyle"));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, tdf120972)
+{
+    loadAndReload("table_number_format_3.docx");
+
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    OUString cDecimal(SvtSysLocale().GetLocaleData().getNumDecimalSep()[0]);
+    assertXPath(
+        pXmlDoc,
+        "//style:style[@style:name='P1']/style:paragraph-properties/style:tab-stops/style:tab-stop",
+        "char", cDecimal);
+    assertXPath(
+        pXmlDoc,
+        "//style:style[@style:name='P2']/style:paragraph-properties/style:tab-stops/style:tab-stop",
+        "char", cDecimal);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
