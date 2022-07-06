@@ -16,6 +16,23 @@
       "message": "Hmm - is it possible that this has a translation impact ? it\u0027s not really the world\u0027s most urgent bug fix I think ;-)",
       "revId": "f851eb2b8bb6f1d56a5f58e8173f9882b8f1cf7f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "217ae08d_cdea4933",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-07-06T18:35:12Z",
+      "side": 1,
+      "message": "it has translation impact, but we\u0027re still in time for string/UI freeze, and it is a single string , and one that most users won\u0027t encounter :-)\n\nWilling to take the blame for that one (knowing that there was a larger dump of help strings earlier ;-P)",
+      "revId": "f851eb2b8bb6f1d56a5f58e8173f9882b8f1cf7f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
