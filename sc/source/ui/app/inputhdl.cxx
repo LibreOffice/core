@@ -4241,6 +4241,14 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                     {
                         EditView* pActiveView = pTopView ? pTopView : pTableView;
                         ESelection aSel = pActiveView ? pActiveView->GetSelection() : ESelection();
+
+                        // if we switched content completly - don't send huge numbers
+                        if (aSel.nStartPara == EE_PARA_NOT_FOUND)
+                            aSel.nStartPara = 0;
+
+                        if (aSel.nEndPara == EE_PARA_NOT_FOUND)
+                            aSel.nEndPara = 0;
+
                         ScInputHandler::LOKSendFormulabarUpdate(pActiveViewSh, aString, aSel);
                         // TODO: deprecated?
                         pActiveViewSh->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_FORMULA, aString.toUtf8().getStr());
