@@ -1650,13 +1650,19 @@ TextFrameIndex SwTextFormatInfo::ScanPortionEnd(TextFrameIndex const nStart,
 {
     m_cHookChar = 0;
     TextFrameIndex i = nStart;
+    OUString aBaseURL = GetTextFrame()->GetDoc().GetDocShell()->getDocumentBaseURL();
+    const bool bOOXML = !aBaseURL.isEmpty()
+                        && (aBaseURL.endsWith(".docx") || aBaseURL.endsWith(".docm")
+                            || aBaseURL.endsWith(".dotx") || aBaseURL.endsWith(".dotm"));
 
     // Used for decimal tab handling:
     const sal_Unicode cTabDec = GetLastTab() ? GetTabDecimal() : 0;
-    const sal_Unicode cThousandSep  = ',' == cTabDec ? '.' : ',';
+
+    // tdf#120972 OOXML does not support custom decimal separator.
+    const sal_Unicode cThousandSep = bOOXML ? '\0' : ',' == cTabDec ? '.' : ',';
 
     // #i45951# German (Switzerland) uses ' as thousand separator
-    const sal_Unicode cThousandSep2 = ',' == cTabDec ? '.' : '\'';
+    const sal_Unicode cThousandSep2 = bOOXML ? '\0' : ',' == cTabDec ? '.' : '\'';
 
     bool bNumFound = false;
     const bool bTabCompat = GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::TAB_COMPAT);

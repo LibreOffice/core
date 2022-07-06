@@ -25,6 +25,7 @@
 
 #include <editeng/lrspitem.hxx>
 #include <tabstpge.hxx>
+#include <sfx2/objsh.hxx>
 #include <svx/dlgutil.hxx>
 #include <svl/cjkoptions.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -367,6 +368,11 @@ void SvxTabulatorTabPage::SetFillAndTabType_Impl()
     weld::RadioButton* pTypeBtn = nullptr;
     weld::RadioButton* pFillBtn = nullptr;
 
+    OUString aBaseURL = SfxObjectShell::Current()->getDocumentBaseURL();
+    const bool bOOXML = !aBaseURL.isEmpty()
+                        && (aBaseURL.endsWith(".docx") || aBaseURL.endsWith(".docm")
+                            || aBaseURL.endsWith(".dotx") || aBaseURL.endsWith(".dotm"));
+
     m_xDezChar->set_sensitive(false);
     m_xDezCharLabel->set_sensitive(false);
 
@@ -377,9 +383,12 @@ void SvxTabulatorTabPage::SetFillAndTabType_Impl()
     else if ( aCurrentTab.GetAdjustment() == SvxTabAdjust::Decimal )
     {
         pTypeBtn = m_xDezTab.get();
-        m_xDezChar->set_sensitive(true);
-        m_xDezCharLabel->set_sensitive(true);
-        m_xDezChar->set_text(OUString(aCurrentTab.GetDecimal()));
+        if (!bOOXML)    // tdf#120972 OOXML does not support custom decimal separator.
+        {
+            m_xDezChar->set_sensitive(true);
+            m_xDezCharLabel->set_sensitive(true);
+            m_xDezChar->set_text(OUString(aCurrentTab.GetDecimal()));
+        }
     }
     else if ( aCurrentTab.GetAdjustment() == SvxTabAdjust::Center )
         pTypeBtn = m_xCenterTab.get();
@@ -522,6 +531,11 @@ IMPL_LINK(SvxTabulatorTabPage, TabTypeCheckHdl_Impl, weld::Toggleable&, rBox, vo
     if (!rBox.get_active())
         return;
 
+    OUString aBaseURL = SfxObjectShell::Current()->getDocumentBaseURL();
+    const bool bOOXML = !aBaseURL.isEmpty()
+                        && (aBaseURL.endsWith(".docx") || aBaseURL.endsWith(".docm")
+                            || aBaseURL.endsWith(".dotx") || aBaseURL.endsWith(".dotm"));
+
     SvxTabAdjust eAdj;
     m_xDezChar->set_sensitive(false);
     m_xDezCharLabel->set_sensitive(false);
@@ -536,9 +550,12 @@ IMPL_LINK(SvxTabulatorTabPage, TabTypeCheckHdl_Impl, weld::Toggleable&, rBox, vo
     else
     {
         eAdj = SvxTabAdjust::Decimal;
-        m_xDezChar->set_sensitive(true);
-        m_xDezCharLabel->set_sensitive(true);
-        m_xDezChar->set_text(OUString(aCurrentTab.GetDecimal()));
+        if (!bOOXML)    // tdf#120972 OOXML does not support custom decimal separator.
+        {
+            m_xDezChar->set_sensitive(true);
+            m_xDezCharLabel->set_sensitive(true);
+            m_xDezChar->set_text(OUString(aCurrentTab.GetDecimal()));
+        }
     }
 
     aCurrentTab.GetAdjustment() = eAdj;
