@@ -107,16 +107,16 @@ struct SaxContext
 {
     Reference< XFastContextHandler > mxContext;
     sal_Int32 mnElementToken;
-    OUString  maNamespace;
-    OUString  maElementName;
+    std::optional<OUString>  moNamespace;
+    std::optional<OUString> moElementName;
 
     SaxContext( sal_Int32 nElementToken, const OUString& aNamespace, const OUString& aElementName ):
             mnElementToken(nElementToken)
     {
         if (nElementToken == FastToken::DONTKNOW)
         {
-            maNamespace = aNamespace;
-            maElementName = aElementName;
+            moNamespace = aNamespace;
+            moElementName = aElementName;
         }
     }
 };
@@ -514,7 +514,7 @@ void Entity::endElement()
             if( nElementToken != FastToken::DONTKNOW )
                 pContext->endFastElement( nElementToken );
             else
-                pContext->endUnknownElement( aContext.maNamespace, aContext.maElementName );
+                pContext->endUnknownElement( *aContext.moNamespace, *aContext.moElementName );
         }
         catch (...)
         {
