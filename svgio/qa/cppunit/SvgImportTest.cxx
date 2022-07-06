@@ -70,6 +70,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void testTdf94765();
     void testBehaviourWhenWidthAndHeightIsOrIsNotSet();
     void testTdf97663();
+    void testTdf149880();
 
     Primitive2DSequence parseSvg(std::u16string_view aSource);
 
@@ -106,6 +107,7 @@ public:
     CPPUNIT_TEST(testTdf94765);
     CPPUNIT_TEST(testBehaviourWhenWidthAndHeightIsOrIsNotSet);
     CPPUNIT_TEST(testTdf97663);
+    CPPUNIT_TEST(testTdf149880);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -830,6 +832,26 @@ void Test::testTdf97663()
     // - Expected: 236
     // - Actual  : 204
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "y", "236");
+}
+
+void Test::testTdf149880()
+{
+    Primitive2DSequence aSequence = parseSvg(u"/svgio/qa/cppunit/data/tdf149880.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
+
+    CPPUNIT_ASSERT (pDocument);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : 0
+    // - In <>, XPath '/primitive2D/transform/mask/unhandled' number of nodes is incorrect
+    assertXPath(pDocument,
+            "/primitive2D/transform/mask/unhandled", "id", "PATTERNFILL");
+    assertXPath(pDocument,
+            "/primitive2D/transform/mask/unhandled/mask/transform/transform/bitmap", 28);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
