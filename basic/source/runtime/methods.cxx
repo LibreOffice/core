@@ -891,76 +891,74 @@ void SbRtl_InStrRev(StarBASIC *, SbxArray & rPar, bool)
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
+    
+    const OUString aStr1 = rPar.Get(1)->GetOUString();
+    const OUString aToken = rPar.Get(2)->GetOUString();
+
+    sal_Int32 nStartPos = -1;
+    if ( nArgCount >= 3 )
+    {
+        nStartPos = rPar.Get(3)->GetLong();
+        if( nStartPos <= 0 && nStartPos != -1 )
+        {
+            StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+            nStartPos = -1;
+        }
+    }
+
+    SbiInstance* pInst = GetSbData()->pInst;
+    bool bTextMode;
+    bool bCompatibility = ( pInst && pInst->IsCompatibility() );
+    if( bCompatibility )
+    {
+        SbiRuntime* pRT = pInst->pRun;
+        bTextMode = pRT && pRT->IsImageFlag( SbiImageFlags::COMPARETEXT );
+    }
     else
     {
-        const OUString aStr1 = rPar.Get(1)->GetOUString();
-        const OUString aToken = rPar.Get(2)->GetOUString();
-
-        sal_Int32 nStartPos = -1;
-        if ( nArgCount >= 3 )
-        {
-            nStartPos = rPar.Get(3)->GetLong();
-            if( nStartPos <= 0 && nStartPos != -1 )
-            {
-                StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-                nStartPos = -1;
-            }
-        }
-
-        SbiInstance* pInst = GetSbData()->pInst;
-        bool bTextMode;
-        bool bCompatibility = ( pInst && pInst->IsCompatibility() );
-        if( bCompatibility )
-        {
-            SbiRuntime* pRT = pInst->pRun;
-            bTextMode = pRT && pRT->IsImageFlag( SbiImageFlags::COMPARETEXT );
-        }
-        else
-        {
-            bTextMode = true;
-        }
-        if ( nArgCount == 4 )
-        {
-            bTextMode = rPar.Get(4)->GetInteger();
-        }
-        const sal_Int32 nStrLen = aStr1.getLength();
-        if( nStartPos == -1 )
-        {
-            nStartPos = nStrLen;
-        }
-
-        sal_Int32 nPos = 0;
-        if( nStartPos <= nStrLen )
-        {
-            sal_Int32 nTokenLen = aToken.getLength();
-            if( !nTokenLen )
-            {
-                // Always find empty string
-                nPos = nStartPos;
-            }
-            else if( nStrLen > 0 )
-            {
-                if( !bTextMode )
-                {
-                    nPos = aStr1.lastIndexOf( aToken, nStartPos ) + 1;
-                }
-                else
-                {
-                    // tdf#143332 - case-insensitive operation for non-ASCII characters
-                    i18nutil::SearchOptions2 aSearchOptions;
-                    aSearchOptions.searchString = aToken;
-                    aSearchOptions.AlgorithmType2 = util::SearchAlgorithms2::ABSOLUTE;
-                    aSearchOptions.transliterateFlags |= TransliterationFlags::IGNORE_CASE;
-                    utl::TextSearch textSearch(aSearchOptions);
-
-                    sal_Int32 nStart = 0;
-                    sal_Int32 nEnd = nStartPos;
-                    nPos = textSearch.SearchBackward(aStr1, &nEnd, &nStart) ? nStart : 0;
-                }
-            }
-        }
-        rPar.Get(0)->PutLong(nPos);
+        bTextMode = true;
     }
+    if ( nArgCount == 4 )
+    {
+        bTextMode = rPar.Get(4)->GetInteger();
+    }
+    const sal_Int32 nStrLen = aStr1.getLength();
+    if( nStartPos == -1 )
+    {
+        nStartPos = nStrLen;
+    }
+
+    sal_Int32 nPos = 0;
+    if( nStartPos <= nStrLen )
+    {
+        sal_Int32 nTokenLen = aToken.getLength();
+        if( !nTokenLen )
+        {
+           // Always find empty string
+           nPos = nStartPos;
+        }
+        else if( nStrLen > 0 )
+        {
+            if( !bTextMode )
+            {
+               nPos = aStr1.lastIndexOf( aToken, nStartPos ) + 1;
+            }
+            else
+            {
+               // tdf#143332 - case-insensitive operation for non-ASCII characters
+               i18nutil::SearchOptions2 aSearchOptions;
+               aSearchOptions.searchString = aToken;
+               aSearchOptions.AlgorithmType2 = util::SearchAlgorithms2::ABSOLUTE;
+               aSearchOptions.transliterateFlags |= TransliterationFlags::IGNORE_CASE;
+               utl::TextSearch textSearch(aSearchOptions);
+
+               sal_Int32 nStart = 0;
+               sal_Int32 nEnd = nStartPos;
+               nPos = textSearch.SearchBackward(aStr1, &nEnd, &nStart) ? nStart : 0;
+            }
+        }
+    }
+    rPar.Get(0)->PutLong(nPos);
 }
 
 
