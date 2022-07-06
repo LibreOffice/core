@@ -716,7 +716,6 @@ gb_emscripten_fs_image_files := \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swriter/ui/querycontinuebegindialog.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swriter/ui/querycontinueenddialog.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swriter/ui/querydefaultcompatdialog.ui \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swriter/ui/queryredlinedialog.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swriter/ui/querysavelabeldialog.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swriter/ui/readonlymenu.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/swriter/ui/renameautotextdialog.ui \
