@@ -1114,7 +1114,7 @@ namespace svgio::svgreader
                 }
                 else
                 {
-                    if(rCandidate.startsWith("none"))
+                    if(rCandidate.startsWithIgnoreAsciiCase("none"))
                     {
                         rSvgPaint = SvgPaint(aColor, true, false, false);
                         return true;
@@ -1124,7 +1124,7 @@ namespace svgio::svgreader
                         /// Url is copied to rURL, but needs to be solved outside this helper
                         return false;
                     }
-                    else if(rCandidate.startsWith("currentColor"))
+                    else if(rCandidate.startsWithIgnoreAsciiCase("currentColor"))
                     {
                         rSvgPaint = SvgPaint(aColor, true, true, true);
                         return true;
@@ -1338,7 +1338,7 @@ namespace svgio::svgreader
 
                     if(!rMimeType.isEmpty() && nPos < nLen)
                     {
-                        if(rMimeType.startsWith("image"))
+                        if(rMimeType.startsWithIgnoreAsciiCase("image"))
                         {
                             // image data
                             std::u16string_view aData(rCandidate.subView(nPos));

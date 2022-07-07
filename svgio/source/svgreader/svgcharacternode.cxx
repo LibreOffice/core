@@ -123,11 +123,11 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.startsWith("spacing"))
+                        if(aContent.startsWithIgnoreAsciiCase("spacing"))
                         {
                             setLengthAdjust(true);
                         }
-                        else if(aContent.startsWith("spacingAndGlyphs"))
+                        else if(aContent.startsWithIgnoreAsciiCase("spacingAndGlyphs"))
                         {
                             setLengthAdjust(false);
                         }
