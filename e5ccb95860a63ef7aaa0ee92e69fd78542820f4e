@@ -24,6 +24,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7701f1e9_13888da1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-07-07T12:06:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "21755c56_2bfd8150",
+      "range": {
+        "startLine": 7,
+        "startChar": 34,
+        "endLine": 7,
+        "endChar": 37
+      },
+      "revId": "e5ccb95860a63ef7aaa0ee92e69fd78542820f4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "71957768_b7c51df8",
@@ -37,6 +61,24 @@
       "writtenOn": "2022-07-07T10:07:07Z",
       "side": 1,
       "message": "Also these should only skip one char, and that char must be only equal to the aLimiter - so please replace the two lines with one:\n\n    skip_char(rCandidate, aLimiter, nPos, nPos + 1);",
+      "revId": "e5ccb95860a63ef7aaa0ee92e69fd78542820f4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e13e3a2_2d6b2013",
+        "filename": "svgio/source/svgreader/svgtools.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1084,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-07-07T12:06:00Z",
+      "side": 1,
+      "message": "I guess you mean these two lines ?\n\nskip_char(rCandidate, \u0027\"\u0027, \u0027\\\u0027\u0027, nPos, nLen);\nskip_char(rCandidate, \u0027 \u0027, \u0027#\u0027, nPos, nLen);\n\nno, you can\u0027t replace them by\n\nskip_char(rCandidate, aLimiter, nPos, nPos + 1);\n\nsince you still need to skip # and there might also be spaces between the limiter and #",
+      "parentUuid": "71957768_b7c51df8",
       "revId": "e5ccb95860a63ef7aaa0ee92e69fd78542820f4e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
