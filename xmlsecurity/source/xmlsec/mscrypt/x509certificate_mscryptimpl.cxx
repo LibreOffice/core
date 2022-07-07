@@ -77,9 +77,9 @@ findTypeInDN(const OUString& rRawString, std::u16string_view sTypeName)
         {
             if (! bInValue)
             {
-                OUString sType = rRawString.copy(nTypeNameStart, i - nTypeNameStart);
-                sType = sType.trim();
-                if (sType.equalsIgnoreAsciiCase(sTypeName))
+                std::u16string_view sType = rRawString.subView(nTypeNameStart, i - nTypeNameStart);
+                sType = o3tl::trim(sType);
+                if (o3tl::equalsIgnoreAsciiCase(sType, sTypeName))
                 {
                     bFound = true;
                     break;

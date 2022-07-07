@@ -185,9 +185,9 @@ css::uno::Sequence< css::uno::Reference< css::security::XCertificateExtension > 
 
             // remove "OID." prefix if existing
             OString objID;
-            OString oid("OID.");
+            constexpr std::string_view oid("OID.");
             if (oidString.match(oid))
-                objID = oidString.copy(oid.getLength());
+                objID = oidString.copy(oid.size());
             else
                 objID = oidString;
 

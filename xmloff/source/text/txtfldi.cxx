@@ -3323,13 +3323,12 @@ void XMLAnnotationImportContext::PrepareField(
     }
     aDateBuffer.setLength(0);
 
-    OUString sBuffer = aTextBuffer.makeStringAndClear();
-    if ( sBuffer.getLength() )
+    if ( aTextBuffer.getLength() )
     {
         // delete last paragraph mark (if necessary)
-        if (char(0x0a) == sBuffer[sBuffer.getLength()-1])
-            sBuffer = sBuffer.copy(0, sBuffer.getLength()-1);
-        xPropertySet->setPropertyValue(sAPI_content, Any(sBuffer));
+        if (char(0x0a) == aTextBuffer[aTextBuffer.getLength()-1])
+            aTextBuffer.setLength(aTextBuffer.getLength()-1);
+        xPropertySet->setPropertyValue(sAPI_content, Any(aTextBuffer.makeStringAndClear()));
     }
 
     if (!aName.isEmpty())

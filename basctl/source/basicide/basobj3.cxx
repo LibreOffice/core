@@ -105,9 +105,7 @@ SbMethod* CreateMacro( SbModule* pModule, const OUString& rMacroName )
             aOUSource = aOUSource.copy( 0, nSourceLen-1 );
     }
 
-    OUString aSubStr = "Sub " + aMacroName + "\n\nEnd Sub";
-
-    aOUSource += aSubStr;
+    aOUSource += "Sub " + aMacroName + "\n\nEnd Sub";
 
     // update module in library
     StarBASIC* pBasic = dynamic_cast<StarBASIC*>(pModule->GetParent());
