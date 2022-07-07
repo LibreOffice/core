@@ -51,6 +51,24 @@
       "parentUuid": "82098178_e7fe7948",
       "revId": "d0dd8de2a33b1cf35b14b219d0a4713307766137",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21bce36d_ba6d389b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-07-07T17:01:09Z",
+      "side": 1,
+      "message": "Yes. I think so. :)",
+      "parentUuid": "75ffbc9e_1dfb263a",
+      "revId": "d0dd8de2a33b1cf35b14b219d0a4713307766137",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
