@@ -128,11 +128,11 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.match(commonStrings::aStrUserSpaceOnUse))
+                        if(aContent.trim().equalsIgnoreAsciiCase(commonStrings::aStrUserSpaceOnUse))
                         {
                             setMaskUnits(SvgUnits::userSpaceOnUse);
                         }
-                        else if(aContent.match(commonStrings::aStrObjectBoundingBox))
+                        else if(aContent.trim().equalsIgnoreAsciiCase(commonStrings::aStrObjectBoundingBox))
                         {
                             setMaskUnits(SvgUnits::objectBoundingBox);
                         }
@@ -143,11 +143,11 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.match(commonStrings::aStrUserSpaceOnUse))
+                        if(aContent.trim().equalsIgnoreAsciiCase(commonStrings::aStrUserSpaceOnUse))
                         {
                             setMaskContentUnits(SvgUnits::userSpaceOnUse);
                         }
-                        else if(aContent.match(commonStrings::aStrObjectBoundingBox))
+                        else if(aContent.trim().equalsIgnoreAsciiCase(commonStrings::aStrObjectBoundingBox))
                         {
                             setMaskContentUnits(SvgUnits::objectBoundingBox);
                         }

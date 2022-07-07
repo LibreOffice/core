@@ -100,11 +100,11 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.startsWith("strokeWidth"))
+                        if(aContent.trim().equalsIgnoreAsciiCase("strokeWidth"))
                         {
                             setMarkerUnits(MarkerUnits::strokeWidth);
                         }
-                        else if(aContent.match(commonStrings::aStrUserSpaceOnUse))
+                        else if(aContent.trim().equalsIgnoreAsciiCase(commonStrings::aStrUserSpaceOnUse))
                         {
                             setMarkerUnits(MarkerUnits::userSpaceOnUse);
                         }
@@ -143,7 +143,7 @@ namespace svgio::svgreader
 
                     if(nLen)
                     {
-                        if(aContent.startsWith("auto"))
+                        if(aContent.trim().equalsIgnoreAsciiCase("auto"))
                         {
                             mbOrientAuto = true;
                         }

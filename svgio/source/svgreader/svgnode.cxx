@@ -441,11 +441,11 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.startsWith("default"))
+                        if(aContent.trim().equalsIgnoreAsciiCase("default"))
                         {
                             setXmlSpace(XmlSpace::Default);
                         }
-                        else if(aContent.startsWith("preserve"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("preserve"))
                         {
                             setXmlSpace(XmlSpace::Preserve);
                         }

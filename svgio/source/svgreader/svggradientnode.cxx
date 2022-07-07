@@ -171,11 +171,11 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.match(commonStrings::aStrUserSpaceOnUse))
+                        if(aContent.trim().equalsIgnoreAsciiCase(commonStrings::aStrUserSpaceOnUse))
                         {
                             setGradientUnits(SvgUnits::userSpaceOnUse);
                         }
-                        else if(aContent.match(commonStrings::aStrObjectBoundingBox))
+                        else if(aContent.trim().equalsIgnoreAsciiCase(commonStrings::aStrObjectBoundingBox))
                         {
                             setGradientUnits(SvgUnits::objectBoundingBox);
                         }
@@ -186,15 +186,15 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.startsWith("pad"))
+                        if(aContent.trim().equalsIgnoreAsciiCase("pad"))
                         {
                             setSpreadMethod(drawinglayer::primitive2d::SpreadMethod::Pad);
                         }
-                        else if(aContent.startsWith("reflect"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("reflect"))
                         {
                             setSpreadMethod(drawinglayer::primitive2d::SpreadMethod::Reflect);
                         }
-                        else if(aContent.startsWith("repeat"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("repeat"))
                         {
                             setSpreadMethod(drawinglayer::primitive2d::SpreadMethod::Repeat);
                         }

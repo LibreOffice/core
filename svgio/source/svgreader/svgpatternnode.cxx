@@ -130,11 +130,11 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.match(commonStrings::aStrUserSpaceOnUse))
+                        if(aContent.trim().equalsIgnoreAsciiCase(commonStrings::aStrUserSpaceOnUse))
                         {
                             setPatternUnits(SvgUnits::userSpaceOnUse);
                         }
-                        else if(aContent.match(commonStrings::aStrObjectBoundingBox))
+                        else if(aContent.trim().equalsIgnoreAsciiCase(commonStrings::aStrObjectBoundingBox))
                         {
                             setPatternUnits(SvgUnits::objectBoundingBox);
                         }
@@ -145,11 +145,11 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.match(commonStrings::aStrUserSpaceOnUse))
+                        if(aContent.trim().equalsIgnoreAsciiCase(commonStrings::aStrUserSpaceOnUse))
                         {
                             setPatternContentUnits(SvgUnits::userSpaceOnUse);
                         }
-                        else if(aContent.match(commonStrings::aStrObjectBoundingBox))
+                        else if(aContent.trim().equalsIgnoreAsciiCase(commonStrings::aStrObjectBoundingBox))
                         {
                             setPatternContentUnits(SvgUnits::objectBoundingBox);
                         }

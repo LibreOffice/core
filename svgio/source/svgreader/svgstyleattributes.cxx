@@ -1329,11 +1329,11 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.match(commonStrings::aStrNonzero))
+                        if(aContent.trim().equalsIgnoreAsciiCase(commonStrings::aStrNonzero))
                         {
                             maFillRule = FillRule::nonzero;
                         }
-                        else if(aContent.match(commonStrings::aStrEvenOdd))
+                        else if(aContent.trim().equalsIgnoreAsciiCase(commonStrings::aStrEvenOdd))
                         {
                             maFillRule = FillRule::evenodd;
                         }
@@ -1366,7 +1366,7 @@ namespace svgio::svgreader
                     {
                         SvgNumberVector aVector;
 
-                        if(aContent.startsWith("none"))
+                        if(aContent.trim().equalsIgnoreAsciiCase("none"))
                         {
                             // #121221# The special value 'none' needs to be handled
                             // in the sense that *when* it is set, the parent shall not
@@ -1398,15 +1398,15 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.startsWith("butt"))
+                        if(aContent.trim().equalsIgnoreAsciiCase("butt"))
                         {
                             setStrokeLinecap(StrokeLinecap::butt);
                         }
-                        else if(aContent.startsWith("round"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("round"))
                         {
                             setStrokeLinecap(StrokeLinecap::round);
                         }
-                        else if(aContent.startsWith("square"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("square"))
                         {
                             setStrokeLinecap(StrokeLinecap::square);
                         }
@@ -1417,15 +1417,15 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.startsWith("miter"))
+                        if(aContent.trim().equalsIgnoreAsciiCase("miter"))
                         {
                             setStrokeLinejoin(StrokeLinejoin::miter);
                         }
-                        else if(aContent.startsWith("round"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("round"))
                         {
                             setStrokeLinejoin(StrokeLinejoin::round);
                         }
-                        else if(aContent.startsWith("bevel"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("bevel"))
                         {
                             setStrokeLinejoin(StrokeLinejoin::bevel);
                         }
@@ -1516,43 +1516,43 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.startsWith("xx-small"))
+                        if(aContent.trim().equalsIgnoreAsciiCase("xx-small"))
                         {
                             setFontSize(FontSize::xx_small);
                         }
-                        else if(aContent.startsWith("x-small"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("x-small"))
                         {
                             setFontSize(FontSize::x_small);
                         }
-                        else if(aContent.startsWith("small"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("small"))
                         {
                             setFontSize(FontSize::small);
                         }
-                        else if(aContent.startsWith("smaller"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("smaller"))
                         {
                             setFontSize(FontSize::smaller);
                         }
-                        else if(aContent.startsWith("medium"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("medium"))
                         {
                             setFontSize(FontSize::medium);
                         }
-                        else if(aContent.startsWith("larger"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("larger"))
                         {
                             setFontSize(FontSize::larger);
                         }
-                        else if(aContent.startsWith("large"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("large"))
                         {
                             setFontSize(FontSize::large);
                         }
-                        else if(aContent.startsWith("x-large"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("x-large"))
                         {
                             setFontSize(FontSize::x_large);
                         }
-                        else if(aContent.startsWith("xx-large"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("xx-large"))
                         {
                             setFontSize(FontSize::xx_large);
                         }
-                        else if(aContent.startsWith("initial"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("initial"))
                         {
                             setFontSize(FontSize::initial);
                         }
@@ -1576,47 +1576,47 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.startsWith("normal"))
+                        if(aContent.trim().equalsIgnoreAsciiCase("normal"))
                         {
                             setFontStretch(FontStretch::normal);
                         }
-                        else if(aContent.startsWith("wider"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("wider"))
                         {
                             setFontStretch(FontStretch::wider);
                         }
-                        else if(aContent.startsWith("narrower"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("narrower"))
                         {
                             setFontStretch(FontStretch::narrower);
                         }
-                        else if(aContent.startsWith("ultra-condensed"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("ultra-condensed"))
                         {
                             setFontStretch(FontStretch::ultra_condensed);
                         }
-                        else if(aContent.startsWith("extra-condensed"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("extra-condensed"))
                         {
                             setFontStretch(FontStretch::extra_condensed);
                         }
-                        else if(aContent.startsWith("condensed"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("condensed"))
                         {
                             setFontStretch(FontStretch::condensed);
                         }
-                        else if(aContent.startsWith("semi-condensed"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("semi-condensed"))
                         {
                             setFontStretch(FontStretch::semi_condensed);
                         }
-                        else if(aContent.startsWith("semi-expanded"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("semi-expanded"))
                         {
                             setFontStretch(FontStretch::semi_expanded);
                         }
-                        else if(aContent.startsWith("expanded"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("expanded"))
                         {
                             setFontStretch(FontStretch::expanded);
                         }
-                        else if(aContent.startsWith("extra-expanded"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("extra-expanded"))
                         {
                             setFontStretch(FontStretch::extra_expanded);
                         }
-                        else if(aContent.startsWith("ultra-expanded"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("ultra-expanded"))
                         {
                             setFontStretch(FontStretch::ultra_expanded);
                         }
@@ -1627,15 +1627,15 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.startsWith("normal"))
+                        if(aContent.trim().equalsIgnoreAsciiCase("normal"))
                         {
                             setFontStyle(FontStyle::normal);
                         }
-                        else if(aContent.startsWith("italic"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("italic"))
                         {
                             setFontStyle(FontStyle::italic);
                         }
-                        else if(aContent.startsWith("oblique"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("oblique"))
                         {
                             setFontStyle(FontStyle::oblique);
                         }
@@ -1650,47 +1650,47 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.startsWith("100"))
+                        if(aContent.trim().equals("100"))
                         {
                             setFontWeight(FontWeight::N100);
                         }
-                        else if(aContent.startsWith("200"))
+                        else if(aContent.trim().equals("200"))
                         {
                             setFontWeight(FontWeight::N200);
                         }
-                        else if(aContent.startsWith("300"))
+                        else if(aContent.trim().equals("300"))
                         {
                             setFontWeight(FontWeight::N300);
                         }
-                        else if(aContent.startsWith("400") || aContent.startsWith("normal"))
+                        else if(aContent.trim().equals("400") || aContent.trim().equalsIgnoreAsciiCase("normal"))
                         {
                             setFontWeight(FontWeight::N400);
                         }
-                        else if(aContent.startsWith("500"))
+                        else if(aContent.trim().equals("500"))
                         {
                             setFontWeight(FontWeight::N500);
                         }
-                        else if(aContent.startsWith("600"))
+                        else if(aContent.trim().equals("600"))
                         {
                             setFontWeight(FontWeight::N600);
                         }
-                        else if(aContent.startsWith("700") || aContent.startsWith("bold"))
+                        else if(aContent.trim().equals("700") || aContent.trim().equalsIgnoreAsciiCase("bold"))
                         {
                             setFontWeight(FontWeight::N700);
                         }
-                        else if(aContent.startsWith("800"))
+                        else if(aContent.trim().equals("800"))
                         {
                             setFontWeight(FontWeight::N800);
                         }
-                        else if(aContent.startsWith("900"))
+                        else if(aContent.trim().equals("900"))
                         {
                             setFontWeight(FontWeight::N900);
                         }
-                        else if(aContent.startsWith("bolder"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("bolder"))
                         {
                             setFontWeight(FontWeight::bolder);
                         }
-                        else if(aContent.startsWith("lighter"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("lighter"))
                         {
                             setFontWeight(FontWeight::lighter);
                         }
@@ -1709,23 +1709,23 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.startsWith("none"))
+                        if(aContent.trim().equalsIgnoreAsciiCase("none"))
                         {
                             setTextDecoration(TextDecoration::none);
                         }
-                        else if(aContent.startsWith("underline"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("underline"))
                         {
                             setTextDecoration(TextDecoration::underline);
                         }
-                        else if(aContent.startsWith("overline"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("overline"))
                         {
                             setTextDecoration(TextDecoration::overline);
                         }
-                        else if(aContent.startsWith("line-through"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("line-through"))
                         {
                             setTextDecoration(TextDecoration::line_through);
                         }
-                        else if(aContent.startsWith("blink"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("blink"))
                         {
                             setTextDecoration(TextDecoration::blink);
                         }
@@ -1744,15 +1744,15 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.startsWith("start"))
+                        if(aContent.trim().equalsIgnoreAsciiCase("start"))
                         {
                             setTextAnchor(TextAnchor::start);
                         }
-                        else if(aContent.startsWith("middle"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("middle"))
                         {
                             setTextAnchor(TextAnchor::middle);
                         }
-                        else if(aContent.startsWith("end"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("end"))
                         {
                             setTextAnchor(TextAnchor::end);
                         }
@@ -1763,19 +1763,19 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.startsWith("left"))
+                        if(aContent.trim().equalsIgnoreAsciiCase("left"))
                         {
                             setTextAlign(TextAlign::left);
                         }
-                        else if(aContent.startsWith("right"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("right"))
                         {
                             setTextAlign(TextAlign::right);
                         }
-                        else if(aContent.startsWith("center"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("center"))
                         {
                             setTextAlign(TextAlign::center);
                         }
-                        else if(aContent.startsWith("justify"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("justify"))
                         {
                             setTextAlign(TextAlign::justify);
                         }
@@ -1812,19 +1812,19 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.startsWith("visible"))
+                        if(aContent.trim().equalsIgnoreAsciiCase("visible"))
                         {
                             setVisibility(Visibility::visible);
                         }
-                        else if(aContent.startsWith("hidden"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("hidden"))
                         {
                             setVisibility(Visibility::hidden);
                         }
-                        else if(aContent.startsWith("collapse"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("collapse"))
                         {
                             setVisibility(Visibility::collapse);
                         }
-                        else if(aContent.startsWith("inherit"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("inherit"))
                         {
                             setVisibility(Visibility::inherit);
                         }
@@ -1855,11 +1855,11 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.match(commonStrings::aStrNonzero))
+                        if(aContent.trim().equalsIgnoreAsciiCase(commonStrings::aStrNonzero))
                         {
                             maClipRule = FillRule::nonzero;
                         }
-                        else if(aContent.match(commonStrings::aStrEvenOdd))
+                        else if(aContent.trim().equalsIgnoreAsciiCase(commonStrings::aStrEvenOdd))
                         {
                             maClipRule = FillRule::evenodd;
                         }
@@ -1908,11 +1908,11 @@ namespace svgio::svgreader
                     {
                         SvgNumber aNum;
 
-                        if(aContent.startsWith("sub"))
+                        if(aContent.trim().equalsIgnoreAsciiCase("sub"))
                         {
                             setBaselineShift(BaselineShift::Sub);
                         }
-                        else if(aContent.startsWith("super"))
+                        else if(aContent.trim().equalsIgnoreAsciiCase("super"))
                         {
                             setBaselineShift(BaselineShift::Super);
                         }
@@ -2474,7 +2474,7 @@ namespace svgio::svgreader
 
         const SvgStringVector& SvgStyleAttributes::getFontFamily() const
         {
-            if(!maFontFamily.empty() && !maFontFamily[0].startsWith("inherit"))
+            if(!maFontFamily.empty() && !maFontFamily[0].trim().equalsIgnoreAsciiCase("inherit"))
             {
                 return maFontFamily;
             }

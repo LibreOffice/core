@@ -76,11 +76,11 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.match(commonStrings::aStrUserSpaceOnUse))
+                        if(aContent.trim().equalsIgnoreAsciiCase(commonStrings::aStrUserSpaceOnUse))
                         {
                             setClipPathUnits(SvgUnits::userSpaceOnUse);
                         }
-                        else if(aContent.match(commonStrings::aStrObjectBoundingBox))
+                        else if(aContent.trim().equalsIgnoreAsciiCase(commonStrings::aStrObjectBoundingBox))
                         {
                             setClipPathUnits(SvgUnits::objectBoundingBox);
                         }
