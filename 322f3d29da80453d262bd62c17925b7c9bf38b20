@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8cd3c34_2c0b114e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-07-07T09:30:51Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "322f3d29da80453d262bd62c17925b7c9bf38b20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89670214_722aeb99",
+        "filename": "svgio/source/svgreader/svgtools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1075,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-07-07T09:30:51Z",
+      "side": 1,
+      "message": "This would not be correct - you need to skip the opening parenthesis first, then spaces (this change would skip either one or the other, consuming \"url\" without \"(\").\n\nBy the way, the original skip_char(..., \u0027(\u0027) was also wrong - it doesn\u0027t require that there is the character, it just skips it *if* it\u0027s present. You need to replace the \"url\" with \"url(\", to require that there is the character right after it; use startsWithIgnoreAcsiiCase, and then skip whitespace - which includes space, tab, CR (so we likely need a skip_char with arbitrary number of characters - e.g., taking std::initializer_list\u003csal_Unicode\u003e).",
+      "revId": "322f3d29da80453d262bd62c17925b7c9bf38b20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
