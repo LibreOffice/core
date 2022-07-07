@@ -584,9 +584,7 @@ void CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines )
     else
         nEndPos++;
 
-    OUString aEndStr = rStr.copy( nEndPos );
-    rStr = rStr.copy( 0, nStartPos );
-    rStr += aEndStr;
+    rStr = OUString::Concat(rStr.subView( 0, nStartPos )) + rStr.subView( nEndPos );
 
     // erase trailing empty lines
     {
@@ -600,9 +598,7 @@ void CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines )
 
         if ( n > nStartPos )
         {
-            aEndStr = rStr.copy( n );
-            rStr = rStr.copy( 0, nStartPos );
-            rStr += aEndStr;
+            rStr = OUString::Concat(rStr.subView( 0, nStartPos )) + rStr.subView( n );
         }
     }
 }
