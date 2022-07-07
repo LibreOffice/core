@@ -515,7 +515,9 @@ void syncRepositories(
                 Reference<task::XAbortChannel>(), xCmdEnv);
         }
     }
-#if !HAVE_FEATURE_MACOSX_SANDBOX
+#if HAVE_FEATURE_MACOSX_SANDBOX
+    (void) bModified;
+#else
     if (bModified && !comphelper::LibreOfficeKit::isActive())
     {
         Reference<task::XRestartManager> restarter(task::OfficeRestartManager::get(comphelper::getProcessComponentContext()));
