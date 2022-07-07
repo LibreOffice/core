@@ -87,6 +87,24 @@
       "parentUuid": "9f263a1f_8ad56b98",
       "revId": "322f3d29da80453d262bd62c17925b7c9bf38b20",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2eb2db41_0d11e246",
+        "filename": "svgio/source/svgreader/svgtools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1075,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-07-07T12:22:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5476e49_0b598747",
+      "revId": "322f3d29da80453d262bd62c17925b7c9bf38b20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
