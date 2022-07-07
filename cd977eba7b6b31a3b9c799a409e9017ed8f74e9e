@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bd91ddf_bae2c019",
+        "filename": "winaccessibility/source/service/AccObject.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 787,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-07T14:47:14Z",
+      "side": 1,
+      "message": "This must be `\u0026` instead of `\u0026\u0026`. (Just found when NVDA announced all kind of weird states in a quick test.)",
+      "range": {
+        "startLine": 787,
+        "startChar": 8,
+        "endLine": 787,
+        "endChar": 33
+      },
+      "revId": "cd977eba7b6b31a3b9c799a409e9017ed8f74e9e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

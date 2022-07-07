@@ -148,6 +148,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3605b164_e02127fd",
+        "filename": "toolkit/qa/cppunit/a11y/AccessibilityTools.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-07T14:47:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "55d3ee39_3a2823a2",
+      "range": {
+        "startLine": 277,
+        "startChar": 0,
+        "endLine": 399,
+        "endChar": 24
+      },
+      "revId": "4dc5ea202ff8efde229ab658b5035e0387dd7f5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e2e6c7a9_d06400a8",
@@ -209,6 +233,30 @@
       "side": 1,
       "message": "Still seems to be unchanged in PS12.",
       "parentUuid": "9cffe421_4d18054b",
+      "range": {
+        "startLine": 786,
+        "startChar": 1,
+        "endLine": 786,
+        "endChar": 46
+      },
+      "revId": "4dc5ea202ff8efde229ab658b5035e0387dd7f5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ebeb6c18_2c637005",
+        "filename": "winaccessibility/source/service/AccObject.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-07T14:47:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "52580c99_e7d7783e",
       "range": {
         "startLine": 786,
         "startChar": 1,
