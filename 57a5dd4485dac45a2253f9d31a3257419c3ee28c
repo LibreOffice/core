@@ -804,6 +804,30 @@
       },
       "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69f5459f_0b26a15d",
+        "filename": "winaccessibility/source/service/AccObject.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 808,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-07T09:53:57Z",
+      "side": 1,
+      "message": "The newly added variant from PS 8 looks good to me. The previous version is still there, though, which now looks redundant to me.",
+      "parentUuid": "9b0ad874_1bc9ac3d",
+      "range": {
+        "startLine": 784,
+        "startChar": 0,
+        "endLine": 808,
+        "endChar": 5
+      },
+      "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

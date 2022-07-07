@@ -24,6 +24,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "304609a8_b2e9d84a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-07T09:53:57Z",
+      "side": 1,
+      "message": "The fact that we have `const hyper COLLAPSE \u003d 8589934592` (\u003d 1 \u003c\u003c 33) in ./offapi/com/sun/star/accessibility/AccessibleStateType.idl doesn\u0027t seem to fit well with the \"could probably get away with a 32-bit value\" from the commit msg in my eyes (but given it\u0027s just the commit msg, I have no strong opinion on that).",
+      "parentUuid": "190aebca_44086130",
+      "range": {
+        "startLine": 13,
+        "startChar": 44,
+        "endLine": 15,
+        "endChar": 23
+      },
+      "revId": "487b1375ca56eea89bfd7fd575ee0ceb06cbe8d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "8c6dbf23_f1b90797",
