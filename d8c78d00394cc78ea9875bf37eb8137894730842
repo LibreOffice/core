@@ -68,6 +68,24 @@
       "message": "True, the unlabeled toolbar items require tooltips.",
       "revId": "d8c78d00394cc78ea9875bf37eb8137894730842",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5701ad21_4877ff33",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-07-07T09:40:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "285efe6a_3ea86950",
+      "revId": "d8c78d00394cc78ea9875bf37eb8137894730842",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
