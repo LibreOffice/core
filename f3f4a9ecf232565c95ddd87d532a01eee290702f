@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9932e79b_0c42634d",
+        "filename": "vcl/source/filter/png/PngImageWriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-07-07T17:00:05Z",
+      "side": 1,
+      "message": "OldPal, NewPal seem rather deceiving names.. not to mention it shouldn\u0027t be abbreviated. aBitmapPalette and aPngPaletteArray maybe?",
+      "range": {
+        "startLine": 148,
+        "startChar": 17,
+        "endLine": 148,
+        "endChar": 24
+      },
+      "revId": "f3f4a9ecf232565c95ddd87d532a01eee290702f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
