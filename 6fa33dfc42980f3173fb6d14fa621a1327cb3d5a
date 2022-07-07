@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a23360b9_8823a2ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-07-07T15:17:33Z",
+      "side": 1,
+      "message": "not so nice but it can work... lets see what is the trial of Jenkins.\n@Xisco: What is your opinion, is this worth to merge (if passes Jenkins)? Is this better than the python one?",
+      "revId": "6fa33dfc42980f3173fb6d14fa621a1327cb3d5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
