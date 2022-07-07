@@ -33,6 +33,24 @@
       "message": "Shouldn\u0027t you change `setWidth()` and `setHeight()` similarly then?  AFAICT they also use helf-open values (probably same difference with their capital counterpart as the get ones), and they look just as confusing.\nThis seems especially relevant to me as AFAICT `getOpenWidth() \u003d\u003d setWidth(getOpenWidth())`, so their name should really match.\n\nWhat do you think?",
       "revId": "dfe6b11d30e2316b31438afcaf17b3b23f89e9cb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83e2566d_81484c07",
+        "filename": "include/tools/gen.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-07-07T16:41:25Z",
+      "side": 1,
+      "message": "Makes sense to change both, but this is already a huge patch, so maybe better to do it in a follow-up patch.",
+      "parentUuid": "c7d17511_daa95358",
+      "revId": "dfe6b11d30e2316b31438afcaf17b3b23f89e9cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
