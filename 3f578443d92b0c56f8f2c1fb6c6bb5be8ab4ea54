@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f6bea23_20db2e93",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001053
+      },
+      "writtenOn": "2022-07-07T06:23:51Z",
+      "side": 1,
+      "message": "Wasn\u0027t this string change introduced after 7.4 was tagged (I see source files on dev-build with time 20:17)? \u003d\u003d After the string freeze?",
+      "revId": "3f578443d92b0c56f8f2c1fb6c6bb5be8ab4ea54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
