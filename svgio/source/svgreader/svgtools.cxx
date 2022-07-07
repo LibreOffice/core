@@ -1065,21 +1065,23 @@ namespace svgio::svgreader
 
         bool readLocalUrl(const OUString& rCandidate, OUString& rURL)
         {
-            static const char aStrUrl[] = "url";
+            static const char aStrUrl[] = "url(";
 
-            if(rCandidate.startsWith(aStrUrl))
+            if(rCandidate.startsWithIgnoreAsciiCase(aStrUrl))
             {
                 const sal_Int32 nLen(rCandidate.getLength());
                 sal_Int32 nPos(strlen(aStrUrl));
-
-                skip_char(rCandidate, '(', nPos, nLen);
                 sal_Unicode aLimiter(')');
+
+                skip_char(rCandidate, ' ', nPos, nLen);
 
                 if('"' == rCandidate[nPos])
                     aLimiter = '"';
+                else if('\'' == rCandidate[nPos])
+                    aLimiter = '\'';
 
-                skip_char(rCandidate, '"', nPos, nLen);
-                skip_char(rCandidate, '#', nPos, nLen);
+                skip_char(rCandidate, '"', '\'', nPos, nLen);
+                skip_char(rCandidate, ' ', '#', nPos, nLen);
                 OUStringBuffer aTokenValue;
 
                 copyToLimiter(rCandidate, aLimiter, nPos, aTokenValue, nLen);
