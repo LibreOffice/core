@@ -221,7 +221,7 @@ xmlDocUniquePtr SwModelTestBase::parseLayoutDump()
         dumpLayout(mxComponent);
 
     auto pBuffer = reinterpret_cast<const char*>(xmlBufferContent(mpXmlBuffer));
-    SAL_INFO("sw", "SwModelTestBase::parseLayoutDump: pBuffer is '" << pBuffer << "'");
+    SAL_INFO("sw.qa", "SwModelTestBase::parseLayoutDump: pBuffer is '" << pBuffer << "'");
     return xmlDocUniquePtr(xmlParseMemory(pBuffer, xmlBufferLength(mpXmlBuffer)));
 }
 
