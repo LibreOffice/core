@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b85d4c8_139cd565",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-07-07T17:03:40Z",
+      "side": 1,
+      "message": "let\u0027s wait with merging this until it is ready to replace the existing PNG exported",
+      "revId": "c5b2edefca025190cce004cd1e5b6b099ef7829f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
