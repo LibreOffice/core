@@ -16,6 +16,24 @@
       "message": "For my build on macOS on Apple M1, this fails with\n\n  /Users/stephan/lo/core/test/source/xmltesttools.cxx:195: Assertion\n  Test name: (anonymous namespace)::Test::TestEmfPlusDrawPathWithCustomCap\n  equality assertion failed\n  - Expected: 1423.297394625,1268.98481214025 830.006276132353,558.656004112967\n  - Actual  : 1423.297394625,1268.98481214025 830.006276132352,558.656004112967\n  - In \u003c\u003e, XPath contents of child does not match\n\nI have no idea whether that difference is due to legitimate divergence in floating-point calculations, or whether this indicates a genuine error somewhere.  If it is the former, could you please rework this test so that it is resilient to legitimate divergence in floating-point calculations (e.g., involve some epsilon in the comparison of the polygon data, or rework the source .emf file so that it isn\u0027t prone to such divergence)?  (Sorry, I have too little experience with this code to do any of the above myself in a meaningful way.)",
       "revId": "5b21b65572610df88986e700b81f1156aff14f65",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b267e78_3f2256f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-07-07T11:44:56Z",
+      "side": 1,
+      "message": "\u003e For my build on macOS on Apple M1, this fails\n\nThis also causes other Aarch64 builds to fail in the same way, e.g. the Linux aarch64 test build of the libreoffice-7.4.0.1 Flathub flatpak at \u003chttps://buildbot.flathub.org/#/builders/21/builds/7749\u003e,\n  xmltesttools.cxx:195:Assertion\n  Test name: (anonymous namespace)::Test::TestEmfPlusDrawPathWithCustomCap\n  equality assertion failed\n  - Expected: 1423.297394625,1268.98481214025 830.006276132353,558.656004112967\n  - Actual  : 1423.297394625,1268.98481214025 830.006276132352,558.656004112967\n  - In \u003c\u003e, XPath contents of child does not match",
+      "parentUuid": "2e86ee73_ebb05591",
+      "revId": "5b21b65572610df88986e700b81f1156aff14f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
