@@ -19,6 +19,7 @@
 
 #include <svgstylenode.hxx>
 #include <svgdocument.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 
 namespace svgio::svgreader
@@ -56,7 +57,7 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.startsWith("text/css"))
+                        if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"text/css"))
                         {
                             setTextCss(true);
                         }

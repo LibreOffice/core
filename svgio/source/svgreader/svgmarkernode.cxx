@@ -18,6 +18,7 @@
  */
 
 #include <svgmarkernode.hxx>
+#include <o3tl/string_view.hxx>
 
 namespace svgio::svgreader
 {
@@ -100,11 +101,11 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.startsWith("strokeWidth"))
+                        if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"strokeWidth"))
                         {
                             setMarkerUnits(MarkerUnits::strokeWidth);
                         }
-                        else if(aContent.match(commonStrings::aStrUserSpaceOnUse))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), commonStrings::aStrUserSpaceOnUse))
                         {
                             setMarkerUnits(MarkerUnits::userSpaceOnUse);
                         }
@@ -143,7 +144,7 @@ namespace svgio::svgreader
 
                     if(nLen)
                     {
-                        if(aContent.startsWith("auto"))
+                        if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"auto"))
                         {
                             mbOrientAuto = true;
                         }
