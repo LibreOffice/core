@@ -486,7 +486,7 @@ namespace svgio::svgreader
             }
         }
 
-        bool match_colorKeyword(basegfx::BColor& rColor, const OUString& rName, bool bCaseIndependent)
+        bool match_colorKeyword(basegfx::BColor& rColor, const OUString& rName)
         {
             typedef std::unordered_map< OUString, Color > ColorTokenMapper;
             typedef std::pair< OUString, Color > ColorTokenValueType;
@@ -640,13 +640,7 @@ namespace svgio::svgreader
                 { ColorTokenValueType(OUString("yellowgreen"), Color(154, 205, 50) ) },
             };
 
-            ColorTokenMapper::const_iterator aResult(aColorTokenMapperList.find(rName));
-
-            if(bCaseIndependent && aResult == aColorTokenMapperList.end())
-            {
-                // also try case independent match (e.g. for Css styles)
-                aResult = aColorTokenMapperList.find(rName.toAsciiLowerCase());
-            }
+            ColorTokenMapper::const_iterator aResult(aColorTokenMapperList.find(rName.toAsciiLowerCase()));
 
             if(aResult == aColorTokenMapperList.end())
             {
@@ -659,7 +653,7 @@ namespace svgio::svgreader
             }
         }
 
-        bool read_color(const OUString& rCandidate, basegfx::BColor& rColor, bool bCaseIndependent, SvgNumber& rOpacity)
+        bool read_color(const OUString& rCandidate, basegfx::BColor& rColor, SvgNumber& rOpacity)
         {
             const sal_Int32 nLen(rCandidate.getLength());
 
@@ -798,7 +792,7 @@ namespace svgio::svgreader
                     else
                     {
                         // color keyword
-                        if(match_colorKeyword(rColor, rCandidate, bCaseIndependent))
+                        if(match_colorKeyword(rColor, rCandidate))
                         {
                             return true;
                         }
@@ -1093,13 +1087,13 @@ namespace svgio::svgreader
         }
 
         bool readSvgPaint(const OUString& rCandidate, SvgPaint& rSvgPaint,
-            OUString& rURL, bool bCaseIndependent, SvgNumber& rOpacity)
+            OUString& rURL, SvgNumber& rOpacity)
         {
             if( !rCandidate.isEmpty() )
             {
                 basegfx::BColor aColor;
 
-                if(read_color(rCandidate, aColor, bCaseIndependent, rOpacity))
+                if(read_color(rCandidate, aColor, rOpacity))
                 {
                     rSvgPaint = SvgPaint(aColor, true, true);
                     return true;
