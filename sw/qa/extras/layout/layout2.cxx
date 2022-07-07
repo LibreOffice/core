@@ -566,6 +566,23 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf149709_RedlineNumberingLevel)
     assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[8]/text", "2.");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf149711_importDOCXMoveToParagraphMark)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf149711.docx");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt", 6);
+
+    // reject tracked insertion (moveTo)
+    SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), pEditShell->GetRedlineCount());
+    pEditShell->RejectRedline(1);
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    // This was 6 (not tracked paragraph mark of the moveTo list item)
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt", 5);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumberInFootnote)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf85610.fodt");
