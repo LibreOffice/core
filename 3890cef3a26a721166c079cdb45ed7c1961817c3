@@ -33,6 +33,24 @@
       "message": "\u003e clang plugin toolslong did trigger. VarDecl, use \"tools::Long\" instead of \"long\" ( https://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/116933/ )\n\nlets wait for \u003chttps://gerrit.libreoffice.org/c/core/+/136852\u003e \"Retire loplugin:toolslong\" to land and then rebase on top of it",
       "revId": "3890cef3a26a721166c079cdb45ed7c1961817c3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3647c8e_b8dac0f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-07-07T07:17:09Z",
+      "side": 1,
+      "message": "\u003e lets wait for \u003chttps://gerrit.libreoffice.org/c/core/+/136852\u003e \"Retire loplugin:toolslong\" to land and then rebase on top of it\n\nYou can do the rebase now.\n\nAnd you shouldn\u0027t have based two other, unrelated Gerrit changes on top of this one, forming a false relation chain.  The failure here needlessly requires updates of those unrelated changes to avoid propagated failures, unrelated to those changes\u0027 actual modifications, there.",
+      "parentUuid": "fae534ba_6a2c49ec",
+      "revId": "3890cef3a26a721166c079cdb45ed7c1961817c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
