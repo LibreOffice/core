@@ -69,6 +69,23 @@
       "message": "Martin, you behave like a spoiled child. You are the only one of us localizers who are allowed a special process for submitting translations and you dare speak like that to Cloph…",
       "revId": "3f578443d92b0c56f8f2c1fb6c6bb5be8ab4ea54",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ebe6126_223d27dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2022-07-07T10:18:45Z",
+      "side": 1,
+      "message": "Glad the fix got in before the string freeze (any my potential concern was not merited). Nice work Cloph ! \u003d) Glad we didn\u0027t trample on the hard-working translators by mistake. Thanks for all you do in translation \u0026 elsewhere Adolfo \u0026 Martin!",
+      "revId": "3f578443d92b0c56f8f2c1fb6c6bb5be8ab4ea54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
