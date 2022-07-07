@@ -34,6 +34,24 @@
       "parentUuid": "7f6bea23_20db2e93",
       "revId": "3f578443d92b0c56f8f2c1fb6c6bb5be8ab4ea54",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76b4f7b2_dba7122f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-07-07T09:31:11Z",
+      "side": 1,
+      "message": "No, it was before. How do I know? Because I did the tag that marks UI/and English string freeze.\nThe dates/events for that are no secret, they are laid out in the release plan, https://wiki.documentfoundation.org/ReleasePlan/7.4  → String Freeze is with rc1, so in effect now.\n\nAnd call-for-papers is open, feel free to submit a talk (I\u0027m serious)\nAlso feel free to point out any concrete violations of the string freeze (but probably not here, but on the l10n list or in your talk). My recollection for string freeze break is that either any change didn\u0027t result in action needed by translators because the change could be mass-applied, or there was an extraordinary case that required a new string, like to address a CVE properly.",
+      "parentUuid": "bb3cc153_85503e76",
+      "revId": "3f578443d92b0c56f8f2c1fb6c6bb5be8ab4ea54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
