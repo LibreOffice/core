@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e455524_252db9dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-07-07T13:57:25Z",
+      "side": 1,
+      "message": "Hi Mike,\nI haven\u0027t tested all these values in uppercase but the ones I tested work fine in Firefox and Chrome so I think this change makes sense.\nthis is similar to what you suggested in https://gerrit.libreoffice.org/c/core/+/136877",
+      "revId": "d0cb72f72bb67c60f524029feb322f851428d402",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
