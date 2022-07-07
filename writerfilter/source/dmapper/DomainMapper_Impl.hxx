@@ -576,8 +576,8 @@ private:
     RedlineParamsPtr                m_previousRedline;
     RedlineParamsPtr                m_pParaMarkerRedline;
     bool                            m_bIsParaMarkerChange;
-    // redline data of the terminating run, if it's a moveFrom deletion
-    RedlineParamsPtr                m_pParaMarkerRedlineMoveFrom;
+    // redline data of the terminating run, if it's a moveFrom deletion or a moveTo insertion
+    RedlineParamsPtr                m_pParaMarkerRedlineMove;
     // This is for removing workaround (double ZWSPs around the anchoring point) for track
     // changed images anchored *to* character, if it's followed by a redline text run immediately.
     // (In that case, the image is part of a tracked text range, no need for the dummy
