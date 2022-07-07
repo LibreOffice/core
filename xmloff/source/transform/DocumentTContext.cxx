@@ -64,20 +64,18 @@ void XMLDocumentTransformerContext::StartElement( const Reference< XAttributeLis
             IsXMLToken( aLocalName, XML_MIMETYPE ) )
         {
             const OUString& rValue = xAttrList->getValueByIndex( i );
-            static const char * aTmp[] =
+            static constexpr std::string_view aTmp[]
             {
                 "application/vnd.oasis.openoffice.",
                 "application/x-vnd.oasis.openoffice.",
                 "application/vnd.oasis.opendocument.",
-                "application/x-vnd.oasis.document.",
-                nullptr
+                "application/x-vnd.oasis.document."
             };
-            for (int k=0; aTmp[k]; k++)
+            for (const auto & rPrefix : aTmp)
             {
-                OUString sTmpString = OUString::createFromAscii(aTmp[k]);
-                if( rValue.matchAsciiL( aTmp[k], sTmpString.getLength() ) )
+                if( rValue.matchAsciiL( rPrefix.data(), rPrefix.size() ) )
                 {
-                    aClass = rValue.copy( sTmpString.getLength() );
+                    aClass = rValue.copy( rPrefix.size() );
                     break;
                 }
             }

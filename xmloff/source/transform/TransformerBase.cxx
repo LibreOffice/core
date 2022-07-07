@@ -1332,11 +1332,9 @@ bool XMLTransformerBase::ConvertURIToOOo( OUString& rURI,
 
         if( bPackage && bSupportPackage )
         {
-            OUString sTmp( '#' );
             if( rURI.startsWith( "./" ) )
                 rURI = rURI.copy( 2 );
-            sTmp += rURI;
-            rURI = sTmp;
+            rURI = "#" + rURI;
             bRet = true;
         }
     }

@@ -36,6 +36,7 @@
 #include <certificateextension_xmlsecimpl.hxx>
 
 #include "sanextension_nssimpl.hxx"
+#include <o3tl/string_view.hxx>
 #include <tools/time.hxx>
 #include <svl/sigstruct.hxx>
 
@@ -185,9 +186,9 @@ css::uno::Sequence< css::uno::Reference< css::security::XCertificateExtension > 
 
             // remove "OID." prefix if existing
             OString objID;
-            OString oid("OID.");
+            constexpr std::string_view oid("OID.");
             if (oidString.match(oid))
-                objID = oidString.copy(oid.getLength());
+                objID = oidString.copy(oid.size());
             else
                 objID = oidString;
 
