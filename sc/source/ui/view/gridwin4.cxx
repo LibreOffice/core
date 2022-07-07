@@ -818,8 +818,8 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         }
     }
 
-    // edge (area) (Pixel)
-    if ( nX2==rDoc.MaxCol() || nY2==rDoc.MaxRow() )
+    // app-background / document edge (area) (Pixel)
+    if ( !bIsTiledRendering && ( nX2 == rDoc.MaxCol() || nY2 == rDoc.MaxRow() ) )
     {
         // save MapMode and set to pixel
         MapMode aCurrentMapMode(pContentDev->GetMapMode());
