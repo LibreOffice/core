@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4265df75_24d66407",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-07-07T15:52:39Z",
+      "side": 1,
+      "message": "I noticed that this header should be in vcl and not tools. Tomaz, can you have a quick look?",
+      "revId": "10b638cea3342a9b9846c854ae77485b6830d49c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
