@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04008b91_d1765d40",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-07-07T09:46:42Z",
+      "side": 1,
+      "message": "Just checking that I am still able to submit tooltip change before the string freeze. Thanks.",
+      "revId": "1d6196782389fdc7390268e26d00f1cca4968e80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
