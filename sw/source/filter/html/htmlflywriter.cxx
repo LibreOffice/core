@@ -621,7 +621,8 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
 
     if( (nFrameOpts & HtmlFrmOpts::Space) &&
         (aTwipSpc.Width() || aTwipSpc.Height()) &&
-        Application::GetDefaultDevice() )
+        Application::GetDefaultDevice() &&
+        !mbReqIF )
     {
         Size aPixelSpc =
             Application::GetDefaultDevice()->LogicToPixel( aTwipSpc,
@@ -888,7 +889,8 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
 
     if( (nFrameOptions & HtmlFrmOpts::Space) &&
         (aTwipSpc.Width() || aTwipSpc.Height()) &&
-        Application::GetDefaultDevice() )
+        Application::GetDefaultDevice() &&
+        !mbReqIF )
     {
         Size aPixelSpc =
             Application::GetDefaultDevice()->LogicToPixel( aTwipSpc,
