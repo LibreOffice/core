@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f454cab_c2149ae0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-07-07T09:57:39Z",
+      "side": 1,
+      "message": "I noticed you sent a license statement again, even though you already sent it in April. You don\u0027t need to keep sending statements, once is enough.",
+      "revId": "3bf537244973a19c09dc6ef6430e25a05ba5027f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
