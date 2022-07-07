@@ -719,9 +719,9 @@ TextSelection EditorWindow::GetLastHighlightPortionTextSelection() const
     if( aPortions.empty() )
         return TextSelection();
 
-    OUString sStr = aLine.copy( r.nBegin, r.nEnd - r.nBegin );
+    std::u16string_view sStr = aLine.subView( r.nBegin, r.nEnd - r.nBegin );
     TextPaM aStart( nLine, r.nBegin );
-    TextPaM aEnd( nLine, r.nBegin + sStr.getLength() );
+    TextPaM aEnd( nLine, r.nBegin + sStr.size() );
     return TextSelection( aStart, aEnd );
 }
 

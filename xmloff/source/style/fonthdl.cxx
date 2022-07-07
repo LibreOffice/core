@@ -160,7 +160,7 @@ bool XMLFontFamilyNamePropHdl::exportXML( OUString& rStrExpValue, const uno::Any
                     sValue.append( ' ' );
                 }
                 sal_Int32 nLen = nLast-nFirst+1;
-                OUString sFamily( aStrFamilyName.copy( nFirst, nLen ) );
+                std::u16string_view sFamily( aStrFamilyName.subView( nFirst, nLen ) );
                 bool bQuote = false;
                 for( sal_Int32 i=0; i < nLen; i++ )
                 {
