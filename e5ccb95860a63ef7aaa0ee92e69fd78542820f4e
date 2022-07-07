@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "21755c56_2bfd8150",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-07-07T10:24:23Z",
+      "side": 1,
+      "message": "i\u0027m playing the bad cop so i have to point out it\u0027s \"compliant\"",
+      "range": {
+        "startLine": 7,
+        "startChar": 34,
+        "endLine": 7,
+        "endChar": 37
+      },
+      "revId": "e5ccb95860a63ef7aaa0ee92e69fd78542820f4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "71957768_b7c51df8",
         "filename": "svgio/source/svgreader/svgtools.cxx",
         "patchSetId": 2
