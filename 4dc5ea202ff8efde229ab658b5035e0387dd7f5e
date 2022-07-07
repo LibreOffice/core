@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "efbfb297_c2508768",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-07-07T12:09:01Z",
+      "side": 1,
+      "message": "It\u0027s my own fault for editing this patch online (because I was home and didn\u0027t have access to the machine I\u0027m doing this patch on).\nAnd then editing the patch again on the relevant machine this morning :-)\nBad Noel!",
+      "parentUuid": "54b04fbd_04e472b0",
+      "revId": "4dc5ea202ff8efde229ab658b5035e0387dd7f5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c42d9e1c_7d6ade85",
@@ -65,6 +83,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8098ed4c_fc88db67",
+        "filename": "editeng/source/accessibility/AccessibleParaManager.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-07-07T12:09:01Z",
+      "side": 1,
+      "message": "good catch!",
+      "parentUuid": "61b2318b_7f5924a7",
+      "range": {
+        "startLine": 247,
+        "startChar": 2,
+        "endLine": 247,
+        "endChar": 41
+      },
+      "revId": "4dc5ea202ff8efde229ab658b5035e0387dd7f5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "55d3ee39_3a2823a2",
@@ -101,6 +143,30 @@
       "writtenOn": "2022-07-07T11:41:06Z",
       "side": 1,
       "message": "That `\u003d` -\u003e `\u003d\u003d` change in PS9 looks odd to me (equality check instead of assignment).",
+      "range": {
+        "startLine": 786,
+        "startChar": 1,
+        "endLine": 786,
+        "endChar": 46
+      },
+      "revId": "4dc5ea202ff8efde229ab658b5035e0387dd7f5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9cffe421_4d18054b",
+        "filename": "winaccessibility/source/service/AccObject.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-07-07T12:09:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e2e6c7a9_d06400a8",
       "range": {
         "startLine": 786,
         "startChar": 1,
