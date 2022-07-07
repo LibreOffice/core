@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c42d9e1c_7d6ade85",
+        "filename": "editeng/source/accessibility/AccessibleParaManager.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-07T11:41:06Z",
+      "side": 1,
+      "message": "I\u0027m wondering (but not 100% sure) whether this can result in an overflow now, because `(1 \u003c\u003c i)` is treated as int (\u003d32 bit value) in PS9, as compared to PS8 where this was sal_Int64 explicitly.",
+      "range": {
+        "startLine": 247,
+        "startChar": 2,
+        "endLine": 247,
+        "endChar": 41
+      },
+      "revId": "4dc5ea202ff8efde229ab658b5035e0387dd7f5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55d3ee39_3a2823a2",
+        "filename": "toolkit/qa/cppunit/a11y/AccessibilityTools.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-07T11:41:06Z",
+      "side": 1,
+      "message": "changes between PS8 and PS9 here look odd to me, and result in undefined `name` variable.",
+      "range": {
+        "startLine": 277,
+        "startChar": 0,
+        "endLine": 399,
+        "endChar": 24
+      },
+      "revId": "4dc5ea202ff8efde229ab658b5035e0387dd7f5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2e6c7a9_d06400a8",
+        "filename": "winaccessibility/source/service/AccObject.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-07T11:41:06Z",
+      "side": 1,
+      "message": "That `\u003d` -\u003e `\u003d\u003d` change in PS9 looks odd to me (equality check instead of assignment).",
+      "range": {
+        "startLine": 786,
+        "startChar": 1,
+        "endLine": 786,
+        "endChar": 46
+      },
+      "revId": "4dc5ea202ff8efde229ab658b5035e0387dd7f5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
