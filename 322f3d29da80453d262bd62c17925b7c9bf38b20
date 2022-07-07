@@ -51,6 +51,24 @@
       "parentUuid": "89670214_722aeb99",
       "revId": "322f3d29da80453d262bd62c17925b7c9bf38b20",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f263a1f_8ad56b98",
+        "filename": "svgio/source/svgreader/svgtools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1075,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-07-07T10:02:50Z",
+      "side": 1,
+      "message": "could you also please check with url(  \"#foo\"  ) - and with tabs/newlines there together with spaces?",
+      "parentUuid": "f9789cc5_b2c5fe3c",
+      "revId": "322f3d29da80453d262bd62c17925b7c9bf38b20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
