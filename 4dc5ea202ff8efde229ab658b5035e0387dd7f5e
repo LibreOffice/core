@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "61b2318b_7f5924a7",
+        "filename": "editeng/source/accessibility/AccessibleParaManager.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-07T11:51:27Z",
+      "side": 1,
+      "message": "And if it\u0027s a problem, same thing is in `vcl/qt5/QtAccessibleWidget.cxx` and `vcl/unx/gtk3/a11y/atkwrapper.cxx` as well (just searched for `\u003c\u003c` again.",
+      "parentUuid": "c42d9e1c_7d6ade85",
+      "range": {
+        "startLine": 247,
+        "startChar": 2,
+        "endLine": 247,
+        "endChar": 41
+      },
+      "revId": "4dc5ea202ff8efde229ab658b5035e0387dd7f5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "55d3ee39_3a2823a2",
         "filename": "toolkit/qa/cppunit/a11y/AccessibilityTools.cxx",
         "patchSetId": 11
