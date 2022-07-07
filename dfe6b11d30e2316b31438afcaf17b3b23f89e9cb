@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c258821c_99ee4766",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001582
+      },
+      "writtenOn": "2022-07-07T16:11:16Z",
+      "side": 1,
+      "message": "I don\u0027t actually have any real opinion here as I wholly lack any relevant knowledge of the code here, so please take my comments lightly 😊",
+      "revId": "dfe6b11d30e2316b31438afcaf17b3b23f89e9cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7d17511_daa95358",
+        "filename": "include/tools/gen.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1001582
+      },
+      "writtenOn": "2022-07-07T16:11:16Z",
+      "side": 1,
+      "message": "Shouldn\u0027t you change `setWidth()` and `setHeight()` similarly then?  AFAICT they also use helf-open values (probably same difference with their capital counterpart as the get ones), and they look just as confusing.\nThis seems especially relevant to me as AFAICT `getOpenWidth() \u003d\u003d setWidth(getOpenWidth())`, so their name should really match.\n\nWhat do you think?",
+      "revId": "dfe6b11d30e2316b31438afcaf17b3b23f89e9cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
