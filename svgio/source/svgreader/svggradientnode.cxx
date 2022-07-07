@@ -186,15 +186,15 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.startsWith("pad"))
+                        if(aContent.startsWithIgnoreAsciiCase("pad"))
                         {
                             setSpreadMethod(drawinglayer::primitive2d::SpreadMethod::Pad);
                         }
-                        else if(aContent.startsWith("reflect"))
+                        else if(aContent.startsWithIgnoreAsciiCase("reflect"))
                         {
                             setSpreadMethod(drawinglayer::primitive2d::SpreadMethod::Reflect);
                         }
-                        else if(aContent.startsWith("repeat"))
+                        else if(aContent.startsWithIgnoreAsciiCase("repeat"))
                         {
                             setSpreadMethod(drawinglayer::primitive2d::SpreadMethod::Repeat);
                         }

@@ -56,7 +56,7 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.startsWith("text/css"))
+                        if(aContent.startsWithIgnoreAsciiCase("text/css"))
                         {
                             setTextCss(true);
                         }

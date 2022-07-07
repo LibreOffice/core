@@ -100,7 +100,7 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.startsWith("strokeWidth"))
+                        if(aContent.startsWithIgnoreAsciiCase("strokeWidth"))
                         {
                             setMarkerUnits(MarkerUnits::strokeWidth);
                         }
@@ -143,7 +143,7 @@ namespace svgio::svgreader
 
                     if(nLen)
                     {
-                        if(aContent.startsWith("auto"))
+                        if(aContent.startsWithIgnoreAsciiCase("auto"))
                         {
                             mbOrientAuto = true;
                         }
