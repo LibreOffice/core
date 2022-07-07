@@ -1301,7 +1301,7 @@ namespace svgio::svgreader
                     OUString aURL;
                     SvgNumber aOpacity;
 
-                    if(readSvgPaint(aContent, aSvgPaint, aURL, bCaseIndependent, aOpacity))
+                    if(readSvgPaint(aContent, aSvgPaint, aURL, aOpacity))
                     {
                         setFill(aSvgPaint);
                         if(aOpacity.isSet())
@@ -1346,7 +1346,7 @@ namespace svgio::svgreader
                     OUString aURL;
                     SvgNumber aOpacity;
 
-                    if(readSvgPaint(aContent, aSvgPaint, aURL, bCaseIndependent, aOpacity))
+                    if(readSvgPaint(aContent, aSvgPaint, aURL, aOpacity))
                     {
                         maStroke = aSvgPaint;
                         if(aOpacity.isSet())
@@ -1475,7 +1475,7 @@ namespace svgio::svgreader
                     OUString aURL;
                     SvgNumber aOpacity;
 
-                    if(readSvgPaint(aContent, aSvgPaint, aURL, bCaseIndependent, aOpacity))
+                    if(readSvgPaint(aContent, aSvgPaint, aURL, aOpacity))
                     {
                         maStopColor = aSvgPaint;
                         if(aOpacity.isSet())
@@ -1788,7 +1788,7 @@ namespace svgio::svgreader
                     OUString aURL;
                     SvgNumber aOpacity;
 
-                    if(readSvgPaint(aContent, aSvgPaint, aURL, bCaseIndependent, aOpacity))
+                    if(readSvgPaint(aContent, aSvgPaint, aURL, aOpacity))
                     {
                         maColor = aSvgPaint;
                         if(aOpacity.isSet())
