@@ -16,6 +16,24 @@
       "message": "hmm perhaps the issue is that ~SwViewShell does \"mpImp.reset()\" and \"mpLayout\" is  only deleted implicitly, i.e. later?\n\nare you sure it\u0027s actually SvViewShell that is null and not its Imp()?\n\n... this stack i\u0027m looking at is very funny, apparently there is a call to DelFrameFormat() in SwRootFrame::DestroyImpl() which creates an Undo action and the Undo stack is full so deletes the 1st Undo action which happens to delete layout frames...\n\nperhaps it\u0027s better to disable Undo in SwRootFrame::DestroyImpl() via sw::UndoGuard or even further out in ~SwViewShell (and make deleting mpLayout explicit)",
       "revId": "b3f7887b738ab067951020a93ef980154214eadd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a34ffa7f_66fd7141",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-07-07T11:17:06Z",
+      "side": 1,
+      "message": "\u003e hmm perhaps the issue is that ~SwViewShell does \"mpImp.reset()\" and \"mpLayout\" is  only deleted implicitly, i.e. later?\n\u003e \n\u003e are you sure it\u0027s actually SvViewShell that is null and not its Imp()?\n\nNo, i\u0027m not, but I checked sw/source/core/layout/wsfrm.cxx and other files and we always check SwViewShell is not null so I thought this would be the most obvious fix.",
+      "parentUuid": "89f13e5f_b7d03819",
+      "revId": "b3f7887b738ab067951020a93ef980154214eadd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
