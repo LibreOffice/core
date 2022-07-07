@@ -25,6 +25,7 @@
 #include <drawinglayer/primitive2d/textbreakuphelper.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 #include <utility>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 
 using namespace drawinglayer::primitive2d;
@@ -123,11 +124,11 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.startsWith("spacing"))
+                        if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"spacing"))
                         {
                             setLengthAdjust(true);
                         }
-                        else if(aContent.startsWith("spacingAndGlyphs"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"spacingAndGlyphs"))
                         {
                             setLengthAdjust(false);
                         }

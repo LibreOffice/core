@@ -43,6 +43,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pagehierarchyprimitive2d.hxx>
+#include <o3tl/string_view.hxx>
 #include <o3tl/unit_conversion.hxx>
 
 const int nStyleDepthLimit = 1024;
@@ -1329,11 +1330,11 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.match(commonStrings::aStrNonzero))
+                        if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), commonStrings::aStrNonzero))
                         {
                             maFillRule = FillRule::nonzero;
                         }
-                        else if(aContent.match(commonStrings::aStrEvenOdd))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), commonStrings::aStrEvenOdd))
                         {
                             maFillRule = FillRule::evenodd;
                         }
@@ -1366,7 +1367,7 @@ namespace svgio::svgreader
                     {
                         SvgNumberVector aVector;
 
-                        if(aContent.startsWith("none"))
+                        if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"none"))
                         {
                             // #121221# The special value 'none' needs to be handled
                             // in the sense that *when* it is set, the parent shall not
@@ -1398,15 +1399,15 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.startsWith("butt"))
+                        if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"butt"))
                         {
                             setStrokeLinecap(StrokeLinecap::butt);
                         }
-                        else if(aContent.startsWith("round"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"round"))
                         {
                             setStrokeLinecap(StrokeLinecap::round);
                         }
-                        else if(aContent.startsWith("square"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"square"))
                         {
                             setStrokeLinecap(StrokeLinecap::square);
                         }
@@ -1417,15 +1418,15 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.startsWith("miter"))
+                        if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"miter"))
                         {
                             setStrokeLinejoin(StrokeLinejoin::miter);
                         }
-                        else if(aContent.startsWith("round"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"round"))
                         {
                             setStrokeLinejoin(StrokeLinejoin::round);
                         }
-                        else if(aContent.startsWith("bevel"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"bevel"))
                         {
                             setStrokeLinejoin(StrokeLinejoin::bevel);
                         }
@@ -1516,43 +1517,43 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.startsWith("xx-small"))
+                        if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"xx-small"))
                         {
                             setFontSize(FontSize::xx_small);
                         }
-                        else if(aContent.startsWith("x-small"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"x-small"))
                         {
                             setFontSize(FontSize::x_small);
                         }
-                        else if(aContent.startsWith("small"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"small"))
                         {
                             setFontSize(FontSize::small);
                         }
-                        else if(aContent.startsWith("smaller"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"smaller"))
                         {
                             setFontSize(FontSize::smaller);
                         }
-                        else if(aContent.startsWith("medium"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"medium"))
                         {
                             setFontSize(FontSize::medium);
                         }
-                        else if(aContent.startsWith("larger"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"larger"))
                         {
                             setFontSize(FontSize::larger);
                         }
-                        else if(aContent.startsWith("large"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"large"))
                         {
                             setFontSize(FontSize::large);
                         }
-                        else if(aContent.startsWith("x-large"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"x-large"))
                         {
                             setFontSize(FontSize::x_large);
                         }
-                        else if(aContent.startsWith("xx-large"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"xx-large"))
                         {
                             setFontSize(FontSize::xx_large);
                         }
-                        else if(aContent.startsWith("initial"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"initial"))
                         {
                             setFontSize(FontSize::initial);
                         }
@@ -1576,47 +1577,47 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.startsWith("normal"))
+                        if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"normal"))
                         {
                             setFontStretch(FontStretch::normal);
                         }
-                        else if(aContent.startsWith("wider"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"wider"))
                         {
                             setFontStretch(FontStretch::wider);
                         }
-                        else if(aContent.startsWith("narrower"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"narrower"))
                         {
                             setFontStretch(FontStretch::narrower);
                         }
-                        else if(aContent.startsWith("ultra-condensed"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"ultra-condensed"))
                         {
                             setFontStretch(FontStretch::ultra_condensed);
                         }
-                        else if(aContent.startsWith("extra-condensed"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"extra-condensed"))
                         {
                             setFontStretch(FontStretch::extra_condensed);
                         }
-                        else if(aContent.startsWith("condensed"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"condensed"))
                         {
                             setFontStretch(FontStretch::condensed);
                         }
-                        else if(aContent.startsWith("semi-condensed"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"semi-condensed"))
                         {
                             setFontStretch(FontStretch::semi_condensed);
                         }
-                        else if(aContent.startsWith("semi-expanded"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"semi-expanded"))
                         {
                             setFontStretch(FontStretch::semi_expanded);
                         }
-                        else if(aContent.startsWith("expanded"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"expanded"))
                         {
                             setFontStretch(FontStretch::expanded);
                         }
-                        else if(aContent.startsWith("extra-expanded"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"extra-expanded"))
                         {
                             setFontStretch(FontStretch::extra_expanded);
                         }
-                        else if(aContent.startsWith("ultra-expanded"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"ultra-expanded"))
                         {
                             setFontStretch(FontStretch::ultra_expanded);
                         }
@@ -1627,15 +1628,15 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.startsWith("normal"))
+                        if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"normal"))
                         {
                             setFontStyle(FontStyle::normal);
                         }
-                        else if(aContent.startsWith("italic"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"italic"))
                         {
                             setFontStyle(FontStyle::italic);
                         }
-                        else if(aContent.startsWith("oblique"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"oblique"))
                         {
                             setFontStyle(FontStyle::oblique);
                         }
@@ -1650,47 +1651,47 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.startsWith("100"))
+                        if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"100"))
                         {
                             setFontWeight(FontWeight::N100);
                         }
-                        else if(aContent.startsWith("200"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"200"))
                         {
                             setFontWeight(FontWeight::N200);
                         }
-                        else if(aContent.startsWith("300"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"300"))
                         {
                             setFontWeight(FontWeight::N300);
                         }
-                        else if(aContent.startsWith("400") || aContent.startsWith("normal"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"400") || o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"normal"))
                         {
                             setFontWeight(FontWeight::N400);
                         }
-                        else if(aContent.startsWith("500"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"500"))
                         {
                             setFontWeight(FontWeight::N500);
                         }
-                        else if(aContent.startsWith("600"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"600"))
                         {
                             setFontWeight(FontWeight::N600);
                         }
-                        else if(aContent.startsWith("700") || aContent.startsWith("bold"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"700") || o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"bold"))
                         {
                             setFontWeight(FontWeight::N700);
                         }
-                        else if(aContent.startsWith("800"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"800"))
                         {
                             setFontWeight(FontWeight::N800);
                         }
-                        else if(aContent.startsWith("900"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"900"))
                         {
                             setFontWeight(FontWeight::N900);
                         }
-                        else if(aContent.startsWith("bolder"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"bolder"))
                         {
                             setFontWeight(FontWeight::bolder);
                         }
-                        else if(aContent.startsWith("lighter"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"lighter"))
                         {
                             setFontWeight(FontWeight::lighter);
                         }
@@ -1709,23 +1710,23 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.startsWith("none"))
+                        if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"none"))
                         {
                             setTextDecoration(TextDecoration::none);
                         }
-                        else if(aContent.startsWith("underline"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"underline"))
                         {
                             setTextDecoration(TextDecoration::underline);
                         }
-                        else if(aContent.startsWith("overline"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"overline"))
                         {
                             setTextDecoration(TextDecoration::overline);
                         }
-                        else if(aContent.startsWith("line-through"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"line-through"))
                         {
                             setTextDecoration(TextDecoration::line_through);
                         }
-                        else if(aContent.startsWith("blink"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"blink"))
                         {
                             setTextDecoration(TextDecoration::blink);
                         }
@@ -1744,15 +1745,15 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.startsWith("start"))
+                        if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"start"))
                         {
                             setTextAnchor(TextAnchor::start);
                         }
-                        else if(aContent.startsWith("middle"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"middle"))
                         {
                             setTextAnchor(TextAnchor::middle);
                         }
-                        else if(aContent.startsWith("end"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"end"))
                         {
                             setTextAnchor(TextAnchor::end);
                         }
@@ -1763,19 +1764,19 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.startsWith("left"))
+                        if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"left"))
                         {
                             setTextAlign(TextAlign::left);
                         }
-                        else if(aContent.startsWith("right"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"right"))
                         {
                             setTextAlign(TextAlign::right);
                         }
-                        else if(aContent.startsWith("center"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"center"))
                         {
                             setTextAlign(TextAlign::center);
                         }
-                        else if(aContent.startsWith("justify"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"justify"))
                         {
                             setTextAlign(TextAlign::justify);
                         }
@@ -1812,19 +1813,19 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.startsWith("visible"))
+                        if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"visible"))
                         {
                             setVisibility(Visibility::visible);
                         }
-                        else if(aContent.startsWith("hidden"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"hidden"))
                         {
                             setVisibility(Visibility::hidden);
                         }
-                        else if(aContent.startsWith("collapse"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"collapse"))
                         {
                             setVisibility(Visibility::collapse);
                         }
-                        else if(aContent.startsWith("inherit"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"inherit"))
                         {
                             setVisibility(Visibility::inherit);
                         }
@@ -1855,11 +1856,11 @@ namespace svgio::svgreader
                 {
                     if(!aContent.isEmpty())
                     {
-                        if(aContent.match(commonStrings::aStrNonzero))
+                        if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), commonStrings::aStrNonzero))
                         {
                             maClipRule = FillRule::nonzero;
                         }
-                        else if(aContent.match(commonStrings::aStrEvenOdd))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), commonStrings::aStrEvenOdd))
                         {
                             maClipRule = FillRule::evenodd;
                         }
@@ -1908,11 +1909,11 @@ namespace svgio::svgreader
                     {
                         SvgNumber aNum;
 
-                        if(aContent.startsWith("sub"))
+                        if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"sub"))
                         {
                             setBaselineShift(BaselineShift::Sub);
                         }
-                        else if(aContent.startsWith("super"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"super"))
                         {
                             setBaselineShift(BaselineShift::Super);
                         }
@@ -2474,7 +2475,7 @@ namespace svgio::svgreader
 
         const SvgStringVector& SvgStyleAttributes::getFontFamily() const
         {
-            if(!maFontFamily.empty() && !maFontFamily[0].startsWith("inherit"))
+            if(!maFontFamily.empty() && !o3tl::equalsIgnoreAsciiCase(o3tl::trim(maFontFamily[0]), u"inherit"))
             {
                 return maFontFamily;
             }
