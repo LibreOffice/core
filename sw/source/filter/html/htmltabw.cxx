@@ -664,7 +664,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
         sOut.append("\"");
     }
 
-    if( (nHSpace || nVSpace) && Application::GetDefaultDevice())
+    if( (nHSpace || nVSpace) && Application::GetDefaultDevice() && !rWrt.mbReqIF)
     {
         Size aPixelSpc =
             Application::GetDefaultDevice()->LogicToPixel( Size(nHSpace,nVSpace),
