@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71957768_b7c51df8",
+        "filename": "svgio/source/svgreader/svgtools.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1084,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-07-07T10:07:07Z",
+      "side": 1,
+      "message": "Also these should only skip one char, and that char must be only equal to the aLimiter - so please replace the two lines with one:\n\n    skip_char(rCandidate, aLimiter, nPos, nPos + 1);",
+      "revId": "e5ccb95860a63ef7aaa0ee92e69fd78542820f4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
