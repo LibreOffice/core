@@ -36,6 +36,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e05d3b3_ab9bd969",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-07T12:40:19Z",
+      "side": 1,
+      "message": "Ah, I see. :-)\nI never tried/dared to use the Gerrit web interface for editing so far.",
+      "parentUuid": "efbfb297_c2508768",
+      "revId": "4dc5ea202ff8efde229ab658b5035e0387dd7f5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c42d9e1c_7d6ade85",
@@ -167,6 +185,30 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "e2e6c7a9_d06400a8",
+      "range": {
+        "startLine": 786,
+        "startChar": 1,
+        "endLine": 786,
+        "endChar": 46
+      },
+      "revId": "4dc5ea202ff8efde229ab658b5035e0387dd7f5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52580c99_e7d7783e",
+        "filename": "winaccessibility/source/service/AccObject.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-07T12:40:19Z",
+      "side": 1,
+      "message": "Still seems to be unchanged in PS12.",
+      "parentUuid": "9cffe421_4d18054b",
       "range": {
         "startLine": 786,
         "startChar": 1,
