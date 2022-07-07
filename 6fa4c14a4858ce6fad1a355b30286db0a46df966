@@ -16,6 +16,23 @@
       "message": "Hossein, the +2 is for you :-)",
       "revId": "6fa4c14a4858ce6fad1a355b30286db0a46df966",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "332dbe64_3d921641",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-07-07T07:40:44Z",
+      "side": 1,
+      "message": "Looks good to me.",
+      "revId": "6fa4c14a4858ce6fad1a355b30286db0a46df966",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
