@@ -56,6 +56,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void testRGBAColor();
     void testNoneColor();
     void testTdf97936();
+    void testTdf149893();
     void testClipPathAndParentStyle();
     void testClipPathAndStyle();
     void testi125329();
@@ -94,6 +95,7 @@ public:
     CPPUNIT_TEST(testRGBAColor);
     CPPUNIT_TEST(testNoneColor);
     CPPUNIT_TEST(testTdf97936);
+    CPPUNIT_TEST(testTdf149893);
     CPPUNIT_TEST(testClipPathAndParentStyle);
     CPPUNIT_TEST(testClipPathAndStyle);
     CPPUNIT_TEST(testi125329);
@@ -521,6 +523,22 @@ void Test::testTdf97936()
     assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor[2]/polypolygon", "miny", "50");
     assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor[2]/polypolygon", "maxx", "60");
     assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor[2]/polypolygon", "maxy", "100");
+}
+
+void Test::testTdf149893()
+{
+    Primitive2DSequence aSequenceClipPathAndParentStyle = parseSvg(u"/svgio/qa/cppunit/data/tdf149893.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceClipPathAndParentStyle.getLength()));
+
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequenceClipPathAndParentStyle));
+
+    CPPUNIT_ASSERT (pDocument);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: #008000
+    // - Actual  : #000000
+    assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor", "color", "#008000");
 }
 
 void Test::testClipPathAndParentStyle()
