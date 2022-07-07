@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "54b04fbd_04e472b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-07T11:45:04Z",
+      "side": 1,
+      "message": "Sorry for the confusion, \"PS9\" in my latest comments refers to the latest PS11 (and \"PS8\" to previous patch set accordingly)...",
+      "revId": "4dc5ea202ff8efde229ab658b5035e0387dd7f5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c42d9e1c_7d6ade85",
