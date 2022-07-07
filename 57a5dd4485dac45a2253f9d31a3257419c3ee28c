@@ -828,6 +828,30 @@
       },
       "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "441ed1ee_94bb3e86",
+        "filename": "winaccessibility/source/service/AccObject.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 808,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-07-07T11:05:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "69f5459f_0b26a15d",
+      "range": {
+        "startLine": 784,
+        "startChar": 0,
+        "endLine": 808,
+        "endChar": 5
+      },
+      "revId": "57a5dd4485dac45a2253f9d31a3257419c3ee28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
