@@ -81,6 +81,24 @@
       "parentUuid": "71957768_b7c51df8",
       "revId": "e5ccb95860a63ef7aaa0ee92e69fd78542820f4e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ec2c2b1_bc8e7223",
+        "filename": "svgio/source/svgreader/svgtools.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1084,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-07-07T12:21:52Z",
+      "side": 1,
+      "message": "Oh I\u0027m sorry for a thinko. What I was thinking about was \"replace the skipping of the *two* quoting characters at line 1083 with replacement of one discovered limiter character\". And then I got distracted, and commented under a wrong line, and in a wrong way.\n\nIndeed, skipping the hash is separate. However I see now that we can only skip limiter *iif* it\u0027s not \u0027)\u0027. Sorry for being so confusing.\n\n    if (aLimiter !\u003d \u0027)\u0027)\n        skip_char(rCandidate, aLimiter, nPos, nPos + 1);",
+      "parentUuid": "0e13e3a2_2d6b2013",
+      "revId": "e5ccb95860a63ef7aaa0ee92e69fd78542820f4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
