@@ -700,7 +700,7 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
         rHTMLWrt.OutNewLine();
 
     OStringBuffer sOut;
-    sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_division);
+    sOut.append("<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_division);
 
     const OUString& rName = rSection.GetSectionName();
     if( !rName.isEmpty() && !bContinued )
