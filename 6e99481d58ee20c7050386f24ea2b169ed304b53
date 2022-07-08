@@ -16,6 +16,24 @@
       "message": "I\u0027m sorry, I\u0027m not an expect in SVG, and I would need to check the documentation for each of the pieces separately, which is a big task, for which I don\u0027t have cycles ATM.\n\nPlease go ahead and merge if you are reasonably confident - or maybe you already have consulted the documentation (in which case, mentioning the respective references in the message would be great).",
       "revId": "6e99481d58ee20c7050386f24ea2b169ed304b53",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa049d92_a15fc1de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-07-08T07:38:02Z",
+      "side": 1,
+      "message": "Hi Mike,\nThanks for you comment. Yep, it\u0027s a big task...\nI feel pretty confident about this patch so I\u0027ll go ahead and merge. I don\u0027t plan to backport it to other branches, just in case.",
+      "parentUuid": "70a8d973_b5111bcd",
+      "revId": "6e99481d58ee20c7050386f24ea2b169ed304b53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
