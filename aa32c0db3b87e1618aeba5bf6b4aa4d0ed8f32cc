@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "127d2b90_f766d282",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-07-08T16:15:17Z",
+      "side": 1,
+      "message": "@Michael, this cherry-pick conflicted with your \u003chttps://git.libreoffice.org/core/+/122905d30e8918e0ebe0ad3a84a50c7681ae228e%5E%21\u003e \"sfx2: fix utterly confusing bools in SfxViewFrame::ExecReload_Impl()\", and I\u0027d appreciate your set of eyes to verify that I indeed solved the merge conflict correctly",
+      "revId": "aa32c0db3b87e1618aeba5bf6b4aa4d0ed8f32cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
