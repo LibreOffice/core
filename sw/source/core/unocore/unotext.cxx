@@ -61,6 +61,7 @@
 #include <doc.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <bookmark.hxx>
 #include <redline.hxx>
 #include <swundo.hxx>
 #include <section.hxx>
@@ -2006,6 +2007,65 @@ void SwXText::Impl::ConvertCell(
     SwNodeRange aCellRange(aStartCellPam.Start()->nNode,
             aEndCellPam.End()->nNode);
     rRowNodes.push_back(aCellRange); // note: invalidates pLastCell!
+
+    // tdf#149649 delete any fieldmarks overlapping the cell
+    IDocumentMarkAccess & rIDMA(*m_pDoc->getIDocumentMarkAccess());
+    while (::sw::mark::IFieldmark *const pMark = rIDMA.getFieldmarkFor(*aStartCellPam.Start()))
+    {
+        if (pMark->GetMarkEnd() <= *aEndCellPam.End())
+        {
+            if (pMark->GetMarkStart() < *aStartCellPam.Start())
+            {
+                SAL_INFO("sw.uno", "deleting fieldmark overlapping table cell");
+                rIDMA.deleteMark(pMark);
+            }
+            else
+            {
+                break;
+            }
+        }
+        else
+        {
+            SwPosition const sepPos(::sw::mark::FindFieldSep(*pMark));
+            if (*aStartCellPam.Start() <= sepPos && sepPos <= *aEndCellPam.End())
+            {
+                SAL_INFO("sw.uno", "deleting fieldmark with separator in table cell");
+                rIDMA.deleteMark(pMark);
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+    while (::sw::mark::IFieldmark *const pMark = rIDMA.getFieldmarkFor(*aEndCellPam.End()))
+    {
+        if (*aStartCellPam.Start() <= pMark->GetMarkStart())
+        {
+            if (*aEndCellPam.End() < pMark->GetMarkEnd())
+            {
+                SAL_INFO("sw.uno", "deleting fieldmark overlapping table cell");
+                rIDMA.deleteMark(pMark);
+            }
+            else
+            {
+                break;
+            }
+        }
+        else
+        {
+            SwPosition const sepPos(::sw::mark::FindFieldSep(*pMark));
+            if (*aStartCellPam.Start() <= sepPos && sepPos <= *aEndCellPam.End())
+            {
+                SAL_INFO("sw.uno", "deleting fieldmark with separator in table cell");
+                rIDMA.deleteMark(pMark);
+            }
+            else
+            {
+                break;
+            }
+       }
+    }
 }
 
 typedef uno::Sequence< text::TableColumnSeparator > TableColumnSeparators;
