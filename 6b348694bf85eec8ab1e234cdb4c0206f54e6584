@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "655b927d_9b13ee10",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2022-07-08T19:57:23Z",
+      "side": 1,
+      "message": "Justin, since you were working on tdt#103975 probably you have opinion on this one.",
+      "revId": "6b348694bf85eec8ab1e234cdb4c0206f54e6584",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
