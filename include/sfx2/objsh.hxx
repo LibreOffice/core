@@ -647,7 +647,7 @@ public:
     void            SetMapUnit( MapUnit nMUnit );
 
     void            FillTransferableObjectDescriptor( TransferableObjectDescriptor& rDesc ) const;
-    void            DoDraw( OutputDevice *, const Point & rObjPos,
+    void            DoDraw( VirtualDevice *, const Point & rObjPos,
                             const Size & rSize,
                             const JobSetup & rSetup,
                             sal_uInt16 nAspect = ASPECT_CONTENT );
@@ -712,7 +712,7 @@ public:
 
     SAL_DLLPRIVATE void SetCreateMode_Impl( SfxObjectCreateMode nMode );
 
-    SAL_DLLPRIVATE void DoDraw_Impl( OutputDevice* pDev,
+    SAL_DLLPRIVATE void DoDraw_Impl( VirtualDevice* pDev,
                                             const Point & rViewPos,
                                             const Fraction & rScaleX,
                                             const Fraction & rScaleY,

@@ -25,7 +25,7 @@
 #include <comphelper/fileformat.h>
 #include <tools/fract.hxx>
 #include <vcl/transfer.hxx>
-#include <vcl/outdev.hxx>
+#include <vcl/virdev.hxx>
 #include <vcl/gdimtf.hxx>
 
 using namespace ::com::sun::star;
@@ -123,7 +123,7 @@ void SfxObjectShell::FillTransferableObjectDescriptor( TransferableObjectDescrip
 }
 
 
-void SfxObjectShell::DoDraw( OutputDevice* pDev,
+void SfxObjectShell::DoDraw( VirtualDevice* pDev,
                             const Point & rObjPos,
                             const Size & rSize,
                             const JobSetup & rSetup,
@@ -146,7 +146,7 @@ void SfxObjectShell::DoDraw( OutputDevice* pDev,
 }
 
 
-void SfxObjectShell::DoDraw_Impl( OutputDevice* pDev,
+void SfxObjectShell::DoDraw_Impl( VirtualDevice* pDev,
                                const Point & rViewPos,
                                const Fraction & rScaleX,
                                const Fraction & rScaleY,
@@ -171,7 +171,7 @@ void SfxObjectShell::DoDraw_Impl( OutputDevice* pDev,
     pDev->Push();
 
     vcl::Region aRegion;
-    if( pDev->IsClipRegion() && pDev->GetOutDevType() != OUTDEV_PRINTER )
+    if( pDev->IsClipRegion() )
     {
         aRegion = pDev->GetClipRegion();
         aRegion = pDev->LogicToPixel( aRegion );
@@ -181,12 +181,12 @@ void SfxObjectShell::DoDraw_Impl( OutputDevice* pDev,
     GDIMetaFile * pMtf = pDev->GetConnectMetaFile();
     if( pMtf )
     {
-        if( pMtf->IsRecord() && pDev->GetOutDevType() != OUTDEV_PRINTER )
+        if( pMtf->IsRecord() )
             pMtf->Stop();
         else
             pMtf = nullptr;
     }
-    if( pDev->IsClipRegion() && pDev->GetOutDevType() != OUTDEV_PRINTER )
+    if( pDev->IsClipRegion() )
     {
         aRegion = pDev->PixelToLogic( aRegion );
         pDev->SetClipRegion( aRegion );
