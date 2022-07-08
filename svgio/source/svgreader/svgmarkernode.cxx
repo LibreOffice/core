@@ -148,7 +148,7 @@ namespace svgio::svgreader
                         {
                             setMarkerOrient(MarkerOrient::auto_start);
                         }
-                        if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"auto-start-reverse"))
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"auto-start-reverse"))
                         {
                             setMarkerOrient(MarkerOrient::auto_start_reverse);
                         }
