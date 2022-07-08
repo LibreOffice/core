@@ -2900,7 +2900,7 @@ void SwDBManager::LoadAndRegisterEmbeddedDataSource(const SwDBData& rData, const
     // Encode the stream name and the real path into a single URL.
     const INetURLObject& rURLObject = rDocShell.GetMedium()->GetURLObject();
     OUString const aURL = ConstructVndSunStarPkgUrl(
-        rURLObject.GetMainURL(INetURLObject::DecodeMechanism::NONE),
+        rURLObject.GetMainURL(INetURLObject::DecodeMechanism::WithCharset),
         m_sEmbeddedName);
 
     uno::Reference<uno::XInterface> xDataSource(xDatabaseContext->getByName(aURL), uno::UNO_QUERY);
