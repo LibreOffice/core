@@ -69,6 +69,42 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe0ff988_cea6fb1b",
+        "filename": "sw/inc/textboxhelper.hxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-07-08T09:51:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a7390246_43eb9ba4",
+      "revId": "02a8bf1eb19db5f978edc65f456f2dd15c72aa05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25963393_6c10f3d0",
+        "filename": "sw/inc/textboxhelper.hxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-07-08T09:51:32Z",
+      "side": 1,
+      "message": "is this the same with the formats? Sorry but i can see the other typo. :)\nUpdate i finally found it! sorry :) fist -\u003e first unfortunately the whole line was marked, i think because of the previous comment. But fixed.",
+      "parentUuid": "f6563e50_1a42b8a0",
+      "revId": "02a8bf1eb19db5f978edc65f456f2dd15c72aa05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7cca3b4f_169ced48",
@@ -82,6 +118,30 @@
       "writtenOn": "2022-07-08T09:31:30Z",
       "side": 1,
       "message": "typo",
+      "range": {
+        "startLine": 213,
+        "startChar": 18,
+        "endLine": 213,
+        "endChar": 26
+      },
+      "revId": "02a8bf1eb19db5f978edc65f456f2dd15c72aa05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f19f2b75_d90182c5",
+        "filename": "sw/inc/textboxhelper.hxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-07-08T09:51:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7cca3b4f_169ced48",
       "range": {
         "startLine": 213,
         "startChar": 18,
@@ -109,6 +169,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8df91a3_26872ce6",
+        "filename": "sw/inc/textboxhelper.hxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-07-08T09:51:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a830514_6a64fbe3",
+      "revId": "02a8bf1eb19db5f978edc65f456f2dd15c72aa05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5cac384a_d7eea3b9",
@@ -122,6 +200,24 @@
       "writtenOn": "2022-07-08T09:31:30Z",
       "side": 1,
       "message": "typo",
+      "revId": "02a8bf1eb19db5f978edc65f456f2dd15c72aa05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "981297ee_be1b981e",
+        "filename": "sw/inc/textboxhelper.hxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-07-08T09:51:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5cac384a_d7eea3b9",
       "revId": "02a8bf1eb19db5f978edc65f456f2dd15c72aa05",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -172,6 +268,54 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "145eb172_d8bf66ed",
+        "filename": "sw/qa/extras/layout/layout.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 3490,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-07-08T09:51:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f71b68d8_0be9ec3a",
+      "range": {
+        "startLine": 3490,
+        "startChar": 61,
+        "endLine": 3490,
+        "endChar": 66
+      },
+      "revId": "02a8bf1eb19db5f978edc65f456f2dd15c72aa05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab2b5dcd_6e506472",
+        "filename": "sw/qa/extras/layout/layout.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 3490,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-07-08T09:51:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5089fd8_a74e1e88",
+      "range": {
+        "startLine": 3490,
+        "startChar": 19,
+        "endLine": 3490,
+        "endChar": 30
+      },
+      "revId": "02a8bf1eb19db5f978edc65f456f2dd15c72aa05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d4de1a35_ed19bb37",
@@ -185,6 +329,30 @@
       "writtenOn": "2022-07-08T09:31:30Z",
       "side": 1,
       "message": "typo",
+      "range": {
+        "startLine": 1833,
+        "startChar": 51,
+        "endLine": 1833,
+        "endChar": 57
+      },
+      "revId": "02a8bf1eb19db5f978edc65f456f2dd15c72aa05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a0ee233_2c542f4b",
+        "filename": "sw/source/core/doc/textboxhelper.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 1833,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-07-08T09:51:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d4de1a35_ed19bb37",
       "range": {
         "startLine": 1833,
         "startChar": 51,
@@ -218,6 +386,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e9073e1_129d84e3",
+        "filename": "sw/source/core/doc/textboxhelper.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 1845,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-07-08T09:51:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2b57be66_39bec408",
+      "range": {
+        "startLine": 1845,
+        "startChar": 21,
+        "endLine": 1845,
+        "endChar": 28
+      },
+      "revId": "02a8bf1eb19db5f978edc65f456f2dd15c72aa05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3468a783_4ed08e49",
@@ -241,6 +433,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5f7c4dc_54072114",
+        "filename": "sw/source/core/doc/textboxhelper.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 1848,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-07-08T09:51:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3468a783_4ed08e49",
+      "range": {
+        "startLine": 1848,
+        "startChar": 67,
+        "endLine": 1848,
+        "endChar": 71
+      },
+      "revId": "02a8bf1eb19db5f978edc65f456f2dd15c72aa05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3e0eae6b_b00bf932",
@@ -254,6 +470,30 @@
       "writtenOn": "2022-07-08T09:31:30Z",
       "side": 1,
       "message": "Delete all of them.",
+      "range": {
+        "startLine": 2562,
+        "startChar": 33,
+        "endLine": 2562,
+        "endChar": 46
+      },
+      "revId": "02a8bf1eb19db5f978edc65f456f2dd15c72aa05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5729fd7a_7418d12a",
+        "filename": "sw/source/core/layout/atrfrm.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 2562,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-07-08T09:51:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e0eae6b_b00bf932",
       "range": {
         "startLine": 2562,
         "startChar": 33,
