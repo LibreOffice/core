@@ -123,7 +123,7 @@
                     <property name="label" translatable="yes" context="additionsdialog|ProgressLabel">Progress Label</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="labelProgress-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="additionsdialog|ProgressLabel">ProgressLabel</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="additionsdialog|ProgressLabel">Progress label</property>
                         <property name="AtkObject::accessible-description" translatable="yes" context="additionsdialog|ProgressLabel">This label shows that the progress of the operations such as loading extensions, not found, etc.</property>
                         <property name="AtkObject::accessible-role" translatable="no">static</property>
                       </object>
@@ -185,7 +185,7 @@
                     <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="entrySearch-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes" context="additionsdialog|searchEntry">searchEntry</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="additionsdialog|searchEntry">Search entry</property>
                         <property name="AtkObject::accessible-description" translatable="yes" context="additionsdialog|searchEntry">searchEntry</property>
                       </object>
                     </child>
