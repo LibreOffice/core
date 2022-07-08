@@ -1060,7 +1060,7 @@ void Test::TestEmfPlusDrawPathWithCustomCap()
     CPPUNIT_ASSERT(pDocument);
 
     assertXPathContent(pDocument, aXPathPrefix + "polygonstrokearrow/polygon",
-                       "1423.297394625,1268.98481214025 830.006276132353,558.656004112967");
+                       "1423.297394625,1268.98481214025 705.717657763014,1304.88786195939");
     assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow/line", "color", "#cc0000");
     assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow/line", "width", "96");
     assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow/line", "linecap", "BUTT");
