@@ -34,6 +34,24 @@
       "parentUuid": "89f13e5f_b7d03819",
       "revId": "b3f7887b738ab067951020a93ef980154214eadd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37779af5_1ef5994a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-07-08T09:46:51Z",
+      "side": 1,
+      "message": "hmm this is very non-obvious but it looks like *both* mpCurrShell and Imp() on the destroyed shell will be null in this situation, so maybe the patch will fix the crash after all.",
+      "parentUuid": "a34ffa7f_66fd7141",
+      "revId": "b3f7887b738ab067951020a93ef980154214eadd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
