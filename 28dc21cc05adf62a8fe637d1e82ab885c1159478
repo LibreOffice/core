@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5695443b_9cc26070",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-07-08T08:15:02Z",
+      "side": 1,
+      "message": "@Tünde: very nice catch and fix! I\u0027m going to cherry-pick it in libreoffice-7-4, too.",
+      "revId": "28dc21cc05adf62a8fe637d1e82ab885c1159478",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
