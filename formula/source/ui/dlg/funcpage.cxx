@@ -159,7 +159,9 @@ void FuncPage::UpdateFunctionList(const OUString& aStr)
             for (sal_uInt32 j = 0; j < nFunctionCount; ++j)
             {
                 TFunctionDesc pDesc(pCategory->getFunction(j));
-                if (rCharClass.uppercase(pDesc->getFunctionName()).indexOf(aSearchStr) >= 0)
+                // tdf#146781 - search for the desired function also in the description
+                if (rCharClass.uppercase(pDesc->getFunctionName()).indexOf(aSearchStr) >= 0
+                    || rCharClass.uppercase(pDesc->getDescription()).indexOf(aSearchStr) >= 0)
                 {
                     if (!pDesc->isHidden())
                     {
