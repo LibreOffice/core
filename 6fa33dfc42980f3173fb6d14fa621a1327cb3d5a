@@ -16,6 +16,23 @@
       "message": "not so nice but it can work... lets see what is the trial of Jenkins.\n@Xisco: What is your opinion, is this worth to merge (if passes Jenkins)? Is this better than the python one?",
       "revId": "6fa33dfc42980f3173fb6d14fa621a1327cb3d5a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f62609f2_14d9dc73",
+        "filename": "sw/qa/extras/uiwriter/uiwriter3.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1845,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-07-08T11:31:59Z",
+      "side": 1,
+      "message": "I\u0027m wondering whether it will work with slow machines.\nWhat about a while loop to wait for the selection instead ?",
+      "revId": "6fa33dfc42980f3173fb6d14fa621a1327cb3d5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
