@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ae2c9c9_17c04ed3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 28
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-07-08T09:56:27Z",
+      "side": 1,
+      "message": "Thank you for the quick response. All typos have fixed. Let see, if Jenkins will like this or not. After passing i think this can be merged, hopefully will make the function more robust, and will not have regression.",
+      "revId": "fc63c4e1a112d7c9d5fea388e1d8f2e243318d1c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
