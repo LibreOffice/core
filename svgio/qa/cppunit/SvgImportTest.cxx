@@ -44,6 +44,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void testFontsizeKeywords();
     void testFontsizePercentage();
     void testFontsizeRelative();
+    void testMarkerOrient();
     void testTdf45771();
     void testTdf97941();
     void testTdf104339();
@@ -82,6 +83,7 @@ public:
     CPPUNIT_TEST(testFontsizeKeywords);
     CPPUNIT_TEST(testFontsizePercentage);
     CPPUNIT_TEST(testFontsizeRelative);
+    CPPUNIT_TEST(testMarkerOrient);
     CPPUNIT_TEST(testTdf45771);
     CPPUNIT_TEST(testTdf97941);
     CPPUNIT_TEST(testTdf104339);
@@ -306,6 +308,37 @@ void Test::testFontsizeRelative()
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "text", "Sample");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "height", "50");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "familyname", "serif");
+}
+
+void Test::testMarkerOrient()
+{
+    Primitive2DSequence aSequence = parseSvg(u"/svgio/qa/cppunit/data/MarkerOrient.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(aSequence);
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/transform[1]", "xy11", "0");
+    assertXPath(pDocument, "/primitive2D/transform/transform[1]", "xy12", "0");
+    assertXPath(pDocument, "/primitive2D/transform/transform[1]", "xy13", "7");
+    assertXPath(pDocument, "/primitive2D/transform/transform[1]", "xy21", "0");
+    assertXPath(pDocument, "/primitive2D/transform/transform[1]", "xy22", "0");
+    assertXPath(pDocument, "/primitive2D/transform/transform[1]", "xy23", "13");
+    assertXPath(pDocument, "/primitive2D/transform/transform[1]", "xy31", "0");
+    assertXPath(pDocument, "/primitive2D/transform/transform[1]", "xy32", "0");
+    assertXPath(pDocument, "/primitive2D/transform/transform[1]", "xy33", "1");
+
+    assertXPath(pDocument, "/primitive2D/transform/transform[2]", "xy11", "0");
+    assertXPath(pDocument, "/primitive2D/transform/transform[2]", "xy12", "0");
+    assertXPath(pDocument, "/primitive2D/transform/transform[2]", "xy13", "87");
+    assertXPath(pDocument, "/primitive2D/transform/transform[2]", "xy21", "0");
+    assertXPath(pDocument, "/primitive2D/transform/transform[2]", "xy22", "0");
+    assertXPath(pDocument, "/primitive2D/transform/transform[2]", "xy23", "87");
+    assertXPath(pDocument, "/primitive2D/transform/transform[2]", "xy31", "0");
+    assertXPath(pDocument, "/primitive2D/transform/transform[2]", "xy32", "0");
+    assertXPath(pDocument, "/primitive2D/transform/transform[2]", "xy33", "1");
 }
 
 void Test::testTdf45771()

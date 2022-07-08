@@ -998,7 +998,8 @@ namespace svgio::svgreader
                         basegfx::B2DHomMatrix aCombinedTransform(aPreparedMarkerTransform);
 
                         // get rotation
-                        if(pPrepared->getOrientAuto())
+                        if(pPrepared->getMarkerOrient() == SvgMarkerNode::MarkerOrient::auto_start ||
+                            pPrepared->getMarkerOrient() == SvgMarkerNode::MarkerOrient::auto_start_reverse)
                         {
                             const sal_uInt32 nPointIndex(b % nSubPolygonPointCount);
 
@@ -1027,12 +1028,18 @@ namespace svgio::svgreader
 
                                 if(bEntering)
                                 {
-                                    aSum += aEntering.normalize();
+                                    if(bIsFirstMarker && pPrepared->getMarkerOrient() == SvgMarkerNode::MarkerOrient::auto_start_reverse)
+                                        aSum -= aEntering.normalize();
+                                    else
+                                        aSum += aEntering.normalize();
                                 }
 
                                 if(bLeaving)
                                 {
-                                    aSum += aLeaving.normalize();
+                                    if(bIsFirstMarker && pPrepared->getMarkerOrient() == SvgMarkerNode::MarkerOrient::auto_start_reverse)
+                                        aSum -= aLeaving.normalize();
+                                    else
+                                        aSum += aLeaving.normalize();
                                 }
 
                                 if(!aSum.equalZero())

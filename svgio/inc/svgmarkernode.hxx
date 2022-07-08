@@ -34,6 +34,13 @@ namespace svgio::svgreader
                 userSpaceOnUse
             };
 
+            enum class MarkerOrient
+            {
+                notset,
+                auto_start,
+                auto_start_reverse
+            };
+
         private:
             /// buffered decomposition
             drawinglayer::primitive2d::Primitive2DContainer aPrimitives;
@@ -51,8 +58,7 @@ namespace svgio::svgreader
             SvgNumber               maMarkerWidth;
             SvgNumber               maMarkerHeight;
             double                  mfAngle;
-
-            bool                    mbOrientAuto : 1; // true == on, false == fAngle valid
+            MarkerOrient            maMarkerOrient;
 
         public:
             SvgMarkerNode(
@@ -94,10 +100,11 @@ namespace svgio::svgreader
 
             /// Angle content, set if found in current context
             double getAngle() const { return mfAngle; }
-            void setAngle(double fAngle) { mfAngle = fAngle; mbOrientAuto = false; }
+            void setAngle(double fAngle) { mfAngle = fAngle;}
 
-            /// OrientAuto content, set if found in current context
-            bool getOrientAuto() const { return mbOrientAuto; }
+            /// MarkerOrient content
+            MarkerOrient getMarkerOrient() const { return maMarkerOrient; }
+            void setMarkerOrient(const MarkerOrient aMarkerOrient) { maMarkerOrient = aMarkerOrient; }
 
         };
 
