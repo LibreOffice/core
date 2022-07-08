@@ -58,6 +58,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "44fbd688_f11961ba",
+        "filename": "sw/qa/extras/uiwriter/uiwriter6.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2043,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-07-08T10:05:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be289514_68a7b143",
+      "range": {
+        "startLine": 2043,
+        "startChar": 36,
+        "endLine": 2043,
+        "endChar": 41
+      },
+      "revId": "15c337e4ceb09b417761c3b0bef89f6f7efc6949",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6f55a665_2de53d5e",
@@ -71,6 +95,30 @@
       "writtenOn": "2022-07-08T10:00:12Z",
       "side": 1,
       "message": "if the textbox",
+      "range": {
+        "startLine": 2060,
+        "startChar": 17,
+        "endLine": 2060,
+        "endChar": 25
+      },
+      "revId": "15c337e4ceb09b417761c3b0bef89f6f7efc6949",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01f0165d_54e460ee",
+        "filename": "sw/qa/extras/uiwriter/uiwriter6.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2060,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-07-08T10:05:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f55a665_2de53d5e",
       "range": {
         "startLine": 2060,
         "startChar": 17,
@@ -117,6 +165,30 @@
       "writtenOn": "2022-07-08T10:00:12Z",
       "side": 1,
       "message": "could not",
+      "range": {
+        "startLine": 2078,
+        "startChar": 44,
+        "endLine": 2078,
+        "endChar": 52
+      },
+      "revId": "15c337e4ceb09b417761c3b0bef89f6f7efc6949",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d795a832_49d3f7e2",
+        "filename": "sw/qa/extras/uiwriter/uiwriter6.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2078,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-07-08T10:05:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "42655b3d_24dd1805",
       "range": {
         "startLine": 2078,
         "startChar": 44,
