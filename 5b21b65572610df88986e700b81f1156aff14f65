@@ -34,6 +34,24 @@
       "parentUuid": "2e86ee73_ebb05591",
       "revId": "5b21b65572610df88986e700b81f1156aff14f65",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "104dbaae_5c869e6c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-07-08T10:41:24Z",
+      "side": 1,
+      "message": "\u003chttps://gerrit.libreoffice.org/c/core/+/136896\u003e \"Make TestEmfPlusDrawPathWithCustomCap succeed on Aarch64\"",
+      "parentUuid": "4b267e78_3f2256f9",
+      "revId": "5b21b65572610df88986e700b81f1156aff14f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
