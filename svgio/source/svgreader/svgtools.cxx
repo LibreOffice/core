@@ -640,7 +640,7 @@ namespace svgio::svgreader
                 { ColorTokenValueType(OUString("yellowgreen"), Color(154, 205, 50) ) },
             };
 
-            ColorTokenMapper::const_iterator aResult(aColorTokenMapperList.find(rName.toAsciiLowerCase()));
+            ColorTokenMapper::const_iterator aResult(aColorTokenMapperList.find(rName.trim().toAsciiLowerCase()));
 
             if(aResult == aColorTokenMapperList.end())
             {
