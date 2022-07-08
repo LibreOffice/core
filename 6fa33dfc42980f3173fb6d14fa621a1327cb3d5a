@@ -33,6 +33,24 @@
       "message": "I\u0027m wondering whether it will work with slow machines.\nWhat about a while loop to wait for the selection instead ?",
       "revId": "6fa33dfc42980f3173fb6d14fa621a1327cb3d5a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38b00619_056f17eb",
+        "filename": "sw/qa/extras/uiwriter/uiwriter3.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1845,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-07-08T12:16:01Z",
+      "side": 1,
+      "message": "That a very good idea, ok i replace that. Thx",
+      "parentUuid": "f62609f2_14d9dc73",
+      "revId": "6fa33dfc42980f3173fb6d14fa621a1327cb3d5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
