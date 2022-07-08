@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35071be2_ca37c0e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000007
+      },
+      "writtenOn": "2022-07-08T08:32:29Z",
+      "side": 1,
+      "message": "I can\u0027t give a +1 for the code, but this patch has the support from the l10n team, so +1 for the 3 new strings :)",
+      "revId": "377021adcd7d3c71ef4ec3195ba9ff1f56818d0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
