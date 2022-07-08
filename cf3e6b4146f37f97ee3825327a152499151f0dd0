@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "efb254fb_7a2bcde9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-07-08T12:47:51Z",
+      "side": 1,
+      "message": "Cypress CI is adjusted to allow correct clipboard data: https://github.com/CollaboraOnline/online/pull/4997",
+      "revId": "cf3e6b4146f37f97ee3825327a152499151f0dd0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
