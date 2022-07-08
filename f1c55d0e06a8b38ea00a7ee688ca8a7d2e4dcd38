@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f347ff49_e1c81d04",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-07-08T20:56:34Z",
+      "side": 1,
+      "message": "You are creating multiple gerrit patches for the same submissions. Please don\u0027t do that! Abandon this submission and send this submission in another fix:\nhttps://gerrit.libreoffice.org/c/core/+/136851\n\nIt is easy! Just use this Change-Id manually:\n\nChange-Id: Icda875d3c6f03ffd29395ac5ce932475cc629361",
+      "revId": "f1c55d0e06a8b38ea00a7ee688ca8a7d2e4dcd38",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
