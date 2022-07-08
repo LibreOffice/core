@@ -45,6 +45,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void testFontsizePercentage();
     void testFontsizeRelative();
     void testMarkerOrient();
+    void testMarkerInPresentation();
     void testTdf45771();
     void testTdf97941();
     void testTdf104339();
@@ -85,6 +86,7 @@ public:
     CPPUNIT_TEST(testFontsizePercentage);
     CPPUNIT_TEST(testFontsizeRelative);
     CPPUNIT_TEST(testMarkerOrient);
+    CPPUNIT_TEST(testMarkerInPresentation);
     CPPUNIT_TEST(testTdf45771);
     CPPUNIT_TEST(testTdf97941);
     CPPUNIT_TEST(testTdf104339);
@@ -341,6 +343,26 @@ void Test::testMarkerOrient()
     assertXPath(pDocument, "/primitive2D/transform/transform[2]", "xy31", "0");
     assertXPath(pDocument, "/primitive2D/transform/transform[2]", "xy32", "0");
     assertXPath(pDocument, "/primitive2D/transform/transform[2]", "xy33", "1");
+}
+
+void Test::testMarkerInPresentation()
+{
+    Primitive2DSequence aSequence = parseSvg(u"/svgio/qa/cppunit/data/markerInPresentation.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(aSequence);
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygonstroke/line", 1);
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygonstroke/polypolygon/polygon", 1);
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygonstroke/polypolygon/polygon", 1);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 0
+    // - Actual  : 2
+    assertXPath(pDocument, "/primitive2D/transform/transform/transform", 0);
 }
 
 void Test::testTdf45771()

@@ -1299,7 +1299,7 @@ namespace svgio::svgreader
         void SvgStyleAttributes::parseStyleAttribute(
             SVGToken aSVGToken,
             const OUString& aContent,
-            bool bCaseIndependent)
+            bool bIsInStyleSheet)
         {
             switch(aSVGToken)
             {
@@ -1876,7 +1876,7 @@ namespace svgio::svgreader
                 }
                 case SVGToken::Marker:
                 {
-                    if(bCaseIndependent)
+                    if(bIsInStyleSheet)
                     {
                         readLocalUrl(aContent, maMarkerEndXLink);
                         maMarkerStartXLink = maMarkerMidXLink = maMarkerEndXLink;
