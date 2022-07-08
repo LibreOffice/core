@@ -34,6 +34,24 @@
       "parentUuid": "7537c6e1_305b1073",
       "revId": "cf1c072fad015ac71f6aac1358d11749bd732f38",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d89a7cef_c3df9728",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-07-08T14:27:56Z",
+      "side": 1,
+      "message": "Thumbnail stored in any ODF document is always converted to PNG 8-bit indexed so it takes a smaller size. When you replace the current PNG exporter you can try that out.",
+      "parentUuid": "e5030458_1b746932",
+      "revId": "cf1c072fad015ac71f6aac1358d11749bd732f38",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
