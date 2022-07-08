@@ -339,75 +339,75 @@ namespace svgio::svgreader
         {
             if(!aContent.empty())
             {
-                if(o3tl::starts_with(aContent, u"inline"))
+                if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"inline"))
                 {
                     return Display::Inline;
                 }
-                else if(o3tl::starts_with(aContent, u"none"))
+                else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"none"))
                 {
                     return Display::None;
                 }
-                else if(o3tl::starts_with(aContent, u"inherit"))
+                else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"inherit"))
                 {
                     return Display::Inherit;
                 }
-                else if(o3tl::starts_with(aContent, u"block"))
+                else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"block"))
                 {
                     return Display::Block;
                 }
-                else if(o3tl::starts_with(aContent, u"list-item"))
+                else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"list-item"))
                 {
                     return Display::ListItem;
                 }
-                else if(o3tl::starts_with(aContent, u"run-in"))
+                else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"run-in"))
                 {
                     return Display::RunIn;
                 }
-                else if(o3tl::starts_with(aContent, u"compact"))
+                else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"compact"))
                 {
                     return Display::Compact;
                 }
-                else if(o3tl::starts_with(aContent, u"marker"))
+                else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"marker"))
                 {
                     return Display::Marker;
                 }
-                else if(o3tl::starts_with(aContent, u"table"))
+                else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"table"))
                 {
                     return Display::Table;
                 }
-                else if(o3tl::starts_with(aContent, u"inline-table"))
+                else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"inline-table"))
                 {
                     return Display::InlineTable;
                 }
-                else if(o3tl::starts_with(aContent, u"table-row-group"))
+                else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"table-row-group"))
                 {
                     return Display::TableRowGroup;
                 }
-                else if(o3tl::starts_with(aContent, u"table-header-group"))
+                else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"table-header-group"))
                 {
                     return Display::TableHeaderGroup;
                 }
-                else if(o3tl::starts_with(aContent, u"table-footer-group"))
+                else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"table-footer-group"))
                 {
                     return Display::TableFooterGroup;
                 }
-                else if(o3tl::starts_with(aContent, u"table-row"))
+                else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"table-row"))
                 {
                     return Display::TableRow;
                 }
-                else if(o3tl::starts_with(aContent, u"table-column-group"))
+                else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"table-column-group"))
                 {
                     return Display::TableColumnGroup;
                 }
-                else if(o3tl::starts_with(aContent, u"table-column"))
+                else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"table-column"))
                 {
                     return Display::TableColumn;
                 }
-                else if(o3tl::starts_with(aContent, u"table-cell"))
+                else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"table-cell"))
                 {
                     return Display::TableCell;
                 }
-                else if(o3tl::starts_with(aContent, u"table-caption"))
+                else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"table-caption"))
                 {
                     return Display::TableCaption;
                 }
