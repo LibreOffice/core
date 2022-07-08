@@ -22,6 +22,30 @@
       },
       "revId": "cd977eba7b6b31a3b9c799a409e9017ed8f74e9e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d455a2f_36ccfd6b",
+        "filename": "winaccessibility/source/service/AccObject.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 787,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-07-08T07:27:39Z",
+      "side": 1,
+      "message": "good spotting!",
+      "parentUuid": "7bd91ddf_bae2c019",
+      "range": {
+        "startLine": 787,
+        "startChar": 8,
+        "endLine": 787,
+        "endChar": 33
+      },
+      "revId": "cd977eba7b6b31a3b9c799a409e9017ed8f74e9e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
