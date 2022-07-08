@@ -39,8 +39,6 @@
     </columns>
   </object>
   <object class="GtkDialog" id="TemplateDialog">
-    <property name="width-request">740</property>
-    <property name="height-request">500</property>
     <property name="can-focus">False</property>
     <property name="border-width">6</property>
     <property name="title" translatable="yes" context="templatedlg|TemplateDialog">Templates</property>

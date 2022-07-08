@@ -203,6 +203,9 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(weld::Window *pParent)
 
     mxLocalView->ShowTooltips(true);
 
+    // Set width and height of the templates thumbnail viewer to acommodate 2 rows and 4 columns of items
+    mxLocalViewWeld->set_size_request(TEMPLATE_ITEM_MAX_WIDTH * 4, TEMPLATE_ITEM_MAX_HEIGHT_SUB * 2);
+
     mxOKButton->connect_clicked(LINK(this, SfxTemplateManagerDlg, OkClickHdl));
     // FIXME: rather than disabling make dispatchCommand(".uno:AdditionsDialog") work in start center
     if ( !SfxModule::GetActiveModule() )
@@ -241,6 +244,11 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(weld::Window *pParent)
 
     mxLocalView->connect_focus_rect(LINK(this, SfxTemplateManagerDlg, FocusRectLocalHdl));
     bMakeSelItemVisible = false;
+
+    // restore dialog size
+    SvtViewOptions aDlgOpt(EViewType::Dialog, "TemplateDialog");
+    if (aDlgOpt.Exists())
+        m_xDialog->set_window_state(aDlgOpt.GetWindowState().toUtf8());
 }
 
 SfxTemplateManagerDlg::~SfxTemplateManagerDlg()
@@ -251,6 +259,11 @@ SfxTemplateManagerDlg::~SfxTemplateManagerDlg()
     mxLocalView->setItemStateHdl(Link<const ThumbnailViewItem*,void>());
     mxLocalView->setOpenRegionHdl(Link<void*,void>());
     mxLocalView->setOpenTemplateHdl(Link<ThumbnailViewItem*, void>());
+
+    // Remember the size of the templates dialog
+    SvtViewOptions aDlgOpt(EViewType::Dialog, "TemplateDialog");
+    OString sWindowState = m_xDialog->get_window_state(vcl::WindowDataMask::Size);
+    aDlgOpt.SetWindowState(OUString::fromUtf8(sWindowState));
 }
 
 short SfxTemplateManagerDlg::run()
