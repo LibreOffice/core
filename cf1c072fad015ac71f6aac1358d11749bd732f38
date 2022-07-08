@@ -16,6 +16,24 @@
       "message": "hm... that was easy",
       "revId": "cf1c072fad015ac71f6aac1358d11749bd732f38",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5030458_1b746932",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-07-08T10:54:48Z",
+      "side": 1,
+      "message": "Well it\u0027s based on the 1 bit palette patch and libpng makes it pretty trivial to use any number of palettes. Do you think there\u0027s anything else to test to make sure this works? Where is 8 bit rgb palette export used in LO anyway?",
+      "parentUuid": "7537c6e1_305b1073",
+      "revId": "cf1c072fad015ac71f6aac1358d11749bd732f38",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
