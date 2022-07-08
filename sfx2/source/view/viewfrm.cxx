@@ -270,6 +270,11 @@ bool AskPasswordToModify_Impl( const uno::Reference< task::XInteractionHandler >
 
     return bResult;
 }
+
+bool physObjIsOlder(INetURLObject const & aMedObj, INetURLObject const & aPhysObj) {
+    return ::utl::UCBContentHelper::IsYounger(aMedObj.GetMainURL( INetURLObject::DecodeMechanism::NONE),
+                                           aPhysObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
+}
 }
 
 void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
@@ -438,8 +443,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             // etag tells that the cache representation (e.g. in LO) is different from the one on the server,
             // but tells nothing about the age
             // Details at this link: http://tools.ietf.org/html/rfc4918#section-15, section 15.7
-            bool bPhysObjIsYounger = ::utl::UCBContentHelper::IsYounger( aMedObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
-                                                                         aPhysObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
             bool bIsWebDAV = aMedObj.isAnyKnownWebDAVScheme();
 
             // tdf#118938 Reload the document when the user enters the editing password,
@@ -447,8 +450,8 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             if ( ( !bNeedsReload && ( ( aMedObj.GetProtocol() == INetProtocol::File &&
                                         ( aMedObj.getFSysPath( FSysStyle::Detect ) != aPhysObj.getFSysPath( FSysStyle::Detect )
                                           || bPasswordEntered ) &&
-                                        !bPhysObjIsYounger )
-                                      || ( bIsWebDAV && !bPhysObjIsYounger )
+                                        !physObjIsOlder(aMedObj, aPhysObj) )
+                                      || ( bIsWebDAV && !physObjIsOlder(aMedObj, aPhysObj) )
                                       || ( pMed->IsRemote() && !bIsWebDAV ) ) )
                  || pVersionItem )
             // <- tdf#82744
