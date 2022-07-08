@@ -136,6 +136,21 @@ void lcl_emitEvent(SfxEventHintId nEventId, sal_Int32 nStrId, SfxObjectShell* pD
                                            pDocShell));
 }
 
+// Construct vnd.sun.star.pkg:// URL
+OUString ConstructVndSunStarPkgUrl(const OUString& rMainURL, std::u16string_view rStreamRelPath)
+{
+    auto xContext(comphelper::getProcessComponentContext());
+    auto xUri = css::uri::UriReferenceFactory::create(xContext)->parse(rMainURL);
+    assert(xUri.is());
+    xUri = css::uri::VndSunStarPkgUrlReferenceFactory::create(xContext)
+        ->createVndSunStarPkgUrlReference(xUri);
+    assert(xUri.is());
+    return xUri->getUriReference() + "/"
+        + INetURLObject::encode(
+            rStreamRelPath, INetURLObject::PART_FPATH,
+            INetURLObject::EncodeMechanism::All);
+}
+
 }
 
 std::vector<std::pair<SwDocShell*, OUString>> SwDBManager::s_aUncommittedRegistrations;
@@ -256,10 +271,9 @@ void SAL_CALL SwDataSourceRemovedListener::revokedDatabaseLocation(const sdb::Da
     if (!pDocShell)
         return;
 
-    OUString aOwnURL = pDocShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::WithCharset);
-    OUString sTmpName = "vnd.sun.star.pkg://" +
-        INetURLObject::encode(aOwnURL, INetURLObject::PART_AUTHORITY, INetURLObject::EncodeMechanism::All);
-    sTmpName += "/" + m_pDBManager->getEmbeddedName();
+    const OUString sTmpName = ConstructVndSunStarPkgUrl(
+        pDocShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::NONE),
+        m_pDBManager->getEmbeddedName());
 
     if (sTmpName != rEvent.OldLocation)
         return;
@@ -2759,21 +2773,6 @@ OUString LoadAndRegisterDataSource_Impl(DBConnURIType type, const uno::Reference
         sFind.clear();
     }
     return sFind;
-}
-
-// Construct vnd.sun.star.pkg:// URL
-OUString ConstructVndSunStarPkgUrl(const OUString& rMainURL, std::u16string_view rStreamRelPath)
-{
-    auto xContext(comphelper::getProcessComponentContext());
-    auto xUri = css::uri::UriReferenceFactory::create(xContext)->parse(rMainURL);
-    assert(xUri.is());
-    xUri = css::uri::VndSunStarPkgUrlReferenceFactory::create(xContext)
-        ->createVndSunStarPkgUrlReference(xUri);
-    assert(xUri.is());
-    return xUri->getUriReference() + "/"
-        + INetURLObject::encode(
-            rStreamRelPath, INetURLObject::PART_FPATH,
-            INetURLObject::EncodeMechanism::All);
 }
 }
 
