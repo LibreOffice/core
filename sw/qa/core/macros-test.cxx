@@ -106,9 +106,13 @@ void SwMacrosTest::createFileURL(std::u16string_view aFile, OUString& rFilePath)
 void SwMacrosTest::testVba()
 {
     TestMacroInfo testInfo[] = {
-        {
+        /* { // doesn't do anything.
             OUString("testVba.doc"),
             OUString("vnd.sun.Star.script:Project.NewMacros.Macro1?language=Basic&location=document")
+        }, */
+        {
+           OUString("testFind.docm"),
+            OUString("vnd.sun.Star.script:Project.Module1.testFind?language=Basic&location=document")
         }
     };
     for ( size_t  i=0; i<SAL_N_ELEMENTS( testInfo ); ++i )
@@ -125,10 +129,10 @@ void SwMacrosTest::testVba()
         SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
 
         CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-        SfxObjectShell::CallXScript(xComponent, sUrl, aParams, aRet, aOutParamIndex,aOutParam);
+        CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, SfxObjectShell::CallXScript(xComponent, sUrl, aParams, aRet, aOutParamIndex,aOutParam));
         OUString aStringRes;
-        aRet >>= aStringRes;
-        // CPPUNIT_ASSERT_EQUAL(OUString("OK"), aStringRes);
+        CPPUNIT_ASSERT(aRet >>= aStringRes);
+        CPPUNIT_ASSERT_EQUAL(OUString("OK"), aStringRes);
         pFoundShell->DoClose();
     }
 }
