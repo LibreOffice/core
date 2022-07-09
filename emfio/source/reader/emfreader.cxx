@@ -31,7 +31,7 @@
 #include <rtl/bootstrap.hxx>
 
 #ifdef DBG_UTIL
-#include <vcl/pngwrite.hxx>
+#include <vcl/filter/PngImageWriter.hxx>
 #endif
 
 // GDI-Array
@@ -1502,8 +1502,8 @@ namespace emfio
                                     if(bDoSaveForVisualControl)
                                     {
                                         SvFileStream aNew("c:\\metafile_content.png", StreamMode::WRITE|StreamMode::TRUNC);
-                                        vcl::PNGWriter aPNGWriter(aBitmapEx);
-                                        aPNGWriter.Write(aNew);
+                                        vcl::PngImageWriter aPNGWriter(aNew);
+                                        aPNGWriter.write(aBitmapEx);
                                     }
     #endif
                                     maBmpSaveList.emplace_back(aBitmapEx, aRect, SRCAND|SRCINVERT);
