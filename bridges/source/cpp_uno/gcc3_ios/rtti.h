@@ -25,8 +25,8 @@
 // the GNU General Public License.
 //
 // Written by Nathan Sidwell, Codesourcery LLC, <nathan@codesourcery.com>
-#ifndef __RTTI_H
-#define __RTTI_H
+
+#pragma once
 
 #include <typeinfo>
 
@@ -405,6 +405,3 @@ namespace __cxxabiv1
 
 // User programs should use the alias `abi'.
 namespace abi = __cxxabiv1;
-
-
-#endif // __RTTI_H
