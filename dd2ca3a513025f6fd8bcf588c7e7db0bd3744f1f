@@ -105,6 +105,24 @@
       "parentUuid": "1c5393ec_97a6e1e4",
       "revId": "dd2ca3a513025f6fd8bcf588c7e7db0bd3744f1f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d48660bc_bad70a90",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003551
+      },
+      "writtenOn": "2022-07-09T21:23:49Z",
+      "side": 1,
+      "message": "Hello.\n\nI had another minor question: so currently it looks like the code for `UUI_DOC_OWN_LOAD_LOCK` is merged with the code for `UUI_DOC_OWN_SAVE_LOCK` (the else block in uui/source/iahndl-locking.cxx:143). Depending upon which flag is triggering the code, the dialog box has different layouts; for instance if `UUI_DOC_OWN_LOAD_LOCK` is triggering the code, then there are the same buttons as in `OpenLockedQueryBox`; on the other hand, if `UUI_DOC_OWN_SAVE_LOCK` is being triggered, then we have only two buttons (to see this, the code is in the file uui/source/alreadyopen.cxx). \n\nSo my question is:\n\n1) If we don\u0027t separate these two, it\u0027ll not be possible to use the same `openlockedquerybox.ui` UI file.\n2) Otherwise we can separate the two flags, but perhaps I\u0027ll have to add a new class for `UUI_DOC_OWN_SAVE_LOCK`? And reserve `AlreadyOpenQueryBox` class for `UUI_DOC_OWN_LOAD_LOCK`?\n\nAny tips will be great.",
+      "parentUuid": "0e70d193_aee97d33",
+      "revId": "dd2ca3a513025f6fd8bcf588c7e7db0bd3744f1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ],
   "submitRequirementResults": []
