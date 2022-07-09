@@ -1270,6 +1270,12 @@ bool ScDocFunc::SetCellText(
                     ;
             }
         }
+        // tdf#120436 - if the cell text contains a formula (see ScStringUtil::parseInputString)
+        // just set a plain formula cell without local formulas/number formats. This ensures that
+        // setting a string in a macro via Formula or FormulaLocal has the same performance.
+        else if (rText.getLength() > 1 && rText[0] == '=')
+            bSet = SetFormulaCell(
+                rPos, new ScFormulaCell(rDocShell.GetDocument(), rPos, rText, eGrammar), !bApi);
         // otherwise keep Null -> SetString with local formulas/number formats
     }
     else if (!rText.isEmpty())
