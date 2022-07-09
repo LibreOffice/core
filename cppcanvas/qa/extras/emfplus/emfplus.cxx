@@ -15,7 +15,7 @@
 #include <sfx2/sfxbasemodel.hxx>
 #include <test/unoapi_test.hxx>
 #include <vcl/BitmapReadAccess.hxx>
-#include <vcl/pngwrite.hxx>
+#include <vcl/filter/PngImageWriter.hxx>
 #include <vcl/gdimtf.hxx>
 #include <tools/stream.hxx>
 
@@ -63,8 +63,8 @@ public:
         if (pEnv)
         {
             SvFileStream aStream(OUString::fromUtf8(pEnv), StreamMode::WRITE);
-            vcl::PNGWriter aWriter(aResultBitmap);
-            CPPUNIT_ASSERT(aWriter.Write(aStream));
+            vcl::PngImageWriter aWriter(aStream);
+            CPPUNIT_ASSERT(aWriter.write(aResultBitmap));
         }
 
         return aResultBitmap.GetBitmap();
