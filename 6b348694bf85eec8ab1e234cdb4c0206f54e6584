@@ -16,6 +16,46 @@
       "message": "Justin, since you were working on tdt#103975 probably you have opinion on this one.",
       "revId": "6b348694bf85eec8ab1e234cdb4c0206f54e6584",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "817a9a40_d786aba1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-07-09T16:15:00Z",
+      "side": 1,
+      "message": "First impression: You are welcome to try this and see what happens. My approach here is to keep trying to make changes until all unit tests pass :-). I recommend NOT backporting to 7.3 (or even 7.4 for that matter). Very likely you will be causing regressions. This relates to two areas LO struggles with. The bRemove is some kind of fakery that has all kinds of bug reports against it. Also, LO has no native counterpart to continuous section breaks.\n\nLet me just talk this through, to help me wrap my mind around it. We have here an empty paragraph containing a sectpr and the question is whether the paragraph itself should be removed. (Normally, if we don\u0027t remove it we have an extra CR at the bottom of our content before a page break - and that just might be enough to spill over and create an extra page.)\n\nA sectpr normally indicates a page break - except for continuous breaks and the rare nextColumn section break. Somewhat surprisingly, MS apparently treats a page w:br followed by a page section break as a single break command.\n\nSo where we might run unto trouble is a page break followed by a continuous sectpr paragraph. In that case, one might think that the first paragraph on the page should be empty. However, in MS Word 2016 this continuous section marker is displayed on the same line as the PageBreak marker (and called a next page section break visually - even though that isn\u0027t correct). So I think in practice this patch should work out fine, and the fact that it passes all unit tests is astonishingly good news.\n\nIf this ends up being a regression, I expect it to be a missing empty paragraph at the top of a page. However, I failed to produce a document showing this (with Word 2016).\n",
+      "revId": "6b348694bf85eec8ab1e234cdb4c0206f54e6584",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61c8bb9f_697c272d",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 3897,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-07-09T16:15:00Z",
+      "side": 1,
+      "message": "Pretty expensive to get this three times.",
+      "range": {
+        "startLine": 3897,
+        "startChar": 16,
+        "endLine": 3897,
+        "endChar": 63
+      },
+      "revId": "6b348694bf85eec8ab1e234cdb4c0206f54e6584",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
