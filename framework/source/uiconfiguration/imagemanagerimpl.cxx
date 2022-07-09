@@ -43,7 +43,7 @@
 #include <comphelper/sequence.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/filter/PngImageReader.hxx>
-#include <vcl/pngwrite.hxx>
+#include <vcl/filter/PngImageWriter.hxx>
 #include <memory>
 
 using ::com::sun::star::uno::Sequence;
@@ -395,8 +395,9 @@ bool ImageManagerImpl::implts_storeUserImages(
             {
                 {
                     std::unique_ptr<SvStream> pSvStream(utl::UcbStreamHelper::CreateStream( xBitmapStream ));
-                    vcl::PNGWriter aPngWriter( pImageList->GetAsHorizontalStrip() );
-                    aPngWriter.Write( *pSvStream );
+                    vcl::PngImageWriter aPngWriter( *pSvStream );
+                    auto rBitmap = pImageList->GetAsHorizontalStrip();
+                    aPngWriter.write( rBitmap );
                 }
 
                 // Commit user bitmaps storage
