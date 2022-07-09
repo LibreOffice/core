@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "482e7828_e861a6cd",
+        "filename": "bridges/source/cpp_uno/gcc3_ios/rtti.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-07-09T19:13:29Z",
+      "side": 0,
+      "message": "Please remove this blank line.",
+      "revId": "c1c8ce3b0f1037bca4d500af2f39363cd9d38db6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
