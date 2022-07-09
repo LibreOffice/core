@@ -97,7 +97,7 @@ public:
     sal_uInt16 GetBaseWidth() const { return m_nBaseWidth;}
     void SetBaseWidth( sal_uInt16 nNew ) { m_nBaseWidth = nNew; }
 
-    bool IsSnapToChars() const { return m_bSnapToChars; }
+    bool IsSnapToChars() const { return m_bSnapToChars || m_bSquaredMode; }
     bool GetSnapToChars() const { return m_bSnapToChars; }
     void SetSnapToChars( bool bNew ) { m_bSnapToChars = bNew; }
 

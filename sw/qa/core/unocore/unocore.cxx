@@ -679,6 +679,38 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testListIdState)
     CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DIRECT_VALUE, eState);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testGridSnapToChars)
+{
+    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDocShell* pDocShell = pTextDoc->GetDocShell();
+    // Set to squared page mode
+    pDocShell->GetDoc()->SetDefaultPageMode(true);
+
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"),
+                                                   uno::UNO_QUERY);
+    // GridSnapToChars default to false in squared page mode.
+    auto bGridSnapToChars = getProperty<bool>(xPageStyle, "GridSnapToChars");
+    CPPUNIT_ASSERT(!bGridSnapToChars);
+
+    // GridSnapToChars always evaluate to false in squared page mode.
+    xPageStyle->setPropertyValue("GridSnapToChars", uno::Any(true));
+    bGridSnapToChars = getProperty<bool>(xPageStyle, "GridSnapToChars");
+    CPPUNIT_ASSERT(!bGridSnapToChars);
+
+    pDocShell->GetDoc()->SetDefaultPageMode(false);
+
+    bGridSnapToChars = getProperty<bool>(xPageStyle, "GridSnapToChars");
+    CPPUNIT_ASSERT(bGridSnapToChars);
+
+    // set GridSnapToChars back to false and verify it.
+    xPageStyle->setPropertyValue("GridSnapToChars", uno::Any(false));
+    bGridSnapToChars = getProperty<bool>(xPageStyle, "GridSnapToChars");
+    CPPUNIT_ASSERT(!bGridSnapToChars);
+
+    pDocShell->GetDoc()->SetDefaultPageMode(true);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
