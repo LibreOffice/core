@@ -33,6 +33,23 @@
       "message": "other CI Cypress fixes required: https://github.com/CollaboraOnline/online/pull/5001",
       "revId": "cf3e6b4146f37f97ee3825327a152499151f0dd0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ecda8cc6_b9339e85",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-07-09T12:49:22Z",
+      "side": 1,
+      "message": "another cypress error catched: https://github.com/CollaboraOnline/online/pull/5003",
+      "revId": "cf3e6b4146f37f97ee3825327a152499151f0dd0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
