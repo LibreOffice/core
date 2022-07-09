@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23f973e6_c6fea8bf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-07-09T13:57:28Z",
+      "side": 1,
+      "message": "Let\u0027s put back +1 to Verified. (I don\u0027t know why just editing commit message removes it).",
+      "revId": "d79e2518b87a2f764291e42f80dde7051483e097",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
