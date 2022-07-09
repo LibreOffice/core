@@ -35,7 +35,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/event.hxx>
-#include <vcl/pngwrite.hxx>
+#include <vcl/filter/PngImageWriter.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/salgtype.hxx>
 #include <vcl/virdev.hxx>
@@ -341,8 +341,8 @@ IMPL_LINK_NOARG(ScreenshotAnnotationDlg_Impl, saveButtonHandler, weld::Button&, 
         mxVirtualBufferDevice->GetOutputSizePixel()));
 
     // write as PNG
-    vcl::PNGWriter aPNGWriter(aTargetBitmap);
-    aPNGWriter.Write(aNew);
+    vcl::PngImageWriter aPNGWriter(aNew);
+    aPNGWriter.write(aTargetBitmap);
 }
 
 weld::ScreenShotEntry* ScreenshotAnnotationDlg_Impl::CheckHit(const basegfx::B2IPoint& rPosition)
