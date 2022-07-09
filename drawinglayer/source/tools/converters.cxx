@@ -32,7 +32,7 @@
 
 #ifdef DBG_UTIL
 #include <tools/stream.hxx>
-#include <vcl/pngwrite.hxx>
+#include <vcl/filter/PngImageWriter.hxx>
 #endif
 
 namespace drawinglayer
@@ -111,8 +111,8 @@ namespace drawinglayer
 #endif
                 , StreamMode::WRITE|StreamMode::TRUNC);
                 BitmapEx aContentEx(aContent);
-                vcl::PNGWriter aPNGWriter(aContentEx);
-                aPNGWriter.Write(aNew);
+                vcl::PngImageWriter aPNGWriter(aNew);
+                aPNGWriter.write(aContentEx);
             }
 #endif
             // prepare for mask creation
@@ -147,8 +147,8 @@ namespace drawinglayer
 #endif
                 , StreamMode::WRITE|StreamMode::TRUNC);
                 BitmapEx aAlphaEx(aAlpha);
-                vcl::PNGWriter aPNGWriter(aAlphaEx);
-                aPNGWriter.Write(aNew);
+                vcl::PngImageWriter aPNGWriter(aNew);
+                aPNGWriter.write(aAlphaEx);
             }
 #endif
 
@@ -164,8 +164,8 @@ namespace drawinglayer
                 "~/test_combined.png"
 #endif
                 , StreamMode::WRITE|StreamMode::TRUNC);
-                vcl::PNGWriter aPNGWriter(aRetval);
-                aPNGWriter.Write(aNew);
+                vcl::PngImageWriter aPNGWriter(aNew);
+                aPNGWriter.write(aRetval);
             }
 #endif
         }
