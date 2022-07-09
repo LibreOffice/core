@@ -1268,7 +1268,9 @@ void VclPixelProcessor2D::processPatternFillPrimitive2D(
     {
         mpOutputDevice->Push(vcl::PushFlags::CLIPREGION);
         mpOutputDevice->IntersectClipRegion(vcl::Region(aMask));
-        mpOutputDevice->DrawWallpaper(aMaskRect, Wallpaper(aTileImage));
+        Wallpaper aWallpaper(aTileImage);
+        aWallpaper.SetColor(COL_TRANSPARENT);
+        mpOutputDevice->DrawWallpaper(aMaskRect, aWallpaper);
         mpOutputDevice->Pop();
         return;
     }
@@ -1291,7 +1293,11 @@ void VclPixelProcessor2D::processPatternFillPrimitive2D(
         mpOutputDevice->DrawRect(aMaskRect);
     }
     else
-        mpOutputDevice->DrawWallpaper(aMaskRect, Wallpaper(aTileImage));
+    {
+        Wallpaper aWallpaper(aTileImage);
+        aWallpaper.SetColor(COL_TRANSPARENT);
+        mpOutputDevice->DrawWallpaper(aMaskRect, aWallpaper);
+    }
 
     // back to old OutDev
     mpOutputDevice = pLastOutputDevice;
