@@ -1244,7 +1244,9 @@ bool ScDocFunc::SetCellText(
     bool bSet = false;
     if ( bInterpret )
     {
-        if ( bEnglish )
+        // tdf#120436 - check if the cell text contains a formula (see ScStringUtil::parseInputString)
+        const bool bIsFormula = rText.getLength() > 1 && rText[0] == '=';
+        if ( bEnglish || bIsFormula )
         {
             ScDocument& rDoc = rDocShell.GetDocument();
 
@@ -1252,22 +1254,25 @@ bool ScDocFunc::SetCellText(
             if (bApi)
                 pExtRefGuard.emplace(rDoc);
 
-            ScInputStringType aRes =
-                ScStringUtil::parseInputString(*rDoc.GetFormatTable(), rText, LANGUAGE_ENGLISH_US);
-
-            switch (aRes.meType)
+            // tdf#120436 - if the cell text contains a formula (see ScStringUtil::parseInputString)
+            // just set a plain formula cell without local formulas/number formats. This ensures that
+            // setting a string in a macro via Formula or FormulaLocal has the same performance.
+            if (bIsFormula)
+                bSet = SetFormulaCell(rPos, new ScFormulaCell(rDoc, rPos, rText, eGrammar), !bApi);
+            else
             {
-                case ScInputStringType::Formula:
-                    bSet = SetFormulaCell(rPos, new ScFormulaCell(rDoc, rPos, aRes.maText, eGrammar), !bApi);
-                break;
-                case ScInputStringType::Number:
-                    bSet = SetValueCell(rPos, aRes.mfValue, !bApi);
-                break;
-                case ScInputStringType::Text:
-                    bSet = SetStringOrEditCell(rPos, aRes.maText, !bApi);
-                break;
-                default:
-                    ;
+                ScInputStringType aRes =
+                    ScStringUtil::parseInputString(*rDoc.GetFormatTable(), rText, LANGUAGE_ENGLISH_US);
+                switch (aRes.meType)
+                {
+                    case ScInputStringType::Number:
+                        bSet = SetValueCell(rPos, aRes.mfValue, !bApi);
+                        break;
+                    case ScInputStringType::Text:
+                        bSet = SetStringOrEditCell(rPos, aRes.maText, !bApi);
+                        break;
+                    default:;
+                }
             }
         }
         // otherwise keep Null -> SetString with local formulas/number formats
