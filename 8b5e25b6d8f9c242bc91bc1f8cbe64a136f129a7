@@ -33,6 +33,24 @@
       "message": "I doubt this optional is correct. When would the number:position attribute be optional in a \u003cnumber:embedded-text\u003e element? Note this is the ODF v1.3 schema without extensions.",
       "revId": "8b5e25b6d8f9c242bc91bc1f8cbe64a136f129a7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9da90c17_8b06c8c4",
+        "filename": "schema/odf1.3/OpenDocument-v1.3-schema.rng",
+        "patchSetId": 8
+      },
+      "lineNbr": 7142,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2022-07-09T17:57:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c72b153a_fe904370",
+      "revId": "8b5e25b6d8f9c242bc91bc1f8cbe64a136f129a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
