@@ -16,6 +16,23 @@
       "message": "Let\u0027s put back +1 to Verified. (I don\u0027t know why just editing commit message removes it).",
       "revId": "d79e2518b87a2f764291e42f80dde7051483e097",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "659ea10a_41366ca1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-07-10T19:08:50Z",
+      "side": 1,
+      "message": "No complain, let\u0027s push this one.",
+      "revId": "d79e2518b87a2f764291e42f80dde7051483e097",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
