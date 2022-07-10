@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad4950d5_10676578",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-07-10T22:47:48Z",
+      "side": 1,
+      "message": "You have done these changes in another commit, but please do all of the changes here! By keeping the Change-Id, you can have those changes here. Then, you can abandon the other change.",
+      "revId": "d83adcb51ee0b17e8a123c514e419b50066e3f69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
