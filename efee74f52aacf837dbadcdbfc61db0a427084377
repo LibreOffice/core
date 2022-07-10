@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a91af213_7fb1560d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-07-10T20:36:37Z",
+      "side": 1,
+      "message": "Thank you for your submission!\nPlease fix these issues:\n1. Please don\u0027t use \u003c and \u003e in the title.\n2. This submission should be \"marked as active\", and then CI builds your submission. Please do this if you are ready.\n3. You need to send a license statement. Please read these instructions:\nhttps://wiki.documentfoundation.org/Development/GetInvolved#License_statement",
+      "revId": "efee74f52aacf837dbadcdbfc61db0a427084377",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
