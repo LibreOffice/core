@@ -16,6 +16,24 @@
       "message": "Please put a blank line before this line.",
       "revId": "1d59f2966326f2954aba11dc72487a8e319538c1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba364a45_21c9ffea",
+        "filename": "bridges/source/cpp_uno/gcc3_ios/rtti.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1003633
+      },
+      "writtenOn": "2022-07-10T19:14:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "107957af_7055edb7",
+      "revId": "1d59f2966326f2954aba11dc72487a8e319538c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
