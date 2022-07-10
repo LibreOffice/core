@@ -33,6 +33,42 @@
       "message": "And btw., any selection in the Navigator tree resets the zoom level (in my case from either zoomed-in at 150% or -out at 25% to 63%, which is Entire Page).",
       "revId": "abc2c51817cf8c19b1d4787a97f523773df31b9a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53c697c3_352256eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-07-10T01:04:39Z",
+      "side": 1,
+      "message": "For vcl plugin gen, kf5/qt5, patchset 2 makes the slide name selected in the Navigator tree when no shapes are selected. gtk3 doesn\u0027t follow this behavior for some reason.",
+      "parentUuid": "32817ff8_0e199f86",
+      "revId": "abc2c51817cf8c19b1d4787a97f523773df31b9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea0927c1_d0a002a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-07-10T01:04:39Z",
+      "side": 1,
+      "message": "Seems this has always been the case?",
+      "parentUuid": "8aa0401b_d24ca853",
+      "revId": "abc2c51817cf8c19b1d4787a97f523773df31b9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
