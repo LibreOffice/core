@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00949a5e_9024489c",
+        "filename": "sfx2/inc/sidebar/ContextChangeBroadcaster.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-07-10T20:55:21Z",
+      "side": 1,
+      "message": "Please add 1 blank line before this line.",
+      "revId": "f9ae68e553c9de2eb0b454c97b53c2e024a731f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
