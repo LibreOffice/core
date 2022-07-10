@@ -44,13 +44,13 @@
 #include <limits.h>
 #include <cmath>
 
-#define EDGE_LEFT       1
-#define EDGE_TOP        2
-#define EDGE_RIGHT      4
-#define EDGE_BOTTOM     8
-#define EDGE_HORZ       (EDGE_RIGHT | EDGE_LEFT)
-#define EDGE_VERT       (EDGE_TOP | EDGE_BOTTOM)
-#define SMALL_DVALUE    0.0000001
+constexpr int EDGE_LEFT   = 1;
+constexpr int EDGE_TOP    = 2;
+constexpr int EDGE_RIGHT  = 4;
+constexpr int EDGE_BOTTOM = 8;
+constexpr int EDGE_HORZ   = EDGE_RIGHT | EDGE_LEFT;
+constexpr int EDGE_VERT   = EDGE_TOP | EDGE_BOTTOM;
+constexpr double SMALL_DVALUE = 0.0000001;
 #define FSQRT2          1.4142135623730950488016887242097
 
 static double ImplGetParameter( const Point& rCenter, const Point& rPt, double fWR, double fHR )
