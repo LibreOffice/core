@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99f7061e_240ee892",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-07-10T16:54:10Z",
+      "side": 1,
+      "message": "I fixed the [loplugin:cppunitassertequals] which comes from https://gerrit.libreoffice.org/c/core/+/136943.\nOnce that one was ok, I rebased its child, https://gerrit.libreoffice.org/c/core/+/136630, it\u0027s ok.\nFinally I rebased this one since it\u0027s the child of https://gerrit.libreoffice.org/c/core/+/136630 and now there\u0027s another error.\nI let you take a look.\n\nHope it helped a bit.",
+      "revId": "666ed4eebb5ab6d825fc8611ad33dc590aad2cd3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
