@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de252c0a_5d888985",
+        "filename": "sfx2/inc/sidebar/ContextChangeBroadcaster.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-07-10T15:59:03Z",
+      "side": 1,
+      "message": "Please also remove these 2 extra blank lines.",
+      "revId": "cee9ee083d01f5ec516a5fb6fd96ca4c148bf8fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
