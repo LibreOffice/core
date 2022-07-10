@@ -1,3 +1,4 @@
+
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
@@ -16,8 +17,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SFX2_INC_SIDEBAR_CONTEXTCHANGEBROADCASTER_HXX
-#define INCLUDED_SFX2_INC_SIDEBAR_CONTEXTCHANGEBROADCASTER_HXX
+#pragma once
 
 #include <com/sun/star/frame/XFrame.hpp>
 
@@ -61,7 +61,5 @@ private:
 
 
 } // end of namespace ::sd::sidebar
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
