@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdda9494_5aaa665b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-07-10T17:16:11Z",
+      "side": 1,
+      "message": "Please remove the blank line you added at the beginning of the file.",
+      "revId": "19d63b9c3f4e8ea9bc3ef83bb31f3326696984b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
