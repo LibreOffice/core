@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5a712de_1c7dbf03",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-07-10T21:22:11Z",
+      "side": 1,
+      "message": "You are editing a file that is fixed before. Please choose another header file, fix it. Remember to keep the Change-Id the same as here.",
+      "revId": "0ddfdd56ee15750a0d61de8f27d34ced79778772",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
