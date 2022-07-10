@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9cc7123c_740fd42e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-07-10T22:48:47Z",
+      "side": 1,
+      "message": "Please move these changes to the older submission that you have created. Then, abandon this submission.",
+      "revId": "e4ccff761dd78e543091ccab0ca2c5d2fa4a7c61",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
