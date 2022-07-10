@@ -16,6 +16,24 @@
       "message": "Please remove this blank line.",
       "revId": "c1c8ce3b0f1037bca4d500af2f39363cd9d38db6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75712dcf_258c5cdb",
+        "filename": "bridges/source/cpp_uno/gcc3_ios/rtti.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1003633
+      },
+      "writtenOn": "2022-07-10T13:32:45Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "482e7828_e861a6cd",
+      "revId": "c1c8ce3b0f1037bca4d500af2f39363cd9d38db6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
