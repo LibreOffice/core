@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "107957af_7055edb7",
+        "filename": "bridges/source/cpp_uno/gcc3_ios/rtti.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-07-10T16:22:27Z",
+      "side": 1,
+      "message": "Please put a blank line before this line.",
+      "revId": "1d59f2966326f2954aba11dc72487a8e319538c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
