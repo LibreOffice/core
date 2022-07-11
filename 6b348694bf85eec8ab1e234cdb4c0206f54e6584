@@ -98,6 +98,30 @@
       },
       "revId": "6b348694bf85eec8ab1e234cdb4c0206f54e6584",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a78f12c_64e34a1a",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 3897,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-07-11T14:49:23Z",
+      "side": 1,
+      "message": "Actually, I just remembered that DOCX always specifies BREAK_BEFORE for both pages and columns, so really there is only one test that needs to be made. So your old approach was actually fine - you just needed to test the one condition.",
+      "parentUuid": "3c3181e7_b658bd20",
+      "range": {
+        "startLine": 3897,
+        "startChar": 16,
+        "endLine": 3897,
+        "endChar": 63
+      },
+      "revId": "6b348694bf85eec8ab1e234cdb4c0206f54e6584",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
