@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a600e629_9f627fbd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-07-11T20:07:11Z",
+      "side": 1,
+      "message": "Tested with MS Word 2016. MSO 2003 had no ability to justify comments.",
+      "range": {
+        "startLine": 18,
+        "startChar": 4,
+        "endLine": 19,
+        "endChar": 36
+      },
+      "revId": "5fff0daf0a09b9fb5402194b4ffeadd4956ffe4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2b15db0_7ec21fda",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-07-11T20:07:11Z",
+      "side": 1,
+      "message": "Actually, export (in the followup patch) seems to work fine. It looks at RES_FRAMEDIR to determine exporting as RtL, not WritingMode.",
+      "revId": "5fff0daf0a09b9fb5402194b4ffeadd4956ffe4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
