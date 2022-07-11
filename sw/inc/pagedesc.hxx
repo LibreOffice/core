@@ -29,6 +29,7 @@
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/text/HorizontalAdjust.hpp>
 #include <o3tl/typed_flags_set.hxx>
+#include <stashedhfformathelper.hxx>
 
 #include <boost/multi_index_container.hpp>
 #include <boost/multi_index/identity.hpp>
@@ -149,15 +150,7 @@ class SW_DLLPUBLIC SwPageDesc final
     SwFrameFormat    m_FirstMaster;
     SwFrameFormat    m_FirstLeft;
 
-    struct StashedPageDesc
-    {
-        std::shared_ptr<SwFrameFormat> m_pStashedFirst;
-        std::shared_ptr<SwFrameFormat> m_pStashedLeft;
-        std::shared_ptr<SwFrameFormat> m_pStashedFirstLeft;
-    };
-
-    mutable StashedPageDesc m_aStashedHeader;
-    mutable StashedPageDesc m_aStashedFooter;
+    mutable SwStashedFormatHelperPtr m_pStashedFormats;
 
     sw::WriterMultiListener m_aDepends; ///< Because of grid alignment (Registerhaltigkeit).
     mutable const SwTextFormatColl* m_pTextFormatColl;
@@ -216,17 +209,11 @@ public:
     bool IsHidden() const { return m_IsHidden; }
     void SetHidden(bool const bValue) { m_IsHidden = bValue; }
 
-    /// Remember original header/footer formats even when they are hidden by "sharing".
-    void StashFrameFormat(const SwFrameFormat& rFormat, bool bHeader, bool bLeft, bool bFirst);
-
-    /// Used to restore hidden header/footer formats.
-    const SwFrameFormat* GetStashedFrameFormat(bool bHeader, bool bLeft, bool bFirst) const;
-
-    /// Checks if the pagedescriptor has a stashed format according to the parameters or not.
-    bool HasStashedFormat(bool bHeader, bool bLeft, bool bFirst);
-
-    /// Gives the feature of removing the stashed format by hand if it is necessary.
-    void RemoveStashedFormat(bool bHeader, bool bLeft, bool bFirst);
+    const SwStashedFormatHelperPtr& GetStashedFormats() const { return m_pStashedFormats; }
+    void SetStashedFormats(const SwStashedFormatHelperPtr& rStash)
+    {
+        m_pStashedFormats = std::move(std::make_unique<SwStashedHFFormatHelper>(*rStash.get()));
+    }
 
     /// Same as WriteUseOn(), but the >= HeaderShare part of the bitfield is not modified.
     inline void      SetUseOn( UseOnPage eNew );
@@ -297,6 +284,8 @@ public:
     virtual ~SwPageDesc() override;
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
+
+    static void DelHFFormat(SwClient* pToRemove, SwFrameFormat* pFormat);
 };
 
 namespace std {

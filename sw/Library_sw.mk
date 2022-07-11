@@ -356,6 +356,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/layout/sectfrm \
     sw/source/core/layout/softpagebreak \
     sw/source/core/layout/sortedobjs \
+    sw/source/core/layout/stashedhfformathelper \
     sw/source/core/layout/ssfrm \
     sw/source/core/layout/swselectionlist \
     sw/source/core/layout/tabfrm \

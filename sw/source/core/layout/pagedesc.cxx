@@ -40,6 +40,12 @@
 #include <IDocumentStylePoolAccess.hxx>
 #include <poolfmt.hxx>
 #include <calbck.hxx>
+#include <fmthdft.hxx>
+#include <fmtcntnt.hxx>
+#include <ndindex.hxx>
+#include <crsrsh.hxx>
+#include <UndoManager.hxx>
+#include <IDocumentContentOperations.hxx>
 
 SwPageDesc::SwPageDesc(const OUString& rName, SwFrameFormat *pFormat, SwDoc *const pDoc)
     : sw::BroadcastingModify()
@@ -48,8 +54,6 @@ SwPageDesc::SwPageDesc(const OUString& rName, SwFrameFormat *pFormat, SwDoc *con
     , m_Left( pDoc->GetAttrPool(), rName, pFormat )
     , m_FirstMaster( pDoc->GetAttrPool(), rName, pFormat )
     , m_FirstLeft( pDoc->GetAttrPool(), rName, pFormat )
-    , m_aStashedHeader()
-    , m_aStashedFooter()
     , m_aDepends(*this)
     , m_pTextFormatColl(nullptr)
     , m_pFollow( this )
@@ -61,6 +65,7 @@ SwPageDesc::SwPageDesc(const OUString& rName, SwFrameFormat *pFormat, SwDoc *con
     , m_IsHidden( false )
     , m_pdList( nullptr )
 {
+    m_pStashedFormats = std::move(std::make_unique<SwStashedHFFormatHelper>());
 }
 
 SwPageDesc::SwPageDesc( const SwPageDesc &rCpy )
@@ -83,13 +88,8 @@ SwPageDesc::SwPageDesc( const SwPageDesc &rCpy )
     , m_FootnoteInfo( rCpy.GetFootnoteInfo() )
     , m_pdList( nullptr )
 {
-    m_aStashedHeader.m_pStashedFirst = rCpy.m_aStashedHeader.m_pStashedFirst;
-    m_aStashedHeader.m_pStashedLeft = rCpy.m_aStashedHeader.m_pStashedLeft;
-    m_aStashedHeader.m_pStashedFirstLeft = rCpy.m_aStashedHeader.m_pStashedFirstLeft;
-
-    m_aStashedFooter.m_pStashedFirst = rCpy.m_aStashedFooter.m_pStashedFirst;
-    m_aStashedFooter.m_pStashedLeft = rCpy.m_aStashedFooter.m_pStashedLeft;
-    m_aStashedFooter.m_pStashedFirstLeft = rCpy.m_aStashedFooter.m_pStashedFirstLeft;
+    if (auto& rStash = rCpy.GetStashedFormats())
+        m_pStashedFormats = std::move(std::make_unique<SwStashedHFFormatHelper>(*rStash.get()));
 
     if (rCpy.m_pTextFormatColl && rCpy.m_aDepends.IsListeningTo(rCpy.m_pTextFormatColl))
     {
@@ -110,13 +110,11 @@ SwPageDesc & SwPageDesc::operator = (const SwPageDesc & rSrc)
     m_FirstMaster = rSrc.m_FirstMaster;
     m_FirstLeft = rSrc.m_FirstLeft;
 
-    m_aStashedHeader.m_pStashedFirst = rSrc.m_aStashedHeader.m_pStashedFirst;
-    m_aStashedHeader.m_pStashedLeft = rSrc.m_aStashedHeader.m_pStashedLeft;
-    m_aStashedHeader.m_pStashedFirstLeft = rSrc.m_aStashedHeader.m_pStashedFirstLeft;
+    m_pStashedFormats.reset();
+    m_pStashedFormats = std::move(std::make_unique<SwStashedHFFormatHelper>());
 
-    m_aStashedFooter.m_pStashedFirst = rSrc.m_aStashedFooter.m_pStashedFirst;
-    m_aStashedFooter.m_pStashedLeft = rSrc.m_aStashedFooter.m_pStashedLeft;
-    m_aStashedFooter.m_pStashedFirstLeft = rSrc.m_aStashedFooter.m_pStashedFirstLeft;
+    if (auto& rStash = rSrc.GetStashedFormats())
+        m_pStashedFormats = std::move(std::make_unique<SwStashedHFFormatHelper>(*rStash.get()));
 
     m_aDepends.EndListeningAll();
     if (rSrc.m_pTextFormatColl && rSrc.m_aDepends.IsListeningTo(rSrc.m_pTextFormatColl))
@@ -142,6 +140,7 @@ SwPageDesc & SwPageDesc::operator = (const SwPageDesc & rSrc)
 
 SwPageDesc::~SwPageDesc()
 {
+    m_pStashedFormats.release();
 }
 
 bool SwPageDesc::SetName( const OUString& rNewName )
@@ -406,156 +405,6 @@ void SwPageDesc::ChgFirstShare( bool bNew )
         m_eUse &= UseOnPage::NoFirstShare;
 }
 
-void SwPageDesc::StashFrameFormat(const SwFrameFormat& rFormat, bool bHeader, bool bLeft, bool bFirst)
-{
-    assert(rFormat.GetRegisteredIn());
-    std::shared_ptr<SwFrameFormat>* pFormat = nullptr;
-
-    if (bHeader)
-    {
-        if (bLeft && !bFirst)
-            pFormat = &m_aStashedHeader.m_pStashedLeft;
-        else if (!bLeft && bFirst)
-            pFormat = &m_aStashedHeader.m_pStashedFirst;
-        else if (bLeft && bFirst)
-            pFormat = &m_aStashedHeader.m_pStashedFirstLeft;
-    }
-    else
-    {
-        if (bLeft && !bFirst)
-            pFormat = &m_aStashedFooter.m_pStashedLeft;
-        else if (!bLeft && bFirst)
-            pFormat = &m_aStashedFooter.m_pStashedFirst;
-        else if (bLeft && bFirst)
-            pFormat = &m_aStashedFooter.m_pStashedFirstLeft;
-    }
-
-    if (pFormat)
-    {
-        *pFormat = std::make_shared<SwFrameFormat>(rFormat);
-    }
-    else
-    {
-        SAL_WARN(
-            "sw",
-            "SwPageDesc::StashFrameFormat: Stashing the right page header/footer is pointless.");
-    }
-}
-
-const SwFrameFormat* SwPageDesc::GetStashedFrameFormat(bool bHeader, bool bLeft, bool bFirst) const
-{
-    std::shared_ptr<SwFrameFormat>* pFormat = nullptr;
-
-    if (bLeft && !bFirst)
-    {
-        pFormat = bHeader ? &m_aStashedHeader.m_pStashedLeft : &m_aStashedFooter.m_pStashedLeft;
-    }
-    else if (!bLeft && bFirst)
-    {
-        pFormat = bHeader ? &m_aStashedHeader.m_pStashedFirst : &m_aStashedFooter.m_pStashedFirst;
-    }
-    else if (bLeft && bFirst)
-    {
-        pFormat = bHeader ? &m_aStashedHeader.m_pStashedFirstLeft : &m_aStashedFooter.m_pStashedFirstLeft;
-    }
-
-    if (pFormat)
-    {
-        return pFormat->get();
-    }
-    else
-    {
-        SAL_WARN("sw", "SwPageDesc::GetStashedFrameFormat: Right page format is never stashed.");
-        return nullptr;
-    }
-}
-
-bool SwPageDesc::HasStashedFormat(bool bHeader, bool bLeft, bool bFirst)
-{
-    if (bHeader)
-    {
-        if (bLeft && !bFirst)
-        {
-            return m_aStashedHeader.m_pStashedLeft != nullptr;
-        }
-        else if (!bLeft && bFirst)
-        {
-            return m_aStashedHeader.m_pStashedFirst != nullptr;
-        }
-        else if (bLeft && bFirst)
-        {
-            return m_aStashedHeader.m_pStashedFirstLeft != nullptr;
-        }
-        else
-        {
-            SAL_WARN("sw", "SwPageDesc::HasStashedFormat: Right page format is never stashed.");
-            return false;
-        }
-    }
-    else
-    {
-        if (bLeft && !bFirst)
-        {
-            return m_aStashedFooter.m_pStashedLeft != nullptr;
-        }
-        else if (!bLeft && bFirst)
-        {
-            return m_aStashedFooter.m_pStashedFirst != nullptr;
-        }
-        else if (bLeft && bFirst)
-        {
-            return m_aStashedFooter.m_pStashedFirstLeft != nullptr;
-        }
-        else
-        {
-            SAL_WARN("sw", "SwPageDesc::HasStashedFormat: Right page format is never stashed.");
-            return false;
-        }
-    }
-}
-
-void SwPageDesc::RemoveStashedFormat(bool bHeader, bool bLeft, bool bFirst)
-{
-    if (bHeader)
-    {
-        if (bLeft && !bFirst)
-        {
-            m_aStashedHeader.m_pStashedLeft.reset();
-        }
-        else if (!bLeft && bFirst)
-        {
-            m_aStashedHeader.m_pStashedFirst.reset();
-        }
-        else if (bLeft && bFirst)
-        {
-            m_aStashedHeader.m_pStashedFirstLeft.reset();
-        }
-        else
-        {
-            SAL_WARN("sw", "SwPageDesc::RemoveStashedFormat: Right page format is never stashed.");
-        }
-    }
-    else
-    {
-        if (bLeft && !bFirst)
-        {
-            m_aStashedFooter.m_pStashedLeft.reset();
-        }
-        else if (!bLeft && bFirst)
-        {
-            m_aStashedFooter.m_pStashedFirst.reset();
-        }
-        else if (bLeft && bFirst)
-        {
-            m_aStashedFooter.m_pStashedFirstLeft.reset();
-        }
-        else
-        {
-            SAL_WARN("sw", "SwPageDesc::RemoveStashedFormat: Right page format is never stashed.");
-        }
-    }
-}
-
 // Page styles
 const TranslateId STR_POOLPAGE[] =
 {
@@ -624,6 +473,76 @@ void SwPageDesc::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterEndElement(pWriter);
 
     (void)xmlTextWriterEndElement(pWriter);
+}
+
+void SwPageDesc::DelHFFormat( SwClient *pToRemove, SwFrameFormat *pFormat )
+{
+    //If the client is the last one who uses this format, then we have to delete
+    //it - before this is done, we may need to delete the content-section.
+    SwDoc* pDoc = pFormat->GetDoc();
+    pFormat->Remove( pToRemove );
+    if( pDoc->IsInDtor() )
+    {
+        delete pFormat;
+        return;
+    }
+
+    // Anything other than frames registered?
+    bool bDel = true;
+    {
+        // nested scope because DTOR of SwClientIter resets the flag bTreeChg.
+        // It's suboptimal if the format is deleted beforehand.
+        SwIterator<SwClient,SwFrameFormat> aIter(*pFormat);
+        for(SwClient* pLast = aIter.First(); bDel && pLast; pLast = aIter.Next())
+            if (dynamic_cast<const SwFrame*>(pLast) == nullptr)
+                bDel = false;
+    }
+
+    if ( !bDel )
+        return;
+
+    // If there is a Cursor registered in one of the nodes, we need to call the
+    // ParkCursor in an (arbitrary) shell.
+    SwFormatContent& rCnt = const_cast<SwFormatContent&>(pFormat->GetContent());
+    if ( rCnt.GetContentIdx() )
+    {
+        SwNode *pNode = nullptr;
+        {
+            // #i92993#
+            // Begin with start node of page header/footer to assure that
+            // complete content is checked for cursors and the complete content
+            // is deleted on below made method call <pDoc->getIDocumentContentOperations().DeleteSection(pNode)>
+            SwNodeIndex aIdx( *rCnt.GetContentIdx(), 0 );
+            // If there is a Cursor registered in one of the nodes, we need to call the
+            // ParkCursor in an (arbitrary) shell.
+            pNode = & aIdx.GetNode();
+            SwNodeOffset nEnd = pNode->EndOfSectionIndex();
+            while ( aIdx < nEnd )
+            {
+                if ( pNode->IsContentNode() &&
+                     static_cast<SwContentNode*>(pNode)->HasWriterListeners() )
+                {
+                    SwCursorShell *pShell = SwIterator<SwCursorShell,SwContentNode>( *static_cast<SwContentNode*>(pNode) ).First();
+                    if( pShell )
+                    {
+                        pShell->ParkCursor( aIdx );
+                        aIdx = nEnd-1;
+                    }
+                }
+                ++aIdx;
+                pNode = & aIdx.GetNode();
+            }
+        }
+        rCnt.SetNewContentIdx( nullptr );
+
+        // When deleting a header/footer-format, we ALWAYS need to disable
+        // the undo function (Bug 31069)
+        ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
+
+        OSL_ENSURE( pNode, "A big problem." );
+        pDoc->getIDocumentContentOperations().DeleteSection( pNode );
+    }
+    delete pFormat;
 }
 
 SwPageFootnoteInfo::SwPageFootnoteInfo()
