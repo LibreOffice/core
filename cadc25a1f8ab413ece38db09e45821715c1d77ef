@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb1ac586_ec2f47ec",
+        "filename": "sw/source/uibase/dbui/dbmgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-07-11T05:44:27Z",
+      "side": 1,
+      "message": "I am sorry for creating a confusion.\nThe problem seems to be not in the LoadAndRegisterEmbeddedDataSource, where the vnd.sun.star.pkg URL is created *properly*, but in this place that you already identified while debugging. I told you that \"rEvent.OldLocation string was *incorrectly* URL-encoded twice\" - but obviously that was a wrong statement; instead, aOwnURL creation should be changed to also use *proper* procedure. To do that, ConstructVndSunStarPkgUrl needs to be moved to the beginning of this file.\n\nPlease see https://gerrit.libreoffice.org/c/core/+/44917/, where I myself explicitly replaced WithCharset with NONE in lcl_getOwnURL - because this is how the URL must be created: the canonical URL representation (i.e., URL-encoded where appropriate) gets passed to the createVndSunStarPkgUrlReference to create second-level URL, so second URL-encoding is expected and correct.\n\nAgain, excuse for the confusion caused.",
+      "revId": "cadc25a1f8ab413ece38db09e45821715c1d77ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
