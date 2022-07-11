@@ -4063,7 +4063,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf147006)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf124261)
 {
-#if !defined(_WIN32)
+#if !defined(_WIN32) && !defined(MACOSX)
     // Make sure that pressing a key in a btlr cell frame causes an immediate, correct repaint.
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf124261.docx");
     SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();

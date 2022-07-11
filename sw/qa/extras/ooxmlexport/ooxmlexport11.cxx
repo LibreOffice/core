@@ -1403,7 +1403,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf88496)
     // Switch off repeating header, there is no place for it.
     // Now there are only 3 pages with complete table content
     // instead of a 51-page long table only with header.
-    CPPUNIT_ASSERT_EQUAL(2, getPages());
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
+    // (this appears to have the correct result now?)
     // FIXME: this actually has 3 pages but SwWrtShell::SttPg() puts the cursor
     // into the single SwTextFrame in the follow-flow-row at the top of the
     // table but that SwTextFrame 1105 should not exist and the cursor ends up
