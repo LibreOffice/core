@@ -277,6 +277,8 @@ void SwUndoInsTable::UndoImpl(::sw::UndoRedoContext & rContext)
         if( SfxItemState::SET == pTableFormat->GetItemState( RES_BREAK,
             false, &pItem ) )
             pNextNd->SetAttr( *pItem );
+
+        ::sw::NotifyTableCollapsedParagraph(pNextNd, nullptr);
     }
 
     sTableNm = pTableNd->GetTable().GetFrameFormat()->GetName();

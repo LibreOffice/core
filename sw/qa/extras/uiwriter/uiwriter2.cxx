@@ -1238,7 +1238,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testMixedFormFieldInsertion)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf124261)
 {
-#if !defined(WNT)
+#if !defined(WNT) && !defined(MACOSX)
     // Make sure that pressing a key in a btlr cell frame causes an immediate, correct repaint.
     SwDoc* pDoc = createDoc("tdf124261.docx");
     SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
