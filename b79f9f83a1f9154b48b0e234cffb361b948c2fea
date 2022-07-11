@@ -16,6 +16,23 @@
       "message": "\u003e Patch Set 3:\n\u003e \n\u003e Build queued https://ci.libreoffice.org/job/gerrit_master/118253/\n\nThanks!",
       "revId": "b79f9f83a1f9154b48b0e234cffb361b948c2fea",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40bb8e11_7d65fce3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003573
+      },
+      "writtenOn": "2022-07-11T13:26:31Z",
+      "side": 1,
+      "message": "Thanks Julien, sorry didn\u0027t mean to resolve in the previous comment!",
+      "revId": "b79f9f83a1f9154b48b0e234cffb361b948c2fea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
