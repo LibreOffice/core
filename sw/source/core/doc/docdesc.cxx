@@ -414,11 +414,11 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
         const bool bStashFirstMasterHead = !rDesc.IsFirstShared() && rChged.IsFirstShared();
         const bool bStashFirstLeftHead = (!rDesc.IsHeaderShared() && rChged.IsHeaderShared()) || (!rDesc.IsFirstShared() && rChged.IsFirstShared());
         if (bStashLeftHead && rLeftHead.GetRegisteredIn() && !rDesc.HasStashedFormat(true, true, false))
-            rDesc.StashFrameFormat(rChged.GetLeft(), true, true, false);
+            rDesc.StashFrameFormat(&rChged.GetLeft(), true, true, false);
         if (bStashFirstMasterHead && rFirstMasterHead.GetRegisteredIn() && !rDesc.HasStashedFormat(true, false, true))
-            rDesc.StashFrameFormat(rChged.GetFirstMaster(), true, false, true);
+            rDesc.StashFrameFormat(&rChged.GetFirstMaster(), true, false, true);
         if (bStashFirstLeftHead && rFirstLeftHead.GetRegisteredIn() && !rDesc.HasStashedFormat(true, true, true))
-            rDesc.StashFrameFormat(rChged.GetFirstLeft(), true, true, true);
+            rDesc.StashFrameFormat(&rChged.GetFirstLeft(), true, true, true);
 
         // Stash footer formats as needed.
         const SwFormatFooter& rLeftFoot = rChged.GetLeft().GetFooter();
@@ -428,11 +428,11 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
         const bool bStashFirstMasterFoot = !rDesc.IsFirstShared() && rChged.IsFirstShared();
         const bool bStashFirstLeftFoot = (!rDesc.IsFooterShared() && rChged.IsFooterShared()) || (!rDesc.IsFirstShared() && rChged.IsFirstShared());
         if (bStashLeftFoot && rLeftFoot.GetRegisteredIn() && !rDesc.HasStashedFormat(false, true, false))
-            rDesc.StashFrameFormat(rChged.GetLeft(), false, true, false);
+            rDesc.StashFrameFormat(&rChged.GetLeft(), false, true, false);
         if (bStashFirstMasterFoot && rFirstMasterFoot.GetRegisteredIn()  && !rDesc.HasStashedFormat(false, false, true))
-            rDesc.StashFrameFormat(rChged.GetFirstMaster(), false, false, true);
+            rDesc.StashFrameFormat(&rChged.GetFirstMaster(), false, false, true);
         if (bStashFirstLeftFoot && rFirstLeftFoot.GetRegisteredIn()  && !rDesc.HasStashedFormat(false, true, true))
-            rDesc.StashFrameFormat(rChged.GetFirstLeft(), false, true, true);
+            rDesc.StashFrameFormat(&rChged.GetFirstLeft(), false, true, true);
 
         GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoPageDesc>(rDesc, rChged, this));
     }
@@ -464,57 +464,19 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
             rDesc.GetLeft().ResetFormatAttr(RES_FOOTER);
             rDesc.GetFirstLeft().ResetFormatAttr(RES_FOOTER);
 
-            auto lDelHFFormat = [this](SwClient* pToRemove, SwFrameFormat* pFormat)
-            {
-                // Code taken from lcl_DelHFFormat
-                pFormat->Remove(pToRemove);
-                SwFormatContent& rCnt = const_cast<SwFormatContent&>(pFormat->GetContent());
-                if (rCnt.GetContentIdx())
-                {
-                    SwNode* pNode = nullptr;
-                    {
-                        SwNodeIndex aIdx(*rCnt.GetContentIdx(), 0);
-                        pNode = &aIdx.GetNode();
-                        SwNodeOffset nEnd = pNode->EndOfSectionIndex();
-                        while (aIdx < nEnd)
-                        {
-                            if (pNode->IsContentNode() &&
-                                static_cast<SwContentNode*>(pNode)->HasWriterListeners())
-                            {
-                                SwCursorShell* pShell = SwIterator<SwCursorShell, SwContentNode>(*static_cast<SwContentNode*>(pNode)).First();
-                                if (pShell)
-                                {
-                                    pShell->ParkCursor(aIdx);
-                                    aIdx = nEnd - 1;
-                                }
-                            }
-                            ++aIdx;
-                            pNode = &aIdx.GetNode();
-                        }
-                    }
-                    rCnt.SetNewContentIdx(nullptr);
-
-                    ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
-
-                    assert(pNode);
-                    getIDocumentContentOperations().DeleteSection(pNode);
-                }
-                delete pFormat;
-            };
-
             if (rDescMasterHeaderFormat.GetHeaderFormat() && rDescMasterHeaderFormat != rChgedMasterHeaderFormat)
-                lDelHFFormat(&rDescMasterHeaderFormat, rDescMasterHeaderFormat.GetHeaderFormat());
+                SwPageDesc::DelHFFormat(&rDescMasterHeaderFormat, rDescMasterHeaderFormat.GetHeaderFormat());
             else if (rDescLeftHeaderFormat.GetHeaderFormat() && rDescLeftHeaderFormat != rChgedLeftHeaderFormat)
-                lDelHFFormat(&rDescLeftHeaderFormat, rDescLeftHeaderFormat.GetHeaderFormat());
+                SwPageDesc::DelHFFormat(&rDescLeftHeaderFormat, rDescLeftHeaderFormat.GetHeaderFormat());
             else if (rDescFirstLeftHeaderFormat.GetHeaderFormat() && rDescFirstLeftHeaderFormat != rChgedFirstLeftHeaderFormat)
-                lDelHFFormat(&rDescFirstLeftHeaderFormat, rDescFirstLeftHeaderFormat.GetHeaderFormat());
+                SwPageDesc::DelHFFormat(&rDescFirstLeftHeaderFormat, rDescFirstLeftHeaderFormat.GetHeaderFormat());
 
             else if (rDescMasterFooterFormat.GetFooterFormat() && rDescMasterFooterFormat != rChgedMasterFooterFormat)
-                lDelHFFormat(&rDescMasterFooterFormat, rDescMasterFooterFormat.GetFooterFormat());
+                SwPageDesc::DelHFFormat(&rDescMasterFooterFormat, rDescMasterFooterFormat.GetFooterFormat());
             else if (rDescLeftFooterFormat.GetFooterFormat() && rDescLeftFooterFormat != rChgedLeftFooterFormat)
-                lDelHFFormat(&rDescLeftFooterFormat, rDescLeftFooterFormat.GetFooterFormat());
+                SwPageDesc::DelHFFormat(&rDescLeftFooterFormat, rDescLeftFooterFormat.GetFooterFormat());
             else if (rDescFirstLeftFooterFormat.GetFooterFormat() && rDescFirstLeftFooterFormat != rChgedFirstLeftFooterFormat)
-                lDelHFFormat(&rDescFirstLeftFooterFormat, rDescFirstLeftFooterFormat.GetFooterFormat());
+                SwPageDesc::DelHFFormat(&rDescFirstLeftFooterFormat, rDescFirstLeftFooterFormat.GetFooterFormat());
         }
     }
     ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());

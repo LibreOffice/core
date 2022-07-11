@@ -149,15 +149,18 @@ class SW_DLLPUBLIC SwPageDesc final
     SwFrameFormat    m_FirstMaster;
     SwFrameFormat    m_FirstLeft;
 
-    struct StashedPageDesc
+    struct StashedPageFormat
     {
-        std::shared_ptr<SwFrameFormat> m_pStashedFirst;
-        std::shared_ptr<SwFrameFormat> m_pStashedLeft;
-        std::shared_ptr<SwFrameFormat> m_pStashedFirstLeft;
+        std::unique_ptr<SwFrameFormat> m_pStashedFirst;
+        std::unique_ptr<SwFrameFormat> m_pStashedLeft;
+        std::unique_ptr<SwFrameFormat> m_pStashedFirstLeft;
     };
 
-    mutable StashedPageDesc m_aStashedHeader;
-    mutable StashedPageDesc m_aStashedFooter;
+    typedef StashedPageFormat SwStashedHeader;
+    typedef StashedPageFormat SwStashedFooter;
+
+    mutable SwStashedHeader m_aStashedHeader;
+    mutable SwStashedFooter m_aStashedFooter;
 
     sw::WriterMultiListener m_aDepends; ///< Because of grid alignment (Registerhaltigkeit).
     mutable const SwTextFormatColl* m_pTextFormatColl;
@@ -217,13 +220,13 @@ public:
     void SetHidden(bool const bValue) { m_IsHidden = bValue; }
 
     /// Remember original header/footer formats even when they are hidden by "sharing".
-    void StashFrameFormat(const SwFrameFormat& rFormat, bool bHeader, bool bLeft, bool bFirst);
+    void StashFrameFormat(const SwFrameFormat* pFormat, bool bHeader, bool bLeft, bool bFirst);
 
     /// Used to restore hidden header/footer formats.
     const SwFrameFormat* GetStashedFrameFormat(bool bHeader, bool bLeft, bool bFirst) const;
 
     /// Checks if the pagedescriptor has a stashed format according to the parameters or not.
-    bool HasStashedFormat(bool bHeader, bool bLeft, bool bFirst);
+    bool HasStashedFormat(bool bHeader, bool bLeft, bool bFirst) const;
 
     /// Gives the feature of removing the stashed format by hand if it is necessary.
     void RemoveStashedFormat(bool bHeader, bool bLeft, bool bFirst);
@@ -297,6 +300,8 @@ public:
     virtual ~SwPageDesc() override;
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
+
+    static void DelHFFormat(SwClient* pToRemove, SwFrameFormat* pFormat);
 };
 
 namespace std {

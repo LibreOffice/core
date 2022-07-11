@@ -146,76 +146,6 @@ static sal_Int16 lcl_IntToRelation(const uno::Any& rVal)
     return nVal;
 }
 
-static void lcl_DelHFFormat( SwClient *pToRemove, SwFrameFormat *pFormat )
-{
-    //If the client is the last one who uses this format, then we have to delete
-    //it - before this is done, we may need to delete the content-section.
-    SwDoc* pDoc = pFormat->GetDoc();
-    pFormat->Remove( pToRemove );
-    if( pDoc->IsInDtor() )
-    {
-        delete pFormat;
-        return;
-    }
-
-    // Anything other than frames registered?
-    bool bDel = true;
-    {
-        // nested scope because DTOR of SwClientIter resets the flag bTreeChg.
-        // It's suboptimal if the format is deleted beforehand.
-        SwIterator<SwClient,SwFrameFormat> aIter(*pFormat);
-        for(SwClient* pLast = aIter.First(); bDel && pLast; pLast = aIter.Next())
-            if (dynamic_cast<const SwFrame*>(pLast) == nullptr)
-                bDel = false;
-    }
-
-    if ( !bDel )
-        return;
-
-    // If there is a Cursor registered in one of the nodes, we need to call the
-    // ParkCursor in an (arbitrary) shell.
-    SwFormatContent& rCnt = const_cast<SwFormatContent&>(pFormat->GetContent());
-    if ( rCnt.GetContentIdx() )
-    {
-        SwNode *pNode = nullptr;
-        {
-            // #i92993#
-            // Begin with start node of page header/footer to assure that
-            // complete content is checked for cursors and the complete content
-            // is deleted on below made method call <pDoc->getIDocumentContentOperations().DeleteSection(pNode)>
-            SwNodeIndex aIdx( *rCnt.GetContentIdx(), 0 );
-            // If there is a Cursor registered in one of the nodes, we need to call the
-            // ParkCursor in an (arbitrary) shell.
-            pNode = & aIdx.GetNode();
-            SwNodeOffset nEnd = pNode->EndOfSectionIndex();
-            while ( aIdx < nEnd )
-            {
-                if ( pNode->IsContentNode() &&
-                     static_cast<SwContentNode*>(pNode)->HasWriterListeners() )
-                {
-                    SwCursorShell *pShell = SwIterator<SwCursorShell,SwContentNode>( *static_cast<SwContentNode*>(pNode) ).First();
-                    if( pShell )
-                    {
-                        pShell->ParkCursor( aIdx );
-                        aIdx = nEnd-1;
-                    }
-                }
-                ++aIdx;
-                pNode = & aIdx.GetNode();
-            }
-        }
-        rCnt.SetNewContentIdx( nullptr );
-
-        // When deleting a header/footer-format, we ALWAYS need to disable
-        // the undo function (Bug 31069)
-        ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
-
-        OSL_ENSURE( pNode, "A big problem." );
-        pDoc->getIDocumentContentOperations().DeleteSection( pNode );
-    }
-    delete pFormat;
-}
-
 void SwFormatFrameSize::ScaleMetrics(tools::Long lMult, tools::Long lDiv) {
     // Don't inherit the SvxSizeItem override (might or might not be relevant; added "just in case"
     // when changing SwFormatFrameSize to derive from SvxSizeItem instead of directly from
@@ -510,7 +440,7 @@ SwFormatHeader::SwFormatHeader( bool bOn )
  SwFormatHeader::~SwFormatHeader()
 {
     if ( GetHeaderFormat() )
-        lcl_DelHFFormat( this, GetHeaderFormat() );
+        SwPageDesc::DelHFFormat( this, GetHeaderFormat() );
 }
 
 bool SwFormatHeader::operator==( const SfxPoolItem& rAttr ) const
@@ -555,7 +485,7 @@ SwFormatFooter::SwFormatFooter( bool bOn )
  SwFormatFooter::~SwFormatFooter()
 {
     if ( GetFooterFormat() )
-        lcl_DelHFFormat( this, GetFooterFormat() );
+        SwPageDesc::DelHFFormat( this, GetFooterFormat() );
 }
 
 void SwFormatFooter::RegisterToFormat( SwFormat& rFormat )
