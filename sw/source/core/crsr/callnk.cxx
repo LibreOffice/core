@@ -60,6 +60,13 @@ SwCallLink::SwCallLink( SwCursorShell & rSh )
     }
 }
 
+/**
+  An empty paragraph inside a table with a nested table preceding it
+  should be hidden, unless the cursor is positioned in the paragraph.
+
+  If the cursor is now (or was previously) inside such a paragraph,
+  send a size change notification on the row frame to force reformatting.
+ */
 static void lcl_notifyRow(const SwContentNode* pNode, SwCursorShell & rShell)
 {
     if ( !pNode )
@@ -69,8 +76,11 @@ static void lcl_notifyRow(const SwContentNode* pNode, SwCursorShell & rShell)
     if ( !pMyFrame )
         return;
 
-    // We need to emulated a change of the row height in order
-    // to have the complete row redrawn
+    // important: only invalidate layout if something is actually hidden or
+    // shown! Otherwise performance is going to suffer with "difficult" tables.
+    if (!pMyFrame->IsCollapse())
+        return;
+
     SwRowFrame *const pRow = pMyFrame->FindRowFrame();
     if ( !pRow )
         return;
@@ -86,6 +96,7 @@ static void lcl_notifyRow(const SwContentNode* pNode, SwCursorShell & rShell)
         return;
     }
 
+    // notify a change in frame size to force reformatting of the row
     const SwFormatFrameSize aSize = pLine->GetFrameFormat()->GetFrameSize();
     pRow->OnFrameSize(aSize);
 }
