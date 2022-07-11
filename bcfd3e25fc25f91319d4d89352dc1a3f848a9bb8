@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "749217e5_1bb6edfb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-07-11T04:49:10Z",
+      "side": 1,
+      "message": "Tomaz, I know this patch touches a lot of files, but actually to review it hopefully shouldn\u0027t be that hard. \n\nFirst check:\n* vcl/source/gdi/print.cxx\n* vcl/source/gdi/virdev.cxx\n* vcl/source/window/window.cxx\n\n(and associated include files)\n\nThen check:\n\nvcl/qt5/QtGraphics.cxx\nvcl/qt5/QtSvpGraphics.cxx\nvcl/unx/generic/gdi/salgdi.cxx\nvcl/unx/generic/gdi/salgdi.cxx\nvcl/unx/generic/print/genpspgraphics.cxx\nvcl/unx/gtk3/salnativewidgets-gtk.cxx\n\nThese are the only platform specific files that are affected.",
+      "revId": "bcfd3e25fc25f91319d4d89352dc1a3f848a9bb8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
