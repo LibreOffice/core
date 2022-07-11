@@ -1494,7 +1494,9 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
 
     // RDF metadata for this text node.
     SwTextNode* pTextNode = m_rExport.m_pCurPam->GetNode().GetTextNode();
-    std::map<OUString, OUString> aStatements = SwRDFHelper::getTextNodeStatements("urn:bails", *pTextNode);
+    std::map<OUString, OUString> aStatements;
+    if (pTextNode)
+        aStatements = SwRDFHelper::getTextNodeStatements("urn:bails", *pTextNode);
     if (!aStatements.empty())
     {
         m_pSerializer->startElementNS(XML_w, XML_smartTag,
