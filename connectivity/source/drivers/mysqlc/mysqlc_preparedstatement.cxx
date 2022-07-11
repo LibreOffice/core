@@ -493,9 +493,10 @@ void SAL_CALL OPreparedStatement::setBytes(sal_Int32 parameter, const Sequence<s
     checkParameterIndex(parameter);
 
     const sal_Int32 nIndex = parameter - 1;
-    m_binds[nIndex].buffer_type = MYSQL_TYPE_BLOB; // FIXME
-    mysqlc_sdbc_driver::resetSqlVar(&m_binds[nIndex].buffer, &x, MYSQL_TYPE_BLOB);
+    m_binds[nIndex].buffer_type = MYSQL_TYPE_BLOB;
+    mysqlc_sdbc_driver::resetSqlVar(&m_binds[nIndex].buffer, &x[0], MYSQL_TYPE_BLOB, x.getLength());
     m_bindMetas[nIndex].is_null = false;
+    m_bindMetas[nIndex].length = x.getLength();
 }
 
 void SAL_CALL OPreparedStatement::setCharacterStream(sal_Int32 parameter,
