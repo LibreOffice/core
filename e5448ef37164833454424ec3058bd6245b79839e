@@ -16,6 +16,23 @@
       "message": "cause of zoom level being reset",
       "revId": "e5448ef37164833454424ec3058bd6245b79839e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10a9286d_2e15fb6e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-07-11T15:24:40Z",
+      "side": 1,
+      "message": "Confirming the zoom solution, not sure what else works (unselecting shapes reverts the selection back to Page but not on gtk3).",
+      "revId": "e5448ef37164833454424ec3058bd6245b79839e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
