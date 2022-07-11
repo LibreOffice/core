@@ -586,6 +586,7 @@ namespace
 
         void testTdf78427_FontFeatures()
         {
+#if HAVE_FEATURE_POPPLER
             rtl::Reference<pdfi::PDFIRawAdaptor> xAdaptor(new pdfi::PDFIRawAdaptor(OUString(), getComponentContext()));
             xAdaptor->setTreeVisitorFactory(createDrawTreeVisitorFactory());
 
@@ -712,10 +713,12 @@ namespace
             assertXPath(pXmlDoc, xpath, "font-weight", "normal");
             assertXPathNoAttribute(pXmlDoc, xpath, "font-style");
             assertXPath(pXmlDoc, xpath, "text-outline", "true");
+#endif
         }
 
         void testTdf78427_FontWeight_MyraidProSemibold() // Related to attachment 155937.
         {
+#if HAVE_FEATURE_POPPLER
             rtl::Reference<pdfi::PDFIRawAdaptor> xAdaptor(new pdfi::PDFIRawAdaptor(OUString(), getComponentContext()));
             xAdaptor->setTreeVisitorFactory(createDrawTreeVisitorFactory());
 
@@ -745,10 +748,12 @@ namespace
                 "\"]/style:text-properties";
             // the font-weight and font-style should be 300 (Light)
             assertXPath(pXmlDoc, xpath, "font-weight", "300");
+#endif
         }
 
         void testTdf143959_nameFromFontFile()
         {
+#if HAVE_FEATURE_POPPLER
             rtl::Reference<pdfi::PDFIRawAdaptor> xAdaptor(new pdfi::PDFIRawAdaptor(OUString(), getComponentContext()));
             xAdaptor->setTreeVisitorFactory(createDrawTreeVisitorFactory());
 
@@ -778,6 +783,7 @@ namespace
                                  getXPath(pXmlDoc, xpath, "font-family").replaceAll(u" ", u""));
             CPPUNIT_ASSERT_EQUAL(OUString("bold"),
                                  getXPath(pXmlDoc, xpath, "font-weight"));
+#endif
         }
 
         CPPUNIT_TEST_SUITE(PDFITest);
