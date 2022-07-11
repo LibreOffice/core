@@ -63,9 +63,9 @@
 #define S_FA_THREE "\xDB\xB3"
 
 // Indic Devanagari
-#define S_HI_ONE "\xDB\xB1"
-#define S_HI_TWO "\xDB\xB2"
-#define S_HI_THREE "\xDB\xB3"
+#define S_HI_ONE "\xE0\xA5\xA7"
+#define S_HI_TWO "\xE0\xA5\xA8"
+#define S_HI_THREE "\xE0\xA5\xA9"
 
 // Chicago footnote symbols
 #define S_DAGGER "\xE2\x80\xA0"
