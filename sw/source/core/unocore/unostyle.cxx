@@ -3331,33 +3331,30 @@ void SwXPageStyle::setPropertyValue(const OUString& rPropertyName, const uno::An
     const uno::Sequence<OUString> aProperties(&rPropertyName, 1);
     const uno::Sequence<uno::Any> aValues(&rValue, 1);
 
-    // Trick: if the Domain Mapper changes the props of shared header/footer,
+    // Trick: if the filter changes the props of shared header/footer,
     // store the old ones in time for later use.
     const bool bIsHeader = rPropertyName == UNO_NAME_HEADER_IS_SHARED;
     const bool bIsFooter = rPropertyName == UNO_NAME_FOOTER_IS_SHARED;
-    if ((bIsFooter || bIsHeader) && rValue == uno::Any(true))
+    if ((bIsFooter || bIsHeader) && rValue == uno::Any(true) && !GetStyleName().isEmpty())
     {
-        // Find the matching page descriptor
-        for (size_t i = 0; i < GetDoc()->GetPageDescCnt(); i++)
+        // If we have the right page descriptor stash the necessary formats in import time.
+        if (auto* pPageDesc = GetDoc()->FindPageDesc(GetStyleName()))
         {
-            auto pPageDesc = &GetDoc()->GetPageDesc(i);
-            // If we have the right page descriptor stash the necessary formats in import time.
-            if (pPageDesc->GetName() == GetStyleName())
+            if (const auto& rStashedFormats = pPageDesc->GetStashedFormats())
             {
-                auto pLeftHeader = pPageDesc->GetLeft().GetHeader().GetHeaderFormat();
-                if (bIsHeader && pLeftHeader)
-                {
-                    pPageDesc->StashFrameFormat(pPageDesc->GetLeft(), true, true, false);
-                    pPageDesc->StashFrameFormat(pPageDesc->GetFirstMaster(), true, false, true);
-                    pPageDesc->StashFrameFormat(pPageDesc->GetFirstLeft(), true, true, true);
-                }
-                auto pLeftFooter = pPageDesc->GetLeft().GetFooter().GetFooterFormat();
-                if (bIsFooter && pLeftFooter)
-                {
-                    pPageDesc->StashFrameFormat(pPageDesc->GetLeft(), false, true, false);
-                    pPageDesc->StashFrameFormat(pPageDesc->GetFirstMaster(), false, false, true);
-                    pPageDesc->StashFrameFormat(pPageDesc->GetFirstLeft(), false, true, true);
-                }
+                if (bIsHeader && pPageDesc->GetLeft().GetHeader().GetHeaderFormat())
+                    rStashedFormats->Stash(&pPageDesc->GetLeft().GetHeader(), true, false);
+                else if (bIsHeader && pPageDesc->GetFirstMaster().GetHeader().GetHeaderFormat())
+                    rStashedFormats->Stash(&pPageDesc->GetFirstMaster().GetHeader(), false, true);
+                else if (bIsHeader && pPageDesc->GetFirstLeft().GetHeader().GetHeaderFormat())
+                    rStashedFormats->Stash(&pPageDesc->GetFirstLeft().GetHeader(), true, true);
+
+                if (bIsFooter && pPageDesc->GetLeft().GetFooter().GetFooterFormat())
+                    rStashedFormats->Stash(&pPageDesc->GetLeft().GetFooter(), true, false);
+                else if (bIsFooter && pPageDesc->GetFirstMaster().GetFooter().GetFooterFormat())
+                    rStashedFormats->Stash(&pPageDesc->GetFirstMaster().GetFooter(), false, true);
+                else if (bIsFooter && pPageDesc->GetFirstLeft().GetFooter().GetFooterFormat())
+                    rStashedFormats->Stash(&pPageDesc->GetFirstLeft().GetFooter(), true, true);
             }
         }
     }

@@ -1828,12 +1828,14 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
     bool bEvenAndOddHeaders = true;
     bool bEvenAndOddFooters = true;
 
+    const auto& rStashedFormats = pPd->GetStashedFormats();
+
     const SwFrameFormat* pPdLeftHeaderFormat = nullptr;
     const SwFrameFormat* pPdLeftFooterFormat = nullptr;
     if (bLeftRightPgChain)
     {
-        const SwFrameFormat* pHeaderFormat = pPd->GetStashedFrameFormat(true, true, true);
-        const SwFrameFormat* pFooterFormat = pPd->GetStashedFrameFormat(false, true, true);
+        const auto* pHeaderFormat = rStashedFormats->GetStashedHeaderFormat(true, true);
+        const auto* pFooterFormat = rStashedFormats->GetStashedFooterFormat(true, true);
         if (pHeaderFormat)
         {
             pPdLeftHeaderFormat = pHeaderFormat;
@@ -1855,8 +1857,8 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
     }
     else
     {
-        const SwFrameFormat* pHeaderFormat = pPd->GetStashedFrameFormat(true, true, false);
-        const SwFrameFormat* pFooterFormat = pPd->GetStashedFrameFormat(false, true, false);
+        const auto* pHeaderFormat = rStashedFormats->GetStashedHeaderFormat(true, false);
+        const auto* pFooterFormat = rStashedFormats->GetStashedFooterFormat(true, false);
         if (pHeaderFormat)
         {
             pPdLeftHeaderFormat = pHeaderFormat;
@@ -1888,11 +1890,13 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
         }
         else
         {
-            if ( pPd->GetStashedFrameFormat(true, true, true) && pPdLeftHeaderFormat && pPdLeftHeaderFormat->GetHeader().GetHeaderFormat() )
+            if (rStashedFormats->GetStashedHeaderFormat(true, true) && pPdLeftHeaderFormat
+                && pPdLeftHeaderFormat->GetHeader().GetHeaderFormat())
             {
                 MSWordSections::SetHeaderFlag( nHeadFootFlags, *pPdLeftHeaderFormat, WW8_HEADER_FIRST );
             }
-            if ( pPd->GetStashedFrameFormat(false, true, true) && pPdLeftFooterFormat && pPdLeftFooterFormat->GetFooter().GetFooterFormat() )
+            if (rStashedFormats->GetStashedFooterFormat(true, true) && pPdLeftFooterFormat
+                && pPdLeftFooterFormat->GetFooter().GetFooterFormat())
             {
                 MSWordSections::SetFooterFlag( nHeadFootFlags, *pPdLeftFooterFormat, WW8_FOOTER_FIRST );
             }
@@ -1905,7 +1909,8 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
         {
             MSWordSections::SetHeaderFlag( nHeadFootFlags, *pPdLeftHeaderFormat, WW8_HEADER_EVEN );
         }
-        else if ( pPd->IsHeaderShared() && pPd->GetStashedFrameFormat(true, true, false) && pPdLeftHeaderFormat && pPdLeftHeaderFormat->GetHeader().GetHeaderFormat() )
+        else if (pPd->IsHeaderShared() && rStashedFormats->GetStashedHeaderFormat(true, false)
+                 && pPdLeftHeaderFormat && pPdLeftHeaderFormat->GetHeader().GetHeaderFormat())
         {
             MSWordSections::SetHeaderFlag( nHeadFootFlags, *pPdLeftHeaderFormat, WW8_HEADER_EVEN );
             bEvenAndOddHeaders = false;
@@ -1915,7 +1920,8 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
         {
             MSWordSections::SetFooterFlag( nHeadFootFlags, *pPdLeftFooterFormat, WW8_FOOTER_EVEN );
         }
-        else if ( pPd->IsFooterShared() && pPd->GetStashedFrameFormat(false, true, false) && pPdLeftFooterFormat && pPdLeftFooterFormat->GetFooter().GetFooterFormat() )
+        else if (pPd->IsFooterShared() && rStashedFormats->GetStashedFooterFormat(true, false)
+                 && pPdLeftFooterFormat && pPdLeftFooterFormat->GetFooter().GetFooterFormat())
         {
             MSWordSections::SetFooterFlag( nHeadFootFlags, *pPdLeftFooterFormat, WW8_FOOTER_EVEN );
             bEvenAndOddFooters = false;
