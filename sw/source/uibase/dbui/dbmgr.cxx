@@ -2784,40 +2784,44 @@ OUString SwDBManager::LoadAndRegisterDataSource(weld::Window* pParent, SwDocShel
 
     OUString sFilterAll(SwResId(STR_FILTER_ALL));
     OUString sFilterAllData(SwResId(STR_FILTER_ALL_DATA));
-    OUString sFilterSXB(SwResId(STR_FILTER_SXB));
-    OUString sFilterSXC(SwResId(STR_FILTER_SXC));
-    OUString sFilterSXW(SwResId(STR_FILTER_SXW));
-    OUString sFilterDBF(SwResId(STR_FILTER_DBF));
-    OUString sFilterXLS(SwResId(STR_FILTER_XLS));
-    OUString sFilterDOC(SwResId(STR_FILTER_DOC));
-    OUString sFilterTXT(SwResId(STR_FILTER_TXT));
-    OUString sFilterCSV(SwResId(STR_FILTER_CSV));
-#ifdef _WIN32
-    OUString sFilterMDB(SwResId(STR_FILTER_MDB));
-    OUString sFilterACCDB(SwResId(STR_FILTER_ACCDB));
-#endif
-    xFP->appendFilter( sFilterAll, "*" );
-    xFP->appendFilter( sFilterAllData, "*.ods;*.sxc;*.odt;*.sxw;*.dbf;*.xls;*.xlsx;*.doc;*.docx;*.txt;*.csv");
 
-    xFP->appendFilter( sFilterSXB, "*.odb" );
-    xFP->appendFilter( sFilterSXC, "*.ods;*.sxc" );
-    xFP->appendFilter( sFilterSXW, "*.odt;*.sxw" );
-    xFP->appendFilter( sFilterDBF, "*.dbf" );
-    xFP->appendFilter( sFilterXLS, "*.xls;*.xlsx" );
-    xFP->appendFilter( sFilterDOC, "*.doc;*.docx" );
-    xFP->appendFilter( sFilterTXT, "*.txt" );
-    xFP->appendFilter( sFilterCSV, "*.csv" );
+    const std::vector<std::pair<OUString, OUString>> filters{
+        { SwResId(STR_FILTER_SXB), "*.odb" },
+        { SwResId(STR_FILTER_SXC), "*.ods;*.sxc" },
+        { SwResId(STR_FILTER_SXW), "*.odt;*.sxw" },
+        { SwResId(STR_FILTER_DBF), "*.dbf" },
+        { SwResId(STR_FILTER_XLS), "*.xls;*.xlsx" },
+        { SwResId(STR_FILTER_DOC), "*.doc;*.docx" },
+        { SwResId(STR_FILTER_TXT), "*.txt" },
+        { SwResId(STR_FILTER_CSV), "*.csv" },
 #ifdef _WIN32
-    xFP->appendFilter(sFilterMDB, "*.mdb;*.mde");
-    xFP->appendFilter(sFilterACCDB, "*.accdb;*.accde");
+        { SwResId(STR_FILTER_MDB), "*.mdb;*.mde" },
+        { SwResId(STR_FILTER_ACCDB), "*.accdb;*.accde" },
 #endif
+    };
+
+    OUStringBuffer sAllDataFilter;
+    for (const auto& [name, filter] : filters)
+    {
+        (void)name;
+        if (!sAllDataFilter.isEmpty())
+            sAllDataFilter.append(';');
+        sAllDataFilter.append(filter);
+    }
+
+    xFP->appendFilter( sFilterAll, "*" );
+    xFP->appendFilter( sFilterAllData, sAllDataFilter.makeStringAndClear());
+
+    // Similar to sfx2::addExtension from sfx2/source/dialog/filtergrouping.cxx
+    for (const auto& [name, filter] : filters)
+        xFP->appendFilter(name + " (" + filter + ")", filter);
 
     xFP->setCurrentFilter( sFilterAll ) ;
     OUString sFind;
     if( ERRCODE_NONE == aDlgHelper.Execute() )
     {
         uno::Reference< beans::XPropertySet > aSettings;
-        const INetURLObject aURL( xFP->getSelectedFiles().getConstArray()[0] );
+        const INetURLObject aURL( xFP->getSelectedFiles()[0] );
         const DBConnURIType type = GetDBunoType( aURL );
 
         if( DBConnURIType::FLAT == type )
