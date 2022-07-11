@@ -8723,6 +8723,7 @@ else
     AC_MSG_RESULT([internal])
     BUILD_TYPE="$BUILD_TYPE BOOST"
     SYSTEM_BOOST=NO
+    BOOST_CPPFLAGS="-I${WORKDIR}/UnpackedTarball/boost"
 fi
 AC_SUBST(SYSTEM_BOOST)
 
