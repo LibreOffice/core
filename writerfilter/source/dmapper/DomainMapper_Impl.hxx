@@ -852,7 +852,7 @@ public:
     void PushPageHeader(SectionPropertyMap::PageType eType);
     void PushPageFooter(SectionPropertyMap::PageType eType);
 
-    void PopPageHeaderFooter();
+    void PopPageHeaderFooter(bool bHeader, bool bFirst, bool bLeft);
     bool IsInHeaderFooter() const { return m_eInHeaderFooterImport != HeaderFooterImportState::none; }
     void ConvertHeaderFooterToTextFrame(bool, bool);
     static void fillEmptyFrameProperties(std::vector<css::beans::PropertyValue>& rFrameProperties, bool bSetAnchorToChar);

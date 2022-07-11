@@ -435,6 +435,7 @@ SectionPropertyMap::SectionPropertyMap( bool bIsFirstSection )
     , m_bDefaultFooterLinkToPrevious( true )
     , m_bEvenPageFooterLinkToPrevious( true )
     , m_bFirstPageFooterLinkToPrevious( true )
+    , m_bSharedHeaderFooter(false)
 {
 #ifdef DBG_UTIL
     static sal_Int32 nNumber = 0;

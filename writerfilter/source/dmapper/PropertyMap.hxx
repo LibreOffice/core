@@ -409,6 +409,9 @@ public:
     // Handling of margins, header and footer for any kind of sections breaks.
     void HandleMarginsHeaderFooter( bool bFirstPage, DomainMapper_Impl& rDM_Impl );
     void ClearHeaderFooterLinkToPrevious( bool bHeader, PageType eType );
+
+    // Flags, indicating if the headers/footers sharing setting have to be modified.
+    bool                                            m_bSharedHeaderFooter;
 };
 
 class ParagraphProperties : public virtual SvRefBase

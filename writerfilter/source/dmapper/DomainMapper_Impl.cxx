@@ -3159,14 +3159,17 @@ void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::P
         // If we have *hidden* header footer
         else
         {
-            bool bIsShared = false;
-            // Turn on the headers
+            // Turn on the headers/footers
             xPageStyle->setPropertyValue(getPropertyName(ePropIsOn), uno::Any(true));
-            // Store the state of the previous state of shared prop
-            xPageStyle->getPropertyValue(getPropertyName(ePropShared)) >>= bIsShared;
-            // Turn on the shared prop in order to save the headers/footers in time
+
+            // Save sharing setting for later use
+            pSectionContext->m_bSharedHeaderFooter
+                = xPageStyle->getPropertyValue(getPropertyName(ePropShared)).get<bool>();
+
+            // Turn off sharing temporary.
             xPageStyle->setPropertyValue(getPropertyName(ePropShared), uno::Any(false));
-            // Add the content of the headers footers to the doc
+
+            // Add each header/footer to the context stack
             uno::Reference<text::XText> xText;
             xPageStyle->getPropertyValue(getPropertyName(bLeft ? ePropTextLeft : ePropText))
                 >>= xText;
@@ -3175,8 +3178,6 @@ void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::P
                 TextAppendContext(uno::Reference<text::XTextAppend>(xText, uno::UNO_QUERY_THROW),
                                   m_bIsNewDoc ? uno::Reference<text::XTextCursor>()
                                               : xText->createTextCursorByRange(xText->getStart())));
-            // Restore the original state of the shared prop after we stored the necessary values.
-            xPageStyle->setPropertyValue(getPropertyName(ePropShared), uno::Any(bIsShared));
         }
         m_bDiscardHeaderFooter = false; // set only on success!
     }
@@ -3196,8 +3197,24 @@ void DomainMapper_Impl::PushPageFooter(SectionPropertyMap::PageType eType)
     PushPageHeaderFooter(/* bHeader = */ false, eType);
 }
 
-void DomainMapper_Impl::PopPageHeaderFooter()
+void DomainMapper_Impl::PopPageHeaderFooter(bool bHeader, bool bFirst, bool bLeft)
 {
+    SectionPropertyMap* pSectionContext = nullptr;
+
+    if (const PropertyMapPtr& pContext = DomainMapper_Impl::GetTopContextOfType(CONTEXT_SECTION))
+        pSectionContext = dynamic_cast<SectionPropertyMap*>(pContext.get());
+
+    if (pSectionContext)
+    {
+        if (const auto& rStyle = pSectionContext->GetPageStyle(*this, bFirst))
+        {
+            if (bLeft)
+                rStyle->setPropertyValue(
+                    getPropertyName(bHeader ? PROP_HEADER_IS_SHARED : PROP_FOOTER_IS_SHARED),
+                    uno::Any(pSectionContext->m_bSharedHeaderFooter));
+        }
+    }
+
     //header and footer always have an empty paragraph at the end
     //this has to be removed
     RemoveLastParagraph( );
@@ -8576,13 +8593,24 @@ void DomainMapper_Impl::substream(Id rName,
 
     switch( rName )
     {
-    case NS_ooxml::LN_headerl:
-    case NS_ooxml::LN_headerr:
-    case NS_ooxml::LN_headerf:
-    case NS_ooxml::LN_footerl:
-    case NS_ooxml::LN_footerr:
-    case NS_ooxml::LN_footerf:
-        PopPageHeaderFooter();
+        case NS_ooxml::LN_headerl:
+            PopPageHeaderFooter(true, false, true);
+            break;
+        case NS_ooxml::LN_headerr:
+            PopPageHeaderFooter(true, false, false);
+            break;
+        case NS_ooxml::LN_headerf:
+            PopPageHeaderFooter(true, true, false);
+            break;
+        case NS_ooxml::LN_footerl:
+            PopPageHeaderFooter(false, false, true);
+            break;
+        case NS_ooxml::LN_footerr:
+            PopPageHeaderFooter(false, false, false);
+            break;
+        case NS_ooxml::LN_footerf:
+            PopPageHeaderFooter(false, true, false);
+            break;
     break;
     case NS_ooxml::LN_footnote:
     case NS_ooxml::LN_endnote:
