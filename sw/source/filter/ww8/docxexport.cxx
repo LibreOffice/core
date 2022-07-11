@@ -1939,6 +1939,13 @@ sal_Int32 DocxExport::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt
         OUString aStr( rEditObj.GetText( n ));
         sal_Int32 nCurrentPos = 0;
         const sal_Int32 nEnd = aStr.getLength();
+
+        // Write paragraph properties.
+        AttrOutput().StartParagraphProperties();
+        aAttrIter.OutParaAttr(/*bCharAttr=*/false);
+        SfxItemSet aParagraphMarkerProperties(m_rDoc.GetAttrPool());
+        AttrOutput().EndParagraphProperties(aParagraphMarkerProperties, nullptr, nullptr, nullptr);
+
         do {
             AttrOutput().StartRun( nullptr, 0 );
             const sal_Int32 nNextAttr = std::min(aAttrIter.WhereNext(), nEnd);
@@ -1966,7 +1973,7 @@ sal_Int32 DocxExport::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt
             AttrOutput().EndRun( nullptr, 0 );
 
         } while( nCurrentPos < nEnd );
-//        aAttrIter.OutParaAttr(false);
+
         AttrOutput().EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t());
     }
     return nParaId;
