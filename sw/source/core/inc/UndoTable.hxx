@@ -43,6 +43,14 @@ class SwStartNode;
 class SwTableNode;
 class SwTableAutoFormat;
 class SwTableSortBoxes;
+class SwContentNode;
+class SwCursorShell;
+
+namespace sw {
+
+void NotifyTableCollapsedParagraph(const SwContentNode* pNode, SwCursorShell *const pShell);
+
+}
 
 class SwUndoInsTable final : public SwUndo
 {

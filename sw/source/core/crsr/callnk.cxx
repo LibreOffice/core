@@ -31,6 +31,7 @@
 #include <ndtxt.hxx>
 #include <flyfrm.hxx>
 #include <breakit.hxx>
+#include <UndoTable.hxx>
 
 SwCallLink::SwCallLink( SwCursorShell & rSh )
     : m_rShell( rSh )
@@ -60,24 +61,36 @@ SwCallLink::SwCallLink( SwCursorShell & rSh )
     }
 }
 
-static void lcl_notifyRow(const SwContentNode* pNode, SwCursorShell & rShell)
+namespace sw {
+
+/**
+  An empty paragraph inside a table with a nested table preceding it
+  should be hidden, unless the cursor is positioned in the paragraph.
+
+  If the cursor is now (or was previously) inside such a paragraph,
+  send a size change notification on the row frame to force reformatting.
+ */
+void NotifyTableCollapsedParagraph(const SwContentNode *const pNode, SwCursorShell *const pShell)
 {
     if ( !pNode )
         return;
 
-    SwFrame *const pMyFrame = pNode->getLayoutFrame( rShell.GetLayout() );
+    SwFrame *const pMyFrame = pNode->getLayoutFrame(pShell ? pShell->GetLayout() : nullptr);
     if ( !pMyFrame )
         return;
 
-    // We need to emulated a change of the row height in order
-    // to have the complete row redrawn
+    // important: only invalidate layout if something is actually hidden or
+    // shown! Otherwise performance is going to suffer with "difficult" tables.
+    if (!pMyFrame->IsCollapse())
+        return;
+
     SwRowFrame *const pRow = pMyFrame->FindRowFrame();
     if ( !pRow )
         return;
 
     const SwTableLine* pLine = pRow->GetTabLine( );
 
-    if (rShell.IsTableMode() || (rShell.StartsWithTable() && rShell.ExtendedSelectedAll()))
+    if (pShell && (pShell->IsTableMode() || (pShell->StartsWithTable() && pShell->ExtendedSelectedAll())))
     {
         // If we have a table selection, then avoid the notification: it's not necessary (the text
         // cursor needs no updating) and the notification may kill the selection overlay, leading to
@@ -86,9 +99,12 @@ static void lcl_notifyRow(const SwContentNode* pNode, SwCursorShell & rShell)
         return;
     }
 
+    // notify a change in frame size to force reformatting of the row
     const SwFormatFrameSize aSize = pLine->GetFrameFormat()->GetFrameSize();
     pRow->OnFrameSize(aSize);
 }
+
+} // namespace sw
 
 SwCallLink::~SwCallLink() COVERITY_NOEXCEPT_FALSE
 {
@@ -102,15 +118,17 @@ SwCallLink::~SwCallLink() COVERITY_NOEXCEPT_FALSE
     if( !pCNd )
         return;
 
-    lcl_notifyRow(pCNd, m_rShell);
-
-    const SwDoc *pDoc=m_rShell.GetDoc();
-    const SwContentNode *pNode = nullptr;
-    if ( pDoc && sal_Int32(m_nNode) < sal_Int32(pDoc->GetNodes( ).Count( )) )
+    if (pCNd->GetIndex() != m_nNode) // only if moved to different node
     {
-        pNode = pDoc->GetNodes()[m_nNode]->GetContentNode();
+        ::sw::NotifyTableCollapsedParagraph(pCNd, &m_rShell);
+
+        const SwDoc *pDoc=m_rShell.GetDoc();
+        if (sal_Int32(m_nNode) < sal_Int32(pDoc->GetNodes().Count()))
+        {
+            const SwContentNode *const pNode = pDoc->GetNodes()[m_nNode]->GetContentNode();
+            ::sw::NotifyTableCollapsedParagraph(pNode, &m_rShell);
+        }
     }
-    lcl_notifyRow(pNode, m_rShell);
 
     sal_Int32 nCmp, nCurrentContent = pCurrentCursor->GetPoint()->nContent.GetIndex();
     SwNodeType nNdWhich = pCNd->GetNodeType();
