@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "714946b6_20d2a9ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 29
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-07-11T12:08:56Z",
+      "side": 1,
+      "message": "Attila: many thanks for the very nice clean-up!",
+      "revId": "d94eb2b42457229470b51bba90e8054c51a08c32",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
