@@ -494,6 +494,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf140668, "tdf140668.docx")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf149649, "tdf149649.docx")
+{
+    // Don't crash when document is opened
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf138771, "tdf138771.docx")
 {
     // Don't crash when document is imported
