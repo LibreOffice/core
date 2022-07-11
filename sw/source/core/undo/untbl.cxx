@@ -292,6 +292,8 @@ void SwUndoInsTable::UndoImpl(::sw::UndoRedoContext & rContext)
         if( const SvxFormatBreakItem* pItem = pTableFormat->GetItemIfSet( RES_BREAK,
             false ) )
             pNextNd->SetAttr( *pItem );
+
+        ::sw::NotifyTableCollapsedParagraph(pNextNd, nullptr);
     }
 
     m_sTableName = pTableNd->GetTable().GetFrameFormat()->GetName();
