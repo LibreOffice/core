@@ -35,6 +35,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e30df6de_347672d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2022-07-11T08:13:28Z",
+      "side": 1,
+      "message": "Thanks! This seems very close to my understanding how this is working.\nLet\u0027s try how it will pass: right now current CI tests are passing and right now there is +1 another tricky case with combination of page break and section break.",
+      "parentUuid": "817a9a40_d786aba1",
+      "revId": "6b348694bf85eec8ab1e234cdb4c0206f54e6584",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "61c8bb9f_697c272d",
@@ -48,6 +66,30 @@
       "writtenOn": "2022-07-09T16:15:00Z",
       "side": 1,
       "message": "Pretty expensive to get this three times.",
+      "range": {
+        "startLine": 3897,
+        "startChar": 16,
+        "endLine": 3897,
+        "endChar": 63
+      },
+      "revId": "6b348694bf85eec8ab1e234cdb4c0206f54e6584",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c3181e7_b658bd20",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 3897,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2022-07-11T08:13:28Z",
+      "side": 1,
+      "message": "Oh, my bad. Changed this one.",
+      "parentUuid": "61c8bb9f_697c272d",
       "range": {
         "startLine": 3897,
         "startChar": 16,
