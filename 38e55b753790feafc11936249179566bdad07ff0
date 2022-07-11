@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2c7055f_7e6d4268",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-07-11T09:04:43Z",
+      "side": 1,
+      "message": "You should mention tdf#143148 here, which is the issue id.",
+      "revId": "38e55b753790feafc11936249179566bdad07ff0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38c60c3f_1f11a921",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-07-11T09:04:43Z",
+      "side": 1,
+      "message": "Thank you for your patch!\nPlease fix these issues.",
+      "revId": "38e55b753790feafc11936249179566bdad07ff0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a797b81a_ef634c78",
+        "filename": "xmloff/inc/fasttokenhandler.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-07-11T09:04:43Z",
+      "side": 1,
+      "message": "You should not comment out these lines. Just remove them.",
+      "revId": "38e55b753790feafc11936249179566bdad07ff0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd9d8875_676b1a06",
+        "filename": "xmloff/inc/fasttokenhandler.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-07-11T09:04:43Z",
+      "side": 1,
+      "message": "Also remove this line.",
+      "revId": "38e55b753790feafc11936249179566bdad07ff0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ff93aa9_1725f150",
+        "filename": "xmloff/inc/fasttokenhandler.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-07-11T09:04:43Z",
+      "side": 1,
+      "message": "Remove this line.",
+      "revId": "38e55b753790feafc11936249179566bdad07ff0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a1cf930_70adf870",
+        "filename": "xmloff/inc/fasttokenhandler.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-07-11T09:04:43Z",
+      "side": 1,
+      "message": "Remove this blank line.",
+      "revId": "38e55b753790feafc11936249179566bdad07ff0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
