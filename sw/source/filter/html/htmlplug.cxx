@@ -1650,6 +1650,9 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
         if( nErr )              // error, don't write anything
         {
             rHTMLWrt.m_nWarn = WARN_SWG_POOR_LOAD;
+            if (bObjectOpened) // Still at least close the tag.
+                rWrt.Strm().WriteOString("</" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_object
+                                         ">");
             return rWrt;
         }
         aGraphicURL = URIHelper::SmartRel2Abs(
