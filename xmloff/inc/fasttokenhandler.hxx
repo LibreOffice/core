@@ -7,8 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef XMLOFF_INC_FASTTOKENHANDLER_HXX
-#define XMLOFF_INC_FASTTOKENHANDLER_HXX
+#pragma once
+// #ifndef XMLOFF_INC_FASTTOKENHANDLER_HXX
+// #define XMLOFF_INC_FASTTOKENHANDLER_HXX
 
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -89,6 +90,6 @@ private:
 
 } // namespace xmloff::token
 
-#endif
+// #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
