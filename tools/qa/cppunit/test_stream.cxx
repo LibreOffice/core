@@ -27,6 +27,7 @@ namespace
         void test_read_cstring();
         void test_read_pstring();
         void test_readline();
+        void test_makereadonly();
 
         CPPUNIT_TEST_SUITE(Test);
         CPPUNIT_TEST(test_stdstream);
@@ -34,6 +35,7 @@ namespace
         CPPUNIT_TEST(test_read_cstring);
         CPPUNIT_TEST(test_read_pstring);
         CPPUNIT_TEST(test_readline);
+        CPPUNIT_TEST(test_makereadonly);
         CPPUNIT_TEST_SUITE_END();
     };
 
@@ -269,6 +271,37 @@ namespace
         std::getline(issB, sStr, '\n');
         CPPUNIT_ASSERT_EQUAL(std::string("foo"), sStr);
         CPPUNIT_ASSERT(issB.eof());         //<-- diff A
+    }
+
+    void Test::test_makereadonly()
+    {
+        SvMemoryStream aMemStream;
+        CPPUNIT_ASSERT(aMemStream.IsWritable());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(0), aMemStream.GetSize());
+        aMemStream.WriteInt64(21);
+        CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, aMemStream.GetError());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(8), aMemStream.GetSize());
+
+        aMemStream.MakeReadOnly();
+        CPPUNIT_ASSERT(!aMemStream.IsWritable());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(8), aMemStream.GetSize());
+        aMemStream.WriteInt64(42);
+        CPPUNIT_ASSERT_EQUAL(ERRCODE_IO_CANTWRITE, aMemStream.GetError());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(8), aMemStream.GetSize());
+
+        aMemStream.ResetError();
+        // Check that seeking past the end doesn't resize a read-only stream.
+        // This apparently doesn't set an error, but at least it shouldn't
+        // change the size.
+        aMemStream.Seek(1024LL*1024*1024*3);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(8), aMemStream.GetSize());
+
+        aMemStream.ResetError();
+        aMemStream.Seek(0);
+        sal_Int64 res;
+        aMemStream.ReadInt64(res);
+        CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, aMemStream.GetError());
+        CPPUNIT_ASSERT_EQUAL(sal_Int64(21), res);
     }
 
     CPPUNIT_TEST_SUITE_REGISTRATION(Test);

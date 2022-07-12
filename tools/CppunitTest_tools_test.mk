@@ -41,6 +41,7 @@ $(eval $(call gb_CppunitTest_use_libraries,tools_test, \
     tl \
     test \
     unotest \
+    vcl \
 ))
 
 $(eval $(call gb_CppunitTest_use_static_libraries,tools_test, \

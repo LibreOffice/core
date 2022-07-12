@@ -661,6 +661,10 @@ public:
     void            SetBuffer( void* pBuf, std::size_t nSize, std::size_t nEOF );
 
     void            ObjectOwnsMemory( bool bOwn ) { bOwnsData = bOwn; }
+    /// Makes the stream read-only after it was (possibly) initially writable,
+    /// without having to copy the data or change buffers.
+    /// @since LibreOffice 7.5
+    void            MakeReadOnly();
     void            SetResizeOffset( std::size_t nNewResize ) { nResize = nNewResize; }
     virtual sal_uInt64 TellEnd() override { FlushBuffer(); return nEndOfData; }
 };
