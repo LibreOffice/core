@@ -22,6 +22,7 @@
 #include <ooo/vba/word/XRange.hpp>
 #include <ooo/vba/word/XParagraphFormat.hpp>
 #include <ooo/vba/word/XFont.hpp>
+#include <ooo/vba/word/XFind.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
@@ -68,7 +69,9 @@ public:
     virtual void SAL_CALL setStyle( const css::uno::Any& _xStyle ) override;
 
     virtual css::uno::Reference< ooo::vba::word::XFont > SAL_CALL getFont() override;
+    virtual css::uno::Reference< ooo::vba::word::XFind > SAL_CALL getFind() override;
     virtual css::uno::Reference< ooo::vba::word::XListFormat > SAL_CALL getListFormat() override;
+
     // Methods
     virtual void SAL_CALL InsertBreak(const css::uno::Any& _breakType) override;
     virtual void SAL_CALL Select() override;
