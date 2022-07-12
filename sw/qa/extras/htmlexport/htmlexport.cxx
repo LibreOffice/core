@@ -1042,6 +1042,18 @@ DECLARE_HTMLEXPORT_TEST(testTdf132739, "tdf132739.odt")
                 "background: #5983b0; border: 1px solid #333333; padding: 0.04in");
 }
 
+DECLARE_HTMLEXPORT_TEST(testTdf135449, "tdf135449.odt")
+{
+    htmlDocUniquePtr pDoc = parseHtml(maTempFile);
+    CPPUNIT_ASSERT(pDoc);
+
+    // Without the accompanying fix in place, this test would have failed because the li/ol tags
+    // would not have been closed, resulting in an xpath error.
+    assertXPath(pDoc, "/html/body/ul/li", 2);
+    assertXPath(pDoc, "/html/body/ul/ol", 1);
+    assertXPath(pDoc, "/html/body/ul/ol/li", 1);
+}
+
 DECLARE_HTMLEXPORT_TEST(testFieldShadeReqIf, "field-shade-reqif.odt")
 {
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
