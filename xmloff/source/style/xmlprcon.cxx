@@ -18,6 +18,7 @@
  */
 
 #include <sal/log.hxx>
+#include <utility>
 #include <xmloff/xmlprcon.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltypes.hxx>
@@ -33,14 +34,14 @@ SvXMLPropertySetContext::SvXMLPropertySetContext(
     const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
     sal_uInt32 nFam,
     vector< XMLPropertyState > &rProps,
-    const rtl::Reference < SvXMLImportPropertyMapper >  &rMap,
+    rtl::Reference < SvXMLImportPropertyMapper > xMap,
     sal_Int32 nSIdx, sal_Int32 nEIdx )
 :   SvXMLImportContext( rImp )
 ,   mnStartIdx( nSIdx )
 ,   mnEndIdx( nEIdx )
 ,   mnFamily( nFam )
 ,   mrProperties( rProps )
-,   mxMapper( rMap )
+,   mxMapper(std::move( xMap ))
 {
     mxMapper->importXML( mrProperties, xAttrList,
                         GetImport().GetMM100UnitConverter(),

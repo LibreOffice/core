@@ -25,6 +25,7 @@
 #include <map>
 
 #include <com/sun/star/uno/Reference.hxx>
+#include <utility>
 
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::beans { class XPropertySetInfo; }
@@ -39,7 +40,7 @@ class SinglePropertySetInfoCache
 
 public:
 
-    inline SinglePropertySetInfoCache( const OUString& rName );
+    inline SinglePropertySetInfoCache( OUString sName );
 
     bool hasProperty(
             const css::uno::Reference< css::beans::XPropertySet >& rPropSet,
@@ -50,8 +51,8 @@ public:
 };
 
 inline SinglePropertySetInfoCache::SinglePropertySetInfoCache(
-        const OUString& rName ) :
-    sName( rName )
+        OUString _sName ) :
+    sName(std::move( _sName ))
 {
 }
 

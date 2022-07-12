@@ -18,6 +18,7 @@
  */
 
 #include "PageHeaderFooterContext.hxx"
+#include <utility>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmltypes.hxx>
@@ -31,14 +32,14 @@ using ::xmloff::token::XML_HEADER_FOOTER_PROPERTIES;
 
 PageHeaderFooterContext::PageHeaderFooterContext( SvXMLImport& rImport,
                                       ::std::vector< XMLPropertyState > & rTempProperties,
-                                      const rtl::Reference < SvXMLImportPropertyMapper > &rTempMap,
+                                      rtl::Reference < SvXMLImportPropertyMapper > xTempMap,
                                       sal_Int32 nStart, sal_Int32 nEnd,
                                       const bool bTempHeader ) :
     SvXMLImportContext( rImport ),
     rProperties(rTempProperties),
     nStartIndex(nStart),
     nEndIndex(nEnd),
-    rMap(rTempMap)
+    rMap(std::move(xTempMap))
 {
     bHeader = bTempHeader;
 }
