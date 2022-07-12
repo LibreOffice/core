@@ -21,6 +21,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 
+#include <utility>
 #include <xmloff/xmlmetae.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/namespacemap.hxx>
@@ -301,9 +302,9 @@ const char s_href[] = "xlink:href";
 
 SvXMLMetaExport::SvXMLMetaExport(
         SvXMLExport& i_rExp,
-        const uno::Reference<document::XDocumentProperties>& i_rDocProps ) :
+        uno::Reference<document::XDocumentProperties> i_rDocProps ) :
     mrExport( i_rExp ),
-    mxDocProps( i_rDocProps ),
+    mxDocProps(std::move( i_rDocProps )),
     m_level( 0 )
 {
     assert(mxDocProps.is());

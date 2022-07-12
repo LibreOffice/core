@@ -69,7 +69,7 @@ private:
 
 public:
     SvXMLMetaExport( SvXMLExport& i_rExport,
-        const css::uno::Reference< css::document::XDocumentProperties>& i_rDocProps);
+        css::uno::Reference< css::document::XDocumentProperties> i_xDocProps);
 
     virtual ~SvXMLMetaExport() override;
 

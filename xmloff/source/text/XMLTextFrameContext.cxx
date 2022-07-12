@@ -38,6 +38,7 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <sax/tools/converter.hxx>
+#include <utility>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnamespace.hxx>
@@ -95,9 +96,9 @@ class XMLTextFrameContextHyperlink_Impl
 
 public:
 
-    inline XMLTextFrameContextHyperlink_Impl( const OUString& rHRef,
-                       const OUString& rName,
-                       const OUString& rTargetFrameName,
+    inline XMLTextFrameContextHyperlink_Impl( OUString aHRef,
+                       OUString aName,
+                       OUString aTargetFrameName,
                        bool bMap );
 
     const OUString& GetHRef() const { return sHRef; }
@@ -107,11 +108,11 @@ public:
 };
 
 inline XMLTextFrameContextHyperlink_Impl::XMLTextFrameContextHyperlink_Impl(
-    const OUString& rHRef, const OUString& rName,
-    const OUString& rTargetFrameName, bool bM ) :
-    sHRef( rHRef ),
-    sName( rName ),
-    sTargetFrameName( rTargetFrameName ),
+    OUString aHRef, OUString aName,
+    OUString aTargetFrameName, bool bM ) :
+    sHRef(std::move( aHRef )),
+    sName(std::move( aName )),
+    sTargetFrameName(std::move( aTargetFrameName )),
     bMap( bM )
 {
 }
