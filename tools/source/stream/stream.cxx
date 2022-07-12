@@ -1903,6 +1903,14 @@ void SvMemoryStream::SetSize(sal_uInt64 const nNewSize)
     ReAllocateMemory( nDiff );
 }
 
+void SvMemoryStream::MakeReadOnly()
+{
+    FlushBuffer();
+    m_isWritable = false;
+    nResize     = 0;
+    SetBufferSize( 0 );
+}
+
 //Create an OString of nLen bytes from rStream
 OString read_uInt8s_ToOString(SvStream& rStrm, std::size_t nLen)
 {

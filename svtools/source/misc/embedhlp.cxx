@@ -599,7 +599,7 @@ std::unique_ptr<SvStream> EmbeddedObjectRef::GetGraphicStream( bool bUpdate ) co
         if ( xStream.is() )
         {
             const sal_Int32 nConstBufferSize = 32000;
-            std::unique_ptr<SvStream> pStream(new SvMemoryStream( 32000, 32000 ));
+            std::unique_ptr<SvMemoryStream> pStream(new SvMemoryStream( 32000, 32000 ));
             try
             {
                 sal_Int32 nRead=0;
@@ -611,6 +611,7 @@ std::unique_ptr<SvStream> EmbeddedObjectRef::GetGraphicStream( bool bUpdate ) co
                 }
                 while ( nRead == nConstBufferSize );
                 pStream->Seek(0);
+                pStream->MakeReadOnly();
                 return pStream;
             }
             catch (const uno::Exception&)
