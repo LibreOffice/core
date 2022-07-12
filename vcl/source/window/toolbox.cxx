@@ -1102,6 +1102,15 @@ IMPL_LINK( ImplTBDragMgr, SelectHdl, Accelerator&, rAccel, void )
         EndDragging();
 }
 
+void ToolBox::TrackImageOrientation(const css::uno::Reference<css::frame::XFrame>& rFrame)
+{
+    if (mpStatusListener.is())
+        mpStatusListener->dispose();
+
+    mpStatusListener = new VclStatusListener<ToolBox>(this, rFrame, ".uno:ImageOrientation");
+    mpStatusListener->startListening();
+}
+
 void ToolBox::ImplInitToolBoxData()
 {
     // initialize variables
@@ -1157,9 +1166,6 @@ void ToolBox::ImplInitToolBoxData()
     mnLastFocusItemId     = ToolBoxItemId(0);
     mnActivateCount       = 0;
     mnImagesRotationAngle = 0_deg10;
-
-    mpStatusListener = new VclStatusListener<ToolBox>(this, ".uno:ImageOrientation");
-    mpStatusListener->startListening();
 
     mpIdle.reset(new Idle("vcl::ToolBox maIdle update"));
     mpIdle->SetPriority( TaskPriority::RESIZE );

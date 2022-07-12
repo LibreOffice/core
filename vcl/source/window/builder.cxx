@@ -1193,7 +1193,7 @@ namespace
         Image aImage(vcl::CommandInfoProvider::GetImageForCommand(aCommand, rFrame));
         pButton->SetModeImage(aImage);
 
-        pButton->SetCommandHandler(aCommand);
+        pButton->SetCommandHandler(aCommand, rFrame);
     }
 
     VclPtr<Button> extractStockAndBuildPushButton(vcl::Window *pParent, VclBuilder::stringmap &rMap, bool bToggle)
@@ -2156,6 +2156,8 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
                     m_pParserState->m_aButtonMenuMaps.emplace_back(id, sMenu);
                 setupFromActionName(static_cast<Button*>(xWindow.get()), rMap, m_xFrame);
             }
+            else if (xWindow->GetType() == WindowType::TOOLBOX)
+                static_cast<ToolBox*>(xWindow.get())->TrackImageOrientation(m_xFrame);
         }
     }
 
