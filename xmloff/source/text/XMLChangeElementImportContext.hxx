@@ -65,7 +65,7 @@ public:
         bool bAcceptContent,
         /// context of enclosing <text:changed-region> element
         XMLChangedRegionImportContext& rParent,
-        OUString const & rType);
+        OUString aType);
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;

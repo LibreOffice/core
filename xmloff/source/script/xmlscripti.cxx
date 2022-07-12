@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <utility>
 #include <xmloff/xmlscripti.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -50,7 +51,7 @@ private:
 public:
     XMLScriptChildContext( SvXMLImport& rImport,
         const css::uno::Reference< css::frame::XModel>& rxModel,
-        const OUString& rLanguage );
+        OUString aLanguage );
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
             sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
@@ -59,11 +60,11 @@ public:
 }
 
 XMLScriptChildContext::XMLScriptChildContext( SvXMLImport& rImport,
-        const Reference< frame::XModel >& rxModel, const OUString& rLanguage )
+        const Reference< frame::XModel >& rxModel, OUString aLanguage )
     :SvXMLImportContext( rImport )
     ,m_xModel( rxModel )
     ,m_xDocumentScripts( rxModel, UNO_QUERY )
-    ,m_aLanguage( rLanguage )
+    ,m_aLanguage(std::move( aLanguage ))
 {
 }
 

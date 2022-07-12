@@ -22,6 +22,8 @@
 
 #include <osl/diagnose.h>
 
+#include <utility>
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
@@ -33,7 +35,7 @@ class XMLPersTextTContext_Impl : public XMLTransformerContext
 
 public:
     XMLPersTextTContext_Impl( XMLTransformerBase& rTransformer,
-                           const OUString& rChars );
+                           OUString aChars );
 
     virtual rtl::Reference<XMLTransformerContext> CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
@@ -51,9 +53,9 @@ public:
 
 XMLPersTextTContext_Impl::XMLPersTextTContext_Impl(
         XMLTransformerBase& rImp,
-        const OUString& rChars ) :
+        OUString aChars ) :
     XMLTransformerContext( rImp, OUString() ),
-    m_aCharacters( rChars )
+    m_aCharacters(std::move( aChars ))
 {
 }
 

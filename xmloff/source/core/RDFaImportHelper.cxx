@@ -19,6 +19,7 @@
 
 #include <RDFaImportHelper.hxx>
 
+#include <utility>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/namespacemap.hxx>
 
@@ -86,10 +87,10 @@ class RDFaInserter
     BlankNodeMap_t m_BlankNodeMap;
 
 public:
-    RDFaInserter(uno::Reference<uno::XComponentContext> const & i_xContext,
-            uno::Reference< rdf::XDocumentRepository > const & i_xRepository)
-        : m_xContext(i_xContext)
-        , m_xRepository(i_xRepository)
+    RDFaInserter(uno::Reference<uno::XComponentContext> i_xContext,
+            uno::Reference< rdf::XDocumentRepository > i_xRepository)
+        : m_xContext(std::move(i_xContext))
+        , m_xRepository(std::move(i_xRepository))
     {}
 
     uno::Reference< rdf::XBlankNode >
@@ -115,14 +116,14 @@ struct ParsedRDFaAttributes
     OUString m_Datatype;
 
     ParsedRDFaAttributes(
-            OUString const & i_rAbout,
+            OUString i_sAbout,
             ::std::vector< OUString >&& i_rProperties,
-            OUString const & i_rContent,
-            OUString const & i_rDatatype)
-        : m_About(i_rAbout)
+            OUString i_sContent,
+            OUString i_sDatatype)
+        : m_About(std::move(i_sAbout))
         , m_Properties(std::move(i_rProperties))
-        , m_Content(i_rContent)
-        , m_Datatype(i_rDatatype)
+        , m_Content(std::move(i_sContent))
+        , m_Datatype(std::move(i_sDatatype))
     { }
 };
 
@@ -132,10 +133,10 @@ struct RDFaEntry
     uno::Reference<rdf::XMetadatable> m_xObject;
     std::shared_ptr<ParsedRDFaAttributes> m_xRDFaAttributes;
 
-    RDFaEntry(uno::Reference<rdf::XMetadatable> const & i_xObject,
-            std::shared_ptr<ParsedRDFaAttributes> const& i_pRDFaAttributes)
-        : m_xObject(i_xObject)
-        , m_xRDFaAttributes(i_pRDFaAttributes)
+    RDFaEntry(uno::Reference<rdf::XMetadatable> i_xObject,
+            std::shared_ptr<ParsedRDFaAttributes> i_pRDFaAttributes)
+        : m_xObject(std::move(i_xObject))
+        , m_xRDFaAttributes(std::move(i_pRDFaAttributes))
     { }
 };
 

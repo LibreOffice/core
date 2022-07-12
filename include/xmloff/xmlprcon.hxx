@@ -43,7 +43,7 @@ public:
             const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
             sal_uInt32 nFamily,
             ::std::vector< XMLPropertyState > &rProps,
-            const rtl::Reference < SvXMLImportPropertyMapper > &rMap,
+            rtl::Reference < SvXMLImportPropertyMapper > xMap,
               sal_Int32 nStartIdx = -1, sal_Int32 nEndIdx = -1 );
 
     virtual ~SvXMLPropertySetContext() override;

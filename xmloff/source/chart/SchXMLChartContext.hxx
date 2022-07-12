@@ -135,7 +135,7 @@ public:
     SchXMLTitleContext( SchXMLImportHelper& rImpHelper,
                         SvXMLImport& rImport,
                         OUString& rTitle,
-                        css::uno::Reference< css::drawing::XShape > const & xTitleShape );
+                        css::uno::Reference< css::drawing::XShape > xTitleShape );
     virtual ~SchXMLTitleContext() override;
 
     virtual void SAL_CALL startFastElement( sal_Int32 nElement,

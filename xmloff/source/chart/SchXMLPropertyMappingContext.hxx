@@ -28,7 +28,7 @@ public:
                           SvXMLImport& rImport,
                           tSchXMLLSequencesPerIndex& rLSequencesPerIndex,
                               css::uno::Reference<
-                              css::chart2::XDataSeries > const & xSeries );
+                              css::chart2::XDataSeries > xSeries );
 
     virtual ~SchXMLPropertyMappingContext() override;
 

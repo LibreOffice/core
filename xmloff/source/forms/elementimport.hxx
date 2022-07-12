@@ -501,7 +501,7 @@ namespace xmloff
 
     public:
         OListOptionImport(SvXMLImport& _rImport,
-            const OListAndComboImportRef& _rListBox);
+            OListAndComboImportRef _xListBox);
 
         virtual void SAL_CALL startFastElement( sal_Int32 nElement,
             const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override;
@@ -517,7 +517,7 @@ namespace xmloff
 
     public:
         OComboItemImport(SvXMLImport& _rImport,
-            const OListAndComboImportRef& _rListBox);
+            OListAndComboImportRef _xListBox);
 
     protected:
         // SvXMLImportContext overridables

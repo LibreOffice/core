@@ -46,8 +46,8 @@ protected:
     virtual XMLTransformerActions *GetUserDefinedActions( sal_uInt16 n ) override;
 
 public:
-    OOo2OasisTransformer( OUString const & rImplName,
-                          OUString const & rSubServiceName ) noexcept;
+    OOo2OasisTransformer( OUString aImplName,
+                          OUString aSubServiceName ) noexcept;
     virtual ~OOo2OasisTransformer() noexcept override;
 
     // XInterface

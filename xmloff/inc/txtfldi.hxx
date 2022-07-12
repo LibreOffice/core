@@ -65,7 +65,7 @@ public:
     XMLTextFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
-        const OUString& pService);              /// name of SO API service
+        OUString aService);              /// name of SO API service
 
     /// process character data: will be collected in member sContentBuffer
     virtual void SAL_CALL characters( const OUString& sContent ) override;
