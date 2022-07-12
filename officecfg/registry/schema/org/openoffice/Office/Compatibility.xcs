@@ -172,8 +172,8 @@
       <prop oor:name="AllowCommentsInFootnotes" oor:type="xs:boolean" oor:nillable="false">
         <info>
             <!-- See tdf#86188 for rationale -->
-            <desc>Specifies whether adding comments to footnotes is allowed. This is allowed for ODF but not in OOXML and can result in invalid docx files being saved.</desc>
-            <label>Allow adding comments to footnotes. Disable for better OOXML interoperability.</label>
+            <desc>Specifies whether adding comments to footnotes etc. is allowed. These are allowed for ODF but not in OOXML and can result in invalid docx files being saved.</desc>
+            <label>Allow adding comments to footnotes and frames. Disable for better OOXML interoperability.</label>
         </info>
         <value>true</value>
       </prop>
