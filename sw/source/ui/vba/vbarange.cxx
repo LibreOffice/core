@@ -29,6 +29,7 @@
 #include "vbaparagraphformat.hxx"
 #include "vbastyle.hxx"
 #include "vbafont.hxx"
+#include "vbafind.hxx"
 #include "vbapalette.hxx"
 #include "vbapagesetup.hxx"
 #include "vbalistformat.hxx"
@@ -295,6 +296,14 @@ SwVbaRange::getFont()
 {
     VbaPalette aColors;
     return new SwVbaFont( mxParent, mxContext, aColors.getPalette(), uno::Reference< beans::XPropertySet >( getXTextRange(), uno::UNO_QUERY_THROW ) );
+}
+
+uno::Reference< word::XFind > SAL_CALL
+SwVbaRange::getFind()
+{
+    uno::Reference< text::XTextRange > xTextRange = getXTextRange();
+    uno::Reference< frame::XModel > xModel( mxTextDocument, uno::UNO_QUERY_THROW );
+    return SwVbaFind::GetOrCreateFind(this, mxContext, xModel, xTextRange);
 }
 
 uno::Reference< word::XListFormat > SAL_CALL
