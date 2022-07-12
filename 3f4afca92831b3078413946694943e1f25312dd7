@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e9b36ff_560fe38a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-07-12T20:53:56Z",
+      "side": 1,
+      "message": "Looking at the history I discovered it was I that introduced the block of code that sets the zoom to the whole page when an object is selected in the Navigator. Here is another attempt to fix this bug. ",
+      "revId": "3f4afca92831b3078413946694943e1f25312dd7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
