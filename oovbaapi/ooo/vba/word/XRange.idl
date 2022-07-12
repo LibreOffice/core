@@ -28,6 +28,8 @@ interface XListFormat;
 interface XRange
 {
     interface ooo::vba::XHelperInterface;
+    interface com::sun::star::script::XDefaultProperty;
+
 
     [attribute] string Text;
     [attribute] XParagraphFormat ParagraphFormat;

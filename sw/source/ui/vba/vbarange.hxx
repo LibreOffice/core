@@ -67,10 +67,12 @@ public:
     virtual void SAL_CALL setParagraphFormat( const css::uno::Reference< ooo::vba::word::XParagraphFormat >& rParagraphFormat ) override;
     virtual css::uno::Any SAL_CALL getStyle() override;
     virtual void SAL_CALL setStyle( const css::uno::Any& _xStyle ) override;
-
     virtual css::uno::Reference< ooo::vba::word::XFont > SAL_CALL getFont() override;
     virtual css::uno::Reference< ooo::vba::word::XFind > SAL_CALL getFind() override;
     virtual css::uno::Reference< ooo::vba::word::XListFormat > SAL_CALL getListFormat() override;
+
+    //XDefaultProperty
+    virtual OUString SAL_CALL getDefaultPropertyName() override { return "Text"; }
 
     // Methods
     virtual void SAL_CALL InsertBreak(const css::uno::Any& _breakType) override;
