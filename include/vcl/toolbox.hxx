@@ -509,6 +509,8 @@ public:
 
     void SetLineSpacing(bool b) { mbLineSpacing = b; }
 
+    void TrackImageOrientation(const css::uno::Reference<css::frame::XFrame>& rFrame);
+
     virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 };
 

@@ -24,7 +24,7 @@
 template <class T> class VclStatusListener final : public cppu::WeakImplHelper < css::frame::XStatusListener>
 {
 public:
-    VclStatusListener(T* widget, const OUString& aCommand);
+    VclStatusListener(T* widget, const css::uno::Reference<css::frame::XFrame>& rFrame, const OUString& aCommand);
 
 private:
     VclPtr<T> mWidget; /** The widget on which actions are performed */
@@ -47,18 +47,11 @@ public:
 };
 
 template<class T>
-VclStatusListener<T>::VclStatusListener(T* widget, const OUString& aCommand) {
-    mWidget = widget;
-
+VclStatusListener<T>::VclStatusListener(T* widget, const css::uno::Reference<css::frame::XFrame>& rFrame, const OUString& aCommand) :
+    mWidget(widget),
+    mxFrame(rFrame)
+{
     css::uno::Reference<css::uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
-    css::uno::Reference<css::frame::XDesktop2> xDesktop = css::frame::Desktop::create(xContext);
-
-    css::uno::Reference<css::frame::XFrame> xFrame(xDesktop->getActiveFrame());
-    if (!xFrame.is())
-        xFrame = xDesktop;
-
-    mxFrame = xFrame;
-
     maCommandURL.Complete = aCommand;
     css::uno::Reference<css::util::XURLTransformer> xParser = css::util::URLTransformer::create(xContext);
     xParser->parseStrict(maCommandURL);
@@ -67,9 +60,6 @@ VclStatusListener<T>::VclStatusListener(T* widget, const OUString& aCommand) {
 template<class T>
 void VclStatusListener<T>::startListening()
 {
-    if (mxDispatch.is())
-        mxDispatch->removeStatusListener(this, maCommandURL);
-
     css::uno::Reference<css::frame::XDispatchProvider> xDispatchProvider(mxFrame, css::uno::UNO_QUERY);
     if (!xDispatchProvider.is())
         return;
