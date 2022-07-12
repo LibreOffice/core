@@ -2453,6 +2453,9 @@ VclPtr<vcl::Window> MenuBar::ImplCreate(vcl::Window* pParent, vcl::Window* pWind
     pMenu->pStartedFrom = nullptr;
     pMenu->pWindow = pMenuBarWindow;
     pMenuBarWindow->SetMenu(pMenu);
+    if (pMenuBarWindow) {
+        pMenu->ImplCalcSize(pMenuBarWindow);
+    }
 
     return pMenuBarWindow;
 }
