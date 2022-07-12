@@ -76,7 +76,7 @@ class XMLPropertyBackpatcher
 public:
 
     explicit XMLPropertyBackpatcher(
-        const OUString& sPropertyName);
+        OUString sPropertyName);
 
     ~XMLPropertyBackpatcher();
 

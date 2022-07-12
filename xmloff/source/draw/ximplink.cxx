@@ -18,6 +18,7 @@
  */
 
 #include <sal/log.hxx>
+#include <utility>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include "ximplink.hxx"
@@ -27,9 +28,9 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
 
-SdXMLShapeLinkContext::SdXMLShapeLinkContext( SvXMLImport& rImport, const uno::Reference< xml::sax::XFastAttributeList>& xAttrList, uno::Reference< drawing::XShapes > const & rShapes)
+SdXMLShapeLinkContext::SdXMLShapeLinkContext( SvXMLImport& rImport, const uno::Reference< xml::sax::XFastAttributeList>& xAttrList, uno::Reference< drawing::XShapes > xShapes)
 : SvXMLShapeContext( rImport, false )
-, mxParent( rShapes )
+, mxParent(std::move( xShapes ))
 {
     for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {

@@ -116,8 +116,8 @@ namespace xmloff
         */
         OControlExport(IFormsExportContext& _rContext,
             const css::uno::Reference< css::beans::XPropertySet >& _rxControl,
-            const OUString& _rControlId,
-            const OUString& _rReferringControls,
+            OUString _sControlId,
+            OUString _sReferringControls,
             const css::uno::Sequence< css::script::ScriptEventDescriptor >& _rxEvents);
 
     protected:

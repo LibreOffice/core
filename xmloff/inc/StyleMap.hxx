@@ -24,6 +24,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <o3tl/hash_combine.hxx>
 #include <unordered_map>
+#include <utility>
 
 enum class XmlStyleFamily;
 
@@ -33,9 +34,9 @@ struct StyleNameKey_Impl
     OUString       m_aName;
 
     StyleNameKey_Impl( XmlStyleFamily nFamily,
-                       const OUString& rName ) :
+                       OUString sName ) :
         m_nFamily( nFamily ),
-        m_aName( rName )
+        m_aName(std::move( sName ))
     {
     }
 };

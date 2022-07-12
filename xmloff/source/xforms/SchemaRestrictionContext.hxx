@@ -42,7 +42,7 @@ class SchemaRestrictionContext : public TokenContext
 public:
     SchemaRestrictionContext( SvXMLImport& rImport,
                               css::uno::Reference<css::xforms::XDataTypeRepository> const & rRepository,
-                              const OUString& sTypeName );
+                              OUString sTypeName );
 
 private:
     // create mxDataType (if not already present)

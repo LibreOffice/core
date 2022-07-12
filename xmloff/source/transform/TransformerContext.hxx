@@ -61,7 +61,7 @@ public:
     // Note that virtual methods cannot be used inside constructors. Use
     // StartElement instead if this is required.
     XMLTransformerContext( XMLTransformerBase& rTransformer,
-                        const OUString& rQName );
+                        OUString aQName );
 
     // Create a children element context. By default, the import's
     // CreateContext method is called to create a new default context.

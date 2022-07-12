@@ -21,6 +21,7 @@
 #include "XMLChangedRegionImportContext.hxx"
 #include "XMLChangeInfoContext.hxx"
 #include <com/sun/star/uno/Reference.h>
+#include <utility>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -36,10 +37,10 @@ XMLChangeElementImportContext::XMLChangeElementImportContext(
     SvXMLImport& rImport,
     bool bAccContent,
     XMLChangedRegionImportContext& rParent,
-    OUString const & rType) :
+    OUString aType) :
         SvXMLImportContext(rImport),
         bAcceptContent(bAccContent),
-        maType(rType),
+        maType(std::move(aType)),
         rChangedRegion(rParent)
 {
 }

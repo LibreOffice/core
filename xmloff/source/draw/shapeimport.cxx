@@ -535,7 +535,7 @@ public:
     sal_Int32                       mnCurrentZ;
     std::shared_ptr<ShapeGroupContext> mpParentContext;
 
-    ShapeGroupContext( uno::Reference< drawing::XShapes > const & rShapes, std::shared_ptr<ShapeGroupContext> pParentContext );
+    ShapeGroupContext( uno::Reference< drawing::XShapes > xShapes, std::shared_ptr<ShapeGroupContext> pParentContext );
 
     void popGroupAndPostProcess();
 private:
@@ -544,8 +544,8 @@ private:
 
 }
 
-ShapeGroupContext::ShapeGroupContext( uno::Reference< drawing::XShapes > const & rShapes, std::shared_ptr<ShapeGroupContext> pParentContext )
-:   mxShapes( rShapes ), mnCurrentZ( 0 ), mpParentContext( std::move(pParentContext) )
+ShapeGroupContext::ShapeGroupContext( uno::Reference< drawing::XShapes > xShapes, std::shared_ptr<ShapeGroupContext> pParentContext )
+:   mxShapes(std::move( xShapes )), mnCurrentZ( 0 ), mpParentContext( std::move(pParentContext) )
 {
 }
 

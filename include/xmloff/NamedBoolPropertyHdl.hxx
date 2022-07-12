@@ -20,6 +20,7 @@
 #ifndef INCLUDED_XMLOFF_NAMEDBOOLPROPERTYHDL_HXX
 #define INCLUDED_XMLOFF_NAMEDBOOLPROPERTYHDL_HXX
 
+#include <utility>
 #include <xmloff/xmlprhdl.hxx>
 #include <xmloff/xmltoken.hxx>
 
@@ -33,7 +34,7 @@ private:
     const OUString maFalseStr;
 
 public:
-    XMLNamedBoolPropertyHdl( const OUString& rTrueStr, const OUString& rFalseStr ) : maTrueStr( rTrueStr ), maFalseStr( rFalseStr ) {}
+    XMLNamedBoolPropertyHdl( OUString sTrueStr, OUString sFalseStr ) : maTrueStr(std::move( sTrueStr )), maFalseStr(std::move( sFalseStr )) {}
 
     XMLNamedBoolPropertyHdl(
             ::xmloff::token::XMLTokenEnum eTrue,

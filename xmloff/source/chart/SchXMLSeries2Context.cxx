@@ -47,6 +47,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include <sal/log.hxx>
+#include <utility>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/namespacemap.hxx>
@@ -529,8 +530,8 @@ namespace {
 
 struct DomainInfo
 {
-    DomainInfo( const OUString& rRole, const OUString& rRange, sal_Int32 nIndex )
-        : aRole(rRole), aRange(rRange), nIndexForLocalData(nIndex)
+    DomainInfo( OUString _aRole, OUString _aRange, sal_Int32 nIndex )
+        : aRole(std::move(_aRole)), aRange(std::move(_aRange)), nIndexForLocalData(nIndex)
     {}
 
     OUString aRole;

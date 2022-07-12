@@ -19,11 +19,11 @@ private:
 public:
     // Assuming OUString is well behaved, the default copy constructor and
     // assignment operator are fine.
-    SvXMLAttr( const OUString& rLName,
-               const OUString& rValue );
+    SvXMLAttr( OUString aLName,
+               OUString aValue );
     SvXMLAttr( const sal_uInt16 nPos,
-               const OUString& rLName,
-               const OUString& rValue );
+               OUString aLName,
+               OUString aValue );
     bool operator== (const SvXMLAttr &rCmp) const;
 
     sal_uInt16       getPrefixPos() const { return aPrefixPos;}
