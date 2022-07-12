@@ -23,6 +23,7 @@
 
 #include <rtl/ustring.hxx>
 #include "XMLPropertyBackpatcher.hxx"
+#include <utility>
 #include <xmloff/txtimp.hxx>
 
 using ::std::map;
@@ -33,8 +34,8 @@ using ::com::sun::star::beans::XPropertySet;
 
 template<class A>
 XMLPropertyBackpatcher<A>::XMLPropertyBackpatcher(
-    const OUString& sPropName)
-:   sPropertyName(sPropName)
+    OUString sPropName)
+:   sPropertyName(std::move(sPropName))
 {
 }
 

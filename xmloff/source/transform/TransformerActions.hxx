@@ -20,6 +20,7 @@
 #pragma once
 
 #include <rtl/ustring.hxx>
+#include <utility>
 #include <xmloff/namespacemap.hxx>
 #include "TransformerActionInit.hxx"
 #include "TransformerAction.hxx"
@@ -31,9 +32,9 @@ struct NameKey_Impl
     sal_uInt16 m_nPrefix;
     OUString m_aLocalName;
 
-    NameKey_Impl( sal_uInt16 nPrfx, const OUString& rLclNm ) :
+    NameKey_Impl( sal_uInt16 nPrfx, OUString aLclNm ) :
         m_nPrefix( nPrfx ),
-        m_aLocalName( rLclNm )
+        m_aLocalName(std::move( aLclNm ))
     {
     }
 

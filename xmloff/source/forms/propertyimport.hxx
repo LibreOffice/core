@@ -157,7 +157,7 @@ namespace xmloff
 
     public:
         OPropertyElementsContext(SvXMLImport& _rImport,
-                const OPropertyImportRef& _rPropertyImporter);
+                OPropertyImportRef _xPropertyImporter);
 
         virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
             sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
@@ -179,7 +179,7 @@ namespace xmloff
 
     public:
         OSinglePropertyContext(SvXMLImport& _rImport,
-                const OPropertyImportRef& _rPropertyImporter);
+                OPropertyImportRef _xPropertyImporter);
 
         virtual void SAL_CALL startFastElement(
             sal_Int32 nElement,
@@ -196,7 +196,7 @@ namespace xmloff
 
     public:
         OListPropertyContext( SvXMLImport& _rImport,
-                const OPropertyImportRef& _rPropertyImporter );
+                OPropertyImportRef _xPropertyImporter );
 
         virtual void SAL_CALL startFastElement(
             sal_Int32 nElement,

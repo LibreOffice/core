@@ -19,6 +19,7 @@
 
 #include "XMLIndexSimpleEntryContext.hxx"
 #include "XMLIndexTemplateContext.hxx"
+#include <utility>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/txtimp.hxx>
@@ -41,10 +42,10 @@ using ::xmloff::token::XML_STYLE_NAME;
 
 XMLIndexSimpleEntryContext::XMLIndexSimpleEntryContext(
     SvXMLImport& rImport,
-    const OUString& rEntry,
+    OUString aEntry,
     XMLIndexTemplateContext& rTemplate )
 :   SvXMLImportContext(rImport)
-,   m_rEntryType(rEntry)
+,   m_rEntryType(std::move(aEntry))
 ,   m_bCharStyleNameOK(false)
 ,   m_rTemplateContext(rTemplate)
 ,   m_nValues(1)

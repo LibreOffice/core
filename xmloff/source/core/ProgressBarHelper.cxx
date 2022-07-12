@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <utility>
 #include <xmloff/ProgressBarHelper.hxx>
 
 #include <osl/diagnose.h>
@@ -26,9 +27,9 @@ using namespace ::com::sun::star;
 const sal_Int32 nDefaultProgressBarRange = 1000000;
 const float fProgressStep = 0.5;
 
-ProgressBarHelper::ProgressBarHelper(const css::uno::Reference < css::task::XStatusIndicator>& xTempStatusIndicator,
+ProgressBarHelper::ProgressBarHelper(css::uno::Reference < css::task::XStatusIndicator> xTempStatusIndicator,
                                     const bool bTempStrict)
-: xStatusIndicator(xTempStatusIndicator)
+: xStatusIndicator(std::move(xTempStatusIndicator))
 , nRange(nDefaultProgressBarRange)
 , nReference(100)
 , nValue(0)

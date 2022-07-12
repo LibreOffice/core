@@ -20,6 +20,7 @@
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
+#include <utility>
 #include <osl/diagnose.h>
 
 #include "TransformerBase.hxx"
@@ -45,9 +46,9 @@ bool XMLTransformerContext::HasNamespace( sal_uInt16 nPrefix ) const
 }
 
 XMLTransformerContext::XMLTransformerContext( XMLTransformerBase& rImp,
-                                                const OUString& rQName )
+                                                OUString aQName )
     : m_rTransformer(rImp)
-    , m_aQName(rQName)
+    , m_aQName(std::move(aQName))
 {
 }
 

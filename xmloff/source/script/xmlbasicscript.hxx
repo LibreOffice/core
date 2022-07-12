@@ -66,7 +66,7 @@ public:
     BasicEmbeddedLibraryElement(
         SvXMLImport& rImport,
         const css::uno::Reference<css::script::XLibraryContainer2>& rxLibContainer,
-        const OUString& rLibName, bool bReadOnly);
+        OUString aLibName, bool bReadOnly);
 
     virtual css::uno::Reference<XFastContextHandler> SAL_CALL createFastChildContext(
         sal_Int32 Element,
@@ -83,7 +83,7 @@ private:
 public:
     BasicModuleElement(SvXMLImport& rImport,
                        const css::uno::Reference<css::container::XNameContainer>& rxLib,
-                       const OUString& rName);
+                       OUString aName);
 
     virtual css::uno::Reference<XFastContextHandler> SAL_CALL createFastChildContext(
         sal_Int32 Element,
@@ -100,7 +100,7 @@ private:
 public:
     BasicSourceCodeElement(SvXMLImport& rImport,
                            const css::uno::Reference<css::container::XNameContainer>& rxLib,
-                           const OUString& rName);
+                           OUString rName);
 
     virtual void SAL_CALL characters(const OUString& rChars) override;
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
