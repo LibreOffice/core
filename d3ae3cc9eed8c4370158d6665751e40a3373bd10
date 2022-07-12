@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1460816e_4ae28422",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2022-07-12T21:00:06Z",
+      "side": 1,
+      "message": "Hi Heiko,\nThis is the fixed presented in the bug report.",
+      "revId": "d3ae3cc9eed8c4370158d6665751e40a3373bd10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
