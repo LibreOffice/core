@@ -25,6 +25,7 @@
 #include <graphic/DetectorTools.hxx>
 #include <tools/solar.h>
 #include <tools/zcodec.hxx>
+#include <utility>
 
 constexpr sal_uInt32 SVG_CHECK_SIZE = 2048;
 constexpr sal_uInt32 WMF_EMF_CHECK_SIZE = 44;
@@ -337,9 +338,9 @@ bool isPCT(SvStream& rStream, sal_uLong nStreamPos, sal_uLong nStreamLen)
 
 } // end anonymous namespace
 
-GraphicFormatDetector::GraphicFormatDetector(SvStream& rStream, OUString const& rFormatExtension)
+GraphicFormatDetector::GraphicFormatDetector(SvStream& rStream, OUString aFormatExtension)
     : mrStream(rStream)
-    , maExtension(rFormatExtension)
+    , maExtension(std::move(aFormatExtension))
     , mnFirstLong(0)
     , mnSecondLong(0)
     , mnStreamPosition(0)

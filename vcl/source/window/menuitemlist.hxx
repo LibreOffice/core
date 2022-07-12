@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <utility>
 #include <vcl/vclenum.hxx>
 #include <vcl/glyphitem.hxx>
 #include <vcl/image.hxx>
@@ -72,12 +73,12 @@ struct MenuItemData
         , bHiddenOnGUI(false)
     {
     }
-    MenuItemData( const OUString& rStr )
+    MenuItemData( OUString aStr )
         : nId(0)
         , eType(MenuItemType::DONTKNOW)
         , nBits(MenuItemBits::NONE)
         , pSubMenu(nullptr)
-        , aText(rStr)
+        , aText(std::move(aStr))
         , nUserValue(nullptr)
         , aUserValueReleaseFunc(nullptr)
         , aImage()

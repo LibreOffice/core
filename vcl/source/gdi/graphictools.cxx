@@ -19,6 +19,7 @@
 
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
+#include <utility>
 #include <vcl/TypeSerializer.hxx>
 #include <vcl/graphictools.hxx>
 
@@ -37,18 +38,18 @@ SvtGraphicStroke::SvtGraphicStroke() :
 {
 }
 
-SvtGraphicStroke::SvtGraphicStroke( const tools::Polygon& rPath,
-                                    const tools::PolyPolygon&  rStartArrow,
-                                    const tools::PolyPolygon&  rEndArrow,
+SvtGraphicStroke::SvtGraphicStroke( tools::Polygon  aPath,
+                                    tools::PolyPolygon   aStartArrow,
+                                    tools::PolyPolygon   aEndArrow,
                                     double              fTransparency,
                                     double              fStrokeWidth,
                                     CapType             aCap,
                                     JoinType            aJoin,
                                     double              fMiterLimit,
                                     DashArray&&         rDashArray  ) :
-    maPath( rPath ),
-    maStartArrow( rStartArrow ),
-    maEndArrow( rEndArrow ),
+    maPath(std::move( aPath )),
+    maStartArrow(std::move( aStartArrow )),
+    maEndArrow(std::move( aEndArrow )),
     mfTransparency( fTransparency ),
     mfStrokeWidth( fStrokeWidth ),
     maCapType( aCap ),
@@ -171,7 +172,7 @@ SvtGraphicFill::SvtGraphicFill() :
 {
 }
 
-SvtGraphicFill::SvtGraphicFill( const tools::PolyPolygon&  rPath,
+SvtGraphicFill::SvtGraphicFill( tools::PolyPolygon   aPath,
                                 Color               aFillColor,
                                 double              fTransparency,
                                 FillRule            aFillRule,
@@ -184,8 +185,8 @@ SvtGraphicFill::SvtGraphicFill( const tools::PolyPolygon&  rPath,
                                 Color               aGradient1stColor,
                                 Color               aGradient2ndColor,
                                 sal_Int32           aGradientStepCount,
-                                const Graphic&      aFillGraphic ) :
-    maPath( rPath ),
+                                Graphic       aFillGraphic ) :
+    maPath(std::move( aPath )),
     maFillColor( aFillColor ),
     mfTransparency( fTransparency ),
     maFillRule( aFillRule ),
@@ -198,7 +199,7 @@ SvtGraphicFill::SvtGraphicFill( const tools::PolyPolygon&  rPath,
     maGradient1stColor( aGradient1stColor ),
     maGradient2ndColor( aGradient2ndColor ),
     maGradientStepCount( aGradientStepCount ),
-    maFillGraphic( aFillGraphic )
+    maFillGraphic(std::move( aFillGraphic ))
 {
 }
 

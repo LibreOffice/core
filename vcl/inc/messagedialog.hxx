@@ -40,7 +40,7 @@ private:
     virtual void StateChanged(StateChangedType nType) override;
 
 public:
-    MessageDialog(vcl::Window* pParent, const OUString& rMessage, VclMessageType eMessageType,
+    MessageDialog(vcl::Window* pParent, OUString aMessage, VclMessageType eMessageType,
                   VclButtonsType eButtonsType);
     virtual bool set_property(const OString& rKey, const OUString& rValue) override;
     OUString const& get_primary_text() const;

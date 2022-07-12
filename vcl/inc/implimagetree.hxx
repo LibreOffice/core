@@ -47,10 +47,10 @@ struct ImageRequestParameters
     bool mbWriteImageToCache;
     sal_Int32 mnScalePercentage;
 
-    ImageRequestParameters(const OUString & rName, const OUString & rStyle, BitmapEx& rBitmap, bool bLocalized,
+    ImageRequestParameters(OUString aName, OUString aStyle, BitmapEx& rBitmap, bool bLocalized,
                            ImageLoadFlags eFlags, sal_Int32 nScalePercentage)
-        : msName(rName)
-        , msStyle(rStyle)
+        : msName(std::move(aName))
+        , msStyle(std::move(aStyle))
         , mrBitmap(rBitmap)
         , mbLocalized(bLocalized)
         , meFlags(eFlags)
@@ -107,8 +107,8 @@ private:
             maLinkHash.reserve(50);
         }
 
-        IconSet(const OUString & rURL)
-            : maURL(rURL)
+        IconSet(OUString aURL)
+            : maURL(std::move(aURL))
         {
             maLinkHash.reserve(50);
         }

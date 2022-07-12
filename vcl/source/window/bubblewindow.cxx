@@ -18,6 +18,7 @@
  */
 
 #include <rtl/ustrbuf.hxx>
+#include <utility>
 #include <vcl/menubarupdateicon.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/settings.hxx>
@@ -33,15 +34,15 @@
 #define TEXT_MAX_WIDTH        300
 #define TEXT_MAX_HEIGHT       200
 
-BubbleWindow::BubbleWindow( vcl::Window* pParent, const OUString& rTitle,
-                            const OUString& rText, const Image& rImage )
+BubbleWindow::BubbleWindow( vcl::Window* pParent, OUString aTitle,
+                            OUString aText, Image aImage )
     : FloatingWindow( pParent, WB_SYSTEMWINDOW
                                | WB_OWNERDRAWDECORATION
                                | WB_NOBORDER
                     )
-    , maBubbleTitle( rTitle )
-    , maBubbleText( rText )
-    , maBubbleImage( rImage )
+    , maBubbleTitle(std::move( aTitle ))
+    , maBubbleText(std::move( aText ))
+    , maBubbleImage(std::move( aImage ))
     , maMaxTextSize( TEXT_MAX_WIDTH, TEXT_MAX_HEIGHT )
     , mnTipOffset( 0 )
 {

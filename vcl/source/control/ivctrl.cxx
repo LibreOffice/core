@@ -18,6 +18,7 @@
  */
 
 
+#include <utility>
 #include <vcl/toolkit/ivctrl.hxx>
 #include "imivctl.hxx"
 #include <vcl/accessiblefactory.hxx>
@@ -53,10 +54,10 @@ void collectUIInformation( const OUString& aID, const OUString& aPos)
 |
 \*****************************************************************************/
 
-SvxIconChoiceCtrlEntry::SvxIconChoiceCtrlEntry( const OUString& rText,
-                                                const Image& rImage )
-    : aImage(rImage)
-    , aText(rText)
+SvxIconChoiceCtrlEntry::SvxIconChoiceCtrlEntry( OUString _aText,
+                                                Image _aImage )
+    : aImage(std::move(_aImage))
+    , aText(std::move(_aText))
     , nPos(0)
     , pblink(nullptr)
     , pflink(nullptr)

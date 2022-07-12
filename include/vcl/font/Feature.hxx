@@ -66,13 +66,13 @@ private:
 
 public:
     FeatureDefinition();
-    FeatureDefinition(uint32_t nCode, OUString const& rDescription,
+    FeatureDefinition(uint32_t nCode, OUString aDescription,
                       FeatureParameterType eType = FeatureParameterType::BOOL,
                       std::vector<FeatureParameter>&& rEnumParameters
                       = std::vector<FeatureParameter>{},
                       uint32_t nDefault = 0);
     FeatureDefinition(uint32_t nCode, TranslateId pDescriptionID,
-                      OUString const& rNumericPart = OUString());
+                      OUString aNumericPart = OUString());
     FeatureDefinition(uint32_t nCode, TranslateId pDescriptionID,
                       std::vector<FeatureParameter> aEnumParameters);
 

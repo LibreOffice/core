@@ -66,11 +66,11 @@ namespace cairo {
         X11PixmapSharedPtr    mpPixmap;
         CairoSurfaceSharedPtr mpSurface;
 
-        X11Surface( const X11SysData& rSysData, const X11PixmapSharedPtr& rPixmap, const CairoSurfaceSharedPtr& pSurface );
+        X11Surface( const X11SysData& rSysData, X11PixmapSharedPtr aPixmap, CairoSurfaceSharedPtr  pSurface );
 
     public:
         /// takes over ownership of passed cairo_surface
-        explicit X11Surface( const CairoSurfaceSharedPtr& pSurface );
+        explicit X11Surface( CairoSurfaceSharedPtr pSurface );
         /// create surface on subarea of given drawable
         X11Surface( const X11SysData& rSysData, int x, int y, int width, int height );
         /// create surface for given bitmap data

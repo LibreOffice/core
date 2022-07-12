@@ -22,6 +22,7 @@
 
 #include "cairo_xlib_cairo.hxx"
 
+#include <utility>
 #include <vcl/sysdata.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/virdev.hxx>
@@ -94,11 +95,11 @@ namespace cairo
      * Set the mpSurface as pSurface
      **/
     X11Surface::X11Surface( const X11SysData&            rSysData,
-                            const X11PixmapSharedPtr&    rPixmap,
-                            const CairoSurfaceSharedPtr& pSurface ) :
+                            X11PixmapSharedPtr     rPixmap,
+                            CairoSurfaceSharedPtr  pSurface ) :
         maSysData(rSysData),
-        mpPixmap(rPixmap),
-        mpSurface(pSurface)
+        mpPixmap(std::move(rPixmap)),
+        mpSurface(std::move(pSurface))
     {}
 
     /**
@@ -112,9 +113,9 @@ namespace cairo
      *
      * Set the mpSurface as pSurface
      **/
-    X11Surface::X11Surface( const CairoSurfaceSharedPtr& pSurface ) :
+    X11Surface::X11Surface( CairoSurfaceSharedPtr  pSurface ) :
         maSysData(),
-        mpSurface(pSurface)
+        mpSurface(std::move(pSurface))
     {}
 
     /**

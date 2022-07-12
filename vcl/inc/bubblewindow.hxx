@@ -41,8 +41,8 @@ private:
     void            RecalcTextRects();
 
 public:
-                    BubbleWindow( vcl::Window* pParent, const OUString& rTitle,
-                                  const OUString& rText, const Image& rImage );
+                    BubbleWindow( vcl::Window* pParent, OUString aTitle,
+                                  OUString aText, Image aImage );
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;

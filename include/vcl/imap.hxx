@@ -63,7 +63,7 @@ private:
 public:
 
                         ImageMap() {};
-                        ImageMap( const OUString& rName );
+                        ImageMap( OUString aName );
                         ImageMap( const ImageMap& rImageMap );
 
                         // all IMapObjects are destroyed in the destructor

@@ -24,6 +24,7 @@
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/helpers.hxx>
+#include <utility>
 #include <vcl/dibtools.hxx>
 #include <vcl/filter/SvmReader.hxx>
 #include <vcl/filter/SvmWriter.hxx>
@@ -191,9 +192,9 @@ MetaLineAction::MetaLineAction( const Point& rStart, const Point& rEnd ) :
 {}
 
 MetaLineAction::MetaLineAction( const Point& rStart, const Point& rEnd,
-                                const LineInfo& rLineInfo ) :
+                                LineInfo aLineInfo ) :
     MetaAction  ( MetaActionType::LINE ),
-    maLineInfo  ( rLineInfo ),
+    maLineInfo  (std::move( aLineInfo )),
     maStartPt   ( rStart ),
     maEndPt     ( rEnd )
 {}
@@ -451,15 +452,15 @@ MetaPolyLineAction::MetaPolyLineAction() :
 MetaPolyLineAction::~MetaPolyLineAction()
 {}
 
-MetaPolyLineAction::MetaPolyLineAction( const tools::Polygon& rPoly ) :
+MetaPolyLineAction::MetaPolyLineAction( tools::Polygon aPoly ) :
     MetaAction  ( MetaActionType::POLYLINE ),
-    maPoly      ( rPoly )
+    maPoly      (std::move( aPoly ))
 {}
 
-MetaPolyLineAction::MetaPolyLineAction( const tools::Polygon& rPoly, const LineInfo& rLineInfo ) :
+MetaPolyLineAction::MetaPolyLineAction( tools::Polygon aPoly, LineInfo aLineInfo ) :
     MetaAction  ( MetaActionType::POLYLINE ),
-    maLineInfo  ( rLineInfo ),
-    maPoly      ( rPoly )
+    maLineInfo  (std::move( aLineInfo )),
+    maPoly      (std::move( aPoly ))
 {}
 
 void MetaPolyLineAction::Execute( OutputDevice* pOut )
@@ -493,9 +494,9 @@ MetaPolygonAction::MetaPolygonAction() :
 MetaPolygonAction::~MetaPolygonAction()
 {}
 
-MetaPolygonAction::MetaPolygonAction( const tools::Polygon& rPoly ) :
+MetaPolygonAction::MetaPolygonAction( tools::Polygon aPoly ) :
     MetaAction  ( MetaActionType::POLYGON ),
-    maPoly      ( rPoly )
+    maPoly      (std::move( aPoly ))
 {}
 
 void MetaPolygonAction::Execute( OutputDevice* pOut )
@@ -525,9 +526,9 @@ MetaPolyPolygonAction::MetaPolyPolygonAction() :
 MetaPolyPolygonAction::~MetaPolyPolygonAction()
 {}
 
-MetaPolyPolygonAction::MetaPolyPolygonAction( const tools::PolyPolygon& rPolyPoly ) :
+MetaPolyPolygonAction::MetaPolyPolygonAction( tools::PolyPolygon aPolyPoly ) :
     MetaAction  ( MetaActionType::POLYPOLYGON ),
-    maPolyPoly  ( rPolyPoly )
+    maPolyPoly  (std::move( aPolyPoly ))
 {}
 
 void MetaPolyPolygonAction::Execute( OutputDevice* pOut )
@@ -560,11 +561,11 @@ MetaTextAction::MetaTextAction() :
 MetaTextAction::~MetaTextAction()
 {}
 
-MetaTextAction::MetaTextAction( const Point& rPt, const OUString& rStr,
+MetaTextAction::MetaTextAction( const Point& rPt, OUString aStr,
                                 sal_Int32 nIndex, sal_Int32 nLen ) :
     MetaAction  ( MetaActionType::TEXT ),
     maPt        ( rPt ),
-    maStr       ( rStr ),
+    maStr       (std::move( aStr )),
     mnIndex     ( nIndex ),
     mnLen       ( nLen )
 {}
@@ -606,27 +607,27 @@ MetaTextArrayAction::MetaTextArrayAction( const MetaTextArrayAction& rAction ) :
 }
 
 MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
-                                          const OUString& rStr,
-                                          const std::vector<sal_Int32>& rDXAry,
+                                          OUString aStr,
+                                          std::vector<sal_Int32> aDXAry,
                                           sal_Int32 nIndex,
                                           sal_Int32 nLen ) :
     MetaAction  ( MetaActionType::TEXTARRAY ),
     maStartPt   ( rStartPt ),
-    maStr       ( rStr ),
-    maDXAry     ( rDXAry ),
+    maStr       (std::move( aStr )),
+    maDXAry     (std::move( aDXAry )),
     mnIndex     ( nIndex ),
     mnLen       ( nLen )
 {
 }
 
 MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
-                                          const OUString& rStr,
+                                          OUString aStr,
                                           o3tl::span<const sal_Int32> pDXAry,
                                           sal_Int32 nIndex,
                                           sal_Int32 nLen ) :
     MetaAction  ( MetaActionType::TEXTARRAY ),
     maStartPt   ( rStartPt ),
-    maStr       ( rStr ),
+    maStr       (std::move( aStr )),
     maDXAry     ( pDXAry.begin(), pDXAry.end() ),
     mnIndex     ( nIndex ),
     mnLen       ( nLen )
@@ -679,11 +680,11 @@ MetaStretchTextAction::~MetaStretchTextAction()
 {}
 
 MetaStretchTextAction::MetaStretchTextAction( const Point& rPt, sal_uInt32 nWidth,
-                                              const OUString& rStr,
+                                              OUString aStr,
                                               sal_Int32 nIndex, sal_Int32 nLen ) :
     MetaAction  ( MetaActionType::STRETCHTEXT ),
     maPt        ( rPt ),
-    maStr       ( rStr ),
+    maStr       (std::move( aStr )),
     mnWidth     ( nWidth ),
     mnIndex     ( nIndex ),
     mnLen       ( nLen )
@@ -718,10 +719,10 @@ MetaTextRectAction::~MetaTextRectAction()
 {}
 
 MetaTextRectAction::MetaTextRectAction( const tools::Rectangle& rRect,
-                                        const OUString& rStr, DrawTextFlags nStyle ) :
+                                        OUString aStr, DrawTextFlags nStyle ) :
     MetaAction  ( MetaActionType::TEXTRECT ),
     maRect      ( rRect ),
-    maStr       ( rStr ),
+    maStr       (std::move( aStr )),
     mnStyle     ( nStyle )
 {}
 
@@ -1183,10 +1184,10 @@ MetaGradientAction::MetaGradientAction() :
 MetaGradientAction::~MetaGradientAction()
 {}
 
-MetaGradientAction::MetaGradientAction( const tools::Rectangle& rRect, const Gradient& rGradient ) :
+MetaGradientAction::MetaGradientAction( const tools::Rectangle& rRect, Gradient aGradient ) :
     MetaAction  ( MetaActionType::GRADIENT ),
     maRect      ( rRect ),
-    maGradient  ( rGradient )
+    maGradient  (std::move( aGradient ))
 {}
 
 void MetaGradientAction::Execute( OutputDevice* pOut )
@@ -1213,10 +1214,10 @@ MetaGradientExAction::MetaGradientExAction() :
     MetaAction  ( MetaActionType::GRADIENTEX )
 {}
 
-MetaGradientExAction::MetaGradientExAction( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient ) :
+MetaGradientExAction::MetaGradientExAction( tools::PolyPolygon aPolyPoly, Gradient aGradient ) :
     MetaAction  ( MetaActionType::GRADIENTEX ),
-    maPolyPoly  ( rPolyPoly ),
-    maGradient  ( rGradient )
+    maPolyPoly  (std::move( aPolyPoly )),
+    maGradient  (std::move( aGradient ))
 {}
 
 MetaGradientExAction::~MetaGradientExAction()
@@ -1253,9 +1254,9 @@ MetaHatchAction::MetaHatchAction() :
 MetaHatchAction::~MetaHatchAction()
 {}
 
-MetaHatchAction::MetaHatchAction( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch ) :
+MetaHatchAction::MetaHatchAction( tools::PolyPolygon aPolyPoly, const Hatch& rHatch ) :
     MetaAction  ( MetaActionType::HATCH ),
-    maPolyPoly  ( rPolyPoly ),
+    maPolyPoly  (std::move( aPolyPoly )),
     maHatch     ( rHatch )
 {}
 
@@ -1288,10 +1289,10 @@ MetaWallpaperAction::~MetaWallpaperAction()
 {}
 
 MetaWallpaperAction::MetaWallpaperAction( const tools::Rectangle& rRect,
-                                          const Wallpaper& rPaper ) :
+                                          Wallpaper aPaper ) :
     MetaAction  ( MetaActionType::WALLPAPER ),
     maRect      ( rRect ),
-    maWallpaper ( rPaper )
+    maWallpaper (std::move( aPaper ))
 {}
 
 void MetaWallpaperAction::Execute( OutputDevice* pOut )
@@ -1322,9 +1323,9 @@ MetaClipRegionAction::MetaClipRegionAction() :
 MetaClipRegionAction::~MetaClipRegionAction()
 {}
 
-MetaClipRegionAction::MetaClipRegionAction( const vcl::Region& rRegion, bool bClip ) :
+MetaClipRegionAction::MetaClipRegionAction( vcl::Region aRegion, bool bClip ) :
     MetaAction  ( MetaActionType::CLIPREGION ),
-    maRegion    ( rRegion ),
+    maRegion    (std::move( aRegion )),
     mbClip      ( bClip )
 {}
 
@@ -1390,9 +1391,9 @@ MetaISectRegionClipRegionAction::MetaISectRegionClipRegionAction() :
 MetaISectRegionClipRegionAction::~MetaISectRegionClipRegionAction()
 {}
 
-MetaISectRegionClipRegionAction::MetaISectRegionClipRegionAction( const vcl::Region& rRegion ) :
+MetaISectRegionClipRegionAction::MetaISectRegionClipRegionAction( vcl::Region aRegion ) :
     MetaAction  ( MetaActionType::ISECTREGIONCLIPREGION ),
-    maRegion    ( rRegion )
+    maRegion    (std::move( aRegion ))
 {
 }
 
@@ -1664,9 +1665,9 @@ MetaFontAction::MetaFontAction() :
 MetaFontAction::~MetaFontAction()
 {}
 
-MetaFontAction::MetaFontAction( const vcl::Font& rFont ) :
+MetaFontAction::MetaFontAction( vcl::Font aFont ) :
     MetaAction  ( MetaActionType::FONT ),
-    maFont      ( rFont )
+    maFont      (std::move( aFont ))
 {
     // #96876: because RTL_TEXTENCODING_SYMBOL is often set at the StarSymbol font,
     // we change the textencoding to RTL_TEXTENCODING_UNICODE here, which seems
@@ -1769,9 +1770,9 @@ MetaTransparentAction::MetaTransparentAction() :
 MetaTransparentAction::~MetaTransparentAction()
 {}
 
-MetaTransparentAction::MetaTransparentAction( const tools::PolyPolygon& rPolyPoly, sal_uInt16 nTransPercent ) :
+MetaTransparentAction::MetaTransparentAction( tools::PolyPolygon aPolyPoly, sal_uInt16 nTransPercent ) :
     MetaAction      ( MetaActionType::Transparent ),
-    maPolyPoly      ( rPolyPoly ),
+    maPolyPoly      (std::move( aPolyPoly )),
     mnTransPercent  ( nTransPercent )
 {}
 
@@ -1804,12 +1805,12 @@ MetaFloatTransparentAction::~MetaFloatTransparentAction()
 {}
 
 MetaFloatTransparentAction::MetaFloatTransparentAction( const GDIMetaFile& rMtf, const Point& rPos,
-                                                        const Size& rSize, const Gradient& rGradient ) :
+                                                        const Size& rSize, Gradient aGradient ) :
     MetaAction      ( MetaActionType::FLOATTRANSPARENT ),
     maMtf           ( rMtf ),
     maPoint         ( rPos ),
     maSize          ( rSize ),
-    maGradient      ( rGradient )
+    maGradient      (std::move( aGradient ))
 {}
 
 void MetaFloatTransparentAction::Execute( OutputDevice* pOut )
@@ -1843,9 +1844,9 @@ MetaEPSAction::~MetaEPSAction()
 {}
 
 MetaEPSAction::MetaEPSAction( const Point& rPoint, const Size& rSize,
-                              const GfxLink& rGfxLink, const GDIMetaFile& rSubst ) :
+                              GfxLink aGfxLink, const GDIMetaFile& rSubst ) :
     MetaAction  ( MetaActionType::EPS ),
-    maGfxLink   ( rGfxLink ),
+    maGfxLink   (std::move( aGfxLink )),
     maSubst     ( rSubst ),
     maPoint     ( rPoint ),
     maSize      ( rSize )
@@ -1916,9 +1917,9 @@ MetaCommentAction::MetaCommentAction( const MetaCommentAction& rAct ) :
     ImplInitDynamicData( rAct.mpData.get(), rAct.mnDataSize );
 }
 
-MetaCommentAction::MetaCommentAction( const OString& rComment, sal_Int32 nValue, const sal_uInt8* pData, sal_uInt32 nDataSize ) :
+MetaCommentAction::MetaCommentAction( OString aComment, sal_Int32 nValue, const sal_uInt8* pData, sal_uInt32 nDataSize ) :
     MetaAction  ( MetaActionType::COMMENT ),
-    maComment   ( rComment ),
+    maComment   (std::move( aComment )),
     mnValue     ( nValue )
 {
     ImplInitDynamicData( pData, nDataSize );

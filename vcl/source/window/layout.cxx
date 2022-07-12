@@ -36,6 +36,7 @@
 #include <o3tl/enumrange.hxx>
 #include <o3tl/string_view.hxx>
 #include <tools/stream.hxx>
+#include <utility>
 #include <vcl/builder.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/cvtgrf.hxx>
@@ -2440,7 +2441,7 @@ MessageDialog::MessageDialog(vcl::Window* pParent, WinBits nStyle)
 }
 
 MessageDialog::MessageDialog(vcl::Window* pParent,
-    const OUString &rMessage,
+    OUString aMessage,
     VclMessageType eMessageType,
     VclButtonsType eButtonsType)
     : Dialog(pParent, WB_MOVEABLE | WB_3DLOOK | WB_CLOSEABLE)
@@ -2451,7 +2452,7 @@ MessageDialog::MessageDialog(vcl::Window* pParent,
     , m_pImage(nullptr)
     , m_pPrimaryMessage(nullptr)
     , m_pSecondaryMessage(nullptr)
-    , m_sPrimaryString(rMessage)
+    , m_sPrimaryString(std::move(aMessage))
 {
     SetType(WindowType::MESSBOX);
     create_owned_areas();

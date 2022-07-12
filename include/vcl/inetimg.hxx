@@ -22,6 +22,7 @@
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 #include <sot/formats.hxx>
+#include <utility>
 
 
 class INetImage
@@ -33,12 +34,12 @@ class INetImage
 
 public:
                     INetImage(
-                        const OUString& rImageURL,
-                        const OUString& rTargetURL,
-                        const OUString& rTargetFrame )
-                    :   aImageURL( rImageURL ),
-                        aTargetURL( rTargetURL ),
-                        aTargetFrame( rTargetFrame )
+                        OUString _aImageURL,
+                        OUString _aTargetURL,
+                        OUString _aTargetFrame )
+                    :   aImageURL(std::move( _aImageURL )),
+                        aTargetURL(std::move( _aTargetURL )),
+                        aTargetFrame(std::move( _aTargetFrame ))
                     {}
                     INetImage()
                     {}

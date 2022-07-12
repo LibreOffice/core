@@ -131,7 +131,7 @@ struct TEIMEInfos
     sal_Int32   nLen;
     bool        bWasCursorOverwrite;
 
-    TEIMEInfos(const TextPaM& rPos, const OUString& rOldTextAfterStartPos);
+    TEIMEInfos(const TextPaM& rPos, OUString aOldTextAfterStartPos);
     ~TEIMEInfos();
 
     void CopyAttribs(const ExtTextInputAttr* pA, sal_Int32 nL);

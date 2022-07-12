@@ -23,6 +23,7 @@
 
 #include <cstddef>
 
+#include <utility>
 #include <vcl/textdata.hxx>
 #include "textdat2.hxx"
 
@@ -316,8 +317,8 @@ TextHint::TextHint( SfxHintId Id, sal_Int32 nValue ) : SfxHint( Id ), mnValue(nV
 {
 }
 
-TEIMEInfos::TEIMEInfos( const TextPaM& rPos, const OUString& rOldTextAfterStartPos )
-    : aOldTextAfterStartPos(rOldTextAfterStartPos)
+TEIMEInfos::TEIMEInfos( const TextPaM& rPos, OUString _aOldTextAfterStartPos )
+    : aOldTextAfterStartPos(std::move(_aOldTextAfterStartPos))
     , aPos(rPos)
     , nLen(0)
     , bWasCursorOverwrite(false)

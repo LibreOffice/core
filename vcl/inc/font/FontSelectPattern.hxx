@@ -40,7 +40,7 @@ class PhysicalFontFace;
 class VCL_DLLPUBLIC FontSelectPattern : public FontAttributes
 {
 public:
-    FontSelectPattern(const vcl::Font&, const OUString& rSearchName,
+    FontSelectPattern(const vcl::Font&, OUString aSearchName,
                       const Size&, float fExactHeight, bool bNonAntialias = false);
 #ifdef _WIN32
                     FontSelectPattern( const PhysicalFontFace&, const Size&,
