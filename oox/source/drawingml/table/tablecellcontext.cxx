@@ -36,9 +36,9 @@ TableCellContext::TableCellContext( ContextHandler2Helper const & rParent, const
 , mrTableCell( rTableCell )
 {
     if ( rAttribs.hasAttribute( XML_rowSpan ) )
-        mrTableCell.setRowSpan( rAttribs.getStringDefaulted( XML_rowSpan ).toInt32() );
+        mrTableCell.setRowSpan( rAttribs.getInteger( XML_rowSpan, 0 ) );
     if ( rAttribs.hasAttribute( XML_gridSpan ) )
-        mrTableCell.setGridSpan( rAttribs.getStringDefaulted( XML_gridSpan ).toInt32() );
+        mrTableCell.setGridSpan( rAttribs.getInteger( XML_gridSpan, 0 ) );
 
     mrTableCell.sethMerge( rAttribs.getBool( XML_hMerge, false ) );
     mrTableCell.setvMerge( rAttribs.getBool( XML_vMerge, false ) );

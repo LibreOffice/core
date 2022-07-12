@@ -74,7 +74,7 @@ ContextHandlerRef PPTShapeContext::onCreateContext( sal_Int32 aElementToken, con
 
             if( rAttribs.hasAttribute( XML_idx ) )
             {
-                sal_Int32 nSubTypeIndex = rAttribs.getStringDefaulted( XML_idx ).toInt32();
+                sal_Int32 nSubTypeIndex = rAttribs.getInteger( XML_idx, 0 );
                 mpShapePtr->setSubTypeIndex( nSubTypeIndex );
 
                 if(!oSubType.has_value() && pMasterPersist)

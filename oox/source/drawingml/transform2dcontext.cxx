@@ -96,22 +96,22 @@ ContextHandlerRef Transform2DContext::onCreateContext( sal_Int32 aElementToken, 
     switch( aElementToken )
     {
     case A_TOKEN( off ):        // horz/vert translation
-        mrShape.setPosition( awt::Point( rAttribs.getStringDefaulted( XML_x ).toInt32(), rAttribs.getStringDefaulted( XML_y ).toInt32() ) );
+        mrShape.setPosition( awt::Point( rAttribs.getInteger( XML_x, 0 ), rAttribs.getInteger( XML_y, 0 ) ) );
         break;
     case A_TOKEN( ext ):        // horz/vert size
-        mrShape.setSize( awt::Size( rAttribs.getStringDefaulted( XML_cx ).toInt32(), rAttribs.getStringDefaulted( XML_cy ).toInt32() ) );
+        mrShape.setSize( awt::Size( rAttribs.getInteger( XML_cx, 0 ), rAttribs.getInteger( XML_cy, 0 ) ) );
         break;
     case A_TOKEN( chOff ):  // horz/vert translation of children
-        mrShape.setChildPosition( awt::Point( rAttribs.getStringDefaulted( XML_x ).toInt32(), rAttribs.getStringDefaulted( XML_y ).toInt32() ) );
+        mrShape.setChildPosition( awt::Point( rAttribs.getInteger( XML_x, 0 ), rAttribs.getInteger( XML_y, 0 ) ) );
         break;
     case A_TOKEN( chExt ):  // horz/vert size of children
         {
-            sal_Int32 nChExtCx = rAttribs.getStringDefaulted(XML_cx).toInt32();
+            sal_Int32 nChExtCx = rAttribs.getInteger(XML_cx, 0);
 
             if(nChExtCx == 0)
                 nChExtCx = mrShape.getSize().Width;
 
-            sal_Int32 nChExtCy = rAttribs.getStringDefaulted(XML_cy).toInt32();
+            sal_Int32 nChExtCy = rAttribs.getInteger(XML_cy, 0);
 
             if(nChExtCy == 0)
                 nChExtCy = mrShape.getSize().Height;
