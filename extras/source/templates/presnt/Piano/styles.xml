@@ -648,6 +648,17 @@
       <loext:graphic-properties draw:fill-color="#000000"/>
       <style:paragraph-properties fo:text-align="center"/>
     </style:style>
+    <style:style style:name="MP12" style:family="paragraph">
+      <style:text-properties fo:color="#eeeeee" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
+    </style:style>
+    <style:style style:name="MP13" style:family="paragraph">
+      <style:paragraph-properties fo:text-align="center"/>
+      <style:text-properties fo:color="#eeeeee" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
+    </style:style>
+    <style:style style:name="MP14" style:family="paragraph">
+      <style:paragraph-properties fo:text-align="end"/>
+      <style:text-properties fo:color="#eeeeee" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
+    </style:style>
     <style:style style:name="MT1" style:family="text">
       <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
     </style:style>
@@ -813,7 +824,7 @@
         <text:p/>
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
       </draw:custom-shape>
-      <draw:frame presentation:style-name="Mpr3" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="6.523cm" svg:height="1.086cm" svg:x="1cm" svg:y="14.35cm">
+      <draw:frame presentation:style-name="Mpr3" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="6.523cm" svg:height="1.086cm" svg:x="1cm" svg:y="14.35cm" presentation:class="date-time">
         <draw:text-box>
           <text:p text:style-name="MP1">
             <text:span text:style-name="MT1">
@@ -822,7 +833,7 @@
           </text:p>
         </draw:text-box>
       </draw:frame>
-      <draw:frame presentation:style-name="Mpr3" draw:text-style-name="MP10" draw:layer="backgroundobjects" svg:width="8.875cm" svg:height="1.086cm" svg:x="9.563cm" svg:y="14.348cm">
+      <draw:frame presentation:style-name="Mpr3" draw:text-style-name="MP10" draw:layer="backgroundobjects" svg:width="8.875cm" svg:height="1.086cm" svg:x="9.563cm" svg:y="14.348cm" presentation:class="footer">
         <draw:text-box>
           <text:p text:style-name="MP9">
             <text:span text:style-name="MT1">
@@ -831,7 +842,7 @@
           </text:p>
         </draw:text-box>
       </draw:frame>
-      <draw:frame presentation:style-name="Mpr3" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="6.523cm" svg:height="1.086cm" svg:x="20.477cm" svg:y="14.35cm">
+      <draw:frame presentation:style-name="Mpr3" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="6.523cm" svg:height="1.086cm" svg:x="20.477cm" svg:y="14.35cm" presentation:class="page-number">
         <draw:text-box>
           <text:p text:style-name="MP3">
             <text:span text:style-name="MT1">
@@ -895,7 +906,7 @@
       </draw:frame>
       <draw:frame presentation:style-name="Mpr7" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="6.523cm" svg:height="1.086cm" svg:x="1cm" svg:y="14.35cm" presentation:class="date-time">
         <draw:text-box>
-          <text:p text:style-name="MP1">
+          <text:p text:style-name="MP12">
             <text:span text:style-name="MT1">
               <presentation:date-time/>
             </text:span>
@@ -904,7 +915,7 @@
       </draw:frame>
       <draw:frame presentation:style-name="Mpr7" draw:text-style-name="MP10" draw:layer="backgroundobjects" svg:width="8.875cm" svg:height="1.086cm" svg:x="9.563cm" svg:y="14.348cm" presentation:class="footer">
         <draw:text-box>
-          <text:p text:style-name="MP9">
+          <text:p text:style-name="MP13">
             <text:span text:style-name="MT1">
               <presentation:footer/>
             </text:span>
@@ -913,7 +924,7 @@
       </draw:frame>
       <draw:frame presentation:style-name="Mpr7" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="6.523cm" svg:height="1.086cm" svg:x="20.477cm" svg:y="14.35cm" presentation:class="page-number">
         <draw:text-box>
-          <text:p text:style-name="MP3">
+          <text:p text:style-name="MP14">
             <text:span text:style-name="MT1">
               <text:page-number/>
             </text:span>
