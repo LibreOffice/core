@@ -72,6 +72,4 @@ $(eval $(call gb_CppunitTest_use_components,sc_new_cond_format_api,\
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_new_cond_format_api))
 
-$(eval $(call gb_CppunitTest_use_unittest_configuration,sc_new_cond_format_api))
-
 # vim: set noet sw=4 ts=4:
