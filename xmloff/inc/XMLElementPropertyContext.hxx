@@ -39,7 +39,7 @@ protected:
 public:
 
     XMLElementPropertyContext( SvXMLImport& rImport, sal_Int32 nElement,
-                               const XMLPropertyState& rProp,
+                               XMLPropertyState aProp,
                                 ::std::vector< XMLPropertyState > &rProps );
 
     virtual ~XMLElementPropertyContext() override;

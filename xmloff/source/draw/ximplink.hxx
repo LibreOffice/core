@@ -37,7 +37,7 @@ public:
 
     SdXMLShapeLinkContext( SvXMLImport& rImport,
         const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes > const & rShapes);
+        css::uno::Reference< css::drawing::XShapes > xShapes);
     virtual ~SdXMLShapeLinkContext() override;
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(

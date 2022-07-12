@@ -89,7 +89,7 @@ class SdXMLImExViewBox
 
 public:
     SdXMLImExViewBox(double fX, double fY, double fW, double fH);
-    SdXMLImExViewBox(const OUString& rNew, const SvXMLUnitConverter& rConv);
+    SdXMLImExViewBox(OUString aNew, const SvXMLUnitConverter& rConv);
 
     double GetX() const { return mfX; }
     double GetY() const { return mfY; }

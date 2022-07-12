@@ -24,6 +24,7 @@
 #include <sal/log.hxx>
 #include <tools/solar.h>
 #include <PageMasterStyleMap.hxx>
+#include <utility>
 #include <xmloff/families.hxx>
 #include <xmloff/xmlaustp.hxx>
 #include <xmloff/xmlexp.hxx>
@@ -44,12 +45,12 @@ using namespace ::xmloff::token;
 
 XMLAutoStyleFamily::XMLAutoStyleFamily(
         XmlStyleFamily nFamily,
-        const OUString& rStrName,
-        const rtl::Reference < SvXMLExportPropertyMapper > &rMapper,
-        const OUString& rStrPrefix,
+        OUString aStrName,
+        rtl::Reference < SvXMLExportPropertyMapper > xMapper,
+        OUString aStrPrefix,
         bool bAsFamily ) :
-    mnFamily( nFamily ), maStrFamilyName( rStrName), mxMapper( rMapper ),
-    mnCount( 0 ), mnName( 0 ), maStrPrefix( rStrPrefix ), mbAsFamily( bAsFamily )
+    mnFamily( nFamily ), maStrFamilyName(std::move( aStrName)), mxMapper(std::move( xMapper )),
+    mnCount( 0 ), mnName( 0 ), maStrPrefix(std::move( aStrPrefix )), mbAsFamily( bAsFamily )
 {}
 
 XMLAutoStyleFamily::XMLAutoStyleFamily( XmlStyleFamily nFamily ) :

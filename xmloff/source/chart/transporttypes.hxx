@@ -21,6 +21,7 @@
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
 
+#include <utility>
 #include <vector>
 #include <map>
 #include <optional>
@@ -137,11 +138,11 @@ struct RegressionStyle
 
     OUString msStyleName;
 
-    RegressionStyle(const css::uno::Reference<
-                          css::chart2::XDataSeries >& xSeries,
-                    const OUString& sStyleName) :
-            m_xSeries    ( xSeries ),
-            msStyleName  ( sStyleName )
+    RegressionStyle(css::uno::Reference<
+                          css::chart2::XDataSeries > xSeries,
+                    OUString sStyleName) :
+            m_xSeries    (std::move( xSeries )),
+            msStyleName  (std::move( sStyleName ))
     {}
 };
 
@@ -199,26 +200,26 @@ struct DataRowPointStyle
     bool mbSymbolSizeForSeriesIsMissingInFile;
 
     DataRowPointStyle( StyleType eType
-                        , const css::uno::Reference< css::chart2::XDataSeries >& xSeries
+                        , css::uno::Reference< css::chart2::XDataSeries > xSeries
                         , sal_Int32 nPointIndex
                         , sal_Int32 nPointRepeat
-                        , const OUString& sStyleName
+                        , OUString sStyleName
                         , sal_Int32 nAttachedAxis = 0 ) :
             meType( eType ),
-            m_xSeries( xSeries ),
+            m_xSeries(std::move( xSeries )),
             m_nPointIndex( nPointIndex ),
             m_nPointRepeat( nPointRepeat ),
-            msStyleName( sStyleName ),
+            msStyleName(std::move( sStyleName )),
             mnAttachedAxis( nAttachedAxis ),
             mbSymbolSizeForSeriesIsMissingInFile( false )
         {}
 
     // ctor for use in import of <chart:data-label> as child of <chart:series>
-    DataRowPointStyle(StyleType eType, const OUString& sStyleName, sal_Int32 nAttachedAxis = 0)
+    DataRowPointStyle(StyleType eType, OUString sStyleName, sal_Int32 nAttachedAxis = 0)
         : meType(eType)
         , m_nPointIndex(0)
         , m_nPointRepeat(0)
-        , msStyleName(sStyleName)
+        , msStyleName(std::move(sStyleName))
         , mnAttachedAxis(nAttachedAxis)
         , mbSymbolSizeForSeriesIsMissingInFile(false)
     {

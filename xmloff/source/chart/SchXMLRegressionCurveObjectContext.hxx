@@ -31,7 +31,7 @@ public:
         SchXMLImportHelper& rImportHelper,
         SvXMLImport& rImport,
         std::vector< RegressionStyle >& rRegressionStyleVector,
-        const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
+        css::uno::Reference< css::chart2::XDataSeries > xSeries,
         const css::awt::Size & rChartSize );
 
     virtual ~SchXMLRegressionCurveObjectContext() override;

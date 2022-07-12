@@ -8,22 +8,24 @@
  */
 
 #include <limits.h>
+
+#include <utility>
 #include "SvXMLAttr.hxx"
 
-SvXMLAttr::SvXMLAttr( const OUString& rLName,
-                      const OUString& rValue ) :
+SvXMLAttr::SvXMLAttr( OUString aLName,
+                      OUString aValue ) :
         aPrefixPos(USHRT_MAX),
-        aLName(rLName),
-        aValue(rValue)
+        aLName(std::move(aLName)),
+        aValue(std::move(aValue))
 {
 }
 
 SvXMLAttr::SvXMLAttr( const sal_uInt16 nPos,
-                      const OUString& rLName,
-                      const OUString& rValue ) :
+                      OUString aLName,
+                      OUString aValue ) :
         aPrefixPos(nPos),
-        aLName(rLName),
-        aValue(rValue)
+        aLName(std::move(aLName)),
+        aValue(std::move(aValue))
 {
 }
 

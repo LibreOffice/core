@@ -25,6 +25,7 @@
 #include <com/sun/star/style/NumberingType.hpp>
 #include <sal/log.hxx>
 #include <sax/tools/converter.hxx>
+#include <utility>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -50,10 +51,10 @@ XMLSectionFootnoteConfigImport::XMLSectionFootnoteConfigImport(
     SvXMLImport& rImport,
     sal_Int32 /*nElement*/,
     vector<XMLPropertyState> & rProps,
-    const rtl::Reference<XMLPropertySetMapper> & rMapperRef) :
+    rtl::Reference<XMLPropertySetMapper> xMapperRef) :
         SvXMLImportContext(rImport),
         rProperties(rProps),
-        rMapper(rMapperRef)
+        rMapper(std::move(xMapperRef))
 {
 }
 

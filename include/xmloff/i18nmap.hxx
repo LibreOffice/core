@@ -24,15 +24,16 @@
 #include <xmloff/dllapi.h>
 #include <rtl/ustring.hxx>
 #include <map>
+#include <utility>
 
 class SvI18NMapEntry_Key
 {
     sal_uInt16      nKind;
     OUString   aName;
 public:
-    SvI18NMapEntry_Key( sal_uInt16 nKnd, const OUString& rName ) :
+    SvI18NMapEntry_Key( sal_uInt16 nKnd, OUString sName ) :
         nKind( nKnd ),
-        aName( rName )
+        aName(std::move( sName ))
     {
     }
 

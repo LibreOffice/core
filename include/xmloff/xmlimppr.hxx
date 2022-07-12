@@ -78,7 +78,7 @@ protected:
 public:
 
     SvXMLImportPropertyMapper(
-            const rtl::Reference< XMLPropertySetMapper >& rMapper,
+            rtl::Reference< XMLPropertySetMapper > xMapper,
             SvXMLImport& rImport);
     virtual ~SvXMLImportPropertyMapper() override;
 

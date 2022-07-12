@@ -25,6 +25,7 @@
 
 #include <sax/tools/converter.hxx>
 
+#include <utility>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/namespacemap.hxx>
@@ -339,9 +340,9 @@ bool OPropertyImport::handleAttribute(sal_Int32 nAttributeToken, const OUString&
 
 //= OPropertyElementsContext
 OPropertyElementsContext::OPropertyElementsContext(SvXMLImport& _rImport,
-        const OPropertyImportRef& _rPropertyImporter)
+        OPropertyImportRef _xPropertyImporter)
     :SvXMLImportContext(_rImport)
-    ,m_xPropertyImporter(_rPropertyImporter)
+    ,m_xPropertyImporter(std::move(_xPropertyImporter))
 {
 }
 
@@ -375,9 +376,9 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > OPropertyElementsConte
 
 //= OSinglePropertyContext
 OSinglePropertyContext::OSinglePropertyContext(SvXMLImport& _rImport,
-        const OPropertyImportRef& _rPropertyImporter)
+        OPropertyImportRef _xPropertyImporter)
     :SvXMLImportContext(_rImport)
-    ,m_xPropertyImporter(_rPropertyImporter)
+    ,m_xPropertyImporter(std::move(_xPropertyImporter))
 {
 }
 
@@ -432,9 +433,9 @@ void OSinglePropertyContext::startFastElement(
 
 //= OListPropertyContext
 OListPropertyContext::OListPropertyContext( SvXMLImport& _rImport,
-    const OPropertyImportRef& _rPropertyImporter )
+    OPropertyImportRef  _rPropertyImporter )
     :SvXMLImportContext( _rImport )
-    ,m_xPropertyImporter( _rPropertyImporter )
+    ,m_xPropertyImporter(std::move( _rPropertyImporter ))
 {
 }
 
