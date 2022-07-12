@@ -3369,102 +3369,82 @@ bool XMLTextParagraphExport::addHyperlinkAttributes(
     const Reference< XPropertyState > & rPropState,
     const Reference< XPropertySetInfo > & rPropSetInfo )
 {
-    bool bExport = false;
-    OUString sHRef, sName, sTargetFrame, sUStyleName, sVStyleName;
-    bool bServerMap = false;
+    OUString sHRef;
 
     if( rPropSetInfo->hasPropertyByName( gsHyperLinkURL ) &&
         ( !rPropState.is() || PropertyState_DIRECT_VALUE ==
                     rPropState->getPropertyState( gsHyperLinkURL ) ) )
     {
         rPropSet->getPropertyValue( gsHyperLinkURL ) >>= sHRef;
-
-        if( !sHRef.isEmpty() )
-            bExport = true;
     }
 
     if ( sHRef.isEmpty() )
     {
         // hyperlink without a URL does not make sense
-        OSL_ENSURE( false, "hyperlink without a URL --> no export to ODF" );
+        SAL_WARN("xmloff", "hyperlink without a URL --> no export to ODF");
         return false;
     }
+
+    GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE);
+    GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_HREF,
+                             GetExport().GetRelativeReference(sHRef));
 
     if ( rPropSetInfo->hasPropertyByName( gsHyperLinkName )
          && ( !rPropState.is()
               || PropertyState_DIRECT_VALUE == rPropState->getPropertyState( gsHyperLinkName ) ) )
     {
+        OUString sName;
         rPropSet->getPropertyValue( gsHyperLinkName ) >>= sName;
         if( !sName.isEmpty() )
-            bExport = true;
+            GetExport().AddAttribute(XML_NAMESPACE_OFFICE, XML_NAME, sName);
     }
 
     if ( rPropSetInfo->hasPropertyByName( gsHyperLinkTarget )
          && ( !rPropState.is()
               || PropertyState_DIRECT_VALUE == rPropState->getPropertyState( gsHyperLinkTarget ) ) )
     {
+        OUString sTargetFrame;
         rPropSet->getPropertyValue( gsHyperLinkTarget ) >>= sTargetFrame;
         if( !sTargetFrame.isEmpty() )
-            bExport = true;
+        {
+            GetExport().AddAttribute(XML_NAMESPACE_OFFICE, XML_TARGET_FRAME_NAME, sTargetFrame);
+            enum XMLTokenEnum eTok = sTargetFrame == "_blank" ? XML_NEW : XML_REPLACE;
+            GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_SHOW, eTok);
+        }
     }
 
     if ( rPropSetInfo->hasPropertyByName( gsServerMap )
          && ( !rPropState.is()
               || PropertyState_DIRECT_VALUE == rPropState->getPropertyState( gsServerMap ) ) )
     {
-        bServerMap = *o3tl::doAccess<bool>(rPropSet->getPropertyValue( gsServerMap ));
+        bool bServerMap = *o3tl::doAccess<bool>(rPropSet->getPropertyValue( gsServerMap ));
         if ( bServerMap )
-            bExport = true;
+            GetExport().AddAttribute(XML_NAMESPACE_OFFICE, XML_SERVER_MAP, XML_TRUE);
     }
 
     if ( rPropSetInfo->hasPropertyByName( gsUnvisitedCharStyleName )
          && ( !rPropState.is()
               || PropertyState_DIRECT_VALUE == rPropState->getPropertyState( gsUnvisitedCharStyleName ) ) )
     {
+        OUString sUStyleName;
         rPropSet->getPropertyValue( gsUnvisitedCharStyleName ) >>= sUStyleName;
         if( !sUStyleName.isEmpty() )
-            bExport = true;
+            GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_STYLE_NAME,
+                                     GetExport().EncodeStyleName(sUStyleName));
     }
 
     if ( rPropSetInfo->hasPropertyByName( gsVisitedCharStyleName )
          && ( !rPropState.is()
               || PropertyState_DIRECT_VALUE == rPropState->getPropertyState( gsVisitedCharStyleName ) ) )
     {
+        OUString sVStyleName;
         rPropSet->getPropertyValue( gsVisitedCharStyleName ) >>= sVStyleName;
         if( !sVStyleName.isEmpty() )
-            bExport = true;
+            GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_VISITED_STYLE_NAME,
+                                     GetExport().EncodeStyleName(sVStyleName));
     }
 
-    if ( bExport )
-    {
-        GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
-        GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, GetExport().GetRelativeReference( sHRef ) );
-
-        if( !sName.isEmpty() )
-            GetExport().AddAttribute( XML_NAMESPACE_OFFICE, XML_NAME, sName );
-
-        if( !sTargetFrame.isEmpty() )
-        {
-            GetExport().AddAttribute( XML_NAMESPACE_OFFICE,
-                                      XML_TARGET_FRAME_NAME, sTargetFrame );
-            enum XMLTokenEnum eTok = sTargetFrame == "_blank" ? XML_NEW : XML_REPLACE;
-            GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, eTok );
-        }
-
-        if( bServerMap  )
-            GetExport().AddAttribute( XML_NAMESPACE_OFFICE,
-                                      XML_SERVER_MAP, XML_TRUE );
-
-        if( !sUStyleName.isEmpty() )
-            GetExport().AddAttribute( XML_NAMESPACE_TEXT,
-              XML_STYLE_NAME, GetExport().EncodeStyleName( sUStyleName ) );
-
-        if( !sVStyleName.isEmpty() )
-            GetExport().AddAttribute( XML_NAMESPACE_TEXT,
-              XML_VISITED_STYLE_NAME, GetExport().EncodeStyleName( sVStyleName ) );
-    }
-
-    return bExport;
+    return true;
 }
 
 void XMLTextParagraphExport::exportTextRangeSpan(
