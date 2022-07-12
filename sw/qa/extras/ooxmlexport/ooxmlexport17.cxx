@@ -1050,6 +1050,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf149089, "tdf149089.docx")
     CPPUNIT_ASSERT_EQUAL( sal_Int16(text::TextGridMode::LINES), nGridMode);   // was LINES_AND_CHARS
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf139128)
+{
+    loadAndReload("tdf139128.odt");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 0
+    // i.e. the line break was lost on export.
+    assertXPath(pXmlDoc, "//w:br", 2);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
