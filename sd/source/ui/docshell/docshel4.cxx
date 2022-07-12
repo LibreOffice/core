@@ -74,7 +74,8 @@
 #include <framework/FrameworkHelper.hxx>
 #include <o3tl/string_view.hxx>
 
-#include <sfx2/zoomitem.hxx>
+#include <Window.hxx>
+#include <svl/intitem.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -835,17 +836,11 @@ void DrawDocShell::GotoBookmark(std::u16string_view rBookmark)
                 pDrawViewShell->SwitchPage(nSdPgNum);
             }
 
-            if (pDrawViewShell->GetDispatcher())
-            {
-                // show page
-                SvxZoomItem aZoom;
-                aZoom.SetType( SvxZoomType::WHOLEPAGE );
-                pDrawViewShell->GetDispatcher()->ExecuteList(SID_ATTR_ZOOM, SfxCallMode::ASYNCHRON, { &aZoom });
-            }
-
             if (pObj != nullptr)
             {
-                // select object
+                // show and select object
+                if (vcl::Window* pWindow = pDrawViewShell->GetActiveWindow())
+                    pDrawViewShell->MakeVisible(pObj->GetSnapRect(), *pWindow);
                 pDrawViewShell->GetView()->UnmarkAll();
                 pDrawViewShell->GetView()->MarkObj(
                     pObj,
