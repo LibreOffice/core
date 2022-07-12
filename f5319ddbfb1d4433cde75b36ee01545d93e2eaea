@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7af7ff80_e3d31106",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-07-12T12:03:36Z",
+      "side": 1,
+      "message": "@Tünde: very good approach! There is a regression related to the broken ODT generation, the empty style:char, which is not allowed by the OpenDocument standard, see http://www.datypic.com/sc/odf/e-style_tab-stop.html and http://www.datypic.com/sc/odf/a-style_char.html. The best would be to avoid of any DOCX related changes in the core, analyzing the text in writerfilter or in UNO API. An option is to use something extra DOCX export, if this problem raised by OpenDocument-\u003eDOCX conversion.",
+      "revId": "f5319ddbfb1d4433cde75b36ee01545d93e2eaea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91d2381f_f10b0f3f",
+        "filename": "sw/source/core/text/inftxt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1657,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-07-12T12:03:36Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 1657,
+        "startChar": 64,
+        "endLine": 1657,
+        "endChar": 73
+      },
+      "revId": "f5319ddbfb1d4433cde75b36ee01545d93e2eaea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf2e579c_901ab601",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-07-12T12:03:36Z",
+      "side": 1,
+      "message": "Octal 31 is 25 (0x19): end of medium. (Replacement character \"0019\" is visible in Tab page of paragraph setting, too.)\n\nUnit separator character is \u0027\\37\u0027 or 0x1F",
+      "range": {
+        "startLine": 296,
+        "startChar": 22,
+        "endLine": 296,
+        "endChar": 27
+      },
+      "revId": "f5319ddbfb1d4433cde75b36ee01545d93e2eaea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
