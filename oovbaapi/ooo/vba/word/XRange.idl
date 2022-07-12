@@ -23,6 +23,7 @@ module ooo {  module vba {  module word {
 interface XParagraphFormat;
 interface XStyle;
 interface XFont;
+interface XFind;
 interface XListFormat;
 interface XRange
 {
@@ -35,6 +36,8 @@ interface XRange
     // Of course Font is NOT readonly, #FIXME #TODO
     // readonly though will force an error attempting to write
     [attribute, readonly] XFont Font;
+    [attribute, readonly] XFind Find;
+
     [attribute] long LanguageID;
     [attribute] long Start;
     [attribute] long End;
