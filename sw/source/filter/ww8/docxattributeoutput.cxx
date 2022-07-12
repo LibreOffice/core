@@ -150,6 +150,7 @@
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/text/ControlCharacter.hpp>
 
 #include <algorithm>
 #include <cstddef>
@@ -3396,6 +3397,7 @@ void DocxAttributeOutput::RunText( const OUString& rText, rtl_TextEncoding /*eCh
                 prevUnicode = *pIt;
                 break;
             case 0x0b: // line break
+            case static_cast<sal_Unicode>(text::ControlCharacter::LINE_BREAK):
                 {
                     if (impl_WriteRunText( m_pSerializer, nTextToken, pBegin, pIt ) || prevUnicode < 0x0020)
                     {
