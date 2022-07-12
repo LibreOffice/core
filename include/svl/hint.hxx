@@ -70,6 +70,7 @@ enum class SfxHintId {
     ScReference,
     ScDrawLayerNew,
     ScDbAreasChanged,
+    ScAreaChanged,
     ScAreasChanged,
     ScTablesChanged,
     ScTablesRenamed,
@@ -116,6 +117,8 @@ enum class SfxHintId {
     SwNavigatorUpdateTracking,
     SwNavigatorSelectOutlinesWithSelections,
     SwLegacyModify,
+    SwCollectTextMarks,
+    SwCollectTextTOXMarksForLayout,
 
     ThisIsAnSdrHint // used to avoid dynamic_cast
 };
@@ -163,6 +166,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
     case SfxHintId::ScReference: return stream << "ScReference";
     case SfxHintId::ScDrawLayerNew: return stream << "ScDrawLayerNew";
     case SfxHintId::ScDbAreasChanged: return stream << "ScDbAreasChanged";
+    case SfxHintId::ScAreaChanged: return stream << "ScAreaChanged";
     case SfxHintId::ScAreasChanged: return stream << "ScAreasChanged";
     case SfxHintId::ScTablesChanged: return stream << "ScTablesChanged";
     case SfxHintId::ScTablesRenamed: return stream << "ScTablesRenamed";
@@ -200,6 +204,8 @@ inline std::basic_ostream<charT, traits> & operator <<(
     case SfxHintId::SwNavigatorUpdateTracking: return stream << "SwNavigatorUpdateTracking";
     case SfxHintId::SwNavigatorSelectOutlinesWithSelections:
         return stream << "SwNavigatorSelectOutlinesWithSelections";
+    case SfxHintId::SwCollectTextMarks: return stream << "SwCollectTextMarks";
+    case SfxHintId::SwCollectTextTOXMarksForLayout: return stream << "SwCollectTextTOXMarksForLayout";
     case SfxHintId::ThisIsAnSdrHint: return stream << "SdrHint";
     default: return stream << "unk(" << std::to_string(int(id)) << ")";
     }

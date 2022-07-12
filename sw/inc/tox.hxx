@@ -49,7 +49,7 @@ typedef std::vector<SwTOXMark*> SwTOXMarks;
 namespace sw {
     struct CollectTextMarksHint final : SfxHint {
         SwTOXMarks& m_rMarks;
-        CollectTextMarksHint(SwTOXMarks& rMarks) : m_rMarks(rMarks) {}
+        CollectTextMarksHint(SwTOXMarks& rMarks) : SfxHint(SfxHintId::SwCollectTextMarks), m_rMarks(rMarks) {}
     };
     struct FindContentFrameHint final : SfxHint {
         SwContentFrame*& m_rpContentFrame;
@@ -64,7 +64,8 @@ namespace sw {
     struct CollectTextTOXMarksForLayoutHint final : SfxHint {
         std::vector<std::reference_wrapper<SwTextTOXMark>>& m_rMarks;
         const SwRootFrame* m_pLayout;
-        CollectTextTOXMarksForLayoutHint(std::vector<std::reference_wrapper<SwTextTOXMark>>& rMarks, const SwRootFrame* pLayout) : m_rMarks(rMarks), m_pLayout(pLayout) {}
+        CollectTextTOXMarksForLayoutHint(std::vector<std::reference_wrapper<SwTextTOXMark>>& rMarks, const SwRootFrame* pLayout)
+            : SfxHint(SfxHintId::SwCollectTextTOXMarksForLayout), m_rMarks(rMarks), m_pLayout(pLayout) {}
     };
     SW_DLLPUBLIC auto PrepareJumpToTOXMark(SwDoc const& rDoc, OUString const& rName)
         -> std::optional<std::pair<SwTOXMark, sal_Int32>>;
