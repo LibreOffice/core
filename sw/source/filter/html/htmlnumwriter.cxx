@@ -95,7 +95,7 @@ Writer& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
         return rWrt;
     }
 
-    if (rWrt.mbXHTML && !rInfo.IsNumbered())
+    if (!rInfo.IsNumbered())
     {
         // If the list only consists of non-numbered text nodes, then don't start the list.
         bool bAtLeastOneNumbered = false;
@@ -324,7 +324,7 @@ Writer& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
     bool bListEnd = !bSameRule || rNextInfo.GetDepth() < rInfo.GetDepth() || rNextInfo.IsRestart();
 
     std::optional<bool> oAtLeastOneNumbered;
-    if (rWrt.mbXHTML && !rInfo.IsNumbered())
+    if (!rInfo.IsNumbered())
     {
         oAtLeastOneNumbered = false;
         SwNodeOffset nPos = rWrt.m_pCurrentPam->GetPoint()->nNode.GetIndex() - 1;
@@ -354,18 +354,14 @@ Writer& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
         }
     }
 
-    if (rWrt.mbXHTML)
+    // The list is numbered if the previous text node is numbered or any other previous text
+    // node is numbered.
+    bool bPrevIsNumbered = rInfo.IsNumbered() || *oAtLeastOneNumbered;
+    if ((bListEnd && bPrevIsNumbered) || (!bListEnd && rNextInfo.IsNumbered()))
     {
-        // The list is numbered if the previous text node is numbered or any other previous text
-        // node is numbered.
-        bool bPrevIsNumbered = rInfo.IsNumbered() || *oAtLeastOneNumbered;
-        // XHTML </li> for the list item content, if there is an open <li>.
-        if ((bListEnd && bPrevIsNumbered) || (!bListEnd && rNextInfo.IsNumbered()))
-        {
-            HTMLOutFuncs::Out_AsciiTag(
-                rWrt.Strm(), OStringConcatenation(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_li),
-                false);
-        }
+        HTMLOutFuncs::Out_AsciiTag(
+            rWrt.Strm(), OStringConcatenation(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_li),
+            false);
     }
 
     if (!bListEnd)
@@ -373,7 +369,7 @@ Writer& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
         return rWrt;
     }
 
-    if (rWrt.mbXHTML && !rInfo.IsNumbered())
+    if (!rInfo.IsNumbered())
     {
         // If the list only consisted of non-numbered text nodes, then don't end the list.
         if (!*oAtLeastOneNumbered)
@@ -402,7 +398,7 @@ Writer& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
         else
             aTag = OOO_STRING_SVTOOLS_HTML_orderlist;
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OStringConcatenation(rWrt.GetNamespace() + aTag), false );
-        if (rWrt.mbXHTML && (nNextDepth != 0 || i != 1))
+        if (nNextDepth != 0 || i != 1)
         {
             HTMLOutFuncs::Out_AsciiTag(
                 rWrt.Strm(), OStringConcatenation(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_li),
