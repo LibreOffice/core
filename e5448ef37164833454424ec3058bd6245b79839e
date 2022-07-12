@@ -51,6 +51,23 @@
       "parentUuid": "10a9286d_2e15fb6e",
       "revId": "e5448ef37164833454424ec3058bd6245b79839e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afd82a41_c9373c39",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-07-12T05:15:59Z",
+      "side": 1,
+      "message": "Cannot find a reference on BZ, closest is bug 138587. We could file a new ticket and separate this part or keep just one patch, as you like.",
+      "revId": "e5448ef37164833454424ec3058bd6245b79839e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
