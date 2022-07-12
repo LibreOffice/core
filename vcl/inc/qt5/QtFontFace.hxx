@@ -64,7 +64,7 @@ private:
     typedef enum { Font, FontDB } FontIdType;
 
     QtFontFace(const QtFontFace&);
-    QtFontFace(const FontAttributes&, const QString& rFontID, const FontIdType);
+    QtFontFace(const FontAttributes&, QString rFontID, const FontIdType);
 
     const QString m_aFontId;
     const FontIdType m_eFontIdType;

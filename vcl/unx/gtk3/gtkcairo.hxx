@@ -25,7 +25,7 @@ namespace cairo {
         CairoSurfaceSharedPtr mpSurface;
     public:
         /// takes over ownership of passed cairo_surface
-        explicit Gtk3Surface(const CairoSurfaceSharedPtr& pSurface);
+        explicit Gtk3Surface(CairoSurfaceSharedPtr pSurface);
         /// create surface on subarea of given drawable
         explicit Gtk3Surface(const GtkSalGraphics* pGraphics, int x, int y, int width, int height);
 

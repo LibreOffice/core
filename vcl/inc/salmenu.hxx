@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_INC_SALMENU_HXX
 #define INCLUDED_VCL_INC_SALMENU_HXX
 
+#include <utility>
 #include <vcl/menu.hxx>
 #include <vcl/image.hxx>
 
@@ -44,8 +45,8 @@ struct SalMenuButtonItem
     OUString            maToolTipText;
 
     SalMenuButtonItem() : mnId( 0 ) {}
-    SalMenuButtonItem( sal_uInt16 i_nId, const Image& rImg, const OUString& i_rTTText )
-    : mnId( i_nId ), maImage( rImg ), maToolTipText( i_rTTText ) {}
+    SalMenuButtonItem( sal_uInt16 i_nId, Image aImg, OUString  i_TTText )
+    : mnId( i_nId ), maImage(std::move( aImg )), maToolTipText(std::move( i_TTText )) {}
 };
 
 class VCL_PLUGIN_PUBLIC SalMenuItem

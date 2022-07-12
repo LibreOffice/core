@@ -24,6 +24,7 @@
 #include <tools/stream.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <utility>
 
 namespace vcl
 {
@@ -33,8 +34,8 @@ private:
     INetURLObject maSwapURL;
 
 public:
-    SwapFile(INetURLObject const& rSwapURL)
-        : maSwapURL(rSwapURL)
+    SwapFile(INetURLObject aSwapURL)
+        : maSwapURL(std::move(aSwapURL))
     {
     }
 

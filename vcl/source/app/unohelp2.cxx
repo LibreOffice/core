@@ -18,6 +18,7 @@
  */
 
 #include <sal/log.hxx>
+#include <utility>
 #include <vcl/unohelp2.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
@@ -34,7 +35,7 @@ using namespace ::com::sun::star;
 
 namespace vcl::unohelper {
 
-    TextDataObject::TextDataObject( const OUString& rText ) : maText( rText )
+    TextDataObject::TextDataObject( OUString aText ) : maText(std::move( aText ))
     {
     }
 

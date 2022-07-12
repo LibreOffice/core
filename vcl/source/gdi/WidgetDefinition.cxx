@@ -8,6 +8,7 @@
  *
  */
 
+#include <utility>
 #include <widgetdraw/WidgetDefinition.hxx>
 
 #include <sal/config.h>
@@ -122,18 +123,17 @@ WidgetDefinitionPart::getStates(ControlType eType, ControlPart ePart, ControlSta
     return aStatesToAdd;
 }
 
-WidgetDefinitionState::WidgetDefinitionState(OString const& sEnabled, OString const& sFocused,
-                                             OString const& sPressed, OString const& sRollover,
-                                             OString const& sDefault, OString const& sSelected,
-                                             OString const& sButtonValue, OString const& sExtra)
-    : msEnabled(sEnabled)
-    , msFocused(sFocused)
-    , msPressed(sPressed)
-    , msRollover(sRollover)
-    , msDefault(sDefault)
-    , msSelected(sSelected)
-    , msButtonValue(sButtonValue)
-    , msExtra(sExtra)
+WidgetDefinitionState::WidgetDefinitionState(OString sEnabled, OString sFocused, OString sPressed,
+                                             OString sRollover, OString sDefault, OString sSelected,
+                                             OString sButtonValue, OString sExtra)
+    : msEnabled(std::move(sEnabled))
+    , msFocused(std::move(sFocused))
+    , msPressed(std::move(sPressed))
+    , msRollover(std::move(sRollover))
+    , msDefault(std::move(sDefault))
+    , msSelected(std::move(sSelected))
+    , msButtonValue(std::move(sButtonValue))
+    , msExtra(std::move(sExtra))
 {
 }
 

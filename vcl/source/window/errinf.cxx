@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 
 #include <tools/debug.hxx>
+#include <utility>
 #include <vcl/errinf.hxx>
 
 #include <algorithm>
@@ -321,8 +322,8 @@ DialogMask DynamicErrorInfo::GetDialogMask() const
 }
 
 StringErrorInfo::StringErrorInfo(
-    ErrCode nArgUserId, const OUString& aStringP, DialogMask nMask)
-: DynamicErrorInfo(nArgUserId, nMask), aString(aStringP)
+    ErrCode nArgUserId, OUString aStringP, DialogMask nMask)
+: DynamicErrorInfo(nArgUserId, nMask), aString(std::move(aStringP))
 {
 }
 

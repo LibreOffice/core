@@ -22,6 +22,7 @@
 
 #include <sal/config.h>
 
+#include <utility>
 #include <vcl/graph.hxx>
 
 enum class ConvertDataFormat
@@ -51,8 +52,8 @@ public:
     SvStream&           mrStm;
     ConvertDataFormat   mnFormat;
 
-                        ConvertData( const Graphic& rGraphic, SvStream& rStm, ConvertDataFormat nFormat ) :
-                            maGraphic( rGraphic ), mrStm( rStm ), mnFormat( nFormat ) {}
+                        ConvertData( Graphic aGraphic, SvStream& rStm, ConvertDataFormat nFormat ) :
+                            maGraphic(std::move( aGraphic )), mrStm( rStm ), mnFormat( nFormat ) {}
 };
 
 typedef sal_uLong (*SALGRFCVTPROC)( void* pInst,

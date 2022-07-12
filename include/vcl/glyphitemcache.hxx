@@ -78,8 +78,8 @@ private:
         vcl::text::ComplexTextLayoutFlags layoutMode;
         LanguageType digitLanguage;
         size_t hashValue;
-        CachedGlyphsKey(const VclPtr<const OutputDevice>& dev, const OUString& t, sal_Int32 i,
-                        sal_Int32 l, tools::Long w);
+        CachedGlyphsKey(const VclPtr<const OutputDevice>& dev, OUString t, sal_Int32 i, sal_Int32 l,
+                        tools::Long w);
         bool operator==(const CachedGlyphsKey& other) const;
     };
     struct CachedGlyphsHash

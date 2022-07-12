@@ -21,6 +21,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/fract.hxx>
 #include <tools/GenericTypeSerializer.hxx>
+#include <utility>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/mapmod.hxx>
@@ -51,13 +52,13 @@ IMapObject::IMapObject()
 {
 }
 
-IMapObject::IMapObject( const OUString& rURL, const OUString& rAltText, const OUString& rDesc,
-                        const OUString& rTarget, const OUString& rName, bool bURLActive )
-: aURL( rURL )
-, aAltText( rAltText )
-, aDesc( rDesc )
-, aTarget( rTarget )
-, aName( rName )
+IMapObject::IMapObject( OUString _aURL, OUString _aAltText, OUString _aDesc,
+                        OUString _aTarget, OUString _aName, bool bURLActive )
+: aURL(std::move( _aURL ))
+, aAltText(std::move( _aAltText ))
+, aDesc(std::move( _aDesc ))
+, aTarget(std::move( _aTarget ))
+, aName(std::move( _aName ))
 , bActive( bURLActive )
 , nReadVersion( 0 )
 {
@@ -550,8 +551,8 @@ bool IMapPolygonObject::IsEqual( const IMapPolygonObject& rEqObj )
 |*
 \******************************************************************************/
 
-ImageMap::ImageMap( const OUString& rName )
-:   aName( rName )
+ImageMap::ImageMap( OUString _aName )
+:   aName(std::move( _aName ))
 {
 }
 

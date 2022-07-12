@@ -92,9 +92,8 @@ enum VersionComparisonOp
 
 struct DriverInfo
 {
-    DriverInfo(OperatingSystem os, const OUString& vendor, VersionComparisonOp op,
-               uint64_t driverVersion, bool bAllowListed = false,
-               const char* suggestedVersion = nullptr);
+    DriverInfo(OperatingSystem os, OUString vendor, VersionComparisonOp op, uint64_t driverVersion,
+               bool bAllowListed = false, const char* suggestedVersion = nullptr);
 
     DriverInfo();
 
@@ -117,7 +116,7 @@ struct DriverInfo
 class VCL_DLLPUBLIC Parser
 {
 public:
-    Parser(const OUString& rURL, std::vector<DriverInfo>& rDriverList, VersionType versionType);
+    Parser(OUString aURL, std::vector<DriverInfo>& rDriverList, VersionType versionType);
     bool parse();
 
 private:

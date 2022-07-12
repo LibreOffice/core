@@ -68,12 +68,12 @@ struct ImplToolItem
                         mbExpand:1;
 
                         ImplToolItem();
-                        ImplToolItem( ToolBoxItemId nItemId, const Image& rImage,
+                        ImplToolItem( ToolBoxItemId nItemId, Image aImage,
                                       ToolBoxItemBits nItemBits );
-                        ImplToolItem( ToolBoxItemId nItemId, const OUString& rTxt,
+                        ImplToolItem( ToolBoxItemId nItemId, OUString aTxt,
                                       ToolBoxItemBits nItemBits );
-                        ImplToolItem( ToolBoxItemId nItemId, const Image& rImage,
-                                      const OUString& rTxt,
+                        ImplToolItem( ToolBoxItemId nItemId, Image aImage,
+                                      OUString aTxt,
                                       ToolBoxItemBits nItemBits );
 
     // returns the size of an item, taking toolbox orientation into account

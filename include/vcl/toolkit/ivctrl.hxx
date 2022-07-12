@@ -108,7 +108,7 @@ class SvxIconChoiceCtrlEntry
                             }
 
 public:
-                            SvxIconChoiceCtrlEntry( const OUString& rText, const Image& rImage );
+                            SvxIconChoiceCtrlEntry( OUString aText, Image aImage );
 
     const Image&            GetImage () const { return aImage; }
     void                    SetText ( const OUString& rText ) { aText = rText; }

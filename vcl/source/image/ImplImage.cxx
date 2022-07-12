@@ -18,6 +18,7 @@
  */
 
 #include <sal/log.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/settings.hxx>
@@ -35,9 +36,9 @@ ImplImage::ImplImage(const BitmapEx &rBitmapEx)
 {
 }
 
-ImplImage::ImplImage(const OUString &aStockName)
+ImplImage::ImplImage(OUString aStockName)
     : maBitmapChecksum(0)
-    , maStockName(aStockName)
+    , maStockName(std::move(aStockName))
 {
 }
 

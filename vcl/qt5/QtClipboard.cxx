@@ -22,12 +22,13 @@
 
 #include <cassert>
 #include <map>
+#include <utility>
 
-QtClipboard::QtClipboard(const OUString& aModeString, const QClipboard::Mode aMode)
+QtClipboard::QtClipboard(OUString aModeString, const QClipboard::Mode aMode)
     : cppu::WeakComponentImplHelper<css::datatransfer::clipboard::XSystemClipboard,
                                     css::datatransfer::clipboard::XFlushableClipboard,
                                     XServiceInfo>(m_aMutex)
-    , m_aClipboardName(aModeString)
+    , m_aClipboardName(std::move(aModeString))
     , m_aClipboardMode(aMode)
     , m_bOwnClipboardChange(false)
     , m_bDoClear(false)
