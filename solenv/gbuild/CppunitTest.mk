@@ -354,17 +354,25 @@ $(call gb_CppunitTest__use_configuration,$(1),xcsxcu,$(INSTROOT)/$(LIBO_SHARE_FO
 
 endef
 
-# Use configuration in $(WORKDIR)/unittest/registry.
-define gb_CppunitTest_use_unittest_configuration
+# Use configuration in $(WORKDIR)/unittest/registry-common.
+define gb_CppunitTest_use_common_configuration
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_Package_get_target,test_unittest)
-$(call gb_CppunitTest__use_configuration,$(1),xcsxcu,$(WORKDIR)/unittest/registry)
+$(call gb_CppunitTest__use_configuration,$(1),xcsxcu,$(WORKDIR)/unittest/registry-common)
 
 endef
 
-# Use standard configuration: instdir config + unittest config (in this order!)
+# Use configuration in $(WORKDIR)/unittest/registry-user-ui
+define gb_CppunitTest_use_user_ui_configuration
+$(call gb_CppunitTest_get_target,$(1)) : $(call gb_Package_get_target,test_unittest)
+$(call gb_CppunitTest__use_configuration,$(1),xcsxcu,$(WORKDIR)/unittest/registry-user-ui)
+
+endef
+
+# Use standard configuration: instdir config + common + user-ui config (in this order!)
 define gb_CppunitTest_use_configuration
 $(call gb_CppunitTest_use_instdir_configuration,$(1))
-$(call gb_CppunitTest_use_unittest_configuration,$(1))
+$(call gb_CppunitTest_use_common_configuration,$(1))
+$(call gb_CppunitTest_use_user_ui_configuration,$(1))
 
 endef
 

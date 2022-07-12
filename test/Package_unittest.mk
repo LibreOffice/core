@@ -11,7 +11,8 @@ $(eval $(call gb_Package_Package,test_unittest,$(SRCDIR)/test/user-template))
 
 $(eval $(call gb_Package_set_outdir,test_unittest,$(WORKDIR)))
 
-$(eval $(call gb_Package_add_file,test_unittest,unittest/registry/modifications.xcd,registry/modifications.xcd))
+$(eval $(call gb_Package_add_file,test_unittest,unittest/registry-common/modifications.xcd,registry-common/modifications.xcd))
+$(eval $(call gb_Package_add_file,test_unittest,unittest/registry-user-ui/user-ui.xcd,registry-user-ui/user-ui.xcd))
 $(eval $(call gb_Package_add_file,test_unittest,unittest/user/wordbook/sl.dic,user/wordbook/sl.dic))
 $(eval $(call gb_Package_add_file,test_unittest,unittest/user/wordbook/en-US.dic,user/wordbook/en-US.dic))
 $(eval $(call gb_Package_add_file,test_unittest,unittest/user/database/biblio.odb,user/database/biblio.odb))

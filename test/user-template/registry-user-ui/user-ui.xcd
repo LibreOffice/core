@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+<oor:data xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:oor="http://openoffice.org/2001/registry">
+ <oor:component-data oor:name="Paths" oor:package="org.openoffice.Office">
+  <node oor:name="Paths">
+   <node oor:name="UIConfig" oor:op="replace">
+    <node oor:name="InternalPaths">
+     <node oor:name="$(userurl)/config" oor:op="fuse"/>
+    </node>
+   </node>
+  </node>
+ </oor:component-data>
+</oor:data>
