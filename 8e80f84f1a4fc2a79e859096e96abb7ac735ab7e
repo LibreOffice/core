@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c9a41eb_b476873d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-07-12T14:57:38Z",
+      "side": 1,
+      "message": "Hi Xisco, I don\u0027t know it does not really test if the tags are closed, just if there is a xpath error. Should I parse the string and check every li/ol has its corresponding closing partner including the text?",
+      "revId": "8e80f84f1a4fc2a79e859096e96abb7ac735ab7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
