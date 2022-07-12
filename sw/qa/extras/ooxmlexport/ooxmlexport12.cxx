@@ -1374,6 +1374,17 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149708)
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:rPr/w:ins");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf149707)
+{
+    loadAndSave("tdf149711.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveFrom");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:moveTo");
+    // These were missing
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:rPr/w:moveFrom");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:pPr/w:rPr/w:moveTo");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf70234)
 {
     loadAndSave("tdf70234.docx");
