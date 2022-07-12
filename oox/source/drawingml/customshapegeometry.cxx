@@ -996,8 +996,8 @@ Path2DContext::Path2DContext( ContextHandler2Helper const & rParent, const Attri
 , mrSegments( rSegments )
 , mrCustomShapeProperties( rCustomShapeProperties )
 {
-    rPath2D.w = rAttribs.getString( XML_w, "" ).toInt64();
-    rPath2D.h = rAttribs.getString( XML_h, "" ).toInt64();
+    rPath2D.w = rAttribs.getHyper( XML_w, 0 );
+    rPath2D.h = rAttribs.getHyper( XML_h, 0 );
     rPath2D.fill = rAttribs.getToken( XML_fill, XML_norm );
     rPath2D.stroke = rAttribs.getBool( XML_stroke, true );
     rPath2D.extrusionOk = rAttribs.getBool( XML_extrusionOk, true );

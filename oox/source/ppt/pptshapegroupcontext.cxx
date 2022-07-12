@@ -77,7 +77,7 @@ ContextHandlerRef PPTShapeGroupContext::onCreateContext( sal_Int32 aElementToken
     case PPT_TOKEN( ph ):
         mpGroupShapePtr->setSubType( rAttribs.getToken( XML_type, FastToken::DONTKNOW ) );
         if( rAttribs.hasAttribute( XML_idx ) )
-            mpGroupShapePtr->setSubTypeIndex( rAttribs.getStringDefaulted( XML_idx ).toInt32() );
+            mpGroupShapePtr->setSubTypeIndex( rAttribs.getInteger( XML_idx, 0 ) );
         break;
     // nvSpPr CT_ShapeNonVisual end
 

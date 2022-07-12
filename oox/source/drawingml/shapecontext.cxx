@@ -78,7 +78,7 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 aElementToken, const 
     case XML_ph:
         mpShapePtr->setSubType( rAttribs.getToken( XML_type, XML_obj ) );
         if( rAttribs.hasAttribute( XML_idx ) )
-            mpShapePtr->setSubTypeIndex( rAttribs.getStringDefaulted( XML_idx ).toInt32() );
+            mpShapePtr->setSubTypeIndex( rAttribs.getInteger( XML_idx, 0 ) );
         break;
     // nvSpPr CT_ShapeNonVisual end
 
