@@ -9,6 +9,7 @@
  */
 #pragma once
 
+#include <utility>
 #include <vcl/bitmap.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/test/TestResult.hxx>
@@ -25,8 +26,8 @@ class VCL_PLUGIN_PUBLIC VclTestResult
 
 public:
     VclTestResult(OUString atestName, OUString atestStatus, Bitmap atestBitmap)
-        : m_aTestName(atestName)
-        , m_aTestStatus(atestStatus)
+        : m_aTestName(std::move(atestName))
+        , m_aTestStatus(std::move(atestStatus))
         , m_aResultantBitmap(atestBitmap)
     {
     }

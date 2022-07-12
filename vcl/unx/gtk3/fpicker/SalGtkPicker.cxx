@@ -30,6 +30,7 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
 
@@ -104,13 +105,13 @@ GtkWindow* RunDialog::GetTransientFor()
     return GTK_WINDOW(widget_get_toplevel(pFrame->getWindow()));
 }
 
-RunDialog::RunDialog(GtkWidget *pDialog, const uno::Reference<awt::XExtendedToolkit>& rToolkit,
-                                         const uno::Reference<frame::XDesktop>& rDesktop)
+RunDialog::RunDialog(GtkWidget *pDialog, uno::Reference<awt::XExtendedToolkit> xToolkit,
+                                         uno::Reference<frame::XDesktop> xDesktop)
     : cppu::WeakComponentImplHelper<awt::XTopWindowListener, frame::XTerminateListener>(maLock)
     , mpDialog(pDialog)
     , mbTerminateDesktop(false)
-    , mxToolkit(rToolkit)
-    , mxDesktop(rDesktop)
+    , mxToolkit(std::move(xToolkit))
+    , mxDesktop(std::move(xDesktop))
 {
 }
 
@@ -168,8 +169,8 @@ namespace
     private:
         css::uno::Reference<css::frame::XDesktop> mxDesktop;
     public:
-        ExecuteInfo(const css::uno::Reference<css::frame::XDesktop>& rDesktop)
-            : mxDesktop(rDesktop)
+        ExecuteInfo(css::uno::Reference<css::frame::XDesktop> xDesktop)
+            : mxDesktop(std::move(xDesktop))
         {
         }
         void terminate()
@@ -225,10 +226,10 @@ IMPL_STATIC_LINK(RunDialog, TerminateDesktop, void*, p, void)
     delete pExecuteInfo;
 }
 
-SalGtkPicker::SalGtkPicker( const uno::Reference<uno::XComponentContext>& xContext )
+SalGtkPicker::SalGtkPicker( uno::Reference<uno::XComponentContext> xContext )
     : m_pParentWidget(nullptr)
     , m_pDialog(nullptr)
-    , m_xContext(xContext)
+    , m_xContext(std::move(xContext))
 {
 }
 

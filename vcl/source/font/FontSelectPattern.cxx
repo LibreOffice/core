@@ -21,6 +21,7 @@
 #include <o3tl/safeint.hxx>
 #include <tools/gen.hxx>
 
+#include <utility>
 #include <vcl/font.hxx>
 
 #include <font/FontSelectPattern.hxx>
@@ -34,8 +35,8 @@ const char FontSelectPattern::FEAT_PREFIX = ':';
 const char FontSelectPattern::FEAT_SEPARATOR = '&';
 
 FontSelectPattern::FontSelectPattern( const vcl::Font& rFont,
-    const OUString& rSearchName, const Size& rSize, float fExactHeight, bool bNonAntialias)
-    : maSearchName( rSearchName )
+    OUString aSearchName, const Size& rSize, float fExactHeight, bool bNonAntialias)
+    : maSearchName(std::move( aSearchName ))
     , mnWidth( rSize.Width() )
     , mnHeight( rSize.Height() )
     , mfExactHeight( fExactHeight)

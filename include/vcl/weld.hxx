@@ -18,6 +18,7 @@
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <vcl/dllapi.h>
+#include <utility>
 #include <vcl/vclenum.hxx>
 #include <vcl/font.hxx>
 #include <vcl/vclptr.hxx>
@@ -491,8 +492,8 @@ public:
 class VCL_DLLPUBLIC ScreenShotEntry
 {
 public:
-    ScreenShotEntry(const OString& rHelpId, const basegfx::B2IRange& rB2IRange)
-        : msHelpId(rHelpId)
+    ScreenShotEntry(OString aHelpId, const basegfx::B2IRange& rB2IRange)
+        : msHelpId(std::move(aHelpId))
         , maB2IRange(rB2IRange)
     {
     }
@@ -666,19 +667,19 @@ struct VCL_DLLPUBLIC ComboBoxEntry
     OUString sString;
     OUString sId;
     OUString sImage;
-    ComboBoxEntry(const OUString& rString)
-        : sString(rString)
+    ComboBoxEntry(OUString _aString)
+        : sString(std::move(_aString))
     {
     }
-    ComboBoxEntry(const OUString& rString, const OUString& rId)
-        : sString(rString)
-        , sId(rId)
+    ComboBoxEntry(OUString _aString, OUString _aId)
+        : sString(std::move(_aString))
+        , sId(std::move(_aId))
     {
     }
-    ComboBoxEntry(const OUString& rString, const OUString& rId, const OUString& rImage)
-        : sString(rString)
-        , sId(rId)
-        , sImage(rImage)
+    ComboBoxEntry(OUString _aString, OUString _aId, OUString _aImage)
+        : sString(std::move(_aString))
+        , sId(std::move(_aId))
+        , sImage(std::move(_aImage))
     {
     }
 };

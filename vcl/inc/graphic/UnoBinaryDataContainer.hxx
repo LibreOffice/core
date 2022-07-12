@@ -20,6 +20,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
+#include <utility>
 #include <vcl/BinaryDataContainer.hxx>
 
 class UnoBinaryDataContainer final
@@ -29,8 +30,8 @@ private:
     BinaryDataContainer maBinaryDataContainer;
 
 public:
-    UnoBinaryDataContainer(BinaryDataContainer const& rBinaryDataContainer)
-        : maBinaryDataContainer(rBinaryDataContainer)
+    UnoBinaryDataContainer(BinaryDataContainer aBinaryDataContainer)
+        : maBinaryDataContainer(std::move(aBinaryDataContainer))
     {
     }
 

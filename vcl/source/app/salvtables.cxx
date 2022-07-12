@@ -639,7 +639,7 @@ private:
 
 public:
     SalFlashAttention(VclPtr<vcl::Window> xWidget)
-        : m_xWidget(xWidget)
+        : m_xWidget(std::move(xWidget))
         , m_aFlashTimer("SalFlashAttention")
         , m_bOrigControlBackground(false)
         , m_nFlashCount(1)

@@ -57,7 +57,7 @@ private:
     bool searchPDF(std::shared_ptr<VectorGraphicData> const& rData);
 
 public:
-    VectorGraphicSearch(Graphic const& rGraphic);
+    VectorGraphicSearch(Graphic aGraphic);
     ~VectorGraphicSearch();
     bool search(OUString const& rSearchString,
                 VectorGraphicSearchOptions const& rOptions = VectorGraphicSearchOptions());

@@ -15,6 +15,7 @@
 #include <unotools/resmgr.hxx>
 #include <tools/fldunit.hxx>
 #include <vcl/dllapi.h>
+#include <utility>
 #include <vcl/window.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/toolboxid.hxx>
@@ -56,9 +57,9 @@ struct ComboBoxTextItem
 {
     OUString m_sItem;
     OString m_sId;
-    ComboBoxTextItem(const OUString& rItem, const OString& rId)
-        : m_sItem(rItem)
-        , m_sId(rId)
+    ComboBoxTextItem(OUString sItem, OString sId)
+        : m_sItem(std::move(sItem))
+        , m_sId(std::move(sId))
     {
     }
 };
@@ -74,8 +75,8 @@ public:
 
 public:
     VclBuilder(vcl::Window* pParent, const OUString& sUIRootDir, const OUString& sUIFile,
-               const OString& sID = OString(),
-               const css::uno::Reference<css::frame::XFrame>& rFrame
+               OString sID = OString(),
+               css::uno::Reference<css::frame::XFrame> xFrame
                = css::uno::Reference<css::frame::XFrame>(),
                bool bLegacy = true,
                const NotebookBarAddonsItem* pNotebookBarAddonsItem = nullptr);
@@ -142,8 +143,8 @@ private:
         OString m_sID;
         VclPtr<vcl::Window> m_pWindow;
         PackingData m_aPackingData;
-        WinAndId(const OString &rId, vcl::Window *pWindow, bool bVertical)
-            : m_sID(rId)
+        WinAndId(OString sId, vcl::Window *pWindow, bool bVertical)
+            : m_sID(std::move(sId))
             , m_pWindow(pWindow)
             , m_aPackingData(bVertical)
         {
@@ -155,7 +156,7 @@ private:
     {
         OString m_sID;
         VclPtr<Menu> m_pMenu;
-        MenuAndId(const OString &rId, Menu *pMenu);
+        MenuAndId(OString sId, Menu *pMenu);
     };
     std::vector<MenuAndId> m_aMenus;
 
@@ -163,9 +164,9 @@ private:
     {
         OString m_sID;
         OString m_sValue;
-        StringPair(const OString &rId, const OString &rValue)
-            : m_sID(rId)
-            , m_sValue(rValue)
+        StringPair(OString sId, OString sValue)
+            : m_sID(std::move(sId))
+            , m_sValue(std::move(sValue))
         {
         }
     };
@@ -174,9 +175,9 @@ private:
     {
         OString m_sID;
         OUString m_sValue;
-        UStringPair(const OString &rId, const OUString &rValue)
-            : m_sID(rId)
-            , m_sValue(rValue)
+        UStringPair(OString sId, OUString sValue)
+            : m_sID(std::move(sId))
+            , m_sValue(std::move(sValue))
         {
         }
     };
@@ -188,9 +189,9 @@ private:
         OString m_sID;
         OUString m_sValue;
         bool m_bRadio;
-        ButtonImageWidgetMap(const OString &rId, const OUString &rValue, bool bRadio)
-            : m_sID(rId)
-            , m_sValue(rValue)
+        ButtonImageWidgetMap(OString sId, OUString sValue, bool bRadio)
+            : m_sID(std::move(sId))
+            , m_sValue(std::move(sValue))
             , m_bRadio(bRadio)
         {
         }
@@ -206,9 +207,9 @@ private:
         OString m_sID;
         OUString m_sValue;
         sal_Int32 m_nActiveId;
-        ComboBoxModelMap(const OString &rId, const OUString &rValue, sal_Int32 nActiveId)
-            : m_sID(rId)
-            , m_sValue(rValue)
+        ComboBoxModelMap(OString sId, OUString sValue, sal_Int32 nActiveId)
+            : m_sID(std::move(sId))
+            , m_sValue(std::move(sValue))
             , m_nActiveId(nActiveId)
         {
         }

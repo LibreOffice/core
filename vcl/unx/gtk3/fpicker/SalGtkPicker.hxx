@@ -51,7 +51,7 @@
 class SalGtkPicker
 {
     public:
-                 SalGtkPicker( const css::uno::Reference<css::uno::XComponentContext>& xContext );
+                 SalGtkPicker( css::uno::Reference<css::uno::XComponentContext> xContext );
         virtual ~SalGtkPicker();
     protected:
         osl::Mutex m_rbHelperMtx;
@@ -113,8 +113,8 @@ public:
     virtual void SAL_CALL notifyTermination( const css::lang::EventObject& aEvent ) override;
 public:
     RunDialog(GtkWidget *pDialog,
-        const css::uno::Reference<css::awt::XExtendedToolkit>& rToolkit,
-        const css::uno::Reference<css::frame::XDesktop>& rDesktop);
+        css::uno::Reference<css::awt::XExtendedToolkit> xToolkit,
+        css::uno::Reference<css::frame::XDesktop> xDesktop);
     virtual ~RunDialog() override;
     gint run();
     void cancel();

@@ -62,7 +62,7 @@ class PhysicalFontFaceCollection;
 class VCL_PLUGIN_PUBLIC PhysicalFontFamily
 {
 public:
-    PhysicalFontFamily(const OUString& rSearchName);
+    PhysicalFontFamily(OUString aSearchName);
     ~PhysicalFontFamily();
 
     // Avoid implicitly defined copy constructors/assignments for the DLLPUBLIC class (they may

@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <utility>
 #include <vcl/uitest/logger.hxx>
 #include <sal/log.hxx>
 
@@ -110,24 +111,24 @@ ImplToolItem::ImplToolItem()
     init(ToolBoxItemId(0), ToolBoxItemBits::NONE, true);
 }
 
-ImplToolItem::ImplToolItem( ToolBoxItemId nItemId, const Image& rImage,
+ImplToolItem::ImplToolItem( ToolBoxItemId nItemId, Image aImage,
                             ToolBoxItemBits nItemBits ) :
-    maImage( rImage )
+    maImage(std::move( aImage ))
 {
     init(nItemId, nItemBits, false);
 }
 
-ImplToolItem::ImplToolItem( ToolBoxItemId nItemId, const OUString& rText,
+ImplToolItem::ImplToolItem( ToolBoxItemId nItemId, OUString aText,
                             ToolBoxItemBits nItemBits ) :
-    maText( rText )
+    maText(std::move( aText ))
 {
     init(nItemId, nItemBits, false);
 }
 
-ImplToolItem::ImplToolItem( ToolBoxItemId nItemId, const Image& rImage,
-                            const OUString& rText, ToolBoxItemBits nItemBits ) :
-    maImage( rImage ),
-    maText( rText )
+ImplToolItem::ImplToolItem( ToolBoxItemId nItemId, Image aImage,
+                            OUString aText, ToolBoxItemBits nItemBits ) :
+    maImage(std::move( aImage )),
+    maText(std::move( aText ))
 {
     init(nItemId, nItemBits, false);
 }

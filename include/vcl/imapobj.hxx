@@ -80,11 +80,11 @@ protected:
 public:
 
                         IMapObject();
-                        IMapObject( const OUString& rURL,
-                                    const OUString& rAltText,
-                                    const OUString& rDesc,
-                                    const OUString& rTarget,
-                                    const OUString& rName,
+                        IMapObject( OUString aURL,
+                                    OUString aAltText,
+                                    OUString aDesc,
+                                    OUString aTarget,
+                                    OUString aName,
                                     bool bActive );
     virtual             ~IMapObject() {};
 

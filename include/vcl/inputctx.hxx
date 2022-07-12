@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_INPUTCTX_HXX
 
 #include <vcl/dllapi.h>
+#include <utility>
 #include <vcl/font.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
@@ -48,8 +49,8 @@ public:
                     InputContext( const InputContext& rInputContext ) :
                         maFont( rInputContext.maFont )
                     { mnOptions = rInputContext.mnOptions; }
-                    InputContext( const vcl::Font& rFont, InputContextFlags nOptions = InputContextFlags::NONE ) :
-                        maFont( rFont )
+                    InputContext( vcl::Font aFont, InputContextFlags nOptions = InputContextFlags::NONE ) :
+                        maFont(std::move( aFont ))
                     { mnOptions = nOptions; }
 
     const vcl::Font& GetFont() const { return maFont; }

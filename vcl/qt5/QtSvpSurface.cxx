@@ -33,10 +33,10 @@ Size get_surface_size(cairo_surface_t* surface)
 
 namespace cairo
 {
-QtSvpSurface::QtSvpSurface(const CairoSurfaceSharedPtr& pSurface)
+QtSvpSurface::QtSvpSurface(CairoSurfaceSharedPtr pSurface)
     : m_pGraphics(nullptr)
     , m_pCairoContext(nullptr)
-    , m_pSurface(pSurface)
+    , m_pSurface(std::move(pSurface))
 {
 }
 

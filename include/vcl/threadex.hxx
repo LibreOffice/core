@@ -26,6 +26,7 @@
 
 #include <optional>
 #include <memory>
+#include <utility>
 
 namespace vcl
 {
@@ -65,8 +66,8 @@ public:
     }
 
 private:
-    explicit GenericSolarThreadExecutor( FuncT const& func )
-        : m_func(func), m_result() {}
+    explicit GenericSolarThreadExecutor( FuncT func )
+        : m_func(std::move(func)), m_result() {}
 
     virtual void doIt() override
     {
@@ -103,8 +104,8 @@ public:
     }
 
 private:
-    explicit GenericSolarThreadExecutor( FuncT const& func )
-        : m_func(func) {}
+    explicit GenericSolarThreadExecutor( FuncT func )
+        : m_func(std::move(func)) {}
 
     virtual void doIt() override
     {
