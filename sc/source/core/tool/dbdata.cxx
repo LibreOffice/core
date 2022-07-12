@@ -916,12 +916,9 @@ OUString ScDBData::GetTableColumnName( SCCOL nCol ) const
 
 void ScDBData::Notify( const SfxHint& rHint )
 {
-    const ScHint* pScHint = dynamic_cast<const ScHint*>(&rHint);
-    if (!pScHint)
+    if (rHint.GetId() != SfxHintId::ScDataChanged)
         return;
-
-    if (pScHint->GetId() != SfxHintId::ScDataChanged)
-        return;
+    const ScHint* pScHint = static_cast<const ScHint*>(&rHint);
 
     mbTableColumnNamesDirty = true;
     if (!mpContainer)

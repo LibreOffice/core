@@ -159,12 +159,16 @@ void SwTOXMark::Notify(const SfxHint& rHint)
         CallSwClientNotify(rHint);
         if (pLegacyHint->m_pOld && (RES_REMOVE_UNO_OBJECT == pLegacyHint->m_pOld->Which()))
             SetXTOXMark(css::uno::Reference<css::text::XDocumentIndexMark>(nullptr));
-    } else if (auto pCollectHint = dynamic_cast<const sw::CollectTextMarksHint*>(&rHint))
+    }
+    else if (rHint.GetId() == SfxHintId::SwCollectTextMarks)
     {
+        auto pCollectHint = static_cast<const sw::CollectTextMarksHint*>(&rHint);
         if(GetTextTOXMark())
             pCollectHint->m_rMarks.push_back(this);
-    } else if (auto pCollectLayoutHint = dynamic_cast<const sw::CollectTextTOXMarksForLayoutHint*>(&rHint))
+    }
+    else if (rHint.GetId() == SfxHintId::SwCollectTextTOXMarksForLayout)
     {
+        auto pCollectLayoutHint = static_cast<const sw::CollectTextTOXMarksForLayoutHint*>(&rHint);
         if(!GetTextTOXMark())
             return;
         auto& rTextMark = *GetTextTOXMark();

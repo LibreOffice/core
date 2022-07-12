@@ -173,9 +173,7 @@ void ScSortedRangeCache::Notify(const SfxHint& rHint)
 {
     if (!mpDoc->IsInDtorClear())
     {
-        const ScHint* p = dynamic_cast<const ScHint*>(&rHint);
-        if ((p && (p->GetId() == SfxHintId::ScDataChanged))
-            || dynamic_cast<const ScAreaChangedHint*>(&rHint))
+        if (rHint.GetId() == SfxHintId::ScDataChanged || rHint.GetId() == SfxHintId::ScAreaChanged)
         {
             mpDoc->RemoveSortedRangeCache(*this);
             delete this;

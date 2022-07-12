@@ -153,8 +153,7 @@ uno::Reference< chart::XChartData > ScChartListener::GetUnoSource() const
 
 void ScChartListener::Notify( const SfxHint& rHint )
 {
-    const ScHint* p = dynamic_cast<const ScHint*>(&rHint);
-    if (p && (p->GetId() == SfxHintId::ScDataChanged))
+    if (rHint.GetId() == SfxHintId::ScDataChanged)
         SetUpdateQueue();
 }
 
