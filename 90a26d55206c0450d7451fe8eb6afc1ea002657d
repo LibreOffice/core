@@ -16,6 +16,24 @@
       "message": "ooxmlexport12\u0027s testTdf112202 is also positively affected.  You can add\n        assertXPathContent(pXmlDoc, \"/root/page[3]/body//txt\", \"AUFGABENSTELLUNG\");\n\n\n\n\n",
       "revId": "90a26d55206c0450d7451fe8eb6afc1ea002657d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2edfb03c_5808d742",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2022-07-12T10:04:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9bd9a2ec_d74987ad",
+      "revId": "90a26d55206c0450d7451fe8eb6afc1ea002657d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

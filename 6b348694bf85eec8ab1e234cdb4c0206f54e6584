@@ -122,6 +122,30 @@
       },
       "revId": "6b348694bf85eec8ab1e234cdb4c0206f54e6584",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79d67e53_60031809",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 3897,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2022-07-12T10:04:23Z",
+      "side": 1,
+      "message": "I think the current one approach is better: it is quite exceeding right now, but defines all possible column break types. Less problems if someone will decide to emit BREAK_BOTH for any reason.\nBut this is disputable anyway: this part of code is problematic in any case :-)",
+      "parentUuid": "3a78f12c_64e34a1a",
+      "range": {
+        "startLine": 3897,
+        "startChar": 16,
+        "endLine": 3897,
+        "endChar": 63
+      },
+      "revId": "6b348694bf85eec8ab1e234cdb4c0206f54e6584",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
