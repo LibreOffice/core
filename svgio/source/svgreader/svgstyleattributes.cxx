@@ -35,6 +35,7 @@
 #include <drawinglayer/processor2d/textaspolygonextractor2d.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <svgclippathnode.hxx>
+#include <svgfilternode.hxx>
 #include <svgmasknode.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svgmarkernode.hxx>
@@ -1203,6 +1204,12 @@ namespace svgio::svgreader
                 pClip = pClip->getSvgStyleAttributes()->accessClipPathXLink();
             }
 
+            const SvgFilterNode* pFilter = accessFilterXLink();
+            if(pFilter)
+            {
+                pFilter->apply(aSource, pTransform);
+            }
+
             if(!aSource.empty()) // test again, applied clipPath may have lead to empty geometry
             {
                 const SvgMaskNode* pMask = accessMaskXLink();
@@ -1270,6 +1277,7 @@ namespace svgio::svgreader
             maTextAnchor(TextAnchor::notset),
             maVisibility(Visibility::notset),
             mpClipPathXLink(nullptr),
+            mpFilterXLink(nullptr),
             mpMaskXLink(nullptr),
             mpMarkerStartXLink(nullptr),
             mpMarkerMidXLink(nullptr),
@@ -1504,6 +1512,11 @@ namespace svgio::svgreader
                             maStopOpacity = aNum;
                         }
                     }
+                    break;
+                }
+                case SVGToken::Filter:
+                {
+                    readLocalUrl(aContent, maFilterXLink);
                     break;
                 }
                 case SVGToken::Font:
@@ -1791,6 +1804,7 @@ namespace svgio::svgreader
                     break;
                 }
                 case SVGToken::Color:
+                case SVGToken::FloodColor:
                 {
                     SvgPaint aSvgPaint;
                     OUString aURL;
@@ -1807,6 +1821,7 @@ namespace svgio::svgreader
                     break;
                 }
                 case SVGToken::Opacity:
+                case SVGToken::FloodOpacity:
                 {
                     SvgNumber aNum;
 
@@ -2832,6 +2847,27 @@ namespace svgio::svgreader
 
             return mpClipPathXLink;
         }
+
+        OUString const & SvgStyleAttributes::getFilterXLink() const
+        {
+            return maFilterXLink;
+        }
+
+        const SvgFilterNode* SvgStyleAttributes::accessFilterXLink() const
+        {
+            if(!mpFilterXLink)
+            {
+                const OUString aFilter(getFilterXLink());
+
+                if(!aFilter.isEmpty())
+                {
+                    const_cast< SvgStyleAttributes* >(this)->mpFilterXLink = dynamic_cast< const SvgFilterNode* >(mrOwner.getDocument().findSvgNodeById(aFilter));
+                }
+            }
+
+            return mpFilterXLink;
+        }
+
 
         OUString SvgStyleAttributes::getMaskXLink() const
         {

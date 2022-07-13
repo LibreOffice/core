@@ -48,14 +48,16 @@ $(eval $(call gb_Library_use_libraries,svgio,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,svgio,\
+    svgio/source/svgreader/svganode \
     svgio/source/svgreader/svgcharacternode \
     svgio/source/svgreader/svgcirclenode \
     svgio/source/svgreader/svgclippathnode \
     svgio/source/svgreader/svgdocument \
     svgio/source/svgreader/svgdocumenthandler \
     svgio/source/svgreader/svgellipsenode \
+    svgio/source/svgreader/svgfefloodnode \
+    svgio/source/svgreader/svgfilternode \
     svgio/source/svgreader/svggnode \
-    svgio/source/svgreader/svganode \
     svgio/source/svgreader/svggradientnode \
     svgio/source/svgreader/svggradientstopnode \
     svgio/source/svgreader/svgimagenode \

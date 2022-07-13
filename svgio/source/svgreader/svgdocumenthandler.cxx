@@ -44,6 +44,8 @@
 #include <svgmasknode.hxx>
 #include <svgmarkernode.hxx>
 #include <svgpatternnode.hxx>
+#include <svgfefloodnode.hxx>
+#include <svgfilternode.hxx>
 #include <svgtitledescnode.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
@@ -402,6 +404,22 @@ namespace
                     break;
                 }
 
+                case SVGToken::FeFlood:
+                {
+                    /// new node for filter
+                    mpTarget = new SvgFeFlood(maDocument, mpTarget);
+                    mpTarget->parseAttributes(xAttribs);
+                    break;
+                }
+
+                case SVGToken::Filter:
+                {
+                    /// new node for filter
+                    mpTarget = new SvgFilterNode(maDocument, mpTarget);
+                    mpTarget->parseAttributes(xAttribs);
+                    break;
+                }
+
                 default:
                 {
                     /// invalid token, ignore
@@ -479,6 +497,12 @@ namespace
 
                 /// structural element pattern
                 case SVGToken::Pattern:
+
+                /// structural element feFlood
+                case SVGToken::FeFlood:
+
+                /// structural element filter
+                case SVGToken::Filter:
 
                 /// content handling after parsing
                 {

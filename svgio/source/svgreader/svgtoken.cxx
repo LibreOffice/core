@@ -42,6 +42,11 @@ namespace svgio::svgreader
         const char aSVGStrRotate[] = "rotate";
         const char aSVGStrTextLength[] = "textLength";
         const char aSVGStrLengthAdjust[] = "lengthAdjust";
+        const char aSVGStrFeFlood[] = "feFlood";
+        const char aSVGStrFilter[] = "filter";
+        const char aSVGStrFilterUnits[] = "filterUnits";
+        const char aSVGStrFloodColor[] = "flood-color";
+        const char aSVGStrFloodOpacity[] = "flood-opacity";
         const char aSVGStrFont[] = "font";
         const char aSVGStrFontFamily[] = "font-family";
         const char aSVGStrFontSize[] = "font-size";
@@ -188,6 +193,11 @@ namespace svgio::svgreader
                 { aSVGStrRotate, SVGToken::Rotate },
                 { aSVGStrTextLength, SVGToken::TextLength },
                 { aSVGStrLengthAdjust, SVGToken::LengthAdjust },
+                { aSVGStrFeFlood, SVGToken::FeFlood },
+                { aSVGStrFilter, SVGToken::Filter },
+                { aSVGStrFilterUnits, SVGToken::FilterUnits },
+                { aSVGStrFloodColor, SVGToken::FloodColor },
+                { aSVGStrFloodOpacity, SVGToken::FloodOpacity },
                 { aSVGStrFont, SVGToken::Font },
                 { aSVGStrFontFamily, SVGToken::FontFamily },
                 { aSVGStrFontSize, SVGToken::FontSize },
