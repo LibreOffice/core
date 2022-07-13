@@ -1704,6 +1704,52 @@ DateOrder ImpSvNumberInputScan::GetDateOrder( bool bFromFormatIfNoPattern )
     return pFormatter->GetLocaleData()->getDateOrder();
 }
 
+LongDateOrder ImpSvNumberInputScan::GetMiddleMonthLongDateOrder( bool bFormatTurn,
+                                                                 const LocaleDataWrapper* pLoc,
+                                                                 DateOrder eDateOrder )
+{
+    if (MayBeMonthDate())
+        return (nMayBeMonthDate == 2) ? LongDateOrder::DMY : LongDateOrder::YMD;
+
+    LongDateOrder eLDO;
+    const sal_uInt32 nExactDateOrder = (bFormatTurn ? mpFormat->GetExactDateOrder() : 0);
+    if (!nExactDateOrder)
+        eLDO = pLoc->getLongDateOrder();
+    else if ((((nExactDateOrder >> 16) & 0xff) == 'Y') && ((nExactDateOrder & 0xff) == 'D'))
+        eLDO = LongDateOrder::YMD;
+    else if ((((nExactDateOrder >> 16) & 0xff) == 'D') && ((nExactDateOrder & 0xff) == 'Y'))
+        eLDO = LongDateOrder::DMY;
+    else
+        eLDO = pLoc->getLongDateOrder();
+    if (eLDO != LongDateOrder::YMD && eLDO != LongDateOrder::DMY)
+    {
+        switch (eDateOrder)
+        {
+            case DateOrder::YMD:
+                eLDO = LongDateOrder::YMD;
+            break;
+            case DateOrder::DMY:
+                eLDO = LongDateOrder::DMY;
+            break;
+            default:
+                ;   // nothing, not a date
+        }
+    }
+    else if (eLDO == LongDateOrder::DMY && eDateOrder == DateOrder::YMD)
+    {
+        // Check possible order and maybe switch.
+        if (!ImplGetDay(0) && ImplGetDay(1))
+            eLDO = LongDateOrder::YMD;
+    }
+    else if (eLDO == LongDateOrder::YMD && eDateOrder == DateOrder::DMY)
+    {
+        // Check possible order and maybe switch.
+        if (!ImplGetDay(1) && ImplGetDay(0))
+            eLDO = LongDateOrder::DMY;
+    }
+    return eLDO;
+}
+
 bool ImpSvNumberInputScan::GetDateRef( double& fDays, sal_uInt16& nCounter )
 {
     using namespace ::com::sun::star::i18n;
@@ -2060,14 +2106,14 @@ input for the following reasons:
             case 2:             // month in the middle (10 Jan 94)
             {
                 pCal->setValue( CalendarFieldIndex::MONTH, std::abs(nMonth)-1 );
-                DateOrder eDF = (MayBeMonthDate() ? (nMayBeMonthDate == 2 ? DateOrder::DMY : DateOrder::YMD) : DateFmt);
-                switch (eDF)
+                const LongDateOrder eLDO = GetMiddleMonthLongDateOrder( bFormatTurn, pLoc, DateFmt);
+                switch (eLDO)
                 {
-                case DateOrder::DMY:
+                case LongDateOrder::DMY:
                     pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
                     pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(1) );
                     break;
-                case DateOrder::YMD:
+                case LongDateOrder::YMD:
                     pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
                     pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
                     break;
@@ -2143,15 +2189,17 @@ input for the following reasons:
                 }
                 break;
             case 2:             // month in the middle (10 Jan 94 8:23)
+            {
                 nCounter = 2;
                 pCal->setValue( CalendarFieldIndex::MONTH, std::abs(nMonth)-1 );
-                switch (DateFmt)
+                const LongDateOrder eLDO = GetMiddleMonthLongDateOrder( bFormatTurn, pLoc, DateFmt);
+                switch (eLDO)
                 {
-                case DateOrder::DMY:
+                case LongDateOrder::DMY:
                     pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
                     pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(1) );
                     break;
-                case DateOrder::YMD:
+                case LongDateOrder::YMD:
                     pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
                     pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
                     break;
@@ -2160,6 +2208,7 @@ input for the following reasons:
                     break;
                 }
                 break;
+            }
             default:            // else, e.g. month at the end (94 10 Jan 8:23)
                 nCounter = 2;
                 res = false;
