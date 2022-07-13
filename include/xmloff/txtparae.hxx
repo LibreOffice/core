@@ -50,7 +50,7 @@ namespace com::sun::star
 {
     namespace beans { class XPropertySet; class XPropertyState;
                       class XPropertySetInfo; }
-    namespace container { class XEnumeration; class XIndexAccess; }
+    namespace container { class XEnumeration; class XIndexAccess; class XNameReplace; }
     namespace text { class XTextContent; class XTextRange; class XText;
                      class XFootnote; class XTextFrame; class XTextSection;
                      class XTextField; }
@@ -182,16 +182,11 @@ public:
         return xRubyPropMapper;
     }
 
-    OUString FindTextStyleAndHyperlink(
+    OUString FindTextStyle(
             const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
-            bool& rbHyperlink,
             bool& rbHasCharStyle,
             bool& rbHasAutoStyle,
             const XMLPropertyState** pAddState = nullptr) const;
-    bool addHyperlinkAttributes(
-        const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
-        const css::uno::Reference< css::beans::XPropertyState > & rPropState,
-        const css::uno::Reference< css::beans::XPropertySetInfo > & rPropSetInfo );
 
     void exportTextRangeEnumeration(
         const css::uno::Reference< css::container::XEnumeration > & rRangeEnum,
