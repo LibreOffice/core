@@ -566,6 +566,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
                     if( ! rReq.IsAPI() )
                         rReq.Done();
+                    TestHintWindow();
                 }
                 //! otherwise an error ?
             }
