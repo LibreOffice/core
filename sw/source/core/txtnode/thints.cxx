@@ -3302,13 +3302,12 @@ bool SwpHints::TryInsertHint(
     {
         // There may be more than one character style at the current position.
         // Take care of the sort number.
-        // Special case ruby portion: During import, the ruby attribute is set
-        // multiple times
-        // Special case hyperlink: During import, the ruby attribute is set
-        // multiple times
         // FME 2007-11-08 #i82989# in NOHINTADJUST mode, we want to insert
         // character attributes directly
-        if ( RES_TXTATR_CHARFMT  == nWhich && !bNoHintAdjustMode )
+        if (!bNoHintAdjustMode
+            && (   (RES_TXTATR_CHARFMT == nWhich)
+                // tdf#149978 also for import of automatic styles, could be produced by non-LO application
+                || (RES_TXTATR_AUTOFMT == nWhich && rNode.GetDoc().IsInXMLImport())))
         {
             BuildPortions( rNode, *pHint, nMode );
         }
