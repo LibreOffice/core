@@ -943,6 +943,15 @@ void* ToolBox::GetItemData( ToolBoxItemId nItemId ) const
         return nullptr;
 }
 
+static Image ImplMirrorImage( const Image& rImage )
+{
+    BitmapEx    aMirrBitmapEx( rImage.GetBitmapEx() );
+
+    aMirrBitmapEx.Mirror( BmpMirrorFlags::Horizontal );
+
+    return Image( aMirrBitmapEx );
+}
+
 void ToolBox::SetItemImage( ToolBoxItemId nItemId, const Image& rImage )
 {
     ImplToolItems::size_type nPos = GetItemPos( nItemId );
@@ -953,7 +962,10 @@ void ToolBox::SetItemImage( ToolBoxItemId nItemId, const Image& rImage )
     ImplToolItem* pItem = &mpData->m_aItems[nPos];
     Size aOldSize = pItem->maImage.GetSizePixel();
 
-    pItem->maImage = rImage;
+    if (pItem->mbMirrorMode)
+        pItem->maImage = ImplMirrorImage(rImage);
+    else
+        pItem->maImage = rImage;
 
     // only once all is calculated, do extra work
     if (!mbCalc)
@@ -1001,15 +1013,6 @@ void ToolBox::SetItemImageAngle( ToolBoxItemId nItemId, Degree10 nAngle10 )
         else
             ImplUpdateItem(nPos);
     }
-}
-
-static Image ImplMirrorImage( const Image& rImage )
-{
-    BitmapEx    aMirrBitmapEx( rImage.GetBitmapEx() );
-
-    aMirrBitmapEx.Mirror( BmpMirrorFlags::Horizontal );
-
-    return Image( aMirrBitmapEx );
 }
 
 void ToolBox::SetItemImageMirrorMode( ToolBoxItemId nItemId, bool bMirror )
