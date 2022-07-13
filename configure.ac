@@ -1777,14 +1777,6 @@ libo_FUZZ_ARG_ENABLE(cve-tests,
         [Prevent CVE tests to be executed]),
 ,)
 
-libo_FUZZ_ARG_ENABLE(chart-tests,
-    AS_HELP_STRING([--enable-chart-tests],
-        [Executes chart XShape tests. In a perfect world these tests would be
-         stable and everyone could run them, in reality it is best to run them
-         only on a few machines that are known to work and maintained by people
-         who can judge if a test failure is a regression or not.]),
-,)
-
 AC_ARG_ENABLE(build-opensymbol,
     AS_HELP_STRING([--enable-build-opensymbol],
         [Do not use the prebuilt opens___.ttf. Build it instead. This needs
@@ -11005,18 +10997,6 @@ if test "$enable_cve_tests" = "no"; then
     AC_SUBST(DISABLE_CVE_TESTS)
 else
     AC_MSG_RESULT([yes])
-fi
-
-dnl ===================================================================
-dnl Check for enabling chart XShape tests
-dnl ===================================================================
-AC_MSG_CHECKING([whether to execute chart XShape tests])
-if test "$enable_chart_tests" = "yes" -o '(' "$_os" = "WINNT" -a "$enable_chart_tests" != "no" ')'; then
-    AC_MSG_RESULT([yes])
-    ENABLE_CHART_TESTS=TRUE
-    AC_SUBST(ENABLE_CHART_TESTS)
-else
-    AC_MSG_RESULT([no])
 fi
 
 dnl ===================================================================
