@@ -371,6 +371,18 @@ CPPUNIT_TEST_FIXTURE(Test, testDateFormFormats)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf149978)
+{
+    load(mpTestDocumentPath, "tdf149978.fodt");
+    // on Linux the bug only reproduces if a document has been loaded previously
+    load(mpTestDocumentPath, "tdf149978.fodt");
+    // this was nondeterministic so try 10 times
+    for (int i = 1; i <= 10; ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL(COL_WHITE, getProperty<Color>(getRun(getParagraph(i), 2, "bar"), "CharBackColor"));
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf64038)
 {
     load(mpTestDocumentPath, "space.odt");
