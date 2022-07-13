@@ -153,6 +153,7 @@ namespace svgio::svgreader
             GradientUnits,
             GradientTransform,
             SpreadMethod,
+            Href,
             XlinkHref,
             StopColor,
             StopOpacity,
