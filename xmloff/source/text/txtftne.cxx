@@ -89,38 +89,10 @@ void XMLTextParagraphExport::exportTextFootnote(
     {
         // create span (for citation mark) if necessary; footnote content
         // will be handled via exportTextFootnoteHelper, exportText
-        bool bHasHyperlink;
         bool bIsUICharStyle = false;
         bool bHasAutoStyle = false;
 
-        OUString sStyle = FindTextStyleAndHyperlink( rPropSet, bHasHyperlink,
-                                                     bIsUICharStyle, bHasAutoStyle );
-
-        // export hyperlink (if we have one)
-        Reference < XPropertySetInfo > xPropSetInfo;
-        if( bHasHyperlink )
-        {
-            Reference<XPropertyState> xPropState( rPropSet, UNO_QUERY );
-            xPropSetInfo = rPropSet->getPropertySetInfo();
-            bHasHyperlink =
-                addHyperlinkAttributes( rPropSet, xPropState, xPropSetInfo );
-        }
-        SvXMLElementExport aHyperlink( GetExport(), bHasHyperlink,
-                                       XML_NAMESPACE_TEXT, XML_A,
-                                       false, false );
-
-        if( bHasHyperlink )
-        {
-            // export events (if supported)
-            OUString sHyperLinkEvents("HyperLinkEvents");
-            if (xPropSetInfo->hasPropertyByName(sHyperLinkEvents))
-            {
-                Any a = rPropSet->getPropertyValue(sHyperLinkEvents);
-                Reference<XNameReplace> xName;
-                a >>= xName;
-                GetExport().GetEventExport().Export(xName, false);
-            }
-        }
+        OUString sStyle = FindTextStyle( rPropSet, bIsUICharStyle, bHasAutoStyle );
 
         {
             XMLTextCharStyleNamesElementExport aCharStylesExport(
