@@ -474,7 +474,7 @@ void ThreeDHelper::convertElevationRotationDegToXYZAngleRad(
         //sR!=0 cR!=0 cE==0
         //element 12 + 22 --> y=0 or M_PI and x=+-M_PI/2
         //-->element 13/23:
-        z = atan(sin(R)/(cos(R)*sin(E)));
+        z = atan2(sin(R), cos(R) * sin(E));
         //use element 13 for sign for x
         if( (sin(R)*sin(z))>0.0 )
             x = M_PI_2;
@@ -638,7 +638,7 @@ void ThreeDHelper::convertXYZAngleRadToElevationRotationDeg(
                 //siny == 0 && cosx == 0 && cosz != 0 && sinz != 0
                 //element 11 && 13
                 double f13 = sin(x)*sin(z);
-                R = atan( f13/f11 );
+                R = atan2(f13, f11);
 
                 if(f11<0)
                     R+=M_PI;
@@ -678,7 +678,7 @@ void ThreeDHelper::convertXYZAngleRadToElevationRotationDeg(
             //element 22 && 23
             double f22 = cos(x)*cos(z);
             double f23 = cos(z)*sin(x);
-            E = atan( f23/(f22*cos(R)) );
+            E = atan2(f23, f22*cos(R));
             if( (f22*cos(E))<0 )
                 E+=M_PI;
         }
@@ -703,15 +703,15 @@ void ThreeDHelper::convertXYZAngleRadToElevationRotationDeg(
         {
             //sinY == 0 && all other !=0
             double f13 = sin(x)*sin(z);
-            R = atan( f13/f11 );
+            R = atan2(f13, f11);
             if( (f11*cos(R))<0.0 )
                 R+=M_PI;
 
             double f22 = cos(x)*cos(z);
             if( !lcl_isCosZero(R) )
-                E = atan( cos(z)*sin(x) /( f22*cos(R) ) );
+                E = atan2(cos(z) * sin(x),  f22 * cos(R));
             else
-                E = atan( cos(y)*sin(z) /( f22*sin(R) ) );
+                E = atan2(cos(y)*sin(z), f22 * sin(R));
             if( (f22*cos(E))<0 )
                 E+=M_PI;
         }
@@ -739,7 +739,7 @@ void ThreeDHelper::convertXYZAngleRadToElevationRotationDeg(
         {
             //cosY!=0 sinY!=0 sinX=0 sinZ=0
             double f13 = cos(x)*cos(z)*sin(y);
-            R = atan( f13/f11 );
+            R = atan2(f13, f11);
             //R = asin(f13);
             if( f11<0 )
                 R+=M_PI;
@@ -767,14 +767,14 @@ void ThreeDHelper::convertXYZAngleRadToElevationRotationDeg(
         {
             //cosY!=0 sinY!=0 sinX=0 sinZ!=0 cosZ!=0
             double f13 = cos(x)*cos(z)*sin(y);
-            R = atan( f13/f11 );
+            R = atan2(f13, f11);
 
             if( f11<0 )
                 R+=M_PI;
 
             double f21 = cos(y)*sin(z);
             double f22 = cos(x)*cos(z);
-            E = atan(f21/(f22*sin(R)) );
+            E = atan2(f21, f22*sin(R));
 
             if( (f22*cos(E))<0.0 )
                 E+=M_PI;
@@ -814,7 +814,7 @@ void ThreeDHelper::convertXYZAngleRadToElevationRotationDeg(
         {
             //cosY!=0 sinY!=0 cosX=0 sinZ!=0 cosZ!=0
             //element 13/11
-            R = atan( sin(x)*sin(z)/(cos(y)*cos(z)) );
+            R = atan2(sin(x) * sin(z), cos(y) * cos(z));
             //use 13 for 'sign'
             if( (sin(x)*sin(z))<0.0 )
                 R += M_PI;
@@ -843,12 +843,12 @@ void ThreeDHelper::convertXYZAngleRadToElevationRotationDeg(
     {
         //cosY!=0 sinY!=0 sinX!=0 cosX!=0 cosZ=0
         //element 21/23
-        R=atan(-cos(y)/(cos(x)*sin(y)));
+        R=atan2(-cos(y), cos(x) * sin(y));
         //use element 13 for 'sign'
         if( (sin(x)*sin(z)*sin(R))<0.0 )
             R+=M_PI;
         //element 21/22
-        E=atan( cos(y)*sin(z)/(sin(R)*sin(x)*sin(y)*sin(z)) );
+        E=atan2(cos(y) * sin(z), sin(R) * sin(x) * sin(y) * sin(z));
         //use element 23 for 'sign'
         if( (-cos(x)*sin(y)*sin(z)*cos(R)*sin(E))<0.0 )
             E+=M_PI;
@@ -858,13 +858,13 @@ void ThreeDHelper::convertXYZAngleRadToElevationRotationDeg(
         //cosY!=0 sinY!=0 sinX!=0 cosX!=0 sinZ!=0 cosZ!=0
         //13/11:
         double f13 = sin(x)*sin(z)+cos(x)*cos(z)*sin(y);
-        R = atan( f13/ f11 );
+        R = atan2(f13, f11);
         if(f11<0.0)
             R+=M_PI;
         double f22 = cos(x)*cos(z)+sin(x)*sin(y)*sin(z);
         double f23 = cos(x)*sin(y)*sin(z)-cos(z)*sin(x);
         //23/22:
-        E = atan( -1.0*f23/(f22*cos(R)) );
+        E = atan2(-1.0 * f23, f22*cos(R));
         if(f22<0.0)
             E+=M_PI;
     }
