@@ -2072,11 +2072,42 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::finishParagraph(
 }
 
 uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::insertTextPortion(
-        const OUString& /*rText*/,
-        const uno::Sequence< beans::PropertyValue >& /*rCharAndParaProps*/,
-        const uno::Reference< text::XTextRange>& /*rTextRange*/ )
+        const OUString& rText,
+        const uno::Sequence< beans::PropertyValue >& rCharAndParaProps,
+        const uno::Reference< text::XTextRange>& rTextRange )
 {
-    uno::Reference< text::XTextRange > xRet;
+    SolarMutexGuard aGuard;
+
+    SvxEditSource* pEditSource = GetEditSource();
+    SvxTextForwarder* pTextForwarder = pEditSource ? pEditSource->GetTextForwarder() : nullptr;
+    uno::Reference<text::XTextRange> xRet;
+    if (pTextForwarder)
+    {
+        uno::Reference<beans::XPropertySet> xPropSet(rTextRange, uno::UNO_QUERY);
+        if (!xPropSet.is())
+            throw lang::IllegalArgumentException();
+
+        uno::Any aAny = xPropSet->getPropertyValue(UNO_TR_PROP_SELECTION);
+        text::TextRangeSelection aSel = aAny.get<text::TextRangeSelection>();
+
+        ESelection aESel = toESelection(aSel);
+        pTextForwarder->InsertText(rText, aESel);
+        pEditSource->UpdateData();
+
+        pTextForwarder->RemoveAttribs(aESel);
+        pEditSource->UpdateData();
+
+        SfxItemSet aItemSet( *pTextForwarder->GetEmptyItemSetPtr() );
+        SvxPropertyValuesToItemSet( aItemSet, rCharAndParaProps,
+                ImplGetSvxTextPortionSfxPropertySet(), pTextForwarder, aESel.nStartPara );
+        pTextForwarder->QuickSetAttribs( aItemSet, aESel );
+        rtl::Reference<SvxUnoTextRange> pRange = new SvxUnoTextRange( *this );
+        xRet = pRange;
+        pRange->SetSelection( aESel );
+        for( const beans::PropertyValue& rProp : rCharAndParaProps )
+            pRange->setPropertyValue( rProp.Name, rProp.Value );
+
+    }
     return xRet;
 }
 
