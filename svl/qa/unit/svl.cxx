@@ -1250,7 +1250,8 @@ void Test::testIsNumberFormatSpecific()
             { "1999-11-22", true, "1999-11-22", 0 },
             { "11/2/1",     true, "2011-02-01", 0 },
             { "99-2-11",    true, "1999-02-11", 0 },
-            { "22-2-11",    true, "2022-02-11", 0 }
+            { "22-2-11",    true, "2022-02-11", 0 },
+            { "02 Mar 2020",true, "2020-03-02", 0 }
         };
 
         checkSpecificNumberFormats( aFormatter, aIO, "[en-ZA] date");
