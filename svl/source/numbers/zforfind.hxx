@@ -427,6 +427,13 @@ private:
         NfEvalDateFormat setting.
      */
     bool IsAcceptableIso8601();
+
+    /** If month name in the middle was parsed, get the corresponding
+        LongDateOrder in GetDateRef().
+     */
+    LongDateOrder GetMiddleMonthLongDateOrder( bool bFormatTurn,
+                                               const LocaleDataWrapper* pLoc,
+                                               DateOrder eDateOrder );
 };
 
 #endif // INCLUDED_SVL_SOURCE_NUMBERS_ZFORFIND_HXX
