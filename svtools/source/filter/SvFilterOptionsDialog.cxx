@@ -18,6 +18,7 @@
  */
 
 
+#include <utility>
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/svapp.hxx>
@@ -69,7 +70,7 @@ class SvFilterOptionsDialog : public cppu::WeakImplHelper
 
 public:
 
-    explicit SvFilterOptionsDialog( const uno::Reference< uno::XComponentContext >& _rxORB );
+    explicit SvFilterOptionsDialog( uno::Reference< uno::XComponentContext > _xORB );
 
     // XInterface
     virtual void SAL_CALL acquire() noexcept override;
@@ -96,8 +97,8 @@ public:
 
 };
 
-SvFilterOptionsDialog::SvFilterOptionsDialog( const uno::Reference< uno::XComponentContext >& rxContext ) :
-    mxContext           ( rxContext ),
+SvFilterOptionsDialog::SvFilterOptionsDialog( uno::Reference< uno::XComponentContext > xContext ) :
+    mxContext           (std::move( xContext )),
     meFieldUnit         ( FieldUnit::CM ),
     mbExportSelection   ( false ),
     mbGraphicsSource    ( true )
