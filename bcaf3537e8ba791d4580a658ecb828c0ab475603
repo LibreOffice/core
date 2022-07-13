@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48443bc8_dfe80fc0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-07-13T09:20:37Z",
+      "side": 1,
+      "message": "Will this allow one to use FormulaLocal to set localized formula (using localized function names, or number literals with locale-specific decimal separators)? This is what FormulaLocal must enable, behaving identically to user\u0027s direct input to the formula bar, taking into account the user\u0027s preferences.",
+      "revId": "bcaf3537e8ba791d4580a658ecb828c0ab475603",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
