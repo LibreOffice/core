@@ -16,6 +16,29 @@
       "message": "Hi Mike! May I have your opinion about this change? I don\u0027t know why the rCharAndParaProps are not applied.",
       "revId": "b186d2503be942807c9740d187583a8e0018b891",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "503939ce_6793cde0",
+        "filename": "editeng/source/uno/unotext.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2102,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-07-13T17:49:47Z",
+      "side": 1,
+      "message": "and here I have no idea which para I should use 😞",
+      "range": {
+        "startLine": 2102,
+        "startChar": 72,
+        "endLine": 2102,
+        "endChar": 87
+      },
+      "revId": "b186d2503be942807c9740d187583a8e0018b891",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
