@@ -96,10 +96,10 @@ HTMLOptionEnum<HTMLTableRules> const aTableRulesOptEnums[] =
 };
 
 
-HTMLOption::HTMLOption( HtmlOptionId nTok, const OUString& rToken,
-                        const OUString& rValue )
-    : aValue(rValue)
-    , aToken(rToken)
+HTMLOption::HTMLOption( HtmlOptionId nTok, OUString _aToken,
+                        OUString _aValue )
+    : aValue(std::move(_aValue))
+    , aToken(std::move(_aToken))
     , nToken( nTok )
 {
     DBG_ASSERT( nToken>=HtmlOptionId::BOOL_START && nToken<HtmlOptionId::END,

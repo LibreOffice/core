@@ -22,6 +22,7 @@
 #include <tools/globname.hxx>
 #include <sot/formats.hxx>
 
+#include <utility>
 #include <vector>
 #include <vcl/transfer.hxx>
 
@@ -32,9 +33,9 @@ private:
     OUString        aHumanName;
 
 public:
-    SvObjectServer( const SvGlobalName & rClassP, const OUString & rHumanP ) :
+    SvObjectServer( const SvGlobalName & rClassP, OUString aHumanP ) :
         aClassName( rClassP ),
-        aHumanName( rHumanP ) {}
+        aHumanName(std::move( aHumanP )) {}
 
     const SvGlobalName &    GetClassName() const { return aClassName; }
     const OUString &        GetHumanName() const { return aHumanName; }

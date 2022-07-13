@@ -44,7 +44,7 @@ protected:
     rtl::Reference<svt::FrameStatusListener> m_xStatusListener;
 
 public:
-    WeldToolbarPopup(const css::uno::Reference<css::frame::XFrame>& rFrame,
+    WeldToolbarPopup(css::uno::Reference<css::frame::XFrame> xFrame,
                      weld::Widget* pParent, const OUString& rUIFile, const OString& rId);
     virtual ~WeldToolbarPopup();
     weld::Container* getTopLevel() { return m_xTopLevel.get(); }

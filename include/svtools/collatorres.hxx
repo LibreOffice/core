@@ -21,6 +21,7 @@
 
 #include <svtools/svtdllapi.h>
 #include <rtl/ustring.hxx>
+#include <utility>
 #include <vector>
 
 class SVT_DLLPUBLIC CollatorResource
@@ -36,9 +37,9 @@ private:
         OUString m_aTranslation;
 
     public:
-        CollatorResourceData(const OUString& rAlgorithm, const OUString& rTranslation)
-            : m_aName(rAlgorithm)
-            , m_aTranslation(rTranslation)
+        CollatorResourceData(OUString aAlgorithm, OUString aTranslation)
+            : m_aName(std::move(aAlgorithm))
+            , m_aTranslation(std::move(aTranslation))
         {
         }
         const OUString& GetAlgorithm() const { return m_aName; }

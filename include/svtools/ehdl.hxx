@@ -36,7 +36,7 @@ public:
             sal_uInt16 nCtxIdP, weld::Window *pWin=nullptr,
             const ErrMsgCode* pIds = nullptr, const std::locale& rResLocaleP = SvtResLocale());
     SfxErrorContext(
-            sal_uInt16 nCtxIdP, const OUString &aArg1, weld::Window *pWin=nullptr,
+            sal_uInt16 nCtxIdP, OUString aArg1, weld::Window *pWin=nullptr,
             const ErrMsgCode* pIds = nullptr, const std::locale& rResLocaleP = SvtResLocale());
     bool GetString(ErrCode nErrId, OUString &rStr) override;
 
