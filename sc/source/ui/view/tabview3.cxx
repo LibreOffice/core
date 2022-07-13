@@ -1853,6 +1853,7 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
         // UpdateShow before SetCursor, so that UpdateAutoFillMark finds the correct
         // window  (is called from SetCursor)
         UpdateShow();
+        aViewData.GetView()->TestHintWindow();
 
         SfxBindings& rBindings = aViewData.GetBindings();
         ScMarkData& rMark = aViewData.GetMarkData();
