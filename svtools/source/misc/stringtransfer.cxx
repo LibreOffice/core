@@ -22,6 +22,7 @@
 #include <rtl/ref.hxx>
 #include <sot/exchange.hxx>
 #include <svtools/stringtransfer.hxx>
+#include <utility>
 
 
 namespace svt
@@ -33,9 +34,9 @@ namespace svt
 
 
     //= OStringTransferable
-    OStringTransferable::OStringTransferable(const OUString& rContent)
+    OStringTransferable::OStringTransferable(OUString aContent)
         : TransferDataContainer()
-        , m_sContent(rContent)
+        , m_sContent(std::move(aContent))
     {
     }
 

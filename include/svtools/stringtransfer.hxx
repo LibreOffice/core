@@ -29,7 +29,7 @@ namespace svt
     class SVT_DLLPUBLIC OStringTransferable final : public TransferDataContainer
     {
     public:
-        OStringTransferable(const OUString& rContent);
+        OStringTransferable(OUString aContent);
         void SetData(const OUString& rContent);
 
     private:
