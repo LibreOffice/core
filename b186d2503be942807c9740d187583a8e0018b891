@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a2e0903_c4723b1d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-07-13T17:47:14Z",
+      "side": 1,
+      "message": "Hi Mike! May I have your opinion about this change? I don\u0027t know why the rCharAndParaProps are not applied.",
+      "revId": "b186d2503be942807c9740d187583a8e0018b891",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
