@@ -11908,14 +11908,14 @@ if test -n "$enable_sdremote" -a "$enable_sdremote" != "no"; then
             AC_MSG_RESULT([yes])
             ENABLE_SDREMOTE_BLUETOOTH=TRUE
             SYSTEM_BLUEZ=
+            SDREMOTE_ENTITLEMENT="$SDREMOTE_ENTITLEMENT
+	<key>com.apple.security.device.bluetooth</key>
+	<true/>"
         fi
     else
         AC_MSG_RESULT([no])
         ENABLE_SDREMOTE_BLUETOOTH=
         SYSTEM_BLUEZ=
-        SDREMOTE_ENTITLEMENT="$SDREMOTE_ENTITLEMENT
-	<key>com.apple.security.device.bluetooth</key>
-	<true/>"
     fi
 else
     ENABLE_SDREMOTE=
