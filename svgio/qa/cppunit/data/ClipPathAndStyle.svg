@@ -8,6 +8,6 @@
                      fill  : #ccccff;"/>
       </clipPath>
 
-  <use xlink:href="#c1" style="fill:red" stroke-width="5px" stroke="black"/>
+  <use href="#c1" style="fill:red" stroke-width="5px" stroke="black"/>
 
 </svg>

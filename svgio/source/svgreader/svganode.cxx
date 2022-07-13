@@ -64,6 +64,7 @@ namespace svgio::svgreader
                     }
                     break;
                 }
+                case SVGToken::Href:
                 case SVGToken::XlinkHref:
                     //TODO: add support for xlink:href
                     break;

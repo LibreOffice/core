@@ -55,6 +55,7 @@ namespace svgio::svgreader
                     readLocalCssStyle(aContent);
                     break;
                 }
+                case SVGToken::Href:
                 case SVGToken::XlinkHref:
                 {
                     const sal_Int32 nLen(aContent.getLength());

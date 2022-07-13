@@ -141,6 +141,7 @@ namespace svgio::svgreader
         const char aSVGStrGradientUnits[] = "gradientUnits";
         const char aSVGStrGradientTransform[] = "gradientTransform";
         const char aSVGStrSpreadMethod[] = "spreadMethod";
+        const char aSVGStrHref[] = "href";
         const char aSVGStrXlinkHref[] = "xlink:href";
         const char aSVGStrStopColor[] = "stop-color";
         const char aSVGStrStopOpacity[] = "stop-opacity";
@@ -287,6 +288,7 @@ namespace svgio::svgreader
                 { aSVGStrGradientUnits, SVGToken::GradientUnits },
                 { aSVGStrGradientTransform, SVGToken::GradientTransform },
                 { aSVGStrSpreadMethod, SVGToken::SpreadMethod },
+                { aSVGStrHref, SVGToken::Href },
                 { aSVGStrXlinkHref, SVGToken::XlinkHref },
                 { aSVGStrStopColor, SVGToken::StopColor },
                 { aSVGStrStopOpacity, SVGToken::StopOpacity },
