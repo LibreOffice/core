@@ -255,6 +255,18 @@ DECLARE_ODFIMPORT_TEST(testPageStyleLayoutDefault, "hello.odt")
     CPPUNIT_ASSERT_EQUAL(style::PageStyleLayout_ALL, getProperty<style::PageStyleLayout>(xPropertySet, "PageStyleLayout"));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf149978)
+{
+    load(mpTestDocumentPath, "tdf149978.fodt");
+    // on Linux the bug only reproduces if a document has been loaded previously
+    load(mpTestDocumentPath, "tdf149978.fodt");
+    // this was nondeterministic so try 10 times
+    for (int i = 1; i <= 10; ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL(COL_WHITE, getProperty<Color>(getRun(getParagraph(i), 2, "bar"), "CharBackColor"));
+    }
+}
+
 DECLARE_ODFIMPORT_TEST(testTdf64038, "space.odt")
 {
     // no space
