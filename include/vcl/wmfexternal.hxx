@@ -50,7 +50,6 @@ struct VCL_DLLPUBLIC WmfExternal
     sal_uInt16 mapMode;
 
     WmfExternal();
-    css::uno::Sequence<css::beans::PropertyValue> getSequence() const;
     bool setSequence(const css::uno::Sequence<css::beans::PropertyValue>& rSequence);
 };
 

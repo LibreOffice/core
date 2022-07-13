@@ -401,9 +401,6 @@ public:
     /// closes explicitly the current key
     inline RegError closeKey();
 
-    /// releases the current key
-    inline void releaseKey();
-
     /** sets a value of a key.
 
         @param  keyName specifies the name of the key which value will be set.
@@ -782,15 +779,6 @@ inline RegError RegistryKey::closeKey()
         } else
             return RegError::INVALID_KEY;
     }
-
-inline void RegistryKey::releaseKey()
-{
-    if (m_registry.isValid() && (m_hImpl != nullptr))
-    {
-        m_registry.m_pApi->releaseKey(m_hImpl);
-        m_hImpl = nullptr;
-    }
-}
 
 inline RegError RegistryKey::setValue(const OUString& keyName,
                                               RegValueType valueType,

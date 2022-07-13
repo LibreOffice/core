@@ -43,28 +43,6 @@ public:
     {
     }
 
-    constexpr tools::Rectangle clientArea() const
-    {
-        tools::Long nX(x() + m_nLeftDecoration), nY(y() + m_nTopDecoration);
-        return { { nX, nY }, size() };
-    }
-    void setClientArea(const tools::Rectangle& rRect)
-    {
-        setX(rRect.getX() - m_nLeftDecoration);
-        setY(rRect.getY() - m_nTopDecoration);
-        setSize(rRect.GetSize());
-    }
-    constexpr tools::Rectangle clientRect() const { return { { 0, 0 }, size() }; }
-
-    // returns the position and size of the window, including all margins
-    constexpr tools::Rectangle frameArea() const
-    {
-        tools::Long nWidth(width() + m_nLeftDecoration + m_nRightDecoration);
-        tools::Long nHeight(height() + m_nTopDecoration + m_nBottomDecoration);
-        return { pos(), Size(nWidth, nHeight) };
-    }
-    // no setFrameArea, as it can't really be implemented, e.g. what happens, if size() > frameArea.size() etc.
-
     constexpr sal_uInt32 leftDecoration() const { return m_nLeftDecoration; }
     void setLeftDecoration(sal_uInt32 nLeftDecoration) { m_nLeftDecoration = nLeftDecoration; }
     constexpr sal_uInt32 topDecoration() const { return m_nTopDecoration; }
@@ -75,14 +53,6 @@ public:
     void setBottomDecoration(sal_uInt32 nBottomDecoration)
     {
         m_nBottomDecoration = nBottomDecoration;
-    }
-    void decorations(sal_uInt32& nLeft, sal_uInt32& nTop, sal_uInt32& nRight,
-                     sal_uInt32& nBottom) const
-    {
-        nLeft = m_nLeftDecoration;
-        nTop = m_nTopDecoration;
-        nRight = m_nRightDecoration;
-        nBottom = m_nBottomDecoration;
     }
     void setDecorations(sal_uInt32 nLeft, sal_uInt32 nTop, sal_uInt32 nRight, sal_uInt32 nBottom)
     {

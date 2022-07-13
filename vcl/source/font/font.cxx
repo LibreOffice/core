@@ -334,11 +334,6 @@ bool Font::EqualIgnoreColor( const vcl::Font& rFont ) const
     return mpImplFont->EqualIgnoreColor( *rFont.mpImplFont );
 }
 
-size_t Font::GetHashValue() const
-{
-    return mpImplFont->GetHashValue();
-}
-
 size_t Font::GetHashValueIgnoreColor() const
 {
     return mpImplFont->GetHashValueIgnoreColor();

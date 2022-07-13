@@ -31,18 +31,6 @@ WmfExternal::WmfExternal()
 {
 }
 
-css::uno::Sequence<css::beans::PropertyValue> WmfExternal::getSequence() const
-{
-    if (0 != xExt || 0 != yExt || 0 != mapMode)
-    {
-        return { comphelper::makePropertyValue("Width", static_cast<sal_Int16>(xExt)),
-                 comphelper::makePropertyValue("Height", static_cast<sal_Int16>(yExt)),
-                 comphelper::makePropertyValue("MapMode", static_cast<sal_Int16>(mapMode)) };
-    }
-
-    return {};
-}
-
 bool WmfExternal::setSequence(const css::uno::Sequence<css::beans::PropertyValue>& rSequence)
 {
     bool bRetval(false);

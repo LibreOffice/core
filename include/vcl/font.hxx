@@ -162,7 +162,6 @@ public:
     bool                EqualIgnoreColor( const Font& ) const;
 
     // Compute value usable as hash.
-    size_t              GetHashValue() const;
     size_t              GetHashValueIgnoreColor() const;
 
     friend VCL_DLLPUBLIC SvStream&  ::ReadFont( SvStream& rIStm, vcl::Font& );

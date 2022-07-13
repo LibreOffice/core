@@ -169,8 +169,6 @@ public:
     void            Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nScreen,
                           SystemParentData const * pParentData, bool bUseGeometry = false );
 
-    bool IsPartialFullScreen() const { return m_bIsPartialFullScreen; }
-
     SalDisplay* GetDisplay() const
     {
         return pDisplay_;
