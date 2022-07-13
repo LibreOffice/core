@@ -27,6 +27,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <memory>
+#include <utility>
 
 template<typename T> struct SvParser_Impl;
 class SvStream;
@@ -160,8 +161,8 @@ public:
     SvKeyValue()
     {}
 
-    SvKeyValue (const OUString &rKey, const OUString &rValue)
-        : m_aKey (rKey), m_aValue (rValue)
+    SvKeyValue (OUString aKey, OUString aValue)
+        : m_aKey (std::move(aKey)), m_aValue (std::move(aValue))
     {}
 
     SvKeyValue (const SvKeyValue &rOther)
