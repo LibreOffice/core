@@ -26,7 +26,6 @@
 #include <vcl/toolkit/treelistentry.hxx>
 #include <vcl/jsdialog/executor.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <utility>
 
 static std::map<std::string, vcl::Window*>& GetLOKPopupsMap()
 {
