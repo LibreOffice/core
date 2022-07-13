@@ -16,6 +16,24 @@
       "message": "Mike, what do you think? Switching the fields seems to be a bit more elegant than adding some if/then at the TypeHdl in sw/source/ui/fldui/flddok.cxx (#290). But I\u0027m afraid of macros that rely on the index.\n\nThe name is worth another patch since \"(fixed)\" is added to \"Date\" at some places currently, for example in SwDocInfoField::GetFieldName().",
       "revId": "d6e0bda6ce8094ef29aba7062398af69175d2b33",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48b9f596_776ba0ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-07-13T15:45:55Z",
+      "side": 1,
+      "message": "The change looks fine to me. I don\u0027t see why would this order be exposed to the API - but I only looked at the code. Do you actually know that there\u0027s some impact on API?",
+      "parentUuid": "34f3d384_a5e59caa",
+      "revId": "d6e0bda6ce8094ef29aba7062398af69175d2b33",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
