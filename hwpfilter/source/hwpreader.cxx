@@ -3950,11 +3950,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, const Picture* hbox)
                 if (r_pt[2].getY() == r_pt[1].getY())
                          skewX = 0;
                 else
-                         skewX = atan((r_pt[2].getX() - r_pt[1].getX()) / (r_pt[2].getY() - r_pt[1].getY()));
-                if( skewX >= M_PI_2 )
-                         skewX -= M_PI;
-                if( skewX <= -M_PI_2 )
-                         skewX += M_PI;
+                         skewX = atan2(r_pt[2].getX() - r_pt[1].getX(), r_pt[2].getY() - r_pt[1].getY());
 
                 OUString trans;
                 if( skewX != 0.0 && rotate != 0.0 ){
