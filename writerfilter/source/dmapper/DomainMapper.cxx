@@ -1714,17 +1714,19 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                     break;
             }
 
+            PropertyIds ePropertyId = m_pImpl->IsInComments() ? PROP_CHAR_BACK_COLOR : PROP_CHAR_HIGHLIGHT;
+
             // OOXML import uses an ID
             if( IsOOXMLImport() )
             {
                 sal_Int32 nColor = 0;
                 if( getColorFromId(nIntValue, nColor) )
-                    rContext->Insert(PROP_CHAR_HIGHLIGHT, uno::Any( nColor ));
+                    rContext->Insert(ePropertyId, uno::Any(nColor));
             }
             // RTF import uses the actual color value
             else if( IsRTFImport() )
             {
-                rContext->Insert(PROP_CHAR_HIGHLIGHT, uno::Any( nIntValue ));
+                rContext->Insert(ePropertyId, uno::Any(nIntValue));
             }
         }
         break;
