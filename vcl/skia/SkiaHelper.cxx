@@ -273,6 +273,8 @@ static bool supportsVCLSkia()
     return getenv("SAL_DISABLESKIA") == nullptr;
 }
 
+static void initInternal();
+
 bool isVCLSkiaEnabled()
 {
     /**
@@ -308,8 +310,7 @@ bool isVCLSkiaEnabled()
     if (bForceSkia && bSupportsVCLSkia)
     {
         bRet = true;
-        SkGraphics::Init();
-        SkLoOpts::Init();
+        initInternal();
         // don't actually block if denylisted, but log it if enabled, and also get the vendor id
         checkDeviceDenylisted(true);
     }
@@ -334,8 +335,7 @@ bool isVCLSkiaEnabled()
 
         if (bEnable)
         {
-            SkGraphics::Init();
-            SkLoOpts::Init();
+            initInternal();
             checkDeviceDenylisted(); // switch to raster if driver is denylisted
         }
 
@@ -752,6 +752,13 @@ void setBlenderXor(SkPaint* paint)
         xorBlender = effect.effect->makeBlender(nullptr);
     }
     paint->setBlender(xorBlender);
+}
+
+static void initInternal()
+{
+    // Set up all things needed for using Skia.
+    SkGraphics::Init();
+    SkLoOpts::Init();
 }
 
 void cleanup()
