@@ -44,7 +44,6 @@
 #include <xmloff/maptype.hxx>
 
 #include <algorithm>
-#include <utility>
 #include <vector>
 
 using namespace ::com::sun::star::uno;
