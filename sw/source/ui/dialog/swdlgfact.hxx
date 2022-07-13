@@ -437,7 +437,6 @@ public:
     {
     }
     virtual short Execute() override;
-    virtual void AcceptAll(bool bAccept) override;
 };
 
 class SwGlossaryDlg;

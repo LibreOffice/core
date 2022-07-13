@@ -559,11 +559,6 @@ void    AbstractSwRenameXNamedDlg_Impl::SetAlternativeAccess(
     m_xDlg->SetAlternativeAccess( xSecond, xThird);
 }
 
-void AbstractSwModalRedlineAcceptDlg_Impl::AcceptAll( bool bAccept )
-{
-    m_xDlg->AcceptAll( bAccept);
-}
-
 OUString AbstractGlossaryDlg_Impl::GetCurrGrpName() const
 {
     return m_xDlg->GetCurrGrpName();

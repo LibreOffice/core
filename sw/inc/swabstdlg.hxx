@@ -356,8 +356,6 @@ class AbstractSwModalRedlineAcceptDlg : public VclAbstractDialog
 {
 protected:
     virtual ~AbstractSwModalRedlineAcceptDlg() override = default;
-public:
-    virtual void            AcceptAll( bool bAccept ) = 0;
 };
 
 class AbstractMarkFloatDlg : public VclAbstractDialog

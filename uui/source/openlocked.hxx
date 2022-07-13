@@ -45,7 +45,6 @@ private:
     std::unique_ptr<weld::Label> mxHiddenText;
 
     DECL_LINK(ClickHdl, weld::Button&, void);
-    DECL_LINK(ToggleHdl, weld::Toggleable&, void);
 };
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
