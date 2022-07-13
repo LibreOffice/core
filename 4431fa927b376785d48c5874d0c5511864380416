@@ -16,6 +16,23 @@
       "message": "Gabor. I see two options here. One is just extending your earlier setting to encompass more than just footnotes. The other option is to create a second setting that is a bit more generic. Basically option 2 would \"deprecate\" AllowCommentsInFootnotes, but leave it available for those who already used it, but everyone new should only use the new setting.\n\nWhat do you think?",
       "revId": "4431fa927b376785d48c5874d0c5511864380416",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52ea5599_87a6c99f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-07-13T13:41:03Z",
+      "side": 1,
+      "message": "This should also be extended to exclude comments in footnotes/endnotes.",
+      "revId": "4431fa927b376785d48c5874d0c5511864380416",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
