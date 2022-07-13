@@ -27,15 +27,16 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
+#include <utility>
 #include <vcl/transfer.hxx>
 #include <sot/filelist.hxx>
 
 #include <osl/file.hxx>
 #include <vcl/svapp.hxx>
 
-OpenFileDropTargetListener::OpenFileDropTargetListener( const css::uno::Reference< css::uno::XComponentContext >& xContext,
+OpenFileDropTargetListener::OpenFileDropTargetListener( css::uno::Reference< css::uno::XComponentContext > xContext,
                                         const css::uno::Reference< css::frame::XFrame >&          xFrame  )
-        : m_xContext      ( xContext                      )
+        : m_xContext      (std::move( xContext                      ))
         , m_xTargetFrame  ( xFrame                        )
 {
 }

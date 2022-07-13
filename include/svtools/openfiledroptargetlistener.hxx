@@ -50,7 +50,7 @@ class UNLESS_MERGELIBS(SVT_DLLPUBLIC) OpenFileDropTargetListener final : public 
         DataFlavorExVector m_aFormats;
 
     public:
-        OpenFileDropTargetListener( const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        OpenFileDropTargetListener( css::uno::Reference< css::uno::XComponentContext > xContext,
                                     const css::uno::Reference< css::frame::XFrame >& xFrame );
         virtual ~OpenFileDropTargetListener() override;
 
