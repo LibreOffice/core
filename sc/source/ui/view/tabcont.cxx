@@ -242,7 +242,8 @@ void ScTabControl::AddTabClick()
     OUString aName;
     rDoc.CreateValidTabName(aName);
     SCTAB nTabCount = rDoc.GetTableCount();
-    pViewData->GetViewShell()->InsertTable(aName, nTabCount);
+    if (pViewData->GetViewShell()->InsertTable(aName, nTabCount))
+        pViewData->GetView()->TestHintWindow();
 }
 
 void ScTabControl::Select()
