@@ -486,7 +486,6 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
 
         case accessibility::AccessibleEventId::BOUNDRECT_CHANGED:
 
-#ifdef HAS_ATKRECTANGLE
             if( ATK_IS_COMPONENT( atk_obj ) )
             {
                 AtkRectangle rect;
@@ -498,12 +497,10 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
                                            &rect.height,
                                            ATK_XY_SCREEN );
 
-                g_signal_emit_by_name( atk_obj, "bounds_changed", &rect );
+                g_signal_emit_by_name( atk_obj, "bounds-changed", &rect );
             }
             else
-                g_warning( "bounds_changed event for object not implementing AtkComponent\n");
-#endif
-
+                g_warning( "bounds-changed event for object not implementing AtkComponent\n");
             break;
 
         case accessibility::AccessibleEventId::VISIBLE_DATA_CHANGED:
