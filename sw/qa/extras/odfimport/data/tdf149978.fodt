@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<office:document xmlns:officeooo="http://openoffice.org/2009/office" xmlns:css3t="http://www.w3.org/TR/css3-text/" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rpt="http://openoffice.org/2005/report" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:xforms="http://www.w3.org/2002/xforms" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+    <office:font-face-decls>
+      <style:font-face style:font-family-generic="roman" style:font-pitch="variable" style:name="Times New Roman" svg:font-family="'Times New Roman'"/>
+      <style:font-face style:font-family-generic="system" style:font-pitch="variable" style:name="Lucida Sans Unicode" svg:font-family="'Lucida Sans Unicode'"/>
+      <style:font-face style:font-family-generic="system" style:font-pitch="variable" style:name="Tahoma" svg:font-family="Tahoma"/>
+    </office:font-face-decls>
+    <office:styles>
+      <style:default-style style:family="paragraph">
+        <style:paragraph-properties fo:hyphenation-ladder-count="no-limit" style:line-break="strict" style:punctuation-wrap="hanging" style:tab-stop-distance="1.251cm" style:text-autospace="ideograph-alpha" style:writing-mode="page"/>
+        <style:text-properties fo:country="DE" fo:font-size="12pt" fo:hyphenate="false" fo:hyphenation-push-char-count="2" fo:hyphenation-remain-char-count="2" fo:language="de" style:country-asian="none" style:country-complex="none" style:font-name="Times New Roman" style:font-name-asian="Lucida Sans Unicode" style:font-name-complex="Tahoma" style:font-size-asian="12pt" style:font-size-complex="12pt" style:language-asian="zxx" style:language-complex="zxx" style:letter-kerning="true" style:use-window-font-color="true"/>
+      </style:default-style>
+    </office:styles>
+
+    <office:automatic-styles>
+      <style:style style:family="text" style:name="A25" style:parent-style-name="">
+        <style:text-properties fo:background-color="#d3d3d3"/>
+      </style:style>
+      <style:style style:family="text" style:name="A26" style:parent-style-name="">
+        <style:text-properties fo:background-color="inherit" fo:color="inherit"/>
+      </style:style>
+
+        <style:page-layout style:name="pm1">
+            <style:page-layout-properties fo:page-width="21.001cm" fo:page-height="29.7cm" style:num-format="1" style:print-orientation="portrait" fo:margin-top="2cm" fo:margin-bottom="2cm" fo:margin-left="2cm" fo:margin-right="2cm" style:writing-mode="lr-tb" style:layout-grid-color="#c0c0c0" style:layout-grid-lines="20" style:layout-grid-base-height="0.706cm" style:layout-grid-ruby-height="0.353cm" style:layout-grid-mode="none" style:layout-grid-ruby-below="false" style:layout-grid-print="false" style:layout-grid-display="false" style:footnote-max-height="0cm" loext:margin-gutter="0cm">
+                <style:footnote-sep style:width="0.018cm" style:distance-before-sep="0.101cm" style:distance-after-sep="0.101cm" style:line-style="solid" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
+            </style:page-layout-properties>
+            <style:header-style/>
+            <style:footer-style/>
+        </style:page-layout>
+        <style:style style:name="dp1" style:family="drawing-page">
+            <style:drawing-page-properties draw:background-size="full"/>
+        </style:style>
+    </office:automatic-styles>
+    <office:master-styles>
+        <style:master-page style:name="Standard" style:page-layout-name="pm1" draw:style-name="dp1"/>
+    </office:master-styles>
+    <office:body>
+        <office:text>
+
+           <text:p>foo <text:span text:style-name="A25"><text:span text:style-name="A26">bar</text:span></text:span> baz</text:p>
+           <text:p>foo <text:span text:style-name="A25"><text:span text:style-name="A26">bar</text:span></text:span> baz</text:p>
+           <text:p>foo <text:span text:style-name="A25"><text:span text:style-name="A26">bar</text:span></text:span> baz</text:p>
+           <text:p>foo <text:span text:style-name="A25"><text:span text:style-name="A26">bar</text:span></text:span> baz</text:p>
+           <text:p>foo <text:span text:style-name="A25"><text:span text:style-name="A26">bar</text:span></text:span> baz</text:p>
+           <text:p>foo <text:span text:style-name="A25"><text:span text:style-name="A26">bar</text:span></text:span> baz</text:p>
+           <text:p>foo <text:span text:style-name="A25"><text:span text:style-name="A26">bar</text:span></text:span> baz</text:p>
+           <text:p>foo <text:span text:style-name="A25"><text:span text:style-name="A26">bar</text:span></text:span> baz</text:p>
+           <text:p>foo <text:span text:style-name="A25"><text:span text:style-name="A26">bar</text:span></text:span> baz</text:p>
+           <text:p>foo <text:span text:style-name="A25"><text:span text:style-name="A26">bar</text:span></text:span> baz</text:p>
+
+        </office:text>
+    </office:body>
+</office:document>
