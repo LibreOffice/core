@@ -991,44 +991,15 @@ void XMLTextFieldExport::ExportField(
                     ? aStates
                     : nullptr;
 
-    // find out whether we need to set the style or hyperlink
-    bool bHasHyperlink;
+    // find out whether we need to set the style
     bool bIsUICharStyle;
     bool bHasAutoStyle;
     OUString sStyle = GetExport().GetTextParagraphExport()->
-        FindTextStyleAndHyperlink( xRangePropSet, bHasHyperlink, bIsUICharStyle,
-                                   bHasAutoStyle, pStates );
+        FindTextStyle( xRangePropSet, bIsUICharStyle, bHasAutoStyle, pStates );
     bool bHasStyle = !sStyle.isEmpty();
 
-    // export hyperlink (if we have one)
-    Reference < XPropertySetInfo > xRangePropSetInfo;
-    if( bHasHyperlink )
     {
-        Reference<XPropertyState> xRangePropState( xRangePropSet, UNO_QUERY );
-        xRangePropSetInfo = xRangePropSet->getPropertySetInfo();
-        bHasHyperlink =
-            GetExport().GetTextParagraphExport()->addHyperlinkAttributes(
-                xRangePropSet, xRangePropState,
-                xRangePropSetInfo );
-    }
-    SvXMLElementExport aHyperlink( GetExport(), bHasHyperlink,
-                                   XML_NAMESPACE_TEXT, XML_A,
-                                   false, false );
-
-    if( bHasHyperlink )
-    {
-        // export events (if supported)
-        OUString sHyperLinkEvents("HyperLinkEvents");
-        if (xRangePropSetInfo->hasPropertyByName(sHyperLinkEvents))
-        {
-            Any aAny = xRangePropSet->getPropertyValue(sHyperLinkEvents);
-            Reference<XNameReplace> xName;
-            aAny >>= xName;
-            GetExport().GetEventExport().Export(xName, false);
-        }
-    }
-
-    {
+        Reference<XPropertySetInfo> xRangePropSetInfo;
         XMLTextCharStyleNamesElementExport aCharStylesExport(
             GetExport(), bIsUICharStyle &&
                          GetExport().GetTextParagraphExport()
