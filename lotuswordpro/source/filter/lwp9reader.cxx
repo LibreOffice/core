@@ -62,6 +62,7 @@
 #include <xfilter/xfstylemanager.hxx>
 #include <lwpdocdata.hxx>
 #include <lwpchangemgr.hxx>
+#include <sal/log.hxx>
 
 Lwp9Reader::Lwp9Reader(LwpSvStream* pInputStream, IXFStream* pStream)
     : m_pDocStream(pInputStream)
@@ -88,7 +89,11 @@ bool Lwp9Reader::Read()
             bRet = ParseDocument();
         }
         else
+        {
+            SAL_WARN("lwp", "Only Lotus Word Pro 97 (version 11) and later is supported.");
+            SAL_WARN("lwp", "You are trying to open version: " << LwpFileHeader::m_nFileRevision);
             bRet = false;
+        }
     }
     catch (...)
     {
