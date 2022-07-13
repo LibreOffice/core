@@ -16,6 +16,23 @@
       "message": "I see you submitted a total of five patches, abandoning the older ones. Please don\u0027t do that in the future, but follow this: https://wiki.documentfoundation.org/Development/gerrit/SubmitPatch#Submitting_a_new_version",
       "revId": "9ac85e9fd485bb4cc145e924bb01a2623c393c2b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e6b7733_da7e783d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-07-13T11:23:29Z",
+      "side": 1,
+      "message": "Also, remember https://wiki.documentfoundation.org/Development/GetInvolved#License_statement",
+      "revId": "9ac85e9fd485bb4cc145e924bb01a2623c393c2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
