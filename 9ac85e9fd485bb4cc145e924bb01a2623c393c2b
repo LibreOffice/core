@@ -33,6 +33,24 @@
       "message": "Also, remember https://wiki.documentfoundation.org/Development/GetInvolved#License_statement",
       "revId": "9ac85e9fd485bb4cc145e924bb01a2623c393c2b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f82bbe1_5d8dd8c6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003628
+      },
+      "writtenOn": "2022-07-13T11:26:16Z",
+      "side": 1,
+      "message": "Thank you, I will keep that in mind in the future.",
+      "parentUuid": "9aa9cbfb_8b4f914d",
+      "revId": "9ac85e9fd485bb4cc145e924bb01a2623c393c2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
