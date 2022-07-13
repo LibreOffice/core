@@ -26,6 +26,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <tools/gen.hxx>
 #include <unordered_map>
+#include <utility>
 
 namespace com :: sun :: star :: awt { class XWindow; }
 namespace com :: sun :: star :: beans { struct PropertyValue; }
@@ -46,7 +47,7 @@ class SVT_DLLPUBLIC StatusbarController :
     public:
         StatusbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                              const css::uno::Reference< css::frame::XFrame >& xFrame,
-                             const OUString& aCommandURL,
+                             OUString aCommandURL,
                              unsigned short       nID );
         StatusbarController();
         virtual ~StatusbarController() override;
@@ -95,8 +96,8 @@ class SVT_DLLPUBLIC StatusbarController :
     protected:
         struct Listener
         {
-            Listener( const css::util::URL& rURL, const css::uno::Reference< css::frame::XDispatch >& rDispatch ) :
-                aURL( rURL ), xDispatch( rDispatch ) {}
+            Listener( css::util::URL _aURL, css::uno::Reference< css::frame::XDispatch > _xDispatch ) :
+                aURL(std::move( _aURL )), xDispatch(std::move( _xDispatch )) {}
 
             css::util::URL                               aURL;
             css::uno::Reference< css::frame::XDispatch > xDispatch;

@@ -18,6 +18,7 @@
  */
 
 #include <unotools/resmgr.hxx>
+#include <utility>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -248,10 +249,10 @@ SfxErrorContext::SfxErrorContext(
 
 
 SfxErrorContext::SfxErrorContext(
-    sal_uInt16 nCtxIdP, const OUString &aArg1P, weld::Window *pWindow,
+    sal_uInt16 nCtxIdP, OUString aArg1P, weld::Window *pWindow,
     const ErrMsgCode* pIdsP, const std::locale& rResLocaleP)
 :   ErrorContext(pWindow), nCtxId(nCtxIdP), pIds(pIdsP), aResLocale(rResLocaleP),
-    aArg1(aArg1P)
+    aArg1(std::move(aArg1P))
 {
     if (!pIds)
         pIds = RID_ERRCTX;
