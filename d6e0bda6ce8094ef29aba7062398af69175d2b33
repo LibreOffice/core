@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34f3d384_a5e59caa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-07-13T13:46:04Z",
+      "side": 1,
+      "message": "Mike, what do you think? Switching the fields seems to be a bit more elegant than adding some if/then at the TypeHdl in sw/source/ui/fldui/flddok.cxx (#290). But I\u0027m afraid of macros that rely on the index.\n\nThe name is worth another patch since \"(fixed)\" is added to \"Date\" at some places currently, for example in SwDocInfoField::GetFieldName().",
+      "revId": "d6e0bda6ce8094ef29aba7062398af69175d2b33",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
