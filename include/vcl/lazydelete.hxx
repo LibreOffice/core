@@ -47,7 +47,7 @@ namespace vcl
 
     SomeWindow::Paint()
     {
-        static vcl::DeleteOnDeinit< BitmapEx > aBmp( new BitmapEx( ... ) );
+        static vcl::DeleteOnDeinit< BitmapEx > aBmp( ... );
 
         if( aBmp.get() ) // check whether DeInitVCL has been called already
             DrawBitmapEx( Point( 10, 10 ), *aBmp );
