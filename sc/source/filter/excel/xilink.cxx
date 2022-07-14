@@ -605,7 +605,7 @@ void XclImpSupbookTab::LoadCachedValues( const ScExternalRefCache::TableTypeRef&
             case EXC_CACHEDVAL_STRING:
             {
                 svl::SharedString aSS( rPool.intern( pCrn->GetString()));
-                ScExternalRefCache::TokenRef pToken(new formula::FormulaStringToken( aSS));
+                ScExternalRefCache::TokenRef pToken(new formula::FormulaStringToken( std::move(aSS) ));
                 pCacheTable->setCell(rAddr.mnCol, rAddr.mnRow, pToken, 0, false);
             }
             break;

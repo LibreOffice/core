@@ -547,8 +547,7 @@ void ToolboxController::bindListener()
 
                 listener.second = xDispatch;
 
-                Listener aListener( aTargetURL, xDispatch );
-                aDispatchVector.push_back( aListener );
+                aDispatchVector.push_back( Listener( aTargetURL, xDispatch ) );
             }
         }
     }
@@ -682,7 +681,7 @@ void ToolboxController::dispatchCommand( const OUString& sCommandURL, const Sequ
 
         Reference< XDispatch > xDispatch( xDispatchProvider->queryDispatch( aURL, sTarget, 0 ), UNO_SET_THROW );
 
-        std::unique_ptr<DispatchInfo> pDispatchInfo(new DispatchInfo( xDispatch, aURL, rArgs ));
+        std::unique_ptr<DispatchInfo> pDispatchInfo(new DispatchInfo( xDispatch, std::move(aURL), rArgs ));
         if ( Application::PostUserEvent( LINK(nullptr, ToolboxController, ExecuteHdl_Impl),
                                           pDispatchInfo.get() ) )
             pDispatchInfo.release();

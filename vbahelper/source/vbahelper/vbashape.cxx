@@ -540,7 +540,7 @@ ScVbaShape::ShapeRange( const uno::Any& index )
 
     XNamedObjectCollectionHelper< drawing::XShape >::XNamedVec aVec;
     aVec.push_back( m_xShape );
-    uno::Reference< container::XIndexAccess > xIndexAccess( new XNamedObjectCollectionHelper< drawing::XShape >( aVec ) );
+    uno::Reference< container::XIndexAccess > xIndexAccess( new XNamedObjectCollectionHelper< drawing::XShape >( std::move(aVec) ) );
     uno::Reference< container::XChild > xChild( m_xShape, uno::UNO_QUERY_THROW );
     // #FIXME for want of a better parent, setting this
     uno::Reference< msforms::XShapeRange > xShapeRange( new ScVbaShapeRange( mxParent, mxContext, xIndexAccess,  uno::Reference< drawing::XDrawPage >( xChild->getParent(), uno::UNO_QUERY_THROW ), m_xModel ) );

@@ -448,8 +448,7 @@ void StatusbarController::bindListener()
                 }
                 listener.second = xDispatch;
 
-                Listener aListener( aTargetURL, xDispatch );
-                aDispatchVector.push_back( aListener );
+                aDispatchVector.push_back( Listener( std::move(aTargetURL), xDispatch ) );
             }
         }
     }

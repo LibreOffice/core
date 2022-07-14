@@ -1342,8 +1342,7 @@ bool EscherPropertyContainer::CreateOLEGraphicProperties(const uno::Reference<dr
             const Graphic* pGraphic = pOle2Obj->GetGraphic();
             if (pGraphic)
             {
-                Graphic aGraphic(*pGraphic);
-                GraphicObject aGraphicObject(aGraphic);
+                GraphicObject aGraphicObject(*pGraphic);
                 bRetValue = CreateGraphicProperties(rXShape, aGraphicObject);
             }
         }
@@ -1418,10 +1417,10 @@ void EscherPropertyContainer::CreateEmbeddedBitmapProperties(
     uno::Reference<graphic::XGraphic> xGraphic(rxBitmap, uno::UNO_QUERY);
     if (!xGraphic.is())
         return;
-    const Graphic aGraphic(xGraphic);
+    Graphic aGraphic(xGraphic);
     if (aGraphic.IsNone())
         return;
-    const GraphicObject aGraphicObject(aGraphic);
+    GraphicObject aGraphicObject(std::move(aGraphic));
     if (aGraphicObject.GetType() == GraphicType::NONE)
         return;
     if (ImplCreateEmbeddedBmp(aGraphicObject))
@@ -1467,7 +1466,7 @@ void EscherPropertyContainer::CreateEmbeddedHatchProperties(const drawing::Hatch
 {
     const tools::Rectangle aRect(pShapeBoundRect ? *pShapeBoundRect : tools::Rectangle(Point(0,0), Size(28000, 21000)));
     Graphic aGraphic(lclDrawHatch(rHatch, rBackColor, bFillBackground, aRect));
-    GraphicObject aGraphicObject(aGraphic);
+    GraphicObject aGraphicObject(std::move(aGraphic));
 
     if (ImplCreateEmbeddedBmp(aGraphicObject))
         AddOpt( ESCHER_Prop_fillType, ESCHER_FillTexture );

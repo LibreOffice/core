@@ -653,7 +653,6 @@ bool ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
 
     if( pRAcc )
     {
-        tools::PolyPolygon         aPolyPoly;
         double              fPercent = 0.0;
         double              fPercentStep_2 = 0.0;
         const tools::Long          nWidth = pRAcc->Width();
@@ -702,7 +701,7 @@ bool ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
 
             if( oMap )
             {
-                aPolyPoly.Clear();
+                tools::PolyPolygon         aPolyPoly;
                 ImplCalculate( *oMap, aPolyPoly, cReduce );
                 oMap.reset();
 
@@ -716,7 +715,7 @@ bool ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
                     {
                         rMtf.AddAction( new MetaLineColorAction( aFindColor, true ) );
                         rMtf.AddAction( new MetaFillColorAction( aFindColor, true ) );
-                        rMtf.AddAction( new MetaPolyPolygonAction( aPolyPoly ) );
+                        rMtf.AddAction( new MetaPolyPolygonAction( std::move(aPolyPoly) ) );
                     }
                 }
             }

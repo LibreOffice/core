@@ -181,7 +181,7 @@ void applySharedFormulas(
                     {
                         // See applyCellFormulaValues
                         svl::SharedString aSS = rStrPool.intern(rDesc.maCellValue);
-                        pCell->SetResultToken(new formula::FormulaStringToken(aSS));
+                        pCell->SetResultToken(new formula::FormulaStringToken(std::move(aSS)));
                         // If we don't reset dirty, then e.g. disabling macros makes all cells
                         // that use macro functions to show #VALUE!
                         pCell->ResetDirty();
@@ -310,7 +310,7 @@ void applyCellFormulaValues(
                 if (bGeneratorKnownGood)
                 {
                     svl::SharedString aSS = rStrPool.intern(rValueStr);
-                    pCell->SetResultToken(new formula::FormulaStringToken(aSS));
+                    pCell->SetResultToken(new formula::FormulaStringToken(std::move(aSS)));
                     pCell->ResetDirty();
                     pCell->SetChanged(false);
                 }

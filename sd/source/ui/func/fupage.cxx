@@ -349,7 +349,7 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent, const SfxRequest&
 
             // MigrateItemSet makes sure the XFillBitmapItem will have a unique name
             SfxItemSetFixed<XATTR_FILLBITMAP, XATTR_FILLBITMAP> aMigrateSet( mpDoc->GetPool() );
-            aMigrateSet.Put(XFillBitmapItem("background", aGraphic));
+            aMigrateSet.Put(XFillBitmapItem("background", std::move(aGraphic)));
             SdrModel::MigrateItemSet( &aMigrateSet, &*pTempSet, mpDoc );
 
             pTempSet->Put( XFillBmpStretchItem( true ));

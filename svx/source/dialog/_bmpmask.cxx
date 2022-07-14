@@ -783,7 +783,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
                     if( bReplace )
                     {
                         aFont.SetColor( aCol );
-                        pAct = new MetaFontAction( aFont );
+                        pAct = new MetaFontAction( std::move(aFont) );
                     }
 
                     aMtf.AddAction( pAct );
@@ -801,7 +801,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
                     if( bReplace )
                     {
                         aWall.SetColor( aCol );
-                        pAct = new MetaWallpaperAction( pAct->GetRect(), aWall );
+                        pAct = new MetaWallpaperAction( pAct->GetRect(), std::move(aWall) );
                     }
 
                     aMtf.AddAction( pAct );
