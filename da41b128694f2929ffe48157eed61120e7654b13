@@ -16,6 +16,23 @@
       "message": "Two more needed",
       "revId": "da41b128694f2929ffe48157eed61120e7654b13",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdaabf60_dc7913c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-07-14T06:20:45Z",
+      "side": 1,
+      "message": "I think we have the 3 reviews: Xisco, Thorsten, myself.",
+      "revId": "da41b128694f2929ffe48157eed61120e7654b13",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
