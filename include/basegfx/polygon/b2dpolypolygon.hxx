@@ -36,7 +36,7 @@ namespace basegfx
     class BASEGFX_DLLPUBLIC B2DPolyPolygon
     {
     private:
-        o3tl::cow_wrapper<ImplB2DPolyPolygon> mpPolyPolygon;
+        o3tl::cow_wrapper<ImplB2DPolyPolygon, o3tl::ThreadSafeRefCountingPolicy> mpPolyPolygon;
 
     public:
         B2DPolyPolygon();
