@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "064bdbd9_6094829e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-07-14T13:34:22Z",
+      "side": 1,
+      "message": "overriding jenkins here - the entitlements file in question/the substitution isn\u0027t used by jenkins builders, so if configure passes, then that is already all the verification the bots can do for this one...",
+      "revId": "b6d3223df9a80e1f9b054b9585de5e8a61cf4fa1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
