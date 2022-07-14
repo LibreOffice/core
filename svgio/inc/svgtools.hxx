@@ -111,6 +111,7 @@ namespace svgio::svgreader
         basegfx::B2DRange readViewBox(const OUString& rCandidate, InfoProvider const & rInfoProvider);
         basegfx::B2DHomMatrix readTransform(const OUString& rCandidate, InfoProvider const & rInfoProvider);
         bool readSingleNumber(const OUString& rCandidate, SvgNumber& aNum);
+        bool readLocalLink(const OUString& rCandidate, OUString& rURL);
         bool readLocalUrl(const OUString& rCandidate, OUString& rURL);
         bool readSvgPaint(const OUString& rCandidate, SvgPaint& rSvgPaint, OUString& rURL, SvgNumber& rOpacity);
 
