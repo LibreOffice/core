@@ -1057,6 +1057,24 @@ namespace svgio::svgreader
             return readNumberAndUnit(rCandidate, nPos, aNum, nLen);
         }
 
+        bool readLocalLink(const OUString& rCandidate, OUString& rURL)
+        {
+            sal_Int32 nPos(0);
+            const sal_Int32 nLen(rCandidate.getLength());
+
+            skip_char(rCandidate, ' ', nPos, nLen);
+
+            if(nLen && '#' == rCandidate[nPos])
+            {
+                ++nPos;
+                rURL = rCandidate.copy(nPos);
+
+                return true;
+            }
+
+            return false;
+        }
+
         bool readLocalUrl(const OUString& rCandidate, OUString& rURL)
         {
             static const char aStrUrl[] = "url(";
@@ -1308,12 +1326,7 @@ namespace svgio::svgreader
             rMimeType.clear();
             rData.clear();
 
-            if('#' == rCandidate[0])
-            {
-                // local link
-                rXLink = rCandidate.copy(1);
-            }
-            else
+            if(!readLocalLink(rCandidate, rXLink))
             {
                 static const char aStrData[] = "data:";
 
