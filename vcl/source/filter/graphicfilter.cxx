@@ -1795,50 +1795,6 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, std::u16string_vi
             else if ( aFilterName.equalsIgnoreAsciiCase( EXP_PNG ) )
             {
                 vcl::PNGWriter aPNGWriter( aGraphic.GetBitmapEx(), pFilterData );
-                if ( pFilterData )
-                {
-                    for ( const auto& rPropVal : *pFilterData )
-                    {
-                        if ( rPropVal.Name == "AdditionalChunks" )
-                        {
-                            css::uno::Sequence< css::beans::PropertyValue > aAdditionalChunkSequence;
-                            if ( rPropVal.Value >>= aAdditionalChunkSequence )
-                            {
-                                for ( const auto& rAdditionalChunk : std::as_const(aAdditionalChunkSequence) )
-                                {
-                                    if ( rAdditionalChunk.Name.getLength() == 4 )
-                                    {
-                                        sal_uInt32 nChunkType = 0;
-                                        for ( sal_Int32 k = 0; k < 4; k++ )
-                                        {
-                                            nChunkType <<= 8;
-                                            nChunkType |= static_cast<sal_uInt8>(rAdditionalChunk.Name[ k ]);
-                                        }
-                                        css::uno::Sequence< sal_Int8 > aByteSeq;
-                                        if ( rAdditionalChunk.Value >>= aByteSeq )
-                                        {
-                                            std::vector< vcl::PNGWriter::ChunkData >& rChunkData = aPNGWriter.GetChunks();
-                                            if ( !rChunkData.empty() )
-                                            {
-                                                sal_uInt32 nChunkLen = aByteSeq.getLength();
-
-                                                vcl::PNGWriter::ChunkData aChunkData;
-                                                aChunkData.nType = nChunkType;
-                                                if ( nChunkLen )
-                                                {
-                                                    aChunkData.aData.resize( nChunkLen );
-                                                    memcpy( aChunkData.aData.data(), aByteSeq.getConstArray(), nChunkLen );
-                                                }
-                                                std::vector< vcl::PNGWriter::ChunkData >::iterator aIter = rChunkData.end() - 1;
-                                                rChunkData.insert( aIter, aChunkData );
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
                 aPNGWriter.Write( rOStm );
 
                 if( rOStm.GetError() )
