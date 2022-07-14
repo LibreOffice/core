@@ -19,6 +19,7 @@
 
 #include "atkwrapper.hxx"
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
+#include <sal/log.hxx>
 #include <gtk/gtk.h>
 
 using namespace ::com::sun::star;
@@ -51,15 +52,41 @@ static css::uno::Reference<css::accessibility::XAccessibleComponent>
     return css::uno::Reference<css::accessibility::XAccessibleComponent>();
 }
 
+static awt::Point
+lcl_getLocationInWindow(AtkComponent* pAtkComponent,
+                        css::uno::Reference<accessibility::XAccessibleComponent> const& xComponent)
+{
+    // calculate position in window by adding the component's position in the parent
+    // to the parent's position in the window (unless parent is a window itself)
+    awt::Point aPos = xComponent->getLocation();
+    AtkObject* pParent = atk_object_get_parent(ATK_OBJECT(pAtkComponent));
+    if (ATK_IS_COMPONENT(pParent) && pParent->role != AtkRole::ATK_ROLE_DIALOG
+            && pParent->role != AtkRole::ATK_ROLE_FILE_CHOOSER
+            && pParent->role != AtkRole::ATK_ROLE_FRAME
+            && pParent->role != AtkRole::ATK_ROLE_WINDOW)
+    {
+        int nX;
+        int nY;
+        atk_component_get_extents(ATK_COMPONENT(pParent), &nX, &nY, nullptr, nullptr, ATK_XY_WINDOW);
+        aPos.X += nX;
+        aPos.Y += nY;
+    }
+
+    return aPos;
+}
+
 /*****************************************************************************/
 
 static awt::Point
-translatePoint( css::uno::Reference<accessibility::XAccessibleComponent> const & pComponent,
+translatePoint( AtkComponent* pAtkComponent,
+                css::uno::Reference<accessibility::XAccessibleComponent> const & pComponent,
                 gint x, gint y, AtkCoordType t)
 {
     awt::Point aOrigin( 0, 0 );
     if( t == ATK_XY_SCREEN )
         aOrigin = pComponent->getLocationOnScreen();
+    else if (t == ATK_XY_WINDOW)
+        aOrigin = lcl_getLocationInWindow(pAtkComponent, pComponent);
     return awt::Point( x - aOrigin.X, y - aOrigin.Y );
 }
 
@@ -111,7 +138,8 @@ component_wrapper_contains (AtkComponent *component,
         css::uno::Reference<css::accessibility::XAccessibleComponent> pComponent
             = getComponent(obj);
         if( pComponent.is() )
-            return pComponent->containsPoint( translatePoint( pComponent, x, y, coord_type ) );
+            return pComponent->containsPoint(
+                translatePoint(component, pComponent, x, y, coord_type));
     }
     catch( const uno::Exception & )
     {
@@ -142,7 +170,7 @@ component_wrapper_ref_accessible_at_point (AtkComponent *component,
         if( pComponent.is() )
         {
             uno::Reference< accessibility::XAccessible > xAccessible = pComponent->getAccessibleAtPoint(
-                translatePoint( pComponent, x, y, coord_type ) );
+                translatePoint(component, pComponent, x, y, coord_type));
             return atk_object_wrapper_ref( xAccessible );
         }
     }
@@ -182,8 +210,24 @@ component_wrapper_get_position (AtkComponent   *component,
 
             if( coord_type == ATK_XY_SCREEN )
                 aPos = pComponent->getLocationOnScreen();
+            else if (coord_type == ATK_XY_WINDOW)
+                aPos = lcl_getLocationInWindow(component, pComponent);
+#if ATK_CHECK_VERSION(2, 30, 0)
+            else if (coord_type == ATK_XY_PARENT)
+#else
+            // ATK_XY_PARENT added in ATK 2.30, so can't use the constant here
             else
+#endif
                 aPos = pComponent->getLocation();
+#if ATK_CHECK_VERSION(2, 30, 0)
+            else
+            {
+                SAL_WARN("vcl.gtk",
+                         "component_wrapper_get_position called with unknown AtkCoordType "
+                             << coord_type);
+                return;
+            }
+#endif
 
             *x = aPos.X;
             *y = aPos.Y;

@@ -666,7 +666,7 @@ text_wrapper_get_character_extents( AtkText          *text,
             gint origin_x = 0;
             gint origin_y = 0;
 
-            if( coords == ATK_XY_SCREEN )
+            if (coords == ATK_XY_SCREEN || coords == ATK_XY_WINDOW)
             {
                 g_return_if_fail( ATK_IS_COMPONENT( text ) );
                 SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -717,7 +717,7 @@ text_wrapper_get_offset_at_point (AtkText     *text,
             gint origin_x = 0;
             gint origin_y = 0;
 
-            if( coords == ATK_XY_SCREEN )
+            if (coords == ATK_XY_SCREEN || coords == ATK_XY_WINDOW)
             {
                 g_return_val_if_fail( ATK_IS_COMPONENT( text ), -1 );
                 SAL_WNODEPRECATED_DECLARATIONS_PUSH
