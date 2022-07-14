@@ -840,6 +840,8 @@ void SwDocUpdateField::MakeFieldList_( SwDoc& rDoc, int eGetMode )
     // new version: walk all fields of the attribute pool
     m_pFieldSortList.reset(new SetGetExpFields);
 
+    std::vector<std::reference_wrapper<SwSection>> aUnhiddenSections;
+
     // consider and unhide sections
     //     with hide condition, only in mode GETFLD_ALL (<eGetMode == GETFLD_ALL>)
     //     notes by OD:
@@ -886,13 +888,25 @@ void SwDocUpdateField::MakeFieldList_( SwDoc& rDoc, int eGetMode )
         {
             pSectNd = rDoc.GetNodes()[ aTmpArr[ n ] ]->GetSectionNode();
             OSL_ENSURE( pSectNd, "Where is my SectionNode" );
-            pSectNd->GetSection().SetCondHidden( false );
+
+            auto& rSection = pSectNd->GetSection();
+            if (rSection.IsCondHidden()) // only show if hidden
+            {
+                aUnhiddenSections.push_back(std::ref(rSection)); // remember to later hide again
+                rSection.SetCondHidden(false);
+            }
         }
         for (std::vector<sal_uLong>::size_type n = 0; n < nArrStt; ++n)
         {
             pSectNd = rDoc.GetNodes()[ aTmpArr[ n ] ]->GetSectionNode();
             OSL_ENSURE( pSectNd, "Where is my SectionNode" );
-            pSectNd->GetSection().SetCondHidden( false );
+
+            auto& rSection = pSectNd->GetSection();
+            if (rSection.IsCondHidden()) // only show if hidden
+            {
+                aUnhiddenSections.push_back(std::ref(rSection)); // remember to later hide again
+                rSection.SetCondHidden(false);
+            }
         }
 
         // add all to the list so that they are sorted
@@ -1033,6 +1047,20 @@ void SwDocUpdateField::MakeFieldList_( SwDoc& rDoc, int eGetMode )
     }
     m_nFieldListGetMode = eGetMode;
     m_nNodes = rDoc.GetNodes().Count();
+
+    // recalculate the sections that were unhidden temporarily
+    for (auto& rSectionWrapper : aUnhiddenSections)
+    {
+        auto& rSection = rSectionWrapper.get();
+        if (rSection.IsHidden() && !rSection.GetCondition().isEmpty() )
+        {
+            SwCalc aCalc(rDoc);
+            SwSectionNode* pNode = rSection.GetFormat()->GetSectionNode();
+            rDoc.getIDocumentFieldsAccess().FieldsToCalc(aCalc, pNode->GetIndex(), SAL_MAX_INT32);
+            bool bCondHidden = aCalc.Calculate(rSection.GetCondition()).GetBool();
+            rSection.SetCondHidden(bCondHidden);
+        }
+    }
 }
 
 void SwDocUpdateField::GetBodyNode( const SwTextField& rTField, SwFieldIds nFieldWhich )
