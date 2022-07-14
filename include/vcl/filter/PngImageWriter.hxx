@@ -14,11 +14,19 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <tools/stream.hxx>
 #include <vcl/bitmapex.hxx>
+#include <vector>
 
 #pragma once
 
 namespace vcl
 {
+// Similar to png_unknown_chunk
+struct PngChunk
+{
+    std::array<uint8_t, 5> name;
+    std::vector<sal_uInt8> data;
+    size_t size;
+};
 class VCL_DLLPUBLIC PngImageWriter
 {
     SvStream& mrStream;
@@ -26,22 +34,14 @@ class VCL_DLLPUBLIC PngImageWriter
 
     sal_Int32 mnCompressionLevel;
     bool mbInterlaced;
+    std::vector<PngChunk> maAdditionalChunks;
 
 public:
     PngImageWriter(SvStream& rStream);
 
-    virtual ~PngImageWriter() {}
+    virtual ~PngImageWriter() = default;
 
-    void setParameters(css::uno::Sequence<css::beans::PropertyValue> const& rParameters)
-    {
-        for (auto const& rValue : rParameters)
-        {
-            if (rValue.Name == "Compression")
-                rValue.Value >>= mnCompressionLevel;
-            else if (rValue.Name == "Interlaced")
-                rValue.Value >>= mbInterlaced;
-        }
-    }
+    void setParameters(css::uno::Sequence<css::beans::PropertyValue> const& rParameters);
     bool write(BitmapEx& rBitmap);
 };
 
