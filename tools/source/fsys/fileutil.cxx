@@ -10,6 +10,7 @@
 #include <tools/fileutil.hxx>
 #if defined _WIN32
 #include <osl/file.hxx>
+#include <rtl/uri.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
@@ -29,7 +30,11 @@ OUString UNCToDavURL(LPCWSTR sUNC)
         bufURL = std::make_unique<wchar_t[]>(nSize);
         nResult = DavGetHTTPFromUNCPath(sUNC, bufURL.get(), &nSize);
     }
-    return nResult == ERROR_SUCCESS ? OUString(o3tl::toU(bufURL.get())) : OUString();
+    // looks like on different Windowses this may or may not be URL encoded?
+    return nResult == ERROR_SUCCESS
+               ? ::rtl::Uri::encode(OUString(o3tl::toU(bufURL.get())), rtl_UriCharClassUric,
+                                    rtl_UriEncodeKeepEscapes, RTL_TEXTENCODING_UTF8)
+               : OUString();
 }
 #endif
 }
