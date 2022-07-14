@@ -2414,6 +2414,29 @@ KEYINPUT_CHECKTABLE_INSDEL:
             aCh = '\t';
             [[fallthrough]];
         case SwKeyState::InsChar:
+            if (rSh.CursorInsideContentControl())
+            {
+                const SwPosition* pStart = rSh.GetCursor()->Start();
+                SwTextNode* pTextNode = pStart->nNode.GetNode().GetTextNode();
+                if (pTextNode)
+                {
+                    sal_Int32 nIndex = pStart->nContent.GetIndex();
+                    SwTextAttr* pAttr = pTextNode->GetTextAttrAt(nIndex, RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT);
+                    if (pAttr)
+                    {
+                        auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
+                        const SwFormatContentControl& rFormatContentControl = pTextContentControl->GetContentControl();
+                        std::shared_ptr<SwContentControl> pContentControl = rFormatContentControl.GetContentControl();
+                        if (pContentControl->IsInteractingCharacter(aCh))
+                        {
+                            rSh.GotoContentControl(rFormatContentControl);
+                            eKeyState = SwKeyState::End;
+                            break;
+                        }
+                    }
+                }
+            }
+
             if (rSh.GetChar(false)==CH_TXT_ATR_FORMELEMENT)
             {
                 ::sw::mark::ICheckboxFieldmark* pFieldmark =

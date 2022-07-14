@@ -301,6 +301,16 @@ double SwContentControl::GetCurrentDateValue() const
     return dCurrentDate;
 }
 
+bool SwContentControl::IsInteractingCharacter(sal_Unicode cCh)
+{
+    if (GetCheckbox())
+    {
+        return cCh == ' ';
+    }
+
+    return false;
+}
+
 void SwContentControl::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwContentControl"));

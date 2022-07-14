@@ -25,6 +25,11 @@
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
 #include <formatcontentcontrol.hxx>
+#include <view.hxx>
+#include <edtwin.hxx>
+#include <txatbase.hxx>
+#include <ndtxt.hxx>
+#include <textcontentcontrol.hxx>
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/core/txtnode/data/";
 
@@ -218,6 +223,30 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testInsertDropDownContentControlTwice)
 
     // When trying to insert an inner one, make sure that we don't crash:
     pWrtShell->InsertContentControl(SwContentControlType::DROP_DOWN_LIST);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testCheckboxContentControlKeyboard)
+{
+    // Given an already selected checkbox content control:
+    SwDoc* pDoc = createSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->InsertContentControl(SwContentControlType::CHECKBOX);
+    SwEditWin& rEditWin = pWrtShell->GetView().GetEditWin();
+
+    // When pressing space on the keyboard:
+    KeyEvent aKeyEvent(' ', KEY_SPACE);
+    rEditWin.KeyInput(aKeyEvent);
+
+    // Then make sure the state is toggled:
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetNode().GetTextNode();
+    SwTextAttr* pAttr = pTextNode->GetTextAttrForCharAt(0, RES_TXTATR_CONTENTCONTROL);
+    auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
+    auto& rFormatContentControl
+        = static_cast<SwFormatContentControl&>(pTextContentControl->GetAttr());
+    std::shared_ptr<SwContentControl> pContentControl = rFormatContentControl.GetContentControl();
+    // Without the accompanying fix in place, this test would have failed, because the state
+    // remained unchanged.
+    CPPUNIT_ASSERT(pContentControl->GetChecked());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
