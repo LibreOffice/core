@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5a11bbc_fd886860",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2022-07-14T07:20:06Z",
+      "side": 1,
+      "message": "Hi Caolán,\n\nMay I get some advice about gtk? Is it possible to grey out a row (both checkbox and the text col too) of the pop-up autofilter element on GTK too?\nI checked the set_sensitive(const weld::TreeIter\u0026 rIter, bool bSensitive, int col) function in the gtkinst.cxx, it looks like, its only set the m_nTextCol.\nBut even if the m_nTextCol was set as sensitive the checkbox is still clickable in the row.\nIs it possible to make sensitive of the checkbox too and make unclickable the checbox?\nBy the way the text of the filter element wasn\u0027t gray out after the m_nTextCol was set as sensitive. Is it normal or shouldn\u0027t it be painted as gray just like on the other UI?\n",
+      "revId": "247291ff4ebefc25f2eecce384e85ed9c7e70686",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
