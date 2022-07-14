@@ -361,7 +361,7 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
                         if (eType == DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_CELLRANGE && oaCellRange.has_value())
                         {
                             xCustomLabel->setCellRange( oaCellRange.value() );
-                            xCustomLabel->setString( oaLabelText.value() );
+                            xCustomLabel->setString( oaLabelText.value_or("") );
                             xCustomLabel->setDataLabelsRange( true );
                         }
                         else
