@@ -205,7 +205,7 @@ public:
     }
 };
 
-    static o3tl::cow_wrapper<ImplB2DPolyPolygon> DEFAULT;
+    static o3tl::cow_wrapper<ImplB2DPolyPolygon, o3tl::ThreadSafeRefCountingPolicy> DEFAULT;
 
     B2DPolyPolygon::B2DPolyPolygon() :
         mpPolyPolygon(DEFAULT) {}

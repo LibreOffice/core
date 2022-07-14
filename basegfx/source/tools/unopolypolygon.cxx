@@ -38,8 +38,6 @@ namespace basegfx::unotools
         maPolyPoly(std::move( aPolyPoly )),
         meFillRule( rendering::FillRule_EVEN_ODD )
     {
-        // or else races will haunt us.
-        maPolyPoly.makeUnique();
     }
 
     void SAL_CALL UnoPolyPolygon::addPolyPolygon(
@@ -440,10 +438,7 @@ namespace basegfx::unotools
     {
         std::unique_lock const guard( m_aMutex );
 
-        // detach result from us
-        B2DPolyPolygon aRet( maPolyPoly );
-        aRet.makeUnique();
-        return aRet;
+        return maPolyPoly;
     }
 
 }
