@@ -36,9 +36,9 @@ class ColorFilterTest(UITestCase):
                 xCond1 = xDialog.getChild("cond1")
 
                 # tdf#143103: Without the fix in place, this test would have failed with
-                # AssertionError: 'Text color' != ''
+                # AssertionError: 'Font color' != ''
                 self.assertEqual("Text color", get_state_as_dict(xField1)['DisplayText'])
-                self.assertEqual("Text color", get_state_as_dict(xCond1)['DisplayText'])
+                self.assertEqual("Font color", get_state_as_dict(xCond1)['DisplayText'])
 
                 xColor1 = xDialog.getChild("color1")
 
