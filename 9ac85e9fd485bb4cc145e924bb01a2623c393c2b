@@ -51,6 +51,23 @@
       "parentUuid": "9aa9cbfb_8b4f914d",
       "revId": "9ac85e9fd485bb4cc145e924bb01a2623c393c2b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72ae9c04_7cf47a5f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-07-14T06:31:43Z",
+      "side": 1,
+      "message": "Thanks for your submission.\n\nAs you can see in the related blog post:\n\nUse atan2 function instead of atan – EasyHack\nhttps://dev.blog.documentfoundation.org/2021/11/17/use-atan2-function-instead-of-atan-easyhack/\n\nthis EasyHack is not about simply changing atan to atan2, no matter what the conditions are! You also have to make sure that the new computation is compatible with the previous calculations or what was intended. As you may know, atan2 is a piecewise function, that works differently according to the range in which the input values fall inside. Taking care of the output range and removing the extra conditions are also parts of this task.\n\nPlease read this section carefully:\nhttps://en.wikipedia.org/wiki/Atan2#Definition_and_computation\n\nI suggest you to keep only one instance of this change (for example, hwpfilter/source/hwpreader.cxx), and forget about others. Then, make sure that the atan2 is used properly.",
+      "revId": "9ac85e9fd485bb4cc145e924bb01a2623c393c2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
