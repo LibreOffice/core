@@ -33,7 +33,7 @@ namespace sdr::animation
             // the animated VOC
             sdr::contact::ViewObjectContact&                    mrVOContact;
 
-            // the vetor of animated primitives
+            // the vector of animated primitives
             drawinglayer::primitive2d::Primitive2DContainer      maAnimatedPrimitives;
 
             // local helpers
