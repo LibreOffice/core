@@ -4125,7 +4125,7 @@ void ScInputHandler::InputCommand( const CommandEvent& rCEvt )
             {
                 if (pTableView)
                     pTableView->Command( rCEvt );
-                if (pTopView && !comphelper::LibreOfficeKit::isActive())
+                if (pTopView)
                     pTopView->Command( rCEvt );
 
                 if ( rCEvt.GetCommand() == CommandEventId::EndExtTextInput )
