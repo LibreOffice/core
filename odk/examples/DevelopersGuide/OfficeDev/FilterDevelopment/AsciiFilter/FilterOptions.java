@@ -46,13 +46,6 @@ import com.sun.star.uno.UnoRuntime;
                     - a stream for input or output
                     - or a URL for creating such streams
                     - information about required action on filtering
-
-  @attention    This class mustn't be threadsafe - because instances of it
-                are used temp. only - not as members. So no concurrent access
-                should occur.
-                Another reason: it would be very difficult to safe every
-                access on our internal member. To do so - we must implement
-                special methods instead of allowing pure member access.
  ************************************************************************-*/
 
 public class FilterOptions
