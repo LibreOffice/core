@@ -412,9 +412,18 @@ void ScInputWindow::StartFormula()
         EditView* pView = mxTextWindow->GetEditView();
         if (pView)
         {
+            sal_Int32 nStartPara = 0, nEndPara = 0;
             if (comphelper::LibreOfficeKit::isActive())
+            {
                 TextGrabFocus();
-            pView->SetSelection( ESelection(0, nStartPos, 0, nEndPos) );
+                if (pViewSh && !pViewSh->isLOKDesktop())
+                {
+                    nStartPara = nEndPara = pView->GetEditEngine()->GetParagraphCount() ?
+                        (pView->GetEditEngine()->GetParagraphCount() - 1) : 0;
+                    nStartPos = nEndPos = pView->GetEditEngine()->GetTextLen(nStartPara);
+                }
+            }
+            pView->SetSelection(ESelection(nStartPara, nStartPos, nEndPara, nEndPos));
             pScMod->InputChanged(pView);
             SetOkCancelMode();
             pView->SetEditEngineUpdateLayout(true);
@@ -1779,10 +1788,26 @@ bool ScTextWnd::Command( const CommandEvent& rCEvt )
         // see vcl/jsdialog/executor.cxx "textselection" event
         const Point* pParaPoint = static_cast<const Point*>(rCEvt.GetEventData());
         Point aSelectionStartEnd = rCEvt.GetMousePosPixel();
-        m_xEditView->SetSelection(
-            ESelection((pParaPoint ? pParaPoint->X() : 0), aSelectionStartEnd.X(),
-                       (pParaPoint ? pParaPoint->Y() : 0), aSelectionStartEnd.Y()));
 
+        sal_Int32 nParaStart, nParaEnd, nPosStart, nPosEnd;
+
+        ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
+        if (pViewSh && pViewSh->isLOKMobilePhone())
+        {
+            // We use IME - do not select anything, put cursor at the end
+            nParaStart = nParaEnd = m_xEditView->GetEditEngine()->GetParagraphCount() ?
+                (m_xEditView->GetEditEngine()->GetParagraphCount() - 1) : 0;
+            nPosStart = nPosEnd = m_xEditView->GetEditEngine()->GetTextLen(nParaStart);
+        }
+        else
+        {
+            nParaStart = pParaPoint ? pParaPoint->X() : 0;
+            nParaEnd = pParaPoint ? pParaPoint->Y() : 0;
+            nPosStart = aSelectionStartEnd.X();
+            nPosEnd = aSelectionStartEnd.Y();
+        }
+
+        m_xEditView->SetSelection(ESelection(nParaStart, nPosStart, nParaEnd, nPosEnd));
         SC_MOD()->InputSelection( m_xEditView.get() );
 
         bConsumed = true;
@@ -1944,12 +1969,6 @@ static sal_Int32 findFirstNonMatchingChar(const OUString& rStr1, const OUString&
 
 void ScTextWnd::SetTextString( const OUString& rNewString )
 {
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        ESelection aSel = m_xEditView ? m_xEditView->GetSelection() : ESelection();
-        ScInputHandler::LOKSendFormulabarUpdate(SfxViewShell::Current(), rNewString, aSel);
-    }
-
     // Ideally it would be best to create on demand the EditEngine/EditView here, but... for
     // the initialisation scenario where a cell is first clicked on we end up with the text in the
     // inputbar window scrolled to the bottom if we do that here ( because the tableview and topview
@@ -2022,6 +2041,12 @@ void ScTextWnd::SetTextString( const OUString& rNewString )
             maAccTextDatas.back()->TextChanged();
 
         bInputMode = false;
+    }
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        ESelection aSel = m_xEditView ? m_xEditView->GetSelection() : ESelection();
+        ScInputHandler::LOKSendFormulabarUpdate(SfxViewShell::Current(), rNewString, aSel);
     }
 
     SetScrollBarRange();
