@@ -307,6 +307,10 @@ ifneq ($(WITH_WEBDAV),)
 postprocess_FILES_main += $(postprocess_MOD)/org/openoffice/ucb/Configuration-webdav.xcu
 endif
 
+ifneq ($(ENABLE_MACOSX_SANDBOX),)
+postprocess_FILES_main += $(postprocess_MOD)/org/openoffice/Office/UI/Infobar-macosxsandbox.xcu
+endif
+
 ifneq (,$(SYSTEM_LIBEXTTEXTCAT_DATA))
 postprocess_FILES_main += $(postprocess_MOD)/org/openoffice/Office/Paths-externallibexttextcatdata.xcu
 else

@@ -31,6 +31,9 @@ if test -n "$ENABLE_MACOSX_SANDBOX"; then
     # All data files are in Resources and included in the app bundle signature
     # through that. I think.
     other_files=''
+    # HACK: remove donate menu entries, need to support apple-pay and be verified
+    # as non profit as a bare minimum to allow asking....
+    sed -I "" -e '\#<menu:menuitem menu:id=".uno:Donation"/>#d' $APP_BUNDLE/Contents/Resources/config/soffice.cfg/modules/*/menubar/menubar.xml
 else
     # We then want to sign data files, too, hmm.
     entitlements="--entitlements $BUILDDIR/hardened_runtime.xcent"
