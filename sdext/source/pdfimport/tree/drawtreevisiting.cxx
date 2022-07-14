@@ -188,21 +188,30 @@ void DrawXmlEmitter::fillFrameProps( DrawElement&       rElem,
                                      bool               bWasTransformed
                                      )
 {
-    rProps[ "draw:z-index" ] = OUString::number( rElem.ZOrder );
-    rProps[ "draw:style-name"] = rEmitContext.rStyles.getStyleName( rElem.StyleId );
+    static constexpr OUStringLiteral sDrawZIndex = u"draw:z-index";
+    static constexpr OUStringLiteral sDrawStyleName = u"draw:style-name";
+    static constexpr OUStringLiteral sDrawTextStyleName = u"draw:text-style-name";
+    static constexpr OUStringLiteral sSvgX = u"svg:x";
+    static constexpr OUStringLiteral sSvgY = u"svg:y";
+    static constexpr OUStringLiteral sSvgWidth = u"svg:width";
+    static constexpr OUStringLiteral sSvgHeight = u"svg:height";
+    static constexpr OUStringLiteral sDrawTransform = u"draw:transform";
+
+    rProps[ sDrawZIndex ] = OUString::number( rElem.ZOrder );
+    rProps[ sDrawStyleName ] = rEmitContext.rStyles.getStyleName( rElem.StyleId );
 
     if (rElem.IsForText)
-        rProps["draw:text-style-name"] = rEmitContext.rStyles.getStyleName(rElem.TextStyleId);
+        rProps[ sDrawTextStyleName ] = rEmitContext.rStyles.getStyleName(rElem.TextStyleId);
 
     const GraphicsContext& rGC =
         rEmitContext.rProcessor.getGraphicsContext( rElem.GCId );
 
     if (bWasTransformed)
     {
-        rProps[ "svg:x" ]       = convertPixelToUnitString(rElem.x);
-        rProps[ "svg:y" ]       = convertPixelToUnitString(rElem.y);
-        rProps[ "svg:width" ]   = convertPixelToUnitString(rElem.w);
-        rProps[ "svg:height" ]  = convertPixelToUnitString(rElem.h);
+        rProps[ sSvgX ]       = convertPixelToUnitString(rElem.x);
+        rProps[ sSvgY ]       = convertPixelToUnitString(rElem.y);
+        rProps[ sSvgWidth ]   = convertPixelToUnitString(rElem.w);
+        rProps[ sSvgHeight ]  = convertPixelToUnitString(rElem.h);
     }
     else
     {
@@ -236,7 +245,7 @@ void DrawXmlEmitter::fillFrameProps( DrawElement&       rElem,
         aBuf.append(mat.get(1, 2));
         aBuf.append(")");
 
-        rProps["draw:transform"] = aBuf.makeStringAndClear();
+        rProps[ sDrawTransform ] = aBuf.makeStringAndClear();
     }
 }
 

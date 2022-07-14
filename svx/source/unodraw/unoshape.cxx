@@ -143,8 +143,9 @@ namespace {
 class ShapePositionProvider : public PropertyValueProvider
 {
 public:
+    static constexpr OUStringLiteral sPosition = u"Position";
     explicit ShapePositionProvider( SvxShape& _shape )
-        :PropertyValueProvider( _shape, "Position" )
+        :PropertyValueProvider( _shape, sPosition )
     {
     }
 

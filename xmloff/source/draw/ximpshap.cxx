@@ -707,8 +707,9 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
             // SwTextBoxHelper::syncProperty, which indirectly calls SwTextBoxHelper::isTextBox)
             uno::Reference<beans::XPropertySetInfo> xPropertySetInfo
                 = xPropSet->getPropertySetInfo();
-            if (xPropertySetInfo->hasPropertyByName("TextBox"))
-                xPropSet->setPropertyValue("TextBox", uno::Any(mbTextBox));
+            static constexpr OUStringLiteral sTextBox = u"TextBox";
+            if (xPropertySetInfo->hasPropertyByName(sTextBox))
+                xPropSet->setPropertyValue(sTextBox, uno::Any(mbTextBox));
 
             // if this is an auto style, set its properties
             if(bAutoStyle && pDocStyle)
