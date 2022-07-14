@@ -611,10 +611,11 @@ Const vbGet = 2, vbLet = 4, vbMethod = 1, vbSet = 8
 &apos;	Protocol flags
 Const cstDateArg = 64		&apos;	May contain a date argument
 Const cstDateRet = 128		&apos;	Return value can be a date
+Const cstUno = 256			&apos;	Return value can be a UNO object
 Const cstArgArray = 512		&apos;	Any argument can be a 2D array
 Const cstRetArray = 1024	&apos;	Return value can be an array
-Const cstUno = 256			&apos;	Return value can be a UNO object
 Const cstObject = 2048		&apos;	1st argument is a Basic object when numeric
+Const cstHardCode = 4096	&apos;	Method must not be executed with CallByName()
 &apos;	Object nature in returned array
 Const objMODULE = 1, objCLASS = 2, objUNO = 3
 
@@ -625,7 +626,7 @@ Check:
 	&apos;	Ignore Null basic objects (Null = Null or Nothing)
 	If IsNull(BasicObject) Or IsEmpty(BasicObject) Then GoTo Catch
 
-	&apos;	Reinterpret arguments one by one into vArgs, examine iso-dates and conventional NoArgs/Empty/Null values
+	&apos;	Reinterpret arguments one by one into vArgs, convert UNO date/times and conventional NoArgs/Empty/Null/Missing values
 	iNbArgs = -1
 	vArgs = Array()
 
@@ -667,14 +668,14 @@ Try:
 	&apos;				The CallByName function fails when returning an array
 	&apos;			(2) Python has tuples and tuple of tuples, not 2D arrays
 	&apos;			(3) Passing 2D arrays through a script provider always transform it into a sequence of sequences
+	&apos;			(4) The CallByName function takes exclusive control on the targeted object up to its exit
 	&apos;	1.	Methods in usual modules are called by ExecuteBasicScript() except if they use a ParamArray
 	&apos;	2.	Properties in any service are got and set with obj.GetProperty/SetProperty(...)
 	&apos;	3.	Methods in class modules are invoked with CallByName
 	&apos;	4.	Methods in class modules using a 2D array or returning arrays, or methods using ParamArray,
 &apos;&apos;&apos;			are hardcoded as exceptions or are not implemented
-	&apos;	5.	Methods returning a 1D array when no arguments and a scalar otherwise (e.g. SF_Dialog.Controls())
-	&apos;		may be considered as properties when no argument
-&apos;			Requires Python and Basic update in the concerned library but is transparent for this dispatcher
+	&apos;	5.	Due to constraint (4), a predefined list of method calls must be hardcoded to avoid blocking use of CallByName
+	&apos;		The concerned methods are flagged with cstHardCode
 
 	With _SF_
 		&apos;	Initialize Python persistent storage at 1st call
@@ -816,6 +817,19 @@ Try:
 					End Select
 				End If
 			
+			&apos;	Methods in class modules may better not be executed with CallByName()
+			ElseIf bBasicClass And ((CallType And vbMethod) + (CallType And cstHardCode)) = vbMethod + cstHardCode Then
+				Select Case sServiceName
+					Case &quot;SFDialogs.Dialog&quot;
+						Select Case Script
+							Case &quot;Activate&quot;			:	vReturn = vBasicObject.Activate()
+							Case &quot;Center&quot;
+								If UBound(vArgs) &lt; 0 Then vReturn = vBasicObject.Center() Else vReturn = vBasicObject.Center(vArgs(0))
+							Case &quot;EndExecute&quot;		:	vReturn = vBasicObject.EndExecute(vArgs(0))
+							Case &quot;Resize&quot;			:	vReturn = vBasicObject.Resize(vArgs(0), vArgs(1), vArgs(2), vArgs(3))
+						End Select
+				End Select
+
 			&apos;	Methods in class modules are invoked with CallByName
 			ElseIf bBasicClass And ((CallType And vbMethod) = vbMethod) Then
 				Select Case UBound(vArgs)
