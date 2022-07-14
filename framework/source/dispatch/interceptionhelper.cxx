@@ -235,7 +235,7 @@ void SAL_CALL InterceptionHelper::disposing(const css::lang::EventObject& aEvent
 
     // We need a full copy of all currently registered interceptor objects.
     // Otherwise we can't iterate over this vector without the risk, that our iterator will be invalid.
-    // Because this vetor will be influenced by every deregistered interceptor.
+    // Because this vector will be influenced by every deregistered interceptor.
     InterceptionHelper::InterceptorList aCopy = m_lInterceptionRegs;
 
     aReadLock.clear();
