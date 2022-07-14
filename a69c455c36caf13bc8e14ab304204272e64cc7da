@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "09a14c3a_83bc375d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-07-14T20:51:28Z",
+      "side": 1,
+      "message": "Jenkins verified - just a capitalization fix on the commit message.",
+      "revId": "a69c455c36caf13bc8e14ab304204272e64cc7da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
