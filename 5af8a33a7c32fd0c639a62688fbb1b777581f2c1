@@ -51,6 +51,24 @@
       "message": "i was a bit concerned about this: there are some elements where it could cause problems, such as text:ruby, text:meta, text:meta-field (possibly text:input-field) as they are well-formed elements and so the text attributes in writer for hyperlinks are split into chunks that don\u0027t overlap these elements.\n\nbut when i try it out with this patch on master, i still get an overlapping hyperlink split into 2 at the text:ruby or text:meta boundary.\n\nnot sure how this works, but it seems to work.",
       "revId": "5af8a33a7c32fd0c639a62688fbb1b777581f2c1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d192bf3_29063e54",
+        "filename": "xmloff/source/text/txtparae.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2277,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-07-14T11:41:17Z",
+      "side": 1,
+      "message": "Thanks for the review!\n\nFTR: text:p and text:a have exactly the same number of allowed children (129 each), all but one pair of them being identical, and the one unmatching pair is: text:p allows text:a as a child, and text:a allows office:event-listeners as a child.\n\nhttps://docs.oasis-open.org/office/OpenDocument/v1.3/OpenDocument-v1.3-part3-schema.html#element-text_p\n\nhttps://docs.oasis-open.org/office/OpenDocument/v1.3/OpenDocument-v1.3-part3-schema.html#element-text_a",
+      "parentUuid": "fe2b492d_f67ff15b",
+      "revId": "5af8a33a7c32fd0c639a62688fbb1b777581f2c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
