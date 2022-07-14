@@ -202,7 +202,7 @@
                 </child>
                 <child>
                   <object class="GtkTreeViewColumn" id="treeviewcolumn7">
-                    <property name="title" translatable="yes" context="filtersubdropdown|textcolor">Text Color</property>
+                    <property name="title" translatable="yes" context="filtersubdropdown|textcolor">Font Color</property>
                     <child>
                       <object class="GtkCellRendererToggle" id="cellrenderertoggle2"/>
                       <attributes>

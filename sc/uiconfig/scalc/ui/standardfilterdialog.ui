@@ -430,7 +430,7 @@
                                   <item translatable="yes" context="standardfilterdialog|cond">Does not begin with</item>
                                   <item translatable="yes" context="standardfilterdialog|cond">Ends with</item>
                                   <item translatable="yes" context="standardfilterdialog|cond">Does not end with</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Text color</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Font color</item>
                                   <item translatable="yes" context="standardfilterdialog|cond">Background color</item>
                                 </items>
                                 <accessibility>
@@ -469,7 +469,7 @@
                                   <item translatable="yes" context="standardfilterdialog|cond">Does not begin with</item>
                                   <item translatable="yes" context="standardfilterdialog|cond">Ends with</item>
                                   <item translatable="yes" context="standardfilterdialog|cond">Does not end with</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Text color</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Font color</item>
                                   <item translatable="yes" context="standardfilterdialog|cond">Background color</item>
                                 </items>
                                 <accessibility>
@@ -508,7 +508,7 @@
                                   <item translatable="yes" context="standardfilterdialog|cond">Does not begin with</item>
                                   <item translatable="yes" context="standardfilterdialog|cond">Ends with</item>
                                   <item translatable="yes" context="standardfilterdialog|cond">Does not end with</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Text color</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Font color</item>
                                   <item translatable="yes" context="standardfilterdialog|cond">Background color</item>
                                 </items>
                                 <accessibility>
@@ -547,7 +547,7 @@
                                   <item translatable="yes" context="standardfilterdialog|cond">Does not begin with</item>
                                   <item translatable="yes" context="standardfilterdialog|cond">Ends with</item>
                                   <item translatable="yes" context="standardfilterdialog|cond">Does not end with</item>
-                                  <item translatable="yes" context="standardfilterdialog|cond">Text color</item>
+                                  <item translatable="yes" context="standardfilterdialog|cond">Font color</item>
                                   <item translatable="yes" context="standardfilterdialog|cond">Background color</item>
                                 </items>
                                 <child internal-child="accessible">
