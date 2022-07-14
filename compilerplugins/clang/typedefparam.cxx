@@ -189,7 +189,7 @@ static bool areTypesEqual(QualType lhs, QualType rhs)
                 return dyn_cast<RecordType>(elaboratedType->desugar());
             };
             auto containsTypedefToRecord = [](clang::QualType type, RecordType const* recordType) {
-                TypedefType const* typedefType = dyn_cast<TypedefType>(type);
+                TypedefType const* typedefType = type->getAs<TypedefType>();
                 if (!typedefType)
                     return false;
                 auto tmp = typedefType->desugar();

@@ -44,23 +44,23 @@ int main()
 {
     OUString s;
     (void)OUString(
-        s); // expected-error@-1 {{redundant functional cast from 'rtl::OUString' to 'rtl::OUString' [loplugin:redundantfcast]}}
+        s); // expected-error-re@-1 {{redundant functional cast from '{{(rtl::)?}}OUString' to '{{(rtl::)?}}OUString' [loplugin:redundantfcast]}}
     using T1 = OUString;
     (void)T1(
-        s); // expected-error@-1 {{redundant functional cast from 'rtl::OUString' to 'T1' (aka 'rtl::OUString') [loplugin:redundantfcast]}}
+        s); // expected-error-re@-1 {{redundant functional cast from '{{(rtl::)?}}OUString' to 'T1' (aka '{{(rtl::)?}}OUString') [loplugin:redundantfcast]}}
     using T2 = OUString const;
     (void)T2(
-        s); // expected-error@-1 {{redundant functional cast from 'rtl::OUString' to 'T2' (aka 'const rtl::OUString') [loplugin:redundantfcast]}}
+        s); // expected-error-re@-1 {{redundant functional cast from '{{(rtl::)?}}OUString' to 'T2' (aka 'const {{(rtl::?)}}OUString') [loplugin:redundantfcast]}}
 
     (void)std::unique_ptr<int>(std::unique_ptr<int>(
         new int{})); // expected-error@-1 {{redundant functional cast from 'std::unique_ptr<int>' to 'std::unique_ptr<int>' [loplugin:redundantfcast]}}
 
     OUString s1;
     method1(OUString(
-        s1)); // expected-error@-1 {{redundant functional cast from 'rtl::OUString' to 'rtl::OUString' [loplugin:redundantfcast]}}
+        s1)); // expected-error-re@-1 {{redundant functional cast from '{{(rtl::)?}}OUString' to '{{(rtl::)?}}OUString' [loplugin:redundantfcast]}}
     OUString s2;
     s2 = OUString(
-        s1); // expected-error@-1 {{redundant functional cast from 'rtl::OUString' to 'rtl::OUString' [loplugin:redundantfcast]}}
+        s1); // expected-error-re@-1 {{redundant functional cast from '{{(rtl::)?}}OUString' to '{{(rtl::)?}}OUString' [loplugin:redundantfcast]}}
     (void)s2;
 
     Color col1;

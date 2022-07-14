@@ -18,7 +18,7 @@
 
 void f1(std::string_view sv)
 {
-    // expected-error@+1 {{replace var of type 'rtl::OString' with 'std::string_view' [loplugin:stringviewvar]}}
+    // expected-error-re@+1 {{replace var of type '{{(rtl::)?}}OString' with 'std::string_view' [loplugin:stringviewvar]}}
     OString s1(sv);
     (void)s1;
 }
@@ -33,7 +33,7 @@ void f2(const OString s1)
 std::string_view f3a();
 void f3()
 {
-    // expected-error@+1 {{replace var of type 'rtl::OString' with 'std::string_view' [loplugin:stringviewvar]}}
+    // expected-error-re@+1 {{replace var of type '{{(rtl::)?}}OString' with 'std::string_view' [loplugin:stringviewvar]}}
     OString s1 = OString(f3a());
     (void)s1;
 }
@@ -48,7 +48,7 @@ void f4(std::string_view sv)
 
 void f5(std::string_view sv)
 {
-    // expected-error@+1 {{replace var of type 'rtl::OString' with 'std::string_view' [loplugin:stringviewvar]}}
+    // expected-error-re@+1 {{replace var of type '{{(rtl::)?}}OString' with 'std::string_view' [loplugin:stringviewvar]}}
     OString s1(sv);
     if (s1 == "xxxx")
         f5(sv);
@@ -56,7 +56,7 @@ void f5(std::string_view sv)
 
 void f6(std::u16string_view sv)
 {
-    // expected-error@+1 {{replace var of type 'rtl::OUString' with 'std::u16string_view' [loplugin:stringviewvar]}}
+    // expected-error-re@+1 {{replace var of type '{{(rtl::)?}}OUString' with 'std::u16string_view' [loplugin:stringviewvar]}}
     OUString s6;
     s6 = sv;
     (void)s6;
