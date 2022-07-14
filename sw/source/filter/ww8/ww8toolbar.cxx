@@ -79,14 +79,14 @@ OUString MSOWordCommandConvertor::MSOTCIDToOOCommand( sal_Int16 key )
 }
 
 SwCTBWrapper::SwCTBWrapper() :
-reserved2(0)
-,reserved3(0)
-,reserved4(0)
-,reserved5(0)
-,cbTBD(0)
-,cCust(0)
-,cbDTBC(0)
-,rtbdc(0)
+m_reserved2(0)
+,m_reserved3(0)
+,m_reserved4(0)
+,m_reserved5(0)
+,m_cbTBD(0)
+,m_cCust(0)
+,m_cbDTBC(0)
+,m_rtbdc(0)
 {
 }
 
@@ -96,19 +96,19 @@ SwCTBWrapper::~SwCTBWrapper()
 
 Customization* SwCTBWrapper::GetCustomizaton( sal_Int16 index )
 {
-    if ( index < 0 || o3tl::make_unsigned(index) >= rCustomizations.size() )
+    if ( index < 0 || o3tl::make_unsigned(index) >= m_rCustomizations.size() )
         return nullptr;
-    return &rCustomizations[ index ];
+    return &m_rCustomizations[ index ];
 }
 
 SwCTB* SwCTBWrapper::GetCustomizationData( const OUString& sTBName )
 {
-    auto it = std::find_if(rCustomizations.begin(), rCustomizations.end(),
+    auto it = std::find_if(m_rCustomizations.begin(), m_rCustomizations.end(),
         [&sTBName](Customization& rCustomization) {
             SwCTB* pCTB = rCustomization.GetCustomizationData();
             return pCTB && pCTB->GetName() == sTBName;
         });
-    if (it != rCustomizations.end())
+    if (it != m_rCustomizations.end())
         return it->GetCustomizationData();
     return nullptr;
 }
@@ -118,10 +118,10 @@ bool SwCTBWrapper::Read( SvStream& rS )
     SAL_INFO("sw.ww8","SwCTBWrapper::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
     Tcg255SubStruct::Read( rS );
-    rS.ReadUInt16( reserved2 ).ReadUChar( reserved3 ).ReadUInt16( reserved4 ).ReadUInt16( reserved5 );
-    rS.ReadInt16( cbTBD ).ReadUInt16( cCust ).ReadInt32( cbDTBC );
-    sal_uInt64 nExpectedPos =  rS.Tell() + cbDTBC;
-    if ( cbDTBC )
+    rS.ReadUInt16( m_reserved2 ).ReadUChar( m_reserved3 ).ReadUInt16( m_reserved4 ).ReadUInt16( m_reserved5 );
+    rS.ReadInt16( m_cbTBD ).ReadUInt16( m_cCust ).ReadInt32( m_cbDTBC );
+    sal_uInt64 nExpectedPos =  rS.Tell() + m_cbDTBC;
+    if ( m_cbDTBC )
     {
         // cbDTBC is the size in bytes of the SwTBC array
         // but the size of a SwTBC element is dynamic ( and this relates to TBDelta's
@@ -136,8 +136,8 @@ bool SwCTBWrapper::Read( SvStream& rS )
             SwTBC aTBC;
             if ( !aTBC.Read( rS ) )
                 return false;
-            rtbdc.push_back( aTBC );
-            bytesToRead = cbDTBC - ( rS.Tell() - nStart );
+            m_rtbdc.push_back( aTBC );
+            bytesToRead = m_cbDTBC - ( rS.Tell() - nStart );
         } while ( bytesToRead > 0 );
     }
     if ( rS.Tell() != nExpectedPos )
@@ -150,43 +150,43 @@ bool SwCTBWrapper::Read( SvStream& rS )
         // seek to correct position after rtbdc
         rS.Seek( nExpectedPos );
     }
-    if (cCust)
+    if (m_cCust)
     {
         //Each customization takes a min of 8 bytes
         size_t nMaxPossibleRecords = rS.remainingSize() / 8;
-        if (cCust > nMaxPossibleRecords)
+        if (m_cCust > nMaxPossibleRecords)
         {
             return false;
         }
-        for (sal_uInt16 index = 0; index < cCust; ++index)
+        for (sal_uInt16 index = 0; index < m_cCust; ++index)
         {
             Customization aCust( this );
             if ( !aCust.Read( rS ) )
                 return false;
-            rCustomizations.push_back( aCust );
+            m_rCustomizations.push_back( aCust );
         }
     }
-    for ( const auto& rIndex : dropDownMenuIndices )
+    for ( const auto& rIndex : m_dropDownMenuIndices )
     {
-        if (rIndex < 0 || o3tl::make_unsigned(rIndex) >= rCustomizations.size())
+        if (rIndex < 0 || o3tl::make_unsigned(rIndex) >= m_rCustomizations.size())
             continue;
-        rCustomizations[rIndex].m_bIsDroppedMenuTB = true;
+        m_rCustomizations[rIndex].m_bIsDroppedMenuTB = true;
     }
     return rS.good();
 }
 
 SwTBC* SwCTBWrapper::GetTBCAtOffset( sal_uInt32 nStreamOffset )
 {
-    auto it = std::find_if(rtbdc.begin(), rtbdc.end(),
+    auto it = std::find_if(m_rtbdc.begin(), m_rtbdc.end(),
         [&nStreamOffset](SwTBC& rItem) { return rItem.GetOffset() == nStreamOffset; });
-    if ( it != rtbdc.end() )
+    if ( it != m_rtbdc.end() )
         return &(*it);
     return nullptr;
 }
 
 bool SwCTBWrapper::ImportCustomToolBar( SfxObjectShell& rDocSh )
 {
-    for ( auto& rCustomization : rCustomizations )
+    for ( auto& rCustomization : m_rCustomizations )
     {
         try
         {
@@ -336,30 +336,30 @@ bool Customization::ImportCustomToolBar( SwCTBWrapper& rWrapper, CustomToolBarIm
 }
 
 TBDelta::TBDelta()
-    : doprfatendFlags(0)
-    , ibts(0)
-    , cidNext(0)
-    , cid(0)
-    , fc(0)
-    , CiTBDE(0)
-    , cbTBC(0)
+    : m_doprfatendFlags(0)
+    , m_ibts(0)
+    , m_cidNext(0)
+    , m_cid(0)
+    , m_fc(0)
+    , m_CiTBDE(0)
+    , m_cbTBC(0)
 {
 }
 
 bool TBDelta::ControlIsInserted()
 {
-    return ( ( doprfatendFlags & 0x3 ) == 0x1 );
+    return ( ( m_doprfatendFlags & 0x3 ) == 0x1 );
 }
 
 bool TBDelta::ControlDropsToolBar()
 {
-    return !( CiTBDE & 0x8000 );
+    return !( m_CiTBDE & 0x8000 );
 }
 
 
 sal_Int16 TBDelta::CustomizationIndex()
 {
-    sal_Int16 nIndex = CiTBDE;
+    sal_Int16 nIndex = m_CiTBDE;
     nIndex = nIndex >> 1;
     nIndex &= 0x1ff; // only 13 bits are relevant
     return nIndex;
@@ -369,8 +369,8 @@ bool TBDelta::Read(SvStream &rS)
 {
     SAL_INFO("sw.ww8","TBDelta::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
-    rS.ReadUChar( doprfatendFlags ).ReadUChar( ibts ).ReadInt32( cidNext ).ReadInt32( cid ).ReadInt32( fc ) ;
-    rS.ReadUInt16( CiTBDE ).ReadUInt16( cbTBC );
+    rS.ReadUChar( m_doprfatendFlags ).ReadUChar( m_ibts ).ReadInt32( m_cidNext ).ReadInt32( m_cid ).ReadInt32( m_fc ) ;
+    rS.ReadUInt16( m_CiTBDE ).ReadUInt16( m_cbTBC );
     return rS.good();
 }
 
@@ -485,18 +485,18 @@ bool SwTBC::Read( SvStream &rS )
 {
     SAL_INFO("sw.ww8","SwTBC::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
-    if ( !tbch.Read( rS ) )
+    if ( !m_tbch.Read( rS ) )
         return false;
-    if ( tbch.getTcID() != 0x1 && tbch.getTcID() != 0x1051 )
+    if ( m_tbch.getTcID() != 0x1 && m_tbch.getTcID() != 0x1051 )
     {
-        cid = std::make_shared<sal_uInt32>();
-        rS.ReadUInt32( *cid );
+        m_cid = std::make_shared<sal_uInt32>();
+        rS.ReadUInt32( *m_cid );
     }
     // MUST exist if tbch.tct is not equal to 0x16
-    if ( tbch.getTct() != 0x16 )
+    if ( m_tbch.getTct() != 0x16 )
     {
-        tbcd = std::make_shared<TBCData>( tbch );
-        if ( !tbcd->Read( rS ) )
+        m_tbcd = std::make_shared<TBCData>( m_tbch );
+        if ( !m_tbcd->Read( rS ) )
             return false;
     }
     return rS.good();
@@ -511,9 +511,9 @@ SwTBC::ImportToolBarControl( SwCTBWrapper& rWrapper, const css::uno::Reference< 
     // cmtNil       0x7 No command. See Cid.
     bool bBuiltin = false;
     sal_Int16 cmdId = 0;
-    if  ( cid )
+    if  ( m_cid )
     {
-        const sal_uInt32 nCid = ( *cid & 0xFFFF );
+        const sal_uInt32 nCid = ( *m_cid & 0xFFFF );
 
         const sal_uInt8 cmt = static_cast<sal_uInt8>( nCid & 0x7 );
         const sal_Int16 arg2 = static_cast<sal_Int16>( nCid >> 3 );
@@ -540,7 +540,7 @@ SwTBC::ImportToolBarControl( SwCTBWrapper& rWrapper, const css::uno::Reference< 
         }
     }
 
-    if ( tbcd )
+    if ( m_tbcd )
     {
         std::vector< css::beans::PropertyValue > props;
         if ( bBuiltin )
@@ -556,9 +556,9 @@ SwTBC::ImportToolBarControl( SwCTBWrapper& rWrapper, const css::uno::Reference< 
             }
         }
         bool bBeginGroup = false;
-        tbcd->ImportToolBarControl( helper, props, bBeginGroup, bIsMenuBar );
+        m_tbcd->ImportToolBarControl( helper, props, bBeginGroup, bIsMenuBar );
 
-        TBCMenuSpecific* pMenu = tbcd->getMenuSpecific();
+        TBCMenuSpecific* pMenu = m_tbcd->getMenuSpecific();
         if ( pMenu )
         {
             SAL_INFO("sw.ww8","** control has a menu, name of toolbar with menu items is " << pMenu->Name() );
@@ -603,8 +603,8 @@ SwTBC::ImportToolBarControl( SwCTBWrapper& rWrapper, const css::uno::Reference< 
 OUString
 SwTBC::GetCustomText()
 {
-    if ( tbcd )
-        return tbcd->getGeneralInfo().CustomText();
+    if ( m_tbcd )
+        return m_tbcd->getGeneralInfo().CustomText();
     return OUString();
 }
 
@@ -617,7 +617,7 @@ Xst::Read( SvStream& rS )
     return rS.good();
 }
 
-Tcg::Tcg() : nTcgVer( -1 )
+Tcg::Tcg() : m_nTcgVer( -1 )
 {
 }
 
@@ -625,17 +625,17 @@ bool Tcg::Read(SvStream &rS)
 {
     SAL_INFO("sw.ww8","Tcg::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
-    rS.ReadSChar( nTcgVer );
-    if ( nTcgVer != -1 )
+    rS.ReadSChar( m_nTcgVer );
+    if ( m_nTcgVer != -1 )
         return false;
-    tcg.reset( new Tcg255() );
-    return tcg->Read( rS );
+    m_tcg.reset( new Tcg255() );
+    return m_tcg->Read( rS );
 }
 
 bool Tcg::ImportCustomToolBar( SfxObjectShell& rDocSh )
 {
-    if (tcg)
-        return tcg->ImportCustomToolBar( rDocSh );
+    if (m_tcg)
+        return m_tcg->ImportCustomToolBar( rDocSh );
     return false;
 }
 
