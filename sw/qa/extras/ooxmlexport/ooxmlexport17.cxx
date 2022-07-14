@@ -191,6 +191,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf114734_commentFormating, "tdf114734_commentForma
                                  getProperty<sal_Int16>(xParagraph, "ParaAdjust"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf139759_commentHighlightBackground, "tdf139759_commentHighlightBackground.docx")
+{
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    auto xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    uno::Reference<text::XTextField> xField(xFields->nextElement(), uno::UNO_QUERY);
+
+    uno::Reference<text::XText> xText = getProperty<uno::Reference<text::XText>>(xField, "TextRange");
+    uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(1, xText);
+    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getProperty<Color>(getRun(xParagraph, 2), "CharBackColor"));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf135906)
 {
     loadAndReload("tdf135906.docx");
