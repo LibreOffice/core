@@ -1646,9 +1646,9 @@ void SwXStyle::SetPropertyValue<sal_uInt16(XATTR_FILLGRADIENT)>(const SfxItemPro
     {
         if(sal_uInt16(XATTR_FILLBITMAP) == rEntry.nWID)
         {
-            const Graphic aNullGraphic;
+            Graphic aNullGraphic;
             SfxItemSet& rStyleSet = o_rStyleBase.GetItemSet();
-            XFillBitmapItem aXFillBitmapItem(aNullGraphic);
+            XFillBitmapItem aXFillBitmapItem(std::move(aNullGraphic));
             aXFillBitmapItem.PutValue(aValue, nMemberId);
             rStyleSet.Put(aXFillBitmapItem);
         }
@@ -3694,8 +3694,8 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
                     {
                         if(XATTR_FILLBITMAP == pEntry->nWID)
                         {
-                            const Graphic aNullGraphic;
-                            XFillBitmapItem aXFillBitmapItem(aNullGraphic);
+                            Graphic aNullGraphic;
+                            XFillBitmapItem aXFillBitmapItem(std::move(aNullGraphic));
 
                             aXFillBitmapItem.PutValue(aValue, nMemberId);
                             aSet.Put(aXFillBitmapItem);

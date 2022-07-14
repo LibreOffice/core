@@ -36,7 +36,7 @@ static uno::Reference< container::XIndexAccess > createVariablesAccess( const un
         [&xParent, &xContext, &xUserDefined](const beans::PropertyValue& rProp) -> uno::Reference< word::XVariable > {
             return uno::Reference< word::XVariable > ( new SwVbaVariable( xParent, xContext, xUserDefined, rProp.Name ) ); });
 
-    uno::Reference< container::XIndexAccess > xVariables( new XNamedObjectCollectionHelper< word::XVariable >( aVariables ) );
+    uno::Reference< container::XIndexAccess > xVariables( new XNamedObjectCollectionHelper< word::XVariable >( std::move(aVariables) ) );
     return xVariables;
 }
 

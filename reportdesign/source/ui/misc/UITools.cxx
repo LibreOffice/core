@@ -617,7 +617,6 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
     };
     FontList aFontList(Application::GetDefaultDevice());
     XColorListRef pColorList( XColorList::CreateStdColorList() );
-    const Graphic aNullGraphic;
     const ::Color aNullLineCol(COL_DEFAULT_SHAPE_STROKE); // #i121448# Use defined default color
     const ::Color aNullFillCol(COL_DEFAULT_SHAPE_FILLING); // #i121448# Use defined default color
     const XGradient aNullGrad(COL_BLACK, COL_WHITE);
@@ -628,7 +627,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         new XFillColorItem("", aNullFillCol),
         new XFillGradientItem(aNullGrad),
         new XFillHatchItem(aNullHatch),
-        new XFillBitmapItem(aNullGraphic),
+        new XFillBitmapItem(Graphic()),
         new XFillTransparenceItem,
         new XGradientStepCountItem,
         new XFillBmpTileItem,

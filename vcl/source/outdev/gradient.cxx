@@ -195,7 +195,7 @@ void OutputDevice::DrawGradientToMetafile ( const tools::PolyPolygon& rPolyPoly,
 
     if ( rPolyPoly.IsRect() )
     {
-        mpMetaFile->AddAction( new MetaGradientAction( aBoundRect, aGradient ) );
+        mpMetaFile->AddAction( new MetaGradientAction( aBoundRect, std::move(aGradient) ) );
     }
     else
     {

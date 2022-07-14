@@ -557,7 +557,7 @@ namespace legacy
             {
                 Graphic aGraphic;
                 aSerializer.readGraphic(aGraphic);
-                rItem.SetGraphicObject(GraphicObject(aGraphic));
+                rItem.SetGraphicObject(GraphicObject(std::move(aGraphic)));
 
                 if( SVSTREAM_FILEFORMAT_ERROR == rStrm.GetError() )
                 {

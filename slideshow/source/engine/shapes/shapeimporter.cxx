@@ -63,7 +63,7 @@ std::unique_ptr<GraphicObject> importShapeGraphic(uno::Reference<beans::XPropert
     }
 
     Graphic aGraphic(xGraphic);
-    xRet.reset(new GraphicObject(aGraphic));
+    xRet.reset(new GraphicObject(std::move(aGraphic)));
 
     if (GraphicType::Default == xRet->GetType() || GraphicType::NONE == xRet->GetType())
     {

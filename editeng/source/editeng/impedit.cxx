@@ -1477,7 +1477,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
             SvxFont aFont;
             pEditEngine->SeekCursor( aPaM.GetNode(), aPaM.GetIndex()+1, aFont );
 
-            InputContext aInputContext(aFont, InputContextFlags::Text | InputContextFlags::ExtText);
+            InputContext aInputContext(std::move(aFont), InputContextFlags::Text | InputContextFlags::ExtText);
             if (EditViewCallbacks* pCallbacks = getEditViewCallbacks())
                 pCallbacks->EditViewInputContext(aInputContext);
             else if (auto xWindow = GetWindow())

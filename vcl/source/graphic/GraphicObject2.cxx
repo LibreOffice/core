@@ -141,7 +141,7 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
         // extract generated tile -> see comment on the first loop below
         BitmapEx aTileBitmap( rVDev.GetBitmap( aTileInfo.aTileTopLeft, aTileInfo.aTileSizePixel ) );
 
-        xTmpGraphic.reset(new GraphicObject(aTileBitmap));
+        xTmpGraphic.reset(new GraphicObject(std::move(aTileBitmap)));
         pTileGraphic = xTmpGraphic.get();
 
         // fill stripes left over from upstream levels:
