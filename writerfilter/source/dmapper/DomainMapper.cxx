@@ -1988,6 +1988,10 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 pProperties->resolve(*pCellColorHandler);
                 rContext->InsertProps(pCellColorHandler->getProperties().get());
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_SHADING_MARKER, uno::Any(true), true, CHAR_GRAB_BAG );
+
+                // EditEng doesn't have a corresponding property for Shading Value, so eliminate it.
+                if (m_pImpl->IsInComments())
+                    rContext->Erase(PROP_CHAR_SHADING_VALUE);
             }
             break;
         }
