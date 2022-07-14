@@ -31,6 +31,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/frame/XController2.hpp>
 #include <com/sun/star/view/PrintableState.hpp>
+#include <utility>
 
 namespace com::sun::star::beans { struct PropertyValue; }
 
@@ -195,9 +196,9 @@ class SFX2_DLLPUBLIC SfxEventHint : public SfxHint
     SfxEventHintId      nEventId;
 
 public:
-    SfxEventHint( SfxEventHintId nId, const OUString& aName, SfxObjectShell *pObj )
+    SfxEventHint( SfxEventHintId nId, OUString aName, SfxObjectShell *pObj )
                         :   pObjShell(pObj),
-                            aEventName(aName),
+                            aEventName(std::move(aName)),
                             nEventId(nId)
                         {}
 
@@ -222,9 +223,9 @@ public:
                         , xViewController( xController, css::uno::UNO_QUERY )
                         {}
 
-    SfxViewEventHint( SfxEventHintId nId, const OUString& aName, SfxObjectShell *pObj, const css::uno::Reference< css::frame::XController2 >& xController )
+    SfxViewEventHint( SfxEventHintId nId, const OUString& aName, SfxObjectShell *pObj, css::uno::Reference< css::frame::XController2 > xController )
                         : SfxEventHint( nId, aName, pObj )
-                        , xViewController( xController )
+                        , xViewController(std::move( xController ))
                         {}
 
     const css::uno::Reference< css::frame::XController2 >& GetController() const

@@ -27,6 +27,7 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <o3tl/safeint.hxx>
+#include <utility>
 #include <vcl/commandevent.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/event.hxx>
@@ -43,8 +44,8 @@ namespace sfx2::sidebar {
 
 TabBar::TabBar(vcl::Window* pParentWindow,
                const Reference<frame::XFrame>& rxFrame,
-               const std::function<void (const OUString&)>& rDeckActivationFunctor,
-               const PopupMenuProvider& rPopupMenuProvider,
+               std::function<void (const OUString&)> aDeckActivationFunctor,
+               PopupMenuProvider  aPopupMenuProvider,
                SidebarController* rParentSidebarController
               )
     : InterimItemWindow(pParentWindow, "sfx/ui/tabbar.ui", "TabBar")
@@ -56,8 +57,8 @@ TabBar::TabBar(vcl::Window* pParentWindow,
     , mxMainMenu(mxAuxBuilder->weld_menu("mainmenu"))
     , mxSubMenu(mxAuxBuilder->weld_menu("submenu"))
     , mxMeasureBox(mxAuxBuilder->weld_widget("measure"))
-    , maDeckActivationFunctor(rDeckActivationFunctor)
-    , maPopupMenuProvider(rPopupMenuProvider)
+    , maDeckActivationFunctor(std::move(aDeckActivationFunctor))
+    , maPopupMenuProvider(std::move(aPopupMenuProvider))
     , pParentSidebarController(rParentSidebarController)
 {
     InitControlBase(mxMenuButton.get());

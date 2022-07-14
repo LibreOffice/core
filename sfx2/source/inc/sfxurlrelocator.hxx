@@ -40,7 +40,7 @@ public:
     void                        makeRelocatableURL( OUString & rURL );
     void                        makeAbsoluteURL( OUString & rURL );
 
-    SfxURLRelocator_Impl( const css::uno::Reference< css::uno::XComponentContext > & xContext );
+    SfxURLRelocator_Impl( css::uno::Reference< css::uno::XComponentContext > xContext );
     ~SfxURLRelocator_Impl();
 
 private:

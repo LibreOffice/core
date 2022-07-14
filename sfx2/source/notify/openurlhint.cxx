@@ -18,9 +18,10 @@
  */
 
 #include <openurlhint.hxx>
+#include <utility>
 
-SfxOpenUrlHint::SfxOpenUrlHint( const OUString& sDocumentURL ) :
-    msDocumentURL(sDocumentURL) { }
+SfxOpenUrlHint::SfxOpenUrlHint( OUString sDocumentURL ) :
+    msDocumentURL(std::move(sDocumentURL)) { }
 
 const OUString& SfxOpenUrlHint::GetDocumentURL() const
 {

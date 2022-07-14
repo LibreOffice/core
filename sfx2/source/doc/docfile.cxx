@@ -149,8 +149,8 @@ struct ReadOnlyMediumEntry
 {
     ReadOnlyMediumEntry(std::shared_ptr<std::recursive_mutex> pMutex,
                         std::shared_ptr<bool> pIsDestructed)
-        : _pMutex(pMutex)
-        , _pIsDestructed(pIsDestructed)
+        : _pMutex(std::move(pMutex))
+        , _pIsDestructed(std::move(pIsDestructed))
     {
     }
     std::shared_ptr<std::recursive_mutex> _pMutex;

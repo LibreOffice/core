@@ -19,6 +19,7 @@
 
 #include <sfx2/tplpitem.hxx>
 #include <com/sun/star/frame/status/Template.hpp>
+#include <utility>
 
 SfxPoolItem* SfxTemplateItem::CreateDefault() { return new SfxTemplateItem; }
 
@@ -30,11 +31,11 @@ SfxTemplateItem::SfxTemplateItem()
 SfxTemplateItem::SfxTemplateItem
 (
     sal_uInt16 nWhichId,      // Slot-ID
-    const OUString& rStyle,    // Name of the current Styles
-    const OUString& rStyleIdentifier     // Prog Name of current Style
+    OUString _aStyle,    // Name of the current Styles
+    OUString _aStyleIdentifier     // Prog Name of current Style
 ) : SfxFlagItem( nWhichId, static_cast<sal_uInt16>(SfxStyleSearchBits::All) ),
-    aStyle( rStyle ),
-    aStyleIdentifier( rStyleIdentifier )
+    aStyle(std::move( _aStyle )),
+    aStyleIdentifier(std::move( _aStyleIdentifier ))
 {
 }
 

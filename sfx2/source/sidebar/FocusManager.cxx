@@ -24,6 +24,7 @@
 #include <sidebar/DeckTitleBar.hxx>
 #include <sidebar/PanelTitleBar.hxx>
 #include <sidebar/TitleBar.hxx>
+#include <utility>
 #include <vcl/event.hxx>
 #include <vcl/weld.hxx>
 
@@ -35,9 +36,9 @@ FocusManager::FocusLocation::FocusLocation (const PanelComponent eComponent, con
 {
 }
 
-FocusManager::FocusManager(const std::function<void(const Panel&)>& rShowPanelFunctor)
+FocusManager::FocusManager(std::function<void(const Panel&)> aShowPanelFunctor)
     : mpDeckTitleBar(nullptr),
-      maShowPanelFunctor(rShowPanelFunctor)
+      maShowPanelFunctor(std::move(aShowPanelFunctor))
 {
 }
 

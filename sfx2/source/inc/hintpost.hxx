@@ -48,7 +48,7 @@ private:
     virtual         ~SfxHintPoster() override;
 
 public:
-                    SfxHintPoster(const std::function<void (std::unique_ptr<SfxRequest>)>& rLink);
+                    SfxHintPoster(std::function<void (std::unique_ptr<SfxRequest>)> aLink);
 
     void            Post( std::unique_ptr<SfxRequest> pHint );
     void            SetEventHdl(const std::function<void (std::unique_ptr<SfxRequest>)>& rLink);

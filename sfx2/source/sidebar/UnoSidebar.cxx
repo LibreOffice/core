@@ -16,6 +16,7 @@
 
 #include <com/sun/star/frame/XDispatch.hpp>
 
+#include <utility>
 #include <vcl/svapp.hxx>
 
 using namespace css;
@@ -23,8 +24,8 @@ using namespace ::sfx2::sidebar;
 
 using ::com::sun::star::uno::RuntimeException;
 
-SfxUnoSidebar::SfxUnoSidebar(const uno::Reference<frame::XFrame>& rFrame)
-    : xFrame(rFrame)
+SfxUnoSidebar::SfxUnoSidebar(uno::Reference<frame::XFrame> _xFrame)
+    : xFrame(std::move(_xFrame))
 {
 }
 

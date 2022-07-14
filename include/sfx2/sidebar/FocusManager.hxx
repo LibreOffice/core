@@ -50,7 +50,7 @@ class DeckTitleBar;
 class FocusManager
 {
 public:
-    FocusManager(const std::function<void(const Panel&)>& rShowPanelFunctor);
+    FocusManager(std::function<void(const Panel&)> aShowPanelFunctor);
     ~FocusManager();
 
     /** Forget all panels and buttons.  Remove all window listeners.

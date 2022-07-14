@@ -20,10 +20,11 @@
 #include <hintpost.hxx>
 
 #include <sfx2/request.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 
-SfxHintPoster::SfxHintPoster(const std::function<void(std::unique_ptr<SfxRequest>)>& rLink)
-    : m_Link(rLink)
+SfxHintPoster::SfxHintPoster(std::function<void(std::unique_ptr<SfxRequest>)> aLink)
+    : m_Link(std::move(aLink))
 {
 }
 

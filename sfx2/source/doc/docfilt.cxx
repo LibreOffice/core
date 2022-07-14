@@ -29,12 +29,13 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/objsh.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 
-SfxFilter::SfxFilter( const OUString& rProvider, const OUString &rFilterName ) :
-    maFilterName(rFilterName),
-    maProvider(rProvider),
+SfxFilter::SfxFilter( OUString aProvider, OUString aFilterName ) :
+    maFilterName(std::move(aFilterName)),
+    maProvider(std::move(aProvider)),
     nFormatType(SfxFilterFlags::NONE),
     nVersion(0),
     lFormat(SotClipboardFormatId::NONE),
@@ -42,21 +43,21 @@ SfxFilter::SfxFilter( const OUString& rProvider, const OUString &rFilterName ) :
 {
 }
 
-SfxFilter::SfxFilter( const OUString &rName,
+SfxFilter::SfxFilter( OUString aName,
                       std::u16string_view rWildCard,
                       SfxFilterFlags nType,
                       SotClipboardFormatId lFmt,
-                      const OUString &rTypNm,
-                      const OUString &rMimeType,
-                      const OUString &rUsrDat,
-                      const OUString &rServiceName,
+                      OUString aTypNm,
+                      OUString _aMimeType,
+                      OUString aUsrDat,
+                      OUString _aServiceName,
                       bool bEnabled ):
     aWildCard(rWildCard, ';'),
-    aTypeName(rTypNm),
-    aUserData(rUsrDat),
-    aServiceName(rServiceName),
-    aMimeType(rMimeType),
-    maFilterName(rName),
+    aTypeName(std::move(aTypNm)),
+    aUserData(std::move(aUsrDat)),
+    aServiceName(std::move(_aServiceName)),
+    aMimeType(std::move(_aMimeType)),
+    maFilterName(std::move(aName)),
     aUIName(maFilterName),
     nFormatType(nType),
     nVersion(SOFFICE_FILEFORMAT_50),

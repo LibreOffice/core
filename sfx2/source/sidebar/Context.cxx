@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <sfx2/sidebar/Context.hxx>
+#include <utility>
 
 
 constexpr OUStringLiteral AnyApplicationName = u"any";
@@ -36,10 +37,10 @@ Context::Context()
 }
 
 Context::Context (
-    const OUString& rsApplication,
-    const OUString& rsContext)
-    : msApplication(rsApplication),
-      msContext(rsContext)
+    OUString sApplication,
+    OUString sContext)
+    : msApplication(std::move(sApplication)),
+      msContext(std::move(sContext))
 {
 }
 

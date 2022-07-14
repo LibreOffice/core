@@ -43,7 +43,7 @@ class AutoReloadTimer_Impl final : public Timer
     SfxObjectShell*   pObjSh;
 
 public:
-    AutoReloadTimer_Impl( const OUString& rURL, sal_uInt32 nTime,
+    AutoReloadTimer_Impl( OUString aURL, sal_uInt32 nTime,
                           SfxObjectShell* pSh );
     virtual void Invoke() override;
 };

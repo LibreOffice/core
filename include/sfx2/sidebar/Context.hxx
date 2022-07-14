@@ -31,7 +31,7 @@ public:
     OUString msContext;
 
     Context();
-    Context(const OUString& rsApplication, const OUString& rsContext);
+    Context(OUString sApplication, OUString sContext);
 
     /** When two contexts are matched against each other, then
         application or context name may have the wildcard value 'any'.
