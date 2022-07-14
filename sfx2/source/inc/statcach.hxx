@@ -45,8 +45,8 @@ friend class SfxStateCache;
 
 public:
                             BindDispatch_Impl(
-                                const css::uno::Reference< css::frame::XDispatch > & rDisp,
-                                const css::util::URL& rURL,
+                                css::uno::Reference< css::frame::XDispatch > xDisp,
+                                css::util::URL aURL,
                                 SfxStateCache* pStateCache, const SfxSlot* pSlot );
 
     virtual void SAL_CALL   statusChanged( const css::frame::FeatureStateEvent& Event ) override;

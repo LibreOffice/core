@@ -61,16 +61,16 @@ class SFX2_DLLPUBLIC SfxFilter
     bool mbEnabled;
 
 public:
-    SfxFilter( const OUString& rProvider, const OUString& rFilterName );
+    SfxFilter( OUString aProvider, OUString aFilterName );
 
-    SfxFilter( const OUString &rName,
+    SfxFilter( OUString aName,
                std::u16string_view rWildCard,
                SfxFilterFlags nFormatType,
                SotClipboardFormatId lFormat,
-               const OUString &rTypeName,
-               const OUString &rMimeType,
-               const OUString &rUserData,
-               const OUString& rServiceName,
+               OUString aTypeName,
+               OUString aMimeType,
+               OUString aUserData,
+               OUString aServiceName,
                bool bEnabled = true );
     ~SfxFilter();
 

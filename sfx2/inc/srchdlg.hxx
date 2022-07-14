@@ -48,7 +48,7 @@ private:
     DECL_LINK(FindHdl, weld::Button&, void);
 
 public:
-    SearchDialog(weld::Window* pWindow, const OUString& rConfigName);
+    SearchDialog(weld::Window* pWindow, OUString aConfigName);
     static void runAsync(const std::shared_ptr<SearchDialog>& rController);
     virtual ~SearchDialog() override;
 

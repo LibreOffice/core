@@ -28,6 +28,7 @@
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/viewsh.hxx>
 #include <unotools/viewoptions.hxx>
+#include <utility>
 #include <vcl/virdev.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
