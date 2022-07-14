@@ -671,7 +671,7 @@ class OOX_DLLPUBLIC AxOptionButtonModel final : public AxMorphDataModelBase
 public:
     explicit            AxOptionButtonModel();
 
-    /** Returns the group name used to goup several option buttons together. */
+    /** Returns the group name used to group several option buttons together. */
     const OUString& getGroupName() const { return maGroupName; }
 
     virtual ApiControlType getControlType() const override;
