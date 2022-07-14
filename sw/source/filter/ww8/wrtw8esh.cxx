@@ -33,6 +33,7 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdpage.hxx>
+#include <editeng/colritem.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/brushitem.hxx>
@@ -1155,6 +1156,12 @@ void MSWord_SdrAttrIter::OutAttr( sal_Int32 nSwPos )
             if (nWhich == EE_FEATURE_TAB)
             {
                 m_rExport.WriteChar(0x9);
+                continue;
+            }
+            if (nWhich == EE_CHAR_BKGCOLOR)
+            {
+                Color aColor(static_cast<const SvxColorItem*>(rTextAtr.pAttr)->GetValue());
+                m_rExport.AttrOutput().OutputItem(SvxBrushItem(aColor, RES_CHRATR_BACKGROUND));
                 continue;
             }
 
