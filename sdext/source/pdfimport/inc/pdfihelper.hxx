@@ -64,9 +64,12 @@ namespace pdfi
         return fMM;
     }
 
+    /// round to 2 decimal places
     inline double convPx2mmPrec2( double fPix )
     {
-        return rtl_math_round( convPx2mm( fPix ), 2, rtl_math_RoundingMode_Floor );
+        constexpr double px2mm = 25.4/PDFI_OUTDEV_RESOLUTION;
+        double mm = fPix * ( px2mm * 100);
+        return std::floor(mm) / 100;
     }
 
     /// Convert color to "#FEFEFE" color notation
