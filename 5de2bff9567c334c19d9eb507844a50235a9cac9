@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef9ce434_10f94da4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-07-14T08:00:25Z",
+      "side": 1,
+      "message": "Let\u0027s hope there is no Word field that can expand to tables, and then this is fine.",
+      "revId": "5de2bff9567c334c19d9eb507844a50235a9cac9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
