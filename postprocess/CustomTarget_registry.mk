@@ -579,6 +579,7 @@ postprocess_main_SED := \
 	-e 's,$${SYSTEM_LIBEXTTEXTCAT_DATA},$(SYSTEM_LIBEXTTEXTCAT_DATA),g' \
 	-e 's,$${SYSTEM_LIBNUMBERTEXT_DATA},$(SYSTEM_LIBNUMBERTEXT_DATA),g' \
 	-e 's,$${PRIVACY_POLICY_URL},$(PRIVACY_POLICY_URL),g' \
+	-e 's,$${INFOBAR_DONATE_ENABLED},$(if $(ENABLE_MACOSX_SANDBOX),false,true),g' \
 
 $(call gb_XcdTarget_get_target,main.xcd) \
 		: $(BUILDDIR)/config_host.mk.stamp \

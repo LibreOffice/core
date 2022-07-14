@@ -34,7 +34,7 @@
         <info>
           <desc>Whether the Infobar showing the call for donations is enabled</desc>
         </info>
-        <value>true</value>
+        <value>${INFOBAR_DONATE_ENABLED}</value>
       </prop>
       <prop oor:name="GetInvolved" oor:type="xs:boolean" oor:nillable="false">
         <info>
