@@ -16,6 +16,24 @@
       "message": "\u003e I hope that this would not be a real issue\n\nTo paraphrase Malcolm, I can’t find a flaw in your logic :-)",
       "revId": "5af8a33a7c32fd0c639a62688fbb1b777581f2c1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8df8311_98695901",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-07-14T09:32:17Z",
+      "side": 1,
+      "message": "😂 In my defense, I note that I explicitly stated the problem in the message, and provided the reasoning behind preferring one against the other - among other things, that could help understand it and decide the revert if real problems turn out to be worse than anticipated 😉",
+      "parentUuid": "a24d1c9b_8fbfe867",
+      "revId": "5af8a33a7c32fd0c639a62688fbb1b777581f2c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
