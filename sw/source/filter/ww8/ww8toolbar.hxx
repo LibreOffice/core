@@ -29,9 +29,9 @@ public:
 
 class SwTBC : public TBBase
 {
-    TBCHeader tbch;
-    std::shared_ptr< sal_uInt32 > cid; // optional
-    std::shared_ptr<TBCData> tbcd;
+    TBCHeader m_tbch;
+    std::shared_ptr< sal_uInt32 > m_cid; // optional
+    std::shared_ptr<TBCData> m_tbcd;
 
 public:
     SwTBC();
@@ -67,21 +67,21 @@ public:
 
 class TBDelta : public TBBase
 {
-    sal_uInt8 doprfatendFlags;
+    sal_uInt8 m_doprfatendFlags;
 
-    sal_uInt8 ibts;
-    sal_Int32 cidNext;
-    sal_Int32 cid;
-    sal_Int32 fc;
-    sal_uInt16 CiTBDE; // careful of this ( endian matters etc. )
-    sal_uInt16 cbTBC;
+    sal_uInt8 m_ibts;
+    sal_Int32 m_cidNext;
+    sal_Int32 m_cid;
+    sal_Int32 m_fc;
+    sal_uInt16 m_CiTBDE; // careful of this ( endian matters etc. )
+    sal_uInt16 m_cbTBC;
 
 public:
     TBDelta();
     bool Read(SvStream &rS) override;
     bool ControlIsInserted();
     bool ControlDropsToolBar();
-    sal_Int32 TBCStreamOffset() { return fc;}
+    sal_Int32 TBCStreamOffset() { return m_fc;}
     sal_Int16 CustomizationIndex();
 };
 
@@ -124,26 +124,26 @@ public:
 class SwCTBWrapper : public Tcg255SubStruct
 {
     // reserved1 is the ch field of Tcg255SubStruct
-    sal_uInt16 reserved2;
-    sal_uInt8 reserved3;
-    sal_uInt16 reserved4;
-    sal_uInt16 reserved5;
+    sal_uInt16 m_reserved2;
+    sal_uInt8 m_reserved3;
+    sal_uInt16 m_reserved4;
+    sal_uInt16 m_reserved5;
 
-    sal_Int16 cbTBD;
-    sal_uInt16 cCust;
+    sal_Int16 m_cbTBD;
+    sal_uInt16 m_cCust;
 
-    sal_Int32 cbDTBC;
+    sal_Int32 m_cbDTBC;
 
-    std::vector< SwTBC > rtbdc;
-    std::vector< Customization > rCustomizations; // array of Customizations
-    std::vector< sal_Int16 > dropDownMenuIndices; // array of indexes of Customization toolbars that are dropped by a menu
+    std::vector< SwTBC > m_rtbdc;
+    std::vector< Customization > m_rCustomizations; // array of Customizations
+    std::vector< sal_Int16 > m_dropDownMenuIndices; // array of indexes of Customization toolbars that are dropped by a menu
     SwCTBWrapper(const SwCTBWrapper&) = delete;
     SwCTBWrapper& operator = ( const SwCTBWrapper&) = delete;
 
 public:
     explicit SwCTBWrapper();
     virtual ~SwCTBWrapper() override;
-    void InsertDropIndex( sal_Int32 aIndex ) { dropDownMenuIndices.push_back( aIndex ); }
+    void InsertDropIndex( sal_Int32 aIndex ) { m_dropDownMenuIndices.push_back( aIndex ); }
     SwTBC* GetTBCAtOffset( sal_uInt32 nStreamOffset );
     bool Read(SvStream &rS) override;
     bool ImportCustomToolBar( SfxObjectShell& rDocSh );
@@ -326,8 +326,8 @@ public:
 
 class Tcg: public TBBase
 {
-    sal_Int8 nTcgVer;
-    std::unique_ptr< Tcg255 > tcg;
+    sal_Int8 m_nTcgVer;
+    std::unique_ptr< Tcg255 > m_tcg;
     Tcg(const Tcg&) = delete;
     Tcg& operator = ( const Tcg&) = delete;
 
