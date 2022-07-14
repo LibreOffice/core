@@ -9,9 +9,9 @@
  */
 
 #include <vcl/filter/PngImageWriter.hxx>
-#include <png.h>
 #include <bitmap/BitmapWriteAccess.hxx>
 #include <vcl/bitmap.hxx>
+#include <iostream>
 
 namespace
 {
@@ -48,7 +48,8 @@ static void lclWriteStream(png_structp pPng, png_bytep pData, png_size_t pDataSi
         png_error(pPng, "Write Error");
 }
 
-static bool pngWrite(SvStream& rStream, BitmapEx& rBitmapEx, int nCompressionLevel)
+static bool pngWrite(SvStream& rStream, BitmapEx& rBitmapEx, int nCompressionLevel,
+                     png_unknown_chunkp pUnknownChunks, int nUnknownChunksSize)
 {
     png_structp pPng = png_create_write_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
 
@@ -198,11 +199,79 @@ static bool pngWrite(SvStream& rStream, BitmapEx& rBitmapEx, int nCompressionLev
         }
     }
 
+    if (pUnknownChunks)
+    {
+        std::cout << "unknown chunks detected" << std::endl;
+        std::cout << "size: " << nUnknownChunksSize << std::endl;
+        std::cout << "inner size: " << pUnknownChunks[0].size << std::endl;
+        std::cout << "inner name: " << pUnknownChunks[0].name << std::endl;
+        // png_set_unknown_chunks(pPng, pInfo, pUnknownChunks, nUnknownChunksSize);
+        png_write_chunk(pPng, pUnknownChunks[0].name, pUnknownChunks[0].data,
+                        pUnknownChunks[0].size);
+    }
+    else
+    {
+        std::cout << " no unknown:(" << std::endl;
+    }
+
     png_write_end(pPng, pInfo);
 
     png_destroy_write_struct(&pPng, &pInfo);
 
     return true;
+}
+
+PngImageWriter::~PngImageWriter()
+{
+    for (auto& aChunk : maAdditionalChunks)
+    {
+        if (aChunk.data)
+            delete[] aChunk.data;
+    }
+}
+
+void PngImageWriter::setParameters(css::uno::Sequence<css::beans::PropertyValue> const& rParameters)
+{
+    for (auto const& rValue : rParameters)
+    {
+        if (rValue.Name == "Compression")
+            rValue.Value >>= mnCompressionLevel;
+        else if (rValue.Name == "Interlaced")
+            rValue.Value >>= mbInterlaced;
+        else if (rValue.Name == "AdditionalChunks")
+        {
+            css::uno::Sequence<css::beans::PropertyValue> aAdditionalChunkSequence;
+            if (rValue.Value >>= aAdditionalChunkSequence)
+            {
+                for (const auto& rAdditionalChunk : std::as_const(aAdditionalChunkSequence))
+                {
+                    if (rAdditionalChunk.Name.getLength() == 4)
+                    {
+                        png_unknown_chunk_t aChunk;
+                        for (sal_Int32 k = 0; k < 4; k++)
+                        {
+                            aChunk.name[k] = static_cast<sal_uInt8>(rAdditionalChunk.Name[k]);
+                        }
+                        aChunk.name[4] = '\0';
+
+                        css::uno::Sequence<sal_Int8> aByteSeq;
+                        if (rAdditionalChunk.Value >>= aByteSeq)
+                        {
+                            sal_uInt32 nChunkLen = aByteSeq.getLength();
+                            aChunk.size = nChunkLen;
+                            if (nChunkLen)
+                            {
+                                aChunk.data = new png_byte[nChunkLen];
+                                memcpy(aChunk.data, aByteSeq.getConstArray(), nChunkLen);
+                                aChunk.location = PNG_AFTER_IDAT;
+                                maAdditionalChunks.push_back(aChunk);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 PngImageWriter::PngImageWriter(SvStream& rStream)
@@ -214,7 +283,11 @@ PngImageWriter::PngImageWriter(SvStream& rStream)
 
 bool PngImageWriter::write(BitmapEx& rBitmapEx)
 {
-    return pngWrite(mrStream, rBitmapEx, mnCompressionLevel);
+    png_unknown_chunkp pChunks = nullptr;
+    int nChunksSize = maAdditionalChunks.size();
+    if (nChunksSize > 0)
+        pChunks = maAdditionalChunks.data();
+    return pngWrite(mrStream, rBitmapEx, mnCompressionLevel, pChunks, nChunksSize);
 }
 
 } // namespace vcl
