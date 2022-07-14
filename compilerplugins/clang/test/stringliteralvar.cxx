@@ -18,7 +18,7 @@
 char const literal1[] = "foo";
 OString f1()
 {
-    // expected-note@+1 {{first passed into a 'rtl::OString' constructor here [loplugin:stringliteralvar]}}
+    // expected-note-re@+1 {{first passed into a '{{(rtl::)?}}OString' constructor here [loplugin:stringliteralvar]}}
     return literal1;
 }
 
@@ -27,7 +27,7 @@ void f2()
 {
     // expected-error-re@+1 {{change type of variable 'literal' from constant character array ('const char{{ ?}}[4]') to OUStringLiteral, and make it static [loplugin:stringliteralvar]}}
     char const literal[] = "foo";
-    // expected-note@+1 {{first passed into a 'rtl::OUString' constructor here [loplugin:stringliteralvar]}}
+    // expected-note-re@+1 {{first passed into a '{{(rtl::)?}}OUString' constructor here [loplugin:stringliteralvar]}}
     f(literal);
 }
 
@@ -38,7 +38,7 @@ struct S3
 };
 void f3()
 {
-    // expected-note@+1 {{first passed into a 'rtl::OUString' constructor here [loplugin:stringliteralvar]}}
+    // expected-note-re@+1 {{first passed into a '{{(rtl::)?}}OUString' constructor here [loplugin:stringliteralvar]}}
     f(S3::literal);
 }
 
@@ -52,17 +52,17 @@ std::vector<OUString> f4()
 
 void f5()
 {
-    // expected-error@+1 {{variable 'literal' of type 'const rtl::OUStringLiteral<4>' with automatic storage duration most likely needs to be static [loplugin:stringliteralvar]}}
+    // expected-error-re@+1 {{variable 'literal' of type 'const {{(rtl::)?}}OUStringLiteral<4>'{{( \(aka 'const rtl::OUStringLiteral<4>'\))?}} with automatic storage duration most likely needs to be static [loplugin:stringliteralvar]}}
     OUStringLiteral const literal = u"foo";
-    // expected-note@+1 {{first converted to 'rtl::OUString' here [loplugin:stringliteralvar]}}
+    // expected-note-re@+1 {{first converted to '{{(rtl::)?}}OUString' here [loplugin:stringliteralvar]}}
     f(literal);
 }
 
 void f6()
 {
-    // expected-error@+1 {{variable 'literal' of type 'const rtl::OUStringLiteral<4>' with automatic storage duration most likely needs to be static [loplugin:stringliteralvar]}}
+    // expected-error-re@+1 {{variable 'literal' of type 'const {{(rtl::)?}}OUStringLiteral<4>'{{( \(aka 'const rtl::OUStringLiteral<4>'\))?}} with automatic storage duration most likely needs to be static [loplugin:stringliteralvar]}}
     constexpr OUStringLiteral literal = u"foo";
-    // expected-note@+1 {{first converted to 'rtl::OUString' here [loplugin:stringliteralvar]}}
+    // expected-note-re@+1 {{first converted to '{{(rtl::)?}}OUString' here [loplugin:stringliteralvar]}}
     f(literal);
 }
 
@@ -75,7 +75,7 @@ void f7()
 void f8()
 {
     static constexpr OUStringLiteral const literal = u"foo";
-    // expected-error@+1 {{variable 'literal' of type 'const rtl::OUStringLiteral<4>' suspiciously used in a sizeof expression [loplugin:stringliteralvar]}}
+    // expected-error-re@+1 {{variable 'literal' of type 'const {{(rtl::)?}}OUStringLiteral<4>'{{( \(aka 'const rtl::OUStringLiteral<4>'\))?}} suspiciously used in a sizeof expression [loplugin:stringliteralvar]}}
     (void)sizeof literal;
 }
 
@@ -83,7 +83,7 @@ void f9()
 {
     // expected-error-re@+1 {{change type of variable 'literal' from constant character array ('const sal_Unicode{{ ?}}[3]'{{( \(aka 'const char16_t\[3\]'\))?}}) to OUStringLiteral [loplugin:stringliteralvar]}}
     static sal_Unicode const literal[] = { 'f', 'o', 'o' };
-    // expected-note@+1 {{first passed into a 'rtl::OUString' constructor here [loplugin:stringliteralvar]}}
+    // expected-note-re@+1 {{first passed into a '{{(rtl::)?}}OUString' constructor here [loplugin:stringliteralvar]}}
     f(OUString(literal, SAL_N_ELEMENTS(literal)));
 }
 
@@ -91,7 +91,7 @@ void f10()
 {
     // expected-error-re@+1 {{change type of variable 'literal' from constant character array ('const sal_Unicode{{ ?}}[3]'{{( \(aka 'const char16_t\[3\]'\))?}}) to OUStringLiteral [loplugin:stringliteralvar]}}
     static sal_Unicode const literal[] = { 'f', 'o', 'o' };
-    // expected-note@+1 {{first passed into a 'rtl::OUString' constructor here [loplugin:stringliteralvar]}}
+    // expected-note-re@+1 {{first passed into a '{{(rtl::)?}}OUString' constructor here [loplugin:stringliteralvar]}}
     f(OUString(literal, 3));
 }
 

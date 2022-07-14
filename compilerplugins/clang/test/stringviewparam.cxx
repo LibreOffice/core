@@ -19,7 +19,7 @@
 #include "sal/types.h"
 
 void f1a(std::string_view);
-// expected-error@+1 {{replace function parameter of type 'const rtl::OString &' with 'std::string_view' [loplugin:stringviewparam]}}
+// expected-error-re@+1 {{replace function parameter of type 'const {{(rtl::)?}}OString &' with 'std::string_view' [loplugin:stringviewparam]}}
 char f1b(OString const& s)
 {
     f1a(s);
@@ -32,7 +32,7 @@ char f1b(OString const& s)
 }
 
 void f2a(std::u16string_view);
-// expected-error@+1 {{replace function parameter of type 'const rtl::OUString &' with 'std::u16string_view' [loplugin:stringviewparam]}}
+// expected-error-re@+1 {{replace function parameter of type 'const {{(rtl::)?}}OUString &' with 'std::u16string_view' [loplugin:stringviewparam]}}
 sal_Unicode f2b(OUString const& s)
 {
     f2a(s);
@@ -56,19 +56,19 @@ template <> void f5<OUString>(OUString const&) {}
 void f6([[maybe_unused]] OUString const&) {}
 
 bool f7(
-    // expected-error@+1 {{replace function parameter of type 'const rtl::OUString &' with 'std::u16string_view' [loplugin:stringviewparam]}}
+    // expected-error-re@+1 {{replace function parameter of type 'const {{(rtl::)?}}OUString &' with 'std::u16string_view' [loplugin:stringviewparam]}}
     const OUString& p1,
-    // expected-error@+1 {{replace function parameter of type 'const rtl::OUString &' with 'std::u16string_view' [loplugin:stringviewparam]}}
+    // expected-error-re@+1 {{replace function parameter of type 'const {{(rtl::)?}}OUString &' with 'std::u16string_view' [loplugin:stringviewparam]}}
     const OUString& p2)
 {
     return p1 == p2;
 }
-// expected-error@+1 {{replace function parameter of type 'const rtl::OUString &' with 'std::u16string_view' [loplugin:stringviewparam]}}
+// expected-error-re@+1 {{replace function parameter of type 'const {{(rtl::)?}}OUString &' with 'std::u16string_view' [loplugin:stringviewparam]}}
 bool f8(const OUString& p1, std::u16string_view p2) { return p1 == p2; }
 
 struct Converter
 {
-    // expected-error@+1 {{replace function parameter of type 'const rtl::OUString &' with 'std::u16string_view' [loplugin:stringviewparam]}}
+    // expected-error-re@+1 {{replace function parameter of type 'const {{(rtl::)?}}OUString &' with 'std::u16string_view' [loplugin:stringviewparam]}}
     static bool convertBool(bool& rBool, const OUString& rString)
     {
         rBool = rString == "true";
@@ -88,7 +88,7 @@ struct S10
     }
 };
 
-// expected-error@+1 {{replace function parameter of type 'const rtl::OUString &' with 'std::u16string_view' [loplugin:stringviewparam]}}
+// expected-error-re@+1 {{replace function parameter of type 'const {{(rtl::)?}}OUString &' with 'std::u16string_view' [loplugin:stringviewparam]}}
 void f11(const OUString& f11rString)
 {
     OUStringBuffer buf;

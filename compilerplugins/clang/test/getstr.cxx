@@ -37,11 +37,11 @@ void f(std::ostream& st, OString const& s1, OStringBuffer const& s2,
        OString* p1, OStringBuffer* p2, OUString* p3[[maybe_unused]],
        OUStringBuffer* p4[[maybe_unused]], S* p5, char const* (OString::*pf)() const)
 {
-    st << s1.getStr() // expected-error {{directly use object of type 'rtl::OString' in a call of 'operator <<', instead of calling 'getStr' first [loplugin:getstr]}}
+    st << s1.getStr() // expected-error-re {{directly use object of type '{{(rtl::)?}}OString' in a call of 'operator <<', instead of calling 'getStr' first [loplugin:getstr]}}
        << s2.getStr()
 #if !HAVE_DELETED_OPERATORS
-       << s3.getStr() // expected-error {{suspicious use of 'getStr' on an object of type 'rtl::OUString'; the result is implicitly cast to a void pointer in a call of 'operator <<' [loplugin:getstr]}}
-       << s4.getStr() // expected-error {{suspicious use of 'getStr' on an object of type 'rtl::OUStringBuffer'; the result is implicitly cast to a void pointer in a call of 'operator <<' [loplugin:getstr]}}
+       << s3.getStr() // expected-error-re {{suspicious use of 'getStr' on an object of type '{{(rtl::)?}}OUString'; the result is implicitly cast to a void pointer in a call of 'operator <<' [loplugin:getstr]}}
+       << s4.getStr() // expected-error-re {{suspicious use of 'getStr' on an object of type '{{(rtl::)?}}OUStringBuffer'; the result is implicitly cast to a void pointer in a call of 'operator <<' [loplugin:getstr]}}
 #endif
        << s5.getStr() // expected-error {{directly use object of type 'S' (aka 'rtl::OString') in a call of 'operator <<', instead of calling 'getStr' first [loplugin:getstr]}}
        << p1->getStr() // expected-error {{directly use object of type 'rtl::OString' in a call of 'operator <<', instead of calling 'getStr' first [loplugin:getstr]}}
@@ -52,7 +52,7 @@ void f(std::ostream& st, OString const& s1, OStringBuffer const& s2,
 #endif
        << p5->getStr() // expected-error {{directly use object of type 'rtl::OString' in a call of 'operator <<', instead of calling 'getStr' first [loplugin:getstr]}}
        << (s1.*pf)();
-    SAL_INFO( // expected-error 1+ {{directly use object of type 'rtl::OString' in a call of 'operator <<', instead of calling 'getStr' first [loplugin:getstr]}}
+    SAL_INFO( // expected-error-re 1+ {{directly use object of type '{{(rtl::)?}}OString' in a call of 'operator <<', instead of calling 'getStr' first [loplugin:getstr]}}
         "test", s1.getStr());
 }
 

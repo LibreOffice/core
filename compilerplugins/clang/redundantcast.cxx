@@ -66,6 +66,13 @@ char const * printExprValueKind(ExprValueKind k) {
     llvm_unreachable("unknown ExprValueKind");
 }
 
+QualType desugarElaboratedType(QualType type) {
+    if (auto const t = dyn_cast<ElaboratedType>(type)) {
+        return t->desugar();
+    }
+    return type;
+}
+
 enum class AlgebraicType { None, Integer, FloatingPoint };
 
 AlgebraicType algebraicType(clang::Type const & type) {
@@ -320,7 +327,7 @@ bool RedundantCast::VisitCStyleCastExpr(CStyleCastExpr const * expr) {
     if (auto templateType = dyn_cast<SubstTemplateTypeParmType>(t1)) {
         t1 = templateType->desugar();
     }
-    if (t1 != t2) {
+    if (desugarElaboratedType(t1) != desugarElaboratedType(t2)) {
         return true;
     }
     if (!t1->isBuiltinType() && !loplugin::TypeCheck(t1).Enum() && !loplugin::TypeCheck(t1).Typedef()) {

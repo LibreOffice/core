@@ -132,7 +132,7 @@ bool ReferenceCasting::VisitCXXConstructExpr(const CXXConstructExpr* cce)
 
     // ignore the up-casting constructor, which has a std::enable_if second parameter
     if (isUnoReference && cce->getNumArgs() == 2
-        && !isa<EnumType>(cce->getConstructor()->getParamDecl(1)->getType()))
+        && !cce->getConstructor()->getParamDecl(1)->getType()->isEnumeralType())
         return true;
 
     // extract the type parameter passed to the template
