@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45033ca7_0ed4232e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-07-14T14:49:02Z",
+      "side": 1,
+      "message": "I don\u0027t like this collapsing behavior, either (annoying when the cursor traveling changes the layout), but I guess users like it. ;-)",
+      "revId": "fd43ade4f9be57b0b6b182d73855dea0b00ceb24",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
