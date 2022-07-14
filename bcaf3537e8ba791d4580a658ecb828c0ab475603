@@ -16,6 +16,23 @@
       "message": "Will this allow one to use FormulaLocal to set localized formula (using localized function names, or number literals with locale-specific decimal separators)? This is what FormulaLocal must enable, behaving identically to user\u0027s direct input to the formula bar, taking into account the user\u0027s preferences.",
       "revId": "bcaf3537e8ba791d4580a658ecb828c0ab475603",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a77cd40_69f2e2bc",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1261,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-07-14T09:19:51Z",
+      "side": 1,
+      "message": "This is wrong. It now parses the formula with the passed grammar even in the non-English case. The grammar oddly is always FormulaGrammar::GRAM_API as the only caller is ScCellObj::SetString_Impl() and only bEnglish varies. This call chain seems to be some left-over, if bEnglish\u003dfalse then eGrammar is ignored as things are passed down to ScDocFunc::SetNormalString() where then the current document grammar is used.",
+      "revId": "bcaf3537e8ba791d4580a658ecb828c0ab475603",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
