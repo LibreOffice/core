@@ -338,7 +338,8 @@ private:
 
     // Analyze middle substring
     bool ScanMidString( const OUString& rString,
-                        sal_uInt16 nStringPos );
+                        sal_uInt16 nStringPos,
+                        sal_uInt16 nCurNumCount );
 
 
     // Analyze end of string

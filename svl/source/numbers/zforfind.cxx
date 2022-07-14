@@ -2123,7 +2123,17 @@ input for the following reasons:
                 }
                 break;
             }
-            default:            // else, e.g. month at the end (94 10 Jan)
+            case 3:             // month at the end (94 10 Jan)
+                if (pLoc->getLongDateOrder() != LongDateOrder::YDM)
+                    res = false;
+                else
+                {
+                    pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
+                    pCal->setValue( CalendarFieldIndex::MONTH, std::abs(nMonth)-1 );
+                    pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
+                }
+                break;
+            default:
                 res = false;
                 break;
             }   // switch (nMonthPos)
@@ -2215,7 +2225,18 @@ input for the following reasons:
                 }
                 break;
             }
-            default:            // else, e.g. month at the end (94 10 Jan 8:23)
+            case 3:            // month at the end (94 10 Jan 8:23)
+                nCounter = 2;
+                if (pLoc->getLongDateOrder() != LongDateOrder::YDM)
+                    res = false;
+                else
+                {
+                    pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
+                    pCal->setValue( CalendarFieldIndex::MONTH, std::abs(nMonth)-1 );
+                    pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
+                }
+                break;
+            default:
                 nCounter = 2;
                 res = false;
                 break;
@@ -2524,7 +2545,7 @@ bool ImpSvNumberInputScan::ScanStartString( const OUString& rString )
  * All gone => true
  * else     => false
  */
-bool ImpSvNumberInputScan::ScanMidString( const OUString& rString, sal_uInt16 nStringPos )
+bool ImpSvNumberInputScan::ScanMidString( const OUString& rString, sal_uInt16 nStringPos, sal_uInt16 nCurNumCount )
 {
     sal_Int32 nPos = 0;
     SvNumFormatType eOldScannedType = eScannedType;
@@ -2722,7 +2743,7 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString, sal_uInt16 nS
     }
 
     const sal_Int32 nMonthStart = nPos;
-    short nTempMonth = GetMonth(rString, nPos);     // month in the middle (10 Jan 94)
+    short nTempMonth = GetMonth(rString, nPos);     // month in the middle (10 Jan 94) or at the end (94 10 Jan)
     if (nTempMonth)
     {
         if (nMonth != 0)                            // month dup
@@ -2738,7 +2759,10 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString, sal_uInt16 nS
         {
             eScannedType = SvNumFormatType::DATE;       // !!! it IS a date
             nMonth = nTempMonth;
-            nMonthPos = 2;                          // month in the middle
+            if (nCurNumCount <= 1)
+                nMonthPos = 2;                      // month in the middle
+            else
+                nMonthPos = 3;                      // month at the end
             if ( nMonth < 0 )
             {
                 SkipChar( '.', rString, nPos );     // abbreviated
@@ -3439,7 +3463,7 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
             i++;                            // i=1
         }
         GetNextNumber(i,j);                 // i=1,2
-        if ( !ScanMidString( sStrArray[i], i ) )
+        if ( !ScanMidString( sStrArray[i], i, j ) )
         {
             return false;
         }
@@ -3477,7 +3501,7 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
             }
         }
         GetNextNumber(i,j);                 // i=1,2
-        if ( !ScanMidString( sStrArray[i], i ) )
+        if ( !ScanMidString( sStrArray[i], i, j ) )
         {
             return false;
         }
@@ -3487,7 +3511,7 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
             return false;
         }
         GetNextNumber(i,j);                 // i=3,4
-        if ( !ScanMidString( sStrArray[i], i ) )
+        if ( !ScanMidString( sStrArray[i], i, j ) )
         {
             return false;
         }
@@ -3525,7 +3549,7 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
                 return false;
         }
         GetNextNumber(i,j);                 // i=1,2
-        if ( !ScanMidString( sStrArray[i], i ) )
+        if ( !ScanMidString( sStrArray[i], i, j ) )
         {
             return false;
         }
@@ -3541,7 +3565,7 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
                     return false;
                 }
                 GetNextNumber(i,j);
-                if ( i < nStringsCnt && !ScanMidString( sStrArray[i], i ) )
+                if ( i < nStringsCnt && !ScanMidString( sStrArray[i], i, j ) )
                 {
                     return false;
                 }
@@ -3559,7 +3583,7 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
                     return false;
                 }
                 GetNextNumber(i,j);
-                if ( i < nStringsCnt && !ScanMidString( sStrArray[i], i ) )
+                if ( i < nStringsCnt && !ScanMidString( sStrArray[i], i, j ) )
                 {
                     return false;
                 }
