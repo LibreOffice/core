@@ -38,7 +38,6 @@
 #include <svtools/strings.hrc>
 #include <limits>
 #include <memory>
-#include <utility>
 #include <vector>
 #include <vcl/idle.hxx>
 #include <bitmaps.hlst>
