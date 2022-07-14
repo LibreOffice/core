@@ -28,7 +28,7 @@ class SfxOpenUrlHint final : public SfxHint
     OUString msDocumentURL;
 
 public:
-    SfxOpenUrlHint(const OUString& sDocumentURL);
+    SfxOpenUrlHint(OUString sDocumentURL);
     const OUString& GetDocumentURL() const;
     virtual ~SfxOpenUrlHint() override;
 };

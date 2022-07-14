@@ -33,8 +33,8 @@ public:
     static SfxPoolItem* CreateDefault();
     SfxTemplateItem();
     SfxTemplateItem( sal_uInt16 nWhich,
-                     const OUString &rStyle,
-                     const OUString &rStyleIdentifier = "" );
+                     OUString aStyle,
+                     OUString aStyleIdentifier = "" );
 
     const OUString&         GetStyleName() const { return aStyle; }
     const OUString&         GetStyleIdentifier() const { return aStyleIdentifier; }

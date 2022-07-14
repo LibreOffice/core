@@ -49,8 +49,7 @@ public:
     bool SaveTemplate();
 
 public:
-    SfxSaveAsTemplateDialog(weld::Window* pParent,
-                            const css::uno::Reference<css::frame::XModel>& rModel);
+    SfxSaveAsTemplateDialog(weld::Window* pParent, css::uno::Reference<css::frame::XModel> xModel);
 };
 
 #endif // INCLUDED_SFX2_INC_SAVEASTEMPLATEDLG_HXX

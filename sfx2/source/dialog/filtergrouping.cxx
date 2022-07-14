@@ -37,6 +37,7 @@
 #include <tools/debug.hxx>
 
 #include <list>
+#include <utility>
 #include <vector>
 #include <map>
 #include <algorithm>
@@ -197,8 +198,8 @@ namespace sfx2
         FilterClassReferrer&    m_aClassReferrer;
 
     public:
-        ReadGlobalFilter( const OConfigurationNode& _rClassesNode, FilterClassReferrer& _rClassesReferrer )
-            :m_aClassesNode     ( _rClassesNode )
+        ReadGlobalFilter( OConfigurationNode _aClassesNode, FilterClassReferrer& _rClassesReferrer )
+            :m_aClassesNode     (std::move( _aClassesNode ))
             ,m_aClassReferrer   ( _rClassesReferrer )
         {
         }
@@ -271,8 +272,8 @@ namespace sfx2
         FilterClassList&        m_rClasses;
 
     public:
-        ReadLocalFilter( const OConfigurationNode& _rClassesNode, FilterClassList& _rClasses )
-            :m_aClassesNode ( _rClassesNode )
+        ReadLocalFilter( OConfigurationNode _aClassesNode, FilterClassList& _rClasses )
+            :m_aClassesNode (std::move( _aClassesNode ))
             ,m_rClasses     ( _rClasses )
         {
         }
@@ -342,9 +343,9 @@ namespace sfx2
         FilterGroup::iterator       m_aClassPos;
 
     public:
-        ReferToFilterEntry( FilterGroupEntryReferrer& _rEntryReferrer, const FilterGroup::iterator& _rClassPos )
+        ReferToFilterEntry( FilterGroupEntryReferrer& _rEntryReferrer, FilterGroup::iterator  _aClassPos )
             :m_rEntryReferrer( _rEntryReferrer )
-            ,m_aClassPos( _rClassPos )
+            ,m_aClassPos(std::move( _aClassPos ))
         {
         }
 
@@ -534,7 +535,7 @@ namespace sfx2
     struct FindGroupEntry
     {
         FilterGroupEntryReferrer::mapped_type aLookingFor;
-        explicit FindGroupEntry( FilterGroupEntryReferrer::mapped_type const & _rLookingFor ) : aLookingFor( _rLookingFor ) { }
+        explicit FindGroupEntry( FilterGroupEntryReferrer::mapped_type _aLookingFor ) : aLookingFor(std::move( _aLookingFor )) { }
 
         bool operator() ( const MapGroupEntry2GroupEntry::value_type& _rMapEntry )
         {
@@ -948,8 +949,8 @@ namespace sfx2
 
     struct ExportFilter
     {
-        ExportFilter( const OUString& _aUIName, const OUString& _aWildcard ) :
-            aUIName( _aUIName ), aWildcard( _aWildcard ) {}
+        ExportFilter( OUString _aUIName, OUString _aWildcard ) :
+            aUIName(std::move( _aUIName )), aWildcard(std::move( _aWildcard )) {}
 
         OUString aUIName;
         OUString aWildcard;

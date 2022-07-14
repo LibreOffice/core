@@ -18,12 +18,13 @@
  */
 
 #include <sfx2/sidebar/AsynchronousCall.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 
 namespace sfx2::sidebar {
 
-AsynchronousCall::AsynchronousCall (const Action& rAction)
-    : maAction(rAction),
+AsynchronousCall::AsynchronousCall (Action aAction)
+    : maAction(std::move(aAction)),
       mnCallId(nullptr)
 {
 }

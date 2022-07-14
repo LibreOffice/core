@@ -24,14 +24,15 @@
 #include <sfx2/dllapi.h>
 #include <svl/style.hxx>
 #include <unotools/resmgr.hxx>
+#include <utility>
 #include <vector>
 
 struct SFX2_DLLPUBLIC SfxFilterTuple
 {
     OUString aName;
     SfxStyleSearchBits nFlags;
-    SfxFilterTuple(const OUString& rName, SfxStyleSearchBits nArg)
-        : aName(rName)
+    SfxFilterTuple(OUString _aName, SfxStyleSearchBits nArg)
+        : aName(std::move(_aName))
         , nFlags(nArg)
     {
     }
@@ -47,7 +48,7 @@ class SFX2_DLLPUBLIC SfxStyleFamilyItem
     SfxStyleFilter  aFilterList;
 
 public:
-    SfxStyleFamilyItem(SfxStyleFamily nFamily, const OUString &rName, const OUString& rImage, const std::pair<TranslateId, SfxStyleSearchBits>* pStringArray, const std::locale& rLocale);
+    SfxStyleFamilyItem(SfxStyleFamily nFamily, OUString rName, OUString  rImage, const std::pair<TranslateId, SfxStyleSearchBits>* pStringArray, const std::locale& rLocale);
 
     const OUString& GetText() const { return aText; }
     SfxStyleFamily  GetFamily() const { return nFamily; }

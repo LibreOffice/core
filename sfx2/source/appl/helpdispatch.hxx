@@ -33,7 +33,7 @@ private:
 
 public:
     HelpDispatch_Impl( HelpInterceptor_Impl& _rInterceptor,
-                       const css::uno::Reference< css::frame::XDispatch >& _xDisp );
+                       css::uno::Reference< css::frame::XDispatch > _xDisp );
     virtual ~HelpDispatch_Impl() override;
 
     // XDispatch

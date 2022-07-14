@@ -19,13 +19,14 @@
 
 #include <sfx2/styfitem.hxx>
 #include <unotools/resmgr.hxx>
+#include <utility>
 
 SfxStyleFamilyItem::SfxStyleFamilyItem(
-    SfxStyleFamily nFamily_, const OUString& rName, const OUString& rImage,
+    SfxStyleFamily nFamily_, OUString _aName, OUString _aImage,
     const std::pair<TranslateId, SfxStyleSearchBits>* pStringArray, const std::locale& rResLocale)
     : nFamily(nFamily_)
-    , aText(rName)
-    , aImage(rImage)
+    , aText(std::move(_aName))
+    , aImage(std::move(_aImage))
 {
     for (const std::pair<TranslateId, SfxStyleSearchBits>* pItem = pStringArray; pItem->first;
          ++pItem)

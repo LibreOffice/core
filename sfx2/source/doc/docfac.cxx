@@ -44,6 +44,7 @@
 #include <tools/globname.hxx>
 
 #include <memory>
+#include <utility>
 
 using namespace ::com::sun::star;
 
@@ -70,8 +71,8 @@ SfxFilterContainer* SfxObjectFactory::GetFilterContainer() const
 SfxObjectFactory::SfxObjectFactory
 (
     const SvGlobalName&     rName,
-    const OUString&         sName
-) :    m_sFactoryName( sName ),
+    OUString          sName
+) :    m_sFactoryName(std::move( sName )),
        pImpl( new SfxObjectFactory_Impl )
 {
     pImpl->pFilterContainer = new SfxFilterContainer( m_sFactoryName );
