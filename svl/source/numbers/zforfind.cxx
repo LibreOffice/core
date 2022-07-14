@@ -2175,19 +2175,25 @@ input for the following reasons:
                 break;
             }
             case 1:             // month at the beginning (Jan 01 01 8:23)
+            {
                 nCounter = 2;
-                switch (DateFmt)
+                // The input is valid as MDY in almost any
+                // constellation, there is no date order (M)YD except if
+                // set in a format applied.
+                pCal->setValue( CalendarFieldIndex::MONTH, std::abs(nMonth)-1 );
+                sal_uInt32 nExactDateOrder = (bFormatTurn ? mpFormat->GetExactDateOrder() : 0);
+                if ((((nExactDateOrder >> 8) & 0xff) == 'Y') && ((nExactDateOrder & 0xff) == 'D'))
                 {
-                case DateOrder::MDY:
+                    pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
+                    pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
+                }
+                else
+                {
                     pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
-                    pCal->setValue( CalendarFieldIndex::MONTH, std::abs(nMonth)-1 );
                     pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(1) );
-                    break;
-                default:
-                    res = false;
-                    break;
                 }
                 break;
+            }
             case 2:             // month in the middle (10 Jan 94 8:23)
             {
                 nCounter = 2;
