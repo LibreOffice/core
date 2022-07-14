@@ -16,6 +16,7 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/doctempl.hxx>
 #include <sfx2/docfilt.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <sot/storage.hxx>
@@ -32,14 +33,14 @@ using namespace ::com::sun::star::frame;
 
 // Class SfxSaveAsTemplateDialog --------------------------------------------------
 
-SfxSaveAsTemplateDialog::SfxSaveAsTemplateDialog(weld::Window* pParent, const uno::Reference<frame::XModel> &rModel)
+SfxSaveAsTemplateDialog::SfxSaveAsTemplateDialog(weld::Window* pParent, uno::Reference<frame::XModel> xModel)
     : GenericDialogController(pParent, "sfx/ui/saveastemplatedlg.ui", "SaveAsTemplateDialog")
     , m_xLBCategory(m_xBuilder->weld_tree_view("categorylb"))
     , m_xCBXDefault(m_xBuilder->weld_check_button("defaultcb"))
     , m_xTemplateNameEdit(m_xBuilder->weld_entry("name_entry"))
     , m_xOKButton(m_xBuilder->weld_button("ok"))
     , mnRegionPos(0)
-    , m_xModel(rModel)
+    , m_xModel(std::move(xModel))
 {
     m_xLBCategory->append_text(SfxResId(STR_CATEGORY_NONE));
     initialize();

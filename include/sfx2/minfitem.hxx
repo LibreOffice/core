@@ -41,10 +41,10 @@ public:
     static SfxPoolItem* CreateDefault();
     SfxMacroInfoItem( sal_uInt16 nWhich,
                     const BasicManager* pMgr,
-                    const OUString &rLibName,
-                    const OUString &rModuleName,
-                    const OUString &rMethodName,
-                    const OUString &rComment);
+                    OUString aLibName,
+                    OUString aModuleName,
+                    OUString aMethodName,
+                    OUString aComment);
 
     virtual SfxMacroInfoItem* Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;

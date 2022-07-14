@@ -22,6 +22,7 @@
 #include <sfx2/lnkbase.hxx>
 #include <com/sun/star/uno/Any.hxx>
 
+#include <utility>
 #include <vcl/timer.hxx>
 #include <memory>
 #include <vector>
@@ -77,9 +78,9 @@ struct SvLinkSource_Entry_Impl
     sal_uInt16                nAdviseModes;
     bool                      bIsDataSink;
 
-    SvLinkSource_Entry_Impl( SvBaseLink* pLink, const OUString& rMimeType,
+    SvLinkSource_Entry_Impl( SvBaseLink* pLink, OUString aMimeType,
                                 sal_uInt16 nAdvMode )
-        : xSink( pLink ), aDataMimeType( rMimeType ),
+        : xSink( pLink ), aDataMimeType(std::move( aMimeType )),
             nAdviseModes( nAdvMode ), bIsDataSink( true )
     {}
 

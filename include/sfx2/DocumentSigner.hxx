@@ -14,6 +14,7 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <rtl/ustring.hxx>
+#include <utility>
 
 namespace com::sun::star::security
 {
@@ -32,8 +33,8 @@ private:
     OUString m_aUrl;
 
 public:
-    DocumentSigner(OUString const& rUrl)
-        : m_aUrl(rUrl)
+    DocumentSigner(OUString aUrl)
+        : m_aUrl(std::move(aUrl))
     {
     }
 

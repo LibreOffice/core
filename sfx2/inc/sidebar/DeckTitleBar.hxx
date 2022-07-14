@@ -30,7 +30,7 @@ class DeckTitleBar final : public TitleBar
 {
 public:
     DeckTitleBar(const OUString& rsTitle, weld::Builder& rBuilder,
-                 const std::function<void()>& rCloserAction);
+                 std::function<void()> aCloserAction);
     virtual ~DeckTitleBar() override;
 
     virtual void SetTitle(const OUString& rsTitle) override;

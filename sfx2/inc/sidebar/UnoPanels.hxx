@@ -23,7 +23,7 @@ class SfxUnoPanels final : public cppu::WeakImplHelper<css::ui::XPanels>
 
 public:
 
-    SfxUnoPanels(const css::uno::Reference<css::frame::XFrame>& , const OUString&);
+    SfxUnoPanels(css::uno::Reference<css::frame::XFrame>, const OUString&);
 
 // XPanels
     virtual OUString SAL_CALL getDeckId() override;

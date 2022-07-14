@@ -25,6 +25,7 @@
 #include <tools/ref.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <memory>
+#include <utility>
 
 namespace com::sun::star::uno
 {
@@ -94,8 +95,8 @@ public:
 
     struct StreamToLoadFrom{
         StreamToLoadFrom(
-            const css::uno::Reference<css::io::XInputStream>& xInputStream, bool bIsReadOnly )
-            :m_xInputStreamToLoadFrom(xInputStream),
+            css::uno::Reference<css::io::XInputStream> xInputStream, bool bIsReadOnly )
+            :m_xInputStreamToLoadFrom(std::move(xInputStream)),
              m_bIsReadOnly(bIsReadOnly)
         {
         }

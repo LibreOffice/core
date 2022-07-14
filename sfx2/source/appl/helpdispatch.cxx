@@ -21,6 +21,7 @@
 #include "helpdispatch.hxx"
 #include "newhelp.hxx"
 #include <tools/debug.hxx>
+#include <utility>
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
@@ -30,10 +31,10 @@ using namespace ::com::sun::star::util;
 // class HelpInterceptor_Impl --------------------------------------------
 
 HelpDispatch_Impl::HelpDispatch_Impl( HelpInterceptor_Impl& _rInterceptor,
-                                      const css::uno::Reference< css::frame::XDispatch >& _xDisp ) :
+                                      css::uno::Reference< css::frame::XDispatch > _xDisp ) :
 
     m_rInterceptor  ( _rInterceptor ),
-    m_xRealDispatch ( _xDisp )
+    m_xRealDispatch (std::move( _xDisp ))
 
 {
 }

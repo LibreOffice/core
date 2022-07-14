@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SFX2_SOURCE_INC_WORKWIN_HXX
 #define INCLUDED_SFX2_SOURCE_INC_WORKWIN_HXX
 
+#include <utility>
 #include <vector>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
@@ -96,9 +97,9 @@ struct SfxChild_Impl
         nVisible = bIsVisible ? SfxChildVisibility::VISIBLE : SfxChildVisibility::NOT_VISIBLE;
     }
 
-    SfxChild_Impl(const std::shared_ptr<SfxDialogController>& rChild,
+    SfxChild_Impl(std::shared_ptr<SfxDialogController> xChild,
                   SfxChildAlignment eAlignment):
-        pWin(nullptr), xController(rChild), eAlign(eAlignment), bResize(false),
+        pWin(nullptr), xController(std::move(xChild)), eAlign(eAlignment), bResize(false),
         bSetFocus( false )
     {
         nVisible = xController->getDialog()->get_visible() ? SfxChildVisibility::VISIBLE : SfxChildVisibility::NOT_VISIBLE;
