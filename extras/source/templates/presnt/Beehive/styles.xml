@@ -4107,7 +4107,7 @@
       <draw:frame presentation:style-name="Beehive1-outline1" draw:layer="backgroundobjects" svg:width="25.199cm" svg:height="9.134cm" svg:x="1.4cm" svg:y="3.685cm" presentation:class="outline" presentation:placeholder="true">
         <draw:text-box/>
       </draw:frame>
-      <draw:frame presentation:style-name="Mpr3" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="6.67cm" svg:height="1.95cm" svg:x="0.95cm" svg:y="13.651cm">
+      <draw:frame presentation:style-name="Mpr3" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="6.67cm" svg:height="1.95cm" svg:x="0.95cm" svg:y="13.651cm" presentation:class="date-time">
         <draw:text-box>
           <text:p>
             <text:span text:style-name="MT1">
@@ -4116,7 +4116,7 @@
           </text:p>
         </draw:text-box>
       </draw:frame>
-      <draw:frame presentation:style-name="Mpr3" draw:text-style-name="MP7" draw:layer="backgroundobjects" svg:width="12.725cm" svg:height="1.956cm" svg:x="7.624cm" svg:y="13.65cm">
+      <draw:frame presentation:style-name="Mpr3" draw:text-style-name="MP7" draw:layer="backgroundobjects" svg:width="12.725cm" svg:height="1.956cm" svg:x="7.624cm" svg:y="13.65cm" presentation:class="footer">
         <draw:text-box>
           <text:p text:style-name="MP6">
             <text:span text:style-name="MT1">
@@ -4125,7 +4125,7 @@
           </text:p>
         </draw:text-box>
       </draw:frame>
-      <draw:frame presentation:style-name="Mpr3" draw:text-style-name="MP7" draw:layer="backgroundobjects" svg:width="3.175cm" svg:height="1.95cm" svg:x="23.595cm" svg:y="13.65cm">
+      <draw:frame presentation:style-name="Mpr3" draw:text-style-name="MP7" draw:layer="backgroundobjects" svg:width="3.175cm" svg:height="1.95cm" svg:x="23.595cm" svg:y="13.65cm" presentation:class="page-number">
         <draw:text-box>
           <text:p text:style-name="MP6">
             <text:span text:style-name="MT1">

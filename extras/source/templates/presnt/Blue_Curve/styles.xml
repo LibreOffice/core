@@ -797,7 +797,7 @@
       <draw:frame presentation:style-name="Blue_5f_Curve-outline1" draw:layer="backgroundobjects" svg:width="26cm" svg:height="4.5cm" svg:x="1cm" svg:y="8cm" presentation:class="outline" presentation:placeholder="true">
         <draw:text-box/>
       </draw:frame>
-      <draw:frame presentation:style-name="Mpr1" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="6.5cm" svg:height="1cm" svg:x="1cm" svg:y="14.5cm">
+      <draw:frame presentation:style-name="Mpr1" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="6.5cm" svg:height="1cm" svg:x="1cm" svg:y="14.5cm" presentation:class="date-time">
         <draw:text-box>
           <text:p>
             <text:span text:style-name="MT1">
@@ -806,7 +806,7 @@
           </text:p>
         </draw:text-box>
       </draw:frame>
-      <draw:frame presentation:style-name="Mpr1" draw:text-style-name="MP7" draw:layer="backgroundobjects" svg:width="9cm" svg:height="1cm" svg:x="9.5cm" svg:y="14.5cm">
+      <draw:frame presentation:style-name="Mpr1" draw:text-style-name="MP7" draw:layer="backgroundobjects" svg:width="9cm" svg:height="1cm" svg:x="9.5cm" svg:y="14.5cm" presentation:class="footer">
         <draw:text-box>
           <text:p text:style-name="MP6">
             <text:span text:style-name="MT1">
@@ -815,7 +815,7 @@
           </text:p>
         </draw:text-box>
       </draw:frame>
-      <draw:frame presentation:style-name="Mpr1" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="6.5cm" svg:height="1cm" svg:x="20.5cm" svg:y="14.5cm">
+      <draw:frame presentation:style-name="Mpr1" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="6.5cm" svg:height="1cm" svg:x="20.5cm" svg:y="14.5cm" presentation:class="page-number">
         <draw:text-box>
           <text:p text:style-name="MP8">
             <text:span text:style-name="MT1">
