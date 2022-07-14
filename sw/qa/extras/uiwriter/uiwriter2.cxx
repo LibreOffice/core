@@ -30,10 +30,12 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/configuration.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/filter/PDFiumLibrary.hxx>
 #include <ndtxt.hxx>
 #include <swdtflvr.hxx>
 #include <wrtsh.hxx>
@@ -6067,6 +6069,54 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf126735)
     CPPUNIT_ASSERT(xTextRange);
     // This was empty (collapsing at the start of the last tracked change)
     CPPUNIT_ASSERT_EQUAL(OUString("or "), xTextRange->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testConditionalHiddenSectionIssue)
+{
+    // tdf#54703
+    // When exporting the bug document as PDF, the conditional hidden
+    // sections became visible in the PDF and in the document.
+
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+        return;
+
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "HiddenSection.odt");
+
+    // Check section conditional hidden status - all should be hidden (IsCondHidden == true)
+    for (SwNodeOffset i(0); i < pDoc->GetNodes().Count(); ++i)
+    {
+        if (SwSectionNode const* const pNode = pDoc->GetNodes()[i]->GetSectionNode())
+        {
+            CPPUNIT_ASSERT_EQUAL(true, pNode->GetSection().IsCondHidden());
+        }
+    }
+
+    // PDF export
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aFile);
+    auto pPdfDocument = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize());
+    CPPUNIT_ASSERT(pPdfDocument);
+    auto pPdfPage = pPdfDocument->openPage(0);
+    CPPUNIT_ASSERT(pPdfPage);
+
+    // No PDF object should be present in the page - sections remained hidden
+    CPPUNIT_ASSERT_EQUAL(0, pPdfPage->getObjectCount());
+
+    // Check section conditional hidden status - all should remained hidden (IsCondHidden == true)
+    for (SwNodeOffset i(0); i < pDoc->GetNodes().Count(); ++i)
+    {
+        if (SwSectionNode const* const pNode = pDoc->GetNodes()[i]->GetSectionNode())
+        {
+            CPPUNIT_ASSERT_EQUAL(true, pNode->GetSection().IsCondHidden());
+        }
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
