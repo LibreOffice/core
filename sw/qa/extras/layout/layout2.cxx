@@ -340,10 +340,11 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineShowHideFootnotePagination)
     assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn", 6);
     assertXPath(pXmlDoc, "/root/page[2]/ftncont/ftn", 3);
     // check that first page ends with the y line and second page starts with z
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[last()]/LineBreak[last()]", "Line",
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[last()]/SwParaPortion/SwLineLayout[last()]",
+                "portion",
                 "yyyyyyyyy yyy yyyyyyyyyyyyyyyy yyyyyyy yyy yyyyy yyyyyyyyy yyy yyyyyyyyy ");
-    assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/LineBreak[1]", "Line",
-                "zzz. zzz zzzz zzzz7 zzz zzz zzzzzzz zzz zzzz zzzzzzzzzzzzzz zzzzzzzzzzzz ");
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/SwParaPortion/SwLineLayout[1]", "portion",
+                "zzz. zzz zzzz zzzz* zzz zzz zzzzzzz zzz zzzz zzzzzzzzzzzzzz zzzzzzzzzzzz ");
 
     // hide redlines - all still visible footnotes move to page 1
     dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
@@ -364,10 +365,11 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineShowHideFootnotePagination)
     assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn", 6);
     assertXPath(pXmlDoc, "/root/page[2]/ftncont/ftn", 3);
     // check that first page ends with the y line and second page starts with z
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[last()]/LineBreak[last()]", "Line",
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[last()]/SwParaPortion/SwLineLayout[last()]",
+                "portion",
                 "yyyyyyyyy yyy yyyyyyyyyyyyyyyy yyyyyyy yyy yyyyy yyyyyyyyy yyy yyyyyyyyy ");
-    assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/LineBreak[1]", "Line",
-                "zzz. zzz zzzz zzzz7 zzz zzz zzzzzzz zzz zzzz zzzzzzzzzzzzzz zzzzzzzzzzzz ");
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/SwParaPortion/SwLineLayout[1]", "portion",
+                "zzz. zzz zzzz zzzz* zzz zzz zzzzzzz zzz zzzz zzzzzzzzzzzzzz zzzzzzzzzzzz ");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testtdf138951)
@@ -802,7 +804,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf146964_ReappearingMovedTextInHideCh
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     CPPUNIT_ASSERT(pXmlDoc);
     // This was "Lorem Lorem ipsum" (reappearing deletion in Hide Changes mode)
-    assertXPath(pXmlDoc, "/root/page/body/txt[1]/Text", "Portion", "Lorem ipsum");
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
+                "portion", "Lorem ipsum");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf125300)
@@ -1948,10 +1951,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf117245)
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // This was 2, TabOverMargin did not use a single line when there was
     // enough space for the text.
-    assertXPath(pXmlDoc, "/root/page/body/txt[1]/LineBreak", 1);
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout", 1);
 
     // This was 2, same problem elsewhere due to code duplication.
-    assertXPath(pXmlDoc, "/root/page/body/txt[2]/LineBreak", 1);
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf118672)
@@ -1965,10 +1968,11 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf118672)
         return;
 
     // This ended as "fol*1 2 3 4 5 6 7 8 9", i.e. "10con-" was moved to the next line.
-    assertXPath(pXmlDoc, "/root/page/body/txt[1]/LineBreak[1]", "Line",
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[1]", "portion",
                 "He heard quiet steps behind him. That didn't bode well. Who could be fol*1 2 "
-                "3 4 5 6 7 8 9 10con-");
-    assertXPath(pXmlDoc, "/root/page/body/txt[1]/LineBreak[2]", "Line", "setetur");
+                "3 4 5 6 7 8 9 10con");
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[2]", "portion",
+                "setetur");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf117923)
@@ -1986,11 +1990,16 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf117923)
 
     // Check that we actually test the line we need
     assertXPathContent(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]", "GHI GHI GHI GHI");
-    assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]/Special", "nType",
-                "PortionType::Number");
-    assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]/Special", "rText", "2.");
+    assertXPath(pXmlDoc,
+                "/root/page/body/tab/row/cell/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion",
+                "type", "PortionType::Number");
+    assertXPath(pXmlDoc,
+                "/root/page/body/tab/row/cell/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion",
+                "expand", "2.");
     // The numbering height was 960.
-    assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]/Special", "nHeight", "220");
+    assertXPath(pXmlDoc,
+                "/root/page/body/tab/row/cell/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion",
+                "font-height", "220");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf127606)
@@ -2008,11 +2017,16 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf127606)
 
     // Check that we actually test the line we need
     assertXPathContent(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]", "GHI GHI GHI GHI");
-    assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]/Special", "nType",
-                "PortionType::Number");
-    assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]/Special", "rText", "2.");
+    assertXPath(pXmlDoc,
+                "/root/page/body/tab/row/cell/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion",
+                "type", "PortionType::Number");
+    assertXPath(pXmlDoc,
+                "/root/page/body/tab/row/cell/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion",
+                "expand", "2.");
     // The numbering height was 960 in DOC format.
-    assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]/Special", "nHeight", "220");
+    assertXPath(pXmlDoc,
+                "/root/page/body/tab/row/cell/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion",
+                "font-height", "220");
 
     // tdf#127606: now it's possible to change formatting of numbering
     // increase font size (220 -> 260)
@@ -2021,7 +2035,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf127606)
     pViewShell->Reformat();
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]/Special", "nHeight", "260");
+    assertXPath(pXmlDoc,
+                "/root/page/body/tab/row/cell/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion",
+                "font-height", "260");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf127118)
@@ -2180,8 +2196,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testUserFieldTypeLanguage)
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // This was "123,456.00", via a buggy 1234.56 -> 1234,56 -> 123456 ->
     // 123,456.00 transform chain.
-    assertXPath(pXmlDoc, "/root/page/body/txt/Special[@nType='PortionType::Field']", "rText",
-                "1,234.56");
+    assertXPath(
+        pXmlDoc,
+        "/root/page/body/txt/SwParaPortion/SwLineLayout/SwFieldPortion[@type='PortionType::Field']",
+        "expand", "1,234.56");
 
     discardDumpedLayout();
     // Now change the system locale to English (before this was failing, 1234,56 -> 0.00)
@@ -2194,8 +2212,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testUserFieldTypeLanguage)
     pViewShell->UpdateFields();
     pXmlDoc = parseLayoutDump();
     // We expect, that the field value is not changed. Otherwise there is a problem:
-    assertXPath(pXmlDoc, "/root/page/body/txt/Special[@nType='PortionType::Field']", "rText",
-                "1,234.56");
+    assertXPath(
+        pXmlDoc,
+        "/root/page/body/txt/SwParaPortion/SwLineLayout/SwFieldPortion[@type='PortionType::Field']",
+        "expand", "1,234.56");
     discardDumpedLayout();
     // Now change the system locale to German
     aOptions.SetLocaleConfigString("de-DE");
@@ -2207,8 +2227,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testUserFieldTypeLanguage)
     pViewShell->UpdateFields();
     pXmlDoc = parseLayoutDump();
     // We expect, that the field value is not changed. Otherwise there is a problem:
-    assertXPath(pXmlDoc, "/root/page/body/txt/Special[@nType='PortionType::Field']", "rText",
-                "1,234.56");
+    assertXPath(
+        pXmlDoc,
+        "/root/page/body/txt/SwParaPortion/SwLineLayout/SwFieldPortion[@type='PortionType::Field']",
+        "expand", "1,234.56");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf124261)
