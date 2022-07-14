@@ -272,6 +272,9 @@ public:
 
     std::optional<double> GetSelectedDate() const { return m_oSelectedDate; }
 
+    /// Should this character (during key input) interact with the content control?
+    bool IsInteractingCharacter(sal_Unicode cCh);
+
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
     void SetDataBindingPrefixMappings(const OUString& rDataBindingPrefixMappings)
