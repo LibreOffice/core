@@ -839,6 +839,9 @@ void SwDocUpdateField::MakeFieldList_( SwDoc& rDoc, int eGetMode )
     // new version: walk all fields of the attribute pool
     m_pFieldSortList.reset(new SetGetExpFields);
 
+    // remembeer sections that were unhidden and need to be hidden again
+    std::vector<std::reference_wrapper<SwSection>> aUnhiddenSections;
+
     // consider and unhide sections
     //     with hide condition, only in mode GETFLD_ALL (<eGetMode == GETFLD_ALL>)
     //     notes by OD:
@@ -885,13 +888,27 @@ void SwDocUpdateField::MakeFieldList_( SwDoc& rDoc, int eGetMode )
         {
             pSectNd = rDoc.GetNodes()[ aTmpArr[ n ] ]->GetSectionNode();
             OSL_ENSURE( pSectNd, "Where is my SectionNode" );
-            pSectNd->GetSection().SetCondHidden( false );
+
+            auto& rSection = pSectNd->GetSection();
+            // unhide and remember the conditionally hidden sections
+            if (rSection.IsHidden() && !rSection.GetCondition().isEmpty() && rSection.IsCondHidden())
+            {
+                aUnhiddenSections.push_back(std::ref(rSection)); // remember to later hide again
+                rSection.SetCondHidden(false);
+            }
         }
         for (std::vector<sal_uLong>::size_type n = 0; n < nArrStt; ++n)
         {
             pSectNd = rDoc.GetNodes()[ aTmpArr[ n ] ]->GetSectionNode();
             OSL_ENSURE( pSectNd, "Where is my SectionNode" );
-            pSectNd->GetSection().SetCondHidden( false );
+
+            auto& rSection = pSectNd->GetSection();
+            // unhide and remember the conditionally hidden sections
+            if (rSection.IsHidden() && !rSection.GetCondition().isEmpty() && rSection.IsCondHidden())
+            {
+                aUnhiddenSections.push_back(std::ref(rSection)); // remember to later hide again
+                rSection.SetCondHidden(false);
+            }
         }
 
         // add all to the list so that they are sorted
@@ -1032,6 +1049,13 @@ void SwDocUpdateField::MakeFieldList_( SwDoc& rDoc, int eGetMode )
     }
     m_nFieldListGetMode = eGetMode;
     m_nNodes = rDoc.GetNodes().Count();
+
+    // return the conditional hidden value back to the previous value
+    for (auto& rSectionWrapper : aUnhiddenSections)
+    {
+        auto& rSection = rSectionWrapper.get();
+        rSection.SetCondHidden(true);
+    }
 }
 
 void SwDocUpdateField::GetBodyNode( const SwTextField& rTField, SwFieldIds nFieldWhich )

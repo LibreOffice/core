@@ -1263,6 +1263,7 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc& rDoc, const SwNodeIndex& rIdx ) c
 
     pNewSect->SetType( GetSection().GetType() );
     pNewSect->SetCondition( GetSection().GetCondition() );
+    pNewSect->SetCondHidden( GetSection().IsCondHidden() );
     pNewSect->SetLinkFileName( GetSection().GetLinkFileName() );
     if( !pNewSect->IsHiddenFlag() && GetSection().IsHidden() )
         pNewSect->SetHidden();
