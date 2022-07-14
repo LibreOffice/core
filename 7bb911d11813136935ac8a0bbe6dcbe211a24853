@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51e66436_6a24b2c7",
+        "filename": "lotuswordpro/source/filter/lwp9reader.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-07-14T09:45:04Z",
+      "side": 1,
+      "message": "please fold this into a single SAL_WARN",
+      "range": {
+        "startLine": 93,
+        "startChar": 12,
+        "endLine": 94,
+        "endChar": 98
+      },
+      "revId": "7bb911d11813136935ac8a0bbe6dcbe211a24853",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
