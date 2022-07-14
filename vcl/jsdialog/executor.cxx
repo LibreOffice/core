@@ -75,6 +75,12 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
 
     if (pWidget != nullptr)
     {
+        if (sAction == "grab_focus")
+        {
+            pWidget->grab_focus();
+            return true;
+        }
+
         if (sControlType == "tabcontrol")
         {
             auto pNotebook = dynamic_cast<weld::Notebook*>(pWidget);
