@@ -306,7 +306,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                 {
                     const Fraction& rZoomY = GetViewData().GetZoomY();
                     tools::Long nZoom = tools::Long(rZoomY * 100);
-                    if (nZoom >= tools::Long(MAXZOOM))
+                    if (nZoom >= MAXZOOM)
                         rSet.DisableItem(nWhich);
                 }
                 break;
@@ -314,7 +314,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                 {
                     const Fraction& rZoomY = GetViewData().GetZoomY();
                     tools::Long nZoom = tools::Long(rZoomY * 100);
-                    if (nZoom <= tools::Long(MINZOOM))
+                    if (nZoom <= MINZOOM)
                         rSet.DisableItem(nWhich);
                 }
                 break;
