@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "657900a3_6809fada",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2022-07-14T16:32:23Z",
+      "side": 1,
+      "message": "Works now:\n- add new tab with + icon in tab bar\n- switch to other tab\nSheet menu commands:\n- Insert sheet\n- Insert sheet from file\n- Insert sheet at end\n- Hide sheet\n- Delete sheet\n\nTo be filed as separate bug:\nSheet -\u003e row/column/cell operations",
+      "revId": "4b19d5682c875ee867104b76a2bed38ee8693149",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
