@@ -864,7 +864,7 @@ void ScExternalRefCache::setCellRangeData(sal_uInt16 nFileId, const ScRange& rRa
             };
             ScMatrix::StringOpFunction aStringFunc = [=](size_t row, size_t col, svl::SharedString val) -> void
             {
-                pTabData->setCell(col + nCol1, row + nRow1, new formula::FormulaStringToken(val), 0, false);
+                pTabData->setCell(col + nCol1, row + nRow1, new formula::FormulaStringToken(std::move(val)), 0, false);
             };
             ScMatrix::EmptyOpFunction aEmptyFunc = [](size_t /*row*/, size_t /*col*/) -> void
             {
@@ -1515,7 +1515,7 @@ static FormulaToken* convertToToken( ScDocument& rHostDoc, const ScDocument& rSr
         {
             OUString aStr = rCell.getString(&rSrcDoc);
             svl::SharedString aSS = rHostDoc.GetSharedStringPool().intern(aStr);
-            return new formula::FormulaStringToken(aSS);
+            return new formula::FormulaStringToken(std::move(aSS));
         }
         case CELLTYPE_VALUE:
             return new formula::FormulaDoubleToken(rCell.getDouble());
@@ -1533,7 +1533,7 @@ static FormulaToken* convertToToken( ScDocument& rHostDoc, const ScDocument& rSr
             else
             {
                 svl::SharedString aSS = rHostDoc.GetSharedStringPool().intern( pFCell->GetString().getString());
-                return new formula::FormulaStringToken(aSS);
+                return new formula::FormulaStringToken(std::move(aSS));
             }
         }
         default:
@@ -2940,7 +2940,7 @@ public:
                 {
                     OUString aStr = aCell.getString(&mpCurCol->GetDoc());
                     svl::SharedString aSS = mrStrPool.intern(aStr);
-                    pTok.reset(new formula::FormulaStringToken(aSS));
+                    pTok.reset(new formula::FormulaStringToken(std::move(aSS)));
                 }
                 break;
                 case CELLTYPE_VALUE:
@@ -2958,7 +2958,7 @@ public:
                         {
                             // Re-intern the string to the host document pool.
                             svl::SharedString aInterned = mrStrPool.intern(aRes.maString.getString());
-                            pTok.reset(new formula::FormulaStringToken(aInterned));
+                            pTok.reset(new formula::FormulaStringToken(std::move(aInterned)));
                         }
                         break;
                         case sc::FormulaResultValue::Error:

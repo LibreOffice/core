@@ -351,8 +351,7 @@ namespace svt
             {
                 OUString sURL = m_rStorage.ReadUniOrByteString(m_rStorage.GetStreamCharSet());
                 sURL = m_xOfficeInstDirs->makeAbsoluteURL( sURL );
-                INetURLObject aChildURL( sURL );
-                rChildren.push_back( new TemplateContent( aChildURL ) );
+                rChildren.push_back( new TemplateContent( INetURLObject( sURL ) ) );
             }
 
             // their content
@@ -566,7 +565,7 @@ namespace svt
                     INetURLObject aSubContentURL( xContentAccess->queryContentIdentifierString() );
 
                     // a new content instance
-                    ::rtl::Reference< TemplateContent > xChild = new TemplateContent( aSubContentURL );
+                    ::rtl::Reference< TemplateContent > xChild = new TemplateContent( std::move(aSubContentURL) );
 
                     // the modified date
                     xChild->setModDate( xRow->getTimestamp( 2 ) );  // date modified

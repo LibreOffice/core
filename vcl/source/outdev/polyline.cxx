@@ -163,8 +163,8 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
         aLineInfo.SetLineJoin(eLineJoin);
         aLineInfo.SetLineCap(eLineCap);
 
-        const tools::Polygon aToolsPolygon( rB2DPolygon );
-        mpMetaFile->AddAction( new MetaPolyLineAction( aToolsPolygon, aLineInfo ) );
+        tools::Polygon aToolsPolygon( rB2DPolygon );
+        mpMetaFile->AddAction( new MetaPolyLineAction( std::move(aToolsPolygon), std::move(aLineInfo) ) );
     }
 
     // Do not paint empty PolyPolygons
@@ -330,8 +330,8 @@ bool OutputDevice::DrawPolyLineDirect(
             aLineInfo.SetLineJoin(eLineJoin);
             aLineInfo.SetLineCap(eLineCap);
             // MiterMinimumAngle does not exist yet in LineInfo
-            const tools::Polygon aToolsPolygon( rB2DPolygon );
-            mpMetaFile->AddAction( new MetaPolyLineAction( aToolsPolygon, aLineInfo ) );
+            tools::Polygon aToolsPolygon( rB2DPolygon );
+            mpMetaFile->AddAction( new MetaPolyLineAction( std::move(aToolsPolygon), std::move(aLineInfo) ) );
         }
         return true;
     }

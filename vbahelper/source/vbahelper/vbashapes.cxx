@@ -83,7 +83,7 @@ void ScVbaShapes::initBaseCollection()
     aShapes.reserve( nLen );
     for ( sal_Int32 index=0; index<nLen; ++index )
         aShapes.emplace_back( m_xIndexAccess->getByIndex( index ) , uno::UNO_QUERY );
-    uno::Reference< container::XIndexAccess > xShapes( new XNamedObjectCollectionHelper< drawing::XShape >( aShapes ) );
+    uno::Reference< container::XIndexAccess > xShapes( new XNamedObjectCollectionHelper< drawing::XShape >( std::move(aShapes) ) );
     m_xIndexAccess = xShapes;
     m_xNameAccess.set( xShapes, uno::UNO_QUERY );
 }
@@ -167,7 +167,7 @@ ScVbaShapes::getShapesByArrayIndices( const uno::Any& Index  )
         if ( xShape.is() )
             aShapes.push_back( xShape );
     }
-    uno::Reference< container::XIndexAccess > xIndexAccess( new XNamedObjectCollectionHelper< drawing::XShape >( aShapes ) );
+    uno::Reference< container::XIndexAccess > xIndexAccess( new XNamedObjectCollectionHelper< drawing::XShape >( std::move(aShapes) ) );
     return xIndexAccess;
 }
 

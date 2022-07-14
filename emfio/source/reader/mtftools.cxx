@@ -911,7 +911,7 @@ namespace emfio
                         Point aPoint( aPoly[ 0 ] );
                         aPoly.Insert( nCount, aPoint );
                     }
-                    mpGDIMetaFile->AddAction( new MetaPolygonAction( aPoly ) );
+                    mpGDIMetaFile->AddAction( new MetaPolygonAction( std::move(aPoly) ) );
                 }
             }
         }

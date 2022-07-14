@@ -391,7 +391,7 @@ void GalleryTransferable::InitData( bool bLazy )
                     Graphic aGraphic;
 
                     if (mpTheme && mpTheme->GetGraphic(mnObjectPos, aGraphic))
-                        mpGraphicObject.reset(new GraphicObject( aGraphic ));
+                        mpGraphicObject.reset(new GraphicObject( std::move(aGraphic) ));
                 }
 
                 if( !mxModelStream.is() )
@@ -428,7 +428,7 @@ void GalleryTransferable::InitData( bool bLazy )
                 Graphic aGraphic;
 
                 if (mpTheme && mpTheme->GetGraphic(mnObjectPos, aGraphic))
-                    mpGraphicObject.reset(new GraphicObject( aGraphic ));
+                    mpGraphicObject.reset(new GraphicObject( std::move(aGraphic) ));
             }
         }
         break;

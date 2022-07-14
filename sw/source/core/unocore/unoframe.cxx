@@ -434,8 +434,8 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         {
             if(pXFillBitmapItem)
             {
-                const Graphic aNullGraphic;
-                XFillBitmapItem aXFillBitmapItem(aNullGraphic);
+                Graphic aNullGraphic;
+                XFillBitmapItem aXFillBitmapItem(std::move(aNullGraphic));
 
                 aXFillBitmapItem.PutValue(*pXFillBitmapItem, MID_BITMAP);
                 rToSet.Put(aXFillBitmapItem);
@@ -1839,8 +1839,8 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                     {
                         case XATTR_FILLBITMAP:
                         {
-                            const Graphic aNullGraphic;
-                            XFillBitmapItem aXFillBitmapItem(aNullGraphic);
+                            Graphic aNullGraphic;
+                            XFillBitmapItem aXFillBitmapItem(std::move(aNullGraphic));
 
                             aXFillBitmapItem.PutValue(aValue, nMemberId);
                             aSet.Put(aXFillBitmapItem);

@@ -2403,7 +2403,7 @@ formula::FormulaTokenRef ScColumn::ResolveStaticReference( SCROW nRow )
             const EditTextObject* pText = sc::edittext_block::at(*it->data, aPos.second);
             OUString aStr = ScEditUtil::GetString(*pText, &GetDoc());
             svl::SharedString aSS( GetDoc().GetSharedStringPool().intern(aStr));
-            return formula::FormulaTokenRef(new formula::FormulaStringToken(aSS));
+            return formula::FormulaTokenRef(new formula::FormulaStringToken(std::move(aSS)));
         }
         case sc::element_type_empty:
         default:

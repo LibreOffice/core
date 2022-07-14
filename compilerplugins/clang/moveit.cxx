@@ -41,20 +41,39 @@ public:
         std::string fn(handler.getMainFileName());
         loplugin::normalizeDotDotInFilePath(fn);
         // false +
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/basctl/source/basicide/moduldlg.cxx"))
+            return false;
         if (loplugin::hasPathnamePrefix(fn, SRCDIR "/basic/source/classes/sbunoobj.cxx"))
             return false;
+        if (loplugin::hasPathnamePrefix(fn,
+                                        SRCDIR "/connectivity/source/drivers/dbase/dindexnode.cxx"))
+            return false;
         if (loplugin::hasPathnamePrefix(
-                fn, SRCDIR "/drawinglayer/source/primitive2d/fillgradientprimitive2d.cxx"))
+                fn, SRCDIR "/drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx"))
             return false;
         if (loplugin::hasPathnamePrefix(
                 fn, SRCDIR "/drawinglayer/source/primitive3d/sdrdecompositiontools3d.cxx"))
             return false;
         if (loplugin::hasPathnamePrefix(
-                fn, SRCDIR "/drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx"))
+                fn, SRCDIR "/drawinglayer/source/primitive2d/fillgradientprimitive2d.cxx"))
             return false;
         if (loplugin::hasPathnamePrefix(fn, SRCDIR "/drawinglayer/source/tools/emfphelperdata.cxx"))
             return false;
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/editeng/source/items/frmitems.cxx"))
+            return false;
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/emfio/source/reader/mtftools.cxx"))
+            return false;
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/filter/source/msfilter/msdffimp.cxx"))
+            return false;
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/filter/source/msfilter/escherex.cxx"))
+            return false;
         if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sc/source/ui/view/hintwin.cxx"))
+            return false;
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sc/source/core/tool/scmatrix.cxx"))
+            return false;
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sd/source/filter/eppt/epptso.cxx"))
+            return false;
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sdext/source/pdfimport/pdfparse/pdfparse.cxx"))
             return false;
         if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sfx2/source/control/dispatch.cxx"))
             return false;
@@ -73,14 +92,12 @@ public:
         if (loplugin::hasPathnamePrefix(fn,
                                         SRCDIR "/svx/source/svdraw/svdotextpathdecomposition.cxx"))
             return false;
-        if (loplugin::hasPathnamePrefix(fn,
-                                        SRCDIR "/connectivity/source/drivers/dbase/dindexnode.cxx"))
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR
+                                        "/svx/source/sdr/primitive2d/sdrolecontentprimitive2d.cxx"))
             return false;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/basctl/source/basicide/moduldlg.cxx"))
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/svx/source/xml/xmlgrhlp.cxx"))
             return false;
         if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/core/SwNumberTree/SwNumberTree.cxx"))
-            return false;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sc/source/core/tool/scmatrix.cxx"))
             return false;
         if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/core/bastyp/calc.cxx"))
             return false;
@@ -95,6 +112,16 @@ public:
         if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/core/layout/paintfrm.cxx"))
             return false;
         if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/uibase/docvw/DashedLine.cxx"))
+            return false;
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/vcl/source/gdi/gradient.cxx"))
+            return false;
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/vcl/source/graphic/GraphicObject.cxx"))
+            return false;
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/vcl/source/graphic/GraphicObject2.cxx"))
+            return false;
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/vcl/source/filter/svm/SvmConverter.cxx"))
+            return false;
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/vcl/source/outdev/font.cxx"))
             return false;
         if (loplugin::hasPathnamePrefix(
                 fn, SRCDIR "/writerfilter/source/dmapper/DomainMapperTableHandler.cxx"))

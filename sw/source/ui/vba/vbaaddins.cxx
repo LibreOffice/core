@@ -51,7 +51,7 @@ static uno::Reference< container::XIndexAccess > lcl_getAddinCollection( const u
 
     // TODO: second get the customize addins in the org.openoffice.Office.Writer/GlobalTemplateList
 
-    uno::Reference< container::XIndexAccess > xAddinsAccess( new XNamedObjectCollectionHelper< word::XAddin >( aAddins ) );
+    uno::Reference< container::XIndexAccess > xAddinsAccess( new XNamedObjectCollectionHelper< word::XAddin >( std::move(aAddins) ) );
     return xAddinsAccess;
 }
 

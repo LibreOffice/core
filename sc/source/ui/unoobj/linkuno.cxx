@@ -1404,7 +1404,7 @@ void SAL_CALL ScExternalSheetCacheObj::setCellValue(sal_Int32 nCol, sal_Int32 nR
     {
         svl::SharedStringPool& rPool = mpDocShell->GetDocument().GetSharedStringPool();
         svl::SharedString aSS = rPool.intern(aVal);
-        pToken.reset(new FormulaStringToken(aSS));
+        pToken.reset(new FormulaStringToken(std::move(aSS)));
     }
     else
         // unidentified value type.

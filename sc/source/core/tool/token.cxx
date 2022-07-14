@@ -365,9 +365,9 @@ FormulaToken* ScRawToken::CreateToken(ScSheetLimits& rLimits) const
         {
             svl::SharedString aSS(sharedstring.mpData, sharedstring.mpDataIgnoreCase);
             if (eOp == ocPush)
-                return new FormulaStringToken(aSS);
+                return new FormulaStringToken(std::move(aSS));
             else
-                return new FormulaStringOpToken(eOp, aSS);
+                return new FormulaStringOpToken(eOp, std::move(aSS));
         }
         case svSingleRef :
             if (eOp == ocPush)

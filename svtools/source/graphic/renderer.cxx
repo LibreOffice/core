@@ -277,7 +277,7 @@ void SAL_CALL GraphicRendererVCL::render( const uno::Reference< graphic::XGraphi
         Graphic aGraphic(rxGraphic);
         if (!aGraphic.IsNone())
         {
-            GraphicObject aGraphicObject(aGraphic);
+            GraphicObject aGraphicObject(std::move(aGraphic));
             aGraphicObject.Draw(*mpOutDev, maDestRect.TopLeft(), maDestRect.GetSize());
         }
     }

@@ -337,7 +337,7 @@ void SAL_CALL ScXMLExternalRefCellContext::endFastElement( sal_Int32 /*nElement*
         {
             ScDocument& rDoc = mrScImport.GetDoc().getDoc();
             svl::SharedString aSS = rDoc.GetSharedStringPool().intern(maCellString);
-            aToken.reset(new formula::FormulaStringToken(aSS));
+            aToken.reset(new formula::FormulaStringToken(std::move(aSS)));
         }
 
         sal_uInt32 nNumFmt = mnNumberFormat >= 0 ? static_cast<sal_uInt32>(mnNumberFormat) : 0;

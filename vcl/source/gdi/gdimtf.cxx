@@ -774,7 +774,7 @@ void GDIMetaFile::Clip( const tools::Rectangle& i_rClipRect )
             vcl::Region aNewReg( aCurRect );
             if( pOldAct->IsClipping() )
                 aNewReg.Intersect( pOldAct->GetRegion() );
-            MetaClipRegionAction* pNewAct = new MetaClipRegionAction( aNewReg, true );
+            MetaClipRegionAction* pNewAct = new MetaClipRegionAction( std::move(aNewReg), true );
             m_aList[ m_nCurrentActionElement ] = pNewAct;
         }
     }
@@ -1252,7 +1252,7 @@ void GDIMetaFile::Rotate( Degree10 nAngle10 )
                 vcl::Font       aFont( pAct->GetFont() );
 
                 aFont.SetOrientation( aFont.GetOrientation() + nAngle10 );
-                aMtf.AddAction( new MetaFontAction( aFont ) );
+                aMtf.AddAction( new MetaFontAction( std::move(aFont) ) );
             }
             break;
 
@@ -1892,7 +1892,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
 
                 aFont.SetColor( pFncCol( aFont.GetColor(), pColParam ) );
                 aFont.SetFillColor( pFncCol( aFont.GetFillColor(), pColParam ) );
-                aMtf.push_back( new MetaFontAction( aFont ) );
+                aMtf.push_back( new MetaFontAction( std::move(aFont) ) );
             }
             break;
 
@@ -1916,7 +1916,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
                     aWall.SetGradient( aGradient );
                 }
 
-                aMtf.push_back( new MetaWallpaperAction( rRect, aWall ) );
+                aMtf.push_back( new MetaWallpaperAction( rRect, std::move(aWall) ) );
             }
             break;
 
@@ -1993,7 +1993,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
 
                 aGradient.SetStartColor( pFncCol( aGradient.GetStartColor(), pColParam ) );
                 aGradient.SetEndColor( pFncCol( aGradient.GetEndColor(), pColParam ) );
-                aMtf.push_back( new MetaGradientAction( pAct->GetRect(), aGradient ) );
+                aMtf.push_back( new MetaGradientAction( pAct->GetRect(), std::move(aGradient) ) );
             }
             break;
 
@@ -2004,7 +2004,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
 
                 aGradient.SetStartColor( pFncCol( aGradient.GetStartColor(), pColParam ) );
                 aGradient.SetEndColor( pFncCol( aGradient.GetEndColor(), pColParam ) );
-                aMtf.push_back( new MetaGradientExAction( pAct->GetPolyPolygon(), aGradient ) );
+                aMtf.push_back( new MetaGradientExAction( pAct->GetPolyPolygon(), std::move(aGradient) ) );
             }
             break;
 
