@@ -70,6 +70,30 @@
       },
       "revId": "ba866df2dd51fb646d3c3dd295571dcaf9e074de",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f45d07c1_3881e952",
+        "filename": "svgio/source/svgreader/svgstyleattributes.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2845,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-07-15T08:00:00Z",
+      "side": 0,
+      "message": "Yes, probably \"remove redundant check\" was not the most accurate description\nThis code was added in ecc7f698b5f080530f006218fa3dd82da43d9abb and it\u0027s the only place where it checks whether the variable is empty before calling the parent recurrently. you can check other places using getParentStyle. so checking pSvgStyleAttributes-\u003emaMaskXLink.isEmpty() looks wrong to me",
+      "parentUuid": "cd4f586e_e8b1116e",
+      "range": {
+        "startLine": 2845,
+        "startChar": 40,
+        "endLine": 2845,
+        "endChar": 59
+      },
+      "revId": "ba866df2dd51fb646d3c3dd295571dcaf9e074de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
