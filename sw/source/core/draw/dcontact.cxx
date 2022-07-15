@@ -421,13 +421,15 @@ namespace
 void SwContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
     // this does not call SwClient::SwClientNotify and thus doesn't handle RES_OBJECTDYING as usual. Is this intentional?
-    if (auto pFindSdrObjectHint = dynamic_cast<const sw::FindSdrObjectHint*>(&rHint))
+    if (rHint.GetId() == SfxHintId::SwFindSdrObject)
     {
+        auto pFindSdrObjectHint = static_cast<const sw::FindSdrObjectHint*>(&rHint);
         if(!pFindSdrObjectHint->m_rpObject)
             pFindSdrObjectHint->m_rpObject = GetMaster();
     }
-    else if (auto pWW8AnchorConvHint = dynamic_cast<const sw::WW8AnchorConvHint*>(&rHint))
+    else if (rHint.GetId() == SfxHintId::SwWW8AnchorConv)
     {
+        auto pWW8AnchorConvHint = static_cast<const sw::WW8AnchorConvHint*>(&rHint);
         // determine anchored object
         SwAnchoredObject* pAnchoredObj(nullptr);
         {
@@ -664,8 +666,9 @@ void SwFlyDrawContact::GetAnchoredObjs( std::vector<SwAnchoredObject*>& _roAncho
 void SwFlyDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
     SwContact::SwClientNotify(rMod, rHint);
-    if(auto pGetZOrdnerHint = dynamic_cast<const sw::GetZOrderHint*>(&rHint))
+    if(rHint.GetId() == SfxHintId::SwGetZOrder)
     {
+        auto pGetZOrdnerHint = static_cast<const sw::GetZOrderHint*>(&rHint);
         // #i11176#
         // This also needs to work when no layout exists. Thus, for
         // FlyFrames an alternative method is used now in that case.
@@ -1512,8 +1515,9 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         // #i51474#
         GetAnchoredObj(nullptr)->ResetLayoutProcessBools();
     }
-    else if (auto pDrawFrameFormatHint = dynamic_cast<const sw::DrawFrameFormatHint*>(&rHint))
+    else if (rHint.GetId() == SfxHintId::SwDrawFrameFormat)
     {
+        auto pDrawFrameFormatHint = static_cast<const sw::DrawFrameFormatHint*>(&rHint);
         switch(pDrawFrameFormatHint->m_eId)
         {
             case sw::DrawFrameFormatHintId::DYING:
@@ -1548,19 +1552,22 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
                 ;
         }
     }
-    else if (auto pCheckDrawFrameFormatLayerHint = dynamic_cast<const sw::CheckDrawFrameFormatLayerHint*>(&rHint))
+    else if (rHint.GetId() == SfxHintId::SwCheckDrawFrameFormatLayer)
     {
+        auto pCheckDrawFrameFormatLayerHint = static_cast<const sw::CheckDrawFrameFormatLayerHint*>(&rHint);
         *(pCheckDrawFrameFormatLayerHint->m_bCheckControlLayer) |= (GetMaster() && CheckControlLayer(GetMaster()));
     }
-    else if (auto pContactChangedHint = dynamic_cast<const sw::ContactChangedHint*>(&rHint))
+    else if (rHint.GetId() == SfxHintId::SwContactChanged)
     {
+        auto pContactChangedHint = static_cast<const sw::ContactChangedHint*>(&rHint);
         if(!*pContactChangedHint->m_ppObject)
             *pContactChangedHint->m_ppObject = GetMaster();
         auto pObject = *pContactChangedHint->m_ppObject;
         Changed(*pObject, SdrUserCallType::Delete, pObject->GetLastBoundRect());
     }
-    else if (auto pDrawFormatLayoutCopyHint = dynamic_cast<const sw::DrawFormatLayoutCopyHint*>(&rHint))
+    else if (rHint.GetId() == SfxHintId::SwDrawFormatLayoutCopy)
     {
+        auto pDrawFormatLayoutCopyHint = static_cast<const sw::DrawFormatLayoutCopyHint*>(&rHint);
         const SwDrawFrameFormat& rFormat = static_cast<const SwDrawFrameFormat&>(rMod);
         new SwDrawContact(
                 &pDrawFormatLayoutCopyHint->m_rDestFormat,
@@ -1573,8 +1580,9 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         if(rFormat.IsPosAttrSet())
             pDrawFormatLayoutCopyHint->m_rDestFormat.PosAttrSet();
     }
-    else if (auto pRestoreFlyAnchorHint = dynamic_cast<const sw::RestoreFlyAnchorHint*>(&rHint))
+    else if (rHint.GetId() == SfxHintId::SwRestoreFlyAnchor)
     {
+        auto pRestoreFlyAnchorHint = static_cast<const sw::RestoreFlyAnchorHint*>(&rHint);
         SdrObject* pObj = GetMaster();
         if(GetAnchorFrame() && !pObj->IsInserted())
         {
@@ -1584,8 +1592,9 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         }
         pObj->SetRelativePos(pRestoreFlyAnchorHint->m_aPos);
     }
-    else if (auto pCreatePortionHint = dynamic_cast<const sw::CreatePortionHint*>(&rHint))
+    else if (rHint.GetId() == SfxHintId::SwCreatePortion)
     {
+        auto pCreatePortionHint = static_cast<const sw::CreatePortionHint*>(&rHint);
         if(*pCreatePortionHint->m_ppContact)
             return;
         *pCreatePortionHint->m_ppContact = this; // This is kind of ridiculous: the FrameFormat doesn't even hold a pointer to the contact itself,  but here we are leaking it out randomly
@@ -1597,8 +1606,9 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             MoveObjToVisibleLayer(GetMaster());
         }
     }
-    else if (auto pCollectTextObjectsHint = dynamic_cast<const sw::CollectTextObjectsHint*>(&rHint))
+    else if (rHint.GetId() == SfxHintId::SwCollectTextObjects)
     {
+        auto pCollectTextObjectsHint = static_cast<const sw::CollectTextObjectsHint*>(&rHint);
         auto pSdrO = GetMaster();
         if(!pSdrO)
             return;
@@ -1620,14 +1630,16 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
                 pCollectTextObjectsHint->m_rTextObjects.push_back(pTextObj);
         }
     }
-    else if (auto pGetZOrdnerHint = dynamic_cast<const sw::GetZOrderHint*>(&rHint))
+    else if (rHint.GetId() == SfxHintId::SwGetZOrder)
     {
+        auto pGetZOrdnerHint = static_cast<const sw::GetZOrderHint*>(&rHint);
         auto pFormat(dynamic_cast<const SwFrameFormat*>(&rMod));
         if(pFormat->Which() == RES_DRAWFRMFMT)
             pGetZOrdnerHint->m_rnZOrder = GetMaster()->GetOrdNum();
     }
-    else if (auto pConnectedHint = dynamic_cast<const sw::GetObjectConnectedHint*>(&rHint))
+    else if (rHint.GetId() == SfxHintId::SwGetObjectConnected)
     {
+        auto pConnectedHint = static_cast<const sw::GetObjectConnectedHint*>(&rHint);
         pConnectedHint->m_risConnected |= (GetAnchorFrame() != nullptr);
     }
 }

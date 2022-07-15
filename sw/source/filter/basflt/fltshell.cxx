@@ -892,8 +892,9 @@ void SwFltAnchorListener::Notify(const SfxHint& rHint)
 {
     if (rHint.GetId() == SfxHintId::Dying)
         m_pFltAnchor->SetFrameFormat(nullptr);
-    else if (auto pDrawFrameFormatHint = dynamic_cast<const sw::DrawFrameFormatHint*>(&rHint))
+    else if (rHint.GetId() == SfxHintId::SwDrawFrameFormat)
     {
+        auto pDrawFrameFormatHint = static_cast<const sw::DrawFrameFormatHint*>(&rHint);
         if (pDrawFrameFormatHint->m_eId != sw::DrawFrameFormatHintId::DYING)
             return;
         m_pFltAnchor->SetFrameFormat(nullptr);
@@ -1042,8 +1043,11 @@ void FrameDeleteWatch::Notify(const SfxHint& rHint)
     bool bDying = false;
     if (rHint.GetId() == SfxHintId::Dying)
         bDying = true;
-    else if (auto pDrawFrameFormatHint = dynamic_cast<const sw::DrawFrameFormatHint*>(&rHint))
+    else if (rHint.GetId() == SfxHintId::SwDrawFrameFormat)
+    {
+        auto pDrawFrameFormatHint = static_cast<const sw::DrawFrameFormatHint*>(&rHint);
         bDying = pDrawFrameFormatHint->m_eId == sw::DrawFrameFormatHintId::DYING;
+    }
     if (bDying)
     {
         m_pFormat = nullptr;

@@ -42,36 +42,48 @@ namespace sw {
     struct FindFormatForFieldHint final : SfxHint {
         const SwField* m_pField;
         SwFormatField*& m_rpFormat;
-        FindFormatForFieldHint(const SwField* pField, SwFormatField*& rpFormat) : m_pField(pField), m_rpFormat(rpFormat) {};
+        FindFormatForFieldHint(const SwField* pField, SwFormatField*& rpFormat)
+            : SfxHint(SfxHintId::SwFindFormatForField), m_pField(pField), m_rpFormat(rpFormat) {};
     };
     struct FindFormatForPostItIdHint final : SfxHint {
         const sal_uInt32 m_nPostItId;
         SwFormatField*& m_rpFormat;
-        FindFormatForPostItIdHint(const sal_uInt32 nPostItId, SwFormatField*& rpFormat) : m_nPostItId(nPostItId), m_rpFormat(rpFormat) {};
+        FindFormatForPostItIdHint(const sal_uInt32 nPostItId, SwFormatField*& rpFormat)
+            : SfxHint(SfxHintId::SwFindFormatForPostItId), m_nPostItId(nPostItId), m_rpFormat(rpFormat) {};
     };
     struct CollectPostItsHint final : SfxHint {
         std::vector<SwFormatField*>& m_rvFormatFields;
         IDocumentRedlineAccess const& m_rIDRA;
         const bool m_bHideRedlines;
-        CollectPostItsHint(std::vector<SwFormatField*>& rvFormatFields, IDocumentRedlineAccess const& rIDRA, bool bHideRedlines) : m_rvFormatFields(rvFormatFields), m_rIDRA(rIDRA), m_bHideRedlines(bHideRedlines) {};
+        CollectPostItsHint(std::vector<SwFormatField*>& rvFormatFields, IDocumentRedlineAccess const& rIDRA, bool bHideRedlines)
+            : SfxHint(SfxHintId::SwCollectPostIts),
+              m_rvFormatFields(rvFormatFields), m_rIDRA(rIDRA), m_bHideRedlines(bHideRedlines) {};
     };
     struct HasHiddenInformationNotesHint final : SfxHint {
         bool& m_rbHasHiddenInformationNotes;
-        HasHiddenInformationNotesHint(bool& rbHasHiddenInformationNotes) : m_rbHasHiddenInformationNotes(rbHasHiddenInformationNotes) {};
+        HasHiddenInformationNotesHint(bool& rbHasHiddenInformationNotes)
+            : SfxHint(SfxHintId::SwHasHiddenInformationNotes),
+              m_rbHasHiddenInformationNotes(rbHasHiddenInformationNotes) {};
     };
     struct GatherNodeIndexHint final : SfxHint {
         std::vector<SwNodeOffset>& m_rvNodeIndex;
-        GatherNodeIndexHint(std::vector<SwNodeOffset>& rvNodeIndex) : m_rvNodeIndex(rvNodeIndex) {};
+        GatherNodeIndexHint(std::vector<SwNodeOffset>& rvNodeIndex)
+            : SfxHint(SfxHintId::SwGatherNodeIndex),
+              m_rvNodeIndex(rvNodeIndex) {};
     };
     struct GatherRefFieldsHint final : SfxHint {
         std::vector<SwGetRefField*>& m_rvRFields;
         const sal_uInt16 m_nType;
-        GatherRefFieldsHint(std::vector<SwGetRefField*>& rvRFields, const sal_uInt16 nType) : m_rvRFields(rvRFields), m_nType(nType) {};
+        GatherRefFieldsHint(std::vector<SwGetRefField*>& rvRFields, const sal_uInt16 nType)
+            : SfxHint(SfxHintId::SwGatherRefFields),
+              m_rvRFields(rvRFields), m_nType(nType) {};
     };
     struct GatherFieldsHint final : SfxHint {
         const bool m_bCollectOnlyInDocNodes;
         std::vector<SwFormatField*>& m_rvFields;
-        GatherFieldsHint(std::vector<SwFormatField*>& rvFields, bool bCollectOnlyInDocNodes = true) : m_bCollectOnlyInDocNodes(bCollectOnlyInDocNodes), m_rvFields(rvFields) {};
+        GatherFieldsHint(std::vector<SwFormatField*>& rvFields, bool bCollectOnlyInDocNodes = true)
+            : SfxHint(SfxHintId::SwGatherFields),
+              m_bCollectOnlyInDocNodes(bCollectOnlyInDocNodes), m_rvFields(rvFields) {};
     };
     struct GatherDdeTablesHint final : SfxHint {
         std::vector<SwDDETable*>& m_rvTables;
