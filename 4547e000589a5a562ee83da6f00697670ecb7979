@@ -16,6 +16,23 @@
       "message": "Two more needed",
       "revId": "4547e000589a5a562ee83da6f00697670ecb7979",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4732b47a_35c365ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-07-15T18:16:47Z",
+      "side": 1,
+      "message": "one on X-Y branch, and two additional ones on X-Y-Z",
+      "revId": "4547e000589a5a562ee83da6f00697670ecb7979",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
