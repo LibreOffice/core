@@ -165,6 +165,9 @@ public:
         sal_uInt16 eFlags = SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE,
         bool bIdleEnd = false );
 
+    // TODO: make private, add getter/setter, possibly give it a more generic name
+    bool m_bAccessibleCursorEventsEnabled;
+
 private:
 
     SwRect  m_aCharRect;          ///< Char-SRectangle on which the cursor is located

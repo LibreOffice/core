@@ -1753,7 +1753,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
             }
             m_eMvState = CursorMoveState::NONE;  // state for cursor travelling - GetModelPositionForViewPoint
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
-            if (Imp()->IsAccessible())
+            if (Imp()->IsAccessible() && m_bAccessibleCursorEventsEnabled)
                 Imp()->InvalidateAccessibleCursorPosition( pTableFrame );
 #endif
             return;
@@ -2027,7 +2027,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
     m_eMvState = CursorMoveState::NONE; // state for cursor travelling - GetModelPositionForViewPoint
 
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
-    if (Imp()->IsAccessible())
+    if (Imp()->IsAccessible() && m_bAccessibleCursorEventsEnabled)
         Imp()->InvalidateAccessibleCursorPosition( pFrame );
 #endif
 

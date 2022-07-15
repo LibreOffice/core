@@ -480,6 +480,15 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
             bool bState = eNewState != ATK_STATE_INVALID;
             AtkStateType eRealState = bState ? eNewState : eOldState;
 
+            // TODO: drop test change
+            if (atk_obj->role == ATK_ROLE_PARAGRAPH && eNewState == ATK_STATE_SELECTED)
+            {
+                SAL_WARN("mw.a11y", "state-changed:selected event for paragraph");
+                // TEST: ignore:
+                //break;
+            }
+
+
             atk_object_notify_state_change( atk_obj, eRealState, bState );
             break;
         }

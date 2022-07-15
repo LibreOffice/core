@@ -6504,6 +6504,9 @@ OUString SwEditWin::GetSurroundingText() const
         bool bUnLockView = !rSh.IsViewLocked();
         rSh.LockView(true);
         rSh.Push();
+        // TODO: comment -> "internal helper cursor" only, just used to retrieve surrounding text
+        bool bBackup = rSh.m_bAccessibleCursorEventsEnabled;
+        rSh.m_bAccessibleCursorEventsEnabled = false;
 
         // get the sentence around the cursor
         rSh.HideCursor();
@@ -6513,6 +6516,7 @@ OUString SwEditWin::GetSurroundingText() const
         rSh.GetSelectedText( sReturn, ParaBreakType::ToOnlyCR  );
 
         rSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
+        rSh.m_bAccessibleCursorEventsEnabled = bBackup;
         rSh.HideCursor();
 
         if (bUnLockView)
@@ -6544,7 +6548,7 @@ Selection SwEditWin::GetSurroundingTextSelection() const
         // around the visible cursor.
         TextFrameIndex const nPos(rSh.GetCursorPointAsViewIndex());
 
-        rSh.Push();
+        rSh.Push(); // TODO: same here?
 
         rSh.HideCursor();
         rSh.GoStartSentence();
@@ -6572,7 +6576,7 @@ bool SwEditWin::DeleteSurroundingText(const Selection& rSelection)
 
     // rSelection is relative to the start of the sentence, so find that and
     // adjust the range by it
-    rSh.Push();
+    rSh.Push(); // TODO: same here?
     rSh.HideCursor();
     rSh.GoStartSentence();
     TextFrameIndex const nStartPos(rSh.GetCursorPointAsViewIndex());
