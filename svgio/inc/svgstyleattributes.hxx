@@ -277,8 +277,7 @@ namespace svgio::svgreader
 
         public:
             /// local attribute scanner
-            void parseStyleAttribute(SVGToken aSVGToken, const OUString& rContent,
-                                     bool bCaseIndependent);
+            void parseStyleAttribute(SVGToken aSVGToken, const OUString& rContent);
 
             /// helper which does the necessary with a given path
             void add_text(

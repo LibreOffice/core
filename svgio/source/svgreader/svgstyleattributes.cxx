@@ -239,7 +239,7 @@ namespace svgio::svgreader
                 }
 
                 // valid token-value pair, parse it
-                parseStyleAttribute(StrToSVGToken(aOUTokenName, true), aOUTokenValue, true);
+                parseStyleAttribute(StrToSVGToken(aOUTokenName, true), aOUTokenValue);
             }
         }
 
@@ -1298,8 +1298,7 @@ namespace svgio::svgreader
 
         void SvgStyleAttributes::parseStyleAttribute(
             SVGToken aSVGToken,
-            const OUString& aContent,
-            bool bIsInStyleSheet)
+            const OUString& aContent)
         {
             switch(aSVGToken)
             {
@@ -1876,7 +1875,7 @@ namespace svgio::svgreader
                 }
                 case SVGToken::Marker:
                 {
-                    if(bIsInStyleSheet)
+                    if(getCssStyleParent())
                     {
                         readLocalUrl(aContent, maMarkerEndXLink);
                         maMarkerStartXLink = maMarkerMidXLink = maMarkerEndXLink;

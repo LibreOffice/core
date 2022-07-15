@@ -45,7 +45,7 @@ namespace svgio::svgreader
             SvgNode::parseAttribute(rTokenName, aSVGToken, aContent);
 
             // read style attributes
-            maSvgStyleAttributes.parseStyleAttribute(aSVGToken, aContent, false);
+            maSvgStyleAttributes.parseStyleAttribute(aSVGToken, aContent);
 
             // read text position attributes
             maSvgTextPositions.parseTextPositionAttributes(aSVGToken, aContent);
