@@ -16,6 +16,24 @@
       "message": "For the info bar, instead of the `${INFOBAR_DONATE_ENABLED}` hack, I would prefer a somewhat cleaner `install:module` override, something like\n  diff --git a/officecfg/Configuration_officecfg.mk b/officecfg/Configuration_officecfg.mk\n  index dc8802628451..89a8a57504e9 100644\n  --- a/officecfg/Configuration_officecfg.mk\n  +++ b/officecfg/Configuration_officecfg.mk\n  @@ -118,6 +118,7 @@ $(eval $(call gb_Configuration_add_spool_modules,registry,officecfg/registry/dat\n   \t\torg/openoffice/Office/UI/WriterWindowState-librelogo.xcu \\\n   \t) \\\n   \torg/openoffice/Office/UI/Controller-reportbuilder.xcu \\\n  +\torg/openoffice/Office/UI/Infobar-macosxsandbox.xcu \\\n   \torg/openoffice/TypeDetection/UISort-writer.xcu \\\n   \torg/openoffice/TypeDetection/UISort-calc.xcu \\\n   \torg/openoffice/TypeDetection/UISort-draw.xcu \\\n  diff --git a/officecfg/registry/data/org/openoffice/Office/UI/Infobar.xcu b/officecfg/registry/data/org/openoffice/Office/UI/Infobar.xcu\n  new file mode 100644\n  index 000000000000..109e2198d408\n  --- /dev/null\n  +++ b/officecfg/registry/data/org/openoffice/Office/UI/Infobar.xcu\n  @@ -0,0 +1,17 @@\n  +\u003c?xml version\u003d\"1.0\" encoding\u003d\"UTF-8\"?\u003e\n  +\u003c!--\n  + * This file is part of the LibreOffice project.\n  + *\n  + * This Source Code Form is subject to the terms of the Mozilla Public\n  + * License, v. 2.0. If a copy of the MPL was not distributed with this\n  + * file, You can obtain one at http://mozilla.org/MPL/2.0/.\n  + *\n  +--\u003e\n  +\u003c!DOCTYPE oor:component-data SYSTEM \"../../../../../component-update.dtd\"\u003e\n  +\u003coor:component-data oor:name\u003d\"Infobar\" oor:package\u003d\"org.openoffice.Office.UI\" xmlns:install\u003d\"http://openoffice.org/2004/installation\" xmlns:oor\u003d\"http://openoffice.org/2001/registry\" xmlns:xs\u003d\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi\u003d\"http://www.w3.org/2001/XMLSchema-instance\"\u003e\n  +  \u003cnode oor:name\u003d\"Enabled\" install:module\u003d\"macosxsandbox\"\u003e\n  +    \u003cprop oor:name\u003d\"Donate\"\u003e\n  +      \u003cvalue\u003efalse\u003c/value\u003e\n  +    \u003c/prop\u003e\n  +  \u003c/node\u003e\n  +\u003c/oor:component-data\u003e\n  diff --git a/postprocess/CustomTarget_registry.mk b/postprocess/CustomTarget_registry.mk\n  index fa30e33ae0c7..9e7fbb1398ae 100644\n  --- a/postprocess/CustomTarget_registry.mk\n  +++ b/postprocess/CustomTarget_registry.mk\n  @@ -306,6 +306,10 @@ ifneq ($(WITH_WEBDAV),)\n   postprocess_FILES_main +\u003d $(postprocess_MOD)/org/openoffice/ucb/Configuration-webdav.xcu\n   endif\n   \n  +ifneq ($(ENABLE_MACOSX_SANDBOX),)\n  +postprocess_FILES_main +\u003d $(postprocess_MOD)/org/openoffice/Office/UI/Infobar-macosxsandbox.xcu\n  +endif\n  +\n   ifneq (,$(SYSTEM_LIBEXTTEXTCAT_DATA))\n   postprocess_FILES_main +\u003d $(postprocess_MOD)/org/openoffice/Office/Paths-externallibexttextcatdata.xcu\n   else\n",
       "revId": "7ae41744e875421b206ae041e7cbfa8cb4c72b81",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9caaf7b0_8cf4c09f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-07-15T15:43:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "766881c2_e65f40eb",
+      "revId": "7ae41744e875421b206ae041e7cbfa8cb4c72b81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
