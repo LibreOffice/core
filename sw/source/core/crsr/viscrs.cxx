@@ -798,6 +798,11 @@ void SwSelPaintRects::HighlightContentControl()
     }
 }
 
+VclPtr<SwContentControlButton> SwSelPaintRects::GetContentControlButton() const
+{
+    return m_pContentControlButton;
+}
+
 void SwSelPaintRects::Invalidate( const SwRect& rRect )
 {
     size_type nSz = size();

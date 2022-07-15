@@ -249,6 +249,27 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testCheckboxContentControlKeyboard)
     CPPUNIT_ASSERT(pContentControl->GetChecked());
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testDropdownContentControlKeyboard)
+{
+    // Given an already selected dropdown content control:
+    SwDoc* pDoc = createSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->InsertContentControl(SwContentControlType::DROP_DOWN_LIST);
+
+    // When checking if alt-down should open a popup:
+    SwTextContentControl* pTextContentControl = pWrtShell->CursorInsideContentControl();
+    auto& rFormatContentControl
+        = static_cast<SwFormatContentControl&>(pTextContentControl->GetAttr());
+    std::shared_ptr<SwContentControl> pContentControl = rFormatContentControl.GetContentControl();
+    vcl::KeyCode aKeyCode(KEY_DOWN, KEY_MOD2);
+    bool bShouldOpen = pContentControl->ShouldOpenPopup(aKeyCode);
+
+    // Then make sure that the answer is yes for dropdowns:
+    // Without the accompanying fix in place, this test would have failed, the dropdown popup was
+    // mouse-only.
+    CPPUNIT_ASSERT(bShouldOpen);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
