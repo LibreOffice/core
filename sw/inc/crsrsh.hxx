@@ -59,6 +59,7 @@ class SwBlockCursor;
 class SwPostItField;
 class SwTextField;
 class SwTextFootnote;
+class SwTextContentControl;
 
 namespace i18nutil {
     struct SearchOptions2;
@@ -717,7 +718,7 @@ public:
         const bool bIncludeInputFieldAtStart );
     SwField* GetCurField( const bool bIncludeInputFieldAtStart = false ) const;
     bool CursorInsideInputField() const;
-    bool CursorInsideContentControl() const;
+    SwTextContentControl* CursorInsideContentControl() const;
     static bool PosInsideInputField( const SwPosition& rPos );
     bool DocPtInsideInputField( const Point& rDocPt ) const;
     static sal_Int32 StartOfInputFieldAtPos( const SwPosition& rPos );

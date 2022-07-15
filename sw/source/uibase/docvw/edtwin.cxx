@@ -151,6 +151,7 @@
 #include <txtfrm.hxx>
 #include <strings.hrc>
 #include <textcontentcontrol.hxx>
+#include <contentcontrolbutton.hxx>
 
 using namespace sw::mark;
 using namespace ::com::sun::star;
@@ -1521,6 +1522,26 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
         const SwFieldType* pFieldType = rSh.GetFieldType( 0, SwFieldIds::Postit );
         rSh.MoveFieldType( pFieldType, bNext );
         return;
+    }
+
+    if (SwTextContentControl* pTextContentControl = rSh.CursorInsideContentControl())
+    {
+        // Check if this combination of rKeyCode and pTextContentControl should open a popup.
+        const SwFormatContentControl& rFormatContentControl = pTextContentControl->GetContentControl();
+        std::shared_ptr<SwContentControl> pContentControl = rFormatContentControl.GetContentControl();
+        if (pContentControl->ShouldOpenPopup(rKeyCode))
+        {
+            SwShellCursor* pCursor = rSh.GetCursor_();
+            if (pCursor)
+            {
+                VclPtr<SwContentControlButton> pContentControlButton = pCursor->GetContentControlButton();
+                if (pContentControlButton)
+                {
+                    pContentControlButton->StartPopup();
+                    return;
+                }
+            }
+        }
     }
 
     const SwFrameFormat* pFlyFormat = rSh.GetFlyFrameFormat();

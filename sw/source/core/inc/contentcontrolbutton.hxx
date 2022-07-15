@@ -29,6 +29,8 @@ public:
 
     virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
     DECL_LINK(PopupModeEndHdl, weld::Popover&, void);
+    /// Shared MouseButtonDown() and KeyInput() code.
+    void StartPopup();
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual WindowHitTest ImplHitTest(const Point& rFramePos) override;
