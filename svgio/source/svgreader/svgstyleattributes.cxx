@@ -2842,7 +2842,7 @@ namespace svgio::svgreader
 
             const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
 
-            if (pSvgStyleAttributes && !pSvgStyleAttributes->maMaskXLink.isEmpty() && maResolvingParent[25] < nStyleDepthLimit)
+            if (pSvgStyleAttributes && maResolvingParent[25] < nStyleDepthLimit)
             {
                 ++maResolvingParent[25];
                 auto ret = pSvgStyleAttributes->getMaskXLink();
