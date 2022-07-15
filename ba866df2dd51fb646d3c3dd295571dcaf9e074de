@@ -46,6 +46,30 @@
       },
       "revId": "ba866df2dd51fb646d3c3dd295571dcaf9e074de",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd4f586e_e8b1116e",
+        "filename": "svgio/source/svgreader/svgstyleattributes.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2845,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-07-15T07:49:39Z",
+      "side": 0,
+      "message": "Huh?\n\nCalling pSvgStyleAttributes-\u003egetMaskXLink will check if the pSvgStyleAttributes-\u003emaMaskXLink is not empty; and *if* it *is* empty, then it will try to get the parent style of pSvgStyleAttributes, and repeat. So the result is very different, potentially giving different results: where originally it stopped whenever the parent had no own mask link, now it would go up by the ancestor chain, and probably would get the link at some point.\n\nThat could be the wanted result - but then it\u0027s not \"removal of recurring (redundant) check\", but a functional change.",
+      "parentUuid": "3698c158_c267ac01",
+      "range": {
+        "startLine": 2845,
+        "startChar": 40,
+        "endLine": 2845,
+        "endChar": 59
+      },
+      "revId": "ba866df2dd51fb646d3c3dd295571dcaf9e074de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
