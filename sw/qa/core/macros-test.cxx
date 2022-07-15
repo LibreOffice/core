@@ -110,6 +110,24 @@ void SwMacrosTest::testVba()
            OUString("testFind.docm"),
             OUString("vnd.sun.Star.script:Project.Module1.testFind?language=Basic&location=document")
         }
+        /* TODO - make these pass in Writer
+        {
+            OUString("testSentences.docm"),
+            OUString("vnd.sun.Star.script:Project.ThisDocument.TestAll?language=Basic&location=document")
+        },
+        {
+            OUString("testWords.docm"),
+            OUString("vnd.sun.Star.script:Project.ThisDocument.TestAll?language=Basic&location=document")
+        },
+        {
+            OUString("testParagraphFormat.docm"),
+            OUString("vnd.sun.Star.script:Project.ThisDocument.TestAll?language=Basic&location=document")
+        },
+        {
+            OUString("testTables.docm"),
+            OUString("vnd.sun.Star.script:Project.ThisDocument.TestAll?language=Basic&location=document")
+        },*/
+
     };
     for ( size_t  i=0; i<SAL_N_ELEMENTS( testInfo ); ++i )
     {
