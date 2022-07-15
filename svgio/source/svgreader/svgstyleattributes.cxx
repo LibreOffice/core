@@ -1196,11 +1196,10 @@ namespace svgio::svgreader
             }
 
             const SvgClipPathNode* pClip = accessClipPathXLink();
-            while(pClip)
+            if(pClip)
             {
                 // #i124852# transform may be needed when SvgUnits::userSpaceOnUse
                 pClip->apply(aSource, pTransform);
-                pClip = pClip->getSvgStyleAttributes()->accessClipPathXLink();
             }
 
             if(!aSource.empty()) // test again, applied clipPath may have lead to empty geometry
@@ -1278,7 +1277,7 @@ namespace svgio::svgreader
             maClipRule(FillRule::nonzero),
             maBaselineShift(BaselineShift::Baseline),
             maBaselineShiftNumber(0),
-            maResolvingParent(30, 0),
+            maResolvingParent(31, 0),
             mbIsClipPathContent(SVGToken::ClipPathNode == mrOwner.getType()),
             mbStrokeDasharraySet(false)
         {
@@ -2812,9 +2811,27 @@ namespace svgio::svgreader
             return nullptr;
         }
 
-        OUString const & SvgStyleAttributes::getClipPathXLink() const
+        OUString SvgStyleAttributes::getClipPathXLink() const
         {
-            return maClipPathXLink;
+            if(!maClipPathXLink.isEmpty())
+            {
+                return maClipPathXLink;
+            }
+
+            if(getCssStyleParent())
+            {
+                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+
+                if (pSvgStyleAttributes && maResolvingParent[31] < nStyleDepthLimit)
+                {
+                    ++maResolvingParent[31];
+                    auto ret = pSvgStyleAttributes->getClipPathXLink();
+                    --maResolvingParent[31];
+                    return ret;
+                }
+            }
+
+            return OUString();
         }
 
         const SvgClipPathNode* SvgStyleAttributes::accessClipPathXLink() const
