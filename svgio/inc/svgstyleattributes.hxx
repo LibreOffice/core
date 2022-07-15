@@ -411,7 +411,7 @@ namespace svgio::svgreader
             const OUString& getDesc() const { return maDesc; }
 
             // ClipPathXLink content
-            OUString const & getClipPathXLink() const;
+            OUString getClipPathXLink() const;
             const SvgClipPathNode* accessClipPathXLink() const;
 
             // MaskXLink content
