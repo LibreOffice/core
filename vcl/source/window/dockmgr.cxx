@@ -813,8 +813,7 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, FloatWin
     ImplPreparePopupMode();
 
     // don't allow tearoff, if globally disabled
-    if( !StyleSettings::GetDockingFloatsSupported() ||
-        ( GetWindow()->GetType() == WindowType::TOOLBOX && ToolBox::AlwaysLocked() ) )
+    if( !StyleSettings::GetDockingFloatsSupported() )
         nFlags &= ~FloatWinPopupFlags::AllowTearOff;
 
     // if the subtoolbar was opened via keyboard make sure that key events
