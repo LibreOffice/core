@@ -1002,7 +1002,7 @@ bool SwCursorShell::CursorInsideInputField() const
     return false;
 }
 
-bool SwCursorShell::CursorInsideContentControl() const
+SwTextContentControl* SwCursorShell::CursorInsideContentControl() const
 {
     for (SwPaM& rCursor : GetCursor()->GetRingContainer())
     {
@@ -1014,13 +1014,13 @@ bool SwCursorShell::CursorInsideContentControl() const
         }
 
         sal_Int32 nIndex = pStart->nContent.GetIndex();
-        if (pTextNode->GetTextAttrAt(nIndex, RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT))
+        if (SwTextAttr* pAttr = pTextNode->GetTextAttrAt(nIndex, RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT))
         {
-            return true;
+            return static_txtattr_cast<SwTextContentControl*>(pAttr);
         }
     }
 
-    return false;
+    return nullptr;
 }
 
 bool SwCursorShell::PosInsideInputField( const SwPosition& rPos )
