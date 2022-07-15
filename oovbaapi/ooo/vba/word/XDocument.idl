@@ -43,6 +43,7 @@ interface XDocument
     any Tables( [in] any Index );
     any Fields( [in] any Index );
     any Shapes( [in] any Index );
+    void Select();
     any Sections( [in] any Index );
     void Activate();
     any PageSetup();
