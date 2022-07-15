@@ -945,9 +945,9 @@
 /*--------------------------------------------------------------------
     Description: SubCmd-Strings
  --------------------------------------------------------------------*/
-#define FLD_DATE_STD                            NC_("FLD_DATE_STD", "Date")
+#define FLD_DATE_STD                            NC_("FLD_DATE_STD", "Date (current)")
 #define FLD_DATE_FIX                            NC_("FLD_DATE_FIX", "Date (fixed)")
-#define FLD_TIME_STD                            NC_("FLD_TIME_STD", "Time")
+#define FLD_TIME_STD                            NC_("FLD_TIME_STD", "Time (current)")
 #define FLD_TIME_FIX                            NC_("FLD_TIME_FIX", "Time (fixed)")
 //  SubCmd Statistic
 #define FLD_STAT_TABLE                          NC_("FLD_STAT_TABLE", "Tables")

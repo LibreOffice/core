@@ -313,7 +313,12 @@ OUString SwField::GetFieldName() const
     OUString sRet = SwFieldType::GetTypeStr( nTypeId );
     if (IsFixed())
     {
-        sRet += " " + SwViewShell::GetShellRes()->aFixedStr;
+        if (GetTyp()->Which() == SwFieldIds::Date)
+            sRet = SwResId(FLD_DATE_FIX);
+        else if (GetTyp()->Which() == SwFieldIds::Time)
+            sRet = SwResId(FLD_TIME_FIX);
+        else
+            sRet += " " + SwViewShell::GetShellRes()->aFixedStr;
     }
     return sRet;
 }
