@@ -79,7 +79,9 @@ void SwContentControlButton::CalcPosAndSize(const SwRect& rPortionPaintArea)
     }
 }
 
-void SwContentControlButton::MouseButtonDown(const MouseEvent&)
+void SwContentControlButton::MouseButtonDown(const MouseEvent&) { StartPopup(); }
+
+void SwContentControlButton::StartPopup()
 {
     LaunchPopup();
     Invalidate();
