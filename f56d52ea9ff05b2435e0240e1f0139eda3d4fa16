@@ -24,6 +24,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0126fb6a_1bfc32b5",
+        "filename": "solenv/bin/desktop-translate.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-07-15T17:17:24Z",
+      "side": 1,
+      "message": "Yeah, was some magical thinking...",
+      "parentUuid": "7a6370ca_f79bbd11",
+      "range": {
+        "startLine": 19,
+        "startChar": 10,
+        "endLine": 19,
+        "endChar": 27
+      },
+      "revId": "f56d52ea9ff05b2435e0240e1f0139eda3d4fa16",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6f6da10d_86176731",
@@ -37,6 +61,24 @@
       "writtenOn": "2022-07-15T17:08:13Z",
       "side": 1,
       "message": "that\u0027s also a sloppy wording, you only need to touch the localize.cxx files if the ulf files are added in a module that isn\u0027t listed in there already...",
+      "revId": "f56d52ea9ff05b2435e0240e1f0139eda3d4fa16",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbaf8b8f_83e14ea0",
+        "filename": "solenv/bin/desktop-translate.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-07-15T17:17:24Z",
+      "side": 1,
+      "message": "Thanks, hopefully better now",
+      "parentUuid": "6f6da10d_86176731",
       "revId": "f56d52ea9ff05b2435e0240e1f0139eda3d4fa16",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
