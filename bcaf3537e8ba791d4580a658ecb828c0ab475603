@@ -51,6 +51,24 @@
       "parentUuid": "0a77cd40_69f2e2bc",
       "revId": "bcaf3537e8ba791d4580a658ecb828c0ab475603",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "caf40ee7_56de2269",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1261,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-07-15T09:35:30Z",
+      "side": 1,
+      "message": "This actually does not change the performance of the macro, so I abbandoned it.",
+      "parentUuid": "56c7a0fb_6d44aaca",
+      "revId": "bcaf3537e8ba791d4580a658ecb828c0ab475603",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ],
   "submitRequirementResults": []
