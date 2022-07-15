@@ -61,6 +61,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void testClipPathAndParentStyle();
     void testClipPathAndStyle();
     void testShapeWithClipPath();
+    void testShapeWithClipPathAndCssStyle();
     void testi125329();
     void testMaskingPath07b();
     void test123926();
@@ -102,6 +103,7 @@ public:
     CPPUNIT_TEST(testClipPathAndParentStyle);
     CPPUNIT_TEST(testClipPathAndStyle);
     CPPUNIT_TEST(testShapeWithClipPath);
+    CPPUNIT_TEST(testShapeWithClipPathAndCssStyle);
     CPPUNIT_TEST(testi125329);
     CPPUNIT_TEST(testMaskingPath07b);
     CPPUNIT_TEST(test123926);
@@ -627,6 +629,20 @@ void Test::testShapeWithClipPath()
     assertXPath(pDocument, "/primitive2D/transform/mask/polypolygoncolor/polypolygon/polygon", 1);
 }
 
+void Test::testShapeWithClipPathAndCssStyle()
+{
+    // tdf#97539: Check there is a mask and 3 polygons
+    Primitive2DSequence aSequenceClipPathAndStyle = parseSvg(u"/svgio/qa/cppunit/data/ShapeWithClipPathAndCssStyle.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceClipPathAndStyle.getLength()));
+
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequenceClipPathAndStyle));
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/mask/polypolygon/polygon", 2);
+    assertXPath(pDocument, "/primitive2D/transform/mask/polypolygoncolor/polypolygon/polygon", 1);
+}
 void Test::testi125329()
 {
     //Check style inherit from * css element
