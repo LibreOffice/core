@@ -16,6 +16,24 @@
       "message": "Works fine locally as well.",
       "revId": "4af0559bfb6170d256932af9e244bc425f0a5b34",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb0f36d3_6fa5f529",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2022-07-15T08:28:03Z",
+      "side": 1,
+      "message": "Thanks for the check, Gábor.",
+      "parentUuid": "de7fee7f_bbfbfb47",
+      "revId": "4af0559bfb6170d256932af9e244bc425f0a5b34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
