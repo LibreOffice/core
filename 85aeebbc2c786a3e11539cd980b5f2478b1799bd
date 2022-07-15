@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "177ceb58_4e870ad0",
+        "filename": "vcl/source/window/dockmgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 817,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2022-07-15T09:29:32Z",
+      "side": 1,
+      "message": "Please remove that part too. Then it will work.",
+      "range": {
+        "startLine": 817,
+        "startChar": 9,
+        "endLine": 817,
+        "endChar": 54
+      },
+      "revId": "85aeebbc2c786a3e11539cd980b5f2478b1799bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
