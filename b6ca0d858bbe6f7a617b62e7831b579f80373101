@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "19a625a5_0dbf90cc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2022-07-15T21:16:56Z",
+      "side": 1,
+      "message": "Hi. I would need help with writing tests for that filter.\nIs there an easy way to view which UNO calls are used during opening document?",
+      "revId": "b6ca0d858bbe6f7a617b62e7831b579f80373101",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
