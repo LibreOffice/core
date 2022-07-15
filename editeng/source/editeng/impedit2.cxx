@@ -1534,7 +1534,7 @@ EditPaM ImpEditEngine::StartOfWord( const EditPaM& rPaM )
 
     uno::Reference < i18n::XBreakIterator > _xBI( ImplGetBreakIterator() );
     i18n::Boundary aBoundary = _xBI->getWordBoundary(
-        rPaM.GetNode()->GetString(), rPaM.GetIndex(), aLocale, css::i18n::WordType::ANYWORD_IGNOREWHITESPACES, true);
+        rPaM.GetNode()->GetString(), rPaM.GetIndex(), aLocale, css::i18n::WordType::ANY_WORD, true);
 
     aNewPaM.SetIndex( aBoundary.startPos );
     return aNewPaM;
@@ -1553,7 +1553,7 @@ EditPaM ImpEditEngine::EndOfWord( const EditPaM& rPaM )
 
     uno::Reference < i18n::XBreakIterator > _xBI( ImplGetBreakIterator() );
     i18n::Boundary aBoundary = _xBI->getWordBoundary(
-        rPaM.GetNode()->GetString(), rPaM.GetIndex(), aLocale, css::i18n::WordType::ANYWORD_IGNOREWHITESPACES, true);
+        rPaM.GetNode()->GetString(), rPaM.GetIndex(), aLocale, css::i18n::WordType::ANY_WORD, true);
 
     aNewPaM.SetIndex( aBoundary.endPos );
     return aNewPaM;
