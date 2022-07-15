@@ -2601,6 +2601,34 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf133342)
     CPPUNIT_ASSERT_EQUAL(OUString("12 %"), pDoc->GetString(ScAddress(0, 0, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf135761)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    //  Enter text including two whitespaces in the text, and delete the left part of the text
+    insertStringToCell(*pModelObj, "A1", "a  b");
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::F2);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::F2);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::LEFT);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::LEFT);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::LEFT);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::LEFT);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_MOD1 | awt::Key::BACKSPACE);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_MOD1 | awt::Key::BACKSPACE);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: " b"
+    // - Actual  : "a b"
+    CPPUNIT_ASSERT_EQUAL(OUString(" b"), pDoc->GetString(ScAddress(0, 0, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf71339)
 {
     mxComponent = loadFromDesktop("private:factory/scalc");

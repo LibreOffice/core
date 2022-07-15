@@ -1533,8 +1533,11 @@ EditPaM ImpEditEngine::StartOfWord( const EditPaM& rPaM )
     lang::Locale aLocale( GetLocale( aTmpPaM ) );
 
     uno::Reference < i18n::XBreakIterator > _xBI( ImplGetBreakIterator() );
+    // tdf#135761 - since this function is only used when a selection is deleted at the left,
+    // change the search preference of the word boundary from forward to backward.
+    // For further details of a deletion of a selection check ImpEditEngine::DeleteLeftOrRight.
     i18n::Boundary aBoundary = _xBI->getWordBoundary(
-        rPaM.GetNode()->GetString(), rPaM.GetIndex(), aLocale, css::i18n::WordType::ANYWORD_IGNOREWHITESPACES, true);
+        rPaM.GetNode()->GetString(), rPaM.GetIndex(), aLocale, css::i18n::WordType::ANYWORD_IGNOREWHITESPACES, false);
 
     aNewPaM.SetIndex( aBoundary.startPos );
     return aNewPaM;
