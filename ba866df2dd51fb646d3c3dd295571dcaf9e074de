@@ -22,6 +22,30 @@
       },
       "revId": "ba866df2dd51fb646d3c3dd295571dcaf9e074de",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3698c158_c267ac01",
+        "filename": "svgio/source/svgreader/svgstyleattributes.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2845,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-07-15T07:30:15Z",
+      "side": 0,
+      "message": "it\u0027s checked when it calls pSvgStyleAttributes-\u003egetMaskXLink() below",
+      "parentUuid": "3d15e68b_908bd5dc",
+      "range": {
+        "startLine": 2845,
+        "startChar": 40,
+        "endLine": 2845,
+        "endChar": 59
+      },
+      "revId": "ba866df2dd51fb646d3c3dd295571dcaf9e074de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
