@@ -22,6 +22,8 @@
 
 #include <svx/sdr/overlay/overlayobject.hxx>
 
+#include <memory>
+
 class SwView;
 
 namespace sw { namespace sidebarwindows {
