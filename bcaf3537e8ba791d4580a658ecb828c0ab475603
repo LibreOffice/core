@@ -33,6 +33,24 @@
       "message": "This is wrong. It now parses the formula with the passed grammar even in the non-English case. The grammar oddly is always FormulaGrammar::GRAM_API as the only caller is ScCellObj::SetString_Impl() and only bEnglish varies. This call chain seems to be some left-over, if bEnglish\u003dfalse then eGrammar is ignored as things are passed down to ScDocFunc::SetNormalString() where then the current document grammar is used.",
       "revId": "bcaf3537e8ba791d4580a658ecb828c0ab475603",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56c7a0fb_6d44aaca",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1261,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-07-15T09:28:58Z",
+      "side": 1,
+      "message": "A possibility might be to let ScCellObj::SetString_Impl() pass the correct grammar for both cases, then this change should work. Or was there some other reason why this was abandoned?",
+      "parentUuid": "0a77cd40_69f2e2bc",
+      "revId": "bcaf3537e8ba791d4580a658ecb828c0ab475603",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ],
   "submitRequirementResults": []
