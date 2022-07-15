@@ -348,6 +348,7 @@ SwPaM::SwPaM( const SwPosition& rMark, const SwPosition& rPoint, SwPaM* pRing )
     , m_pPoint( &m_Bound2 )
     , m_pMark( &m_Bound1 )
     , m_bIsInFrontOfLabel( false )
+    , m_bPointLessEqualToThanMark( *m_pPoint <= *m_pMark )
 {
 }
 
@@ -370,6 +371,7 @@ SwPaM::SwPaM( const SwNodeIndex& rMark, const SwNodeIndex& rPoint,
     }
     m_Bound1.nContent.Assign( m_Bound1.nNode.GetNode().GetContentNode(), 0 );
     m_Bound2.nContent.Assign( m_Bound2.nNode.GetNode().GetContentNode(), 0 );
+    m_bPointLessEqualToThanMark = *m_pPoint <= *m_pMark;
 }
 
 SwPaM::SwPaM( const SwNode& rMark, const SwNode& rPoint,
@@ -391,6 +393,7 @@ SwPaM::SwPaM( const SwNode& rMark, const SwNode& rPoint,
     }
     m_Bound1.nContent.Assign( m_Bound1.nNode.GetNode().GetContentNode(), 0 );
     m_Bound2.nContent.Assign( m_Bound2.nNode.GetNode().GetContentNode(), 0 );
+    m_bPointLessEqualToThanMark = *m_pPoint <= *m_pMark;
 }
 
 SwPaM::SwPaM( const SwNodeIndex& rMark, sal_Int32 nMarkContent,
@@ -404,6 +407,7 @@ SwPaM::SwPaM( const SwNodeIndex& rMark, sal_Int32 nMarkContent,
 {
     m_pPoint->nContent.Assign( rPoint.GetNode().GetContentNode(), nPointContent);
     m_pMark ->nContent.Assign( rMark .GetNode().GetContentNode(), nMarkContent );
+    m_bPointLessEqualToThanMark = *m_pPoint <= *m_pMark;
 }
 
 SwPaM::SwPaM( const SwNode& rMark, sal_Int32 nMarkContent,
@@ -419,6 +423,7 @@ SwPaM::SwPaM( const SwNode& rMark, sal_Int32 nMarkContent,
         nPointContent);
     m_pMark ->nContent.Assign( m_pMark ->nNode.GetNode().GetContentNode(),
         nMarkContent );
+    m_bPointLessEqualToThanMark = *m_pPoint <= *m_pMark;
 }
 
 SwPaM::SwPaM( const SwNode& rNode, sal_Int32 nContent, SwPaM* pRing )
@@ -428,6 +433,7 @@ SwPaM::SwPaM( const SwNode& rNode, sal_Int32 nContent, SwPaM* pRing )
     , m_pPoint( &m_Bound1 )
     , m_pMark( &m_Bound1 )
     , m_bIsInFrontOfLabel( false )
+    , m_bPointLessEqualToThanMark(true)
 {
     m_pPoint->nContent.Assign( m_pPoint->nNode.GetNode().GetContentNode(),
         nContent );
@@ -440,6 +446,7 @@ SwPaM::SwPaM( const SwNodeIndex& rNodeIdx, sal_Int32 nContent, SwPaM* pRing )
     , m_pPoint( &m_Bound1 )
     , m_pMark( &m_Bound1 )
     , m_bIsInFrontOfLabel( false )
+    , m_bPointLessEqualToThanMark(true)
 {
     m_pPoint->nContent.Assign( rNodeIdx.GetNode().GetContentNode(), nContent );
 }
@@ -452,6 +459,7 @@ SwPaM::SwPaM(SwPaM const& rPam, SwPaM *const pRing)
     , m_Bound2( *(rPam.m_pMark)  )
     , m_pPoint( &m_Bound1 ), m_pMark( rPam.HasMark() ? &m_Bound2 : m_pPoint )
     , m_bIsInFrontOfLabel( false )
+    , m_bPointLessEqualToThanMark( rPam.m_bPointLessEqualToThanMark )
 {
 }
 
@@ -471,6 +479,7 @@ SwPaM &SwPaM::operator=( const SwPaM &rPam )
     {
         DeleteMark();
     }
+    m_bPointLessEqualToThanMark = rPam.m_bPointLessEqualToThanMark;
     return *this;
 }
 
@@ -485,6 +494,7 @@ void SwPaM::SetMark()
         m_pMark = &m_Bound1;
     }
     (*m_pMark) = *m_pPoint;
+    m_bPointLessEqualToThanMark = true;
 }
 
 #ifdef DBG_UTIL
@@ -495,6 +505,7 @@ void SwPaM::Exchange()
         SwPosition *pTmp = m_pPoint;
         m_pPoint = m_pMark;
         m_pMark = pTmp;
+        m_bPointLessEqualToThanMark = !m_bPointLessEqualToThanMark;
     }
 }
 #endif

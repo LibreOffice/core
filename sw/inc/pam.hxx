@@ -141,6 +141,7 @@ class SAL_WARN_UNUSED SW_DLLPUBLIC SwPaM : public sw::Ring<SwPaM>
     SwPosition * m_pPoint; ///< points at either m_Bound1 or m_Bound2
     SwPosition * m_pMark;  ///< points at either m_Bound1 or m_Bound2
     bool m_bIsInFrontOfLabel;
+    bool m_bPointLessEqualToThanMark;
 
     SwPaM(SwPaM const& rPaM) = delete;
 
@@ -196,6 +197,7 @@ public:
             SwPosition *pTmp = m_pPoint;
             m_pPoint = m_pMark;
             m_pMark = pTmp;
+            m_bPointLessEqualToThanMark = !m_bPointLessEqualToThanMark;
         }
     }
 #endif
@@ -211,14 +213,14 @@ public:
           SwPosition *GetMark()        { return m_pMark; }
 
     const SwPosition *Start() const
-                { return (*m_pPoint) <= (*m_pMark) ? m_pPoint : m_pMark; }
+                { return m_bPointLessEqualToThanMark ? m_pPoint : m_pMark; }
           SwPosition *Start()
-                { return (*m_pPoint) <= (*m_pMark) ? m_pPoint : m_pMark; }
+                { return m_bPointLessEqualToThanMark ? m_pPoint : m_pMark; }
 
     const SwPosition *End()   const
-                { return (*m_pPoint) >  (*m_pMark) ? m_pPoint : m_pMark; }
+                { return !m_bPointLessEqualToThanMark ? m_pPoint : m_pMark; }
           SwPosition *End()
-                { return (*m_pPoint) >  (*m_pMark) ? m_pPoint : m_pMark; }
+                { return !m_bPointLessEqualToThanMark ? m_pPoint : m_pMark; }
 
     /// @return current Node at Point/Mark
     SwNode    & GetNode      ( bool bPoint = true ) const
