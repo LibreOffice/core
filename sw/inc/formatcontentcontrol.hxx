@@ -29,6 +29,10 @@
 #include "calbck.hxx"
 #include "swdllapi.h"
 
+namespace vcl
+{
+class KeyCode;
+}
 class SwContentControl;
 class SwTextContentControl;
 class SwTextNode;
@@ -274,6 +278,9 @@ public:
 
     /// Should this character (during key input) interact with the content control?
     bool IsInteractingCharacter(sal_Unicode cCh);
+
+    /// Given rKeyCode as a keyboard event, should a popup be opened for this content control?
+    bool ShouldOpenPopup(const vcl::KeyCode& rKeyCode);
 
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 

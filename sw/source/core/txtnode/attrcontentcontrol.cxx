@@ -25,6 +25,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <svl/numformat.hxx>
+#include <vcl/keycod.hxx>
 
 #include <ndtxt.hxx>
 #include <textcontentcontrol.hxx>
@@ -306,6 +307,17 @@ bool SwContentControl::IsInteractingCharacter(sal_Unicode cCh)
     if (GetCheckbox())
     {
         return cCh == ' ';
+    }
+
+    return false;
+}
+
+bool SwContentControl::ShouldOpenPopup(const vcl::KeyCode& rKeyCode)
+{
+    if (HasListItems())
+    {
+        // Alt-down opens the popup.
+        return rKeyCode.IsMod2() && rKeyCode.GetCode() == KEY_DOWN;
     }
 
     return false;
