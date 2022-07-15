@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4bbd087_aea0b144",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-07-15T21:04:59Z",
+      "side": 1,
+      "message": "more likely a problem from when I optimised it to use binary search.\nBut it\u0027s supposed to detect when redlines are overlapping and fall back to linear search.\nnot sure why it\u0027s going wrong.",
+      "revId": "757e0c90352f8272aee51236455527985401ab14",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
