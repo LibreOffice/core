@@ -243,7 +243,7 @@ rtl::Reference<XFContentContainer> LwpBulletStyleMgr::AddBulletList(
         XFContentContainer* pCont, bool bIsOrdered,
         const OUString& rStyleName, sal_Int16 nLevel, bool bIsBulletSkiped)
 {
-    assert(nLevel>0);
+    assert(nLevel > 0);
 
     m_bIsBulletSkipped = bIsBulletSkiped;
 
@@ -253,7 +253,7 @@ rtl::Reference<XFContentContainer> LwpBulletStyleMgr::AddBulletList(
     rtl::Reference<XFList> prevList;
     XFListItem* theItem;
     XFListItem* InnerItem = nullptr;
-    for (sal_Int8 nC = nLevel-1; nC >= 0; nC--)
+    for (sal_Int8 nC = nLevel - 1; nC >= 0; nC--)
     {
         rtl::Reference<XFList> theList(new XFList);
         theItem = new XFListItem();
@@ -269,7 +269,7 @@ rtl::Reference<XFContentContainer> LwpBulletStyleMgr::AddBulletList(
             theList->SetOrdered(false);
         }
 
-        if (nC == nLevel-1)
+        if (nC == nLevel - 1)
         {
             theList->SetContinueNumber(bContinue);
         }
@@ -277,22 +277,26 @@ rtl::Reference<XFContentContainer> LwpBulletStyleMgr::AddBulletList(
         if (nC == 0 && pCont)
         {
             theList->SetStyleName(rStyleName);
+            theList->SetContinueNumber(bContinue);
             pCont->Add(theList.get());
         }
 
-        if ((nC == nLevel-1) && bIsBulletSkiped)
+        if ((nC == 0) && bIsBulletSkiped)
         {
-            theItem->SetIsHeader();
-
             theList->SetContinueNumber(true);
         }
 
-        if(nC == nLevel-1)
+        if ((nC == nLevel - 1) && bIsBulletSkiped)
+        {
+            theItem->SetIsHeader();
+        }
+
+        if (nC == nLevel - 1)
         {
             InnerItem = theItem;
         }
 
-        if(prevList)
+        if (prevList)
         {
             theItem->Add(prevList.get());
         }
