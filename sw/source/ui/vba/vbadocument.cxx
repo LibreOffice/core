@@ -255,6 +255,14 @@ SwVbaDocument::Shapes( const uno::Any& index )
     return uno::Any( xCol );
 }
 
+void SAL_CALL
+SwVbaDocument::Select()
+{
+    auto xRange = getContent();
+    if ( xRange )
+        xRange->Select();
+}
+
 uno::Any SAL_CALL
 SwVbaDocument::Sections( const uno::Any& index )
 {
