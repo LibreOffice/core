@@ -53,6 +53,25 @@ void LotusWordProTest::tearDown()
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/lotuswordpro/qa/cppunit/data/";
 
+CPPUNIT_TEST_FIXTURE(LotusWordProTest, testtdf33787OrderedBullets)
+{
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf33787-ordered-bullets.lwp";
+    getComponent() = loadFromDesktop(aURL);
+    uno::Reference<text::XTextDocument> textDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(textDocument->getText(),
+                                                                  uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+
+    //TODO Check three numbered bullets (1. 2. 3.)
+    //TODO Check three roman numeral lowercase bullet 1 (i. ii. iii.)
+    //TODO Check three roman numeral uppercase bullet 1 (I. II. III)
+    //TODO Check three Lettered bullet lowercase 1 (a. b. c.)
+    //TODO Check three Lettered bullet uppercase 1 (A. B. C.)
+    //TODO Numbered bullet w/ bracket one (1) 2) 3)) with skipped bullet
+    //TODO Check Lettered bullet w/ bracket lowercase 1 (a) b) c)) with indentation
+    //TODO Check Roman numeral w/ bracket lowercase bullet 1 (i) ii) iii))
+}
+
 CPPUNIT_TEST_FIXTURE(LotusWordProTest, testTdf129993)
 {
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf129993.lwp";

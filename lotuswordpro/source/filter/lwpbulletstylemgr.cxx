@@ -277,14 +277,18 @@ rtl::Reference<XFContentContainer> LwpBulletStyleMgr::AddBulletList(
         if (nC == 0 && pCont)
         {
             theList->SetStyleName(rStyleName);
+            theList->SetContinueNumber(bContinue);
             pCont->Add(theList.get());
+        }
+
+        if ((nC == 0) && bIsBulletSkiped)
+        {
+            theList->SetContinueNumber(true);
         }
 
         if ((nC == nLevel-1) && bIsBulletSkiped)
         {
             theItem->SetIsHeader();
-
-            theList->SetContinueNumber(true);
         }
 
         if(nC == nLevel-1)
