@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d15e68b_908bd5dc",
+        "filename": "svgio/source/svgreader/svgstyleattributes.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2845,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-07-15T07:05:27Z",
+      "side": 0,
+      "message": "I don\u0027t see the *parent* maMaskXLink being checked above?",
+      "range": {
+        "startLine": 2845,
+        "startChar": 40,
+        "endLine": 2845,
+        "endChar": 59
+      },
+      "revId": "ba866df2dd51fb646d3c3dd295571dcaf9e074de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
