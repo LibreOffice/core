@@ -2492,7 +2492,7 @@ bool DocumentRedlineManager::SplitRedline( const SwPaM& rRange )
     SwRedlineTable::size_type n = 0;
     const SwPosition* pStt = rRange.Start();
     const SwPosition* pEnd = rRange.End();
-    GetRedline( *pStt, &n );
+    //FIXME overlapping problem GetRedline( *pStt, &n );
     for ( ; n < maRedlineTable.size(); ++n)
     {
         SwRangeRedline * pRedline = maRedlineTable[ n ];
