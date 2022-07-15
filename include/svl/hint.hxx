@@ -24,6 +24,7 @@
 
 #include <svl/svldllapi.h>
 
+/// hint ids, mostly used to avoid dynamic_cast of SfxHint
 enum class SfxHintId {
     NONE,
     Dying,
@@ -119,8 +120,27 @@ enum class SfxHintId {
     SwLegacyModify,
     SwCollectTextMarks,
     SwCollectTextTOXMarksForLayout,
+    SwDrawFrameFormat,
+    SwCheckDrawFrameFormatLayer,
+    SwContactChanged,
+    SwDrawFormatLayoutCopy,
+    SwRestoreFlyAnchor,
+    SwCreatePortion,
+    SwCollectTextObjects,
+    SwGetZOrder,
+    SwGetObjectConnected,
+    SwFindSdrObject,
+    SwWW8AnchorConv,
+    SwField,
+    SwFindFormatForField,
+    SwFindFormatForPostItId,
+    SwCollectPostIts,
+    SwHasHiddenInformationNotes,
+    SwGatherNodeIndex,
+    SwGatherRefFields,
+    SwGatherFields,
 
-    ThisIsAnSdrHint // used to avoid dynamic_cast
+    ThisIsAnSdrHint
 };
 
 template< typename charT, typename traits >

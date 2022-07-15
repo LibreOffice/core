@@ -222,8 +222,9 @@ void SwFormatField::InvalidateField()
 void SwFormatField::SwClientNotify( const SwModify& rModify, const SfxHint& rHint )
 {
     SwClient::SwClientNotify(rModify, rHint);
-    if (const auto pFieldHint = dynamic_cast<const SwFieldHint*>( &rHint ))
+    if (rHint.GetId() == SfxHintId::SwField)
     {
+        const auto pFieldHint = static_cast<const SwFieldHint*>( &rHint );
         // replace field content by text
         SwPaM* pPaM = pFieldHint->m_pPaM;
         pPaM->DeleteMark(); // TODO: this is really hackish
@@ -241,42 +242,57 @@ void SwFormatField::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
         pPaM->Move( fnMoveForward );
         rDoc.getIDocumentContentOperations().DeleteRange( *pPaM );
         rDoc.getIDocumentContentOperations().InsertString( *pPaM, aEntry );
-    } else if (rHint.GetId() == SfxHintId::SwLegacyModify)
+    }
+    else if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
         auto pLegacyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
         if( !mpTextField )
             return;
         UpdateTextNode(pLegacyHint->m_pOld, pLegacyHint->m_pNew);
-    } else if (const auto pFindForFieldHint = dynamic_cast<const sw::FindFormatForFieldHint*>( &rHint ))
+    }
+    else if (rHint.GetId() == SfxHintId::SwFindFormatForField)
     {
+        const auto pFindForFieldHint = static_cast<const sw::FindFormatForFieldHint*>( &rHint );
         if(pFindForFieldHint->m_rpFormat == nullptr && pFindForFieldHint->m_pField == GetField())
             pFindForFieldHint->m_rpFormat = this;
-    } else if (const auto pFindForPostItIdHint = dynamic_cast<const sw::FindFormatForPostItIdHint*>( &rHint ))
+    }
+    else if (rHint.GetId() == SfxHintId::SwFindFormatForPostItId)
     {
+        const auto pFindForPostItIdHint = static_cast<const sw::FindFormatForPostItIdHint*>( &rHint );
         auto pPostItField = dynamic_cast<SwPostItField*>(mpField.get());
         if(pPostItField && pFindForPostItIdHint->m_rpFormat == nullptr && pFindForPostItIdHint->m_nPostItId == pPostItField->GetPostItId())
             pFindForPostItIdHint->m_rpFormat = this;
-    } else if (const auto pCollectPostItsHint = dynamic_cast<const sw::CollectPostItsHint*>( &rHint ))
+    }
+    else if (rHint.GetId() == SfxHintId::SwCollectPostIts)
     {
+        const auto pCollectPostItsHint = static_cast<const sw::CollectPostItsHint*>( &rHint );
         if(GetTextField() && IsFieldInDoc() && (!pCollectPostItsHint->m_bHideRedlines || !sw::IsFieldDeletedInModel(pCollectPostItsHint->m_rIDRA, *GetTextField())))
             pCollectPostItsHint->m_rvFormatFields.push_back(this);
-    } else if (const auto pHasHiddenInfoHint = dynamic_cast<const sw::HasHiddenInformationNotesHint*>( &rHint ))
+    }
+    else if (rHint.GetId() == SfxHintId::SwHasHiddenInformationNotes)
     {
+        const auto pHasHiddenInfoHint = static_cast<const sw::HasHiddenInformationNotesHint*>( &rHint );
         if(!pHasHiddenInfoHint->m_rbHasHiddenInformationNotes && GetTextField() && IsFieldInDoc())
             pHasHiddenInfoHint->m_rbHasHiddenInformationNotes = true;
-    } else if (const auto pGatherNodeIndexHint = dynamic_cast<const sw::GatherNodeIndexHint*>( &rHint ))
+    }
+    else if (rHint.GetId() == SfxHintId::SwGatherNodeIndex)
     {
+        const auto pGatherNodeIndexHint = static_cast<const sw::GatherNodeIndexHint*>( &rHint );
         if(auto pTextField = GetTextField())
             pGatherNodeIndexHint->m_rvNodeIndex.push_back(pTextField->GetTextNode().GetIndex());
-    } else if (const auto pGatherRefFieldsHint = dynamic_cast<const sw::GatherRefFieldsHint*>( &rHint ))
+    }
+    else if (rHint.GetId() == SfxHintId::SwGatherRefFields)
     {
+        const auto pGatherRefFieldsHint = static_cast<const sw::GatherRefFieldsHint*>( &rHint );
         if(!GetTextField() || pGatherRefFieldsHint->m_nType != GetField()->GetSubType())
             return;
         SwTextNode* pNd = GetTextField()->GetpTextNode();
         if(pNd && pNd->GetNodes().IsDocNodes())
             pGatherRefFieldsHint->m_rvRFields.push_back(static_cast<SwGetRefField*>(GetField()));
-    } else if (const auto pGatherFieldsHint = dynamic_cast<const sw::GatherFieldsHint*>( &rHint ))
+    }
+    else if (rHint.GetId() == SfxHintId::SwGatherFields)
     {
+        const auto pGatherFieldsHint = static_cast<const sw::GatherFieldsHint*>( &rHint );
         if(pGatherFieldsHint->m_bCollectOnlyInDocNodes)
         {
             if(!GetTextField())

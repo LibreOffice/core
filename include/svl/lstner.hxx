@@ -68,6 +68,9 @@ public:
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     void                RemoveBroadcaster_Impl( SfxBroadcaster& rBC );
+
+    /// Used to avoid cost of dynamic_cast in SdrViewIter::ImpFindView
+    virtual bool        IsSdrView() const { return false; }
 };
 
 #endif

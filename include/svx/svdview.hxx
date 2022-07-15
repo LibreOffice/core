@@ -160,6 +160,8 @@ public:
 
     virtual ~SdrView() override;
 
+    virtual bool IsSdrView() const final { return true; }
+
     // The default value for all dispatchers is activated. If the app for example
     // wants to intervene in MouseDispatcher for special treatment, you have to
     // deactivate the MouseDispatcher with the help of the method below and you have

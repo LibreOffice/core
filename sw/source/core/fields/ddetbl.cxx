@@ -97,8 +97,9 @@ void SwDDETable::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
                 SwTable::SwClientNotify(rModify, rHint);
         }
     }
-    else if(auto pFieldHint = dynamic_cast<const SwFieldHint*>(&rHint))
+    else if (rHint.GetId() == SfxHintId::SwField)
     {
+        auto pFieldHint = static_cast<const SwFieldHint*>(&rHint);
         pFieldHint->m_pPaM->DeleteMark(); // TODO: this is really hackish
         // replace DDETable by real table
         NoDDETable();

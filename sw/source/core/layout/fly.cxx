@@ -728,14 +728,16 @@ void SwFlyFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         // #i87645# - reset flags for the layout process (only if something has been invalidated)
         ResetLayoutProcessBools();
     }
-    else if (auto pGetZOrdnerHint = dynamic_cast<const sw::GetZOrderHint*>(&rHint))
+    else if (rHint.GetId() == SfxHintId::SwGetZOrder)
     {
+        auto pGetZOrdnerHint = static_cast<const sw::GetZOrderHint*>(&rHint);
         const auto& rFormat(dynamic_cast<const SwFrameFormat&>(rMod));
         if (rFormat.Which() == RES_FLYFRMFMT && rFormat.getIDocumentLayoutAccess().GetCurrentViewShell()) // #i11176#
             pGetZOrdnerHint->m_rnZOrder = GetVirtDrawObj()->GetOrdNum();
     }
-    else if (auto pConnectedHint = dynamic_cast<const sw::GetObjectConnectedHint*>(&rHint))
+    else if (rHint.GetId() == SfxHintId::SwGetObjectConnected)
     {
+        auto pConnectedHint = static_cast<const sw::GetObjectConnectedHint*>(&rHint);
         const auto& rFormat(dynamic_cast<const SwFrameFormat&>(rMod));
         if (!pConnectedHint->m_risConnected && rFormat.Which() == RES_FLYFRMFMT && (!pConnectedHint->m_pRoot || pConnectedHint->m_pRoot == getRootFrame()))
             pConnectedHint->m_risConnected = true;
