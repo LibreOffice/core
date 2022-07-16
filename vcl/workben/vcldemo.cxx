@@ -45,7 +45,6 @@
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/combobox.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/pngwrite.hxx>
 #include <vcl/toolkit/floatwin.hxx>
 #include <vcl/help.hxx>
 #include <vcl/menu.hxx>
