@@ -91,10 +91,12 @@ bool FieldCode::Read(HWPFile & hwpf)
     str2.reset( new hchar[len2_ ? len2_ : 1] );
     str3.reset( new hchar[len3_ ? len3_ : 1] );
 
-    hwpf.Read2b(str1.get(), len1_);
+    if (hwpf.Read2b(str1.get(), len1_) != len1_)
+        return false;
     hwpf.SkipBlock(len1 - (len1_ * sizeof(hchar)));
     str1[len1_ ? (len1_ - 1) : 0] = 0;
-    hwpf.Read2b(str2.get(), len2_);
+    if (hwpf.Read2b(str2.get(), len2_) != len2_)
+        return false;
     hwpf.SkipBlock(len2 - (len2_ * sizeof(hchar)));
     str2[len2_ ? (len2_ - 1) : 0] = 0;
     if (hwpf.Read2b(str3.get(), len3_) != len3_)
