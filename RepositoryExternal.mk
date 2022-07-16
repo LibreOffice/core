@@ -4297,4 +4297,14 @@ endif # ENABLE_ZXING
 
 endif # SYSTEM_ZXING
 
+
+define gb_LinkTarget__use_frozen
+$(call gb_LinkTarget_use_unpacked,$(1),frozen)
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,frozen/include/)\
+	$$(INCLUDE) \
+)
+endef
+
+
 # vim: set noet sw=4 ts=4:
