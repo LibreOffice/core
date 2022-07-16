@@ -781,17 +781,22 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                                     aFontVDev->GetTextArray( aStr, &aTmpAry, nIndex, nLen );
 
-                                    // now, the difference between the
-                                    // last and the second last DX array
-                                    // is the advancement for the last
-                                    // glyph. Thus, to complete our meta
-                                    // action's DX array, just add that
-                                    // difference to last elem and store
-                                    // in very last.
-                                    if( nStrLen > 1 )
-                                        aDXAry[ nStrLen-1 ] = aDXAry[ nStrLen-2 ] + aTmpAry[ nStrLen-1 ] - aTmpAry[ nStrLen-2 ];
+                                    if (aTmpAry.size() < o3tl::make_unsigned(nStrLen))
+                                        SAL_WARN("vcl.gdi", "TextArray too short to recover missing element");
                                     else
-                                        aDXAry[ nStrLen-1 ] = aTmpAry[ nStrLen-1 ]; // len=1: 0th position taken to be 0
+                                    {
+                                        // now, the difference between the
+                                        // last and the second last DX array
+                                        // is the advancement for the last
+                                        // glyph. Thus, to complete our meta
+                                        // action's DX array, just add that
+                                        // difference to last elem and store
+                                        // in very last.
+                                        if( nStrLen > 1 )
+                                            aDXAry[ nStrLen-1 ] = aDXAry[ nStrLen-2 ] + aTmpAry[ nStrLen-1 ] - aTmpAry[ nStrLen-2 ];
+                                        else
+                                            aDXAry[ nStrLen-1 ] = aTmpAry[ nStrLen-1 ]; // len=1: 0th position taken to be 0
+                                    }
                                 }
 #ifdef DBG_UTIL
                                 else
