@@ -14,7 +14,7 @@
 #include <unx/gtk/gloactiongroup.h>
 #include <vcl/toolkit/floatwin.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/pngwrite.hxx>
+#include <vcl/filter/PngImageWriter.hxx>
 #include <vcl/pdfwriter.hxx> // for escapeStringXML
 
 #include <o3tl/string_view.hxx>
@@ -813,8 +813,9 @@ bool GtkSalMenu::AddMenuBarButton(const SalMenuButtonItem& rNewItem)
     if (!!rNewItem.maImage)
     {
         SvMemoryStream* pMemStm = new SvMemoryStream;
-        vcl::PNGWriter aWriter(rNewItem.maImage.GetBitmapEx());
-        aWriter.Write(*pMemStm);
+        auto aBitmapEx = rNewItem.maImage.GetBitmapEx();
+        vcl::PngImageWriter aWriter(*pMemStm);
+        aWriter.write(aBitmapEx);
 
         GBytes *pBytes = g_bytes_new_with_free_func(pMemStm->GetData(),
                                                     pMemStm->TellEnd(),
@@ -1071,11 +1072,11 @@ void GtkSalMenu::ApplyPersona()
     {
         if (maPersonaBitmap != rPersonaBitmap)
         {
-            vcl::PNGWriter aPNGWriter(rPersonaBitmap);
             mxPersonaImage.reset(new utl::TempFile);
             mxPersonaImage->EnableKillingFile(true);
             SvStream* pStream = mxPersonaImage->GetStream(StreamMode::WRITE);
-            aPNGWriter.Write(*pStream);
+            vcl::PngImageWriter aPNGWriter(*pStream);
+            aPNGWriter.write(rPersonaBitmap);
             mxPersonaImage->CloseStream();
         }
 
@@ -1260,8 +1261,9 @@ void GtkSalMenu::NativeSetItemIcon( unsigned nSection, unsigned nItemPos, const 
     if (!!rImage)
     {
         SvMemoryStream* pMemStm = new SvMemoryStream;
-        vcl::PNGWriter aWriter(rImage.GetBitmapEx());
-        aWriter.Write(*pMemStm);
+        auto aBitmapEx = rImage.GetBitmapEx();
+        vcl::PngImageWriter aWriter(*pMemStm);
+        aWriter.write(aBitmapEx);
 
         GBytes *pBytes = g_bytes_new_with_free_func(pMemStm->GetData(),
                                                     pMemStm->TellEnd(),
