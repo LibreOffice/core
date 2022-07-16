@@ -24,7 +24,7 @@
 #include <tools/stream.hxx>
 #include <vcl/event.hxx>
 #include <vcl/image.hxx>
-#include <vcl/pngwrite.hxx>
+#include <vcl/filter/PngImageWriter.hxx>
 
 #include <QtGui/QImage>
 
@@ -111,8 +111,9 @@ QImage toQImage(const Image& rImage)
     if (!!rImage)
     {
         SvMemoryStream aMemStm;
-        vcl::PNGWriter aWriter(rImage.GetBitmapEx());
-        aWriter.Write(aMemStm);
+        auto rBitmapEx = rImage.GetBitmapEx();
+        vcl::PngImageWriter aWriter(aMemStm);
+        aWriter.write(rBitmapEx);
         aImage.loadFromData(static_cast<const uchar*>(aMemStm.GetData()), aMemStm.TellEnd());
     }
 
