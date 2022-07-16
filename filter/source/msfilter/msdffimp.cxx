@@ -4101,13 +4101,13 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
                                             tools::Rectangle& rClientRect, const tools::Rectangle& rGlobalChildRect,
                                                 int nCalledByGroup, sal_Int32* pShapeId )
 {
-    SdrObject* pRet = nullptr;
-
     if( pShapeId )
         *pShapeId = 0;
 
     if (!rHd.SeekToContent(rSt))
-        return pRet;
+        return nullptr;
+
+    SdrObjectUniquePtr xRet;
 
     DffRecordHeader aRecHd;     // the first atom has to be the SpContainer for the GroupObject
     bool bOk = ReadDffRecordHeader(rSt, aRecHd);
@@ -4115,9 +4115,9 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
     {
         mnFix16Angle = 0_deg100;
         if (!aRecHd.SeekToBegOfRecord(rSt))
-            return pRet;
-        pRet = ImportObj( rSt, rClientData, rClientRect, rGlobalChildRect, nCalledByGroup + 1, pShapeId );
-        if ( pRet )
+            return xRet.release();
+        xRet.reset(ImportObj(rSt, rClientData, rClientRect, rGlobalChildRect, nCalledByGroup + 1, pShapeId));
+        if (xRet)
         {
             Degree100 nGroupRotateAngle(0);
             ShapeFlag nSpFlags = nGroupShapeFlags;
@@ -4147,7 +4147,7 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
 
             // now importing the inner objects of the group
             if (!aRecHd.SeekToEndOfRecord(rSt))
-                return pRet;
+                return xRet.release();
 
             while (rSt.good() && ( rSt.Tell() < rHd.GetRecEndFilePos()))
             {
@@ -4159,12 +4159,12 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
                     tools::Rectangle aGroupClientAnchor, aGroupChildAnchor;
                     GetGroupAnchors( aRecHd2, rSt, aGroupClientAnchor, aGroupChildAnchor, aClientRect, aGlobalChildRect );
                     if (!aRecHd2.SeekToBegOfRecord(rSt))
-                        return pRet;
+                        return xRet.release();
                     sal_Int32 nShapeId;
                     SdrObject* pTmp = ImportGroup( aRecHd2, rSt, rClientData, aGroupClientAnchor, aGroupChildAnchor, nCalledByGroup + 1, &nShapeId );
                     if (pTmp)
                     {
-                        SdrObjGroup* pGroup = dynamic_cast<SdrObjGroup*>(pRet);
+                        SdrObjGroup* pGroup = dynamic_cast<SdrObjGroup*>(xRet.get());
                         if (pGroup && pGroup->GetSubList())
                         {
                             pGroup->GetSubList()->NbcInsertObject(pTmp);
@@ -4178,12 +4178,12 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
                 else if ( aRecHd2.nRecType == DFF_msofbtSpContainer )
                 {
                     if (!aRecHd2.SeekToBegOfRecord(rSt))
-                        return pRet;
+                        return xRet.release();
                     sal_Int32 nShapeId;
                     SdrObject* pTmp = ImportShape( aRecHd2, rSt, rClientData, aClientRect, aGlobalChildRect, nCalledByGroup + 1, &nShapeId );
                     if (pTmp)
                     {
-                        SdrObjGroup* pGroup = dynamic_cast<SdrObjGroup*>(pRet);
+                        SdrObjGroup* pGroup = dynamic_cast<SdrObjGroup*>(xRet.get());
                         if (pGroup && pGroup->GetSubList())
                         {
                             pGroup->GetSubList()->NbcInsertObject(pTmp);
@@ -4195,32 +4195,32 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
                     }
                 }
                 if (!aRecHd2.SeekToEndOfRecord(rSt))
-                    return pRet;
+                    return xRet.release();
             }
 
             if ( nGroupRotateAngle )
-                pRet->NbcRotate( aClientRect.Center(), nGroupRotateAngle );
+                xRet->NbcRotate( aClientRect.Center(), nGroupRotateAngle );
             if ( nSpFlags & ShapeFlag::FlipV )
             {   // BoundRect in aBoundRect
                 Point aLeft( aClientRect.Left(), ( aClientRect.Top() + aClientRect.Bottom() ) >> 1 );
                 Point aRight( aLeft.X() + 1000, aLeft.Y() );
-                pRet->NbcMirror( aLeft, aRight );
+                xRet->NbcMirror( aLeft, aRight );
             }
             if ( nSpFlags & ShapeFlag::FlipH )
             {   // BoundRect in aBoundRect
                 Point aTop( ( aClientRect.Left() + aClientRect.Right() ) >> 1, aClientRect.Top() );
                 Point aBottom( aTop.X(), aTop.Y() + 1000 );
-                pRet->NbcMirror( aTop, aBottom );
+                xRet->NbcMirror( aTop, aBottom );
             }
         }
     }
     if (o3tl::make_unsigned(nCalledByGroup) < maPendingGroupData.size())
     {
         // finalization for this group is pending, do it now
-        pRet = FinalizeObj(maPendingGroupData.back().first, pRet);
+        xRet.reset(FinalizeObj(maPendingGroupData.back().first, xRet.release()));
         maPendingGroupData.pop_back();
     }
-    return pRet;
+    return xRet.release();
 }
 
 SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& rSt, SvxMSDffClientData& rClientData,
