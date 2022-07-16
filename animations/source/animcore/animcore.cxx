@@ -745,7 +745,9 @@ Any SAL_CALL AnimationNode::queryInterface( const Type& aType )
 
 void AnimationNode::initTypeProvider( sal_Int16 nNodeType ) noexcept
 {
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    static std::mutex aMutex;
+
+    std::scoped_lock aGuard(aMutex);
 
     if( mpTypes[nNodeType] )
         return;
