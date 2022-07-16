@@ -932,6 +932,9 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
 
 void XclImpValidationManager::Apply()
 {
+    const bool bFuzzing = utl::ConfigManager::IsFuzzing();
+    size_t nPatterns = 0;
+
     ScDocument& rDoc = GetRoot().GetDoc();
     for (const auto& rxDVItem : maDVItems)
     {
@@ -942,11 +945,16 @@ void XclImpValidationManager::Apply()
         aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALIDDATA, nHandle ) );
 
         // apply all ranges
-        for ( size_t i = 0, nRanges = rItem.maRanges.size(); i < nRanges; ++i )
+        for ( size_t i = 0, nRanges = rItem.maRanges.size(); i < nRanges; ++i, ++nPatterns )
         {
             const ScRange & rScRange = rItem.maRanges[ i ];
             rDoc.ApplyPatternAreaTab( rScRange.aStart.Col(), rScRange.aStart.Row(),
                 rScRange.aEnd.Col(), rScRange.aEnd.Row(), rScRange.aStart.Tab(), aPattern );
+            if (bFuzzing && nPatterns >= 128)
+            {
+                SAL_WARN("sc.filter", "for fuzzing performance, abandoned pattern after " << nPatterns << " insertions");
+                break;
+            }
         }
     }
     maDVItems.clear();
