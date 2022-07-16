@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1daaaa59_559672e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-07-16T16:04:45Z",
+      "side": 1,
+      "message": "Hi Xisco! A general questions: is there any logic behind the test folders in sc? Calc_test9 etc., because I have no real insight in these folders. Thank you very much!",
+      "revId": "87c3d98997c90c1b0664f59908312fe6b8a67703",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
