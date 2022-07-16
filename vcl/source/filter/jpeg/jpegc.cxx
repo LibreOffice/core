@@ -185,9 +185,14 @@ static void ReadJPEG(JpegStuff& rContext, JPEGReader* pJPEGReader, void* pInputS
     tools::Long nWidth = rContext.cinfo.output_width;
     tools::Long nHeight = rContext.cinfo.output_height;
 
-    tools::Long nResult = 0;
-    if (utl::ConfigManager::IsFuzzing() && (o3tl::checked_multiply(nWidth, nHeight, nResult) || nResult > 4000000))
-        return;
+    if (utl::ConfigManager::IsFuzzing())
+    {
+        tools::Long nResult = 0;
+        if (o3tl::checked_multiply(nWidth, nHeight, nResult) || nResult > 4000000)
+            return;
+        if (rContext.cinfo.err->num_warnings && (nWidth > 8192 || nHeight > 8192))
+            return;
+    }
 
     bool bGray = (rContext.cinfo.output_components == 1);
 
