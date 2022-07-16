@@ -16,7 +16,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <comphelper/processfactory.hxx>
 #include <vcl/abstdlg.hxx>
-#include <vcl/pngwrite.hxx>
+#include <vcl/filter/PngImageWriter.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
@@ -92,8 +92,8 @@ void ScreenshotTest::implSaveScreenshot(const BitmapEx& rScreenshot, const OStri
     CPPUNIT_ASSERT_MESSAGE(OString("Failed to open <" + OUStringToOString(pngUrl, RTL_TEXTENCODING_UTF8) + ">: " + OString::number(sal_uInt32(aNew.GetErrorCode()))).getStr(), aNew.IsOpen());
 
     std::cout << "saving " << pngUrl << ":\n";
-    vcl::PNGWriter aPNGWriter(rScreenshot);
-    aPNGWriter.Write(aNew);
+    vcl::PngImageWriter aPNGWriter(aNew);
+    aPNGWriter.write(rScreenshot);
 }
 
 void ScreenshotTest::saveScreenshot(VclAbstractDialog const & rDialog)
