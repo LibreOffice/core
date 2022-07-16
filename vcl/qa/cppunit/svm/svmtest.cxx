@@ -19,7 +19,7 @@
 #include <vcl/hatch.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/pngwrite.hxx>
+#include <vcl/filter/PngImageWriter.hxx>
 #include <tools/fract.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/filter/SvmReader.hxx>
@@ -284,13 +284,13 @@ void SvmTest::checkRendering(ScopedVclPtrInstance<VirtualDevice> const & pVirtua
 
         {
             SvFileStream aStream(aTempFile.GetURL() + ".source.png", StreamMode::WRITE | StreamMode::TRUNC);
-            vcl::PNGWriter aPNGWriter(aSourceBitmapEx);
-            aPNGWriter.Write(aStream);
+            vcl::PngImageWriter aPNGWriter(aStream);
+            aPNGWriter.write(aSourceBitmapEx);
         }
         {
             SvFileStream aStream(aTempFile.GetURL() + ".result.png", StreamMode::WRITE | StreamMode::TRUNC);
-            vcl::PNGWriter aPNGWriter(aResultBitmapEx);
-            aPNGWriter.Write(aStream);
+            vcl::PngImageWriter aPNGWriter(aStream);
+            aPNGWriter.write(aResultBitmapEx);
         }
     }
     CPPUNIT_ASSERT_EQUAL(aSourceBitmapEx.GetChecksum(), aResultBitmapEx.GetChecksum());
