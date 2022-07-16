@@ -86,7 +86,7 @@
 #include <vcl/i18nhelp.hxx>
 #include <vcl/quickselectionengine.hxx>
 #include <vcl/mnemonic.hxx>
-#include <vcl/pngwrite.hxx>
+#include <vcl/filter/PngImageWriter.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/virdev.hxx>
@@ -4814,9 +4814,10 @@ namespace
         // We "know" that this gets passed to zlib's deflateInit2_(). 1 means best speed.
         css::uno::Sequence<css::beans::PropertyValue> aFilterData{ comphelper::makePropertyValue(
             "Compression", sal_Int32(1)) };
-
-        vcl::PNGWriter aWriter(aImage.GetBitmapEx(), &aFilterData);
-        aWriter.Write(aMemStm);
+        auto aBitmapEx = aImage.GetBitmapEx();
+        vcl::PngImageWriter aWriter(aMemStm);
+        aWriter.setParameters(aFilterData);
+        aWriter.write(aBitmapEx);
 
         return load_icon_from_stream(aMemStm);
     }
