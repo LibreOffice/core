@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd3fc91b_6e8ad4c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-07-16T14:01:08Z",
+      "side": 1,
+      "message": "Seth: this change should not require any documentation alteration. But the result now better fits the theme of symmetry in the case where the table is able to grow wider.\n\nPreviously the table would be asymmetrical if every column wanted to grow wider - only the first column would have done so (if it was greedy). Now each column can grow equally from the added table width.",
+      "revId": "2e64fc0c9b655d89ac3178242df18649b4862a43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
