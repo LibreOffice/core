@@ -51,6 +51,24 @@
       "parentUuid": "52ea5599_87a6c99f",
       "revId": "4431fa927b376785d48c5874d0c5511864380416",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02ce1e7e_3aef5c6e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2022-07-16T09:42:21Z",
+      "side": 1,
+      "message": "I think it\u0027s fine to extend the setting this way.\nIdeally we should only have one such key, to tweak the UI towards OOXML (and binary DOC/XLS/PPT) interop, but I could not yet convince people that this makes sense.\nSo for now, it\u0027s ok this way.\nMany thanks for fixing this!",
+      "parentUuid": "efd002b5_4712d3a7",
+      "revId": "4431fa927b376785d48c5874d0c5511864380416",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
