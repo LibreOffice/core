@@ -19,7 +19,7 @@
 #include <tools/stream.hxx>
 #include <config_folders.h>
 #include <memory>
-#include <vcl/pngwrite.hxx>
+#include <vcl/filter/PngImageWriter.hxx>
 #include <vcl/svapp.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <com/sun/star/util/XFlushable.hpp>
@@ -531,9 +531,9 @@ void OpenGLHelper::renderToFile(tools::Long nWidth, tools::Long nHeight, const O
     glReadPixels(0, 0, nWidth, nHeight, OptimalBufferFormat(), GL_UNSIGNED_BYTE, pBuffer.get());
     BitmapEx aBitmap = ConvertBufferToBitmapEx(pBuffer.get(), nWidth, nHeight);
     try {
-        vcl::PNGWriter aWriter( aBitmap );
         SvFileStream sOutput( rFileName, StreamMode::WRITE );
-        aWriter.Write( sOutput );
+        vcl::PngImageWriter aWriter( sOutput );
+        aWriter.write( aBitmap );
         sOutput.Close();
     } catch (...) {
         SAL_WARN("vcl.opengl", "Error writing png to " << rFileName);
