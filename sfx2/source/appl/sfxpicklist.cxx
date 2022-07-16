@@ -25,7 +25,7 @@
 #include <tools/datetime.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/inethist.hxx>
-#include <vcl/pngwrite.hxx>
+#include <vcl/filter/PngImageWriter.hxx>
 #include <vcl/svapp.hxx>
 #include <officecfg/Office/Common.hxx>
 
@@ -112,8 +112,8 @@ void SfxPickListImpl::AddDocumentToPickList( const SfxObjectShell* pDocSh )
             if (!aResultBitmap.IsEmpty())
             {
                 SvMemoryStream aStream(65535, 65535);
-                vcl::PNGWriter aWriter(aResultBitmap);
-                if (aWriter.Write(aStream))
+                vcl::PngImageWriter aWriter(aStream);
+                if (aWriter.write(aResultBitmap))
                 {
                     Sequence<sal_Int8> aSequence(static_cast<const sal_Int8*>(aStream.GetData()), aStream.Tell());
                     OUStringBuffer aBuffer;
