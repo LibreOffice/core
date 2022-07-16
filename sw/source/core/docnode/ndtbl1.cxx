@@ -1645,7 +1645,8 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor,
     // only afterwards.
     // The first column's desired width would be discarded as it would cause
     // the Table's width to exceed the maximum width.
-    const sal_uInt16 nEqualWidth = (aTabCols.GetRight() - aTabCols.GetLeft()) / (aTabCols.Count() + 1);
+    const tools::Long nMaxRight = std::max(aTabCols.GetRightMax(), nOldRight);
+    const sal_uInt16 nEqualWidth = (nMaxRight - aTabCols.GetLeft()) / (aTabCols.Count() + 1);
     const sal_Int16 nTablePadding = nSelectedWidth - fTotalWish;
     for ( int k = 0; k < 2; ++k )
     {
@@ -1678,7 +1679,6 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor,
                     nDiff -= aTabCols[i] - aTabCols[i-1];
 
                 tools::Long nTabRight = aTabCols.GetRight() + nDiff;
-                const tools::Long nMaxRight = std::max(aTabCols.GetRightMax(), nOldRight);
 
                 // If the Table would become (or is already) too wide,
                 // restrict the column growth to the allowed maximum.
