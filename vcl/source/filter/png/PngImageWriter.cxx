@@ -47,7 +47,8 @@ static void lclWriteStream(png_structp pPng, png_bytep pData, png_size_t pDataSi
         png_error(pPng, "Write Error");
 }
 
-static bool pngWrite(SvStream& rStream, BitmapEx& rBitmapEx, int nCompressionLevel)
+static bool pngWrite(SvStream& rStream, const BitmapEx& rBitmapEx, int nCompressionLevel,
+                     const std::vector<PngChunk>& aAdditionalChunks)
 {
     png_structp pPng = png_create_write_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
 
@@ -197,11 +198,63 @@ static bool pngWrite(SvStream& rStream, BitmapEx& rBitmapEx, int nCompressionLev
         }
     }
 
+    if (!aAdditionalChunks.empty())
+    {
+        for (const auto& aChunk : aAdditionalChunks)
+        {
+            png_write_chunk(pPng, aChunk.name.data(), aChunk.data.data(), aChunk.size);
+        }
+    }
+
     png_write_end(pPng, pInfo);
 
     png_destroy_write_struct(&pPng, &pInfo);
 
     return true;
+}
+
+void PngImageWriter::setParameters(css::uno::Sequence<css::beans::PropertyValue> const& rParameters)
+{
+    for (auto const& rValue : rParameters)
+    {
+        if (rValue.Name == "Compression")
+            rValue.Value >>= mnCompressionLevel;
+        else if (rValue.Name == "Interlaced")
+            rValue.Value >>= mbInterlaced;
+        else if (rValue.Name == "AdditionalChunks")
+        {
+            css::uno::Sequence<css::beans::PropertyValue> aAdditionalChunkSequence;
+            if (rValue.Value >>= aAdditionalChunkSequence)
+            {
+                for (const auto& rAdditionalChunk : std::as_const(aAdditionalChunkSequence))
+                {
+                    if (rAdditionalChunk.Name.getLength() == 4)
+                    {
+                        vcl::PngChunk aChunk;
+                        for (sal_Int32 k = 0; k < 4; k++)
+                        {
+                            aChunk.name[k] = static_cast<sal_uInt8>(rAdditionalChunk.Name[k]);
+                        }
+                        aChunk.name[4] = '\0';
+
+                        css::uno::Sequence<sal_Int8> aByteSeq;
+                        if (rAdditionalChunk.Value >>= aByteSeq)
+                        {
+                            sal_uInt32 nChunkSize = aByteSeq.getLength();
+                            aChunk.size = nChunkSize;
+                            if (nChunkSize)
+                            {
+                                const sal_Int8* pSource = aByteSeq.getConstArray();
+                                std::vector<sal_uInt8> aData(pSource, pSource + nChunkSize);
+                                aChunk.data = std::move(aData);
+                                maAdditionalChunks.push_back(aChunk);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 PngImageWriter::PngImageWriter(SvStream& rStream)
@@ -211,9 +264,9 @@ PngImageWriter::PngImageWriter(SvStream& rStream)
 {
 }
 
-bool PngImageWriter::write(BitmapEx& rBitmapEx)
+bool PngImageWriter::write(const BitmapEx& rBitmapEx)
 {
-    return pngWrite(mrStream, rBitmapEx, mnCompressionLevel);
+    return pngWrite(mrStream, rBitmapEx, mnCompressionLevel, maAdditionalChunks);
 }
 
 } // namespace vcl

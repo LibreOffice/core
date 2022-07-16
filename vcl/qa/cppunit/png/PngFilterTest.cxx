@@ -1696,16 +1696,65 @@ void PngFilterTest::testPngSuite()
 
 void PngFilterTest::testMsGifInPng()
 {
-    Graphic aGraphic;
-    const OUString aURL(getFullUrl(u"ms-gif.png"));
-    SvFileStream aFileStream(aURL, StreamMode::READ);
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
-    ErrCode aResult = rFilter.ImportGraphic(aGraphic, aURL, aFileStream);
-    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, aResult);
-    CPPUNIT_ASSERT(aGraphic.IsGfxLink());
-    // The image is technically a PNG, but it has an animated Gif as a chunk (Microsoft extension).
-    CPPUNIT_ASSERT_EQUAL(GfxLinkType::NativeGif, aGraphic.GetSharedGfxLink()->GetType());
-    CPPUNIT_ASSERT(aGraphic.IsAnimated());
+    {
+        Graphic aGraphic;
+        const OUString aURL(getFullUrl(u"ms-gif.png"));
+        SvFileStream aFileStream(aURL, StreamMode::READ);
+        ErrCode aResult = rFilter.ImportGraphic(aGraphic, aURL, aFileStream);
+        CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, aResult);
+        CPPUNIT_ASSERT(aGraphic.IsGfxLink());
+        // The image is technically a PNG, but it has an animated Gif as a chunk (Microsoft extension).
+        CPPUNIT_ASSERT_EQUAL(GfxLinkType::NativeGif, aGraphic.GetSharedGfxLink()->GetType());
+        CPPUNIT_ASSERT(aGraphic.IsAnimated());
+    }
+    {
+        // Tests msOG chunk export support
+        const OUString aURL(getFullUrl(u"dummy.gif"));
+        SvFileStream aGIFStream(aURL, StreamMode::READ);
+        sal_uInt32 nGIFSize = aGIFStream.TellEnd();
+        const char* const pHeader = "MSOFFICE9.0";
+        auto nHeaderSize = strlen(pHeader);
+        uno::Sequence<sal_Int8> aGIFSequence(nHeaderSize + nGIFSize);
+        sal_Int8* pSequence = aGIFSequence.getArray();
+        for (size_t i = 0; i < nHeaderSize; i++)
+            *pSequence++ = pHeader[i];
+        aGIFStream.Seek(STREAM_SEEK_TO_BEGIN);
+        aGIFStream.ReadBytes(pSequence, nGIFSize);
+        // Create msOG chunk
+        beans::PropertyValue aChunkProperty, aFilterProperty;
+        aChunkProperty.Name = "msOG";
+        aChunkProperty.Value <<= aGIFSequence;
+        uno::Sequence<beans::PropertyValue> aAdditionalChunkSequence{ aChunkProperty };
+        aFilterProperty.Name = "AdditionalChunks";
+        aFilterProperty.Value <<= aAdditionalChunkSequence;
+        uno::Sequence<beans::PropertyValue> aPNGParameters{ aFilterProperty };
+        // Export the png with the chunk
+        OUString ext = u".png";
+        utl::TempFile aTempFile(u"testPngExportMsGif", true, &ext);
+        if (!bKeepTemp)
+            aTempFile.EnableKillingFile();
+        {
+            SvStream& rStream = *aTempFile.GetStream(StreamMode::WRITE);
+            BitmapEx aDummyBitmap(Size(8, 8), vcl::PixelFormat::N24_BPP);
+            vcl::PngImageWriter aPngWriter(rStream);
+            aPngWriter.setParameters(aPNGParameters);
+            bool bWriteSuccess = aPngWriter.write(aDummyBitmap);
+            CPPUNIT_ASSERT_EQUAL(true, bWriteSuccess);
+            aTempFile.CloseStream();
+        }
+        {
+            SvStream& rStream = *aTempFile.GetStream(StreamMode::READ);
+            rStream.Seek(0);
+            // Import the png and check that it is a gif
+            Graphic aGraphic;
+            ErrCode aResult = rFilter.ImportGraphic(aGraphic, aTempFile.GetURL(), rStream);
+            CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, aResult);
+            CPPUNIT_ASSERT(aGraphic.IsGfxLink());
+            CPPUNIT_ASSERT_EQUAL(GfxLinkType::NativeGif, aGraphic.GetSharedGfxLink()->GetType());
+            CPPUNIT_ASSERT(aGraphic.IsAnimated());
+        }
+    }
 }
 
 void PngFilterTest::testPngRoundtrip8BitGrey()
