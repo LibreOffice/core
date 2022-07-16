@@ -15,7 +15,7 @@
 #include <com/sun/star/text/XTextSection.hpp>
 
 #include <vcl/BitmapTools.hxx>
-#include <vcl/pngwrite.hxx>
+#include <vcl/filter/PngImageWriter.hxx>
 #include <unotools/tempfile.hxx>
 #include <tools/stream.hxx>
 
@@ -38,8 +38,8 @@ void writerFileWithBitmap(OUString const& rURL)
 {
     BitmapEx aBitmapEx = createExampleBitmap();
     SvFileStream aFileStream(rURL, StreamMode::READ | StreamMode::WRITE);
-    vcl::PNGWriter aWriter(aBitmapEx);
-    aWriter.Write(aFileStream);
+    vcl::PngImageWriter aWriter(aFileStream);
+    aWriter.write(aBitmapEx);
     aFileStream.Seek(STREAM_SEEK_TO_BEGIN);
     aFileStream.Close();
 }
