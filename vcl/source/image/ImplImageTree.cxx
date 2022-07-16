@@ -55,7 +55,7 @@
 #include <IconThemeScanner.hxx>
 #include <vcl/filter/PngImageReader.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/pngwrite.hxx>
+#include <vcl/filter/PngImageWriter.hxx>
 #include <o3tl/string_view.hxx>
 #include <bitmap/BitmapLightenFilter.hxx>
 
@@ -381,11 +381,11 @@ bool loadDiskCachedVersion(std::u16string_view sVariant, ImageRequestParameters&
 void cacheBitmapToDisk(std::u16string_view sVariant, ImageRequestParameters const & rParameters)
 {
     OUString sUrl(createIconCacheUrl(sVariant, rParameters));
-    vcl::PNGWriter aWriter(rParameters.mrBitmap);
     try
     {
         SvFileStream aStream(sUrl, StreamMode::WRITE);
-        aWriter.Write(aStream);
+        vcl::PngImageWriter aWriter(aStream);
+        aWriter.write(rParameters.mrBitmap);
         aStream.Close();
     }
     catch (...)
