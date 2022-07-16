@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19587f9f_ac030755",
+        "filename": "vcl/source/filter/png/PngImageWriter.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-07-16T10:01:24Z",
+      "side": 1,
+      "message": "std::copy is not good?",
+      "range": {
+        "startLine": 249,
+        "startChar": 32,
+        "endLine": 249,
+        "endChar": 38
+      },
+      "revId": "a475ca06d592e1ca13599ef3137cc2d5aed48944",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
