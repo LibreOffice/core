@@ -16,6 +16,23 @@
       "message": "Caolán,any concerns with this gtk change of behavior?",
       "revId": "384431d643b8961e7efe649e6a922749e82b8f46",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58b8291c_e916fb45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-07-16T11:43:20Z",
+      "side": 1,
+      "message": "I don\u0027t mind",
+      "revId": "384431d643b8961e7efe649e6a922749e82b8f46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
