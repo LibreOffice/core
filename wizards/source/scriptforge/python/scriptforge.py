@@ -455,6 +455,7 @@ class SFServices(object):
     flgArrayRet = 1024  # Invoked service method can return a 2D array (standard modules) or any array (class modules)
     flgUno = 256  # Invoked service method/property can return a UNO object
     flgObject = 2048  # 1st argument may be a Basic object
+    flgHardCode = 4096  # Force hardcoded call to method, avoid CallByName()
     # Basic class type
     moduleClass, moduleStandard = 2, 1
     #
@@ -1781,20 +1782,21 @@ class SFDialogs:
                 """
             return container, library, dialogname, ScriptForge.componentcontext
 
+        # Methods potentially executed while the dialog is in execution require the flgHardCode flag
         def Activate(self):
-            return self.ExecMethod(self.vbMethod, 'Activate')
+            return self.ExecMethod(self.vbMethod + self.flgHardCode, 'Activate')
 
         def Center(self, parent = ScriptForge.cstSymMissing):
             parentclasses = (SFDocuments.SF_Document, SFDocuments.SF_Base, SFDocuments.SF_Calc, SFDocuments.SF_Writer,
                                                           SFDialogs.SF_Dialog)
             parentobj = parent.objectreference if isinstance(parent, parentclasses) else parent
-            return self.ExecMethod(self.vbMethod + self.flgObject, 'Center', parentobj)
+            return self.ExecMethod(self.vbMethod + self.flgObject + self.flgHardCode, 'Center', parentobj)
 
         def Controls(self, controlname = ''):
-            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Controls', controlname)
+            return self.ExecMethod(self.vbMethod + self.flgArrayRet + self.flgHardCode, 'Controls', controlname)
 
         def EndExecute(self, returnvalue):
-            return self.ExecMethod(self.vbMethod, 'EndExecute', returnvalue)
+            return self.ExecMethod(self.vbMethod + self.flgHardCode, 'EndExecute', returnvalue)
 
         def Execute(self, modal = True):
             return self.ExecMethod(self.vbMethod, 'Execute', modal)
@@ -1804,7 +1806,7 @@ class SFDialogs:
             return self.ExecMethod(self.vbMethod + self.flgObject, 'GetTextsFromL10N', l10nobj)
 
         def Resize(self, left = -1, top = -1, width = -1, height = -1):
-            return self.ExecMethod(self.vbMethod, 'Resize', left, top, width, height)
+            return self.ExecMethod(self.vbMethod + self.flgHardCode, 'Resize', left, top, width, height)
 
         def Terminate(self):
             return self.ExecMethod(self.vbMethod, 'Terminate')
