@@ -22,7 +22,7 @@
 #include <tools/stream.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/filter/PngImageReader.hxx>
-#include <vcl/pngwrite.hxx>
+#include <vcl/filter/PngImageWriter.hxx>
 
 namespace sd::slidesorter::cache {
 
@@ -160,9 +160,9 @@ public:
 
 std::shared_ptr<BitmapReplacement> PngCompression::Compress (const BitmapEx& rBitmap) const
 {
-    vcl::PNGWriter aWriter(rBitmap);
     SvMemoryStream aStream (32768, 32768);
-    aWriter.Write(aStream);
+    vcl::PngImageWriter aWriter(aStream);
+    aWriter.write(rBitmap);
 
     auto pResult = std::make_shared<PngReplacement>();
     pResult->mnDataSize = aStream.Tell();
