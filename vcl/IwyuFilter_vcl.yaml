@@ -50,10 +50,6 @@ excludelist:
     vcl/source/filter/jpeg/JpegWriter.hxx:
     # Needed for direct member access
     - vcl/BitmapReadAccess.hxx
-    vcl/source/filter/png/pngwrite.cxx:
-    # Actually these are used
-    - com/sun/star/beans/PropertyValue.hpp
-    - com/sun/star/uno/Sequence.hxx
     vcl/source/filter/wmf/wmfexternal.cxx:
     # Actually these are used
     - com/sun/star/beans/PropertyValue.hpp
