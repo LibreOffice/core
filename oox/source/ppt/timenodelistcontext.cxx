@@ -651,7 +651,7 @@ namespace oox::ppt {
     public:
         AnimScaleContext( FragmentHandler2 const & rParent, sal_Int32  aElement,
                             const Reference< XFastAttributeList >& xAttribs,
-                            const TimeNodePtr & pNode ) noexcept
+                            const TimeNodePtr & pNode )
             : TimeNodeContext( rParent, aElement, pNode )
                 , mbZoomContents( false )
             {

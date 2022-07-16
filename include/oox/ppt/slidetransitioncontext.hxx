@@ -37,7 +37,7 @@ namespace oox::ppt {
     public:
         SlideTransitionContext( ::oox::core::FragmentHandler2 const & rParent,
             const AttributeList& rAttributes,
-            PropertyMap & aProperties ) noexcept;
+            PropertyMap & aProperties );
         virtual ~SlideTransitionContext() noexcept override;
 
     virtual void onEndElement() override;
