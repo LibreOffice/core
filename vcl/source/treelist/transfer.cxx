@@ -64,7 +64,7 @@
 #include <cstdio>
 #include <vcl/dibtools.hxx>
 #include <vcl/filter/PngImageReader.hxx>
-#include <vcl/pngwrite.hxx>
+#include <vcl/filter/PngImageWriter.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <memory>
 #include <utility>
@@ -668,9 +668,9 @@ bool TransferableHelper::SetBitmapEx( const BitmapEx& rBitmapEx, const DataFlavo
 
             aFilterData.getArray()[aFilterData.getLength() - 1].Value <<= 1;
 #endif
-            vcl::PNGWriter aPNGWriter(rBitmapEx, &aFilterData);
-
-            aPNGWriter.Write(aMemStm);
+            vcl::PngImageWriter aPNGWriter(aMemStm);
+            aPNGWriter.setParameters(aFilterData);
+            aPNGWriter.write(rBitmapEx);
         }
         else
         {
