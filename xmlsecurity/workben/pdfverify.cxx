@@ -20,7 +20,7 @@
 #include <sal/log.hxx>
 #include <sal/main.h>
 #include <tools/diagnose_ex.h>
-#include <vcl/pngwrite.hxx>
+#include <vcl/filter/PngImageWriter.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/filter/pdfdocument.hxx>
@@ -47,11 +47,11 @@ void generatePreview(std::string_view rPdfPath, std::string_view rPngPath)
         return;
 
     BitmapEx aBitmapEx = aGraphic.GetBitmapEx();
-    vcl::PNGWriter aWriter(aBitmapEx);
     OUString aOutURL;
     osl::FileBase::getFileURLFromSystemPath(OUString::fromUtf8(rPngPath), aOutURL);
     SvFileStream aOutStream(aOutURL, StreamMode::WRITE);
-    aWriter.Write(aOutStream);
+    vcl::PngImageWriter aWriter(aOutStream);
+    aWriter.write(aBitmapEx);
 }
 
 int pdfVerify(int nArgc, char** pArgv)
