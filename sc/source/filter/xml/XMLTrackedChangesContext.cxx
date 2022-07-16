@@ -431,7 +431,8 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > ScXMLChangeInfoContext
 void SAL_CALL ScXMLChangeInfoContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     aInfo.sUser = sAuthorBuffer.makeStringAndClear();
-    ::sax::Converter::parseDateTime(aInfo.aDateTime, sDateTimeBuffer);
+    if (!::sax::Converter::parseDateTime(aInfo.aDateTime, sDateTimeBuffer))
+        SAL_WARN("sc.filter", "ScXMLChangeInfoContext: broken DateTime '" << sDateTimeBuffer.toString() << "'");
     sDateTimeBuffer.setLength(0);
     aInfo.sComment = sCommentBuffer.makeStringAndClear();
     pChangeTrackingImportHelper->SetActionInfo(aInfo);
