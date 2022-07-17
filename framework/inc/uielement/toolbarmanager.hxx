@@ -64,10 +64,6 @@ public:
     virtual void Init() = 0;
     virtual void Destroy() = 0;
     virtual css::uno::Reference<css::awt::XWindow> GetInterface() = 0;
-    virtual css::uno::Reference<css::frame::XStatusListener> CreateToolBoxController(
-                            const css::uno::Reference<css::frame::XFrame>& rFrame,
-                            ToolBoxItemId nId,
-                            const OUString& aCommandURL ) = 0;
     virtual void InsertItem(ToolBoxItemId nId,
                             const OUString& rString,
                             const OUString& rCommandURL,
@@ -230,6 +226,7 @@ class ToolBarManager final : public ToolbarManager_Base
 
         std::unique_ptr<ToolBarManagerImpl>                          m_pImpl;
         VclPtr<ToolBox>                                              m_pToolBar;
+        weld::Toolbar*                                               m_pWeldedToolBar;
 
         OUString                                                     m_aModuleIdentifier;
         OUString                                                     m_aResourceName;
