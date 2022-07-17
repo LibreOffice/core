@@ -136,6 +136,14 @@ static bool pngWrite(SvStream& rStream, const BitmapEx& rBitmapEx, int nCompress
             }
         }
 
+        if (rBitmapEx.GetPrefMapMode().GetMapUnit() == MapUnit::Map100thMM)
+        {
+            Size aPrefSize(rBitmapEx.GetPrefSize());
+            sal_uInt32 nPrefSizeX = o3tl::convert(aSize.Width(), 100000, aPrefSize.Width());
+            sal_uInt32 nPrefSizeY = o3tl::convert(aSize.Height(), 100000, aPrefSize.Height());
+            png_set_pHYs(pPng, pInfo, nPrefSizeX, nPrefSizeY, 1);
+        }
+
         png_set_compression_level(pPng, nCompressionLevel);
 
         int interlaceType = PNG_INTERLACE_NONE;
