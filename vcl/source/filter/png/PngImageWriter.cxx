@@ -11,6 +11,7 @@
 #include <png.h>
 #include <bitmap/BitmapWriteAccess.hxx>
 #include <vcl/bitmap.hxx>
+#include <vcl/BitmapTools.hxx>
 
 namespace
 {
@@ -20,7 +21,7 @@ void combineScanlineChannels(Scanline pRGBScanline, Scanline pAlphaScanline, Sca
     assert(pRGBScanline && "RGB scanline is null");
     assert(pAlphaScanline && "Alpha scanline is null");
 
-    for (sal_uInt32 i = 0; i < nSize; i++)
+    for (sal_uInt32 i = 0; i < nSize; i += 3)
     {
         *pResult++ = *pRGBScanline++; // R
         *pResult++ = *pRGBScanline++; // G
@@ -48,8 +49,14 @@ static void lclWriteStream(png_structp pPng, png_bytep pData, png_size_t pDataSi
 }
 
 static bool pngWrite(SvStream& rStream, const BitmapEx& rBitmapEx, int nCompressionLevel,
+                     bool bInterlaced, bool bTranslucent,
                      const std::vector<PngChunk>& aAdditionalChunks)
 {
+    if (rBitmapEx.IsAlpha() && !bTranslucent)
+        return false;
+    if (rBitmapEx.IsEmpty())
+        return false;
+
     png_structp pPng = png_create_write_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
 
     if (!pPng)
@@ -60,6 +67,17 @@ static bool pngWrite(SvStream& rStream, const BitmapEx& rBitmapEx, int nCompress
     {
         png_destroy_write_struct(&pPng, nullptr);
         return false;
+    }
+
+    BitmapEx aBitmapEx;
+    if (rBitmapEx.GetBitmap().getPixelFormat() == vcl::PixelFormat::N32_BPP)
+    {
+        if (!vcl::bitmap::convertBitmap32To24Plus8(rBitmapEx, aBitmapEx))
+            return false;
+    }
+    else
+    {
+        aBitmapEx = rBitmapEx;
     }
 
     Bitmap aBitmap;
@@ -78,13 +96,14 @@ static bool pngWrite(SvStream& rStream, const BitmapEx& rBitmapEx, int nCompress
     // Set our custom stream writer
     png_set_write_fn(pPng, &rStream, lclWriteStream, nullptr);
 
-    aBitmap = rBitmapEx.GetBitmap();
-    aAlphaMask = rBitmapEx.GetAlpha();
+    aBitmap = aBitmapEx.GetBitmap();
+    aAlphaMask = aBitmapEx.GetAlpha();
 
     {
+        bool bCombineChannels = false;
         pAccess = Bitmap::ScopedReadAccess(aBitmap);
         pAlphaAccess = Bitmap::ScopedReadAccess(aAlphaMask);
-        Size aSize = rBitmapEx.GetSizePixel();
+        Size aSize = aBitmapEx.GetSizePixel();
 
         int bitDepth = -1;
         int colorType = -1;
@@ -127,7 +146,21 @@ static bool pngWrite(SvStream& rStream, const BitmapEx& rBitmapEx, int nCompress
                 colorType = PNG_COLOR_TYPE_RGB;
                 bitDepth = 8;
                 if (pAlphaAccess)
+                {
                     colorType = PNG_COLOR_TYPE_RGBA;
+                    bCombineChannels = true;
+                }
+                break;
+            }
+            case ScanlineFormat::N32BitTcBgra:
+            {
+                png_set_bgr(pPng);
+                [[fallthrough]];
+            }
+            case ScanlineFormat::N32BitTcRgba:
+            {
+                colorType = PNG_COLOR_TYPE_RGBA;
+                bitDepth = 8;
                 break;
             }
             default:
@@ -136,9 +169,9 @@ static bool pngWrite(SvStream& rStream, const BitmapEx& rBitmapEx, int nCompress
             }
         }
 
-        if (rBitmapEx.GetPrefMapMode().GetMapUnit() == MapUnit::Map100thMM)
+        if (aBitmapEx.GetPrefMapMode().GetMapUnit() == MapUnit::Map100thMM)
         {
-            Size aPrefSize(rBitmapEx.GetPrefSize());
+            Size aPrefSize(aBitmapEx.GetPrefSize());
             sal_uInt32 nPrefSizeX = o3tl::convert(aSize.Width(), 100000, aPrefSize.Width());
             sal_uInt32 nPrefSizeY = o3tl::convert(aSize.Height(), 100000, aPrefSize.Height());
             png_set_pHYs(pPng, pInfo, nPrefSizeX, nPrefSizeY, 1);
@@ -146,7 +179,7 @@ static bool pngWrite(SvStream& rStream, const BitmapEx& rBitmapEx, int nCompress
 
         png_set_compression_level(pPng, nCompressionLevel);
 
-        int interlaceType = PNG_INTERLACE_NONE;
+        int interlaceType = bInterlaced ? PNG_INTERLACE_ADAM7 : PNG_INTERLACE_NONE;
         int compressionType = PNG_COMPRESSION_TYPE_DEFAULT;
         int filterMethod = PNG_FILTER_TYPE_DEFAULT;
 
@@ -185,10 +218,10 @@ static bool pngWrite(SvStream& rStream, const BitmapEx& rBitmapEx, int nCompress
                 pSourcePointer = pAccess->GetScanline(y);
                 Scanline pFinalPointer = pSourcePointer;
                 std::vector<std::remove_pointer_t<Scanline>> aCombinedChannels;
-                if (pAlphaAccess)
+                if (bCombineChannels)
                 {
-                    // Check that theres an alpha channel per 3 color/RGB channels
-                    assert(((pAlphaAccess->GetScanlineSize() * 3) == pAccess->GetScanlineSize())
+                    // Check that theres at least an alpha channel per 3 color/RGB channels
+                    assert(((pAlphaAccess->GetScanlineSize() * 3) >= pAccess->GetScanlineSize())
                            && "RGB and alpha channel size mismatch");
                     // Allocate enough size to fit all 4 channels
                     aCombinedChannels.resize(pAlphaAccess->GetScanlineSize()
@@ -196,7 +229,7 @@ static bool pngWrite(SvStream& rStream, const BitmapEx& rBitmapEx, int nCompress
                     Scanline pAlphaPointer = pAlphaAccess->GetScanline(y);
                     // Combine RGB and alpha channels
                     combineScanlineChannels(pSourcePointer, pAlphaPointer, aCombinedChannels.data(),
-                                            pAlphaAccess->GetScanlineSize());
+                                            pAccess->GetScanlineSize());
                     pFinalPointer = aCombinedChannels.data();
                     // Invert alpha channel (255 - a)
                     png_set_invert_alpha(pPng);
@@ -229,6 +262,13 @@ void PngImageWriter::setParameters(css::uno::Sequence<css::beans::PropertyValue>
             rValue.Value >>= mnCompressionLevel;
         else if (rValue.Name == "Interlaced")
             rValue.Value >>= mbInterlaced;
+        else if (rValue.Name == "Translucent")
+        {
+            tools::Long nTmp = 0;
+            rValue.Value >>= nTmp;
+            if (!nTmp)
+                mbTranslucent = false;
+        }
         else if (rValue.Name == "AdditionalChunks")
         {
             css::uno::Sequence<css::beans::PropertyValue> aAdditionalChunkSequence;
@@ -269,12 +309,14 @@ PngImageWriter::PngImageWriter(SvStream& rStream)
     : mrStream(rStream)
     , mnCompressionLevel(6)
     , mbInterlaced(false)
+    , mbTranslucent(true)
 {
 }
 
 bool PngImageWriter::write(const BitmapEx& rBitmapEx)
 {
-    return pngWrite(mrStream, rBitmapEx, mnCompressionLevel, maAdditionalChunks);
+    return pngWrite(mrStream, rBitmapEx, mnCompressionLevel, mbInterlaced, mbTranslucent,
+                    maAdditionalChunks);
 }
 
 } // namespace vcl

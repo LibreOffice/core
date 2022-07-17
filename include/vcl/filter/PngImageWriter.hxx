@@ -32,7 +32,7 @@ class VCL_DLLPUBLIC PngImageWriter
     css::uno::Reference<css::task::XStatusIndicator> mxStatusIndicator;
 
     sal_Int32 mnCompressionLevel;
-    bool mbInterlaced;
+    bool mbInterlaced, mbTranslucent;
     std::vector<PngChunk> maAdditionalChunks;
 
 public:
