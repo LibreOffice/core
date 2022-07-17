@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,extras_tplwizreport,$(SRCDIR)/extras/source/templates/wizard/report))
+$(eval $(call gb_Package_Package,extras_tplwizreport,$(call gb_CustomTarget_get_workdir,extras/source/templates/wizard/report)))
 
 $(eval $(call gb_Package_add_files,extras_tplwizreport,$(LIBO_SHARE_FOLDER)/template/common/wizard/report,\
     cnt-011.ott \
