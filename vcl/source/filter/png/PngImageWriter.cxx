@@ -137,6 +137,16 @@ static bool pngWrite(SvStream& rStream, const BitmapEx& rBitmapEx, int nCompress
             }
         }
 
+        if (rBitmapEx.GetPrefMapMode().GetMapUnit() == MapUnit::Map100thMM)
+        {
+            Size aPrefSize(rBitmapEx.GetPrefSize());
+            sal_uInt32 nPrefSizeX = static_cast<sal_uInt32>(
+                100000.0 / (static_cast<double>(aPrefSize.Width()) / aSize.Width()) + 0.5);
+            sal_uInt32 nPrefSizeY = static_cast<sal_uInt32>(
+                100000.0 / (static_cast<double>(aPrefSize.Height()) / aSize.Height()) + 0.5);
+            png_set_pHYs(pPng, pInfo, nPrefSizeX, nPrefSizeY, 1);
+        }
+
         png_set_compression_level(pPng, nCompressionLevel);
 
         int interlaceType = PNG_INTERLACE_NONE;
