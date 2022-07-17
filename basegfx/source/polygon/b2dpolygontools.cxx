@@ -157,7 +157,7 @@ namespace basegfx::utils
             return rCandidate.getContinuityInPoint(nIndex);
         }
 
-        B2DPolygon adaptiveSubdivideByDistance(const B2DPolygon& rCandidate, double fDistanceBound)
+        B2DPolygon adaptiveSubdivideByDistance(const B2DPolygon& rCandidate, double fDistanceBound, int nRecurseLimit)
         {
             if(rCandidate.areControlPointsUsed())
             {
@@ -213,7 +213,7 @@ namespace basegfx::utils
                             }
 
                             // call adaptive subdivide which adds edges to aRetval accordingly
-                            aBezier.adaptiveSubdivideByDistance(aRetval, fBound);
+                            aBezier.adaptiveSubdivideByDistance(aRetval, fBound, nRecurseLimit);
                         }
                         else
                         {

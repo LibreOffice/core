@@ -113,7 +113,7 @@ namespace basegfx::utils
             return rCandidate;
         }
 
-        B2DPolyPolygon adaptiveSubdivideByDistance(const B2DPolyPolygon& rCandidate, double fDistanceBound)
+        B2DPolyPolygon adaptiveSubdivideByDistance(const B2DPolyPolygon& rCandidate, double fDistanceBound, int nRecurseLimit)
         {
             if(rCandidate.areControlPointsUsed())
             {
@@ -123,7 +123,7 @@ namespace basegfx::utils
                 {
                     if(rPolygon.areControlPointsUsed())
                     {
-                        aRetval.append(utils::adaptiveSubdivideByDistance(rPolygon, fDistanceBound));
+                        aRetval.append(utils::adaptiveSubdivideByDistance(rPolygon, fDistanceBound, nRecurseLimit));
                     }
                     else
                     {
