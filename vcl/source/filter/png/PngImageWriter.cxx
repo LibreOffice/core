@@ -83,6 +83,7 @@ static bool pngWrite(SvStream& rStream, const BitmapEx& rBitmapEx, int nCompress
     aAlphaMask = rBitmapEx.GetAlpha();
 
     {
+        bool bCombineChannels = false;
         pAccess = Bitmap::ScopedReadAccess(aBitmap);
         pAlphaAccess = Bitmap::ScopedReadAccess(aAlphaMask);
         Size aSize = rBitmapEx.GetSizePixel();
@@ -128,7 +129,21 @@ static bool pngWrite(SvStream& rStream, const BitmapEx& rBitmapEx, int nCompress
                 colorType = PNG_COLOR_TYPE_RGB;
                 bitDepth = 8;
                 if (pAlphaAccess)
+                {
                     colorType = PNG_COLOR_TYPE_RGBA;
+                    bCombineChannels = true;
+                }
+                break;
+            }
+            case ScanlineFormat::N32BitTcBgra:
+            {
+                png_set_bgr(pPng);
+                [[fallthrough]];
+            }
+            case ScanlineFormat::N32BitTcRgba:
+            {
+                colorType = PNG_COLOR_TYPE_RGBA;
+                bitDepth = 8;
                 break;
             }
             default:
@@ -186,7 +201,7 @@ static bool pngWrite(SvStream& rStream, const BitmapEx& rBitmapEx, int nCompress
                 pSourcePointer = pAccess->GetScanline(y);
                 Scanline pFinalPointer = pSourcePointer;
                 std::vector<std::remove_pointer_t<Scanline>> aCombinedChannels;
-                if (pAlphaAccess)
+                if (bCombineChannels)
                 {
                     // Check that theres an alpha channel per 3 color/RGB channels
                     assert(((pAlphaAccess->GetScanlineSize() * 3) == pAccess->GetScanlineSize())
