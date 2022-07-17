@@ -200,19 +200,6 @@ public:
         return VCLUnoHelper::GetInterface(m_pToolBar);
     }
 
-    virtual css::uno::Reference<css::frame::XStatusListener> CreateToolBoxController(
-        const css::uno::Reference<css::frame::XFrame>& rFrame,
-        ToolBoxItemId nId,
-        const OUString& rCommandURL ) override
-    {
-        rtl::Reference<svt::ToolboxController> pController
-            = ::framework::CreateToolBoxController( rFrame, m_pToolBar, nId, rCommandURL );
-        css::uno::Reference<css::frame::XStatusListener> xListener;
-        if (pController)
-            xListener = pController;
-        return xListener;
-    }
-
     virtual void ConnectCallbacks(ToolBarManager* pManager) override
     {
         m_pManager = pManager;
@@ -425,19 +412,6 @@ public:
         return new weld::TransportAsXWindow(m_pWeldedToolBar);
     }
 
-    virtual css::uno::Reference<css::frame::XStatusListener> CreateToolBoxController(
-        const css::uno::Reference<css::frame::XFrame>& rFrame,
-        ToolBoxItemId /*nId*/,
-        const OUString& rCommandURL ) override
-    {
-        css::uno::Reference<css::frame::XToolbarController> xController
-            = ::framework::CreateWeldToolBoxController(rFrame, m_pWeldedToolBar, m_pBuilder, rCommandURL);
-        css::uno::Reference<css::frame::XStatusListener> xListener;
-        if (xController.is())
-            xListener = css::uno::Reference<css::frame::XStatusListener>( xController, UNO_QUERY );
-        return xListener;
-    }
-
     virtual void ConnectCallbacks(ToolBarManager* pManager) override
     {
         m_pManager = pManager;
@@ -603,7 +577,7 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
     m_eSymbolSize( SvtMiscOptions().GetCurrentSymbolsSize() ),
     m_nContextMinPos(0),
     m_pImpl( new WeldToolBarManager( pToolBar, pBuilder ) ),
-    m_pToolBar( nullptr ),
+    m_pWeldedToolBar( pToolBar ),
     m_aResourceName(std::move( aResourceName )),
     m_xFrame( rFrame ),
     m_xContext( rxContext ),
@@ -1134,7 +1108,8 @@ void ToolBarManager::CreateControllers()
 
         if ( !xController.is() && bCreate )
         {
-            xController = m_pImpl->CreateToolBoxController( m_xFrame, nId, aCommandURL );
+            if ( m_pToolBar )
+                xController = CreateToolBoxController( m_xFrame, m_pToolBar, nId, aCommandURL );
             if ( !xController )
             {
                 if ( aCommandURL.startsWith( ".uno:StyleApply?" ) )
@@ -1164,10 +1139,12 @@ void ToolBarManager::CreateControllers()
 
                     xController = xStatusListener;
                 }
-                else if (m_pToolBar)
+                else
                 {
-                    xController.set(
-                        new GenericToolbarController( m_xContext, m_xFrame, m_pToolBar, nId, aCommandURL ));
+                    if ( m_pToolBar )
+                        xController.set( new GenericToolbarController( m_xContext, m_xFrame, m_pToolBar, nId, aCommandURL ));
+                    else
+                        xController.set( new GenericToolbarController( m_xContext, m_xFrame, *m_pWeldedToolBar, aCommandURL ));
 
                     // Accessibility support: Set toggle button role for specific commands
                     sal_Int32 nProps = vcl::CommandInfoProvider::GetPropertiesForCommand(aCommandURL, m_aModuleIdentifier);
