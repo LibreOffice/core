@@ -220,6 +220,12 @@ public:
           SwPosition *End()
                 { return (*m_pPoint) >  (*m_pMark) ? m_pPoint : m_pMark; }
 
+    /// Because sometimes the cost of the operator<= can add up
+    std::pair<const SwPosition *, const SwPosition *> StartEnd() const
+                { if ((*m_pPoint) <= (*m_pMark)) return { m_pPoint, m_pMark }; else return { m_pMark, m_pPoint }; }
+    std::pair<SwPosition *, SwPosition *> StartEnd()
+                { if ((*m_pPoint) <= (*m_pMark)) return { m_pPoint, m_pMark }; else return { m_pMark, m_pPoint }; }
+
     /// @return current Node at Point/Mark
     SwNode    & GetNode      ( bool bPoint = true ) const
     {
