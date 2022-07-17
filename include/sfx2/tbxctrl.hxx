@@ -31,7 +31,6 @@
 namespace com::sun::star::frame { class XDispatchProvider; }
 namespace com::sun::star::frame { class XFrame; }
 namespace vcl { class Window; }
-namespace com::sun::star::frame { class XToolbarController; }
 
 class InterimItemWindow;
 class SfxToolBoxControl;
