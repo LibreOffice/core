@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document-styles xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:rpt="http://openoffice.org/2005/report" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2">
+  <office:font-face-decls>
+    <style:font-face style:name="Liberation Sans Unicode MS" svg:font-family="'Liberation Sans Unicode MS'" style:font-pitch="variable"/>
+    <style:font-face style:name="HG Mincho Light J" svg:font-family="'HG Mincho Light J'" style:font-pitch="variable"/>
+    <style:font-face style:name="Liberation Serif" svg:font-family="Liberation Serif" style:font-family-generic="roman" style:font-pitch="variable"/>
+    <style:font-face style:name="Liberation Sans" svg:font-family="Liberation Sans" style:font-family-generic="swiss" style:font-pitch="variable"/>
+  </office:font-face-decls>
+  <office:styles>
+    <style:default-style style:family="graphic">
+      <style:graphic-properties fo:wrap-option="no-wrap" draw:shadow-offset-x="0.1181in" draw:shadow-offset-y="0.1181in" draw:start-line-spacing-horizontal="0.1114in" draw:start-line-spacing-vertical="0.1114in" draw:end-line-spacing-horizontal="0.1114in" draw:end-line-spacing-vertical="0.1114in" style:flow-with-text="true"/>
+      <style:paragraph-properties style:text-autospace="ideograph-alpha" style:line-break="strict" style:writing-mode="lr-tb" style:font-independent-line-spacing="false">
+        <style:tab-stops/>
+      </style:paragraph-properties>
+      <style:text-properties fo:color="#000000" fo:font-size="12pt" style:font-size-asian="12pt" style:language-asian="zxx" style:country-asian="none" style:font-size-complex="12pt" style:language-complex="zxx" style:country-complex="none"/>
+    </style:default-style>
+    <style:default-style style:family="paragraph">
+      <style:paragraph-properties fo:hyphenation-ladder-count="no-limit" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging" style:line-break="strict" style:tab-stop-distance="0.8681in" style:writing-mode="page"/>
+      <style:text-properties fo:color="#000000" style:font-name="Liberation Serif" fo:font-size="12pt" style:font-name-asian="HG Mincho Light J" style:font-size-asian="12pt" style:language-asian="zxx" style:country-asian="none" style:font-name-complex="Liberation Sans Unicode MS" style:font-size-complex="12pt" style:language-complex="zxx" style:country-complex="none" fo:hyphenate="false" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2"/>
+    </style:default-style>
+    <style:default-style style:family="table">
+      <style:table-properties table:border-model="separating"/>
+    </style:default-style>
+    <style:default-style style:family="table-row">
+      <style:table-row-properties fo:keep-together="always"/>
+    </style:default-style>
+    <style:style style:name="Standard" style:family="paragraph" style:class="text">
+      <style:text-properties style:use-window-font-color="true"/>
+    </style:style>
+    <style:style style:name="Text_20_body" style:display-name="Text body" style:family="paragraph" style:parent-style-name="Standard" style:class="text">
+      <style:paragraph-properties fo:margin-top="0in" fo:margin-bottom="0.0835in"/>
+    </style:style>
+    <style:style style:name="Heading" style:family="paragraph" style:parent-style-name="Standard" style:next-style-name="Text_20_body" style:class="text">
+      <style:paragraph-properties fo:margin-top="0.1665in" fo:margin-bottom="0.0835in" fo:keep-with-next="always"/>
+      <style:text-properties style:font-name="Liberation Sans" fo:font-size="14pt" style:font-name-asian="HG Mincho Light J" style:font-size-asian="14pt" style:font-name-complex="Liberation Sans Unicode MS" style:font-size-complex="14pt"/>
+    </style:style>
+    <style:style style:name="Heading_20_1" style:display-name="Heading 1" style:family="paragraph" style:parent-style-name="Heading" style:next-style-name="Text_20_body" style:class="text">
+      <style:text-properties fo:font-size="115%" fo:font-weight="bold" style:font-size-asian="115%" style:font-weight-asian="bold" style:font-size-complex="115%" style:font-weight-complex="bold"/>
+    </style:style>
+    <style:style style:name="Heading_20_2" style:display-name="Heading 2" style:family="paragraph" style:parent-style-name="Heading" style:next-style-name="Text_20_body" style:class="text">
+      <style:text-properties fo:font-size="14pt" fo:font-style="italic" fo:font-weight="bold" style:font-size-asian="14pt" style:font-style-asian="italic" style:font-weight-asian="bold" style:font-size-complex="14pt" style:font-style-complex="italic" style:font-weight-complex="bold"/>
+    </style:style>
+    <style:style style:name="Heading_20_3" style:display-name="Heading 3" style:family="paragraph" style:parent-style-name="Heading" style:next-style-name="Text_20_body" style:class="text">
+      <style:text-properties fo:font-size="14pt" fo:font-weight="bold" style:font-size-asian="14pt" style:font-weight-asian="bold" style:font-size-complex="14pt" style:font-weight-complex="bold"/>
+    </style:style>
+    <style:style style:name="Header" style:family="paragraph" style:parent-style-name="Standard" style:class="extra">
+      <style:paragraph-properties text:number-lines="false" text:line-number="0">
+        <style:tab-stops/>
+      </style:paragraph-properties>
+    </style:style>
+    <style:style style:name="Header_20_left" style:display-name="Header left" style:family="paragraph" style:parent-style-name="Standard" style:class="extra">
+      <style:paragraph-properties fo:margin-top="0in" fo:margin-bottom="0in" text:number-lines="false" text:line-number="0">
+        <style:tab-stops/>
+      </style:paragraph-properties>
+    </style:style>
+    <style:style style:name="Footer" style:family="paragraph" style:parent-style-name="Standard" style:class="extra">
+      <style:paragraph-properties text:number-lines="false" text:line-number="0">
+        <style:tab-stops>
+          <style:tab-stop style:position="3.3457in" style:type="center"/>
+          <style:tab-stop style:position="6.6925in" style:type="right"/>
+        </style:tab-stops>
+      </style:paragraph-properties>
+    </style:style>
+    <style:style style:name="Footer_20_left" style:display-name="Footer left" style:family="paragraph" style:parent-style-name="Standard" style:class="extra">
+      <style:paragraph-properties text:number-lines="false" text:line-number="0">
+        <style:tab-stops>
+          <style:tab-stop style:position="5.1571in" style:type="center"/>
+          <style:tab-stop style:position="10.3146in" style:type="right"/>
+        </style:tab-stops>
+      </style:paragraph-properties>
+    </style:style>
+    <style:style style:name="Footer_20_right" style:display-name="Footer right" style:family="paragraph" style:parent-style-name="Standard" style:class="extra">
+      <style:paragraph-properties fo:text-align="end" style:justify-single-word="false" text:number-lines="false" text:line-number="0">
+        <style:tab-stops>
+          <style:tab-stop style:position="5.1571in" style:type="center"/>
+          <style:tab-stop style:position="10.3146in" style:type="right"/>
+        </style:tab-stops>
+      </style:paragraph-properties>
+    </style:style>
+    <style:style style:name="Footnote_20_Symbol" style:display-name="Footnote Symbol" style:family="text"/>
+    <style:style style:name="Endnote_20_Symbol" style:display-name="Endnote Symbol" style:family="text"/>
+    <style:style style:name="Graphics" style:family="graphic">
+      <style:graphic-properties text:anchor-type="paragraph" svg:x="0in" svg:y="0in" style:wrap="none" style:vertical-pos="top" style:vertical-rel="paragraph" style:horizontal-pos="center" style:horizontal-rel="paragraph"/>
+    </style:style>
+    <text:outline-style style:name="Outline">
+      <text:outline-level-style text:level="1" style:num-format="">
+        <style:list-level-properties/>
+      </text:outline-level-style>
+      <text:outline-level-style text:level="2" style:num-format="">
+        <style:list-level-properties/>
+      </text:outline-level-style>
+      <text:outline-level-style text:level="3" style:num-format="">
+        <style:list-level-properties/>
+      </text:outline-level-style>
+      <text:outline-level-style text:level="4" style:num-format="">
+        <style:list-level-properties/>
+      </text:outline-level-style>
+      <text:outline-level-style text:level="5" style:num-format="">
+        <style:list-level-properties/>
+      </text:outline-level-style>
+      <text:outline-level-style text:level="6" style:num-format="">
+        <style:list-level-properties/>
+      </text:outline-level-style>
+      <text:outline-level-style text:level="7" style:num-format="">
+        <style:list-level-properties/>
+      </text:outline-level-style>
+      <text:outline-level-style text:level="8" style:num-format="">
+        <style:list-level-properties/>
+      </text:outline-level-style>
+      <text:outline-level-style text:level="9" style:num-format="">
+        <style:list-level-properties/>
+      </text:outline-level-style>
+      <text:outline-level-style text:level="10" style:num-format="">
+        <style:list-level-properties/>
+      </text:outline-level-style>
+    </text:outline-style>
+    <text:notes-configuration text:note-class="footnote" text:citation-style-name="Footnote_20_Symbol" style:num-format="1" text:start-value="0" text:footnotes-position="page" text:start-numbering-at="page"/>
+    <text:notes-configuration text:note-class="endnote" text:citation-style-name="Endnote_20_Symbol" text:master-page-name="Endnote" style:num-format="1" text:start-value="0"/>
+    <text:linenumbering-configuration text:number-lines="false" text:offset="0.1965in" style:num-format="1" text:number-position="left" text:increment="5"/>
+  </office:styles>
+  <office:automatic-styles>
+    <style:style style:name="MP1" style:family="paragraph" style:parent-style-name="Header_20_left">
+      <style:paragraph-properties fo:text-align="start" style:justify-single-word="false">
+        <style:tab-stops>
+          <style:tab-stop style:position="0.6874in"/>
+        </style:tab-stops>
+      </style:paragraph-properties>
+    </style:style>
+    <style:style style:name="MP2" style:family="paragraph" style:parent-style-name="Header">
+      <style:paragraph-properties fo:text-align="start" style:justify-single-word="false">
+        <style:tab-stops>
+          <style:tab-stop style:position="0.689in"/>
+        </style:tab-stops>
+      </style:paragraph-properties>
+    </style:style>
+    <style:style style:name="MP3" style:family="paragraph" style:parent-style-name="Header_20_left">
+      <style:paragraph-properties fo:text-align="start" style:justify-single-word="false">
+        <style:tab-stops>
+          <style:tab-stop style:position="0.6874in"/>
+          <style:tab-stop style:position="1.378in"/>
+        </style:tab-stops>
+      </style:paragraph-properties>
+    </style:style>
+    <style:page-layout style:name="Mpm1">
+      <style:page-layout-properties fo:page-width="11in" fo:page-height="8.5in" style:num-format="1" style:print-orientation="landscape" fo:margin-top="0.4in" fo:margin-bottom="0.6in" fo:margin-left="0.8in" fo:margin-right="0.6in" style:writing-mode="lr-tb" style:footnote-max-height="0in">
+        <style:footnote-sep style:width="0.0071in" style:distance-before-sep="0.0398in" style:distance-after-sep="0.0398in" style:line-style="none" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
+      </style:page-layout-properties>
+      <style:header-style>
+        <style:header-footer-properties fo:min-height="0.9839in" fo:margin-left="0in" fo:margin-right="0in" fo:margin-bottom="0.1965in" fo:border="none" fo:padding="0in"/>
+      </style:header-style>
+      <style:footer-style>
+        <style:header-footer-properties fo:min-height="0.3929in" fo:margin-left="0in" fo:margin-right="0in" fo:margin-top="0.1965in" fo:border="none" fo:padding="0in"/>
+      </style:footer-style>
+    </style:page-layout>
+    <style:page-layout style:name="Mpm2" style:page-usage="left">
+      <style:page-layout-properties fo:page-width="11in" fo:page-height="8.5in" style:num-format="1" style:print-orientation="landscape" fo:margin-top="0.4in" fo:margin-bottom="0.6in" fo:margin-left="0.6in" fo:margin-right="0.8in" fo:background-color="transparent" style:writing-mode="lr-tb" style:footnote-max-height="0in">
+        <style:background-image/>
+        <style:footnote-sep style:width="0.0071in" style:distance-before-sep="0.0398in" style:distance-after-sep="0.0398in" style:line-style="none" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
+      </style:page-layout-properties>
+      <style:header-style>
+        <style:header-footer-properties fo:min-height="0.9839in" fo:margin-left="0in" fo:margin-right="0in" fo:margin-bottom="0.1965in" fo:border="none" fo:padding="0in"/>
+      </style:header-style>
+      <style:footer-style>
+        <style:header-footer-properties fo:min-height="0.3929in" fo:margin-left="0in" fo:margin-right="0in" fo:margin-top="0.1965in" fo:border="none" fo:padding="0in"/>
+      </style:footer-style>
+    </style:page-layout>
+    <style:page-layout style:name="Mpm3" style:page-usage="right">
+      <style:page-layout-properties fo:page-width="11in" fo:page-height="8.5in" style:num-format="1" style:print-orientation="landscape" fo:margin-top="0.4in" fo:margin-bottom="0.6in" fo:margin-left="0.8in" fo:margin-right="0.6in" style:writing-mode="lr-tb" style:footnote-max-height="0in">
+        <style:footnote-sep style:width="0.0071in" style:distance-before-sep="0.0398in" style:distance-after-sep="0.0398in" style:line-style="none" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
+      </style:page-layout-properties>
+      <style:header-style>
+        <style:header-footer-properties fo:min-height="0.9839in" fo:margin-left="0in" fo:margin-right="0in" fo:margin-bottom="0.1965in" fo:border="none" fo:padding="0in"/>
+      </style:header-style>
+      <style:footer-style>
+        <style:header-footer-properties fo:min-height="0.3929in" fo:margin-left="0in" fo:margin-right="0in" fo:margin-top="0.1965in" fo:border="none" fo:padding="0in"/>
+      </style:footer-style>
+    </style:page-layout>
+    <style:page-layout style:name="Mpm4">
+      <style:page-layout-properties style:num-format="1" style:print-orientation="portrait" fo:margin="0.7874in" fo:margin-top="0.7874in" fo:margin-bottom="0.7874in" fo:margin-left="0.7874in" fo:margin-right="0.7874in" style:writing-mode="lr-tb" style:footnote-max-height="0in">
+        <style:footnote-sep style:line-style="none" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
+      </style:page-layout-properties>
+      <style:header-style/>
+      <style:footer-style/>
+    </style:page-layout>
+    <number:date-style style:name="N5030" number:language="en" number:country="US" number:automatic-order="true" number:format-source="language">
+      <number:month/>
+      <number:text>/</number:text>
+      <number:day/>
+      <number:text>/</number:text>
+      <number:year/>
+    </number:date-style>
+  </office:automatic-styles>
+  <office:master-styles>
+    <style:master-page style:name="Standard" style:page-layout-name="Mpm1">
+      <style:header>
+        <text:p text:style-name="MP1">Title: <text:tab/><text:title>Default</text:title></text:p>
+        <text:p text:style-name="MP1">Author:<text:tab/><text:sender-firstname>pista</text:sender-firstname> <text:sender-lastname/><text:line-break/>Date:<text:tab/><text:date style:data-style-name="N5030" text:date-value="2012-08-23T16:32:07.99" text:fixed="true">8/23/12</text:date></text:p>
+      </style:header>
+      <style:footer>
+        <text:p text:style-name="Footer_20_right">Page <text:page-number text:select-page="current"/>/<text:page-count>1</text:page-count></text:p>
+      </style:footer>
+    </style:master-page>
+    <style:master-page style:name="First_20_Page" style:display-name="First Page" style:page-layout-name="Mpm1" style:next-style-name="Standard">
+      <style:header>
+        <text:p text:style-name="MP2">#titleconst# <text:tab/><text:title>Default</text:title></text:p>
+        <text:p text:style-name="MP3"><text:tab/>#authorconst#<text:tab/><text:sender-firstname>pista</text:sender-firstname><text:sender-lastname/><text:line-break/><text:tab/>#dateconst#<text:tab/><text:date style:data-style-name="N5030" text:date-value="2012-08-23T16:32:07.99" text:fixed="true">8/23/12</text:date></text:p>
+      </style:header>
+      <style:footer>
+        <text:p text:style-name="Footer_20_right">#pageconst# <text:page-number text:select-page="current">1</text:page-number>/<text:page-count>1</text:page-count></text:p>
+      </style:footer>
+    </style:master-page>
+    <style:master-page style:name="Left_20_Page" style:display-name="Left Page" style:page-layout-name="Mpm2">
+      <style:header>
+        <text:p text:style-name="MP1">Title: <text:tab/><text:title>Default</text:title></text:p>
+        <text:p text:style-name="MP1">Author:<text:tab/><text:sender-firstname>pista</text:sender-firstname> <text:sender-lastname/><text:line-break/>Date:<text:tab/><text:date style:data-style-name="N5030" text:date-value="2012-08-23T16:32:07.99" text:fixed="true">8/23/12</text:date></text:p>
+      </style:header>
+      <style:footer>
+        <text:p text:style-name="Footer_20_left">Page <text:page-number text:select-page="current"/>/<text:page-count>1</text:page-count></text:p>
+      </style:footer>
+    </style:master-page>
+    <style:master-page style:name="Right_20_Page" style:display-name="Right Page" style:page-layout-name="Mpm3">
+      <style:header>
+        <text:p text:style-name="MP1">Title: <text:tab/><text:title>Default</text:title></text:p>
+        <text:p text:style-name="MP1">Author:<text:tab/><text:sender-firstname>pista</text:sender-firstname> <text:sender-lastname/><text:line-break/>Date:<text:tab/><text:date style:data-style-name="N5030" text:date-value="2012-08-23T16:32:07.99" text:fixed="true">8/23/12</text:date></text:p>
+      </style:header>
+      <style:footer>
+        <text:p text:style-name="Footer_20_right">Page <text:page-number text:select-page="current"/>/<text:page-count>1</text:page-count></text:p>
+      </style:footer>
+    </style:master-page>
+    <style:master-page style:name="Endnote" style:page-layout-name="Mpm4"/>
+  </office:master-styles>
+</office:document-styles>

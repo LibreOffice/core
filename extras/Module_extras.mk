@@ -20,6 +20,11 @@ $(eval $(call gb_Module_add_targets,extras,\
 	CustomTarget_tplpresnt \
 	CustomTarget_tpl_styles \
 	CustomTarget_tpldraw \
+	CustomTarget_tplwizagenda \
+	CustomTarget_tplwizfax \
+	CustomTarget_tplwizletter \
+	CustomTarget_tplwizreport \
+	CustomTarget_tplwizstyles \
 	Package_autocorr \
 	Package_autotextuser \
 	Package_cfgsrvnolang \

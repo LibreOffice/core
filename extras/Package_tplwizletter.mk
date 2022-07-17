@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,extras_tplwizletter,$(SRCDIR)/extras/source/templates/wizard/letter))
+$(eval $(call gb_Package_Package,extras_tplwizletter,$(call gb_CustomTarget_get_workdir,extras/source/templates/wizard/letter)))
 
 $(eval $(call gb_Package_add_files,extras_tplwizletter,$(LIBO_SHARE_FOLDER)/template/common/wizard/letter,\
     bus-elegant_l.ott \
