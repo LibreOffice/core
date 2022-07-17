@@ -59,7 +59,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <comphelper/propertyvalue.hxx>
-#include <comphelper/sequence.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/imgdef.hxx>
 #include <utility>
@@ -1075,27 +1075,14 @@ void ToolBarManager::CreateControllers()
         if ( m_xToolbarControllerFactory.is() &&
              m_xToolbarControllerFactory->hasController( aCommandURL, m_aModuleIdentifier ))
         {
-            PropertyValue aPropValue;
-            std::vector< Any > aPropertyVector;
-
-            aPropValue.Name     = "ModuleIdentifier";
-            aPropValue.Value    <<= m_aModuleIdentifier;
-            aPropertyVector.push_back( Any( aPropValue ));
-            aPropValue.Name     = "Frame";
-            aPropValue.Value    <<= m_xFrame;
-            aPropertyVector.push_back( Any( aPropValue ));
-            aPropValue.Name     = "ServiceManager";
             Reference<XMultiServiceFactory> xMSF(m_xContext->getServiceManager(), UNO_QUERY_THROW);
-            aPropValue.Value    <<= xMSF;
-            aPropertyVector.push_back( Any( aPropValue ));
-            aPropValue.Name     = "ParentWindow";
-            aPropValue.Value    <<= xToolbarWindow;
-            aPropertyVector.push_back( Any( aPropValue ));
-            aPropValue.Name     = "Identifier";
-            aPropValue.Value    <<= sal_uInt16(nId);
-            aPropertyVector.push_back( uno::Any( aPropValue ) );
-
-            Sequence< Any > aArgs( comphelper::containerToSequence( aPropertyVector ));
+            Sequence< Any > aArgs( comphelper::InitAnyPropertySequence( {
+                { "ModuleIdentifier", Any(m_aModuleIdentifier) },
+                { "Frame", Any(m_xFrame) },
+                { "ServiceManager", Any(xMSF) },
+                { "ParentWindow", Any(xToolbarWindow) },
+                { "Identifier", Any(sal_uInt16(nId)) },
+            } ));
             xController.set( m_xToolbarControllerFactory->createInstanceWithArgumentsAndContext( aCommandURL, aArgs, m_xContext ),
                              UNO_QUERY );
             bInit = false; // Initialization is done through the factory service
@@ -1183,14 +1170,14 @@ void ToolBarManager::CreateControllers()
             if ( bInit )
             {
                 Reference<XMultiServiceFactory> xMSF(m_xContext->getServiceManager(), UNO_QUERY_THROW);
-                Sequence< Any > aArgs {
-                    Any( comphelper::makePropertyValue("Frame", m_xFrame) ),
-                    Any( comphelper::makePropertyValue("CommandURL", aCommandURL) ),
-                    Any( comphelper::makePropertyValue("ServiceManager", xMSF) ),
-                    Any( comphelper::makePropertyValue("ParentWindow", xToolbarWindow) ),
-                    Any( comphelper::makePropertyValue("ModuleIdentifier", m_aModuleIdentifier) ),
-                    Any( comphelper::makePropertyValue("Identifier", sal_uInt16(nId)) ),
-                };
+                Sequence< Any > aArgs( comphelper::InitAnyPropertySequence( {
+                    { "Frame", Any(m_xFrame) },
+                    { "CommandURL", Any(aCommandURL) },
+                    { "ServiceManager", Any(xMSF) },
+                    { "ParentWindow", Any(xToolbarWindow) },
+                    { "ModuleIdentifier", Any(m_aModuleIdentifier) },
+                    { "Identifier", Any(sal_uInt16(nId)) },
+                } ));
 
                 xInit->initialize( aArgs );
             }
