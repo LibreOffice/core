@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE manifest:manifest PUBLIC "-//OpenOffice.org//DTD Manifest 1.0//EN" "Manifest.dtd">
+<manifest:manifest>
+  <manifest:file-entry manifest:media-type="application/vnd.oasis.opendocument.text-template" manifest:full-path="/"/>
+  <manifest:file-entry manifest:media-type="" manifest:full-path="Pictures/2000032600002711000026A54A905481.wmf"/>
+  <manifest:file-entry manifest:media-type="" manifest:full-path="Pictures/"/>
+  <manifest:file-entry manifest:media-type="" manifest:full-path="META-INF/"/>
+  <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="content.xml"/>
+  <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="styles.xml"/>
+  <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="meta.xml"/>
+  <manifest:file-entry manifest:media-type="" manifest:full-path="Thumbnails/thumbnail.png"/>
+  <manifest:file-entry manifest:media-type="" manifest:full-path="Thumbnails/"/>
+  <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="settings.xml"/>
+</manifest:manifest>
