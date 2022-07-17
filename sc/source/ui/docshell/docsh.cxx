@@ -910,6 +910,14 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                                 pValues[1].Name = "Password";
                                                 pValues[1].Value <<= pPasswordItem->GetValue();
                                             }
+                                            const SfxUnoAnyItem* pEncryptionItem = SfxItemSet::GetItem<SfxUnoAnyItem>(GetMedium()->GetItemSet(), SID_ENCRYPTIONDATA, false);
+                                            if (pEncryptionItem)
+                                            {
+                                                aValues.realloc(aValues.getLength() + 1);
+                                                auto pValues = aValues.getArray();
+                                                pValues[aValues.getLength() - 1].Name = "EncryptionData";
+                                                pValues[aValues.getLength() - 1].Value = pEncryptionItem->GetValue();
+                                            }
 
                                             SC_MOD()->SetInSharedDocSaving( true );
                                             xStor->storeToURL( GetSharedFileURL(), aValues );
