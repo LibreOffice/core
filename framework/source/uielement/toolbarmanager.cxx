@@ -1053,8 +1053,6 @@ void ToolBarManager::CreateControllers()
         bool                     bCreate( true );
         Reference< XStatusListener > xController;
 
-        rtl::Reference<svt::ToolboxController> pController;
-
         OUString aCommandURL( m_pImpl->GetItemCommand( nId ) );
         // Command can be just an alias to another command.
         auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(aCommandURL, m_aModuleIdentifier);
@@ -1195,12 +1193,6 @@ void ToolBarManager::CreateControllers()
                 };
 
                 xInit->initialize( aArgs );
-
-                if (pController)
-                {
-                    if (aCommandURL == ".uno:SwitchXFormsDesignMode" || aCommandURL == ".uno:ViewDataSourceBrowser")
-                        pController->setFastPropertyValue_NoBroadcast(1, Any(true));
-                }
             }
 
             // Request an item window from the toolbar controller and set it at the VCL toolbar
