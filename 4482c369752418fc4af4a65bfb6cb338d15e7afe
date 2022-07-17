@@ -16,6 +16,24 @@
       "message": "1. Please do not use explicit casts (including static_cast), *unless* you have to do that - e.g., when you have to silence some compiler warning. Avoiding explicit casts, and allowing implicit conversions, you also allow various tools, like some sanitizers and fuzzers, to catch and emit diagnostics when the value falls outside of the destination range, this way allowing to find and properly fix the origin of the bad value.\n\n2. When you have to use multiplication and division, consider o3tl::convert. Like here:\n\n    o3tl::convert(aSize.Width(), 100000, aPrefSize.Width())\n\nThat ensures the proper rounding, taking sign into account, without floating point operation, and without explicit 0.5.",
       "revId": "4482c369752418fc4af4a65bfb6cb338d15e7afe",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62977711_4b2ad28a",
+        "filename": "vcl/source/filter/png/PngImageWriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-07-17T23:21:27Z",
+      "side": 1,
+      "message": "Resolved, thanks!",
+      "parentUuid": "38cb4d05_d784db09",
+      "revId": "4482c369752418fc4af4a65bfb6cb338d15e7afe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
