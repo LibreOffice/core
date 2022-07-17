@@ -1349,8 +1349,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
         bDec = false;
 
         SwRangeRedline* pRedl = maRedlineTable[ n ];
-        SwPosition* pRStt = pRedl->Start(),
-                  * pREnd = pRedl->End();
+        auto [pRStt, pREnd] = pRedl->StartEnd();
 
         // #i8518# remove empty redlines while we're at it
         if( ( *pRStt == *pREnd ) &&
@@ -2460,10 +2459,9 @@ void DocumentRedlineManager::CompressRedlines()
     {
         SwRangeRedline* pPrev = maRedlineTable[ n-1 ],
                     * pCur = maRedlineTable[ n ];
-        const SwPosition* pPrevStt = pPrev->Start(),
-                        * pPrevEnd = pPrev->End();
-        const SwPosition* pCurStt = pCur->Start(),
-                        * pCurEnd = pCur->End();
+        auto [pPrevStt,pPrevEnd] = pPrev->StartEnd();
+        auto [pCurStt, pCurEnd] = pCur->StartEnd();
+
         if( *pPrevEnd == *pCurStt && pPrev->CanCombine( *pCur ) &&
             pPrevStt->nNode.GetNode().StartOfSectionNode() ==
             pCurEnd->nNode.GetNode().StartOfSectionNode() &&
@@ -2771,8 +2769,7 @@ const SwRangeRedline* DocumentRedlineManager::GetRedline( const SwPosition& rPos
         {
             nM = nU + ( nO - nU ) / 2;
             const SwRangeRedline* pRedl = maRedlineTable[ nM ];
-            const SwPosition* pStt = pRedl->Start();
-            const SwPosition* pEnd = pRedl->End();
+            auto [pStt, pEnd] = pRedl->StartEnd();
             if( pEnd == pStt
                     ? *pStt == rPos
                     : ( *pStt <= rPos && rPos < *pEnd ) )

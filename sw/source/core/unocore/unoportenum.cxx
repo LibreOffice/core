@@ -1121,12 +1121,12 @@ static void lcl_FillRedlineArray(
     for(; nRed < nRedTableCount; ++nRed)
     {
         const SwRangeRedline* pRedline = rRedTable[nRed];
-        const SwPosition* pRedStart = pRedline->Start();
+        auto [pRedStart, pRedEnd]= pRedline->StartEnd();
         const SwNodeIndex nRedNode = pRedStart->nNode;
         if ( nOwnNode == nRedNode )
             rRedArr.insert( std::make_shared<SwXRedlinePortion_Impl>(
                 pRedline, true ) );
-        if( pRedline->HasMark() && pRedline->End()->nNode == nOwnNode )
+        if( pRedline->HasMark() && pRedEnd->nNode == nOwnNode )
             rRedArr.insert( std::make_shared<SwXRedlinePortion_Impl>(
                 pRedline, false ) );
     }

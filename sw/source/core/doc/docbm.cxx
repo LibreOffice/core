@@ -1919,8 +1919,7 @@ void DelBookmarks(
     for(SwRangeRedline* pRedl : rTable)
     {
         // Is at position?
-        SwPosition *const pRStt = pRedl->Start();
-        SwPosition *const pREnd = pRedl->End();
+        auto [pRStt, pREnd] = pRedl->StartEnd();
 
         if( lcl_Greater( *pRStt, rStt, pSttIdx ) && lcl_Lower( *pRStt, rEnd, pEndIdx ))
         {
