@@ -22,6 +22,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <tools/debug.hxx>
+#include <unotools/configmgr.hxx>
 
 #include <vcl/lineinfo.hxx>
 #include <vcl/metaact.hxx>
@@ -264,7 +265,8 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
             // but one that is at least as good as ImplSubdivideBezier was.
             // There, Polygon::AdaptiveSubdivide was used with default parameter
             // 1.0 as quality index.
-            aLinePolyPolygon = basegfx::utils::adaptiveSubdivideByDistance(aLinePolyPolygon, 1.0);
+            static int nRecurseLimit = utl::ConfigManager::IsFuzzing() ? 15 : 30;
+            aLinePolyPolygon = basegfx::utils::adaptiveSubdivideByDistance(aLinePolyPolygon, 1.0, nRecurseLimit);
         }
 
         for(auto const& rPolygon : std::as_const(aLinePolyPolygon))

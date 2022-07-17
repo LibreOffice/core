@@ -135,7 +135,7 @@ namespace basegfx::utils
         BASEGFX_DLLPUBLIC B2VectorContinuity getContinuityInPoint(const B2DPolygon& rCandidate, sal_uInt32 nIndex);
 
         // Subdivide all contained curves. Use distanceBound value if given.
-        BASEGFX_DLLPUBLIC B2DPolygon adaptiveSubdivideByDistance(const B2DPolygon& rCandidate, double fDistanceBound);
+        BASEGFX_DLLPUBLIC B2DPolygon adaptiveSubdivideByDistance(const B2DPolygon& rCandidate, double fDistanceBound, int nRecurseLimit = 30);
 
         // Subdivide all contained curves. Use angleBound value if given.
         BASEGFX_DLLPUBLIC B2DPolygon adaptiveSubdivideByAngle(const B2DPolygon& rCandidate, double fAngleBound = 0.0);

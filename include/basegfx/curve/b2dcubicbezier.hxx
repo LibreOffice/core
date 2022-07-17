@@ -143,8 +143,11 @@ namespace basegfx
             @param fDistanceBound
             Bound on the maximal distance of the approximation to the
             true curve.
+
+            @param nRecurseLimit
+            Bound on recursion for the bezier case.
         */
-        void adaptiveSubdivideByDistance(B2DPolygon& rTarget, double fDistanceBound) const;
+        void adaptiveSubdivideByDistance(B2DPolygon& rTarget, double fDistanceBound, int nRecurseLimit = 30) const;
 
         // get point at given relative position
         B2DPoint interpolatePoint(double t) const;
