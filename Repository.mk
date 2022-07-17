@@ -959,11 +959,7 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	extras_tplpersonal \
 	extras_tplwizbitmap \
 	extras_tplwizdesktop \
-	extras_tplwizletter \
-	extras_tplwizfax \
-	extras_tplwizagenda \
-	extras_tplwizreport \
-	extras_tplwizstyles \
+	extras_tplwizard \
 	framework_dtd \
 	$(if $(filter $(OS),MACOSX),infoplist) \
 	oox_customshapes \

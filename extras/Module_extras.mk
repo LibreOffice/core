@@ -20,6 +20,7 @@ $(eval $(call gb_Module_add_targets,extras,\
 	CustomTarget_tplpresnt \
 	CustomTarget_tpl_styles \
 	CustomTarget_tpldraw \
+	CustomTarget_tplwizard \
 	Package_autocorr \
 	Package_autotextuser \
 	Package_cfgsrvnolang \
@@ -43,13 +44,9 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Package_tplpresnt \
 	Package_tpl_styles \
 	Package_tpldraw \
-	Package_tplwizagenda \
+	Package_tplwizard \
 	Package_tplwizbitmap \
 	Package_tplwizdesktop \
-	Package_tplwizfax \
-	Package_tplwizletter \
-	Package_tplwizreport \
-	Package_tplwizstyles \
 	Package_wordbook \
 ))
 
