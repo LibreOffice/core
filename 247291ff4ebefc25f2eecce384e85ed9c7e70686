@@ -52,6 +52,24 @@
       "parentUuid": "f6da968b_773d3067",
       "revId": "247291ff4ebefc25f2eecce384e85ed9c7e70686",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9830e356_790a263d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-07-18T16:00:49Z",
+      "side": 1,
+      "message": "that seems to work ok, uitests will probably still fail as a todo to be adjusted to the changes which I\u0027ll leave to patch owner :-)",
+      "parentUuid": "06488ff6_5b393adc",
+      "revId": "247291ff4ebefc25f2eecce384e85ed9c7e70686",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
