@@ -206,25 +206,7 @@ sal_Int64 SAL_CALL UNOMemoryStream::getLength()
 // XOutputStream
 void SAL_CALL UNOMemoryStream::writeBytes( const Sequence< sal_Int8 >& aData )
 {
-    const sal_Int32 nBytesToWrite( aData.getLength() );
-    if( !nBytesToWrite )
-        return;
-
-    sal_Int64 nNewSize = static_cast<sal_Int64>(mnCursor) + nBytesToWrite;
-    if( nNewSize > SAL_MAX_INT32 )
-    {
-        OSL_ASSERT(false);
-        throw IOException("this implementation does not support more than 2GB!", static_cast<OWeakObject*>(this) );
-    }
-
-    if( o3tl::make_unsigned( nNewSize ) > maData.size() )
-        maData.resize( nNewSize );
-
-    sal_Int8* pData = &(*maData.begin());
-    sal_Int8* pCursor = &(pData[mnCursor]);
-    memcpy(pCursor, aData.getConstArray(), nBytesToWrite);
-
-    mnCursor += nBytesToWrite;
+    writeBytes(aData.getConstArray(), aData.getLength());
 }
 
 void UNOMemoryStream::writeBytes( const sal_Int8* pInData, sal_Int32 nBytesToWrite )
