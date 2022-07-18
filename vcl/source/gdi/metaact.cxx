@@ -1289,10 +1289,10 @@ MetaWallpaperAction::~MetaWallpaperAction()
 {}
 
 MetaWallpaperAction::MetaWallpaperAction( const tools::Rectangle& rRect,
-                                          Wallpaper aPaper ) :
+                                          const Wallpaper& rPaper ) :
     MetaAction  ( MetaActionType::WALLPAPER ),
     maRect      ( rRect ),
-    maWallpaper (std::move( aPaper ))
+    maWallpaper ( rPaper )
 {}
 
 void MetaWallpaperAction::Execute( OutputDevice* pOut )
