@@ -16,6 +16,57 @@
       "message": "Hi Christian,\nA new train of ODF files built from their XML code. Would you have the possibility to review it?",
       "revId": "3858dfa6657acbf721cfa322c50a6d0bc8f05486",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3b9422a_9c4066ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-07-18T14:48:34Z",
+      "side": 1,
+      "message": "I\u0027d prefer if the different makefiles could be consolidated first or at least the rules should be included from a common file and not duplicated in even more makefiles.\nhttps://gerrit.libreoffice.org/c/core/+/129726 was converting existing makefiles/structures, so I didn\u0027t do it back then, but I don\u0027t really want another 5 additional copies of the same rules.., so a soft -1 for now...",
+      "revId": "3858dfa6657acbf721cfa322c50a6d0bc8f05486",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0380b93e_f3d68516",
+        "filename": "extras/CustomTarget_tplwizreport.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-07-18T14:48:34Z",
+      "side": 1,
+      "message": "I dislike this way of needless duplication, I\u0027d prefer if it was assembled with the base set of files in a more streamlined way, content.xml, meta.cml, META-INF/manifest.xml, styles.xml, settings.xml (and didn\u0027t check, but also looks like the tthumbnail) are part of every file, but they are all listed separately. so could be done in a much more concise way, only having to add the pictures or other elements specifically.",
+      "revId": "3858dfa6657acbf721cfa322c50a6d0bc8f05486",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08174a5d_bff31707",
+        "filename": "extras/CustomTarget_tplwizreport.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-07-18T14:48:34Z",
+      "side": 1,
+      "message": "I dislike that those rules are duplicated in many makefiles, so I\u0027d prefer if first the makefiles could be combined as stated in https://gerrit.libreoffice.org/c/core/+/129726 - there is no technical reason for the different makefiles.",
+      "revId": "3858dfa6657acbf721cfa322c50a6d0bc8f05486",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
