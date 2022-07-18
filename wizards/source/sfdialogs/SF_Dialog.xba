@@ -561,6 +561,8 @@ Finally:
 	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
 	Exit Function
 Catch:
+	&apos;	When an error is caused by an event error, the location is unknown
+	SF_Exception.Raise(, &quot;?&quot;)
 	GoTo Finally
 End Function	&apos;	SFDialogs.SF_Dialog.Execute
 
