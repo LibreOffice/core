@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f1a8653_c1199a66",
+        "filename": "unotools/source/config/saveopt.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-07-18T10:40:28Z",
+      "side": 0,
+      "message": "It looks odd: is officecfg::Office::Recovery::AutoSave related to this change? Is this somehow related to tdf#149176 and tdf#149178, which now have a fix looking for a different configuration, but it\u0027s still confusing how these two configurations relate to each other? I wonder if this could be some leftover from work on d5b9283985633fdb423269cab961bba2acc3539e maybe?",
+      "revId": "28993c0a8d8628c650b661767fd8ab2228c507d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
