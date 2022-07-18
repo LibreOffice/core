@@ -194,7 +194,7 @@ void OStorageHelper::CopyInputToOutput(
         do
         {
             nRead = pByteReader->readSomeBytes ( aTempBuf, nConstBufferSize );
-            pByteWriter->writeSomeBytes ( aTempBuf, nRead );
+            pByteWriter->writeBytes ( aTempBuf, nRead );
         }
         while ( nRead == nConstBufferSize );
     }

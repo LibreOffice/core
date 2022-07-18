@@ -17,8 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <memory>
 #include <sal/config.h>
+
+#include <cassert>
+#include <memory>
 #include <sal/log.hxx>
 
 #include <com/sun/star/packages/NoEncryptionException.hpp>
@@ -2099,8 +2101,10 @@ void SAL_CALL OWriteStream::writeBytes( const uno::Sequence< sal_Int8 >& aData )
     ModifyParentUnlockMutex_Impl( aGuard );
 }
 
-sal_Int32 OWriteStream::writeSomeBytes( const sal_Int8* pData, sal_Int32 nBytesToWrite )
+void OWriteStream::writeBytes( const sal_Int8* pData, sal_Int32 nBytesToWrite )
 {
+    assert(nBytesToWrite >= 0);
+
     osl::ClearableMutexGuard aGuard(m_pData->m_xSharedMutex->GetMutex());
 
     // the write method makes initialization itself, since it depends from the aData length
@@ -2162,7 +2166,7 @@ sal_Int32 OWriteStream::writeSomeBytes( const sal_Int8* pData, sal_Int32 nBytesT
     if (xOutputTunnel)
         pByteWriter = reinterpret_cast< comphelper::ByteWriter* >( xOutputTunnel->getSomething( comphelper::ByteWriter::getUnoTunnelId() ) );
     if (pByteWriter)
-        nBytesToWrite = pByteWriter->writeSomeBytes(pData, nBytesToWrite);
+        pByteWriter->writeBytes(pData, nBytesToWrite);
     else
     {
         uno::Sequence<sal_Int8> aData(pData, nBytesToWrite);
@@ -2171,8 +2175,6 @@ sal_Int32 OWriteStream::writeSomeBytes( const sal_Int8* pData, sal_Int32 nBytesT
     m_pImpl->m_bHasDataToFlush = true;
 
     ModifyParentUnlockMutex_Impl( aGuard );
-
-    return nBytesToWrite;
 }
 
 sal_Int64 SAL_CALL OWriteStream::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier )

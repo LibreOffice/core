@@ -18,6 +18,7 @@
  */
 
 #include <algorithm>
+#include <cassert>
 #include <memory>
 
 #include <boost/core/noinit_adaptor.hpp>
@@ -93,7 +94,7 @@ public:
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     // comphelper::ByteWriter
-    virtual sal_Int32 writeSomeBytes(const sal_Int8* aData, sal_Int32 nBytesToWrite) override;
+    virtual void writeBytes(const sal_Int8* aData, sal_Int32 nBytesToWrite) override;
 
 private:
     std::vector< sal_Int8, boost::noinit_adaptor<std::allocator<sal_Int8>> > maData;
@@ -226,10 +227,11 @@ void SAL_CALL UNOMemoryStream::writeBytes( const Sequence< sal_Int8 >& aData )
     mnCursor += nBytesToWrite;
 }
 
-sal_Int32 UNOMemoryStream::writeSomeBytes( const sal_Int8* pInData, sal_Int32 nBytesToWrite )
+void UNOMemoryStream::writeBytes( const sal_Int8* pInData, sal_Int32 nBytesToWrite )
 {
+    assert(nBytesToWrite >= 0);
     if( !nBytesToWrite )
-        return 0;
+        return;
 
     sal_Int64 nNewSize = static_cast<sal_Int64>(mnCursor) + nBytesToWrite;
     if( nNewSize > SAL_MAX_INT32 )
@@ -247,7 +249,6 @@ sal_Int32 UNOMemoryStream::writeSomeBytes( const sal_Int8* pInData, sal_Int32 nB
     memcpy(pCursor, pInData, nBytesToWrite);
 
     mnCursor += nBytesToWrite;
-    return nBytesToWrite;
 }
 
 void SAL_CALL UNOMemoryStream::flush()
