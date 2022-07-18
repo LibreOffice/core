@@ -2517,6 +2517,53 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntries(
     return aResult;
 }
 
+std::vector<ViewLegendSymbol> VSeriesPlotter::createSymbols(const awt::Size& rEntryKeyAspectRatio
+            , const css::uno::Reference<css::drawing::XShapes>& xTarget
+            , const Reference< lang::XMultiServiceFactory >& xShapeFactory
+            , const Reference<uno::XComponentContext>& xContext)
+{
+    std::vector<ViewLegendSymbol> aResult;
+
+    if( xTarget.is() )
+    {
+        bool bBreak = false;
+        bool bFirstSeries = true;
+
+        for (std::vector<VDataSeriesGroup> const & rGroupVector : m_aZSlots)
+        {
+            for (VDataSeriesGroup const & rGroup : rGroupVector)
+            {
+                for (std::unique_ptr<VDataSeries> const & pSeries : rGroup.m_aSeriesVector)
+                {
+                    if (!pSeries)
+                        continue;
+
+                    if (!pSeries->getPropertiesOfSeries()->getPropertyValue("ShowLegendEntry").get<sal_Bool>())
+                    {
+                        continue;
+                    }
+
+                    std::vector<ViewLegendSymbol> aSeriesSymbols = createSymbolsForSeries(rEntryKeyAspectRatio, *pSeries, xTarget, xShapeFactory, xContext);
+
+                    //add series entries to the result now
+
+                    // use only the first series if VaryColorsByPoint is set for the first series
+                    if (bFirstSeries && pSeries->isVaryColorsByPoint())
+                        bBreak = true;
+
+                    bFirstSeries = false;
+
+                    aResult.insert(aResult.end(), aSeriesSymbols.begin(), aSeriesSymbols.end());
+                }
+                if (bBreak)
+                    return aResult;
+            }
+        }
+    }
+
+    return aResult;
+}
+
 namespace
 {
 bool lcl_HasVisibleLine( const uno::Reference< beans::XPropertySet >& xProps, bool& rbHasDashedLine )
@@ -2856,6 +2903,101 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
         }
     }
     catch( const uno::Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2" );
+    }
+    return aResult;
+}
+
+std::vector<ViewLegendSymbol> VSeriesPlotter::createSymbolsForSeries(
+              const awt::Size& rEntryKeyAspectRatio
+            , const VDataSeries& rSeries
+            , const css::uno::Reference<css::drawing::XShapes>& xTarget
+            , const Reference< lang::XMultiServiceFactory >& xShapeFactory
+            , const Reference<uno::XComponentContext>& xContext)
+{
+    std::vector<ViewLegendSymbol> aResult;
+
+    if (!(xTarget.is() && xContext.is()))
+        return aResult;
+
+    try
+    {
+        ViewLegendSymbol aEntry;
+        bool bVaryColorsByPoint = rSeries.isVaryColorsByPoint();
+        bool bIsPie = m_xChartTypeModel->getChartType().equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_PIE);
+        try
+        {
+            if (bIsPie)
+            {
+                bool bDonut = false;
+                if ((m_xChartTypeModelProps->getPropertyValue("UseRings") >>= bDonut) && bDonut)
+                    bIsPie = false;
+            }
+        }
+        catch (const uno::Exception&)
+        {
+        }
+
+        if (bVaryColorsByPoint || bIsPie)
+        {
+            Sequence< OUString > aCategoryNames;
+            if (m_pExplicitCategoriesProvider)
+                aCategoryNames = m_pExplicitCategoriesProvider->getSimpleCategories();
+            Sequence<sal_Int32> deletedLegendEntries;
+            try
+            {
+                rSeries.getPropertiesOfSeries()->getPropertyValue("DeletedLegendEntries") >>= deletedLegendEntries;
+            }
+            catch (const uno::Exception&)
+            {
+            }
+
+            for (sal_Int32 nIdx=0; nIdx < aCategoryNames.getLength(); ++nIdx)
+            {
+                bool deletedLegendEntry = false;
+                for (const auto& deletedLegendEntryIdx : std::as_const(deletedLegendEntries))
+                {
+                    if (nIdx == deletedLegendEntryIdx)
+                    {
+                        deletedLegendEntry = true;
+                        break;
+                    }
+                }
+                if (deletedLegendEntry)
+                    continue;
+
+                // symbol
+                uno::Reference< drawing::XShapes > xSymbolGroup( ShapeFactory::getOrCreateShapeFactory(xShapeFactory)->createGroup2D( xTarget ));
+
+                // create the symbol
+                Reference< drawing::XShape > xShape( createLegendSymbolForSeries(
+                    rEntryKeyAspectRatio, rSeries, xSymbolGroup, xShapeFactory ) );
+
+                // set CID to symbol for selection
+                if( xShape.is())
+                {
+                    aEntry.aSymbol.set(xSymbolGroup, uno::UNO_QUERY);
+                }
+            }
+        }
+        else
+        {
+            // symbol
+            uno::Reference< drawing::XShapes > xSymbolGroup( ShapeFactory::getOrCreateShapeFactory(xShapeFactory)->createGroup2D(xTarget));
+
+            // create the symbol
+            Reference< drawing::XShape > xShape( createLegendSymbolForSeries(
+                rEntryKeyAspectRatio, rSeries, xSymbolGroup, xShapeFactory ) );
+
+            // set CID to symbol for selection
+            if( xShape.is())
+            {
+                aEntry.aSymbol.set( xSymbolGroup, uno::UNO_QUERY );
+            }
+        }
+    }
+    catch (const uno::Exception &)
     {
         DBG_UNHANDLED_EXCEPTION("chart2" );
     }
