@@ -212,12 +212,6 @@ sal_Int64 SAL_CALL SvtRulerAccessible::getAccessibleStateSet()
             nStateSet |= AccessibleStateType::HORIZONTAL;
         else
             nStateSet |= AccessibleStateType::VERTICAL;
-
-        if(nStateSet & AccessibleStateType::FOCUSABLE)
-        {
-            nStateSet &= ~AccessibleStateType::FOCUSABLE;
-        }
-
     }
 
     return nStateSet;
