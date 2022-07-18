@@ -16,6 +16,24 @@
       "message": "This is fine by me, but noting that I named it this way to match the underlying UNO interface",
       "revId": "d2f97f5d9b88fbe04ace540d6b0948f44a4854b7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44e14bb6_59a64f22",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-07-18T09:43:18Z",
+      "side": 1,
+      "message": "which one?  I don\u0027t find any mention of `writeSomeBytes` elsewhere?",
+      "parentUuid": "7c9c1662_56f78083",
+      "revId": "d2f97f5d9b88fbe04ace540d6b0948f44a4854b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
