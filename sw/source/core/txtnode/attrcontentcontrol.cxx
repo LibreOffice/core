@@ -309,6 +309,11 @@ bool SwContentControl::IsInteractingCharacter(sal_Unicode cCh)
         return cCh == ' ';
     }
 
+    if (GetPicture())
+    {
+        return cCh == '\r';
+    }
+
     return false;
 }
 
