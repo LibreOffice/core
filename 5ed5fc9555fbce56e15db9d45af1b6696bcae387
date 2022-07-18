@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61be7088_30fd5bfc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-07-18T18:21:54Z",
+      "side": 1,
+      "message": "Thanks!  Just two minor nitpicking remarks:\n\nFor one, it would have been better not to put this change into a false relation chain:  It makes reviewing harder, as one has to check whether and how this change depends on its ancestors in the chain.  It causes needless churn (and wasted Jenkins resources) when this change needlessly gets rebased because one of its ancestors gets rebased.  And it runs the risk that if this change is then submitted out-of-order, but did have a true dependency on its ancestors in the chain after all, it breaks master.\n\nFor another, it is helpful to mention more context in the commit message, like \"...which had been broken with 7a4814f717520b8de8c963dc2d576f05fc15d2e9 \u0027Change make file so that debugging works - Previous error:\u0027\".",
+      "revId": "5ed5fc9555fbce56e15db9d45af1b6696bcae387",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
