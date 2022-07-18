@@ -52,6 +52,5 @@ $(call gb_CustomTarget_get_workdir,extras/source/templates/offimisc)/%.ott : \
 		zip -qrX --must-match $@ $(call extras_OFFIMISC_XMLFILES_RELATIVE,$*) \
 	)
 	$(call gb_Trace_EndRange,templates/offimisc/$*.ott,ZIP)
-extras_OFFIMISC_MIMETYPEFILES := $(foreach atexts,$(extras_TEMPLATES_OFFIMISC),$(atexts)/mimetype)
 
 # vim: set noet sw=4 ts=4:
