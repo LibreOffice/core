@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee913053_53718752",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-07-18T07:00:47Z",
+      "side": 1,
+      "message": "`make Postprocess_AllModulesButInstsetNative` has the same effect, btw",
+      "range": {
+        "startLine": 13,
+        "startChar": 10,
+        "endLine": 13,
+        "endChar": 33
+      },
+      "revId": "ca056d8680334e48343ad2c1f6c512d7fc5bab8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
