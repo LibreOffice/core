@@ -216,6 +216,17 @@ public:
             const css::uno::Reference< css::uno::XComponentContext >& xContext
                 );
 
+    std::vector<ViewLegendSymbol> createSymbols(
+              const css::awt::Size& rEntryKeyAspectRatio
+            , const rtl::Reference<SvxShapeGroupAnyD>& xTarget
+            , const css::uno::Reference<css::uno::XComponentContext>& xContext);
+
+    std::vector<ViewLegendSymbol> createSymbolsForSeries(
+              const css::awt::Size& rEntryKeyAspectRatio
+            , const VDataSeries& rSeries
+            , const rtl::Reference<SvxShapeGroupAnyD>& xTarget
+            , const css::uno::Reference<css::uno::XComponentContext>& xContext);
+
     std::vector<VDataSeries*> getAllSeries();
     std::vector<VDataSeries const*> getAllSeries() const;
 

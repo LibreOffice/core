@@ -104,7 +104,8 @@ void VCartesianCoordinateSystem::createVAxisList(
             const awt::Size& rFontReferenceSize,
             const awt::Rectangle& rMaximumSpaceForLabels,
             bool bLimitSpaceForLabels,
-            std::vector<std::unique_ptr<VSeriesPlotter>>& rSeriesPlotterList)
+            std::vector<std::unique_ptr<VSeriesPlotter>>& rSeriesPlotterList,
+            uno::Reference<uno::XComponentContext> const& rComponentContext)
 {
     // note: using xChartDoc itself as XNumberFormatsSupplier would cause
     // a leak from VCartesianAxis due to cyclic reference
@@ -166,7 +167,7 @@ void VCartesianCoordinateSystem::createVAxisList(
             apVAxis->set3DWallPositions( m_eLeftWallPos, m_eBackWallPos, m_eBottomPos );
 
             apVAxis->initAxisLabelProperties(rFontReferenceSize,rMaximumSpaceForLabels);
-            apVAxis->createDataTableView(rSeriesPlotterList, xNumberFormatsSupplier, xChartDoc);
+            apVAxis->createDataTableView(rSeriesPlotterList, xNumberFormatsSupplier, xChartDoc, rComponentContext);
         }
     }
 }
