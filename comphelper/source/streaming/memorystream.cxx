@@ -245,7 +245,6 @@ void UNOMemoryStream::writeBytes( const sal_Int8* pInData, sal_Int32 nBytesToWri
 
     sal_Int8* pData = &(*maData.begin());
     sal_Int8* pCursor = &(pData[mnCursor]);
-    // cast to avoid -Werror=class-memaccess
     memcpy(pCursor, pInData, nBytesToWrite);
 
     mnCursor += nBytesToWrite;
