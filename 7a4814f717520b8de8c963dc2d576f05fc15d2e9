@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fc2069a0_93a48fe8",
+        "filename": "solenv/gbuild/CppunitTest.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1003573
+      },
+      "writtenOn": "2022-07-18T15:49:30Z",
+      "side": 1,
+      "message": "Thanks, can you look at:  https://gerrit.libreoffice.org/c/core/+/137204 Mend python support for lldb cppunit tests. ?",
+      "parentUuid": "b32ba250_77244709",
+      "revId": "7a4814f717520b8de8c963dc2d576f05fc15d2e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5bf3f826_93355183",
         "filename": "solenv/gbuild/CppunitTest.mk",
         "patchSetId": 2
