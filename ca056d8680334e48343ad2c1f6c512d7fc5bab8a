@@ -22,6 +22,30 @@
       },
       "revId": "ca056d8680334e48343ad2c1f6c512d7fc5bab8a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "484cec2a_c7700e4b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-07-18T13:05:36Z",
+      "side": 1,
+      "message": "oh, that is a mouthful to remember though :-)\nnot the exact same effect, that one would skip instesetoo_native completely, so e.g the versionrc or bootstraprc files would not be generated. But close enough for IDE use, when it is expected to only use the IDE\u0027s build command after a full build was done...",
+      "parentUuid": "ee913053_53718752",
+      "range": {
+        "startLine": 13,
+        "startChar": 10,
+        "endLine": 13,
+        "endChar": 33
+      },
+      "revId": "ca056d8680334e48343ad2c1f6c512d7fc5bab8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
