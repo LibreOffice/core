@@ -45,6 +45,7 @@ namespace accessibility
 {
     AccessibleParaManager::AccessibleParaManager() :
         maChildren(1),
+        mnChildStates( 0 ),
         maEEOffset( 0, 0 ),
         mnFocusedChild( -1 ),
         mbActive( false )
