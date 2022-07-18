@@ -16,6 +16,24 @@
       "message": "Hi Caolán,\n\nMay I get some advice about gtk? Is it possible to grey out a row (both checkbox and the text col too) of the pop-up autofilter element on GTK too?\nI checked the set_sensitive(const weld::TreeIter\u0026 rIter, bool bSensitive, int col) function in the gtkinst.cxx, it looks like, its only set the m_nTextCol.\nBut even if the m_nTextCol was set as sensitive the checkbox is still clickable in the row.\nIs it possible to make sensitive of the checkbox too and make unclickable the checbox?\nBy the way the text of the filter element wasn\u0027t gray out after the m_nTextCol was set as sensitive. Is it normal or shouldn\u0027t it be painted as gray just like on the other UI?\n",
       "revId": "247291ff4ebefc25f2eecce384e85ed9c7e70686",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6da968b_773d3067",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-07-18T11:18:46Z",
+      "side": 1,
+      "message": "For gtk using \"sensitive\" needs a little adjustment in the .ui to add a \"sensitive\" row to the list/tree model and link it to the cell is affects. I can make that change.\n\nthe set_sensitive currently is documented to take -1 as affecting the first text column, and not to affect all columns, which is changed here. I don\u0027t have an objection to changing it to affect all columns instead but I\u0027d like to double check that doesn\u0027t break any existing usage first. Bear with me and I\u0027ll tweak things and push something here.",
+      "parentUuid": "b5a11bbc_fd886860",
+      "revId": "247291ff4ebefc25f2eecce384e85ed9c7e70686",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
