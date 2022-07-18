@@ -33,6 +33,23 @@
       "message": "We have 3 filters:\n\n- strict: this is import-only\n- transitional: this has an ISO and an ECMA variant\n\nThe ECMA variant does hacks to get our output be accepted by MSO 2007, while the ISO one would follow the spec (and only open in MSO \u003e\u003d 2010).\n\nI imagine that the current ECMA version doesn\u0027t recommend anymore what we do on export in ECMA mode. :-) (Since we somewhat still care about MSO 2007 users, but they do not.)",
       "revId": "3fb1477de164bba260e3e9a39afcb3f67c78fb5e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13dab30b_6f31e4e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-07-18T07:04:37Z",
+      "side": 1,
+      "message": "Note that now, not only we have the \"Transitional\" label in export dialog, but also in import dialog; this makes me confused: is that really correct? Given the explanation:\n\n\u003e We have 3 filters:\n\u003e strict: this is import-only\n\n... it *seems* to me that our \"strict\" import filter is likely a sub-filter of one or the other IMPORT/EXPORT DOCX filters; so on import, the \"transitional\" label looks too restrictive (it appears because it\u0027s the same filter, and it indeed has only one name).\n\nWould it be reasonable to clutter the name more to add something like \"(Transitional on export)\"?",
+      "revId": "3fb1477de164bba260e3e9a39afcb3f67c78fb5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
