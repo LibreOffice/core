@@ -1634,7 +1634,7 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
     {
         auto pGetZOrdnerHint = static_cast<const sw::GetZOrderHint*>(&rHint);
         auto pFormat(dynamic_cast<const SwFrameFormat*>(&rMod));
-        if(pFormat->Which() == RES_DRAWFRMFMT)
+        if (pFormat && pFormat->Which() == RES_DRAWFRMFMT)
             pGetZOrdnerHint->m_rnZOrder = GetMaster()->GetOrdNum();
     }
     else if (rHint.GetId() == SfxHintId::SwGetObjectConnected)
