@@ -24,7 +24,7 @@ namespace svgio::svgreader
         SvgSymbolNode::SvgSymbolNode(
             SvgDocument& rDocument,
             SvgNode* pParent)
-        :   SvgNode(SVGToken::Svg, rDocument, pParent),
+        :   SvgNode(SVGToken::Symbol, rDocument, pParent),
             maSvgStyleAttributes(*this)
         {
         }
