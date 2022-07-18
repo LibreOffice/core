@@ -52,7 +52,7 @@ class RTSDialog : public weld::GenericDialogController
     void insertAllPPDValues(weld::ComboBox&, const psp::PPDParser*, const psp::PPDKey*);
 
 public:
-    RTSDialog(::psp::PrinterInfo aJobData, weld::Window* pParent);
+    RTSDialog(const ::psp::PrinterInfo& rJobData, weld::Window* pParent);
     virtual ~RTSDialog() override;
 
     const ::psp::PrinterInfo& getSetup() const { return m_aJobData; }

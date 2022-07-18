@@ -22,7 +22,6 @@
 #include <strings.hrc>
 
 #include <officecfg/Office/Common.hxx>
-#include <utility>
 
 using namespace psp;
 
@@ -68,9 +67,9 @@ void RTSDialog::insertAllPPDValues(weld::ComboBox& rBox, const PPDParser* pParse
  * RTSDialog
  */
 
-RTSDialog::RTSDialog(PrinterInfo aJobData, weld::Window* pParent)
+RTSDialog::RTSDialog(const PrinterInfo& rJobData, weld::Window* pParent)
     : GenericDialogController(pParent, "vcl/ui/printerpropertiesdialog.ui", "PrinterPropertiesDialog")
-    , m_aJobData(std::move(aJobData))
+    , m_aJobData(rJobData)
     , m_bDataModified(false)
     , m_xTabControl(m_xBuilder->weld_notebook("tabcontrol"))
     , m_xOKButton(m_xBuilder->weld_button("ok"))
