@@ -1995,11 +1995,12 @@ void VCartesianAxis::createShapes()
 
 void VCartesianAxis::createDataTableView(std::vector<std::unique_ptr<VSeriesPlotter>>& rSeriesPlotterList,
                                          Reference<util::XNumberFormatsSupplier> const& xNumberFormatsSupplier,
-                                         rtl::Reference<::chart::ChartModel> const& xChartDoc)
+                                         rtl::Reference<::chart::ChartModel> const& xChartDoc,
+                                         css::uno::Reference<css::uno::XComponentContext> const& rComponentContext)
 {
     if (m_aAxisProperties.m_bDisplayDataTable)
     {
-        m_pDataTableView.reset(new DataTableView(xChartDoc, m_aAxisProperties.m_xDataTableModel));
+        m_pDataTableView.reset(new DataTableView(xChartDoc, m_aAxisProperties.m_xDataTableModel, rComponentContext));
         m_pDataTableView->initializeValues(rSeriesPlotterList);
         m_xNumberFormatsSupplier = xNumberFormatsSupplier;
     }
