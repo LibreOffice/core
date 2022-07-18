@@ -36,6 +36,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3d8ce04_401d95b5",
+        "filename": "solenv/gbuild/CppunitTest.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-07-18T18:22:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc2069a0_93a48fe8",
+      "revId": "7a4814f717520b8de8c963dc2d576f05fc15d2e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5bf3f826_93355183",
@@ -49,6 +67,30 @@
       "writtenOn": "2022-07-14T09:41:26Z",
       "side": 1,
       "message": "This will now cause e.g. a `CPPUNITTRACE\u003d\u0027lldb --\u0027` scenario to make lldb run its sub-process with `PYTHONWARNINGS\u003ddefault` (as only the gdb scenario resets the `PYTHONWARNINGS` env var to the original `$(PYTHONWARNIGNS)` value for its sub-process).  The condition should rather be `$(filter gdb,$(CPPUNITTRACE))`.",
+      "range": {
+        "startLine": 140,
+        "startChar": 7,
+        "endLine": 140,
+        "endChar": 30
+      },
+      "revId": "7a4814f717520b8de8c963dc2d576f05fc15d2e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1b5b6eb_9216f491",
+        "filename": "solenv/gbuild/CppunitTest.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-07-18T18:22:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5bf3f826_93355183",
       "range": {
         "startLine": 140,
         "startChar": 7,
