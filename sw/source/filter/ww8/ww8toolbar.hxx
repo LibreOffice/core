@@ -93,11 +93,11 @@ class Tcg255SubStruct : public TBBase
     Tcg255SubStruct& operator = ( const Tcg255SubStruct&) = delete;
 
 protected:
-    sal_uInt8 ch;
+    sal_uInt8 m_ch;
 
 public:
     explicit Tcg255SubStruct();
-    sal_uInt8 id() const { return ch; }
+    sal_uInt8 id() const { return m_ch; }
     bool Read(SvStream &rS) override;
 };
 
@@ -247,10 +247,10 @@ class TcgSttbfCore : public TBBase
         SBBItem() : cchData(0), extraData(0){}
     };
 
-    sal_uInt16 fExtend;
-    sal_uInt16 cData;
-    sal_uInt16 cbExtra;
-    std::unique_ptr<SBBItem[]> dataItems;
+    sal_uInt16 m_fExtend;
+    sal_uInt16 m_cData;
+    sal_uInt16 m_cbExtra;
+    std::unique_ptr<SBBItem[]> m_dataItems;
     TcgSttbfCore(const TcgSttbfCore&) = delete;
     TcgSttbfCore& operator = ( const TcgSttbfCore&) = delete;
 
@@ -262,7 +262,7 @@ public:
 
 class TcgSttbf : public Tcg255SubStruct
 {
-    TcgSttbfCore sttbf;
+    TcgSttbfCore m_sttbf;
     TcgSttbf(const TcgSttbf&) = delete;
     TcgSttbf& operator = ( const TcgSttbf&) = delete;
 
@@ -312,7 +312,7 @@ public:
 
 class Tcg255 : public TBBase
 {
-    std::vector< std::unique_ptr<Tcg255SubStruct> > rgtcgData; // array of sub structures
+    std::vector< std::unique_ptr<Tcg255SubStruct> > m_rgtcgData; // array of sub structures
     Tcg255(const Tcg255&) = delete;
     Tcg255& operator = ( const Tcg255&) = delete;
     bool processSubStruct( sal_uInt8 nId, SvStream& );
