@@ -39,6 +39,7 @@ namespace com::sun::star::chart2 { class XChartDocument; }
 namespace com::sun::star::chart2 { class XCoordinateSystem; }
 namespace com::sun::star::drawing { class XShapes; }
 namespace com::sun::star::lang { class XMultiServiceFactory; }
+namespace com::sun::star::uno { class XComponentContext; }
 
 namespace chart
 {
@@ -117,7 +118,8 @@ public:
             , const css::awt::Size& rFontReferenceSize
             , const css::awt::Rectangle& rMaximumSpaceForLabels
             , bool bLimitSpaceForLabels
-            , std::vector<std::unique_ptr<VSeriesPlotter>>& rSeriesPlotterList);
+            , std::vector<std::unique_ptr<VSeriesPlotter>>& rSeriesPlotterList
+            , css::uno::Reference<css::uno::XComponentContext> const& rComponentContext);
 
     virtual void initVAxisInList();
     virtual void updateScalesAndIncrementsOnAxes();

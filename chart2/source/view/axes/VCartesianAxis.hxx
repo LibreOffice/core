@@ -23,7 +23,6 @@
 
 namespace chart
 {
-
 class VCartesianAxis : public VAxisBase
 {
     // public methods
@@ -101,7 +100,8 @@ public:
 
     void createDataTableView(std::vector<std::unique_ptr<VSeriesPlotter>>& rSeriesPlotterList,
                              css::uno::Reference<css::util::XNumberFormatsSupplier> const& xNumberFormatsSupplier,
-                             css::uno::Reference<css::chart2::XChartDocument> const& xChartDoc) override;
+                             css::uno::Reference<css::chart2::XChartDocument> const& xChartDoc,
+                             css::uno::Reference<css::uno::XComponentContext> const& rComponentContext) override;
 private: //methods
     /**
      * Go through all tick label positions and decide which labels to display
