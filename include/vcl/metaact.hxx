@@ -1096,7 +1096,7 @@ public:
     virtual rtl::Reference<MetaAction> Clone() const override;
 
                         MetaWallpaperAction( const tools::Rectangle& rRect,
-                                             Wallpaper aPaper );
+                                             const Wallpaper& rPaper );
 
     virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
