@@ -137,7 +137,7 @@ else
 		$(if $(GLIBCXX_FORCE_NEW),GLIBCXX_FORCE_NEW=$(GLIBCXX_FORCE_NEW)) \
 		$(if $(strip $(PYTHON_URE)),\
 			PYTHONDONTWRITEBYTECODE=1) \
-		$(if $(strip $(CPPUNITTRACE)),\
+		$(if $(filter gdb,$(CPPUNITTRACE)),\
 			PYTHONWARNINGS=default) \
 		$(ICECREAM_RUN) $(gb_CppunitTest_GDBTRACE) $(gb_CppunitTest_VALGRINDTOOL) $(gb_CppunitTest_RR) \
 			$(gb_CppunitTest_CPPTESTCOMMAND) \
