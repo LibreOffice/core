@@ -270,6 +270,33 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testDropdownContentControlKeyboard)
     CPPUNIT_ASSERT(bShouldOpen);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testPicutreContentControlKeyboard)
+{
+    // Given an already selected picture content control:
+    SwDoc* pDoc = createSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->InsertContentControl(SwContentControlType::PICTURE);
+    pWrtShell->GotoObj(/*bNext=*/true, GotoObjFlags::Any);
+
+    // When checking if enter should trigger the file picker:
+    const SwFrameFormat* pFlyFormat = pWrtShell->GetFlyFrameFormat();
+    const SwFormatAnchor& rFormatAnchor = pFlyFormat->GetAnchor();
+    const SwPosition* pAnchorPos = rFormatAnchor.GetContentAnchor();
+    SwTextNode* pTextNode = pAnchorPos->nNode.GetNode().GetTextNode();
+    SwTextAttr* pAttr = pTextNode->GetTextAttrAt(pAnchorPos->nContent.GetIndex(),
+                                                 RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT);
+    auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
+    auto& rFormatContentControl
+        = static_cast<SwFormatContentControl&>(pTextContentControl->GetAttr());
+    std::shared_ptr<SwContentControl> pContentControl = rFormatContentControl.GetContentControl();
+    bool bIsInteracting = pContentControl->IsInteractingCharacter('\r');
+
+    // Then make sure that the answer is yes for pictures:
+    // Without the accompanying fix in place, this test would have failed, the picture replacement
+    // file-picker was mouse-only.
+    CPPUNIT_ASSERT(bIsInteracting);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

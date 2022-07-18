@@ -1540,6 +1540,38 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     }
 
     const SwFrameFormat* pFlyFormat = rSh.GetFlyFrameFormat();
+
+    if (pFlyFormat)
+    {
+        // See if the fly frame's anchor is in a content control. If so,
+        // try to interact with it.
+        const SwFormatAnchor& rFormatAnchor = pFlyFormat->GetAnchor();
+        const SwPosition* pAnchorPos = rFormatAnchor.GetContentAnchor();
+        if (pAnchorPos)
+        {
+            SwTextNode* pTextNode = pAnchorPos->nNode.GetNode().GetTextNode();
+            if (pTextNode)
+            {
+                SwTextAttr* pAttr = pTextNode->GetTextAttrAt(
+                    pAnchorPos->nContent.GetIndex(), RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT);
+                if (pAttr)
+                {
+                    SwTextContentControl* pTextContentControl
+                        = static_txtattr_cast<SwTextContentControl*>(pAttr);
+                    const SwFormatContentControl& rFormatContentControl
+                        = pTextContentControl->GetContentControl();
+                    std::shared_ptr<SwContentControl> pContentControl
+                        = rFormatContentControl.GetContentControl();
+                    if (pContentControl->IsInteractingCharacter(aCh))
+                    {
+                        rSh.GotoContentControl(rFormatContentControl);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
     if( pFlyFormat )
     {
         SvMacroItemId nEvent;
