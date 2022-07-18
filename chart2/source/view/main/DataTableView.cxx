@@ -28,6 +28,7 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/util/XBroadcaster.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <o3tl/unit_conversion.hxx>
 
@@ -35,15 +36,6 @@ using namespace css;
 
 namespace chart
 {
-DataTableView::DataTableView(rtl::Reference<::chart::ChartModel> const& xChartModel,
-                             rtl::Reference<DataTable> const& rDataTableModel)
-    : m_xChartModel(xChartModel)
-    , m_xDataTableModel(rDataTableModel)
-{
-    uno::Reference<beans::XPropertySet> xProp(m_xDataTableModel);
-    m_aLineProperties.initFromPropertySet(xProp);
-}
-
 namespace
 {
 void setTopCell(uno::Reference<beans::XPropertySet>& xPropertySet)
@@ -65,10 +57,22 @@ void copyProperty(uno::Reference<beans::XPropertySet>& xOut,
 {
     xOut->setPropertyValue(sPropertyName, xIn->getPropertyValue(sPropertyName));
 }
+} // end anonymous namespace
+
+DataTableView::DataTableView(
+    rtl::Reference<::chart::ChartModel> const& xChartModel,
+    rtl::Reference<DataTable> const& rDataTableModel,
+    css::uno::Reference<css::uno::XComponentContext> const& rComponentContext)
+    : m_xChartModel(xChartModel)
+    , m_xDataTableModel(rDataTableModel)
+    , m_xComponentContext(rComponentContext)
+{
+    uno::Reference<beans::XPropertySet> xProp(m_xDataTableModel);
+    m_aLineProperties.initFromPropertySet(xProp);
 }
 
-void DataTableView::setCellDefaults(uno::Reference<beans::XPropertySet>& xPropertySet, bool bLeft,
-                                    bool bTop, bool bRight, bool bBottom)
+void DataTableView::setCellCharAndParagraphProperties(
+    uno::Reference<beans::XPropertySet>& xPropertySet)
 {
     uno::Reference<beans::XPropertySet> xDataTableProperties(m_xDataTableModel);
 
@@ -113,19 +117,27 @@ void DataTableView::setCellDefaults(uno::Reference<beans::XPropertySet>& xProper
     copyProperty(xPropertySet, xDataTableProperties, "CharWeightComplex");
     copyProperty(xPropertySet, xDataTableProperties, "CharWordMode");
 
+    xPropertySet->setPropertyValue("ParaAdjust", uno::Any(style::ParagraphAdjust_CENTER));
+}
+
+void DataTableView::setCellProperties(css::uno::Reference<beans::XPropertySet>& xPropertySet,
+                                      bool bLeft, bool bTop, bool bRight, bool bBottom)
+{
+    xPropertySet->setPropertyValue("FillColor", uno::Any(Color(0xFFFFFF)));
+
+    uno::Reference<beans::XPropertySet> xDataTableProperties = m_xDataTableModel.get();
     float fFontHeight = 0.0;
     xDataTableProperties->getPropertyValue("CharHeight") >>= fFontHeight;
     fFontHeight = o3tl::convert(fFontHeight, o3tl::Length::pt, o3tl::Length::mm100);
-    uno::Any aXDistanceAny(sal_Int32(std::round(fFontHeight * 0.18f)));
-    uno::Any aYDistanceAny(sal_Int32(std::round(fFontHeight * 0.30f)));
-    xPropertySet->setPropertyValue("TextLeftDistance", aXDistanceAny);
-    xPropertySet->setPropertyValue("TextRightDistance", aXDistanceAny);
-    xPropertySet->setPropertyValue("TextUpperDistance", aYDistanceAny);
-    xPropertySet->setPropertyValue("TextLowerDistance", aYDistanceAny);
+    sal_Int32 nXDistance = std::round(fFontHeight * 0.18f);
+    sal_Int32 nYDistance = std::round(fFontHeight * 0.30f);
 
-    xPropertySet->setPropertyValue("FillColor", uno::Any(Color(0xFFFFFF)));
+    xPropertySet->setPropertyValue("TextLeftDistance", uno::Any(nXDistance));
+    xPropertySet->setPropertyValue("TextRightDistance", uno::Any(nXDistance));
+    xPropertySet->setPropertyValue("TextUpperDistance", uno::Any(nYDistance));
+    xPropertySet->setPropertyValue("TextLowerDistance", uno::Any(nYDistance));
+
     xPropertySet->setPropertyValue("TextVerticalAdjust", uno::Any(drawing::TextVerticalAdjust_TOP));
-    xPropertySet->setPropertyValue("ParaAdjust", uno::Any(style::ParagraphAdjust_CENTER));
 
     drawing::LineStyle eStyle = drawing::LineStyle_NONE;
     m_aLineProperties.LineStyle >>= eStyle;
@@ -218,13 +230,19 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
 
     xBroadcaster->lockBroadcasts();
 
+    auto* pTableObject = static_cast<sdr::table::SdrTableObj*>(m_xTableShape->GetSdrObject());
+
     bool bHBorder = false;
     bool bVBorder = false;
     bool bOutline = false;
+    bool bKeys = false;
+
+    std::vector<ViewLegendSymbol> aSymbols;
 
     m_xDataTableModel->getPropertyValue("HBorder") >>= bHBorder;
     m_xDataTableModel->getPropertyValue("VBorder") >>= bVBorder;
     m_xDataTableModel->getPropertyValue("Outline") >>= bOutline;
+    m_xDataTableModel->getPropertyValue("Keys") >>= bKeys;
 
     sal_Int32 nColumnCount = m_aXValues.size();
     uno::Reference<table::XTableColumns> xTableColumns = xTable->getColumns();
@@ -256,22 +274,50 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
         {
             xCellTextRange->setString(rString);
             bool bLeft = bOutline || (bVBorder && nColumn > 1);
-            setCellDefaults(xPropertySet, bLeft, bOutline, bOutline, bOutline);
+            setCellProperties(xPropertySet, bLeft, bOutline, bOutline, bOutline);
+            setCellCharAndParagraphProperties(xPropertySet);
         }
         nColumn++;
+    }
+
+    if (bKeys)
+    {
+        awt::Size aMaxSymbolExtent(300, 300);
+        for (VSeriesPlotter* pSeriesPlotter : m_pSeriesPlotterList)
+        {
+            if (pSeriesPlotter)
+            {
+                std::vector<ViewLegendSymbol> aNewEntries = pSeriesPlotter->createSymbols(
+                    aMaxSymbolExtent, m_xTarget, m_xComponentContext);
+                aSymbols.insert(aSymbols.end(), aNewEntries.begin(), aNewEntries.end());
+            }
+        }
     }
 
     nRow = 1;
     for (auto const& rSeriesName : m_aDataSeriesNames)
     {
         uno::Reference<table::XCell> xCell = xTable->getCellByPosition(0, nRow);
-        uno::Reference<beans::XPropertySet> xPropertySet(xCell, uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xCellPropertySet(xCell, uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xCellTextRange(xCell, uno::UNO_QUERY);
         if (xCellTextRange.is())
         {
             bool bTop = bOutline || (bHBorder && nRow > 1);
-            xCellTextRange->setString(rSeriesName);
-            setCellDefaults(xPropertySet, bOutline, bTop, bOutline, bOutline);
+            setCellProperties(xCellPropertySet, bOutline, bTop, bOutline, bOutline);
+
+            auto xText = xCellTextRange->getText();
+            xText->insertString(xText->getStart(), rSeriesName, false);
+            uno::Reference<container::XEnumerationAccess> xEnumAccess(xText, uno::UNO_QUERY);
+            uno::Reference<container::XEnumeration> xEnumeration(xEnumAccess->createEnumeration());
+            uno::Reference<text::XTextRange> xParagraph(xEnumeration->nextElement(),
+                                                        uno::UNO_QUERY);
+            uno::Reference<beans::XPropertySet> xTextPropertySet(xParagraph, uno::UNO_QUERY);
+
+            setCellCharAndParagraphProperties(xTextPropertySet);
+
+            xCellPropertySet->setPropertyValue("ParaAdjust", uno::Any(style::ParagraphAdjust_LEFT));
+            if (bKeys)
+                xCellPropertySet->setPropertyValue("ParaLeftMargin", uno::Any(500));
         }
         nRow++;
     }
@@ -306,7 +352,8 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
                 if (nColumn == nColumnCount && bOutline)
                     bRight = true;
 
-                setCellDefaults(xPropertySet, bLeft, bTop, bRight, bBottom);
+                setCellProperties(xPropertySet, bLeft, bTop, bRight, bBottom);
+                setCellCharAndParagraphProperties(xPropertySet);
             }
             nColumn++;
         }
@@ -315,20 +362,38 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
 
     xBroadcaster->unlockBroadcasts();
 
-    auto* pTableObject = static_cast<sdr::table::SdrTableObj*>(m_xTableShape->GetSdrObject());
     pTableObject->DistributeColumns(0, nColumnCount - 1, true, true);
+    pTableObject->DistributeRows(0, nRowCount - 1, true, true);
 
     uno::Reference<beans::XPropertySet> xPropertySet(xTableColumns->getByIndex(0), uno::UNO_QUERY);
     sal_Int32 nWidth = 0;
     xPropertySet->getPropertyValue("Width") >>= nWidth;
 
-    m_xTableShape->setPosition(
-        { basegfx::fround(rStart.getX() - nWidth), basegfx::fround(rStart.getY()) });
+    sal_Int32 nTableX = basegfx::fround(rStart.getX() - nWidth);
+    sal_Int32 nTableY = basegfx::fround(rStart.getY());
+    m_xTableShape->setPosition({ nTableX, nTableY });
 
     for (sal_Int32 i = 1; i < xTableColumns->getCount(); ++i)
     {
         xPropertySet.set(xTableColumns->getByIndex(i), uno::UNO_QUERY);
         xPropertySet->setPropertyValue("Width", uno::Any(nColumnWidth));
+    }
+
+    if (bKeys)
+    {
+        sal_Int32 nTotalHeight = 0;
+        for (sal_Int32 i = 0; i < xTableRows->getCount(); i++)
+        {
+            xPropertySet.set(xTableRows->getByIndex(i), uno::UNO_QUERY);
+            sal_Int32 nHeight = 0;
+            xPropertySet->getPropertyValue("Height") >>= nHeight;
+            if (i > 0)
+            {
+                aSymbols[i - 1].xSymbol->setPosition(
+                    { nTableX + 100, nTableY + nTotalHeight + 100 });
+            }
+            nTotalHeight += nHeight;
+        }
     }
 }
 
@@ -342,6 +407,8 @@ void DataTableView::initializeValues(
 {
     for (auto& rSeriesPlotter : rSeriesPlotterList)
     {
+        m_pSeriesPlotterList.push_back(rSeriesPlotter.get());
+
         for (auto const& rCategory :
              rSeriesPlotter->getExplicitCategoriesProvider()->getSimpleCategories())
         {
