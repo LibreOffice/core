@@ -16,6 +16,24 @@
       "message": "Hi Xisco! A general questions: is there any logic behind the test folders in sc? Calc_test9 etc., because I have no real insight in these folders. Thank you very much!",
       "revId": "87c3d98997c90c1b0664f59908312fe6b8a67703",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8e69936_a215f30f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-07-18T10:14:42Z",
+      "side": 1,
+      "message": "in the past, all tests were inside one folder and at some point, they got splitted into more folders to run them faster in parallel. that\u0027s the only logic for those calc_testN",
+      "parentUuid": "1daaaa59_559672e3",
+      "revId": "87c3d98997c90c1b0664f59908312fe6b8a67703",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
