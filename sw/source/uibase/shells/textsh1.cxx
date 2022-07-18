@@ -1533,9 +1533,12 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     SwPaM *pPaM = rWrtSh.GetCursor();
                     if (pPaM)
                         SwEditShell::IgnoreGrammarErrorAt( *pPaM );
-                    // refresh the layout of all paragraphs (workaround to launch a dictionary event)
-                    xDictionary->setActive(false);
-                    xDictionary->setActive(true);
+                    if (xDictionary.is())
+                    {
+                        // refresh the layout of all paragraphs (workaround to launch a dictionary event)
+                        xDictionary->setActive(false);
+                        xDictionary->setActive(true);
+                    }
                 }
                 catch( const uno::Exception& )
                 {
