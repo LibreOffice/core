@@ -24,6 +24,7 @@
 #include "Tickmarks.hxx"
 
 namespace com::sun::star::util { class XNumberFormatsSupplier; }
+namespace com::sun::star::uno { class XComponentContext; }
 
 namespace chart
 {
@@ -31,6 +32,7 @@ namespace chart
 class VSeriesPlotter;
 class DataTableView;
 class ChartModel;
+class LegendEntryProvider;
 
 class VAxisBase : public VAxisOrGridBase
 {
@@ -66,7 +68,8 @@ public:
 
     virtual void createDataTableView(std::vector<std::unique_ptr<VSeriesPlotter>>& rSeriesPlotterList,
                                      css::uno::Reference<css::util::XNumberFormatsSupplier> const& xNumberFormatsSupplier,
-                                     css::uno::Reference<css::chart2::XChartDocument> const& xChartDoc);
+                                     css::uno::Reference<css::chart2::XChartDocument> const& xChartDoc,
+                                     css::uno::Reference<css::uno::XComponentContext> const& rComponentContext);
 
     std::shared_ptr<DataTableView> getDataTableView() { return m_pDataTableView; }
 

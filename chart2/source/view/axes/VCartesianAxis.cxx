@@ -2009,11 +2009,12 @@ void VCartesianAxis::createShapes()
 
 void VCartesianAxis::createDataTableView(std::vector<std::unique_ptr<VSeriesPlotter>>& rSeriesPlotterList,
                                          uno::Reference<util::XNumberFormatsSupplier> const& xNumberFormatsSupplier,
-                                         uno::Reference<chart2::XChartDocument> const& xChartDoc)
+                                         uno::Reference<chart2::XChartDocument> const& xChartDoc,
+                                         uno::Reference<uno::XComponentContext> const& rComponentContext)
 {
     if (m_aAxisProperties.m_bDisplayDataTable)
     {
-        m_pDataTableView.reset(new DataTableView(xChartDoc, m_aAxisProperties.m_xDataTableModel));
+        m_pDataTableView.reset(new DataTableView(xChartDoc, m_aAxisProperties.m_xDataTableModel, rComponentContext));
         m_pDataTableView->initializeValues(rSeriesPlotterList);
         m_xNumberFormatsSupplier = xNumberFormatsSupplier;
     }
