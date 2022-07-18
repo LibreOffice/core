@@ -538,8 +538,8 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
             CuboidPlanePosition eBottomPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBottom( xSceneProperties ) );
             pVCooSys->set3DWallPositions( eLeftWallPos, eBackWallPos, eBottomPos );
         }
-
-        pVCooSys->createVAxisList(xChartDoc, rPageSize, rParam.maRemainingSpace, rParam.mbUseFixedInnerSize, rSeriesPlotterList);
+        pVCooSys->createVAxisList(xChartDoc, rPageSize, rParam.maRemainingSpace, rParam.mbUseFixedInnerSize, rSeriesPlotterList,
+                                  getComponentContext());
     }
 
     // - prepare list of all axis and how they are used
@@ -1393,9 +1393,12 @@ void ChartView::createShapes()
     if(!mxRootShape.is())
         mxRootShape = pShapeFactory->getOrCreateChartRootShape( m_xDrawPage );
 
-    SdrPage* pPage = ChartView::getSdrPage();
-    if(pPage) //it is necessary to use the implementation here as the uno page does not provide a propertyset
+    SdrPage* pPage = getSdrPage();
+
+    if (pPage) //it is necessary to use the implementation here as the uno page does not provide a propertyset
+    {
         pPage->SetSize(Size(aPageSize.Width,aPageSize.Height));
+    }
     else
     {
         OSL_FAIL("could not set page size correctly");
@@ -1931,7 +1934,7 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
     }
 
     lcl_createLegend(
-        LegendHelper::getLegend( mrChartModel ), mxRootShape, m_xShapeFactory, m_xCC,
+        LegendHelper::getLegend( mrChartModel ), mxRootShape, m_xShapeFactory, getComponentContext(),
         aParam.maRemainingSpace, rPageSize, mrChartModel, aParam.mpSeriesPlotterContainer->getLegendEntryProviderList(),
         lcl_getDefaultWritingModeFromPool( m_pDrawModelWrapper ) );
 

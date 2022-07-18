@@ -142,6 +142,8 @@ public:
     /** The active table has the focus or is currently edited */
     const sdr::table::CellRef& getActiveCell() const;
 
+    CellRef getCell(const CellPos& rPos) const;
+
     void setActiveCell( const sdr::table::CellPos& rPos );
     void getActiveCellPos( sdr::table::CellPos& rPos ) const;
     sal_Int32 getColumnCount() const;
