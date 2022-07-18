@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "393dffb1_67ad5198",
+        "filename": "dbaccess/source/sdbtools/connection/tablename.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1003612
+      },
+      "writtenOn": "2022-07-18T21:19:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "58f99f32_eb062ba3",
+      "revId": "2ed80a7f8613e3da1687203efcb2ce7dcfb9491e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a7688209_1b6c7938",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-07-17T12:16:09Z",
       "side": 1,
       "message": "Range based for or even std::find_if is more suitable here.",
+      "revId": "2ed80a7f8613e3da1687203efcb2ce7dcfb9491e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "764fa3a8_13b8ec09",
+        "filename": "dbaccess/source/ui/app/templwin.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1003612
+      },
+      "writtenOn": "2022-07-18T21:19:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a7688209_1b6c7938",
       "revId": "2ed80a7f8613e3da1687203efcb2ce7dcfb9491e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -65,6 +101,24 @@
       "writtenOn": "2022-07-17T12:16:09Z",
       "side": 1,
       "message": "Range based for is more suitable here.",
+      "revId": "2ed80a7f8613e3da1687203efcb2ce7dcfb9491e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a88b0aad_efa42069",
+        "filename": "dbaccess/source/ui/dlg/TextConnectionHelper.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1003612
+      },
+      "writtenOn": "2022-07-18T21:19:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "25e38152_14778629",
       "revId": "2ed80a7f8613e3da1687203efcb2ce7dcfb9491e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
