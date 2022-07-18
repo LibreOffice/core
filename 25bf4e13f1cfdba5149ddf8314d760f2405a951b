@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a85a9b14_ee1781f7",
+        "filename": "lotuswordpro/qa/cppunit/import_test.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-07-18T12:26:29Z",
+      "side": 1,
+      "message": "At this point you can access the list of paragraphs with xParaEnum-\u003enextElement(). There the important property is ListLabelString, which gives you the layout-level calculated list label. So for example, you want to assert that the 2nd para\u0027s label is \"2.\" and not \"1.\":\n\n    uno::Reference\u003cbeans::XPropertySet\u003e xPara(xParaEnum-\u003enextElement(), uno::UNO_QUERY);\n    xPara.set(xParaEnum-\u003enextElement(), uno::UNO_QUERY);\n    OUString aListLabelString;\n    xPara-\u003egetPropertyValue(\"ListLabelString\") \u003e\u003e\u003d aListLabelString;\n    // Without the accompanying fix in place, this test would have failed, the list label was \"1.\".\n    CPPUNIT_ASSERT_EQUAL(OUString(\"2.\"), aListLabelString);\n    \nYou probably get the idea. :-)",
+      "revId": "25bf4e13f1cfdba5149ddf8314d760f2405a951b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
