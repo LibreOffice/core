@@ -40,6 +40,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void checkRectPrimitive(Primitive2DSequence const & rPrimitive);
 
     void testStyles();
+    void testSymbol();
     void testTdf87309();
     void testFontsizeKeywords();
     void testFontsizePercentage();
@@ -83,6 +84,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools
 public:
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testStyles);
+    CPPUNIT_TEST(testSymbol);
     CPPUNIT_TEST(testTdf87309);
     CPPUNIT_TEST(testFontsizeKeywords);
     CPPUNIT_TEST(testFontsizePercentage);
@@ -196,6 +198,23 @@ void Test::testStyles()
     CPPUNIT_ASSERT(arePrimitive2DSequencesEqual(aSequenceRect, aSequenceRectWithStyle));
     CPPUNIT_ASSERT(arePrimitive2DSequencesEqual(aSequenceRect, aSequenceRectWithParentStyle));
     CPPUNIT_ASSERT(arePrimitive2DSequencesEqual(aSequenceRect, aSequenceRectWithStylesByGroup));
+}
+
+void Test::testSymbol()
+{
+    Primitive2DSequence aSequenceTdf87309 = parseSvg(u"/svgio/qa/cppunit/data/symbol.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequenceTdf87309.getLength()));
+
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(aSequenceTdf87309);
+
+    CPPUNIT_ASSERT (pDocument);
+
+    // tdf#126330: Without the fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : 2
+    // number of nodes is incorrect
+    assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor", "color", "#00d000");
 }
 
 void Test::testTdf87309()
