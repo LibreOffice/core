@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc6afc5e_7c8e8792",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2022-07-18T11:44:57Z",
+      "side": 1,
+      "message": "Hi Christian,\nA new train of ODF files built from their XML code. Would you have the possibility to review it?",
+      "revId": "3858dfa6657acbf721cfa322c50a6d0bc8f05486",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
