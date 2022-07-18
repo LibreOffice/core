@@ -66,7 +66,7 @@ void SwEditShell::HandleUndoRedoContext(::sw::UndoRedoContext & rContext)
 
             // Before layout calc, inline anchored textboxes have to be synced unless crash.
             if (pSelFormat->GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR
-                && pSelFormat->GetOtherTextBoxFormats() && pSObj)
+                && pSelFormat->GetOtherTextBoxFormats())
                 SwTextBoxHelper::synchronizeGroupTextBoxProperty(SwTextBoxHelper::changeAnchor,
                                                                  pSelFormat, pSObj);
 
