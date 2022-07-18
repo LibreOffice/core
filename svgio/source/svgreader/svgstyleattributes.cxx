@@ -1195,10 +1195,11 @@ namespace svgio::svgreader
             }
 
             const SvgClipPathNode* pClip = accessClipPathXLink();
-            if(pClip)
+            while(pClip)
             {
                 // #i124852# transform may be needed when SvgUnits::userSpaceOnUse
                 pClip->apply(aSource, pTransform);
+                pClip = pClip->getSvgStyleAttributes()->accessClipPathXLink();
             }
 
             if(!aSource.empty()) // test again, applied clipPath may have lead to empty geometry
