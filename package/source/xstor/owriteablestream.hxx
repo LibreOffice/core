@@ -351,7 +351,7 @@ public:
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     // comphelper::ByteWriter
-    virtual sal_Int32 writeSomeBytes(const sal_Int8* aData, sal_Int32 nBytesToWrite) override;
+    virtual void writeBytes(const sal_Int8* aData, sal_Int32 nBytesToWrite) override;
 
 };
 

@@ -34,7 +34,7 @@ class COMPHELPER_DLLPUBLIC ByteWriter
 {
 public:
     virtual ~ByteWriter();
-    virtual sal_Int32 writeSomeBytes(const sal_Int8* aData, sal_Int32 nBytesToWrite) = 0;
+    virtual void writeBytes(const sal_Int8* aData, sal_Int32 nBytesToWrite) = 0;
 
     static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
 };
