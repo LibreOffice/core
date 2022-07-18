@@ -64,6 +64,15 @@ struct ViewLegendEntry
         css::uno::Reference< css::chart2::XFormattedString2 > >  aLabel;
 };
 
+
+struct ViewLegendSymbol
+{
+    /** The legend symbol that represents a data series or other
+        information contained in the legend
+     */
+    css::uno::Reference<css::drawing::XShape> aSymbol;
+};
+
 class LegendEntryProvider
 {
 public:

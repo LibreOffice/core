@@ -217,7 +217,20 @@ public:
             const css::uno::Reference< css::uno::XComponentContext >& xContext
                 );
 
-    std::vector< VDataSeries* > getAllSeries();
+    std::vector<ViewLegendSymbol> createSymbols(
+              const css::awt::Size& rEntryKeyAspectRatio
+            , const css::uno::Reference<css::drawing::XShapes>& xTarget
+            , const css::uno::Reference<css::lang::XMultiServiceFactory>& xShapeFactory
+            , const css::uno::Reference<css::uno::XComponentContext>& xContext);
+
+    std::vector<ViewLegendSymbol> createSymbolsForSeries(
+              const css::awt::Size& rEntryKeyAspectRatio
+            , const VDataSeries& rSeries
+            , const css::uno::Reference<css::drawing::XShapes>& xTarget
+            , const css::uno::Reference<css::lang::XMultiServiceFactory>& xShapeFactory
+            , const css::uno::Reference<css::uno::XComponentContext>& xContext);
+
+    std::vector<VDataSeries*> getAllSeries();
     std::vector<VDataSeries const*> getAllSeries() const;
 
     // This method creates a series plotter of the requested type; e.g. : return new PieChart...
