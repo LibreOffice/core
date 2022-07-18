@@ -1361,6 +1361,9 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
 
         SwComparePosition eCmpPos = ComparePosition( *pStt, *pEnd, *pRStt, *pREnd );
 
+        if ( SwComparePosition::Before == eCmpPos && !IsPrevPos( *pEnd, *pRStt ))
+            break;
+
         switch( pNewRedl->GetType() )
         {
         case RedlineType::Insert:
