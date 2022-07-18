@@ -239,10 +239,13 @@ void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
         aOutRect = DrawControlText(*pDev, aOutRect, aText, nTextStyle, nullptr, nullptr);
         tools::Rectangle textRect = GetTextRect(
             tools::Rectangle(Point(), Size(0x7fffffff, 0x7fffffff)), aText, nTextStyle);
+
+        assert(textRect.GetWidth() >= 0);
+
         // If the button text doesn't fit into it, put it into a tooltip (might happen in sidebar)
         if (GetQuickHelpText()!= aText && mpButtonData->mbGeneratedTooltip)
             SetQuickHelpText("");
-        if (GetQuickHelpText().isEmpty() && textRect.getOpenWidth() > rSize.getWidth())
+        if (GetQuickHelpText().isEmpty() && ((textRect.GetWidth() + 1) > rSize.getWidth()))
         {
             SetQuickHelpText(aText);
             mpButtonData->mbGeneratedTooltip = true;
