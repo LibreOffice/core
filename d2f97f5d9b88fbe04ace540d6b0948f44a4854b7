@@ -34,6 +34,24 @@
       "parentUuid": "7c9c1662_56f78083",
       "revId": "d2f97f5d9b88fbe04ace540d6b0948f44a4854b7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f2b26f0_7af9d426",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-07-18T09:53:56Z",
+      "side": 1,
+      "message": "doh!! So sorry, I did the readSomeBytes bypass thing first, and then I did this the write bypass, so I just carried on the naming from there, but of course, there is no writeSomeBytes UNO interface, it just has writeBytes",
+      "parentUuid": "44e14bb6_59a64f22",
+      "revId": "d2f97f5d9b88fbe04ace540d6b0948f44a4854b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
