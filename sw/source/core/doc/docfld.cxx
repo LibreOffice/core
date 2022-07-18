@@ -840,7 +840,7 @@ void SwDocUpdateField::MakeFieldList_( SwDoc& rDoc, int eGetMode )
     // new version: walk all fields of the attribute pool
     m_pFieldSortList.reset(new SetGetExpFields);
 
-    // remembeer sections that were unhidden and need to be hidden again
+    // remember sections that were unhidden and need to be hidden again
     std::vector<std::reference_wrapper<SwSection>> aUnhiddenSections;
 
     // consider and unhide sections
