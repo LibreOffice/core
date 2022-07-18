@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67c4eac1_22a41e86",
+        "filename": "lotuswordpro/qa/cppunit/import_test.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2022-07-18T18:52:44Z",
+      "side": 1,
+      "message": "For these bullets ( a), b) ) I could check also indentation",
+      "revId": "76167c948f46a99f5e4dd11a1bf4608d663db7a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
