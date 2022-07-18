@@ -1375,7 +1375,7 @@ tools::Rectangle Application::GetScreenPosSizePixel( unsigned int nScreen )
         return tools::Rectangle();
     }
     tools::Rectangle aRect = pSys->GetDisplayScreenPosSizePixel(nScreen);
-    if (aRect.getOpenHeight() == 0)
+    if (aRect.GetHeight() == 0)
         SAL_WARN("vcl", "Requesting screen size/pos for screen #" << nScreen << " returned 0 height.");
     return aRect;
 }

@@ -95,7 +95,7 @@ void VclComplexTextTest::testArabic()
     pOutDev->GetTextBoundRect(aBoundRect, aOneTwoThree);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0, aBoundRect.Left(), 1); // This sometimes equals to 1
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1, aBoundRect.Top(), 1);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(71, aBoundRect.getOpenWidth(), 1); // This sometimes equals to 70
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(71, aBoundRect.GetWidth(), 2); // This sometimes equals to 70
     CPPUNIT_ASSERT_DOUBLES_EQUAL(15, aBoundRect.getOpenHeight(), 1);
 
 #if 0
