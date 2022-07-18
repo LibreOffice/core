@@ -687,17 +687,17 @@ bool Tcg255::processSubStruct( sal_uInt8 nId, SvStream &rS )
             SAL_INFO("sw.ww8","Unknown id 0x" << std::hex << nId);
             return false;
     }
-    xSubStruct->ch = nId;
+    xSubStruct->m_ch = nId;
     if (!xSubStruct->Read(rS))
         return false;
-    rgtcgData.push_back(std::move(xSubStruct));
+    m_rgtcgData.push_back(std::move(xSubStruct));
     return true;
 }
 
 bool Tcg255::ImportCustomToolBar( SfxObjectShell& rDocSh )
 {
     // Find the SwCTBWrapper
-    for ( const auto & rSubStruct : rgtcgData )
+    for ( const auto & rSubStruct : m_rgtcgData )
     {
         if ( rSubStruct->id() == 0x12 )
         {
@@ -734,7 +734,7 @@ bool Tcg255::Read(SvStream &rS)
     // Peek at
 }
 
-Tcg255SubStruct::Tcg255SubStruct( ) : ch(0)
+Tcg255SubStruct::Tcg255SubStruct( ) : m_ch(0)
 {
 }
 
@@ -852,12 +852,12 @@ bool TcgSttbf::Read( SvStream &rS)
     SAL_INFO("sw.ww8","TcgSttbf::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
     Tcg255SubStruct::Read( rS );
-    return sttbf.Read( rS );
+    return m_sttbf.Read( rS );
 }
 
-TcgSttbfCore::TcgSttbfCore() : fExtend( 0 )
-,cData( 0 )
-,cbExtra( 0 )
+TcgSttbfCore::TcgSttbfCore() : m_fExtend( 0 )
+,m_cData( 0 )
+,m_cbExtra( 0 )
 {
 }
 
@@ -869,17 +869,17 @@ bool TcgSttbfCore::Read( SvStream& rS )
 {
     SAL_INFO("sw.ww8","TcgSttbfCore::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
-    rS.ReadUInt16( fExtend ).ReadUInt16( cData ).ReadUInt16( cbExtra );
-    if ( cData )
+    rS.ReadUInt16( m_fExtend ).ReadUInt16( m_cData ).ReadUInt16( m_cbExtra );
+    if ( m_cData )
     {
-        if (cData > rS.remainingSize() / 4) //definitely an invalid record
+        if (m_cData > rS.remainingSize() / 4) //definitely an invalid record
             return false;
-        dataItems.reset( new SBBItem[ cData ] );
-        for ( sal_Int32 index = 0; index < cData; ++index )
+        m_dataItems.reset( new SBBItem[ m_cData ] );
+        for ( sal_Int32 index = 0; index < m_cData; ++index )
         {
-            rS.ReadUInt16( dataItems[ index ].cchData );
-            dataItems[ index ].data = read_uInt16s_ToOUString(rS, dataItems[index].cchData);
-            rS.ReadUInt16( dataItems[ index ].extraData );
+            rS.ReadUInt16( m_dataItems[ index ].cchData );
+            m_dataItems[ index ].data = read_uInt16s_ToOUString(rS, m_dataItems[index].cchData);
+            rS.ReadUInt16( m_dataItems[ index ].extraData );
         }
     }
     return rS.good();
