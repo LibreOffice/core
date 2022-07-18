@@ -107,8 +107,8 @@ void SwMacrosTest::testVba()
 {
     TestMacroInfo testInfo[] = {
         {
-           OUString("testFind.docm"),
-            OUString("vnd.sun.Star.script:Project.Module1.testFind?language=Basic&location=document")
+            OUString("testFind.docm"),
+            OUString("vnd.sun.Star.script:Project.Module1.testAll?language=Basic&location=document")
         }
     };
     for ( size_t  i=0; i<SAL_N_ELEMENTS( testInfo ); ++i )
