@@ -2497,8 +2497,7 @@ bool DocumentRedlineManager::SplitRedline( const SwPaM& rRange )
     for ( ; n < maRedlineTable.size(); ++n)
     {
         SwRangeRedline * pRedline = maRedlineTable[ n ];
-        SwPosition *const pRedlineStart = pRedline->Start();
-        SwPosition *const pRedlineEnd = pRedline->End();
+        auto [pRedlineStart, pRedlineEnd] = pRedline->StartEnd();
         if (*pRedlineStart <= *pStt && *pStt <= *pRedlineEnd &&
             *pRedlineStart <= *pEnd && *pEnd <= *pRedlineEnd)
         {
