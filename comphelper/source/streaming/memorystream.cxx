@@ -217,7 +217,7 @@ void SAL_CALL UNOMemoryStream::writeBytes( const Sequence< sal_Int8 >& aData )
         throw IOException("this implementation does not support more than 2GB!", static_cast<OWeakObject*>(this) );
     }
 
-    if( static_cast< sal_Int32 >( nNewSize ) > static_cast< sal_Int32 >( maData.size() ) )
+    if( o3tl::make_unsigned( nNewSize ) > maData.size() )
         maData.resize( nNewSize );
 
     sal_Int8* pData = &(*maData.begin());
@@ -240,7 +240,7 @@ void UNOMemoryStream::writeBytes( const sal_Int8* pInData, sal_Int32 nBytesToWri
         throw IOException("this implementation does not support more than 2GB!", static_cast<OWeakObject*>(this) );
     }
 
-    if( static_cast< sal_Int32 >( nNewSize ) > static_cast< sal_Int32 >( maData.size() ) )
+    if( o3tl::make_unsigned( nNewSize ) > maData.size() )
         maData.resize( nNewSize );
 
     sal_Int8* pData = &(*maData.begin());
