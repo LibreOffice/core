@@ -104,8 +104,7 @@ private:
 
 public:
     ChartView() = delete;
-    ChartView(css::uno::Reference< css::uno::XComponentContext > xContext,
-               ChartModel& rModel);
+    ChartView(css::uno::Reference<css::uno::XComponentContext> xContext, ChartModel& rModel);
 
     virtual ~ChartView() override;
 
@@ -185,6 +184,8 @@ public:
 
     void setViewDirty();
 
+    css::uno::Reference<css::uno::XComponentContext> const& getComponentContext() { return m_xCC;}
+
     /// See sfx2::XmlDump::dumpAsXml().
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
@@ -210,8 +211,7 @@ private: //methods
 private: //member
     ::osl::Mutex m_aMutex;
 
-    css::uno::Reference< css::uno::XComponentContext>
-            m_xCC;
+    css::uno::Reference< css::uno::XComponentContext> m_xCC;
 
     chart::ChartModel& mrChartModel;
 
