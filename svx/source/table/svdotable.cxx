@@ -1568,6 +1568,18 @@ void SdrTableObj::TakeTextRect( const CellPos& rPos, SdrOutliner& rOutliner, too
     rTextRect=tools::Rectangle(aTextPos,aTextSiz);
 }
 
+CellRef SdrTableObj::getCell(const CellPos& rPos) const
+{
+    if (mpImpl.is())
+    {
+        return mpImpl->getCell(rPos);
+    }
+    else
+    {
+        static CellRef xCell;
+        return xCell;
+    }
+}
 
 const CellRef& SdrTableObj::getActiveCell() const
 {
