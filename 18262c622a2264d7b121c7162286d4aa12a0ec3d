@@ -16,6 +16,24 @@
       "message": "Please don\u0027t CC me on VCL renames. Thanks \u003d)",
       "revId": "18262c622a2264d7b121c7162286d4aa12a0ec3d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b10f80bf_41f3f683",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-07-19T17:49:46Z",
+      "side": 1,
+      "message": "You\u0027ve added yourself as a reviewer automatically by commenting on the issue :) I guess you don\u0027t want to be in the CC and you wanted to remove yourself?",
+      "parentUuid": "b577204a_2102ff34",
+      "revId": "18262c622a2264d7b121c7162286d4aa12a0ec3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
