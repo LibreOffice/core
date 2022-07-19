@@ -16,6 +16,24 @@
       "message": "For these bullets ( a), b) ) I could check also indentation",
       "revId": "76167c948f46a99f5e4dd11a1bf4608d663db7a7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33da2bae_71474acd",
+        "filename": "lotuswordpro/qa/cppunit/import_test.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2022-07-19T11:44:32Z",
+      "side": 1,
+      "message": "It seems that TextMarginDistance is what I need to check:\n https://api.libreoffice.org/docs/idl/ref/servicecom_1_1sun_1_1star_1_1style_1_1NumberingAlignment.html#addff75c89ff36084dc9a9af59ee9f60a",
+      "parentUuid": "67c4eac1_22a41e86",
+      "revId": "76167c948f46a99f5e4dd11a1bf4608d663db7a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
