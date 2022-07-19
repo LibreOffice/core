@@ -2220,15 +2220,9 @@ void SvmTest::checkComment(const GDIMetaFile& rMetafile)
         {"datasize", "48"}
     });
 
-#ifdef OSL_LITENDIAN
     assertXPathAttrs(pDoc, "/metafile/comment[2]", {
         {"data", "540068006500730065002000610072006500200073006f006d0065002000740065007300740020006400610074006100"}
     });
-#else
-    assertXPathAttrs(pDoc, "/metafile/comment[2]", {
-        {"data", "00540068006500730065002000610072006500200073006f006d00650020007400650073007400200064006100740061"}
-    });
-#endif
 
     assertXPathAttrs(pDoc, "/metafile/comment[2]", {
         {"value", "4"}
@@ -2245,11 +2239,13 @@ void SvmTest::testComment()
 
     aGDIMetaFile.AddAction(new MetaCommentAction("Test comment"));
 
-    OUString aString = "These are some test data";
+    using namespace std::literals::string_view_literals;
+    static constexpr auto aString
+        = "T\0h\0e\0s\0e\0 \0a\0r\0e\0 \0s\0o\0m\0e\0 \0t\0e\0s\0t\0 \0d\0a\0t\0a\0"sv;
     aGDIMetaFile.AddAction(new MetaCommentAction("This is a test comment", \
                                                     4, \
-                                                    reinterpret_cast<const sal_uInt8*>(aString.getStr()), \
-                                                    2*aString.getLength() ));
+                                                    reinterpret_cast<const sal_uInt8*>(aString.data()), \
+                                                    aString.length() ));
 
     checkComment(writeAndReadStream(aGDIMetaFile));
     checkComment(readFile(u"comment.svm"));
