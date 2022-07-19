@@ -79,7 +79,7 @@ public:
         /*[in]*/RedlineType nType,
         /*[in]*/bool bStartOrEndInRange) const override;
 
-    virtual void CompressRedlines() override;
+    virtual void CompressRedlines(size_t nStartIdx = 0) override;
 
     virtual const SwRangeRedline* GetRedline(
         /*[in]*/const SwPosition& rPos,
