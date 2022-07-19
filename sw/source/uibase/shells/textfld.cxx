@@ -915,9 +915,11 @@ void SwTextShell::StateField( SfxItemSet &rSet )
                 {
                     rSet.DisableItem(nWhich);
                 }
-                // tdf#86188 Allow disabling comment insertion on footnote/endnote for better OOXML interoperability
+                // tdf#86188, tdf#135794: Allow disabling comment insertion
+                // on footnote/endnote/header/frames for better OOXML interoperability
                 else if (!officecfg::Office::Compatibility::View::AllowCommentsInFootnotes::get() &&
-                         (rSh.IsCursorInFootnote() || rSh.GetCurrFlyFrame(/*bCalcFrame=*/false)))
+                         (rSh.IsCursorInFootnote() || rSh.IsInHeaderFooter() ||
+                          rSh.GetCurrFlyFrame(/*bCalcFrame=*/false)))
                 {
                     rSet.DisableItem(nWhich);
                 }
