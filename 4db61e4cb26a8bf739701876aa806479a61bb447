@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1e2a29d_13836173",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-07-19T14:43:33Z",
+      "side": 1,
+      "message": "Could you please re-check with current master. After https://gerrit.libreoffice.org/c/core/+/134647, the unit test introduced here was tweaked, with a TODO in the commit message:\n\n\u003e TODO: check testTdf138818 change is acceptable/meaningful",
+      "revId": "4db61e4cb26a8bf739701876aa806479a61bb447",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
