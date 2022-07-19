@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1330a8d1_918865d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-07-19T09:45:07Z",
+      "side": 1,
+      "message": "fine with me, using the f-strings is way more readable IMHO, so even if the script ends up in a complete rewrite, this patch is better than the status quo, so +2 :-)",
+      "revId": "65ecc72b757cb330440a42ce57693aaf9add8659",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
