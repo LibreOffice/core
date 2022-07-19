@@ -494,6 +494,32 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
                         for( int i = 0; i < pPPD->num_groups; i++ )
                             updatePrinterContextInfo( pPPD->groups + i, rContext );
 
+                        // tdf#149439 Set Custom values.
+                        for (int k = 0; k < pDest->num_options; ++k)
+                        {
+                            if (strncmp(pDest->options[k].value, RTL_CONSTASCII_STRINGPARAM("Custom.")) == 0)
+                            {
+                                const PPDKey* pKey = rContext.getParser()->getKey(OStringToOUString(pDest->options[k].name, aEncoding));
+                                if (!pKey)
+                                {
+                                    SAL_WARN("vcl.unx.print", "Custom key " << pDest->options[k].name << " not found");
+                                    continue;
+                                }
+                                const PPDValue* pCustomValue = rContext.getValue(pKey);
+                                if (!pCustomValue)
+                                {
+                                    SAL_WARN("vcl.unx.print", "Value for " << pDest->options[k].name << " not found");
+                                    continue;
+                                }
+                                if (!pCustomValue->m_bCustomOption)
+                                {
+                                    SAL_WARN("vcl.unx.print", "Value for " << pDest->options[k].name << " not set to custom option");
+                                    continue;
+                                }
+                                pCustomValue->m_aCustomOption = OStringToOUString(pDest->options[k].value, aEncoding);
+                            }
+                        }
+
                         rInfo.m_pParser = pNewParser;
                         rInfo.m_aContext = rContext;
 
