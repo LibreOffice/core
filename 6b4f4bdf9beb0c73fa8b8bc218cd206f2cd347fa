@@ -52,6 +52,24 @@
       "parentUuid": "074e65a4_6b069f2a",
       "revId": "6b4f4bdf9beb0c73fa8b8bc218cd206f2cd347fa",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42625f46_8b1647f5",
+        "filename": "vcl/qa/cppunit/png/PngFilterTest.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-07-19T13:43:57Z",
+      "side": 1,
+      "message": "\u003e I wonder why doesn\u0027t this fail in Jenkins?\n\n:) Because we don\u0027t have Win64 builds on Jenkins...\n\n\u003e Can you not compare a sal_Int64 (which I assume is a long long) with a long? Doesn\u0027t CPPUNIT_ASSERT_EQUAL just use operator\u003d\u003d?\n\nNo it doesn\u0027t just use an operator\u003d\u003d, unfortunately (?) it uses a template:\n\n  template \u003cclass T\u003e\n  void assertEquals( const T\u0026 expected,\n                     const T\u0026 actual,\n                     ...\n\nwhich requires that type T is identical for expected and actual.",
+      "parentUuid": "ddd820d4_4973ade6",
+      "revId": "6b4f4bdf9beb0c73fa8b8bc218cd206f2cd347fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
