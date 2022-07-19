@@ -765,9 +765,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 // Do not cache the old Document! Is invalid when loading
                 // another document.
 
-                const SfxStringItem* pSavedOptions = SfxItemSet::GetItem<SfxStringItem>(pMedium->GetItemSet(), SID_FILE_FILTEROPTIONS, false);
-                const SfxStringItem* pSavedReferer = SfxItemSet::GetItem<SfxStringItem>(pMedium->GetItemSet(), SID_REFERER, false);
-
                 bool bHasStorage = pMedium->HasStorage_Impl();
                 if( bHandsOff )
                 {
@@ -811,29 +808,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         pMedium->LockOrigFileOnDemand( false, true );
 
                         xOldObj->DoSaveCompleted( pMedium );
-                    }
-
-                    // r/o-Doc couldn't be switched to writing mode
-                    if ( bForEdit && ( SID_EDITDOC == rReq.GetSlot() || SID_READONLYDOC == rReq.GetSlot() ) )
-                    {
-                        // ask user for opening as template
-                        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetWindow().GetFrameWeld(),
-                                                                                 VclMessageType::Question, VclButtonsType::YesNo,
-                                                                                 SfxResId(STR_QUERY_OPENASTEMPLATE)));
-                        if (RET_YES == xBox->run())
-                        {
-                            SfxAllItemSet aSet( pApp->GetPool() );
-                            aSet.Put( SfxStringItem( SID_FILE_NAME, pMedium->GetName() ) );
-                            aSet.Put( SfxStringItem( SID_TARGETNAME, "_blank" ) );
-                            if ( pSavedOptions )
-                                aSet.Put( *pSavedOptions );
-                            if ( pSavedReferer )
-                                aSet.Put( *pSavedReferer );
-                            aSet.Put( SfxBoolItem( SID_TEMPLATE, true ) );
-                            if( pFilter )
-                                aSet.Put( SfxStringItem( SID_FILTER_NAME, pFilter->GetFilterName() ) );
-                            GetDispatcher()->Execute( SID_OPENDOC, SfxCallMode::ASYNCHRON, aSet );
-                        }
                     }
                 }
                 else
