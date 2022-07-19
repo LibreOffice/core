@@ -54,7 +54,7 @@ Animation::Animation(const Animation& rAnimation)
     , mbLoopTerminated(rAnimation.mbLoopTerminated)
 {
     for (auto const& rFrame : rAnimation.maFrames)
-        maFrames.emplace_back(new AnimationBitmap(*rFrame));
+        maFrames.emplace_back(new AnimationFrame(*rFrame));
 
     maTimer.SetInvokeHandler(LINK(this, Animation, ImplTimeoutHdl));
     mnLoops = mbLoopTerminated ? 0 : mnLoopCount;
@@ -73,7 +73,7 @@ Animation& Animation::operator=(const Animation& rAnimation)
         Clear();
 
         for (auto const& i : rAnimation.maFrames)
-            maFrames.emplace_back(new AnimationBitmap(*i));
+            maFrames.emplace_back(new AnimationFrame(*i));
 
         maGlobalSize = rAnimation.maGlobalSize;
         maBitmapEx = rAnimation.maBitmapEx;
@@ -90,8 +90,8 @@ bool Animation::operator==(const Animation& rAnimation) const
     return maFrames.size() == rAnimation.maFrames.size() && maBitmapEx == rAnimation.maBitmapEx
            && maGlobalSize == rAnimation.maGlobalSize
            && std::equal(maFrames.begin(), maFrames.end(), rAnimation.maFrames.begin(),
-                         [](const std::unique_ptr<AnimationBitmap>& pAnim1,
-                            const std::unique_ptr<AnimationBitmap>& pAnim2) -> bool {
+                         [](const std::unique_ptr<AnimationFrame>& pAnim1,
+                            const std::unique_ptr<AnimationFrame>& pAnim2) -> bool {
                              return *pAnim1 == *pAnim2;
                          });
 }
@@ -117,7 +117,7 @@ bool Animation::IsTransparent() const
 
     return maBitmapEx.IsAlpha()
            || std::any_of(maFrames.begin(), maFrames.end(),
-                          [&aRect](const std::unique_ptr<AnimationBitmap>& pAnim) -> bool {
+                          [&aRect](const std::unique_ptr<AnimationFrame>& pAnim) -> bool {
                               return pAnim->meDisposal == Disposal::Back
                                      && tools::Rectangle{ pAnim->maPositionPixel,
                                                           pAnim->maSizePixel }
@@ -129,9 +129,9 @@ sal_uLong Animation::GetSizeBytes() const
 {
     sal_uLong nSizeBytes = GetBitmapEx().GetSizeBytes();
 
-    for (auto const& pAnimationBitmap : maFrames)
+    for (auto const& pAnimationFrame : maFrames)
     {
-        nSizeBytes += pAnimationBitmap->maBitmapEx.GetSizeBytes();
+        nSizeBytes += pAnimationFrame->maBitmapEx.GetSizeBytes();
     }
 
     return nSizeBytes;
@@ -245,7 +245,7 @@ void Animation::Draw(OutputDevice& rOut, const Point& rDestPt, const Size& rDest
     if (!nCount)
         return;
 
-    AnimationBitmap* pObj = maFrames[std::min(mnPos, nCount - 1)].get();
+    AnimationFrame* pObj = maFrames[std::min(mnPos, nCount - 1)].get();
 
     if (rOut.GetConnectMetaFile() || (rOut.GetOutDevType() == OUTDEV_PRINTER))
     {
@@ -343,7 +343,7 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
         }
         else
         {
-            AnimationBitmap* pStepBmp
+            AnimationFrame* pStepBmp
                 = (++mnPos < maFrames.size()) ? maFrames[mnPos].get() : nullptr;
 
             if (!pStepBmp)
@@ -390,7 +390,7 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
         Stop();
 }
 
-bool Animation::Insert(const AnimationBitmap& rStepBmp)
+bool Animation::Insert(const AnimationFrame& rStepBmp)
 {
     bool bRet = false;
 
@@ -401,7 +401,7 @@ bool Animation::Insert(const AnimationBitmap& rStepBmp)
         maGlobalSize
             = aGlobalRect.Union(tools::Rectangle(rStepBmp.maPositionPixel, rStepBmp.maSizePixel))
                   .GetSize();
-        maFrames.emplace_back(new AnimationBitmap(rStepBmp));
+        maFrames.emplace_back(new AnimationFrame(rStepBmp));
 
         // As a start, we make the first BitmapEx the replacement BitmapEx
         if (maFrames.size() == 1)
@@ -413,24 +413,24 @@ bool Animation::Insert(const AnimationBitmap& rStepBmp)
     return bRet;
 }
 
-const AnimationBitmap& Animation::Get(sal_uInt16 nAnimation) const
+const AnimationFrame& Animation::Get(sal_uInt16 nAnimation) const
 {
     SAL_WARN_IF((nAnimation >= maFrames.size()), "vcl", "No object at this position");
     return *maFrames[nAnimation];
 }
 
-void Animation::Replace(const AnimationBitmap& rNewAnimationBitmap, sal_uInt16 nAnimation)
+void Animation::Replace(const AnimationFrame& rNewAnimationFrame, sal_uInt16 nAnimation)
 {
     SAL_WARN_IF((nAnimation >= maFrames.size()), "vcl", "No object at this position");
 
-    maFrames[nAnimation].reset(new AnimationBitmap(rNewAnimationBitmap));
+    maFrames[nAnimation].reset(new AnimationFrame(rNewAnimationFrame));
 
     // If we insert at first position we also need to
     // update the replacement BitmapEx
     if ((!nAnimation && (!mbLoopTerminated || (maFrames.size() == 1)))
         || ((nAnimation == maFrames.size() - 1) && mbLoopTerminated))
     {
-        maBitmapEx = rNewAnimationBitmap.maBitmapEx;
+        maBitmapEx = rNewAnimationFrame.maBitmapEx;
     }
 }
 
@@ -526,7 +526,7 @@ void Animation::Mirror(BmpMirrorFlags nMirrorFlags)
 
     for (size_t i = 0, n = maFrames.size(); (i < n) && bRet; ++i)
     {
-        AnimationBitmap* pStepBmp = maFrames[i].get();
+        AnimationFrame* pStepBmp = maFrames[i].get();
         bRet = pStepBmp->maBitmapEx.Mirror(nMirrorFlags);
         if (bRet)
         {
@@ -585,20 +585,20 @@ SvStream& WriteAnimation(SvStream& rOStm, const Animation& rAnimation)
 
         for (sal_uInt16 i = 0; i < nCount; i++)
         {
-            const AnimationBitmap& rAnimationBitmap = rAnimation.Get(i);
+            const AnimationFrame& rAnimationFrame = rAnimation.Get(i);
             const sal_uInt16 nRest = nCount - i - 1;
 
-            // Write AnimationBitmap
-            WriteDIBBitmapEx(rAnimationBitmap.maBitmapEx, rOStm);
+            // Write AnimationFrame
+            WriteDIBBitmapEx(rAnimationFrame.maBitmapEx, rOStm);
             tools::GenericTypeSerializer aSerializer(rOStm);
-            aSerializer.writePoint(rAnimationBitmap.maPositionPixel);
-            aSerializer.writeSize(rAnimationBitmap.maSizePixel);
+            aSerializer.writePoint(rAnimationFrame.maPositionPixel);
+            aSerializer.writeSize(rAnimationFrame.maSizePixel);
             aSerializer.writeSize(rAnimation.maGlobalSize);
-            rOStm.WriteUInt16((ANIMATION_TIMEOUT_ON_CLICK == rAnimationBitmap.mnWait)
+            rOStm.WriteUInt16((ANIMATION_TIMEOUT_ON_CLICK == rAnimationFrame.mnWait)
                                   ? 65535
-                                  : rAnimationBitmap.mnWait);
-            rOStm.WriteUInt16(static_cast<sal_uInt16>(rAnimationBitmap.meDisposal));
-            rOStm.WriteBool(rAnimationBitmap.mbUserInput);
+                                  : rAnimationFrame.mnWait);
+            rOStm.WriteUInt16(static_cast<sal_uInt16>(rAnimationFrame.meDisposal));
+            rOStm.WriteBool(rAnimationFrame.mbUserInput);
             rOStm.WriteUInt32(rAnimation.mnLoopCount);
             rOStm.WriteUInt32(nDummy32); // Unused
             rOStm.WriteUInt32(nDummy32); // Unused
@@ -625,7 +625,7 @@ SvStream& ReadAnimation(SvStream& rIStm, Animation& rAnimation)
     rAnimation.Clear();
 
     // If the BitmapEx at the beginning have already been read (by Graphic)
-    // we can start reading the AnimationBitmaps right away
+    // we can start reading the AnimationFrames right away
     if ((nAnimMagic1 == 0x5344414e) && (nAnimMagic2 == 0x494d4931) && !rIStm.GetError())
         bReadAnimations = true;
     // Else, we try reading the Bitmap(-Ex)
@@ -642,27 +642,27 @@ SvStream& ReadAnimation(SvStream& rIStm, Animation& rAnimation)
             rIStm.Seek(nStmPos);
     }
 
-    // Read AnimationBitmaps
+    // Read AnimationFrames
     if (bReadAnimations)
     {
-        AnimationBitmap aAnimationBitmap;
+        AnimationFrame aAnimationFrame;
         sal_uInt32 nTmp32;
         sal_uInt16 nTmp16;
         bool cTmp;
 
         do
         {
-            ReadDIBBitmapEx(aAnimationBitmap.maBitmapEx, rIStm);
+            ReadDIBBitmapEx(aAnimationFrame.maBitmapEx, rIStm);
             tools::GenericTypeSerializer aSerializer(rIStm);
-            aSerializer.readPoint(aAnimationBitmap.maPositionPixel);
-            aSerializer.readSize(aAnimationBitmap.maSizePixel);
+            aSerializer.readPoint(aAnimationFrame.maPositionPixel);
+            aSerializer.readSize(aAnimationFrame.maSizePixel);
             aSerializer.readSize(rAnimation.maGlobalSize);
             rIStm.ReadUInt16(nTmp16);
-            aAnimationBitmap.mnWait = ((65535 == nTmp16) ? ANIMATION_TIMEOUT_ON_CLICK : nTmp16);
+            aAnimationFrame.mnWait = ((65535 == nTmp16) ? ANIMATION_TIMEOUT_ON_CLICK : nTmp16);
             rIStm.ReadUInt16(nTmp16);
-            aAnimationBitmap.meDisposal = static_cast<Disposal>(nTmp16);
+            aAnimationFrame.meDisposal = static_cast<Disposal>(nTmp16);
             rIStm.ReadCharAsBool(cTmp);
-            aAnimationBitmap.mbUserInput = cTmp;
+            aAnimationFrame.mbUserInput = cTmp;
             rIStm.ReadUInt32(rAnimation.mnLoopCount);
             rIStm.ReadUInt32(nTmp32); // Unused
             rIStm.ReadUInt32(nTmp32); // Unused
@@ -670,7 +670,7 @@ SvStream& ReadAnimation(SvStream& rIStm, Animation& rAnimation)
             read_uInt16_lenPrefixed_uInt8s_ToOString(rIStm); // Unused
             rIStm.ReadUInt16(nTmp16); // The rest to read
 
-            rAnimation.Insert(aAnimationBitmap);
+            rAnimation.Insert(aAnimationFrame);
         } while (nTmp16 && !rIStm.GetError());
 
         rAnimation.ResetLoopCount();

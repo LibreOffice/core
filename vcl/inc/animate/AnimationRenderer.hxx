@@ -26,7 +26,7 @@
 class Animation;
 class OutputDevice;
 class VirtualDevice;
-struct AnimationBitmap;
+struct AnimationFrame;
 
 struct AnimationData
 {
@@ -78,9 +78,9 @@ public:
     void            drawToIndex( sal_uLong nIndex );
     void            draw( sal_uLong nIndex, VirtualDevice* pVDev=nullptr );
     void            repaint();
-    AnimationData*          createAnimationData() const;
+    AnimationData*  createAnimationData() const;
 
-    void            getPosSize( const AnimationBitmap& rAnm, Point& rPosPix, Size& rSizePix );
+    void            getPosSize( const AnimationFrame& rAnm, Point& rPosPix, Size& rSizePix );
 
     const Point&    getOriginPosition() const { return maOriginPt; }
 

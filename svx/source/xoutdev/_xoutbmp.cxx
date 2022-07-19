@@ -55,21 +55,21 @@ Animation XOutBitmap::MirrorAnimation( const Animation& rAnimation, bool bHMirr,
 
         for( sal_uInt16 i = 0, nCount = aNewAnim.Count(); i < nCount; i++ )
         {
-            AnimationBitmap aAnimationBitmap( aNewAnim.Get( i ) );
+            AnimationFrame aAnimationFrame( aNewAnim.Get( i ) );
 
             // mirror the BitmapEx
-            aAnimationBitmap.maBitmapEx.Mirror( nMirrorFlags );
+            aAnimationFrame.maBitmapEx.Mirror( nMirrorFlags );
 
             // Adjust the positions inside the whole bitmap
             if( bHMirr )
-                aAnimationBitmap.maPositionPixel.setX(rGlobalSize.Width() - aAnimationBitmap.maPositionPixel.X() -
-                                       aAnimationBitmap.maSizePixel.Width());
+                aAnimationFrame.maPositionPixel.setX(rGlobalSize.Width() - aAnimationFrame.maPositionPixel.X() -
+                                       aAnimationFrame.maSizePixel.Width());
 
             if( bVMirr )
-                aAnimationBitmap.maPositionPixel.setY(rGlobalSize.Height() - aAnimationBitmap.maPositionPixel.Y() -
-                                       aAnimationBitmap.maSizePixel.Height());
+                aAnimationFrame.maPositionPixel.setY(rGlobalSize.Height() - aAnimationFrame.maPositionPixel.Y() -
+                                       aAnimationFrame.maSizePixel.Height());
 
-            aNewAnim.Replace(aAnimationBitmap, i);
+            aNewAnim.Replace(aAnimationFrame, i);
         }
     }
 
