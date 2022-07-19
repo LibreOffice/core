@@ -2490,12 +2490,15 @@ void DocumentRedlineManager::CompressRedlines()
 bool DocumentRedlineManager::SplitRedline( const SwPaM& rRange )
 {
     bool bChg = false;
-    SwRedlineTable::size_type n = 0;
     const SwPosition* pStt = rRange.Start();
     const SwPosition* pEnd = rRange.End();
     //FIXME overlapping problem GetRedline( *pStt, &n );
-    for ( ; n < maRedlineTable.size(); ++n)
+    // Loop backwards, because we are mostly called with rRange pointing
+    // something near the end of the table.
+    SwRedlineTable::size_type n = maRedlineTable.size();
+    while (n != 0)
     {
+        --n;
         SwRangeRedline * pRedline = maRedlineTable[ n ];
         auto [pRedlineStart, pRedlineEnd] = pRedline->StartEnd();
         if (*pRedlineStart <= *pStt && *pEnd <= *pRedlineEnd)
@@ -2526,7 +2529,7 @@ bool DocumentRedlineManager::SplitRedline( const SwPaM& rRange )
 
             case 3:
                 pRedline->InvalidateRange(SwRangeRedline::Invalidation::Remove);
-                maRedlineTable.DeleteAndDestroy( n-- );
+                maRedlineTable.DeleteAndDestroy( n );
                 pRedline = nullptr;
                 break;
             }
@@ -2539,7 +2542,7 @@ bool DocumentRedlineManager::SplitRedline( const SwPaM& rRange )
             if( pNew )
                 maRedlineTable.Insert( pNew, n );
         }
-        else if (*pEnd < *pRedlineStart)
+        else if (*pRedlineEnd < *pStt)
             break;
     }
     return bChg;
