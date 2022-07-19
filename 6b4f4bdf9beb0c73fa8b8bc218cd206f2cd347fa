@@ -70,6 +70,24 @@
       "parentUuid": "ddd820d4_4973ade6",
       "revId": "6b4f4bdf9beb0c73fa8b8bc218cd206f2cd347fa",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8611a7c_a68bea78",
+        "filename": "vcl/qa/cppunit/png/PngFilterTest.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-07-19T15:42:32Z",
+      "side": 1,
+      "message": "Ok, should be resolved in https://gerrit.libreoffice.org/c/core/+/137236, thanks!",
+      "parentUuid": "42625f46_8b1647f5",
+      "revId": "6b4f4bdf9beb0c73fa8b8bc218cd206f2cd347fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
