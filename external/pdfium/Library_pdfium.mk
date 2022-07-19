@@ -484,6 +484,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxge/dib/cfx_cmyk_to_srgb \
     UnpackedTarball/pdfium/core/fxge/text_char_pos \
     UnpackedTarball/pdfium/core/fxge/cfx_face \
+    UnpackedTarball/pdfium/core/fxge/cfx_defaultrenderdevice \
     UnpackedTarball/pdfium/core/fxge/calculate_pitch \
 ))
 
@@ -532,30 +533,31 @@ endif
 ifneq ($(SYSTEM_OPENJPEG2),TRUE)
 # third_party/fx_libopenjpeg
 $(eval $(call gb_Library_add_generated_cobjects,pdfium,\
-    UnpackedTarball/pdfium/third_party/libopenjpeg20/bio \
-    UnpackedTarball/pdfium/third_party/libopenjpeg20/cio \
-    UnpackedTarball/pdfium/third_party/libopenjpeg20/dwt \
-    UnpackedTarball/pdfium/third_party/libopenjpeg20/event \
-    UnpackedTarball/pdfium/third_party/libopenjpeg20/function_list \
-    UnpackedTarball/pdfium/third_party/libopenjpeg20/image \
-    UnpackedTarball/pdfium/third_party/libopenjpeg20/invert \
-    UnpackedTarball/pdfium/third_party/libopenjpeg20/j2k \
-    UnpackedTarball/pdfium/third_party/libopenjpeg20/jp2 \
-    UnpackedTarball/pdfium/third_party/libopenjpeg20/mct \
-    UnpackedTarball/pdfium/third_party/libopenjpeg20/mqc \
-    UnpackedTarball/pdfium/third_party/libopenjpeg20/openjpeg \
-    UnpackedTarball/pdfium/third_party/libopenjpeg20/opj_clock \
-    UnpackedTarball/pdfium/third_party/libopenjpeg20/pi \
-    UnpackedTarball/pdfium/third_party/libopenjpeg20/thread \
-    UnpackedTarball/pdfium/third_party/libopenjpeg20/t1 \
-    UnpackedTarball/pdfium/third_party/libopenjpeg20/t2 \
-    UnpackedTarball/pdfium/third_party/libopenjpeg20/tcd \
-    UnpackedTarball/pdfium/third_party/libopenjpeg20/tgt \
-    UnpackedTarball/pdfium/third_party/libopenjpeg20/sparse_array \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/bio \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/cio \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/dwt \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/event \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/function_list \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/image \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/invert \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/j2k \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/jp2 \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/mct \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/mqc \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/openjpeg \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/opj_clock \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/pi \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/thread \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/t1 \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/t2 \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/tcd \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/tgt \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/sparse_array \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/ht_dec \
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
-    UnpackedTarball/pdfium/third_party/libopenjpeg20/opj_malloc \
+    UnpackedTarball/pdfium/third_party/libopenjpeg/opj_malloc \
 ))
 endif
 

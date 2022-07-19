@@ -18,7 +18,6 @@ pdfium_patches += c++20-comparison.patch
 pdfium_patches += cg-instead-of-carbon.patch.1
 # Android NDK 19 - that is known to work well - does not have 2 defines
 pdfium_patches += AndroidNDK19.patch.1
-pdfium_patches += bsd-time.patch.1
 
 # Work around <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=94141> "c++20 rewritten operator==
 # recursive call mixing friend and external operators for template class" in GCC with
@@ -55,7 +54,7 @@ $(eval $(call gb_UnpackedTarball_set_post_action,pdfium,\
     mv third_party/base/allocator/partition_allocator/random.cc third_party/base/allocator/partition_allocator/random.cpp && \
     mv third_party/base/memory/aligned_memory.cc third_party/base/memory/aligned_memory.cpp && \
     mv third_party/base/win/win_util.cc third_party/base/win/win_util.cpp && \
-    mv third_party/libopenjpeg20/opj_malloc.cc third_party/libopenjpeg20/opj_malloc.cpp && \
+    mv third_party/libopenjpeg/opj_malloc.cc third_party/libopenjpeg/opj_malloc.cpp && \
     mv third_party/abseil-cpp/absl/types/bad_optional_access.cc third_party/abseil-cpp/absl/types/bad_optional_access.cpp \
 ))
 
