@@ -26,6 +26,7 @@
 class SwWrtShell;
 class SwFormat;
 
+/// The Condition tab on the paragraph style dialog for conditional styles, e.g. Text Body.
 class SwCondCollPage final : public SfxTabPage
 {
     std::vector<OUString> m_aStrArr;
