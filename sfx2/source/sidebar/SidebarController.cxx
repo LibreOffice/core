@@ -120,6 +120,7 @@ SidebarController::SidebarController (
                      const ::std::vector<TabBar::DeckMenuData>& rMenuData) { return this->ShowPopupMenu(rMainMenu, rSubMenu, rMenuData); },
               this)),
       maCurrentContext(OUString(), OUString()),
+      maRequestedContext(OUString(), OUString()),
       mnRequestedForceFlags(SwitchFlag_NoForce),
       mnMaximumSidebarWidth(officecfg::Office::UI::Sidebar::General::MaximumWidth::get()),
       mbMinimumSidebarWidth(officecfg::Office::UI::Sidebar::General::MinimumWidth::get()),
@@ -143,7 +144,7 @@ rtl::Reference<SidebarController> SidebarController::create(SidebarDockingWindow
     rtl::Reference<SidebarController> instance(new SidebarController(pParentWindow, pViewFrame));
 
     const css::uno::Reference<css::frame::XFrame>& rxFrame = pViewFrame->GetFrame().GetFrameInterface();
-    registerSidebarForFrame(instance.get(), rxFrame->getController());
+    instance->registerSidebarForFrame(rxFrame->getController());
     rxFrame->addFrameActionListener(instance);
     // Listen for window events.
     instance->mpParentWindow->AddEventListener(LINK(instance.get(), SidebarController, WindowEventHandler));
@@ -190,27 +191,27 @@ SidebarController* SidebarController::GetSidebarControllerForFrame (
     return dynamic_cast<SidebarController*>(xListener.get());
 }
 
-void SidebarController::registerSidebarForFrame(SidebarController* pController, const css::uno::Reference<css::frame::XController>& xController)
+void SidebarController::registerSidebarForFrame(const css::uno::Reference<css::frame::XController>& xController)
 {
     // Listen for context change events.
     css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
         css::ui::ContextChangeEventMultiplexer::get(
             ::comphelper::getProcessComponentContext()));
     xMultiplexer->addContextChangeEventListener(
-        static_cast<css::ui::XContextChangeEventListener*>(pController),
+        static_cast<css::ui::XContextChangeEventListener*>(this),
         xController);
 }
 
-void SidebarController::unregisterSidebarForFrame(SidebarController* pController, const css::uno::Reference<css::frame::XController>& xController)
+void SidebarController::unregisterSidebarForFrame(const css::uno::Reference<css::frame::XController>& xController)
 {
-    pController->saveDeckState();
-    pController->disposeDecks();
+    saveDeckState();
+    disposeDecks();
 
     css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
         css::ui::ContextChangeEventMultiplexer::get(
             ::comphelper::getProcessComponentContext()));
     xMultiplexer->removeContextChangeEventListener(
-        static_cast<css::ui::XContextChangeEventListener*>(pController),
+        static_cast<css::ui::XContextChangeEventListener*>(this),
         xController);
 }
 
@@ -328,7 +329,7 @@ void SidebarController::disposing(std::unique_lock<std::mutex>&)
     if (!xController.is())
         xController = mxCurrentController;
 
-    unregisterSidebarForFrame(this, xController);
+    unregisterSidebarForFrame(xController);
 }
 
 void SAL_CALL SidebarController::notifyContextChangeEvent (const css::ui::ContextChangeEventObject& rEvent)
@@ -548,6 +549,8 @@ void SidebarController::UpdateConfigurations()
             (maCurrentContext.msApplication != maRequestedContext.msApplication))
     {
         OUString sLastActiveDeck = mpResourceManager->GetLastActiveDeck( maRequestedContext );
+        if (comphelper::LibreOfficeKit::isActive() && sLastActiveDeck == "PropertyDeck" && maRequestedContext.msApplication == "com.sun.star.formula.FormulaProperties")
+            sLastActiveDeck = "ElementsDeck"; // Manual override for lok
         if (!sLastActiveDeck.isEmpty())
             msCurrentDeckId = sLastActiveDeck;
     }
@@ -1591,9 +1594,9 @@ void SidebarController::frameAction(const css::frame::FrameActionEvent& rEvent)
     if (rEvent.Frame == mxFrame)
     {
         if (rEvent.Action == css::frame::FrameAction_COMPONENT_DETACHING)
-            unregisterSidebarForFrame(this, mxFrame->getController());
+            unregisterSidebarForFrame(mxFrame->getController());
         else if (rEvent.Action == css::frame::FrameAction_COMPONENT_REATTACHED)
-            registerSidebarForFrame(this, mxFrame->getController());
+            registerSidebarForFrame(mxFrame->getController());
     }
 }
 
@@ -1609,10 +1612,18 @@ void SidebarController::saveDeckState()
     }
 }
 
+static bool isChartOrMathContext(const Context& context)
+{
+    return context.msApplication == "com.sun.star.chart2.ChartDocument"
+           || context.msApplication == "com.sun.star.formula.FormulaProperties";
+}
+
 bool SidebarController::hasChartOrMathContextCurrently() const
 {
-    return GetCurrentContext().msApplication == "com.sun.star.chart2.ChartDocument"
-           || GetCurrentContext().msApplication == "com.sun.star.formula.FormulaProperties";
+    if ((maRequestedContext != maCurrentContext) && isChartOrMathContext(maRequestedContext))
+        return true; // We are not yet changed, but in the process
+
+    return isChartOrMathContext(maCurrentContext);
 }
 
 sfx2::sidebar::SidebarController* SidebarController::GetSidebarControllerForView(const SfxViewShell* pViewShell)
