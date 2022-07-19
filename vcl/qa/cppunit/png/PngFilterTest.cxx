@@ -1796,8 +1796,7 @@ void PngFilterTest::testPngRoundtrip8BitGrey()
         BitmapEx aBitmapEx;
         CPPUNIT_ASSERT_EQUAL(true, aPngReader.read(aBitmapEx));
 
-        CPPUNIT_ASSERT_EQUAL(16L, aBitmapEx.GetSizePixel().Width());
-        CPPUNIT_ASSERT_EQUAL(16L, aBitmapEx.GetSizePixel().Height());
+        CPPUNIT_ASSERT_EQUAL(Size(16, 16), aBitmapEx.GetSizePixel());
 
         CPPUNIT_ASSERT_EQUAL(COL_GRAY, aBitmapEx.GetPixelColor(0, 0));
         CPPUNIT_ASSERT_EQUAL(COL_LIGHTGRAY, aBitmapEx.GetPixelColor(15, 15));
@@ -1845,8 +1844,7 @@ void PngFilterTest::testPngRoundtrip24()
         BitmapEx aBitmapEx;
         CPPUNIT_ASSERT_EQUAL(true, aPngReader.read(aBitmapEx));
 
-        CPPUNIT_ASSERT_EQUAL(16L, aBitmapEx.GetSizePixel().Width());
-        CPPUNIT_ASSERT_EQUAL(16L, aBitmapEx.GetSizePixel().Height());
+        CPPUNIT_ASSERT_EQUAL(Size(16, 16), aBitmapEx.GetSizePixel());
 
         CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aBitmapEx.GetPixelColor(0, 0));
         CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, aBitmapEx.GetPixelColor(15, 15));
@@ -1900,8 +1898,7 @@ void PngFilterTest::testPngRoundtrip24_8()
         BitmapEx aBitmapEx;
         CPPUNIT_ASSERT_EQUAL(true, aPngReader.read(aBitmapEx));
 
-        CPPUNIT_ASSERT_EQUAL(16L, aBitmapEx.GetSizePixel().Width());
-        CPPUNIT_ASSERT_EQUAL(16L, aBitmapEx.GetSizePixel().Height());
+        CPPUNIT_ASSERT_EQUAL(Size(16, 16), aBitmapEx.GetSizePixel());
 
         CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0xBB, 0xFF, 0x00, 0x00),
                              aBitmapEx.GetPixelColor(0, 0));
@@ -1970,8 +1967,7 @@ void PngFilterTest::testPngWrite1BitRGBPalette()
         BitmapEx aBitmapEx;
         CPPUNIT_ASSERT_EQUAL(true, aPngReader.read(aBitmapEx));
 
-        CPPUNIT_ASSERT_EQUAL(16L, aBitmapEx.GetSizePixel().Width());
-        CPPUNIT_ASSERT_EQUAL(16L, aBitmapEx.GetSizePixel().Height());
+        CPPUNIT_ASSERT_EQUAL(Size(16, 16), aBitmapEx.GetSizePixel());
 
         CPPUNIT_ASSERT_EQUAL(COL_RED, aBitmapEx.GetPixelColor(0, 0));
         CPPUNIT_ASSERT_EQUAL(COL_RED, aBitmapEx.GetPixelColor(15, 15));
@@ -2013,8 +2009,7 @@ void PngFilterTest::testPngWrite8BitRGBPalette()
         BitmapEx aBitmapEx;
         CPPUNIT_ASSERT_EQUAL(true, aPngReader.read(aBitmapEx));
 
-        CPPUNIT_ASSERT_EQUAL(16L, aBitmapEx.GetSizePixel().Width());
-        CPPUNIT_ASSERT_EQUAL(16L, aBitmapEx.GetSizePixel().Height());
+        CPPUNIT_ASSERT_EQUAL(Size(16, 16), aBitmapEx.GetSizePixel());
 
         for (int i = 0; i < 16; i++)
         {
