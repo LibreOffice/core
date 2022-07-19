@@ -20,9 +20,9 @@
 #include <sal/config.h>
 #include <o3tl/underlyingenumvalue.hxx>
 #include <tools/solar.h>
-#include <vcl/animate/AnimationBitmap.hxx>
+#include <vcl/animate/AnimationFrame.hxx>
 
-BitmapChecksum AnimationBitmap::GetChecksum() const
+BitmapChecksum AnimationFrame::GetChecksum() const
 {
     BitmapChecksum nCrc = maBitmapEx.GetChecksum();
     SVBT32 aBT32;

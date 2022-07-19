@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-09-12 11:52:12 using:
+ Generated on 2022-08-13 18:01:17 using:
  ./bin/update_pch slideshow slideshow --cutoff=4 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -39,6 +39,7 @@
 #include <map>
 #include <math.h>
 #include <memory>
+#include <mutex>
 #include <new>
 #include <numeric>
 #include <optional>
@@ -49,8 +50,6 @@
 #include <string>
 #include <string_view>
 #include <type_traits>
-#include <typeinfo>
-#include <unordered_map>
 #include <unordered_set>
 #include <utility>
 #include <vector>
@@ -65,7 +64,6 @@
 #include <osl/interlck.h>
 #include <osl/mutex.h>
 #include <osl/mutex.hxx>
-#include <osl/thread.h>
 #include <osl/thread.hxx>
 #include <osl/time.h>
 #include <rtl/alloc.h>
@@ -83,7 +81,6 @@
 #include <rtl/ustrbuf.h>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
-#include <rtl/uuid.h>
 #include <sal/backtrace.hxx>
 #include <sal/detail/log.h>
 #include <sal/log.hxx>
@@ -97,7 +94,7 @@
 #include <vcl/Scanline.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate/Animation.hxx>
-#include <vcl/animate/AnimationBitmap.hxx>
+#include <vcl/animate/AnimationFrame.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmap/BitmapTypes.hxx>
 #include <vcl/bitmapex.hxx>
@@ -152,7 +149,9 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/range/Range2D.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/range/basicrange.hxx>
 #include <basegfx/tuple/Tuple2D.hxx>
 #include <basegfx/tuple/Tuple3D.hxx>
@@ -169,16 +168,13 @@
 #include <canvas/canvastools.hxx>
 #include <com/sun/star/animations/TransitionSubType.hpp>
 #include <com/sun/star/animations/TransitionType.hpp>
-#include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
 #include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/awt/SystemPointer.hpp>
-#include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
@@ -186,19 +182,18 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
+#include <com/sun/star/geometry/IntegerSize2D.hpp>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
-#include <com/sun/star/i18n/CharacterIteratorMode.hpp>
-#include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <com/sun/star/presentation/XSlideShowView.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/style/XStyle.hpp>
-#include <com/sun/star/text/textfield/Type.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -209,7 +204,6 @@
 #include <com/sun/star/uno/Type.h>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hdl>
-#include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/uno/genfunc.h>
@@ -217,16 +211,19 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Time.hpp>
+#include <com/sun/star/util/XAccounting.hpp>
+#include <comphelper/compbase.hxx>
 #include <comphelper/comphelperdllapi.h>
-#include <comphelper/interfacecontainer2.hxx>
-#include <comphelper/propertysetinfo.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <comphelper/weak.hxx>
 #include <cppcanvas/basegfxfactory.hxx>
+#include <cppcanvas/bitmap.hxx>
 #include <cppcanvas/bitmapcanvas.hxx>
 #include <cppcanvas/canvas.hxx>
 #include <cppcanvas/canvasgraphic.hxx>
 #include <cppcanvas/color.hxx>
 #include <cppcanvas/customsprite.hxx>
+#include <cppcanvas/renderer.hxx>
 #include <cppcanvas/vclfactory.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
@@ -237,37 +234,33 @@
 #include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/implbase_ex_post.hxx>
 #include <cppuhelper/implbase_ex_pre.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <drawinglayer/drawinglayerdllapi.h>
+#include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/CommonTypes.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
-#include <editeng/editdata.hxx>
-#include <editeng/editeng.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <editeng/editengdllapi.h>
-#include <editeng/editobj.hxx>
-#include <editeng/editstat.hxx>
-#include <editeng/eedata.hxx>
-#include <editeng/macros.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/paragraphdata.hxx>
 #include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/safeint.hxx>
-#include <o3tl/sorted_vector.hxx>
+#include <o3tl/span.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
 #include <o3tl/unit_conversion.hxx>
+#include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/cenumitm.hxx>
 #include <svl/eitem.hxx>
 #include <svl/hint.hxx>
 #include <svl/itemset.hxx>
-#include <svl/languageoptions.hxx>
 #include <svl/lstner.hxx>
 #include <svl/macitem.hxx>
 #include <svl/poolitem.hxx>
@@ -324,7 +317,6 @@
 #include <uno/data.h>
 #include <uno/sequence2.h>
 #include <unotools/fontdefs.hxx>
-#include <unotools/options.hxx>
 #include <unotools/resmgr.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/unotoolsdllapi.h>
@@ -332,13 +324,15 @@
 #if PCH_LEVEL >= 4
 #include <activitiesfactory.hxx>
 #include <activitiesqueue.hxx>
+#include <animatableshape.hxx>
+#include <animatedsprite.hxx>
 #include <animationfactory.hxx>
-#include <animationnode.hxx>
+#include <attributableshape.hxx>
 #include <cursormanager.hxx>
 #include <delayevent.hxx>
 #include <disposable.hxx>
 #include <doctreenode.hxx>
-#include <event.hxx>
+#include <doctreenodesupplier.hxx>
 #include <eventmultiplexer.hxx>
 #include <eventqueue.hxx>
 #include <rgbcolor.hxx>
@@ -353,6 +347,7 @@
 #include <unoview.hxx>
 #include <unoviewcontainer.hxx>
 #include <usereventqueue.hxx>
+#include <viewlayer.hxx>
 #endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

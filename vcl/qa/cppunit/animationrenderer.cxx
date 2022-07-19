@@ -91,8 +91,8 @@ void VclAnimationRendererTest::testGetPosSizeWindow()
 
     AnimationRenderer* pAnimationRenderer
         = new AnimationRenderer(&aTestAnim, pTestRC, Point(0, 0), Size(10, 10), 5);
-    AnimationBitmap aAnimBmp(BitmapEx(Size(3, 4), vcl::PixelFormat::N24_BPP), Point(0, 0),
-                             Size(10, 10));
+    AnimationFrame aAnimBmp(BitmapEx(Size(3, 4), vcl::PixelFormat::N24_BPP), Point(0, 0),
+                            Size(10, 10));
     Point aPos;
     Size aSize;
 
@@ -106,10 +106,10 @@ Animation VclAnimationRendererTest::createAnimation()
 {
     Animation aAnimation;
 
-    aAnimation.Insert(AnimationBitmap(BitmapEx(Size(3, 4), vcl::PixelFormat::N24_BPP), Point(0, 0),
-                                      Size(10, 10)));
-    aAnimation.Insert(AnimationBitmap(BitmapEx(Size(3, 3), vcl::PixelFormat::N24_BPP), Point(0, 0),
-                                      Size(10, 10)));
+    aAnimation.Insert(
+        AnimationFrame(BitmapEx(Size(3, 4), vcl::PixelFormat::N24_BPP), Point(0, 0), Size(10, 10)));
+    aAnimation.Insert(
+        AnimationFrame(BitmapEx(Size(3, 3), vcl::PixelFormat::N24_BPP), Point(0, 0), Size(10, 10)));
 
     return aAnimation;
 }
