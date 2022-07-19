@@ -264,6 +264,7 @@ public:
     // existing one to the data holder object later
     void prepareDiagramHelper(const std::shared_ptr< Diagram >& rDiagramPtr, const std::shared_ptr<::oox::drawingml::Theme>& rTheme);
     void propagateDiagramHelper();
+    void dropUnpropagatedDiagramHelper();
 
     // for Writer it is necessary to migrate an existing helper to a new Shape
     void migrateDiagramHelperToNewShape(const ShapePtr& pTarget);
