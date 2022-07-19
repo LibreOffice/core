@@ -764,21 +764,21 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
 
             for( size_t nFrame=0; nFrame<aAnim.Count(); ++nFrame )
             {
-                AnimationBitmap aAnimationBitmap( aAnim.Get( nFrame ) );
+                AnimationFrame aAnimationFrame( aAnim.Get( nFrame ) );
 
-                if( !aCropRect.Contains( tools::Rectangle(aAnimationBitmap.maPositionPixel, aAnimationBitmap.maSizePixel) ) )
+                if( !aCropRect.Contains( tools::Rectangle(aAnimationFrame.maPositionPixel, aAnimationFrame.maSizePixel) ) )
                 {
                     // setup actual cropping (relative to frame position)
                     tools::Rectangle aCropRectRel( aCropRect );
-                    aCropRectRel.Move( -aAnimationBitmap.maPositionPixel.X(),
-                                       -aAnimationBitmap.maPositionPixel.Y() );
+                    aCropRectRel.Move( -aAnimationFrame.maPositionPixel.X(),
+                                       -aAnimationFrame.maPositionPixel.Y() );
 
                     // cropping affects this frame, apply it then
                     // do _not_ apply enlargement, this is done below
-                    ImplTransformBitmap( aAnimationBitmap.maBitmapEx, rAttr, Size(), Size(),
+                    ImplTransformBitmap( aAnimationFrame.maBitmapEx, rAttr, Size(), Size(),
                                          aCropRectRel, rDestSize, false );
 
-                    aAnim.Replace( aAnimationBitmap, nFrame );
+                    aAnim.Replace( aAnimationFrame, nFrame );
                 }
                 // else: bitmap completely within crop area,
                 // i.e. nothing is cropped away
@@ -808,11 +808,11 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
 
                 for( size_t nFrame=0; nFrame<aAnim.Count(); ++nFrame )
                 {
-                    AnimationBitmap aAnimationBitmap( aAnim.Get( nFrame ) );
+                    AnimationFrame aAnimationFrame( aAnim.Get( nFrame ) );
 
-                    aAnimationBitmap.maPositionPixel += aPosOffset;
+                    aAnimationFrame.maPositionPixel += aPosOffset;
 
-                    aAnim.Replace( aAnimationBitmap, nFrame );
+                    aAnim.Replace( aAnimationFrame, nFrame );
                 }
             }
 

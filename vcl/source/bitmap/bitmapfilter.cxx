@@ -41,7 +41,7 @@ bool BitmapFilter::Filter(Animation& rAnimation, BitmapFilter const& rFilter)
     {
         bRet = true;
 
-        std::vector<std::unique_ptr<AnimationBitmap>>& aList = rAnimation.GetAnimationFrames();
+        std::vector<std::unique_ptr<AnimationFrame>>& aList = rAnimation.GetAnimationFrames();
         for (size_t i = 0, n = aList.size(); (i < n) && bRet; ++i)
         {
             bRet = BitmapFilter::Filter(aList[i]->maBitmapEx, rFilter);

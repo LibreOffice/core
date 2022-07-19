@@ -23,7 +23,7 @@
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/timer.hxx>
-#include <vcl/animate/AnimationBitmap.hxx>
+#include <vcl/animate/AnimationFrame.hxx>
 
 #define ANIMATION_TIMEOUT_ON_CLICK 2147483647L
 
@@ -66,11 +66,11 @@ public:
     void SetNotifyHdl(const Link<Animation*, void>& rLink) { maNotifyLink = rLink; }
     const Link<Animation*, void>& GetNotifyHdl() const { return maNotifyLink; }
 
-    std::vector<std::unique_ptr<AnimationBitmap>>& GetAnimationFrames() { return maFrames; }
+    std::vector<std::unique_ptr<AnimationFrame>>& GetAnimationFrames() { return maFrames; }
     size_t Count() const { return maFrames.size(); }
-    bool Insert(const AnimationBitmap& rAnimationBitmap);
-    const AnimationBitmap& Get(sal_uInt16 nAnimation) const;
-    void Replace(const AnimationBitmap& rNewAnimationBmp, sal_uInt16 nAnimation);
+    bool Insert(const AnimationFrame& rAnimationFrame);
+    const AnimationFrame& Get(sal_uInt16 nAnimation) const;
+    void Replace(const AnimationFrame& rNewAnimationBmp, sal_uInt16 nAnimation);
 
     sal_uLong GetSizeBytes() const;
     BitmapChecksum GetChecksum() const;
@@ -96,7 +96,7 @@ public:
 private:
     SAL_DLLPRIVATE static sal_uLong mnAnimCount;
 
-    std::vector<std::unique_ptr<AnimationBitmap>> maFrames;
+    std::vector<std::unique_ptr<AnimationFrame>> maFrames;
     std::vector<std::unique_ptr<AnimationRenderer>> maRenderers;
 
     Link<Animation*, void> maNotifyLink;

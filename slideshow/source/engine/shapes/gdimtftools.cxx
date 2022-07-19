@@ -276,14 +276,14 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
 
     for( sal_uInt16 i=0, nCount=aAnimation.Count(); i<nCount; ++i )
     {
-        const AnimationBitmap& rAnimationBitmap( aAnimation.Get(i) );
-        switch(rAnimationBitmap.meDisposal)
+        const AnimationFrame& rAnimationFrame( aAnimation.Get(i) );
+        switch(rAnimationFrame.meDisposal)
         {
             case Disposal::Not:
             {
-                pVDev->DrawBitmapEx(rAnimationBitmap.maPositionPixel,
-                                    rAnimationBitmap.maBitmapEx);
-                Bitmap aMask = rAnimationBitmap.maBitmapEx.GetAlpha();
+                pVDev->DrawBitmapEx(rAnimationFrame.maPositionPixel,
+                                    rAnimationFrame.maBitmapEx);
+                Bitmap aMask = rAnimationFrame.maBitmapEx.GetAlpha();
 
                 if( aMask.IsEmpty() )
                 {
@@ -296,7 +296,7 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
                 else
                 {
                     BitmapEx aTmpMask(aMask, aMask);
-                    pVDevMask->DrawBitmapEx(rAnimationBitmap.maPositionPixel,
+                    pVDevMask->DrawBitmapEx(rAnimationFrame.maPositionPixel,
                                             aTmpMask );
                 }
                 break;
@@ -305,32 +305,32 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
             case Disposal::Back:
             {
                 // #i70772# react on no mask
-                const Bitmap aMask(rAnimationBitmap.maBitmapEx.GetAlpha());
-                const Bitmap & rContent(rAnimationBitmap.maBitmapEx.GetBitmap());
+                const Bitmap aMask(rAnimationFrame.maBitmapEx.GetAlpha());
+                const Bitmap & rContent(rAnimationFrame.maBitmapEx.GetBitmap());
 
                 pVDevMask->Erase();
-                pVDev->DrawBitmap(rAnimationBitmap.maPositionPixel, rContent);
+                pVDev->DrawBitmap(rAnimationFrame.maPositionPixel, rContent);
 
                 if(aMask.IsEmpty())
                 {
-                    const tools::Rectangle aRect(rAnimationBitmap.maPositionPixel, rContent.GetSizePixel());
+                    const tools::Rectangle aRect(rAnimationFrame.maPositionPixel, rContent.GetSizePixel());
                     pVDevMask->SetFillColor( COL_BLACK);
                     pVDevMask->SetLineColor();
                     pVDevMask->DrawRect(aRect);
                 }
                 else
                 {
-                    pVDevMask->DrawBitmap(rAnimationBitmap.maPositionPixel, aMask);
+                    pVDevMask->DrawBitmap(rAnimationFrame.maPositionPixel, aMask);
                 }
                 break;
             }
 
             case Disposal::Previous :
             {
-                pVDev->DrawBitmapEx(rAnimationBitmap.maPositionPixel,
-                                    rAnimationBitmap.maBitmapEx);
-                pVDevMask->DrawBitmap(rAnimationBitmap.maPositionPixel,
-                                      rAnimationBitmap.maBitmapEx.GetAlpha());
+                pVDev->DrawBitmapEx(rAnimationFrame.maPositionPixel,
+                                    rAnimationFrame.maBitmapEx);
+                pVDevMask->DrawBitmap(rAnimationFrame.maPositionPixel,
+                                      rAnimationFrame.maBitmapEx.GetAlpha());
                 break;
             }
         }
@@ -356,7 +356,7 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
 
         // Take care of special value for MultiPage TIFFs. ATM these shall just
         // show their first page for _quite_ some time.
-        sal_Int32 nWaitTime100thSeconds(rAnimationBitmap.mnWait);
+        sal_Int32 nWaitTime100thSeconds(rAnimationFrame.mnWait);
         if( ANIMATION_TIMEOUT_ON_CLICK == nWaitTime100thSeconds )
         {
             // ATM the huge value would block the timer, so use a long
