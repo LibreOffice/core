@@ -785,7 +785,7 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
         return false;
 
     // Read the data
-    bool bIsCurRecordDeleted = static_cast<char>(m_pBuffer[0]) == '*';
+    bool bIsCurRecordDeleted = m_pBuffer[0] == '*';
 
     // only read the bookmark
 
