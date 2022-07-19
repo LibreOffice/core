@@ -1129,6 +1129,8 @@ static void lcl_FillRedlineArray(
         if( pRedline->HasMark() && pRedEnd->nNode == nOwnNode )
             rRedArr.insert( std::make_shared<SwXRedlinePortion_Impl>(
                 pRedline, false ) );
+        if (pRedStart->nNode < nOwnNode)
+            break;
     }
 }
 

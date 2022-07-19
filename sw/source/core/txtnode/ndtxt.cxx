@@ -1404,9 +1404,9 @@ void SwTextNode::Update(
         for( ; n < rTable.size(); ++n )
         {
             SwRangeRedline* pRedl = rTable[ n ];
+            auto [pStart, pEnd] = pRedl->StartEnd(); // SwPosition*
             if ( pRedl->HasMark() )
             {
-                SwPosition* const pEnd = pRedl->End();
                 if ( this == &pEnd->nNode.GetNode() &&
                      *pRedl->GetPoint() != *pRedl->GetMark() )
                 {
@@ -1429,6 +1429,8 @@ void SwTextNode::Update(
                 assert(!pRedl->GetBound(!isOneUsed).nNode.GetNode().IsTextNode());
                 assert(!pRedl->GetBound(!isOneUsed).nContent.GetIdxReg()); (void)isOneUsed;
             }
+            if (pStart->nNode < *this)
+                break;
         }
 
         // Bookmarks must never grow to either side, when editing (directly)
