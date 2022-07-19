@@ -1511,27 +1511,41 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                         }
                     }
 
-                    VclPtr<SfxInfoBarWindow> pInfoBar =
-                        AppendInfoBar(aInfobarData.msId, aInfobarData.msPrimaryMessage,
+                    // Track Changes infobar: add a button to show/hide Track Changes functions
+                    // Hyphenation infobar: add a button to get more information
+                    // tdf#148913 limit VclPtr usage for these
+                    bool bTrackChanges = aInfobarData.msId == "hiddentrackchanges";
+                    if ( bTrackChanges || aInfobarData.msId == "hyphenationmissing" )
+                    {
+                        VclPtr<SfxInfoBarWindow> pInfoBar =
+                            AppendInfoBar(aInfobarData.msId, aInfobarData.msPrimaryMessage,
                                   aInfobarData.msSecondaryMessage, aInfobarData.maInfobarType,
                                   aInfobarData.mbShowCloseButton);
 
-                    // Track Changes infobar: add a button to show/hide Track Changes functions
-                    if ( pInfoBar && aInfobarData.msId == "hiddentrackchanges" )
-                    {
-                        weld::Button& rTrackChangesButton = pInfoBar->addButton();
-                        rTrackChangesButton.set_label(SfxResId(STR_TRACK_CHANGES_BUTTON));
-                        rTrackChangesButton.connect_clicked(LINK(this,
+                        // tdf#148913 don't extend this condition to keep it thread-safe
+                        if (pInfoBar)
+                        {
+                            weld::Button& rButton = pInfoBar->addButton();
+                            rButton.set_label(SfxResId(bTrackChanges
+                                    ? STR_TRACK_CHANGES_BUTTON
+                                    : STR_HYPHENATION_BUTTON));
+                            if (bTrackChanges)
+                            {
+                                rButton.connect_clicked(LINK(this,
                                                     SfxViewFrame, HiddenTrackChangesHandler));
+                            }
+                            else
+                            {
+                                rButton.connect_clicked(LINK(this,
+                                                    SfxViewFrame, HyphenationMissingHandler));
+                            }
+                        }
                     }
-
-                    // Hyphenation infobar: add a button to get more information
-                    if ( pInfoBar && aInfobarData.msId == "hyphenationmissing" )
+                    else
                     {
-                        weld::Button& rHyphenationButton = pInfoBar->addButton();
-                        rHyphenationButton.set_label(SfxResId(STR_HYPHENATION_BUTTON));
-                        rHyphenationButton.connect_clicked(LINK(this,
-                                                   SfxViewFrame, HyphenationMissingHandler));
+                        AppendInfoBar(aInfobarData.msId, aInfobarData.msPrimaryMessage,
+                                  aInfobarData.msSecondaryMessage, aInfobarData.maInfobarType,
+                                  aInfobarData.mbShowCloseButton);
                     }
 
                     aPendingInfobars.pop_back();
