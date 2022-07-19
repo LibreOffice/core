@@ -80,9 +80,9 @@ public:
     static SidebarController* GetSidebarControllerForFrame (
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
-    static void registerSidebarForFrame(SidebarController* pController, const css::uno::Reference<css::frame::XController>& xFrame);
+    void registerSidebarForFrame(const css::uno::Reference<css::frame::XController>& xFrame);
 
-    static void unregisterSidebarForFrame(SidebarController* pController, const css::uno::Reference<css::frame::XController>& xFrame);
+    void unregisterSidebarForFrame(const css::uno::Reference<css::frame::XController>& xFrame);
 
     // ui::XContextChangeEventListener
     virtual void SAL_CALL notifyContextChangeEvent (const css::ui::ContextChangeEventObject& rEvent) override;
@@ -172,6 +172,7 @@ public:
 
     void SyncUpdate();
 
+    // Used to avoid wrong context update when an embedded object activation is in progress
     bool hasChartOrMathContextCurrently() const;
 
     static SidebarController* GetSidebarControllerForView(const SfxViewShell* pViewShell);
