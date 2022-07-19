@@ -90,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bb8bcf71_7f0aeffc",
+        "filename": "extras/CustomTarget_tplwizreport.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2022-07-19T18:00:19Z",
+      "side": 1,
+      "message": "Actually, I was a little bit dreaming: extra files were missing. May be excess of heat these days?\nNow the list is limited to one file per template (p.e. mimetype), plus extra files (maxifest.rdf and Pictures)",
+      "parentUuid": "13e603a3_db8e2572",
+      "revId": "3858dfa6657acbf721cfa322c50a6d0bc8f05486",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "08174a5d_bff31707",
         "filename": "extras/CustomTarget_tplwizreport.mk",
         "patchSetId": 2
