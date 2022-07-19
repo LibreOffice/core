@@ -145,3 +145,29 @@ index 4d8a7b7d9..d14c6dc06 100644
        if (m_GlyphIndex[charcode] != 0 || !bToUnicode)
          continue;
  
+diff --git a/third_party/libopenjpeg/openjpeg.c b/third_party/libopenjpeg/openjpeg.c
+index 29d3ee528..d5c7a1bc9 100644
+--- a/third_party/libopenjpeg/openjpeg.c
++++ b/third_party/libopenjpeg/openjpeg.c
+@@ -433,7 +433,7 @@ OPJ_BOOL OPJ_CALLCONV opj_setup_decoder(opj_codec_t *p_codec,
+     return OPJ_FALSE;
+ }
+ 
+-OPJ_API OPJ_BOOL OPJ_CALLCONV opj_decoder_set_strict_mode(opj_codec_t *p_codec,
++OPJ_BOOL OPJ_CALLCONV opj_decoder_set_strict_mode(opj_codec_t *p_codec,
+         OPJ_BOOL strict)
+ {
+     if (p_codec) {
+diff --git a/core/fpdfapi/parser/cpdf_data_avail.cpp b/core/fpdfapi/parser/cpdf_data_avail.cpp
+index a17ec0353..3b024ac91 100644
+--- a/core/fpdfapi/parser/cpdf_data_avail.cpp
++++ b/core/fpdfapi/parser/cpdf_data_avail.cpp
+@@ -902,7 +902,7 @@ CPDF_DataAvail::DocAvailStatus CPDF_DataAvail::CheckResources(
+   CPDF_PageObjectAvail* resource_avail =
+       m_PagesResourcesAvail
+           .insert(std::make_pair(
+-              resources,
++              resources.Get(),
+               std::make_unique<CPDF_PageObjectAvail>(
+                   GetValidator(), m_pDocument.Get(), resources.Get())))
+           .first->second.get();
