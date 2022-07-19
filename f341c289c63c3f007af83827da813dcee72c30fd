@@ -16,6 +16,24 @@
       "message": "Hi Andreas,\nSince you are not using any UI dialog in this test, is it something you can test in uicalc.cxx instead ?",
       "revId": "f341c289c63c3f007af83827da813dcee72c30fd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0c80beb_c9cdc80d",
+        "filename": "sc/qa/uitest/calc_tests9/tdf135761.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-07-19T09:57:46Z",
+      "side": 1,
+      "message": "I will try it",
+      "parentUuid": "0af483c5_f23bdca5",
+      "revId": "f341c289c63c3f007af83827da813dcee72c30fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
