@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b577204a_2102ff34",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2022-07-19T15:37:26Z",
+      "side": 1,
+      "message": "Please don\u0027t CC me on VCL renames. Thanks \u003d)",
+      "revId": "18262c622a2264d7b121c7162286d4aa12a0ec3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
