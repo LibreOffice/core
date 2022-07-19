@@ -420,7 +420,7 @@ Sequence< OUString > SvxLinguData_Impl::GetSortedImplNames( LanguageType nLang, 
     OUString *pRes = aRes.getArray();
 
     // add not configured services
-    for (sal_Int32 i = 0;  i < static_cast<sal_Int32>(nDisplayServices);  ++i)
+    for (sal_uInt32 i = 0;  i < nDisplayServices;  ++i)
     {
         const ServiceInfo_Impl &rInfo = aDisplayServiceArr[ i ];
         OUString aImplName;
