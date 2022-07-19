@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c98f19a5_215a02d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-07-19T21:03:14Z",
+      "side": 1,
+      "message": "I think I understand what is happening here. We have to map Writer-specific Which (here RES_CHRATR_BACKGROUND) via a common SID to an EE-specific Which (EE_CHAR_BKGCOLOR).\nHowever, one is a SvxBrushItem and the other is a SvxColorItem, so they can\u0027t directly map - and thus have different SIDs. EE-SID_ATTR_CHAR_BACK_COLOR and SW-SID_ATTR_CHAR_COLOR_BACKGROUND (I think).\n\nPerhaps there is some central place where these conversions are supposed to happen but I haven\u0027t found such a place. This here in the import code is safe anyway - even if not elegant/magical.",
+      "revId": "efc0750654de38647be39298ee686108d4cbf62e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17b1d274_a03faf41",
+        "filename": "sw/source/filter/ww8/ww8graf.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 741,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-07-19T21:03:14Z",
+      "side": 1,
+      "message": "I checked the unit tests to see if there were any documents that had another property that had a slot, but didn\u0027t have an EE match (aka \"else\") but didn\u0027t find any.",
+      "range": {
+        "startLine": 741,
+        "startChar": 39,
+        "endLine": 741,
+        "endChar": 56
+      },
+      "revId": "efc0750654de38647be39298ee686108d4cbf62e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
