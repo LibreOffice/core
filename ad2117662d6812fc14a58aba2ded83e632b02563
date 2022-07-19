@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f12778e_ce29e502",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2022-07-19T08:32:57Z",
+      "side": 1,
+      "message": "Hi Christian,\nWhen I was diving in makefile docs, I found this extra line which could be removed if you agree.",
+      "revId": "ad2117662d6812fc14a58aba2ded83e632b02563",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
