@@ -654,38 +654,38 @@ void GIFReader::FillImages( const sal_uInt8* pBytes, sal_uLong nCount )
 
 void GIFReader::CreateNewBitmaps()
 {
-    AnimationBitmap aAnimationBitmap;
+    AnimationFrame aAnimationFrame;
 
     pAcc8.reset();
 
     if( bGCTransparent )
     {
         pAcc1.reset();
-        aAnimationBitmap.maBitmapEx = BitmapEx( aBmp8, aBmp1 );
+        aAnimationFrame.maBitmapEx = BitmapEx( aBmp8, aBmp1 );
     }
     else
-        aAnimationBitmap.maBitmapEx = BitmapEx( aBmp8 );
+        aAnimationFrame.maBitmapEx = BitmapEx( aBmp8 );
 
-    aAnimationBitmap.maPositionPixel = Point( nImagePosX, nImagePosY );
-    aAnimationBitmap.maSizePixel = Size( nImageWidth, nImageHeight );
-    aAnimationBitmap.mnWait = ( nTimer != 65535 ) ? nTimer : ANIMATION_TIMEOUT_ON_CLICK;
-    aAnimationBitmap.mbUserInput = false;
+    aAnimationFrame.maPositionPixel = Point( nImagePosX, nImagePosY );
+    aAnimationFrame.maSizePixel = Size( nImageWidth, nImageHeight );
+    aAnimationFrame.mnWait = ( nTimer != 65535 ) ? nTimer : ANIMATION_TIMEOUT_ON_CLICK;
+    aAnimationFrame.mbUserInput = false;
 
     // tdf#104121 . Internet Explorer, Firefox, Chrome and Safari all set a minimum default playback speed.
     // IE10 Consumer Preview sets default of 100ms for rates less that 20ms. We do the same
-    if (aAnimationBitmap.mnWait < 2) // 20ms, specified in 100's of a second
-        aAnimationBitmap.mnWait = 10;
+    if (aAnimationFrame.mnWait < 2) // 20ms, specified in 100's of a second
+        aAnimationFrame.mnWait = 10;
 
     if( nGCDisposalMethod == 2 )
-        aAnimationBitmap.meDisposal = Disposal::Back;
+        aAnimationFrame.meDisposal = Disposal::Back;
     else if( nGCDisposalMethod == 3 )
-        aAnimationBitmap.meDisposal = Disposal::Previous;
+        aAnimationFrame.meDisposal = Disposal::Previous;
     else
-        aAnimationBitmap.meDisposal = Disposal::Not;
+        aAnimationFrame.meDisposal = Disposal::Not;
 
-    nAnimationByteSize += aAnimationBitmap.maBitmapEx.GetSizeBytes();
+    nAnimationByteSize += aAnimationFrame.maBitmapEx.GetSizeBytes();
     nAnimationMinFileData += static_cast<sal_uInt64>(nImageWidth) * nImageHeight / 2560;
-    aAnimation.Insert(aAnimationBitmap);
+    aAnimation.Insert(aAnimationFrame);
 
     if( aAnimation.Count() == 1 )
     {
