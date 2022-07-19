@@ -173,7 +173,7 @@
         <info>
             <!-- See tdf#86188 for rationale -->
             <desc>Specifies whether adding comments to footnotes etc. is allowed. These are allowed for ODF but not in OOXML and can result in invalid docx files being saved.</desc>
-            <label>Allow adding comments to footnotes and frames. Disable for better OOXML interoperability.</label>
+            <label>Allow adding comments to footnotes, headers and frames. Disable for better OOXML interoperability.</label>
         </info>
         <value>true</value>
       </prop>
