@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a0febbc_b1a46268",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2022-07-19T06:21:22Z",
+      "side": 1,
+      "message": "Seems to work for me. \nEditing password is also lost, this issue is filed as tdf#150044 ",
+      "revId": "c8fc15a8eca52062f7b345f7a909bc984df506d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
