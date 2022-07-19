@@ -109,7 +109,7 @@
                 <property name="margin-start">12</property>
                 <child>
                   <object class="GtkCheckButton" id="checkSameLR">
-                    <property name="label" translatable="yes" context="headfootformatpage|checkSameLR">Same _content on left and right pages</property>
+                    <property name="label" translatable="yes" context="headfootformatpage|checkSameLR">Same co_ntent on left and right pages</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -125,7 +125,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="checkSameFP">
-                    <property name="label" translatable="yes" context="headfootformatpage|checkSameFP">Same content on first page</property>
+                    <property name="label" translatable="yes" context="headfootformatpage|checkSameFP">Same content on first _page</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -249,7 +249,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="label" translatable="yes" context="headfootformatpage|labelHeight">_Height:</property>
+                    <property name="label" translatable="yes" context="headfootformatpage|labelHeight">Heigh_t:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">spinHeight</property>
                     <property name="ellipsize">end</property>
@@ -299,10 +299,11 @@
                     <property name="layout_style">start</property>
                     <child>
                       <object class="GtkButton" id="buttonMore">
-                        <property name="label" translatable="yes" context="headfootformatpage|buttonMore">More...</property>
+                        <property name="label" translatable="yes" context="headfootformatpage|buttonMore">_More...</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <property name="use_underline">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
