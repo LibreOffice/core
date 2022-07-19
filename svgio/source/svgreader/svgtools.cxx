@@ -1064,7 +1064,7 @@ namespace svgio::svgreader
 
             skip_char(rCandidate, ' ', nPos, nLen);
 
-            if(nLen && '#' == rCandidate[nPos])
+            if (nLen && nPos < nLen && '#' == rCandidate[nPos])
             {
                 ++nPos;
                 rURL = rCandidate.copy(nPos);
