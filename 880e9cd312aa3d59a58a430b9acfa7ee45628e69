@@ -16,6 +16,24 @@
       "message": "I guess all those comments are useless or should not be comments",
       "revId": "880e9cd312aa3d59a58a430b9acfa7ee45628e69",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80105bf0_d976a8d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001582
+      },
+      "writtenOn": "2022-07-19T07:31:31Z",
+      "side": 1,
+      "message": "Oops indeed, that\u0027s an early c\u0026p leftover from when I started setting things up before I understood much, thanks for the catch.",
+      "parentUuid": "51451831_138834c7",
+      "revId": "880e9cd312aa3d59a58a430b9acfa7ee45628e69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ],
   "submitRequirementResults": []
