@@ -1630,12 +1630,22 @@ void ScTabView::MarkColumns(SCCOL nCol, sal_Int16 nModifier)
     if ((nModifier & KEY_SHIFT) == KEY_SHIFT)
         bMoveIsShift = true;
 
-    DoneBlockMode( nModifier != 0 );
-    InitBlockMode( nStartCol, 0, nTab, true, true);
-    MarkCursor( nCol, rDoc.MaxRow(), nTab );
-    bMoveIsShift = false;
-    SetCursor( nCol, 0 );
-    SelectionChanged();
+    if ( SC_MOD()->IsFormulaMode() )
+    {
+        DoneRefMode( nModifier != 0 );
+        InitRefMode( nCol, 0, nTab, SC_REFTYPE_REF );
+        UpdateRef( nCol, rDoc.MaxRow(), nTab );
+        bMoveIsShift = false;
+    }
+    else
+    {
+        DoneBlockMode( nModifier != 0 );
+        InitBlockMode( nStartCol, 0, nTab, true, true);
+        MarkCursor( nCol, rDoc.MaxRow(), nTab );
+        bMoveIsShift = false;
+        SetCursor( nCol, 0 );
+        SelectionChanged();
+    }
 }
 
 void ScTabView::MarkRows(SCROW nRow, sal_Int16 nModifier)
@@ -1647,12 +1657,22 @@ void ScTabView::MarkRows(SCROW nRow, sal_Int16 nModifier)
     if ((nModifier & KEY_SHIFT) == KEY_SHIFT)
         bMoveIsShift = true;
 
-    DoneBlockMode( nModifier != 0 );
-    InitBlockMode( 0, nStartRow, nTab, true, false, true );
-    MarkCursor( rDoc.MaxCol(), nRow, nTab );
-    bMoveIsShift = false;
-    SetCursor( 0, nRow );
-    SelectionChanged();
+    if ( SC_MOD()->IsFormulaMode() )
+    {
+        DoneRefMode( nModifier != 0 );
+        InitRefMode( 0, nRow, nTab, SC_REFTYPE_REF );
+        UpdateRef( rDoc.MaxCol(), nRow, nTab );
+        bMoveIsShift = false;
+    }
+    else
+    {
+        DoneBlockMode( nModifier != 0 );
+        InitBlockMode( 0, nStartRow, nTab, true, false, true );
+        MarkCursor( rDoc.MaxCol(), nRow, nTab );
+        bMoveIsShift = false;
+        SetCursor( 0, nRow );
+        SelectionChanged();
+    }
 }
 
 void ScTabView::MarkDataArea( bool bIncludeCursor )
