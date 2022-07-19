@@ -216,6 +216,16 @@ void Shape::prepareDiagramHelper(
     }
 }
 
+void Shape::dropUnpropagatedDiagramHelper()
+{
+    if (nullptr != mpDiagramHelper)
+    {
+        SAL_WARN("oox.drawingml", "dropping unpropagated DiagramHelper");
+        delete mpDiagramHelper;
+        mpDiagramHelper = nullptr;
+    }
+}
+
 void Shape::propagateDiagramHelper()
 {
     // Propagate collected Diagram data to data holder
@@ -233,11 +243,7 @@ void Shape::propagateDiagramHelper()
     // If propagation failed, delete/cleanup here. Since the DiagramHelper
     // holds a Diagram and that this Shape it is necessary - the destructor
     // will not be called and will be too late
-    if (nullptr != mpDiagramHelper)
-    {
-        delete mpDiagramHelper;
-        mpDiagramHelper = nullptr;
-    }
+    dropUnpropagatedDiagramHelper();
 }
 
 void Shape::migrateDiagramHelperToNewShape(const ShapePtr& pTarget)
