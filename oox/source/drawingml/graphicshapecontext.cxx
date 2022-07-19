@@ -269,6 +269,7 @@ DiagramGraphicDataContext::DiagramGraphicDataContext( ContextHandler2Helper cons
 
 DiagramGraphicDataContext::~DiagramGraphicDataContext()
 {
+    mpShapePtr->dropUnpropagatedDiagramHelper();
 }
 
 ContextHandlerRef DiagramGraphicDataContext::onCreateContext( ::sal_Int32 aElementToken, const AttributeList& rAttribs )
