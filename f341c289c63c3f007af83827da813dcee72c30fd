@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0af483c5_f23bdca5",
+        "filename": "sc/qa/uitest/calc_tests9/tdf135761.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-07-19T09:39:06Z",
+      "side": 1,
+      "message": "Hi Andreas,\nSince you are not using any UI dialog in this test, is it something you can test in uicalc.cxx instead ?",
+      "revId": "f341c289c63c3f007af83827da813dcee72c30fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
