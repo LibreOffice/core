@@ -174,7 +174,7 @@ public:
         /*[in]*/RedlineType nType,
         /*[in]*/bool bStartOrEndInRange) const = 0;
 
-    virtual void CompressRedlines() = 0;
+    virtual void CompressRedlines(size_t nStartIndex = 0) = 0;
 
     virtual const SwRangeRedline* GetRedline(
         /*[in]*/const SwPosition& rPos,

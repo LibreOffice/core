@@ -1342,6 +1342,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
     // look up the first Redline for the starting position
     if( !GetRedline( *pStt, &n ) && n )
         --n;
+    const SwRedlineTable::size_type nStartPos = n;
     bool bDec = false;
 
     for( ; pNewRedl && n < maRedlineTable.size(); bDec ? n : ++n )
@@ -2353,7 +2354,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
     }
 
     if( bCompress )
-        CompressRedlines();
+        CompressRedlines(nStartPos);
 
     CHECK_REDLINE( *this )
 
@@ -2446,7 +2447,7 @@ bool DocumentRedlineManager::AppendTableCellRedline( SwTableCellRedline* pNewRed
     return nullptr != pNewRedl;
 }
 
-void DocumentRedlineManager::CompressRedlines()
+void DocumentRedlineManager::CompressRedlines(size_t nStartIndex)
 {
     CHECK_REDLINE( *this )
 
@@ -2458,7 +2459,9 @@ void DocumentRedlineManager::CompressRedlines()
         pFnc = &SwRangeRedline::Hide;
 
     // Try to merge identical ones
-    for( SwRedlineTable::size_type n = 1; n < maRedlineTable.size(); ++n )
+    if (nStartIndex == 0)
+        nStartIndex = 1;
+    for( SwRedlineTable::size_type n = nStartIndex; n < maRedlineTable.size(); ++n )
     {
         SwRangeRedline* pPrev = maRedlineTable[ n-1 ],
                     * pCur = maRedlineTable[ n ];
