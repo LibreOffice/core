@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "abd61671_bedaae1d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-07-19T10:07:56Z",
+      "side": 1,
+      "message": "\u003e Patch Set 1:\n\u003e \n\u003e This was an internal header. Why was it made public ? Is that necessary? if not we should keep these things maximally encapsulated.\n\u003e If it is necessary the commit message should state what the reason is.\n\nFair enough, I have reverted this aspect of the patch. ",
+      "revId": "e9cc30320c013f3df05f1bb01214bdc20c4122e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
