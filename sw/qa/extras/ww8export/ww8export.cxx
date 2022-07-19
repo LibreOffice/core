@@ -29,6 +29,8 @@
 #include <com/sun/star/table/TableBorder2.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/text/XFormField.hpp>
+#include <com/sun/star/text/XTextField.hpp>
+#include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/view/DocumentZoomType.hpp>
@@ -1455,6 +1457,15 @@ DECLARE_WW8EXPORT_TEST(testCommentExport, "comment-export.odt")
             CPPUNIT_ASSERT_EQUAL(sNames[aTextPortions[i].nAnnotationID], xBookmark->getName());
         }
     }
+
+    // tdf#139759 import character highlight and shade for comment text
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    auto xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    uno::Reference<text::XTextField> xField(xFields->nextElement(), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = getProperty<uno::Reference<text::XText>>(xField, "TextRange");
+    uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(1, xText);
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, getProperty<Color>(getRun(xParagraph, 1), "CharBackColor"));
 }
 
 #if HAVE_MORE_FONTS

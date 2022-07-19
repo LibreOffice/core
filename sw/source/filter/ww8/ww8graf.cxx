@@ -732,7 +732,12 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
                         nWhich >= RES_FLTRATTR_END )
                     {
                         sal_uInt16 nSlotId = m_rDoc.GetAttrPool().GetSlotId(nWhich);
-                        if (
+                        if (nWhich == RES_CHRATR_BACKGROUND || nWhich == RES_CHRATR_HIGHLIGHT)
+                        {
+                            Color aColor(static_cast<const SvxBrushItem*>(pItem)->GetColor());
+                            pS->Put(SvxColorItem(aColor, EE_CHAR_BKGCOLOR));
+                        }
+                        else if (
                             nSlotId && nWhich != nSlotId &&
                             0 != (nWhich = pEditPool->GetWhich(nSlotId)) &&
                             nWhich != nSlotId
