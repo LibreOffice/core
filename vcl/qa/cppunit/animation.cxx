@@ -36,11 +36,11 @@ void VclAnimationTest::testFrameCount()
     CPPUNIT_ASSERT_EQUAL(size_t(0), aAnimation.Count());
 
     aAnimation.Insert(
-        AnimationBitmap(BitmapEx(Size(3, 4), vcl::PixelFormat::N24_BPP), Point(0, 0), Size(3, 4)));
+        AnimationFrame(BitmapEx(Size(3, 4), vcl::PixelFormat::N24_BPP), Point(0, 0), Size(3, 4)));
     CPPUNIT_ASSERT_EQUAL(size_t(1), aAnimation.Count());
 
-    aAnimation.Insert(AnimationBitmap(BitmapEx(Size(3, 3), vcl::PixelFormat::N24_BPP), Point(0, 0),
-                                      Size(10, 10)));
+    aAnimation.Insert(
+        AnimationFrame(BitmapEx(Size(3, 3), vcl::PixelFormat::N24_BPP), Point(0, 0), Size(10, 10)));
     CPPUNIT_ASSERT_EQUAL(size_t(2), aAnimation.Count());
 
     aAnimation.Clear();
@@ -53,11 +53,11 @@ void VclAnimationTest::testDisplaySize()
     CPPUNIT_ASSERT_EQUAL(Size(0, 0), aAnimation.GetDisplaySizePixel());
 
     aAnimation.Insert(
-        AnimationBitmap(BitmapEx(Size(3, 4), vcl::PixelFormat::N24_BPP), Point(0, 0), Size(3, 4)));
+        AnimationFrame(BitmapEx(Size(3, 4), vcl::PixelFormat::N24_BPP), Point(0, 0), Size(3, 4)));
     CPPUNIT_ASSERT_EQUAL(Size(3, 4), aAnimation.GetDisplaySizePixel());
 
-    aAnimation.Insert(AnimationBitmap(BitmapEx(Size(10, 10), vcl::PixelFormat::N24_BPP),
-                                      Point(0, 0), Size(10, 10)));
+    aAnimation.Insert(AnimationFrame(BitmapEx(Size(10, 10), vcl::PixelFormat::N24_BPP), Point(0, 0),
+                                     Size(10, 10)));
     CPPUNIT_ASSERT_EQUAL(Size(10, 10), aAnimation.GetDisplaySizePixel());
 
     aAnimation.Clear();
