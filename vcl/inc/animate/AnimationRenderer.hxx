@@ -26,7 +26,7 @@
 class Animation;
 class OutputDevice;
 class VirtualDevice;
-struct AnimationBitmap;
+struct AnimationFrame;
 
 struct AnimationData
 {
@@ -80,7 +80,7 @@ public:
     void            Repaint();
     AnimationData*  CreateAnimationData() const;
 
-    void            GetPosSize( const AnimationBitmap& rAnm, Point& rPosPix, Size& rSizePix );
+    void            GetPosSize( const AnimationFrame& rAnm, Point& rPosPix, Size& rSizePix );
 
     const Point&    GetOriginPosition() const { return maPt; }
 

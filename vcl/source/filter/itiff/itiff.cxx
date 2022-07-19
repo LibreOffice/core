@@ -243,9 +243,9 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
                     break;
             }
 
-            AnimationBitmap aAnimationBitmap(aBitmapEx, Point(0, 0), aBitmapEx.GetSizePixel(),
+            AnimationFrame aAnimationFrame(aBitmapEx, Point(0, 0), aBitmapEx.GetSizePixel(),
                                              ANIMATION_TIMEOUT_ON_CLICK, Disposal::Back);
-            aAnimation.Insert(aAnimationBitmap);
+            aAnimation.Insert(aAnimationFrame);
         }
     } while (TIFFReadDirectory(tif));
 
