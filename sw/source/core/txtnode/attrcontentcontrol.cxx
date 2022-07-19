@@ -319,7 +319,7 @@ bool SwContentControl::IsInteractingCharacter(sal_Unicode cCh)
 
 bool SwContentControl::ShouldOpenPopup(const vcl::KeyCode& rKeyCode)
 {
-    if (HasListItems())
+    if (HasListItems() || GetDate())
     {
         // Alt-down opens the popup.
         return rKeyCode.IsMod2() && rKeyCode.GetCode() == KEY_DOWN;

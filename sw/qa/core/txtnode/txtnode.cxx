@@ -270,7 +270,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testDropdownContentControlKeyboard)
     CPPUNIT_ASSERT(bShouldOpen);
 }
 
-CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testPicutreContentControlKeyboard)
+CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testPictureContentControlKeyboard)
 {
     // Given an already selected picture content control:
     SwDoc* pDoc = createSwDoc();
@@ -295,6 +295,27 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testPicutreContentControlKeyboard)
     // Without the accompanying fix in place, this test would have failed, the picture replacement
     // file-picker was mouse-only.
     CPPUNIT_ASSERT(bIsInteracting);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testDateContentControlKeyboard)
+{
+    // Given an already selected date content control:
+    SwDoc* pDoc = createSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->InsertContentControl(SwContentControlType::DATE);
+
+    // When checking if alt-down should open a popup:
+    SwTextContentControl* pTextContentControl = pWrtShell->CursorInsideContentControl();
+    auto& rFormatContentControl
+        = static_cast<SwFormatContentControl&>(pTextContentControl->GetAttr());
+    std::shared_ptr<SwContentControl> pContentControl = rFormatContentControl.GetContentControl();
+    vcl::KeyCode aKeyCode(KEY_DOWN, KEY_MOD2);
+    bool bShouldOpen = pContentControl->ShouldOpenPopup(aKeyCode);
+
+    // Then make sure that the answer is yes for date:
+    // Without the accompanying fix in place, this test would have failed, the date popup was
+    // mouse-only.
+    CPPUNIT_ASSERT(bShouldOpen);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
