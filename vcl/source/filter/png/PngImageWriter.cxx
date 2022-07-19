@@ -220,7 +220,7 @@ static bool pngWrite(SvStream& rStream, const BitmapEx& rBitmapEx, int nCompress
                 std::vector<std::remove_pointer_t<Scanline>> aCombinedChannels;
                 if (bCombineChannels)
                 {
-                    // Check that theres at least an alpha channel per 3 color/RGB channels
+                    // Check that there's at least an alpha channel per 3 color/RGB channels
                     assert(((pAlphaAccess->GetScanlineSize() * 3) >= pAccess->GetScanlineSize())
                            && "RGB and alpha channel size mismatch");
                     // Allocate enough size to fit all 4 channels
