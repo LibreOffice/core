@@ -34,6 +34,24 @@
       "parentUuid": "93482292_ea7803f6",
       "revId": "ca7c1039deb48140e9c588bf17c6bbc7211e2076",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac7bed5a_e2defbad",
+        "filename": "offapi/com/sun/star/chart2/DataTable.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-07-19T17:57:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "48621e15_bd48de00",
+      "revId": "ca7c1039deb48140e9c588bf17c6bbc7211e2076",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

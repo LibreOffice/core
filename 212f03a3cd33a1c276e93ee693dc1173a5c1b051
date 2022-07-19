@@ -16,6 +16,24 @@
       "message": "Is the empty XDataTable a deliberately empty marker interface, unfinished work in progress (\"The interface for registering and removing data table entries\"), or some accident?",
       "revId": "212f03a3cd33a1c276e93ee693dc1173a5c1b051",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bfb5a39_ccfeb52b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-07-19T17:57:53Z",
+      "side": 1,
+      "message": "Oh.. I just duplicated what was done for legends - XLegend is also empty. I didn\u0027t question the sanity of doing that. \nWhat would be the best for the XDiagram method then? getDataTable and setDataTable to return XPropertySet instead, as all that DataTable holds are properties anyway?",
+      "parentUuid": "3492dcbb_b3a2ba69",
+      "revId": "212f03a3cd33a1c276e93ee693dc1173a5c1b051",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
