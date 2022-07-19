@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58f05c35_49334bac",
+        "filename": "vcl/qa/cppunit/png/PngFilterTest.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-07-19T08:44:30Z",
+      "side": 1,
+      "message": "These fail on Win64: \u0027tools::Long\u0027 is not \u0027long\u0027 there.\n\nAnd likely, it would be cleaner to just use\n\n   CPPUNIT_ASSERT_EQUAL(Size(16, 16), aBitmapEx.GetSizePixel());",
+      "revId": "6b4f4bdf9beb0c73fa8b8bc218cd206f2cd347fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
