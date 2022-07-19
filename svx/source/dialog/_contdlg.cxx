@@ -99,7 +99,7 @@ tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
 
                 for( sal_uInt16 i = 0; i < nCount; i++ )
                 {
-                    const AnimationBitmap& rStepBmp = aAnim.Get( i );
+                    const AnimationFrame& rStepBmp = aAnim.Get( i );
 
                     // Push Polygon output to the right place; this is the
                     // offset of the sub-image within the total animation

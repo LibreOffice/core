@@ -214,10 +214,10 @@ void GIFWriter::WriteAnimation( const Animation& rAnimation )
 
     for( sal_uInt16 i = 0; i < nCount; i++ )
     {
-        const AnimationBitmap& rAnimationBitmap = rAnimation.Get( i );
+        const AnimationFrame& rAnimationFrame = rAnimation.Get( i );
 
-        WriteBitmapEx(rAnimationBitmap.maBitmapEx, rAnimationBitmap.maPositionPixel, true,
-                       rAnimationBitmap.mnWait, rAnimationBitmap.meDisposal );
+        WriteBitmapEx(rAnimationFrame.maBitmapEx, rAnimationFrame.maPositionPixel, true,
+                       rAnimationFrame.mnWait, rAnimationFrame.meDisposal );
         nMinPercent = nMaxPercent;
         nMaxPercent = static_cast<sal_uInt32>(nMaxPercent + fStep);
     }
