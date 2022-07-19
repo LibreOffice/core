@@ -379,7 +379,7 @@ void SAL_CALL ChartController::attachFrame(
     {
         auto pSidebar = dynamic_cast<sfx2::sidebar::SidebarController*>(xSidebar.get());
         assert(pSidebar);
-        sfx2::sidebar::SidebarController::registerSidebarForFrame(pSidebar, this);
+        pSidebar->registerSidebarForFrame(this);
         pSidebar->updateModel(getChartModel());
         css::lang::EventObject aEvent;
         mpSelectionChangeHandler->selectionChanged(aEvent);
@@ -745,7 +745,7 @@ void SAL_CALL ChartController::dispose()
         uno::Reference<ui::XSidebar> xSidebar = getSidebarFromModel(getChartModel());
         if (sfx2::sidebar::SidebarController* pSidebar = dynamic_cast<sfx2::sidebar::SidebarController*>(xSidebar.get()))
         {
-            sfx2::sidebar::SidebarController::unregisterSidebarForFrame(pSidebar, this);
+            pSidebar->unregisterSidebarForFrame(this);
         }
     }
 
