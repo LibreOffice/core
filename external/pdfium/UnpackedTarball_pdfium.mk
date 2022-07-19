@@ -56,7 +56,7 @@ $(eval $(call gb_UnpackedTarball_set_post_action,pdfium,\
     mv third_party/base/allocator/partition_allocator/random.cc third_party/base/allocator/partition_allocator/random.cpp && \
     mv third_party/base/memory/aligned_memory.cc third_party/base/memory/aligned_memory.cpp && \
     mv third_party/base/win/win_util.cc third_party/base/win/win_util.cpp && \
-    mv third_party/libopenjpeg20/opj_malloc.cc third_party/libopenjpeg20/opj_malloc.cpp && \
+    mv third_party/libopenjpeg/opj_malloc.cc third_party/libopenjpeg/opj_malloc.cpp && \
     mv third_party/abseil-cpp/absl/types/bad_optional_access.cc third_party/abseil-cpp/absl/types/bad_optional_access.cpp \
 ))
 

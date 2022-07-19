@@ -145,3 +145,16 @@ index 4d8a7b7d9..d14c6dc06 100644
        if (m_GlyphIndex[charcode] != 0 || !bToUnicode)
          continue;
  
+diff --git a/third_party/libopenjpeg/openjpeg.c b/third_party/libopenjpeg/openjpeg.c
+index 29d3ee528..d5c7a1bc9 100644
+--- a/third_party/libopenjpeg/openjpeg.c
++++ b/third_party/libopenjpeg/openjpeg.c
+@@ -433,7 +433,7 @@ OPJ_BOOL OPJ_CALLCONV opj_setup_decoder(opj_codec_t *p_codec,
+     return OPJ_FALSE;
+ }
+ 
+-OPJ_API OPJ_BOOL OPJ_CALLCONV opj_decoder_set_strict_mode(opj_codec_t *p_codec,
++OPJ_BOOL OPJ_CALLCONV opj_decoder_set_strict_mode(opj_codec_t *p_codec,
+         OPJ_BOOL strict)
+ {
+     if (p_codec) {
