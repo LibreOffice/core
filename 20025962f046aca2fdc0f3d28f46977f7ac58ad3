@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1e0958c_331702bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2022-07-19T17:01:18Z",
+      "side": 1,
+      "message": "Hi Christian. It is only a work in progress step, but I need some feedback. Thanks for your help.",
+      "revId": "20025962f046aca2fdc0f3d28f46977f7ac58ad3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

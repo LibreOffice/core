@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f007052c_33bcdc7d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2022-07-19T17:01:18Z",
+      "side": 1,
+      "message": "Thanks Christian for your review. I will proceed in different steps.\nFirst to simplify this endless list of files on one test package (wizard/report). This is this step I want you to review. \nSecond step, when you valid previous one, I will then extend to other packages of wizard\nThird step, I will merge all wizard packages in one.\n\nAfter this change is merged, same should be done to other templates and autotext",
+      "parentUuid": "d3b9422a_9c4066ef",
+      "revId": "3858dfa6657acbf721cfa322c50a6d0bc8f05486",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0380b93e_f3d68516",
         "filename": "extras/CustomTarget_tplwizreport.mk",
         "patchSetId": 2
@@ -54,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "13e603a3_db8e2572",
+        "filename": "extras/CustomTarget_tplwizreport.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2022-07-19T17:01:18Z",
+      "side": 1,
+      "message": "Agree. It is the goal of this new version.\nHowever, I\u0027ve got difficulties on this part. I don\u0027t understand why there is no need to list all the files. It needs only that there is at least one file by template. That\u0027s why I chose mimetype, because there must be one in each template. Other files do not appear in workdir, but are correctly present in instdir/share/template/common/wizard/report/*.ott\nIt works, but I don\u0027t understand why.",
+      "parentUuid": "0380b93e_f3d68516",
+      "revId": "3858dfa6657acbf721cfa322c50a6d0bc8f05486",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "08174a5d_bff31707",
         "filename": "extras/CustomTarget_tplwizreport.mk",
         "patchSetId": 2
@@ -65,6 +101,24 @@
       "writtenOn": "2022-07-18T14:48:34Z",
       "side": 1,
       "message": "I dislike that those rules are duplicated in many makefiles, so I\u0027d prefer if first the makefiles could be combined as stated in https://gerrit.libreoffice.org/c/core/+/129726 - there is no technical reason for the different makefiles.",
+      "revId": "3858dfa6657acbf721cfa322c50a6d0bc8f05486",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d275a21_24549830",
+        "filename": "extras/CustomTarget_tplwizreport.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2022-07-19T17:01:18Z",
+      "side": 1,
+      "message": "It will be done afterwards.",
+      "parentUuid": "08174a5d_bff31707",
       "revId": "3858dfa6657acbf721cfa322c50a6d0bc8f05486",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
