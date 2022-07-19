@@ -34,6 +34,24 @@
       "parentUuid": "67c4eac1_22a41e86",
       "revId": "76167c948f46a99f5e4dd11a1bf4608d663db7a7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8592761_4f39fc8b",
+        "filename": "lotuswordpro/qa/cppunit/import_test.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-07-19T12:51:42Z",
+      "side": 1,
+      "message": "If asserting that property passes with your fix and fails without your fix, then that\u0027s fine. What I typically do is xray on the paragraph object (see sw/qa/extras/README) and simply diff the output (list of all property name-value pairs) before the fix / after the fix. That should lead you to the relevant property to assert. That\u0027s how I found the above ListLabelString one. :-)",
+      "parentUuid": "33da2bae_71474acd",
+      "revId": "76167c948f46a99f5e4dd11a1bf4608d663db7a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
