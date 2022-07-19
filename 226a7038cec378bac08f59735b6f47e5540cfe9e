@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c8adc9d_8304a8e5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-07-19T11:04:01Z",
+      "side": 1,
+      "message": "Looks unrelated Jenkins test fail(s). Next patch passes. ",
+      "revId": "226a7038cec378bac08f59735b6f47e5540cfe9e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
