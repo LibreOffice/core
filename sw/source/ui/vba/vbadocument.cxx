@@ -137,22 +137,34 @@ SwVbaDocument::Range( const uno::Any& rStart, const uno::Any& rEnd )
     sal_Int32 nEnd = 0;
     rStart >>= nStart;
     rEnd >>= nEnd;
-    nStart--;
-    nEnd--;
 
     uno::Reference< text::XTextRange > xStart;
     uno::Reference< text::XTextRange > xEnd;
-    if( nStart != -1 || nEnd != -1 )
-    {
-        if( nStart == -1 )
-            xStart = mxTextDocument->getText()->getStart();
-        else
-            xStart = SwVbaRangeHelper::getRangeByPosition( mxTextDocument->getText(), nStart );
 
-        if( nEnd == -1 )
+    if( nStart > nEnd)
+       throw uno::RuntimeException();
+
+    if( nEnd != 0)
+    {
+        if( nEnd == nStart )
+        {
+            xStart = mxTextDocument->getText()->getEnd();
             xEnd = mxTextDocument->getText()->getEnd();
+        }
         else
+        {
             xEnd = SwVbaRangeHelper::getRangeByPosition( mxTextDocument->getText(), nEnd );
+
+            if( nStart != 0 )
+                xStart = SwVbaRangeHelper::getRangeByPosition( mxTextDocument->getText(), nStart );
+            else
+                xStart = mxTextDocument->getText()->getStart();
+        }
+    }
+    else
+    {
+        xStart = mxTextDocument->getText()->getEnd();
+        xEnd = mxTextDocument->getText()->getEnd();
     }
 
     if( !xStart.is() && !xEnd.is() )
