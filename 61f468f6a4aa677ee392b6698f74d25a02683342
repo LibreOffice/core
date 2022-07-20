@@ -16,6 +16,24 @@
       "message": "Ah sorry about that but why is there an extra channel in that bitmap anyway?",
       "revId": "61f468f6a4aa677ee392b6698f74d25a02683342",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e972555_955567c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-07-20T13:01:59Z",
+      "side": 1,
+      "message": "There isn\u0027t an extra channel - but a scanline can be 32 bit-aligned so it could be 1,2 bytes bigger than the number of actual pixels. This is just enough that the condition does another iteration.  \n\nInstead of nSize it would probably be better if the input would be actual bitmap width.  \n\nAlso might be good to unit test this method..",
+      "parentUuid": "b9321291_02fb98b6",
+      "revId": "61f468f6a4aa677ee392b6698f74d25a02683342",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
