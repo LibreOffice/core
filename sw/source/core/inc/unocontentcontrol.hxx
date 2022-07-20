@@ -71,13 +71,13 @@ protected:
     SwXContentControl(SwDoc* pDoc);
 
 public:
-    static css::uno::Reference<css::text::XTextContent>
+    static rtl::Reference<SwXContentControl>
     CreateXContentControl(SwContentControl& rContentControl,
                           const css::uno::Reference<css::text::XText>& xParentText = nullptr,
                           std::unique_ptr<const TextRangeList_t>&& pPortions
                           = std::unique_ptr<const TextRangeList_t>());
 
-    static css::uno::Reference<css::text::XTextContent> CreateXContentControl(SwDoc& rDoc);
+    static rtl::Reference<SwXContentControl> CreateXContentControl(SwDoc& rDoc);
 
     /// Initializes params with position of the attribute content (without CH_TXTATR).
     bool SetContentRange(SwTextNode*& rpNode, sal_Int32& rStart, sal_Int32& rEnd) const;

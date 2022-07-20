@@ -439,6 +439,11 @@ void SwXTextDocument::GetNumberFormatter()
 
 Reference< XText >  SwXTextDocument::getText()
 {
+    return getBodyText();
+}
+
+rtl::Reference< SwXBodyText > SwXTextDocument::getBodyText()
+{
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw DisposedException("", static_cast< XTextDocument* >(this));

@@ -56,7 +56,7 @@ private:
 
 public:
 
-    static css::uno::Reference<css::text::XTextContent>
+    static rtl::Reference<SwXReferenceMark>
         CreateXReferenceMark(SwDoc & rDoc, SwFormatRefMark * pMarkFormat);
 
     static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();

@@ -25,6 +25,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <sal/types.h>
 #include <svl/poolitem.hxx>
+#include <unotools/weakref.hxx>
 
 #include "calbck.hxx"
 #include "swdllapi.h"
@@ -107,7 +108,7 @@ public:
 /// Stores the properties of a content control.
 class SW_DLLPUBLIC SwContentControl : public sw::BroadcastingModify
 {
-    css::uno::WeakReference<css::text::XTextContent> m_wXContentControl;
+    unotools::WeakReference<SwXContentControl> m_wXContentControl;
 
     SwFormatContentControl* m_pFormat;
 
@@ -185,15 +186,12 @@ public:
 
     void NotifyChangeTextNode(SwTextNode* pTextNode);
 
-    const css::uno::WeakReference<css::text::XTextContent>& GetXContentControl() const
+    const unotools::WeakReference<SwXContentControl>& GetXContentControl() const
     {
         return m_wXContentControl;
     }
 
-    void SetXContentControl(const css::uno::Reference<css::text::XTextContent>& xContentCnotrol)
-    {
-        m_wXContentControl = xContentCnotrol;
-    }
+    void SetXContentControl(const rtl::Reference<SwXContentControl>& xContentCnotrol);
 
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 

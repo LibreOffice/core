@@ -30,6 +30,7 @@
 #include <ndtxt.hxx>
 #include <textcontentcontrol.hxx>
 #include <doc.hxx>
+#include <unocontentcontrol.hxx>
 
 using namespace com::sun::star;
 
@@ -175,6 +176,11 @@ SwContentControl::SwContentControl(SwFormatContentControl* pFormat)
 
 SwContentControl::~SwContentControl() {}
 
+void SwContentControl::SetXContentControl(const rtl::Reference<SwXContentControl>& xContentCnotrol)
+{
+    m_wXContentControl = xContentCnotrol.get();
+}
+
 SwTextContentControl* SwContentControl::GetTextAttr() const
 {
     return m_pFormat ? m_pFormat->GetTextAttr() : nullptr;
@@ -210,7 +216,7 @@ void SwContentControl::SwClientNotify(const SwModify&, const SfxHint& rHint)
     if (pLegacy->GetWhich() == RES_REMOVE_UNO_OBJECT)
     {
         // Invalidate cached uno object.
-        SetXContentControl(uno::Reference<text::XTextContent>());
+        SetXContentControl(nullptr);
         GetNotifier().Broadcast(SfxHint(SfxHintId::Deinitializing));
     }
 }

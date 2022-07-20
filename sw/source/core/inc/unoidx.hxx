@@ -70,7 +70,7 @@ private:
 
 public:
 
-    static css::uno::Reference< css::text::XDocumentIndex>
+    static rtl::Reference<SwXDocumentIndex>
         CreateXDocumentIndex(SwDoc & rDoc, SwTOXBaseSection * pSection,
                 TOXTypes eTypes = TOX_INDEX);
 
@@ -168,7 +168,7 @@ private:
 
 public:
 
-    static css::uno::Reference< css::text::XDocumentIndexMark>
+    static rtl::Reference<SwXDocumentIndexMark>
         CreateXDocumentIndexMark(SwDoc & rDoc,
             SwTOXMark * pMark, TOXTypes eType = TOX_INDEX);
 

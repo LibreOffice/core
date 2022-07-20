@@ -225,6 +225,7 @@ public:
 
     //XTextDocument
     virtual css::uno::Reference< css::text::XText >  SAL_CALL getText() override;
+    rtl::Reference< SwXBodyText > getBodyText();
     virtual void SAL_CALL reformat() override;
 
     //XModel

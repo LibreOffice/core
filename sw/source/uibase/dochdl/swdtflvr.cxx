@@ -1319,7 +1319,7 @@ SwPasteContext::~SwPasteContext()
 
                 aPropertyValue.Name = "TextGraphicObject";
                 aPropertyValue.Value
-                    <<= SwXTextGraphicObject::CreateXTextGraphicObject(*pFormat->GetDoc(), pFormat);
+                    <<= uno::Reference<text::XTextContent>(SwXTextGraphicObject::CreateXTextGraphicObject(*pFormat->GetDoc(), pFormat));
                 break;
             }
 

@@ -64,7 +64,7 @@ public:
 
     SwSectionFormat*   GetFormat() const;
 
-    static css::uno::Reference< css::text::XTextSection >
+    static rtl::Reference< SwXTextSection >
         CreateXTextSection(SwSectionFormat *const pFormat,
                 const bool bIndexHeader = false);
 

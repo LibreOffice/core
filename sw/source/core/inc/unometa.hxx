@@ -90,13 +90,13 @@ protected:
 
 public:
 
-    static css::uno::Reference< css::rdf::XMetadatable >
+    static rtl::Reference<SwXMeta>
         CreateXMeta(
             ::sw::Meta & rMeta,
             css::uno::Reference< css::text::XText> const& xParentText = nullptr,
             std::unique_ptr<TextRangeList_t const> && pPortions = std::unique_ptr<TextRangeList_t const>());
 
-    static css::uno::Reference<css::rdf::XMetadatable>
+    static rtl::Reference<SwXMeta>
         CreateXMeta(SwDoc & rDoc, bool isField);
 
     /// init params with position of the attribute content (w/out CH_TXTATR)
@@ -198,7 +198,7 @@ private:
 
     virtual ~SwXMetaField() override;
 
-    friend css::uno::Reference< css::rdf::XMetadatable >
+    friend rtl::Reference<SwXMeta>
         SwXMeta::CreateXMeta(::sw::Meta &,
             css::uno::Reference< css::text::XText> const&,
             std::unique_ptr<TextRangeList_t const> && pPortions);
@@ -207,7 +207,7 @@ private:
         css::uno::Reference< css::text::XText> const& xParentText,
         std::unique_ptr<TextRangeList_t const> pPortions);
 
-    friend css::uno::Reference<css::rdf::XMetadatable>
+    friend rtl::Reference<SwXMeta>
         SwXMeta::CreateXMeta(SwDoc &, bool);
 
     SwXMetaField(SwDoc *const pDoc);

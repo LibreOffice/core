@@ -60,7 +60,7 @@ private:
 
 public:
 
-    static css::uno::Reference<css::beans::XPropertySet>
+    static rtl::Reference<SwXFieldMaster>
         CreateXFieldMaster(SwDoc * pDoc, SwFieldType * pType,
                 SwFieldIds nResId = SwFieldIds::Unknown);
 
@@ -145,7 +145,7 @@ public:
     static void TransmuteLeadToInputField(SwSetExpField & rField);
 
     /// @return an SwXTextField, either an already existing one or a new one
-    static css::uno::Reference< css::text::XTextField>
+    static rtl::Reference<SwXTextField>
         CreateXTextField(SwDoc * pDoc, SwFormatField const* pFormat,
                 SwServiceType nServiceId = SwServiceType::Invalid);
 

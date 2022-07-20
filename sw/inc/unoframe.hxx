@@ -90,8 +90,8 @@ protected:
     SwXFrame(SwFrameFormat& rFrameFormat, FlyCntType eSet,
                 const SfxItemPropertySet*    pPropSet);
 
-    template<class Interface, class Impl>
-    static css::uno::Reference<Interface>
+    template<class Impl>
+    static rtl::Reference<Impl>
     CreateXFrame(SwDoc & rDoc, SwFrameFormat *const pFrameFormat);
 
 public:
@@ -187,7 +187,7 @@ class SwXTextFrame final : public SwXTextFrameBaseClass,
     SwXTextFrame(SwFrameFormat& rFormat);
 
 public:
-    static SW_DLLPUBLIC css::uno::Reference<css::text::XTextFrame>
+    static SW_DLLPUBLIC rtl::Reference<SwXTextFrame>
             CreateXTextFrame(SwDoc & rDoc, SwFrameFormat * pFrameFormat);
 
     // FIXME: EVIL HACK:  make available for SwXFrame::attachToRange
@@ -195,14 +195,14 @@ public:
 
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
     virtual void SAL_CALL acquire(  ) noexcept override;
-    virtual void SAL_CALL release(  ) noexcept override;
+    virtual SW_DLLPUBLIC void SAL_CALL release(  ) noexcept override;
 
     //XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     //XTextFrame
-    virtual css::uno::Reference< css::text::XText >  SAL_CALL getText() override;
+    virtual SW_DLLPUBLIC css::uno::Reference< css::text::XText >  SAL_CALL getText() override;
 
     //XText
     virtual css::uno::Reference< css::text::XTextCursor >  SAL_CALL createTextCursor() override;
@@ -236,7 +236,8 @@ public:
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     //XPropertySet
-    virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
+    virtual SW_DLLPUBLIC css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
+    using SwXFrame::setPropertyValue;
 };
 
 typedef cppu::ImplInheritanceHelper
@@ -255,7 +256,7 @@ class SwXTextGraphicObject final : public SwXTextGraphicObjectBaseClass
 
 public:
 
-    static css::uno::Reference<css::text::XTextContent>
+    static rtl::Reference<SwXTextGraphicObject>
         CreateXTextGraphicObject(SwDoc & rDoc, SwFrameFormat * pFrameFormat);
 
     //XServiceInfo
@@ -286,7 +287,7 @@ class SwXTextEmbeddedObject final : public SwXTextEmbeddedObjectBaseClass
 
 public:
 
-    static css::uno::Reference<css::text::XTextContent>
+    static rtl::Reference<SwXTextEmbeddedObject>
         CreateXTextEmbeddedObject(SwDoc & rDoc, SwFrameFormat * pFrameFormat);
 
     //XEmbeddedObjectSupplier2

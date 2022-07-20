@@ -22,6 +22,7 @@
 #include <rtl/ustring.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <svl/poolitem.hxx>
+#include <unotools/weakref.hxx>
 #include <com/sun/star/text/XFootnote.hpp>
 
 #include "swdllapi.h"
@@ -34,6 +35,7 @@ namespace com::sun::star::text {
 class SwDoc;
 class SwTextFootnote;
 class SwRootFrame;
+class SwXFootnote;
 
 // ATT_FTN
 
@@ -48,7 +50,7 @@ class SW_DLLPUBLIC SwFormatFootnote final
     sal_uInt16 m_nNumberRLHidden; ///< automatic sequence number (hidden redlines)
     bool    m_bEndNote;     ///< Is it an End note?
 
-    css::uno::WeakReference<css::text::XFootnote> m_wXFootnote;
+    unotools::WeakReference<SwXFootnote> m_wXFootnote;
 
     SwFormatFootnote& operator=(const SwFormatFootnote& rFootnote) = delete;
     SwFormatFootnote( const SwFormatFootnote& ) = delete;
@@ -91,10 +93,9 @@ public:
 
     css::uno::Reference<css::text::XTextRange> getAnchor(SwDoc& rDoc) const;
 
-    css::uno::WeakReference<css::text::XFootnote> const& GetXFootnote() const
+    unotools::WeakReference<SwXFootnote> const& GetXFootnote() const
         { return m_wXFootnote; }
-    void SetXFootnote(css::uno::Reference<css::text::XFootnote> const& xNote)
-        { m_wXFootnote = xNote; }
+    void SetXFootnote(rtl::Reference<SwXFootnote> const& xNote);
 };
 
 #endif

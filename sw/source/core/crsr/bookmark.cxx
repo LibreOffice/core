@@ -280,6 +280,9 @@ namespace sw::mark
         }
     }
 
+    void MarkBase::SetXBookmark(rtl::Reference<SwXBookmark> const& xBkmk)
+    { m_wXBookmark = xBkmk.get(); }
+
     // For fieldmarks, the CH_TXT_ATR_FIELDSTART and CH_TXT_ATR_FIELDEND
     // themselves are part of the covered range. This is guaranteed by
     // TextFieldmark::InitDoc/lcl_AssureFieldMarksSet.
@@ -359,7 +362,7 @@ namespace sw::mark
         auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
         if(RES_REMOVE_UNO_OBJECT == pLegacy->GetWhich())
         {   // invalidate cached uno object
-            SetXBookmark(uno::Reference<text::XTextContent>(nullptr));
+            SetXBookmark(nullptr);
         }
     }
 
@@ -494,7 +497,7 @@ namespace sw::mark
     {
         SwDoc& rDoc( GetMarkPos().GetDoc() );
         const uno::Reference< rdf::XMetadatable> xMeta(
-                SwXBookmark::CreateXBookmark(rDoc, this), uno::UNO_QUERY);
+                SwXBookmark::CreateXBookmark(rDoc, this) );
         return xMeta;
     }
 

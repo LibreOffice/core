@@ -28,6 +28,7 @@
 #include <svl/listener.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <sfx2/Metadatable.hxx>
+#include <unotools/weakref.hxx>
 
 #include "frmfmt.hxx"
 #include <vector>
@@ -38,6 +39,7 @@ class SwSection;
 class SwSectionNode;
 class SwTOXBase;
 class SwServerObject;
+class SwXTextSection;
 
 typedef std::vector<SwSection*> SwSections;
 
@@ -276,7 +278,7 @@ class SW_DLLPUBLIC SwSectionFormat final
         in case of an index, both a SwXDocumentIndex and a SwXTextSection
         register at this SwSectionFormat, so we need to have two refs.
      */
-    css::uno::WeakReference<css::text::XTextSection> m_wXTextSection;
+    unotools::WeakReference<SwXTextSection> m_wXTextSection;
 
     SAL_DLLPRIVATE void UpdateParent();      // Parent has been changed.
 
@@ -317,10 +319,9 @@ public:
     // Is section a valid one for global document?
     const SwSection* GetGlobalDocSection() const;
 
-    SAL_DLLPRIVATE css::uno::WeakReference<css::text::XTextSection> const& GetXTextSection() const
+    SAL_DLLPRIVATE unotools::WeakReference<SwXTextSection> const& GetXTextSection() const
             { return m_wXTextSection; }
-    SAL_DLLPRIVATE void SetXTextSection(css::uno::Reference<css::text::XTextSection> const& xTextSection)
-            { m_wXTextSection = xTextSection; }
+    SAL_DLLPRIVATE void SetXTextSection(rtl::Reference<SwXTextSection> const& xTextSection);
 
     // sfx2::Metadatable
     virtual ::sfx2::IXmlIdRegistry& GetRegistry() override;
