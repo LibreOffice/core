@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5de928e2_2808560f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-07-20T15:53:13Z",
+      "side": 1,
+      "message": "\u003e Uploaded patch set 2: Patch Set 1 was rebased.\n\nrebased this change (and placed it into a false relation chain with \u003chttps://gerrit.libreoffice.org/c/core/+/137270\u003e \"Fix CppunitTest_vcl_svm_test for big endian\") by accident",
+      "revId": "2ecc1c3bf4320332212e4613fe35281a02686427",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
