@@ -34,6 +34,24 @@
       "parentUuid": "3492dcbb_b3a2ba69",
       "revId": "212f03a3cd33a1c276e93ee693dc1173a5c1b051",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c06a97f7_5579365d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-07-20T06:52:19Z",
+      "side": 1,
+      "message": "Ah, so there\u0027s precedent and those deliberately empty interfaces are apparently used as some form of marker interface.  Fine then (I had just wondered whether it might e.g. have been some leftover accident from previous revisions...)\n\n(Just using XPropertySet would also be possible, but would be less descriptive.)",
+      "parentUuid": "5bfb5a39_ccfeb52b",
+      "revId": "212f03a3cd33a1c276e93ee693dc1173a5c1b051",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
