@@ -131,7 +131,7 @@ bool Animation::Repaint(OutputDevice& rOut, tools::Long nRendererId, Point const
     if (itAnimView != maRenderers.end())
     {
         if ((*itAnimView)->getOriginPosition() == rDestPt
-            && (*itAnimView)->getOutSizePix() == rOut.LogicToPixel(rDestSz))
+            && (*itAnimView)->getSizePx() == rOut.LogicToPixel(rDestSz))
         {
             (*itAnimView)->repaint();
             bRepainted = false;
