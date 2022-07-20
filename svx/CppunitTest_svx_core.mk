@@ -22,6 +22,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,svx_core, \
 $(eval $(call gb_CppunitTest_use_libraries,svx_core, \
     comphelper \
     cppu \
+    cppuhelper \
     sal \
     svx \
     svxcore \
