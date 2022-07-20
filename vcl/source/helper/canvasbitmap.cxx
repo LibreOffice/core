@@ -393,17 +393,17 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( rendering::IntegerB
     aRequestedBytes.SetRight( (aRequestedArea.Right()*m_nBitsPerOutputPixel + 7)/8 );
 
     // copy stuff to output sequence
-    aRet.realloc(aRequestedBytes.getOpenWidth()*aRequestedBytes.getOpenHeight());
+    aRet.realloc((aRequestedBytes.GetWidth()-1)*(aRequestedBytes.GetHeight()-1));
     sal_Int8* pOutBuf = aRet.getArray();
 
-    bitmapLayout.ScanLines     = aRequestedBytes.getOpenHeight();
+    bitmapLayout.ScanLines     = aRequestedBytes.GetHeight() - 1;
     bitmapLayout.ScanLineBytes =
-    bitmapLayout.ScanLineStride= aRequestedBytes.getOpenWidth();
+    bitmapLayout.ScanLineStride= aRequestedBytes.GetWidth() - 1;
 
     sal_Int32 nScanlineStride=bitmapLayout.ScanLineStride;
     if( !(m_pBmpAcc->GetScanlineFormat() & ScanlineFormat::TopDown) )
     {
-        pOutBuf += bitmapLayout.ScanLineStride*(aRequestedBytes.getOpenHeight()-1);
+        pOutBuf += bitmapLayout.ScanLineStride*(aRequestedBytes.GetHeight()-2);
         nScanlineStride *= -1;
     }
 
@@ -416,7 +416,7 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( rendering::IntegerB
         for( tools::Long y=aRequestedBytes.Top(); y<aRequestedBytes.Bottom(); ++y )
         {
             Scanline pScan = pBmpAcc->GetScanline(y);
-            memcpy(pOutBuf, pScan+aRequestedBytes.Left(), aRequestedBytes.getOpenWidth());
+            memcpy(pOutBuf, pScan+aRequestedBytes.Left(), aRequestedBytes.GetWidth()-1);
             pOutBuf += nScanlineStride;
         }
     }
