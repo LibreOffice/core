@@ -353,6 +353,8 @@ void SwContentControl::dumpAsXml(xmlTextWriterPtr pWriter) const
                                       BAD_CAST(m_aDateLanguage.toUtf8().getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("current-date"),
                                       BAD_CAST(m_aCurrentDate.toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("plain-text"),
+                                      BAD_CAST(OString::boolean(m_bPlainText).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("placeholder-doc-part"),
                                       BAD_CAST(m_aPlaceholderDocPart.toUtf8().getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("data-binding-prefix-mappings"),

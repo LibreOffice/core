@@ -1033,6 +1033,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetContentControlProper
         { u"" UNO_NAME_DATE_FORMAT, 0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
         { u"" UNO_NAME_DATE_LANGUAGE, 0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
         { u"" UNO_NAME_CURRENT_DATE, 0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
+        { u"" UNO_NAME_PLAIN_TEXT, 0, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 },
         { u"" UNO_NAME_PLACEHOLDER_DOC_PART, 0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
         { u"" UNO_NAME_DATA_BINDING_PREFIX_MAPPINGS, 0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
         { u"" UNO_NAME_DATA_BINDING_XPATH, 0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
