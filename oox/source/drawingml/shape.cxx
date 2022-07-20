@@ -1437,7 +1437,7 @@ Reference< XShape > const & Shape::createAndInsert(
             }
             else if (mbTextBox)
             {
-                // ToDo: TextBox has no rotated text, so indroduce it only if really needed. tdf#82627
+                // ToDo: TextBox has no rotated text, so introduce it only if really needed. tdf#82627
                 aShapeProps.setProperty(PROP_TextBox, true);
             }
 
@@ -1709,7 +1709,7 @@ Reference< XShape > const & Shape::createAndInsert(
                     if ((nDeg >= 45 && nDeg < 135) || (nDeg >= 225 && nDeg < 315))
                     {
                         nTextAreaRotateAngle += 5400000;
-                        nTextPreRotateAngle -= 5400000; // compensate the addional text area rotation
+                        nTextPreRotateAngle -= 5400000; // compensate the additional text area rotation
                     }
                     putPropertyToGrabBag("Upright", Any(true));
                 }

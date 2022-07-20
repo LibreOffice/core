@@ -704,7 +704,7 @@ bool PSDReader::ImplReadBody()
 
     if (mbTransparent && m_rPSD.good())
     {
-        // the psd is 24 or 8 bit grafix + alphachannel
+        // the psd is 24 or 8 bit grafix + alpha channel
 
         nY = nX = 0;
         while ( nY < mpFileHeader->nRows )
