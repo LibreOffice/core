@@ -16,6 +16,23 @@
       "message": "I don\u0027t know Xisco, these cxx tests hate me 😂 ",
       "revId": "1fd9537f1d777c7c236a4d8a5fd93422d96fea77",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd9999eb_fa903c5f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-07-20T12:28:18Z",
+      "side": 1,
+      "message": "It seems it works better with:\n\ngoToCell(\"A1\");\ntypeString(*pModelObj, \"a  b\");\n\nI debugged it and unfortunately it does not move the cursor 😞\nDo you have any idea how to set the selection cursor? I could not figure it out ...\n\nThank you very much",
+      "revId": "1fd9537f1d777c7c236a4d8a5fd93422d96fea77",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
