@@ -1029,6 +1029,7 @@ void SwWrtShell::InsertContentControl(SwContentControlType eType)
     switch (eType)
     {
         case SwContentControlType::RICH_TEXT:
+        case SwContentControlType::PLAIN_TEXT:
         {
             pContentControl->SetShowingPlaceHolder(true);
             if (!HasSelection())
