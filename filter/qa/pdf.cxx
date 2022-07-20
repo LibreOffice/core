@@ -100,7 +100,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSignCertificateSubjectName)
     // Then make sure the resulting PDF has a signature:
     std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = pPDFium->openDocument(aStream.GetData(), aStream.GetSize());
+        = pPDFium->openDocument(aStream.GetData(), aStream.GetSize(), OString());
     // Without the accompanying fix in place, this test would have failed, as signing was enabled
     // without configuring a certificate, so the whole export failed.
     CPPUNIT_ASSERT(pPdfDocument);

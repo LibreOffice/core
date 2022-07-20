@@ -70,7 +70,7 @@ CPPUNIT_TEST_FIXTURE(Test, testChartExportToPdf)
     SvMemoryStream aMemory;
     aMemory.WriteStream(*aTempFile.GetStream(StreamMode::READ));
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = pPdfium->openDocument(aMemory.GetData(), aMemory.GetSize());
+        = pPdfium->openDocument(aMemory.GetData(), aMemory.GetSize(), OString());
     // Without the accompanying fix in place, this test would have failed, because the output was
     // empty (0 bytes).
     CPPUNIT_ASSERT(pPdfDocument);
