@@ -15,19 +15,19 @@
 
 namespace
 {
-void combineScanlineChannels(Scanline pRGBScanline, Scanline pAlphaScanline, Scanline pResult,
-                             sal_uInt32 nSize)
+void combineScanlineChannels(Scanline pRGBScanline, Scanline pAlphaScanline,
+                             std::vector<std::remove_pointer_t<Scanline>>& pResult,
+                             sal_uInt32 nBitmapWidth)
 {
     assert(pRGBScanline && "RGB scanline is null");
     assert(pAlphaScanline && "Alpha scanline is null");
 
-    auto const width = nSize / 3;
-    for (sal_uInt32 i = 0; i < width; ++i)
+    for (sal_uInt32 i = 0; i < nBitmapWidth; ++i)
     {
-        *pResult++ = *pRGBScanline++; // R
-        *pResult++ = *pRGBScanline++; // G
-        *pResult++ = *pRGBScanline++; // B
-        *pResult++ = *pAlphaScanline++; // A
+        pResult.at(i * 4) = *pRGBScanline++; // R
+        pResult.at(i * 4 + 1) = *pRGBScanline++; // G
+        pResult.at(i * 4 + 2) = *pRGBScanline++; // B
+        pResult.at(i * 4 + 3) = *pAlphaScanline++; // A
     }
 }
 }
@@ -221,16 +221,17 @@ static bool pngWrite(SvStream& rStream, const BitmapEx& rBitmapEx, int nCompress
                 std::vector<std::remove_pointer_t<Scanline>> aCombinedChannels;
                 if (bCombineChannels)
                 {
-                    // Check that there's at least an alpha channel per 3 color/RGB channels
-                    assert(((pAlphaAccess->GetScanlineSize() * 3) >= pAccess->GetScanlineSize())
-                           && "RGB and alpha channel size mismatch");
+                    auto nBitmapWidth = pAccess->Width();
+                    assert((pAlphaAccess->GetScanlineSize() >= nBitmapWidth)
+                           && "Bitmap width and alpha channel size mismatch");
+                    assert(((pAccess->GetScanlineSize() / 3) >= nBitmapWidth)
+                           && "Bitmap width and RGB channels size mismatch");
                     // Allocate enough size to fit all 4 channels
-                    aCombinedChannels.resize(pAlphaAccess->GetScanlineSize()
-                                             + pAccess->GetScanlineSize());
+                    aCombinedChannels.resize(nBitmapWidth * 4);
                     Scanline pAlphaPointer = pAlphaAccess->GetScanline(y);
                     // Combine RGB and alpha channels
-                    combineScanlineChannels(pSourcePointer, pAlphaPointer, aCombinedChannels.data(),
-                                            pAccess->GetScanlineSize());
+                    combineScanlineChannels(pSourcePointer, pAlphaPointer, aCombinedChannels,
+                                            nBitmapWidth);
                     pFinalPointer = aCombinedChannels.data();
                     // Invert alpha channel (255 - a)
                     png_set_invert_alpha(pPng);
