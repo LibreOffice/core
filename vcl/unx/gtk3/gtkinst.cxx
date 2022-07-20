@@ -16639,6 +16639,16 @@ private:
         return FRound(fValue * Power10(get_digits()));
     }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
+    static gboolean signalScroll(GtkWidget* pWidget, GdkEventScroll* /*pEvent*/, gpointer /*widget*/)
+    {
+        // tdf#149823 if we don't have focus don't react to the scroll-event
+        if (!gtk_widget_has_focus(pWidget))
+            g_signal_stop_emission_by_name(pWidget, "scroll-event");
+        return false;
+    }
+#endif
+
 public:
     GtkInstanceSpinButton(GtkSpinButton* pButton, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceEditable(GTK_WIDGET(pButton), pBuilder, bTakeOwnership)
@@ -16652,6 +16662,9 @@ public:
     {
 #if GTK_CHECK_VERSION(4, 0, 0)
           gtk_text_set_activates_default(GTK_TEXT(m_pDelegate), true);
+#endif
+#if !GTK_CHECK_VERSION(4, 0, 0)
+        g_signal_connect(pButton, "scroll-event", G_CALLBACK(signalScroll), this);
 #endif
     }
 
