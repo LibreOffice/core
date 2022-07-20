@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6f3ac3bc_abbad46e",
+        "filename": "dbaccess/source/sdbtools/connection/tablename.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1003612
+      },
+      "writtenOn": "2022-07-20T17:04:36Z",
+      "side": 1,
+      "message": "oops!! Sorry.",
+      "parentUuid": "f3f96f5f_5beca6d1",
+      "revId": "fb7b1378187ddec0fc440909406625ef05a0e986",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f263b70e_bbd56a61",
         "filename": "dbaccess/source/ui/app/templwin.cxx",
         "patchSetId": 5
@@ -48,6 +66,24 @@
       "writtenOn": "2022-07-19T17:56:16Z",
       "side": 1,
       "message": "(found !\u003d std::end(STRARY_SVT_DOCINFO))",
+      "revId": "fb7b1378187ddec0fc440909406625ef05a0e986",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2aa9dcce_6ac4e73f",
+        "filename": "dbaccess/source/ui/app/templwin.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1003612
+      },
+      "writtenOn": "2022-07-20T17:04:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f263b70e_bbd56a61",
       "revId": "fb7b1378187ddec0fc440909406625ef05a0e986",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -69,6 +105,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9c86df6_55c10283",
+        "filename": "dbaccess/source/ui/control/FieldDescControl.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1003612
+      },
+      "writtenOn": "2022-07-20T17:04:36Z",
+      "side": 1,
+      "message": "You are right. Fields could change between calls.",
+      "parentUuid": "2d110603_5f169a8a",
+      "revId": "fb7b1378187ddec0fc440909406625ef05a0e986",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "e372a147_c48d3d64",
@@ -82,6 +136,24 @@
       "writtenOn": "2022-07-19T17:56:16Z",
       "side": 1,
       "message": "Could be converted to range based for now.",
+      "revId": "fb7b1378187ddec0fc440909406625ef05a0e986",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4bf7327_041aa510",
+        "filename": "dbaccess/source/ui/control/FieldDescControl.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1003612
+      },
+      "writtenOn": "2022-07-20T17:04:36Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "e372a147_c48d3d64",
       "revId": "fb7b1378187ddec0fc440909406625ef05a0e986",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
