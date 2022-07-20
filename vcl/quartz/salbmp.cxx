@@ -224,7 +224,6 @@ bool QuartzSalBitmap::AllocateUserData()
         switch( mnBits )
         {
         case 1:     mnBytesPerRow = (mnWidth + 7) >> 3; break;
-        case 4:     mnBytesPerRow = (mnWidth + 1) >> 1; break;
         case 8:     mnBytesPerRow = mnWidth; break;
         case 24:    mnBytesPerRow = (mnWidth << 1) + mnWidth; break;
         case 32:    mnBytesPerRow = mnWidth << 2; break;
@@ -414,7 +413,6 @@ static const BitmapPalette& GetDefaultPalette( int mnBits, bool bMonochrome )
     switch( mnBits )
     {
     case 1: return aDefPalette2;
-    case 4: return aDefPalette16;
     case 8: return aDefPalette256;
     default: break;
     }
