@@ -94,6 +94,8 @@
 #include <UndoParagraphSignature.hxx>
 #include <txtatr.hxx>
 #include <fmtmeta.hxx>
+#include <unotxdoc.hxx>
+#include <unotextbodyhf.hxx>
 
 #include <tools/diagnose_ex.h>
 #include <IDocumentRedlineAccess.hxx>
@@ -1276,8 +1278,8 @@ void SwEditShell::ApplyParagraphClassification(std::vector<svx::ClassificationRe
     });
 
     uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
-    uno::Reference<text::XTextContent> xParent = SwXParagraph::CreateXParagraph(pNode->GetDoc(), pNode);
-    lcl_ApplyParagraphClassification(GetDoc(), xModel, xParent, css::uno::Reference<css::rdf::XResource>(xParent, uno::UNO_QUERY), std::move(aResults));
+    rtl::Reference<SwXParagraph> xParent = SwXParagraph::CreateXParagraph(pNode->GetDoc(), pNode);
+    lcl_ApplyParagraphClassification(GetDoc(), xModel, xParent, css::uno::Reference<css::rdf::XResource>(xParent), std::move(aResults));
 }
 
 static std::vector<svx::ClassificationResult> lcl_CollectParagraphClassification(const uno::Reference<frame::XModel>& xModel, const uno::Reference<text::XTextContent>& xParagraph)
@@ -1918,14 +1920,11 @@ void SwEditShell::RestoreMetadataFieldsAndValidateParagraphSignatures()
         });
 
     uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
-    const uno::Reference<text::XTextDocument> xDoc(xModel, uno::UNO_QUERY);
-    uno::Reference<text::XText> xParent = xDoc->getText();
-    uno::Reference<container::XEnumerationAccess> xParagraphEnumerationAccess(xParent, uno::UNO_QUERY);
-    if (!xParagraphEnumerationAccess.is())
+    const rtl::Reference<SwXTextDocument> xDoc(dynamic_cast<SwXTextDocument*>(xModel.get()));
+    rtl::Reference<SwXBodyText> xBodyText = xDoc->getBodyText();
+    if (!xBodyText.is())
         return;
-    uno::Reference<container::XEnumeration> xParagraphs = xParagraphEnumerationAccess->createEnumeration();
-    if (!xParagraphs.is())
-        return;
+    rtl::Reference<SwXParagraphEnumeration> xParagraphs = xBodyText->createParagraphEnumeration();
 
     static constexpr OUStringLiteral sBlank(u"");
     const sfx::ClassificationKeyCreator aKeyCreator(SfxClassificationHelper::getPolicyType());
@@ -2116,11 +2115,10 @@ static OUString lcl_GetHighestClassificationParagraphClass(SwPaM* pCursor)
     sfx::ClassificationKeyCreator aKeyCreator(SfxClassificationHelper::getPolicyType());
 
     uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
-    const uno::Reference< text::XTextDocument > xDoc(xModel, uno::UNO_QUERY);
-    uno::Reference<text::XText> xParent = xDoc->getText();
+    const rtl::Reference<SwXTextDocument> xDoc(dynamic_cast<SwXTextDocument*>(xModel.get()));
+    rtl::Reference<SwXBodyText> xBodyText = xDoc->getBodyText();
 
-    uno::Reference<container::XEnumerationAccess> xParagraphEnumerationAccess(xParent, uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> xParagraphs = xParagraphEnumerationAccess->createEnumeration();
+    rtl::Reference<SwXParagraphEnumeration> xParagraphs = xBodyText->createParagraphEnumeration();
     while (xParagraphs->hasMoreElements())
     {
         uno::Reference<text::XTextContent> xParagraph(xParagraphs->nextElement(), uno::UNO_QUERY);

@@ -111,7 +111,7 @@ class SwXTextSection::Impl
 {
 public:
     SwXTextSection &            m_rThis;
-    uno::WeakReference<uno::XInterface> m_wThis;
+    unotools::WeakReference<SwXTextSection> m_wThis;
     const SfxItemPropertySet &  m_rPropSet;
     std::mutex m_Mutex; // just for OInterfaceContainerHelper4
     ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_EventListeners;
@@ -190,27 +190,27 @@ SwSectionFormat * SwXTextSection::GetFormat() const
     return m_pImpl->GetSectionFormat();
 }
 
-uno::Reference< text::XTextSection >
+rtl::Reference< SwXTextSection >
 SwXTextSection::CreateXTextSection(
         SwSectionFormat *const pFormat, const bool bIndexHeader)
 {
     // re-use existing SwXTextSection
     // #i105557#: do not iterate over the registered clients: race condition
-    uno::Reference< text::XTextSection > xSection;
+    rtl::Reference< SwXTextSection > xSection;
     if (pFormat)
     {
-        xSection.set(pFormat->GetXTextSection());
+        xSection = pFormat->GetXTextSection();
     }
     if ( !xSection.is() )
     {
         rtl::Reference<SwXTextSection> pNew = new SwXTextSection(pFormat, bIndexHeader);
-        xSection.set(pNew);
+        xSection = pNew;
         if (pFormat)
         {
             pFormat->SetXTextSection(xSection);
         }
         // need a permanent Reference to initialize m_wThis
-        pNew->m_pImpl->m_wThis = xSection;
+        pNew->m_pImpl->m_wThis = xSection.get();
     }
     return xSection;
 }

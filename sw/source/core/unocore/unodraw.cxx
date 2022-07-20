@@ -331,18 +331,18 @@ uno::Reference< drawing::XShape > SwFmDrawPage::CreateShape( SdrObject *pObj ) c
                 const SwNode* pNd = pDoc->GetNodes()[ pIdx->GetIndex() + 1 ];
                 if(!pNd->IsNoTextNode())
                 {
-                    xRet.set(SwXTextFrame::CreateXTextFrame(*pDoc, pFlyFormat),
+                    xRet.set(static_cast<cppu::OWeakObject*>(SwXTextFrame::CreateXTextFrame(*pDoc, pFlyFormat).get()),
                             uno::UNO_QUERY);
                 }
                 else if( pNd->IsGrfNode() )
                 {
-                    xRet.set(SwXTextGraphicObject::CreateXTextGraphicObject(
-                                *pDoc, pFlyFormat), uno::UNO_QUERY);
+                    xRet.set(static_cast<cppu::OWeakObject*>(SwXTextGraphicObject::CreateXTextGraphicObject(
+                                *pDoc, pFlyFormat).get()), uno::UNO_QUERY);
                 }
                 else if( pNd->IsOLENode() )
                 {
-                    xRet.set(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
-                                *pDoc, pFlyFormat), uno::UNO_QUERY);
+                    xRet.set(static_cast<cppu::OWeakObject*>(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
+                                *pDoc, pFlyFormat).get()), uno::UNO_QUERY);
                 }
             }
             else

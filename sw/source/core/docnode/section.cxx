@@ -795,8 +795,13 @@ void SwSectionFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 
     if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
     {   // invalidate cached uno object
-        SetXTextSection(uno::Reference<text::XTextSection>(nullptr));
+        SetXTextSection(nullptr);
     }
+}
+
+void SwSectionFormat::SetXTextSection(rtl::Reference<SwXTextSection> const& xTextSection)
+{
+    m_wXTextSection = xTextSection.get();
 }
 
 // Get info from the Format
@@ -976,9 +981,8 @@ SwSectionFormat::MakeUnoObject()
     SwSection *const pSection( GetSection() );
     if (pSection)
     {
-        xMeta.set(  SwXTextSection::CreateXTextSection(this,
-                        SectionType::ToxHeader == pSection->GetType()),
-                    uno::UNO_QUERY );
+        xMeta = SwXTextSection::CreateXTextSection(this,
+                        SectionType::ToxHeader == pSection->GetType());
     }
     return xMeta;
 }

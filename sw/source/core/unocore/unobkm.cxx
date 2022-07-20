@@ -44,7 +44,7 @@ class SwXBookmark::Impl
     : public SvtListener
 {
 public:
-    uno::WeakReference<uno::XInterface> m_wThis;
+    unotools::WeakReference<SwXBookmark> m_wThis;
     std::mutex m_Mutex; // just for OInterfaceContainerHelper3
     ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_EventListeners;
     SwDoc* m_pDoc;
@@ -87,7 +87,7 @@ void SwXBookmark::Impl::Notify(const SfxHint& rHint)
 void SwXBookmark::Impl::registerInMark(SwXBookmark& rThis,
         ::sw::mark::IMark* const pBkmk)
 {
-    const uno::Reference<text::XTextContent> xBookmark(&rThis);
+    const rtl::Reference<SwXBookmark> xBookmark(&rThis);
     if (pBkmk)
     {
         EndListeningAll();
@@ -116,7 +116,7 @@ void SwXBookmark::Impl::registerInMark(SwXBookmark& rThis,
     }
     m_pRegisteredBookmark = pBkmk;
     // need a permanent Reference to initialize m_wThis
-    m_wThis = xBookmark;
+    m_wThis = xBookmark.get();
 }
 
 void SwXBookmark::registerInMark(SwXBookmark & rThis,
@@ -154,14 +154,14 @@ SwXBookmark::~SwXBookmark()
 {
 }
 
-uno::Reference<text::XTextContent> SwXBookmark::CreateXBookmark(
+rtl::Reference<SwXBookmark> SwXBookmark::CreateXBookmark(
     SwDoc & rDoc,
     ::sw::mark::IMark *const pBookmark)
 {
     // #i105557#: do not iterate over the registered clients: race condition
     ::sw::mark::MarkBase *const pMarkBase(dynamic_cast< ::sw::mark::MarkBase * >(pBookmark));
     OSL_ENSURE(!pBookmark || pMarkBase, "CreateXBookmark: no MarkBase?");
-    uno::Reference<text::XTextContent> xBookmark;
+    rtl::Reference<SwXBookmark> xBookmark;
     if (pMarkBase)
     {
         xBookmark = pMarkBase->GetXBookmark();
@@ -683,7 +683,7 @@ uno::Reference<container::XNameContainer> SwXFieldmark::getParameters()
     return uno::Reference<container::XNameContainer>(new SwXFieldmarkParameters(pBkm));
 }
 
-uno::Reference<text::XTextContent>
+rtl::Reference<SwXBookmark>
 SwXFieldmark::CreateXFieldmark(SwDoc & rDoc, ::sw::mark::IMark *const pMark,
         bool const isReplacementObject)
 {
@@ -691,7 +691,7 @@ SwXFieldmark::CreateXFieldmark(SwDoc & rDoc, ::sw::mark::IMark *const pMark,
     ::sw::mark::MarkBase *const pMarkBase(
         dynamic_cast< ::sw::mark::MarkBase * >(pMark));
     assert(!pMark || pMarkBase);
-    uno::Reference<text::XTextContent> xMark;
+    rtl::Reference<SwXBookmark> xMark;
     if (pMarkBase)
     {
         xMark = pMarkBase->GetXBookmark();
@@ -711,7 +711,7 @@ SwXFieldmark::CreateXFieldmark(SwDoc & rDoc, ::sw::mark::IMark *const pMark,
         else
             pXBkmk = new SwXFieldmark(isReplacementObject, &rDoc);
 
-        xMark.set(static_cast<::cppu::OWeakObject*>(pXBkmk.get()), uno::UNO_QUERY); // work around ambiguous base
+        xMark = pXBkmk.get();
         pXBkmk->registerInMark(*pXBkmk, pMarkBase);
     }
     return xMark;

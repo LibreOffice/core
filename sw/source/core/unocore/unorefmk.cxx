@@ -63,7 +63,7 @@ class SwXReferenceMark::Impl
     : public SvtListener
 {
 public:
-    uno::WeakReference<uno::XInterface> m_wThis;
+    unotools::WeakReference<SwXReferenceMark> m_wThis;
     std::mutex m_Mutex; // just for OInterfaceContainerHelper4
     ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_EventListeners;
     bool m_bIsDescriptor;
@@ -122,26 +122,25 @@ SwXReferenceMark::~SwXReferenceMark()
 {
 }
 
-uno::Reference<text::XTextContent>
+rtl::Reference<SwXReferenceMark>
 SwXReferenceMark::CreateXReferenceMark(
         SwDoc & rDoc, SwFormatRefMark *const pMarkFormat)
 {
     // i#105557: do not iterate over the registered clients: race condition
-    uno::Reference<text::XTextContent> xMark;
+    rtl::Reference<SwXReferenceMark> xMark;
     if (pMarkFormat)
     {
         xMark = pMarkFormat->GetXRefMark();
     }
     if (!xMark.is())
     {
-        rtl::Reference<SwXReferenceMark> pMark(new SwXReferenceMark(&rDoc, pMarkFormat));
-        xMark = pMark;
+        xMark = new SwXReferenceMark(&rDoc, pMarkFormat);
         if (pMarkFormat)
         {
             pMarkFormat->SetXRefMark(xMark);
         }
         // need a permanent Reference to initialize m_wThis
-        pMark->m_pImpl->m_wThis = xMark;
+        xMark->m_pImpl->m_wThis = xMark.get();
     }
     return xMark;
 }
@@ -606,7 +605,7 @@ SwXMetaText::createTextCursorByRange(
 class SwXMeta::Impl : public SvtListener
 {
 public:
-    uno::WeakReference<uno::XInterface> m_wThis;
+    unotools::WeakReference<SwXMeta> m_wThis;
     std::mutex m_Mutex; // just for OInterfaceContainerHelper4
     ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_EventListeners;
     std::unique_ptr<const TextRangeList_t> m_pTextPortions;
@@ -685,42 +684,38 @@ SwXMeta::~SwXMeta()
 {
 }
 
-uno::Reference<rdf::XMetadatable>
+rtl::Reference<SwXMeta>
 SwXMeta::CreateXMeta(SwDoc & rDoc, bool const isField)
 {
-    SwXMeta *const pXMeta(isField
-            ? new SwXMetaField(& rDoc) : new SwXMeta(& rDoc));
     // this is why the constructor is private: need to acquire pXMeta here
-    uno::Reference<rdf::XMetadatable> const xMeta(pXMeta);
+    rtl::Reference<SwXMeta> xMeta(isField
+            ? new SwXMetaField(& rDoc) : new SwXMeta(& rDoc));
     // need a permanent Reference to initialize m_wThis
-    pXMeta->m_pImpl->m_wThis = xMeta;
+    xMeta->m_pImpl->m_wThis = xMeta.get();
     return xMeta;
 }
 
-uno::Reference<rdf::XMetadatable>
+rtl::Reference<SwXMeta>
 SwXMeta::CreateXMeta(::sw::Meta & rMeta,
             uno::Reference<text::XText> const& i_xParent,
             std::unique_ptr<TextRangeList_t const> && pPortions)
 {
     // re-use existing SwXMeta
     // #i105557#: do not iterate over the registered clients: race condition
-    uno::Reference<rdf::XMetadatable> xMeta(rMeta.GetXMeta());
+    rtl::Reference<SwXMeta> xMeta(rMeta.GetXMeta());
     if (xMeta.is())
     {
         if (pPortions) // set cache in the XMeta to the given portions
         {
-            SwXMeta *const pXMeta(
-                comphelper::getFromUnoTunnel<SwXMeta>(xMeta));
-            assert(pXMeta);
             // NB: the meta must always be created with the complete content
             // if SwXTextPortionEnumeration is created for a selection,
             // it must be checked that the Meta is contained in the selection!
-            pXMeta->m_pImpl->m_pTextPortions = std::move(pPortions);
+            xMeta->m_pImpl->m_pTextPortions = std::move(pPortions);
             // ??? is this necessary?
-            if (pXMeta->m_pImpl->m_xParentText.get() != i_xParent.get())
+            if (xMeta->m_pImpl->m_xParentText.get() != i_xParent.get())
             {
                 SAL_WARN("sw.uno", "SwXMeta with different parent?");
-                pXMeta->m_pImpl->m_xParentText.set(i_xParent);
+                xMeta->m_pImpl->m_xParentText.set(i_xParent);
             }
         }
         return xMeta;
@@ -740,17 +735,16 @@ SwXMeta::CreateXMeta(::sw::Meta & rMeta,
         xParentText.set( ::sw::CreateParentXText(pTextNode->GetDoc(), aPos) );
     }
     if (!xParentText.is()) { return nullptr; }
-    SwXMeta *const pXMeta( (RES_TXTATR_META == rMeta.GetFormatMeta()->Which())
+    // this is why the constructor is private: need to acquire pXMeta here
+    xMeta = (RES_TXTATR_META == rMeta.GetFormatMeta()->Which())
         ? new SwXMeta     (&pTextNode->GetDoc(), &rMeta, xParentText,
                             std::move(pPortions))
         : new SwXMetaField(&pTextNode->GetDoc(), &rMeta, xParentText,
-                            std::move(pPortions)));
-    // this is why the constructor is private: need to acquire pXMeta here
-    xMeta.set(pXMeta);
+                            std::move(pPortions));
     // in order to initialize the weak pointer cache in the core object
     rMeta.SetXMeta(xMeta);
     // need a permanent Reference to initialize m_wThis
-    pXMeta->m_pImpl->m_wThis = xMeta;
+    xMeta->m_pImpl->m_wThis = xMeta.get();
     return xMeta;
 }
 
@@ -1006,7 +1000,7 @@ SwXMeta::AttachImpl(const uno::Reference< text::XTextRange > & i_xTextRange,
     m_pImpl->EndListeningAll();
     m_pImpl->m_pMeta = pMeta.get();
     m_pImpl->StartListening(pMeta->GetNotifier());
-    pMeta->SetXMeta(uno::Reference<rdf::XMetadatable>(this));
+    pMeta->SetXMeta(this);
 
     m_pImpl->m_xParentText = ::sw::CreateParentXText(*pDoc, *aPam.GetPoint());
 

@@ -22,6 +22,7 @@
 #include <hintids.hxx>
 #include <hints.hxx>
 #include <txtrfmrk.hxx>
+#include <unorefmark.hxx>
 
 SwFormatRefMark::~SwFormatRefMark( )
 {
@@ -43,6 +44,9 @@ SwFormatRefMark::SwFormatRefMark( const SwFormatRefMark& rAttr )
 {
 }
 
+void SwFormatRefMark::SetXRefMark(rtl::Reference<SwXReferenceMark> const& xMark)
+{ m_wXReferenceMark = xMark.get(); }
+
 bool SwFormatRefMark::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
@@ -61,7 +65,7 @@ void SwFormatRefMark::SwClientNotify(const SwModify&, const SfxHint& rHint)
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     CallSwClientNotify(rHint);
     if(RES_REMOVE_UNO_OBJECT == pLegacy->GetWhich())
-        SetXRefMark(css::uno::Reference<css::text::XTextContent>(nullptr));
+        SetXRefMark(nullptr);
 }
 
 void SwFormatRefMark::InvalidateRefMark()

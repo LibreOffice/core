@@ -407,7 +407,7 @@ class SwXFieldMaster::Impl
 public:
     std::mutex m_Mutex; // just for OInterfaceContainerHelper4
 
-    uno::WeakReference<uno::XInterface> m_wThis;
+    unotools::WeakReference<SwXFieldMaster> m_wThis;
     ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_EventListeners;
 
     SwDoc*          m_pDoc;
@@ -532,15 +532,15 @@ SwXFieldMaster::~SwXFieldMaster()
 {
 }
 
-uno::Reference<beans::XPropertySet>
+rtl::Reference<SwXFieldMaster>
 SwXFieldMaster::CreateXFieldMaster(SwDoc * pDoc, SwFieldType *const pType,
         SwFieldIds nResId)
 {
     // re-use existing SwXFieldMaster
-    uno::Reference<beans::XPropertySet> xFM;
+    rtl::Reference<SwXFieldMaster> xFM;
     if (pType)
     {
-        xFM = pType->GetXObject();
+        xFM = dynamic_cast<SwXFieldMaster*>(pType->GetXObject().get().get());
     }
     if (!xFM.is())
     {
@@ -553,7 +553,7 @@ SwXFieldMaster::CreateXFieldMaster(SwDoc * pDoc, SwFieldType *const pType,
             pType->SetXObject(xFM);
         }
         // need a permanent Reference to initialize m_wThis
-        pFM->m_pImpl->m_wThis = xFM;
+        pFM->m_pImpl->m_wThis = xFM.get();
     }
     return xFM;
 }
@@ -824,7 +824,7 @@ SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
             pType->GatherFields(vpFields);
             uno::Sequence<uno::Reference <text::XDependentTextField> > aSeq(vpFields.size());
             std::transform(vpFields.begin(), vpFields.end(), aSeq.getArray(),
-                    [this](SwFormatField* pF) { return uno::Reference<text::XDependentTextField>(SwXTextField::CreateXTextField(m_pImpl->m_pDoc, pF), uno::UNO_QUERY); });
+                    [this](SwFormatField* pF) { return uno::Reference<text::XDependentTextField>(SwXTextField::CreateXTextField(m_pImpl->m_pDoc, pF)); });
             aRet <<= aSeq;
         }
         else
@@ -1087,7 +1087,7 @@ public:
     SwFieldType* m_pFieldType;
     SwFormatField* m_pFormatField;
 
-    uno::WeakReference<uno::XInterface> m_wThis;
+    unotools::WeakReference<SwXTextField> m_wThis;
     ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_EventListeners;
 
     SwDoc* m_pDoc;
@@ -1212,14 +1212,14 @@ SwXTextField::~SwXTextField()
 {
 }
 
-uno::Reference<text::XTextField>
+rtl::Reference<SwXTextField>
 SwXTextField::CreateXTextField(SwDoc *const pDoc, SwFormatField const* pFormat,
         SwServiceType nServiceId)
 {
     assert(!pFormat || pDoc);
     assert(pFormat || nServiceId != SwServiceType::Invalid);
     // re-use existing SwXTextField
-    uno::Reference<text::XTextField> xField;
+    rtl::Reference<SwXTextField> xField;
     if (pFormat)
     {
         xField = pFormat->GetXTextField();
@@ -1235,7 +1235,7 @@ SwXTextField::CreateXTextField(SwDoc *const pDoc, SwFormatField const* pFormat,
             const_cast<SwFormatField *>(pFormat)->SetXTextField(xField);
         }
         // need a permanent Reference to initialize m_wThis
-        pField->m_pImpl->m_wThis = xField;
+        pField->m_pImpl->m_wThis = xField.get();
     }
     return xField;
 }
@@ -1260,10 +1260,10 @@ SwServiceType SwXTextField::GetServiceId() const
 void SwXTextField::TransmuteLeadToInputField(SwSetExpField & rField)
 {
     assert(rField.GetFormatField()->Which() == (rField.GetInputFlag() ? RES_TXTATR_INPUTFIELD : RES_TXTATR_FIELD));
-    uno::Reference<text::XTextField> const xField(
+    rtl::Reference<SwXTextField> const xField(
         rField.GetFormatField()->GetXTextField());
     SwXTextField *const pXField = xField.is()
-        ? comphelper::getFromUnoTunnel<SwXTextField>(uno::Reference<lang::XUnoTunnel>(xField, uno::UNO_QUERY_THROW))
+        ? comphelper::getFromUnoTunnel<SwXTextField>(uno::Reference<lang::XUnoTunnel>(xField))
         : nullptr;
     if (pXField)
         pXField->m_pImpl->SetFormatField(nullptr, nullptr);
@@ -1988,7 +1988,7 @@ void SAL_CALL SwXTextField::attach(
         assert(m_pImpl->GetFormatField());
         m_pImpl->m_pDoc = pDoc;
         m_pImpl->GetFormatField()->SetXTextField(this);
-        m_pImpl->m_wThis = *this;
+        m_pImpl->m_wThis = this;
         m_pImpl->m_bIsDescriptor = false;
         m_pImpl->ClearFieldType();
         m_pImpl->m_pProps.reset();
@@ -2981,7 +2981,7 @@ SwXFieldEnumeration::SwXFieldEnumeration(SwDoc & rDoc)
     IDocumentMarkAccess& rMarksAccess(*rDoc.getIDocumentMarkAccess());
     for (auto iter = rMarksAccess.getFieldmarksBegin(); iter != rMarksAccess.getFieldmarksEnd(); ++iter)
     {
-        m_pImpl->m_Items.emplace_back(SwXFieldmark::CreateXFieldmark(rDoc, *iter), uno::UNO_QUERY);
+        m_pImpl->m_Items.emplace_back(static_cast<cppu::OWeakObject*>(SwXFieldmark::CreateXFieldmark(rDoc, *iter).get()), uno::UNO_QUERY);
     }
 }
 

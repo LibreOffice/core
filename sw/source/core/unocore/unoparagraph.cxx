@@ -113,7 +113,7 @@ class SwXParagraph::Impl
 {
 public:
     SwXParagraph& m_rThis;
-    uno::WeakReference<uno::XInterface> m_wThis;
+    unotools::WeakReference<SwXParagraph> m_wThis;
     std::mutex m_Mutex; // just for OInterfaceContainerHelper4
     ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_EventListeners;
     SfxItemPropertySet const& m_rPropSet;
@@ -227,17 +227,17 @@ bool SwXParagraph::IsDescriptor() const
     return m_pImpl->IsDescriptor();
 }
 
-uno::Reference<text::XTextContent>
+rtl::Reference<SwXParagraph>
 SwXParagraph::CreateXParagraph(SwDoc & rDoc, SwTextNode *const pTextNode,
         uno::Reference< text::XText> const& i_xParent,
         const sal_Int32 nSelStart, const sal_Int32 nSelEnd)
 {
     // re-use existing SwXParagraph
     // #i105557#: do not iterate over the registered clients: race condition
-    uno::Reference<text::XTextContent> xParagraph;
+    rtl::Reference<SwXParagraph> xParagraph;
     if (pTextNode && (-1 == nSelStart) && (-1 == nSelEnd))
     {   // only use cache if no selection!
-        xParagraph.set(pTextNode->GetXParagraph());
+        xParagraph = pTextNode->GetXParagraph();
     }
     if (xParagraph.is())
     {
@@ -262,7 +262,7 @@ SwXParagraph::CreateXParagraph(SwDoc & rDoc, SwTextNode *const pTextNode,
         pTextNode->SetXParagraph(xParagraph);
     }
     // need a permanent Reference to initialize m_wThis
-    pXPara->m_pImpl->m_wThis = xParagraph;
+    pXPara->m_pImpl->m_wThis = xParagraph.get();
     return xParagraph;
 }
 
@@ -331,7 +331,7 @@ SwXParagraph::attachToText(SwXText & rParent, SwTextNode & rTextNode)
     m_pImpl->m_bIsDescriptor = false;
     m_pImpl->EndListeningAll();
     m_pImpl->StartListening(rTextNode.GetNotifier());
-    rTextNode.SetXParagraph(uno::Reference<text::XTextContent>(this));
+    rTextNode.SetXParagraph(this);
     m_pImpl->m_xParentText = &rParent;
     if (!m_pImpl->m_sText.isEmpty())
     {

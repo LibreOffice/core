@@ -5378,7 +5378,7 @@ void SwTextNode::TriggerNodeUpdate(const sw::LegacyModifyHint& rHint)
 
     if (pOldValue && (RES_REMOVE_UNO_OBJECT == pOldValue->Which()))
     {   // invalidate cached uno object
-        SetXParagraph(css::uno::Reference<css::text::XTextContent>(nullptr));
+        SetXParagraph(nullptr);
     }
 }
 
@@ -5400,7 +5400,7 @@ uno::Reference< rdf::XMetadatable >
 SwTextNode::MakeUnoObject()
 {
     const uno::Reference<rdf::XMetadatable> xMeta(
-            SwXParagraph::CreateXParagraph(GetDoc(), this), uno::UNO_QUERY);
+            SwXParagraph::CreateXParagraph(GetDoc(), this));
     return xMeta;
 }
 
@@ -5413,6 +5413,11 @@ drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwTextNode::getSdrAllFill
     }
 
     return maFillAttributes;
+}
+
+void SwTextNode::SetXParagraph(rtl::Reference<SwXParagraph> const & xParagraph)
+{
+    m_wXParagraph = xParagraph.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

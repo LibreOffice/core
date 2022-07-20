@@ -1244,16 +1244,15 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf137025)
     // Check the textbox as well:
     auto xTxFrm = SwXTextFrame::CreateXTextFrame(*pFrameFormat->GetDoc(), pFrameFormat);
     CPPUNIT_ASSERT(xTxFrm);
-    uno::Reference<beans::XPropertySet> xFrameProps(xTxFrm, uno::UNO_QUERY);
 
     const tools::Long nFrameLeftPaddng
-        = xFrameProps->getPropertyValue("LeftBorderDistance").get<tools::Long>();
+        = xTxFrm->getPropertyValue("LeftBorderDistance").get<tools::Long>();
     const tools::Long nFrameRightPaddng
-        = xFrameProps->getPropertyValue("RightBorderDistance").get<tools::Long>();
+        = xTxFrm->getPropertyValue("RightBorderDistance").get<tools::Long>();
     const tools::Long nFrameTopPaddng
-        = xFrameProps->getPropertyValue("TopBorderDistance").get<tools::Long>();
+        = xTxFrm->getPropertyValue("TopBorderDistance").get<tools::Long>();
     const tools::Long nFrameBottomPaddng
-        = xFrameProps->getPropertyValue("BottomBorderDistance").get<tools::Long>();
+        = xTxFrm->getPropertyValue("BottomBorderDistance").get<tools::Long>();
 
     // Check if the shape and frame have different setting
     CPPUNIT_ASSERT_EQUAL(nLPaddng, nFrameLeftPaddng);

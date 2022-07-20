@@ -22,6 +22,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <sfx2/Metadatable.hxx>
 #include <vcl/keycod.hxx>
+#include <unotools/weakref.hxx>
 #include <memory>
 #include <string_view>
 #include <com/sun/star/text/XTextContent.hpp>
@@ -38,6 +39,7 @@ class SwEditWin;
 class SwServerObject;
 class SvNumberFormatter;
 class SfxViewShell;
+class SwXBookmark;
 
 namespace sw::mark {
         class MarkBase
@@ -99,10 +101,9 @@ namespace sw::mark {
 
             virtual ~MarkBase() override;
 
-            const css::uno::WeakReference< css::text::XTextContent> & GetXBookmark() const
+            const unotools::WeakReference<SwXBookmark> & GetXBookmark() const
                     { return m_wXBookmark; }
-            void SetXBookmark(css::uno::Reference< css::text::XTextContent> const& xBkmk)
-                    { m_wXBookmark = xBkmk; }
+            void SetXBookmark(rtl::Reference<SwXBookmark> const& xBkmk);
 
         protected:
             // SwClient
@@ -114,7 +115,7 @@ namespace sw::mark {
             OUString m_aName;
             static OUString GenerateNewName(std::u16string_view rPrefix);
 
-            css::uno::WeakReference< css::text::XTextContent> m_wXBookmark;
+            unotools::WeakReference<SwXBookmark> m_wXBookmark;
         };
 
         class NavigatorReminder final

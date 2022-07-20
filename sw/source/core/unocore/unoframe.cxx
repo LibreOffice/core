@@ -1260,28 +1260,27 @@ SwXFrame::~SwXFrame()
     EndListeningAll();
 }
 
-template<class Interface, class NameLookupIsHard>
-uno::Reference<Interface>
+template<class NameLookupIsHard>
+rtl::Reference<NameLookupIsHard>
 SwXFrame::CreateXFrame(SwDoc & rDoc, SwFrameFormat *const pFrameFormat)
 {
     assert(!pFrameFormat || &rDoc == pFrameFormat->GetDoc());
-    uno::Reference<Interface> xFrame;
+    rtl::Reference<NameLookupIsHard> xFrame;
     if (pFrameFormat)
     {
-        xFrame.set(pFrameFormat->GetXObject(), uno::UNO_QUERY); // cached?
+        xFrame = dynamic_cast<NameLookupIsHard*>(pFrameFormat->GetXObject().get().get()); // cached?
     }
     if (!xFrame.is())
     {
-        NameLookupIsHard *const pNew(pFrameFormat
+        xFrame = pFrameFormat
                 ? new NameLookupIsHard(*pFrameFormat)
-                : new NameLookupIsHard(&rDoc));
-        xFrame.set(pNew);
+                : new NameLookupIsHard(&rDoc);
         if (pFrameFormat)
         {
-            pFrameFormat->SetXObject(xFrame);
+            pFrameFormat->SetXObject(static_cast<cppu::OWeakObject*>(xFrame.get()));
         }
         // need a permanent Reference to initialize m_wThis
-        pNew->SwXFrame::m_pImpl->m_wThis = xFrame;
+        xFrame->SwXFrame::m_pImpl->m_wThis = uno::Reference<XWeak>(xFrame.get());
     }
     return xFrame;
 }
@@ -3214,10 +3213,10 @@ SwXTextFrame::~SwXTextFrame()
 {
 }
 
-uno::Reference<text::XTextFrame>
+rtl::Reference<SwXTextFrame>
 SwXTextFrame::CreateXTextFrame(SwDoc & rDoc, SwFrameFormat *const pFrameFormat)
 {
-    return CreateXFrame<text::XTextFrame, SwXTextFrame>(rDoc, pFrameFormat);
+    return CreateXFrame<SwXTextFrame>(rDoc, pFrameFormat);
 }
 
 void SAL_CALL SwXTextFrame::acquire(  )noexcept
@@ -3455,10 +3454,10 @@ SwXTextGraphicObject::~SwXTextGraphicObject()
 {
 }
 
-uno::Reference<text::XTextContent>
+rtl::Reference<SwXTextGraphicObject>
 SwXTextGraphicObject::CreateXTextGraphicObject(SwDoc & rDoc, SwFrameFormat *const pFrameFormat)
 {
-    return CreateXFrame<text::XTextContent, SwXTextGraphicObject>(rDoc, pFrameFormat);
+    return CreateXFrame<SwXTextGraphicObject>(rDoc, pFrameFormat);
 }
 
 OUString SwXTextGraphicObject::getImplementationName()
@@ -3502,10 +3501,10 @@ SwXTextEmbeddedObject::~SwXTextEmbeddedObject()
 {
 }
 
-uno::Reference<text::XTextContent>
+rtl::Reference<SwXTextEmbeddedObject>
 SwXTextEmbeddedObject::CreateXTextEmbeddedObject(SwDoc & rDoc, SwFrameFormat *const pFrameFormat)
 {
-    return CreateXFrame<text::XTextContent, SwXTextEmbeddedObject>(rDoc, pFrameFormat);
+    return CreateXFrame<SwXTextEmbeddedObject>(rDoc, pFrameFormat);
 }
 
 uno::Reference< lang::XComponent >  SwXTextEmbeddedObject::getEmbeddedObject()

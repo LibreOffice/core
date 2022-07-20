@@ -28,6 +28,7 @@
 #include <textlinebreak.hxx>
 #include <ndtxt.hxx>
 #include <unotextrange.hxx>
+#include <unolinebreak.hxx>
 
 using namespace com::sun::star;
 
@@ -39,6 +40,11 @@ SwFormatLineBreak::SwFormatLineBreak(SwLineBreakClear eClear)
 }
 
 SwFormatLineBreak::~SwFormatLineBreak() {}
+
+void SwFormatLineBreak::SetXLineBreak(rtl::Reference<SwXLineBreak> const& xLineBreak)
+{
+    m_wXLineBreak = xLineBreak.get();
+}
 
 bool SwFormatLineBreak::operator==(const SfxPoolItem& rAttr) const
 {
@@ -59,7 +65,7 @@ void SwFormatLineBreak::SwClientNotify(const SwModify&, const SfxHint& rHint)
     CallSwClientNotify(rHint);
     if (RES_REMOVE_UNO_OBJECT == pLegacy->GetWhich())
     {
-        SetXLineBreak(css::uno::Reference<css::text::XTextContent>(nullptr));
+        SetXLineBreak(nullptr);
     }
 }
 

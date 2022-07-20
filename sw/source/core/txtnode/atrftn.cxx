@@ -43,6 +43,7 @@
 #include <vcl/svapp.hxx>
 #include <unotextrange.hxx>
 #include <osl/diagnose.h>
+#include <unofootnote.hxx>
 
 namespace {
     /// Get a sorted list of the used footnote reference numbers.
@@ -134,6 +135,9 @@ SwFormatFootnote::SwFormatFootnote( bool bEndNote )
 {
 }
 
+void SwFormatFootnote::SetXFootnote(rtl::Reference<SwXFootnote> const& xNote)
+{ m_wXFootnote = xNote.get(); }
+
 bool SwFormatFootnote::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
@@ -160,7 +164,7 @@ void SwFormatFootnote::SwClientNotify(const SwModify&, const SfxHint& rHint)
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     CallSwClientNotify(rHint);
     if(RES_REMOVE_UNO_OBJECT == pLegacy->GetWhich())
-        SetXFootnote(css::uno::Reference<css::text::XFootnote>(nullptr));
+        SetXFootnote(nullptr);
 }
 
 void SwFormatFootnote::InvalidateFootnote()

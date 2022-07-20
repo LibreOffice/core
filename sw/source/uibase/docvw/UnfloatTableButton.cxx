@@ -140,10 +140,9 @@ void UnfloatTableButton::MouseButtonDown(const MouseEvent& /*rMEvt*/)
         {
             css::uno::Any aVal;
             aGrabBagItem.QueryValue(aVal);
-            const auto xTable = SwXTextTable::CreateXTextTable(pTableFormat);
-            const css::uno::Reference<css::beans::XPropertySet> xSet(xTable, css::uno::UNO_QUERY);
-            assert(xSet);
-            xSet->setPropertyValue(UNO_NAME_TABLE_INTEROP_GRAB_BAG, aVal);
+            const rtl::Reference<SwXTextTable> xTable
+                = SwXTextTable::CreateXTextTable(pTableFormat);
+            xTable->setPropertyValue(UNO_NAME_TABLE_INTEROP_GRAB_BAG, aVal);
         }
     }
 

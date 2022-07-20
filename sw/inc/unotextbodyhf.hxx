@@ -31,6 +31,7 @@
 class SwDoc;
 class SwFrameFormat;
 class SwXTextCursor;
+struct SwXParagraphEnumeration;
 
 typedef ::cppu::WeakAggImplHelper2
 <   css::lang::XServiceInfo
@@ -80,6 +81,7 @@ public:
     // XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration >  SAL_CALL
         createEnumeration() override;
+    rtl::Reference< SwXParagraphEnumeration > createParagraphEnumeration();
 
     // XSimpleText
     virtual css::uno::Reference< css::text::XTextCursor >  SAL_CALL

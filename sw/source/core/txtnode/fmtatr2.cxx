@@ -653,6 +653,8 @@ SwTextMeta * Meta::GetTextAttr() const
     return m_pFormat ? m_pFormat->GetTextAttr() : nullptr;
 }
 
+void Meta::SetXMeta(rtl::Reference<SwXMeta> const& xMeta)
+{ m_wXMeta = xMeta.get(); }
 
 void Meta::NotifyChangeTextNode(SwTextNode *const pTextNode)
 {
@@ -680,7 +682,7 @@ void Meta::SwClientNotify(const SwModify&, const SfxHint& rHint)
     GetNotifier().Broadcast(SfxHint(SfxHintId::DataChanged));
     if(RES_REMOVE_UNO_OBJECT == pLegacy->GetWhich())
     {   // invalidate cached uno object
-        SetXMeta(uno::Reference<rdf::XMetadatable>(nullptr));
+        SetXMeta(nullptr);
         GetNotifier().Broadcast(SfxHint(SfxHintId::Deinitializing));
     }
 }

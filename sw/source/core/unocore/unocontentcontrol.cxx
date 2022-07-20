@@ -144,7 +144,7 @@ uno::Reference<text::XTextCursor> SAL_CALL SwXContentControlText::createTextCurs
 class SwXContentControl::Impl : public SvtListener
 {
 public:
-    uno::WeakReference<uno::XInterface> m_wThis;
+    unotools::WeakReference<SwXContentControl> m_wThis;
     // Just for OInterfaceContainerHelper4.
     std::mutex m_Mutex;
     ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_EventListeners;
@@ -247,37 +247,32 @@ SwXContentControl::SwXContentControl(SwDoc* pDoc)
 
 SwXContentControl::~SwXContentControl() {}
 
-uno::Reference<text::XTextContent> SwXContentControl::CreateXContentControl(SwDoc& rDoc)
+rtl::Reference<SwXContentControl> SwXContentControl::CreateXContentControl(SwDoc& rDoc)
 {
     rtl::Reference<SwXContentControl> xContentControl(new SwXContentControl(&rDoc));
-    uno::Reference<text::XTextContent> xTextContent(xContentControl);
-    xContentControl->m_pImpl->m_wThis = xTextContent;
+    xContentControl->m_pImpl->m_wThis = xContentControl.get();
     return xContentControl;
 }
 
-uno::Reference<text::XTextContent>
+rtl::Reference<SwXContentControl>
 SwXContentControl::CreateXContentControl(SwContentControl& rContentControl,
                                          const uno::Reference<text::XText>& xParent,
                                          std::unique_ptr<const TextRangeList_t>&& pPortions)
 {
     // re-use existing SwXContentControl
-    uno::Reference<text::XTextContent> xContentControl(rContentControl.GetXContentControl());
+    rtl::Reference<SwXContentControl> xContentControl(rContentControl.GetXContentControl());
     if (xContentControl.is())
     {
         if (pPortions)
         {
-            // Set the cache in the XContentControl to the given portions.
-            auto pXContentControl
-                = comphelper::getFromUnoTunnel<SwXContentControl>(xContentControl);
-            assert(pXContentControl);
             // The content control must always be created with the complete content.  If
             // SwXTextPortionEnumeration is created for a selection, it must be checked that the
             // content control is contained in the selection.
-            pXContentControl->m_pImpl->m_pTextPortions = std::move(pPortions);
-            if (pXContentControl->m_pImpl->m_xParentText.get() != xParent.get())
+            xContentControl->m_pImpl->m_pTextPortions = std::move(pPortions);
+            if (xContentControl->m_pImpl->m_xParentText.get() != xParent.get())
             {
                 SAL_WARN("sw.uno", "SwXContentControl with different parent");
-                pXContentControl->m_pImpl->m_xParentText.set(xParent);
+                xContentControl->m_pImpl->m_xParentText.set(xParent);
             }
         }
         return xContentControl;
@@ -306,11 +301,10 @@ SwXContentControl::CreateXContentControl(SwContentControl& rContentControl,
     {
         return nullptr;
     }
-    rtl::Reference<SwXContentControl> pXContentControl = new SwXContentControl(
-        &pTextNode->GetDoc(), &rContentControl, xParentText, std::move(pPortions));
-    xContentControl.set(pXContentControl);
+    xContentControl = new SwXContentControl(&pTextNode->GetDoc(), &rContentControl, xParentText,
+                                            std::move(pPortions));
     rContentControl.SetXContentControl(xContentControl);
-    pXContentControl->m_pImpl->m_wThis = xContentControl;
+    xContentControl->m_pImpl->m_wThis = xContentControl.get();
     return xContentControl;
 }
 
@@ -504,7 +498,7 @@ void SwXContentControl::AttachImpl(const uno::Reference<text::XTextRange>& xText
     m_pImpl->EndListeningAll();
     m_pImpl->m_pContentControl = pContentControl.get();
     m_pImpl->StartListening(pContentControl->GetNotifier());
-    pContentControl->SetXContentControl(uno::Reference<text::XTextContent>(this));
+    pContentControl->SetXContentControl(this);
 
     m_pImpl->m_xParentText = sw::CreateParentXText(*pDoc, *aPam.GetPoint());
 

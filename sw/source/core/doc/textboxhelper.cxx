@@ -468,7 +468,9 @@ static void lcl_queryInterface(const SwFrameFormat* pShape, uno::Any& rAny, SdrO
         = SwTextBoxHelper::getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT, pObj))
     {
         uno::Reference<T> const xInterface(
-            SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat), uno::UNO_QUERY);
+            static_cast<cppu::OWeakObject*>(
+                SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat).get()),
+            uno::UNO_QUERY);
         rAny <<= xInterface;
     }
 }
@@ -708,7 +710,9 @@ css::uno::Any SwTextBoxHelper::getProperty(SwFrameFormat const* pShape, const OU
         return {};
 
     uno::Reference<beans::XPropertySet> const xPropertySet(
-        SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat), uno::UNO_QUERY);
+        static_cast<cppu::OWeakObject*>(
+            SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat).get()),
+        uno::UNO_QUERY);
 
     return xPropertySet->getPropertyValue(rPropName);
 }
@@ -944,7 +948,9 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
     }
     auto aGuard = SwTextBoxLockGuard(*pShape->GetOtherTextBoxFormats());
     uno::Reference<beans::XPropertySet> const xPropertySet(
-        SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat), uno::UNO_QUERY);
+        static_cast<cppu::OWeakObject*>(
+            SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat).get()),
+        uno::UNO_QUERY);
     xPropertySet->setPropertyValue(aPropertyName, aValue);
 }
 
@@ -1223,7 +1229,9 @@ bool SwTextBoxHelper::changeAnchor(SwFrameFormat* pShape, SdrObject* pObj)
             auto aGuard = SwTextBoxLockGuard(*pShape->GetOtherTextBoxFormats());
             ::sw::UndoGuard const UndoGuard(pShape->GetDoc()->GetIDocumentUndoRedo());
             uno::Reference<beans::XPropertySet> const xPropertySet(
-                SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat), uno::UNO_QUERY);
+                static_cast<cppu::OWeakObject*>(
+                    SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat).get()),
+                uno::UNO_QUERY);
             if (pOldCnt && rNewAnch.GetAnchorId() == RndStdIds::FLY_AT_PAGE
                 && rNewAnch.GetPageNum())
             {

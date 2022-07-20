@@ -274,7 +274,7 @@ private:
     virtual ~SwXTextTable() override;
 
 public:
-    static css::uno::Reference<css::text::XTextTable>
+    static rtl::Reference<SwXTextTable>
             CreateXTextTable(SwFrameFormat * pFrameFormat);
 
     SW_DLLPUBLIC static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();

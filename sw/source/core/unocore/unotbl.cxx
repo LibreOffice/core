@@ -1896,7 +1896,7 @@ private:
     SwFrameFormat* m_pFrameFormat;
 
 public:
-    uno::WeakReference<uno::XInterface> m_wThis;
+    unotools::WeakReference<SwXTextTable> m_wThis;
     std::mutex m_Mutex; // just for OInterfaceContainerHelper4
     ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_EventListeners;
     ::comphelper::OInterfaceContainerHelper4<chart::XChartDataChangeEventListener> m_ChartListeners;
@@ -1984,19 +1984,18 @@ SwXTextTable::~SwXTextTable()
 {
 }
 
-uno::Reference<text::XTextTable> SwXTextTable::CreateXTextTable(SwFrameFormat* const pFrameFormat)
+rtl::Reference<SwXTextTable> SwXTextTable::CreateXTextTable(SwFrameFormat* const pFrameFormat)
 {
-    uno::Reference<text::XTextTable> xTable;
+    rtl::Reference<SwXTextTable> xTable;
     if(pFrameFormat)
-        xTable.set(pFrameFormat->GetXObject(), uno::UNO_QUERY); // cached?
+        xTable = dynamic_cast<SwXTextTable*>(pFrameFormat->GetXObject().get().get()); // cached?
     if(xTable.is())
         return xTable;
-    SwXTextTable* const pNew( pFrameFormat ? new SwXTextTable(*pFrameFormat) : new SwXTextTable());
-    xTable.set(pNew);
+    xTable = pFrameFormat ? new SwXTextTable(*pFrameFormat) : new SwXTextTable();
     if(pFrameFormat)
-        pFrameFormat->SetXObject(xTable);
+        pFrameFormat->SetXObject(static_cast<cppu::OWeakObject*>(xTable.get()));
     // need a permanent Reference to initialize m_wThis
-    pNew->m_pImpl->m_wThis = xTable;
+    xTable->m_pImpl->m_wThis = xTable.get();
     return xTable;
 }
 

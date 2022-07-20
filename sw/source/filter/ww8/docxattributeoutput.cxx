@@ -9867,7 +9867,7 @@ void DocxAttributeOutput::FormatFillGradient( const XFillGradientItem& rFillGrad
         SwFrameFormat & rFormat(
                 const_cast<SwFrameFormat&>(m_rExport.m_pParentFrame->GetFrameFormat()));
         uno::Reference<beans::XPropertySet> const xPropertySet(
-            SwXTextFrame::CreateXTextFrame(*rFormat.GetDoc(), &rFormat),
+            static_cast<cppu::OWeakObject*>(SwXTextFrame::CreateXTextFrame(*rFormat.GetDoc(), &rFormat).get()),
             uno::UNO_QUERY);
         m_rDrawingML.SetFS(m_pSerializer);
         m_rDrawingML.WriteGradientFill(xPropertySet);

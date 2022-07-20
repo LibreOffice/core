@@ -61,7 +61,7 @@ class SwXFootnote final
 
 public:
 
-    static css::uno::Reference<css::text::XFootnote>
+    static rtl::Reference<SwXFootnote>
         CreateXFootnote(SwDoc & rDoc, SwFormatFootnote * pFootnoteFormat,
                 bool isEndnote = false);
 

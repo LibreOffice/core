@@ -24,6 +24,7 @@
 #include <svl/poolitem.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <com/sun/star/text/XTextField.hpp>
+#include <unotools/weakref.hxx>
 
 #include "swdllapi.h"
 #include "calbck.hxx"
@@ -36,6 +37,7 @@ class SwView;
 class SwFieldType;
 class SwDDETable;
 class SwFormatField;
+class SwXTextField;
 class IDocumentRedlineAccess;
 
 namespace sw {
@@ -101,7 +103,7 @@ class SW_DLLPUBLIC SwFormatField final
     friend void InitCore();
     SwFormatField( sal_uInt16 nWhich ); // for default-Attribute
 
-    css::uno::WeakReference<css::text::XTextField> m_wXTextField;
+    unotools::WeakReference<SwXTextField> m_wXTextField;
 
     std::unique_ptr<SwField> mpField;
     SwTextField* mpTextField; // the TextAttribute
@@ -158,10 +160,10 @@ public:
     bool IsFieldInDoc() const;
     bool IsProtect() const;
 
-    SAL_DLLPRIVATE css::uno::WeakReference<css::text::XTextField> const& GetXTextField() const
+    SAL_DLLPRIVATE unotools::WeakReference<SwXTextField> const& GetXTextField() const
             { return m_wXTextField; }
-    SAL_DLLPRIVATE void SetXTextField(css::uno::Reference<css::text::XTextField> const& xTextField)
-            { m_wXTextField = xTextField; }
+    SAL_DLLPRIVATE void SetXTextField(rtl::Reference<SwXTextField> const& xTextField);
+
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
     void UpdateTextNode(const SfxPoolItem* pOld, const SfxPoolItem* pNew);
