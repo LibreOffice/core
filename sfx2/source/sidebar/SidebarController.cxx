@@ -124,7 +124,6 @@ SidebarController::SidebarController (
       maCurrentContext(OUString(), OUString()),
       maRequestedContext(),
       mnRequestedForceFlags(SwitchFlag_NoForce),
-      mnMaximumSidebarWidth(officecfg::Office::UI::Sidebar::General::MaximumWidth::get()),
       mbMinimumSidebarWidth(officecfg::Office::UI::Sidebar::General::MinimumWidth::get()),
       msCurrentDeckId(gsDefaultDeckId),
       maPropertyChangeForwarder([this](){ return this->BroadcastPropertyChange(); }),
@@ -140,6 +139,7 @@ SidebarController::SidebarController (
       mnWidthOnSplitterButtonDown(0),
       mpResourceManager()
 {
+    mnMaximumSidebarWidth = officecfg::Office::UI::Sidebar::General::MaximumWidth::get() * mpTabBar->GetDPIScaleFactor();
     // Decks and panel collections for this sidebar
     mpResourceManager = std::make_unique<ResourceManager>();
 }
@@ -1433,7 +1433,7 @@ void SidebarController::RestrictWidth (sal_Int32 nWidth)
 
         pSplitWindow->SetItemSizeRange(
             nSetId,
-            Range(nRequestedWidth, getMaximumWidth()));
+            Range(nRequestedWidth, std::max(nRequestedWidth, getMaximumWidth())));
     }
 }
 
