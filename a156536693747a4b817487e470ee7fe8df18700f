@@ -16,6 +16,23 @@
       "message": "The commit message doesn\u0027t match the actual change",
       "revId": "a156536693747a4b817487e470ee7fe8df18700f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2c0b106_fa31548a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-07-20T09:10:29Z",
+      "side": 1,
+      "message": "BTW.. you could at the same time change the maPt to maOriginPoint too",
+      "revId": "a156536693747a4b817487e470ee7fe8df18700f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
