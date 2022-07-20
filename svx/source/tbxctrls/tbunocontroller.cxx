@@ -26,6 +26,7 @@
 
 #include <comphelper/propertyvalue.hxx>
 #include <rtl/math.hxx>
+#include <utility>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weldutils.hxx>
@@ -94,7 +95,7 @@ class SvxFontSizeBox_Base
 {
 public:
     SvxFontSizeBox_Base(std::unique_ptr<weld::ComboBox> xWidget,
-                        const uno::Reference< frame::XFrame >& _xFrame,
+                        uno::Reference< frame::XFrame > _xFrame,
                         FontHeightToolBoxControl& rCtrl);
 
     virtual ~SvxFontSizeBox_Base()
@@ -172,11 +173,11 @@ private:
 };
 
 SvxFontSizeBox_Base::SvxFontSizeBox_Base(std::unique_ptr<weld::ComboBox> xWidget,
-                                         const uno::Reference<frame::XFrame>& rFrame,
+                                         uno::Reference<frame::XFrame> xFrame,
                                          FontHeightToolBoxControl& rCtrl)
     : m_rCtrl(rCtrl)
     , m_bRelease(true)
-    , m_xFrame(rFrame)
+    , m_xFrame(std::move(xFrame))
     , m_xWidget(new FontSizeBox(std::move(xWidget)))
 {
     m_xWidget->set_value(0);

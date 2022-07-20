@@ -80,7 +80,7 @@ public:
                             GalleryBrowser1(
                                 weld::Builder& rBuilder,
                                 Gallery* pGallery,
-                                const ::std::function<void ()>& rThemeSelectionHandler);
+                                ::std::function<void ()> aThemeSelectionHandler);
 
                             ~GalleryBrowser1();
 

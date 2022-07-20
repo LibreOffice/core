@@ -44,6 +44,7 @@
 
 #include <svx/unoshprp.hxx>
 
+#include <utility>
 #include <vcl/gdimtf.hxx>
 #include <vcl/wmf.hxx>
 #include <svtools/embedhlp.hxx>
@@ -765,9 +766,9 @@ bool SvxFrameShape::getPropertyValueImpl(const OUString& rName, const SfxItemPro
         return SvxOle2Shape::getPropertyValueImpl( rName, pProperty, rValue );
     }
 }
-SvxMediaShape::SvxMediaShape(SdrObject* pObj, OUString const & referer)
+SvxMediaShape::SvxMediaShape(SdrObject* pObj, OUString referer)
 :   SvxShape( pObj, getSvxMapProvider().GetMap(SVXMAP_MEDIA), getSvxMapProvider().GetPropertySet(SVXMAP_MEDIA, SdrObject::GetGlobalDrawObjectItemPool()) ),
-    referer_(referer)
+    referer_(std::move(referer))
 {
     SetShapeType( "com.sun.star.drawing.MediaShape" );
 }

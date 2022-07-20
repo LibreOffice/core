@@ -14,6 +14,7 @@
 #include <sal/config.h>
 #include <svx/svxdllapi.h>
 #include <editeng/flditem.hxx>
+#include <utility>
 
 namespace svx {
 
@@ -34,12 +35,12 @@ public:
     OUString msAbbreviatedName; //< Abbreviated name, displayed instead of Name.
     OUString msIdentifier;      //< The identifier of this entry (from example.xml).
 
-    ClassificationResult(ClassificationType eType, const OUString& sName,
-                         const OUString& sAbbreviatedName, const OUString& sIdentifier = "")
+    ClassificationResult(ClassificationType eType, OUString sName,
+                         OUString sAbbreviatedName, OUString sIdentifier = "")
         : meType(eType)
-        , msName(sName)
-        , msAbbreviatedName(sAbbreviatedName)
-        , msIdentifier(sIdentifier)
+        , msName(std::move(sName))
+        , msAbbreviatedName(std::move(sAbbreviatedName))
+        , msIdentifier(std::move(sIdentifier))
     {
     }
 
@@ -66,11 +67,11 @@ public:
     OUString msFullClassName;
     OUString msIdentifier;
 
-    ClassificationField(ClassificationType eType, OUString const & sDescription, OUString const & sFullClassName, OUString const & sIdentifier)
+    ClassificationField(ClassificationType eType, OUString sDescription, OUString sFullClassName, OUString sIdentifier)
         : meType(eType)
-        , msDescription(sDescription)
-        , msFullClassName(sFullClassName)
-        , msIdentifier(sIdentifier)
+        , msDescription(std::move(sDescription))
+        , msFullClassName(std::move(sFullClassName))
+        , msIdentifier(std::move(sIdentifier))
     {}
 
     std::unique_ptr<SvxFieldData> Clone() const override

@@ -18,6 +18,7 @@
  */
 
 #include "dlgunit.hxx"
+#include <utility>
 #include <vcl/fieldvalues.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -74,10 +75,10 @@ CompressGraphicsDialog::CompressGraphicsDialog( weld::Window* pParent, SdrGrafOb
     recallParameter();
 }
 
-CompressGraphicsDialog::CompressGraphicsDialog( weld::Window* pParent, Graphic const & rGraphic, Size rViewSize100mm, tools::Rectangle const & rCropRectangle, SfxBindings& rBindings ) :
+CompressGraphicsDialog::CompressGraphicsDialog( weld::Window* pParent, Graphic aGraphic, Size rViewSize100mm, tools::Rectangle const & rCropRectangle, SfxBindings& rBindings ) :
     GenericDialogController( pParent, "svx/ui/compressgraphicdialog.ui", "CompressGraphicDialog" ),
     m_xGraphicObj     ( nullptr ),
-    m_aGraphic        ( rGraphic ),
+    m_aGraphic        (std::move( aGraphic )),
     m_aViewSize100mm  ( rViewSize100mm ),
     m_aCropRectangle  ( rCropRectangle ),
     m_rBindings       ( rBindings ),

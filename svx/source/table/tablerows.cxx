@@ -21,6 +21,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 
 #include <tablemodel.hxx>
+#include <utility>
 #include "tablerow.hxx"
 #include "tablerows.hxx"
 
@@ -33,8 +34,8 @@ using namespace ::com::sun::star::table;
 
 namespace sdr::table {
 
-TableRows::TableRows( const TableModelRef& xTableModel )
-: mxTableModel( xTableModel )
+TableRows::TableRows( TableModelRef xTableModel )
+: mxTableModel(std::move( xTableModel ))
 {
 }
 

@@ -24,6 +24,7 @@
 #include <svx/diagram/datamodel.hxx>
 #include <comphelper/xmltools.hxx>
 #include <sal/log.hxx>
+#include <utility>
 
 namespace svx::diagram {
 
@@ -141,9 +142,9 @@ bool DiagramData::removeNode(const OUString& rNodeId)
     return true;
 }
 
-DiagramDataState::DiagramDataState(const Connections& rConnections, const Points& rPoints)
-: maConnections(rConnections)
-, maPoints(rPoints)
+DiagramDataState::DiagramDataState(Connections aConnections, Points aPoints)
+: maConnections(std::move(aConnections))
+, maPoints(std::move(aPoints))
 {
 }
 

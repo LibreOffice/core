@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_GALMISC_HXX
 #define INCLUDED_SVX_GALMISC_HXX
 
+#include <utility>
 #include <vcl/imap.hxx>
 #include <svl/hint.hxx>
 #include <vcl/transfer.hxx>
@@ -182,11 +183,11 @@ private:
 
 public:
 
-                     GalleryHint( GalleryHintType nType, const OUString& rThemeName, void* nData1 = nullptr ) :
-                        mnType( nType ), maThemeName( rThemeName ), mnData1( nData1 ) {}
+                     GalleryHint( GalleryHintType nType, OUString aThemeName, void* nData1 = nullptr ) :
+                        mnType( nType ), maThemeName(std::move( aThemeName )), mnData1( nData1 ) {}
 
-                     GalleryHint( GalleryHintType nType, const OUString& rThemeName, const OUString& rStringData ) :
-                        mnType( nType ), maThemeName( rThemeName ), maStringData( rStringData ), mnData1( nullptr ) {}
+                     GalleryHint( GalleryHintType nType, OUString aThemeName, OUString aStringData ) :
+                        mnType( nType ), maThemeName(std::move( aThemeName )), maStringData(std::move( aStringData )), mnData1( nullptr ) {}
 
     GalleryHintType  GetType() const { return mnType; }
     const OUString&  GetThemeName() const { return maThemeName; }

@@ -517,8 +517,8 @@ private:
 
 public:
     SdrCropViewHdl(
-        const basegfx::B2DHomMatrix& rObjectTransform,
-        const Graphic& rGraphic,
+        basegfx::B2DHomMatrix aObjectTransform,
+        Graphic aGraphic,
         double fCropLeft,
         double fCropTop,
         double fCropRight,

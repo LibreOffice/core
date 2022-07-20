@@ -23,6 +23,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <toolkit/helper/convert.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <tools/debug.hxx>
@@ -400,12 +401,12 @@ awt::Rectangle SvxRectCtlAccessibleContext::implGetBounds()
 
 SvxRectCtlChildAccessibleContext::SvxRectCtlChildAccessibleContext(
     const Reference<XAccessible>&   rxParent,
-    const OUString&              rName,
-    const OUString&              rDescription,
+    OUString               aName,
+    OUString               aDescription,
     const tools::Rectangle& rBoundingBox,
     tools::Long nIndexInParent )
-    : msDescription( rDescription )
-    , msName( rName )
+    : msDescription(std::move( aDescription ))
+    , msName(std::move( aName ))
     , mxParent(rxParent)
     , maBoundingBox( rBoundingBox )
     , mnIndexInParent( nIndexInParent )

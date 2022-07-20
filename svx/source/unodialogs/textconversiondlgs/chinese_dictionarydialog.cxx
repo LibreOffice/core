@@ -30,6 +30,7 @@
 #include <o3tl/safeint.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>
+#include <utility>
 #include <osl/diagnose.h>
 
 namespace textconversiondlgs
@@ -231,11 +232,11 @@ int DictionaryList::deleteEntries( std::u16string_view rTerm )
     return nPos;
 }
 
-DictionaryEntry::DictionaryEntry( const OUString& rTerm, const OUString& rMapping
+DictionaryEntry::DictionaryEntry( OUString aTerm, OUString aMapping
                     , sal_Int16 nConversionPropertyType
                     , bool bNewEntry )
-        : m_aTerm( rTerm )
-        , m_aMapping( rMapping )
+        : m_aTerm(std::move( aTerm ))
+        , m_aMapping(std::move( aMapping ))
         , m_nConversionPropertyType( nConversionPropertyType )
         , m_bNewEntry( bNewEntry )
 {

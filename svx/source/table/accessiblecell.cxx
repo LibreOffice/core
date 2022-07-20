@@ -30,6 +30,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 
 #include <editeng/unoedsrc.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 
@@ -49,11 +50,11 @@ using namespace ::com::sun::star::container;
 
 namespace accessibility {
 
-AccessibleCell::AccessibleCell( const css::uno::Reference< css::accessibility::XAccessible>& rxParent, const sdr::table::CellRef& rCell, sal_Int32 nIndex, const AccessibleShapeTreeInfo& rShapeTreeInfo )
+AccessibleCell::AccessibleCell( const css::uno::Reference< css::accessibility::XAccessible>& rxParent, sdr::table::CellRef xCell, sal_Int32 nIndex, const AccessibleShapeTreeInfo& rShapeTreeInfo )
 : AccessibleCellBase( rxParent, AccessibleRole::TABLE_CELL )
 , maShapeTreeInfo( rShapeTreeInfo )
 , mnIndexInParent( nIndex )
-, mxCell( rCell )
+, mxCell(std::move( xCell ))
 {
     //Init the pAccTable var
     pAccTable = dynamic_cast <AccessibleTableShape *> (rxParent.get());

@@ -38,6 +38,7 @@
 #include <svx/framelink.hxx>
 #include <svx/framelinkarray.hxx>
 #include <svx/sdooitm.hxx>
+#include <utility>
 #include <vcl/canvastools.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <svx/xfltrit.hxx>
@@ -66,9 +67,9 @@ namespace drawinglayer::primitive2d
 
         public:
             SdrCellPrimitive2D(
-                const basegfx::B2DHomMatrix& rTransform,
+                basegfx::B2DHomMatrix aTransform,
                 const attribute::SdrFillTextAttribute& rSdrFTAttribute)
-            :   maTransform(rTransform),
+            :   maTransform(std::move(aTransform)),
                 maSdrFTAttribute(rSdrFTAttribute)
             {
             }

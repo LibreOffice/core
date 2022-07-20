@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <tools/datetime.hxx>
+#include <utility>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
@@ -46,7 +47,7 @@ using namespace ::com::sun::star;
 GalleryBrowser1::GalleryBrowser1(
     weld::Builder& rBuilder,
     Gallery* pGallery,
-    const std::function<void ()>& rThemeSelectionHandler)
+    std::function<void ()> aThemeSelectionHandler)
     :
     mxNewTheme(rBuilder.weld_button("insert")),
     mxThemes(rBuilder.weld_tree_view("themelist")),
@@ -56,7 +57,7 @@ GalleryBrowser1::GalleryBrowser1(
     aImgNormal            ( RID_SVXBMP_THEME_NORMAL ),
     aImgDefault           ( RID_SVXBMP_THEME_DEFAULT ),
     aImgReadOnly          ( RID_SVXBMP_THEME_READONLY ),
-    maThemeSelectionHandler(rThemeSelectionHandler)
+    maThemeSelectionHandler(std::move(aThemeSelectionHandler))
 {
     mxNewTheme->set_help_id(HID_GALLERY_NEWTHEME);
     mxNewTheme->connect_clicked( LINK( this, GalleryBrowser1, ClickNewThemeHdl ) );

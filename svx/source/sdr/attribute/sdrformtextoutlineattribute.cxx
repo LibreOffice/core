@@ -21,6 +21,7 @@
 #include <sdr/attribute/sdrformtextoutlineattribute.hxx>
 #include <drawinglayer/attribute/lineattribute.hxx>
 #include <drawinglayer/attribute/strokeattribute.hxx>
+#include <utility>
 
 
 namespace drawinglayer::attribute
@@ -35,10 +36,10 @@ namespace drawinglayer::attribute
 
             ImpSdrFormTextOutlineAttribute(
                 const LineAttribute& rLineAttribute,
-                const StrokeAttribute& rStrokeAttribute,
+                StrokeAttribute aStrokeAttribute,
                 sal_uInt8 nTransparence)
             :   maLineAttribute(rLineAttribute),
-                maStrokeAttribute(rStrokeAttribute),
+                maStrokeAttribute(std::move(aStrokeAttribute)),
                 mnTransparence(nTransparence)
             {
             }

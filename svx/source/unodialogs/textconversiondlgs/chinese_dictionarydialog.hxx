@@ -30,7 +30,7 @@ namespace textconversiondlgs
 
 struct DictionaryEntry final
 {
-    DictionaryEntry( const OUString& rTerm, const OUString& rMapping
+    DictionaryEntry( OUString  rTerm, OUString aMapping
                     , sal_Int16 nConversionPropertyType //linguistic2::ConversionPropertyType
                     , bool bNewEntry = false );
 

@@ -56,7 +56,7 @@ public:
     E3dExtrudeObj(
         SdrModel& rSdrModel,
         const E3dDefaultAttributes& rDefault,
-        const basegfx::B2DPolyPolygon& rPP,
+        basegfx::B2DPolyPolygon aPP,
         double fDepth);
     E3dExtrudeObj(SdrModel& rSdrModel, E3dExtrudeObj const & rSource);
     E3dExtrudeObj(SdrModel& rSdrModel);

@@ -19,6 +19,7 @@
 
 #include <config_wasm_strip.h>
 
+#include <utility>
 #include <vcl/event.hxx>
 #include <vcl/fontcharmap.hxx>
 #include <vcl/svapp.hxx>
@@ -898,8 +899,8 @@ const Subset* SubsetMap::GetSubsetByUnicode( sal_UCS4 cChar ) const
     return nullptr;
 }
 
-inline Subset::Subset(sal_UCS4 nMin, sal_UCS4 nMax, const OUString& rName)
-:   mnRangeMin(nMin), mnRangeMax(nMax), maRangeName(rName)
+inline Subset::Subset(sal_UCS4 nMin, sal_UCS4 nMax, OUString aName)
+:   mnRangeMin(nMin), mnRangeMax(nMax), maRangeName(std::move(aName))
 {
 }
 

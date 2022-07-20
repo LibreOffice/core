@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <map>
+#include <utility>
 #include <vector>
 
 #include <config_feature_desktop.h>
@@ -192,13 +193,13 @@ void impl_executeSearch( const css::uno::Reference< css::uno::XComponentContext 
 }
 
 FindTextFieldControl::FindTextFieldControl( vcl::Window* pParent,
-    css::uno::Reference< css::frame::XFrame > const & xFrame,
-    const css::uno::Reference< css::uno::XComponentContext >& xContext) :
+    css::uno::Reference< css::frame::XFrame > xFrame,
+    css::uno::Reference< css::uno::XComponentContext > xContext) :
     InterimItemWindow(pParent, "svx/ui/findbox.ui", "FindBox"),
     m_nAsyncGetFocusId(nullptr),
     m_xWidget(m_xBuilder->weld_combo_box("find")),
-    m_xFrame(xFrame),
-    m_xContext(xContext),
+    m_xFrame(std::move(xFrame)),
+    m_xContext(std::move(xContext)),
     m_pAcc(svt::AcceleratorExecute::createAcceleratorHelper())
 {
     InitControlBase(m_xWidget.get());

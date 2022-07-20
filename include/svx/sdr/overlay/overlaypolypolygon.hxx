@@ -36,7 +36,7 @@ namespace sdr::overlay
             virtual drawinglayer::primitive2d::Primitive2DContainer createOverlayObjectPrimitive2DSequence() override;
 
         public:
-            explicit OverlayPolyPolygon(const basegfx::B2DPolyPolygon& rLinePolyPolygon,
+            explicit OverlayPolyPolygon(basegfx::B2DPolyPolygon aLinePolyPolygon,
                                         Color const & rLineColor,
                                         double mfLineWidth,
                                         Color const & rFillColor);
@@ -53,7 +53,7 @@ namespace sdr::overlay
 
         public:
             explicit OverlayPolyPolygonStripedAndFilled(
-                const basegfx::B2DPolyPolygon& rLinePolyPolygon);
+                basegfx::B2DPolyPolygon aLinePolyPolygon);
             virtual ~OverlayPolyPolygonStripedAndFilled() override;
 
             // change geometry

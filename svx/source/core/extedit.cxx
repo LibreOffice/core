@@ -9,6 +9,7 @@
 
 #include <svx/extedit.hxx>
 
+#include <utility>
 #include <vcl/graph.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <vcl/cvtgrf.hxx>
@@ -77,9 +78,9 @@ private:
     virtual void execute() override;
 
 public:
-    explicit ExternalToolEditThread(OUString const& rFileName)
+    explicit ExternalToolEditThread(OUString aFileName)
         : ::salhelper::Thread("ExternalToolEdit")
-        , m_aFileName(rFileName)
+        , m_aFileName(std::move(aFileName))
     {}
 };
 

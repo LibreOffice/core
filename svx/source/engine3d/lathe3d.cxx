@@ -31,6 +31,7 @@
 #include <sdr/contact/viewcontactofe3dlathe.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <utility>
 
 
 // DrawContact section
@@ -48,9 +49,9 @@ std::unique_ptr<sdr::properties::BaseProperties> E3dLatheObj::CreateObjectSpecif
 E3dLatheObj::E3dLatheObj(
     SdrModel& rSdrModel,
     const E3dDefaultAttributes& rDefault,
-    const basegfx::B2DPolyPolygon& rPoly2D)
+    basegfx::B2DPolyPolygon aPoly2D)
 :   E3dCompoundObject(rSdrModel),
-    maPolyPoly2D(rPoly2D)
+    maPolyPoly2D(std::move(aPoly2D))
 {
     // since the old class PolyPolygon3D did mirror the given PolyPolygons in Y, do the same here
     basegfx::B2DHomMatrix aMirrorY;

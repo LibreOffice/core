@@ -46,7 +46,7 @@ namespace drawinglayer::primitive2d
 
         public:
             SdrRectanglePrimitive2D(
-                const basegfx::B2DHomMatrix& rTransform,
+                basegfx::B2DHomMatrix aTransform,
                 const attribute::SdrLineFillEffectsTextAttribute& rSdrLFSTAttribute,
                 double fCornerRadiusX,
                 double fCornerRadiusY,

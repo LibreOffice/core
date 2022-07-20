@@ -20,6 +20,7 @@
 
 #include "tablehandles.hxx"
 
+#include <utility>
 #include <vcl/outdev.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/ptrstyle.hxx>
@@ -50,7 +51,7 @@ protected:
     virtual drawinglayer::primitive2d::Primitive2DContainer createOverlayObjectPrimitive2DSequence() override;
 
 public:
-    OverlayTableEdge( const basegfx::B2DPolyPolygon& rPolyPolygon, bool bVisible );
+    OverlayTableEdge( basegfx::B2DPolyPolygon aPolyPolygon, bool bVisible );
 };
 
 }
@@ -202,9 +203,9 @@ void TableEdgeHdl::CreateB2dIAObject()
 }
 
 
-OverlayTableEdge::OverlayTableEdge( const basegfx::B2DPolyPolygon& rPolyPolygon, bool bVisible )
+OverlayTableEdge::OverlayTableEdge( basegfx::B2DPolyPolygon aPolyPolygon, bool bVisible )
 :   OverlayObject(COL_GRAY)
-,   maPolyPolygon( rPolyPolygon )
+,   maPolyPolygon(std::move( aPolyPolygon ))
 ,   mbVisible(bVisible)
 {
 }

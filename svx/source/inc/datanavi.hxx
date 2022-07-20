@@ -419,7 +419,7 @@ namespace svxform
 
     public:
         AddConditionDialog(weld::Window* pParent,
-            const OUString& _rPropertyName, const css::uno::Reference< css::beans::XPropertySet >& _rBinding);
+            OUString _aPropertyName, const css::uno::Reference< css::beans::XPropertySet >& _rBinding);
         virtual ~AddConditionDialog() override;
 
         const css::uno::Reference< css::xforms::XFormsUIHelper1 >& GetUIHelper() const { return m_xUIHelper; }

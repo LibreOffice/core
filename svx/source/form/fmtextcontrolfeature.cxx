@@ -19,6 +19,7 @@
 
 #include <fmtextcontrolfeature.hxx>
 #include <fmtextcontrolshell.hxx>
+#include <utility>
 
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
@@ -33,9 +34,9 @@ namespace svx
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::util;
 
-    FmTextControlFeature::FmTextControlFeature( const Reference< XDispatch >& _rxDispatcher, const URL& _rFeatureURL, SfxSlotId _nSlotId, FmTextControlShell* _pInvalidator )
+    FmTextControlFeature::FmTextControlFeature( const Reference< XDispatch >& _rxDispatcher, URL _aFeatureURL, SfxSlotId _nSlotId, FmTextControlShell* _pInvalidator )
         :m_xDispatcher    ( _rxDispatcher )
-        ,m_aFeatureURL    ( _rFeatureURL  )
+        ,m_aFeatureURL    (std::move( _aFeatureURL  ))
         ,m_nSlotId        ( _nSlotId      )
         ,m_pInvalidator   ( _pInvalidator )
         ,m_bFeatureEnabled( false         )

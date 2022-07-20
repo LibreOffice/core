@@ -43,6 +43,7 @@
 #include <svx/unoapi.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <sdr/attribute/sdrformtextoutlineattribute.hxx>
+#include <utility>
 
 
 using namespace ::com::sun::star::uno;
@@ -230,10 +231,10 @@ namespace
 
     public:
         impPolygonParagraphHandler(
-            const drawinglayer::attribute::SdrFormTextAttribute& rSdrFormTextAttribute,
+            drawinglayer::attribute::SdrFormTextAttribute aSdrFormTextAttribute,
             drawinglayer::primitive2d::Primitive2DContainer& rDecomposition,
             drawinglayer::primitive2d::Primitive2DContainer& rShadowDecomposition)
-        :   maSdrFormTextAttribute(rSdrFormTextAttribute),
+        :   maSdrFormTextAttribute(std::move(aSdrFormTextAttribute)),
             mrDecomposition(rDecomposition),
             mrShadowDecomposition(rShadowDecomposition)
         {

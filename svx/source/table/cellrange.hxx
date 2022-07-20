@@ -31,7 +31,7 @@ namespace sdr::table {
 class CellRange : public ::cppu::WeakAggImplHelper1< css::table::XCellRange >, public ICellRange
 {
 public:
-    CellRange( const TableModelRef & xTable, sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom );
+    CellRange( TableModelRef xTable, sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom );
     virtual ~CellRange() override;
 
     // ICellRange

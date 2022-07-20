@@ -40,7 +40,7 @@ private:
                           const geometry::ViewInformation2D& aViewInformation) const override;
 
 public:
-    SdrGrafPrimitive2D(const ::basegfx::B2DHomMatrix& rTransform,
+    SdrGrafPrimitive2D(::basegfx::B2DHomMatrix aTransform,
                        const attribute::SdrLineFillEffectsTextAttribute& rSdrLFSTAttribute,
                        const GraphicObject& rGraphicObject, const GraphicAttr& rGraphicAttr);
 

@@ -80,7 +80,7 @@ namespace drawinglayer::primitive2d
         public:
             SdrTextPrimitive2D(
                 const SdrText* pSdrText,
-                const OutlinerParaObject& rOutlinerParaObjectPtr);
+                OutlinerParaObject aOutlinerParaObjectPtr);
 
             // get data
             const SdrText* getSdrText() const;
@@ -117,8 +117,8 @@ namespace drawinglayer::primitive2d
             SdrContourTextPrimitive2D(
                 const SdrText* pSdrText,
                 const OutlinerParaObject& rOutlinerParaObjectPtr,
-                const basegfx::B2DPolyPolygon& rUnitPolyPolygon,
-                const basegfx::B2DHomMatrix& rObjectTransform);
+                basegfx::B2DPolyPolygon aUnitPolyPolygon,
+                basegfx::B2DHomMatrix aObjectTransform);
 
             // get data
             const basegfx::B2DPolyPolygon& getUnitPolyPolygon() const { return maUnitPolyPolygon; }
@@ -154,8 +154,8 @@ namespace drawinglayer::primitive2d
             SdrPathTextPrimitive2D(
                 const SdrText* pSdrText,
                 const OutlinerParaObject& rOutlinerParaObjectPtr,
-                const basegfx::B2DPolyPolygon& rPathPolyPolygon,
-                const attribute::SdrFormTextAttribute& rSdrFormTextAttribute);
+                basegfx::B2DPolyPolygon aPathPolyPolygon,
+                attribute::SdrFormTextAttribute aSdrFormTextAttribute);
 
             // get data
             const basegfx::B2DPolyPolygon& getPathPolyPolygon() const { return maPathPolyPolygon; }
@@ -197,7 +197,7 @@ namespace drawinglayer::primitive2d
             SdrBlockTextPrimitive2D(
                 const SdrText* pSdrText,
                 const OutlinerParaObject& rOutlinerParaObjectPtr,
-                const basegfx::B2DHomMatrix& rTextRangeTransform,
+                basegfx::B2DHomMatrix aTextRangeTransform,
                 SdrTextHorzAdjust aSdrTextHorzAdjust,
                 SdrTextVertAdjust aSdrTextVertAdjust,
                 bool bFixedCellHeight,
@@ -243,7 +243,7 @@ namespace drawinglayer::primitive2d
             SdrStretchTextPrimitive2D(
                 const SdrText* pSdrText,
                 const OutlinerParaObject& rOutlinerParaObjectPtr,
-                const basegfx::B2DHomMatrix& rTextRangeTransform,
+                basegfx::B2DHomMatrix aTextRangeTransform,
                 bool bFixedCellHeight);
 
             // get data
@@ -278,7 +278,7 @@ namespace drawinglayer::primitive2d
             SdrAutoFitTextPrimitive2D(
                 const SdrText* pSdrText,
                 const OutlinerParaObject& rOutlinerParaObjectPtr,
-                const ::basegfx::B2DHomMatrix& rTextRangeTransform,
+                ::basegfx::B2DHomMatrix aTextRangeTransform,
                 bool bWordWrap);
 
             // get data
@@ -312,7 +312,7 @@ namespace drawinglayer::primitive2d
             SdrChainedTextPrimitive2D(
                 const SdrText* pSdrText,
                 const OutlinerParaObject& rOutlinerParaObjectPtrs,
-                const ::basegfx::B2DHomMatrix& rTextRangeTransform);
+                ::basegfx::B2DHomMatrix aTextRangeTransform);
 
             // get data
             const basegfx::B2DHomMatrix& getTextRangeTransform() const { return maTextRangeTransform; }
