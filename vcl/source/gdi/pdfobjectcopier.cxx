@@ -113,12 +113,10 @@ sal_Int32 PDFObjectCopier::copyExternalResource(SvMemoryStream& rDocBuffer,
         aLine.append(" >>\n");
     }
 
-    if (filter::PDFStreamElement* pStream = rObject.GetStream())
+    filter::PDFStreamElement* pStream = rObject.GetStream();
+    if (pStream)
     {
         aLine.append("stream\n");
-        SvMemoryStream& rStream = pStream->GetMemory();
-        aLine.append(static_cast<const char*>(rStream.GetData()), rStream.GetSize());
-        aLine.append("\nendstream\n");
     }
 
     if (filter::PDFArrayElement* pArray = rObject.GetArray())
@@ -146,11 +144,30 @@ sal_Int32 PDFObjectCopier::copyExternalResource(SvMemoryStream& rDocBuffer,
         aLine.append("\n");
     }
 
-    aLine.append("endobj\n\n");
-
     // We have the whole object, now write it to the output.
     if (!m_rContainer.updateObject(nObject))
         return -1;
+    if (!m_rContainer.writeBuffer(aLine.getStr(), aLine.getLength()))
+        return -1;
+    aLine.setLength(0);
+
+    if (pStream)
+    {
+        SvMemoryStream& rStream = pStream->GetMemory();
+        m_rContainer.checkAndEnableStreamEncryption(nObject);
+        aLine.append(static_cast<const char*>(rStream.GetData()), rStream.GetSize());
+        if (!m_rContainer.writeBuffer(aLine.getStr(), aLine.getLength()))
+            return -1;
+        aLine.setLength(0);
+        m_rContainer.disableStreamEncryption();
+
+        aLine.append("\nendstream\n");
+        if (!m_rContainer.writeBuffer(aLine.getStr(), aLine.getLength()))
+            return -1;
+        aLine.setLength(0);
+    }
+
+    aLine.append("endobj\n\n");
     if (!m_rContainer.writeBuffer(aLine.getStr(), aLine.getLength()))
         return -1;
 
