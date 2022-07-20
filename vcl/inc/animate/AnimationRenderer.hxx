@@ -44,9 +44,6 @@ struct AnimationData
 class VCL_DLLPUBLIC AnimationRenderer
 {
 private:
-
-    friend class Animation;
-
     Animation*      mpParent;
     VclPtr<OutputDevice>  mpRenderContext;
     tools::Long     mnRendererId;
