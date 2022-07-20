@@ -72,8 +72,8 @@ Animation& Animation::operator=(const Animation& rAnimation)
     {
         Clear();
 
-        for (auto const& i : rAnimation.maFrames)
-            maFrames.emplace_back(new AnimationFrame(*i));
+        for (auto const& rFrame : rAnimation.maFrames)
+            maFrames.emplace_back(new AnimationFrame(*rFrame));
 
         maGlobalSize = rAnimation.maGlobalSize;
         maBitmapEx = rAnimation.maBitmapEx;
@@ -152,9 +152,9 @@ BitmapChecksum Animation::GetChecksum() const
     Int32ToSVBT32(maGlobalSize.Height(), aBT32);
     nCrc = vcl_get_checksum(nCrc, aBT32, 4);
 
-    for (auto const& i : maFrames)
+    for (auto const& rFrame : maFrames)
     {
-        BCToBCOA(i->GetChecksum(), aBCOA);
+        BCToBCOA(rFrame->GetChecksum(), aBCOA);
         nCrc = vcl_get_checksum(nCrc, aBCOA, BITMAP_CHECKSUM_SIZE);
     }
 
