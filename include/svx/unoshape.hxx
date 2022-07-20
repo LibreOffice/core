@@ -851,7 +851,7 @@ public:
 class SvxMediaShape final : public SvxShape
 {
 public:
-    SvxMediaShape(SdrObject* pObj, OUString const & referer);
+    SvxMediaShape(SdrObject* pObj, OUString referer);
     virtual     ~SvxMediaShape() noexcept override;
 
 private:

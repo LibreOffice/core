@@ -38,7 +38,7 @@ class PaletteASE final : public Palette
 
     void        LoadPalette();
 public:
-    PaletteASE( const OUString &rFPath, const OUString &rFName );
+    PaletteASE( OUString aFPath, OUString aFName );
     virtual ~PaletteASE() override;
 
     virtual const OUString&     GetName() override;
@@ -63,7 +63,7 @@ class PaletteGPL final : public Palette
     void        LoadPaletteHeader();
     void        LoadPalette();
 public:
-    PaletteGPL( const OUString &rFPath, const OUString &rFName );
+    PaletteGPL( OUString aFPath, OUString aFName );
     virtual ~PaletteGPL() override;
 
     virtual const OUString&     GetName() override;
@@ -82,7 +82,7 @@ class PaletteSOC final : public Palette
     OUString        maSOCPaletteName;
     XColorListRef   mpColorList;
 public:
-    PaletteSOC( const OUString &rFPath, const OUString &rFName );
+    PaletteSOC( OUString aFPath, OUString aFName );
     virtual ~PaletteSOC() override;
 
     virtual const OUString&     GetName() override;

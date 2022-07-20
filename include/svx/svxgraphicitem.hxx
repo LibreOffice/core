@@ -29,7 +29,7 @@ class SVX_DLLPUBLIC SvxGraphicItem final : public SfxPoolItem
     Graphic         aGraphic;
 
 public:
-                            SvxGraphicItem( const Graphic& rGraphic);
+                            SvxGraphicItem( Graphic aGraphic);
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SvxGraphicItem* Clone( SfxItemPool *pPool = nullptr ) const override;

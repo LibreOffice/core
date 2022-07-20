@@ -210,7 +210,7 @@ class RecoveryCore final : public ::cppu::WeakImplHelper< css::frame::XStatusLis
 
 
         /** @short  TODO */
-        RecoveryCore(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        RecoveryCore(css::uno::Reference< css::uno::XComponentContext > xContext,
                            bool                                            bUsedForSaving);
 
 

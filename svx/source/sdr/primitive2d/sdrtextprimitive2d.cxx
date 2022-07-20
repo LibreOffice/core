@@ -30,6 +30,7 @@
 #include <svx/svdmodel.hxx>
 #include <svx/svdoutl.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <utility>
 #include <osl/diagnose.h>
 
 
@@ -95,9 +96,9 @@ namespace drawinglayer::primitive2d
 
         SdrTextPrimitive2D::SdrTextPrimitive2D(
             const SdrText* pSdrText,
-            const OutlinerParaObject& rOutlinerParaObject)
+            OutlinerParaObject aOutlinerParaObject)
         :   mrSdrText(const_cast< SdrText* >(pSdrText)),
-            maOutlinerParaObject(rOutlinerParaObject),
+            maOutlinerParaObject(std::move(aOutlinerParaObject)),
             mnLastPageNumber(0),
             mnLastPageCount(0),
             mbContainsPageField(false),
@@ -248,11 +249,11 @@ namespace drawinglayer::primitive2d
         SdrContourTextPrimitive2D::SdrContourTextPrimitive2D(
             const SdrText* pSdrText,
             const OutlinerParaObject& rOutlinerParaObject,
-            const basegfx::B2DPolyPolygon& rUnitPolyPolygon,
-            const basegfx::B2DHomMatrix& rObjectTransform)
+            basegfx::B2DPolyPolygon aUnitPolyPolygon,
+            basegfx::B2DHomMatrix aObjectTransform)
         :   SdrTextPrimitive2D(pSdrText, rOutlinerParaObject),
-            maUnitPolyPolygon(rUnitPolyPolygon),
-            maObjectTransform(rObjectTransform)
+            maUnitPolyPolygon(std::move(aUnitPolyPolygon)),
+            maObjectTransform(std::move(aObjectTransform))
         {
         }
 
@@ -297,11 +298,11 @@ namespace drawinglayer::primitive2d
         SdrPathTextPrimitive2D::SdrPathTextPrimitive2D(
             const SdrText* pSdrText,
             const OutlinerParaObject& rOutlinerParaObject,
-            const basegfx::B2DPolyPolygon& rPathPolyPolygon,
-            const attribute::SdrFormTextAttribute& rSdrFormTextAttribute)
+            basegfx::B2DPolyPolygon aPathPolyPolygon,
+            attribute::SdrFormTextAttribute aSdrFormTextAttribute)
         :   SdrTextPrimitive2D(pSdrText, rOutlinerParaObject),
-            maPathPolyPolygon(rPathPolyPolygon),
-            maSdrFormTextAttribute(rSdrFormTextAttribute)
+            maPathPolyPolygon(std::move(aPathPolyPolygon)),
+            maSdrFormTextAttribute(std::move(aSdrFormTextAttribute))
         {
         }
 
@@ -349,7 +350,7 @@ namespace drawinglayer::primitive2d
         SdrBlockTextPrimitive2D::SdrBlockTextPrimitive2D(
             const SdrText* pSdrText,
             const OutlinerParaObject& rOutlinerParaObject,
-            const basegfx::B2DHomMatrix& rTextRangeTransform,
+            basegfx::B2DHomMatrix aTextRangeTransform,
             SdrTextHorzAdjust aSdrTextHorzAdjust,
             SdrTextVertAdjust aSdrTextVertAdjust,
             bool bFixedCellHeight,
@@ -357,7 +358,7 @@ namespace drawinglayer::primitive2d
             bool bCellText,
             bool bWordWrap)
         :   SdrTextPrimitive2D(pSdrText, rOutlinerParaObject),
-            maTextRangeTransform(rTextRangeTransform),
+            maTextRangeTransform(std::move(aTextRangeTransform)),
             maSdrTextHorzAdjust(aSdrTextHorzAdjust),
             maSdrTextVertAdjust(aSdrTextVertAdjust),
             mbFixedCellHeight(bFixedCellHeight),
@@ -418,10 +419,10 @@ namespace drawinglayer::primitive2d
          SdrAutoFitTextPrimitive2D::SdrAutoFitTextPrimitive2D(
              const SdrText* pSdrText,
              const OutlinerParaObject& rParaObj,
-             const ::basegfx::B2DHomMatrix& rTextRangeTransform,
+             ::basegfx::B2DHomMatrix aTextRangeTransform,
              bool bWordWrap)
          :  SdrTextPrimitive2D(pSdrText, rParaObj),
-             maTextRangeTransform(rTextRangeTransform),
+             maTextRangeTransform(std::move(aTextRangeTransform)),
              mbWordWrap(bWordWrap)
          {
          }
@@ -456,9 +457,9 @@ namespace drawinglayer::primitive2d
         SdrChainedTextPrimitive2D::SdrChainedTextPrimitive2D(
             const SdrText* pSdrText,
             const OutlinerParaObject& rOutlinerParaObject,
-            const basegfx::B2DHomMatrix& rTextRangeTransform)
+            basegfx::B2DHomMatrix aTextRangeTransform)
         : SdrTextPrimitive2D(pSdrText, rOutlinerParaObject),
-          maTextRangeTransform(rTextRangeTransform)
+          maTextRangeTransform(std::move(aTextRangeTransform))
         { }
 
         void SdrChainedTextPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const
@@ -504,10 +505,10 @@ namespace drawinglayer::primitive2d
         SdrStretchTextPrimitive2D::SdrStretchTextPrimitive2D(
             const SdrText* pSdrText,
             const OutlinerParaObject& rOutlinerParaObject,
-            const basegfx::B2DHomMatrix& rTextRangeTransform,
+            basegfx::B2DHomMatrix aTextRangeTransform,
             bool bFixedCellHeight)
         :   SdrTextPrimitive2D(pSdrText, rOutlinerParaObject),
-            maTextRangeTransform(rTextRangeTransform),
+            maTextRangeTransform(std::move(aTextRangeTransform)),
             mbFixedCellHeight(bFixedCellHeight)
         {
         }

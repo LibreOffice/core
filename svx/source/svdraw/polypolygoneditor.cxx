@@ -22,11 +22,12 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
 #include <svx/polypolygoneditor.hxx>
+#include <utility>
 
 namespace sdr {
 
-PolyPolygonEditor::PolyPolygonEditor( const basegfx::B2DPolyPolygon& rPolyPolygon)
-: maPolyPolygon( rPolyPolygon )
+PolyPolygonEditor::PolyPolygonEditor( basegfx::B2DPolyPolygon aPolyPolygon)
+: maPolyPolygon(std::move( aPolyPolygon ))
 {
 }
 

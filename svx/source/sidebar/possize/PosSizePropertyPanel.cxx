@@ -37,6 +37,7 @@
 #include <svx/sdangitm.hxx>
 #include <unotools/viewoptions.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <utility>
 #include <vcl/canvastools.hxx>
 #include <vcl/fieldvalues.hxx>
 #include <svl/intitem.hxx>
@@ -59,7 +60,7 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings,
-    const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
+    css::uno::Reference<css::ui::XSidebar> xSidebar)
 :   PanelLayout(pParent, "PosSizePropertyPanel", "svx/ui/sidebarpossize.ui"),
     mxFtPosX(m_xBuilder->weld_label("horizontallabel")),
     mxMtrPosX(m_xBuilder->weld_metric_spin_button("horizontalpos", FieldUnit::CM)),
@@ -111,7 +112,7 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     mbAutoWidth(false),
     mbAutoHeight(false),
     mbAdjustEnabled(false),
-    mxSidebar(rxSidebar)
+    mxSidebar(std::move(xSidebar))
 {
     Initialize();
 

@@ -25,17 +25,18 @@
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
+#include <utility>
 
 
 namespace sdr::overlay
 {
         OverlayPolyPolygon::OverlayPolyPolygon(
-                            const basegfx::B2DPolyPolygon& rLinePolyPolygon,
+                            basegfx::B2DPolyPolygon aLinePolyPolygon,
                             Color const & rLineColor,
                             double fLineWidth,
                             Color const & rFillColor)
             : OverlayObject(rLineColor)
-            , maLinePolyPolygon(rLinePolyPolygon)
+            , maLinePolyPolygon(std::move(aLinePolyPolygon))
             , mfLineWidth(fLineWidth)
             , maFillColor(rFillColor)
         {
@@ -113,9 +114,9 @@ namespace sdr::overlay
         }
 
         OverlayPolyPolygonStripedAndFilled::OverlayPolyPolygonStripedAndFilled(
-            const basegfx::B2DPolyPolygon& rLinePolyPolygon)
+            basegfx::B2DPolyPolygon aLinePolyPolygon)
         :   OverlayObject(COL_BLACK),
-            maLinePolyPolygon(rLinePolyPolygon)
+            maLinePolyPolygon(std::move(aLinePolyPolygon))
         {
         }
 

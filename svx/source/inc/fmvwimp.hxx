@@ -97,7 +97,7 @@ class FormViewPageWindowAdapter final : public FormViewPageWindowAdapter_Base
     VclPtr<vcl::Window>         m_pWindow;
 
 public:
-    FormViewPageWindowAdapter(  const css::uno::Reference<css::uno::XComponentContext>& _rContext,
+    FormViewPageWindowAdapter(  css::uno::Reference<css::uno::XComponentContext> _xContext,
         const SdrPageWindow&, FmXFormView* pView);
         //const SdrPageViewWinRec*, FmXFormView* pView);
 

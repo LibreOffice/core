@@ -35,7 +35,7 @@ class FontCharMap;
 class Subset
 {
 public:
-    Subset(sal_UCS4 nMin, sal_UCS4 nMax, const OUString& rName);
+    Subset(sal_UCS4 nMin, sal_UCS4 nMax, OUString aName);
 
     sal_UCS4        GetRangeMin() const { return mnRangeMin;}
     sal_UCS4        GetRangeMax() const { return mnRangeMax;}

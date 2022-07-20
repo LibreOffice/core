@@ -59,7 +59,7 @@ private:
     basegfx::B2DPolyPolygon aB2DPolyPolygon;
 
 public:
-    XLineEndEntry(const basegfx::B2DPolyPolygon& rB2DPolyPolygon, const OUString& rName);
+    XLineEndEntry(basegfx::B2DPolyPolygon aB2DPolyPolygon, const OUString& rName);
     XLineEndEntry(const XLineEndEntry& rOther);
 
     const basegfx::B2DPolyPolygon& GetLineEnd() const
@@ -163,7 +163,7 @@ protected:
     bool                mbListDirty;
     bool                mbEmbedInDocument;
 
-    XPropertyList(XPropertyListType t, const OUString& rPath, const OUString& rReferer);
+    XPropertyList(XPropertyListType t, OUString aPath, OUString aReferer);
     bool isValidIdx(tools::Long nIndex) const;
     virtual BitmapEx CreateBitmapForUI(tools::Long nIndex) = 0;
 

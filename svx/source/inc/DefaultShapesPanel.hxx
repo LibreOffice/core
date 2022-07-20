@@ -39,7 +39,7 @@ class DefaultShapesPanel final
 public:
     DefaultShapesPanel (
         weld::Widget* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+        css::uno::Reference<css::frame::XFrame> xFrame);
     static std::unique_ptr<PanelLayout> Create(
         weld::Widget* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);

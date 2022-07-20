@@ -28,6 +28,7 @@
 #include <tools/color.hxx>
 
 #include <set>
+#include <utility>
 
 namespace com::sun::star::form::validation { class XValidatableFormComponent; }
 
@@ -80,8 +81,8 @@ namespace svxform
         OUString                                                     sOriginalHelpText;
 
         ControlData() : BorderDescriptor() { }
-        ControlData( const css::uno::Reference< css::awt::XControl >& _rxControl )
-            :xControl( _rxControl )
+        ControlData( css::uno::Reference< css::awt::XControl > _xControl )
+            :xControl(std::move( _xControl ))
         {
         }
     };

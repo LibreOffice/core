@@ -999,9 +999,9 @@ XLineStartItem::XLineStartItem(sal_Int32 nIndex)
 {
 }
 
-XLineStartItem::XLineStartItem(const OUString& rName, const basegfx::B2DPolyPolygon& rPolyPolygon)
+XLineStartItem::XLineStartItem(const OUString& rName, basegfx::B2DPolyPolygon aPolyPolygon)
 :   NameOrIndex(XATTR_LINESTART, rName),
-    maPolyPolygon(rPolyPolygon)
+    maPolyPolygon(std::move(aPolyPolygon))
 {
 }
 
@@ -1011,9 +1011,9 @@ XLineStartItem::XLineStartItem(const XLineStartItem& rItem)
 {
 }
 
-XLineStartItem::XLineStartItem(const basegfx::B2DPolyPolygon& rPolyPolygon)
+XLineStartItem::XLineStartItem(basegfx::B2DPolyPolygon aPolyPolygon)
 :   NameOrIndex( XATTR_LINESTART, -1 ),
-    maPolyPolygon(rPolyPolygon)
+    maPolyPolygon(std::move(aPolyPolygon))
 {
 }
 
@@ -1296,9 +1296,9 @@ XLineEndItem::XLineEndItem(sal_Int32 nIndex)
 {
 }
 
-XLineEndItem::XLineEndItem(const OUString& rName, const basegfx::B2DPolyPolygon& rPolyPolygon)
+XLineEndItem::XLineEndItem(const OUString& rName, basegfx::B2DPolyPolygon aPolyPolygon)
 :   NameOrIndex(XATTR_LINEEND, rName),
-    maPolyPolygon(rPolyPolygon)
+    maPolyPolygon(std::move(aPolyPolygon))
 {
 }
 
@@ -1308,9 +1308,9 @@ XLineEndItem::XLineEndItem(const XLineEndItem& rItem)
 {
 }
 
-XLineEndItem::XLineEndItem(const basegfx::B2DPolyPolygon& rPolyPolygon)
+XLineEndItem::XLineEndItem(basegfx::B2DPolyPolygon aPolyPolygon)
 :   NameOrIndex( XATTR_LINEEND, -1 ),
-    maPolyPolygon(rPolyPolygon)
+    maPolyPolygon(std::move(aPolyPolygon))
 {
 }
 

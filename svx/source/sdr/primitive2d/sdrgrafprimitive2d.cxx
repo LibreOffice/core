@@ -23,6 +23,7 @@
 #include <sdr/primitive2d/sdrdecompositiontools.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <utility>
 
 namespace drawinglayer::primitive2d
 {
@@ -124,10 +125,10 @@ void SdrGrafPrimitive2D::create2DDecomposition(
 }
 
 SdrGrafPrimitive2D::SdrGrafPrimitive2D(
-    const basegfx::B2DHomMatrix& rTransform,
+    basegfx::B2DHomMatrix aTransform,
     const attribute::SdrLineFillEffectsTextAttribute& rSdrLFSTAttribute,
     const GraphicObject& rGraphicObject, const GraphicAttr& rGraphicAttr)
-    : maTransform(rTransform)
+    : maTransform(std::move(aTransform))
     , maSdrLFSTAttribute(rSdrLFSTAttribute)
     , maGraphicObject(rGraphicObject)
     , maGraphicAttr(rGraphicAttr)

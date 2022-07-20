@@ -44,6 +44,7 @@
 #include <svx/svxids.hrc>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
+#include <utility>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
@@ -139,11 +140,11 @@ OUString FmFilterItems::GetImage() const
 }
 
 FmFilterItem::FmFilterItem( FmFilterItems* pParent,
-                            const OUString& aFieldName,
+                            OUString aFieldName,
                             const OUString& aText,
                             const sal_Int32 _nComponentIndex )
           :FmFilterData(pParent, aText)
-          ,m_aFieldName(aFieldName)
+          ,m_aFieldName(std::move(aFieldName))
           ,m_nComponentIndex( _nComponentIndex )
 {
 }

@@ -19,17 +19,18 @@
 
 
 #include <sdr/attribute/sdrfilltextattribute.hxx>
+#include <utility>
 
 
 namespace drawinglayer::attribute
 {
         SdrFillTextAttribute::SdrFillTextAttribute(
-            const SdrFillAttribute& rFill,
-            const FillGradientAttribute& rFillFloatTransGradient,
-            const SdrTextAttribute& rTextAttribute)
-        :   maFill(rFill),
-            maFillFloatTransGradient(rFillFloatTransGradient),
-            maTextAttribute(rTextAttribute)
+            SdrFillAttribute aFill,
+            FillGradientAttribute aFillFloatTransGradient,
+            SdrTextAttribute aTextAttribute)
+        :   maFill(std::move(aFill)),
+            maFillFloatTransGradient(std::move(aFillFloatTransGradient)),
+            maTextAttribute(std::move(aTextAttribute))
         {
         }
 
