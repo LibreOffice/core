@@ -12,6 +12,7 @@
 
 #include <string_view>
 
+#include <osl/endian.h>
 #include <test/bootstrapfixture.hxx>
 #include <test/xmltesttools.hxx>
 #include <vcl/gdimtf.hxx>
@@ -937,14 +938,26 @@ void SvmTest::checkBitmaps(const GDIMetaFile& rMetaFile)
     if (SkiaHelper::isVCLSkiaEnabled())
         return; // TODO SKIA using CRCs is broken (the idea of it)
 
-    assertXPathAttrs(pDoc, "/metafile/bmp[1]", {{"x", "1"}, {"y", "2"}, {"crc", "b8dee5da"}});
+    assertXPathAttrs(pDoc, "/metafile/bmp[1]", {{"x", "1"}, {"y", "2"}, {"crc",
+#if defined OSL_BIGENDIAN
+        "5e01ddcc"
+#else
+        "b8dee5da"
+#endif
+        }});
     assertXPathAttrs(pDoc, "/metafile/bmpscale[1]", {
         {"x", "1"}, {"y", "2"}, {"width", "3"}, {"height", "4"}, {"crc", "281fc589"}
     });
     assertXPathAttrs(pDoc, "/metafile/bmpscalepart[1]", {
         {"destx", "1"}, {"desty", "2"}, {"destwidth", "3"}, {"destheight", "4"},
         {"srcx", "2"},  {"srcy", "1"},  {"srcwidth", "4"},  {"srcheight", "3"},
-        {"crc", "5e01ddcc"}
+        {"crc",
+#if defined OSL_BIGENDIAN
+         "b8dee5da"
+#else
+         "5e01ddcc"
+#endif
+        }
     });
 }
 
@@ -995,6 +1008,16 @@ void SvmTest::checkBitmapExs(const GDIMetaFile& rMetaFile)
     std::vector<OUString> aExpectedCRC;
     aExpectedCRC.insert(aExpectedCRC.end(),
     {
+#if defined OSL_BIGENDIAN
+        "08feb5d3",
+        "281fc589",
+        "b8dee5da",
+        "4df0e464",
+        "186ff868",
+        "33b4a07c", // 4-bit color bitmap - same as 8-bit color bitmap
+        "33b4a07c",
+        "742c3e35",
+#else
         "d8377d4f",
         "281fc589",
         "5e01ddcc",
@@ -1003,6 +1026,7 @@ void SvmTest::checkBitmapExs(const GDIMetaFile& rMetaFile)
         "3c80d829", // 4-bit color bitmap - same as 8-bit color bitmap
         "3c80d829",
         "71efc447",
+#endif
     });
 
     assertXPathAttrs(pDoc, "/metafile/bmpex[1]", {
