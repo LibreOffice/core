@@ -125,6 +125,8 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
 
     Animation aAnimation;
 
+    const bool bFuzzing = utl::ConfigManager::IsFuzzing();
+
     do
     {
         uint32_t w, h;
@@ -157,7 +159,7 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
             break;
         }
 
-        if (utl::ConfigManager::IsFuzzing())
+        if (bFuzzing)
         {
             const uint64_t MAX_SIZE = 200000000;
             if (TIFFTileSize64(tif) > MAX_SIZE || nPixelsRequired > MAX_SIZE)
@@ -234,13 +236,16 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
 
             BitmapEx aBitmapEx(bitmap, bitmapAlpha);
 
-            switch (nOrientation)
+            if (!bFuzzing)
             {
-                case ORIENTATION_LEFTBOT:
-                    aBitmapEx.Rotate(2700_deg10, COL_BLACK);
-                    break;
-                default:
-                    break;
+                switch (nOrientation)
+                {
+                    case ORIENTATION_LEFTBOT:
+                        aBitmapEx.Rotate(2700_deg10, COL_BLACK);
+                        break;
+                    default:
+                        break;
+                }
             }
 
             AnimationBitmap aAnimationBitmap(aBitmapEx, Point(0, 0), aBitmapEx.GetSizePixel(),
