@@ -232,7 +232,8 @@ bool VectorGraphicSearch::searchPDF(std::shared_ptr<VectorGraphicData> const& rD
     }
 
     mpImplementation->mpPdfDocument = mpImplementation->mpPDFium->openDocument(
-        rData->getBinaryDataContainer().getData(), rData->getBinaryDataContainer().getSize());
+        rData->getBinaryDataContainer().getData(), rData->getBinaryDataContainer().getSize(),
+        OString());
 
     if (!mpImplementation->mpPdfDocument)
     {

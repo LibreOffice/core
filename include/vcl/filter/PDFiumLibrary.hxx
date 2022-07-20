@@ -55,7 +55,9 @@ public:
 
     virtual const OUString& getLastError() const = 0;
 
-    virtual std::unique_ptr<PDFiumDocument> openDocument(const void* pData, int nSize) = 0;
+    virtual std::unique_ptr<PDFiumDocument> openDocument(const void* pData, int nSize,
+                                                         const OString& rPassword)
+        = 0;
     virtual PDFErrorType getLastErrorCode() = 0;
     virtual std::unique_ptr<PDFiumBitmap> createBitmap(int nWidth, int nHeight, int nAlpha) = 0;
 };

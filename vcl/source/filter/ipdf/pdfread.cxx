@@ -79,7 +79,7 @@ bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream)
         {
             // Load the buffer using pdfium.
             std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-                = pPdfium->openDocument(aInBuffer.GetData(), aInBuffer.GetSize());
+                = pPdfium->openDocument(aInBuffer.GetData(), aInBuffer.GetSize(), OString());
             if (!pPdfDocument)
                 return false;
 
@@ -128,7 +128,8 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<BitmapEx>& r
     }
 
     // Load the buffer using pdfium.
-    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = pPdfium->openDocument(pBuffer, nSize);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPdfium->openDocument(pBuffer, nSize, OString());
     if (!pPdfDocument)
         return 0;
 
@@ -441,7 +442,8 @@ size_t ImportPDFUnloaded(const OUString& rURL, std::vector<PDFGraphicResult>& rG
     }
 
     // Load the buffer using pdfium.
-    auto pPdfDocument = pPdfium->openDocument(pGfxLink->GetData(), pGfxLink->GetDataSize());
+    auto pPdfDocument
+        = pPdfium->openDocument(pGfxLink->GetData(), pGfxLink->GetDataSize(), OString());
 
     if (!pPdfDocument)
         return 0;

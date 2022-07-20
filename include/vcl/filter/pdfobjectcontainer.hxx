@@ -28,6 +28,10 @@ public:
     // Write pBuffer to the end of the output.
     virtual bool writeBuffer(const void* pBuffer, sal_uInt64 nBytes) = 0;
 
+    virtual void checkAndEnableStreamEncryption(sal_Int32 nObject) = 0;
+
+    virtual void disableStreamEncryption() = 0;
+
 protected:
     ~PDFObjectContainer() noexcept = default;
 };

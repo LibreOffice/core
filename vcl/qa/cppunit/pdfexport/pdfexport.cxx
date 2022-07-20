@@ -68,7 +68,7 @@ protected:
     utl::TempFile maTempFile;
     SvMemoryStream maMemory;
     utl::MediaDescriptor aMediaDescriptor;
-    std::unique_ptr<vcl::pdf::PDFiumDocument> parseExport();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> parseExport(const OString& rPassword = OString());
     std::shared_ptr<vcl::pdf::PDFium> mpPDFium;
 
 public:
@@ -81,13 +81,13 @@ public:
 
 PdfExportTest::PdfExportTest() { maTempFile.EnableKillingFile(); }
 
-std::unique_ptr<vcl::pdf::PDFiumDocument> PdfExportTest::parseExport()
+std::unique_ptr<vcl::pdf::PDFiumDocument> PdfExportTest::parseExport(const OString& rPassword)
 {
     SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
     maMemory.WriteStream(aFile);
     std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = pPDFium->openDocument(maMemory.GetData(), maMemory.GetSize());
+        = pPDFium->openDocument(maMemory.GetData(), maMemory.GetSize(), rPassword);
     CPPUNIT_ASSERT(pPdfDocument);
     return pPdfDocument;
 }
@@ -3406,6 +3406,50 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testPdfImageAnnots)
     // - Actual  : 3
     // i.e. not only the hyperlink but also the 2 comments were exported, leading to duplication.
     CPPUNIT_ASSERT_EQUAL(1, pPdfPage->getAnnotationCount());
+}
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testPdfImageEncryption)
+{
+    // Given an empty document, with an inserted PDF image:
+    mxComponent = loadFromDesktop("private:factory/swriter");
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xGraphicObject(
+        xFactory->createInstance("com.sun.star.text.TextGraphicObject"), uno::UNO_QUERY);
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "rectangles.pdf";
+    xGraphicObject->setPropertyValue("GraphicURL", uno::Any(aURL));
+    uno::Reference<drawing::XShape> xShape(xGraphicObject, uno::UNO_QUERY);
+    xShape->setSize(awt::Size(1000, 1000));
+    uno::Reference<text::XTextContent> xTextContent(xGraphicObject, uno::UNO_QUERY);
+    xText->insertTextContent(xCursor->getStart(), xTextContent, /*bAbsorb=*/false);
+
+    // When saving as encrypted PDF:
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    uno::Sequence<beans::PropertyValue> aFilterData = {
+        comphelper::makePropertyValue("EncryptFile", true),
+        comphelper::makePropertyValue("DocumentOpenPassword", OUString("secret")),
+    };
+    aMediaDescriptor["FilterData"] <<= aFilterData;
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Then make sure that the image is not lost:
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport("secret");
+    CPPUNIT_ASSERT(pPdfDocument);
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(pPdfPage);
+    CPPUNIT_ASSERT_EQUAL(1, pPdfPage->getObjectCount());
+    std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPdfPage->getObject(0);
+    CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFPageObjectType::Form, pPageObject->getType());
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 0
+    // i.e. instead of the white background and the actual form child, the image was lost due to
+    // missing encryption.
+    CPPUNIT_ASSERT_EQUAL(2, pPageObject->getFormObjectCount());
 }
 } // end anonymous namespace
 
