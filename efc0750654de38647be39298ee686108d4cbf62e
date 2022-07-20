@@ -72,6 +72,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "45e5ae51_6836526a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-07-20T16:13:15Z",
+      "side": 1,
+      "message": "OK - good. I\u0027m understanding correctly.\n\nIn your example, both share the same SID. In this case the attribute doesn\u0027t share the same SID (because of a different underlying SvxItem).\nEE_CHAR_BKGCOLOR is SID_ATTR_CHAR_BACK_COLOR.\nRES_CHRATR_BACKGROUND is SID_ATTR_BRUSH_CHAR.\n\nSure, HIGHLIGHT could be mapped as well to SID_ATTR_BRUSH_CHAR - I didn\u0027t see any existing unique SID associated with highlights.\n\nI tried the opposite (setting the slots to zero) and that passed a make check.\n\nSince the mappings are left hanging, and since HIGHLIGHT is actually something different from SID_ATTR_BRUSH_CHAR (it is emulation more than a mapping) it is probably better to leave it \"slotless\".",
+      "parentUuid": "c98f19a5_215a02d8",
+      "revId": "efc0750654de38647be39298ee686108d4cbf62e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "17b1d274_a03faf41",
         "filename": "sw/source/filter/ww8/ww8graf.cxx",
         "patchSetId": 2
