@@ -64,6 +64,10 @@ private:
     bool            mbIsMirroredHorizontally;
     bool            mbIsMirroredVertically;
 
+    SAL_DLLPRIVATE double calculateXScaling();
+    SAL_DLLPRIVATE double calculateYScaling();
+    SAL_DLLPRIVATE static Point getBottomRightPoint(const AnimationFrame& rAnimationFrame);
+
 public:
                     AnimationRenderer( Animation* pParent, OutputDevice* pOut,
                                   const Point& rPt, const Size& rSz, sal_uLong nRendererId,
@@ -77,11 +81,12 @@ public:
     void            repaint();
     AnimationData*  createAnimationData() const;
 
-    void            getPosSize( const AnimationFrame& rAnm, Point& rPosPix, Size& rSizePix );
+    Point getPosition(AnimationFrame const& rAnm);
+    Size getSize(AnimationFrame const& rAnm);
 
     const Point&    getOriginPosition() const { return maOriginPt; }
 
-    const Size&     getOutSizePix() const { return maSizePx; }
+    const Size&     getSizePx() const { return maSizePx; }
 
     void            pause( bool bIsPaused ) { mbIsPaused = bIsPaused; }
     bool            isPaused() const { return mbIsPaused; }
