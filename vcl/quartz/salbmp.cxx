@@ -224,7 +224,6 @@ bool QuartzSalBitmap::AllocateUserData()
         switch( mnBits )
         {
         case 1:     mnBytesPerRow = (mnWidth + 7) >> 3; break;
-        case 4:     mnBytesPerRow = (mnWidth + 1) >> 1; break;
         case 8:     mnBytesPerRow = mnWidth; break;
         case 24:    mnBytesPerRow = (mnWidth << 1) + mnWidth; break;
         case 32:    mnBytesPerRow = mnWidth << 2; break;
@@ -370,20 +369,17 @@ static const BitmapPalette& GetDefaultPalette( int mnBits, bool bMonochrome )
     // since all other platforms do so, too.
     static bool bDefPalInit = false;
     static BitmapPalette aDefPalette256;
-    static BitmapPalette aDefPalette16;
     static BitmapPalette aDefPalette2;
     if( ! bDefPalInit )
     {
         bDefPalInit = true;
         aDefPalette256.SetEntryCount( 256 );
-        aDefPalette16.SetEntryCount( 16 );
         aDefPalette2.SetEntryCount( 2 );
 
         // Standard colors
         unsigned int i;
         for( i = 0; i < 16; i++ )
         {
-            aDefPalette16[i] =
             aDefPalette256[i] = BitmapColor( aImplSalSysPalEntryAry[i].mnRed,
                                              aImplSalSysPalEntryAry[i].mnGreen,
                                              aImplSalSysPalEntryAry[i].mnBlue );
@@ -414,7 +410,6 @@ static const BitmapPalette& GetDefaultPalette( int mnBits, bool bMonochrome )
     switch( mnBits )
     {
     case 1: return aDefPalette2;
-    case 4: return aDefPalette16;
     case 8: return aDefPalette256;
     default: break;
     }
