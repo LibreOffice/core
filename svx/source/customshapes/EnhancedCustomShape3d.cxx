@@ -47,6 +47,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeMetalType.hpp>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
+#include <basegfx/color/bcolor.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
@@ -56,7 +57,7 @@
 #include <svx/xlnwtit.hxx>
 #include <svx/xlntrit.hxx>
 #include <svx/xfltrit.hxx>
-#include <basegfx/color/bcolor.hxx>
+#include <unotools/configmgr.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -350,6 +351,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
         basegfx::B2DPolyPolygon aTotalPolyPoly;
         SdrObjListIter aIter( *pShape2d, SdrIterMode::DeepNoGroups );
         const bool bMultipleSubObjects(aIter.Count() > 1);
+        const bool bFuzzing(utl::ConfigManager::IsFuzzing());
 
         while( aIter.IsMore() )
         {
@@ -394,7 +396,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
                     }
                 }
 
-                if(bNeedToConvertToContour)
+                if (bNeedToConvertToContour && !bFuzzing)
                 {
                     SdrObject* pNewObj = pNext->ConvertToContourObj(const_cast< SdrObject* >(pNext));
                     SdrPathObj* pNewPathObj = dynamic_cast< SdrPathObj* >(pNewObj);
