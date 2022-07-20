@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d8d14f3_3d802ddb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-07-20T16:00:41Z",
+      "side": 1,
+      "message": "wdyt? Is 1MB reasonable as a default?",
+      "revId": "eede5aa5981c4c1ce380dfad36f521f4fa148fcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
