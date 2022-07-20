@@ -120,10 +120,10 @@ namespace
 class SvxStyleBox_Base
 {
 public:
-    SvxStyleBox_Base(std::unique_ptr<weld::ComboBox> xWidget, const OUString& rCommand, SfxStyleFamily eFamily,
+    SvxStyleBox_Base(std::unique_ptr<weld::ComboBox> xWidget, OUString  rCommand, SfxStyleFamily eFamily,
                      const Reference<XDispatchProvider>& rDispatchProvider,
-                     const Reference<XFrame>& _xFrame,const OUString& rClearFormatKey,
-                     const OUString& rMoreKey, bool bInSpecialMode, SvxStyleToolBoxControl& rCtrl);
+                     const Reference<XFrame>& _xFrame, OUString aClearFormatKey,
+                     OUString aMoreKey, bool bInSpecialMode, SvxStyleToolBoxControl& rCtrl);
 
     virtual ~SvxStyleBox_Base()
     {
@@ -836,12 +836,12 @@ class SfxStyleControllerItem_Impl : public SfxStatusListener
 #define ITEM_HEIGHT 30
 
 SvxStyleBox_Base::SvxStyleBox_Base(std::unique_ptr<weld::ComboBox> xWidget,
-                                   const OUString& rCommand,
+                                   OUString aCommand,
                                    SfxStyleFamily eFamily,
                                    const Reference< XDispatchProvider >& rDispatchProvider,
                                    const Reference< XFrame >& _xFrame,
-                                   const OUString& rClearFormatKey,
-                                   const OUString& rMoreKey,
+                                   OUString _aClearFormatKey,
+                                   OUString _aMoreKey,
                                    bool bInSpec, SvxStyleToolBoxControl& rCtrl)
     : m_rCtrl(rCtrl)
     , m_xMenuBuilder(Application::CreateBuilder(nullptr, "svx/ui/stylemenu.ui"))
@@ -853,9 +853,9 @@ SvxStyleBox_Base::SvxStyleBox_Base(std::unique_ptr<weld::ComboBox> xWidget,
     , bRelease( true )
     , m_xDispatchProvider( rDispatchProvider )
     , m_xFrame(_xFrame)
-    , m_aCommand( rCommand )
-    , aClearFormatKey( rClearFormatKey )
-    , aMoreKey( rMoreKey )
+    , m_aCommand(std::move( aCommand ))
+    , aClearFormatKey(std::move( _aClearFormatKey ))
+    , aMoreKey(std::move( _aMoreKey ))
     , bInSpecialMode( bInSpec )
 {
     m_xWidget->connect_changed(LINK(this, SvxStyleBox_Base, SelectHdl));
@@ -1760,22 +1760,22 @@ IMPL_LINK(SvxFontNameBox_Base, DumpAsPropertyTreeHdl, tools::JsonWriter&, rJsonW
     rJsonWriter.put("command", ".uno:CharFontName");
 }
 
-ColorWindow::ColorWindow(const OUString& rCommand,
-                         std::shared_ptr<PaletteManager> const & rPaletteManager,
+ColorWindow::ColorWindow(OUString  rCommand,
+                         std::shared_ptr<PaletteManager> xPaletteManager,
                          ColorStatus&               rColorStatus,
                          sal_uInt16                 nSlotId,
                          const Reference< XFrame >& rFrame,
                          const MenuOrToolMenuButton& rMenuButton,
-                         TopLevelParentFunction const& rTopLevelParentFunction,
-                         ColorSelectFunction const & rColorSelectFunction)
+                         TopLevelParentFunction  aTopLevelParentFunction,
+                         ColorSelectFunction  aColorSelectFunction)
     : WeldToolbarPopup(rFrame, rMenuButton.get_widget(), "svx/ui/colorwindow.ui", "palette_popup_window")
     , theSlotId(nSlotId)
-    , maCommand(rCommand)
+    , maCommand(std::move(rCommand))
     , maMenuButton(rMenuButton)
-    , mxPaletteManager(rPaletteManager)
+    , mxPaletteManager(std::move(xPaletteManager))
     , mrColorStatus(rColorStatus)
-    , maTopLevelParentFunction(rTopLevelParentFunction)
-    , maColorSelectFunction(rColorSelectFunction)
+    , maTopLevelParentFunction(std::move(aTopLevelParentFunction))
+    , maColorSelectFunction(std::move(aColorSelectFunction))
     , mxColorSet(new SvxColorValueSet(m_xBuilder->weld_scrolled_window("colorsetwin", true)))
     , mxRecentColorSet(new SvxColorValueSet(nullptr))
     , mxPaletteListBox(m_xBuilder->weld_combo_box("palette_listbox"))
@@ -3973,13 +3973,13 @@ void ColorListBox::SetSlotId(sal_uInt16 nSlotId, bool bShowNoneButton)
     createColorWindow();
 }
 
-ColorListBox::ColorListBox(std::unique_ptr<weld::MenuButton> pControl, TopLevelParentFunction const& rTopLevelParentFunction)
+ColorListBox::ColorListBox(std::unique_ptr<weld::MenuButton> pControl, TopLevelParentFunction aTopLevelParentFunction)
     : m_xButton(std::move(pControl))
     , m_aColorWrapper(this)
     , m_aAutoDisplayColor(Application::GetSettings().GetStyleSettings().GetDialogColor())
     , m_nSlotId(0)
     , m_bShowNoneButton(false)
-    , m_aTopLevelParentFunction(rTopLevelParentFunction)
+    , m_aTopLevelParentFunction(std::move(aTopLevelParentFunction))
 {
     m_xButton->connect_toggled(LINK(this, ColorListBox, ToggleHdl));
     m_aSelectedColor = svx::NamedThemedColor::FromNamedColor(GetAutoColor(m_nSlotId));
@@ -4125,10 +4125,10 @@ MenuOrToolMenuButton::MenuOrToolMenuButton(weld::MenuButton* pMenuButton)
 {
 }
 
-MenuOrToolMenuButton::MenuOrToolMenuButton(weld::Toolbar* pToolbar, const OString& rIdent)
+MenuOrToolMenuButton::MenuOrToolMenuButton(weld::Toolbar* pToolbar, OString aIdent)
     : m_pMenuButton(nullptr)
     , m_pToolbar(pToolbar)
-    , m_aIdent(rIdent)
+    , m_aIdent(std::move(aIdent))
     , m_pControl(nullptr)
     , m_nId(0)
 {

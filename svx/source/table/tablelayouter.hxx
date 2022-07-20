@@ -67,7 +67,7 @@ struct EdgeInfo final
 class TableLayouter final
 {
 public:
-    explicit TableLayouter( const TableModelRef& xTableModel );
+    explicit TableLayouter( TableModelRef xTableModel );
     ~TableLayouter();
 
     /** try to fit the table into the given rectangle.

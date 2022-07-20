@@ -29,6 +29,7 @@
 #include <svtools/imagemgr.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <tools/urlobj.hxx>
+#include <utility>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 
@@ -46,9 +47,9 @@ namespace svx::DocRecovery
 
 using namespace ::osl;
 
-RecoveryCore::RecoveryCore(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+RecoveryCore::RecoveryCore(css::uno::Reference< css::uno::XComponentContext > xContext,
                                  bool                                            bUsedForSaving)
-    : m_xContext        ( rxContext    )
+    : m_xContext        (std::move( xContext    ))
     , m_pListener       ( nullptr            )
     , m_bListenForSaving(bUsedForSaving)
 {

@@ -32,6 +32,7 @@
 #include <svx/svdotable.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
+#include <utility>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star::uno;
@@ -49,8 +50,8 @@ static SvxBorderLine gEmptyBorder;
 
 constexpr OUStringLiteral gsSize( u"Size" );
 
-TableLayouter::TableLayouter( const TableModelRef& xTableModel )
-: mxTable( xTableModel )
+TableLayouter::TableLayouter( TableModelRef xTableModel )
+: mxTable(std::move( xTableModel ))
 {
 }
 

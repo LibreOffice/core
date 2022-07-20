@@ -42,7 +42,7 @@ class SVX_DLLPUBLIC SelectionChangeHandler final
 {
 public:
     SelectionChangeHandler (
-        const std::function<OUString ()>& rSelectionChangeCallback,
+        std::function<OUString ()> aSelectionChangeCallback,
         const css::uno::Reference<css::frame::XController>& rxController,
         const vcl::EnumContext::Context eDefaultContext);
     virtual ~SelectionChangeHandler() override;

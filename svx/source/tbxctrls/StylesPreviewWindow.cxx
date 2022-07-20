@@ -20,6 +20,7 @@
 #include <StylesPreviewWindow.hxx>
 
 #include <comphelper/propertyvalue.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/itemset.hxx>
@@ -105,9 +106,9 @@ void StylePoolChangeListener::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& /*r
     m_pPreviewControl->RequestStylesListUpdate();
 }
 
-StyleItemController::StyleItemController(const std::pair<OUString, OUString>& aStyleName)
+StyleItemController::StyleItemController(std::pair<OUString, OUString> aStyleName)
     : m_eStyleFamily(SfxStyleFamily::Para)
-    , m_aStyleName(aStyleName)
+    , m_aStyleName(std::move(aStyleName))
 {
 }
 

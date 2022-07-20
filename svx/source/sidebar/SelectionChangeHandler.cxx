@@ -21,6 +21,7 @@
 
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
+#include <utility>
 #include <vcl/EnumContext.hxx>
 
 
@@ -30,10 +31,10 @@ using namespace css::uno;
 namespace svx::sidebar {
 
 SelectionChangeHandler::SelectionChangeHandler (
-    const std::function<OUString()>& rSelectionChangeCallback,
+    std::function<OUString()> aSelectionChangeCallback,
     const Reference<css::frame::XController>& rxController,
     const vcl::EnumContext::Context eDefaultContext)
-    : maSelectionChangeCallback(rSelectionChangeCallback),
+    : maSelectionChangeCallback(std::move(aSelectionChangeCallback)),
       mxController(rxController),
       meDefaultContext(eDefaultContext),
       mbIsConnected(false)

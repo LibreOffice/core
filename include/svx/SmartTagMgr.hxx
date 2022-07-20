@@ -27,6 +27,7 @@
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <svx/svxdllapi.h>
 
+#include <utility>
 #include <vector>
 #include <map>
 #include <set>
@@ -73,8 +74,8 @@ struct ActionReference
 {
     css::uno::Reference< css::smarttags::XSmartTagAction > mxSmartTagAction;
     sal_Int32 mnSmartTagIndex;
-    ActionReference( css::uno::Reference< css::smarttags::XSmartTagAction > const & xSmartTagAction, sal_Int32 nSmartTagIndex )
-        : mxSmartTagAction( xSmartTagAction), mnSmartTagIndex( nSmartTagIndex ) {}
+    ActionReference( css::uno::Reference< css::smarttags::XSmartTagAction > xSmartTagAction, sal_Int32 nSmartTagIndex )
+        : mxSmartTagAction(std::move( xSmartTagAction)), mnSmartTagIndex( nSmartTagIndex ) {}
 };
 
 /** The smart tag manager maintains all installed action and recognizer services
@@ -120,7 +121,7 @@ private:
 
 public:
 
-    SmartTagMgr( const OUString& rApplicationName );
+    SmartTagMgr( OUString aApplicationName );
     virtual ~SmartTagMgr() override;
 
     /** Triggers configuration reading, library loading and listener registration

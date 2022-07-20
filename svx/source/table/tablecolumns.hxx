@@ -31,7 +31,7 @@ namespace sdr::table {
 class TableColumns : public ::cppu::WeakAggImplHelper1< css::table::XTableColumns >
 {
 public:
-    explicit TableColumns( const TableModelRef& xTableModel );
+    explicit TableColumns( TableModelRef xTableModel );
     virtual ~TableColumns() override;
 
     void dispose();

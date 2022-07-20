@@ -37,6 +37,7 @@
 
 #include <svx/fmshell.hxx>
 #include <comphelper/types.hxx>
+#include <utility>
 
 using namespace ::svxform;
 using namespace ::com::sun::star::uno;
@@ -79,9 +80,9 @@ FmNavRemovedHint::~FmNavRemovedHint()
 {
 }
 
-FmNavNameChangedHint::FmNavNameChangedHint( FmEntryData* pData, const OUString& rNewName )
+FmNavNameChangedHint::FmNavNameChangedHint( FmEntryData* pData, OUString _aNewName )
     :pEntryData( pData )
-    ,aNewName( rNewName )
+    ,aNewName(std::move( _aNewName ))
 {
 }
 

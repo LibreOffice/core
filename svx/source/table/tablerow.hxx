@@ -37,7 +37,7 @@ class TableRow : public TableRowBase
     friend class TableModel;
     friend class TableRowUndo;
 public:
-    TableRow( const TableModelRef& xTableModel, sal_Int32 nRow, sal_Int32 nColumns );
+    TableRow( TableModelRef xTableModel, sal_Int32 nRow, sal_Int32 nColumns );
     virtual ~TableRow() override;
 
     void dispose();

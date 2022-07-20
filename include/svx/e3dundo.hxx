@@ -23,6 +23,7 @@
 #include <svl/itemset.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/obj3d.hxx>
+#include <utility>
 #include <svx/svxdllapi.h>
 
 /************************************************************************\
@@ -61,11 +62,11 @@ private:
 public:
     E3dRotateUndoAction(
         E3dObject& r3DObj,
-        const basegfx::B3DHomMatrix &aOldRotation,
-        const basegfx::B3DHomMatrix &aNewRotation)
+        basegfx::B3DHomMatrix aOldRotation,
+        basegfx::B3DHomMatrix aNewRotation)
     :   E3dUndoAction(r3DObj),
-        maMyOldRotation(aOldRotation),
-        maMyNewRotation(aNewRotation)
+        maMyOldRotation(std::move(aOldRotation)),
+        maMyNewRotation(std::move(aNewRotation))
     {
     }
 
@@ -92,8 +93,8 @@ private:
  public:
         E3dAttributesUndoAction(
             E3dObject& rInObject,
-            const SfxItemSet& rNewSet,
-            const SfxItemSet& rOldSet);
+            SfxItemSet aNewSet,
+            SfxItemSet aOldSet);
 
         virtual ~E3dAttributesUndoAction() override;
 

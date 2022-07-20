@@ -23,6 +23,7 @@
 #include <tools/stream.hxx>
 #include <tools/XmlWriter.hxx>
 #include <tools/XmlWalker.hxx>
+#include <utility>
 #include <vcl/customweld.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
@@ -154,12 +155,12 @@ void writeResultToXml(tools::XmlWriter & rXmlWriter,
 
 } // end anonymous namespace
 
-ClassificationDialog::ClassificationDialog(weld::Window* pParent, const bool bPerParagraph, const std::function<void()>& rParagraphSignHandler)
+ClassificationDialog::ClassificationDialog(weld::Window* pParent, const bool bPerParagraph, std::function<void()> aParagraphSignHandler)
     : GenericDialogController(pParent, "svx/ui/classificationdialog.ui", "AdvancedDocumentClassificationDialog")
     , maHelper(SfxObjectShell::Current()->getDocProperties())
     , maInternationalHelper(SfxObjectShell::Current()->getDocProperties(), /*bUseLocalizedPolicy*/ false)
     , m_bPerParagraph(bPerParagraph)
-    , m_aParagraphSignHandler(rParagraphSignHandler)
+    , m_aParagraphSignHandler(std::move(aParagraphSignHandler))
     , m_nCurrentSelectedCategory(-1)
     , m_xOkButton(m_xBuilder->weld_button("ok"))
     , m_xSignButton(m_xBuilder->weld_button("signButton"))

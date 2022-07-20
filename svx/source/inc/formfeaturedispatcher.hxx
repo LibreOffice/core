@@ -52,7 +52,7 @@ namespace svx
             @see dispose
         */
         OSingleFeatureDispatcher(
-            const css::util::URL& _rFeatureURL,
+            css::util::URL _aFeatureURL,
             const sal_Int16 _nFormFeature,
             const css::uno::Reference< css::form::runtime::XFormOperations >& _rxFormOperations,
             ::osl::Mutex& _rMutex

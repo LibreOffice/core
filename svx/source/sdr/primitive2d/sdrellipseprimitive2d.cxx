@@ -25,6 +25,7 @@
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
+#include <utility>
 
 
 using namespace com::sun::star;
@@ -109,9 +110,9 @@ namespace drawinglayer::primitive2d
         }
 
         SdrEllipsePrimitive2D::SdrEllipsePrimitive2D(
-            const basegfx::B2DHomMatrix& rTransform,
+            basegfx::B2DHomMatrix aTransform,
             const attribute::SdrLineFillEffectsTextAttribute& rSdrLFSTAttribute)
-        :   maTransform(rTransform),
+        :   maTransform(std::move(aTransform)),
             maSdrLFSTAttribute(rSdrLFSTAttribute)
         {
         }

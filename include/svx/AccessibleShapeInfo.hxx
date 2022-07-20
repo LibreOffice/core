@@ -68,20 +68,20 @@ public:
     /** Copy the given values into the members described above.
     */
     AccessibleShapeInfo (
-        const css::uno::Reference<
-            css::drawing::XShape>& rxShape,
-        const css::uno::Reference<
-            css::accessibility::XAccessible>& rxParent,
+        css::uno::Reference<
+            css::drawing::XShape> xShape,
+        css::uno::Reference<
+            css::accessibility::XAccessible> xParent,
         IAccessibleParent* pChildrenManager);
 
     /** Copy the given values into the members described above.
         The accessible parent implementation object is set to NULL.
     */
     AccessibleShapeInfo (
-        const css::uno::Reference<
-            css::drawing::XShape>& rxShape,
-        const css::uno::Reference<
-            css::accessibility::XAccessible>& rxParent);
+        css::uno::Reference<
+            css::drawing::XShape> xShape,
+        css::uno::Reference<
+            css::accessibility::XAccessible> xParent);
 
     ~AccessibleShapeInfo();
 

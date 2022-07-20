@@ -54,7 +54,7 @@ private:
     basegfx::B2DPolyPolygon             maOriginalPolyPolygon;
 
 public:
-    SdrDragEntryPolyPolygon(const basegfx::B2DPolyPolygon& rOriginalPolyPolygon);
+    SdrDragEntryPolyPolygon(basegfx::B2DPolyPolygon aOriginalPolyPolygon);
     virtual ~SdrDragEntryPolyPolygon() override;
 
     virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod) override;

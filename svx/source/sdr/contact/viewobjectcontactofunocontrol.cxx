@@ -43,6 +43,7 @@
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 
+#include <utility>
 #include <vcl/canvastools.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
@@ -799,8 +800,8 @@ namespace sdr::contact {
             ) const override;
 
     public:
-        explicit LazyControlCreationPrimitive2D( const ::rtl::Reference< ViewObjectContactOfUnoControl_Impl >& _pVOCImpl )
-            :m_pVOCImpl( _pVOCImpl )
+        explicit LazyControlCreationPrimitive2D( ::rtl::Reference< ViewObjectContactOfUnoControl_Impl > _pVOCImpl )
+            :m_pVOCImpl(std::move( _pVOCImpl ))
         {
             ENSURE_OR_THROW( m_pVOCImpl.is(), "Illegal argument." );
             getTransformation( m_pVOCImpl->getViewContact(), m_aTransformation );

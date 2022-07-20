@@ -41,6 +41,7 @@
 #include <svx/dataaccessdescriptor.hxx>
 #include <tools/diagnose_ex.h>
 #include <tabwin.hrc>
+#include <utility>
 
 const tools::Long STD_WIN_SIZE_X = 120;
 const tools::Long STD_WIN_SIZE_Y = 150;
@@ -61,8 +62,8 @@ using namespace ::dbtools;
 struct ColumnInfo
 {
     OUString sColumnName;
-    explicit ColumnInfo(const OUString& i_sColumnName)
-        : sColumnName(i_sColumnName)
+    explicit ColumnInfo(OUString i_sColumnName)
+        : sColumnName(std::move(i_sColumnName))
     {
     }
 };

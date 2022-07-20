@@ -162,7 +162,7 @@ class SVXCORE_DLLPUBLIC DiagramDataState
     Points maPoints;
 
 public:
-    DiagramDataState(const Connections& rConnections, const Points& rPoints);
+    DiagramDataState(Connections aConnections, Points aPoints);
 
     Connections& getConnections() { return maConnections; }
     Points& getPoints() { return maPoints; }

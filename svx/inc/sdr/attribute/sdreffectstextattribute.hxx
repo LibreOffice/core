@@ -40,9 +40,9 @@ namespace drawinglayer::attribute
 
         public:
             SdrEffectsTextAttribute(
-                const SdrShadowAttribute& rShadow,
-                const SdrTextAttribute& rTextAttribute,
-                const SdrGlowAttribute& rGlow,
+                SdrShadowAttribute aShadow,
+                SdrTextAttribute aTextAttribute,
+                SdrGlowAttribute aGlow,
                 sal_Int32 nSoftEdgeRadius);
             SdrEffectsTextAttribute();
             SdrEffectsTextAttribute(const SdrEffectsTextAttribute& rCandidate);

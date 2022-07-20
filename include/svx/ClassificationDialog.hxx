@@ -83,7 +83,7 @@ private:
 
 public:
     ClassificationDialog(weld::Window* pParent, bool bPerParagraph,
-                         const std::function<void()>& rParagraphSignHandler = []() {});
+                         std::function<void()> aParagraphSignHandler = []() {});
     ~ClassificationDialog() override;
 
     std::vector<ClassificationResult> getResult();

@@ -96,8 +96,8 @@ public:
             for new and deleted children, i.e. that holds a list of
             listeners to be informed.
     */
-    ChildrenManagerImpl (const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
-        const css::uno::Reference<css::drawing::XShapes>& rxShapeList,
+    ChildrenManagerImpl (css::uno::Reference<css::accessibility::XAccessible> xParent,
+        css::uno::Reference<css::drawing::XShapes> xShapeList,
         const AccessibleShapeTreeInfo& rShapeTreeInfo,
         AccessibleContextBase& rContext);
 

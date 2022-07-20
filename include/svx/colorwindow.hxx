@@ -63,7 +63,7 @@ private:
     ToolBoxItemId m_nId;
 public:
     MenuOrToolMenuButton(weld::MenuButton* pMenuButton);
-    MenuOrToolMenuButton(weld::Toolbar* pToolbar, const OString& rIdent);
+    MenuOrToolMenuButton(weld::Toolbar* pToolbar, OString sIdent);
     MenuOrToolMenuButton(SvxColorToolBoxControl* pControl, ToolBox* pToolbar, ToolBoxItemId nId);
     ~MenuOrToolMenuButton();
 
@@ -110,14 +110,14 @@ private:
     NamedColor GetAutoColor() const;
 
 public:
-    ColorWindow(const OUString& rCommand,
-                std::shared_ptr<PaletteManager> const & rPaletteManager,
+    ColorWindow(OUString  rCommand,
+                std::shared_ptr<PaletteManager> xPaletteManager,
                 ColorStatus& rColorStatus,
                 sal_uInt16 nSlotId,
                 const css::uno::Reference<css::frame::XFrame>& rFrame,
                 const MenuOrToolMenuButton &rMenuButton,
-                TopLevelParentFunction const& rTopLevelParentFunction,
-                ColorSelectFunction const& rColorSelectFunction);
+                TopLevelParentFunction aTopLevelParentFunction,
+                ColorSelectFunction aColorSelectFunction);
     virtual ~ColorWindow() override;
     void                ShowNoneButton();
     void                SetNoSelection();

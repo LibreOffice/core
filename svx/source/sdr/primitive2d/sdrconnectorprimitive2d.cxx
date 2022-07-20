@@ -23,6 +23,7 @@
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <utility>
 
 
 using namespace com::sun::star;
@@ -77,9 +78,9 @@ namespace drawinglayer::primitive2d
 
         SdrConnectorPrimitive2D::SdrConnectorPrimitive2D(
             const attribute::SdrLineEffectsTextAttribute& rSdrLSTAttribute,
-            const ::basegfx::B2DPolygon& rUnitPolygon)
+            ::basegfx::B2DPolygon aUnitPolygon)
         :   maSdrLSTAttribute(rSdrLSTAttribute),
-            maUnitPolygon(rUnitPolygon)
+            maUnitPolygon(std::move(aUnitPolygon))
         {
         }
 

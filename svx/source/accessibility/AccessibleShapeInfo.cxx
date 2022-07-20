@@ -18,16 +18,17 @@
  */
 
 #include <svx/AccessibleShapeInfo.hxx>
+#include <utility>
 
 
 namespace accessibility {
 
 AccessibleShapeInfo::AccessibleShapeInfo (
-        const css::uno::Reference<css::drawing::XShape>& rxShape,
-        const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
+        css::uno::Reference<css::drawing::XShape> xShape,
+        css::uno::Reference<css::accessibility::XAccessible> xParent,
         IAccessibleParent* pChildrenManager)
-    : mxShape (rxShape),
-      mxParent (rxParent),
+    : mxShape (std::move(xShape)),
+      mxParent (std::move(xParent)),
       mpChildrenManager (pChildrenManager)
 {
     // empty.
@@ -35,10 +36,10 @@ AccessibleShapeInfo::AccessibleShapeInfo (
 
 
 AccessibleShapeInfo::AccessibleShapeInfo (
-        const css::uno::Reference<css::drawing::XShape>& rxShape,
-        const css::uno::Reference<css::accessibility::XAccessible>& rxParent)
-    : mxShape (rxShape),
-      mxParent (rxParent),
+        css::uno::Reference<css::drawing::XShape> xShape,
+        css::uno::Reference<css::accessibility::XAccessible> xParent)
+    : mxShape (std::move(xShape)),
+      mxParent (std::move(xParent)),
       mpChildrenManager (nullptr)
 {
     // empty.

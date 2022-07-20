@@ -32,6 +32,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <sax/tools/converter.hxx>
 #include <sfx2/docfile.hxx>
+#include <utility>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/namespacemap.hxx>
 
@@ -64,7 +65,7 @@ enum class SvxXMLTableImportContextEnum { Color, Marker, Dash, Hatch, Gradient, 
 class SvxXMLTableImportContext : public SvXMLImportContext
 {
 public:
-    SvxXMLTableImportContext( SvXMLImport& rImport, SvxXMLTableImportContextEnum eContext, const uno::Reference< XNameContainer >& xTable,
+    SvxXMLTableImportContext( SvXMLImport& rImport, SvxXMLTableImportContextEnum eContext, uno::Reference< XNameContainer > xTable,
         bool bOOoFormat );
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
@@ -87,8 +88,8 @@ private:
 
 }
 
-SvxXMLTableImportContext::SvxXMLTableImportContext( SvXMLImport& rImport, SvxXMLTableImportContextEnum eContext, const uno::Reference< XNameContainer >& xTable, bool bOOoFormat )
-: SvXMLImportContext( rImport ), mxTable( xTable ), meContext( eContext ),
+SvxXMLTableImportContext::SvxXMLTableImportContext( SvXMLImport& rImport, SvxXMLTableImportContextEnum eContext, uno::Reference< XNameContainer > xTable, bool bOOoFormat )
+: SvXMLImportContext( rImport ), mxTable(std::move( xTable )), meContext( eContext ),
     mbOOoFormat( bOOoFormat )
 {
 }

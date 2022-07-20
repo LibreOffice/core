@@ -49,7 +49,7 @@ namespace drawinglayer::primitive2d
         public:
             SdrOleContentPrimitive2D(
                 const SdrOle2Obj& rSdrOle2Obj,
-                const basegfx::B2DHomMatrix& rObjectTransform,
+                basegfx::B2DHomMatrix aObjectTransform,
                 sal_uInt32 nGraphicVersion
             );
 
