@@ -102,41 +102,75 @@ bool AnimationRenderer::matches(const OutputDevice* pOut, tools::Long nRendererI
     return (!pOut || pOut == mpRenderContext) && (nRendererId == 0 || nRendererId == mnRendererId);
 }
 
-void AnimationRenderer::getPosSize( const AnimationFrame& rAnimationFrame, Point& rPosPix, Size& rSizePix )
+double AnimationRenderer::calculateXScaling()
 {
-    const Size& rAnmSize = mpParent->GetDisplaySizePixel();
-    Point       aPt2( rAnimationFrame.maPositionPixel.X() + rAnimationFrame.maSizePixel.Width() - 1,
-                      rAnimationFrame.maPositionPixel.Y() + rAnimationFrame.maSizePixel.Height() - 1 );
-    double      fFactX, fFactY;
+    const Size& rAnimSize = mpParent->GetDisplaySizePixel();
+    double fFactX = 1.0;
 
-    // calculate x scaling
-    if( rAnmSize.Width() > 1 )
-        fFactX = static_cast<double>( maSizePx.Width() - 1 ) / ( rAnmSize.Width() - 1 );
-    else
-        fFactX = 1.0;
+    if (rAnimSize.Width() > 1)
+        fFactX = static_cast<double>(maSizePx.Width() - 1) / (rAnimSize.Width() - 1);
 
-    // calculate y scaling
-    if( rAnmSize.Height() > 1 )
-        fFactY = static_cast<double>( maSizePx.Height() - 1 ) / ( rAnmSize.Height() - 1 );
-    else
-        fFactY = 1.0;
+    return fFactX;
+}
 
-    rPosPix.setX( FRound( rAnimationFrame.maPositionPixel.X() * fFactX ) );
-    rPosPix.setY( FRound( rAnimationFrame.maPositionPixel.Y() * fFactY ) );
+double AnimationRenderer::calculateYScaling()
+{
+    const Size& rAnimSize = mpParent->GetDisplaySizePixel();
+    double fFactY = 1.0;
 
-    aPt2.setX( FRound( aPt2.X() * fFactX ) );
-    aPt2.setY( FRound( aPt2.Y() * fFactY ) );
+    if (rAnimSize.Height() > 1)
+        fFactY = static_cast<double>(maSizePx.Height() - 1) / (rAnimSize.Height() - 1);
 
-    rSizePix.setWidth( aPt2.X() - rPosPix.X() + 1 );
-    rSizePix.setHeight( aPt2.Y() - rPosPix.Y() + 1 );
+    return fFactY;
+}
+
+Point AnimationRenderer::getBottomRightPoint(const AnimationFrame& rAnimationFrame)
+{
+    return Point(rAnimationFrame.maPositionPixel.X() + rAnimationFrame.maSizePixel.Width() - 1,
+                 rAnimationFrame.maPositionPixel.Y() + rAnimationFrame.maSizePixel.Height() - 1);
+}
+
+Size AnimationRenderer::getSize(const AnimationFrame& rAnimationFrame)
+{
+    double fFactX = calculateXScaling();
+    double fFactY = calculateYScaling();
+
+    Point aPositionPt;
+
+    aPositionPt.setX(FRound(rAnimationFrame.maPositionPixel.X() * fFactX));
+    aPositionPt.setY(FRound(rAnimationFrame.maPositionPixel.Y() * fFactY));
+
+    Point aBottomRightPt = getBottomRightPoint(rAnimationFrame);
+
+    aBottomRightPt.setX(FRound(aBottomRightPt.X() * fFactX));
+    aBottomRightPt.setY(FRound(aBottomRightPt.Y() * fFactY));
+
+    Size aSizePix;
+
+    aSizePix.setWidth(aBottomRightPt.X() - aPositionPt.X() + 1);
+    aSizePix.setHeight(aBottomRightPt.Y() - aPositionPt.Y() + 1);
+
+    return aSizePix;
+}
+
+Point AnimationRenderer::getPosition(const AnimationFrame& rAnimationFrame)
+{
+    Point aPositionPt;
+
+    aPositionPt.setX(FRound(rAnimationFrame.maPositionPixel.X() * calculateXScaling()));
+    aPositionPt.setY(FRound(rAnimationFrame.maPositionPixel.Y() * calculateYScaling()));
+
+    Point aBottomRightPt = getBottomRightPoint(rAnimationFrame);
 
     // Mirrored horizontally?
     if( mbIsMirroredHorizontally )
-        rPosPix.setX( maSizePx.Width() - 1 - aPt2.X() );
+        aPositionPt.setX( maSizePx.Width() - 1 - aBottomRightPt.X() );
 
     // Mirrored vertically?
     if( mbIsMirroredVertically )
-        rPosPix.setY( maSizePx.Height() - 1 - aPt2.Y() );
+        aPositionPt.setY( maSizePx.Height() - 1 - aBottomRightPt.Y() );
+
+    return aPositionPt;
 }
 
 void AnimationRenderer::drawToIndex( sal_uLong nIndex )
@@ -203,7 +237,8 @@ void AnimationRenderer::draw( sal_uLong nIndex, VirtualDevice* pVDev )
         mnActIndex = std::min( nIndex, nLastPos );
         const AnimationFrame&  rAnimationFrame = mpParent->Get( static_cast<sal_uInt16>( mnActIndex ) );
 
-        getPosSize( rAnimationFrame, aPosPix, aSizePix );
+        aPosPix = getPosition(rAnimationFrame);
+        aSizePix = getSize(rAnimationFrame);
 
         // Mirrored horizontally?
         if( mbIsMirroredHorizontally )
