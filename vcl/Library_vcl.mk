@@ -102,6 +102,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/animate/Animation \
     vcl/source/animate/AnimationFrame \
     vcl/source/animate/AnimationRenderer \
+    vcl/source/animate/AnimationRenderers \
     vcl/source/cnttype/mcnttfactory \
     vcl/source/cnttype/mcnttype \
     vcl/source/printer/Options \
