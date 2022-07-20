@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff430d7c_129ed39d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2022-07-20T13:49:17Z",
+      "side": 1,
+      "message": "Love it \u003d) very simple - thanks Tor !",
+      "revId": "f3bf90afdd67a8b73430d01db24c2c3a84b7b8ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
