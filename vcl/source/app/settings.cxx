@@ -67,7 +67,7 @@ struct ImplMouseData
     sal_Int32                       mnMenuDelay         = 150;
     MouseFollowFlags                mnFollow            = MouseFollowFlags::Menu;
     MouseMiddleButtonAction         mnMiddleButtonAction= MouseMiddleButtonAction::AutoScroll;
-    MouseWheelBehaviour             mnWheelBehavior     = MouseWheelBehaviour::ALWAYS;
+    MouseWheelBehaviour             mnWheelBehavior     = MouseWheelBehaviour::FocusOnly;
 };
 
 struct ImplStyleData
