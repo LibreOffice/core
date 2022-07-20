@@ -237,12 +237,11 @@ SwIndexReg::~SwIndexReg()
 void SwIndexReg::Update(
     SwIndex const & rIdx,
     const sal_Int32 nDiff,
-    const bool bNeg,
-    const bool /* argument is only used in derived class*/ )
+    UpdateMode const eMode)
 {
     SwIndex* pStt = const_cast<SwIndex*>(&rIdx);
     const sal_Int32 nNewVal = rIdx.m_nIndex;
-    if( bNeg )
+    if (eMode & UpdateMode::Negative)
     {
         const sal_Int32 nLast = rIdx.GetIndex() + nDiff;
         while (pStt && pStt->m_nIndex == nNewVal)

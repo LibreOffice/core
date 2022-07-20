@@ -761,8 +761,7 @@ public:
     virtual void Update(
         SwIndex const & rPos,
         const sal_Int32 nChangeLen,
-        const bool bNegative = false,
-        const bool bDelete = false ) override;
+        UpdateMode eMode) override;
 
     /// change text to Upper/Lower/Hiragana/Katakana/...
     void TransliterateText( utl::TransliterationWrapper& rTrans,

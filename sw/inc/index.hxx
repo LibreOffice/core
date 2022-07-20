@@ -22,6 +22,8 @@
 #include <sal/types.h>
 #include "swdllapi.h"
 
+#include <o3tl/typed_flags_set.hxx>
+
 #include <iostream>
 
 class SwIndexReg;
@@ -111,9 +113,17 @@ class SAL_WARN_UNUSED SwIndexReg
     const SwIndex * m_pFirst;
     const SwIndex * m_pLast;
 
+public:
+    enum class UpdateMode {
+        Default = 0,
+        Negative = (1<<0),
+        Delete = (1<<1),
+        Replace = (1<<2),
+    };
+
 protected:
     virtual void Update( SwIndex const & rPos, const sal_Int32 nChangeLen,
-                 const bool bNegative = false, const bool bDelete = false );
+            UpdateMode eMode);
 
     bool HasAnyIndex() const { return nullptr != m_pFirst; }
 
@@ -124,6 +134,11 @@ public:
     void MoveTo( SwIndexReg& rArr );
     const SwIndex* GetFirstIndex() const { return m_pFirst; }
 };
+
+    namespace o3tl
+    {
+        template<> struct typed_flags<SwIndexReg::UpdateMode> : is_typed_flags<SwIndexReg::UpdateMode, 0x07> {};
+    }
 
 #ifndef DBG_UTIL
 
