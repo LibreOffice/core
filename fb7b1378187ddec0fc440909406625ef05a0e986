@@ -53,6 +53,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9df54d95_05fcf49f",
+        "filename": "dbaccess/source/sdbtools/connection/tablename.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1003612
+      },
+      "writtenOn": "2022-07-20T17:05:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f3ac3bc_abbad46e",
+      "revId": "fb7b1378187ddec0fc440909406625ef05a0e986",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f263b70e_bbd56a61",
@@ -119,6 +137,24 @@
       "side": 1,
       "message": "You are right. Fields could change between calls.",
       "parentUuid": "2d110603_5f169a8a",
+      "revId": "fb7b1378187ddec0fc440909406625ef05a0e986",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "190a9518_4e2bcb16",
+        "filename": "dbaccess/source/ui/control/FieldDescControl.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1003612
+      },
+      "writtenOn": "2022-07-20T17:05:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c9c86df6_55c10283",
       "revId": "fb7b1378187ddec0fc440909406625ef05a0e986",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
