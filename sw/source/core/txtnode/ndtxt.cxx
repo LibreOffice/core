@@ -1227,8 +1227,7 @@ public:
 void SwTextNode::Update(
     SwContentIndex const & rPos,
     const sal_Int32 nChangeLen,
-    const bool bNegative,
-    const bool bDelete )
+    UpdateMode const eMode)
 {
     SetAutoCompleteWordDirty( true );
 
@@ -1237,7 +1236,7 @@ void SwTextNode::Update(
 
     if ( HasHints() )
     {
-        if ( bNegative )
+        if (eMode & UpdateMode::Negative)
         {
             std::vector<SwTextInputField*> aTextInputFields;
 
@@ -1409,7 +1408,7 @@ void SwTextNode::Update(
 
     bool bSortMarks = false;
     SwContentNodeTmp aTmpIdxReg;
-    if ( !bNegative && !bDelete )
+    if (!(eMode & UpdateMode::Negative) && !(eMode & UpdateMode::Delete))
     {
         const SwRedlineTable& rTable = GetDoc().getIDocumentRedlineAccess().GetRedlineTable();
         SwRedlineTable::size_type n = GetDoc().getIDocumentRedlineAccess().GetRedlinePos(*this, RedlineType::Any);
@@ -1446,6 +1445,7 @@ void SwTextNode::Update(
         // Bookmarks must never grow to either side, when editing (directly)
         // to the left or right (i#29942)! Exception: if the bookmark has
         // 2 positions and start == end, then expand it (tdf#96479)
+        if (!(eMode & UpdateMode::Replace)) // Exception: Replace
         {
             bool bAtLeastOneBookmarkMoved = false;
             bool bAtLeastOneExpandedBookmarkAtInsertionPosition = false;
@@ -1541,7 +1541,7 @@ void SwTextNode::Update(
     }
 
     // base class
-    SwContentIndexReg::Update( rPos, nChangeLen, bNegative, bDelete );
+    SwContentIndexReg::Update(rPos, nChangeLen, eMode);
 
     if (pCollector)
     {
@@ -2332,7 +2332,7 @@ OUString SwTextNode::InsertText( const OUString & rStr, const SwContentIndex & r
         SetIgnoreDontExpand( true );
     }
 
-    Update( rIdx, nLen ); // text content changed!
+    Update(rIdx, nLen, UpdateMode::Default); // text content changed!
 
     if (nMode & SwInsertFlags::FORCEHINTEXPAND)
     {
@@ -2468,7 +2468,7 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwContentIndex & rDest
     if (bUpdate)
     {
         // Update all SwContentIndex
-        pDest->Update( rDestStart, nLen, false, false/*??? why was it true*/);
+        pDest->Update(rDestStart, nLen, UpdateMode::Default);
     }
 
     CHECK_SWPHINTS(pDest);
@@ -2670,7 +2670,7 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwContentIndex & rDest
                 ++nAttrCnt;
             }
         }
-        Update( rStart, nLen, true, true );
+        Update(rStart, nLen, UpdateMode::Negative|UpdateMode::Delete);
 
         for (SwTextAttr* pHt : aArr)
         {
@@ -2681,7 +2681,7 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwContentIndex & rDest
     }
     else
     {
-        Update( rStart, nLen, true, true );
+        Update(rStart, nLen, UpdateMode::Negative|UpdateMode::Delete);
     }
 
     // set after moving hints
@@ -2774,7 +2774,7 @@ void SwTextNode::EraseText(const SwContentIndex &rIdx, const sal_Int32 nCount,
 
     TryDeleteSwpHints();
 
-    Update( rIdx, nCnt, true );
+    Update(rIdx, nCnt, UpdateMode::Negative);
 
     if( 1 == nCnt )
     {
@@ -3772,19 +3772,19 @@ void SwTextNode::ReplaceText( const SwContentIndex& rStart, const sal_Int32 nDel
 
         ++const_cast<SwContentIndex&>(rStart);
         m_Text = m_Text.replaceAt(rStart.GetIndex(), nLen - 1, u"");
-        Update( rStart, nLen - 1, true );
+        Update(rStart, nLen - 1, UpdateMode::Negative);
 
         std::u16string_view aTmpText( sInserted.subView(1) );
         m_Text = m_Text.replaceAt(rStart.GetIndex(), 0, aTmpText);
-        Update( rStart, aTmpText.size() );
+        Update(rStart, aTmpText.size(), UpdateMode::Replace);
     }
     else
     {
         m_Text = m_Text.replaceAt(nStartPos, nLen, u"");
-        Update( rStart, nLen, true );
+        Update(rStart, nLen, UpdateMode::Negative);
 
         m_Text = m_Text.replaceAt(nStartPos, 0, sInserted);
-        Update( rStart, sInserted.getLength() );
+        Update(rStart, sInserted.getLength(), UpdateMode::Replace);
     }
 
     SetIgnoreDontExpand( bOldExpFlg );

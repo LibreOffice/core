@@ -1423,7 +1423,7 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                             m_Text = m_Text.replaceAt(pAttr->GetStart(), 1, u"");
                             // Update SwIndexes
                             SwContentIndex aTmpIdx( this, pAttr->GetStart() );
-                            Update( aTmpIdx, 1, true );
+                            Update(aTmpIdx, 1, UpdateMode::Negative);
                         }
                         // do not record deletion of Format!
                         ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
@@ -1454,7 +1454,7 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                         m_Text = m_Text.replaceAt(pAttr->GetStart(), 1, u"");
                         // Update SwIndexes
                         SwContentIndex aTmpIdx( this, pAttr->GetStart() );
-                        Update( aTmpIdx, 1, true );
+                        Update(aTmpIdx, 1, UpdateMode::Negative);
                     }
                     DestroyAttr( pAttr );
                     return false;

@@ -237,12 +237,11 @@ SwContentIndexReg::~SwContentIndexReg()
 void SwContentIndexReg::Update(
     SwContentIndex const & rIdx,
     const sal_Int32 nDiff,
-    const bool bNeg,
-    const bool /* argument is only used in derived class*/ )
+    UpdateMode const eMode)
 {
     SwContentIndex* pStt = const_cast<SwContentIndex*>(&rIdx);
     const sal_Int32 nNewVal = rIdx.m_nIndex;
-    if( bNeg )
+    if (eMode & UpdateMode::Negative)
     {
         const sal_Int32 nLast = rIdx.GetIndex() + nDiff;
         while (pStt && pStt->m_nIndex == nNewVal)
