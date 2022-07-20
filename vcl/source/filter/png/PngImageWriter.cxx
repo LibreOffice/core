@@ -21,7 +21,8 @@ void combineScanlineChannels(Scanline pRGBScanline, Scanline pAlphaScanline, Sca
     assert(pRGBScanline && "RGB scanline is null");
     assert(pAlphaScanline && "Alpha scanline is null");
 
-    for (sal_uInt32 i = 0; i < nSize; i += 3)
+    auto const width = nSize / 3;
+    for (sal_uInt32 i = 0; i < width; ++i)
     {
         *pResult++ = *pRGBScanline++; // R
         *pResult++ = *pRGBScanline++; // G
