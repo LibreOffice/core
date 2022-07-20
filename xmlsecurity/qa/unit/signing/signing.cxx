@@ -845,7 +845,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPDFAddVisibleSignature)
     SvMemoryStream aMemory;
     aMemory.WriteStream(aFile);
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize());
+        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize(), OString());
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT_EQUAL(1, pPdfPage->getAnnotationCount());
     std::unique_ptr<vcl::pdf::PDFiumAnnotation> pAnnot = pPdfPage->getAnnotation(/*nIndex=*/0);

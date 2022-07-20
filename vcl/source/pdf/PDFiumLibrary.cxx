@@ -424,7 +424,8 @@ public:
 
     const OUString& getLastError() const override { return maLastError; }
 
-    std::unique_ptr<PDFiumDocument> openDocument(const void* pData, int nSize) override;
+    std::unique_ptr<PDFiumDocument> openDocument(const void* pData, int nSize,
+                                                 const OString& rPassword) override;
     PDFErrorType getLastErrorCode() override;
     std::unique_ptr<PDFiumBitmap> createBitmap(int nWidth, int nHeight, int nAlpha) override;
 };
@@ -442,12 +443,18 @@ PDFiumImpl::PDFiumImpl()
 
 PDFiumImpl::~PDFiumImpl() { FPDF_DestroyLibrary(); }
 
-std::unique_ptr<PDFiumDocument> PDFiumImpl::openDocument(const void* pData, int nSize)
+std::unique_ptr<PDFiumDocument> PDFiumImpl::openDocument(const void* pData, int nSize,
+                                                         const OString& rPassword)
 {
     maLastError = OUString();
     std::unique_ptr<PDFiumDocument> pPDFiumDocument;
 
-    FPDF_DOCUMENT pDocument = FPDF_LoadMemDocument(pData, nSize, /*password=*/nullptr);
+    FPDF_BYTESTRING pPassword = nullptr;
+    if (!rPassword.isEmpty())
+    {
+        pPassword = rPassword.getStr();
+    }
+    FPDF_DOCUMENT pDocument = FPDF_LoadMemDocument(pData, nSize, pPassword);
 
     if (!pDocument)
     {
