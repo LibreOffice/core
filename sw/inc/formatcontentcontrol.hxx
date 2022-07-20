@@ -45,6 +45,7 @@ enum class SwContentControlType
     DROP_DOWN_LIST,
     PICTURE,
     DATE,
+    PLAIN_TEXT,
 };
 
 /// SfxPoolItem subclass that wraps an SwContentControl.
@@ -142,6 +143,9 @@ class SW_DLLPUBLIC SwContentControl : public sw::BroadcastingModify
 
     /// Date in YYYY-MM-DDT00:00:00Z format.
     OUString m_aCurrentDate;
+
+    /// Plain text, i.e. not rich text.
+    bool m_bPlainText = false;
 
     /// The placeholder's doc part: just remembered.
     OUString m_aPlaceholderDocPart;
@@ -257,6 +261,10 @@ public:
 
     /// Formats m_oSelectedDate, taking m_aDateFormat and m_aDateLanguage into account.
     OUString GetDateString() const;
+
+    void SetPlainText(bool bPlainText) { m_bPlainText = bPlainText; }
+
+    bool GetPlainText() const { return m_bPlainText; }
 
     void SetPlaceholderDocPart(const OUString& rPlaceholderDocPart)
     {
