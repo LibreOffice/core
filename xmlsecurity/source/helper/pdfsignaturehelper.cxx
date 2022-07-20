@@ -255,7 +255,7 @@ void AnalyizeSignatureStream(SvMemoryStream& rStream, std::vector<PageChecksum>&
 {
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = pPdfium->openDocument(rStream.GetData(), rStream.GetSize());
+        = pPdfium->openDocument(rStream.GetData(), rStream.GetSize(), OString());
     if (!pPdfDocument)
     {
         return;
@@ -435,7 +435,7 @@ bool PDFSignatureHelper::ReadAndVerifySignatureSvStream(SvStream& rStream)
     aStream.WriteStream(rStream);
     rStream.Seek(nPos);
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = pPdfium->openDocument(aStream.GetData(), aStream.GetSize());
+        = pPdfium->openDocument(aStream.GetData(), aStream.GetSize(), OString());
     if (!pPdfDocument)
     {
         SAL_WARN("xmlsecurity.helper", "failed to read the document");

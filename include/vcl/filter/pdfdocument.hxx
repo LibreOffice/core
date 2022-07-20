@@ -595,6 +595,8 @@ public:
     bool updateObject(sal_Int32 n) override;
     /// See vcl::PDFObjectContainer::writeBuffer().
     bool writeBuffer(const void* pBuffer, sal_uInt64 nBytes) override;
+    void checkAndEnableStreamEncryption(sal_Int32 /*nObject*/) override {}
+    void disableStreamEncryption() override {}
 };
 
 /// The trailer singleton is at the end of the doc.

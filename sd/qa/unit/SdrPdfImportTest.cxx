@@ -216,7 +216,7 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testAnnotationsImportExport)
         CPPUNIT_ASSERT_EQUAL(false, aContainer.isEmpty());
 
         auto pPDFDocument
-            = pPdfiumLibrary->openDocument(aContainer.getData(), aContainer.getSize());
+            = pPdfiumLibrary->openDocument(aContainer.getData(), aContainer.getSize(), OString());
         auto pPDFPage = pPDFDocument->openPage(0);
 
         CPPUNIT_ASSERT_EQUAL(2, pPDFPage->getAnnotationCount());
@@ -248,7 +248,8 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testAnnotationsImportExport)
         aMemory.WriteStream(aFile);
 
         // Check PDF for annotations
-        auto pPDFDocument = pPdfiumLibrary->openDocument(aMemory.GetData(), aMemory.GetSize());
+        auto pPDFDocument
+            = pPdfiumLibrary->openDocument(aMemory.GetData(), aMemory.GetSize(), OString());
         CPPUNIT_ASSERT(pPDFDocument);
         CPPUNIT_ASSERT_EQUAL(1, pPDFDocument->getPageCount());
 

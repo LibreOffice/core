@@ -451,7 +451,7 @@ void ScPDFExportTest::testTdf143978()
     SvMemoryStream aMemory;
     aMemory.WriteStream(aFile);
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize());
+        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize(), OString());
     CPPUNIT_ASSERT(pPdfDocument);
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
 
@@ -498,7 +498,7 @@ void ScPDFExportTest::testTdf84012()
     SvMemoryStream aMemory;
     aMemory.WriteStream(aFile);
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize());
+        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize(), OString());
     CPPUNIT_ASSERT(pPdfDocument);
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
 
@@ -539,7 +539,7 @@ void ScPDFExportTest::testTdf78897()
     SvMemoryStream aMemory;
     aMemory.WriteStream(aFile);
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize());
+        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize(), OString());
     CPPUNIT_ASSERT(pPdfDocument);
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
 

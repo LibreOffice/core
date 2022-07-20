@@ -3193,7 +3193,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testConditionalHiddenSectionIssue)
     SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
     SvMemoryStream aMemory;
     aMemory.WriteStream(aFile);
-    auto pPdfDocument = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize());
+    auto pPdfDocument = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize(), OString());
     CPPUNIT_ASSERT(pPdfDocument);
     auto pPdfPage = pPdfDocument->openPage(0);
     CPPUNIT_ASSERT(pPdfPage);
