@@ -83,7 +83,7 @@ bool ConstructPresetTextRectangle(Shape& rShape, awt::Rectangle& rRect)
             if (nWidth == 0 || nHeight == 0)
                 return false;
             double fMaxAdj = 50000.0 * nWidth / std::min(nWidth, nHeight);
-            std::clamp<double>(fAdj, 0, fMaxAdj);
+            fAdj = std::clamp<double>(fAdj, 0, fMaxAdj);
             sal_Int32 nTextLeft = std::min(nWidth, nHeight) * fAdj / 100000.0 * 0.29289;
             sal_Int32 nTextTop = nTextLeft;
             rRect.X = rShape.getPosition().X + nTextLeft;
@@ -101,7 +101,7 @@ bool ConstructPresetTextRectangle(Shape& rShape, awt::Rectangle& rRect)
             if (nWidth == 0 || nHeight == 0)
                 return false;
             double fMaxAdj = 50000.0 * nWidth / std::min(nWidth, nHeight);
-            std::clamp<double>(fAdj, 0, fMaxAdj);
+            fAdj = std::clamp<double>(fAdj, 0, fMaxAdj);
             sal_Int32 nTextLeft = nWidth / 3.0 * fAdj / fMaxAdj;
             sal_Int32 nTextTop = nHeight / 3.0 * fAdj / fMaxAdj;
             rRect.X = rShape.getPosition().X + nTextLeft;
@@ -145,8 +145,8 @@ bool ConstructPresetTextRectangle(Shape& rShape, awt::Rectangle& rRect)
             {
                 a1 = aAdjGdList[0].maFormula.toDouble();
                 a2 = aAdjGdList[1].maFormula.toDouble();
-                std::clamp<double>(a1, 0, 20000);
-                std::clamp<double>(a2, 0, 5358);
+                a1 = std::clamp<double>(a1, 0, 20000);
+                a2 = std::clamp<double>(a2, 0, 5358);
             }
             double th = std::min(w, h) * a1 / 100000.0;
             double l2 = std::min(w, h) * a2 / 100000.0 / 2.0;
@@ -189,7 +189,7 @@ bool ConstructPresetTextRectangle(Shape& rShape, awt::Rectangle& rRect)
             if (nWidth == 0 || nHeight == 0)
                 return false;
             double fMaxAdj = 50000.0 * nWidth / std::min(nWidth, nHeight);
-            std::clamp<double>(fAdj, 0, fMaxAdj);
+            fAdj = std::clamp<double>(fAdj, 0, fMaxAdj);
             double fFactor = fAdj/fMaxAdj/6.0 + 1.0/12.0;
             sal_Int32 nTextLeft = nWidth * fFactor;
             sal_Int32 nTextTop = nHeight * fFactor;
