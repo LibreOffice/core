@@ -669,8 +669,8 @@ public:
                     tools::Rectangle aSub(aRegions[i]);
                     tools::Rectangle aSmaller(aSub);
                     aSmaller.Move(10,10);
-                    aSmaller.setWidth(aSmaller.getOpenWidth()-20);
-                    aSmaller.setHeight(aSmaller.getOpenHeight()-24);
+                    aSmaller.setWidth(aSmaller.GetWidth()-21);
+                    aSmaller.setHeight(aSmaller.GetHeight()-25);
                     switch (i) {
                     case 0:
                         aRegion = vcl::Region(aSub);
@@ -1785,7 +1785,7 @@ public:
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override
     {
         mrRenderer.SetSizePixel(GetSizePixel());
-        fprintf(stderr, "DemoWin::Paint(%" SAL_PRIdINT64 ",%" SAL_PRIdINT64 ",%" SAL_PRIdINT64 ",%" SAL_PRIdINT64 ")\n", sal_Int64(rRect.Left()), sal_Int64(rRect.Top()), sal_Int64(rRect.getOpenWidth()), sal_Int64(rRect.getOpenHeight()));
+        fprintf(stderr, "DemoWin::Paint(%" SAL_PRIdINT64 ",%" SAL_PRIdINT64 ",%" SAL_PRIdINT64 ",%" SAL_PRIdINT64 ")\n", sal_Int64(rRect.Left()), sal_Int64(rRect.Top()), sal_Int64(rRect.GetWidth()), sal_Int64(rRect.GetHeight()));
         if (mrRenderer.getIterCount() == 0)
             mrRenderer.drawToDevice(rRenderContext, GetSizePixel(), false);
         else
