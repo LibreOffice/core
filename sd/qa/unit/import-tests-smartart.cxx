@@ -17,6 +17,7 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 
+#include <svx/svdoashp.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdogrp.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -119,6 +120,10 @@ public:
     void testAutofitSync();
     void testSnakeRows();
     void testCompositeInferRight();
+    void testTdf149551Pie();
+    void testTdf149551Pyramid();
+    void testTdf149551Venn();
+    void testTdf149551Gear();
 
     CPPUNIT_TEST_SUITE(SdImportTestSmartArt);
 
@@ -174,6 +179,10 @@ public:
     CPPUNIT_TEST(testAutofitSync);
     CPPUNIT_TEST(testSnakeRows);
     CPPUNIT_TEST(testCompositeInferRight);
+    CPPUNIT_TEST(testTdf149551Pie);
+    CPPUNIT_TEST(testTdf149551Pyramid);
+    CPPUNIT_TEST(testTdf149551Venn);
+    CPPUNIT_TEST(testTdf149551Gear);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1840,6 +1849,103 @@ void SdImportTestSmartArt::testCompositeInferRight()
     // - Actual  : 2430
     // i.e. the text was overlapping with the image.
     CPPUNIT_ASSERT_GREATER(nRightOfImage, nLeftOfText);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testTdf149551Pie()
+{
+    // The file contains a diagram of type "Basic Pie".
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf149551_SmartArt_Pie.pptx"), PPTX);
+    uno::Reference<drawing::XShape> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    // shape at index 0 is the background shape
+    uno::Reference<drawing::XShape> xShape = getChildShape(xGroup, 1);
+    CPPUNIT_ASSERT(xShape.is());
+    auto pCustomShape = dynamic_cast<SdrObjCustomShape*>(SdrObject::getSdrObjectFromXShape(xShape));
+    CPPUNIT_ASSERT(pCustomShape);
+    tools::Rectangle aTextRect;
+    pCustomShape->TakeTextAnchorRect(aTextRect);
+    // without fix the text area rectangle had LT [7787,3420] and RB[16677,12312]. The values from
+    // txXfrm were ignored.
+    // The used tolerance is estimated.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(12658), sal_Int32(aTextRect.Left()), 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(5073), sal_Int32(aTextRect.Top()), 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(15627), sal_Int32(aTextRect.Right()), 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(7990), sal_Int32(aTextRect.Bottom()), 4);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testTdf149551Pyramid()
+{
+    // The file contains a diagram of type "Basic Pyramid".
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf149551_SmartArt_Pyramid.pptx"),
+        PPTX);
+    uno::Reference<drawing::XShape> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    // shape at index 0 is the background shape
+    uno::Reference<drawing::XShape> xShape = getChildShape(xGroup, 1);
+    CPPUNIT_ASSERT(xShape.is());
+    auto pCustomShape = dynamic_cast<SdrObjCustomShape*>(SdrObject::getSdrObjectFromXShape(xShape));
+    CPPUNIT_ASSERT(pCustomShape);
+    tools::Rectangle aTextRect;
+    pCustomShape->TakeTextAnchorRect(aTextRect);
+    // without fix the text area rectangle had LT [9369,2700] and RB[14632,6185]. The values from
+    // txXfrm were ignored.
+    // The used tolerance is estimated.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(7591), sal_Int32(aTextRect.Left()), 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(1515), sal_Int32(aTextRect.Top()), 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(16410), sal_Int32(aTextRect.Right()), 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(7370), sal_Int32(aTextRect.Bottom()), 4);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testTdf149551Venn()
+{
+    // The file contains a diagram of type "Stacked Venn".
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf149551_SmartArt_Venn.pptx"), PPTX);
+    uno::Reference<drawing::XShape> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    // shape at index 0 is the background shape
+    uno::Reference<drawing::XShape> xShape = getChildShape(xGroup, 1);
+    CPPUNIT_ASSERT(xShape.is());
+    auto pCustomShape = dynamic_cast<SdrObjCustomShape*>(SdrObject::getSdrObjectFromXShape(xShape));
+    CPPUNIT_ASSERT(pCustomShape);
+    tools::Rectangle aTextRect;
+    pCustomShape->TakeTextAnchorRect(aTextRect);
+    // without fix the text area rectangle had LT [6865,3396] and RB[17136,4600]. The values from
+    // txXfrm were ignored.
+    // The used tolerance is estimated.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(8772), sal_Int32(aTextRect.Left()), 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(1834), sal_Int32(aTextRect.Top()), 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(15229), sal_Int32(aTextRect.Right()), 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(6162), sal_Int32(aTextRect.Bottom()), 4);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testTdf149551Gear()
+{
+    // The file contains a diagram of type "Gear".
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf149551_SmartArt_Gear.pptx"), PPTX);
+    uno::Reference<drawing::XShape> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    // shape at index 0 is the background shape
+    uno::Reference<drawing::XShape> xShape = getChildShape(xGroup, 1);
+    CPPUNIT_ASSERT(xShape.is());
+    auto pCustomShape = dynamic_cast<SdrObjCustomShape*>(SdrObject::getSdrObjectFromXShape(xShape));
+    CPPUNIT_ASSERT(pCustomShape);
+    tools::Rectangle aTextRect;
+    pCustomShape->TakeTextAnchorRect(aTextRect);
+    // without fix the text area rectangle had LT [4101,1014] and RB[8019,4932]. The values from
+    // txXfrm were ignored.
+    // The used tolerance is estimated.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(5501), sal_Int32(aTextRect.Left()), 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(4500), sal_Int32(aTextRect.Top()), 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(11000), sal_Int32(aTextRect.Right()), 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(9999), sal_Int32(aTextRect.Bottom()), 4);
 
     xDocShRef->DoClose();
 }
