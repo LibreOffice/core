@@ -47,7 +47,7 @@ private:
     Animation*      mpParent;
     VclPtr<OutputDevice>  mpRenderContext;
     tools::Long     mnRendererId;
-    Point           maPt;
+    Point           maOriginPt;
     Point           maDispPt;
     Point           maRestPt;
     Size            maLogicalSize;
@@ -79,7 +79,7 @@ public:
 
     void            GetPosSize( const AnimationFrame& rAnm, Point& rPosPix, Size& rSizePix );
 
-    const Point&    GetOriginPosition() const { return maPt; }
+    const Point&    GetOriginPosition() const { return maOriginPt; }
 
     const Size&     GetOutSizePix() const { return maSizePx; }
 

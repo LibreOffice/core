@@ -33,7 +33,7 @@ AnimationRenderer::AnimationRenderer( Animation* pParent, OutputDevice* pOut,
         mpParent        ( pParent ),
         mpRenderContext ( pFirstFrameOutDev ? pFirstFrameOutDev : pOut ),
         mnRendererId     ( mnRendererId ),
-        maPt            ( rPt ),
+        maOriginPt      ( rPt ),
         maLogicalSize            ( rSz ),
         maSizePx         ( mpRenderContext->LogicToPixel( maLogicalSize ) ),
         maClip          ( mpRenderContext->GetClipRegion() ),
@@ -51,26 +51,26 @@ AnimationRenderer::AnimationRenderer( Animation* pParent, OutputDevice* pOut,
     // Mirrored horizontally?
     if( mbIsMirroredHorizontally )
     {
-        maDispPt.setX( maPt.X() + maLogicalSize.Width() + 1 );
+        maDispPt.setX( maOriginPt.X() + maLogicalSize.Width() + 1 );
         maDispSz.setWidth( -maLogicalSize.Width() );
         maSizePx.setWidth( -maSizePx.Width() );
     }
     else
     {
-        maDispPt.setX( maPt.X() );
+        maDispPt.setX( maOriginPt.X() );
         maDispSz.setWidth( maLogicalSize.Width() );
     }
 
     // Mirrored vertically?
     if( mbIsMirroredVertically )
     {
-        maDispPt.setY( maPt.Y() + maLogicalSize.Height() + 1 );
+        maDispPt.setY( maOriginPt.Y() + maLogicalSize.Height() + 1 );
         maDispSz.setHeight( -maLogicalSize.Height() );
         maSizePx.setHeight( -maSizePx.Height() );
     }
     else
     {
-        maDispPt.setY( maPt.Y() );
+        maDispPt.setY( maOriginPt.Y() );
         maDispSz.setHeight( maLogicalSize.Height() );
     }
 
@@ -313,7 +313,7 @@ AnimationData* AnimationRenderer::CreateAnimationData() const
 {
     AnimationData* pDataItem = new AnimationData;
 
-    pDataItem->maOriginStartPt = maPt;
+    pDataItem->maOriginStartPt = maOriginPt;
     pDataItem->maStartSize = maLogicalSize;
     pDataItem->mpRenderContext = mpRenderContext;
     pDataItem->mpRendererData = const_cast<AnimationRenderer *>(this);
