@@ -115,4 +115,32 @@ bool Animation::AllRenderersPaused()
                         [](const auto& pRenderer) { return !pRenderer->IsPaused(); });
 }
 
+bool Animation::Repaint(OutputDevice& rOut, tools::Long nRendererId, Point const& rDestPt,
+                        Size const& rDestSz)
+{
+    bool bRepainted = true;
+
+    auto itAnimView = std::find_if(
+        maRenderers.begin(), maRenderers.end(),
+        [&rOut, nRendererId](const std::unique_ptr<AnimationRenderer>& pRenderer) -> bool {
+            return pRenderer->Matches(&rOut, nRendererId);
+        });
+
+    if (itAnimView != maRenderers.end())
+    {
+        if ((*itAnimView)->GetOriginPosition() == rDestPt
+            && (*itAnimView)->GetOutSizePix() == rOut.LogicToPixel(rDestSz))
+        {
+            (*itAnimView)->Repaint();
+            bRepainted = false;
+        }
+        else
+        {
+            maRenderers.erase(itAnimView);
+        }
+    }
+
+    return bRepainted;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
