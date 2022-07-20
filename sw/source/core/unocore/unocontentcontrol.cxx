@@ -166,6 +166,7 @@ public:
     OUString m_aDateFormat;
     OUString m_aDateLanguage;
     OUString m_aCurrentDate;
+    bool m_bPlainText;
     OUString m_aPlaceholderDocPart;
     OUString m_aDataBindingPrefixMappings;
     OUString m_aDataBindingXpath;
@@ -186,6 +187,7 @@ public:
         , m_bChecked(false)
         , m_bPicture(false)
         , m_bDate(false)
+        , m_bPlainText(false)
     {
         if (m_pContentControl)
         {
@@ -534,6 +536,7 @@ void SwXContentControl::AttachImpl(const uno::Reference<text::XTextRange>& xText
     pContentControl->SetDateFormat(m_pImpl->m_aDateFormat);
     pContentControl->SetDateLanguage(m_pImpl->m_aDateLanguage);
     pContentControl->SetCurrentDate(m_pImpl->m_aCurrentDate);
+    pContentControl->SetPlainText(m_pImpl->m_bPlainText);
     pContentControl->SetPlaceholderDocPart(m_pImpl->m_aPlaceholderDocPart);
     pContentControl->SetDataBindingPrefixMappings(m_pImpl->m_aDataBindingPrefixMappings);
     pContentControl->SetDataBindingXpath(m_pImpl->m_aDataBindingXpath);
@@ -853,6 +856,21 @@ void SAL_CALL SwXContentControl::setPropertyValue(const OUString& rPropertyName,
             }
         }
     }
+    else if (rPropertyName == UNO_NAME_PLAIN_TEXT)
+    {
+        bool bValue;
+        if (rValue >>= bValue)
+        {
+            if (m_pImpl->m_bIsDescriptor)
+            {
+                m_pImpl->m_bPlainText = bValue;
+            }
+            else
+            {
+                m_pImpl->m_pContentControl->SetPlainText(bValue);
+            }
+        }
+    }
     else if (rPropertyName == UNO_NAME_PLACEHOLDER_DOC_PART)
     {
         OUString aValue;
@@ -1060,6 +1078,17 @@ uno::Any SAL_CALL SwXContentControl::getPropertyValue(const OUString& rPropertyN
         else
         {
             aRet <<= m_pImpl->m_pContentControl->GetCurrentDate();
+        }
+    }
+    else if (rPropertyName == UNO_NAME_PLAIN_TEXT)
+    {
+        if (m_pImpl->m_bIsDescriptor)
+        {
+            aRet <<= m_pImpl->m_bPlainText;
+        }
+        else
+        {
+            aRet <<= m_pImpl->m_pContentControl->GetPlainText();
         }
     }
     else if (rPropertyName == UNO_NAME_PLACEHOLDER_DOC_PART)

@@ -587,6 +587,39 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlDate)
     CPPUNIT_ASSERT_EQUAL(OUString("008000"), pContentControl->GetColor());
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlPlainText)
+{
+    // Given an empty document:
+    SwDoc* pDoc = createSwDoc();
+
+    // When inserting a plain text content control around a text portion:
+    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xText->insertString(xCursor, "test", /*bAbsorb=*/false);
+    xCursor->gotoStart(/*bExpand=*/false);
+    xCursor->gotoEnd(/*bExpand=*/true);
+    uno::Reference<text::XTextContent> xContentControl(
+        xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    xContentControlProps->setPropertyValue("PlainText", uno::Any(true));
+    xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
+
+    // Then make sure that the text attribute is inserted:
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    SwTextNode* pTextNode = pDoc->GetNodes()[nIndex]->GetTextNode();
+    SwTextAttr* pAttr = pTextNode->GetTextAttrForCharAt(0, RES_TXTATR_CONTENTCONTROL);
+    CPPUNIT_ASSERT(pAttr);
+    // Also verify that the type if plain text:
+    auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
+    auto& rFormatContentControl
+        = static_cast<SwFormatContentControl&>(pTextContentControl->GetAttr());
+    std::shared_ptr<SwContentControl> pContentControl = rFormatContentControl.GetContentControl();
+    CPPUNIT_ASSERT(pContentControl->GetPlainText());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
