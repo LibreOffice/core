@@ -42,6 +42,7 @@
 #include <sal/log.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/lok.hxx>
+#include <vcl/unx/freetypemanager.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <osl/file.hxx>
@@ -4151,10 +4152,17 @@ static void lo_setOption(LibreOfficeKit* /*pThis*/, const char *pOption, const c
     }
     else if (strcmp(pOption, "addfont") == 0)
     {
+        SAL_INFO("vcl.unx.freetype", "Loading and mapping the font '" << pValue << "'");
         OutputDevice *pDevice = Application::GetDefaultDevice();
         OutputDevice::ImplClearAllFontData(false);
         pDevice->AddTempDevFont(OUString::fromUtf8(pValue), "");
         OutputDevice::ImplRefreshAllFontData(false);
+        FreetypeManager &rFTManager = FreetypeManager::get();
+        OUString sFontFileName;
+        osl::FileBase::getSystemPathFromFileURL( OUString::fromUtf8(pValue), sFontFileName );
+        FreetypeFontFile *pFTFile = rFTManager.FindFontFile(OUStringToOString(sFontFileName, RTL_TEXTENCODING_UTF8));
+        FreetypeManager::MapFontFile(pFTFile);
+        // Intentionally leak that FreetypeFontFile object
     }
 }
 

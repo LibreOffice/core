@@ -31,6 +31,7 @@
 #include <unx/gendata.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/outdev.hxx>
+#include <vcl/unx/freetypemanager.hxx>
 
 #include <fontattributes.hxx>
 #include <fontinstance.hxx>
@@ -38,8 +39,6 @@
 
 #include <unordered_map>
 
-class FreetypeFont;
-class FreetypeFontFile;
 class FreetypeFontInstance;
 class FreetypeFontInfo;
 class FontConfigFontOptions;
@@ -47,68 +46,9 @@ namespace vcl::font
 {
 class PhysicalFontCollection;
 }
-class FreetypeFont;
-class SvpGcpHelper;
 
 namespace basegfx { class B2DPolyPolygon; }
 namespace vcl { struct FontCapabilities; }
-
- /**
-  * The FreetypeManager caches various aspects of Freetype fonts
-  *
-  * It mainly consists of two std::unordered_map lists, which hold the items of the cache.
-  *
-  * They form kind of a tree, with FreetypeFontFile as the roots, referenced by multiple FreetypeFontInfo
-  * entries, which are referenced by the FreetypeFont items.
-  *
-  * All of these items have reference counters, but these don't control the items life-cycle, but that of
-  * the managed resources.
-  *
-  * The respective resources are:
-  *   FreetypeFontFile = holds the mmapped font file, as long as it's used by any FreetypeFontInfo.
-  *   FreetypeFontInfo = holds the FT_FaceRec_ object, as long as it's used by any FreetypeFont.
-  *   FreetypeFont     = holds the FT_SizeRec_ and is owned by a FreetypeFontInstance
-  *
-  * FreetypeFontInfo therefore is embedded in the Freetype subclass of PhysicalFontFace.
-  * FreetypeFont is owned by FreetypeFontInstance, the Freetype subclass of LogicalFontInstance.
-  *
-  * Nowadays there is not really a reason to have separate files for the classes, as the FreetypeManager
-  * is just about handling of Freetype based fonts, not some abstract glyphs.
-  **/
-class VCL_DLLPUBLIC FreetypeManager final
-{
-public:
-    ~FreetypeManager();
-
-    static FreetypeManager& get();
-
-    void                    AddFontFile(const OString& rNormalizedName,
-                                int nFaceNum, int nVariantNum,
-                                sal_IntPtr nFontId,
-                                const FontAttributes&);
-
-    void                    AnnounceFonts( vcl::font::PhysicalFontCollection* ) const;
-
-    void                    ClearFontCache();
-
-    FreetypeFont*           CreateFont(FreetypeFontInstance* pLogicalFont);
-
-private:
-    // to access the constructor (can't use InitFreetypeManager function, because it's private?!)
-    friend class GenericUnixSalData;
-    explicit FreetypeManager();
-
-    static void             InitFreetype();
-    FreetypeFontFile* FindFontFile(const OString& rNativeFileName);
-
-    typedef std::unordered_map<sal_IntPtr, std::shared_ptr<FreetypeFontInfo>> FontInfoList;
-    typedef std::unordered_map<const char*, std::unique_ptr<FreetypeFontFile>, rtl::CStringHash, rtl::CStringEqual> FontFileList;
-
-    FontInfoList            m_aFontInfoList;
-    sal_IntPtr              m_nMaxFontId;
-
-    FontFileList            m_aFontFileList;
-};
 
 class VCL_DLLPUBLIC FreetypeFont final
 {
