@@ -16,6 +16,24 @@
       "message": "please also drop mention of any removed files from solenv/clang-format/excludelist",
       "revId": "65f1903921c448da61733ca0d47c2ffc862b201d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed9a6de4_bd600746",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-07-20T10:23:29Z",
+      "side": 1,
+      "message": "Okay. Should the ones in sequentialassign.cxx be removed too?",
+      "parentUuid": "473fa172_c32a9172",
+      "revId": "65f1903921c448da61733ca0d47c2ffc862b201d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
