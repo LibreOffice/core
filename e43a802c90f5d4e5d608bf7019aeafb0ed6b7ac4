@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21ececcc_996158b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-07-20T06:15:59Z",
+      "side": 1,
+      "message": "Separating rotation inside the text area vs rotation of the text area itself makes sense to me, thanks. Looking forward to the follow-up change that will update the ODF filter for this. :-)",
+      "revId": "e43a802c90f5d4e5d608bf7019aeafb0ed6b7ac4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
