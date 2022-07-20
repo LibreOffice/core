@@ -53,6 +53,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbdab54f_ad7ef211",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2022-07-20T18:39:06Z",
+      "side": 1,
+      "message": "This change propose to merge the 5 previous makefile into 1.",
+      "parentUuid": "f007052c_33bcdc7d",
+      "revId": "3858dfa6657acbf721cfa322c50a6d0bc8f05486",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0380b93e_f3d68516",
@@ -106,6 +124,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "57b01a13_354e2991",
+        "filename": "extras/CustomTarget_tplwizreport.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2022-07-20T18:39:06Z",
+      "side": 1,
+      "message": "Please forget my previous expectations.\nIt now works fine as expected, as far as I could test.\nEach template is only present once in the list with its meta.xml file (I changed mimetype because it has a specific treatment).\nThe list contains in addition all other files different from content.xml, settings.xml, styles.xml, manifest.xml and thumbnail.png",
+      "parentUuid": "bb8bcf71_7f0aeffc",
+      "revId": "3858dfa6657acbf721cfa322c50a6d0bc8f05486",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "08174a5d_bff31707",
@@ -137,6 +173,24 @@
       "side": 1,
       "message": "It will be done afterwards.",
       "parentUuid": "08174a5d_bff31707",
+      "revId": "3858dfa6657acbf721cfa322c50a6d0bc8f05486",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73dddd5e_0bc42efd",
+        "filename": "extras/CustomTarget_tplwizreport.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2022-07-20T18:39:06Z",
+      "side": 1,
+      "message": "Makefiles are now combined into only 1 for wizard templates.",
+      "parentUuid": "8d275a21_24549830",
       "revId": "3858dfa6657acbf721cfa322c50a6d0bc8f05486",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
