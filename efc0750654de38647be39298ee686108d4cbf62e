@@ -37,6 +37,41 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "779f9043_93ac489e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-07-20T12:39:08Z",
+      "side": 1,
+      "message": "Let\u0027s get this in as-is, see the inline commend on a possible follow-up improvement. Thanks.",
+      "revId": "efc0750654de38647be39298ee686108d4cbf62e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ed7f2c4_50beaf7f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-07-20T12:39:08Z",
+      "side": 1,
+      "message": "sw/source/core/bastyp/init.cxx has a slot table that knows how to map between e.g. SID_ATTR_CHAR_WEIGHT and RES_CHRATR_WEIGHT. editeng/source/editeng/editdoc.cxx has a similar mapping between SID_ATTR_CHAR_WEIGHT and EE_CHAR_WEIGHT. This mechanism is used to iterate the content of comment, shape or other editeng-powered text in the WW8 export, which only has handlers for sw/ which ids.\n\nPerhaps you could clean up this patch by filling in the 0 entry for RES_CHRATR_HIGHLIGHT in sw/source/core/bastyp/init.cxx?",
+      "parentUuid": "c98f19a5_215a02d8",
+      "revId": "efc0750654de38647be39298ee686108d4cbf62e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "17b1d274_a03faf41",
         "filename": "sw/source/filter/ww8/ww8graf.cxx",
         "patchSetId": 2
