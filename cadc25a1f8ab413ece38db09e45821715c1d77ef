@@ -34,6 +34,24 @@
       "parentUuid": "eb1ac586_ec2f47ec",
       "revId": "cadc25a1f8ab413ece38db09e45821715c1d77ef",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c6d5cb6_ffa2fd28",
+        "filename": "sw/source/uibase/dbui/dbmgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-07-20T15:34:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d26f346e_d8ee1c20",
+      "revId": "cadc25a1f8ab413ece38db09e45821715c1d77ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
