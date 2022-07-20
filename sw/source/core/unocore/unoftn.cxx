@@ -64,7 +64,7 @@ class SwXFootnote::Impl
 public:
 
     SwXFootnote& m_rThis;
-    uno::WeakReference<uno::XInterface> m_wThis;
+    unotools::WeakReference<SwXFootnote> m_wThis;
     const bool m_bIsEndnote;
     std::mutex m_Mutex; // just for OInterfaceContainerHelper4
     ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_EventListeners;
@@ -138,28 +138,27 @@ SwXFootnote::~SwXFootnote()
 {
 }
 
-uno::Reference<text::XFootnote>
+rtl::Reference<SwXFootnote>
 SwXFootnote::CreateXFootnote(SwDoc & rDoc, SwFormatFootnote *const pFootnoteFormat,
         bool const isEndnote)
 {
     // i#105557: do not iterate over the registered clients: race condition
-    uno::Reference<text::XFootnote> xNote;
+    rtl::Reference<SwXFootnote> xNote;
     if (pFootnoteFormat)
     {
         xNote = pFootnoteFormat->GetXFootnote();
     }
     if (!xNote.is())
     {
-        SwXFootnote *const pNote(pFootnoteFormat
+        xNote = pFootnoteFormat
                 ? new SwXFootnote(rDoc, *pFootnoteFormat)
-                : new SwXFootnote(isEndnote));
-        xNote.set(pNote);
+                : new SwXFootnote(isEndnote);
         if (pFootnoteFormat)
         {
             pFootnoteFormat->SetXFootnote(xNote);
         }
         // need a permanent Reference to initialize m_wThis
-        pNote->m_pImpl->m_wThis = xNote;
+        xNote->m_pImpl->m_wThis = xNote.get();
     }
     return xNote;
 }

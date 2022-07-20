@@ -131,8 +131,7 @@ class Meta
     friend class ::SwFormatMeta; ///< SetFormatMeta, NotifyChangeTextNode
     friend class ::SwXMeta;   ///< GetTextNode, GetTextAttr, Get/SetXMeta
 
-    css::uno::WeakReference<
-        css::rdf::XMetadatable> m_wXMeta;
+    unotools::WeakReference<SwXMeta> m_wXMeta;
 
     SwFormatMeta * m_pFormat;
     SwTextNode * m_pTextNode;
@@ -147,10 +146,9 @@ protected:
 
     void NotifyChangeTextNode(SwTextNode *const pTextNode);
 
-    css::uno::WeakReference<css::rdf::XMetadatable> const& GetXMeta() const
+    unotools::WeakReference<SwXMeta> const& GetXMeta() const
             { return m_wXMeta; }
-    void SetXMeta(css::uno::Reference<css::rdf::XMetadatable> const& xMeta)
-            { m_wXMeta = xMeta; }
+    void SetXMeta(rtl::Reference<SwXMeta> const& xMeta);
 
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 

@@ -22,11 +22,13 @@
 #include <rtl/ustring.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <svl/poolitem.hxx>
+#include <unotools/weakref.hxx>
 #include <com/sun/star/text/XTextContent.hpp>
 
 #include "calbck.hxx"
 
 class SwTextRefMark;
+class SwXReferenceMark;
 
 // ATT_REFMARK
 
@@ -40,7 +42,7 @@ class SAL_DLLPUBLIC_RTTI SwFormatRefMark final
     SwFormatRefMark& operator=(const SwFormatRefMark& rRefMark) = delete;
     OUString m_aRefName;
 
-    css::uno::WeakReference<css::text::XTextContent> m_wXReferenceMark;
+    unotools::WeakReference<SwXReferenceMark> m_wXReferenceMark;
 
 public:
     SwFormatRefMark( const OUString& rText );
@@ -61,10 +63,9 @@ public:
     OUString &GetRefName()       { return m_aRefName; }
     const OUString &GetRefName() const { return m_aRefName; }
 
-    css::uno::WeakReference<css::text::XTextContent> const& GetXRefMark() const
+    unotools::WeakReference<SwXReferenceMark> const& GetXRefMark() const
         { return m_wXReferenceMark; }
-    void SetXRefMark(css::uno::Reference<css::text::XTextContent> const& xMark)
-        { m_wXReferenceMark = xMark; }
+    void SetXRefMark(rtl::Reference<SwXReferenceMark> const& xMark);
 };
 
 #endif

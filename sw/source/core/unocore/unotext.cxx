@@ -1339,8 +1339,7 @@ SwXText::Impl::finishOrAppendParagraph(
     OSL_ENSURE(pTextNode, "no SwTextNode?");
     if (pTextNode)
     {
-        xRet.set(SwXParagraph::CreateXParagraph(*m_pDoc, pTextNode, &m_rThis),
-                uno::UNO_QUERY);
+        xRet = SwXParagraph::CreateXParagraph(*m_pDoc, pTextNode, &m_rThis);
     }
 
     return xRet;
@@ -2560,6 +2559,12 @@ SwXBodyText::createTextCursorByRange(
 
 uno::Reference< container::XEnumeration > SAL_CALL
 SwXBodyText::createEnumeration()
+{
+    return createParagraphEnumeration();
+}
+
+rtl::Reference< SwXParagraphEnumeration >
+SwXBodyText::createParagraphEnumeration()
 {
     SolarMutexGuard aGuard;
 

@@ -383,8 +383,8 @@ uno::Any SwXTextView::getSelection()
                 SwFrameFormat *const pFormat = rSh.GetFlyFrameFormat();
                 if (pFormat)
                 {
-                    aRef = SwXTextFrame::CreateXTextFrame(
-                            *pFormat->GetDoc(), pFormat);
+                    aRef = static_cast<cppu::OWeakObject*>(SwXTextFrame::CreateXTextFrame(
+                            *pFormat->GetDoc(), pFormat).get());
                 }
             }
             break;
@@ -393,8 +393,8 @@ uno::Any SwXTextView::getSelection()
                 SwFrameFormat *const pFormat = rSh.GetFlyFrameFormat();
                 if (pFormat)
                 {
-                    aRef = SwXTextGraphicObject::CreateXTextGraphicObject(
-                            *pFormat->GetDoc(), pFormat);
+                    aRef = static_cast<cppu::OWeakObject*>(SwXTextGraphicObject::CreateXTextGraphicObject(
+                            *pFormat->GetDoc(), pFormat).get());
                 }
             }
             break;
@@ -403,8 +403,8 @@ uno::Any SwXTextView::getSelection()
                 SwFrameFormat *const pFormat = rSh.GetFlyFrameFormat();
                 if (pFormat)
                 {
-                    aRef = SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
-                            *pFormat->GetDoc(), pFormat);
+                    aRef = static_cast<cppu::OWeakObject*>(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
+                            *pFormat->GetDoc(), pFormat).get());
                 }
             }
             break;

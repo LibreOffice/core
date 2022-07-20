@@ -80,7 +80,7 @@ private:
 
 public:
 
-    static css::uno::Reference<css::text::XTextContent>
+    static rtl::Reference<SwXParagraph>
         CreateXParagraph(SwDoc & rDoc, SwTextNode * pTextNode,
             css::uno::Reference< css::text::XText>
             const& xParentText = nullptr,

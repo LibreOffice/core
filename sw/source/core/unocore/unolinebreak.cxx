@@ -108,19 +108,16 @@ SwXLineBreak::SwXLineBreak()
 
 SwXLineBreak::~SwXLineBreak() {}
 
-uno::Reference<text::XTextContent>
-SwXLineBreak::CreateXLineBreak(SwFormatLineBreak* pLineBreakFormat)
+rtl::Reference<SwXLineBreak> SwXLineBreak::CreateXLineBreak(SwFormatLineBreak* pLineBreakFormat)
 {
-    uno::Reference<text::XTextContent> xLineBreak;
+    rtl::Reference<SwXLineBreak> xLineBreak;
     if (pLineBreakFormat)
     {
         xLineBreak = pLineBreakFormat->GetXTextContent();
     }
     if (!xLineBreak.is())
     {
-        SwXLineBreak* const pLineBreak(pLineBreakFormat ? new SwXLineBreak(*pLineBreakFormat)
-                                                        : new SwXLineBreak);
-        xLineBreak.set(pLineBreak);
+        xLineBreak = pLineBreakFormat ? new SwXLineBreak(*pLineBreakFormat) : new SwXLineBreak;
         if (pLineBreakFormat)
         {
             pLineBreakFormat->SetXLineBreak(xLineBreak);

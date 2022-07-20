@@ -27,6 +27,7 @@
 #include <docfld.hxx>
 #include <docufld.hxx>
 #include <doc.hxx>
+#include <unofield.hxx>
 
 #include <pam.hxx>
 #include <reffld.hxx>
@@ -768,5 +769,8 @@ SwTextAnnotationField::~SwTextAnnotationField()
            ? *pMark
            : nullptr;
 }
+
+void SwFormatField::SetXTextField(rtl::Reference<SwXTextField> const& xTextField)
+{ m_wXTextField = xTextField.get(); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

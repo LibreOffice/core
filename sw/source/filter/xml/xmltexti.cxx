@@ -337,8 +337,8 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
             pOLENd->SetOLESizeInvalid( true );
     }
 
-    xPropSet.set(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
-                *pDoc, pFrameFormat), uno::UNO_QUERY);
+    xPropSet = SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
+                *pDoc, pFrameFormat);
     if( pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
     {
         // req for z-order
@@ -580,8 +580,8 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
 
             // TODO/LATER: in future may need a way to set replacement image url to the link ( may be even to the object ), needs oasis cws???
 
-            xPropSet.set(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
-                            *pDoc, pFrameFormat), uno::UNO_QUERY);
+            xPropSet = SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
+                            *pDoc, pFrameFormat);
             if( pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
             {
                 SwXFrame::GetOrCreateSdrObject(*
@@ -636,8 +636,8 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertApplet(
         pDoc->getIDocumentContentOperations().InsertEmbObject( *pTextCursor->GetPaM(),
         ::svt::EmbeddedObjectRef(aAppletImpl.GetApplet(), embed::Aspects::MSOLE_CONTENT),
         &aAppletImpl.GetItemSet());
-    xPropSet.set(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
-                *pDoc, pFrameFormat), uno::UNO_QUERY);
+    xPropSet = SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
+                *pDoc, pFrameFormat);
     if( pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
     {
         // req for z-order
@@ -707,8 +707,8 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
                     *pTextCursor->GetPaM(),
                     ::svt::EmbeddedObjectRef(xObj, embed::Aspects::MSOLE_CONTENT),
                     &aItemSet);
-            xPropSet.set(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
-                            *pDoc, pFrameFormat), uno::UNO_QUERY);
+            xPropSet = SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
+                            *pDoc, pFrameFormat);
             if( pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
             {
                 SwXFrame::GetOrCreateSdrObject(*
@@ -856,8 +856,8 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
                     *pTextCursor->GetPaM(),
                     ::svt::EmbeddedObjectRef(xObj, embed::Aspects::MSOLE_CONTENT),
                     &aItemSet);
-            xPropSet.set(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
-                            *pDoc, pFrameFormat), uno::UNO_QUERY);
+            xPropSet = SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
+                            *pDoc, pFrameFormat);
             if( pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
             {
                 // req for z-order

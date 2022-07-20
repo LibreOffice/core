@@ -85,7 +85,7 @@ protected:
 
 public:
 
-    static css::uno::Reference< css::text::XTextContent>
+    static rtl::Reference<SwXBookmark>
         CreateXBookmark(SwDoc & rDoc, ::sw::mark::IMark * pBookmark);
 
     /// @return IMark for this, but only if it lives in pDoc
@@ -201,7 +201,7 @@ class SwXFieldmark final
     SwXFieldmark(bool isReplacementObject, SwDoc* pDoc);
 
 public:
-    static css::uno::Reference<css::text::XTextContent>
+    static rtl::Reference<SwXBookmark>
         CreateXFieldmark(SwDoc & rDoc, ::sw::mark::IMark * pMark,
                 bool isReplacementObject = false);
 

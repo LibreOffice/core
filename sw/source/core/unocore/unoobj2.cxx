@@ -1260,8 +1260,7 @@ CreateParentXText(SwDoc & rDoc, const SwPosition& rPos)
             SwFrameFormat *const pFormat = pSttNode->GetFlyFormat();
             if (nullptr != pFormat)
             {
-                xParentText.set(SwXTextFrame::CreateXTextFrame(rDoc, pFormat),
-                        uno::UNO_QUERY);
+                xParentText = SwXTextFrame::CreateXTextFrame(rDoc, pFormat);
             }
         }
         break;
@@ -1315,7 +1314,7 @@ CreateParentXText(SwDoc & rDoc, const SwPosition& rPos)
                                     FindSttNodeByType(SwFootnoteStartNode))
                 {
                     xParentText.set(SwXFootnote::CreateXFootnote(rDoc,
-                            &const_cast<SwFormatFootnote&>(rFootnote)), uno::UNO_QUERY);
+                            &const_cast<SwFormatFootnote&>(rFootnote)));
                     break;
                 }
             }
@@ -1807,8 +1806,8 @@ bool SwXParaFrameEnumerationImpl::CreateNextObject()
 
         if (!pNd->IsNoTextNode())
         {
-            m_xNextObject.set(SwXTextFrame::CreateXTextFrame(
-                        *pFormat->GetDoc(), pFormat));
+            m_xNextObject = static_cast<SwXFrame*>(SwXTextFrame::CreateXTextFrame(
+                        *pFormat->GetDoc(), pFormat).get());
         }
         else if (pNd->IsGrfNode())
         {

@@ -32,6 +32,7 @@
 #include "paratr.hxx"
 
 #include <sfx2/Metadatable.hxx>
+#include <unotools/weakref.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <memory>
 #include <vector>
@@ -41,6 +42,7 @@ class SfxHint;
 class SwNumRule;
 class SwNodeNum;
 class SvxLRSpaceItem;
+class SwXParagraph;
 
 namespace utl {
     class TransliterationWrapper;
@@ -124,7 +126,7 @@ class SW_DLLPUBLIC SwTextNode final
 
     std::optional< OUString > m_oNumStringCache;
 
-    css::uno::WeakReference<css::text::XTextContent> m_wXParagraph;
+    unotools::WeakReference<SwXParagraph> m_wXParagraph;
 
     // DrawingLayer FillAttributes in a preprocessed form for primitive usage
     drawinglayer::attribute::SdrAllFillAttributesHelperPtr  maFillAttributes;
@@ -800,10 +802,9 @@ public:
 
     bool IsFirstOfNumRule(SwRootFrame const& rLayout) const;
 
-    SAL_DLLPRIVATE css::uno::WeakReference<css::text::XTextContent> const& GetXParagraph() const
+    SAL_DLLPRIVATE unotools::WeakReference<SwXParagraph> const& GetXParagraph() const
             { return m_wXParagraph; }
-    SAL_DLLPRIVATE void SetXParagraph(css::uno::Reference<css::text::XTextContent> const& xParagraph)
-            { m_wXParagraph = xParagraph; }
+    SAL_DLLPRIVATE void SetXParagraph(rtl::Reference<SwXParagraph> const& xParagraph);
 
     /// sfx2::Metadatable
     virtual ::sfx2::IXmlIdRegistry& GetRegistry() override;
