@@ -1999,7 +1999,7 @@ void SwTextNode::ReplaceTextOnly( sal_Int32 nPos, sal_Int32 nLen,
             while( nI + nCnt < nTLen && nOff == pOffsets[ nI + nCnt ] )
                 ++nCnt;
 
-            Update( SwContentIndex( this, nMyOff ), nCnt );
+            Update(SwContentIndex(this, nMyOff), nCnt, UpdateMode::Default);
             nMyOff = nOff;
             //nMyOff -= nCnt;
             nI += nCnt - 1;
@@ -2007,14 +2007,14 @@ void SwTextNode::ReplaceTextOnly( sal_Int32 nPos, sal_Int32 nLen,
         else if( nOff > nMyOff )
         {
             // something is deleted
-            Update( SwContentIndex( this, nMyOff+1 ), nOff - nMyOff, true );
+            Update(SwContentIndex(this, nMyOff + 1), nOff - nMyOff, UpdateMode::Negative);
             nMyOff = nOff;
         }
         ++nMyOff;
     }
     if( nMyOff < nLen )
         // something is deleted at the end
-        Update( SwContentIndex( this, nMyOff ), nLen - nMyOff, true );
+        Update(SwContentIndex(this, nMyOff), nLen - nMyOff, UpdateMode::Negative);
 
     // notify the layout!
     SwDelText aDelHint( nPos, nTLen );
