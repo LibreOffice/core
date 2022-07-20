@@ -96,7 +96,7 @@ class FmNavNameChangedHint final : public SfxHint
     OUString          aNewName;
 
 public:
-    FmNavNameChangedHint( FmEntryData* pData, const OUString& rNewName );
+    FmNavNameChangedHint( FmEntryData* pData, OUString aNewName );
     virtual ~FmNavNameChangedHint() override;
 
     FmEntryData*    GetEntryData() const { return pEntryData; }

@@ -19,6 +19,7 @@
 
 #include <svx/drawitem.hxx>
 #include <svx/xtable.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 
@@ -36,9 +37,9 @@ SvxColorListItem::SvxColorListItem()
 }
 
 
-SvxColorListItem::SvxColorListItem( XColorListRef const & pTable, TypedWhichId<SvxColorListItem> nW ) :
+SvxColorListItem::SvxColorListItem( XColorListRef pTable, TypedWhichId<SvxColorListItem> nW ) :
     SfxPoolItem( nW ),
-    pColorList( pTable )
+    pColorList(std::move( pTable ))
 {
 }
 
@@ -96,9 +97,9 @@ SvxGradientListItem::SvxGradientListItem()
 {
 }
 
-SvxGradientListItem::SvxGradientListItem( XGradientListRef const & pList, TypedWhichId<SvxGradientListItem> nW ) :
+SvxGradientListItem::SvxGradientListItem( XGradientListRef pList, TypedWhichId<SvxGradientListItem> nW ) :
     SfxPoolItem( nW ),
-    pGradientList( pList )
+    pGradientList(std::move( pList ))
 {
 }
 
@@ -141,9 +142,9 @@ SvxHatchListItem::SvxHatchListItem()
 }
 
 
-SvxHatchListItem::SvxHatchListItem( XHatchListRef const & pList, TypedWhichId<SvxHatchListItem> nW ) :
+SvxHatchListItem::SvxHatchListItem( XHatchListRef pList, TypedWhichId<SvxHatchListItem> nW ) :
     SfxPoolItem( nW ),
-    pHatchList( pList )
+    pHatchList(std::move( pList ))
 {
 }
 
@@ -185,9 +186,9 @@ SvxBitmapListItem::SvxBitmapListItem()
 {
 }
 
-SvxBitmapListItem::SvxBitmapListItem( XBitmapListRef const & pList, TypedWhichId<SvxBitmapListItem> nW ) :
+SvxBitmapListItem::SvxBitmapListItem( XBitmapListRef pList, TypedWhichId<SvxBitmapListItem> nW ) :
     SfxPoolItem( nW ),
-    pBitmapList( pList )
+    pBitmapList(std::move( pList ))
 {
 }
 
@@ -226,9 +227,9 @@ SvxPatternListItem::SvxPatternListItem()
 {
 }
 
-SvxPatternListItem::SvxPatternListItem( XPatternListRef const & pList, TypedWhichId<SvxPatternListItem> nW ) :
+SvxPatternListItem::SvxPatternListItem( XPatternListRef pList, TypedWhichId<SvxPatternListItem> nW ) :
     SfxPoolItem( nW ),
-    pPatternList( pList )
+    pPatternList(std::move( pList ))
 {
 }
 
@@ -267,9 +268,9 @@ SvxDashListItem::SvxDashListItem()
 {
 }
 
-SvxDashListItem::SvxDashListItem( XDashListRef const & pList, TypedWhichId<SvxDashListItem> nW ) :
+SvxDashListItem::SvxDashListItem( XDashListRef pList, TypedWhichId<SvxDashListItem> nW ) :
     SfxPoolItem( nW ),
-    pDashList( pList )
+    pDashList(std::move( pList ))
 {
 }
 
@@ -308,9 +309,9 @@ SvxLineEndListItem::SvxLineEndListItem()
 {
 }
 
-SvxLineEndListItem::SvxLineEndListItem( XLineEndListRef const & pList, TypedWhichId<SvxLineEndListItem>  nW ) :
+SvxLineEndListItem::SvxLineEndListItem( XLineEndListRef pList, TypedWhichId<SvxLineEndListItem>  nW ) :
     SfxPoolItem( nW ),
-    pLineEndList( pList )
+    pLineEndList(std::move( pList ))
 {
 }
 

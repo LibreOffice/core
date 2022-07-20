@@ -29,7 +29,7 @@ class ColorSet
     OUString maColorSetName;
     std::vector<Color> maColors;
 public:
-    ColorSet(OUString const & aName);
+    ColorSet(OUString aName);
 
     void add(sal_uInt32 nIndex, ::Color aColorData)
     {
@@ -93,7 +93,7 @@ class SVXCORE_DLLPUBLIC Theme
     std::unique_ptr<ColorSet> mpColorSet;
 
 public:
-    Theme(OUString const& rName);
+    Theme(OUString sName);
     ~Theme();
 
     void SetColorSet(std::unique_ptr<ColorSet> pColorSet);

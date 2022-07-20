@@ -43,6 +43,7 @@
 #include <sdr/primitive2d/sdrattributecreator.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <sdr/attribute/sdrformtextattribute.hxx>
+#include <utility>
 #include <vcl/ptrstyle.hxx>
 #include <memory>
 #include <sal/log.hxx>
@@ -1637,9 +1638,9 @@ SdrPathObj::SdrPathObj(SdrModel& rSdrModel, SdrPathObj const & rSource)
 SdrPathObj::SdrPathObj(
     SdrModel& rSdrModel,
     SdrObjKind eNewKind,
-    const basegfx::B2DPolyPolygon& rPathPoly)
+    basegfx::B2DPolyPolygon aPathPoly)
 :   SdrTextObj(rSdrModel),
-    maPathPolygon(rPathPoly),
+    maPathPolygon(std::move(aPathPoly)),
     meKind(eNewKind)
 {
     m_bClosedObj = IsClosed();

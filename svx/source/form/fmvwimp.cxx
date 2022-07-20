@@ -75,6 +75,7 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/window.hxx>
@@ -147,9 +148,9 @@ public:
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 };
 
-FormViewPageWindowAdapter::FormViewPageWindowAdapter( const css::uno::Reference<css::uno::XComponentContext>& _rContext, const SdrPageWindow& _rWindow, FmXFormView* _pViewImpl )
+FormViewPageWindowAdapter::FormViewPageWindowAdapter( css::uno::Reference<css::uno::XComponentContext> _xContext, const SdrPageWindow& _rWindow, FmXFormView* _pViewImpl )
 :   m_xControlContainer( _rWindow.GetControlContainer() ),
-    m_xContext( _rContext ),
+    m_xContext(std::move( _xContext )),
     m_pViewImpl( _pViewImpl ),
     m_pWindow( _rWindow.GetPaintWindow().GetOutputDevice().GetOwnerWindow() )
 {

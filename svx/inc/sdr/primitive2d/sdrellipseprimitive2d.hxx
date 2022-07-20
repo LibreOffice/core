@@ -41,7 +41,7 @@ namespace drawinglayer::primitive2d
 
         public:
             SdrEllipsePrimitive2D(
-                const ::basegfx::B2DHomMatrix& rTransform,
+                ::basegfx::B2DHomMatrix aTransform,
                 const attribute::SdrLineFillEffectsTextAttribute& rSdrLFSTAttribute);
 
             // data access

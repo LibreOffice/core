@@ -34,6 +34,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
+#include <utility>
 
 
 // DrawContact section
@@ -52,10 +53,10 @@ std::unique_ptr<sdr::properties::BaseProperties> E3dExtrudeObj::CreateObjectSpec
 E3dExtrudeObj::E3dExtrudeObj(
     SdrModel& rSdrModel,
     const E3dDefaultAttributes& rDefault,
-    const basegfx::B2DPolyPolygon& rPP,
+    basegfx::B2DPolyPolygon aPP,
     double fDepth)
 :   E3dCompoundObject(rSdrModel),
-    maExtrudePolygon(rPP)
+    maExtrudePolygon(std::move(aPP))
 {
     // since the old class PolyPolygon3D did mirror the given PolyPolygons in Y, do the same here
     basegfx::B2DHomMatrix aMirrorY;

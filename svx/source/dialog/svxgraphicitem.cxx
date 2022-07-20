@@ -19,9 +19,10 @@
 
 #include <svx/svxgraphicitem.hxx>
 #include <svx/svxids.hrc>
+#include <utility>
 
-SvxGraphicItem::SvxGraphicItem( const Graphic& rGraphic )
-    : SfxPoolItem( SID_GRAPHIC ), aGraphic( rGraphic )
+SvxGraphicItem::SvxGraphicItem( Graphic aGraphic )
+    : SfxPoolItem( SID_GRAPHIC ), aGraphic(std::move( aGraphic ))
 {
 
 }

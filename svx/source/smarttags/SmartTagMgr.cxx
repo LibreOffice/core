@@ -21,6 +21,7 @@
 
 #include <svx/SmartTagMgr.hxx>
 
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/smarttags/XSmartTagRecognizer.hpp>
 #include <com/sun/star/smarttags/XRangeBasedSmartTagRecognizer.hpp>
@@ -46,8 +47,8 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::i18n;
 
 
-SmartTagMgr::SmartTagMgr( const OUString& rApplicationName )
-    : maApplicationName( rApplicationName ),
+SmartTagMgr::SmartTagMgr( OUString aApplicationName )
+    : maApplicationName(std::move( aApplicationName )),
       mxContext( ::comphelper::getProcessComponentContext() ),
       mbLabelTextWithSmartTags(true)
 {

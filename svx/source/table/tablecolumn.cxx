@@ -26,6 +26,7 @@
 #include "tableundo.hxx"
 #include <svx/svdmodel.hxx>
 #include <svx/svdotable.hxx>
+#include <utility>
 
 
 using namespace ::com::sun::star::uno;
@@ -46,9 +47,9 @@ const sal_Int32 Property_IsStartOfNewPage = 3;
 // TableRow
 
 
-TableColumn::TableColumn( const TableModelRef& xTableModel, sal_Int32 nColumn )
+TableColumn::TableColumn( TableModelRef xTableModel, sal_Int32 nColumn )
 : TableColumnBase( getStaticPropertySetInfo() )
-, mxTableModel( xTableModel )
+, mxTableModel(std::move( xTableModel ))
 , mnColumn( nColumn )
 , mnWidth( 0 )
 , mbOptimalWidth( true )

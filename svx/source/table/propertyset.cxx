@@ -18,6 +18,8 @@
  */
 
 
+#include <utility>
+
 #include "propertyset.hxx"
 
 using namespace ::com::sun::star::uno;
@@ -89,8 +91,8 @@ sal_Bool SAL_CALL FastPropertySetInfo::hasPropertyByName( const OUString& aName 
     return hasProperty( aName ) != nullptr;
 }
 
-FastPropertySet::FastPropertySet( const rtl::Reference< FastPropertySetInfo >& xInfo )
-: mxInfo( xInfo )
+FastPropertySet::FastPropertySet( rtl::Reference< FastPropertySetInfo > xInfo )
+: mxInfo(std::move( xInfo ))
 {
 }
 

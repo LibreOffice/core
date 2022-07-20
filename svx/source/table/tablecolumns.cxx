@@ -22,6 +22,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 #include <tablemodel.hxx>
+#include <utility>
 #include "tablecolumns.hxx"
 #include "tablecolumn.hxx"
 
@@ -34,8 +35,8 @@ using namespace ::com::sun::star::table;
 
 namespace sdr::table {
 
-TableColumns::TableColumns( const TableModelRef& xTableModel )
-: mxTableModel( xTableModel )
+TableColumns::TableColumns( TableModelRef xTableModel )
+: mxTableModel(std::move( xTableModel ))
 {
 }
 

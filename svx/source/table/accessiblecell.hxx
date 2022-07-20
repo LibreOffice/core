@@ -47,7 +47,7 @@ class AccessibleCell : public AccessibleCellBase
                      , public IAccessibleViewForwarderListener
 {
 public:
-    AccessibleCell( const css::uno::Reference< css::accessibility::XAccessible>& rxParent, const sdr::table::CellRef& rCell, sal_Int32 nIndex, const AccessibleShapeTreeInfo& rShapeTreeInfo);
+    AccessibleCell( const css::uno::Reference< css::accessibility::XAccessible>& rxParent, sdr::table::CellRef xCell, sal_Int32 nIndex, const AccessibleShapeTreeInfo& rShapeTreeInfo);
     virtual ~AccessibleCell() override;
     AccessibleCell(const AccessibleCell&) = delete;
     AccessibleCell& operator=(const AccessibleCell&) = delete;

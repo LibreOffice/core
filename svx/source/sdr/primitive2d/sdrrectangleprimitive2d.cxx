@@ -24,6 +24,7 @@
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <utility>
 
 
 using namespace com::sun::star;
@@ -112,12 +113,12 @@ namespace drawinglayer::primitive2d
         }
 
         SdrRectanglePrimitive2D::SdrRectanglePrimitive2D(
-            const basegfx::B2DHomMatrix& rTransform,
+            basegfx::B2DHomMatrix aTransform,
             const attribute::SdrLineFillEffectsTextAttribute& rSdrLFSTAttribute,
             double fCornerRadiusX,
             double fCornerRadiusY,
             bool bForceFillForHitTest)
-        :   maTransform(rTransform),
+        :   maTransform(std::move(aTransform)),
             maSdrLFSTAttribute(rSdrLFSTAttribute),
             mfCornerRadiusX(fCornerRadiusX),
             mfCornerRadiusY(fCornerRadiusY),
