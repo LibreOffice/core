@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9321291_02fb98b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-07-20T12:47:59Z",
+      "side": 1,
+      "message": "Ah sorry about that but why is there an extra channel in that bitmap anyway?",
+      "revId": "61f468f6a4aa677ee392b6698f74d25a02683342",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
