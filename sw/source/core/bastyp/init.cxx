@@ -280,7 +280,7 @@ SfxItemInfo aSlotTab[] =
     { SID_ATTR_FLASH, true },              // RES_CHRATR_BLINK
     { 0, true },                           // RES_CHRATR_UNUSED2
     { 0, true },                           // RES_CHRATR_NOHYPHEN
-    { SID_ATTR_BRUSH_CHAR, true },         // RES_CHRATR_BACKGROUND
+    { 0, true },         // RES_CHRATR_BACKGROUND
     { SID_ATTR_CHAR_CJK_FONT, true },      // RES_CHRATR_CJK_FONT
     { SID_ATTR_CHAR_CJK_FONTHEIGHT, true },// RES_CHRATR_CJK_FONTSIZE
     { SID_ATTR_CHAR_CJK_LANGUAGE, true },  // RES_CHRATR_CJK_LANGUAGE
@@ -301,7 +301,7 @@ SfxItemInfo aSlotTab[] =
     { 0, true },                           // RES_CHRATR_RSID
     { SID_ATTR_CHAR_BOX, true },           // RES_CHRATR_BOX
     { SID_ATTR_CHAR_SHADOW, true },        // RES_CHRATR_SHADOW
-    { 0, true },                           // RES_CHRATR_HIGHLIGHT
+    { SID_ATTR_BRUSH_CHAR, true },         // RES_CHRATR_HIGHLIGHT
     { SID_ATTR_CHAR_GRABBAG, true },       // RES_CHRATR_GRABBAG
     { 0, true },                           // RES_CHRATR_BIDIRTL
     { 0, true },                           // RES_CHRATR_IDCTHINT

@@ -520,7 +520,17 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
         if ( pItem && pItem->GetRegisteredIn() != nullptr)
         {
             bBreakSet = true;
-            bNewPageDesc = true;
+            // Avoid unnecessary section breaks if possible. LO can't notice identical
+            // sections during import, so minimize unnecessary duplication
+            // by substituting a simple page break when the resulting section is identical.
+            if (!bNewPageDesc && !pItem->GetNumOffset()
+                && m_pCurrentPageDesc->GetFollow() == pItem->GetPageDesc())
+            {
+                AttrOutput().OutputItem(SvxFormatBreakItem(SvxBreak::PageBefore, RES_BREAK));
+            }
+            else
+                bNewPageDesc = true;
+
             pPgDesc = pItem;
             m_pCurrentPageDesc = pPgDesc->GetPageDesc();
 
