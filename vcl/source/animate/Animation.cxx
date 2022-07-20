@@ -233,7 +233,7 @@ void Animation::Draw(OutputDevice& rOut, const Point& rDestPt, const Size& rDest
     {
         maFrames[0]->maBitmapEx.Draw(&rOut, rDestPt, rDestSz);
     }
-    else if (ANIMATION_TIMEOUT_ON_CLICK == pObj->mnWait)
+    else if (pObj->mnWait == ANIMATION_TIMEOUT_ON_CLICK)
     {
         pObj->maBitmapEx.Draw(&rOut, rDestPt, rDestSz);
     }
@@ -497,7 +497,7 @@ SvStream& WriteAnimation(SvStream& rOStm, const Animation& rAnimation)
             aSerializer.writePoint(rAnimationFrame.maPositionPixel);
             aSerializer.writeSize(rAnimationFrame.maSizePixel);
             aSerializer.writeSize(rAnimation.maGlobalSize);
-            rOStm.WriteUInt16((ANIMATION_TIMEOUT_ON_CLICK == rAnimationFrame.mnWait)
+            rOStm.WriteUInt16((rAnimationFrame.mnWait == ANIMATION_TIMEOUT_ON_CLICK)
                                   ? 65535
                                   : rAnimationFrame.mnWait);
             rOStm.WriteUInt16(static_cast<sal_uInt16>(rAnimationFrame.meDisposal));
@@ -561,7 +561,7 @@ SvStream& ReadAnimation(SvStream& rIStm, Animation& rAnimation)
             aSerializer.readSize(aAnimationFrame.maSizePixel);
             aSerializer.readSize(rAnimation.maGlobalSize);
             rIStm.ReadUInt16(nTmp16);
-            aAnimationFrame.mnWait = ((65535 == nTmp16) ? ANIMATION_TIMEOUT_ON_CLICK : nTmp16);
+            aAnimationFrame.mnWait = ((nTmp16 == 65535) ? ANIMATION_TIMEOUT_ON_CLICK : nTmp16);
             rIStm.ReadUInt16(nTmp16);
             aAnimationFrame.meDisposal = static_cast<Disposal>(nTmp16);
             rIStm.ReadCharAsBool(cTmp);
