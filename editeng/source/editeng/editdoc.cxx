@@ -209,7 +209,7 @@ const SfxItemInfo aItemInfos[EDITITEMCOUNT] = {
         { SID_ATTR_CHAR_OVERLINE, true },      // EE_CHAR_OVERLINE
         { SID_ATTR_CHAR_CASEMAP, true },       // EE_CHAR_CASEMAP
         { SID_ATTR_CHAR_GRABBAG, true },       // EE_CHAR_GRABBAG
-        { SID_ATTR_CHAR_BACK_COLOR, true },    // EE_CHAR_BKGCOLOR
+        { 0, true },    // EE_CHAR_BKGCOLOR
         { 0, true },                           // EE_FEATURE_TAB
         { 0, true },                           // EE_FEATURE_LINEBR
         { SID_ATTR_CHAR_CHARSETCOLOR, true },  // EE_FEATURE_NOTCONV
