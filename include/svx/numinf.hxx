@@ -33,13 +33,13 @@ public:
     SvxNumberInfoItem( const TypedWhichId<SvxNumberInfoItem> nId  );
     SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
                        const TypedWhichId<SvxNumberInfoItem> nId  );
-    SvxNumberInfoItem( SvNumberFormatter* pNumFormatter, const OUString& rVal,
+    SvxNumberInfoItem( SvNumberFormatter* pNumFormatter, OUString aVal,
                        const TypedWhichId<SvxNumberInfoItem> nId  );
     SvxNumberInfoItem( SvNumberFormatter* pNumFormatter, const double& rVal,
                        const TypedWhichId<SvxNumberInfoItem> nId  );
     // if both double and String are supplied, String is used for text formats
     SvxNumberInfoItem( SvNumberFormatter* pNumFormatter, const double& rVal,
-                       const OUString& rValueStr, const TypedWhichId<SvxNumberInfoItem> nId );
+                       OUString aValueStr, const TypedWhichId<SvxNumberInfoItem> nId );
     SvxNumberInfoItem( const SvxNumberInfoItem& );
     virtual ~SvxNumberInfoItem() override;
 

@@ -20,6 +20,7 @@
 #include <sdr/primitive2d/sdrolecontentprimitive2d.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <svx/svdoole2.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
@@ -130,11 +131,11 @@ namespace drawinglayer::primitive2d
 
         SdrOleContentPrimitive2D::SdrOleContentPrimitive2D(
             const SdrOle2Obj& rSdrOle2Obj,
-            const basegfx::B2DHomMatrix& rObjectTransform,
+            basegfx::B2DHomMatrix aObjectTransform,
             sal_uInt32 nGraphicVersion
         )
         :   mpSdrOle2Obj(const_cast< SdrOle2Obj* >(&rSdrOle2Obj)),
-            maObjectTransform(rObjectTransform),
+            maObjectTransform(std::move(aObjectTransform)),
             mnGraphicVersion(nGraphicVersion)
         {
         }

@@ -42,7 +42,7 @@ namespace drawinglayer::primitive2d
         public:
             SdrConnectorPrimitive2D(
                 const attribute::SdrLineEffectsTextAttribute& rSdrLSTAttribute,
-                const ::basegfx::B2DPolygon& rUnitPolygon);
+                ::basegfx::B2DPolygon aUnitPolygon);
 
             // data access
             const attribute::SdrLineEffectsTextAttribute& getSdrLSTAttribute() const { return maSdrLSTAttribute; }

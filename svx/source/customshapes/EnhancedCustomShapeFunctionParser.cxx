@@ -41,6 +41,7 @@
 #include <functional>
 #include <algorithm>
 #include <stack>
+#include <utility>
 
 #include <math.h>
 using namespace EnhancedCustomShape;
@@ -290,9 +291,9 @@ class UnaryFunctionExpression : public ExpressionNode
     std::shared_ptr<ExpressionNode> mpArg;
 
 public:
-    UnaryFunctionExpression( const ExpressionFunct eFunct, const std::shared_ptr<ExpressionNode>& rArg ) :
+    UnaryFunctionExpression( const ExpressionFunct eFunct, std::shared_ptr<ExpressionNode> aArg ) :
         meFunct( eFunct ),
-        mpArg( rArg )
+        mpArg(std::move( aArg ))
     {
     }
     static double getValue( const ExpressionFunct eFunct, const std::shared_ptr<ExpressionNode>& rArg )
@@ -460,10 +461,10 @@ class BinaryFunctionExpression : public ExpressionNode
 
 public:
 
-    BinaryFunctionExpression( const ExpressionFunct eFunct, const std::shared_ptr<ExpressionNode>& rFirstArg, const std::shared_ptr<ExpressionNode>& rSecondArg ) :
+    BinaryFunctionExpression( const ExpressionFunct eFunct, std::shared_ptr<ExpressionNode> xFirstArg, std::shared_ptr<ExpressionNode> xSecondArg ) :
         meFunct( eFunct ),
-        mpFirstArg( rFirstArg ),
-        mpSecondArg( rSecondArg )
+        mpFirstArg(std::move( xFirstArg )),
+        mpSecondArg(std::move( xSecondArg ))
     {
     }
 #if defined(__clang__) || (defined (__GNUC__) && __GNUC__ >= 8)
@@ -686,12 +687,12 @@ class IfExpression : public ExpressionNode
 
 public:
 
-    IfExpression( const std::shared_ptr<ExpressionNode>& rFirstArg,
-                  const std::shared_ptr<ExpressionNode>& rSecondArg,
-                  const std::shared_ptr<ExpressionNode>& rThirdArg ) :
-        mpFirstArg(  rFirstArg ),
-        mpSecondArg( rSecondArg ),
-        mpThirdArg(  rThirdArg )
+    IfExpression( std::shared_ptr<ExpressionNode> xFirstArg,
+                  std::shared_ptr<ExpressionNode> xSecondArg,
+                  std::shared_ptr<ExpressionNode> xThirdArg ) :
+        mpFirstArg(std::move( xFirstArg )),
+        mpSecondArg(std::move(xSecondArg )),
+        mpThirdArg(std::move( xThirdArg ))
     {
     }
     virtual bool isConstant() const override
@@ -756,8 +757,8 @@ class DoubleConstantFunctor
     ParserContextSharedPtr  mxContext;
 
 public:
-    explicit DoubleConstantFunctor( const ParserContextSharedPtr& rContext ) :
-        mxContext( rContext )
+    explicit DoubleConstantFunctor( ParserContextSharedPtr xContext ) :
+        mxContext(std::move( xContext ))
     {
     }
     void operator()( double n ) const
@@ -773,9 +774,9 @@ class EnumFunctor
 
 public:
 
-    EnumFunctor( const ExpressionFunct eFunct, const ParserContextSharedPtr& rContext )
+    EnumFunctor( const ExpressionFunct eFunct, ParserContextSharedPtr xContext )
     : meFunct( eFunct )
-    , mxContext( rContext )
+    , mxContext(std::move( xContext ))
     {
     }
     void operator()( StringIteratorT rFirst, StringIteratorT rSecond ) const
@@ -808,9 +809,9 @@ class UnaryFunctionFunctor
 
 public:
 
-    UnaryFunctionFunctor( const ExpressionFunct eFunct, const ParserContextSharedPtr& rContext ) :
+    UnaryFunctionFunctor( const ExpressionFunct eFunct, ParserContextSharedPtr xContext ) :
         meFunct( eFunct ),
-        mxContext( rContext )
+        mxContext(std::move( xContext ))
     {
     }
     void operator()( StringIteratorT, StringIteratorT ) const
@@ -845,9 +846,9 @@ class BinaryFunctionFunctor
 
 public:
 
-    BinaryFunctionFunctor( const ExpressionFunct eFunct, const ParserContextSharedPtr& rContext ) :
+    BinaryFunctionFunctor( const ExpressionFunct eFunct, ParserContextSharedPtr xContext ) :
         meFunct( eFunct ),
-        mxContext( rContext )
+        mxContext(std::move( xContext ))
     {
     }
 
@@ -882,8 +883,8 @@ class IfFunctor
 
 public:
 
-    explicit IfFunctor( const ParserContextSharedPtr& rContext ) :
-        mxContext( rContext )
+    explicit IfFunctor( ParserContextSharedPtr xContext ) :
+        mxContext(std::move( xContext ))
     {
     }
     void operator()( StringIteratorT, StringIteratorT ) const
@@ -972,8 +973,8 @@ public:
         @param rParserContext
         Contains context info for the parser
         */
-    explicit ExpressionGrammar( const ParserContextSharedPtr& rParserContext ) :
-        mpParserContext( rParserContext )
+    explicit ExpressionGrammar( ParserContextSharedPtr xParserContext ) :
+        mpParserContext(std::move( xParserContext ))
     {
     }
 

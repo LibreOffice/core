@@ -30,6 +30,7 @@
 #include <svl/style.hxx>
 #include <svl/itemset.hxx>
 
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <libxml/xmlwriter.h>
 
@@ -111,7 +112,7 @@ namespace
 class CellTextProvider : public svx::ITextProvider
 {
 public:
-    explicit CellTextProvider(const sdr::table::CellRef& rCell);
+    explicit CellTextProvider(sdr::table::CellRef xCell);
     virtual ~CellTextProvider();
 
 private:
@@ -122,8 +123,8 @@ private:
     const sdr::table::CellRef m_xCell;
 };
 
-CellTextProvider::CellTextProvider(const sdr::table::CellRef& rCell)
-    : m_xCell(rCell)
+CellTextProvider::CellTextProvider(sdr::table::CellRef xCell)
+    : m_xCell(std::move(xCell))
 {
 }
 

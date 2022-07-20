@@ -23,6 +23,7 @@
 #include <svx/svdmodel.hxx>
 
 #include <algorithm>
+#include <utility>
 
 bool SdrLayerIDSet::IsEmpty() const
 {
@@ -67,8 +68,8 @@ void SdrLayerIDSet::PutValue( const css::uno::Any & rAny )
     }
 }
 
-SdrLayer::SdrLayer(SdrLayerID nNewID, const OUString& rNewName) :
-    maName(rNewName), pModel(nullptr), nID(nNewID)
+SdrLayer::SdrLayer(SdrLayerID nNewID, OUString aNewName) :
+    maName(std::move(aNewName)), pModel(nullptr), nID(nNewID)
 {
     // ODF default values
     mbVisibleODF = true;

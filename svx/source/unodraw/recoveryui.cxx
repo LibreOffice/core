@@ -29,6 +29,7 @@
 #include <rtl/ref.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
+#include <utility>
 #include <vcl/svapp.hxx>
 
 namespace svxdr = svx::DocRecovery;
@@ -73,7 +74,7 @@ class RecoveryUI : public ::cppu::WeakImplHelper< css::lang::XServiceInfo       
 
 
         /** @short  TODO */
-        explicit RecoveryUI(const css::uno::Reference< css::uno::XComponentContext >& xContext);
+        explicit RecoveryUI(css::uno::Reference< css::uno::XComponentContext > xContext);
 
         // css.lang.XServiceInfo
 
@@ -106,8 +107,8 @@ class RecoveryUI : public ::cppu::WeakImplHelper< css::lang::XServiceInfo       
         bool impl_doBringToFront();
 };
 
-RecoveryUI::RecoveryUI(const css::uno::Reference< css::uno::XComponentContext >& xContext)
-    : m_xContext(xContext)
+RecoveryUI::RecoveryUI(css::uno::Reference< css::uno::XComponentContext >  xContext)
+    : m_xContext(std::move(xContext))
     , m_pParentWindow(nullptr)
     , m_eJob(RecoveryUI::E_JOB_UNKNOWN)
     , m_pDialog(nullptr)

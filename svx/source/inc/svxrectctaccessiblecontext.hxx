@@ -142,7 +142,7 @@ class SvxRectCtlChildAccessibleContext final : public ::comphelper::OAccessibleC
 public:
     SvxRectCtlChildAccessibleContext(
         const css::uno::Reference< css::accessibility::XAccessible>& rxParent,
-        const OUString& rName, const OUString& rDescription,
+        OUString aName, OUString aDescription,
         const tools::Rectangle& rBoundingBox,
         tools::Long nIndexInParent );
 

@@ -55,7 +55,7 @@ public:
     E3dLatheObj(
         SdrModel& rSdrModel,
         const E3dDefaultAttributes& rDefault,
-        const basegfx::B2DPolyPolygon& rPoly2D);
+        basegfx::B2DPolyPolygon aPoly2D);
     E3dLatheObj(SdrModel& rSdrModel, E3dLatheObj const & rSource);
     E3dLatheObj(SdrModel& rSdrModel);
 

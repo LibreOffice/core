@@ -22,6 +22,7 @@
 
 #include <o3tl/numeric.hxx>
 #include <osl/diagnose.h>
+#include <utility>
 #include <vcl/canvastools.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -81,8 +82,8 @@ SdrDragEntry::~SdrDragEntry()
 }
 
 
-SdrDragEntryPolyPolygon::SdrDragEntryPolyPolygon(const basegfx::B2DPolyPolygon& rOriginalPolyPolygon)
-:   maOriginalPolyPolygon(rOriginalPolyPolygon)
+SdrDragEntryPolyPolygon::SdrDragEntryPolyPolygon(basegfx::B2DPolyPolygon aOriginalPolyPolygon)
+:   maOriginalPolyPolygon(std::move(aOriginalPolyPolygon))
 {
 }
 

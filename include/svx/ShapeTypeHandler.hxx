@@ -26,6 +26,7 @@
 #include <rtl/ustring.hxx>
 #include <tools/long.hxx>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 namespace accessibility { class AccessibleShape; }
@@ -59,9 +60,9 @@ struct ShapeTypeDescriptor
     OUString       msServiceName;
     tCreateFunction     maCreateFunction;
     ShapeTypeDescriptor (
-        ShapeTypeId nId, const OUString& sName, tCreateFunction aFunction)
+        ShapeTypeId nId, OUString sName, tCreateFunction aFunction)
     :   mnShapeTypeId (nId),
-        msServiceName (sName),
+        msServiceName (std::move(sName)),
            maCreateFunction (aFunction)
     {}
     ShapeTypeDescriptor()

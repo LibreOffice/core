@@ -20,6 +20,7 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <comphelper/dispatchcommand.hxx>
+#include <utility>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -28,7 +29,7 @@ namespace svx::sidebar {
 
 DefaultShapesPanel::DefaultShapesPanel (
     weld::Widget* pParent,
-    const css::uno::Reference<css::frame::XFrame>& rxFrame)
+    css::uno::Reference<css::frame::XFrame> xFrame)
     : PanelLayout(pParent, "DefaultShapesPanel", "svx/ui/defaultshapespanel.ui")
     , mxLineArrowSet(new ValueSet(nullptr))
     , mxLineArrowSetWin(new weld::CustomWeld(*m_xBuilder, "LinesArrows", *mxLineArrowSet))
@@ -50,7 +51,7 @@ DefaultShapesPanel::DefaultShapesPanel (
     , mxStarSetWin(new weld::CustomWeld(*m_xBuilder, "Stars", *mxStarSet))
     , mx3DObjectSet(new ValueSet(nullptr))
     , mx3DObjectSetWin(new weld::CustomWeld(*m_xBuilder, "3DObjects", *mx3DObjectSet))
-    , mxFrame(rxFrame)
+    , mxFrame(std::move(xFrame))
 {
     Initialize();
     pParent->set_size_request(pParent->get_approximate_digit_width() * 20, -1);

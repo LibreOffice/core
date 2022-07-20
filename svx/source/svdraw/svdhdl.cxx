@@ -24,6 +24,7 @@
 #include <svx/svdhdl.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdmrkv.hxx>
+#include <utility>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/ptrstyle.hxx>
@@ -2463,15 +2464,15 @@ void SdrCropHdl::CreateB2dIAObject()
 // accordingly
 
 SdrCropViewHdl::SdrCropViewHdl(
-    const basegfx::B2DHomMatrix& rObjectTransform,
-    const Graphic& rGraphic,
+    basegfx::B2DHomMatrix aObjectTransform,
+    Graphic aGraphic,
     double fCropLeft,
     double fCropTop,
     double fCropRight,
     double fCropBottom)
 :   SdrHdl(Point(), SdrHdlKind::User),
-    maObjectTransform(rObjectTransform),
-    maGraphic(rGraphic),
+    maObjectTransform(std::move(aObjectTransform)),
+    maGraphic(std::move(aGraphic)),
     mfCropLeft(fCropLeft),
     mfCropTop(fCropTop),
     mfCropRight(fCropRight),

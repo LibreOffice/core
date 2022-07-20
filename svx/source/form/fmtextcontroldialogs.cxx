@@ -25,14 +25,15 @@
 #include <svl/intitem.hxx>
 
 #include <svl/cjkoptions.hxx>
+#include <utility>
 
 
 namespace svx
 {
 
-    TextControlCharAttribDialog::TextControlCharAttribDialog(weld::Window* pParent, const SfxItemSet& rCoreSet, const SvxFontListItem& rFontList)
+    TextControlCharAttribDialog::TextControlCharAttribDialog(weld::Window* pParent, const SfxItemSet& rCoreSet, SvxFontListItem aFontList)
         : SfxTabDialogController(pParent, "svx/ui/textcontrolchardialog.ui", "TextControlCharacterPropertiesDialog", &rCoreSet)
-        , m_aFontList(rFontList)
+        , m_aFontList(std::move(aFontList))
     {
         AddTabPage("font", RID_SVXPAGE_CHAR_NAME);
         AddTabPage("fonteffects", RID_SVXPAGE_CHAR_EFFECTS);

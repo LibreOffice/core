@@ -45,9 +45,9 @@ namespace drawinglayer::primitive2d
 
         public:
             SdrCaptionPrimitive2D(
-                const ::basegfx::B2DHomMatrix& rTransform,
+                ::basegfx::B2DHomMatrix aTransform,
                 const attribute::SdrLineFillEffectsTextAttribute& rSdrLFSTAttribute,
-                const ::basegfx::B2DPolygon& rTail,
+                ::basegfx::B2DPolygon aTail,
                 double fCornerRadiusX,
                 double fCornerRadiusY);
 

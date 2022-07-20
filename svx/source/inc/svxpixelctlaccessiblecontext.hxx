@@ -48,7 +48,7 @@ public:
                 SvxPixelCtl& rWindow,
                 bool bPixelColorOrBG,
                 const tools::Rectangle& rBounds,
-                const rtl::Reference<SvxPixelCtlAccessible>& xParent,
+                rtl::Reference<SvxPixelCtlAccessible> xParent,
                 tools::Long nIndexInParent );
 
     DECLARE_XINTERFACE( )

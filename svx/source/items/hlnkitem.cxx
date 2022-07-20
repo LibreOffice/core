@@ -20,6 +20,7 @@
 #include <svx/svxids.hrc>
 #include <sfx2/event.hxx>
 #include <svx/hlnkitem.hxx>
+#include <utility>
 
 
 SfxPoolItem* SvxHyperlinkItem::CreateDefault() { return new  SvxHyperlinkItem(TypedWhichId<SvxHyperlinkItem>(0));}
@@ -39,15 +40,15 @@ SvxHyperlinkItem::SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem ):
 
 };
 
-SvxHyperlinkItem::SvxHyperlinkItem( TypedWhichId<SvxHyperlinkItem> _nWhich, const OUString& rName, const OUString& rURL,
-                                    const OUString& rTarget, const OUString& rIntName, SvxLinkInsertMode eTyp,
+SvxHyperlinkItem::SvxHyperlinkItem( TypedWhichId<SvxHyperlinkItem> _nWhich, OUString aName, OUString aURL,
+                                    OUString aTarget, OUString aIntName, SvxLinkInsertMode eTyp,
                                     HyperDialogEvent nEvents, SvxMacroTableDtor const *pMacroTbl ):
     SfxPoolItem (_nWhich),
-    sName       (rName),
-    sURL        (rURL),
-    sTarget     (rTarget),
+    sName       (std::move(aName)),
+    sURL        (std::move(aURL)),
+    sTarget     (std::move(aTarget)),
     eType       (eTyp),
-    sIntName (rIntName),
+    sIntName (std::move(aIntName)),
     nMacroEvents (nEvents)
 {
     if (pMacroTbl)

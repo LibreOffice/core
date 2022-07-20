@@ -19,22 +19,23 @@
 
 
 #include <sdr/attribute/sdrlinefilleffectstextattribute.hxx>
+#include <utility>
 
 
 namespace drawinglayer::attribute
 {
         SdrLineFillEffectsTextAttribute::SdrLineFillEffectsTextAttribute(
             const SdrLineAttribute& rLine,
-            const SdrFillAttribute& rFill,
+            SdrFillAttribute aFill,
             const SdrLineStartEndAttribute& rLineStartEnd,
             const SdrShadowAttribute& rShadow,
-            const FillGradientAttribute& rFillFloatTransGradient,
+            FillGradientAttribute aFillFloatTransGradient,
             const SdrTextAttribute& rTextAttribute,
             const SdrGlowAttribute& rGlow,
             sal_Int32 nSoftEdgeRadius)
         :   SdrLineEffectsTextAttribute(rLine, rLineStartEnd, rShadow, rTextAttribute, rGlow, nSoftEdgeRadius),
-            maFill(rFill),
-            maFillFloatTransGradient(rFillFloatTransGradient)
+            maFill(std::move(aFill)),
+            maFillFloatTransGradient(std::move(aFillFloatTransGradient))
         {
         }
 
