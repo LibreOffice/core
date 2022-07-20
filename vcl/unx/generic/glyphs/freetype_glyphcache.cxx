@@ -125,9 +125,11 @@ bool FreetypeFontFile::Map()
             SAL_WARN("vcl.unx.freetype", "mmap of '" << maNativeFileName << "' failed: " << strerror(errno));
             mpFileMap = nullptr;
         }
+        SAL_INFO("vcl.unx.freetype", "Successful mmap of '" << maNativeFileName << "'");
         close( nFile );
     }
-
+    else
+        SAL_INFO("vcl.unx.freetype", "Already mmapped: '" << maNativeFileName << "' (" << mnRefCount << ")");
     return (mpFileMap != nullptr);
 }
 
@@ -139,6 +141,7 @@ void FreetypeFontFile::Unmap()
     if (mpFileMap)
     {
         munmap(mpFileMap, mnFileSize);
+        SAL_INFO("vcl.unx.freetype", "Successful munmap of '" << maNativeFileName << "'");
         mpFileMap = nullptr;
     }
 }
