@@ -400,7 +400,7 @@ bool SvXMLGraphicHelper::ImplGetStreamNames( const OUString& rURLStr,
 
     if( !aURLStr.isEmpty() && aURLStr.indexOf('/')<0 ) // just one token?
     {
-        rPictureStorageName = XML_GRAPHICSTORAGE_NAME;
+        rPictureStorageName = OUString();
         rPictureStreamName = aURLStr;
     }
     else
@@ -449,7 +449,10 @@ SvxGraphicHelperStream_Impl SvXMLGraphicHelper::ImplGetGraphicStream( const OUSt
                                                               const OUString& rPictureStreamName )
 {
     SvxGraphicHelperStream_Impl aRet;
-    aRet.xStorage = ImplGetGraphicStorage( rPictureStorageName );
+    if (!rPictureStorageName.isEmpty())
+        aRet.xStorage = ImplGetGraphicStorage(rPictureStorageName);
+    else
+        aRet.xStorage = mxRootStorage;
 
     sal_Int32 nMode = embed::ElementModes::READ;
     if (SvXMLGraphicHelperMode::Write == meCreateMode)
