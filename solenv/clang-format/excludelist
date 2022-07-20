@@ -6376,7 +6376,6 @@ include/vcl/opengl/OpenGLHelper.hxx
 include/vcl/outdev.hxx
 include/vcl/pdfextoutdevdata.hxx
 include/vcl/pdfwriter.hxx
-include/vcl/pngwrite.hxx
 include/vcl/print.hxx
 include/vcl/prntypes.hxx
 include/vcl/ptrstyle.hxx
@@ -14803,7 +14802,6 @@ vcl/source/filter/jpeg/jpeg.hxx
 vcl/source/filter/jpeg/jpegc.cxx
 vcl/source/filter/jpeg/transupp.c
 vcl/source/filter/jpeg/transupp.h
-vcl/source/filter/png/pngread.cxx
 vcl/source/filter/wmf/emfwr.cxx
 vcl/source/filter/wmf/emfwr.hxx
 vcl/source/filter/wmf/wmf.cxx
