@@ -476,8 +476,8 @@ public:
 
     SdrUndoObjStrAttr( SdrObject& rNewObj,
                        const ObjStrAttrType eObjStrAttr,
-                       const OUString& sOldStr,
-                       const OUString& sNewStr);
+                       OUString sOldStr,
+                       OUString sNewStr);
 
     virtual void Undo() override;
     virtual void Redo() override;

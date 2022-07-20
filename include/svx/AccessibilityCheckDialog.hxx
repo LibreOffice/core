@@ -48,7 +48,7 @@ private:
 
 public:
     AccessibilityCheckDialog(weld::Window* pParent,
-                             sfx::AccessibilityIssueCollection const& rIssueCollection);
+                             sfx::AccessibilityIssueCollection rIssueCollection);
     virtual ~AccessibilityCheckDialog() override;
 };
 

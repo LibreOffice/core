@@ -32,6 +32,7 @@
 #include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <mutex>
 #include <o3tl/sorted_vector.hxx>
@@ -802,9 +803,9 @@ namespace svxform
             const OUString   m_sScriptCode;
 
         public:
-            NewStyleUNOScript( SfxObjectShell& _rObjectShell, const OUString& _rScriptCode )
+            NewStyleUNOScript( SfxObjectShell& _rObjectShell, OUString _aScriptCode )
                 :m_rObjectShell( _rObjectShell )
-                ,m_sScriptCode( _rScriptCode )
+                ,m_sScriptCode(std::move( _aScriptCode ))
             {
             }
 

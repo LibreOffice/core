@@ -68,7 +68,7 @@ class SVXCORE_DLLPUBLIC SdrLayer
     bool mbLockedODF; // corresponds to ODF draw:protected
     SdrLayerID nID;
 
-    SdrLayer(SdrLayerID nNewID, const OUString& rNewName);
+    SdrLayer(SdrLayerID nNewID, OUString aNewName);
 
 public:
     bool operator==(const SdrLayer& rCmpLayer) const;

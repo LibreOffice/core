@@ -51,6 +51,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <svx/e3dsceneupdater.hxx>
+#include <utility>
 
 using namespace com::sun::star;
 
@@ -1002,9 +1003,9 @@ struct E3dDepthNeighbour
     E3dExtrudeObj*              mpObj;
     basegfx::B2DPolyPolygon     maPreparedPolyPolygon;
 
-    E3dDepthNeighbour(E3dExtrudeObj* pObj, basegfx::B2DPolyPolygon const & rPreparedPolyPolygon)
+    E3dDepthNeighbour(E3dExtrudeObj* pObj, basegfx::B2DPolyPolygon aPreparedPolyPolygon)
     :   mpObj(pObj),
-        maPreparedPolyPolygon(rPreparedPolyPolygon)
+        maPreparedPolyPolygon(std::move(aPreparedPolyPolygon))
     {
     }
 };

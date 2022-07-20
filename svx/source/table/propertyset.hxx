@@ -61,7 +61,7 @@ private:
 class FastPropertySet : public ::cppu::WeakAggImplHelper3<  css::beans::XPropertySet, css::beans::XMultiPropertySet, css::beans::XFastPropertySet >
 {
 public:
-    explicit FastPropertySet( const rtl::Reference< FastPropertySetInfo >& xInfo );
+    explicit FastPropertySet( rtl::Reference< FastPropertySetInfo > xInfo );
     virtual ~FastPropertySet() override;
 
     // XPropertySet

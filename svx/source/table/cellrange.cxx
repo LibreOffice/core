@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <utility>
 
 #include "cellrange.hxx"
 
@@ -32,8 +33,8 @@ using namespace ::com::sun::star::table;
 
 namespace sdr::table {
 
-CellRange::CellRange( const TableModelRef & xTable, sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom )
-: mxTable( xTable )
+CellRange::CellRange( TableModelRef xTable, sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom )
+: mxTable(std::move( xTable ))
 , mnLeft(nLeft)
 , mnTop(nTop)
 , mnRight(nRight)

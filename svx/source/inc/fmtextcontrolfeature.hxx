@@ -55,7 +55,7 @@ namespace svx
         */
         FmTextControlFeature(
             const css::uno::Reference< css::frame::XDispatch >& _rxDispatcher,
-            const css::util::URL& _rFeatureURL,
+            css::util::URL _aFeatureURL,
             SfxSlotId _nId,
             FmTextControlShell* _pInvalidator
         );

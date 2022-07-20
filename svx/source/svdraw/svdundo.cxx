@@ -40,6 +40,7 @@
 #include <svx/e3dsceneupdater.hxx>
 #include <svx/svdviter.hxx>
 #include <svx/svdotable.hxx> // #i124389#
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svx/svdoashp.hxx>
@@ -1225,12 +1226,12 @@ bool SdrUndoObjSetText::CanSdrRepeat(SdrView& rView) const
 // Undo/Redo for setting object's name (#i73249#)
 SdrUndoObjStrAttr::SdrUndoObjStrAttr( SdrObject& rNewObj,
                                       const ObjStrAttrType eObjStrAttr,
-                                      const OUString& sOldStr,
-                                      const OUString& sNewStr)
+                                      OUString sOldStr,
+                                      OUString sNewStr)
     : SdrUndoObj( rNewObj )
     , meObjStrAttr( eObjStrAttr )
-    , msOldStr( sOldStr )
-    , msNewStr( sNewStr )
+    , msOldStr(std::move( sOldStr ))
+    , msNewStr(std::move( sNewStr ))
 {
 }
 

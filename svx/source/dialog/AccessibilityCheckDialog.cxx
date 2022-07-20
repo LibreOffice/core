@@ -11,6 +11,7 @@
 #include <svx/AccessibilityCheckDialog.hxx>
 
 #include <sfx2/AccessibilityIssue.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 
 namespace svx
@@ -35,10 +36,10 @@ IMPL_LINK_NOARG(AccessibilityCheckEntry, GotoButtonClicked, weld::Button&, void)
 }
 
 AccessibilityCheckDialog::AccessibilityCheckDialog(
-    weld::Window* pParent, sfx::AccessibilityIssueCollection const& rIssueCollection)
+    weld::Window* pParent, sfx::AccessibilityIssueCollection aIssueCollection)
     : GenericDialogController(pParent, "svx/ui/accessibilitycheckdialog.ui",
                               "AccessibilityCheckDialog")
-    , m_aIssueCollection(rIssueCollection)
+    , m_aIssueCollection(std::move(aIssueCollection))
     , m_xAccessibilityCheckBox(m_xBuilder->weld_box("accessibilityCheckBox"))
 {
     sal_Int32 i = 0;

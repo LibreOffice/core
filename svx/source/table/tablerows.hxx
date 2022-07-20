@@ -30,7 +30,7 @@ namespace sdr::table
 class TableRows : public ::cppu::WeakAggImplHelper1<css::table::XTableRows>
 {
 public:
-    explicit TableRows(const TableModelRef& xTableModel);
+    explicit TableRows(TableModelRef xTableModel);
     virtual ~TableRows() override;
 
     void dispose();

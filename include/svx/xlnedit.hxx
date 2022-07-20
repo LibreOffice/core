@@ -35,8 +35,8 @@ class SVXCORE_DLLPUBLIC XLineEndItem final : public NameOrIndex
 public:
             static SfxPoolItem* CreateDefault();
             XLineEndItem(sal_Int32 nIndex = -1);
-            XLineEndItem(const OUString& rName, const basegfx::B2DPolyPolygon& rPolyPolygon);
-            XLineEndItem(const basegfx::B2DPolyPolygon& rPolyPolygon);
+            XLineEndItem(const OUString& rName, basegfx::B2DPolyPolygon aPolyPolygon);
+            XLineEndItem(basegfx::B2DPolyPolygon aPolyPolygon);
             XLineEndItem(const XLineEndItem& rItem);
 
     virtual bool            operator==(const SfxPoolItem& rItem) const override;

@@ -26,6 +26,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svditer.hxx>
 #include <editeng/unoprnms.hxx>
+#include <utility>
 
 using namespace com::sun::star;
 
@@ -125,8 +126,8 @@ void UpdateSdrObject(svx::Theme* pTheme, SdrObject* pObject)
 namespace svx
 {
 
-ColorSet::ColorSet(OUString const & aColorSetName)
-    : maColorSetName(aColorSetName)
+ColorSet::ColorSet(OUString aColorSetName)
+    : maColorSetName(std::move(aColorSetName))
     , maColors(12)
 {}
 
@@ -233,8 +234,8 @@ const ColorSet& ColorSets::getColorSet(std::u16string_view rName)
     return maColorSets[0];
 }
 
-Theme::Theme(const OUString& rName)
-    : maName(rName)
+Theme::Theme(OUString aName)
+    : maName(std::move(aName))
 {
 }
 

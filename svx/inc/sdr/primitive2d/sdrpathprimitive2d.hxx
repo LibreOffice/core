@@ -57,10 +57,10 @@ namespace drawinglayer::primitive2d
             // a 2nd version without can be defined that just does not set the
             // maUnitDefinitionPolyPolygon or set equal to UnitPolyPolygon
             SdrPathPrimitive2D(
-                const basegfx::B2DHomMatrix& rTransform,
+                basegfx::B2DHomMatrix aTransform,
                 const attribute::SdrLineFillEffectsTextAttribute& rSdrLFSTAttribute,
-                const basegfx::B2DPolyPolygon& rUnitPolyPolygon,
-                const basegfx::B2DPolyPolygon& rUnitDefinitionPolyPolygon);
+                basegfx::B2DPolyPolygon aUnitPolyPolygon,
+                basegfx::B2DPolyPolygon aUnitDefinitionPolyPolygon);
 
             // data access
             const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }

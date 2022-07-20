@@ -54,10 +54,10 @@ namespace drawinglayer::primitive2d
             SdrCustomShapePrimitive2D(
                 const attribute::SdrEffectsTextAttribute& rSdrSTAttribute,
                 Primitive2DContainer&& rSubPrimitives,
-                const basegfx::B2DHomMatrix& rTextBox,
+                basegfx::B2DHomMatrix aTextBox,
                 bool bWordWrap,
                 bool b3DShape,
-                const basegfx::B2DHomMatrix& rObjectMatrix);
+                basegfx::B2DHomMatrix aObjectMatrix);
 
             // data access
             const attribute::SdrEffectsTextAttribute& getSdrSTAttribute() const { return maSdrSTAttribute; }

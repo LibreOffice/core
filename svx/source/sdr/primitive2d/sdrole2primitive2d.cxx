@@ -24,6 +24,7 @@
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <utility>
 
 
 using namespace com::sun::star;
@@ -33,10 +34,10 @@ namespace drawinglayer::primitive2d
 {
         SdrOle2Primitive2D::SdrOle2Primitive2D(
             Primitive2DContainer&& rOLEContent,
-            const basegfx::B2DHomMatrix& rTransform,
+            basegfx::B2DHomMatrix aTransform,
             const attribute::SdrLineFillEffectsTextAttribute& rSdrLFSTAttribute)
         :   maOLEContent(std::move(rOLEContent)),
-            maTransform(rTransform),
+            maTransform(std::move(aTransform)),
             maSdrLFSTAttribute(rSdrLFSTAttribute)
         {
         }

@@ -31,6 +31,7 @@
 #include <sal/log.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <utility>
 
 using namespace css;
 using namespace css::uno;
@@ -390,7 +391,7 @@ FieldUnit ParaPropertyPanel::GetCurrentUnit( SfxItemState eState, const SfxPoolI
 ParaPropertyPanel::ParaPropertyPanel(weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings,
-    const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
+    css::uno::Reference<css::ui::XSidebar> xSidebar)
     : PanelLayout(pParent, "ParaPropertyPanel", "svx/ui/sidebarparagraph.ui"),
       //Alignment
       mxTBxHorzAlign(m_xBuilder->weld_toolbar("horizontalalignment")),
@@ -427,7 +428,7 @@ ParaPropertyPanel::ParaPropertyPanel(weld::Widget* pParent,
       maULSpaceControl (SID_ATTR_PARA_ULSPACE, *pBindings,*this),
       m_aMetricCtl (SID_ATTR_METRIC, *pBindings,*this),
       mpBindings(pBindings),
-      mxSidebar(rxSidebar)
+      mxSidebar(std::move(xSidebar))
 {
     // tdf#130197 We want to give this toolbar a width as if it had 5 entries
     // (the parent grid has homogeneous width set so both columns will have the

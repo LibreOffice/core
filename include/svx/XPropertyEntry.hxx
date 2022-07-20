@@ -30,7 +30,7 @@ private:
     BitmapEx maUiBitmap;
 
 protected:
-    XPropertyEntry(const OUString& rPropEntryName);
+    XPropertyEntry(OUString aPropEntryName);
 
     XPropertyEntry(XPropertyEntry const&) = default;
     XPropertyEntry(XPropertyEntry&&) = default;

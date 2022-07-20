@@ -21,6 +21,7 @@
 #include <svtools/popupmenucontrollerbase.hxx>
 #include <svx/SmartTagItem.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
+#include <utility>
 #include <vcl/commandinfoprovider.hxx>
 
 const sal_uInt16 MN_ST_INSERT_START = 500;
@@ -50,9 +51,9 @@ private:
         css::uno::Reference< css::smarttags::XSmartTagAction > m_xAction;
         css::uno::Reference< css::container::XStringKeyMap > m_xSmartTagProperties;
         sal_uInt32 m_nActionID;
-        InvokeAction( css::uno::Reference< css::smarttags::XSmartTagAction > const & xAction,
-                      css::uno::Reference< css::container::XStringKeyMap > const & xSmartTagProperties,
-                      sal_uInt32 nActionID ) : m_xAction( xAction ), m_xSmartTagProperties( xSmartTagProperties ), m_nActionID( nActionID ) {}
+        InvokeAction( css::uno::Reference< css::smarttags::XSmartTagAction > xAction,
+                      css::uno::Reference< css::container::XStringKeyMap > xSmartTagProperties,
+                      sal_uInt32 nActionID ) : m_xAction(std::move( xAction )), m_xSmartTagProperties(std::move( xSmartTagProperties )), m_nActionID( nActionID ) {}
     };
     std::vector< InvokeAction > m_aInvokeActions;
     std::unique_ptr< const SvxSmartTagItem > m_pSmartTagItem;

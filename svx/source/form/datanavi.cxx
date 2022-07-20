@@ -39,6 +39,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
+#include <utility>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/weld.hxx>
@@ -2514,11 +2515,11 @@ namespace svxform
     }
 
     AddConditionDialog::AddConditionDialog(weld::Window* pParent,
-        const OUString& _rPropertyName,
+        OUString _aPropertyName,
         const Reference< XPropertySet >& _rPropSet)
         : GenericDialogController(pParent, "svx/ui/addconditiondialog.ui", "AddConditionDialog")
         , m_aResultIdle("svx AddConditionDialog m_aResultIdle")
-        , m_sPropertyName(_rPropertyName)
+        , m_sPropertyName(std::move(_aPropertyName))
         , m_xBinding(_rPropSet)
         , m_xConditionED(m_xBuilder->weld_text_view("condition"))
         , m_xResultWin(m_xBuilder->weld_text_view("result"))

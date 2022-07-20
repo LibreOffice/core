@@ -61,7 +61,7 @@ public:
             The shape from which properties will be extracted by later calls
             to <member>addProperty</member>.
     */
-    DescriptionGenerator(const css::uno::Reference<css::drawing::XShape>& xShape);
+    DescriptionGenerator(css::uno::Reference<css::drawing::XShape> xShape);
 
     ~DescriptionGenerator();
 

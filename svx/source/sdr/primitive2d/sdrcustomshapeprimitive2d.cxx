@@ -24,6 +24,7 @@
 #include <sdr/primitive2d/sdrdecompositiontools.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <drawinglayer/attribute/sdrlineattribute.hxx>
+#include <utility>
 
 
 using namespace com::sun::star;
@@ -90,16 +91,16 @@ namespace drawinglayer::primitive2d
         SdrCustomShapePrimitive2D::SdrCustomShapePrimitive2D(
             const attribute::SdrEffectsTextAttribute& rSdrSTAttribute,
             Primitive2DContainer&& rSubPrimitives,
-            const basegfx::B2DHomMatrix& rTextBox,
+            basegfx::B2DHomMatrix aTextBox,
             bool bWordWrap,
             bool b3DShape,
-            const basegfx::B2DHomMatrix& rTransform)
+            basegfx::B2DHomMatrix aTransform)
         :   maSdrSTAttribute(rSdrSTAttribute),
             maSubPrimitives(std::move(rSubPrimitives)),
-            maTextBox(rTextBox),
+            maTextBox(std::move(aTextBox)),
             mbWordWrap(bWordWrap),
             mb3DShape(b3DShape),
-            maTransform(rTransform)
+            maTransform(std::move(aTransform))
         {
         }
 
