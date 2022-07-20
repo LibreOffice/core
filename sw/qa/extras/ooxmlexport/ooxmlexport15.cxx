@@ -475,6 +475,36 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf98000_changePageStyle)
     CPPUNIT_ASSERT_MESSAGE("Different page1/page2 styles", sPageOneStyle != sPageTwoStyle);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf145998_unnecessaryPageStyles)
+{
+    loadAndReload("tdf145998_unnecessaryPageStyles.odt");
+
+    // Sanity check - always good to test when dealing with page styles and breaks.
+    CPPUNIT_ASSERT_EQUAL(5, getPages());
+
+    // Page Style should be explicitly mentioned - otherwise it would be a "follow" style
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(2, "2"), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(uno::Any() != xPara->getPropertyValue("PageDescName"));
+    // CPPUNIT_ASSERT_EQUAL(OUString("First Page header"),
+    //                      parseDump("/root/page[2]/header/txt"));
+
+    // Page Style is converted into a page break instead. Still shows "first" header.
+    xPara.set(getParagraph(3, "3"), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(), xPara->getPropertyValue("PageDescName"));
+    // CPPUNIT_ASSERT_EQUAL(OUString("Default page style - first page style"),
+    //                      parseDump("/root/page[3]/header/txt"));
+
+    // Page Style is converted into a page break instead. Shows the "normal" header.
+    xPara.set(getParagraph(5, "4"), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(), xPara->getPropertyValue("PageDescName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Default page style"),
+                         parseDump("/root/page[4]/header/txt"));
+
+    // Page Style is retained (with wrong header) in order to preserve page re-numbering.
+    xPara.set(getParagraph(7, "1"), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(uno::Any() != xPara->getPropertyValue("PageDescName"));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf135216_evenOddFooter)
 {
     loadAndReload("tdf135216_evenOddFooter.odt");
