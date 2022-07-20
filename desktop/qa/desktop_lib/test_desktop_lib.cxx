@@ -698,7 +698,7 @@ void DesktopLOKTest::testSaveAsJsonOptions()
     aMemory.WriteStream(aFile);
     std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
-        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize());
+        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize(), OString());
     CPPUNIT_ASSERT(pPdfDocument);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 2

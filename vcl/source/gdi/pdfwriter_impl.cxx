@@ -8659,16 +8659,34 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
         aLine.append(nLength);
 
         aLine.append(">>\nstream\n");
-        // Copy the original page streams to the form XObject stream.
-        aLine.append(static_cast<const char*>(aStream.GetData()), aStream.GetSize());
-        aLine.append("\nendstream\nendobj\n\n");
+        if (g_bDebugDisableCompression)
+        {
+            emitComment("PDFWriterImpl::writeReferenceXObject, WrappedFormObject");
+        }
         if (!updateObject(nWrappedFormObject))
             return;
+        if (!writeBuffer(aLine.getStr(), aLine.getLength()))
+            return;
+        aLine.setLength(0);
+
+        checkAndEnableStreamEncryption(nWrappedFormObject);
+        // Copy the original page streams to the form XObject stream.
+        aLine.append(static_cast<const char*>(aStream.GetData()), aStream.GetSize());
+        if (!writeBuffer(aLine.getStr(), aLine.getLength()))
+            return;
+        aLine.setLength(0);
+        disableStreamEncryption();
+
+        aLine.append("\nendstream\nendobj\n\n");
         if (!writeBuffer(aLine.getStr(), aLine.getLength()))
             return;
     }
 
     OStringBuffer aLine;
+    if (g_bDebugDisableCompression)
+    {
+        emitComment("PDFWriterImpl::writeReferenceXObject, FormObject");
+    }
     if (!updateObject(rEmit.m_nFormObject))
         return;
 
@@ -8747,7 +8765,17 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
     aLine.append(aStream.getLength());
 
     aLine.append(">>\nstream\n");
+    if (!writeBuffer(aLine.getStr(), aLine.getLength()))
+        return;
+    aLine.setLength(0);
+
+    checkAndEnableStreamEncryption(rEmit.m_nFormObject);
     aLine.append(aStream.getStr());
+    if (!writeBuffer(aLine.getStr(), aLine.getLength()))
+        return;
+    aLine.setLength(0);
+    disableStreamEncryption();
+
     aLine.append("\nendstream\nendobj\n\n");
     CHECK_RETURN2(writeBuffer(aLine.getStr(), aLine.getLength()));
 }
