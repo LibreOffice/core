@@ -34,6 +34,24 @@
       "parentUuid": "473fa172_c32a9172",
       "revId": "65f1903921c448da61733ca0d47c2ffc862b201d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26a8441b_31369aba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-07-20T10:29:02Z",
+      "side": 1,
+      "message": "\u003e Should the ones in sequentialassign.cxx be removed too?\n\nI would leave compilerplugins/clang/store/sequentialassign.cxx alone, as it is a historic plugin that has been moved to the attic (aka \"store\").",
+      "parentUuid": "ed9a6de4_bd600746",
+      "revId": "65f1903921c448da61733ca0d47c2ffc862b201d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
