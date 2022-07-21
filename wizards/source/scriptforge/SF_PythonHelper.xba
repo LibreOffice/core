@@ -826,6 +826,7 @@ Try:
 							Case &quot;Center&quot;
 								If UBound(vArgs) &lt; 0 Then vReturn = vBasicObject.Center() Else vReturn = vBasicObject.Center(vArgs(0))
 							Case &quot;EndExecute&quot;		:	vReturn = vBasicObject.EndExecute(vArgs(0))
+							Case &quot;Execute&quot;			:	vReturn = vBasicObject.Execute(vArgs(0))
 							Case &quot;Resize&quot;			:	vReturn = vBasicObject.Resize(vArgs(0), vArgs(1), vArgs(2), vArgs(3))
 						End Select
 				End Select
