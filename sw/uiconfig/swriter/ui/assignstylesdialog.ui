@@ -266,11 +266,10 @@
                         </child>
                         <child>
                           <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                            <property name="clickable">True</property>
                             <property name="resizable">True</property>
                             <property name="spacing">6</property>
                             <property name="title" translatable="yes" context="assignstylesdialog|stylecolumn">Style</property>
-                            <property name="sort-indicator">True</property>
-                            <property name="sort-column-id">0</property>
                             <child>
                               <object class="GtkCellRendererText" id="cellrenderer1"/>
                               <attributes>
