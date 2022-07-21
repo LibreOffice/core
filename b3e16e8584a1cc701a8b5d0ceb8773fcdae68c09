@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c08b604c_1e99af05",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2022-07-21T14:32:36Z",
+      "side": 1,
+      "message": "Now it asks for password when selecting Edit mode and only accepts the correct password.",
+      "revId": "b3e16e8584a1cc701a8b5d0ceb8773fcdae68c09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
