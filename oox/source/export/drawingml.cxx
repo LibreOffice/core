@@ -5644,8 +5644,7 @@ OString DrawingML::WriteWdpPicture( const OUString& rFileId, const Sequence< sal
                              oox::getRelationship(Relationship::HDPHOTO),
                              OUStringBuffer()
                              .appendAscii( GetRelationCompPrefix() )
-                             .append( sFileName )
-                             .makeStringAndClear() );
+                             .append( sFileName ) );
 
     maWdpCache[rFileId] = sId;
     return OUStringToOString( sId, RTL_TEXTENCODING_UTF8 );

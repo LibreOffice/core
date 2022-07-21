@@ -523,7 +523,7 @@ void StringHelper::appendIndex( OUStringBuffer& rStr, sal_Int64 nIdx )
 {
     OUStringBuffer aToken;
     appendDec( aToken, nIdx );
-    rStr.append( '[' ).append( aToken.makeStringAndClear() ).append( ']' );
+    rStr.append( '[' ).append( aToken ).append( ']' );
 }
 
 std::u16string_view StringHelper::getToken( std::u16string_view rData, sal_Int32& rnPos, sal_Unicode cSep )
@@ -575,7 +575,7 @@ OUString lclTrimQuotedStringList( const OUString& rStr )
             }
             while( (nPos < nLen) && (rStr[ nPos ] != OOX_DUMP_CFG_QUOTE) );
             // add token, seek to list separator, ignore text following closing quote
-            aBuffer.append( aToken.makeStringAndClear() );
+            aBuffer.append( aToken );
             nPos = lclIndexOf( rStr, OOX_DUMP_CFG_LISTSEP, nPos );
             if( nPos < nLen )
                 aBuffer.append( OOX_DUMP_LF );
@@ -1100,7 +1100,7 @@ OUString FlagsList::implGetName( const Config& /*rCfg*/, sal_Int64 nKey ) const
         aUnknown.append( OOX_DUMP_ITEMSEP );
         StringHelper::appendShortHex( aUnknown, nKey );
         StringHelper::enclose( aUnknown, '(', ')' );
-        StringHelper::appendToken( aName, aUnknown.makeStringAndClear() );
+        StringHelper::appendToken( aName, aUnknown );
     }
     return aName.makeStringAndClear();
 }
@@ -1203,14 +1203,14 @@ OUString CombiList::implGetName( const Config& rCfg, sal_Int64 nKey ) const
                 case DATATYPE_DOUBLE:   StringHelper::appendValue( aValue, static_cast< double >( nSValue ), rItemFmt.meFmtType );      break;
                 default:;
             }
-            StringHelper::appendToken( aItem, aValue.makeStringAndClear(), OOX_DUMP_ITEMSEP );
+            StringHelper::appendToken( aItem, aValue, OOX_DUMP_ITEMSEP );
             if( !rItemFmt.maListName.isEmpty() )
             {
                 OUString aValueName = rCfg.getName( rItemFmt.maListName, static_cast< sal_Int64 >( nUValue ) );
                 StringHelper::appendToken( aItem, aValueName, OOX_DUMP_ITEMSEP );
             }
             StringHelper::enclose( aItem, '(', ')' );
-            StringHelper::appendToken( aName, aItem.makeStringAndClear() );
+            StringHelper::appendToken( aName, aItem );
             setFlag( nFound, nMask );
         }
     }
