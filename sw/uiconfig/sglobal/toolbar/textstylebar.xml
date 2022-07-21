@@ -66,7 +66,7 @@
  <toolbar:toolbaritem xlink:href=".uno:SubScript" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FontColor"/>
- <toolbar:toolbaritem xlink:href=".uno:BackColor"/>
+ <toolbar:toolbaritem xlink:href=".uno:CharBackColor"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ResetAttributes"/>
  <toolbar:toolbarseparator/>

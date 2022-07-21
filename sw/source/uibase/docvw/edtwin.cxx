@@ -5117,6 +5117,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                 case SID_ATTR_CHAR_COLOR_EXT:
                     nId = RES_CHRATR_COLOR;
                     break;
+                case SID_ATTR_CHAR_BACK_COLOR:
                 case SID_ATTR_CHAR_COLOR_BACKGROUND:
                     nId = RES_CHRATR_BACKGROUND;
                     break;
