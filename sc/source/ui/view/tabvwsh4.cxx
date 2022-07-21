@@ -159,7 +159,8 @@ void ScTabViewShell::Activate(bool bMDI)
             }
         }
 
-        UpdateInputHandler( /*bForce=*/ true, /*bStopEditing=*/ !comphelper::LibreOfficeKit::isActive() );
+        bool isLOK = comphelper::LibreOfficeKit::isActive();
+        UpdateInputHandler( /*bForce=*/ !isLOK, /*bStopEditing=*/ !isLOK );
 
         if ( bFirstActivate )
         {
