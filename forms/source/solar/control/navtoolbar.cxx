@@ -91,7 +91,6 @@ namespace frm
             if ( pAsciiCommandName != nullptr )
                 return ".uno:" + OUString::createFromAscii( pAsciiCommandName );
 
-            OSL_FAIL( "lcl_getCommandURL: unknown FormFeature!" );
             return OUString();
         }
     }
@@ -279,13 +278,12 @@ namespace frm
             {   // it's _not_ a separator
 
                 // insert the entry
-                m_pToolbar->InsertItem( ToolBoxItemId(pSupportedFeatures->nId), OUString(), pSupportedFeatures->bRepeat ? ToolBoxItemBits::REPEAT : ToolBoxItemBits::NONE );
+                OUString sCommandURL( lcl_getCommandURL( pSupportedFeatures->nId ) );
+                m_pToolbar->InsertItem( ToolBoxItemId(pSupportedFeatures->nId), OUString(), sCommandURL, pSupportedFeatures->bRepeat ? ToolBoxItemBits::REPEAT : ToolBoxItemBits::NONE );
                 m_pToolbar->SetQuickHelpText( ToolBoxItemId(pSupportedFeatures->nId), OUString() );  // TODO
 
                 if ( !isArtificialItem( pSupportedFeatures->nId ) )
                 {
-                    OUString sCommandURL( lcl_getCommandURL( pSupportedFeatures->nId ) );
-                    m_pToolbar->SetItemCommand( ToolBoxItemId(pSupportedFeatures->nId), sCommandURL );
                     auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(sCommandURL, m_sModuleId);
                     m_pToolbar->SetQuickHelpText(ToolBoxItemId(pSupportedFeatures->nId),
                             vcl::CommandInfoProvider::GetLabelForCommand(aProperties));

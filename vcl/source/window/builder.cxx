@@ -2093,10 +2093,9 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             {
                 nItemId = ToolBoxItemId(pToolBox->GetItemCount() + 1);
                     //TODO: ImplToolItems::size_type -> sal_uInt16!
-                pToolBox->InsertItem(nItemId, extractLabel(rMap), nBits);
                 if (aCommand.isEmpty() && !m_bLegacy)
                     aCommand = OUString::fromUtf8(id);
-                pToolBox->SetItemCommand(nItemId, aCommand);
+                pToolBox->InsertItem(nItemId, extractLabel(rMap), aCommand, nBits);
             }
 
             pToolBox->SetHelpId(nItemId, m_sHelpRoot + id);

@@ -1111,8 +1111,7 @@ void SalInstanceToolbar::set_item_menu(const OString& rIdent, weld::Menu* pMenu)
 void SalInstanceToolbar::insert_item(int pos, const OUString& rId)
 {
     ToolBoxItemId nId(pos);
-    m_xToolBox->InsertItem(nId, rId, ToolBoxItemBits::ICON_ONLY);
-    m_xToolBox->SetItemCommand(nId, rId);
+    m_xToolBox->InsertItem(nId, OUString(), rId, ToolBoxItemBits::ICON_ONLY);
 }
 
 void SalInstanceToolbar::insert_separator(int pos, const OUString& /*rId*/)

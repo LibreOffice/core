@@ -119,8 +119,9 @@ ImplToolItem::ImplToolItem( ToolBoxItemId nItemId, Image aImage,
 }
 
 ImplToolItem::ImplToolItem( ToolBoxItemId nItemId, OUString aText,
-                            ToolBoxItemBits nItemBits ) :
-    maText(std::move( aText ))
+                            OUString aCommand, ToolBoxItemBits nItemBits ) :
+    maText(std::move( aText )),
+    maCommandStr(std::move( aCommand ))
 {
     init(nItemId, nItemBits, false);
 }
@@ -417,7 +418,8 @@ void ToolBox::InsertItem( ToolBoxItemId nItemId, const Image& rImage, const OUSt
     CallEventListeners( VclEventId::ToolboxItemAdded, reinterpret_cast< void* >( nNewPos ) );
 }
 
-void ToolBox::InsertItem( ToolBoxItemId nItemId, const OUString& rText, ToolBoxItemBits nBits, ImplToolItems::size_type nPos )
+void ToolBox::InsertItem( ToolBoxItemId nItemId, const OUString& rText, const OUString& rCommand, ToolBoxItemBits nBits,
+                          ImplToolItems::size_type nPos )
 {
     SAL_WARN_IF( !nItemId, "vcl", "ToolBox::InsertItem(): ItemId == 0" );
     SAL_WARN_IF( GetItemPos( nItemId ) != ITEM_NOTFOUND, "vcl",
@@ -425,7 +427,7 @@ void ToolBox::InsertItem( ToolBoxItemId nItemId, const OUString& rText, ToolBoxI
 
     // create item and add to list
     mpData->m_aItems.insert( (nPos < mpData->m_aItems.size()) ? mpData->m_aItems.begin()+nPos : mpData->m_aItems.end(),
-                             ImplToolItem( nItemId, MnemonicGenerator::EraseAllMnemonicChars(rText), nBits ) );
+                             ImplToolItem( nItemId, MnemonicGenerator::EraseAllMnemonicChars(rText), rCommand, nBits ) );
     mpData->ImplClearLayoutData();
 
     ImplInvalidate( true );
@@ -446,8 +448,8 @@ void ToolBox::InsertItem(const OUString& rCommand, const css::uno::Reference<css
 
     ToolBoxItemId nItemId(GetItemCount() + 1);
         //TODO: ImplToolItems::size_type -> sal_uInt16!
-    InsertItem(nItemId, aImage, aLabel, nBits, nPos);
-    SetItemCommand(nItemId, rCommand);
+    InsertItem(nItemId, aLabel, rCommand, nBits, nPos);
+    SetItemImage(nItemId, aImage);
     SetQuickHelpText(nItemId, aTooltip);
 
     // set the minimal size

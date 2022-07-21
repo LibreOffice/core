@@ -71,6 +71,7 @@ struct ImplToolItem
                         ImplToolItem( ToolBoxItemId nItemId, Image aImage,
                                       ToolBoxItemBits nItemBits );
                         ImplToolItem( ToolBoxItemId nItemId, OUString aTxt,
+                                      OUString aCommand,
                                       ToolBoxItemBits nItemBits );
                         ImplToolItem( ToolBoxItemId nItemId, Image aImage,
                                       OUString aTxt,

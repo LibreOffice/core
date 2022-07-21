@@ -1922,7 +1922,7 @@ public:
 
         Help::EnableBalloonHelp();
         mpToolbox->SetHelpText("Help text");
-        mpToolbox->InsertItem(ToolBoxItemId(0), "Toolbar item");
+        mpToolbox->InsertItem(ToolBoxItemId(0), "Toolbar item", OUString());
         mpToolbox->SetQuickHelpText(ToolBoxItemId(0), "This is a tooltip popup");
         mpToolbox->InsertSeparator();
         mpToolbox->Show();

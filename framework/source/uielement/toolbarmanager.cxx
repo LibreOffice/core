@@ -221,8 +221,7 @@ public:
                             const OUString& rLabel,
                             ToolBoxItemBits nItemBits) override
     {
-        m_pToolBar->InsertItem( nId, rLabel, nItemBits );
-        m_pToolBar->SetItemCommand( nId, rCommandURL );
+        m_pToolBar->InsertItem( nId, rLabel, rCommandURL, nItemBits );
         m_pToolBar->SetQuickHelpText(nId, rTooltip);
         m_pToolBar->EnableItem( nId );
         m_pToolBar->SetItemState( nId, TRISTATE_FALSE );
@@ -1525,7 +1524,7 @@ void ToolBarManager::FillAddonToolbar( const Sequence< Sequence< PropertyValue >
             }
             else
             {
-                m_pToolBar->InsertItem( nId, aTitle );
+                m_pToolBar->InsertItem( nId, aTitle, aURL );
 
                 OUString aShortcut(vcl::CommandInfoProvider::GetCommandShortcut(aURL, m_xFrame));
                 if (!aShortcut.isEmpty())
@@ -1536,7 +1535,6 @@ void ToolBarManager::FillAddonToolbar( const Sequence< Sequence< PropertyValue >
                 pRuntimeItemData->aControlType = aControlType;
                 pRuntimeItemData->nWidth = nWidth;
                 m_pToolBar->SetItemData( nId, pRuntimeItemData );
-                m_pToolBar->SetItemCommand( nId, aURL );
 
                 // Fill command map. It stores all our commands and from what
                 // image manager we got our image. So we can decide if we have to use an
@@ -1583,8 +1581,7 @@ void ToolBarManager::FillOverflowToolbar( ToolBox const * pParent )
             }
 
             const OUString aCommandURL( pParent->GetItemCommand( nId ) );
-            m_pToolBar->InsertItem( nId, pParent->GetItemText( nId ) );
-            m_pToolBar->SetItemCommand( nId, aCommandURL );
+            m_pToolBar->InsertItem( nId, pParent->GetItemText( nId ), aCommandURL );
             m_pToolBar->SetQuickHelpText( nId, pParent->GetQuickHelpText( nId ) );
 
             // Handle possible add-on controls.

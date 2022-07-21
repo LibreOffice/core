@@ -78,7 +78,6 @@ static void CreateNotebookBarToolBox(vcl::Window* pNotebookbarToolBox,
     Image sImage;
     pToolbox->InsertItem(aAddonNotebookBarItem.sCommandURL, m_xFrame, ToolBoxItemBits::NONE, aSize);
     nItemId = pToolbox->GetItemId(aAddonNotebookBarItem.sCommandURL);
-    pToolbox->SetItemCommand(nItemId, aAddonNotebookBarItem.sCommandURL);
     pToolbox->SetQuickHelpText(nItemId, aAddonNotebookBarItem.sLabel);
 
     if (nIter < aImageVec.size())

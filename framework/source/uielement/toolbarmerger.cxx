@@ -630,8 +630,7 @@ void ToolBarMerger::CreateToolbarItem( ToolBox* pToolbar, ToolBox::ImplToolItems
 {
     assert(pToolbar->GetItemData(nItemId) == nullptr); // that future would contain a double free
 
-    pToolbar->InsertItem( nItemId, rItem.aLabel, ToolBoxItemBits::NONE, nPos );
-    pToolbar->SetItemCommand( nItemId, rItem.aCommandURL );
+    pToolbar->InsertItem( nItemId, rItem.aLabel, rItem.aCommandURL, ToolBoxItemBits::NONE, nPos );
     pToolbar->SetQuickHelpText( nItemId, rItem.aLabel );
     pToolbar->SetItemText( nItemId, rItem.aLabel );
     pToolbar->EnableItem( nItemId );
