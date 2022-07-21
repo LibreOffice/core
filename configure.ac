@@ -288,9 +288,9 @@ dnl checks build and host OSes
 dnl do this before argument processing to allow for platform dependent defaults
 dnl ===================================================================
 
-# Check for WSL (version 2, at least). But if --host is explicitly specified (to really do build for
+# Check for WSL. But if --host is explicitly specified (to really do build for
 # Linux on WSL) trust that.
-if test -z "$host" -a -z "$build" -a "`wslsys -v 2>/dev/null`" != ""; then
+if test -z "$host" -a -z "$build" -a "$(uname -r | grep -i Microsoft 2>/dev/null)" != ""; then
     ac_cv_host="x86_64-pc-wsl"
     ac_cv_host_cpu="x86_64"
     ac_cv_host_os="wsl"
