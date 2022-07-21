@@ -27,11 +27,11 @@ public:
 DECLARE_ODFEXPORT_TEST(testTdf52065_centerTabs, "testTdf52065_centerTabs.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    sal_Int32 nTabStop = parseDump("//body/txt[4]/Text[3]", "nWidth").toInt32();
+    sal_Int32 nTabStop = parseDump("//body/txt[4]/SwParaPortion/SwLineLayout/child::*[3]", "width").toInt32();
     // Without the fix, the text was unseen, with a tabstop width of 64057. It should be 3057
     CPPUNIT_ASSERT(nTabStop < 4000);
     CPPUNIT_ASSERT(3000 < nTabStop);
-    CPPUNIT_ASSERT_EQUAL(OUString(u"Pečiatka zamestnávateľa"), parseDump("//body/txt[4]/Text[4]", "Portion"));
+    CPPUNIT_ASSERT_EQUAL(OUString(u"Pečiatka zamestnávateľa"), parseDump("//body/txt[4]/SwParaPortion/SwLineLayout/child::*[4]", "portion"));
 }
 
 DECLARE_ODFEXPORT_TEST(testTdf104254_noHeaderWrapping, "tdf104254_noHeaderWrapping.odt")
