@@ -284,7 +284,7 @@ rtl::Reference<Entity> SourceTreeProvider::findEntity(OUString const & name)
         throw FileFormatException( //TODO
             "", "Illegal UNOIDL identifier \"" + name + "\"");
     }
-    OUString uri(uri_ + buf.makeStringAndClear());
+    OUString uri(uri_ + buf);
     rtl::Reference<Entity> ent;
     // Prevent conflicts between foo/ and Foo.idl on case-preserving file
     // systems:
