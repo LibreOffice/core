@@ -1313,8 +1313,6 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
     const SwViewOption* pVOpt = m_pWrtShell->GetViewOptions();
 
     sal_Int64 nX = rRect.Left(), nY = rRect.Top(), nLeft = rVis.Left(), nTop = rVis.Top();
-    sal_Int64 nRight = nLeft;
-    sal_Int64 nBottom = LONG_MIN;
     sal_Int16 nZoomType = static_cast< sal_Int16 >(pVOpt->GetZoomType());
     sal_Int16 nZoomFactor = static_cast < sal_Int16 > (pVOpt->GetZoom());
     bool bViewLayoutBookMode = pVOpt->IsViewLayoutBookMode();
@@ -1323,8 +1321,8 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
 
     bool bSelectedFrame = ( m_pWrtShell->GetSelFrameType() != FrameTypeFlags::NONE ),
              bGotVisibleLeft = false,
-             bGotVisibleTop = false, bGotVisibleRight = false,
-             bGotVisibleBottom = false, bGotZoomType = false,
+             bGotVisibleTop = false,
+             bGotZoomType = false,
              bGotZoomFactor = false, bGotIsSelectedFrame = false,
              bGotViewLayoutColumns = false, bGotViewLayoutBookMode = false,
              bGotHideWhitespace = false,
@@ -1355,18 +1353,6 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
            rValue.Value >>= nTop;
            nTop = o3tl::toTwips(nTop, o3tl::Length::mm100);
            bGotVisibleTop = true;
-        }
-        else if ( rValue.Name == "VisibleRight" )
-        {
-           rValue.Value >>= nRight;
-           nRight = o3tl::toTwips(nRight, o3tl::Length::mm100);
-           bGotVisibleRight = true;
-        }
-        else if ( rValue.Name == "VisibleBottom" )
-        {
-           rValue.Value >>= nBottom;
-           nBottom = o3tl::toTwips(nBottom, o3tl::Length::mm100);
-           bGotVisibleBottom = true;
         }
         else if ( rValue.Name == "ZoomType" )
         {
@@ -1420,16 +1406,9 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
 
     SelectShell();
 
-    if (!bGotVisibleBottom)
-        return;
-
     Point aCursorPos( nX, nY );
-    const tools::Long nAdd = m_pWrtShell->GetViewOptions()->getBrowseMode() ? DOCUMENTBORDER : DOCUMENTBORDER*2;
-    if (nBottom > (m_pWrtShell->GetDocSize().Height()+nAdd) )
-        return;
 
     m_pWrtShell->EnableSmooth( false );
-    const tools::Rectangle aVis( nLeft, nTop, nRight, nBottom );
 
     SvxZoomType eZoom;
     if ( !m_pWrtShell->GetViewOptions()->getBrowseMode() )
@@ -1536,7 +1515,7 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
     {
         if ( bGotVisibleLeft && bGotVisibleTop )
         {
-            Point aTopLeft(aVis.TopLeft());
+            Point aTopLeft(nLeft, nTop);
             // make sure the document is still centered
             const SwTwips lBorder = IsDocumentBorder() ? DOCUMENTBORDER : 2 * DOCUMENTBORDER;
             SwTwips nEditWidth = GetEditWin().GetOutDev()->GetOutputSize().Width();
@@ -1551,8 +1530,6 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
             }
             SetVisArea( aTopLeft );
         }
-        else if (bGotVisibleLeft && bGotVisibleTop && bGotVisibleRight && bGotVisibleBottom )
-            SetVisArea( aVis );
     }
 
     m_pWrtShell->LockView( true );
@@ -1581,6 +1558,9 @@ void SwView::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& rSe
 
     auto visibleTop = convertTwipToMm100 ( rVis.Top() );
     aVector.push_back(comphelper::makePropertyValue("VisibleTop", visibleTop));
+
+    // We don't read VisibleRight and VisibleBottom anymore, but write them,
+    // because older versions rely on their presense to restore position
 
     auto visibleRight = rVis.IsWidthEmpty() ? visibleLeft : convertTwipToMm100 ( rVis.Right() );
     aVector.push_back(comphelper::makePropertyValue("VisibleRight", visibleRight));
