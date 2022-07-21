@@ -34,6 +34,24 @@
       "parentUuid": "017da6e6_d6d6ddce",
       "revId": "eea7038c182cc1f6cd792359053ea2561a200026",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bb07fa4_abe8b133",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-07-21T06:47:18Z",
+      "side": 1,
+      "message": "Ah - thank you, indeed it\u0027s natural *then*, and sorry for the noise.",
+      "parentUuid": "d5a41490_2dedd7ff",
+      "revId": "eea7038c182cc1f6cd792359053ea2561a200026",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
