@@ -342,7 +342,10 @@ void SvRTFParser::ScanText()
                                 if (next>0xFF) // fix for #i43933# and #i35653#
                                 {
                                     if (!aByteString.isEmpty())
-                                        aToken.append( OStringToOUString(aByteString.makeStringAndClear(), GetSrcEncoding()) );
+                                    {
+                                        aToken.append( OStringToOUString(aByteString, GetSrcEncoding()) );
+                                        aByteString.setLength(0);
+                                    }
                                     aToken.append(static_cast<sal_Unicode>(next));
 
                                     continue;
@@ -383,7 +386,10 @@ void SvRTFParser::ScanText()
                         bNextCh = false;
 
                         if (!aByteString.isEmpty())
-                            aToken.append( OStringToOUString(aByteString.makeStringAndClear(), GetSrcEncoding()) );
+                        {
+                            aToken.append( OStringToOUString(aByteString, GetSrcEncoding()) );
+                            aByteString.setLength(0);
+                        }
                     }
                     break;
                 case '\\':
