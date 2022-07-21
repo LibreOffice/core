@@ -43,7 +43,7 @@ using namespace ::formula;
 
 //  map only for PropertySetInfo
 
-static const SfxItemPropertyMapEntry* lcl_GetValidatePropertyMap()
+static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetValidatePropertyMap()
 {
     static const SfxItemPropertyMapEntry aValidatePropertyMap_Impl[] =
     {
@@ -57,7 +57,6 @@ static const SfxItemPropertyMapEntry* lcl_GetValidatePropertyMap()
         { SC_UNONAME_SHOWINP,  0,  cppu::UnoType<bool>::get(),                          0, 0},
         { SC_UNONAME_SHOWLIST, 0,  cppu::UnoType<sal_Int16>::get(),                    0, 0},
         { SC_UNONAME_TYPE,     0,  cppu::UnoType<sheet::ValidationType>::get(),        0, 0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     return aValidatePropertyMap_Impl;
 }

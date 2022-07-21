@@ -38,7 +38,7 @@ class SdXShape : public SvxShapeMaster,
 private:
     SvxShape* mpShape;
     const SvxItemPropertySet*   mpPropSet;
-    const SfxItemPropertyMapEntry* mpMap;
+    o3tl::span<const SfxItemPropertyMapEntry> mpMap;
     SdXImpressDocument* mpModel;
 
     /// @throws css::lang::IllegalArgumentException

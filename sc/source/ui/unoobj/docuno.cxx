@@ -138,7 +138,7 @@ constexpr OUStringLiteral SC_UNO_VBAGLOBNAME = u"VBAGlobalConstantName";
 //  no Which-ID here, map only for PropertySetInfo
 
 //! rename this, those are no longer only options
-static const SfxItemPropertyMapEntry* lcl_GetDocOptPropertyMap()
+static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetDocOptPropertyMap()
 {
     static const SfxItemPropertyMapEntry aDocOptPropertyMap_Impl[] =
     {
@@ -186,14 +186,13 @@ static const SfxItemPropertyMapEntry* lcl_GetDocOptPropertyMap()
         {u"BuildId",                      0, ::cppu::UnoType<OUString>::get(),                0, 0},
         { SC_UNO_CODENAME,                0, cppu::UnoType<OUString>::get(),                  0, 0},
         { SC_UNO_INTEROPGRABBAG,          0, cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get(), 0, 0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     return aDocOptPropertyMap_Impl;
 }
 
 //! StandardDecimals as property and from NumberFormatter ????????
 
-static const SfxItemPropertyMapEntry* lcl_GetColumnsPropertyMap()
+static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetColumnsPropertyMap()
 {
     static const SfxItemPropertyMapEntry aColumnsPropertyMap_Impl[] =
     {
@@ -202,12 +201,11 @@ static const SfxItemPropertyMapEntry* lcl_GetColumnsPropertyMap()
         { SC_UNONAME_CELLVIS,  0,  cppu::UnoType<bool>::get(),          0, 0 },
         { SC_UNONAME_OWIDTH,   0,  cppu::UnoType<bool>::get(),          0, 0 },
         { SC_UNONAME_CELLWID,  0,  cppu::UnoType<sal_Int32>::get(),    0, 0 },
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     return aColumnsPropertyMap_Impl;
 }
 
-static const SfxItemPropertyMapEntry* lcl_GetRowsPropertyMap()
+static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetRowsPropertyMap()
 {
     static const SfxItemPropertyMapEntry aRowsPropertyMap_Impl[] =
     {
@@ -220,7 +218,6 @@ static const SfxItemPropertyMapEntry* lcl_GetRowsPropertyMap()
         { SC_UNONAME_CELLBACK, ATTR_BACKGROUND, ::cppu::UnoType<sal_Int32>::get(), 0, MID_BACK_COLOR },
         { SC_UNONAME_CELLTRAN, ATTR_BACKGROUND, cppu::UnoType<bool>::get(), 0, MID_GRAPHIC_TRANSPARENT },
         // not sorted, not used with SfxItemPropertyMapEntry::GetByName
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     return aRowsPropertyMap_Impl;
 }
