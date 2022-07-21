@@ -1,0 +1,10 @@
+Verified+1: Gabor Kelemen <kelemeng@ubuntu.com>
+Verified+1: Jenkins
+Verified+1: Balazs Varga <balazs.varga.extern@allotropia.de>
+Code-Review+2: Balazs Varga <balazs.varga.extern@allotropia.de>
+Code-Review+1: Tünde Tóth <toth.tunde@nisz.hu>
+Submitted-by: Balazs Varga <balazs.varga.extern@allotropia.de>
+Submitted-at: Thu, 21 Jul 2022 17:30:40 +0200
+Reviewed-on: https://gerrit.libreoffice.org/c/core/+/137281
+Project: core
+Branch: refs/heads/master
