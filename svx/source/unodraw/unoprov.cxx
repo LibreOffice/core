@@ -53,7 +53,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans::PropertyAttribute;
 using ::com::sun::star::drawing::TextVerticalAdjust;
 
-static SfxItemPropertyMapEntry const * ImplGetSvxShapePropertyMap()
+static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxShapePropertyMap()
 {
     static SfxItemPropertyMapEntry const aShapePropertyMap_Impl[] =
     {
@@ -72,13 +72,12 @@ static SfxItemPropertyMapEntry const * ImplGetSvxShapePropertyMap()
         FONTWORK_PROPERTIES
         { u"UserDefinedAttributes", SDRATTR_XMLATTRIBUTES, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
         { u"ParaUserDefinedAttributes", EE_PARA_XMLATTRIBS, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aShapePropertyMap_Impl;
 }
 
-static SfxItemPropertyMapEntry const * ImplGetSvxTextShapePropertyMap()
+static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxTextShapePropertyMap()
 {
     static SfxItemPropertyMapEntry const aTextShapePropertyMap_Impl[] =
     {
@@ -97,13 +96,12 @@ static SfxItemPropertyMapEntry const * ImplGetSvxTextShapePropertyMap()
         FONTWORK_PROPERTIES
         { u"UserDefinedAttributes", SDRATTR_XMLATTRIBUTES, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
         { u"ParaUserDefinedAttributes", EE_PARA_XMLATTRIBS, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aTextShapePropertyMap_Impl;
 }
 
-static SfxItemPropertyMapEntry const * ImplGetSvxConnectorPropertyMap()
+static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxConnectorPropertyMap()
 {
     static SfxItemPropertyMapEntry const aConnectorPropertyMap_Impl[] =
     {
@@ -123,13 +121,12 @@ static SfxItemPropertyMapEntry const * ImplGetSvxConnectorPropertyMap()
         FONTWORK_PROPERTIES
         { u"UserDefinedAttributes", SDRATTR_XMLATTRIBUTES, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
         { u"ParaUserDefinedAttributes", EE_PARA_XMLATTRIBS, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aConnectorPropertyMap_Impl;
 }
 
-static SfxItemPropertyMapEntry const * ImplGetSvxDimensioningPropertyMap()
+static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxDimensioningPropertyMap()
 {
     static SfxItemPropertyMapEntry const aDimensioningPropertyMap_Impl[] =
     {
@@ -149,13 +146,12 @@ static SfxItemPropertyMapEntry const * ImplGetSvxDimensioningPropertyMap()
         FONTWORK_PROPERTIES
         { u"UserDefinedAttributes", SDRATTR_XMLATTRIBUTES, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
         { u"ParaUserDefinedAttributes", EE_PARA_XMLATTRIBS, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aDimensioningPropertyMap_Impl;
 }
 
-static SfxItemPropertyMapEntry const * ImplGetSvxCirclePropertyMap()
+static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxCirclePropertyMap()
 {
     static SfxItemPropertyMapEntry const aCirclePropertyMap_Impl[] =
     {
@@ -175,13 +171,12 @@ static SfxItemPropertyMapEntry const * ImplGetSvxCirclePropertyMap()
         FONTWORK_PROPERTIES
         { u"UserDefinedAttributes", SDRATTR_XMLATTRIBUTES, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
         { u"ParaUserDefinedAttributes", EE_PARA_XMLATTRIBS, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aCirclePropertyMap_Impl;
 }
 
-static SfxItemPropertyMapEntry const * ImplGetSvxPolyPolygonPropertyMap()
+static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxPolyPolygonPropertyMap()
 {
     static SfxItemPropertyMapEntry const aPolyPolygonPropertyMap_Impl[] =
     {
@@ -203,13 +198,12 @@ static SfxItemPropertyMapEntry const * ImplGetSvxPolyPolygonPropertyMap()
         FONTWORK_PROPERTIES
         { u"UserDefinedAttributes", SDRATTR_XMLATTRIBUTES, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
         { u"ParaUserDefinedAttributes", EE_PARA_XMLATTRIBS, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aPolyPolygonPropertyMap_Impl;
 }
 
-static SfxItemPropertyMapEntry const * ImplGetSvxGraphicObjectPropertyMap()
+static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxGraphicObjectPropertyMap()
 {
     static SfxItemPropertyMapEntry const aGraphicObjectPropertyMap_Impl[] =
     {
@@ -236,13 +230,12 @@ static SfxItemPropertyMapEntry const * ImplGetSvxGraphicObjectPropertyMap()
         { u"UserDefinedAttributes", SDRATTR_XMLATTRIBUTES, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
         { u"ParaUserDefinedAttributes", EE_PARA_XMLATTRIBS, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
         { u"GraphicStream", OWN_ATTR_GRAPHIC_STREAM, cppu::UnoType<css::io::XInputStream>::get(), css::beans::PropertyAttribute::READONLY, 0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aGraphicObjectPropertyMap_Impl;
 }
 
-static SfxItemPropertyMapEntry const * ImplGetSvx3DSceneObjectPropertyMap()
+static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvx3DSceneObjectPropertyMap()
 {
     static SfxItemPropertyMapEntry const a3DSceneObjectPropertyMap_Impl[] =
     {
@@ -254,13 +247,12 @@ static SfxItemPropertyMapEntry const * ImplGetSvx3DSceneObjectPropertyMap()
         MISC_OBJ_PROPERTIES
         LINKTARGET_PROPERTIES
         SHADOW_PROPERTIES
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return a3DSceneObjectPropertyMap_Impl;
 }
 
-static SfxItemPropertyMapEntry const * ImplGetSvx3DCubeObjectPropertyMap()
+static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvx3DCubeObjectPropertyMap()
 {
     static SfxItemPropertyMapEntry const a3DCubeObjectPropertyMap_Impl[] =
     {
@@ -275,13 +267,12 @@ static SfxItemPropertyMapEntry const * ImplGetSvx3DCubeObjectPropertyMap()
         SHADOW_PROPERTIES
         { u"UserDefinedAttributes", SDRATTR_XMLATTRIBUTES, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
         { u"ParaUserDefinedAttributes", EE_PARA_XMLATTRIBS, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return a3DCubeObjectPropertyMap_Impl;
 }
 
-static SfxItemPropertyMapEntry const * ImplGetSvx3DSphereObjectPropertyMap()
+static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvx3DSphereObjectPropertyMap()
 {
     static SfxItemPropertyMapEntry const a3DSphereObjectPropertyMap_Impl[] =
     {
@@ -296,12 +287,11 @@ static SfxItemPropertyMapEntry const * ImplGetSvx3DSphereObjectPropertyMap()
         SHADOW_PROPERTIES
         { u"UserDefinedAttributes", SDRATTR_XMLATTRIBUTES, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
         { u"ParaUserDefinedAttributes", EE_PARA_XMLATTRIBS, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     return a3DSphereObjectPropertyMap_Impl;
 }
 
-static SfxItemPropertyMapEntry const * ImplGetSvx3DLatheObjectPropertyMap()
+static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvx3DLatheObjectPropertyMap()
 {
     static SfxItemPropertyMapEntry const a3DLatheObjectPropertyMap_Impl[] =
     {
@@ -321,13 +311,12 @@ static SfxItemPropertyMapEntry const * ImplGetSvx3DLatheObjectPropertyMap()
         SHADOW_PROPERTIES
         { u"UserDefinedAttributes", SDRATTR_XMLATTRIBUTES, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
         { u"ParaUserDefinedAttributes", EE_PARA_XMLATTRIBS, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return a3DLatheObjectPropertyMap_Impl;
 }
 
-static SfxItemPropertyMapEntry const * ImplGetSvx3DExtrudeObjectPropertyMap()
+static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvx3DExtrudeObjectPropertyMap()
 {
     static SfxItemPropertyMapEntry const a3DExtrudeObjectPropertyMap_Impl[] =
     {
@@ -347,13 +336,12 @@ static SfxItemPropertyMapEntry const * ImplGetSvx3DExtrudeObjectPropertyMap()
         SHADOW_PROPERTIES
         { u"UserDefinedAttributes", SDRATTR_XMLATTRIBUTES, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
         { u"ParaUserDefinedAttributes", EE_PARA_XMLATTRIBS, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return a3DExtrudeObjectPropertyMap_Impl;
 }
 
-static SfxItemPropertyMapEntry const * ImplGetSvx3DPolygonObjectPropertyMap()
+static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvx3DPolygonObjectPropertyMap()
 {
     static SfxItemPropertyMapEntry const a3DPolygonObjectPropertyMap_Impl[] =
     {
@@ -368,13 +356,12 @@ static SfxItemPropertyMapEntry const * ImplGetSvx3DPolygonObjectPropertyMap()
         SHADOW_PROPERTIES
         { u"UserDefinedAttributes", SDRATTR_XMLATTRIBUTES, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
         { u"ParaUserDefinedAttributes", EE_PARA_XMLATTRIBS, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return a3DPolygonObjectPropertyMap_Impl;
 }
 
-static SfxItemPropertyMapEntry const * ImplGetSvxAllPropertyMap()
+static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxAllPropertyMap()
 {
     static SfxItemPropertyMapEntry const aAllPropertyMap_Impl[] =
     {
@@ -412,13 +399,12 @@ static SfxItemPropertyMapEntry const * ImplGetSvxAllPropertyMap()
         SPECIAL_3DPOLYGONOBJECT_PROPERTIES
         { u"UserDefinedAttributes", SDRATTR_XMLATTRIBUTES, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
         { u"ParaUserDefinedAttributes", EE_PARA_XMLATTRIBS, cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aAllPropertyMap_Impl;
 }
 
-static SfxItemPropertyMapEntry const * ImplGetSvxGroupPropertyMap()
+static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxGroupPropertyMap()
 {
     static SfxItemPropertyMapEntry const aGroupPropertyMap_Impl[] =
     {
@@ -431,7 +417,7 @@ static SfxItemPropertyMapEntry const * ImplGetSvxGroupPropertyMap()
     return aGroupPropertyMap_Impl;
 }
 
-static SfxItemPropertyMapEntry const * ImplGetSvxOle2PropertyMap()
+static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxOle2PropertyMap()
 {
     static SfxItemPropertyMapEntry const aOle2PropertyMap_Impl[] =
     {
@@ -460,13 +446,12 @@ static SfxItemPropertyMapEntry const * ImplGetSvxOle2PropertyMap()
         { UNO_NAME_OLE2_PERSISTNAME,  OWN_ATTR_PERSISTNAME        , cppu::UnoType<OUString>::get(), 0, 0 },
         { u"LinkURL",                  OWN_ATTR_OLE_LINKURL        , cppu::UnoType<OUString>::get(), 0, 0 },
         { UNO_NAME_GRAPHOBJ_GRAPHIC,   OWN_ATTR_VALUE_GRAPHIC     , cppu::UnoType<css::graphic::XGraphic>::get(),     0,     0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aOle2PropertyMap_Impl;
 }
 
-static SfxItemPropertyMapEntry const * ImplGetSvxPluginPropertyMap()
+static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxPluginPropertyMap()
 {
     static SfxItemPropertyMapEntry const aPluginPropertyMap_Impl[] =
     {
@@ -491,13 +476,12 @@ static SfxItemPropertyMapEntry const * ImplGetSvxPluginPropertyMap()
         // #i68101#
         { UNO_NAME_MISC_OBJ_TITLE,        OWN_ATTR_MISC_OBJ_TITLE         , cppu::UnoType<OUString>::get(),    0,  0},
         { UNO_NAME_MISC_OBJ_DESCRIPTION,  OWN_ATTR_MISC_OBJ_DESCRIPTION   , cppu::UnoType<OUString>::get(),    0,  0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aPluginPropertyMap_Impl;
 }
 
-static SfxItemPropertyMapEntry const * ImplGetSvxFramePropertyMap()
+static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxFramePropertyMap()
 {
     //TODO/LATER: new properties for ScrollingMode and DefaultBorder
     static SfxItemPropertyMapEntry const aFramePropertyMap_Impl[] =
@@ -526,13 +510,12 @@ static SfxItemPropertyMapEntry const * ImplGetSvxFramePropertyMap()
         // #i68101#
         { UNO_NAME_MISC_OBJ_TITLE,        OWN_ATTR_MISC_OBJ_TITLE         , cppu::UnoType<OUString>::get(),    0,  0},
         { UNO_NAME_MISC_OBJ_DESCRIPTION,  OWN_ATTR_MISC_OBJ_DESCRIPTION   , cppu::UnoType<OUString>::get(),    0,  0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aFramePropertyMap_Impl;
 }
 
-static SfxItemPropertyMapEntry const * ImplGetSvxAppletPropertyMap()
+static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxAppletPropertyMap()
 {
     static SfxItemPropertyMapEntry const aAppletPropertyMap_Impl[] =
     {
@@ -560,13 +543,12 @@ static SfxItemPropertyMapEntry const * ImplGetSvxAppletPropertyMap()
         // #i68101#
         { UNO_NAME_MISC_OBJ_TITLE,        OWN_ATTR_MISC_OBJ_TITLE         , cppu::UnoType<OUString>::get(),    0,  0},
         { UNO_NAME_MISC_OBJ_DESCRIPTION,  OWN_ATTR_MISC_OBJ_DESCRIPTION   , cppu::UnoType<OUString>::get(),    0,  0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aAppletPropertyMap_Impl;
 }
 
-static SfxItemPropertyMapEntry const * ImplGetSvxControlShapePropertyMap()
+static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxControlShapePropertyMap()
 {
     static SfxItemPropertyMapEntry const aControlPropertyMap_Impl[] =
     {
@@ -620,13 +602,12 @@ static SfxItemPropertyMapEntry const * ImplGetSvxControlShapePropertyMap()
         { UNO_NAME_MISC_OBJ_PRINTABLE,    SDRATTR_OBJPRINTABLE            , cppu::UnoType<bool>::get(),                      0,  0},
         { u"Visible",                      SDRATTR_OBJVISIBLE              , cppu::UnoType<bool>::get(),                      0,  0},
         { UNO_NAME_MISC_OBJ_INTEROPGRABBAG,   OWN_ATTR_INTEROPGRABBAG,    cppu::UnoType<css::uno::Sequence< css::beans::PropertyValue >>::get(),  0,  0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aControlPropertyMap_Impl;
 }
 
-static SfxItemPropertyMapEntry const * ImplGetSvxPageShapePropertyMap()
+static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxPageShapePropertyMap()
 {
     static SfxItemPropertyMapEntry const aPageShapePropertyMap_Impl[] =
     {
@@ -643,13 +624,12 @@ static SfxItemPropertyMapEntry const * ImplGetSvxPageShapePropertyMap()
         // #i68101#
         { UNO_NAME_MISC_OBJ_TITLE,        OWN_ATTR_MISC_OBJ_TITLE         , cppu::UnoType<OUString>::get(),    0,  0},
         { UNO_NAME_MISC_OBJ_DESCRIPTION,  OWN_ATTR_MISC_OBJ_DESCRIPTION   , cppu::UnoType<OUString>::get(),    0,  0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aPageShapePropertyMap_Impl;
 }
 
-static SfxItemPropertyMapEntry const * ImplGetSvxCaptionPropertyMap()
+static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxCaptionPropertyMap()
 {
     static SfxItemPropertyMapEntry const aCaptionPropertyMap_Impl[] =
     {
@@ -677,13 +657,12 @@ static SfxItemPropertyMapEntry const * ImplGetSvxCaptionPropertyMap()
         FONTWORK_PROPERTIES
         { u"UserDefinedAttributes",        SDRATTR_XMLATTRIBUTES,      cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
         {u"ParaUserDefinedAttributes",         EE_PARA_XMLATTRIBS,     cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aCaptionPropertyMap_Impl;
 }
 
-static SfxItemPropertyMapEntry const * ImplGetSvxCustomShapePropertyMap()
+static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxCustomShapePropertyMap()
 {
     static SfxItemPropertyMapEntry const aCustomShapePropertyMap_Impl[] =
     {
@@ -703,12 +682,11 @@ static SfxItemPropertyMapEntry const * ImplGetSvxCustomShapePropertyMap()
         TEXT_PROPERTIES
         {u"UserDefinedAttributes",     SDRATTR_XMLATTRIBUTES,      cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
         {u"ParaUserDefinedAttributes", EE_PARA_XMLATTRIBS,         cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     return aCustomShapePropertyMap_Impl;
 }
 
-static SfxItemPropertyMapEntry const * ImplGetSvxMediaShapePropertyMap()
+static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxMediaShapePropertyMap()
 {
     static SfxItemPropertyMapEntry const aMediaShapePropertyMap_Impl[] =
     {
@@ -736,13 +714,12 @@ static SfxItemPropertyMapEntry const * ImplGetSvxMediaShapePropertyMap()
         { u"MediaMimeType", OWN_ATTR_MEDIA_MIMETYPE, cppu::UnoType<OUString>::get(), 0, 0},
         { u"FallbackGraphic", OWN_ATTR_FALLBACK_GRAPHIC, cppu::UnoType<css::graphic::XGraphic>::get(), css::beans::PropertyAttribute::READONLY, 0},
         { UNO_NAME_GRAPHOBJ_GRAPHIC,   OWN_ATTR_VALUE_GRAPHIC     , cppu::UnoType<css::graphic::XGraphic>::get(), 0, 0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aMediaShapePropertyMap_Impl;
 }
 
-static SfxItemPropertyMapEntry const * ImplGetSvxTableShapePropertyMap()
+static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxTableShapePropertyMap()
 {
     static SfxItemPropertyMapEntry const  aTableShapePropertyMap_Impl[] =
     {
@@ -769,7 +746,6 @@ static SfxItemPropertyMapEntry const * ImplGetSvxTableShapePropertyMap()
         { u"UseBandingRowStyle",           OWN_ATTR_TABLETEMPLATE_BANDINGROWS, cppu::UnoType<bool>::get(),0, 0},
         { u"UseBandingColumnStyle",        OWN_ATTR_TABLETEMPLATE_BANDINGCOLUMNS, cppu::UnoType<bool>::get(),0, 0},
         { u"ReplacementGraphic",           OWN_ATTR_REPLACEMENT_GRAPHIC, cppu::UnoType<css::graphic::XGraphic>::get(), css::beans::PropertyAttribute::READONLY, 0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aTableShapePropertyMap_Impl;
@@ -891,10 +867,7 @@ SvxUnoPropertyMapProvider& getSvxMapProvider()
 SvxUnoPropertyMapProvider::SvxUnoPropertyMapProvider()
 {
     for(sal_uInt16 i=0;i<SVXMAP_END; i++)
-    {
         aSetArr[i] = nullptr;
-        aMapArr[i] = nullptr;
-    }
 }
 
 SvxUnoPropertyMapProvider::~SvxUnoPropertyMapProvider()
@@ -902,10 +875,10 @@ SvxUnoPropertyMapProvider::~SvxUnoPropertyMapProvider()
 }
 
 
-const SfxItemPropertyMapEntry* SvxUnoPropertyMapProvider::GetMap(sal_uInt16 nPropertyId)
+o3tl::span<const SfxItemPropertyMapEntry> SvxUnoPropertyMapProvider::GetMap(sal_uInt16 nPropertyId)
 {
     assert(nPropertyId < SVXMAP_END);
-    if(!aMapArr[nPropertyId]) {
+    if(aMapArr[nPropertyId].empty()) {
         switch(nPropertyId) {
             case SVXMAP_SHAPE: aMapArr[SVXMAP_SHAPE]=ImplGetSvxShapePropertyMap(); break;
             case SVXMAP_CONNECTOR: aMapArr[SVXMAP_CONNECTOR]=ImplGetSvxConnectorPropertyMap(); break;

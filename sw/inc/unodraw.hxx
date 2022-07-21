@@ -143,7 +143,7 @@ class SwXShape : public SwXShapeBaseClass, public SvtListener
     css::uno::Reference< css::drawing::XShape > mxShape;
 
     const SfxItemPropertySet*           m_pPropSet;
-    const SfxItemPropertyMapEntry*      m_pPropertyMapEntries;
+    o3tl::span<const SfxItemPropertyMapEntry>      m_pPropertyMapEntries;
     css::uno::Reference< css::beans::XPropertySetInfo > mxPropertySetInfo;
 
     std::unique_ptr<SwShapeDescriptor_Impl>  m_pImpl;

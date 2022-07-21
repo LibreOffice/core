@@ -834,7 +834,7 @@ static const SfxItemPropertySet* lcl_GetSheetPropertySet()
     return &aSheetPropertySet;
 }
 
-static const SfxItemPropertyMapEntry* lcl_GetEditPropertyMap()
+static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetEditPropertyMap()
 {
     static const SfxItemPropertyMapEntry aEditPropertyMap_Impl[] =
     {
@@ -844,7 +844,6 @@ static const SfxItemPropertyMapEntry* lcl_GetEditPropertyMap()
         SVX_UNOEDIT_NUMBERING_PROPERTY,    // for completeness of service ParagraphProperties
         { SC_UNONAME_TEXTUSER, EE_CHAR_XMLATTRIBS, cppu::UnoType<container::XNameContainer>::get(), 0, 0},
         { SC_UNONAME_USERDEF,  EE_PARA_XMLATTRIBS, cppu::UnoType<container::XNameContainer>::get(), 0, 0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     return aEditPropertyMap_Impl;
 }

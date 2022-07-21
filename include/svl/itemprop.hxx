@@ -26,6 +26,7 @@
 #include <svl/itemset.hxx>
 #include <svl/svldllapi.h>
 #include <o3tl/sorted_vector.hxx>
+#include <o3tl/span.hxx>
 #include <string_view>
 #include <utility>
 
@@ -80,7 +81,7 @@ class SVL_DLLPUBLIC SfxItemPropertyMap
     o3tl::sorted_vector< const SfxItemPropertyMapEntry*, SfxItemPropertyMapCompare > m_aMap;
     mutable css::uno::Sequence< css::beans::Property > m_aPropSeq;
 public:
-    SfxItemPropertyMap( const SfxItemPropertyMapEntry* pEntries );
+    SfxItemPropertyMap( o3tl::span<const SfxItemPropertyMapEntry> pEntries );
     SfxItemPropertyMap( const SfxItemPropertyMap& rSource );
     ~SfxItemPropertyMap();
 
@@ -99,7 +100,7 @@ class SVL_DLLPUBLIC SfxItemPropertySet final
     mutable css::uno::Reference<css::beans::XPropertySetInfo> m_xInfo;
 
 public:
-                            SfxItemPropertySet( const SfxItemPropertyMapEntry *pMap ) :
+                            SfxItemPropertySet( o3tl::span<const SfxItemPropertyMapEntry> pMap ) :
                                 m_aMap(pMap) {}
                             ~SfxItemPropertySet();
 
@@ -150,7 +151,7 @@ class SVL_DLLPUBLIC SfxItemPropertySetInfo final : public SfxItemPropertySetInfo
 
 public:
     SfxItemPropertySetInfo(const SfxItemPropertyMap &rMap );
-    SfxItemPropertySetInfo(const SfxItemPropertyMapEntry *pEntries );
+    SfxItemPropertySetInfo(o3tl::span<const SfxItemPropertyMapEntry> pEntries );
     virtual ~SfxItemPropertySetInfo() override;
 
     virtual css::uno::Sequence< css::beans::Property > SAL_CALL
@@ -179,7 +180,7 @@ class SVL_DLLPUBLIC SfxExtItemPropertySetInfo final : public SfxExtItemPropertyS
 {
 public:
                             SfxExtItemPropertySetInfo(
-                                const SfxItemPropertyMapEntry *pMap,
+                                o3tl::span<const SfxItemPropertyMapEntry> pMap,
                                 const css::uno::Sequence<css::beans::Property>& rPropSeq );
                             virtual ~SfxExtItemPropertySetInfo() override;
 

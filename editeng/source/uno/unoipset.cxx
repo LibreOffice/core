@@ -31,7 +31,7 @@
 using namespace ::com::sun::star;
 
 
-SvxItemPropertySet::SvxItemPropertySet( const SfxItemPropertyMapEntry* pMap, SfxItemPool& rItemPool )
+SvxItemPropertySet::SvxItemPropertySet( o3tl::span<const SfxItemPropertyMapEntry> pMap, SfxItemPool& rItemPool )
 :   m_aPropertyMap( pMap ),
     mrItemPool( rItemPool )
 {
