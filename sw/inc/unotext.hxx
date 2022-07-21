@@ -27,6 +27,7 @@
 #include <com/sun/star/text/XRelativeTextContentInsert.hpp>
 #include <com/sun/star/text/XRelativeTextContentRemove.hpp>
 #include <com/sun/star/text/XTextAppendAndConvert.hpp>
+#include <sal/types.h>
 
 #include "unobaseclass.hxx"
 
@@ -41,7 +42,7 @@ class SwDoc;
 class SwStartNode;
 class SwPaM;
 
-class SwXText
+class SAL_DLLPUBLIC_RTTI SwXText
     : public css::lang::XTypeProvider
     , public css::lang::XUnoTunnel
     , public css::beans::XPropertySet
