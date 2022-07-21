@@ -147,6 +147,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_core_view \
     CppunitTest_sw_core_attr \
     CppunitTest_sw_filter_ww8 \
+    CppunitTest_sw_a11y \
 ))
 
 ifneq ($(DISABLE_GUI),TRUE)
