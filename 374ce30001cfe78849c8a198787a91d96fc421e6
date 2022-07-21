@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f7ea25b_cda7b2fa",
+        "filename": "include/framework/interaction.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-07-21T07:04:05Z",
+      "side": 1,
+      "message": "You left an extra empty line behind.",
+      "revId": "374ce30001cfe78849c8a198787a91d96fc421e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
