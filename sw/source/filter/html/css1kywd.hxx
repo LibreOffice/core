@@ -200,6 +200,7 @@ extern const char* const sCSS1_P_height;
 extern const char* const sCSS1_P_float;
 
 extern const char* const sCSS1_P_column_count;
+extern const char* const sCSS1_P_dir;
 
 // Strings for positioning
 
