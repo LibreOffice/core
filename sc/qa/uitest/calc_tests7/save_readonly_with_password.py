@@ -94,4 +94,50 @@ class save_readonly_with_password(UITestCase):
 
                 self.assertFalse(document.isReadonly())
 
+   def test_save_to_shared_ods(self):
+
+        with TemporaryDirectory() as tempdir:
+            xFilePath = os.path.join(tempdir, "shared_readonly_with_password_tmp.ods")
+
+            with self.ui_test.create_doc_in_start_center("calc"):
+                with self.ui_test.execute_dialog_through_command(".uno:ShareDocument", close_button="") as xShareDocumentDialog:
+                    xShareCheckButton = xShareDocumentDialog.getChild("share")
+                    xShareCheckButton.executeAction("CLICK", tuple())
+                    xOk = xShareDocumentDialog.getChild("ok")
+                    # Save the document
+                    with self.ui_test.execute_dialog_through_action(xOk, "CLICK", close_button="") as xSaveDialog:
+                        xFileName = xSaveDialog.getChild("file_name")
+                        xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                        xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                        xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": xFilePath}))
+                        xPasswordCheckButton = xSaveDialog.getChild("password")
+                        xPasswordCheckButton.executeAction("CLICK", tuple())
+                        xOpen = xSaveDialog.getChild("open")
+
+                        with self.ui_test.execute_dialog_through_action(xOpen, "CLICK") as xPasswordDialog:
+                            xReadonly = xPasswordDialog.getChild("readonly")
+                            xReadonly.executeAction("CLICK", tuple())
+                            xNewPassword = xPasswordDialog.getChild("newpassroEntry")
+                            xNewPassword.executeAction("TYPE", mkPropertyValues({"TEXT": "password"}))
+                            xConfirmPassword = xPasswordDialog.getChild("confirmropassEntry")
+                            xConfirmPassword.executeAction("TYPE", mkPropertyValues({"TEXT": "password"}))
+
+            self.ui_test.wait_until_file_is_available(xFilePath)
+
+            with self.ui_test.execute_dialog_through_command(".uno:Open", close_button="") as xOpenDialog:
+                # Open document
+                xFileName = xOpenDialog.getChild("file_name")
+                xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": xFilePath}))
+                xOpenBtn = xOpenDialog.getChild("open")
+                xOpenBtn.executeAction("CLICK", tuple())
+
+                xDialog = self.ui_test.wait_for_top_focus_window('SharedWarningDialog')
+                xOk = xDialog.getChild("ok")
+                xOk.executeAction("CLICK", tuple())
+
+                with self.ui_test.execute_dialog_through_command(".uno:EditDoc") as xDialog:
+                    # check that we have a password dialog for editing the shared document
+                    xPassword = xDialog.getChild("newpassEntry")
+                    xPassword.executeAction("TYPE", mkPropertyValues({"TEXT": "password"}))
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
