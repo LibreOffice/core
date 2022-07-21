@@ -112,6 +112,11 @@ bool AccessibilityTools::equals(const uno::Reference<accessibility::XAccessibleC
     return equals(xctx1->getAccessibleParent(), xctx2->getAccessibleParent());
 }
 
+static OUString unknownName(const sal_Int64 value)
+{
+    return "unknown (" + OUString::number(value) + ")";
+}
+
 OUString AccessibilityTools::getRoleName(const sal_Int16 role)
 {
     switch (role)
@@ -291,7 +296,7 @@ OUString AccessibilityTools::getRoleName(const sal_Int16 role)
         case accessibility::AccessibleRole::WINDOW:
             return "WINDOW";
     };
-    return "unknown";
+    return unknownName(role);
 }
 
 OUString AccessibilityTools::debugAccessibleStateSet(const sal_Int64 nCombinedState)
@@ -411,6 +416,9 @@ OUString AccessibilityTools::debugAccessibleStateSet(const sal_Int64 nCombinedSt
             case accessibility::AccessibleStateType::VISIBLE:
                 name = "VISIBLE";
                 break;
+            default:
+                name = unknownName(state);
+                break;
         }
         if (combinedName.getLength())
             combinedName += " | ";
@@ -509,7 +517,7 @@ OUString AccessibilityTools::getEventIdName(const sal_Int16 event_id)
         case accessibility::AccessibleEventId::VISIBLE_DATA_CHANGED:
             return "VISIBLE_DATA_CHANGED";
     }
-    return "unknown";
+    return unknownName(event_id);
 }
 
 OUString AccessibilityTools::getRelationTypeName(const sal_Int16 rel_type)
@@ -539,7 +547,7 @@ OUString AccessibilityTools::getRelationTypeName(const sal_Int16 rel_type)
         case accessibility::AccessibleRelationType::SUB_WINDOW_OF:
             return "SUB_WINDOW_OF";
     }
-    return "unknown";
+    return unknownName(rel_type);
 }
 
 OUString AccessibilityTools::debugName(accessibility::XAccessibleContext* ctx)
