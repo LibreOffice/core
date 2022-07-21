@@ -834,7 +834,8 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
         for (SwRedlineTable::size_type nIndex = 0; nIndex < rRedlines.size(); ++nIndex)
         {
             SwRangeRedline* pRedline = rRedlines[nIndex];
-            if (!pRedline->HasMark() || pRedline->GetMark()->nNode != aInsPos)
+            if ( RedlineType::Delete != pRedline->GetType() ||
+                 !pRedline->HasMark() || pRedline->GetMark()->nNode != aInsPos )
             {
                 continue;
             }
