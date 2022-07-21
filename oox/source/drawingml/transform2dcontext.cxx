@@ -207,7 +207,7 @@ bool ConstructPresetTextRectangle(Shape& rShape, awt::Rectangle& rRect)
                 return false;
             auto aAdjGdList = rShape.getCustomShapeProperties()->getAdjustmentGuideList();
             double fAdj = aAdjGdList.empty() ? 16667.0 : aAdjGdList[0].maFormula.toDouble();
-            std::clamp<double>(fAdj, 0.0, 50000.0);
+            fAdj = std::clamp<double>(fAdj, 0.0, 50000.0);
             double fDx = std::min(nWidth, nHeight) * fAdj / 100000.0 * 0.29289;
             rRect.X = rShape.getPosition().X;
             rRect.Y = rShape.getPosition().Y;
