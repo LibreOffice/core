@@ -4052,6 +4052,9 @@ find_msvc()
     vs_versions_to_check "$1"
     if test "$build_os" = wsl; then
         vswhere="$PROGRAMFILESX86"
+        if test -z "$vswhere"; then
+            vswhere="c:\\Program Files (x86)"
+        fi
     else
         vswhere="$(perl -e 'print $ENV{"ProgramFiles(x86)"}')"
     fi
