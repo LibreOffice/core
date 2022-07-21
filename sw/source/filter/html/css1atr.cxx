@@ -2088,6 +2088,17 @@ void SwHTMLWriter::OutCSS1_SectionFormatOptions( const SwFrameFormat& rFrameForm
     if( SfxItemState::SET==rItemSet.GetItemState( RES_BACKGROUND, false, &pItem ) )
         OutCSS1_SvxBrush( *this, *pItem, sw::Css1Background::Section, nullptr );
 
+    if (mbXHTML)
+    {
+        SvxFrameDirection nDir = GetHTMLDirection(rFrameFormat.GetAttrSet());
+        OString sConvertedDirection = convertDirection(nDir);
+        if (!sConvertedDirection.isEmpty())
+        {
+            OutCSS1_Property(sCSS1_P_dir, sConvertedDirection, nullptr,
+                             sw::Css1Background::Section);
+        }
+    }
+
     if (pCol)
     {
         OString sColumnCount(OString::number(static_cast<sal_Int32>(pCol->GetNumCols())));

@@ -711,9 +711,12 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
         sOut.append('\"');
     }
 
-    SvxFrameDirection nDir = rHTMLWrt.GetHTMLDirection( rFormat.GetAttrSet() );
     rHTMLWrt.Strm().WriteOString( sOut.makeStringAndClear() );
-    rHTMLWrt.OutDirection( nDir );
+    if (!rHTMLWrt.mbXHTML)
+    {
+        SvxFrameDirection nDir = rHTMLWrt.GetHTMLDirection(rFormat.GetAttrSet());
+        rHTMLWrt.OutDirection(nDir);
+    }
 
     if( SectionType::FileLink == rSection.GetType() )
     {
