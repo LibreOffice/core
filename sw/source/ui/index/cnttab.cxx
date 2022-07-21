@@ -487,6 +487,7 @@ class SwAddStylesDlg_Impl : public SfxDialogController
     DECL_LINK(KeyInput, const KeyEvent&, bool);
     DECL_LINK(TreeSizeAllocHdl, const Size&, void);
     DECL_LINK(RadioToggleOnHdl, const weld::TreeView::iter_col&, void);
+    DECL_LINK(HeaderBarClick, int, void);
 
 public:
     SwAddStylesDlg_Impl(weld::Window* pParent, SwWrtShell const & rWrtSh, OUString rStringArr[]);
@@ -510,6 +511,7 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(weld::Window* pParent,
     m_xHeaderTree->connect_size_allocate(LINK(this, SwAddStylesDlg_Impl, TreeSizeAllocHdl));
     m_xHeaderTree->enable_toggle_buttons(weld::ColumnToggleType::Radio);
     m_xHeaderTree->connect_toggled(LINK(this, SwAddStylesDlg_Impl, RadioToggleOnHdl));
+    m_xHeaderTree->connect_column_clicked(LINK(this, SwAddStylesDlg_Impl, HeaderBarClick));
 
     std::vector<int> aWidths
     {
@@ -581,9 +583,32 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(weld::Window* pParent,
             }
         }
     }
+
     m_xHeaderTree->make_sorted();
+    m_xHeaderTree->set_sort_column(0);
+    m_xHeaderTree->set_sort_order(true);
+    m_xHeaderTree->set_sort_indicator(TRISTATE_TRUE, 0);
+
     m_xHeaderTree->select(0);
     m_xHeaderTree->connect_key_release(LINK(this, SwAddStylesDlg_Impl, KeyInput));
+}
+
+IMPL_LINK(SwAddStylesDlg_Impl, HeaderBarClick, int, nColumn, void)
+{
+    bool bSortAtoZ = m_xHeaderTree->get_sort_order();
+
+    //set new arrow positions in headerbar
+    if (nColumn == m_xHeaderTree->get_sort_column())
+    {
+        bSortAtoZ = !bSortAtoZ;
+        m_xHeaderTree->set_sort_order(bSortAtoZ);
+    }
+
+    if (nColumn != -1)
+    {
+        //sort lists
+        m_xHeaderTree->set_sort_indicator(bSortAtoZ ? TRISTATE_TRUE : TRISTATE_FALSE, nColumn);
+    }
 }
 
 IMPL_LINK(SwAddStylesDlg_Impl, TreeSizeAllocHdl, const Size&, rSize, void)
