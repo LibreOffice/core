@@ -786,7 +786,8 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
         case SID_BACKGROUND_COLOR:
             impl_fillState_nothrow(PROPERTY_CONTROLBACKGROUND,aReturn);
             break;
-        case SID_ATTR_CHAR_COLOR_BACKGROUND:
+        case SID_ATTR_CHAR_BACK_COLOR:
+        case SID_ATTR_CHAR_COLOR_BACKGROUND: // deprecated
             aReturn.bEnabled = isEditable();
             {
                 uno::Reference<report::XSection> xSection = getDesignView()->getCurrentSection();
@@ -1415,12 +1416,13 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             getDesignView()->Resize();
             break;
         case SID_PAGEDIALOG:
+        case SID_ATTR_CHAR_BACK_COLOR:
         case SID_ATTR_CHAR_COLOR_BACKGROUND:
             {
                 uno::Reference<report::XSection> xSection;
                 if (aArgs.getLength() == 1 )
                     aArgs[0].Value >>= xSection;
-                else if (_nId == SID_ATTR_CHAR_COLOR_BACKGROUND)
+                else if (_nId == SID_ATTR_CHAR_BACK_COLOR || _nId == SID_ATTR_CHAR_COLOR_BACKGROUND)
                     xSection.set(getDesignView()->getMarkedSection()->getReportSection().getSection());
                 openPageDialog(xSection);
                 bForceBroadcast = true;
@@ -1804,7 +1806,7 @@ void OReportController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:Bold",                      SID_ATTR_CHAR_WEIGHT,           CommandGroup::FORMAT );
     implDescribeSupportedFeature( ".uno:Italic",                    SID_ATTR_CHAR_POSTURE,          CommandGroup::FORMAT );
     implDescribeSupportedFeature( ".uno:Underline",                 SID_ATTR_CHAR_UNDERLINE,        CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:DBBackgroundColor",         SID_ATTR_CHAR_COLOR_BACKGROUND, CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:DBBackgroundColor",         SID_ATTR_CHAR_BACK_COLOR, CommandGroup::FORMAT );
     implDescribeSupportedFeature( ".uno:BackgroundColor",           SID_BACKGROUND_COLOR,           CommandGroup::FORMAT );
     implDescribeSupportedFeature( ".uno:CharColorExt",              SID_ATTR_CHAR_COLOR_EXT);
     implDescribeSupportedFeature( ".uno:Color",                     SID_ATTR_CHAR_COLOR);
