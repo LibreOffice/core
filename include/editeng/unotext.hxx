@@ -45,6 +45,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <osl/diagnose.hxx>
+#include <o3tl/span.hxx>
 #include <mutex>
 #include <comphelper/servicehelper.hxx>
 #include <svl/itemset.hxx>
@@ -668,9 +669,9 @@ public:
 };
 
 EDITENG_DLLPUBLIC const SvxItemPropertySet* ImplGetSvxUnoOutlinerTextCursorSvxPropertySet();
-const SfxItemPropertyMapEntry* ImplGetSvxUnoOutlinerTextCursorPropertyMap();
+o3tl::span<const SfxItemPropertyMapEntry> ImplGetSvxUnoOutlinerTextCursorPropertyMap();
 const SvxItemPropertySet* ImplGetSvxTextPortionSvxPropertySet();
-const SfxItemPropertyMapEntry* ImplGetSvxTextPortionPropertyMap();
+o3tl::span<const SfxItemPropertyMapEntry> ImplGetSvxTextPortionPropertyMap();
 
 #endif
 

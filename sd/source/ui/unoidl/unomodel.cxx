@@ -224,7 +224,6 @@ static const SvxItemPropertySet* ImplGetDrawModelPropertySet()
         { u"Fonts",                        WID_MODEL_FONTS,              cppu::UnoType<uno::Sequence<uno::Any>>::get(),                     beans::PropertyAttribute::READONLY, 0},
         { sUNO_Prop_InteropGrabBag,       WID_MODEL_INTEROPGRABBAG,     cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get(),       0, 0},
         { sUNO_Prop_Theme,                WID_MODEL_THEME,              cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get(),       0, 0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     static SvxItemPropertySet aDrawModelPropertySet_Impl( aDrawModelPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
     return &aDrawModelPropertySet_Impl;

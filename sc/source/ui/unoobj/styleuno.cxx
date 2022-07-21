@@ -168,7 +168,6 @@ static const SfxItemPropertySet* lcl_GetCellStyleSet()
         {u"" SC_UNONAME_WRITING,  ATTR_WRITINGDIR,    cppu::UnoType<sal_Int16>::get(),            0, 0 },
         {u"" SC_UNONAME_HIDDEN,   ATTR_HIDDEN,        cppu::UnoType<sal_Bool>::get(),             0, 0 },
         {u"" SC_UNONAME_HYPERLINK,  ATTR_HYPERLINK, cppu::UnoType<OUString>::get(),        0, 0 },
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     static SfxItemPropertySet aCellStyleSet_Impl( aCellStyleMap_Impl );
     return &aCellStyleSet_Impl;
@@ -296,7 +295,6 @@ static const SfxItemPropertySet * lcl_GetPageStyleSet()
         {u"" SC_UNO_PAGE_WIDTH,       ATTR_PAGE_SIZE,     ::cppu::UnoType<sal_Int32>::get(),            0, MID_SIZE_WIDTH | CONVERT_TWIPS },
         {u"" SC_UNONAME_WRITING,      ATTR_WRITINGDIR,    cppu::UnoType<sal_Int16>::get(),            0, 0 },
         {u"" SC_UNONAME_HIDDEN,       ATTR_HIDDEN,        cppu::UnoType<sal_Bool>::get(),             0, 0 },
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     static SfxItemPropertySet aPageStyleSet_Impl( aPageStyleMap_Impl );
     return &aPageStyleSet_Impl;
@@ -337,7 +335,6 @@ static const SfxItemPropertyMap* lcl_GetHeaderStyleMap()
         {u"" SC_UNO_PAGE_HDRTOPBOR,   ATTR_BORDER,        ::cppu::UnoType<table::BorderLine>::get(),        0, TOP_BORDER | CONVERT_TWIPS },
         {u"" SC_UNO_PAGE_HDRTOPBDIS,  ATTR_BORDER,        ::cppu::UnoType<sal_Int32>::get(),    0, TOP_BORDER_DISTANCE | CONVERT_TWIPS },
         {u"" OLD_UNO_PAGE_HDRBACKTRAN,ATTR_BACKGROUND,    cppu::UnoType<bool>::get(),            0, MID_GRAPHIC_TRANSPARENT },
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     static SfxItemPropertyMap aHeaderStyleMap( aHeaderStyleMap_Impl );
     return &aHeaderStyleMap;
@@ -378,7 +375,6 @@ static const SfxItemPropertyMap* lcl_GetFooterStyleMap()
         {u"" SC_UNO_PAGE_FTRTOPBOR,   ATTR_BORDER,        ::cppu::UnoType<table::BorderLine>::get(),        0, TOP_BORDER | CONVERT_TWIPS },
         {u"" SC_UNO_PAGE_FTRTOPBDIS,  ATTR_BORDER,        ::cppu::UnoType<sal_Int32>::get(),    0, TOP_BORDER_DISTANCE | CONVERT_TWIPS },
         {u"" OLD_UNO_PAGE_FTRBACKTRAN,ATTR_BACKGROUND,    cppu::UnoType<bool>::get(),            0, MID_GRAPHIC_TRANSPARENT },
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     static SfxItemPropertyMap aFooterStyleMap( aFooterStyleMap_Impl );
     return &aFooterStyleMap;

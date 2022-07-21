@@ -68,7 +68,6 @@ const SfxItemPropertySet* GetErrorBarPropertySet()
         {u"LineColor",12,cppu::UnoType<css::util::Color>::get(),0,0},
         {u"LineTransparence",13,cppu::UnoType<sal_Int16>::get(),0,0},
         {u"LineJoint",14,cppu::UnoType<css::drawing::LineJoint>::get(),0,0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     static SfxItemPropertySet aPropSet( aErrorBarPropertyMap_Impl );
     return &aPropSet;

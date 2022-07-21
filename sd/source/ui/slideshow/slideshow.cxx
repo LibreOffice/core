@@ -104,7 +104,7 @@ namespace {
     };
 }
 
-static const SfxItemPropertyMapEntry* ImplGetPresentationPropertyMap()
+static o3tl::span<const SfxItemPropertyMapEntry> ImplGetPresentationPropertyMap()
 {
     // NOTE: First member must be sorted
     static const SfxItemPropertyMapEntry aPresentationPropertyMap_Impl[] =
@@ -124,7 +124,6 @@ static const SfxItemPropertyMapEntry* ImplGetPresentationPropertyMap()
         { u"Pause",                    ATTR_PRESENT_PAUSE_TIMEOUT,     ::cppu::UnoType<sal_Int32>::get(),    0, 0 },
         { u"StartWithNavigator",       ATTR_PRESENT_NAVIGATOR,         cppu::UnoType<bool>::get(),                0, 0 },
         { u"UsePen",                   ATTR_PRESENT_PEN,               cppu::UnoType<bool>::get(),                0, 0 },
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aPresentationPropertyMap_Impl;

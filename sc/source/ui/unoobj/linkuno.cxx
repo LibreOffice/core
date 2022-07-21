@@ -52,7 +52,7 @@ using ::com::sun::star::uno::RuntimeException;
 using ::std::vector;
 
 //  used for sheet- and area link:
-static const SfxItemPropertyMapEntry* lcl_GetSheetLinkMap()
+static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetSheetLinkMap()
 {
     static const SfxItemPropertyMapEntry aSheetLinkMap_Impl[] =
     {
@@ -61,7 +61,6 @@ static const SfxItemPropertyMapEntry* lcl_GetSheetLinkMap()
         { SC_UNONAME_LINKURL,  0,  cppu::UnoType<OUString>::get(),    0, 0 },
         { SC_UNONAME_REFDELAY, 0,  cppu::UnoType<sal_Int32>::get(),        0, 0 },
         { SC_UNONAME_REFPERIOD,    0,  cppu::UnoType<sal_Int32>::get(),        0, 0 },
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     return aSheetLinkMap_Impl;
 }

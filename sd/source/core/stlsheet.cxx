@@ -106,7 +106,6 @@ static SvxItemPropertySet& GetStylePropertySet()
         { u"BottomBorder",                 SDRATTR_TABLE_BORDER,           ::cppu::UnoType<BorderLine>::get(), 0, BOTTOM_BORDER },
         { u"LeftBorder",                   SDRATTR_TABLE_BORDER,           ::cppu::UnoType<BorderLine>::get(), 0, LEFT_BORDER },
         { u"RightBorder",                  SDRATTR_TABLE_BORDER,           ::cppu::UnoType<BorderLine>::get(), 0, RIGHT_BORDER },
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     static SvxItemPropertySet aPropSet( aFullPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );

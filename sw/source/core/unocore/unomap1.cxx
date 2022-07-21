@@ -90,34 +90,31 @@ SwUnoPropertyMapProvider::SwUnoPropertyMapProvider()
 {
     for( sal_uInt16 i = 0; i < PROPERTY_MAP_END; i++ )
     {
-        m_aMapEntriesArr[i] = nullptr;
         m_aPropertySetArr[i] = nullptr;
     }
 }
 
-const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetTextCursorPropertyMap()
+o3tl::span<const SfxItemPropertyMapEntry>  SwUnoPropertyMapProvider::GetTextCursorPropertyMap()
 {
     static SfxItemPropertyMapEntry const aCharAndParaMap_Impl[] =
     {
         COMPLETE_TEXT_CURSOR_MAP
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aCharAndParaMap_Impl;
 }
 
-const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetAccessibilityTextAttrPropertyMap()
+o3tl::span<const SfxItemPropertyMapEntry>  SwUnoPropertyMapProvider::GetAccessibilityTextAttrPropertyMap()
 {
     static SfxItemPropertyMapEntry const aAccessibilityTextAttrMap_Impl[] =
     {
         COMMON_ACCESSIBILITY_TEXT_ATTRIBUTE
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aAccessibilityTextAttrMap_Impl;
 }
 
-const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetParagraphPropertyMap()
+o3tl::span<const SfxItemPropertyMapEntry>  SwUnoPropertyMapProvider::GetParagraphPropertyMap()
 {
     static SfxItemPropertyMapEntry const aParagraphMap_Impl[] =
     {
@@ -132,13 +129,12 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetParagraphPropertyMa
         // This entry is for adding that properties to style import/export
         // Added for paragraph backgrounds, this is for paragraph itself
         FILL_PROPERTIES_SW
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aParagraphMap_Impl;
 }
 
-const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetAutoParaStylePropertyMap()
+o3tl::span<const SfxItemPropertyMapEntry>  SwUnoPropertyMapProvider::GetAutoParaStylePropertyMap()
 {
     static SfxItemPropertyMapEntry const aAutoParaStyleMap [] =
     {
@@ -168,13 +164,12 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetAutoParaStyleProper
         // This entry is for adding that properties to style import/export
         // Added for paragraph backgrounds, this is for Paragraph AutoStyles
         FILL_PROPERTIES_SW
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aAutoParaStyleMap;
 }
 
-const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetCharStylePropertyMap()
+o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetCharStylePropertyMap()
 {
     static SfxItemPropertyMapEntry const aCharStyleMap   [] =
     {
@@ -230,13 +225,12 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetCharStylePropertyMa
         { u"" UNO_NAME_CHAR_BOTTOM_BORDER_DISTANCE, RES_CHRATR_BOX, cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },
         { u"" UNO_NAME_CHAR_SHADOW_FORMAT, RES_CHRATR_SHADOW, cppu::UnoType<css::table::ShadowFormat>::get(), PROPERTY_NONE, CONVERT_TWIPS},
         { u"" UNO_NAME_LINK_STYLE, FN_UNO_LINK_STYLE, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aCharStyleMap;
 }
 
-const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetAutoCharStylePropertyMap()
+o3tl::span<const SfxItemPropertyMapEntry>  SwUnoPropertyMapProvider::GetAutoCharStylePropertyMap()
 {
     // same as PROPERTY_MAP_TEXTPORTION_EXTENSIONS
     static SfxItemPropertyMapEntry const aAutoCharStyleMap   [] =
@@ -292,13 +286,12 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetAutoCharStyleProper
         { u"" UNO_NAME_CHAR_TOP_BORDER_DISTANCE, RES_CHRATR_BOX, cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, TOP_BORDER_DISTANCE |CONVERT_TWIPS },
         { u"" UNO_NAME_CHAR_BOTTOM_BORDER_DISTANCE, RES_CHRATR_BOX, cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },
         { u"" UNO_NAME_CHAR_SHADOW_FORMAT, RES_CHRATR_SHADOW, cppu::UnoType<css::table::ShadowFormat>::get(), PROPERTY_NONE, CONVERT_TWIPS},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aAutoCharStyleMap;
 }
 
-const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetParaStylePropertyMap()
+o3tl::span<const SfxItemPropertyMapEntry>  SwUnoPropertyMapProvider::GetParaStylePropertyMap()
 {
     static SfxItemPropertyMapEntry const aParaStyleMap [] =
     {
@@ -309,13 +302,12 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetParaStylePropertyMa
         // This entry is for adding that properties to style import/export
         // Added for paragraph backgrounds, this is for Paragraph Styles
         FILL_PROPERTIES_SW
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aParaStyleMap;
 }
 
-const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetConditionalParaStylePropertyMap()
+o3tl::span<const SfxItemPropertyMapEntry>  SwUnoPropertyMapProvider::GetConditionalParaStylePropertyMap()
 {
     static SfxItemPropertyMapEntry const aParaStyleMap [] =
     {
@@ -328,14 +320,12 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetConditionalParaStyl
         // This entry is for adding that properties to style import/export
         // Added for paragraph backgrounds, this is for Paragraph Styles
         FILL_PROPERTIES_SW
-
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aParaStyleMap;
 }
 
-const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetFrameStylePropertyMap()
+o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetFrameStylePropertyMap()
 {
     static SfxItemPropertyMapEntry const aFrameStyleMap   [] =
     {
@@ -424,14 +414,12 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetFrameStylePropertyM
         // and uno types (see loop at end of this method and definition of SW_PROP_NMID)
         // This entry is for adding that properties to style import/export
         FILL_PROPERTIES_SW
-
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aFrameStyleMap;
 }
 
-const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetPageStylePropertyMap()
+o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetPageStylePropertyMap()
 {
     static SfxItemPropertyMapEntry const aPageStyleMap   [] =
     {
@@ -626,13 +614,12 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetPageStylePropertyMa
         { u"" UNO_NAME_FOOTER_FILLTRANSPARENCEGRADIENTNAME,   XATTR_FILLFLOATTRANSPARENCE,    cppu::UnoType<OUString>::get(),        0,  MID_NAME },
         { u"" UNO_NAME_FOOTER_FILLCOLOR_2,                    XATTR_SECONDARYFILLCOLOR,       cppu::UnoType<sal_Int32>::get(),           0,  0},
 
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aPageStyleMap;
 }
 
-const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetTablePropertyMap()
+o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetTablePropertyMap()
 {
     static SfxItemPropertyMapEntry const aTablePropertyMap_Impl[] =
     {
@@ -678,13 +665,12 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetTablePropertyMap()
         { u"" UNO_NAME_COLLAPSING_BORDERS, RES_COLLAPSING_BORDERS, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0},
         REDLINE_NODE_PROPERTIES
         { u"" UNO_NAME_TABLE_INTEROP_GRAB_BAG, RES_FRMATR_GRABBAG, cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(), PROPERTY_NONE, 0 },
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aTablePropertyMap_Impl;
 }
 
-const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetRangePropertyMap()
+o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetRangePropertyMap()
 {
     static SfxItemPropertyMapEntry const aRangePropertyMap_Impl[] =
     {
@@ -700,13 +686,12 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetRangePropertyMap()
         { u"" UNO_NAME_VERT_ORIENT, RES_VERT_ORIENT,      cppu::UnoType<sal_Int16>::get(),           PROPERTY_NONE ,MID_VERTORIENT_ORIENT    },
         { u"" UNO_NAME_CHART_ROW_AS_LABEL, FN_UNO_RANGE_ROW_LABEL,    cppu::UnoType<bool>::get(),         PropertyAttribute::MAYBEVOID,  0},
         { u"" UNO_NAME_CHART_COLUMN_AS_LABEL, FN_UNO_RANGE_COL_LABEL, cppu::UnoType<bool>::get()  ,       PropertyAttribute::MAYBEVOID,     0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aRangePropertyMap_Impl;
 }
 
-const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetSectionPropertyMap()
+o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetSectionPropertyMap()
 {
     static SfxItemPropertyMapEntry const aSectionPropertyMap_Impl[] =
     {
@@ -753,13 +738,12 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetSectionPropertyMap(
         { u"" UNO_NAME_WRITING_MODE, RES_FRAMEDIR, cppu::UnoType<sal_Int16>::get(), PROPERTY_NONE, 0 },
         { u"" UNO_NAME_SECT_LEFT_MARGIN, RES_LR_SPACE,            cppu::UnoType<sal_Int32>::get(),           PropertyAttribute::MAYBEVOID, MID_L_MARGIN|CONVERT_TWIPS},
         { u"" UNO_NAME_SECT_RIGHT_MARGIN, RES_LR_SPACE,           cppu::UnoType<sal_Int32>::get(),           PropertyAttribute::MAYBEVOID, MID_R_MARGIN|CONVERT_TWIPS},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aSectionPropertyMap_Impl;
 }
 
-const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetFramePropertyMap()
+o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetFramePropertyMap()
 {
     static SfxItemPropertyMapEntry const aFramePropertyMap_Impl[] =
     {   //
@@ -788,14 +772,12 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetFramePropertyMap()
         // and uno types (see loop at end of this method and definition of SW_PROP_NMID)
         // This entry is for adding that properties to FlyFrame import/export
         FILL_PROPERTIES_SW
-
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aFramePropertyMap_Impl;
 }
 
-const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetGraphicPropertyMap()
+o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetGraphicPropertyMap()
 {
     static SfxItemPropertyMapEntry const aGraphicPropertyMap_Impl[] =
     {
@@ -835,14 +817,12 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetGraphicPropertyMap(
         // and uno types (see loop at end of this method and definition of SW_PROP_NMID)
         // This entry is for adding that properties to Writer GraphicObject import/export
         FILL_PROPERTIES_SW
-
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aGraphicPropertyMap_Impl;
 }
 
-const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetEmbeddedPropertyMap()
+o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetEmbeddedPropertyMap()
 {
     static SfxItemPropertyMapEntry const aEmbeddedPropertyMap_Impl[] =
     {   //
@@ -870,14 +850,12 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetEmbeddedPropertyMap
         // and uno types (see loop at end of this method and definition of SW_PROP_NMID)
         // This entry is for adding that properties to OLE/EmbeddedObject import/export
         FILL_PROPERTIES_SW
-
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aEmbeddedPropertyMap_Impl;
 }
 
-const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetIndexMarkPropertyMap()
+o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetIndexMarkPropertyMap()
 {
     static SfxItemPropertyMapEntry const aIdxMarkMap_Impl[] =
     {
@@ -889,26 +867,24 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetIndexMarkPropertyMa
         { u"" UNO_NAME_SECONDARY_KEY_READING, WID_SECONDARY_KEY_READING, cppu::UnoType<OUString>::get(), PROPERTY_NONE,     0},
         { u"" UNO_NAME_IS_MAIN_ENTRY, WID_MAIN_ENTRY,     cppu::UnoType<bool>::get()  ,       PROPERTY_NONE,     0},
         COMMON_TEXT_CONTENT_PROPERTIES
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aIdxMarkMap_Impl;
 }
 
-const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetContentMarkPropertyMap()
+o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetContentMarkPropertyMap()
 {
     static SfxItemPropertyMapEntry const aContentMarkMap_Impl[] =
     {
         { u"" UNO_NAME_ALTERNATIVE_TEXT, WID_ALT_TEXT,        cppu::UnoType<OUString>::get()  ,      PROPERTY_NONE,     0},
         { u"" UNO_NAME_LEVEL, WID_LEVEL        ,  cppu::UnoType<sal_Int16>::get()  ,         PROPERTY_NONE,     0},
         COMMON_TEXT_CONTENT_PROPERTIES
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aContentMarkMap_Impl;
 }
 
-const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetUserMarkPropertyMap()
+o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetUserMarkPropertyMap()
 {
     static SfxItemPropertyMapEntry const aUserMarkMap_Impl[] =
     {
@@ -916,13 +892,12 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetUserMarkPropertyMap
         { u"" UNO_NAME_LEVEL,   WID_LEVEL        ,    cppu::UnoType<sal_Int16>::get()  ,         PROPERTY_NONE,     0},
         { u"" UNO_NAME_USER_INDEX_NAME, WID_USER_IDX_NAME,    cppu::UnoType<OUString>::get()  ,      PROPERTY_NONE,     0},
         COMMON_TEXT_CONTENT_PROPERTIES
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aUserMarkMap_Impl;
 }
 
-const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetTextTableCursorPropertyMap()
+o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetTextTableCursorPropertyMap()
 {
     // The PropertySet corresponds to the Range without Chart properties
     static SfxItemPropertyMapEntry const aTableCursorPropertyMap_Impl [] =
@@ -942,13 +917,12 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetTextTableCursorProp
         { u"" UNO_NAME_TEXT_SECTION, FN_UNO_TEXT_SECTION, cppu::UnoType<css::text::XTextSection>::get(),  PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },
         { u"" UNO_NAME_IS_PROTECTED, RES_PROTECT,            cppu::UnoType<bool>::get(), 0, MID_PROTECT_CONTENT},
         { u"" UNO_NAME_VERT_ORIENT, RES_VERT_ORIENT,      cppu::UnoType<sal_Int16>::get(),           PROPERTY_NONE ,MID_VERTORIENT_ORIENT    },
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aTableCursorPropertyMap_Impl;
 }
 
-const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetBookmarkPropertyMap()
+o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetBookmarkPropertyMap()
 {
     static SfxItemPropertyMapEntry const aBookmarkPropertyMap_Impl [] =
     {
@@ -956,24 +930,22 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetBookmarkPropertyMap
         COMMON_TEXT_CONTENT_PROPERTIES
         { u"" UNO_NAME_BOOKMARK_HIDDEN, FN_BOOKMARK_HIDDEN,  cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 },
         { u"" UNO_NAME_BOOKMARK_CONDITION, FN_BOOKMARK_CONDITION,  cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aBookmarkPropertyMap_Impl;
 }
 
-const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetParagraphExtensionsPropertyMap()
+o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetParagraphExtensionsPropertyMap()
 {
     static SfxItemPropertyMapEntry const aParagraphExtensionsMap_Impl[] =
     {
         COMMON_TEXT_CONTENT_PROPERTIES
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aParagraphExtensionsMap_Impl;
 }
 
-const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetTextPortionExtensionPropertyMap()
+o3tl::span<const SfxItemPropertyMapEntry>  SwUnoPropertyMapProvider::GetTextPortionExtensionPropertyMap()
 {
     static SfxItemPropertyMapEntry const aTextPortionExtensionMap_Impl[] =
     {
@@ -987,38 +959,35 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetTextPortionExtensio
         {u"" UNO_NAME_META, FN_UNO_META, cppu::UnoType<css::text::XTextContent>::get(), PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0 },
         { u"" UNO_NAME_LINEBREAK, FN_UNO_LINEBREAK, cppu::UnoType<css::text::XTextContent>::get(),  PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },
         { u"" UNO_NAME_CONTENT_CONTROL, FN_UNO_CONTENT_CONTROL, cppu::UnoType<css::text::XTextContent>::get(), PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0 },
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aTextPortionExtensionMap_Impl;
 }
 
-const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetFootnotePropertyMap()
+o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetFootnotePropertyMap()
 {
     static SfxItemPropertyMapEntry const aFootnoteMap_Impl[] =
     {
         {u"" UNO_NAME_REFERENCE_ID, 0, cppu::UnoType<sal_Int16>::get(),PropertyAttribute::READONLY|PropertyAttribute::MAYBEVOID, 0},
         COMMON_TEXT_CONTENT_PROPERTIES
         REDLINE_NODE_PROPERTIES
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aFootnoteMap_Impl;
 }
 
-const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetLineBreakPropertyMap()
+o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetLineBreakPropertyMap()
 {
     static SfxItemPropertyMapEntry const aLineBreakMap_Impl[] =
     {
         { u"" UNO_NAME_CLEAR, 0, cppu::UnoType<sal_Int16>::get(), PROPERTY_NONE, 0 },
         COMMON_TEXT_CONTENT_PROPERTIES
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aLineBreakMap_Impl;
 }
 
-const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetContentControlPropertyMap()
+o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetContentControlPropertyMap()
 {
     static SfxItemPropertyMapEntry const aContentControlMap_Impl[] =
     {
@@ -1039,13 +1008,12 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetContentControlProper
         { u"" UNO_NAME_DATA_BINDING_XPATH, 0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
         { u"" UNO_NAME_DATA_BINDING_STORE_ITEM_ID, 0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
         { u"" UNO_NAME_COLOR, 0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aContentControlMap_Impl;
 }
 
-const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetRedlinePropertyMap()
+o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetRedlinePropertyMap()
 {
     static SfxItemPropertyMapEntry const aRedlineMap_Impl[] =
     {
@@ -1053,13 +1021,12 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetRedlinePropertyMap(
         REDLINE_NODE_PROPERTIES
         {u"" UNO_NAME_REDLINE_START, 0, cppu::UnoType<css::uno::XInterface>::get(),  PropertyAttribute::READONLY,    0},
         {u"" UNO_NAME_REDLINE_END, 0, cppu::UnoType<css::uno::XInterface>::get(),    PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aRedlineMap_Impl;
 }
 
-SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetTextDefaultPropertyMap()
+o3tl::span<SfxItemPropertyMapEntry>  SwUnoPropertyMapProvider::GetTextDefaultPropertyMap()
 {
     static SfxItemPropertyMapEntry aTextDefaultMap_Impl[] =
     {
@@ -1074,13 +1041,12 @@ SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetTextDefaultPropertyMap()
         //text grid enhancement for better CJK support.  2007-04-01
         //just export the default page mode property, other properties are not handled in this version
         { u"" UNO_NAME_GRID_STANDARD_PAGE_MODE, RES_TEXTGRID, cppu::UnoType<bool>::get(), PROPERTY_NONE, MID_GRID_STANDARD_MODE},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aTextDefaultMap_Impl;
 }
 
-const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetRedlinePortionPropertyMap()
+o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetRedlinePortionPropertyMap()
 {
     static SfxItemPropertyMapEntry const aRedlinePortionMap_Impl[] =
     {
@@ -1091,7 +1057,6 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetRedlinePortionPrope
         {u"" UNO_NAME_IS_START, FN_UNO_IS_START, cppu::UnoType<bool>::get(),                             PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0 },
         REDLINE_PROPERTIES(0)
         {u"" UNO_NAME_TEXT_PORTION_TYPE, FN_UNO_TEXT_PORTION_TYPE, cppu::UnoType<OUString>::get(),                        PropertyAttribute::READONLY, 0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     return aRedlinePortionMap_Impl;
@@ -1101,7 +1066,7 @@ const SfxItemPropertySet*  SwUnoPropertyMapProvider::GetPropertySet( sal_uInt16 
 {
     if( !m_aPropertySetArr[nPropertyId] )
     {
-        const SfxItemPropertyMapEntry* pEntries = GetPropertyMapEntries(nPropertyId);
+        o3tl::span<const SfxItemPropertyMapEntry> pEntries = GetPropertyMapEntries(nPropertyId);
         switch( nPropertyId )
         {
             case PROPERTY_MAP_TEXT_CURSOR:
