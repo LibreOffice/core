@@ -2453,6 +2453,11 @@ VclPtr<vcl::Window> MenuBar::ImplCreate(vcl::Window* pParent, vcl::Window* pWind
     pMenu->pStartedFrom = nullptr;
     pMenu->pWindow = pMenuBarWindow;
     pMenuBarWindow->SetMenu(pMenu);
+    if (pMenuBarWindow) {
+        // This is needed at least on macOS to make the JunitTest_toolkit_unoapi_1
+        // toolkit.AccessibleMenu test pass:
+        pMenu->ImplCalcSize(pMenuBarWindow);
+    }
 
     return pMenuBarWindow;
 }
