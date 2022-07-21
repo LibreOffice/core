@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "017da6e6_d6d6ddce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-07-21T05:54:50Z",
+      "side": 1,
+      "message": "I admit I\u0027m a noob here, but CRC being platform-dependent IMO looks strange, invalidating any CRCs written into stuff like ZIP etc... there should be some platform-independent algorithm I suppose.",
+      "revId": "eea7038c182cc1f6cd792359053ea2561a200026",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
