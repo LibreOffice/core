@@ -7,14 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-/*
- * This is a tool that will be useful for various tasks if/when we build LO on WSL
- *
- * It is a Win32 program, not a Linux (WSL) one.
- *
- * Compile as: cl -MD wsl-lo-helper.cpp advapi32.lib
- */
-
 #include <cstdio>
 #include <cstring>
 
