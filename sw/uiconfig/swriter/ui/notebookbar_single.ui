@@ -752,7 +752,7 @@
                             <child>
                               <object class="GtkMenuToolButton" id="Default-BackColor">
                                 <property name="visible">True</property>
-                                <property name="action_name">.uno:BackColor</property>
+                                <property name="action_name">.uno:CharBackColor</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -2022,7 +2022,7 @@
                             <child>
                               <object class="GtkMenuToolButton" id="Table-BackColor1">
                                 <property name="visible">True</property>
-                                <property name="action_name">.uno:BackColor</property>
+                                <property name="action_name">.uno:CharBackColor</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>

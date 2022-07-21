@@ -3268,7 +3268,7 @@ sal_uInt16 MapCommandToSlotId(const OUString& rCommand)
         return SID_ATTR_CHAR_COLOR;
     else if (rCommand == ".uno:FontColor")
         return SID_ATTR_CHAR_COLOR2;
-    else if (rCommand == ".uno:BackColor")
+    else if (rCommand == ".uno:BackColor") // deprecated - use CharBackColor
         return SID_ATTR_CHAR_COLOR_BACKGROUND;
     else if (rCommand == ".uno:CharBackColor")
         return SID_ATTR_CHAR_BACK_COLOR;
@@ -3336,6 +3336,7 @@ void SvxColorToolBoxControl::update()
             addStatusListener( ".uno:CharColorExt");
             break;
 
+        // case SID_ATTR_CHAR_BACK_COLOR:
         case SID_ATTR_CHAR_COLOR_BACKGROUND:
             addStatusListener( ".uno:CharBackgroundExt");
             break;
@@ -3493,6 +3494,7 @@ void SvxColorToolBoxControl::execute(sal_Int16 /*nSelectModifier*/)
             aCommand    = ".uno:CharColorExt";
             break;
 
+        // case SID_ATTR_CHAR_BACK_COLOR:
         case SID_ATTR_CHAR_COLOR_BACKGROUND :
             aCommand    = ".uno:CharBackgroundExt";
             break;
