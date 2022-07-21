@@ -267,7 +267,9 @@
                         <property name="title" translatable="yes" context="insertbookmark|text">Text</property>
                         <property name="clickable">True</property>
                         <child>
-                          <object class="GtkCellRendererText" id="cellrenderer2"/>
+                          <object class="GtkCellRendererText" id="cellrenderer2">
+                            <property name="editable">True</property>
+                          </object>
                           <attributes>
                             <attribute name="text">2</attribute>
                           </attributes>
@@ -364,6 +366,20 @@
               </packing>
             </child>
             <child>
+              <object class="GtkButton" id="edittext">
+                <property name="label" translatable="yes" context="insertbookmark|edittext">Edit Text</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="pack-type">end</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkButton" id="rename">
                 <property name="label" translatable="yes" context="insertbookmark|rename">Rename</property>
                 <property name="visible">True</property>
@@ -374,7 +390,7 @@
                 <property name="expand">False</property>
                 <property name="fill">False</property>
                 <property name="pack-type">end</property>
-                <property name="position">2</property>
+                <property name="position">3</property>
               </packing>
             </child>
           </object>
