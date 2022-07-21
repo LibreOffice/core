@@ -16,6 +16,24 @@
       "message": "can probably remove this too, now?",
       "revId": "a0bcd1d187a4e56a9fa600462842004545b6be9c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "214b5525_6bfb1009",
+        "filename": "vcl/quartz/salbmp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-07-21T14:16:23Z",
+      "side": 0,
+      "message": "oh.. I though I did",
+      "parentUuid": "a3b9891e_ba743771",
+      "revId": "a0bcd1d187a4e56a9fa600462842004545b6be9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
