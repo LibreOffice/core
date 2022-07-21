@@ -2275,16 +2275,7 @@ SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
         {
             --rSh.mnStartAction;
 
-            // When using tiled rendering, idle painting is disabled and paints are done
-            // only later by tiled rendering. But paints call SwViewShellImp::DeletePaintRegion()
-            // to reset this HasPaintRegion(), and if it's done too late,
-            // SwTiledRenderingTest::testTablePaintInvalidate() will end up in an infinite
-            // loop, because the idle layout will call this code repeatedly, because there
-            // will be no idle paints to reset HasPaintRegion().
-            // This code dates back to the initial commit, and I find its purpose unclear,
-            // so I'm still leaving it here in case it turns out it serves a purpose.
-            static const bool blockOnRepaints = true;
-            if (!blockOnRepaints && rSh.Imp()->HasPaintRegion())
+            if ( rSh.Imp()->HasPaintRegion() )
                 bActions = true;
             else
             {
