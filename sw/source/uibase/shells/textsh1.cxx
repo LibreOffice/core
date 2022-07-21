@@ -1228,7 +1228,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
             }
         }
         break;
-        case SID_ATTR_CHAR_COLOR_BACKGROUND:
+        case SID_ATTR_CHAR_BACK_COLOR:
+        case SID_ATTR_CHAR_COLOR_BACKGROUND: // deprecated
         case SID_ATTR_CHAR_COLOR_BACKGROUND_EXT:
         case SID_ATTR_CHAR_COLOR_EXT:
         {
@@ -1275,7 +1276,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     rWrtSh.SetAttrItem(
                         SvxColorItem(aSet, RES_CHRATR_COLOR) );
             }
-            else if (nSlot == SID_ATTR_CHAR_COLOR_BACKGROUND)
+            else if (nSlot == SID_ATTR_CHAR_COLOR_BACKGROUND || nSlot == SID_ATTR_CHAR_BACK_COLOR)
             {
                 if (!pApply || pApply->nColor != SID_ATTR_CHAR_COLOR_BACKGROUND_EXT)
                 {
@@ -1829,6 +1830,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 rSet.Put( aColorItem.CloneSetWhich(SID_ATTR_CHAR_COLOR2) );
             }
             break;
+        case SID_ATTR_CHAR_BACK_COLOR:
         case SID_ATTR_CHAR_COLOR_BACKGROUND:
             {
                 // Always use the visible background

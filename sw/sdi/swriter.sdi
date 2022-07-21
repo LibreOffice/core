@@ -377,7 +377,26 @@ SfxVoidItem AutoSum FN_TABLE_AUTOSUM
     GroupId = SfxGroupId::Table;
 ]
 
-SvxColorItem BackColor SID_ATTR_CHAR_COLOR_BACKGROUND
+SvxColorItem CharBackColor SID_ATTR_CHAR_BACK_COLOR
+(SfxStringItem Color SID_ATTR_COLOR_STR, SvxColorItem CharBackColor SID_ATTR_CHAR_BACK_COLOR)
+
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Format;
+]
+
+SvxColorItem BackColor SID_ATTR_CHAR_COLOR_BACKGROUND // deprecated - use CHAR_BACK_COLOR
 (SfxStringItem Color SID_ATTR_COLOR_STR, SvxColorItem BackColor SID_ATTR_CHAR_COLOR_BACKGROUND)
 
 [

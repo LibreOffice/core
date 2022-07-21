@@ -3658,7 +3658,7 @@
                             <child>
                               <object class="GtkMenuToolButton" id="Home-BackColor">
                                 <property name="visible">True</property>
-                                <property name="action_name">.uno:BackColor</property>
+                                <property name="action_name">.uno:CharBackColor</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>

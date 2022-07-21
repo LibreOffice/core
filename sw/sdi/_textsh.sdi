@@ -1387,7 +1387,13 @@ interface BaseText
         StateMethod = GetTextFontCtrlState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
-    SID_ATTR_CHAR_COLOR_BACKGROUND // status()
+    SID_ATTR_CHAR_BACK_COLOR // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+    SID_ATTR_CHAR_COLOR_BACKGROUND // status() deprecated - use CHAR_BACK_COLOR
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
