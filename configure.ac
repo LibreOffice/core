@@ -3849,6 +3849,31 @@ reg_get_value_64()
     reg_get_value "64" "$1"
 }
 
+reg_list_values()
+{
+    # Return value: $reglist
+    unset reglist
+
+    if test "$build_os" = "wsl"; then
+        reglist=$($WSL_LO_HELPER --list-registry $1 "$2" 2>/dev/null | tr -d '\r')
+        return
+    fi
+
+    reglist=$(ls "/proc/registry${1}/${2}")
+}
+
+# List values from the 32-bit side of the Registry
+reg_list_values_32()
+{
+    reg_list_values "32" "$1"
+}
+
+# List values from the 64-bit side of the Registry
+reg_list_values_64()
+{
+    reg_list_values "64" "$1"
+}
+
 case "$host_os" in
 cygwin*|wsl*)
     COM=MSC
@@ -6510,15 +6535,18 @@ find_al()
     # We need this check to detect 4.6.1 or above.
     for ver in 4.8 4.7.2 4.7.1 4.7 4.6.2 4.6.1; do
         reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/NETFXSDK/$ver/WinSDK-NetFx40Tools/InstallationFolder"
-        if test -n "$regvalue" -a \( -f "$regvalue/al.exe" -o -f "$regvalue/bin/al.exe" \); then
+        PathFormat "$regvalue"
+        if test -n "$regvalue" -a \( -f "$formatted_path_unix/al.exe" -o -f "$formatted_path_unix/bin/al.exe" \); then
             altest=$regvalue
             return
         fi
     done
 
-    for x in `ls /proc/registry32/HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft\ SDKs/Windows`; do
+    reg_list_values_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows"
+    for x in $reglist; do
         reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/$x/WinSDK-NetFx40Tools/InstallationFolder"
-        if test -n "$regvalue" -a \( -f "$regvalue/al.exe" -o -f "$regvalue/bin/al.exe" \); then
+        PathFormat "$regvalue"
+        if test -n "$regvalue" -a \( -f "$formatted_path_unix/al.exe" -o -f "$formatted_path_unix/bin/al.exe" \); then
             altest=$regvalue
             return
         fi
@@ -6804,26 +6832,30 @@ AC_SUBST(WINDOWS_SDK_LIB_SUBDIR)
 AC_SUBST(WINDOWS_SDK_VERSION)
 AC_SUBST(WINDOWS_SDK_WILANGID)
 
-if test "$build_os" = "cygwin"; then
+if test "$build_os" = "cygwin" -o "$build_os" = "wsl"; then
     dnl Check midl.exe; this being the first check for a tool in the SDK bin
     dnl dir, it also determines that dir's path w/o an arch segment if any,
     dnl WINDOWS_SDK_BINDIR_NO_ARCH:
     AC_MSG_CHECKING([for midl.exe])
 
     find_winsdk
+    PathFormat "$winsdktest"
+    winsdktest_unix="$formatted_path_unix"
+
     if test -n "$winsdkbinsubdir" \
-        -a -f "$winsdktest/Bin/$winsdkbinsubdir/$WIN_BUILD_ARCH/midl.exe"
+        -a -f "$winsdktest_unix/Bin/$winsdkbinsubdir/$WIN_BUILD_ARCH/midl.exe"
     then
         MIDL_PATH=$winsdktest/Bin/$winsdkbinsubdir/$WIN_BUILD_ARCH
-        WINDOWS_SDK_BINDIR_NO_ARCH=$WINDOWS_SDK_HOME/Bin/$winsdkbinsubdir
-    elif test -f "$winsdktest/Bin/$WIN_BUILD_ARCH/midl.exe"; then
+        WINDOWS_SDK_BINDIR_NO_ARCH=$WINDOWS_SDK_HOME_unix/Bin/$winsdkbinsubdir
+    elif test -f "$winsdktest_unix/Bin/$WIN_BUILD_ARCH/midl.exe"; then
         MIDL_PATH=$winsdktest/Bin/$WIN_BUILD_ARCH
-        WINDOWS_SDK_BINDIR_NO_ARCH=$WINDOWS_SDK_HOME/Bin
-    elif test -f "$winsdktest/Bin/midl.exe"; then
+        WINDOWS_SDK_BINDIR_NO_ARCH=$WINDOWS_SDK_HOME_unix/Bin
+    elif test -f "$winsdktest_unix/Bin/midl.exe"; then
         MIDL_PATH=$winsdktest/Bin
-        WINDOWS_SDK_BINDIR_NO_ARCH=$WINDOWS_SDK_HOME/Bin
+        WINDOWS_SDK_BINDIR_NO_ARCH=$WINDOWS_SDK_HOME_unix/Bin
     fi
-    if test ! -f "$MIDL_PATH/midl.exe"; then
+    PathFormat "$MIDL_PATH"
+    if test ! -f "$formatted_path_unix/midl.exe"; then
         AC_MSG_ERROR([midl.exe not found in $winsdktest/Bin/$WIN_BUILD_ARCH, Windows SDK installation broken?])
     else
         AC_MSG_RESULT([$MIDL_PATH/midl.exe])
@@ -6851,10 +6883,12 @@ if test "$build_os" = "cygwin"; then
     dnl Check csc.exe
     AC_MSG_CHECKING([for csc.exe])
     find_csc
-    if test -f "$csctest/csc.exe"; then
+    PathFormat "$csctest"
+    csctest_unix="$formatted_path_unix"
+    if test -f "$csctest_unix/csc.exe"; then
         CSC_PATH="$csctest"
     fi
-    if test ! -f "$CSC_PATH/csc.exe"; then
+    if test ! -f "$csctest_unix/csc.exe"; then
         AC_MSG_ERROR([csc.exe not found as $CSC_PATH/csc.exe])
     else
         AC_MSG_RESULT([$CSC_PATH/csc.exe])
@@ -6864,26 +6898,28 @@ if test "$build_os" = "cygwin"; then
 
     dnl Check al.exe
     AC_MSG_CHECKING([for al.exe])
-    find_winsdk
     if test -n "$winsdkbinsubdir" \
-        -a -f "$winsdktest/Bin/$winsdkbinsubdir/$WIN_BUILD_ARCH/al.exe"
+        -a -f "$winsdktest_unix/Bin/$winsdkbinsubdir/$WIN_BUILD_ARCH/al.exe"
     then
         AL_PATH="$winsdktest/Bin/$winsdkbinsubdir/$WIN_BUILD_ARCH"
-    elif test -f "$winsdktest/Bin/$WIN_BUILD_ARCH/al.exe"; then
+    elif test -f "$winsdktest_unix/Bin/$WIN_BUILD_ARCH/al.exe"; then
         AL_PATH="$winsdktest/Bin/$WIN_BUILD_ARCH"
-    elif test -f "$winsdktest/Bin/al.exe"; then
+    elif test -f "$winsdktest_unix/Bin/al.exe"; then
         AL_PATH="$winsdktest/Bin"
     fi
 
     if test -z "$AL_PATH"; then
         find_al
-        if test -f "$altest/bin/al.exe"; then
+        PathFormat "$altest"
+        altest_unix="$formatted_path_unix"
+        if test -f "$altest_unix/bin/al.exe"; then
             AL_PATH="$altest/bin"
-        elif test -f "$altest/al.exe"; then
+        elif test -f "$altest_unix/al.exe"; then
             AL_PATH="$altest"
         fi
     fi
-    if test ! -f "$AL_PATH/al.exe"; then
+    PathFormat "$AL_PATH"
+    if test ! -f "$formatted_path_unix/al.exe"; then
         AC_MSG_ERROR([al.exe not found as $AL_PATH/al.exe])
     else
         AC_MSG_RESULT([$AL_PATH/al.exe])
@@ -6895,16 +6931,16 @@ if test "$build_os" = "cygwin"; then
     AC_MSG_CHECKING(.NET Framework)
     find_dotnetsdk46
     PathFormat "$frametest"
-    frametest="$formatted_path"
+    frametest="$formatted_path_unix"
     if test -f "$frametest/Lib/um/$WIN_BUILD_ARCH/mscoree.lib"; then
         DOTNET_FRAMEWORK_HOME="$frametest"
     else
-        find_winsdk
-        if test -f "$winsdktest/lib/mscoree.lib" -o -f "$winsdktest/lib/$winsdklibsubdir/um/$WIN_BUILD_ARCH/mscoree.lib"; then
+        if test -f "$winsdktest_unix/lib/mscoree.lib" -o -f "$winsdktest_unix/lib/$winsdklibsubdir/um/$WIN_BUILD_ARCH/mscoree.lib"; then
             DOTNET_FRAMEWORK_HOME="$winsdktest"
         fi
     fi
-    if test ! -f "$DOTNET_FRAMEWORK_HOME/lib/mscoree.lib" -a ! -f "$DOTNET_FRAMEWORK_HOME/lib/$winsdklibsubdir/um/$WIN_BUILD_ARCH/mscoree.lib" -a ! -f "$DOTNET_FRAMEWORK_HOME/Lib/um/$WIN_BUILD_ARCH/mscoree.lib"; then
+    PathFormat "$DOTNET_FRAMEWORK_HOME"
+    if test ! -f "$formatted_path_unix/lib/mscoree.lib" -a ! -f "$formatted_path_unix/lib/$winsdklibsubdir/um/$WIN_BUILD_ARCH/mscoree.lib" -a ! -f "$formatted_path_unix/Lib/um/$WIN_BUILD_ARCH/mscoree.lib"; then
         AC_MSG_ERROR([mscoree.lib not found])
     fi
     AC_MSG_RESULT([found: $DOTNET_FRAMEWORK_HOME])
@@ -9794,7 +9830,7 @@ no|disable)
         fi
         AC_MSG_RESULT([none, overridden by --disable-scripting])
         enable_python=no
-    elif test $build_os = cygwin; then
+    elif test $build_os = cygwin -o $build_os = wsl; then
         dnl When building on Windows we don't attempt to use any installed
         dnl "system"  Python.
         AC_MSG_RESULT([fully internal])
@@ -14295,14 +14331,15 @@ AC_SUBST(PARALLELISM)
 # Set up ILIB for MSVC build
 #
 ILIB1=
-if test "$build_os" = "cygwin"; then
+if test "$build_os" = "cygwin" -o "$build_os" = "wsl"; then
     ILIB="."
     if test -n "$JAVA_HOME"; then
         ILIB="$ILIB;$JAVA_HOME/lib"
     fi
     ILIB1=-link
-    ILIB="$ILIB;$COMPATH/lib/$WIN_HOST_ARCH"
-    ILIB1="$ILIB1 -LIBPATH:$COMPATH/lib/$WIN_HOST_ARCH"
+    PathFormat "${COMPATH}/lib/$WIN_HOST_ARCH"
+    ILIB="$ILIB;$formatted_path"
+    ILIB1="$ILIB1 -LIBPATH:$formatted_path"
     ILIB="$ILIB;$WINDOWS_SDK_HOME/lib/$WIN_HOST_ARCH"
     ILIB1="$ILIB1 -LIBPATH:$WINDOWS_SDK_HOME/lib/$WIN_HOST_ARCH"
     if test $WINDOWS_SDK_VERSION = 80 -o $WINDOWS_SDK_VERSION = 81 -o $WINDOWS_SDK_VERSION = 10; then
@@ -14314,9 +14351,11 @@ if test "$build_os" = "cygwin"; then
     ILIB="$ILIB;$ucrtlibpath_formatted"
     ILIB1="$ILIB1 -LIBPATH:$ucrtlibpath_formatted"
     if test -f "$DOTNET_FRAMEWORK_HOME/lib/mscoree.lib"; then
-        ILIB="$ILIB;$DOTNET_FRAMEWORK_HOME/lib"
+        PathFormat "$DOTNET_FRAMEWORK_HOME/lib"
+        ILIB="$ILIB;$formatted_path"
     else
-        ILIB="$ILIB;$DOTNET_FRAMEWORK_HOME/Lib/um/$WIN_HOST_ARCH"
+        PathFormat "$DOTNET_FRAMEWORK_HOME/Lib/um/$WIN_HOST_ARCH"
+        ILIB="$ILIB;$formatted_path"
     fi
 
     if test "$cross_compiling" != "yes"; then
@@ -14517,7 +14556,8 @@ dnl ===================================================================
 
 if test $_os = WINNT -a -f "$SRC_ROOT/antivirusDetection.vbs" ; then
     AC_MSG_CHECKING([for active Antivirus software])
-    ANTIVIRUS_LIST=`cscript.exe //Nologo $SRC_ROOT/antivirusDetection.vbs`
+    PathFormat "$SRC_ROOT/antivirusDetection.vbs"
+    ANTIVIRUS_LIST=`cscript.exe //Nologo ${formatted_path}`
     if [ [ "$ANTIVIRUS_LIST" != "NULL" ] ]; then
         if [ [ "$ANTIVIRUS_LIST" != "NOT_FOUND" ] ]; then
             AC_MSG_RESULT([found])
@@ -14550,7 +14590,7 @@ AC_MSG_NOTICE([setting up the build environment variables...])
 
 AC_SUBST(COMPATH)
 
-if test "$build_os" = "cygwin"; then
+if test "$build_os" = "cygwin" -o "$build_os" = wsl; then
     if test -d "$COMPATH/atlmfc/lib/spectre"; then
         ATL_LIB="$COMPATH/atlmfc/lib/spectre"
         ATL_INCLUDE="$COMPATH/atlmfc/include"
@@ -14564,7 +14604,9 @@ if test "$build_os" = "cygwin"; then
     ATL_LIB="$ATL_LIB/$WIN_HOST_ARCH"
     ATL_LIB=`win_short_path_for_make "$ATL_LIB"`
     ATL_INCLUDE=`win_short_path_for_make "$ATL_INCLUDE"`
+fi
 
+if test "$build_os" = "cygwin"; then
     # sort.exe and find.exe also exist in C:/Windows/system32 so need /usr/bin/
     PathFormat "/usr/bin/find.exe"
     FIND="$formatted_path"
