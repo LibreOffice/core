@@ -50,7 +50,7 @@
  <toolbar:toolbaritem xlink:href=".uno:SmallCaps" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Color"/>
- <toolbar:toolbaritem xlink:href=".uno:BackColor"/>
+ <toolbar:toolbaritem xlink:href=".uno:CharBackColor"/>
  <toolbar:toolbaritem xlink:href=".uno:BackgroundColor" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:LeftPara"/>
