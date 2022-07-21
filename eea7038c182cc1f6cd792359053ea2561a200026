@@ -16,6 +16,24 @@
       "message": "I admit I\u0027m a noob here, but CRC being platform-dependent IMO looks strange, invalidating any CRCs written into stuff like ZIP etc... there should be some platform-independent algorithm I suppose.",
       "revId": "eea7038c182cc1f6cd792359053ea2561a200026",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5a41490_2dedd7ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-07-21T06:19:00Z",
+      "side": 1,
+      "message": "note that, in the case here, it is not the CRC computation for a given bitmap that is platform dependent, but rather the chosen bitmap format itself (of which a seemingly natural consequence is that the resulting CRCs differ, too)",
+      "parentUuid": "017da6e6_d6d6ddce",
+      "revId": "eea7038c182cc1f6cd792359053ea2561a200026",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
