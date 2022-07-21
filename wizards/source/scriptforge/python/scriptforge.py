@@ -1799,7 +1799,7 @@ class SFDialogs:
             return self.ExecMethod(self.vbMethod + self.flgHardCode, 'EndExecute', returnvalue)
 
         def Execute(self, modal = True):
-            return self.ExecMethod(self.vbMethod, 'Execute', modal)
+            return self.ExecMethod(self.vbMethod + self.flgHardCode, 'Execute', modal)
 
         def GetTextsFromL10N(self, l10n):
             l10nobj = l10n.objectreference if isinstance(l10n, SFScriptForge.SF_L10N) else l10n
