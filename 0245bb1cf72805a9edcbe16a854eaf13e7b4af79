@@ -16,6 +16,24 @@
       "message": "Overall I think this is better. This way we get bounds checking with \u0027at\u0027, and by passing the width I don\u0027t think there\u0027s a scenario were this wouldn\u0027t work... but even if it did and it tried to write out of bounds we would immediately know because \u0027at\u0027 would throw an exception. Not sure however... let\u0027s see if the tests pass first",
       "revId": "0245bb1cf72805a9edcbe16a854eaf13e7b4af79",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9cd5488_4ad97340",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-07-21T07:29:38Z",
+      "side": 1,
+      "message": "It\u0027s not better if the bounds are checked at every \"at\" call. Typical images have multi-millions of pixels and you will check this for every pixel, so multi-million times instead of once.",
+      "parentUuid": "5259d716_4f0defba",
+      "revId": "0245bb1cf72805a9edcbe16a854eaf13e7b4af79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
