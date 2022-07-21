@@ -38,7 +38,7 @@ class impBufferDevice
     tools::Rectangle maDestPixel;
 
 public:
-    impBufferDevice(OutputDevice& rOutDev, const basegfx::B2DRange& rRange);
+    impBufferDevice(OutputDevice& rOutDev, const basegfx::B2DRange& rRange, bool bCrop = true);
     ~impBufferDevice();
 
     void paint(double fTrans = 0.0);

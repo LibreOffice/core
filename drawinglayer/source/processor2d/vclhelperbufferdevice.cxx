@@ -285,18 +285,17 @@ VDevBuffer& getVDevBuffer()
     return *aVDevBuffer.get();
 }
 
-impBufferDevice::impBufferDevice(OutputDevice& rOutDev, const basegfx::B2DRange& rRange)
+impBufferDevice::impBufferDevice(OutputDevice& rOutDev, const basegfx::B2DRange& rRange, bool bCrop)
     : mrOutDev(rOutDev)
     , mpContent(nullptr)
     , mpAlpha(nullptr)
 {
     basegfx::B2DRange aRangePixel(rRange);
     aRangePixel.transform(mrOutDev.GetViewTransformation());
-    const ::tools::Rectangle aRectPixel(floor(aRangePixel.getMinX()), floor(aRangePixel.getMinY()),
-                                        ceil(aRangePixel.getMaxX()), ceil(aRangePixel.getMaxY()));
-    const Point aEmptyPoint;
-    maDestPixel = ::tools::Rectangle(aEmptyPoint, mrOutDev.GetOutputSizePixel());
-    maDestPixel.Intersection(aRectPixel);
+    maDestPixel = tools::Rectangle(floor(aRangePixel.getMinX()), floor(aRangePixel.getMinY()),
+                                   ceil(aRangePixel.getMaxX()), ceil(aRangePixel.getMaxY()));
+    if (bCrop)
+        maDestPixel.Intersection({ {}, mrOutDev.GetOutputSizePixel() });
 
     if (!isVisible())
         return;
