@@ -186,7 +186,7 @@ static void lcl_SetRuleChgd( SwTextNode& rNd, sal_uInt8 nLevel )
 SwNumFormat::SwNumFormat() :
     SvxNumberFormat(SVX_NUM_ARABIC),
     SwClient( nullptr ),
-    m_pVertOrient(new SwFormatVertOrient( 0, text::VertOrientation::NONE))
+    m_aVertOrient( 0, text::VertOrientation::NONE )
     ,m_cGrfBulletCP(USHRT_MAX)//For i120928,record the cp info of graphic within bullet
 {
 }
@@ -194,7 +194,7 @@ SwNumFormat::SwNumFormat() :
 SwNumFormat::SwNumFormat( const SwNumFormat& rFormat) :
     SvxNumberFormat(rFormat),
     SwClient( rFormat.GetRegisteredInNonConst() ),
-    m_pVertOrient(new SwFormatVertOrient( 0, rFormat.GetVertOrient()))
+    m_aVertOrient( 0, rFormat.GetVertOrient() )
     ,m_cGrfBulletCP(rFormat.m_cGrfBulletCP)//For i120928,record the cp info of graphic within bullet
 {
     sal_Int16 eMyVertOrient = rFormat.GetVertOrient();
@@ -204,7 +204,7 @@ SwNumFormat::SwNumFormat( const SwNumFormat& rFormat) :
 
 SwNumFormat::SwNumFormat(const SvxNumberFormat& rNumFormat, SwDoc* pDoc)
     : SvxNumberFormat(rNumFormat)
-    , m_pVertOrient(new SwFormatVertOrient( 0, rNumFormat.GetVertOrient()))
+    , m_aVertOrient( 0, rNumFormat.GetVertOrient() )
     , m_cGrfBulletCP(USHRT_MAX)
 {
     sal_Int16 eMyVertOrient = rNumFormat.GetVertOrient();
@@ -319,7 +319,7 @@ void    SwNumFormat::SetGraphicBrush( const SvxBrushItem* pBrushItem, const Size
     const sal_Int16* pOrient)
 {
     if(pOrient)
-        m_pVertOrient->SetVertOrient( *pOrient );
+        m_aVertOrient.SetVertOrient( *pOrient );
     SvxNumberFormat::SetGraphicBrush( pBrushItem, pSize, pOrient);
 }
 
@@ -355,8 +355,8 @@ const SwFormatVertOrient*      SwNumFormat::GetGraphicOrientation() const
         return nullptr;
     else
     {
-        m_pVertOrient->SetVertOrient(eOrient);
-        return m_pVertOrient.get();
+        const_cast<SwFormatVertOrient&>(m_aVertOrient).SetVertOrient(eOrient);
+        return &m_aVertOrient;
     }
 }
 
