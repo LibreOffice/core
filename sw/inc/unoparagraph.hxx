@@ -45,6 +45,7 @@ class SwStartNode;
 class SwTextNode;
 class SwTableBox;
 class SwXText;
+class SwXTextPortionEnumeration;
 
 typedef ::cppu::ImplInheritanceHelper
 <   ::sfx2::MetadatableMixin
@@ -206,6 +207,8 @@ public:
     virtual OUString SAL_CALL getString() override;
     virtual void SAL_CALL setString(const OUString& rString) override;
 
+    /// tries to return less data, but may return more than just text fields
+    rtl::Reference<SwXTextPortionEnumeration> createTextFieldsEnumeration();
 };
 
 

@@ -96,6 +96,7 @@
 #include <fmtmeta.hxx>
 #include <unotxdoc.hxx>
 #include <unotextbodyhf.hxx>
+#include <unoport.hxx>
 
 #include <tools/diagnose_ex.h>
 #include <IDocumentRedlineAccess.hxx>
@@ -542,17 +543,16 @@ bool lcl_IsParagraphClassificationField(const uno::Reference<frame::XModel>& xMo
 }
 
 uno::Reference<text::XTextField> lcl_FindParagraphClassificationField(const uno::Reference<frame::XModel>& xModel,
-                                                                      const uno::Reference<text::XTextContent>& xParagraph,
+                                                                      const rtl::Reference<SwXParagraph>& xParagraph,
                                                                       std::u16string_view sKey = u"")
 {
     uno::Reference<text::XTextField> xTextField;
 
-    uno::Reference<container::XEnumerationAccess> xTextPortionEnumerationAccess(xParagraph, uno::UNO_QUERY);
-    if (!xTextPortionEnumerationAccess.is())
+    if (!xParagraph.is())
         return xTextField;
 
     // Enumerate text portions to find metadata fields. This is expensive, best to enumerate fields only.
-    uno::Reference<container::XEnumeration> xTextPortions = xTextPortionEnumerationAccess->createEnumeration();
+    rtl::Reference<SwXTextPortionEnumeration> xTextPortions = xParagraph->createTextFieldsEnumeration();
     while (xTextPortions->hasMoreElements())
     {
         uno::Reference<beans::XPropertySet> xTextPortion(xTextPortions->nextElement(), uno::UNO_QUERY);
@@ -1159,7 +1159,7 @@ void SwEditShell::SetClassification(const OUString& rName, SfxClassificationPoli
 // on a performance-sensitive path.
 static void lcl_ApplyParagraphClassification(SwDoc* pDoc,
                                       const uno::Reference<frame::XModel>& xModel,
-                                      const uno::Reference<text::XTextContent>& xParent,
+                                      const rtl::Reference<SwXParagraph>& xParent,
                                       const css::uno::Reference<css::rdf::XResource>& xNodeSubject,
                                       std::vector<svx::ClassificationResult> aResults)
 {
@@ -1932,11 +1932,12 @@ void SwEditShell::RestoreMetadataFieldsAndValidateParagraphSignatures()
 
     while (xParagraphs->hasMoreElements())
     {
-        uno::Reference<text::XTextContent> xParagraph(xParagraphs->nextElement(), uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xParaOrTable(xParagraphs->nextElement(), uno::UNO_QUERY);
+        rtl::Reference<SwXParagraph> xParagraph(dynamic_cast<SwXParagraph*>(xParaOrTable.get()));
 
         try
         {
-            const css::uno::Reference<css::rdf::XResource> xSubject(xParagraph, uno::UNO_QUERY);
+            const css::uno::Reference<css::rdf::XResource> xSubject(xParagraph);
             const std::map<OUString, OUString> aStatements = SwRDFHelper::getStatements(xModel, aGraphNames, xSubject);
 
             const auto it = aStatements.find(ParagraphClassificationFieldNamesRDFName);
@@ -1991,7 +1992,7 @@ void SwEditShell::RestoreMetadataFieldsAndValidateParagraphSignatures()
 
             // Get Signatures
             std::map<OUString, SignatureDescr> aSignatures;
-            for (const auto& pair : lcl_getRDFStatements(xModel, xParagraph))
+            for (const auto& pair : lcl_getRDFStatements(xModel, uno::Reference<css::text::XTextContent>(xParagraph)))
             {
                 const OUString& sName = pair.first;
                 if (sName.startsWith(ParagraphSignatureRDFNamespace))
@@ -2080,7 +2081,7 @@ bool SwEditShell::RemoveParagraphMetadataFieldAtCursor()
 }
 
 static OUString lcl_GetParagraphClassification(SfxClassificationHelper & rHelper, sfx::ClassificationKeyCreator const & rKeyCreator,
-                                        const uno::Reference<frame::XModel>& xModel, const uno::Reference<text::XTextContent>& xParagraph)
+                                        const uno::Reference<frame::XModel>& xModel, const rtl::Reference<SwXParagraph>& xParagraph)
 {
     uno::Reference<text::XTextField> xTextField;
     xTextField = lcl_FindParagraphClassificationField(xModel, xParagraph, rKeyCreator.makeCategoryIdentifierKey());
@@ -2121,7 +2122,8 @@ static OUString lcl_GetHighestClassificationParagraphClass(SwPaM* pCursor)
     rtl::Reference<SwXParagraphEnumeration> xParagraphs = xBodyText->createParagraphEnumeration();
     while (xParagraphs->hasMoreElements())
     {
-        uno::Reference<text::XTextContent> xParagraph(xParagraphs->nextElement(), uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xParaOrTable(xParagraphs->nextElement(), uno::UNO_QUERY);
+        rtl::Reference<SwXParagraph> xParagraph(dynamic_cast<SwXParagraph*>(xParaOrTable.get()));
         const OUString sCurrentClass = lcl_GetParagraphClassification(aHelper, aKeyCreator, xModel, xParagraph);
         sHighestClass = aHelper.GetHigherClass(sHighestClass, sCurrentClass);
     }

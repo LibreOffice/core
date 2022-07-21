@@ -78,7 +78,7 @@ static void lcl_CreatePortions(
     uno::Reference< text::XText > const& i_xParentText,
     SwUnoCursor* pUnoCursor,
     FrameClientSortList_t & i_rFrames,
-    const sal_Int32 i_nStartPos, const sal_Int32 i_nEndPos );
+    const sal_Int32 i_nStartPos, const sal_Int32 i_nEndPos, bool bOnlyTextFields );
 
 namespace
 {
@@ -312,7 +312,8 @@ SwXTextPortionEnumeration::SwXTextPortionEnumeration(
         SwPaM& rParaCursor,
         uno::Reference< XText > const & xParentText,
         const sal_Int32 nStart,
-        const sal_Int32 nEnd )
+        const sal_Int32 nEnd,
+        bool bOnlyTextFields)
 {
     m_pUnoCursor = rParaCursor.GetDoc().CreateUnoCursor(*rParaCursor.GetPoint());
 
@@ -323,7 +324,7 @@ SwXTextPortionEnumeration::SwXTextPortionEnumeration(
     // find all frames, graphics and OLEs that are bound AT character in para
     FrameClientSortList_t frames;
     ::CollectFrameAtNode(m_pUnoCursor->GetPoint()->nNode, frames, true);
-    lcl_CreatePortions(m_Portions, xParentText, &*m_pUnoCursor, frames, nStart, nEnd);
+    lcl_CreatePortions(m_Portions, xParentText, &*m_pUnoCursor, frames, nStart, nEnd, bOnlyTextFields);
 }
 
 SwXTextPortionEnumeration::SwXTextPortionEnumeration(
@@ -1341,7 +1342,8 @@ static void lcl_CreatePortions(
         SwUnoCursor * const pUnoCursor,
         FrameClientSortList_t & i_rFrames,
         const sal_Int32 i_nStartPos,
-        const sal_Int32 i_nEndPos )
+        const sal_Int32 i_nEndPos,
+        bool bOnlyTextFields )
 {
     if (!pUnoCursor)
         return;
@@ -1361,19 +1363,24 @@ static void lcl_CreatePortions(
     SwDoc& rDoc = pUnoCursor->GetDoc();
 
     std::deque<sal_Int32> FieldMarks;
-    lcl_FillFieldMarkArray(FieldMarks, *pUnoCursor, i_nStartPos);
+    if (!bOnlyTextFields)
+        lcl_FillFieldMarkArray(FieldMarks, *pUnoCursor, i_nStartPos);
 
     SwXBookmarkPortion_ImplList Bookmarks;
-    lcl_FillBookmarkArray(rDoc, *pUnoCursor, Bookmarks);
+    if (!bOnlyTextFields)
+        lcl_FillBookmarkArray(rDoc, *pUnoCursor, Bookmarks);
 
     SwXRedlinePortion_ImplList Redlines;
-    lcl_FillRedlineArray(rDoc, *pUnoCursor, Redlines);
+    if (!bOnlyTextFields)
+        lcl_FillRedlineArray(rDoc, *pUnoCursor, Redlines);
 
     SwSoftPageBreakList SoftPageBreaks;
-    lcl_FillSoftPageBreakArray(*pUnoCursor, SoftPageBreaks);
+    if (!bOnlyTextFields)
+        lcl_FillSoftPageBreakArray(*pUnoCursor, SoftPageBreaks);
 
     SwAnnotationStartPortion_ImplList AnnotationStarts;
-    lcl_FillAnnotationStartArray( rDoc, *pUnoCursor, AnnotationStarts );
+    if (!bOnlyTextFields)
+        lcl_FillAnnotationStartArray( rDoc, *pUnoCursor, AnnotationStarts );
 
     PortionStack_t PortionStack;
     PortionStack.push( PortionList_t(&i_rPortions, nullptr) );
