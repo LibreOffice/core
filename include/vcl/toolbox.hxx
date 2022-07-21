@@ -313,6 +313,7 @@ public:
                                     ToolBoxItemBits nBits = ToolBoxItemBits::NONE,
                                     ImplToolItems::size_type nPos = APPEND );
     void                InsertItem( ToolBoxItemId nItemId, const OUString& rText,
+                                    const OUString& rCommand,
                                     ToolBoxItemBits nBits = ToolBoxItemBits::NONE,
                                     ImplToolItems::size_type nPos = APPEND );
     void                InsertWindow( ToolBoxItemId nItemId, vcl::Window* pWindow,
