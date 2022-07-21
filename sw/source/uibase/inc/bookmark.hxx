@@ -33,7 +33,7 @@ class BookmarkTable
     std::unique_ptr<weld::TreeIter> GetRowByBookmarkName(const OUString& sName);
 public:
     BookmarkTable(std::unique_ptr<weld::TreeView> xControl);
-    void                InsertBookmark(sw::mark::IMark* pMark);
+    void                InsertBookmark(SwWrtShell & rSh, sw::mark::IMark* pMark);
     void                SelectByName(const OUString& sName);
     sw::mark::IMark*    GetBookmarkByName(const OUString& sName);
     OUString            GetNameProposal() const;
@@ -45,6 +45,7 @@ public:
     void                remove(const weld::TreeIter& rIter) { m_xControl->remove(rIter); }
     void                select(const weld::TreeIter& rIter) { m_xControl->select(rIter); }
     void                remove_selection() { m_xControl->remove_selection(); }
+    OUString            get_text(const weld::TreeIter& rIter) const { return m_xControl->get_text(rIter, 2); }
     OUString            get_id(const weld::TreeIter& rIter) const { return m_xControl->get_id(rIter); }
     void set_sort_indicator(TriState eState, int nColumn = -1) { m_xControl->set_sort_indicator(eState, nColumn); }
     void selected_foreach(const std::function<bool(weld::TreeIter&)>& func) { m_xControl->selected_foreach(func); }
@@ -52,6 +53,10 @@ public:
     void connect_changed(const Link<weld::TreeView&, void>& rLink) { m_xControl->connect_changed(rLink); }
     void connect_row_activated(const Link<weld::TreeView&, bool>& rLink) { m_xControl->connect_row_activated(rLink); }
     void connect_column_clicked(const Link<int, void>& rLink) { m_xControl->connect_column_clicked(rLink); }
+    void connect_editing(const Link<const weld::TreeIter&, bool>& rStartLink,
+         const Link<::std::pair<weld::TreeIter const&, OUString> const&, bool>& rEndLink) { m_xControl->connect_editing(rStartLink, rEndLink); }
+    void set_column_editables(::std::vector<bool> const& rEditables) { m_xControl->set_column_editables(rEditables); }
+    void start_editing(weld::TreeIter const& rIter) { m_xControl->start_editing(rIter); }
     void make_sorted() { m_xControl->make_sorted(); }
     bool get_sort_order() const { return m_xControl->get_sort_order(); }
     void set_sort_order(bool bAscending) { m_xControl->set_sort_order(bAscending); }
@@ -75,6 +80,7 @@ class SwInsertBookmarkDlg : public SfxDialogController
     std::unique_ptr<weld::Button> m_xInsertBtn;
     std::unique_ptr<weld::Button> m_xDeleteBtn;
     std::unique_ptr<weld::Button> m_xGotoBtn;
+    std::unique_ptr<weld::Button> m_xEditTextBtn;
     std::unique_ptr<weld::Button> m_xRenameBtn;
     std::unique_ptr<weld::CheckButton> m_xHideCB;
     std::unique_ptr<weld::Label> m_xConditionFT;
@@ -85,12 +91,16 @@ class SwInsertBookmarkDlg : public SfxDialogController
     DECL_LINK(ModifyHdl, weld::Entry&, void);
     DECL_LINK(InsertHdl, weld::Button&, void);
     DECL_LINK(DeleteHdl, weld::Button&, void);
+    DECL_LINK(EditTextHdl, weld::Button&, void);
     DECL_LINK(RenameHdl, weld::Button&, void);
     DECL_LINK(GotoHdl, weld::Button&, void);
     DECL_LINK(SelectionChangedHdl, weld::TreeView&, void);
     DECL_LINK(DoubleClickHdl, weld::TreeView&, bool);
     DECL_LINK(HeaderBarClick, int, void);
     DECL_LINK(ChangeHideHdl, weld::ToggleButton&, void);
+    DECL_LINK(EditingHdl, weld::TreeIter const&, bool);
+    typedef ::std::pair<weld::TreeIter const&, OUString> const& comma_issue;
+    DECL_LINK(EditedHdl, comma_issue, bool);
 
     // Fill table with bookmarks
     void PopulateTable();
