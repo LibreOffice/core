@@ -47,7 +47,7 @@ using namespace com::sun::star;
 
 constexpr OUStringLiteral SCSAVEVERSION = u"SaveVersionOnClose";
 
-static const SfxItemPropertyMapEntry* lcl_GetConfigPropertyMap()
+static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetConfigPropertyMap()
 {
     static const SfxItemPropertyMapEntry aConfigPropertyMap_Impl[] =
     {
@@ -91,7 +91,6 @@ static const SfxItemPropertyMapEntry* lcl_GetConfigPropertyMap()
         { SC_UNO_EMBED_FONT_SCRIPT_COMPLEX, 0,  cppu::UnoType<bool>::get(), 0, 0},
         { SC_UNO_IMAGE_PREFERRED_DPI,       0,  cppu::UnoType<sal_Int32>::get(), 0, 0},
         { SC_UNO_SYNTAXSTRINGREF, 0,  cppu::UnoType<sal_Int16>::get(),     0, 0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     return aConfigPropertyMap_Impl;
 }

@@ -68,10 +68,10 @@ using namespace ::com::sun::star::beans;
                     { u"" UNO_NAME_IS_FIELD_DISPLAYED, FIELD_PROP_IS_FIELD_DISPLAYED, cppu::UnoType<sal_Int16>::get(), PropertyAttribute::READONLY, 0},\
                     { u"" UNO_NAME_TITLE, FIELD_PROP_TITLE, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0},\
 
-const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(sal_uInt16 nPropertyId)
+o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetPropertyMapEntries(sal_uInt16 nPropertyId)
 {
     OSL_ENSURE(nPropertyId < PROPERTY_MAP_END, "Id ?" );
-    if( !m_aMapEntriesArr[ nPropertyId ] )
+    if( m_aMapEntriesArr[ nPropertyId ].empty() )
     {
         switch(nPropertyId)
         {
@@ -688,14 +688,13 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
             break;
             case PROPERTY_MAP_TEXT_DEFAULT :
             {
-                SfxItemPropertyMapEntry* aTextDefaultMap_Impl = GetTextDefaultPropertyMap();
+                o3tl::span<SfxItemPropertyMapEntry> aTextDefaultMap_Impl = GetTextDefaultPropertyMap();
                 m_aMapEntriesArr[nPropertyId] = aTextDefaultMap_Impl;
-                for( SfxItemPropertyMapEntry * pMap = aTextDefaultMap_Impl;
-                     !pMap->aName.isEmpty(); ++pMap )
+                for( auto & rEntry : aTextDefaultMap_Impl )
                 {
                     // UNO_NAME_PAGE_DESC_NAME should keep its MAYBEVOID flag
-                    if (RES_PAGEDESC != pMap->nWID || MID_PAGEDESC_PAGEDESCNAME != pMap->nMemberId)
-                        pMap->nFlags &= ~PropertyAttribute::MAYBEVOID;
+                    if (RES_PAGEDESC != rEntry.nWID || MID_PAGEDESC_PAGEDESCNAME != rEntry.nMemberId)
+                        rEntry.nFlags &= ~PropertyAttribute::MAYBEVOID;
                 }
             }
             break;

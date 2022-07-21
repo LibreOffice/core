@@ -79,25 +79,23 @@ using ::std::shared_ptr;
 
 namespace
 {
-const SfxItemPropertyMapEntry* lcl_GetDataProviderPropertyMap()
+o3tl::span<const SfxItemPropertyMapEntry> lcl_GetDataProviderPropertyMap()
 {
     static const SfxItemPropertyMapEntry aDataProviderPropertyMap_Impl[] =
     {
         { SC_UNONAME_INCLUDEHIDDENCELLS, 0, cppu::UnoType<bool>::get(), 0, 0 },
         { SC_UNONAME_USE_INTERNAL_DATA_PROVIDER, 0, cppu::UnoType<bool>::get(), 0, 0 },
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     return aDataProviderPropertyMap_Impl;
 }
 
-const SfxItemPropertyMapEntry* lcl_GetDataSequencePropertyMap()
+o3tl::span<const SfxItemPropertyMapEntry> lcl_GetDataSequencePropertyMap()
 {
     static const SfxItemPropertyMapEntry aDataSequencePropertyMap_Impl[] =
     {
         { SC_UNONAME_HIDDENVALUES, 0, cppu::UnoType<uno::Sequence<sal_Int32>>::get(),                 0, 0 },
         { SC_UNONAME_ROLE, 0, cppu::UnoType<css::chart2::data::DataSequenceRole>::get(),                  0, 0 },
         { SC_UNONAME_INCLUDEHIDDENCELLS, 0,        cppu::UnoType<bool>::get(),                  0, 0 },
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     return aDataSequencePropertyMap_Impl;
 }

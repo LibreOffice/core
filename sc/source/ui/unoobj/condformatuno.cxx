@@ -45,13 +45,12 @@ enum CondFormatProperties
     CondFormat_Range
 };
 
-const SfxItemPropertyMapEntry* getCondFormatPropset()
+o3tl::span<const SfxItemPropertyMapEntry> getCondFormatPropset()
 {
     static const SfxItemPropertyMapEntry aCondFormatPropertyMap_Impl[] =
     {
         {u"ID", ID, cppu::UnoType<sal_Int32>::get(), 0, 0},
         {u"Range", CondFormat_Range, cppu::UnoType<sheet::XSheetCellRanges>::get(), 0, 0},
-        {u"", 0, css::uno::Type(), 0, 0}
     };
     return aCondFormatPropertyMap_Impl;
 }
@@ -64,7 +63,7 @@ enum ConditionEntryProperties
     Operator
 };
 
-const SfxItemPropertyMapEntry* getConditionEntryrPropSet()
+o3tl::span<const SfxItemPropertyMapEntry> getConditionEntryrPropSet()
 {
     static const SfxItemPropertyMapEntry aConditionEntryPropertyMap_Impl[] =
     {
@@ -72,7 +71,6 @@ const SfxItemPropertyMapEntry* getConditionEntryrPropSet()
         {u"Formula1", Formula1, cppu::UnoType<OUString>::get(), 0, 0},
         {u"Formula2", Formula2, cppu::UnoType<OUString>::get(), 0, 0},
         {u"Operator", Operator, cppu::UnoType<decltype(sheet::ConditionFormatOperator::EQUAL)>::get(), 0, 0 },
-        {u"", 0, css::uno::Type(), 0, 0}
     };
     return aConditionEntryPropertyMap_Impl;
 }
@@ -118,12 +116,11 @@ enum ColorScaleProperties
     ColorScaleEntries
 };
 
-const SfxItemPropertyMapEntry* getColorScalePropSet()
+o3tl::span<const SfxItemPropertyMapEntry> getColorScalePropSet()
 {
     static const SfxItemPropertyMapEntry aColorScalePropertyMap_Impl[] =
     {
         {u"ColorScaleEntries", ColorScaleEntries, cppu::UnoType<uno::Sequence< sheet::XColorScaleEntry >>::get(), 0, 0 },
-        {u"", 0, css::uno::Type(), 0, 0}
     };
     return aColorScalePropertyMap_Impl;
 }
@@ -158,7 +155,7 @@ enum DataBarProperties
     MaximumLength
 };
 
-const SfxItemPropertyMapEntry* getDataBarPropSet()
+o3tl::span<const SfxItemPropertyMapEntry> getDataBarPropSet()
 {
     static const SfxItemPropertyMapEntry aDataBarPropertyMap_Impl[] =
     {
@@ -172,7 +169,6 @@ const SfxItemPropertyMapEntry* getDataBarPropSet()
         {u"DataBarEntries", DataBarEntries, cppu::UnoType<uno::Sequence< sheet::XDataBarEntry >>::get(), 0, 0 },
         {u"MinimumLength", MinimumLength, cppu::UnoType<double>::get(), 0, 0 },
         {u"MaximumLength", MaximumLength, cppu::UnoType<double>::get(), 0, 0 },
-        {u"", 0, css::uno::Type(), 0, 0}
     };
     return aDataBarPropertyMap_Impl;
 }
@@ -215,7 +211,7 @@ enum IconSetProperties
     IconSetEntries
 };
 
-const SfxItemPropertyMapEntry* getIconSetPropSet()
+o3tl::span<const SfxItemPropertyMapEntry> getIconSetPropSet()
 {
     static const SfxItemPropertyMapEntry aIconSetPropertyMap_Impl[] =
     {
@@ -223,7 +219,6 @@ const SfxItemPropertyMapEntry* getIconSetPropSet()
         {u"Reverse", Reverse, cppu::UnoType<bool>::get(), 0, 0 },
         {u"ShowValue", ShowValue, cppu::UnoType<bool>::get(), 0, 0 },
         {u"IconSetEntries", IconSetEntries, cppu::UnoType<uno::Sequence< sheet::XIconSetEntry >>::get(), 0, 0 },
-        {u"", 0, css::uno::Type(), 0, 0}
     };
     return aIconSetPropertyMap_Impl;
 }
@@ -278,13 +273,12 @@ enum DateProperties
     DateType
 };
 
-const SfxItemPropertyMapEntry* getCondDatePropSet()
+o3tl::span<const SfxItemPropertyMapEntry> getCondDatePropSet()
 {
     static const SfxItemPropertyMapEntry aCondDatePropertyMap_Impl[] =
     {
         {u"StyleName", StyleName, cppu::UnoType<OUString>::get(), 0, 0},
         {u"DateType", Icons, cppu::UnoType<decltype(sheet::DateType::TODAY)>::get(), 0, 0 },
-        {u"", 0, css::uno::Type(), 0, 0}
     };
     return aCondDatePropertyMap_Impl;
 }

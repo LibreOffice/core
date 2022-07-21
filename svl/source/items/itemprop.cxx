@@ -35,13 +35,13 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 
-SfxItemPropertyMap::SfxItemPropertyMap( const SfxItemPropertyMapEntry* pEntries )
+SfxItemPropertyMap::SfxItemPropertyMap( o3tl::span<const SfxItemPropertyMapEntry> pEntries )
 {
-    m_aMap.reserve(128);
-    while( !pEntries->aName.isEmpty() )
+    m_aMap.reserve(pEntries.size());
+    for (const auto & pEntry : pEntries)
     {
-        m_aMap.insert( pEntries );
-        ++pEntries;
+        assert(!pEntry.Name.IsEmpty() && "empty name? might be something left an empty entry at the end of this array");
+        m_aMap.insert( &pEntry );
     }
 }
 
@@ -246,7 +246,7 @@ SfxItemPropertySetInfo::SfxItemPropertySetInfo(const SfxItemPropertyMap &rMap )
 {
 }
 
-SfxItemPropertySetInfo::SfxItemPropertySetInfo(const SfxItemPropertyMapEntry *pEntries )
+SfxItemPropertySetInfo::SfxItemPropertySetInfo(o3tl::span<const SfxItemPropertyMapEntry> pEntries )
     : m_aOwnMap( pEntries )
 {
 }
@@ -270,14 +270,14 @@ sal_Bool SAL_CALL SfxItemPropertySetInfo::hasPropertyByName( const OUString& rNa
     return m_aOwnMap.hasPropertyByName( rName );
 }
 
-SfxExtItemPropertySetInfo::SfxExtItemPropertySetInfo( const SfxItemPropertyMapEntry *pEntries,
+SfxExtItemPropertySetInfo::SfxExtItemPropertySetInfo( o3tl::span<const SfxItemPropertyMapEntry> pEntries,
                                                       const Sequence<Property>& rPropSeq )
 {
-    maMap.reserve(16);
-    while( !pEntries->aName.isEmpty() )
+    maMap.reserve(pEntries.size());
+    for (const auto & pEntry : pEntries )
     {
-        maMap.insert( *pEntries );
-        ++pEntries;
+        assert(!pEntry.Name.IsEmpty() && "empty name? might be something left an empty entry at the end of this array");
+        maMap.insert( pEntry );
     }
     for( const auto & rProp : rPropSeq )
     {

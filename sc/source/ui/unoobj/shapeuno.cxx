@@ -47,7 +47,7 @@
 
 using namespace ::com::sun::star;
 
-static const SfxItemPropertyMapEntry* lcl_GetShapeMap()
+static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetShapeMap()
 {
     static const SfxItemPropertyMapEntry aShapeMap_Impl[] =
     {
@@ -59,7 +59,6 @@ static const SfxItemPropertyMapEntry* lcl_GetShapeMap()
         { SC_UNONAME_MOVEPROTECT, 0, cppu::UnoType<sal_Bool>::get(), 0, 0 },
         { SC_UNONAME_HYPERLINK, 0, cppu::UnoType<OUString>::get(), 0, 0 },
         { SC_UNONAME_URL, 0, cppu::UnoType<OUString>::get(), 0, 0 },
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     return aShapeMap_Impl;
 }
