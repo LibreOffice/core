@@ -197,6 +197,7 @@ const char* const sCSS1_P_height = "height";
 const char* const sCSS1_P_float = "float";
 
 const char* const sCSS1_P_column_count = "column-count";
+const char* const sCSS1_P_dir = "dir";
 
 // Strings for positioning
 

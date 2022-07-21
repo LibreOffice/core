@@ -1734,6 +1734,30 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testLeadingTabHTML)
     assertXPathContent(pHtmlDoc, "/html/body/p", SAL_NEWLINE_STRING u"\xa0\xa0 test");
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testSectionDir)
+{
+    // Given a document with a section:
+    loadURL("private:factory/swriter", nullptr);
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Insert("test");
+    pWrtShell->SelAll();
+    SwSectionData aSectionData(SectionType::Content, "mysect");
+    pWrtShell->InsertSection(aSectionData);
+
+    // When exporting to (reqif-)xhtml:
+    ExportToReqif();
+
+    // Then make sure CSS is used to export the text direction of the section:
+    SvMemoryStream aStream;
+    HtmlExportTest::wrapFragment(maTempFile, aStream);
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - XPath '//reqif-xhtml:div[@id='mysect']' no attribute 'style' exist
+    // i.e. the dir="ltr" HTML attribute was used instead.
+    assertXPath(pXmlDoc, "//reqif-xhtml:div[@id='mysect']", "style", "dir: ltr");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
