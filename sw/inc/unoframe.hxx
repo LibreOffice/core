@@ -29,6 +29,7 @@
 #include <com/sun/star/document/XEventsSupplier.hpp>
 
 #include <cppuhelper/implbase.hxx>
+#include <sal/types.h>
 #include <svl/listener.hxx>
 
 #include "flyenum.hxx"
@@ -44,7 +45,7 @@ class SfxItemPropertySet;
 namespace com::sun::star::frame { class XModel; }
 
 class BaseFrameProperties_Impl;
-class SwXFrame : public cppu::WeakImplHelper
+class SAL_DLLPUBLIC_RTTI SwXFrame : public cppu::WeakImplHelper
 <
     css::lang::XServiceInfo,
     css::lang::XUnoTunnel,
@@ -171,7 +172,7 @@ typedef cppu::ImplInheritanceHelper
 >
 SwXTextFrameBaseClass;
 
-class SwXTextFrame final : public SwXTextFrameBaseClass,
+class SAL_DLLPUBLIC_RTTI SwXTextFrame final : public SwXTextFrameBaseClass,
     public SwXText
 {
     friend class SwXFrame; // just for CreateXFrame
