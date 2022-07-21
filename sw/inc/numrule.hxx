@@ -32,6 +32,7 @@
 #include <memory>
 #include <vector>
 #include "charfmt.hxx"
+#include "fmtornt.hxx"
 
 class SwTextFormatColl;
 class IDocumentListsAccess;
@@ -40,7 +41,6 @@ namespace vcl { class Font; }
 class SvxBrushItem;
 class SfxGrabBagItem;
 class SwDoc;
-class SwFormatVertOrient;
 class SwTextNode;
 class Size;
 class SwWrtShell;
@@ -49,7 +49,7 @@ const sal_Unicode cBulletChar = 0x2022; ///< Character for lists.
 
 class SW_DLLPUBLIC SwNumFormat final : public SvxNumberFormat, public SwClient
 {
-    std::unique_ptr<SwFormatVertOrient> m_pVertOrient;
+    SwFormatVertOrient m_aVertOrient;
     //For i120928,record the cp info of graphic within bullet
     sal_Unicode     m_cGrfBulletCP;
     SAL_DLLPRIVATE void UpdateNumNodes(SwDoc& rDoc);
