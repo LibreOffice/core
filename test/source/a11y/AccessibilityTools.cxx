@@ -88,6 +88,27 @@ bool AccessibilityTools::equals(const uno::Reference<accessibility::XAccessibleC
     if (xctx1->getAccessibleIndexInParent() != xctx2->getAccessibleIndexInParent())
         return false;
 
+    /* because in Writer at least some children only are referenced by their relations to others
+     * objects, we need to account for that as their index in parent is incorrect (so not
+     * necessarily unique) */
+    auto relset1 = xctx1->getAccessibleRelationSet();
+    auto relset2 = xctx2->getAccessibleRelationSet();
+    if (relset1.is() != relset2.is())
+        return false;
+    else if (relset1.is())
+    {
+        auto relCount1 = relset1->getRelationCount();
+        auto relCount2 = relset2->getRelationCount();
+        if (relCount1 != relCount2)
+            return false;
+
+        for (sal_Int32 i = 0; i < relCount1; ++i)
+        {
+            if (relset1->getRelation(i) != relset2->getRelation(i))
+                return false;
+        }
+    }
+
     return equals(xctx1->getAccessibleParent(), xctx2->getAccessibleParent());
 }
 
