@@ -1025,13 +1025,29 @@ AlphaMask ProcessAndBlurAlphaMask(const Bitmap& rMask, double fErodeDilateRadius
 
     return AlphaMask(mask.GetBitmap());
 }
+
+drawinglayer::geometry::ViewInformation2D
+expandRange(const drawinglayer::geometry::ViewInformation2D& rViewInfo, double nAmount)
+{
+    basegfx::B2DRange viewport(rViewInfo.getViewport());
+    viewport.grow(nAmount);
+    return { rViewInfo.getObjectTransformation(),
+             rViewInfo.getViewTransformation(),
+             viewport,
+             rViewInfo.getVisualizedPage(),
+             rViewInfo.getViewTime(),
+             rViewInfo.getReducedDisplayQuality() };
+}
 }
 
 void VclPixelProcessor2D::processGlowPrimitive2D(const primitive2d::GlowPrimitive2D& rCandidate)
 {
-    basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
+    const double nGlowRadius(rCandidate.getGlowRadius());
+    // Avoid wrong effect on the cut-off side; so expand by radius
+    const auto aExpandedViewInfo(expandRange(getViewInformation2D(), nGlowRadius));
+    basegfx::B2DRange aRange(rCandidate.getB2DRange(aExpandedViewInfo));
     aRange.transform(maCurrentTransformation);
-    basegfx::B2DVector aGlowRadiusVector(rCandidate.getGlowRadius(), 0);
+    basegfx::B2DVector aGlowRadiusVector(nGlowRadius, 0);
     // Calculate the pixel size of glow radius in current transformation
     aGlowRadiusVector *= maCurrentTransformation;
     // Glow radius is the size of the halo from each side of the object. The halo is the
@@ -1054,9 +1070,8 @@ void VclPixelProcessor2D::processGlowPrimitive2D(const primitive2d::GlowPrimitiv
         process(rCandidate);
 
         // Limit the bitmap size to the visible area.
-        basegfx::B2DRange viewRange(getViewInformation2D().getDiscreteViewport());
         basegfx::B2DRange bitmapRange(aRange);
-        bitmapRange.intersect(viewRange);
+        bitmapRange.intersect(aExpandedViewInfo.getDiscreteViewport());
         if (!bitmapRange.isEmpty())
         {
             const tools::Rectangle aRect(
@@ -1093,13 +1108,13 @@ void VclPixelProcessor2D::processGlowPrimitive2D(const primitive2d::GlowPrimitiv
 void VclPixelProcessor2D::processSoftEdgePrimitive2D(
     const primitive2d::SoftEdgePrimitive2D& rCandidate)
 {
-    // TODO: don't limit the object at view range. This is needed to not blur objects at window
-    // borders, where they don't end. Ideally, process the full object once at maximal reasonable
-    // resolution, and store the resulting alpha mask in primitive's cache; then reuse it later,
-    // applying the transform.
-    basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
+    const double nRadius(rCandidate.getRadius());
+    // Avoid wrong effect on the cut-off side; so expand by diameter
+    const auto aExpandedViewInfo(expandRange(getViewInformation2D(), nRadius * 2));
+
+    basegfx::B2DRange aRange(rCandidate.getB2DRange(aExpandedViewInfo));
     aRange.transform(maCurrentTransformation);
-    basegfx::B2DVector aRadiusVector(rCandidate.getRadius(), 0);
+    basegfx::B2DVector aRadiusVector(nRadius, 0);
     // Calculate the pixel size of soft edge radius in current transformation
     aRadiusVector *= maCurrentTransformation;
     // Blur radius is equal to soft edge radius
@@ -1116,9 +1131,8 @@ void VclPixelProcessor2D::processSoftEdgePrimitive2D(
         process(rCandidate);
 
         // Limit the bitmap size to the visible area.
-        basegfx::B2DRange viewRange(getViewInformation2D().getDiscreteViewport());
         basegfx::B2DRange bitmapRange(aRange);
-        bitmapRange.intersect(viewRange);
+        bitmapRange.intersect(aExpandedViewInfo.getDiscreteViewport());
         if (!bitmapRange.isEmpty())
         {
             const tools::Rectangle aRect(
