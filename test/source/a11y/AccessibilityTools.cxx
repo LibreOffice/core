@@ -32,30 +32,54 @@
 
 using namespace css;
 
+uno::Reference<accessibility::XAccessibleContext>
+AccessibilityTools::getAccessibleObjectForPredicate(
+    const uno::Reference<accessibility::XAccessibleContext>& xCtx,
+    const std::function<bool(const uno::Reference<accessibility::XAccessibleContext>&)>& cPredicate)
+{
+    if (cPredicate(xCtx))
+    {
+        return xCtx;
+    }
+    else
+    {
+        int count = xCtx->getAccessibleChildCount();
+
+        for (int i = 0; i < count && i < AccessibilityTools::MAX_CHILDREN; i++)
+        {
+            uno::Reference<accessibility::XAccessibleContext> xCtx2
+                = getAccessibleObjectForPredicate(xCtx->getAccessibleChild(i), cPredicate);
+            if (xCtx2.is())
+                return xCtx2;
+        }
+    }
+    return nullptr;
+}
+
+uno::Reference<accessibility::XAccessibleContext>
+AccessibilityTools::getAccessibleObjectForPredicate(
+    const uno::Reference<accessibility::XAccessible>& xAcc,
+    const std::function<bool(const uno::Reference<accessibility::XAccessibleContext>&)>& cPredicate)
+{
+    return getAccessibleObjectForPredicate(xAcc->getAccessibleContext(), cPredicate);
+}
+
+uno::Reference<accessibility::XAccessibleContext> AccessibilityTools::getAccessibleObjectForRole(
+    const uno::Reference<accessibility::XAccessibleContext>& xCtx, sal_Int16 role)
+{
+    return getAccessibleObjectForPredicate(
+        xCtx, [&role](const uno::Reference<accessibility::XAccessibleContext>& xObjCtx) {
+            return (xObjCtx->getAccessibleRole() == role
+                    && xObjCtx->getAccessibleStateSet()
+                           & accessibility::AccessibleStateType::SHOWING);
+        });
+}
+
 css::uno::Reference<css::accessibility::XAccessibleContext>
 AccessibilityTools::getAccessibleObjectForRole(
     const css::uno::Reference<css::accessibility::XAccessible>& xacc, sal_Int16 role)
 {
-    css::uno::Reference<css::accessibility::XAccessibleContext> ac = xacc->getAccessibleContext();
-    bool isShowing = ac->getAccessibleStateSet() & accessibility::AccessibleStateType::SHOWING;
-
-    if ((ac->getAccessibleRole() == role) && isShowing)
-    {
-        return ac;
-    }
-    else
-    {
-        int count = ac->getAccessibleChildCount();
-
-        for (int i = 0; i < count && i < AccessibilityTools::MAX_CHILDREN; i++)
-        {
-            css::uno::Reference<css::accessibility::XAccessibleContext> ac2
-                = AccessibilityTools::getAccessibleObjectForRole(ac->getAccessibleChild(i), role);
-            if (ac2.is())
-                return ac2;
-        }
-    }
-    return nullptr;
+    return getAccessibleObjectForRole(xacc->getAccessibleContext(), role);
 }
 
 bool AccessibilityTools::equals(const uno::Reference<accessibility::XAccessible>& xacc1,
