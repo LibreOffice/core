@@ -18,6 +18,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <vcl/errinf.hxx>
+#include <editeng/wghtitem.hxx>
 
 #include <wrtsh.hxx>
 #include <unotextrange.hxx>
@@ -618,6 +619,25 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlPlainText)
         = static_cast<SwFormatContentControl&>(pTextContentControl->GetAttr());
     std::shared_ptr<SwContentControl> pContentControl = rFormatContentControl.GetContentControl();
     CPPUNIT_ASSERT(pContentControl->GetPlainText());
+
+    // Now check if the char index range 2-4 is extended to 0-6 when we apply formatting:
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    // Select "es" from "<dummy>test<dummy>".
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 2, /*bBasicCall=*/false);
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 2, /*bBasicCall=*/false);
+    SfxItemSetFixed<RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT> aSet(pWrtShell->GetAttrPool());
+    SvxWeightItem aItem(WEIGHT_BOLD, RES_CHRATR_WEIGHT);
+    aSet.Put(aItem);
+    pWrtShell->SetAttrSet(aSet);
+    pAttr = pTextNode->GetTextAttrAt(2, RES_TXTATR_AUTOFMT);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 2
+    // i.e. the plain text content control now had 3 portions (<dummy>t<b>es</b>t<dummy>), instead
+    // of one (<b><dummy>test<dummy></b>).
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), pAttr->GetStart());
+    CPPUNIT_ASSERT(pAttr->End());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6), *pAttr->End());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
