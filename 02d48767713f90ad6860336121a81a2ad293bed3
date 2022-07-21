@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e87d8672_b670123d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-07-21T18:24:06Z",
+      "side": 1,
+      "message": "I\u0027m not a UI guy. This could have much larger ramifications than I can imagine.",
+      "revId": "02d48767713f90ad6860336121a81a2ad293bed3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d42119bb_4c8eb677",
+        "filename": "reportdesign/source/ui/report/ReportController.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1809,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-07-21T18:24:06Z",
+      "side": 1,
+      "message": "I am just assuming this should be done. It seems logical. Should look into this UNO command and find out how to test it.",
+      "range": {
+        "startLine": 1809,
+        "startChar": 40,
+        "endLine": 1809,
+        "endChar": 57
+      },
+      "revId": "02d48767713f90ad6860336121a81a2ad293bed3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2239f68d_7a143def",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3339,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-07-21T18:24:06Z",
+      "side": 1,
+      "message": "If I add this, then the color value disappears from the toolbar press at every cursor move. What am I breaking by leaving out Ext?",
+      "range": {
+        "startLine": 3339,
+        "startChar": 11,
+        "endLine": 3339,
+        "endChar": 40
+      },
+      "revId": "02d48767713f90ad6860336121a81a2ad293bed3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
