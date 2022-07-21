@@ -382,7 +382,7 @@ sal_Int64 toNumericWithoutDecimalPlace(const OUString& sSource)
             sBuffer.append(sNumber.subView(0, nDotIndex));
         }
         sBuffer.append(sNumber.subView(nDotIndex + 1));
-        return sBuffer.makeStringAndClear().toInt64();
+        return o3tl::toInt64(sBuffer);
     }
 }
 
