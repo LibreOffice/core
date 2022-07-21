@@ -62,12 +62,14 @@ void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,
     OStringBuffer sOut;
     sOut.append("<" OOO_STRING_SVTOOLS_HTML_meta " ")
         .append(bHTTPEquiv ? OOO_STRING_SVTOOLS_HTML_O_httpequiv : OOO_STRING_SVTOOLS_HTML_O_name).append("=\"");
-    rStrm.WriteOString( sOut.makeStringAndClear() );
+    rStrm.WriteOString( sOut );
+    sOut.setLength(0);
 
     HTMLOutFuncs::Out_String( rStrm, rName, pNonConvertableChars );
 
     sOut.append("\" " OOO_STRING_SVTOOLS_HTML_O_content "=\"");
-    rStrm.WriteOString( sOut.makeStringAndClear() );
+    rStrm.WriteOString( sOut );
+    sOut.setLength(0);
 
     HTMLOutFuncs::Out_String( rStrm, rContent, pNonConvertableChars ).WriteCharPtr( "\"/>" );
 }
@@ -230,7 +232,8 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
                 aURL = URIHelper::simpleNormalizedMakeRelative(
                     rBaseURL, aURL );
                 sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_src "=\"");
-                rOut.WriteOString( sOut.makeStringAndClear() );
+                rOut.WriteOString( sOut );
+                sOut.setLength(0);
                 HTMLOutFuncs::Out_String( rOut, aURL );
                 sOut.append('\"');
             }
@@ -240,7 +243,8 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
         if ( (aAny >>= aStr) && !aStr.isEmpty() )
         {
             sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_name "=\"");
-            rOut.WriteOString( sOut.makeStringAndClear() );
+            rOut.WriteOString( sOut );
+            sOut.setLength(0);
             HTMLOutFuncs::Out_String( rOut, aStr );
             sOut.append('\"');
         }
@@ -284,7 +288,8 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
                     .append('=').append(pStr);
             }
         }
-        rOut.WriteOString( sOut.makeStringAndClear() );
+        rOut.WriteOString( sOut );
+        sOut.setLength(0);
     }
     catch (const uno::Exception&)
     {

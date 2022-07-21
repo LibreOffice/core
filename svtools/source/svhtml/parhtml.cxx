@@ -1140,7 +1140,8 @@ HtmlTokenId HTMLParser::GetNextToken_()
                             if( !bDone )
                                 nNextCh = GetNextChar();
                         }
-                        aToken = sTmpBuffer.makeStringAndClear();
+                        aToken = sTmpBuffer;
+                        sTmpBuffer.setLength(0);
                         if( !bDone && IsParserWorking() && nCStreamPos )
                         {
                             rInput.Seek( nCStreamPos );
@@ -1246,7 +1247,8 @@ HtmlTokenId HTMLParser::GetNextToken_()
                             nRet = HtmlTokenId::TEXTTOKEN;
                             break;
                         }
-                        aToken = aTmpBuffer.makeStringAndClear();
+                        aToken = aTmpBuffer;
+                        aTmpBuffer.setLength(0);
                         if( IsParserWorking() )
                         {
                             sSaveToken = aToken;
@@ -1608,7 +1610,7 @@ HtmlTokenId HTMLParser::FilterPRE( HtmlTokenId nToken )
             {
                 using comphelper::string::padToLength;
                 OUStringBuffer aBuf(aToken);
-                aToken = padToLength(aBuf, nSpaces, ' ').makeStringAndClear();
+                aToken = padToLength(aBuf, nSpaces, ' ');
             }
             nPre_LinePos += nSpaces;
             nToken = HtmlTokenId::TEXTTOKEN;
