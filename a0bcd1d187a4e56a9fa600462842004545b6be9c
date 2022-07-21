@@ -34,6 +34,24 @@
       "parentUuid": "a3b9891e_ba743771",
       "revId": "a0bcd1d187a4e56a9fa600462842004545b6be9c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a475258_545f32d3",
+        "filename": "vcl/quartz/salbmp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-07-21T16:16:39Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "214b5525_6bfb1009",
+      "revId": "a0bcd1d187a4e56a9fa600462842004545b6be9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
