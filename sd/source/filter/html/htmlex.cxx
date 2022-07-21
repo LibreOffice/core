@@ -684,7 +684,7 @@ void HtmlExport::ExportSingleDocument()
     // close page
     aStr.append("</body>\r\n</html>");
 
-    WriteHtml(maDocFileName, false, aStr.makeStringAndClear());
+    WriteHtml(maDocFileName, false, aStr);
 
     pOutliner->Clear();
     ResetProgress();
@@ -1127,7 +1127,7 @@ bool HtmlExport::CreateHtmlTextForPresPages()
         // close page
         aStr.append("</body>\r\n</html>");
 
-        bOk = WriteHtml(maTextFiles[nSdPage], false, aStr.makeStringAndClear());
+        bOk = WriteHtml(maTextFiles[nSdPage], false, aStr);
 
         if (mpProgress)
             mpProgress->SetState(++mnPagesWritten);
@@ -1879,7 +1879,8 @@ bool HtmlExport::CreateHtmlForPresPages()
 
         aStr.append("</body>\r\n</html>");
 
-        bOk = WriteHtml(maHTMLFiles[nSdPage], false, aStr.makeStringAndClear());
+        bOk = WriteHtml(maHTMLFiles[nSdPage], false, aStr);
+        aStr.setLength(0);
 
         if (mpProgress)
             mpProgress->SetState(++mnPagesWritten);
@@ -2013,7 +2014,7 @@ bool HtmlExport::CreateContentPage()
 
     aStr.append("</body>\r\n</html>");
 
-    bool bOk = WriteHtml(maIndex, false, aStr.makeStringAndClear());
+    bool bOk = WriteHtml(maIndex, false, aStr);
 
     if (mpProgress)
         mpProgress->SetState(++mnPagesWritten);
@@ -2048,7 +2049,7 @@ bool HtmlExport::CreateNotesPages()
         aStr.append("</body>\r\n</html>");
 
         OUString aFileName("note" + OUString::number(nSdPage));
-        bOk = WriteHtml(aFileName, true, aStr.makeStringAndClear());
+        bOk = WriteHtml(aFileName, true, aStr);
 
         if (mpProgress)
             mpProgress->SetState(++mnPagesWritten);
@@ -2109,7 +2110,8 @@ bool HtmlExport::CreateOutlinePages()
         aStr.append("</body>\r\n</html>");
 
         OUString aFileName("outline" + OUString::number(nPage));
-        bOk = WriteHtml(aFileName, true, aStr.makeStringAndClear());
+        bOk = WriteHtml(aFileName, true, aStr);
+        aStr.setLength(0);
 
         if (mpProgress)
             mpProgress->SetState(++mnPagesWritten);
@@ -2359,7 +2361,7 @@ bool HtmlExport::CreateFrames()
     aStr.append(RESTOHTML(STR_HTMLEXP_NOFRAMES));
     aStr.append("\r\n</noframes>\r\n</frameset>\r\n</html>");
 
-    bool bOk = WriteHtml(maFramePage, false, aStr.makeStringAndClear());
+    bool bOk = WriteHtml(maFramePage, false, aStr);
 
     if (mpProgress)
         mpProgress->SetState(++mnPagesWritten);
@@ -2481,7 +2483,8 @@ bool HtmlExport::CreateNavBarFrames()
 
         OUString aFileName("navbar" + OUString::number(nFile));
 
-        bOk = WriteHtml(aFileName, true, aStr.makeStringAndClear());
+        bOk = WriteHtml(aFileName, true, aStr);
+        aStr.setLength(0);
 
         if (mpProgress)
             mpProgress->SetState(++mnPagesWritten);
@@ -2947,7 +2950,7 @@ bool HtmlExport::CreateImageFileList()
         aStr.append("\r\n");
     }
 
-    bool bOk = WriteHtml("picture.txt", false, aStr.makeStringAndClear());
+    bool bOk = WriteHtml("picture.txt", false, aStr);
 
     if (mpProgress)
         mpProgress->SetState(++mnPagesWritten);
