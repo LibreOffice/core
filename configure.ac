@@ -12193,9 +12193,9 @@ if test "$ENABLE_SKIA" = TRUE -a "$COM_IS_CLANG" != TRUE; then
             AC_MSG_CHECKING([for clang-cl])
             if test -x "$VC_PRODUCT_DIR/Tools/Llvm/bin/clang-cl.exe"; then
                 LO_CLANG_CC=`win_short_path_for_make "$VC_PRODUCT_DIR/Tools/Llvm/bin/clang-cl.exe"`
-            elif test -n "$PROGRAMFILES" -a -x "$PROGRAMFILES/LLVM/bin/clang-cl.exe"; then
+            elif test -n "$PROGRAMFILES" -a -x "$(cygpath -u "$PROGRAMFILES/LLVM/bin/clang-cl.exe")"; then
                 LO_CLANG_CC=`win_short_path_for_make "$PROGRAMFILES/LLVM/bin/clang-cl.exe"`
-            elif test -x "c:/Program Files/LLVM/bin/clang-cl.exe"; then
+            elif test -x "$(cygpath -u "c:/Program Files/LLVM/bin/clang-cl.exe")"; then
                 LO_CLANG_CC=`win_short_path_for_make "c:/Program Files/LLVM/bin/clang-cl.exe"`
             fi
             if test -n "$LO_CLANG_CC"; then
