@@ -55,7 +55,7 @@ constexpr OUStringLiteral DATA_DIRECTORY = u"/lotuswordpro/qa/cppunit/data/";
 
 CPPUNIT_TEST_FIXTURE(LotusWordProTest, testtdf33787OrderedBullets)
 {
-    // Test if ordered bullets are incrementing correclty:
+    // Test if ordered bullets are incrementing correctly:
     //         A. Lettered bullet uppercase 1 (A.)
     //         B. Lettered bullet uppercase 2 (B.)
     //         C. Lettered bullet uppercase 3 (C.)
@@ -130,7 +130,7 @@ CPPUNIT_TEST_FIXTURE(LotusWordProTest, testtdf33787OrderedBullets)
     xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
     xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
     xPara->getPropertyValue("ListLabelString") >>= aListLabelString;
-    // Make sure the nested list (with indendation) starts from 1).
+    // Make sure the nested list (with indentation) starts from 1).
     CPPUNIT_ASSERT_EQUAL(OUString("1)"), aListLabelString);
 
     xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
