@@ -119,7 +119,7 @@ PathFormat()
                         formatted_path=$(wslpath -w "$formatted_path")
                         ;;
                 esac
-                formatted_path=$($BUILDDIR/solenv/wsl/wsl-lo-helper.exe --8.3 "$formatted_path")
+                formatted_path=$($WSL_LO_HELPER --8.3 "$formatted_path")
             elif test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
                 formatted_path=`cygpath -sm "$formatted_path"`
             else
@@ -355,7 +355,7 @@ if test -z "$host" -a -z "$build" -a "$(uname -r | grep -i Microsoft 2>/dev/null
                     ;;
             esac
             if test -n "$opt_d" -o -n "$opt_s"; then
-                input=$($BUILDDIR/solenv/wsl/wsl-lo-helper.exe --8.3 "$input")
+                input=$($WSL_LO_HELPER --8.3 "$input")
             fi
             if test -n "$opt_m"; then
                 input="${input//\\//}"
@@ -398,6 +398,17 @@ if test -z "$host" -a -z "$build" -a "$(uname -r | grep -i Microsoft 2>/dev/null
         cygpath -u 'c:/windows/system32/AboutSettingsHandlers.dll'
 
         exit 0
+    fi
+
+    if test -z "$WSL_LO_HELPER"; then
+        if test -n "$LODE_HOME" -a -x "$LODE_HOME/opt/bin/wsl-lo-helper" ; then
+            WSL_LO_HELPER="$LODE_HOME/opt/bin/wsl-lo-helper"
+        elif test -x "/opt/lo/bin/wsl-lo-helper"; then
+            WSL_LO_HELPER="/opt/lo/bin/wsl-lo-helper"
+        fi
+    fi
+    if test -z "$WSL_LO_HELPER"; then
+        AC_MSG_ERROR([wsl-lo-helper not found. See solenv/wsl/README.])
     fi
 fi
 
@@ -3811,7 +3822,7 @@ reg_get_value()
     unset regvalue
 
     if test "$build_os" = "wsl"; then
-        regvalue=$($BUILDDIR/solenv/wsl/wsl-lo-helper.exe --read-registry $1 "$2" 2>/dev/null)
+        regvalue=$($WSL_LO_HELPER --read-registry $1 "$2" 2>/dev/null)
         return
     fi
 
