@@ -334,7 +334,7 @@ void DispatchRecorder::implts_recordMacro( std::u16string_view aURL,
             aArgumentBuffer.append("(");
             aArgumentBuffer.append     (nValidArgs);
             aArgumentBuffer.append(").Value = ");
-            aArgumentBuffer.append     (sValBuffer.makeStringAndClear());
+            aArgumentBuffer.append     (sValBuffer);
             aArgumentBuffer.append("\n");
 
             ++nValidArgs;
@@ -351,7 +351,7 @@ void DispatchRecorder::implts_recordMacro( std::u16string_view aURL,
         aScriptBuffer.append("(");
         aScriptBuffer.append     (static_cast<sal_Int32>(nValidArgs-1)); // 0 based!
         aScriptBuffer.append(") as new com.sun.star.beans.PropertyValue\n");
-        aScriptBuffer.append     (aArgumentBuffer.makeStringAndClear());
+        aScriptBuffer.append     (aArgumentBuffer);
         aScriptBuffer.append("\n");
     }
 
