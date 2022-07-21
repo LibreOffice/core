@@ -206,7 +206,7 @@ SvxShape::SvxShape( SdrObject* pObject )
 }
 
 
-SvxShape::SvxShape( SdrObject* pObject, const SfxItemPropertyMapEntry* pEntries, const SvxItemPropertySet* pPropertySet )
+SvxShape::SvxShape( SdrObject* pObject, o3tl::span<const SfxItemPropertyMapEntry> pEntries, const SvxItemPropertySet* pPropertySet )
 :   maSize(100,100)
 ,   mpImpl( new SvxShapeImpl( *this, m_aMutex ) )
 ,   mbIsMultiPropertyCall(false)
@@ -3800,7 +3800,7 @@ SvxShapeText::SvxShapeText(SdrObject* pObject)
 }
 
 
-SvxShapeText::SvxShapeText(SdrObject* pObject, const SfxItemPropertyMapEntry* pPropertyMap, const SvxItemPropertySet* pPropertySet)
+SvxShapeText::SvxShapeText(SdrObject* pObject, o3tl::span<const SfxItemPropertyMapEntry> pPropertyMap, const SvxItemPropertySet* pPropertySet)
 : SvxShape( pObject, pPropertyMap, pPropertySet ), SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() )
 {
     if( pObject )

@@ -126,7 +126,6 @@ static const SvxItemPropertySet* ImplGetSdTextPortionPropertyMap()
         {u"TextPortionType",               WID_PORTIONTYPE,    ::cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY, 0 },
         {u"TextUserDefinedAttributes",     EE_CHAR_XMLATTRIBS,     cppu::UnoType<XNameContainer>::get(),        0,     0},
         {u"ParaUserDefinedAttributes",     EE_PARA_XMLATTRIBS,     cppu::UnoType<XNameContainer>::get(),        0,     0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     static SvxItemPropertySet aSdTextPortionPropertyMap( aSdTextPortionPropertyEntries, SdrObject::GetGlobalDrawObjectItemPool() );
 

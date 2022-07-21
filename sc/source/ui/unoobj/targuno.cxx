@@ -48,13 +48,12 @@ const TranslateId aTypeResIds[SC_LINKTARGETTYPE_COUNT] =
     SCSTR_CONTENT_DBAREA        // SC_LINKTARGETTYPE_DBAREA
 };
 
-static const SfxItemPropertyMapEntry* lcl_GetLinkTargetMap()
+static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetLinkTargetMap()
 {
     static const SfxItemPropertyMapEntry aLinkTargetMap_Impl[] =
     {
         { SC_UNO_LINKDISPBIT,  0,  cppu::UnoType<awt::XBitmap>::get(),   beans::PropertyAttribute::READONLY, 0 },
         { SC_UNO_LINKDISPNAME, 0,  cppu::UnoType<OUString>::get(),                beans::PropertyAttribute::READONLY, 0 },
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     return aLinkTargetMap_Impl;
 }

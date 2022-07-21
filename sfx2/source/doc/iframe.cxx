@@ -128,7 +128,7 @@ IFrameWindow_Impl::IFrameWindow_Impl( vcl::Window *pParent, bool bHasBorder )
 #define WID_FRAME_MARGIN_WIDTH          7
 #define WID_FRAME_MARGIN_HEIGHT         8
 
-const SfxItemPropertyMapEntry* lcl_GetIFramePropertyMap_Impl()
+o3tl::span<const SfxItemPropertyMapEntry> lcl_GetIFramePropertyMap_Impl()
 {
     static const SfxItemPropertyMapEntry aIFramePropertyMap_Impl[] =
     {
@@ -140,7 +140,6 @@ const SfxItemPropertyMapEntry* lcl_GetIFramePropertyMap_Impl()
         { u"FrameMarginWidth",     WID_FRAME_MARGIN_WIDTH,     cppu::UnoType<sal_Int32>::get(), PROPERTY_UNBOUND, 0 },
         { u"FrameName",            WID_FRAME_NAME,             cppu::UnoType<OUString>::get(), PROPERTY_UNBOUND, 0 },
         { u"FrameURL",             WID_FRAME_URL,              cppu::UnoType<OUString>::get(), PROPERTY_UNBOUND, 0 },
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     return aIFramePropertyMap_Impl;
 }

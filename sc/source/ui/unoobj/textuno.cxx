@@ -58,24 +58,20 @@ static const SvxItemPropertySet * lcl_GetHdFtPropertySet()
             SVX_UNOEDIT_FONT_PROPERTIES,
             SVX_UNOEDIT_PARA_PROPERTIES,
             SVX_UNOEDIT_NUMBERING_PROPERTY,    // for completeness of service ParagraphProperties
-            { u"", 0, css::uno::Type(), 0, 0 }
         };
 
         //  modify PropertyMap to include CONVERT_TWIPS flag for font height
         //  (headers/footers are in twips)
 
-        SfxItemPropertyMapEntry* pEntry = aHdFtPropertyMap_Impl;
-        while (!pEntry->aName.isEmpty())
+        for (auto & rEntry : aHdFtPropertyMap_Impl)
         {
-            if ( ( pEntry->nWID == EE_CHAR_FONTHEIGHT ||
-                   pEntry->nWID == EE_CHAR_FONTHEIGHT_CJK ||
-                   pEntry->nWID == EE_CHAR_FONTHEIGHT_CTL ) &&
-                 pEntry->nMemberId == MID_FONTHEIGHT )
+            if ( ( rEntry.nWID == EE_CHAR_FONTHEIGHT ||
+                   rEntry.nWID == EE_CHAR_FONTHEIGHT_CJK ||
+                   rEntry.nWID == EE_CHAR_FONTHEIGHT_CTL ) &&
+                 rEntry.nMemberId == MID_FONTHEIGHT )
             {
-                pEntry->nMemberId |= CONVERT_TWIPS;
+                rEntry.nMemberId |= CONVERT_TWIPS;
             }
-
-            ++pEntry;
         }
 
         return SvxItemPropertySet(aHdFtPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool());

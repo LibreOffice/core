@@ -128,11 +128,9 @@ using ::com::sun::star::drawing::XShape;
         { u"IsAnimation",              WID_ISANIMATION,     cppu::UnoType<bool>::get(),                            0, 0},\
         { u"NavigationOrder",          WID_NAVORDER,        cppu::UnoType<sal_Int32>::get(),                       0, 0},\
         { u"PlaceholderText",          WID_PLACEHOLDERTEXT, cppu::UnoType<OUString>::get(),                        0, 0},\
-        { u"", 0, css::uno::Type(), 0, 0 }
 
-    static const SfxItemPropertyMapEntry* lcl_GetImpress_SdXShapePropertyGraphicMap_Impl()
+    static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetImpress_SdXShapePropertyGraphicMap_Impl()
     {
-
         static const SfxItemPropertyMapEntry aImpress_SdXShapePropertyGraphicMap_Impl[] =
         {
             { u"ImageMap",             WID_IMAGEMAP,        cppu::UnoType<container::XIndexContainer>::get(),    0, 0 },
@@ -141,9 +139,8 @@ using ::com::sun::star::drawing::XShape;
         return aImpress_SdXShapePropertyGraphicMap_Impl;
     }
 
-    static const SfxItemPropertyMapEntry* lcl_GetImpress_SdXShapePropertySimpleMap_Impl()
+    static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetImpress_SdXShapePropertySimpleMap_Impl()
     {
-
         static const SfxItemPropertyMapEntry aImpress_SdXShapePropertySimpleMap_Impl[] =
         {
             IMPRESS_MAP_ENTRIES
@@ -156,9 +153,8 @@ using ::com::sun::star::drawing::XShape;
         { u"" UNO_NAME_OBJ_CLICKACTION,   WID_CLICKACTION,    cppu::UnoType<presentation::ClickAction>::get(),0, 0},\
         { u"" UNO_NAME_OBJ_STYLE,         WID_STYLE,          cppu::UnoType<style::XStyle>::get(),            css::beans::PropertyAttribute::MAYBEVOID, 0},\
         { u"NavigationOrder",          WID_NAVORDER,       cppu::UnoType<sal_Int32>::get(),                0, 0},\
-        { u"", 0, css::uno::Type(), 0, 0 }
 
-    static const SfxItemPropertyMapEntry* lcl_GetDraw_SdXShapePropertySimpleMap_Impl()
+    static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetDraw_SdXShapePropertySimpleMap_Impl()
     {
         static const SfxItemPropertyMapEntry aDraw_SdXShapePropertyMap_Impl[] =
         {
@@ -166,7 +162,7 @@ using ::com::sun::star::drawing::XShape;
         };
         return aDraw_SdXShapePropertyMap_Impl;
     }
-    static const SfxItemPropertyMapEntry* lcl_GetDraw_SdXShapePropertyGraphicMap_Impl()
+    static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetDraw_SdXShapePropertyGraphicMap_Impl()
     {
         static const SfxItemPropertyMapEntry aDraw_SdXShapePropertyGraphicMap_Impl[] =
         {
@@ -175,9 +171,9 @@ using ::com::sun::star::drawing::XShape;
         };
         return aDraw_SdXShapePropertyGraphicMap_Impl;
     }
-    static const SfxItemPropertyMapEntry* lcl_ImplGetShapePropertyMap( bool bImpress, bool bGraphicObj )
+    static o3tl::span<const SfxItemPropertyMapEntry> lcl_ImplGetShapePropertyMap( bool bImpress, bool bGraphicObj )
     {
-        const SfxItemPropertyMapEntry* pRet = nullptr;
+        o3tl::span<const SfxItemPropertyMapEntry> pRet;
         if( bImpress )
         {
             if( bGraphicObj )
@@ -226,13 +222,9 @@ using ::com::sun::star::drawing::XShape;
         }
         return pRet;
     }
-    static const SfxItemPropertyMapEntry* lcl_GetEmpty_SdXShapePropertyMap_Impl()
+    static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetEmpty_SdXShapePropertyMap_Impl()
     {
-        static const SfxItemPropertyMapEntry aEmpty_SdXShapePropertyMap_Impl[] =
-        {
-            { u"", 0, css::uno::Type(), 0, 0 }
-        };
-        return aEmpty_SdXShapePropertyMap_Impl;
+        return {};
     }
 
     static const SvxItemPropertySet* lcl_GetEmpty_SdXShapePropertySet_Impl()
@@ -386,7 +378,7 @@ uno::Any SAL_CALL SdXShape::getPropertyDefault( const OUString& aPropertyName )
 //XPropertySet
 css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL SdXShape::getPropertySetInfo()
 {
-    SfxItemPropertyMapEntry const * nObjId = mpShape->getPropertyMapEntries();
+    o3tl::span<SfxItemPropertyMapEntry const> nObjId = mpShape->getPropertyMapEntries();
     css::uno::Reference<css::beans::XPropertySetInfo> pInfo;
 
     SdExtPropertySetInfoCache& rCache = (mpModel && mpModel->IsImpressDocument()) ?

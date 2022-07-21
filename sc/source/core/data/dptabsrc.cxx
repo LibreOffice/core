@@ -1076,7 +1076,6 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPSource::getPropertySetInfo(
         { SC_UNO_DP_COLUMNFIELDCOUNT, 0, cppu::UnoType<sal_Int32>::get(), READONLY, 0 },
         { SC_UNO_DP_DATAFIELDCOUNT,   0, cppu::UnoType<sal_Int32>::get(), READONLY, 0 },
         { SC_UNO_DP_GRANDTOTAL_NAME,  0, cppu::UnoType<OUString>::get(), 0, 0 },
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     static uno::Reference<beans::XPropertySetInfo> aRef =
         new SfxItemPropertySetInfo( aDPSourceMap_Impl );
@@ -1407,7 +1406,6 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPDimension::getPropertySetIn
         { SC_UNO_DP_LAYOUTNAME, 0, cppu::UnoType<OUString>::get(), 0, 0 },
         { SC_UNO_DP_FIELD_SUBTOTALNAME, 0, cppu::UnoType<OUString>::get(), 0, 0 },
         { SC_UNO_DP_HAS_HIDDEN_MEMBER, 0, cppu::UnoType<bool>::get(), 0, 0 },
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     static uno::Reference<beans::XPropertySetInfo> aRef =
         new SfxItemPropertySetInfo( aDPDimensionMap_Impl );
@@ -2068,7 +2066,6 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPLevel::getPropertySetInfo()
         { SC_UNO_DP_SORTING,  0,  cppu::UnoType<sheet::DataPilotFieldSortInfo>::get(),         0, 0 },
         { SC_UNO_DP_SUBTOTAL, 0,  cppu::UnoType<uno::Sequence<sheet::GeneralFunction>>::get(), 0, 0 },
         { SC_UNO_DP_SUBTOTAL2, 0, cppu::UnoType<uno::Sequence<sal_Int16>>::get(), 0, 0 },
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     static uno::Reference<beans::XPropertySetInfo> aRef =
         new SfxItemPropertySetInfo( aDPLevelMap_Impl );
@@ -2536,7 +2533,6 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPMember::getPropertySetInfo(
         { SC_UNO_DP_POSITION, 0,  cppu::UnoType<sal_Int32>::get(),        0, 0 },
         { SC_UNO_DP_SHOWDETAILS, 0,  cppu::UnoType<bool>::get(),              0, 0 },
         { SC_UNO_DP_LAYOUTNAME, 0, cppu::UnoType<OUString>::get(), 0, 0 },
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     static uno::Reference<beans::XPropertySetInfo> aRef =
         new SfxItemPropertySetInfo( aDPMemberMap_Impl );

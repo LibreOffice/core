@@ -69,7 +69,7 @@ using namespace css::sheet;
 
 //  everything without Which-ID, map only for PropertySetInfo
 
-static const SfxItemPropertyMapEntry* lcl_GetSubTotalPropertyMap()
+static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetSubTotalPropertyMap()
 {
     // some old property names are for 5.2 compatibility
 
@@ -87,12 +87,11 @@ static const SfxItemPropertyMapEntry* lcl_GetSubTotalPropertyMap()
         { SC_UNONAME_ULIST,    0,  cppu::UnoType<bool>::get(),       0, 0},
         { SC_UNONAME_UINDEX,   0,  cppu::UnoType<sal_Int32>::get(), 0, 0},
         { SC_UNONAME_USINDEX,  0,  cppu::UnoType<sal_Int32>::get(), 0, 0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     return aSubTotalPropertyMap_Impl;
 }
 
-static const SfxItemPropertyMapEntry* lcl_GetFilterPropertyMap()
+static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetFilterPropertyMap()
 {
     static const SfxItemPropertyMapEntry aFilterPropertyMap_Impl[] =
     {
@@ -105,12 +104,11 @@ static const SfxItemPropertyMapEntry* lcl_GetFilterPropertyMap()
         { SC_UNONAME_SAVEOUT,  0,  cppu::UnoType<bool>::get(),                      0, 0},
         { SC_UNONAME_SKIPDUP,  0,  cppu::UnoType<bool>::get(),                      0, 0},
         { SC_UNONAME_USEREGEX, 0,  cppu::UnoType<bool>::get(),                      0, 0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     return aFilterPropertyMap_Impl;
 }
 
-static const SfxItemPropertyMapEntry* lcl_GetDBRangePropertyMap()
+static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetDBRangePropertyMap()
 {
     static const SfxItemPropertyMapEntry aDBRangePropertyMap_Impl[] =
     {
@@ -128,7 +126,6 @@ static const SfxItemPropertyMapEntry* lcl_GetDBRangePropertyMap()
         { SC_UNONAME_USEFLTCRT,0,  cppu::UnoType<bool>::get(),                      0, 0},
         { SC_UNONAME_TOTALSROW,0,  cppu::UnoType<bool>::get(),                      0, 0},
         { SC_UNONAME_CONTHDR  ,0,  cppu::UnoType<bool>::get(),                      0, 0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     return aDBRangePropertyMap_Impl;
 }

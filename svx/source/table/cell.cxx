@@ -99,7 +99,6 @@ static const SvxItemPropertySet* ImplGetSvxCellPropertySet()
         SVX_UNOEDIT_OUTLINER_PROPERTIES,
         SVX_UNOEDIT_CHAR_PROPERTIES,
         SVX_UNOEDIT_PARA_PROPERTIES,
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
     static SvxItemPropertySet aSvxCellPropertySet( aSvxCellPropertyMap, SdrObject::GetGlobalDrawObjectItemPool() );

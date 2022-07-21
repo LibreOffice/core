@@ -279,7 +279,6 @@ SvxXMLTextExportComponent::SvxXMLTextExportComponent(
         { UNO_NAME_NUMBERING,              EE_PARA_BULLETSTATE,cppu::UnoType<bool>::get(), 0, 0 },
         { UNO_NAME_NUMBERING_LEVEL,        EE_PARA_OUTLLEVEL,  ::cppu::UnoType<sal_Int16>::get(), 0, 0 },
         SVX_UNOEDIT_PARA_PROPERTIES,
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     static SvxItemPropertySet aSvxXMLTextExportComponentPropertySet( SvxXMLTextExportComponentPropertyMap, EditEngine::GetGlobalItemPool() );
 

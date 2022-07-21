@@ -70,7 +70,7 @@ SvxOle2Shape::SvxOle2Shape(SdrObject* pObject)
 {
 }
 
-SvxOle2Shape::SvxOle2Shape(SdrObject* pObject, const SfxItemPropertyMapEntry* pPropertyMap, const SvxItemPropertySet* pPropertySet)
+SvxOle2Shape::SvxOle2Shape(SdrObject* pObject, o3tl::span<const SfxItemPropertyMapEntry> pPropertyMap, const SvxItemPropertySet* pPropertySet)
 : SvxShapeText( pObject, pPropertyMap, pPropertySet  )
 {
 }

@@ -247,7 +247,6 @@ static const SfxItemPropertySet* lcl_GetCellsPropertySet()
         { SC_UNONAME_WRITING,  ATTR_WRITINGDIR,    cppu::UnoType<sal_Int16>::get(),            0, 0 },
         { SC_UNONAME_HYPERLINK,  ATTR_HYPERLINK, cppu::UnoType<OUString>::get(),        0, 0 },
         { SC_UNONAME_FORMATID,  SC_WID_UNO_FORMATID, cppu::UnoType<sal_uInt64>::get(),        0, 0 },
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     static SfxItemPropertySet aCellsPropertySet( aCellsPropertyMap_Impl );
     return &aCellsPropertySet;
@@ -358,7 +357,6 @@ static const SfxItemPropertySet* lcl_GetRangePropertySet()
         { SC_UNONAME_CELLVJUS_METHOD, ATTR_VER_JUSTIFY_METHOD, ::cppu::UnoType<sal_Int32>::get(),   0, 0 },
         { SC_UNONAME_WRITING,  ATTR_WRITINGDIR,    cppu::UnoType<sal_Int16>::get(),            0, 0 },
         { SC_UNONAME_FORMATID,  SC_WID_UNO_FORMATID, cppu::UnoType<sal_uInt64>::get(),        0, 0 },
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     static SfxItemPropertySet aRangePropertySet( aRangePropertyMap_Impl );
     return &aRangePropertySet;
@@ -475,7 +473,6 @@ static const SfxItemPropertySet* lcl_GetCellPropertySet()
         { UNO_NAME_EDIT_CHAR_ESCAPEMENT,   EE_CHAR_ESCAPEMENT, cppu::UnoType<sal_Int32>::get(),            0, 0 },
         { SC_UNONAME_HYPERLINK,  ATTR_HYPERLINK, cppu::UnoType<OUString>::get(),        0, 0 },
         { SC_UNONAME_FORMATID,  SC_WID_UNO_FORMATID, cppu::UnoType<sal_uInt64>::get(),        0, 0 },
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     static SfxItemPropertySet aCellPropertySet( aCellPropertyMap_Impl );
     return &aCellPropertySet;
@@ -590,7 +587,6 @@ static const SfxItemPropertySet* lcl_GetColumnPropertySet()
         { SC_UNONAME_CELLVJUS_METHOD, ATTR_VER_JUSTIFY_METHOD, ::cppu::UnoType<sal_Int32>::get(),   0, 0 },
         { SC_UNONAME_CELLWID,  SC_WID_UNO_CELLWID, cppu::UnoType<sal_Int32>::get(),            0, 0 },
         { SC_UNONAME_WRITING,  ATTR_WRITINGDIR,    cppu::UnoType<sal_Int16>::get(),            0, 0 },
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     static SfxItemPropertySet aColumnPropertySet( aColumnPropertyMap_Impl );
     return &aColumnPropertySet;
@@ -703,7 +699,6 @@ static const SfxItemPropertySet* lcl_GetRowPropertySet()
         { SC_UNONAME_CELLVJUS, ATTR_VER_JUSTIFY,   cppu::UnoType<sal_Int32>::get(), 0, 0 },
         { SC_UNONAME_CELLVJUS_METHOD, ATTR_VER_JUSTIFY_METHOD, ::cppu::UnoType<sal_Int32>::get(),   0, 0 },
         { SC_UNONAME_WRITING,  ATTR_WRITINGDIR,    cppu::UnoType<sal_Int16>::get(),            0, 0 },
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     static SfxItemPropertySet aRowPropertySet( aRowPropertyMap_Impl );
     return &aRowPropertySet;
@@ -828,13 +823,12 @@ static const SfxItemPropertySet* lcl_GetSheetPropertySet()
         { SC_UNONAME_TABCOLOR, SC_WID_UNO_TABCOLOR, cppu::UnoType<sal_Int32>::get(), 0, 0 },
         { SC_UNO_CODENAME,        SC_WID_UNO_CODENAME, cppu::UnoType<OUString>::get(),    0, 0},
         { SC_UNO_NAMEDRANGES, SC_WID_UNO_NAMES, cppu::UnoType<sheet::XNamedRanges>::get(), 0, 0 },
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     static SfxItemPropertySet aSheetPropertySet( aSheetPropertyMap_Impl );
     return &aSheetPropertySet;
 }
 
-static const SfxItemPropertyMapEntry* lcl_GetEditPropertyMap()
+static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetEditPropertyMap()
 {
     static const SfxItemPropertyMapEntry aEditPropertyMap_Impl[] =
     {
@@ -844,7 +838,6 @@ static const SfxItemPropertyMapEntry* lcl_GetEditPropertyMap()
         SVX_UNOEDIT_NUMBERING_PROPERTY,    // for completeness of service ParagraphProperties
         { SC_UNONAME_TEXTUSER, EE_CHAR_XMLATTRIBS, cppu::UnoType<container::XNameContainer>::get(), 0, 0},
         { SC_UNONAME_USERDEF,  EE_PARA_XMLATTRIBS, cppu::UnoType<container::XNameContainer>::get(), 0, 0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     return aEditPropertyMap_Impl;
 }

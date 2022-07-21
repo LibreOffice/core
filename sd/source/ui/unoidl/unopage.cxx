@@ -153,7 +153,6 @@ static const SvxItemPropertySet* ImplGetDrawPagePropertySet( bool bImpress, Page
         { u"" UNO_NAME_PAGE_TRANSITION_DURATION, WID_TRANSITION_DURATION, ::cppu::UnoType<double>::get(),          0,  0},
         { u"LoopSound",                    WID_LOOP_SOUND, cppu::UnoType<bool>::get(),                    0, 0},
         { u"NavigationOrder",              WID_NAVORDER, cppu::UnoType<css::container::XIndexAccess>::get(),0,  0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
 
 #define DRAW_PAGE_NOTES_PROPERTIES \
@@ -179,8 +178,7 @@ static const SvxItemPropertySet* ImplGetDrawPagePropertySet( bool bImpress, Page
         { u"IsDateTimeFixed",              WID_PAGE_DATETIMEFIXED, cppu::UnoType<bool>::get(),                    0, 0},                                                                 \
         { u"DateTimeText",                 WID_PAGE_DATETIMETEXT, ::cppu::UnoType<OUString>::get(),              0,  0},                                                            \
         { u"DateTimeFormat",               WID_PAGE_DATETIMEFORMAT, ::cppu::UnoType<sal_Int32>::get(),           0,  0},                                                            \
-        { u"NavigationOrder",              WID_NAVORDER, cppu::UnoType<css::container::XIndexAccess>::get(),0,  0},                                                            \
-        { u"", 0, css::uno::Type(), 0, 0 }
+        { u"NavigationOrder",              WID_NAVORDER, cppu::UnoType<css::container::XIndexAccess>::get(),0,  0}
 
     static const SfxItemPropertyMapEntry aDrawPageNotesHandoutPropertyMap_Impl[] =
     {
@@ -210,8 +208,7 @@ static const SvxItemPropertySet* ImplGetDrawPagePropertySet( bool bImpress, Page
         { sUNO_Prop_UserDefinedAttributes,WID_PAGE_USERATTRIBS, cppu::UnoType<css::container::XNameContainer>::get(),         0,     0},                          \
         { sUNO_Prop_BookmarkURL,          WID_PAGE_BOOKMARK,  ::cppu::UnoType<OUString>::get(),             0,  0},                                                                             \
         { u"IsBackgroundDark",             WID_PAGE_ISDARK,    cppu::UnoType<bool>::get(),                        beans::PropertyAttribute::READONLY, 0},                                             \
-        { u"NavigationOrder",              WID_NAVORDER, cppu::UnoType<css::container::XIndexAccess>::get(),0,  0},                                                                         \
-        { u"", 0, css::uno::Type(), 0, 0 }
+        { u"NavigationOrder",              WID_NAVORDER, cppu::UnoType<css::container::XIndexAccess>::get(),0,  0}
 
     static const SfxItemPropertyMapEntry aGraphicPagePropertyMap_Impl[] =
     {
@@ -282,8 +279,7 @@ static const SvxItemPropertySet* ImplGetMasterPagePropertySet( PageKind ePageKin
         { u"BackgroundFullSize",           WID_PAGE_BACKFULL,  cppu::UnoType<bool>::get(),                        0, 0},
         { sUNO_Prop_UserDefinedAttributes,WID_PAGE_USERATTRIBS, cppu::UnoType<css::container::XNameContainer>::get(),         0,     0},
         { u"IsBackgroundDark",             WID_PAGE_ISDARK,    cppu::UnoType<bool>::get(),                        beans::PropertyAttribute::READONLY, 0},
-        { u"Theme", WID_PAGE_THEME, cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get(), 0,  0},
-        { u"", 0, css::uno::Type(), 0, 0 }
+        { u"Theme", WID_PAGE_THEME, cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get(), 0,  0}
     };
 
     static const SfxItemPropertyMapEntry aHandoutMasterPagePropertyMap_Impl[] =
@@ -307,8 +303,7 @@ static const SvxItemPropertySet* ImplGetMasterPagePropertySet( PageKind ePageKin
         { u"IsDateTimeVisible",            WID_PAGE_DATETIMEVISIBLE, cppu::UnoType<bool>::get(),                  0, 0},
         { u"IsDateTimeFixed",              WID_PAGE_DATETIMEFIXED, cppu::UnoType<bool>::get(),                    0, 0},
         { u"DateTimeText",                 WID_PAGE_DATETIMETEXT, ::cppu::UnoType<OUString>::get(),              0,  0},
-        { u"DateTimeFormat",               WID_PAGE_DATETIMEFORMAT, ::cppu::UnoType<sal_Int32>::get(),           0,  0},
-        { u"", 0, css::uno::Type(), 0, 0 }
+        { u"DateTimeFormat",               WID_PAGE_DATETIMEFORMAT, ::cppu::UnoType<sal_Int32>::get(),           0,  0}
     };
 
     const SvxItemPropertySet* pRet = nullptr;
