@@ -611,7 +611,8 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
             " "
             OOO_STRING_SVTOOLS_HTML_O_name
             "=\"");
-    rStream.WriteOString( sOut.makeStringAndClear() );
+    rStream.WriteOString( sOut );
+    sOut.setLength(0);
     Out_String( rStream, rOutName );
     rStream.WriteCharPtr( "\">" );
 
@@ -704,7 +705,8 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                         "=" + pShape + " "
                         OOO_STRING_SVTOOLS_HTML_O_coords "=\"" +
                         aCoords + "\" ");
-                rStream.WriteOString( sOut.makeStringAndClear() );
+                rStream.WriteOString( sOut );
+                sOut.setLength(0);
 
                 OUString aURL( pObj->GetURL() );
                 if( !aURL.isEmpty() && pObj->IsActive() )
@@ -712,7 +714,8 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                     aURL = URIHelper::simpleNormalizedMakeRelative(
                         rBaseURL, aURL );
                     sOut.append(OOO_STRING_SVTOOLS_HTML_O_href "=\"");
-                    rStream.WriteOString( sOut.makeStringAndClear() );
+                    rStream.WriteOString( sOut );
+                    sOut.setLength(0);
                     Out_String( rStream, aURL ).WriteChar( '\"' );
                 }
                 else
@@ -722,7 +725,8 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                 if( !rObjName.isEmpty() )
                 {
                     sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_name "=\"");
-                    rStream.WriteOString( sOut.makeStringAndClear() );
+                    rStream.WriteOString( sOut );
+                    sOut.setLength(0);
                     Out_String( rStream, rObjName ).WriteChar( '\"' );
                 }
 
@@ -730,7 +734,8 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                 if( !rTarget.isEmpty() && pObj->IsActive() )
                 {
                     sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_target "=\"");
-                    rStream.WriteOString( sOut.makeStringAndClear() );
+                    rStream.WriteOString( sOut );
+                    sOut.setLength(0);
                     Out_String( rStream, rTarget ).WriteChar( '\"' );
                 }
 
@@ -741,7 +746,8 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                 if( !rDesc.isEmpty() )
                 {
                     sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_alt "=\"");
-                    rStream.WriteOString( sOut.makeStringAndClear() );
+                    rStream.WriteOString( sOut );
+                    sOut.setLength(0);
                     Out_String( rStream, rDesc ).WriteChar( '\"' );
                 }
 
@@ -782,7 +788,8 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
     if( !rLanguage.isEmpty() )
     {
         sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_language "=\"");
-        rStrm.WriteOString( sOut.makeStringAndClear() );
+        rStrm.WriteOString( sOut );
+        sOut.setLength(0);
         Out_String( rStrm, rLanguage );
         sOut.append('\"');
     }
@@ -790,7 +797,8 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
     if( !rSrc.isEmpty() )
     {
         sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_src "=\"");
-        rStrm.WriteOString( sOut.makeStringAndClear() );
+        rStrm.WriteOString( sOut );
+        sOut.setLength(0);
         Out_String( rStrm, URIHelper::simpleNormalizedMakeRelative(rBaseURL, rSrc) );
         sOut.append('\"');
     }
@@ -798,7 +806,8 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
     if( STARBASIC != eScriptType && pSBLibrary )
     {
         sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_sdlibrary "=\"");
-        rStrm.WriteOString( sOut.makeStringAndClear() );
+        rStrm.WriteOString( sOut );
+        sOut.setLength(0);
         Out_String( rStrm, *pSBLibrary );
         sOut.append('\"');
     }
@@ -806,14 +815,16 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
     if( STARBASIC != eScriptType && pSBModule )
     {
         sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_sdmodule "=\"");
-        rStrm.WriteOString( sOut.makeStringAndClear() );
+        rStrm.WriteOString( sOut );
+        sOut.setLength(0);
         Out_String( rStrm, *pSBModule );
         sOut.append('\"');
     }
 
     sOut.append('>');
 
-    rStrm.WriteOString( sOut.makeStringAndClear() );
+    rStrm.WriteOString( sOut );
+    sOut.setLength(0);
 
     if( !rSource.empty() || pSBLibrary || pSBModule )
     {
@@ -831,14 +842,16 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
             {
                 sOut.append("' " OOO_STRING_SVTOOLS_HTML_SB_library " " +
                             OUStringToOString(*pSBLibrary, RTL_TEXTENCODING_UTF8));
-                rStrm.WriteOString( sOut.makeStringAndClear() ).WriteCharPtr( SAL_NEWLINE_STRING );
+                rStrm.WriteOString( sOut ).WriteCharPtr( SAL_NEWLINE_STRING );
+                sOut.setLength(0);
             }
 
             if( pSBModule )
             {
                 sOut.append("' " OOO_STRING_SVTOOLS_HTML_SB_module " " +
                         OUStringToOString(*pSBModule, RTL_TEXTENCODING_UTF8));
-                rStrm.WriteOString( sOut.makeStringAndClear() ).WriteCharPtr( SAL_NEWLINE_STRING );
+                rStrm.WriteOString( sOut ).WriteCharPtr( SAL_NEWLINE_STRING );
+                sOut.setLength(0);
             }
         }
 
@@ -974,7 +987,7 @@ void HtmlWriterHelper::applyColor(HtmlWriter& rHtmlWriter, std::string_view aAtt
         sBuffer.append(sStringStream.str().c_str());
     }
 
-    rHtmlWriter.attribute(aAttributeName, sBuffer.makeStringAndClear());
+    rHtmlWriter.attribute(aAttributeName, sBuffer);
 }
 
 

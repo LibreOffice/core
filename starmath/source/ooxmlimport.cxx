@@ -383,7 +383,7 @@ OUString SmOoxmlImport::handleEqArr()
         ret.append(" ");
     } while( !m_rStream.atEnd() && m_rStream.findTag( OPENING( M_TOKEN( e ))));
     m_rStream.ensureClosingTag( M_TOKEN( eqArr ));
-    return "stack {" + ret.makeStringAndClear() + "}";
+    return "stack {" + ret + "}";
 }
 
 OUString SmOoxmlImport::handleF()
@@ -500,7 +500,7 @@ OUString SmOoxmlImport::handleM()
         m_rStream.ensureClosingTag( M_TOKEN( mr ));
     } while( !m_rStream.atEnd() && m_rStream.findTag( OPENING( M_TOKEN( mr ))));
     m_rStream.ensureClosingTag( M_TOKEN( m ));
-    return "matrix {" + allrows.makeStringAndClear() + "}";
+    return "matrix {" + allrows + "}";
 }
 
 OUString SmOoxmlImport::handleNary()
