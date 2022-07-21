@@ -257,9 +257,10 @@ class SwXTextPortionEnumeration final
     virtual ~SwXTextPortionEnumeration() override;
 
 public:
+    /// @param bOnlyTextFields tries to return less data, but may return more than just text fields
     SwXTextPortionEnumeration(SwPaM& rParaCursor,
             css::uno::Reference< css::text::XText > const & xParent,
-            const sal_Int32 nStart, const sal_Int32 nEnd );
+            const sal_Int32 nStart, const sal_Int32 nEnd, bool bOnlyTextFields = false );
 
     SwXTextPortionEnumeration(SwPaM& rParaCursor,
         TextRangeList_t && rPortions );

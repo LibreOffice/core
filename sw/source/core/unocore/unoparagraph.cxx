@@ -1265,6 +1265,20 @@ SwXParagraph::createEnumeration()
     return xRef;
 }
 
+ /// tries to return less data, but may return more than just text fields
+rtl::Reference< SwXTextPortionEnumeration >
+SwXParagraph::createTextFieldsEnumeration()
+{
+    SolarMutexGuard aGuard;
+
+    SwTextNode & rTextNode(m_pImpl->GetTextNodeOrThrow());
+    SwPosition aPos( rTextNode );
+    SwPaM aPam ( aPos );
+
+    return new SwXTextPortionEnumeration(aPam, m_pImpl->m_xParentText,
+            m_pImpl->m_nSelectionStartPos, m_pImpl->m_nSelectionEndPos, /*bOnlyTextFields*/true);
+}
+
 uno::Type SAL_CALL SwXParagraph::getElementType()
 {
     return cppu::UnoType<text::XTextRange>::get();
