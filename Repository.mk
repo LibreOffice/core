@@ -951,12 +951,8 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	extras_persona_pink \
 	extras_persona_sand \
 	extras_persona_white \
-	extras_tplofficorr \
-	extras_tploffimisc \
+	extras_templates \
 	extras_tplpresnt \
-	extras_tpl_styles \
-	extras_tpldraw \
-	extras_tplpersonal \
 	extras_tplwizbitmap \
 	extras_tplwizdesktop \
 	extras_tplwizard \

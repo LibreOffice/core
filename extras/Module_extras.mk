@@ -14,12 +14,8 @@ $(eval $(call gb_Module_add_targets,extras,\
 	CustomTarget_autotextuser \
 	CustomTarget_glade \
 	CustomTarget_gallsystem \
-	CustomTarget_tplofficorr \
-	CustomTarget_tploffimisc \
-	CustomTarget_tplpersonal \
+	CustomTarget_templates \
 	CustomTarget_tplpresnt \
-	CustomTarget_tpl_styles \
-	CustomTarget_tpldraw \
 	CustomTarget_tplwizard \
 	Package_autocorr \
 	Package_autotextuser \
@@ -38,12 +34,8 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Package_labels \
 	$(if $(filter WNT,$(OS)),Package_newfiles) \
 	Package_palettes \
-	Package_tplofficorr \
-	Package_tploffimisc \
-	Package_tplpersonal \
+	Package_templates \
 	Package_tplpresnt \
-	Package_tpl_styles \
-	Package_tpldraw \
 	Package_tplwizard \
 	Package_tplwizbitmap \
 	Package_tplwizdesktop \
