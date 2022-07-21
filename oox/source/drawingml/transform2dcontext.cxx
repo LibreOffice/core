@@ -199,6 +199,22 @@ bool ConstructPresetTextRectangle(Shape& rShape, awt::Rectangle& rRect)
             rRect.Height = nHeight - 2 * nTextTop;
             return true;
         }
+        case XML_round1Rect:
+        {
+            sal_Int32 nWidth = rShape.getSize().Width;
+            sal_Int32 nHeight = rShape.getSize().Height;
+            if (nWidth == 0 || nHeight == 0)
+                return false;
+            auto aAdjGdList = rShape.getCustomShapeProperties()->getAdjustmentGuideList();
+            double fAdj = aAdjGdList.empty() ? 16667.0 : aAdjGdList[0].maFormula.toDouble();
+            std::clamp<double>(fAdj, 0.0, 50000.0);
+            double fDx = std::min(nWidth, nHeight) * fAdj / 100000.0 * 0.29289;
+            rRect.X = rShape.getPosition().X;
+            rRect.Y = rShape.getPosition().Y;
+            rRect.Width = nWidth - fDx;
+            rRect.Height = nHeight;
+            return true;
+        }
         default:
             return false;
     }

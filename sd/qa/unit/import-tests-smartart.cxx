@@ -124,6 +124,7 @@ public:
     void testTdf149551Pyramid();
     void testTdf149551Venn();
     void testTdf149551Gear();
+    void testTdf145528Matrix();
 
     CPPUNIT_TEST_SUITE(SdImportTestSmartArt);
 
@@ -183,6 +184,7 @@ public:
     CPPUNIT_TEST(testTdf149551Pyramid);
     CPPUNIT_TEST(testTdf149551Venn);
     CPPUNIT_TEST(testTdf149551Gear);
+    CPPUNIT_TEST(testTdf145528Matrix);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1946,6 +1948,40 @@ void SdImportTestSmartArt::testTdf149551Gear()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(4500), sal_Int32(aTextRect.Top()), 4);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(11000), sal_Int32(aTextRect.Right()), 4);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(9999), sal_Int32(aTextRect.Bottom()), 4);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testTdf145528Matrix()
+{
+    // The file contains a diagram of type "Titled Matrix". Such is build from shapes of type
+    // 'round1Rect'.
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf145528_SmartArt_Matrix.pptx"), PPTX);
+    uno::Reference<drawing::XShape> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    // expected values
+    sal_Int32 nLeft[]{ 4001, 12001, 12001, 18501 };
+    sal_Int32 nTop[]{ 9999, 1999, 12499, 5999 };
+    // nWidth = 10292, nHeight = 4499
+    // Without the fix in place the values were
+    // nLeft {2001, 12001, 12001, 22001}
+    // nTop {7999. 1999, 13999, 7999}
+    // nWidth {6000, 10000, 10000, 6000}
+    // nHeight {10000, 6000, 6000, 10000}
+    tools::Rectangle aTextRect;
+    for (auto i : { 1, 2, 3, 4 }) // shape at index 0 is the background shape
+    {
+        uno::Reference<drawing::XShape> xShape = getChildShape(xGroup, i);
+        CPPUNIT_ASSERT(xShape.is());
+        auto pCustomShape
+            = dynamic_cast<SdrObjCustomShape*>(SdrObject::getSdrObjectFromXShape(xShape));
+        CPPUNIT_ASSERT(pCustomShape);
+        pCustomShape->TakeTextAnchorRect(aTextRect);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(nLeft[i - 1], sal_Int32(aTextRect.Left()), 4);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(nTop[i - 1], sal_Int32(aTextRect.Top()), 4);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(10293), sal_Int32(aTextRect.GetWidth()), 4);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(4500), sal_Int32(aTextRect.GetHeight()), 4);
+    }
 
     xDocShRef->DoClose();
 }
