@@ -17,9 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "AccessibilityTools.hxx"
+#include <test/a11y/AccessibilityTools.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
+#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -31,7 +32,6 @@
 
 using namespace css;
 
-/* FIXME: mostly copied from sw/qa/extras/accessibility/accessible_relation_set.cxx */
 css::uno::Reference<css::accessibility::XAccessibleContext>
 AccessibilityTools::getAccessibleObjectForRole(
     const css::uno::Reference<css::accessibility::XAccessible>& xacc, sal_Int16 role)
@@ -57,7 +57,6 @@ AccessibilityTools::getAccessibleObjectForRole(
     }
     return nullptr;
 }
-/* FIXME: end copy */
 
 bool AccessibilityTools::equals(const uno::Reference<accessibility::XAccessible>& xacc1,
                                 const uno::Reference<accessibility::XAccessible>& xacc2)
@@ -488,6 +487,36 @@ OUString AccessibilityTools::getEventIdName(const sal_Int16 event_id)
             return "VALUE_CHANGED";
         case accessibility::AccessibleEventId::VISIBLE_DATA_CHANGED:
             return "VISIBLE_DATA_CHANGED";
+    }
+    return "unknown";
+}
+
+OUString AccessibilityTools::getRelationTypeName(const sal_Int16 rel_type)
+{
+    switch (rel_type)
+    {
+        case accessibility::AccessibleRelationType::CONTENT_FLOWS_FROM:
+            return "CONTENT_FLOWS_FROM";
+        case accessibility::AccessibleRelationType::CONTENT_FLOWS_TO:
+            return "CONTENT_FLOWS_TO";
+        case accessibility::AccessibleRelationType::CONTROLLED_BY:
+            return "CONTROLLED_BY";
+        case accessibility::AccessibleRelationType::CONTROLLER_FOR:
+            return "CONTROLLER_FOR";
+        case accessibility::AccessibleRelationType::DESCRIBED_BY:
+            return "DESCRIBED_BY";
+        case accessibility::AccessibleRelationType::INVALID:
+            return "INVALID";
+        case accessibility::AccessibleRelationType::LABELED_BY:
+            return "LABELED_BY";
+        case accessibility::AccessibleRelationType::LABEL_FOR:
+            return "LABEL_FOR";
+        case accessibility::AccessibleRelationType::MEMBER_OF:
+            return "MEMBER_OF";
+        case accessibility::AccessibleRelationType::NODE_CHILD_OF:
+            return "NODE_CHILD_OF";
+        case accessibility::AccessibleRelationType::SUB_WINDOW_OF:
+            return "SUB_WINDOW_OF";
     }
     return "unknown";
 }

@@ -38,7 +38,7 @@
 #include <rtl/ref.hxx>
 #include <sal/log.hxx>
 
-#include "AccessibilityTools.hxx"
+#include <test/a11y/AccessibilityTools.hxx>
 
 using namespace css;
 

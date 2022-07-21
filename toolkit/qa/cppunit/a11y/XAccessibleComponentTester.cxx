@@ -30,7 +30,7 @@
 
 #include <tools/color.hxx>
 
-#include "AccessibilityTools.hxx"
+#include <test/a11y/AccessibilityTools.hxx>
 
 using namespace css;
 

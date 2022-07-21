@@ -38,7 +38,7 @@
 #include <test/bootstrapfixture.hxx>
 #include <vcl/scheduler.hxx>
 
-#include "AccessibilityTools.hxx"
+#include <test/a11y/AccessibilityTools.hxx>
 #include "XAccessibleComponentTester.hxx"
 #include "XAccessibleContextTester.hxx"
 #include "XAccessibleExtendedComponentTester.hxx"
