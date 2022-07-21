@@ -38,6 +38,18 @@ public:
     static const sal_Int32 MAX_CHILDREN = 500;
 
     static css::uno::Reference<css::accessibility::XAccessibleContext>
+    getAccessibleObjectForPredicate(
+        const css::uno::Reference<css::accessibility::XAccessibleContext>& xCtx,
+        const std::function<
+            bool(const css::uno::Reference<css::accessibility::XAccessibleContext>&)>& cPredicate);
+    static css::uno::Reference<css::accessibility::XAccessibleContext>
+    getAccessibleObjectForPredicate(
+        const css::uno::Reference<css::accessibility::XAccessible>& xAcc,
+        const std::function<
+            bool(const css::uno::Reference<css::accessibility::XAccessibleContext>&)>& cPredicate);
+    static css::uno::Reference<css::accessibility::XAccessibleContext> getAccessibleObjectForRole(
+        const css::uno::Reference<css::accessibility::XAccessibleContext>& xCtx, sal_Int16 role);
+    static css::uno::Reference<css::accessibility::XAccessibleContext>
     getAccessibleObjectForRole(const css::uno::Reference<css::accessibility::XAccessible>& xacc,
                                sal_Int16 role);
 
