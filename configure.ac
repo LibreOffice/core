@@ -190,7 +190,9 @@ AbsolutePath()
     # Args: $1: A possibly relative pathname
     # Return value: $absolute_path
 
-    local rel="$1"
+    # Convert to unix path, mkdir would treat c:/path as a relative path.
+    PathFormat "$1"
+    local rel="$formatted_path_unix"
     absolute_path=""
     test ! -e "$rel" && mkdir -p "$rel"
     if test -d "$rel" ; then
@@ -6081,7 +6083,7 @@ if test -z "$TARFILE_LOCATION"; then
 else
     AbsolutePath "$TARFILE_LOCATION"
     PathFormat "${absolute_path}"
-    TARFILE_LOCATION="${formatted_path}"
+    TARFILE_LOCATION="${formatted_path_unix}"
 fi
 AC_SUBST(TARFILE_LOCATION)
 
