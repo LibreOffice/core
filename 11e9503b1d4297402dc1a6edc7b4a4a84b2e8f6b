@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4891d851_aa37df71",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-07-21T15:10:03Z",
+      "side": 1,
+      "message": "So lets submit this hack for now if there are no review comments.",
+      "revId": "11e9503b1d4297402dc1a6edc7b4a4a84b2e8f6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
