@@ -1237,7 +1237,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
             }
         }
         break;
-        case SID_ATTR_CHAR_COLOR_BACKGROUND:
+        case SID_ATTR_CHAR_BACK_COLOR:
+        case SID_ATTR_CHAR_COLOR_BACKGROUND: // deprecated
         case SID_ATTR_CHAR_COLOR_EXT:
         {
             Color aSet;
@@ -1837,6 +1838,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 rSet.Put( aColorItem.CloneSetWhich(SID_ATTR_CHAR_COLOR2) );
             }
             break;
+        case SID_ATTR_CHAR_BACK_COLOR:
         case SID_ATTR_CHAR_COLOR_BACKGROUND:
             {
                 // Always use the visible background
@@ -1858,7 +1860,10 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             {
                 SwEditWin& rEdtWin = GetView().GetEditWin();
                 SwApplyTemplate* pApply = rEdtWin.GetApplyTemplate();
-                rSet.Put(SfxBoolItem(nWhich, pApply && pApply->nColor == SID_ATTR_CHAR_COLOR_BACKGROUND));
+                const sal_uInt32 nColWhich = pApply ? pApply->nColor : 0;
+                const bool bUseTemplate = nColWhich == SID_ATTR_CHAR_BACK_COLOR
+                                          || nColWhich == SID_ATTR_CHAR_COLOR_BACKGROUND;
+                rSet.Put(SfxBoolItem(nWhich, bUseTemplate));
             }
             break;
         case SID_ATTR_CHAR_COLOR_EXT:
