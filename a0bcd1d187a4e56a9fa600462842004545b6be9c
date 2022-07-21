@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3b9891e_ba743771",
+        "filename": "vcl/quartz/salbmp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-07-21T10:53:51Z",
+      "side": 0,
+      "message": "can probably remove this too, now?",
+      "revId": "a0bcd1d187a4e56a9fa600462842004545b6be9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
