@@ -1560,7 +1560,7 @@ void SwView::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& rSe
     aVector.push_back(comphelper::makePropertyValue("VisibleTop", visibleTop));
 
     // We don't read VisibleRight and VisibleBottom anymore, but write them,
-    // because older versions rely on their presense to restore position
+    // because older versions rely on their presence to restore position
 
     auto visibleRight = rVis.IsWidthEmpty() ? visibleLeft : convertTwipToMm100 ( rVis.Right() );
     aVector.push_back(comphelper::makePropertyValue("VisibleRight", visibleRight));
