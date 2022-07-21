@@ -4215,17 +4215,18 @@ OUString SfxMedium::SwitchDocumentToTempFile()
                     {}
                 }
 
+                if (bWasReadonly)
+                {
+                    // set the readonly state back
+                    pImpl->m_nStorOpenMode = SFX_STREAM_READONLY;
+                    GetItemSet()->Put(SfxBoolItem(SID_DOC_READONLY, true));
+                }
+
                 if ( aResult.isEmpty() )
                 {
                     Close();
                     SetPhysicalName_Impl( OUString() );
                     SetName( aOrigURL );
-                    if ( bWasReadonly )
-                    {
-                        // set the readonly state back
-                        pImpl->m_nStorOpenMode = SFX_STREAM_READONLY;
-                        GetItemSet()->Put( SfxBoolItem(SID_DOC_READONLY, true));
-                    }
                     GetMedium_Impl();
                     pImpl->xStorage = xStorage;
                 }
