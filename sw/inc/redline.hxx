@@ -157,11 +157,10 @@ class SW_DLLPUBLIC SwRangeRedline final : public SwPaM
 {
     SwRedlineData* m_pRedlineData;
     SwNodeIndex* m_pContentSect;
+    std::optional<tools::Long> m_oLOKLastNodeTop;
+    sal_uInt32 m_nId;
     bool m_bDelLastPara : 1;
     bool m_bIsVisible : 1;
-    sal_uInt32 m_nId;
-
-    std::optional<tools::Long> m_oLOKLastNodeTop;
 
     void MoveToSection();
     void CopyToSection();
@@ -178,7 +177,7 @@ public:
     SwRangeRedline(SwRedlineData* pData, const SwPosition& rPos,
                bool bDelLP) :
         SwPaM( rPos ), m_pRedlineData( pData ), m_pContentSect( nullptr ),
-        m_bDelLastPara( bDelLP ), m_bIsVisible( true ), m_nId( s_nLastId++ )
+        m_nId( s_nLastId++ ), m_bDelLastPara( bDelLP ), m_bIsVisible( true )
     {}
     SwRangeRedline( const SwRangeRedline& );
     virtual ~SwRangeRedline() override;
