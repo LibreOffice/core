@@ -100,7 +100,7 @@ using ::com::sun::star::table::CellRangeAddress;
 
 namespace {
 
-const SfxItemPropertyMapEntry* lcl_GetDataPilotDescriptorBaseMap()
+o3tl::span<const SfxItemPropertyMapEntry> lcl_GetDataPilotDescriptorBaseMap()
 {
     static const SfxItemPropertyMapEntry aDataPilotDescriptorBaseMap_Impl[] =
     {
@@ -114,12 +114,11 @@ const SfxItemPropertyMapEntry* lcl_GetDataPilotDescriptorBaseMap()
         { SC_UNO_DP_SERVICEARG,   0,  cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get(), 0, 0 },
         { SC_UNO_DP_SHOWFILTER,     0,  cppu::UnoType<bool>::get(),  0, 0 },
         { SC_UNO_DP_SOURCESERVICE,   0,  cppu::UnoType<OUString>::get(), 0, 0 },
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     return aDataPilotDescriptorBaseMap_Impl;
 }
 
-const SfxItemPropertyMapEntry* lcl_GetDataPilotFieldMap()
+o3tl::span<const SfxItemPropertyMapEntry> lcl_GetDataPilotFieldMap()
 {
     using namespace ::com::sun::star::beans::PropertyAttribute;
     static const SfxItemPropertyMapEntry aDataPilotFieldMap_Impl[] =
@@ -143,19 +142,17 @@ const SfxItemPropertyMapEntry* lcl_GetDataPilotFieldMap()
         { SC_UNONAME_SUBTOTALS,    0,  cppu::UnoType<Sequence<GeneralFunction>>::get(),    0, 0 },
         { SC_UNONAME_SUBTOTALS2,   0,  cppu::UnoType<Sequence<sal_Int16>>::get(),   0, 0 },
         { SC_UNONAME_USESELPAGE,   0,  cppu::UnoType<bool>::get(),                          0, 0 },
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     return aDataPilotFieldMap_Impl;
 }
 
-const SfxItemPropertyMapEntry* lcl_GetDataPilotItemMap()
+o3tl::span<const SfxItemPropertyMapEntry> lcl_GetDataPilotItemMap()
 {
     static const SfxItemPropertyMapEntry aDataPilotItemMap_Impl[] =
     {
         { SC_UNONAME_ISHIDDEN,     0,  cppu::UnoType<bool>::get(),          0, 0 },
         { SC_UNONAME_POS,          0,  cppu::UnoType<sal_Int32>::get(),    0, 0 },
         { SC_UNONAME_SHOWDETAIL,   0,  cppu::UnoType<bool>::get(),          0, 0 },
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     return aDataPilotItemMap_Impl;
 }

@@ -77,7 +77,7 @@ using namespace com::sun::star;
 
 //  no Which-ID here, Map only for PropertySetInfo
 
-static const SfxItemPropertyMapEntry* lcl_GetViewOptPropertyMap()
+static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetViewOptPropertyMap()
 {
     static const SfxItemPropertyMapEntry aViewOptPropertyMap_Impl[] =
     {
@@ -110,7 +110,6 @@ static const SfxItemPropertyMapEntry* lcl_GetViewOptPropertyMap()
         { SC_UNO_ZOOMVALUE,    0,  cppu::UnoType<sal_Int16>::get(),    0, 0},
         { SC_UNO_VISAREASCREEN,0,  cppu::UnoType<awt::Rectangle>::get(), 0, 0},
         { SC_UNO_FORMULABARHEIGHT,0,cppu::UnoType<sal_Int16>::get(),     0, 0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     return aViewOptPropertyMap_Impl;
 }

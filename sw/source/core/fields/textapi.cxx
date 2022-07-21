@@ -52,7 +52,6 @@ static const SvxItemPropertySet* ImplGetSvxTextPortionPropertySet()
             cppu::UnoType<css::container::XNameContainer>::get(), 0, 0},
         {u"ParaUserDefinedAttributes", EE_PARA_XMLATTRIBS,
             cppu::UnoType<css::container::XNameContainer>::get(), 0, 0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     static SvxItemPropertySet aSvxTextPortionPropertySet( aSvxTextPortionPropertyMap, EditEngine::GetGlobalItemPool() );
     return &aSvxTextPortionPropertySet;

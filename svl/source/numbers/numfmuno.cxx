@@ -62,7 +62,7 @@ constexpr OUStringLiteral PROPERTYNAME_TWODIGIT = u"TwoDigitDateStart";
 
 // All without a Which-ID, Map only for PropertySetInfo
 
-static const SfxItemPropertyMapEntry* lcl_GetNumberFormatPropertyMap()
+static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetNumberFormatPropertyMap()
 {
     static const SfxItemPropertyMapEntry aNumberFormatPropertyMap_Impl[] =
     {
@@ -79,12 +79,11 @@ static const SfxItemPropertyMapEntry* lcl_GetNumberFormatPropertyMap()
         {PROPERTYNAME_THOUS,    0, cppu::UnoType<bool>::get(),         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
         {PROPERTYNAME_USERDEF,  0, cppu::UnoType<bool>::get(),         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
         {PROPERTYNAME_CURRABB,  0, cppu::UnoType<OUString>::get(),    beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     return aNumberFormatPropertyMap_Impl;
 }
 
-static const SfxItemPropertyMapEntry* lcl_GetNumberSettingsPropertyMap()
+static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetNumberSettingsPropertyMap()
 {
     static const SfxItemPropertyMapEntry aNumberSettingsPropertyMap_Impl[] =
     {
@@ -92,7 +91,6 @@ static const SfxItemPropertyMapEntry* lcl_GetNumberSettingsPropertyMap()
         {PROPERTYNAME_NULLDATE, 0, cppu::UnoType<util::Date>::get(),  beans::PropertyAttribute::BOUND, 0},
         {PROPERTYNAME_STDDEC,   0, cppu::UnoType<sal_Int16>::get(),   beans::PropertyAttribute::BOUND, 0},
         {PROPERTYNAME_TWODIGIT, 0, cppu::UnoType<sal_Int16>::get(),   beans::PropertyAttribute::BOUND, 0},
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     return aNumberSettingsPropertyMap_Impl;
 }

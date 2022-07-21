@@ -30,6 +30,7 @@
 #include <sfx2/module.hxx>
 #include <sal/types.h>
 #include <vcl/virdev.hxx>
+#include <o3tl/span.hxx>
 #include <map>
 #include <memory>
 #include <string_view>
@@ -56,7 +57,17 @@ enum class SdOptionStreamMode
     Store = 1
 };
 
-typedef std::map< SfxItemPropertyMapEntry const * , css::uno::Reference<css::beans::XPropertySetInfo> > SdExtPropertySetInfoCache;
+struct SdExtPropertySetInfoCacheCompare
+{
+    bool operator()(const o3tl::span<SfxItemPropertyMapEntry const>& lhs, const o3tl::span<SfxItemPropertyMapEntry const>& rhs) const
+    {
+        return lhs.data() < rhs.data();
+    }
+};
+typedef std::map<
+            o3tl::span<SfxItemPropertyMapEntry const>,
+            css::uno::Reference<css::beans::XPropertySetInfo>,
+            SdExtPropertySetInfoCacheCompare > SdExtPropertySetInfoCache;
 typedef std::map< SdrObjKind, css::uno::Sequence< css::uno::Type> > SdTypesCache;
 
 /*

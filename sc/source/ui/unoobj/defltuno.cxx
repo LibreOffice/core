@@ -36,7 +36,7 @@
 class SvxFontItem;
 using namespace ::com::sun::star;
 
-static const SfxItemPropertyMapEntry* lcl_GetDocDefaultsMap()
+static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetDocDefaultsMap()
 {
     static const SfxItemPropertyMapEntry aDocDefaultsMap_Impl[] =
     {
@@ -63,7 +63,6 @@ static const SfxItemPropertyMapEntry* lcl_GetDocDefaultsMap()
         { SC_UNO_CTL_CHEIGHT,  ATTR_CTL_FONT_HEIGHT, cppu::UnoType<float>::get(), 0, MID_FONTHEIGHT | CONVERT_TWIPS },
         { SC_UNO_STANDARDDEC,              0,      cppu::UnoType<sal_Int16>::get(),        0, 0 },
         { SC_UNO_TABSTOPDIS,               0,      cppu::UnoType<sal_Int32>::get(),        0, 0 },
-        { u"", 0, css::uno::Type(), 0, 0 }
     };
     return aDocDefaultsMap_Impl;
 }

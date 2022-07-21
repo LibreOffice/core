@@ -67,7 +67,6 @@ SfxItemPropertyMapEntry const saTextColumns_Impl[] = {
       cppu::UnoType<css::style::VerticalAlignment>::get(), 0, 0 },
     { u"SeparatorLineIsOn", WID_TXTCOL_LINE_IS_ON, cppu::UnoType<bool>::get(), 0, 0 },
     { u"SeparatorLineStyle", WID_TXTCOL_LINE_STYLE, cppu::UnoType<sal_Int16>::get(), 0, 0 },
-    { u"", 0, css::uno::Type(), 0, 0 },
 };
 
 class SvxXTextColumns final
