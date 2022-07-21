@@ -1687,6 +1687,31 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
         }
     }
 
+    {
+        // Handle the invariant that a plain text content control has the same character formatting
+        // for all of its content.
+        auto* pTextContentControl = static_txtattr_cast<SwTextContentControl*>(
+            GetTextAttrAt(pAttr->GetStart(), RES_TXTATR_CONTENTCONTROL, PARENT));
+        if (pTextContentControl)
+        {
+            auto& rFormatContentControl
+                = static_cast<SwFormatContentControl&>(pTextContentControl->GetAttr());
+            std::shared_ptr<SwContentControl> pContentControl
+                = rFormatContentControl.GetContentControl();
+            if (pAttr->End() != nullptr && pContentControl->GetPlainText())
+            {
+                if (pAttr->GetStart() > pTextContentControl->GetStart())
+                {
+                    pAttr->SetStart(pTextContentControl->GetStart());
+                }
+                if (*pAttr->End() < *pTextContentControl->End())
+                {
+                    pAttr->SetEnd(*pTextContentControl->End());
+                }
+            }
+        }
+    }
+
     const bool bRet = bInsertHint
                       && m_pSwpHints->TryInsertHint( pAttr, *this, nMode );
 
