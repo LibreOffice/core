@@ -41,7 +41,6 @@
 #include <basic/basmgr.hxx>
 
 #include <memory>
-#include <utility>
 
 using std::pair;
 
