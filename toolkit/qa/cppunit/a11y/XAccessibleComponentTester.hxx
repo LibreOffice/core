@@ -23,7 +23,7 @@
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 
-#include "AccessibilityTools.hxx"
+#include <test/a11y/AccessibilityTools.hxx>
 
 class XAccessibleComponentTester
 {

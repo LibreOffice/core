@@ -24,7 +24,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 
-#include "AccessibilityTools.hxx"
+#include <test/a11y/AccessibilityTools.hxx>
 
 /**
  * @brief Tries to get every child and checks its parent.
