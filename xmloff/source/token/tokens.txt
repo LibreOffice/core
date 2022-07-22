@@ -3247,5 +3247,6 @@ display-text
 picture
 date-format
 date-rfc-language-tag
+plain-text
 fill-use-slide-background
 TOKEN_END_DUMMY

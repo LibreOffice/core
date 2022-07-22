@@ -3501,6 +3501,7 @@ namespace xmloff::token {
         XML_PICTURE,
         XML_DATE_FORMAT,
         XML_DATE_RFC_LANGUAGE_TAG,
+        XML_PLAIN_TEXT,
 
         XML_FILL_USE_SLIDE_BACKGROUND,
 
