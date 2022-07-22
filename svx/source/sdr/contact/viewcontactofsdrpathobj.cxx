@@ -199,8 +199,8 @@ namespace sdr::contact
                 new drawinglayer::primitive2d::SdrPathPrimitive2D(
                     aObjectMatrix,
                     aAttribute,
-                    aUnitPolyPolygon,
-                    aUnitDefinitionPolyPolygon));
+                    std::move(aUnitPolyPolygon),
+                    std::move(aUnitDefinitionPolyPolygon)));
 
             rVisitor.visit(xReference);
         }

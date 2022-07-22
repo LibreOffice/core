@@ -62,7 +62,7 @@ void ContourWindow::SetPolyPolygon(const tools::PolyPolygon& rPolyPoly)
         SdrPathObj* pPathObj = new SdrPathObj(
             *pModel,
             SdrObjKind::PathFill,
-            aPolyPolygon);
+            std::move(aPolyPolygon));
 
         SfxItemSet aSet(pModel->GetItemPool());
 

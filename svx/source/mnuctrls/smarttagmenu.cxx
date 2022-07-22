@@ -102,7 +102,7 @@ void SmartTagMenuController::statusChanged( const css::frame::FeatureStateEvent&
         else if ( aProperty.Name == "RangeText" )
             aProperty.Value >>= aRangeText;
     }
-    m_pSmartTagItem.reset( new SvxSmartTagItem( TypedWhichId<SvxSmartTagItem>(0), aActionComponents, aActionIndices, aStringKeyMaps, xTextRange, xController, aLocale, aApplicationName, aRangeText ) );
+    m_pSmartTagItem.reset( new SvxSmartTagItem( TypedWhichId<SvxSmartTagItem>(0), aActionComponents, aActionIndices, aStringKeyMaps, xTextRange, xController, std::move(aLocale), aApplicationName, aRangeText ) );
     FillMenu();
 }
 

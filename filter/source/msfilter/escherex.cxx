@@ -1775,7 +1775,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(const uno::Reference<beans
                 {
                     EscherGraphicProvider aProvider;
                     SvMemoryStream aMemStrm;
-                    GraphicObject aGraphicObject(aGraphic);
+                    GraphicObject aGraphicObject(std::move(aGraphic));
 
                     if (aProvider.GetBlibID(aMemStrm, aGraphicObject, nullptr, pGraphicAttr.get(), bOOxmlExport))
                     {
@@ -3757,8 +3757,8 @@ bool EscherPropertyContainer::CreateBlipPropertiesforOLEControl(const uno::Refer
     if ( !pShape )
         return false;
 
-    const Graphic aGraphic(SdrExchangeView::GetObjGraphic(*pShape));
-    const GraphicObject aGraphicObject(aGraphic);
+    Graphic aGraphic(SdrExchangeView::GetObjGraphic(*pShape));
+    const GraphicObject aGraphicObject(std::move(aGraphic));
 
     if (!aGraphicObject.GetUniqueID().isEmpty())
     {

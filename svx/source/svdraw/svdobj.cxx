@@ -2454,7 +2454,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(bool bForceLineDash)
                 aLinePolygonPart = new SdrPathObj(
                     getSdrModelFromSdrObject(),
                     SdrObjKind::PathFill,
-                    aMergedLineFillPolyPolygon);
+                    std::move(aMergedLineFillPolyPolygon));
 
                 // correct item properties
                 aSet.Put(XLineWidthItem(0));
@@ -2477,7 +2477,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(bool bForceLineDash)
                 aLineHairlinePart = new SdrPathObj(
                     getSdrModelFromSdrObject(),
                     SdrObjKind::PathLine,
-                    aMergedHairlinePolyPolygon);
+                    std::move(aMergedHairlinePolyPolygon));
 
                 aSet.Put(XLineWidthItem(0));
                 aSet.Put(XFillStyleItem(drawing::FillStyle_NONE));

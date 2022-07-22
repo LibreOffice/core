@@ -81,7 +81,7 @@ void OverlayStaticRectanglePrimitive::create2DDecomposition(Primitive2DContainer
 
         // create fill primitive
         const Primitive2DReference aFill(
-            new PolyPolygonColorPrimitive2D(aPolyPolygon, maFillColor));
+            new PolyPolygonColorPrimitive2D(std::move(aPolyPolygon), maFillColor));
 
         aPrimitive2DSequence = Primitive2DContainer(2);
         aPrimitive2DSequence[0] = aFill;

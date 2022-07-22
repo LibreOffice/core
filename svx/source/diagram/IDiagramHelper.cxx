@@ -237,7 +237,7 @@ void OverlayDiagramPrimitive::create2DDecomposition(
     // top/left, would require alternative creation)
     rContainer.push_back(
         new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
-            aPolyPolygon,
+            std::move(aPolyPolygon),
             aLineAttribute));
 
     // top-left line pattern (as grep-here-sign to signal
@@ -264,7 +264,7 @@ void OverlayDiagramPrimitive::create2DDecomposition(
         new drawinglayer::primitive2d::PolygonStrokePrimitive2D(
             std::move(aPolygonLapDown),
             aLineAttribute,
-            aStrokeAttribute));
+            std::move(aStrokeAttribute)));
 
     // add text last. May use darker text color, go for same color
     // as accentuation line for now

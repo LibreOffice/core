@@ -530,7 +530,7 @@ void Gradient::DrawLinearGradientToMetafile(tools::Rectangle const& rRect, GDIMe
     aPoly[3] = aRect.BottomLeft();
     aPoly.Rotate( aCenter, nAngle );
 
-    rMetaFile.AddAction( new MetaPolygonAction( aPoly ) );
+    rMetaFile.AddAction( new MetaPolygonAction( std::move(aPoly) ) );
 
 }
 

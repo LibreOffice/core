@@ -1116,7 +1116,7 @@ std::unique_ptr<XLineStartItem> XLineStartItem::checkForUniqueItem( SdrModel* pM
                 // force a closed polygon
                 basegfx::B2DPolyPolygon aNew(maPolyPolygon);
                 aNew.setClosed(true);
-                pTempItem.reset(new XLineStartItem( aUniqueName, aNew ));
+                pTempItem.reset(new XLineStartItem( aUniqueName, std::move(aNew) ));
                 pLineStartItem = pTempItem.get();
             }
         }
@@ -1355,7 +1355,7 @@ std::unique_ptr<XLineEndItem> XLineEndItem::checkForUniqueItem( SdrModel* pModel
                 // force a closed polygon
                 basegfx::B2DPolyPolygon aNew(maPolyPolygon);
                 aNew.setClosed(true);
-                pTempItem.reset(new XLineEndItem( aUniqueName, aNew ));
+                pTempItem.reset(new XLineEndItem( aUniqueName, std::move(aNew) ));
                 pLineEndItem = pTempItem.get();
             }
         }

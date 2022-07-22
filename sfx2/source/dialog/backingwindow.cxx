@@ -755,7 +755,7 @@ void BackingWindow::dispatchURL( const OUString& i_rURL,
         // dispatch the URL
         if ( xDispatch.is() )
         {
-            std::unique_ptr<ImplDelayedDispatch> pDisp(new ImplDelayedDispatch( xDispatch, aDispatchURL, i_rArgs ));
+            std::unique_ptr<ImplDelayedDispatch> pDisp(new ImplDelayedDispatch( xDispatch, std::move(aDispatchURL), i_rArgs ));
             if( Application::PostUserEvent( Link<void*,void>( nullptr, implDispatchDelayed ), pDisp.get() ) )
                 pDisp.release();
         }

@@ -1023,7 +1023,7 @@ void ImpSdrPdfImport::ImportPath(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
 
     if (!mbLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge(aPolyPoly))
     {
-        SdrPathObj* pPath = new SdrPathObj(*mpModel, SdrObjKind::Polygon, aPolyPoly);
+        SdrPathObj* pPath = new SdrPathObj(*mpModel, SdrObjKind::Polygon, std::move(aPolyPoly));
         SetAttributes(pPath);
         InsertObj(pPath, false);
     }

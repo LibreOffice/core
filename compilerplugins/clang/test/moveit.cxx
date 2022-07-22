@@ -16,23 +16,36 @@
 struct Movable
 {
     std::shared_ptr<int> x;
+
+    void method1();
 };
 
-namespace test1
+namespace test1a
 {
 struct F
 {
     // expected-note@+1 {{passing to this param [loplugin:moveit]}}
     void call_by_value(Movable);
-    // expected-note@+1 {{passing to this param [loplugin:moveit]}}
-    F(Movable);
     void foo()
     {
-        // expected-note@+2 {{local var declared here [loplugin:moveit]}}
         // expected-note@+1 {{local var declared here [loplugin:moveit]}}
         Movable m;
         // expected-error@+1 {{can std::move this var into this param [loplugin:moveit]}}
         call_by_value(m);
+    }
+};
+}
+
+namespace test1b
+{
+struct F
+{
+    // expected-note@+1 {{passing to this param [loplugin:moveit]}}
+    F(Movable);
+    void foo()
+    {
+        // expected-note@+1 {{local var declared here [loplugin:moveit]}}
+        Movable m;
         // expected-error@+1 {{can std::move this var into this param [loplugin:moveit]}}
         F a(m);
         (void)a;
@@ -53,6 +66,21 @@ struct F
         // expected-error@+1 {{can std::move this var into this param [loplugin:moveit]}}
         F a(m);
         (void)a;
+    }
+};
+}
+
+// No error expected, because referencing after call
+namespace test3
+{
+struct F
+{
+    F(Movable);
+    void foo()
+    {
+        Movable m;
+        F a(m);
+        m.method1();
     }
 };
 }

@@ -535,7 +535,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
                     p3DObj = new E3dExtrudeObj(
                         rSdrObjCustomShape.getSdrModelFromSdrObject(),
                         a3DDefaultAttr,
-                        aPolyPoly,
+                        std::move(aPolyPoly),
                         0);
 
                     p3DObj->NbcSetLayer( pShape2d->GetLayer() );

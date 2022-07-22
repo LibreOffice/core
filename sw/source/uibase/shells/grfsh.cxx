@@ -205,7 +205,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
 
                 Graphic aGraphic = *pGraphic;
 
-                CompressGraphicsDialog aDialog(GetView().GetFrameWeld(), aGraphic, aSize, aCropRectangle, GetView().GetViewFrame()->GetBindings());
+                CompressGraphicsDialog aDialog(GetView().GetFrameWeld(), std::move(aGraphic), aSize, aCropRectangle, GetView().GetViewFrame()->GetBindings());
                 if (aDialog.run() == RET_OK)
                 {
                     rSh.StartAllAction();

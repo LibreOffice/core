@@ -991,7 +991,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaPolyPolygonAction const & rAct)
         SdrPathObj* pPath = new SdrPathObj(
             *mpModel,
             SdrObjKind::Polygon,
-            aSource);
+            std::move(aSource));
         SetAttributes(pPath);
         InsertObj(pPath, false);
     }
@@ -1157,7 +1157,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaHatchAction const & rAct )
     SdrPathObj* pPath = new SdrPathObj(
         *mpModel,
         SdrObjKind::Polygon,
-        aSource);
+        std::move(aSource));
     // #i125211# Use the ranges from the SdrObject to create a new empty SfxItemSet
     SfxItemSet aHatchAttr(mpModel->GetItemPool(), pPath->GetMergedItemSet().GetRanges());
     css::drawing::HatchStyle eStyle;
@@ -1248,7 +1248,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction const & rAct, GDIMetaF
                     SdrPathObj* pPath = new SdrPathObj(
                         *mpModel,
                         SdrObjKind::Polygon,
-                        aSource);
+                        std::move(aSource));
                     // #i125211# Use the ranges from the SdrObject to create a new empty SfxItemSet
                     SfxItemSet aGradAttr(mpModel->GetItemPool(), pPath->GetMergedItemSet().GetRanges());
                     XGradient aXGradient;
@@ -1481,7 +1481,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaTransparentAction const & rAct)
     SdrPathObj* pPath = new SdrPathObj(
         *mpModel,
         SdrObjKind::Polygon,
-        aSource);
+        std::move(aSource));
     SetAttributes(pPath);
     pPath->SetMergedItem(XFillTransparenceItem(rAct.GetTransparence()));
     InsertObj(pPath, false);
@@ -1504,7 +1504,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaGradientExAction const & rAct)
     SdrPathObj* pPath = new SdrPathObj(
         *mpModel,
         SdrObjKind::Polygon,
-        aSource);
+        std::move(aSource));
     // #i125211# Use the ranges from the SdrObject to create a new empty SfxItemSet
     SfxItemSet aGradientAttr(mpModel->GetItemPool(), pPath->GetMergedItemSet().GetRanges());
     const css::awt::GradientStyle aXGradientStyle(getXGradientStyleFromGradientStyle(rGradient.GetStyle()));

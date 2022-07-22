@@ -327,7 +327,7 @@ namespace drawinglayer::primitive2d
             return new SdrPathTextPrimitive2D(
                 getSdrText(),
                 getOutlinerParaObject(),
-                aNewPolyPolygon,
+                std::move(aNewPolyPolygon),
                 getSdrFormTextAttribute());
         }
 
