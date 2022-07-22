@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49823bd0_676edf0e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-07-22T07:20:51Z",
+      "side": 1,
+      "message": "Sorry if off-topic: is the change related to Quartz only, or is it more generic? I wonder if aGreyPalette16 is related.",
+      "revId": "a02d4f656add39658c30669f2652bf6536207098",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
