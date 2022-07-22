@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd460a88_7bdc0563",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-07-22T01:20:07Z",
+      "side": 1,
+      "message": "Patchset 4 is rebased on the patch at https://gerrit.libreoffice.org/c/core/+/137008/2",
+      "revId": "73e85923812df2553ea435efe00e22b09957da88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
