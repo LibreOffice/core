@@ -117,6 +117,14 @@ void XMLContentControlContext::startFastElement(
                 m_aCurrentDate = rIter.toString();
                 break;
             }
+            case XML_ELEMENT(LO_EXT, XML_PLAIN_TEXT):
+            {
+                if (sax::Converter::convertBool(bTmp, rIter.toView()))
+                {
+                    m_bPlainText = bTmp;
+                }
+                break;
+            }
             default:
                 XMLOFF_WARN_UNKNOWN("xmloff", rIter);
         }
@@ -201,6 +209,11 @@ void XMLContentControlContext::endFastElement(sal_Int32)
     if (!m_aCurrentDate.isEmpty())
     {
         xPropertySet->setPropertyValue("CurrentDate", uno::Any(m_aCurrentDate));
+    }
+
+    if (m_bPlainText)
+    {
+        xPropertySet->setPropertyValue("PlainText", uno::Any(m_bPlainText));
     }
 }
 
