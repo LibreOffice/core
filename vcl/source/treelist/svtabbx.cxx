@@ -153,6 +153,16 @@ void SvTabListBox::SetTabs()
     }
     */
 
+    if (!aTabs.empty())
+    {
+        const bool bEditable(mvTabList[0].nFlags & SvLBoxTabFlags::EDITABLE);
+        SvLBoxTab* pFirstTab = aTabs[aTabs.size()-1].get();
+        if (bEditable)
+            pFirstTab->nFlags |= SvLBoxTabFlags::EDITABLE;
+        else
+            pFirstTab->nFlags &= ~SvLBoxTabFlags::EDITABLE;
+    }
+
     // append all other tabs to the list
     for( sal_uInt16 nCurTab = 1; nCurTab < sal_uInt16(mvTabList.size()); nCurTab++ )
     {
