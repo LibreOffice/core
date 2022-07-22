@@ -1571,7 +1571,11 @@ int Desktop::Main()
 #endif
 
         //Running the VCL graphics rendering tests
-        runGraphicsRenderTests();
+        const char * pDisplay = std::getenv("DISPLAY");
+        if (!pDisplay || pDisplay[0] == ':')
+        {
+            runGraphicsRenderTests();
+        }
 
         // Post user event to startup first application component window
         // We have to send this OpenClients message short before execute() to
