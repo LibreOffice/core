@@ -80,22 +80,19 @@ Bitmap::Bitmap( const Size& rSizePixel, vcl::PixelFormat ePixelFormat, const Bit
     if (!(rSizePixel.Width() && rSizePixel.Height()))
         return;
 
-    BitmapPalette   aPal;
-    BitmapPalette*  pRealPal = nullptr;
-
-    if (vcl::isPalettePixelFormat(ePixelFormat))
+    switch (ePixelFormat)
     {
-        if( !pPal )
+        case vcl::PixelFormat::N1_BPP:
         {
-            if (ePixelFormat == vcl::PixelFormat::N1_BPP)
-            {
-                aPal.SetEntryCount( 2 );
-                aPal[ 0 ] = COL_BLACK;
-                aPal[ 1 ] = COL_WHITE;
-            }
-            else if (ePixelFormat == vcl::PixelFormat::N8_BPP)
-            {
-                aPal.SetEntryCount(1 << sal_uInt16(ePixelFormat));
+            static const BitmapPalette aPalN1_BPP = { COL_BLACK, COL_WHITE };
+            if (!pPal)
+                pPal = &aPalN1_BPP;
+            break;
+        }
+        case vcl::PixelFormat::N8_BPP:
+        {
+            static const BitmapPalette aPalN8_BPP = [] {
+                BitmapPalette aPal(1 << sal_uInt16(vcl::PixelFormat::N8_BPP));
                 aPal[ 0 ] = COL_BLACK;
                 aPal[ 1 ] = COL_BLUE;
                 aPal[ 2 ] = COL_GREEN;
@@ -114,26 +111,32 @@ Bitmap::Bitmap( const Size& rSizePixel, vcl::PixelFormat ePixelFormat, const Bit
                 aPal[ 15 ] = COL_WHITE;
 
                 // Create dither palette
-                if (ePixelFormat == vcl::PixelFormat::N8_BPP)
-                {
-                    sal_uInt16 nActCol = 16;
+                sal_uInt16 nActCol = 16;
 
-                    for( sal_uInt16 nB = 0; nB < 256; nB += 51 )
-                        for( sal_uInt16 nG = 0; nG < 256; nG += 51 )
-                            for( sal_uInt16 nR = 0; nR < 256; nR += 51 )
-                                aPal[ nActCol++ ] = BitmapColor( static_cast<sal_uInt8>(nR), static_cast<sal_uInt8>(nG), static_cast<sal_uInt8>(nB) );
+                for( sal_uInt16 nB = 0; nB < 256; nB += 51 )
+                    for( sal_uInt16 nG = 0; nG < 256; nG += 51 )
+                        for( sal_uInt16 nR = 0; nR < 256; nR += 51 )
+                            aPal[ nActCol++ ] = BitmapColor( static_cast<sal_uInt8>(nR), static_cast<sal_uInt8>(nG), static_cast<sal_uInt8>(nB) );
 
-                    // Set standard Office colors
-                    aPal[ nActCol++ ] = BitmapColor( 0, 184, 255 );
-                }
-            }
+                // Set standard Office colors
+                aPal[ nActCol++ ] = BitmapColor( 0, 184, 255 );
+                return aPal;
+            }();
+            if (!pPal)
+                pPal = &aPalN8_BPP;
+            break;
         }
-        else
-            pRealPal = const_cast<BitmapPalette*>(pPal);
+        default:
+        {
+            static const BitmapPalette aPalEmpty;
+            if (!pPal || !vcl::isPalettePixelFormat(ePixelFormat))
+                pPal = &aPalEmpty;
+            break;
+        }
     }
 
     mxSalBmp = ImplGetSVData()->mpDefInst->CreateSalBitmap();
-    mxSalBmp->Create(rSizePixel, ePixelFormat, pRealPal ? *pRealPal : aPal);
+    mxSalBmp->Create(rSizePixel, ePixelFormat, *pPal);
 }
 
 #ifdef DBG_UTIL
