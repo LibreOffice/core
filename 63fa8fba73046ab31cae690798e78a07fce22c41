@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca57d56c_bb7d7055",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-07-22T13:38:24Z",
+      "side": 1,
+      "message": "@Tünde: it seems, the solution is simply removing this line:\n\nwriterfilter/source/dmapper/DomainMapper_Impl.hxx:        DecimalChar \u003d \u0027,\u0027;\n\nreverting c0b6aadedc9429eee4f4df85957e00e29ccb0c8f partially.\n\nThis way we could fix the import based on the locale settings of LibreOffice, as was the problem in the original bug report. The \"ugly\" problem mentioned in that commit doesn\u0027t occur any more.",
+      "revId": "63fa8fba73046ab31cae690798e78a07fce22c41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
