@@ -91,9 +91,7 @@ public:
     SwUnoCursor& GetCursor();
     bool IsAtEndOfMeta() const;
 
-    void DeleteAndInsert(OUString const& rText,
-                const bool bForceExpandHints);
-
+    void DeleteAndInsert(OUString const& rText, ::sw::DeleteAndInsertMode eMode);
     // OTextCursorHelper
     virtual const SwPaM*        GetPaM() const override;
     virtual SwPaM*              GetPaM() override;

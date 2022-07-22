@@ -26,6 +26,9 @@
 
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
+
+#include <o3tl/typed_flags_set.hxx>
+
 #include <vcl/svapp.hxx>
 
 class SfxPoolItem;
@@ -53,6 +56,22 @@ enum class CursorType
     SelectionInTable,
     Meta,         // meta/meta-field
 };
+
+namespace sw {
+
+enum class DeleteAndInsertMode
+{
+    Default = 0,
+    ForceExpandHints = (1<<0),
+    ForceReplace = (1<<1),
+};
+
+} // namespace sw
+
+namespace o3tl
+{
+    template<> struct typed_flags<::sw::DeleteAndInsertMode> : is_typed_flags<::sw::DeleteAndInsertMode, 0x03> {};
+}
 
 /*
     Start/EndAction or Start/EndAllAction

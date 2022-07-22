@@ -765,7 +765,7 @@ SwXTextCursor::~SwXTextCursor()
 }
 
 void SwXTextCursor::DeleteAndInsert(const OUString& rText,
-        const bool bForceExpandHints)
+        ::sw::DeleteAndInsertMode const eMode)
 {
     auto pUnoCursor = static_cast<SwCursor*>(m_pImpl->m_pUnoCursor.get());
     if (pUnoCursor)
@@ -780,13 +780,15 @@ void SwXTextCursor::DeleteAndInsert(const OUString& rText,
         {
             if (pCurrent->HasMark())
             {
-                pDoc->getIDocumentContentOperations().DeleteAndJoin(*pCurrent);
+                pDoc->getIDocumentContentOperations().DeleteAndJoin(*pCurrent,
+                    // is it "delete" or "replace"?
+                    (nTextLen != 0 || eMode & ::sw::DeleteAndInsertMode::ForceReplace) ? SwDeleteFlags::ArtificialSelection : SwDeleteFlags::Default);
             }
             if(nTextLen)
             {
                 const bool bSuccess(
                     SwUnoCursorHelper::DocInsertStringSplitCR(
-                        *pDoc, *pCurrent, rText, bForceExpandHints ) );
+                        *pDoc, *pCurrent, rText, bool(eMode & ::sw::DeleteAndInsertMode::ForceExpandHints)) );
                 OSL_ENSURE( bSuccess, "Doc->Insert(Str) failed." );
 
                 SwUnoCursorHelper::SelectPam(*pUnoCursor, true);
@@ -1754,7 +1756,7 @@ SwXTextCursor::setString(const OUString& aString)
     const bool bForceExpandHints( (CursorType::Meta == m_pImpl->m_eType)
         && dynamic_cast<SwXMeta*>(m_pImpl->m_xParentText.get())
                 ->CheckForOwnMemberMeta(*GetPaM(), true) );
-    DeleteAndInsert(aString, bForceExpandHints);
+    DeleteAndInsert(aString, bForceExpandHints ? ::sw::DeleteAndInsertMode::ForceExpandHints : ::sw::DeleteAndInsertMode::Default);
 }
 
 uno::Any SwUnoCursorHelper::GetPropertyValue(

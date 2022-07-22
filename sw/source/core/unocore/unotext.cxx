@@ -364,7 +364,8 @@ SwXText::insertString(const uno::Reference< text::XTextRange >& xTextRange,
                 dynamic_cast<SwXTextCursor*>(pCursor) );
             if (pTextCursor)
             {
-                pTextCursor->DeleteAndInsert(rString, bForceExpandHints);
+                pTextCursor->DeleteAndInsert(rString, ::sw::DeleteAndInsertMode::ForceReplace
+                    | (bForceExpandHints ? ::sw::DeleteAndInsertMode::ForceExpandHints : ::sw::DeleteAndInsertMode::Default));
             }
             else
             {
@@ -373,7 +374,8 @@ SwXText::insertString(const uno::Reference< text::XTextRange >& xTextRange,
         }
         else
         {
-            pRange->DeleteAndInsert(rString, bForceExpandHints);
+            pRange->DeleteAndInsert(rString, ::sw::DeleteAndInsertMode::ForceReplace
+                | (bForceExpandHints ? ::sw::DeleteAndInsertMode::ForceExpandHints : ::sw::DeleteAndInsertMode::Default));
         }
     }
     else
@@ -605,7 +607,21 @@ SwXText::insertTextContent(
 
     if (bAbsorb && !bAttribute)
     {
-        xRange->setString(OUString());
+        uno::Reference<lang::XUnoTunnel> const xRangeTunnel(xRange, uno::UNO_QUERY);
+        if (SwXTextRange *const pRange = ::sw::UnoTunnelGetImplementation<SwXTextRange>(xRangeTunnel))
+        {
+            pRange->DeleteAndInsert(OUString(), ::sw::DeleteAndInsertMode::ForceReplace
+                | (bForceExpandHints ? ::sw::DeleteAndInsertMode::ForceExpandHints : ::sw::DeleteAndInsertMode::Default));
+        }
+        else if (SwXTextCursor *const pCursor = dynamic_cast<SwXTextCursor*>(::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel)))
+        {
+            pCursor->DeleteAndInsert(OUString(), ::sw::DeleteAndInsertMode::ForceReplace
+                | (bForceExpandHints ? ::sw::DeleteAndInsertMode::ForceExpandHints : ::sw::DeleteAndInsertMode::Default));
+        }
+        else
+        {
+            xRange->setString(OUString());
+        }
     }
     uno::Reference< text::XTextRange > xTempRange =
         (bAttribute && bAbsorb) ? xRange : xRange->getStart();
