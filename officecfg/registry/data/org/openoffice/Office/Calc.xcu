@@ -228,6 +228,17 @@
         <value>3.45280</value>
       </prop>
     </node>
+    <node oor:name="CR20" oor:op="replace">
+      <prop oor:name="FromUnit">
+        <value>EUR</value>
+      </prop>
+      <prop oor:name="ToUnit">
+        <value>HRK</value>
+      </prop>
+      <prop oor:name="Factor">
+        <value>7.53450</value>
+      </prop>
+    </node>
   </node>
   <node oor:name="Calculate">
     <node oor:name="Other">
