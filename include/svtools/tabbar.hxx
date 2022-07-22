@@ -496,6 +496,7 @@ public:
     void            SetSelectHdl( const Link<TabBar*,void>& rLink ) { maSelectHdl = rLink; }
     void            SetSplitHdl( const Link<TabBar*,void>& rLink ) { maSplitHdl = rLink; }
     void            SetScrollAreaContextHdl( const Link<const CommandEvent&,void>& rLink ) { maScrollAreaContextHdl = rLink; }
+    void            SetAddButtonEnabled(bool bAddButtonEnabled);
 
     // accessibility
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
