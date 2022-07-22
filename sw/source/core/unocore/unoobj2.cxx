@@ -800,7 +800,7 @@ static void DeleteTable(SwDoc & rDoc, SwTable& rTable)
 }
 
 void SwXTextRange::DeleteAndInsert(
-        const OUString& rText, const bool bForceExpandHints)
+        const OUString& rText, ::sw::DeleteAndInsertMode const eMode)
 {
     if (RANGE_IS_TABLE == m_pImpl->m_eRangePosition)
     {
@@ -887,13 +887,14 @@ void SwXTextRange::DeleteAndInsert(
 
     if (aCursor.HasMark())
     {
-        m_pImpl->m_rDoc.getIDocumentContentOperations().DeleteAndJoin(aCursor);
+        m_pImpl->m_rDoc.getIDocumentContentOperations().DeleteAndJoin(aCursor,
+            (!rText.isEmpty() || eMode & ::sw::DeleteAndInsertMode::ForceReplace) ? SwDeleteFlags::ArtificialSelection : SwDeleteFlags::Default);
     }
 
     if (!rText.isEmpty())
     {
         SwUnoCursorHelper::DocInsertStringSplitCR(
-                m_pImpl->m_rDoc, aCursor, rText, bForceExpandHints);
+            m_pImpl->m_rDoc, aCursor, rText, bool(eMode & ::sw::DeleteAndInsertMode::ForceExpandHints));
 
         SwUnoCursorHelper::SelectPam(aCursor, true);
         aCursor.Left(rText.getLength());
@@ -1060,7 +1061,7 @@ void SAL_CALL SwXTextRange::setString(const OUString& rString)
 {
     SolarMutexGuard aGuard;
 
-    DeleteAndInsert(rString, false);
+    DeleteAndInsert(rString, ::sw::DeleteAndInsertMode::Default);
 }
 
 bool SwXTextRange::GetPositions(SwPaM& rToFill, ::sw::TextRangeMode const eMode) const
