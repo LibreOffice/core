@@ -3235,7 +3235,8 @@ static bool lclConvertMoney( const OUString& aSearchUnit, double& rfRate, int& r
         { "SKK", 30.1260,  2 },
         { "EEK", 15.6466,  2 },
         { "LVL", 0.702804, 2 },
-        { "LTL", 3.45280,  2 }
+        { "LTL", 3.45280,  2 },
+        { "HRK", 7.53450,  2 }
     };
 
     for (const auto & i : aConvertTable)
