@@ -259,7 +259,7 @@ void E3dDragMethod::CreateOverlayGeometry(
     {
         std::unique_ptr<sdr::overlay::OverlayPolyPolygonStripedAndFilled> pNew(
             new sdr::overlay::OverlayPolyPolygonStripedAndFilled(
-                aResult));
+                std::move(aResult)));
 
         insertNewlyCreatedOverlayObjectForSdrDragMethod(
             std::move(pNew),

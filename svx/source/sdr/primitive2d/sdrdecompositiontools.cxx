@@ -515,7 +515,7 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
                     pNew = new SdrContourTextPrimitive2D(
                         &rText.getSdrText(),
                         rText.getOutlinerParaObject(),
-                        aScaledUnitPolyPolygon,
+                        std::move(aScaledUnitPolyPolygon),
                         rObjectTransform);
                 }
                 else
@@ -536,7 +536,7 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
                 pNew = new SdrPathTextPrimitive2D(
                     &rText.getSdrText(),
                     rText.getOutlinerParaObject(),
-                    aScaledPolyPolygon,
+                    std::move(aScaledPolyPolygon),
                     rText.getSdrFormTextAttribute());
             }
             else

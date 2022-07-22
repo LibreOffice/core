@@ -523,13 +523,13 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                 if( bFatLine )
                 {
-                    const tools::Polygon aPoly( aRect.Center(), aRect.GetWidth() >> 1, aRect.GetHeight() >> 1 );
+                    tools::Polygon aPoly( aRect.Center(), aRect.GetWidth() >> 1, aRect.GetHeight() >> 1 );
 
                     rMtf.AddAction( new MetaPushAction( vcl::PushFlags::LINECOLOR ) );
                     rMtf.AddAction( new MetaLineColorAction( COL_TRANSPARENT, false ) );
                     rMtf.AddAction( new MetaPolygonAction( aPoly ) );
                     rMtf.AddAction( new MetaPopAction() );
-                    rMtf.AddAction( new MetaPolyLineAction( aPoly, aLineInfo ) );
+                    rMtf.AddAction( new MetaPolyLineAction( std::move(aPoly), aLineInfo ) );
                 }
                 else
                     rMtf.AddAction( new MetaEllipseAction( aRect ) );
@@ -550,7 +550,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     rMtf.AddAction( new MetaLineColorAction( COL_TRANSPARENT, false ) );
                     rMtf.AddAction( new MetaPolygonAction( aPoly ) );
                     rMtf.AddAction( new MetaPopAction() );
-                    rMtf.AddAction( new MetaPolyLineAction( aPoly, aLineInfo ) );
+                    rMtf.AddAction( new MetaPolyLineAction( std::move(aPoly), aLineInfo ) );
                 }
                 else
                     rMtf.AddAction( new MetaArcAction( aRect, aPt, aPt1 ) );
@@ -571,7 +571,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     rMtf.AddAction( new MetaLineColorAction( COL_TRANSPARENT, false ) );
                     rMtf.AddAction( new MetaPolygonAction( aPoly ) );
                     rMtf.AddAction( new MetaPopAction() );
-                    rMtf.AddAction( new MetaPolyLineAction( aPoly, aLineInfo ) );
+                    rMtf.AddAction( new MetaPolyLineAction( std::move(aPoly), aLineInfo ) );
                 }
                 else
                     rMtf.AddAction( new MetaPieAction( aRect, aPt, aPt1 ) );
@@ -809,7 +809,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     if ( nUnicodeCommentActionNumber == i )
                         ImplReadUnicodeComment( nUnicodeCommentStreamPos, rIStm, aStr );
                     ClampRange(aStr, nIndex, nLen, &aDXAry);
-                    rMtf.AddAction( new MetaTextArrayAction( aPt, aStr, aDXAry, nIndex, nLen ) );
+                    rMtf.AddAction( new MetaTextArrayAction( aPt, aStr, std::move(aDXAry), nIndex, nLen ) );
                 }
 
                 if (nActionSize < 24)
@@ -985,7 +985,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 if( bIntersect )
                     aRegion.Intersect( aRect );
 
-                rMtf.AddAction( new MetaClipRegionAction( aRegion, bClip ) );
+                rMtf.AddAction( new MetaClipRegionAction( std::move(aRegion), bClip ) );
             }
             break;
 
@@ -1088,7 +1088,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 aGrad.SetOfsY( nOfsY );
                 aGrad.SetStartIntensity( nIntensityStart );
                 aGrad.SetEndIntensity( nIntensityEnd );
-                rMtf.AddAction( new MetaGradientAction( aRect, aGrad ) );
+                rMtf.AddAction( new MetaGradientAction( aRect, std::move(aGrad) ) );
             }
             break;
 
@@ -1101,7 +1101,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 ReadPolyPolygon( rIStm, aPolyPoly );
                 rIStm.ReadInt16( nTrans ).ReadInt32( nFollowingActionCount );
                 ImplSkipActions( rIStm, nFollowingActionCount );
-                rMtf.AddAction( new MetaTransparentAction( aPolyPoly, nTrans ) );
+                rMtf.AddAction( new MetaTransparentAction( std::move(aPolyPoly), nTrans ) );
 
                 i = SkipActions(i, nFollowingActionCount, nActions);
             }
@@ -1122,7 +1122,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 aSerializer.readGradient(aGradient);
                 rIStm.ReadInt32( nFollowingActionCount );
                 ImplSkipActions( rIStm, nFollowingActionCount );
-                rMtf.AddAction( new MetaFloatTransparentAction( aMtf, aPos, aSize, aGradient ) );
+                rMtf.AddAction( new MetaFloatTransparentAction( aMtf, aPos, aSize, std::move(aGradient) ) );
 
                 i = SkipActions(i, nFollowingActionCount, nActions);
             }
@@ -1138,7 +1138,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 ReadHatch( rIStm, aHatch );
                 rIStm.ReadInt32( nFollowingActionCount );
                 ImplSkipActions( rIStm, nFollowingActionCount );
-                rMtf.AddAction( new MetaHatchAction( aPolyPoly, aHatch ) );
+                rMtf.AddAction( new MetaHatchAction( std::move(aPolyPoly), aHatch ) );
 
                 i = SkipActions(i, nFollowingActionCount, nActions);
             }
@@ -1210,7 +1210,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 aSerializer.readGradient(aGradient);
                 rIStm.ReadInt32( nFollowingActionCount );
                 ImplSkipActions( rIStm, nFollowingActionCount );
-                rMtf.AddAction( new MetaGradientExAction( aPolyPoly, aGradient ) );
+                rMtf.AddAction( new MetaGradientExAction( std::move(aPolyPoly), std::move(aGradient) ) );
 
                 i = SkipActions(i, nFollowingActionCount, nActions);
             }

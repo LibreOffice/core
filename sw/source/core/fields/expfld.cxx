@@ -635,7 +635,7 @@ size_t SwSetExpFieldType::GetSeqFieldList(SwSeqFieldList& rList,
             SeqFieldLstElem aNew(
                     pNd->GetExpandText(pLayout),
                     static_cast<SwSetExpField*>(pF->GetField())->GetSeqNumber() );
-            rList.InsertSort( aNew );
+            rList.InsertSort( std::move(aNew) );
         }
     }
     return rList.Count();

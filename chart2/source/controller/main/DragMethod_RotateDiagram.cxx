@@ -216,7 +216,7 @@ void DragMethod_RotateDiagram::CreateOverlayGeometry(
 
     std::unique_ptr<sdr::overlay::OverlayPolyPolygonStripedAndFilled> pNew(
         new sdr::overlay::OverlayPolyPolygonStripedAndFilled(
-            aPolyPolygon));
+            std::move(aPolyPolygon)));
 
     insertNewlyCreatedOverlayObjectForSdrDragMethod(
         std::move(pNew),

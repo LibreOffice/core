@@ -81,7 +81,7 @@ namespace sdr::contact
             double fCornerRadiusY;
             drawinglayer::primitive2d::calculateRelativeCornerRadius(
                 rCaptionObj.GetEckenradius(), aObjectRange, fCornerRadiusX, fCornerRadiusY);
-            const basegfx::B2DPolygon aTail(rCaptionObj.getTailPolygon());
+            basegfx::B2DPolygon aTail(rCaptionObj.getTailPolygon());
 
             // create primitive. Always create one (even if invisible) to let the decomposition
             // of SdrCaptionPrimitive2D create needed invisible elements for HitTest and BoundRect
@@ -89,7 +89,7 @@ namespace sdr::contact
                 new drawinglayer::primitive2d::SdrCaptionPrimitive2D(
                     aObjectMatrix,
                     aAttribute,
-                    aTail,
+                    std::move(aTail),
                     fCornerRadiusX,
                     fCornerRadiusY));
 

@@ -1547,7 +1547,7 @@ private:
                 SdrPathObj* pPathObj = new SdrPathObj(
                     rModel,
                     SdrObjKind::PathLine,
-                    aPathPoly);
+                    std::move(aPathPoly));
                 pPathObj->SetMergedItem(XLineStyleItem(drawing::LineStyle_SOLID));
                 pPathObj->SetMergedItem(XLineColorItem(OUString(), COL_BLACK));
 

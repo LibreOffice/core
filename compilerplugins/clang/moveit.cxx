@@ -16,6 +16,8 @@
 #include "config_clang.h"
 #include "plugin.hxx"
 #include "check.hxx"
+#include <unordered_set>
+#include <unordered_map>
 
 /*
 Look for local variables that can be std::move'd into parameters.
@@ -40,92 +42,9 @@ public:
     {
         std::string fn(handler.getMainFileName());
         loplugin::normalizeDotDotInFilePath(fn);
-        // false +
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/basctl/source/basicide/moduldlg.cxx"))
-            return false;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/basic/source/classes/sbunoobj.cxx"))
-            return false;
-        if (loplugin::hasPathnamePrefix(fn,
-                                        SRCDIR "/connectivity/source/drivers/dbase/dindexnode.cxx"))
-            return false;
-        if (loplugin::hasPathnamePrefix(
-                fn, SRCDIR "/drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx"))
-            return false;
-        if (loplugin::hasPathnamePrefix(
-                fn, SRCDIR "/drawinglayer/source/primitive3d/sdrdecompositiontools3d.cxx"))
-            return false;
-        if (loplugin::hasPathnamePrefix(
-                fn, SRCDIR "/drawinglayer/source/primitive2d/fillgradientprimitive2d.cxx"))
-            return false;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/drawinglayer/source/tools/emfphelperdata.cxx"))
-            return false;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/editeng/source/items/frmitems.cxx"))
-            return false;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/emfio/source/reader/mtftools.cxx"))
-            return false;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/filter/source/msfilter/msdffimp.cxx"))
-            return false;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/filter/source/msfilter/escherex.cxx"))
-            return false;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sc/source/ui/view/hintwin.cxx"))
-            return false;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sc/source/core/tool/scmatrix.cxx"))
-            return false;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sd/source/filter/eppt/epptso.cxx"))
-            return false;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sdext/source/pdfimport/pdfparse/pdfparse.cxx"))
-            return false;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sfx2/source/control/dispatch.cxx"))
-            return false;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/svgio/source/svgreader/svgcharacternode.cxx"))
-            return false;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/svx/source/svdraw/textchainflow.cxx"))
-            return false;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/svx/source/unodraw/unoshtxt.cxx"))
-            return false;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/svx/source/diagram/IDiagramHelper.cxx"))
-            return false;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/svx/source/sdr/overlay/overlaytools.cxx"))
-            return false;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/svx/source/svdraw/svddrgmt.cxx"))
-            return false;
-        if (loplugin::hasPathnamePrefix(fn,
-                                        SRCDIR "/svx/source/svdraw/svdotextpathdecomposition.cxx"))
-            return false;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR
-                                        "/svx/source/sdr/primitive2d/sdrolecontentprimitive2d.cxx"))
-            return false;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/svx/source/xml/xmlgrhlp.cxx"))
-            return false;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/core/SwNumberTree/SwNumberTree.cxx"))
-            return false;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/core/bastyp/calc.cxx"))
-            return false;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/core/edit/edattr.cxx"))
-            return false;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/core/fields/expfld.cxx"))
-            return false;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/uibase/docvw/edtwin.cxx"))
-            return false;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/uibase/uiview/viewling.cxx"))
-            return false;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/core/layout/paintfrm.cxx"))
-            return false;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/uibase/docvw/DashedLine.cxx"))
-            return false;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/vcl/source/gdi/gradient.cxx"))
-            return false;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/vcl/source/graphic/GraphicObject.cxx"))
-            return false;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/vcl/source/graphic/GraphicObject2.cxx"))
-            return false;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/vcl/source/filter/svm/SvmConverter.cxx"))
-            return false;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/vcl/source/outdev/font.cxx"))
-            return false;
-        if (loplugin::hasPathnamePrefix(
-                fn, SRCDIR "/writerfilter/source/dmapper/DomainMapperTableHandler.cxx"))
-            return false;
+        //        // false +
+        //        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/basctl/source/basicide/moduldlg.cxx"))
+        //            return false;
         return true;
     }
 
@@ -133,13 +52,36 @@ public:
     {
         if (preRun())
             TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
+        for (auto const& pair : m_possibles)
+        {
+            auto const& possible = pair.second;
+            report(DiagnosticsEngine::Warning, "can std::move this var into this param",
+                   possible.argExpr->getBeginLoc());
+            report(DiagnosticsEngine::Note, "passing to this param",
+                   possible.calleeParmVarDecl->getBeginLoc());
+            report(DiagnosticsEngine::Note, "local var declared here",
+                   possible.localVarDecl->getBeginLoc());
+            report(DiagnosticsEngine::Note, "type declared here",
+                   possible.recordDecl->getBeginLoc());
+        }
     }
 
     bool VisitCXXMemberCallExpr(const CXXMemberCallExpr*);
     bool VisitCXXConstructExpr(const CXXConstructExpr*);
+    bool VisitDeclRefExpr(const DeclRefExpr*);
 
 private:
     bool isInterestingType(QualType);
+    struct Possible
+    {
+        const Expr* argExpr;
+        const ParmVarDecl* calleeParmVarDecl;
+        const VarDecl* localVarDecl;
+        const CXXRecordDecl* recordDecl;
+        const DeclRefExpr* dre;
+    };
+    std::unordered_map<const VarDecl*, Possible> m_possibles;
+    std::unordered_set<const VarDecl*> m_rejected;
 };
 
 bool MoveIt::VisitCXXMemberCallExpr(const CXXMemberCallExpr* topExpr)
@@ -182,19 +124,11 @@ bool MoveIt::VisitCXXMemberCallExpr(const CXXMemberCallExpr* topExpr)
         if (!isInterestingType(localVarDecl->getType()))
             continue;
 
-        report(DiagnosticsEngine::Warning, "can std::move this var into this param",
-               argExpr->getBeginLoc());
-        report(DiagnosticsEngine::Note, "passing to this param", parmVarDecl->getBeginLoc());
-        report(DiagnosticsEngine::Note, "local var declared here", localVarDecl->getBeginLoc());
-        report(DiagnosticsEngine::Note, "type declared here", recordDecl->getBeginLoc());
-        //        parmVarDecl->getType()->dump();
-    }
+        if (m_rejected.count(localVarDecl))
+            continue;
 
-    //    StringRef aFileName = getFilenameOfLocation(
-    //        compiler.getSourceManager().getSpellingLoc(parmVarDecl->getBeginLoc()));
-    //    if (loplugin::hasPathnamePrefix(aFileName,
-    //                                    SRCDIR "/svx/source/sidebar/line/LineWidthValueSet.cxx"))
-    //        return true;
+        m_possibles[localVarDecl] = Possible{ argExpr, parmVarDecl, localVarDecl, recordDecl, dre };
+    }
 
     return true;
 }
@@ -241,20 +175,33 @@ bool MoveIt::VisitCXXConstructExpr(const CXXConstructExpr* topExpr)
         if (!isInterestingType(localVarDecl->getType()))
             continue;
 
-        report(DiagnosticsEngine::Warning, "can std::move this var into this param",
-               argExpr->getBeginLoc());
-        report(DiagnosticsEngine::Note, "passing to this param", parmVarDecl->getBeginLoc());
-        report(DiagnosticsEngine::Note, "local var declared here", localVarDecl->getBeginLoc());
-        report(DiagnosticsEngine::Note, "type declared here", recordDecl->getBeginLoc());
-        //        parmVarDecl->getType()->dump();
+        if (m_rejected.count(localVarDecl))
+            continue;
+
+        m_possibles[localVarDecl] = Possible{ argExpr, parmVarDecl, localVarDecl, recordDecl, dre };
     }
 
-    //    StringRef aFileName = getFilenameOfLocation(
-    //        compiler.getSourceManager().getSpellingLoc(parmVarDecl->getBeginLoc()));
-    //    if (loplugin::hasPathnamePrefix(aFileName,
-    //                                    SRCDIR "/svx/source/sidebar/line/LineWidthValueSet.cxx"))
-    //        return true;
+    return true;
+}
 
+/// If we have pushed a possibility, and then we see that possibility again,
+/// then we cannot std::move it, because it is being referenced after being moved.
+///
+bool MoveIt::VisitDeclRefExpr(const DeclRefExpr* declRefExpr)
+{
+    if (ignoreLocation(declRefExpr))
+        return true;
+    const VarDecl* localVarDecl = dyn_cast<VarDecl>(declRefExpr->getDecl());
+    if (!localVarDecl)
+        return true;
+    auto it = m_possibles.find(localVarDecl);
+    if (it == m_possibles.end())
+        return true;
+    // ignoring the DeclRefExpr* for the expression where we found the Possible
+    if (it->second.dre == declRefExpr)
+        return true;
+    m_possibles.erase(it);
+    m_rejected.insert(localVarDecl);
     return true;
 }
 

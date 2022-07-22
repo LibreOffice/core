@@ -121,7 +121,7 @@ drawinglayer::primitive2d::Primitive2DContainer SdrDragEntryPolyPolygon::createP
         const double fTransparence(SvtOptionsDrawinglayer::GetTransparentSelectionPercent() * 0.01);
 
         aRetval[1] = new drawinglayer::primitive2d::PolyPolygonSelectionPrimitive2D(
-            aCopy,
+            std::move(aCopy),
             aHilightColor,
             fTransparence,
             3.0,
@@ -463,7 +463,7 @@ void SdrDragMethod::createSdrDragEntries_PolygonDrag()
 
     if(aResult.count())
     {
-        addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntryPolyPolygon(aResult)));
+        addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntryPolyPolygon(std::move(aResult))));
     }
 }
 
@@ -1220,7 +1220,7 @@ void SdrDragObjOwn::createSdrDragEntries()
 
     if(aDragPolyPolygon.count())
     {
-        addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntryPolyPolygon(aDragPolyPolygon)));
+        addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntryPolyPolygon(std::move(aDragPolyPolygon))));
     }
 }
 
@@ -2881,7 +2881,7 @@ void SdrDragCrook::createSdrDragEntries()
 
         if(aDragRaster.count())
         {
-            addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntryPolyPolygon(aDragRaster)));
+            addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntryPolyPolygon(std::move(aDragRaster))));
         }
     }
 
@@ -3412,7 +3412,7 @@ void SdrDragDistort::createSdrDragEntries()
 
         if(aDragRaster.count())
         {
-            addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntryPolyPolygon(aDragRaster)));
+            addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntryPolyPolygon(std::move(aDragRaster))));
         }
     }
 

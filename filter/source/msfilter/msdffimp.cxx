@@ -1461,7 +1461,7 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
                     }
                     else
                     {
-                        rSet.Put(XFillBitmapItem(OUString(), aGraf));
+                        rSet.Put(XFillBitmapItem(OUString(), std::move(aGraf)));
                         rSet.Put(XFillBmpTileItem(false));
                     }
                 }

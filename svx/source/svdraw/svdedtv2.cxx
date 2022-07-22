@@ -1120,7 +1120,7 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
     // #i73441# check insert list before taking actions
     if(pInsOL)
     {
-        SdrPathObj* pPath = new SdrPathObj(pAttrObj->getSdrModelFromSdrObject(), SdrObjKind::PathFill, aMergePolyPolygonA);
+        SdrPathObj* pPath = new SdrPathObj(pAttrObj->getSdrModelFromSdrObject(), SdrObjKind::PathFill, std::move(aMergePolyPolygonA));
         ImpCopyAttributes(pAttrObj, pPath);
         pInsOL->InsertObject(pPath, nInsPos);
         if( bUndo )
@@ -1413,7 +1413,7 @@ void SdrEditView::CombineMarkedObjects(bool bNoPolyPoly)
             }
         }
 
-        SdrPathObj* pPath = new SdrPathObj(pAttrObj->getSdrModelFromSdrObject(), eKind, aPolyPolygon);
+        SdrPathObj* pPath = new SdrPathObj(pAttrObj->getSdrModelFromSdrObject(), eKind, std::move(aPolyPolygon));
 
         // attributes of the lowest object
         ImpCopyAttributes(pAttrObj, pPath);

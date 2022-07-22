@@ -1610,7 +1610,7 @@ namespace emfio
         else
         {
             UpdateLineStyle();
-            mpGDIMetaFile->AddAction( new MetaPolyLineAction( rPolygon, maLineStyle.aLineInfo ) );
+            mpGDIMetaFile->AddAction( new MetaPolyLineAction( std::move(rPolygon), maLineStyle.aLineInfo ) );
         }
     }
 
@@ -1640,7 +1640,7 @@ namespace emfio
         else
         {
             UpdateLineStyle();
-            mpGDIMetaFile->AddAction( new MetaPolyLineAction( rPolygon, maLineStyle.aLineInfo ) );
+            mpGDIMetaFile->AddAction( new MetaPolyLineAction( std::move(rPolygon), maLineStyle.aLineInfo ) );
         }
     }
 

@@ -921,7 +921,7 @@ static SdrObject* CreateSdrObjectFromParagraphOutlines(
         pRet = new SdrPathObj(
             rSdrObjCustomShape.getSdrModelFromSdrObject(),
             SdrObjKind::Polygon,
-            aPolyPoly);
+            std::move(aPolyPoly));
 
         SfxItemSet aSet(rSdrObjCustomShape.GetMergedItemSet());
         aSet.ClearItem( SDRATTR_TEXTDIRECTION );    //SJ: vertical writing is not required, by removing this item no outliner is created

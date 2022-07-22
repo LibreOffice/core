@@ -2611,7 +2611,7 @@ void EnhancedCustomShape2d::CreateSubPath(
             SdrPathObjUniquePtr pFill(new SdrPathObj(
                 mrSdrObjCustomShape.getSdrModelFromSdrObject(),
                 SdrObjKind::Polygon,
-                aClosedPolyPolygon));
+                std::move(aClosedPolyPolygon)));
             SfxItemSet aTempSet(*this);
             aTempSet.Put(makeSdrShadowItem(false));
             aTempSet.Put(XLineStyleItem(drawing::LineStyle_NONE));

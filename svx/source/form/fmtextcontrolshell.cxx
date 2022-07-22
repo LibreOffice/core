@@ -1257,7 +1257,7 @@ namespace svx
         }
         Reference< XDispatch > xDispatcher = _rxProvider->queryDispatch( aFeatureURL, OUString(), 0xFF );
         if ( xDispatcher.is() )
-            return new FmTextControlFeature( xDispatcher, aFeatureURL, _nSlot, this );
+            return new FmTextControlFeature( xDispatcher, std::move(aFeatureURL), _nSlot, this );
         return nullptr;
     }
 

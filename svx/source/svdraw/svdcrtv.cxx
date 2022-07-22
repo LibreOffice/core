@@ -101,7 +101,7 @@ ImplConnectMarkerOverlay::ImplConnectMarkerOverlay(const SdrCreateView& rView, S
                 aTempPolyPoly.append(aTempPoly);
 
                 std::unique_ptr<sdr::overlay::OverlayPolyPolygonStripedAndFilled> pNew2(new sdr::overlay::OverlayPolyPolygonStripedAndFilled(
-                    aTempPolyPoly));
+                    std::move(aTempPolyPoly)));
                 xTargetOverlay->add(*pNew2);
                 maObjects.append(std::move(pNew2));
             }

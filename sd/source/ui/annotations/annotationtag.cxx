@@ -238,7 +238,7 @@ void AnnotationHdl::CreateB2dIAObject()
                         aPolyPolygon.append(rPolygon);
 
                     pOverlayObject.reset(new sdr::overlay::OverlayPolyPolygon(
-                            aPolyPolygon,
+                            std::move(aPolyPolygon),
                             rCustomAnnotationMarker.maLineColor,
                             rCustomAnnotationMarker.mnLineWidth,
                             rCustomAnnotationMarker.maFillColor));

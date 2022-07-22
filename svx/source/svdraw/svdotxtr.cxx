@@ -366,7 +366,7 @@ SdrObjectUniquePtr SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly
                     pPathObj = new SdrPathObj(
                         getSdrModelFromSdrObject(),
                         SdrObjKind::PathLine,
-                        aPolyPolygon);
+                        std::move(aPolyPolygon));
                 }
 
                 // copy basic information from original
@@ -435,7 +435,7 @@ SdrPathObjUniquePtr SdrTextObj::ImpConvertMakeObj(const basegfx::B2DPolyPolygon&
     SdrPathObjUniquePtr pPathObj(new SdrPathObj(
         getSdrModelFromSdrObject(),
         ePathKind,
-        aB2DPolyPolygon));
+        std::move(aB2DPolyPolygon)));
 
     if(bBezier)
     {

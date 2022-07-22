@@ -189,7 +189,7 @@ void Impl3DMirrorConstructOverlay::SetMirrorAxis(Point aMirrorAxisA, Point aMirr
                     aPolyPolygon.transform(aMatrixTransform);
 
                     std::unique_ptr<sdr::overlay::OverlayPolyPolygonStripedAndFilled> pNew(new sdr::overlay::OverlayPolyPolygonStripedAndFilled(
-                        aPolyPolygon));
+                        std::move(aPolyPolygon)));
                     xTargetOverlay->add(*pNew);
                     maObjects.append(std::move(pNew));
                 }
@@ -742,7 +742,7 @@ void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, boo
         aPolyPoly2D.transform(rLatheMat);
         // ctor E3dLatheObj expects coordinates with y-axis down
         aPolyPoly2D.transform(aFlipVerticalMat);
-        p3DObj = new E3dLatheObj(pObj->getSdrModelFromSdrObject(), aDefault, aPolyPoly2D);
+        p3DObj = new E3dLatheObj(pObj->getSdrModelFromSdrObject(), aDefault, std::move(aPolyPoly2D));
     }
 
     // Set attribute

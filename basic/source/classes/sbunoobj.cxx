@@ -4714,7 +4714,7 @@ void SbUnoStructRefObject::implCreateDbgProperties()
     QuickInsert( xVarRef.get() );
 
     // Id == -3: output the Methods
-    xVarRef = new SbUnoProperty( ID_DBG_METHODS, SbxSTRING, SbxSTRING, aProp, -3, false, false );
+    xVarRef = new SbUnoProperty( ID_DBG_METHODS, SbxSTRING, SbxSTRING, std::move(aProp), -3, false, false );
     QuickInsert( xVarRef.get() );
 }
 

@@ -186,7 +186,7 @@ std::unique_ptr<SdrAttrObj,SdrObjectFreeOp> E3dLatheObj::GetBreakObj()
     // create PathObj
     basegfx::B3DPolyPolygon aLathePoly3D(basegfx::utils::createB3DPolyPolygonFromB2DPolyPolygon(maPolyPoly2D));
     basegfx::B2DPolyPolygon aTransPoly(TransformToScreenCoor(aLathePoly3D));
-    std::unique_ptr<SdrPathObj,SdrObjectFreeOp> pPathObj(new SdrPathObj(getSdrModelFromSdrObject(), SdrObjKind::PolyLine, aTransPoly));
+    std::unique_ptr<SdrPathObj,SdrObjectFreeOp> pPathObj(new SdrPathObj(getSdrModelFromSdrObject(), SdrObjKind::PolyLine, std::move(aTransPoly)));
 
     // Set Attribute
     SfxItemSet aSet(GetObjectItemSet());
