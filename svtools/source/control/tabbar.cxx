@@ -2494,6 +2494,11 @@ tools::Rectangle TabBar::GetPageArea() const
                      Size(mnLastOffX - mnOffX + 1, GetSizePixel().Height() - mnOffY));
 }
 
+void TabBar::SetAddButtonEnabled(bool bAddButtonEnabled)
+{
+    mpImpl->mxButtonBox->m_xAddButton->set_sensitive(bAddButtonEnabled);
+}
+
 css::uno::Reference<css::accessibility::XAccessible> TabBar::CreateAccessible()
 {
     return mpImpl->maAccessibleFactory.getFactory().createAccessibleTabBar(*this);
