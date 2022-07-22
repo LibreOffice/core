@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5dfd9ae_d3675846",
+        "filename": "vcl/source/treelist/svtabbx.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-07-22T15:10:58Z",
+      "side": 1,
+      "message": "I suspect, like the commented out code above hints, that we could use [aTabs.size() - 1] instead of [1] here and drop the GetStyle() and GetTreeFlags() line then",
+      "revId": "58767658b5bf5f2cff83a854c2f6bc7e232bd9b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
