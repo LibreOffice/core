@@ -173,25 +173,21 @@ const BitmapPalette& Bitmap::GetGreyPalette( int nEntries )
     {
         case 2:
         {
-            static const BitmapPalette aGreyPalette2 = [] {
-                BitmapPalette aPalette(2);
-                aPalette[0] = BitmapColor(0, 0, 0);
-                aPalette[1] = BitmapColor(255, 255, 255);
-                return aPalette;
-            }();
+            static const BitmapPalette aGreyPalette2 = {
+                BitmapColor(0, 0, 0),
+                BitmapColor(255, 255, 255),
+            };
 
             return aGreyPalette2;
         }
         case 4:
         {
-            static const BitmapPalette aGreyPalette4 = [] {
-                BitmapPalette aPalette(4);
-                aPalette[0] = BitmapColor(0, 0, 0);
-                aPalette[1] = BitmapColor(85, 85, 85);
-                aPalette[2] = BitmapColor(170, 170, 170);
-                aPalette[3] = BitmapColor(255, 255, 255);
-                return aPalette;
-            }();
+            static const BitmapPalette aGreyPalette4 = {
+                BitmapColor(0, 0, 0),
+                BitmapColor(85, 85, 85),
+                BitmapColor(170, 170, 170),
+                BitmapColor(255, 255, 255),
+            };
 
             return aGreyPalette4;
         }
