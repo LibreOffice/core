@@ -15890,32 +15890,59 @@ public:
 
     virtual void start_editing(const weld::TreeIter& rIter) override
     {
-        GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(g_list_nth_data(m_pColumns, m_nTextView));
-        assert(pColumn && "wrong column");
-
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         GtkTreePath* path = gtk_tree_model_get_path(m_pTreeModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
 
-        // allow editing of cells which are not usually editable, so we can have double click
-        // do its usual row-activate but if we explicitly want to edit (remote files dialog)
-        // we can still do that
-        GList *pRenderers = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(pColumn));
-        for (GList* pRenderer = g_list_first(pRenderers); pRenderer; pRenderer = g_list_next(pRenderer))
+        GtkTreeViewColumn* pColumn = nullptr;
+
+        for (GList* pEntry = g_list_first(m_pColumns); pEntry; pEntry = g_list_next(pEntry))
         {
-            GtkCellRenderer* pCellRenderer = GTK_CELL_RENDERER(pRenderer->data);
-            if (GTK_IS_CELL_RENDERER_TEXT(pCellRenderer))
+            GtkTreeViewColumn* pTestColumn = GTK_TREE_VIEW_COLUMN(pEntry->data);
+
+            // see if this column is editable
+            gboolean is_editable(false);
+            GList *pRenderers = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(pTestColumn));
+            for (GList* pRenderer = g_list_first(pRenderers); pRenderer; pRenderer = g_list_next(pRenderer))
             {
-                gboolean is_editable(false);
-                g_object_get(pCellRenderer, "editable", &is_editable, nullptr);
-                if (!is_editable)
+                GtkCellRenderer* pCellRenderer = GTK_CELL_RENDERER(pRenderer->data);
+                if (GTK_IS_CELL_RENDERER_TEXT(pCellRenderer))
+                {
+                    g_object_get(pCellRenderer, "editable", &is_editable, nullptr);
+                    if (is_editable)
+                    {
+                        pColumn = pTestColumn;
+                        break;
+                    }
+                }
+            }
+            g_list_free(pRenderers);
+
+            if (is_editable)
+                break;
+        }
+
+        // if nothing explicit editable, allow editing of cells which are not
+        // usually editable, so we can have double click do its usual
+        // row-activate but if we explicitly want to edit (remote files dialog)
+        // we can still do that
+        if (!pColumn)
+        {
+            pColumn = GTK_TREE_VIEW_COLUMN(g_list_nth_data(m_pColumns, m_nTextView));
+            assert(pColumn && "wrong column");
+
+            GList *pRenderers = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(pColumn));
+            for (GList* pRenderer = g_list_first(pRenderers); pRenderer; pRenderer = g_list_next(pRenderer))
+            {
+                GtkCellRenderer* pCellRenderer = GTK_CELL_RENDERER(pRenderer->data);
+                if (GTK_IS_CELL_RENDERER_TEXT(pCellRenderer))
                 {
                     g_object_set(pCellRenderer, "editable", true, "editable-set", true, nullptr);
                     g_object_set_data(G_OBJECT(pCellRenderer), "g-lo-RestoreNonEditable", reinterpret_cast<gpointer>(true));
                     break;
                 }
             }
+            g_list_free(pRenderers);
         }
-        g_list_free(pRenderers);
 
         gtk_tree_view_scroll_to_cell(m_pTreeView, path, pColumn, false, 0, 0);
         gtk_tree_view_set_cursor(m_pTreeView, path, pColumn, true);
