@@ -3170,7 +3170,13 @@ static void doc_iniUnoCommands ()
         OUString(".uno:UngroupSparklines"),
         OUString(".uno:FormatSparklineMenu"),
         OUString(".uno:Protect"),
-        OUString(".uno:UnsetCellsReadOnly")
+        OUString(".uno:UnsetCellsReadOnly"),
+        OUString(".uno:ContentControlProperties"),
+        OUString(".uno:InsertCheckboxContentControl"),
+        OUString(".uno:InsertContentControl"),
+        OUString(".uno:InsertDateContentControl"),
+        OUString(".uno:InsertDropdownContentControl"),
+        OUString(".uno:InsertPictureContentControl")
     };
 
     util::URL aCommandURL;

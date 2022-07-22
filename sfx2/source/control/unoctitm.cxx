@@ -1116,7 +1116,13 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
              aEvent.FeatureURL.Path == "NumberFormatDecDecimals" ||
              aEvent.FeatureURL.Path == "NumberFormatIncDecimals" ||
              aEvent.FeatureURL.Path == "Protect" ||
-             aEvent.FeatureURL.Path == "UnsetCellsReadOnly")
+             aEvent.FeatureURL.Path == "UnsetCellsReadOnly" ||
+             aEvent.FeatureURL.Path == "ContentControlProperties" ||
+             aEvent.FeatureURL.Path == "InsertCheckboxContentControl" ||
+             aEvent.FeatureURL.Path == "InsertContentControl" ||
+             aEvent.FeatureURL.Path == "InsertDateContentControl" ||
+             aEvent.FeatureURL.Path == "InsertDropdownContentControl" ||
+             aEvent.FeatureURL.Path == "InsertPictureContentControl")
     {
         aBuffer.append(aEvent.IsEnabled ? std::u16string_view(u"enabled") : std::u16string_view(u"disabled"));
     }
