@@ -89,6 +89,7 @@ Public sCurrSLOVAK as String
 Public sCurrESTONIAN as String
 Public sCurrLATVIAN as String
 Public sCurrLITHUANIAN as String
+Public sCurrCROATIAN as String
 
 Public sPrgsRETRIEVAL as String
 Public sPrgsCONVERTING as String
@@ -214,6 +215,7 @@ Dim LocWorkPath as String
 		sCurrESTONIAN = GetResText(&quot;CURRENCIES_16&quot;)
 		sCurrLATVIAN = GetResText(&quot;CURRENCIES_17&quot;)
 		sCurrLITHUANIAN = GetResText(&quot;CURRENCIES_18&quot;)
+		sCurrCROATIAN = GetResText(&quot;CURRENCIES_19&quot;)
 		.cmdCancel.Label =  sCANCEL
 		.cmdHelp.Label =  sHELP
 		.cmdBack.Label =  GetResText(&quot;STEP_ZERO_2&quot;)
@@ -393,6 +395,11 @@ Sub InitializeLanguages()
     LangIDValue(18,0,1) = &quot;LT&quot;
     LangIDValue(18,0,2) = &quot;-427&quot;
 
+&apos; CURRENCIES_CROATIAN
+    LangIDValue(19,0,0) = &quot;hr&quot;
+    LangIDValue(19,0,1) = &quot;HR&quot;
+    LangIDValue(19,0,2) = &quot;-41A&quot;
+
 End Sub
 
 
@@ -571,6 +578,15 @@ Dim i as Integer
 	CurrValue(18,3) = &quot;Lt&quot;
 	CurrValue(18,4) = &quot;Lt&quot;
 	CurrValue(18,5) = &quot;LTL&quot;
+
+	CurrValue(19,0) = sCurrCROATIAN
+	&apos; real conversion rate
+	CurrValue(19,1) = 7.53450
+	&apos; rounded conversion rate
+	CurrValue(19,2) = 7.5
+	CurrValue(19,3) = &quot;kn&quot;
+	CurrValue(19,4) = &quot;kn&quot;
+	CurrValue(19,5) = &quot;HRK&quot;
 
 	i = -1
 	CurrSymbolList(0) = &quot;&quot;
