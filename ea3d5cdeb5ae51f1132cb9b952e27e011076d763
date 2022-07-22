@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fabd5c05_037190dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-07-22T10:40:53Z",
+      "side": 1,
+      "message": "Hi Miklos,\n\nCould you please rubber-stamp this when you have time? Thank you!",
+      "revId": "ea3d5cdeb5ae51f1132cb9b952e27e011076d763",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
