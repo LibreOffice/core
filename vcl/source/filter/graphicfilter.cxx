@@ -1385,8 +1385,8 @@ ErrCode GraphicFilter::ImportGraphic(Graphic& rGraphic, std::u16string_view rPat
         }
         else
             nStreamBegin = rIStream.Tell();
-
-        nStatus = ImpTestOrFindFormat( rPath, rIStream, nFormat );
+        if ( nFormat == GRFILTER_FORMAT_NOTFOUND )
+            nStatus = ImpTestOrFindFormat( rPath, rIStream, nFormat );
         // if pending, return ERRCODE_NONE in order to request more bytes
         if( rIStream.GetError() == ERRCODE_IO_PENDING )
         {
