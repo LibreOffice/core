@@ -154,6 +154,19 @@ void SvTabListBox::SetTabs()
     }
     */
 
+    if (!(GetTreeFlags() & SvTreeFlags::CHKBTN) && !(GetStyle() & WB_HASBUTTONS))
+    {
+        // the 1st column (index 1 because 0 is some bitmap) is always set
+        // editable by SvTreeListBox::SetTabs(),
+        // which prevents setting a different column to editable as the first
+        // one with the flag is picked in SvTreeListBox::ImplEditEntry()
+        assert(aTabs[1]->nFlags & SvLBoxTabFlags::EDITABLE);
+        if (!(mvTabList[0].nFlags & SvLBoxTabFlags::EDITABLE))
+        {
+            aTabs[1]->nFlags &= ~SvLBoxTabFlags::EDITABLE;
+        }
+    }
+
     // append all other tabs to the list
     for( sal_uInt16 nCurTab = 1; nCurTab < sal_uInt16(mvTabList.size()); nCurTab++ )
     {
