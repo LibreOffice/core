@@ -1684,6 +1684,7 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
         }
     }
 
+    if (bInsertHint)
     {
         // Handle the invariant that a plain text content control has the same character formatting
         // for all of its content.
