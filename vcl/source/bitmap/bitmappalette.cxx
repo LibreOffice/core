@@ -37,6 +37,10 @@ public:
         : maBitmapColor(aBitmapColor)
     {
     }
+    ImplBitmapPalette(const BitmapColor* first, const BitmapColor* last)
+        : maBitmapColor(first, last)
+    {
+    }
     ImplBitmapPalette() {}
     ImplBitmapPalette(sal_uInt16 nCount)
         : maBitmapColor(nCount)
@@ -79,6 +83,11 @@ BitmapPalette::BitmapPalette(BitmapPalette&& rOther) noexcept
 
 BitmapPalette::BitmapPalette(std::initializer_list<BitmapColor> aBitmapColor)
     : mpImpl(aBitmapColor)
+{
+}
+
+BitmapPalette::BitmapPalette(const BitmapColor* first, const BitmapColor* last)
+    : mpImpl({ first, last })
 {
 }
 

@@ -24,6 +24,8 @@
 #include <vcl/checksum.hxx>
 #include <o3tl/cow_wrapper.hxx>
 
+#include <array>
+
 class ImplBitmapPalette;
 
 class VCL_DLLPUBLIC BitmapPalette
@@ -43,6 +45,7 @@ public:
     BitmapPalette( const BitmapPalette& );
     BitmapPalette( BitmapPalette&& ) noexcept;
     BitmapPalette(std::initializer_list<BitmapColor> aBitmapColor);
+    template <size_t N> BitmapPalette(const std::array<BitmapColor, N>& colors);
     explicit BitmapPalette(sal_uInt16 nCount);
     ~BitmapPalette();
 
@@ -72,7 +75,15 @@ public:
     typedef o3tl::cow_wrapper< ImplBitmapPalette > ImplType;
 
 private:
+    BitmapPalette(const BitmapColor* first, const BitmapColor* last);
+
     ImplType mpImpl;
 };
+
+template <size_t N>
+BitmapPalette::BitmapPalette(const std::array<BitmapColor, N>& colors)
+    : BitmapPalette(colors.data(), colors.data() + N)
+{
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

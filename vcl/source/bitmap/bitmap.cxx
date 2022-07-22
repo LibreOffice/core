@@ -169,6 +169,19 @@ Bitmap::~Bitmap()
 #endif
 }
 
+namespace
+{
+template <size_t N>
+constexpr std::enable_if_t<255 % (N - 1) == 0, std::array<BitmapColor, N>> getGreyscalePalette()
+{
+    const int step = 255 / (N - 1);
+    std::array<BitmapColor, N> a;
+    for (size_t i = 0; i < N; ++i)
+        a[i] = BitmapColor(i * step, i * step, i * step);
+    return a;
+}
+}
+
 const BitmapPalette& Bitmap::GetGreyPalette( int nEntries )
 {
     // Create greyscale palette with 2, 4, 16 or 256 entries
@@ -176,52 +189,22 @@ const BitmapPalette& Bitmap::GetGreyPalette( int nEntries )
     {
         case 2:
         {
-            static const BitmapPalette aGreyPalette2 = {
-                BitmapColor(0, 0, 0),
-                BitmapColor(255, 255, 255),
-            };
-
+            static const BitmapPalette aGreyPalette2 = getGreyscalePalette<2>();
             return aGreyPalette2;
         }
         case 4:
         {
-            static const BitmapPalette aGreyPalette4 = {
-                BitmapColor(0, 0, 0),
-                BitmapColor(85, 85, 85),
-                BitmapColor(170, 170, 170),
-                BitmapColor(255, 255, 255),
-            };
-
+            static const BitmapPalette aGreyPalette4 = getGreyscalePalette<4>();
             return aGreyPalette4;
         }
         case 16:
         {
-            static const BitmapPalette aGreyPalette16 = [] {
-                sal_uInt8 cGrey = 0;
-                sal_uInt8 const cGreyInc = 17;
-
-                BitmapPalette aPalette(16);
-
-                for (sal_uInt16 i = 0; i < 16; ++i, cGrey += cGreyInc)
-                    aPalette[i] = BitmapColor(cGrey, cGrey, cGrey);
-
-                return aPalette;
-            }();
-
+            static const BitmapPalette aGreyPalette16 = getGreyscalePalette<16>();
             return aGreyPalette16;
         }
         case 256:
         {
-            static const BitmapPalette aGreyPalette256 = [] {
-                BitmapPalette aPalette(256);
-
-                for (sal_uInt16 i = 0; i < 256; ++i)
-                    aPalette[i] = BitmapColor(static_cast<sal_uInt8>(i), static_cast<sal_uInt8>(i),
-                                              static_cast<sal_uInt8>(i));
-
-                return aPalette;
-            }();
-
+            static const BitmapPalette aGreyPalette256 = getGreyscalePalette<256>();
             return aGreyPalette256;
         }
     }
