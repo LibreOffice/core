@@ -80,42 +80,38 @@ Bitmap::Bitmap( const Size& rSizePixel, vcl::PixelFormat ePixelFormat, const Bit
     if (!(rSizePixel.Width() && rSizePixel.Height()))
         return;
 
-    BitmapPalette   aPal;
-    BitmapPalette*  pRealPal = nullptr;
-
-    if (vcl::isPalettePixelFormat(ePixelFormat))
+    if( !pPal )
     {
-        if( !pPal )
+        switch (ePixelFormat)
         {
-            if (ePixelFormat == vcl::PixelFormat::N1_BPP)
+            case vcl::PixelFormat::N1_BPP:
             {
-                aPal.SetEntryCount( 2 );
-                aPal[ 0 ] = COL_BLACK;
-                aPal[ 1 ] = COL_WHITE;
+                static const BitmapPalette aPalN1_BPP = { COL_BLACK, COL_WHITE };
+                pPal = &aPalN1_BPP;
+                break;
             }
-            else if (ePixelFormat == vcl::PixelFormat::N8_BPP)
+            case vcl::PixelFormat::N8_BPP:
             {
-                aPal.SetEntryCount(1 << sal_uInt16(ePixelFormat));
-                aPal[ 0 ] = COL_BLACK;
-                aPal[ 1 ] = COL_BLUE;
-                aPal[ 2 ] = COL_GREEN;
-                aPal[ 3 ] = COL_CYAN;
-                aPal[ 4 ] = COL_RED;
-                aPal[ 5 ] = COL_MAGENTA;
-                aPal[ 6 ] = COL_BROWN;
-                aPal[ 7 ] = COL_GRAY;
-                aPal[ 8 ] = COL_LIGHTGRAY;
-                aPal[ 9 ] = COL_LIGHTBLUE;
-                aPal[ 10 ] = COL_LIGHTGREEN;
-                aPal[ 11 ] = COL_LIGHTCYAN;
-                aPal[ 12 ] = COL_LIGHTRED;
-                aPal[ 13 ] = COL_LIGHTMAGENTA;
-                aPal[ 14 ] = COL_YELLOW;
-                aPal[ 15 ] = COL_WHITE;
+                static const BitmapPalette aPalN8_BPP = [] {
+                    BitmapPalette aPal(1 << sal_uInt16(vcl::PixelFormat::N8_BPP));
+                    aPal[ 0 ] = COL_BLACK;
+                    aPal[ 1 ] = COL_BLUE;
+                    aPal[ 2 ] = COL_GREEN;
+                    aPal[ 3 ] = COL_CYAN;
+                    aPal[ 4 ] = COL_RED;
+                    aPal[ 5 ] = COL_MAGENTA;
+                    aPal[ 6 ] = COL_BROWN;
+                    aPal[ 7 ] = COL_GRAY;
+                    aPal[ 8 ] = COL_LIGHTGRAY;
+                    aPal[ 9 ] = COL_LIGHTBLUE;
+                    aPal[ 10 ] = COL_LIGHTGREEN;
+                    aPal[ 11 ] = COL_LIGHTCYAN;
+                    aPal[ 12 ] = COL_LIGHTRED;
+                    aPal[ 13 ] = COL_LIGHTMAGENTA;
+                    aPal[ 14 ] = COL_YELLOW;
+                    aPal[ 15 ] = COL_WHITE;
 
-                // Create dither palette
-                if (ePixelFormat == vcl::PixelFormat::N8_BPP)
-                {
+                    // Create dither palette
                     sal_uInt16 nActCol = 16;
 
                     for( sal_uInt16 nB = 0; nB < 256; nB += 51 )
@@ -125,15 +121,22 @@ Bitmap::Bitmap( const Size& rSizePixel, vcl::PixelFormat ePixelFormat, const Bit
 
                     // Set standard Office colors
                     aPal[ nActCol++ ] = BitmapColor( 0, 184, 255 );
-                }
+                    return aPal;
+                }();
+                pPal = &aPalN8_BPP;
+                break;
+            }
+            default:
+            {
+                static const BitmapPalette aPalEmpty;
+                pPal = &aPalEmpty;
+                break;
             }
         }
-        else
-            pRealPal = const_cast<BitmapPalette*>(pPal);
     }
 
     mxSalBmp = ImplGetSVData()->mpDefInst->CreateSalBitmap();
-    mxSalBmp->Create(rSizePixel, ePixelFormat, pRealPal ? *pRealPal : aPal);
+    mxSalBmp->Create(rSizePixel, ePixelFormat, *pPal);
 }
 
 #ifdef DBG_UTIL
