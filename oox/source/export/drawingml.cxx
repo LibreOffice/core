@@ -3452,7 +3452,6 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
                         && ( sPresetWarp == "textArchDown" || sPresetWarp == "textArchUp"
                             || sPresetWarp == "textButton" || sPresetWarp == "textCircle");
 
-
     if (bUpright)
     {
         Degree100 nShapeRotateAngleDeg100(0_deg100);
@@ -3460,24 +3459,37 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
             nShapeRotateAngleDeg100 = Degree100(mAny.get<sal_Int32>());
         // Depending on shape rotation, the import has made 90deg changes to properties
         // "TextPreRotateAngle" and "TextRotateAngle". Revert it.
-        if ((nShapeRotateAngleDeg100 > 4500_deg100 && nShapeRotateAngleDeg100 <= 13500_deg100)
-            || (nShapeRotateAngleDeg100 > 22500_deg100 && nShapeRotateAngleDeg100 <= 31500_deg100))
+        bool bWasAngleChanged
+            = (nShapeRotateAngleDeg100 > 4500_deg100 && nShapeRotateAngleDeg100 <= 13500_deg100)
+              || (nShapeRotateAngleDeg100 > 22500_deg100
+                  && nShapeRotateAngleDeg100 <= 31500_deg100);
+        if (bWasAngleChanged)
         {
             nTextRotateAngleDeg100 = nTextRotateAngleDeg100.value_or(0_deg100) + 9000_deg100;
             nTextPreRotateAngle -= 90;
         }
         // If text is no longer upright, user has changed something. Do not write 'upright' then.
+        // This try to detect the case assumes, that the text area rotation was 0 in the original
+        // MS Office document. That is likely because MS Office has no UI to set it and the
+        // predefined SmartArt shapes, which use it, do not use 'upright'.
         Degree100 nAngleSum = nShapeRotateAngleDeg100 + nTextRotateAngleDeg100.value_or(0_deg100);
-        if (abs(NormAngle18000(nAngleSum)) >= 100_deg100) // consider inaccuracy from rounding
+        if (abs(NormAngle18000(nAngleSum)) < 100_deg100) // consider inaccuracy from rounding
         {
+            nTextRotateAngleDeg100.reset(); // 'upright' does not overrule text area rotation.
+        }
+        else
+        {
+            // User changes. Keep current angles.
             isUpright.reset();
+            if (bWasAngleChanged)
+            {
+                nTextPreRotateAngle += 90;
+                nTextRotateAngleDeg100 = nTextRotateAngleDeg100.value_or(0_deg100) - 9000_deg100;
+            }
         }
     }
 
-    // Evaluate "TextPreRotateAngle". It is used to simulate not yet implemented writing modes and it
-    // is used to simulate the 'rot' attribute from diagram <dgm:txXfrm> element. When we are here
-    // and export a diagram it is in fact an export of a group of shapes. For them a text rotation
-    // inside the text area rectangle is only possible by the "vert" attribute.
+    // Evaluate "TextPreRotateAngle". It is used to simulate not yet implemented writing modes.
     if (nTextPreRotateAngle != 0 && !sWritingMode)
     {
         if (nTextPreRotateAngle == -90 || nTextPreRotateAngle == 270)
@@ -3485,7 +3497,7 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
             sWritingMode = "vert";
             bVertical = true;
             // Our TextPreRotation includes padding, MSO vert does not include padding. Therefore set
-            // padding so, that is looks the same in MSO.
+            // padding so, that is looks the same in MSO as in LO.
             sal_Int32 nHelp = nLeft;
             nLeft = nBottom;
             nBottom = nRight;
