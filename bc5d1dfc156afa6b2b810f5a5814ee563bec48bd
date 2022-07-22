@@ -39,6 +39,30 @@
       },
       "revId": "bc5d1dfc156afa6b2b810f5a5814ee563bec48bd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ff28e65_9838d551",
+        "filename": "oox/source/export/shapes.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1656,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-07-22T11:40:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "051e2bd0_07fc018e",
+      "range": {
+        "startLine": 1650,
+        "startChar": 0,
+        "endLine": 1656,
+        "endChar": 5
+      },
+      "revId": "bc5d1dfc156afa6b2b810f5a5814ee563bec48bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

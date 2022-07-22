@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9c1f430_c0a2cadd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-07-22T11:40:18Z",
+      "side": 1,
+      "message": "@Tibi: many thanks for extending the unit test! This way it\u0027s guaranteed, that the fix will be permanent.",
+      "revId": "419269d5bd4fc1a55904a87958078e92dafd9bc0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
