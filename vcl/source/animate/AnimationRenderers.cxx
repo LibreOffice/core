@@ -122,23 +122,23 @@ bool Animation::Repaint(OutputDevice& rOut, tools::Long nRendererId, Point const
 {
     bool bRepainted = true;
 
-    auto itAnimView = std::find_if(
+    auto itRenderer = std::find_if(
         maRenderers.begin(), maRenderers.end(),
         [&rOut, nRendererId](const std::unique_ptr<AnimationRenderer>& pRenderer) -> bool {
             return pRenderer->matches(&rOut, nRendererId);
         });
 
-    if (itAnimView != maRenderers.end())
+    if (itRenderer != maRenderers.end())
     {
-        if ((*itAnimView)->getOriginPosition() == rDestPt
-            && (*itAnimView)->getSizePx() == rOut.LogicToPixel(rDestSz))
+        if ((*itRenderer)->getOriginPosition() == rDestPt
+            && (*itRenderer)->getSizePx() == rOut.LogicToPixel(rDestSz))
         {
-            (*itAnimView)->repaint();
+            (*itRenderer)->repaint();
             bRepainted = false;
         }
         else
         {
-            maRenderers.erase(itAnimView);
+            maRenderers.erase(itRenderer);
         }
     }
 
