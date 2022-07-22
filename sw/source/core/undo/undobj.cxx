@@ -1136,7 +1136,12 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                         && (   type == IDocumentMarkAccess::MarkType::TEXT_FIELDMARK
                             || type == IDocumentMarkAccess::MarkType::CHECKBOX_FIELDMARK
                             || type == IDocumentMarkAccess::MarkType::DROPDOWN_FIELDMARK
-                            || type == IDocumentMarkAccess::MarkType::DATE_FIELDMARK)))
+                            || type == IDocumentMarkAccess::MarkType::DATE_FIELDMARK))
+                    || (bMaybe
+                        && !(nDelContentType & DelContentType::Replace)
+                        && type == IDocumentMarkAccess::MarkType::BOOKMARK
+                        && pStt->nContent == 0 // entire paragraph deleted?
+                        && pEnd->nContent == pEnd->nNode.GetNode().GetTextNode()->Len()))
                 {
                     if( bMaybe )
                         bSavePos = true;

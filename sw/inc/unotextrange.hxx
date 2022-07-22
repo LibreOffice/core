@@ -109,7 +109,7 @@ private:
     //TODO: new exception type for protected content
     /// @throws css::uno::RuntimeException
     void    DeleteAndInsert(
-                const OUString& rText, const bool bForceExpandHints);
+                const OUString& rText, ::sw::DeleteAndInsertMode eMode);
     void    Invalidate();
 
     virtual ~SwXTextRange() override;

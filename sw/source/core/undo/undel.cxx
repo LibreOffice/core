@@ -1306,6 +1306,7 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
         rDoc.getIDocumentContentOperations().DelFullPara( rPam );
     }
     else
+        // FIXME: this ends up calling DeleteBookmarks() on the entire rPam which deletes too many!
         rDoc.getIDocumentContentOperations().DeleteAndJoin(rPam, m_DeleteFlags);
 }
 

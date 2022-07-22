@@ -705,7 +705,7 @@ SwXTextCursor::~SwXTextCursor()
 }
 
 void SwXTextCursor::DeleteAndInsert(const OUString& rText,
-        const bool bForceExpandHints)
+        ::sw::DeleteAndInsertMode const eMode)
 {
     auto pUnoCursor = static_cast<SwCursor*>(m_pUnoCursor.get());
     if (!pUnoCursor)
@@ -721,13 +721,16 @@ void SwXTextCursor::DeleteAndInsert(const OUString& rText,
     {
         if (pCurrent->HasMark())
         {
-            rDoc.getIDocumentContentOperations().DeleteAndJoin(*pCurrent);
+            rDoc.getIDocumentContentOperations().DeleteAndJoin(*pCurrent,
+                // is it "delete" or "replace"?
+                // FIXME still test failure because insertTextContent calls with empty string
+                (nTextLen != 0 || eMode & ::sw::DeleteAndInsertMode::ForceReplace) ? SwDeleteFlags::ArtificialSelection : SwDeleteFlags::Default);
         }
         if(nTextLen)
         {
             const bool bSuccess(
                 SwUnoCursorHelper::DocInsertStringSplitCR(
-                    rDoc, *pCurrent, rText, bForceExpandHints ) );
+                    rDoc, *pCurrent, rText, bool(eMode & ::sw::DeleteAndInsertMode::ForceExpandHints)));
             OSL_ENSURE( bSuccess, "Doc->Insert(Str) failed." );
 
             SwUnoCursorHelper::SelectPam(*pUnoCursor, true);
@@ -1724,7 +1727,7 @@ SwXTextCursor::setString(const OUString& aString)
     const bool bForceExpandHints( (CursorType::Meta == m_eType)
         && dynamic_cast<SwXMeta&>(*m_xParentText)
                 .CheckForOwnMemberMeta(*GetPaM(), true) );
-    DeleteAndInsert(aString, bForceExpandHints);
+    DeleteAndInsert(aString, bForceExpandHints ? ::sw::DeleteAndInsertMode::ForceExpandHints : ::sw::DeleteAndInsertMode::Default);
 }
 
 uno::Any SwUnoCursorHelper::GetPropertyValue(
