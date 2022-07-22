@@ -34,6 +34,24 @@
       "parentUuid": "bd741744_68d3abfa",
       "revId": "1dce9ee7e12871ee63434499db805e806b9e9d3c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e30b588_c965385d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-07-22T09:51:18Z",
+      "side": 1,
+      "message": "See https://gerrit.libreoffice.org/c/core/+/137349 sw: fix heap-use-after-free in SwTextNode::InsertHint()",
+      "parentUuid": "a913589c_c7c461fa",
+      "revId": "1dce9ee7e12871ee63434499db805e806b9e9d3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
