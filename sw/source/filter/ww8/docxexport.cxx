@@ -263,6 +263,10 @@ void DocxExport::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
     // Turn ON flag for 'Writing Headers \ Footers'
     m_pAttrOutput->SetWritingHeaderFooter( true );
 
+    const bool bPrevSectionHadHeader = m_bHasHdr;
+    const bool bPrevSEctionHadFooter = m_bHasFtr;
+    m_bHasHdr = m_bHasFtr = false;
+
     // headers
     if ( nHeadFootFlags & nsHdFtFlags::WW8_HEADER_EVEN )
         WriteHeaderFooter( &rLeftHeaderFormat, true, "even" );
@@ -270,22 +274,19 @@ void DocxExport::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
     {
         if ( nHeadFootFlags & nsHdFtFlags::WW8_HEADER_ODD )
             WriteHeaderFooter( &rFormat, true, "even" );
-        else if ( m_bHasHdr && nBreakCode == 2 )
+        else if (bPrevSectionHadHeader && nBreakCode == 2)
             WriteHeaderFooter( nullptr, true, "even" );
     }
 
     if ( nHeadFootFlags & nsHdFtFlags::WW8_HEADER_ODD )
         WriteHeaderFooter( &rFormat, true, "default" );
+    else if (bPrevSectionHadHeader && nBreakCode == 2) // 2: nextPage
+        WriteHeaderFooter(nullptr, true, "default");
 
     if ( nHeadFootFlags & nsHdFtFlags::WW8_HEADER_FIRST )
         WriteHeaderFooter( &rFirstPageFormat, true, "first" );
-
-    if( (nHeadFootFlags & (nsHdFtFlags::WW8_HEADER_EVEN
-                         | nsHdFtFlags::WW8_HEADER_ODD
-                         | nsHdFtFlags::WW8_HEADER_FIRST)) == 0
-            && m_bHasHdr && nBreakCode == 2 ) // 2: nexPage
-        WriteHeaderFooter( nullptr, true, "default" );
-
+    else if (bPrevSectionHadHeader && nBreakCode == 2)
+        WriteHeaderFooter(nullptr, true, "first");
 
     // footers
     if ( nHeadFootFlags & nsHdFtFlags::WW8_FOOTER_EVEN )
@@ -294,21 +295,19 @@ void DocxExport::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
     {
         if ( nHeadFootFlags & nsHdFtFlags::WW8_FOOTER_ODD )
            WriteHeaderFooter( &rFormat, false, "even" );
-        else if ( m_bHasFtr && nBreakCode == 2 )
+        else if (bPrevSEctionHadFooter && nBreakCode == 2)
             WriteHeaderFooter( nullptr, false, "even");
     }
 
     if ( nHeadFootFlags & nsHdFtFlags::WW8_FOOTER_ODD )
         WriteHeaderFooter( &rFormat, false, "default" );
+    else if (bPrevSEctionHadFooter && nBreakCode == 2)
+        WriteHeaderFooter(nullptr, false, "default");
 
     if ( nHeadFootFlags & nsHdFtFlags::WW8_FOOTER_FIRST )
         WriteHeaderFooter( &rFirstPageFormat, false, "first" );
-
-    if( (nHeadFootFlags & (nsHdFtFlags::WW8_FOOTER_EVEN
-                         | nsHdFtFlags::WW8_FOOTER_ODD
-                         | nsHdFtFlags::WW8_FOOTER_FIRST)) == 0
-            && m_bHasFtr && nBreakCode == 2 ) // 2: nexPage
-        WriteHeaderFooter( nullptr, false, "default");
+    else if (bPrevSEctionHadFooter && nBreakCode == 2)
+        WriteHeaderFooter(nullptr, false, "first");
 
     // Turn OFF flag for 'Writing Headers \ Footers'
     m_pAttrOutput->SetWritingHeaderFooter( false );

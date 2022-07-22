@@ -493,6 +493,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf145998_unnecessaryPageStyles)
     CPPUNIT_ASSERT_EQUAL(uno::Any(), xPara->getPropertyValue("PageDescName"));
     // CPPUNIT_ASSERT_EQUAL(OUString("Default page style - first page style"),
     //                      parseDump("/root/page[3]/header/txt"));
+    CPPUNIT_ASSERT_EQUAL(OUString(), parseDump("/root/page[3]/footer/txt"));
 
     // Page Style is converted into a page break instead. Shows the "normal" header.
     xPara.set(getParagraph(5, "4"), uno::UNO_QUERY_THROW);
@@ -503,6 +504,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf145998_unnecessaryPageStyles)
     // Page Style is retained (with wrong header) in order to preserve page re-numbering.
     xPara.set(getParagraph(7, "1"), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(uno::Any() != xPara->getPropertyValue("PageDescName"));
+    CPPUNIT_ASSERT_EQUAL(OUString(), parseDump("/root/page[5]/footer/txt"));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf135216_evenOddFooter)
