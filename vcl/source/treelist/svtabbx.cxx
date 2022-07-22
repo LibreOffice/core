@@ -154,6 +154,16 @@ void SvTabListBox::SetTabs()
     }
     */
 
+    // the 1st column (index 1 or 2 depending on button flags) is always set
+    // editable by SvTreeListBox::SetTabs(),
+    // which prevents setting a different column to editable as the first
+    // one with the flag is picked in SvTreeListBox::ImplEditEntry()
+    assert(aTabs.back()->nFlags & SvLBoxTabFlags::EDITABLE);
+    if (!(mvTabList[0].nFlags & SvLBoxTabFlags::EDITABLE))
+    {
+        aTabs.back()->nFlags &= ~SvLBoxTabFlags::EDITABLE;
+    }
+
     // append all other tabs to the list
     for( sal_uInt16 nCurTab = 1; nCurTab < sal_uInt16(mvTabList.size()); nCurTab++ )
     {
