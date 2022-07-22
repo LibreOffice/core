@@ -4008,6 +4008,15 @@ void XMLTextParagraphExport::ExportContentControl(
         {
             GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_CURRENT_DATE, aCurrentDate);
         }
+
+        bool bPlainText = false;
+        xPropertySet->getPropertyValue("PlainText") >>= bPlainText;
+        if (bPlainText)
+        {
+            OUStringBuffer aBuffer;
+            sax::Converter::convertBool(aBuffer, bPlainText);
+            GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_PLAIN_TEXT, aBuffer.makeStringAndClear());
+        }
     }
 
     SvXMLElementExport aElem(GetExport(), bExport, XML_NAMESPACE_LO_EXT, XML_CONTENT_CONTROL, false,
