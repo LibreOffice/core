@@ -173,7 +173,7 @@
       <style:graphic-properties svg:stroke-color="#3f52d9" draw:fill="solid" draw:fill-color="#7d8ae7" draw:shadow="visible" draw:shadow-color="#c1c7f4"/>
     </style:style>
     <style:style style:name="Inspiration-background" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none"/>
+      <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#666666"/>
       <style:text-properties style:letter-kerning="true"/>
     </style:style>
     <style:style style:name="Inspiration-backgroundobjects" style:family="presentation">
@@ -381,11 +381,11 @@
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" fo:min-height="1.485cm"/>
       <style:paragraph-properties style:writing-mode="lr-tb"/>
     </style:style>
-    <style:style style:name="Mgr3" style:family="graphic" style:parent-style-name="Accent_20_3">
-      <style:graphic-properties draw:textarea-vertical-align="middle" fo:min-height="3.25cm" fo:min-width="2.5cm"/>
+    <style:style style:name="Mgr3" style:family="graphic" style:parent-style-name="standard" style:list-style-name="ML1">
+      <style:graphic-properties draw:stroke="none" draw:stroke-dash="Dashed_20__28_var_29__20_2" svg:stroke-width="0.03cm" svg:stroke-color="#3f52d9" draw:marker-start-width="0.25cm" draw:marker-end-width="0.25cm" draw:fill-color="#81aca6" draw:opacity="39%" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0.4cm" fo:min-width="1.601cm" fo:padding-top="0.125cm" fo:padding-bottom="0.125cm" fo:padding-left="0.25cm" fo:padding-right="0.25cm" draw:shadow="visible" draw:shadow-offset-x="0cm" draw:shadow-offset-y="0cm" draw:shadow-color="#b2b2b2" draw:shadow-opacity="100%"/>
     </style:style>
     <style:style style:name="Mgr4" style:family="graphic" style:parent-style-name="Accent_20_1">
-      <style:graphic-properties draw:textarea-vertical-align="middle" fo:min-height="1.75cm" fo:min-width="25.25cm"/>
+      <style:graphic-properties draw:textarea-vertical-align="middle" fo:min-height="1.5cm" fo:min-width="24.31cm" draw:shadow-offset-x="0.035cm" draw:shadow-offset-y="0.035cm" draw:shadow-color="#b2b2b2" draw:shadow-opacity="43%" loext:shadow-blur="0.035cm" loext:glow-radius="0cm" loext:softedge-radius="0cm"/>
     </style:style>
     <style:style style:name="Mgr5" style:family="graphic" style:parent-style-name="Accent_20_3">
       <style:graphic-properties draw:textarea-vertical-align="middle" fo:min-height="3cm" fo:min-width="2cm"/>
@@ -393,11 +393,20 @@
     <style:style style:name="Mgr6" style:family="graphic" style:parent-style-name="Accent_20_1">
       <style:graphic-properties draw:textarea-vertical-align="middle" fo:min-height="1.5cm" fo:min-width="24.75cm"/>
     </style:style>
+    <style:style style:name="Mgr7" style:family="graphic" style:parent-style-name="standard" style:list-style-name="ML1">
+      <style:graphic-properties draw:stroke="none" draw:stroke-dash="Dashed_20__28_var_29__20_2" svg:stroke-width="0.03cm" svg:stroke-color="#91d93f" draw:marker-start-width="0.25cm" draw:marker-end-width="0.25cm" draw:fill-color="#b5e77d" draw:opacity="49%" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="1.01cm" fo:min-width="0.996cm" fo:padding-top="0.125cm" fo:padding-bottom="0.125cm" fo:padding-left="0.25cm" fo:padding-right="0.25cm" draw:shadow-offset-x="0.06cm" draw:shadow-offset-y="0.06cm" draw:shadow-color="#dcf1c1"/>
+    </style:style>
+    <style:style style:name="Mgr8" style:family="graphic" style:parent-style-name="Accent_20_1">
+      <style:graphic-properties draw:stroke="none" draw:textarea-vertical-align="middle" fo:min-height="1.5cm" fo:min-width="0.19cm" draw:shadow="hidden" draw:shadow-offset-x="0cm" draw:shadow-offset-y="0cm" draw:shadow-color="#dddddd" draw:shadow-opacity="100%" loext:shadow-blur="0cm" loext:glow-radius="0cm" loext:softedge-radius="0cm"/>
+    </style:style>
+    <style:style style:name="Mgr9" style:family="graphic" style:parent-style-name="Accent_20_3">
+      <style:graphic-properties draw:stroke="none" draw:fill-color="#81aca6" draw:textarea-vertical-align="middle" fo:min-height="0cm" fo:min-width="2.013cm" draw:shadow="hidden" draw:shadow-offset-x="0cm" draw:shadow-offset-y="0cm" draw:shadow-color="#b2b2b2" draw:shadow-opacity="100%" loext:shadow-blur="0cm"/>
+    </style:style>
     <style:style style:name="Mpr1" style:family="presentation" style:parent-style-name="Inspiration-backgroundobjects">
       <style:graphic-properties draw:fill="solid" draw:fill-color="#666666" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="15.749cm" fo:min-width="28cm"/>
     </style:style>
     <style:style style:name="Mpr2" style:family="presentation" style:parent-style-name="Inspiration-backgroundobjects">
-      <style:graphic-properties draw:fill="solid" draw:fill-color="#ffffff" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="13.5cm" fo:min-width="26.5cm"/>
+      <style:graphic-properties draw:fill="solid" draw:fill-color="#ffffff" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="13.5cm" fo:min-width="26.5cm" draw:shadow="visible" loext:shadow-blur="0.106cm"/>
     </style:style>
     <style:style style:name="Mpr3" style:family="presentation" style:parent-style-name="Inspiration-backgroundobjects">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="false" fo:min-height="1.449cm"/>
@@ -448,6 +457,28 @@
       <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
       <style:paragraph-properties fo:text-align="center" style:writing-mode="lr-tb"/>
       <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
+    </style:style>
+    <style:style style:name="MP10" style:family="paragraph">
+      <loext:graphic-properties draw:fill-color="#81aca6" draw:opacity="39%"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-align="center" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="18pt" style:font-size-asian="18pt" style:font-size-complex="18pt"/>
+    </style:style>
+    <style:style style:name="MP11" style:family="paragraph">
+      <loext:graphic-properties draw:fill-color="#b5e77d" draw:opacity="49%"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-align="center" fo:text-indent="0cm"/>
+      <style:text-properties fo:font-size="18pt" style:font-size-asian="18pt" style:font-size-complex="18pt"/>
+    </style:style>
+    <style:style style:name="MP12" style:family="paragraph">
+      <loext:graphic-properties draw:fill-color="#81aca6"/>
+      <style:paragraph-properties fo:text-align="center"/>
+    </style:style>
+    <style:style style:name="MP13" style:family="paragraph">
+      <loext:graphic-properties draw:fill="solid" draw:fill-color="#81aca6"/>
+      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%" fo:text-align="center" fo:text-indent="0cm"/>
+      <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:font-size="18pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="18pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="18pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+    </style:style>
+    <style:style style:name="MP14" style:family="paragraph">
+      <style:paragraph-properties fo:text-align="center"/>
     </style:style>
     <style:style style:name="MT1" style:family="text">
       <style:text-properties fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
@@ -590,25 +621,61 @@
       <draw:page-thumbnail draw:layer="backgroundobjects" svg:width="8.999cm" svg:height="5.061cm" svg:x="11cm" svg:y="20.894cm"/>
     </style:handout-master>
     <style:master-page style:name="Inspiration" style:page-layout-name="PM1" draw:style-name="Mdp1">
-      <draw:custom-shape presentation:style-name="Mpr1" draw:text-style-name="MP5" draw:layer="backgroundobjects" svg:width="28cm" svg:height="15.749cm" svg:x="0cm" svg:y="0cm">
+      <draw:custom-shape draw:style-name="Mgr7" draw:text-style-name="MP11" draw:layer="backgroundobjects" svg:width="2.375cm" svg:height="2cm" draw:transform="rotate (1.5707963267949) translate (0.31cm 3.685cm)">
         <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
+        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="?f6 0 10800 ?f8 ?f11 10800 ?f9 21600 10800 ?f10 ?f5 10800" draw:text-areas="?f3 ?f3 ?f4 ?f4" draw:type="parallelogram" draw:modifiers="5636.36363636364" draw:enhanced-path="M ?f0 0 L 21600 0 ?f1 21600 0 21600 Z N">
+          <draw:equation draw:name="f0" draw:formula="$0 "/>
+          <draw:equation draw:name="f1" draw:formula="21600-$0 "/>
+          <draw:equation draw:name="f2" draw:formula="$0 *10/24"/>
+          <draw:equation draw:name="f3" draw:formula="?f2 +1750"/>
+          <draw:equation draw:name="f4" draw:formula="21600-?f3 "/>
+          <draw:equation draw:name="f5" draw:formula="?f0 /2"/>
+          <draw:equation draw:name="f6" draw:formula="10800+?f5 "/>
+          <draw:equation draw:name="f7" draw:formula="?f0 -10800"/>
+          <draw:equation draw:name="f8" draw:formula="if(?f7 ,?f13 ,0)"/>
+          <draw:equation draw:name="f9" draw:formula="10800-?f5 "/>
+          <draw:equation draw:name="f10" draw:formula="if(?f7 ,?f12 ,21600)"/>
+          <draw:equation draw:name="f11" draw:formula="21600-?f5 "/>
+          <draw:equation draw:name="f12" draw:formula="21600*10800/?f0 "/>
+          <draw:equation draw:name="f13" draw:formula="21600-?f12 "/>
+          <draw:handle draw:handle-position="$0 top" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="21600"/>
+        </draw:enhanced-geometry>
+      </draw:custom-shape>
+      <draw:custom-shape draw:style-name="Mgr3" draw:text-style-name="MP10" draw:layer="backgroundobjects" svg:width="3.337cm" svg:height="1.03cm" svg:x="21.223cm" svg:y="0.28cm">
+        <text:p/>
+        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="?f6 0 10800 ?f8 ?f11 10800 ?f9 21600 10800 ?f10 ?f5 10800" draw:text-areas="?f3 ?f3 ?f4 ?f4" draw:type="parallelogram" draw:modifiers="5901.49790293589" draw:enhanced-path="M ?f0 0 L 21600 0 ?f1 21600 0 21600 Z N">
+          <draw:equation draw:name="f0" draw:formula="$0 "/>
+          <draw:equation draw:name="f1" draw:formula="21600-$0 "/>
+          <draw:equation draw:name="f2" draw:formula="$0 *10/24"/>
+          <draw:equation draw:name="f3" draw:formula="?f2 +1750"/>
+          <draw:equation draw:name="f4" draw:formula="21600-?f3 "/>
+          <draw:equation draw:name="f5" draw:formula="?f0 /2"/>
+          <draw:equation draw:name="f6" draw:formula="10800+?f5 "/>
+          <draw:equation draw:name="f7" draw:formula="?f0 -10800"/>
+          <draw:equation draw:name="f8" draw:formula="if(?f7 ,?f13 ,0)"/>
+          <draw:equation draw:name="f9" draw:formula="10800-?f5 "/>
+          <draw:equation draw:name="f10" draw:formula="if(?f7 ,?f12 ,21600)"/>
+          <draw:equation draw:name="f11" draw:formula="21600-?f5 "/>
+          <draw:equation draw:name="f12" draw:formula="21600*10800/?f0 "/>
+          <draw:equation draw:name="f13" draw:formula="21600-?f12 "/>
+          <draw:handle draw:handle-position="$0 top" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="21600"/>
+        </draw:enhanced-geometry>
       </draw:custom-shape>
       <draw:custom-shape presentation:style-name="Mpr2" draw:text-style-name="MP6" draw:layer="backgroundobjects" svg:width="26.5cm" svg:height="13.5cm" svg:x="0.75cm" svg:y="0.5cm">
         <text:p/>
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:mirror-horizontal="false" draw:mirror-vertical="false" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
       </draw:custom-shape>
+      <draw:custom-shape draw:name="rest2" draw:style-name="Mgr9" draw:text-style-name="MP13" draw:layer="backgroundobjects" svg:width="2.515cm" svg:height="3.177cm" svg:x="22.137cm" svg:y="0.451cm">
+        <text:p/>
+        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
+      </draw:custom-shape>
+      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP7" draw:layer="backgroundobjects" svg:width="24.81cm" svg:height="1.75cm" svg:x="0.75cm" svg:y="1.31cm">
+        <text:p/>
+        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
+      </draw:custom-shape>
       <draw:frame presentation:style-name="Inspiration-outline1" draw:layer="backgroundobjects" svg:width="25cm" svg:height="10cm" svg:x="1.5cm" svg:y="3.75cm" presentation:class="outline" presentation:placeholder="true">
         <draw:text-box/>
       </draw:frame>
-      <draw:custom-shape draw:style-name="Mgr3" draw:text-style-name="MP7" draw:layer="backgroundobjects" svg:width="2.5cm" svg:height="3.25cm" svg:x="22cm" svg:y="0.25cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
-      </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Mgr4" draw:text-style-name="MP7" draw:layer="backgroundobjects" svg:width="25.25cm" svg:height="1.75cm" svg:x="0.25cm" svg:y="1.25cm">
-        <text:p/>
-        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
-      </draw:custom-shape>
       <draw:frame presentation:style-name="Inspiration-title" draw:layer="backgroundobjects" svg:width="24cm" svg:height="1.75cm" svg:x="1.5cm" svg:y="1.25cm" presentation:class="title" presentation:placeholder="true">
         <draw:text-box/>
       </draw:frame>
@@ -639,6 +706,14 @@
           </text:p>
         </draw:text-box>
       </draw:frame>
+      <draw:custom-shape draw:style-name="Mgr8" draw:text-style-name="MP14" draw:layer="backgroundobjects" svg:width="0.69cm" svg:height="1.75cm" svg:x="0.31cm" svg:y="1.31cm">
+        <text:p/>
+        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
+      </draw:custom-shape>
+      <draw:custom-shape draw:name="rect1" draw:style-name="Mgr9" draw:text-style-name="MP12" draw:layer="backgroundobjects" svg:width="2.513cm" svg:height="0.22cm" svg:x="22.137cm" svg:y="0.28cm">
+        <text:p/>
+        <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
+      </draw:custom-shape>
       <presentation:notes style:page-layout-name="PM0">
         <draw:page-thumbnail presentation:style-name="Inspiration-title" draw:layer="backgroundobjects" svg:width="12.75cm" svg:height="9.56cm" svg:x="4.125cm" svg:y="2.5cm" presentation:class="page"/>
         <draw:frame presentation:style-name="Inspiration-notes" draw:layer="backgroundobjects" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
