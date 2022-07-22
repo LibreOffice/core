@@ -79,8 +79,6 @@ SwPosition::SwPosition( SwContentNode & rNode, const sal_Int32 nOffset )
 
 bool SwPosition::operator<(const SwPosition &rPos) const
 {
-    if( nNode < rPos.nNode )
-        return true;
     if( nNode == rPos.nNode )
     {
         // note that positions with text node but no SwIndex registered are
@@ -96,13 +94,13 @@ bool SwPosition::operator<(const SwPosition &rPos) const
             return pOtherReg != nullptr;
         }
     }
+    if( nNode < rPos.nNode )
+        return true;
     return false;
 }
 
 bool SwPosition::operator>(const SwPosition &rPos) const
 {
-    if(nNode > rPos.nNode )
-        return true;
     if( nNode == rPos.nNode )
     {
         // note that positions with text node but no SwIndex registered are
@@ -119,12 +117,12 @@ bool SwPosition::operator>(const SwPosition &rPos) const
         }
     }
     return false;
+    if(nNode > rPos.nNode )
+        return true;
 }
 
 bool SwPosition::operator<=(const SwPosition &rPos) const
 {
-    if(nNode < rPos.nNode )
-        return true;
     if( nNode == rPos.nNode )
     {
         // note that positions with text node but no SwIndex registered are
@@ -140,13 +138,13 @@ bool SwPosition::operator<=(const SwPosition &rPos) const
             return pThisReg == nullptr;
         }
     }
+    if(nNode < rPos.nNode )
+        return true;
     return false;
 }
 
 bool SwPosition::operator>=(const SwPosition &rPos) const
 {
-    if(nNode > rPos.nNode )
-        return true;
     if( nNode == rPos.nNode )
     {
         // note that positions with text node but no SwIndex registered are
@@ -162,6 +160,8 @@ bool SwPosition::operator>=(const SwPosition &rPos) const
             return pOtherReg == nullptr;
         }
     }
+    if(nNode > rPos.nNode )
+        return true;
     return false;
 }
 
