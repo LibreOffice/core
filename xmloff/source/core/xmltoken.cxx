@@ -3498,6 +3498,7 @@ namespace xmloff::token {
         TOKEN("picture", XML_PICTURE),
         TOKEN("date-format", XML_DATE_FORMAT),
         TOKEN("date-rfc-language-tag", XML_DATE_RFC_LANGUAGE_TAG),
+        TOKEN("plain-text", XML_PLAIN_TEXT),
 
 
 #if OSL_DEBUG_LEVEL > 0

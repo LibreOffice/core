@@ -729,6 +729,72 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDateContentControlImport)
     CPPUNIT_ASSERT_EQUAL(OUString("2022-05-25T00:00:00Z"), aCurrentDate);
 }
 
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPlainTextContentControlExport)
+{
+    // Given a document with a plain text content control around a text portion:
+    getComponent() = loadFromDesktop("private:factory/swriter");
+    uno::Reference<lang::XMultiServiceFactory> xMSF(getComponent(), uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xText->insertString(xCursor, "test", /*bAbsorb=*/false);
+    xCursor->gotoStart(/*bExpand=*/false);
+    xCursor->gotoEnd(/*bExpand=*/true);
+    uno::Reference<text::XTextContent> xContentControl(
+        xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    xContentControlProps->setPropertyValue("PlainText", uno::Any(true));
+    xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
+
+    // When exporting to ODT:
+    uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
+        { "FilterName", uno::Any(OUString("writer8")) },
+    });
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    xStorable->storeToURL(aTempFile.GetURL(), aStoreProps);
+    validate(aTempFile.GetFileName(), test::ODF);
+
+    // Then make sure the expected markup is used:
+    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    // Without the accompanying fix in place, this test would have failed with:
+    // - XPath '//loext:content-control' no attribute 'plain-text' exist
+    // i.e. the plain text content control was turned into a rich text one on export.
+    assertXPath(pXmlDoc, "//loext:content-control", "plain-text", "true");
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPlainTextContentControlImport)
+{
+    // Given an ODF document with a plain-text content control:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "content-control-plain-text.fodt";
+
+    // When loading that document:
+    getComponent() = loadFromDesktop(aURL);
+
+    // Then make sure that the content control is not lost on import:
+    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParagraphsAccess(xTextDocument->getText(),
+                                                                    uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParagraphs = xParagraphsAccess->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphs->nextElement(),
+                                                             uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
+    uno::Reference<beans::XPropertySet> xTextPortion(xPortions->nextElement(), uno::UNO_QUERY);
+    OUString aPortionType;
+    xTextPortion->getPropertyValue("TextPortionType") >>= aPortionType;
+    CPPUNIT_ASSERT_EQUAL(OUString("ContentControl"), aPortionType);
+    uno::Reference<text::XTextContent> xContentControl;
+    xTextPortion->getPropertyValue("ContentControl") >>= xContentControl;
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    bool bPlainText{};
+    xContentControlProps->getPropertyValue("PlainText") >>= bPlainText;
+    // Without the accompanying fix in place, this test would have failed, the import result was a
+    // rich text content control (not a plain text one).
+    CPPUNIT_ASSERT(bPlainText);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
