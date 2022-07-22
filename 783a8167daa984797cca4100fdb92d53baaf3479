@@ -16,6 +16,24 @@
       "message": "Hi Stephan!\n\nhttps://ci.libreoffice.org/job/gerrit_mac/124147/consoleFull#-872233233d893063f-7f3d-4b7e-b56f-4e0f225817cd looks definitely related. But I fail to see how the change could modify the logic, and also why it\u0027s only on one system?\n\nCould you please help understanding the issue? Thank you!\n\n(Not important in any way; it\u0027s just some cleanup I thought might be good. OK to abandon.)",
       "revId": "783a8167daa984797cca4100fdb92d53baaf3479",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "733e7914_df878e4b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-07-22T10:01:46Z",
+      "side": 1,
+      "message": "For ePixelFormat \u003d N24_BPP (for which vcl::isPalettePixelFormat is false) and pPal non-null, the old code called mxSalBmp-\u003eCreate with the default-initialized BitmapPalette aPal, while the new code calls it with *pPal.  That appears to make the difference here.",
+      "parentUuid": "ad5eb0d8_574aff64",
+      "revId": "783a8167daa984797cca4100fdb92d53baaf3479",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
