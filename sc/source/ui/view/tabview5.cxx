@@ -383,6 +383,7 @@ void ScTabView::UpdateLayerLocks()
         pDrawView->SetLayerLocked( pLayer->GetName(), bProt || bShared );
         pDrawView->SetLayerVisible( pLayer->GetName(), false);
     }
+    pTabControl->SetAddButtonEnabled(aViewData.GetDocument().IsDocEditable());
 }
 
 void ScTabView::DrawDeselectAll()
