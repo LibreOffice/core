@@ -1562,7 +1562,11 @@ int Desktop::Main()
 #endif
 
         //Running the VCL graphics rendering tests
-        runGraphicsRenderTests();
+        const char * pDisplay = std::getenv("DISPLAY");
+        if (!pDisplay || pDisplay[0] == ':')
+        {
+            runGraphicsRenderTests();
+        }
 
         // Reap the process started by fire_glxtest_process().
         reap_glxtest_process();
