@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34f39380_0e2b66a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2022-07-22T16:47:00Z",
+      "side": 1,
+      "message": "Hi Christian,\nThis patch concerns Impress templates.\nI\u0027ve another patch for Writer (and Draw) templates, but there is a merge conflict with Wizard templates.\nShall we merge all templates: Wizard, Writer, Impress, Draw?",
+      "revId": "a0d996d39c819b73f40a21179fe52fa2ef199080",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
