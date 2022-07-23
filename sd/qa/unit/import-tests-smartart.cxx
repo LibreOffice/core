@@ -125,6 +125,7 @@ public:
     void testTdf149551Venn();
     void testTdf149551Gear();
     void testTdf145528Matrix();
+    void testTdf135953TextPosition();
 
     CPPUNIT_TEST_SUITE(SdImportTestSmartArt);
 
@@ -185,6 +186,7 @@ public:
     CPPUNIT_TEST(testTdf149551Venn);
     CPPUNIT_TEST(testTdf149551Gear);
     CPPUNIT_TEST(testTdf145528Matrix);
+    CPPUNIT_TEST(testTdf135953TextPosition);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1982,6 +1984,33 @@ void SdImportTestSmartArt::testTdf145528Matrix()
         CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(10293), sal_Int32(aTextRect.GetWidth()), 4);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(4500), sal_Int32(aTextRect.GetHeight()), 4);
     }
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testTdf135953TextPosition()
+{
+    // The file contains a diagram of type "Detailed Process". There the text area rectangle
+    // is at the left edge of the shape and rotated there.
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf135953_SmartArt_textposition.pptx"),
+        PPTX);
+    uno::Reference<drawing::XShape> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    // shape at index 0 is the background shape
+    uno::Reference<drawing::XShape> xShape = getChildShape(xGroup, 1);
+    CPPUNIT_ASSERT(xShape.is());
+    auto pCustomShape = dynamic_cast<SdrObjCustomShape*>(SdrObject::getSdrObjectFromXShape(xShape));
+    CPPUNIT_ASSERT(pCustomShape);
+    tools::Rectangle aTextRect;
+    pCustomShape->TakeTextAnchorRect(aTextRect);
+    // without fix the text area rectangle had LT[-2213,2336] and RB[4123,4575]. It was not
+    // considered that the txXfrm and the preset text area rectangle have different centers in this
+    // case and thus the text was far off.
+    // The used tolerance is estimated.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(3223), sal_Int32(aTextRect.Left()), 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(-1661), sal_Int32(aTextRect.Top()), 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(9559), sal_Int32(aTextRect.Right()), 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(578), sal_Int32(aTextRect.Bottom()), 4);
 
     xDocShRef->DoClose();
 }
