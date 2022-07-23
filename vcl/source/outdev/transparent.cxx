@@ -319,6 +319,7 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
 
             tools::Rectangle aLogicPolyRect( rPolyPoly.GetBoundRect() );
             tools::Rectangle aPixelRect( ImplLogicToDevicePixel( aLogicPolyRect ) );
+            aPixelRect.Normalize();
 
             if( !mbOutputClipped )
             {
@@ -327,7 +328,7 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
                     // This is because the source is a polygon which when painted would not paint
                     // the rightmost and lowest pixel line(s), so use one pixel less for the
                     // rectangle, too.
-                                                    aPixelRect.getOpenWidth(), aPixelRect.getOpenHeight(),
+                                                    std::max(0L, aPixelRect.GetWidth()-1), std::max(aPixelRect.GetHeight()-1),
                                                     sal::static_int_cast<sal_uInt8>(nTransparencePercent),
                                                     *this );
             }
