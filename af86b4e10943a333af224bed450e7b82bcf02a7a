@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b57f9c06_0a6484f6",
+        "filename": "sc/source/core/data/documen3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1918,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-07-23T18:01:39Z",
+      "side": 1,
+      "message": "I think GetDocument().IsDocEditable() is well suited, not only because Heiko suggested it in the Bugzilla, but also because it is used in ScDocFunc::RenameTable() which is invoked when you want to rename a sheet.",
+      "parentUuid": "f94ef340_3dfbdcb0",
+      "revId": "af86b4e10943a333af224bed450e7b82bcf02a7a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "759a8ca0_354048f7",
@@ -66,6 +84,24 @@
       "writtenOn": "2022-07-23T16:44:01Z",
       "side": 1,
       "message": "Aha, thanks; but IsDocEditable is wrong, too: maybe what you wanted was IsDocProtected?",
+      "revId": "af86b4e10943a333af224bed450e7b82bcf02a7a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bd70725_a9c26833",
+        "filename": "sc/source/ui/view/tabview5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-07-23T18:01:39Z",
+      "side": 1,
+      "message": "With the above note, I think the GetDocument().IsDocEditable() is the correct choice. It does additional checks, but that should be fine.",
+      "parentUuid": "c3af97ab_b5e81c2e",
       "revId": "af86b4e10943a333af224bed450e7b82bcf02a7a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
