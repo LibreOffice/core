@@ -113,6 +113,15 @@ void SwMacrosTest::testVba()
         {
             OUString("testDocumentRange.docm"),
             OUString("vnd.sun.Star.script:Project.Module1.testAll?language=Basic&location=document")
+        },
+        /*{
+            OUString("testSelectionFind.docm"),
+            OUString("vnd.sun.Star.script:Project.Module1.testAll?language=Basic&location=document")
+        },*/
+        {
+            //current working tests here!
+            OUString("testFontColor.docm"),
+            OUString("vnd.sun.Star.script:Project.ThisDocument.testAll?language=Basic&location=document")
         }
         /* TODO - make these pass in Writer
         {
