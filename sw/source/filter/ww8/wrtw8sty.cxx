@@ -1609,6 +1609,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
 
     bool bOldPg = m_bOutPageDescs;
     m_bOutPageDescs = true;
+    const SwPageDesc* pSavedPageDesc = pPd;
 
     AttrOutput().StartSection();
 
@@ -1745,6 +1746,11 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
                 // has different headers/footers for the title page
                 titlePage = true;
             }
+        }
+        else if (nBreakCode == 2 && pPd == m_pPreviousSectionPageDesc && pPd->GetFollow() == pPd)
+        {
+            // The first title page has already been displayed in the previous section. Drop it.
+            titlePage = false;
         }
 
         const SfxItemSet* pOldI = m_pISet;
@@ -1958,6 +1964,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
 
     // outside of the section properties again
     m_bOutPageDescs = bOldPg;
+    m_pPreviousSectionPageDesc = pSavedPageDesc;
 }
 
 bool WW8_WrPlcSepx::WriteKFText( WW8Export& rWrt )

@@ -507,6 +507,19 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf145998_unnecessaryPageStyles)
     CPPUNIT_ASSERT_EQUAL(OUString(), parseDump("/root/page[5]/footer/txt"));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf145998_firstHeader)
+{
+    loadAndReload("tdf145998_firstHeader.odt");
+
+    // Sanity check - always good to test when dealing with page styles and breaks.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Very first header"), parseDump("/root/page[1]/header/txt"));
+
+    // Page Style is already used in prior section - this can't be the first-header
+    CPPUNIT_ASSERT_EQUAL(OUString("Normal Header"), parseDump("/root/page[2]/header/txt"));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf135216_evenOddFooter)
 {
     loadAndReload("tdf135216_evenOddFooter.odt");
