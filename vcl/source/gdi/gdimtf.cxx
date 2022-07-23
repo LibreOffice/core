@@ -1355,7 +1355,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference ) const
             MetaLineAction* pAct = static_cast<MetaLineAction*>(pAction);
             Point aP1( pAct->GetStartPoint() ), aP2( pAct->GetEndPoint() );
             tools::Rectangle aRect( aP1, aP2 );
-            aRect.Justify();
+            aRect.Normalize();
 
             ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack );
         }

@@ -200,7 +200,7 @@ bool ContourWindow::MouseButtonUp(const MouseEvent& rMEvt)
         aWorkRect.SetRight( aLogPt.X() );
         aWorkRect.SetBottom( aLogPt.Y() );
         aWorkRect.Intersection( aGraphRect );
-        aWorkRect.Justify();
+        aWorkRect.Normalize();
 
         if ( aWorkRect.Left() != aWorkRect.Right() && aWorkRect.Top() != aWorkRect.Bottom() )
         {

@@ -53,7 +53,7 @@ void ImplScaleRect( tools::Rectangle& rRect, double fScaleX, double fScaleY )
     ImplScalePoint( aBR, fScaleX, fScaleY );
 
     rRect = tools::Rectangle( aTL, aBR );
-    rRect.Justify();
+    rRect.Normalize();
 }
 
 void ImplScalePoly( tools::Polygon& rPoly, double fScaleX, double fScaleY )

@@ -482,7 +482,7 @@ void ScOptSolverDlg::SetReference( const ScRange& rRef, ScDocument& rDocP )
     {
         OUString aVal = mpEdActive->GetText();
         Selection aSel = mpEdActive->GetSelection();
-        aSel.Justify();
+        aSel.Normalize();
         aVal = aVal.replaceAt( aSel.Min(), aSel.Len(), aStr );
         Selection aNewSel( aSel.Min(), aSel.Min()+aStr.getLength() );
         mpEdActive->SetRefString( aVal );

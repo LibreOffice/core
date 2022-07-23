@@ -755,7 +755,7 @@ void NumericFormatter::ImplNewFieldValue( sal_Int64 nNewValue )
     // should be checked and clearly traced (with comment) in order to find out what happens.
 
     Selection aSelection = GetField()->GetSelection();
-    aSelection.Justify();
+    aSelection.Normalize();
     OUString aText = GetField()->GetText();
     // leave it as is if selected until end
     if ( static_cast<sal_Int32>(aSelection.Max()) == aText.getLength() )

@@ -1139,7 +1139,7 @@ tools::Rectangle EnhancedCustomShape2d::GetTextRect() const
     if( aRect.GetWidth() <= 1 || aRect.GetHeight() <= 1 )
         return aLogicRect;
     aRect.Move( aLogicRect.Left(), aLogicRect.Top() );
-    aRect.Justify();
+    aRect.Normalize();
     return aRect;
 }
 
@@ -1989,7 +1989,7 @@ static basegfx::B2DPolygon CreateArc( const tools::Rectangle& rRect, const Point
         bSwapStartEndAngle ^= 0x11;
     if ( bSwapStartEndAngle )
     {
-        aRect.Justify();
+        aRect.Normalize();
         if ( bSwapStartEndAngle & 1 )
         {
             Point aTmp( aStart );
@@ -2370,7 +2370,7 @@ void EnhancedCustomShape2d::CreateSubPath(
                             }
                             aNewB2DPolygon.clear();
                         }
-                        tools::Rectangle aRect = tools::Rectangle::Justify( GetPoint( seqCoordinates[ rSrcPt ], true, true ), GetPoint( seqCoordinates[ rSrcPt + 1 ], true, true ) );
+                        tools::Rectangle aRect = tools::Rectangle::Normalize( GetPoint( seqCoordinates[ rSrcPt ], true, true ), GetPoint( seqCoordinates[ rSrcPt + 1 ], true, true ) );
                         if ( aRect.GetWidth() && aRect.GetHeight() )
                         {
                             Point aStart( GetPoint( seqCoordinates[ static_cast<sal_uInt16>( rSrcPt + nXor ) ], true, true ) );

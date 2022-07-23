@@ -850,7 +850,7 @@ void Slider::SetRange( const Range& rRange )
 {
     // adjust Range
     Range aRange = rRange;
-    aRange.Justify();
+    aRange.Normalize();
     tools::Long nNewMinRange = aRange.Min();
     tools::Long nNewMaxRange = aRange.Max();
 

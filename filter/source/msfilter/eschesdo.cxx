@@ -676,7 +676,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
 
         {
             tools::Rectangle aRect( rObj.GetRect() );
-            aRect.Justify();
+            aRect.Normalize();
             rObj.SetRect( aRect );
         }
 

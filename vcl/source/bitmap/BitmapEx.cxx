@@ -1278,7 +1278,7 @@ tools::Polygon  BitmapEx::GetContour( bool bContourEdgeDetect,
     if( pWorkRectPixel )
         aWorkRect.Intersection( *pWorkRectPixel );
 
-    aWorkRect.Justify();
+    aWorkRect.Normalize();
 
     if( ( aWorkRect.GetWidth() > 4 ) && ( aWorkRect.GetHeight() > 4 ) )
     {

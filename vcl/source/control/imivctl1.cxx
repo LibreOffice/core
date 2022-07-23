@@ -2216,7 +2216,7 @@ tools::Rectangle SvxIconChoiceCtrl_Impl::CalcFocusRect( SvxIconChoiceCtrlEntry* 
 static tools::Rectangle GetHotSpot( const tools::Rectangle& rRect )
 {
     tools::Rectangle aResult( rRect );
-    aResult.Justify();
+    aResult.Normalize();
     Size aSize( rRect.GetSize() );
     tools::Long nDelta = aSize.Width() / 4;
     aResult.AdjustLeft(nDelta );
@@ -2252,7 +2252,7 @@ void SvxIconChoiceCtrl_Impl::SelectRect( const tools::Rectangle& rRect, bool bAd
     const size_t nCount = maZOrderList.size();
 
     tools::Rectangle aRect( rRect );
-    aRect.Justify();
+    aRect.Normalize();
     bool bCalcOverlap = (bAdd && pOtherRects && !pOtherRects->empty());
 
     bool bResetClipRegion = false;
@@ -2403,7 +2403,7 @@ void SvxIconChoiceCtrl_Impl::AddSelectedRect( SvxIconChoiceCtrlEntry* pEntry1,
 void SvxIconChoiceCtrl_Impl::AddSelectedRect( const tools::Rectangle& rRect )
 {
     tools::Rectangle newRect = rRect;
-    newRect.Justify();
+    newRect.Normalize();
     aSelectedRectList.push_back( newRect );
 }
 

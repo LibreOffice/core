@@ -505,7 +505,7 @@ void ImpEditEngine::FormatDoc()
         tools::Long nDiff = nNewHeight - nCurTextHeight;
         if ( nDiff )
         {
-            aInvalidRect.Union(tools::Rectangle::Justify(
+            aInvalidRect.Union(tools::Rectangle::Normalize(
                 { 0, nNewHeight }, { getWidthDirectionAware(aPaperSize), nCurTextHeight }));
             aStatus.GetStatusWord() |= !IsEffectivelyVertical() ? EditStatusFlags::TextHeightChanged : EditStatusFlags::TEXTWIDTHCHANGED;
         }
@@ -3260,7 +3260,7 @@ Point ImpEditEngine::MoveToNextLine(
     adjustXDirectionAware(aOtherCorner, getWidthDirectionAware(aPaperSize));
     adjustYDirectionAware(aOtherCorner, nCurTextHeight);
     tools::Long nNeeded
-        = getYOverflowDirectionAware(rMovePos, tools::Rectangle::Justify(aOrigin, aOtherCorner));
+        = getYOverflowDirectionAware(rMovePos, tools::Rectangle::Normalize(aOrigin, aOtherCorner));
     if (pnHeightNeededToNotWrap)
         *pnHeightNeededToNotWrap = nNeeded;
     if (nNeeded && rColumn < mnColumns)
@@ -4190,7 +4190,7 @@ EditSelection ImpEditEngine::MoveParagraphs( Range aOldPositions, sal_Int32 nNew
     DBG_ASSERT( GetParaPortions().Count() != 0, "No paragraphs found: MoveParagraphs" );
     if ( GetParaPortions().Count() == 0 )
         return EditSelection();
-    aOldPositions.Justify();
+    aOldPositions.Normalize();
 
     EditSelection aSel( ImpMoveParagraphs( aOldPositions, nNewPos ) );
 

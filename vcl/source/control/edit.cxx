@@ -543,14 +543,14 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangl
         vcl::Region aHighlightClipRegion;
         vcl::Region aNormalClipRegion;
         Selection aTmpSel(maSelection);
-        aTmpSel.Justify();
+        aTmpSel.Normalize();
         // selection is highlighted
         for(sal_Int32 i = 0; i < nLen; ++i)
         {
             tools::Rectangle aRect(aPos, Size(10, nTH));
             aRect.SetLeft( pDX[2 * i] + mnXOffset + ImplGetExtraXOffset() );
             aRect.SetRight( pDX[2 * i + 1] + mnXOffset + ImplGetExtraXOffset() );
-            aRect.Justify();
+            aRect.Normalize();
             bool bHighlight = false;
             if (i >= aTmpSel.Min() && i < aTmpSel.Max())
                 bHighlight = true;
@@ -628,7 +628,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangl
                         tools::Rectangle aRect( aPos, Size( 10, nTH ) );
                         aRect.SetLeft( pDX[2 * (nIndex + mpIMEInfos->nPos)] + mnXOffset + ImplGetExtraXOffset() );
                         aRect.SetRight( pDX[2 * (nIndex + mpIMEInfos->nPos) + 1] + mnXOffset + ImplGetExtraXOffset() );
-                        aRect.Justify();
+                        aRect.Normalize();
                         aClip.Union(aRect);
                         nIndex++;
                     }
@@ -685,7 +685,7 @@ void Edit::ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uI
     ImplClearLayoutData();
 
     Selection aSelection( rSelection );
-    aSelection.Justify();
+    aSelection.Normalize();
 
     if ( !aSelection.Len() )
     {
@@ -789,7 +789,7 @@ bool Edit::ImplTruncateToMaxLen( OUString& rStr, sal_Int32 nSelectionLen ) const
 void Edit::ImplInsertText( const OUString& rStr, const Selection* pNewSel, bool bIsUserInput )
 {
     Selection aSelection( maSelection );
-    aSelection.Justify();
+    aSelection.Normalize();
 
     OUString aNewText( ImplGetValidString( rStr ) );
 
@@ -1306,7 +1306,7 @@ void Edit::ImplPaste( uno::Reference< datatransfer::clipboard::XClipboard > cons
         aData >>= aText;
 
         Selection aSelection(maSelection);
-        aSelection.Justify();
+        aSelection.Normalize();
         if (ImplTruncateToMaxLen(aText, aSelection.Len()))
             ShowTruncationWarning(GetFrameWeld());
 
@@ -1327,7 +1327,7 @@ void Edit::MouseButtonDown( const MouseEvent& rMEvt )
 
     sal_Int32 nCharPos = ImplGetCharPos( rMEvt.GetPosPixel() );
     Selection aSelection( maSelection );
-    aSelection.Justify();
+    aSelection.Normalize();
 
     if ( rMEvt.GetClicks() < 4 )
     {
@@ -2501,7 +2501,7 @@ OUString Edit::GetSelected() const
     else
     {
         Selection aSelection( maSelection );
-        aSelection.Justify();
+        aSelection.Normalize();
         return OUString( maText.getStr() + aSelection.Min(), aSelection.Len() );
     }
 }
@@ -2731,7 +2731,7 @@ void Edit::dragGestureRecognized( const css::datatransfer::dnd::DragGestureEvent
         return;
 
     Selection aSel( maSelection );
-    aSel.Justify();
+    aSel.Normalize();
 
     // only if mouse in the selection...
     Point aMousePos( rDGE.DragOriginX, rDGE.DragOriginY );
@@ -2793,7 +2793,7 @@ void Edit::drop( const css::datatransfer::dnd::DropTargetDropEvent& rDTDE )
         ImplHideDDCursor();
 
         Selection aSel( maSelection );
-        aSel.Justify();
+        aSel.Normalize();
 
         if ( aSel.Len() && !mpDDInfo->bStarterOfDD )
             ImplDelete( aSel, EDIT_DEL_RIGHT, EDIT_DELMODE_SIMPLE );
@@ -2871,7 +2871,7 @@ void Edit::dragOver( const css::datatransfer::dnd::DropTargetDragEvent& rDTDE )
     */
 
     Selection aSel( maSelection );
-    aSel.Justify();
+    aSel.Normalize();
 
     // Don't accept drop in selection or read-only field...
     if ( IsReadOnly() || aSel.Contains( mpDDInfo->nDropPos ) || ! mpDDInfo->bIsStringSupported )

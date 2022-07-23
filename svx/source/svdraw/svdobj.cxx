@@ -1319,7 +1319,7 @@ tools::Rectangle SdrObject::ImpDragCalcRect(const SdrDragStat& rDrag) const
             }
         }
     }
-    aTmpRect.Justify();
+    aTmpRect.Normalize();
     return aTmpRect;
 }
 
@@ -1380,7 +1380,7 @@ bool SdrObject::BegCreate(SdrDragStat& rStat)
 {
     rStat.SetOrtho4Possible();
     tools::Rectangle aRect1(rStat.GetStart(), rStat.GetNow());
-    aRect1.Justify();
+    aRect1.Normalize();
     rStat.SetActionRect(aRect1);
     setOutRectangle(aRect1);
     return true;
@@ -1391,7 +1391,7 @@ bool SdrObject::MovCreate(SdrDragStat& rStat)
     tools::Rectangle aRectangle;
     rStat.TakeCreateRect(aRectangle);
     rStat.SetActionRect(aRectangle);
-    aRectangle.Justify();
+    aRectangle.Normalize();
     setOutRectangle(aRectangle);
     return true;
 }
@@ -1400,7 +1400,7 @@ bool SdrObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     tools::Rectangle aRectangle;
     rStat.TakeCreateRect(aRectangle);
-    aRectangle.Justify();
+    aRectangle.Normalize();
     setOutRectangle(aRectangle);
 
     return (eCmd==SdrCreateCmd::ForceEnd || rStat.GetPointCount()>=2);
@@ -1419,7 +1419,7 @@ basegfx::B2DPolyPolygon SdrObject::TakeCreatePoly(const SdrDragStat& rDrag) cons
 {
     tools::Rectangle aRect1;
     rDrag.TakeCreateRect(aRect1);
-    aRect1.Justify();
+    aRect1.Normalize();
 
     basegfx::B2DPolyPolygon aRetval;
     aRetval.append(basegfx::utils::createPolygonFromRect(vcl::unotools::b2DRectangleFromRectangle(aRect1)));
@@ -1496,7 +1496,7 @@ tools::Rectangle lclRotateRectangle(tools::Rectangle const& rRectangle, Point co
         aRectangle.SetBottom(-R.Left() );
     }
     aRectangle.Move(rRef.X(),rRef.Y());
-    aRectangle.Justify(); // just in case
+    aRectangle.Normalize(); // just in case
     return aRectangle;
 }
 
@@ -1525,7 +1525,7 @@ tools::Rectangle lclMirrorRectangle(tools::Rectangle const& rRectangle, Point co
         aRectangle.SetBottom(-R.Left() );
     }
     aRectangle.Move(rRef1.X(),rRef1.Y());
-    aRectangle.Justify(); // just in case
+    aRectangle.Normalize(); // just in case
     return aRectangle;
 }
 

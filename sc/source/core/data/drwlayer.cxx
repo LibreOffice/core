@@ -733,7 +733,7 @@ void lcl_SetLogicRectFromAnchor(SdrObject* pObj, const ScDrawObjData& rAnchor, c
 
     // Set this as new, full sized logical rectangle
     tools::Rectangle aNewRectangle(aStartPoint, aEndPoint);
-    aNewRectangle.Justify();
+    aNewRectangle.Normalize();
     if (!lcl_AreRectanglesApproxEqual(pObj->GetLogicRect(), aNewRectangle))
         pObj->NbcSetLogicRect(lcl_makeSafeRectangle(aNewRectangle));
 

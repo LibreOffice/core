@@ -178,7 +178,7 @@ void ScPrintAreasDlg::SetReference( const ScRange& rRef, ScDocument& /* rDoc */ 
         aStr = rRef.Format(*pDoc, ScRefFlags::RANGE_ABS, eConv);
         OUString aVal = m_xEdPrintArea->GetText();
         Selection aSel = m_xEdPrintArea->GetSelection();
-        aSel.Justify();
+        aSel.Normalize();
         aVal = aVal.replaceAt( aSel.Min(), aSel.Len(), aStr );
         Selection aNewSel( aSel.Min(), aSel.Min()+aStr.getLength() );
         m_xEdPrintArea->SetRefString( aVal );

@@ -2213,7 +2213,7 @@ namespace emfio
         if (nLeft > nRight || nTop > nBottom)
         {
             SAL_WARN("emfio", "broken rectangle");
-            return tools::Rectangle::Justify(Point(nLeft, nTop), Point(nRight, nBottom));
+            return tools::Rectangle::Normalize(Point(nLeft, nTop), Point(nRight, nBottom));
         }
 
         return tools::Rectangle(nLeft, nTop, nRight, nBottom);
