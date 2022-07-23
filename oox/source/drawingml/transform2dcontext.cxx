@@ -20,10 +20,14 @@
 #include <cmath>
 
 #include <drawingml/transform2dcontext.hxx>
-#include <oox/helper/attributelist.hxx>
-#include <oox/drawingml/shape.hxx>
+
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/numeric/ftools.hxx>
+#include <basegfx/point/b2dpoint.hxx>
 #include <drawingml/customshapeproperties.hxx>
 #include <drawingml/textbody.hxx>
+#include <oox/drawingml/shape.hxx>
+#include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
 
 #include <com/sun/star/awt/Rectangle.hpp>
@@ -190,7 +194,7 @@ bool ConstructPresetTextRectangle(Shape& rShape, awt::Rectangle& rRect)
                 return false;
             double fMaxAdj = 50000.0 * nWidth / std::min(nWidth, nHeight);
             fAdj = std::clamp<double>(fAdj, 0, fMaxAdj);
-            double fFactor = fAdj/fMaxAdj/6.0 + 1.0/12.0;
+            double fFactor = fAdj / fMaxAdj / 6.0 + 1.0 / 12.0;
             sal_Int32 nTextLeft = nWidth * fFactor;
             sal_Int32 nTextTop = nHeight * fFactor;
             rRect.X = rShape.getPosition().X + nTextLeft;
@@ -215,15 +219,51 @@ bool ConstructPresetTextRectangle(Shape& rShape, awt::Rectangle& rRect)
             rRect.Height = nHeight;
             return true;
         }
+        case XML_rightArrow:
+        {
+            // The identifiers here reflect the guides name value in presetShapeDefinitions.xml
+            sal_Int32 nWidth = rShape.getSize().Width;
+            sal_Int32 nHeight = rShape.getSize().Height;
+            if (nWidth == 0 || nHeight == 0)
+                return false;
+            double a1(50000.0);
+            double a2(50000.0);
+            auto aAdjGdList = rShape.getCustomShapeProperties()->getAdjustmentGuideList();
+            if (aAdjGdList.size() == 2)
+            {
+                a1 = aAdjGdList[0].maFormula.toDouble();
+                a2 = aAdjGdList[1].maFormula.toDouble();
+                a1 = std::clamp<double>(a1, 0, 100000);
+            }
+            double maxAdj2 = 100000.0 * nWidth / std::min(nWidth, nHeight);
+            a2 = std::clamp<double>(a2, 0, maxAdj2);
+            double dx1 = std::min(nWidth, nHeight) * a2 / 100000.0;
+            double x1 = nWidth - dx1;
+            double dy1 = nHeight * a1 / 200000.0;
+            double y1 = nHeight / 2.0 - dy1; // top
+            double y2 = nHeight / 2.0 + dy1; // bottom
+            double dx2 = y1 * dx1 / (nHeight / 2.0);
+            double x2 = x1 + dx2; // right
+            rRect.X = rShape.getPosition().X; // left = 0
+            rRect.Y = rShape.getPosition().Y + y1;
+            rRect.Width = x2;
+            rRect.Height = y2 - y1;
+            return true;
+        }
         default:
             return false;
     }
 }
+
+basegfx::B2DPoint getCenter(const awt::Rectangle& rRect)
+{
+    return basegfx::B2DPoint(rRect.X + rRect.Width / 2.0, rRect.Y + rRect.Height / 2.0);
 }
+} // end namespace
 
 ContextHandlerRef Transform2DContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    if( mbtxXfrm )
+    if (mbtxXfrm)
     {
         // The child elements <a:off> and <a:ext> of a <dsp:txXfrm> element describe the position and
         // size of the text area rectangle. We cannot change the text area rectangle directly, because
@@ -232,7 +272,7 @@ ContextHandlerRef Transform2DContext::onCreateContext( sal_Int32 aElementToken, 
         // and used in TextBodyProperties::pushTextDistances().
         awt::Rectangle aPresetTextRectangle;
         if (!ConstructPresetTextRectangle(mrShape, aPresetTextRectangle))
-            return nullptr; // faulty shape or corrections from txXfrm not needed.
+            return nullptr; // faulty shape or text area calculation not implemented
 
         switch (aElementToken)
         {
@@ -254,26 +294,40 @@ ContextHandlerRef Transform2DContext::onCreateContext( sal_Int32 aElementToken, 
                 awt::Rectangle aUnrotatedTxXfrm = aPresetTextRectangle; // dummy initialize
                 const OUString sCXValue = rAttribs.getStringDefaulted(XML_cx);
                 const OUString sCYValue = rAttribs.getStringDefaulted(XML_cy);
-                if (!sCXValue.isEmpty() && !sCYValue.isEmpty() && mno_txXfrmOffX.has_value()
-                    && mno_txXfrmOffY.has_value())
-                {
-                    sal_Int32 ntxXfrmWidth = sCXValue.toInt32();
-                    sal_Int32 ntxXfrmHeight = sCYValue.toInt32();
-                    aUnrotatedTxXfrm.X = mno_txXfrmOffX.value();
-                    aUnrotatedTxXfrm.Y = mno_txXfrmOffY.value();
-                    aUnrotatedTxXfrm.Width = ntxXfrmWidth;
-                    aUnrotatedTxXfrm.Height = ntxXfrmHeight;
-                }
-                else if (mno_txXfrmOffX.has_value() && mno_txXfrmOffY.has_value()) // can it happen?
-                {
-                    aUnrotatedTxXfrm.X = mno_txXfrmOffX.value();
-                    aUnrotatedTxXfrm.Y = mno_txXfrmOffY.value();
-                }
-                else if (!sCXValue.isEmpty() && !sCYValue.isEmpty()) // can it happen?
+                if (!sCXValue.isEmpty() && !sCYValue.isEmpty())
                 {
                     aUnrotatedTxXfrm.Width = sCXValue.toInt32();
                     aUnrotatedTxXfrm.Height = sCYValue.toInt32();
                 }
+                if (mno_txXfrmOffX.has_value() && mno_txXfrmOffY.has_value())
+                {
+                    aUnrotatedTxXfrm.X = mno_txXfrmOffX.value();
+                    aUnrotatedTxXfrm.Y = mno_txXfrmOffY.value();
+                }
+
+                // Has the txXfrm an own rotation beyond compensation of the shape rotation?
+                // Happens e.g. in diagram type 'Detailed Process'.
+                sal_Int32 nAngleDiff
+                    = (mrShape.getRotation() + mno_txXfrmRot.value_or(0)) % 21600000;
+                if (nAngleDiff != 0)
+                {
+                    // Rectangle aUnrotatedTxXfrm rotates around its center not around text area
+                    // center from preset. We shift aUnrotatedTxXfrm so that it is at the original
+                    // position after rotation of text area rectangle from preset.
+                    basegfx::B2DPoint aXfrmCenter(getCenter(aUnrotatedTxXfrm));
+                    basegfx::B2DPoint aPresetCenter(getCenter(aPresetTextRectangle));
+
+                    if (!aXfrmCenter.equal(aPresetCenter))
+                    {
+                        double fAngleRad = basegfx::deg2rad(nAngleDiff / 60000.0);
+                        basegfx::B2DHomMatrix aRotMatrix(
+                            basegfx::utils::createRotateAroundPoint(aPresetCenter, -fAngleRad));
+                        basegfx::B2DPoint aNewCenter(aRotMatrix * aXfrmCenter);
+                        aUnrotatedTxXfrm.X += aNewCenter.getX() - aXfrmCenter.getX();
+                        aUnrotatedTxXfrm.Y += aNewCenter.getY() - aXfrmCenter.getY();
+                    }
+                }
+
                 // Calculate indent offsets
                 sal_Int32 nOffsetLeft = aUnrotatedTxXfrm.X - aPresetTextRectangle.X;
                 sal_Int32 nOffsetTop = aUnrotatedTxXfrm.Y - aPresetTextRectangle.Y;
