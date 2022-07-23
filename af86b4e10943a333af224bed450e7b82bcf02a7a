@@ -122,6 +122,24 @@
       "parentUuid": "3bd70725_a9c26833",
       "revId": "af86b4e10943a333af224bed450e7b82bcf02a7a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6da6464_4ff492a9",
+        "filename": "sc/source/ui/view/tabview5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-07-23T20:29:25Z",
+      "side": 1,
+      "message": "I said it is correct, because it the same function that is used in the ScDocFunc::RenameTable() which is used to rename a sheet.",
+      "parentUuid": "2c3b263e_fee31ba9",
+      "revId": "af86b4e10943a333af224bed450e7b82bcf02a7a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
