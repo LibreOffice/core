@@ -27,7 +27,7 @@ class SvStream;
 
 class SVL_DLLPUBLIC SfxRectangleItem final : public SfxPoolItem
 {
-    tools::Rectangle                aVal;
+    tools::Rectangle                maVal;
 
 public:
                              static SfxPoolItem* CreateDefault();
@@ -43,7 +43,7 @@ public:
     virtual bool             operator==( const SfxPoolItem& ) const override;
     virtual SfxRectangleItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
-    const tools::Rectangle&         GetValue() const { return aVal; }
+    const tools::Rectangle&         GetValue() const { return maVal; }
     virtual bool             QueryValue( css::uno::Any& rVal,
                                           sal_uInt8 nMemberId = 0 ) const override;
     virtual bool             PutValue( const css::uno::Any& rVal,
