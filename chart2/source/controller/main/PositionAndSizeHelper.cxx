@@ -46,7 +46,7 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
     tools::Rectangle aPageRect( Point(rPageRectangle.X,rPageRectangle.Y), Size(rPageRectangle.Width,rPageRectangle.Height) );
 
     // every following branch divides by width and height
-    if (aPageRect.getOpenWidth() == 0 || aPageRect.getOpenHeight() == 0)
+    if (aPageRect.GetWidth() == 0 || aPageRect.GetHeight() == 0)
         return false;
 
     if( eObjectType==OBJECTTYPE_TITLE )
