@@ -121,7 +121,7 @@ ImplPolygon::ImplPolygon( const tools::Rectangle& rRect, sal_uInt32 nHorzRound, 
     if ( !rRect.IsEmpty() )
     {
         tools::Rectangle aRect( rRect );
-        aRect.Justify();            // SJ: i9140
+        aRect.Normalize();            // SJ: i9140
 
         nHorzRound = std::min( nHorzRound, static_cast<sal_uInt32>(std::abs( aRect.GetWidth() >> 1 )) );
         nVertRound = std::min( nVertRound, static_cast<sal_uInt32>(std::abs( aRect.GetHeight() >> 1 )) );
@@ -1443,9 +1443,9 @@ void Polygon::Clip( const tools::Rectangle& rRect )
     // Use PolyPolygon::Clip().
     assert( !HasFlags());
 
-    // #105251# Justify rect before edge filtering
+    // #105251# Normalize rect before edge filtering
     tools::Rectangle               aJustifiedRect( rRect );
-    aJustifiedRect.Justify();
+    aJustifiedRect.Normalize();
 
     sal_uInt16              nSourceSize = mpImplPolygon->mnPoints;
     ImplPolygonPointFilter  aPolygon( nSourceSize );

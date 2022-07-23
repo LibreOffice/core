@@ -411,7 +411,7 @@ void BrowseBox::ExpandRowSelection( const BrowserMouseEvent& rEvt )
     if ( bMultiSelection )
     {
         Range aJustifiedRange( aSelRange );
-        aJustifiedRange.Justify();
+        aJustifiedRange.Normalize();
 
         bool bSelectThis = ( bSelect != aJustifiedRange.Contains( rEvt.GetRow() ) );
 

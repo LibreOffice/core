@@ -46,7 +46,7 @@ void OutputDevice::DrawWallpaper( const tools::Rectangle& rRect,
     if ( rWallpaper.GetStyle() != WallpaperStyle::NONE )
     {
         tools::Rectangle aRect = LogicToPixel( rRect );
-        aRect.Justify();
+        aRect.Normalize();
 
         if ( !aRect.IsEmpty() )
         {
@@ -317,7 +317,7 @@ void OutputDevice::DrawBitmapWallpaper( tools::Long nX, tools::Long nY,
             const tools::Rectangle aColRect( Point( nX, nY ), Size( nWidth, nHeight ) );
 
             tools::Rectangle aWorkRect( 0, 0, aOutRect.Right(), aPos.Y() - 1 );
-            aWorkRect.Justify();
+            aWorkRect.Normalize();
             aWorkRect.Intersection( aColRect );
             if( !aWorkRect.IsEmpty() )
             {
@@ -327,7 +327,7 @@ void OutputDevice::DrawBitmapWallpaper( tools::Long nX, tools::Long nY,
             }
 
             aWorkRect = tools::Rectangle( 0, aPos.Y(), aPos.X() - 1, aPos.Y() + aBmpSize.Height() - 1 );
-            aWorkRect.Justify();
+            aWorkRect.Normalize();
             aWorkRect.Intersection( aColRect );
             if( !aWorkRect.IsEmpty() )
             {
@@ -338,7 +338,7 @@ void OutputDevice::DrawBitmapWallpaper( tools::Long nX, tools::Long nY,
 
             aWorkRect = tools::Rectangle( aPos.X() + aBmpSize.Width(), aPos.Y(),
                                    aOutRect.Right(), aPos.Y() + aBmpSize.Height() - 1 );
-            aWorkRect.Justify();
+            aWorkRect.Normalize();
             aWorkRect.Intersection( aColRect );
             if( !aWorkRect.IsEmpty() )
             {
@@ -349,7 +349,7 @@ void OutputDevice::DrawBitmapWallpaper( tools::Long nX, tools::Long nY,
 
             aWorkRect = tools::Rectangle( 0, aPos.Y() + aBmpSize.Height(),
                                    aOutRect.Right(), aOutRect.Bottom() );
-            aWorkRect.Justify();
+            aWorkRect.Normalize();
             aWorkRect.Intersection( aColRect );
             if( !aWorkRect.IsEmpty() )
             {

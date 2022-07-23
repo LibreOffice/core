@@ -271,7 +271,7 @@ namespace emfio
         if (aTL.X() > aBR.X() || aTL.Y() > aBR.Y())
         {
             SAL_WARN("emfio", "broken rectangle");
-            return tools::Rectangle::Justify(aTL, aBR);
+            return tools::Rectangle::Normalize(aTL, aBR);
         }
         return tools::Rectangle( aTL, aBR );
     }
@@ -427,7 +427,7 @@ namespace emfio
                 Point aEnd( ReadYX() );
                 Point aStart( ReadYX() );
                 tools::Rectangle aRect( ReadRectangle() );
-                aRect.Justify();
+                aRect.Normalize();
                 DrawArc( aRect, aStart, aEnd );
             }
             break;
@@ -437,7 +437,7 @@ namespace emfio
                 Point     aEnd( ReadYX() );
                 Point     aStart( ReadYX() );
                 tools::Rectangle aRect( ReadRectangle() );
-                aRect.Justify();
+                aRect.Normalize();
 
                 // #i73608# OutputDevice deviates from WMF
                 // semantics. start==end means full ellipse here.
@@ -453,7 +453,7 @@ namespace emfio
                 Point aEnd( ReadYX() );
                 Point aStart( ReadYX() );
                 tools::Rectangle aRect( ReadRectangle() );
-                aRect.Justify();
+                aRect.Normalize();
                 DrawChord( aRect, aStart, aEnd );
             }
             break;

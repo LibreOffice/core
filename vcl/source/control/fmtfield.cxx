@@ -317,7 +317,7 @@ void Formatter::SetTextFormatted(const OUString& rStr)
     // calculate the new selection
     Selection aSel(GetEntrySelection());
     Selection aNewSel(aSel);
-    aNewSel.Justify();
+    aNewSel.Normalize();
     sal_Int32 nNewLen = sFormatted.getLength();
     sal_Int32 nCurrentLen = GetEntryText().getLength();
     if ((nNewLen > nCurrentLen) && (aNewSel.Max() == nCurrentLen))
@@ -416,7 +416,7 @@ void Formatter::ImplSetTextImpl(const OUString& rNew, Selection const * pNewSel)
     else
     {
         Selection aSel(GetEntrySelection());
-        aSel.Justify();
+        aSel.Normalize();
 
         sal_Int32 nNewLen = rNew.getLength();
         sal_Int32 nCurrentLen = GetEntryText().getLength();

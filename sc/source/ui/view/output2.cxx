@@ -1390,8 +1390,8 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, tools::Long nPosX, too
 
     //  justify both rectangles for alignment calculation, use with DrawText etc.
 
-    rParam.maAlignRect.Justify();
-    rParam.maClipRect.Justify();
+    rParam.maAlignRect.Normalize();
+    rParam.maClipRect.Normalize();
 }
 
 namespace {

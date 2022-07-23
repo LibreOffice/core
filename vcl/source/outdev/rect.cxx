@@ -63,7 +63,7 @@ void OutputDevice::DrawRect( const tools::Rectangle& rRect )
     if ( aRect.IsEmpty() )
         return;
 
-    aRect.Justify();
+    aRect.Normalize();
 
     if ( !mpGraphics && !AcquireGraphics() )
         return;
@@ -156,7 +156,7 @@ void OutputDevice::Invert( const tools::Rectangle& rRect, InvertFlags nFlags )
 
     if ( aRect.IsEmpty() )
         return;
-    aRect.Justify();
+    aRect.Normalize();
 
     // we need a graphics
     if ( !mpGraphics && !AcquireGraphics() )

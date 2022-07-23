@@ -59,7 +59,7 @@ bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
             if( mbInitClipRegion )
                 InitClipRegion();
 
-            aRect.Justify();
+            aRect.Normalize();
             bDrawn = mpGraphics->DrawEPS( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(),
                          const_cast<sal_uInt8*>(rGfxLink.GetData()), rGfxLink.GetDataSize(), *this );
         }

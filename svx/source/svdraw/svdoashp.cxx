@@ -1923,7 +1923,7 @@ void SdrObjCustomShape::DragResizeCustomShape( const tools::Rectangle& rNewRect 
     bool    bOldMirroredY( IsMirroredY() );
 
     tools::Rectangle aNewRect( rNewRect );
-    aNewRect.Justify();
+    aNewRect.Normalize();
 
     std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles() );
 

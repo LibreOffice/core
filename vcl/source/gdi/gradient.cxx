@@ -303,7 +303,7 @@ const sal_uInt32 GRADIENT_DEFAULT_STEPCOUNT = 0;
 void Gradient::AddGradientActions(tools::Rectangle const& rRect, GDIMetaFile& rMetaFile)
 {
     tools::Rectangle aRect(rRect);
-    aRect.Justify();
+    aRect.Normalize();
 
     // do nothing if the rectangle is empty
     if (aRect.IsEmpty())

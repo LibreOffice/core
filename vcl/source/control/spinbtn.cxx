@@ -349,7 +349,7 @@ void SpinButton::SetRange( const Range& rRange )
 {
     // adjust rage
     Range aRange = rRange;
-    aRange.Justify();
+    aRange.Normalize();
     tools::Long nNewMinRange = aRange.Min();
     tools::Long nNewMaxRange = aRange.Max();
 

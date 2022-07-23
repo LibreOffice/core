@@ -708,7 +708,7 @@ void EditView::MoveParagraphs( tools::Long nDiff )
 {
     ESelection aSel = GetSelection();
     Range aRange( aSel.nStartPara, aSel.nEndPara );
-    aRange.Justify();
+    aRange.Normalize();
     tools::Long nDest = ( nDiff > 0  ? aRange.Max() : aRange.Min() ) + nDiff;
     if ( nDiff > 0 )
         nDest++;

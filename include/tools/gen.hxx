@@ -361,7 +361,7 @@ public:
 
     bool            Contains( tools::Long nIs ) const;
 
-    void            Justify();
+    void            Normalize();
 
     Pair const &    toPair() const { return *this; }
     Pair &          toPair() { return *this; }
@@ -374,7 +374,7 @@ inline bool Range::Contains( tools::Long nIs ) const
     return ((nA <= nIs) && (nIs <= nB ));
 }
 
-inline void Range::Justify()
+inline void Range::Normalize()
 {
     if ( nA > nB )
     {
@@ -422,7 +422,7 @@ public:
 
     bool            Contains( tools::Long nIs ) const;
 
-    void            Justify();
+    void            Normalize();
 
     bool            operator !() const { return !Len(); }
 
@@ -441,7 +441,7 @@ inline bool Selection::Contains( tools::Long nIs ) const
     return ((nA <= nIs) && (nIs < nB ));
 }
 
-inline void Selection::Justify()
+inline void Selection::Normalize()
 {
     if ( nA > nB )
     {
@@ -502,7 +502,7 @@ public:
     /// Constructs a closed interval rectangle
     constexpr Rectangle( const Point& rLT, const Size& rSize );
 
-    constexpr inline static Rectangle Justify(const Point& rLT, const Point& rRB);
+    constexpr inline static Rectangle Normalize(const Point& rLT, const Point& rRB);
 
     constexpr tools::Long Left() const { return nLeft; }
     constexpr tools::Long Right() const { return IsWidthEmpty() ? nLeft : nRight; }
@@ -553,7 +553,7 @@ public:
     inline tools::Rectangle    GetUnion( const tools::Rectangle& rRect ) const;
     inline tools::Rectangle    GetIntersection( const tools::Rectangle& rRect ) const;
 
-    void                Justify();
+    void                Normalize();
 
     bool                Contains( const Point& rPOINT ) const;
     bool                Contains( const tools::Rectangle& rRect ) const;
@@ -635,7 +635,7 @@ constexpr inline tools::Rectangle::Rectangle( const Point& rLT, const Size& rSiz
     , nBottom(rSize.Height() ? nTop + (rSize.Height() + (rSize.Height() > 0 ? -1 : 1)) : RECT_EMPTY)
 {}
 
-constexpr inline tools::Rectangle tools::Rectangle::Justify(const Point& rLT, const Point& rRB)
+constexpr inline tools::Rectangle tools::Rectangle::Normalize(const Point& rLT, const Point& rRB)
 {
     const std::pair<tools::Long, tools::Long> aLeftRight = std::minmax(rLT.X(), rRB.X());
     const std::pair<tools::Long, tools::Long> aTopBottom = std::minmax(rLT.Y(), rRB.Y());

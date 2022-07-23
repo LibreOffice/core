@@ -166,7 +166,7 @@ void Window::InvertTracking( const tools::Rectangle& rRect, ShowTrackFlags nFlag
 
     if ( aRect.IsEmpty() )
         return;
-    aRect.Justify();
+    aRect.Normalize();
 
     SalGraphics* pGraphics;
 

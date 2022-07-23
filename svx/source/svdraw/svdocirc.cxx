@@ -631,7 +631,7 @@ OUString SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 void ImpCircUser::SetCreateParams(SdrDragStat const & rStat)
 {
     rStat.TakeCreateRect(aR);
-    aR.Justify();
+    aR.Normalize();
     aCenter=aR.Center();
     nWdt=aR.Right()-aR.Left();
     nHgt=aR.Bottom()-aR.Top();
@@ -694,7 +694,7 @@ bool SdrCircObj::BegCreate(SdrDragStat& rStat)
 {
     rStat.SetOrtho4Possible();
     tools::Rectangle aRect1(rStat.GetStart(), rStat.GetNow());
-    aRect1.Justify();
+    aRect1.Normalize();
     rStat.SetActionRect(aRect1);
     maRect = aRect1;
     ImpSetCreateParams(rStat);

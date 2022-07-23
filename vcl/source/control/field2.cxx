@@ -555,7 +555,7 @@ static bool ImplPatternProcessKeyInput( IEditImplementation& rEdit, const KeyEve
             // Use the start of selection as minimum; even a small position is allowed in case that
             // all was selected by the focus
             Selection aSel( aOldSel );
-            aSel.Justify();
+            aSel.Normalize();
             nCursorPos = aSel.Min();
             aSel.Max() = ImplPatternRightPos( rEdit.GetText(), rEditMask, nFormatFlags, bSameMask, nCursorPos );
             if ( bShift )
@@ -592,7 +592,7 @@ static bool ImplPatternProcessKeyInput( IEditImplementation& rEdit, const KeyEve
             // Use the start of selection as minimum; even a small position is allowed in case that
             // all was selected by the focus
             Selection aSel( aOldSel );
-            aSel.Justify();
+            aSel.Normalize();
             nCursorPos = static_cast<sal_Int32>(aSel.Min());
             ImplPatternMaxPos( rEdit.GetText(), rEditMask, nFormatFlags, bSameMask, nCursorPos, nNewPos );
             aSel.Max() = nNewPos;
@@ -609,7 +609,7 @@ static bool ImplPatternProcessKeyInput( IEditImplementation& rEdit, const KeyEve
             OUStringBuffer    aStr( aOldStr );
             Selection   aSel = aOldSel;
 
-            aSel.Justify();
+            aSel.Normalize();
             nNewPos = static_cast<sal_Int32>(aSel.Min());
 
              // if selection then delete it
@@ -678,7 +678,7 @@ static bool ImplPatternProcessKeyInput( IEditImplementation& rEdit, const KeyEve
         return false;
 
     Selection aSel = aOldSel;
-    aSel.Justify();
+    aSel.Normalize();
     nNewPos = aSel.Min();
 
     if ( nNewPos < rEditMask.getLength() )
@@ -1656,7 +1656,7 @@ void DateField::ImplDateSpinArea( bool bUp )
 
     Date aDate( GetDate() );
     Selection aSelection = GetField()->GetSelection();
-    aSelection.Justify();
+    aSelection.Normalize();
     OUString aText( GetText() );
     if ( static_cast<sal_Int32>(aSelection.Len()) == aText.getLength() )
         ImplDateIncrementDay( aDate, bUp );
@@ -1878,7 +1878,7 @@ void DateFormatter::ImplNewFieldValue( const Date& rDate )
         return;
 
     Selection aSelection = GetField()->GetSelection();
-    aSelection.Justify();
+    aSelection.Normalize();
     OUString aText = GetField()->GetText();
 
     // If selected until the end then keep it that way
@@ -2742,7 +2742,7 @@ void TimeFormatter::ImplNewFieldValue( const tools::Time& rTime )
         return;
 
     Selection aSelection = GetField()->GetSelection();
-    aSelection.Justify();
+    aSelection.Normalize();
     OUString aText = GetField()->GetText();
 
     // If selected until the end then keep it that way

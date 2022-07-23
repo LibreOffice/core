@@ -1685,7 +1685,7 @@ void SdrPathObj::ImpForceLineAngle()
     maGeo.RecalcTan();
 
     // for SdrTextObj, keep aRect up to date
-    maRect = tools::Rectangle::Justify(aPoint0, aPoint1);
+    maRect = tools::Rectangle::Normalize(aPoint0, aPoint1);
 }
 
 void SdrPathObj::ImpForceKind()

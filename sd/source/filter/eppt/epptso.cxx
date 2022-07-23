@@ -2846,7 +2846,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             }
 
             aPropOpt.CreateShadowProperties( mXPropSet );
-            maRect.Justify();
+            maRect.Normalize();
             if ( mnAngle )
                 ImplFlipBoundingBox( aPropOpt );
             aPropOpt.CreateShapeProperties( mXShape );

@@ -203,7 +203,7 @@ Point SvResizeHelper::GetTrackPosPixel( const tools::Rectangle & rRect ) const
     // which handle has been touched
     Point aPos;
     tools::Rectangle aRect( rRect );
-    aRect.Justify();
+    aRect.Normalize();
     // only because of EMPTY_RECT
     Point aBR = aOuter.BottomRight();
     Point aTR = aOuter.TopRight();
@@ -402,7 +402,7 @@ bool SvResizeHelper::SelectRelease( vcl::Window * pWin, const Point & rPos,
     if( -1 != nGrab )
     {
         rOutPosSize = GetTrackRectPixel( rPos );
-        rOutPosSize.Justify();
+        rOutPosSize.Normalize();
         nGrab = -1;
         pWin->ReleaseMouse();
         pWin->HideTracking();

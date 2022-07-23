@@ -1551,7 +1551,7 @@ void X11SalFrame::SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth
 
     // relative positioning in X11SalFrame::SetPosSize
     tools::Rectangle aPosSize( Point( maGeometry.x(), maGeometry.y() ), Size( maGeometry.width(), maGeometry.height() ) );
-    aPosSize.Justify();
+    aPosSize.Normalize();
 
     if( ! ( nFlags & SAL_FRAME_POSSIZE_X ) )
     {

@@ -1123,7 +1123,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
                             tools::Rectangle aBackground(aStart, aEnd);
                             if (bLokRTL)
-                                aBackground.Justify();
+                                aBackground.Normalize();
 
                             // Need to draw the background in absolute coords.
                             Point aOrigin = aOriginalMode.GetOrigin();
@@ -1219,7 +1219,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         // set the correct mapmode
         tools::Rectangle aBackground(aStart, aEnd);
         if (bLokRTL)
-            aBackground.Justify();
+            aBackground.Normalize();
         tools::Rectangle aBGAbs(aBackground);
 
         if (bIsTiledRendering)

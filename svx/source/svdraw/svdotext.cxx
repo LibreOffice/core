@@ -421,7 +421,7 @@ SdrTextVertAdjust SdrTextObj::GetTextVerticalAdjust(const SfxItemSet& rSet) cons
 void SdrTextObj::ImpJustifyRect(tools::Rectangle& rRect)
 {
     if (!rRect.IsEmpty()) {
-        rRect.Justify();
+        rRect.Normalize();
         if (rRect.Left()==rRect.Right()) rRect.AdjustRight( 1 );
         if (rRect.Top()==rRect.Bottom()) rRect.AdjustBottom( 1 );
     }

@@ -4272,7 +4272,7 @@ tools::Rectangle XclImpChartDrawing::CalcAnchorRect( const XclObjAnchor& rAnchor
         static_cast< tools::Long >( static_cast< double >( bDffAnchor ? rAnchor.maFirst.mnRow : rAnchor.mnTY ) / EXC_CHART_TOTALUNITS * maChartRect.GetHeight() + 0.5 ),
         static_cast< tools::Long >( static_cast< double >( bDffAnchor ? rAnchor.maLast.mnCol  : rAnchor.mnRX ) / EXC_CHART_TOTALUNITS * maChartRect.GetWidth()  + 0.5 ),
         static_cast< tools::Long >( static_cast< double >( bDffAnchor ? rAnchor.maLast.mnRow  : rAnchor.mnBY ) / EXC_CHART_TOTALUNITS * maChartRect.GetHeight() + 0.5 ) );
-    aRect.Justify();
+    aRect.Normalize();
     // move shapes into chart area for sheet charts
     if( mbOwnTab )
         aRect.Move( maChartRect.Left(), maChartRect.Top() );

@@ -2133,7 +2133,7 @@ void ImpEditEngine::ImpRemoveChars( const EditPaM& rPaM, sal_Int32 nChars )
 
 EditSelection ImpEditEngine::ImpMoveParagraphs( Range aOldPositions, sal_Int32 nNewPos )
 {
-    aOldPositions.Justify();
+    aOldPositions.Normalize();
     bool bValidAction = ( static_cast<tools::Long>(nNewPos) < aOldPositions.Min() ) || ( static_cast<tools::Long>(nNewPos) > aOldPositions.Max() );
     OSL_ENSURE( bValidAction, "Move in itself?" );
     OSL_ENSURE( aOldPositions.Max() <= static_cast<tools::Long>(GetParaPortions().Count()), "totally over it: MoveParagraphs" );
@@ -3245,7 +3245,7 @@ void ImpEditEngine::IterateLineAreas(const IterateLinesAreasFunc& f, IterFlag eO
                     aInfo.nColumn = nColumn;
                     aInfo.pLine = &rLine;
                     aInfo.nLine = nLine;
-                    aInfo.aArea = tools::Rectangle::Justify(aLineStart, aOtherCorner);
+                    aInfo.aArea = tools::Rectangle::Normalize(aLineStart, aOtherCorner);
                     eResult = f(aInfo);
                     if (eResult == CallbackResult::Stop)
                         return;

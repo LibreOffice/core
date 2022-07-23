@@ -183,7 +183,7 @@ bool SdrTextObj::BegCreate(SdrDragStat& rStat)
 {
     rStat.SetOrtho4Possible();
     tools::Rectangle aRect1(rStat.GetStart(), rStat.GetNow());
-    aRect1.Justify();
+    aRect1.Normalize();
     rStat.SetActionRect(aRect1);
     maRect = aRect1;
     return true;
@@ -231,7 +231,7 @@ basegfx::B2DPolyPolygon SdrTextObj::TakeCreatePoly(const SdrDragStat& rDrag) con
 {
     tools::Rectangle aRect1;
     rDrag.TakeCreateRect(aRect1);
-    aRect1.Justify();
+    aRect1.Normalize();
 
     basegfx::B2DPolyPolygon aRetval;
     const basegfx::B2DRange aRange = vcl::unotools::b2DRectangleFromRectangle(aRect1);
