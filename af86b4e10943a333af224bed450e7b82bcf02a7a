@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "759a8ca0_354048f7",
+        "filename": "sc/source/ui/view/tabview5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-07-23T09:05:45Z",
+      "side": 1,
+      "message": "(Reviewing on the go, can\u0027t check the difference myself)\n\nHere GetSfxDocShell()-\u003eIsReadOnly is used; below you use GetDocument().IsDocEditable. Depending on implementation, these can be different. Any reason to not use the former?",
+      "revId": "af86b4e10943a333af224bed450e7b82bcf02a7a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
