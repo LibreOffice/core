@@ -495,6 +495,7 @@ public:
     std::unordered_map<SwTOXMark const*, OUString> m_TOXMarkBookmarksByTOXMark;
     ww8::Frames m_aFrames;             // The floating frames in this document
     const SwPageDesc *m_pCurrentPageDesc;
+    const SwPageDesc* m_pPreviousSectionPageDesc;
     bool m_bFirstTOCNodeWithSection;
     std::unique_ptr<WW8_WrPlcPn> m_pPapPlc;
     std::unique_ptr<WW8_WrPlcPn> m_pChpPlc;
