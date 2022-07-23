@@ -232,6 +232,7 @@ sal_Int32 PDFDocument::WriteAppearanceObject(tools::Rectangle& rSignatureRectang
             return -1;
         }
         rSignatureRectangle.setWidth(pWidth->GetValue());
+        rSignatureRectangle.Normalize();
         auto pHeight = dynamic_cast<PDFNumberElement*>(rMediaBoxElements[3]);
         if (!pHeight)
         {
@@ -239,6 +240,7 @@ sal_Int32 PDFDocument::WriteAppearanceObject(tools::Rectangle& rSignatureRectang
             return -1;
         }
         rSignatureRectangle.setHeight(pHeight->GetValue());
+        rSignatureRectangle.Normalize();
 
         if (PDFObjectElement* pContentStream = pPage->LookupObject("Contents"))
         {
@@ -273,9 +275,9 @@ sal_Int32 PDFDocument::WriteAppearanceObject(tools::Rectangle& rSignatureRectang
     }
 
     aEditBuffer.WriteCharPtr("/BBox[0 0 ");
-    aEditBuffer.WriteOString(OString::number(rSignatureRectangle.getOpenWidth()));
+    aEditBuffer.WriteOString(OString::number(std::max(0, rSignatureRectangle.GetWidth() - 1)));
     aEditBuffer.WriteCharPtr(" ");
-    aEditBuffer.WriteOString(OString::number(rSignatureRectangle.getOpenHeight()));
+    aEditBuffer.WriteOString(OString::number(std::max(0, rSignatureRectangle.GetHeight() - 1)));
     aEditBuffer.WriteCharPtr("]\n/Length ");
 
     // Add the object to the doc-level edit buffer and update the offset.
