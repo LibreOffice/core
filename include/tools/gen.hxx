@@ -566,6 +566,8 @@ public:
     constexpr bool IsWidthEmpty() const { return nRight == RECT_EMPTY; }
     constexpr bool IsHeightEmpty() const { return nBottom == RECT_EMPTY; }
 
+    void Normalize();
+
     inline bool         operator == ( const tools::Rectangle& rRect ) const;
     inline bool         operator != ( const tools::Rectangle& rRect ) const;
 

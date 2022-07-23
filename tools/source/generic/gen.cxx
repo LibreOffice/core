@@ -216,6 +216,74 @@ tools::Long tools::Rectangle::AdjustBottom( tools::Long nVertMoveDelta )
     return nBottom;
 }
 
+void tools::Rectangle::Normalize()
+{
+    if (IsEmpty()
+        || ((nLeft == nRight) && (nTop == nBottom))
+        || ((nLeft < nRight) && (nTop < nBottom)))
+    {
+        return;
+    }
+
+    // top left is set to bottom right, and bottom right is set to top left
+    if ((nLeft > nRight) && (nTop > nBottom))
+    {
+        auto nTmp = nRight;
+        nRight = nLeft;
+        nLeft = nTmp;
+
+        nTmp = nBottom;
+        nBottom = nTop;
+        nTop = nTmp;
+
+        return;
+    }
+
+    // top left is set to bottom left, and bottom right is set to top right
+    if ((nLeft > nRight) && (nTop < nBottom))
+    {
+        auto nTmp = nBottom;
+        nBottom = nTop;
+        nTop = nTmp;
+
+        nTmp = nRight;
+        nRight = nLeft;
+        nLeft = nTmp;
+
+        nTmp = nBottom;
+        nBottom = nTop;
+        nTop = nTmp;
+
+        return;
+    }
+
+    // top left is set to bottom left, and bottom right is set to top right
+    if ((nLeft < nRight) && (nTop > nBottom))
+    {
+        auto nTmp = nBottom;
+        nBottom = nTop;
+        nTop = nTmp;
+
+        return;
+    }
+
+    if ((nLeft == nRight) && (nTop > nBottom))
+    {
+        auto nTmp = nBottom;
+        nBottom = nTop;
+        nTop = nTmp;
+
+        return;
+    }
+
+    if ((nTop == nBottom) && (nLeft > nRight))
+    {
+        auto nTmp = nRight;
+        nRight = nLeft;
+        nLeft = nTmp;
+    }
+}
+
 static_assert( std::is_trivially_copyable< Pair >::value );
 static_assert( std::is_trivially_copyable< Point >::value );
 static_assert( std::is_trivially_copyable< Size >::value );
