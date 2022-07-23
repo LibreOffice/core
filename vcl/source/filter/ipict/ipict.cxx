@@ -1332,13 +1332,14 @@ sal_uInt64 PictReader::ReadData(sal_uInt16 nOpcode)
         pPict->ReadUInt16( nUSHORT );
         nDataSize=nUSHORT;
         ReadRectangle(aRect);
+        aRect.Normalize();
         // checkme: do we really want to extend the rectangle here ?
         // I do that because the clipping is often used to clean a region,
         //   before drawing some text and also to draw this text.
         // So using a too small region can lead to clip the end of the text ;
         //   but this can be discussable...
-        aRect.setWidth(aRect.getOpenWidth()+1);
-        aRect.setHeight(aRect.getOpenHeight()+1);
+        aRect.setWidth(std::max(0L, aRect.GetWidth()-1) + 1);
+        aRect.setHeight(std::max(0L, aRect.GetHeight()-1) + 1);
         pVirDev->SetClipRegion( vcl::Region( aRect ) );
         break;
     }
