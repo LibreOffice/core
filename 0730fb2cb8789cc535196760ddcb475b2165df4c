@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8936429d_7ade25cd",
+        "filename": "vcl/source/window/syswin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-07-23T15:53:04Z",
+      "side": 1,
+      "message": "As you did it for setHeight, perhapsjuste use nWidth instead of calling again o3tl::toInt32 ?",
+      "range": {
+        "startLine": 436,
+        "startChar": 27,
+        "endLine": 436,
+        "endChar": 51
+      },
+      "revId": "0730fb2cb8789cc535196760ddcb475b2165df4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
