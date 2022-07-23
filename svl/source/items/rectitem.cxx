@@ -26,6 +26,7 @@
 #include <svl/poolitem.hxx>
 #include <svl/memberid.h>
 
+#include <algorithm>
 
 SfxPoolItem* SfxRectangleItem::CreateDefault() { return new SfxRectangleItem; }
 
@@ -36,9 +37,10 @@ SfxRectangleItem::SfxRectangleItem()
 
 
 SfxRectangleItem::SfxRectangleItem( sal_uInt16 nW, const tools::Rectangle& rVal ) :
-    SfxPoolItem( nW ),
-    maVal( rVal )
+    SfxPoolItem( nW )
 {
+    maVal = rVal;
+    maVal.Normalize();
 }
 
 
@@ -80,14 +82,14 @@ bool SfxRectangleItem::QueryValue( css::uno::Any& rVal,
         {
             rVal <<= css::awt::Rectangle( maVal.Left(),
                                              maVal.Top(),
-                                             maVal.getOpenWidth(),
-                                             maVal.getOpenHeight() );
+                                             std::max(0L, maVal.GetWidth()-1),
+                                             std::max(0L, maVal.GetHeight()-1) );
             break;
         }
         case MID_RECT_LEFT:  rVal <<= maVal.Left(); break;
         case MID_RECT_RIGHT: rVal <<= maVal.Top(); break;
-        case MID_WIDTH: rVal <<= maVal.getOpenWidth(); break;
-        case MID_HEIGHT: rVal <<= maVal.getOpenHeight(); break;
+        case MID_WIDTH: rVal <<= std::max(0L, maVal.GetWidth()-1); break;
+        case MID_HEIGHT: rVal <<= std::max(0L, maVal.GetHeight()-1); break;
         default: OSL_FAIL("Wrong MemberID!"); return false;
     }
 
@@ -124,6 +126,8 @@ bool SfxRectangleItem::PutValue( const css::uno::Any& rVal,
             default: OSL_FAIL("Wrong MemberID!"); return false;
         }
     }
+
+    maVal.Normalize();
 
     return bRet;
 }
