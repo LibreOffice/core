@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f94ef340_3dfbdcb0",
+        "filename": "sc/source/core/data/documen3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1918,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-07-23T16:44:01Z",
+      "side": 1,
+      "message": "IsDocEditable considers IsDocProtected, and *also* other things, mpShell-\u003eIsReadOnly() among them.",
+      "revId": "af86b4e10943a333af224bed450e7b82bcf02a7a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "759a8ca0_354048f7",
         "filename": "sc/source/ui/view/tabview5.cxx",
         "patchSetId": 1
@@ -32,6 +49,23 @@
       "side": 1,
       "message": "The GetSfxDocShell()-\u003eIsReadOnly is something else, unrelated to \"Protect Spreadsheet Structure...\". I have used it instead of GetDocument().IsDocEditable, and it didn\u0027t work as intended here.\nI have used +w and -w permissions for an ods file, tested it in a debug session. GetSfxDocShell()-\u003eIsReadOnly exactly reflected that permission.",
       "parentUuid": "759a8ca0_354048f7",
+      "revId": "af86b4e10943a333af224bed450e7b82bcf02a7a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3af97ab_b5e81c2e",
+        "filename": "sc/source/ui/view/tabview5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-07-23T16:44:01Z",
+      "side": 1,
+      "message": "Aha, thanks; but IsDocEditable is wrong, too: maybe what you wanted was IsDocProtected?",
       "revId": "af86b4e10943a333af224bed450e7b82bcf02a7a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
