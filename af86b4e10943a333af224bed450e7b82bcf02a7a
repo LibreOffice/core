@@ -16,6 +16,24 @@
       "message": "(Reviewing on the go, can\u0027t check the difference myself)\n\nHere GetSfxDocShell()-\u003eIsReadOnly is used; below you use GetDocument().IsDocEditable. Depending on implementation, these can be different. Any reason to not use the former?",
       "revId": "af86b4e10943a333af224bed450e7b82bcf02a7a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ad8633c_4236c1c4",
+        "filename": "sc/source/ui/view/tabview5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-07-23T12:14:08Z",
+      "side": 1,
+      "message": "The GetSfxDocShell()-\u003eIsReadOnly is something else, unrelated to \"Protect Spreadsheet Structure...\". I have used it instead of GetDocument().IsDocEditable, and it didn\u0027t work as intended here.\nI have used +w and -w permissions for an ods file, tested it in a debug session. GetSfxDocShell()-\u003eIsReadOnly exactly reflected that permission.",
+      "parentUuid": "759a8ca0_354048f7",
+      "revId": "af86b4e10943a333af224bed450e7b82bcf02a7a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
