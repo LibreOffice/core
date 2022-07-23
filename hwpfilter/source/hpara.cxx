@@ -31,30 +31,30 @@
 
 void LineInfo::Read(HWPFile & hwpf, HWPPara const *pPara)
 {
-    if (!hwpf.Read2b(pos))
-        return;
     unsigned short tmp16;
     if (!hwpf.Read2b(tmp16))
         return;
-    space_width = tmp16;
+    // unused field is "pos" "Starting character position"
     if (!hwpf.Read2b(tmp16))
         return;
-    height = tmp16;
-// internal information
+    // unused field is "space_width"
+    if (!hwpf.Read2b(tmp16))
+        return;
+    // unused field is "height"
+    // internal information
     if (!hwpf.Read2b(tmp16))
         return;
     pgy = tmp16;
     if (!hwpf.Read2b(tmp16))
         return;
-    sx = tmp16;
+    // unused field is "sx"
     if (!hwpf.Read2b(tmp16))
         return;
-    psx = tmp16;
+    // unused field is "psx"
     if (!hwpf.Read2b(tmp16))
         return;
-    pex = tmp16;
-    height_sp = 0;
 
+    hunit pex = tmp16;
     if( pex >> 15 & 0x01 )
     {
         if (pex & 0x01)
