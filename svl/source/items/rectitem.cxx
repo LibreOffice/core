@@ -37,7 +37,7 @@ SfxRectangleItem::SfxRectangleItem()
 
 SfxRectangleItem::SfxRectangleItem( sal_uInt16 nW, const tools::Rectangle& rVal ) :
     SfxPoolItem( nW ),
-    aVal( rVal )
+    maVal( rVal )
 {
 }
 
@@ -51,10 +51,10 @@ bool SfxRectangleItem::GetPresentation
     const IntlWrapper&
 )   const
 {
-    rText = OUString::number(aVal.Top())    + ", " +
-            OUString::number(aVal.Left())   + ", " +
-            OUString::number(aVal.Bottom()) + ", " +
-            OUString::number(aVal.Right());
+    rText = OUString::number(maVal.Top())    + ", " +
+            OUString::number(maVal.Left())   + ", " +
+            OUString::number(maVal.Bottom()) + ", " +
+            OUString::number(maVal.Right());
     return true;
 }
 
@@ -62,7 +62,7 @@ bool SfxRectangleItem::GetPresentation
 bool SfxRectangleItem::operator==( const SfxPoolItem& rItem ) const
 {
     assert(SfxPoolItem::operator==(rItem));
-    return static_cast<const SfxRectangleItem&>(rItem).aVal == aVal;
+    return static_cast<const SfxRectangleItem&>(rItem).maVal == maVal;
 }
 
 SfxRectangleItem* SfxRectangleItem::Clone(SfxItemPool *) const
@@ -78,16 +78,16 @@ bool SfxRectangleItem::QueryValue( css::uno::Any& rVal,
     {
         case 0:
         {
-            rVal <<= css::awt::Rectangle( aVal.Left(),
-                                             aVal.Top(),
-                                             aVal.getOpenWidth(),
-                                             aVal.getOpenHeight() );
+            rVal <<= css::awt::Rectangle( maVal.Left(),
+                                             maVal.Top(),
+                                             maVal.getOpenWidth(),
+                                             maVal.getOpenHeight() );
             break;
         }
-        case MID_RECT_LEFT:  rVal <<= aVal.Left(); break;
-        case MID_RECT_RIGHT: rVal <<= aVal.Top(); break;
-        case MID_WIDTH: rVal <<= aVal.getOpenWidth(); break;
-        case MID_HEIGHT: rVal <<= aVal.getOpenHeight(); break;
+        case MID_RECT_LEFT:  rVal <<= maVal.Left(); break;
+        case MID_RECT_RIGHT: rVal <<= maVal.Top(); break;
+        case MID_WIDTH: rVal <<= maVal.getOpenWidth(); break;
+        case MID_HEIGHT: rVal <<= maVal.getOpenHeight(); break;
         default: OSL_FAIL("Wrong MemberID!"); return false;
     }
 
@@ -112,15 +112,15 @@ bool SfxRectangleItem::PutValue( const css::uno::Any& rVal,
         switch ( nMemberId )
         {
             case 0:
-                aVal.SetLeft( aValue.X );
-                aVal.SetTop( aValue.Y );
-                aVal.setWidth( aValue.Width );
-                aVal.setHeight( aValue.Height );
+                maVal.SetLeft( aValue.X );
+                maVal.SetTop( aValue.Y );
+                maVal.setWidth( aValue.Width );
+                maVal.setHeight( aValue.Height );
                 break;
-            case MID_RECT_LEFT:  aVal.SetPosX( nVal ); break;
-            case MID_RECT_RIGHT: aVal.SetPosY( nVal ); break;
-            case MID_WIDTH: aVal.setWidth( nVal ); break;
-            case MID_HEIGHT: aVal.setHeight( nVal ); break;
+            case MID_RECT_LEFT:  maVal.SetPosX( nVal ); break;
+            case MID_RECT_RIGHT: maVal.SetPosY( nVal ); break;
+            case MID_WIDTH: maVal.setWidth( nVal ); break;
+            case MID_HEIGHT: maVal.setHeight( nVal ); break;
             default: OSL_FAIL("Wrong MemberID!"); return false;
         }
     }
