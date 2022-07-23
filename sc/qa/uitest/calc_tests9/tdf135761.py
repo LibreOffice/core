@@ -28,7 +28,6 @@ class tdf135761(UITestCase):
 
             # Without the fix in place, this test would have failed with
             # AssertionError: ' b' != 'a b'
-
             self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), " b")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
