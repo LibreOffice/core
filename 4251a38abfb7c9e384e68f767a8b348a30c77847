@@ -16,6 +16,24 @@
       "message": "What makes Normalize() different from Justify() ?\n\nWhy use nTmp and not std::swap ?",
       "revId": "4251a38abfb7c9e384e68f767a8b348a30c77847",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78803613_7c500c0e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-07-23T23:05:46Z",
+      "side": 1,
+      "message": "Oh... is that what Justify() does? Why does it use the word Justify?",
+      "parentUuid": "d6fe7c66_2556b8c9",
+      "revId": "4251a38abfb7c9e384e68f767a8b348a30c77847",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
