@@ -559,7 +559,7 @@ void ScCondFormatDlg::SetReference(const ScRange& rRef, ScDocument&)
     if (pEdit != mxEdRange.get())
     {
         Selection sel = pEdit->GetSelection();
-        sel.Justify();            // in case of RTL selection
+        sel.Normalize();            // in case of RTL selection
         sel.Max() = sel.Min() + aRefStr.getLength();
         pEdit->GetWidget()->replace_selection(aRefStr);
         pEdit->SetSelection(sel); // to replace it again with next drag event

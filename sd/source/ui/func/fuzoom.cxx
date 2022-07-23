@@ -131,7 +131,7 @@ bool FuZoom::MouseMove(const MouseEvent& rMEvt)
         {
             ::tools::Rectangle aRect(aBeginPos, aEndPos);
             aZoomRect = aRect;
-            aZoomRect.Justify();
+            aZoomRect.Normalize();
             mpViewShell->DrawMarkRect(aZoomRect);
             bVisible = true;
         }

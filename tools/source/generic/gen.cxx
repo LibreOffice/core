@@ -99,10 +99,10 @@ tools::Rectangle& tools::Rectangle::Intersection( const tools::Rectangle& rRect 
         return *this;
     }
 
-    // Justify rectangle
+    // Normalize rectangle
     tools::Rectangle aTmpRect( rRect );
-    Justify();
-    aTmpRect.Justify();
+    Normalize();
+    aTmpRect.Normalize();
 
     // Perform intersection
     mnLeft  = std::max( mnLeft, aTmpRect.mnLeft );
@@ -117,7 +117,7 @@ tools::Rectangle& tools::Rectangle::Intersection( const tools::Rectangle& rRect 
     return *this;
 }
 
-void tools::Rectangle::Justify()
+void tools::Rectangle::Normalize()
 {
     if ((mnRight < mnLeft) && (!IsWidthEmpty()))
     {

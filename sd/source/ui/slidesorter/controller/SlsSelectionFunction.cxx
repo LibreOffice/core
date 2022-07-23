@@ -1390,7 +1390,7 @@ void MultiSelectionModeHandler::UpdateSelection()
     mnSecondIndex = nIndexUnderMouse;
 
     Range aRange (mnAnchorIndex, mnSecondIndex);
-    aRange.Justify();
+    aRange.Normalize();
 
     for (sal_Int32 nIndex=0; nIndex<nPageCount; ++nIndex)
     {

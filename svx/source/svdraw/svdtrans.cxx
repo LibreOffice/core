@@ -58,7 +58,7 @@ void ResizeRect(tools::Rectangle& rRect, const Point& rRef, const Fraction& rxFa
     rRect.SetTop( rRef.Y() + FRound( (rRect.Top()    - rRef.Y()) * double(aYFact) ) );
     rRect.SetBottom( rRef.Y() + FRound( (rRect.Bottom() - rRef.Y()) * double(aYFact) ) );
 
-    rRect.Justify();
+    rRect.Normalize();
 }
 
 

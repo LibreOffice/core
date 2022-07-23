@@ -338,7 +338,7 @@ tools::Rectangle ScDetectiveFunc::GetDrawRect( SCCOL nCol1, SCROW nRow1, SCCOL n
     tools::Rectangle aRect(
         GetDrawPos( ::std::min( nCol1, nCol2 ), ::std::min( nRow1, nRow2 ), DrawPosMode::TopLeft ),
         GetDrawPos( ::std::max( nCol1, nCol2 ), ::std::max( nRow1, nRow2 ), DrawPosMode::BottomRight ) );
-    aRect.Justify();    // reorder left/right in RTL sheets
+    aRect.Normalize();    // reorder left/right in RTL sheets
     return aRect;
 }
 
@@ -499,7 +499,7 @@ void ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
         *pModel,
         SdrObjKind::Line,
         basegfx::B2DPolyPolygon(aTempPoly));
-    pArrow->NbcSetLogicRect(tools::Rectangle::Justify(aStartPos,aEndPos));  //TODO: needed ???
+    pArrow->NbcSetLogicRect(tools::Rectangle::Normalize(aStartPos,aEndPos));  //TODO: needed ???
     pArrow->SetMergedItemSetAndBroadcast(rAttrSet);
 
     pArrow->SetLayer( SC_LAYER_INTERN );
@@ -568,7 +568,7 @@ void ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
         *pModel,
         SdrObjKind::Line,
         basegfx::B2DPolyPolygon(aTempPoly));
-    pArrow->NbcSetLogicRect(tools::Rectangle::Justify(aStartPos,aEndPos));  //TODO: needed ???
+    pArrow->NbcSetLogicRect(tools::Rectangle::Normalize(aStartPos,aEndPos));  //TODO: needed ???
 
     pArrow->SetMergedItemSetAndBroadcast(rAttrSet);
 
@@ -752,7 +752,7 @@ void ScDetectiveFunc::DeleteBox( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nR
             if ( auto pSdrRectObj = dynamic_cast< const SdrRectObj* >(pObject) )
             {
                 aObjRect = pSdrRectObj->GetLogicRect();
-                aObjRect.Justify();
+                aObjRect.Normalize();
                 if ( RectIsPoints( aObjRect, aStartCorner, aEndCorner ) )
                     ppObj[nDelCount++] = pObject;
             }

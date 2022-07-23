@@ -686,7 +686,7 @@ bool E3dScene::BegCreate(SdrDragStat& rStat)
 {
     rStat.SetOrtho4Possible();
     tools::Rectangle aRect1(rStat.GetStart(), rStat.GetNow());
-    aRect1.Justify();
+    aRect1.Normalize();
     rStat.SetActionRect(aRect1);
     NbcSetSnapRect(aRect1);
     return true;
@@ -696,7 +696,7 @@ bool E3dScene::MovCreate(SdrDragStat& rStat)
 {
     tools::Rectangle aRect1;
     rStat.TakeCreateRect(aRect1);
-    aRect1.Justify();
+    aRect1.Normalize();
     rStat.SetActionRect(aRect1);
     NbcSetSnapRect(aRect1);
     SetBoundRectDirty();
@@ -708,7 +708,7 @@ bool E3dScene::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     tools::Rectangle aRect1;
     rStat.TakeCreateRect(aRect1);
-    aRect1.Justify();
+    aRect1.Normalize();
     NbcSetSnapRect(aRect1);
     SetBoundAndSnapRectsDirty();
     return (eCmd==SdrCreateCmd::ForceEnd || rStat.GetPointCount()>=2);

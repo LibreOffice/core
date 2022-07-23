@@ -2496,7 +2496,7 @@ static void ImplHandleSalSurroundingTextRequest( vcl::Window *pWindow,
     Selection aSelRange;
     ImplHandleSurroundingTextRequest( pWindow, pEvt->maText, aSelRange );
 
-    aSelRange.Justify();
+    aSelRange.Normalize();
 
     if( aSelRange.Min() < 0 )
         pEvt->mnStart = 0;

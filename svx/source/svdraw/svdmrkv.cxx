@@ -421,7 +421,7 @@ bool SdrMarkView::EndMarkObj()
         if(maDragStat.IsMinMoved())
         {
             tools::Rectangle aRect(maDragStat.GetStart(), maDragStat.GetNow());
-            aRect.Justify();
+            aRect.Normalize();
             MarkObj(aRect, mpMarkObjOverlay->IsUnmarking());
             bRetval = true;
         }
@@ -484,7 +484,7 @@ bool SdrMarkView::EndMarkPoints()
         if(maDragStat.IsMinMoved())
         {
             tools::Rectangle aRect(maDragStat.GetStart(), maDragStat.GetNow());
-            aRect.Justify();
+            aRect.Normalize();
             MarkPoints(&aRect, mpMarkPointsOverlay->IsUnmarking());
 
             bRetval = true;
@@ -546,7 +546,7 @@ void SdrMarkView::EndMarkGluePoints()
         if(maDragStat.IsMinMoved())
         {
             tools::Rectangle aRect(maDragStat.GetStart(),maDragStat.GetNow());
-            aRect.Justify();
+            aRect.Normalize();
             MarkGluePoints(&aRect, mpMarkGluePointsOverlay->IsUnmarking());
         }
 
@@ -1094,7 +1094,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                 tools::Rectangle aNegatedRect(aSelection);
                 aNegatedRect.SetLeft(-aNegatedRect.Left());
                 aNegatedRect.SetRight(-aNegatedRect.Right());
-                aNegatedRect.Justify();
+                aNegatedRect.Normalize();
                 sSelectionText = aNegatedRect.toString() +
                     ", " + OString::number(nRotAngle.get());
             }

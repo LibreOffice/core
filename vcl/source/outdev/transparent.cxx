@@ -1016,7 +1016,7 @@ tools::Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
         {
             const MetaLineAction& rMetaLineAction = static_cast<const MetaLineAction&>(rAct);
             aActionBounds = tools::Rectangle( rMetaLineAction.GetStartPoint(),  rMetaLineAction.GetEndPoint() );
-            aActionBounds.Justify();
+            aActionBounds.Normalize();
             const tools::Long nLineWidth(rMetaLineAction.GetLineInfo().GetWidth());
             if(nLineWidth)
             {

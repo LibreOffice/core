@@ -88,7 +88,7 @@ void ScSimpleRefDlg::SetReference( const ScRange& rRef, ScDocument& rDocP )
     {
         OUString aVal = m_xEdAssign->GetText();
         Selection aSel = m_xEdAssign->GetSelection();
-        aSel.Justify();
+        aSel.Normalize();
         aVal = aVal.replaceAt( aSel.Min(), aSel.Len(), aRefStr );
         Selection aNewSel( aSel.Min(), aSel.Min()+aRefStr.getLength() );
         m_xEdAssign->SetRefString( aVal );

@@ -1712,7 +1712,7 @@ bool FormulaDlg_Impl::UpdateParaWin(Selection& _rSelection)
     if (pEd && !m_pTheRefEdit)
     {
         _rSelection = pEd->GetSelection();
-        _rSelection.Justify();
+        _rSelection.Normalize();
         aStrEd = pEd->GetText();
         m_xEdRef->SetRefString(aStrEd);
         m_xEdRef->SetSelection( _rSelection );
@@ -1720,7 +1720,7 @@ bool FormulaDlg_Impl::UpdateParaWin(Selection& _rSelection)
     else
     {
         _rSelection = m_xEdRef->GetSelection();
-        _rSelection.Justify();
+        _rSelection.Normalize();
         aStrEd = m_xEdRef->GetText();
     }
     return m_pTheRefEdit == nullptr;

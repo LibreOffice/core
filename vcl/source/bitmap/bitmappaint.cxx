@@ -648,7 +648,7 @@ vcl::Region Bitmap::CreateRegion(const Color& rColor, const tools::Rectangle& rR
     ScopedReadAccess pReadAcc(const_cast<Bitmap&>(*this));
 
     aRect.Intersection(tools::Rectangle(Point(), GetSizePixel()));
-    aRect.Justify();
+    aRect.Normalize();
 
     if (pReadAcc)
     {

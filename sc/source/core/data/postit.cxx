@@ -399,7 +399,7 @@ void ScCaptionCreator::Initialize()
         /*  #i98141# SdrPage::GetSize() returns negative width in RTL mode.
             The call to Rectangle::Adjust() orders left/right coordinate
             accordingly. */
-        maPageRect.Justify();
+        maPageRect.Normalize();
     }
 }
 

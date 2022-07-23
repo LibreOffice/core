@@ -122,7 +122,7 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     if (maGeo.nRotationAngle==0_deg100 && maGeo.nShearAngle==0_deg100) {
         ResizeRect(maRect,rRef,xFact,yFact);
         if (bYMirr) {
-            maRect.Justify();
+            maRect.Normalize();
             maRect.Move(maRect.Right()-maRect.Left(),maRect.Bottom()-maRect.Top());
             maGeo.nRotationAngle=18000_deg100;
             maGeo.RecalcSinCos();
