@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6fe7c66_2556b8c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2022-07-23T15:13:11Z",
+      "side": 1,
+      "message": "What makes Normalize() different from Justify() ?\n\nWhy use nTmp and not std::swap ?",
+      "revId": "4251a38abfb7c9e384e68f767a8b348a30c77847",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
