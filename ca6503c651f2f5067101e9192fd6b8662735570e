@@ -16,6 +16,23 @@
       "message": "Looks good to me.\n@Heiko: What do you think?",
       "revId": "ca6503c651f2f5067101e9192fd6b8662735570e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "93d3b4ac_b04293e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-07-23T14:29:21Z",
+      "side": 1,
+      "message": "OK, let\u0027s merge this trivial change.",
+      "revId": "ca6503c651f2f5067101e9192fd6b8662735570e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
