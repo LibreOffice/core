@@ -104,6 +104,24 @@
       "parentUuid": "c3af97ab_b5e81c2e",
       "revId": "af86b4e10943a333af224bed450e7b82bcf02a7a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c3b263e_fee31ba9",
+        "filename": "sc/source/ui/view/tabview5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-07-23T20:20:37Z",
+      "side": 1,
+      "message": "I do not quite get it: are you saying that IsDocEditable \"is the correct choice\" (i.e., it makes the *correct* checks), or are you telling that the additional (unneeded) checks are done in it, but these extra checks are OK (because of what? On that logic, we can stop caring about correctness, and start inserting extra checks left and right).\n\nUnCCing myself - I can\u0027t review such an approach. You have commit rights anyway.",
+      "parentUuid": "3bd70725_a9c26833",
+      "revId": "af86b4e10943a333af224bed450e7b82bcf02a7a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
