@@ -83,9 +83,9 @@ void ImportTest::testWK3WithFM3()
     CPPUNIT_ASSERT(xSheet.is());
     uno::Reference<beans::XPropertySet> xCellProps(xSheet->getCellByPosition(1, 1), UNO_QUERY);
     CPPUNIT_ASSERT(xCellProps.is());
-    sal_Int32 nCharColor = 0;
+    Color nCharColor = 0;
     CPPUNIT_ASSERT(xCellProps->getPropertyValue("CharColor") >>= nCharColor);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x0000ff), nCharColor); // blue text
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, nCharColor); // blue text
 }
 
 WpftLoader ImportTest::createCalcLoader(std::u16string_view rFile) const
