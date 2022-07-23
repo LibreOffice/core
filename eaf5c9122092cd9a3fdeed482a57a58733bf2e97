@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ce81dfe_29b663c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-07-23T10:35:19Z",
+      "side": 1,
+      "message": "No idea how to integrate this test into uicalc.cxx. I am unable to move the cursor in a cell. Tried 3 days in a row now 😞",
+      "revId": "eaf5c9122092cd9a3fdeed482a57a58733bf2e97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
