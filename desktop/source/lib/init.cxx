@@ -2495,6 +2495,14 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
 
         if (!aLanguage.isEmpty() && isValidLangTag)
         {
+            static bool isLoading = true;
+            if (isLoading)
+            {
+                // Capture the language used to load the document.
+                SfxLokHelper::setLoadLanguage(aLanguage);
+                isLoading = false;
+            }
+
             SfxLokHelper::setDefaultLanguage(aLanguage);
             // Set the LOK language tag, used for dialog tunneling.
             comphelper::LibreOfficeKit::setLanguageTag(LanguageTag(aLanguage));
