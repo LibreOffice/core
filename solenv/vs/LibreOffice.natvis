@@ -89,29 +89,29 @@
     <DisplayString>{mpImpl}</DisplayString>
   </Type>
   <Type Name="Point">
-    <DisplayString>X:{nA}, Y:{nB}</DisplayString>
+    <DisplayString>X:{mnA}, Y:{mnB}</DisplayString>
   </Type>
   <Type Name="Size">
-    <DisplayString>W:{nA}, H:{nB}</DisplayString>
+    <DisplayString>W:{mnA}, H:{mnB}</DisplayString>
   </Type>
   <Type Name="Range">
-    <DisplayString>Min:{nA}, Max:{nB}</DisplayString>
+    <DisplayString>Min:{mnA}, Max:{mnB}</DisplayString>
   </Type>
   <Type Name="Selection">
-    <DisplayString>Min:{nA}, Max:{nB}</DisplayString>
+    <DisplayString>Min:{mnA}, Max:{mnB}</DisplayString>
   </Type>
   <Type Name="Pair">
-    <DisplayString>A:{nA}, B:{nB}</DisplayString>
+    <DisplayString>A:{mnA}, B:{mnB}</DisplayString>
   </Type>
   <Type Name="SwRect">
     <DisplayString>{m_Point}, {m_Size}</DisplayString>
   </Type>
   <Type Name="tools::Rectangle">
-    <DisplayString IncludeView="w">{nRight==-32767?0:(nRight-nLeft+(nLeft>nRight?(-1):(1)))}</DisplayString>
-    <DisplayString IncludeView="h">{nBottom==-32767?0:(nBottom-nTop+(nTop>nBottom?(-1):(1)))}</DisplayString>
-    <DisplayString IncludeView="sz" Condition="nRight==-32767 || nBottom==-32767">empty</DisplayString>
+    <DisplayString IncludeView="w">{mnRight==-32767?0:(mnRight-mnLeft+(mnLeft>mnRight?(-1):(1)))}</DisplayString>
+    <DisplayString IncludeView="h">{mnBottom==-32767?0:(mnBottom-mnTop+(mnTop>mnBottom?(-1):(1)))}</DisplayString>
+    <DisplayString IncludeView="sz" Condition="mnRight==-32767 || mnBottom==-32767">empty</DisplayString>
     <DisplayString IncludeView="sz">{*this,view(w)nd} x {*this,view(h)nd}</DisplayString>
-    <DisplayString>{{ LT=[{nLeft} , {nTop}] RB=[{nRight} , {nBottom}] [{*this,view(sz)}] }}</DisplayString>
+    <DisplayString>{{ LT=[{mnLeft} , {mnTop}] RB=[{mnRight} , {mnBottom}] [{*this,view(sz)}] }}</DisplayString>
   </Type>
   <Type Name="_sal_Sequence">
     <DisplayString Condition="nElements == 0">_sal_Sequence (empty)</DisplayString>
