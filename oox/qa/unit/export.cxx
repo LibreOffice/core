@@ -796,7 +796,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149551VertPadding)
 CPPUNIT_TEST_FIXTURE(Test, testTdf149538upright)
 {
     // The document has a shape with attribute upright="1" in the bodyPr element. On import it is
-    // emulatated by rotating the text area rectangle. On export there should be an upright="1"
+    // emulated by rotating the text area rectangle. On export there should be an upright="1"
     // attribute but no 'rot' attribute. Without the fix the 'rot' attribute with values from
     // the emulation was written out.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf149538_upright.pptx";
