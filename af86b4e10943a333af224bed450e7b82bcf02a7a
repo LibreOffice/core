@@ -140,6 +140,24 @@
       "parentUuid": "2c3b263e_fee31ba9",
       "revId": "af86b4e10943a333af224bed450e7b82bcf02a7a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf2df08a_7d26df38",
+        "filename": "sc/source/ui/view/tabview5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-07-24T08:33:54Z",
+      "side": 1,
+      "message": "I am sorry for my harsh reaction.\n\nAnd the argument that this same check is used in the place where the actual change happens, is a strong one.\n\nI ask you to edit the commit message then, to mention that the same check is used as in ScDocFunc::RenameTable; or maybe even right in the code comment.\n\nBut I +2 anyway; up to you to decide if you push it right away or after documenting the decision.",
+      "parentUuid": "d6da6464_4ff492a9",
+      "revId": "af86b4e10943a333af224bed450e7b82bcf02a7a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
