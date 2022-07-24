@@ -22,8 +22,10 @@
 #include <sfx2/sfxsids.hrc>
 #include <sot/storage.hxx>
 #include <sot/exchange.hxx>
+#include <svl/intitem.hxx>
 #include <filter/msfilter/classids.hxx>
 #include <tools/globname.hxx>
+#include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/packages/XPackageEncryption.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -446,12 +448,14 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportXLS(SvStream& rStream)
     SfxMedium aMedium;
     css::uno::Reference<css::io::XInputStream> xStm(new utl::OInputStreamWrapper(rStream));
     aMedium.GetItemSet()->Put(SfxUnoAnyItem(SID_INPUTSTREAM, css::uno::Any(xStm)));
+    aMedium.GetItemSet()->Put(SfxUInt16Item(SID_UPDATEDOCMODE, css::document::UpdateDocMode::NO_UPDATE));
 
     ScDocShellRef xDocShell = new ScDocShell(SfxModelFlags::EMBEDDED_OBJECT |
                                              SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
                                              SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
 
     xDocShell->DoInitNew();
+    xDocShell->SetInitialLinkUpdate(&aMedium);
 
     ScDocument& rDoc = xDocShell->GetDocument();
 
