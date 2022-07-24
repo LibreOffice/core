@@ -156,8 +156,8 @@ class PointPrinter(object):
         return "%s" % (self.typename)
 
     def children(self):
-        x = self.value['nA']
-        y = self.value['nB']
+        x = self.value['mnA']
+        y = self.value['mnB']
         children = [('x', x), ('y', y)]
         return children.__iter__()
 
@@ -172,8 +172,8 @@ class SizePrinter(object):
         return "%s" % (self.typename)
 
     def children(self):
-        width = self.value['nA']
-        height = self.value['nB']
+        width = self.value['mnA']
+        height = self.value['mnB']
         children = [('width', width), ('height', height)]
         return children.__iter__()
 
@@ -188,10 +188,10 @@ class RectanglePrinter(object):
         return "%s" % (self.typename)
 
     def children(self):
-        left = self.value['nLeft']
-        top = self.value['nTop']
-        right = self.value['nRight']
-        bottom = self.value['nBottom']
+        left = self.value['mnLeft']
+        top = self.value['mnTop']
+        right = self.value['mnRight']
+        bottom = self.value['mnBottom']
         children = [('left', left), ('top', top), ('right', right), ('bottom', bottom)]
         return children.__iter__()
 

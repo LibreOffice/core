@@ -37,24 +37,24 @@ OString Pair::toString() const
 size_t Pair::GetHashValue() const
 {
     size_t hash = 0;
-    o3tl::hash_combine( hash, nA );
-    o3tl::hash_combine( hash, nB );
+    o3tl::hash_combine( hash, mnA );
+    o3tl::hash_combine( hash, mnB );
     return hash;
 }
 
 void tools::Rectangle::SaturatingSetSize(const Size& rSize)
 {
     if (rSize.Width() < 0)
-        nRight = o3tl::saturating_add(nLeft, (rSize.Width() + 1));
+        mnRight = o3tl::saturating_add(mnLeft, (rSize.Width() + 1));
     else if ( rSize.Width() > 0 )
-        nRight = o3tl::saturating_add(nLeft, (rSize.Width() - 1));
+        mnRight = o3tl::saturating_add(mnLeft, (rSize.Width() - 1));
     else
         SetWidthEmpty();
 
     if ( rSize.Height() < 0 )
-        nBottom = o3tl::saturating_add(nTop, (rSize.Height() + 1));
+        mnBottom = o3tl::saturating_add(mnTop, (rSize.Height() + 1));
     else if ( rSize.Height() > 0 )
-        nBottom = o3tl::saturating_add(nTop, (rSize.Height() - 1));
+        mnBottom = o3tl::saturating_add(mnTop, (rSize.Height() - 1));
     else
         SetHeightEmpty();
 }
@@ -62,15 +62,15 @@ void tools::Rectangle::SaturatingSetSize(const Size& rSize)
 void tools::Rectangle::SaturatingSetPosX(tools::Long x)
 {
     if (!IsWidthEmpty())
-        nRight = o3tl::saturating_add(nRight, x - nLeft);
-    nLeft = x;
+        mnRight = o3tl::saturating_add(mnRight, x - mnLeft);
+    mnLeft = x;
 }
 
 void tools::Rectangle::SaturatingSetPosY(tools::Long y)
 {
     if (!IsHeightEmpty())
-        nBottom = o3tl::saturating_add(nBottom, y - nTop);
-    nTop = y;
+        mnBottom = o3tl::saturating_add(mnBottom, y - mnTop);
+    mnTop = y;
 }
 
 tools::Rectangle& tools::Rectangle::Union( const tools::Rectangle& rRect )
@@ -82,8 +82,8 @@ tools::Rectangle& tools::Rectangle::Union( const tools::Rectangle& rRect )
         *this = rRect;
     else
     {
-        std::tie(nLeft, nRight) = std::minmax({ nLeft, rRect.nLeft, nRight, rRect.nRight });
-        std::tie(nTop, nBottom) = std::minmax({ nTop, rRect.nTop, nBottom, rRect.nBottom });
+        std::tie(mnLeft, mnRight) = std::minmax({ mnLeft, rRect.mnLeft, mnRight, rRect.mnRight });
+        std::tie(mnTop, mnBottom) = std::minmax({ mnTop, rRect.mnTop, mnBottom, rRect.mnBottom });
     }
 
     return *this;
@@ -105,13 +105,13 @@ tools::Rectangle& tools::Rectangle::Intersection( const tools::Rectangle& rRect 
     aTmpRect.Justify();
 
     // Perform intersection
-    nLeft  = std::max( nLeft, aTmpRect.nLeft );
-    nRight = std::min( nRight, aTmpRect.nRight );
-    nTop   = std::max( nTop, aTmpRect.nTop );
-    nBottom= std::min( nBottom, aTmpRect.nBottom );
+    mnLeft  = std::max( mnLeft, aTmpRect.mnLeft );
+    mnRight = std::min( mnRight, aTmpRect.mnRight );
+    mnTop   = std::max( mnTop, aTmpRect.mnTop );
+    mnBottom= std::min( mnBottom, aTmpRect.mnBottom );
 
     // Determine if intersection is empty
-    if ( nRight < nLeft || nBottom < nTop )
+    if ( mnRight < mnLeft || mnBottom < mnTop )
         *this = tools::Rectangle();
 
     return *this;
@@ -119,14 +119,14 @@ tools::Rectangle& tools::Rectangle::Intersection( const tools::Rectangle& rRect 
 
 void tools::Rectangle::Justify()
 {
-    if ((nRight < nLeft) && (!IsWidthEmpty()))
+    if ((mnRight < mnLeft) && (!IsWidthEmpty()))
     {
-        std::swap(nLeft, nRight);
+        std::swap(mnLeft, mnRight);
     }
 
-    if ((nBottom < nTop) && (!IsHeightEmpty()))
+    if ((mnBottom < mnTop) && (!IsHeightEmpty()))
     {
-        std::swap(nBottom, nTop);
+        std::swap(mnBottom, mnTop);
     }
 }
 
@@ -135,24 +135,24 @@ bool tools::Rectangle::Contains( const Point& rPoint ) const
     if ( IsEmpty() )
         return false;
 
-    if ( nLeft <= nRight )
+    if ( mnLeft <= mnRight )
     {
-        if ( (rPoint.X() < nLeft) || (rPoint.X() > nRight) )
+        if ( (rPoint.X() < mnLeft) || (rPoint.X() > mnRight) )
             return false;
     }
     else
     {
-        if ( (rPoint.X() > nLeft) || (rPoint.X() < nRight) )
+        if ( (rPoint.X() > mnLeft) || (rPoint.X() < mnRight) )
             return false;
     }
-    if ( nTop <= nBottom )
+    if ( mnTop <= mnBottom )
     {
-        if ( (rPoint.Y() < nTop) || (rPoint.Y() > nBottom) )
+        if ( (rPoint.Y() < mnTop) || (rPoint.Y() > mnBottom) )
             return false;
     }
     else
     {
-        if ( (rPoint.Y() > nTop) || (rPoint.Y() < nBottom) )
+        if ( (rPoint.Y() > mnTop) || (rPoint.Y() < mnBottom) )
             return false;
     }
     return true;
@@ -190,30 +190,30 @@ void tools::Rectangle::expand(tools::Long nExpandBy)
 
 void tools::Rectangle::shrink(tools::Long nShrinkBy)
 {
-    nLeft   += nShrinkBy;
-    nTop    += nShrinkBy;
+    mnLeft   += nShrinkBy;
+    mnTop    += nShrinkBy;
     if (!IsWidthEmpty())
-        nRight -= nShrinkBy;
+        mnRight -= nShrinkBy;
     if (!IsHeightEmpty())
-        nBottom -= nShrinkBy;
+        mnBottom -= nShrinkBy;
 }
 
 tools::Long tools::Rectangle::AdjustRight(tools::Long nHorzMoveDelta)
 {
     if (IsWidthEmpty())
-        nRight = nLeft + nHorzMoveDelta - 1;
+        mnRight = mnLeft + nHorzMoveDelta - 1;
     else
-        nRight += nHorzMoveDelta;
-    return nRight;
+        mnRight += nHorzMoveDelta;
+    return mnRight;
 }
 
 tools::Long tools::Rectangle::AdjustBottom( tools::Long nVertMoveDelta )
 {
     if (IsHeightEmpty())
-        nBottom = nTop + nVertMoveDelta - 1;
+        mnBottom = mnTop + nVertMoveDelta - 1;
     else
-        nBottom += nVertMoveDelta;
-    return nBottom;
+        mnBottom += nVertMoveDelta;
+    return mnBottom;
 }
 
 static_assert( std::is_trivially_copyable< Pair >::value );
