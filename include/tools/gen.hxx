@@ -377,11 +377,7 @@ inline bool Range::Contains( tools::Long nIs ) const
 inline void Range::Justify()
 {
     if ( mnA > mnB )
-    {
-        tools::Long nHelp = mnA;
-        mnA = mnB;
-        mnB = nHelp;
-    }
+        std::swap(mnA, mnB);
 }
 
 inline bool operator ==(Range const & r1, Range const & r2)
@@ -444,11 +440,7 @@ inline bool Selection::Contains( tools::Long nIs ) const
 inline void Selection::Justify()
 {
     if ( mnA > mnB )
-    {
-        tools::Long nHelp = mnA;
-        mnA = mnB;
-        mnB = nHelp;
-    }
+        std::swap(mnA, mnB);
 }
 
 inline bool operator ==(Selection const & s1, Selection const & s2)
