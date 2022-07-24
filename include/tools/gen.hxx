@@ -42,14 +42,14 @@ enum TriState { TRISTATE_FALSE, TRISTATE_TRUE, TRISTATE_INDET };
 class SAL_WARN_UNUSED Pair
 {
 public:
-    constexpr Pair() : nA(0), nB(0) {}
-    constexpr Pair( tools::Long _nA, tools::Long _nB ) : nA(_nA), nB(_nB) {}
+    constexpr Pair() : mnA(0), mnB(0) {}
+    constexpr Pair( tools::Long nA, tools::Long nB ) : mnA(nA), mnB(nB) {}
 
-    tools::Long                A() const { return nA; }
-    tools::Long                B() const { return nB; }
+    tools::Long                A() const { return mnA; }
+    tools::Long                B() const { return mnB; }
 
-    tools::Long&               A() { return nA; }
-    tools::Long&               B() { return nB; }
+    tools::Long&               A() { return mnA; }
+    tools::Long&               B() { return mnB; }
 
     TOOLS_DLLPUBLIC rtl::OString        toString() const;
 
@@ -57,8 +57,8 @@ public:
     TOOLS_DLLPUBLIC size_t     GetHashValue() const;
 
 protected:
-    tools::Long                nA;
-    tools::Long                nB;
+    tools::Long                mnA;
+    tools::Long                mnB;
 };
 
 namespace tools::detail {
@@ -80,13 +80,13 @@ public:
     constexpr Point() {}
     constexpr Point( tools::Long nX, tools::Long nY ) : Pair( nX, nY ) {}
 
-    constexpr tools::Long      X() const { return nA; }
-    constexpr tools::Long      Y() const { return nB; }
+    constexpr tools::Long      X() const { return mnA; }
+    constexpr tools::Long      Y() const { return mnB; }
 
     void                Move( tools::Long nHorzMove, tools::Long nVertMove );
     void                Move( Size const & s );
-    tools::Long                AdjustX( tools::Long nHorzMove ) { nA += nHorzMove; return nA; }
-    tools::Long                AdjustY( tools::Long nVertMove ) { nB += nVertMove; return nB; }
+    tools::Long                AdjustX( tools::Long nHorzMove ) { mnA += nHorzMove; return mnA; }
+    tools::Long                AdjustY( tools::Long nVertMove ) { mnB += nVertMove; return mnB; }
 
     void                RotateAround( tools::Long& rX, tools::Long& rY, Degree10 nOrientation ) const;
     void                RotateAround( Point&, Degree10 nOrientation ) const;
@@ -103,8 +103,8 @@ public:
 
     constexpr tools::Long      getX() const { return X(); }
     constexpr tools::Long      getY() const { return Y(); }
-    void                setX(tools::Long nX)  { nA = nX; }
-    void                setY(tools::Long nY)  { nB = nY; }
+    void                setX(tools::Long nX)  { mnA = nX; }
+    void                setY(tools::Long nY)  { mnB = nY; }
 
     Pair const &        toPair() const { return *this; }
     Pair &              toPair() { return *this; }
@@ -119,56 +119,56 @@ public:
 
 inline void Point::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
-    nA += nHorzMove;
-    nB += nVertMove;
+    mnA += nHorzMove;
+    mnB += nVertMove;
 }
 
 inline Point& Point::operator += ( const Point& rPoint )
 {
-    nA += rPoint.nA;
-    nB += rPoint.nB;
+    mnA += rPoint.mnA;
+    mnB += rPoint.mnB;
     return *this;
 }
 
 inline Point& Point::operator -= ( const Point& rPoint )
 {
-    nA -= rPoint.nA;
-    nB -= rPoint.nB;
+    mnA -= rPoint.mnA;
+    mnB -= rPoint.mnB;
     return *this;
 }
 
 inline Point& Point::operator *= ( const tools::Long nVal )
 {
-    nA *= nVal;
-    nB *= nVal;
+    mnA *= nVal;
+    mnB *= nVal;
     return *this;
 }
 
 inline Point& Point::operator /= ( const tools::Long nVal )
 {
-    nA /= nVal;
-    nB /= nVal;
+    mnA /= nVal;
+    mnB /= nVal;
     return *this;
 }
 
 inline Point operator+( const Point &rVal1, const Point &rVal2 )
 {
-    return Point( rVal1.nA+rVal2.nA, rVal1.nB+rVal2.nB );
+    return Point( rVal1.mnA+rVal2.mnA, rVal1.mnB+rVal2.mnB );
 }
 
 inline Point operator-( const Point &rVal1, const Point &rVal2 )
 {
-    return Point( rVal1.nA-rVal2.nA, rVal1.nB-rVal2.nB );
+    return Point( rVal1.mnA-rVal2.mnA, rVal1.mnB-rVal2.mnB );
 }
 
 inline Point operator*( const Point &rVal1, const tools::Long nVal2 )
 {
-    return Point( rVal1.nA*nVal2, rVal1.nB*nVal2 );
+    return Point( rVal1.mnA*nVal2, rVal1.mnB*nVal2 );
 }
 
 inline Point operator/( const Point &rVal1, const tools::Long nVal2 )
 {
-    return Point( rVal1.nA/nVal2, rVal1.nB/nVal2 );
+    return Point( rVal1.mnA/nVal2, rVal1.mnB/nVal2 );
 }
 
 inline bool operator ==(Point const & p1, Point const & p2)
@@ -213,23 +213,23 @@ public:
     constexpr Size() {}
     constexpr Size( tools::Long nWidth, tools::Long nHeight ) : Pair( nWidth, nHeight ) {}
 
-    constexpr tools::Long  Width() const  { return nA; }
-    constexpr tools::Long  Height() const { return nB; }
+    constexpr tools::Long  Width() const  { return mnA; }
+    constexpr tools::Long  Height() const { return mnB; }
 
-    tools::Long            AdjustWidth( tools::Long n ) { nA += n; return nA; }
-    tools::Long            AdjustHeight( tools::Long n ) { nB += n; return nB; }
+    tools::Long            AdjustWidth( tools::Long n ) { mnA += n; return mnA; }
+    tools::Long            AdjustHeight( tools::Long n ) { mnB += n; return mnB; }
 
     constexpr tools::Long  getWidth() const { return Width(); }
     constexpr tools::Long  getHeight() const { return Height(); }
-    void            setWidth(tools::Long nWidth)  { nA = nWidth; }
-    void            setHeight(tools::Long nHeight)  { nB = nHeight; }
+    void            setWidth(tools::Long nWidth)  { mnA = nWidth; }
+    void            setHeight(tools::Long nHeight)  { mnB = nHeight; }
 
-    bool            IsEmpty() const { return nA <= 0 || nB <= 0; }
+    bool            IsEmpty() const { return mnA <= 0 || mnB <= 0; }
 
     void extendBy(tools::Long x, tools::Long y)
     {
-        nA += x;
-        nB += y;
+        mnA += x;
+        mnB += y;
     }
 
     Pair const &    toPair() const { return *this; }
@@ -265,50 +265,50 @@ inline bool operator !=(Size const & s1, Size const & s2)
 
 inline Size& Size::operator += ( const Size& rSize )
 {
-    nA += rSize.nA;
-    nB += rSize.nB;
+    mnA += rSize.mnA;
+    mnB += rSize.mnB;
     return *this;
 }
 
 inline Size& Size::operator -= ( const Size& rSize )
 {
-    nA -= rSize.nA;
-    nB -= rSize.nB;
+    mnA -= rSize.mnA;
+    mnB -= rSize.mnB;
     return *this;
 }
 
 inline Size& Size::operator *= ( const tools::Long nVal )
 {
-    nA *= nVal;
-    nB *= nVal;
+    mnA *= nVal;
+    mnB *= nVal;
     return *this;
 }
 
 inline Size& Size::operator /= ( const tools::Long nVal )
 {
-    nA /= nVal;
-    nB /= nVal;
+    mnA /= nVal;
+    mnB /= nVal;
     return *this;
 }
 
 inline Size operator+( const Size &rVal1, const Size &rVal2 )
 {
-    return Size( rVal1.nA+rVal2.nA, rVal1.nB+rVal2.nB );
+    return Size( rVal1.mnA+rVal2.mnA, rVal1.mnB+rVal2.mnB );
 }
 
 inline Size operator-( const Size &rVal1, const Size &rVal2 )
 {
-    return Size( rVal1.nA-rVal2.nA, rVal1.nB-rVal2.nB );
+    return Size( rVal1.mnA-rVal2.mnA, rVal1.mnB-rVal2.mnB );
 }
 
 inline Size operator*( const Size &rVal1, const tools::Long nVal2 )
 {
-    return Size( rVal1.nA*nVal2, rVal1.nB*nVal2 );
+    return Size( rVal1.mnA*nVal2, rVal1.mnB*nVal2 );
 }
 
 inline Size operator/( const Size &rVal1, const tools::Long nVal2 )
 {
-    return Size( rVal1.nA/nVal2, rVal1.nB/nVal2 );
+    return Size( rVal1.mnA/nVal2, rVal1.mnB/nVal2 );
 }
 
 constexpr inline Size Size::scale(sal_Int64 nMulX, sal_Int64 nDivX,
@@ -352,12 +352,12 @@ public:
     constexpr Range() {}
     constexpr Range( tools::Long nMin, tools::Long nMax ) : Pair( nMin, nMax ) {}
 
-    tools::Long            Min() const { return nA; }
-    tools::Long            Max() const { return nB; }
-    tools::Long            Len() const { return nB - nA + 1; }
+    tools::Long            Min() const { return mnA; }
+    tools::Long            Max() const { return mnB; }
+    tools::Long            Len() const { return mnB - mnA + 1; }
 
-    tools::Long&           Min() { return nA; }
-    tools::Long&           Max() { return nB; }
+    tools::Long&           Min() { return mnA; }
+    tools::Long&           Max() { return mnB; }
 
     bool            Contains( tools::Long nIs ) const;
 
@@ -371,16 +371,16 @@ public:
 
 inline bool Range::Contains( tools::Long nIs ) const
 {
-    return ((nA <= nIs) && (nIs <= nB ));
+    return ((mnA <= nIs) && (nIs <= mnB ));
 }
 
 inline void Range::Justify()
 {
-    if ( nA > nB )
+    if ( mnA > mnB )
     {
-        tools::Long nHelp = nA;
-        nA = nB;
-        nB = nHelp;
+        tools::Long nHelp = mnA;
+        mnA = mnB;
+        mnB = nHelp;
     }
 }
 
@@ -413,12 +413,12 @@ public:
                     Selection( tools::Long nPos ) : Pair( nPos, nPos ) {}
                     Selection( tools::Long nMin, tools::Long nMax ) : Pair( nMin, nMax ) {}
 
-    tools::Long            Min() const { return nA; }
-    tools::Long            Max() const { return nB; }
-    tools::Long            Len() const { return nB - nA; }
+    tools::Long            Min() const { return mnA; }
+    tools::Long            Max() const { return mnB; }
+    tools::Long            Len() const { return mnB - mnA; }
 
-    tools::Long&           Min() { return nA; }
-    tools::Long&           Max() { return nB; }
+    tools::Long&           Min() { return mnA; }
+    tools::Long&           Max() { return mnB; }
 
     bool            Contains( tools::Long nIs ) const;
 
@@ -438,16 +438,16 @@ public:
 
 inline bool Selection::Contains( tools::Long nIs ) const
 {
-    return ((nA <= nIs) && (nIs < nB ));
+    return ((mnA <= nIs) && (nIs < mnB ));
 }
 
 inline void Selection::Justify()
 {
-    if ( nA > nB )
+    if ( mnA > mnB )
     {
-        tools::Long nHelp = nA;
-        nA = nB;
-        nB = nHelp;
+        tools::Long nHelp = mnA;
+        mnA = mnB;
+        mnB = nHelp;
     }
 }
 
@@ -495,24 +495,24 @@ class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Rectangle final
 public:
     constexpr Rectangle() = default;
     constexpr Rectangle( const Point& rLT, const Point& rRB );
-    constexpr Rectangle( tools::Long nLeft, tools::Long nTop,
-                         tools::Long nRight, tools::Long nBottom );
+    constexpr Rectangle( tools::Long mnLeft, tools::Long mnTop,
+                         tools::Long mnRight, tools::Long mnBottom );
     /// Constructs an empty Rectangle, with top/left at the specified params
-    constexpr Rectangle( tools::Long nLeft, tools::Long nTop );
+    constexpr Rectangle( tools::Long mnLeft, tools::Long mnTop );
     /// Constructs a closed interval rectangle
     constexpr Rectangle( const Point& rLT, const Size& rSize );
 
     constexpr inline static Rectangle Justify(const Point& rLT, const Point& rRB);
 
-    constexpr tools::Long Left() const { return nLeft; }
-    constexpr tools::Long Right() const { return IsWidthEmpty() ? nLeft : nRight; }
-    constexpr tools::Long Top() const { return nTop; }
-    constexpr tools::Long Bottom() const { return IsHeightEmpty() ? nTop : nBottom; }
+    constexpr tools::Long Left() const { return mnLeft; }
+    constexpr tools::Long Right() const { return IsWidthEmpty() ? mnLeft : mnRight; }
+    constexpr tools::Long Top() const { return mnTop; }
+    constexpr tools::Long Bottom() const { return IsHeightEmpty() ? mnTop : mnBottom; }
 
-    constexpr void SetLeft(tools::Long v) { nLeft = v; }
-    constexpr void SetRight(tools::Long v) { nRight = v; }
-    constexpr void SetTop(tools::Long v) { nTop = v; }
-    constexpr void SetBottom(tools::Long v) { nBottom = v; }
+    constexpr void SetLeft(tools::Long v) { mnLeft = v; }
+    constexpr void SetRight(tools::Long v) { mnRight = v; }
+    constexpr void SetTop(tools::Long v) { mnTop = v; }
+    constexpr void SetBottom(tools::Long v) { mnBottom = v; }
 
     constexpr Point TopLeft() const { return { Left(), Top() }; }
     constexpr Point TopRight() const { return { Right(), Top() }; }
@@ -527,9 +527,9 @@ public:
     /// Move the top and left edges by a delta, preserving width and height
     inline void         Move( tools::Long nHorzMoveDelta, tools::Long nVertMoveDelta );
     void                Move( Size const & s ) { Move(s.Width(), s.Height()); }
-    tools::Long         AdjustLeft( tools::Long nHorzMoveDelta ) { nLeft += nHorzMoveDelta; return nLeft; }
+    tools::Long         AdjustLeft( tools::Long nHorzMoveDelta ) { mnLeft += nHorzMoveDelta; return mnLeft; }
     tools::Long         AdjustRight( tools::Long nHorzMoveDelta );
-    tools::Long         AdjustTop( tools::Long nVertMoveDelta ) { nTop += nVertMoveDelta; return nTop; }
+    tools::Long         AdjustTop( tools::Long nVertMoveDelta ) { mnTop += nVertMoveDelta; return mnTop; }
     tools::Long         AdjustBottom( tools::Long nVertMoveDelta );
     /// Set the left edge of the rectangle to x, preserving the width
     inline void SetPosX(tools::Long x);
@@ -559,12 +559,12 @@ public:
     bool                Contains( const tools::Rectangle& rRect ) const;
     bool                Overlaps( const tools::Rectangle& rRect ) const;
 
-    void                SetEmpty() { nRight = nBottom = RECT_EMPTY; }
-    void                SetWidthEmpty() { nRight = RECT_EMPTY; }
-    void                SetHeightEmpty() { nBottom = RECT_EMPTY; }
+    void                SetEmpty() { mnRight = mnBottom = RECT_EMPTY; }
+    void                SetWidthEmpty() { mnRight = RECT_EMPTY; }
+    void                SetHeightEmpty() { mnBottom = RECT_EMPTY; }
     constexpr bool IsEmpty() const { return IsWidthEmpty() || IsHeightEmpty(); }
-    constexpr bool IsWidthEmpty() const { return nRight == RECT_EMPTY; }
-    constexpr bool IsHeightEmpty() const { return nBottom == RECT_EMPTY; }
+    constexpr bool IsWidthEmpty() const { return mnRight == RECT_EMPTY; }
+    constexpr bool IsHeightEmpty() const { return mnBottom == RECT_EMPTY; }
 
     inline bool         operator == ( const tools::Rectangle& rRect ) const;
     inline bool         operator != ( const tools::Rectangle& rRect ) const;
@@ -575,14 +575,14 @@ public:
     friend inline tools::Rectangle operator + ( const tools::Rectangle& rRect, const Point& rPt );
     friend inline tools::Rectangle operator - ( const tools::Rectangle& rRect, const Point& rPt );
 
-    tools::Long         getX() const { return nLeft; }
-    tools::Long         getY() const { return nTop; }
+    tools::Long         getX() const { return mnLeft; }
+    tools::Long         getY() const { return mnTop; }
     /// Returns the difference between right and left, assuming the range includes one end, but not the other.
     tools::Long getOpenWidth() const { return Right() - Left(); }
     /// Returns the difference between bottom and top, assuming the range includes one end, but not the other.
     tools::Long getOpenHeight() const { return Bottom() - Top(); }
-    void                setWidth( tools::Long n ) { nRight = nLeft + n; }
-    void                setHeight( tools::Long n ) { nBottom = nTop + n; }
+    void                setWidth( tools::Long n ) { mnRight = mnLeft + n; }
+    void                setHeight( tools::Long n ) { mnBottom = mnTop + n; }
     /// Returns the string representation of the rectangle, format is "x, y, width, height".
     rtl::OString        toString() const;
 
@@ -604,10 +604,10 @@ public:
                                             sal_Int64 nMulY, sal_Int64 nDivY) const;
 
 private:
-    tools::Long nLeft = 0;
-    tools::Long nTop = 0;
-    tools::Long nRight = RECT_EMPTY;
-    tools::Long nBottom = RECT_EMPTY;
+    tools::Long mnLeft = 0;
+    tools::Long mnTop = 0;
+    tools::Long mnRight = RECT_EMPTY;
+    tools::Long mnBottom = RECT_EMPTY;
 };
 }
 
@@ -615,24 +615,24 @@ constexpr inline tools::Rectangle::Rectangle( const Point& rLT, const Point& rRB
     : Rectangle(rLT.X(), rLT.Y(), rRB.X(), rRB.Y())
 {}
 
-constexpr inline tools::Rectangle::Rectangle( tools::Long _nLeft,  tools::Long _nTop,
-                             tools::Long _nRight, tools::Long _nBottom )
-    : nLeft( _nLeft )
-    , nTop( _nTop )
-    , nRight( _nRight )
-    , nBottom( _nBottom )
+constexpr inline tools::Rectangle::Rectangle( tools::Long _mnLeft,  tools::Long _mnTop,
+                             tools::Long _mnRight, tools::Long _mnBottom )
+    : mnLeft( _mnLeft )
+    , mnTop( _mnTop )
+    , mnRight( _mnRight )
+    , mnBottom( _mnBottom )
 {}
 
-constexpr inline tools::Rectangle::Rectangle( tools::Long _nLeft,  tools::Long _nTop )
-    : nLeft(_nLeft)
-    , nTop(_nTop)
+constexpr inline tools::Rectangle::Rectangle( tools::Long _mnLeft,  tools::Long _mnTop )
+    : mnLeft(_mnLeft)
+    , mnTop(_mnTop)
 {}
 
 constexpr inline tools::Rectangle::Rectangle( const Point& rLT, const Size& rSize )
-    : nLeft( rLT.X())
-    , nTop( rLT.Y())
-    , nRight(rSize.Width() ? nLeft + (rSize.Width() + (rSize.Width() > 0 ? -1 : 1)) : RECT_EMPTY)
-    , nBottom(rSize.Height() ? nTop + (rSize.Height() + (rSize.Height() > 0 ? -1 : 1)) : RECT_EMPTY)
+    : mnLeft( rLT.X())
+    , mnTop( rLT.Y())
+    , mnRight(rSize.Width() ? mnLeft + (rSize.Width() + (rSize.Width() > 0 ? -1 : 1)) : RECT_EMPTY)
+    , mnBottom(rSize.Height() ? mnTop + (rSize.Height() + (rSize.Height() > 0 ? -1 : 1)) : RECT_EMPTY)
 {}
 
 constexpr inline tools::Rectangle tools::Rectangle::Justify(const Point& rLT, const Point& rRB)
@@ -644,26 +644,26 @@ constexpr inline tools::Rectangle tools::Rectangle::Justify(const Point& rLT, co
 
 inline void tools::Rectangle::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
-    nLeft += nHorzMove;
-    nTop  += nVertMove;
+    mnLeft += nHorzMove;
+    mnTop  += nVertMove;
     if (!IsWidthEmpty())
-        nRight += nHorzMove;
+        mnRight += nHorzMove;
     if (!IsHeightEmpty())
-        nBottom += nVertMove;
+        mnBottom += nVertMove;
 }
 
 inline void tools::Rectangle::SetPosX(tools::Long x)
 {
     if (!IsWidthEmpty())
-        nRight += x - nLeft;
-    nLeft = x;
+        mnRight += x - mnLeft;
+    mnLeft = x;
 }
 
 inline void tools::Rectangle::SetPosY(tools::Long y)
 {
     if (!IsHeightEmpty())
-        nBottom += y - nTop;
-    nTop = y;
+        mnBottom += y - mnTop;
+    mnTop = y;
 }
 
 inline void tools::Rectangle::SetPos( const Point& rPoint )
@@ -675,9 +675,9 @@ inline void tools::Rectangle::SetPos( const Point& rPoint )
 inline void tools::Rectangle::SetWidth(tools::Long nWidth)
 {
     if (nWidth < 0)
-        nRight = nLeft + nWidth + 1;
+        mnRight = mnLeft + nWidth + 1;
     else if (nWidth > 0)
-        nRight = nLeft + nWidth - 1;
+        mnRight = mnLeft + nWidth - 1;
     else
         SetWidthEmpty();
 }
@@ -685,9 +685,9 @@ inline void tools::Rectangle::SetWidth(tools::Long nWidth)
 inline void tools::Rectangle::SetHeight(tools::Long nHeight)
 {
     if (nHeight < 0)
-        nBottom = nTop + nHeight + 1;
+        mnBottom = mnTop + nHeight + 1;
     else if (nHeight > 0)
-        nBottom = nTop + nHeight - 1;
+        mnBottom = mnTop + nHeight - 1;
     else
         SetHeightEmpty();
 }
@@ -704,7 +704,7 @@ constexpr inline tools::Long tools::Rectangle::GetWidth() const
 
     if (!IsWidthEmpty())
     {
-        n = nRight - nLeft;
+        n = mnRight - mnLeft;
         if (n < 0)
             n--;
         else
@@ -720,7 +720,7 @@ constexpr inline tools::Long tools::Rectangle::GetHeight() const
 
     if (!IsHeightEmpty())
     {
-        n = nBottom - nTop;
+        n = mnBottom - mnTop;
         if (n < 0)
             n--;
         else
@@ -744,18 +744,18 @@ inline tools::Rectangle tools::Rectangle::GetIntersection( const tools::Rectangl
 
 inline bool tools::Rectangle::operator == ( const tools::Rectangle& rRect ) const
 {
-    return (nLeft   == rRect.nLeft   ) &&
-           (nTop    == rRect.nTop    ) &&
-           (nRight  == rRect.nRight  ) &&
-           (nBottom == rRect.nBottom );
+    return (mnLeft   == rRect.mnLeft   ) &&
+           (mnTop    == rRect.mnTop    ) &&
+           (mnRight  == rRect.mnRight  ) &&
+           (mnBottom == rRect.mnBottom );
 }
 
 inline bool tools::Rectangle::operator != ( const tools::Rectangle& rRect ) const
 {
-    return (nLeft   != rRect.nLeft   ) ||
-           (nTop    != rRect.nTop    ) ||
-           (nRight  != rRect.nRight  ) ||
-           (nBottom != rRect.nBottom );
+    return (mnLeft   != rRect.mnLeft   ) ||
+           (mnTop    != rRect.mnTop    ) ||
+           (mnRight  != rRect.mnRight  ) ||
+           (mnBottom != rRect.mnBottom );
 }
 
 inline tools::Rectangle& tools::Rectangle::operator +=( const Point& rPt )
