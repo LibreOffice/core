@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "696a2273_b9f500fb",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2022-07-24T18:09:11Z",
+      "side": 1,
+      "message": "Not sure why a lot of checks uses \u003c instead of \u003d\u003d",
+      "range": {
+        "startLine": 185,
+        "startChar": 13,
+        "endLine": 185,
+        "endChar": 18
+      },
+      "revId": "68c6cad002f762439793d96947b17d4785aa759a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
