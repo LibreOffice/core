@@ -16,6 +16,24 @@
       "message": "Sorry if off-topic: is the change related to Quartz only, or is it more generic? I wonder if aGreyPalette16 is related.",
       "revId": "a02d4f656add39658c30669f2652bf6536207098",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3be978ad_5bb0726e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-07-24T10:41:18Z",
+      "side": 1,
+      "message": "We removed 4-bit Bitmap support somewhere in the past, so this is just removing the left-overs.\n\nI see we still have Bitmap::GetGreyPalette that creates a aGreyPalette16 palette (and aGreyPalette4) - are you referring to this? This is fine but these palettes will always be stored in 8-bit Bitmap.",
+      "parentUuid": "49823bd0_676edf0e",
+      "revId": "a02d4f656add39658c30669f2652bf6536207098",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
