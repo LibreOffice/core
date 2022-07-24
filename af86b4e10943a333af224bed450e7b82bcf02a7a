@@ -158,6 +158,24 @@
       "parentUuid": "d6da6464_4ff492a9",
       "revId": "af86b4e10943a333af224bed450e7b82bcf02a7a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7435c95e_e7dfd214",
+        "filename": "sc/source/ui/view/tabview5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-07-24T09:35:58Z",
+      "side": 1,
+      "message": "No problem!\n\n\u003e I ask you to edit the commit message then, to mention that the same check is used as in ScDocFunc::RenameTable; or maybe even right in the code comment.\nDone. I have added a note to the commit message describing my argument for the choice.",
+      "parentUuid": "bf2df08a_7d26df38",
+      "revId": "af86b4e10943a333af224bed450e7b82bcf02a7a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
