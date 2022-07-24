@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6fc552e_8ab5000f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-07-24T08:09:45Z",
+      "side": 1,
+      "message": "I don\u0027t see a license statement. Can you send it https://wiki.documentfoundation.org/Development/GetInvolved#License_statement ?",
+      "revId": "5e7663b792ee1d56838d7a5082e5c29867f839f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
