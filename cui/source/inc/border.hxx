@@ -178,7 +178,7 @@ private:
     void                FillPresetVS();
     void                FillShadowVS();
     void                FillValueSets();
-    void                SetLineWidth(sal_Int64 nWidth);
+    void                SetLineWidth(sal_Int64 nWidth, sal_Int32 nRemovedType = 0);
 
     // Filler
     void                FillLineListBox_Impl();
