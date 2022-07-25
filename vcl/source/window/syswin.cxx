@@ -430,7 +430,11 @@ vcl::WindowData::WindowData(std::string_view rStr)
     aTokenStr = o3tl::getToken(rStr, 0, ',', nIndex);
     if (!aTokenStr.empty())
     {
-        rData.setWidth(o3tl::toInt32(aTokenStr));
+        sal_Int32 nWidth = o3tl::toInt32(aTokenStr);
+        if (nWidth >= 0)
+        {
+            rData.setWidth(nWidth);
+        }
         if (rData.width() > 0 && rData.width() < 16384)
             nValidMask |= vcl::WindowDataMask::Width;
         else
@@ -441,7 +445,11 @@ vcl::WindowData::WindowData(std::string_view rStr)
     aTokenStr = o3tl::getToken(rStr, 0, ';', nIndex);
     if (!aTokenStr.empty())
     {
-        rData.setHeight(o3tl::toInt32(aTokenStr));
+        sal_Int32 nHeight = o3tl::toInt32(aTokenStr);
+        if (nHeight >= 0)
+        {
+            rData.setHeight(nHeight);
+        }
         if (rData.height() > 0 && rData.height() < 16384)
             nValidMask |= vcl::WindowDataMask::Height;
         else
