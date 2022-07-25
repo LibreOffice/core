@@ -113,6 +113,9 @@ private:
 protected:
     SwStartNode* m_pStartOfSection;
 
+    /// only used by SwContentNodeTmp in SwTextNode::Update
+    SwNode();
+
     SwNode( const SwNodeIndex &rWhere, const SwNodeType nNodeId );
 
     /// for the initial StartNode
@@ -365,6 +368,9 @@ class SW_DLLPUBLIC SwContentNode: public sw::BroadcastingModify, public SwNode, 
     mutable bool mbSetModifyAtAttr;
 
 protected:
+    /// only used by SwContentNodeTmp in SwTextNode::Update
+    SwContentNode();
+
     SwContentNode( const SwNodeIndex &rWhere, const SwNodeType nNodeType,
                 SwFormatColl *pFormatColl );
     /** the = 0 forces the class to be an abstract base class, but the dtor can be still called

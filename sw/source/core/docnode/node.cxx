@@ -285,6 +285,18 @@ sal_uInt16 SwNode::GetSectionLevel() const
 tools::Long SwNode::s_nSerial = 0;
 #endif
 
+/// only used by SwContentNodeTmp in SwTextNode::Update
+SwNode::SwNode()
+    : m_nNodeType( SwNodeType::Start )
+    , m_nAFormatNumLvl( 0 )
+    , m_bIgnoreDontExpand( false)
+    , m_eMerge(Merge::None)
+#ifdef DBG_UTIL
+    , m_nSerial( s_nSerial++)
+#endif
+    , m_pStartOfSection( nullptr )
+{}
+
 SwNode::SwNode( const SwNodeIndex &rWhere, const SwNodeType nNdType )
     : m_nNodeType( nNdType )
     , m_nAFormatNumLvl( 0 )
@@ -1059,6 +1071,14 @@ SwEndNode::SwEndNode( SwNodes& rNds, SwNodeOffset nPos, SwStartNode& rSttNd )
     m_pStartOfSection = &rSttNd;
     m_pStartOfSection->m_pEndOfSection = this;
 }
+
+/// only used by SwContentNodeTmp in SwTextNode::Update
+SwContentNode::SwContentNode()
+    : SwNode()
+    , m_aCondCollListener( *this )
+    , m_pCondColl( nullptr )
+    , mbSetModifyAtAttr( false )
+{}
 
 SwContentNode::SwContentNode( const SwNodeIndex &rWhere, const SwNodeType nNdType,
                             SwFormatColl *pColl )
