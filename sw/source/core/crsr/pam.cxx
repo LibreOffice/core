@@ -84,8 +84,8 @@ bool SwPosition::operator<(const SwPosition &rPos) const
     {
         // note that positions with text node but no SwIndex registered are
         // created for text frames anchored at para (see SwXFrame::getAnchor())
-        SwIndexReg const*const pThisReg(nContent.GetIdxReg());
-        SwIndexReg const*const pOtherReg(rPos.nContent.GetIdxReg());
+        SwContentNode const*const pThisReg(nContent.GetContentNode());
+        SwContentNode const*const pOtherReg(rPos.nContent.GetContentNode());
         if (pThisReg && pOtherReg)
         {
             return (nContent < rPos.nContent);
@@ -105,8 +105,8 @@ bool SwPosition::operator>(const SwPosition &rPos) const
     {
         // note that positions with text node but no SwIndex registered are
         // created for text frames anchored at para (see SwXFrame::getAnchor())
-        SwIndexReg const*const pThisReg(nContent.GetIdxReg());
-        SwIndexReg const*const pOtherReg(rPos.nContent.GetIdxReg());
+        SwContentNode const*const pThisReg(nContent.GetContentNode());
+        SwContentNode const*const pOtherReg(rPos.nContent.GetContentNode());
         if (pThisReg && pOtherReg)
         {
             return (nContent > rPos.nContent);
@@ -126,8 +126,8 @@ bool SwPosition::operator<=(const SwPosition &rPos) const
     {
         // note that positions with text node but no SwIndex registered are
         // created for text frames anchored at para (see SwXFrame::getAnchor())
-        SwIndexReg const*const pThisReg(nContent.GetIdxReg());
-        SwIndexReg const*const pOtherReg(rPos.nContent.GetIdxReg());
+        SwContentNode const*const pThisReg(nContent.GetContentNode());
+        SwContentNode const*const pOtherReg(rPos.nContent.GetContentNode());
         if (pThisReg && pOtherReg)
         {
             return (nContent <= rPos.nContent);
@@ -147,8 +147,8 @@ bool SwPosition::operator>=(const SwPosition &rPos) const
     {
         // note that positions with text node but no SwIndex registered are
         // created for text frames anchored at para (see SwXFrame::getAnchor())
-        SwIndexReg const*const pThisReg(nContent.GetIdxReg());
-        SwIndexReg const*const pOtherReg(rPos.nContent.GetIdxReg());
+        SwContentNode const*const pThisReg(nContent.GetContentNode());
+        SwContentNode const*const pOtherReg(rPos.nContent.GetContentNode());
         if (pThisReg && pOtherReg)
         {
             return (nContent >= rPos.nContent);

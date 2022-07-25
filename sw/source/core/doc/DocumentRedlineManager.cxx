@@ -54,7 +54,7 @@ using namespace com::sun::star;
         void lcl_CheckPosition( const SwPosition* pPos )
         {
             assert(dynamic_cast<SwIndexReg*>(&pPos->nNode.GetNode())
-                    == pPos->nContent.GetIdxReg());
+                    == pPos->nContent.GetContentNode());
 
             SwTextNode* pTextNode = pPos->nNode.GetNode().GetTextNode();
             if( pTextNode == nullptr )

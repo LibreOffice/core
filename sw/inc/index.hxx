@@ -24,19 +24,20 @@
 
 #include <iostream>
 
+class SwContentNode;
 class SwIndexReg;
 struct SwPosition;
 
 namespace sw::mark { class IMark; }
 
-/// Marks a character position inside a document model node.
+/// Marks a character position inside a document model content node (SwContentNode)
 class SAL_WARN_UNUSED SW_DLLPUBLIC SwIndex
 {
 private:
     friend class SwIndexReg;
 
     sal_Int32 m_nIndex;
-    SwIndexReg * m_pIndexReg;
+    SwContentNode * m_pContentNode;
     // doubly linked list of Indexes registered at m_pIndexReg
     SwIndex * m_pNext;
     SwIndex * m_pPrev;
@@ -49,7 +50,7 @@ private:
     void Remove();
 
 public:
-    explicit SwIndex(SwIndexReg *const pReg, sal_Int32 const nIdx = 0);
+    explicit SwIndex(SwContentNode *const pContentNode, sal_Int32 const nIdx = 0);
     SwIndex( const SwIndex & );
     SwIndex( const SwIndex &, short nDiff );
     ~SwIndex() { Remove(); }
@@ -79,22 +80,22 @@ public:
     bool operator==( const SwIndex& rSwIndex ) const
     {
         return (m_nIndex    == rSwIndex.m_nIndex)
-            && (m_pIndexReg == rSwIndex.m_pIndexReg);
+            && (m_pContentNode == rSwIndex.m_pContentNode);
     }
 
     bool operator!=( const SwIndex& rSwIndex ) const
     {
         return (m_nIndex    != rSwIndex.m_nIndex)
-            || (m_pIndexReg != rSwIndex.m_pIndexReg);
+            || (m_pContentNode != rSwIndex.m_pContentNode);
     }
 
     sal_Int32 GetIndex() const { return m_nIndex; }
 
     // Assignments without creating a temporary object.
-    SwIndex &Assign(SwIndexReg *, sal_Int32);
+    SwIndex &Assign(SwContentNode *, sal_Int32);
 
-    // Returns pointer to IndexArray (for RTTI at SwIndexReg).
-    const SwIndexReg* GetIdxReg() const { return m_pIndexReg; }
+    // Returns pointer to SwContentNode (for RTTI at SwIndexReg).
+    const SwContentNode* GetContentNode() const { return m_pContentNode; }
     const SwIndex* GetNext() const { return m_pNext; }
 
     const sw::mark::IMark* GetMark() const { return m_pMark; }
@@ -103,6 +104,7 @@ public:
 
 SW_DLLPUBLIC std::ostream& operator <<(std::ostream& s, const SwIndex& index);
 
+/// Helper base class for SwContentNode to manage the list of attached SwIndex
 class SAL_WARN_UNUSED SwIndexReg
 {
     friend class SwIndex;
@@ -117,11 +119,11 @@ protected:
 
     bool HasAnyIndex() const { return nullptr != m_pFirst; }
 
-public:
     SwIndexReg();
+public:
     virtual ~SwIndexReg();
 
-    void MoveTo( SwIndexReg& rArr );
+    void MoveTo( SwContentNode& rArr );
     const SwIndex* GetFirstIndex() const { return m_pFirst; }
 };
 

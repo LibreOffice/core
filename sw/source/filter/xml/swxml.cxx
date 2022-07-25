@@ -93,7 +93,7 @@ static void lcl_EnsureValidPam( SwPaM& rPam )
     if( rPam.GetContentNode() != nullptr )
     {
         // set proper point content
-        if( rPam.GetContentNode() != rPam.GetPoint()->nContent.GetIdxReg() )
+        if( rPam.GetContentNode() != rPam.GetPoint()->nContent.GetContentNode() )
         {
             rPam.GetPoint()->nContent.Assign( rPam.GetContentNode(), 0 );
         }
@@ -101,7 +101,7 @@ static void lcl_EnsureValidPam( SwPaM& rPam )
 
         // if mark is invalid, we delete it
         if( ( rPam.GetContentNode( false ) == nullptr ) ||
-            ( rPam.GetContentNode( false ) != rPam.GetMark()->nContent.GetIdxReg() ) )
+            ( rPam.GetContentNode( false ) != rPam.GetMark()->nContent.GetContentNode() ) )
         {
             rPam.DeleteMark();
         }

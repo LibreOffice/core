@@ -24,9 +24,9 @@
 
 #include <crossrefbookmark.hxx>
 
-SwIndex::SwIndex(SwIndexReg *const pReg, sal_Int32 const nIdx)
+SwIndex::SwIndex(SwContentNode *const pContentNode, sal_Int32 const nIdx)
     : m_nIndex( nIdx )
-    , m_pIndexReg( pReg )
+    , m_pContentNode( pContentNode )
     , m_pNext( nullptr )
     , m_pPrev( nullptr )
     , m_pMark( nullptr )
@@ -35,7 +35,7 @@ SwIndex::SwIndex(SwIndexReg *const pReg, sal_Int32 const nIdx)
 }
 
 SwIndex::SwIndex( const SwIndex& rIdx, short nDiff )
-    : m_pIndexReg( rIdx.m_pIndexReg )
+    : m_pContentNode( rIdx.m_pContentNode )
     , m_pNext( nullptr )
     , m_pPrev( nullptr )
     , m_pMark( nullptr )
@@ -45,7 +45,7 @@ SwIndex::SwIndex( const SwIndex& rIdx, short nDiff )
 
 SwIndex::SwIndex( const SwIndex& rIdx )
     : m_nIndex( rIdx.m_nIndex )
-    , m_pIndexReg( rIdx.m_pIndexReg )
+    , m_pContentNode( rIdx.m_pContentNode )
     , m_pNext( nullptr )
     , m_pPrev( nullptr )
     , m_pMark( nullptr )
@@ -55,31 +55,31 @@ SwIndex::SwIndex( const SwIndex& rIdx )
 
 void SwIndex::Init(sal_Int32 const nIdx)
 {
-    if (!m_pIndexReg)
+    if (!m_pContentNode)
     {
         m_nIndex = 0; // always 0 if no IndexReg
     }
-    else if (!m_pIndexReg->m_pFirst) // first Index?
+    else if (!m_pContentNode->m_pFirst) // first Index?
     {
-        assert(!m_pIndexReg->m_pLast);
-        m_pIndexReg->m_pFirst = m_pIndexReg->m_pLast = this;
+        assert(!m_pContentNode->m_pLast);
+        m_pContentNode->m_pFirst = m_pContentNode->m_pLast = this;
         m_nIndex = nIdx;
     }
-    else if (nIdx > ((m_pIndexReg->m_pLast->m_nIndex
-                        - m_pIndexReg->m_pFirst->m_nIndex) / 2))
+    else if (nIdx > ((m_pContentNode->m_pLast->m_nIndex
+                        - m_pContentNode->m_pFirst->m_nIndex) / 2))
     {
-        ChgValue( *m_pIndexReg->m_pLast, nIdx );
+        ChgValue( *m_pContentNode->m_pLast, nIdx );
     }
     else
     {
-        ChgValue( *m_pIndexReg->m_pFirst, nIdx );
+        ChgValue( *m_pContentNode->m_pFirst, nIdx );
     }
 }
 
 SwIndex& SwIndex::ChgValue( const SwIndex& rIdx, sal_Int32 nNewValue )
 {
-    assert(m_pIndexReg == rIdx.m_pIndexReg);
-    if (!m_pIndexReg)
+    assert(m_pContentNode == rIdx.m_pContentNode);
+    if (!m_pContentNode)
     {
         m_nIndex = 0;
         return *this; // no IndexReg => no list to sort into; m_nIndex is 0
@@ -105,7 +105,7 @@ SwIndex& SwIndex::ChgValue( const SwIndex& rIdx, sal_Int32 nNewValue )
             if (m_pPrev)
                 m_pPrev->m_pNext = this;
             else
-                m_pIndexReg->m_pFirst = this;
+                m_pContentNode->m_pFirst = this;
             pFnd->m_pPrev = this;
         }
     }
@@ -129,7 +129,7 @@ SwIndex& SwIndex::ChgValue( const SwIndex& rIdx, sal_Int32 nNewValue )
             if (m_pNext)
                 m_pNext->m_pPrev = this;
             else
-                m_pIndexReg->m_pLast = this;
+                m_pContentNode->m_pLast = this;
             pFnd->m_pNext = this;
         }
     }
@@ -143,15 +143,15 @@ SwIndex& SwIndex::ChgValue( const SwIndex& rIdx, sal_Int32 nNewValue )
         m_pPrev->m_pNext = this;
 
         if (!m_pNext) // last in the list
-            m_pIndexReg->m_pLast = this;
+            m_pContentNode->m_pLast = this;
         else
             m_pNext->m_pPrev = this;
     }
 
-    if (m_pIndexReg->m_pFirst == m_pNext)
-        m_pIndexReg->m_pFirst = this;
-    if (m_pIndexReg->m_pLast == m_pPrev)
-        m_pIndexReg->m_pLast = this;
+    if (m_pContentNode->m_pFirst == m_pNext)
+        m_pContentNode->m_pFirst = this;
+    if (m_pContentNode->m_pLast == m_pPrev)
+        m_pContentNode->m_pLast = this;
 
     m_nIndex = nNewValue;
 
@@ -160,7 +160,7 @@ SwIndex& SwIndex::ChgValue( const SwIndex& rIdx, sal_Int32 nNewValue )
 
 void SwIndex::Remove()
 {
-    if (!m_pIndexReg)
+    if (!m_pContentNode)
     {
         assert(!m_pPrev && !m_pNext);
         return;
@@ -170,28 +170,28 @@ void SwIndex::Remove()
     {
         m_pPrev->m_pNext = m_pNext;
     }
-    else if (m_pIndexReg->m_pFirst == this)
+    else if (m_pContentNode->m_pFirst == this)
     {
-        m_pIndexReg->m_pFirst = m_pNext;
+        m_pContentNode->m_pFirst = m_pNext;
     }
 
     if (m_pNext)
     {
         m_pNext->m_pPrev = m_pPrev;
     }
-    else if (m_pIndexReg->m_pLast == this)
+    else if (m_pContentNode->m_pLast == this)
     {
-        m_pIndexReg->m_pLast = m_pPrev;
+        m_pContentNode->m_pLast = m_pPrev;
     }
 }
 
 SwIndex& SwIndex::operator=( const SwIndex& rIdx )
 {
     bool bEqual;
-    if (rIdx.m_pIndexReg != m_pIndexReg) // unregister!
+    if (rIdx.m_pContentNode != m_pContentNode) // unregister!
     {
         Remove();
-        m_pIndexReg = rIdx.m_pIndexReg;
+        m_pContentNode = rIdx.m_pContentNode;
         m_pNext = m_pPrev = nullptr;
         bEqual = false;
     }
@@ -203,12 +203,12 @@ SwIndex& SwIndex::operator=( const SwIndex& rIdx )
     return *this;
 }
 
-SwIndex& SwIndex::Assign( SwIndexReg* pArr, sal_Int32 nIdx )
+SwIndex& SwIndex::Assign( SwContentNode* pArr, sal_Int32 nIdx )
 {
-    if (pArr != m_pIndexReg) // unregister!
+    if (pArr != m_pContentNode) // unregister!
     {
         Remove();
-        m_pIndexReg = pArr;
+        m_pContentNode = pArr;
         m_pNext = m_pPrev = nullptr;
         Init(nIdx);
     }
@@ -284,7 +284,7 @@ void SwIndexReg::Update(
     }
 }
 
-void SwIndexReg::MoveTo( SwIndexReg& rArr )
+void SwIndexReg::MoveTo( SwContentNode& rArr )
 {
     if (!(this != &rArr && m_pFirst))
         return;
@@ -348,28 +348,28 @@ sal_Int32 SwIndex::operator-=( sal_Int32 const nVal )
 bool SwIndex::operator< ( const SwIndex & rIndex ) const
 {
     // Attempt to compare indices into different arrays
-    assert(m_pIndexReg == rIndex.m_pIndexReg);
+    assert(m_pContentNode == rIndex.m_pContentNode);
     return m_nIndex < rIndex.m_nIndex;
 }
 
 bool SwIndex::operator<=( const SwIndex & rIndex ) const
 {
     // Attempt to compare indices into different arrays
-    assert(m_pIndexReg == rIndex.m_pIndexReg);
+    assert(m_pContentNode == rIndex.m_pContentNode);
     return m_nIndex <= rIndex.m_nIndex;
 }
 
 bool SwIndex::operator> ( const SwIndex & rIndex ) const
 {
     // Attempt to compare indices into different arrays
-    assert(m_pIndexReg == rIndex.m_pIndexReg);
+    assert(m_pContentNode == rIndex.m_pContentNode);
     return m_nIndex > rIndex.m_nIndex;
 }
 
 bool SwIndex::operator>=( const SwIndex & rIndex ) const
 {
     // Attempt to compare indices into different arrays
-    assert(m_pIndexReg == rIndex.m_pIndexReg);
+    assert(m_pContentNode == rIndex.m_pContentNode);
     return m_nIndex >= rIndex.m_nIndex;
 }
 
