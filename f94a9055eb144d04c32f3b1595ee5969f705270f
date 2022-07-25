@@ -16,6 +16,24 @@
       "message": "please adapt any gdb pretty printers and check that they still work",
       "revId": "f94a9055eb144d04c32f3b1595ee5969f705270f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0156234e_a6d7d6b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-07-25T11:43:09Z",
+      "side": 1,
+      "message": "fixed and checked (the gdb one, at least). I also updated the Visual Studio one, have not checked it",
+      "parentUuid": "d7323b08_bdb27ab4",
+      "revId": "f94a9055eb144d04c32f3b1595ee5969f705270f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
