@@ -541,7 +541,8 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo82123, "fdo82123.docx")
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // make sure there is only one run inside first SDT after RT as in the Original file.
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[2]/w:p/w:sdt[1]/w:sdtContent/w:r",1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[2]/w:p/w:sdt[1]/w:sdtContent/w:r/w:t", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[2]/w:p/w:r/w:drawing", 1);
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSdtBeforeField, "sdt-before-field.docx")
@@ -563,7 +564,8 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testfdo82492, "fdo82492.docx")
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // make sure there is only one run inside first SDT after RT as in the Original file.
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt[1]/w:sdtContent/w:r",1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt[1]/w:sdtContent/w:r/w:t", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent", 1);
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSdtHeader, "sdt-header.docx")

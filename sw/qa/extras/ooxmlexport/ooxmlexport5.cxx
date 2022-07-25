@@ -1105,7 +1105,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSdt2Run)
     xmlDocUniquePtr pXmlDoc = parseExport();
 
     // The problem was that <w:sdt> was closed after "first", not after "second", so the second assert failed.
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r", 1);
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r/w:t", "firstsecond");
     // Make sure the third portion is still outside <w:sdt>.
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/w:t", "third");
 }

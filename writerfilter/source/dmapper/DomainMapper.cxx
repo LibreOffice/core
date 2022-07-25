@@ -1070,6 +1070,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         break;
         case NS_ooxml::LN_CT_SdtBlock_sdtContent:
         case NS_ooxml::LN_CT_SdtRun_sdtContent:
+            m_pImpl->m_pSdtHelper->SetSdtType(nName);
             if (m_pImpl->m_pSdtHelper->getControlType() == SdtControlType::unknown)
             {
                 // Still not determined content type? and it is even not unsupported? Then it is plain text field
@@ -1109,6 +1110,15 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                         break;
                     default:
                         break;
+                }
+
+                if (m_pImpl->m_pSdtHelper->getControlType() == SdtControlType::plainText)
+                {
+                    // The plain text && data binding case needs more work before it can be enabled.
+                    if (m_pImpl->m_pSdtHelper->GetDataBindingPrefixMapping().isEmpty())
+                    {
+                        m_pImpl->PopSdt();
+                    }
                 }
             }
 
@@ -2751,6 +2761,14 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     case NS_ooxml::LN_CT_SdtPr_text:
     {
         m_pImpl->m_pSdtHelper->setControlType(SdtControlType::plainText);
+        if (m_pImpl->m_pSdtHelper->GetSdtType() == NS_ooxml::LN_CT_SdtRun_sdtContent)
+        {
+            if (m_pImpl->m_pSdtHelper->GetDataBindingPrefixMapping().isEmpty())
+            {
+                m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear();
+                break;
+            }
+        }
         enableInteropGrabBag("ooxml:CT_SdtPr_text");
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
         if (pProperties)
@@ -3739,7 +3757,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
             return;
         }
     }
-    else if (m_pImpl->m_pSdtHelper->getControlType() == SdtControlType::plainText)
+    else if ((m_pImpl->m_pSdtHelper->GetSdtType() != NS_ooxml::LN_CT_SdtRun_sdtContent || !m_pImpl->m_pSdtHelper->GetDataBindingPrefixMapping().isEmpty()) && m_pImpl->m_pSdtHelper->getControlType() == SdtControlType::plainText)
     {
         m_pImpl->m_pSdtHelper->getSdtTexts().append(sText);
         if (bNewLine)
