@@ -137,7 +137,7 @@ void SwCharDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
 
 SwCharURLPage::SwCharURLPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet)
     : SfxTabPage(pPage, pController, "modules/swriter/ui/charurlpage.ui", "CharURLPage", &rCoreSet)
-    , bModified(false)
+    , m_bModified(false)
     , m_xURLED(m_xBuilder->weld_entry("urled"))
     , m_xTextFT(m_xBuilder->weld_label("textft"))
     , m_xTextED(m_xBuilder->weld_entry("texted"))
@@ -253,7 +253,7 @@ bool SwCharURLPage::FillItemSet(SfxItemSet* rSet)
     bool bURLModified = m_xURLED->get_value_changed_from_saved();
     bool bNameModified = m_xNameED->get_value_changed_from_saved();
     bool bTargetModified = m_xTargetFrameLB->get_value_changed_from_saved();
-    bModified = bURLModified || bNameModified || bTargetModified;
+    m_bModified = bURLModified || bNameModified || bTargetModified;
 
     // set valid settings first
     OUString sEntry = m_xVisitedLB->get_active_text();
@@ -268,19 +268,19 @@ bool SwCharURLPage::FillItemSet(SfxItemSet* rSet)
         aINetFormat.SetMacroTable(&*m_oINetMacroTable);
 
     if (m_xVisitedLB->get_value_changed_from_saved())
-        bModified = true;
+        m_bModified = true;
 
     if (m_xNotVisitedLB->get_value_changed_from_saved())
-        bModified = true;
+        m_bModified = true;
 
     if (bNameModified)
     {
-        bModified = true;
+        m_bModified = true;
         rSet->Put(SfxStringItem(FN_PARAM_SELECTION, m_xTextED->get_text()));
     }
-    if(bModified)
+    if(m_bModified)
         rSet->Put(aINetFormat);
-    return bModified;
+    return m_bModified;
 }
 
 std::unique_ptr<SfxTabPage> SwCharURLPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet)
@@ -302,7 +302,7 @@ IMPL_LINK_NOARG(SwCharURLPage, InsertFileHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(SwCharURLPage, EventHdl, weld::Button&, void)
 {
-    bModified |= SwMacroAssignDlg::INetFormatDlg(GetFrameWeld(),
+    m_bModified |= SwMacroAssignDlg::INetFormatDlg(GetFrameWeld(),
                     ::GetActiveView()->GetWrtShell(), m_oINetMacroTable);
 }
 

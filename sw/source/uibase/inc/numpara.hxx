@@ -29,8 +29,8 @@ class SwParagraphNumTabPage final : public SfxTabPage
     // #outlinelevel#
     const OUString msOutlineNumbering;
 
-    bool                    bModified : 1;
-    bool                    bCurNumrule : 1;
+    bool                    m_bModified : 1;
+    bool                    m_bCurNumrule : 1;
 
     std::unique_ptr<weld::Widget> m_xOutlineStartBX;
     std::unique_ptr<weld::ComboBox> m_xOutlineLvLB;
@@ -56,7 +56,7 @@ class SwParagraphNumTabPage final : public SfxTabPage
     DECL_LINK(EditNumStyleHdl_Impl, weld::Button&, void);
     DECL_LINK(EditNumStyleSelectHdl_Impl, weld::ComboBox&, void);
 
-    static const WhichRangesContainer aPageRg;
+    static const WhichRangesContainer s_aPageRg;
 
     bool ExecuteEditNumStyle_Impl(sal_uInt16 nId, const OUString& rStr,
                                   SfxStyleFamily nFamily);
@@ -67,7 +67,7 @@ public:
 
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController,
                                       const SfxItemSet* rSet );
-    static WhichRangesContainer GetRanges() { return aPageRg; }
+    static WhichRangesContainer GetRanges() { return s_aPageRg; }
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;

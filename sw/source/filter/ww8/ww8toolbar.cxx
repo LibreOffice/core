@@ -613,7 +613,7 @@ Xst::Read( SvStream& rS )
 {
     SAL_INFO("sw.ww8","Xst::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
-    sString = read_uInt16_PascalString(rS);
+    m_sString = read_uInt16_PascalString(rS);
     return rS.good();
 }
 
@@ -928,7 +928,7 @@ bool MacroName::Read(SvStream &rS)
     return m_xstz.Read( rS );
 }
 
-Xstz::Xstz():chTerm(0)
+Xstz::Xstz():m_chTerm(0)
 {
 }
 
@@ -937,10 +937,10 @@ Xstz::Read(SvStream &rS)
 {
     SAL_INFO("sw.ww8","Xstz::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
-    if ( !xst.Read( rS ) )
+    if ( !m_xst.Read( rS ) )
         return false;
-    rS.ReadUInt16( chTerm );
-    if ( chTerm != 0 ) // should be an assert
+    rS.ReadUInt16( m_chTerm );
+    if ( m_chTerm != 0 ) // should be an assert
         return false;
     return rS.good();
 }
