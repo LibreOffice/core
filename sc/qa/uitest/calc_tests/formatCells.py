@@ -270,15 +270,16 @@ class formatCell(UITestCase):
                 # set line style to "double" (minimal width is taken)
                 xLineSet.executeAction("CHOOSE", mkPropertyValues({"POS": '16'}))
                 widthVal = get_state_as_dict(linewidthmf)["Text"]
-                self.assertEqual(widthVal, '0.75 pt')
+                # because of minimum gap  double line only can handle 1.10 pt
+                self.assertEqual(widthVal, '1.10 pt')
 
                 # set line style to "solid"
                 xLineSet.executeAction("CHOOSE", mkPropertyValues({"POS": "1"}))
                 widthVal = get_state_as_dict(linewidthmf)["Text"]
-                self.assertEqual(widthVal, '0.75 pt')
+                # because the previous value was 1.10 pt we use it for the next selected style too
+                self.assertEqual(widthVal, '1.10 pt')
 
                 # make custom line width
-                linewidthmf.executeAction("UP", tuple())
                 linewidthmf.executeAction("UP", tuple())
                 linewidthmf.executeAction("UP", tuple())
                 widthVal = get_state_as_dict(linewidthmf)["Text"]
