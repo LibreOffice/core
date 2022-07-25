@@ -137,7 +137,12 @@ bool GoInContentCells( SwPaM&, SwMoveFnCollection const &);
 bool GoInContentSkipHidden( SwPaM&, SwMoveFnCollection const &);
 bool GoInContentCellsSkipHidden( SwPaM&, SwMoveFnCollection const &);
 
-/// PaM is Point and Mark: a selection of the document model.
+/**
+ * PaM is Point and Mark: a selection of the document model.
+ *
+ * The reason for the distinction is that the point moves around during adjusting the selection with
+ * shift-arrow keys, while the mark remains where it is.
+ */
 class SAL_WARN_UNUSED SW_DLLPUBLIC SwPaM : public sw::Ring<SwPaM>
 {
     SwPosition   m_Bound1;
