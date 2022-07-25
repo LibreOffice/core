@@ -1410,12 +1410,14 @@ void SwTextNode::Update(
     SwContentNodeTmp aTmpIdxReg;
     if (!(eMode & UpdateMode::Negative) && !(eMode & UpdateMode::Delete))
     {
-        const SwRedlineTable& rTable = GetDoc().getIDocumentRedlineAccess().GetRedlineTable();
-        SwRedlineTable::size_type n = GetDoc().getIDocumentRedlineAccess().GetRedlinePos(*this, RedlineType::Any);
-        for( ; n < rTable.size(); ++n )
+        // walk the list of SwIndex attached to me and see if any of them are redlines
+        const SwContentIndex* pContentNodeIndex = GetFirstIndex();
+        while (pContentNodeIndex)
         {
-            SwRangeRedline* pRedl = rTable[ n ];
-            if ( pRedl->HasMark() )
+            SwRangeRedline* pRedl = pContentNodeIndex->GetRedline();
+            if (!pRedl)
+                ; // ignore
+            else if ( pRedl->HasMark() )
             {
                 SwPosition* const pEnd = pRedl->End();
                 if ( this == &pEnd->nNode.GetNode() &&
@@ -1440,6 +1442,7 @@ void SwTextNode::Update(
                 assert(!pRedl->GetBound(!isOneUsed).nNode.GetNode().IsTextNode());
                 assert(!pRedl->GetBound(!isOneUsed).nContent.GetContentNode()); (void)isOneUsed;
             }
+            pContentNodeIndex = pContentNodeIndex->GetNext();
         }
 
         // Bookmarks must never grow to either side, when editing (directly)

@@ -28,6 +28,7 @@
 class SwContentNode;
 class SwContentIndexReg;
 struct SwPosition;
+class SwRangeRedline;
 
 namespace sw::mark { class IMark; }
 
@@ -42,6 +43,9 @@ private:
     // doubly linked list of Indexes registered at m_pIndexReg
     SwContentIndex * m_pNext;
     SwContentIndex * m_pPrev;
+
+    /// points to the SwRangeRedline (if any) that contains this SwIndex, via SwPosition and SwPaM
+    SwRangeRedline * m_pRangeRedline = nullptr;
 
     /// Pointer to a mark that owns this position to allow fast lookup of marks of an SwContentIndexReg.
     const sw::mark::IMark* m_pMark;
@@ -101,6 +105,9 @@ public:
 
     const sw::mark::IMark* GetMark() const { return m_pMark; }
     void SetMark(const sw::mark::IMark* pMark);
+
+    SwRangeRedline* GetRedline() const { return m_pRangeRedline; }
+    void SetRedline(SwRangeRedline* pRangeRedline) { m_pRangeRedline = pRangeRedline; }
 };
 
 SW_DLLPUBLIC std::ostream& operator <<(std::ostream& s, const SwContentIndex& index);
