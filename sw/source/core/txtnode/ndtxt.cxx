@@ -1410,11 +1410,20 @@ void SwTextNode::Update(
     SwContentNodeTmp aTmpIdxReg;
     if (!(eMode & UpdateMode::Negative) && !(eMode & UpdateMode::Delete))
     {
-        const SwRedlineTable& rTable = GetDoc().getIDocumentRedlineAccess().GetRedlineTable();
-        SwRedlineTable::size_type n = GetDoc().getIDocumentRedlineAccess().GetRedlinePos(*this, RedlineType::Any);
-        for( ; n < rTable.size(); ++n )
+        std::vector<SwRangeRedline*> vMyRedlines;
+        // walk the list of SwIndex attached to me and see if any of them are redlines
+        const SwContentIndex* pContentNodeIndex = GetFirstIndex();
+        while (pContentNodeIndex)
         {
-            SwRangeRedline* pRedl = rTable[ n ];
+            SwRangeRedline* pRedl = pContentNodeIndex->GetRedline();
+            if (pRedl)
+                vMyRedlines.push_back(pRedl);
+            pContentNodeIndex = pContentNodeIndex->GetNext();
+        }
+        std::sort(vMyRedlines.begin(), vMyRedlines.end());
+        vMyRedlines.erase( std::unique( vMyRedlines.begin(), vMyRedlines.end() ), vMyRedlines.end() );
+        for (SwRangeRedline* pRedl : vMyRedlines)
+        {
             if ( pRedl->HasMark() )
             {
                 SwPosition* const pEnd = pRedl->End();
