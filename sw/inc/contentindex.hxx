@@ -49,7 +49,7 @@ private:
     void Remove();
 
 public:
-    explicit SwContentIndex(SwContentNode *const pContentNode, sal_Int32 const nIdx = 0);
+    explicit SwContentIndex(const SwContentNode * pContentNode, sal_Int32 const nIdx = 0);
     SwContentIndex( const SwContentIndex & );
     SwContentIndex( const SwContentIndex &, short nDiff );
     ~SwContentIndex() { Remove(); }
@@ -91,7 +91,7 @@ public:
     sal_Int32 GetIndex() const { return m_nIndex; }
 
     // Assignments without creating a temporary object.
-    SwContentIndex &Assign(SwContentNode *, sal_Int32);
+    SwContentIndex &Assign(const SwContentNode *, sal_Int32);
 
     // Returns pointer to SwContentNode (for RTTI at SwContentIndexReg).
     const SwContentNode* GetContentNode() const { return m_pContentNode; }

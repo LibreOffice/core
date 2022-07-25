@@ -845,7 +845,7 @@ bool SwCursorShell::GotoFootnoteAnchor(const SwTextFootnote& rTextFootnote)
     SwCursorSaveState aSaveState(*pCursor);
 
     pCursor->GetPoint()->nNode = rTextFootnote.GetTextNode();
-    pCursor->GetPoint()->nContent.Assign(const_cast<SwTextNode*>(&rTextFootnote.GetTextNode()),
+    pCursor->GetPoint()->nContent.Assign(&rTextFootnote.GetTextNode(),
                                          rTextFootnote.GetStart());
     bRet = !pCursor->IsSelOvr();
     if (bRet)
@@ -2176,8 +2176,7 @@ bool SwCursorShell::GotoINetAttr( const SwTextINetFormat& rAttr )
         SwCursorSaveState aSaveState( *pCursor );
 
         pCursor->GetPoint()->nNode = *rAttr.GetpTextNode();
-        pCursor->GetPoint()->nContent.Assign( const_cast<SwTextNode*>(rAttr.GetpTextNode()),
-                                            rAttr.GetStart() );
+        pCursor->GetPoint()->nContent.Assign( rAttr.GetpTextNode(), rAttr.GetStart() );
         bRet = !pCursor->IsSelOvr();
         if( bRet )
             UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);

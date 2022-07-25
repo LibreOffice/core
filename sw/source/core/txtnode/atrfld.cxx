@@ -236,7 +236,7 @@ void SwFormatField::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
         SwDoc& rDoc = pPaM->GetDoc();
         const SwTextNode& rTextNode = mpTextField->GetTextNode();
         pPaM->GetPoint()->nNode = rTextNode;
-        pPaM->GetPoint()->nContent.Assign( const_cast<SwTextNode*>(&rTextNode), mpTextField->GetStart() );
+        pPaM->GetPoint()->nContent.Assign( &rTextNode, mpTextField->GetStart() );
 
         OUString const aEntry(mpField->ExpandField(rDoc.IsClipBoard(), pFieldHint->m_pLayout));
         pPaM->SetMark();

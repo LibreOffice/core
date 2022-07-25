@@ -2453,7 +2453,7 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pCurrentCursor )
                 SwPosition* pPos = pCur->GetMark();
                 if( pNd != &pPos->nNode.GetNode() )
                     pPos->nNode = *pNd;
-                pPos->nContent.Assign( const_cast<SwContentNode*>(static_cast<const SwContentNode*>(pNd)), 0 );
+                pPos->nContent.Assign( static_cast<const SwContentNode*>(pNd), 0 );
 
                 aIdx.Assign( *pSttNd->EndOfSectionNode(), - 1 );
                 pNd = &aIdx.GetNode();
@@ -2463,7 +2463,7 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pCurrentCursor )
                 pPos = pCur->GetPoint();
                 if (pNd && pNd != &pPos->nNode.GetNode())
                     pPos->nNode = *pNd;
-                pPos->nContent.Assign(const_cast<SwContentNode*>(static_cast<const SwContentNode*>(pNd)), pNd ? static_cast<const SwContentNode*>(pNd)->Len() : 0);
+                pPos->nContent.Assign( static_cast<const SwContentNode*>(pNd), pNd ? static_cast<const SwContentNode*>(pNd)->Len() : 0);
 
                 aTmp.erase( aTmp.begin() + nPos );
             }

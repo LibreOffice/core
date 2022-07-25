@@ -24,9 +24,9 @@
 
 #include <crossrefbookmark.hxx>
 
-SwContentIndex::SwContentIndex(SwContentNode *const pContentNode, sal_Int32 const nIdx)
+SwContentIndex::SwContentIndex(const SwContentNode * pContentNode, sal_Int32 const nIdx)
     : m_nIndex( nIdx )
-    , m_pContentNode( pContentNode )
+    , m_pContentNode( const_cast<SwContentNode*>(pContentNode) )
     , m_pNext( nullptr )
     , m_pPrev( nullptr )
     , m_pMark( nullptr )
@@ -203,12 +203,12 @@ SwContentIndex& SwContentIndex::operator=( const SwContentIndex& rIdx )
     return *this;
 }
 
-SwContentIndex& SwContentIndex::Assign( SwContentNode* pArr, sal_Int32 nIdx )
+SwContentIndex& SwContentIndex::Assign( const SwContentNode* pArr, sal_Int32 nIdx )
 {
     if (pArr != m_pContentNode) // unregister!
     {
         Remove();
-        m_pContentNode = pArr;
+        m_pContentNode = const_cast<SwContentNode*>(pArr);
         m_pNext = m_pPrev = nullptr;
         Init(nIdx);
     }
