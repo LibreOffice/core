@@ -43,7 +43,7 @@ public:
 class SwCharURLPage final : public SfxTabPage
 {
     std::optional<SvxMacroTableDtor> m_oINetMacroTable;
-    bool                bModified;
+    bool                m_bModified;
 
     std::unique_ptr<weld::Entry> m_xURLED;
     std::unique_ptr<weld::Label> m_xTextFT;

@@ -19,12 +19,12 @@ class SwCTBWrapper;
 
 class Xst : public TBBase
 {
-    OUString sString;
+    OUString m_sString;
 
 public:
     Xst(){}
     bool Read(SvStream &rS) override;
-    const OUString& getString() const { return sString; }
+    const OUString& getString() const { return m_sString; }
 };
 
 class SwTBC : public TBBase
@@ -273,8 +273,8 @@ public:
 
 class Xstz : public TBBase
 {
-    Xst xst; //An Xst specifying the string with its pre-pended length.
-    sal_uInt16 chTerm;
+    Xst m_xst; //An Xst specifying the string with its pre-pended length.
+    sal_uInt16 m_chTerm;
 
     Xstz(const Xstz&) = delete;
     Xstz& operator = ( const Xstz&) = delete;
