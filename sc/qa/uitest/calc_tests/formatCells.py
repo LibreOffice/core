@@ -270,24 +270,25 @@ class formatCell(UITestCase):
                 # set line style to "double" (minimal width is taken)
                 xLineSet.executeAction("CHOOSE", mkPropertyValues({"POS": '16'}))
                 widthVal = get_state_as_dict(linewidthmf)["Text"]
-                self.assertEqual(widthVal, '0.75 pt')
+                # minimim predefined width is Medium (1.50 pt)
+                self.assertEqual(widthVal, '1.50 pt')
 
                 # set line style to "solid"
                 xLineSet.executeAction("CHOOSE", mkPropertyValues({"POS": "1"}))
                 widthVal = get_state_as_dict(linewidthmf)["Text"]
-                self.assertEqual(widthVal, '0.75 pt')
+                self.assertEqual(widthVal, '1.50 pt')
 
                 # make custom line width
                 linewidthmf.executeAction("UP", tuple())
                 linewidthmf.executeAction("UP", tuple())
                 linewidthmf.executeAction("UP", tuple())
                 widthVal = get_state_as_dict(linewidthmf)["Text"]
-                self.assertEqual(widthVal, '1.50 pt')
+                self.assertEqual(widthVal, '2.25 pt')
 
                 # set line style to "double" (minimal width is not taken)
                 xLineSet.executeAction("CHOOSE", mkPropertyValues({"POS": "8"}))
                 widthVal = get_state_as_dict(linewidthmf)["Text"]
-                self.assertEqual(widthVal, '1.50 pt')
+                self.assertEqual(widthVal, '2.25 pt')
 
 
 
