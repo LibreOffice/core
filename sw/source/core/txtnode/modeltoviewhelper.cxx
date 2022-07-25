@@ -161,7 +161,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode,
             {
                 case CH_TXT_ATR_FIELDSTART:
                 {
-                    auto const pFieldMark(rIDMA.getFieldmarkAt(SwPosition(const_cast<SwTextNode&>(rNode), i)));
+                    auto const pFieldMark(rIDMA.getFieldmarkAt(SwPosition(rNode, i)));
                     assert(pFieldMark);
                     startedFields.emplace_back(pFieldMark, false);
                     if (!oStartHidden)
@@ -172,7 +172,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode,
                 }
                 case CH_TXT_ATR_FIELDSEP:
                 {
-                    assert(startedFields.back().first->IsCoveringPosition(SwPosition(const_cast<SwTextNode&>(rNode), i)));
+                    assert(startedFields.back().first->IsCoveringPosition(SwPosition(rNode, i)));
                     startedFields.back().second = true;
                     assert(oStartHidden);
                     if (::std::all_of(startedFields.begin(), startedFields.end(),
@@ -194,7 +194,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode,
                 }
                 case CH_TXT_ATR_FIELDEND:
                 {
-                    assert(startedFields.back().first == rIDMA.getFieldmarkAt(SwPosition(const_cast<SwTextNode&>(rNode), i)));
+                    assert(startedFields.back().first == rIDMA.getFieldmarkAt(SwPosition(rNode, i)));
                     startedFields.pop_back();
                     aHiddenMulti.Select({i, i}, true);
                     break;

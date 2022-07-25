@@ -38,8 +38,7 @@ bool IsFootnoteDeleted(IDocumentRedlineAccess const& rIDRA,
         SwTextFootnote const& rTextFootnote)
 {
     SwRedlineTable::size_type tmp;
-    SwPosition const pos(const_cast<SwTextNode&>(rTextFootnote.GetTextNode()),
-            rTextFootnote.GetStart());
+    SwPosition const pos(rTextFootnote.GetTextNode(), rTextFootnote.GetStart());
     SwRangeRedline const*const pRedline(rIDRA.GetRedline(pos, &tmp));
     return (pRedline
         && pRedline->GetType() == RedlineType::Delete

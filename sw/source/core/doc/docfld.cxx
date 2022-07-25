@@ -1068,7 +1068,7 @@ void SwDocUpdateField::GetBodyNode( const SwTextField& rTField, SwFieldIds nFiel
     Point aPt;
     std::pair<Point, bool> const tmp(aPt, false);
     // need pos to get the frame on the correct page
-    SwPosition const pos(const_cast<SwTextNode&>(rTextNd), rTField.GetStart());
+    SwPosition const pos(rTextNd, rTField.GetStart());
     const SwFrame* pFrame = rTextNd.getLayoutFrame(
         rDoc.getIDocumentLayoutAccess().GetCurrentLayout(), &pos, &tmp);
 

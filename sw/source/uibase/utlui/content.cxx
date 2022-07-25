@@ -836,9 +836,9 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
 
             std::stable_sort(aStableSortINetAttrsArray.begin(), aStableSortINetAttrsArray.end(),
                              [](const SwGetINetAttr* a, const SwGetINetAttr* b){
-                SwPosition aSwPos(const_cast<SwTextNode&>(a->rINetAttr.GetTextNode()),
+                SwPosition aSwPos(a->rINetAttr.GetTextNode(),
                                   a->rINetAttr.GetStart());
-                SwPosition bSwPos(const_cast<SwTextNode&>(b->rINetAttr.GetTextNode()),
+                SwPosition bSwPos(b->rINetAttr.GetTextNode(),
                                   b->rINetAttr.GetStart());
                 return aSwPos < bSwPos;});
 
@@ -850,8 +850,8 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                                  [nEndOfExtrasIndex](const SwGetINetAttr* a, const SwGetINetAttr* b){
                     const SwTextNode& aTextNode = a->rINetAttr.GetTextNode();
                     const SwTextNode& bTextNode = b->rINetAttr.GetTextNode();
-                    SwPosition aPos(const_cast<SwTextNode&>(aTextNode), a->rINetAttr.GetStart());
-                    SwPosition bPos(const_cast<SwTextNode&>(bTextNode), b->rINetAttr.GetStart());
+                    SwPosition aPos(aTextNode, a->rINetAttr.GetStart());
+                    SwPosition bPos(bTextNode, b->rINetAttr.GetStart());
                     // use anchor position for entries that are located in flys
                     if (nEndOfExtrasIndex >= aTextNode.GetIndex())
                         if (auto pFlyFormat = aTextNode.GetFlyFormat())
