@@ -263,14 +263,15 @@ namespace svl::undo::impl
 
         ~UndoManagerGuard();
 
-        void clear()
+        struct ResetGuard {
+            ResetGuard(osl::ResettableMutexGuard& r) : rGuard(r) {}
+            ~ResetGuard() { rGuard.reset(); }
+            osl::ResettableMutexGuard& rGuard;
+        };
+        ResetGuard clear()
         {
             m_aGuard.clear();
-        }
-
-        void reset()
-        {
-            m_aGuard.reset();
+            return ResetGuard(m_aGuard);
         }
 
         void cancelNotifications()
@@ -706,17 +707,14 @@ bool SfxUndoManager::ImplUndo( SfxUndoContext* i_contextOrNull )
     {
         // clear the guard/mutex before calling into the SfxUndoAction - this can be an extension-implemented UNO component
         // nowadays ...
-        aGuard.clear();
+        auto aResetGuard(aGuard.clear());
         if ( i_contextOrNull != nullptr )
             pAction->UndoWithContext( *i_contextOrNull );
         else
             pAction->Undo();
-        aGuard.reset();
     }
     catch( ... )
     {
-        aGuard.reset();
-
         // in theory, somebody might have tampered with all of *m_xData while the mutex was unlocked. So, see if
         // we still find pAction in our current Undo array
         size_t nCurAction = 0;
@@ -818,17 +816,14 @@ bool SfxUndoManager::ImplRedo( SfxUndoContext* i_contextOrNull )
     {
         // clear the guard/mutex before calling into the SfxUndoAction - this can be an extension-implemented UNO component
         // nowadays ...
-        aGuard.clear();
+        auto aResetGuard(aGuard.clear());
         if ( i_contextOrNull != nullptr )
             pAction->RedoWithContext( *i_contextOrNull );
         else
             pAction->Redo();
-        aGuard.reset();
     }
     catch( ... )
     {
-        aGuard.reset();
-
         // in theory, somebody might have tampered with all of *m_xData while the mutex was unlocked. So, see if
         // we still find pAction in our current Undo array
         size_t nCurAction = 0;
@@ -875,10 +870,9 @@ bool SfxUndoManager::Repeat( SfxRepeatTarget &rTarget )
     if ( !m_xData->pActUndoArray->maUndoActions.empty() )
     {
         SfxUndoAction* pAction = m_xData->pActUndoArray->maUndoActions.back().pAction.get();
-        aGuard.clear();
+        auto aResetGuard(aGuard.clear());
         if ( pAction->CanRepeat( rTarget ) )
             pAction->Repeat( rTarget );
-        aGuard.reset(); // allow clearing in guard dtor
         return true;
     }
 
