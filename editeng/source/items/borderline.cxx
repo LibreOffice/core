@@ -338,7 +338,7 @@ BorderWidthImpl SvxBorderLine::getWidthImpl( SvxBorderLineStyle nStyle )
             break;
 
         case SvxBorderLineStyle::DOUBLE_THIN:
-            aImpl = BorderWidthImpl(BorderWidthImplFlags::CHANGE_DIST, 10.0, 10.0, 1.0);
+            aImpl = BorderWidthImpl(BorderWidthImplFlags::CHANGE_DIST, 1.0, 1.0, 1.0);
             break;
 
         case SvxBorderLineStyle::THINTHICK_SMALLGAP:
@@ -422,7 +422,7 @@ void SvxBorderLine::GuessLinesWidths( SvxBorderLineStyle nStyle, sal_uInt16 nOut
             nStyle = SvxBorderLineStyle::DOUBLE;
     }
 
-    if ( nStyle == SvxBorderLineStyle::DOUBLE )
+    if ( nStyle == SvxBorderLineStyle::DOUBLE || nStyle == SvxBorderLineStyle::DOUBLE_THIN )
     {
         static const SvxBorderLineStyle aDoubleStyles[] =
         {

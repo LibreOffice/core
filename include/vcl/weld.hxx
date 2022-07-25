@@ -825,6 +825,7 @@ public:
     void connect_entry_activate(const Link<ComboBox&, bool>& rLink) { m_aEntryActivateHdl = rLink; }
 
     void save_value() { m_sSavedValue = get_active_text(); }
+    void save_value_by_id(const OUString& rId) { m_sSavedValue = get_text(find_id(rId)); }
     OUString const& get_saved_value() const { return m_sSavedValue; }
     bool get_value_changed_from_saved() const { return m_sSavedValue != get_active_text(); }
 
