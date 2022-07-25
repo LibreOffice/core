@@ -2725,8 +2725,9 @@ void DocumentContentOperationsManager::MoveAndJoin( SwPaM& rPaM, SwPosition& rPo
     if( pTextNd && pTextNd->CanJoinNext( &aNxtIdx ) )
     {
         {   // Block so SwContentIndex into node is deleted before Join
-            m_rDoc.CorrRel( aNxtIdx, SwPosition( aIdx, SwContentIndex(pTextNd,
-                        pTextNd->GetText().getLength()) ), 0, true );
+            m_rDoc.CorrRel( aNxtIdx,
+                            SwPosition( *pTextNd, pTextNd->GetText().getLength() ),
+                            0, true );
         }
         pTextNd->JoinNext();
     }
@@ -5206,8 +5207,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
         }
 
         {
-            SwPosition startPos(SwNodeIndex(pCopyPam->GetPoint()->nNode, +1),
-                SwContentIndex(SwNodeIndex(pCopyPam->GetPoint()->nNode, +1).GetNode().GetContentNode()));
+            SwPosition startPos(pCopyPam->GetPoint()->nNode, SwNodeOffset(+1));
             if (bCanMoveBack)
             {   // pCopyPam is actually 1 before the copy range so move it fwd
                 SwPaM temp(*pCopyPam->GetPoint());
@@ -5239,8 +5239,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
         if (pFlysAtInsPos)
         {
             // init *again* - because CopyWithFlyInFly moved startPos
-            SwPosition startPos(SwNodeIndex(pCopyPam->GetPoint()->nNode, +1),
-                SwContentIndex(SwNodeIndex(pCopyPam->GetPoint()->nNode, +1).GetNode().GetContentNode()));
+            SwPosition startPos(pCopyPam->GetPoint()->nNode, SwNodeOffset(+1));
             if (bCanMoveBack)
             {   // pCopyPam is actually 1 before the copy range so move it fwd
                 SwPaM temp(*pCopyPam->GetPoint());

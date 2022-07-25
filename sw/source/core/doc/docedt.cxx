@@ -277,7 +277,7 @@ SaveRedlEndPosForRestore::SaveRedlEndPosForRestore( const SwNodeIndex& rInsIdx, 
 
     SwRedlineTable::size_type nFndPos;
     const SwPosition* pEnd;
-    SwPosition aSrcPos( rInsIdx, SwContentIndex( rNd.GetContentNode(), nCnt ));
+    SwPosition aSrcPos( rInsIdx, rNd.GetContentNode(), nCnt );
     rDest.getIDocumentRedlineAccess().GetRedline( aSrcPos, &nFndPos );
     const SwRangeRedline* pRedl;
     while( nFndPos--
@@ -307,7 +307,7 @@ void SaveRedlEndPosForRestore::Restore()
     // This may happen if a table (or section?) will be inserted.
     if( pNode )
     {
-        SwPosition aPos( *mpSaveIndex, SwContentIndex( pNode, mnSaveContent ));
+        SwPosition aPos( *pNode, mnSaveContent );
         for( auto n = mvSavArr.size(); n; )
             *mvSavArr[ --n ] = aPos;
     }
@@ -479,11 +479,11 @@ bool sw_JoinText( SwPaM& rPam, bool bJoinPrev )
             // #i100466# adjust given <rPam>, if it does not belong to the cursors
             if ( pDelNd == rPam.GetBound().nContent.GetContentNode() )
             {
-                rPam.GetBound() = SwPosition( SwNodeIndex( *pTextNd ), SwContentIndex( pTextNd ) );
+                rPam.GetBound() = SwPosition( *pTextNd );
             }
             if( pDelNd == rPam.GetBound( false ).nContent.GetContentNode() )
             {
-                rPam.GetBound( false ) = SwPosition( SwNodeIndex( *pTextNd ), SwContentIndex( pTextNd ) );
+                rPam.GetBound( false ) = SwPosition( *pTextNd );
             }
             pTextNd->JoinNext();
         }

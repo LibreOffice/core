@@ -349,8 +349,8 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
         if( bJoinNext && pTextNode->CanJoinNext())
         {
             {
-                RemoveIdxRel( rIdx.GetIndex()+1, SwPosition( rIdx,
-                    SwContentIndex( pTextNode, pTextNode->GetText().getLength() )));
+                RemoveIdxRel( rIdx.GetIndex()+1,
+                        SwPosition( *pTextNode, pTextNode->GetText().getLength() ) );
             }
             pTextNode->JoinNext();
         }

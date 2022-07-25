@@ -600,8 +600,7 @@ void SwUndoResetAttr::RedoImpl(::sw::UndoRedoContext & rContext)
     {
         SwTOXMarks aArr;
         SwNodeIndex aIdx( rDoc.GetNodes(), m_nSttNode );
-        SwPosition aPos( aIdx, SwContentIndex( aIdx.GetNode().GetContentNode(),
-                                        m_nSttContent ));
+        SwPosition aPos( aIdx, aIdx.GetNode().GetContentNode(), m_nSttContent );
 
         sal_uInt16 nCnt = SwDoc::GetCurTOXMark( aPos, aArr );
         if( nCnt ) {

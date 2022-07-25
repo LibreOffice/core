@@ -185,14 +185,8 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
 
         const SwFormatContent& rFlyContent = pHdFtFormat->GetContent();
         const SwNodeIndex& rContentStIdx = *rFlyContent.GetContentIdx();
-        SwContentNode *pCNd;
 
-        if( bNew )
-        {
-            pCNd = m_xDoc->GetNodes()[rContentStIdx.GetIndex()+1]
-                       ->GetContentNode();
-        }
-        else
+        if( !bNew )
         {
             // Our own html export only exports one "header" at most (and one "footer")
 
@@ -200,8 +194,6 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
             // and hide the original header/footers content by putting it into a hidden
             // document-level section
             SwNodeIndex aSttIdx( rContentStIdx, 1 );
-            pCNd = m_xDoc->GetNodes().MakeTextNode( aSttIdx,
-                            m_pCSS1Parser->GetTextCollFromPool(RES_POOLCOLL_TEXT));
 
             // delete the current content of the section
             SwPaM aDelPam( aSttIdx );
@@ -226,7 +218,7 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
             }
         }
 
-        SwPosition aNewPos( SwNodeIndex( rContentStIdx, 1 ), SwContentIndex( pCNd, 0 ) );
+        SwPosition aNewPos( rContentStIdx, SwNodeOffset(1) );
         SaveDocContext(xCntxt.get(), nFlags, &aNewPos);
     }
     else if( !bPositioned && aId.getLength() > 9 &&
@@ -246,7 +238,7 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
                 SwContentNode *pCNd =
                     m_xDoc->GetNodes()[pStartNdIdx->GetIndex()+1]->GetContentNode();
                 SwNodeIndex aTmpSwNodeIndex(*pCNd);
-                SwPosition aNewPos( aTmpSwNodeIndex, SwContentIndex( pCNd, 0 ) );
+                SwPosition aNewPos( aTmpSwNodeIndex );
                 SaveDocContext(xCntxt.get(), HtmlContextFlags::MultiColMask, &aNewPos);
                 aId.clear();
                 aPropInfo.m_aId.clear();
@@ -779,10 +771,8 @@ void SwHTMLParser::InsertFlyFrame( const SfxItemSet& rItemSet,
 
     const SwFormatContent& rFlyContent = pFlyFormat->GetContent();
     const SwNodeIndex& rFlyCntIdx = *rFlyContent.GetContentIdx();
-    SwContentNode *pCNd = m_xDoc->GetNodes()[rFlyCntIdx.GetIndex()+1]
-                            ->GetContentNode();
 
-    SwPosition aNewPos( SwNodeIndex( rFlyCntIdx, 1 ), SwContentIndex( pCNd, 0 ) );
+    SwPosition aNewPos( rFlyCntIdx, SwNodeOffset(1) );
     const HtmlContextFlags nFlags = HtmlContextFlags::ProtectStack|HtmlContextFlags::StripPara;
     SaveDocContext( pCntxt, nFlags, &aNewPos );
 }

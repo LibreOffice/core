@@ -1971,7 +1971,7 @@ void SwUndoTableMerge::UndoImpl(::sw::UndoRedoContext & rContext)
                 SwNodeIndex aTmpIdx( *pBox->GetSttNd() );
                 SwDoc::CorrAbs( SwNodeIndex( aTmpIdx, 1 ),
                             SwNodeIndex( *aTmpIdx.GetNode().EndOfSectionNode() ),
-                            SwPosition( aTmpIdx, SwContentIndex( nullptr, 0 )), true );
+                            SwPosition( aTmpIdx ), true );
             }
 
             delete pBox;

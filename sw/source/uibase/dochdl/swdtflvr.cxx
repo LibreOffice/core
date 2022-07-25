@@ -925,8 +925,7 @@ void SwTransferable::PrepareForCopyTextRange(SwPaM & rPaM)
 
         SwNodeIndex const aIdx(rDest.GetNodes().GetEndOfContent(), -1);
         SwContentNode *const pContentNode(aIdx.GetNode().GetContentNode());
-        SwPosition aPos(aIdx,
-            SwContentIndex(pContentNode, pContentNode ? pContentNode->Len() : 0));
+        SwPosition aPos(aIdx, pContentNode, pContentNode ? pContentNode->Len() : 0);
 
         rSrc.getIDocumentContentOperations().CopyRange(rPaM, aPos, SwCopyFlags::CheckPosInFly);
 

@@ -1061,7 +1061,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
         rTable.GetTabLines().insert(rTable.GetTabLines().begin() + nLines, pLine);
 
         SwStartNode* pSttNd;
-        SwPosition aCntPos( aSttIdx, SwContentIndex( pTextNd ));
+        SwPosition aCntPos( aSttIdx );
 
         const std::shared_ptr< sw::mark::ContentIdxStore> pContentStore(sw::mark::ContentIdxStore::Create());
         pContentStore->Save(rDoc, aSttIdx.GetIndex(), SAL_MAX_INT32);

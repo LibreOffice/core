@@ -175,7 +175,7 @@ void SwDoc::DeleteTOXMark( const SwTOXMark* pTOXMark )
         {
             // save attributes for Undo
             SwUndoResetAttr* pUndo = new SwUndoResetAttr(
-                SwPosition( rTextNd, SwContentIndex( &rTextNd, pTextTOXMark->GetStart() ) ),
+                SwPosition( rTextNd, pTextTOXMark->GetStart() ),
                 RES_TXTATR_TOXMARK );
             GetIDocumentUndoRedo().AppendUndo( std::unique_ptr<SwUndo>(pUndo) );
 
@@ -1024,7 +1024,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         else
         {
             --aEndIdx;
-            SwPosition aPos( aEndIdx, SwContentIndex( pFirstEmptyNd, 0 ));
+            SwPosition aPos( *pFirstEmptyNd, 0 );
             SwDoc::CorrAbs( aSttIdx, aEndIdx, aPos, true );
 
             // delete flys in whole range including start node which requires
