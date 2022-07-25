@@ -39,9 +39,13 @@ struct SAL_WARN_UNUSED SW_DLLPUBLIC SwPosition
     SwContentIndex nContent;
 
     SwPosition( const SwNodeIndex &rNode, const SwContentIndex &rContent );
-    explicit SwPosition( const SwNodeIndex &rNode );
-    explicit SwPosition( const SwNode& rNode );
-    explicit SwPosition( const SwContentNode& rNode, const sal_Int32 nOffset = 0 );
+    explicit SwPosition( SwNodes& rNodes, SwNodeOffset nIndex = SwNodeOffset(0) );
+    explicit SwPosition( const SwNodeIndex &rNode, SwNodeOffset nDiff = SwNodeOffset(0) );
+    explicit SwPosition( const SwNode& rNode, SwNodeOffset nDiff = SwNodeOffset(0) );
+    explicit SwPosition( const SwContentNode& rNode, const sal_Int32 nContentOffset = 0 );
+
+    // callers should be using one of the other constructors to avoid creating a temporary
+    SwPosition( SwNodeIndex && ) = delete;
 
     /**
        Returns the document this position is in.
@@ -181,7 +185,7 @@ public:
         {
             /** clear the mark position; this helps if mark's SwContentIndex is
                registered at some node, and that node is then deleted */
-            *m_pMark = SwPosition( SwNodeIndex( GetNode().GetNodes() ) );
+            *m_pMark = SwPosition( GetNode().GetNodes() );
             m_pMark = m_pPoint;
         }
     }

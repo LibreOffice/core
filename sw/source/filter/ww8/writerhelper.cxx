@@ -117,8 +117,7 @@ namespace
             {
                 // the anchor position will be invalidated by SetRedlineFlags
                 // so set a dummy position and fix it in UpdateFramePositions
-                SwPosition const dummy(SwNodeIndex(
-                            const_cast<SwNodes&>(pAnchor->nNode.GetNodes())));
+                SwPosition const dummy(const_cast<SwNodes&>(pAnchor->nNode.GetNodes()));
                 aRet.emplace_back(rEntry, dummy);
             }
             else
@@ -812,7 +811,7 @@ namespace sw
                 // the point node may be deleted in AppendRedline, so park
                 // the PaM somewhere safe
                 aRegion.DeleteMark();
-                *aRegion.GetPoint() = SwPosition(SwNodeIndex(mrDoc.GetNodes()));
+                *aRegion.GetPoint() = SwPosition(mrDoc.GetNodes());
                 mrDoc.getIDocumentRedlineAccess().AppendRedline(pNewRedline, true);
                 mrDoc.getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::NONE | RedlineFlags::ShowInsert |
                      RedlineFlags::ShowDelete );

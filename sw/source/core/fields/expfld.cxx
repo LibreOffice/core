@@ -353,7 +353,7 @@ void SwGetExpField::ChangeExpansion( const SwFrame& rFrame, const SwTextField& r
     SwDoc& rDoc = const_cast<SwDoc&>(pTextNode->GetDoc());
 
     // create index for determination of the TextNode
-    SwPosition aPos( SwNodeIndex( rDoc.GetNodes() ) );
+    SwPosition aPos( rDoc.GetNodes() );
     pTextNode = GetBodyTextNode( rDoc, aPos, rFrame );
 
     // If no layout exists, ChangeExpansion is called for header and

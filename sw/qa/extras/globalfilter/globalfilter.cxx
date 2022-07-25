@@ -1242,7 +1242,7 @@ void Test::testRedlineFlags()
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
 
-    SwPaM pam(SwPosition(SwNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1)));
+    SwPaM pam(SwPosition(pDoc->GetNodes().GetEndOfContent(), SwNodeOffset(-1)));
     pDoc->getIDocumentContentOperations().InsertString(pam, "foo bar baz");
 
     IDocumentRedlineAccess & rIDRA(pDoc->getIDocumentRedlineAccess());

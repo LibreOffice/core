@@ -4360,7 +4360,7 @@ bool SwDoc::InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
             // Copy the Table into a temporary Doc
             xCpyDoc = new SwDoc;
 
-            SwPosition aPos( SwNodeIndex( xCpyDoc->GetNodes().GetEndOfContent() ));
+            SwPosition aPos( xCpyDoc->GetNodes().GetEndOfContent() );
             if( !pSrcTableNd->GetTable().MakeCopy( *xCpyDoc, aPos, rBoxes, true ))
             {
                 xCpyDoc.clear();

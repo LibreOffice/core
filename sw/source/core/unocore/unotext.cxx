@@ -1256,8 +1256,7 @@ SwXText::Impl::finishOrAppendParagraph(
     // find end node, go backward - don't skip tables because the new
     // paragraph has to be the last node
     //aPam.Move( fnMoveBackward, GoInNode );
-    SwPosition aInsertPosition(
-            SwNodeIndex( *pStartNode->EndOfSectionNode(), -1 ) );
+    SwPosition aInsertPosition( *pStartNode->EndOfSectionNode(), SwNodeOffset(-1) );
     SwPaM aPam(aInsertPosition);
     // If we got a position reference, then the insert point is not the end of
     // the document.
@@ -2381,7 +2380,7 @@ SwXText::copyText(
         if (!pFirstNode)
         {   // the node at rPos was split; get rid of the first empty one so
             // that the pasted table is first
-            auto pDelCursor(m_pImpl->m_pDoc->CreateUnoCursor(SwPosition(SwNodeIndex(*GetStartNode(), 1))));
+            auto pDelCursor(m_pImpl->m_pDoc->CreateUnoCursor(SwPosition(*GetStartNode(), SwNodeOffset(1))));
             m_pImpl->m_pDoc->getIDocumentContentOperations().DelFullPara(*pDelCursor);
         }
     }

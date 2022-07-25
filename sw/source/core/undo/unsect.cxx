@@ -579,7 +579,7 @@ void SwUndoUpdateIndex::UndoImpl(::sw::UndoRedoContext & rContext)
     m_pSaveSectionOriginal->RestoreSection(&rDoc, first, true);
     // delete before restoring nested undo, so its node indexes match
     SwNodeIndex const del(*pDeletionPrevention);
-    SwDoc::CorrAbs(del, del, SwPosition(SwNodeIndex(*rDoc.GetNodes()[m_nStartIndex]->EndOfSectionNode())), true);
+    SwDoc::CorrAbs(del, del, SwPosition(*rDoc.GetNodes()[m_nStartIndex]->EndOfSectionNode(), SwNodeOffset(0)), true);
     rDoc.GetNodes().Delete(del);
     // original title section will be restored by next Undo, see ctor!
 }
@@ -600,7 +600,7 @@ void SwUndoUpdateIndex::RedoImpl(::sw::UndoRedoContext & rContext)
     m_pSaveSectionUpdated->RestoreSection(&rDoc, first, true);
     // delete before restoring nested undo, so its node indexes match
     SwNodeIndex const del(*pDeletionPrevention);
-    SwDoc::CorrAbs(del, del, SwPosition(SwNodeIndex(*rDoc.GetNodes()[m_nStartIndex]->EndOfSectionNode())), true);
+    SwDoc::CorrAbs(del, del, SwPosition(*rDoc.GetNodes()[m_nStartIndex]->EndOfSectionNode(), SwNodeOffset(0)), true);
     rDoc.GetNodes().Delete(del);
     if (m_pTitleSectionUpdated)
     {

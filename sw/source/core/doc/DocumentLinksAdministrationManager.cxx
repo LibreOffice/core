@@ -505,7 +505,7 @@ bool DocumentLinksAdministrationManager::SelectServerObj( std::u16string_view rS
         }
         else if( sCmp == u"outline" )
         {
-            SwPosition aPos( SwNodeIndex( m_rDoc.GetNodes() ));
+            SwPosition aPos( m_rDoc.GetNodes() );
             if (m_rDoc.GotoOutline(aPos, sName, nullptr))
             {
                 SwNode* pNd = &aPos.nNode.GetNode();

@@ -376,7 +376,7 @@ static SwPosition ResolveFlyAnchor(SwFrameFormat const& rFlyFrame)
     SwFormatAnchor const& rAnch(rFlyFrame.GetAnchor());
     if (rAnch.GetAnchorId() == RndStdIds::FLY_AT_PAGE)
     {   // arbitrarily pick last node
-        return SwPosition(SwNodeIndex(rFlyFrame.GetDoc()->GetNodes().GetEndOfContent(), -1));
+        return SwPosition(rFlyFrame.GetDoc()->GetNodes().GetEndOfContent(), SwNodeOffset(-1));
     }
     else
     {

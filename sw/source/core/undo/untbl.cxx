@@ -313,7 +313,7 @@ void SwUndoInsTable::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
 
-    SwPosition const aPos(SwNodeIndex(rDoc.GetNodes(), m_nStartNode));
+    SwPosition const aPos(rDoc.GetNodes(), m_nStartNode);
     const SwTable* pTable = rDoc.InsertTable( m_aInsTableOptions, aPos, m_nRows, m_nColumns,
                                             m_nAdjust,
                                             m_pAutoFormat.get(), m_pColumnWidth.get() );
@@ -2717,7 +2717,7 @@ std::unique_ptr<SwUndo> SwUndoTableCpyTable::PrepareRedline( SwDoc* pDoc, const 
         if( pText )
             aDeleteStart.nContent.Assign( pText, 0 );
     }
-    SwPosition aCellEnd( SwNodeIndex( *rBox.GetSttNd()->EndOfSectionNode(), -1 ) );
+    SwPosition aCellEnd( *rBox.GetSttNd()->EndOfSectionNode(), SwNodeOffset(-1) );
     pText = aCellEnd.nNode.GetNode().GetTextNode();
     if( pText )
         aCellEnd.nContent.Assign(pText, pText->GetText().getLength());
@@ -2729,12 +2729,11 @@ std::unique_ptr<SwUndo> SwUndoTableCpyTable::PrepareRedline( SwDoc* pDoc, const 
     }
     else if( !rJoin ) // If the old part is empty and joined, we are finished
     {   // if it is not joined, we have to delete this empty paragraph
-        aCellEnd = SwPosition(
-            SwNodeIndex( *rBox.GetSttNd()->EndOfSectionNode() ));
+        aCellEnd = SwPosition(*rBox.GetSttNd()->EndOfSectionNode(), SwNodeOffset(0));
         SwPaM aTmpPam( aDeleteStart, aCellEnd );
         pUndo = std::make_unique<SwUndoDelete>(aTmpPam, SwDeleteFlags::Default, true);
     }
-    SwPosition aCellStart( SwNodeIndex( *rBox.GetSttNd(), 2 ) );
+    SwPosition aCellStart( *rBox.GetSttNd(), SwNodeOffset(2) );
     pText = aCellStart.nNode.GetNode().GetTextNode();
     if( pText )
         aCellStart.nContent.Assign( pText, 0 );
