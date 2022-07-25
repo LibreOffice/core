@@ -23,6 +23,7 @@
 #include <iterator>
 #include <type_traits>
 #include <utility>
+#include <array>
 #include <cassert>
 
 namespace o3tl {
@@ -92,10 +93,10 @@ public:
     const_iterator   begin() const { return const_iterator(*this, 0); }
     const_iterator   end() const   { return const_iterator(*this, size()); }
 
-    V*               data()       { return detail_values; }
+    V*               data()       { return detail_values.data(); }
 
 private:
-    V detail_values[max_index + 1];
+    std::array<V, max_index + 1> detail_values;
 };
 
 
