@@ -64,6 +64,7 @@
 #include <vcl/virdev.hxx>
 #include <sal/log.hxx>
 #include <tools/svborder.hxx>
+#include <o3tl/temporary.hxx>
 
 #include <unotools/streamwrap.hxx>
 
@@ -685,6 +686,12 @@ bool SmGraphicWidget::KeyInput(const KeyEvent& rKEvt)
         break;
     case KeyFuncType::PASTE:
         rCursor.Paste();
+        break;
+    case KeyFuncType::UNDO:
+        GetDoc()->Execute(o3tl::temporary(SfxRequest(GetView().GetFrame(), SID_UNDO)));
+        break;
+    case KeyFuncType::REDO:
+        GetDoc()->Execute(o3tl::temporary(SfxRequest(GetView().GetFrame(), SID_REDO)));
         break;
     default:
         switch (rKEvt.GetKeyCode().GetCode())
