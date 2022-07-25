@@ -67,7 +67,8 @@ void RestFlyInRange( SaveFlyArr & rArr, const SwPosition& rStartPos,
                 if (aAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA)
                 {
                     aPos.nNode = *pInsertPos;
-                    aPos.nContent.Assign(dynamic_cast<SwIndexReg*>(&aPos.nNode.GetNode()),
+                    assert(aPos.nNode.GetNode().GetContentNode());
+                    aPos.nContent.Assign(aPos.nNode.GetNode().GetContentNode(),
                         rSave.nContentIndex);
                 }
                 else
@@ -79,13 +80,15 @@ void RestFlyInRange( SaveFlyArr & rArr, const SwPosition& rStartPos,
             else
             {
                 aPos.nNode = rStartPos.nNode;
-                aPos.nContent.Assign(dynamic_cast<SwIndexReg*>(&aPos.nNode.GetNode()), 0);
+                assert(aPos.nNode.GetNode().GetContentNode());
+                aPos.nContent.Assign(aPos.nNode.GetNode().GetContentNode(), 0);
             }
         }
         else
         {
             aPos.nNode = rStartPos.nNode.GetIndex() + rSave.nNdDiff;
-            aPos.nContent.Assign(dynamic_cast<SwIndexReg*>(&aPos.nNode.GetNode()),
+            assert(aPos.nNode.GetNode().GetContentNode());
+            aPos.nContent.Assign(aPos.nNode.GetNode().GetContentNode(),
                 rSave.nNdDiff == SwNodeOffset(0)
                     ? rStartPos.nContent.GetIndex() + rSave.nContentIndex
                     : rSave.nContentIndex);
@@ -423,9 +426,9 @@ bool sw_JoinText( SwPaM& rPam, bool bJoinPrev )
 
                 // If the passed PaM is not in the Cursor ring,
                 // treat it separately (e.g. when it's being called from AutoFormat)
-                if( pOldTextNd == rPam.GetBound().nContent.GetIdxReg() )
+                if( pOldTextNd == rPam.GetBound().nContent.GetContentNode() )
                     rPam.GetBound() = aAlphaPos;
-                if( pOldTextNd == rPam.GetBound( false ).nContent.GetIdxReg() )
+                if( pOldTextNd == rPam.GetBound( false ).nContent.GetContentNode() )
                     rPam.GetBound( false ) = aAlphaPos;
             }
             // delete the Node, at last!
@@ -474,11 +477,11 @@ bool sw_JoinText( SwPaM& rPam, bool bJoinPrev )
 
             rDoc.CorrRel( aIdx, *rPam.GetPoint(), 0, true );
             // #i100466# adjust given <rPam>, if it does not belong to the cursors
-            if ( pDelNd == rPam.GetBound().nContent.GetIdxReg() )
+            if ( pDelNd == rPam.GetBound().nContent.GetContentNode() )
             {
                 rPam.GetBound() = SwPosition( SwNodeIndex( *pTextNd ), SwIndex( pTextNd ) );
             }
-            if( pDelNd == rPam.GetBound( false ).nContent.GetIdxReg() )
+            if( pDelNd == rPam.GetBound( false ).nContent.GetContentNode() )
             {
                 rPam.GetBound( false ) = SwPosition( SwNodeIndex( *pTextNd ), SwIndex( pTextNd ) );
             }

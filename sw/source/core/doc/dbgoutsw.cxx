@@ -321,7 +321,7 @@ static OUString lcl_dbg_out(const SwPosition & rPos)
         ", " +
         OUString::number(rPos.nContent.GetIndex()) +
         ": " +
-        OUString::number(reinterpret_cast<sal_IntPtr>(rPos.nContent.GetIdxReg()), 16) +
+        OUString::number(reinterpret_cast<sal_IntPtr>(rPos.nContent.GetContentNode()), 16) +
         " )";
 
     return aStr;

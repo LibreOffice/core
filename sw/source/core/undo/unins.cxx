@@ -162,11 +162,11 @@ bool SwUndoInsert::CanGrouping( const SwPosition& rPos )
             if( !rTable.empty() )
             {
                 SwRedlineData aRData( RedlineType::Insert, rDoc.getIDocumentRedlineAccess().GetRedlineAuthor() );
-                const SwIndexReg* pIReg = rPos.nContent.GetIdxReg();
+                const SwContentNode* pIReg = rPos.nContent.GetContentNode();
                 for(SwRangeRedline* pRedl : rTable)
                 {
                     SwIndex* pIdx = &pRedl->End()->nContent;
-                    if( pIReg == pIdx->GetIdxReg() &&
+                    if( pIReg == pIdx->GetContentNode() &&
                         m_nContent == pIdx->GetIndex() )
                     {
                         if( !pRedl->HasMark() || !m_pRedlData ||

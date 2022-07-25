@@ -1211,6 +1211,18 @@ void SwTextNode::NewAttrSet( SwAttrPool& rPool )
     mpAttrSet = GetDoc().GetIStyleAccess().getAutomaticStyle( aNewAttrSet, IStyleAccess::AUTO_STYLE_PARA, &sVal );
 }
 
+namespace
+{
+class SwContentNodeTmp : public SwContentNode
+{
+public:
+    SwContentNodeTmp() : SwContentNode() {}
+    virtual void NewAttrSet(SwAttrPool&) override {}
+    virtual SwContentFrame *MakeFrame(SwFrame*) override { return nullptr; }
+    virtual SwContentNode* MakeCopy(SwDoc&, const SwNodeIndex&, bool /*bNewFrames*/) const override { return nullptr; };
+};
+};
+
 // override SwIndexReg::Update => text hints do not need SwIndex for start/end!
 void SwTextNode::Update(
     SwIndex const & rPos,
@@ -1396,7 +1408,7 @@ void SwTextNode::Update(
     }
 
     bool bSortMarks = false;
-    SwIndexReg aTmpIdxReg;
+    SwContentNodeTmp aTmpIdxReg;
     if ( !bNegative && !bDelete )
     {
         const SwRedlineTable& rTable = GetDoc().getIDocumentRedlineAccess().GetRedlineTable();
@@ -1427,7 +1439,7 @@ void SwTextNode::Update(
                 // the unused position must not be on a SwTextNode
                 bool const isOneUsed(&pRedl->GetBound() == pRedl->GetPoint());
                 assert(!pRedl->GetBound(!isOneUsed).nNode.GetNode().IsTextNode());
-                assert(!pRedl->GetBound(!isOneUsed).nContent.GetIdxReg()); (void)isOneUsed;
+                assert(!pRedl->GetBound(!isOneUsed).nContent.GetContentNode()); (void)isOneUsed;
             }
         }
 

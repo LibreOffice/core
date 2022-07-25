@@ -77,7 +77,7 @@ namespace
             {
                 pPam->GetBound(bool(nb)).nNode = rNewPos.nNode;
                 pPam->GetBound(bool(nb)).nContent.Assign(
-                    const_cast<SwIndexReg*>(rNewPos.nContent.GetIdxReg()),
+                    rNewPos.nNode.GetNode().GetContentNode(),
                     nCntIdx + pPam->GetBound(bool(nb)).nContent.GetIndex());
             }
     }
