@@ -368,9 +368,16 @@ void DocxAttributeOutput::StartContentControl(const SwFormatContentControl& rFor
     m_pContentControl = rFormatContentControl.GetContentControl();
 }
 
-void DocxAttributeOutput::EndContentControl()
+void DocxAttributeOutput::EndContentControl(const SwTextNode& rNode, sal_Int32 nPos)
 {
-    ++m_nCloseContentControlInThisRun;
+    if (rNode.GetTextAttrForCharAt(nPos, RES_TXTATR_FLYCNT) || rNode.GetTextAttrForCharAt(nPos, RES_TXTATR_CONTENTCONTROL))
+    {
+        ++m_nCloseContentControlInPreviousRun;
+    }
+    else
+    {
+        ++m_nCloseContentControlInThisRun;
+    }
 }
 
 static void checkAndWriteFloatingTables(DocxAttributeOutput& rDocxAttributeOutput)
@@ -2332,6 +2339,11 @@ void DocxAttributeOutput::WriteSdtPlainText(const OUString & sValue, const uno::
 void DocxAttributeOutput::WriteContentControlStart()
 {
     if (!m_pContentControl)
+    {
+        return;
+    }
+
+    if (m_bAnchorLinkedToNode)
     {
         return;
     }

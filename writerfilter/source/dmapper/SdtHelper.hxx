@@ -66,6 +66,7 @@ class SdtHelper final : public virtual SvRefBase
     std::vector<OUString> m_aDropDownDisplayTexts;
     /// Type of sdt control
     SdtControlType m_aControlType;
+    sal_uInt32 m_nSdtType = 0;
     /// Pieces of the default text -- currently used only by the dropdown control.
     OUStringBuffer m_aSdtTexts;
     /// Date ISO string contained in the w:date element, used by the date control.
@@ -168,6 +169,9 @@ public:
 
     SdtControlType getControlType() { return m_aControlType; }
     void setControlType(SdtControlType aType) { m_aControlType = aType; }
+
+    void SetSdtType(sal_uInt32 nSdtType) { m_nSdtType = nSdtType; }
+    sal_uInt32 GetSdtType() const { return m_nSdtType; }
 
     /// Create drop-down control from w:sdt's w:dropDownList.
     void createDropDownControl();

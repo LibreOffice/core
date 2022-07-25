@@ -973,6 +973,11 @@ void DomainMapper_Impl::PopSdt()
                                                uno::Any(m_pSdtHelper->getDate().makeStringAndClear()));
     }
 
+    if (m_pSdtHelper->getControlType() == SdtControlType::plainText)
+    {
+        xContentControlProps->setPropertyValue("PlainText", uno::Any(true));
+    }
+
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     m_pSdtHelper->clear();
