@@ -248,7 +248,7 @@ IMPL_LINK_NOARG(SmGraphicWindow, ScrollHdl, weld::ScrolledWindow&, void)
 
 void SmGraphicWindow::SetGraphicMapMode(const MapMode& rNewMapMode)
 {
-    OutputDevice& rDevice = mxGraphic->GetDrawingArea()->get_ref_device();
+    OutputDevice& rDevice = mxGraphic->GetOutputDevice();
     MapMode aMap( rNewMapMode );
     aMap.SetOrigin( aMap.GetOrigin() + rDevice.PixelToLogic( aPixOffset, aMap ) );
     rDevice.SetMapMode( aMap );
@@ -257,7 +257,7 @@ void SmGraphicWindow::SetGraphicMapMode(const MapMode& rNewMapMode)
 
 MapMode SmGraphicWindow::GetGraphicMapMode() const
 {
-    OutputDevice& rDevice = mxGraphic->GetDrawingArea()->get_ref_device();
+    OutputDevice& rDevice = mxGraphic->GetOutputDevice();
     MapMode aMap(rDevice.GetMapMode());
     aMap.SetOrigin( aMap.GetOrigin() - rDevice.PixelToLogic( aPixOffset ) );
     return aMap;
@@ -265,15 +265,13 @@ MapMode SmGraphicWindow::GetGraphicMapMode() const
 
 void SmGraphicWindow::SetTotalSize( const Size& rNewSize )
 {
-    OutputDevice& rDevice = mxGraphic->GetDrawingArea()->get_ref_device();
-    aTotPixSz = rDevice.LogicToPixel(rNewSize);
+    aTotPixSz = mxGraphic->GetOutputDevice().LogicToPixel(rNewSize);
     Resize();
 }
 
 Size SmGraphicWindow::GetTotalSize() const
 {
-    OutputDevice& rDevice = mxGraphic->GetDrawingArea()->get_ref_device();
-    return rDevice.PixelToLogic(aTotPixSz);
+    return mxGraphic->GetOutputDevice().PixelToLogic(aTotPixSz);
 }
 
 void SmGraphicWindow::ShowContextMenu(const CommandEvent& rCEvt)
@@ -300,7 +298,7 @@ void SmGraphicWidget::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     weld::CustomWidgetController::SetDrawingArea(pDrawingArea);
 
-    OutputDevice& rDevice = pDrawingArea->get_ref_device();
+    OutputDevice& rDevice = GetOutputDevice();
 
     rDevice.SetBackground(SM_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor);
 
@@ -323,6 +321,14 @@ SmGraphicWidget::~SmGraphicWidget()
     CaretBlinkStop();
 }
 
+SmDocShell* SmGraphicWidget::GetDoc() { return GetView().GetDoc(); }
+
+SmCursor& SmGraphicWidget::GetCursor()
+{
+    assert(GetDoc());
+    return GetDoc()->GetCursor();
+}
+
 bool SmGraphicWidget::MouseButtonDown(const MouseEvent& rMEvt)
 {
     GrabFocus();
@@ -334,16 +340,16 @@ bool SmGraphicWidget::MouseButtonDown(const MouseEvent& rMEvt)
     if ( !rMEvt.IsLeft() )
         return true;
 
-    OutputDevice& rDevice = GetDrawingArea()->get_ref_device();
+    OutputDevice& rDevice = GetOutputDevice();
     // get click position relative to formula
     Point aPos(rDevice.PixelToLogic(rMEvt.GetPosPixel()) - GetFormulaDrawPos());
 
-    const SmNode *pTree = mrViewShell.GetDoc()->GetFormulaTree();
+    const SmNode *pTree = GetDoc()->GetFormulaTree();
     if (!pTree)
         return true;
 
     if (SmViewShell::IsInlineEditEnabled()) {
-        mrViewShell.GetDoc()->GetCursor().MoveTo(&rDevice, aPos, !rMEvt.IsShift());
+        GetCursor().MoveTo(&rDevice, aPos, !rMEvt.IsShift());
         return true;
     }
     const SmNode *pNode = nullptr;
@@ -354,7 +360,7 @@ bool SmGraphicWidget::MouseButtonDown(const MouseEvent& rMEvt)
     if (!pNode)
         return true;
 
-    SmEditWindow* pEdit = mrViewShell.GetEditWindow();
+    SmEditWindow* pEdit = GetView().GetEditWindow();
     if (!pEdit)
         return true;
     const SmToken  aToken (pNode->GetToken());
@@ -374,9 +380,9 @@ bool SmGraphicWidget::MouseMove(const MouseEvent &rMEvt)
 {
     if (rMEvt.IsLeft() && SmViewShell::IsInlineEditEnabled())
     {
-        OutputDevice& rDevice = GetDrawingArea()->get_ref_device();
+        OutputDevice& rDevice = GetOutputDevice();
         Point aPos(rDevice.PixelToLogic(rMEvt.GetPosPixel()) - GetFormulaDrawPos());
-        mrViewShell.GetDoc()->GetCursor().MoveTo(&rDevice, aPos, false);
+        GetCursor().MoveTo(&rDevice, aPos, false);
 
         CaretBlinkStop();
         SetIsCursorVisible(true);
@@ -390,10 +396,10 @@ void SmGraphicWidget::GetFocus()
 {
     if (!SmViewShell::IsInlineEditEnabled())
         return;
-    if (mrViewShell.GetEditWindow())
-        mrViewShell.GetEditWindow()->Flush();
+    if (GetView().GetEditWindow())
+        GetView().GetEditWindow()->Flush();
     //Let view shell know what insertions should be done in visual editor
-    mrViewShell.SetInsertIntoEditWindow(false);
+    GetView().SetInsertIntoEditWindow(false);
     SetIsCursorVisible(true);
     ShowLine(true);
     CaretBlinkStart();
@@ -420,8 +426,7 @@ void SmGraphicWidget::LoseFocus()
 
 void SmGraphicWidget::RepaintViewShellDoc()
 {
-    SmDocShell* pDoc = mrViewShell.GetDoc();
-    if (pDoc)
+    if (SmDocShell* pDoc = GetDoc())
         pDoc->Repaint();
 }
 
@@ -464,10 +469,7 @@ void SmGraphicWidget::ShowCursor(bool bShow)
 
     bool bInvert = bShow != IsCursorVisible();
     if (bInvert)
-    {
-        OutputDevice& rDevice = GetDrawingArea()->get_ref_device();
-        InvertFocusRect(rDevice, aCursorRect);
-    }
+        InvertFocusRect(GetOutputDevice(), aCursorRect);
 
     SetIsCursorVisible(bShow);
 }
@@ -485,7 +487,7 @@ void SmGraphicWidget::SetCursor(const SmNode *pNode)
     if (SmViewShell::IsInlineEditEnabled())
         return;
 
-    const SmNode *pTree = mrViewShell.GetDoc()->GetFormulaTree();
+    const SmNode *pTree = GetDoc()->GetFormulaTree();
 
     // get appropriate rectangle
     Point aOffset (pNode->GetTopLeft() - pTree->GetTopLeft()),
@@ -525,7 +527,7 @@ const SmNode * SmGraphicWidget::SetCursorPos(sal_uInt16 nRow, sal_uInt16 nCol)
         return nullptr;
 
     // find visible node with token at nRow, nCol
-    const SmNode *pTree = mrViewShell.GetDoc()->GetFormulaTree(),
+    const SmNode *pTree = GetDoc()->GetFormulaTree(),
                  *pNode = nullptr;
     if (pTree)
         pNode = pTree->FindTokenAt(nRow, nCol);
@@ -540,7 +542,8 @@ const SmNode * SmGraphicWidget::SetCursorPos(sal_uInt16 nRow, sal_uInt16 nCol)
 
 void SmGraphicWidget::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    SmDocShell& rDoc = *mrViewShell.GetDoc();
+    assert(GetDoc());
+    SmDocShell& rDoc = *GetDoc();
     Point aPoint;
 
     rDoc.DrawFormula(rRenderContext, aPoint, true);  //! modifies aPoint to be the topleft
@@ -549,14 +552,14 @@ void SmGraphicWidget::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
     if (SmViewShell::IsInlineEditEnabled())
     {
         //Draw cursor if any...
-        if (mrViewShell.GetDoc()->HasCursor() && IsLineVisible())
-            mrViewShell.GetDoc()->GetCursor().Draw(rRenderContext, aPoint, IsCursorVisible());
+        if (rDoc.HasCursor() && IsLineVisible())
+            rDoc.GetCursor().Draw(rRenderContext, aPoint, IsCursorVisible());
     }
     else
     {
         SetIsCursorVisible(false);  // (old) cursor must be drawn again
 
-        const SmEditWindow* pEdit = mrViewShell.GetEditWindow();
+        const SmEditWindow* pEdit = GetView().GetEditWindow();
         if (pEdit)
         {   // get new position for formula-cursor (for possible altered formula)
             sal_Int32  nRow;
@@ -573,9 +576,9 @@ void SmGraphicWidget::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
 
 void SmGraphicWidget::SetTotalSize()
 {
-    SmDocShell &rDoc = *mrViewShell.GetDoc();
-    OutputDevice& rDevice = GetDrawingArea()->get_ref_device();
-    const Size aTmp(rDevice.PixelToLogic(rDevice.LogicToPixel(rDoc.GetSize())));
+    assert(GetDoc());
+    OutputDevice& rDevice = GetOutputDevice();
+    const Size aTmp(rDevice.PixelToLogic(rDevice.LogicToPixel(GetDoc()->GetSize())));
     if (aTmp != mrGraphicWindow.GetTotalSize())
         mrGraphicWindow.SetTotalSize(aTmp);
 }
@@ -667,62 +670,57 @@ bool CharInput(sal_uInt32 c, SmCursor& rCursor, OutputDevice& rDevice)
 bool SmGraphicWidget::KeyInput(const KeyEvent& rKEvt)
 {
     if (!SmViewShell::IsInlineEditEnabled())
-        return mrViewShell.KeyInput(rKEvt);
+        return GetView().KeyInput(rKEvt);
 
     bool bConsumed = true;
 
-    SmCursor& rCursor = mrViewShell.GetDoc()->GetCursor();
-    KeyFuncType eFunc = rKEvt.GetKeyCode().GetFunction();
-    if (eFunc == KeyFuncType::COPY)
-        rCursor.Copy();
-    else if (eFunc == KeyFuncType::CUT)
-        rCursor.Cut();
-    else if (eFunc == KeyFuncType::PASTE)
-        rCursor.Paste();
-    else {
-    OutputDevice& rDevice = GetDrawingArea()->get_ref_device();
-    sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
-    switch(nCode)
+    SmCursor& rCursor = GetCursor();
+    switch (rKEvt.GetKeyCode().GetFunction())
     {
-        case KEY_LEFT:
+    case KeyFuncType::COPY:
+        rCursor.Copy();
+        break;
+    case KeyFuncType::CUT:
+        rCursor.Cut();
+        break;
+    case KeyFuncType::PASTE:
+        rCursor.Paste();
+        break;
+    default:
+        switch (rKEvt.GetKeyCode().GetCode())
         {
-            rCursor.Move(&rDevice, MoveLeft, !rKEvt.GetKeyCode().IsShift());
-        }break;
-        case KEY_RIGHT:
-        {
-            rCursor.Move(&rDevice, MoveRight, !rKEvt.GetKeyCode().IsShift());
-        }break;
-        case KEY_UP:
-        {
-            rCursor.Move(&rDevice, MoveUp, !rKEvt.GetKeyCode().IsShift());
-        }break;
-        case KEY_DOWN:
-        {
-            rCursor.Move(&rDevice, MoveDown, !rKEvt.GetKeyCode().IsShift());
-        }break;
-        case KEY_RETURN:
-        {
-            if(!rKEvt.GetKeyCode().IsShift())
-                rCursor.InsertRow();
-        }break;
-        case KEY_DELETE:
-        {
-            if(!rCursor.HasSelection()){
-                rCursor.Move(&rDevice, MoveRight, false);
-                if(rCursor.HasComplexSelection()) break;
-            }
-            rCursor.Delete();
-        }break;
-        case KEY_BACKSPACE:
-        {
-            rCursor.DeletePrev(&rDevice);
-        }break;
-        default:
-        {
-            if (!CharInput(rKEvt.GetCharCode(), rCursor, rDevice))
-                bConsumed = mrViewShell.KeyInput(rKEvt);
+            case KEY_LEFT:
+                rCursor.Move(&GetOutputDevice(), MoveLeft, !rKEvt.GetKeyCode().IsShift());
+                break;
+            case KEY_RIGHT:
+                rCursor.Move(&GetOutputDevice(), MoveRight, !rKEvt.GetKeyCode().IsShift());
+                break;
+            case KEY_UP:
+                rCursor.Move(&GetOutputDevice(), MoveUp, !rKEvt.GetKeyCode().IsShift());
+                break;
+            case KEY_DOWN:
+                rCursor.Move(&GetOutputDevice(), MoveDown, !rKEvt.GetKeyCode().IsShift());
+                break;
+            case KEY_RETURN:
+                if (!rKEvt.GetKeyCode().IsShift())
+                    rCursor.InsertRow();
+                break;
+            case KEY_DELETE:
+                if (!rCursor.HasSelection())
+                {
+                    rCursor.Move(&GetOutputDevice(), MoveRight, false);
+                    if (rCursor.HasComplexSelection())
+                        break;
+                }
+                rCursor.Delete();
+                break;
+            case KEY_BACKSPACE:
+                rCursor.DeletePrev(&GetOutputDevice());
+                break;
+            default:
+                if (!CharInput(rKEvt.GetCharCode(), rCursor, GetOutputDevice()))
+                    bConsumed = GetView().KeyInput(rKEvt);
         }
-    }
     }
     CaretBlinkStop();
     CaretBlinkStart();
@@ -735,7 +733,7 @@ bool SmGraphicWidget::KeyInput(const KeyEvent& rKEvt)
 bool SmGraphicWidget::Command(const CommandEvent& rCEvt)
 {
     bool bCallBase = true;
-    if (!mrViewShell.GetViewFrame()->GetFrame().IsInPlace())
+    if (!GetView().GetViewFrame()->GetFrame().IsInPlace())
     {
         switch ( rCEvt.GetCommand() )
         {
@@ -775,8 +773,8 @@ bool SmGraphicWidget::Command(const CommandEvent& rCEvt)
                     const CommandExtTextInputData* pData = rCEvt.GetExtTextInputData();
                     assert(pData);
                     const OUString& rText = pData->GetText();
-                    SmCursor& rCursor = mrViewShell.GetDoc()->GetCursor();
-                    OutputDevice& rDevice = GetDrawingArea()->get_ref_device();
+                    SmCursor& rCursor = GetCursor();
+                    OutputDevice& rDevice = GetOutputDevice();
                     for (sal_Int32 i = 0; i < rText.getLength();)
                         CharInput(rText.iterateCodePoints(&i), rCursor, rDevice);
                     bCallBase = false;
@@ -802,14 +800,11 @@ void SmGraphicWindow::SetZoom(sal_uInt16 Factor)
 
 void SmGraphicWindow::ZoomToFitInWindow()
 {
-    SmViewShell& rViewSh = mxGraphic->GetView();
-    SmDocShell& rDoc = *rViewSh.GetDoc();
-
     // set defined mapmode before calling 'LogicToPixel' below
     SetGraphicMapMode(MapMode(MapUnit::Map100thMM));
 
-    OutputDevice& rDevice = mxGraphic->GetDrawingArea()->get_ref_device();
-    Size aSize(rDevice.LogicToPixel(rDoc.GetSize()));
+    assert(mxGraphic->GetDoc());
+    Size aSize(mxGraphic->GetOutputDevice().LogicToPixel(mxGraphic->GetDoc()->GetSize()));
     Size aWindowSize(GetSizePixel());
 
     if (!aSize.IsEmpty())
