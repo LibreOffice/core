@@ -22,6 +22,30 @@
       },
       "revId": "0730fb2cb8789cc535196760ddcb475b2165df4c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c13b7c9_16082c81",
+        "filename": "vcl/source/window/syswin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-07-25T06:26:50Z",
+      "side": 1,
+      "message": "Good catch, fixed, thanks.",
+      "parentUuid": "8936429d_7ade25cd",
+      "range": {
+        "startLine": 436,
+        "startChar": 27,
+        "endLine": 436,
+        "endChar": 51
+      },
+      "revId": "0730fb2cb8789cc535196760ddcb475b2165df4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
