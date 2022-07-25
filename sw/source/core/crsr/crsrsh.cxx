@@ -1543,7 +1543,7 @@ static void lcl_CheckHiddenPara( SwPosition& rPos )
     }
 
     if ( pTextNd )
-        rPos = SwPosition( aTmp, SwIndex( pTextNd, 0 ) );
+        rPos = SwPosition( aTmp, SwContentIndex( pTextNd, 0 ) );
 }
 
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
@@ -2998,7 +2998,7 @@ SwCursorShell::SwCursorShell( SwDoc& rDoc, vcl::Window *pInitWin,
     SwNodeIndex aNodeIdx( *rNds.GetEndOfContent().StartOfSectionNode() );
     SwContentNode* pCNd = rNds.GoNext( &aNodeIdx ); // go to the first ContentNode
 
-    m_pCurrentCursor = new SwShellCursor( *this, SwPosition( aNodeIdx, SwIndex( pCNd, 0 )));
+    m_pCurrentCursor = new SwShellCursor( *this, SwPosition( aNodeIdx, SwContentIndex( pCNd, 0 )));
 
     // Register shell as dependent at current node. As a result all attribute
     // changes can be forwarded via the Link.
@@ -3729,7 +3729,7 @@ static void lcl_FillTextRange( uno::Reference<text::XTextRange>& rRange,
                    SwTextNode& rNode, sal_Int32 nBegin, sal_Int32 nLen )
 {
     // create SwPosition for nStartIndex
-    SwIndex aIndex( &rNode, nBegin );
+    SwContentIndex aIndex( &rNode, nBegin );
     SwPosition aStartPos( rNode, aIndex );
 
     // create SwPosition for nEndIndex
@@ -3843,7 +3843,7 @@ void SwCursorShell::GetSmartTagRect( const Point& rPt, SwRect& rSelectRect )
     const sal_Int32 nWordEnd = std::min(nBegin + nLen - nLeft - nRight, nLineEnd);
     Push();
     pCursor->DeleteMark();
-    SwIndex& rContent = GetCursor()->GetPoint()->nContent;
+    SwContentIndex& rContent = GetCursor()->GetPoint()->nContent;
     rContent = nWordStart;
     SwRect aStartRect;
     SwCursorMoveState aState;

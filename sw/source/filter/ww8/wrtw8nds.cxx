@@ -238,7 +238,7 @@ SwWW8AttrIter::SwWW8AttrIter(MSWordExportBase& rWr, const SwTextNode& rTextNd) :
 
     if ( !m_rExport.m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty() )
     {
-        SwPosition aPosition( m_rNode, SwIndex( const_cast<SwTextNode*>(&m_rNode) ) );
+        SwPosition aPosition( m_rNode, SwContentIndex( const_cast<SwTextNode*>(&m_rNode) ) );
         m_pCurRedline = m_rExport.m_rDoc.getIDocumentRedlineAccess().GetRedline( aPosition, &m_nCurRedlinePos );
     }
 
@@ -2489,7 +2489,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 IDocumentMarkAccess* const pMarkAccess = m_rDoc.getIDocumentMarkAccess();
                 if ( ch == CH_TXT_ATR_FIELDSTART )
                 {
-                    SwPosition aPosition( rNode, SwIndex( &rNode, nCurrentPos ) );
+                    SwPosition aPosition( rNode, SwContentIndex( &rNode, nCurrentPos ) );
                     ::sw::mark::IFieldmark const*const pFieldmark = pMarkAccess->getFieldmarkAt(aPosition);
                     assert(pFieldmark);
 
@@ -2541,7 +2541,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 }
                 else if (ch == CH_TXT_ATR_FIELDSEP)
                 {
-                    SwPosition aPosition(rNode, SwIndex(&rNode, nCurrentPos));
+                    SwPosition aPosition(rNode, SwContentIndex(&rNode, nCurrentPos));
                     // the innermost field is the correct one
                     ::sw::mark::IFieldmark const*const pFieldmark = pMarkAccess->getFieldmarkFor(aPosition);
                     assert(pFieldmark);
@@ -2567,7 +2567,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 }
                 else if ( ch == CH_TXT_ATR_FIELDEND )
                 {
-                    SwPosition aPosition( rNode, SwIndex( &rNode, nCurrentPos ) );
+                    SwPosition aPosition( rNode, SwContentIndex( &rNode, nCurrentPos ) );
                     ::sw::mark::IFieldmark const*const pFieldmark = pMarkAccess->getFieldmarkAt(aPosition);
 
                     assert(pFieldmark);
@@ -2604,7 +2604,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 }
                 else if ( ch == CH_TXT_ATR_FORMELEMENT )
                 {
-                    SwPosition aPosition( rNode, SwIndex( &rNode, nCurrentPos ) );
+                    SwPosition aPosition( rNode, SwContentIndex( &rNode, nCurrentPos ) );
                     ::sw::mark::IFieldmark const*const pFieldmark = pMarkAccess->getFieldmarkAt(aPosition);
                     assert(pFieldmark);
 

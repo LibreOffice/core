@@ -28,7 +28,7 @@
 #include <memory>
 
 class SwTextField;
-class SwIndex;
+class SwContentIndex;
 class SwNodeIndex;
 class SwContentFrame;
 class SwSectionNode;
@@ -66,7 +66,7 @@ class SetGetExpField
 
 public:
     SetGetExpField( const SwNodeIndex& rNdIdx, const SwTextField* pField = nullptr,
-                    const SwIndex* pIdx = nullptr,
+                    const SwContentIndex* pIdx = nullptr,
                     sal_uInt16 nPageNumber = 0);
 
     SetGetExpField( const SwNodeIndex& rNdIdx, const SwTextINetFormat& rINet );

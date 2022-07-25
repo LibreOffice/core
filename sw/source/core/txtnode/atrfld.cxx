@@ -736,7 +736,7 @@ void SwTextInputField::UpdateTextNodeContent( const OUString& rNewContent )
     const sal_Int32 nIdx = GetStart() + 1;
     // skip CH_TXT_ATR_INPUTFIELDEND character
     const sal_Int32 nDelLen = std::max<sal_Int32>( 0, ( (*End()) - 1 - nIdx ) );
-    SwIndex aIdx( &GetTextNode(), nIdx );
+    SwContentIndex aIdx( &GetTextNode(), nIdx );
     GetTextNode().ReplaceText( aIdx, nDelLen, rNewContent );
 }
 

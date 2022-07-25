@@ -755,7 +755,7 @@ ErrCode SwWriter::Write( WriterRef const & rxWriter, const OUString* pRealFileNa
         SwNodeIndex aIdx( xDoc->GetNodes().GetEndOfExtras(), 2 );
         SwContentNode *pNd = aIdx.GetNode().GetContentNode();
         OSL_ENSURE( pNd, "Node not found" );
-        SwPosition aPos( aIdx, SwIndex( pNd ) );
+        SwPosition aPos( aIdx, SwContentIndex( pNd ) );
         pTableNd->GetTable().MakeCopy( *xDoc, aPos, aBoxes );
     }
 

@@ -459,7 +459,7 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
 
         // Move the first part of the content to the new node and delete
         // it in the old node.
-        SwIndex aIdx( this );
+        SwContentIndex aIdx( this );
         CutText( pNode, aIdx, nSplitPos );
 
         if( GetWrong() )
@@ -581,7 +581,7 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
         std::unique_ptr<SwWrongList> pList2 = ReleaseSmartTags();
         SetSmartTagDirty( true );
 
-        SwIndex aIdx( this );
+        SwContentIndex aIdx( this );
         CutText( pNode, aIdx, nSplitPos );
 
         // JP 01.10.96: delete all empty and not-to-be-expanded attributes
@@ -1041,8 +1041,8 @@ SwContentNode *SwTextNode::JoinNext()
             }
         }
 
-        { // scope for SwIndex
-            pTextNode->CutText( this, SwIndex(pTextNode), pTextNode->Len() );
+        { // scope for SwContentIndex
+            pTextNode->CutText( this, SwContentIndex(pTextNode), pTextNode->Len() );
         }
         // move all Bookmarks/TOXMarks
         if( !pContentStore->Empty())
@@ -1156,8 +1156,8 @@ void SwTextNode::JoinPrev()
             }
         }
 
-        { // scope for SwIndex
-            pTextNode->CutText( this, SwIndex(this), SwIndex(pTextNode), nLen );
+        { // scope for SwContentIndex
+            pTextNode->CutText( this, SwContentIndex(this), SwContentIndex(pTextNode), nLen );
         }
         // move all Bookmarks/TOXMarks
         if( !pContentStore->Empty() )
@@ -1223,9 +1223,9 @@ public:
 };
 };
 
-// override SwIndexReg::Update => text hints do not need SwIndex for start/end!
+// override SwContentIndexReg::Update => text hints do not need SwContentIndex for start/end!
 void SwTextNode::Update(
-    SwIndex const & rPos,
+    SwContentIndex const & rPos,
     const sal_Int32 nChangeLen,
     const bool bNegative,
     const bool bDelete )
@@ -1422,7 +1422,7 @@ void SwTextNode::Update(
                 if ( this == &pEnd->nNode.GetNode() &&
                      *pRedl->GetPoint() != *pRedl->GetMark() )
                 {
-                    SwIndex & rIdx = pEnd->nContent;
+                    SwContentIndex & rIdx = pEnd->nContent;
                     if (nChangePos == rIdx.GetIndex())
                     {
                         rIdx.Assign( &aTmpIdxReg, rIdx.GetIndex() );
@@ -1431,7 +1431,7 @@ void SwTextNode::Update(
             }
             else if ( this == &pRedl->GetPoint()->nNode.GetNode() )
             {
-                SwIndex & rIdx = pRedl->GetPoint()->nContent;
+                SwContentIndex & rIdx = pRedl->GetPoint()->nContent;
                 if (nChangePos == rIdx.GetIndex())
                 {
                     rIdx.Assign( &aTmpIdxReg, rIdx.GetIndex() );
@@ -1449,10 +1449,10 @@ void SwTextNode::Update(
         {
             bool bAtLeastOneBookmarkMoved = false;
             bool bAtLeastOneExpandedBookmarkAtInsertionPosition = false;
-            // A text node already knows its marks via its SwIndexes.
+            // A text node already knows its marks via its SwContentIndexes.
             o3tl::sorted_vector<const sw::mark::IMark*> aSeenMarks;
-            const SwIndex* next;
-            for (const SwIndex* pIndex = GetFirstIndex(); pIndex; pIndex = next )
+            const SwContentIndex* next;
+            for (const SwContentIndex* pIndex = GetFirstIndex(); pIndex; pIndex = next )
             {
                 next = pIndex->GetNext();
                 const sw::mark::IMark* pMark = pIndex->GetMark();
@@ -1462,7 +1462,7 @@ void SwTextNode::Update(
                 if (!aSeenMarks.insert(pMark).second)
                     continue;
                 const SwPosition* pEnd = &pMark->GetMarkEnd();
-                SwIndex & rEndIdx = const_cast<SwIndex&>(pEnd->nContent);
+                SwContentIndex & rEndIdx = const_cast<SwContentIndex&>(pEnd->nContent);
                 if( this == &pEnd->nNode.GetNode() &&
                     rPos.GetIndex() == rEndIdx.GetIndex() )
                 {
@@ -1504,7 +1504,7 @@ void SwTextNode::Update(
                 if (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR && pContentAnchor)
                 {
                     // The fly is at-char anchored and has an anchor position.
-                    SwIndex& rEndIdx = const_cast<SwIndex&>(pContentAnchor->nContent);
+                    SwContentIndex& rEndIdx = const_cast<SwContentIndex&>(pContentAnchor->nContent);
                     if (&pContentAnchor->nNode.GetNode() == this && rEndIdx.GetIndex() == rPos.GetIndex())
                     {
                         // The anchor position is exactly our insert position.
@@ -1529,7 +1529,7 @@ void SwTextNode::Update(
                     if (!pCursor)
                         continue;
 
-                    SwIndex& rIndex = pCursor->Start()->nContent;
+                    SwContentIndex& rIndex = pCursor->Start()->nContent;
                     if (&pCursor->Start()->nNode.GetNode() == this && rIndex.GetIndex() == rPos.GetIndex())
                     {
                         // The cursor position of this other shell is exactly our insert position.
@@ -1541,7 +1541,7 @@ void SwTextNode::Update(
     }
 
     // base class
-    SwIndexReg::Update( rPos, nChangeLen, bNegative, bDelete );
+    SwContentIndexReg::Update( rPos, nChangeLen, bNegative, bDelete );
 
     if (pCollector)
     {
@@ -1633,7 +1633,7 @@ void SwTextNode::ChgTextCollUpdateNum( const SwTextFormatColl *pOldColl,
 
 // If positioned exactly at the end of a CharStyle or Hyperlink,
 // set its DontExpand flag.
-bool SwTextNode::DontExpandFormat( const SwIndex& rIdx, bool bFlag,
+bool SwTextNode::DontExpandFormat( const SwContentIndex& rIdx, bool bFlag,
                                 bool bFormatToTextAttributes )
 {
     const sal_Int32 nIdx = rIdx.GetIndex();
@@ -2020,17 +2020,17 @@ void SwTextNode::CopyAttr( SwTextNode *pDest, const sal_Int32 nTextStartIdx,
 
 /// copy text and attributes to node pDest
 void SwTextNode::CopyText( SwTextNode *const pDest,
-                      const SwIndex &rStart,
+                      const SwContentIndex &rStart,
                       const sal_Int32 nLen,
                       const bool bForceCopyOfAllAttrs )
 {
-    SwIndex const aIdx( pDest, pDest->m_Text.getLength() );
+    SwContentIndex const aIdx( pDest, pDest->m_Text.getLength() );
     CopyText( pDest, aIdx, rStart, nLen, bForceCopyOfAllAttrs );
 }
 
 void SwTextNode::CopyText( SwTextNode *const pDest,
-                      const SwIndex &rDestStart,
-                      const SwIndex &rStart,
+                      const SwContentIndex &rDestStart,
+                      const SwContentIndex &rStart,
                       sal_Int32 nLen,
                       const bool bForceCopyOfAllAttrs )
 {
@@ -2273,7 +2273,7 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
         std::reverse(metaFieldRanges.begin(), metaFieldRanges.end());
         for (const auto& pair : metaFieldRanges)
         {
-            const SwIndex aIdx(pDest, pair.first);
+            const SwContentIndex aIdx(pDest, pair.first);
             pDest->EraseText(aIdx, pair.second - pair.first);
         }
     }
@@ -2295,7 +2295,7 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
             }
             else
             {
-                const SwIndex aIdx( pDest, pNewHt->GetStart() );
+                const SwContentIndex aIdx( pDest, pNewHt->GetStart() );
                 pDest->EraseText( aIdx, 1 );
             }
         }
@@ -2305,7 +2305,7 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
     CHECK_SWPHINTS(pDest);
 }
 
-OUString SwTextNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
+OUString SwTextNode::InsertText( const OUString & rStr, const SwContentIndex & rIdx,
         const SwInsertFlags nMode )
 {
     assert(rIdx <= m_Text.getLength()); // invalid index
@@ -2426,15 +2426,15 @@ OUString SwTextNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
 }
 
 void SwTextNode::CutText( SwTextNode * const pDest,
-            const SwIndex & rStart, const sal_Int32 nLen )
+            const SwContentIndex & rStart, const sal_Int32 nLen )
 {
     assert(pDest); // Cut requires a destination
-    SwIndex aDestStt(pDest, pDest->GetText().getLength());
+    SwContentIndex aDestStt(pDest, pDest->GetText().getLength());
     CutImpl( pDest, aDestStt, rStart, nLen, false );
 }
 
-void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
-         const SwIndex & rStart, sal_Int32 nLen, const bool bUpdate )
+void SwTextNode::CutImpl( SwTextNode * const pDest, const SwContentIndex & rDestStart,
+         const SwContentIndex & rStart, sal_Int32 nLen, const bool bUpdate )
 {
     assert(pDest); // Cut requires a destination
 
@@ -2467,7 +2467,7 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
 
     if (bUpdate)
     {
-        // Update all SwIndex
+        // Update all SwContentIndex
         pDest->Update( rDestStart, nLen, false, false/*??? why was it true*/);
     }
 
@@ -2697,7 +2697,7 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
     TryDeleteSwpHints();
 }
 
-void SwTextNode::EraseText(const SwIndex &rIdx, const sal_Int32 nCount,
+void SwTextNode::EraseText(const SwContentIndex &rIdx, const sal_Int32 nCount,
         const SwInsertFlags nMode )
 {
     assert(rIdx <= m_Text.getLength()); // invalid index
@@ -3474,7 +3474,7 @@ OUString SwTextNode::GetExpandText(SwRootFrame const*const pLayout,
     return aText.makeStringAndClear();
 }
 
-bool SwTextNode::CopyExpandText(SwTextNode& rDestNd, const SwIndex* pDestIdx,
+bool SwTextNode::CopyExpandText(SwTextNode& rDestNd, const SwContentIndex* pDestIdx,
                         sal_Int32 nIdx, sal_Int32 nLen,
                         SwRootFrame const*const pLayout, bool bWithNum,
                         bool bWithFootnote, bool bReplaceTabsWithSpaces ) const
@@ -3482,7 +3482,7 @@ bool SwTextNode::CopyExpandText(SwTextNode& rDestNd, const SwIndex* pDestIdx,
     if( &rDestNd == this )
         return false;
 
-    SwIndex aDestIdx(&rDestNd, rDestNd.GetText().getLength());
+    SwContentIndex aDestIdx(&rDestNd, rDestNd.GetText().getLength());
     if( pDestIdx )
         aDestIdx = *pDestIdx;
     const sal_Int32 nDestStt = aDestIdx.GetIndex();
@@ -3643,7 +3643,7 @@ bool SwTextNode::CopyExpandText(SwTextNode& rDestNd, const SwIndex* pDestIdx,
         }
         assert(-1 != nStartDelete); // without delete range, would have continued
         rDestNd.EraseText(
-            SwIndex(&rDestNd, nStartDelete),
+            SwContentIndex(&rDestNd, nStartDelete),
             aDestIdx.GetIndex() - nStartDelete);
         assert(aDestIdx.GetIndex() == nStartDelete);
         nStartDelete = -1; // reset
@@ -3723,7 +3723,7 @@ OUString SwTextNode::GetRedlineText() const
     return aText.makeStringAndClear();
 }
 
-void SwTextNode::ReplaceText( const SwIndex& rStart, const sal_Int32 nDelLen,
+void SwTextNode::ReplaceText( const SwContentIndex& rStart, const sal_Int32 nDelLen,
                              const OUString & rStr)
 {
     assert( rStart.GetIndex() < m_Text.getLength()     // index out of bounds
@@ -3770,7 +3770,7 @@ void SwTextNode::ReplaceText( const SwIndex& rStart, const sal_Int32 nDelLen,
         // This way the attributes of the 1st char are expanded!
         m_Text = m_Text.replaceAt(nStartPos, 1, sInserted.subView(0, 1));
 
-        ++const_cast<SwIndex&>(rStart);
+        ++const_cast<SwContentIndex&>(rStart);
         m_Text = m_Text.replaceAt(rStart.GetIndex(), nLen - 1, u"");
         Update( rStart, nLen - 1, true );
 

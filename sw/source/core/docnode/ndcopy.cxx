@@ -106,7 +106,7 @@ SwContentNode* SwTextNode::MakeCopy(SwDoc& rDoc, const SwNodeIndex& rIdx, bool c
 
     // Is that enough? What about PostIts/Fields/FieldTypes?
     // #i96213# - force copy of all attributes
-    pCpyTextNd->CopyText( pTextNd, SwIndex( pCpyTextNd ),
+    pCpyTextNd->CopyText( pTextNd, SwContentIndex( pCpyTextNd ),
         pCpyTextNd->GetText().getLength(), true );
 
     if( RES_CONDTXTFMTCOLL == pColl->Which() )

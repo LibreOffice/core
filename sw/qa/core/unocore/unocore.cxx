@@ -89,7 +89,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, flyAtParaAnchor)
     auto const xAnchor = xTextFrame->getAnchor();
     uno::Reference<text::XTextContent> const xFieldmark(
         xMSF->createInstance("com.sun.star.text.Fieldmark"), uno::UNO_QUERY_THROW);
-    // this crashed because the anchor didn't have SwIndex
+    // this crashed because the anchor didn't have SwContentIndex
     xText->insertTextContent(xAnchor, xFieldmark, false);
 }
 

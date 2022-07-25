@@ -185,7 +185,7 @@ bool IDocumentMarkAccess::iterator::operator>=(iterator const& rOther) const
 
 namespace
 {
-    bool lcl_GreaterThan( const SwPosition& rPos, const SwNodeIndex& rNdIdx, const SwIndex* pIdx )
+    bool lcl_GreaterThan( const SwPosition& rPos, const SwNodeIndex& rNdIdx, const SwContentIndex* pIdx )
     {
         return pIdx != nullptr
                ? ( rPos.nNode > rNdIdx
@@ -194,7 +194,7 @@ namespace
                : rPos.nNode >= rNdIdx;
     }
 
-    bool lcl_Lower( const SwPosition& rPos, const SwNodeIndex& rNdIdx, const SwIndex* pIdx )
+    bool lcl_Lower( const SwPosition& rPos, const SwNodeIndex& rNdIdx, const SwContentIndex* pIdx )
     {
         return rPos.nNode < rNdIdx
                || ( pIdx != nullptr
@@ -974,8 +974,8 @@ namespace sw::mark
             ::sw::mark::MarkBase const*const pMark,
             SwNodeIndex const& rStt,
             SwNodeIndex const& rEnd,
-            SwIndex const*const pSttIdx,
-            SwIndex const*const pEndIdx,
+            SwContentIndex const*const pSttIdx,
+            SwContentIndex const*const pEndIdx,
             bool & rbIsPosInRange,
             bool & rbIsOtherPosInRange)
     {
@@ -1066,8 +1066,8 @@ namespace sw::mark
             const SwNodeIndex& rStt,
             const SwNodeIndex& rEnd,
             std::vector<SaveBookmark>* pSaveBkmk,
-            const SwIndex* pSttIdx,
-            const SwIndex* pEndIdx )
+            const SwContentIndex* pSttIdx,
+            const SwContentIndex* pEndIdx )
     {
         std::vector<const_iterator_t> vMarksToDelete;
         bool bIsSortingNeeded = false;
@@ -1782,7 +1782,7 @@ void MarkManager::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 namespace
 {
-    bool lcl_Greater( const SwPosition& rPos, const SwNodeIndex& rNdIdx, const SwIndex* pIdx )
+    bool lcl_Greater( const SwPosition& rPos, const SwNodeIndex& rNdIdx, const SwContentIndex* pIdx )
     {
         return rPos.nNode > rNdIdx || ( pIdx && rPos.nNode == rNdIdx && rPos.nContent > pIdx->GetIndex() );
     }
@@ -1798,7 +1798,7 @@ const IDocumentMarkAccess* SwDoc::getIDocumentMarkAccess() const
 SaveBookmark::SaveBookmark(
     const IMark& rBkmk,
     const SwNodeIndex & rMvPos,
-    const SwIndex* pIdx)
+    const SwContentIndex* pIdx)
     : m_aName(rBkmk.GetName())
     , m_bHidden(false)
     , m_eOrigBkmType(IDocumentMarkAccess::GetType(rBkmk))
@@ -1844,7 +1844,7 @@ SaveBookmark::SaveBookmark(
 void SaveBookmark::SetInDoc(
     SwDoc* pDoc,
     const SwNodeIndex& rNewPos,
-    const SwIndex* pIdx)
+    const SwContentIndex* pIdx)
 {
     SwPaM aPam(rNewPos.GetNode());
     if(pIdx)
@@ -1901,8 +1901,8 @@ void DelBookmarks(
     const SwNodeIndex& rStt,
     const SwNodeIndex& rEnd,
     std::vector<SaveBookmark> * pSaveBkmk,
-    const SwIndex* pSttIdx,
-    const SwIndex* pEndIdx)
+    const SwContentIndex* pSttIdx,
+    const SwContentIndex* pEndIdx)
 {
     // illegal range ??
     if(rStt.GetIndex() > rEnd.GetIndex()

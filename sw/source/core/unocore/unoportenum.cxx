@@ -182,7 +182,7 @@ namespace
         assert(pTextNode);
         // A text node already knows its marks via its SwIndexes.
         o3tl::sorted_vector<const sw::mark::IMark*> aSeenMarks;
-        for (const SwIndex* pIndex = pTextNode->GetFirstIndex(); pIndex; pIndex = pIndex->GetNext())
+        for (const SwContentIndex* pIndex = pTextNode->GetFirstIndex(); pIndex; pIndex = pIndex->GetNext())
         {
             // Need a non-cost mark here, as we'll create a UNO wrapper around it.
             sw::mark::IMark* pBkmk = const_cast<sw::mark::IMark*>(pIndex->GetMark());

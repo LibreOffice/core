@@ -30,7 +30,7 @@
 #include <extinput.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
-#include <index.hxx>
+#include <contentindex.hxx>
 #include <ndtxt.hxx>
 #include <swundo.hxx>
 
@@ -53,7 +53,7 @@ SwExtTextInput::~SwExtTextInput()
     if( !pTNd )
         return;
 
-    SwIndex& rIdx = GetPoint()->nContent;
+    SwContentIndex& rIdx = GetPoint()->nContent;
     sal_Int32 nSttCnt = rIdx.GetIndex();
     sal_Int32 nEndCnt = GetMark()->nContent.GetIndex();
     if( nEndCnt == nSttCnt )
@@ -156,7 +156,7 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
     sal_Int32 nSttCnt = Start()->nContent.GetIndex();
     sal_Int32 nEndCnt = End()->nContent.GetIndex();
 
-    SwIndex aIdx( pTNd, nSttCnt );
+    SwContentIndex aIdx( pTNd, nSttCnt );
     const OUString& rNewStr = rData.GetText();
 
     if( m_bIsOverwriteCursor && !m_sOverwriteText.isEmpty() )

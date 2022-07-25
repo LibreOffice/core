@@ -12070,6 +12070,7 @@ sw/inc/charfmt.hxx
 sw/inc/chpfld.hxx
 sw/inc/cmdid.h
 sw/inc/comcore.hxx
+sw/inc/contentindex.hxx
 sw/inc/crsrsh.hxx
 sw/inc/crstate.hxx
 sw/inc/cshtyp.hxx
@@ -12139,7 +12140,6 @@ sw/inc/hfspacingitem.hxx
 sw/inc/hhcwrp.hxx
 sw/inc/hints.hxx
 sw/inc/htmltbl.hxx
-sw/inc/index.hxx
 sw/inc/init.hxx
 sw/inc/iodetect.hxx
 sw/inc/istyleaccess.hxx

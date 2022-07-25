@@ -258,7 +258,7 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc,
             case TOKEN_AUTHORITY:
                 {
                     ToxAuthorityField eField = static_cast<ToxAuthorityField>(aToken.nAuthorityField);
-                    SwIndex aIdx( pTOXNd, rText.getLength() );
+                    SwContentIndex aIdx( pTOXNd, rText.getLength() );
                     if (eField == ToxAuthorityField::AUTH_FIELD_URL)
                     {
                         aCharStyleName = SwResId(STR_POOLCHR_INET_NORMAL);
@@ -423,7 +423,7 @@ ToxTextGenerator::HandleTextToken(const SwTOXSortTabBase& source,
 ToxTextGenerator::ApplyHandledTextToken(const HandledTextToken& htt, SwTextNode& targetNode)
 {
     sal_Int32 offset = targetNode.GetText().getLength();
-    SwIndex aIdx(&targetNode, offset);
+    SwContentIndex aIdx(&targetNode, offset);
     targetNode.InsertText(htt.text, aIdx);
     for (size_t i=0; i < htt.autoFormats.size(); ++i) {
         targetNode.InsertItem(*htt.autoFormats.at(i),

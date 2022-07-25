@@ -26,7 +26,7 @@
 #include "BorderCacheOwner.hxx"
 #include "ndarr.hxx"
 #include "ndtyp.hxx"
-#include "index.hxx"
+#include "contentindex.hxx"
 #include "fmtcol.hxx"
 #include "nodeoffset.hxx"
 
@@ -360,7 +360,7 @@ class SwEndNode final : public SwNode
 
 // SwContentNode
 
-class SW_DLLPUBLIC SwContentNode: public sw::BroadcastingModify, public SwNode, public SwIndexReg
+class SW_DLLPUBLIC SwContentNode: public sw::BroadcastingModify, public SwNode, public SwContentIndexReg
 {
 
     sw::WriterMultiListener m_aCondCollListener;
@@ -402,11 +402,11 @@ public:
     bool CanJoinNext( SwNodeIndex* pIdx =nullptr ) const;
     bool CanJoinPrev( SwNodeIndex* pIdx =nullptr ) const;
 
-    void MakeStartIndex( SwIndex * pIdx )   { pIdx->Assign( this, 0 ); }
-    void MakeEndIndex( SwIndex * pIdx )     { pIdx->Assign( this, Len() ); }
+    void MakeStartIndex( SwContentIndex * pIdx )   { pIdx->Assign( this, 0 ); }
+    void MakeEndIndex( SwContentIndex * pIdx )     { pIdx->Assign( this, Len() ); }
 
-    bool GoNext(SwIndex *, sal_uInt16 nMode ) const;
-    bool GoPrevious(SwIndex *, sal_uInt16 nMode ) const;
+    bool GoNext(SwContentIndex *, sal_uInt16 nMode ) const;
+    bool GoPrevious(SwContentIndex *, sal_uInt16 nMode ) const;
 
     /// @see GetFrameOfModify
     SwContentFrame *getLayoutFrame( const SwRootFrame*,

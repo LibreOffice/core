@@ -57,7 +57,7 @@ static sal_Int32 GetSttOrEnd( bool bCondition, const SwContentNode& rNd )
     return bCondition ? 0 : rNd.Len();
 }
 
-SwPosition::SwPosition( const SwNodeIndex & rNodeIndex, const SwIndex & rContent )
+SwPosition::SwPosition( const SwNodeIndex & rNodeIndex, const SwContentIndex & rContent )
     : nNode( rNodeIndex ), nContent( rContent )
 {
 }
@@ -82,7 +82,7 @@ bool SwPosition::operator<(const SwPosition &rPos) const
     // cheaper to check for == first
     if( nNode == rPos.nNode )
     {
-        // note that positions with text node but no SwIndex registered are
+        // note that positions with text node but no SwContentIndex registered are
         // created for text frames anchored at para (see SwXFrame::getAnchor())
         SwContentNode const*const pThisReg(nContent.GetContentNode());
         SwContentNode const*const pOtherReg(rPos.nContent.GetContentNode());
@@ -103,7 +103,7 @@ bool SwPosition::operator>(const SwPosition &rPos) const
     // cheaper to check for == first
     if( nNode == rPos.nNode )
     {
-        // note that positions with text node but no SwIndex registered are
+        // note that positions with text node but no SwContentIndex registered are
         // created for text frames anchored at para (see SwXFrame::getAnchor())
         SwContentNode const*const pThisReg(nContent.GetContentNode());
         SwContentNode const*const pOtherReg(rPos.nContent.GetContentNode());
@@ -124,7 +124,7 @@ bool SwPosition::operator<=(const SwPosition &rPos) const
     // cheaper to check for == first
     if( nNode == rPos.nNode )
     {
-        // note that positions with text node but no SwIndex registered are
+        // note that positions with text node but no SwContentIndex registered are
         // created for text frames anchored at para (see SwXFrame::getAnchor())
         SwContentNode const*const pThisReg(nContent.GetContentNode());
         SwContentNode const*const pOtherReg(rPos.nContent.GetContentNode());
@@ -145,7 +145,7 @@ bool SwPosition::operator>=(const SwPosition &rPos) const
     // cheaper to check for == first
     if( nNode == rPos.nNode )
     {
-        // note that positions with text node but no SwIndex registered are
+        // note that positions with text node but no SwContentIndex registered are
         // created for text frames anchored at para (see SwXFrame::getAnchor())
         SwContentNode const*const pThisReg(nContent.GetContentNode());
         SwContentNode const*const pOtherReg(rPos.nContent.GetContentNode());
@@ -283,14 +283,14 @@ bool CheckNodesRange( const SwNodeIndex& rStt,
     return false; // somewhere in between => error
 }
 
-bool GoNext(SwNode* pNd, SwIndex * pIdx, sal_uInt16 nMode )
+bool GoNext(SwNode* pNd, SwContentIndex * pIdx, sal_uInt16 nMode )
 {
     if( pNd->IsContentNode() )
         return static_cast<SwContentNode*>(pNd)->GoNext( pIdx, nMode );
     return false;
 }
 
-bool GoPrevious( SwNode* pNd, SwIndex * pIdx, sal_uInt16 nMode )
+bool GoPrevious( SwNode* pNd, SwContentIndex * pIdx, sal_uInt16 nMode )
 {
     if( pNd->IsContentNode() )
         return static_cast<SwContentNode*>(pNd)->GoPrevious( pIdx, nMode );

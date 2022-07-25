@@ -2694,7 +2694,7 @@ sal_Int32 SwHTMLParser::StripTrailingLF()
                 }
 
                 nPos = nLen - nLFCount;
-                SwIndex nIdx( pTextNd, nPos );
+                SwContentIndex nIdx( pTextNd, nPos );
                 pTextNd->EraseText( nIdx, nLFCount );
                 nStripped = nLFCount;
             }

@@ -1284,7 +1284,7 @@ SwFormatColl *SwContentNode::ChgFormatColl( SwFormatColl *pNewColl )
     return pOldColl;
 }
 
-bool SwContentNode::GoNext(SwIndex * pIdx, sal_uInt16 nMode ) const
+bool SwContentNode::GoNext(SwContentIndex * pIdx, sal_uInt16 nMode ) const
 {
     bool bRet = true;
     if( pIdx->GetIndex() < Len() )
@@ -1325,7 +1325,7 @@ bool SwContentNode::GoNext(SwIndex * pIdx, sal_uInt16 nMode ) const
     return bRet;
 }
 
-bool SwContentNode::GoPrevious(SwIndex * pIdx, sal_uInt16 nMode ) const
+bool SwContentNode::GoPrevious(SwContentIndex * pIdx, sal_uInt16 nMode ) const
 {
     bool bRet = true;
     if( pIdx->GetIndex() > 0 )

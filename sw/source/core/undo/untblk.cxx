@@ -350,12 +350,12 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
         {
             {
                 RemoveIdxRel( rIdx.GetIndex()+1, SwPosition( rIdx,
-                    SwIndex( pTextNode, pTextNode->GetText().getLength() )));
+                    SwContentIndex( pTextNode, pTextNode->GetText().getLength() )));
             }
             pTextNode->JoinNext();
         }
         // reset all text attributes in the paragraph!
-        pTextNode->RstTextAttr( SwIndex(pTextNode, 0), pTextNode->Len(), 0, nullptr, true );
+        pTextNode->RstTextAttr( SwContentIndex(pTextNode, 0), pTextNode->Len(), 0, nullptr, true );
 
         pTextNode->ResetAllAttr();
 

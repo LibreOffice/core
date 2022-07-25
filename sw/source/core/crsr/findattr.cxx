@@ -1327,7 +1327,7 @@ int SwFindParaAttr::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnMove,
     {
         const bool bRegExp(
                 SearchAlgorithms2::REGEXP == pSearchOpt->AlgorithmType2);
-        SwIndex& rSttCntIdx = rCursor.Start()->nContent;
+        SwContentIndex& rSttCntIdx = rCursor.Start()->nContent;
         const sal_Int32 nSttCnt = rSttCntIdx.GetIndex();
 
         // add to shell-cursor-ring so that the regions will be moved eventually

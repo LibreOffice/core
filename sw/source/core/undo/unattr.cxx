@@ -571,7 +571,7 @@ void SwUndoResetAttr::UndoImpl(::sw::UndoRedoContext & rContext)
         (m_nSttNode == m_nEndNode) && (m_nSttContent == m_nEndContent)) {
         SwTextNode* pTNd = rDoc.GetNodes()[ m_nSttNode ]->GetTextNode();
         if( pTNd ) {
-            SwIndex aIdx( pTNd, m_nSttContent );
+            SwContentIndex aIdx( pTNd, m_nSttContent );
             pTNd->DontExpandFormat( aIdx, false );
         }
     }
@@ -600,7 +600,7 @@ void SwUndoResetAttr::RedoImpl(::sw::UndoRedoContext & rContext)
     {
         SwTOXMarks aArr;
         SwNodeIndex aIdx( rDoc.GetNodes(), m_nSttNode );
-        SwPosition aPos( aIdx, SwIndex( aIdx.GetNode().GetContentNode(),
+        SwPosition aPos( aIdx, SwContentIndex( aIdx.GetNode().GetContentNode(),
                                         m_nSttContent ));
 
         sal_uInt16 nCnt = SwDoc::GetCurTOXMark( aPos, aArr );

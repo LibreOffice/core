@@ -66,7 +66,7 @@ using namespace ::com::sun::star::uno;
 SetGetExpField::SetGetExpField(
     const SwNodeIndex& rNdIdx,
     const SwTextField* pField,
-    const SwIndex* pIdx,
+    const SwContentIndex* pIdx,
     sal_uInt16 const nPageNumber)
     : m_nPageNumber(nPageNumber)
 {

@@ -2688,7 +2688,7 @@ void SwScriptInfo::selectHiddenTextProperty(const SwTextNode& rNode,
         }
     }
 
-    for (const SwIndex* pIndex = rNode.GetFirstIndex(); pIndex; pIndex = pIndex->GetNext())
+    for (const SwContentIndex* pIndex = rNode.GetFirstIndex(); pIndex; pIndex = pIndex->GetNext())
     {
         const sw::mark::IMark* pMark = pIndex->GetMark();
         const sw::mark::IBookmark* pBookmark = dynamic_cast<const sw::mark::IBookmark*>(pMark);

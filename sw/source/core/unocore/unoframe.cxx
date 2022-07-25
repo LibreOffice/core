@@ -2702,7 +2702,7 @@ uno::Reference< text::XTextRange >  SwXFrame::getAnchor()
     {
         const SwPosition &rPos = *(rAnchor.GetContentAnchor());
         if (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA)
-        {   // ensure that SwXTextRange has SwIndex
+        {   // ensure that SwXTextRange has SwContentIndex
             aRef = SwXTextRange::CreateXTextRange(*pFormat->GetDoc(), SwPosition(rPos.nNode), nullptr);
         }
         else

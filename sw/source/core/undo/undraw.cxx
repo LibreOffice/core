@@ -122,7 +122,7 @@ static void lcl_SaveAnchor( SwFrameFormat* pFormat, SwNodeOffset& rNodePos )
         {
             // just set pointer to 0, don't delete
             const_cast<SwFormatFlyCnt&>(pAttr->GetFlyCnt()).SetFlyFormat();
-            SwIndex aIdx( pTextNd, nContentPos );
+            SwContentIndex aIdx( pTextNd, nContentPos );
             pTextNd->EraseText( aIdx, 1 );
         }
     }

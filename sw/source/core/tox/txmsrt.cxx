@@ -217,7 +217,7 @@ bool SwTOXSortTabBase::IsFullPara() const
     return false;
 }
 
-void SwTOXSortTabBase::FillText( SwTextNode& rNd, const SwIndex& rInsPos,
+void SwTOXSortTabBase::FillText( SwTextNode& rNd, const SwContentIndex& rInsPos,
                                     sal_uInt16, SwRootFrame const*const) const
 {
     rNd.InsertText( GetText().sText, rInsPos );
@@ -394,7 +394,7 @@ TextAndReading SwTOXIndex::GetText_Impl(SwRootFrame const*const pLayout) const
     return aRet;
 }
 
-void SwTOXIndex::FillText( SwTextNode& rNd, const SwIndex& rInsPos, sal_uInt16,
+void SwTOXIndex::FillText( SwTextNode& rNd, const SwContentIndex& rInsPos, sal_uInt16,
         SwRootFrame const*const pLayout) const
 {
     assert(!"sw_redlinehide: this is dead code, Bibliography only has SwTOXAuthority");
@@ -504,7 +504,7 @@ TextAndReading SwTOXContent::GetText_Impl(SwRootFrame const*const pLayout) const
     return TextAndReading(pTextMark->GetTOXMark().GetAlternativeText(), OUString());
 }
 
-void SwTOXContent::FillText(SwTextNode& rNd, const SwIndex& rInsPos, sal_uInt16,
+void SwTOXContent::FillText(SwTextNode& rNd, const SwContentIndex& rInsPos, sal_uInt16,
         SwRootFrame const*const pLayout) const
 {
     assert(!"sw_redlinehide: this is dead code, Bibliography only has SwTOXAuthority");
@@ -607,7 +607,7 @@ TextAndReading SwTOXPara::GetText_Impl(SwRootFrame const*const pLayout) const
     return TextAndReading();
 }
 
-void SwTOXPara::FillText( SwTextNode& rNd, const SwIndex& rInsPos, sal_uInt16,
+void SwTOXPara::FillText( SwTextNode& rNd, const SwContentIndex& rInsPos, sal_uInt16,
         SwRootFrame const*const pLayout) const
 {
     assert(!"sw_redlinehide: this is dead code, Bibliography only has SwTOXAuthority");
@@ -872,7 +872,7 @@ OUString SwTOXAuthority::GetSourceURL(const OUString& rText)
     return aText;
 }
 
-void SwTOXAuthority::FillText(SwTextNode& rNd, const SwIndex& rInsPos, sal_uInt16 nAuthField,
+void SwTOXAuthority::FillText(SwTextNode& rNd, const SwContentIndex& rInsPos, sal_uInt16 nAuthField,
                               SwRootFrame const* const pLayout) const
 {
     OUString aText = GetText(nAuthField, pLayout);

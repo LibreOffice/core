@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_INC_INDEX_HXX
-#define INCLUDED_SW_INC_INDEX_HXX
+#pragma once
 
 #include <sal/types.h>
 #include "swdllapi.h"
@@ -25,38 +24,38 @@
 #include <iostream>
 
 class SwContentNode;
-class SwIndexReg;
+class SwContentIndexReg;
 struct SwPosition;
 
 namespace sw::mark { class IMark; }
 
 /// Marks a character position inside a document model content node (SwContentNode)
-class SAL_WARN_UNUSED SW_DLLPUBLIC SwIndex
+class SAL_WARN_UNUSED SW_DLLPUBLIC SwContentIndex
 {
 private:
-    friend class SwIndexReg;
+    friend class SwContentIndexReg;
 
     sal_Int32 m_nIndex;
     SwContentNode * m_pContentNode;
     // doubly linked list of Indexes registered at m_pIndexReg
-    SwIndex * m_pNext;
-    SwIndex * m_pPrev;
+    SwContentIndex * m_pNext;
+    SwContentIndex * m_pPrev;
 
-    /// Pointer to a mark that owns this position to allow fast lookup of marks of an SwIndexReg.
+    /// Pointer to a mark that owns this position to allow fast lookup of marks of an SwContentIndexReg.
     const sw::mark::IMark* m_pMark;
 
-    SwIndex& ChgValue( const SwIndex& rIdx, sal_Int32 nNewValue );
+    SwContentIndex& ChgValue( const SwContentIndex& rIdx, sal_Int32 nNewValue );
     void Init(sal_Int32 const nIdx);
     void Remove();
 
 public:
-    explicit SwIndex(SwContentNode *const pContentNode, sal_Int32 const nIdx = 0);
-    SwIndex( const SwIndex & );
-    SwIndex( const SwIndex &, short nDiff );
-    ~SwIndex() { Remove(); }
+    explicit SwContentIndex(SwContentNode *const pContentNode, sal_Int32 const nIdx = 0);
+    SwContentIndex( const SwContentIndex & );
+    SwContentIndex( const SwContentIndex &, short nDiff );
+    ~SwContentIndex() { Remove(); }
 
-    SwIndex& operator=( sal_Int32 const );
-    SwIndex& operator=( const SwIndex & );
+    SwContentIndex& operator=( sal_Int32 const );
+    SwContentIndex& operator=( const SwContentIndex & );
 
     sal_Int32 operator++();
     sal_Int32 operator--();
@@ -65,10 +64,10 @@ public:
     sal_Int32 operator+=( sal_Int32 const );
     sal_Int32 operator-=( sal_Int32 const );
 
-    bool operator< ( const SwIndex& ) const;
-    bool operator<=( const SwIndex& ) const;
-    bool operator> ( const SwIndex& ) const;
-    bool operator>=( const SwIndex& ) const;
+    bool operator< ( const SwContentIndex& ) const;
+    bool operator<=( const SwContentIndex& ) const;
+    bool operator> ( const SwContentIndex& ) const;
+    bool operator>=( const SwContentIndex& ) const;
 
     bool operator< ( sal_Int32 const nVal ) const { return m_nIndex <  nVal; }
     bool operator<=( sal_Int32 const nVal ) const { return m_nIndex <= nVal; }
@@ -77,106 +76,106 @@ public:
     bool operator==( sal_Int32 const nVal ) const { return m_nIndex == nVal; }
     bool operator!=( sal_Int32 const nVal ) const { return m_nIndex != nVal; }
 
-    bool operator==( const SwIndex& rSwIndex ) const
+    bool operator==( const SwContentIndex& rSwContentIndex ) const
     {
-        return (m_nIndex    == rSwIndex.m_nIndex)
-            && (m_pContentNode == rSwIndex.m_pContentNode);
+        return (m_nIndex    == rSwContentIndex.m_nIndex)
+            && (m_pContentNode == rSwContentIndex.m_pContentNode);
     }
 
-    bool operator!=( const SwIndex& rSwIndex ) const
+    bool operator!=( const SwContentIndex& rSwContentIndex ) const
     {
-        return (m_nIndex    != rSwIndex.m_nIndex)
-            || (m_pContentNode != rSwIndex.m_pContentNode);
+        return (m_nIndex    != rSwContentIndex.m_nIndex)
+            || (m_pContentNode != rSwContentIndex.m_pContentNode);
     }
 
     sal_Int32 GetIndex() const { return m_nIndex; }
 
     // Assignments without creating a temporary object.
-    SwIndex &Assign(SwContentNode *, sal_Int32);
+    SwContentIndex &Assign(SwContentNode *, sal_Int32);
 
-    // Returns pointer to SwContentNode (for RTTI at SwIndexReg).
+    // Returns pointer to SwContentNode (for RTTI at SwContentIndexReg).
     const SwContentNode* GetContentNode() const { return m_pContentNode; }
-    const SwIndex* GetNext() const { return m_pNext; }
+    const SwContentIndex* GetNext() const { return m_pNext; }
 
     const sw::mark::IMark* GetMark() const { return m_pMark; }
     void SetMark(const sw::mark::IMark* pMark);
 };
 
-SW_DLLPUBLIC std::ostream& operator <<(std::ostream& s, const SwIndex& index);
+SW_DLLPUBLIC std::ostream& operator <<(std::ostream& s, const SwContentIndex& index);
 
-/// Helper base class for SwContentNode to manage the list of attached SwIndex
-class SAL_WARN_UNUSED SwIndexReg
+/// Helper base class for SwContentNode to manage the list of attached SwContentIndex
+class SAL_WARN_UNUSED SwContentIndexReg
 {
-    friend class SwIndex;
+    friend class SwContentIndex;
     friend bool sw_PosOk(const SwPosition & aPos);
 
-    const SwIndex * m_pFirst;
-    const SwIndex * m_pLast;
+    const SwContentIndex * m_pFirst;
+    const SwContentIndex * m_pLast;
 
 protected:
-    virtual void Update( SwIndex const & rPos, const sal_Int32 nChangeLen,
+    virtual void Update( SwContentIndex const & rPos, const sal_Int32 nChangeLen,
                  const bool bNegative = false, const bool bDelete = false );
 
     bool HasAnyIndex() const { return nullptr != m_pFirst; }
 
-    SwIndexReg();
+    SwContentIndexReg();
 public:
-    virtual ~SwIndexReg();
+    virtual ~SwContentIndexReg();
 
     void MoveTo( SwContentNode& rArr );
-    const SwIndex* GetFirstIndex() const { return m_pFirst; }
+    const SwContentIndex* GetFirstIndex() const { return m_pFirst; }
 };
 
 #ifndef DBG_UTIL
 
-inline sal_Int32 SwIndex::operator++()
+inline sal_Int32 SwContentIndex::operator++()
 {
     return ChgValue( *this, m_nIndex+1 ).m_nIndex;
 }
 
-inline sal_Int32 SwIndex::operator--()
+inline sal_Int32 SwContentIndex::operator--()
 {
     return ChgValue( *this, m_nIndex-1 ).m_nIndex;
 }
 
-inline sal_Int32 SwIndex::operator--(int)
+inline sal_Int32 SwContentIndex::operator--(int)
 {
     sal_Int32 const nOldIndex = m_nIndex;
     ChgValue( *this, m_nIndex-1 );
     return nOldIndex;
 }
 
-inline sal_Int32 SwIndex::operator+=( sal_Int32 const nVal )
+inline sal_Int32 SwContentIndex::operator+=( sal_Int32 const nVal )
 {
     return ChgValue( *this, m_nIndex + nVal ).m_nIndex;
 }
 
-inline sal_Int32 SwIndex::operator-=( sal_Int32 const nVal )
+inline sal_Int32 SwContentIndex::operator-=( sal_Int32 const nVal )
 {
     return ChgValue( *this, m_nIndex - nVal ).m_nIndex;
 }
 
-inline bool SwIndex::operator< ( const SwIndex& rIndex ) const
+inline bool SwContentIndex::operator< ( const SwContentIndex& rIndex ) const
 {
     return m_nIndex <  rIndex.m_nIndex;
 }
 
-inline bool SwIndex::operator<=( const SwIndex& rIndex ) const
+inline bool SwContentIndex::operator<=( const SwContentIndex& rIndex ) const
 {
     return m_nIndex <= rIndex.m_nIndex;
 }
 
-inline bool SwIndex::operator> ( const SwIndex& rIndex ) const
+inline bool SwContentIndex::operator> ( const SwContentIndex& rIndex ) const
 {
     return m_nIndex >  rIndex.m_nIndex;
 }
 
-inline bool SwIndex::operator>=( const SwIndex& rIndex ) const
+inline bool SwContentIndex::operator>=( const SwContentIndex& rIndex ) const
 {
     return m_nIndex >= rIndex.m_nIndex;
 }
 
-inline SwIndex& SwIndex::operator= ( sal_Int32 const nVal )
+inline SwContentIndex& SwContentIndex::operator= ( sal_Int32 const nVal )
 {
     if (m_nIndex != nVal)
     {
@@ -186,7 +185,5 @@ inline SwIndex& SwIndex::operator= ( sal_Int32 const nVal )
 }
 
 #endif // ifndef DBG_UTIL
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

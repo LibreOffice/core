@@ -1891,7 +1891,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
                 SAL_WARN_IF(!pTextNode->GetText().isEmpty(), "sw",
                         "why text here?");
                 pTextNode->InsertText(*pCell->GetStringValue(),
-                        SwIndex(pTextNode, 0));
+                        SwContentIndex(pTextNode, 0));
             }
         }
 
