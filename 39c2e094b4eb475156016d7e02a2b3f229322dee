@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df6bf744_9671d8c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-07-25T10:23:08Z",
+      "side": 1,
+      "message": "this requires https://gerrit.libreoffice.org/c/core/+/137218/1 but that one failed to build",
+      "revId": "39c2e094b4eb475156016d7e02a2b3f229322dee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
