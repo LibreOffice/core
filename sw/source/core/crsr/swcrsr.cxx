@@ -1690,7 +1690,7 @@ SwCursor::DoSetBidiLevelLeftRight(
     if( rNode.IsTextNode() )
     {
         const SwTextNode& rTNd = *rNode.GetTextNode();
-        SwIndex& rIdx = GetPoint()->nContent;
+        SwContentIndex& rIdx = GetPoint()->nContent;
         sal_Int32 nPos = rIdx.GetIndex();
 
         const SvtCTLOptions& rCTLOptions = SW_MOD()->GetCTLOptions();
@@ -1975,7 +1975,7 @@ void SwCursor::DoSetBidiLevelUpDown()
     if ( !pSI )
         return;
 
-    SwIndex& rIdx = GetPoint()->nContent;
+    SwContentIndex& rIdx = GetPoint()->nContent;
     const sal_Int32 nPos = rIdx.GetIndex();
 
     if (!(nPos && nPos < rNode.GetTextNode()->GetText().getLength()))

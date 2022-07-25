@@ -594,7 +594,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf72788)
     }
     //Clear all the Direct Formatting ( Ctrl + M )
     SwTextNode* pTextNode = pCursor->GetNode().GetTextNode();
-    SwIndex aSt(pTextNode, 0);
+    SwContentIndex aSt(pTextNode, 0);
     sal_Int32 nEnd = pTextNode->Len();
     pTextNode->RstTextAttr(aSt, nEnd - aSt.GetIndex());
     //In case of Regression RstTextAttr() call will result to infinite recursion

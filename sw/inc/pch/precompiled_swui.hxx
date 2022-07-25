@@ -565,7 +565,7 @@
 #include <frmpage.hxx>
 #include <glossary.hxx>
 #include <hintids.hxx>
-#include <index.hxx>
+#include <contentindex.hxx>
 #include <label.hxx>
 #include <labimg.hxx>
 #include <macassgn.hxx>

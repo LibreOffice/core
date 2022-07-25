@@ -3393,7 +3393,7 @@ ErrCode MSWordExportBase::ExportDocument( bool bWriteAll )
     m_aFrames.clear();
 
     // park m_pCurPam in a "safe place" now that document is fully exported
-    // before toggling redline mode to avoid ~SwIndexReg assert e.g. export
+    // before toggling redline mode to avoid ~SwContentIndexReg assert e.g. export
     // ooo103014-1.odt to .doc
     // park m_pOrigPam as well, as needed for exporting abi9915-1.odt to doc
     m_pOrigPam->DeleteMark();

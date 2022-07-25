@@ -70,7 +70,7 @@ namespace {
         }
 
         // sw_redlinehide: rely on the Hide early return above & cast
-        // TextFrameIndex to SwIndex directly
+        // TextFrameIndex to SwContentIndex directly
         const sal_Int32 nTextFrameTextStartPos = rTextFrame.IsFollow()
             ? sal_Int32(rTextFrame.GetOffset())
             : 0;

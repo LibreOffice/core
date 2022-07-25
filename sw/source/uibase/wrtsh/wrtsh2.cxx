@@ -125,7 +125,7 @@ bool SwWrtShell::InsertField2(SwField const& rField, SwPaM* pAnnotationRange)
                 // Annotation range was passed in externally, and inserting the postit field shifted
                 // its start/end positions right by one. Restore the original position for the range
                 // start. This allows commenting on the placeholder character of the field.
-                SwIndex& rRangeStart = pAnnotationTextRange->Start()->nContent;
+                SwContentIndex& rRangeStart = pAnnotationTextRange->Start()->nContent;
                 if (rRangeStart.GetIndex() > 0)
                     --rRangeStart;
             }

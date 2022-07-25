@@ -38,8 +38,8 @@ class SwNodeIndexPrinter(object):
         nodeindex = block['nStart'] + node['m_nOffset']
         return "%s (node %d)" % (self.typename, nodeindex)
 
-class SwIndexPrinter(object):
-    '''Prints SwIndex.'''
+class SwContentIndexPrinter(object):
+    '''Prints SwContentIndex.'''
 
     def __init__(self, typename, value):
         self.typename = typename
@@ -284,7 +284,7 @@ def build_pretty_printers():
     printer.add('BigPtrArray', BigPtrArrayPrinter)
     printer.add('SwPosition', SwPositionPrinter)
     printer.add('SwNodeIndex', SwNodeIndexPrinter)
-    printer.add('SwIndex', SwIndexPrinter)
+    printer.add('SwContentIndex', SwContentIndexPrinter)
     printer.add('SwPaM', SwPaMPrinter)
     printer.add('SwUnoCursor', SwUnoCursorPrinter)
     printer.add('SwRect', SwRectPrinter)

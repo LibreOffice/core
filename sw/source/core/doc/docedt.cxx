@@ -210,7 +210,7 @@ void SaveFlyInRange( const SwPaM& rPam, const SwPosition& rInsPos,
 /// If there is a Fly at the SPoint, it is moved onto the Mark.
 void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
                     const SwNodeIndex& rPtNdIdx,
-                    SwIndex const*const pMkIdx, SwIndex const*const pPtIdx)
+                    SwContentIndex const*const pMkIdx, SwContentIndex const*const pPtIdx)
 {
     assert((pMkIdx == nullptr) == (pPtIdx == nullptr));
     SwPosition const point(pPtIdx
@@ -277,7 +277,7 @@ SaveRedlEndPosForRestore::SaveRedlEndPosForRestore( const SwNodeIndex& rInsIdx, 
 
     SwRedlineTable::size_type nFndPos;
     const SwPosition* pEnd;
-    SwPosition aSrcPos( rInsIdx, SwIndex( rNd.GetContentNode(), nCnt ));
+    SwPosition aSrcPos( rInsIdx, SwContentIndex( rNd.GetContentNode(), nCnt ));
     rDest.getIDocumentRedlineAccess().GetRedline( aSrcPos, &nFndPos );
     const SwRangeRedline* pRedl;
     while( nFndPos--
@@ -307,7 +307,7 @@ void SaveRedlEndPosForRestore::Restore()
     // This may happen if a table (or section?) will be inserted.
     if( pNode )
     {
-        SwPosition aPos( *mpSaveIndex, SwIndex( pNode, mnSaveContent ));
+        SwPosition aPos( *mpSaveIndex, SwContentIndex( pNode, mnSaveContent ));
         for( auto n = mvSavArr.size(); n; )
             *mvSavArr[ --n ] = aPos;
     }
@@ -414,8 +414,8 @@ bool sw_JoinText( SwPaM& rPam, bool bJoinPrev )
                 const std::shared_ptr< sw::mark::ContentIdxStore> pContentStore(sw::mark::ContentIdxStore::Create());
                 pContentStore->Save(rDoc, aOldIdx.GetIndex(), SAL_MAX_INT32);
 
-                SwIndex aAlphaIdx(pTextNd);
-                pOldTextNd->CutText( pTextNd, aAlphaIdx, SwIndex(pOldTextNd),
+                SwContentIndex aAlphaIdx(pTextNd);
+                pOldTextNd->CutText( pTextNd, aAlphaIdx, SwContentIndex(pOldTextNd),
                                     pOldTextNd->Len() );
                 SwPosition aAlphaPos( aIdx, aAlphaIdx );
                 rDoc.CorrRel( rPam.GetPoint()->nNode, aAlphaPos, 0, true );
@@ -479,11 +479,11 @@ bool sw_JoinText( SwPaM& rPam, bool bJoinPrev )
             // #i100466# adjust given <rPam>, if it does not belong to the cursors
             if ( pDelNd == rPam.GetBound().nContent.GetContentNode() )
             {
-                rPam.GetBound() = SwPosition( SwNodeIndex( *pTextNd ), SwIndex( pTextNd ) );
+                rPam.GetBound() = SwPosition( SwNodeIndex( *pTextNd ), SwContentIndex( pTextNd ) );
             }
             if( pDelNd == rPam.GetBound( false ).nContent.GetContentNode() )
             {
-                rPam.GetBound( false ) = SwPosition( SwNodeIndex( *pTextNd ), SwIndex( pTextNd ) );
+                rPam.GetBound( false ) = SwPosition( SwNodeIndex( *pTextNd ), SwContentIndex( pTextNd ) );
             }
             pTextNd->JoinNext();
         }
@@ -586,7 +586,7 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                             // if grammar checking starts inside of a sentence the start position has to be adjusted
                             if( nBeginGrammarCheck )
                             {
-                                SwIndex aStartIndex( dynamic_cast< SwTextNode* >( pNd ), nBeginGrammarCheck );
+                                SwContentIndex aStartIndex( dynamic_cast< SwTextNode* >( pNd ), nBeginGrammarCheck );
                                 SwPosition aStart( *pNd, aStartIndex );
                                 SwCursor aCursor(aStart, nullptr);
                                 SwPosition aOrigPos = *aCursor.GetPoint();

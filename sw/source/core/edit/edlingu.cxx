@@ -876,7 +876,7 @@ void SwEditShell::HandleCorrectionError(const OUString& aText, SwPosition aPos, 
                             ? nLineEnd : (nBegin + nLen - nLeft - nRight);
     Push();
     pCursor->DeleteMark();
-    SwIndex& rContent = GetCursor()->GetPoint()->nContent;
+    SwContentIndex& rContent = GetCursor()->GetPoint()->nContent;
     rContent = nWordStart;
     SwRect aStartRect;
     SwCursorMoveState aState;

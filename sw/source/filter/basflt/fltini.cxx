@@ -322,7 +322,7 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
                 {
                     // if the first node don't contained any content, then
                     // insert one char in it calc again and delete once again
-                    SwIndex aNdIdx( pFirstTextNd );
+                    SwContentIndex aNdIdx( pFirstTextNd );
                     pFirstTextNd->InsertText("MM", aNdIdx);
                     sal_uLong nAbsMinCnts;
                     pFirstTextNd->GetMinMaxSize( pFirstTextNd->GetIndex(),

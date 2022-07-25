@@ -235,7 +235,7 @@
   <Type Name="SwNodeIndex">
     <DisplayString>{{{*m_pNode}}}</DisplayString>
   </Type>
-  <Type Name="SwIndex">
+  <Type Name="SwContentIndex">
     <DisplayString>{{{m_nIndex}}}</DisplayString>
   </Type>
   <Type Name="SwPosition">

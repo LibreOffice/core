@@ -684,7 +684,7 @@ void SwDoc::ClearDoc()
         // set the layout to the dummy pagedesc
         pFirstNd->SetAttr( SwFormatPageDesc( pDummyPgDsc ));
 
-        SwPosition aPos( *pFirstNd, SwIndex( pFirstNd ));
+        SwPosition aPos( *pFirstNd, SwContentIndex( pFirstNd ));
         SwPaM const tmpPaM(aSttIdx, SwNodeIndex(GetNodes().GetEndOfContent()));
         ::PaMCorrAbs(tmpPaM, aPos);
     }
@@ -1119,7 +1119,7 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
                 // Collect the marks starting or ending at this text node.
                 o3tl::sorted_vector<sw::mark::IMark*> aSeenMarks;
                 IDocumentMarkAccess* pMarkAccess = getIDocumentMarkAccess();
-                for (const SwIndex* pIndex = pTextNode->GetFirstIndex(); pIndex; pIndex = pIndex->GetNext())
+                for (const SwContentIndex* pIndex = pTextNode->GetFirstIndex(); pIndex; pIndex = pIndex->GetNext())
                 {
                     sw::mark::IMark* pMark = const_cast<sw::mark::IMark*>(pIndex->GetMark());
                     if (!pMark)

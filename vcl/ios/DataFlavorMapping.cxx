@@ -412,7 +412,7 @@ NSString* DataFlavorMapper::openOfficeToSystemFlavor(const DataFlavor& oOOFlavor
         // apparently is a symptom of something being seriously wrong:
         // xmloff/source/transform/OOo2Oasis.cxx:1925: duplicate doc handler
         // Because is then followed a bit later by an assertion failure:
-        // Assertion failed: (!m_pFirst && !m_pLast && "There are still indices registered"), function ~SwIndexReg, file [...]/sw/source/core/bastyp/index.cxx, line 226
+        // Assertion failed: (!m_pFirst && !m_pLast && "There are still indices registered"), function ~SwContentIndexReg, file [...]/sw/source/core/bastyp/index.cxx, line 226
 
         if (oOOFlavor.MimeType == "text/html")
             return nil;

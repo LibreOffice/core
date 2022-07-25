@@ -571,7 +571,7 @@ SwTableNode* SwNodes::UndoTableToText( SwNodeOffset nSttNd, SwNodeOffset nEndNd,
         {
             // split at ContentPosition, delete previous char (= separator)
             OSL_ENSURE( pTextNd, "Where is my TextNode?" );
-            SwIndex aCntPos( pTextNd, pSave->m_nContent - 1 );
+            SwContentIndex aCntPos( pTextNd, pSave->m_nContent - 1 );
 
             pTextNd->EraseText( aCntPos, 1 );
 
@@ -1945,7 +1945,7 @@ void SwUndoTableMerge::UndoImpl(::sw::UndoRedoContext & rContext)
                 else if( pTextNd )
                 {
                     // also delete not needed attributes
-                    SwIndex aTmpIdx( pTextNd, nDelPos );
+                    SwContentIndex aTmpIdx( pTextNd, nDelPos );
                     if( pTextNd->GetpSwpHints() && pTextNd->GetpSwpHints()->Count() )
                         pTextNd->RstTextAttr( aTmpIdx, pTextNd->GetText().getLength() - nDelPos + 1 );
                     // delete separator
@@ -1971,7 +1971,7 @@ void SwUndoTableMerge::UndoImpl(::sw::UndoRedoContext & rContext)
                 SwNodeIndex aTmpIdx( *pBox->GetSttNd() );
                 SwDoc::CorrAbs( SwNodeIndex( aTmpIdx, 1 ),
                             SwNodeIndex( *aTmpIdx.GetNode().EndOfSectionNode() ),
-                            SwPosition( aTmpIdx, SwIndex( nullptr, 0 )), true );
+                            SwPosition( aTmpIdx, SwContentIndex( nullptr, 0 )), true );
             }
 
             delete pBox;
@@ -2162,7 +2162,7 @@ void SwUndoTableNumFormat::UndoImpl(::sw::UndoRedoContext & rContext)
     {
         rDoc.getIDocumentRedlineAccess().DeleteRedline( *( pBox->GetSttNd() ), false, RedlineType::Any );
 
-        SwIndex aIdx( pTextNd, 0 );
+        SwContentIndex aIdx( pTextNd, 0 );
         if( !m_aStr.isEmpty() )
         {
             pTextNd->EraseText( aIdx );
@@ -2866,7 +2866,7 @@ void SwUndoSplitTable::UndoImpl(::sw::UndoRedoContext & rContext)
     assert(rIdx.GetNode().GetContentNode()->Len() == 0); // empty para inserted
 
     {
-        // avoid asserts from ~SwIndexReg
+        // avoid asserts from ~SwContentIndexReg
         SwNodeIndex const idx(pDoc->GetNodes(), m_nTableNode + m_nOffset);
         {
             SwPaM pam(idx);

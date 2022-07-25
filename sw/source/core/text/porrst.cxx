@@ -413,7 +413,7 @@ bool SwTextFrame::FormatEmpty()
         return false;
 
     // only need to check one node because of early return on GetMerged()
-    for (SwIndex const* pIndex = GetTextNodeFirst()->GetFirstIndex();
+    for (SwContentIndex const* pIndex = GetTextNodeFirst()->GetFirstIndex();
          pIndex; pIndex = pIndex->GetNext())
     {
         sw::mark::IMark const*const pMark = pIndex->GetMark();

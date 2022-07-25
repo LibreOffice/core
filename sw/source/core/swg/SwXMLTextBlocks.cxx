@@ -511,7 +511,7 @@ void SwXMLTextBlocks::MakeBlockText( std::u16string_view rText )
         {
             pTextNode = static_cast<SwTextNode*>(pTextNode->AppendNode( SwPosition( *pTextNode ) ));
         }
-        SwIndex aIdx( pTextNode );
+        SwContentIndex aIdx( pTextNode );
         pTextNode->InsertText( OUString(o3tl::getToken(rText, 0, '\015', nPos )), aIdx );
     } while ( -1 != nPos );
 }

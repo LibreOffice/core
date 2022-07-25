@@ -331,7 +331,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     m_eScriptLang = HTMLScriptLanguage::Unknown;
 
     rCursor.DeleteMark();
-    m_pPam = &rCursor; // re-use existing cursor: avoids spurious ~SwIndexReg assert
+    m_pPam = &rCursor; // re-use existing cursor: avoids spurious ~SwContentIndexReg assert
     memset(m_xAttrTab.get(), 0, sizeof(HTMLAttrTable));
 
     // Read the font sizes 1-7 from the INI file

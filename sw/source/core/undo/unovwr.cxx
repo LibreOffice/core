@@ -88,7 +88,7 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc& rDoc, SwPosition& rPos,
 
     if( !m_bInsChar )
     {
-        const SwIndex aTmpIndex( rPos.nContent, -2 );
+        const SwContentIndex aTmpIndex( rPos.nContent, -2 );
         pTextNd->EraseText( aTmpIndex, 1 );
     }
     pTextNd->SetIgnoreDontExpand( bOldExpFlg );
@@ -167,7 +167,7 @@ bool SwUndoOverwrite::CanGrouping( SwDoc& rDoc, SwPosition& rPos,
 
     if( !m_bInsChar )
     {
-        const SwIndex aTmpIndex( rPos.nContent, -2 );
+        const SwContentIndex aTmpIndex( rPos.nContent, -2 );
         pDelTextNd->EraseText( aTmpIndex, 1 );
     }
     pDelTextNd->SetIgnoreDontExpand( bOldExpFlg );
@@ -185,7 +185,7 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
     rCurrentPam.GetPoint()->nNode = m_nStartNode;
     SwTextNode* pTextNd = rCurrentPam.GetNode().GetTextNode();
     assert(pTextNd);
-    SwIndex& rIdx = rCurrentPam.GetPoint()->nContent;
+    SwContentIndex& rIdx = rCurrentPam.GetPoint()->nContent;
     rIdx.Assign( pTextNd, m_nStartContent );
 
     SwAutoCorrExceptWord* pACEWord = rDoc.GetAutoCorrExceptWord();
@@ -267,7 +267,7 @@ void SwUndoOverwrite::RedoImpl(::sw::UndoRedoContext & rContext)
     rCurrentPam.GetPoint()->nNode = m_nStartNode;
     SwTextNode* pTextNd = rCurrentPam.GetNode().GetTextNode();
     assert(pTextNd);
-    SwIndex& rIdx = rCurrentPam.GetPoint()->nContent;
+    SwContentIndex& rIdx = rCurrentPam.GetPoint()->nContent;
 
     if( m_pRedlSaveData )
     {

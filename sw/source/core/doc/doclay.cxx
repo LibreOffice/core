@@ -904,7 +904,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
         aText += rText;
 
         // Insert string
-        SwIndex aIdx( pNew, 0 );
+        SwContentIndex aIdx( pNew, 0 );
         pNew->InsertText( aText, aIdx );
 
         // Insert field
@@ -1198,7 +1198,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable
         aText += rText;
 
         // insert text
-        SwIndex aIdx( pNew, 0 );
+        SwContentIndex aIdx( pNew, 0 );
         pNew->InsertText( aText, aIdx );
 
         // insert field

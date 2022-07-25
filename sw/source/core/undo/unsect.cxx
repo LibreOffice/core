@@ -283,13 +283,13 @@ void SwUndoInsSection::Join( SwDoc& rDoc, SwNodeOffset nNode )
     {
         RemoveIdxRel(
             nNode + 1,
-            SwPosition( aIdx, SwIndex( pTextNd, pTextNd->GetText().getLength() ) ) );
+            SwPosition( aIdx, SwContentIndex( pTextNd, pTextNd->GetText().getLength() ) ) );
     }
     pTextNd->JoinNext();
 
     if (m_pHistory)
     {
-        SwIndex aCntIdx( pTextNd, 0 );
+        SwContentIndex aCntIdx( pTextNd, 0 );
         pTextNd->RstTextAttr( aCntIdx, pTextNd->Len(), 0, nullptr, true );
     }
 }

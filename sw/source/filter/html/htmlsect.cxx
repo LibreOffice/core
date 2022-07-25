@@ -226,7 +226,7 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
             }
         }
 
-        SwPosition aNewPos( SwNodeIndex( rContentStIdx, 1 ), SwIndex( pCNd, 0 ) );
+        SwPosition aNewPos( SwNodeIndex( rContentStIdx, 1 ), SwContentIndex( pCNd, 0 ) );
         SaveDocContext(xCntxt.get(), nFlags, &aNewPos);
     }
     else if( !bPositioned && aId.getLength() > 9 &&
@@ -246,7 +246,7 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
                 SwContentNode *pCNd =
                     m_xDoc->GetNodes()[pStartNdIdx->GetIndex()+1]->GetContentNode();
                 SwNodeIndex aTmpSwNodeIndex(*pCNd);
-                SwPosition aNewPos( aTmpSwNodeIndex, SwIndex( pCNd, 0 ) );
+                SwPosition aNewPos( aTmpSwNodeIndex, SwContentIndex( pCNd, 0 ) );
                 SaveDocContext(xCntxt.get(), HtmlContextFlags::MultiColMask, &aNewPos);
                 aId.clear();
                 aPropInfo.m_aId.clear();
@@ -782,7 +782,7 @@ void SwHTMLParser::InsertFlyFrame( const SfxItemSet& rItemSet,
     SwContentNode *pCNd = m_xDoc->GetNodes()[rFlyCntIdx.GetIndex()+1]
                             ->GetContentNode();
 
-    SwPosition aNewPos( SwNodeIndex( rFlyCntIdx, 1 ), SwIndex( pCNd, 0 ) );
+    SwPosition aNewPos( SwNodeIndex( rFlyCntIdx, 1 ), SwContentIndex( pCNd, 0 ) );
     const HtmlContextFlags nFlags = HtmlContextFlags::ProtectStack|HtmlContextFlags::StripPara;
     SaveDocContext( pCntxt, nFlags, &aNewPos );
 }

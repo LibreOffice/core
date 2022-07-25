@@ -1512,7 +1512,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
             pDestNd = rNodes[ rPos.nNode.GetIndex() - 1 ]->GetTextNode();
             if( nLen )
             {
-                pSrcNd->CutText( pDestNd, SwIndex( pDestNd, pDestNd->Len()),
+                pSrcNd->CutText( pDestNd, SwContentIndex( pDestNd, pDestNd->Len()),
                             pStt->nContent, nLen );
             }
         }
@@ -1601,7 +1601,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
         if (pDestNd && pEnd->nContent.GetIndex())
         {
             // move the content into the new node
-            SwIndex aIdx( pEndSrcNd, 0 );
+            SwContentIndex aIdx( pEndSrcNd, 0 );
             pEndSrcNd->CutText( pDestNd, rPos.nContent, aIdx,
                             pEnd->nContent.GetIndex());
         }

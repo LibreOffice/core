@@ -175,7 +175,7 @@ void SwDoc::DeleteTOXMark( const SwTOXMark* pTOXMark )
         {
             // save attributes for Undo
             SwUndoResetAttr* pUndo = new SwUndoResetAttr(
-                SwPosition( rTextNd, SwIndex( &rTextNd, pTextTOXMark->GetStart() ) ),
+                SwPosition( rTextNd, SwContentIndex( &rTextNd, pTextTOXMark->GetStart() ) ),
                 RES_TXTATR_TOXMARK );
             GetIDocumentUndoRedo().AppendUndo( std::unique_ptr<SwUndo>(pUndo) );
 
@@ -1024,7 +1024,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         else
         {
             --aEndIdx;
-            SwPosition aPos( aEndIdx, SwIndex( pFirstEmptyNd, 0 ));
+            SwPosition aPos( aEndIdx, SwContentIndex( pFirstEmptyNd, 0 ));
             SwDoc::CorrAbs( aSttIdx, aEndIdx, aPos, true );
 
             // delete flys in whole range including start node which requires
@@ -1044,7 +1044,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
 
         SwTextNode* pHeadNd = rDoc.GetNodes().MakeTextNode( aIdx,
                                 GetTextFormatColl( FORM_TITLE ) );
-        pHeadNd->InsertText( GetTitle(), SwIndex( pHeadNd ) );
+        pHeadNd->InsertText( GetTitle(), SwContentIndex( pHeadNd ) );
 
         SwSectionData headerData( SectionType::ToxHeader, GetTOXName()+"_Head" );
 
@@ -1820,7 +1820,7 @@ void SwTOXBaseSection::UpdatePageNum_( SwTextNode* pNd,
     }
 
     // Delete place holder
-    SwIndex aPos(pNd, nStartPos);
+    SwContentIndex aPos(pNd, nStartPos);
     SwCharFormat* pPageNoCharFormat = nullptr;
     SwpHints* pHints = pNd->GetpSwpHints();
     if(pHints)

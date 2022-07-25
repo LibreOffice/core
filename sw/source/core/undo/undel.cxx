@@ -487,7 +487,7 @@ bool SwUndoDelete::SaveContent( const SwPosition* pStt, const SwPosition* pEnd,
     // 2 - copy end into End-String
     if( pEndTextNd )
     {
-        SwIndex aEndIdx( pEndTextNd );
+        SwContentIndex aEndIdx( pEndTextNd );
         nNdIdx = pEnd->nNode.GetIndex();
         SwRegHistory aRHst( *pEndTextNd, m_pHistory.get() );
 
@@ -1280,7 +1280,7 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
             return;
         }
 
-        // avoid asserts from ~SwIndexReg for deleted nodes
+        // avoid asserts from ~SwContentIndexReg for deleted nodes
         SwPaM aTmp(*rPam.End());
         if (!aTmp.Move(fnMoveForward, GoInNode))
         {

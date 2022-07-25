@@ -1449,7 +1449,7 @@ void SwHTMLParser::StripTrailingPara()
                 SwTextNode *pPrvNd = m_xDoc->GetNodes()[nNodeIdx-1]->GetTextNode();
                 if( pPrvNd )
                 {
-                    SwIndex aSrc( pCNd, 0 );
+                    SwContentIndex aSrc( pCNd, 0 );
                     pCNd->GetTextNode()->CutText( pPrvNd, aSrc, pCNd->Len() );
                 }
             }

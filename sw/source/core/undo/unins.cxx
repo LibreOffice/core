@@ -165,7 +165,7 @@ bool SwUndoInsert::CanGrouping( const SwPosition& rPos )
                 const SwContentNode* pIReg = rPos.nContent.GetContentNode();
                 for(SwRangeRedline* pRedl : rTable)
                 {
-                    SwIndex* pIdx = &pRedl->End()->nContent;
+                    SwContentIndex* pIdx = &pRedl->End()->nContent;
                     if( pIReg == pIdx->GetContentNode() &&
                         m_nContent == pIdx->GetIndex() )
                     {
