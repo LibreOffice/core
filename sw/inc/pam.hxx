@@ -41,7 +41,7 @@ struct SAL_WARN_UNUSED SW_DLLPUBLIC SwPosition
     SwPosition( const SwNodeIndex &rNode, const SwContentIndex &rContent );
     explicit SwPosition( const SwNodeIndex &rNode );
     explicit SwPosition( const SwNode& rNode );
-    explicit SwPosition( SwContentNode& rNode, const sal_Int32 nOffset = 0 );
+    explicit SwPosition( const SwContentNode& rNode, const sal_Int32 nOffset = 0 );
 
     /**
        Returns the document this position is in.
