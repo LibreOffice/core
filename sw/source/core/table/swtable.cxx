@@ -1635,8 +1635,8 @@ SwRedlineTable::size_type SwTableLine::UpdateTextChangesOnly(
             }
 
             bool bHasRedlineInBox = false;
-            SwPosition aCellStart( SwNodeIndex( *pBox->GetSttNd(), 0 ) );
-            SwPosition aCellEnd( SwNodeIndex( *pBox->GetSttNd()->EndOfSectionNode(), -1 ) );
+            SwPosition aCellStart( *pBox->GetSttNd(), SwNodeOffset(0) );
+            SwPosition aCellEnd( *pBox->GetSttNd()->EndOfSectionNode(), SwNodeOffset(-1) );
             SwNodeIndex pEndNodeIndex(aCellEnd.nNode.GetNode());
             SwRangeRedline* pPreviousDeleteRedline = nullptr;
             for( ; rRedlinePos < aRedlineTable.size(); ++rRedlinePos )

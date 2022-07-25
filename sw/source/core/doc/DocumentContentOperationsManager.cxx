@@ -3677,8 +3677,7 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
     if (m_rDoc.getIDocumentMarkAccess()->getAllMarksCount())
     {
         SwPaM aRgTmp( rRg.aStart, rRg.aEnd );
-        SwPosition targetPos(SwNodeIndex(aSavePos,
-                                         SwNodeOffset(rRg.aStart != rRg.aEnd ? +1 : 0)));
+        SwPosition targetPos(aSavePos, SwNodeOffset(rRg.aStart != rRg.aEnd ? +1 : 0));
         if (pCopiedPaM && rRg.aStart != pCopiedPaM->first.Start()->nNode)
         {
             // there is 1 (partially selected, maybe) paragraph before

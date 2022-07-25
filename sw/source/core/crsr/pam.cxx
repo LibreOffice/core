@@ -62,18 +62,23 @@ SwPosition::SwPosition( const SwNodeIndex & rNodeIndex, const SwContentIndex & r
 {
 }
 
-SwPosition::SwPosition( const SwNodeIndex & rNodeIndex )
-    : nNode( rNodeIndex ), nContent( nNode.GetNode().GetContentNode() )
+SwPosition::SwPosition( const SwNodeIndex & rNodeIndex, SwNodeOffset nDiff )
+    : nNode( rNodeIndex, nDiff ), nContent( nNode.GetNode().GetContentNode() )
 {
 }
 
-SwPosition::SwPosition( const SwNode& rNode )
-    : nNode( rNode ), nContent( nNode.GetNode().GetContentNode() )
+SwPosition::SwPosition( const SwNode& rNode, SwNodeOffset nDiff )
+    : nNode( rNode, nDiff ), nContent( nNode.GetNode().GetContentNode() )
 {
 }
 
-SwPosition::SwPosition( const SwContentNode & rNode, const sal_Int32 nOffset )
-    : nNode( rNode ), nContent( const_cast<SwContentNode*>(&rNode), nOffset )
+SwPosition::SwPosition( SwNodes& rNodes, SwNodeOffset nIndex )
+    : nNode( rNodes, nIndex ), nContent( nNode.GetNode().GetContentNode() )
+{
+}
+
+SwPosition::SwPosition( const SwContentNode & rNode, const sal_Int32 nContentOffset )
+    : nNode( rNode ), nContent( const_cast<SwContentNode*>(&rNode), nContentOffset )
 {
 }
 

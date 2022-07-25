@@ -807,7 +807,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf131912)
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
 
     sw::UnoCursorPointer pCursor(
-        pDoc->CreateUnoCursor(SwPosition(SwNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1))));
+        pDoc->CreateUnoCursor(SwPosition(pDoc->GetNodes().GetEndOfContent(), SwNodeOffset(-1))));
 
     pDoc->getIDocumentContentOperations().InsertString(*pCursor, "foo");
 
