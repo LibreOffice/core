@@ -62,6 +62,12 @@ SwPosition::SwPosition( const SwNodeIndex & rNodeIndex, const SwContentIndex & r
 {
 }
 
+SwPosition::SwPosition( const SwNodeIndex & rNodeIndex, const SwContentNode* pContentNode, sal_Int32 nContentOffset )
+    : nNode( rNodeIndex ), nContent( const_cast<SwContentNode*>(pContentNode), nContentOffset )
+{
+    assert(!pContentNode || pContentNode == &rNodeIndex.GetNode());
+}
+
 SwPosition::SwPosition( const SwNodeIndex & rNodeIndex, SwNodeOffset nDiff )
     : nNode( rNodeIndex, nDiff ), nContent( nNode.GetNode().GetContentNode() )
 {
@@ -82,21 +88,22 @@ SwPosition::SwPosition( const SwContentNode & rNode, const sal_Int32 nContentOff
 {
 }
 
+SwPosition::SwPosition( const SwContentIndex & rContentIndex, short nDiff )
+    : nNode( *rContentIndex.GetContentNode() ), nContent( rContentIndex, nDiff )
+{
+}
+
 bool SwPosition::operator<(const SwPosition &rPos) const
 {
     // cheaper to check for == first
-    if( nNode == rPos.nNode )
-    {
+    if( nNode == rPos.nNode ) {
         // note that positions with text node but no SwContentIndex registered are
         // created for text frames anchored at para (see SwXFrame::getAnchor())
         SwContentNode const*const pThisReg(nContent.GetContentNode());
         SwContentNode const*const pOtherReg(rPos.nContent.GetContentNode());
-        if (pThisReg && pOtherReg)
-        {
+        if (pThisReg && pOtherReg) {
             return (nContent < rPos.nContent);
-        }
-        else // by convention position with no index is smaller
-        {
+        } else { // by convention position with no index is smaller
             return pOtherReg != nullptr;
         }
     }
@@ -106,18 +113,14 @@ bool SwPosition::operator<(const SwPosition &rPos) const
 bool SwPosition::operator>(const SwPosition &rPos) const
 {
     // cheaper to check for == first
-    if( nNode == rPos.nNode )
-    {
+    if( nNode == rPos.nNode ) {
         // note that positions with text node but no SwContentIndex registered are
         // created for text frames anchored at para (see SwXFrame::getAnchor())
         SwContentNode const*const pThisReg(nContent.GetContentNode());
         SwContentNode const*const pOtherReg(rPos.nContent.GetContentNode());
-        if (pThisReg && pOtherReg)
-        {
+        if (pThisReg && pOtherReg) {
             return (nContent > rPos.nContent);
-        }
-        else // by convention position with no index is smaller
-        {
+        } else { // by convention position with no index is smaller
             return pThisReg != nullptr;
         }
     }
@@ -127,18 +130,14 @@ bool SwPosition::operator>(const SwPosition &rPos) const
 bool SwPosition::operator<=(const SwPosition &rPos) const
 {
     // cheaper to check for == first
-    if( nNode == rPos.nNode )
-    {
+    if( nNode == rPos.nNode ) {
         // note that positions with text node but no SwContentIndex registered are
         // created for text frames anchored at para (see SwXFrame::getAnchor())
         SwContentNode const*const pThisReg(nContent.GetContentNode());
         SwContentNode const*const pOtherReg(rPos.nContent.GetContentNode());
-        if (pThisReg && pOtherReg)
-        {
+        if (pThisReg && pOtherReg) {
             return (nContent <= rPos.nContent);
-        }
-        else // by convention position with no index is smaller
-        {
+        } else { // by convention position with no index is smaller
             return pThisReg == nullptr;
         }
     }
@@ -148,18 +147,14 @@ bool SwPosition::operator<=(const SwPosition &rPos) const
 bool SwPosition::operator>=(const SwPosition &rPos) const
 {
     // cheaper to check for == first
-    if( nNode == rPos.nNode )
-    {
+    if( nNode == rPos.nNode ) {
         // note that positions with text node but no SwContentIndex registered are
         // created for text frames anchored at para (see SwXFrame::getAnchor())
         SwContentNode const*const pThisReg(nContent.GetContentNode());
         SwContentNode const*const pOtherReg(rPos.nContent.GetContentNode());
-        if (pThisReg && pOtherReg)
-        {
+        if (pThisReg && pOtherReg) {
             return (nContent >= rPos.nContent);
-        }
-        else // by convention position with no index is smaller
-        {
+        } else { // by convention position with no index is smaller
             return pOtherReg == nullptr;
         }
     }
@@ -169,13 +164,13 @@ bool SwPosition::operator>=(const SwPosition &rPos) const
 bool SwPosition::operator==(const SwPosition &rPos) const
 {
     return (nNode == rPos.nNode)
-        && (nContent == rPos.nContent);
+           && (nContent == rPos.nContent);
 }
 
 bool SwPosition::operator!=(const SwPosition &rPos) const
 {
     return (nNode != rPos.nNode)
-        || (nContent != rPos.nContent);
+           || (nContent != rPos.nContent);
 }
 
 SwDoc& SwPosition::GetDoc() const
@@ -196,7 +191,8 @@ std::ostream &operator <<(std::ostream& s, const SwPosition& position)
     return s << "SwPosition (node " << position.nNode.GetIndex() << ", offset " << position.nContent.GetIndex() << ")";
 }
 
-namespace {
+namespace
+{
 
 enum CHKSECTION { Chk_Both, Chk_One, Chk_None };
 
@@ -212,7 +208,7 @@ static CHKSECTION lcl_TstIdx( SwNodeOffset nSttIdx, SwNodeOffset nEndIdx, const 
 }
 
 static bool lcl_ChkOneRange( CHKSECTION eSec, bool bChkSections,
-                    const SwNode& rBaseEnd, SwNodeOffset nStt, SwNodeOffset nEnd )
+                             const SwNode& rBaseEnd, SwNodeOffset nStt, SwNodeOffset nEnd )
 {
     if( eSec != Chk_Both )
         return false;
@@ -233,8 +229,7 @@ static bool lcl_ChkOneRange( CHKSECTION eSec, bool bChkSections,
     if( !pNd->StartOfSectionIndex() )
         return false;
 
-    for (;;)
-    {
+    for (;;) {
         pTmp = pNd->StartOfSectionNode();
         if (pTmp->EndOfSectionNode() == &rBaseEnd )
             break;
@@ -268,22 +263,22 @@ bool CheckNodesRange( const SwNodeIndex& rStt,
     eSec = lcl_TstIdx( nStt, nEnd, rNds.GetEndOfAutotext() );
     if( Chk_None != eSec )
         return lcl_ChkOneRange( eSec, bChkSection,
-                            rNds.GetEndOfAutotext(), nStt, nEnd );
+                                rNds.GetEndOfAutotext(), nStt, nEnd );
 
     eSec = lcl_TstIdx( nStt, nEnd, rNds.GetEndOfPostIts() );
     if( Chk_None != eSec )
         return lcl_ChkOneRange( eSec, bChkSection,
-                            rNds.GetEndOfPostIts(), nStt, nEnd );
+                                rNds.GetEndOfPostIts(), nStt, nEnd );
 
     eSec = lcl_TstIdx( nStt, nEnd, rNds.GetEndOfInserts() );
     if( Chk_None != eSec )
         return lcl_ChkOneRange( eSec, bChkSection,
-                            rNds.GetEndOfInserts(), nStt, nEnd );
+                                rNds.GetEndOfInserts(), nStt, nEnd );
 
     eSec = lcl_TstIdx( nStt, nEnd, rNds.GetEndOfRedlines() );
     if( Chk_None != eSec )
         return lcl_ChkOneRange( eSec, bChkSection,
-                            rNds.GetEndOfRedlines(), nStt, nEnd );
+                                rNds.GetEndOfRedlines(), nStt, nEnd );
 
     return false; // somewhere in between => error
 }
@@ -306,11 +301,10 @@ SwContentNode* GoNextNds( SwNodeIndex* pIdx, bool bChk )
 {
     SwNodeIndex aIdx( *pIdx );
     SwContentNode* pNd = aIdx.GetNodes().GoNext( &aIdx );
-    if( pNd )
-    {
+    if( pNd ) {
         if( bChk && SwNodeOffset(1) != aIdx.GetIndex() - pIdx->GetIndex() &&
             !CheckNodesRange( *pIdx, aIdx, true ) )
-                pNd = nullptr;
+            pNd = nullptr;
         else
             *pIdx = aIdx;
     }
@@ -321,11 +315,10 @@ SwContentNode* GoPreviousNds( SwNodeIndex * pIdx, bool bChk )
 {
     SwNodeIndex aIdx( *pIdx );
     SwContentNode* pNd = SwNodes::GoPrevious( &aIdx );
-    if( pNd )
-    {
+    if( pNd ) {
         if( bChk && SwNodeOffset(1) != pIdx->GetIndex() - aIdx.GetIndex() &&
             !CheckNodesRange( *pIdx, aIdx, true ) )
-                pNd = nullptr;
+            pNd = nullptr;
         else
             *pIdx = aIdx;
     }
@@ -361,12 +354,10 @@ SwPaM::SwPaM( const SwNodeIndex& rMark, const SwNodeIndex& rPoint,
     , m_pMark( &m_Bound1 )
     , m_bIsInFrontOfLabel( false )
 {
-    if ( nMarkOffset )
-    {
+    if ( nMarkOffset ) {
         m_pMark->nNode += nMarkOffset;
     }
-    if ( nPointOffset )
-    {
+    if ( nPointOffset ) {
         m_pPoint->nNode += nPointOffset;
     }
     m_Bound1.nContent.Assign( m_Bound1.nNode.GetNode().GetContentNode(), 0 );
@@ -382,12 +373,10 @@ SwPaM::SwPaM( const SwNode& rMark, const SwNode& rPoint,
     , m_pMark( &m_Bound1 )
     , m_bIsInFrontOfLabel( false )
 {
-    if ( nMarkOffset )
-    {
+    if ( nMarkOffset ) {
         m_pMark->nNode += nMarkOffset;
     }
-    if ( nPointOffset )
-    {
+    if ( nPointOffset ) {
         m_pPoint->nNode += nPointOffset;
     }
     m_Bound1.nContent.Assign( m_Bound1.nNode.GetNode().GetContentNode(), 0 );
@@ -417,9 +406,9 @@ SwPaM::SwPaM( const SwNode& rMark, sal_Int32 nMarkContent,
     , m_bIsInFrontOfLabel( false )
 {
     m_pPoint->nContent.Assign( m_pPoint->nNode.GetNode().GetContentNode(),
-        nPointContent);
+                               nPointContent);
     m_pMark ->nContent.Assign( m_pMark ->nNode.GetNode().GetContentNode(),
-        nMarkContent );
+                               nMarkContent );
 }
 
 SwPaM::SwPaM( const SwNode& rNode, sal_Int32 nContent, SwPaM* pRing )
@@ -431,7 +420,7 @@ SwPaM::SwPaM( const SwNode& rNode, sal_Int32 nContent, SwPaM* pRing )
     , m_bIsInFrontOfLabel( false )
 {
     m_pPoint->nContent.Assign( m_pPoint->nNode.GetNode().GetContentNode(),
-        nContent );
+                               nContent );
 }
 
 SwPaM::SwPaM( const SwNodeIndex& rNodeIdx, sal_Int32 nContent, SwPaM* pRing )
@@ -463,13 +452,10 @@ SwPaM &SwPaM::operator=( const SwPaM &rPam )
         return *this;
 
     *m_pPoint = *( rPam.m_pPoint );
-    if ( rPam.HasMark() )
-    {
+    if ( rPam.HasMark() ) {
         SetMark();
         *m_pMark = *( rPam.m_pMark );
-    }
-    else
-    {
+    } else {
         DeleteMark();
     }
     return *this;
@@ -477,12 +463,9 @@ SwPaM &SwPaM::operator=( const SwPaM &rPam )
 
 void SwPaM::SetMark()
 {
-    if (m_pPoint == &m_Bound1)
-    {
+    if (m_pPoint == &m_Bound1) {
         m_pMark = &m_Bound2;
-    }
-    else
-    {
+    } else {
         m_pMark = &m_Bound1;
     }
     (*m_pMark) = *m_pPoint;
@@ -491,8 +474,7 @@ void SwPaM::SetMark()
 #ifdef DBG_UTIL
 void SwPaM::Exchange()
 {
-    if (m_pPoint != m_pMark)
-    {
+    if (m_pPoint != m_pMark) {
         SwPosition *pTmp = m_pPoint;
         m_pPoint = m_pMark;
         m_pMark = pTmp;
@@ -509,7 +491,8 @@ bool SwPaM::Move( SwMoveFnCollection const & fnMove, SwGoInDoc fnGo )
     return bRet;
 }
 
-namespace sw {
+namespace sw
+{
 
 /** make a new region
 
@@ -522,7 +505,7 @@ namespace sw {
     @return Newly created range, in Ring with parameter pOrigRg.
 */
 std::unique_ptr<SwPaM> MakeRegion(SwMoveFnCollection const & fnMove,
-        const SwPaM & rOrigRg)
+                                  const SwPaM & rOrigRg)
 {
     std::unique_ptr<SwPaM> pPam;
     {
@@ -542,8 +525,7 @@ void SwPaM::Normalize(bool bPointFirst)
 {
     if (HasMark())
         if ( ( bPointFirst && *m_pPoint > *m_pMark) ||
-             (!bPointFirst && *m_pPoint < *m_pMark) )
-        {
+             (!bPointFirst && *m_pPoint < *m_pMark) ) {
             Exchange();
         }
 }
@@ -557,8 +539,7 @@ sal_uInt16 SwPaM::GetPageNum( bool bAtPoint, const Point* pLayPos )
     const SwPosition* pPos = bAtPoint ? m_pPoint : m_pMark;
 
     std::pair<Point, bool> tmp;
-    if (pLayPos)
-    {
+    if (pLayPos) {
         tmp.first = *pLayPos;
         tmp.second = false;
     }
@@ -578,16 +559,13 @@ static const SwFrame* lcl_FindEditInReadonlyFrame( const SwFrame& rFrame )
     const SwSectionFrame* pSectionFrame;
 
     if( rFrame.IsInFly() &&
-       (pFly = rFrame.FindFlyFrame())->GetFormat()->GetEditInReadonly().GetValue() &&
+        (pFly = rFrame.FindFlyFrame())->GetFormat()->GetEditInReadonly().GetValue() &&
         pFly->Lower() &&
-       !pFly->Lower()->IsNoTextFrame() )
-    {
-       pRet = pFly;
-    }
-    else if ( rFrame.IsInSct() &&
-              nullptr != ( pSectionFrame = rFrame.FindSctFrame() )->GetSection() &&
-              pSectionFrame->GetSection()->IsEditInReadonlyFlag() )
-    {
+        !pFly->Lower()->IsNoTextFrame() ) {
+        pRet = pFly;
+    } else if ( rFrame.IsInSct() &&
+                nullptr != ( pSectionFrame = rFrame.FindSctFrame() )->GetSection() &&
+                pSectionFrame->GetSection()->IsEditInReadonlyFlag() ) {
         pRet = pSectionFrame;
     }
 
@@ -601,13 +579,12 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
 
     const SwContentNode* pNd = GetPoint()->nNode.GetNode().GetContentNode();
     const SwContentFrame *pFrame = nullptr;
-    if ( pNd != nullptr )
-    {
+    if ( pNd != nullptr ) {
         Point aTmpPt;
         std::pair<Point, bool> const tmp(aTmpPt, false);
         pFrame = pNd->getLayoutFrame(
-            pNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(),
-            GetPoint(), &tmp);
+                     pNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(),
+                     GetPoint(), &tmp);
     }
 
     // Will be set if point are inside edit-in-readonly environment
@@ -615,27 +592,20 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
     if ( pFrame != nullptr
          && ( pFrame->IsProtected()
               || ( bFormView
-                   && nullptr == ( pPointEditInReadonlyFrame = lcl_FindEditInReadonlyFrame( *pFrame ) ) ) ) )
-    {
+                   && nullptr == ( pPointEditInReadonlyFrame = lcl_FindEditInReadonlyFrame( *pFrame ) ) ) ) ) {
         bRet = true;
-    }
-    else if( pNd != nullptr )
-    {
+    } else if( pNd != nullptr ) {
         const SwSectionNode* pSNd = pNd->GetSectionNode();
         if ( pSNd != nullptr
              && ( pSNd->GetSection().IsProtectFlag()
                   || ( bFormView
-                       && !pSNd->GetSection().IsEditInReadonlyFlag()) ) )
-        {
+                       && !pSNd->GetSection().IsEditInReadonlyFlag()) ) ) {
             bRet = true;
-        }
-        else
-        {
+        } else {
             const SwSectionNode* pParentSectionNd = pNd->FindSectionNode();
             if ( pParentSectionNd != nullptr
                  && ( pParentSectionNd->GetSection().IsProtectFlag()
-                      || ( bFormView && !pParentSectionNd->GetSection().IsEditInReadonlyFlag()) ) )
-            {
+                      || ( bFormView && !pParentSectionNd->GetSection().IsEditInReadonlyFlag()) ) ) {
                 bRet = true;
             }
         }
@@ -643,54 +613,45 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
 
     if ( !bRet
          && HasMark()
-         && GetPoint()->nNode != GetMark()->nNode )
-    {
+         && GetPoint()->nNode != GetMark()->nNode ) {
         pNd = GetMark()->nNode.GetNode().GetContentNode();
         pFrame = nullptr;
-        if ( pNd != nullptr )
-        {
+        if ( pNd != nullptr ) {
             Point aTmpPt;
             std::pair<Point, bool> const tmp(aTmpPt, false);
             pFrame = pNd->getLayoutFrame(
-                pNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(),
-                GetMark(), &tmp);
+                         pNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(),
+                         GetMark(), &tmp);
         }
 
         const SwFrame* pMarkEditInReadonlyFrame = nullptr;
         if ( pFrame != nullptr
              && ( pFrame->IsProtected()
                   || ( bFormView
-                       && nullptr == ( pMarkEditInReadonlyFrame = lcl_FindEditInReadonlyFrame( *pFrame ) ) ) ) )
-        {
+                       && nullptr == ( pMarkEditInReadonlyFrame = lcl_FindEditInReadonlyFrame( *pFrame ) ) ) ) ) {
             bRet = true;
-        }
-        else if( pNd != nullptr )
-        {
+        } else if( pNd != nullptr ) {
             const SwSectionNode* pSNd = pNd->GetSectionNode();
             if ( pSNd != nullptr
                  && ( pSNd->GetSection().IsProtectFlag()
                       || ( bFormView
-                           && !pSNd->GetSection().IsEditInReadonlyFlag()) ) )
-            {
+                           && !pSNd->GetSection().IsEditInReadonlyFlag()) ) ) {
                 bRet = true;
             }
         }
 
-        if ( !bRet && bFormView )
-        {
-           // Check if start and end frame are inside the _same_
-           // edit-in-readonly-environment. Otherwise we better return 'true'
-           if ( pPointEditInReadonlyFrame != pMarkEditInReadonlyFrame )
+        if ( !bRet && bFormView ) {
+            // Check if start and end frame are inside the _same_
+            // edit-in-readonly-environment. Otherwise we better return 'true'
+            if ( pPointEditInReadonlyFrame != pMarkEditInReadonlyFrame )
                 bRet = true;
         }
 
         // check for protected section inside the selection
-        if( !bRet )
-        {
+        if( !bRet ) {
             SwNodeOffset nSttIdx = GetMark()->nNode.GetIndex(),
-                    nEndIdx = GetPoint()->nNode.GetIndex();
-            if( nEndIdx <= nSttIdx )
-            {
+                         nEndIdx = GetPoint()->nNode.GetIndex();
+            if( nEndIdx <= nSttIdx ) {
                 SwNodeOffset nTmp = nSttIdx;
                 nSttIdx = nEndIdx;
                 nEndIdx = nTmp;
@@ -699,20 +660,16 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
             // If a protected section should be between nodes, then the
             // selection needs to contain already x nodes.
             // (TextNd, SectNd, TextNd, EndNd, TextNd )
-            if( nSttIdx + SwNodeOffset(3) < nEndIdx )
-            {
+            if( nSttIdx + SwNodeOffset(3) < nEndIdx ) {
                 const SwSectionFormats& rFormats = GetDoc().GetSections();
-                for( SwSectionFormats::size_type n = rFormats.size(); n;  )
-                {
+                for( SwSectionFormats::size_type n = rFormats.size(); n;  ) {
                     const SwSectionFormat* pFormat = rFormats[ --n ];
-                    if( pFormat->GetProtect().IsContentProtected() )
-                    {
+                    if( pFormat->GetProtect().IsContentProtected() ) {
                         const SwFormatContent& rContent = pFormat->GetContent(false);
                         OSL_ENSURE( rContent.GetContentIdx(), "where is the SectionNode?" );
                         SwNodeOffset nIdx = rContent.GetContentIdx()->GetIndex();
                         if( nSttIdx <= nIdx && nEndIdx >= nIdx &&
-                            rContent.GetContentIdx()->GetNode().GetNodes().IsDocNodes() )
-                        {
+                            rContent.GetContentIdx()->GetNode().GetNodes().IsDocNodes() ) {
                             bRet = true;
                             break;
                         }
@@ -731,80 +688,61 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
     const bool bAtStartA = (pA != nullptr) && (pA->GetMarkStart() == *GetPoint());
     const bool bAtStartB = (pB != nullptr) && (pB->GetMarkStart() == *GetMark());
 
-    if (officecfg::Office::Common::Filter::Microsoft::Import::ForceImportWWFieldsAsGenericFields::get())
-    {
+    if (officecfg::Office::Common::Filter::Microsoft::Import::ForceImportWWFieldsAsGenericFields::get()) {
         ; // allow editing all fields in generic mode
-    }
-    else if (!bRet)
-    {
+    } else if (!bRet) {
         bool bUnhandledMark = pA && pA->GetFieldname( ) == ODF_UNHANDLED;
         // Unhandled fieldmarks case shouldn't be edited manually to avoid breaking anything
         if ( ( pA == pB ) && bUnhandledMark )
             bRet = true;
-        else
-        {
+        else {
             if ((pA == pB) && (bAtStartA != bAtStartB))
                 bRet = true;
-            else if (pA != pB)
-            {
+            else if (pA != pB) {
                 // If both points are either outside or at marks edges (i.e. selection either
                 // touches fields, or fully encloses it), then don't disable editing
                 bRet = !( ( !pA || bAtStartA ) && ( !pB || bAtStartB ) );
             }
-            if( !bRet && rDoc.GetDocumentSettingManager().get( DocumentSettingId::PROTECT_FORM ) && (pA || pB) )
-            {
+            if( !bRet && rDoc.GetDocumentSettingManager().get( DocumentSettingId::PROTECT_FORM ) && (pA || pB) ) {
                 // Form protection case
                 bRet = ( pA == nullptr ) || ( pB == nullptr ) || bAtStartA || bAtStartB;
             }
         }
-    }
-    else
-    {
+    } else {
         // Allow editing when the cursor/selection is fully inside of a legacy form field.
         bRet = !( pA != nullptr && !bAtStartA && !bAtStartB && pA == pB );
     }
 
-    if (!bRet)
-    {
+    if (!bRet) {
         // Paragraph Signatures and Classification fields are read-only.
         if (rDoc.GetEditShell())
             bRet = rDoc.GetEditShell()->IsCursorInParagraphMetadataField();
     }
 
     if (!bRet &&
-        rDoc.getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_BOOKMARKS))
-    {
-        if (rDoc.getIDocumentMarkAccess()->isBookmarkDeleted(*this))
-        {
+        rDoc.getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_BOOKMARKS)) {
+        if (rDoc.getIDocumentMarkAccess()->isBookmarkDeleted(*this)) {
             return true;
         }
     }
     if (!bRet &&
-        rDoc.getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_FIELDS))
-    {
+        rDoc.getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_FIELDS)) {
         SwPosition const& rStart(*Start());
         SwPosition const& rEnd(*End());
-        for (SwNodeIndex n = rStart.nNode; n <= rEnd.nNode; ++n)
-        {
-            if (SwTextNode const*const pNode = n.GetNode().GetTextNode())
-            {
-                if (SwpHints const*const pHints = pNode->GetpSwpHints())
-                {
-                    for (size_t i = 0; i < pHints->Count(); ++i)
-                    {
+        for (SwNodeIndex n = rStart.nNode; n <= rEnd.nNode; ++n) {
+            if (SwTextNode const*const pNode = n.GetNode().GetTextNode()) {
+                if (SwpHints const*const pHints = pNode->GetpSwpHints()) {
+                    for (size_t i = 0; i < pHints->Count(); ++i) {
                         SwTextAttr const*const pHint(pHints->Get(i));
-                        if (n == rStart.nNode && pHint->GetStart() < rStart.nContent.GetIndex())
-                        {
+                        if (n == rStart.nNode && pHint->GetStart() < rStart.nContent.GetIndex()) {
                             continue; // before selection
                         }
-                        if (n == rEnd.nNode && rEnd.nContent.GetIndex() <= pHint->GetStart())
-                        {
+                        if (n == rEnd.nNode && rEnd.nContent.GetIndex() <= pHint->GetStart()) {
                             break; // after selection
                         }
                         if (pHint->Which() == RES_TXTATR_FIELD
                             // placeholders don't work if you can't delete them
-                            && pHint->GetFormatField().GetField()->GetTyp()->Which() != SwFieldIds::JumpEdit)
-                        {
+                            && pHint->GetFormatField().GetField()->GetTyp()->Which() != SwFieldIds::JumpEdit) {
                             return true;
                         }
                     }
@@ -813,25 +751,21 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
         }
     }
 
-    if (!bRet)
-    {
+    if (!bRet) {
         // See if we're inside a read-only content control.
         const SwPosition* pStart = Start();
         SwTextNode* pTextNode = pStart->nNode.GetNode().GetTextNode();
-        if (pTextNode)
-        {
+        if (pTextNode) {
             sal_Int32 nIndex = pStart->nContent.GetIndex();
             SwTextAttr* pAttr
                 = pTextNode->GetTextAttrAt(nIndex, RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT);
             auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
-            if (pTextContentControl)
-            {
+            if (pTextContentControl) {
                 const SwFormatContentControl& rFormatContentControl
                     = pTextContentControl->GetContentControl();
                 std::shared_ptr<SwContentControl> pContentControl
                     = rFormatContentControl.GetContentControl();
-                if (pContentControl && !pContentControl->GetReadWrite())
-                {
+                if (pContentControl && !pContentControl->GetReadWrite()) {
                     bRet = pContentControl->GetCheckbox() || pContentControl->GetPicture();
                 }
             }
@@ -846,20 +780,17 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
 /// @param rbFirst If <true> then first time request. If so than the position of
 ///        the PaM must not be changed!
 SwContentNode* GetNode( SwPaM & rPam, bool& rbFirst, SwMoveFnCollection const & fnMove,
-        bool const bInReadOnly, SwRootFrame const*const i_pLayout)
+                        bool const bInReadOnly, SwRootFrame const*const i_pLayout)
 {
     SwRootFrame const*const pLayout(i_pLayout ? i_pLayout :
-        rPam.GetDoc().getIDocumentLayoutAccess().GetCurrentLayout());
+                                    rPam.GetDoc().getIDocumentLayoutAccess().GetCurrentLayout());
     SwContentNode * pNd = nullptr;
     if( ((*rPam.GetPoint()).*fnMove.fnCmpOp)( *rPam.GetMark() ) ||
-        ( *rPam.GetPoint() == *rPam.GetMark() && rbFirst ) )
-    {
-        if( rbFirst )
-        {
+        ( *rPam.GetPoint() == *rPam.GetMark() && rbFirst ) ) {
+        if( rbFirst ) {
             rbFirst = false;
             pNd = rPam.GetContentNode();
-            if( pNd )
-            {
+            if( pNd ) {
                 SwContentFrame const*const pFrame(pNd->getLayoutFrame(pLayout));
                 if(
                     (
@@ -868,52 +799,44 @@ SwContentNode* GetNode( SwPaM & rPam, bool& rbFirst, SwMoveFnCollection const & 
                         (pFrame->IsTextFrame() && static_cast<SwTextFrame const*>(pFrame)->IsHiddenNow())
                     ) ||
                     ( !bInReadOnly && pNd->FindSectionNode() &&
-                        pNd->FindSectionNode()->GetSection().IsProtect()
+                      pNd->FindSectionNode()->GetSection().IsProtect()
                     )
-                  )
-                {
+                ) {
                     pNd = nullptr;
                 }
             }
         }
 
-        if( !pNd ) // is the cursor not on a ContentNode?
-        {
+        if( !pNd ) { // is the cursor not on a ContentNode?
             SwPosition aPos( *rPam.GetPoint() );
             bool bSrchForward = &fnMove == &fnMoveForward;
             SwNodes& rNodes = aPos.nNode.GetNodes();
 
             // go to next/previous ContentNode
-            while( true )
-            {
-                if (i_pLayout && aPos.nNode.GetNode().IsTextNode())
-                {
+            while( true ) {
+                if (i_pLayout && aPos.nNode.GetNode().IsTextNode()) {
                     auto const fal(sw::GetFirstAndLastNode(*pLayout, aPos.nNode));
                     aPos.nNode = bSrchForward ? *fal.second : *fal.first;
                 }
 
                 pNd = bSrchForward
-                        ? rNodes.GoNextSection( &aPos.nNode, true, !bInReadOnly )
-                        : SwNodes::GoPrevSection( &aPos.nNode, true, !bInReadOnly );
-                if( pNd )
-                {
+                      ? rNodes.GoNextSection( &aPos.nNode, true, !bInReadOnly )
+                      : SwNodes::GoPrevSection( &aPos.nNode, true, !bInReadOnly );
+                if( pNd ) {
                     aPos.nContent.Assign( pNd, ::GetSttOrEnd( bSrchForward,*pNd ));
                     // is the position still in the area
-                    if( (aPos.*fnMove.fnCmpOp)( *rPam.GetMark() ) )
-                    {
+                    if( (aPos.*fnMove.fnCmpOp)( *rPam.GetMark() ) ) {
                         // only in AutoTextSection can be nodes that are hidden
                         SwContentFrame const*const pFrame(pNd->getLayoutFrame(pLayout));
                         if (nullptr == pFrame ||
                             ( !bInReadOnly && pFrame->IsProtected() ) ||
                             ( pFrame->IsTextFrame() &&
-                                static_cast<SwTextFrame const*>(pFrame)->IsHiddenNow()))
-                        {
+                              static_cast<SwTextFrame const*>(pFrame)->IsHiddenNow())) {
                             pNd = nullptr;
                             continue;
                         }
                         *rPam.GetPoint() = aPos;
-                    }
-                    else
+                    } else
                         pNd = nullptr; // no valid node
                     break;
                 }
@@ -950,7 +873,9 @@ void GoStartSection( SwPosition * pPos )
     sal_uInt16 nLevel = SwNodes::GetSectionLevel( pPos->nNode );
     if( pPos->nNode < rNodes.GetEndOfContent().StartOfSectionIndex() )
         nLevel--;
-    do { SwNodes::GoStartOfSection( &pPos->nNode ); } while( nLevel-- );
+    do {
+        SwNodes::GoStartOfSection( &pPos->nNode );
+    } while( nLevel-- );
 
     // already on a ContentNode
     pPos->nNode.GetNode().GetContentNode()->MakeStartIndex( &pPos->nContent );
@@ -964,7 +889,9 @@ void GoEndSection( SwPosition * pPos )
     sal_uInt16 nLevel = SwNodes::GetSectionLevel( pPos->nNode );
     if( pPos->nNode < rNodes.GetEndOfContent().StartOfSectionIndex() )
         nLevel--;
-    do { SwNodes::GoEndOfSection( &pPos->nNode ); } while( nLevel-- );
+    do {
+        SwNodes::GoEndOfSection( &pPos->nNode );
+    } while( nLevel-- );
 
     // now on an EndNode, thus to the previous ContentNode
     if( GoPreviousNds( &pPos->nNode, true ) )
@@ -988,7 +915,7 @@ bool GoInNode( SwPaM & rPam, SwMoveFnCollection const & fnMove )
     SwContentNode *pNd = (*fnMove.fnNds)( &rPam.GetPoint()->nNode, true );
     if( pNd )
         rPam.GetPoint()->nContent.Assign( pNd,
-                        ::GetSttOrEnd( &fnMove == &fnMoveForward, *pNd ) );
+                                          ::GetSttOrEnd( &fnMove == &fnMoveForward, *pNd ) );
     return pNd;
 }
 
@@ -1003,7 +930,7 @@ bool GoInContent( SwPaM & rPam, SwMoveFnCollection const & fnMove )
 bool GoInContentCells( SwPaM & rPam, SwMoveFnCollection const & fnMove )
 {
     if( (*fnMove.fnNd)( &rPam.GetPoint()->nNode.GetNode(),
-                         &rPam.GetPoint()->nContent, CRSR_SKIP_CELLS ))
+                        &rPam.GetPoint()->nContent, CRSR_SKIP_CELLS ))
         return true;
     return GoInNode( rPam, fnMove );
 }
@@ -1019,20 +946,19 @@ bool GoInContentSkipHidden( SwPaM & rPam, SwMoveFnCollection const & fnMove )
 bool GoInContentCellsSkipHidden( SwPaM & rPam, SwMoveFnCollection const & fnMove )
 {
     if( (*fnMove.fnNd)( &rPam.GetPoint()->nNode.GetNode(),
-                         &rPam.GetPoint()->nContent, CRSR_SKIP_CELLS | CRSR_SKIP_HIDDEN ) )
+                        &rPam.GetPoint()->nContent, CRSR_SKIP_CELLS | CRSR_SKIP_HIDDEN ) )
         return true;
     return GoInNode( rPam, fnMove );
 }
 
 bool GoPrevPara( SwPaM & rPam, SwMoveFnCollection const & aPosPara )
 {
-    if( rPam.Move( fnMoveBackward, GoInNode ) )
-    {
+    if( rPam.Move( fnMoveBackward, GoInNode ) ) {
         // always on a ContentNode
         SwPosition& rPos = *rPam.GetPoint();
         SwContentNode * pNd = rPos.nNode.GetNode().GetContentNode();
         rPos.nContent.Assign( pNd,
-                            ::GetSttOrEnd( &aPosPara == &fnMoveForward, *pNd ) );
+                              ::GetSttOrEnd( &aPosPara == &fnMoveForward, *pNd ) );
         return true;
     }
     return false;
@@ -1042,25 +968,22 @@ bool GoCurrPara( SwPaM & rPam, SwMoveFnCollection const & aPosPara )
 {
     SwPosition& rPos = *rPam.GetPoint();
     SwContentNode * pNd = rPos.nNode.GetNode().GetContentNode();
-    if( pNd )
-    {
+    if( pNd ) {
         const sal_Int32 nOld = rPos.nContent.GetIndex();
         const sal_Int32 nNew = &aPosPara == &fnMoveForward ? 0 : pNd->Len();
         // if already at beginning/end then to the next/previous
-        if( nOld != nNew )
-        {
+        if( nOld != nNew ) {
             rPos.nContent.Assign( pNd, nNew );
             return true;
         }
     }
     // move node to next/previous ContentNode
     if( ( &aPosPara==&fnParaStart && nullptr != ( pNd =
-            GoPreviousNds( &rPos.nNode, true ))) ||
+                GoPreviousNds( &rPos.nNode, true ))) ||
         ( &aPosPara==&fnParaEnd && nullptr != ( pNd =
-            GoNextNds( &rPos.nNode, true ))) )
-    {
+                    GoNextNds( &rPos.nNode, true ))) ) {
         rPos.nContent.Assign( pNd,
-                        ::GetSttOrEnd( &aPosPara == &fnMoveForward, *pNd ));
+                              ::GetSttOrEnd( &aPosPara == &fnMoveForward, *pNd ));
         return true;
     }
     return false;
@@ -1068,13 +991,12 @@ bool GoCurrPara( SwPaM & rPam, SwMoveFnCollection const & aPosPara )
 
 bool GoNextPara( SwPaM & rPam, SwMoveFnCollection const & aPosPara )
 {
-    if( rPam.Move( fnMoveForward, GoInNode ) )
-    {
+    if( rPam.Move( fnMoveForward, GoInNode ) ) {
         // always on a ContentNode
         SwPosition& rPos = *rPam.GetPoint();
         SwContentNode * pNd = rPos.nNode.GetNode().GetContentNode();
         rPos.nContent.Assign( pNd,
-                        ::GetSttOrEnd( &aPosPara == &fnMoveForward, *pNd ) );
+                              ::GetSttOrEnd( &aPosPara == &fnMoveForward, *pNd ) );
         return true;
     }
     return false;
@@ -1087,14 +1009,13 @@ bool GoCurrSection( SwPaM & rPam, SwMoveFnCollection const & fnMove )
     (fnMove.fnSection)( &rPos.nNode );
     SwContentNode *pNd;
     if( nullptr == ( pNd = rPos.nNode.GetNode().GetContentNode()) &&
-        nullptr == ( pNd = (*fnMove.fnNds)( &rPos.nNode, true )) )
-    {
+        nullptr == ( pNd = (*fnMove.fnNds)( &rPos.nNode, true )) ) {
         rPos = aSavePos; // do not change cursor
         return false;
     }
 
     rPos.nContent.Assign( pNd,
-                        ::GetSttOrEnd( &fnMove == &fnMoveForward, *pNd ) );
+                          ::GetSttOrEnd( &fnMove == &fnMoveForward, *pNd ) );
     return aSavePos != rPos;
 }
 
@@ -1108,39 +1029,32 @@ OUString SwPaM::GetText() const
     // Use a "forever" loop with an exit condition in the middle
     // of its body, in order to correctly handle all cases.
     bool bIsStartNode = true;
-    for (;;)
-    {
+    for (;;) {
         const bool bIsEndNode = aNodeIndex == End()->nNode;
         SwTextNode * pTextNode = aNodeIndex.GetNode().GetTextNode();
 
-        if (pTextNode != nullptr)
-        {
-            if (!bIsStartNode)
-            {
+        if (pTextNode != nullptr) {
+            if (!bIsStartNode) {
                 aResult.append(CH_TXTATR_NEWLINE); // use newline for para break
             }
             const OUString& aTmpStr = pTextNode->GetText();
 
-            if (bIsStartNode || bIsEndNode)
-            {
+            if (bIsStartNode || bIsEndNode) {
                 // Handle corner cases of start/end node(s)
                 const sal_Int32 nStart = bIsStartNode
-                    ? Start()->nContent.GetIndex()
-                    : 0;
+                                         ? Start()->nContent.GetIndex()
+                                         : 0;
                 const sal_Int32 nEnd = bIsEndNode
-                    ? End()->nContent.GetIndex()
-                    : aTmpStr.getLength();
+                                       ? End()->nContent.GetIndex()
+                                       : aTmpStr.getLength();
 
                 aResult.append(aTmpStr.subView(nStart, nEnd-nStart));
-            }
-            else
-            {
+            } else {
                 aResult.append(aTmpStr);
             }
         }
 
-        if (bIsEndNode)
-        {
+        if (bIsEndNode) {
             break;
         }
 
@@ -1153,10 +1067,8 @@ OUString SwPaM::GetText() const
 
 void SwPaM::InvalidatePaM()
 {
-    for (SwNodeIndex index = Start()->nNode; index <= End()->nNode; ++index)
-    {
-        if (SwTextNode *const pTextNode = index.GetNode().GetTextNode())
-        {
+    for (SwNodeIndex index = Start()->nNode; index <= End()->nNode; ++index) {
+        if (SwTextNode *const pTextNode = index.GetNode().GetTextNode()) {
             // pretend that the PaM marks changed formatting to reformat...
             sal_Int32 const nStart(
                 index == Start()->nNode ? Start()->nContent.GetIndex() : 0);
@@ -1164,8 +1076,8 @@ void SwPaM::InvalidatePaM()
             SwUpdateAttr const aHint(
                 nStart,
                 index == End()->nNode
-                    ? End()->nContent.GetIndex() - nStart
-                    : pTextNode->Len() - nStart,
+                ? End()->nContent.GetIndex() - nStart
+                : pTextNode->Len() - nStart,
                 0);
             pTextNode->TriggerNodeUpdate(sw::LegacyModifyHint(&aHint, &aHint));
         }
@@ -1181,8 +1093,7 @@ void SwPaM::dumpAsXml(xmlTextWriterPtr pWriter) const
     GetPoint()->dumpAsXml(pWriter);
     (void)xmlTextWriterEndElement(pWriter);
 
-    if (HasMark())
-    {
+    if (HasMark()) {
         (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mark"));
         GetMark()->dumpAsXml(pWriter);
         (void)xmlTextWriterEndElement(pWriter);

@@ -684,7 +684,7 @@ void SwDoc::ClearDoc()
         // set the layout to the dummy pagedesc
         pFirstNd->SetAttr( SwFormatPageDesc( pDummyPgDsc ));
 
-        SwPosition aPos( *pFirstNd, SwContentIndex( pFirstNd ));
+        SwPosition aPos( *pFirstNd );
         SwPaM const tmpPaM(aSttIdx, SwNodeIndex(GetNodes().GetEndOfContent()));
         ::PaMCorrAbs(tmpPaM, aPos);
     }
