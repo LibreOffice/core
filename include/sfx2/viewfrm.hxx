@@ -69,6 +69,7 @@ class SFX2_DLLPUBLIC SfxViewFrame final : public SfxShell, public SfxListener
     DECL_DLLPRIVATE_LINK(HiddenTrackChangesHandler, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(HyphenationMissingHandler, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(RefreshMasterPasswordHdl, weld::Button&, void);
+    DECL_DLLPRIVATE_STATIC_LINK(SfxViewFrame, HelpMasterPasswordHdl, weld::Button&, void);
     SAL_DLLPRIVATE void KillDispatcher_Impl();
 
     virtual                 ~SfxViewFrame() override;

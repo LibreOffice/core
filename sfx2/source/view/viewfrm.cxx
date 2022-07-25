@@ -46,6 +46,7 @@
 #include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/undo.hxx>
+#include <vcl/help.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/weldutils.hxx>
@@ -1468,6 +1469,12 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                         rButton.set_label(SfxResId(STR_REFRESH_PASSWORD));
                         rButton.connect_clicked(LINK(this,
                                                    SfxViewFrame, RefreshMasterPasswordHdl));
+                        if (Application::GetHelp())
+                        {
+                            weld::Button& rHelp = pOldMasterPasswordInfoBar->addButton();
+                            rHelp.set_label(SfxResId(RID_STR_HELP));
+                            rHelp.connect_clicked(LINK(this, SfxViewFrame, HelpMasterPasswordHdl));
+                        }
                     }
                 }
 
@@ -1716,6 +1723,12 @@ IMPL_LINK_NOARG(SfxViewFrame, RefreshMasterPasswordHdl, weld::Button&, void)
     {}
     if (bChanged)
         RemoveInfoBar(u"oldmasterpassword");
+}
+
+IMPL_STATIC_LINK_NOARG(SfxViewFrame, HelpMasterPasswordHdl, weld::Button&, void)
+{
+    if (Help* pHelp = Application::GetHelp())
+        pHelp->Start("cui/ui/optsecuritypage/savepassword");
 }
 
 void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
