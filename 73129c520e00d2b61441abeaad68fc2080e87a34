@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f91b728_eb705610",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-07-25T06:27:21Z",
+      "side": 1,
+      "message": "gerrit_windows_co-22.05_32bit failed, resume.",
+      "revId": "73129c520e00d2b61441abeaad68fc2080e87a34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
