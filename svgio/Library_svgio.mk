@@ -25,7 +25,10 @@ $(eval $(call gb_Library_set_include,svgio,\
     -I$(SRCDIR)/svgio/inc \
 ))
 
-$(eval $(call gb_Library_use_external,svgio,boost_headers))
+$(eval $(call gb_Library_use_externals,svgio,\
+    boost_headers \
+    frozen \
+))
 
 $(eval $(call gb_Library_set_precompiled_header,svgio,svgio/inc/pch/precompiled_svgio))
 
