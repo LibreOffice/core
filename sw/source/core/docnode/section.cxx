@@ -1131,7 +1131,7 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
         else if( pVSh )
             pVSh->StartAction();
 
-        SwPosition aPos( aIdx, SwIndex( pNewNd, 0 ));
+        SwPosition aPos( aIdx, SwContentIndex( pNewNd, 0 ));
         --aPos.nNode;
         SwDoc::CorrAbs( aIdx, aEndIdx, aPos, true );
 

@@ -582,7 +582,7 @@
 #include <ftninfo.hxx>
 #include <grfatr.hxx>
 #include <hintids.hxx>
-#include <index.hxx>
+#include <contentindex.hxx>
 #include <lineinfo.hxx>
 #include <mdiexp.hxx>
 #include <msfilter.hxx>

@@ -53,7 +53,7 @@ using namespace com::sun::star;
         // 2. check that position is valid and doesn't point after text
         void lcl_CheckPosition( const SwPosition* pPos )
         {
-            assert(dynamic_cast<SwIndexReg*>(&pPos->nNode.GetNode())
+            assert(dynamic_cast<SwContentIndexReg*>(&pPos->nNode.GetNode())
                     == pPos->nContent.GetContentNode());
 
             SwTextNode* pTextNode = pPos->nNode.GetNode().GetTextNode();

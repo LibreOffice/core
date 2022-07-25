@@ -915,7 +915,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                 SwTextAttr* const pFootnoteHint =
                     pTextNd->GetTextAttrForCharAt( nFootnoteSttIdx );
                 assert(pFootnoteHint);
-                SwIndex aIdx( pTextNd, nFootnoteSttIdx );
+                SwContentIndex aIdx( pTextNd, nFootnoteSttIdx );
                 m_pHistory->Add( pFootnoteHint, pTextNd->GetIndex(), false );
                 pTextNd->EraseText( aIdx, 1 );
             }
@@ -940,7 +940,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                 SwTextAttr* const pFootnoteHint =
                     pTextNd->GetTextAttrForCharAt( nFootnoteSttIdx );
                 assert(pFootnoteHint);
-                SwIndex aIdx( pTextNd, nFootnoteSttIdx );
+                SwContentIndex aIdx( pTextNd, nFootnoteSttIdx );
                 m_pHistory->Add( pFootnoteHint, pTextNd->GetIndex(), false );
                 pTextNd->EraseText( aIdx, 1 );
             }
@@ -1269,7 +1269,7 @@ void SwUndoSaveSection::SaveSection(
     if( nullptr != pCNd )
         aPam.GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
 
-    // Keep positions as SwIndex so that this section can be deleted in DTOR
+    // Keep positions as SwContentIndex so that this section can be deleted in DTOR
     SwNodeOffset nEnd;
     m_pMovedStart.reset(new SwNodeIndex(rRange.aStart));
     MoveToUndoNds(aPam, m_pMovedStart.get(), &nEnd);
@@ -1561,7 +1561,7 @@ static bool IsAtEndOfSection(SwPosition const& rAnchorPos)
     assert(pNode);
     assert(rAnchorPos.nNode <= node); // last valid anchor pos is last content
     return node == rAnchorPos.nNode
-        // at-para fly has no SwIndex!
+        // at-para fly has no SwContentIndex!
         && (rAnchorPos.nContent == pNode->Len() || rAnchorPos.nContent.GetContentNode() == nullptr);
 }
 

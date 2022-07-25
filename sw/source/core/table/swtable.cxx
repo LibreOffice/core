@@ -2209,7 +2209,7 @@ void ChgTextToNum( SwTableBox& rBox, const OUString& rText, const Color* pCol,
             ;
         for( ; n < rOrig.getLength() && '\x01' == rOrig[n]; ++n )
             ;
-        SwIndex aIdx( pTNd, n );
+        SwContentIndex aIdx( pTNd, n );
         for( n = rOrig.getLength(); n && ('\x9' == rOrig[--n] || CH_TXTATR_INWORD == rOrig[n]); )
             ;
         sal_Int32 nEndPos = n;
@@ -2217,7 +2217,7 @@ void ChgTextToNum( SwTableBox& rBox, const OUString& rText, const Color* pCol,
 
         // Reset DontExpand-Flags before exchange, to retrigger expansion
         {
-            SwIndex aResetIdx( aIdx, n );
+            SwContentIndex aResetIdx( aIdx, n );
             pTNd->DontExpandFormat( aResetIdx, false, false );
         }
 
@@ -2231,7 +2231,7 @@ void ChgTextToNum( SwTableBox& rBox, const OUString& rText, const Color* pCol,
         sal_Int32 nCommentPos = pTNd->GetText().lastIndexOf( CH_TXTATR_INWORD, nEndPos );
         while( nCommentPos > aIdx.GetIndex() )
         {
-            pTNd->EraseText( SwIndex(pTNd, nCommentPos+1), nEndPos - nCommentPos, SwInsertFlags::EMPTYEXPAND );
+            pTNd->EraseText( SwContentIndex(pTNd, nCommentPos+1), nEndPos - nCommentPos, SwInsertFlags::EMPTYEXPAND );
             // find the next non-sequential comment anchor
             do
             {
@@ -2284,7 +2284,7 @@ static void ChgNumToText( SwTableBox& rBox, sal_uLong nFormat )
         if( sText != sTmp )
         {
             // exchange text
-            SwIndex aIdx( pTNd, sText.getLength() );
+            SwContentIndex aIdx( pTNd, sText.getLength() );
             // Reset DontExpand-Flags before exchange, to retrigger expansion
             pTNd->DontExpandFormat( aIdx, false, false );
             aIdx = 0;

@@ -257,7 +257,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
 
         pPam = new SwPaM( *rRg.GetPoint() );
 
-        SwIndex& rSt = pPam->GetPoint()->nContent;
+        SwContentIndex& rSt = pPam->GetPoint()->nContent;
         sal_Int32 nMkPos, nPtPos = rSt.GetIndex();
 
         // Special case: if the Cursor is located within a URL attribute, we take over it's area

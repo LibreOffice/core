@@ -35,7 +35,7 @@
 #include <docsh.hxx>
 #include <mdiexp.hxx>
 #include <edtwin.hxx>
-#include <index.hxx>
+#include <contentindex.hxx>
 #include <pam.hxx>
 #include <swcrsr.hxx>
 #include <ndtxt.hxx>

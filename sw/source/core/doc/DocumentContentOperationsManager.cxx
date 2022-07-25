@@ -981,7 +981,7 @@ namespace
     bool lcl_SaveFootnote( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
                      const SwNodeIndex& rInsPos,
                      SwFootnoteIdxs& rFootnoteArr, SwFootnoteIdxs& rSaveArr,
-                     const SwIndex* pSttCnt = nullptr, const SwIndex* pEndCnt = nullptr )
+                     const SwContentIndex* pSttCnt = nullptr, const SwContentIndex* pEndCnt = nullptr )
     {
         bool bUpdateFootnote = false;
         const SwNodes& rNds = rInsPos.GetNodes();
@@ -1018,7 +1018,7 @@ namespace
                     if( bDelFootnote )
                     {
                         SwTextNode& rTextNd = const_cast<SwTextNode&>(pSrch->GetTextNode());
-                        SwIndex aIdx( &rTextNd, nFootnoteSttIdx );
+                        SwContentIndex aIdx( &rTextNd, nFootnoteSttIdx );
                         rTextNd.EraseText( aIdx, 1 );
                     }
                     else
@@ -1046,7 +1046,7 @@ namespace
                     {
                         // delete it
                         SwTextNode& rTextNd = const_cast<SwTextNode&>(pSrch->GetTextNode());
-                        SwIndex aIdx( &rTextNd, nFootnoteSttIdx );
+                        SwContentIndex aIdx( &rTextNd, nFootnoteSttIdx );
                         rTextNd.EraseText( aIdx, 1 );
                     }
                     else
@@ -1112,7 +1112,7 @@ namespace
         }
     }
 
-    void lcl_SkipAttr( const SwTextNode *pNode, SwIndex &rIdx, sal_Int32 &rStart )
+    void lcl_SkipAttr( const SwTextNode *pNode, SwContentIndex &rIdx, sal_Int32 &rStart )
     {
         if( !lcl_MayOverwrite( pNode, rStart ) )
         {
@@ -1487,7 +1487,7 @@ namespace //local functions originally from docfmt.cxx
                     {
                         pCurrentNode->ResetAttr(RES_PARATR_LIST_AUTOFMT);
                         // reset also paragraph marker
-                        SwIndex nIdx( pCurrentNode, pCurrentNode->Len() );
+                        SwContentIndex nIdx( pCurrentNode, pCurrentNode->Len() );
                         pCurrentNode->GetTextNode()->RstTextAttr(nIdx, 1);
                     }
                     pCurrentNode = SwNodes::GoPrevious( &aIdx );
@@ -1535,7 +1535,7 @@ namespace //local functions originally from docfmt.cxx
                 return true;
             }
 
-            const SwIndex& rSt = pStt->nContent;
+            const SwContentIndex& rSt = pStt->nContent;
 
             // Attributes without an end do not have a range
             if ( !bCharAttr && !bOtherAttr )
@@ -1730,7 +1730,7 @@ namespace //local functions originally from docfmt.cxx
             if( pNode->IsTextNode() && pCharSet && pCharSet->Count() )
             {
                 SwTextNode* pTextNd = pNode->GetTextNode();
-                const SwIndex& rSt = pStt->nContent;
+                const SwContentIndex& rSt = pStt->nContent;
                 sal_Int32 nMkPos, nPtPos = rSt.GetIndex();
                 const OUString& rStr = pTextNd->GetText();
 
@@ -1767,7 +1767,7 @@ namespace //local functions originally from docfmt.cxx
                 if( !(nFlags & SetAttrMode::DONTREPLACE ) &&
                     pTextNd->HasHints() && !nMkPos && nPtPos == rStr.getLength())
                 {
-                    SwIndex aSt( pTextNd );
+                    SwContentIndex aSt( pTextNd );
                     if( pHistory )
                     {
                         // Save all attributes for the Undo.
@@ -1826,7 +1826,7 @@ namespace //local functions originally from docfmt.cxx
 
         SwNodeIndex aSt( rDoc.GetNodes() );
         SwNodeIndex aEnd( rDoc.GetNodes() );
-        SwIndex aCntEnd( pEnd->nContent );
+        SwContentIndex aCntEnd( pEnd->nContent );
 
         if( pNode )
         {
@@ -2724,8 +2724,8 @@ void DocumentContentOperationsManager::MoveAndJoin( SwPaM& rPaM, SwPosition& rPo
     SwNodeIndex aNxtIdx( aIdx );
     if( pTextNd && pTextNd->CanJoinNext( &aNxtIdx ) )
     {
-        {   // Block so SwIndex into node is deleted before Join
-            m_rDoc.CorrRel( aNxtIdx, SwPosition( aIdx, SwIndex(pTextNd,
+        {   // Block so SwContentIndex into node is deleted before Join
+            m_rDoc.CorrRel( aNxtIdx, SwPosition( aIdx, SwContentIndex(pTextNd,
                         pTextNd->GetText().getLength()) ), 0, true );
         }
         pTextNd->JoinNext();
@@ -2760,7 +2760,7 @@ bool DocumentContentOperationsManager::Overwrite( const SwPaM &rRg, const OUStri
     const size_t nOldAttrCnt = pNode->GetpSwpHints()
                                 ? pNode->GetpSwpHints()->Count() : 0;
     SwDataChanged aTmp( rRg );
-    SwIndex& rIdx = rPt.nContent;
+    SwContentIndex& rIdx = rPt.nContent;
     sal_Int32 const nActualStart(rIdx.GetIndex());
     sal_Int32 nStart = 0;
 
@@ -4070,7 +4070,7 @@ bool DocumentContentOperationsManager::lcl_RstTextAttr( SwNode* pNd, void* pArgs
     SwTextNode * pTextNode = pNd->GetTextNode();
     if( pTextNode && pTextNode->GetpSwpHints() )
     {
-        SwIndex aSt( pTextNode, 0 );
+        SwContentIndex aSt( pTextNode, 0 );
         sal_Int32 nEnd = pTextNode->Len();
 
         if( &pPara->pSttNd->nNode.GetNode() == pTextNode &&
@@ -4421,7 +4421,7 @@ bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam, SwDelet
                 // if already empty, don't call again
                 if( pEnd->nContent.GetIndex() )
                 {
-                    SwIndex aIdx( pCNd, 0 );
+                    SwContentIndex aIdx( pCNd, 0 );
                     pEndTextNode->EraseText( aIdx, pEnd->nContent.GetIndex() );
 
                     if( !pEndTextNode->Len() )
@@ -4634,7 +4634,7 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
                         OUString(), IDocumentMarkAccess::MarkType::UNO_BOOKMARK,
                         ::sw::mark::InsertMode::New);
 
-                SwIndex& rIdx = aDelPam.GetPoint()->nContent;
+                SwContentIndex& rIdx = aDelPam.GetPoint()->nContent;
                 rIdx.Assign( nullptr, 0 );
                 aDelPam.GetMark()->nContent = rIdx;
                 rPam.GetPoint()->nNode = SwNodeOffset(0);
@@ -5005,7 +5005,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
             // Don't copy the beginning completely?
             if( !bCopyCollFormat || bColumnSel || pStt->nContent.GetIndex() )
             {
-                SwIndex aDestIdx( rPos.nContent );
+                SwContentIndex aDestIdx( rPos.nContent );
                 bool bCopyOk = false;
                 if( !pDestTextNd )
                 {
@@ -5155,7 +5155,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
         pDestTextNd = aInsPos.GetNode().GetTextNode();
         if (pEndTextNd)
         {
-            SwIndex aDestIdx( rPos.nContent );
+            SwContentIndex aDestIdx( rPos.nContent );
             if( !pDestTextNd )
             {
                 pDestTextNd = rDoc.GetNodes().MakeTextNode( aInsPos,
@@ -5178,7 +5178,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
                 PUSH_NUMRULE_STATE
             }
 
-            pEndTextNd->CopyText( pDestTextNd, aDestIdx, SwIndex( pEndTextNd ),
+            pEndTextNd->CopyText( pDestTextNd, aDestIdx, SwContentIndex( pEndTextNd ),
                             pEnd->nContent.GetIndex() );
 
             // Also copy all format templates
@@ -5208,7 +5208,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
 
         {
             SwPosition startPos(SwNodeIndex(pCopyPam->GetPoint()->nNode, +1),
-                SwIndex(SwNodeIndex(pCopyPam->GetPoint()->nNode, +1).GetNode().GetContentNode()));
+                SwContentIndex(SwNodeIndex(pCopyPam->GetPoint()->nNode, +1).GetNode().GetContentNode()));
             if (bCanMoveBack)
             {   // pCopyPam is actually 1 before the copy range so move it fwd
                 SwPaM temp(*pCopyPam->GetPoint());
@@ -5241,7 +5241,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
         {
             // init *again* - because CopyWithFlyInFly moved startPos
             SwPosition startPos(SwNodeIndex(pCopyPam->GetPoint()->nNode, +1),
-                SwIndex(SwNodeIndex(pCopyPam->GetPoint()->nNode, +1).GetNode().GetContentNode()));
+                SwContentIndex(SwNodeIndex(pCopyPam->GetPoint()->nNode, +1).GetNode().GetContentNode()));
             if (bCanMoveBack)
             {   // pCopyPam is actually 1 before the copy range so move it fwd
                 SwPaM temp(*pCopyPam->GetPoint());

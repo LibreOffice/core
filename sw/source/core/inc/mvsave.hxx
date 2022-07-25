@@ -33,7 +33,7 @@ class SvNumberFormatter;
 class SwDoc;
 class SwFormatAnchor;
 class SwFrameFormat;
-class SwIndex;
+class SwContentIndex;
 class SwNodeIndex;
 class SwNodeRange;
 class SwPaM;
@@ -50,10 +50,10 @@ namespace sw::mark
             SaveBookmark(
                 const ::sw::mark::IMark& rBkmk,
                 const SwNodeIndex& rMvPos,
-                const SwIndex* pIdx);
+                const SwContentIndex* pIdx);
             void SetInDoc(SwDoc* pDoc,
                 const SwNodeIndex&,
-                const SwIndex* pIdx =nullptr);
+                const SwContentIndex* pIdx =nullptr);
 
     private:
             OUString m_aName;
@@ -93,8 +93,8 @@ namespace o3tl {
 void DelBookmarks(const SwNodeIndex& rStt,
     const SwNodeIndex& rEnd,
     std::vector< ::sw::mark::SaveBookmark> * SaveBkmk =nullptr,
-    const SwIndex* pSttIdx =nullptr,
-    const SwIndex* pEndIdx =nullptr);
+    const SwContentIndex* pSttIdx =nullptr,
+    const SwContentIndex* pEndIdx =nullptr);
 
 /** data structure to temporarily hold fly anchor positions relative to some
  *  location. */
@@ -123,8 +123,8 @@ void SaveFlyInRange( const SwPaM& rPam, const SwPosition& rInsPos,
 
 void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
                     const SwNodeIndex& rPtNdIdx,
-                    SwIndex const* pMkIdx = nullptr,
-                    SwIndex const* pPtIdx = nullptr);
+                    SwContentIndex const* pMkIdx = nullptr,
+                    SwContentIndex const* pPtIdx = nullptr);
 
 class SwDataChanged
 {

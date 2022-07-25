@@ -676,7 +676,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
         {
             getIDocumentContentOperations().SplitNode( *pEnd, false );
             --const_cast<SwNodeIndex&>(pEnd->nNode);
-            const_cast<SwIndex&>(pEnd->nContent).Assign(
+            const_cast<SwContentIndex&>(pEnd->nContent).Assign(
                                 pEnd->nNode.GetNode().GetContentNode(), 0 );
             // A Node and at the End?
             if( pStt->nNode.GetIndex() >= pEnd->nNode.GetIndex() )
@@ -1061,7 +1061,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
         rTable.GetTabLines().insert(rTable.GetTabLines().begin() + nLines, pLine);
 
         SwStartNode* pSttNd;
-        SwPosition aCntPos( aSttIdx, SwIndex( pTextNd ));
+        SwPosition aCntPos( aSttIdx, SwContentIndex( pTextNd ));
 
         const std::shared_ptr< sw::mark::ContentIdxStore> pContentStore(sw::mark::ContentIdxStore::Create());
         pContentStore->Save(rDoc, aSttIdx.GetIndex(), SAL_MAX_INT32);
@@ -1178,7 +1178,7 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
         {
             getIDocumentContentOperations().SplitNode( *pEnd, false );
             --const_cast<SwNodeIndex&>(pEnd->nNode);
-            const_cast<SwIndex&>(pEnd->nContent).Assign(
+            const_cast<SwContentIndex&>(pEnd->nContent).Assign(
                                 pEnd->nNode.GetNode().GetContentNode(), 0 );
             // A Node and at the End?
             if( pStt->nNode.GetIndex() >= pEnd->nNode.GetIndex() )
@@ -1550,8 +1550,8 @@ static void lcl_DelBox( SwTableBox* pBox, DelTabPara* pDelPara )
             if( pDelPara->pLastNd == &aDelRg.aStart.GetNode() )
             {
                 // Inserting the separator
-                SwIndex aCntIdx( pDelPara->pLastNd,
-                        pDelPara->pLastNd->GetText().getLength());
+                SwContentIndex aCntIdx( pDelPara->pLastNd,
+                                 pDelPara->pLastNd->GetText().getLength());
                 pDelPara->pLastNd->InsertText( OUString(pDelPara->cCh), aCntIdx,
                     SwInsertFlags::EMPTYEXPAND );
                 if( pDelPara->pUndo )

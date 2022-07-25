@@ -29,30 +29,30 @@
 
 class SwTextFrame;
 class SwTextNode;
-class SwIndex;
+class SwContentIndex;
 namespace vcl { class Font; }
 namespace com::sun::star::linguistic2 { class XHyphenatedWord; }
 
 struct SwArgsBase     // used for text conversion (Hangul/Hanja, ...)
 {
-    SwTextNode  *pStartNode;
-    SwIndex    *pStartIdx;
-    SwTextNode  *pEndNode;
-    SwIndex    *pEndIdx;
+    SwTextNode     *pStartNode;
+    SwContentIndex *pStartIdx;
+    SwTextNode     *pEndNode;
+    SwContentIndex *pEndIdx;
 
     SwArgsBase(
-            SwTextNode* pStart, SwIndex& rStart,
-            SwTextNode* pEnd, SwIndex& rEnd )
+            SwTextNode* pStart, SwContentIndex& rStart,
+            SwTextNode* pEnd, SwContentIndex& rEnd )
         : pStartNode( pStart ), pStartIdx( &rStart ),
           pEndNode( pEnd ), pEndIdx( &rEnd )
         {}
 
-    void SetStart(SwTextNode* pStart, SwIndex& rStart )
+    void SetStart(SwTextNode* pStart, SwContentIndex& rStart )
     {
         pStartNode = pStart;    pStartIdx = &rStart ;
     }
 
-    void SetEnd( SwTextNode* pEnd, SwIndex& rEnd  )
+    void SetEnd( SwTextNode* pEnd, SwContentIndex& rEnd  )
     {
         pEndNode = pEnd;        pEndIdx = &rEnd ;
     }
@@ -72,8 +72,8 @@ struct SwConversionArgs : SwArgsBase
     bool            bAllowImplicitChangesForNotConvertibleText;
 
     SwConversionArgs( LanguageType nLang,
-            SwTextNode* pStart, SwIndex& rStart,
-            SwTextNode* pEnd, SwIndex& rEnd )
+            SwTextNode* pStart, SwContentIndex& rStart,
+            SwTextNode* pEnd, SwContentIndex& rEnd )
         : SwArgsBase( pStart, rStart, pEnd, rEnd ),
           nConvSrcLang( nLang ),
           nConvTextLang( LANGUAGE_NONE ),
@@ -93,8 +93,8 @@ struct SwSpellArgs : SwArgsBase
 
     SwSpellArgs(css::uno::Reference<
             css::linguistic2::XSpellChecker1 > const &rxSplChk,
-            SwTextNode* pStart, SwIndex& rStart,
-            SwTextNode* pEnd, SwIndex& rEnd,
+            SwTextNode* pStart, SwContentIndex& rStart,
+            SwTextNode* pEnd, SwContentIndex& rEnd,
             bool bGrammar )
         :   SwArgsBase( pStart, rStart, pEnd, rEnd ),
             xSpeller( rxSplChk ),

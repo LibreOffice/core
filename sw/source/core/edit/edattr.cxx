@@ -683,7 +683,7 @@ SvtScriptType SwEditShell::GetScriptType() const
                     //              position, if no selection exist!
                     if( nPos )
                     {
-                        SwIndex aIdx( pStt->nContent );
+                        SwContentIndex aIdx( pStt->nContent );
                         if( pTNd->GoPrevious( &aIdx, CRSR_SKIP_CHARS ) )
                             nPos = aIdx.GetIndex();
                     }

@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <index.hxx>
+#include <contentindex.hxx>
 
 #include <assert.h>
 #include <sal/log.hxx>
 
 #include <crossrefbookmark.hxx>
 
-SwIndex::SwIndex(SwContentNode *const pContentNode, sal_Int32 const nIdx)
+SwContentIndex::SwContentIndex(SwContentNode *const pContentNode, sal_Int32 const nIdx)
     : m_nIndex( nIdx )
     , m_pContentNode( pContentNode )
     , m_pNext( nullptr )
@@ -34,7 +34,7 @@ SwIndex::SwIndex(SwContentNode *const pContentNode, sal_Int32 const nIdx)
     Init(m_nIndex);
 }
 
-SwIndex::SwIndex( const SwIndex& rIdx, short nDiff )
+SwContentIndex::SwContentIndex( const SwContentIndex& rIdx, short nDiff )
     : m_pContentNode( rIdx.m_pContentNode )
     , m_pNext( nullptr )
     , m_pPrev( nullptr )
@@ -43,7 +43,7 @@ SwIndex::SwIndex( const SwIndex& rIdx, short nDiff )
     ChgValue( rIdx, rIdx.m_nIndex + nDiff );
 }
 
-SwIndex::SwIndex( const SwIndex& rIdx )
+SwContentIndex::SwContentIndex( const SwContentIndex& rIdx )
     : m_nIndex( rIdx.m_nIndex )
     , m_pContentNode( rIdx.m_pContentNode )
     , m_pNext( nullptr )
@@ -53,7 +53,7 @@ SwIndex::SwIndex( const SwIndex& rIdx )
     ChgValue( rIdx, rIdx.m_nIndex );
 }
 
-void SwIndex::Init(sal_Int32 const nIdx)
+void SwContentIndex::Init(sal_Int32 const nIdx)
 {
     if (!m_pContentNode)
     {
@@ -76,7 +76,7 @@ void SwIndex::Init(sal_Int32 const nIdx)
     }
 }
 
-SwIndex& SwIndex::ChgValue( const SwIndex& rIdx, sal_Int32 nNewValue )
+SwContentIndex& SwContentIndex::ChgValue( const SwContentIndex& rIdx, sal_Int32 nNewValue )
 {
     assert(m_pContentNode == rIdx.m_pContentNode);
     if (!m_pContentNode)
@@ -84,12 +84,12 @@ SwIndex& SwIndex::ChgValue( const SwIndex& rIdx, sal_Int32 nNewValue )
         m_nIndex = 0;
         return *this; // no IndexReg => no list to sort into; m_nIndex is 0
     }
-    SwIndex* pFnd = const_cast<SwIndex*>(&rIdx);
+    SwContentIndex* pFnd = const_cast<SwContentIndex*>(&rIdx);
     if (rIdx.m_nIndex > nNewValue) // move forwards
     {
         for (;;)
         {
-            SwIndex* pPrv = pFnd->m_pPrev;
+            SwContentIndex* pPrv = pFnd->m_pPrev;
             if (!pPrv || pPrv->m_nIndex <= nNewValue)
                 break;
             pFnd = pPrv;
@@ -113,7 +113,7 @@ SwIndex& SwIndex::ChgValue( const SwIndex& rIdx, sal_Int32 nNewValue )
     {
         for (;;)
         {
-            SwIndex* pNxt = pFnd->m_pNext;
+            SwContentIndex* pNxt = pFnd->m_pNext;
             if (!pNxt || pNxt->m_nIndex >= nNewValue)
                 break;
             pFnd = pNxt;
@@ -158,7 +158,7 @@ SwIndex& SwIndex::ChgValue( const SwIndex& rIdx, sal_Int32 nNewValue )
     return *this;
 }
 
-void SwIndex::Remove()
+void SwContentIndex::Remove()
 {
     if (!m_pContentNode)
     {
@@ -185,7 +185,7 @@ void SwIndex::Remove()
     }
 }
 
-SwIndex& SwIndex::operator=( const SwIndex& rIdx )
+SwContentIndex& SwContentIndex::operator=( const SwContentIndex& rIdx )
 {
     bool bEqual;
     if (rIdx.m_pContentNode != m_pContentNode) // unregister!
@@ -203,7 +203,7 @@ SwIndex& SwIndex::operator=( const SwIndex& rIdx )
     return *this;
 }
 
-SwIndex& SwIndex::Assign( SwContentNode* pArr, sal_Int32 nIdx )
+SwContentIndex& SwContentIndex::Assign( SwContentNode* pArr, sal_Int32 nIdx )
 {
     if (pArr != m_pContentNode) // unregister!
     {
@@ -219,28 +219,28 @@ SwIndex& SwIndex::Assign( SwContentNode* pArr, sal_Int32 nIdx )
     return *this;
 }
 
-void SwIndex::SetMark(const sw::mark::IMark* pMark)
+void SwContentIndex::SetMark(const sw::mark::IMark* pMark)
 {
     m_pMark = pMark;
 }
 
-SwIndexReg::SwIndexReg()
+SwContentIndexReg::SwContentIndexReg()
     : m_pFirst( nullptr ), m_pLast( nullptr )
 {
 }
 
-SwIndexReg::~SwIndexReg()
+SwContentIndexReg::~SwContentIndexReg()
 {
     assert(!m_pFirst && !m_pLast && "There are still indices registered");
 }
 
-void SwIndexReg::Update(
-    SwIndex const & rIdx,
+void SwContentIndexReg::Update(
+    SwContentIndex const & rIdx,
     const sal_Int32 nDiff,
     const bool bNeg,
     const bool /* argument is only used in derived class*/ )
 {
-    SwIndex* pStt = const_cast<SwIndex*>(&rIdx);
+    SwContentIndex* pStt = const_cast<SwContentIndex*>(&rIdx);
     const sal_Int32 nNewVal = rIdx.m_nIndex;
     if( bNeg )
     {
@@ -284,13 +284,13 @@ void SwIndexReg::Update(
     }
 }
 
-void SwIndexReg::MoveTo( SwContentNode& rArr )
+void SwContentIndexReg::MoveTo( SwContentNode& rArr )
 {
     if (!(this != &rArr && m_pFirst))
         return;
 
-    SwIndex * pIdx = const_cast<SwIndex*>(m_pFirst);
-    SwIndex * pNext;
+    SwContentIndex * pIdx = const_cast<SwContentIndex*>(m_pFirst);
+    SwContentIndex * pNext;
     while( pIdx )
     {
         pNext = pIdx->m_pNext;
@@ -303,77 +303,77 @@ void SwIndexReg::MoveTo( SwContentNode& rArr )
 
 #ifdef DBG_UTIL
 
-// SwIndex
+// SwContentIndex
 
-sal_Int32 SwIndex::operator++()
+sal_Int32 SwContentIndex::operator++()
 {
     SAL_WARN_IF( !(m_nIndex < SAL_MAX_INT32), "sw.core",
-                 "SwIndex::operator++() wraps around" );
+                 "SwContentIndex::operator++() wraps around" );
 
     ChgValue( *this, m_nIndex+1 );
     return m_nIndex;
 }
 
-sal_Int32 SwIndex::operator--(int)
+sal_Int32 SwContentIndex::operator--(int)
 {
     SAL_WARN_IF( !(m_nIndex > 0), "sw.core",
-                 "SwIndex::operator--(int) wraps around" );
+                 "SwContentIndex::operator--(int) wraps around" );
 
     const sal_Int32 nOldIndex = m_nIndex;
     ChgValue( *this, m_nIndex-1 );
     return nOldIndex;
 }
 
-sal_Int32 SwIndex::operator--()
+sal_Int32 SwContentIndex::operator--()
 {
     SAL_WARN_IF( !( m_nIndex > 0), "sw.core",
-                 "SwIndex::operator--() wraps around" );
+                 "SwContentIndex::operator--() wraps around" );
     return ChgValue( *this, m_nIndex-1 ).m_nIndex;
 }
 
-sal_Int32 SwIndex::operator+=( sal_Int32 const nVal )
+sal_Int32 SwContentIndex::operator+=( sal_Int32 const nVal )
 {
     SAL_WARN_IF( !(m_nIndex <= SAL_MAX_INT32 - nVal), "sw.core",
-                 "SwIndex SwIndex::operator+=(sal_Int32) wraps around" );
+                 "SwContentIndex SwContentIndex::operator+=(sal_Int32) wraps around" );
     return ChgValue( *this, m_nIndex + nVal ).m_nIndex;
 }
 
-sal_Int32 SwIndex::operator-=( sal_Int32 const nVal )
+sal_Int32 SwContentIndex::operator-=( sal_Int32 const nVal )
 {
     SAL_WARN_IF( !(m_nIndex >= nVal), "sw.core",
-                 "SwIndex::operator-=(sal_Int32) wraps around" );
+                 "SwContentIndex::operator-=(sal_Int32) wraps around" );
     return ChgValue( *this, m_nIndex - nVal ).m_nIndex;
 }
 
-bool SwIndex::operator< ( const SwIndex & rIndex ) const
+bool SwContentIndex::operator< ( const SwContentIndex & rIndex ) const
 {
     // Attempt to compare indices into different arrays
     assert(m_pContentNode == rIndex.m_pContentNode);
     return m_nIndex < rIndex.m_nIndex;
 }
 
-bool SwIndex::operator<=( const SwIndex & rIndex ) const
+bool SwContentIndex::operator<=( const SwContentIndex & rIndex ) const
 {
     // Attempt to compare indices into different arrays
     assert(m_pContentNode == rIndex.m_pContentNode);
     return m_nIndex <= rIndex.m_nIndex;
 }
 
-bool SwIndex::operator> ( const SwIndex & rIndex ) const
+bool SwContentIndex::operator> ( const SwContentIndex & rIndex ) const
 {
     // Attempt to compare indices into different arrays
     assert(m_pContentNode == rIndex.m_pContentNode);
     return m_nIndex > rIndex.m_nIndex;
 }
 
-bool SwIndex::operator>=( const SwIndex & rIndex ) const
+bool SwContentIndex::operator>=( const SwContentIndex & rIndex ) const
 {
     // Attempt to compare indices into different arrays
     assert(m_pContentNode == rIndex.m_pContentNode);
     return m_nIndex >= rIndex.m_nIndex;
 }
 
-SwIndex& SwIndex::operator= ( sal_Int32 const nVal )
+SwContentIndex& SwContentIndex::operator= ( sal_Int32 const nVal )
 {
     if (m_nIndex != nVal)
         ChgValue( *this, nVal );
@@ -383,9 +383,9 @@ SwIndex& SwIndex::operator= ( sal_Int32 const nVal )
 
 #endif
 
-std::ostream& operator <<(std::ostream& s, const SwIndex& index)
+std::ostream& operator <<(std::ostream& s, const SwContentIndex& index)
 {
-    return s << "SwIndex offset (" << index.GetIndex() << ")";
+    return s << "SwContentIndex offset (" << index.GetIndex() << ")";
 }
 
 std::ostream& operator <<(std::ostream& s, const SwNodeOffset& index)

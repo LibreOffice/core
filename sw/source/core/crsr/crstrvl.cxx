@@ -667,14 +667,14 @@ lcl_FindField(bool & o_rFound, SetGetExpFields const& rSrtLst,
         sal_Int32 const nContentOffset)
 {
     std::unique_ptr<SetGetExpField> pSrch;
-    std::unique_ptr<SwIndex> pIndex;
+    std::unique_ptr<SwContentIndex> pIndex;
     if (-1 == nContentOffset)
     {
         pSrch.reset(new SetGetExpField(rPos.nNode, pTextField, &rPos.nContent));
     }
     else
     {
-        pIndex.reset(new SwIndex(rPos.nNode.GetNode().GetContentNode(), nContentOffset));
+        pIndex.reset(new SwContentIndex(rPos.nNode.GetNode().GetContentNode(), nContentOffset));
         pSrch.reset(new SetGetExpField(rPos.nNode, pTextField, pIndex.get()));
     }
 

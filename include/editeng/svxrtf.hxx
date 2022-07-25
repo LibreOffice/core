@@ -38,7 +38,7 @@ class SvxRTFItemStackType;
 class SvxRTFItemStackList : public std::vector<std::unique_ptr<SvxRTFItemStackType>> {};
 
 // Mapper-Classes for the various requirements on Document positions
-//        Swg - NodePosition is a SwIndex, which is used internally
+//        Swg - NodePosition is a SwContentIndex, which is used internally
 // EditEngine - ULONG to list of paragraphs
 
 class EditEngine;

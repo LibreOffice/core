@@ -2575,7 +2575,7 @@ bool SwWW8ImplReader::JoinNode(SwPaM &rPam, bool bStealAttr)
                 //we are removing the last paragraph of a frame, so there
                 //cannot be a page break at this point so we can
                 //safely reset m_pLastAnchorPos to avoid any dangling
-                //SwIndex's pointing into the deleted paragraph
+                //SwContentIndex's pointing into the deleted paragraph
                 SwNodeIndex aLastAnchorPos(m_pLastAnchorPos->nNode);
                 if (aLastAnchorPos == aToBeJoined)
                     m_pLastAnchorPos.reset();
@@ -2697,7 +2697,7 @@ void SwWW8ImplReader::StopApo()
                 //we are removing the last paragraph of a frame, so there
                 //cannot be a page break at this point so we can
                 //safely reset m_pLastAnchorPos to avoid any dangling
-                //SwIndex's pointing into the deleted paragraph
+                //SwContentIndex's pointing into the deleted paragraph
                 SwNodeIndex aLastAnchorPos(m_pLastAnchorPos->nNode);
                 SwNodeIndex aToBeJoined(aPref, 1);
                 if (aLastAnchorPos == aToBeJoined)

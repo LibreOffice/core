@@ -141,8 +141,8 @@ class SW_DLLPUBLIC SwTextNode final
                                 bool bChgFollow = true );
 
     SAL_DLLPRIVATE void CutImpl(
-          SwTextNode * const pDest, const SwIndex & rDestStart,
-          const SwIndex & rStart, /*const*/ sal_Int32 nLen,
+          SwTextNode * const pDest, const SwContentIndex & rDestStart,
+          const SwContentIndex & rStart, /*const*/ sal_Int32 nLen,
           const bool bUpdate = true );
 
     /// Move all comprising hard attributes to the AttrSet of the paragraph.
@@ -250,7 +250,7 @@ public:
     /// @param rStr text to insert; in case it does not fit into the capacity
     ///             of the node, the longest prefix that fits is inserted
     /// @return the prefix of rStr that was actually inserted
-    OUString InsertText( const OUString & rStr, const SwIndex & rIdx,
+    OUString InsertText( const OUString & rStr, const SwContentIndex & rIdx,
                      const SwInsertFlags nMode
                          = SwInsertFlags::DEFAULT );
 
@@ -258,7 +258,7 @@ public:
         ATTENTION: must not be called with a range that overlaps the start of
                    an attribute with both extent and dummy char
      */
-    void EraseText ( const SwIndex &rIdx, const sal_Int32 nCount = SAL_MAX_INT32,
+    void EraseText ( const SwContentIndex &rIdx, const sal_Int32 nCount = SAL_MAX_INT32,
                      const SwInsertFlags nMode = SwInsertFlags::DEFAULT );
 
     /** delete all attributes.
@@ -276,7 +276,7 @@ public:
         which are simply included in the range.
      */
     void RstTextAttr(
-        const SwIndex &rIdx,
+        const SwContentIndex &rIdx,
         const sal_Int32 nLen,
         const sal_uInt16 nWhich = 0,
         const SfxItemSet* pSet = nullptr,
@@ -333,24 +333,24 @@ public:
     /** Actions on text and attributes.
        introduce optional parameter to control, if all attributes have to be copied. */
     void CopyText( SwTextNode * const pDest,
-               const SwIndex &rStart,
+               const SwContentIndex &rStart,
                const sal_Int32 nLen,
                const bool bForceCopyOfAllAttrs );
     void CopyText( SwTextNode * const pDest,
-               const SwIndex &rDestStart,
-               const SwIndex &rStart,
+               const SwContentIndex &rDestStart,
+               const SwContentIndex &rStart,
                sal_Int32 nLen,
                const bool bForceCopyOfAllAttrs = false );
 
     void        CutText(SwTextNode * const pDest,
-                    const SwIndex & rStart, const sal_Int32 nLen);
-    inline void CutText(SwTextNode * const pDest, const SwIndex &rDestStart,
-                    const SwIndex & rStart, const sal_Int32 nLen);
+                    const SwContentIndex & rStart, const sal_Int32 nLen);
+    inline void CutText(SwTextNode * const pDest, const SwContentIndex &rDestStart,
+                    const SwContentIndex & rStart, const sal_Int32 nLen);
 
     /// replace nDelLen characters at rStart with rText
     /// in case the replacement does not fit, it is partially inserted up to
     /// the capacity of the node
-    void ReplaceText( const SwIndex& rStart, const sal_Int32 nDelLen,
+    void ReplaceText( const SwContentIndex& rStart, const sal_Int32 nDelLen,
             const OUString & rText );
     void ReplaceTextOnly( sal_Int32 nPos, sal_Int32 nLen,
             const OUString& rText,
@@ -366,7 +366,7 @@ public:
     SwContentNode *AppendNode( const SwPosition & );
 
     /// When appropriate set DontExpand-flag at INet or character styles respectively.
-    bool DontExpandFormat( const SwIndex& rIdx, bool bFlag = true,
+    bool DontExpandFormat( const SwContentIndex& rIdx, bool bFlag = true,
                         bool bFormatToTextAttributes = true );
 
     enum GetTextAttrMode {
@@ -713,7 +713,7 @@ public:
                             const bool bAddSpaceAfterListLabelStr = false,
                             const bool bWithSpacesForLevel = false,
                             const ExpandMode eAdditionalMode = ExpandMode::ExpandFootnote | ExpandMode::HideFieldmarkCommands) const;
-    bool CopyExpandText( SwTextNode& rDestNd, const SwIndex* pDestIdx,
+    bool CopyExpandText( SwTextNode& rDestNd, const SwContentIndex* pDestIdx,
                            sal_Int32 nIdx, sal_Int32 nLen,
                            SwRootFrame const* pLayout,
                            bool bWithNum = false, bool bWithFootnote = true,
@@ -759,9 +759,9 @@ public:
     bool IsHidden() const;
 
 
-    /// override SwIndexReg
+    /// override SwContentIndexReg
     virtual void Update(
-        SwIndex const & rPos,
+        SwContentIndex const & rPos,
         const sal_Int32 nChangeLen,
         const bool bNegative = false,
         const bool bDelete = false ) override;
@@ -880,8 +880,8 @@ inline const SwTextNode *SwNode::GetTextNode() const
 }
 
 inline void
-SwTextNode::CutText(SwTextNode * const pDest, const SwIndex & rDestStart,
-                    const SwIndex & rStart, const sal_Int32 nLen)
+SwTextNode::CutText(SwTextNode * const pDest, const SwContentIndex & rDestStart,
+                    const SwContentIndex & rStart, const sal_Int32 nLen)
 {
     CutImpl( pDest, rDestStart, rStart, nLen );
 }

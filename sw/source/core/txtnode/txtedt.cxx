@@ -365,7 +365,7 @@ static bool lcl_HaveCommonAttributes( IStyleAccess& rStyleAccess,
  */
 
 void SwTextNode::RstTextAttr(
-    const SwIndex &rIdx,
+    const SwContentIndex &rIdx,
     const sal_Int32 nLen,
     const sal_uInt16 nWhich,
     const SfxItemSet* pSet,
@@ -1999,7 +1999,7 @@ void SwTextNode::ReplaceTextOnly( sal_Int32 nPos, sal_Int32 nLen,
             while( nI + nCnt < nTLen && nOff == pOffsets[ nI + nCnt ] )
                 ++nCnt;
 
-            Update( SwIndex( this, nMyOff ), nCnt );
+            Update( SwContentIndex( this, nMyOff ), nCnt );
             nMyOff = nOff;
             //nMyOff -= nCnt;
             nI += nCnt - 1;
@@ -2007,14 +2007,14 @@ void SwTextNode::ReplaceTextOnly( sal_Int32 nPos, sal_Int32 nLen,
         else if( nOff > nMyOff )
         {
             // something is deleted
-            Update( SwIndex( this, nMyOff+1 ), nOff - nMyOff, true );
+            Update( SwContentIndex( this, nMyOff+1 ), nOff - nMyOff, true );
             nMyOff = nOff;
         }
         ++nMyOff;
     }
     if( nMyOff < nLen )
         // something is deleted at the end
-        Update( SwIndex( this, nMyOff ), nLen - nMyOff, true );
+        Update( SwContentIndex( this, nMyOff ), nLen - nMyOff, true );
 
     // notify the layout!
     SwDelText aDelHint( nPos, nTLen );

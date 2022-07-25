@@ -415,7 +415,7 @@
 #include <format.hxx>
 #include <frmfmt.hxx>
 #include <hintids.hxx>
-#include <index.hxx>
+#include <contentindex.hxx>
 #include <ndarr.hxx>
 #include <ndindex.hxx>
 #include <ndtyp.hxx>

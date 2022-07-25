@@ -1373,7 +1373,7 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                     // have to worry about it.
                     const SwFormatAnchor* pAnchor = pFormat->GetItemIfSet( RES_ANCHOR, false );
 
-                    SwIndex aIdx( this, pAttr->GetStart() );
+                    SwContentIndex aIdx( this, pAttr->GetStart() );
                     const OUString c(GetCharOfTextAttr(*pAttr));
                     OUString const ins( InsertText(c, aIdx, nInsertFlags) );
                     if (ins.isEmpty())
@@ -1392,7 +1392,7 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                         pAnchor->GetContentAnchor()->nNode == *this &&
                         pAnchor->GetContentAnchor()->nContent == aIdx )
                     {
-                        --const_cast<SwIndex&>(
+                        --const_cast<SwContentIndex&>(
                             pAnchor->GetContentAnchor()->nContent);
                     }
                 }
@@ -1422,7 +1422,7 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                                 || CH_TXTATR_INWORD == m_Text[pAttr->GetStart()]);
                             m_Text = m_Text.replaceAt(pAttr->GetStart(), 1, u"");
                             // Update SwIndexes
-                            SwIndex aTmpIdx( this, pAttr->GetStart() );
+                            SwContentIndex aTmpIdx( this, pAttr->GetStart() );
                             Update( aTmpIdx, 1, true );
                         }
                         // do not record deletion of Format!
@@ -1453,7 +1453,7 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                             || CH_TXTATR_INWORD == m_Text[pAttr->GetStart()]);
                         m_Text = m_Text.replaceAt(pAttr->GetStart(), 1, u"");
                         // Update SwIndexes
-                        SwIndex aTmpIdx( this, pAttr->GetStart() );
+                        SwContentIndex aTmpIdx( this, pAttr->GetStart() );
                         Update( aTmpIdx, 1, true );
                     }
                     DestroyAttr( pAttr );
@@ -1494,7 +1494,7 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                     // must insert first, to prevent identical indexes
                     // that could later prevent insertion into SwDoc's
                     // footnote array
-                    SwIndex aNdIdx( this, pAttr->GetStart() );
+                    SwContentIndex aNdIdx( this, pAttr->GetStart() );
                     const OUString c(GetCharOfTextAttr(*pAttr));
                     OUString const ins( InsertText(c, aNdIdx, nInsertFlags) );
                     if (ins.isEmpty())
@@ -1561,7 +1561,7 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
         // and SETATTR_NOTXTATRCHR prevents inserting it again here.
         if( !(SetAttrMode::NOTXTATRCHR & nInsMode) )
         {
-            SwIndex aIdx( this, pAttr->GetStart() );
+            SwContentIndex aIdx( this, pAttr->GetStart() );
             OUString const ins( InsertText(OUString(GetCharOfTextAttr(*pAttr)),
                         aIdx, nInsertFlags) );
             if (ins.isEmpty())
@@ -1580,7 +1580,7 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
             if (pAttr->Which() == RES_TXTATR_CONTENTCONTROL)
             {
                 // Content controls have a dummy character at their end as well.
-                SwIndex aEndIdx(this, *pAttr->GetEnd());
+                SwContentIndex aEndIdx(this, *pAttr->GetEnd());
                 OUString aEnd
                     = InsertText(OUString(GetCharOfTextAttr(*pAttr)), aEndIdx, nInsertFlags);
                 if (aEnd.isEmpty())
@@ -1614,7 +1614,7 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                 {
                     if( !(SetAttrMode::NOTXTATRCHR & nMode) )
                     {
-                        SwIndex aIdx( this, pAttr->GetStart() );
+                        SwContentIndex aIdx( this, pAttr->GetStart() );
                         const OUString aContent = OUStringChar(CH_TXT_ATR_INPUTFIELDSTART)
                             + pTextInputField->GetFieldContent() + OUStringChar(CH_TXT_ATR_INPUTFIELDEND);
                         InsertText( aContent, aIdx, nInsertFlags );
@@ -1629,7 +1629,7 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                         // assure that CH_TXT_ATR_INPUTFIELDSTART and CH_TXT_ATR_INPUTFIELDEND are inserted.
                         if ( m_Text[ pAttr->GetStart() ] != CH_TXT_ATR_INPUTFIELDSTART )
                         {
-                            SwIndex aIdx( this, pAttr->GetStart() );
+                            SwContentIndex aIdx( this, pAttr->GetStart() );
                             InsertText( OUString(CH_TXT_ATR_INPUTFIELDSTART), aIdx, nInsertFlags );
                             bInputFieldStartCharInserted = true;
                             const sal_Int32* const pEnd(pAttr->GetEnd());
@@ -1642,7 +1642,7 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                         assert(pEnd != nullptr);
                         if (m_Text[ *pEnd - 1 ] != CH_TXT_ATR_INPUTFIELDEND)
                         {
-                            SwIndex aIdx( this, *pEnd );
+                            SwContentIndex aIdx( this, *pEnd );
                             InsertText( OUString(CH_TXT_ATR_INPUTFIELDEND), aIdx, nInsertFlags );
                             bInputFieldEndCharInserted = true;
                             pAttr->SetEnd(*pEnd + 1);
@@ -1724,7 +1724,7 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
             // resulting in infinite recursion
             assert((CH_TXTATR_BREAKWORD == m_Text[nStart] ||
                     CH_TXTATR_INWORD    == m_Text[nStart] ));
-            SwIndex aIdx( this, nStart );
+            SwContentIndex aIdx( this, nStart );
             EraseText( aIdx, 1 );
         }
 
@@ -1733,7 +1733,7 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
             if ( !(SetAttrMode::NOTXTATRCHR & nMode)
                  && (nEnd - nStart) > 0 )
             {
-                SwIndex aIdx( this, nStart );
+                SwContentIndex aIdx( this, nStart );
                 EraseText( aIdx, (nEnd - nStart) );
             }
             else
@@ -1741,13 +1741,13 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                 if ( bInputFieldEndCharInserted
                      && (nEnd - nStart) > 0 )
                 {
-                    SwIndex aIdx( this, nEnd - 1 );
+                    SwContentIndex aIdx( this, nEnd - 1 );
                     EraseText( aIdx, 1 );
                 }
 
                 if ( bInputFieldStartCharInserted )
                 {
-                    SwIndex aIdx( this, nStart );
+                    SwContentIndex aIdx( this, nStart );
                     EraseText( aIdx, 1 );
                 }
             }
@@ -1773,13 +1773,13 @@ void SwTextNode::DeleteAttribute( SwTextAttr * const pAttr )
     if ( pAttr->HasDummyChar() )
     {
         // copy index!
-        const SwIndex aIdx( this, pAttr->GetStart() );
+        const SwContentIndex aIdx( this, pAttr->GetStart() );
         // erase the CH_TXTATR, which will also delete pAttr
         EraseText( aIdx, 1 );
     }
     else if ( pAttr->HasContent() )
     {
-        const SwIndex aIdx( this, pAttr->GetStart() );
+        const SwContentIndex aIdx( this, pAttr->GetStart() );
         assert(pAttr->End() != nullptr);
         EraseText( aIdx, *pAttr->End() - pAttr->GetStart() );
     }
@@ -1846,13 +1846,13 @@ void SwTextNode::DeleteAttributes(
             if ( pTextHt->HasDummyChar() )
             {
                 // copy index!
-                const SwIndex aIdx( this, nStart );
+                const SwContentIndex aIdx( this, nStart );
                 // erase the CH_TXTATR, which will also delete pTextHt
                 EraseText( aIdx, 1 );
             }
             else if ( pTextHt->HasContent() )
             {
-                const SwIndex aIdx( this, nStart );
+                const SwContentIndex aIdx( this, nStart );
                 OSL_ENSURE( pTextHt->End() != nullptr, "<SwTextNode::DeleteAttributes(..)> - missing End() at <SwTextAttr> instance which has content" );
                 EraseText( aIdx, *pTextHt->End() - nStart );
             }
@@ -1886,7 +1886,7 @@ void SwTextNode::DelSoftHyph( const sal_Int32 nStt, const sal_Int32 nEnd )
         {
             break;
         }
-        const SwIndex aIdx( this, nFndPos );
+        const SwContentIndex aIdx( this, nFndPos );
         EraseText( aIdx, 1 );
         --nEndPos;
     }
@@ -1984,7 +1984,7 @@ bool SwTextNode::SetAttr(
                     (GetDoc().GetDfltCharFormat() ==
                      static_cast<const SwFormatCharFormat*>(pItem)->GetCharFormat()))
                 {
-                    SwIndex aIndex( this, nStt );
+                    SwContentIndex aIndex( this, nStt );
                     RstTextAttr( aIndex, nEnd - nStt, RES_TXTATR_CHARFMT );
                     DontExpandFormat( aIndex );
                 }

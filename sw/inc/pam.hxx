@@ -21,7 +21,7 @@
 
 #include <sal/types.h>
 #include "ring.hxx"
-#include "index.hxx"
+#include "contentindex.hxx"
 #include "ndindex.hxx"
 #include "swdllapi.h"
 #include "nodeoffset.hxx"
@@ -36,9 +36,9 @@ class Point;
 struct SAL_WARN_UNUSED SW_DLLPUBLIC SwPosition
 {
     SwNodeIndex nNode;
-    SwIndex nContent;
+    SwContentIndex nContent;
 
-    SwPosition( const SwNodeIndex &rNode, const SwIndex &rContent );
+    SwPosition( const SwNodeIndex &rNode, const SwContentIndex &rContent );
     explicit SwPosition( const SwNodeIndex &rNode );
     explicit SwPosition( const SwNode& rNode );
     explicit SwPosition( SwContentNode& rNode, const sal_Int32 nOffset = 0 );
@@ -179,7 +179,7 @@ public:
     {
         if (m_pMark != m_pPoint)
         {
-            /** clear the mark position; this helps if mark's SwIndex is
+            /** clear the mark position; this helps if mark's SwContentIndex is
                registered at some node, and that node is then deleted */
             *m_pMark = SwPosition( SwNodeIndex( GetNode().GetNodes() ) );
             m_pMark = m_pPoint;

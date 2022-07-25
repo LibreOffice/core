@@ -281,7 +281,7 @@ static bool lcl_CopySelToDoc(SwDoc& rInsDoc, OTextCursorHelper* pxCursor, SwXTex
 
     SwNodeIndex aIdx( rNds.GetEndOfContent(), -1 );
     SwContentNode * pNd = aIdx.GetNode().GetContentNode();
-    SwPosition aPos(aIdx, SwIndex(pNd, pNd ? pNd->Len() : 0));
+    SwPosition aPos(aIdx, SwContentIndex(pNd, pNd ? pNd->Len() : 0));
 
     bool bRet = false;
     rInsDoc.getIDocumentFieldsAccess().LockExpFields();

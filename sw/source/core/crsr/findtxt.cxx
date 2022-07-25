@@ -379,7 +379,7 @@ bool FindTextImpl(SwPaM & rSearchPam,
     std::unique_ptr<SwPaM> pPam = sw::MakeRegion(fnMove, rRegion);
     const bool bSrchForward = &fnMove == &fnMoveForward;
     SwNodeIndex& rNdIdx = pPam->GetPoint()->nNode;
-    SwIndex& rContentIdx = pPam->GetPoint()->nContent;
+    SwContentIndex& rContentIdx = pPam->GetPoint()->nContent;
 
     // If bFound is true then the string was found and is between nStart and nEnd
     bool bFound = false;
@@ -957,7 +957,7 @@ int SwFindParaText::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnMove,
     {
         // use replace method in SwDoc
         const bool bRegExp(SearchAlgorithms2::REGEXP == m_rSearchOpt.AlgorithmType2);
-        SwIndex& rSttCntIdx = rCursor.Start()->nContent;
+        SwContentIndex& rSttCntIdx = rCursor.Start()->nContent;
         const sal_Int32 nSttCnt = rSttCntIdx.GetIndex();
         // add to shell-cursor-ring so that the regions will be moved eventually
         SwPaM* pPrev(nullptr);

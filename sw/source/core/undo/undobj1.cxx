@@ -254,7 +254,7 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
         {
             // Pointer to 0, do not delete
             const_cast<SwFormatFlyCnt&>(pAttr->GetFlyCnt()).SetFlyFormat();
-            SwIndex aIdx( pPos->nContent );
+            SwContentIndex aIdx( pPos->nContent );
             pTextNd->EraseText( aIdx, 1 );
         }
     }
@@ -314,7 +314,7 @@ void SwUndoInsLayFormat::UndoImpl(::sw::UndoRedoContext & rContext)
                         rContent.GetContentIdx()->GetIndex() );
                 SwNodeIndex aEndIdx( rDoc.GetNodes(),
                         aIdx.GetNode().EndOfSectionIndex() );
-                SwIndex aIndex( pNode, mnCursorSaveIndexPos );
+                SwContentIndex aIndex( pNode, mnCursorSaveIndexPos );
                 SwPosition aPos( *pNode, aIndex );
                 // don't delete bookmarks here, DelFly() will save them in history
                 ::PaMCorrAbs(SwPaM(aIdx, aEndIdx), aPos);

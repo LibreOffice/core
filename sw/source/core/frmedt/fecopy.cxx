@@ -113,7 +113,7 @@ void SwFEShell::Copy( SwDoc& rClpDoc, const OUString* pNewClpText )
     // clipboard
     if( pNewClpText )
     {
-        pTextNd->InsertText( *pNewClpText, SwIndex( pTextNd ) );
+        pTextNd->InsertText( *pNewClpText, SwContentIndex( pTextNd ) );
         return;                // that's it
     }
 
@@ -160,7 +160,7 @@ void SwFEShell::Copy( SwDoc& rClpDoc, const OUString* pNewClpText )
             //              clipboard, it should be found at pasting. Therefore
             //              the copied TextAttribut should be removed in the node
             //              otherwise it will be recognised as TextSelektion
-            const SwIndex& rIdx = pFlyFormat->GetAnchor().GetContentAnchor()->nContent;
+            const SwContentIndex& rIdx = pFlyFormat->GetAnchor().GetContentAnchor()->nContent;
             SwTextFlyCnt *const pTextFly = static_cast<SwTextFlyCnt *>(
                 pTextNd->GetTextAttrForCharAt(
                     rIdx.GetIndex(), RES_TXTATR_FLYCNT));
@@ -173,7 +173,7 @@ void SwFEShell::Copy( SwDoc& rClpDoc, const OUString* pNewClpText )
     }
     else if ( IsObjSelected() )
     {
-        SwPosition aPos( aSttIdx, SwIndex( pTextNd, 0 ));
+        SwPosition aPos( aSttIdx, SwContentIndex( pTextNd, 0 ));
         const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
         for ( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
@@ -1011,7 +1011,7 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
                     // exit first the complete table
                     // ???? what about only table in a frame ?????
                     SwContentNode* pCNd = GetDoc()->GetNodes().GoNext( &aNdIdx );
-                    SwPosition aPos( aNdIdx, SwIndex( pCNd, 0 ));
+                    SwPosition aPos( aNdIdx, SwContentIndex( pCNd, 0 ));
                     // #i59539: Don't remove all redline
                     SwPaM const tmpPaM(*pDestNd, *pDestNd->EndOfSectionNode());
                     ::PaMCorrAbs(tmpPaM, aPos);
@@ -1026,7 +1026,7 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
                     // return to the box
                     aNdIdx = *pSttNd;
                     SwContentNode* pCNd = GetDoc()->GetNodes().GoNext( &aNdIdx );
-                    SwPosition aPos( aNdIdx, SwIndex( pCNd, 0 ));
+                    SwPosition aPos( aNdIdx, SwContentIndex( pCNd, 0 ));
                     // #i59539: Don't remove all redline
                     SwNode & rNode(rPaM.GetPoint()->nNode.GetNode());
                     SwContentNode *const pContentNode( rNode.GetContentNode() );

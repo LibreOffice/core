@@ -42,7 +42,7 @@
 #include <unocrsr.hxx>
 #include <docary.hxx>
 #include <editsh.hxx>
-#include <index.hxx>
+#include <contentindex.hxx>
 #include <pam.hxx>
 #include <swundo.hxx>
 #include <poolfmt.hxx>
@@ -2749,7 +2749,7 @@ void SwEditShell::AutoFormatBySplitNode()
 
     bool bRange = false;
     pCursor->SetMark();
-    SwIndex* pContent = &pCursor->GetMark()->nContent;
+    SwContentIndex* pContent = &pCursor->GetMark()->nContent;
     if( pContent->GetIndex() )
     {
         *pContent = 0;

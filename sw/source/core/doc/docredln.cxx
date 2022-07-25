@@ -1532,7 +1532,7 @@ void SwRangeRedline::MoveToSection()
             SwTextNode* pTextNd = rNds[ pSttNd->GetIndex() + 1 ]->GetTextNode();
 
             SwNodeIndex aNdIdx( *pTextNd );
-            SwPosition aPos( aNdIdx, SwIndex( pTextNd ));
+            SwPosition aPos( aNdIdx, SwContentIndex( pTextNd ));
             if( pCSttNd && pCEndNd )
             {
                 // tdf#140982 keep annotation ranges in deletions in margin mode
@@ -1601,7 +1601,7 @@ void SwRangeRedline::CopyToSection()
 
         SwNodeIndex aNdIdx( *pSttNd, 1 );
         SwTextNode* pTextNd = aNdIdx.GetNode().GetTextNode();
-        SwPosition aPos( aNdIdx, SwIndex( pTextNd ));
+        SwPosition aPos( aNdIdx, SwContentIndex( pTextNd ));
 
         // tdf#115815 keep original start position of collapsed annotation ranges
         // as temporary bookmarks (removed after file saving and file loading)

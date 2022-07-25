@@ -5844,7 +5844,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                 const SwPosition& rStart = *pInput->Start();
                 const SwPosition& rEnd = *pInput->End();
                 int nSize = 0;
-                for ( SwIndex nIndex = rStart.nContent; nIndex < rEnd.nContent; ++nIndex )
+                for ( SwContentIndex nIndex = rStart.nContent; nIndex < rEnd.nContent; ++nIndex )
                 {
                     ++nSize;
                 }
@@ -5860,7 +5860,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                 {
                     std::unique_ptr<tools::Rectangle[]> aRects(new tools::Rectangle[ nSize ]);
                     int nRectIndex = 0;
-                    for ( SwIndex nIndex = rStart.nContent; nIndex < rEnd.nContent; ++nIndex )
+                    for ( SwContentIndex nIndex = rStart.nContent; nIndex < rEnd.nContent; ++nIndex )
                     {
                         const SwPosition aPos( rStart.nNode, nIndex );
                         SwRect aRect ( rSh.GetCharRect() );

@@ -21,7 +21,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
-#include <index.hxx>
+#include <contentindex.hxx>
 #include <ndtxt.hxx>
 #include <swtable.hxx>
 #include <swddetbl.hxx>
@@ -159,7 +159,7 @@ void SwDDETable::ChangeContent()
             SwNodeIndex aNdIdx( *pBox->GetSttNd(), 1 );
             SwTextNode* pTextNode = aNdIdx.GetNode().GetTextNode();
             OSL_ENSURE( pTextNode, "No Node" );
-            SwIndex aCntIdx( pTextNode, 0 );
+            SwContentIndex aCntIdx( pTextNode, 0 );
             pTextNode->EraseText( aCntIdx );
             pTextNode->InsertText( aLine.getToken( 0, '\t', nLineTokenPos ), aCntIdx );
 
