@@ -97,7 +97,7 @@ namespace
         void operator()(SwPosition& rPos, sal_Int32 nContent) const
         {
             rPos.nNode = *m_pNewContentNode;
-            rPos.nContent.Assign(const_cast<SwContentNode*>(m_pNewContentNode), nContent + m_nOffset);
+            rPos.nContent.Assign(m_pNewContentNode, nContent + m_nOffset);
         };
     };
     struct LimitUpdater
@@ -112,7 +112,7 @@ namespace
             rPos.nNode = *m_pNewContentNode;
             if( nContent < m_nCorrLen )
             {
-                rPos.nContent.Assign(const_cast<SwContentNode*>(m_pNewContentNode), std::min( nContent, static_cast<sal_Int32>(m_nLen) ) );
+                rPos.nContent.Assign(m_pNewContentNode, std::min( nContent, static_cast<sal_Int32>(m_nLen) ) );
             }
             else
             {

@@ -139,7 +139,7 @@ void SwTextFlyCnt::SetAnchor( const SwTextNode *pNode )
 
     SwDoc& rDoc = const_cast<SwDoc&>(pNode->GetDoc());
 
-    SwContentIndex aIdx( const_cast<SwTextNode*>(pNode), GetStart() );
+    SwContentIndex aIdx( pNode, GetStart() );
     SwPosition aPos( *pNode->StartOfSectionNode(), aIdx );
     SwFrameFormat* pFormat = GetFlyCnt().GetFrameFormat();
     SwFormatAnchor aAnchor( pFormat->GetAnchor() );
