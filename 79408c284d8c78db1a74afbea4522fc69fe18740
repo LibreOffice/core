@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afd0eb88_04bc0d0c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002093
+      },
+      "writtenOn": "2022-07-25T07:21:58Z",
+      "side": 1,
+      "message": "It seems that the patch fixes the issue.\n\nThanks Ash!",
+      "revId": "79408c284d8c78db1a74afbea4522fc69fe18740",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
