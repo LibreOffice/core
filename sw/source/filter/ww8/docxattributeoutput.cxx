@@ -2428,6 +2428,11 @@ void DocxAttributeOutput::WriteContentControlStart()
         m_pSerializer->endElementNS(XML_w, XML_date);
     }
 
+    if (m_pContentControl->GetPlainText())
+    {
+        m_pSerializer->singleElementNS(XML_w, XML_text);
+    }
+
     m_pSerializer->endElementNS(XML_w, XML_sdtPr);
     m_pSerializer->startElementNS(XML_w, XML_sdtContent);
     m_pContentControl = nullptr;
