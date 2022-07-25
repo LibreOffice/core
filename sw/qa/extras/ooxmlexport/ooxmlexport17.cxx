@@ -676,15 +676,26 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123642_BookmarkAtDocEnd, "tdf123642.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf148361, "tdf148361.docx")
 {
-    // Refresh fields and ensure cross-reference to numbered para is okay
-    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    if (mbExported)
+    {
+        // Block SDT is turned into run SDT on export, so the next import will have this as content
+        // control, not as a field.
+        OUString aActual = getParagraph(1)->getString();
+        // This was "itadmin".
+        CPPUNIT_ASSERT_EQUAL(OUString("itadmin"), aActual);
+    }
+    else
+    {
+        // Refresh fields and ensure cross-reference to numbered para is okay
+        uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
 
-    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
-    CPPUNIT_ASSERT(xFields->hasMoreElements());
+        uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+        CPPUNIT_ASSERT(xFields->hasMoreElements());
 
-    uno::Reference<text::XTextField> xTextField1(xFields->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("itadmin"), xTextField1->getPresentation(false));
+        uno::Reference<text::XTextField> xTextField1(xFields->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(OUString("itadmin"), xTextField1->getPresentation(false));
+    }
 
     OUString aActual = getParagraph(2)->getString();
     // This was "itadmin".

@@ -373,7 +373,7 @@ public:
     virtual void StartContentControl(const SwFormatContentControl& /*rFormatContentControl*/) {}
 
     /// Output content control end.
-    virtual void EndContentControl() {}
+    virtual void EndContentControl( const SwTextNode& /*rNode*/, sal_Int32 /*nPos*/ ) {}
 
 protected:
 

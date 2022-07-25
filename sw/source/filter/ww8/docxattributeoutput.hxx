@@ -408,7 +408,7 @@ public:
     void StartContentControl(const SwFormatContentControl& rFormatContentControl) override;
 
     /// See AttributeOutputBase::EndContentControl().
-    void EndContentControl() override;
+    void EndContentControl( const SwTextNode& rNode, sal_Int32 nPos ) override;
 
 private:
     /// Initialize the structures where we are going to collect some of the paragraph properties.

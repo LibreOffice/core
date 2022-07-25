@@ -1407,7 +1407,7 @@ int SwWW8AttrIter::OutAttrWithRange(const SwTextNode& rNode, sal_Int32 nPos)
                     pEnd = pHt->End();
                     if (nPos == *pEnd && nPos != pHt->GetStart())
                     {
-                        m_rExport.AttrOutput().EndContentControl();
+                        m_rExport.AttrOutput().EndContentControl(rNode, nPos);
                         --nRet;
                     }
                     break;

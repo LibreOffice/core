@@ -443,6 +443,7 @@ void SdtHelper::clear()
     m_aDropDownItems.clear();
     m_aDropDownDisplayTexts.clear();
     setControlType(SdtControlType::unknown);
+    m_nSdtType = 0;
     m_sDataBindingPrefixMapping.clear();
     m_sDataBindingXPath.clear();
     m_sDataBindingStoreItemID.clear();
