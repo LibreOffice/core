@@ -83,7 +83,7 @@ public:
         , m_isHideRedlines(isHideRedlines)
         , m_eFieldmarkMode(eMode)
         , m_Start(rTextNode, 0)
-        , m_RedlineIndex(m_rIDRA.GetRedlinePos(rTextNode, RedlineType::Any))
+        , m_RedlineIndex(isHideRedlines ? m_rIDRA.GetRedlinePos(rTextNode, RedlineType::Any) : SwRedlineTable::npos)
         , m_pStartPos(nullptr)
         , m_pEndPos(&m_Start)
     {
