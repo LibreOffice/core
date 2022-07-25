@@ -88,6 +88,36 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtRunRichText)
     CPPUNIT_ASSERT_EQUAL(24.f, fCharheight);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testSdtRunPlainText)
+{
+    // Given a document with a plain text inline/run SDT:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "sdt-run-plain-text.docx";
+
+    // When loading the document:
+    getComponent() = loadFromDesktop(aURL);
+
+    // Then make sure that the text inside the SDT is not rich:
+    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
+                                                                  uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xPortionEnum = xPara->createEnumeration();
+    uno::Reference<beans::XPropertySet> xPortion(xPortionEnum->nextElement(), uno::UNO_QUERY);
+    OUString aTextPortionType;
+    xPortion->getPropertyValue("TextPortionType") >>= aTextPortionType;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: ContentControl
+    // - Actual  : TextField
+    // i.e. the SDT was imported as a text field, not as a content control.
+    CPPUNIT_ASSERT_EQUAL(OUString("ContentControl"), aTextPortionType);
+    uno::Reference<beans::XPropertySet> xContentControl;
+    xPortion->getPropertyValue("ContentControl") >>= xContentControl;
+    bool bPlainText{};
+    xContentControl->getPropertyValue("PlainText") >>= bPlainText;
+    CPPUNIT_ASSERT(bPlainText);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testSdtRunCheckbox)
 {
     // Given a document with a checkbox inline/run SDT:

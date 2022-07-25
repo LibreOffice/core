@@ -587,7 +587,8 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo82123)
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // make sure there is only one run inside first SDT after RT as in the Original file.
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[2]/w:p/w:sdt[1]/w:sdtContent/w:r",1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[2]/w:p/w:sdt[1]/w:sdtContent/w:r/w:t", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[2]/w:p/w:r/w:drawing", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSdtBeforeField)
@@ -612,7 +613,8 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo82492)
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // make sure there is only one run inside first SDT after RT as in the Original file.
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt[1]/w:sdtContent/w:r",1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt[1]/w:sdtContent/w:r/w:t", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSdtHeader)
