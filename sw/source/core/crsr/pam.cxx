@@ -72,8 +72,8 @@ SwPosition::SwPosition( const SwNode& rNode )
 {
 }
 
-SwPosition::SwPosition( SwContentNode & rNode, const sal_Int32 nOffset )
-    : nNode( rNode ), nContent( &rNode, nOffset )
+SwPosition::SwPosition( const SwContentNode & rNode, const sal_Int32 nOffset )
+    : nNode( rNode ), nContent( const_cast<SwContentNode*>(&rNode), nOffset )
 {
 }
 

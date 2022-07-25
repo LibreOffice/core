@@ -2229,7 +2229,7 @@ bool MSWordExportBase::NeedTextNodeSplit( const SwTextNode& rNd, SwSoftPageBreak
         if (pos < it) // previous one might have skipped over it
         {
             pos = it;
-            while (auto const*const pMark = rIDMA.getFieldmarkFor(SwPosition(const_cast<SwTextNode&>(rNd), pos)))
+            while (auto const*const pMark = rIDMA.getFieldmarkFor(SwPosition(rNd, pos)))
             {
                 if (pMark->GetMarkEnd().nNode != rNd)
                 {

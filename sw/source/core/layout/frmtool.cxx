@@ -1112,8 +1112,8 @@ static bool IsShown(SwNodeOffset const nIndex,
         return pIter == nullptr // not merged
             || pIter != pEnd    // at least one char visible in node
             || !IsSelectFrameAnchoredAtPara(rAnchor,
-                    SwPosition(const_cast<SwTextNode&>(*pFirstNode), 0),
-                    SwPosition(const_cast<SwTextNode&>(*pLastNode), pLastNode->Len()));
+                    SwPosition(*pFirstNode, 0),
+                    SwPosition(*pLastNode, pLastNode->Len()));
     }
     if (pIter)
     {
@@ -1153,10 +1153,9 @@ static bool IsShown(SwNodeOffset const nIndex,
                     else
                     {
                         SwPosition const start(
-                            const_cast<SwTextNode&>(
-                                iter == *pIter
-                                    ? *pFirstNode // simplification
-                                    : *iter->pNode),
+                            iter == *pIter
+                                ? *pFirstNode // simplification
+                                : *iter->pNode,
                             iter == *pIter // first extent?
                                 ? iter->pNode == pFirstNode
                                     ? 0 // at start of 1st node
@@ -1176,7 +1175,7 @@ static bool IsShown(SwNodeOffset const nIndex,
                     {
                         SwPosition const start(*iter->pNode, iter->nEnd);
                         SwPosition const end(
-                            const_cast<SwTextNode&>(*pLastNode), // simplification
+                            *pLastNode, // simplification
                             iter->pNode == pLastNode
                                 ? iter->pNode->Len()
                                 : 0);
