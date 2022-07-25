@@ -115,10 +115,9 @@ public:
 
     void SetTotalSize();
 
-    SmViewShell& GetView()
-    {
-        return mrViewShell;
-    }
+    SmViewShell& GetView() { return mrViewShell; }
+    SmDocShell* GetDoc();
+    SmCursor& GetCursor();
 
     const Point& GetFormulaDrawPos() const
     {
@@ -131,6 +130,12 @@ public:
     SmGraphicAccessible* GetAccessible_Impl()
     {
         return mxAccessible.get();
+    }
+
+    OutputDevice& GetOutputDevice()
+    {
+        assert(GetDrawingArea());
+        return GetDrawingArea()->get_ref_device();
     }
 
 private:
