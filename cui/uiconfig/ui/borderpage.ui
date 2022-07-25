@@ -280,13 +280,14 @@
                     <property name="can-focus">False</property>
                     <property name="hexpand">False</property>
                     <items>
-                      <item translatable="yes" context="borderpage|linewidthlb">Hairline (0.05pt)</item>
-                      <item translatable="yes" context="borderpage|linewidthlb">Very thin (0.5pt)</item>
-                      <item translatable="yes" context="borderpage|linewidthlb">Thin (0.75pt)</item>
-                      <item translatable="yes" context="borderpage|linewidthlb">Medium (1.5pt)</item>
-                      <item translatable="yes" context="borderpage|linewidthlb">Thick (2.25pt)</item>
-                      <item translatable="yes" context="borderpage|linewidthlb">Extra thick (4.5pt)</item>
-                      <item translatable="yes" context="borderpage|linewidthlb">Custom</item>
+                      <item id="0" translatable="yes" context="borderpage|linewidthlb">Hairline (0.05pt)</item>
+                      <item id="1" translatable="yes" context="borderpage|linewidthlb">Very thin (0.5pt)</item>
+                      <item id="2" translatable="yes" context="borderpage|linewidthlb">Thin (0.75pt)</item>
+                      <item id="3" translatable="yes" context="borderpage|linewidthlb">Double Hairline (1.10pt)</item>
+                      <item id="4" translatable="yes" context="borderpage|linewidthlb">Medium (1.5pt)</item>
+                      <item id="5" translatable="yes" context="borderpage|linewidthlb">Thick (2.25pt)</item>
+                      <item id="6" translatable="yes" context="borderpage|linewidthlb">Extra thick (4.5pt)</item>
+                      <item id="7" translatable="yes" context="borderpage|linewidthlb">Custom</item>
                     </items>
                     <accessibility>
                       <relation type="labelled-by" target="label16"/>

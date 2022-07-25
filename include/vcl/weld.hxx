@@ -698,6 +698,7 @@ class VCL_DLLPUBLIC ComboBox : virtual public Widget
 {
 private:
     OUString m_sSavedValue;
+    std::vector<OUString> m_aSavedValues;
 
 public:
     // OUString is the id of the row, it may be null to measure the height of a generic line
@@ -748,6 +749,10 @@ public:
     void append(const OUString& rId, const OUString& rStr, VirtualDevice& rImage)
     {
         insert(-1, rStr, &rId, nullptr, &rImage);
+    }
+    void append(int pos, const OUString& rId, const OUString& rStr)
+    {
+        insert(pos, rStr, &rId, nullptr, nullptr);
     }
     virtual void insert_separator(int pos, const OUString& rId) = 0;
     void append_separator(const OUString& rId) { insert_separator(-1, rId); }
@@ -825,8 +830,23 @@ public:
     void connect_entry_activate(const Link<ComboBox&, bool>& rLink) { m_aEntryActivateHdl = rLink; }
 
     void save_value() { m_sSavedValue = get_active_text(); }
+
+    void save_values_by_id(const OUString& rId)
+    {
+        m_aSavedValues.push_back(get_text(find_id(rId)));
+    }
+
     OUString const& get_saved_value() const { return m_sSavedValue; }
+    OUString const& get_saved_values(int pos) const { return m_aSavedValues[pos]; }
     bool get_value_changed_from_saved() const { return m_sSavedValue != get_active_text(); }
+    bool get_values_changed_from_saved() const
+    {
+        return !m_aSavedValues.empty()
+               && std::find(m_aSavedValues.begin(), m_aSavedValues.end(), get_active_text())
+                      == m_aSavedValues.end();
+    }
+
+    void removeSavedValues() { m_aSavedValues.clear(); }
 
     // for custom rendering a row
     void connect_custom_get_size(const Link<vcl::RenderContext&, Size>& rLink)

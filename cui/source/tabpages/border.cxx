@@ -88,6 +88,7 @@ const std::vector<int> SvxBorderTabPage::m_aLineWidths = {
     lcl_twipsToPt(SvxBorderLineWidth::Hairline),
     lcl_twipsToPt(SvxBorderLineWidth::VeryThin),
     lcl_twipsToPt(SvxBorderLineWidth::Thin),
+    lcl_twipsToPt(SvxBorderLineWidth::DoubleHairline),
     lcl_twipsToPt(SvxBorderLineWidth::Medium),
     lcl_twipsToPt(SvxBorderLineWidth::Thick),
     lcl_twipsToPt(SvxBorderLineWidth::ExtraThick),
@@ -1242,8 +1243,12 @@ IMPL_LINK(SvxBorderTabPage, SelColHdl_Impl, ColorListBox&, rColorBox, void)
 IMPL_LINK_NOARG(SvxBorderTabPage, ModifyWidthLBHdl_Impl, weld::ComboBox&, void)
 {
     sal_Int32 nPos = m_xLineWidthLB->get_active();
+    sal_Int32 nRemovedType = 0;
+    if (m_xLineWidthLB->get_values_changed_from_saved()) {
+        nRemovedType = m_aLineWidths.size() - m_xLineWidthLB->get_count();
+    }
 
-    SetLineWidth(m_aLineWidths[nPos]);
+    SetLineWidth(m_aLineWidths[nPos + nRemovedType], nRemovedType);
 
     // Call the spinner handler to trigger all related modifications
     ModifyWidthMFHdl_Impl(*m_xLineWidthMF);
@@ -1276,7 +1281,12 @@ IMPL_LINK_NOARG(SvxBorderTabPage, SelStyleHdl_Impl, SvtLineListBox&, void)
 
     // auto change line-width if it doesn't correspond to minimal value
     // let's change only in case when user has not changed the line-width into some custom value
-    const sal_Int64 nNewWidth = (nOldMinWidth == nOldWidth)? nNewMinWidth : nOldWidth;
+    sal_Int64 nNewWidth = (nOldMinWidth == nOldWidth) ? nNewMinWidth : nOldWidth;
+
+    bool bNewDoubleHairline = m_xLbLineStyle->GetSelectEntryStyle() == SvxBorderLineStyle::DOUBLE_THIN &&
+        (nOldWidth == SvxBorderLineWidth::Hairline || nOldWidth == SvxBorderLineWidth::VeryThin || nOldWidth == SvxBorderLineWidth::Thin);
+    if (bNewDoubleHairline && nNewWidth < SvxBorderLineWidth::DoubleHairline)
+        nNewWidth = SvxBorderLineWidth::DoubleHairline;
 
     // set value inside edit box
     if (nOldWidth != nNewWidth)
@@ -1287,6 +1297,26 @@ IMPL_LINK_NOARG(SvxBorderTabPage, SelStyleHdl_Impl, SvtLineListBox&, void)
             MapUnit::MapTwip,
             FieldUnit::POINT));
         SetLineWidth(nNewWidthPt);
+    }
+
+    if (m_xLbLineStyle->GetSelectEntryStyle() == SvxBorderLineStyle::DOUBLE_THIN)
+    {
+        for (size_t i = 0; i < 3; i++)
+        {
+            m_xLineWidthLB->save_values_by_id(OUString::number(i));
+            m_xLineWidthLB->remove_id(OUString::number(i));
+        }
+        if (m_xLineWidthLB->get_active_id().isEmpty())
+            m_xLineWidthLB->set_active_id("3");
+    }
+    else
+    {
+        if (m_xLineWidthLB->get_values_changed_from_saved())
+        {
+            for (size_t i = 0; i < 3; i++)
+                m_xLineWidthLB->append(i, OUString::number(i), m_xLineWidthLB->get_saved_values(i));
+            m_xLineWidthLB->removeSavedValues();
+        }
     }
 
     // set value inside style box
@@ -1413,7 +1443,7 @@ void SvxBorderTabPage::FillValueSets()
     FillShadowVS();
 }
 
-void SvxBorderTabPage::SetLineWidth( sal_Int64 nWidth )
+void SvxBorderTabPage::SetLineWidth( sal_Int64 nWidth, sal_Int32 nRemovedType )
 {
     if ( nWidth >= 0 )
         m_xLineWidthMF->set_value( nWidth, FieldUnit::POINT );
@@ -1425,12 +1455,12 @@ void SvxBorderTabPage::SetLineWidth( sal_Int64 nWidth )
     {
         // Select predefined value in combobox
         m_xLineWidthMF->hide();
-        m_xLineWidthLB->set_active(std::distance(m_aLineWidths.begin(), it));
+        m_xLineWidthLB->set_active(std::distance(m_aLineWidths.begin(), it) - nRemovedType);
     }
     else
     {
         // This is not one of predefined values. Show spinner
-        m_xLineWidthLB->set_active(m_aLineWidths.size()-1);
+        m_xLineWidthLB->set_active(m_aLineWidths.size() - nRemovedType -1);
         m_xLineWidthMF->show();
     }
 }
