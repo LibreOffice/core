@@ -33,6 +33,24 @@
       "message": "Not sure we need the static though - did you test without that or ? ... \u003d)\nQuite possibly in the other branch when it\u0027s not set - we should set the language to be the same as the last load language (in case it\u0027s some subsequent load in a different locale I guess) - but later ... \u003d)",
       "revId": "214f3294aee7d80f417cbcb013648ec90f701797",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ac1f9d9_0ecc1249",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2022-07-25T13:34:14Z",
+      "side": 1,
+      "message": "We fail save when we try to save in a different language from that of the load. That\u0027s why we wanted to capture the load-language and use that for all saves.\n\nThe static is to capture it only for the first load, not any subsequent views.\n\n... unless I misunderstood.",
+      "parentUuid": "8aa364ab_04816c96",
+      "revId": "214f3294aee7d80f417cbcb013648ec90f701797",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
