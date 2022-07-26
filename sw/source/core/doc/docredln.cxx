@@ -1531,7 +1531,6 @@ void SwRangeRedline::MoveToSection()
                                             SwNormalStartNode, pColl );
             SwTextNode* pTextNd = rNds[ pSttNd->GetIndex() + 1 ]->GetTextNode();
 
-            SwNodeIndex aNdIdx( *pTextNd );
             SwPosition aPos( *pTextNd );
             if( pCSttNd && pCEndNd )
             {
