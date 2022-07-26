@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6af06026_db08086c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-07-26T11:12:34Z",
+      "side": 1,
+      "message": "This adds a new translatable currency string (in resources_en_US.properties), which is the reason I separated it and didn\u0027t cherry-pick it for 7-4; I don\u0027t mind much, the wizard isn\u0027t offered in the UI anymore but might be callable from a macro, Cc\u0027ing Sophie to have the last say :) ",
+      "revId": "15321d468009783b0a935068ac7fe1cec43d5248",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
