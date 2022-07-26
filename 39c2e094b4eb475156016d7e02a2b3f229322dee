@@ -16,6 +16,24 @@
       "message": "this requires https://gerrit.libreoffice.org/c/core/+/137218/1 but that one failed to build",
       "revId": "39c2e094b4eb475156016d7e02a2b3f229322dee",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "775b495e_dd99110e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-07-26T09:31:22Z",
+      "side": 1,
+      "message": "no, it\u0027s the other way around, that one depends on this one. pushing this one an rebasing that one. Thanks for the +1",
+      "parentUuid": "df6bf744_9671d8c2",
+      "revId": "39c2e094b4eb475156016d7e02a2b3f229322dee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
