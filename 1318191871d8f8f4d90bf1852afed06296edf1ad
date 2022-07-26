@@ -68,6 +68,23 @@
       "parentUuid": "f1c2d8af_52e444e5",
       "revId": "1318191871d8f8f4d90bf1852afed06296edf1ad",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4250ec0d_00c5c993",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-07-26T12:38:22Z",
+      "side": 1,
+      "message": "Unfortunately the problem is still reproducible in 7.4 RC1: https://bugs.documentfoundation.org/show_bug.cgi?id\u003d146842#c78",
+      "revId": "1318191871d8f8f4d90bf1852afed06296edf1ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
