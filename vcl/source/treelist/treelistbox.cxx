@@ -889,6 +889,13 @@ void SvTreeListBox::EnableSelectionAsDropTarget( bool bEnable )
 // InplaceEditing
 // ******************************************************************
 
+VclPtr<Edit> SvInplaceEdit2::GetEditWidget() const { return pEdit; };
+
+VclPtr<Edit> SvTreeListBox::GetEditWidget() const
+{
+    return pEdCtrl ? pEdCtrl->GetEditWidget() : nullptr;
+}
+
 void SvTreeListBox::EditText( const OUString& rStr, const tools::Rectangle& rRect,
     const Selection& rSel )
 {

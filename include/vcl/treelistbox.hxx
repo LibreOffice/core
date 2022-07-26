@@ -380,6 +380,7 @@ public:
     SvViewDataItem*  GetViewDataItem(SvTreeListEntry const *, SvLBoxItem const *);
     const SvViewDataItem*  GetViewDataItem(const SvTreeListEntry*, const SvLBoxItem*) const;
 
+    VclPtr<Edit> GetEditWidget() const; // for UITest
     bool IsInplaceEditingEnabled() const { return bool(nImpFlags & SvTreeListBoxFlags::EDT_ENABLED); }
     bool IsEditingActive() const { return bool(nImpFlags & SvTreeListBoxFlags::IN_EDT); }
     void EndEditing( bool bCancel = false );
@@ -757,6 +758,7 @@ public:
     OUString const & GetSavedValue() const;
     void        StopEditing( bool bCancel );
     void        Hide();
+    VclPtr<Edit> GetEditWidget() const;
 };
 
 #endif

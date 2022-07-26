@@ -136,4 +136,43 @@ class bookmarkDialog(UITestCase):
 
         self.ui_test.close_doc()
 
+    def test_bookmark_dialog_edittext(self):
+            self.ui_test.create_doc_in_start_center("writer")
+            xDoc = self.ui_test.get_component()
+
+            xDoc.Text.insertString(xDoc.Text.getStart(), "foo", False)
+            self.xUITest.executeCommand(".uno:SelectAll")
+
+            self.ui_test.execute_dialog_through_command(".uno:InsertBookmark")
+            xBookDlg = self.xUITest.getTopFocusWindow()
+            xButton = xBookDlg.getChild("insert")
+            self.ui_test.close_dialog_through_button(xButton)
+
+            self.ui_test.execute_dialog_through_command(".uno:InsertBookmark")
+            xBookDlg = self.xUITest.getTopFocusWindow()
+
+            xBmk = xBookDlg.getChild("bookmarks")
+            xFirstListEntry = xBmk.getChild("0") #  select first bookmark
+            xFirstListEntry.executeAction("SELECT", tuple())
+            xEditBtn = xBookDlg.getChild("edittext")
+
+            xEditBtn.executeAction('CLICK', ())
+
+            # this does not work - the Edit widget has the focus but it's not forwarded
+#                xBookDlg.executeAction("TYPE", mkPropertyValues({"TEXT":"fubar"}))
+#                xBookDlg.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
+            # this did not work previously but now works due to explicit
+            # forwarding in TreeListUIObject::execute()
+            xBmk.executeAction("TYPE", mkPropertyValues({"TEXT":"fubar"}))
+            xBmk.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
+
+            x1stListEntry = xBmk.getChild("O") #  select first bookmark
+            x1stListEntry.executeAction("SELECT", tuple())
+
+            self.assertEqual(xDoc.Text.String, "fubar")
+            self.assertEqual(get_state_as_dict(x1stListEntry)["Text"], "1\tBookmark 1\tfubar\tNo\t")
+
+            xButton = xBookDlg.getChild("close")
+            self.ui_test.close_dialog_through_button(xButton)
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
