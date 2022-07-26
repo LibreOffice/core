@@ -1123,7 +1123,7 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
         // Insert an empty TextNode at the Section's start
         SwNodeIndex aIdx( *pSectNd, +1 );
         SwNodeIndex aEndIdx( *pSectNd->EndOfSectionNode() );
-        SwTextNode* pNewNd = pDoc->GetNodes().MakeTextNode( aIdx,
+        pDoc->GetNodes().MakeTextNode( aIdx,
                         pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TEXT ) );
 
         if( pESh )
@@ -1131,8 +1131,7 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
         else if( pVSh )
             pVSh->StartAction();
 
-        SwPosition aPos( aIdx, SwContentIndex( pNewNd, 0 ));
-        --aPos.nNode;
+        SwPosition aPos( aIdx, SwNodeOffset(-1) );
         SwDoc::CorrAbs( aIdx, aEndIdx, aPos, true );
 
         pPam = new SwPaM( aPos );

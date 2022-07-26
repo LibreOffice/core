@@ -62,6 +62,18 @@ SwPosition::SwPosition( const SwNodeIndex & rNodeIndex, const SwContentIndex & r
 {
 }
 
+SwPosition::SwPosition( const SwNodeIndex & rNodeIndex, const SwContentNode* pContentNode, sal_Int32 nContentOffset )
+    : nNode( rNodeIndex ), nContent( pContentNode, nContentOffset )
+{
+    assert(!pContentNode || pContentNode == &rNodeIndex.GetNode());
+}
+
+SwPosition::SwPosition( const SwNodeIndex & rNodeIndex, SwNodeOffset nDiff, const SwContentNode* pContentNode, sal_Int32 nContentOffset )
+    : nNode( rNodeIndex, nDiff ), nContent( pContentNode, nContentOffset )
+{
+    assert(!pContentNode || pContentNode == &rNodeIndex.GetNode());
+}
+
 SwPosition::SwPosition( const SwNodeIndex & rNodeIndex, SwNodeOffset nDiff )
     : nNode( rNodeIndex, nDiff ), nContent( nNode.GetNode().GetContentNode() )
 {
@@ -79,6 +91,11 @@ SwPosition::SwPosition( SwNodes& rNodes, SwNodeOffset nIndex )
 
 SwPosition::SwPosition( const SwContentNode & rNode, const sal_Int32 nContentOffset )
     : nNode( rNode ), nContent( &rNode, nContentOffset )
+{
+}
+
+SwPosition::SwPosition( const SwContentIndex & rContentIndex, short nDiff )
+    : nNode( *rContentIndex.GetContentNode() ), nContent( rContentIndex, nDiff )
 {
 }
 

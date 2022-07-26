@@ -140,7 +140,7 @@ sal_uInt16 SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
 
             aStt = pGDoc->GetNodes().GetEndOfExtras();
             pContentNd = pGDoc->GetNodes().GoNext( &aStt );
-            SwPosition aInsPos( aStt, SwContentIndex( pContentNd ));
+            SwPosition aInsPos( aStt );
             pMyDoc->getIDocumentContentOperations().CopyRange(aCpyPam, aInsPos, SwCopyFlags::CheckPosInFly);
 
             nRet = rBlock.PutDoc();
@@ -157,8 +157,7 @@ bool SwEditShell::CopySelToDoc( SwDoc& rInsDoc )
 
     SwNodeIndex aIdx( rNds.GetEndOfContent(), -1 );
     SwContentNode *const pContentNode = aIdx.GetNode().GetContentNode();
-    SwPosition aPos( aIdx,
-        SwContentIndex(pContentNode, pContentNode ? pContentNode->Len() : 0));
+    SwPosition aPos( aIdx, pContentNode, pContentNode ? pContentNode->Len() : 0);
 
     bool bRet = false;
     CurrShell aCurr( this );

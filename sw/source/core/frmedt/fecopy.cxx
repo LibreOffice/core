@@ -173,7 +173,7 @@ void SwFEShell::Copy( SwDoc& rClpDoc, const OUString* pNewClpText )
     }
     else if ( IsObjSelected() )
     {
-        SwPosition aPos( aSttIdx, SwContentIndex( pTextNd, 0 ));
+        SwPosition aPos( aSttIdx, pTextNd, 0 );
         const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
         for ( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
@@ -1011,7 +1011,7 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
                     // exit first the complete table
                     // ???? what about only table in a frame ?????
                     SwContentNode* pCNd = GetDoc()->GetNodes().GoNext( &aNdIdx );
-                    SwPosition aPos( aNdIdx, SwContentIndex( pCNd, 0 ));
+                    SwPosition aPos( aNdIdx, pCNd, 0 );
                     // #i59539: Don't remove all redline
                     SwPaM const tmpPaM(*pDestNd, *pDestNd->EndOfSectionNode());
                     ::PaMCorrAbs(tmpPaM, aPos);
@@ -1026,7 +1026,7 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
                     // return to the box
                     aNdIdx = *pSttNd;
                     SwContentNode* pCNd = GetDoc()->GetNodes().GoNext( &aNdIdx );
-                    SwPosition aPos( aNdIdx, SwContentIndex( pCNd, 0 ));
+                    SwPosition aPos( aNdIdx, pCNd, 0 );
                     // #i59539: Don't remove all redline
                     SwNode & rNode(rPaM.GetPoint()->nNode.GetNode());
                     SwContentNode *const pContentNode( rNode.GetContentNode() );

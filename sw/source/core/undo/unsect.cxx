@@ -283,7 +283,7 @@ void SwUndoInsSection::Join( SwDoc& rDoc, SwNodeOffset nNode )
     {
         RemoveIdxRel(
             nNode + 1,
-            SwPosition( aIdx, SwContentIndex( pTextNd, pTextNd->GetText().getLength() ) ) );
+            SwPosition( aIdx, pTextNd, pTextNd->GetText().getLength() ) );
     }
     pTextNd->JoinNext();
 
