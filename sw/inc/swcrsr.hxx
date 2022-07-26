@@ -76,7 +76,7 @@ class SW_DLLPUBLIC SwCursor : public SwPaM
     sal_uInt8 m_nCursorBidiLevel; // bidi level of the cursor
     bool m_bColumnSelection;      // true: cursor is aprt of a column selection
 
-    sal_uLong FindAll( SwFindParas& , SwDocPositions, SwDocPositions, FindRanges, bool& bCancel );
+    sal_Int32 FindAll( SwFindParas& , SwDocPositions, SwDocPositions, FindRanges, bool& bCancel );
 
     SwCursor(SwCursor const& rPaM) = delete;
 
@@ -114,20 +114,20 @@ public:
                                         SwPaM* ) const;
 
     // note: DO NOT call it FindText because windows.h
-    sal_uLong Find_Text( const i18nutil::SearchOptions2& rSearchOpt,
+    sal_Int32 Find_Text( const i18nutil::SearchOptions2& rSearchOpt,
                 bool bSearchInNotes,
                 SwDocPositions nStart, SwDocPositions nEnd,
                 bool& bCancel,
                 FindRanges,
                 bool bReplace = false,
                 SwRootFrame const*const pLayout = nullptr);
-    sal_uLong FindFormat( const SwTextFormatColl& rFormatColl,
+    sal_Int32 FindFormat( const SwTextFormatColl& rFormatColl,
                 SwDocPositions nStart, SwDocPositions nEnd,
                 bool& bCancel,
                 FindRanges,
                 const SwTextFormatColl* pReplFormat,
                 SwRootFrame const*const pLayout = nullptr);
-    sal_uLong FindAttrs( const SfxItemSet& rSet, bool bNoCollections,
+    sal_Int32 FindAttrs( const SfxItemSet& rSet, bool bNoCollections,
                 SwDocPositions nStart, SwDocPositions nEnd,
                 bool& bCancel,
                 FindRanges,
