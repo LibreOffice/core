@@ -683,16 +683,33 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                 }
                 else if (pField->GetTypeId() == SwFieldTypesEnum::GetRef)
                 {
-                    OUString sFieldSubTypeOrName;
-                    auto nSubType = pField->GetSubType();
-                    if (nSubType == REF_FOOTNOTE)
-                        sFieldSubTypeOrName = SwResId(STR_FLDREF_FOOTNOTE);
-                    else if (nSubType == REF_ENDNOTE)
-                        sFieldSubTypeOrName = SwResId(STR_FLDREF_ENDNOTE);
+                    const SwGetRefField* pRefField(static_cast<const SwGetRefField*>(pField));
+                    if (pRefField->IsRefToHeadingCrossRefBookmark() ||
+                            pRefField->IsRefToNumItemCrossRefBookmark())
+                    {
+                        OUString sExpandedTextOfReferencedTextNode =
+                                pRefField->GetExpandedTextOfReferencedTextNode(
+                                    *m_pWrtShell->GetLayout());
+                        if (sExpandedTextOfReferencedTextNode.getLength() > 80)
+                        {
+                            sExpandedTextOfReferencedTextNode = OUString::Concat(
+                                        sExpandedTextOfReferencedTextNode.subView(0, 80)) + u"...";
+                        }
+                        sText = pField->GetDescription() + u" - " + sExpandedTextOfReferencedTextNode;
+                    }
                     else
-                        sFieldSubTypeOrName = pField->GetFieldName();
-                    sText = pField->GetDescription() + u" - " + sFieldSubTypeOrName
-                            + sExpandField;
+                    {
+                        OUString sFieldSubTypeOrName;
+                        auto nSubType = pField->GetSubType();
+                        if (nSubType == REF_FOOTNOTE)
+                            sFieldSubTypeOrName = SwResId(STR_FLDREF_FOOTNOTE);
+                        else if (nSubType == REF_ENDNOTE)
+                            sFieldSubTypeOrName = SwResId(STR_FLDREF_ENDNOTE);
+                        else
+                            sFieldSubTypeOrName = pField->GetFieldName();
+                        sText = pField->GetDescription() + u" - " + sFieldSubTypeOrName
+                                + sExpandField;
+                    }
                 }
                 else
                     sText = pField->GetDescription() + u" - " + pField->GetFieldName()
