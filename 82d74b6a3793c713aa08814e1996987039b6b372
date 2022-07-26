@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e96e665c_d37efc67",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-07-26T13:06:28Z",
+      "side": 1,
+      "message": "Caolan: do you have any preference between this vs whitelisting CAIRO_HINT_STYLE_DEFAULT? Reading documentation, perhaps that one is better, reading your commit message, this was just added for \"just in case\", so it sounds low-risk to relax it.\n\nOr perhaps there is a 3rd, even better fix I\u0027m not aware of. Thanks.",
+      "revId": "82d74b6a3793c713aa08814e1996987039b6b372",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
