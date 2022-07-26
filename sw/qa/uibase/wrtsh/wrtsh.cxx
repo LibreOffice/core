@@ -367,6 +367,27 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertDateContentControl)
     // handling for date content control.
     CPPUNIT_ASSERT(pContentControl->GetDate());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testInsertPlainTextContentControl)
+{
+    // Given an empty document:
+    SwDoc* pDoc = createSwDoc();
+
+    // When inserting a plain text content control:
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->InsertContentControl(SwContentControlType::PLAIN_TEXT);
+
+    // Then make sure that the matching text attribute is added to the document model:
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetNode().GetTextNode();
+    SwTextAttr* pAttr = pTextNode->GetTextAttrForCharAt(0, RES_TXTATR_CONTENTCONTROL);
+    auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
+    auto& rFormatContentControl
+        = static_cast<SwFormatContentControl&>(pTextContentControl->GetAttr());
+    std::shared_ptr<SwContentControl> pContentControl = rFormatContentControl.GetContentControl();
+    // Without the accompanying fix in place, this test would have failed, there was no special
+    // handling for plain text content controls.
+    CPPUNIT_ASSERT(pContentControl->GetPlainText());
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
