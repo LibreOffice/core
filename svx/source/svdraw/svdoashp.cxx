@@ -88,84 +88,80 @@
 #include "presetooxhandleadjustmentrelations.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::drawing;
 
-static void lcl_ShapeSegmentFromBinary( EnhancedCustomShapeSegment& rSegInfo, sal_uInt16 nSDat )
+static void lcl_ShapeSegmentFromBinary( drawing::EnhancedCustomShapeSegment& rSegInfo, sal_uInt16 nSDat )
 {
     switch( nSDat >> 8 )
     {
         case 0x00 :
-            rSegInfo.Command = EnhancedCustomShapeSegmentCommand::LINETO;
+            rSegInfo.Command = drawing::EnhancedCustomShapeSegmentCommand::LINETO;
             rSegInfo.Count   = nSDat & 0xff;
             if ( !rSegInfo.Count )
                 rSegInfo.Count = 1;
             break;
         case 0x20 :
-            rSegInfo.Command = EnhancedCustomShapeSegmentCommand::CURVETO;
+            rSegInfo.Command = drawing::EnhancedCustomShapeSegmentCommand::CURVETO;
             rSegInfo.Count   = nSDat & 0xff;
             if ( !rSegInfo.Count )
                 rSegInfo.Count = 1;
             break;
         case 0x40 :
-            rSegInfo.Command = EnhancedCustomShapeSegmentCommand::MOVETO;
+            rSegInfo.Command = drawing::EnhancedCustomShapeSegmentCommand::MOVETO;
             rSegInfo.Count   = nSDat & 0xff;
             if ( !rSegInfo.Count )
                 rSegInfo.Count = 1;
             break;
         case 0x60 :
-            rSegInfo.Command = EnhancedCustomShapeSegmentCommand::CLOSESUBPATH;
+            rSegInfo.Command = drawing::EnhancedCustomShapeSegmentCommand::CLOSESUBPATH;
             rSegInfo.Count   = 0;
             break;
         case 0x80 :
-            rSegInfo.Command = EnhancedCustomShapeSegmentCommand::ENDSUBPATH;
+            rSegInfo.Command = drawing::EnhancedCustomShapeSegmentCommand::ENDSUBPATH;
             rSegInfo.Count   = 0;
             break;
         case 0xa1 :
-            rSegInfo.Command = EnhancedCustomShapeSegmentCommand::ANGLEELLIPSETO;
+            rSegInfo.Command = drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSETO;
             rSegInfo.Count   = ( nSDat & 0xff ) / 3;
             break;
         case 0xa2 :
-            rSegInfo.Command = EnhancedCustomShapeSegmentCommand::ANGLEELLIPSE;
+            rSegInfo.Command = drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSE;
             rSegInfo.Count   = ( nSDat & 0xff ) / 3;
             break;
         case 0xa3 :
-            rSegInfo.Command = EnhancedCustomShapeSegmentCommand::ARCTO;
+            rSegInfo.Command = drawing::EnhancedCustomShapeSegmentCommand::ARCTO;
             rSegInfo.Count   = ( nSDat & 0xff ) >> 2;
             break;
         case 0xa4 :
-            rSegInfo.Command = EnhancedCustomShapeSegmentCommand::ARC;
+            rSegInfo.Command = drawing::EnhancedCustomShapeSegmentCommand::ARC;
             rSegInfo.Count   = ( nSDat & 0xff ) >> 2;
             break;
         case 0xa5 :
-            rSegInfo.Command = EnhancedCustomShapeSegmentCommand::CLOCKWISEARCTO;
+            rSegInfo.Command = drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARCTO;
             rSegInfo.Count   = ( nSDat & 0xff ) >> 2;
             break;
         case 0xa6 :
-            rSegInfo.Command = EnhancedCustomShapeSegmentCommand::CLOCKWISEARC;
+            rSegInfo.Command = drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARC;
             rSegInfo.Count   = ( nSDat & 0xff ) >> 2;
             break;
         case 0xa7 :
-            rSegInfo.Command = EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTX;
+            rSegInfo.Command = drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTX;
             rSegInfo.Count   = nSDat & 0xff;
             break;
         case 0xa8 :
-            rSegInfo.Command = EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTY;
+            rSegInfo.Command = drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTY;
             rSegInfo.Count   = nSDat & 0xff;
             break;
         case 0xaa :
-            rSegInfo.Command = EnhancedCustomShapeSegmentCommand::NOFILL;
+            rSegInfo.Command = drawing::EnhancedCustomShapeSegmentCommand::NOFILL;
             rSegInfo.Count   = 0;
             break;
         case 0xab :
-            rSegInfo.Command = EnhancedCustomShapeSegmentCommand::NOSTROKE;
+            rSegInfo.Command = drawing::EnhancedCustomShapeSegmentCommand::NOSTROKE;
             rSegInfo.Count   = 0;
             break;
         default:
         case 0xf8 :
-            rSegInfo.Command = EnhancedCustomShapeSegmentCommand::UNKNOWN;
+            rSegInfo.Command = drawing::EnhancedCustomShapeSegmentCommand::UNKNOWN;
             rSegInfo.Count   = nSDat;
             break;
     }
@@ -180,7 +176,7 @@ static MSO_SPT ImpGetCustomShapeType( const SdrObjCustomShape& rCustoShape )
     {
         OUString sShapeType;
         const SdrCustomShapeGeometryItem& rGeometryItem( rCustoShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
-        const Any* pAny = rGeometryItem.GetPropertyValueByName( "Type" );
+        const uno::Any* pAny = rGeometryItem.GetPropertyValueByName( "Type" );
         if ( pAny && ( *pAny >>= sShapeType ) )
             eRetValue = EnhancedCustomShapeTypeNames::Get( sShapeType );
     }
@@ -281,7 +277,7 @@ static SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const S
         // is creating a paraobject, but paraobjects can not be created without model. So
         // we are preventing the crash by setting the writing mode always left to right,
         // this is not bad since our shadow geometry does not contain text.
-        aTempSet.Put( SvxWritingModeItem( css::text::WritingMode_LR_TB, SDRATTR_TEXTDIRECTION ) );
+        aTempSet.Put(SvxWritingModeItem(text::WritingMode_LR_TB, SDRATTR_TEXTDIRECTION));
 
         // no shadow
         aTempSet.Put(makeSdrShadowItem(false));
@@ -370,16 +366,16 @@ static SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const S
 }
 
 
-Reference< XCustomShapeEngine > const & SdrObjCustomShape::GetCustomShapeEngine() const
+uno::Reference<drawing::XCustomShapeEngine> const & SdrObjCustomShape::GetCustomShapeEngine() const
 {
     if (mxCustomShapeEngine.is())
         return mxCustomShapeEngine;
 
-    Reference< XShape > aXShape = GetXShapeForSdrObject(const_cast<SdrObjCustomShape*>(this));
+    uno::Reference<drawing::XShape> aXShape = GetXShapeForSdrObject(const_cast<SdrObjCustomShape*>(this));
     if ( !aXShape )
         return mxCustomShapeEngine;
 
-    Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+    uno::Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
 
     OUString aEngine(GetMergedItem( SDRATTR_CUSTOMSHAPE_ENGINE ).GetValue());
     static constexpr OUStringLiteral sEnhancedCustomShapeEngine = u"com.sun.star.drawing.EnhancedCustomShapeEngine";
@@ -388,16 +384,16 @@ Reference< XCustomShapeEngine > const & SdrObjCustomShape::GetCustomShapeEngine(
 
     {
         static constexpr OUStringLiteral sCustomShape = u"CustomShape";
-        Sequence< PropertyValue > aPropValues{ comphelper::makePropertyValue(sCustomShape,
+        uno::Sequence<beans::PropertyValue> aPropValues{ comphelper::makePropertyValue(sCustomShape,
                                                                              aXShape) };
-        Sequence< Any > aArgument{ Any(aPropValues) };
+        uno::Sequence<uno::Any> aArgument{ uno::Any(aPropValues) };
         try
         {
-            Reference<XInterface> xInterface(xContext->getServiceManager()->createInstanceWithArgumentsAndContext(aEngine, aArgument, xContext));
+            uno::Reference<uno::XInterface> xInterface(xContext->getServiceManager()->createInstanceWithArgumentsAndContext(aEngine, aArgument, xContext));
             if (xInterface.is())
-                mxCustomShapeEngine.set( xInterface, UNO_QUERY );
+                mxCustomShapeEngine.set(xInterface, uno::UNO_QUERY);
         }
-        catch (const css::loader::CannotActivateFactoryException&)
+        catch (const loader::CannotActivateFactoryException&)
         {
         }
     }
@@ -409,7 +405,7 @@ const SdrObject* SdrObjCustomShape::GetSdrObjectFromCustomShape() const
 {
     if ( !mXRenderedCustomShape.is() )
     {
-        Reference< XCustomShapeEngine > xCustomShapeEngine( GetCustomShapeEngine() );
+        uno::Reference<drawing::XCustomShapeEngine> xCustomShapeEngine( GetCustomShapeEngine() );
         if ( xCustomShapeEngine.is() )
             const_cast<SdrObjCustomShape*>(this)->mXRenderedCustomShape = xCustomShapeEngine->render();
     }
@@ -448,7 +444,7 @@ bool SdrObjCustomShape::IsTextPath() const
     static const OUStringLiteral sTextPath( u"TextPath" );
     bool bTextPathOn = false;
     const SdrCustomShapeGeometryItem& rGeometryItem = GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
-    const Any* pAny = rGeometryItem.GetPropertyValueByName( sTextPath, sTextPath );
+    const uno::Any* pAny = rGeometryItem.GetPropertyValueByName( sTextPath, sTextPath );
     if ( pAny )
         *pAny >>= bTextPathOn;
     return bTextPathOn;
@@ -460,7 +456,7 @@ bool SdrObjCustomShape::UseNoFillStyle() const
     OUString sShapeType;
     static const OUStringLiteral sType( u"Type" );
     const SdrCustomShapeGeometryItem& rGeometryItem( GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
-    const Any* pAny = rGeometryItem.GetPropertyValueByName( sType );
+    const uno::Any* pAny = rGeometryItem.GetPropertyValueByName( sType );
     if ( pAny )
         *pAny >>= sShapeType;
     bRet = !IsCustomShapeFilledByDefault( EnhancedCustomShapeTypeNames::Get( sType ) );
@@ -472,7 +468,7 @@ bool SdrObjCustomShape::IsMirroredX() const
 {
     bool bMirroredX = false;
     const SdrCustomShapeGeometryItem & rGeometryItem( GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
-    const css::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( "MirroredX" );
+    const uno::Any* pAny = rGeometryItem.GetPropertyValueByName( "MirroredX" );
     if ( pAny )
         *pAny >>= bMirroredX;
     return bMirroredX;
@@ -481,7 +477,7 @@ bool SdrObjCustomShape::IsMirroredY() const
 {
     bool bMirroredY = false;
     const SdrCustomShapeGeometryItem & rGeometryItem( GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
-    const css::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( "MirroredY" );
+    const uno::Any* pAny = rGeometryItem.GetPropertyValueByName( "MirroredY" );
     if ( pAny )
         *pAny >>= bMirroredY;
     return bMirroredY;
@@ -489,7 +485,7 @@ bool SdrObjCustomShape::IsMirroredY() const
 void SdrObjCustomShape::SetMirroredX( const bool bMirrorX )
 {
     SdrCustomShapeGeometryItem aGeometryItem( GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
-    PropertyValue aPropVal;
+    beans::PropertyValue aPropVal;
     aPropVal.Name = "MirroredX";
     aPropVal.Value <<= bMirrorX;
     aGeometryItem.SetPropertyValue( aPropVal );
@@ -498,7 +494,7 @@ void SdrObjCustomShape::SetMirroredX( const bool bMirrorX )
 void SdrObjCustomShape::SetMirroredY( const bool bMirrorY )
 {
     SdrCustomShapeGeometryItem aGeometryItem( GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
-    PropertyValue aPropVal;
+    beans::PropertyValue aPropVal;
     aPropVal.Name = "MirroredY";
     aPropVal.Value <<= bMirrorY;
     aGeometryItem.SetPropertyValue( aPropVal );
@@ -507,7 +503,7 @@ void SdrObjCustomShape::SetMirroredY( const bool bMirrorY )
 
 double SdrObjCustomShape::GetExtraTextRotation( const bool bPreRotation ) const
 {
-    const css::uno::Any* pAny;
+    const uno::Any* pAny;
     const SdrCustomShapeGeometryItem& rGeometryItem = GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
     pAny = rGeometryItem.GetPropertyValueByName( bPreRotation ? OUString( "TextPreRotateAngle" ) : OUString( "TextRotateAngle" ) );
     double fExtraTextRotateAngle = 0.0;
@@ -520,7 +516,7 @@ bool SdrObjCustomShape::GetTextBounds( tools::Rectangle& rTextBound ) const
 {
     bool bRet = false;
 
-    Reference< XCustomShapeEngine > xCustomShapeEngine( GetCustomShapeEngine() );
+    uno::Reference<drawing::XCustomShapeEngine> xCustomShapeEngine( GetCustomShapeEngine() );
     if ( xCustomShapeEngine.is() )
     {
         awt::Rectangle aR( xCustomShapeEngine->getTextBounds() );
@@ -535,10 +531,10 @@ bool SdrObjCustomShape::GetTextBounds( tools::Rectangle& rTextBound ) const
 basegfx::B2DPolyPolygon SdrObjCustomShape::GetLineGeometry( const bool bBezierAllowed ) const
 {
     basegfx::B2DPolyPolygon aRetval;
-    Reference< XCustomShapeEngine > xCustomShapeEngine( GetCustomShapeEngine() );
+    uno::Reference<drawing::XCustomShapeEngine> xCustomShapeEngine( GetCustomShapeEngine() );
     if ( xCustomShapeEngine.is() )
     {
-        css::drawing::PolyPolygonBezierCoords aBezierCoords = xCustomShapeEngine->getLineGeometry();
+        drawing::PolyPolygonBezierCoords aBezierCoords = xCustomShapeEngine->getLineGeometry();
         try
         {
             aRetval = basegfx::utils::UnoPolyPolygonBezierCoordsToB2DPolyPolygon( aBezierCoords );
@@ -547,7 +543,7 @@ basegfx::B2DPolyPolygon SdrObjCustomShape::GetLineGeometry( const bool bBezierAl
                 aRetval = basegfx::utils::adaptiveSubdivideByAngle(aRetval);
             }
         }
-        catch ( const css::lang::IllegalArgumentException & )
+        catch ( const lang::IllegalArgumentException & )
         {
         }
     }
@@ -559,11 +555,11 @@ std::vector< SdrCustomShapeInteraction > SdrObjCustomShape::GetInteractionHandle
     std::vector< SdrCustomShapeInteraction > aRet;
     try
     {
-        Reference< XCustomShapeEngine > xCustomShapeEngine( GetCustomShapeEngine() );
+        uno::Reference<drawing::XCustomShapeEngine> xCustomShapeEngine( GetCustomShapeEngine() );
         if ( xCustomShapeEngine.is() )
         {
             int i;
-            Sequence< Reference< XCustomShapeHandle > > xInteractionHandles( xCustomShapeEngine->getInteraction() );
+            uno::Sequence<uno::Reference<drawing::XCustomShapeHandle>> xInteractionHandles( xCustomShapeEngine->getInteraction() );
             for ( i = 0; i < xInteractionHandles.getLength(); i++ )
             {
                 if ( xInteractionHandles[ i ].is() )
@@ -689,7 +685,7 @@ static sal_Int32 GetNumberOfProperties ( const SvxMSDffHandle* pData )
     return nPropertiesNeeded;
 }
 
-static void lcl_ShapePropertiesFromDFF( const SvxMSDffHandle* pData, css::beans::PropertyValues& rPropValues )
+static void lcl_ShapePropertiesFromDFF( const SvxMSDffHandle* pData, beans::PropertyValues& rPropValues )
 {
     SvxMSDffHandleFlags nFlags = pData->nFlags;
     sal_Int32 n=0;
@@ -697,7 +693,7 @@ static void lcl_ShapePropertiesFromDFF( const SvxMSDffHandle* pData, css::beans:
 
     // POSITION
     {
-        css::drawing::EnhancedCustomShapeParameterPair aPosition;
+        drawing::EnhancedCustomShapeParameterPair aPosition;
         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aPosition.First, pData->nPositionX, true, true );
         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aPosition.Second, pData->nPositionY, true, false );
         pPropValues[ n ].Name = "Position";
@@ -720,7 +716,7 @@ static void lcl_ShapePropertiesFromDFF( const SvxMSDffHandle* pData, css::beans:
     }
     if ( nFlags & SvxMSDffHandleFlags::POLAR )
     {
-        css::drawing::EnhancedCustomShapeParameterPair aCenter;
+        drawing::EnhancedCustomShapeParameterPair aCenter;
         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aCenter.First, pData->nCenterX,
                            bool( nFlags & SvxMSDffHandleFlags::CENTER_X_IS_SPECIAL ), true  );
         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aCenter.Second, pData->nCenterY,
@@ -731,7 +727,7 @@ static void lcl_ShapePropertiesFromDFF( const SvxMSDffHandle* pData, css::beans:
         {
             if ( pData->nRangeXMin != DEFAULT_MINIMUM_SIGNED_COMPARE )
             {
-                css::drawing::EnhancedCustomShapeParameter aRadiusRangeMinimum;
+                drawing::EnhancedCustomShapeParameter aRadiusRangeMinimum;
                 EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRadiusRangeMinimum, pData->nRangeXMin,
                            bool( nFlags & SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL ), true  );
                 pPropValues[ n ].Name = "RadiusRangeMinimum";
@@ -739,7 +735,7 @@ static void lcl_ShapePropertiesFromDFF( const SvxMSDffHandle* pData, css::beans:
             }
             if ( pData->nRangeXMax != DEFAULT_MAXIMUM_SIGNED_COMPARE )
             {
-                css::drawing::EnhancedCustomShapeParameter aRadiusRangeMaximum;
+                drawing::EnhancedCustomShapeParameter aRadiusRangeMaximum;
                 EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRadiusRangeMaximum, pData->nRangeXMax,
                            bool( nFlags & SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL ), false );
                 pPropValues[ n ].Name = "RadiusRangeMaximum";
@@ -751,7 +747,7 @@ static void lcl_ShapePropertiesFromDFF( const SvxMSDffHandle* pData, css::beans:
     {
         if ( pData->nRangeXMin != DEFAULT_MINIMUM_SIGNED_COMPARE )
         {
-            css::drawing::EnhancedCustomShapeParameter aRangeXMinimum;
+            drawing::EnhancedCustomShapeParameter aRangeXMinimum;
             EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeXMinimum, pData->nRangeXMin,
                            bool( nFlags & SvxMSDffHandleFlags::RANGE_X_MIN_IS_SPECIAL ), true  );
             pPropValues[ n ].Name = "RangeXMinimum";
@@ -759,7 +755,7 @@ static void lcl_ShapePropertiesFromDFF( const SvxMSDffHandle* pData, css::beans:
         }
         if ( pData->nRangeXMax != DEFAULT_MAXIMUM_SIGNED_COMPARE )
         {
-            css::drawing::EnhancedCustomShapeParameter aRangeXMaximum;
+            drawing::EnhancedCustomShapeParameter aRangeXMaximum;
             EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeXMaximum, pData->nRangeXMax,
                            bool( nFlags & SvxMSDffHandleFlags::RANGE_X_MAX_IS_SPECIAL ), false );
             pPropValues[ n ].Name = "RangeXMaximum";
@@ -767,7 +763,7 @@ static void lcl_ShapePropertiesFromDFF( const SvxMSDffHandle* pData, css::beans:
         }
         if ( pData->nRangeYMin != DEFAULT_MINIMUM_SIGNED_COMPARE )
         {
-            css::drawing::EnhancedCustomShapeParameter aRangeYMinimum;
+            drawing::EnhancedCustomShapeParameter aRangeYMinimum;
             EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeYMinimum, pData->nRangeYMin,
                              bool( nFlags & SvxMSDffHandleFlags::RANGE_Y_MIN_IS_SPECIAL ), true );
             pPropValues[ n ].Name = "RangeYMinimum";
@@ -775,7 +771,7 @@ static void lcl_ShapePropertiesFromDFF( const SvxMSDffHandle* pData, css::beans:
         }
         if ( pData->nRangeYMax != DEFAULT_MAXIMUM_SIGNED_COMPARE )
         {
-            css::drawing::EnhancedCustomShapeParameter aRangeYMaximum;
+            drawing::EnhancedCustomShapeParameter aRangeYMaximum;
             EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeYMaximum, pData->nRangeYMax,
                              bool( nFlags & SvxMSDffHandleFlags::RANGE_Y_MAX_IS_SPECIAL ), false );
             pPropValues[ n ].Name = "RangeYMaximum";
@@ -822,7 +818,7 @@ SdrObjCustomShape::~SdrObjCustomShape()
 
 void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
 {
-    PropertyValue aPropVal;
+    beans::PropertyValue aPropVal;
     OUString sShapeType;
     static const OUStringLiteral sType( u"Type" );
     SdrCustomShapeGeometryItem aGeometryItem( GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
@@ -840,7 +836,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     }
     else
     {
-        Any *pAny = aGeometryItem.GetPropertyValueByName( sType );
+        uno::Any *pAny = aGeometryItem.GetPropertyValueByName( sType );
         if ( pAny )
             *pAny >>= sShapeType;
     }
@@ -851,13 +847,13 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     if ( pDefCustomShape )
         pDefData = pDefCustomShape->pDefData;
 
-    css::uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue > seqAdjustmentValues;
+    uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue> seqAdjustmentValues;
 
 
     // AdjustmentValues
 
     static const OUStringLiteral sAdjustmentValues( u"AdjustmentValues" );
-    const Any* pAny = aGeometryItem.GetPropertyValueByName( sAdjustmentValues );
+    const uno::Any* pAny = aGeometryItem.GetPropertyValueByName( sAdjustmentValues );
     if ( pAny )
         *pAny >>= seqAdjustmentValues;
     if ( pDefCustomShape && pDefData )  // now check if we have to default some adjustment values
@@ -871,16 +867,16 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
         for ( i = nAdjustmentValues; i < nAdjustmentDefaults; i++ )
         {
             pseqAdjustmentValues[ i ].Value <<= pDefData[ i ];
-            pseqAdjustmentValues[ i ].State = css::beans::PropertyState_DIRECT_VALUE;
+            pseqAdjustmentValues[ i ].State = beans::PropertyState_DIRECT_VALUE;
         }
         // check if there are defaulted adjustment values that should be filled the hard coded defaults (pDefValue)
         sal_Int32 nCount = std::min(nAdjustmentValues, nAdjustmentDefaults);
         for ( i = 0; i < nCount; i++ )
         {
-            if ( seqAdjustmentValues[ i ].State != css::beans::PropertyState_DIRECT_VALUE )
+            if ( seqAdjustmentValues[ i ].State != beans::PropertyState_DIRECT_VALUE )
             {
                 pseqAdjustmentValues[ i ].Value <<= pDefData[ i ];
-                pseqAdjustmentValues[ i ].State = css::beans::PropertyState_DIRECT_VALUE;
+                pseqAdjustmentValues[ i ].State = beans::PropertyState_DIRECT_VALUE;
             }
         }
     }
@@ -892,8 +888,8 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     // Coordsize
 
     static const OUStringLiteral sViewBox( u"ViewBox" );
-    const Any* pViewBox = aGeometryItem.GetPropertyValueByName( sViewBox );
-    css::awt::Rectangle aViewBox;
+    const uno::Any* pViewBox = aGeometryItem.GetPropertyValueByName( sViewBox );
+    awt::Rectangle aViewBox;
     if ( !pViewBox || !(*pViewBox >>= aViewBox ) )
     {
         if ( pDefCustomShape )
@@ -918,7 +914,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     if ( !pAny && pDefCustomShape && pDefCustomShape->nVertices && pDefCustomShape->pVertices )
     {
         sal_Int32 i, nCount = pDefCustomShape->nVertices;
-        css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair> seqCoordinates( nCount );
+        uno::Sequence<drawing::EnhancedCustomShapeParameterPair> seqCoordinates( nCount );
         auto pseqCoordinates = seqCoordinates.getArray();
         for ( i = 0; i < nCount; i++ )
         {
@@ -936,7 +932,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     if ( !pAny && pDefCustomShape && pDefCustomShape->nGluePoints && pDefCustomShape->pGluePoints )
     {
         sal_Int32 i, nCount = pDefCustomShape->nGluePoints;
-        css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair> seqGluePoints( nCount );
+        uno::Sequence<drawing::EnhancedCustomShapeParameterPair> seqGluePoints( nCount );
         auto pseqGluePoints = seqGluePoints.getArray();
         for ( i = 0; i < nCount; i++ )
         {
@@ -954,11 +950,11 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     if ( !pAny && pDefCustomShape && pDefCustomShape->nElements && pDefCustomShape->pElements )
     {
         sal_Int32 i, nCount = pDefCustomShape->nElements;
-        css::uno::Sequence< css::drawing::EnhancedCustomShapeSegment > seqSegments( nCount );
+        uno::Sequence<drawing::EnhancedCustomShapeSegment> seqSegments( nCount );
         auto pseqSegments = seqSegments.getArray();
         for ( i = 0; i < nCount; i++ )
         {
-            EnhancedCustomShapeSegment& rSegInfo = pseqSegments[ i ];
+            drawing::EnhancedCustomShapeSegment& rSegInfo = pseqSegments[ i ];
             sal_uInt16 nSDat = pDefCustomShape->pElements[ i ];
             lcl_ShapeSegmentFromBinary( rSegInfo, nSDat );
         }
@@ -1001,7 +997,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     if ( !pAny && pDefCustomShape && pDefCustomShape->nTextRect && pDefCustomShape->pTextRect )
     {
         sal_Int32 i, nCount = pDefCustomShape->nTextRect;
-        css::uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame > seqTextFrames( nCount );
+        uno::Sequence<drawing::EnhancedCustomShapeTextFrame> seqTextFrames( nCount );
         auto pseqTextFrames = seqTextFrames.getArray();
         const SvxMSDffTextRectangles* pRectangles = pDefCustomShape->pTextRect;
         for ( i = 0; i < nCount; i++, pRectangles++ )
@@ -1022,7 +1018,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     if ( !pAny && pDefCustomShape && pDefCustomShape->nCalculation && pDefCustomShape->pCalculation )
     {
         sal_Int32 i, nCount = pDefCustomShape->nCalculation;
-        css::uno::Sequence< OUString > seqEquations( nCount );
+        uno::Sequence< OUString > seqEquations( nCount );
         auto pseqEquations = seqEquations.getArray();
         const SvxMSDffCalculationData* pData = pDefCustomShape->pCalculation;
         for ( i = 0; i < nCount; i++, pData++ )
@@ -1039,12 +1035,12 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     {
         sal_Int32 i, nCount = pDefCustomShape->nHandles;
         const SvxMSDffHandle* pData = pDefCustomShape->pHandles;
-        css::uno::Sequence< css::beans::PropertyValues > seqHandles( nCount );
+        uno::Sequence<beans::PropertyValues> seqHandles( nCount );
         auto pseqHandles = seqHandles.getArray();
         for ( i = 0; i < nCount; i++, pData++ )
         {
             sal_Int32 nPropertiesNeeded;
-            css::beans::PropertyValues& rPropValues = pseqHandles[ i ];
+            beans::PropertyValues& rPropValues = pseqHandles[ i ];
             nPropertiesNeeded = GetNumberOfProperties( pData );
             rPropValues.realloc( nPropertiesNeeded );
             lcl_ShapePropertiesFromDFF( pData, rPropValues );
@@ -1059,7 +1055,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
         // value by name, e.g. attribute RefX="adj". So the information is lost, when exporting
         // a pptx to odp, for example. This part reconstructs this information for the
         // ooxml preset shapes from their definition.
-        css::uno::Sequence<css::beans::PropertyValues> seqHandles;
+        uno::Sequence<beans::PropertyValues> seqHandles;
         *pAny >>= seqHandles;
         auto seqHandlesRange = asNonConstRange(seqHandles);
         bool bChanged(false);
@@ -1102,7 +1098,7 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
     OUString sShapeType;
     const SdrCustomShapeGeometryItem & rGeometryItem( GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
 
-    const Any *pAny = rGeometryItem.GetPropertyValueByName( "Type" );
+    const uno::Any *pAny = rGeometryItem.GetPropertyValueByName( "Type" );
     if ( pAny )
         *pAny >>= sShapeType;
 
@@ -1114,8 +1110,8 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
     {
         case DefaultType::Viewbox :
         {
-            const Any* pViewBox = rGeometryItem.GetPropertyValueByName( "ViewBox" );
-            css::awt::Rectangle aViewBox;
+            const uno::Any* pViewBox = rGeometryItem.GetPropertyValueByName( "ViewBox" );
+            awt::Rectangle aViewBox;
             if (pViewBox && (*pViewBox >>= aViewBox) && pDefCustomShape)
             {
                 if ( ( aViewBox.Width == pDefCustomShape->nCoordWidth )
@@ -1130,11 +1126,11 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
             pAny = rGeometryItem.GetPropertyValueByName( sPath, "Coordinates" );
             if ( pAny && pDefCustomShape && pDefCustomShape->nVertices && pDefCustomShape->pVertices )
             {
-                css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair> seqCoordinates1;
+                uno::Sequence<drawing::EnhancedCustomShapeParameterPair> seqCoordinates1;
                 if ( *pAny >>= seqCoordinates1 )
                 {
                     sal_Int32 i, nCount = pDefCustomShape->nVertices;
-                    css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair> seqCoordinates2( nCount );
+                    uno::Sequence<drawing::EnhancedCustomShapeParameterPair> seqCoordinates2( nCount );
                     auto pseqCoordinates2 = seqCoordinates2.getArray();
                     for ( i = 0; i < nCount; i++ )
                     {
@@ -1155,11 +1151,11 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
             pAny = rGeometryItem.GetPropertyValueByName( sPath, "GluePoints" );
             if ( pAny && pDefCustomShape && pDefCustomShape->nGluePoints && pDefCustomShape->pGluePoints )
             {
-                css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair> seqGluePoints1;
+                uno::Sequence<drawing::EnhancedCustomShapeParameterPair> seqGluePoints1;
                 if ( *pAny >>= seqGluePoints1 )
                 {
                     sal_Int32 i, nCount = pDefCustomShape->nGluePoints;
-                    css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair> seqGluePoints2( nCount );
+                    uno::Sequence<drawing::EnhancedCustomShapeParameterPair> seqGluePoints2( nCount );
                     auto pseqGluePoints2 = seqGluePoints2.getArray();
                     for ( i = 0; i < nCount; i++ )
                     {
@@ -1181,7 +1177,7 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
             pAny = rGeometryItem.GetPropertyValueByName( sPath, "Segments" );
             if ( pAny )
             {
-                css::uno::Sequence< css::drawing::EnhancedCustomShapeSegment > seqSegments1;
+                uno::Sequence<drawing::EnhancedCustomShapeSegment> seqSegments1;
                 if ( *pAny >>= seqSegments1 )
                 {
                     if ( pDefCustomShape && pDefCustomShape->nElements && pDefCustomShape->pElements )
@@ -1189,11 +1185,11 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
                         sal_Int32 i, nCount = pDefCustomShape->nElements;
                         if ( nCount )
                         {
-                            css::uno::Sequence< css::drawing::EnhancedCustomShapeSegment > seqSegments2( nCount );
+                            uno::Sequence<drawing::EnhancedCustomShapeSegment> seqSegments2( nCount );
                             auto pseqSegments2 = seqSegments2.getArray();
                             for ( i = 0; i < nCount; i++ )
                             {
-                                EnhancedCustomShapeSegment& rSegInfo = pseqSegments2[ i ];
+                                drawing::EnhancedCustomShapeSegment& rSegInfo = pseqSegments2[ i ];
                                 sal_uInt16 nSDat = pDefCustomShape->pElements[ i ];
                                 lcl_ShapeSegmentFromBinary( rSegInfo, nSDat );
                             }
@@ -1206,10 +1202,10 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
                         // check if it's the default segment description ( M L Z N )
                         if ( seqSegments1.getLength() == 4 )
                         {
-                            if ( ( seqSegments1[ 0 ].Command == EnhancedCustomShapeSegmentCommand::MOVETO )
-                                && ( seqSegments1[ 1 ].Command == EnhancedCustomShapeSegmentCommand::LINETO )
-                                && ( seqSegments1[ 2 ].Command == EnhancedCustomShapeSegmentCommand::CLOSESUBPATH )
-                                && ( seqSegments1[ 3 ].Command == EnhancedCustomShapeSegmentCommand::ENDSUBPATH ) )
+                            if ( ( seqSegments1[ 0 ].Command == drawing::EnhancedCustomShapeSegmentCommand::MOVETO )
+                                && ( seqSegments1[ 1 ].Command == drawing::EnhancedCustomShapeSegmentCommand::LINETO )
+                                && ( seqSegments1[ 2 ].Command == drawing::EnhancedCustomShapeSegmentCommand::CLOSESUBPATH )
+                                && ( seqSegments1[ 3 ].Command == drawing::EnhancedCustomShapeSegmentCommand::ENDSUBPATH ) )
                                 bIsDefaultGeometry = true;
                         }
                     }
@@ -1259,11 +1255,11 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
             pAny = rGeometryItem.GetPropertyValueByName( "Equations" );
             if ( pAny && pDefCustomShape && pDefCustomShape->nCalculation && pDefCustomShape->pCalculation )
             {
-                css::uno::Sequence< OUString > seqEquations1;
+                uno::Sequence<OUString> seqEquations1;
                 if ( *pAny >>= seqEquations1 )
                 {
                     sal_Int32 i, nCount = pDefCustomShape->nCalculation;
-                    css::uno::Sequence< OUString > seqEquations2( nCount );
+                    uno::Sequence<OUString> seqEquations2( nCount );
                     auto pseqEquations2 = seqEquations2.getArray();
 
                     const SvxMSDffCalculationData* pData = pDefCustomShape->pCalculation;
@@ -1284,11 +1280,11 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
             pAny = rGeometryItem.GetPropertyValueByName( sPath, "TextFrames" );
             if ( pAny && pDefCustomShape && pDefCustomShape->nTextRect && pDefCustomShape->pTextRect )
             {
-                css::uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame > seqTextFrames1;
+                uno::Sequence<drawing::EnhancedCustomShapeTextFrame> seqTextFrames1;
                 if ( *pAny >>= seqTextFrames1 )
                 {
                     sal_Int32 i, nCount = pDefCustomShape->nTextRect;
-                    css::uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame > seqTextFrames2( nCount );
+                    uno::Sequence<drawing::EnhancedCustomShapeTextFrame> seqTextFrames2( nCount );
                     auto pseqTextFrames2 = seqTextFrames2.getArray();
                     const SvxMSDffTextRectangles* pRectangles = pDefCustomShape->pTextRect;
                     for ( i = 0; i < nCount; i++, pRectangles++ )
@@ -1529,17 +1525,17 @@ void SdrObjCustomShape::NbcResize( const Point& rRef, const Fraction& rxFact, co
             if ( rInteraction.nMode & CustomShapeHandleModes::RESIZE_ABSOLUTE_X )
             {
                 sal_Int32 nX = ( rInteraction.aPosition.X - aOld.Left() ) + maRect.Left();
-                rInteraction.xInteraction->setControllerPosition( css::awt::Point( nX, rInteraction.xInteraction->getPosition().Y ) );
+                rInteraction.xInteraction->setControllerPosition(awt::Point(nX, rInteraction.xInteraction->getPosition().Y));
             }
             else if ( rInteraction.nMode & CustomShapeHandleModes::RESIZE_ABSOLUTE_NEGX )
             {
                 sal_Int32 nX = maRect.Right() - (aOld.Right() - rInteraction.aPosition.X);
-                rInteraction.xInteraction->setControllerPosition( css::awt::Point( nX, rInteraction.xInteraction->getPosition().Y ) );
+                rInteraction.xInteraction->setControllerPosition(awt::Point(nX, rInteraction.xInteraction->getPosition().Y));
             }
             if ( rInteraction.nMode & CustomShapeHandleModes::RESIZE_ABSOLUTE_Y )
             {
                 sal_Int32 nY = ( rInteraction.aPosition.Y - aOld.Top() ) + maRect.Top();
-                rInteraction.xInteraction->setControllerPosition( css::awt::Point( rInteraction.xInteraction->getPosition().X, nY ) );
+                rInteraction.xInteraction->setControllerPosition(awt::Point(rInteraction.xInteraction->getPosition().X, nY));
             }
         }
         catch ( const uno::RuntimeException& )
@@ -1863,7 +1859,7 @@ void SdrObjCustomShape::AddToHdlList(SdrHdlList& rHdlList) const
         {
             try
             {
-                css::awt::Point aPosition( rInteraction.xInteraction->getPosition() );
+                awt::Point aPosition( rInteraction.xInteraction->getPosition() );
                 std::unique_ptr<SdrHdl> pH(new SdrHdl( Point( aPosition.X, aPosition.Y ), SdrHdlKind::CustomShape1 ));
                 pH->SetPointNum( nCustomShapeHdlNum );
                 pH->SetObj( const_cast<SdrObjCustomShape*>(this) );
@@ -1988,7 +1984,7 @@ void SdrObjCustomShape::DragResizeCustomShape( const tools::Rectangle& rNewRect 
                     else
                         nX += maRect.Left();
                 }
-                rInteraction.xInteraction->setControllerPosition( css::awt::Point( nX, rInteraction.xInteraction->getPosition().Y ) );
+                rInteraction.xInteraction->setControllerPosition(awt::Point(nX, rInteraction.xInteraction->getPosition().Y));
             }
             if ( rInteraction.nMode & CustomShapeHandleModes::RESIZE_ABSOLUTE_Y )
             {
@@ -2009,7 +2005,7 @@ void SdrObjCustomShape::DragResizeCustomShape( const tools::Rectangle& rNewRect 
                     else
                         nY += maRect.Top();
                 }
-                rInteraction.xInteraction->setControllerPosition( css::awt::Point( rInteraction.xInteraction->getPosition().X, nY ) );
+                rInteraction.xInteraction->setControllerPosition(awt::Point(rInteraction.xInteraction->getPosition().X, nY));
             }
         }
         catch ( const uno::RuntimeException& )
@@ -2031,7 +2027,7 @@ void SdrObjCustomShape::DragMoveCustomShapeHdl( const Point& rDestination,
 
     try
     {
-        css::awt::Point aPt( rDestination.X(), rDestination.Y() );
+        awt::Point aPt( rDestination.X(), rDestination.Y() );
         if ( aInteractionHandle.nMode & CustomShapeHandleModes::MOVE_SHAPE && bMoveCalloutRectangle )
         {
             sal_Int32 nXDiff = aPt.X - aInteractionHandle.aPosition.X;
@@ -2890,7 +2886,7 @@ void SdrObjCustomShape::SaveGeoData(SdrObjGeoData& rGeo) const
     rAGeo.bMirroredX = IsMirroredX();
     rAGeo.bMirroredY = IsMirroredY();
 
-    const Any* pAny = GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ).GetPropertyValueByName( "AdjustmentValues" );
+    const uno::Any* pAny = GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ).GetPropertyValueByName( "AdjustmentValues" );
     if ( pAny )
         *pAny >>= rAGeo.aAdjustmentSeq;
 }
@@ -2904,7 +2900,7 @@ void SdrObjCustomShape::RestoreGeoData(const SdrObjGeoData& rGeo)
     SetMirroredY( rAGeo.bMirroredY );
 
     SdrCustomShapeGeometryItem rGeometryItem = GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
-    PropertyValue aPropVal;
+    beans::PropertyValue aPropVal;
     aPropVal.Name = "AdjustmentValues";
     aPropVal.Value <<= rAGeo.aAdjustmentSeq;
     rGeometryItem.SetPropertyValue( aPropVal );
@@ -3235,7 +3231,7 @@ OUString SdrObjCustomShape::GetCustomShapeName() const
     {
         OUString sShapeType;
         const SdrCustomShapeGeometryItem& rGeometryItem( GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
-        const Any* pAny = rGeometryItem.GetPropertyValueByName( "Type" );
+        const uno::Any* pAny = rGeometryItem.GetPropertyValueByName( "Type" );
         if ( pAny && ( *pAny >>= sShapeType ) )
             sShapeName = EnhancedCustomShapeTypeNames::GetAccName( sShapeType );
     }

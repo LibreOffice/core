@@ -55,8 +55,6 @@
 #include <memory>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::io;
 
 class SdrGraphicLink : public sfx2::SvBaseLink
 {
@@ -68,7 +66,7 @@ public:
     virtual void        Closed() override;
 
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
-        const OUString& rMimeType, const css::uno::Any & rValue ) override;
+        const OUString& rMimeType, const uno::Any & rValue ) override;
 
     void                Connect() { GetRealObject(); }
 };
@@ -81,7 +79,7 @@ SdrGraphicLink::SdrGraphicLink(SdrGrafObj& rObj)
 }
 
 ::sfx2::SvBaseLink::UpdateResult SdrGraphicLink::DataChanged(
-    const OUString& rMimeType, const css::uno::Any & rValue )
+    const OUString& rMimeType, const uno::Any & rValue )
 {
     SdrModel& rModel(rGrafObj.getSdrModelFromSdrObject());
     sfx2::LinkManager* pLinkManager(rModel.GetLinkManager());
@@ -145,7 +143,7 @@ void SdrGrafObj::onGraphicChanged()
     if (rVectorGraphicDataPtr->getType() == VectorGraphicDataType::Pdf)
         return;
 
-    const std::deque<css::uno::Reference<css::graphic::XPrimitive2D>>& rContainer(rVectorGraphicDataPtr->getPrimitive2DSequence());
+    const std::deque<uno::Reference<graphic::XPrimitive2D>>& rContainer(rVectorGraphicDataPtr->getPrimitive2DSequence());
 
     if (rContainer.empty())
         return;
@@ -238,7 +236,7 @@ SdrGrafObj::SdrGrafObj(SdrModel& rSdrModel, SdrGrafObj const & rSource)
 
     if(rSource.mpBarCode)
     {
-        mpBarCode = std::make_unique<css::drawing::BarCode>(*rSource.mpBarCode);
+        mpBarCode = std::make_unique<drawing::BarCode>(*rSource.mpBarCode);
     }
     else
     {
@@ -1129,9 +1127,9 @@ void SdrGrafObj::SetGrafAnimationAllowed(bool bNew)
     }
 }
 
-Reference< XInputStream > SdrGrafObj::getInputStream() const
+uno::Reference<io::XInputStream> SdrGrafObj::getInputStream() const
 {
-    Reference< XInputStream > xStream;
+    uno::Reference<io::XInputStream> xStream;
 
     if (mpGraphicObject && GetGraphic().IsGfxLink())
     {

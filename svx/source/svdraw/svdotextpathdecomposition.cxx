@@ -34,9 +34,7 @@
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <basegfx/color/bcolor.hxx>
 
-
 // primitive decomposition helpers
-
 #include <drawinglayer/attribute/strokeattribute.hxx>
 #include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
@@ -45,11 +43,7 @@
 #include <sdr/attribute/sdrformtextoutlineattribute.hxx>
 #include <utility>
 
-
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::i18n;
-
+using namespace com::sun::star;
 
 // PathTextPortion helper
 
@@ -64,7 +58,7 @@ namespace
         sal_Int32                                   mnParagraph;
         SvxFont                                     maFont;
         ::std::vector< double >                     maDblDXArray;   // double DXArray, font size independent -> unit coordinate system
-        css::lang::Locale                           maLocale;
+        lang::Locale                           maLocale;
 
         bool                                        mbRTL : 1;
 
@@ -76,7 +70,7 @@ namespace
             mnTextLength(rInfo.mnTextLen),
             mnParagraph(rInfo.mnPara),
             maFont(rInfo.mrFont),
-            maLocale(rInfo.mpLocale ? *rInfo.mpLocale : css::lang::Locale()),
+            maLocale(rInfo.mpLocale ? *rInfo.mpLocale : lang::Locale()),
             mbRTL(!rInfo.mrFont.IsVertical() && rInfo.IsRTL())
         {
             if(mnTextLength && !rInfo.mpDXArray.empty())
@@ -113,7 +107,7 @@ namespace
         const SvxFont& getFont() const { return maFont; }
         bool isRTL() const { return mbRTL; }
         const ::std::vector< double >& getDoubleDXArray() const { return maDblDXArray; }
-        const css::lang::Locale& getLocale() const { return maLocale; }
+        const lang::Locale& getLocale() const { return maLocale; }
 
         sal_Int32 getPortionIndex(sal_Int32 nIndex, sal_Int32 nLength) const
         {
@@ -196,7 +190,7 @@ namespace
         const drawinglayer::attribute::SdrFormTextAttribute         maSdrFormTextAttribute; // FormText parameters
         drawinglayer::primitive2d::Primitive2DContainer&            mrDecomposition;        // destination primitive list
         drawinglayer::primitive2d::Primitive2DContainer&            mrShadowDecomposition;  // destination primitive list for shadow
-        Reference < css::i18n::XBreakIterator >                     mxBreak;                // break iterator
+        uno::Reference<i18n::XBreakIterator>                     mxBreak;                // break iterator
 
         static double getParagraphTextLength(const ::std::vector< const impPathTextPortion* >& rTextPortions)
         {
@@ -215,7 +209,7 @@ namespace
             return fRetval;
         }
 
-        sal_Int32 getNextGlyphLen(const impPathTextPortion* pCandidate, sal_Int32 nPosition, const css::lang::Locale& rFontLocale)
+        sal_Int32 getNextGlyphLen(const impPathTextPortion* pCandidate, sal_Int32 nPosition, const lang::Locale& rFontLocale)
         {
             sal_Int32 nNextGlyphLen(1);
 
@@ -223,7 +217,7 @@ namespace
             {
                 sal_Int32 nDone(0);
                 nNextGlyphLen = mxBreak->nextCharacters(pCandidate->getText(), nPosition,
-                    rFontLocale, CharacterIteratorMode::SKIPCELL, 1, nDone) - nPosition;
+                    rFontLocale, i18n::CharacterIteratorMode::SKIPCELL, 1, nDone) - nPosition;
             }
 
             return nNextGlyphLen;
@@ -239,8 +233,8 @@ namespace
             mrShadowDecomposition(rShadowDecomposition)
         {
             // prepare BreakIterator
-            Reference < XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-            mxBreak = css::i18n::BreakIterator::create(xContext);
+            uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+            mxBreak = i18n::BreakIterator::create(xContext);
         }
 
         void HandlePair(const basegfx::B2DPolygon& rPolygonCandidate, const ::std::vector< const impPathTextPortion* >& rTextPortions)
