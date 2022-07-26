@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "63154eb2_61af8be9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-07-26T17:00:11Z",
+      "side": 1,
+      "message": "vmiklos, any clue how this went wrong?\nI mean, it\u0027s complaining that the redline table becomes unsorted, which is true, since the code is moving SwContentIndex around and back again, but what I don\u0027t get is how it worked __before__ this change.\n",
+      "revId": "bed5de19d24fe9541a71a287301984ca7aa8598f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
