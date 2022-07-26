@@ -254,6 +254,45 @@ void CUPSManager::runDests()
 #endif
 }
 
+static void SetIfCustomOption(PPDContext& rContext, const cups_option_t& rOption, rtl_TextEncoding aEncoding)
+{
+    if (strncmp(rOption.value, RTL_CONSTASCII_STRINGPARAM("Custom.")) == 0)
+    {
+        const PPDParser* pParser = rContext.getParser();
+        if (!pParser)
+        {
+            // normal for first sight of this printer
+            return;
+        }
+
+        const PPDKey* pKey = pParser->getKey(OStringToOUString(rOption.name, aEncoding));
+        if (!pKey)
+        {
+            SAL_WARN("vcl.unx.print", "Custom key " << rOption.name << " not found");
+            return;
+        }
+
+        const PPDValue* pCustomValue = rContext.getValue(pKey);
+        if (!pCustomValue)
+        {
+            SAL_WARN("vcl.unx.print", "Value for " << rOption.name << " not found");
+            return;
+        }
+
+        if (!pCustomValue->m_bCustomOption)
+        {
+            SAL_WARN("vcl.unx.print", "Value for " << rOption.name << " not set to custom option");
+            return;
+        }
+
+        // seems sensible to keep a value the user explicitly set even if lpoptions was used to set
+        // another default
+        if (pCustomValue->m_bCustomOptionSetViaApp)
+            return;
+        pCustomValue->m_aCustomOption = OStringToOUString(rOption.value, aEncoding);
+    }
+}
+
 void CUPSManager::initialize()
 {
     // get normal printers, clear printer list
@@ -332,16 +371,6 @@ void CUPSManager::initialize()
         if( pDest->is_default )
             m_aDefaultPrinter = aPrinterName;
 
-        for( int k = 0; k < pDest->num_options; k++ )
-        {
-            if(!strcmp(pDest->options[k].name, "printer-info"))
-                aPrinter.m_aInfo.m_aComment=OStringToOUString(pDest->options[k].value, aEncoding);
-            if(!strcmp(pDest->options[k].name, "printer-location"))
-                aPrinter.m_aInfo.m_aLocation=OStringToOUString(pDest->options[k].value, aEncoding);
-            if(!strcmp(pDest->options[k].name, "auth-info-required"))
-                aPrinter.m_aInfo.m_aAuthInfoRequired=OStringToOUString(pDest->options[k].value, aEncoding);
-        }
-
         // note: the parser that goes with the PrinterInfo
         // is created implicitly by the JobData::operator=()
         // when it detects the NULL ptr m_pParser.
@@ -359,6 +388,18 @@ void CUPSManager::initialize()
         }
         aPrinter.m_aInfo.setDefaultBackend(bUsePDF);
         aPrinter.m_aInfo.m_aDriverName = "CUPS:" + aPrinterName;
+
+        for( int k = 0; k < pDest->num_options; k++ )
+        {
+            if(!strcmp(pDest->options[k].name, "printer-info"))
+                aPrinter.m_aInfo.m_aComment=OStringToOUString(pDest->options[k].value, aEncoding);
+            if(!strcmp(pDest->options[k].name, "printer-location"))
+                aPrinter.m_aInfo.m_aLocation=OStringToOUString(pDest->options[k].value, aEncoding);
+            if(!strcmp(pDest->options[k].name, "auth-info-required"))
+                aPrinter.m_aInfo.m_aAuthInfoRequired=OStringToOUString(pDest->options[k].value, aEncoding);
+            // tdf#149439 Update Custom values that may have changed if this is not a newly discovered printer
+            SetIfCustomOption(aPrinter.m_aInfo.m_aContext, pDest->options[k], aEncoding);
+        }
 
         m_aPrinters[ aPrinter.m_aInfo.m_aPrinterName ] = aPrinter;
         m_aCUPSDestMap[ aPrinter.m_aInfo.m_aPrinterName ] = nPrinter;
@@ -496,29 +537,7 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
 
                         // tdf#149439 Set Custom values.
                         for (int k = 0; k < pDest->num_options; ++k)
-                        {
-                            if (strncmp(pDest->options[k].value, RTL_CONSTASCII_STRINGPARAM("Custom.")) == 0)
-                            {
-                                const PPDKey* pKey = rContext.getParser()->getKey(OStringToOUString(pDest->options[k].name, aEncoding));
-                                if (!pKey)
-                                {
-                                    SAL_WARN("vcl.unx.print", "Custom key " << pDest->options[k].name << " not found");
-                                    continue;
-                                }
-                                const PPDValue* pCustomValue = rContext.getValue(pKey);
-                                if (!pCustomValue)
-                                {
-                                    SAL_WARN("vcl.unx.print", "Value for " << pDest->options[k].name << " not found");
-                                    continue;
-                                }
-                                if (!pCustomValue->m_bCustomOption)
-                                {
-                                    SAL_WARN("vcl.unx.print", "Value for " << pDest->options[k].name << " not set to custom option");
-                                    continue;
-                                }
-                                pCustomValue->m_aCustomOption = OStringToOUString(pDest->options[k].value, aEncoding);
-                            }
-                        }
+                            SetIfCustomOption(rContext, pDest->options[k], aEncoding);
 
                         rInfo.m_pParser = pNewParser;
                         rInfo.m_aContext = rContext;

@@ -48,6 +48,7 @@ struct VCL_DLLPUBLIC PPDValue
     //see http://www.cups.org/documentation.php/spec-ppd.html#OPTIONS
     //for full specs, only the basics are implemented here
     bool             m_bCustomOption;
+    mutable bool     m_bCustomOptionSetViaApp;
     mutable OUString m_aCustomOption;
     OUString         m_aOption;
     OUString         m_aValue;
