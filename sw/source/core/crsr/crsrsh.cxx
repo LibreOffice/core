@@ -1543,7 +1543,7 @@ static void lcl_CheckHiddenPara( SwPosition& rPos )
     }
 
     if ( pTextNd )
-        rPos = SwPosition( aTmp, SwContentIndex( pTextNd, 0 ) );
+        rPos = SwPosition( *pTextNd, 0 );
 }
 
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
@@ -2998,7 +2998,7 @@ SwCursorShell::SwCursorShell( SwDoc& rDoc, vcl::Window *pInitWin,
     SwNodeIndex aNodeIdx( *rNds.GetEndOfContent().StartOfSectionNode() );
     SwContentNode* pCNd = rNds.GoNext( &aNodeIdx ); // go to the first ContentNode
 
-    m_pCurrentCursor = new SwShellCursor( *this, SwPosition( aNodeIdx, SwContentIndex( pCNd, 0 )));
+    m_pCurrentCursor = new SwShellCursor( *this, SwPosition( aNodeIdx, pCNd, 0 ) );
 
     // Register shell as dependent at current node. As a result all attribute
     // changes can be forwarded via the Link.

@@ -304,8 +304,7 @@ bool SwPageFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
                         // previous character; to get a better measure from
                         // lcl_getDistance, extend that to a rectangle over
                         // the entire character.
-                        SwPosition const nextTextPos(prevTextPos.nNode,
-                                             SwContentIndex(prevTextPos.nContent, +1));
+                        SwPosition const nextTextPos(prevTextPos.nContent, +1);
                         SwRect nextTextRect;
                         pTextFrame->GetCharRect(nextTextRect, nextTextPos);
                         SwRectFnSet aRectFnSet(pTextFrame);

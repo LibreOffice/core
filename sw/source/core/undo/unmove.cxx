@@ -211,8 +211,8 @@ void SwUndoMove::UndoImpl(::sw::UndoRedoContext & rContext)
         if( m_bJoinNext )
         {
             {
-                RemoveIdxRel( aIdx.GetIndex() + 1, SwPosition( aIdx,
-                        SwContentIndex(pTextNd, pTextNd->GetText().getLength())));
+                RemoveIdxRel( aIdx.GetIndex() + 1,
+                        SwPosition( aIdx, pTextNd, pTextNd->GetText().getLength()) );
             }
             // Are there any Pams in the next TextNode?
             pTextNd->JoinNext();
@@ -255,8 +255,7 @@ void SwUndoMove::RedoImpl(::sw::UndoRedoContext & rContext)
     {
         SwPaM aPam(*rPam.GetPoint());
         SetPaM( aPam );
-        SwPosition aMvPos( aIdx, SwContentIndex( aIdx.GetNode().GetContentNode(),
-                                        m_nMoveDestContent ));
+        SwPosition aMvPos( aIdx, aIdx.GetNode().GetContentNode(), m_nMoveDestContent );
 
         DelFootnote( aPam );
         RemoveIdxFromRange( aPam, false );
@@ -275,8 +274,8 @@ void SwUndoMove::RedoImpl(::sw::UndoRedoContext & rContext)
             if( pTextNd && pTextNd->CanJoinNext() )
             {
                 {
-                    RemoveIdxRel( aIdx.GetIndex() + 1, SwPosition( aIdx,
-                            SwContentIndex(pTextNd, pTextNd->GetText().getLength())));
+                    RemoveIdxRel( aIdx.GetIndex() + 1,
+                        SwPosition( *pTextNd, pTextNd->GetText().getLength()) );
                 }
                 pTextNd->JoinNext();
             }

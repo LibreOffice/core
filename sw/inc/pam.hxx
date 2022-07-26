@@ -42,10 +42,18 @@ struct SAL_WARN_UNUSED SW_DLLPUBLIC SwPosition
     explicit SwPosition( SwNodes& rNodes, SwNodeOffset nIndex = SwNodeOffset(0) );
     explicit SwPosition( const SwNodeIndex &rNode, SwNodeOffset nDiff = SwNodeOffset(0) );
     explicit SwPosition( const SwNode& rNode, SwNodeOffset nDiff = SwNodeOffset(0) );
-    explicit SwPosition( const SwContentNode& rNode, const sal_Int32 nContentOffset = 0 );
+    explicit SwPosition( const SwContentNode& rNode, sal_Int32 nContentOffset = 0 );
+    SwPosition( const SwNodeIndex &rNode, const SwContentNode*, const sal_Int32 nContentOffset );
+    SwPosition( const SwNodeIndex &rNode, SwNodeOffset nDiff, const SwContentNode*, sal_Int32 nContentOffset );
+    SwPosition( const SwContentIndex &, short nDiff );
 
     // callers should be using one of the other constructors to avoid creating a temporary
     SwPosition( SwNodeIndex && ) = delete;
+    SwPosition( const SwNodeIndex &, SwContentIndex && ) = delete;
+    SwPosition( SwNodeIndex &&, SwContentIndex && ) = delete;
+    SwPosition( SwNodeIndex &&, const SwContentNode*, sal_Int32 ) = delete;
+    SwPosition( SwNodeIndex &&, SwNodeOffset ) = delete;
+    SwPosition( SwContentIndex &&, short ) = delete;
 
     /**
        Returns the document this position is in.
