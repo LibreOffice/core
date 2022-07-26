@@ -16,6 +16,24 @@
       "message": "\u003e the cppunit test CppunitTest_sc_a11y failed ( https://ci.libreoffice.org/job/gerrit_windows/131554/ )\n\nOK that\u0027s pretty weird to me, somehow in the Windows case, not only the shortcuts are part of the accessible name, but it\u0027s also in German somehow -- although test/user-template/registry-common/modifications.xcd seemingly should force the locale to en-US.\n\nI\u0027m not sure what to do here… for me it\u0027s inconsistent the results are that different on Windows for *the internal* a11y API.  I\u0027m also not very familiar with Windows, but it seems odd to me to present the shortcut this way to a11y -- and again, it should either be universal or done at the platform layer, not in the internal API… or is it something with how tests are run?  Unfortunately I don\u0027t have access to a Windows machine to play with it more though.\n\nIf it\u0027s something that seem reasonable to others though, I could adjust the code to ignore something like tab or a set of spaces followed by a shortcut (but a shortcut is not trivial to recognize, let alone in all locales) or maybe just anything after 2+ spaces or a tab or something.\nAnybody has any insight/opinion here?",
       "revId": "582075bfb075a742a900d447749bfd4129026a87",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0aeb573_5a781eb3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-07-26T10:32:30Z",
+      "side": 1,
+      "message": "the labels for the keyboard shortcuts depend on the keyboard layout and are taken from there. On top of that some are mapped by LibreOffice itself for a handful languages... https://opengrok.libreoffice.org/xref/core/vcl/win/window/keynames.cxx?r\u003d55e59695#71",
+      "parentUuid": "7f98e83b_4de322ee",
+      "revId": "582075bfb075a742a900d447749bfd4129026a87",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
