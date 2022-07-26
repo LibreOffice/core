@@ -16,6 +16,24 @@
       "message": "more commentary at https://gerrit.libreoffice.org/c/core/+/137467",
       "revId": "908665a40f38ea0c2ede9340bd505e90b134c687",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c7fe311_c90fa55d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-07-26T18:31:04Z",
+      "side": 1,
+      "message": "This works for me as well, thanks.",
+      "parentUuid": "8a7e1426_73ec0c4e",
+      "revId": "908665a40f38ea0c2ede9340bd505e90b134c687",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
