@@ -34,6 +34,24 @@
       "parentUuid": "7f98e83b_4de322ee",
       "revId": "582075bfb075a742a900d447749bfd4129026a87",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e12d72db_0bd57f18",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-26T14:59:53Z",
+      "side": 1,
+      "message": "\u003e I\u0027m not sure what to do here… for me it\u0027s inconsistent the results are that different on Windows for *the internal* a11y API.  I\u0027m also not very familiar with Windows, but it seems odd to me to present the shortcut this way to a11y -- and again, it should either be universal or done at the platform layer, not in the internal API… or is it something with how tests are run?\n\nIn this particular case, it actually looks platform-specific; OAccessibleMenuItemComponent::GetAccessibleName in accessibility/source/standard/accessiblemenuitemcomponent.cxx has this:\n\n    #if defined(_WIN32)\n            if ( m_pParent-\u003eGetAccelKey( nItemId ).GetName().getLength() )\n                sName +\u003d \"\\t\" + m_pParent-\u003eGetAccelKey(nItemId).GetName();\n    #endif\n\nwhich was added in \n\n\n    commit d22a27010c4bd55973165a5fc373027f7c251db8\n    Author: Niklas Johansson \u003csleeping.pillow@gmail.com\u003e\n    Date:   Wed Dec 17 23:05:15 2014 +0100\n\n        Accessibility: Expose keyboard short-cuts of menu entries\n        \n        On Windows the keyboard short-cuts of menu items like\n        \"Open Ctrl+O\" is not exposed to accessibility tools on\n        Windows. On Mac and Linux it is.\n        \n        If I understand Microsoft\u0027s notes correctly, it is expected\n        that the short-cut gets appended to the accessibleName.\n        This is what Acrobat Reader, Internet Explorer, Firefox\n        is doing. And with this patch LibreOffice as well.\n        \n        For info from Microsoft on the matter see:\n        http://msdn.microsoft.com/en-us/library/windows/desktop/dd318482%28v\u003dvs.85%29.aspx\n        \n        Change-Id: I4ed7c4c45998063bb50744b44c792351070489d7\n        Reviewed-on: https://gerrit.libreoffice.org/13516\n        Reviewed-by: Caolán McNamara \u003ccaolanm@redhat.com\u003e\n        Tested-by: Caolán McNamara \u003ccaolanm@redhat.com\u003e\n\nI don\u0027t know whether or not that\u0027s actually how it\u0027s supposed to work for a11y (in general and on Windows in particular), but your suggestion to take care of that in the platform-specific code (if at all) generally sounds reasonable to me. (Maybe appending what get_accKeyboardShortcut() returns to the string currently returned in getAccName() in winaccessibility\\source\\UAccCOM\\MAccessible.cxx - based on the role? - would do that, but would probably need a closer look whether it does and whether it\u0027s desirable in the first place).",
+      "parentUuid": "b0aeb573_5a781eb3",
+      "revId": "582075bfb075a742a900d447749bfd4129026a87",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
