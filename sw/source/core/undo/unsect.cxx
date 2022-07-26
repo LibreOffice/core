@@ -554,9 +554,11 @@ SwUndoUpdateIndex::~SwUndoUpdateIndex() = default;
 
 void SwUndoUpdateIndex::TitleSectionInserted(SwSectionFormat & rFormat)
 {
+#ifndef NDEBUG
     SwNodeIndex const tmp(rFormat.GetDoc()->GetNodes(), m_nStartIndex); // title inserted before empty node
     assert(tmp.GetNode().IsSectionNode());
     assert(tmp.GetNode().GetSectionNode()->GetSection().GetFormat() == &rFormat);
+#endif
     m_pTitleSectionUpdated.reset(static_cast<SwUndoDelSection*>(MakeUndoDelSection(rFormat).release()));
 }
 

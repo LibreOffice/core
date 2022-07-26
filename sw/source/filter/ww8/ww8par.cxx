@@ -5080,8 +5080,6 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
 
     size_t nPageDescOffset = m_rDoc.GetPageDescCnt();
 
-    SwNodeIndex aSttNdIdx( m_rDoc.GetNodes() );
-
     RedlineFlags eMode = RedlineFlags::ShowInsert | RedlineFlags::ShowDelete;
 
     m_xSprmParser.reset(new wwSprmParser(*m_xWwFib));
@@ -5096,9 +5094,6 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
     m_eStructCharSet = WW8Fib::GetFIBCharset(m_xWwFib->m_chseTables, m_xWwFib->m_lid);
 
     m_bWWBugNormal = m_xWwFib->m_nProduct == 0xc03d;
-
-    if (!m_bNewDoc)
-        aSttNdIdx = m_pPaM->GetPoint()->nNode;
 
     m_xProgress.reset(new ImportProgress(m_pDocShell, 0, 100));
 
