@@ -32,9 +32,7 @@ namespace {
 
 struct ImplOldJobSetupData
 {
-    char    cPrinterName[64];
-    char    cDeviceName[32];
-    char    cPortName[32];
+    char    cPrinterName[128];
     char    cDriverName[32];
 };
 
