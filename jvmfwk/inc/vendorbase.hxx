@@ -59,6 +59,8 @@ OpenJDK at least, but probably not true for Lemotes JDK */
 #else
 #define JFW_PLUGIN_ARCH "mips64el"
 #endif
+#elif defined RISCV64
+#define JFW_PLUGIN_ARCH "riscv64"
 #elif defined S390X
 #define JFW_PLUGIN_ARCH "s390x"
 #elif defined S390
