@@ -1036,6 +1036,10 @@ void SwWrtShell::InsertContentControl(SwContentControlType eType)
         case SwContentControlType::PLAIN_TEXT:
         {
             pContentControl->SetShowingPlaceHolder(true);
+            if (eType == SwContentControlType::PLAIN_TEXT)
+            {
+                pContentControl->SetPlainText(true);
+            }
             if (!HasSelection())
             {
                 aPlaceholder = SwResId(STR_CONTENT_CONTROL_PLACEHOLDER);

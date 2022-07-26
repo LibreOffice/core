@@ -713,6 +713,7 @@
       <menu:menu menu:id=".uno:ContentControlsMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:InsertContentControl"/>
+          <menu:menuitem menu:id=".uno:InsertPlainTextContentControl"/>
           <menu:menuitem menu:id=".uno:InsertPictureContentControl"/>
           <menu:menuitem menu:id=".uno:InsertCheckboxContentControl"/>
           <menu:menuitem menu:id=".uno:InsertDropdownContentControl"/>
