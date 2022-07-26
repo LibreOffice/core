@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f07f7a5c_65b12e76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-07-26T08:46:15Z",
+      "side": 1,
+      "message": "this should work, but i have noticed that in SwTextINetFormat::GetCharFormat() there is already this code:\n\n        bool bResetMod \u003d !rDoc.getIDocumentState().IsModified();\n        Link\u003cbool,void\u003e aOle2Lnk;\n        if ( bResetMod )\n        {\n            aOle2Lnk \u003d rDoc.GetOle2Link();\n            rDoc.SetOle2Link( Link\u003cbool,void\u003e() );\n        }\n\n        pRet \u003d IsPoolUserFormat( nId )\n               ? rDoc.FindCharFormatByName( rStr )\n               : rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( nId );\n\n        if ( bResetMod )\n        {\n            rDoc.getIDocumentState().ResetModified();\n            rDoc.SetOle2Link( aOle2Lnk );\n        }\n        \ndo you have an idea why \"Ole2Lnk\" is being called in your stack despite it being cleared here?\n\nwould it help to call \"SetEnableSetModified(false)\" in SwTextINetFormat::GetCharFormat() instead of the outer function where you added it?\n",
+      "revId": "9f33a5919bec0930ddbae7945390da208b44b947",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
