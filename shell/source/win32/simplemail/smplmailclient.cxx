@@ -201,7 +201,7 @@ OUString CSmplMailClient::CopyAttachment(const OUString& sOrigAttachURL, OUStrin
     osl::FileBase::getFileURLFromSystemPath(sCorrectedOrigAttachURL, sCorrectedOrigAttachURL);
     if (osl::File::copy(sCorrectedOrigAttachURL, sNewAttachmentURL) == osl::FileBase::RC::E_None)
     {
-        INetURLObject url(sOrigAttachURL, INetURLObject::EncodeMechanism::WasEncoded);
+        INetURLObject url(sCorrectedOrigAttachURL, INetURLObject::EncodeMechanism::WasEncoded);
         sUserVisibleName = url.getName(INetURLObject::LAST_SEGMENT, true,
             INetURLObject::DecodeMechanism::WithCharset);
         nodelete = false;
