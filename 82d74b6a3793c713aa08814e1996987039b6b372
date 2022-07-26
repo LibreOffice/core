@@ -16,6 +16,24 @@
       "message": "Caolan: do you have any preference between this vs whitelisting CAIRO_HINT_STYLE_DEFAULT? Reading documentation, perhaps that one is better, reading your commit message, this was just added for \"just in case\", so it sounds low-risk to relax it.\n\nOr perhaps there is a 3rd, even better fix I\u0027m not aware of. Thanks.",
       "revId": "82d74b6a3793c713aa08814e1996987039b6b372",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c02f309_2fd1e8ae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-07-26T15:04:45Z",
+      "side": 1,
+      "message": "I\u0027m not entirely sure of the interaction of all these things, but I think the default for hint_metrics is basically CAIRO_HINT_METRICS_ON so this change probably just leaves that setting effectively untouched, while mclasen\u0027s comment at https://github.com/GNOME/gtk/commit/4de670b0b478329d161b4ead7927f29233531d6f indicates that CAIRO_HINT_METRICS_OFF is the way to go for subpixel positioning which is what we want to do IMO.\n\nChecking example 1 of https://bugs.documentfoundation.org/show_bug.cgi?id\u003d144862 I still get a missing part of the \u0026 in Kerning2.odt with this proposed change at 90% zoom and 1024x768 resolution, and there it doesn\u0027t seem to matter if I have CAIRO_HINT_METRICS_OFF or CAIRO_HINT_METRICS_ON and if I use CAIRO_HINT_STYLE_SLIGHT or CAIRO_HINT_STYLE_FULL I always have that missing top of \u0026\n\nSo if we\u0027ve got a discrepancy with hinting and \"hint metrics off\" I think I\u0027d lean towards keeping CAIRO_HINT_METRICS_OFF and dropping hinting to none like https://gerrit.libreoffice.org/c/core/+/137466 though I am unable to really perceive a visual difference.",
+      "parentUuid": "e96e665c_d37efc67",
+      "revId": "82d74b6a3793c713aa08814e1996987039b6b372",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
