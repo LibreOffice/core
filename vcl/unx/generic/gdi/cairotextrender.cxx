@@ -200,7 +200,7 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
         cairo_hint_style_t eHintStyle = cairo_font_options_get_hint_style(pFontOptions);
         cairo_hint_metrics_t eHintMetricsStyle = cairo_font_options_get_hint_metrics(pFontOptions);
         bool bAllowedHintStyle = !bResolutionIndependentLayoutEnabled || (eHintStyle == CAIRO_HINT_STYLE_NONE || eHintStyle == CAIRO_HINT_STYLE_SLIGHT);
-        bool bAllowedHintMetricStyle = !bResolutionIndependentLayoutEnabled || (eHintMetricsStyle == CAIRO_HINT_METRICS_OFF);
+        bool bAllowedHintMetricStyle = !bResolutionIndependentLayoutEnabled || (eHintMetricsStyle == CAIRO_HINT_METRICS_OFF || eHintMetricsStyle == CAIRO_HINT_METRICS_DEFAULT);
 
         if (bDisableAA || !bAllowedHintStyle || !bAllowedHintMetricStyle)
         {
