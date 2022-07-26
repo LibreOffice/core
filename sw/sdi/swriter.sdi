@@ -3117,6 +3117,23 @@ SfxVoidItem InsertDateContentControl FN_INSERT_DATE_CONTENT_CONTROL
     GroupId = SfxGroupId::Insert;
 ]
 
+SfxVoidItem InsertPlainTextContentControl FN_INSERT_PLAIN_TEXT_CONTENT_CONTROL
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Insert;
+]
+
 SfxVoidItem ContentControlProperties FN_CONTENT_CONTROL_PROPERTIES
 ()
 [
