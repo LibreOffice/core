@@ -347,7 +347,7 @@ void SwWrtShell::ClickToField(const SwField& rField, bool bExecHyperlinks)
     if (SwFieldIds::GetRef != rField.GetTyp()->Which())
     {
         StartAllAction();
-        Right( CRSR_SKIP_CHARS, true, 1, false ); // Select the field.
+        Right( SwCursorSkipMode::Chars, true, 1, false ); // Select the field.
         NormalizePam();
         EndAllAction();
     }

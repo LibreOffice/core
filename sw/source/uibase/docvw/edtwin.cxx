@@ -2324,12 +2324,12 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 switch ( rKeyCode.GetModifier() | rKeyCode.GetCode() )
                 {
                     case KEY_RIGHT | KEY_MOD2:
-                        rSh.Right( CRSR_SKIP_CHARS, false, 1, false );
+                        rSh.Right( SwCursorSkipMode::Chars, false, 1, false );
                         eKeyState = SwKeyState::End;
                         FlushInBuffer();
                         break;
                     case KEY_LEFT | KEY_MOD2:
-                        rSh.Left( CRSR_SKIP_CHARS, false, 1, false );
+                        rSh.Left( SwCursorSkipMode::Chars, false, 1, false );
                         eKeyState = SwKeyState::End;
                         FlushInBuffer();
                         break;
@@ -3786,7 +3786,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         {
                             assert(rSh.GetCurrentShellCursor().GetPoint()->nContent
                                     .GetIndex() == (pTextField->GetStart() + 1));
-                            rSh.Left( CRSR_SKIP_CHARS, false, 1, false );
+                            rSh.Left( SwCursorSkipMode::Chars, false, 1, false );
                         }
                         // don't go into the !bOverSelect block below - it moves
                         // the cursor

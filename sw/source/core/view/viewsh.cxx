@@ -2438,7 +2438,7 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
                     || IsCursorInFieldmarkHidden(*pSh->GetCursor(),
                             pSh->GetLayout()->GetFieldmarkMode()))
                 {   // move cursor out of field
-                    pSh->Left(1, CRSR_SKIP_CHARS);
+                    pSh->Left(1, SwCursorSkipMode::Chars);
                 }
             }
         }

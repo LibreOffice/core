@@ -36,6 +36,7 @@ class SwNodeIndex;
 class SwContentNode;
 class SwContentIndex;
 class SvxSearchItem;
+enum class SwCursorSkipMode;
 
 namespace i18nutil {
     struct SearchOptions2;
@@ -50,13 +51,13 @@ void GoEndSection( SwPosition*);
 const SwTextAttr* GetFrwrdTextHint( const SwpHints&, size_t&, sal_Int32 );
 const SwTextAttr* GetBkwrdTextHint( const SwpHints&, size_t&, sal_Int32 );
 
-bool GoNext(SwNode* pNd, SwContentIndex * pIdx, sal_uInt16 nMode );
-bool GoPrevious(SwNode* pNd, SwContentIndex * pIdx, sal_uInt16 nMode );
+bool GoNext(SwNode* pNd, SwContentIndex * pIdx, SwCursorSkipMode nMode );
+bool GoPrevious(SwNode* pNd, SwContentIndex * pIdx, SwCursorSkipMode nMode );
 SwContentNode* GoNextNds( SwNodeIndex * pIdx, bool );
 SwContentNode* GoPreviousNds( SwNodeIndex * pIdx, bool );
 
 // type definitions of functions
-typedef bool (*GoNd)( SwNode*, SwContentIndex*, sal_uInt16 );
+typedef bool (*GoNd)( SwNode*, SwContentIndex*, SwCursorSkipMode );
 typedef SwContentNode* (*GoNds)( SwNodeIndex*, bool );
 typedef void (*GoDoc)( SwPosition* );
 typedef void (*GoSection)( SwPosition* );

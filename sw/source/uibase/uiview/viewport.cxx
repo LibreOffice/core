@@ -637,7 +637,7 @@ bool SwView::PageUpCursor( bool bSelect )
         {
             m_pWrtShell->MoveCursor();
             m_pWrtShell->GotoFootnoteAnchor();
-            m_pWrtShell->Right(CRSR_SKIP_CHARS, false, 1, false );
+            m_pWrtShell->Right(SwCursorSkipMode::Chars, false, 1, false );
             return true;
         }
     }

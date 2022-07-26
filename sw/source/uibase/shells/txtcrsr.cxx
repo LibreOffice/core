@@ -93,10 +93,10 @@ void SwTextShell::ExecBasicMove(SfxRequest &rReq)
         switch(nSlot)
         {
             case FN_CHAR_LEFT:
-                rSh.Left( CRSR_SKIP_CELLS,  bSelect, 1, false, true );
+                rSh.Left( SwCursorSkipMode::Cells,  bSelect, 1, false, true );
                 break;
             case FN_CHAR_RIGHT:
-                rSh.Right( CRSR_SKIP_CELLS, bSelect, 1, false, true );
+                rSh.Right( SwCursorSkipMode::Cells, bSelect, 1, false, true );
                 break;
             case FN_LINE_UP:
                 rSh.Up( bSelect );

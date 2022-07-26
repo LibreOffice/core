@@ -863,8 +863,8 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testPasteListener)
     CPPUNIT_ASSERT(pTextDoc);
     SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 3, /*bBasicCall=*/false);
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 2, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 3, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 2, /*bBasicCall=*/false);
     rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
     pTransfer->Cut();
     TransferableDataHelper aHelper(pTransfer);
@@ -878,8 +878,8 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testPasteListener)
     CPPUNIT_ASSERT_EQUAL(OUString("ABCDEF"), xBodyText->getString());
 
     // Paste again, this time overwriting "BC".
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 4, /*bBasicCall=*/false);
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 2, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 4, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 2, /*bBasicCall=*/false);
     pListener->GetString().clear();
     SwTransferable::Paste(*pWrtShell, aHelper);
     CPPUNIT_ASSERT_EQUAL(OUString("DE"), pListener->GetString());

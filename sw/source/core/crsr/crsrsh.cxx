@@ -321,7 +321,7 @@ void SwCursorShell::EndCursorMove( const bool bIdleEnd )
 #endif
 }
 
-bool SwCursorShell::LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
+bool SwCursorShell::LeftRight( bool bLeft, sal_uInt16 nCnt, SwCursorSkipMode nMode,
                              bool bVisualAllowed )
 {
     if( IsTableMode() )

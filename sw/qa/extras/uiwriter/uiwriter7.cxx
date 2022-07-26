@@ -2002,7 +2002,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testUndoDelAsChar)
     CPPUNIT_ASSERT(rIDCO.InsertGraphicObject(*pShell->GetCursor(), grf, &frameSet, &grfSet));
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
     pShell->SetMark();
-    pShell->Left(1, CRSR_SKIP_CHARS);
+    pShell->Left(1, SwCursorSkipMode::Chars);
     rIDCO.DeleteAndJoin(*pShell->GetCursor());
     CPPUNIT_ASSERT_EQUAL(size_t(0), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
     CPPUNIT_ASSERT(!pShell->GetCursor()->GetNode().GetTextNode()->HasHints());
@@ -2169,10 +2169,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf127635)
     Scheduler::ProcessEventsToIdle();
 
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 2, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 2, /*bBasicCall=*/false);
 
     //Select 'a'
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
 
     // enable redlining
     dispatchCommand(mxComponent, ".uno:TrackChanges", {});
@@ -2206,12 +2206,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testDde)
     SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->Insert("asdf");
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 4, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 4, /*bBasicCall=*/false);
     uno::Sequence<beans::PropertyValue> aPropertyValues;
     dispatchCommand(mxComponent, ".uno:Copy", aPropertyValues);
 
     // Go before the selection and paste as a DDE link.
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     aPropertyValues = comphelper::InitPropertySequence(
         { { "SelectedFormat", uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::LINK)) } });
     dispatchCommand(mxComponent, ".uno:ClipboardFormatItems", aPropertyValues);
@@ -2427,8 +2427,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf138873)
     CPPUNIT_ASSERT_EQUAL(OUString("A B C"), getParagraph(1)->getString());
 
     // Select B
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 2, /*bBasicCall=*/false);
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 2, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
 
     pWrtShell->Insert("DDD");
 
@@ -2440,7 +2440,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf138873)
     CPPUNIT_ASSERT_EQUAL(OUString("A B C"), getParagraph(1)->getString());
 
     // Select B and C
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 2, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 2, /*bBasicCall=*/false);
 
     dispatchCommand(mxComponent, ".uno:Copy", {});
     Scheduler::ProcessEventsToIdle();

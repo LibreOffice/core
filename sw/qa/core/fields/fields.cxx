@@ -52,7 +52,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAuthorityTooltip)
 
     // Get the tooltip of the field.
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     SwPaM* pCursor = pWrtShell->GetCursor();
     auto pField = dynamic_cast<SwAuthorityField*>(
         SwCursorShell::GetFieldAtCursor(pCursor, /*bIncludeInputFieldAtStart=*/true));

@@ -316,7 +316,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPostKeyEvent)
 {
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
     // Did we manage to go after the first character?
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), pShellCursor->GetPoint()->nContent.GetIndex());
@@ -332,7 +332,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPostMouseEvent)
 {
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
     // Did we manage to go after the first character?
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), pShellCursor->GetPoint()->nContent.GetIndex());
@@ -351,7 +351,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSetTextSelection)
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     // Move the cursor into the second word.
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 5, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 5, /*bBasicCall=*/false);
     // Create a selection on the word.
     pWrtShell->SelWrd();
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
@@ -379,7 +379,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testGetTextSelection)
 
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     // Move the cursor into the first word.
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 2, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 2, /*bBasicCall=*/false);
     // Create a selection by on the word.
     pWrtShell->SelWrd();
 
@@ -410,7 +410,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testGetTextSelectionLineLimit)
 
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     // Move the cursor into the first word.
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 2, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 2, /*bBasicCall=*/false);
     // Create a selection.
     pWrtShell->SelAll();
 
@@ -454,7 +454,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testResetSelection)
     SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     // Select one character.
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
     // We have a text selection.
     CPPUNIT_ASSERT(pShellCursor->HasMark());
@@ -914,13 +914,13 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testMissingInvalidation)
     // First view: put the cursor into the first word.
     SfxLokHelper::setView(nView1);
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
 
     // Second view: select the first word.
     SfxLokHelper::setView(nView2);
     CPPUNIT_ASSERT(pXTextDocument->GetDocShell()->GetWrtShell() != pWrtShell);
     pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     pWrtShell->SelWrd();
 
     // Now delete the selected word and make sure both views are invalidated.
@@ -957,7 +957,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testViewCursors)
     aView2.m_bViewSelectionSet = false;
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     // Move the cursor into the second word.
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 5, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 5, /*bBasicCall=*/false);
     // Create a selection on the word.
     pWrtShell->SelWrd();
     Scheduler::ProcessEventsToIdle();
@@ -1584,7 +1584,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesCallback)
     CPPUNIT_ASSERT_EQUAL(1, m_nRedlineTableSizeChanged);
 
     CPPUNIT_ASSERT_EQUAL(-1, m_nTrackedChangeIndex);
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     SfxItemSet aSet(pWrtShell->GetDoc()->GetAttrPool(), svl::Items<FN_REDLINE_ACCEPT_DIRECT, FN_REDLINE_ACCEPT_DIRECT>);
     SfxVoidItem aItem(FN_REDLINE_ACCEPT_DIRECT);
     aSet.Put(aItem);
@@ -1614,7 +1614,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testRedlineUpdateCallback)
     // Turn off the change tracking mode, make some modification to left of the
     // redline so that its position changes
     xPropertySet->setPropertyValue("RecordChanges", uno::Any(false));
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     pWrtShell->Insert("This text is left of the redline");
 
     // Position of the redline has changed => Modify callback
@@ -1625,7 +1625,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testRedlineUpdateCallback)
     CPPUNIT_ASSERT_EQUAL(3, m_nRedlineTableEntryModified);
 
     // Make changes to the right of the redline => no position change in redline
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 100/*Go enough right */, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 100/*Go enough right */, /*bBasicCall=*/false);
     pWrtShell->Insert("This text is right of the redline");
 
     // No Modify callbacks
@@ -1699,7 +1699,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCreateViewTextSelection)
     // Create a text selection:
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     // Move the cursor into the second word.
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 5, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 5, /*bBasicCall=*/false);
     // Create a selection on the word.
     pWrtShell->SelWrd();
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
@@ -2989,7 +2989,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownFormFieldButton)
     setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
 
     // Move the cursor to trigger displaying of the field button.
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     CPPUNIT_ASSERT(m_aFormFieldButton.isEmpty());
 
     // Do a tile rendering to trigger the button message with a valid text area
@@ -3037,7 +3037,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownFormFieldButton)
     }
 
     // Move the cursor back so the button becomes hidden.
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
 
     CPPUNIT_ASSERT(!m_aFormFieldButton.isEmpty());
     {
@@ -3062,7 +3062,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownFormFieldButtonEditing)
     setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
 
     // Move the cursor to trigger displaying of the field button.
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     CPPUNIT_ASSERT(m_aFormFieldButton.isEmpty());
 
     // Do a tile rendering to trigger the button message with a valid text area
@@ -3119,7 +3119,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownFormFieldButtonNoSelectio
     setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
 
     // Move the cursor to trigger displaying of the field button.
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     CPPUNIT_ASSERT(m_aFormFieldButton.isEmpty());
 
     // Do a tile rendering to trigger the button message with a valid text area
@@ -3205,7 +3205,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownFormFieldButtonNoItem)
     setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
 
     // Move the cursor to trigger displaying of the field button.
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     CPPUNIT_ASSERT(m_aFormFieldButton.isEmpty());
 
     // Do a tile rendering to trigger the button message with a valid text area
@@ -3462,7 +3462,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testRedlinePortions)
     pView->SetRedlineAuthor("second");
     pDocShell->SetView(pView);
     pWrtShell->SttEndDoc(/*bStt*/true);
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, /*nCount=*/9, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, /*nCount=*/9, /*bBasicCall=*/false);
     pDocShell->SetChangeRecording(true);
     pWrtShell->Delete();
 
@@ -3489,7 +3489,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testContentControl)
     m_aContentControl.clear();
 
     // When entering that content control (chars 2-7 are the content control):
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, /*nCount=*/5, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, /*nCount=*/5, /*bBasicCall=*/false);
 
     // Then make sure that the callback is emitted:
     // Without the accompanying fix in place, this test would have failed, no callback was emitted.
@@ -3553,7 +3553,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownContentControl)
     m_aContentControl.clear();
 
     // When entering that content control:
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, /*nCount=*/1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, /*nCount=*/1, /*bBasicCall=*/false);
 
     // Then make sure that the callback is emitted:
     CPPUNIT_ASSERT(!m_aContentControl.isEmpty());
@@ -3680,7 +3680,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDateContentControl)
     m_aContentControl.clear();
 
     // When entering that content control:
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, /*nCount=*/1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, /*nCount=*/1, /*bBasicCall=*/false);
 
     // Then make sure that the callback is emitted:
     CPPUNIT_ASSERT(!m_aContentControl.isEmpty());

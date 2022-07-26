@@ -305,14 +305,14 @@ bool CheckNodesRange( const SwNodeIndex& rStt,
     return false; // somewhere in between => error
 }
 
-bool GoNext(SwNode* pNd, SwContentIndex * pIdx, sal_uInt16 nMode )
+bool GoNext(SwNode* pNd, SwContentIndex * pIdx, SwCursorSkipMode nMode )
 {
     if( pNd->IsContentNode() )
         return static_cast<SwContentNode*>(pNd)->GoNext( pIdx, nMode );
     return false;
 }
 
-bool GoPrevious( SwNode* pNd, SwContentIndex * pIdx, sal_uInt16 nMode )
+bool GoPrevious( SwNode* pNd, SwContentIndex * pIdx, SwCursorSkipMode nMode )
 {
     if( pNd->IsContentNode() )
         return static_cast<SwContentNode*>(pNd)->GoPrevious( pIdx, nMode );
@@ -1012,7 +1012,7 @@ bool GoInNode( SwPaM & rPam, SwMoveFnCollection const & fnMove )
 bool GoInContent( SwPaM & rPam, SwMoveFnCollection const & fnMove )
 {
     if( (*fnMove.fnNd)( &rPam.GetPoint()->nNode.GetNode(),
-                        &rPam.GetPoint()->nContent, CRSR_SKIP_CHARS ))
+                        &rPam.GetPoint()->nContent, SwCursorSkipMode::Chars ))
         return true;
     return GoInNode( rPam, fnMove );
 }
@@ -1020,7 +1020,7 @@ bool GoInContent( SwPaM & rPam, SwMoveFnCollection const & fnMove )
 bool GoInContentCells( SwPaM & rPam, SwMoveFnCollection const & fnMove )
 {
     if( (*fnMove.fnNd)( &rPam.GetPoint()->nNode.GetNode(),
-                         &rPam.GetPoint()->nContent, CRSR_SKIP_CELLS ))
+                         &rPam.GetPoint()->nContent, SwCursorSkipMode::Cells ))
         return true;
     return GoInNode( rPam, fnMove );
 }
@@ -1028,7 +1028,7 @@ bool GoInContentCells( SwPaM & rPam, SwMoveFnCollection const & fnMove )
 bool GoInContentSkipHidden( SwPaM & rPam, SwMoveFnCollection const & fnMove )
 {
     if( (*fnMove.fnNd)( &rPam.GetPoint()->nNode.GetNode(),
-                        &rPam.GetPoint()->nContent, CRSR_SKIP_CHARS | CRSR_SKIP_HIDDEN ) )
+                        &rPam.GetPoint()->nContent, SwCursorSkipMode::Chars | SwCursorSkipMode::Hidden ) )
         return true;
     return GoInNode( rPam, fnMove );
 }
@@ -1036,7 +1036,7 @@ bool GoInContentSkipHidden( SwPaM & rPam, SwMoveFnCollection const & fnMove )
 bool GoInContentCellsSkipHidden( SwPaM & rPam, SwMoveFnCollection const & fnMove )
 {
     if( (*fnMove.fnNd)( &rPam.GetPoint()->nNode.GetNode(),
-                         &rPam.GetPoint()->nContent, CRSR_SKIP_CELLS | CRSR_SKIP_HIDDEN ) )
+                         &rPam.GetPoint()->nContent, SwCursorSkipMode::Cells | SwCursorSkipMode::Hidden ) )
         return true;
     return GoInNode( rPam, fnMove );
 }

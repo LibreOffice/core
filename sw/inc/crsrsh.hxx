@@ -254,7 +254,7 @@ private:
                                       const int nLevel );
 
     // private method(s) accessed from public inline method(s) must be exported.
-                   bool LeftRight( bool, sal_uInt16, sal_uInt16, bool );
+                   bool LeftRight( bool, sal_uInt16, SwCursorSkipMode, bool );
     SAL_DLLPRIVATE bool UpDown( bool, sal_uInt16 );
     SAL_DLLPRIVATE bool LRMargin( bool, bool bAPI = false );
     SAL_DLLPRIVATE bool IsAtLRMargin( bool, bool bAPI = false ) const;
@@ -352,9 +352,9 @@ public:
     // basic cursor travelling
     tools::Long GetUpDownX() const             { return m_nUpDownX; }
 
-    bool Left( sal_uInt16 nCnt, sal_uInt16 nMode, bool bAllowVisual = false )
+    bool Left( sal_uInt16 nCnt, SwCursorSkipMode nMode, bool bAllowVisual = false )
         { return LeftRight( true, nCnt, nMode, bAllowVisual ); }
-    bool Right( sal_uInt16 nCnt, sal_uInt16 nMode, bool bAllowVisual = false )
+    bool Right( sal_uInt16 nCnt, SwCursorSkipMode nMode, bool bAllowVisual = false )
         { return LeftRight( false, nCnt, nMode, bAllowVisual ); }
     bool Up( sal_uInt16 nCnt = 1 )      { return UpDown( true, nCnt ); }
     bool Down( sal_uInt16 nCnt = 1 )    { return UpDown( false, nCnt ); }

@@ -207,9 +207,9 @@ public:
 typedef bool (SwWrtShell::*FNSimpleMove)();
     bool SimpleMove( FNSimpleMove, bool bSelect );
 
-    bool Left       ( sal_uInt16 nMode, bool bSelect,
+    bool Left       ( SwCursorSkipMode nMode, bool bSelect,
                             sal_uInt16 nCount, bool bBasicCall, bool bVisual = false );
-    bool Right      ( sal_uInt16 nMode, bool bSelect,
+    bool Right      ( SwCursorSkipMode nMode, bool bSelect,
                             sal_uInt16 nCount, bool bBasicCall, bool bVisual = false );
     bool Up         ( bool bSelect, sal_uInt16 nCount = 1, bool bBasicCall = false );
     bool Down       ( bool bSelect, sal_uInt16 nCount = 1, bool bBasicCall = false );

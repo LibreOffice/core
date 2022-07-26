@@ -443,8 +443,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf135978)
         IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
     CPPUNIT_ASSERT(pWrtShell->GetLayout()->IsHideRedlines());
 
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 4, /*bBasicCall=*/false);
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 6, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 4, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 6, /*bBasicCall=*/false);
     pWrtShell->Delete();
 
     // now split
@@ -563,7 +563,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testImportRTF)
     SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->Insert("foobar");
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 3, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 3, /*bBasicCall=*/false);
 
     // Insert the RTF at the cursor position.
     OString aData = "{\\rtf1 Hello world!\\par}";
@@ -584,8 +584,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testExportRTF)
     SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->Insert("aaabbbccc");
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 3, /*bBasicCall=*/false);
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 3, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 3, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 3, /*bBasicCall=*/false);
 
     // Create the clipboard document.
     rtl::Reference<SwDoc> xClpDoc(new SwDoc());
@@ -808,7 +808,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo74981)
     }
 
     // go to the begin of the paragraph and split this node
-    pWrtShell->Left(CRSR_SKIP_CHARS, false, 100, false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, false, 100, false);
     pWrtShell->SplitNode();
 
     {
@@ -1007,7 +1007,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCommentedWord)
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "commented-word.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     // Move the cursor into the second word.
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 5, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 5, /*bBasicCall=*/false);
     // Select the word.
     pWrtShell->SelWrd();
 
@@ -1304,7 +1304,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf81226)
     SwDoc* const pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->Insert("before");
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 4, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 4, /*bBasicCall=*/false);
     pWrtShell->Down(false);
     pWrtShell->Insert("after");
 
@@ -1321,12 +1321,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf137532)
     pWrtShell->Insert("test");
 
     //Select the word and change it to bold
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 4, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 4, /*bBasicCall=*/false);
     lcl_setWeight(pWrtShell, WEIGHT_BOLD);
 
     // Select first character and replace it
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
     pWrtShell->Insert("x");
 
     auto xText = getParagraph(1)->getText();

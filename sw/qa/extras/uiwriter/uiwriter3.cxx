@@ -438,7 +438,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf148868)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
     pWrtShell->EndPg(/*bSelect=*/false);
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 5, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 5, /*bBasicCall=*/false);
     pWrtShell->Insert("X");
 
     // Without the fix in place, this test would have failed with
@@ -2622,7 +2622,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf141391)
     dispatchCommand(mxComponent, ".uno:SelectTable", {});
     dispatchCommand(mxComponent, ".uno:Copy", {});
     // remove the selection and positionate the cursor at beginning of A2
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     dispatchCommand(mxComponent, ".uno:Paste", {});
     Scheduler::ProcessEventsToIdle();
 
@@ -2680,7 +2680,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf141391)
     // copy the 2-row table into the fist paragraph of cell "A2",
     // but not at paragraph start (changed behaviour)
 
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     pWrtShell->Insert("and some text again in the first paragraph to be sure...");
     dispatchCommand(mxComponent, ".uno:Paste", {});
     Scheduler::ProcessEventsToIdle();
@@ -2712,7 +2712,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf148791)
     dispatchCommand(mxComponent, ".uno:SelectTable", {});
     dispatchCommand(mxComponent, ".uno:Copy", {});
     // remove the selection and positionate the cursor at beginning of A2
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     pWrtShell->Up(/*bSelect=*/false);
     dispatchCommand(mxComponent, ".uno:PasteRowsBefore", {});
     Scheduler::ProcessEventsToIdle();
@@ -2746,7 +2746,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf148791)
     dispatchCommand(mxComponent, ".uno:SelectTable", {});
     dispatchCommand(mxComponent, ".uno:Copy", {});
     // remove the selection and positionate the cursor at beginning of A2
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     pWrtShell->Up(/*bSelect=*/false);
     pWrtShell->Up(/*bSelect=*/false);
     pWrtShell->Up(/*bSelect=*/false);
@@ -2770,7 +2770,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf148791)
     dispatchCommand(mxComponent, ".uno:SelectTable", {});
     dispatchCommand(mxComponent, ".uno:Copy", {});
     // remove the selection and positionate the cursor at beginning of A2
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     // skip 7 table rows plus 4 rows of the nested table
     for (int i = 0; i < 7 + 4; ++i)
         pWrtShell->Up(/*bSelect=*/false);
@@ -2795,7 +2795,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf148791)
     dispatchCommand(mxComponent, ".uno:SelectTable", {});
     dispatchCommand(mxComponent, ".uno:Copy", {});
     // remove the selection and positionate the cursor at beginning of A2
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     // skip 15 table rows plus 4 * 2 rows of the nested tables
     for (int i = 0; i < 15 + 4 * 2; ++i)
         pWrtShell->Up(/*bSelect=*/false);
@@ -2880,7 +2880,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf145584)
     pWrtSh->Insert("Hello World");
 
     // Select 'World'
-    pWrtSh->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 5, /*bBasicCall=*/false);
+    pWrtSh->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 5, /*bBasicCall=*/false);
 
     // Save as PDF.
     uno::Sequence<beans::PropertyValue> aFilterData(
@@ -2992,7 +2992,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf116315)
     CPPUNIT_ASSERT(pWrtSh);
 
     pWrtSh->Insert("This is a test");
-    pWrtSh->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 4, /*bBasicCall=*/false);
+    pWrtSh->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 4, /*bBasicCall=*/false);
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     for (sal_Int32 i = 0; i < 5; ++i)
@@ -3598,11 +3598,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf146573)
     // of the cell with the footnote
     dispatchCommand(mxComponent, ".uno:AcceptAllTrackedChanges", {});
     Scheduler::ProcessEventsToIdle();
-    pWrtShell->Right(CRSR_SKIP_CELLS, /*bSelect=*/false, /*nCount=*/1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Cells, /*bSelect=*/false, /*nCount=*/1,
+                     /*bBasicCall=*/false);
     dispatchCommand(mxComponent, ".uno:InsertFootnote", {});
     dispatchCommand(mxComponent, ".uno:PageUp", {}); // leave footnote
-    pWrtShell->Left(CRSR_SKIP_CELLS, /*bSelect=*/false, /*nCount=*/1, /*bBasicCall=*/false);
-    pWrtShell->Left(CRSR_SKIP_CELLS, /*bSelect=*/true, /*nCount=*/1, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Cells, /*bSelect=*/false, /*nCount=*/1, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Cells, /*bSelect=*/true, /*nCount=*/1, /*bBasicCall=*/false);
     pWrtShell->Insert("100");
 
     // trigger recalculation by leaving the cell

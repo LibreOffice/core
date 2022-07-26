@@ -66,7 +66,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBiblioPageNumberUpdate)
     SwDocShell* pDocShell = pDoc->GetDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     pWrtShell->SttEndDoc(/*bStt=*/false);
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     OUString aCoreFields[AUTH_FIELD_END];
     aCoreFields[AUTH_FIELD_AUTHORITY_TYPE] = OUString::number(text::BibliographyDataType::WWW);
     aCoreFields[AUTH_FIELD_IDENTIFIER] = "AT";

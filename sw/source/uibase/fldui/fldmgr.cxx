@@ -1496,7 +1496,7 @@ bool SwFieldMgr::InsertField(
             pCurShell->Push();
 
             // start dialog, not before the field is inserted tdf#99529
-            pCurShell->Left(CRSR_SKIP_CHARS, false,
+            pCurShell->Left(SwCursorSkipMode::Chars, false,
                 (INP_VAR == (nSubType & 0xff) || pCurShell->GetViewOptions()->IsFieldName()) ? 1 : 2,
                 false);
             pCurShell->StartInputFieldDlg(pField.get(), false, true, rData.m_pParent);
@@ -1511,9 +1511,9 @@ bool SwFieldMgr::InsertField(
 
         if (bTable)
         {
-            pCurShell->Left(CRSR_SKIP_CHARS, false, 1, false );
+            pCurShell->Left(SwCursorSkipMode::Chars, false, 1, false );
             pCurShell->UpdateOneField(*pField);
-            pCurShell->Right(CRSR_SKIP_CHARS, false, 1, false );
+            pCurShell->Right(SwCursorSkipMode::Chars, false, 1, false );
         }
         else if (bPageVar)
         {

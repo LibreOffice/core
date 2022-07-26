@@ -170,7 +170,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testLineWidth)
     sal_Int32 nOldLeft = pWrtShell->GetCharRect().Left();
 
     // When moving the cursor to the right:
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
 
     // Then make sure we move to the right by the image width:
     sal_Int32 nNewLeft = pWrtShell->GetCharRect().Left();
@@ -458,9 +458,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testRedlineDelete)
 
     // When deleting content in the middle of the paragraph:
     pWrtShell->SttEndDoc(/*bStt=*/true);
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, /*nCount=*/aBefore.getLength(),
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, /*nCount=*/aBefore.getLength(),
                      /*bBasicCall=*/false);
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, /*nCount=*/aDelete.getLength(),
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, /*nCount=*/aDelete.getLength(),
                      /*bBasicCall=*/false);
     // Without the accompanying fix in place, this test would have crashed:
     pWrtShell->Delete();
@@ -512,7 +512,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf43100_CursorMoveToSpacesOverMargin)
     // Before this fix, the cursor stopped at the margin.
     for (int i = 0; i < 5; i++)
     {
-        pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+        pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
         sal_Int32 nNewCursorPos = pWrtShell->GetCharRect().Left();
         CPPUNIT_ASSERT_GREATER(nLastCursorPos, nNewCursorPos);
         nLastCursorPos = nNewCursorPos;

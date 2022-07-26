@@ -567,7 +567,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             rWrtSh.InsertFootnote( aStr, nSlot == FN_INSERT_ENDNOTE, !bFont );
             if ( bFont )
             {
-                rWrtSh.Left( CRSR_SKIP_CHARS, true, 1, false );
+                rWrtSh.Left( SwCursorSkipMode::Chars, true, 1, false );
                 SfxItemSetFixed<RES_CHRATR_FONT, RES_CHRATR_FONT> aSet( rWrtSh.GetAttrPool() );
                 rWrtSh.GetCurAttr( aSet );
                 rWrtSh.SetAttrSet( aSet, SetAttrMode::DONTEXPAND );

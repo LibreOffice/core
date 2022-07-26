@@ -340,7 +340,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer, void )
                 pSh->Overwrite(SwResId(STR_IDXEXAMPLE_IDXTXT_IMAGE1));
               }
             }
-            while(pSh->Right(sal_uInt16(1), sal_uInt16(1), true));
+            while(pSh->Right(sal_uInt16(1), SwCursorSkipMode::Cells, true));
 
             TOXTypes eTypes[] = { TOX_INDEX, TOX_USER, TOX_CONTENT };
             for (auto eType : eTypes)
