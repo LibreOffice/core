@@ -244,20 +244,21 @@ namespace
             pMark);
     }
 
-    std::unique_ptr<SwPosition> lcl_PositionFromContentNode(
+    void lcl_PositionFromContentNode(
+        std::optional<SwPosition>& rFoundPos,
         SwContentNode * const pContentNode,
         const bool bAtEnd)
     {
-        std::unique_ptr<SwPosition> pResult(new SwPosition(*pContentNode));
-        pResult->nContent.Assign(pContentNode, bAtEnd ? pContentNode->Len() : 0);
-        return pResult;
+        rFoundPos.emplace(*pContentNode);
+        rFoundPos->nContent.Assign(pContentNode, bAtEnd ? pContentNode->Len() : 0);
     }
 
     // return a position at the begin of rEnd, if it is a ContentNode
     // else set it to the begin of the Node after rEnd, if there is one
     // else set it to the end of the node before rStt
     // else set it to the ContentNode of the Pos outside the Range
-    std::unique_ptr<SwPosition> lcl_FindExpelPosition(
+    void lcl_FindExpelPosition(
+        std::optional<SwPosition>& rFoundPos,
         const SwNodeIndex& rStt,
         const SwNodeIndex& rEnd,
         const SwPosition& rOtherPosition)
@@ -278,10 +279,11 @@ namespace
         }
         if ( pNode != nullptr )
         {
-            return lcl_PositionFromContentNode( pNode, bPosAtEndOfNode );
+            lcl_PositionFromContentNode( rFoundPos, pNode, bPosAtEndOfNode );
+            return;
         }
 
-        return std::make_unique<SwPosition>(rOtherPosition);
+        rFoundPos = rOtherPosition;
     }
 
     struct CompareIMarkStartsBefore
@@ -1110,17 +1112,14 @@ namespace sw::mark
                 // the bookmark is partially in the range
                 // move position of that is in the range out of it
 
-                std::unique_ptr< SwPosition > pNewPos;
+                std::optional< SwPosition > oNewPos;
+                if ( pEndIdx != nullptr )
                 {
-                    if ( pEndIdx != nullptr )
-                    {
-                        pNewPos = std::make_unique< SwPosition >( rEnd, *pEndIdx );
-                    }
-                    else
-                    {
-                        pNewPos =
-                            lcl_FindExpelPosition( rStt, rEnd, bIsPosInRange ? pMark->GetOtherMarkPos() : pMark->GetMarkPos() );
-                    }
+                    oNewPos.emplace( rEnd, *pEndIdx );
+                }
+                else
+                {
+                    lcl_FindExpelPosition( oNewPos, rStt, rEnd, bIsPosInRange ? pMark->GetOtherMarkPos() : pMark->GetMarkPos() );
                 }
 
                 bool bMoveMark = true;
@@ -1130,7 +1129,7 @@ namespace sw::mark
                     case IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK:
                     case IDocumentMarkAccess::MarkType::CROSSREF_NUMITEM_BOOKMARK:
                         // no move of cross-reference bookmarks, if move occurs inside a certain node
-                        bMoveMark = pMark->GetMarkPos().nNode != pNewPos->nNode;
+                        bMoveMark = pMark->GetMarkPos().nNode != oNewPos->nNode;
                         break;
                     case IDocumentMarkAccess::MarkType::ANNOTATIONMARK:
                         // no move of annotation marks, if method is called to collect deleted marks
@@ -1144,9 +1143,9 @@ namespace sw::mark
                 if ( bMoveMark )
                 {
                     if ( bIsPosInRange )
-                        pMark->SetMarkPos(*pNewPos);
+                        pMark->SetMarkPos(*oNewPos);
                     else
-                        pMark->SetOtherMarkPos(*pNewPos);
+                        pMark->SetOtherMarkPos(*oNewPos);
                     bMarksMoved = true;
 
                     // illegal selection? collapse the mark and restore sorting later
