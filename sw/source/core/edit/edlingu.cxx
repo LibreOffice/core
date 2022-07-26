@@ -1617,7 +1617,7 @@ void    SwSpellIter::AddPortion(uno::Reference< XSpellAlternatives > const & xAl
         while(*pCursor->GetPoint() < aEnd)
         {
             // #125786 in table cell with fixed row height the cursor might not move forward
-            if(!GetSh()->Right(1, CRSR_SKIP_CELLS))
+            if(!GetSh()->Right(1, SwCursorSkipMode::Cells))
                 break;
 
             bool bField = false;
@@ -1672,7 +1672,7 @@ void    SwSpellIter::AddPortion(uno::Reference< XSpellAlternatives > const & xAl
                 if(bField)
                 {
                     *pCursor->GetMark() = *pCursor->GetPoint();
-                    GetSh()->Right(1, CRSR_SKIP_CELLS);
+                    GetSh()->Right(1, SwCursorSkipMode::Cells);
                     CreatePortion(xAlt, pGrammarResult, true, false);
                     aStart = *pCursor->End();
                 }

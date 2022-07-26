@@ -62,10 +62,10 @@ namespace o3tl {
 // the same, but in complex text cell skip over ligatures and char skip
 // into it.
 // These defines exist only to cut off the dependencies to I18N project.
-const sal_uInt16 CRSR_SKIP_CHARS  = 0;
-const sal_uInt16 CRSR_SKIP_CELLS  = 1;
-const sal_uInt16 CRSR_SKIP_HIDDEN = 2;
-
+enum class SwCursorSkipMode { Chars = 0, Cells = 1, Hidden = 2 };
+namespace o3tl {
+    template<> struct typed_flags<SwCursorSkipMode> : is_typed_flags<SwCursorSkipMode, 0x3> {};
+}
 
 class SW_DLLPUBLIC SwCursor : public SwPaM
 {
@@ -160,7 +160,7 @@ public:
     bool GoSentence(SentenceMoveType eMoveType, SwRootFrame const*pLayout = nullptr);
     void ExpandToSentenceBorders(SwRootFrame const* pLayout);
 
-    virtual bool LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
+    virtual bool LeftRight( bool bLeft, sal_uInt16 nCnt, SwCursorSkipMode nMode,
         bool bAllowVisual, bool bSkipHidden, bool bInsertCursor,
         SwRootFrame const* pLayout, bool isFieldNames);
     bool UpDown(bool bUp, sal_uInt16 nCnt, Point const * pPt, tools::Long nUpDownX, SwRootFrame & rLayout);
@@ -169,8 +169,8 @@ public:
     bool SttEndDoc( bool bSttDoc );
     bool GoPrevNextCell( bool bNext, sal_uInt16 nCnt );
 
-    bool Left( sal_uInt16 nCnt )   { return LeftRight(true, nCnt, CRSR_SKIP_CHARS, false/*bAllowVisual*/, false/*bSkipHidden*/, false, nullptr, false); }
-    bool Right( sal_uInt16 nCnt )  { return LeftRight(false, nCnt, CRSR_SKIP_CHARS, false/*bAllowVisual*/, false/*bSkipHidden*/, false, nullptr, false); }
+    bool Left( sal_uInt16 nCnt )   { return LeftRight(true, nCnt, SwCursorSkipMode::Chars, false/*bAllowVisual*/, false/*bSkipHidden*/, false, nullptr, false); }
+    bool Right( sal_uInt16 nCnt )  { return LeftRight(false, nCnt, SwCursorSkipMode::Chars, false/*bAllowVisual*/, false/*bSkipHidden*/, false, nullptr, false); }
     bool GoNextCell( sal_uInt16 nCnt = 1 )  { return GoPrevNextCell( true, nCnt ); }
     bool GoPrevCell( sal_uInt16 nCnt = 1 )  { return GoPrevNextCell( false, nCnt ); }
     virtual bool GotoTable( const OUString& rName );
@@ -269,7 +269,7 @@ public:
     SwTableCursor( SwTableCursor& );
     virtual ~SwTableCursor() override;
 
-    virtual bool LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
+    virtual bool LeftRight( bool bLeft, sal_uInt16 nCnt, SwCursorSkipMode nMode,
         bool bAllowVisual, bool bSkipHidden, bool bInsertCursor,
         SwRootFrame const*, bool) override;
     virtual bool GotoTable( const OUString& rName ) override;

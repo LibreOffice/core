@@ -1022,9 +1022,9 @@ void SwEditShell::SetExtTextInputData( const CommandExtTextInputData& rData )
         {
             auto nOldPos = pCurrentCursor->GetPoint()->nContent.GetIndex();
             if (bLeft)
-                Left(1, CRSR_SKIP_CHARS);
+                Left(1, SwCursorSkipMode::Chars);
             else
-                Right(1, CRSR_SKIP_CHARS);
+                Right(1, SwCursorSkipMode::Chars);
             auto nNewPos = pCurrentCursor->GetPoint()->nContent.GetIndex();
 
             // expected success

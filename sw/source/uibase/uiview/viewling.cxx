@@ -492,7 +492,7 @@ void SwView::InsertThesaurusSynonym( const OUString &rSynonmText, const OUString
     if( !bSelection )
     {
         if(m_pWrtShell->IsEndWrd())
-            m_pWrtShell->Left(CRSR_SKIP_CELLS, false, 1, false );
+            m_pWrtShell->Left(SwCursorSkipMode::Cells, false, 1, false );
 
         m_pWrtShell->SelWrd();
 

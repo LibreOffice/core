@@ -1792,8 +1792,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf130274)
     // "tset" may be replaced by the AutoCorrect in the test profile
     emulateTyping(*pXTextDocument, u"tset");
     // select from left to right
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 4, /*bBasicCall=*/false);
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 4, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 4, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 4, /*bBasicCall=*/false);
 
     pWrtShell->SetRedlineFlags(pWrtShell->GetRedlineFlags() | RedlineFlags::On);
     // this would crash in AutoCorrect

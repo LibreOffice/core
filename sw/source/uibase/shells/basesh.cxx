@@ -254,7 +254,7 @@ void SwBaseShell::ExecDelete(SfxRequest &rReq)
             if( rSh.IsNoNum() )
             {
                 rSh.SttCursorMove();
-                bool bLeft = rSh.Left( CRSR_SKIP_CHARS, true, 1, false  );
+                bool bLeft = rSh.Left( SwCursorSkipMode::Chars, true, 1, false  );
                 if( bLeft )
                 {
                     rSh.DelLeft();

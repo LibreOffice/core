@@ -71,6 +71,7 @@ class IDocumentListItems;
 class Point;
 enum class SvxFrameDirection;
 typedef std::vector<SwOLENode*> SwOLENodes; // docary.hxx
+enum class SwCursorSkipMode;
 
 namespace drawinglayer::attribute {
     class SdrAllFillAttributesHelper;
@@ -405,8 +406,8 @@ public:
     void MakeStartIndex( SwContentIndex * pIdx )   { pIdx->Assign( this, 0 ); }
     void MakeEndIndex( SwContentIndex * pIdx )     { pIdx->Assign( this, Len() ); }
 
-    bool GoNext(SwContentIndex *, sal_uInt16 nMode ) const;
-    bool GoPrevious(SwContentIndex *, sal_uInt16 nMode ) const;
+    bool GoNext(SwContentIndex *, SwCursorSkipMode nMode ) const;
+    bool GoPrevious(SwContentIndex *, SwCursorSkipMode nMode ) const;
 
     /// @see GetFrameOfModify
     SwContentFrame *getLayoutFrame( const SwRootFrame*,

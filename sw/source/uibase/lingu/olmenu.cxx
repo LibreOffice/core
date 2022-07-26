@@ -747,7 +747,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
     }
     else if (nId == m_nSpellDialogId)
     {
-        m_pSh->Left(CRSR_SKIP_CHARS, false, 1, false );
+        m_pSh->Left(SwCursorSkipMode::Chars, false, 1, false );
         {
             m_pSh->GetView().GetViewFrame()->GetDispatcher()->
                 Execute( FN_SPELL_GRAMMAR_DIALOG, SfxCallMode::ASYNCHRON );

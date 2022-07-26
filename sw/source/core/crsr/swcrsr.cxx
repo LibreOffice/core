@@ -1670,7 +1670,7 @@ void SwCursor::ExpandToSentenceBorders(SwRootFrame const*const pLayout)
     }
 }
 
-bool SwTableCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 /*nMode*/,
+bool SwTableCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, SwCursorSkipMode /*nMode*/,
     bool /*bVisualAllowed*/, bool /*bSkipHidden*/, bool /*bInsertCursor*/,
     SwRootFrame const*, bool /*isFieldNames*/)
 {
@@ -1736,7 +1736,7 @@ SwCursor::DoSetBidiLevelLeftRight(
     return pSttFrame;
 }
 
-bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
+bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, SwCursorSkipMode nMode,
                           bool bVisualAllowed,bool bSkipHidden, bool bInsertCursor,
                           SwRootFrame const*const pLayout, bool isFieldNames)
 {
@@ -1751,9 +1751,9 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
 
     SwGoInDoc fnGo;
     if ( bSkipHidden )
-        fnGo = CRSR_SKIP_CELLS == nMode ? GoInContentCellsSkipHidden : GoInContentSkipHidden;
+        fnGo = SwCursorSkipMode::Cells == nMode ? GoInContentCellsSkipHidden : GoInContentSkipHidden;
     else
-        fnGo = CRSR_SKIP_CELLS == nMode ? GoInContentCells : GoInContent;
+        fnGo = SwCursorSkipMode::Cells == nMode ? GoInContentCells : GoInContent;
 
     SwTextFrame const* pFrame(nullptr);
     if (pLayout)

@@ -1482,7 +1482,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf104032)
     SwDoc aClipboard;
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->StartOfSection();
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
     pWrtShell->Copy(aClipboard);
     pWrtShell->EndOfSection();
     pWrtShell->Paste(aClipboard);
@@ -1594,7 +1594,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableRemoveHasTextChangesOnly)
     assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row", 4);
 
     // Move the cursor after the redline, and insert some text without change tracking
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     pWrtShell->Insert("X");
 
     // Accepting again: 4 rows (extra text keeps the deleted row)
@@ -1647,7 +1647,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableRemoveHasTextChangesOnly2)
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->Down(/*bSelect=*/false);
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     Scheduler::ProcessEventsToIdle();
     dispatchCommand(mxComponent, ".uno:AcceptTrackedChange", {});
     Scheduler::ProcessEventsToIdle();
@@ -1907,7 +1907,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf105625)
     pWrtShell->Down(/*bSelect=*/false);
     // Check selection across FORMTEXT field boundary - must be read-only
     pWrtShell->SttPara();
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
     CPPUNIT_ASSERT_EQUAL(true, pWrtShell->HasReadonlySel());
     // Test deletion of whole field with single backspace
     // Previously it only removed right boundary of FORMTEXT, or failed removal at all
@@ -1934,7 +1934,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf125151_protected)
     // The cursor moved inside of the FieldMark textbox.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Readonly 1", false, pWrtShell->HasReadonlySel());
     // Move left to the start/definition of the textbox
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Readonly 2", true, pWrtShell->HasReadonlySel());
 }
 
@@ -1951,7 +1951,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf125151_protectedB)
     // The cursor starts inside of the FieldMark textbox.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Readonly 1", false, pWrtShell->HasReadonlySel());
     // Move left to the start/definition of the textbox
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Readonly 2", true, pWrtShell->HasReadonlySel());
 }
 

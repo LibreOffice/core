@@ -146,13 +146,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf138479)
     dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});
 
     // delete "r" in "Lorem"
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 3, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 3, /*bBasicCall=*/false);
     dispatchCommand(mxComponent, ".uno:Delete", {});
     CPPUNIT_ASSERT_EQUAL(OUString("Loem"), getParagraph(1)->getString());
 
     // delete "oe" in "Loem"
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 2, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 2, /*bBasicCall=*/false);
     dispatchCommand(mxComponent, ".uno:Delete", {});
     CPPUNIT_ASSERT_EQUAL(OUString("Lm"), getParagraph(1)->getString());
 
@@ -318,7 +318,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf50447)
     }
 
     // remove bold formatting with change tracking
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 6, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 6, /*bBasicCall=*/false);
     dispatchCommand(mxComponent, ".uno:Bold", {});
 
     xText = getParagraph(1)->getText();
@@ -362,7 +362,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf143918)
     }
 
     // remove bold formatting with change tracking and after that, apply underline, too
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 6, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 6, /*bBasicCall=*/false);
     dispatchCommand(mxComponent, ".uno:Bold", {});
     dispatchCommand(mxComponent, ".uno:Underline", {});
 
@@ -422,7 +422,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf143938)
         IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
 
     // apply italic with change tracking
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 6, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 6, /*bBasicCall=*/false);
     dispatchCommand(mxComponent, ".uno:Italic", {});
 
     xText = getParagraph(1)->getText();
@@ -473,7 +473,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf143939)
     }
 
     // positionate the text cursor inside the first word
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     // remove bold formatting with change tracking without selection
     dispatchCommand(mxComponent, ".uno:Bold", {});
 
@@ -1053,9 +1053,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf125310)
 
     // paragraph join
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     pWrtShell->EndPara(/*bSelect=*/true);
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
     rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
     pTransfer->Cut();
 
@@ -1140,7 +1140,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testImageComment)
     // Test document has "before<image>after", remove the content before the image.
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->SttEndDoc(/*bStart=*/true);
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 6, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 6, /*bBasicCall=*/false);
     pWrtShell->Delete();
 
     // Select the image.
@@ -2793,7 +2793,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf93747)
     pWrtSh->Insert("Col1");
 
     // Move the cursor to B1
-    pWrtSh->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtSh->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
 
     pWrtSh->Insert("Col2");
 
@@ -2812,10 +2812,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf93747)
     CPPUNIT_ASSERT_EQUAL(OUString("Col2"), xCellB1->getString());
 
     // Select backwards B1 and A1
-    pWrtSh->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 5, /*bBasicCall=*/false);
+    pWrtSh->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 5, /*bBasicCall=*/false);
 
     // Just select the whole B1
-    pWrtSh->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtSh->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
 
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
         { "Style", uno::Any(OUString("Heading 1")) },
@@ -2835,7 +2835,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf93747)
         getProperty<OUString>(getParagraphOfText(1, xCellB1->getText()), "ParaStyleName"));
 
     // Now select A1 again
-    pWrtSh->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtSh->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
 
     dispatchCommand(mxComponent, ".uno:StyleApply", aPropertyValues);
 
@@ -2884,7 +2884,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf145151)
     pWrtSh->Insert("Col1");
 
     // Move the cursor to B1
-    pWrtSh->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtSh->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
 
     pWrtSh->Insert("Col2");
 
@@ -2903,10 +2903,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf145151)
     CPPUNIT_ASSERT_EQUAL(OUString("Col2"), xCellB1->getString());
 
     // Select backwards B1 and A1 (select "2loC<cell>" which ends up selecting both cells)
-    pWrtSh->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 5, /*bBasicCall=*/false);
+    pWrtSh->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 5, /*bBasicCall=*/false);
 
     // Just select the whole B1
-    pWrtSh->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtSh->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
 
     dispatchCommand(mxComponent, ".uno:DefaultNumbering", {});
     Scheduler::ProcessEventsToIdle();
@@ -2931,7 +2931,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf145151)
 
     // Now test removing numbering/bullets
     // Add A1 to the current B1 selection
-    pWrtSh->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtSh->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
 
     // Toggle on bullet numbering
     dispatchCommand(mxComponent, ".uno:DefaultBullet", {});
@@ -2947,7 +2947,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf145151)
     CPPUNIT_ASSERT(sNumStyleA1 != sNumStyleB1); // therefore B1 changed from numbering to bullets
 
     // Just select cell B1
-    pWrtSh->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtSh->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
 
     // Toggle off bullet numbering
     dispatchCommand(mxComponent, ".uno:DefaultBullet", {});

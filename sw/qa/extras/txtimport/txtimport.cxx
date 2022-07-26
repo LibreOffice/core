@@ -179,7 +179,7 @@ CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf115088)
     pWrtShell->SelAll();
     dispatchCommand(mxComponent, ".uno:Cut", {});
     pWrtShell->Insert("test");
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 4, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 4, /*bBasicCall=*/false);
     dispatchCommand(mxComponent, ".uno:PasteUnformatted", {});
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     OUString aActual = xTextDocument->getText()->getString().copy(0, 2);

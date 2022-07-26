@@ -185,11 +185,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineMoveInsertInDelete)
     // first delete redline, logically containing the insert redline
     // (note: Word apparently allows similar things...)
     pWrtShell->SttEndDoc(true);
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
     pWrtShell->Delete(); // the footnote
     // second delete redline, following the first one
     pWrtShell->EndOfSection(false);
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 3, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 3, /*bBasicCall=*/false);
     pWrtShell->Delete(); // "foo"
 
     // hiding used to copy the 2nd delete redline "foo", but not delete it
@@ -220,12 +220,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineInHiddenSection)
     pWrtShell->SetRedlineFlags(mode);
 
     // delete paragraph "bar"
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 2, /*bBasicCall=*/false);
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 8, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 2, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 8, /*bBasicCall=*/false);
     pWrtShell->Delete();
 
     pWrtShell->StartOfSection();
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     pWrtShell->EndOfSection(true);
 
     SwSectionData section(SectionType::Content, pWrtShell->GetUniqueSectionName());
@@ -285,7 +285,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineSplitContentNode)
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
 
     pWrtShell->CalcLayout();
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 18, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 18, /*bBasicCall=*/false);
     pWrtShell->SplitNode(true);
     rUndoManager.Undo();
     // crashed
@@ -816,7 +816,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf131912)
                           svl::Items<RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR>);
         SwFormatAnchor anchor(RndStdIds::FLY_AT_CHAR);
         pWrtShell->StartOfSection(false);
-        pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 2, /*bBasicCall=*/false);
+        pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 2, /*bBasicCall=*/false);
         anchor.SetAnchor(pWrtShell->GetCursor()->GetPoint());
         flySet.Put(anchor);
         SwFormatFrameSize size(SwFrameSize::Minimum, 1000, 1000);
@@ -967,7 +967,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf140007)
 
     pWrtShell->SttEndDoc(true);
     pWrtShell->EndPara(false);
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
     pWrtShell->Replace(" ", true);
     CPPUNIT_ASSERT_EQUAL(SwNodeOffset(12), pDoc->GetNodes().Count());
     CPPUNIT_ASSERT_EQUAL(OUString("foo bar"),
@@ -977,7 +977,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf140007)
 
     pWrtShell->SttEndDoc(true);
     pWrtShell->EndPara(false);
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
     pWrtShell->Replace(" ", true);
     CPPUNIT_ASSERT_EQUAL(OUString("foo bar baz"),
                          pDoc->GetNodes()[SwNodeOffset(9)]->GetTextNode()->GetText());
@@ -1050,7 +1050,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf139982)
 
     pWrtShell->Insert("helloo");
 
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     {
         SwFormatAnchor anchor(RndStdIds::FLY_AT_CHAR);
         anchor.SetAnchor(pWrtShell->GetCursor()->GetPoint());
@@ -1091,7 +1091,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf135976)
 
     pWrtShell->Insert("foobar");
 
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 2, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 2, /*bBasicCall=*/false);
     SwFormatAnchor anchor(RndStdIds::FLY_AT_CHAR);
     anchor.SetAnchor(pWrtShell->GetCursor()->GetPoint());
     SfxItemSet flySet(pDoc->GetAttrPool(), svl::Items<RES_ANCHOR, RES_ANCHOR>);
@@ -1116,7 +1116,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf135976)
 
     pWrtShell->UnSelectFrame();
     pWrtShell->SttEndDoc(/*bStart=*/false);
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
 
     pWrtShell->DelLeft();
     pWrtShell->DelLeft();
@@ -1149,7 +1149,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf135976)
     // now again in the other direction:
 
     pWrtShell->SttEndDoc(/*bStart=*/false);
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 3, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 3, /*bBasicCall=*/false);
 
     pWrtShell->DelRight();
     pWrtShell->DelRight();
@@ -1326,7 +1326,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf54819)
     // remove first paragraph with paragraph break
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->EndPara(/*bSelect=*/true);
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
     rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
     pTransfer->Cut();
 
@@ -1372,7 +1372,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf54819_keep_numbering_with_Undo)
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->EndPara(/*bSelect=*/true);
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
     rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
     pTransfer->Cut();
 
@@ -1462,11 +1462,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119571_keep_numbering_with_Undo)
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->Down(/*bSelect=*/false);
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 6, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 6, /*bBasicCall=*/false);
     pWrtShell->EndPara(/*bSelect=*/true);
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 2, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 2, /*bBasicCall=*/false);
     pWrtShell->EndPara(/*bSelect=*/true);
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
     rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
     pTransfer->Cut();
 
@@ -1564,11 +1564,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119571_keep_numbering_with_Reject)
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->Down(/*bSelect=*/false);
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 6, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 6, /*bBasicCall=*/false);
     pWrtShell->EndPara(/*bSelect=*/true);
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 2, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 2, /*bBasicCall=*/false);
     pWrtShell->EndPara(/*bSelect=*/true);
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
     rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
     pTransfer->Cut();
 
@@ -1619,8 +1619,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf140077)
     pWrtShell->Insert("a");
     pWrtShell->SplitNode();
     pWrtShell->Insert("b");
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
     // enable
     dispatchCommand(mxComponent, ".uno:TrackChanges", {});
 
@@ -1633,7 +1633,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf140077)
 
     pWrtShell->Delete();
     pWrtShell->SttEndDoc(/*bStart=*/false);
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     dispatchCommand(mxComponent, ".uno:TrackChanges", {});
 
     // crashed in layout
@@ -1760,7 +1760,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf147414)
         IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
     CPPUNIT_ASSERT(pWrtShell->GetLayout()->IsHideRedlines());
 
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     // backspace
     pWrtShell->DelLeft();
     pWrtShell->AutoCorrect(corr, u' ');
@@ -1910,7 +1910,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf126784_distributeSelectedColumns)
     sal_Int16 nOrigCol3Pos = aSeq[1].Position;
 
     //Select column 1 and 2
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
 
     dispatchCommand(mxComponent, ".uno:DistributeColumns", {});
 
@@ -1987,9 +1987,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119571)
 
     // join paragraphs by removing the end of the first one with paragraph break
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     pWrtShell->EndPara(/*bSelect=*/true);
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
     rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
     pTransfer->Cut();
 
@@ -2019,7 +2019,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf144058)
     // join first and last but one paragraphs by removing the end of the first paragraph
     // with paragraph break, and by removing two tables of the selected range completely
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     pWrtShell->Down(/*bSelect=*/true);
     pWrtShell->Down(/*bSelect=*/true);
     pWrtShell->Down(/*bSelect=*/true);
@@ -2054,7 +2054,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119019)
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->EndPara(/*bSelect=*/false);
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 7, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 7, /*bBasicCall=*/false);
     rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
     pTransfer->Cut();
 
@@ -2094,7 +2094,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119824)
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->EndPara(/*bSelect=*/false);
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 5, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 5, /*bBasicCall=*/false);
     rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
     pTransfer->Cut();
 
@@ -2765,7 +2765,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137503)
     // select and delete the first two paragraphs
     pWrtShell->EndPara(/*bSelect=*/true);
     pWrtShell->EndPara(/*bSelect=*/true);
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
     dispatchCommand(mxComponent, ".uno:Delete", {});
     CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("The"));
 
@@ -3100,7 +3100,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testJoinParaChangesInMargin)
 
     // delete a character and the paragraph break at the end of the paragraph
     dispatchCommand(mxComponent, ".uno:GotoEndOfPara", {});
-    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
     dispatchCommand(mxComponent, ".uno:Delete", {});
     dispatchCommand(mxComponent, ".uno:Delete", {});
     CPPUNIT_ASSERT_EQUAL(OUString("Lorem ipsudolor sit amet."), getParagraph(1)->getString());

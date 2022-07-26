@@ -763,7 +763,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf145225_RedlineMovingWithBadInsertio
     dispatchCommand(mxComponent, ".uno:GoToStartOfDoc", {});
     dispatchCommand(mxComponent, ".uno:TrackChanges", {});
     // positionate the cursor in the middle of the second list item
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 4, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 4, /*bBasicCall=*/false);
     pWrtShell->SplitNode(false);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), pEditShell->GetRedlineCount());
 

@@ -204,7 +204,7 @@ bool SwWrtShell::DelLeft()
 
         // If the cursor is at the beginning of a paragraph, try to step
         // backwards. On failure we are done.
-        bool bDoSomething = SwCursorShell::Left(1,CRSR_SKIP_CHARS);
+        bool bDoSomething = SwCursorShell::Left(1,SwCursorSkipMode::Chars);
 
         if (bDoSomething)
         {
@@ -234,7 +234,7 @@ bool SwWrtShell::DelLeft()
         SwCursorShell::Pop(SwCursorShell::PopMode::DeleteStack);
 
         OpenMark();
-        SwCursorShell::Right(1,CRSR_SKIP_CHARS);
+        SwCursorShell::Right(1,SwCursorSkipMode::Chars);
         SwCursorShell::SwapPam();
         bSwap = true;
     }
@@ -255,7 +255,7 @@ bool SwWrtShell::DelLeft()
         }
 
         OpenMark();
-        SwCursorShell::Left(1, CRSR_SKIP_CHARS);
+        SwCursorShell::Left(1, SwCursorSkipMode::Chars);
         if (SvtScriptType::ASIAN == GetScriptType())
         {
             sal_uInt32 nCode = GetChar(false);
@@ -268,7 +268,7 @@ bool SwWrtShell::DelLeft()
             if ( unicode::isIVSSelector( nCode ) )
             {
                 SwCursorShell::Push();
-                SwCursorShell::Left(1, CRSR_SKIP_CHARS);
+                SwCursorShell::Left(1, SwCursorSkipMode::Chars);
                 OUString sStr = GetSelText();
                 nCode = sStr.iterateCodePoints( &o3tl::temporary(sal_Int32(0)) );
                 if ( unicode::isCJKIVSCharacter( nCode ) )
@@ -356,7 +356,7 @@ bool SwWrtShell::DelRight(bool const isReplaceHeuristic)
             // may be a numbering in front of the next paragraph.
             SwCursorShell::Push();
 
-            if (SwCursorShell::Right(1, CRSR_SKIP_CHARS))
+            if (SwCursorShell::Right(1, SwCursorSkipMode::Chars))
             {
                 const SwTableNode* pCurrTableNd = IsCursorInTable();
                 bDelFull = bCheckDelFull && pCurrTableNd && pCurrTableNd != pWasInTableNd;
@@ -400,7 +400,7 @@ bool SwWrtShell::DelRight(bool const isReplaceHeuristic)
         }
 
         OpenMark();
-        SwCursorShell::Right(1, CRSR_SKIP_CELLS);
+        SwCursorShell::Right(1, SwCursorSkipMode::Cells);
         bRet = Delete(true);
         CloseMark( bRet );
         if (!bRet)
@@ -476,14 +476,14 @@ bool SwWrtShell::DelRight(bool const isReplaceHeuristic)
                     Insert( OUStringChar(CH_TXT_TRACKED_DUMMY_CHAR) +
                             OUStringChar(CH_TXT_TRACKED_DUMMY_CHAR) );
                     SwFormatAnchor anchor(RndStdIds::FLY_AT_CHAR);
-                    SwCursorShell::Left(1, CRSR_SKIP_CHARS);
+                    SwCursorShell::Left(1, SwCursorSkipMode::Chars);
                     anchor.SetAnchor(GetCursor()->GetPoint());
                     GetDoc()->SetAttr(anchor, *pFormat);
                     SetRedlineFlags( eOld );
-                    SwCursorShell::Left(1, CRSR_SKIP_CHARS);
+                    SwCursorShell::Left(1, SwCursorSkipMode::Chars);
                 }
                 OpenMark();
-                SwCursorShell::Right(nRedlineLength, CRSR_SKIP_CHARS);
+                SwCursorShell::Right(nRedlineLength, SwCursorSkipMode::Chars);
                 bRet = Delete(false);
                 CloseMark( bRet );
             }
@@ -608,7 +608,7 @@ bool SwWrtShell::DelToEndOfSentence()
     {
         Push();
         ClearMark();
-        if (SwCursorShell::Right(1,CRSR_SKIP_CHARS))
+        if (SwCursorShell::Right(1,SwCursorSkipMode::Chars))
         {
             SetMark();
             if (!IsEndPara()) // can only be at the end if it's empty

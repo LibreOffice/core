@@ -80,7 +80,7 @@ void SwFieldEditDlg::EnsureSelection(SwField *pCurField, SwFieldMgr &rMgr)
         //After this attempt it is possible that rMgr.GetCurField() != pCurField if
         //the field was in e.g. a zero height portion and so invisible in which
         //case it will be skipped over
-        pSh->Right(CRSR_SKIP_CHARS, true, 1, false );
+        pSh->Right(SwCursorSkipMode::Chars, true, 1, false );
         //So (fdo#50640) if it didn't work then reposition back to the original
         //location where the field was
         SwField *pRealCurField = rMgr.GetCurField();

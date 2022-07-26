@@ -1627,7 +1627,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                  !mrSh.SelectHiddenRange() )
             {
                 // Select the hyperlink:
-                mrSh.SwCursorShell::Right( 1, CRSR_SKIP_CHARS );
+                mrSh.SwCursorShell::Right( 1, SwCursorSkipMode::Chars );
                 if ( mrSh.SwCursorShell::SelectTextAttr( RES_TXTATR_INETFMT, true ) )
                 {
                     // First, we create the destination, because there may be more
@@ -1861,7 +1861,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     continue;
                 // Select the field:
                 mrSh.SwCursorShell::SetMark();
-                mrSh.SwCursorShell::Right( 1, CRSR_SKIP_CHARS );
+                mrSh.SwCursorShell::Right( 1, SwCursorSkipMode::Chars );
 
                 // Link Rectangles
                 SwRects aTmp;
@@ -1954,7 +1954,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
             // Select the footnote:
             mrSh.SwCursorShell::SetMark();
-            mrSh.SwCursorShell::Right( 1, CRSR_SKIP_CHARS );
+            mrSh.SwCursorShell::Right( 1, SwCursorSkipMode::Chars );
 
             // Link Rectangle
             SwRects aTmp;
@@ -2227,7 +2227,7 @@ void SwEnhancedPDFExportHelper::ExportAuthorityEntryLinks()
 
         // Select the field.
         mrSh.SwCursorShell::SetMark();
-        mrSh.SwCursorShell::Right(1, CRSR_SKIP_CHARS);
+        mrSh.SwCursorShell::Right(1, SwCursorSkipMode::Chars);
 
         // Create the links.
         for (const auto& rLinkRect : *mrSh.SwCursorShell::GetCursor_())

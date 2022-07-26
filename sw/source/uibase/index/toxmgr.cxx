@@ -212,7 +212,7 @@ void SwTOXMgr::UpdateTOXMark(const SwTOXMarkDescription& rDesc)
     // Bug 36207 pCurTOXMark points nowhere here!
     if(!m_pCurTOXMark)
     {
-        m_pSh->Left(CRSR_SKIP_CHARS, false, 1, false );
+        m_pSh->Left(SwCursorSkipMode::Chars, false, 1, false );
         m_pSh->GetCurTOXMarks(m_aCurMarks);
         SetCurTOXMark(0);
     }

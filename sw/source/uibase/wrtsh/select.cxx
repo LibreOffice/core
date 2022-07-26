@@ -66,7 +66,7 @@ bool SwWrtShell::SelNearestWrd()
     if( !IsInWord() && !IsEndWrd() && !IsStartWord() )
         PrvWrd();
     if( IsEndWrd() )
-        Left(CRSR_SKIP_CELLS, false, 1, false );
+        Left(SwCursorSkipMode::Cells, false, 1, false );
     return SelWrd();
 }
 
@@ -532,7 +532,7 @@ void SwWrtShell::ExtSelLn(const Point *pPt, bool )
         if( bToTop )
         {
             if( !IsEndPara() )
-                SwCursorShell::Right(1,CRSR_SKIP_CHARS);
+                SwCursorShell::Right(1,SwCursorSkipMode::Chars);
             SwCursorShell::GoEndSentence();
         }
         else
@@ -907,7 +907,7 @@ int SwWrtShell::IntelligentCut(SelectionType nSelection, bool bCut)
                 SwapPam();
             ClearMark();
             SetMark();
-            SwCursorShell::Left(1,CRSR_SKIP_CHARS);
+            SwCursorShell::Left(1,SwCursorSkipMode::Chars);
             SwFEShell::Delete(true);
             Pop(SwCursorShell::PopMode::DeleteCurrent);
         }
@@ -921,7 +921,7 @@ int SwWrtShell::IntelligentCut(SelectionType nSelection, bool bCut)
             if(!IsCursorPtAtEnd()) SwapPam();
             ClearMark();
             SetMark();
-            SwCursorShell::Right(1,CRSR_SKIP_CHARS);
+            SwCursorShell::Right(1,SwCursorSkipMode::Chars);
             SwFEShell::Delete(true);
             Pop(SwCursorShell::PopMode::DeleteCurrent);
         }

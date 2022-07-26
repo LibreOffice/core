@@ -1110,7 +1110,7 @@ void SwWrtShell::InsertContentControl(SwContentControlType eType)
             }
 
             // Select before the anchor position.
-            Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+            Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
             break;
         }
         case SwContentControlType::DATE:
@@ -1132,7 +1132,7 @@ void SwWrtShell::InsertContentControl(SwContentControlType eType)
     if (aPlaceholder.getLength())
     {
         Insert(aPlaceholder);
-        Left(CRSR_SKIP_CHARS, /*bSelect=*/true, aPlaceholder.getLength(),
+        Left(SwCursorSkipMode::Chars, /*bSelect=*/true, aPlaceholder.getLength(),
                 /*bBasicCall=*/false);
     }
     SwFormatContentControl aContentControl(pContentControl, RES_TXTATR_CONTENTCONTROL);
@@ -1165,7 +1165,7 @@ void SwWrtShell::InsertFootnote(const OUString &rStr, bool bEndNote, bool bEdit 
     if( bEdit )
     {
         // For editing the footnote text.
-        Left(CRSR_SKIP_CHARS, false, 1, false );
+        Left(SwCursorSkipMode::Chars, false, 1, false );
         GotoFootnoteText();
     }
     m_aNavigationMgr.addEntry(aPos);
@@ -2267,7 +2267,7 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
                 SwFrameFormat* pFormat = pFly->GetFormat();
                 if (pFormat && pFormat->GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR)
                 {
-                    Right(CRSR_SKIP_CELLS, /*bSelect=*/true, 1, /*bBasicCall=*/false, /*bVisual=*/true);
+                    Right(SwCursorSkipMode::Cells, /*bSelect=*/true, 1, /*bBasicCall=*/false, /*bVisual=*/true);
                 }
                 else if (pFormat && pFormat->GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_CHAR)
                 {
@@ -2280,7 +2280,7 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
         rFieldMgr.InsertField( aData );
 
         Push();
-        SwCursorShell::Left(1, CRSR_SKIP_CHARS);
+        SwCursorShell::Left(1, SwCursorSkipMode::Chars);
         pPostIt = static_cast<SwPostItField*>(rFieldMgr.GetCurField());
         Pop(SwCursorShell::PopMode::DeleteCurrent); // Restore cursor position
     }

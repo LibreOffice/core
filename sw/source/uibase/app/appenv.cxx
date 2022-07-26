@@ -281,7 +281,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
             if ( pSh->IsCursorInTable() )
             {
                 pSh->SplitNode();
-                pSh->Right( CRSR_SKIP_CHARS, false, 1, false );
+                pSh->Right( SwCursorSkipMode::Chars, false, 1, false );
                 SfxItemSetFixed<RES_PAGEDESC, RES_PAGEDESC> aBreakSet( pSh->GetAttrPool() );
                 aBreakSet.Put( SwFormatPageDesc( pFollow ) );
                 pSh->SetTableAttr( aBreakSet );

@@ -42,14 +42,14 @@ void SwInsFootNoteDlg::Apply()
     if (m_bEdit)
     {
         m_rSh.StartAction();
-        m_rSh.Left(CRSR_SKIP_CHARS, false, 1, false );
+        m_rSh.Left(SwCursorSkipMode::Chars, false, 1, false );
         m_rSh.StartUndo( SwUndoId::START );
         SwFormatFootnote aNote( m_xEndNoteBtn->get_active() );
         aNote.SetNumStr( aStr );
 
         if (m_rSh.SetCurFootnote( aNote ) && m_bExtCharAvailable)
         {
-            m_rSh.Right(CRSR_SKIP_CHARS, true, 1, false );
+            m_rSh.Right(SwCursorSkipMode::Chars, true, 1, false );
             SfxItemSetFixed<RES_CHRATR_FONT, RES_CHRATR_FONT> aSet(m_rSh.GetAttrPool());
             m_rSh.GetCurAttr(aSet);
             const SvxFontItem &rFont = aSet.Get( RES_CHRATR_FONT );
@@ -59,7 +59,7 @@ void SwInsFootNoteDlg::Apply()
             aSet.Put( aFont );
             m_rSh.SetAttrSet( aSet, SetAttrMode::DONTEXPAND );
             m_rSh.ResetSelect(nullptr, false);
-            m_rSh.Left(CRSR_SKIP_CHARS, false, 1, false );
+            m_rSh.Left(SwCursorSkipMode::Chars, false, 1, false );
         }
         m_rSh.EndUndo( SwUndoId::END );
         m_rSh.EndAction();
@@ -199,7 +199,7 @@ void SwInsFootNoteDlg::Init()
         {
             sNumStr = aFootnoteNote.GetNumStr();
 
-            m_rSh.Right(CRSR_SKIP_CHARS, true, 1, false );
+            m_rSh.Right(SwCursorSkipMode::Chars, true, 1, false );
             SfxItemSetFixed<RES_CHRATR_FONT, RES_CHRATR_FONT> aSet(m_rSh.GetAttrPool());
             m_rSh.GetCurAttr(aSet);
             const SvxFontItem &rFont = aSet.Get( RES_CHRATR_FONT );
@@ -209,7 +209,7 @@ void SwInsFootNoteDlg::Init()
             aFont.SetFamilyName(m_aFontName);
             aFont.SetCharSet(m_eCharSet);
             m_bExtCharAvailable = true;
-            m_rSh.Left( CRSR_SKIP_CHARS, false, 1, false );
+            m_rSh.Left( SwCursorSkipMode::Chars, false, 1, false );
         }
         bFootnote = !aFootnoteNote.IsEndNote();
     }
@@ -241,7 +241,7 @@ void SwInsFootNoteDlg::Init()
     m_xPrevBT->set_sensitive(bPrev);
     m_xNextBT->set_sensitive(bNext);
 
-    m_rSh.Right(CRSR_SKIP_CHARS, true, 1, false );
+    m_rSh.Right(SwCursorSkipMode::Chars, true, 1, false );
 
     m_rSh.EndAction();
 }

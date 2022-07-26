@@ -178,10 +178,10 @@ void SwHHCWrapper::SelectNewUnit_impl( sal_Int32 nUnitStart, sal_Int32 nUnitEnd 
     pCursor->GetPoint()->nContent = m_nLastPos;
     pCursor->DeleteMark();
 
-    m_rWrtShell.Right( CRSR_SKIP_CHARS, /*bExpand*/ false,
+    m_rWrtShell.Right( SwCursorSkipMode::Chars, /*bExpand*/ false,
                   o3tl::narrowing<sal_uInt16>(m_nUnitOffset + nUnitStart), true );
     pCursor->SetMark();
-    m_rWrtShell.Right( CRSR_SKIP_CHARS, /*bExpand*/ true,
+    m_rWrtShell.Right( SwCursorSkipMode::Chars, /*bExpand*/ true,
                   o3tl::narrowing<sal_uInt16>(nUnitEnd - nUnitStart), true );
     // end selection now. Otherwise SHIFT+HOME (extending the selection)
     // won't work when the dialog is closed without any replacement.
@@ -431,7 +431,7 @@ void SwHHCWrapper::ReplaceUnit(
             // of the flag.
             m_rWrtShell.EndSelect();
 
-            m_rWrtShell.Left( 0, true, aNewOrigText.getLength(), true, true );
+            m_rWrtShell.Left( SwCursorSkipMode::Chars, true, aNewOrigText.getLength(), true, true );
         }
 
         pRuby->SetPosition( o3tl::narrowing<sal_uInt16>(bRubyBelow) );

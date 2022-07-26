@@ -69,7 +69,7 @@ bool SwWrtShell::NxtWrd_()
     bool bRet = false;
     while( IsEndPara() )               // If already at the end, then the next???
     {
-        if(!SwCursorShell::Right(1,CRSR_SKIP_CHARS))  // Document - end ??
+        if(!SwCursorShell::Right(1,SwCursorSkipMode::Chars))  // Document - end ??
         {
             Pop(SwCursorShell::PopMode::DeleteCurrent);
             return bRet;
@@ -83,7 +83,7 @@ bool SwWrtShell::NxtWrd_()
         if( !GoNextWord() )
         {
             if( (!IsEndPara() && !SwCursorShell::MovePara( GoCurrPara, fnParaEnd ) )
-                || !SwCursorShell::Right(1,CRSR_SKIP_CHARS) )
+                || !SwCursorShell::Right(1,SwCursorSkipMode::Chars) )
                 break;
             bRet = IsStartWord();
         }
@@ -100,7 +100,7 @@ bool SwWrtShell::PrvWrd_()
     bool bRet = false;
     while( IsSttPara() )
     {                            // if already at the beginning, then the next???
-        if(!SwCursorShell::Left(1,CRSR_SKIP_CHARS))
+        if(!SwCursorShell::Left(1,SwCursorSkipMode::Chars))
         {                        // Document - beginning ??
             Pop(SwCursorShell::PopMode::DeleteCurrent);
             return bRet;
@@ -114,7 +114,7 @@ bool SwWrtShell::PrvWrd_()
         if( !GoPrevWord() )
         {
             if( (!IsSttPara() && !SwCursorShell::MovePara( GoCurrPara, fnParaStart ) )
-                || !SwCursorShell::Left(1,CRSR_SKIP_CHARS) )
+                || !SwCursorShell::Left(1,SwCursorSkipMode::Chars) )
                 break;
             bRet = IsStartWord();
         }
@@ -132,7 +132,7 @@ bool SwWrtShell::NxtWrdForDelete()
 {
     if ( IsEndPara() )
     {
-        if ( !SwCursorShell::Right(1,CRSR_SKIP_CHARS) )
+        if ( !SwCursorShell::Right(1,SwCursorSkipMode::Chars) )
         {
             Pop(SwCursorShell::PopMode::DeleteCurrent);
             return false;
@@ -155,7 +155,7 @@ bool SwWrtShell::PrvWrdForDelete()
 {
     if ( IsSttPara() )
     {
-        if ( !SwCursorShell::Left(1,CRSR_SKIP_CHARS) )
+        if ( !SwCursorShell::Left(1,SwCursorSkipMode::Chars) )
         {
             Pop(SwCursorShell::PopMode::DeleteCurrent);
             return false;
@@ -177,7 +177,7 @@ bool SwWrtShell::FwdSentence_()
 {
     Push();
     ClearMark();
-    if(!SwCursorShell::Right(1,CRSR_SKIP_CHARS))
+    if(!SwCursorShell::Right(1,SwCursorSkipMode::Chars))
     {
         Pop(SwCursorShell::PopMode::DeleteCurrent);
         return false;
@@ -194,7 +194,7 @@ bool SwWrtShell::BwdSentence_()
 {
     Push();
     ClearMark();
-    if(!SwCursorShell::Left(1,CRSR_SKIP_CHARS))
+    if(!SwCursorShell::Left(1,SwCursorSkipMode::Chars))
     {
         Pop(SwCursorShell::PopMode::DeleteCurrent);
         return false;

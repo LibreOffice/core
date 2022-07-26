@@ -4655,7 +4655,7 @@ void SwContentTree::DeleteOutlineSelections()
         // outline paragraph will be removed. Also check if no selection was made which indicates
         // an empty paragraph and selection right is needed.
         if (!m_pActiveShell->IsSttPara() || !m_pActiveShell->HasSelection())
-            m_pActiveShell->Right(CRSR_SKIP_CHARS, true, 1, false);
+            m_pActiveShell->Right(SwCursorSkipMode::Chars, true, 1, false);
         m_pActiveShell->EndSelect();
         return false;
     });
@@ -5091,7 +5091,7 @@ void SwContentTree::CopyOutlineSelections()
                                            !m_xTreeView->get_row_expanded(rEntry), false);
             // don't move if this is the last selected outline or the cursor is at start of para
             if (--nCount && !m_pActiveShell->IsSttPara())
-                m_pActiveShell->Right(CRSR_SKIP_CHARS, true, 1, false);
+                m_pActiveShell->Right(SwCursorSkipMode::Chars, true, 1, false);
             m_pActiveShell->EndSelect();
             return false;
         });
@@ -5148,7 +5148,7 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
             if(m_pActiveShell->GotoINetAttr(
                             *static_cast<const SwURLFieldContent*>(pCnt)->GetINetAttr() ))
             {
-                m_pActiveShell->Right( CRSR_SKIP_CHARS, true, 1, false);
+                m_pActiveShell->Right( SwCursorSkipMode::Chars, true, 1, false);
                 m_pActiveShell->SwCursorShell::SelectTextAttr( RES_TXTATR_INETFMT, true );
             }
         }

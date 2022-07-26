@@ -1284,7 +1284,7 @@ SwFormatColl *SwContentNode::ChgFormatColl( SwFormatColl *pNewColl )
     return pOldColl;
 }
 
-bool SwContentNode::GoNext(SwContentIndex * pIdx, sal_uInt16 nMode ) const
+bool SwContentNode::GoNext(SwContentIndex * pIdx, SwCursorSkipMode nMode ) const
 {
     bool bRet = true;
     if( pIdx->GetIndex() < Len() )
@@ -1297,7 +1297,7 @@ bool SwContentNode::GoNext(SwContentIndex * pIdx, sal_uInt16 nMode ) const
             sal_Int32 nPos = pIdx->GetIndex();
             assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
             sal_Int32 nDone = 0;
-            sal_uInt16 nItrMode = ( CRSR_SKIP_CELLS & nMode ) ?
+            sal_uInt16 nItrMode = ( SwCursorSkipMode::Cells & nMode ) ?
                                     CharacterIteratorMode::SKIPCELL :
                                     CharacterIteratorMode::SKIPCONTROLCHARACTER;
             nPos = g_pBreakIt->GetBreakIter()->nextCharacters( rTNd.GetText(), nPos,
@@ -1305,7 +1305,7 @@ bool SwContentNode::GoNext(SwContentIndex * pIdx, sal_uInt16 nMode ) const
                                nItrMode, 1, nDone );
 
             // Check if nPos is inside hidden text range:
-            if ( CRSR_SKIP_HIDDEN & nMode )
+            if ( SwCursorSkipMode::Hidden & nMode )
             {
                 sal_Int32 nHiddenStart;
                 sal_Int32 nHiddenEnd;
@@ -1325,7 +1325,7 @@ bool SwContentNode::GoNext(SwContentIndex * pIdx, sal_uInt16 nMode ) const
     return bRet;
 }
 
-bool SwContentNode::GoPrevious(SwContentIndex * pIdx, sal_uInt16 nMode ) const
+bool SwContentNode::GoPrevious(SwContentIndex * pIdx, SwCursorSkipMode nMode ) const
 {
     bool bRet = true;
     if( pIdx->GetIndex() > 0 )
@@ -1338,7 +1338,7 @@ bool SwContentNode::GoPrevious(SwContentIndex * pIdx, sal_uInt16 nMode ) const
             sal_Int32 nPos = pIdx->GetIndex();
             assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
             sal_Int32 nDone = 0;
-            sal_uInt16 nItrMode = ( CRSR_SKIP_CELLS & nMode ) ?
+            sal_uInt16 nItrMode = ( SwCursorSkipMode::Cells & nMode ) ?
                                     CharacterIteratorMode::SKIPCELL :
                                     CharacterIteratorMode::SKIPCONTROLCHARACTER;
             nPos = g_pBreakIt->GetBreakIter()->previousCharacters( rTNd.GetText(), nPos,
@@ -1346,7 +1346,7 @@ bool SwContentNode::GoPrevious(SwContentIndex * pIdx, sal_uInt16 nMode ) const
                                nItrMode, 1, nDone );
 
             // Check if nPos is inside hidden text range:
-            if ( CRSR_SKIP_HIDDEN & nMode )
+            if ( SwCursorSkipMode::Hidden & nMode )
             {
                 sal_Int32 nHiddenStart;
                 sal_Int32 nHiddenEnd;

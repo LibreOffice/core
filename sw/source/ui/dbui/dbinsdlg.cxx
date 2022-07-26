@@ -1149,7 +1149,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
             if( !rSh.IsEndPara() )
             {
                 rSh.SwEditShell::SplitNode();
-                rSh.SwCursorShell::Left(1,CRSR_SKIP_CHARS);
+                rSh.SwCursorShell::Left(1,SwCursorSkipMode::Chars);
             }
 
             rSh.DoUndo( false );

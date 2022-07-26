@@ -53,7 +53,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testTdf119081)
     // Enter outer A1.
     pWrtShell->Down(/*bSelect=*/false, /*nCount=*/3);
     // Enter inner A1.
-    pWrtShell->Right(CRSR_SKIP_CELLS, /*bSelect=*/false, /*nCount=*/1, /*bBasicCall=*/false,
+    pWrtShell->Right(SwCursorSkipMode::Cells, /*bSelect=*/false, /*nCount=*/1, /*bBasicCall=*/false,
                      /*bVisual=*/true);
     // Enter outer B1.
     pWrtShell->Down(/*bSelect=*/false, /*nCount=*/2);
@@ -68,7 +68,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testTdf119081)
     xTextAppend->insertTextPortion("x", {}, xInsertPosition);
 
     // Verify that the string is indeed inserted.
-    pWrtShell->Left(CRSR_SKIP_CELLS, /*bSelect=*/true, /*nCount=*/1, /*bBasicCall=*/false,
+    pWrtShell->Left(SwCursorSkipMode::Cells, /*bSelect=*/true, /*nCount=*/1, /*bBasicCall=*/false,
                     /*bVisual=*/true);
     CPPUNIT_ASSERT_EQUAL(OUString("x"), pWrtShell->GetCurrentShellCursor().GetText());
 }
@@ -715,8 +715,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlPlainText)
     // Now check if the char index range 2-4 is extended to 0-6 when we apply formatting:
     pWrtShell->SttEndDoc(/*bStt=*/true);
     // Select "es" from "<dummy>test<dummy>".
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 2, /*bBasicCall=*/false);
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 2, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 2, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 2, /*bBasicCall=*/false);
     SfxItemSetFixed<RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT> aSet(pWrtShell->GetAttrPool());
     SvxWeightItem aItem(WEIGHT_BOLD, RES_CHRATR_WEIGHT);
     aSet.Put(aItem);

@@ -107,7 +107,7 @@ bool SwWrtShell::SimpleMove( FNSimpleMove FnSimpleMove, bool bSelect )
     return bRet;
 }
 
-bool SwWrtShell::Left( sal_uInt16 nMode, bool bSelect,
+bool SwWrtShell::Left( SwCursorSkipMode nMode, bool bSelect,
                             sal_uInt16 nCount, bool bBasicCall, bool bVisual )
 {
     if ( !bSelect && !bBasicCall && IsCursorReadonly()  && !GetViewOptions()->IsSelectionInReadonly())
@@ -124,7 +124,7 @@ bool SwWrtShell::Left( sal_uInt16 nMode, bool bSelect,
     }
 }
 
-bool SwWrtShell::Right( sal_uInt16 nMode, bool bSelect,
+bool SwWrtShell::Right( SwCursorSkipMode nMode, bool bSelect,
                             sal_uInt16 nCount, bool bBasicCall, bool bVisual )
 {
     if ( !bSelect && !bBasicCall && IsCursorReadonly() && !GetViewOptions()->IsSelectionInReadonly() )

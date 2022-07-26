@@ -1379,7 +1379,7 @@ void SwAnnotationWin::SwitchToFieldPos()
     GotoPos();
     sal_uInt32 aCount = MoveCaret();
     if (aCount)
-        mrView.GetDocShell()->GetWrtShell()->SwCursorShell::Right(aCount, 0);
+        mrView.GetDocShell()->GetWrtShell()->SwCursorShell::Right(aCount, SwCursorSkipMode::Chars);
     GrabFocusToDocument();
     collectUIInformation("LEAVE",get_id());
 }
