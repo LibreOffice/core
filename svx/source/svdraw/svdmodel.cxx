@@ -74,9 +74,6 @@
 #include <svx/ColorSets.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-
 
 struct SdrModelImpl
 {
@@ -225,12 +222,12 @@ SdrModel::~SdrModel()
     // the DrawingEngine may need it in its destructor
     if( mxStyleSheetPool.is() )
     {
-        Reference< XComponent > xComponent( static_cast< cppu::OWeakObject* >( mxStyleSheetPool.get() ), UNO_QUERY );
+        uno::Reference<lang::XComponent> xComponent( static_cast< cppu::OWeakObject* >( mxStyleSheetPool.get() ), uno::UNO_QUERY );
         if( xComponent.is() ) try
         {
             xComponent->dispose();
         }
-        catch( RuntimeException& )
+        catch (uno::RuntimeException&)
         {
         }
         mxStyleSheetPool.clear();
@@ -1585,7 +1582,7 @@ uno::Reference< uno::XInterface > const & SdrModel::getUnoModel()
     return mxUnoModel;
 }
 
-void SdrModel::setUnoModel( const css::uno::Reference< css::uno::XInterface >& xModel )
+void SdrModel::setUnoModel(const uno::Reference<uno::XInterface>& xModel)
 {
     mxUnoModel = xModel;
 }
@@ -1605,7 +1602,7 @@ void SdrModel::adaptSizeAndBorderForAllPages(
 uno::Reference< uno::XInterface > SdrModel::createUnoModel()
 {
     OSL_FAIL( "SdrModel::createUnoModel() - base implementation should not be called!" );
-    css::uno::Reference< css::uno::XInterface > xInt;
+    uno::Reference<uno::XInterface> xInt;
     return xInt;
 }
 
@@ -1759,7 +1756,7 @@ SvxNumType SdrModel::GetPageNumType() const
     return SVX_NUM_ARABIC;
 }
 
-void SdrModel::ReadUserDataSequenceValue(const css::beans::PropertyValue* pValue)
+void SdrModel::ReadUserDataSequenceValue(const beans::PropertyValue* pValue)
 {
     if (pValue->Name == "AnchoredTextOverflowLegacy")
     {
@@ -1772,20 +1769,20 @@ void SdrModel::ReadUserDataSequenceValue(const css::beans::PropertyValue* pValue
 }
 
 template <typename T>
-static void addPair(std::vector< std::pair< OUString, Any > >& aUserData, const OUString& name, const T val)
+static void addPair(std::vector< std::pair< OUString, uno::Any > >& aUserData, const OUString& name, const T val)
 {
-    aUserData.push_back(std::pair< OUString, Any >(name, css::uno::Any(val)));
+    aUserData.push_back(std::pair< OUString, uno::Any >(name, uno::Any(val)));
 }
 
-void SdrModel::WriteUserDataSequence(css::uno::Sequence < css::beans::PropertyValue >& rValues)
+void SdrModel::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rValues)
 {
-    std::vector< std::pair< OUString, Any > > aUserData;
+    std::vector< std::pair< OUString, uno::Any > > aUserData;
     addPair(aUserData, "AnchoredTextOverflowLegacy", IsAnchoredTextOverflowLegacy());
 
     const sal_Int32 nOldLength = rValues.getLength();
     rValues.realloc(nOldLength + aUserData.size());
 
-    css::beans::PropertyValue* pValue = &(rValues.getArray()[nOldLength]);
+    beans::PropertyValue* pValue = &(rValues.getArray()[nOldLength]);
 
     for (const auto &aIter : aUserData)
     {
@@ -1899,7 +1896,7 @@ void SdrModel::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterEndElement(pWriter);
 }
 
-const css::uno::Sequence< sal_Int8 >& SdrModel::getUnoTunnelId()
+const uno::Sequence<sal_Int8>& SdrModel::getUnoTunnelId()
 {
     static const comphelper::UnoIdInit theSdrModelUnoTunnelImplementationId;
     return theSdrModelUnoTunnelImplementationId.getSeq();
