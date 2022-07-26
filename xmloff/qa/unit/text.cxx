@@ -795,6 +795,25 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPlainTextContentControlImport)
     CPPUNIT_ASSERT(bPlainText);
 }
 
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDropdownContentControlAutostyleExport)
+{
+    // Given a document with a dropdown content control, and formatting that forms an autostyle in
+    // ODT:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "content-control-dropdown.docx";
+    getComponent() = loadFromDesktop(aURL);
+
+    // When saving that document to ODT, then make sure no assertion failure happens:
+    uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
+        { "FilterName", uno::Any(OUString("writer8")) },
+    });
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    // Without the accompanying fix in place, this test would have failed, we had duplicated XML
+    // attributes.
+    xStorable->storeToURL(aTempFile.GetURL(), aStoreProps);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
