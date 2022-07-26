@@ -22,6 +22,8 @@
 #include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <vcl/jobset.hxx>
+#include <vcl/print.hxx>
+#include <vcl/QueueInfo.hxx>
 #include <jobset.h>
 #include <memory>
 
@@ -258,9 +260,34 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
             ImplJobSetup& rJobData = rJobSetup.ImplGetData();
 
             pData->cPrinterName[std::size(pData->cPrinterName) - 1] = 0;
-            rJobData.SetPrinterName( OStringToOUString(pData->cPrinterName, aStreamEncoding) );
             pData->cDriverName[std::size(pData->cDriverName) - 1] = 0;
-            rJobData.SetDriver( OStringToOUString(pData->cDriverName, aStreamEncoding) );
+            OUString sPrinterName = OStringToOUString(pData->cPrinterName, aStreamEncoding);
+            OUString sDriverName = OStringToOUString(pData->cDriverName, aStreamEncoding);
+
+            // In case the printer/driver name has the max number of chars,
+            // the full name might actually be longer and have been truncated.
+            // Try to get full strings from matching printer
+            if (strlen(pData->cPrinterName) == std::size(pData->cPrinterName) - 1
+                    || strlen(pData->cDriverName) == std::size(pData->cDriverName) - 1)
+            {
+                SAL_WARN("vcl", "Printer/driver name from stream might be truncated, trying to match to existing printer");
+                const std::vector<OUString>& aQueueNames = Printer::GetPrinterQueues();
+                for (const OUString& sName: aQueueNames)
+                {
+                    const QueueInfo* pQueue = Printer::GetQueueInfo(sName, false);
+                    if (sPrinterName.compareTo(pQueue->GetPrinterName(), sPrinterName.getLength()) == 0
+                            && sDriverName.compareTo(pQueue->GetDriver(), sDriverName.getLength()) == 0)
+                    {
+                        SAL_WARN("vcl", "Using printer " << pQueue->GetPrinterName()
+                                 << " which matches for potentially truncated printer/driver names from stream.");
+                        sPrinterName = pQueue->GetPrinterName();
+                        sDriverName = pQueue->GetDriver();
+                        break;
+                    }
+                }
+            }
+            rJobData.SetPrinterName(sPrinterName);
+            rJobData.SetDriver(sDriverName);
 
             // Are these our new JobSetup files?
             if ( nSystem == JOBSET_FILE364_SYSTEM ||
