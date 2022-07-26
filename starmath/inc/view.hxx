@@ -107,7 +107,6 @@ private:
     using Window::SetCursor;
     void SetCursor(const SmNode *pNode);
     void SetCursor(const tools::Rectangle &rRect);
-    static bool IsInlineEditEnabled();
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
     virtual void KeyInput(const KeyEvent& rKEvt) override;

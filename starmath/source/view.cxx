@@ -158,7 +158,7 @@ void SmGraphicWindow::MouseButtonDown(const MouseEvent& rMEvt)
     if (!pTree)
         return;
 
-    if (IsInlineEditEnabled()) {
+    if (SmViewShell::IsInlineEditEnabled()) {
         pViewShell->GetDoc()->GetCursor().MoveTo(this, aPos, !rMEvt.IsShift());
         return;
     }
@@ -193,7 +193,7 @@ void SmGraphicWindow::MouseMove(const MouseEvent &rMEvt)
 {
     ScrollableWindow::MouseMove(rMEvt);
 
-    if (rMEvt.IsLeft() && IsInlineEditEnabled())
+    if (rMEvt.IsLeft() && SmViewShell::IsInlineEditEnabled())
     {
         Point aPos(PixelToLogic(rMEvt.GetPosPixel()) - GetFormulaDrawPos());
         pViewShell->GetDoc()->GetCursor().MoveTo(this, aPos, false);
@@ -205,14 +205,9 @@ void SmGraphicWindow::MouseMove(const MouseEvent &rMEvt)
     }
 }
 
-bool SmGraphicWindow::IsInlineEditEnabled()
-{
-    return SmViewShell::IsInlineEditEnabled();
-}
-
 void SmGraphicWindow::GetFocus()
 {
-    if (!IsInlineEditEnabled())
+    if (!SmViewShell::IsInlineEditEnabled())
         return;
     if (pViewShell->GetEditWindow())
         pViewShell->GetEditWindow()->Flush();
@@ -235,7 +230,7 @@ void SmGraphicWindow::LoseFocus()
         mxAccessible->LaunchEvent( AccessibleEventId::STATE_CHANGED,
                 aOldValue, aNewValue );
     }
-    if (!IsInlineEditEnabled())
+    if (!SmViewShell::IsInlineEditEnabled())
         return;
     SetIsCursorVisible(false);
     ShowLine(false);
@@ -268,7 +263,7 @@ void SmGraphicWindow::CaretBlinkInit()
 
 void SmGraphicWindow::CaretBlinkStart()
 {
-    if (!IsInlineEditEnabled())
+    if (!SmViewShell::IsInlineEditEnabled())
         return;
     if (aCaretBlinkTimer.GetTimeout() != STYLE_CURSOR_NOBLINKTIME)
         aCaretBlinkTimer.Start();
@@ -276,7 +271,7 @@ void SmGraphicWindow::CaretBlinkStart()
 
 void SmGraphicWindow::CaretBlinkStop()
 {
-    if (!IsInlineEditEnabled())
+    if (!SmViewShell::IsInlineEditEnabled())
         return;
     aCaretBlinkTimer.Stop();
 }
@@ -284,7 +279,7 @@ void SmGraphicWindow::CaretBlinkStop()
 void SmGraphicWindow::ShowCursor(bool bShow)
     // shows or hides the formula-cursor depending on 'bShow' is true or not
 {
-    if (IsInlineEditEnabled())
+    if (SmViewShell::IsInlineEditEnabled())
         return;
 
     bool  bInvert = bShow != IsCursorVisible();
@@ -297,7 +292,7 @@ void SmGraphicWindow::ShowCursor(bool bShow)
 
 void SmGraphicWindow::ShowLine(bool bShow)
 {
-    if (!IsInlineEditEnabled())
+    if (!SmViewShell::IsInlineEditEnabled())
         return;
 
     bIsLineVisible = bShow;
@@ -305,7 +300,7 @@ void SmGraphicWindow::ShowLine(bool bShow)
 
 void SmGraphicWindow::SetCursor(const SmNode *pNode)
 {
-    if (IsInlineEditEnabled())
+    if (SmViewShell::IsInlineEditEnabled())
         return;
 
     const SmNode *pTree = pViewShell->GetDoc()->GetFormulaTree();
@@ -324,7 +319,7 @@ void SmGraphicWindow::SetCursor(const tools::Rectangle &rRect)
     // The old cursor will be removed, and the new one will be shown if
     // that is activated in the ConfigItem
 {
-    if (IsInlineEditEnabled())
+    if (SmViewShell::IsInlineEditEnabled())
         return;
 
     SmModule *pp = SM_MOD();
@@ -344,7 +339,7 @@ const SmNode * SmGraphicWindow::SetCursorPos(sal_uInt16 nRow, sal_uInt16 nCol)
     // rectangle. If not the formula-cursor will be hidden.
     // In any case the search result is being returned.
 {
-    if (IsInlineEditEnabled())
+    if (SmViewShell::IsInlineEditEnabled())
         return nullptr;
 
     // find visible node with token at nRow, nCol
@@ -374,7 +369,7 @@ void SmGraphicWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
     rDoc.DrawFormula(rRenderContext, aPoint, true);  //! modifies aPoint to be the topleft
                                 //! corner of the formula
     aFormulaDrawPos = aPoint;
-    if (IsInlineEditEnabled())
+    if (SmViewShell::IsInlineEditEnabled())
     {
         //Draw cursor if any...
         if (pViewShell->GetDoc()->HasCursor() && IsLineVisible())
@@ -412,7 +407,7 @@ void SmGraphicWindow::SetTotalSize ()
 
 void SmGraphicWindow::KeyInput(const KeyEvent& rKEvt)
 {
-    if (!IsInlineEditEnabled()) {
+    if (!SmViewShell::IsInlineEditEnabled()) {
         if (! (GetView() && GetView()->KeyInput(rKEvt)) )
             ScrollableWindow::KeyInput(rKEvt);
         return;
