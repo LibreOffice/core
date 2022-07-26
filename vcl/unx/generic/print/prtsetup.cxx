@@ -418,6 +418,7 @@ IMPL_LINK(RTSDevicePage, ModifyHdl, weld::Entry&, rEdit, void)
         // tdf#123734 Custom PPD option values are a CUPS extension to PPDs and the user-set value
         // needs to be prefixed with "Custom." in order to be processed properly
         m_pCustomValue->m_aCustomOption = "Custom." + rEdit.get_text();
+        m_pCustomValue->m_bCustomOptionSetViaApp = true;
     }
 }
 

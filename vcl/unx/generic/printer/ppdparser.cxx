@@ -1628,6 +1628,7 @@ PPDValue* PPDKey::insertValue(const OUString& rOption, PPDValueType eType, bool 
     PPDValue aValue;
     aValue.m_aOption = rOption;
     aValue.m_bCustomOption = bCustomOption;
+    aValue.m_bCustomOptionSetViaApp = false;
     aValue.m_eType = eType;
     m_aValues[ rOption ] = aValue;
     PPDValue* pValue = &m_aValues[rOption];
