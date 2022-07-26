@@ -366,8 +366,6 @@ void FreetypeManager::AddFontFile(const OString& rNormalizedName,
     FreetypeFontInfo* pFontInfo = new FreetypeFontInfo( rDevFontAttr,
         FindFontFile(rNormalizedName), nFaceNum, nVariantNum, nFontId);
     m_aFontInfoList[ nFontId ].reset(pFontInfo);
-    if( m_nMaxFontId < nFontId )
-        m_nMaxFontId = nFontId;
 }
 
 void FreetypeManager::AnnounceFonts( vcl::font::PhysicalFontCollection* pToAdd ) const

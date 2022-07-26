@@ -105,7 +105,6 @@ private:
     typedef std::unordered_map<const char*, std::unique_ptr<FreetypeFontFile>, rtl::CStringHash, rtl::CStringEqual> FontFileList;
 
     FontInfoList            m_aFontInfoList;
-    sal_IntPtr              m_nMaxFontId;
 
     FontFileList            m_aFontFileList;
 };

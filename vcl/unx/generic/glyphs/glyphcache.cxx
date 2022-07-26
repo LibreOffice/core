@@ -29,7 +29,6 @@
 #include <sal/log.hxx>
 
 FreetypeManager::FreetypeManager()
-    : m_nMaxFontId(0)
 {
     InitFreetype();
 }
