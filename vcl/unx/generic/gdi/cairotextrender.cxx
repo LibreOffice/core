@@ -177,7 +177,7 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
         const bool bResolutionIndependentLayoutEnabled = rGraphics.getTextRenderModeForResolutionIndependentLayoutEnabled();
         cairo_hint_style_t eHintStyle = cairo_font_options_get_hint_style(pFontOptions);
         cairo_hint_metrics_t eHintMetricsStyle = cairo_font_options_get_hint_metrics(pFontOptions);
-        bool bAllowedHintStyle = !bResolutionIndependentLayoutEnabled || (eHintStyle == CAIRO_HINT_STYLE_NONE || eHintStyle == CAIRO_HINT_STYLE_SLIGHT);
+        bool bAllowedHintStyle = !bResolutionIndependentLayoutEnabled || (eHintStyle == CAIRO_HINT_STYLE_NONE);
         bool bAllowedHintMetricStyle = !bResolutionIndependentLayoutEnabled || (eHintMetricsStyle == CAIRO_HINT_METRICS_OFF);
 
         if (bDisableAA || !bAllowedHintStyle || !bAllowedHintMetricStyle)
@@ -187,10 +187,10 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
             cairo_font_options_t* pOptions = cairo_font_options_copy(pFontOptions);
             if (bDisableAA)
                 cairo_font_options_set_antialias(pOptions, CAIRO_ANTIALIAS_NONE);
-            if (!bAllowedHintStyle)
-                cairo_font_options_set_hint_style(pOptions, CAIRO_HINT_STYLE_SLIGHT);
             if (!bAllowedHintMetricStyle)
                 cairo_font_options_set_hint_metrics(pOptions, CAIRO_HINT_METRICS_OFF);
+            if (!bAllowedHintStyle)
+                cairo_font_options_set_hint_style(pOptions, CAIRO_HINT_STYLE_NONE);
             cairo_set_font_options(cr, pOptions);
             cairo_font_options_destroy(pOptions);
         }
