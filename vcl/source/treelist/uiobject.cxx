@@ -8,6 +8,8 @@
  */
 
 #include <memory>
+
+#include <vcl/toolkit/edit.hxx>
 #include <vcl/toolkit/svlbitm.hxx>
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/toolkit/treelistbox.hxx>
@@ -49,6 +51,10 @@ void TreeListUIObject::execute(const OUString& rAction,
     if (rAction.isEmpty())
     {
     }
+    else if (auto const pEdit = mxTreeList->GetEditWidget())
+    {
+        std::unique_ptr<UIObject>(new EditUIObject(pEdit))->execute(rAction, rParameters);
+    }
     else
         WindowUIObject::execute(rAction, rParameters);
 }
@@ -63,6 +69,13 @@ std::unique_ptr<UIObject> TreeListUIObject::get_child(const OUString& rID)
             return nullptr;
 
         return std::unique_ptr<UIObject>(new TreeListEntryUIObject(mxTreeList, pEntry));
+    }
+    else if (nID == -1) // FIXME hack?
+    {
+        if (auto const pEdit = mxTreeList->GetEditWidget())
+        {
+            return std::unique_ptr<UIObject>(new EditUIObject(pEdit));
+        }
     }
 
     return nullptr;

@@ -84,6 +84,7 @@ public:
     OUString const & GetSavedValue() const;
     void        StopEditing( bool bCancel );
     void        Hide();
+    VclPtr<Edit> GetEditWidget() const { return pEdit; };
 };
 
 // ***************************************************************
@@ -873,6 +874,11 @@ void SvTreeListBox::EnableSelectionAsDropTarget( bool bEnable )
 // ******************************************************************
 // InplaceEditing
 // ******************************************************************
+
+VclPtr<Edit> SvTreeListBox::GetEditWidget() const
+{
+    return pEdCtrl ? pEdCtrl->GetEditWidget() : nullptr;
+}
 
 void SvTreeListBox::EditText( const OUString& rStr, const tools::Rectangle& rRect,
     const Selection& rSel )
