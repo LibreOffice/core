@@ -52,6 +52,24 @@
       "parentUuid": "b0aeb573_5a781eb3",
       "revId": "582075bfb075a742a900d447749bfd4129026a87",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3dab8e25_5a5a7b26",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001582
+      },
+      "writtenOn": "2022-07-26T15:31:24Z",
+      "side": 1,
+      "message": "I actually just uploaded an updated version with something like that in here, finally finding the culprit you just handed me now -- funny timing 😊\n\nThe commit message seems odd to me, because AFAIK it\u0027s not true on Linux (at least, none of GTK, Firefox and LO include the shortcut in the name here), and the shortcuts are only available through the AccessibleAction they are tied with.\n\nNevertheless, as it\u0027s currently how the code is wired, it makes sense to test for it, whether it\u0027s ultimately expected behavior or not -- we\u0027ll just have to update everything accordingly if something changes.  I didn\u0027t go to the trouble of actually checking the shortcut value because I couldn\u0027t find a good way to get that very value from the accessible object, and it seems safe enough to me to accept a \"\\t\u003cANYTHING\u003e\" suffix for menu item names.  If it\u0027s not, I\u0027ll have to figure something out.",
+      "parentUuid": "e12d72db_0bd57f18",
+      "revId": "582075bfb075a742a900d447749bfd4129026a87",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
