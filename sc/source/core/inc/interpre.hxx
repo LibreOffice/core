@@ -91,7 +91,7 @@ class SharedStringPool;
 /// Arbitrary 256MB result string length limit.
 constexpr sal_Int32 kScInterpreterMaxStrLen = SAL_MAX_INT32 / 8;
 
-#define MAXSTACK      (4096 / sizeof(formula::FormulaToken*))
+constexpr size_t MAXSTACK = 512;
 
 class ScTokenStack
 {
