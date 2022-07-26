@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05f5bc30_6634f4d6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-26T09:23:29Z",
+      "side": 1,
+      "message": "Mike suggested to rather have a variable-length chunk at the end of the stream",
+      "revId": "0752f16e6cc50d8c0d5edcfe6b3e78f2685d66eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
