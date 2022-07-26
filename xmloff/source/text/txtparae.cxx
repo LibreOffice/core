@@ -4022,27 +4022,30 @@ void XMLTextParagraphExport::ExportContentControl(
     SvXMLElementExport aElem(GetExport(), bExport, XML_NAMESPACE_LO_EXT, XML_CONTENT_CONTROL, false,
                              false);
 
-    // Export list items of dropdowns.
-    uno::Sequence<beans::PropertyValues> aListItems;
-    xPropertySet->getPropertyValue("ListItems") >>= aListItems;
-    for (const auto& rListItem : aListItems)
+    if (bExport)
     {
-        comphelper::SequenceAsHashMap aMap(rListItem);
-        auto it = aMap.find("DisplayText");
-        OUString aValue;
-        if (it != aMap.end() && (it->second >>= aValue) && !aValue.isEmpty())
+        // Export list items of dropdowns.
+        uno::Sequence<beans::PropertyValues> aListItems;
+        xPropertySet->getPropertyValue("ListItems") >>= aListItems;
+        for (const auto& rListItem : aListItems)
         {
-            GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_DISPLAY_TEXT, aValue);
-        }
+            comphelper::SequenceAsHashMap aMap(rListItem);
+            auto it = aMap.find("DisplayText");
+            OUString aValue;
+            if (it != aMap.end() && (it->second >>= aValue) && !aValue.isEmpty())
+            {
+                GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_DISPLAY_TEXT, aValue);
+            }
 
-        it = aMap.find("Value");
-        if (it != aMap.end() && (it->second >>= aValue))
-        {
-            GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_VALUE, aValue);
-        }
+            it = aMap.find("Value");
+            if (it != aMap.end() && (it->second >>= aValue))
+            {
+                GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_VALUE, aValue);
+            }
 
-        SvXMLElementExport aItem(GetExport(), bExport, XML_NAMESPACE_LO_EXT, XML_LIST_ITEM, false,
-                                 false);
+            SvXMLElementExport aItem(GetExport(), bExport, XML_NAMESPACE_LO_EXT, XML_LIST_ITEM, false,
+                    false);
+        }
     }
 
     // Recurse to export content.
