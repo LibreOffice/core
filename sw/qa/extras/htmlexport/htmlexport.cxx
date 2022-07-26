@@ -620,9 +620,8 @@ DECLARE_HTMLEXPORT_TEST(testReqIfParagraph, "reqif-p.xhtml")
     // This was "<font>" instead of CSS + namespace prefix was missing.
     CPPUNIT_ASSERT(aStream.indexOf("<reqif-xhtml:span style=\"color: #ce181e\"") != -1);
 
-    // This was '<a name="Bookmark 1"': missing namespace prefix, wrong
-    // attribute name, wrong attribute value.
-    CPPUNIT_ASSERT(aStream.indexOf("<reqif-xhtml:a id=\"Bookmark_1\"></reqif-xhtml:a>") != -1);
+    // This was '<reqif-xhtml:a id="...">': non-unique bookmark name in reqif fragment.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1), aStream.indexOf("<reqif-xhtml:a id="));
 }
 
 DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfOleData, "reqif-ole-data.xhtml")

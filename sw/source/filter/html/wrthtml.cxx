@@ -1206,6 +1206,14 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 
 void SwHTMLWriter::OutAnchor( const OUString& rName )
 {
+    if (mbReqIF)
+    {
+        // <a id=".."> has to be unique inside the whole document, but
+        // we only write a fragment, so we can't ensure the ID is indeed
+        // unique. Just don't write anchors in the ReqIF case.
+        return;
+    }
+
     OStringBuffer sOut;
     sOut.append("<" + GetNamespace() + OOO_STRING_SVTOOLS_HTML_anchor " ");
     if (!mbXHTML)
