@@ -695,22 +695,28 @@ DECLARE_OOXMLEXPORT_TEST(testTdf112202, "090716_Studentische_Arbeit_VWS.docx")
     // page 4 header: 1 table, 1 paragraph, with text
     assertXPath(pXmlDoc, "/root/page[4]/header/txt", 1);
     assertXPath(pXmlDoc, "/root/page[4]/header/tab", 1);
-    assertXPath(pXmlDoc, "/root/page[4]/header/tab/row[1]/cell[1]/txt[1]/Text", "Portion",
-                "Titel der studentischen Arbeit");
+    assertXPath(
+        pXmlDoc,
+        "/root/page[4]/header/tab/row[1]/cell[1]/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
+        "portion", "Titel der studentischen Arbeit");
     assertXPath(pXmlDoc, "/root/page[4]/header//anchored", 0);
 
     // page 5: same as page 4
     assertXPath(pXmlDoc, "/root/page[5]/header/txt", 1);
     assertXPath(pXmlDoc, "/root/page[5]/header/tab", 1);
-    assertXPath(pXmlDoc, "/root/page[5]/header/tab/row[1]/cell[1]/txt[1]/Text", "Portion",
-                "Titel der studentischen Arbeit");
+    assertXPath(
+        pXmlDoc,
+        "/root/page[5]/header/tab/row[1]/cell[1]/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
+        "portion", "Titel der studentischen Arbeit");
     assertXPath(pXmlDoc, "/root/page[5]/header//anchored", 0);
 
     // page 6: same as page 4
     assertXPath(pXmlDoc, "/root/page[6]/header/txt", 1);
     assertXPath(pXmlDoc, "/root/page[6]/header/tab", 1);
-    assertXPath(pXmlDoc, "/root/page[6]/header/tab/row[1]/cell[1]/txt[1]/Text", "Portion",
-                "Titel der studentischen Arbeit");
+    assertXPath(
+        pXmlDoc,
+        "/root/page[6]/header/tab/row[1]/cell[1]/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
+        "portion", "Titel der studentischen Arbeit");
     assertXPath(pXmlDoc, "/root/page[6]/header//anchored", 0);
 }
 
@@ -2095,30 +2101,54 @@ DECLARE_OOXMLEXPORT_TEST(testTdf119952_negativeMargins, "tdf119952_negativeMargi
     //Check text of header/ footer
     CPPUNIT_ASSERT_EQUAL(
         OUString("f1"),
-        getXPath(pDump, "//page[1]/header/txt/anchored/fly/txt[1]/Text", "Portion"));
+        getXPath(
+            pDump,
+            "//page[1]/header/txt/anchored/fly/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
+            "portion"));
     CPPUNIT_ASSERT_EQUAL(
         OUString("                f8"),
-        getXPath(pDump, "//page[1]/header/txt/anchored/fly/txt[8]/Text", "Portion"));
+        getXPath(
+            pDump,
+            "//page[1]/header/txt/anchored/fly/txt[8]/SwParaPortion/SwLineLayout/SwParaPortion",
+            "portion"));
     CPPUNIT_ASSERT_EQUAL(
         OUString("                f8"),
-        getXPath(pDump, "//page[1]/footer/txt/anchored/fly/txt[1]/Text", "Portion"));
+        getXPath(
+            pDump,
+            "//page[1]/footer/txt/anchored/fly/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
+            "portion"));
     CPPUNIT_ASSERT_EQUAL(
         OUString("f1"),
-        getXPath(pDump, "//page[1]/footer/txt/anchored/fly/txt[8]/Text", "Portion"));
+        getXPath(
+            pDump,
+            "//page[1]/footer/txt/anchored/fly/txt[8]/SwParaPortion/SwLineLayout/SwParaPortion",
+            "portion"));
 
     CPPUNIT_ASSERT_EQUAL(
         OUString("p1"),
-        getXPath(pDump, "//page[2]/header/txt/anchored/fly/txt[1]/Text", "Portion"));
+        getXPath(
+            pDump,
+            "//page[2]/header/txt/anchored/fly/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
+            "portion"));
     CPPUNIT_ASSERT_EQUAL(
         OUString("p1"),
-        getXPath(pDump, "//page[2]/footer/txt/anchored/fly/txt[1]/Text", "Portion"));
+        getXPath(
+            pDump,
+            "//page[2]/footer/txt/anchored/fly/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
+            "portion"));
 
     CPPUNIT_ASSERT_EQUAL(
         OUString("  aaaa"),
-        getXPath(pDump, "//page[3]/header/txt/anchored/fly/txt[1]/Text", "Portion"));
+        getXPath(
+            pDump,
+            "//page[3]/header/txt/anchored/fly/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
+            "portion"));
     CPPUNIT_ASSERT_EQUAL(
         OUString("      eeee"),
-        getXPath(pDump, "//page[3]/header/txt/anchored/fly/txt[5]/Text", "Portion"));
+        getXPath(
+            pDump,
+            "//page[3]/header/txt/anchored/fly/txt[5]/SwParaPortion/SwLineLayout/SwParaPortion",
+            "portion"));
 
     CPPUNIT_ASSERT_EQUAL(OUString("f1    f2      f3        f4          f5            f6            "
                                   "  f7                f8"),
