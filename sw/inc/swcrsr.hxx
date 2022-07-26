@@ -72,7 +72,7 @@ class SW_DLLPUBLIC SwCursor : public SwPaM
     friend class SwCursorSaveState;
 
     std::vector<SwCursor_SavePos> m_vSavePos; // the current entry is the last element
-    tools::Long m_nRowSpanOffset;        // required for travelling in tabs with rowspans
+    sal_Int32 m_nRowSpanOffset;        // required for travelling in tabs with rowspans
     sal_uInt8 m_nCursorBidiLevel; // bidi level of the cursor
     bool m_bColumnSelection;      // true: cursor is aprt of a column selection
 
@@ -214,7 +214,7 @@ public:
     bool IsColumnSelection() const { return m_bColumnSelection; }
     void SetColumnSelection( bool bNew ) { m_bColumnSelection = bNew; }
 
-    tools::Long GetCursorRowSpanOffset() const { return m_nRowSpanOffset; }
+    sal_Int32 GetCursorRowSpanOffset() const { return m_nRowSpanOffset; }
 
     SwCursor* GetNext()             { return dynamic_cast<SwCursor *>(GetNextInRing()); }
     const SwCursor* GetNext() const { return dynamic_cast<SwCursor const *>(GetNextInRing()); }
