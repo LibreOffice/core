@@ -244,6 +244,11 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         rReq.Done();
         break;
 
+    case FN_INSERT_PLAIN_TEXT_CONTENT_CONTROL:
+        rSh.InsertContentControl(SwContentControlType::PLAIN_TEXT);
+        rReq.Done();
+        break;
+
     case FN_CONTENT_CONTROL_PROPERTIES:
     {
         SwWrtShell& rWrtSh = GetShell();
