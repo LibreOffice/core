@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SVX_SVXDLG_HXX
 #define INCLUDED_SVX_SVXDLG_HXX
 
+#include <svx/svdobj.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <svx/anchorid.hxx>
 #include <svx/zoom_def.hxx>
@@ -176,7 +177,11 @@ protected:
     virtual ~AbstractSvxObjectNameDialog() override = default;
 public:
     virtual void GetName(OUString& rName) = 0;
+    virtual SdrObject* GetObject() = 0;
     virtual void SetCheckNameHdl(const Link<AbstractSvxObjectNameDialog&,bool>& rLink) = 0;
+    virtual void SetOkHdl(const Link<AbstractSvxObjectNameDialog&,void>& rLink) = 0;
+    virtual void SetObject(SdrObject* rObject) = 0;
+    virtual void Response(int response) = 0;
 };
 
 class AbstractSvxObjectTitleDescDialog :public VclAbstractDialog

@@ -145,6 +145,9 @@ protected:
         const basegfx::B2DPoint& rPoint,
         const SdrPageView* pPV) const;
 
+    // custom logic for after marked objected is changed
+    Link<SdrMarkView&, void> mbOnSelectionChangedHdl;
+
 private:
     SVX_DLLPRIVATE void ImpSetPointsRects() const;
     void UndirtyMrkPnt() const;
@@ -246,6 +249,11 @@ public:
     /// whether all x coordinates in use are negated or not
     void SetNegativeX(bool bOn) { mbNegativeX = bOn; }
     bool IsNegativeX() const { return mbNegativeX; }
+
+    void SetOnSelectionChangedHdl(const Link<SdrMarkView&, void>& rLink)
+    {
+        mbOnSelectionChangedHdl = rLink;
+    }
 
 // migrate selections
 

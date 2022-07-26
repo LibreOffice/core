@@ -560,16 +560,17 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                 OUString aName(pSelected->GetName());
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractSvxObjectNameDialog> pDlg(pFact->CreateSvxObjectNameDialog(GetView().GetFrameWeld(), aName));
+                m_xNameDialog = VclPtr<AbstractSvxObjectNameDialog>(
+                    pFact->CreateSvxObjectNameDialog(GetView().GetFrameWeld(), aName));
 
-                pDlg->SetCheckNameHdl(LINK(this, SwDrawBaseShell, CheckGroupShapeNameHdl));
-
-                if(RET_OK == pDlg->Execute())
-                {
-                    pDlg->GetName(aName);
-                    pSelected->SetName(aName);
-                    pSh->SetModified();
-                }
+                pSdrView->SetOnSelectionChangedHdl(LINK(this, SwDrawBaseShell, OnSelectionChangedHdl));
+                m_xNameDialog->SetObject(pSelected);
+                m_xNameDialog->SetCheckNameHdl(LINK(this, SwDrawBaseShell, CheckGroupShapeNameHdl));
+                m_xNameDialog->SetOkHdl(LINK(this, SwDrawBaseShell, NameDialogOkHdl_Impl));
+                m_xNameDialog->StartExecuteAsync([this, pSdrView] (sal_Int32 response){
+                    m_xNameDialog.disposeAndClear();
+                    pSdrView->SetOnSelectionChangedHdl(LINK(this, SwDrawBaseShell, DummyHdl));
+                });
             }
 
             break;
@@ -588,19 +589,22 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                 OUString aDescription(pSelected->GetDescription());
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractSvxObjectTitleDescDialog> pDlg(pFact->CreateSvxObjectTitleDescDialog(GetView().GetFrameWeld(),
-                            aTitle, aDescription));
+                m_xDescriptionDialog = VclPtr<AbstractSvxObjectTitleDescDialog>(
+                    pFact->CreateSvxObjectTitleDescDialog(GetView().GetFrameWeld(), aTitle, aDescription));
 
-                if(RET_OK == pDlg->Execute())
-                {
-                    pDlg->GetTitle(aTitle);
-                    pDlg->GetDescription(aDescription);
+                m_xDescriptionDialog->StartExecuteAsync([&] (sal_Int32 retValue){
+                    if (retValue == RET_OK)
+                    {
+                        m_xDescriptionDialog->GetTitle(aTitle);
+                        m_xDescriptionDialog->GetDescription(aDescription);
 
-                    pSelected->SetTitle(aTitle);
-                    pSelected->SetDescription(aDescription);
+                        pSelected->SetTitle(aTitle);
+                        pSelected->SetDescription(aDescription);
 
-                    pSh->SetModified();
-                }
+                        pSh->SetModified();
+                    }
+                    m_xDescriptionDialog.disposeAndClear();
+                });
             }
 
             break;
@@ -667,6 +671,18 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
     }
 }
 
+IMPL_LINK( SwDrawBaseShell, OnSelectionChangedHdl, SdrMarkView&, rSdrView, void )
+{
+    if (m_xNameDialog && !m_xNameDialog->isDisposed())
+    {
+        m_xNameDialog->Response(RET_CANCEL);
+    }
+}
+
+IMPL_LINK( SwDrawBaseShell, DummyHdl, SdrMarkView&, rSdrView, void )
+{
+}
+
 // Checks whether a given name is allowed for a group shape
 
 IMPL_LINK( SwDrawBaseShell, CheckGroupShapeNameHdl, AbstractSvxObjectNameDialog&, rNameDialog, bool )
@@ -675,7 +691,7 @@ IMPL_LINK( SwDrawBaseShell, CheckGroupShapeNameHdl, AbstractSvxObjectNameDialog&
     SdrView *pSdrView = rSh.GetDrawView();
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     OSL_ENSURE(rMarkList.GetMarkCount() == 1, "wrong draw selection");
-    SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+    SdrObject* pObj = rNameDialog.GetObject();
     const OUString sCurrentName = pObj->GetName();
     OUString sNewName;
     rNameDialog.GetName(sNewName);
@@ -698,6 +714,20 @@ IMPL_LINK( SwDrawBaseShell, CheckGroupShapeNameHdl, AbstractSvxObjectNameDialog&
         }
     }
     return bRet;
+}
+
+
+IMPL_LINK( SwDrawBaseShell, NameDialogOkHdl_Impl, AbstractSvxObjectNameDialog&, rNameDialog, void )
+{
+    OUString aName;
+    SwWrtShell *rSh = &GetShell();
+    SdrObject* rObject = rNameDialog.GetObject();
+    OSL_ENSURE(rObject, "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
+    rNameDialog.GetName(aName);
+    rObject->SetName(aName);
+    rSh->SetModified();
+
+    rNameDialog.Response(RET_CLOSE);
 }
 
 void SwDrawBaseShell::GetState(SfxItemSet& rSet)

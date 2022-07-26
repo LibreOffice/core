@@ -2698,6 +2698,11 @@ void SdrMarkView::MarkListHasChanged()
         }
     }
     ImpSetGlueVisible4(bOneEdgeMarked);
+
+    if (mbOnSelectionChangedHdl.IsSet())
+    {
+        mbOnSelectionChangedHdl.Call(*this);
+    }
 }
 
 

@@ -3169,6 +3169,8 @@ static void doc_iniUnoCommands ()
         OUString(".uno:Intersect"),
         OUString(".uno:BorderInner"),
         OUString(".uno:BorderOuter"),
+        OUString(".uno:NameGroup"),
+        OUString(".uno:ObjectTitleDescription"),
         OUString(".uno:FreezePanes"),
         OUString(".uno:FreezePanesColumn"),
         OUString(".uno:FreezePanesRow"),

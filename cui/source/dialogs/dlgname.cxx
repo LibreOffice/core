@@ -73,6 +73,8 @@ SvxObjectNameDialog::SvxObjectNameDialog(weld::Window* pParent, const OUString& 
     // activate name
     ModifyHdl(*m_xEdtName);
     m_xEdtName->connect_changed(LINK(this, SvxObjectNameDialog, ModifyHdl));
+
+    m_xBtnOK->connect_clicked(LINK(this, SvxObjectNameDialog, OkHdl));
 }
 
 IMPL_LINK_NOARG(SvxObjectNameDialog, ModifyHdl, weld::Entry&, void)
@@ -81,6 +83,16 @@ IMPL_LINK_NOARG(SvxObjectNameDialog, ModifyHdl, weld::Entry&, void)
     {
         m_xBtnOK->set_sensitive(aCheckNameHdl.Call(*this));
     }
+}
+
+IMPL_LINK_NOARG(SvxObjectNameDialog, OkHdl, weld::Button&, void)
+{
+    if (aOkHdl.IsSet())
+    {
+        aOkHdl.Call(*this);
+        return;
+    }
+    m_xDialog->response(RET_OK);
 }
 
 // #i68101#

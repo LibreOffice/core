@@ -94,6 +94,7 @@
 #include <fileextcheckdlg.hxx>
 #include <TextColumnsPage.hxx>
 #include <themepage.hxx>
+#include <svx/svdobj.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
@@ -125,14 +126,14 @@ IMPL_ABSTDLG_CLASS(AbstractSvxJSearchOptionsDialog)
 IMPL_ABSTDLG_CLASS(AbstractSvxMultiPathDialog)
 IMPL_ABSTDLG_CLASS(AbstractSvxNameDialog)
 IMPL_ABSTDLG_CLASS(AbstractSvxNewDictionaryDialog)
-IMPL_ABSTDLG_CLASS(AbstractSvxObjectNameDialog)
-IMPL_ABSTDLG_CLASS(AbstractSvxObjectTitleDescDialog)
 IMPL_ABSTDLG_CLASS(AbstractSvxPathSelectDialog)
 IMPL_ABSTDLG_CLASS(AbstractSvxPostItDialog)
 IMPL_ABSTDLG_CLASS(AbstractSvxSearchSimilarityDialog)
 IMPL_ABSTDLG_CLASS(AbstractSvxZoomDialog)
 IMPL_ABSTDLG_CLASS(AbstractTitleDialog)
 IMPL_ABSTDLG_CLASS(AbstractURLDlg)
+IMPL_ABSTDLG_CLASS_ASYNC(AbstractSvxObjectNameDialog, SfxDialogController)
+IMPL_ABSTDLG_CLASS_ASYNC(AbstractSvxObjectTitleDescDialog, SfxDialogController)
 IMPL_ABSTDLG_CLASS_ASYNC(AbstractPasteDialog,SfxDialogController)
 IMPL_ABSTDLG_CLASS_ASYNC(AbstractScriptSelectorDialog,SfxDialogController)
 IMPL_ABSTDLG_CLASS_ASYNC(AbstractSpellDialog,SfxDialogController)
@@ -592,6 +593,11 @@ void AbstractSvxObjectNameDialog_Impl::GetName(OUString& rName)
     rName = m_xDlg->GetName();
 }
 
+SdrObject* AbstractSvxObjectNameDialog_Impl::GetObject()
+{
+    return m_xDlg->GetObject();
+}
+
 void AbstractSvxObjectNameDialog_Impl::SetCheckNameHdl(const Link<AbstractSvxObjectNameDialog&,bool>& rLink)
 {
     aCheckNameHdl = rLink;
@@ -606,9 +612,33 @@ void AbstractSvxObjectNameDialog_Impl::SetCheckNameHdl(const Link<AbstractSvxObj
     }
 }
 
+void AbstractSvxObjectNameDialog_Impl::SetOkHdl(const Link<AbstractSvxObjectNameDialog&, void>& rLink)
+{
+    aOkHdl = rLink;
+    if( rLink.IsSet() )
+        m_xDlg->SetOkHdl( LINK(this, AbstractSvxObjectNameDialog_Impl, OkHdl) );
+    else
+        m_xDlg->SetOkHdl( Link<SvxObjectNameDialog&, void>() );
+}
+
+void AbstractSvxObjectNameDialog_Impl::SetObject(SdrObject* rObject)
+{
+    m_xDlg->SetObject(rObject);
+}
+
+void AbstractSvxObjectNameDialog_Impl::Response(int response)
+{
+    m_xDlg->response(response);
+}
+
 IMPL_LINK_NOARG(AbstractSvxObjectNameDialog_Impl, CheckNameHdl, SvxObjectNameDialog&, bool)
 {
     return aCheckNameHdl.Call(*this);
+}
+
+IMPL_LINK_NOARG(AbstractSvxObjectNameDialog_Impl, OkHdl, SvxObjectNameDialog&, void)
+{
+    aOkHdl.Call(*this);
 }
 
 void AbstractSvxObjectTitleDescDialog_Impl::GetTitle(OUString& rTitle)
@@ -1067,7 +1097,7 @@ VclPtr<AbstractSvxNameDialog> AbstractDialogFactory_Impl::CreateSvxNameDialog(we
 
 VclPtr<AbstractSvxObjectNameDialog> AbstractDialogFactory_Impl::CreateSvxObjectNameDialog(weld::Window* pParent, const OUString& rName)
 {
-    return VclPtr<AbstractSvxObjectNameDialog_Impl>::Create(std::make_unique<SvxObjectNameDialog>(pParent, rName));
+    return VclPtr<AbstractSvxObjectNameDialog_Impl>::Create(std::make_shared<SvxObjectNameDialog>(pParent, rName));
 }
 
 VclPtr<AbstractSvxObjectTitleDescDialog> AbstractDialogFactory_Impl::CreateSvxObjectTitleDescDialog(weld::Window* pParent, const OUString& rTitle, const OUString& rDescription)

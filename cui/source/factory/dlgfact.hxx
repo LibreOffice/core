@@ -58,6 +58,7 @@
 #include <transfrm.hxx>
 #include <zoom.hxx>
 #include <AdditionsDialog.hxx>
+#include <svx/svdobj.hxx>
 
 #define DECL_ABSTDLG_CLASS_(Class,Base,Dialog,StdPtr) \
 class Class##_Impl final : public Base \
@@ -284,17 +285,24 @@ class SvxObjectNameDialog;
 class SvxObjectTitleDescDialog;
 
 // AbstractSvxObjectNameDialog_Impl
-DECL_ABSTDLG_CLASS(AbstractSvxObjectNameDialog,SvxObjectNameDialog)
+DECL_ABSTDLG_CLASS_ASYNC(AbstractSvxObjectNameDialog,SvxObjectNameDialog)
     virtual void GetName(OUString& rName) override ;
+    virtual SdrObject* GetObject() override;
     virtual void SetCheckNameHdl(const Link<AbstractSvxObjectNameDialog&,bool>& rLink) override;
+    virtual void SetOkHdl(const Link<AbstractSvxObjectNameDialog&,void>& rLink) override;
+    virtual void SetObject(SdrObject* rObject) override;
+    virtual void Response(int response) override;
 
 private:
     Link<AbstractSvxObjectNameDialog&,bool> aCheckNameHdl;
+    Link<AbstractSvxObjectNameDialog&,void> aOkHdl;
+    SdrObject* aObject;
     DECL_LINK(CheckNameHdl, SvxObjectNameDialog&, bool);
+    DECL_LINK(OkHdl, SvxObjectNameDialog&, void);
 };
 
 // AbstractSvxObjectTitleDescDialog_Impl
-DECL_ABSTDLG_CLASS(AbstractSvxObjectTitleDescDialog,SvxObjectTitleDescDialog)
+DECL_ABSTDLG_CLASS_ASYNC(AbstractSvxObjectTitleDescDialog,SvxObjectTitleDescDialog)
     virtual void GetTitle(OUString& rName) override;
     virtual void GetDescription(OUString& rName) override;
 };
