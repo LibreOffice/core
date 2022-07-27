@@ -2488,13 +2488,14 @@ class FilterEntriesHandler
 {
     ScColumn& mrColumn;
     ScFilterEntries& mrFilterEntries;
+    bool mbFiltering;
     bool mbFilteredRow;
 
     void processCell(const ScColumn& rColumn, SCROW nRow, ScRefCellValue& rCell)
     {
         SvNumberFormatter* pFormatter = mrColumn.GetDoc().GetFormatTable();
         sal_uLong nFormat = mrColumn.GetNumberFormat(mrColumn.GetDoc().GetNonThreadedContext(), nRow);
-        OUString aStr = ScCellFormat::GetInputString(rCell, nFormat, *pFormatter, mrColumn.GetDoc(), mrColumn.HasFiltering());
+        OUString aStr = ScCellFormat::GetInputString(rCell, nFormat, *pFormatter, mrColumn.GetDoc(), mbFiltering);
 
         // Colors
         ScAddress aPos(rColumn.GetCol(), nRow, rColumn.GetTab());
@@ -2624,8 +2625,8 @@ class FilterEntriesHandler
     }
 
 public:
-    FilterEntriesHandler(ScColumn& rColumn, ScFilterEntries& rFilterEntries, bool bFilteredRow) :
-        mrColumn(rColumn), mrFilterEntries(rFilterEntries), mbFilteredRow(bFilteredRow) {}
+    FilterEntriesHandler(ScColumn& rColumn, ScFilterEntries& rFilterEntries, bool bFiltering, bool bFilteredRow) :
+        mrColumn(rColumn), mrFilterEntries(rFilterEntries), mbFiltering(bFiltering), mbFilteredRow(bFilteredRow) {}
 
     void operator() (size_t nRow, double fVal)
     {
@@ -2673,8 +2674,7 @@ void ScColumn::GetFilterEntries(
     sc::ColumnBlockConstPosition& rBlockPos, SCROW nStartRow, SCROW nEndRow,
     ScFilterEntries& rFilterEntries, bool bFiltering, bool bFilteredRow )
 {
-    mbFiltering = bFiltering;
-    FilterEntriesHandler aFunc(*this, rFilterEntries, bFilteredRow);
+    FilterEntriesHandler aFunc(*this, rFilterEntries, bFiltering, bFilteredRow);
     rBlockPos.miCellPos =
         sc::ParseAll(rBlockPos.miCellPos, maCells, nStartRow, nEndRow, aFunc, aFunc);
 }
