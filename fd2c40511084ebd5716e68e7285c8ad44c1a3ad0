@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b133913e_1b52b318",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-07-27T10:38:00Z",
+      "side": 1,
+      "message": "thanks vmiklos, turned out to an ordering thing :-)",
+      "revId": "fd2c40511084ebd5716e68e7285c8ad44c1a3ad0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
