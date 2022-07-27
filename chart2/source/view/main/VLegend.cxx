@@ -167,6 +167,14 @@ awt::Size lcl_createTextShapes(
                 if( i == 1 )
                     break;
 
+                // tdf#150034 limit legend label text
+                if (aLabelSeq[i]->getString().getLength() > 520)
+                {
+                    sal_Int32 nIndex = aLabelSeq[i]->getString().indexOf(' ', 500);
+                    aLabelSeq[i]->setString(
+                        aLabelSeq[i]->getString().copy(0, nIndex > 500 ? nIndex : 500));
+                }
+
                 aLabelString += aLabelSeq[i]->getString();
                 // workaround for Issue #i67540#
                 if( aLabelString.isEmpty())
