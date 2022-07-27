@@ -16,6 +16,24 @@
       "message": "Just a note: this change triggered a \"thank you\" reaction at https://ask.libreoffice.org/t/unknown-author-of-one-change-in-7-4-0-1/79958; and while answering that, I found out that a change was introduced in OOo 3.3.0 cycle, that made previously prominent directional cursor almost invisible (possibly along with making it slimmer). This ~invisible state is also present in OOo 3.3.0 and AOO.",
       "revId": "c7a32dab567cce8ee435c65299ec60b638700a35",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ca34076_fc1e41a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-07-27T15:50:32Z",
+      "side": 1,
+      "message": "oh good, though it was part of a failed attempt to workaround the referenced bugzilla issue.",
+      "parentUuid": "bc2a542b_6fa434d8",
+      "revId": "c7a32dab567cce8ee435c65299ec60b638700a35",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
