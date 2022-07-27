@@ -204,19 +204,19 @@ class SwRenderData
 {
     /** pages valid for printing (according to the current settings)
      This set of pages does NOT depend on the 'PageRange' that is used as a printing option! */
-    o3tl::sorted_vector< sal_Int32 >            m_aValidPages;          ///< the set of possible pages (see StringRangeEnumerator::getRangesFromString )
+    o3tl::sorted_vector< Color >            m_aValidPages;          ///< the set of possible pages (see StringRangeEnumerator::getRangesFromString )
 
     /// printer paper tray to use for each of the m_aValidPages above
-    std::map< sal_Int32, sal_Int32 >            m_aPrinterPaperTrays;
+    std::map< Color, Color >            m_aPrinterPaperTrays;
 
     /** vector of pages and their order to be printed (duplicates and any order allowed!)
        (see 'render' in unotxdoc.cxx)
        negative entry indicates the page to be printed is from the post-it doc */
-    std::vector< sal_Int32 >                    m_aPagesToPrint;
+    std::vector< Color >                    m_aPagesToPrint;
 
     /** for prospect printing: the pairs of pages to be printed together on a single prospect page.
        -1 indicates a half page to be left empty. */
-    std::vector< std::pair< sal_Int32, sal_Int32 > >    m_aPagePairs;
+    std::vector< std::pair< Color, Color > >    m_aPagePairs;
 
     OUString               m_aPageRange;
 
@@ -260,21 +260,21 @@ public:
     void MakeSwPrtOptions( SwDocShell const*const pDocShell,
             SwPrintUIOptions const*const pOpt, bool const bIsPDFExport );
 
-    typedef std::vector< std::pair< sal_Int32, sal_Int32 > >    PagePairsVec_t;
+    typedef std::vector< std::pair< Color, Color > >    PagePairsVec_t;
 
-    o3tl::sorted_vector< sal_Int32 > &       GetValidPagesSet()          { return m_aValidPages; }
-    const o3tl::sorted_vector< sal_Int32 > & GetValidPagesSet() const    { return m_aValidPages; }
+    o3tl::sorted_vector< Color > &       GetValidPagesSet()          { return m_aValidPages; }
+    const o3tl::sorted_vector< Color > & GetValidPagesSet() const    { return m_aValidPages; }
 
     /** a map for printer paper tray numbers to use for each document page
        a value of -1 for the tray means that there is no specific tray defined */
-    std::map< sal_Int32, sal_Int32 >&        GetPrinterPaperTrays()          { return m_aPrinterPaperTrays; }
-    const std::map< sal_Int32, sal_Int32 >&  GetPrinterPaperTrays() const    { return m_aPrinterPaperTrays; }
+    std::map< Color, Color >&        GetPrinterPaperTrays()          { return m_aPrinterPaperTrays; }
+    const std::map< Color, Color >&  GetPrinterPaperTrays() const    { return m_aPrinterPaperTrays; }
 
     /** used for 'normal' printing
        A page value of 0 as entry indicates that this page is not from the document but
        from the post-it document. (See also GetPostItStartFrame below) */
-    std::vector< sal_Int32 > &          GetPagesToPrint()           { return m_aPagesToPrint; }
-    const std::vector< sal_Int32 > &    GetPagesToPrint() const     { return m_aPagesToPrint; }
+    std::vector< Color > &          GetPagesToPrint()           { return m_aPagesToPrint; }
+    const std::vector< Color > &    GetPagesToPrint() const     { return m_aPagesToPrint; }
 
     /// used for prospect printing only
     PagePairsVec_t &                    GetPagePairsForProspectPrinting()           { return m_aPagePairs; }

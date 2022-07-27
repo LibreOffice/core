@@ -782,7 +782,7 @@ sal_uLong SwView::FUNC_Search( const SwSearchOptions& rOptions )
     if( !bDoReplace )
         aSearchOpt.replaceString.clear();
 
-    sal_uLong nFound;
+    sal_Int32 nFound;
     if( aSrchSet.Count() || ( xReplSet && xReplSet->Count() ))
     {
         nFound = m_pWrtShell->SearchAttr(

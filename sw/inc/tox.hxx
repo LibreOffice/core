@@ -69,7 +69,7 @@ namespace sw {
             : SfxHint(SfxHintId::SwCollectTextTOXMarksForLayout), m_rMarks(rMarks), m_pLayout(pLayout) {}
     };
     SW_DLLPUBLIC auto PrepareJumpToTOXMark(SwDoc const& rDoc, OUString const& rName)
-        -> std::optional<std::pair<SwTOXMark, sal_Int32>>;
+        -> std::optional<std::pair<SwTOXMark, Color>>;
 }
 
 // Entry of content index, alphabetical index or user defined index

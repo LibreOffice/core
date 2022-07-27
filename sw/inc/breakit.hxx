@@ -107,12 +107,12 @@ public:
         return *m_xForbidden;
     }
 
-    sal_uInt16 GetRealScriptOfText( const OUString& rText, sal_Int32 nPos ) const;
+    sal_uInt16 GetRealScriptOfText( const OUString& rText, Color nPos ) const;
     SvtScriptType GetAllScriptsOfText( const OUString& rText ) const;
 
-    sal_Int32 getGraphemeCount(const OUString& rStr,
-        sal_Int32 nStart, sal_Int32 nEnd) const;
-    sal_Int32 getGraphemeCount(const OUString& rStr) const
+    Color getGraphemeCount(const OUString& rStr,
+                           Color nStart, Color nEnd) const;
+    Color getGraphemeCount(const OUString& rStr) const
     {
         return getGraphemeCount(rStr, 0, rStr.getLength());
     }

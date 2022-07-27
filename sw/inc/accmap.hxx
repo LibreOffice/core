@@ -243,7 +243,7 @@ public:
     /** invalidation of text selection of all paragraphs */
     void InvalidateTextSelectionOfAllParas();
 
-    sal_Int32 GetChildIndex( const SwFrame& rParentFrame,
+    Color GetChildIndex( const SwFrame& rParentFrame,
                              vcl::Window& rChild ) const;
 
     // update preview data (and fire events if necessary)

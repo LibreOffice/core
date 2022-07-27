@@ -42,7 +42,7 @@ public:
     virtual void        FillClass( SvGlobalName * pClassName,
                                    SotClipboardFormatId * pClipFormat,
                                    OUString * pLongUserName,
-                                   sal_Int32 nFileFormat,
+                                  Color nFileFormat,
                                    bool bTemplate = false ) const override;
     sal_uInt16      GetSourcePara()const { return m_nSourcePara; }
     void        SetSourcePara(sal_uInt16 nSet) { m_nSourcePara = nSet; }

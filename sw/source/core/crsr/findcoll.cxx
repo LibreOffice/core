@@ -72,7 +72,7 @@ bool SwFindParaFormatColl::IsReplaceMode() const
 }
 
 /// search for Format-Collections
-sal_uLong SwCursor::FindFormat( const SwTextFormatColl& rFormatColl, SwDocPositions nStart,
+sal_Int32 SwCursor::FindFormat( const SwTextFormatColl& rFormatColl, SwDocPositions nStart,
                           SwDocPositions nEnd, bool& bCancel,
                           FindRanges eFndRngs, const SwTextFormatColl* pReplFormatColl,
                           SwRootFrame const*const pLayout)
@@ -97,7 +97,7 @@ sal_uLong SwCursor::FindFormat( const SwTextFormatColl& rFormatColl, SwDocPositi
 
     SwFindParaFormatColl aSwFindParaFormatColl(rFormatColl, pReplFormatColl, pLayout);
 
-    sal_uLong nRet = FindAll( aSwFindParaFormatColl, nStart, nEnd, eFndRngs, bCancel );
+    sal_Int32 nRet = FindAll( aSwFindParaFormatColl, nStart, nEnd, eFndRngs, bCancel );
     rDoc.SetOle2Link( aLnk );
 
     if( nRet && pReplFormatColl )

@@ -166,11 +166,11 @@ public:
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     //XIndexReplace
-    virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const css::uno::Any& Element ) override;
+    virtual void SAL_CALL replaceByIndex( Color Index, const css::uno::Any& Element ) override;
 
     //XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount(  ) override;
-    virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
+    virtual Color SAL_CALL getCount(  ) override;
+    virtual css::uno::Any SAL_CALL getByIndex(Color nIndex) override;
 
     //XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
@@ -195,11 +195,11 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     css::uno::Sequence< css::beans::PropertyValue>
-            GetNumberingRuleByIndex(const SwNumRule& rNumRule, sal_Int32 nIndex)const;
+            GetNumberingRuleByIndex(const SwNumRule& rNumRule, Color nIndex)const;
     /// @throws css::uno::RuntimeException
     /// @throws css::lang::IllegalArgumentException
     void    SetNumberingRuleByIndex(SwNumRule& rNumRule,
-                const css::uno::Sequence< css::beans::PropertyValue>& rProperties, sal_Int32 nIndex);
+                const css::uno::Sequence< css::beans::PropertyValue>& rProperties, Color nIndex);
 
     const OUString*         GetNewCharStyleNames() const {return m_sNewCharStyleNames;}
     const OUString*         GetBulletFontNames() const {return m_sNewBulletFontNames;}

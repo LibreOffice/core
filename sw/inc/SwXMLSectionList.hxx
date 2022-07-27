@@ -33,7 +33,7 @@ public:
     virtual ~SwXMLSectionList ( ) noexcept override;
 
 private:
-    virtual SvXMLImportContext *CreateFastContext( sal_Int32 Element,
+    virtual SvXMLImportContext *CreateFastContext( Color Element,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 };
 

@@ -209,7 +209,7 @@ void SwWrtShell::SelAll()
 
 // Description: Text search
 
-sal_uLong SwWrtShell::SearchPattern( const i18nutil::SearchOptions2& rSearchOpt, bool bSearchInNotes,
+sal_Int32 SwWrtShell::SearchPattern( const i18nutil::SearchOptions2& rSearchOpt, bool bSearchInNotes,
                                 SwDocPositions eStt, SwDocPositions eEnd,
                                 FindRanges eFlags, bool bReplace )
 {
@@ -217,18 +217,18 @@ sal_uLong SwWrtShell::SearchPattern( const i18nutil::SearchOptions2& rSearchOpt,
     if(!(eFlags & FindRanges::InSel))
         ClearMark();
     bool bCancel = false;
-    sal_uLong nRet = Find_Text(rSearchOpt, bSearchInNotes, eStt, eEnd, bCancel, eFlags, bReplace);
+    sal_Int32 nRet = Find_Text(rSearchOpt, bSearchInNotes, eStt, eEnd, bCancel, eFlags, bReplace);
     if(bCancel)
     {
         Undo();
-        nRet = ULONG_MAX;
+        nRet = SAL_MAX_INT32;
     }
     return nRet;
 }
 
 // Description: search for templates
 
-sal_uLong SwWrtShell::SearchTempl( const OUString &rTempl,
+sal_Int32 SwWrtShell::SearchTempl( const OUString &rTempl,
                                SwDocPositions eStt, SwDocPositions eEnd,
                                FindRanges eFlags, const OUString* pReplTempl )
 {
@@ -241,19 +241,19 @@ sal_uLong SwWrtShell::SearchTempl( const OUString &rTempl,
         pReplaceColl = GetParaStyle(*pReplTempl, SwWrtShell::GETSTYLE_CREATESOME );
 
     bool bCancel = false;
-    sal_uLong nRet = FindFormat(pColl ? *pColl : GetDfltTextFormatColl(),
+    sal_Int32 nRet = FindFormat(pColl ? *pColl : GetDfltTextFormatColl(),
                                eStt,eEnd, bCancel, eFlags, pReplaceColl);
     if(bCancel)
     {
         Undo();
-        nRet = ULONG_MAX;
+        nRet = SAL_MAX_INT32;
     }
     return nRet;
 }
 
 // search for attributes
 
-sal_uLong SwWrtShell::SearchAttr( const SfxItemSet& rFindSet, bool bNoColls,
+sal_Int32 SwWrtShell::SearchAttr( const SfxItemSet& rFindSet, bool bNoColls,
                                 SwDocPositions eStart, SwDocPositions eEnd,
                                 FindRanges eFlags, const i18nutil::SearchOptions2* pSearchOpt,
                                 const SfxItemSet* pReplaceSet )
@@ -264,12 +264,12 @@ sal_uLong SwWrtShell::SearchAttr( const SfxItemSet& rFindSet, bool bNoColls,
 
     // Searching
     bool bCancel = false;
-    sal_uLong nRet = FindAttrs(rFindSet, bNoColls, eStart, eEnd, bCancel, eFlags, pSearchOpt, pReplaceSet);
+    sal_Int32 nRet = FindAttrs(rFindSet, bNoColls, eStart, eEnd, bCancel, eFlags, pSearchOpt, pReplaceSet);
 
     if(bCancel)
     {
         Undo();
-        nRet = ULONG_MAX;
+        nRet = SAL_MAX_INT32;
     }
     return nRet;
 }

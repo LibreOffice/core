@@ -74,7 +74,7 @@ namespace SwUnoCursorHelper
     };
 
     css::uno::Reference< css::text::XTextContent >
-        GetNestedTextContent(SwTextNode const & rTextNode, sal_Int32 const nIndex,
+        GetNestedTextContent(SwTextNode const & rTextNode, Color const nIndex,
             bool const bParent);
 
     bool                    getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
@@ -233,7 +233,7 @@ namespace SwUnoCursorHelper
         std::vector<SdrObject *> & o_rSdrObjects);
 
     css::uno::Reference<css::text::XFlatParagraphIterator>
-            CreateFlatParagraphIterator(SwDoc &, sal_Int32,  bool);
+            CreateFlatParagraphIterator(SwDoc &, Color,  bool);
 
 } // namespace SwUnoCursorHelper
 

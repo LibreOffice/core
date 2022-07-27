@@ -173,7 +173,7 @@ private:
     static void InitInterface_Impl();
 
 public:
-    static OUString GetEventName( sal_Int32 nId );
+    static OUString GetEventName( Color nId );
 
     /// Doc is required for SO data exchange!
     SwDocShell( SfxObjectCreateMode eMode = SfxObjectCreateMode::EMBEDDED );
@@ -249,7 +249,7 @@ public:
     virtual void FillClass( SvGlobalName * pClassName,
                                    SotClipboardFormatId * pClipFormat,
                                    OUString * pLongUserName,
-                                   sal_Int32 nFileFormat,
+                           Color nFileFormat,
                                    bool bTemplate = false ) const override;
 
     virtual std::set<Color> GetDocColors() override;

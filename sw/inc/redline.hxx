@@ -237,7 +237,7 @@ public:
     void ShowOriginal(sal_uInt16 nLoop, size_t nMyPos, bool bForced = false);
 
     /// Calculates the intersection with text node number nNdIdx.
-    void CalcStartEnd(SwNodeOffset nNdIdx, sal_Int32& rStart, sal_Int32& rEnd) const;
+    void CalcStartEnd(SwNodeOffset nNdIdx, Color& rStart, Color& rEnd) const;
 
     enum class Invalidation { Add, Remove };
     /// Initiate the layout.

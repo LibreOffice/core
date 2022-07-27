@@ -199,7 +199,7 @@ class IDocumentMarkAccess
         */
         virtual void correctMarksAbsolute(const SwNodeIndex& rOldNode,
             const SwPosition& rNewPos,
-            const sal_Int32 nOffset) =0;
+            const Color nOffset) =0;
 
         /** Corrects marks (relative)
             This method uses the previous position of the mark in the paragraph as offset
@@ -217,7 +217,7 @@ class IDocumentMarkAccess
         */
         virtual void correctMarksRelative(const SwNodeIndex& rOldNode,
             const SwPosition& rNewPos,
-            const sal_Int32 nOffset) =0;
+            const Color nOffset) =0;
 
         /** Deletes marks in a range
 
@@ -267,7 +267,7 @@ class IDocumentMarkAccess
 
             Note: annotation marks are excluded
         */
-        virtual sal_Int32 getAllMarksCount() const =0;
+        virtual Color getAllMarksCount() const =0;
 
         /** Finds a mark by name.
 
@@ -294,7 +294,7 @@ class IDocumentMarkAccess
 
         /** returns the number of IBookmarks.
         */
-        virtual sal_Int32 getBookmarksCount() const =0;
+        virtual Color getBookmarksCount() const =0;
 
         /** Finds a bookmark by name.
 
@@ -341,7 +341,7 @@ class IDocumentMarkAccess
         // Annotation Marks
         virtual const_iterator_t getAnnotationMarksBegin() const = 0;
         virtual const_iterator_t getAnnotationMarksEnd() const = 0;
-        virtual sal_Int32 getAnnotationMarksCount() const = 0;
+        virtual Color getAnnotationMarksCount() const = 0;
         virtual const_iterator_t findAnnotationMark( const OUString& rName ) const = 0;
         virtual sw::mark::IMark* getAnnotationMarkFor(const SwPosition& rPosition) const = 0;
         // handle and restore text ranges of annotations of tracked deletions

@@ -31,7 +31,7 @@ public:
     virtual ~ToxLinkProcessor() {}
 
     void
-    StartNewLink(sal_Int32 startPosition, const OUString& characterStyle);
+    StartNewLink(Color startPosition, const OUString& characterStyle);
 
     /** Close a link which has been found during processing.
      *
@@ -41,7 +41,7 @@ public:
      * STR_POOLCHR_TOXJUMP.
      */
     void
-    CloseLink(sal_Int32 endPosition, const OUString& url, bool bRelative);
+    CloseLink(Color endPosition, const OUString& url, bool bRelative);
 
     /** Insert the found links as attributes to a text node */
     void
@@ -58,10 +58,10 @@ private:
 
     /** Information about a started link */
     struct StartedLink {
-        StartedLink(sal_Int32 startPosition, const OUString& characterStyle) :
+        StartedLink(Color startPosition, const OUString& characterStyle) :
                 mStartPosition(startPosition), mCharacterStyle(characterStyle) {
         }
-        sal_Int32 mStartPosition;
+        Color mStartPosition;
         OUString mCharacterStyle;
     };
 
@@ -69,15 +69,15 @@ private:
      * A link is closed if it has both a start and an end token.
      */
     struct ClosedLink {
-        ClosedLink(const OUString& url, sal_Int32 startPosition, sal_Int32 endPosition)
+        ClosedLink(const OUString& url, Color startPosition, Color endPosition)
             : mINetFormat(url, OUString())
             , mStartTextPos(startPosition)
             , mEndTextPos(endPosition)
         {
         }
         SwFormatINetFormat mINetFormat;
-        sal_Int32 mStartTextPos;
-        sal_Int32 mEndTextPos;
+        Color mStartTextPos;
+        Color mEndTextPos;
     };
 
     std::vector<std::unique_ptr<ClosedLink>> m_ClosedLinks;

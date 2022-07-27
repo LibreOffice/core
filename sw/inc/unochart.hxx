@@ -266,7 +266,7 @@ public:
     virtual css::uno::Sequence< css::uno::Any > SAL_CALL getData() override;
     virtual OUString SAL_CALL getSourceRangeRepresentation() override;
     virtual css::uno::Sequence< OUString > SAL_CALL generateLabel( css::chart2::data::LabelOrigin eLabelOrigin ) override;
-    virtual ::sal_Int32 SAL_CALL getNumberFormatKeyByIndex( ::sal_Int32 nIndex ) override;
+    virtual ::Color SAL_CALL getNumberFormatKeyByIndex( ::Color nIndex ) override;
 
     // XTextualDataSequence
     virtual css::uno::Sequence< OUString > SAL_CALL getTextualData() override;
@@ -311,7 +311,7 @@ public:
     bool DeleteBox( const SwTableBox &rBox );
 
     void        FillRangeDesc( SwRangeDescriptor &rRangeDesc ) const;
-    void        ExtendTo( bool bExtendCol, sal_Int32 nFirstNew, sal_Int32 nCount );
+    void        ExtendTo( bool bExtendCol, Color nFirstNew, Color nCount );
     std::vector< css::uno::Reference< css::table::XCell > > GetCells();
 
     virtual void Notify(const SfxHint& rHint) override;

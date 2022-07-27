@@ -193,8 +193,8 @@ public:
                          SfxStyleFamily eFam, SfxStyleSearchBits n);
     virtual ~SwStyleSheetIterator() override;
 
-    virtual sal_Int32 Count() override;
-    virtual SfxStyleSheetBase *operator[](sal_Int32 nIdx) override;
+    virtual Color Count() override;
+    virtual SfxStyleSheetBase *operator[](Color nIdx) override;
     virtual SfxStyleSheetBase* First() override;
     virtual SfxStyleSheetBase* Next() override;
     virtual SfxStyleSheetBase* Find(const OUString& rStr) override;
