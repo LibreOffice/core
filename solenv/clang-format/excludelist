@@ -472,6 +472,11 @@ bridges/source/cpp_uno/gcc3_linux_intel/cpp2uno.cxx
 bridges/source/cpp_uno/gcc3_linux_intel/except.cxx
 bridges/source/cpp_uno/gcc3_linux_intel/share.hxx
 bridges/source/cpp_uno/gcc3_linux_intel/uno2cpp.cxx
+bridges/source/cpp_uno/gcc3_linux_loongarch64/call.hxx
+bridges/source/cpp_uno/gcc3_linux_loongarch64/cpp2uno.cxx
+bridges/source/cpp_uno/gcc3_linux_loongarch64/except.cxx
+bridges/source/cpp_uno/gcc3_linux_loongarch64/share.hxx
+bridges/source/cpp_uno/gcc3_linux_loongarch64/uno2cpp.cxx
 bridges/source/cpp_uno/gcc3_linux_m68k/cpp2uno.cxx
 bridges/source/cpp_uno/gcc3_linux_m68k/except.cxx
 bridges/source/cpp_uno/gcc3_linux_m68k/share.hxx
