@@ -1418,7 +1418,6 @@ bool SfxViewShell::ExecKey_Impl(const KeyEvent& aKey)
 
 void SfxViewShell::setLibreOfficeKitViewCallback(SfxLokCallbackInterface* pCallback)
 {
-    pImpl->m_pLibreOfficeKitViewCallback = nullptr;
     pImpl->m_pLibreOfficeKitViewCallback = pCallback;
 
     afterCallbackRegistered();
@@ -1434,6 +1433,12 @@ void SfxViewShell::setLibreOfficeKitViewCallback(SfxLokCallbackInterface* pCallb
             pViewShell->NotifyCursor(this);
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
+}
+
+void SfxViewShell::dumpLibreOfficeKitViewState(rtl::OStringBuffer &rState)
+{
+    if (pImpl->m_pLibreOfficeKitViewCallback)
+        pImpl->m_pLibreOfficeKitViewCallback->dumpState(rState);
 }
 
 static bool ignoreLibreOfficeKitViewCallback(int nType, const SfxViewShell_Impl* pImpl)
