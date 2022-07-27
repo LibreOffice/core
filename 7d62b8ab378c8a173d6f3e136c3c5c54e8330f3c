@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5bf11585_f2b1efd3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-27T07:07:24Z",
+      "side": 1,
+      "message": "CI OK:\n\n    Projekt : 00-LO-BuildAll\n\tBuildnummer\t:\t2767",
+      "revId": "7d62b8ab378c8a173d6f3e136c3c5c54e8330f3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
