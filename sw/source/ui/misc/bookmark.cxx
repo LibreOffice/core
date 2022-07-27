@@ -390,7 +390,7 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg(weld::Window* pParent, SwWrtShell& rS)
     m_xEditTextBtn->set_sensitive(false);
     m_xRenameBtn->set_sensitive(false);
 
-    // select 3rd colum, otherwise it'll pick 1st one FIXME doesn't work with gtk?
+    // select 3rd column, otherwise it'll pick 1st one FIXME doesn't work with gtk?
     m_xBookmarksBox->set_column_editables({ false, false, true, false, false });
 
     PopulateTable();
