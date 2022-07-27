@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65ef2a5f_67ca8304",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-27T10:26:54Z",
+      "side": 1,
+      "message": "Looks reasonable in general:\nJust wondering: Are there valid scenarios where the functions are called with invalid values in the first place?\nOtherwise, would it make sense to instead (or in addition) assert when that \"unknown\" code path is triggered?\n\nI just looked a little closer at `AccessibilityTools::getRelationTypeName`: Values are initialized to -1 in `AccessibleRelationSet::contents_flows_to_and_from`, but it looks to me like that could just as well use AccessibleRelationType::INVALID instead of -1.",
+      "revId": "c134124737e9131d5efdf3fe17be801de2127840",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
