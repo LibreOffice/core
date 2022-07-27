@@ -11,6 +11,7 @@
 #include <sal/config.h>
 #include <sal/types.h>
 #include <svl/svldllapi.h>
+#include <o3tl/sorted_vector.hxx>
 #include <array>
 #include <memory>
 #include <cassert>
@@ -104,6 +105,8 @@ struct SVL_DLLPUBLIC WhichRangesContainer
     WhichRangesContainer(sal_uInt16 nWhichStart, sal_uInt16 nWhichEnd);
     WhichRangesContainer(WhichRangesContainer const& other) { operator=(other); }
     WhichRangesContainer(WhichRangesContainer&& other);
+    /// For when we need to build the container on the fly
+    WhichRangesContainer(const o3tl::sorted_vector<sal_uInt16>&);
     ~WhichRangesContainer();
 
     WhichRangesContainer& operator=(WhichRangesContainer&& other);

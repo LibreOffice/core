@@ -1799,9 +1799,10 @@ void SwUnoCursorHelper::SetPropertyValues(
     OUString aUnknownExMsg, aPropertyVetoExMsg;
 
     // Build set of attributes we want to fetch
-    WhichRangesContainer aRanges;
+    o3tl::sorted_vector<sal_uInt16> aRanges;
     std::vector<std::pair<const SfxItemPropertyMapEntry*, const uno::Any&>> aEntries;
     aEntries.reserve(rPropertyValues.getLength());
+    aRanges.reserve(rPropertyValues.getLength());
     for (const auto& rPropVal : rPropertyValues)
     {
         const OUString &rPropertyName = rPropVal.Name;
@@ -1820,14 +1821,14 @@ void SwUnoCursorHelper::SetPropertyValues(
             aPropertyVetoExMsg += "Property is read-only: '" + rPropertyName + "' ";
             continue;
         }
-        aRanges = aRanges.MergeRange(pEntry->nWID, pEntry->nWID);
+        aRanges.insert(pEntry->nWID);
         aEntries.emplace_back(pEntry, rPropVal.Value);
     }
 
     if (!aEntries.empty())
     {
         // Fetch, overwrite, and re-set the attributes from the core
-        SfxItemSet aItemSet(rDoc.GetAttrPool(), aRanges);
+        SfxItemSet aItemSet(rDoc.GetAttrPool(), WhichRangesContainer(aRanges));
 
         bool bPreviousPropertyCausesSideEffectsInNodes = false;
         for (size_t i = 0; i < aEntries.size(); ++i)

@@ -1480,6 +1480,43 @@ WhichRangesContainer::WhichRangesContainer(WhichRangesContainer && other)
     std::swap(m_bOwnRanges, other.m_bOwnRanges);
 }
 
+WhichRangesContainer::WhichRangesContainer(const o3tl::sorted_vector<sal_uInt16>& rSet)
+{
+    if (rSet.empty())
+        return;
+
+    int noPairs = 1;
+    int pairEnd = rSet[0];
+    for (size_t i=1; i<rSet.size(); ++i)
+    {
+        if (rSet[i] == pairEnd + 1)
+            pairEnd++;
+        else
+        {
+            noPairs++;
+            pairEnd = rSet[i];
+        }
+    }
+
+    auto p = new WhichPair[noPairs];
+    m_pairs = p;
+    m_size = noPairs;
+    m_bOwnRanges = true;
+
+    int pairIndex = 0;
+    p[pairIndex].first = p[pairIndex].second = rSet[0];
+    for (size_t i=0; i<rSet.size(); ++i)
+    {
+        if (rSet[i] == p[pairIndex].second + 1)
+            p[pairIndex].second++;
+        else
+        {
+            pairIndex++;
+            p[pairIndex].first = p[pairIndex].second = rSet[i];
+        }
+    }
+}
+
 WhichRangesContainer& WhichRangesContainer::operator=(WhichRangesContainer && other)
 {
     std::swap(m_pairs, other.m_pairs);
