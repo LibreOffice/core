@@ -37,7 +37,7 @@ public:
 
     virtual const AttributeInfo* getAttributeInfoArray(Id nId);
     virtual bool getElementId(Id nDefine, Id nId, ResourceType& rOutResource, Id& rOutElement);
-    virtual bool getListValue(Id nId, const OUString& rValue, sal_uInt32& rOutValue);
+    virtual bool getListValue(Id nId, std::string_view aValue, sal_uInt32& rOutValue);
     virtual Id getResourceId(Id nDefine, sal_Int32 nToken);
 """ % nsToken)
 

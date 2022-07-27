@@ -223,13 +223,13 @@ def printValueData(values):
     if "" in values:
         output_else = ""
         for i in values[""]:
-            print("        %sif (rValue == \"%s\") { rOutValue = %s; return true; }" % (output_else, i[0], i[1]))
+            print("        %sif (aValue == \"%s\") { rOutValue = %s; return true; }" % (output_else, i[0], i[1]))
             output_else = "else "
-        print("        else switch (rValue[0])")
+        print("        else switch (aValue[0])")
     else:
-        print("        if (rValue.isEmpty())")
+        print("        if (aValue.empty())")
         print("            return false;")
-        print("        switch (rValue[0])")
+        print("        switch (aValue[0])")
 
     print("        {")
     for k in sorted(values.keys()):
@@ -237,7 +237,7 @@ def printValueData(values):
             print("        case '%s':" % k)
             output_else = ""
             for i in values[k]:
-                print("            %sif (rValue == \"%s\") { rOutValue = %s; }" % (output_else, i[0], i[1]))
+                print("            %sif (aValue == \"%s\") { rOutValue = %s; }" % (output_else, i[0], i[1]))
                 output_else = "else "
             print("            else { return false; }")
             print("            return true;")
@@ -245,9 +245,9 @@ def printValueData(values):
 
 
 def factoryGetListValue(nsNode):
-    print("""bool OOXMLFactory_%s::getListValue(Id nId, const OUString& rValue, sal_uInt32& rOutValue)
+    print("""bool OOXMLFactory_%s::getListValue(Id nId, std::string_view aValue, sal_uInt32& rOutValue)
 {
-    (void) rValue;
+    (void) aValue;
     (void) rOutValue;
 
     switch (nId)

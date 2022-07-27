@@ -72,7 +72,7 @@ protected:
     virtual ~OOXMLFactory_ns() override;
 
 public:
-    virtual bool getListValue(Id nId, const OUString& rValue, sal_uInt32& rOutValue) = 0;
+    virtual bool getListValue(Id nId, std::string_view aValue, sal_uInt32& rOutValue) = 0;
     virtual Id getResourceId(Id nDefine, sal_Int32 nToken) = 0;
     virtual const AttributeInfo* getAttributeInfoArray(Id nId) = 0;
     virtual bool getElementId(Id nDefine, Id nId, ResourceType& rOutResource, Id& rOutElement) = 0;

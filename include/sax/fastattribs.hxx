@@ -106,6 +106,7 @@ public:
     bool getAsChar( sal_Int32 nToken, const char*& rPos ) const;
     sal_Int32 getAsIntegerByIndex( sal_Int32 nTokenIndex ) const;
     const char* getAsCharByIndex( sal_Int32 nTokenIndex ) const;
+    std::string_view getAsViewByIndex( sal_Int32 nTokenIndex ) const;
     OUString getValueByIndex( sal_Int32 nTokenIndex ) const;
 
     // XFastAttributeList
