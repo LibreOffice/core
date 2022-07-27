@@ -101,7 +101,7 @@ class AbstractFieldInputDlg : public VclAbstractTerminatedDialog
 protected:
     virtual ~AbstractFieldInputDlg() override = default;
 public:
-    virtual void          EndDialog(sal_Int32 nResult) override = 0;
+    virtual void          EndDialog(Color nResult) override = 0;
     virtual bool          PrevButtonPressed() const = 0;
     virtual bool          NextButtonPressed() const = 0;
 };
@@ -300,8 +300,8 @@ protected:
     virtual ~AbstractSwSelGlossaryDlg() override = default;
 public:
     virtual void InsertGlos(const OUString &rRegion, const OUString &rGlosName) = 0;    // inline
-    virtual sal_Int32 GetSelectedIdx() const = 0;  // inline
-    virtual void SelectEntryPos(sal_Int32 nIdx) = 0;   // inline
+    virtual Color GetSelectedIdx() const = 0;  // inline
+    virtual void SelectEntryPos(Color nIdx) = 0;   // inline
 };
 
 class AbstractSwAutoFormatDlg : public VclAbstractDialog
@@ -494,7 +494,7 @@ public:
                                                 weld::Window* pParent, SwWrtShell& rSh,
                                                 const OUString& rSourceName,
                                                 const OUString& rTableName,
-                                                sal_Int32 nCommandType,
+                                                                  Color nCommandType,
                                                 const css::uno::Reference< css::sdbc::XConnection>& xConnection ) = 0;
     virtual VclPtr<AbstractMailMergeCreateFromDlg>   CreateMailMergeCreateFromDlg(weld::Window* pParent) = 0;
     virtual VclPtr<AbstractMailMergeFieldConnectionsDlg> CreateMailMergeFieldConnectionsDlg(weld::Window* pParent) = 0;

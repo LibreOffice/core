@@ -350,12 +350,12 @@ public:
     // bIsPDFExport == true is: do PDF Export (no printing!)
     bool PrintOrPDFExport( OutputDevice *pOutDev,
             SwPrintData const& rPrintData,
-            sal_Int32 nRenderer, /* offset in vector of pages to print */
+            Color nRenderer, /* offset in vector of pages to print */
             bool bIsPDFExport );
 
     // Printing of one brochure page.
     void PrintProspect( OutputDevice *pOutDev, const SwPrintData &rPrintData,
-            sal_Int32 nRenderer /* offset in vector of page pairs for prospect printing */ );
+                       Color nRenderer /* offset in vector of page pairs for prospect printing */ );
 
     // Printing for OLE 2.0.
     static void PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintData& rOptions,
@@ -500,7 +500,7 @@ public:
     void InvalidateLayout(bool bSizeChanged);
 
     const Size& GetBrowseBorder() const;
-    sal_Int32 GetBrowseWidth() const;
+    Color GetBrowseWidth() const;
     void SetBrowseBorder( const Size& rNew );
 
     css::uno::Reference< css::accessibility::XAccessible > CreateAccessible();
@@ -551,7 +551,7 @@ public:
                tools::Long nFlags = 0 );
     virtual ~SwViewShell() override;
 
-    sal_Int32 GetPageNumAndSetOffsetForPDF( OutputDevice& rOut, const SwRect& rRect ) const;
+    Color GetPageNumAndSetOffsetForPDF( OutputDevice& rOut, const SwRect& rRect ) const;
 
     bool IsInConstructor() const { return mbInConstructor; }
 

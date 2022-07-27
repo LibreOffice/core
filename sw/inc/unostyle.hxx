@@ -67,8 +67,8 @@ public:
     virtual sal_Bool SAL_CALL hasByName(const OUString& Name) override;
 
     //XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() override;
-    virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
+    virtual Color SAL_CALL getCount() override;
+    virtual css::uno::Any SAL_CALL getByIndex(Color nIndex) override;
 
     //XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
@@ -116,8 +116,8 @@ public:
     SwXAutoStyles(SwDocShell& rDocShell);
 
     //XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() override;
-    virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
+    virtual Color SAL_CALL getCount() override;
+    virtual css::uno::Any SAL_CALL getByIndex(Color nIndex) override;
 
     //XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
@@ -226,7 +226,7 @@ public:
 
 };
 
-typedef std::map<OUString, sal_Int32> CellStyleNameMap;
+typedef std::map<OUString, Color> CellStyleNameMap;
 
 /// A text table style is a UNO API wrapper for a SwTableAutoFormat
 class SwXTextTableStyle final : public cppu::WeakImplHelper

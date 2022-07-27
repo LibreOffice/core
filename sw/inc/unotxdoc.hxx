@@ -268,7 +268,7 @@ public:
 
     //XReplaceable
     virtual css::uno::Reference< css::util::XReplaceDescriptor >  SAL_CALL createReplaceDescriptor() override;
-    virtual sal_Int32 SAL_CALL replaceAll(const css::uno::Reference< css::util::XSearchDescriptor > & xDesc) override;
+    virtual Color SAL_CALL replaceAll(const css::uno::Reference< css::util::XSearchDescriptor > & xDesc) override;
 
     //XSearchable
     virtual css::uno::Reference< css::util::XSearchDescriptor >  SAL_CALL createSearchDescriptor() override;
@@ -362,9 +362,9 @@ public:
     virtual void SAL_CALL updateLinks(  ) override;
 
     // css::view::XRenderable
-    virtual sal_Int32 SAL_CALL getRendererCount( const css::uno::Any& aSelection, const css::uno::Sequence< css::beans::PropertyValue >& xOptions ) override;
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getRenderer( sal_Int32 nRenderer, const css::uno::Any& aSelection, const css::uno::Sequence< css::beans::PropertyValue >& xOptions ) override;
-    virtual void SAL_CALL render( sal_Int32 nRenderer, const css::uno::Any& aSelection, const css::uno::Sequence< css::beans::PropertyValue >& xOptions ) override;
+    virtual Color SAL_CALL getRendererCount( const css::uno::Any& aSelection, const css::uno::Sequence< css::beans::PropertyValue >& xOptions ) override;
+    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getRenderer( Color nRenderer, const css::uno::Any& aSelection, const css::uno::Sequence< css::beans::PropertyValue >& xOptions ) override;
+    virtual void SAL_CALL render( Color nRenderer, const css::uno::Any& aSelection, const css::uno::Sequence< css::beans::PropertyValue >& xOptions ) override;
 
     // css::xforms::XFormsSupplier
     virtual css::uno::Reference< css::container::XNameContainer > SAL_CALL getXForms(  ) override;
@@ -373,7 +373,7 @@ public:
     virtual css::uno::Sequence< css::lang::Locale > SAL_CALL getDocumentLanguages( ::sal_Int16 nScriptTypes, ::sal_Int16 nCount ) override;
 
     // css::text::XFlatParagraphIteratorProvider:
-    virtual css::uno::Reference< css::text::XFlatParagraphIterator > SAL_CALL getFlatParagraphIterator(::sal_Int32 nTextMarkupType, sal_Bool bAutomatic ) override;
+    virtual css::uno::Reference< css::text::XFlatParagraphIterator > SAL_CALL getFlatParagraphIterator(::Color nTextMarkupType, sal_Bool bAutomatic ) override;
 
     // css::util::XCloneable
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
@@ -448,7 +448,7 @@ public:
     std::vector<basegfx::B2DRange> getSearchResultRectangles(const char* pPayload) override;
 
     // css::tiledrendering::XTiledRenderable
-    virtual void SAL_CALL paintTile( const ::css::uno::Any& Parent, ::sal_Int32 nOutputWidth, ::sal_Int32 nOutputHeight, ::sal_Int32 nTilePosX, ::sal_Int32 nTilePosY, ::sal_Int32 nTileWidth, ::sal_Int32 nTileHeight ) override;
+    virtual void SAL_CALL paintTile( const ::css::uno::Any& Parent, ::Color nOutputWidth, ::Color nOutputHeight, ::Color nTilePosX, ::Color nTilePosY, ::Color nTileWidth, ::Color nTileHeight ) override;
 
     /// @see vcl::ITiledRenderable::executeContentControlEvent().
     void executeContentControlEvent(const StringMap& aArguments) override;
@@ -463,7 +463,7 @@ public:
     SwUnoCursor* CreateCursorForSearch(css::uno::Reference< css::text::XTextCursor > & xCursor);
     SwUnoCursor* FindAny(const css::uno::Reference< css::util::XSearchDescriptor > & xDesc,
                                             css::uno::Reference< css::text::XTextCursor > & xCursor, bool bAll,
-                                            sal_Int32& nResult,
+                         Color& nResult,
                                             css::uno::Reference< css::uno::XInterface > const & xLastResult);
 
     SwDocShell*                 GetDocShell() {return m_pDocShell;}
@@ -564,11 +564,11 @@ class SwXOutlineTarget final : public cppu::WeakImplHelper
     const SfxItemPropertySet*   m_pPropSet;
     OUString                    m_sOutlineText;
     OUString                    m_sActualText;
-    const sal_Int32             m_nOutlineLevel;
+    const Color             m_nOutlineLevel;
 
 public:
     SwXOutlineTarget(const OUString& rOutlineText, const rtl::OUString &rActualText,
-                     const sal_Int32 nOutlineLevel);
+                     const Color nOutlineLevel);
     virtual ~SwXOutlineTarget() override;
 
     //XPropertySet

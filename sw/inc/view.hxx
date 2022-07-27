@@ -67,7 +67,7 @@ class SwPostItMgr;
 enum class SotExchangeDest;
 class SwCursorShell;
 enum class SvxSearchCmd;
-enum class SelectionType : sal_Int32;
+enum class SelectionType : Color;
 
 namespace com::sun::star::view { class XSelectionSupplier; }
 namespace sfx2 { class FileDialogHelper; }
@@ -164,7 +164,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     static SvxSearchItem           *s_pSrchItem;
 
     static sal_uInt16       s_nMoveType; // for buttons below the scrollbar (viewmdi)
-    static sal_Int32        s_nActMark; // current jump mark for unknown mark
+    static Color        s_nActMark; // current jump mark for unknown mark
 
     static bool             s_bExtra;
     static bool             s_bFound;
@@ -311,7 +311,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SAL_DLLPRIVATE void          StartThesaurus();
 
     // text conversion
-    SAL_DLLPRIVATE void          StartTextConversion( LanguageType nSourceLang, LanguageType nTargetLang, const vcl::Font *pTargetFont, sal_Int32 nOptions, bool bIsInteractive );
+    SAL_DLLPRIVATE void          StartTextConversion( LanguageType nSourceLang, LanguageType nTargetLang, const vcl::Font *pTargetFont, Color nOptions, bool bIsInteractive );
 
     // used for spell checking and text conversion
     SAL_DLLPRIVATE void          SpellStart( SvxSpellArea eSpell, bool bStartDone,
@@ -386,7 +386,7 @@ public:
     virtual SdrView*        GetDrawView() const override;
     virtual bool            HasUIFeature(SfxShellFeature nFeature) const override;
     virtual void            ShowCursor( bool bOn = true ) override;
-    virtual ErrCode         DoVerb(sal_Int32 nVerb) override;
+    virtual ErrCode         DoVerb(Color nVerb) override;
 
     virtual sal_uInt16      SetPrinter( SfxPrinter* pNew,
                                         SfxPrinterChangeFlags nDiff = SFX_PRINTER_ALL) override;
@@ -461,7 +461,7 @@ public:
     static sal_uInt16   GetMoveType();
     static void     SetMoveType(sal_uInt16 nSet);
     DECL_DLLPRIVATE_LINK( MoveNavigationHdl, void*, void );
-    static void     SetActMark(sal_Int32 nSet);
+    static void     SetActMark(Color nSet);
 
     bool            HandleWheelCommands( const CommandEvent& );
 

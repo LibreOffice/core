@@ -228,7 +228,7 @@ class SwUndRng
 {
 public:
     SwNodeOffset m_nSttNode, m_nEndNode;
-    sal_Int32 m_nSttContent, m_nEndContent;
+    Color m_nSttContent, m_nEndContent;
 
     SwUndRng();
     SwUndRng( const SwPaM& );
@@ -299,7 +299,7 @@ class SwUndoFlyBase : public SwUndo, private SwUndoSaveSection
 protected:
     SwFrameFormat* m_pFrameFormat;          // The saved FlyFormat.
     SwNodeOffset m_nNodePagePos;
-    sal_Int32 m_nContentPos;         // Page at/in paragraph.
+    Color m_nContentPos;         // Page at/in paragraph.
     RndStdIds m_nRndId;
     bool m_bDelFormat;           // Delete saved format.
 
@@ -320,9 +320,9 @@ public:
 class SwUndoInsLayFormat final : public SwUndoFlyBase
 {
     SwNodeOffset mnCursorSaveIndexPara;        // Cursor position
-    sal_Int32 mnCursorSaveIndexPos;            // for undo
+    Color mnCursorSaveIndexPos;            // for undo
 public:
-    SwUndoInsLayFormat( SwFrameFormat* pFormat, SwNodeOffset nNodeIdx, sal_Int32 nCntIdx );
+    SwUndoInsLayFormat( SwFrameFormat* pFormat, SwNodeOffset nNodeIdx, Color nCntIdx );
 
     virtual ~SwUndoInsLayFormat() override;
 

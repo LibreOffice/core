@@ -42,16 +42,16 @@ struct SAL_WARN_UNUSED SW_DLLPUBLIC SwPosition
     explicit SwPosition( SwNodes& rNodes, SwNodeOffset nIndex = SwNodeOffset(0) );
     explicit SwPosition( const SwNodeIndex &rNode, SwNodeOffset nDiff = SwNodeOffset(0) );
     explicit SwPosition( const SwNode& rNode, SwNodeOffset nDiff = SwNodeOffset(0) );
-    explicit SwPosition( const SwContentNode& rNode, sal_Int32 nContentOffset = 0 );
-    SwPosition( const SwNodeIndex &rNode, const SwContentNode*, const sal_Int32 nContentOffset );
-    SwPosition( const SwNodeIndex &rNode, SwNodeOffset nDiff, const SwContentNode*, sal_Int32 nContentOffset );
+    explicit SwPosition( const SwContentNode& rNode, Color nContentOffset = 0 );
+    SwPosition( const SwNodeIndex &rNode, const SwContentNode*, const Color nContentOffset );
+    SwPosition( const SwNodeIndex &rNode, SwNodeOffset nDiff, const SwContentNode*, Color nContentOffset );
     SwPosition( const SwContentIndex &, short nDiff );
 
     // callers should be using one of the other constructors to avoid creating a temporary
     SwPosition( SwNodeIndex && ) = delete;
     SwPosition( const SwNodeIndex &, SwContentIndex && ) = delete;
     SwPosition( SwNodeIndex &&, SwContentIndex && ) = delete;
-    SwPosition( SwNodeIndex &&, const SwContentNode*, sal_Int32 ) = delete;
+    SwPosition( SwNodeIndex &&, const SwContentNode*, Color ) = delete;
     SwPosition( SwNodeIndex &&, SwNodeOffset ) = delete;
     SwPosition( SwContentIndex &&, short ) = delete;
 
@@ -168,12 +168,12 @@ public:
            SwNodeOffset nMkOffset = SwNodeOffset(0), SwNodeOffset nPtOffset = SwNodeOffset(0), SwPaM* pRing = nullptr );
     SwPaM( const SwNode& rMk, const SwNode& rPt,
            SwNodeOffset nMkOffset = SwNodeOffset(0), SwNodeOffset nPtOffset = SwNodeOffset(0), SwPaM* pRing = nullptr );
-    SwPaM(  const SwNodeIndex& rMk, sal_Int32 nMkContent,
-            const SwNodeIndex& rPt, sal_Int32 nPtContent, SwPaM* pRing = nullptr );
-    SwPaM(  const SwNode& rMk, sal_Int32 nMkContent,
-            const SwNode& rPt, sal_Int32 nPtContent, SwPaM* pRing = nullptr );
-    SwPaM( const SwNode& rNd, sal_Int32 nContent = 0, SwPaM* pRing = nullptr );
-    SwPaM( const SwNodeIndex& rNd, sal_Int32 nContent = 0, SwPaM* pRing = nullptr );
+    SwPaM(  const SwNodeIndex& rMk, Color nMkContent,
+            const SwNodeIndex& rPt, Color nPtContent, SwPaM* pRing = nullptr );
+    SwPaM(  const SwNode& rMk, Color nMkContent,
+            const SwNode& rPt, Color nPtContent, SwPaM* pRing = nullptr );
+    SwPaM( const SwNode& rNd, Color nContent = 0, SwPaM* pRing = nullptr );
+    SwPaM( const SwNodeIndex& rNd, Color nContent = 0, SwPaM* pRing = nullptr );
     virtual ~SwPaM() override;
 
     /// this takes a second parameter, which indicates the Ring that

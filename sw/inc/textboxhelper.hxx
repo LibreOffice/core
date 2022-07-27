@@ -152,15 +152,15 @@ public:
     static bool hasTextFrame(const SdrObject* pObj);
 
     /// Count number of shapes in the document, excluding TextBoxes.
-    static sal_Int32 getCount(const SwDoc& rDoc);
+    static Color getCount(const SwDoc& rDoc);
     /// Count number of shapes on the page, excluding TextBoxes.
-    static sal_Int32 getCount(SdrPage const* pPage);
+    static Color getCount(SdrPage const* pPage);
     /// Get a shape by index, excluding TextBoxes.
     ///
     /// @throws css::lang::IndexOutOfBoundsException
-    static css::uno::Any getByIndex(SdrPage const* pPage, sal_Int32 nIndex);
+    static css::uno::Any getByIndex(SdrPage const* pPage, Color nIndex);
     /// Get the order of the shape, excluding TextBoxes.
-    static sal_Int32 getOrdNum(const SdrObject* pObject);
+    static Color getOrdNum(const SdrObject* pObject);
     /// If pTextBox is a textbox, then set rWrapThrough to the surround of its shape.
     static void getShapeWrapThrough(const SwFrameFormat* pTextBox, bool& rWrapThrough);
 

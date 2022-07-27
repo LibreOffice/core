@@ -72,11 +72,11 @@ class SW_DLLPUBLIC SwCursor : public SwPaM
     friend class SwCursorSaveState;
 
     std::vector<SwCursor_SavePos> m_vSavePos; // the current entry is the last element
-    sal_Int32 m_nRowSpanOffset;        // required for travelling in tabs with rowspans
+    Color m_nRowSpanOffset;        // required for travelling in tabs with rowspans
     sal_uInt8 m_nCursorBidiLevel; // bidi level of the cursor
     bool m_bColumnSelection;      // true: cursor is aprt of a column selection
 
-    sal_uLong FindAll( SwFindParas& , SwDocPositions, SwDocPositions, FindRanges, bool& bCancel );
+    Color FindAll( SwFindParas& , SwDocPositions, SwDocPositions, FindRanges, bool& bCancel );
 
     SwCursor(SwCursor const& rPaM) = delete;
 
@@ -114,20 +114,20 @@ public:
                                         SwPaM* ) const;
 
     // note: DO NOT call it FindText because windows.h
-    sal_uLong Find_Text( const i18nutil::SearchOptions2& rSearchOpt,
+    Color Find_Text( const i18nutil::SearchOptions2& rSearchOpt,
                 bool bSearchInNotes,
                 SwDocPositions nStart, SwDocPositions nEnd,
                 bool& bCancel,
                 FindRanges,
                 bool bReplace = false,
                 SwRootFrame const*const pLayout = nullptr);
-    sal_uLong FindFormat( const SwTextFormatColl& rFormatColl,
+    Color FindFormat( const SwTextFormatColl& rFormatColl,
                 SwDocPositions nStart, SwDocPositions nEnd,
                 bool& bCancel,
                 FindRanges,
                 const SwTextFormatColl* pReplFormat,
                 SwRootFrame const*const pLayout = nullptr);
-    sal_uLong FindAttrs( const SfxItemSet& rSet, bool bNoCollections,
+    Color FindAttrs( const SfxItemSet& rSet, bool bNoCollections,
                 SwDocPositions nStart, SwDocPositions nEnd,
                 bool& bCancel,
                 FindRanges,
@@ -214,7 +214,7 @@ public:
     bool IsColumnSelection() const { return m_bColumnSelection; }
     void SetColumnSelection( bool bNew ) { m_bColumnSelection = bNew; }
 
-    sal_Int32 GetCursorRowSpanOffset() const { return m_nRowSpanOffset; }
+    Color GetCursorRowSpanOffset() const { return m_nRowSpanOffset; }
 
     SwCursor* GetNext()             { return dynamic_cast<SwCursor *>(GetNextInRing()); }
     const SwCursor* GetNext() const { return dynamic_cast<SwCursor const *>(GetNextInRing()); }
@@ -242,7 +242,7 @@ public:
 struct SwCursor_SavePos final
 {
     SwNodeOffset nNode;
-    sal_Int32 nContent;
+    Color nContent;
 
     SwCursor_SavePos( const SwCursor& rCursor )
         : nNode( rCursor.GetPoint()->nNode.GetIndex() ),
@@ -256,8 +256,8 @@ class SwTableCursor : public virtual SwCursor
 protected:
     SwNodeOffset m_nTablePtNd;
     SwNodeOffset m_nTableMkNd;
-    sal_Int32 m_nTablePtCnt;
-    sal_Int32 m_nTableMkCnt;
+    Color m_nTablePtCnt;
+    Color m_nTableMkCnt;
     SwSelBoxes m_SelectedBoxes;
     bool m_bChanged : 1;
     bool m_bParked : 1;       // Table-cursor was parked.

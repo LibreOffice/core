@@ -40,7 +40,7 @@ public:
     virtual ~BigPtrEntry() = default;
     BigPtrEntry & operator =(BigPtrEntry const &) = default;
 
-    inline sal_Int32 GetPos() const;
+    inline Color GetPos() const;
     inline BigPtrArray& GetArray() const;
 };
 
@@ -56,7 +56,7 @@ public:
 struct BlockInfo final
 {
     BigPtrArray* pBigArr;              ///< in this array the block is located
-    sal_Int32    nStart, nEnd;         ///< start- and end index
+    Color    nStart, nEnd;         ///< start- and end index
     sal_uInt16   nElem;                ///< number of elements
     std::array<BigPtrEntry*, MAXENTRY>
                  mvData;               ///< data block
@@ -67,13 +67,13 @@ class SW_DLLPUBLIC BigPtrArray
 protected:
     std::unique_ptr<BlockInfo*[]>
                     m_ppInf;              ///< block info
-    sal_Int32       m_nSize;              ///< number of elements
+    Color       m_nSize;              ///< number of elements
     sal_uInt16      m_nMaxBlock;          ///< current max. number of blocks
     sal_uInt16      m_nBlock;             ///< number of blocks
     mutable
         sal_uInt16  m_nCur;               ///< last used block
 
-    sal_uInt16  Index2Block( sal_Int32 ) const; ///< block search
+    sal_uInt16  Index2Block( Color ) const; ///< block search
     BlockInfo*  InsBlock( sal_uInt16 );         ///< insert block
     void        BlockDel( sal_uInt16 );         ///< some blocks were deleted
     void        UpdIndex( sal_uInt16 );         ///< recalculate indices
@@ -85,17 +85,17 @@ public:
     BigPtrArray();
     ~BigPtrArray();
 
-    sal_Int32 Count() const { return m_nSize; }
+    Color Count() const { return m_nSize; }
 
-    void Insert( BigPtrEntry* p, sal_Int32 pos );
-    void Remove( sal_Int32 pos, sal_Int32 n = 1 );
-    void Move( sal_Int32 from, sal_Int32 to );
-    void Replace( sal_Int32 pos, BigPtrEntry* p);
+    void Insert( BigPtrEntry* p, Color pos );
+    void Remove( Color pos, Color n = 1 );
+    void Move( Color from, Color to );
+    void Replace( Color pos, BigPtrEntry* p);
 
-    BigPtrEntry* operator[]( sal_Int32 ) const;
+    BigPtrEntry* operator[]( Color ) const;
 };
 
-inline sal_Int32 BigPtrEntry::GetPos() const
+inline Color BigPtrEntry::GetPos() const
 {
     assert(this == m_pBlock->mvData[ m_nOffset ]); // element not in the block
     return m_pBlock->nStart + m_nOffset;

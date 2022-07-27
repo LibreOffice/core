@@ -760,7 +760,7 @@ SwMoveFnCollection const & SwCursor::MakeFindRange( SwDocPositions nStart,
                 ? fnMoveForward : fnMoveBackward;
 }
 
-static sal_uLong lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurrentCursor,
+static sal_Int32 lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurrentCursor,
                         SwMoveFnCollection const & fnMove, SwCursor*& pFndRing,
                         SwPaM& aRegion, FindRanges eFndRngs,
                         bool bInReadOnly, bool& bCancel )
@@ -768,7 +768,7 @@ static sal_uLong lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurrentCurso
     SwDoc& rDoc = pCurrentCursor->GetDoc();
     bool const bDoesUndo = rDoc.GetIDocumentUndoRedo().DoesUndo();
     int nFndRet = 0;
-    sal_uLong nFound = 0;
+    sal_Int32 nFound = 0;
     const bool bSrchBkwrd = &fnMove == &fnMoveBackward;
     SwPaM *pTmpCursor = pCurrentCursor, *pSaveCursor = pCurrentCursor;
     std::unique_ptr<SvxSearchItem> xSearchItem;
@@ -951,7 +951,7 @@ static bool lcl_MakeSelBkwrd( const SwNode& rSttNd, const SwNode& rEndNd,
 
 // this method "searches" for all use cases because in SwFindParas is always the
 // correct parameters and respective search method
-sal_uLong SwCursor::FindAll( SwFindParas& rParas,
+sal_Int32 SwCursor::FindAll( SwFindParas& rParas,
                             SwDocPositions nStart, SwDocPositions nEnd,
                             FindRanges eFndRngs, bool& bCancel )
 {
@@ -962,7 +962,7 @@ sal_uLong SwCursor::FindAll( SwFindParas& rParas,
     SwPaM aRegion( *GetPoint() );
     SwMoveFnCollection const & fnMove = MakeFindRange( nStart, nEnd, &aRegion );
 
-    sal_uLong nFound = 0;
+    sal_Int32 nFound = 0;
     const bool bMvBkwrd = &fnMove == &fnMoveBackward;
     bool bInReadOnly = IsReadOnlyAvailable();
     std::unique_ptr<SvxSearchItem> xSearchItem;

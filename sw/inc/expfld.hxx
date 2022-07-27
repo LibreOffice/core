@@ -129,7 +129,7 @@ public:
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 
-    static sal_Int32    GetReferenceTextPos( const SwFormatField& rFormat, SwDoc& rDoc, sal_Int32 nHint = 0);
+    static Color    GetReferenceTextPos( const SwFormatField& rFormat, SwDoc& rDoc, Color nHint = 0);
     // #i82544#
     void                SetLateInitialization() { m_bLateInitialization = true;}
 };
