@@ -786,6 +786,9 @@ void GtkSalFrame::moveWindow( tools::Long nX, tools::Long nY )
 void GtkSalFrame::widget_set_size_request(tools::Long nWidth, tools::Long nHeight)
 {
     gtk_widget_set_size_request(GTK_WIDGET(m_pFixedContainer), nWidth, nHeight );
+#if GTK_CHECK_VERSION(4,0,0)
+    gtk_widget_set_size_request(GTK_WIDGET(m_pDrawingArea), nWidth, nHeight );
+#endif
 }
 
 void GtkSalFrame::window_resize(tools::Long nWidth, tools::Long nHeight)
