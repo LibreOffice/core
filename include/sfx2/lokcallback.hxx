@@ -11,6 +11,10 @@
 
 #include <sal/types.h>
 
+namespace rtl
+{
+class OStringBuffer;
+}
 namespace tools
 {
 class Rectangle;
@@ -46,6 +50,7 @@ public:
     virtual void libreOfficeKitViewUpdatedCallbackPerViewId(int nType, int nViewId,
                                                             int nSourceViewId)
         = 0;
+    virtual void dumpState(rtl::OStringBuffer& rState) = 0;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
