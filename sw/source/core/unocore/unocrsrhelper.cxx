@@ -1259,29 +1259,43 @@ void makeRedline( SwPaM const & rPaM,
         throw lang::IllegalArgumentException();
 
     //todo: what about REDLINE_FMTCOLL?
-    comphelper::SequenceAsHashMap aPropMap( rRedlineProperties );
     std::size_t nAuthor = 0;
     OUString sAuthor;
-    if( aPropMap.getValue("RedlineAuthor") >>= sAuthor )
-        nAuthor = rRedlineAccess.InsertRedlineAuthor(sAuthor);
-
     OUString sComment;
-    SwRedlineData aRedlineData( eType, nAuthor );
-    if( aPropMap.getValue("RedlineComment") >>= sComment )
-        aRedlineData.SetComment( sComment );
-
     ::util::DateTime aStamp;
-    if( aPropMap.getValue("RedlineDateTime") >>= aStamp )
+    uno::Sequence< beans::PropertyValue > aRevertProperties;
+    bool bIsMoved = false;
+    bool bFoundComment = false;
+    bool bFoundStamp = false;
+    bool bFoundRevertProperties = false;
+    for (const css::beans::PropertyValue & rProp : rRedlineProperties )
     {
-        aRedlineData.SetTimeStamp( DateTime( aStamp));
+        if (rProp.Name == "RedlineAuthor")
+        {
+            if( rProp.Value >>= sAuthor )
+                nAuthor = rRedlineAccess.InsertRedlineAuthor(sAuthor);
+        }
+        else if (rProp.Name == "RedlineComment")
+            bFoundComment = rProp.Value >>= sComment;
+        else if (rProp.Name == "RedlineDateTime")
+            bFoundStamp = rProp.Value >>= aStamp;
+        else if (rProp.Name == "RedlineRevertProperties")
+            bFoundRevertProperties = rProp.Value >>= aRevertProperties;
+        else if (rProp.Name == "RedlineMoved")
+            rProp.Value >>= bIsMoved;
     }
+
+    SwRedlineData aRedlineData( eType, nAuthor );
+    if( bFoundComment )
+        aRedlineData.SetComment( sComment );
+    if( bFoundStamp )
+        aRedlineData.SetTimeStamp( DateTime( aStamp));
 
     std::unique_ptr<SwRedlineExtraData_FormatColl> xRedlineExtraData;
 
     // Read the 'Redline Revert Properties' from the parameters
-    uno::Sequence< beans::PropertyValue > aRevertProperties;
     // Check if the value exists
-    if ( aPropMap.getValue("RedlineRevertProperties") >>= aRevertProperties )
+    if ( bFoundRevertProperties )
     {
         int nMap = 0;
         // Make sure that paragraph format gets its own map, otherwise e.g. fill attributes are not preserved.
@@ -1388,8 +1402,7 @@ void makeRedline( SwPaM const & rPaM,
     SwRangeRedline* pRedline = new SwRangeRedline( aRedlineData, rPaM );
 
     // set IsMoved bit of the redline to show and handle moved text
-    bool bIsMoved;
-    if( (aPropMap.getValue("RedlineMoved") >>= bIsMoved) && bIsMoved )
+    if( bIsMoved )
         pRedline->SetMoved();
 
     RedlineFlags nPrevMode = rRedlineAccess.GetRedlineFlags( );

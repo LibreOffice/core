@@ -246,6 +246,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
                         SwRootFrame const*const pLayout)
 {
     SwPaM* pPam = const_cast<SwPaM*>(&rRg);
+    std::optional<SwPaM> oExtraPaM;
     if( !bTextAttr && !rAttrs.empty() && RES_TXTATR_END > *(rAttrs.begin()) )
         bTextAttr = true;
 
@@ -255,7 +256,8 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
         if( !pTextNd )
             return ;
 
-        pPam = new SwPaM( *rRg.GetPoint() );
+        oExtraPaM.emplace( *rRg.GetPoint() );
+        pPam = &*oExtraPaM;
 
         SwContentIndex& rSt = pPam->GetPoint()->nContent;
         sal_Int32 nMkPos, nPtPos = rSt.GetIndex();
@@ -396,9 +398,6 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
     getIDocumentState().SetModified();
 
     oDataChanged.reset(); //before delete pPam
-
-    if( pPam != &rRg )
-        delete pPam;
 }
 
 /// Set the rsid of the next nLen symbols of rRg to the current session number

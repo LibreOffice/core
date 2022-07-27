@@ -1827,7 +1827,7 @@ void SwUnoCursorHelper::SetPropertyValues(
     if (!aEntries.empty())
     {
         // Fetch, overwrite, and re-set the attributes from the core
-        SfxItemSet aItemSet(rDoc.GetAttrPool(), aRanges);
+        SfxItemSet aItemSet(rDoc.GetAttrPool(), std::move(aRanges));
 
         bool bPreviousPropertyCausesSideEffectsInNodes = false;
         for (size_t i = 0; i < aEntries.size(); ++i)
