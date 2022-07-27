@@ -263,6 +263,13 @@ const char* FastAttributeList::getAsCharByIndex( sal_Int32 nTokenIndex ) const
     return mpChunk + nOffset;
 }
 
+std::string_view FastAttributeList::getAsViewByIndex( sal_Int32 nTokenIndex ) const
+{
+    sal_Int32 nOffset = maAttributeValues[nTokenIndex];
+    size_t nValueLen = maAttributeValues[nTokenIndex + 1] - maAttributeValues[nTokenIndex] - 1;
+    return { mpChunk + nOffset, nValueLen };
+}
+
 OUString FastAttributeList::getValue( ::sal_Int32 Token )
 {
     for (size_t i = 0, n = maAttributeTokens.size(); i < n; ++i)

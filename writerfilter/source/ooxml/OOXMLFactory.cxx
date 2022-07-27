@@ -90,7 +90,7 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
             break;
         case ResourceType::List:
             if (sal_uInt32 nValue;
-                pFactory->getListValue(pAttr->m_nRef, rAttribs.getValueByIndex(nAttrIndex), nValue))
+                pFactory->getListValue(pAttr->m_nRef, rAttribs.getAsViewByIndex(nAttrIndex), nValue))
             {
                 xValue = OOXMLIntegerValue::Create(nValue);
             }
