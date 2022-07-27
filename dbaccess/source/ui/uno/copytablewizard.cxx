@@ -1346,42 +1346,46 @@ void CopyTableWizard::impl_doCopy_nothrow()
 
                 // tdf#119962
                 const Reference< XDatabaseMetaData > xDestMetaData( m_xDestConnection->getMetaData(), UNO_SET_THROW );
-                const OUString sComposedTableName = ::dbtools::composeTableName( xDestMetaData, xTable, ::dbtools::EComposeRule::InDataManipulation, true );
-
-                OUString aSchema,aTable;
-                xTable->getPropertyValue("SchemaName") >>= aSchema;
-                xTable->getPropertyValue("Name")       >>= aTable;
-                Any aCatalog = xTable->getPropertyValue("CatalogName");
-
-                const Reference< XResultSet > xResultPKCL(xDestMetaData->getPrimaryKeys(aCatalog,aSchema,aTable));
-                Reference< XRow > xRowPKCL(xResultPKCL, UNO_QUERY_THROW);
-                OUString sPKCL;
-                if ( xRowPKCL.is() )
+                OUString sDatabaseDest = xDestMetaData->getDatabaseProductName().toAsciiLowerCase();
+                if ( (sDatabaseDest.indexOf("hsql") != -1) || (sDatabaseDest.indexOf("firebird") != -1) )
                 {
-                    if (xResultPKCL->next())
+                    const OUString sComposedTableName = ::dbtools::composeTableName( xDestMetaData, xTable, ::dbtools::EComposeRule::InDataManipulation, true );
+
+                    OUString aSchema,aTable;
+                    xTable->getPropertyValue("SchemaName") >>= aSchema;
+                    xTable->getPropertyValue("Name")       >>= aTable;
+                    Any aCatalog = xTable->getPropertyValue("CatalogName");
+
+                    const Reference< XResultSet > xResultPKCL(xDestMetaData->getPrimaryKeys(aCatalog,aSchema,aTable));
+                    Reference< XRow > xRowPKCL(xResultPKCL, UNO_QUERY_THROW);
+                    OUString sPKCL;
+                    if ( xRowPKCL.is() )
                     {
-                        sPKCL = xRowPKCL->getString(4);
-                    }
-                }
-
-                if (!sPKCL.isEmpty())
-                {
-                    OUString strSql = "SELECT MAX(\"" + sPKCL + "\") FROM " + sComposedTableName;
-
-                    Reference< XResultSet > xResultMAXNUM(m_xDestConnection->createStatement()->executeQuery(strSql));
-                    Reference< XRow > xRow(xResultMAXNUM, UNO_QUERY_THROW);
-
-                    sal_Int64 maxVal = -1L;
-                    if (xResultMAXNUM->next())
-                    {
-                        maxVal = xRow->getLong(1);
+                        if (xResultPKCL->next())
+                        {
+                            sPKCL = xRowPKCL->getString(4);
+                        }
                     }
 
-                    if (maxVal > 0L)
+                    if (!sPKCL.isEmpty())
                     {
-                        strSql = "ALTER TABLE " + sComposedTableName + " ALTER \"" + sPKCL + "\" RESTART WITH " + OUString::number(maxVal + 1);
+                        OUString strSql = "SELECT MAX(\"" + sPKCL + "\") FROM " + sComposedTableName;
 
-                        m_xDestConnection->createStatement()->execute(strSql);
+                        Reference< XResultSet > xResultMAXNUM(m_xDestConnection->createStatement()->executeQuery(strSql));
+                        Reference< XRow > xRow(xResultMAXNUM, UNO_QUERY_THROW);
+
+                        sal_Int64 maxVal = -1L;
+                        if (xResultMAXNUM->next())
+                        {
+                            maxVal = xRow->getLong(1);
+                        }
+
+                        if (maxVal > 0L)
+                        {
+                            strSql = "ALTER TABLE " + sComposedTableName + " ALTER \"" + sPKCL + "\" RESTART WITH " + OUString::number(maxVal + 1);
+
+                            m_xDestConnection->createStatement()->execute(strSql);
+                        }
                     }
                 }
             }
