@@ -1122,6 +1122,7 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
              aEvent.FeatureURL.Path == "InsertContentControl" ||
              aEvent.FeatureURL.Path == "InsertDateContentControl" ||
              aEvent.FeatureURL.Path == "InsertDropdownContentControl" ||
+             aEvent.FeatureURL.Path == "InsertPlainTextContentControl" ||
              aEvent.FeatureURL.Path == "InsertPictureContentControl")
     {
         aBuffer.append(aEvent.IsEnabled ? std::u16string_view(u"enabled") : std::u16string_view(u"disabled"));
