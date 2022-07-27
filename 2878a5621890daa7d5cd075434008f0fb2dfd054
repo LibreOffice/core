@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "169deb1b_cad2ca99",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001855
+      },
+      "writtenOn": "2022-07-27T08:54:01Z",
+      "side": 1,
+      "message": "Hi Thorsten, my changes works so far for wollmux the extension. It seems that I\u0027ve also to update the according UncControl*Model.idl files for a complete solution, but I\u0027m still unsure. The UnoControl* classes seems not to be exported to jar files, so howto import them in java? And does this enhancement need an official decision?",
+      "revId": "2878a5621890daa7d5cd075434008f0fb2dfd054",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
