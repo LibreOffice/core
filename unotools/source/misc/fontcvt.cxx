@@ -38,8 +38,7 @@
 // note: the character mappings that are only approximations
 //       are marked (with an empty comment)
 
-const sal_Unicode aStarBatsTab[224] =
-{
+constexpr sal_Unicode aStarBatsTab[224] = {
     // F020
         0x0020,    0x263a,    0x25cf,    0x274d,
         0x25a0,    0x25a1,    0xE000,    0x2751,
@@ -112,8 +111,7 @@ const sal_Unicode aStarBatsTab[224] =
              0,         0,         0,    0xE03a
 };
 
-const sal_Unicode aStarMathTab[224] =
-{
+constexpr sal_Unicode aStarMathTab[224] = {
     // F020
         0x0020,    0x0021,    0x0022,    0x0023,
         0xE080,    0x0025,    0x0026,    0x221e,
@@ -186,8 +184,7 @@ const sal_Unicode aStarMathTab[224] =
         0x2124,     0x211a,   0x211d,    0x2102
 };
 
-const sal_Unicode aWingDingsTab[224] =
-{
+constexpr sal_Unicode aWingDingsTab[224] = {
     // F020
         0x0020,    0xe400,    0xe401,    0xe402,
         0xe403,    0xe404,    0xe405,    0xe406,
@@ -260,8 +257,7 @@ const sal_Unicode aWingDingsTab[224] =
         0xe4c2,    0xe4c3,    0xe4c4,    0xe4c5
 };
 
-const sal_Unicode aWingDings2Tab[224] =
-{
+constexpr sal_Unicode aWingDings2Tab[224] = {
     // F020
         0x0020,    0xe500,    0xe501,    0xe502,
         0xe503,    0xe504,    0xe505,    0xe506,
@@ -334,8 +330,7 @@ const sal_Unicode aWingDings2Tab[224] =
              0,         0,         0,         0
 };
 
-const sal_Unicode aWingDings3Tab[224] =
-{
+constexpr sal_Unicode aWingDings3Tab[224] = {
     // F020
         0x0020,    0xe600,    0xe601,    0xe602,
         0xe603,    0x2196,    0xe604,    0x2199,
@@ -408,8 +403,7 @@ const sal_Unicode aWingDings3Tab[224] =
              0,         0,         0,         0
 };
 
-const sal_Unicode aWebDingsTab[224] =
-{
+constexpr sal_Unicode aWebDingsTab[224] = {
     // F020
         0x0020,    0xe300,    0xe301,    0xe302,
         0xe303,    0xe304,    0xe305,    0xe306,
@@ -485,8 +479,7 @@ const sal_Unicode aWebDingsTab[224] =
 // See http://www.iana.org/assignments/character-sets/character-sets.xml
 // See ftp://ftp.unicode.org/Public/MAPPINGS/VENDORS/ADOBE/symbol.txt
 
-const sal_Unicode aAdobeSymbolTab[224] =
-{
+constexpr sal_Unicode aAdobeSymbolTab[224] = {
 //TODO:
     // F020
         0x0020,    0xe100,    0xe101,    0xe102,
@@ -560,8 +553,7 @@ const sal_Unicode aAdobeSymbolTab[224] =
         0xf8fc,    0xf8fd,    0xf8fe,         0,
 };
 
-const sal_Unicode aMonotypeSortsTab[224] =
-{
+constexpr sal_Unicode aMonotypeSortsTab[224] = {
     // F020
         0x0020,    0x2701,    0xe200,    0x2703,
         0x2704,    0xe201,    0x2706,    0xe202,
@@ -634,8 +626,7 @@ const sal_Unicode aMonotypeSortsTab[224] =
         0x27bc,    0x27bd,    0x27be,         0,
 };
 
-const sal_Unicode aMTExtraTab[224] =
-{
+constexpr sal_Unicode aMTExtraTab[224] = {
     // F020
         0x0020,         0,         0,    0x0300,
         0x0302,    0x0303,    0x0307,         0,
@@ -708,8 +699,7 @@ const sal_Unicode aMTExtraTab[224] =
         0x02D8,    0x02C7,    0x02DA,    0x02DB,
 };
 
-const sal_Unicode aAdobeSymbolToAppleSymbolTab[224] =
-{
+constexpr sal_Unicode aAdobeSymbolToAppleSymbolTab[224] = {
     // F020
         0x0020,    0x0021,    0x2200,    0x0023,
         0x2203,    0x0025,    0x0026,    0x220D,
@@ -782,9 +772,9 @@ const sal_Unicode aAdobeSymbolToAppleSymbolTab[224] =
         0x23AB,    0x23AC,    0x23AD,    0x00FF
 };
 
-static sal_Unicode ImplStarSymbolToStarBats( sal_Unicode c )
+constexpr sal_Unicode ImplStarSymbolToStarBats(sal_Unicode c)
 {
-    switch ( c )
+    switch (c)
     {
         case 0x00A2: c = 0xF0E0; break;
         case 0x00A4: c = 0xF0E1; break;
@@ -1022,7 +1012,7 @@ enum SymbolFont
 
 }
 
-const char * const aSymbolNames[] =
+constexpr const char* aSymbolNames[] =
 {
     "Symbol", "Wingdings", "Monotype Sorts", "Webdings", "Wingdings 2",
     "Wingdings 3", "MT Extra", "Times New Roman"
@@ -1049,7 +1039,7 @@ struct ExtraTable { sal_Unicode cStar; sal_uInt8 cMS;};
 
 }
 
-ExtraTable const aWingDingsExtraTab[] =
+ExtraTable constexpr aWingDingsExtraTab[] =
 {
     {0x25cf, 0x6C}, {0x2714, 0xFC}, {0x2717, 0xFB}, {0x2794, 0xE8},
     {0x27a2, 0xD8}, {0xe000, 0x6F}, {0xe001, 0x73}, {0xe002, 0x74},
@@ -1067,7 +1057,7 @@ ExtraTable const aWingDingsExtraTab[] =
     {0xe034, 0x4D}, {0xe0aa, 0x71}, {0xe422, 0x44}
 };
 
-ExtraTable const aSymbolExtraTab2[] =
+ExtraTable constexpr aSymbolExtraTab2[] =
 {
     {0x0020, 0x20}, {0x00A0, 0x20}, {0x0021, 0x21}, {0x2200, 0x22},
     {0x0023, 0x23}, {0x2203, 0x24}, {0x0025, 0x25}, {0x0026, 0x26},
@@ -1095,7 +1085,7 @@ ExtraTable const aSymbolExtraTab2[] =
     {0x2320, 0xF3}, {0x2321, 0xF5}, {0x2013, 0x2D}
 };
 
-ExtraTable const aSymbolExtraTab[] =
+ExtraTable constexpr aSymbolExtraTab[] =
 {
     {0xe021, 0xD3}, {0xe024, 0xD2}, {0xe035, 0x20}, {0xe036, 0x28},
     {0xe037, 0x29}, {0xe039, 0x20}, {0xe083, 0x2B}, {0xe084, 0x3C},
@@ -1117,7 +1107,7 @@ ExtraTable const aSymbolExtraTab[] =
     {0xe0dc, 0xAD}, {0xe0dd, 0xAF}
 };
 
-ExtraTable const aTNRExtraTab[] =
+ExtraTable constexpr aTNRExtraTab[] =
 {
     {0xe021, 0xA9},
     {0xe022, 0x40},
@@ -1143,7 +1133,7 @@ StarSymbolToMSMultiFontImpl::StarSymbolToMSMultiFontImpl()
     };
 
     //In order of preference
-    static const ConvertTable aConservativeTable[] =
+    static constexpr ConvertTable aConservativeTable[] =
     {
         {Symbol,         aAdobeSymbolTab},
         {Wingdings,      aWingDingsTab},
@@ -1159,7 +1149,7 @@ StarSymbolToMSMultiFontImpl::StarSymbolToMSMultiFontImpl()
         enum SymbolFont meFont;
         const ExtraTable *mpTable;
         size_t mnSize;
-        ExtendedConvertTable(SymbolFont eFont, const ExtraTable *pTable,
+        constexpr ExtendedConvertTable(SymbolFont eFont, const ExtraTable *pTable,
             size_t nSize)
             : meFont(eFont), mpTable(pTable), mnSize(nSize) {}
     };
@@ -1181,7 +1171,7 @@ StarSymbolToMSMultiFontImpl::StarSymbolToMSMultiFontImpl()
     }
 
     //In order of preference
-    static const ExtendedConvertTable aAggressiveTable[] =
+    static constexpr ExtendedConvertTable aAggressiveTable[] =
     {
         ExtendedConvertTable(Symbol, aSymbolExtraTab2,
             sizeof(aSymbolExtraTab2)),
@@ -1315,7 +1305,7 @@ struct RecodeTable { const char* pOrgName; ConvertChar aCvt;};
 
 }
 
-const RecodeTable aStarSymbolRecodeTable[] =
+constexpr RecodeTable aStarSymbolRecodeTable[] =
 {
     // the first two entries must be StarMath and StarBats; do not reorder!
     // reason: see CreateFontToSubsFontConverter method
@@ -1339,11 +1329,11 @@ const RecodeTable aStarSymbolRecodeTable[] =
     {"mtextra",         {aMTExtraTab, "StarSymbol", nullptr}}
 };
 
-const RecodeTable aAppleSymbolRecodeTable[] = {
+constexpr RecodeTable aAppleSymbolRecodeTable[] = {
     {"symbol",         {aAdobeSymbolToAppleSymbolTab, "AppleSymbol", nullptr}}
 };
 
-static ConvertChar aImplStarSymbolCvt = { nullptr, "StarBats", ImplStarSymbolToStarBats };
+static constexpr ConvertChar aImplStarSymbolCvt = { nullptr, "StarBats", ImplStarSymbolToStarBats };
 
 const ConvertChar* ConvertChar::GetRecodeData( std::u16string_view rOrgFontName, std::u16string_view rMapFontName )
 {
@@ -1400,7 +1390,7 @@ FontToSubsFontConverter CreateFontToSubsFontConverter( std::u16string_view rOrgN
 
     if ( nFlags == FontToSubsFontFlags::IMPORT )
     {
-        const std::size_t nEntries = 2; // only StarMath+StarBats
+        constexpr std::size_t nEntries = 2; // only StarMath+StarBats
         for( std::size_t i = 0; i < nEntries; ++i )
         {
             const RecodeTable& r = aStarSymbolRecodeTable[i];
