@@ -16,6 +16,24 @@
       "message": "vmiklos, any clue how this went wrong?\nI mean, it\u0027s complaining that the redline table becomes unsorted, which is true, since the code is moving SwContentIndex around and back again, but what I don\u0027t get is how it worked __before__ this change.\n",
       "revId": "bed5de19d24fe9541a71a287301984ca7aa8598f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d873d666_5363c128",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-07-27T06:28:47Z",
+      "side": 1,
+      "message": "Hm, you probably need to parallel-debug this or add enough SAL_DEBUG() calls so you can diff the good/bad case to track down where is the difference, but just one guess: reading GetRedlinePos(), I\u0027m not sure it will give you the first position where the redline has a reference to the current SwTextNode. So perhaps the trouble is that now that you visit all redlines referencing the current SwTextNode, you do more changes, and that leads to the assert fail?\n\nIt would be good to add some printfs to verify that you the same moves before/after your patch. I guess the intention is to keep those unchanged, just replace the \"iterate over the full redline table\" code with \"my indexes know if a redline refers to them anyway\".",
+      "parentUuid": "63154eb2_61af8be9",
+      "revId": "bed5de19d24fe9541a71a287301984ca7aa8598f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
