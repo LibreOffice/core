@@ -57,6 +57,7 @@ class Menu;
 class NotifyEvent;
 class SfxInPlaceClient;
 class SfxLokCallbackInterface;
+namespace rtl { class OStringBuffer; }
 namespace vcl { class PrinterController; }
 
 namespace com::sun::star::beans { struct PropertyValue; }
@@ -337,6 +338,8 @@ public:
 
     /// Set up a more efficient internal callback instead of LibreOfficeKitCallback.
     void setLibreOfficeKitViewCallback(SfxLokCallbackInterface* pCallback);
+    /// dump view state for diagnostics
+    void dumpLibreOfficeKitViewState(rtl::OStringBuffer &rState);
     /// Invokes the registered callback, if there are any.
     virtual void libreOfficeKitViewCallback(int nType, const char* pPayload) const override;
     virtual void libreOfficeKitViewCallbackWithViewId(int nType, const char* pPayload, int nViewId) const override;
