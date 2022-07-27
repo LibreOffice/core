@@ -60,6 +60,7 @@ public:
     void testTdf121281();
     void testTdf139658();
     void testTdf146066();
+    void testTdf150034();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest2);
 
@@ -101,6 +102,7 @@ public:
     CPPUNIT_TEST(testTdf121281);
     CPPUNIT_TEST(testTdf139658);
     CPPUNIT_TEST(testTdf146066);
+    CPPUNIT_TEST(testTdf150034);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -928,6 +930,22 @@ void Chart2ImportTest2::testTdf146066()
     CPPUNIT_ASSERT_EQUAL(OUString("30"), xLabel6->getString());
     uno::Reference<text::XTextRange> xLabel7(xIndexAccess->getByIndex(7), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("35"), xLabel7->getString());
+}
+
+void Chart2ImportTest2::testTdf150034()
+{
+    load(u"/chart2/qa/extras/data/xlsx/", u"tdf150034.xlsx");
+    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
+                                               UNO_QUERY_THROW);
+    Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
+    Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
+    Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
+    Reference<drawing::XShape> xLegend = getShapeByName(xShapes, "CID/D=0:Legend=");
+    CPPUNIT_ASSERT(xLegend.is());
+    awt::Point aPosition = xLegend->getPosition();
+
+    // This failed, if the legend flowed out of the chart area.
+    CPPUNIT_ASSERT_GREATEREQUAL(static_cast<sal_Int32>(0), aPosition.Y);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest2);
