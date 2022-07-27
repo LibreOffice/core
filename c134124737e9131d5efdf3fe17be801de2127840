@@ -34,6 +34,24 @@
       "parentUuid": "65ef2a5f_67ca8304",
       "revId": "c134124737e9131d5efdf3fe17be801de2127840",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64a054a6_3d7202d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-27T12:05:47Z",
+      "side": 1,
+      "message": "\u003e My reasoning was more that as these name mappings are not automatically generated at build time (which they possibly should), they could possibly get out of sync and we\u0027d be better off with more info than less.\n\u003e But then maybe asserting is indeed a good idea as it could catch that case as well, although indirectly.\n\nThat also sounds, reasonable, I don\u0027t have a strong opinion here either way. (I\u0027d personally go with asserts at least in non-test code, so it just fails and it becomes clear that something needs to be handled at this place if new constants etc. are added later, or it\u0027s clear where invalid values are passed, so what caller needs to be observed further,... Probably it doesn\u0027t make much of a difference for the tests, since the test already fails if something goes wrong anyway and it\u0027s clear this needs to be looked into.)\n\n\u003e They could, but I\u0027m not sure if they should: API-wise there is nothing preventing a relation actually being set to INVALID (although I fail to see the use), so using a value outside the actual range allows to discriminate the case where it is not set, and where it is set to INVALID.  It\u0027s kind of abusing AccessibilityTools::getRelationTypeName()  (and the fact it\u0027s basically an enum, just presented as separate values) indeed though, and for the test itself it\u0027d be the same.\n\nTrue. I\u0027d personally tend to lean towards the \"Logically, this is like an enum class.\" argument (and I also don\u0027t so far see any real use case where we\u0027d want INVALID for a real relation), but don\u0027t have a strong opinion here either.\n\n\u003e So I\u0027m actually not entirely sure what\u0027s best, and I\u0027d be happy to go either direction if you have an opinion on this.\n\nSimilar here, no strong opinion either way, just some thoughts I had. Please feel free to choose whatever you prefer. 😊",
+      "parentUuid": "ebbe8b7a_9d81cf4f",
+      "revId": "c134124737e9131d5efdf3fe17be801de2127840",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
