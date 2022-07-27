@@ -2670,10 +2670,10 @@ public:
 
 void ScColumn::GetFilterEntries(
     sc::ColumnBlockConstPosition& rBlockPos, SCROW nStartRow, SCROW nEndRow,
-    ScFilterEntries& rFilterEntries, bool bFiltering, bool bHiddenRow )
+    ScFilterEntries& rFilterEntries, bool bFiltering, bool bFilteredRow )
 {
     mbFiltering = bFiltering;
-    mbFilteredRow = bHiddenRow;
+    mbFilteredRow = bFilteredRow;
     FilterEntriesHandler aFunc(*this, rFilterEntries);
     rBlockPos.miCellPos =
         sc::ParseAll(rBlockPos.miCellPos, maCells, nStartRow, nEndRow, aFunc, aFunc);

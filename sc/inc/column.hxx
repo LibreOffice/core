@@ -600,7 +600,7 @@ public:
 
     void GetFilterEntries(
         sc::ColumnBlockConstPosition& rBlockPos, SCROW nStartRow, SCROW nEndRow,
-        ScFilterEntries& rFilterEntries, bool bFiltering, bool bHiddenRow = false );
+        ScFilterEntries& rFilterEntries, bool bFiltering, bool bFilteredRow );
 
     bool GetDataEntries( SCROW nRow, std::set<ScTypedStrData>& rStrings) const;
 
