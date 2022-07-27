@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0365a78_4b81c88e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2022-07-27T09:32:55Z",
+      "side": 1,
+      "message": "verified on eller.debian.org (for MIPS64). Still building but I don\u0027t expect surprises from this patch (configure works, right bridges gets selected and built)",
+      "revId": "6184ec3c61769a8da2939a3eaa0de2be0da6725b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
