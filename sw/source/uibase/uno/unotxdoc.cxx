@@ -696,7 +696,7 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
 
     // Search should take place anywhere
     pUnoCursor->SetRemainInSection(false);
-    sal_uInt32 nResult;
+    sal_Int32 nResult;
     UnoActionContext aContext(m_pDocShell->GetDoc());
     //try attribute search first
     if(pSearch->HasSearchAttributes()||pSearch->HasReplaceAttributes())
@@ -710,11 +710,11 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
         pSearch->FillSearchItemSet(aSearch);
         pSearch->FillReplaceItemSet(aReplace);
         bool bCancel;
-        nResult = static_cast<sal_Int32>(pUnoCursor->FindAttrs(aSearch, !pSearch->m_bStyles,
+        nResult = pUnoCursor->FindAttrs(aSearch, !pSearch->m_bStyles,
                     eStart, eEnd, bCancel,
                     static_cast<FindRanges>(eRanges),
                     !pSearch->m_sSearchText.isEmpty() ? &aSearchOpt : nullptr,
-                    &aReplace ));
+                    &aReplace );
     }
     else if(pSearch->m_bStyles)
     {
@@ -736,7 +736,7 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
             static_cast<FindRanges>(eRanges),
             true );
     }
-    return static_cast<sal_Int32>(nResult);
+    return nResult;
 
 }
 
@@ -823,10 +823,10 @@ SwUnoCursor* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor >
                  aSearch( m_pDocShell->GetDoc()->GetAttrPool() );
             pSearch->FillSearchItemSet(aSearch);
             bool bCancel;
-            nResult = static_cast<sal_Int32>(pUnoCursor->FindAttrs(aSearch, !pSearch->m_bStyles,
+            nResult = pUnoCursor->FindAttrs(aSearch, !pSearch->m_bStyles,
                         eStart, eEnd, bCancel,
                         eRanges,
-                        !pSearch->m_sSearchText.isEmpty() ? &aSearchOpt : nullptr ));
+                        !pSearch->m_sSearchText.isEmpty() ? &aSearchOpt : nullptr );
         }
         else if(pSearch->m_bStyles)
         {
@@ -834,17 +834,17 @@ SwUnoCursor* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor >
             //pSearch->sReplaceText
             SwTextFormatColl *pReplaceColl = nullptr;
             bool bCancel;
-            nResult = static_cast<sal_Int32>(pUnoCursor->FindFormat(*pSearchColl,
+            nResult = pUnoCursor->FindFormat(*pSearchColl,
                         eStart, eEnd, bCancel,
-                        eRanges, pReplaceColl ));
+                        eRanges, pReplaceColl );
         }
         else
         {
             //todo/mba: assuming that notes should be omitted
             bool bCancel;
-            nResult = static_cast<sal_Int32>(pUnoCursor->Find_Text(aSearchOpt, false/*bSearchInNotes*/,
+            nResult = pUnoCursor->Find_Text(aSearchOpt, false/*bSearchInNotes*/,
                     eStart, eEnd, bCancel,
-                    eRanges ));
+                    eRanges );
         }
         if(nResult || (eRanges&(FindRanges::InSelAll|FindRanges::InOther)))
             break;

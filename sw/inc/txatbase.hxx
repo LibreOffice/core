@@ -45,7 +45,7 @@ class SW_DLLPUBLIC SwTextAttr
 friend class SwpHints;
 private:
     SfxPoolItem * const m_pAttr;
-    sal_Int32 m_nStart;
+    Color m_nStart;
     bool m_bDontExpand          : 1;
     bool m_bLockExpandFlag      : 1;
 
@@ -66,7 +66,7 @@ private:
 protected:
     SwpHints * m_pHints = nullptr;  // the SwpHints holds a pointer to this, and needs to be notified if the start/end changes
 
-    SwTextAttr( SfxPoolItem& rAttr, sal_Int32 nStart );
+    SwTextAttr( SfxPoolItem& rAttr, Color nStart );
     virtual ~SwTextAttr() COVERITY_NOEXCEPT_FALSE;
 
     void SetLockExpandFlag( bool bFlag )    { m_bLockExpandFlag = bFlag; }
@@ -84,15 +84,15 @@ public:
     static void Destroy( SwTextAttr * pToDestroy, SfxItemPool& rPool );
 
     /// start position
-    void SetStart(sal_Int32 n) { m_nStart = n; if (m_pHints) m_pHints->StartPosChanged(); }
-    sal_Int32 GetStart() const { return m_nStart; }
+    void SetStart(Color n) { m_nStart = n; if (m_pHints) m_pHints->StartPosChanged(); }
+    Color GetStart() const { return m_nStart; }
 
     /// end position
-    virtual const sal_Int32* GetEnd() const;
-    virtual void SetEnd(sal_Int32);
-    inline const sal_Int32* End() const;
+    virtual const Color* GetEnd() const;
+    virtual void SetEnd(Color);
+    inline const Color* End() const;
     /// end (if available), else start
-    inline sal_Int32 GetAnyEnd() const;
+    inline Color GetAnyEnd() const;
 
     inline void SetDontExpand( bool bDontExpand );
     bool DontExpand() const                 { return m_bDontExpand; }
@@ -135,13 +135,13 @@ public:
 class SAL_DLLPUBLIC_RTTI SwTextAttrEnd : public virtual SwTextAttr
 {
 protected:
-    sal_Int32 m_nEnd;
+    Color m_nEnd;
 
 public:
-    SwTextAttrEnd( SfxPoolItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
+    SwTextAttrEnd( SfxPoolItem& rAttr, Color nStart, Color nEnd );
 
-    virtual const sal_Int32* GetEnd() const override;
-    virtual void SetEnd(sal_Int32) override;
+    virtual const Color* GetEnd() const override;
+    virtual void SetEnd(Color) override;
 };
 
 // attribute that must not overlap others
@@ -149,18 +149,18 @@ class SAL_DLLPUBLIC_RTTI SwTextAttrNesting : public SwTextAttrEnd
 {
 protected:
     SwTextAttrNesting( SfxPoolItem & i_rAttr,
-        const sal_Int32 i_nStart, const sal_Int32 i_nEnd );
+        const Color i_nStart, const Color i_nEnd );
     virtual ~SwTextAttrNesting() override;
 };
 
-inline const sal_Int32* SwTextAttr::End() const
+inline const Color* SwTextAttr::End() const
 {
     return GetEnd();
 }
 
-inline sal_Int32 SwTextAttr::GetAnyEnd() const
+inline Color SwTextAttr::GetAnyEnd() const
 {
-    const sal_Int32* pEnd = End();
+    const Color* pEnd = End();
     return pEnd ? *pEnd : m_nStart;
 }
 

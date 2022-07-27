@@ -268,8 +268,8 @@ public:
     SwXTextTables(SwDoc* pDoc);
 
     //XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount(  ) override;
-    virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
+    virtual Color SAL_CALL getCount(  ) override;
+    virtual css::uno::Any SAL_CALL getByIndex(Color nIndex) override;
 
     //XNameAccess
     virtual css::uno::Any SAL_CALL getByName(const OUString& Name) override;
@@ -310,8 +310,8 @@ public:
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     //XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() override;
-    virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
+    virtual Color SAL_CALL getCount() override;
+    virtual css::uno::Any SAL_CALL getByIndex(Color nIndex) override;
 
     //XNameAccess
     virtual css::uno::Any SAL_CALL getByName(const OUString& Name) override;
@@ -375,8 +375,8 @@ public:
     SwXTextSections(SwDoc* pDoc);
 
     //XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() override;
-    virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
+    virtual Color SAL_CALL getCount() override;
+    virtual css::uno::Any SAL_CALL getByIndex(Color nIndex) override;
 
     //XNameAccess
     virtual css::uno::Any SAL_CALL getByName(const OUString& Name) override;
@@ -403,8 +403,8 @@ class SwXBookmarks final : public SwCollectionBaseClass,
         SwXBookmarks(SwDoc* pDoc);
 
         //XIndexAccess
-        virtual sal_Int32 SAL_CALL getCount() override;
-        virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
+        virtual Color SAL_CALL getCount() override;
+        virtual css::uno::Any SAL_CALL getByIndex(Color nIndex) override;
 
         //XNameAccess
         virtual css::uno::Any SAL_CALL getByName(const OUString& Name) override;
@@ -434,8 +434,8 @@ public:
     SwXNumberingRulesCollection( SwDoc* pDoc );
 
     //XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() override;
-    virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
+    virtual Color SAL_CALL getCount() override;
+    virtual css::uno::Any SAL_CALL getByIndex(Color nIndex) override;
 
     //XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
@@ -460,8 +460,8 @@ public:
     SwXFootnotes(bool bEnd, SwDoc* pDoc);
 
     //XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() override;
-    virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
+    virtual Color SAL_CALL getCount() override;
+    virtual css::uno::Any SAL_CALL getByIndex(Color nIndex) override;
 
     //XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
@@ -483,8 +483,8 @@ public:
     SwXReferenceMarks(SwDoc* pDoc);
 
     //XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() override;
-    virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
+    virtual Color SAL_CALL getCount() override;
+    virtual css::uno::Any SAL_CALL getByIndex(Color nIndex) override;
 
     //XNameAccess
     virtual css::uno::Any SAL_CALL getByName(const OUString& Name) override;

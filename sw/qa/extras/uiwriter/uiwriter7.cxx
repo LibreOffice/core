@@ -684,7 +684,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testSearchWithTransliterate)
     SearchOpt.AlgorithmType2 = css::util::SearchAlgorithms2::ABSOLUTE;
     SearchOpt.WildcardEscapeCharacter = 0;
     //transliteration option set so that at least one of the search strings is not found
-    sal_uLong case1
+    sal_Int32 case1
         = pWrtShell->SearchPattern(SearchOpt, true, SwDocPositions::Start, SwDocPositions::End);
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(true);
     CPPUNIT_ASSERT_EQUAL(OUString(), pShellCursor->GetText());
@@ -692,7 +692,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testSearchWithTransliterate)
     SearchOpt.searchString = "paragraph";
     SearchOpt.transliterateFlags = TransliterationFlags::IGNORE_KASHIDA_CTL;
     //transliteration option set so that all search strings are found
-    sal_uLong case2
+    sal_Int32 case2
         = pWrtShell->SearchPattern(SearchOpt, true, SwDocPositions::Start, SwDocPositions::End);
     pShellCursor = pWrtShell->getShellCursor(true);
     CPPUNIT_ASSERT_EQUAL(OUString("paragraph"), pShellCursor->GetText());
@@ -721,27 +721,27 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf73660)
     //case 1
     searchOpt.searchString = "First";
     CPPUNIT_ASSERT_EQUAL(
-        sal_uLong(1),
+        sal_Int32(1),
         pWrtShell->SearchPattern(searchOpt, true, SwDocPositions::Start, SwDocPositions::End));
     //case 2
     searchOpt.searchString = "Second";
     CPPUNIT_ASSERT_EQUAL(
-        sal_uLong(1),
+        sal_Int32(1),
         pWrtShell->SearchPattern(searchOpt, true, SwDocPositions::Start, SwDocPositions::End));
     //case 3
     searchOpt.searchString = "Third";
     CPPUNIT_ASSERT_EQUAL(
-        sal_uLong(1),
+        sal_Int32(1),
         pWrtShell->SearchPattern(searchOpt, true, SwDocPositions::Start, SwDocPositions::End));
     //case 4
     searchOpt.searchString = "Fourth";
     CPPUNIT_ASSERT_EQUAL(
-        sal_uLong(1),
+        sal_Int32(1),
         pWrtShell->SearchPattern(searchOpt, true, SwDocPositions::Start, SwDocPositions::End));
     //case 5
     searchOpt.searchString = "Fifth";
     CPPUNIT_ASSERT_EQUAL(
-        sal_uLong(1),
+        sal_Int32(1),
         pWrtShell->SearchPattern(searchOpt, true, SwDocPositions::Start, SwDocPositions::End));
 }
 

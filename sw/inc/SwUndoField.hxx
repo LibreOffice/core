@@ -30,7 +30,7 @@ class SwMsgPoolItem;
 class SwUndoField : public SwUndo
 {
     SwNodeOffset m_nNodeIndex;
-    sal_Int32 m_nOffset;
+    Color m_nOffset;
 
 protected:
     SwDoc * m_pDoc;

@@ -444,13 +444,13 @@ public:
     const OUString& GetBaseURL() const { return m_sBaseURL;}
 
     // Look up next bookmark position from bookmark-table.
-    sal_Int32 FindPos_Bkmk( const SwPosition& rPos ) const;
+    Color FindPos_Bkmk( const SwPosition& rPos ) const;
     // Build a bookmark table, which is sort by the node position. The
     // OtherPos of the bookmarks also inserted.
     void CreateBookmarkTable();
     // Search all Bookmarks in the range and return it in the Array.
     bool GetBookmarks( const SwContentNode& rNd,
-                        sal_Int32 nStt, sal_Int32 nEnd,
+                      Color nStt, Color nEnd,
                         std::vector< const ::sw::mark::IMark* >& rArr );
 
     // Create new PaM at position.

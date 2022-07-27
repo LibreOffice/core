@@ -35,7 +35,7 @@ class SW_DLLPUBLIC SwTextFootnote final : public SwTextAttr
     sal_uInt16 m_nSeqNo;
 
 public:
-    SwTextFootnote( SwFormatFootnote& rAttr, sal_Int32 nStart );
+    SwTextFootnote( SwFormatFootnote& rAttr, Color nStart );
     virtual ~SwTextFootnote() override;
 
     SwNodeIndex *GetStartNode() const { return m_pStartNode.get(); }

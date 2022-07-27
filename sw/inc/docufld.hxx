@@ -502,7 +502,7 @@ public:
     void ToggleResolved();
     bool GetResolved() const;
 
-    sal_Int32 GetNumberOfParagraphs() const;
+    Color GetNumberOfParagraphs() const;
 
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;

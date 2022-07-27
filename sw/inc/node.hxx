@@ -430,7 +430,7 @@ public:
 
     /** @return count of elements of node content. Default is 1.
        There are differences between text node and formula node. */
-    virtual sal_Int32 Len() const;
+    virtual Color Len() const;
 
     virtual SwContentNode* MakeCopy(SwDoc&, const SwNodeIndex&, bool bNewFrames) const = 0;
 
@@ -750,7 +750,7 @@ inline SwPlaceholderNode::SwPlaceholderNode(const SwNodeIndex &rWhere)
 
 inline SwNode* SwNodes::operator[]( SwNodeOffset n ) const
 {
-    return static_cast<SwNode*>(BigPtrArray::operator[] ( sal_Int32(n) ));
+    return static_cast<SwNode*>(BigPtrArray::operator[] ( Color(n) ));
 }
 
 #endif

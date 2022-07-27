@@ -28,15 +28,15 @@ class SwDoc;
 class SAL_DLLPUBLIC_RTTI SwTextTOXMark final : public SwTextAttrEnd
 {
     SwTextNode * m_pTextNode;
-    sal_Int32 * m_pEnd;   // 0 if SwTOXMark without AlternativeText
+    Color * m_pEnd;   // 0 if SwTOXMark without AlternativeText
 
 public:
     SwTextTOXMark( SwTOXMark& rAttr,
-            sal_Int32 const nStart, sal_Int32 const*const pEnd);
+                  Color const nStart, Color const*const pEnd);
     virtual ~SwTextTOXMark() override;
 
-    virtual const sal_Int32 *GetEnd() const override;     // SwTextAttr
-    virtual void SetEnd(sal_Int32) override;     // SwTextAttr
+    virtual const Color *GetEnd() const override;     // SwTextAttr
+    virtual void SetEnd(Color) override;     // SwTextAttr
 
     void CopyTOXMark( SwDoc& rDestDoc );
 

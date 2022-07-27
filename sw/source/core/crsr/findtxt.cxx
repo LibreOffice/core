@@ -1006,7 +1006,7 @@ bool SwFindParaText::IsReplaceMode() const
     return m_bReplace;
 }
 
-sal_uLong SwCursor::Find_Text( const i18nutil::SearchOptions2& rSearchOpt, bool bSearchInNotes,
+sal_Int32 SwCursor::Find_Text( const i18nutil::SearchOptions2& rSearchOpt, bool bSearchInNotes,
                           SwDocPositions nStart, SwDocPositions nEnd,
                           bool& bCancel, FindRanges eFndRngs, bool bReplace,
                           SwRootFrame const*const pLayout)
@@ -1026,7 +1026,7 @@ sal_uLong SwCursor::Find_Text( const i18nutil::SearchOptions2& rSearchOpt, bool 
     if( bSearchSel )
         eFndRngs = static_cast<FindRanges>(eFndRngs | FindRanges::InSel);
     SwFindParaText aSwFindParaText(rSearchOpt, bSearchInNotes, bReplace, *this, pLayout);
-    sal_uLong nRet = FindAll( aSwFindParaText, nStart, nEnd, eFndRngs, bCancel );
+    sal_Int32 nRet = FindAll( aSwFindParaText, nStart, nEnd, eFndRngs, bCancel );
     rDoc.SetOle2Link( aLnk );
     if( nRet && bReplace )
         rDoc.getIDocumentState().SetModified();

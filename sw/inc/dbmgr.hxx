@@ -335,7 +335,7 @@ public:
                             const OUString& rColNm,
                             SvNumberFormatter* pNFormatr,
                             LanguageType nLanguage );
-    sal_Int32 GetColumnType( const OUString& rDBName,
+    Color GetColumnType( const OUString& rDBName,
                           const OUString& rTableName,
                           const OUString& rColNm );
 
@@ -353,7 +353,7 @@ public:
 
     /// open the source while fields are updated - for the calculator only!
     bool            OpenDataSource(const OUString& rDataSource, const OUString& rTableOrQuery);
-    sal_uInt32      GetSelectedRecordId(const OUString& rDataSource, const OUString& rTableOrQuery, sal_Int32 nCommandType = -1);
+    sal_uInt32      GetSelectedRecordId(const OUString& rDataSource, const OUString& rTableOrQuery, Color nCommandType = -1);
     bool            GetColumnCnt(const OUString& rSourceName, const OUString& rTableName,
                             const OUString& rColumnName, sal_uInt32 nAbsRecordId, LanguageType nLanguage,
                             OUString& rResult, double* pNumber);
@@ -376,7 +376,7 @@ public:
     void            ToNextRecord(const OUString& rDataSource, const OUString& rTableOrQuery);
 
     sal_uInt32      GetSelectedRecordId();
-    bool            ToRecordId(sal_Int32 nSet);
+    bool            ToRecordId(Color nSet);
 
     static const SwDBData& GetAddressDBName();
 
@@ -448,7 +448,7 @@ public:
     static css::uno::Reference< css::sdbc::XResultSet>
             createCursor(const OUString& _sDataSourceName,
                          const OUString& _sCommand,
-                         sal_Int32 _nCommandType,
+                         Color _nCommandType,
                          const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
                          const SwView* pView);
 

@@ -250,7 +250,7 @@ public:
     /// Returns the cell's name postfix. eg. ".1"
     OUString GetTableTemplateCellSubName(const SwBoxAutoFormat& rBoxFormat) const;
     /// Returns a vector of indexes in aBoxAutoFormat array. Returned indexes points to cells which are mapped to a table-template.
-    static const std::vector<sal_Int32>& GetTableTemplateMap();
+    static const std::vector<Color>& GetTableTemplateMap();
 
     /**
      * Calculates the relevant position in the table autoformat for a given

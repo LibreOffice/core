@@ -29,7 +29,7 @@ struct SwDBData
 {
     OUString     sDataSource;
     OUString     sCommand;       //table, query or statement
-    sal_Int32    nCommandType; //css::sdb::CommandType
+    Color    nCommandType; //css::sdb::CommandType
     SwDBData() :
         nCommandType(0){}
     void dumpAsXml(xmlTextWriterPtr pWriter) const;

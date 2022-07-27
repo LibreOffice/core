@@ -36,10 +36,10 @@ class SW_DLLPUBLIC SwHHCWrapper final : public editeng::HangulHanjaConversion
     std::unique_ptr<SwConversionArgs> m_pConvArgs;    /**< object for arguments (and results) needed
                                                        to find of next convertible text portion */
 
-    sal_Int32       m_nLastPos;       /**< starting position of the last found text part
+    Color       m_nLastPos;       /**< starting position of the last found text part
                                        (needs to be sth that gets not moved like
                                        SwPaM or SwPosition by replace operations!) */
-    sal_Int32       m_nUnitOffset;
+    Color       m_nUnitOffset;
 
     sal_uInt16      m_nPageCount;     ///< page count for progress bar
     sal_uInt16      m_nPageStart;     ///< first checked page
@@ -59,24 +59,24 @@ class SW_DLLPUBLIC SwHHCWrapper final : public editeng::HangulHanjaConversion
     void        ConvEnd_impl( SwConversionArgs const *pConvArgs );                          ///< former SpellEnd
     bool        ConvContinue_impl( SwConversionArgs *pConvArgs );                     ///< former SpellContinue
 
-    void        SelectNewUnit_impl( const sal_Int32 nUnitStart,
-                                    const sal_Int32 nUnitEnd );
+    void        SelectNewUnit_impl( const Color nUnitStart,
+                                    const Color nUnitEnd );
     void        ChangeText( const OUString &rNewText,
                             const OUString& rOrigText,
-                            const css::uno::Sequence< sal_Int32 > *pOffsets,
+                            const css::uno::Sequence< Color > *pOffsets,
                             SwPaM *pCursor );
     void        ChangeText_impl( const OUString &rNewText, bool bKeepAttributes );
 
     virtual void    GetNextPortion( OUString& rNextPortion,
                             LanguageType& rLangOfPortion,
                             bool bAllowImplicitChangesForNotConvertibleText ) override;
-    virtual void    HandleNewUnit( const sal_Int32 nUnitStart,
-                                   const sal_Int32 nUnitEnd ) override;
+    virtual void    HandleNewUnit( const Color nUnitStart,
+                                   const Color nUnitEnd ) override;
     virtual void    ReplaceUnit(
-                        const sal_Int32 nUnitStart, const sal_Int32 nUnitEnd,
+                        const Color nUnitStart, const Color nUnitEnd,
                         const OUString& rOrigText,
                         const OUString& rReplaceWith,
-                        const css::uno::Sequence< sal_Int32 > &rOffsets,
+                        const css::uno::Sequence< Color > &rOffsets,
                         ReplacementAction eAction,
                         LanguageType *pNewUnitLanguage ) override;
 
@@ -88,7 +88,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& rxContext,
         LanguageType nSourceLanguage, LanguageType nTargetLanguage,
         const vcl::Font *pTargetFont,
-        sal_Int32 nConvOptions, bool bIsInteractive,
+                 Color nConvOptions, bool bIsInteractive,
         bool bStart, bool bOther, bool bSelection );
 
     virtual ~SwHHCWrapper() COVERITY_NOEXCEPT_FALSE override;

@@ -370,18 +370,18 @@ public:
     bool MoveRegion( SwWhichRegion, SwMoveFnCollection const & );
 
     // note: DO NOT call it FindText because windows.h
-    sal_uLong Find_Text( const i18nutil::SearchOptions2& rSearchOpt,
+    sal_Int32 Find_Text( const i18nutil::SearchOptions2& rSearchOpt,
                 bool bSearchInNotes,
                 SwDocPositions eStart, SwDocPositions eEnd,
                 bool& bCancel,
                 FindRanges eRng, bool bReplace = false );
 
-    sal_uLong FindFormat( const SwTextFormatColl& rFormatColl,
+    sal_Int32 FindFormat( const SwTextFormatColl& rFormatColl,
                 SwDocPositions eStart, SwDocPositions eEnd,
                 bool& bCancel,
                 FindRanges eRng, const SwTextFormatColl* pReplFormat );
 
-    sal_uLong FindAttrs( const SfxItemSet& rSet, bool bNoCollections,
+    sal_Int32 FindAttrs( const SfxItemSet& rSet, bool bNoCollections,
                 SwDocPositions eStart, SwDocPositions eEnd,
                 bool& bCancel,
                 FindRanges eRng,

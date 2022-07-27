@@ -112,7 +112,7 @@ public:
         { return const_cast<SwXCell*>(this)->getValue(); };
     virtual void SAL_CALL setValue( double nValue ) override;
     virtual css::table::CellContentType SAL_CALL getType(  ) override;
-    virtual sal_Int32 SAL_CALL getError(  ) override;
+    virtual Color SAL_CALL getError(  ) override;
 
     //XText
     virtual css::uno::Reference< css::text::XTextCursor >  SAL_CALL createTextCursor() override;
@@ -243,10 +243,10 @@ public:
 
 struct SwRangeDescriptor
 {
-    sal_Int32 nTop;
-    sal_Int32 nLeft;
-    sal_Int32 nBottom;
-    sal_Int32 nRight;
+    Color nTop;
+    Color nLeft;
+    Color nBottom;
+    Color nRight;
 
     void Normalize();
 };
@@ -279,7 +279,7 @@ public:
 
     SW_DLLPUBLIC static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
-    SW_DLLPUBLIC static void GetCellPosition(const OUString& rCellName, sal_Int32& o_rColumn, sal_Int32& o_rRow);
+    SW_DLLPUBLIC static void GetCellPosition(const OUString& rCellName, Color& o_rColumn, Color& o_rRow);
 
     SW_DLLPUBLIC SwFrameFormat* GetFrameFormat();
 
@@ -288,7 +288,7 @@ public:
 
 
     //XTextTable
-    virtual void SAL_CALL initialize( sal_Int32 nRows, sal_Int32 nColumns ) override;
+    virtual void SAL_CALL initialize( Color nRows, Color nColumns ) override;
     virtual css::uno::Reference< css::table::XTableRows > SAL_CALL getRows(  ) override;
     virtual css::uno::Reference< css::table::XTableColumns > SAL_CALL getColumns(  ) override;
     virtual css::uno::Reference< css::table::XCell > SAL_CALL getCellByName( const OUString& aCellName ) override;
@@ -305,8 +305,8 @@ public:
     virtual void SAL_CALL removeEventListener(const css::uno::Reference< css::lang::XEventListener > & aListener) override;
 
     //XCellRange
-    virtual css::uno::Reference< css::table::XCell > SAL_CALL getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow ) override;
-    virtual css::uno::Reference< css::table::XCellRange > SAL_CALL getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom ) override;
+    virtual css::uno::Reference< css::table::XCell > SAL_CALL getCellByPosition( Color nColumn, Color nRow ) override;
+    virtual css::uno::Reference< css::table::XCellRange > SAL_CALL getCellRangeByPosition( Color nLeft, Color nTop, Color nRight, Color nBottom ) override;
     virtual css::uno::Reference< css::table::XCellRange > SAL_CALL getCellRangeByName( const OUString& aRange ) override;
 
     //XChartDataArray
@@ -389,8 +389,8 @@ public:
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     //XCellRange
-    virtual css::uno::Reference< css::table::XCell > SAL_CALL getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow ) override;
-    virtual css::uno::Reference< css::table::XCellRange > SAL_CALL getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom ) override;
+    virtual css::uno::Reference< css::table::XCell > SAL_CALL getCellByPosition( Color nColumn, Color nRow ) override;
+    virtual css::uno::Reference< css::table::XCellRange > SAL_CALL getCellRangeByPosition( Color nLeft, Color nTop, Color nRight, Color nBottom ) override;
     virtual css::uno::Reference< css::table::XCellRange > SAL_CALL getCellRangeByName( const OUString& aRange ) override;
 
     //XPropertySet
@@ -448,16 +448,16 @@ public:
     SwXTableRows(SwFrameFormat& rFrameFormat);
 
     //XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() override;
-    virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
+    virtual Color SAL_CALL getCount() override;
+    virtual css::uno::Any SAL_CALL getByIndex(Color nIndex) override;
 
     //XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
     virtual sal_Bool SAL_CALL hasElements(  ) override;
 
     //XTableRows
-    virtual void SAL_CALL insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) override;
-    virtual void SAL_CALL removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) override;
+    virtual void SAL_CALL insertByIndex(Color nIndex, Color nCount) override;
+    virtual void SAL_CALL removeByIndex(Color nIndex, sal_Int32 nCount) override;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -490,8 +490,8 @@ public:
     virtual sal_Bool SAL_CALL hasElements(  ) override;
 
     //XTableColumns
-    virtual void SAL_CALL insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) override;
-    virtual void SAL_CALL removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) override;
+    virtual void SAL_CALL insertByIndex(Color nIndex, Color nCount) override;
+    virtual void SAL_CALL removeByIndex(Color nIndex, Color nCount) override;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -506,7 +506,7 @@ int sw_CompareCellRanges(
 
 void sw_NormalizeRange( OUString &rCell1, OUString &rCell2 );
 
-OUString sw_GetCellName( sal_Int32 nColumn, sal_Int32 nRow );
+OUString sw_GetCellName( Color nColumn, Color nRow );
 
 int sw_CompareCellsByColFirst( const OUString &rCellName1, const OUString &rCellName2 );
 

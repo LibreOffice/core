@@ -1405,7 +1405,7 @@ bool SwFindParaAttr::IsReplaceMode() const
 }
 
 /// search for attributes
-sal_uLong SwCursor::FindAttrs( const SfxItemSet& rSet, bool bNoCollections,
+sal_Int32 SwCursor::FindAttrs( const SfxItemSet& rSet, bool bNoCollections,
                           SwDocPositions nStart, SwDocPositions nEnd,
                           bool& bCancel, FindRanges eFndRngs,
                           const i18nutil::SearchOptions2* pSearchOpt,
@@ -1429,7 +1429,7 @@ sal_uLong SwCursor::FindAttrs( const SfxItemSet& rSet, bool bNoCollections,
     SwFindParaAttr aSwFindParaAttr( rSet, bNoCollections, pSearchOpt,
                                     pReplSet, *this, pLayout );
 
-    sal_uLong nRet = FindAll( aSwFindParaAttr, nStart, nEnd, eFndRngs, bCancel );
+    sal_Int32 nRet = FindAll( aSwFindParaAttr, nStart, nEnd, eFndRngs, bCancel );
     rDoc.SetOle2Link( aLnk );
     if( nRet && bReplace )
         rDoc.getIDocumentState().SetModified();

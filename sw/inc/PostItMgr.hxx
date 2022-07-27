@@ -161,9 +161,9 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener
         bool            HasScrollbars() const;
         void            Focus(const SfxBroadcaster& rBC);
 
-        sal_Int32       GetInitialAnchorDistance() const;
-        sal_Int32       GetScrollSize() const;
-        sal_Int32       GetSpaceBetween() const;
+    Color       GetInitialAnchorDistance() const;
+    Color       GetScrollSize() const;
+    Color       GetSpaceBetween() const;
         void            SetReadOnlyState();
         DECL_DLLPRIVATE_LINK( CalcHdl, void*, void);
 
@@ -242,8 +242,8 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener
         void HideActiveSidebarWin();
         void ToggleInsModeOnActiveSidebarWin();
 
-        sal_Int32 GetMinimumSizeWithMeta() const;
-        sal_Int32 GetSidebarScrollerHeight() const;
+    Color GetMinimumSizeWithMeta() const;
+    Color GetSidebarScrollerHeight() const;
 
         void SetShadowState(const SwPostItField* pField,bool bCursor = true);
 
@@ -272,7 +272,7 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener
                                           sw::annotation::SwAnnotationWin& rSidebarWin );
         bool HasFrameConnectedSidebarWins( const SwFrame& rFrame );
         vcl::Window* GetSidebarWinForFrameByIndex( const SwFrame& rFrame,
-                                            const sal_Int32 nIndex );
+                                            const Color nIndex );
         void GetAllSidebarWinForFrame( const SwFrame& rFrame,
                                      std::vector< vcl::Window* >* pChildren );
 

@@ -85,13 +85,13 @@ private:
     struct HandledTextToken {
         OUString text;
         std::vector<std::unique_ptr<SwFormatAutoFormat>> autoFormats;
-        std::vector<sal_Int32> startPositions;
-        std::vector<sal_Int32> endPositions;
+        std::vector<Color> startPositions;
+        std::vector<Color> endPositions;
     };
 
     static void GetAttributesForNode(
         HandledTextToken & rResult,
-        sal_Int32 & rOffset,
+                                     Color & rOffset,
         SwTextNode const& rNode,
         ToxWhitespaceStripper const& rStripper,
         SwAttrPool & rPool,

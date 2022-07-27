@@ -92,8 +92,8 @@ public:
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
     //XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() override;
-    virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
+    virtual Color SAL_CALL getCount() override;
+    virtual css::uno::Any SAL_CALL getByIndex(Color nIndex) override;
 
     //XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
@@ -279,8 +279,8 @@ public:
     virtual void SAL_CALL remove( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
 
     //XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() override;
-    virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
+    virtual Color SAL_CALL getCount() override;
+    virtual css::uno::Any SAL_CALL getByIndex(Color nIndex) override;
 
     //XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override;

@@ -78,12 +78,12 @@ public:
 class SwInsText final : public SwMsgPoolItem
 {
 public:
-    sal_Int32 nPos;
-    sal_Int32 nLen;
+    Color nPos;
+    Color nLen;
     bool isInsideFieldmarkCommand;
     bool isInsideFieldmarkResult;
 
-    SwInsText(sal_Int32 nP, sal_Int32 nL, bool isInFMCommand, bool isInFMResult);
+    SwInsText(Color nP, sal_Int32 nL, bool isInFMCommand, bool isInFMResult);
 };
 
 class SwDelChr final : public SwMsgPoolItem

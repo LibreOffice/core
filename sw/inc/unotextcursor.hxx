@@ -264,7 +264,7 @@ public:
             const css::uno::Sequence< css::beans::PropertyValue >& RedlineProperties) override;
 
     //XMarkingAccess
-    virtual void SAL_CALL invalidateMarkings(::sal_Int32 nType) override;
+    virtual void SAL_CALL invalidateMarkings(::Color nType) override;
 
 };
 

@@ -430,7 +430,7 @@ class SW_DLLPUBLIC SwTableBox final : public SwClient      //Client of FrameForm
 
     std::optional<Color> mxUserColor;
     std::optional<Color> mxNumFormatColor;
-    sal_Int32 mnRowSpan;
+    Color mnRowSpan;
     bool mbDummyFlag;
 
     /// Do we contain any direct formatting?
@@ -511,8 +511,8 @@ public:
     void SetSaveUserColor(std::optional<Color> p ) { mxUserColor = p; }
     void SetSaveNumFormatColor( std::optional<Color> p ) { mxNumFormatColor = p; }
 
-    sal_Int32 getRowSpan() const;
-    void setRowSpan( sal_Int32 nNewRowSpan );
+    Color getRowSpan() const;
+    void setRowSpan( Color nNewRowSpan );
     bool getDummyFlag() const;
     void setDummyFlag( bool bDummy );
 
