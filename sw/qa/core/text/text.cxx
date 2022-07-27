@@ -12,6 +12,7 @@
 #include <memory>
 
 #include <com/sun/star/text/BibliographyDataType.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 
 #include <vcl/gdimtf.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
@@ -368,6 +369,47 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakLeft)
     // - Actual  : 4254
     // i.e. any non-none type was handled as type=all, and this was jumping below both shapes.
     assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout[1]", "height", "2837");
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakLeftRTL)
+{
+    // Given a document with an anchored object in an RTL para and a clearing break (type=left):
+    loadURL("private:factory/swriter", nullptr);
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    uno::Reference<beans::XPropertySet> xCursorProps(xCursor, uno::UNO_QUERY);
+    xCursorProps->setPropertyValue("WritingMode", uno::Any(text::WritingMode2::RL_TB));
+    {
+        uno::Reference<drawing::XShape> xShape(
+            xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+        xShape->setSize(awt::Size(5000, 5000));
+        uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+        xShapeProps->setPropertyValue("AnchorType",
+                                      uno::Any(text::TextContentAnchorType_AT_CHARACTER));
+        uno::Reference<text::XTextContent> xShapeContent(xShape, uno::UNO_QUERY);
+        xText->insertTextContent(xCursor, xShapeContent, /*bAbsorb=*/false);
+    }
+    uno::Reference<text::XTextContent> xLineBreak(
+        xFactory->createInstance("com.sun.star.text.LineBreak"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xLineBreakProps(xLineBreak, uno::UNO_QUERY);
+    auto eClear = static_cast<sal_Int16>(SwLineBreakClear::RIGHT);
+    xLineBreakProps->setPropertyValue("Clear", uno::Any(eClear));
+    xText->insertString(xCursor, "foo", /*bAbsorb=*/false);
+    xText->insertTextContent(xCursor, xLineBreak, /*bAbsorb=*/false);
+    xText->insertString(xCursor, "bar", /*bAbsorb=*/false);
+
+    // When laying out that document:
+    calcLayout();
+
+    // Then make sure the "bar" does not jump down (due to type=left && RTL):
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 276
+    // - Actual  : 2837
+    // i.e. left/right was not ignored in the RTL case.
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout[1]", "height", "276");
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakHeader)
