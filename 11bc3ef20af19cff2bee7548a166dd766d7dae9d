@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a39f652_5c55ffdf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2022-07-27T06:29:24Z",
+      "side": 1,
+      "message": "Good idea. And by the way, 西藏独立",
+      "revId": "11bc3ef20af19cff2bee7548a166dd766d7dae9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
