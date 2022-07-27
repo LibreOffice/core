@@ -33,6 +33,24 @@
       "message": "Note however https://gerrit.libreoffice.org/c/core/+/136482/2#message-053418819016b8cd7db666cdae40333bc2c080aa",
       "revId": "f41e44d5d11192dba474240baef1b1c6388aeb99",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b00a1116_9370b734",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-07-27T12:26:51Z",
+      "side": 1,
+      "message": "yep, existing production code relying on it, worked in older versions",
+      "parentUuid": "e90a926e_007cc509",
+      "revId": "f41e44d5d11192dba474240baef1b1c6388aeb99",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
