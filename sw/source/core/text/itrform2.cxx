@@ -1503,6 +1503,8 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
             case CHAR_SOFTHYPHEN:                   // soft hyphen
                 pPor = new SwSoftHyphPortion; break;
 
+            // tdf#67669 - make narrow no-break space visible by drawing a gray background
+            case CHAR_NNBSP:                        // narrow no-break space
             case CHAR_HARDBLANK:                    // no-break space
                 // Please check tdf#115067 if you want to edit the char
                 pPor = new SwBlankPortion( cChar ); break;
