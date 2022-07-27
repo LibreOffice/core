@@ -456,7 +456,6 @@ void Outliner::SetText( const OUString& rText, Paragraph* pPara )
                     nCurDepth = nTabs-1; //TODO: sal_Int32 -> sal_Int16!
                     ImplCheckDepth( nCurDepth );
                     pPara->SetDepth( nCurDepth );
-                    pPara->nFlags &= ~ParaFlag::HOLDDEPTH;
                 }
             }
             if( nPos ) // not with the first paragraph
