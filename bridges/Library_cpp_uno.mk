@@ -97,7 +97,7 @@ bridges_SELECTED_BRIDGE := gcc3_linux_m68k
 bridge_noopt_objects := cpp2uno except uno2cpp
 endif
 
-else ifeq ($(CPUNAME),GODSON)
+else ifeq ($(CPUNAME),MIPS)
 
 ifneq ($(filter LINUX,$(OS)),)
 bridges_SELECTED_BRIDGE := gcc3_linux_mips
@@ -105,7 +105,7 @@ bridge_noopt_objects := cpp2uno uno2cpp
 bridge_exception_objects := except
 endif
 
-else ifeq ($(CPUNAME),GODSON64)
+else ifeq ($(CPUNAME),MIPS64)
 
 ifneq ($(filter LINUX,$(OS)),)
 bridges_SELECTED_BRIDGE := gcc3_linux_mips64
