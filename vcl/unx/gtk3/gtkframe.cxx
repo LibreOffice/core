@@ -776,10 +776,21 @@ void GtkSalFrame::moveWindow( tools::Long nX, tools::Long nY )
                             m_pWindow,
                             nX - m_pParent->maGeometry.x(), nY - m_pParent->maGeometry.y() );
         }
+        return;
     }
-#if !GTK_CHECK_VERSION(4,0,0)
-    else
-        gtk_window_move( GTK_WINDOW(m_pWindow), nX, nY );
+#if GTK_CHECK_VERSION(4,0,0)
+    if (GTK_IS_POPOVER(m_pWindow))
+    {
+        GdkRectangle aRect;
+        aRect.x = nX;
+        aRect.y = nY;
+        aRect.width = 1;
+        aRect.height = 1;
+        gtk_popover_set_pointing_to(GTK_POPOVER(m_pWindow), &aRect);
+        return;
+    }
+#else
+    gtk_window_move( GTK_WINDOW(m_pWindow), nX, nY );
 #endif
 }
 
@@ -795,6 +806,13 @@ void GtkSalFrame::window_resize(tools::Long nWidth, tools::Long nHeight)
 {
     m_nWidthRequest = nWidth;
     m_nHeightRequest = nHeight;
+    if (!GTK_IS_WINDOW(m_pWindow))
+    {
+#if GTK_CHECK_VERSION(4,0,0)
+        gtk_widget_set_size_request(GTK_WIDGET(m_pDrawingArea), nWidth, nHeight);
+#endif
+        return;
+    }
     gtk_window_set_default_size(GTK_WINDOW(m_pWindow), nWidth, nHeight);
 #if !GTK_CHECK_VERSION(4,0,0)
     if (gtk_widget_get_visible(m_pWindow))
@@ -1374,7 +1392,13 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
 #if !GTK_CHECK_VERSION(4,0,0)
         m_pWindow = gtk_window_new(bPopup ? GTK_WINDOW_POPUP : GTK_WINDOW_TOPLEVEL);
 #else
-        m_pWindow = gtk_window_new();
+        if (!bPopup)
+            m_pWindow = gtk_window_new();
+        else
+        {
+            m_pWindow = gtk_popover_new();
+            gtk_popover_set_has_arrow(GTK_POPOVER(m_pWindow), false);
+        }
 #endif
 
 #if !GTK_CHECK_VERSION(4,0,0)
@@ -1417,6 +1441,11 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
             gtk_window_group_add_window(gtk_window_group_new(), GTK_WINDOW(m_pWindow));
             g_object_unref(gtk_window_get_group(GTK_WINDOW(m_pWindow)));
         }
+    }
+    else if (GTK_IS_POPOVER(m_pWindow))
+    {
+        assert(m_pParent);
+        gtk_widget_set_parent(m_pWindow, m_pParent->getMouseEventWidget());
     }
 
     // set window type
@@ -1581,7 +1610,7 @@ bool GtkSalFrame::PostEvent(std::unique_ptr<ImplSVEvent> pData)
 
 void GtkSalFrame::SetTitle( const OUString& rTitle )
 {
-    if( m_pWindow && ! isChild() )
+    if (m_pWindow && GTK_IS_WINDOW(m_pWindow) && !isChild())
     {
         OString sTitle(OUStringToOString(rTitle, RTL_TEXTENCODING_UTF8));
         gtk_window_set_title(GTK_WINDOW(m_pWindow), sTitle.getStr());
@@ -1889,7 +1918,7 @@ void GtkSalFrame::SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth
 
         maGeometry.setSize({ nWidth, nHeight });
 
-        if( isChild( false ) )
+        if (isChild(false) || GTK_IS_POPOVER(m_pWindow))
             widget_set_size_request(nWidth, nHeight);
         else if( ! ( m_nState & GDK_TOPLEVEL_STATE_MAXIMIZED ) )
             window_resize(nWidth, nHeight);
