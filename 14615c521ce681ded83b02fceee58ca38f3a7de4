@@ -70,6 +70,30 @@
       },
       "revId": "14615c521ce681ded83b02fceee58ca38f3a7de4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36b77cfb_a01156b5",
+        "filename": "test/source/a11y/AccessibilityTools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-27T11:37:50Z",
+      "side": 1,
+      "message": "Thanks for checking.",
+      "parentUuid": "2f962fe8_893e23e4",
+      "range": {
+        "startLine": 96,
+        "startChar": 0,
+        "endLine": 99,
+        "endChar": 49
+      },
+      "revId": "14615c521ce681ded83b02fceee58ca38f3a7de4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
