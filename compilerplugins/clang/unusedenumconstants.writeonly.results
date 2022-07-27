@@ -1492,8 +1492,6 @@ include/editeng/numitem.hxx:247
     enum SvxNumRuleType OUTLINE_NUMBERING
 include/editeng/numitem.hxx:248
     enum SvxNumRuleType PRESENTATION_NUMBERING
-include/editeng/outliner.hxx:99
-    enum ParaFlag SETBULLETTEXT
 include/editeng/outliner.hxx:190
     enum OutlinerView::MouseTarget Outside
 include/editeng/svxrtf.hxx:207

@@ -123,7 +123,6 @@ void Outliner::ParagraphInserted( sal_Int32 nPara )
         pParaList->Insert( std::unique_ptr<Paragraph>(pPara), nPara );
         if( pEditEngine->IsInUndo() )
         {
-            pPara->nFlags = ParaFlag::SETBULLETTEXT;
             pPara->bVisible = true;
             const SfxInt16Item& rLevel = pEditEngine->GetParaAttrib( nPara, EE_PARA_OUTLLEVEL );
             pPara->SetDepth( rLevel.GetValue() );
@@ -664,7 +663,6 @@ void Outliner::SetStyleSheet( sal_Int32 nPara, SfxStyleSheet* pStyle )
     if (pPara)
     {
         pEditEngine->SetStyleSheet( nPara, pStyle );
-        pPara->nFlags |= ParaFlag::SETBULLETTEXT;
         ImplCheckNumBulletItem(  nPara );
     }
 }
@@ -1836,8 +1834,6 @@ void Outliner::ImplCalcBulletText( sal_Int32 nPara, bool bRecalcLevel, bool bRec
         if (pPara->GetText() != aBulletText)
             pPara->SetText( aBulletText );
 
-        pPara->nFlags &= ~ParaFlag::SETBULLETTEXT;
-
         if ( bRecalcLevel )
         {
             sal_Int16 nDepth = pPara->GetDepth();
@@ -1896,8 +1892,6 @@ OUString Outliner::ImplGetBulletText( sal_Int32 nPara )
     Paragraph* pPara = pParaList->GetParagraph( nPara );
     if (pPara)
     {
-    // Enable optimization again ...
-//  if( pPara->nFlags & ParaFlag::SETBULLETTEXT )
         ImplCalcBulletText( nPara, false, false );
         aRes = pPara->GetText();
     }

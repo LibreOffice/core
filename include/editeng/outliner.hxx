@@ -96,7 +96,6 @@ enum class ParaFlag
 {
     NONE               = 0x0000,
     HOLDDEPTH          = 0x4000,
-    SETBULLETTEXT      = 0x8000,
     ISPAGE             = 0x0100,
 };
 namespace o3tl
