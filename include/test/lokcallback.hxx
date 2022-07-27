@@ -39,6 +39,8 @@ public:
     virtual void libreOfficeKitViewUpdatedCallback(int nType) override;
     virtual void libreOfficeKitViewUpdatedCallbackPerViewId(int nType, int nViewId,
                                                             int nSourceViewId) override;
+    virtual void dumpState(rtl::OStringBuffer &) override {};
+
     virtual void Invoke() override;
 
 private:
