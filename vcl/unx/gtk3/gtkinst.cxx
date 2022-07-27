@@ -11285,13 +11285,29 @@ public:
             gtk_menu_reorder_child(m_pMenu, pItem, pos);
 #else
         SAL_WARN("vcl.gtk", "needs to be implemented for gtk4");
-        (void)pos;
-        (void)rId;
-        (void)rStr;
         (void)pIconName;
         (void)pImageSurface;
         (void)rGraphic;
-        (void)eCheckRadioFalse;
+
+        if (GMenuModel* pMenuModel = m_pMenu ? gtk_popover_menu_get_menu_model(m_pMenu) : nullptr)
+        {
+            auto aSectionAndPos = get_section_and_pos_for(pMenuModel, pos);
+            GMenu* pMenu = G_MENU(aSectionAndPos.first);
+            // action with a target value ... the action name and target value are separated by a double
+            // colon ... For example: "app.action::target"
+            OUString sActionAndTarget;
+            if (eCheckRadioFalse == TRISTATE_INDET)
+                sActionAndTarget = "menu.normal." + rId + "::" + rId;
+            else
+                sActionAndTarget = "menu.radio." + rId + "::" + rId;
+            g_menu_insert(pMenu, aSectionAndPos.second, MapToGtkAccelerator(rStr).getStr(), sActionAndTarget.toUtf8().getStr());
+
+            assert(eCheckRadioFalse == TRISTATE_INDET); // come back to this later
+
+            // TODO not redo entire group
+            update_action_group_from_popover_model();
+        }
+
 #endif
     }
 
