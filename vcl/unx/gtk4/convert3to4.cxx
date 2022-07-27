@@ -973,6 +973,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
 
                 // <property name="menu-model">
                 xChild->appendChild(CreateProperty(xDoc, "menu-model", sId));
+                xChild->appendChild(CreateProperty(xDoc, "has-arrow", "False"));
                 xChild->appendChild(CreateProperty(xDoc, "visible", "False"));
             }
         }
