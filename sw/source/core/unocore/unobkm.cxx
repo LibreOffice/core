@@ -403,6 +403,8 @@ void SAL_CALL
 SwXBookmark::setPropertyValue(const OUString& PropertyName,
         const uno::Any& rValue)
 {
+    SolarMutexGuard g;
+
     if (PropertyName == UNO_NAME_BOOKMARK_HIDDEN)
     {
         bool bNewValue = false;
