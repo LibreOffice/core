@@ -33,6 +33,24 @@
       "message": "Argh wrong copy paste, I meant:\nhttps://cgit.freedesktop.org/libreoffice/core/commit/?id\u003d2a8e120db1c3175ff937cdbe6d0ade23dc380c01\n\nDo you mean just 2a8e120db1c3175ff937cdbe6d0ade23dc380c01 would have sufficed so gerrit generates automatically a clickable link?",
       "revId": "4d855bb916bd41221e2b23d6d782e19b4b2740f9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22fcbaeb_692aec18",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-07-27T21:00:21Z",
+      "side": 1,
+      "message": "Yes",
+      "parentUuid": "f2a04db1_759989ce",
+      "revId": "4d855bb916bd41221e2b23d6d782e19b4b2740f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
