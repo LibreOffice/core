@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "322cbe16_0d4c3a99",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-07-27T08:15:42Z",
+      "side": 1,
+      "message": "Hi László,\nI guess this patch should be abandoned since the original patch in master was reverted ?",
+      "revId": "8f6d3082de7c9ac13244edaafffa3e682fbebb83",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
