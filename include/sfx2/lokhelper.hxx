@@ -17,6 +17,7 @@
 #include <sfx2/viewsh.hxx>
 #include <tools/gen.hxx>
 #include <cstddef>
+#include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
 #include <optional>
 #include <string_view>
@@ -146,6 +147,9 @@ public:
     /// A special value to signify 'infinity'.
     /// This value is chosen such that sal_Int32 will not overflow when manipulated.
     static const tools::Long MaxTwips = 1e9;
+
+    /// Helper for diagnosing run-time problems
+    static void dumpState(rtl::OStringBuffer &rState);
 
 private:
     static int createView(SfxViewFrame* pViewFrame, ViewShellDocId docId);
