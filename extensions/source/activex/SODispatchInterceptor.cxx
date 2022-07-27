@@ -46,9 +46,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP SODispatchInterceptor::InterfaceSupportsErrorI
         &IID_ISODispatchInterceptor,
     };
 
-    for (std::size_t i=0;i<SAL_N_ELEMENTS(arr);i++)
+    for (auto const &i : arr)
     {
-        if (InlineIsEqualGUID(*arr[i],riid))
+        if (InlineIsEqualGUID(*i,riid))
             return S_OK;
     }
     return S_FALSE;
