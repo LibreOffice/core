@@ -46,6 +46,30 @@
       },
       "revId": "14615c521ce681ded83b02fceee58ca38f3a7de4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f962fe8_893e23e4",
+        "filename": "test/source/a11y/AccessibilityTools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1001582
+      },
+      "writtenOn": "2022-07-27T10:47:10Z",
+      "side": 1,
+      "message": "Good catch.  Yes, as it\u0027s possible one is empty (I checked and there\u0027s actually at least e.g. `SvxRectCtlAccessibleContext::getAccessibleRelationSet()` doing so), and we can\u0027t tell the relationship between the two objects in this function, they could both be empty just as well.  PS2 fixes this.",
+      "parentUuid": "c4691959_681a6ffd",
+      "range": {
+        "startLine": 96,
+        "startChar": 0,
+        "endLine": 99,
+        "endChar": 49
+      },
+      "revId": "14615c521ce681ded83b02fceee58ca38f3a7de4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
