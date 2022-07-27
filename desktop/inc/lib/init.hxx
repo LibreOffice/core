@@ -21,6 +21,7 @@
 
 #include <osl/thread.h>
 #include <rtl/ref.hxx>
+#include <rtl/strbuf.hxx>
 #include <vcl/idle.hxx>
 #include <LibreOfficeKit/LibreOfficeKit.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -117,6 +118,7 @@ namespace desktop {
         virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart) override;
         virtual void libreOfficeKitViewUpdatedCallback(int nType) override;
         virtual void libreOfficeKitViewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId) override;
+        virtual void dumpState(rtl::OStringBuffer &rState) override;
 
     private:
         struct CallbackData
@@ -261,6 +263,8 @@ namespace desktop {
         {
             return (mOptionalFeatures & feature) != 0;
         }
+
+        void dumpState(rtl::OStringBuffer &aState);
     };
 
     /// Helper function to extract the value from parameters delimited by

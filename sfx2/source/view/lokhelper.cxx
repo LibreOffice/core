@@ -851,4 +851,29 @@ void SfxLokHelper::postMouseEventAsync(const VclPtr<vcl::Window> &xWindow, LokMo
     postEventAsync(pLOKEv);
 }
 
+void SfxLokHelper::dumpState(rtl::OStringBuffer &rState)
+{
+    SfxViewShell* pShell = SfxViewShell::Current();
+    sal_Int32 nDocId = pShell ? static_cast<sal_Int32>(pShell->GetDocId().get()) : -1;
+
+    rState.append("\n\tDocId:\t");
+    rState.append(nDocId);
+
+    if (nDocId < 0)
+        return;
+
+    rState.append("\n\tViewCount:\t");
+    rState.append(static_cast<sal_Int32>(getViewsCount(nDocId)));
+
+    const SfxViewShell* const pCurrentViewShell = SfxViewShell::Current();
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    while (pViewShell)
+    {
+        if (pCurrentViewShell == nullptr || pViewShell->GetDocId() == pCurrentViewShell-> GetDocId())
+            pViewShell->dumpLibreOfficeKitViewState(rState);
+
+        pViewShell = SfxViewShell::GetNext(*pViewShell);
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
