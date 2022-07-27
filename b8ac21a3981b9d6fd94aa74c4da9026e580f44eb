@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d611acd_ade84d9d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-07-27T04:26:52Z",
+      "side": 1,
+      "message": "In such cases, a usual practice is purring an assert(dynamic_cast\u003c\u003e) immediately prior to the static_cast, to allow some diagnostic in debug mode.",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 48
+      },
+      "revId": "b8ac21a3981b9d6fd94aa74c4da9026e580f44eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
