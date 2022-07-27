@@ -99,7 +99,7 @@ OutputDevice* SdrPaintView::GetFirstOutputDevice() const
 }
 
 
-SvxViewChangedHint::SvxViewChangedHint()
+SvxViewChangedHint::SvxViewChangedHint() : SfxHint(SfxHintId::SvxViewChanged)
 {
 }
 
