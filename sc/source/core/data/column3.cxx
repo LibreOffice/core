@@ -2488,6 +2488,7 @@ class FilterEntriesHandler
 {
     ScColumn& mrColumn;
     ScFilterEntries& mrFilterEntries;
+    bool mbFilteredRow;
 
     void processCell(const ScColumn& rColumn, SCROW nRow, ScRefCellValue& rCell)
     {
@@ -2559,7 +2560,7 @@ class FilterEntriesHandler
 
         if (rCell.hasString())
         {
-            mrFilterEntries.push_back(ScTypedStrData(std::move(aStr), 0.0, 0.0, ScTypedStrData::Standard, false, mrColumn.IsFilteredRow()));
+            mrFilterEntries.push_back(ScTypedStrData(std::move(aStr), 0.0, 0.0, ScTypedStrData::Standard, false, mbFilteredRow));
             return;
         }
 
@@ -2617,14 +2618,14 @@ class FilterEntriesHandler
         }
         // store the formatted/rounded value for filtering
         if ((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) != 0 && !bDate)
-            mrFilterEntries.push_back(ScTypedStrData(std::move(aStr), fVal, rColumn.GetDoc().RoundValueAsShown(fVal, nFormat), ScTypedStrData::Value, bDate, mrColumn.IsFilteredRow()));
+            mrFilterEntries.push_back(ScTypedStrData(std::move(aStr), fVal, rColumn.GetDoc().RoundValueAsShown(fVal, nFormat), ScTypedStrData::Value, bDate, mbFilteredRow));
         else
-            mrFilterEntries.push_back(ScTypedStrData(std::move(aStr), fVal, fVal, ScTypedStrData::Value, bDate, mrColumn.IsFilteredRow()));
+            mrFilterEntries.push_back(ScTypedStrData(std::move(aStr), fVal, fVal, ScTypedStrData::Value, bDate, mbFilteredRow));
     }
 
 public:
-    FilterEntriesHandler(ScColumn& rColumn, ScFilterEntries& rFilterEntries) :
-        mrColumn(rColumn), mrFilterEntries(rFilterEntries) {}
+    FilterEntriesHandler(ScColumn& rColumn, ScFilterEntries& rFilterEntries, bool bFilteredRow) :
+        mrColumn(rColumn), mrFilterEntries(rFilterEntries), mbFilteredRow(bFilteredRow) {}
 
     void operator() (size_t nRow, double fVal)
     {
@@ -2673,8 +2674,7 @@ void ScColumn::GetFilterEntries(
     ScFilterEntries& rFilterEntries, bool bFiltering, bool bFilteredRow )
 {
     mbFiltering = bFiltering;
-    mbFilteredRow = bFilteredRow;
-    FilterEntriesHandler aFunc(*this, rFilterEntries);
+    FilterEntriesHandler aFunc(*this, rFilterEntries, bFilteredRow);
     rBlockPos.miCellPos =
         sc::ParseAll(rBlockPos.miCellPos, maCells, nStartRow, nEndRow, aFunc, aFunc);
 }
