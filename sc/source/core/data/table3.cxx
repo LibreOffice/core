@@ -2978,7 +2978,7 @@ void ScTable::GetFilterEntries( SCCOL nCol, SCROW nRow1, SCROW nRow2, ScFilterEn
 
     sc::ColumnBlockConstPosition aBlockPos;
     aCol[nCol].InitBlockPosition(aBlockPos);
-    aCol[nCol].GetFilterEntries(aBlockPos, nRow1, nRow2, rFilterEntries, bFiltering);
+    aCol[nCol].GetFilterEntries(aBlockPos, nRow1, nRow2, rFilterEntries, bFiltering, false /*bFilteredRow*/);
 }
 
 void ScTable::GetFilteredFilterEntries(
@@ -3000,11 +3000,11 @@ void ScTable::GetFilteredFilterEntries(
     {
         if (queryEvaluator.ValidQuery(j))
         {
-            aCol[nCol].GetFilterEntries(aBlockPos, j, j, rFilterEntries, bFiltering, false/*bHiddenRow*/);
+            aCol[nCol].GetFilterEntries(aBlockPos, j, j, rFilterEntries, bFiltering, false/*bFilteredRow*/);
         }
         else
         {
-            aCol[nCol].GetFilterEntries(aBlockPos, j, j, rFilterEntries, bFiltering, true/*bHiddenRow*/);
+            aCol[nCol].GetFilterEntries(aBlockPos, j, j, rFilterEntries, bFiltering, true/*bFilteredRow*/);
         }
     }
 }
