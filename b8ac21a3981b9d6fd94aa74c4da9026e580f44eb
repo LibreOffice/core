@@ -22,6 +22,30 @@
       },
       "revId": "b8ac21a3981b9d6fd94aa74c4da9026e580f44eb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df978177_ee44490b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-07-27T16:15:48Z",
+      "side": 1,
+      "message": "I did not think of doing that. Thanks for the best practices tip.\n\nIn this case it is guaranteed that pField is a pointer to SwGetRefField by:\n\nelse if (pField-\u003eGetTypeId() \u003d\u003d SwFieldTypesEnum::GetRef)\n\nI will add assert to follow best practices.",
+      "parentUuid": "9d611acd_ade84d9d",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 48
+      },
+      "revId": "b8ac21a3981b9d6fd94aa74c4da9026e580f44eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
