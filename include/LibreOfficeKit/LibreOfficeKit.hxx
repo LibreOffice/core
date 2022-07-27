@@ -1103,6 +1103,21 @@ public:
     {
         mpThis->pClass->setOption(mpThis, pOption, pValue);
     }
+
+    /**
+     * Debugging tool for triggering a dump of internal state.
+     *
+     * LibreOfficeKit can get into an unhelpful state at run-time when
+     * in heavy use. This provides a critical tool for inspecting
+     * relevant internal state.
+     *
+     * @param pOption future expansion - string options.
+     * @param pState - heap allocated, C string containing the state dump.
+     */
+    void dumpState(const char* pOption, char** pState)
+    {
+        mpThis->pClass->dumpState(mpThis, pOption, pState);
+    }
 };
 
 /// Factory method to create a lok::Office instance.
