@@ -5258,6 +5258,11 @@ linux-gnu*|linux-musl*)
         RTL_ARCH=X86_64
         PLATFORMID=linux_x86_64
         ;;
+    loongarch64)
+	CPUNAME=LOONGARCH64
+	RTL_ARCH=LOONGARCH64
+	PLATFORMID=linux_loongarch64
+	;;
     *)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
         ;;
@@ -12871,7 +12876,7 @@ AC_SUBST(RHINO_JAR)
 # platforms there.
 supports_multilib=
 case "$host_cpu" in
-x86_64 | powerpc64 | powerpc64le | s390x | aarch64 | mips64 | mips64el)
+x86_64 | powerpc64 | powerpc64le | s390x | aarch64 | mips64 | mips64el | loongarch64)
     if test "$SAL_TYPES_SIZEOFLONG" = "8"; then
         supports_multilib="yes"
     fi

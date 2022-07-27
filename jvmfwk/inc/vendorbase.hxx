@@ -75,9 +75,11 @@ OpenJDK at least, but probably not true for Lemotes JDK */
 #define JFW_PLUGIN_ARCH "alpha"
 #elif defined AARCH64
 #define JFW_PLUGIN_ARCH "aarch64"
-#else // SPARC, INTEL, POWERPC, MIPS, MIPS64, ARM, IA64, M68K, HPPA, ALPHA
+#elif defined LOONGARCH64
+#define JFW_PLUGIN_ARCH "loongarch64"
+#else // SPARC, INTEL, POWERPC, MIPS, MIPS64, ARM, IA64, M68K, HPPA, ALPHA, LOONGARCH64
 #error unknown platform
-#endif // SPARC, INTEL, POWERPC, MIPS, MIPS64, ARM, IA64, M68K, HPPA, ALPHA
+#endif // SPARC, INTEL, POWERPC, MIPS, MIPS64, ARM, IA64, M68K, HPPA, ALPHA, LOONGARCH64
 
 class MalformedVersionException final : public std::exception
 {

@@ -114,6 +114,15 @@ bridge_noopt_objects := cpp2uno uno2cpp
 bridge_exception_objects := except
 endif
 
+else ifeq ($(CPUNAME),LOONGARCH64)
+
+ifneq ($(filter LINUX,$(OS)),)
+bridges_SELECTED_BRIDGE := gcc3_linux_loongarch64
+bridge_asm_objects := call
+bridge_noopt_objects := cpp2uno uno2cpp
+bridge_exception_objects := except
+endif
+
 else ifeq ($(CPUNAME),POWERPC)
 
 ifneq ($(filter DRAGONFLY FREEBSD LINUX NETBSD OPENBSD,$(OS)),)
