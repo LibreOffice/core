@@ -203,7 +203,6 @@ class ScColumn : protected ScColumnData
     SCCOL           nCol;
     SCTAB           nTab;
 
-    bool mbFiltering : 1; // it is true if there is a filtering in the column
     bool mbEmptyBroadcastersPending : 1; // a broadcaster not removed during EnableDelayDeletingBroadcasters()
 
 friend class ScDocument;                    // for FillInfo
@@ -254,7 +253,6 @@ public:
     using ScColumnData::GetDoc;
     SCTAB GetTab() const { return nTab; }
     SCCOL GetCol() const { return nCol; }
-    bool HasFiltering() const { return mbFiltering; }
     sc::CellStoreType& GetCellStore() { return maCells; }
     const sc::CellStoreType& GetCellStore() const { return maCells; }
     sc::CellTextAttrStoreType& GetCellAttrStore() { return maCellTextAttrs; }
