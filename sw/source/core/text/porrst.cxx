@@ -178,7 +178,13 @@ bool SwBreakPortion::Format( SwTextFormatInfo &rInf )
 
     // See if this is a clearing break. If so, calculate how much we need to "jump down" so the next
     // line can again use the full text width.
-    if (m_eClear != SwLineBreakClear::NONE)
+    SwLineBreakClear eClear = m_eClear;
+    if (rInf.GetTextFrame()->IsRightToLeft() && eClear != SwLineBreakClear::ALL)
+    {
+        // RTL ignores left/right breaks.
+        eClear = SwLineBreakClear::NONE;
+    }
+    if (eClear != SwLineBreakClear::NONE)
     {
         SwTextFly& rTextFly = rInf.GetTextFly();
         if (rTextFly.IsOn())
