@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92371a7d_d2dfa76f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-27T13:58:36Z",
+      "side": 1,
+      "message": "Thanks! (Those magic numbers for the relation distracted me as well while reviewing your other change.)",
+      "revId": "d12e61c4a481a1180a72c8b7d6de13347aeff039",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
