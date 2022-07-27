@@ -216,16 +216,14 @@ public:
     }
 
     virtual void InsertItem(ToolBoxItemId nId,
-                            const OUString& rString,
                             const OUString& rCommandURL,
                             const OUString& rTooltip,
                             const OUString& rLabel,
                             ToolBoxItemBits nItemBits) override
     {
-        m_pToolBar->InsertItem( nId, rString, nItemBits );
+        m_pToolBar->InsertItem( nId, rLabel, nItemBits );
         m_pToolBar->SetItemCommand( nId, rCommandURL );
         m_pToolBar->SetQuickHelpText(nId, rTooltip);
-        m_pToolBar->SetItemText( nId, rLabel );
         m_pToolBar->EnableItem( nId );
         m_pToolBar->SetItemState( nId, TRISTATE_FALSE );
     }
@@ -420,7 +418,6 @@ public:
     }
 
     virtual void InsertItem(ToolBoxItemId nId,
-                            const OUString& /*rString*/,
                             const OUString& rCommandURL,
                             const OUString& rTooltip,
                             const OUString& rLabel,
@@ -1410,7 +1407,6 @@ void ToolBarManager::FillToolbarFromContainer( const Reference< XIndexAccess >& 
                     auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(aCommandURL, m_aModuleIdentifier);
                     if (!aProperties.hasElements()) // E.g., user-provided macro command?
                         aProperties = aProps; // Use existing info, including user-provided Label
-                    OUString aString(vcl::CommandInfoProvider::GetLabelForCommand(aProperties));
 
                     ToolBoxItemBits nItemBits = ConvertStyleToToolboxItemBits( nStyle );
 
@@ -1418,9 +1414,9 @@ void ToolBarManager::FillToolbarFromContainer( const Reference< XIndexAccess >& 
                         aTooltip = vcl::CommandInfoProvider::GetTooltipForCommand(aCommandURL, aProperties, m_xFrame);
 
                     if ( aLabel.isEmpty() )
-                        aLabel = aString;
+                        aLabel = vcl::CommandInfoProvider::GetLabelForCommand(aProperties);
 
-                    m_pImpl->InsertItem(nId, aString, aCommandURL, aTooltip, aLabel, nItemBits);
+                    m_pImpl->InsertItem(nId, aCommandURL, aTooltip, aLabel, nItemBits);
 
                     // Fill command map. It stores all our commands and from what
                     // image manager we got our image. So we can decide if we have to use an

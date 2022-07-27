@@ -65,7 +65,6 @@ public:
     virtual void Destroy() = 0;
     virtual css::uno::Reference<css::awt::XWindow> GetInterface() = 0;
     virtual void InsertItem(ToolBoxItemId nId,
-                            const OUString& rString,
                             const OUString& rCommandURL,
                             const OUString& rTooltip,
                             const OUString& rLabel,
