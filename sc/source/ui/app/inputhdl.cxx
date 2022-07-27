@@ -4242,7 +4242,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                         EditView* pActiveView = pTopView ? pTopView : pTableView;
                         ESelection aSel = pActiveView ? pActiveView->GetSelection() : ESelection();
 
-                        // if we switched content completly - don't send huge numbers
+                        // if we switched content completely - don't send huge numbers
                         if (aSel.nStartPara == EE_PARA_NOT_FOUND)
                             aSel.nStartPara = 0;
 
