@@ -1261,7 +1261,7 @@ namespace accessibility
                             bUpdatedBoundRectAndVisibleChildren = true;
                         }
                     }
-                    else if ( dynamic_cast<const SvxViewChangedHint*>( &rHint ) )
+                    else if (rHint.GetId() == SfxHintId::SvxViewChanged)
                     {
                         // just check visibility
                         if (!bUpdatedBoundRectAndVisibleChildren)
@@ -1318,8 +1318,9 @@ namespace accessibility
                 // notification sequence.
                 maEventQueue.Append( *pSdrHint );
             }
-            else if( const SvxViewChangedHint* pViewHint = dynamic_cast<const SvxViewChangedHint*>( &rHint ) )
+            else if (rHint.GetId() == SfxHintId::SvxViewChanged)
             {
+                const SvxViewChangedHint* pViewHint = static_cast<const SvxViewChangedHint*>(&rHint);
                 // process visibility right away, if not within an
                 // open EE notification frame. Otherwise, event
                 // processing would be delayed until next EE
