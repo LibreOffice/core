@@ -139,15 +139,15 @@ int XSecController::findSignatureInfor( sal_Int32 nSecurityId) const
  *          existing
  ******************************************************************************/
 {
-    int i;
-    int size = m_vInternalSignatureInformations.size();
+    int index = 0;
 
-    for (i=0; i<size; ++i)
+    for ( auto &i : m_vInternalSignatureInformations )
     {
-        if (m_vInternalSignatureInformations[i].signatureInfor.nSecurityId == nSecurityId)
+        if (i.signatureInfor.nSecurityId == nSecurityId)
         {
-            return i;
+            return index;
         }
+        ++index;
     }
 
     return -1;
