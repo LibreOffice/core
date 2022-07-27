@@ -3176,6 +3176,7 @@ static void doc_iniUnoCommands ()
         OUString(".uno:InsertContentControl"),
         OUString(".uno:InsertDateContentControl"),
         OUString(".uno:InsertDropdownContentControl"),
+        OUString(".uno:InsertPlainTextContentControl"),
         OUString(".uno:InsertPictureContentControl")
     };
 
