@@ -41,6 +41,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a8850b4_a803759c",
+        "filename": "include/test/a11y/swaccessibletestbase.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1001582
+      },
+      "writtenOn": "2022-07-27T16:24:04Z",
+      "side": 1,
+      "message": "Fixed in PS6.",
+      "parentUuid": "80eb183f_42184351",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 96
+      },
+      "revId": "bc7063474104cd5f04104bde2d6031e7e88a8c3e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2a793c5f_2700fcd2",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-07-27T15:03:10Z",
       "side": 1,
       "message": "I\u0027m wondering (and don\u0027t know myself) whether this is fine to use in tests or whether it\u0027s problematic since it might depend on the locale,...?",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 57
+      },
+      "revId": "bc7063474104cd5f04104bde2d6031e7e88a8c3e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "348bef30_6488c093",
+        "filename": "sc/qa/extras/accessibility/basics.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1001582
+      },
+      "writtenOn": "2022-07-27T16:24:04Z",
+      "side": 1,
+      "message": "In theory we\u0027re running the tests using en-US locale, so that shouldn\u0027t be an issue. See test/user-template/registry-common/modifications.xcd.\n\nI\u0027m not 100% sure how trustworthy that is though as the accelerator labels were showing in German (I think) on the Windows run, but LO\u0027s own strings seemed to be in English nonetheless, so I guess it\u0027s probably only controlling the internal language rather than the system\u0027s but it should be fine here.",
+      "parentUuid": "2a793c5f_2700fcd2",
       "range": {
         "startLine": 26,
         "startChar": 0,
@@ -89,6 +137,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "82ea2896_937204bf",
+        "filename": "sc/qa/extras/accessibility/basics.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1001582
+      },
+      "writtenOn": "2022-07-27T16:24:04Z",
+      "side": 1,
+      "message": "As above it *should* be run using en-US locale, yet for date formats I\u0027m nor entirely sure it\u0027s trustworthy for the same reason mentioned above.\n\nAs you can tell from the comment I\u0027m not particularly fond of the way I\u0027m testing this. If needed, I could possibly simply use `length \u003e 0` as it\u0027s not very different from what I have here, and I\u0027d think in any locale a date ought to be at least 1 char 😄",
+      "parentUuid": "351215f2_bf250619",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 62
+      },
+      "revId": "bc7063474104cd5f04104bde2d6031e7e88a8c3e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5ac7dbd8_2e41db6d",
         "filename": "test/source/a11y/accessibletestbase.cxx",
         "patchSetId": 5
@@ -100,6 +172,30 @@
       "writtenOn": "2022-07-27T15:03:10Z",
       "side": 1,
       "message": "Don\u0027t know about the implications of the search SearchFlags here, but I think using the constants instead of a \"magic number\" would make that more readable (`FrameSearchFlag::TASKS | FrameSearchFlag::TASKS`?)",
+      "range": {
+        "startLine": 56,
+        "startChar": 65,
+        "endLine": 56,
+        "endChar": 68
+      },
+      "revId": "bc7063474104cd5f04104bde2d6031e7e88a8c3e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c678c908_bd61e548",
+        "filename": "test/source/a11y/accessibletestbase.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1001582
+      },
+      "writtenOn": "2022-07-27T16:24:04Z",
+      "side": 1,
+      "message": "To be fair, I just copied the value from the Java-\u003eC++ translations I did earlier, without really digging in to know what that means.  I see many places use `0` and if that\u0027s more meaningful I\u0027d be happy to do so, or use some nice constants indeed.\nI just changed this to `FrameSearchFlags:::AUTO` and all tests are happy, but if you happen to know better, I\u0027m all ears and will just take your word as gospel.",
+      "parentUuid": "5ac7dbd8_2e41db6d",
       "range": {
         "startLine": 56,
         "startChar": 65,
@@ -133,6 +229,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c696d05a_f7a6853a",
+        "filename": "test/source/a11y/accessibletestbase.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1001582
+      },
+      "writtenOn": "2022-07-27T16:24:04Z",
+      "side": 1,
+      "message": "Yeah I left that one in because I think it would be \"nicer\", but when I tried to give it a shot it became kind of a nightmare -- as mentioned, the sw one became big and messy, because it either had to collect everything in the constructor (so does not improve the situation), or use a mix of collecting ahead, iterating and collecting during iteration, making things needlessly hard to follow and easy to mess up.\nBut as I\u0027m not necessarily the most skilled C++ developer there is (I come from a far bigger C background, for better or worse 😊), there could be iterator tricks I don\u0027t know but that could be used to improve this down the line -- yet maybe I just fantasize about a pythonish `yield` kind of \"magic\".\n\nBut maybe I could drop this comment and just leave any possible improvement for later.",
+      "parentUuid": "4230473d_c008f7a4",
+      "range": {
+        "startLine": 129,
+        "startChar": 0,
+        "endLine": 131,
+        "endChar": 28
+      },
+      "revId": "bc7063474104cd5f04104bde2d6031e7e88a8c3e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3457e238_b8c8edd1",
@@ -156,6 +276,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e898e620_a1700ade",
+        "filename": "test/source/a11y/accessibletestbase.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1001582
+      },
+      "writtenOn": "2022-07-27T16:24:04Z",
+      "side": 1,
+      "message": "Hum yeah, that has been forgotten when I split the sw case out (as it showed only be relevant for sw).  I\u0027ll get rid of it as indeed it\u0027s more confusing that anything.",
+      "parentUuid": "3457e238_b8c8edd1",
+      "range": {
+        "startLine": 139,
+        "startChar": 0,
+        "endLine": 139,
+        "endChar": 43
+      },
+      "revId": "bc7063474104cd5f04104bde2d6031e7e88a8c3e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f64d58b8_2a475b27",
@@ -169,6 +313,30 @@
       "writtenOn": "2022-07-27T15:03:10Z",
       "side": 1,
       "message": "I don\u0027t understand that comment. Isn\u0027t the relation set what gets printed right next?",
+      "range": {
+        "startLine": 157,
+        "startChar": 0,
+        "endLine": 157,
+        "endChar": 81
+      },
+      "revId": "bc7063474104cd5f04104bde2d6031e7e88a8c3e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ce882ee_f9cb7f1c",
+        "filename": "test/source/a11y/accessibletestbase.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1001582
+      },
+      "writtenOn": "2022-07-27T16:24:04Z",
+      "side": 1,
+      "message": "It is: this comment is supposed to convey that `AccessibilityTools::debugString()` does not include it, and that\u0027s why it is \"manually\" outputted there. I updated the comment to hopefully be a little more clear.",
+      "parentUuid": "f64d58b8_2a475b27",
       "range": {
         "startLine": 157,
         "startChar": 0,
