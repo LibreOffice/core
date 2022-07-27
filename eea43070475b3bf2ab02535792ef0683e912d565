@@ -52,6 +52,23 @@
       "parentUuid": "1c152c8b_93f4ac23",
       "revId": "eea43070475b3bf2ab02535792ef0683e912d565",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee0d6f89_4771b176",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-07-27T15:06:46Z",
+      "side": 1,
+      "message": "I tried with https://gerrit.libreoffice.org/c/core/+/136595 on master, where this was cherry-picked from, and I don\u0027t even see any difference. Entries of hidden rows are not shown any different to entries of non-hidden rows.\n\nLater: the commit message is confusing, this isn\u0027t about hidden rows, but rows filtered-out by a filter in another column, which are different things in Calc.",
+      "revId": "eea43070475b3bf2ab02535792ef0683e912d565",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
