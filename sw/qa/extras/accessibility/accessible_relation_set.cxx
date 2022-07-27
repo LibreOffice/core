@@ -133,7 +133,8 @@ void AccessibleRelationSet::contents_flows_to_and_from()
     css::uno::Reference<css::accessibility::XAccessibleRelationSet> set2
         = oObj2->getAccessibleRelationSet();
 
-    sal_Int16 relationtypes[2] = { -1, -1 };
+    sal_Int16 relationtypes[2] = { accessibility::AccessibleRelationType::INVALID,
+                                   accessibility::AccessibleRelationType::INVALID };
     css::uno::Reference<css::accessibility::XAccessibleText> atargets[2];
 
     if (set2.is())
@@ -141,14 +142,14 @@ void AccessibleRelationSet::contents_flows_to_and_from()
         CPPUNIT_ASSERT_EQUAL_MESSAGE("didn't gain correct count of relations", sal_Int32(2),
                                      set2->getRelationCount());
         sal_Int16 tmprelation = set2->getRelation(0).RelationType;
-        if (tmprelation == 1)
+        if (tmprelation == accessibility::AccessibleRelationType::CONTENT_FLOWS_FROM)
         {
             css::uno::Reference<css::accessibility::XAccessibleText> adummy(
                 set2->getRelation(0).TargetSet[0], uno::UNO_QUERY_THROW);
             atargets[0] = adummy;
             relationtypes[0] = tmprelation;
         }
-        else if (tmprelation == 2)
+        else if (tmprelation == accessibility::AccessibleRelationType::CONTENT_FLOWS_TO)
         {
             css::uno::Reference<css::accessibility::XAccessibleText> adummy(
                 set2->getRelation(0).TargetSet[0], uno::UNO_QUERY_THROW);
@@ -160,14 +161,14 @@ void AccessibleRelationSet::contents_flows_to_and_from()
             CPPUNIT_FAIL("didn't gain correct relation type");
         }
         tmprelation = set2->getRelation(1).RelationType;
-        if (tmprelation == 1)
+        if (tmprelation == accessibility::AccessibleRelationType::CONTENT_FLOWS_FROM)
         {
             css::uno::Reference<css::accessibility::XAccessibleText> adummy(
                 set2->getRelation(1).TargetSet[0], uno::UNO_QUERY_THROW);
             atargets[0] = adummy;
             relationtypes[0] = tmprelation;
         }
-        else if (tmprelation == 2)
+        else if (tmprelation == accessibility::AccessibleRelationType::CONTENT_FLOWS_TO)
         {
             css::uno::Reference<css::accessibility::XAccessibleText> adummy(
                 set2->getRelation(1).TargetSet[0], uno::UNO_QUERY_THROW);
