@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a264dc7_165b3b41",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2022-07-27T07:12:40Z",
+      "side": 1,
+      "message": "Tested locally, looks good both in Outlook and Thunderbird",
+      "revId": "f41e44d5d11192dba474240baef1b1c6388aeb99",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
