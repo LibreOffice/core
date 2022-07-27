@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ddd2787_aff18f5c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-07-27T14:09:47Z",
+      "side": 1,
+      "message": "For future reference, in your commit messages you don’t need to paste the CGit URL, or any other. Just the commit’s SHA1 identifier (which is missing here).",
+      "revId": "4d855bb916bd41221e2b23d6d782e19b4b2740f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
