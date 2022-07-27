@@ -1469,6 +1469,23 @@ void CallbackFlushHandler::libreOfficeKitViewUpdatedCallbackPerViewId(int nType,
     setUpdatedTypePerViewId(nType, nViewId, nSourceViewId, true);
 }
 
+void CallbackFlushHandler::dumpState(rtl::OStringBuffer &rState)
+{
+    // NB. no locking
+    rState.append("\nView:\t");
+    rState.append(m_viewId);
+    rState.append("\n\tDisableCallbacks:\t");
+    rState.append(m_nDisableCallbacks);
+    rState.append("\n\tStates:\n");
+    for (auto i : m_states)
+    {
+        rState.append("\n\t\t");
+        rState.append(i.first);
+        rState.append("\t");
+        rState.append(i.second);
+    }
+}
+
 void CallbackFlushHandler::queue(const int type, const char* data)
 {
     CallbackData callbackData(data);
@@ -2337,6 +2354,8 @@ static void lo_sendDialogEvent(LibreOfficeKit* pThis,
 
 static void lo_setOption(LibreOfficeKit* pThis, const char* pOption, const char* pValue);
 
+static void lo_dumpState(LibreOfficeKit* pThis, const char* pOptions, char** pState);
+
 LibLibreOffice_Impl::LibLibreOffice_Impl()
     : m_pOfficeClass( gOfficeClass.lock() )
     , maThread(nullptr)
@@ -2363,6 +2382,7 @@ LibLibreOffice_Impl::LibLibreOffice_Impl()
         m_pOfficeClass->runLoop = lo_runLoop;
         m_pOfficeClass->sendDialogEvent = lo_sendDialogEvent;
         m_pOfficeClass->setOption = lo_setOption;
+        m_pOfficeClass->dumpState = lo_dumpState;
 
         gOfficeClass = m_pOfficeClass;
     }
@@ -4156,6 +4176,41 @@ static void lo_setOption(LibreOfficeKit* /*pThis*/, const char *pOption, const c
         pDevice->AddTempDevFont(OUString::fromUtf8(pValue), "");
         OutputDevice::ImplRefreshAllFontData(false);
     }
+}
+
+static void lo_dumpState (LibreOfficeKit* pThis, const char* /* pOptions */, char** pState)
+{
+    if (!pState)
+        return;
+
+    // NB. no SolarMutexGuard since this may be caused in some extremis / deadlock
+    SetLastExceptionMsg();
+
+    *pState = nullptr;
+    OStringBuffer aState(4096*256);
+
+    LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
+
+    pLib->dumpState(aState);
+
+    OString aStr = aState.makeStringAndClear();
+    *pState = strdup(aStr.getStr());
+}
+
+void LibLibreOffice_Impl::dumpState(rtl::OStringBuffer &rState)
+{
+    rState.append("LibreOfficeKit state:");
+    rState.append("\n\tLastExceptionMsg:\t");
+    rState.append(rtl::OUStringToOString(maLastExceptionMsg, RTL_TEXTENCODING_UTF8));
+    rState.append("\n\tUnipoll:\t");
+    rState.append(vcl::lok::isUnipoll() ? "yes" : "no: events on thread");
+    rState.append("\n\tOptionalFeatures:\t0x");
+    rState.append(mOptionalFeatures, 16);
+    rState.append("\n\tCallbackData:\t0x");
+    rState.append(reinterpret_cast<sal_Int64>(mpCallback), 16);
+    // TODO: dump mInteractionMap
+    SfxLokHelper::dumpState(rState);
+    vcl::lok::dumpState(rState);
 }
 
 static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pCommand, const char* pArguments, bool bNotifyWhenFinished)
