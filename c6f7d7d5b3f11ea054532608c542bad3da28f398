@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9bd95d83_c1fb7071",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2022-07-27T21:45:23Z",
+      "side": 1,
+      "message": "verified in my libreoffice-7-4 i386 build",
+      "revId": "c6f7d7d5b3f11ea054532608c542bad3da28f398",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
