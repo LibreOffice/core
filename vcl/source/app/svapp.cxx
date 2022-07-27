@@ -29,6 +29,7 @@
 #include <tools/debug.hxx>
 #include <tools/time.hxx>
 #include <tools/stream.hxx>
+#include <tools/json_writer.hxx>
 
 #include <unotools/configmgr.hxx>
 #include <unotools/resmgr.hxx>
@@ -1827,6 +1828,28 @@ void numberOfViewsChanged(int count)
     auto& rCache = pSVData->maGDIData.maScaleCache;
     // Normally the cache size is set to 10, scale according to the number of users.
     rCache.setMaxSize(count * 10);
+}
+
+void dumpState(rtl::OStringBuffer &rState)
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    if (!pSVData)
+        return;
+
+    rState.append("\nWindows:\t");
+    rState.append(Application::GetTopWindowCount());
+
+    vcl::Window *pWin = Application::GetFirstTopLevelWindow();
+    while (pWin)
+    {
+        tools::JsonWriter props;
+        pWin->DumpAsPropertyTree(props);
+
+        rState.append("\n\tWindow: ");
+        rState.append(props.extractAsOString());
+
+        pWin = Application::GetNextTopLevelWindow( pWin );
+    }
 }
 
 } // namespace lok, namespace vcl

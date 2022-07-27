@@ -118,6 +118,10 @@ struct _LibreOfficeKitClass
 
     /// @see lok::Office::setOption
     void (*setOption) (LibreOfficeKit* pThis, const char* pOption, const char* pValue);
+
+    /// @see lok::Document::dumpState
+    /// @since LibreOffice 7.5
+    void (*dumpState) (LibreOfficeKit* pThis, const char* pOptions, char** pState);
 };
 
 #define LIBREOFFICEKIT_DOCUMENT_HAS(pDoc,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitDocumentClass,member,(pDoc)->pClass->nSize)

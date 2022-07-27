@@ -12,6 +12,7 @@
 
 #include <sal/config.h>
 #include <vcl/dllapi.h>
+#include <rtl/strbuf.hxx>
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
 
 namespace vcl::lok
@@ -24,6 +25,8 @@ void VCL_DLLPUBLIC unregisterPollCallbacks();
 // Called to tell VCL that the number of document views has changed, so that VCL
 // can adjust e.g. sizes of bitmap caches to scale well with larger number of users.
 void VCL_DLLPUBLIC numberOfViewsChanged(int count);
+
+void VCL_DLLPUBLIC dumpState(rtl::OStringBuffer &rState);
 }
 
 #endif // INCLUDE_VCL_LOK_HXX
