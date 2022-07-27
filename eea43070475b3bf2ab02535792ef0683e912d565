@@ -86,6 +86,23 @@
       "message": "The behaviour is confusing:\n* If a column filter includes filtered-out values, unselecting All and then re-selecting All activates also the filtered-out values.\n* Hitting the Cross-button (\"Hide only the current item\") activates also the filtered-out values, without effect of course. There\u0027s no way to deactivate them again other than hitting All twice. They should stay deactivated instead.\n* Activating a filtered-out value is not possible, good, but selecting it and then hitting the Check-button (\"Show only the current item\") still activates it, deactivating all others (would lead to an empty filtered list). There\u0027s no way to deactivate it again other than hitting All twice.\nThis isn\u0027t ripe yet for inclusion in rc2.",
       "revId": "eea43070475b3bf2ab02535792ef0683e912d565",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20faeb80_d1c8a32d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-07-27T16:52:06Z",
+      "side": 1,
+      "message": "Note that I submitted follow-up changes to not unnecessarily store mbFiltering and mbFilteredRow at ScColumn, wait for them getting merged first before touching code around those lines.\nhttps://gerrit.libreoffice.org/q/topic:filtering-filteredrow\n",
+      "revId": "eea43070475b3bf2ab02535792ef0683e912d565",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
