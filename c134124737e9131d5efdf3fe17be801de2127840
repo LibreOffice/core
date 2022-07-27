@@ -16,6 +16,24 @@
       "message": "Looks reasonable in general:\nJust wondering: Are there valid scenarios where the functions are called with invalid values in the first place?\nOtherwise, would it make sense to instead (or in addition) assert when that \"unknown\" code path is triggered?\n\nI just looked a little closer at `AccessibilityTools::getRelationTypeName`: Values are initialized to -1 in `AccessibleRelationSet::contents_flows_to_and_from`, but it looks to me like that could just as well use AccessibleRelationType::INVALID instead of -1.",
       "revId": "c134124737e9131d5efdf3fe17be801de2127840",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebbe8b7a_9d81cf4f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001582
+      },
+      "writtenOn": "2022-07-27T10:43:43Z",
+      "side": 1,
+      "message": "\u003e Just wondering: Are there valid scenarios where the functions are called with invalid values in the first place?\n\u003e Otherwise, would it make sense to instead (or in addition) assert when that \"unknown\" code path is triggered?\n\nMy reasoning was more that as these name mappings are not automatically generated at build time (which they possibly should), they could possibly get out of sync and we\u0027d be better off with more info than less.\nBut then maybe asserting is indeed a good idea as it could catch that case as well, although indirectly.\n\n\u003e I just looked a little closer at `AccessibilityTools::getRelationTypeName`: Values are initialized to -1 in `AccessibleRelationSet::contents_flows_to_and_from`, but it looks to me like that could just as well use AccessibleRelationType::INVALID instead of -1.\n\nThey could, but I\u0027m not sure if they should: API-wise there is nothing preventing a relation actually being set to INVALID (although I fail to see the use), so using a value outside the actual range allows to discriminate the case where it is not set, and where it is set to INVALID.  It\u0027s kind of abusing `AccessibilityTools::getRelationTypeName()` (and the fact it\u0027s basically an enum, just presented as separate values) indeed though, and for the test itself it\u0027d be the same.\n\nSo I\u0027m actually not entirely sure what\u0027s best, and I\u0027d be happy to go either direction if you have an opinion on this.",
+      "parentUuid": "65ef2a5f_67ca8304",
+      "revId": "c134124737e9131d5efdf3fe17be801de2127840",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
