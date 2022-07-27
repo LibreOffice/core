@@ -1118,6 +1118,8 @@ namespace accessibility
             bEverythingUpdated = true;
         }
 
+        bool bUpdatedBoundRectAndVisibleChildren(false);
+
         while( !maEventQueue.IsEmpty() )
         {
             ::std::unique_ptr< SfxHint > pHint( maEventQueue.PopFront() );
@@ -1252,14 +1254,22 @@ namespace accessibility
                         }
 
                         // in all cases, check visibility afterwards.
-                        UpdateVisibleChildren();
-                        UpdateBoundRect();
+                        if (!bUpdatedBoundRectAndVisibleChildren)
+                        {
+                            UpdateVisibleChildren();
+                            UpdateBoundRect();
+                            bUpdatedBoundRectAndVisibleChildren = true;
+                        }
                     }
                     else if ( dynamic_cast<const SvxViewChangedHint*>( &rHint ) )
                     {
                         // just check visibility
-                        UpdateVisibleChildren();
-                        UpdateBoundRect();
+                        if (!bUpdatedBoundRectAndVisibleChildren)
+                        {
+                            UpdateVisibleChildren();
+                            UpdateBoundRect();
+                            bUpdatedBoundRectAndVisibleChildren = true;
+                        }
                     }
                     // it's VITAL to keep the SfxSimpleHint last! It's the base of some classes above!
                     else if( rHint.GetId() == SfxHintId::Dying)
