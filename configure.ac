@@ -2570,6 +2570,11 @@ AC_ARG_WITH(bffvalidator,
          See https://www.microsoft.com/en-us/download/details.aspx?id=26794]),
 ,with_bffvalidator=no)
 
+libo_FUZZ_ARG_WITH(cppunit,
+    AS_HELP_STRING([--without-cppunit>],
+        [disable building(!) of cppunit stuff also built during make build]),
+,with_cppunit=yes)
+
 libo_FUZZ_ARG_WITH(junit,
     AS_HELP_STRING([--with-junit=<absolute path to JUnit 4 jar>],
         [Specifies the JUnit 4 jar file to use for JUnit-based tests.
@@ -2596,6 +2601,18 @@ libo_FUZZ_ARG_WITH(doxygen,
          documentation. --without-doxygen disables generation of ODK C/C++
          documentation. Not relevant in the --disable-odk case.]),
 ,with_doxygen=yes)
+
+AC_ARG_WITH(
+    [javadoc],
+    AS_HELP_STRING(
+        [--with-javadoc],
+        [Specifies the javadoc executable to use when generating ODK Java
+         documentation. --without-javadoc disables generation of ODK Java
+         documentation. Not relevant in the --disable-odk case.])
+    [
+                          Usage:     --with-javadoc=<absolute path to doxygen executable>
+    ],,
+    [with_javadoc=yes])
 
 AC_ARG_WITH(visual-studio,
     AS_HELP_STRING([--with-visual-studio=<2019/2022>],
@@ -4903,6 +4920,9 @@ fi
 if test "$enable_symbols" = yes; then
     ENABLE_SYMBOLS_FOR=all
     AC_MSG_RESULT([yes])
+elif test "$enable_symbols" = "SMALL" -o "$enable_symbols" = "small"; then
+    ENABLE_SYMBOLS_FOR=all
+    AC_MSG_RESULT([yes, small ones])
 elif test "$enable_symbols" = no; then
     ENABLE_SYMBOLS_FOR=
     AC_MSG_RESULT([no])
@@ -4911,6 +4931,7 @@ else
     ENABLE_SYMBOLS_FOR="$enable_symbols"
     AC_MSG_RESULT([for "$enable_symbols"])
 fi
+AC_SUBST(enable_symbols)
 AC_SUBST(ENABLE_SYMBOLS_FOR)
 
 if test -n "$with_android_ndk" -a \( -n "$ENABLE_SYMBOLS" -o -n "$ENABLE_DEBUG" -o -n "$ENABLE_DBGUTIL" \) -a "$ENABLE_DEBUGINFO_FOR" = "all"; then
@@ -5190,25 +5211,25 @@ linux-gnu*|linux-musl*)
         PLATFORMID=linux_ia64
         ;;
     mips)
-        CPUNAME=GODSON
+        CPUNAME=MIPS
         RTL_ARCH=MIPS_EB
         EPM_FLAGS="-a mips"
         PLATFORMID=linux_mips_eb
         ;;
     mips64)
-        CPUNAME=GODSON64
+        CPUNAME=MIPS64
         RTL_ARCH=MIPS64_EB
         EPM_FLAGS="-a mips64"
         PLATFORMID=linux_mips64_eb
         ;;
     mips64el)
-        CPUNAME=GODSON64
+        CPUNAME=MIPS64
         RTL_ARCH=MIPS64_EL
         EPM_FLAGS="-a mips64el"
         PLATFORMID=linux_mips64_el
         ;;
     mipsel)
-        CPUNAME=GODSON
+        CPUNAME=MIPS
         RTL_ARCH=MIPS_EL
         EPM_FLAGS="-a mipsel"
         PLATFORMID=linux_mips_el
@@ -8608,7 +8629,7 @@ if test "$ENABLE_JAVA" != ""; then
         JAVAINTERPRETER=`win_short_path_for_make "$JAVAINTERPRETER"`
     elif test "$cross_compiling" != "yes"; then
         case $CPUNAME in
-            AARCH64|AXP|X86_64|HPPA|IA64|POWERPC64|S390X|SPARC64|GODSON64)
+            AARCH64|AXP|X86_64|IA64|POWERPC64|S390X|SPARC64|MIPS64)
                 if test -f "$JAVAINTERPRETER" -a "`$JAVAINTERPRETER -version 2>&1 | $GREP -i 64-bit`" = "" >/dev/null; then
                     AC_MSG_WARN([You are building 64-bit binaries but the JDK $JAVAINTERPRETER is 32-bit])
                     AC_MSG_ERROR([You should pass the --with-jdk-home option pointing to a 64-bit JDK])
@@ -8672,8 +8693,17 @@ if test "$ENABLE_JAVA" != "" -a "$cross_compiling" != "yes"; then
 
             # set to limit VM usage for JunitTests
             JAVAIFLAGS=-Xmx64M
+	    JAVAIFLAGS="$JAVAIFLAGS -Djdk.net.URLClassPath.disableClassPathURLCheck=true"
             # set to limit VM usage for javac
             JAVACFLAGS=-J-Xmx128M
+
+            AC_MSG_CHECKING([whether $JAVAINTERPRETER is using the Zero VM])
+            if $JAVAINTERPRETER -version 2>&1 | grep -q Zero; then
+               JAVA_HAS_ZERO_VM=y
+               AC_MSG_RESULT([yes])
+            else
+               AC_MSG_RESULT([no])
+            fi
         fi
     else
         AC_MSG_ERROR([Java not found. You need at least JDK 9])
@@ -8689,6 +8719,7 @@ else
         JAVAIFLAGS=$JAVAIFLAGS_FOR_BUILD
     fi
 fi
+AC_SUBST(JAVA_HAS_ZERO_VM)
 
 dnl ===================================================================
 dnl Checks for javac
@@ -8720,34 +8751,43 @@ fi
 dnl ===================================================================
 dnl Checks for javadoc
 dnl ===================================================================
-if test "$ENABLE_JAVA" != "" -a "$cross_compiling" != "yes"; then
+if test "$ENABLE_JAVA" != "" -a "$enable_odk" != no -a "$cross_compiling" != "yes"; then
     if test -z "$with_jdk_home"; then
         AC_PATH_PROG(JAVADOC, javadoc)
     else
-        _javadoc_path="$with_jdk_home/bin/javadoc"
-        dnl Check if there is a javadoc at all.
-        if test -x "$_javadoc_path"; then
-            JAVADOC=$_javadoc_path
-        else
-            AC_PATH_PROG(JAVADOC, javadoc)
-        fi
-    fi
-    if test -z "$JAVADOC"; then
-        AC_MSG_ERROR([$_javadoc_path not found set with_jdk_home])
-    fi
-    if test "$build_os" = "cygwin"; then
-        if test x`echo "$JAVADOC" | $GREP -i '\.exe$'` = x; then
-            JAVADOC="${JAVADOC}.exe"
-        fi
-        JAVADOC=`win_short_path_for_make "$JAVADOC"`
-    fi
+	if test "$with_javadoc" = "yes"; then
+            _javadoc_path="$with_jdk_home/bin/javadoc"
+            dnl Check if there is a javadoc at all.
+            if test -x "$_javadoc_path"; then
+                JAVADOC=$_javadoc_path
+            else
+                AC_PATH_PROG(JAVADOC, javadoc)
+            fi
+            if test -z "$JAVADOC"; then
+                AC_MSG_ERROR([$_javadoc_path not found set with_jdk_home])
+            fi
+            if test "$build_os" = "cygwin"; then
+                if test x`echo "$JAVADOC" | $GREP -i '\.exe$'` = x; then
+                    JAVADOC="${JAVADOC}.exe"
+                fi
+                JAVADOC=`win_short_path_for_make "$JAVADOC"`
+            fi
 
-    if test `$JAVADOC --version 2>&1 | $GREP -c "gjdoc"` -gt 0; then
-    JAVADOCISGJDOC="yes"
+            if test `$JAVADOC --version 2>&1 | $GREP -c "gjdoc"` -gt 0; then
+            JAVADOCISGJDOC="yes"
+            fi
+	 else
+		 unset JAVADOC
+	 fi
     fi
+else
+    unset JAVADOC
+fi
+AC_SUBST(JAVADOCISGJDOC)
+if test "$JAVADOCISGJDOC" = "yes"; then
+       unset JAVADOC
 fi
 AC_SUBST(JAVADOC)
-AC_SUBST(JAVADOCISGJDOC)
 
 if test "$ENABLE_JAVA" != "" -a \( "$cross_compiling" != "yes" -o -n "$with_jdk_home" \); then
     # check if JAVA_HOME was (maybe incorrectly?) set automatically to /usr
@@ -9643,8 +9683,12 @@ dnl ===================================================================
 dnl Check for system cppunit
 dnl ===================================================================
 if test "$_os" != "Android" ; then
+  if test "$with_cppunit" != "no"; then
     libo_CHECK_SYSTEM_MODULE([cppunit],[CPPUNIT],[cppunit >= 1.14.0])
+    ENABLE_CPPUNIT=TRUE
+  fi
 fi
+AC_SUBST(ENABLE_CPPUNIT)
 
 dnl ===================================================================
 dnl Check whether freetype is available
@@ -11401,8 +11445,9 @@ if test "$ENABLE_LPSOLVE" = TRUE; then
         # some systems need this. Like Ubuntu...
         AC_CHECK_LIB(m, floor)
         AC_CHECK_LIB(dl, dlopen)
+        AC_CHECK_LIB(colamd, colamd)
         AC_CHECK_LIB([lpsolve55], [make_lp], [:],
-            [ AC_MSG_ERROR(lpsolve library not found or too old.)], [])
+            [ AC_MSG_ERROR(lpsolve library not found or too old.)], [-L/usr/lib/lp_solve])
         LIBS=$save_LIBS
     else
         AC_MSG_RESULT([internal])
@@ -11947,6 +11992,11 @@ fi
 AC_SUBST(GSTREAMER_1_0_CFLAGS)
 AC_SUBST(GSTREAMER_1_0_LIBS)
 AC_SUBST(ENABLE_GSTREAMER_1_0)
+
+if test -x /usr/bin/dpkg-buildflags; then
+       HARDEN_CPPFLAGS=`dpkg-buildflags --get CPPFLAGS 2>/dev/null`
+fi
+AC_SUBST(HARDEN_CPPFLAGS)
 
 ENABLE_OPENGL_TRANSITIONS=
 ENABLE_OPENGL_CANVAS=
@@ -14584,6 +14634,9 @@ if test $_os = WINNT -a -f "$SRC_ROOT/antivirusDetection.vbs" ; then
         AC_MSG_RESULT([n/a])
     fi
 fi
+
+CDEFAULTOPT=`echo $CFLAGS 2>/dev/null | grep -E -o "\-O[[0-3]]"`
+AC_SUBST(CDEFAULTOPT)
 
 dnl ===================================================================
 dnl Setting up the environment.
