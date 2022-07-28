@@ -52,6 +52,24 @@
       "parentUuid": "cb5b1e61_e4470688",
       "revId": "9f33a5919bec0930ddbae7945390da208b44b947",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a0d09cd_bf652d5f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-07-28T19:22:10Z",
+      "side": 1,
+      "message": "Patchset 3 changes the way the comment \u0027JP 10.02.2000, Bug 72806: don\u0027t modify the doc for getting the correct charstyle.\u0027 is accomplished by replacing the existing approach with an approach using SetEnableSetModified(false),",
+      "parentUuid": "db9cb7bc_67d65558",
+      "revId": "9f33a5919bec0930ddbae7945390da208b44b947",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
