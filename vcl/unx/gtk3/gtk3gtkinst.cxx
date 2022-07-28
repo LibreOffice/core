@@ -8356,6 +8356,12 @@ private:
     {
         nCol = to_internal_model(nCol);
 
+        // recompute these 2 based on new 1st editable column
+        m_nTextCol = -1;
+        m_nTextView = -1;
+        int nIndex(0);
+        int nViewColumn(0);
+        bool isSet(false);
         for (GList* pEntry = g_list_first(m_pColumns); pEntry; pEntry = g_list_next(pEntry))
         {
             GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(pEntry->data);
@@ -8367,10 +8373,27 @@ private:
                 if (reinterpret_cast<sal_IntPtr>(pData) == nCol)
                 {
                     g_object_set(G_OBJECT(pCellRenderer), "editable", bEditable, "editable-set", true, nullptr);
+                    isSet = true;
+                }
+                if (GTK_IS_CELL_RENDERER_TEXT(pCellRenderer))
+                {
+                    gboolean is_editable(false);
+                    g_object_get(pCellRenderer, "editable", &is_editable, nullptr);
+                    if (is_editable && m_nTextCol == -1)
+                    {
+                        assert(m_nTextView == -1);
+                        m_nTextCol = nIndex;
+                        m_nTextView = nViewColumn;
+                    }
+                }
+                if (isSet && m_nTextCol != -1) // both tasks done?
+                {
                     break;
                 }
+                ++nIndex;
             }
             g_list_free(pRenderers);
+            ++nViewColumn;
         }
     }
 
