@@ -1153,6 +1153,12 @@ void SalInstanceToolbar::set_item_icon_name(const OString& rIdent, const OUStrin
                              Image(StockImage::Yes, rIconName));
 }
 
+void SalInstanceToolbar::set_item_image_mirrored(const OString& rIdent, bool bMirrored)
+{
+    m_xToolBox->SetItemImageMirrorMode(m_xToolBox->GetItemId(OUString::fromUtf8(rIdent)),
+                                       bMirrored);
+}
+
 void SalInstanceToolbar::set_item_image(const OString& rIdent,
                                         const css::uno::Reference<css::graphic::XGraphic>& rIcon)
 {

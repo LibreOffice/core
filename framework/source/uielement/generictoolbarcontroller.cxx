@@ -91,6 +91,7 @@ GenericToolbarController::GenericToolbarController( const Reference< XComponentC
     ,   m_xToolbar( pToolbar )
     ,   m_nID( nID )
     ,   m_bEnumCommand( isEnumCommand( aCommand ))
+    ,   m_bMirrored( false )
     ,   m_bMadeInvisible( false )
     ,   m_aEnumCommand( getEnumCommand( aCommand ))
 {
@@ -189,6 +190,7 @@ void GenericToolbarController::statusChanged( const FeatureStateEvent& Event )
 
         bool        bValue;
         OUString    aStrValue;
+        SfxImageItem aImageItem;
 
         if ( Event.State >>= bValue )
         {
@@ -198,6 +200,13 @@ void GenericToolbarController::statusChanged( const FeatureStateEvent& Event )
         else if ( Event.State >>= aStrValue )
         {
             m_pToolbar->set_item_label(sId, aStrValue);
+        }
+        else if ( aImageItem.PutValue( Event.State, 0 ) && aImageItem.IsMirrored() != m_bMirrored )
+        {
+            m_pToolbar->set_item_image_mirrored(sId, aImageItem.IsMirrored());
+            auto xGraphic(vcl::CommandInfoProvider::GetXGraphicForCommand(m_aCommandURL, m_xFrame, m_pToolbar->get_icon_size()));
+            m_pToolbar->set_item_image(sId, xGraphic);
+            m_bMirrored = !m_bMirrored;
         }
         else
             m_pToolbar->set_item_active(sId, false);
@@ -295,9 +304,12 @@ void GenericToolbarController::statusChanged( const FeatureStateEvent& Event )
         if ( m_bMadeInvisible )
             m_xToolbar->ShowItem( m_nID );
     }
-    else if ( aImageItem.PutValue( Event.State, 0 ) )
+    else if ( aImageItem.PutValue( Event.State, 0 ) && aImageItem.IsMirrored() != m_bMirrored )
     {
         m_xToolbar->SetItemImageMirrorMode( m_nID, aImageItem.IsMirrored() );
+        Image aImage( vcl::CommandInfoProvider::GetImageForCommand( m_aCommandURL, m_xFrame, m_xToolbar->GetImageSize() ));
+        m_xToolbar->SetItemImage( m_nID, aImage );
+        m_bMirrored = !m_bMirrored;
         if ( m_bMadeInvisible )
             m_xToolbar->ShowItem( m_nID );
     }

@@ -1025,18 +1025,7 @@ void ToolBox::SetItemImageMirrorMode( ToolBoxItemId nItemId, bool bMirror )
         return;
 
     ImplToolItem* pItem = &mpData->m_aItems[nPos];
-
-    if (pItem->mbMirrorMode != bMirror)
-    {
-        pItem->mbMirrorMode = bMirror;
-        if (!!pItem->maImage)
-        {
-            pItem->maImage = ImplMirrorImage(pItem->maImage);
-        }
-
-        if (!mbCalc)
-            ImplUpdateItem(nPos);
-    }
+    pItem->mbMirrorMode = bMirror;
 }
 
 Image ToolBox::GetItemImage(ToolBoxItemId nItemId) const

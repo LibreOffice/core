@@ -2461,6 +2461,7 @@ public:
     virtual void set_item_tooltip_text(const OString& rIdent, const OUString& rTip) = 0;
     virtual OUString get_item_tooltip_text(const OString& rIdent) const = 0;
     virtual void set_item_icon_name(const OString& rIdent, const OUString& rIconName) = 0;
+    virtual void set_item_image_mirrored(const OString& rIdent, bool bMirrored) = 0;
     virtual void set_item_image(const OString& rIdent,
                                 const css::uno::Reference<css::graphic::XGraphic>& rIcon)
         = 0;

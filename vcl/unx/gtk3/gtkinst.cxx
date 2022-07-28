@@ -4801,9 +4801,18 @@ GdkPixbuf* load_icon_by_name(const OUString& rIconName)
 
 namespace
 {
-    GdkPixbuf* getPixbuf(const css::uno::Reference<css::graphic::XGraphic>& rImage)
+    Image mirrorImage(const Image& rImage)
+    {
+        BitmapEx aMirrBitmapEx(rImage.GetBitmapEx());
+        aMirrBitmapEx.Mirror(BmpMirrorFlags::Horizontal);
+        return Image(aMirrBitmapEx);
+    }
+
+    GdkPixbuf* getPixbuf(const css::uno::Reference<css::graphic::XGraphic>& rImage, bool bMirror = false)
     {
         Image aImage(rImage);
+        if (bMirror)
+            aImage = mirrorImage(aImage);
 
         OUString sStock(aImage.GetStock());
         if (!sStock.isEmpty())
@@ -11649,6 +11658,7 @@ private:
 
     std::map<OString, GtkWidget*> m_aMap;
     std::map<OString, std::unique_ptr<GtkInstanceMenuButton>> m_aMenuButtonMap;
+    std::map<OString, bool> m_aMirroredMap;
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
     // at the time of writing there is no gtk_menu_tool_button_set_popover available
@@ -11813,14 +11823,14 @@ private:
 #endif
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-    static void set_item_image(GtkToolButton* pItem, const css::uno::Reference<css::graphic::XGraphic>& rIcon)
+    static void set_item_image(GtkToolButton* pItem, const css::uno::Reference<css::graphic::XGraphic>& rIcon, bool bMirror)
 #else
-    static void set_item_image(GtkWidget* pItem, const css::uno::Reference<css::graphic::XGraphic>& rIcon)
+    static void set_item_image(GtkWidget* pItem, const css::uno::Reference<css::graphic::XGraphic>& rIcon, bool bMirror)
 #endif
     {
         GtkWidget* pImage = nullptr;
 
-        if (GdkPixbuf* pixbuf = getPixbuf(rIcon))
+        if (GdkPixbuf* pixbuf = getPixbuf(rIcon, bMirror))
         {
             pImage = gtk_image_new_from_pixbuf(pixbuf);
             g_object_unref(pixbuf);
@@ -12194,17 +12204,24 @@ public:
 #endif
     }
 
+    virtual void set_item_image_mirrored(const OString& rIdent, bool bMirrored) override
+    {
+        m_aMirroredMap[rIdent] = bMirrored;
+    }
+
     virtual void set_item_image(const OString& rIdent, const css::uno::Reference<css::graphic::XGraphic>& rIcon) override
     {
         GtkWidget* pItem = m_aMap[rIdent];
+        auto it = m_aMirroredMap.find(rIdent);
+        bool bMirrored = it != m_aMirroredMap.end() && it->second;
 #if !GTK_CHECK_VERSION(4, 0, 0)
         if (!pItem || !GTK_IS_TOOL_BUTTON(pItem))
             return;
-        set_item_image(GTK_TOOL_BUTTON(pItem), rIcon);
+        set_item_image(GTK_TOOL_BUTTON(pItem), rIcon, bMirrored);
 #else
         if (!pItem)
             return;
-        set_item_image(pItem, rIcon);
+        set_item_image(pItem, rIcon, bMirrored);
 #endif
     }
 
@@ -12228,9 +12245,9 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         if (!GTK_IS_TOOL_BUTTON(pItem))
             return;
-        set_item_image(GTK_TOOL_BUTTON(pItem), rIcon);
+        set_item_image(GTK_TOOL_BUTTON(pItem), rIcon, false);
 #else
-        set_item_image(pItem, rIcon);
+        set_item_image(pItem, rIcon, false);
 #endif
     }
 

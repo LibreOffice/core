@@ -64,6 +64,7 @@ class FWK_DLLPUBLIC GenericToolbarController final : public svt::ToolboxControll
         VclPtr<ToolBox>     m_xToolbar;
         ToolBoxItemId       m_nID;
         bool                m_bEnumCommand : 1,
+                            m_bMirrored : 1,
                             m_bMadeInvisible : 1;
         OUString            m_aEnumCommand;
 };

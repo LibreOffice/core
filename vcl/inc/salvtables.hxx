@@ -1259,6 +1259,8 @@ public:
 
     virtual void set_item_icon_name(const OString& rIdent, const OUString& rIconName) override;
 
+    virtual void set_item_image_mirrored(const OString& rIdent, bool bMirrored) override;
+
     virtual void set_item_image(const OString& rIdent,
                                 const css::uno::Reference<css::graphic::XGraphic>& rIcon) override;
 

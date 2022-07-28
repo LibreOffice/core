@@ -158,9 +158,10 @@ IMPL_LINK_NOARG(ToolbarUnoDispatcher, ChangedIconSizeHandler, LinkParamNone*, vo
 
     for (int i = 0, nItems = m_pToolbar->get_n_items(); i < nItems; ++i)
     {
-        OUString sCommand = OUString::fromUtf8(m_pToolbar->get_item_ident(i));
-        auto xImage(vcl::CommandInfoProvider::GetXGraphicForCommand(sCommand, m_xFrame, eSize));
-        m_pToolbar->set_item_image(i, xImage);
+        OString sIdent(m_pToolbar->get_item_ident(i));
+        auto xImage(vcl::CommandInfoProvider::GetXGraphicForCommand(OUString::fromUtf8(sIdent),
+                                                                    m_xFrame, eSize));
+        m_pToolbar->set_item_image(sIdent, xImage);
     }
 
     for (auto const& it : maControllers)
