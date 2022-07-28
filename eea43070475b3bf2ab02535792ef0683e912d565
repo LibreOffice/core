@@ -103,6 +103,24 @@
       "message": "Note that I submitted follow-up changes to not unnecessarily store mbFiltering and mbFilteredRow at ScColumn, wait for them getting merged first before touching code around those lines.\nhttps://gerrit.libreoffice.org/q/topic:filtering-filteredrow\n",
       "revId": "eea43070475b3bf2ab02535792ef0683e912d565",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c080989_6e34740a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2022-07-28T07:52:15Z",
+      "side": 1,
+      "message": "Thank you very much for the review, Eike. I will handle them in master first.",
+      "parentUuid": "1bb84e18_ec168920",
+      "revId": "eea43070475b3bf2ab02535792ef0683e912d565",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
