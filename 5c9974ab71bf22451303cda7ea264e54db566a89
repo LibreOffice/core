@@ -16,6 +16,23 @@
       "message": "Hi Robert,\nIs this patch about tdf#141908? if so, it should only focus on cppunittest.",
       "revId": "5c9974ab71bf22451303cda7ea264e54db566a89",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d221c563_fe6c6df8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-07-28T08:24:35Z",
+      "side": 1,
+      "message": "Some notes:\n- I see you are changing sal_Int32 to Color type without considering at all, if Color is the correct type\n- You clearly did not try building your changes locally\n- You should have tdf#141908 at the start of your commit message and use imperative mood \"Replace\" instead of \"Replacing\"",
+      "revId": "5c9974ab71bf22451303cda7ea264e54db566a89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
