@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "150f027d_3b43daa9",
+        "filename": "sc/qa/extras/accessibility/basics.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1001582
+      },
+      "writtenOn": "2022-07-28T17:32:52Z",
+      "side": 1,
+      "message": "Ideally I\u0027d use `reinterpret_cast\u003cScDocument*\u003e(mxDocument.get())-\u003eGetFormatTable()-\u003eGetNullDate()` here, but somehow it crashes on me:\n #0  __GI___pthread_mutex_lock (mutex\u003d0xe900000090ee8148) at ../nptl/pthread_mutex_lock.c:67\n #1  0x00007ffff7ecb884 in osl_acquireMutex(oslMutex) (pMutex\u003d0xe900000090ee8148) at /…/sal/osl/unx/mutex.cxx:100\n #2  0x00007ffff1a493d3 in osl::Mutex::acquire() (this\u003d0x7fffeab0b4d2 \u003cnon-virtual thunk to SfxBaseModel::getCurrentController()\u003e) at /…/include/osl/mutex.hxx:63\n #3  0x00007ffff1a539b4 in osl::Guard\u003cosl::Mutex\u003e::Guard(osl::Mutex\u0026) (this\u003d0x7fffffff0500, t\u003d...) at /…/include/osl/mutex.hxx:144\n #4  0x00007ffff1b59f30 in SvNumberFormatter::GetNullDate() const (this\u003d0x7fffeab0b4d2 \u003cnon-virtual thunk to SfxBaseModel::getCurrentController()\u003e)\n     at /…/svl/source/numbers/zforlist.cxx:417\n #5  0x00007ffff470ac64 in TestCalcMenu::TestBody() (this\u003d0x55555630d2b0) at /…/sc/qa/extras/accessibility/basics.cxx:74\n\nIf anybody has input on this I\u0027d be happy, but I guess using 1899-12-30 is good enough.",
+      "range": {
+        "startLine": 61,
+        "startChar": 10,
+        "endLine": 61,
+        "endChar": 38
+      },
+      "revId": "e2696cc9327425d510063507222509182eacc1ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13467760_a16a40ca",
+        "filename": "sc/qa/extras/accessibility/basics.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1001582
+      },
+      "writtenOn": "2022-07-28T17:32:52Z",
+      "side": 1,
+      "message": "In the unlikely case of e.g. a DST change that makes time go *backwards*, this should still work, and just make it less accurate -- which is not very important as we\u0027re mostly checking *something* has been inserted, and ideally we inserted what we expected.",
+      "range": {
+        "startLine": 76,
+        "startChar": 4,
+        "endLine": 79,
+        "endChar": 23
+      },
+      "revId": "e2696cc9327425d510063507222509182eacc1ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
