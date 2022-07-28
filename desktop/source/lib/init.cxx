@@ -2607,6 +2607,11 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
 
         LibLODocument_Impl* pDocument = new LibLODocument_Impl(xComponent, nThisDocumentId);
 
+        // create additional view for slide previews which will not contain active edit fields
+        const bool isImpress = (doc_getDocumentType(pDocument) == LOK_DOCTYPE_PRESENTATION);
+        if (isImpress)
+            doc_createView(pDocument);
+
         // After loading the document, its initial view is the "current" view.
         if (pLib->mpCallback)
         {
