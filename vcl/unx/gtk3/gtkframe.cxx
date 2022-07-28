@@ -1353,6 +1353,14 @@ void GtkSalFrame::ListenPortalSettings()
     m_nPortalSettingChangedSignalId = g_signal_connect(m_pSettingsPortal, "g-signal", G_CALLBACK(settings_portal_changed_cb), this);
 }
 
+#if GTK_CHECK_VERSION(4,0,0)
+static void PopoverClosed(GtkPopover*, GtkSalFrame* pThis)
+{
+    SolarMutexGuard aGuard;
+    pThis->closePopup();
+}
+#endif
+
 void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
 {
     if( nStyle & SalFrameStyleFlags::DEFAULT ) // ensure default style
@@ -1398,6 +1406,7 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
         {
             m_pWindow = gtk_popover_new();
             gtk_popover_set_has_arrow(GTK_POPOVER(m_pWindow), false);
+            g_signal_connect(m_pWindow, "closed", G_CALLBACK(PopoverClosed), this);
         }
 #endif
 
