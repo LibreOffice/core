@@ -14,6 +14,8 @@ pdfium_patches += build.patch.1
 # Avoids Windows 8 build dependency.
 pdfium_patches += windows7.patch.1
 pdfium_patches += c++20-comparison.patch
+# __popcnt not available on arm64
+pdfium_patches += pdfium_arm64.patch.1
 # Use CoreGraphics.h instead of Carbon.h
 pdfium_patches += cg-instead-of-carbon.patch.1
 # Android NDK 19 - that is known to work well - does not have 2 defines
