@@ -507,7 +507,7 @@ bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemPropertyMapEntry*
             return !aValue.hasValue() || ((aValue >>= xRule) && !xRule.is());
         }
 
-    case WID_NUMLEVEL:
+    case EE_PARA_OUTLLEVEL:
         {
             SvxTextForwarder* pForwarder = pEditSource? pEditSource->GetTextForwarder() : nullptr;
             if(pForwarder && pSelection)
@@ -519,7 +519,8 @@ bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemPropertyMapEntry*
                     if(! pForwarder->SetDepth( pSelection->nStartPara, nLevel ) )
                         throw lang::IllegalArgumentException();
 
-                    return true;
+                    // If valid, then not yet finished. Also needs to be added to paragraph props.
+                    return nLevel < -1 || nLevel > 9;
                 }
             }
         }
@@ -684,7 +685,7 @@ bool SvxUnoTextRangeBase::GetPropertyValueHelper(  SfxItemSet const & rSet, cons
         }
         break;
 
-    case WID_NUMLEVEL:
+    case EE_PARA_OUTLLEVEL:
         {
             SvxTextForwarder* pForwarder = pEditSource? pEditSource->GetTextForwarder() : nullptr;
             if(pForwarder && pSelection)
@@ -976,7 +977,6 @@ beans::PropertyState SvxUnoTextRangeBase::_getPropertyState(const SfxItemPropert
                 }
                 break;
 
-            case WID_NUMLEVEL:
             case WID_NUMBERINGSTARTVALUE:
             case WID_PARAISNUMBERINGRESTART:
                 eItemState = SfxItemState::SET;
@@ -1110,7 +1110,6 @@ bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet* pSet, const Sf
             }
             break;
 
-        case WID_NUMLEVEL:
         case WID_NUMBERINGSTARTVALUE:
         case WID_PARAISNUMBERINGRESTART:
             eItemState = SfxItemState::SET;
@@ -1215,12 +1214,6 @@ void SvxUnoTextRangeBase::_setPropertyToDefault(SvxTextForwarder* pForwarder, co
         {
             SvxUnoFontDescriptor::setPropertyToDefault( aSet );
         }
-        else if( pMap->nWID == WID_NUMLEVEL )
-        {
-            // #101004# Call interface method instead of unsafe cast
-            pForwarder->SetDepth( maSelection.nStartPara, -1 );
-            return;
-        }
         else if( pMap->nWID == WID_NUMBERINGSTARTVALUE )
         {
             pForwarder->SetNumberingStartValue( maSelection.nStartPara, -1 );
@@ -1263,7 +1256,7 @@ uno::Any SAL_CALL SvxUnoTextRangeBase::getPropertyDefault( const OUString& aProp
             case WID_FONTDESC:
                 return SvxUnoFontDescriptor::getPropertyDefault( pPool );
 
-            case WID_NUMLEVEL:
+            case EE_PARA_OUTLLEVEL:
                 {
                     uno::Any aAny;
                     return aAny;
@@ -1969,8 +1962,8 @@ static void SvxPropertyValuesToItemSet(
         SfxItemSet &rItemSet,
         const uno::Sequence< beans::PropertyValue >& rPropertyValues,
         const SfxItemPropertySet *pPropSet,
-        SvxTextForwarder *pForwarder /*needed for WID_NUMLEVEL*/,
-        sal_Int32 nPara /*needed for WID_NUMLEVEL*/)
+        SvxTextForwarder *pForwarder,
+        sal_Int32 nPara)
 {
     for (const beans::PropertyValue& rProp : rPropertyValues)
     {
@@ -1992,18 +1985,6 @@ static void SvxPropertyValuesToItemSet(
             awt::FontDescriptor aDesc;
             if (rProp.Value >>= aDesc)
                 SvxUnoFontDescriptor::FillItemSet( aDesc, rItemSet );
-        }
-        else if (pEntry->nWID == WID_NUMLEVEL)
-        {
-            if (pForwarder)
-            {
-                sal_Int16 nLevel = -1;
-                rProp.Value >>= nLevel;
-
-                // #101004# Call interface method instead of unsafe cast
-                if (!pForwarder->SetDepth( nPara, nLevel ))
-                    throw lang::IllegalArgumentException();
-            }
         }
         else if (pEntry->nWID == WID_NUMBERINGSTARTVALUE )
         {
