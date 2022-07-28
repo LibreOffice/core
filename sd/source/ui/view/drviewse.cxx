@@ -1478,6 +1478,14 @@ void DrawViewShell::InsertURLField(const OUString& rURL, const OUString& rText,
     {
         ESelection aSel( pOLV->GetSelection() );
         SvxFieldItem aURLItem( SvxURLField( rURL, rText, SvxURLFormat::Repr ), EE_FEATURE_FIELD );
+        if (comphelper::LibreOfficeKit::isActive() && rURL.startsWith("im:"))
+        {
+            if ( aSel.nStartPos == aSel.nEndPos && aSel.nStartPos > 0 )
+            {
+                aSel.nStartPos -= rText.getLength();
+                pOLV->SetSelection( aSel );
+            }
+        }
         pOLV->InsertField( aURLItem );
         if ( aSel.nStartPos <= aSel.nEndPos )
             aSel.nEndPos = aSel.nStartPos + 1;

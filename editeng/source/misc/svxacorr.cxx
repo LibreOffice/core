@@ -741,10 +741,10 @@ bool SvxAutoCorrect::FnAddNonBrkSpace(
 // URL recognition
 bool SvxAutoCorrect::FnSetINetAttr( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                                     sal_Int32 nSttPos, sal_Int32 nEndPos,
-                                    LanguageType eLang )
+                                    LanguageType eLang, SfxViewShell* pViewShell )
 {
     OUString sURL( URIHelper::FindFirstURLInText( rTxt, nSttPos, nEndPos,
-                                                GetCharClass( eLang ) ));
+                                                GetCharClass( eLang ), pViewShell ));
     bool bRet = !sURL.isEmpty();
     if( bRet )          // so, set attribute:
         rDoc.SetINetAttr( nSttPos, nEndPos, sURL );
@@ -1300,7 +1300,8 @@ static bool lcl_HasPrecedingChar( std::u16string_view rTxt, sal_Int32 nPos,
 // WARNING: rText may become invalid, see comment below
 void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                                     sal_Int32 nInsPos, sal_Unicode cChar,
-                                    bool bInsert, bool& io_bNbspRunNext, vcl::Window const * pFrameWin )
+                                    bool bInsert, bool& io_bNbspRunNext, vcl::Window const * pFrameWin,
+                                    SfxViewShell* pViewShell )
 {
     bool bIsNextRun = io_bNbspRunNext;
     io_bNbspRunNext = false;  // if it was set, then it has to be turned off
@@ -1587,7 +1588,7 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                 FnChgOrdinalNumber( rDoc, rTxt, nCapLttrPos, nInsPos, eLang ) ) ||
             ( IsAutoCorrFlag( ACFlags::SetINetAttr ) &&
                 ( ' ' == cChar || '\t' == cChar || 0x0a == cChar || !cChar ) &&
-                FnSetINetAttr( rDoc, rTxt, nCapLttrPos, nInsPos, eLang ) ) )
+                FnSetINetAttr( rDoc, rTxt, nCapLttrPos, nInsPos, eLang, pViewShell ) ) )
             ;
         else
         {

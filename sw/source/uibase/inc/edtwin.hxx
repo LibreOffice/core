@@ -125,6 +125,8 @@ class SW_DLLPUBLIC SwEditWin final : public vcl::Window,
 
     sal_uInt16          m_nKS_NUMDOWN_Count; // #i23725#
     sal_uInt16          m_nKS_NUMINDENTINC_Count;
+    // bool                typedSpace = false;
+    // bool                typingMention = false;
 
     std::unique_ptr<SwFrameControlsManager> m_pFrameControlsManager;
 

@@ -253,7 +253,7 @@ SwUndoId SwEditShell::GetRepeatInfo(OUString *const o_pStr) const
 
 /** Auto correction */
 void SwEditShell::AutoCorrect( SvxAutoCorrect& rACorr, bool bInsert,
-                                sal_Unicode cChar )
+                                sal_Unicode cChar, SfxViewShell* pViewShell)
 {
     CurrShell aCurr( this );
 
@@ -275,7 +275,7 @@ void SwEditShell::AutoCorrect( SvxAutoCorrect& rACorr, bool bInsert,
     OUString const& rMergedText(pFrame->GetText());
     rACorr.DoAutoCorrect( aSwAutoCorrDoc,
                     rMergedText, sal_Int32(nPos),
-                    cChar, bInsert, m_bNbspRunNext, GetWin() );
+                    cChar, bInsert, m_bNbspRunNext, GetWin(), pViewShell );
     if( cChar )
         SaveTableBoxContent( pCursor->GetPoint() );
     EndAllAction();

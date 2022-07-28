@@ -1926,7 +1926,7 @@ void SwWrtShell::AutoUpdateFrame( SwFrameFormat* pFormat, const SfxItemSet& rSty
     EndAction();
 }
 
-void SwWrtShell::AutoCorrect( SvxAutoCorrect& rACorr, sal_Unicode cChar )
+void SwWrtShell::AutoCorrect( SvxAutoCorrect& rACorr, sal_Unicode cChar, SfxViewShell* pViewShell )
 {
     ResetCursorStack();
     if(!CanInsert())
@@ -1955,7 +1955,7 @@ void SwWrtShell::AutoCorrect( SvxAutoCorrect& rACorr, sal_Unicode cChar )
         bStarted = true;
         DelRight(true);
     }
-    SwEditShell::AutoCorrect( rACorr, IsInsMode(), cChar );
+    SwEditShell::AutoCorrect( rACorr, IsInsMode(), cChar, pViewShell );
 
     if(bStarted)
     {

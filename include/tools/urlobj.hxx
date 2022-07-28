@@ -42,6 +42,7 @@ inline constexpr OUStringLiteral INET_HTTP_SCHEME = u"http://";
 inline constexpr OUStringLiteral INET_HTTPS_SCHEME = u"https://";
 inline constexpr OUStringLiteral INET_FILE_SCHEME = u"file://";
 inline constexpr OUStringLiteral INET_MAILTO_SCHEME = u"mailto:";
+inline constexpr OUStringLiteral INET_MENTION_SCHEME = u"im:";
 inline constexpr OUStringLiteral INET_HID_SCHEME = u"hid:";
 
 #define URL_PREFIX_PRIV_SOFFICE "private:"
@@ -78,7 +79,8 @@ enum class INetProtocol
     Hid,
     Sftp,
     Cmis,
-    LAST = Cmis
+    Mention,
+    LAST = Mention
 };
 
 /** The supported notations for file system paths.
@@ -798,6 +800,7 @@ public:
         PART_UNAMBIGUOUS            = 0x08000,
         PART_URIC_NO_SLASH          = 0x10000,
         PART_HTTP_QUERY             = 0x20000, //TODO! unused?
+        PART_MENTION                = 0x40000,
     };
 
     enum class EscapeType

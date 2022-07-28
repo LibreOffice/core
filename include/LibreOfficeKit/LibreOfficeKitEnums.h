@@ -860,6 +860,8 @@ typedef enum
      * [<startColumn>, <startRow>, <endColumn>, <endRow>]
      */
     LOK_CALLBACK_PRINT_RANGES = 56,
+
+    LOK_CALLBACK_MENTION = 57,
 }
 LibreOfficeKitCallbackType;
 
@@ -1002,6 +1004,8 @@ static inline const char* lokCallbackTypeToString(int nType)
         return "LOK_CALLBACK_CONTENT_CONTROL";
     case LOK_CALLBACK_PRINT_RANGES:
         return "LOK_CALLBACK_PRINT_RANGES";
+    case LOK_CALLBACK_MENTION:
+        return "LOK_CALLBACK_MENTION";
     }
 
     assert(!"Unknown LibreOfficeKitCallbackType type.");

@@ -402,7 +402,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
                          const i18nutil::SearchOptions2* pSearchOpt = nullptr,
                          const SfxItemSet* pReplaceSet = nullptr);
 
-    void AutoCorrect( SvxAutoCorrect& rACorr, sal_Unicode cChar );
+    void AutoCorrect( SvxAutoCorrect& rACorr, sal_Unicode cChar, SfxViewShell* pViewShell=nullptr );
 
     // action ahead of cursor movement
     // resets selection if applicable, triggers timer and GCAttr()

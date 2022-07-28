@@ -2529,7 +2529,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     )
                 {
                     FlushInBuffer();
-                    rSh.AutoCorrect( *pACorr, aCh );
+                    SfxViewShell* pViewShell = rSh.GetSfxViewShell();
+                    rSh.AutoCorrect( *pACorr, aCh, pViewShell );
                 }
                 else
                 {

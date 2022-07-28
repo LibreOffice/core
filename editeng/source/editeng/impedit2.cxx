@@ -2577,8 +2577,9 @@ EditPaM ImpEditEngine::AutoCorrect( const EditSelection& rCurSel, sal_Unicode c,
         EdtAutoCorrDoc aAuto(pEditEngine, pNode, nIndex, c);
         // FIXME: this _must_ be called with reference to the actual node text!
         OUString const& rNodeString(pNode->GetString());
+        SfxViewShell* pViewShell = SfxViewShell::Current();
         pAutoCorrect->DoAutoCorrect(
-            aAuto, rNodeString, nIndex, c, !bOverwrite, mbNbspRunNext, pFrameWin );
+            aAuto, rNodeString, nIndex, c, !bOverwrite, mbNbspRunNext, pFrameWin, pViewShell );
         aSel.Max().SetIndex( aAuto.GetCursor() );
 
         // #i78661 since the SvxAutoCorrect object used here is

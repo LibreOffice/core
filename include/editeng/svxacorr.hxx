@@ -32,6 +32,7 @@
 #include <map>
 #include <memory>
 #include <string_view>
+#include <sfx2/viewsh.hxx>
 
 class CharClass;
 class SfxPoolItem;
@@ -302,7 +303,8 @@ public:
     // in rDoc and expects that to side-effect rTxt
     void DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                            sal_Int32 nPos, sal_Unicode cInsChar, bool bInsert, bool& io_bNbspRunNext,
-                           vcl::Window const * pFrameWin = nullptr );
+                           vcl::Window const * pFrameWin = nullptr,
+                           SfxViewShell* pViewShell = nullptr );
 
     // Return for the autotext expansion the previous word,
     // AutoCorrect - corresponding algorithm
@@ -414,7 +416,8 @@ public:
                                 LanguageType eLang, bool& io_bNbspRunNext );
     bool FnSetINetAttr( SvxAutoCorrDoc&, const OUString&,
                                 sal_Int32 nSttPos, sal_Int32 nEndPos,
-                                LanguageType eLang );
+                                LanguageType eLang,
+                                SfxViewShell* pViewShell = nullptr);
     bool FnChgWeightUnderl( SvxAutoCorrDoc&, const OUString&,
                                 sal_Int32 nEndPos );
     void FnCapitalStartSentence( SvxAutoCorrDoc&, const OUString&, bool bNormalPos,

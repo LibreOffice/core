@@ -808,7 +808,7 @@ public:
 
     /// Call AutoCorrect
     void AutoCorrect( SvxAutoCorrect& rACorr, bool bInsertMode,
-                        sal_Unicode cChar );
+                        sal_Unicode cChar, SfxViewShell* pViewShell=nullptr );
     OUString GetPrevAutoCorrWord(SvxAutoCorrect& rACorr);
 
     // We consider no more than 9 characters before the cursor, and they must not start in the

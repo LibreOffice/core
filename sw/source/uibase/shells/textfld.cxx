@@ -1014,6 +1014,8 @@ void SwTextShell::InsertHyperlink(const SvxHyperlinkItem& rHlnkItem)
                 if( pMacro )
                     aINetFormat.SetMacro(SvMacroItemId::OnMouseOut, *pMacro);
             }
+            if (comphelper::LibreOfficeKit::isActive() && rURL.startsWith("im:"))
+                rSh.Left(CRSR_SKIP_CHARS, /*bSelect=*/true, rName.getLength(), /*bBasicCall=*/false);
             rSh.SttSelect();
             rSh.InsertURL( aINetFormat, rName, true );
             rSh.EndSelect();
