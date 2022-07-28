@@ -101,12 +101,21 @@ SfxRecordingFloat_Impl::SfxRecordingFloat_Impl(SfxBindings* pBind, SfxChildWindo
                                   "FloatingRecord")
     , m_xToolbar(m_xBuilder->weld_toolbar("toolbar"))
     , m_xDispatcher(new ToolbarUnoDispatcher(*m_xToolbar, *m_xBuilder, pBind->GetActiveFrame()))
+    , mnPostUserEventId(nullptr)
     , m_bFirstActivate(true)
 {
     // start recording
     SfxBoolItem aItem( SID_RECORDMACRO, true );
     GetBindings().GetDispatcher()->ExecuteList(SID_RECORDMACRO,
             SfxCallMode::SYNCHRON, { &aItem });
+}
+
+IMPL_LINK_NOARG(SfxRecordingFloat_Impl, PresentParentFrame, void*, void)
+{
+    mnPostUserEventId = nullptr;
+    css::uno::Reference<css::awt::XTopWindow> xTopWindow(m_xDispatcher->GetFrame()->getContainerWindow(), css::uno::UNO_QUERY);
+    if (xTopWindow.is())
+        xTopWindow->toFront();
 }
 
 void SfxRecordingFloat_Impl::Activate()
@@ -116,13 +125,13 @@ void SfxRecordingFloat_Impl::Activate()
         return;
     // tdf#147782 retain focus in launching frame on the first activate on automatically gaining focus on getting launched
     m_bFirstActivate = false;
-    css::uno::Reference<css::awt::XTopWindow> xTopWindow(m_xDispatcher->GetFrame()->getContainerWindow(), css::uno::UNO_QUERY);
-    if (xTopWindow.is())
-        xTopWindow->toFront();
+    mnPostUserEventId = Application::PostUserEvent(LINK(this, SfxRecordingFloat_Impl, PresentParentFrame));
 }
 
 SfxRecordingFloat_Impl::~SfxRecordingFloat_Impl()
 {
+    if (mnPostUserEventId)
+        Application::RemoveUserEvent(mnPostUserEventId);
     m_xDispatcher->dispose();
 }
 
