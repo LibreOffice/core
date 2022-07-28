@@ -711,6 +711,15 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
             aCheckedArgs[nProps++].Value <<= bTemp;
         }
 
+        else if ( rProp.Name == "JobName" )
+        {
+            OUString sTemp;
+            if( !(rProp.Value >>= sTemp) )
+                throw css::lang::IllegalArgumentException();
+            aCheckedArgs[nProps].Name = rProp.Name;
+            aCheckedArgs[nProps++].Value <<= sTemp;
+        }
+
         // Pages-Property
         else if ( rProp.Name == "Pages" )
         {
