@@ -26,6 +26,7 @@
 #include <reftokenhelper.hxx>
 #include <userdat.hxx>
 #include <refdata.hxx>
+#include <undomanager.hxx>
 
 #include <docfunc.hxx>
 #include <funcdesc.hxx>
@@ -4596,16 +4597,17 @@ void Test::testAutoFill()
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,5,0)));
 
     // Undo should clear the area except for the top cell.
-    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    ScUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
     CPPUNIT_ASSERT(pUndoMgr);
-    pUndoMgr->Undo();
+    ScUndoRedoContext aUndoRedoContext;
+    pUndoMgr->UndoWithContext(aUndoRedoContext);
 
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(0,0,0)));
     for (SCROW i = 1; i <= 5; ++i)
         CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, m_pDoc->GetCellType(ScAddress(0,i,0)));
 
     // Redo should put the serial values back in.
-    pUndoMgr->Redo();
+    pUndoMgr->RedoWithContext(aUndoRedoContext);
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(0,0,0)));
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0,1,0)));
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(0,2,0)));
@@ -5060,11 +5062,12 @@ void Test::testNoteDeleteRow()
 
     // Undo.
 
-    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    ScUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
     CPPUNIT_ASSERT_MESSAGE("Failed to get undo manager.", pUndoMgr);
     m_pDoc->CreateAllNoteCaptions(); // to make sure that all notes have their corresponding caption objects...
 
-    pUndoMgr->Undo();
+    ScUndoRedoContext aUndoRedoContext;
+    pUndoMgr->UndoWithContext(aUndoRedoContext);
     pNote = m_pDoc->GetNote(ScAddress(1,1,0));
     CPPUNIT_ASSERT_MESSAGE("B2 should NOT have a note.", !pNote);
     pNote = m_pDoc->GetNote(ScAddress(1,2,0));
@@ -5084,7 +5087,7 @@ void Test::testNoteDeleteRow()
     CPPUNIT_ASSERT_MESSAGE("B4 should NOT have a note.", !pNote);
 
     // Undo and check the result.
-    pUndoMgr->Undo();
+    pUndoMgr->UndoWithContext(aUndoRedoContext);
     pNote = m_pDoc->GetNote(ScAddress(1,2,0));
     CPPUNIT_ASSERT_MESSAGE("B3 should have a note.", pNote);
     CPPUNIT_ASSERT_EQUAL(OUString("First Note"), pNote->GetText());
@@ -5183,9 +5186,10 @@ void Test::testNoteLifeCycle()
     const SdrCaptionObj* pMoveCaption = pMoveNote->GetOrCreateCaption(aMovePos);
     CPPUNIT_ASSERT_MESSAGE("Captions identical after move.", pOrigCaption != pMoveCaption);
 
-    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    ScUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
     CPPUNIT_ASSERT(pUndoMgr);
-    pUndoMgr->Undo();   // this should not crash ... tdf#92995
+    ScUndoRedoContext aUndoRedoContext;
+    pUndoMgr->UndoWithContext(aUndoRedoContext);   // this should not crash ... tdf#92995
 
     // Verify the note move Undo.
     pMoveNote = m_pDoc->GetNote(aMovePos);
@@ -5208,9 +5212,9 @@ void Test::testNoteLifeCycle()
     ScCellMergeOption aCellMergeOption(1,3,2,3);
     rDocFunc.MergeCells( aCellMergeOption, true /*bContents*/, bRecord, bApi, false /*bEmptyMergedCells*/ );
 
-    SfxUndoManager* pMergeUndoManager = m_pDoc->GetUndoManager();
+    ScUndoManager* pMergeUndoManager = m_pDoc->GetUndoManager();
     CPPUNIT_ASSERT(pMergeUndoManager);
-    pMergeUndoManager->Undo();  // this should not crash ... tdf#105667
+    pMergeUndoManager->UndoWithContext(aUndoRedoContext);  // this should not crash ... tdf#105667
 
     // Undo contained the original caption object pointer which was still alive
     // at B4 after the merge and not cloned nor recreated during Undo.
@@ -5729,9 +5733,10 @@ void Test::testImportStream()
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,1,0)));
 
     // Undo, and check the result.
-    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    ScUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
     CPPUNIT_ASSERT_MESSAGE("Failed to get the undo manager.", pUndoMgr);
-    pUndoMgr->Undo();
+    ScUndoRedoContext aUndoRedoContext;
+    pUndoMgr->UndoWithContext(aUndoRedoContext);
 
     CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(0,0,0)));
     CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(1,0,0)));
@@ -5740,7 +5745,7 @@ void Test::testImportStream()
     CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(0,1,0))); // formula
 
     // Redo, and check the result.
-    pUndoMgr->Redo();
+    pUndoMgr->RedoWithContext(aUndoRedoContext);
 
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(0,0,0)));
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1,0,0)));
@@ -5816,15 +5821,16 @@ void Test::testTransliterateText()
     CPPUNIT_ASSERT_EQUAL(OUString("OSCAR"), m_pDoc->GetString(ScAddress(0,2,0)));
 
     // Test the undo and redo.
-    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    ScUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
     CPPUNIT_ASSERT_MESSAGE("Failed to get undo manager.", pUndoMgr);
+    ScUndoRedoContext aUndoRedoContext;
 
-    pUndoMgr->Undo();
+    pUndoMgr->UndoWithContext(aUndoRedoContext);
     CPPUNIT_ASSERT_EQUAL(OUString("Mike"), m_pDoc->GetString(ScAddress(0,0,0)));
     CPPUNIT_ASSERT_EQUAL(OUString("Noah"), m_pDoc->GetString(ScAddress(0,1,0)));
     CPPUNIT_ASSERT_EQUAL(OUString("Oscar"), m_pDoc->GetString(ScAddress(0,2,0)));
 
-    pUndoMgr->Redo();
+    pUndoMgr->RedoWithContext(aUndoRedoContext);
     CPPUNIT_ASSERT_EQUAL(OUString("MIKE"), m_pDoc->GetString(ScAddress(0,0,0)));
     CPPUNIT_ASSERT_EQUAL(OUString("NOAH"), m_pDoc->GetString(ScAddress(0,1,0)));
     CPPUNIT_ASSERT_EQUAL(OUString("OSCAR"), m_pDoc->GetString(ScAddress(0,2,0)));
@@ -5910,9 +5916,10 @@ void Test::testFormulaToValue()
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), pFC->GetSharedLength());
 
     // Undo and check.
-    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    ScUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
     CPPUNIT_ASSERT(pUndoMgr);
-    pUndoMgr->Undo();
+    ScUndoRedoContext aUndoRedoContext;
+    pUndoMgr->UndoWithContext(aUndoRedoContext);
 
     {
         // Expected output table content.  0 = empty cell
@@ -5944,7 +5951,7 @@ void Test::testFormulaToValue()
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(6), pFC->GetSharedLength());
 
     // Redo and check.
-    pUndoMgr->Redo();
+    pUndoMgr->RedoWithContext(aUndoRedoContext);
     {
         // Expected output table content.  0 = empty cell
         std::vector<std::vector<const char*>> aOutputCheck = {
@@ -5983,7 +5990,7 @@ void Test::testFormulaToValue()
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), pFC->GetSharedLength());
 
     // Undo again and make sure the recovered formulas in C5:C6 still track B5:B6.
-    pUndoMgr->Undo();
+    pUndoMgr->UndoWithContext(aUndoRedoContext);
     m_pDoc->SetValue(ScAddress(1,4,0), 10);
     m_pDoc->SetValue(ScAddress(1,5,0), 11);
     CPPUNIT_ASSERT_EQUAL(20.0, m_pDoc->GetValue(ScAddress(2,4,0)));
@@ -6046,9 +6053,10 @@ void Test::testFormulaToValue2()
     }
 
     // Undo and check.
-    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    ScUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
     CPPUNIT_ASSERT(pUndoMgr);
-    pUndoMgr->Undo();
+    ScUndoRedoContext aUndoRedoContext;
+    pUndoMgr->UndoWithContext(aUndoRedoContext);
 
     {
         // Expected output table content.  0 = empty cell
@@ -6480,9 +6488,10 @@ void Test::testUndoDataAnchor()
     CPPUNIT_ASSERT_MESSAGE("Failed to compare Address.", aNNewStart != aNOldStart );
     CPPUNIT_ASSERT_MESSAGE("Failed to compare Address.", aNNewEnd != aNOldEnd );
 
-    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    ScUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
     CPPUNIT_ASSERT(pUndoMgr);
-    pUndoMgr->Undo();
+    ScUndoRedoContext aUndoRedoContext;
+    pUndoMgr->UndoWithContext(aUndoRedoContext);
 
     // Check state
     ScAnchorType oldType = ScDrawLayer::GetAnchorType(*pObj);
@@ -6503,7 +6512,7 @@ void Test::testUndoDataAnchor()
     CPPUNIT_ASSERT_EQUAL(pNData->maStart, aNOldStart);
     CPPUNIT_ASSERT_EQUAL(pNData->maEnd, aNOldEnd);
 
-    pUndoMgr->Redo();
+    pUndoMgr->RedoWithContext(aUndoRedoContext);
 
     // Get anchor data
     pData = ScDrawLayer::GetObjData(pObj);

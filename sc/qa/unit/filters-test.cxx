@@ -28,6 +28,7 @@
 #include <sortparam.hxx>
 #include <scopetools.hxx>
 #include <scmod.hxx>
+#include <undomanager.hxx>
 
 #include <svx/svdocapt.hxx>
 #include <svx/svdpage.hxx>

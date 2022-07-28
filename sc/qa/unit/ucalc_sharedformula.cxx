@@ -20,6 +20,7 @@
 #include <dbdata.hxx>
 #include <bcaslot.hxx>
 #include <scdll.hxx>
+#include <undomanager.hxx>
 
 #include <sfx2/docfile.hxx>
 #include <test/bootstrapfixture.hxx>
@@ -580,9 +581,10 @@ void TestSharedFormula::testSharedFormulasRefUpdateMove()
     CPPUNIT_ASSERT(checkFormula(*m_pDoc, ScAddress(2,2,0), "R[-1]C[-1]"));
     CPPUNIT_ASSERT(checkFormula(*m_pDoc, ScAddress(2,3,0), "R[-1]C[-1]"));
 
-    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    ScUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
     CPPUNIT_ASSERT(pUndoMgr);
-    pUndoMgr->Undo();
+    ScUndoRedoContext aUndoRedoContext;
+    pUndoMgr->UndoWithContext(aUndoRedoContext);
 
     // The values should have moved back.
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1,1,0)));
@@ -654,11 +656,12 @@ void TestSharedFormula::testSharedFormulasRefUpdateMove2()
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(5,1,0)));
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(5,2,0)));
 
-    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    ScUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
     CPPUNIT_ASSERT(pUndoMgr);
+    ScUndoRedoContext aUndoRedoContext;
 
     // Undo the move.
-    pUndoMgr->Undo();
+    pUndoMgr->UndoWithContext(aUndoRedoContext);
 
     // Check the formula results.  The results should still be intact.
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(2,1,0)));
@@ -831,15 +834,16 @@ void TestSharedFormula::testSharedFormulasRefUpdateRangeDeleteRow()
     rFunc.SetValueCell(ScAddress(1,3,0), 100.0, false);
     CPPUNIT_ASSERT_EQUAL(107.0, m_pDoc->GetValue(ScAddress(2,3,0)));
 
-    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    ScUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
     CPPUNIT_ASSERT(pUndoMgr);
+    ScUndoRedoContext aUndoRedoContext;
 
     // Undo the value change in B4, and make sure C4 follows.
-    pUndoMgr->Undo();
+    pUndoMgr->UndoWithContext(aUndoRedoContext);
     CPPUNIT_ASSERT_EQUAL(15.0, m_pDoc->GetValue(ScAddress(2,3,0)));
 
     // Undo the deletion of row 3.
-    pUndoMgr->Undo();
+    pUndoMgr->UndoWithContext(aUndoRedoContext);
 
     // Make sure that C1:C2 and C4:C5 are formula groups again.
     pFC = m_pDoc->GetFormulaCell(ScAddress(2,0,0));
@@ -932,16 +936,17 @@ void TestSharedFormula::testSharedFormulasRefUpdateExternal()
     ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,7,0), "COUNTA('file:///extdata.fake'#$Data.A1:A3)", "Wrong formula!");
 
     // Undo and check the formulas again.
-    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    ScUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
     CPPUNIT_ASSERT(pUndoMgr);
-    pUndoMgr->Undo();
+    ScUndoRedoContext aUndoRedoContext;
+    pUndoMgr->UndoWithContext(aUndoRedoContext);
     ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,6,0), "'file:///extdata.fake'#$Data.A1", "Wrong formula!");
     ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,7,0), "'file:///extdata.fake'#$Data.A2", "Wrong formula!");
     ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,8,0), "'file:///extdata.fake'#$Data.A3", "Wrong formula!");
     ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,9,0), "COUNTA('file:///extdata.fake'#$Data.A1:A3)", "Wrong formula!");
 
     // Redo the row deletion and check the formulas again.
-    pUndoMgr->Redo();
+    pUndoMgr->RedoWithContext(aUndoRedoContext);
     ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,4,0), "'file:///extdata.fake'#$Data.A1", "Wrong formula!");
     ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,5,0), "'file:///extdata.fake'#$Data.A2", "Wrong formula!");
     ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,6,0), "'file:///extdata.fake'#$Data.A3", "Wrong formula!");
@@ -1043,15 +1048,16 @@ void TestSharedFormula::testSharedFormulasInsertRow()
     CPPUNIT_ASSERT_MESSAGE("Failed on the initial content check.", bResult);
 
     // Undo and check its result.
-    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    ScUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
     CPPUNIT_ASSERT(pUndoMgr);
-    pUndoMgr->Undo();
+    ScUndoRedoContext aUndoRedoContext;
+    pUndoMgr->UndoWithContext(aUndoRedoContext);
 
     bResult = aCheck.checkContentUndo(m_pDoc);
     CPPUNIT_ASSERT_MESSAGE("Failed on the content check after undo.", bResult);
 
     // Redo and check its result.
-    pUndoMgr->Redo();
+    pUndoMgr->RedoWithContext(aUndoRedoContext);
     bResult = aCheck.checkContent(m_pDoc);
     CPPUNIT_ASSERT_MESSAGE("Failed on the content check after redo.", bResult);
 
@@ -1192,11 +1198,12 @@ void TestSharedFormula::testSharedFormulasDeleteColumns()
     sc::CompileFormulaContext aCFCxt(*m_pDoc, FormulaGrammar::GRAM_ENGLISH);
     CPPUNIT_ASSERT_EQUAL(OUString("=#REF!1"), pFC->GetFormula(aCFCxt));
 
-    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    ScUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
     CPPUNIT_ASSERT(pUndoMgr);
+    ScUndoRedoContext aUndoRedoContext;
 
     // Undo and make sure the deleted flag is gone.
-    pUndoMgr->Undo();
+    pUndoMgr->UndoWithContext(aUndoRedoContext);
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(ScAddress(2,0,0)));
     pFC = m_pDoc->GetFormulaCell(ScAddress(2,0,0));
     CPPUNIT_ASSERT(pFC);
@@ -1233,7 +1240,7 @@ void TestSharedFormula::testSharedFormulasDeleteColumns()
     CPPUNIT_ASSERT_EQUAL(OUString("=A2+#REF!2"), pFC->GetFormula(aCFCxt));
 
     // Undo deletion of column B and check the results of C1:C2.
-    pUndoMgr->Undo();
+    pUndoMgr->UndoWithContext(aUndoRedoContext);
     for (SCROW i = 0; i <= 1; ++i)
     {
         double fCheck = m_pDoc->GetValue(ScAddress(0,i,0));
@@ -1395,9 +1402,10 @@ void TestSharedFormula::testSharedFormulasRefUpdateDeleteSheets()
     ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,2,0), "#REF!.B4", "Wrong formula");
 
     // Undo the deletion and make sure the formulas are back to the way they were.
-    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    ScUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
     CPPUNIT_ASSERT(pUndoMgr);
-    pUndoMgr->Undo();
+    ScUndoRedoContext aUndoRedoContext;
+    pUndoMgr->UndoWithContext(aUndoRedoContext);
 
     ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,0,0), "Sheet2.B2", "Wrong formula");
     ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,1,0), "Sheet2.B3", "Wrong formula");
@@ -1548,11 +1556,12 @@ void TestSharedFormula::testSharedFormulaMoveBlock()
     bool bRes = checkFormulaPositions(*m_pDoc, 0, 1, aRows.data(), aRows.size());
     CPPUNIT_ASSERT(bRes);
 
-    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    ScUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
     CPPUNIT_ASSERT(pUndoMgr);
+    ScUndoRedoContext aUndoRedoContext;
 
     // Undo and check the result.
-    pUndoMgr->Undo();
+    pUndoMgr->UndoWithContext(aUndoRedoContext);
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1,0,0)));
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1,1,0)));
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(1,2,0)));
@@ -1560,7 +1569,7 @@ void TestSharedFormula::testSharedFormulaMoveBlock()
     clearFormulaCellChangedFlag(*m_pDoc, aFormulaRange);
 
     // Redo and check the result.
-    pUndoMgr->Redo();
+    pUndoMgr->RedoWithContext(aUndoRedoContext);
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1,0,0)));
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1,1,0)));
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(1,2,0)));
@@ -1594,14 +1603,14 @@ void TestSharedFormula::testSharedFormulaMoveBlock()
     CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(1,3,0)));
     CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(ScAddress(1,4,0)));
 
-    pUndoMgr->Undo();
+    pUndoMgr->UndoWithContext(aUndoRedoContext);
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1,0,0)));
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1,1,0)));
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(1,2,0)));
     CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(1,3,0)));
     CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(ScAddress(1,4,0)));
 
-    pUndoMgr->Redo();
+    pUndoMgr->RedoWithContext(aUndoRedoContext);
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1,0,0)));
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1,1,0)));
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(1,2,0)));
@@ -1766,17 +1775,18 @@ void TestSharedFormula::testSharedFormulaUpdateOnDBChange()
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(2,2,0)));
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(2,3,0)));
 
-    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    ScUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
     CPPUNIT_ASSERT(pUndoMgr);
+    ScUndoRedoContext aUndoRedoContext;
 
     // Undo and check the results.
-    pUndoMgr->Undo();
+    pUndoMgr->UndoWithContext(aUndoRedoContext);
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(2,1,0)));
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(2,2,0)));
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(2,3,0)));
 
     // Redo and check the results.
-    pUndoMgr->Redo();
+    pUndoMgr->RedoWithContext(aUndoRedoContext);
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(2,1,0)));
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(2,2,0)));
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(2,3,0)));

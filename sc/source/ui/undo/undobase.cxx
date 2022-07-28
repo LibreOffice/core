@@ -34,6 +34,7 @@
 #include <column.hxx>
 #include <sortparam.hxx>
 #include <columnspanset.hxx>
+#include <undomanager.hxx>
 
 
 ScSimpleUndo::ScSimpleUndo( ScDocShell* pDocSh ) :
@@ -613,4 +614,74 @@ bool ScUndoWrapper::CanRepeat(SfxRepeatTarget& rTarget) const
         return false;
 }
 
+ScUndoManager::~ScUndoManager() {}
+
+/**
+ * Checks if the topmost undo action owned by pView is independent from the topmost action undo
+ * action.
+ */
+bool ScUndoManager::IsViewUndoActionIndependent(const SfxViewShell* pView) const
+{
+    if (GetUndoActionCount() <= 1 || SdrUndoManager::GetRedoActionCount() > 0)
+    {
+        // Single or less undo, owned by another view; or redo actions that might depend on the
+        // current undo order.
+        return false;
+    }
+
+    if (!pView)
+    {
+        return false;
+    }
+
+    // Last undo action that doesn't belong to the view.
+    const SfxUndoAction* pTopAction = GetUndoAction();
+    (void) pTopAction;
+
+    ViewShellId nViewId = pView->GetViewShellId();
+
+    // Earlier undo action that belongs to the view, but is not the top one.
+    const SfxUndoAction* pViewAction = nullptr;
+    const SfxUndoAction* pAction = GetUndoAction(1);
+    if (pAction->GetViewShellId() == nViewId)
+    {
+        pViewAction = pAction;
+    }
+
+    if (!pViewAction)
+    {
+        // Found no earlier undo action that belongs to the view.
+        return false;
+    }
+
+//    auto pTopSwAction = dynamic_cast<const SwUndo*>(pTopAction);
+//    if (!pTopSwAction || pTopSwAction->GetId() != SwUndoId::TYPING)
+//    {
+//        return false;
+//    }
+//
+//    auto pViewSwAction = dynamic_cast<const SwUndo*>(pViewAction);
+//    if (!pViewSwAction || pViewSwAction->GetId() != SwUndoId::TYPING)
+//    {
+//        return false;
+//    }
+//
+//    const auto& rTopInsert = *static_cast<const SwUndoInsert*>(pTopSwAction);
+//    const auto& rViewInsert = *static_cast<const SwUndoInsert*>(pViewSwAction);
+//
+//    return rViewInsert.IsIndependent(rTopInsert);
+    return false;
+}
+
+bool ScUndoManager::Undo()
+{
+//    assert(false && "should be calling UndoWithContext");
+    return SdrUndoManager::Undo();
+}
+
+bool ScUndoManager::Redo()
+{
+//    assert(false && "should be calling RedoWithContext");
+    return SdrUndoManager::Redo();
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

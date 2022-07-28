@@ -20,6 +20,7 @@
 #include <attrib.hxx>
 #include <fillinfo.hxx>
 #include <compiler.hxx>
+#include <undomanager.hxx>
 
 #include <svl/sharedstringpool.hxx>
 
@@ -347,11 +348,12 @@ void TestCondformat::testCondFormatInsertDeleteSheets()
     CPPUNIT_ASSERT(pRange);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Format should be applied to B2:B4 on the 1st sheet after the sheet removal.", ScRange(1,1,0,1,3,0), *pRange);
 
-    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    ScUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
     CPPUNIT_ASSERT(pUndoMgr);
 
     // Undo and re-check.
-    pUndoMgr->Undo();
+    ScUndoRedoContext aUndoRedoContext;
+    pUndoMgr->UndoWithContext(aUndoRedoContext);
 
     pList = m_pDoc->GetCondFormList(1);
     CPPUNIT_ASSERT(pList);
@@ -1171,13 +1173,14 @@ void TestCondformat::testCondFormatUndoList()
     for (SCROW nRow = 0; nRow <= 5; ++nRow)
         CPPUNIT_ASSERT(!m_pDoc->GetCondFormat(0, nRow, 0));
 
-    m_pDoc->GetUndoManager()->Undo();
+    ScUndoRedoContext aUndoRedoContext;
+    m_pDoc->GetUndoManager()->UndoWithContext(aUndoRedoContext);
 
     CPPUNIT_ASSERT_EQUAL(size_t(1), m_pDoc->GetCondFormList(0)->size());
     for (SCROW nRow = 0; nRow <= 5; ++nRow)
         CPPUNIT_ASSERT(m_pDoc->GetCondFormat(0, nRow, 0));
 
-    m_pDoc->GetUndoManager()->Redo();
+    m_pDoc->GetUndoManager()->RedoWithContext(aUndoRedoContext);
 
     CPPUNIT_ASSERT_EQUAL(size_t(0), m_pDoc->GetCondFormList(0)->size());
     for (SCROW nRow = 0; nRow <= 5; ++nRow)
