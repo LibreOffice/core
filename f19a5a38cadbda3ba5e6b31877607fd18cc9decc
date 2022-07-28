@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f87ec8e4_cab392ef",
+        "filename": "editeng/source/outliner/outliner.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-07-28T11:27:31Z",
+      "side": 0,
+      "message": "This COULD actually be a spot. If other para flags were already set at this point, it would be clearing them. So a safer choice would be to set to NONE. However, this is a \"new Paragraph()\", so the flag is already the default. OK - perfectly safe to remove.",
+      "range": {
+        "startLine": 126,
+        "startChar": 12,
+        "endLine": 126,
+        "endChar": 52
+      },
+      "revId": "f19a5a38cadbda3ba5e6b31877607fd18cc9decc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
