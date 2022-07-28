@@ -683,6 +683,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                 }
                 else if (pField->GetTypeId() == SwFieldTypesEnum::GetRef)
                 {
+                    assert(dynamic_cast<const SwGetRefField*>(pField));
                     const SwGetRefField* pRefField(static_cast<const SwGetRefField*>(pField));
                     if (pRefField->IsRefToHeadingCrossRefBookmark() ||
                             pRefField->IsRefToNumItemCrossRefBookmark())
