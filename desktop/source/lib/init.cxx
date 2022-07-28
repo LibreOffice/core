@@ -3718,6 +3718,15 @@ static void doc_initializeForRendering(LibreOfficeKitDocument* pThis,
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (pDoc)
     {
+        static bool bWasInitialized = false;
+        const bool isImpress = (doc_getDocumentType(pThis) == LOK_DOCTYPE_PRESENTATION);
+        if (isImpress && !bWasInitialized)
+        {
+            // create additional view for slide previews which will not contain active edit fields
+            bWasInitialized = true;
+            doc_createView(pThis);
+        }
+
         doc_iniUnoCommands();
         pDoc->initializeForTiledRendering(
                 comphelper::containerToSequence(jsonToPropertyValuesVector(pArguments)));
