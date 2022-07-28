@@ -729,10 +729,13 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
         sal_uInt16 nSiz=rTrack0.GetPointCount();
         nSiz--;
         aPt2=rTrack0[nSiz];
-    } else {
-        if (!m_aOutRect.IsEmpty()) {
-            aPt1=m_aOutRect.TopLeft();
-            aPt2=m_aOutRect.BottomRight();
+    }
+    else
+    {
+        auto aRectangle = getOutRectangle();
+        if (!aRectangle.IsEmpty()) {
+            aPt1 = aRectangle.TopLeft();
+            aPt2 = aRectangle.BottomRight();
         }
     }
 
@@ -746,7 +749,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
         if (rCon1.pObj==static_cast<SdrObject const *>(this))
         {
             // check, just in case
-            aBoundRect1=m_aOutRect;
+            aBoundRect1 = getOutRectangle();
         }
         else
         {
@@ -773,7 +776,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
     {
         if (rCon2.pObj==static_cast<SdrObject const *>(this))
         { // check, just in case
-            aBoundRect2=m_aOutRect;
+            aBoundRect2 = getOutRectangle();
         }
         else
         {
@@ -2539,9 +2542,9 @@ Point SdrEdgeObj::GetTailPoint( bool bTail ) const
     else
     {
         if(bTail)
-            return m_aOutRect.TopLeft();
+            return getOutRectangle().TopLeft();
         else
-            return m_aOutRect.BottomRight();
+            return getOutRectangle().BottomRight();
     }
 
 }

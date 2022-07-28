@@ -2034,7 +2034,7 @@ void SdrObjCustomShape::DragMoveCustomShapeHdl( const Point& rDestination,
             sal_Int32 nYDiff = aPt.Y - aInteractionHandle.aPosition.Y;
 
             maRect.Move( nXDiff, nYDiff );
-            m_aOutRect.Move( nXDiff, nYDiff );
+            moveOutRectangle(nXDiff, nYDiff);
             maSnapRect.Move( nXDiff, nYDiff );
             SetBoundAndSnapRectsDirty(/*bNotMyself*/true);
             InvalidateRenderGeometry();

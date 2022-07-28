@@ -247,7 +247,7 @@ const tools::Rectangle& SdrObjGroup::GetCurrentBoundRect() const
     // <aOutRect> has to contain the bounding rectangle
     if(0 != GetObjCount())
     {
-        m_aOutRect = GetAllObjBoundRect();
+        setOutRectangleConst(GetAllObjBoundRect());
     }
 
     return m_aOutRect;
@@ -324,7 +324,7 @@ basegfx::B2DPolyPolygon SdrObjGroup::TakeXorPoly() const
 
     if(!aRetval.count())
     {
-        const basegfx::B2DRange aRange = vcl::unotools::b2DRectangleFromRectangle(m_aOutRect);
+        const basegfx::B2DRange aRange = vcl::unotools::b2DRectangleFromRectangle(getOutRectangle());
         aRetval.append(basegfx::utils::createPolygonFromRect(aRange));
     }
 
@@ -399,9 +399,9 @@ void SdrObjGroup::NbcSetLogicRect(const tools::Rectangle& rRect)
 }
 
 
-void SdrObjGroup::NbcMove(const Size& rSiz)
+void SdrObjGroup::NbcMove(const Size& rSize)
 {
-    maRefPoint.Move(rSiz);
+    maRefPoint.Move(rSize);
     const size_t nObjCount(GetObjCount());
 
     if(0 != nObjCount)
@@ -409,12 +409,12 @@ void SdrObjGroup::NbcMove(const Size& rSiz)
         for (size_t i=0; i<nObjCount; ++i)
         {
             SdrObject* pObj(GetObj(i));
-            pObj->NbcMove(rSiz);
+            pObj->NbcMove(rSize);
         }
     }
     else
     {
-        m_aOutRect.Move(rSiz);
+        moveOutRectangle(rSize.Width(), rSize.Height());
         SetBoundAndSnapRectsDirty();
     }
 }
@@ -451,7 +451,10 @@ void SdrObjGroup::NbcResize(const Point& rRef, const Fraction& xFact, const Frac
     }
     else
     {
-        ResizeRect(m_aOutRect,rRef,xFact,yFact);
+        auto aRectangle = getOutRectangle();
+        ResizeRect(aRectangle, rRef, xFact, yFact);
+        setOutRectangle(aRectangle);
+
         SetBoundAndSnapRectsDirty();
     }
 }
@@ -591,7 +594,7 @@ void SdrObjGroup::Move(const Size& rSiz)
     }
     else
     {
-        m_aOutRect.Move(rSiz);
+        moveOutRectangle(rSiz.Width(), rSiz.Height());
         SetBoundAndSnapRectsDirty();
     }
 
@@ -644,7 +647,10 @@ void SdrObjGroup::Resize(const Point& rRef, const Fraction& xFact, const Fractio
     }
     else
     {
-        ResizeRect(m_aOutRect,rRef,xFact,yFact);
+        auto aRectangle = getOutRectangle();
+        ResizeRect(aRectangle, rRef, xFact, yFact);
+        setOutRectangle(aRectangle);
+
         SetBoundAndSnapRectsDirty();
     }
 

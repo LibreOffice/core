@@ -91,11 +91,11 @@ Degree100 SdrTextObj::GetShearAngle(bool /*bVertical*/) const
     return maGeo.nShearAngle;
 }
 
-void SdrTextObj::NbcMove(const Size& rSiz)
+void SdrTextObj::NbcMove(const Size& rSize)
 {
-    maRect.Move(rSiz);
-    m_aOutRect.Move(rSiz);
-    maSnapRect.Move(rSiz);
+    maRect.Move(rSize);
+    moveOutRectangle(rSize.Width(), rSize.Height());
+    maSnapRect.Move(rSize);
     SetBoundAndSnapRectsDirty(true);
 }
 

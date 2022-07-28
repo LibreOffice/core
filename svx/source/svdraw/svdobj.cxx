@@ -1382,23 +1382,26 @@ bool SdrObject::BegCreate(SdrDragStat& rStat)
     tools::Rectangle aRect1(rStat.GetStart(), rStat.GetNow());
     aRect1.Justify();
     rStat.SetActionRect(aRect1);
-    m_aOutRect = aRect1;
+    setOutRectangle(aRect1);
     return true;
 }
 
 bool SdrObject::MovCreate(SdrDragStat& rStat)
 {
-    rStat.TakeCreateRect(m_aOutRect);
-    rStat.SetActionRect(m_aOutRect);
-    m_aOutRect.Justify();
-
+    tools::Rectangle aRectangle;
+    rStat.TakeCreateRect(aRectangle);
+    rStat.SetActionRect(aRectangle);
+    aRectangle.Justify();
+    setOutRectangle(aRectangle);
     return true;
 }
 
 bool SdrObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
-    rStat.TakeCreateRect(m_aOutRect);
-    m_aOutRect.Justify();
+    tools::Rectangle aRectangle;
+    rStat.TakeCreateRect(aRectangle);
+    aRectangle.Justify();
+    setOutRectangle(aRectangle);
 
     return (eCmd==SdrCreateCmd::ForceEnd || rStat.GetPointCount()>=2);
 }
@@ -1429,9 +1432,9 @@ PointerStyle SdrObject::GetCreatePointer() const
 }
 
 // transformations
-void SdrObject::NbcMove(const Size& rSiz)
+void SdrObject::NbcMove(const Size& rSize)
 {
-    m_aOutRect.Move(rSiz);
+    moveOutRectangle(rSize.Width(), rSize.Height());
     SetBoundAndSnapRectsDirty();
 }
 
@@ -1452,7 +1455,10 @@ void SdrObject::NbcResize(const Point& rRef, const Fraction& xFact, const Fracti
             NbcMirrorGluePoints(aRef1,aRef2);
         }
     }
-    ResizeRect(m_aOutRect,rRef,xFact,yFact);
+    auto aRectangle = getOutRectangle();
+    ResizeRect(aRectangle, rRef, xFact, yFact);
+    setOutRectangle(aRectangle);
+
     SetBoundAndSnapRectsDirty();
 }
 
@@ -1465,60 +1471,85 @@ void SdrObject::NbcRotate(const Point& rRef, Degree100 nAngle)
     }
 }
 
+namespace
+{
+
+tools::Rectangle lclRotateRectangle(tools::Rectangle const& rRectangle, Point const& rRef, double sn, double cs)
+{
+    tools::Rectangle aRectangle(rRectangle);
+    aRectangle.Move(-rRef.X(),-rRef.Y());
+    tools::Rectangle R(aRectangle);
+    if (sn==1.0 && cs==0.0) { // 90deg
+        aRectangle.SetLeft(-R.Bottom() );
+        aRectangle.SetRight(-R.Top() );
+        aRectangle.SetTop(R.Left() );
+        aRectangle.SetBottom(R.Right() );
+    } else if (sn==0.0 && cs==-1.0) { // 180deg
+        aRectangle.SetLeft(-R.Right() );
+        aRectangle.SetRight(-R.Left() );
+        aRectangle.SetTop(-R.Bottom() );
+        aRectangle.SetBottom(-R.Top() );
+    } else if (sn==-1.0 && cs==0.0) { // 270deg
+        aRectangle.SetLeft(R.Top() );
+        aRectangle.SetRight(R.Bottom() );
+        aRectangle.SetTop(-R.Right() );
+        aRectangle.SetBottom(-R.Left() );
+    }
+    aRectangle.Move(rRef.X(),rRef.Y());
+    aRectangle.Justify(); // just in case
+    return aRectangle;
+}
+
+tools::Rectangle lclMirrorRectangle(tools::Rectangle const& rRectangle, Point const& rRef1, Point const& rRef2)
+{
+    tools::Rectangle aRectangle(rRectangle);
+    aRectangle.Move(-rRef1.X(),-rRef1.Y());
+    tools::Rectangle R(aRectangle);
+    tools::Long dx=rRef2.X()-rRef1.X();
+    tools::Long dy=rRef2.Y()-rRef1.Y();
+    if (dx==0) {          // vertical axis
+        aRectangle.SetLeft(-R.Right() );
+        aRectangle.SetRight(-R.Left() );
+    } else if (dy==0) {   // horizontal axis
+        aRectangle.SetTop(-R.Bottom() );
+        aRectangle.SetBottom(-R.Top() );
+    } else if (dx==dy) {  // 45deg axis
+        aRectangle.SetLeft(R.Top() );
+        aRectangle.SetRight(R.Bottom() );
+        aRectangle.SetTop(R.Left() );
+        aRectangle.SetBottom(R.Right() );
+    } else if (dx==-dy) { // 45deg axis
+        aRectangle.SetLeft(-R.Bottom() );
+        aRectangle.SetRight(-R.Top() );
+        aRectangle.SetTop(-R.Right() );
+        aRectangle.SetBottom(-R.Left() );
+    }
+    aRectangle.Move(rRef1.X(),rRef1.Y());
+    aRectangle.Justify(); // just in case
+    return aRectangle;
+}
+
+} // end anonymous namespace
+
 void SdrObject::NbcRotate(const Point& rRef,  Degree100 nAngle, double sn, double cs)
 {
     SetGlueReallyAbsolute(true);
-    m_aOutRect.Move(-rRef.X(),-rRef.Y());
-    tools::Rectangle R(m_aOutRect);
-    if (sn==1.0 && cs==0.0) { // 90deg
-        m_aOutRect.SetLeft(-R.Bottom() );
-        m_aOutRect.SetRight(-R.Top() );
-        m_aOutRect.SetTop(R.Left() );
-        m_aOutRect.SetBottom(R.Right() );
-    } else if (sn==0.0 && cs==-1.0) { // 180deg
-        m_aOutRect.SetLeft(-R.Right() );
-        m_aOutRect.SetRight(-R.Left() );
-        m_aOutRect.SetTop(-R.Bottom() );
-        m_aOutRect.SetBottom(-R.Top() );
-    } else if (sn==-1.0 && cs==0.0) { // 270deg
-        m_aOutRect.SetLeft(R.Top() );
-        m_aOutRect.SetRight(R.Bottom() );
-        m_aOutRect.SetTop(-R.Right() );
-        m_aOutRect.SetBottom(-R.Left() );
-    }
-    m_aOutRect.Move(rRef.X(),rRef.Y());
-    m_aOutRect.Justify(); // just in case
+    tools::Rectangle aRectangle = getOutRectangle();
+    aRectangle = lclRotateRectangle(aRectangle, rRef, sn, cs);
+    setOutRectangle(aRectangle);
     SetBoundAndSnapRectsDirty();
-    NbcRotateGluePoints(rRef,nAngle,sn,cs);
+    NbcRotateGluePoints(rRef, nAngle, sn, cs);
     SetGlueReallyAbsolute(false);
 }
 
 void SdrObject::NbcMirror(const Point& rRef1, const Point& rRef2)
 {
     SetGlueReallyAbsolute(true);
-    m_aOutRect.Move(-rRef1.X(),-rRef1.Y());
-    tools::Rectangle R(m_aOutRect);
-    tools::Long dx=rRef2.X()-rRef1.X();
-    tools::Long dy=rRef2.Y()-rRef1.Y();
-    if (dx==0) {          // vertical axis
-        m_aOutRect.SetLeft(-R.Right() );
-        m_aOutRect.SetRight(-R.Left() );
-    } else if (dy==0) {   // horizontal axis
-        m_aOutRect.SetTop(-R.Bottom() );
-        m_aOutRect.SetBottom(-R.Top() );
-    } else if (dx==dy) {  // 45deg axis
-        m_aOutRect.SetLeft(R.Top() );
-        m_aOutRect.SetRight(R.Bottom() );
-        m_aOutRect.SetTop(R.Left() );
-        m_aOutRect.SetBottom(R.Right() );
-    } else if (dx==-dy) { // 45deg axis
-        m_aOutRect.SetLeft(-R.Bottom() );
-        m_aOutRect.SetRight(-R.Top() );
-        m_aOutRect.SetTop(-R.Right() );
-        m_aOutRect.SetBottom(-R.Left() );
-    }
-    m_aOutRect.Move(rRef1.X(),rRef1.Y());
-    m_aOutRect.Justify(); // just in case
+
+    tools::Rectangle aRectangle = getOutRectangle();
+    aRectangle = lclMirrorRectangle(aRectangle, rRef1, rRef2);
+    setOutRectangle(aRectangle);
+
     SetBoundAndSnapRectsDirty();
     NbcMirrorGluePoints(rRef1,rRef2);
     SetGlueReallyAbsolute(false);
@@ -1669,7 +1700,7 @@ const tools::Rectangle& SdrObject::GetSnapRect() const
 
 void SdrObject::NbcSetSnapRect(const tools::Rectangle& rRect)
 {
-    m_aOutRect=rRect;
+    setOutRectangle(rRect);
 }
 
 const tools::Rectangle& SdrObject::GetLogicRect() const
@@ -1780,7 +1811,7 @@ void SdrObject::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("title"), "%s", BAD_CAST(GetTitle().toUtf8().getStr()));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("description"), "%s", BAD_CAST(GetDescription().toUtf8().getStr()));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("nOrdNum"), "%" SAL_PRIuUINT32, GetOrdNumDirect());
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("aOutRect"), BAD_CAST(m_aOutRect.toString().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("aOutRect"), BAD_CAST(getOutRectangle().toString().getStr()));
 
     if (m_pGrabBagItem)
     {
@@ -1926,7 +1957,7 @@ void SdrObject::SaveGeoData(SdrObjGeoData& rGeo) const
 void SdrObject::RestoreGeoData(const SdrObjGeoData& rGeo)
 {
     SetBoundAndSnapRectsDirty();
-    m_aOutRect      =rGeo.aBoundRect    ;
+    setOutRectangle(rGeo.aBoundRect);
     m_aAnchor       =rGeo.aAnchor       ;
     m_bMovProt      =rGeo.bMovProt      ;
     m_bSizProt      =rGeo.bSizProt      ;
@@ -3189,6 +3220,31 @@ void SdrObject::ForceMetricToItemPoolMetric(basegfx::B2DPolyPolygon& rPolyPolygo
     {
         OSL_FAIL("Missing unit translation to PoolMetric!");
     }
+}
+
+tools::Rectangle SdrObject::getOutRectangle() const
+{
+    return m_aOutRect;
+}
+
+void SdrObject::setOutRectangleConst(tools::Rectangle const& rRectangle) const
+{
+    m_aOutRect = rRectangle;
+}
+
+void SdrObject::setOutRectangle(tools::Rectangle const& rRectangle)
+{
+    m_aOutRect = rRectangle;
+}
+
+void SdrObject::resetOutRectangle()
+{
+    m_aOutRect = tools::Rectangle();
+}
+
+void SdrObject::moveOutRectangle(sal_Int32 nXDelta, sal_Int32 nYDelta)
+{
+    m_aOutRect.Move(nXDelta, nYDelta);
 }
 
 SdrObject* SdrObjFactory::CreateObjectFromFactory(SdrModel& rSdrModel, SdrInventor nInventor, SdrObjKind nObjIdentifier)

@@ -89,7 +89,7 @@ SdrPageObj::SdrPageObj(
         mpShownPage->AddPageUser(*this);
     }
 
-    m_aOutRect = rRect;
+    setOutRectangle(rRect);
 }
 
 SdrPageObj::~SdrPageObj()
