@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c417939f_08948046",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-07-28T09:15:36Z",
+      "side": 1,
+      "message": "Keeping distributions aligned makes sense.",
+      "revId": "a3ec2e093e91a145812e26319eb4f2cdcfd1f450",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
