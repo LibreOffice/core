@@ -624,7 +624,8 @@ void ScCheckListMenuControl::prepWindow()
 void ScCheckListMenuControl::setAllMemberState(bool bSet)
 {
     mpChecks->all_foreach([this, bSet](weld::TreeIter& rEntry){
-        mpChecks->set_toggle(rEntry, bSet ? TRISTATE_TRUE : TRISTATE_FALSE);
+        if (mpChecks->get_sensitive(rEntry, 0))
+            mpChecks->set_toggle(rEntry, bSet ? TRISTATE_TRUE : TRISTATE_FALSE);
         return false;
     });
 
@@ -681,11 +682,15 @@ IMPL_LINK(ScCheckListMenuControl, ButtonHdl, weld::Button&, rBtn, void)
         close(false);
     else if (&rBtn == mxBtnSelectSingle.get() || &rBtn == mxBtnUnselectSingle.get())
     {
-        selectCurrentMemberOnly(&rBtn == mxBtnSelectSingle.get());
         std::unique_ptr<weld::TreeIter> xEntry = mpChecks->make_iterator();
-        if (!mpChecks->get_cursor(xEntry.get()))
+        bool bEntry = mpChecks->get_cursor(xEntry.get());
+        if (!bEntry)
             xEntry.reset();
-        Check(xEntry.get());
+        if (bEntry && mpChecks->get_sensitive(*xEntry, 0))
+        {
+            selectCurrentMemberOnly(&rBtn == mxBtnSelectSingle.get());
+            Check(xEntry.get());
+        }
     }
 }
 
