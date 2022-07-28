@@ -24,6 +24,7 @@
 #include <fillinfo.hxx>
 #include <compiler.hxx>
 #include <tokenarray.hxx>
+#include <undomanager.hxx>
 
 #include <svl/sharedstringpool.hxx>
 

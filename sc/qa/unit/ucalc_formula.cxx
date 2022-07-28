@@ -36,6 +36,7 @@
 #include <scdll.hxx>
 #include <scmod.hxx>
 #include <svl/itemset.hxx>
+#include <undomanager.hxx>
 
 #include <formula/vectortoken.hxx>
 #include <svl/broadcast.hxx>

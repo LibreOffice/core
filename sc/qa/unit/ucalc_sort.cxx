@@ -26,6 +26,8 @@
 #include <editutil.hxx>
 #include <drwlayer.hxx>
 #include <formulaopt.hxx>
+#include <queryiter.hxx>
+#include <undomanager.hxx>
 
 #include <sal/config.h>
 #include <editeng/wghtitem.hxx>

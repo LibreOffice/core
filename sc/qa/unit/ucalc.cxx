@@ -66,6 +66,7 @@
 #include <sharedformula.hxx>
 #include <tabprotection.hxx>
 #include <scmod.hxx>
+#include <undomanager.hxx>
 
 #include <formula/IFunctionDescription.hxx>
 
