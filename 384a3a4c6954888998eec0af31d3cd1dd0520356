@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c39c2ca5_d48d0bcd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-07-28T09:13:28Z",
+      "side": 1,
+      "message": "Keeping distributions aligned makes sense. And this is what Roman did in his patch.",
+      "revId": "384a3a4c6954888998eec0af31d3cd1dd0520356",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
