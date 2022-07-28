@@ -338,6 +338,9 @@ namespace svgio::svgreader
             /// fill rule content
             FillRule getFillRule() const;
 
+            /// clip rule content
+            FillRule getClipRule() const;
+
             /// fill StrokeDasharray content
             const SvgNumberVector& getStrokeDasharray() const;
 

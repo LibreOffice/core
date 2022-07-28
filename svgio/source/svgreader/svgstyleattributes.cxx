@@ -1117,17 +1117,18 @@ namespace svgio::svgreader
             {
                 // create fill
                 basegfx::B2DPolyPolygon aPath(rPath);
-                const bool bNeedToCheckClipRule(SVGToken::Path == mrOwner.getType() || SVGToken::Polygon == mrOwner.getType());
-                const bool bClipPathIsNonzero(bNeedToCheckClipRule && mbIsClipPathContent && FillRule::nonzero == maClipRule);
-                const bool bFillRuleIsNonzero(bNeedToCheckClipRule && !mbIsClipPathContent && FillRule::nonzero == getFillRule());
 
-                if(bClipPathIsNonzero || bFillRuleIsNonzero)
+                if(SVGToken::Path == mrOwner.getType() || SVGToken::Polygon == mrOwner.getType())
                 {
-                    if(getFill() || getSvgGradientNodeFill() || getSvgPatternNodeFill()) {
-                        // nonzero is wanted, solve geometrically (see description on basegfx)
-                        // basegfx::utils::createNonzeroConform() is expensive for huge paths
-                        // and is only needed if path will be filled later on
-                        aPath = basegfx::utils::createNonzeroConform(aPath);
+                    if(FillRule::evenodd != getClipRule() && FillRule::evenodd != getFillRule())
+                    {
+                        if(getFill() || getSvgGradientNodeFill() || getSvgPatternNodeFill())
+                        {
+                            // nonzero is wanted, solve geometrically (see description on basegfx)
+                            // basegfx::utils::createNonzeroConform() is expensive for huge paths
+                            // and is only needed if path will be filled later on
+                            aPath = basegfx::utils::createNonzeroConform(aPath);
+                        }
                     }
                 }
 
@@ -1267,10 +1268,10 @@ namespace svgio::svgreader
             mpMarkerMidXLink(nullptr),
             mpMarkerEndXLink(nullptr),
             maFillRule(FillRule::notset),
-            maClipRule(FillRule::nonzero),
+            maClipRule(FillRule::notset),
             maBaselineShift(BaselineShift::Baseline),
             maBaselineShiftNumber(0),
-            maResolvingParent(31, 0),
+            maResolvingParent(32, 0),
             mbIsClipPathContent(SVGToken::ClipPathNode == mrOwner.getType()),
             mbStrokeDasharraySet(false)
         {
@@ -2334,6 +2335,27 @@ namespace svgio::svgreader
                 ++maResolvingParent[10];
                 auto ret = pSvgStyleAttributes->getFillRule();
                 --maResolvingParent[10];
+                return ret;
+            }
+
+            // default is NonZero
+            return FillRule::nonzero;
+        }
+
+        FillRule SvgStyleAttributes::getClipRule() const
+        {
+            if(FillRule::notset != maClipRule)
+            {
+                return maClipRule;
+            }
+
+            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+
+            if (pSvgStyleAttributes && maResolvingParent[31] < nStyleDepthLimit)
+            {
+                ++maResolvingParent[31];
+                auto ret = pSvgStyleAttributes->getClipRule();
+                --maResolvingParent[31];
                 return ret;
             }
 
