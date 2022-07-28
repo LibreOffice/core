@@ -52,6 +52,7 @@
 #include <docuno.hxx>
 #include <drwlayer.hxx>
 #include <editutil.hxx>
+#include <undomanager.hxx>
 
 using namespace css;
 

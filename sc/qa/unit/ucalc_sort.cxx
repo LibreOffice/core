@@ -24,6 +24,7 @@
 #include <editutil.hxx>
 #include <drwlayer.hxx>
 #include <queryiter.hxx>
+#include <undomanager.hxx>
 
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>

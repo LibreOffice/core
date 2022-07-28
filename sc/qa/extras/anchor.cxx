@@ -22,6 +22,7 @@
 #include <svx/svdocirc.hxx>
 #include <vcl/scheduler.hxx>
 #include <tabvwsh.hxx>
+#include <undomanager.hxx>
 
 #include <sc.hrc>
 

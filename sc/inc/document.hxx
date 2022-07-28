@@ -184,7 +184,7 @@ class ScLookupCache;
 struct ScLookupCacheMap;
 class ScSortedRangeCache;
 struct ScSortedRangeCacheMap;
-class SfxUndoManager;
+class ScUndoManager;
 class ScFormulaParserPool;
 struct ScClipParam;
 class ScRowBreakIterator;
@@ -364,7 +364,7 @@ private:
 
     ScCalcConfig        maCalcConfig;
 
-    SfxUndoManager*     mpUndoManager;
+    ScUndoManager*     mpUndoManager;
     std::unique_ptr<ScFieldEditEngine>  mpEditEngine;                   // uses pEditPool from xPoolHelper
     std::unique_ptr<ScNoteEditEngine>   mpNoteEngine;                   // uses pEditPool from xPoolHelper
     SfxObjectShell*     mpShell;
@@ -2531,7 +2531,7 @@ public:
     void                              SetStorageGrammar( formula::FormulaGrammar::Grammar eGrammar );
     formula::FormulaGrammar::Grammar  GetStorageGrammar() const { return eStorageGrammar; }
 
-    SC_DLLPUBLIC SfxUndoManager* GetUndoManager();
+    SC_DLLPUBLIC ScUndoManager* GetUndoManager();
     bool                         IsInVBAMode() const;
     ScRowBreakIterator*          GetRowBreakIterator(SCTAB nTab) const;
 
