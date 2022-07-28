@@ -2823,6 +2823,9 @@ void GtkSalData::initNWF()
     pSVData->maNWFData.mbNoFocusRects = true;
     pSVData->maNWFData.mbNoFocusRectsForFlatButtons = true;
     pSVData->maNWFData.mbAutoAccel = true;
+#if GTK_CHECK_VERSION(4, 0, 0)
+    pSVData->maNWFData.mbNoFrameJunctionForPopups = true;
+#endif
 
 #if defined(GDK_WINDOWING_WAYLAND)
     //gnome#768128 for the car crash that is wayland
