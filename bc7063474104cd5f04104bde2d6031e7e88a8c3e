@@ -112,6 +112,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0972daef_7ebad51e",
+        "filename": "sc/qa/extras/accessibility/basics.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-28T09:12:03Z",
+      "side": 1,
+      "message": "Ah, right, that\u0027s what you mentioned earlier and Christian gave a hint regarding the accelerator labels, so presumably only those are somehow affected by the environment, which shouldn\u0027t be a problem, now that you have taken care of this.\n\nI wasn\u0027t even able to force this test to fail when trying to force the use of German by setting any of \"de\"/\"de-DE\"/\"de_DE\" in test/user-template/registry-common/modifications.xcd instead and then running\n\n    LO_TEST_LOCALE\u003dde LC_ALL\u003dde_DE.UTF-8 make CppunitTest_sc_a11y\n    \nso we should indeed be fine regarding the locale here for the menu items.\n\ntest/README.vars mentions LO_TEST_LOCALE, but it doesn\u0027t affect the test result here for the menu.",
+      "parentUuid": "348bef30_6488c093",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 57
+      },
+      "revId": "bc7063474104cd5f04104bde2d6031e7e88a8c3e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "351215f2_bf250619",
@@ -149,6 +173,30 @@
       "side": 1,
       "message": "As above it *should* be run using en-US locale, yet for date formats I\u0027m nor entirely sure it\u0027s trustworthy for the same reason mentioned above.\n\nAs you can tell from the comment I\u0027m not particularly fond of the way I\u0027m testing this. If needed, I could possibly simply use `length \u003e 0` as it\u0027s not very different from what I have here, and I\u0027d think in any locale a date ought to be at least 1 char 😄",
       "parentUuid": "351215f2_bf250619",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 62
+      },
+      "revId": "bc7063474104cd5f04104bde2d6031e7e88a8c3e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ff90b40_737d6403",
+        "filename": "sc/qa/extras/accessibility/basics.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-28T09:12:03Z",
+      "side": 1,
+      "message": "Interestingly, LO_TEST_LOCALE\u003dde *does* however change the date format retrieved here, I get \"28.07.2022\" instead of \"07/28/2022\" then. Not sure whether that\u0027s a problem, because LO_TEST_LOCALE defaults to en-US, and I\u0027m not sure whether we need to support the case that people manually set that differently.\n\nHowever, just to be safe, what do you think about just checking the returned text is non-empty and checking the value using XAccessibleValue::getCurrentValue() in addition, to see whether it\u0027s actually the expected date?\nThat seems to return the number of days since 1970-01-01, maybe accept a difference of +/-2 days to not have to bother how that may or may not be affected by time zones or the case that the test run starts shortly before midnight etc.",
+      "parentUuid": "82ea2896_937204bf",
       "range": {
         "startLine": 46,
         "startChar": 0,
