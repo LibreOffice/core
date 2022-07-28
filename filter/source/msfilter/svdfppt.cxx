@@ -2358,6 +2358,8 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                 pPara->GetAttrib( PPT_ParaAttr_BulletOn, nIsBullet2, nDestinationInstance );
                 if ( !nIsBullet2 )
                     aParagraphAttribs.Put( SfxBoolItem( EE_PARA_BULLETSTATE, false ) );
+                else
+                    aParagraphAttribs.Put( SfxInt16Item(EE_PARA_OUTLLEVEL, pPara->mxParaSet->mnDepth));
 
                 if ( !aSelection.nStartPos )    // in PPT empty paragraphs never gets a bullet
                 {
