@@ -604,10 +604,14 @@ void SfxViewShell::StartPrint( const uno::Sequence < beans::PropertyValue >& rPr
                                                                                ));
     pImpl->m_xPrinterController = xNewController;
 
-    SfxObjectShell *pObjShell = GetObjectShell();
-    xNewController->setValue( "JobName",
-                        Any( pObjShell->GetTitle(1) ) );
-    xNewController->setPrinterModified( mbPrinterSettingsModified );
+    // When no JobName was specified via com::sun::star::view::PrintOptions::JobName ,
+    // use the document title as default job name
+    css::beans::PropertyValue* pJobNameVal = xNewController->getValue("JobName");
+    if (!pJobNameVal)
+    {
+        xNewController->setValue("JobName", Any(GetObjectShell()->GetTitle(1)));
+        xNewController->setPrinterModified(mbPrinterSettingsModified);
+    }
 }
 
 void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rProps, bool bIsAPI, bool bIsDirect )
