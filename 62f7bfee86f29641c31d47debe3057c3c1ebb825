@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5482175_8b2ea0a9",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3721,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2022-07-28T14:35:11Z",
+      "side": 1,
+      "message": "I suspect this will give Tor grief on iOS where we have multiple document support. Can we check whether this is the 1st view by counting the views and then if there are \u003c2 adding one or whatever ? \u003d)\n\nOtherwise it looks not hyper-problematic, but possibly slightly inefficient - seems a reasonable way to solve the problem for now though.",
+      "revId": "62f7bfee86f29641c31d47debe3057c3c1ebb825",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
