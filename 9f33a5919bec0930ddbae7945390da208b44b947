@@ -34,6 +34,24 @@
       "parentUuid": "f07f7a5c_65b12e76",
       "revId": "9f33a5919bec0930ddbae7945390da208b44b947",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db9cb7bc_67d65558",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-07-28T10:46:08Z",
+      "side": 1,
+      "message": "ah right, the IsModified() is of course true in that case because of previous editing...\n\nbut what if you check it differently in GetCharFormat(), ignore the actual modified state, replace IsModified() with IsEnableSetModified() and then call SetEnableSetModified(false) and SetEnableSetModified(true) instead of ResetModified()?",
+      "parentUuid": "cb5b1e61_e4470688",
+      "revId": "9f33a5919bec0930ddbae7945390da208b44b947",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
