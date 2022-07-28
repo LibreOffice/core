@@ -49,7 +49,7 @@ public:
     virtual OOXMLValue* clone() const;
 };
 
-class OOXMLProperty : public Sprm
+class OOXMLProperty final : public Sprm
 {
 public:
     typedef tools::SvRef<OOXMLProperty> Pointer_t;
@@ -79,7 +79,7 @@ public:
     void resolve(Properties& rProperties);
 };
 
-class OOXMLBinaryValue : public OOXMLValue
+class OOXMLBinaryValue final : public OOXMLValue
 {
     mutable OOXMLBinaryObjectReference::Pointer_t mpBinaryObj;
 
@@ -94,7 +94,7 @@ public:
     virtual OOXMLValue* clone() const override;
 };
 
-class OOXMLBooleanValue : public OOXMLValue
+class OOXMLBooleanValue final : public OOXMLValue
 {
     bool mbValue;
     explicit OOXMLBooleanValue(bool bValue);
@@ -118,7 +118,7 @@ public:
     virtual OOXMLValue* clone() const override;
 };
 
-class OOXMLStringValue : public OOXMLValue
+class OOXMLStringValue final : public OOXMLValue
 {
     OUString mStr;
 
@@ -139,7 +139,7 @@ public:
     virtual OOXMLValue* clone() const override;
 };
 
-class OOXMLInputStreamValue : public OOXMLValue
+class OOXMLInputStreamValue final : public OOXMLValue
 {
     css::uno::Reference<css::io::XInputStream> mxInputStream;
 
@@ -154,7 +154,7 @@ public:
     virtual OOXMLValue* clone() const override;
 };
 
-class OOXMLPropertySet : public writerfilter::Reference<Properties>
+class OOXMLPropertySet final : public writerfilter::Reference<Properties>
 {
 public:
     typedef std::vector<OOXMLProperty::Pointer_t> OOXMLProperties_t;
@@ -190,7 +190,7 @@ public:
 
 class OOXMLValue;
 
-class OOXMLTable : public writerfilter::Reference<Table>
+class OOXMLTable final : public writerfilter::Reference<Table>
 {
 public:
     typedef tools::SvRef<OOXMLValue> ValuePointer_t;
@@ -211,7 +211,7 @@ private:
     PropertySets_t mPropertySets;
 };
 
-class OOXMLPropertySetValue : public OOXMLValue
+class OOXMLPropertySetValue final : public OOXMLValue
 {
     OOXMLPropertySet::Pointer_t mpPropertySet;
 
@@ -233,7 +233,7 @@ public:
     virtual OOXMLValue* clone() const override;
 };
 
-class OOXMLIntegerValue : public OOXMLValue
+class OOXMLIntegerValue final : public OOXMLValue
 {
     sal_Int32 mnValue;
     explicit OOXMLIntegerValue(sal_Int32 nValue);
@@ -277,7 +277,7 @@ public:
     virtual OOXMLValue* clone() const override;
 };
 
-class OOXMLHexColorValue : public OOXMLHexValue
+class OOXMLHexColorValue final : public OOXMLHexValue
 {
 public:
     explicit OOXMLHexColorValue(const char* pValue);
@@ -304,7 +304,7 @@ public:
 };
 
 /// npPt is quotient defining how much units are in 1 pt
-template <sal_uInt32 npPt> class OOXMLNthPtMeasureValue : public OOXMLUniversalMeasureValue
+template <sal_uInt32 npPt> class OOXMLNthPtMeasureValue final : public OOXMLUniversalMeasureValue
 {
 public:
     explicit OOXMLNthPtMeasureValue(const char* pValue)
@@ -320,7 +320,7 @@ typedef OOXMLNthPtMeasureValue<20> OOXMLTwipsMeasureValue;
 /// Handles OOXML's ST_HpsMeasure value.
 typedef OOXMLNthPtMeasureValue<2> OOXMLHpsMeasureValue;
 
-class OOXMLMeasurementOrPercentValue : public OOXMLValue
+class OOXMLMeasurementOrPercentValue final : public OOXMLValue
 {
     int mnValue;
 
@@ -334,7 +334,7 @@ public:
 #endif
 };
 
-class OOXMLShapeValue : public OOXMLValue
+class OOXMLShapeValue final : public OOXMLValue
 {
     css::uno::Reference<css::drawing::XShape> mrShape;
 
@@ -349,7 +349,7 @@ public:
     virtual OOXMLValue* clone() const override;
 };
 
-class OOXMLStarMathValue : public OOXMLValue
+class OOXMLStarMathValue final : public OOXMLValue
 {
     css::uno::Reference<css::embed::XEmbeddedObject> component;
 
@@ -364,7 +364,7 @@ public:
     virtual OOXMLValue* clone() const override;
 };
 
-class OOXMLPropertySetEntryToString : public Properties
+class OOXMLPropertySetEntryToString final : public Properties
 {
     Id mnId;
     OUString mStr;
@@ -379,7 +379,7 @@ public:
     const OUString& getString() const { return mStr; }
 };
 
-class OOXMLPropertySetEntryToInteger : public Properties
+class OOXMLPropertySetEntryToInteger final : public Properties
 {
     Id mnId;
     int mnValue;
@@ -394,7 +394,7 @@ public:
     int getValue() const { return mnValue; }
 };
 
-class OOXMLPropertySetEntryToBool : public Properties
+class OOXMLPropertySetEntryToBool final : public Properties
 {
     Id mnId;
     bool mValue;
