@@ -1229,7 +1229,15 @@ bool SfxObjectShell::SaveTo_Impl
         bStoreToSameLocation = true;
 
         if ( pMedium->DocNeedsFileDateCheck() )
+        {
             rMedium.CheckFileDate( pMedium->GetInitFileDate( false ) );
+            if (rMedium.GetErrorCode() == ERRCODE_ABORT)
+            {
+                // if user cancels the save, exit early to avoid resetting SfxMedium values that
+                // would cause an invalid subsequent filedate check
+                return false;
+            }
+        }
 
         // before we overwrite the original file, we will make a backup if there is a demand for that
         // if the backup is not created here it will be created internally and will be removed in case of successful saving
@@ -2617,6 +2625,14 @@ bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
     {
         // transfer error code from medium to objectshell
         SetError(pMediumTmp->GetError());
+
+        if (GetErrorCode() == ERRCODE_ABORT)
+        {
+            // avoid doing DoSaveCompleted() which updates the SfxMedium timestamp values
+            // and prevents subsequent filedate checks from being accurate
+            delete pMediumTmp;
+            return false;
+        }
 
         // reconnect to object storage
         DoSaveCompleted();
