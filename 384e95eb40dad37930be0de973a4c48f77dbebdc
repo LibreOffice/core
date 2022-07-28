@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8decc7b_f4d7e985",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-07-28T11:06:26Z",
+      "side": 1,
+      "message": "Adolfo: I just put the SHA1 here and gerrit doesn\u0027t generate automatically a clickable link. Did I miss something?",
+      "revId": "384e95eb40dad37930be0de973a4c48f77dbebdc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
