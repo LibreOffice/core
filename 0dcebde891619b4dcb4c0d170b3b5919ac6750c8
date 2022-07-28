@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3990a6fa_77237ad7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-07-28T13:49:17Z",
+      "side": 1,
+      "message": "perhaps ideally no column should be editable by default, but that requires looking at every existing tree widget and fixing them up with set_column_editables calls which sounds like lot of work...",
+      "revId": "0dcebde891619b4dcb4c0d170b3b5919ac6750c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
