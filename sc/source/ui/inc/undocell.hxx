@@ -94,6 +94,8 @@ public:
 
     virtual OUString GetComment() const override;
 
+    const ScAddress& GetPositionAddress() const { return maPos; }
+
 private:
     ValuesType maOldValues;
 

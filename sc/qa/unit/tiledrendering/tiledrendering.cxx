@@ -52,6 +52,7 @@
 #include <docuno.hxx>
 #include <drwlayer.hxx>
 #include <editutil.hxx>
+#include <undomanager.hxx>
 
 using namespace css;
 
@@ -127,6 +128,7 @@ public:
     void testTextBoxInsert();
     void testCommentCellCopyPaste();
     void testInvalidEntrySave();
+    void testUndoReordering();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnHeaders);
@@ -184,6 +186,7 @@ public:
     CPPUNIT_TEST(testTextBoxInsert);
     CPPUNIT_TEST(testCommentCellCopyPaste);
     CPPUNIT_TEST(testInvalidEntrySave);
+    CPPUNIT_TEST(testUndoReordering);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -936,7 +939,7 @@ void ScTiledRenderingTest::testUndoShells()
     auto pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
     CPPUNIT_ASSERT(pDocShell);
     ScDocument& rDoc = pDocShell->GetDocument();
-    SfxUndoManager* pUndoManager = rDoc.GetUndoManager();
+    ScUndoManager* pUndoManager = rDoc.GetUndoManager();
     CPPUNIT_ASSERT(pUndoManager);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pUndoManager->GetUndoActionCount());
     sal_Int32 nView1 = SfxLokHelper::getView();
@@ -1344,7 +1347,7 @@ void ScTiledRenderingTest::testUndoLimiting()
     CPPUNIT_ASSERT(pModelObj);
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
-    SfxUndoManager* pUndoManager = pDoc->GetUndoManager();
+    ScUndoManager* pUndoManager = pDoc->GetUndoManager();
     CPPUNIT_ASSERT(pUndoManager);
 
     // view #1
@@ -1406,7 +1409,7 @@ void ScTiledRenderingTest::testUndoRepairDispatch()
     CPPUNIT_ASSERT(pModelObj);
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
-    SfxUndoManager* pUndoManager = pDoc->GetUndoManager();
+    ScUndoManager* pUndoManager = pDoc->GetUndoManager();
     CPPUNIT_ASSERT(pUndoManager);
 
     // view #1
@@ -2981,6 +2984,67 @@ void ScTiledRenderingTest::testInvalidEntrySave()
 
     // Ensure that the correct date is recorded in the document.
     CPPUNIT_ASSERT_EQUAL(double(41463), pDoc->GetValue(ScAddress(0, 7, 0)));
+}
+
+void ScTiledRenderingTest::testUndoReordering()
+{
+    ScModelObj* pModelObj = createDoc("small.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    ScUndoManager* pUndoManager = pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoManager);
+
+    // view #1
+    int nView1 = SfxLokHelper::getView();
+    ViewCallback aView1;
+
+    // view #2
+    SfxLokHelper::createView();
+    int nView2 = SfxLokHelper::getView();
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ViewCallback aView2;
+
+    // text edit a cell in view #1
+    SfxLokHelper::setView(nView1);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    // check that undo action count is not 0
+    CPPUNIT_ASSERT_EQUAL(std::size_t(1), pUndoManager->GetUndoActionCount());
+
+    // text edit a different cell in view #2
+    SfxLokHelper::setView(nView2);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_DOWN);
+    Scheduler::ProcessEventsToIdle();
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_DOWN);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    // check that undo action count is not 1
+    CPPUNIT_ASSERT_EQUAL(std::size_t(2), pUndoManager->GetUndoActionCount());
+
+    // try to execute undo in view #1
+    SfxLokHelper::setView(nView1);
+    comphelper::dispatchCommand(".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+    // check that undo has been executed on view #1
+    CPPUNIT_ASSERT_EQUAL(std::size_t(1), pUndoManager->GetUndoActionCount());
+
+    // try to execute undo in view #2
+    SfxLokHelper::setView(nView2);
+    comphelper::dispatchCommand(".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+    // check that undo has been executed on view #2
+    CPPUNIT_ASSERT_EQUAL(std::size_t(0), pUndoManager->GetUndoActionCount());
 }
 
 }

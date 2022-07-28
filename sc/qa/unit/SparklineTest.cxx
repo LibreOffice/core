@@ -12,6 +12,7 @@
 #include <tabvwsh.hxx>
 #include <cliputil.hxx>
 #include <docfunc.hxx>
+#include <undomanager.hxx>
 
 #include <Sparkline.hxx>
 #include <SparklineGroup.hxx>

@@ -59,6 +59,7 @@
 #include <drawview.hxx>
 #include <ChartRangeSelectionListener.hxx>
 #include <gridwin.hxx>
+#include <undomanager.hxx>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <svx/svdpagv.hxx>
 
@@ -709,7 +710,7 @@ bool ScTabViewShell::IsSignatureLineSigned()
 void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
 {
     SfxShell* pSh = GetViewData().GetDispatcher().GetShell(0);
-    SfxUndoManager* pUndoManager = pSh->GetUndoManager();
+    ScUndoManager* pUndoManager = static_cast<ScUndoManager*>(pSh->GetUndoManager());
 
     const SfxItemSet* pReqArgs = rReq.GetArgs();
     ScDocShell* pDocSh = GetViewData().GetDocShell();
@@ -734,6 +735,7 @@ void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
                 if (pReqArgs && pReqArgs->GetItemState(SID_REPAIRPACKAGE, false, &pItem) == SfxItemState::SET)
                     bRepair = static_cast<const SfxBoolItem*>(pItem)->GetValue();
 
+                sal_uInt16 nUndoOffset = 0;
                 if (comphelper::LibreOfficeKit::isActive() && !bRepair)
                 {
                     SfxUndoAction* pAction = nullptr;
@@ -749,11 +751,22 @@ void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
                     }
                     if (pAction)
                     {
+                        // If another view created the undo action, prevent undoing it from this view.
+                        // Unless we know that the other view's undo action is independent from us.
                         ViewShellId nViewShellId = GetViewShellId();
                         if (pAction->GetViewShellId() != nViewShellId)
                         {
-                            rReq.SetReturnValue(SfxUInt32Item(SID_UNDO, static_cast<sal_uInt32>(SID_REPAIRPACKAGE)));
-                            return;
+                            if (pUndoManager->IsViewUndoActionIndependent(this))
+                            {
+                                // Execute the undo with an offset: don't undo the top action, but an
+                                // earlier one, since it's independent and that belongs to our view.
+                                nUndoOffset = 1;
+                            }
+                            else
+                            {
+                                rReq.SetReturnValue(SfxUInt32Item(SID_UNDO, static_cast<sal_uInt32>(SID_REPAIRPACKAGE)));
+                                return;
+                            }
                         }
                     }
                 }
@@ -765,12 +778,15 @@ void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
 
                 try
                 {
+                    ScUndoRedoContext aUndoRedoContext;
+                    aUndoRedoContext.SetUndoOffset(nUndoOffset);
+
                     for (sal_uInt16 i=0; i<nCount; i++)
                     {
                         if ( bIsUndo )
-                            pUndoManager->Undo();
+                            pUndoManager->UndoWithContext(aUndoRedoContext);
                         else
-                            pUndoManager->Redo();
+                            pUndoManager->RedoWithContext(aUndoRedoContext);
                     }
                 }
                 catch ( const uno::Exception& )
