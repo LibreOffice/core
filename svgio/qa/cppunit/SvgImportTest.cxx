@@ -65,6 +65,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void testClipPathAndStyle();
     void testShapeWithClipPath();
     void testClipPathUsingClipPath();
+    void testFillRule();
     void testi125329();
     void testMaskingPath07b();
     void test123926();
@@ -110,6 +111,7 @@ public:
     CPPUNIT_TEST(testClipPathAndStyle);
     CPPUNIT_TEST(testShapeWithClipPath);
     CPPUNIT_TEST(testClipPathUsingClipPath);
+    CPPUNIT_TEST(testFillRule);
     CPPUNIT_TEST(testi125329);
     CPPUNIT_TEST(testMaskingPath07b);
     CPPUNIT_TEST(test123926);
@@ -699,6 +701,22 @@ void Test::testClipPathUsingClipPath()
 
     assertXPath(pDocument, "/primitive2D/transform/mask/polypolygon/polygon/point", 20);
     assertXPath(pDocument, "/primitive2D/transform/mask/mask/polypolygon/polygon/point", 13);
+}
+
+void Test::testFillRule()
+{
+    Primitive2DSequence aSequence = parseSvg(u"/svgio/qa/cppunit/data/FillRule.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor", "color", "#000000");
+    assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor/polypolygon/polygon", 2);
+    assertXPath(pDocument, "/primitive2D/transform/polypolygonstroke/line", "color", "#ff0000");
+    assertXPath(pDocument, "/primitive2D/transform/polypolygonstroke/polypolygon/polygon", 2);
 }
 
 void Test::testi125329()
