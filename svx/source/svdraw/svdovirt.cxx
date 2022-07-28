@@ -113,22 +113,25 @@ SdrObjList* SdrVirtObj::GetSubList() const
 
 const tools::Rectangle& SdrVirtObj::GetCurrentBoundRect() const
 {
-    m_aOutRect = rRefObj.GetCurrentBoundRect(); // TODO: Optimize this.
-    m_aOutRect += m_aAnchor;
+    auto aRectangle = rRefObj.GetCurrentBoundRect(); // TODO: Optimize this.
+    aRectangle += m_aAnchor;
+    setOutRectangleConst(aRectangle);
     return m_aOutRect;
 }
 
 const tools::Rectangle& SdrVirtObj::GetLastBoundRect() const
 {
-    m_aOutRect = rRefObj.GetLastBoundRect(); // TODO: Optimize this.
-    m_aOutRect += m_aAnchor;
+    auto aRectangle = rRefObj.GetLastBoundRect(); // TODO: Optimize this.
+    aRectangle += m_aAnchor;
+    setOutRectangleConst(aRectangle);
     return m_aOutRect;
 }
 
 void SdrVirtObj::RecalcBoundRect()
 {
-    m_aOutRect=rRefObj.GetCurrentBoundRect();
-    m_aOutRect+=m_aAnchor;
+    tools::Rectangle aRectangle = rRefObj.GetCurrentBoundRect();
+    aRectangle += m_aAnchor;
+    setOutRectangle(aRectangle);
 }
 
 SdrVirtObj* SdrVirtObj::CloneSdrObject(SdrModel& rTargetModel) const

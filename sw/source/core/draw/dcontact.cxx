@@ -2390,7 +2390,7 @@ void SwDrawVirtObj::NbcSetAnchorPos(const Point& rPnt)
 
 const tools::Rectangle& SwDrawVirtObj::GetCurrentBoundRect() const
 {
-    if(m_aOutRect.IsEmpty())
+    if (m_aOutRect.IsEmpty())
     {
         const_cast<SwDrawVirtObj*>(this)->RecalcBoundRect();
     }
@@ -2407,13 +2407,13 @@ Point SwDrawVirtObj::GetOffset() const
 {
     // do NOT use IsEmpty() here, there is already a useful offset
     // in the position
-    if(m_aOutRect == tools::Rectangle())
+    if (m_aOutRect == tools::Rectangle())
     {
         return Point();
     }
     else
     {
-        return m_aOutRect.TopLeft() - GetReferencedObj().GetCurrentBoundRect().TopLeft();
+        return getOutRectangle().TopLeft() - GetReferencedObj().GetCurrentBoundRect().TopLeft();
     }
 }
 
@@ -2429,7 +2429,7 @@ void SwDrawVirtObj::RecalcBoundRect()
     // its value by the 'BoundRect' of the referenced object.
 
     const Point aOffset(GetOffset());
-    m_aOutRect = ReferencedObj().GetCurrentBoundRect() + aOffset;
+    setOutRectangle(ReferencedObj().GetCurrentBoundRect() + aOffset);
 }
 
 basegfx::B2DPolyPolygon SwDrawVirtObj::TakeXorPoly() const

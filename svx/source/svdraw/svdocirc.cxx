@@ -807,11 +807,11 @@ PointerStyle SdrCircObj::GetCreatePointer() const
     return PointerStyle::Cross;
 }
 
-void SdrCircObj::NbcMove(const Size& aSiz)
+void SdrCircObj::NbcMove(const Size& aSize)
 {
-    maRect.Move(aSiz);
-    m_aOutRect.Move(aSiz);
-    maSnapRect.Move(aSiz);
+    maRect.Move(aSize);
+    moveOutRectangle(aSize.Width(), aSize.Height());
+    maSnapRect.Move(aSize);
     SetXPolyDirty();
     SetBoundAndSnapRectsDirty(true);
 }
