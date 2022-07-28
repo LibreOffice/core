@@ -418,6 +418,12 @@ void  SvxBulletPickTabPage::Reset( const SfxItemSet* rSet )
     {
         nNumItemId = rSet->GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
         pItem = rSet->GetItemIfSet(nNumItemId, false);
+
+        if( !pItem )
+        {
+            pItem = & rSet->Get( nNumItemId );
+        }
+
     }
     pSaveNum.reset( new SvxNumRule(pItem->GetNumRule()) );
 
