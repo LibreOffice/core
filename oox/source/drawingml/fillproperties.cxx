@@ -811,7 +811,10 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                             if(bIsCustomShape && bHasCropValues && bNeedCrop)
                             {
                                 xGraphic = lclCropGraphic(xGraphic, CropQuotientsFromFillRect(aFillRect));
-                                rPropMap.setProperty(ShapeProperty::FillBitmap, xGraphic);
+                                if (rPropMap.supportsProperty(ShapeProperty::FillBitmapName))
+                                    rPropMap.setProperty(ShapeProperty::FillBitmapName, xGraphic);
+                                else
+                                    rPropMap.setProperty(ShapeProperty::FillBitmap, xGraphic);
                             }
                         }
                     }
