@@ -45,6 +45,7 @@
 #include <detfunc.hxx>
 #include <cellmergeoption.hxx>
 #include <sortparam.hxx>
+#include <undomanager.hxx>
 
 #include <orcusfilters.hxx>
 #include <filter.hxx>

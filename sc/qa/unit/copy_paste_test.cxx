@@ -23,6 +23,7 @@
 #include <scitems.hxx>
 #include <attrib.hxx>
 #include <userlist.hxx>
+#include <undomanager.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 

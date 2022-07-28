@@ -26,6 +26,7 @@
 #include <externalrefmgr.hxx>
 #include <scdll.hxx>
 #include <scmod.hxx>
+#include <undomanager.hxx>
 
 #include <formula/vectortoken.hxx>
 #include <svl/broadcast.hxx>
