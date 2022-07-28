@@ -118,6 +118,7 @@
 #include <docparam.hxx>
 #include "docshimp.hxx"
 #include <sizedev.hxx>
+#include <undomanager.hxx>
 #include <refreshtimerprotector.hxx>
 
 #include <officecfg/Office/Calc.hxx>
