@@ -136,6 +136,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c071e32e_cad24eb8",
+        "filename": "sc/qa/extras/accessibility/basics.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-07-28T10:47:20Z",
+      "side": 1,
+      "message": "yes, indeed the locale/UI of LibreOffice is independent from the keyboard shortcuts - of course most users will have English keyboard layout when using English UI, but if I\u0027d use a French keyboard layout, the key names would use the French labels, if I use a German keyboard layout, I get the German labels, and the locale doesn\u0027t change that.",
+      "parentUuid": "0972daef_7ebad51e",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 57
+      },
+      "revId": "bc7063474104cd5f04104bde2d6031e7e88a8c3e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "351215f2_bf250619",
