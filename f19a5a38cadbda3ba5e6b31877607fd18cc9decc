@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d369b20d_851c88a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-07-28T11:16:59Z",
+      "side": 1,
+      "message": "Sanity check request. Very often my brain gets messed up by binary operations. But we can\u0027t get into this clause of code unless the flag is off, so no need to turn if off at the end - since the called function doesn\u0027t set it and SetDepth() also doesn\u0027t trigger it in any way.",
+      "revId": "f19a5a38cadbda3ba5e6b31877607fd18cc9decc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
