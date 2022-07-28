@@ -16,6 +16,24 @@
       "message": "Looks better!\n\nBut when a custom width is entered, it is still possible to enter values smaller than 1.1pt (when double thin style is selected). That should be not allowed.",
       "revId": "878dddac007b5b20fe72f7108a2f162d0a6be2e0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a864d6b_0d0d217b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2022-07-28T15:27:41Z",
+      "side": 1,
+      "message": "Now a thinner value cannot be selected then 1.10pt. Thanks for the notice. :)",
+      "parentUuid": "98e95cba_a5436c18",
+      "revId": "878dddac007b5b20fe72f7108a2f162d0a6be2e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
