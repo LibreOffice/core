@@ -20,6 +20,7 @@
 #include <dbdata.hxx>
 #include <bcaslot.hxx>
 #include <scdll.hxx>
+#include <undomanager.hxx>
 
 #include <sfx2/docfile.hxx>
 #include <test/bootstrapfixture.hxx>

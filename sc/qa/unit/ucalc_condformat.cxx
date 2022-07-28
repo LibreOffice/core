@@ -20,6 +20,7 @@
 #include <attrib.hxx>
 #include <fillinfo.hxx>
 #include <compiler.hxx>
+#include <undomanager.hxx>
 
 #include <svl/sharedstringpool.hxx>
 

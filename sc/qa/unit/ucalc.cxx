@@ -43,6 +43,7 @@
 
 #include <editable.hxx>
 #include <tabprotection.hxx>
+#include <undomanager.hxx>
 
 #include <formula/IFunctionDescription.hxx>
 
