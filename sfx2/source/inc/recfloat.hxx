@@ -42,7 +42,11 @@ class SfxRecordingFloat_Impl final : public SfxModelessDialogController
 {
     std::unique_ptr<weld::Toolbar> m_xToolbar;
     std::unique_ptr<ToolbarUnoDispatcher> m_xDispatcher;
+    ImplSVEvent *mnPostUserEventId;
     bool m_bFirstActivate;
+
+    DECL_LINK(PresentParentFrame, void*, void);
+
 public:
     SfxRecordingFloat_Impl(SfxBindings* pBindings,
                            SfxChildWindow* pChildWin,
