@@ -72,6 +72,7 @@
 #include <cellmergeoption.hxx>
 #include <undoblk.hxx>
 #include <sortparam.hxx>
+#include <undomanager.hxx>
 
 #include <orcusfilters.hxx>
 #include <filter.hxx>

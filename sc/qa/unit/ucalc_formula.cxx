@@ -35,7 +35,11 @@
 #include <externalrefmgr.hxx>
 #include <scdll.hxx>
 #include <scmod.hxx>
+<<<<<<< HEAD   (273ebc tdf#149738: Minor inconsistencies in sparkline related UI st)
 #include <svl/itemset.hxx>
+=======
+#include <undomanager.hxx>
+>>>>>>> CHANGE (640a64 sc: allow undo of typing in 2 views independent from each ot)
 
 #include <formula/vectortoken.hxx>
 #include <svl/broadcast.hxx>

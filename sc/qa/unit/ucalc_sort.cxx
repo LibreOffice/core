@@ -25,7 +25,12 @@
 #include <scitems.hxx>
 #include <editutil.hxx>
 #include <drwlayer.hxx>
+<<<<<<< HEAD   (273ebc tdf#149738: Minor inconsistencies in sparkline related UI st)
 #include <formulaopt.hxx>
+=======
+#include <queryiter.hxx>
+#include <undomanager.hxx>
+>>>>>>> CHANGE (640a64 sc: allow undo of typing in 2 views independent from each ot)
 
 #include <sal/config.h>
 #include <editeng/wghtitem.hxx>

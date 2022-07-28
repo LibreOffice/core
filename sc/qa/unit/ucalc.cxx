@@ -65,7 +65,11 @@
 #include <bcaslot.hxx>
 #include <sharedformula.hxx>
 #include <tabprotection.hxx>
+<<<<<<< HEAD   (273ebc tdf#149738: Minor inconsistencies in sparkline related UI st)
 #include <scmod.hxx>
+=======
+#include <undomanager.hxx>
+>>>>>>> CHANGE (640a64 sc: allow undo of typing in 2 views independent from each ot)
 
 #include <formula/IFunctionDescription.hxx>
 

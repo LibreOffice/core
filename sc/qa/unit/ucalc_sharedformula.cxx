@@ -27,6 +27,7 @@
 #include <bcaslot.hxx>
 #include <sharedformula.hxx>
 #include <scdll.hxx>
+#include <undomanager.hxx>
 
 #include <svl/sharedstring.hxx>
 #include <sfx2/docfile.hxx>
