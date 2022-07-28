@@ -327,6 +327,8 @@ struct ImplSVNWFData
     bool                    mbFlatMenu = false;             // no popup 3D border
     bool                    mbNoFocusRects = false;         // on Aqua/Gtk3 use native focus rendering, except for flat buttons
     bool                    mbNoFocusRectsForFlatButtons = false; // on Gtk3 native focusing is also preferred for flat buttons
+    bool                    mbNoFrameJunctionForPopups = false; // on Gtk4 popups are done via popovers and a toolbar menu won't align to its toolitem, so
+                                                                // omit the effort the creation a visual junction
     bool                    mbCenteredTabs = false;         // on Aqua, tabs are centered
     bool                    mbNoActiveTabTextRaise = false; // on Aqua the text for the selected tab
                                                             // should not "jump up" a pixel
