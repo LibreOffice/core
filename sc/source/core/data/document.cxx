@@ -88,6 +88,7 @@
 #include <recursionhelper.hxx>
 #include <SparklineGroup.hxx>
 #include <SparklineList.hxx>
+#include <undomanager.hxx>
 
 #include <formula/vectortoken.hxx>
 
@@ -6482,14 +6483,14 @@ bool ScDocument::NeedPageResetAfterTab( SCTAB nTab ) const
     return false;       // otherwise not
 }
 
-SfxUndoManager* ScDocument::GetUndoManager()
+ScUndoManager* ScDocument::GetUndoManager()
 {
     if (!mpUndoManager)
     {
         // to support enhanced text edit for draw objects, use an SdrUndoManager
         ScMutationGuard aGuard(*this, ScMutationGuardFlags::CORE);
 
-        SdrUndoManager* pUndoManager = new SdrUndoManager;
+        ScUndoManager* pUndoManager = new ScUndoManager;
         pUndoManager->SetDocShell(GetDocumentShell());
         mpUndoManager = pUndoManager;
     }
