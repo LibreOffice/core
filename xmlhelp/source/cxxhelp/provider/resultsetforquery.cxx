@@ -41,6 +41,7 @@
 
 #include <algorithm>
 #include <set>
+#include <utility>
 #include "resultsetforquery.hxx"
 #include "databases.hxx"
 
@@ -58,8 +59,8 @@ struct HitItem
     OUString   m_aURL;
     float      m_fScore;
 
-    HitItem(const OUString& aURL, float fScore)
-        : m_aURL(aURL)
+    HitItem(OUString aURL, float fScore)
+        : m_aURL(std::move(aURL))
         , m_fScore(fScore)
     {}
     bool operator < ( const HitItem& rHitItem ) const

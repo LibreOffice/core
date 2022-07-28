@@ -19,6 +19,7 @@
 
 #include "common.hxx"
 #include "imp_share.hxx"
+#include <utility>
 #include <xml_import.hxx>
 #include <xmlscript/xmlns.h>
 
@@ -1659,13 +1660,13 @@ Reference< xml::input::XElement > ElementBase::startChildElement(
 }
 
 ElementBase::ElementBase(
-    sal_Int32 nUid, OUString const & rLocalName,
+    sal_Int32 nUid, OUString aLocalName,
     Reference< xml::input::XAttributes > const & xAttributes,
     ElementBase * pParent, DialogImport * pImport )
     : m_pImport( pImport )
     , m_pParent( pParent )
     , _nUid( nUid )
-    , _aLocalName( rLocalName )
+    , _aLocalName(std::move(aLocalName ))
     , _xAttributes( xAttributes )
 {
 }

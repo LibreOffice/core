@@ -35,6 +35,7 @@
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/macros.hxx>
+#include <utility>
 #include "content.hxx"
 #include "provider.hxx"
 #include "resultset.hxx"
@@ -139,15 +140,15 @@ private:
 public:
 
     ResultSetForRootFactory(
-        const uno::Reference< uno::XComponentContext >& xContext,
-        const uno::Reference< ucb::XContentProvider >&  xProvider,
+        uno::Reference< uno::XComponentContext > xContext,
+        uno::Reference< ucb::XContentProvider > xProvider,
         const uno::Sequence< beans::Property >& seq,
-        const URLParameter& rURLParameter,
+        URLParameter aURLParameter,
         Databases* pDatabases )
-        : m_xContext( xContext ),
-          m_xProvider( xProvider ),
+        : m_xContext(std::move( xContext )),
+          m_xProvider(std::move( xProvider )),
           m_seq( seq ),
-          m_aURLParameter( rURLParameter ),
+          m_aURLParameter(std::move( aURLParameter )),
           m_pDatabases( pDatabases )
     {
     }
@@ -176,15 +177,15 @@ private:
 public:
 
     ResultSetForQueryFactory(
-        const uno::Reference< uno::XComponentContext >& rxContext,
-        const uno::Reference< ucb::XContentProvider >&  xProvider,
+        uno::Reference< uno::XComponentContext > xContext,
+        uno::Reference< ucb::XContentProvider > xProvider,
         const uno::Sequence< beans::Property >& seq,
-        const URLParameter& rURLParameter,
+        URLParameter aURLParameter,
         Databases* pDatabases )
-        : m_xContext( rxContext ),
-          m_xProvider( xProvider ),
+        : m_xContext(std::move( xContext )),
+          m_xProvider(std::move( xProvider )),
           m_seq( seq ),
-          m_aURLParameter( rURLParameter ),
+          m_aURLParameter(std::move( aURLParameter )),
           m_pDatabases( pDatabases )
     {
     }

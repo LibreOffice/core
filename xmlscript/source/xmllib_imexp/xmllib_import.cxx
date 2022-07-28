@@ -22,6 +22,7 @@
 #include <sal/log.hxx>
 
 #include "imp_share.hxx"
+#include <utility>
 #include <xml_import.hxx>
 #include <xmlscript/xmlns.h>
 
@@ -77,12 +78,12 @@ Reference< xml::input::XElement > LibElementBase::startChildElement(
 }
 
 LibElementBase::LibElementBase(
-    OUString const & rLocalName,
+    OUString aLocalName,
     Reference< xml::input::XAttributes > const & xAttributes,
     LibElementBase * pParent, LibraryImport * pImport )
     : mxImport( pImport )
     , mxParent( pParent )
-    , _aLocalName( rLocalName )
+    , _aLocalName(std::move( aLocalName ))
     , _xAttributes( xAttributes )
 {
 }

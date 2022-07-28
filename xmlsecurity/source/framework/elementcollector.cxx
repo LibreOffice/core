@@ -22,18 +22,19 @@
 #include "elementcollector.hxx"
 #include <com/sun/star/xml/crypto/sax/ConstOfSecurityId.hpp>
 #include <com/sun/star/xml/crypto/sax/XReferenceResolvedListener.hpp>
+#include <utility>
 
 ElementCollector::ElementCollector(
     sal_Int32 nBufferId,
     css::xml::crypto::sax::ElementMarkPriority nPriority,
     bool bToModify,
-    const css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener >& xReferenceResolvedListener)
+    css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > xReferenceResolvedListener)
     :ElementMark(css::xml::crypto::sax::ConstOfSecurityId::UNDEFINEDSECURITYID, nBufferId),
      m_nPriority(nPriority),
      m_bToModify(bToModify),
      m_bAbleToNotify(false),
      m_bNotified(false),
-     m_xReferenceResolvedListener(xReferenceResolvedListener)
+     m_xReferenceResolvedListener(std::move(xReferenceResolvedListener))
 /****** ElementCollector/ElementCollector *************************************
  *
  *   NAME

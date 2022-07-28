@@ -60,6 +60,7 @@
 #include <comphelper/xmlsechelper.hxx>
 #include <comphelper/processfactory.hxx>
 
+#include <utility>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/configitem.hxx>
@@ -119,10 +120,10 @@ namespace
 DigitalSignaturesDialog::DigitalSignaturesDialog(
     weld::Window* pParent,
     const uno::Reference< uno::XComponentContext >& rxCtx, DocumentSignatureMode eMode,
-    bool bReadOnly, const OUString& sODFVersion, bool bHasDocumentSignature)
+    bool bReadOnly, OUString sODFVersion, bool bHasDocumentSignature)
     : GenericDialogController(pParent, "xmlsec/ui/digitalsignaturesdialog.ui", "DigitalSignaturesDialog")
     , maSignatureManager(rxCtx, eMode)
-    , m_sODFVersion (sODFVersion)
+    , m_sODFVersion (std::move(sODFVersion))
     , m_bHasDocumentSignature(bHasDocumentSignature)
     , m_bWarningShowSignMacro(false)
     , m_xHintDocFT(m_xBuilder->weld_label("dochint"))

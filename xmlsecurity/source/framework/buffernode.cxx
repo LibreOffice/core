@@ -24,12 +24,13 @@
 #include <com/sun/star/xml/crypto/sax/ConstOfSecurityId.hpp>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
+#include <utility>
 
-BufferNode::BufferNode( const css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& xXMLElement )
+BufferNode::BufferNode( css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > xXMLElement )
     :m_pParent(nullptr),
      m_pBlocker(nullptr),
      m_bAllReceived(false),
-     m_xXMLElement(xXMLElement)
+     m_xXMLElement(std::move(xXMLElement))
 {
 }
 

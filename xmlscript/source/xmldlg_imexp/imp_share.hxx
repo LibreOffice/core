@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <utility>
 #include <xmlscript/xmldlg_imexp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -143,16 +144,16 @@ public:
     const & getNumberFormatsSupplier();
 
     DialogImport(
-        css::uno::Reference<css::uno::XComponentContext> const & xContext,
+        css::uno::Reference<css::uno::XComponentContext> xContext,
         css::uno::Reference<css::container::XNameContainer>
         const & xDialogModel,
-        std::shared_ptr< std::vector< OUString > > const & pStyleNames,
-        std::shared_ptr< std::vector< css::uno::Reference< css::xml::input::XElement > > > const & pStyles,
-        css::uno::Reference<css::frame::XModel> const & xDoc )
-        : _xContext( xContext )
-        , _pStyleNames( pStyleNames )
-        , _pStyles( pStyles )
-        , _xDoc( xDoc )
+        std::shared_ptr< std::vector< OUString > > pStyleNames,
+        std::shared_ptr< std::vector< css::uno::Reference< css::xml::input::XElement > > > pStyles,
+        css::uno::Reference<css::frame::XModel> xDoc )
+        : _xContext(std::move( xContext ))
+        , _pStyleNames(std::move( pStyleNames ))
+        , _pStyles(std::move( pStyles ))
+        , _xDoc(std::move( xDoc ))
         , _xDialogModel( xDialogModel )
         , _xDialogModelFactory( xDialogModel, css::uno::UNO_QUERY_THROW )
         , XMLNS_DIALOGS_UID( 0 )
@@ -204,7 +205,7 @@ protected:
 
 public:
     ElementBase(
-        sal_Int32 nUid, OUString const & rLocalName,
+        sal_Int32 nUid, OUString aLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport );
     virtual ~ElementBase() override;
@@ -371,11 +372,11 @@ protected:
 public:
     ImportContext(
         DialogImport * pImport,
-        css::uno::Reference< css::beans::XPropertySet > const & xControlModel_,
-        OUString const & id )
+        css::uno::Reference< css::beans::XPropertySet > xControlModel_,
+        OUString id )
         : _pImport( pImport ),
-          _xControlModel( xControlModel_ ),
-          _aId( id )
+          _xControlModel(std::move( xControlModel_ )),
+          _aId(std::move( id ))
         { OSL_ASSERT( _xControlModel.is() ); }
 
     const css::uno::Reference< css::beans::XPropertySet >& getControlModel() const

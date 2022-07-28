@@ -26,6 +26,7 @@
 #include <cppuhelper/factory.hxx>
 #include <tvfactory.hxx>
 #include <tvread.hxx>
+#include <utility>
 
 using namespace treeview;
 using namespace com::sun::star;
@@ -34,8 +35,8 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 
-TVFactory::TVFactory( const uno::Reference< XComponentContext >& xContext )
-    : m_xContext( xContext )
+TVFactory::TVFactory( uno::Reference< XComponentContext > xContext )
+    : m_xContext(std::move( xContext ))
 {
 }
 

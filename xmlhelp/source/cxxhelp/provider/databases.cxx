@@ -57,6 +57,7 @@
 
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <utility>
 
 #include "databases.hxx"
 #include "urlparameter.hxx"
@@ -566,9 +567,9 @@ namespace chelp {
 
 KeywordInfo::KeywordElement::KeywordElement( Databases const *pDatabases,
                                              helpdatafileproxy::Hdf* pHdf,
-                                             OUString const & ky,
+                                             OUString ky,
                                              std::u16string_view data )
-    : key( ky )
+    : key(std::move( ky ))
 {
     pDatabases->replaceName( key );
     init( pDatabases,pHdf,data );
@@ -1100,24 +1101,24 @@ void Databases::setInstallPath( const OUString& aInstDir )
 ExtensionHelpExistenceMap ExtensionIteratorBase::aHelpExistenceMap;
 
 ExtensionIteratorBase::ExtensionIteratorBase( Reference< XComponentContext > const & xContext,
-    Databases& rDatabases, const OUString& aInitialModule, const OUString& aLanguage )
+    Databases& rDatabases, OUString aInitialModule, OUString aLanguage )
         : m_xContext( xContext )
         , m_rDatabases( rDatabases )
         , m_eState( IteratorState::InitialModule )
-        , m_aInitialModule( aInitialModule )
-        , m_aLanguage( aLanguage )
+        , m_aInitialModule(std::move( aInitialModule ))
+        , m_aLanguage(std::move( aLanguage ))
 {
     assert( m_xContext.is() );
     init();
 }
 
 ExtensionIteratorBase::ExtensionIteratorBase( Databases& rDatabases,
-    const OUString& aInitialModule, const OUString& aLanguage )
+    OUString aInitialModule, OUString aLanguage )
         : m_xContext( comphelper::getProcessComponentContext() )
         , m_rDatabases( rDatabases )
         , m_eState( IteratorState::InitialModule )
-        , m_aInitialModule( aInitialModule )
-        , m_aLanguage( aLanguage )
+        , m_aInitialModule(std::move( aInitialModule ))
+        , m_aLanguage(std::move( aLanguage ))
 {
     init();
 }

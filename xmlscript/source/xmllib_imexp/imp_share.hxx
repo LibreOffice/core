@@ -153,7 +153,7 @@ private:
 
 public:
     LibElementBase(
-        OUString const & rLocalName,
+        OUString aLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         LibElementBase * pParent, LibraryImport * pImport );
     virtual ~LibElementBase() override;

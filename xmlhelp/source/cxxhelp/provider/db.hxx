@@ -68,14 +68,14 @@ namespace helpdatafileproxy {
         //HDFHelp must get a fileURL which can then directly be used by simple file access.
         //SimpleFileAccess requires file URLs as arguments. Passing file path may work but fails
         //for example when using long file paths on Windows, which start with "\\?\"
-        Hdf( const OUString& rFileURL,
-            css::uno::Reference< css::ucb::XSimpleFileAccess3 > const & xSFA )
-                : m_aFileURL( rFileURL )
-                , m_xSFA( xSFA )
+        Hdf( OUString aFileURL,
+             css::uno::Reference< css::ucb::XSimpleFileAccess3 > xSFA )
+                : m_aFileURL( std::move(aFileURL) )
+                , m_xSFA( std::move(xSFA) )
                 , m_nItRead( -1 )
                 , m_iItPos( -1 )
         {
-            OSL_ASSERT(comphelper::isFileUrl(rFileURL));
+            OSL_ASSERT(comphelper::isFileUrl(m_aFileURL));
         }
         ~Hdf();
 

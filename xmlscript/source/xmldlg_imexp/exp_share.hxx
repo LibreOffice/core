@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <utility>
 #include <xmlscript/xmldlg_imexp.hxx>
 #include <xmlscript/xml_helper.hxx>
 #include <osl/diagnose.h>
@@ -93,13 +94,13 @@ class ElementDescriptor
 
 public:
     ElementDescriptor(
-        css::uno::Reference< css::beans::XPropertySet > const & xProps,
-        css::uno::Reference< css::beans::XPropertyState > const & xPropState,
-        OUString const & name, css::uno::Reference< css::frame::XModel > const & xDocument )
+        css::uno::Reference< css::beans::XPropertySet > xProps,
+        css::uno::Reference< css::beans::XPropertyState > xPropState,
+        OUString const & name, css::uno::Reference< css::frame::XModel > xDocument )
         : XMLElement( name )
-        , _xProps( xProps )
-        , _xPropState( xPropState )
-        , _xDocument( xDocument )
+        , _xProps(std::move( xProps ))
+        , _xPropState(std::move( xPropState ))
+        , _xDocument(std::move( xDocument ))
         {}
     explicit ElementDescriptor(
         OUString const & name )

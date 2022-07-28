@@ -105,7 +105,7 @@ private:
 public:
     DigitalSignaturesDialog(weld::Window* pParent, const css::uno::Reference<
         css::uno::XComponentContext >& rxCtx, DocumentSignatureMode eMode,
-        bool bReadOnly, const OUString& sODFVersion, bool bHasDocumentSignature);
+        bool bReadOnly, OUString sODFVersion, bool bHasDocumentSignature);
     virtual ~DigitalSignaturesDialog() override;
 
     // Initialize the dialog and the security environment, returns TRUE on success

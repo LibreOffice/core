@@ -40,6 +40,7 @@
 #include <tools/urlobj.hxx>
 #include <unotools/datetime.hxx>
 
+#include <utility>
 #include <vcl/svapp.hxx>
 
 using namespace comphelper;
@@ -54,9 +55,9 @@ IMPL_LINK_NOARG(MacroSecurity, OkBtnHdl, weld::Button&, void)
 }
 
 MacroSecurity::MacroSecurity(weld::Window* pParent,
-    const css::uno::Reference<css::xml::crypto::XSecurityEnvironment>& rxSecurityEnvironment)
+    css::uno::Reference<css::xml::crypto::XSecurityEnvironment> xSecurityEnvironment)
     : GenericDialogController(pParent, "xmlsec/ui/macrosecuritydialog.ui", "MacroSecurityDialog")
-    , m_xSecurityEnvironment(rxSecurityEnvironment)
+    , m_xSecurityEnvironment(std::move(xSecurityEnvironment))
     , m_xTabCtrl(m_xBuilder->weld_notebook("tabcontrol"))
     , m_xOkBtn(m_xBuilder->weld_button("ok"))
     , m_xResetBtn(m_xBuilder->weld_button("reset"))

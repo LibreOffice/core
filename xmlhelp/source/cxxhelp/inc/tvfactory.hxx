@@ -36,7 +36,7 @@ class TVFactory final : public cppu::WeakImplHelper <
     {
     public:
 
-        TVFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+        TVFactory( css::uno::Reference< css::uno::XComponentContext > xContext );
 
         virtual ~TVFactory() override;
 

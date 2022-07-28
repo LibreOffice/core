@@ -24,6 +24,7 @@
 #include <sal/log.hxx>
 
 #include "imp_share.hxx"
+#include <utility>
 #include <xml_import.hxx>
 
 using namespace css;
@@ -78,11 +79,11 @@ Reference< xml::input::XElement > ModuleElement::startChildElement(
 }
 
 ModuleElement::ModuleElement(
-    OUString const & rLocalName,
+    OUString aLocalName,
     Reference< xml::input::XAttributes > const & xAttributes,
     ModuleImport * pImport )
     : mxImport( pImport )
-    , _aLocalName( rLocalName )
+    , _aLocalName(std::move( aLocalName ))
     , _xAttributes( xAttributes )
 {
 }

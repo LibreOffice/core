@@ -241,7 +241,7 @@ namespace treeview {
     class TreeFileIterator
     {
     public:
-        TreeFileIterator( const OUString& aLanguage );
+        TreeFileIterator( OUString  aLanguage );
         OUString nextTreeFile( sal_Int32& rnFileSize );
 
     private:
