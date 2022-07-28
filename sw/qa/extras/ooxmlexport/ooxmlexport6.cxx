@@ -274,16 +274,6 @@ DECLARE_OOXMLEXPORT_TEST(testDMLShapeFillBitmapCrop, "dml-shape-fillbitmapcrop.d
 
 }
 
-DECLARE_OOXMLEXPORT_TEST(test141652_fillBitmapName, "tdf141652_fillBitmapName.docx")
-{
-    text::GraphicCrop aGraphicCropStruct = getProperty<text::GraphicCrop>(getShape(1), "GraphicCrop");
-    CPPUNIT_ASSERT_DOUBLES_EQUAL( sal_Int32(-769), aGraphicCropStruct.Right, 10);
-
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 0 ), aGraphicCropStruct.Left );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 0 ), aGraphicCropStruct.Top );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 0 ), aGraphicCropStruct.Bottom );
-}
-
 DECLARE_OOXMLEXPORT_TEST(testDMLShapeFillPattern, "dml-shape-fillpattern.docx")
 {
     // Hatching was ignored by the export.
