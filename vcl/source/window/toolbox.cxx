@@ -18,7 +18,6 @@
  */
 
 #include <vcl/toolbox.hxx>
-#include <vcl/commandinfoprovider.hxx>
 #include <vcl/event.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/toolkit/floatwin.hxx>
@@ -29,13 +28,11 @@
 #include <vcl/layout.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
-#include <vclstatuslistener.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <bitmaps.hlst>
 #include <toolbarvalue.hxx>
 
 #include <tools/poly.hxx>
-#include <svl/imageitm.hxx>
 #include <sal/log.hxx>
 #include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
@@ -1102,15 +1099,6 @@ IMPL_LINK( ImplTBDragMgr, SelectHdl, Accelerator&, rAccel, void )
         EndDragging();
 }
 
-void ToolBox::TrackImageOrientation(const css::uno::Reference<css::frame::XFrame>& rFrame)
-{
-    if (mpStatusListener.is())
-        mpStatusListener->dispose();
-
-    mpStatusListener = new VclStatusListener<ToolBox>(this, rFrame, ".uno:ImageOrientation");
-    mpStatusListener->startListening();
-}
-
 void ToolBox::ImplInitToolBoxData()
 {
     // initialize variables
@@ -1153,7 +1141,6 @@ void ToolBox::ImplInitToolBoxData()
     mbDragging            = false;
     mbIsKeyEvent          = false;
     mbChangingHighlight   = false;
-    mbImagesMirrored      = false;
     mbLineSpacing         = false;
     mbIsArranged          = false;
     meButtonType          = ButtonType::SYMBOLONLY;
@@ -1165,7 +1152,6 @@ void ToolBox::ImplInitToolBoxData()
     meTextPosition        = ToolBoxTextPosition::Right;
     mnLastFocusItemId     = ToolBoxItemId(0);
     mnActivateCount       = 0;
-    mnImagesRotationAngle = 0_deg10;
 
     mpIdle.reset(new Idle("vcl::ToolBox maIdle update"));
     mpIdle->SetPriority( TaskPriority::RESIZE );
@@ -1328,9 +1314,6 @@ void ToolBox::dispose()
     ImplSVData* pSVData = ImplGetSVData();
     delete pSVData->maCtrlData.mpTBDragMgr;
     pSVData->maCtrlData.mpTBDragMgr = nullptr;
-
-    if (mpStatusListener.is())
-        mpStatusListener->dispose();
 
     mpFloatWin.clear();
 
@@ -3854,29 +3837,6 @@ void ToolBox::DataChanged( const DataChangedEvent& rDCEvt )
     }
 
     maDataChangedHandler.Call( &rDCEvt );
-}
-
-void ToolBox::statusChanged( const css::frame::FeatureStateEvent& Event )
-{
-    // Update image mirroring/rotation
-    if ( Event.FeatureURL.Complete != ".uno:ImageOrientation" )
-        return;
-
-    SfxImageItem aItem( 1 );
-    aItem.PutValue( Event.State, 0 );
-
-    mbImagesMirrored = aItem.IsMirrored();
-    mnImagesRotationAngle = aItem.GetRotation();
-
-    // update image orientation
-    OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(mpStatusListener->getFrame()));
-    for (auto const& item : mpData->m_aItems)
-    {
-        if (vcl::CommandInfoProvider::IsMirrored(item.maCommandStr, aModuleName))
-            SetItemImageMirrorMode(item.mnId, mbImagesMirrored);
-        if (vcl::CommandInfoProvider::IsRotated(item.maCommandStr, aModuleName))
-            SetItemImageAngle(item.mnId, mnImagesRotationAngle);
-    }
 }
 
 void ToolBox::SetStyle(WinBits nNewStyle)

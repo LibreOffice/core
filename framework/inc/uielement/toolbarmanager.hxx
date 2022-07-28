@@ -82,7 +82,6 @@ public:
     virtual void Clear() = 0;
     virtual void SetName(const OUString& rName) = 0;
     virtual void SetHelpId(const OString& rHelpId) = 0;
-    virtual void TrackImageOrientation(const css::uno::Reference<css::frame::XFrame>& rFrame) = 0;
     virtual bool WillUsePopupMode() = 0;
     virtual bool IsReallyVisible() = 0;
     virtual void SetIconSize(ToolBoxButtonSize eSize) = 0;

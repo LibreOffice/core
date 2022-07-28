@@ -34,8 +34,6 @@
 #include <vector>
 
 namespace com::sun::star::frame { class XFrame; }
-namespace com::sun::star::frame { struct FeatureStateEvent; }
-template <class T> class VclStatusListener;
 
 class Timer;
 struct ImplToolItem;
@@ -116,7 +114,6 @@ private:
     tools::Long                mnBottomBorder;
     tools::Long                mnLastResizeDY;
     tools::Long                mnActivateCount;
-    Degree10            mnImagesRotationAngle;
     ToolBoxItemId       mnLastFocusItemId;
     ToolBoxItemId       mnHighItemId;
     ToolBoxItemId       mnCurItemId;
@@ -143,7 +140,6 @@ private:
                         mbDragging:1,
                         mbIsKeyEvent:1,
                         mbChangingHighlight:1,
-                        mbImagesMirrored:1,
                         mbLineSpacing:1,
                         mbIsArranged:1;
     WindowAlign         meAlign;
@@ -161,8 +157,6 @@ private:
     Link<ToolBox *, void> maMenuButtonHdl;
     Link<StateChangedType const *, void> maStateChangedHandler;
     Link<DataChangedEvent const *, void> maDataChangedHandler;
-    /** StatusListener. Notifies about rotated images etc */
-    rtl::Reference<VclStatusListener<ToolBox>> mpStatusListener;
 
 public:
     using Window::ImplInit;
@@ -504,13 +498,10 @@ public:
 
 
     void SetToolbarLayoutMode( ToolBoxLayoutMode eLayout );
-    void statusChanged(const css::frame::FeatureStateEvent& rEvent);
 
     void SetToolBoxTextPosition( ToolBoxTextPosition ePosition );
 
     void SetLineSpacing(bool b) { mbLineSpacing = b; }
-
-    void TrackImageOrientation(const css::uno::Reference<css::frame::XFrame>& rFrame);
 
     virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 };

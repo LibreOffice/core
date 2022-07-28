@@ -292,11 +292,6 @@ public:
         m_pToolBar->SetHelpId( rHelpId );
     }
 
-    virtual void TrackImageOrientation(const css::uno::Reference<css::frame::XFrame>& rFrame) override
-    {
-        m_pToolBar->TrackImageOrientation(rFrame);
-    }
-
     virtual bool WillUsePopupMode() override
     {
         return m_pToolBar->WillUsePopupMode();
@@ -482,8 +477,6 @@ public:
     virtual void SetName(const OUString& /*rName*/) override {}
 
     virtual void SetHelpId(const OString& /*rHelpId*/) override {}
-
-    virtual void TrackImageOrientation(const css::uno::Reference<css::frame::XFrame>&) override {}
 
     virtual bool WillUsePopupMode() override { return true; }
 
@@ -1669,8 +1662,6 @@ void ToolBarManager::RequestImages()
         ++pIter;
         ++i;
     }
-
-    m_pImpl->TrackImageOrientation(m_xFrame);
 }
 
 void ToolBarManager::notifyRegisteredControllers( const OUString& aUIElementName, const OUString& aCommand )
