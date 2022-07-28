@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98e95cba_a5436c18",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-07-28T13:43:43Z",
+      "side": 1,
+      "message": "Looks better!\n\nBut when a custom width is entered, it is still possible to enter values smaller than 1.1pt (when double thin style is selected). That should be not allowed.",
+      "revId": "878dddac007b5b20fe72f7108a2f162d0a6be2e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
