@@ -60,7 +60,6 @@ class SvxItemPropertySet;
 struct SfxItemPropertyMapEntry;
 
 #define WID_FONTDESC                OWN_ATTR_VALUE_START
-#define WID_NUMLEVEL                OWN_ATTR_VALUE_START+1
 #define WID_PORTIONTYPE             OWN_ATTR_VALUE_START+2
 #define WID_NUMBERINGSTARTVALUE     OWN_ATTR_VALUE_START+3
 #define WID_PARAISNUMBERINGRESTART  OWN_ATTR_VALUE_START+4
@@ -71,7 +70,7 @@ struct SfxItemPropertyMapEntry;
 
 #define SVX_UNOEDIT_OUTLINER_PROPERTIES \
     SVX_UNOEDIT_NUMBERING_PROPERTY, \
-    { UNO_NAME_NUMBERING_LEVEL,        WID_NUMLEVEL,       ::cppu::UnoType<sal_Int16>::get(), 0, 0 }, \
+    { UNO_NAME_NUMBERING_LEVEL,        EE_PARA_OUTLLEVEL,       ::cppu::UnoType<sal_Int16>::get(), 0, 0 }, \
     {u"NumberingStartValue",           WID_NUMBERINGSTARTVALUE, ::cppu::UnoType<sal_Int16>::get(), 0, 0 }, \
     {u"ParaIsNumberingRestart",        WID_PARAISNUMBERINGRESTART, cppu::UnoType<bool>::get(), 0, 0 }
 
