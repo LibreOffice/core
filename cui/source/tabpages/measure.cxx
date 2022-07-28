@@ -110,11 +110,16 @@ SvxMeasurePage::SvxMeasurePage(weld::Container* pPage, weld::DialogController* p
     m_xTsbAutoPosH->connect_toggled(LINK(this, SvxMeasurePage, ClickAutoPosHdl_Impl));
 
     Link<weld::MetricSpinButton&,void> aLink(LINK(this, SvxMeasurePage, ChangeAttrEditHdl_Impl));
+    m_xMtrFldLineDist->set_range(-10000, 10000, FieldUnit::MM);
     m_xMtrFldLineDist->connect_value_changed(aLink);
     m_xMtrFldHelplineOverhang->connect_value_changed(aLink);
+    m_xMtrFldHelplineOverhang->set_range(-10000, 10000, FieldUnit::MM);
     m_xMtrFldHelplineDist->connect_value_changed(aLink);
+    m_xMtrFldHelplineDist->set_range(-10000, 10000, FieldUnit::MM);
     m_xMtrFldHelpline1Len->connect_value_changed(aLink);
+    m_xMtrFldHelpline1Len->set_range(-10000, 10000, FieldUnit::MM);
     m_xMtrFldHelpline2Len->connect_value_changed(aLink);
+    m_xMtrFldHelpline2Len->set_range(-10000, 10000, FieldUnit::MM);
     m_xMtrFldDecimalPlaces->connect_value_changed(LINK(this, SvxMeasurePage, ChangeAttrSpinHdl_Impl));
     m_xTsbBelowRefEdge->connect_toggled(LINK(this, SvxMeasurePage, ChangeAttrClickHdl_Impl));
     m_xTsbParallel->connect_toggled( LINK( this, SvxMeasurePage, ChangeAttrClickHdl_Impl));
