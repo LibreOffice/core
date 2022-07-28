@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e10926a5_5f56f4e2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-07-28T05:23:23Z",
+      "side": 1,
+      "message": "The message describes the user-visible change. Rather, it should discuss the code change. The user-visible change is also OK, but only as additional note, describing the end result from the discussed code change.\n\nSomething in the line:\n\n\"When called first time, SfxObjectShell::SaveTo_Impl had set media descriptor\u0027s m_Foo to X in case of Y, and didn\u0027t check A to do B; then, calling the function next time in a following save, it detected X\u003d\u003dY, and did M, which resulted in silent overwrite.\n\nThis change makes sure that when A\u003d\u003dB, which is set in DocNeedsFileDateCheck in case of user input N, we do B properly. This way, the following save will ask again.\"",
+      "revId": "6eb6ea534081b54f4f3a8e1bcf9cf00deb50dc21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f66788e4_35c485a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-07-28T05:23:23Z",
+      "side": 1,
+      "message": "Thank you!\n\nPlease consider my *style* nitpicks. I haven\u0027t checked the correctness of the change itself yet.",
+      "revId": "6eb6ea534081b54f4f3a8e1bcf9cf00deb50dc21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36637159_a05b0d50",
+        "filename": "sfx2/source/doc/objstor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1233,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-07-28T05:23:23Z",
+      "side": 1,
+      "message": "Please make sure to keep unchanged lines properly unchanged. That reduces the git noise, allowing to see the truly changed stuff in the review.\n\nSpecifically, both lines 1231 and 1233 should not get any spaces removed, and so would be not marked changed here. Only the newly added braces and the code below should be the stuff marked as modified compared to the previous code.",
+      "revId": "6eb6ea534081b54f4f3a8e1bcf9cf00deb50dc21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
