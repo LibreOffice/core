@@ -16,6 +16,23 @@
       "message": "Adolfo: I just put the SHA1 here and gerrit doesn\u0027t generate automatically a clickable link. Did I miss something?",
       "revId": "384e95eb40dad37930be0de973a4c48f77dbebdc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e9eab67_7fa0bf2f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-07-28T11:34:40Z",
+      "side": 1,
+      "message": "Not on Gerrit, but it works on Gitiles and Cgit (and GitHub), which are the places that actually matter ;-)",
+      "revId": "384e95eb40dad37930be0de973a4c48f77dbebdc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
