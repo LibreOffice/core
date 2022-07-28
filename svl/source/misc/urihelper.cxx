@@ -50,6 +50,12 @@
 #include <sal/log.hxx>
 #include <tools/inetmime.hxx>
 #include <unotools/charclass.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <tools/json_writer.hxx>
+#include <comphelper/lok.hxx>
+#include <sfx2/lokhelper.hxx>
+#include <o3tl/deleter.hxx>
+#include <sfx2/viewsh.hxx>
 
 using namespace com::sun::star;
 
@@ -691,6 +697,42 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
                                            INetURLObject::EncodeMechanism::All,
                                            RTL_TEXTENCODING_UTF8,
                                            FSysStyle::Dos);
+                        if (!aUri.HasError())
+                        {
+                            rBegin = nPos;
+                            rEnd = nUriEnd;
+                            return
+                                aUri.GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
+                        }
+                    }
+                }
+            }
+            else if (rEnd - nPos >= 2
+                     && rText[nPos] == '@')
+            {
+                // ("user typed mention");
+                sal_Int32 i = nPos + 1;
+                if (i != rEnd)
+                {
+                    sal_Int32 nUriEnd = i;
+                    while (i != rEnd
+                           && checkWChar(rCharClass, rText, &i, &nUriEnd,
+                                         nullptr)) ;
+                    if (isBoundary1(rCharClass, rText, nUriEnd, rEnd))
+                    {
+                        // if (comphelper::LibreOfficeKit::isActive())
+                        // {
+                        //     tools::JsonWriter aJson;
+                        //     aJson.put("text", rText);
+
+                        //     std::unique_ptr<char, o3tl::free_delete> pJson(aJson.extractData());
+                        //     SfxViewShell* pViewShell = SfxViewShell::Current();
+                        //     pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_MENTION, pJson.get());
+                        // }
+
+                        INetURLObject aUri(rText.copy(nPos, nUriEnd - nPos),
+                                           INetProtocol::Mention, eMechanism,
+                                           eCharset);
                         if (!aUri.HasError())
                         {
                             rBegin = nPos;
