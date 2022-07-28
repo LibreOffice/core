@@ -16,6 +16,23 @@
       "message": "if it works then it looks good to me",
       "revId": "6cf1212e9ea67c5c898d6383ff15fdfe43fe963a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc6b993f_c1025fe9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-07-28T11:04:21Z",
+      "side": 1,
+      "message": "Thank you for the review!\nLet\u0027s push this one then.",
+      "revId": "6cf1212e9ea67c5c898d6383ff15fdfe43fe963a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
