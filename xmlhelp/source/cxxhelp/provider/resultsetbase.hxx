@@ -49,8 +49,8 @@ namespace chelp {
     {
     public:
 
-        ResultSetBase( const css::uno::Reference< css::uno::XComponentContext >&  rxContext,
-                       const css::uno::Reference< css::ucb::XContentProvider >&  xProvider,
+        ResultSetBase( css::uno::Reference< css::uno::XComponentContext > xContext,
+                       css::uno::Reference< css::ucb::XContentProvider > xProvider,
                        const css::uno::Sequence< css::beans::Property >& seq );
 
         virtual ~ResultSetBase() override;

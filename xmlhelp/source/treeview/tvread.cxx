@@ -40,6 +40,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/pathoptions.hxx>
 #include <memory>
+#include <utility>
 
 namespace treeview {
 
@@ -826,9 +827,9 @@ void TVChildTarget::subst( OUString& instpath )
 
 const char aHelpMediaType[] = "application/vnd.sun.star.help";
 
-TreeFileIterator::TreeFileIterator( const OUString& aLanguage )
+TreeFileIterator::TreeFileIterator( OUString aLanguage )
         : m_eState( IteratorState::UserExtensions )
-        , m_aLanguage( aLanguage )
+        , m_aLanguage(std::move( aLanguage ))
 {
     m_xContext = ::comphelper::getProcessComponentContext();
     if( !m_xContext.is() )

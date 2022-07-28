@@ -19,6 +19,7 @@
 
 #include <config_gpgme.h>
 
+#include <utility>
 #include <xsecctl.hxx>
 #include <documentsignaturehelper.hxx>
 #include <framework/saxeventkeeperimpl.hxx>
@@ -98,8 +99,8 @@ OUString getSignatureURI(svl::crypto::SignatureMethodAlgorithm eAlgorithm, sal_I
 }
 }
 
-XSecController::XSecController( const css::uno::Reference<css::uno::XComponentContext>& rxCtx )
-    : mxCtx(rxCtx)
+XSecController::XSecController( css::uno::Reference<css::uno::XComponentContext> xCtx )
+    : mxCtx(std::move(xCtx))
     , m_nNextSecurityId(1)
     , m_bIsPreviousNodeInitializable(false)
     , m_bIsSAXEventKeeperConnected(false)

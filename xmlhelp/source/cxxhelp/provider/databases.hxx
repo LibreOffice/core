@@ -25,6 +25,7 @@
 #include <string_view>
 #include <unordered_map>
 #include <unordered_set>
+#include <utility>
 #include <vector>
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
@@ -62,13 +63,13 @@ namespace chelp {
 
     public:
 
-        StaticModuleInformation( const OUString& aTitle,
-                                 const OUString& aStartId,
-                                 const OUString& aProgramSwitch,
+        StaticModuleInformation( OUString aTitle,
+                                 OUString aStartId,
+                                 OUString aProgramSwitch,
                                  std::u16string_view aOrder )
-            : m_aStartId( aStartId ),
-              m_aProgramSwitch( aProgramSwitch ),
-              m_aTitle( aTitle ),
+            : m_aStartId(std::move( aStartId )),
+              m_aProgramSwitch(std::move( aProgramSwitch )),
+              m_aTitle(std::move( aTitle )),
               m_nOrder( o3tl::toInt32(aOrder) )
         {
         }
@@ -92,7 +93,7 @@ namespace chelp {
 
             KeywordElement( Databases const * pDatabases,
                             helpdatafileproxy::Hdf* pHdf,
-                            OUString const & key,
+                            OUString  key,
                             std::u16string_view ids );
 
         private:
@@ -306,9 +307,9 @@ namespace chelp {
 
     public:
         ExtensionIteratorBase( css::uno::Reference< css::uno::XComponentContext > const & xContext,
-            Databases& rDatabases, const OUString& aInitialModule, const OUString& aLanguage );
-        ExtensionIteratorBase( Databases& rDatabases, const OUString& aInitialModule,
-            const OUString& aLanguage );
+            Databases& rDatabases, OUString aInitialModule, OUString aLanguage );
+        ExtensionIteratorBase( Databases& rDatabases, OUString  aInitialModule,
+            OUString  aLanguage );
         void init();
 
     private:

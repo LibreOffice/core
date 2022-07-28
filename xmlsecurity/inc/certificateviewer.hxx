@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <utility>
 #include <vcl/weld.hxx>
 
 namespace com::sun::star {
@@ -93,8 +94,8 @@ struct Details_UserDatat
     OUString const  maTxt;
     bool const      mbFixedWidthFont;
 
-    Details_UserDatat(const OUString& rTxt, bool bFixedWidthFont)
-        : maTxt(rTxt)
+    Details_UserDatat(OUString aTxt, bool bFixedWidthFont)
+        : maTxt(std::move(aTxt))
         , mbFixedWidthFont(bFixedWidthFont)
     {
     }
@@ -120,8 +121,8 @@ struct CertPath_UserData
     css::uno::Reference< css::security::XCertificate > mxCert;
     bool const mbValid;
 
-    CertPath_UserData(css::uno::Reference<css::security::XCertificate> const & xCert, bool bValid)
-        : mxCert(xCert)
+    CertPath_UserData(css::uno::Reference<css::security::XCertificate> xCert, bool bValid)
+        : mxCert(std::move(xCert))
         , mbValid(bValid)
     {
     }

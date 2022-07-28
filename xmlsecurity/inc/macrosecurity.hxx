@@ -44,7 +44,7 @@ private:
     DECL_LINK(OkBtnHdl, weld::Button&, void);
 public:
     MacroSecurity(weld::Window* pParent,
-        const css::uno::Reference<css::xml::crypto::XSecurityEnvironment>& rxSecurityEnvironment);
+        css::uno::Reference<css::xml::crypto::XSecurityEnvironment> xSecurityEnvironment);
 
     void EnableReset(bool bEnable = true)
     {

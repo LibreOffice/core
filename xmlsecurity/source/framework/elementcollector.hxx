@@ -67,7 +67,7 @@ public:
         sal_Int32 nBufferId,
         css::xml::crypto::sax::ElementMarkPriority nPriority,
         bool bToModify,
-        const css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener >& xReferenceResolvedListener);
+        css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > xReferenceResolvedListener);
 
     css::xml::crypto::sax::ElementMarkPriority getPriority() const { return m_nPriority;}
     bool getModify() const { return m_bToModify;}

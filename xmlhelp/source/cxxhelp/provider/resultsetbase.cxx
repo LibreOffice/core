@@ -23,17 +23,18 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <ucbhelper/resultsetmetadata.hxx>
 #include <cppuhelper/queryinterface.hxx>
+#include <utility>
 
 #include "resultsetbase.hxx"
 
 using namespace chelp;
 using namespace com::sun::star;
 
-ResultSetBase::ResultSetBase( const uno::Reference< uno::XComponentContext >&  rxContext,
-                              const uno::Reference< ucb::XContentProvider >&  xProvider,
+ResultSetBase::ResultSetBase( uno::Reference< uno::XComponentContext >  xContext,
+                              uno::Reference< ucb::XContentProvider >  xProvider,
                               const uno::Sequence< beans::Property >& seq )
-    : m_xContext( rxContext ),
-      m_xProvider( xProvider ),
+    : m_xContext(std::move( xContext )),
+      m_xProvider(std::move( xProvider )),
       m_nRow( -1 ),
       m_nWasNull( true ),
       m_sProperty( seq )

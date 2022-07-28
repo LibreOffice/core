@@ -42,7 +42,7 @@ protected:
     ONSSInitializer();
 
 public:
-    explicit ONSSInitializer(const css::uno::Reference<css::uno::XComponentContext> &rxContext);
+    explicit ONSSInitializer(css::uno::Reference<css::uno::XComponentContext> xContext);
     virtual ~ONSSInitializer() override;
 
     static bool initNSS( const css::uno::Reference< css::uno::XComponentContext > &rxContext );

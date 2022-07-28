@@ -291,7 +291,7 @@ private:
         sal_Int32 nSecurityId );
 
 public:
-    explicit XSecController(const css::uno::Reference<css::uno::XComponentContext>& rxCtx);
+    explicit XSecController(css::uno::Reference<css::uno::XComponentContext> xCtx);
     virtual ~XSecController() override;
 
     sal_Int32 getNewSecurityId(  );

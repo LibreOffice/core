@@ -74,7 +74,7 @@ class ModuleElement
 
 public:
     ModuleElement(
-        OUString const & rLocalName,
+        OUString aLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ModuleImport * pImport );
     virtual ~ModuleElement() override;
