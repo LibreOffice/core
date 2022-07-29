@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8cd5a341_62f34086",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-07-29T02:30:10Z",
+      "side": 1,
+      "message": "I was hoping I could just do a simple property instead of also calling SetDepth, but unit tests didn\u0027t let me. So I\u0027m tempted to go to the opposite extreme and change as little as possible. At the moment I\u0027m about half-way in between those two poles :-)",
+      "revId": "778172be2aac6816b36f36642e4c7b2ef8f5b483",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f64fbb9_d2f441d9",
+        "filename": "editeng/source/uno/unotext.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1967,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-07-29T02:30:10Z",
+      "side": 1,
+      "message": "I should just get rid of these comments. It actually isn\u0027t correct because I decided to completely remove the clause.",
+      "range": {
+        "startLine": 1967,
+        "startChar": 38,
+        "endLine": 1967,
+        "endChar": 69
+      },
+      "revId": "778172be2aac6816b36f36642e4c7b2ef8f5b483",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8650ec8c_cda7171e",
+        "filename": "editeng/source/uno/unotext.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2014,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-07-29T02:30:10Z",
+      "side": 1,
+      "message": "This too \"feels\" like it should be all that is needed.",
+      "range": {
+        "startLine": 2014,
+        "startChar": 12,
+        "endLine": 2014,
+        "endChar": 75
+      },
+      "revId": "778172be2aac6816b36f36642e4c7b2ef8f5b483",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
