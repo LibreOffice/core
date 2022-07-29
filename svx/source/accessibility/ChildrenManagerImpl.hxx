@@ -353,10 +353,10 @@ private:
         ChildDescriptorListType& raOldChildList);
 
     /** Merge the information that is already known about the visible shapes
-        from the current list into the new list.
+        from the old list into the current list.
         @param raChildList
-            Information is merged from the current list of visible children
-            to this list.
+            Information is merged to the current list of visible children
+            from this list. The old list can get reordered.
     */
     void MergeAccessibilityInformation (ChildDescriptorListType& raChildList);
 
