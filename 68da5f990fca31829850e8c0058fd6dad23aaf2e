@@ -16,6 +16,24 @@
       "message": "“macOS” is dromedary case",
       "revId": "68da5f990fca31829850e8c0058fd6dad23aaf2e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1d9fb4b_9eeb6c92",
+        "filename": "extras/source/wordbook/technical.dic",
+        "patchSetId": 2
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-07-29T14:32:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6227f4d2_da046f76",
+      "revId": "68da5f990fca31829850e8c0058fd6dad23aaf2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
