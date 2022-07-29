@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5f34b0f_c47a1b82",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-29T15:07:44Z",
+      "side": 1,
+      "message": "@Colomban: With this (and underyling https://gerrit.libreoffice.org/c/core/+/137621 ) in place, the test from tdf#150064 runs fine for me.\nIf you have any feedback here, that\u0027s appreciated. Are you planning to make use of that in follow-up a11y tests (in which case I\u0027d not spend time thinking on whether I should be adding any tests myself ;-))?",
+      "revId": "afb7a62ffaf1798f325ea1f071bccabcfefb8e60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
