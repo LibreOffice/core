@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "906c69b7_40d67df4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-07-29T10:10:04Z",
+      "side": 1,
+      "message": "I had submitted https://gerrit.libreoffice.org/c/core/+/137592 but I\u0027ll abandon this one and unassign for this one on Coverity scan",
+      "revId": "d406f481c07b166e8b0644642cfcefd5b848e247",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
