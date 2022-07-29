@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0a66ed1_e9a46910",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-07-29T10:14:26Z",
+      "side": 1,
+      "message": "(just for info, I had submitted https://gerrit.libreoffice.org/c/core/+/137591, I abandoned it and unassign on Coverity)",
+      "revId": "0061366f0f29a5d3a727a6f6f9a99e71a5b6848c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
