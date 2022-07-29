@@ -762,6 +762,9 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
 
             if (sName == "AtkObject::accessible-name")
                 xName->setNodeValue("label");
+
+            if (sName == "AtkObject::accessible-role")
+                xName->setNodeValue("accessible-role");
         }
         else if (xChild->getNodeName() == "child")
         {
@@ -1357,10 +1360,40 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 xParentObject->insertBefore(xAccessibility, xNode);
 
                 // move the converted old AtkObject:: properties into a new accessibility parent
+                css::uno::Reference<css::xml::dom::XNode> xRole;
                 for (css::uno::Reference<css::xml::dom::XNode> xCurrent = xChild->getFirstChild();
                      xCurrent.is(); xCurrent = xChild->getFirstChild())
                 {
+                    if (css::uno::Reference<css::xml::dom::XNamedNodeMap> xCurrentMap
+                        = xCurrent->getAttributes())
+                    {
+                        css::uno::Reference<css::xml::dom::XNode> xName
+                            = xCurrentMap->getNamedItem("name");
+                        OUString sName(xName->getNodeValue());
+                        if (sName == "accessible-role")
+                        {
+                            xRole = xCurrent;
+                        }
+                    }
+
                     xAccessibility->appendChild(xChild->removeChild(xCurrent));
+                }
+
+                if (xRole)
+                {
+                    auto xRoleText = xRole->getFirstChild();
+                    if (xRoleText.is())
+                    {
+                        OUString sText = xRoleText->getNodeValue();
+                        // don't really know what the right solution here should be, but "static" isn't
+                        // a role that exists in gtk4, nothing seems to match exactly, but maybe "alert"
+                        // is a useful place to land for now
+                        if (sText == "static")
+                            xRoleText->setNodeValue("alert");
+                    }
+                    // move out of accessibility section to property section
+                    xParentObject->insertBefore(xRole->getParentNode()->removeChild(xRole),
+                                                xAccessibility);
                 }
             }
 
