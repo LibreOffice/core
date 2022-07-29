@@ -173,16 +173,43 @@ void MacrosTest::tearDownNssGpg()
 #endif
 }
 
+namespace
+{
+struct Valid
+{
+    DateTime now;
+    OUString subjectName;
+    Valid(const css::uno::Sequence<css::beans::PropertyValue>& rFilterData)
+        : now(DateTime::SYSTEM)
+    {
+        for (const auto& propVal : rFilterData)
+        {
+            if (propVal.Name == "SignCertificateSubjectName")
+                propVal.Value >>= subjectName;
+        }
+    }
+    bool operator()(const css::uno::Reference<css::security::XCertificate>& cert) const
+    {
+        if (!now.IsBetween(cert->getNotValidBefore(), cert->getNotValidAfter()))
+            return false;
+        if (!subjectName.isEmpty() && subjectName != cert->getSubjectName())
+            return false;
+        return true;
+    }
+};
+}
+
 bool MacrosTest::IsValid(const css::uno::Reference<css::security::XCertificate>& cert)
 {
-    return DateTime(DateTime::SYSTEM)
-        .IsBetween(cert->getNotValidBefore(), cert->getNotValidAfter());
+    const Valid test({});
+    return test(cert);
 }
 
 css::uno::Reference<css::security::XCertificate> MacrosTest::GetValidCertificate(
-    const css::uno::Sequence<css::uno::Reference<css::security::XCertificate>>& certs)
+    const css::uno::Sequence<css::uno::Reference<css::security::XCertificate>>& certs,
+    const css::uno::Sequence<css::beans::PropertyValue>& rFilterData)
 {
-    if (auto it = std::find_if(certs.begin(), certs.end(), IsValid); it != certs.end())
+    if (auto it = std::find_if(certs.begin(), certs.end(), Valid(rFilterData)); it != certs.end())
         return *it;
     return {};
 }
