@@ -55,6 +55,7 @@ class Menu;
 namespace framework
 {
 
+class ImageOrientationController;
 class ToolBarManager;
 
 class ToolBarManagerImpl
@@ -246,6 +247,7 @@ class ToolBarManager final : public ToolbarManager_Base
         OUString                                                     m_sIconTheme;
 
         rtl::Reference< ToolBarManager >                             m_aOverflowManager;
+        rtl::Reference< ImageOrientationController >                 m_aImageController;
 };
 
 }

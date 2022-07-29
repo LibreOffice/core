@@ -54,6 +54,7 @@ public:
     void InitToolBox(VclBuilder::stringmap& rMap);
 
 protected:
+    css::uno::Reference<css::lang::XComponent> mxImageController;
     typedef std::map<ToolBoxItemId, css::uno::Reference<css::frame::XToolbarController>> ControllerContainer;
     ControllerContainer maControllers;
     bool mbAreHandlersRegistered;

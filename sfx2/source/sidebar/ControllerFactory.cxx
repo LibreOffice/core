@@ -38,6 +38,18 @@ using namespace css::uno;
 
 namespace sfx2::sidebar {
 
+Reference<lang::XComponent> ControllerFactory::CreateImageController(
+    const Reference<frame::XFrame>& rxFrame,
+    const Reference<awt::XWindow>& rxParentWindow)
+{
+    rtl::Reference xController(new framework::ImageOrientationController(
+        comphelper::getProcessComponentContext(), rxFrame, rxParentWindow,
+        vcl::CommandInfoProvider::GetModuleIdentifier(rxFrame)));
+
+    xController->update();
+    return xController;
+}
+
 Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
     ToolBox* pToolBox,
     const ToolBoxItemId nItemId,

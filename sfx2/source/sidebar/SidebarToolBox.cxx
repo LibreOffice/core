@@ -67,6 +67,12 @@ SidebarToolBox::SidebarToolBox (vcl::Window* pParentWindow)
     SetToolboxButtonSize(GetDefaultButtonSize());
 
     SvtMiscOptions().AddListenerLink(LINK(this, SidebarToolBox, ChangedIconSizeHandler));
+    if (SfxViewFrame::Current())
+    {
+        auto xFrame(SfxViewFrame::Current()->GetFrame().GetFrameInterface());
+        auto xWidget(VCLUnoHelper::GetInterface(this));
+        mxImageController = sfx2::sidebar::ControllerFactory::CreateImageController(xFrame, xWidget);
+    }
 
 #ifdef DEBUG
     SetText(OUString("SidebarToolBox"));
@@ -90,6 +96,9 @@ void SidebarToolBox::dispose()
         if (xComponent.is())
             xComponent->dispose();
     }
+
+    if (mxImageController)
+        mxImageController->dispose();
 
     if (mbAreHandlersRegistered)
     {

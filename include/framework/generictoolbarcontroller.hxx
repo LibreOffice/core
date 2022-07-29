@@ -21,9 +21,7 @@
 
 #include <framework/fwkdllapi.h>
 #include <svtools/toolboxcontroller.hxx>
-#include <vcl/vclptr.hxx>
-
-class ToolBox;
+#include <vcl/toolbox.hxx>
 
 namespace framework
 {
@@ -67,6 +65,26 @@ class FWK_DLLPUBLIC GenericToolbarController final : public svt::ToolboxControll
                             m_bMirrored : 1,
                             m_bMadeInvisible : 1;
         OUString            m_aEnumCommand;
+};
+
+class FWK_DLLPUBLIC ImageOrientationController final : public svt::ToolboxController
+{
+public:
+    ImageOrientationController(const css::uno::Reference<css::uno::XComponentContext>& rContext,
+                               const css::uno::Reference<css::frame::XFrame>& rFrame,
+                               const css::uno::Reference<css::awt::XWindow>& rParentWindow,
+                               const OUString& rModuleName);
+
+    // XComponent
+    void SAL_CALL dispose() override;
+
+    // XStatusListener
+    void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
+
+    DECL_LINK(WindowEventListener, VclWindowEvent&, void);
+private:
+    Degree10 m_nRotationAngle;
+    bool m_bMirrored;
 };
 
 }

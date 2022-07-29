@@ -13,7 +13,7 @@
 #include <sfx2/weldutils.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/weldutils.hxx>
 
 namespace
 {
@@ -110,6 +110,8 @@ ToolbarUnoDispatcher::ToolbarUnoDispatcher(weld::Toolbar& rToolbar, weld::Builde
         CreateController(sCommand);
     }
 
+    rtl::Reference xWidget(new weld::TransportAsXWindow(m_pToolbar, m_pBuilder));
+    m_xImageController = sfx2::sidebar::ControllerFactory::CreateImageController(m_xFrame, xWidget);
     m_aToolbarOptions.AddListenerLink(LINK(this, ToolbarUnoDispatcher, ChangedIconSizeHandler));
 }
 
@@ -194,6 +196,7 @@ void ToolbarUnoDispatcher::dispose()
             xComponent->dispose();
     }
 
+    m_xImageController->dispose();
     m_pToolbar->connect_clicked(Link<const OString&, void>());
     m_pToolbar = nullptr;
     m_pBuilder = nullptr;

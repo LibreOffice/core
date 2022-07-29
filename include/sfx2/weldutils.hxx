@@ -31,6 +31,7 @@ class SFX2_DLLPUBLIC ToolbarUnoDispatcher
 {
 private:
     css::uno::Reference<css::frame::XFrame> m_xFrame;
+    css::uno::Reference<css::lang::XComponent> m_xImageController;
     SvtMiscOptions m_aToolbarOptions;
     weld::Toolbar* m_pToolbar;
     weld::Builder* m_pBuilder;

@@ -766,6 +766,8 @@ void ToolBarManager::frameAction( const FrameActionEvent& Action )
     SolarMutexGuard g;
     if ( Action.Action == FrameAction_CONTEXT_CHANGED && !m_bDisposed )
     {
+        if (m_aImageController)
+            m_aImageController->update();
         m_aAsyncUpdateControllersTimer.Start();
     }
 }
@@ -997,6 +999,10 @@ void ToolBarManager::RemoveControllers()
     assert(!m_bDisposed);
 
     m_aSubToolBarControllerMap.clear();
+
+    if (m_aImageController)
+        m_aImageController->dispose();
+    m_aImageController.clear();
 
     // i90033
     // Remove item window pointers from the toolbar. They were
@@ -1662,6 +1668,10 @@ void ToolBarManager::RequestImages()
         ++pIter;
         ++i;
     }
+
+    assert(!m_aImageController); // an existing one isn't disposed here
+    m_aImageController = new ImageOrientationController(m_xContext, m_xFrame, m_pImpl->GetInterface(), m_aModuleIdentifier);
+    m_aImageController->update();
 }
 
 void ToolBarManager::notifyRegisteredControllers( const OUString& aUIElementName, const OUString& aCommand )

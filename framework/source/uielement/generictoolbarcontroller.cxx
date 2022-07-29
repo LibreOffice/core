@@ -30,9 +30,9 @@
 #include <svl/imageitm.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/toolbox.hxx>
 #include <vcl/weld.hxx>
 #include <tools/urlobj.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <strings.hrc>
 #include <classes/fwkresid.hxx>
 
@@ -336,6 +336,98 @@ IMPL_STATIC_LINK( GenericToolbarController, ExecuteHdl_Impl, void*, p, void )
    }
 
    delete pExecuteInfo;
+}
+
+ImageOrientationController::ImageOrientationController(const Reference<XComponentContext>& rContext,
+                                                       const Reference<XFrame>& rFrame,
+                                                       const Reference<css::awt::XWindow>& rParentWindow,
+                                                       const OUString& rModuleName)
+    : ToolboxController(rContext, rFrame, ".uno:ImageOrientation")
+    , m_nRotationAngle(0_deg10)
+    , m_bMirrored(false)
+{
+    m_sModuleName = rModuleName;
+    m_xParentWindow = rParentWindow;
+    initialize({});
+    if (!m_pToolbar)
+        VCLUnoHelper::GetWindow(getParent())->AddEventListener(LINK(this, ImageOrientationController, WindowEventListener));
+}
+
+void ImageOrientationController::dispose()
+{
+    ToolboxController::dispose();
+    if (!m_pToolbar)
+        VCLUnoHelper::GetWindow(getParent())->RemoveEventListener(LINK(this, ImageOrientationController, WindowEventListener));
+}
+
+IMPL_LINK(ImageOrientationController, WindowEventListener, VclWindowEvent&, rWindowEvent, void)
+{
+    if (m_bDisposed || rWindowEvent.GetId() != VclEventId::ToolboxItemAdded)
+        return;
+
+    ToolBox* pToolBox = static_cast<ToolBox*>(rWindowEvent.GetWindow());
+    ToolBoxItemId nItemId = pToolBox->GetItemId(reinterpret_cast<sal_IntPtr>(rWindowEvent.GetData()));
+    OUString aCommand = pToolBox->GetItemCommand(nItemId);
+
+    if (vcl::CommandInfoProvider::IsMirrored(aCommand, getModuleName()))
+        pToolBox->SetItemImageMirrorMode(nItemId, m_bMirrored);
+    if (vcl::CommandInfoProvider::IsRotated(aCommand, getModuleName()))
+        pToolBox->SetItemImageAngle(nItemId, m_nRotationAngle);
+}
+
+void ImageOrientationController::statusChanged(const css::frame::FeatureStateEvent& rEvent)
+{
+    if (m_bDisposed)
+        throw DisposedException();
+
+    SfxImageItem aItem;
+    aItem.PutValue(rEvent.State, 0);
+
+    if (m_bMirrored == aItem.IsMirrored() && m_nRotationAngle == aItem.GetRotation())
+        return;
+
+    m_bMirrored = aItem.IsMirrored();
+    m_nRotationAngle = aItem.GetRotation();
+
+    if (m_pToolbar)
+    {
+        for (int i = 0, nCount = m_pToolbar->get_n_items(); i < nCount; ++i)
+        {
+            OString aCommand = m_pToolbar->get_item_ident(i);
+            if (vcl::CommandInfoProvider::IsMirrored(OUString::fromUtf8(aCommand), getModuleName()))
+            {
+                m_pToolbar->set_item_image_mirrored(aCommand, m_bMirrored);
+                auto xGraphic(vcl::CommandInfoProvider::GetXGraphicForCommand(
+                    OUString::fromUtf8(aCommand), m_xFrame, m_pToolbar->get_icon_size()));
+                m_pToolbar->set_item_image(aCommand, xGraphic);
+            }
+        }
+    }
+    else
+    {
+        ToolBox* pToolBox = static_cast<ToolBox*>(VCLUnoHelper::GetWindow(getParent()));
+        for (ToolBox::ImplToolItems::size_type i = 0; i < pToolBox->GetItemCount(); ++i)
+        {
+            ToolBoxItemId nItemId = pToolBox->GetItemId(i);
+            OUString aCommand = pToolBox->GetItemCommand(nItemId);
+            bool bModified = false;
+            if (vcl::CommandInfoProvider::IsMirrored(aCommand, getModuleName()))
+            {
+                pToolBox->SetItemImageMirrorMode(nItemId, m_bMirrored);
+                bModified = true;
+            }
+            if (vcl::CommandInfoProvider::IsRotated(aCommand, getModuleName()))
+            {
+                pToolBox->SetItemImageAngle(nItemId, m_nRotationAngle);
+                bModified = true;
+            }
+            if (bModified)
+            {
+                Image aImage(vcl::CommandInfoProvider::GetImageForCommand(aCommand, m_xFrame, pToolBox->GetImageSize()));
+                pToolBox->SetItemImage(nItemId, aImage);
+            }
+        }
+    }
 }
 
 } // namespace
