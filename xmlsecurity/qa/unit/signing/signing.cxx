@@ -159,7 +159,8 @@ SigningTest::getCertificate(DocumentSignatureManager& rSignatureManager,
     {
         auto pCertificate = dynamic_cast<xmlsecurity::Certificate*>(xCertificate.get());
         CPPUNIT_ASSERT(pCertificate);
-        if (pCertificate->getSignatureMethodAlgorithm() == eAlgo && IsValid(xCertificate))
+        if (pCertificate->getSignatureMethodAlgorithm() == eAlgo
+            && IsValid(xCertificate, xSecurityEnvironment))
             return xCertificate;
     }
     return uno::Reference<security::XCertificate>();

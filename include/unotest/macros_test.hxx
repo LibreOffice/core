@@ -43,6 +43,10 @@ namespace com::sun::star::security
 {
 class XCertificate;
 }
+namespace com::sun::star::xml::crypto
+{
+class XSecurityEnvironment;
+}
 
 namespace unotest
 {
@@ -93,9 +97,11 @@ public:
     void setUpNssGpg(const test::Directories& rDirectories, const OUString& rTestName);
     void tearDownNssGpg();
 
-    static bool IsValid(const css::uno::Reference<css::security::XCertificate>& cert);
+    static bool IsValid(const css::uno::Reference<css::security::XCertificate>& cert,
+                        const css::uno::Reference<css::xml::crypto::XSecurityEnvironment>& env);
     static css::uno::Reference<css::security::XCertificate> GetValidCertificate(
         const css::uno::Sequence<css::uno::Reference<css::security::XCertificate>>& certs,
+        const css::uno::Reference<css::xml::crypto::XSecurityEnvironment>& env,
         const css::uno::Sequence<css::beans::PropertyValue>& rFilterData = {});
 
 protected:
