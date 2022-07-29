@@ -32,9 +32,10 @@ constexpr sal_uInt32 WMF_EMF_CHECK_SIZE = 44;
 
 namespace vcl
 {
-bool peekGraphicFormat(SvStream& rStream, OUString& rFormatExtension, bool bTest)
+bool peekGraphicFormat(SvStream& rStream, OUString& rFormatExtension, bool bTest,
+                       bool bExtendedInfo)
 {
-    vcl::GraphicFormatDetector aDetector(rStream, rFormatExtension);
+    vcl::GraphicFormatDetector aDetector(rStream, rFormatExtension, bExtendedInfo);
     if (!aDetector.detect())
         return false;
 
@@ -338,13 +339,15 @@ bool isPCT(SvStream& rStream, sal_uLong nStreamPos, sal_uLong nStreamLen)
 
 } // end anonymous namespace
 
-GraphicFormatDetector::GraphicFormatDetector(SvStream& rStream, OUString aFormatExtension)
+GraphicFormatDetector::GraphicFormatDetector(SvStream& rStream, OUString aFormatExtension,
+                                             bool bExtendedInfo)
     : mrStream(rStream)
     , maExtension(std::move(aFormatExtension))
     , mnFirstLong(0)
     , mnSecondLong(0)
     , mnStreamPosition(0)
     , mnStreamLength(0)
+    , mbExtendedInfo(bExtendedInfo)
 {
 }
 
@@ -507,6 +510,13 @@ bool GraphicFormatDetector::checkGIF()
         && maFirstBytes[5] == 0x61)
     {
         msDetectedFormat = "GIF";
+        if (mbExtendedInfo)
+        {
+            sal_uInt16 nWidth = maFirstBytes[6] | (maFirstBytes[7] << 8);
+            sal_uInt16 nHeight = maFirstBytes[8] | (maFirstBytes[9] << 8);
+            maPixSize = Size(nWidth, nHeight);
+            mnBitsPerPixel = ((maFirstBytes[10] & 112) >> 4) + 1;
+        }
         return true;
     }
     return false;

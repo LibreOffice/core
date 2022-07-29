@@ -34,7 +34,8 @@ namespace vcl
  *   returns false, if file type can't be verified
  *           true, if the format is verified or the format is not known
  */
-VCL_DLLPUBLIC bool peekGraphicFormat(SvStream& rStream, OUString& rFormatExtension, bool bTest);
+VCL_DLLPUBLIC bool peekGraphicFormat(SvStream& rStream, OUString& rFormatExtension, bool bTest,
+                                     bool bExtendedInfo = false);
 
 class VCL_DLLPUBLIC GraphicFormatDetector
 {
@@ -51,7 +52,7 @@ public:
 
     OUString msDetectedFormat;
 
-    GraphicFormatDetector(SvStream& rStream, OUString aFormatExtension);
+    GraphicFormatDetector(SvStream& rStream, OUString aFormatExtension, bool bExtendedInfo = false);
 
     bool detect();
 
@@ -91,6 +92,18 @@ private:
      */
     sal_uInt8* checkAndUncompressBuffer(sal_uInt8* aUncompressedBuffer, sal_uInt32 nSize,
                                         sal_uInt64& nDecompressedSize);
+    bool mbExtendedInfo;
+    Size maPixSize;
+    Size maLogSize;
+    std::optional<Size> maPreferredLogSize;
+    std::optional<MapMode> maPreferredMapMode;
+    sal_uInt16 mnBitsPerPixel;
+    sal_uInt16 mnPlanes;
+    GraphicFileFormat mnFormat;
+    sal_uInt8 mnNumberOfImageComponents;
+    bool mbOwnStream;
+    bool mbIsTransparent;
+    bool mbIsAlpha;
 };
 }
 
