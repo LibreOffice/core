@@ -102,6 +102,9 @@ Select 'Protect Sheet' from the 'Tools' menu.</property>
                 <property name="wrap">True</property>
                 <property name="max_width_chars">52</property>
                 <property name="xalign">0</property>
+                <attributes>
+                  <attribute name="scale" value="0.9"/>
+                </attributes>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -173,6 +176,9 @@ Select 'Protect Sheet' from the 'Tools' menu.</property>
                 <property name="wrap">True</property>
                 <property name="width_chars">52</property>
                 <property name="xalign">0</property>
+                <attributes>
+                  <attribute name="scale" value="0.9"/>
+                </attributes>
               </object>
               <packing>
                 <property name="left_attach">1</property>

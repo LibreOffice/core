@@ -238,6 +238,9 @@
                       <object class="GtkLabel" id="lbwarning">
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="inserttable|lbwarning">Warning : Large tables may adversely affect performance and compatibility</property>
+                        <attributes>
+                          <attribute name="scale" value="0.9"/>
+                        </attributes>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>

@@ -128,6 +128,9 @@
                     <property name="max_width_chars">52</property>
                     <property name="xalign">0</property>
                     <property name="yalign">0</property>
+                    <attributes>
+                      <attribute name="scale" value="0.9"/>
+                    </attributes>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
