@@ -16,6 +16,24 @@
       "message": "please adapt debugger pretty-printers such as solenv/gdb/libreoffice/tl.py and solenv/vs/LibreOffice.natvis and test that they work before pushing this",
       "revId": "c2067bba14945141d043ea619f5a8a043b6d2c46",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23d680ac_5fc2e8ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-07-29T15:36:48Z",
+      "side": 1,
+      "message": "thanks, didn’t know this existed - I’ll adapt these.",
+      "parentUuid": "5929d3de_b73c1820",
+      "revId": "c2067bba14945141d043ea619f5a8a043b6d2c46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
