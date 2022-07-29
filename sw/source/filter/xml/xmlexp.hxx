@@ -24,6 +24,7 @@
 #include "xmlitmap.hxx"
 #include <xmloff/xmltoken.hxx>
 
+#include <optional>
 #include <string_view>
 #include <vector>
 
@@ -75,7 +76,8 @@ class SwXMLExport : public SvXMLExport
                                  SwXMLTableInfo_Impl& rTableInfo,
                                  bool bTop=false );
 
-    void ExportFormat( const SwFormat& rFormat,  enum ::xmloff::token::XMLTokenEnum eClass );
+    void ExportFormat(const SwFormat& rFormat, enum ::xmloff::token::XMLTokenEnum eClass,
+            ::std::optional<OUString> const oStyleName);
     void ExportTableFormat( const SwFrameFormat& rFormat, sal_uInt32 nAbsWidth );
 
     void ExportTableColumnStyle( const SwXMLTableColumn_Impl& rCol );
