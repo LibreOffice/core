@@ -1776,11 +1776,10 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
         // non visual connector shape drawing properties
         pFS->startElementNS(mnXmlNamespace, XML_cNvCxnSpPr);
 
-        if (GetShapeID(rXShapeA) == -1)
-            GetNewShapeID(rXShapeA);
-        if (GetShapeID(rXShapeB) == -1)
-            GetNewShapeID(rXShapeB);
-        WriteConnectorConnections(nStartGlueId, nEndGlueId, GetShapeID(rXShapeA), GetShapeID(rXShapeB));
+        WriteConnectorConnections(nStartGlueId, nEndGlueId,
+            GetShapeID(rXShapeA) == -1?GetNewShapeID(rXShapeA):GetShapeID(rXShapeA),
+            GetShapeID(rXShapeB) == -1?GetNewShapeID(rXShapeB):GetShapeID(rXShapeB)
+        );
         pFS->endElementNS(mnXmlNamespace, XML_cNvCxnSpPr);
         if (GetDocumentType() == DOCUMENT_PPTX)
             pFS->singleElementNS(mnXmlNamespace, XML_nvPr);
