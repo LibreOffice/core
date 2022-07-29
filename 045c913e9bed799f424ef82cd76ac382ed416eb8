@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0de6fb5_096833f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-29T15:14:30Z",
+      "side": 1,
+      "message": "LGTM. Let\u0027s leave some time in case anybody else wants to take a look. I intend to merge this on Monday evening otherwise.",
+      "revId": "045c913e9bed799f424ef82cd76ac382ed416eb8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

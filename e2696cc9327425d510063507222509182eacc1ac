@@ -98,6 +98,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "527870f3_fe77c779",
+        "filename": "sc/qa/extras/accessibility/basics.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-29T15:14:30Z",
+      "side": 1,
+      "message": "Nice to see how that version would work, too.",
+      "parentUuid": "94210629_7222205d",
+      "range": {
+        "startLine": 61,
+        "startChar": 10,
+        "endLine": 61,
+        "endChar": 38
+      },
+      "revId": "e2696cc9327425d510063507222509182eacc1ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "13467760_a16a40ca",
         "filename": "sc/qa/extras/accessibility/basics.cxx",
         "patchSetId": 7
@@ -157,6 +181,30 @@
       "side": 1,
       "message": "I updated that slightly realizing it was too forgiving, and basically made the LESSEQUAL check a noop.  Now I only to `value +\u003d 1` if `after \u003c before` as well, so I limit the situations where I allow the value to be \"unexpected\" to the case where the time I measured also swapped.  But this still allows DST going backwards, it just requires time to have not went back *and* forth during the call -- which is in my opinion a sane assumption 😊",
       "parentUuid": "094107ac_16d5cb4d",
+      "range": {
+        "startLine": 76,
+        "startChar": 4,
+        "endLine": 79,
+        "endChar": 23
+      },
+      "revId": "e2696cc9327425d510063507222509182eacc1ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b61c18e_539758f8",
+        "filename": "sc/qa/extras/accessibility/basics.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-29T15:14:30Z",
+      "side": 1,
+      "message": "Good catch. Yes, that sounds like a reasonable assumption to make. 😊",
+      "parentUuid": "6b84c13f_f654f165",
       "range": {
         "startLine": 76,
         "startChar": 4,
