@@ -15,7 +15,9 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
+#include <com/sun/star/security/CertificateValidity.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
+#include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 
 #include <basic/basrdll.hxx>
 #include <cppunit/TestAssert.h>
@@ -179,8 +181,11 @@ struct Valid
 {
     DateTime now;
     OUString subjectName;
-    Valid(const css::uno::Sequence<css::beans::PropertyValue>& rFilterData)
+    const css::uno::Reference<css::xml::crypto::XSecurityEnvironment>& env;
+    Valid(const css::uno::Sequence<css::beans::PropertyValue>& rFilterData,
+          const css::uno::Reference<css::xml::crypto::XSecurityEnvironment>& rEnv)
         : now(DateTime::SYSTEM)
+        , env(rEnv)
     {
         for (const auto& propVal : rFilterData)
         {
@@ -194,22 +199,27 @@ struct Valid
             return false;
         if (!subjectName.isEmpty() && subjectName != cert->getSubjectName())
             return false;
+        if (env->verifyCertificate(cert, {}) != css::security::CertificateValidity::VALID)
+            return false;
         return true;
     }
 };
 }
 
-bool MacrosTest::IsValid(const css::uno::Reference<css::security::XCertificate>& cert)
+bool MacrosTest::IsValid(const css::uno::Reference<css::security::XCertificate>& cert,
+                         const css::uno::Reference<css::xml::crypto::XSecurityEnvironment>& env)
 {
-    const Valid test({});
+    const Valid test({}, env);
     return test(cert);
 }
 
 css::uno::Reference<css::security::XCertificate> MacrosTest::GetValidCertificate(
     const css::uno::Sequence<css::uno::Reference<css::security::XCertificate>>& certs,
+    const css::uno::Reference<css::xml::crypto::XSecurityEnvironment>& env,
     const css::uno::Sequence<css::beans::PropertyValue>& rFilterData)
 {
-    if (auto it = std::find_if(certs.begin(), certs.end(), Valid(rFilterData)); it != certs.end())
+    if (auto it = std::find_if(certs.begin(), certs.end(), Valid(rFilterData, env));
+        it != certs.end())
         return *it;
     return {};
 }

@@ -114,8 +114,8 @@ CPPUNIT_TEST_FIXTURE(VclFilterIpdfTest, testPDFAddVisibleSignatureLastPage)
     uno::Reference<view::XSelectionSupplier> xSelectionSupplier(pBaseModel->getCurrentController(),
                                                                 uno::UNO_QUERY);
     xSelectionSupplier->select(uno::Any(xShape));
-    auto xCert = GetValidCertificate(
-        getSecurityContext()->getSecurityEnvironment()->getPersonalCertificates());
+    auto xEnv = getSecurityContext()->getSecurityEnvironment();
+    auto xCert = GetValidCertificate(xEnv->getPersonalCertificates(), xEnv);
     if (!xCert)
     {
         return;
