@@ -39,6 +39,7 @@
 
 #include <DirectoryStream.hxx>
 #include <WPXSvInputStream.hxx>
+#include <utility>
 
 namespace io = com::sun::star::io;
 namespace sdbc = com::sun::star::sdbc;
@@ -93,13 +94,13 @@ uno::Reference<io::XInputStream> findStream(ucbhelper::Content& rContent, std::u
 
 struct DirectoryStream::Impl
 {
-    explicit Impl(const uno::Reference<ucb::XContent>& rxContent);
+    explicit Impl(uno::Reference<ucb::XContent> xContent);
 
     uno::Reference<ucb::XContent> xContent;
 };
 
-DirectoryStream::Impl::Impl(const uno::Reference<ucb::XContent>& rxContent)
-    : xContent(rxContent)
+DirectoryStream::Impl::Impl(uno::Reference<ucb::XContent> _xContent)
+    : xContent(std::move(_xContent))
 {
 }
 

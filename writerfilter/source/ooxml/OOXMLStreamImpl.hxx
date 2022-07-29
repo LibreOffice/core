@@ -61,9 +61,9 @@ public:
     (OOXMLStreamImpl const & rStream, StreamType_t nType);
     OOXMLStreamImpl
     (css::uno::Reference<css::uno::XComponentContext> const & xContext,
-     css::uno::Reference<css::io::XInputStream> const & xStorageStream,
+     css::uno::Reference<css::io::XInputStream> xStorageStream,
      StreamType_t nType, bool bRepairStorage);
-    OOXMLStreamImpl(OOXMLStreamImpl const & rStream, const OUString & rId);
+    OOXMLStreamImpl(OOXMLStreamImpl const & rStream, OUString aId);
 
     virtual ~OOXMLStreamImpl() override;
 

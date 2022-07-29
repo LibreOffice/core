@@ -19,14 +19,16 @@
 #include "OOXMLBinaryObjectReference.hxx"
 #include <string.h>
 
+#include <utility>
+
 namespace writerfilter::ooxml
 {
 
 using namespace ::com::sun::star;
 
 OOXMLBinaryObjectReference::OOXMLBinaryObjectReference
-(OOXMLStream::Pointer_t const & pStream)
-: mpStream(pStream), mbRead(false)
+(OOXMLStream::Pointer_t pStream)
+: mpStream(std::move(pStream)), mbRead(false)
 {
 }
 

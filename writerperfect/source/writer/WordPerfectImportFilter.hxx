@@ -16,6 +16,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <utility>
 
 /* This component will be instantiated for both import or export. Whether it calls
  * setSourceDocument or setTargetDocument determines which Impl function the filter
@@ -32,9 +33,8 @@ class WordPerfectImportFilter
     bool importImpl(const css::uno::Sequence<css::beans::PropertyValue>& aDescriptor);
 
 public:
-    explicit WordPerfectImportFilter(
-        const css::uno::Reference<css::uno::XComponentContext>& rxContext)
-        : mxContext(rxContext)
+    explicit WordPerfectImportFilter(css::uno::Reference<css::uno::XComponentContext> xContext)
+        : mxContext(std::move(xContext))
     {
     }
 
