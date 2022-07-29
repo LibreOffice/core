@@ -74,6 +74,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "94210629_7222205d",
+        "filename": "sc/qa/extras/accessibility/basics.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1001582
+      },
+      "writtenOn": "2022-07-29T12:53:44Z",
+      "side": 1,
+      "message": "Oops, that was late brain C++ on my part indeed.  Would have I used `dynamic_cast` as I intended, I would have caught it early.  This works as well:\n\n    auto pModelObj \u003d dynamic_cast\u003cScModelObj*\u003e(mxDocument.get());\n    CPPUNIT_ASSERT(pModelObj);\n    auto nullDate \u003d pModelObj-\u003eGetDocument()-\u003eGetFormatTable()-\u003eGetNullDate();\n\nBut I used your UNO version in PS9 as it seems fine and more inline with the calls around.  I was slightly afraid operator- wasn\u0027t going to work with `Date` and `css::util::Date`, but it does as expected so all is fine, thanks!",
+      "parentUuid": "df85e2c3_4e17bfde",
+      "range": {
+        "startLine": 61,
+        "startChar": 10,
+        "endLine": 61,
+        "endChar": 38
+      },
+      "revId": "e2696cc9327425d510063507222509182eacc1ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "13467760_a16a40ca",
         "filename": "sc/qa/extras/accessibility/basics.cxx",
         "patchSetId": 7
@@ -109,6 +133,30 @@
       "side": 1,
       "message": "Nice!",
       "parentUuid": "13467760_a16a40ca",
+      "range": {
+        "startLine": 76,
+        "startChar": 4,
+        "endLine": 79,
+        "endChar": 23
+      },
+      "revId": "e2696cc9327425d510063507222509182eacc1ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b84c13f_f654f165",
+        "filename": "sc/qa/extras/accessibility/basics.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1001582
+      },
+      "writtenOn": "2022-07-29T12:53:44Z",
+      "side": 1,
+      "message": "I updated that slightly realizing it was too forgiving, and basically made the LESSEQUAL check a noop.  Now I only to `value +\u003d 1` if `after \u003c before` as well, so I limit the situations where I allow the value to be \"unexpected\" to the case where the time I measured also swapped.  But this still allows DST going backwards, it just requires time to have not went back *and* forth during the call -- which is in my opinion a sane assumption 😊",
+      "parentUuid": "094107ac_16d5cb4d",
       "range": {
         "startLine": 76,
         "startChar": 4,
