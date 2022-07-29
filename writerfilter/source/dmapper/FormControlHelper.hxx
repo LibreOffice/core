@@ -32,7 +32,7 @@ public:
     typedef tools::SvRef<FormControlHelper> Pointer_t;
     FormControlHelper(FieldId eFieldId,
                       css::uno::Reference<css::text::XTextDocument> const& rTextDocument,
-                      FFDataHandler::Pointer_t const& pFFData);
+                      FFDataHandler::Pointer_t pFFData);
     ~FormControlHelper() override;
 
     void insertControl(css::uno::Reference<css::text::XTextRange> const& xTextRange);
