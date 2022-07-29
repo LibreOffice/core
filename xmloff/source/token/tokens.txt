@@ -522,6 +522,7 @@ data-range
 data-stream-source
 data-style
 data-style-name
+data-table
 data-type
 database-display
 database-name
@@ -1660,12 +1661,16 @@ show-changes-by-datetime-mode
 show-changes-by-datetime-second-datetime
 show-changes-by-ranges
 show-changes-by-ranges-list
+show-horizontal-border
+show-keys
 show-logo
 show-rejected-changes
 show-shape
 show-text
 show-unit
 show-value
+show-vertical-border
+show-outline
 shows
 side-by-side
 silver
