@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3757ec6_7b8c17ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-07-29T09:10:07Z",
+      "side": 1,
+      "message": "Since it\u0027s a regression and the fix is quite straightforward, I think it worths it to have it on 7.4.0",
+      "revId": "e3b2f5522c382da168cb7e32b2c03ad78d9332c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
