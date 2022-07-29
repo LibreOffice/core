@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d63f0e1_d17745f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-07-29T14:23:47Z",
+      "side": 1,
+      "message": "Looks ok, showing to Xisco",
+      "revId": "c5771b78def2fe0a98dbe73ba9ee61c7bca0d38d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
