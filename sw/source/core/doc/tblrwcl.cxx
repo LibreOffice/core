@@ -2126,7 +2126,7 @@ bool SwTable::MakeCopy( SwDoc& rInsDoc, const SwPosition& rPos,
 
     // Also copy Names or enforce a new unique one
     if( bCpyName )
-        pNewTable->GetFrameFormat()->SetName( GetFrameFormat()->GetName() );
+        pNewTable->GetFrameFormat()->SetFormatName( GetFrameFormat()->GetName() );
 
     CpyTabFrames aCpyFormat;
     CpyPara aPara( pTableNd, 1, aCpyFormat );

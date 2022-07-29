@@ -1437,7 +1437,7 @@ void SwDoc::SetFlyName( SwFlyFrameFormat& rFormat, const OUString& rName )
         }
         sName = lcl_GetUniqueFlyName(*this, pTyp, RES_FLYFRMFMT);
     }
-    rFormat.SetName( sName, true );
+    rFormat.SetFormatName( sName, true );
     getIDocumentState().SetModified();
 }
 
@@ -1516,13 +1516,13 @@ void SwDoc::SetAllUniqueFlyNames()
             switch( GetNodes()[ pIdx->GetIndex() + 1 ]->GetNodeType() )
             {
             case SwNodeType::Grf:
-                pFlyFormat->SetName( sGrfNm + OUString::number( ++nGrfNum ));
+                pFlyFormat->SetFormatName( sGrfNm + OUString::number( ++nGrfNum ));
                 break;
             case SwNodeType::Ole:
-                pFlyFormat->SetName( sOLENm + OUString::number( ++nOLENum ));
+                pFlyFormat->SetFormatName( sOLENm + OUString::number( ++nOLENum ));
                 break;
             default:
-                pFlyFormat->SetName( sFlyNm + OUString::number( ++nFlyNum ));
+                pFlyFormat->SetFormatName( sFlyNm + OUString::number( ++nFlyNum ));
                 break;
             }
         }

@@ -2567,7 +2567,7 @@ SwFrameFormat::~SwFrameFormat()
     m_pOtherTextBoxFormats.reset();
 }
 
-void SwFrameFormat::SetName( const OUString& rNewName, bool bBroadcast )
+void SwFrameFormat::SetFormatName( const OUString& rNewName, bool bBroadcast )
 {
     if (m_ffList != nullptr) {
         SwFrameFormats::iterator it = m_ffList->find( this );
@@ -2587,7 +2587,7 @@ void SwFrameFormat::SetName( const OUString& rNewName, bool bBroadcast )
         }
     }
     else
-        SwFormat::SetName( rNewName, bBroadcast );
+        SwFormat::SetFormatName( rNewName, bBroadcast );
 }
 
 bool SwFrameFormat::supportsFullDrawingLayerFillAttributeSet() const

@@ -3583,7 +3583,7 @@ bool SwNodes::MergeTable( const SwNodeIndex& rPos, bool bWithPrev,
         rTable.GetFrameFormat()->LockModify();
         *rTable.GetFrameFormat() = *rDelTable.GetFrameFormat();
         // Also switch the Name
-        rTable.GetFrameFormat()->SetName( rDelTable.GetFrameFormat()->GetName() );
+        rTable.GetFrameFormat()->SetFormatName( rDelTable.GetFrameFormat()->GetName() );
         rTable.GetFrameFormat()->UnlockModify();
     }
 

@@ -130,7 +130,7 @@ public:
 
     const OUString& GetName() const                  { return m_aFormatName; }
     bool HasName(std::u16string_view rName) const { return m_aFormatName == rName; }
-    virtual void SetName( const OUString& rNewName, bool bBroadcast=false );
+    virtual void SetFormatName( const OUString& rNewName, bool bBroadcast=false );
 
     /// For querying the attribute array.
     const SwAttrSet& GetAttrSet() const { return m_aSet; }

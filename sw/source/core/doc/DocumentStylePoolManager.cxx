@@ -602,7 +602,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
                 OUString aName;
                 SwStyleNameMapper::GetUIName(nId, aName);
                 if (!aName.isEmpty())
-                    pNewColl->SetName(aName);
+                    pNewColl->SetFormatName(aName);
             }
 
             return pNewColl;

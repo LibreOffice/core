@@ -181,7 +181,7 @@ public:
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
-    virtual void SetName( const OUString& rNewName, bool bBroadcast=false ) override;
+    virtual void SetFormatName( const OUString& rNewName, bool bBroadcast=false ) override;
     void MoveTableBox(SwTableBox& rTableBox, const SwFrameFormat* pOldFormat);
 };
 

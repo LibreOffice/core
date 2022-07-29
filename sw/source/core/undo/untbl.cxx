@@ -317,7 +317,7 @@ void SwUndoInsTable::RedoImpl(::sw::UndoRedoContext & rContext)
                                             m_nAdjust,
                                             m_pAutoFormat.get(), m_pColumnWidth.get() );
     rDoc.GetEditShell()->MoveTable( GotoPrevTable, fnTableStart );
-    static_cast<SwFrameFormat*>(pTable->GetFrameFormat())->SetName( m_sTableName );
+    static_cast<SwFrameFormat*>(pTable->GetFrameFormat())->SetFormatName( m_sTableName );
     SwTableNode* pTableNode = rDoc.GetNodes()[m_nStartNode]->GetTableNode();
 
     if( m_pDDEFieldType )
@@ -811,7 +811,7 @@ void SwUndoTextToTable::RedoImpl(::sw::UndoRedoContext & rContext)
 
     SwTable const*const pTable = rContext.GetDoc().TextToTable(
                 m_aInsertTableOpts, rPam, m_cSeparator, m_nAdjust, m_pAutoFormat.get() );
-    static_cast<SwFrameFormat*>(pTable->GetFrameFormat())->SetName( m_sTableName );
+    static_cast<SwFrameFormat*>(pTable->GetFrameFormat())->SetFormatName( m_sTableName );
 }
 
 void SwUndoTextToTable::RepeatImpl(::sw::RepeatContext & rContext)
@@ -2996,13 +2996,13 @@ void SwUndoMergeTable::UndoImpl(::sw::UndoRedoContext & rContext)
     if( m_bWithPrev )
     {
         // move name
-        pNew->GetTable().GetFrameFormat()->SetName( pTable->GetFrameFormat()->GetName() );
+        pNew->GetTable().GetFrameFormat()->SetFormatName( pTable->GetFrameFormat()->GetName() );
         m_pSaveHdl->RestoreAttr( pNew->GetTable() );
     }
     else
         pTable = &pNew->GetTable();
 
-    pTable->GetFrameFormat()->SetName( m_aName );
+    pTable->GetFrameFormat()->SetFormatName( m_aName );
     m_pSaveTable->RestoreAttr( *pTable );
 
     if( m_pHistory )

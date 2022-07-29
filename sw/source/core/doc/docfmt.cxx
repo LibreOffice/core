@@ -1717,7 +1717,7 @@ bool SwDoc::DontExpandFormat( const SwPosition& rPos, bool bFlag )
 SwTableBoxFormat* SwDoc::MakeTableBoxFormat()
 {
     SwTableBoxFormat* pFormat = new SwTableBoxFormat( GetAttrPool(), mpDfltFrameFormat.get() );
-    pFormat->SetName("TableBox" + OUString::number(reinterpret_cast<sal_IntPtr>(pFormat)));
+    pFormat->SetFormatName("TableBox" + OUString::number(reinterpret_cast<sal_IntPtr>(pFormat)));
     getIDocumentState().SetModified();
     return pFormat;
 }
@@ -1725,7 +1725,7 @@ SwTableBoxFormat* SwDoc::MakeTableBoxFormat()
 SwTableLineFormat* SwDoc::MakeTableLineFormat()
 {
     SwTableLineFormat* pFormat = new SwTableLineFormat( GetAttrPool(), mpDfltFrameFormat.get() );
-    pFormat->SetName("TableLine" + OUString::number(reinterpret_cast<sal_IntPtr>(pFormat)));
+    pFormat->SetFormatName("TableLine" + OUString::number(reinterpret_cast<sal_IntPtr>(pFormat)));
     getIDocumentState().SetModified();
     return pFormat;
 }
@@ -1937,7 +1937,7 @@ void SwDoc::RenameFormat(SwFormat & rFormat, const OUString & sNewName,
     if (rFormat.Which() == RES_CHRFMT)
         mpCharFormatTable->SetFormatNameAndReindex(static_cast<SwCharFormat*>(&rFormat), sNewName);
     else
-        rFormat.SetName(sNewName);
+        rFormat.SetFormatName(sNewName);
 
     if (bBroadcast)
         BroadcastStyleOperation(sNewName, eFamily, SfxHintId::StyleSheetModified);
