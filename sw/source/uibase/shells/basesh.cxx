@@ -2860,7 +2860,7 @@ static void InsertTableImpl(SwWrtShell& rSh,
     rSh.MoveTable( GotoPrevTable, fnTableStart );
 
     if( !aTableName.isEmpty() && !rSh.GetTableStyle( aTableName ) )
-        rSh.GetTableFormat()->SetName( aTableName );
+        rSh.GetTableFormat()->SetFormatName( aTableName );
 
     if( pTAFormat != nullptr && !aAutoName.isEmpty()
                         && aAutoName != SwViewShell::GetShellRes()->aStrNone )

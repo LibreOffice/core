@@ -48,7 +48,7 @@ typedef boost::multi_index_container<
 class SW_DLLPUBLIC SwFrameFormats final : public SwFormatsBase
 {
     // function updating ByName index via modify
-    friend void SwFrameFormat::SetName(const OUString&, bool);
+    friend void SwFrameFormat::SetFormatName(const OUString&, bool);
 
 public:
     typedef SwFrameFormatsBase::nth_index<0>::type ByPos;

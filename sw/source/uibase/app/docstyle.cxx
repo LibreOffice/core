@@ -1055,7 +1055,7 @@ bool  SwDocStyleSheet::SetName(const OUString& rStr, bool bReindexNow)
                 if (!m_pCharFormat->GetName().isEmpty())
                     m_rDoc.RenameFormat(*m_pCharFormat, rStr);
                 else
-                    m_pCharFormat->SetName(rStr);
+                    m_pCharFormat->SetFormatName(rStr);
 
                 bChg = true;
             }
@@ -1069,7 +1069,7 @@ bool  SwDocStyleSheet::SetName(const OUString& rStr, bool bReindexNow)
                 if (!m_pColl->GetName().isEmpty())
                     m_rDoc.RenameFormat(*m_pColl, rStr);
                 else
-                    m_pColl->SetName(rStr);
+                    m_pColl->SetFormatName(rStr);
 
                 bChg = true;
             }
@@ -1083,7 +1083,7 @@ bool  SwDocStyleSheet::SetName(const OUString& rStr, bool bReindexNow)
                 if (!m_pFrameFormat->GetName().isEmpty())
                     m_rDoc.RenameFormat(*m_pFrameFormat, rStr);
                 else
-                    m_pFrameFormat->SetName( rStr );
+                    m_pFrameFormat->SetFormatName( rStr );
 
                 bChg = true;
             }

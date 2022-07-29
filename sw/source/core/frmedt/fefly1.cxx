@@ -990,7 +990,7 @@ void SwFEShell::InsertDrawObj( SdrObject& rDrawObj,
 
     if (pFormat)
     {
-        pFormat->SetName(rDrawObj.GetName());
+        pFormat->SetFormatName(rDrawObj.GetName());
         // select drawing object
         Imp()->GetDrawView()->MarkObj( &rDrawObj, Imp()->GetPageView() );
     }

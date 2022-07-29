@@ -46,7 +46,7 @@ typedef boost::multi_index_container<
 class SW_DLLPUBLIC SwCharFormats final : public SwFormatsBase
 {
     // function updating ByName index via modify
-    friend void SwFormat::SetName(const OUString&, bool);
+    friend void SwFormat::SetFormatName(const OUString&, bool);
 
 public:
     typedef SwCharFormatsBase::nth_index<0>::type ByPos;
