@@ -65,10 +65,10 @@ private:
         ::chart::CharacterProperties::AddDefaultsToMap(aMap);
 
         ::chart::PropertyHelper::setPropertyValueDefault(aMap, DataTableProperty_HorizontalBorder,
-                                                         true);
+                                                         false);
         ::chart::PropertyHelper::setPropertyValueDefault(aMap, DataTableProperty_VerticalBorder,
-                                                         true);
-        ::chart::PropertyHelper::setPropertyValueDefault(aMap, DataTableProperty_Outilne, true);
+                                                         false);
+        ::chart::PropertyHelper::setPropertyValueDefault(aMap, DataTableProperty_Outilne, false);
         ::chart::PropertyHelper::setPropertyValueDefault(aMap, DataTableProperty_Keys, false);
 
         ::chart::PropertyHelper::setPropertyValue(
