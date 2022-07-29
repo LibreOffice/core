@@ -51,6 +51,24 @@
       "parentUuid": "582a9e59_288dcc4a",
       "revId": "5d66b22e740a7f998fe670ab5603607894d17411",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6073f603_d32e5fec",
+        "filename": "sfx2/source/doc/objstor.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2629,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-07-29T20:52:27Z",
+      "side": 1,
+      "message": "\u003e Actually the ERRCODE_ABORT is from pMediumTmp because line 2627 sets the error code from pMediumTmp which is then read on line 2629.\n\nActually no. Before writing my comment, I read the code of SetError:\n\n  void SfxObjectShell::SetError(ErrCode lErr)\n  {\n      if (pImpl-\u003elErr\u003d\u003dERRCODE_NONE)\n      {\n          pImpl-\u003elErr\u003dlErr;\n      }\n  }\n\nSo again: the ERRCODE_ABORT may come from elsewhere, if it was there before the call to SetError in line 2627.\n\nThanks for changing it!",
+      "parentUuid": "17d1503c_fdd79587",
+      "revId": "5d66b22e740a7f998fe670ab5603607894d17411",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
