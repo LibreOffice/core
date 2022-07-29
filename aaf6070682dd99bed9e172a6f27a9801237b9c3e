@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa1cb521_bb8ef7c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-07-29T02:19:59Z",
+      "side": 1,
+      "message": "I suppose you want to revert from 7.3 as well, so that keep the same breaking scenario from 7.1 onwards.",
+      "revId": "aaf6070682dd99bed9e172a6f27a9801237b9c3e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
