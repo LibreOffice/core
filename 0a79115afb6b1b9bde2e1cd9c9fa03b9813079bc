@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5242bb70_045ab065",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-29T06:58:58Z",
+      "side": 1,
+      "message": "Looks good to me now. Any other comments or ideas on why trying to use `SvNumberFormatter::GetNullDate` would crash (s. remaining unresolved inline comment)?",
+      "revId": "0a79115afb6b1b9bde2e1cd9c9fa03b9813079bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

@@ -24,6 +24,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b524b2e_9b38d5a4",
+        "filename": "sc/qa/extras/accessibility/basics.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-29T06:58:58Z",
+      "side": 1,
+      "message": "Couldn\u0027t figure out what\u0027s wrong here, but agree that 1899-12-30 should be fine.",
+      "parentUuid": "150f027d_3b43daa9",
+      "range": {
+        "startLine": 61,
+        "startChar": 10,
+        "endLine": 61,
+        "endChar": 38
+      },
+      "revId": "e2696cc9327425d510063507222509182eacc1ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "13467760_a16a40ca",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-07-28T17:32:52Z",
       "side": 1,
       "message": "In the unlikely case of e.g. a DST change that makes time go *backwards*, this should still work, and just make it less accurate -- which is not very important as we\u0027re mostly checking *something* has been inserted, and ideally we inserted what we expected.",
+      "range": {
+        "startLine": 76,
+        "startChar": 4,
+        "endLine": 79,
+        "endChar": 23
+      },
+      "revId": "e2696cc9327425d510063507222509182eacc1ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "094107ac_16d5cb4d",
+        "filename": "sc/qa/extras/accessibility/basics.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-29T06:58:58Z",
+      "side": 1,
+      "message": "Nice!",
+      "parentUuid": "13467760_a16a40ca",
       "range": {
         "startLine": 76,
         "startChar": 4,
