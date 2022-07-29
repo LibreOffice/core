@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "a166389f_d90265ca",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2022-07-29T03:07:42Z",
+      "side": 1,
+      "message": "I hope it\u0027s better now.  I can add references to variables but think too much code would just be rewriting the code here.",
+      "parentUuid": "e10926a5_5f56f4e2",
+      "revId": "6eb6ea534081b54f4f3a8e1bcf9cf00deb50dc21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "f66788e4_35c485a3",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -48,6 +66,24 @@
       "writtenOn": "2022-07-28T05:23:23Z",
       "side": 1,
       "message": "Please make sure to keep unchanged lines properly unchanged. That reduces the git noise, allowing to see the truly changed stuff in the review.\n\nSpecifically, both lines 1231 and 1233 should not get any spaces removed, and so would be not marked changed here. Only the newly added braces and the code below should be the stuff marked as modified compared to the previous code.",
+      "revId": "6eb6ea534081b54f4f3a8e1bcf9cf00deb50dc21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bdbdb8c_a1ab6eeb",
+        "filename": "sfx2/source/doc/objstor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1233,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2022-07-29T03:07:42Z",
+      "side": 1,
+      "message": "Understood, and fixed.",
+      "parentUuid": "36637159_a05b0d50",
       "revId": "6eb6ea534081b54f4f3a8e1bcf9cf00deb50dc21",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
