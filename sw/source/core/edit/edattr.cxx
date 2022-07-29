@@ -666,8 +666,7 @@ SvtScriptType SwEditShell::GetScriptType() const
     {
         for(SwPaM& rPaM : GetCursor()->GetRingContainer())
         {
-            const SwPosition *pStt = rPaM.Start(),
-                             *pEnd = rPaM.End();
+            auto [pStt, pEnd] = rPaM.StartEnd(); // SwPosition*
             if( pStt == pEnd || *pStt == *pEnd )
             {
                 const SwTextNode* pTNd = pStt->nNode.GetNode().GetTextNode();

@@ -470,8 +470,7 @@ static bool lcl_TstFlyRange( const SwPaM* pPam, const SwPosition* pFlyPos,
     const SwPaM* pTmp = pPam;
     do {
         const SwNodeOffset nFlyIndex = pFlyPos->nNode.GetIndex();
-        const SwPosition* pPaMStart = pTmp->Start();
-        const SwPosition* pPaMEnd = pTmp->End();
+        auto [pPaMStart, pPaMEnd] = pTmp->StartEnd(); // SwPosition*
         const SwNodeOffset nPamStartIndex = pPaMStart->nNode.GetIndex();
         const SwNodeOffset nPamEndIndex = pPaMEnd->nNode.GetIndex();
         if (RndStdIds::FLY_AT_PARA == nAnchorId)

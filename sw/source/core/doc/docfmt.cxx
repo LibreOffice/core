@@ -229,7 +229,7 @@ void SwDoc::RstTextAttrs(const SwPaM &rRg, bool bInclRefToxMark,
         pHst = &pUndo->GetHistory();
         GetIDocumentUndoRedo().AppendUndo(std::move(pUndo));
     }
-    const SwPosition *pStt = rRg.Start(), *pEnd = rRg.End();
+    auto [pStt, pEnd] = rRg.StartEnd(); // SwPosition*
     sw::DocumentContentOperationsManager::ParaRstFormat aPara(
             pStt, pEnd, pHst, nullptr, pLayout );
     aPara.bInclRefToxMark = bInclRefToxMark;
@@ -316,7 +316,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
         GetIDocumentUndoRedo().AppendUndo(std::move(pUndo));
     }
 
-    const SwPosition *pStt = pPam->Start(), *pEnd = pPam->End();
+    auto [pStt, pEnd] = pPam->StartEnd(); // SwPosition*
     sw::DocumentContentOperationsManager::ParaRstFormat aPara(
             pStt, pEnd, pHst, nullptr, pLayout);
 
@@ -1086,7 +1086,7 @@ bool SwDoc::SetTextFormatColl(const SwPaM &rRg,
                           SwRootFrame const*const pLayout)
 {
     SwDataChanged aTmp( rRg );
-    const SwPosition *pStt = rRg.Start(), *pEnd = rRg.End();
+    auto [pStt, pEnd] = rRg.StartEnd(); // SwPosition*
     SwHistory* pHst = nullptr;
     bool bRet = true;
 

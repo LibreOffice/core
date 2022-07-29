@@ -179,8 +179,7 @@ void SwEditShell::SetSectionAttr( const SfxItemSet& rSet,
 
         for(SwPaM& rPaM : GetCursor()->GetRingContainer())
         {
-            const SwPosition* pStt = rPaM.Start(),
-                            * pEnd = rPaM.End();
+            auto [pStt, pEnd] = rPaM.StartEnd(); // SwPosition*
 
             SwSectionNode* pSttSectNd = pStt->nNode.GetNode().FindSectionNode(),
                                * pEndSectNd = pEnd->nNode.GetNode().FindSectionNode();
@@ -250,8 +249,7 @@ sal_uInt16 SwEditShell::GetFullSelectedSectionCount() const
     for(SwPaM& rPaM : GetCursor()->GetRingContainer())
     {
 
-        const SwPosition* pStt = rPaM.Start(),
-                        * pEnd = rPaM.End();
+        auto [pStt, pEnd] = rPaM.StartEnd(); // SwPosition*
         const SwContentNode* pCNd;
         // check the selection, if Start at Node begin and End at Node end
         if( pStt->nContent.GetIndex() ||

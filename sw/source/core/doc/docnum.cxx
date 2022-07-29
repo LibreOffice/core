@@ -1936,7 +1936,7 @@ bool SwDoc::MoveParagraph(SwPaM& rPam, SwNodeOffset nOffset, bool const bIsOutlM
 bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
         bool const bIsOutlMv, SwRootFrame const*const pLayout)
 {
-    const SwPosition *pStt = rPam.Start(), *pEnd = rPam.End();
+    auto [pStt, pEnd] = rPam.StartEnd(); // SwPosition*
 
     SwNodeOffset nStIdx = pStt->nNode.GetIndex();
     SwNodeOffset nEndIdx = pEnd->nNode.GetIndex();
@@ -2051,7 +2051,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
                 const SwRangeRedline* pTmp = getIDocumentRedlineAccess().GetRedlineTable()[ nRedlPos ];
                 if( !bCheckDel || RedlineType::Delete == pTmp->GetType() )
                 {
-                    const SwPosition *pRStt = pTmp->Start(), *pREnd = pTmp->End();
+                    auto [pRStt, pREnd] = pTmp->StartEnd(); // SwPosition*
                     switch( ComparePosition( *pRStt, *pREnd, aStPos, aEndPos ))
                     {
                     case SwComparePosition::CollideStart:
@@ -2097,7 +2097,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
         if( SwRedlineTable::npos != nRedlPos )
         {
             SwRangeRedline* pTmp = getIDocumentRedlineAccess().GetRedlineTable()[ nRedlPos ];
-            const SwPosition *pRStt = pTmp->Start(), *pREnd = pTmp->End();
+            auto [pRStt, pREnd] = pTmp->StartEnd(); // SwPosition*
             SwRangeRedline aTmpRedl( RedlineType::Insert, rPam );
             const SwContentNode* pCEndNd = pEnd->nNode.GetNode().GetContentNode();
             // Is completely in the range and is the own Redline too?
@@ -2385,7 +2385,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
 
     if( pOwnRedl )
     {
-        SwPosition *pRStt = pOwnRedl->Start(), *pREnd = pOwnRedl->End();
+        auto [pRStt, pREnd] = pOwnRedl->StartEnd(); // SwPosition*
         if( pRStt->nNode.GetIndex() != nRedlSttNd )
         {
             pRStt->nNode = nRedlSttNd;

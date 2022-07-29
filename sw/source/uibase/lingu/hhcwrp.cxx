@@ -506,8 +506,7 @@ void SwHHCWrapper::Convert()
     OSL_ENSURE( m_pConvArgs == nullptr, "NULL pointer expected" );
     {
         SwPaM *pCursor = m_pView->GetWrtShell().GetCursor();
-        SwPosition* pSttPos = pCursor->Start();
-        SwPosition* pEndPos = pCursor->End();
+        auto [pSttPos, pEndPos] = pCursor->StartEnd(); // SwPosition*
 
         if (pSttPos->nNode.GetNode().IsTextNode() &&
             pEndPos->nNode.GetNode().IsTextNode())

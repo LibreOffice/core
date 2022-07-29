@@ -148,7 +148,7 @@ void SwServerObject::SendDataChanged( const SwPaM& rRange )
 
     bool bCall = false;
     const SwStartNode* pNd = nullptr;
-    const SwPosition* pStt = rRange.Start(), *pEnd = rRange.End();
+    auto [pStt, pEnd] = rRange.StartEnd(); // SwPosition*
     switch( m_eType )
     {
     case BOOKMARK_SERVER:

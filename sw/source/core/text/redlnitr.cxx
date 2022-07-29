@@ -110,8 +110,7 @@ public:
                 if (pRed->GetType() != RedlineType::Delete)
                     continue;
 
-                SwPosition const*const pStart(pRed->Start());
-                SwPosition const*const pEnd(pRed->End());
+                auto [pStart, pEnd] = pRed->StartEnd(); // SwPosition*
                 if (*pStart == *pEnd)
                 {   // only allowed while moving (either way?)
 //                  assert(IDocumentRedlineAccess::IsHideChanges(rIDRA.GetRedlineFlags()));

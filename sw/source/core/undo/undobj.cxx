@@ -1423,8 +1423,7 @@ bool SwUndo::FillSaveData(
 {
     rSData.clear();
 
-    const SwPosition* pStt = rRange.Start();
-    const SwPosition* pEnd = rRange.End();
+    auto [pStt, pEnd] = rRange.StartEnd(); // SwPosition*
     const SwRedlineTable& rTable = rRange.GetDoc().getIDocumentRedlineAccess().GetRedlineTable();
     SwRedlineTable::size_type n = 0;
     rRange.GetDoc().getIDocumentRedlineAccess().GetRedline( *pStt, &n );

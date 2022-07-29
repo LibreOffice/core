@@ -1124,8 +1124,7 @@ void SwXTextViewCursor::gotoRange(
         // by him and the transferred Range.
         SwPosition aOwnLeft(*aOwnPaM.Start());
         SwPosition aOwnRight(*aOwnPaM.End());
-        SwPosition* pParamLeft = rDestPam.Start();
-        SwPosition* pParamRight = rDestPam.End();
+        auto [pParamLeft, pParamRight] = rDestPam.StartEnd(); // SwPosition*
         // Now four SwPositions are there, two of them are needed, but which?
         if(aOwnRight > *pParamRight)
             *aOwnPaM.GetPoint() = aOwnRight;

@@ -215,8 +215,7 @@ SwUndoDelete::SwUndoDelete(
         m_pHistory.reset( new SwHistory );
 
     // delete all footnotes for now
-    const SwPosition *pStt = rPam.Start(),
-                     *pEnd = rPam.End();
+    auto [pStt, pEnd] = rPam.StartEnd(); // SwPosition*
 
     // Step 1. deletion/record of content indices
     if( m_bDelFullPara )
@@ -531,8 +530,7 @@ bool SwUndoDelete::CanGrouping( SwDoc& rDoc, const SwPaM& rDelPam )
     if( m_nSttNode != m_nEndNode || ( !m_bGroup && m_nSttContent+1 != m_nEndContent ))
         return false;
 
-    const SwPosition *pStt = rDelPam.Start(),
-                     *pEnd = rDelPam.End();
+    auto [pStt, pEnd] = rDelPam.StartEnd(); // SwPosition*
 
     if( pStt->nNode != pEnd->nNode ||
         pStt->nContent.GetIndex()+1 != pEnd->nContent.GetIndex() ||

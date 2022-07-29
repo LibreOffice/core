@@ -174,7 +174,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
     // See if the whole Document should be hidden, which we currently are not able to do.
     if (rNewData.IsHidden() && rRange.HasMark())
     {
-        const SwPosition *pStt = rRange.Start(), *pEnd = rRange.End();
+        auto [pStt, pEnd] = rRange.StartEnd(); // SwPosition*
         if( !pStt->nContent.GetIndex() &&
             pEnd->nNode.GetNode().GetContentNode()->Len() ==
             pEnd->nContent.GetIndex() )
@@ -210,8 +210,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
 
     if( rRange.HasMark() )
     {
-        SwPosition *pSttPos = const_cast<SwPosition*>(rRange.Start()),
-                    *pEndPos = const_cast<SwPosition*>(rRange.End());
+        auto [pSttPos, pEndPos] = const_cast<SwPaM&>(rRange).StartEnd(); // SwPosition*
         if( pPrvNd && 3 == nRegionRet )
         {
             OSL_ENSURE( pPrvNd, "The SectionNode is missing" );
@@ -397,8 +396,7 @@ sal_uInt16 SwDoc::IsInsRegionAvailable( const SwPaM& rRange,
     if( rRange.HasMark() )
     {
         // See if we have a valid Section
-        const SwPosition* pStt = rRange.Start();
-        const SwPosition* pEnd = rRange.End();
+        auto [pStt, pEnd] = rRange.StartEnd(); // SwPosition*
 
         const SwContentNode* pCNd = pEnd->nNode.GetNode().GetContentNode();
         const SwNode* pNd = &pStt->nNode.GetNode();

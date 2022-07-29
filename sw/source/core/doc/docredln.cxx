@@ -314,10 +314,7 @@ void lcl_LOKInvalidateStartEndFrames(SwShellCursor& rCursor)
         return;
     }
 
-
-    SwPosition *pStartPos = rCursor.Start(),
-               *pEndPos   = rCursor.End();
-
+    auto [pStartPos, pEndPos] = rCursor.StartEnd(); // SwPosition*
 
     lcl_LOKInvalidateFrames(*(pStartPos->nNode.GetNode().GetContentNode()),
                             rCursor.GetShell()->GetLayout(),
@@ -358,8 +355,7 @@ void SwRedlineTable::LOKRedlineNotification(RedlineNotification nType, SwRangeRe
     OUString sDateTime = utl::toISO8601(pRedline->GetRedlineData().GetTimeStamp().GetUNODateTime());
     aRedline.put("dateTime", sDateTime.toUtf8().getStr());
 
-    SwPosition* pStartPos = pRedline->Start();
-    SwPosition* pEndPos = pRedline->End();
+    auto [pStartPos, pEndPos] = pRedline->StartEnd(); // SwPosition*
     SwContentNode* pContentNd = pRedline->GetContentNode();
     SwView* pView = dynamic_cast<SwView*>(SfxViewShell::Current());
     if (pView && pContentNd)
@@ -485,8 +481,7 @@ std::vector<SwRangeRedline*> GetAllValidRanges(std::unique_ptr<SwRangeRedline> p
 {
     std::vector<SwRangeRedline*> ret;
     // Create valid "sub-ranges" from the Selection
-    SwPosition* pStt = p->Start(),
-              * pEnd = p->End();
+    auto [pStt, pEnd] = p->StartEnd(); // SwPosition*
     SwPosition aNewStt( *pStt );
     SwNodes& rNds = aNewStt.nNode.GetNodes();
     SwContentNode* pC;
@@ -746,8 +741,7 @@ const SwRangeRedline* SwRedlineTable::FindAtPosition( const SwPosition& rSttPos,
         const SwRangeRedline* pTmp = (*this)[ rPos ];
         if( pTmp->HasMark() && pTmp->IsVisible() )
         {
-            const SwPosition* pRStt = pTmp->Start(),
-                      * pREnd = pTmp->End();
+            auto [pRStt, pREnd] = pTmp->StartEnd(); // SwPosition*
             if( bNext ? *pRStt <= rSttPos : *pRStt < rSttPos )
             {
                 if( bNext ? *pREnd > rSttPos : *pREnd >= rSttPos )
@@ -1388,10 +1382,11 @@ void SwRangeRedline::ShowOriginal(sal_uInt16 nLoop, size_t nMyPos, bool /*bForce
 // trigger the Layout
 void SwRangeRedline::InvalidateRange(Invalidation const eWhy)
 {
-    SwNodeOffset nSttNd = Start()->nNode.GetIndex(),
-                 nEndNd = End()->nNode.GetIndex();
-    sal_Int32 nSttCnt = Start()->nContent.GetIndex();
-    sal_Int32 nEndCnt = End()->nContent.GetIndex();
+    auto [pRStt, pREnd] = StartEnd(); // SwPosition*
+    SwNodeOffset nSttNd = pRStt->nNode.GetIndex(),
+                 nEndNd = pREnd->nNode.GetIndex();
+    sal_Int32 nSttCnt = pRStt->nContent.GetIndex();
+    sal_Int32 nEndCnt = pREnd->nContent.GetIndex();
 
     SwNodes& rNds = GetDoc().GetNodes();
     for (SwNodeOffset n(nSttNd); n <= nEndNd; ++n)
@@ -1433,7 +1428,7 @@ void SwRangeRedline::InvalidateRange(Invalidation const eWhy)
     text node nNdIdx */
 void SwRangeRedline::CalcStartEnd( SwNodeOffset nNdIdx, sal_Int32& rStart, sal_Int32& rEnd ) const
 {
-    const SwPosition *pRStt = Start(), *pREnd = End();
+    auto [pRStt, pREnd] = StartEnd(); // SwPosition*
     if( pRStt->nNode < nNdIdx )
     {
         if( pREnd->nNode > nNdIdx )
@@ -1507,8 +1502,7 @@ void SwRangeRedline::MoveToSection()
 {
     if( !m_pContentSect )
     {
-        const SwPosition* pStt = Start(),
-                        * pEnd = End();
+        auto [pStt, pEnd] = StartEnd(); // SwPosition*
 
         SwDoc& rDoc = GetDoc();
         SwPaM aPam( *pStt, *pEnd );
@@ -1582,8 +1576,7 @@ void SwRangeRedline::CopyToSection()
     if( m_pContentSect )
         return;
 
-    const SwPosition* pStt = Start(),
-                    * pEnd = End();
+    auto [pStt, pEnd] = StartEnd(); // SwPosition*
 
     SwContentNode* pCSttNd = pStt->nNode.GetNode().GetContentNode();
     SwContentNode* pCEndNd = pEnd->nNode.GetNode().GetContentNode();
@@ -1658,8 +1651,7 @@ void SwRangeRedline::DelCopyOfSection(size_t nMyPos)
     if( !m_pContentSect )
         return;
 
-    const SwPosition* pStt = Start(),
-                    * pEnd = End();
+    auto [pStt, pEnd] = StartEnd(); // SwPosition*
 
     SwDoc& rDoc = GetDoc();
     SwPaM aPam( *pStt, *pEnd );

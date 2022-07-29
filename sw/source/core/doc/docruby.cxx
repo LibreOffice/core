@@ -51,8 +51,7 @@ sal_uInt16 SwDoc::FillRubyList( const SwPaM& rPam, SwRubyList& rList )
                 *_pStartCursor2 = _pStartCursor;
     bool bCheckEmpty = &rPam != _pStartCursor;
     do {
-        const SwPosition* pStt = _pStartCursor->Start(),
-                        * pEnd = _pStartCursor->End();
+        auto [pStt, pEnd] = _pStartCursor->StartEnd(); // SwPosition*
         if( !bCheckEmpty || ( pStt != pEnd && *pStt != *pEnd ))
         {
             SwPaM aPam( *pStt );
@@ -100,8 +99,7 @@ void SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList )
                 *_pStartCursor2 = _pStartCursor;
     bool bCheckEmpty = &rPam != _pStartCursor;
     do {
-        const SwPosition* pStt = _pStartCursor->Start(),
-                        * pEnd = _pStartCursor->End();
+        auto [pStt, pEnd] = _pStartCursor->StartEnd(); // SwPosition*
         if( !bCheckEmpty || ( pStt != pEnd && *pStt != *pEnd ))
         {
 

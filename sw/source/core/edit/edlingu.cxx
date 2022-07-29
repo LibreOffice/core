@@ -550,8 +550,7 @@ void SwHyphIter::InsertSoftHyph( const sal_Int32 nHyphPos )
         return;
 
     SwPaM *pCursor = pMySh->GetCursor();
-    SwPosition* pSttPos = pCursor->Start();
-    SwPosition* pEndPos = pCursor->End();
+    auto [pSttPos, pEndPos] = pCursor->StartEnd(); // SwPosition*
 
     const sal_Int32 nLastHyphLen = GetEnd()->nContent.GetIndex() -
                           pSttPos->nContent.GetIndex();

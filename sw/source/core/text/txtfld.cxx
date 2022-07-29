@@ -556,7 +556,7 @@ static const SwRangeRedline* lcl_GetRedlineAtNodeInsertionOrDeletion( const SwTe
             if( RedlineType::Delete == pTmp->GetType() ||
                 RedlineType::Insert == pTmp->GetType() )
             {
-                const SwPosition *pRStt = pTmp->Start(), *pREnd = pTmp->End();
+                auto [pRStt, pREnd ]= pTmp->StartEnd(); // SwPosition*
                 if( pRStt->nNode <= nNdIdx && pREnd->nNode > nNdIdx )
                 {
                     bIsMoved = pTmp->IsMoved();

@@ -334,7 +334,7 @@ void sw_GetJoinFlags( SwPaM& rPam, bool& rJoinText, bool& rJoinPrev )
     if( rPam.GetPoint()->nNode == rPam.GetMark()->nNode )
         return;
 
-    const SwPosition* pStt = rPam.Start(), *pEnd = rPam.End();
+    auto [pStt, pEnd] = rPam.StartEnd(); // SwPosition*
     SwTextNode *pSttNd = pStt->nNode.GetNode().GetTextNode();
     if( !pSttNd )
         return;
@@ -844,8 +844,7 @@ void SwDoc::DeleteAutoCorrExceptWord()
 void SwDoc::CountWords( const SwPaM& rPaM, SwDocStat& rStat )
 {
     // This is a modified version of SwDoc::TransliterateText
-    const SwPosition* pStt = rPaM.Start();
-    const SwPosition* pEnd = rPaM.End();
+    auto [pStt, pEnd] = rPaM.StartEnd(); // SwPosition*
 
     const SwNodeOffset nSttNd = pStt->nNode.GetIndex();
     const SwNodeOffset nEndNd = pEnd->nNode.GetIndex();

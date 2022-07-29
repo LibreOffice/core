@@ -587,8 +587,7 @@ SwUndoReplace::Impl::Impl(
     , m_bRegExp(bRegExp)
 {
 
-    const SwPosition * pStt( rPam.Start() );
-    const SwPosition * pEnd( rPam.End() );
+    auto [pStt, pEnd] = rPam.StartEnd(); // SwPosition*
 
     m_nSttNd = m_nEndNd = pStt->nNode.GetIndex();
     m_nSttCnt = pStt->nContent.GetIndex();

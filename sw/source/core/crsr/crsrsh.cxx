@@ -86,8 +86,7 @@ using namespace util;
  */
 static void CheckRange( SwCursor* pCurrentCursor )
 {
-    const SwPosition *pStt = pCurrentCursor->Start(),
-        *pEnd = pCurrentCursor->End();
+    auto [pStt, pEnd] = pCurrentCursor->StartEnd(); // SwPosition*
 
     SwPaM *pTmpDel = nullptr,
           *pTmp = pCurrentCursor->GetNext();
@@ -95,8 +94,7 @@ static void CheckRange( SwCursor* pCurrentCursor )
     // Search the complete ring
     while( pTmp != pCurrentCursor )
     {
-        const SwPosition *pTmpStt = pTmp->Start(),
-                        *pTmpEnd = pTmp->End();
+        auto [pTmpStt, pTmpEnd] = pTmp->StartEnd(); // SwPosition*
         if( *pStt <= *pTmpStt )
         {
             if( *pEnd > *pTmpStt ||
@@ -2806,8 +2804,7 @@ bool SwCursorShell::ParkTableCursor()
 
 void SwCursorShell::ParkPams( SwPaM* pDelRg, SwShellCursor** ppDelRing )
 {
-    const SwPosition *pStt = pDelRg->Start(),
-        *pEnd = pDelRg->End();
+    auto [pStt, pEnd] = pDelRg->StartEnd(); // SwPosition*
 
     SwPaM *pTmpDel = nullptr, *pTmp = *ppDelRing;
 
@@ -2818,8 +2815,7 @@ void SwCursorShell::ParkPams( SwPaM* pDelRg, SwShellCursor** ppDelRing )
         if (!pTmp)
             break;
 
-        const SwPosition *pTmpStt = pTmp->Start(),
-                        *pTmpEnd = pTmp->End();
+        auto [pTmpStt, pTmpEnd] = pTmp->StartEnd(); // SwPosition*
         // If a SPoint or GetMark are in a cursor area then cancel the old area.
         // During comparison keep in mind that End() is outside the area.
         if( *pStt <= *pTmpStt )

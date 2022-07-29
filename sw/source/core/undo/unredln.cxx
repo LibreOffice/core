@@ -333,8 +333,7 @@ void SwUndoRedlineSort::UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
     // rPam contains the sorted range
     // aSaveRange contains copied (i.e. original) range
 
-    SwPosition *const pStart = rPam.Start();
-    SwPosition *const pEnd   = rPam.End();
+    auto [pStart, pEnd] = rPam.StartEnd(); // SwPosition*
 
     SwNodeIndex aPrevIdx( pStart->nNode, -1 );
     SwNodeOffset nOffsetTemp = pEnd->nNode.GetIndex() - pStart->nNode.GetIndex();
@@ -383,8 +382,7 @@ void SwUndoRedlineSort::UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
 void SwUndoRedlineSort::RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
 {
     SwPaM* pPam = &rPam;
-    SwPosition* pStart = pPam->Start();
-    SwPosition* pEnd   = pPam->End();
+    auto [pStart, pEnd] = pPam->StartEnd(); // SwPosition*
 
     SwNodeIndex aPrevIdx( pStart->nNode, -1 );
     SwNodeOffset nOffsetTemp = pEnd->nNode.GetIndex() - pStart->nNode.GetIndex();

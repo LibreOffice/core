@@ -360,7 +360,7 @@ namespace
         SwDoc& rDestDoc = rCpyPam.GetDoc();
         SwPosition* pCpyStt = rCpyPam.Start(), *pCpyEnd = rCpyPam.End();
         std::unique_ptr<SwPaM> pDelPam;
-        const SwPosition *pStt = rPam.Start(), *pEnd = rPam.End();
+        auto [pStt, pEnd] = rPam.StartEnd(); // SwPosition*
         // We have to count the "non-copied" nodes
         SwNodeOffset nDelCount;
         SwNodeIndex aCorrIdx(InitDelCount(rPam, nDelCount));
@@ -372,7 +372,7 @@ namespace
             const SwRangeRedline* pRedl = rTable[ n ];
             if( RedlineType::Delete == pRedl->GetType() && pRedl->IsVisible() )
             {
-                const SwPosition *pRStt = pRedl->Start(), *pREnd = pRedl->End();
+                auto [pRStt, pREnd] = pRedl->StartEnd(); // SwPosition*
 
                 SwComparePosition eCmpPos = ComparePosition( *pStt, *pEnd, *pRStt, *pREnd );
                 switch( eCmpPos )
@@ -496,8 +496,7 @@ namespace
     bool lcl_MarksWholeNode(const SwPaM & rPam)
     {
         bool bResult = false;
-        const SwPosition* pStt = rPam.Start();
-        const SwPosition* pEnd = rPam.End();
+        auto [pStt, pEnd] = rPam.StartEnd(); // SwPosition*
 
         if (nullptr != pStt && nullptr != pEnd)
         {
@@ -704,7 +703,7 @@ namespace
         // the string doesn't exceed the allowed string length
         if( rPam.GetPoint()->nNode != rPam.GetMark()->nNode )
         {
-            const SwPosition* pStt = rPam.Start(), *pEnd = rPam.End();
+            auto [pStt, pEnd] = rPam.StartEnd(); // SwPosition*
             const SwTextNode* pEndNd = pEnd->nNode.GetNode().GetTextNode();
             if( (nullptr != pEndNd) && pStt->nNode.GetNode().IsTextNode() )
             {
@@ -728,8 +727,7 @@ namespace
             , nEnd(0)
             , nEndCnt(0)
         {
-            const SwPosition* pStt = pR->Start(),
-                            * pEnd = pR->End();
+            auto [pStt, pEnd] = pR->StartEnd(); // SwPosition*
             SwNodeOffset nSttIdx = rSttIdx.GetIndex();
             nStt = pStt->nNode.GetIndex() - nSttIdx;
             nSttCnt = pStt->nContent.GetIndex();
@@ -750,8 +748,7 @@ namespace
             , nEnd(0)
             , nEndCnt(0)
         {
-            const SwPosition* pStt = pR->Start(),
-                            * pEnd = pR->End();
+            auto [pStt, pEnd] = pR->StartEnd(); // SwPosition*
             SwNodeOffset nSttIdx = rPos.nNode.GetIndex();
             nStt = pStt->nNode.GetIndex() - nSttIdx;
             nSttCnt = pStt->nContent.GetIndex();
@@ -800,8 +797,7 @@ namespace
     {
         SwDoc& rDoc = aPam.GetNode().GetDoc();
 
-        const SwPosition* pStart = aPam.Start();
-        const SwPosition* pEnd = aPam.End();
+        auto [pStart, pEnd] = aPam.StartEnd(); // SwPosition*
 
         // get first relevant redline
         SwRedlineTable::size_type nCurrentRedline;
@@ -894,8 +890,7 @@ namespace
         do {
             SwRangeRedline* pTmp = rRedlTable[ nRedlPos ];
 
-            const SwPosition* pRStt = pTmp->Start(),
-                            * pREnd = pTmp->End();
+            auto [pRStt, pREnd] = pTmp->StartEnd(); // SwPosition*
 
             if( pRStt->nNode < rRg.aStart )
             {
@@ -2962,8 +2957,7 @@ void DocumentContentOperationsManager::TransliterateText(
     if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
         pUndo.reset(new SwUndoTransliterate( rPaM, rTrans ));
 
-    const SwPosition* pStt = rPaM.Start(),
-                       * pEnd = rPaM.End();
+    auto [pStt, pEnd] = rPaM.StartEnd(); // SwPosition*
     SwNodeOffset nSttNd = pStt->nNode.GetIndex(),
           nEndNd = pEnd->nNode.GetIndex();
     sal_Int32 nSttCnt = pStt->nContent.GetIndex();
@@ -4285,7 +4279,7 @@ bool DocumentContentOperationsManager::DeleteRangeImpl(SwPaM & rPam, SwDeleteFla
 
 bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam, SwDeleteFlags const flags)
 {
-    SwPosition *pStt = rPam.Start(), *pEnd = rPam.End();
+    auto [pStt, pEnd] = rPam.StartEnd(); // SwPosition*
 
     if (!rPam.HasMark()
         || (*pStt == *pEnd && !IsFlySelectedByCursor(m_rDoc, *pStt, *pEnd)))
@@ -4499,8 +4493,7 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
         SwPaM aDelPam( *rPam.GetMark(), *rPam.GetPoint() );
         ::PaMCorrAbs( aDelPam, *aDelPam.GetPoint() );
 
-        SwPosition *pStt = aDelPam.Start(),
-                   *pEnd = aDelPam.End();
+        auto [pStt, pEnd] = aDelPam.StartEnd(); // SwPosition*
         bool bOneNode = pStt->nNode == pEnd->nNode;
 
         // Own Undo?
@@ -4894,8 +4887,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
     SwDoc& rDoc = rPos.nNode.GetNode().GetDoc();
     const bool bColumnSel = rDoc.IsClipBoard() && rDoc.IsColumnSelection();
 
-    SwPosition const*const pStt = rPam.Start();
-    SwPosition *const pEnd = rPam.End();
+    auto [pStt, pEnd] = rPam.StartEnd(); // SwPosition*
 
     // Catch when there's no copy to do.
     if (!rPam.HasMark() || (IsEmptyRange(*pStt, *pEnd, flags) && !bColumnSel) ||

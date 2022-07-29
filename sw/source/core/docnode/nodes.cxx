@@ -1434,8 +1434,7 @@ sal_uInt16 HighestLevel( SwNodes & rNodes, const SwNodeRange & rRange )
  */
 void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
 {
-    SwPosition * const pStt = rPam.Start();
-    SwPosition * const pEnd = rPam.End();
+    auto [pStt, pEnd] = rPam.StartEnd(); // SwPosition*
 
     if( !rPam.HasMark() || *pStt >= *pEnd )
         return;
