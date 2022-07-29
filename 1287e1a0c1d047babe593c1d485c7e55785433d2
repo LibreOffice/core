@@ -50,6 +50,23 @@
       "message": " i have no idea, better to ask Eike for i18n stuff ",
       "revId": "1287e1a0c1d047babe593c1d485c7e55785433d2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2dae7a0_ea7af99e",
+        "filename": "i18npool/source/breakiterator/breakiteratorImpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-07-29T20:31:17Z",
+      "side": 1,
+      "message": "I think including NBSP/NNBSP here for DICTIONARY_WORD is not wanted. It\u0027s used for spell-checking and not breaking at (N)NBSP would yield two or more concatenated words, effectively leading to a non-match.",
+      "revId": "1287e1a0c1d047babe593c1d485c7e55785433d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
