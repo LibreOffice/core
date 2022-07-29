@@ -4759,7 +4759,7 @@ void DrawingML::WritePolyPolygon(const css::uno::Reference<css::drawing::XShape>
     mpFS->endElementNS(XML_a, XML_custGeom);
 }
 
-void DrawingML::WriteConnectorConnections( sal_uInt32 nStartGlueId, sal_Int32 nEndGlueId, sal_Int32 nStartID, sal_Int32 nEndID )
+void DrawingML::WriteConnectorConnections( sal_Int32 nStartGlueId, sal_Int32 nEndGlueId, sal_Int32 nStartID, sal_Int32 nEndID )
 {
     if( nStartID != -1 )
     {
