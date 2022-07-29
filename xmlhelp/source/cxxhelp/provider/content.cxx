@@ -143,12 +143,12 @@ public:
         uno::Reference< uno::XComponentContext > xContext,
         uno::Reference< ucb::XContentProvider > xProvider,
         const uno::Sequence< beans::Property >& seq,
-        URLParameter aURLParameter,
+        const URLParameter& rURLParameter,
         Databases* pDatabases )
         : m_xContext(std::move( xContext )),
           m_xProvider(std::move( xProvider )),
           m_seq( seq ),
-          m_aURLParameter(std::move( aURLParameter )),
+          m_aURLParameter(rURLParameter),
           m_pDatabases( pDatabases )
     {
     }
@@ -180,12 +180,12 @@ public:
         uno::Reference< uno::XComponentContext > xContext,
         uno::Reference< ucb::XContentProvider > xProvider,
         const uno::Sequence< beans::Property >& seq,
-        URLParameter aURLParameter,
+        const URLParameter& rURLParameter,
         Databases* pDatabases )
         : m_xContext(std::move( xContext )),
           m_xProvider(std::move( xProvider )),
           m_seq( seq ),
-          m_aURLParameter(std::move( aURLParameter )),
+          m_aURLParameter(rURLParameter),
           m_pDatabases( pDatabases )
     {
     }
