@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8c4aeeb_83f582ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-07-29T22:53:27Z",
+      "side": 1,
+      "message": "So this is an initial patch for discussion on the approach to combining descriptor with formatdetector. This should extract the same metadata that descriptor extracts in ImpDetectGif. If you think this is a good approach I can do the same for every function.",
+      "revId": "5fadf2d936e90fd5365d37e0d3aa25c48597372b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
