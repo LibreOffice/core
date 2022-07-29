@@ -62,12 +62,13 @@ struct SAL_WARN_UNUSED SW_DLLPUBLIC SwPosition
     */
     SwDoc& GetDoc() const;
 
-    bool operator < (const SwPosition &) const;
-    bool operator > (const SwPosition &) const;
-    bool operator <=(const SwPosition &) const;
-    bool operator >=(const SwPosition &) const;
+    bool operator < (const SwPosition & other) const { return compare(other) < 0; }
+    bool operator > (const SwPosition & other) const { return compare(other) > 0; }
+    bool operator <=(const SwPosition & other) const { return compare(other) <= 0; }
+    bool operator >=(const SwPosition & other) const { return compare(other) >= 0; }
+    sal_Int32 compare(const SwPosition &) const;
     bool operator ==(const SwPosition &) const;
-    bool operator !=(const SwPosition &) const;
+    bool operator !=(const SwPosition & other) const { return !operator==(other); }
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
