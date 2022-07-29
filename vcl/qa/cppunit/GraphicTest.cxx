@@ -499,10 +499,10 @@ void GraphicTest::testEmfToWmfConversion()
     SvFileStream aStream(aURL, StreamMode::READ);
     Graphic aGraphic;
     // This similar to an application/x-openoffice-wmf mime type in manifest.xml in the ODF case.
-    sal_uInt16 nFormat = aGraphicFilter.GetImportFormatNumberForShortName(u"WMF");
+    sal_uInt16 nFormatEMF = aGraphicFilter.GetImportFormatNumberForShortName(u"EMF");
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE,
-                         aGraphicFilter.ImportGraphic(aGraphic, u"", aStream, nFormat));
-    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Wmf, aGraphic.getVectorGraphicData()->getType());
+                         aGraphicFilter.ImportGraphic(aGraphic, u"", aStream, nFormatEMF));
+    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Emf, aGraphic.getVectorGraphicData()->getType());
 
     // Save as WMF.
     sal_uInt16 nFilterType = aGraphicFilter.GetExportFormatNumberForShortName(u"WMF");
@@ -518,13 +518,15 @@ void GraphicTest::testEmfToWmfConversion()
     // - Expected: WMF
     // - Actual  : EMF
     // i.e. EMF data was requested to be converted to WMF, but the output was still EMF.
-    CPPUNIT_ASSERT_EQUAL(OUString("WMF"), aDetector.msDetectedFormat);
+    CPPUNIT_ASSERT_EQUAL(OUString("WMF"),
+                         vcl::getImportFormatShortName(aDetector.getMetadata().mnFormat));
 
     // Import the WMF result and check for traces of EMF+ in it.
     Graphic aWmfGraphic;
     aGraphicStream.Seek(0);
-    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE,
-                         aGraphicFilter.ImportGraphic(aWmfGraphic, u"", aGraphicStream, nFormat));
+    sal_uInt16 nFormatWMF = aGraphicFilter.GetImportFormatNumberForShortName(u"WMF");
+    CPPUNIT_ASSERT_EQUAL(
+        ERRCODE_NONE, aGraphicFilter.ImportGraphic(aWmfGraphic, u"", aGraphicStream, nFormatWMF));
     int nCommentCount = 0;
     for (size_t i = 0; i < aWmfGraphic.GetGDIMetaFile().GetActionSize(); ++i)
     {
