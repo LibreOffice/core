@@ -1297,7 +1297,7 @@ IMPL_LINK_NOARG(SvxBorderTabPage, SelStyleHdl_Impl, SvtLineListBox&, void)
     sal_Int64 nNewWidth = (nOldMinWidth == nOldWidth) ? nNewMinWidth : nOldWidth;
 
     // if we had selected a predefined border width under SvxBorderLineWidth::Medium set the Medium as default
-    // otherwise if we had a cusom border width under 1.10pt then set the spinner to the maximum allowed value for double border styles
+    // otherwise if we had a custom border width under 1.10pt then set the spinner to the maximum allowed value for double border styles
     bool bNewDoubleHairline = m_xLbLineStyle->GetSelectEntryStyle() == SvxBorderLineStyle::DOUBLE_THIN && !m_xLineWidthMF->get_visible() &&
         (nOldWidth == SvxBorderLineWidth::Hairline || nOldWidth == SvxBorderLineWidth::VeryThin || nOldWidth == SvxBorderLineWidth::Thin);
     if (bNewDoubleHairline && nNewWidth < SvxBorderLineWidth::Medium)
