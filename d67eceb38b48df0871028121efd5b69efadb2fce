@@ -16,6 +16,23 @@
       "message": "I didn\u0027t cherry-pick the \":\" removal so it doesn\u0027t annoy the translators",
       "revId": "d67eceb38b48df0871028121efd5b69efadb2fce",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3eb0909a_2205b5c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-07-29T15:07:18Z",
+      "side": 1,
+      "message": "yeah, translation stays the same so will look a tiny bit out of place but is more functional that currently so looks good to me",
+      "revId": "d67eceb38b48df0871028121efd5b69efadb2fce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
