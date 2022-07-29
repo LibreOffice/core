@@ -72,7 +72,8 @@ CPPUNIT_TEST_FIXTURE(Test, testSignCertificateSubjectName)
             OUString(
                 "CN=Xmlsecurity RSA Test example Alice,O=Xmlsecurity RSA Test,ST=England,C=UK")),
     };
-    if (!GetValidCertificate(xSecurityEnvironment->getPersonalCertificates(), aFilterData))
+    if (!GetValidCertificate(xSecurityEnvironment->getPersonalCertificates(), xSecurityEnvironment,
+                             aFilterData))
     {
         return;
     }
