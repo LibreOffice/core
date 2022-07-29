@@ -27,6 +27,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <filter/WebpReader.hxx>
+#include <graphic/GraphicFormatDetector.hxx>
 #include "graphicfilter_internal.hxx"
 
 #define DATA_SIZE           640
@@ -116,12 +117,12 @@ bool GraphicDescriptor::Detect( bool bExtendedInfo )
 
 void GraphicDescriptor::ImpConstruct()
 {
-    nFormat = GraphicFileFormat::NOT;
-    nBitsPerPixel = 0;
-    nPlanes = 0;
-    mnNumberOfImageComponents = 0;
-    bIsTransparent = false;
-    bIsAlpha = false;
+    aMetadata.mnFormat = GraphicFileFormat::NOT;
+    aMetadata.mnBitsPerPixel = 0;
+    aMetadata.mnPlanes = 0;
+    aMetadata.mnNumberOfImageComponents = 0;
+    aMetadata.mbIsTransparent = false;
+    aMetadata.mbIsAlpha = false;
 }
 
 bool GraphicDescriptor::ImpDetectBMP( SvStream& rStm, bool bExtendedInfo )
@@ -143,7 +144,7 @@ bool GraphicDescriptor::ImpDetectBMP( SvStream& rStm, bool bExtendedInfo )
     // Bitmap
     if ( nTemp16 == 0x4d42 )
     {
-        nFormat = GraphicFileFormat::BMP;
+        aMetadata.mnFormat = GraphicFileFormat::BMP;
         bRet = true;
 
         if ( bExtendedInfo )
@@ -156,19 +157,19 @@ bool GraphicDescriptor::ImpDetectBMP( SvStream& rStm, bool bExtendedInfo )
 
             // Pixel width
             rStm.ReadUInt32( nTemp32 );
-            aPixSize.setWidth( nTemp32 );
+            aMetadata.maPixSize.setWidth( nTemp32 );
 
             // Pixel height
             rStm.ReadUInt32( nTemp32 );
-            aPixSize.setHeight( nTemp32 );
+            aMetadata.maPixSize.setHeight( nTemp32 );
 
             // Planes
             rStm.ReadUInt16( nTemp16 );
-            nPlanes = nTemp16;
+            aMetadata.mnPlanes = nTemp16;
 
             // BitCount
             rStm.ReadUInt16( nTemp16 );
-            nBitsPerPixel = nTemp16;
+            aMetadata.mnBitsPerPixel = nTemp16;
 
             // Compression
             rStm.ReadUInt32( nTemp32 );
@@ -180,7 +181,7 @@ bool GraphicDescriptor::ImpDetectBMP( SvStream& rStm, bool bExtendedInfo )
             sal_uInt32 nXPelsPerMeter = 0;
             if ( nTemp32 )
             {
-                aLogSize.setWidth( ( aPixSize.Width() * 100000 ) / nTemp32 );
+                aMetadata.maLogSize.setWidth( ( aMetadata.maPixSize.Width() * 100000 ) / nTemp32 );
                 nXPelsPerMeter = nTemp32;
             }
 
@@ -189,24 +190,24 @@ bool GraphicDescriptor::ImpDetectBMP( SvStream& rStm, bool bExtendedInfo )
             sal_uInt32 nYPelsPerMeter = 0;
             if ( nTemp32 )
             {
-                aLogSize.setHeight( ( aPixSize.Height() * 100000 ) / nTemp32 );
+                aMetadata.maLogSize.setHeight( ( aMetadata.maPixSize.Height() * 100000 ) / nTemp32 );
                 nYPelsPerMeter = nTemp32;
             }
 
             // further validation, check for rational values
-            if ( ( nBitsPerPixel > 24 ) || ( nCompression > 3 ) )
+            if ( ( aMetadata.mnBitsPerPixel > 24 ) || ( nCompression > 3 ) )
             {
-                nFormat = GraphicFileFormat::NOT;
+                aMetadata.mnFormat = GraphicFileFormat::NOT;
                 bRet = false;
             }
 
             if (bRet && nXPelsPerMeter && nYPelsPerMeter)
             {
-                maPreferredMapMode
+                aMetadata.maPreferredMapMode
                     = MapMode(MapUnit::MapMM, Point(), Fraction(1000, nXPelsPerMeter),
                               Fraction(1000, nYPelsPerMeter));
 
-                maPreferredLogSize = Size(aPixSize.getWidth(), aPixSize.getHeight());
+                aMetadata.maPreferredLogSize = Size(aMetadata.maPixSize.getWidth(), aMetadata.maPixSize.getHeight());
             }
         }
     }
@@ -229,7 +230,7 @@ bool GraphicDescriptor::ImpDetectGIF( SvStream& rStm, bool bExtendedInfo )
         rStm.ReadUInt16( n16 );
         if ( ( n16 == 0x6137 ) || ( n16 == 0x6139 ) )
         {
-            nFormat = GraphicFileFormat::GIF;
+            aMetadata.mnFormat = GraphicFileFormat::GIF;
             bRet = true;
 
             if ( bExtendedInfo )
@@ -239,15 +240,15 @@ bool GraphicDescriptor::ImpDetectGIF( SvStream& rStm, bool bExtendedInfo )
 
                 // Pixel width
                 rStm.ReadUInt16( nTemp16 );
-                aPixSize.setWidth( nTemp16 );
+                aMetadata.maPixSize.setWidth( nTemp16 );
 
                 // Pixel height
                 rStm.ReadUInt16( nTemp16 );
-                aPixSize.setHeight( nTemp16 );
+                aMetadata.maPixSize.setHeight( nTemp16 );
 
                 // Bits/Pixel
                 rStm.ReadUChar( cByte );
-                nBitsPerPixel = ( ( cByte & 112 ) >> 4 ) + 1;
+                aMetadata.mnBitsPerPixel = ( ( cByte & 112 ) >> 4 ) + 1;
             }
         }
     }
@@ -294,7 +295,7 @@ bool GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  bool bExtendedInfo )
     // compare upper 24 bits
     if( 0xffd8ff00 == ( nTemp32 & 0xffffff00 ) )
     {
-        nFormat = GraphicFileFormat::JPG;
+        aMetadata.mnFormat = GraphicFileFormat::JPG;
         bRet = true;
 
         if ( bExtendedInfo )
@@ -378,7 +379,7 @@ bool GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  bool bExtendedInfo )
                                                 aMap.SetMapUnit( nUnits == 1 ? MapUnit::MapInch : MapUnit::MapCM );
                                                 aMap.SetScaleX( Fraction( 1, nHorizontalResolution ) );
                                                 aMap.SetScaleY( Fraction( 1, nVerticalResolution ) );
-                                                aLogSize = OutputDevice::LogicToLogic( aPixSize, aMap, MapMode( MapUnit::Map100thMM ) );
+                                                aMetadata.maLogSize = OutputDevice::LogicToLogic( aMetadata.maPixSize, aMap, MapMode( MapUnit::Map100thMM ) );
                                             }
                                         }
                                     }
@@ -414,22 +415,22 @@ bool GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  bool bExtendedInfo )
                                         .ReadUChar( nComponentsIdentifier )
                                         .ReadUChar( nSamplingFactor )
                                         .ReadUChar( nQuantizationTableDestinationSelector );
-                                    mnNumberOfImageComponents = nNumberOfImageComponents;
+                                    aMetadata.mnNumberOfImageComponents = nNumberOfImageComponents;
 
                                     // nSamplingFactor (lower nibble: vertical,
                                     // upper nibble: horizontal) is unused
 
-                                    aPixSize.setHeight( nNumberOfLines );
-                                    aPixSize.setWidth( nSamplesPerLine );
-                                    nBitsPerPixel = ( nNumberOfImageComponents == 3 ? 24 : nNumberOfImageComponents == 1 ? 8 : 0 );
-                                    nPlanes = 1;
+                                    aMetadata.maPixSize.setHeight( nNumberOfLines );
+                                    aMetadata.maPixSize.setWidth( nSamplesPerLine );
+                                    aMetadata.mnBitsPerPixel = ( nNumberOfImageComponents == 3 ? 24 : nNumberOfImageComponents == 1 ? 8 : 0 );
+                                    aMetadata.mnPlanes = 1;
 
                                     if (aMap.GetMapUnit() != MapUnit::MapPixel)
                                         // We already know the DPI, but the
                                         // pixel size arrived later, so do the
                                         // conversion again.
-                                        aLogSize = OutputDevice::LogicToLogic(
-                                            aPixSize, aMap, MapMode(MapUnit::Map100thMM));
+                                        aMetadata.maLogSize = OutputDevice::LogicToLogic(
+                                            aMetadata.maPixSize, aMap, MapMode(MapUnit::Map100thMM));
 
                                     bScanFinished = true;
                                 }
@@ -468,7 +469,7 @@ bool GraphicDescriptor::ImpDetectPCD( SvStream& rStm, bool )
          ( nTemp16 == 0x5049 ) &&
          ( cByte == 0x49 ) )
     {
-        nFormat = GraphicFileFormat::PCD;
+        aMetadata.mnFormat = GraphicFileFormat::PCD;
         bRet = true;
     }
     rStm.Seek( nStmPos );
@@ -491,7 +492,7 @@ bool GraphicDescriptor::ImpDetectPCX( SvStream& rStm )
 
     if ( cByte == 0x0a )
     {
-        nFormat = GraphicFileFormat::PCX;
+        aMetadata.mnFormat = GraphicFileFormat::PCX;
 
         rStm.SeekRel( 1 );
 
@@ -511,7 +512,7 @@ bool GraphicDescriptor::ImpDetectPCX( SvStream& rStm )
 
             // Bits/Pixel
             rStm.ReadUChar( cByte );
-            nBitsPerPixel = cByte;
+            aMetadata.mnBitsPerPixel = cByte;
 
             // image dimensions
             rStm.ReadUInt16( nTemp16 );
@@ -523,8 +524,8 @@ bool GraphicDescriptor::ImpDetectPCX( SvStream& rStm )
             rStm.ReadUInt16( nTemp16 );
             nYmax = nTemp16;
 
-            aPixSize.setWidth( nXmax - nXmin + 1 );
-            aPixSize.setHeight( nYmax - nYmin + 1 );
+            aMetadata.maPixSize.setWidth( nXmax - nXmin + 1 );
+            aMetadata.maPixSize.setHeight( nYmax - nYmin + 1 );
 
             // resolution
             rStm.ReadUInt16( nTemp16 );
@@ -535,16 +536,16 @@ bool GraphicDescriptor::ImpDetectPCX( SvStream& rStm )
             // set logical size
             MapMode aMap( MapUnit::MapInch, Point(),
                           Fraction( 1, nDPIx ), Fraction( 1, nDPIy ) );
-            aLogSize = OutputDevice::LogicToLogic( aPixSize, aMap,
+            aMetadata.maLogSize = OutputDevice::LogicToLogic( aMetadata.maPixSize, aMap,
                                                    MapMode( MapUnit::Map100thMM ) );
 
             // number of color planes
             cByte = 5; // Illegal value in case of EOF.
             rStm.SeekRel( 49 );
             rStm.ReadUChar( cByte );
-            nPlanes = cByte;
+            aMetadata.mnPlanes = cByte;
 
-            bRet = (nPlanes<=4);
+            bRet = (aMetadata.mnPlanes<=4);
         }
     }
 
@@ -566,7 +567,7 @@ bool GraphicDescriptor::ImpDetectPNG( SvStream& rStm, bool bExtendedInfo )
         rStm.ReadUInt32( nTemp32 );
         if ( nTemp32 == 0x0d0a1a0a )
         {
-            nFormat = GraphicFileFormat::PNG;
+            aMetadata.mnFormat = GraphicFileFormat::PNG;
             bRet = true;
 
             if ( bExtendedInfo )
@@ -581,30 +582,30 @@ bool GraphicDescriptor::ImpDetectPNG( SvStream& rStm, bool bExtendedInfo )
                     rStm.ReadUInt32( nTemp32 );
                     if (!rStm.good())
                         break;
-                    aPixSize.setWidth( nTemp32 );
+                    aMetadata.maPixSize.setWidth( nTemp32 );
 
                     // height
                     rStm.ReadUInt32( nTemp32 );
                     if (!rStm.good())
                         break;
-                    aPixSize.setHeight( nTemp32 );
+                    aMetadata.maPixSize.setHeight( nTemp32 );
 
                     // Bits/Pixel
                     rStm.ReadUChar( cByte );
                     if (!rStm.good())
                         break;
-                    nBitsPerPixel = cByte;
+                    aMetadata.mnBitsPerPixel = cByte;
 
                     // Colour type - check whether it supports alpha values
                     sal_uInt8 cColType = 0;
                     rStm.ReadUChar( cColType );
                     if (!rStm.good())
                          break;
-                    bIsAlpha = bIsTransparent = ( cColType == 4 || cColType == 6 );
+                    aMetadata.mbIsAlpha = aMetadata.mbIsTransparent = ( cColType == 4 || cColType == 6 );
 
                     // Planes always 1;
                     // compression always
-                    nPlanes = 1;
+                    aMetadata.mnPlanes = 1;
 
                     sal_uInt32  nLen32 = 0;
                     nTemp32 = 0;
@@ -638,18 +639,18 @@ bool GraphicDescriptor::ImpDetectPNG( SvStream& rStm, bool bExtendedInfo )
                             if ( cByte )
                             {
                                 if ( nXRes )
-                                    aLogSize.setWidth( (aPixSize.Width() * 100000) / nXRes );
+                                    aMetadata.maLogSize.setWidth( (aMetadata.maPixSize.Width() * 100000) / nXRes );
 
                                 if ( nYRes )
-                                    aLogSize.setHeight( (aPixSize.Height() * 100000) / nYRes );
+                                    aMetadata.maLogSize.setHeight( (aMetadata.maPixSize.Height() * 100000) / nYRes );
                             }
 
                             nLen32 -= 9;
                         }
                         else if ( nTemp32 == 0x74524e53 ) // transparency
                         {
-                            bIsTransparent = true;
-                            bIsAlpha = ( cColType != 0 && cColType != 2 );
+                            aMetadata.mbIsTransparent = true;
+                            aMetadata.mbIsAlpha = ( cColType != 0 && cColType != 2 );
                         }
 
                         // skip forward to next chunk
@@ -696,7 +697,7 @@ bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, bool bExtendedInfo )
             rStm.ReadUInt16( nTemp16 );
             if ( nTemp16 == 0x2a )
             {
-                nFormat = GraphicFileFormat::TIF;
+                aMetadata.mnFormat = GraphicFileFormat::TIF;
                 bRet = true;
 
                 if ( bExtendedInfo )
@@ -737,13 +738,13 @@ bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, bool bExtendedInfo )
                             if ( nTemp16 == 3 )
                             {
                                 rStm.ReadUInt16( nTemp16 );
-                                aPixSize.setWidth( nTemp16 );
+                                aMetadata.maPixSize.setWidth( nTemp16 );
                                 rStm.SeekRel( 2 );
                             }
                             else
                             {
                                 rStm.ReadUInt32( nTemp32 );
-                                aPixSize.setWidth( nTemp32 );
+                                aMetadata.maPixSize.setWidth( nTemp32 );
                             }
 
                             // height
@@ -753,13 +754,13 @@ bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, bool bExtendedInfo )
                             if ( nTemp16 == 3 )
                             {
                                 rStm.ReadUInt16( nTemp16 );
-                                aPixSize.setHeight( nTemp16 );
+                                aMetadata.maPixSize.setHeight( nTemp16 );
                                 rStm.SeekRel( 2 );
                             }
                             else
                             {
                                 rStm.ReadUInt32( nTemp32 );
-                                aPixSize.setHeight( nTemp32 );
+                                aMetadata.maPixSize.setHeight( nTemp32 );
                             }
 
                             // Bits/Pixel
@@ -768,7 +769,7 @@ bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, bool bExtendedInfo )
                             {
                                 rStm.SeekRel( 6 );
                                 rStm.ReadUInt16( nTemp16 );
-                                nBitsPerPixel = nTemp16;
+                                aMetadata.mnBitsPerPixel = nTemp16;
                                 rStm.SeekRel( 2 );
                             }
                             else
@@ -798,7 +799,7 @@ bool GraphicDescriptor::ImpDetectXBM( SvStream&, bool )
 {
     bool bRet = aPathExt.startsWith( "xbm" );
     if (bRet)
-        nFormat = GraphicFileFormat::XBM;
+        aMetadata.mnFormat = GraphicFileFormat::XBM;
 
     return bRet;
 }
@@ -807,7 +808,7 @@ bool GraphicDescriptor::ImpDetectXPM( SvStream&, bool )
 {
     bool bRet = aPathExt.startsWith( "xpm" );
     if (bRet)
-        nFormat = GraphicFileFormat::XPM;
+        aMetadata.mnFormat = GraphicFileFormat::XPM;
 
     return bRet;
 }
@@ -830,7 +831,7 @@ bool GraphicDescriptor::ImpDetectPBM( SvStream& rStm, bool )
     }
 
     if ( bRet )
-        nFormat = GraphicFileFormat::PBM;
+        aMetadata.mnFormat = GraphicFileFormat::PBM;
 
     return bRet;
 }
@@ -852,7 +853,7 @@ bool GraphicDescriptor::ImpDetectPGM( SvStream& rStm, bool )
     }
 
     if ( bRet )
-        nFormat = GraphicFileFormat::PGM;
+        aMetadata.mnFormat = GraphicFileFormat::PGM;
 
     return bRet;
 }
@@ -874,7 +875,7 @@ bool GraphicDescriptor::ImpDetectPPM( SvStream& rStm, bool )
     }
 
     if ( bRet )
-        nFormat = GraphicFileFormat::PPM;
+        aMetadata.mnFormat = GraphicFileFormat::PPM;
 
     return bRet;
 }
@@ -888,7 +889,7 @@ bool GraphicDescriptor::ImpDetectRAS( SvStream& rStm, bool )
     rStm.ReadUInt32( nMagicNumber );
     if ( nMagicNumber == 0x59a66a95 )
     {
-        nFormat = GraphicFileFormat::RAS;
+        aMetadata.mnFormat = GraphicFileFormat::RAS;
         bRet = true;
     }
     rStm.Seek( nStmPos );
@@ -899,7 +900,7 @@ bool GraphicDescriptor::ImpDetectTGA( SvStream&, bool )
 {
     bool bRet = aPathExt.startsWith( "tga" );
     if (bRet)
-        nFormat = GraphicFileFormat::TGA;
+        aMetadata.mnFormat = GraphicFileFormat::TGA;
 
     return bRet;
 }
@@ -930,17 +931,17 @@ bool GraphicDescriptor::ImpDetectPSD( SvStream& rStm, bool bExtendedInfo )
                 rStm.ReadUInt16( nChannels ).ReadUInt32( nRows ).ReadUInt32( nColumns ).ReadUInt16( nDepth ).ReadUInt16( nMode );
                 if ( ( nDepth == 1 ) || ( nDepth == 8 ) || ( nDepth == 16 ) )
                 {
-                    nBitsPerPixel = ( nDepth == 16 ) ? 8 : nDepth;
+                    aMetadata.mnBitsPerPixel = ( nDepth == 16 ) ? 8 : nDepth;
                     switch ( nChannels )
                     {
                         case 4 :
                         case 3 :
-                            nBitsPerPixel = 24;
+                            aMetadata.mnBitsPerPixel = 24;
                             [[fallthrough]];
                         case 2 :
                         case 1 :
-                            aPixSize.setWidth( nColumns );
-                            aPixSize.setHeight( nRows );
+                            aMetadata.maPixSize.setWidth( nColumns );
+                            aMetadata.maPixSize.setHeight( nRows );
                         break;
                         default:
                             bRet = false;
@@ -953,7 +954,7 @@ bool GraphicDescriptor::ImpDetectPSD( SvStream& rStm, bool bExtendedInfo )
     }
 
     if ( bRet )
-        nFormat = GraphicFileFormat::PSD;
+        aMetadata.mnFormat = GraphicFileFormat::PSD;
     rStm.Seek( nStmPos );
     return bRet;
 }
@@ -975,7 +976,7 @@ bool GraphicDescriptor::ImpDetectEPS( SvStream& rStm, bool )
         ( ImplSearchEntry( nFirstBytes, reinterpret_cast<sal_uInt8 const *>("%!PS-Adobe"), 10, 10 )
             && ImplSearchEntry( &nFirstBytes[15], reinterpret_cast<sal_uInt8 const *>("EPS"), 3, 3 ) ) )
     {
-        nFormat = GraphicFileFormat::EPS;
+        aMetadata.mnFormat = GraphicFileFormat::EPS;
         bRet = true;
     }
     rStm.Seek( nStmPos );
@@ -986,7 +987,7 @@ bool GraphicDescriptor::ImpDetectDXF( SvStream&, bool )
 {
     bool bRet = aPathExt.startsWith( "dxf" );
     if (bRet)
-        nFormat = GraphicFileFormat::DXF;
+        aMetadata.mnFormat = GraphicFileFormat::DXF;
 
     return bRet;
 }
@@ -995,7 +996,7 @@ bool GraphicDescriptor::ImpDetectMET( SvStream&, bool )
 {
     bool bRet = aPathExt.startsWith( "met" );
     if (bRet)
-        nFormat = GraphicFileFormat::MET;
+        aMetadata.mnFormat = GraphicFileFormat::MET;
 
     return bRet;
 }
@@ -1004,7 +1005,7 @@ bool GraphicDescriptor::ImpDetectPCT( SvStream& rStm, bool )
 {
     bool bRet = aPathExt.startsWith( "pct" );
     if (bRet)
-        nFormat = GraphicFileFormat::PCT;
+        aMetadata.mnFormat = GraphicFileFormat::PCT;
     else
     {
         sal_uInt64 const nStreamPos = rStm.Tell();
@@ -1012,7 +1013,7 @@ bool GraphicDescriptor::ImpDetectPCT( SvStream& rStm, bool )
         if (isPCT(rStm, nStreamPos, nStreamLen))
         {
             bRet = true;
-            nFormat = GraphicFileFormat::PCT;
+            aMetadata.mnFormat = GraphicFileFormat::PCT;
         }
         rStm.Seek(nStreamPos);
     }
@@ -1034,7 +1035,7 @@ bool GraphicDescriptor::ImpDetectSVM( SvStream& rStm, bool bExtendedInfo )
         rStm.ReadUChar( cByte );
         if ( cByte == 0x49 )
         {
-            nFormat = GraphicFileFormat::SVM;
+            aMetadata.mnFormat = GraphicFileFormat::SVM;
             bRet = true;
 
             if ( bExtendedInfo )
@@ -1047,17 +1048,17 @@ bool GraphicDescriptor::ImpDetectSVM( SvStream& rStm, bool bExtendedInfo )
                 // width
                 nTemp32 = 0;
                 rStm.ReadUInt32( nTemp32 );
-                aLogSize.setWidth( nTemp32 );
+                aMetadata.maLogSize.setWidth( nTemp32 );
 
                 // height
                 nTemp32 = 0;
                 rStm.ReadUInt32( nTemp32 );
-                aLogSize.setHeight( nTemp32 );
+                aMetadata.maLogSize.setHeight( nTemp32 );
 
                 // read MapUnit and determine PrefSize
                 nTemp16 = 0;
                 rStm.ReadUInt16( nTemp16 );
-                aLogSize = OutputDevice::LogicToLogic( aLogSize,
+                aMetadata.maLogSize = OutputDevice::LogicToLogic( aMetadata.maLogSize,
                                                        MapMode( static_cast<MapUnit>(nTemp16) ),
                                                        MapMode( MapUnit::Map100thMM ) );
             }
@@ -1077,7 +1078,7 @@ bool GraphicDescriptor::ImpDetectSVM( SvStream& rStm, bool bExtendedInfo )
 
             if( nTmp16 == 0x4654 )
             {
-                nFormat = GraphicFileFormat::SVM;
+                aMetadata.mnFormat = GraphicFileFormat::SVM;
                 bRet = true;
 
                 if( bExtendedInfo )
@@ -1086,8 +1087,8 @@ bool GraphicDescriptor::ImpDetectSVM( SvStream& rStm, bool bExtendedInfo )
                     rStm.SeekRel( 0x06 );
                     TypeSerializer aSerializer(rStm);
                     aSerializer.readMapMode(aMapMode);
-                    aSerializer.readSize(aLogSize);
-                    aLogSize = OutputDevice::LogicToLogic( aLogSize, aMapMode, MapMode( MapUnit::Map100thMM ) );
+                    aSerializer.readSize(aMetadata.maLogSize);
+                    aMetadata.maLogSize = OutputDevice::LogicToLogic( aMetadata.maLogSize, aMapMode, MapMode( MapUnit::Map100thMM ) );
                 }
             }
         }
@@ -1120,7 +1121,7 @@ bool GraphicDescriptor::ImpDetectWMF(SvStream& rStm, bool)
     // Check if file is placeable WMF
     if (nKey == PLACEABLE_SIGNATURE)
     {
-        nFormat = GraphicFileFormat::WMF;
+        aMetadata.mnFormat = GraphicFileFormat::WMF;
         bRet = true;
     }
     else
@@ -1133,7 +1134,7 @@ bool GraphicDescriptor::ImpDetectWMF(SvStream& rStm, bool)
             && (nVersion == static_cast<sal_uInt16>(MetafileVersion::Version100)
             || nVersion == static_cast<sal_uInt16>(MetafileVersion::Version300)))
         {
-            nFormat = GraphicFileFormat::WMF;
+            aMetadata.mnFormat = GraphicFileFormat::WMF;
             bRet = true;
         }
     }
@@ -1183,18 +1184,18 @@ bool GraphicDescriptor::ImpDetectEMF(SvStream& rStm, bool bExtendedInfo)
 
         if (nSignature == ENHMETA_SIGNATURE)
         {
-            nFormat = GraphicFileFormat::EMF;
+            aMetadata.mnFormat = GraphicFileFormat::EMF;
             bRet = true;
 
             if (bExtendedInfo)
             {
                 // size in pixels
-                aPixSize.setWidth(nBoundRight - nBoundLeft + 1);
-                aPixSize.setHeight(nBoundBottom - nBoundTop + 1);
+                aMetadata.maPixSize.setWidth(nBoundRight - nBoundLeft + 1);
+                aMetadata.maPixSize.setHeight(nBoundBottom - nBoundTop + 1);
 
                 // size in 0.01mm units
-                aLogSize.setWidth(nFrameRight - nFrameLeft + 1);
-                aLogSize.setHeight(nFrameBottom - nFrameTop + 1);
+                aMetadata.maLogSize.setWidth(nFrameRight - nFrameLeft + 1);
+                aMetadata.maLogSize.setHeight(nFrameBottom - nFrameTop + 1);
             }
         }
     }
@@ -1207,7 +1208,7 @@ bool GraphicDescriptor::ImpDetectSVG( SvStream& /*rStm*/, bool /*bExtendedInfo*/
 {
     bool bRet = aPathExt.startsWith( "svg" );
     if (bRet)
-        nFormat = GraphicFileFormat::SVG;
+        aMetadata.mnFormat = GraphicFileFormat::SVG;
 
     return bRet;
 }
@@ -1227,14 +1228,14 @@ bool GraphicDescriptor::ImpDetectWEBP( SvStream& rStm, bool bExtendedInfo )
         rStm.ReadUInt32( nTemp32 );
         if ( nTemp32 == 0x57454250 )
         {
-            nFormat = GraphicFileFormat::WEBP;
+            aMetadata.mnFormat = GraphicFileFormat::WEBP;
             bRet = true;
 
             if ( bExtendedInfo )
             {
                 rStm.Seek(nStmPos);
-                ReadWebpInfo(rStm, aPixSize, nBitsPerPixel, bIsAlpha );
-                bIsTransparent = bIsAlpha;
+                ReadWebpInfo(rStm, aMetadata.maPixSize, aMetadata.mnBitsPerPixel, aMetadata.mbIsAlpha );
+                aMetadata.mbIsTransparent = aMetadata.mbIsAlpha;
             }
         }
     }
@@ -1244,38 +1245,7 @@ bool GraphicDescriptor::ImpDetectWEBP( SvStream& rStm, bool bExtendedInfo )
 
 OUString GraphicDescriptor::GetImportFormatShortName( GraphicFileFormat nFormat )
 {
-    const char *pKeyName = nullptr;
-
-    switch( nFormat )
-    {
-        case GraphicFileFormat::BMP :   pKeyName = "bmp";   break;
-        case GraphicFileFormat::GIF :   pKeyName = "gif";   break;
-        case GraphicFileFormat::JPG :   pKeyName = "jpg";   break;
-        case GraphicFileFormat::PCD :   pKeyName = "pcd";   break;
-        case GraphicFileFormat::PCX :   pKeyName = "pcx";   break;
-        case GraphicFileFormat::PNG :   pKeyName = "png";   break;
-        case GraphicFileFormat::XBM :   pKeyName = "xbm";   break;
-        case GraphicFileFormat::XPM :   pKeyName = "xpm";   break;
-        case GraphicFileFormat::PBM :   pKeyName = "pbm";   break;
-        case GraphicFileFormat::PGM :   pKeyName = "pgm";   break;
-        case GraphicFileFormat::PPM :   pKeyName = "ppm";   break;
-        case GraphicFileFormat::RAS :   pKeyName = "ras";   break;
-        case GraphicFileFormat::TGA :   pKeyName = "tga";   break;
-        case GraphicFileFormat::PSD :   pKeyName = "psd";   break;
-        case GraphicFileFormat::EPS :   pKeyName = "eps";   break;
-        case GraphicFileFormat::TIF :   pKeyName = "tif";   break;
-        case GraphicFileFormat::DXF :   pKeyName = "dxf";   break;
-        case GraphicFileFormat::MET :   pKeyName = "met";   break;
-        case GraphicFileFormat::PCT :   pKeyName = "pct";   break;
-        case GraphicFileFormat::SVM :   pKeyName = "svm";   break;
-        case GraphicFileFormat::WMF :   pKeyName = "wmf";   break;
-        case GraphicFileFormat::EMF :   pKeyName = "emf";   break;
-        case GraphicFileFormat::SVG :   pKeyName = "svg";   break;
-        case GraphicFileFormat::WEBP :  pKeyName = "webp";   break;
-        default: assert(false);
-    }
-
-    return OUString::createFromAscii(pKeyName);
+    return vcl::getImportFormatShortName( nFormat );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
