@@ -16,6 +16,23 @@
       "message": "jenkins is unhappy:\n\nThe text leading up to this was:\n--------------------------\n|diff -ur pdfium.org/third_party/libopenjpeg/ht_dec.c pdfium/third_party/libopenjpeg/ht_dec.c\n|--- pdfium.org/third_party/libopenjpeg/ht_dec.c\t2022-07-28 15:19:17.366247900 +0200\n|+++ pdfium/third_party/libopenjpeg/ht_dec.c\t2022-07-28 15:23:25.641843900 +0200\n--------------------------\nNo file to patch.  Skipping patch.\n1 out of 1 hunk ignored",
       "revId": "e7edfa126643f60d51f313017b06f50cc58ae9bc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73b97843_76309964",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-07-29T15:54:05Z",
+      "side": 1,
+      "message": "yeah, unhappy because the pdfium version bump is not yet picked to the branch, I kinda jumped the gun with the cherry-pick...",
+      "revId": "e7edfa126643f60d51f313017b06f50cc58ae9bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
