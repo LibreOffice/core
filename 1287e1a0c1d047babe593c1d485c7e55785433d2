@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fce7879_27023736",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-07-29T07:45:18Z",
+      "side": 1,
+      "message": "Since this change affects Writer in several ways, I thought may give me an advise whether this change is reasonable. Thank you very much.",
+      "revId": "1287e1a0c1d047babe593c1d485c7e55785433d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
