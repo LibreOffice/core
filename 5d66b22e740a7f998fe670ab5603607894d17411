@@ -69,6 +69,24 @@
       "parentUuid": "17d1503c_fdd79587",
       "revId": "5d66b22e740a7f998fe670ab5603607894d17411",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8021e9cf_50b58f8a",
+        "filename": "sfx2/source/doc/objstor.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2629,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2022-07-29T23:07:35Z",
+      "side": 1,
+      "message": "Yes, I see now that the ABORT could have been set before.  It seems also that there could have been a different error stored when abort is trying to be set here, which would have skipped the new if check and avoided the return.  Good call.",
+      "parentUuid": "6073f603_d32e5fec",
+      "revId": "5d66b22e740a7f998fe670ab5603607894d17411",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
