@@ -1965,14 +1965,22 @@ void DocxAttributeOutput::DoWriteMoveRangeTagStart(const OString & bookmarkName,
         pAttributeList->add(FSNS(XML_w, XML_date ), DateTimeToOString( aDateTime ));
     pAttributeList->add(FSNS(XML_w, XML_name), bookmarkName);
     m_pSerializer->singleElementNS( XML_w, bFrom ? XML_moveFromRangeStart : XML_moveToRangeStart, pAttributeList );
+
+    // tdf#150166 avoid of unpaired moveRangeEnd at moved ToC
+    m_rSavedBookmarksIds.insert(m_nNextBookmarkId);
 }
 
 void DocxAttributeOutput::DoWriteMoveRangeTagEnd(sal_Int32 const nId, bool bFrom)
 {
-    m_pSerializer->singleElementNS(XML_w, bFrom
-            ? XML_moveFromRangeEnd
-            : XML_moveToRangeEnd,
-        FSNS(XML_w, XML_id), OString::number(nId));
+    if ( m_rSavedBookmarksIds.count(nId) )
+    {
+        m_pSerializer->singleElementNS(XML_w, bFrom
+                ? XML_moveFromRangeEnd
+                : XML_moveToRangeEnd,
+            FSNS(XML_w, XML_id), OString::number(nId));
+
+        m_rSavedBookmarksIds.erase(nId);
+    }
 }
 
 void DocxAttributeOutput::DoWriteBookmarkStartIfExist(sal_Int32 nRunPos)

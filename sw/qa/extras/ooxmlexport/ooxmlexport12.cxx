@@ -1238,6 +1238,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf145720, "tdf104797.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf150166, "tdf150166.docx")
+{
+    // check moveFromRangeStart/End and moveToRangeStart/End (to keep tracked text moving)
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    if (mbExported)
+    {
+        assertXPath(pXmlDoc, "//w:moveFromRangeStart", 0);
+        // This was 2 (missing RangeStart elements, but bad unpaired RangeEnds)
+        assertXPath(pXmlDoc, "//w:moveFromRangeEnd", 0);
+    }
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf143510, "TC-table-DnD-move.docx")
 {
     // check moveFromRangeStart/End and moveToRangeStart/End for tracked table move by drag & drop
