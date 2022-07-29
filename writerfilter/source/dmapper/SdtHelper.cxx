@@ -13,6 +13,7 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <editeng/unoprnms.hxx>
 #include <sal/log.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <comphelper/string.hxx>
@@ -76,9 +77,9 @@ static awt::Size lcl_getOptimalWidth(const StyleSheetTablePtr& pStyleSheet,
 }
 
 SdtHelper::SdtHelper(DomainMapper_Impl& rDM_Impl,
-                     css::uno::Reference<css::uno::XComponentContext> const& xContext)
+                     css::uno::Reference<css::uno::XComponentContext> xContext)
     : m_rDM_Impl(rDM_Impl)
-    , m_xComponentContext(xContext)
+    , m_xComponentContext(std::move(xContext))
     , m_aControlType(SdtControlType::unknown)
     , m_bHasElements(false)
     , m_bOutsideAParagraph(false)

@@ -29,6 +29,7 @@
 #include <memory>
 #include <string_view>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 namespace writerperfect
@@ -96,7 +97,7 @@ OUString concatPath(std::u16string_view lhs, const OUString& rhs)
 
 struct OLEStreamData
 {
-    OLEStreamData(const OString& rName, const OString& rvngName);
+    OLEStreamData(OString aName, OString rvngName);
 
     tools::SvRef<SotStorageStream> stream;
 
@@ -155,9 +156,9 @@ public:
     bool mbInitialized;
 };
 
-OLEStreamData::OLEStreamData(const OString& rName, const OString& rvngName)
-    : name(rName)
-    , RVNGname(rvngName)
+OLEStreamData::OLEStreamData(OString aName, OString rvngName)
+    : name(std::move(aName))
+    , RVNGname(std::move(rvngName))
 {
 }
 
@@ -265,7 +266,7 @@ namespace
 {
 struct ZipStreamData
 {
-    explicit ZipStreamData(const OString& rName);
+    explicit ZipStreamData(OString aName);
 
     Reference<XInputStream> xStream;
 
@@ -309,8 +310,8 @@ public:
     bool mbInitialized;
 };
 
-ZipStreamData::ZipStreamData(const OString& rName)
-    : aName(rName)
+ZipStreamData::ZipStreamData(OString _aName)
+    : aName(std::move(_aName))
 {
 }
 

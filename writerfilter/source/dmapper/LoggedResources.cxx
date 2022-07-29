@@ -20,6 +20,7 @@
 #include "LoggedResources.hxx"
 #include "TagLogger.hxx"
 #include <ooxml/QNameToString.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 
@@ -27,8 +28,8 @@ namespace writerfilter
 {
 #ifdef DBG_UTIL
 
-LoggedResourcesHelper::LoggedResourcesHelper(const std::string& sPrefix)
-    : msPrefix(sPrefix)
+LoggedResourcesHelper::LoggedResourcesHelper(std::string sPrefix)
+    : msPrefix(std::move(sPrefix))
 {
 }
 

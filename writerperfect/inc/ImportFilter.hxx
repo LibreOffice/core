@@ -23,6 +23,7 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <unotools/mediadescriptor.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -43,8 +44,8 @@ class ImportFilterImpl
                                   css::lang::XInitialization>
 {
 public:
-    ImportFilterImpl(const css::uno::Reference<css::uno::XComponentContext>& rxContext)
-        : mxContext(rxContext)
+    ImportFilterImpl(css::uno::Reference<css::uno::XComponentContext> xContext)
+        : mxContext(std::move(xContext))
     {
     }
 

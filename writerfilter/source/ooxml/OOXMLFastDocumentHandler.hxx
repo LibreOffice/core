@@ -35,7 +35,7 @@ class OOXMLFastDocumentHandler : public cppu::WeakImplHelper<css::xml::sax::XFas
 {
 public:
     OOXMLFastDocumentHandler(
-        css::uno::Reference< css::uno::XComponentContext > const & context,
+        css::uno::Reference< css::uno::XComponentContext > context,
         Stream* pStream,
         OOXMLDocumentImpl* pDocument,
         sal_Int32 nXNoteId );
