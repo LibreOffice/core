@@ -349,16 +349,19 @@ private:
             is compared.
     */
     void RemoveNonVisibleChildren (
-        const ChildDescriptorListType& raNewChildList,
-        ChildDescriptorListType& raOldChildList);
+        const std::vector<ChildDescriptor*>& rNonVisibleChildren);
 
     /** Merge the information that is already known about the visible shapes
-        from the old list into the current list.
+        from the old list into the current list, and return a list of
+        children that are in the old list, but not the current one.
         @param raChildList
             Information is merged to the current list of visible children
             from this list. The old list can get reordered.
+        @return
+            Vector of children that are in the old list, but not the current
+            one.
     */
-    void MergeAccessibilityInformation (ChildDescriptorListType& raChildList);
+    std::vector<ChildDescriptor*> MergeAccessibilityInformation (ChildDescriptorListType& raChildList);
 
     /** If the visible area has changed then send events that signal a
         change of their bounding boxes for all shapes that are members of

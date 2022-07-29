@@ -205,8 +205,9 @@ void ChildrenManagerImpl::Update (bool bCreateNewObjectsOnDemand)
         maVisibleChildren.swap (aChildList);
 
         // 3. Merge the information that is already known about the visible
-        // shapes from the previous list into the new list.
-        MergeAccessibilityInformation (aChildList);
+        // shapes from the previous list into the new list and identify
+        // old children that are now unused
+        std::vector<ChildDescriptor*> aUnusedChildList = MergeAccessibilityInformation (aChildList);
 
         adjustIndexInParentOfShapes(maVisibleChildren);
 
@@ -231,8 +232,9 @@ void ChildrenManagerImpl::Update (bool bCreateNewObjectsOnDemand)
         // to be fired, and so the operations will take place on
         // the list we are trying to replace
 
-        RemoveNonVisibleChildren (maVisibleChildren, aChildList);
+        RemoveNonVisibleChildren (aUnusedChildList);
 
+        aUnusedChildList.clear();
         aChildList.clear();
 
         maVisibleArea = aVisibleArea;
@@ -321,80 +323,97 @@ void ChildrenManagerImpl::CreateListOfVisibleShapes (
 
 namespace
 {
-struct ChildDescriptorLess
+
+bool childDescriptorLess(const ChildDescriptor& lhs, const ChildDescriptor& rhs)
 {
-    bool operator()(const ChildDescriptor& lhs, const ChildDescriptor& rhs) const
-    {
-        auto pLhsShape = lhs.mxShape.get();
-        auto pRhsShape = rhs.mxShape.get();
-        if (pLhsShape || pRhsShape)
-            return pLhsShape < pRhsShape;
-        return lhs.mxAccessibleShape.get() < rhs.mxAccessibleShape.get();
-    }
-};
+
+    auto pLhsShape = lhs.mxShape.get();
+    auto pRhsShape = rhs.mxShape.get();
+    if (pLhsShape || pRhsShape)
+        return pLhsShape < pRhsShape;
+    return lhs.mxAccessibleShape.get() < rhs.mxAccessibleShape.get();
+}
+
+bool childDescriptorPtrLess(const ChildDescriptor* lhs, const ChildDescriptor* rhs)
+{
+    return childDescriptorLess(*lhs, *rhs);
+}
+
 }
     
 void ChildrenManagerImpl::RemoveNonVisibleChildren (
-    const ChildDescriptorListType& rNewChildList,
-    ChildDescriptorListType& rOldChildList)
+    const std::vector<ChildDescriptor*>& rNonVisibleChildren)
 {
-    // Iterate over list of formerly visible children and remove those that
-    // are not visible anymore, i.e. member of the new list of visible
-    // children.
-
-    // the lists have already been sorted in MergeAccessibilityInformation
-    auto newIt = rNewChildList.begin();
-    auto newEnd = rNewChildList.end();
-
-    for (auto& rChild : rOldChildList)
+    for (ChildDescriptor* pChild : rNonVisibleChildren)
     {
-        while (newIt != newEnd && ChildDescriptorLess()(*newIt, rChild))
-            newIt++;
-        if (newIt == newEnd || !(*newIt == rChild) )
+        // The child is disposed when there is a UNO shape from which
+        // the accessible shape can be created when the shape becomes
+        // visible again.  When there is no such UNO shape then simply
+        // reset the descriptor but keep the accessibility object.
+        if (pChild->mxShape.is())
         {
-            // The child is disposed when there is a UNO shape from which
-            // the accessible shape can be created when the shape becomes
-            // visible again.  When there is no such UNO shape then simply
-            // reset the descriptor but keep the accessibility object.
-            if (rChild.mxShape.is())
-            {
-                UnregisterAsDisposeListener (rChild.mxShape);
-                rChild.disposeAccessibleObject (mrContext);
-            }
-            else
-            {
-                AccessibleShape* pAccessibleShape = rChild.GetAccessibleShape();
-                pAccessibleShape->ResetState (AccessibleStateType::VISIBLE);
-                rChild.mxAccessibleShape = nullptr;
-            }
+            UnregisterAsDisposeListener (pChild->mxShape);
+            pChild->disposeAccessibleObject (mrContext);
+        }
+        else
+        {
+            AccessibleShape* pAccessibleShape = pChild->GetAccessibleShape();
+            pAccessibleShape->ResetState (AccessibleStateType::VISIBLE);
+            pChild->mxAccessibleShape = nullptr;
         }
     }
 }
 
-void ChildrenManagerImpl::MergeAccessibilityInformation (
+std::vector<ChildDescriptor*> ChildrenManagerImpl::MergeAccessibilityInformation (
     ChildDescriptorListType& raOldChildList)
-{
-    // sort the lists by mxShape, and then walk them in parallel, which avoids an O(n^2) loop
-    std::sort(maVisibleChildren.begin(), maVisibleChildren.end(), ChildDescriptorLess());
-    std::sort(raOldChildList.begin(), raOldChildList.end(), ChildDescriptorLess());
-    ChildDescriptorListType::const_iterator aOldChildDescriptor = raOldChildList.begin();
-    ChildDescriptorListType::const_iterator aEndVisibleChildren = raOldChildList.end();
 
-    for (auto& rChild : maVisibleChildren)
+{
+    // create a working copy of the vector of current children with pointers to elements,
+    // sort the old list and copy by mxShape, and then walk old/current lists in parallel,
+    // which avoids an O(n^2) loop
+    // (order of maVisibleChildren must remain unchanged to not randomly change a11y tree)
+    std::vector<ChildDescriptor*> aSortedVisibleChildren(maVisibleChildren.size());
+    std::transform(maVisibleChildren.begin(), maVisibleChildren.end(),
+                   aSortedVisibleChildren.begin(), [](auto& e) {return &e;});
+    std::sort(aSortedVisibleChildren.begin(), aSortedVisibleChildren.end(), childDescriptorPtrLess);
+
+    // old list can be reordered without problems
+    std::sort(raOldChildList.begin(), raOldChildList.end(), childDescriptorLess);
+
+    ChildDescriptorListType::const_iterator aOldChildDescriptor = raOldChildList.begin();
+    ChildDescriptorListType::const_iterator aEndOldChildren = raOldChildList.end();
+    for (ChildDescriptor* pChild : aSortedVisibleChildren)
     {
-        while (aOldChildDescriptor != aEndVisibleChildren && ChildDescriptorLess()(*aOldChildDescriptor, rChild))
+        while (aOldChildDescriptor != aEndOldChildren && childDescriptorLess(*aOldChildDescriptor, *pChild))
+        {
             aOldChildDescriptor++;
+        }
 
         // Copy accessible shape if that exists in the old descriptor.
-        if (aOldChildDescriptor != aEndVisibleChildren && *aOldChildDescriptor == rChild &&
+        if (aOldChildDescriptor != aEndOldChildren && *aOldChildDescriptor == *pChild &&
             aOldChildDescriptor->mxAccessibleShape.is())
         {
-            rChild.mxAccessibleShape = aOldChildDescriptor->mxAccessibleShape;
-            rChild.mbCreateEventPending = false;
+            pChild->mxAccessibleShape = aOldChildDescriptor->mxAccessibleShape;
+            pChild->mbCreateEventPending = false;
         }
         else
-            RegisterAsDisposeListener (rChild.mxShape);
+            RegisterAsDisposeListener (pChild->mxShape);
     }
+
+    // collect list of children that are in the old, but not the new vector
+    std::vector<ChildDescriptor*> aObsoleteChildren;
+
+    auto newIt = aSortedVisibleChildren.begin();
+    auto newEnd = aSortedVisibleChildren.end();
+    for (ChildDescriptor& rOldChild : raOldChildList)
+    {
+        while (newIt != newEnd && childDescriptorLess(**newIt, rOldChild))
+            newIt++;
+        if (newIt == newEnd || !(**newIt == rOldChild) )
+            aObsoleteChildren.push_back(&rOldChild);
+    }
+
+    return aObsoleteChildren;
 }
 
 void ChildrenManagerImpl::SendVisibleAreaEvents (
