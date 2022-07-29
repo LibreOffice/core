@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9886d19f_9e1ff8ae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-07-29T08:34:42Z",
+      "side": 1,
+      "message": "Somehow this misses the reason for the revert; no comments here, nor in tdf#141652, or in the reverted gerrit change - so we don\u0027t get a new information why was that needed after all, unfortunately :)",
+      "revId": "be39a3d8c1bf9b134839a90e52ccabb2101421f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
