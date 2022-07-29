@@ -140,6 +140,9 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="catalogdialog|symbolname">Unknown</property>
+                <attributes>
+                  <attribute name="scale" value="0.9"/>
+                </attributes>
               </object>
               <packing>
                 <property name="left_attach">0</property>

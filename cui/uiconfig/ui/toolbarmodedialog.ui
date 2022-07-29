@@ -343,6 +343,9 @@
                                 <property name="wrap-mode">word-char</property>
                                 <property name="max-width-chars">50</property>
                                 <property name="xalign">0</property>
+                                <attributes>
+                                  <attribute name="scale" value="0.9"/>
+                                </attributes>
                               </object>
                             </child>
                           </object>

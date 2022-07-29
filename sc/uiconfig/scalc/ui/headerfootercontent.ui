@@ -494,6 +494,9 @@
             <property name="label" translatable="yes" context="headerfootercontent|label2">Use the buttons to change the font or insert field commands such as date, time, etc.</property>
             <property name="margin-start">12</property>
             <property name="margin-top">6</property>
+            <attributes>
+              <attribute name="scale" value="0.9"/>
+            </attributes>
           </object>
         </child>
         <child type="label">
