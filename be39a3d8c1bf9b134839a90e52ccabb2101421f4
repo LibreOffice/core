@@ -16,6 +16,24 @@
       "message": "Somehow this misses the reason for the revert; no comments here, nor in tdf#141652, or in the reverted gerrit change - so we don\u0027t get a new information why was that needed after all, unfortunately :)",
       "revId": "be39a3d8c1bf9b134839a90e52ccabb2101421f4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aecca509_eb34bee6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-07-29T11:29:17Z",
+      "side": 1,
+      "message": "You just didn\u0027t hunt enough. 😊\nI realized that missing bit when starting the 7.4 backport and added the reason to the commit message at that point. I was going to note it in the bug report after all the reverts were finished.",
+      "parentUuid": "9886d19f_9e1ff8ae",
+      "revId": "be39a3d8c1bf9b134839a90e52ccabb2101421f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
