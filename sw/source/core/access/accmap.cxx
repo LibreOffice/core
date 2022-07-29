@@ -3277,8 +3277,7 @@ std::unique_ptr<SwAccessibleSelectedParas_Impl> SwAccessibleMap::BuildSelectedPa
              pCursor->GetPoint()->nNode.GetNode().IsTextNode() &&
              pCursor->GetMark()->nNode.GetNode().IsTextNode() )
         {
-            SwPosition* pStartPos = pCursor->Start();
-            SwPosition* pEndPos = pCursor->End();
+            auto [pStartPos, pEndPos] = pCursor->StartEnd(); // SwPosition*
             // loop on all text nodes inside the selection
             SwNodeIndex aIdx( pStartPos->nNode );
             for ( ; aIdx.GetIndex() <= pEndPos->nNode.GetIndex(); ++aIdx )

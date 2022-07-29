@@ -2020,8 +2020,7 @@ static void Add( SwRegionRects& rRegion, const SwRect& rRect )
  */
 void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
 {
-    SwPosition *pStartPos = rCursor.Start(),
-               *pEndPos   = rCursor.End();
+    auto [pStartPos, pEndPos] = rCursor.StartEnd(); // SwPosition*
 
     SwViewShell *pSh = GetCurrShell();
 

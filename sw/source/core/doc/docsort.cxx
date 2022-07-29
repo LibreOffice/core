@@ -283,7 +283,7 @@ double SwSortBoxElement::GetValue( sal_uInt16 nKey ) const
 bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
 {
     // Check if Frame is in the Text
-    const SwPosition *pStart = rPaM.Start(), *pEnd = rPaM.End();
+    auto [pStart, pEnd] = rPaM.StartEnd(); // SwPosition*
 
     // Set index to the Selection's start
     for ( const auto *pFormat : *GetSpzFrameFormats() )

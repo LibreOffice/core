@@ -83,8 +83,7 @@ void SwList::InsertListItem(SwNodeNum& rNodeNum, SwListRedlineType const eRedlin
 
     for ( const auto& rNumberTree : maListTrees )
     {
-        const SwPosition* pStart = rNumberTree.pSection->Start();
-        const SwPosition* pEnd = rNumberTree.pSection->End();
+        auto [pStart, pEnd] = rNumberTree.pSection->StartEnd(); // SwPosition*
         const SwNodes* pRangeNodes = &(pStart->nNode.GetNode().GetNodes());
 
         if ( pRangeNodes == pNodesOfNodeNum &&

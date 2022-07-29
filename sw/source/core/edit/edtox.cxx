@@ -57,8 +57,7 @@ void SwEditShell::Insert(const SwTOXMark& rMark)
     StartAllAction();
     for(SwPaM& rPaM : GetCursor()->GetRingContainer())
     {
-        const SwPosition *pStt = rPaM.Start(),
-                         *pEnd = rPaM.End();
+        auto [pStt, pEnd] = rPaM.StartEnd(); // SwPosition*
         if( bInsAtPos )
         {
             SwPaM aTmp( *pStt );

@@ -2515,11 +2515,10 @@ const SwRangeRedline* SwCursorShell::GotoRedline( SwRedlineTable::size_type nArr
                     // Redlines were stretched over a whole paragraph
                     SwPaM* pCur = m_pCurrentCursor;
                     SwPaM* pNextPam = pCur->GetNext();
-                    SwPosition* pCStt = pCur->Start(), *pCEnd = pCur->End();
+                    auto [pCStt, pCEnd] = pCur->StartEnd(); // SwPosition*
                     while( pCur != pNextPam )
                     {
-                        const SwPosition *pNStt = pNextPam->Start(),
-                                         *pNEnd = pNextPam->End();
+                        auto [pNStt, pNEnd] = pNextPam->StartEnd(); // SwPosition*
 
                         bool bDel = true;
                         switch( ::ComparePosition( *pCStt, *pCEnd,

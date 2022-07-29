@@ -206,8 +206,7 @@ public:
             {
                 continue;
             }
-            SwPosition const*const pStart(pRedline->Start());
-            SwPosition const*const pEnd(pRedline->End());
+            auto [pStart, pEnd] = pRedline->StartEnd(); // SwPosition*
             if (m_rNode.GetIndex() < pStart->nNode.GetIndex())
             {
                 m_nextRedline = SwRedlineTable::npos;

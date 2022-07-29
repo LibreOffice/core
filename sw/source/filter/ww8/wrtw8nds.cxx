@@ -308,8 +308,7 @@ sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
         {
             const SwRangeRedline* pRedl = m_rExport.m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ nRedLinePos ];
 
-            const SwPosition* pStt = pRedl->Start();
-            const SwPosition* pEnd = pRedl->End();
+            auto [pStt, pEnd] = pRedl->StartEnd(); // SwPosition*
 
             if( pStt->nNode == m_rNode )
             {
@@ -1595,8 +1594,7 @@ const SwRedlineData* SwWW8AttrIter::GetRunLevelRedline( sal_Int32 nPos )
     {
         const SwRangeRedline* pRedl = m_rExport.m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ m_nCurRedlinePos ];
 
-        const SwPosition* pStt = pRedl->Start();
-        const SwPosition* pEnd = pRedl->End();
+        auto [pStt, pEnd] = pRedl->StartEnd(); // SwPosition*
 
         if( pStt->nNode == m_rNode )
         {
@@ -1852,8 +1850,7 @@ static SwTextFormatColl& lcl_getFormatCollection( MSWordExportBase& rExport, con
     while( nPos < nMax )
     {
         const SwRangeRedline* pRedl = rExport.m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ nPos++ ];
-        const SwPosition* pStt = pRedl->Start();
-        const SwPosition* pEnd = pRedl->End();
+        auto [pStt, pEnd] = pRedl->StartEnd(); // SwPosition*
         // Looking for deletions, which ends in current pTextNode
         if( RedlineType::Delete == pRedl->GetRedlineData().GetType() &&
             pEnd->nNode == *pTextNode && pStt->nNode != *pTextNode &&

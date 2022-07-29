@@ -764,7 +764,7 @@ const SfxPoolItem* SwFltControlStack::GetOpenStackAttr(const SwPosition& rPos, s
 
 void SwFltControlStack::Delete(const SwPaM &rPam)
 {
-    const SwPosition *pStt = rPam.Start(), *pEnd = rPam.End();
+    auto [pStt, pEnd] = rPam.StartEnd(); // SwPosition*
 
     if( !rPam.HasMark() || *pStt >= *pEnd )
         return;

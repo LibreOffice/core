@@ -111,8 +111,7 @@ void SAL_CALL SwXTextMarkup::commitTextRangeMarkup(::sal_Int32 nType, const OUSt
 
         ::sw::XTextRangeToSwPaM(aPam, xRange);
 
-        SwPosition* startPos = aPam.Start();
-        SwPosition* endPos   = aPam.End();
+        auto [startPos, endPos] = aPam.StartEnd(); // SwPosition*
 
         commitStringMarkup (nType, aIdentifier, startPos->nContent.GetIndex(), endPos->nContent.GetIndex() - startPos->nContent.GetIndex(), xMarkupInfoContainer);
     }
@@ -120,8 +119,7 @@ void SAL_CALL SwXTextMarkup::commitTextRangeMarkup(::sal_Int32 nType, const OUSt
     {
         SwPaM & rPam(*pCursor->GetPaM());
 
-        SwPosition* startPos = rPam.Start();
-        SwPosition* endPos   = rPam.End();
+        auto [startPos, endPos] = rPam.StartEnd(); // SwPosition*
 
         commitStringMarkup (nType, aIdentifier, startPos->nContent.GetIndex(), endPos->nContent.GetIndex() - startPos->nContent.GetIndex(), xMarkupInfoContainer);
     }

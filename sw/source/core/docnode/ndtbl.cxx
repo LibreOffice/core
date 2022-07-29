@@ -632,7 +632,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
                                    const SwTableAutoFormat* pTAFormat )
 {
     // See if the selection contains a Table
-    const SwPosition *pStt = rRange.Start(), *pEnd = rRange.End();
+    auto [pStt, pEnd] = rRange.StartEnd(); // SwPosition*
     {
         SwNodeOffset nCnt = pStt->nNode.GetIndex();
         for( ; nCnt <= pEnd->nNode.GetIndex(); ++nCnt )
@@ -4530,8 +4530,7 @@ void SwDoc::UnProtectTables( const SwPaM& rPam )
                 bool bFound = false;
                 SwPaM* pTmp = const_cast<SwPaM*>(&rPam);
                 do {
-                    const SwPosition *pStt = pTmp->Start(),
-                                    *pEnd = pTmp->End();
+                    auto [pStt, pEnd] = pTmp->StartEnd(); // SwPosition*
                     bFound = pStt->nNode.GetIndex() < nTableIdx &&
                             nTableIdx < pEnd->nNode.GetIndex();
 
