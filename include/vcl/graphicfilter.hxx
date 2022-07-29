@@ -25,9 +25,9 @@
 #include <vcl/graph.hxx>
 #include <vcl/errcode.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <vcl/graphic/GraphicMetadata.hxx>
 
 #include <memory>
-#include <optional>
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::uno { template <class E> class Sequence; }
@@ -124,56 +124,12 @@ inline constexpr OUStringLiteral SVG_SHORTNAME = u"SVG";
 inline constexpr OUStringLiteral PDF_SHORTNAME = u"PDF";
 inline constexpr OUStringLiteral WEBP_SHORTNAME = u"WEBP";
 
-//  Info class for all supported file formats
-
-enum class GraphicFileFormat
-{
-    NOT = 0x0000,
-    BMP = 0x0001,
-    GIF = 0x0002,
-    JPG = 0x0003,
-    PCD = 0x0004,
-    PCX = 0x0005,
-    PNG = 0x0006,
-    TIF = 0x0007,
-    XBM = 0x0008,
-    XPM = 0x0009,
-    PBM = 0x000a,
-    PGM = 0x000b,
-    PPM = 0x000c,
-    RAS = 0x000d,
-    TGA = 0x000e,
-    PSD = 0x000f,
-    EPS = 0x0010,
-    WEBP = 0x0011,
-    DXF = 0x00f1,
-    MET = 0x00f2,
-    PCT = 0x00f3,
-    // retired SGF = 0x00f4,
-    SVM = 0x00f5,
-    WMF = 0x00f6,
-    // retired SGV = 0x00f7,
-    EMF = 0x00f8,
-    SVG = 0x00f9
-};
-
-
 class VCL_DLLPUBLIC GraphicDescriptor final
 {
-    SvStream*           pFileStm;
-
-    OUString            aPathExt;
-    Size                aPixSize;
-    Size                aLogSize;
-    std::optional<Size> maPreferredLogSize;
-    std::optional<MapMode> maPreferredMapMode;
-    sal_uInt16          nBitsPerPixel;
-    sal_uInt16          nPlanes;
-    GraphicFileFormat   nFormat;
-    bool                bOwnStream;
-    sal_uInt8 mnNumberOfImageComponents;
-    bool                bIsTransparent;
-    bool                bIsAlpha;
+    SvStream*            pFileStm;
+    OUString             aPathExt;
+    GraphicMetadata      aMetadata;
+    bool                 bOwnStream;
 
     void                ImpConstruct();
 
@@ -230,37 +186,37 @@ public:
     bool    Detect( bool bExtendedInfo = false );
 
     /** @return the file format, GraphicFileFormat::NOT if no format was recognized */
-    GraphicFileFormat  GetFileFormat() const { return nFormat; }
+    GraphicFileFormat  GetFileFormat() const { return aMetadata.mnFormat; }
 
     /** @return graphic size in pixels or 0 size */
-    const Size&     GetSizePixel() const { return aPixSize; }
+    const Size&     GetSizePixel() const { return aMetadata.maPixSize; }
 
     /** @return the logical graphic size in 1/100mm or 0 size */
-    const Size&     GetSize_100TH_MM() const { return aLogSize; }
+    const Size&     GetSize_100TH_MM() const { return aMetadata.maLogSize; }
 
     /**
      * Returns the logic size, according to the map mode available via GetPreferredMapMode(). Prefer
      * this size over GetSize_100TH_MM().
      */
-    const std::optional<Size>& GetPreferredLogSize() const { return maPreferredLogSize; }
+    const std::optional<Size>& GetPreferredLogSize() const { return aMetadata.maPreferredLogSize; }
 
     /**
      * If available, this returns the map mode the graphic prefers, which may be other than pixel or
      * 100th mm. Prefer this map mode over just assuming MapUnit::Map100thMM.
      */
-    const std::optional<MapMode>& GetPreferredMapMode() const { return maPreferredMapMode; }
+    const std::optional<MapMode>& GetPreferredMapMode() const { return aMetadata.maPreferredMapMode; }
 
     /** @return bits/pixel or 0 **/
-    sal_uInt16          GetBitsPerPixel() const { return nBitsPerPixel; }
+    sal_uInt16          GetBitsPerPixel() const { return aMetadata.mnBitsPerPixel; }
 
     /** @return number of color channels */
-    sal_uInt8 GetNumberOfImageComponents() const { return mnNumberOfImageComponents; }
+    sal_uInt8 GetNumberOfImageComponents() const { return aMetadata.mnNumberOfImageComponents; }
 
     /** @return whether image supports transparency */
-    bool IsTransparent() const { return bIsTransparent; }
+    bool IsTransparent() const { return aMetadata.mbIsTransparent; }
 
     /** @return whether image supports alpha values for translucent colours */
-    bool IsAlpha() const { return bIsAlpha; }
+    bool IsAlpha() const { return aMetadata.mbIsAlpha; }
 
     /** @return filter number that is needed by the GraphFilter to read this format */
     static OUString GetImportFormatShortName( GraphicFileFormat nFormat );
