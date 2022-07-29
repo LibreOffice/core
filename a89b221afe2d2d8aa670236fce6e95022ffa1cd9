@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0061ded1_2825fa0e",
+        "filename": "vcl/source/treelist/uiobject.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-07-29T09:03:31Z",
+      "side": 1,
+      "message": "Hi Michael,\nIs this part of the code necessary? If I remove it, the test still works",
+      "revId": "a89b221afe2d2d8aa670236fce6e95022ffa1cd9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
