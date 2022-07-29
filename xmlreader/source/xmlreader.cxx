@@ -30,6 +30,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <sal/types.h>
+#include <utility>
 #include <xmlreader/pad.hxx>
 #include <xmlreader/span.hxx>
 #include <xmlreader/xmlreader.hxx>
@@ -52,8 +53,8 @@ bool isSpace(char c) {
 
 }
 
-XmlReader::XmlReader(OUString const & fileUrl)
-    : fileUrl_(fileUrl)
+XmlReader::XmlReader(OUString fileUrl)
+    : fileUrl_(std::move(fileUrl))
     , fileHandle_(nullptr)
 {
     oslFileError e = osl_openFile(
