@@ -23,6 +23,9 @@
 #include <xmloff/txtparae.hxx>
 #include <tools/globname.hxx>
 
+#include <optional>
+#include <unordered_map>
+
 #define XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE "vnd.sun.star.GraphicObject:"
 
 class SwXMLExport;
@@ -39,6 +42,10 @@ class SwXMLTextParagraphExport : public XMLTextParagraphExport
 
     // Collected autostyles for use in exportTextAutoStyles
     std::vector<const SwTableNode*> maTableNodes;
+public:
+    typedef ::std::unordered_map<SwFrameFormat const*, ::std::optional<OUString>> FormatMap;
+private:
+    ::std::unordered_map<SwTableNode const*, ::std::pair<FormatMap, FormatMap>> m_TableFormats;
 
     static SwNoTextNode *GetNoTextNode(
         const css::uno::Reference < css::beans::XPropertySet >& rPropSet );
@@ -61,6 +68,11 @@ public:
         SwXMLExport& rExp,
          SvXMLAutoStylePoolP& rAutoStylePool );
     virtual ~SwXMLTextParagraphExport() override;
+
+    ::std::unordered_map<SwTableNode const*, ::std::pair<FormatMap, FormatMap>> const&
+        GetTableFormats() const { return m_TableFormats; }
+    ::std::unordered_map<SwTableNode const*, ::std::pair<FormatMap, FormatMap>> &
+        GetTableFormats()       { return m_TableFormats; }
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_XML_XMLTEXTE_HXX

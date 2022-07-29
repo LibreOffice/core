@@ -46,7 +46,8 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::lang;
 using namespace ::xmloff::token;
 
-void SwXMLExport::ExportFormat( const SwFormat& rFormat, enum XMLTokenEnum eFamily )
+void SwXMLExport::ExportFormat(const SwFormat& rFormat, enum XMLTokenEnum eFamily,
+        ::std::optional<OUString> const oStyleName)
 {
     // <style:style ...>
     CheckAttrList();
@@ -57,11 +58,14 @@ void SwXMLExport::ExportFormat( const SwFormat& rFormat, enum XMLTokenEnum eFami
         return;
     OSL_ENSURE( eFamily != XML_TOKEN_INVALID, "family must be specified" );
     // style:name="..."
+    assert(oStyleName || (eFamily != XML_TABLE_ROW && eFamily != XML_TABLE_CELL));
     bool bEncoded = false;
-    AddAttribute( XML_NAMESPACE_STYLE, XML_NAME, EncodeStyleName(
-                    rFormat.GetName(), &bEncoded ) );
+    OUString const name(oStyleName ? *oStyleName : rFormat.GetName());
+    AddAttribute(XML_NAMESPACE_STYLE, XML_NAME, EncodeStyleName(name, &bEncoded));
     if( bEncoded )
-        AddAttribute( XML_NAMESPACE_STYLE, XML_DISPLAY_NAME, rFormat.GetName() );
+    {
+        AddAttribute(XML_NAMESPACE_STYLE, XML_DISPLAY_NAME, name);
+    }
 
     if( eFamily != XML_TOKEN_INVALID )
         AddAttribute( XML_NAMESPACE_STYLE, XML_FAMILY, eFamily );
