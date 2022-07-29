@@ -16,6 +16,24 @@
       "message": "Hi Michael,\nIs this part of the code necessary? If I remove it, the test still works",
       "revId": "a89b221afe2d2d8aa670236fce6e95022ffa1cd9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85416f10_f5ac01aa",
+        "filename": "vcl/source/treelist/uiobject.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-07-29T09:17:37Z",
+      "side": 1,
+      "message": "hmm ... not really ? i thought at first to use getChild(\"-1\") and send the input to this widget, but then thought since i need to get the Edit widget to do this i might as well get the Edit widget in the execute function...\n\nbut maybe having direct access to the Edit widget would be useful in some other test? dunno.\n\ni bet this could all be improved, but i don\u0027t know enough about this UITest code and VCL to do so.",
+      "parentUuid": "0061ded1_2825fa0e",
+      "revId": "a89b221afe2d2d8aa670236fce6e95022ffa1cd9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
