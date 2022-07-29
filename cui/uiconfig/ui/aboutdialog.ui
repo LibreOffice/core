@@ -96,7 +96,6 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="halign">start</property>
-                <property name="margin-start">6</property>
                 <property name="column-spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="lbVersion">
@@ -106,6 +105,9 @@
                     <property name="label" translatable="yes" context="aboutdialog|lbVersion">Version:</property>
                     <property name="wrap">True</property>
                     <property name="xalign">0</property>
+                    <attributes>
+                      <attribute name="scale" value="0.9"/>
+                    </attributes>
                     <accessibility>
                       <relation type="label-for" target="lbVersionString"/>
                     </accessibility>
@@ -122,6 +124,9 @@
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes" context="aboutdialog|lbBuild">Build:</property>
                     <property name="xalign">0</property>
+                    <attributes>
+                      <attribute name="scale" value="0.9"/>
+                    </attributes>
                     <accessibility>
                       <relation type="label-for" target="lbBuildString"/>
                     </accessibility>
@@ -138,6 +143,9 @@
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes" context="aboutdialog|lbEnvironment">Environment:</property>
                     <property name="xalign">0</property>
+                    <attributes>
+                      <attribute name="scale" value="0.9"/>
+                    </attributes>
                     <accessibility>
                       <relation type="label-for" target="lbEnvString"/>
                     </accessibility>
@@ -155,6 +163,9 @@
                     <property name="wrap">True</property>
                     <property name="max-width-chars">40</property>
                     <property name="xalign">0</property>
+                    <attributes>
+                      <attribute name="scale" value="0.9"/>
+                    </attributes>
                     <accessibility>
                       <relation type="labelled-by" target="lbVersion"/>
                     </accessibility>
@@ -172,6 +183,9 @@
                     <property name="wrap">True</property>
                     <property name="max-width-chars">40</property>
                     <property name="xalign">0</property>
+                    <attributes>
+                      <attribute name="scale" value="0.9"/>
+                    </attributes>
                     <accessibility>
                       <relation type="labelled-by" target="lbEnvironment"/>
                     </accessibility>
@@ -209,6 +223,9 @@
                     <property name="label" translatable="yes" context="aboutdialog|lbExtra">Misc:</property>
                     <property name="xalign">0</property>
                     <property name="yalign">0</property>
+                    <attributes>
+                      <attribute name="scale" value="0.9"/>
+                    </attributes>
                     <accessibility>
                       <relation type="label-for" target="lbMiscString"/>
                     </accessibility>
@@ -226,6 +243,9 @@
                     <property name="wrap">True</property>
                     <property name="max-width-chars">40</property>
                     <property name="xalign">0</property>
+                    <attributes>
+                      <attribute name="scale" value="0.9"/>
+                    </attributes>
                     <accessibility>
                       <relation type="labelled-by" target="lbMisc"/>
                     </accessibility>
@@ -242,6 +262,9 @@
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes" context="aboutdialog|lbLocale">Locale:</property>
                     <property name="xalign">0</property>
+                    <attributes>
+                      <attribute name="scale" value="0.9"/>
+                    </attributes>
                     <accessibility>
                       <relation type="label-for" target="lbLocaleString"/>
                     </accessibility>
@@ -259,6 +282,9 @@
                     <property name="wrap">True</property>
                     <property name="max-width-chars">40</property>
                     <property name="xalign">0</property>
+                    <attributes>
+                      <attribute name="scale" value="0.9"/>
+                    </attributes>
                     <accessibility>
                       <relation type="labelled-by" target="lbLocale"/>
                     </accessibility>
@@ -274,6 +300,9 @@
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="aboutdialog|lbUI">User Interface:</property>
                     <property name="xalign">0</property>
+                    <attributes>
+                      <attribute name="scale" value="0.9"/>
+                    </attributes>
                     <accessibility>
                       <relation type="label-for" target="lbUIString"/>
                     </accessibility>
@@ -291,6 +320,9 @@
                     <property name="wrap">True</property>
                     <property name="max-width-chars">40</property>
                     <property name="xalign">0</property>
+                    <attributes>
+                      <attribute name="scale" value="0.9"/>
+                    </attributes>
                     <accessibility>
                       <relation type="labelled-by" target="lbUI"/>
                     </accessibility>
@@ -317,6 +349,9 @@
                 <property name="wrap">True</property>
                 <property name="max-width-chars">60</property>
                 <property name="xalign">0</property>
+                <attributes>
+                  <attribute name="scale" value="1.1"/>
+                </attributes>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -334,6 +369,9 @@
                 <property name="wrap">True</property>
                 <property name="max-width-chars">60</property>
                 <property name="xalign">0</property>
+                <attributes>
+                  <attribute name="scale" value="0.9"/>
+                </attributes>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -344,6 +382,7 @@
               <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <property name="halign">center</property>
                 <property name="spacing">12</property>
                 <child>
                   <object class="GtkLinkButton" id="btnCredits">
