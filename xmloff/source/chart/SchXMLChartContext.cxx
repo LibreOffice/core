@@ -20,6 +20,7 @@
 #include "SchXMLChartContext.hxx"
 #include <SchXMLImport.hxx>
 #include "SchXMLLegendContext.hxx"
+#include "SchXMLDataTableContext.hxx"
 #include "SchXMLPlotAreaContext.hxx"
 #include "SchXMLParagraphContext.hxx"
 #include "SchXMLTableContext.hxx"
@@ -1066,6 +1067,9 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLChartContext::cr
             break;
         case XML_ELEMENT(CHART, XML_LEGEND):
             pContext = new SchXMLLegendContext( mrImportHelper, GetImport() );
+            break;
+        case XML_ELEMENT(LO_EXT, XML_DATA_TABLE):
+            pContext = new SchXMLDataTableContext(mrImportHelper, GetImport());
             break;
         case XML_ELEMENT(TABLE, XML_TABLE):
             {

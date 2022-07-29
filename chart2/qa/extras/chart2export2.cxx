@@ -103,6 +103,7 @@ public:
     void testNameRangeXLSX();
     void testTdf143942();
     void testDateCategoriesPPTX();
+    void testDataTableImportExport();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest2);
     CPPUNIT_TEST(testSetSeriesToSecondaryAxisXLSX);
@@ -168,6 +169,7 @@ public:
     CPPUNIT_TEST(testNameRangeXLSX);
     CPPUNIT_TEST(testTdf143942);
     CPPUNIT_TEST(testDateCategoriesPPTX);
+    CPPUNIT_TEST(testDataTableImportExport);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1637,6 +1639,56 @@ void Chart2ExportTest2::testDateCategoriesPPTX()
             "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:cat/c:numRef/c:numCache/c:pt["
                 + OString::number(i + 1) + "]/c:v",
             OUString::number(aDates[i]));
+    }
+}
+
+void Chart2ExportTest2::testDataTableImportExport()
+{
+    load(u"/chart2/qa/extras/data/xlsx/", u"ChartDataTable.xlsx");
+    {
+        uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+        CPPUNIT_ASSERT(xChartDoc.is());
+        auto xDiagram = xChartDoc->getFirstDiagram();
+        CPPUNIT_ASSERT(xDiagram.is());
+        auto xDataTable = xDiagram->getDataTable();
+        CPPUNIT_ASSERT(xDataTable.is());
+        uno::Reference<beans::XPropertySet> xPropertySet(xDataTable, uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xPropertySet.is());
+        bool bHBorder;
+        CPPUNIT_ASSERT(xPropertySet->getPropertyValue("HBorder") >>= bHBorder);
+        CPPUNIT_ASSERT_EQUAL(true, bHBorder);
+        bool bVBorder;
+        CPPUNIT_ASSERT(xPropertySet->getPropertyValue("VBorder") >>= bVBorder);
+        CPPUNIT_ASSERT_EQUAL(true, bVBorder);
+        bool bOutline;
+        CPPUNIT_ASSERT(xPropertySet->getPropertyValue("Outline") >>= bOutline);
+        CPPUNIT_ASSERT_EQUAL(false, bOutline);
+        bool bKeys;
+        CPPUNIT_ASSERT(xPropertySet->getPropertyValue("Keys") >>= bKeys);
+        CPPUNIT_ASSERT_EQUAL(false, bKeys);
+    }
+    reload("calc8");
+    {
+        uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+        CPPUNIT_ASSERT(xChartDoc.is());
+        auto xDiagram = xChartDoc->getFirstDiagram();
+        CPPUNIT_ASSERT(xDiagram.is());
+        auto xDataTable = xDiagram->getDataTable();
+        CPPUNIT_ASSERT(xDataTable.is());
+        uno::Reference<beans::XPropertySet> xPropertySet(xDataTable, uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xPropertySet.is());
+        bool bHBorder;
+        CPPUNIT_ASSERT(xPropertySet->getPropertyValue("HBorder") >>= bHBorder);
+        CPPUNIT_ASSERT_EQUAL(true, bHBorder);
+        bool bVBorder;
+        CPPUNIT_ASSERT(xPropertySet->getPropertyValue("VBorder") >>= bVBorder);
+        CPPUNIT_ASSERT_EQUAL(true, bVBorder);
+        bool bOutline;
+        CPPUNIT_ASSERT(xPropertySet->getPropertyValue("Outline") >>= bOutline);
+        CPPUNIT_ASSERT_EQUAL(false, bOutline);
+        bool bKeys;
+        CPPUNIT_ASSERT(xPropertySet->getPropertyValue("Keys") >>= bKeys);
+        CPPUNIT_ASSERT_EQUAL(false, bKeys);
     }
 }
 
