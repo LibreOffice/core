@@ -270,7 +270,7 @@ class formatCell(UITestCase):
                 # set line style to "double" (minimal width is taken)
                 xLineSet.executeAction("CHOOSE", mkPropertyValues({"POS": '16'}))
                 widthVal = get_state_as_dict(linewidthmf)["Text"]
-                # minimim predefined width is Medium (1.50 pt)
+                # minimum predefined width is Medium (1.50 pt)
                 self.assertEqual(widthVal, '1.50 pt')
 
                 # set line style to "solid"
