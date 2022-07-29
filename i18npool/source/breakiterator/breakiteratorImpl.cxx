@@ -82,7 +82,7 @@ static sal_Int32 skipSpace(const OUString& Text, sal_Int32 nPos, sal_Int32 len, 
                 while (nPos < len)
                 {
                     ch = Text.iterateCodePoints(&pos);
-                    if (!u_isWhitespace(ch) && !isZWSP(ch))
+                    if (!u_isUWhiteSpace(ch) && !isZWSP(ch))
                         break;
                     nPos = pos;
                 }
@@ -90,7 +90,7 @@ static sal_Int32 skipSpace(const OUString& Text, sal_Int32 nPos, sal_Int32 len, 
                 while (nPos > 0)
                 {
                     ch = Text.iterateCodePoints(&pos, -1);
-                    if (!u_isWhitespace(ch) && !isZWSP(ch))
+                    if (!u_isUWhiteSpace(ch) && !isZWSP(ch))
                         break;
                     nPos = pos;
                 }
@@ -100,7 +100,7 @@ static sal_Int32 skipSpace(const OUString& Text, sal_Int32 nPos, sal_Int32 len, 
                 while (nPos < len)
                 {
                     ch = Text.iterateCodePoints(&pos);
-                    if (!u_isWhitespace(ch) && !isZWSP(ch) && (ch == 0x002E || u_isalnum(ch)))
+                    if (!u_isUWhiteSpace(ch) && !isZWSP(ch) && (ch == 0x002E || u_isalnum(ch)))
                         break;
                     nPos = pos;
                 }
@@ -108,7 +108,7 @@ static sal_Int32 skipSpace(const OUString& Text, sal_Int32 nPos, sal_Int32 len, 
                 while (nPos > 0)
                 {
                     ch = Text.iterateCodePoints(&pos, -1);
-                    if (!u_isWhitespace(ch) && !isZWSP(ch) && (ch == 0x002E || u_isalnum(ch)))
+                    if (!u_isUWhiteSpace(ch) && !isZWSP(ch) && (ch == 0x002E || u_isalnum(ch)))
                         break;
                     nPos = pos;
                 }
@@ -118,7 +118,7 @@ static sal_Int32 skipSpace(const OUString& Text, sal_Int32 nPos, sal_Int32 len, 
                 while (nPos < len)
                 {
                     ch = Text.iterateCodePoints(&pos);
-                    if (!u_isUWhiteSpace(ch) && !isZWSP(ch))
+                    if (!u_isWhitespace(ch) && !isZWSP(ch))
                         break;
                     nPos = pos;
                 }
@@ -126,7 +126,7 @@ static sal_Int32 skipSpace(const OUString& Text, sal_Int32 nPos, sal_Int32 len, 
                 while (nPos > 0)
                 {
                     ch = Text.iterateCodePoints(&pos, -1);
-                    if (!u_isUWhiteSpace(ch) && !isZWSP(ch))
+                    if (!u_isWhitespace(ch) && !isZWSP(ch))
                         break;
                     nPos = pos;
                 }
