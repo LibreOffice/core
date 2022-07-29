@@ -235,7 +235,8 @@ void TiffFilterTest::testRoundtrip()
 
     CPPUNIT_ASSERT_EQUAL(true, aDetector.detect());
     CPPUNIT_ASSERT_EQUAL(true, aDetector.checkTIF());
-    CPPUNIT_ASSERT_EQUAL(OUString(u"TIF"), aDetector.msDetectedFormat);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"TIF"),
+                         vcl::getImportFormatShortName(aDetector.getMetadata().mnFormat));
 }
 
 void TiffFilterTest::testRGB8bits()
