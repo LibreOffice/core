@@ -117,7 +117,7 @@ void GraphicFormatDetectorTest::testDetectWMF()
     vcl::GraphicFormatDetector aDetector(aFileStream, "WMF");
 
     CPPUNIT_ASSERT(aDetector.detect());
-    CPPUNIT_ASSERT(aDetector.checkWMForEMF());
+    CPPUNIT_ASSERT(aDetector.checkWMF());
 
     aFileStream.Seek(aDetector.mnStreamPosition);
 
@@ -129,16 +129,16 @@ void GraphicFormatDetectorTest::testDetectWMF()
 void GraphicFormatDetectorTest::testDetectWMZ()
 {
     SvFileStream aFileStream(getFullUrl(u"TypeDetectionExample.wmz"), StreamMode::READ);
-    vcl::GraphicFormatDetector aDetector(aFileStream, "WMF");
+    vcl::GraphicFormatDetector aDetector(aFileStream, "WMZ");
 
     CPPUNIT_ASSERT(aDetector.detect());
-    CPPUNIT_ASSERT(aDetector.checkWMForEMF());
+    CPPUNIT_ASSERT(aDetector.checkWMF());
 
     aFileStream.Seek(aDetector.mnStreamPosition);
 
     OUString rFormatExtension;
     CPPUNIT_ASSERT(vcl::peekGraphicFormat(aFileStream, rFormatExtension, false));
-    CPPUNIT_ASSERT_EQUAL(OUString("WMF"), rFormatExtension);
+    CPPUNIT_ASSERT_EQUAL(OUString("WMZ"), rFormatExtension);
 }
 
 void GraphicFormatDetectorTest::testDetectPCX()
@@ -294,7 +294,7 @@ void GraphicFormatDetectorTest::testDetectSVG()
 void GraphicFormatDetectorTest::testDetectSVGZ()
 {
     SvFileStream aFileStream(getFullUrl(u"TypeDetectionExample.svgz"), StreamMode::READ);
-    vcl::GraphicFormatDetector aDetector(aFileStream, "SVG");
+    vcl::GraphicFormatDetector aDetector(aFileStream, "SVGZ");
 
     CPPUNIT_ASSERT(aDetector.detect());
     CPPUNIT_ASSERT(aDetector.checkSVG());
@@ -303,7 +303,7 @@ void GraphicFormatDetectorTest::testDetectSVGZ()
 
     OUString rFormatExtension;
     CPPUNIT_ASSERT(vcl::peekGraphicFormat(aFileStream, rFormatExtension, false));
-    CPPUNIT_ASSERT_EQUAL(OUString("SVG"), rFormatExtension);
+    CPPUNIT_ASSERT_EQUAL(OUString("SVGZ"), rFormatExtension);
 }
 
 void GraphicFormatDetectorTest::testDetectPDF()
@@ -357,7 +357,7 @@ void GraphicFormatDetectorTest::testDetectEMF()
     vcl::GraphicFormatDetector aDetector(aFileStream, "EMF");
 
     CPPUNIT_ASSERT(aDetector.detect());
-    CPPUNIT_ASSERT(aDetector.checkWMForEMF());
+    CPPUNIT_ASSERT(aDetector.checkEMF());
 
     aFileStream.Seek(aDetector.mnStreamPosition);
 
@@ -369,16 +369,16 @@ void GraphicFormatDetectorTest::testDetectEMF()
 void GraphicFormatDetectorTest::testDetectEMZ()
 {
     SvFileStream aFileStream(getFullUrl(u"TypeDetectionExample.emz"), StreamMode::READ);
-    vcl::GraphicFormatDetector aDetector(aFileStream, "EMF");
+    vcl::GraphicFormatDetector aDetector(aFileStream, "EMZ");
 
     CPPUNIT_ASSERT(aDetector.detect());
-    CPPUNIT_ASSERT(aDetector.checkWMForEMF());
+    CPPUNIT_ASSERT(aDetector.checkEMF());
 
     aFileStream.Seek(aDetector.mnStreamPosition);
 
     OUString rFormatExtension;
     CPPUNIT_ASSERT(vcl::peekGraphicFormat(aFileStream, rFormatExtension, false));
-    CPPUNIT_ASSERT_EQUAL(OUString("EMF"), rFormatExtension);
+    CPPUNIT_ASSERT_EQUAL(OUString("EMZ"), rFormatExtension);
 }
 
 void GraphicFormatDetectorTest::testMatchArray()
