@@ -1147,6 +1147,8 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
         return;
     }
 
+    const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(mrExport.getSaneDefaultVersion());
+
     mxExpPropMapper->setChartDoc(xNewDoc);
 
     awt::Size aPageSize( getPageSize( xNewDoc ));
@@ -1232,8 +1234,6 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
     if( bExportContent )
     {
         //export data provider in xlink:href attribute
-        const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(
-            mrExport.getSaneDefaultVersion());
 
         if (nCurrentODFVersion >= SvtSaveOptions::ODFSVER_012)
         {
@@ -1407,9 +1407,6 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
             Reference< beans::XPropertySet > xProp( rChartDoc->getLegend(), uno::UNO_QUERY );
             if( xProp.is())
             {
-                const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(
-                    mrExport.getSaneDefaultVersion());
-
                 // export legend anchor position
                 try
                 {
@@ -1492,6 +1489,37 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
         {
             CollectAutoStyle( std::move(aPropertyStates) );
         }
+        // remove property states for autostyles
+        aPropertyStates.clear();
+    }
+
+    // Data table
+    if (xNewDiagram.is() && nCurrentODFVersion & SvtSaveOptions::ODFSVER_EXTENDED)
+    {
+        auto xDataTable = xNewDiagram->getDataTable();
+
+        if (xDataTable.is())
+        {
+            // get property states for autostyles
+            if (mxExpPropMapper.is())
+            {
+                uno::Reference<beans::XPropertySet> xPropSet(xDataTable, uno::UNO_QUERY);
+                if (xPropSet.is())
+                    aPropertyStates = mxExpPropMapper->Filter(mrExport, xPropSet);
+            }
+
+            if (bExportContent)
+            {
+                // add style name attribute
+                AddAutoStyleAttribute(aPropertyStates);
+                SvXMLElementExport aDataTableElement(mrExport, XML_NAMESPACE_LO_EXT, XML_DATA_TABLE, true, true);
+            }
+            else
+            {
+                CollectAutoStyle(std::move(aPropertyStates));
+            }
+        }
+
         // remove property states for autostyles
         aPropertyStates.clear();
     }
