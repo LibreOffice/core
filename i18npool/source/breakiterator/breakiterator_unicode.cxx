@@ -379,9 +379,10 @@ Boundary SAL_CALL BreakIterator_Unicode::nextWord( const OUString& Text, sal_Int
     if( rv.startPos >= Text.getLength() || rv.startPos == icu::BreakIterator::DONE )
         rv.endPos = result.startPos;
     else {
-        if ( (rWordType == WordType::ANYWORD_IGNOREWHITESPACES ||
-                    rWordType == WordType::DICTIONARY_WORD ) &&
-                u_isWhitespace(Text.iterateCodePoints(&rv.startPos, 0)) )
+        if ((rWordType == WordType::ANYWORD_IGNOREWHITESPACES
+             && u_isUWhiteSpace(Text.iterateCodePoints(&rv.startPos, 0)))
+            || (rWordType == WordType::DICTIONARY_WORD
+                && u_isWhitespace(Text.iterateCodePoints(&rv.startPos, 0))))
             rv.startPos = icuBI->mpValue->mpBreakIterator->following(rv.startPos);
 
         rv.endPos = icuBI->mpValue->mpBreakIterator->following(rv.startPos);
@@ -402,9 +403,11 @@ Boundary SAL_CALL BreakIterator_Unicode::previousWord(const OUString& Text, sal_
     if( rv.startPos < 0)
         rv.endPos = rv.startPos;
     else {
-        if ( (rWordType == WordType::ANYWORD_IGNOREWHITESPACES ||
-                    rWordType == WordType::DICTIONARY_WORD) &&
-                u_isWhitespace(Text.iterateCodePoints(&rv.startPos, 0)) )
+
+        if ((rWordType == WordType::ANYWORD_IGNOREWHITESPACES
+             && u_isUWhiteSpace(Text.iterateCodePoints(&rv.startPos, 0)))
+            || (rWordType == WordType::DICTIONARY_WORD
+                && u_isWhitespace(Text.iterateCodePoints(&rv.startPos, 0))))
             rv.startPos = icuBI->mpValue->mpBreakIterator->preceding(rv.startPos);
 
         rv.endPos = icuBI->mpValue->mpBreakIterator->following(rv.startPos);

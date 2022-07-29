@@ -164,6 +164,25 @@ CPPUNIT_TEST_FIXTURE(SwCoreCrsrTest, testContentControlReadOnly)
     CPPUNIT_ASSERT(pWrtShell->HasReadonlySel());
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreCrsrTest, testTdf135451)
+{
+    SwDoc* pDoc = createSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // Insert narrow no-break space and move the cursor right before it
+    pWrtShell->Insert(u"a" + OUStringChar(CHAR_NNBSP) + "b");
+    pWrtShell->EndPara(/*bSelect=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->GoPrevWord();
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: a
+    // - Actual  : CHAR_NNBSP
+    // i.e., the cursor did not move over the narrow no-break space (CHAR_NNBSP)
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), pWrtShell->GetSelText());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
