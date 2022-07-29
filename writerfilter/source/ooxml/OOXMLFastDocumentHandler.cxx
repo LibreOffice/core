@@ -21,6 +21,7 @@
 #include "OOXMLFastContextHandler.hxx"
 #include "OOXMLFactory.hxx"
 #include <sal/log.hxx>
+#include <utility>
 
 namespace writerfilter::ooxml
 {
@@ -29,11 +30,11 @@ using namespace ::std;
 
 
 OOXMLFastDocumentHandler::OOXMLFastDocumentHandler(
-    uno::Reference< uno::XComponentContext > const & context,
+    uno::Reference< uno::XComponentContext > context,
     Stream* pStream,
     OOXMLDocumentImpl* pDocument,
     sal_Int32 nXNoteId )
-    : m_xContext(context)
+    : m_xContext(std::move(context))
     , mpStream( pStream )
     , mpDocument( pDocument )
     , mnXNoteId( nXNoteId )

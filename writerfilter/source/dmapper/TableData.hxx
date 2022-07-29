@@ -23,6 +23,7 @@
 
 #include "PropertyMap.hxx"
 
+#include <utility>
 #include <vector>
 
 namespace writerfilter::dmapper
@@ -56,7 +57,7 @@ public:
     typedef tools::SvRef<CellData> Pointer_t;
 
     CellData(css::uno::Reference<css::text::XTextRange> const & start, TablePropertyMapPtr pProps)
-    : mStart(start), mEnd(start), mpProps(pProps), mbOpen(true)
+    : mStart(start), mEnd(start), mpProps(std::move(pProps)), mbOpen(true)
         , m_nGridSpan(1)
     {
     }

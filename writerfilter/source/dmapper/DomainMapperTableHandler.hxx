@@ -79,7 +79,7 @@ class DomainMapperTableHandler final : public virtual SvRefBase
 public:
     typedef tools::SvRef<DomainMapperTableHandler> Pointer_t;
 
-    DomainMapperTableHandler(css::uno::Reference<css::text::XTextAppendAndConvert> const& xText,
+    DomainMapperTableHandler(css::uno::Reference<css::text::XTextAppendAndConvert> xText,
                              DomainMapper_Impl& rDMapper_Impl);
     ~DomainMapperTableHandler() override;
 

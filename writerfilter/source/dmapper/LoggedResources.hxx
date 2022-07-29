@@ -31,7 +31,7 @@ namespace writerfilter
 class LoggedResourcesHelper final
 {
 public:
-    explicit LoggedResourcesHelper(const std::string& sPrefix);
+    explicit LoggedResourcesHelper(std::string sPrefix);
     ~LoggedResourcesHelper();
 
     void startElement(const std::string& sElement);

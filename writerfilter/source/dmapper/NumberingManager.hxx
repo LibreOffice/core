@@ -231,7 +231,7 @@ private:
 
 public:
 
-    ListsManager(DomainMapper& rDMapper, const css::uno::Reference<css::lang::XMultiServiceFactory>& xFactory);
+    ListsManager(DomainMapper& rDMapper, css::uno::Reference<css::lang::XMultiServiceFactory> xFactory);
     virtual ~ListsManager() override;
 
     typedef tools::SvRef< ListsManager >  Pointer;
