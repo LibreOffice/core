@@ -185,13 +185,18 @@ class SwXMLTableFrameFormatsSort_Impl
 {
 private:
     SwXMLFrameFormats_Impl m_aFormatList;
+    SwXMLTextParagraphExport::FormatMap & m_rFormatMap;
+
 public:
-    bool AddRow( SwFrameFormat& rFrameFormat, std::u16string_view rNamePrefix, sal_uInt32 nLine );
-    bool AddCell( SwFrameFormat& rFrameFormat, std::u16string_view rNamePrefix,
+    SwXMLTableFrameFormatsSort_Impl(SwXMLTextParagraphExport::FormatMap & rFormatMap)
+        : m_rFormatMap(rFormatMap)
+    {}
+    ::std::optional<OUString> AddRow(SwFrameFormat& rFrameFormat, std::u16string_view rNamePrefix, sal_uInt32 nLine );
+    ::std::optional<OUString> AddCell(SwFrameFormat& rFrameFormat, std::u16string_view rNamePrefix,
                   sal_uInt32 nCol, sal_uInt32 nRow, bool bTop );
 };
 
-bool SwXMLTableFrameFormatsSort_Impl::AddRow( SwFrameFormat& rFrameFormat,
+::std::optional<OUString> SwXMLTableFrameFormatsSort_Impl::AddRow(SwFrameFormat& rFrameFormat,
                                          std::u16string_view rNamePrefix,
                                             sal_uInt32 nLine )
 {
@@ -216,10 +221,12 @@ bool SwXMLTableFrameFormatsSort_Impl::AddRow( SwFrameFormat& rFrameFormat,
 
     // empty styles have not to be exported
     if( !pFrameSize && !pBrush && !pRowSplit && !pHasTextChangesOnly )
-        return false;
+    {
+        m_rFormatMap.emplace(&rFrameFormat, ::std::optional<OUString>()); // empty just to enable assert
+        return {};
+    }
 
     // order is: -/brush, size/-, size/brush
-    bool bInsert = true;
     SwXMLFrameFormats_Impl::iterator i;
     for( i = m_aFormatList.begin(); i < m_aFormatList.end(); ++i )
     {
@@ -300,19 +307,19 @@ bool SwXMLTableFrameFormatsSort_Impl::AddRow( SwFrameFormat& rFrameFormat,
             continue;
 
         // found!
-        rFrameFormat.SetName( pTestFormat->GetName() );
-        bInsert = false;
-        break;
+        auto const oName(m_rFormatMap.find(pTestFormat)->second);
+        assert(oName);
+        m_rFormatMap.emplace(&rFrameFormat, oName);
+        return {};
     }
 
-    if( bInsert )
     {
-        rFrameFormat.SetName( OUString::Concat(rNamePrefix) + "." + OUString::number(nLine+1) );
+        OUString const name(OUString::Concat(rNamePrefix) + "." + OUString::number(nLine+1));
+        m_rFormatMap.emplace(&rFrameFormat, ::std::optional<OUString>(name));
         if ( i != m_aFormatList.end() ) ++i;
         m_aFormatList.insert( i, &rFrameFormat );
+        return ::std::optional<OUString>(name);
     }
-
-    return bInsert;
 }
 
 static OUString lcl_xmltble_appendBoxPrefix(std::u16string_view rNamePrefix,
@@ -329,7 +336,7 @@ static OUString lcl_xmltble_appendBoxPrefix(std::u16string_view rNamePrefix,
         + "." + OUString::number(nRow + 1);
 }
 
-bool SwXMLTableFrameFormatsSort_Impl::AddCell( SwFrameFormat& rFrameFormat,
+::std::optional<OUString> SwXMLTableFrameFormatsSort_Impl::AddCell(SwFrameFormat& rFrameFormat,
                                          std::u16string_view rNamePrefix,
                                             sal_uInt32 nCol, sal_uInt32 nRow, bool bTop )
 {
@@ -364,7 +371,10 @@ bool SwXMLTableFrameFormatsSort_Impl::AddCell( SwFrameFormat& rFrameFormat,
 
     // empty styles have not to be exported
     if( !pVertOrient && !pBrush && !pBox && !pNumFormat && !pFrameDir && !pAttCnt )
-        return false;
+    {
+        m_rFormatMap.emplace(&rFrameFormat, ::std::optional<OUString>()); // empty just to enable assert
+        return {};
+    }
 
     // order is: -/-/-/num,
     //           -/-/box/-, -/-/box/num,
@@ -372,7 +382,6 @@ bool SwXMLTableFrameFormatsSort_Impl::AddCell( SwFrameFormat& rFrameFormat,
     //           vert/-/-/-, vert/-/-/num, vert/-/box/-, ver/-/box/num,
     //           vert/brush/-/-, vert/brush/-/num, vert/brush/box/-,
     //           vert/brush/box/num
-    bool bInsert = true;
     SwXMLFrameFormats_Impl::iterator i;
     for( i = m_aFormatList.begin(); i < m_aFormatList.end(); ++i )
     {
@@ -490,19 +499,19 @@ bool SwXMLTableFrameFormatsSort_Impl::AddCell( SwFrameFormat& rFrameFormat,
             continue;
 
         // found!
-        rFrameFormat.SetName( pTestFormat->GetName() );
-        bInsert = false;
-        break;
+        auto const oName(m_rFormatMap.find(pTestFormat)->second);
+        assert(oName);
+        m_rFormatMap.emplace(&rFrameFormat, oName);
+        return {};
     }
 
-    if( bInsert )
     {
-        rFrameFormat.SetName( lcl_xmltble_appendBoxPrefix( rNamePrefix, nCol, nRow, bTop ) );
+        OUString const name(lcl_xmltble_appendBoxPrefix(rNamePrefix, nCol, nRow, bTop));
+        m_rFormatMap.emplace(&rFrameFormat, ::std::optional<OUString>(name));
         if ( i != m_aFormatList.end() ) ++i;
         m_aFormatList.insert( i, &rFrameFormat );
+        return ::std::optional<OUString>(name);
     }
-
-    return bInsert;
 }
 
 class SwXMLTableInfo_Impl
@@ -511,10 +520,21 @@ class SwXMLTableInfo_Impl
     Reference<XTextSection> m_xBaseSection;
     bool m_bBaseSectionValid;
     sal_uInt32 m_nPrefix;
+    SwXMLTextParagraphExport::FormatMap const& m_rLineFormats;
+    SwXMLTextParagraphExport::FormatMap const& m_rBoxFormats;
 
 public:
 
-    inline SwXMLTableInfo_Impl( const SwTable *pTable, sal_uInt16 nPrefix );
+    inline SwXMLTableInfo_Impl( const SwTable *pTable, sal_uInt16 nPrefix,
+            SwXMLTextParagraphExport::FormatMap const& rLineFormats,
+            SwXMLTextParagraphExport::FormatMap const& rBoxFormats)
+        : m_pTable(pTable)
+        , m_bBaseSectionValid(false)
+        , m_nPrefix(nPrefix)
+        , m_rLineFormats(rLineFormats)
+        , m_rBoxFormats(rBoxFormats)
+    {
+    }
 
     const SwTable *GetTable() const { return m_pTable; }
     const SwFrameFormat *GetTableFormat() const { return m_pTable->GetFrameFormat(); }
@@ -524,14 +544,9 @@ public:
     inline void SetBaseSection( const Reference < XTextSection >& rBase );
     /// The namespace (table or loext) that should be used for the elements.
     sal_uInt16 GetPrefix() const { return m_nPrefix; }
+    SwXMLTextParagraphExport::FormatMap const& GetLineFormats() const { return m_rLineFormats; }
+    SwXMLTextParagraphExport::FormatMap const& GetBoxFormats() const { return m_rBoxFormats; }
 };
-
-inline SwXMLTableInfo_Impl::SwXMLTableInfo_Impl(const SwTable *pTable, sal_uInt16 nPrefix) :
-    m_pTable(pTable),
-    m_bBaseSectionValid(false),
-    m_nPrefix(nPrefix)
-{
-}
 
 inline void SwXMLTableInfo_Impl::SetBaseSection(
         const Reference < XTextSection >& rBaseSection )
@@ -667,8 +682,10 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
         SwTableLine *pLine = rLines[nLine];
 
         SwFrameFormat *pFrameFormat = pLine->GetFrameFormat();
-        if( rExpRows.AddRow( *pFrameFormat, rNamePrefix, nLine ) )
-            ExportFormat( *pFrameFormat, XML_TABLE_ROW );
+        if (auto oNew = rExpRows.AddRow(*pFrameFormat, rNamePrefix, nLine))
+        {
+            ExportFormat(*pFrameFormat, XML_TABLE_ROW, oNew);
+        }
 
         const SwTableBoxes& rBoxes = pLine->GetTabBoxes();
         const size_t nBoxes = rBoxes.size();
@@ -695,9 +712,11 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
             if( pBoxSttNd )
             {
                 SwFrameFormat *pFrameFormat2 = pBox->GetFrameFormat();
-                if( rExpCells.AddCell( *pFrameFormat2, rNamePrefix, nOldCol, nLine,
+                if (auto oNew = rExpCells.AddCell(*pFrameFormat2, rNamePrefix, nOldCol, nLine,
                                        bTop) )
-                    ExportFormat( *pFrameFormat2, XML_TABLE_CELL );
+                {
+                    ExportFormat(*pFrameFormat2, XML_TABLE_CELL, oNew);
+                }
 
                 Reference < XCell > xCell = SwXCell::CreateXCell(
                                                 const_cast<SwFrameFormat *>(rTableInfo.GetTableFormat()),
@@ -743,8 +762,13 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
     }
 }
 
-void SwXMLExport::ExportTableAutoStyles( const SwTableNode& rTableNd )
+void SwXMLExport::ExportTableAutoStyles(const SwTableNode& rTableNd)
 {
+    auto & rFormats(static_cast<SwXMLTextParagraphExport *>(GetTextParagraphExport().get())->GetTableFormats());
+    auto const it(rFormats.find(&rTableNd));
+    assert(it != rFormats.end());
+    SwXMLTextParagraphExport::FormatMap & rRowFormats(it->second.first);
+    SwXMLTextParagraphExport::FormatMap & rBoxFormats(it->second.second);
     const SwTable& rTable = rTableNd.GetTable();
     const SwFrameFormat *pTableFormat = rTable.GetFrameFormat();
 
@@ -772,9 +796,9 @@ void SwXMLExport::ExportTableAutoStyles( const SwTableNode& rTableNd )
     ExportTableFormat( *pTableFormat, nAbsWidth );
 
     SwXMLTableColumnsSortByWidth_Impl aExpCols;
-    SwXMLTableFrameFormatsSort_Impl aExpRows;
-    SwXMLTableFrameFormatsSort_Impl aExpCells;
-    SwXMLTableInfo_Impl aTableInfo( &rTable, XML_NAMESPACE_TABLE );
+    SwXMLTableFrameFormatsSort_Impl aExpRows(rRowFormats);
+    SwXMLTableFrameFormatsSort_Impl aExpCells(rBoxFormats);
+    SwXMLTableInfo_Impl aTableInfo(&rTable, XML_NAMESPACE_TABLE, rRowFormats, rBoxFormats);
     ExportTableLinesAutoStyles( rTable.GetTabLines(), nAbsWidth, nBaseWidth,
                                 pTableFormat->GetName(), aExpCols, aExpRows, aExpCells,
                                 aTableInfo, true);
@@ -792,10 +816,12 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
         const SwFrameFormat *pFrameFormat = rBox.GetFrameFormat();
         if( pFrameFormat )
         {
-            const OUString& sName = pFrameFormat->GetName();
-            if( !sName.isEmpty() )
+            auto const it(rTableInfo.GetBoxFormats().find(pFrameFormat));
+            assert(it != rTableInfo.GetBoxFormats().end());
+            if (it->second)
             {
-                AddAttribute( XML_NAMESPACE_TABLE, XML_STYLE_NAME, EncodeStyleName(sName) );
+                assert(!it->second->isEmpty());
+                AddAttribute(XML_NAMESPACE_TABLE, XML_STYLE_NAME, EncodeStyleName(*it->second));
             }
         }
     }
@@ -925,10 +951,12 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
     const SwFrameFormat *pFrameFormat = rLine.GetFrameFormat();
     if( pFrameFormat )
     {
-        const OUString& sName = pFrameFormat->GetName();
-        if( !sName.isEmpty() )
+        auto const it(rTableInfo.GetLineFormats().find(pFrameFormat));
+        assert(it != rTableInfo.GetLineFormats().end());
+        if (it->second)
         {
-            AddAttribute( XML_NAMESPACE_TABLE, XML_STYLE_NAME, EncodeStyleName(sName) );
+            assert(!it->second->isEmpty());
+            AddAttribute(XML_NAMESPACE_TABLE, XML_STYLE_NAME, EncodeStyleName(*it->second));
         }
     }
 
@@ -951,10 +979,12 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
                 const SwFrameFormat* pFormat = pBox->GetFrameFormat();
                 if (pFormat)
                 {
-                    const OUString& sName = pFormat->GetName();
-                    if (!sName.isEmpty())
+                    auto const it(rTableInfo.GetBoxFormats().find(pFormat));
+                    assert(it != rTableInfo.GetBoxFormats().end());
+                    if (it->second)
                     {
-                        AddAttribute(XML_NAMESPACE_TABLE, XML_STYLE_NAME, EncodeStyleName(sName));
+                        assert(!it->second->isEmpty());
+                        AddAttribute(XML_NAMESPACE_TABLE, XML_STYLE_NAME, EncodeStyleName(*it->second));
                     }
                 }
 
@@ -1091,29 +1121,6 @@ void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
     delete pLines;
 }
 
-static void lcl_xmltble_ClearName_Line( SwTableLine* pLine );
-
-static void lcl_xmltble_ClearName_Box( SwTableBox* pBox )
-{
-    if( !pBox->GetSttNd() )
-    {
-        for( SwTableLine* pLine : pBox->GetTabLines() )
-            lcl_xmltble_ClearName_Line( pLine );
-    }
-    else
-    {
-        SwFrameFormat *pFrameFormat = pBox->GetFrameFormat();
-        if( pFrameFormat && !pFrameFormat->GetName().isEmpty() )
-            pFrameFormat->SetName( OUString() );
-    }
-}
-
-void lcl_xmltble_ClearName_Line( SwTableLine* pLine )
-{
-    for( SwTableBox* pBox : pLine->GetTabBoxes() )
-        lcl_xmltble_ClearName_Box( pBox );
-}
-
 void SwXMLExport::ExportTable( const SwTableNode& rTableNd )
 {
     ::std::optional<sal_uInt16> oPrefix = XML_NAMESPACE_TABLE;
@@ -1187,14 +1194,15 @@ void SwXMLExport::ExportTable( const SwTableNode& rTableNd )
                                    XML_DDE_SOURCE, true, false);
     }
 
-    SwXMLTableInfo_Impl aTableInfo(&rTable, *oPrefix);
+    auto const& rFormats(static_cast<SwXMLTextParagraphExport const*>(GetTextParagraphExport().get())->GetTableFormats());
+    auto const it(rFormats.find(&rTableNd));
+    assert(it != rFormats.end());
+    SwXMLTableInfo_Impl aTableInfo(&rTable, *oPrefix, it->second.first, it->second.second);
     ExportTableLines( rTable.GetTabLines(), aTableInfo, rTable.GetRowsToRepeat() );
-
-    for( SwTableLine *pLine : const_cast<SwTable &>(rTable).GetTabLines() )
-        lcl_xmltble_ClearName_Line( pLine );
 }
 
 void SwXMLTextParagraphExport::exportTableAutoStyles() {
+    // note: maTableNodes is used here only to keep the iteration order as before
     for (const auto* pTableNode : maTableNodes)
     {
         static_cast<SwXMLExport&>(GetExport()).ExportTableAutoStyles(*pTableNode);
@@ -1235,6 +1243,7 @@ void SwXMLTextParagraphExport::exportTable(
                     && (bExportStyles || !pFormat->GetDoc()->IsInHeaderFooter(aIdx)))
                 {
                     maTableNodes.push_back(pTableNd);
+                    m_TableFormats.emplace(pTableNd, ::std::make_pair(SwXMLTextParagraphExport::FormatMap(), SwXMLTextParagraphExport::FormatMap()));
                     // Collect all tables inside cells of this table, too
                     const auto aCellNames = pXTable->getCellNames();
                     for (const OUString& rCellName : aCellNames)
