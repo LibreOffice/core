@@ -16,6 +16,24 @@
       "message": "I suspect this will give Tor grief on iOS where we have multiple document support. Can we check whether this is the 1st view by counting the views and then if there are \u003c2 adding one or whatever ? \u003d)\n\nOtherwise it looks not hyper-problematic, but possibly slightly inefficient - seems a reasonable way to solve the problem for now though.",
       "revId": "62f7bfee86f29641c31d47debe3057c3c1ebb825",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f67386e1_a96b3095",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3721,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-07-29T10:53:32Z",
+      "side": 1,
+      "message": "Updated the patch, now the view is created on document load",
+      "parentUuid": "d5482175_8b2ea0a9",
+      "revId": "62f7bfee86f29641c31d47debe3057c3c1ebb825",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
