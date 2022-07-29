@@ -245,7 +245,7 @@ void SwXMLExport::ExportTableFormat( const SwFrameFormat& rFormat, sal_uInt32 nA
 {
     static_cast<SwXMLTableItemMapper_Impl *>(m_pTableItemMapper.get())
         ->SetAbsWidth( nAbsWidth );
-    ExportFormat( rFormat, XML_TABLE );
+    ExportFormat(rFormat, XML_TABLE, {});
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
