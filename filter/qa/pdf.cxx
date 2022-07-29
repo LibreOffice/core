@@ -65,7 +65,14 @@ CPPUNIT_TEST_FIXTURE(Test, testSignCertificateSubjectName)
         = xSEInitializer->createSecurityContext(OUString());
     uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment
         = xSecurityContext->getSecurityEnvironment();
-    if (!GetValidCertificate(xSecurityEnvironment->getPersonalCertificates()))
+    uno::Sequence<beans::PropertyValue> aFilterData{
+        comphelper::makePropertyValue("SignPDF", true),
+        comphelper::makePropertyValue(
+            "SignCertificateSubjectName",
+            OUString(
+                "CN=Xmlsecurity RSA Test example Alice,O=Xmlsecurity RSA Test,ST=England,C=UK")),
+    };
+    if (!GetValidCertificate(xSecurityEnvironment->getPersonalCertificates(), aFilterData))
     {
         return;
     }
@@ -83,13 +90,6 @@ CPPUNIT_TEST_FIXTURE(Test, testSignCertificateSubjectName)
     SvMemoryStream aStream;
     uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
 
-    uno::Sequence<beans::PropertyValue> aFilterData{
-        comphelper::makePropertyValue("SignPDF", true),
-        comphelper::makePropertyValue(
-            "SignCertificateSubjectName",
-            OUString(
-                "CN=Xmlsecurity RSA Test example Alice,O=Xmlsecurity RSA Test,ST=England,C=UK")),
-    };
     uno::Sequence<beans::PropertyValue> aDescriptor{
         comphelper::makePropertyValue("FilterName", OUString("writer_pdf_Export")),
         comphelper::makePropertyValue("FilterData", aFilterData),
