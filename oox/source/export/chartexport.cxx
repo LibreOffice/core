@@ -2053,7 +2053,7 @@ void ChartExport::exportDataTable( )
     if (GetProperty(aPropSet, "Outline"))
         mAny >>= bShowOutline;
     if (GetProperty(aPropSet, "Keys"))
-        mAny >>= bShowOutline;
+        mAny >>= bShowKeys;
 
     pFS->startElement(FSNS(XML_c, XML_dTable));
 
