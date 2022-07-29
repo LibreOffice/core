@@ -9,6 +9,31 @@
 
 # simple wrapper script to run non-installed executables from workdir
 
+print_usage()
+{
+    echo "This utility can be used to run the executables in this folder:"
+    echo
+    echo "  workdir/LinkTarget/Executable"
+    echo
+    echo "Usage:"
+    echo
+    echo "  ./bin/run application [parameters]|--list|--help"
+    echo
+    echo "Use --list (same as -list or -l) to get the list of executables"
+    echo "Use --help (same as -help or -h) to get this help"
+}
+
+list_executables()
+{
+    echo "Listing executables inside workdir/LinkTarget/Executable folder:"
+    find workdir/LinkTarget/Executable -executable -printf "%P\n"
+}
+
+print_executable_name()
+{
+    echo "Setting env variables and running workdir/LinkTarget/Executable/$1"
+}
+
 setdefaults()
 {
     dir=$(realpath "$(pwd)")
@@ -24,6 +49,14 @@ setdefaults()
     exedir="${dir}"/workdir/LinkTarget/Executable
     export URE_BOOTSTRAP=file://"${dir}"/instdir/program/fundamentalrc
 }
+
+case "$1" in
+    ""|"-h"|"-help"|"--help")
+        print_usage; return 1;;
+    "-l"|"-list"|"--list")
+        list_executables; return 0;;
+    *) print_executable_name $1;;
+esac
 
 if uname | grep -i CYGWIN >/dev/null; then
 
