@@ -196,18 +196,19 @@ void ChildrenManagerImpl::Update (bool bCreateNewObjectsOnDemand)
     ChildDescriptorListType aChildList;
     CreateListOfVisibleShapes (aChildList);
 
-    // 2. Merge the information that is already known about the visible
-    // shapes from the current list into the new list.
-    MergeAccessibilityInformation (aChildList);
-
-    // 3. Replace the current list of visible shapes with the new one.  Do
+    // 2. Replace the current list of visible shapes with the new one.  Do
     // the same with the visible area.
     {
         SolarMutexGuard g;
-        adjustIndexInParentOfShapes(aChildList);
 
         // Use swap to copy the contents of the new list in constant time.
         maVisibleChildren.swap (aChildList);
+
+        // 3. Merge the information that is already known about the visible
+        // shapes from the previous list into the new list.
+        MergeAccessibilityInformation (aChildList);
+
+        adjustIndexInParentOfShapes(maVisibleChildren);
 
         // aChildList now contains all the old children, while maVisibleChildren
         // contains all the current children
@@ -371,15 +372,15 @@ void ChildrenManagerImpl::RemoveNonVisibleChildren (
 }
 
 void ChildrenManagerImpl::MergeAccessibilityInformation (
-    ChildDescriptorListType& raNewChildList)
+    ChildDescriptorListType& raOldChildList)
 {
     // sort the lists by mxShape, and then walk them in parallel, which avoids an O(n^2) loop
     std::sort(maVisibleChildren.begin(), maVisibleChildren.end(), ChildDescriptorLess());
-    std::sort(raNewChildList.begin(), raNewChildList.end(), ChildDescriptorLess());
-    ChildDescriptorListType::const_iterator aOldChildDescriptor = maVisibleChildren.begin();
-    ChildDescriptorListType::const_iterator aEndVisibleChildren = maVisibleChildren.end();
+    std::sort(raOldChildList.begin(), raOldChildList.end(), ChildDescriptorLess());
+    ChildDescriptorListType::const_iterator aOldChildDescriptor = raOldChildList.begin();
+    ChildDescriptorListType::const_iterator aEndVisibleChildren = raOldChildList.end();
 
-    for (auto& rChild : raNewChildList)
+    for (auto& rChild : maVisibleChildren)
     {
         while (aOldChildDescriptor != aEndVisibleChildren && ChildDescriptorLess()(*aOldChildDescriptor, rChild))
             aOldChildDescriptor++;
