@@ -35,7 +35,7 @@ namespace xmlreader {
 
 class OOO_DLLPUBLIC_XMLREADER XmlReader {
 public:
-    explicit XmlReader(OUString const & fileUrl);
+    explicit XmlReader(OUString fileUrl);
 
     ~XmlReader();
 
