@@ -31,7 +31,7 @@
 #include <vcl/wmf.hxx>
 
 #include <impgraph.hxx>
-#include <graphic/GraphicFormatDetector.hxx>
+#include <vcl/graphic/GraphicFormatDetector.hxx>
 
 #if USE_TLS_NSS
 #include <nss.h>
@@ -518,7 +518,7 @@ void GraphicTest::testEmfToWmfConversion()
     // - Expected: WMF
     // - Actual  : EMF
     // i.e. EMF data was requested to be converted to WMF, but the output was still EMF.
-    CPPUNIT_ASSERT_EQUAL(OUString("WMF"), aDetector.msDetectedFormat);
+    CPPUNIT_ASSERT_EQUAL(OUString("WMF"), aDetector.GetMetadata().msDetectedFormat);
 
     // Import the WMF result and check for traces of EMF+ in it.
     Graphic aWmfGraphic;
