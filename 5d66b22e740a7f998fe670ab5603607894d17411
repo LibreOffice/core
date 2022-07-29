@@ -33,6 +33,24 @@
       "message": "In this place, the ERRCODE_ABORT is not necessarily from pMediumTmp. This \u0027else\u0027 branch happens either when SaveTo_Impl failed, *or* when GetError() already returned some error.\n\nI suggest to store the result of pMediumTmp-\u003eGetError() to a variable, then use it in SetError, and then check *its* value here, to be sure we obtain it from the medium, not from elsewhere (no idea if ERRCODE_ABORT is possible in other places, but it\u0027s better to be explicit and precise, right?).",
       "revId": "5d66b22e740a7f998fe670ab5603607894d17411",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17d1503c_fdd79587",
+        "filename": "sfx2/source/doc/objstor.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2629,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2022-07-29T18:13:11Z",
+      "side": 1,
+      "message": "Actually the ERRCODE_ABORT is from pMediumTmp because line 2627 sets the error code from pMediumTmp which is then read on line 2629.  I changed it anyway though to help with readability.",
+      "parentUuid": "582a9e59_288dcc4a",
+      "revId": "5d66b22e740a7f998fe670ab5603607894d17411",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
