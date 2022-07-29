@@ -216,42 +216,8 @@ bool GraphicDescriptor::ImpDetectBMP( SvStream& rStm, bool bExtendedInfo )
 
 bool GraphicDescriptor::ImpDetectGIF( SvStream& rStm, bool bExtendedInfo )
 {
-    sal_uInt32  n32 = 0;
-    bool    bRet = false;
-
-    sal_Int32 nStmPos = rStm.Tell();
-    rStm.SetEndian( SvStreamEndian::LITTLE );
-    rStm.ReadUInt32( n32 );
-
-    if ( n32 == 0x38464947 )
-    {
-        sal_uInt16  n16 = 0;
-        rStm.ReadUInt16( n16 );
-        if ( ( n16 == 0x6137 ) || ( n16 == 0x6139 ) )
-        {
-            nFormat = GraphicFileFormat::GIF;
-            bRet = true;
-
-            if ( bExtendedInfo )
-            {
-                sal_uInt16 nTemp16 = 0;
-                sal_uInt8  cByte = 0;
-
-                // Pixel width
-                rStm.ReadUInt16( nTemp16 );
-                aPixSize.setWidth( nTemp16 );
-
-                // Pixel height
-                rStm.ReadUInt16( nTemp16 );
-                aPixSize.setHeight( nTemp16 );
-
-                // Bits/Pixel
-                rStm.ReadUChar( cByte );
-                nBitsPerPixel = ( ( cByte & 112 ) >> 4 ) + 1;
-            }
-        }
-    }
-    rStm.Seek( nStmPos );
+    vcl::GraphicFormatDetector aDetector(rStm, aPathExt, bExtendedInfo);
+    bool bRet = aDetector.checkGIF();
     return bRet;
 }
 
@@ -1240,42 +1206,6 @@ bool GraphicDescriptor::ImpDetectWEBP( SvStream& rStm, bool bExtendedInfo )
     }
     rStm.Seek( nStmPos );
     return bRet;
-}
-
-OUString GraphicDescriptor::GetImportFormatShortName( GraphicFileFormat nFormat )
-{
-    const char *pKeyName = nullptr;
-
-    switch( nFormat )
-    {
-        case GraphicFileFormat::BMP :   pKeyName = "bmp";   break;
-        case GraphicFileFormat::GIF :   pKeyName = "gif";   break;
-        case GraphicFileFormat::JPG :   pKeyName = "jpg";   break;
-        case GraphicFileFormat::PCD :   pKeyName = "pcd";   break;
-        case GraphicFileFormat::PCX :   pKeyName = "pcx";   break;
-        case GraphicFileFormat::PNG :   pKeyName = "png";   break;
-        case GraphicFileFormat::XBM :   pKeyName = "xbm";   break;
-        case GraphicFileFormat::XPM :   pKeyName = "xpm";   break;
-        case GraphicFileFormat::PBM :   pKeyName = "pbm";   break;
-        case GraphicFileFormat::PGM :   pKeyName = "pgm";   break;
-        case GraphicFileFormat::PPM :   pKeyName = "ppm";   break;
-        case GraphicFileFormat::RAS :   pKeyName = "ras";   break;
-        case GraphicFileFormat::TGA :   pKeyName = "tga";   break;
-        case GraphicFileFormat::PSD :   pKeyName = "psd";   break;
-        case GraphicFileFormat::EPS :   pKeyName = "eps";   break;
-        case GraphicFileFormat::TIF :   pKeyName = "tif";   break;
-        case GraphicFileFormat::DXF :   pKeyName = "dxf";   break;
-        case GraphicFileFormat::MET :   pKeyName = "met";   break;
-        case GraphicFileFormat::PCT :   pKeyName = "pct";   break;
-        case GraphicFileFormat::SVM :   pKeyName = "svm";   break;
-        case GraphicFileFormat::WMF :   pKeyName = "wmf";   break;
-        case GraphicFileFormat::EMF :   pKeyName = "emf";   break;
-        case GraphicFileFormat::SVG :   pKeyName = "svg";   break;
-        case GraphicFileFormat::WEBP :  pKeyName = "webp";   break;
-        default: assert(false);
-    }
-
-    return OUString::createFromAscii(pKeyName);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
