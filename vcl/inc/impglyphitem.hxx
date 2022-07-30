@@ -40,11 +40,12 @@ enum class GlyphItemFlags : sal_uInt16
     ALLOW_KASHIDA = 0x20,
     IS_DROPPED = 0x40,
     IS_CLUSTER_START = 0x80,
-    IS_UNSAFE_TO_BREAK = 0x100 // HB_GLYPH_FLAG_UNSAFE_TO_BREAK from harfbuzz
+    IS_UNSAFE_TO_BREAK = 0x100, // HB_GLYPH_FLAG_UNSAFE_TO_BREAK from harfbuzz
+    IS_SAFE_TO_INSERT_KASHIDA = 0x200 // HB_GLYPH_FLAG_SAFE_TO_INSERT_TATWEEL from harfbuzz
 };
 namespace o3tl
 {
-template <> struct typed_flags<GlyphItemFlags> : is_typed_flags<GlyphItemFlags, 0x1ff>
+template <> struct typed_flags<GlyphItemFlags> : is_typed_flags<GlyphItemFlags, 0x3ff>
 {
 };
 };
@@ -85,6 +86,10 @@ public:
     bool IsDropped() const { return bool(m_nFlags & GlyphItemFlags::IS_DROPPED); }
     bool IsClusterStart() const { return bool(m_nFlags & GlyphItemFlags::IS_CLUSTER_START); }
     bool IsUnsafeToBreak() const { return bool(m_nFlags & GlyphItemFlags::IS_UNSAFE_TO_BREAK); }
+    bool IsSafeToInsertKashida() const
+    {
+        return bool(m_nFlags & GlyphItemFlags::IS_SAFE_TO_INSERT_KASHIDA);
+    }
 
     inline bool GetGlyphBoundRect(const LogicalFontInstance*, tools::Rectangle&) const;
     inline bool GetGlyphOutline(const LogicalFontInstance*, basegfx::B2DPolyPolygon&) const;
