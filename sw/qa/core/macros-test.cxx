@@ -113,17 +113,18 @@ void SwMacrosTest::testVba()
         {
             OUString("testDocumentRange.docm"),
             OUString("vnd.sun.Star.script:Project.Module1.testAll?language=Basic&location=document")
-        },
+        }
         /*{
             OUString("testSelectionFind.docm"),
             OUString("vnd.sun.Star.script:Project.Module1.testAll?language=Basic&location=document")
-        },*/
+        },
         {
             //current working tests here!
+
             OUString("testFontColor.docm"),
             OUString("vnd.sun.Star.script:Project.ThisDocument.testAll?language=Basic&location=document")
         }
-        /* TODO - make these pass in Writer
+        // TODO - make these pass in Writer
         {
             OUString("testSentences.docm"),
             OUString("vnd.sun.Star.script:Project.ThisDocument.TestAll?language=Basic&location=document")
@@ -138,8 +139,8 @@ void SwMacrosTest::testVba()
         },
         {
             OUString("testTables.docm"),
-            OUString("vnd.sun.Star.script:Project.ThisDocument.TestAll?language=Basic&location=document")
-        },*/
+            OUString("vnd.sun.Star.script:Project.ThisDocument.RightPadding?language=Basic&location=document")
+        }*/
 
     };
     for ( size_t  i=0; i<SAL_N_ELEMENTS( testInfo ); ++i )
