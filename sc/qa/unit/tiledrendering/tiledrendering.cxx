@@ -129,6 +129,7 @@ public:
     void testCommentCellCopyPaste();
     void testInvalidEntrySave();
     void testUndoReordering();
+    void testUndoReorderingRedo();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnHeaders);
@@ -187,6 +188,7 @@ public:
     CPPUNIT_TEST(testCommentCellCopyPaste);
     CPPUNIT_TEST(testInvalidEntrySave);
     CPPUNIT_TEST(testUndoReordering);
+    CPPUNIT_TEST(testUndoReorderingRedo);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3045,6 +3047,63 @@ void ScTiledRenderingTest::testUndoReordering()
     Scheduler::ProcessEventsToIdle();
     // check that undo has been executed on view #2
     CPPUNIT_ASSERT_EQUAL(std::size_t(0), pUndoManager->GetUndoActionCount());
+}
+
+void ScTiledRenderingTest::testUndoReorderingRedo()
+{
+    ScModelObj* pModelObj = createDoc("small.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    ScUndoManager* pUndoManager = pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoManager);
+    CPPUNIT_ASSERT_EQUAL(std::size_t(0), pUndoManager->GetUndoActionCount());
+    ScTabViewShell* pView1 = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+
+    // view #1
+    int nView1 = SfxLokHelper::getView();
+    ViewCallback aView1;
+
+    // view #2
+    SfxLokHelper::createView();
+    int nView2 = SfxLokHelper::getView();
+    ScTabViewShell* pView2 = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ViewCallback aView2;
+
+    // text edit a cell in view #1
+    SfxLokHelper::setView(nView1);
+    lcl_typeCharsInCell("AA", 0, 0, pView1, pModelObj); // Type 'AA' in A1
+    CPPUNIT_ASSERT_EQUAL(std::size_t(1), pUndoManager->GetUndoActionCount());
+
+    // text edit another cell in view #1
+    SfxLokHelper::setView(nView1);
+    lcl_typeCharsInCell("BB", 0, 1, pView1, pModelObj); // Type 'BB' in A2
+    CPPUNIT_ASSERT_EQUAL(std::size_t(2), pUndoManager->GetUndoActionCount());
+    CPPUNIT_ASSERT_EQUAL(OUString("AA"), pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("BB"), pDoc->GetString(ScAddress(0, 1, 0)));
+
+    // text edit a different cell in view #2
+    SfxLokHelper::setView(nView2);
+    lcl_typeCharsInCell("CC", 0, 3, pView1, pModelObj); // Type 'CC' in A3
+    CPPUNIT_ASSERT_EQUAL(std::size_t(3), pUndoManager->GetUndoActionCount());
+    CPPUNIT_ASSERT_EQUAL(OUString("CC"), pDoc->GetString(ScAddress(0, 3, 0)));
+
+    // View 1 presses undo, and the second cell is erased
+    SfxLokHelper::setView(nView1);
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(OUString("AA"), pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("CC"), pDoc->GetString(ScAddress(0, 3, 0)));
+
+    // View 1 presses undo again, and the first cell is erased
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(std::size_t(1), pUndoManager->GetUndoActionCount());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("CC"), pDoc->GetString(ScAddress(0, 3, 0)));
 }
 
 }
