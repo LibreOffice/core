@@ -1239,6 +1239,12 @@ public:
     /// Sets a custom clipboard for the window's frame, instead of creating it on-demand using css::datatransfer::clipboard::SystemClipboard.
     void SetClipboard(css::uno::Reference<css::datatransfer::clipboard::XClipboard> const & xClipboard);
 
+    tools::Long GetXFrameOffset() const;
+    void SetXFrameOffset(tools::Long nOffset);
+
+    tools::Long GetYFrameOffset() const;
+    void SetYFrameOffset(tools::Long nOffset);
+
     /*
      * Widgets call this to inform their owner container that the widget wants
      * to renegotiate its size. Should be called when a widget has a new size

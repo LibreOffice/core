@@ -42,7 +42,7 @@
 #include <vcl/rendercontext/DrawModeFlags.hxx>
 #include <vcl/rendercontext/DrawTextFlags.hxx>
 #include <vcl/rendercontext/GetDefaultFontFlags.hxx>
-#include <vcl/rendercontext/ImplMapRes.hxx>
+#include <vcl/rendercontext/MappingMetrics.hxx>
 #include <vcl/rendercontext/InvertFlags.hxx>
 #include <vcl/rendercontext/RasterOp.hxx>
 #include <vcl/rendercontext/SalLayoutFlags.hxx>
@@ -202,15 +202,6 @@ private:
     // TEMP TEMP TEMP
     VclPtr<VirtualDevice>           mpAlphaVDev;
 
-    Geometry maGeometry;
-    /// Additional output offset in _logical_ coordinates, applied in PixelToLogic (used by SetPixelOffset/GetPixelOffset)
-    tools::Long                            mnOutOffLogicX;
-    /// Additional output offset in _logical_ coordinates, applied in PixelToLogic (used by SetPixelOffset/GetPixelOffset)
-    tools::Long                            mnOutOffLogicY;
-    /// Output offset for device output in pixel (pseudo window offset within window system's frames)
-    tools::Long                            mnOutOffX;
-    /// Output offset for device output in pixel (pseudo window offset within window system's frames)
-    tools::Long                            mnOutOffY;
     tools::Long                            mnOutWidth;
     tools::Long                            mnOutHeight;
     sal_Int32                       mnDPIX;
@@ -223,7 +214,7 @@ private:
     mutable tools::Long                    mnEmphasisDescent;
     DrawModeFlags                   mnDrawMode;
     vcl::text::ComplexTextLayoutFlags mnTextLayoutMode;
-    ImplMapRes                      maMapRes;
+    MappingMetrics                  maMapMetrics;
     const OutDevType                meOutDevType;
     OutDevViewType                  meOutDevViewType;
     vcl::Region                     maRegion;           // contains the clip region, see SetClipRegion(...)
@@ -264,6 +255,8 @@ private:
 protected:
     mutable std::shared_ptr<vcl::font::PhysicalFontCollection> mxFontCollection;
     mutable std::shared_ptr<ImplFontCache> mxFontCache;
+
+    Geometry maGeometry;
 
     /** @name Initialization and accessor functions
      */
@@ -319,12 +312,10 @@ public:
                                     { return Size( mnOutWidth, mnOutHeight ); }
     tools::Long                        GetOutputWidthPixel() const { return mnOutWidth; }
     tools::Long                        GetOutputHeightPixel() const { return mnOutHeight; }
-    tools::Long                        GetOutOffXPixel() const { return mnOutOffX; }
-    tools::Long                        GetOutOffYPixel() const { return mnOutOffY; }
-    void                        SetOutOffXPixel(tools::Long nOutOffX);
-    void                        SetOutOffYPixel(tools::Long nOutOffY);
+    tools::Long                        GetOutOffXPixel() const { return maGeometry.GetXFrameOffset(); }
+    tools::Long                        GetOutOffYPixel() const { return maGeometry.GetYFrameOffset(); }
     Point                       GetOutputOffPixel() const
-                                    { return Point( mnOutOffX, mnOutOffY ); }
+                                    { return Point( maGeometry.GetXFrameOffset(), maGeometry.GetYFrameOffset() ); }
     tools::Rectangle            GetOutputRectPixel() const
                                     { return tools::Rectangle(GetOutputOffPixel(), GetOutputSizePixel() ); }
 

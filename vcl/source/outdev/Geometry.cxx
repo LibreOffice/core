@@ -13,6 +13,10 @@ Geometry::Geometry()
     : mbMap(false)
     , mnOffsetOriginX(0)
     , mnOffsetOriginY(0)
+    , mnOffsetOriginLogicX(0)
+    , mnOffsetOriginLogicY(0)
+    , mnFrameOffsetX(0)
+    , mnFrameOffsetY(0)
 {
 }
 
@@ -33,5 +37,27 @@ void Geometry::SetYOffsetFromOriginInPixels(tools::Long nOffsetFromOriginYpx)
 {
     mnOffsetOriginY = nOffsetFromOriginYpx;
 }
+
+tools::Long Geometry::GetXOffsetFromOriginInLogicalUnits() const { return mnOffsetOriginLogicX; }
+
+void Geometry::SetXOffsetFromOriginInLogicalUnits(tools::Long nOffsetFromOriginXInLogicalUnits)
+{
+    mnOffsetOriginLogicX = nOffsetFromOriginXInLogicalUnits;
+}
+
+tools::Long Geometry::GetYOffsetFromOriginInLogicalUnits() const { return mnOffsetOriginLogicX; }
+
+void Geometry::SetYOffsetFromOriginInLogicalUnits(tools::Long nOffsetFromOriginYInLogicalUnits)
+{
+    mnOffsetOriginLogicY = nOffsetFromOriginYInLogicalUnits;
+}
+
+tools::Long Geometry::GetXFrameOffset() const { return mnFrameOffsetX; }
+
+void Geometry::SetXFrameOffset(tools::Long nOffset) { mnFrameOffsetX = nOffset; }
+
+tools::Long Geometry::GetYFrameOffset() const { return mnFrameOffsetY; }
+
+void Geometry::SetYFrameOffset(tools::Long nOffset) { mnFrameOffsetY = nOffset; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

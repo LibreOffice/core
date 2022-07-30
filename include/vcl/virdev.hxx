@@ -174,6 +174,12 @@ public:
 
     bool                IsScreenComp() const override { return mbScreenComp; }
 
+    tools::Long GetXFrameOffset() { return maGeometry.GetXFrameOffset(); }
+    void SetXFrameOffset(tools::Long nOffset) { maGeometry.SetXFrameOffset(nOffset); }
+
+    tools::Long GetYFrameOffset() { return maGeometry.GetYFrameOffset(); }
+    void SetYFrameOffset(tools::Long nOffset) { maGeometry.SetYFrameOffset(nOffset); }
+
 private:
     SAL_DLLPRIVATE void ImplSetReferenceDevice( RefDevMode, sal_Int32 i_nDPIX, sal_Int32 i_nDPIY );
 

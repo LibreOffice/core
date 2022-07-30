@@ -278,20 +278,20 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
 
     // mask output with text colored bitmap
     GDIMetaFile* pOldMetaFile = mpMetaFile;
-    tools::Long nOldOffX = mnOutOffX;
-    tools::Long nOldOffY = mnOutOffY;
+    tools::Long nOldOffX = maGeometry.GetXFrameOffset();
+    tools::Long nOldOffY = maGeometry.GetYFrameOffset();
     bool bOldMap = IsMapModeEnabled();
 
-    mnOutOffX   = 0;
-    mnOutOffY   = 0;
+    maGeometry.SetXFrameOffset(0);
+    maGeometry.SetYFrameOffset(0);
     mpMetaFile  = nullptr;
     EnableMapMode( false );
 
     DrawMask( aPoint, aBmp, GetTextColor() );
 
     EnableMapMode( bOldMap );
-    mnOutOffX   = nOldOffX;
-    mnOutOffY   = nOldOffY;
+    maGeometry.SetXFrameOffset(nOldOffX);
+    maGeometry.SetYFrameOffset(nOldOffY);
     mpMetaFile  = pOldMetaFile;
 
     return true;
@@ -314,7 +314,7 @@ void OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout,
         {
             OutputDevice *pOutDevRef = this;
             // mirror this window back
-            tools::Long devX = w-pOutDevRef->mnOutWidth-pOutDevRef->mnOutOffX;   // re-mirrored mnOutOffX
+            tools::Long devX = w-pOutDevRef->mnOutWidth-pOutDevRef->maGeometry.GetXFrameOffset();   // re-mirrored maGeometry.GetXFrameOffset()
             rSalLayout.DrawBase().setX( devX + ( pOutDevRef->mnOutWidth - 1 - (rSalLayout.DrawBase().getX() - devX) ) ) ;
         }
     }
@@ -323,7 +323,7 @@ void OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout,
         OutputDevice *pOutDevRef = this;
 
         // mirror this window back
-        tools::Long devX = pOutDevRef->mnOutOffX;   // re-mirrored mnOutOffX
+        tools::Long devX = pOutDevRef->maGeometry.GetXFrameOffset();   // re-mirrored maGeometry.GetXFrameOffset()
         rSalLayout.DrawBase().setX( pOutDevRef->mnOutWidth - 1 - (rSalLayout.DrawBase().getX() - devX) + devX );
     }
 
@@ -2273,8 +2273,8 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
 
             aTempPos += rPos;
             aTempPos = LogicToPixel( aTempPos );
-            nMnemonicX = mnOutOffX + aTempPos.X();
-            nMnemonicY = mnOutOffY + aTempPos.Y();
+            nMnemonicX = maGeometry.GetXFrameOffset() + aTempPos.X();
+            nMnemonicY = maGeometry.GetYFrameOffset() + aTempPos.Y();
         }
     }
 
@@ -2451,7 +2451,7 @@ bool OutputDevice::GetTextBoundRect( tools::Rectangle& rRect,
             aPixelRect += aRotatedOfs;
             rRect = PixelToLogic( aPixelRect );
             if (IsMapModeEnabled())
-                rRect += Point( maMapRes.mnMapOfsX, maMapRes.mnMapOfsY );
+                rRect += Point( maMapMetrics.mnMapOfsX, maMapMetrics.mnMapOfsY );
         }
     }
 

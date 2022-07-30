@@ -2501,8 +2501,6 @@ OutputDevice::ReleaseFontCollection()
 OutputDevice::ResetNewFontCache()
 OutputDevice::SelectClipRegion(vcl::Region const&, SalGraphics*)
 OutputDevice::SetFontCollectionFromSVData()
-OutputDevice::SetOutOffXPixel(long)
-OutputDevice::SetOutOffYPixel(long)
 PDFSignatureHelper::GetNewSecurityId() const
 PDFSignatureHelper::ReadAndVerifySignature(com::sun::star::uno::Reference<com::sun::star::io::XInputStream> const&)
 PDFSignatureHelper::SetDescription(rtl::OUString const&)

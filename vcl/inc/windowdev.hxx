@@ -60,6 +60,12 @@ public:
     virtual css::uno::Reference<css::rendering::XCanvas>
     ImplGetCanvas(bool bSpriteCanvas) const override;
 
+    tools::Long GetXFrameOffset() const;
+    void SetXFrameOffset(tools::Long nOffset);
+
+    tools::Long GetYFrameOffset() const;
+    void SetYFrameOffset(tools::Long nOffset);
+
 private:
     virtual void InitClipRegion() override;
 

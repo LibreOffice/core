@@ -999,10 +999,10 @@ bool OutputDevice::ImplNewFont() const
 
 bool OutputDevice::AttemptOLEFontScaleFix(vcl::Font& rFont, tools::Long nHeight) const
 {
-    const float fDenominator = static_cast<float>(maMapRes.mnMapScNumY) * maMapRes.mnMapScDenomX;
+    const float fDenominator = static_cast<float>(maMapMetrics.mnMapScNumY) * maMapMetrics.mnMapScDenomX;
     if (fDenominator == 0.0)
         return false;
-    const float fNumerator = static_cast<float>(maMapRes.mnMapScNumX) * maMapRes.mnMapScDenomY;
+    const float fNumerator = static_cast<float>(maMapMetrics.mnMapScNumX) * maMapMetrics.mnMapScDenomY;
     float fStretch = fNumerator / fDenominator;
     int nOrigWidth = mpFontInstance->mxFontMetric->GetWidth();
     int nNewWidth = static_cast<int>(nOrigWidth * fStretch + 0.5);
@@ -1040,8 +1040,8 @@ void OutputDevice::ImplDrawEmphasisMark( tools::Long nBaseX, tools::Long nX, too
     if( IsRTLEnabled() )
         nX = nBaseX - (nX - nBaseX - 1);
 
-    nX -= mnOutOffX;
-    nY -= mnOutOffY;
+    nX -= maGeometry.GetXFrameOffset();
+    nY -= maGeometry.GetYFrameOffset();
 
     if ( rPolyPoly.Count() )
     {

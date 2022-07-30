@@ -23,14 +23,34 @@ public:
 
     tools::Long GetXOffsetFromOriginInPixels() const;
     void SetXOffsetFromOriginInPixels(tools::Long nOffsetFromOriginXpx);
+
     tools::Long GetYOffsetFromOriginInPixels() const;
     void SetYOffsetFromOriginInPixels(tools::Long nOffsetFromOriginYpx);
+
+    tools::Long GetXOffsetFromOriginInLogicalUnits() const;
+    void SetXOffsetFromOriginInLogicalUnits(tools::Long nOffsetFromOriginXInLogicalUnits);
+
+    tools::Long GetYOffsetFromOriginInLogicalUnits() const;
+    void SetYOffsetFromOriginInLogicalUnits(tools::Long nOffsetFromOriginYInLogicalUnits);
+
+    tools::Long GetXFrameOffset() const;
+    void SetXFrameOffset(tools::Long nOffset);
+
+    tools::Long GetYFrameOffset() const;
+    void SetYFrameOffset(tools::Long nOffset);
 
 private:
     bool mbMap;
 
     tools::Long mnOffsetOriginX;
     tools::Long mnOffsetOriginY;
+    tools::Long mnOffsetOriginLogicX;
+    tools::Long mnOffsetOriginLogicY;
+
+    // Output offset for device output in pixels (pseduo window offset within window
+    // system's frames)
+    tools::Long mnFrameOffsetX;
+    tools::Long mnFrameOffsetY;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

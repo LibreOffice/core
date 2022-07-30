@@ -21,9 +21,9 @@
 
 #include <tools/long.hxx>
 
-struct ImplMapRes
+struct MappingMetrics
 {
-    ImplMapRes() = default;
+    MappingMetrics() = default;
 
     tools::Long mnMapOfsX = 0; ///< Offset in X direction
     tools::Long mnMapOfsY = 0; ///< Offset in Y direction
