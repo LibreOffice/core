@@ -59,6 +59,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c524ccc_9ab8c22d",
+        "filename": "vcl/inc/graphic/GraphicFormatDetector.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-07-30T13:55:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "06378aea_4a18b329",
+      "range": {
+        "startLine": 38,
+        "startChar": 42,
+        "endLine": 38,
+        "endChar": 55
+      },
+      "revId": "5fadf2d936e90fd5365d37e0d3aa25c48597372b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "134042fe_ddb1cb38",
@@ -82,6 +106,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b37ea108_6accd8b5",
+        "filename": "vcl/inc/graphic/GraphicFormatDetector.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-07-30T13:55:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "134042fe_ddb1cb38",
+      "range": {
+        "startLine": 104,
+        "startChar": 4,
+        "endLine": 104,
+        "endChar": 21
+      },
+      "revId": "5fadf2d936e90fd5365d37e0d3aa25c48597372b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d6fd01d8_db7c5e81",
@@ -95,6 +143,30 @@
       "writtenOn": "2022-07-30T08:20:42Z",
       "side": 1,
       "message": "Add just the ones you need.. also could be in it\u0027s own struct - GraphicMetadata or something (there is already GraphicNativeMetadata which is used for something else - to extract EXIF metadata)",
+      "range": {
+        "startLine": 95,
+        "startChar": 0,
+        "endLine": 106,
+        "endChar": 19
+      },
+      "revId": "5fadf2d936e90fd5365d37e0d3aa25c48597372b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3fdb5fb_220429ed",
+        "filename": "vcl/inc/graphic/GraphicFormatDetector.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-07-30T13:55:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d6fd01d8_db7c5e81",
       "range": {
         "startLine": 95,
         "startChar": 0,

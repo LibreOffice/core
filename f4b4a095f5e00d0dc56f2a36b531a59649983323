@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67b0ce7c_a7ab0b93",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-07-30T13:55:07Z",
+      "side": 1,
+      "message": "This patch shouldn\u0027t compile, I pushed it to talk about if this is a good approach. Another approach could be GraphicFormatDetector taking a GraphicMetadata\u0026 instead. \n\nAlso I forgot to add it but at ImpDetectGif it will also do `aMetadata \u003d aDetector.GetMetadata();` or something.",
+      "revId": "f4b4a095f5e00d0dc56f2a36b531a59649983323",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
