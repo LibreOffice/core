@@ -1710,34 +1710,6 @@ public:
     SAL_DLLPRIVATE tools::Long         ImplLogicWidthToDevicePixel( tools::Long nWidth ) const;
     SAL_DLLPRIVATE double              ImplLogicWidthToDeviceFontWidth(tools::Long nWidth) const;
 
-    SAL_DLLPRIVATE DeviceCoordinate LogicWidthToDeviceCoordinate( tools::Long nWidth ) const;
-
-    /** Convert a logical X coordinate to a device pixel's X coordinate.
-
-     To get the device's X coordinate, it must calculate the mapping offset
-     coordinate X position (if there is one - if not then it just adds
-     the pseudo-window offset to the logical X coordinate), the X-DPI of
-     the device and the mapping's X scaling factor.
-
-     @param         nX          Logical X coordinate
-
-     @returns Device's X pixel coordinate
-     */
-    SAL_DLLPRIVATE tools::Long         ImplLogicXToDevicePixel( tools::Long nX ) const;
-
-    /** Convert a logical Y coordinate to a device pixel's Y coordinate.
-
-     To get the device's Y coordinate, it must calculate the mapping offset
-     coordinate Y position (if there is one - if not then it just adds
-     the pseudo-window offset to the logical Y coordinate), the Y-DPI of
-     the device and the mapping's Y scaling factor.
-
-     @param         nY          Logical Y coordinate
-
-     @returns Device's Y pixel coordinate
-     */
-    SAL_DLLPRIVATE tools::Long         ImplLogicYToDevicePixel( tools::Long nY ) const;
-
     /** Convert a logical height to a height in units of device pixels.
 
      To get the number of device pixels, it must calculate the Y-DPI of the device and
@@ -1771,17 +1743,6 @@ public:
      @returns Height in logical units.
      */
     SAL_DLLPRIVATE tools::Long         ImplDevicePixelToLogicHeight( tools::Long nHeight ) const;
-
-    /** Convert logical height to device pixels, with exact sub-pixel value.
-
-     To get the \em exact pixel height, it must calculate the Y-DPI of the device and the
-     map scaling factor.
-
-     @param         fLogicHeight     Exact height in logical units.
-
-     @returns Exact height in pixels - returns as a float to provide for subpixel value.
-     */
-    SAL_DLLPRIVATE float        ImplFloatLogicHeightToDevicePixel( float fLogicHeight ) const;
 
     /** Convert a logical size to the size on the physical device.
 
@@ -1850,6 +1811,46 @@ public:
      @since AOO bug 75163 (OpenOffice.org 2.4.3 - OOH 680 milestone 212)
      */
     SAL_DLLPRIVATE basegfx::B2DHomMatrix ImplGetDeviceTransformation() const;
+
+private:
+    SAL_DLLPRIVATE DeviceCoordinate LogicWidthToDeviceCoordinate( tools::Long nWidth ) const;
+
+    /** Convert a logical X coordinate to a device pixel's X coordinate.
+
+     To get the device's X coordinate, it must calculate the mapping offset
+     coordinate X position (if there is one - if not then it just adds
+     the pseudo-window offset to the logical X coordinate), the X-DPI of
+     the device and the mapping's X scaling factor.
+
+     @param         nX          Logical X coordinate
+
+     @returns Device's X pixel coordinate
+     */
+    SAL_DLLPRIVATE tools::Long         ImplLogicXToDevicePixel( tools::Long nX ) const;
+
+    /** Convert a logical Y coordinate to a device pixel's Y coordinate.
+
+     To get the device's Y coordinate, it must calculate the mapping offset
+     coordinate Y position (if there is one - if not then it just adds
+     the pseudo-window offset to the logical Y coordinate), the Y-DPI of
+     the device and the mapping's Y scaling factor.
+
+     @param         nY          Logical Y coordinate
+
+     @returns Device's Y pixel coordinate
+     */
+    SAL_DLLPRIVATE tools::Long         ImplLogicYToDevicePixel( tools::Long nY ) const;
+
+    /** Convert logical height to device pixels, with exact sub-pixel value.
+
+     To get the \em exact pixel height, it must calculate the Y-DPI of the device and the
+     map scaling factor.
+
+     @param         fLogicHeight     Exact height in logical units.
+
+     @returns Exact height in pixels - returns as a float to provide for subpixel value.
+     */
+    SAL_DLLPRIVATE float        ImplFloatLogicHeightToDevicePixel( float fLogicHeight ) const;
     ///@}
 
 
