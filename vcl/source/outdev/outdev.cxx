@@ -81,9 +81,7 @@ OutputDevice::OutputDevice(OutDevType eOutDevType) :
     mnDPIScalePercentage            = 100;
     mnTextOffX                      = 0;
     mnTextOffY                      = 0;
-    mnOutOffOrigX                   = 0;
     mnOutOffLogicX                  = 0;
-    mnOutOffOrigY                   = 0;
     mnOutOffLogicY                  = 0;
     mnEmphasisAscent                = 0;
     mnEmphasisDescent               = 0;
