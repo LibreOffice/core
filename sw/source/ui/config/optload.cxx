@@ -409,7 +409,7 @@ void SwCaptionPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Re
 {
     ApplySettings(rRenderContext);
 
-    rRenderContext.DrawRect(tools::Rectangle(Point(0, 0), GetOutputSizePixel()));
+    rRenderContext.DrawRect(tools::Rectangle(Point(0, 0), GetSize()));
     rRenderContext.DrawText(Point(4, 6), maText);
 }
 

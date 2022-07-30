@@ -42,7 +42,7 @@ namespace vclcanvas
         // setup back buffer
         OutputDevice& rOutDev( pOutDev->getOutDev() );
         mpBackBuffer = std::make_shared<BackBuffer>( rOutDev );
-        mpBackBuffer->setSize( rOutDev.GetOutputSizePixel() );
+        mpBackBuffer->setSize( rOutDev.GetSize() );
 
         tools::SetDefaultDeviceAntiAliasing( &mpBackBuffer->getOutDev());
     }
@@ -108,7 +108,7 @@ namespace vclcanvas
             const ::Point aEmptyPoint;
             mpBackBuffer->getOutDev().EnableMapMode( false );
             mpBackBuffer->getOutDev().SetAntialiasing( AntialiasingFlags::Enable );
-            WriteDIB(mpBackBuffer->getOutDev().GetBitmapEx(aEmptyPoint, mpBackBuffer->getOutDev().GetOutputSizePixel()), aStream, false);
+            WriteDIB(mpBackBuffer->getOutDev().GetBitmapEx(aEmptyPoint, mpBackBuffer->getOutDev().GetSize()), aStream, false);
         }
 
         ++nFilePostfixCount;

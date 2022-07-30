@@ -16,10 +16,10 @@ BufferDevice::BufferDevice(const VclPtr<vcl::Window>& pWindow, vcl::RenderContex
     , m_pWindow(pWindow)
     , m_rRenderContext(rRenderContext)
 {
-    m_pBuffer->SetOutputSizePixel(pWindow->GetOutputSizePixel(), false);
+    m_pBuffer->SetOutputSizePixel(pWindow->GetSize(), false);
     m_pBuffer->SetTextColor(rRenderContext.GetTextColor());
-    m_pBuffer->DrawOutDev(Point(0, 0), pWindow->GetOutputSizePixel(), Point(0, 0),
-                          pWindow->GetOutputSizePixel(), rRenderContext);
+    m_pBuffer->DrawOutDev(Point(0, 0), pWindow->GetSize(), Point(0, 0), pWindow->GetSize(),
+                          rRenderContext);
     m_pBuffer->EnableRTL(rRenderContext.IsRTLEnabled());
 }
 
@@ -30,8 +30,8 @@ void BufferDevice::Dispose()
         return;
     }
 
-    m_rRenderContext.DrawOutDev(Point(0, 0), m_pWindow->GetOutputSizePixel(), Point(0, 0),
-                                m_pWindow->GetOutputSizePixel(), *m_pBuffer);
+    m_rRenderContext.DrawOutDev(Point(0, 0), m_pWindow->GetSize(), Point(0, 0),
+                                m_pWindow->GetSize(), *m_pBuffer);
     m_bDisposed = true;
 }
 

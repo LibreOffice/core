@@ -146,7 +146,7 @@ void lcl_DrawIDEWindowFrame(DockingWindow const * pWin, vcl::RenderContext& rRen
     if (pWin->IsFloatingMode())
         return;
 
-    Size aSz(pWin->GetOutputSizePixel());
+    Size aSz(pWin->GetSize());
     const Color aOldLineColor(rRenderContext.GetLineColor());
     rRenderContext.SetLineColor(COL_WHITE);
     // White line on top
@@ -429,7 +429,7 @@ void EditorWindow::Resize()
     tools::Long nVisY = pEditView->GetStartDocPos().Y();
 
     pEditView->ShowCursor();
-    Size aOutSz( GetOutputSizePixel() );
+    Size aOutSz( GetSize() );
     tools::Long nMaxVisAreaStart = pEditView->GetTextEngine()->GetTextHeight() - aOutSz.Height();
     if ( nMaxVisAreaStart < 0 )
         nMaxVisAreaStart = 0;
@@ -1089,7 +1089,7 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     {
         if ( pEditView->GetStartDocPos().Y() )
         {
-            tools::Long nOutHeight = GetOutputSizePixel().Height();
+            tools::Long nOutHeight = GetSize().Height();
             tools::Long nTextHeight = pEditEngine->GetTextHeight();
             if ( nTextHeight < nOutHeight )
                 pEditView->Scroll( 0, pEditView->GetStartDocPos().Y() );
@@ -1176,7 +1176,7 @@ void EditorWindow::InitScrollBars()
         return;
 
     SetScrollBarRanges();
-    Size aOutSz(GetOutputSizePixel());
+    Size aOutSz(GetSize());
     rModulWindow.GetEditVScrollBar().SetVisibleSize(aOutSz.Height());
     rModulWindow.GetEditVScrollBar().SetPageSize(aOutSz.Height() * 8 / 10);
     rModulWindow.GetEditVScrollBar().SetLineSize(GetTextHeight());
@@ -1335,7 +1335,7 @@ void EditorWindow::ParagraphInsertedDeleted( sal_uInt32 nPara, bool bInserted )
         rModulWindow.GetBreakPointWindow().Invalidate( aInvRect );
 
         Size aLnSz(rModulWindow.GetLineNumberWindow().GetWidth(),
-                   GetOutputSizePixel().Height() - 2 * DWBORDER);
+                   GetSize().Height() - 2 * DWBORDER);
         rModulWindow.GetLineNumberWindow().SetPosSizePixel(Point(DWBORDER + 19, DWBORDER), aLnSz);
         rModulWindow.GetLineNumberWindow().Invalidate();
     }
@@ -1688,7 +1688,7 @@ void WatchWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
 
 void WatchWindow::Resize()
 {
-    Size aSz = GetOutputSizePixel();
+    Size aSz = GetSize();
     Size aBoxSz(aSz.Width() - 2*DWBORDER, aSz.Height() - 2*DWBORDER);
 
     if ( aBoxSz.Width() < 4 )
@@ -1846,7 +1846,7 @@ void StackWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
 
 void StackWindow::Resize()
 {
-    Size aSz = GetOutputSizePixel();
+    Size aSz = GetSize();
     Size aBoxSz(aSz.Width() - 2*DWBORDER, aSz.Height() - 2*DWBORDER);
 
     if ( aBoxSz.Width() < 4 )
@@ -1967,7 +1967,7 @@ void ComplexEditorWindow::dispose()
 
 void ComplexEditorWindow::Resize()
 {
-    Size aOutSz = GetOutputSizePixel();
+    Size aOutSz = GetSize();
     Size aSz(aOutSz);
     aSz.AdjustWidth( -(2*DWBORDER) );
     aSz.AdjustHeight( -(2*DWBORDER) );
@@ -2795,7 +2795,7 @@ void CodeCompleteWindow::ResizeAndPositionListBox()
     SetSizePixel( aSize );
 
     //calculate position
-    const tools::Rectangle aVisArea( pParent->GetEditView()->GetStartDocPos(), pParent->GetOutputSizePixel() ); //the visible area
+    const tools::Rectangle aVisArea( pParent->GetEditView()->GetStartDocPos(), pParent->GetSize() ); //the visible area
     const Point& aBottomPoint = aVisArea.BottomRight();
 
     if( aVisArea.TopRight().getY() + aPos.getY() + aSize.getHeight() > aBottomPoint.getY() )

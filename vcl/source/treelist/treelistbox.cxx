@@ -3230,7 +3230,7 @@ void SvTreeListBox::ClearTabList()
 }
 
 
-Size SvTreeListBox::GetOutputSizePixel() const
+Size SvTreeListBox::GetSize() const
 {
     Size aSize = pImpl->GetOutputSize();
     return aSize;
@@ -3327,7 +3327,7 @@ void SvTreeListBox::RequestHelp( const HelpEvent& rHEvt )
             const OUString tooltip = aTooltipHdl.Call(entry);
             if (!tooltip.isEmpty())
             {
-                const Size size(GetOutputSizePixel().Width(), GetEntryHeight());
+                const Size size(GetSize().Width(), GetEntryHeight());
                 tools::Rectangle screenRect(OutputToScreenPixel(GetEntryPosition(entry)), size);
                 Help::ShowQuickHelp(this, screenRect, tooltip);
                 return;

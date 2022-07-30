@@ -693,7 +693,7 @@ bool Window::HandleScrollCommand( const CommandEvent& rCmd,
 
                         double deltaXInPixels = double(deltaPoint.X());
                         double deltaYInPixels = double(deltaPoint.Y());
-                        Size winSize = GetOutputSizePixel();
+                        Size winSize = GetSize();
 
                         if(pHScrl)
                         {
@@ -960,12 +960,12 @@ void Window::ImplSetMouseTransparent( bool bTransparent )
 
 Point Window::ImplOutputToFrame( const Point& rPos )
 {
-    return Point( rPos.X()+GetOutDev()->mnOutOffX, rPos.Y()+GetOutDev()->mnOutOffY );
+    return Point( rPos.X()+GetXFrameOffset(), rPos.Y()+GetYFrameOffset() );
 }
 
 Point Window::ImplFrameToOutput( const Point& rPos )
 {
-    return Point( rPos.X()-GetOutDev()->mnOutOffX, rPos.Y()-GetOutDev()->mnOutOffY );
+    return Point( rPos.X()-GetXFrameOffset(), rPos.Y()-GetYFrameOffset() );
 }
 
 void Window::SetCompoundControl( bool bCompound )

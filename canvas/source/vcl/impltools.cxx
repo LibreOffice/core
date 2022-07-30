@@ -65,7 +65,7 @@ namespace vclcanvas::tools
                     const ::OutputDevice& rDev( pCanvasImpl->getBackBuffer()->getOutDev() );
                     const ::Point aEmptyPoint;
                     return rDev.GetBitmapEx( aEmptyPoint,
-                                             rDev.GetOutputSizePixel() );
+                                             rDev.GetSize() );
                 }
 
                 // TODO(F2): add support for floating point bitmap formats

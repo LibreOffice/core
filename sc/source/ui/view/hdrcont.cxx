@@ -129,7 +129,7 @@ void ScHeaderControl::DoPaint( SCCOLROW nStart, SCCOLROW nEnd )
     bool bLayoutRTL = IsLayoutRTL();
     tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
 
-    tools::Rectangle aRect( Point(0,0), GetOutputSizePixel() );
+    tools::Rectangle aRect( Point(0,0), GetSize() );
     if ( bVertical )
     {
         aRect.SetTop( GetScrPos( nStart )-nLayoutSign );      // extra pixel for line at top of selection
@@ -190,7 +190,7 @@ tools::Long ScHeaderControl::GetScrPos( SCCOLROW nEntryNo ) const
 {
     tools::Long nScrPos;
 
-    tools::Long nMax = ( bVertical ? GetOutputSizePixel().Height() : GetOutputSizePixel().Width() ) + 1;
+    tools::Long nMax = ( bVertical ? GetSize().Height() : GetSize().Width() ) + 1;
     if (nEntryNo >= nSize)
         nScrPos = nMax;
     else
@@ -631,7 +631,7 @@ SCCOLROW ScHeaderControl::GetMousePos(const Point& rPos, bool& rBorder) const
     tools::Long    nScrPos;
     tools::Long    nMousePos = bVertical ? rPos.Y() : rPos.X();
     tools::Long    nDif;
-    Size    aSize = GetOutputSizePixel();
+    Size    aSize = GetSize();
     tools::Long    nWinSize = bVertical ? aSize.Height() : aSize.Width();
 
     bool bLayoutRTL = IsLayoutRTL();
@@ -767,7 +767,7 @@ void ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
     else
     {
         pSelEngine->SetWindow( this );
-        tools::Rectangle aVis( Point(), GetOutputSizePixel() );
+        tools::Rectangle aVis( Point(), GetSize() );
         if (bVertical)
         {
             aVis.SetLeft( LONG_MIN );

@@ -930,7 +930,7 @@ void HeaderBar::Draw( OutputDevice* pDev, const Point& rPos,
 
 void HeaderBar::Resize()
 {
-    Size aSize = GetOutputSizePixel();
+    Size aSize = GetSize();
     if ( IsVisible() && (mnDY != aSize.Height()) )
         Invalidate();
     mnDX = aSize.Width();

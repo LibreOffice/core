@@ -414,7 +414,7 @@ void OutputDevice::ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPo
     }
 
     // calculate position
-    tools::Long nOffY = 1+(mnDPIY/300); // one visible pixel space
+    tools::Long nOffY = 1+(GetDPIY()/300); // one visible pixel space
     tools::Long nSpaceY = nHeight-nDotSize;
     if ( nSpaceY >= nOffY*2 )
         rYOff += nOffY;
@@ -727,7 +727,7 @@ vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLan
                         if ( aFont.GetFontHeight() )
                             aSize.setHeight( 1 );
                         else
-                            aSize.setHeight( (12*pOutDev->mnDPIY)/72 );
+                            aSize.setHeight( (12*pOutDev->GetDPIY())/72 );
                     }
 
                     // use default width only when logical width is zero
@@ -872,7 +872,7 @@ bool OutputDevice::ImplNewFont() const
         if ( maFont.GetFontSize().Height() )
             aSize.setHeight( 1 );
         else
-            aSize.setHeight( (12*mnDPIY)/72 );
+            aSize.setHeight( (12*GetDPIY())/72 );
         fExactHeight =  static_cast<float>(aSize.Height());
     }
 
@@ -979,7 +979,7 @@ bool OutputDevice::ImplNewFont() const
     bool bRet = true;
 
     // #95414# fix for OLE objects which use scale factors very creatively
-    if (mbMap && !aSize.Width())
+    if (IsMapModeEnabled() && !aSize.Width())
         bRet = AttemptOLEFontScaleFix(const_cast<vcl::Font&>(maFont), aSize.Height());
 
     return bRet;
@@ -987,10 +987,10 @@ bool OutputDevice::ImplNewFont() const
 
 bool OutputDevice::AttemptOLEFontScaleFix(vcl::Font& rFont, tools::Long nHeight) const
 {
-    const float fDenominator = static_cast<float>(maMapRes.mnMapScNumY) * maMapRes.mnMapScDenomX;
+    const float fDenominator = static_cast<float>(maMapMetrics.mnMapScNumY) * maMapMetrics.mnMapScDenomX;
     if (fDenominator == 0.0)
         return false;
-    const float fNumerator = static_cast<float>(maMapRes.mnMapScNumX) * maMapRes.mnMapScDenomY;
+    const float fNumerator = static_cast<float>(maMapMetrics.mnMapScNumX) * maMapMetrics.mnMapScDenomY;
     float fStretch = fNumerator / fDenominator;
     int nOrigWidth = mpFontInstance->mxFontMetric->GetWidth();
     int nNewWidth = static_cast<int>(nOrigWidth * fStretch + 0.5);
@@ -999,10 +999,10 @@ bool OutputDevice::AttemptOLEFontScaleFix(vcl::Font& rFont, tools::Long nHeight)
     {
         Size aOrigSize = rFont.GetFontSize();
         rFont.SetFontSize(Size(nNewWidth, nHeight));
-        mbMap = false;
+        const_cast<OutputDevice*>(this)->EnableMapMode(false);
         mbNewFont = true;
         bRet = ImplNewFont();  // recurse once using stretched width
-        mbMap = true;
+        const_cast<OutputDevice*>(this)->EnableMapMode();
         rFont.SetFontSize(aOrigSize);
     }
     return bRet;
@@ -1028,8 +1028,8 @@ void OutputDevice::ImplDrawEmphasisMark( tools::Long nBaseX, tools::Long nX, too
     if( IsRTLEnabled() )
         nX = nBaseX - (nX - nBaseX - 1);
 
-    nX -= mnOutOffX;
-    nY -= mnOutOffY;
+    nX -= maGeometry.GetXFrameOffset();
+    nY -= maGeometry.GetYFrameOffset();
 
     if ( rPolyPoly.Count() )
     {
@@ -1067,7 +1067,7 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
 {
     Color               aOldLineColor   = GetLineColor();
     Color               aOldFillColor   = GetFillColor();
-    bool                bOldMap         = mbMap;
+    bool                bOldMap         = IsMapModeEnabled();
     GDIMetaFile*        pOldMetaFile    = mpMetaFile;
     mpMetaFile = nullptr;
     EnableMapMode( false );

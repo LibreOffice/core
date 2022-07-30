@@ -644,7 +644,7 @@ private:
     }
     virtual void Resize() override
     {
-        m_aResizeHdl.Call(GetOutputSizePixel());
+        m_aResizeHdl.Call(GetSize());
     }
     virtual void MouseMove(const MouseEvent& rMEvt) override
     {

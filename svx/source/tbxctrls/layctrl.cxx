@@ -513,7 +513,7 @@ void ColumnsWidget::UpdateSize_Impl( tools::Long nNewCol )
     if ( nNewCol == nCol )
         return;
 
-    Size aWinSize = GetOutputSizePixel();
+    Size aWinSize = GetSize();
 
     Invalidate( tools::Rectangle( 0, aWinSize.Height() - 2,
                            aWinSize.Width(), aWinSize.Height() ) );
@@ -605,7 +605,7 @@ void ColumnsWidget::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
 
     tools::Long i;
     tools::Long nLineWidth;
-    Size aSize(GetOutputSizePixel());
+    Size aSize(GetSize());
 
     for (i = 0; i < WIDTH; i++)
     {

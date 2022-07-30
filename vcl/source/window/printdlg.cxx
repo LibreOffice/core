@@ -83,7 +83,7 @@ PrintDialog::PrintPreviewWindow::~PrintPreviewWindow()
 
 void PrintDialog::PrintPreviewWindow::Resize()
 {
-    Size aNewSize(GetOutputSizePixel());
+    Size aNewSize(GetSize());
     tools::Long nTextHeight = GetDrawingArea()->get_text_height();
     // leave small space for decoration
     aNewSize.AdjustWidth( -(nTextHeight + 2) );
@@ -127,7 +127,7 @@ void PrintDialog::PrintPreviewWindow::Paint(vcl::RenderContext& rRenderContext, 
     rRenderContext.Erase();
 
     auto nTextHeight = rRenderContext.GetTextHeight();
-    Size aSize(GetOutputSizePixel());
+    Size aSize(GetSize());
     Point aOffset((aSize.Width()  - maPreviewSize.Width()  + nTextHeight) / 2,
                   (aSize.Height() - maPreviewSize.Height() + nTextHeight) / 2);
 
@@ -351,7 +351,7 @@ void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
     pPrerenderVDev->SetReferenceDevice( mnDPIX, mnDPIY );
 
     // calculate needed Scale for Metafile (using Size and DPI from VDev)
-    Size aLogicSize( pPrerenderVDev->PixelToLogic( pPrerenderVDev->GetOutputSizePixel(), MapMode( MapUnit::Map100thMM ) ) );
+    Size aLogicSize( pPrerenderVDev->PixelToLogic( pPrerenderVDev->GetSize(), MapMode( MapUnit::Map100thMM ) ) );
     Size aOrigSize( maOrigSize );
     if( aOrigSize.Width() < 1 )
         aOrigSize.setWidth( aLogicSize.Width() );
@@ -429,7 +429,7 @@ void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
     aMtf.Play(*pPrerenderVDev, Point(0, 0), aLogicSize);
 
     pPrerenderVDev->SetMapMode(MapMode(MapUnit::MapPixel));
-    maPreviewBitmap = pPrerenderVDev->GetBitmapEx(Point(0, 0), pPrerenderVDev->GetOutputSizePixel());
+    maPreviewBitmap = pPrerenderVDev->GetBitmapEx(Point(0, 0), pPrerenderVDev->GetSize());
 
     if(0.0 != fFactor)
     {
@@ -467,7 +467,7 @@ void PrintDialog::ShowNupOrderWindow::Paint(vcl::RenderContext& rRenderContext, 
     aFont.SetFontSize(Size(0, 24));
     rRenderContext.SetFont(aFont);
     Size aSampleTextSize(rRenderContext.GetTextWidth(OUString::number(nPages + 1)), rRenderContext.GetTextHeight());
-    Size aOutSize(GetOutputSizePixel());
+    Size aOutSize(GetSize());
     Size aSubSize(aOutSize.Width() / mnColumns, aOutSize.Height() / mnRows);
     // calculate font size: shrink the sample text so it fits
     double fX = double(aSubSize.Width()) / double(aSampleTextSize.Width());

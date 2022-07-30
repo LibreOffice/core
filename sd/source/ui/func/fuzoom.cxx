@@ -164,7 +164,7 @@ bool FuZoom::MouseButtonUp(const MouseEvent& rMEvt)
         {
             // click at place: double zoom factor
             Point aPos = mpWindow->PixelToLogic(aPosPix);
-            Size aSize = mpWindow->PixelToLogic(mpWindow->GetOutputSizePixel());
+            Size aSize = mpWindow->PixelToLogic(mpWindow->GetSize());
             if ( rMEvt.IsMod1() )
             {
                 aSize.setWidth( aSize.Width() * 2 );
@@ -186,7 +186,7 @@ bool FuZoom::MouseButtonUp(const MouseEvent& rMEvt)
     }
 
     ::tools::Rectangle aVisAreaWin = mpWindow->PixelToLogic(::tools::Rectangle(Point(0,0),
-                                           mpWindow->GetOutputSizePixel()));
+                                           mpWindow->GetSize()));
     mpViewShell->GetZoomList()->InsertZoomRect(aVisAreaWin);
 
     bStartDrag = false;

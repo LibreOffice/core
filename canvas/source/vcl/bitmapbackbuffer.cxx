@@ -79,7 +79,7 @@ namespace vclcanvas
             mpVDev->SetAntialiasing( AntialiasingFlags::Enable );
             const Point aEmptyPoint;
             *maBitmap = mpVDev->GetBitmapEx( aEmptyPoint,
-                                             mpVDev->GetOutputSizePixel() );
+                                             mpVDev->GetSize() );
         }
 
         // client queries bitmap, and will possibly alter content -
@@ -98,7 +98,7 @@ namespace vclcanvas
         {
             mpVDev->EnableMapMode( false );
             mpVDev->SetAntialiasing( AntialiasingFlags::Enable );
-            aSize = mpVDev->GetOutputSizePixel();
+            aSize = mpVDev->GetSize();
         }
 
         return aSize;

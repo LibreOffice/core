@@ -1023,11 +1023,11 @@ namespace vclcanvas
                             const ::Point aEmptyPoint;
                             BitmapEx aContentBmp(
                                 pVDev->GetBitmapEx( aEmptyPoint,
-                                                 pVDev->GetOutputSizePixel() ) );
+                                                 pVDev->GetSize() ) );
 
                             sal_uInt8 nCol( static_cast< sal_uInt8 >(
                                            ::basegfx::fround( 255.0*( 1.0 - textures[0].Alpha ) ) ) );
-                            AlphaMask aAlpha( pVDev->GetOutputSizePixel(),
+                            AlphaMask aAlpha( pVDev->GetSize(),
                                               &nCol );
 
                             BitmapEx aOutputBmpEx( aContentBmp.GetBitmap(), aAlpha );

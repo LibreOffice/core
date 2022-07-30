@@ -104,7 +104,7 @@ static void InsertTableImpl(const DrawViewShell* pShell,
         Size aSize( 14100, 2000 );
 
         Point aPos;
-        ::tools::Rectangle aWinRect(aPos, pShell->GetActiveWindow()->GetOutputSizePixel());
+        ::tools::Rectangle aWinRect(aPos, pShell->GetActiveWindow()->GetSize());
         aWinRect = pShell->GetActiveWindow()->PixelToLogic(aWinRect);
 
         // make sure that the default size of the table fits on the paper and is inside the viewing area.

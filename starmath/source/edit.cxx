@@ -437,7 +437,7 @@ IMPL_LINK(SmEditWindow, ScrollHdl, weld::ScrolledWindow&, rScrolledWindow, void)
 
 tools::Rectangle SmEditWindow::AdjustScrollBars()
 {
-    tools::Rectangle aRect(Point(), rCmdBox.GetOutputSizePixel());
+    tools::Rectangle aRect(Point(), rCmdBox.GetSize());
 
     if (mxScrolledWindow)
     {

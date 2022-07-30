@@ -170,7 +170,7 @@ void ScCsvRuler::UpdateSplitSize()
 
 void ScCsvRuler::InitSizeData()
 {
-    maWinSize = GetOutputSizePixel();
+    maWinSize = GetSize();
 
     UpdateSplitSize();
 

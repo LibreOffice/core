@@ -177,7 +177,7 @@ namespace dbaui
     void ORelationControl::Resize()
     {
         EditBrowseBox::Resize();
-        tools::Long nOutputWidth = GetOutputSizePixel().Width() - 1;
+        tools::Long nOutputWidth = GetSize().Width() - 1;
         SetColumnWidth(1, (nOutputWidth / 2));
         SetColumnWidth(2, (nOutputWidth / 2));
     }

@@ -79,7 +79,7 @@ void IconView::CalcEntryHeight(SvTreeListEntry const* pEntry)
 
 void IconView::Resize()
 {
-    Size aBoxSize = Control::GetOutputSizePixel();
+    Size aBoxSize = Control::GetSize();
 
     if (!aBoxSize.Width())
         return;
@@ -111,7 +111,7 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
 
     const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();
 
-    const Size aOutputSize = GetOutputSizePixel();
+    const Size aOutputSize = GetSize();
     if (aOutputSize.getHeight() < nTempEntryHeight)
         nTempEntryHeight = aOutputSize.getHeight();
 

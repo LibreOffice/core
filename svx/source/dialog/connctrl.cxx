@@ -77,7 +77,7 @@ void SvxXConnectionPreview::AdaptSize()
     MapMode         aDisplayMap( aMapMode );
     Point           aNewPos;
     Size            aNewSize;
-    const Size      aWinSize = GetDrawingArea()->get_ref_device().PixelToLogic(GetOutputSizePixel(), aDisplayMap);
+    const Size      aWinSize = GetDrawingArea()->get_ref_device().PixelToLogic(GetSize(), aDisplayMap);
     const tools::Long      nWidth = aWinSize.Width();
     const tools::Long      nHeight = aWinSize.Height();
     if (aRect.GetHeight() == 0)
@@ -288,7 +288,7 @@ bool SvxXConnectionPreview::MouseButtonDown( const MouseEvent& rMEvt )
             aMapMode.SetScaleY( aYFrac );
             SetMapMode( aMapMode );
 
-            Size aOutSize(GetOutputSizePixel());
+            Size aOutSize(GetSize());
             aOutSize = GetDrawingArea()->get_ref_device().PixelToLogic(aOutSize);
 
             Point aPt( aMapMode.GetOrigin() );

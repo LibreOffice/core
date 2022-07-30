@@ -507,7 +507,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
             aSize = mpWindow->LogicToPixel(aSize);
 
             // put it at the center of the window
-            Size aTemp(mpWindow->GetOutputSizePixel());
+            Size aTemp(mpWindow->GetSize());
             Point aPos(aTemp.Width() / 2, aTemp.Height() / 2);
             aPos.AdjustX( -(aSize.Width() / 2) );
             aPos.AdjustY( -(aSize.Height() / 2) );

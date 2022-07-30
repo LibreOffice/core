@@ -79,7 +79,7 @@ public:
 
     virtual void Resize() override
     {
-        auto nWidth = GetOutputSizePixel().Width();
+        auto nWidth = GetSize().Width();
         if (maBrandImage.GetSizePixel().Width() != nWidth)
             LoadImageForWidth(nWidth);
         weld::CustomWidgetController::Resize();
@@ -111,7 +111,7 @@ public:
 
         const bool bIsDark = rStyleSettings.GetDialogColor().IsDark();
         if (bIsDark != mbIsDark)
-            LoadImageForWidth(GetOutputSizePixel().Width());
+            LoadImageForWidth(GetSize().Width());
         weld::CustomWidgetController::StyleUpdated();
     }
 

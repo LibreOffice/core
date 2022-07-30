@@ -151,7 +151,7 @@ void ViewShell::VirtHScrollHdl(ScrollAdaptor* pHScroll)
     aVisArea.SetPos(aVisAreaPos);
     GetDocSh()->SetVisArea(aVisArea);
 
-    Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
+    Size aVisSizePixel = GetActiveWindow()->GetSize();
     ::tools::Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(0,0), aVisSizePixel) );
     VisAreaChanged(aVisAreaWin);
 
@@ -208,7 +208,7 @@ void ViewShell::VirtVScrollHdl(ScrollAdaptor* pVScroll)
         aVisArea.SetPos(aVisAreaPos);
         GetDocSh()->SetVisArea(aVisArea);
 
-        Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
+        Size aVisSizePixel = GetActiveWindow()->GetSize();
         ::tools::Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(0,0), aVisSizePixel) );
         VisAreaChanged(aVisAreaWin);
 
@@ -286,7 +286,7 @@ void ViewShell::Scroll(::tools::Long nScrollX, ::tools::Long nScrollY)
     aVisArea.SetPos(aVisAreaPos);
     GetDocSh()->SetVisArea(aVisArea);
 
-    Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
+    Size aVisSizePixel = GetActiveWindow()->GetSize();
     ::tools::Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(0,0), aVisSizePixel) );
     VisAreaChanged(aVisAreaWin);
 
@@ -328,7 +328,7 @@ void ViewShell::SetZoom(::tools::Long nZoom)
         mpContentWindow->Invalidate(InvalidateFlags::Children);
     }
 
-    Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
+    Size aVisSizePixel = GetActiveWindow()->GetSize();
     ::tools::Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(0,0), aVisSizePixel) );
     VisAreaChanged(aVisAreaWin);
 
@@ -384,7 +384,7 @@ void ViewShell::SetZoomRect(const ::tools::Rectangle& rZoomRect)
             mpContentWindow->Invalidate(InvalidateFlags::Children);
     }
 
-    Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
+    Size aVisSizePixel = GetActiveWindow()->GetSize();
     ::tools::Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(0,0), aVisSizePixel) );
     VisAreaChanged(aVisAreaWin);
 
@@ -416,7 +416,7 @@ void ViewShell::InitWindows(const Point& rViewOrigin, const Size& rViewSize,
         }
     }
 
-    Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
+    Size aVisSizePixel = GetActiveWindow()->GetSize();
     ::tools::Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(0,0), aVisSizePixel) );
     VisAreaChanged(aVisAreaWin);
 
@@ -923,7 +923,7 @@ void ViewShell::SetWinViewPos(const Point& rWinPos)
 
     UpdateScrollBars();
 
-    Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
+    Size aVisSizePixel = GetActiveWindow()->GetSize();
     ::tools::Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(0,0), aVisSizePixel) );
     VisAreaChanged(aVisAreaWin);
 

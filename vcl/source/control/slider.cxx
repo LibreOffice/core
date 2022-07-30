@@ -273,7 +273,7 @@ void Slider::ImplCalc( bool bUpdate )
         maChannel2Rect.SetEmpty();
         maThumbRect.SetEmpty();
 
-        Size aSize = GetOutputSizePixel();
+        Size aSize = GetSize();
         if ( GetStyle() & WB_HORZ )
         {
             nCalcWidth          = aSize.Width();
@@ -348,7 +348,7 @@ void Slider::ImplDraw(vcl::RenderContext& rRenderContext)
                 aSliderValue.mnThumbState |= ControlState::ROLLOVER;
         }
 
-        const tools::Rectangle aCtrlRegion(Point(0,0), GetOutputSizePixel());
+        const tools::Rectangle aCtrlRegion(Point(0,0), GetSize());
 
         if (rRenderContext.DrawNativeControl(ControlType::Slider, nPart, aCtrlRegion, nState, aSliderValue, OUString()))
             return;
@@ -463,7 +463,7 @@ void Slider::ImplDraw(vcl::RenderContext& rRenderContext)
 
 bool Slider::ImplIsPageUp( const Point& rPos ) const
 {
-    Size aSize = GetOutputSizePixel();
+    Size aSize = GetSize();
     tools::Rectangle aRect = maChannel1Rect;
     if ( GetStyle() & WB_HORZ )
     {
@@ -480,7 +480,7 @@ bool Slider::ImplIsPageUp( const Point& rPos ) const
 
 bool Slider::ImplIsPageDown( const Point& rPos ) const
 {
-    Size aSize = GetOutputSizePixel();
+    Size aSize = GetSize();
     tools::Rectangle aRect = maChannel2Rect;
     if ( GetStyle() & WB_HORZ )
     {

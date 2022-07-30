@@ -41,7 +41,7 @@ class CanvasTest : public test::BootstrapFixture
     {
         if (mbExportBitmap)
         {
-            BitmapEx aBitmapEx(device->GetBitmapEx(Point(0, 0), device->GetOutputSizePixel()));
+            BitmapEx aBitmapEx(device->GetBitmapEx(Point(0, 0), device->GetSize()));
             SvFileStream aStream(filename, StreamMode::WRITE | StreamMode::TRUNC);
             GraphicFilter::GetGraphicFilter().compressAsPNG(aBitmapEx, aStream);
         }
@@ -95,7 +95,7 @@ public:
         mCanvas->drawLine(geometry::RealPoint2D(1, 1), geometry::RealPoint2D(9, 1), mViewState,
                           mRenderState);
         exportDevice("test-draw-line.png", mVclDevice);
-        Bitmap bitmap = mVclDevice->GetBitmap(Point(), mVclDevice->GetOutputSizePixel());
+        Bitmap bitmap = mVclDevice->GetBitmap(Point(), mVclDevice->GetSize());
         Bitmap::ScopedReadAccess access(bitmap);
         // Canvas uses AA, which blurs the line, and it cannot be turned off,
         // so do not check the end points.
@@ -130,7 +130,7 @@ public:
         mCanvas->strokePolyPolygon(polygon, mViewState, mRenderState, strokeAttributes);
 
         exportDevice("test-tdf134053.png", mVclDevice);
-        Bitmap bitmap = mVclDevice->GetBitmap(Point(), mVclDevice->GetOutputSizePixel());
+        Bitmap bitmap = mVclDevice->GetBitmap(Point(), mVclDevice->GetSize());
         Bitmap::ScopedReadAccess access(bitmap);
         struct Check
         {

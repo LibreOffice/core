@@ -309,7 +309,7 @@ void BmpColorWindow::Paint( vcl::RenderContext& rRenderContext, const tools::Rec
     rRenderContext.Push(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
     rRenderContext.SetLineColor(aColor);
     rRenderContext.SetFillColor(aColor);
-    rRenderContext.DrawRect(tools::Rectangle(Point(), GetOutputSizePixel()));
+    rRenderContext.DrawRect(tools::Rectangle(Point(), GetSize()));
     rRenderContext.Pop();
 }
 

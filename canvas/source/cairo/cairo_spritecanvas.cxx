@@ -81,7 +81,7 @@ namespace cairocanvas
         ENSURE_ARG_OR_THROW(bHasCairo,
                             "CairoSpriteCanvas::SpriteCanvas: No Cairo capability");
 
-        Size aPixelSize( pParentWindow->GetOutputSizePixel() );
+        Size aPixelSize( pParentWindow->GetSize() );
         const ::basegfx::B2ISize aSize( aPixelSize.Width(),
                                         aPixelSize.Height() );
 

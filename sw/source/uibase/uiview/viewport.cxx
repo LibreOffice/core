@@ -190,7 +190,7 @@ void SwView::DocSzChgd(const Size &rSz)
     if ( UpdateScrollbars() && !m_bInOuterResizePixel && !m_bInInnerResizePixel &&
             !GetViewFrame()->GetFrame().IsInPlace())
         OuterResizePixel( Point(),
-                          GetViewFrame()->GetWindow().GetOutputSizePixel() );
+                          GetViewFrame()->GetWindow().GetSize() );
 }
 
 // Set VisArea newly
@@ -279,7 +279,7 @@ void SwView::SetVisArea( const tools::Rectangle &rRect, bool bUpdateScrollbar )
 
     if ( bOuterResize && !m_bInOuterResizePixel && !m_bInInnerResizePixel)
             OuterResizePixel( Point(),
-                GetViewFrame()->GetWindow().GetOutputSizePixel() );
+                GetViewFrame()->GetWindow().GetSize() );
 }
 
 // Set Pos VisArea
@@ -982,7 +982,7 @@ void SwView::InnerResizePixel( const Point &rOfst, const Size &rSize, bool )
             aSz.AdjustWidth(aBorder.Left() + aBorder.Right() );
         }
 
-        Size aEditSz( GetEditWin().GetOutputSizePixel() );
+        Size aEditSz( GetEditWin().GetSize() );
         ViewResizePixel( *GetEditWin().GetOutDev(), rOfst, aSz, aEditSz, *m_pVScrollbar,
                             *m_pHScrollbar, m_pVRuler, m_pHRuler,
                             m_pWrtShell->GetViewOptions()->IsVRulerRight());
@@ -1078,7 +1078,7 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
         const bool bScroll2 = m_pHScrollbar->IsScrollbarVisible(true);
         SvBorder aBorder;
         CalcAndSetBorderPixel( aBorder );
-        const Size aEditSz( GetEditWin().GetOutputSizePixel() );
+        const Size aEditSz( GetEditWin().GetSize() );
         ViewResizePixel( *GetEditWin().GetOutDev(), rOfst, rSize, aEditSz, *m_pVScrollbar,
                                 *m_pHScrollbar, m_pVRuler, m_pHRuler,
                                 m_pWrtShell->GetViewOptions()->IsVRulerRight() );

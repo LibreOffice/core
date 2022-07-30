@@ -156,7 +156,7 @@ bool SvxShowCharSet::MouseButtonUp(const MouseEvent& rMEvt)
     if ( bDrag && rMEvt.IsLeft() )
     {
         // released mouse over character map
-        if ( tools::Rectangle(Point(), GetOutputSizePixel()).Contains(rMEvt.GetPosPixel()))
+        if ( tools::Rectangle(Point(), GetSize()).Contains(rMEvt.GetPosPixel()))
             aSelectHdl.Call( this );
         ReleaseMouse();
         bDrag = false;
@@ -170,7 +170,7 @@ bool SvxShowCharSet::MouseMove(const MouseEvent& rMEvt)
     if ( rMEvt.IsLeft() && bDrag )
     {
         Point aPos  = rMEvt.GetPosPixel();
-        Size  aSize = GetOutputSizePixel();
+        Size  aSize = GetSize();
 
         if ( aPos.X() < 0 )
             aPos.setX( 0 );
@@ -508,7 +508,7 @@ void SvxShowCharSet::DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, 
     if (n1 > LastInView() || n2 < FirstInView())
         return;
 
-    Size aOutputSize(GetOutputSizePixel());
+    Size aOutputSize(GetSize());
 
     int i;
     for (i = 1; i < COLUMN_COUNT; ++i)
@@ -670,7 +670,7 @@ void SvxShowCharSet::RecalculateFont(vcl::RenderContext& rRenderContext)
     if (nSelectedIndex >= 0)
         getSelectedChar() = mxFontCharMap->GetCharFromIndex(nSelectedIndex);
 
-    Size aSize(GetOutputSizePixel());
+    Size aSize(GetSize());
 
     vcl::Font aFont = maFont;
     aFont.SetWeight(WEIGHT_LIGHT);

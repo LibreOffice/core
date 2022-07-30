@@ -824,7 +824,7 @@ void SdrObjEditView::ImpInvalidateOutlinerView(OutlinerView const& rOutlView) co
 
     {
         // limit xPixRect because of driver problems when pixel coordinates are too far out
-        Size aMaxXY(pWin->GetOutputSizePixel());
+        Size aMaxXY(pWin->GetSize());
         tools::Long a(2 * nPixSiz);
         tools::Long nMaxX(aMaxXY.Width() + a);
         tools::Long nMaxY(aMaxXY.Height() + a);

@@ -64,7 +64,7 @@ void SwEnvPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     const tools::Long nPageW = std::max(rItem.m_nWidth, rItem.m_nHeight);
     const tools::Long nPageH = std::min(rItem.m_nWidth, rItem.m_nHeight);
 
-    Size aSize(GetOutputSizePixel());
+    Size aSize(GetSize());
 
     const double f = 0.8 * std::min(
         double(aSize.Width()) / double(nPageW),

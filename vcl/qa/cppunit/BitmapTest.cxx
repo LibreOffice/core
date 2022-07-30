@@ -361,7 +361,7 @@ void checkAndInsert(CRCHash& rHash, Bitmap const& rBmp, const char* pLocation)
 
 Bitmap getAsBitmap(VclPtr<OutputDevice> const& pOut)
 {
-    return pOut->GetBitmap(Point(), pOut->GetOutputSizePixel());
+    return pOut->GetBitmap(Point(), pOut->GetSize());
 }
 
 void BitmapTest::testCRC()
@@ -384,7 +384,7 @@ void BitmapTest::testCRC()
 #endif
 
     // a 1x1 black & white checkerboard
-    aVDev->DrawCheckered(Point(), aVDev->GetOutputSizePixel(), 1, Color(0, 0, 1));
+    aVDev->DrawCheckered(Point(), aVDev->GetSize(), 1, Color(0, 0, 1));
     Bitmap aChecker = getAsBitmap(aVDev);
     checkAndInsert(aCRCs, aChecker, "checkerboard");
     aChecker.Invert();

@@ -30,7 +30,7 @@ BrowserHeader::BrowserHeader( BrowseBox* pParent, WinBits nWinBits )
     tools::Long nHeight = pParent->IsZoom() ? pParent->CalcZoom(pParent->GetTitleHeight()) : pParent->GetTitleHeight();
 
     SetPosSizePixel( Point( 0, 0),
-                     Size( pParent->GetOutputSizePixel().Width(),
+                     Size( pParent->GetSize().Width(),
                            nHeight ) );
     Show();
 }

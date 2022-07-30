@@ -27,6 +27,7 @@
 #include <tools/solar.h>
 #include <tools/color.hxx>
 #include <tools/poly.hxx>
+#include <vcl/Geometry.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/devicecoordinate.hxx>
@@ -41,7 +42,7 @@
 #include <vcl/rendercontext/DrawModeFlags.hxx>
 #include <vcl/rendercontext/DrawTextFlags.hxx>
 #include <vcl/rendercontext/GetDefaultFontFlags.hxx>
-#include <vcl/rendercontext/ImplMapRes.hxx>
+#include <vcl/rendercontext/MappingMetrics.hxx>
 #include <vcl/rendercontext/InvertFlags.hxx>
 #include <vcl/rendercontext/RasterOp.hxx>
 #include <vcl/rendercontext/SalLayoutFlags.hxx>
@@ -195,23 +196,6 @@ private:
     // TEMP TEMP TEMP
     VclPtr<VirtualDevice>           mpAlphaVDev;
 
-    /// Additional output pixel offset, applied in LogicToPixel (used by SetPixelOffset/GetPixelOffset)
-    tools::Long                            mnOutOffOrigX;
-    /// Additional output offset in _logical_ coordinates, applied in PixelToLogic (used by SetPixelOffset/GetPixelOffset)
-    tools::Long                            mnOutOffLogicX;
-    /// Additional output pixel offset, applied in LogicToPixel (used by SetPixelOffset/GetPixelOffset)
-    tools::Long                            mnOutOffOrigY;
-    /// Additional output offset in _logical_ coordinates, applied in PixelToLogic (used by SetPixelOffset/GetPixelOffset)
-    tools::Long                            mnOutOffLogicY;
-    /// Output offset for device output in pixel (pseudo window offset within window system's frames)
-    tools::Long                            mnOutOffX;
-    /// Output offset for device output in pixel (pseudo window offset within window system's frames)
-    tools::Long                            mnOutOffY;
-    tools::Long                            mnOutWidth;
-    tools::Long                            mnOutHeight;
-    sal_Int32                       mnDPIX;
-    sal_Int32                       mnDPIY;
-    sal_Int32                       mnDPIScalePercentage; ///< For HiDPI displays, we want to draw elements for a percentage larger
     /// font specific text alignment offsets in pixel units
     mutable tools::Long                    mnTextOffX;
     mutable tools::Long                    mnTextOffY;
@@ -219,7 +203,7 @@ private:
     mutable tools::Long                    mnEmphasisDescent;
     DrawModeFlags                   mnDrawMode;
     vcl::text::ComplexTextLayoutFlags mnTextLayoutMode;
-    ImplMapRes                      maMapRes;
+    MappingMetrics                  maMapMetrics;
     const OutDevType                meOutDevType;
     OutDevViewType                  meOutDevViewType;
     vcl::Region                     maRegion;           // contains the clip region, see SetClipRegion(...)
@@ -237,7 +221,6 @@ private:
     AntialiasingFlags               mnAntialiasing;
     LanguageType                    meTextLanguage;
 
-    mutable bool                    mbMap : 1;
     mutable bool                    mbClipRegion : 1;
     mutable bool                    mbBackground : 1;
     mutable bool                    mbOutput : 1;
@@ -260,6 +243,8 @@ private:
 protected:
     mutable std::shared_ptr<vcl::font::PhysicalFontCollection> mxFontCollection;
     mutable std::shared_ptr<ImplFontCache> mxFontCache;
+
+    Geometry maGeometry;
 
     /** @name Initialization and accessor functions
      */
@@ -311,21 +296,20 @@ public:
 
     virtual sal_uInt16          GetBitCount() const;
 
-    Size                        GetOutputSizePixel() const
-                                    { return Size( mnOutWidth, mnOutHeight ); }
-    tools::Long                        GetOutputWidthPixel() const { return mnOutWidth; }
-    tools::Long                        GetOutputHeightPixel() const { return mnOutHeight; }
-    tools::Long                        GetOutOffXPixel() const { return mnOutOffX; }
-    tools::Long                        GetOutOffYPixel() const { return mnOutOffY; }
-    void                        SetOutOffXPixel(tools::Long nOutOffX);
-    void                        SetOutOffYPixel(tools::Long nOutOffY);
+    Size GetSize() const { return Size(maGeometry.GetWidth(), maGeometry.GetHeight()); }
+    tools::Long GetWidth() const { return maGeometry.GetWidth(); }
+    tools::Long GetHeight() const { return maGeometry.GetHeight(); }
+    void SetWidth(tools::Long nWidth) { maGeometry.SetWidth(nWidth); }
+    void SetHeight(tools::Long nHeight) { maGeometry.SetHeight(nHeight); }
+    tools::Long                        GetOutOffXPixel() const { return maGeometry.GetXFrameOffset(); }
+    tools::Long                        GetOutOffYPixel() const { return maGeometry.GetYFrameOffset(); }
     Point                       GetOutputOffPixel() const
-                                    { return Point( mnOutOffX, mnOutOffY ); }
+                                    { return Point( maGeometry.GetXFrameOffset(), maGeometry.GetYFrameOffset() ); }
     tools::Rectangle            GetOutputRectPixel() const
-                                    { return tools::Rectangle(GetOutputOffPixel(), GetOutputSizePixel() ); }
+                                    { return tools::Rectangle(GetOutputOffPixel(), GetSize() ); }
 
     Size                        GetOutputSize() const
-                                    { return PixelToLogic( GetOutputSizePixel() ); }
+                                    { return PixelToLogic( GetSize() ); }
 
     css::uno::Reference< css::awt::XGraphics >
                                 CreateUnoGraphics();
@@ -382,25 +366,27 @@ public:
 
      @returns x-axis DPI value
      */
-    SAL_DLLPRIVATE sal_Int32    GetDPIX() const { return mnDPIX; }
+    SAL_DLLPRIVATE sal_Int32    GetDPIX() const { return maGeometry.GetDPIX(); }
 
     /** Get the output device's DPI y-axis value.
 
      @returns y-axis DPI value
      */
-    SAL_DLLPRIVATE sal_Int32    GetDPIY() const { return mnDPIY; }
+    SAL_DLLPRIVATE sal_Int32    GetDPIY() const { return maGeometry.GetDPIY(); }
 
-    SAL_DLLPRIVATE void         SetDPIX( sal_Int32 nDPIX ) { mnDPIX = nDPIX; }
-    SAL_DLLPRIVATE void         SetDPIY( sal_Int32 nDPIY ) { mnDPIY = nDPIY; }
+    SAL_DLLPRIVATE void         SetDPIX( sal_Int32 nDPIX ) { maGeometry.SetDPIX(nDPIX); }
+    SAL_DLLPRIVATE void         SetDPIY( sal_Int32 nDPIY ) { maGeometry.SetDPIY(nDPIY); }
 
-    float GetDPIScaleFactor() const
-    {
-        return mnDPIScalePercentage / 100.0f;
-    }
+    float GetDPIScaleFactor() const { return maGeometry.GetDPIScaleFactor(); }
 
     sal_Int32 GetDPIScalePercentage() const
     {
-        return mnDPIScalePercentage;
+        return maGeometry.GetDPIScalePercentage();
+    }
+
+    void SetDPIScalePercentage(sal_Int32 nPercent)
+    {
+        maGeometry.SetDPIScalePercentage(std::max(100, nPercent));
     }
 
     OutDevType                  GetOutDevType() const { return meOutDevType; }
@@ -952,7 +938,7 @@ public:
 
         // bitmap that contains even the space around the text,
         // that means, preserves the baseline etc.
-        Bitmap aBitmap(aDevice.GetBitmap(Point(0, 0), aDevice.GetOutputSize()));
+        Bitmap aBitmap(aDevice.GetBitmap(Point(0, 0), aDevice.GetSize()));
         </code>
     */
     bool                        GetTextBoundRect( tools::Rectangle& rRect,
@@ -1550,7 +1536,7 @@ protected:
 public:
 
     void                        EnableMapMode( bool bEnable = true );
-    bool                        IsMapModeEnabled() const { return mbMap; }
+    bool                        IsMapModeEnabled() const { return maGeometry.IsMapModeEnabled(); }
 
     void                        SetMapMode();
     void                        SetMapMode( const MapMode& rNewMapMode );
@@ -1600,7 +1586,7 @@ public:
 
         @return the current offset in pixel
      */
-    SAL_WARN_UNUSED_RESULT Size GetPixelOffset() const { return Size(mnOutOffOrigX, mnOutOffOrigY);}
+    SAL_WARN_UNUSED_RESULT Size GetPixelOffset() const { return Size(maGeometry.GetXOffsetFromOriginInPixels(), maGeometry.GetYOffsetFromOriginInPixels());}
 
     SAL_WARN_UNUSED_RESULT Point LogicToPixel(const Point& rLogicPt) const;
     SAL_WARN_UNUSED_RESULT Size  LogicToPixel(const Size& rLogicSize) const;

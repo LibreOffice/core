@@ -87,7 +87,7 @@ void BibWindowContainer::dispose()
 void BibWindowContainer::Resize()
 {
     if( pChild )
-        GetChild()->SetSizePixel( GetOutputSizePixel() );
+        GetChild()->SetSizePixel( GetSize() );
 }
 
 void BibWindowContainer::GetFocus()

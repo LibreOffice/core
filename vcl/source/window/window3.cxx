@@ -86,7 +86,7 @@ bool Window::GetNativeControlRegion(ControlType nType, ControlPart nPart,
                                                rNativeBoundingRegion, rNativeContentRegion);
 }
 
-Size Window::GetOutputSizePixel() const { return GetOutDev()->GetOutputSizePixel(); }
+Size Window::GetSize() const { return GetOutDev()->GetSize(); }
 
 tools::Rectangle Window::GetOutputRectPixel() const { return GetOutDev()->GetOutputRectPixel(); }
 

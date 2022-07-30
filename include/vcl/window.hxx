@@ -1239,6 +1239,12 @@ public:
     /// Sets a custom clipboard for the window's frame, instead of creating it on-demand using css::datatransfer::clipboard::SystemClipboard.
     void SetClipboard(css::uno::Reference<css::datatransfer::clipboard::XClipboard> const & xClipboard);
 
+    tools::Long GetXFrameOffset() const;
+    void SetXFrameOffset(tools::Long nOffset);
+
+    tools::Long GetYFrameOffset() const;
+    void SetYFrameOffset(tools::Long nOffset);
+
     /*
      * Widgets call this to inform their owner container that the widget wants
      * to renegotiate its size. Should be called when a widget has a new size
@@ -1468,7 +1474,7 @@ public:
     void SetModalHierarchyHdl(const Link<bool, void>& rLink);
     void SetDumpAsPropertyTreeHdl(const Link<tools::JsonWriter&, void>& rLink);
 
-    Size                        GetOutputSizePixel() const;
+    Size                        GetSize() const;
     tools::Rectangle            GetOutputRectPixel() const;
 
     Point                       LogicToPixel( const Point& rLogicPt ) const;
@@ -1484,7 +1490,7 @@ public:
 
     Point                       PixelToLogic( const Point& rDevicePt ) const;
     Size                        PixelToLogic( const Size& rDeviceSize ) const;
-    tools::Rectangle                   PixelToLogic( const tools::Rectangle& rDeviceRect ) const;
+    tools::Rectangle            PixelToLogic( const tools::Rectangle& rDeviceRect ) const;
     tools::PolyPolygon          PixelToLogic( const tools::PolyPolygon& rDevicePolyPoly ) const;
     vcl::Region                 PixelToLogic( const vcl::Region& rDeviceRegion ) const;
     Point                       PixelToLogic( const Point& rDevicePt,

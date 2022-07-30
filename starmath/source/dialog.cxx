@@ -957,7 +957,7 @@ Point SmShowSymbolSet::OffsetPoint(const Point &rPoint) const
 void SmShowSymbolSet::Resize()
 {
     CustomWidgetController::Resize();
-    Size aWinSize(GetOutputSizePixel());
+    Size aWinSize(GetSize());
     if (aWinSize != m_aOldSize)
     {
         calccols(GetDrawingArea()->get_ref_device());
@@ -1090,7 +1090,7 @@ void SmShowSymbolSet::calccols(const vcl::RenderContext& rRenderContext)
     // Height of 16pt in pixels (matching 'aOutputSize')
     nLen = rRenderContext.LogicToPixel(Size(0, 16), MapMode(MapUnit::MapPoint)).Height();
 
-    Size aOutputSize(GetOutputSizePixel());
+    Size aOutputSize(GetSize());
 
     nColumns = aOutputSize.Width() / nLen;
     nRows = aOutputSize.Height() / nLen;
@@ -1156,7 +1156,7 @@ SmShowSymbol::SmShowSymbol()
 
 void SmShowSymbol::setFontSize(vcl::Font &rFont) const
 {
-    Size aSize(GetOutputSizePixel());
+    Size aSize(GetSize());
     rFont.SetFontSize(Size(0, aSize.Height() - aSize.Height() / 3));
 }
 
@@ -1400,7 +1400,7 @@ void SmShowChar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangl
     rRenderContext.SetTextColor(aWindowTextColor);
     rRenderContext.SetFillColor(aWindowColor);
 
-    Size aSize(GetOutputSizePixel());
+    Size aSize(GetSize());
     rRenderContext.DrawRect(tools::Rectangle(Point(0, 0), aSize));
 
     OUString aText(GetText());
@@ -1430,7 +1430,7 @@ void SmShowChar::SetSymbol( const SmSym *pSym )
 void SmShowChar::SetSymbol( sal_UCS4 cChar, const vcl::Font &rFont )
 {
     vcl::Font aFont( rFont );
-    Size aSize(GetOutputSizePixel());
+    Size aSize(GetSize());
     aFont.SetFontSize(Size(0, aSize.Height() - aSize.Height() / 3));
     aFont.SetAlignment(ALIGN_BASELINE);
     SetFont(aFont);

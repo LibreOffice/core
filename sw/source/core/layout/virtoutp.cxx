@@ -148,7 +148,7 @@ void SwLayVout::Enter(  SwViewShell *pShell, SwRect &rRect, bool bOn )
     tools::Rectangle aTmpRect( pO->LogicToPixel( aTmp.SVRect() ) );
 
     OSL_ENSURE( !m_pShell->GetWin()->IsReallyVisible() ||
-            aTmpRect.GetWidth() <= m_pShell->GetWin()->GetOutputSizePixel().Width() + 2,
+            aTmpRect.GetWidth() <= m_pShell->GetWin()->GetSize().Width() + 2,
             "Paintwidth bigger than visarea?" );
     // Does the rectangle fit in our buffer?
     if( !DoesFit( aTmpRect.GetSize() ) )

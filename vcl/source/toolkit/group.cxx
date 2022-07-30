@@ -168,12 +168,12 @@ void GroupBox::ImplDraw( OutputDevice* pDev, SystemTextColorFlags nSystemTextCol
 void GroupBox::FillLayoutData() const
 {
     mxLayoutData.emplace();
-    const_cast<GroupBox*>(this)->ImplDraw( const_cast<GroupBox*>(this)->GetOutDev(), SystemTextColorFlags::NONE, Point(), GetOutputSizePixel(), true );
+    const_cast<GroupBox*>(this)->ImplDraw( const_cast<GroupBox*>(this)->GetOutDev(), SystemTextColorFlags::NONE, Point(), GetSize(), true );
 }
 
 void GroupBox::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& )
 {
-    ImplDraw(&rRenderContext, SystemTextColorFlags::NONE, Point(), GetOutputSizePixel());
+    ImplDraw(&rRenderContext, SystemTextColorFlags::NONE, Point(), GetSize());
 }
 
 void GroupBox::Draw( OutputDevice* pDev, const Point& rPos,

@@ -689,7 +689,7 @@ namespace svt::table
         bool const i_assumeVerticalScrollbar, ::std::vector< tools::Long >& o_newColWidthsPixel ) const
     {
         // the available horizontal space
-        tools::Long gridWidthPixel = m_rAntiImpl.GetOutputSizePixel().Width();
+        tools::Long gridWidthPixel = m_rAntiImpl.GetSize().Width();
         ENSURE_OR_RETURN( !!m_pModel, "TableControl_Impl::impl_ni_calculateColumnWidths: not allowed without a model!", gridWidthPixel );
         if ( m_pModel->hasRowHeaders() && ( gridWidthPixel != 0 ) )
         {
@@ -970,7 +970,7 @@ namespace svt::table
 
         // determine the playground for the data cells (excluding headers)
         // TODO: what if the control is smaller than needed for the headers/scrollbars?
-        tools::Rectangle aDataCellPlayground( Point( 0, 0 ), m_rAntiImpl.GetOutputSizePixel() );
+        tools::Rectangle aDataCellPlayground( Point( 0, 0 ), m_rAntiImpl.GetSize() );
         aDataCellPlayground.SetLeft( m_nRowHeaderWidthPixel );
         aDataCellPlayground.SetTop( m_nColHeaderHeightPixel );
 
@@ -1742,7 +1742,7 @@ namespace svt::table
 
     ::Size TableControl_Impl::getTableSizePixel() const
     {
-        return m_pDataWindow->GetOutputSizePixel();
+        return m_pDataWindow->GetSize();
     }
 
 
@@ -1885,7 +1885,7 @@ namespace svt::table
         }
 
         if ( i_lastRow == ROW_INVALID )
-            aInvalidateRect.SetBottom( m_pDataWindow->GetOutputSizePixel().Height() );
+            aInvalidateRect.SetBottom( m_pDataWindow->GetSize().Height() );
 
         invalidateRect(aInvalidateRect);
     }
@@ -1927,7 +1927,7 @@ namespace svt::table
         DBG_ASSERT( m_pDataWindow, "TableControl_Impl::impl_getVisibleRows: no data window!" );
 
         return lcl_getRowsFittingInto(
-            m_pDataWindow->GetOutputSizePixel().Height() - m_nColHeaderHeightPixel,
+            m_pDataWindow->GetSize().Height() - m_nColHeaderHeightPixel,
             m_nRowHeightPixel,
             _bAcceptPartialRow
         );
@@ -1939,7 +1939,7 @@ namespace svt::table
         DBG_ASSERT( m_pDataWindow, "TableControl_Impl::impl_getVisibleColumns: no data window!" );
 
         return lcl_getColumnsVisibleWithin(
-            tools::Rectangle( Point( 0, 0 ), m_pDataWindow->GetOutputSizePixel() ),
+            tools::Rectangle( Point( 0, 0 ), m_pDataWindow->GetSize() ),
             m_nLeftColumn,
             *this,
             _bAcceptPartialCol
@@ -2036,7 +2036,7 @@ namespace svt::table
             // scroll the view port, if possible
             tools::Long nPixelDelta = m_nRowHeightPixel * ( m_nTopRow - nOldTopRow );
 
-            tools::Rectangle aDataArea( Point( 0, m_nColHeaderHeightPixel ), m_pDataWindow->GetOutputSizePixel() );
+            tools::Rectangle aDataArea( Point( 0, m_nColHeaderHeightPixel ), m_pDataWindow->GetSize() );
 
             if  (   m_pDataWindow->GetBackground().IsScrollable()
                 &&  std::abs( nPixelDelta ) < aDataArea.GetHeight()
@@ -2098,7 +2098,7 @@ namespace svt::table
             // Same for onEndScroll
 
             // scroll the view port, if possible
-            const tools::Rectangle aDataArea( Point( m_nRowHeaderWidthPixel, 0 ), m_pDataWindow->GetOutputSizePixel() );
+            const tools::Rectangle aDataArea( Point( m_nRowHeaderWidthPixel, 0 ), m_pDataWindow->GetSize() );
 
             tools::Long nPixelDelta =
                     m_aColumnWidths[ nOldLeftColumn ].getStart()

@@ -119,7 +119,7 @@ css::awt::Rectangle SvxShowCharSetAcc::implGetBounds()
     if (m_pParent)
     {
         const Point   aOutPos;//( m_pParent->GetPosPixel() );
-        Size          aOutSize( m_pParent->GetOutputSizePixel());
+        Size          aOutSize( m_pParent->GetSize());
 
         aRet.X = aOutPos.X();
         aRet.Y = aOutPos.Y();
@@ -542,7 +542,7 @@ awt::Rectangle SvxShowCharSetItemAcc::implGetBounds(  )
     if( mpParent )
     {
         tools::Rectangle   aRect( mpParent->maRect );
-        tools::Rectangle   aParentRect(Point(), mpParent->mrParent.GetOutputSizePixel());
+        tools::Rectangle   aParentRect(Point(), mpParent->mrParent.GetSize());
 
         aRect.Intersection( aParentRect );
 

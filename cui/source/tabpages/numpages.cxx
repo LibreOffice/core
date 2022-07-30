@@ -2180,7 +2180,7 @@ SvxNumberingPreview::SvxNumberingPreview()
 // paint preview of numeration
 void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& /*rRect*/)
 {
-    Size aSize(rRenderContext.PixelToLogic(GetOutputSizePixel()));
+    Size aSize(rRenderContext.PixelToLogic(GetSize()));
 
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     const Color aBackColor = rStyleSettings.GetFieldColor();

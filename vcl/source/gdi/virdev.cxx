@@ -166,17 +166,17 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     }
 
     mnBitCount = pOutDev->GetBitCount();
-    mnOutWidth      = nDX;
-    mnOutHeight     = nDY;
+    SetWidth(nDX);
+    SetHeight(nDY);
 
     mbScreenComp    = pOutDev->IsScreenComp();
 
     mbDevOutput     = true;
     mxFontCollection = pSVData->maGDIData.mxScreenFontList;
     mxFontCache     = pSVData->maGDIData.mxScreenFontCache;
-    mnDPIX          = pOutDev->mnDPIX;
-    mnDPIY          = pOutDev->mnDPIY;
-    mnDPIScalePercentage = pOutDev->mnDPIScalePercentage;
+    SetDPIX(pOutDev->GetDPIX());
+    SetDPIY(pOutDev->GetDPIY());
+    SetDPIScalePercentage(pOutDev->GetDPIScalePercentage());
     maFont          = pOutDev->maFont;
 
     if( maTextColor != pOutDev->maTextColor )
@@ -261,7 +261,7 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
 
     if ( !mpVirDev )
         return false;
-    else if ( rNewSize == GetOutputSizePixel() )
+    else if ( rNewSize == GetSize() )
     {
         if ( bErase )
             Erase();
@@ -287,8 +287,8 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
 
         if ( bRet )
         {
-            mnOutWidth  = rNewSize.Width();
-            mnOutHeight = rNewSize.Height();
+            SetWidth(rNewSize.Width());
+            SetHeight(rNewSize.Height());
             Erase();
         }
     }
@@ -311,21 +311,23 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
             {
                 tools::Long nWidth;
                 tools::Long nHeight;
-                if ( mnOutWidth < nNewWidth )
-                    nWidth = mnOutWidth;
+                if ( GetWidth() < nNewWidth )
+                    nWidth = GetWidth();
                 else
                     nWidth = nNewWidth;
-                if ( mnOutHeight < nNewHeight )
-                    nHeight = mnOutHeight;
+
+                if ( GetHeight() < nNewHeight )
+                    nHeight = GetHeight();
                 else
                     nHeight = nNewHeight;
+
                 SalTwoRect aPosAry(0, 0, nWidth, nHeight, 0, 0, nWidth, nHeight);
                 pGraphics->CopyBits( aPosAry, *mpGraphics, *this, *this );
                 pNewVirDev->ReleaseGraphics( pGraphics );
                 ReleaseGraphics();
                 mpVirDev = std::move(pNewVirDev);
-                mnOutWidth  = rNewSize.Width();
-                mnOutHeight = rNewSize.Height();
+                SetWidth(rNewSize.Width());
+                SetHeight(rNewSize.Height());
                 bRet = true;
             }
             else
@@ -362,7 +364,7 @@ bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
         if (meAlphaFormat != DeviceFormat::NONE)
         {
             // #110958# Setup alpha bitmap
-            if(mpAlphaVDev && mpAlphaVDev->GetOutputSizePixel() != rNewSize)
+            if(mpAlphaVDev && mpAlphaVDev->GetSize() != rNewSize)
             {
                 mpAlphaVDev.disposeAndClear();
             }
@@ -458,9 +460,9 @@ bool VirtualDevice::IsVirtual() const
 
 void VirtualDevice::ImplSetReferenceDevice( RefDevMode i_eRefDevMode, sal_Int32 i_nDPIX, sal_Int32 i_nDPIY )
 {
-    mnDPIX = i_nDPIX;
-    mnDPIY = i_nDPIY;
-    mnDPIScalePercentage = 100;
+    SetDPIX(i_nDPIX);
+    SetDPIY(i_nDPIY);
+    SetDPIScalePercentage(100);
 
     EnableOutput( false );  // prevent output on reference device
     mbScreenComp = false;

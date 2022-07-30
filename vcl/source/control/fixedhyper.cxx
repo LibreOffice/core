@@ -60,7 +60,7 @@ void FixedHyperlink::Initialize()
 
 bool FixedHyperlink::ImplIsOverText(Point aPosition) const
 {
-    Size aSize = GetOutputSizePixel();
+    Size aSize = GetSize();
 
     bool bIsOver = false;
 

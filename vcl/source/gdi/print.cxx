@@ -155,9 +155,9 @@ void Printer::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask,
     tools::Long nX, nY; // , nWorkX, nWorkY, nWorkWidth, nWorkHeight;
     std::unique_ptr<tools::Long[]> pMapX(new tools::Long[ nSrcWidth + 1 ]);
     std::unique_ptr<tools::Long[]> pMapY(new tools::Long[ nSrcHeight + 1 ]);
-    const bool bOldMap = mbMap;
+    const bool bOldMap = IsMapModeEnabled();
 
-    mbMap = false;
+    EnableMapMode(false);
 
     // create forward mapping tables
     for( nX = 0; nX <= nSrcWidth; nX++ )
@@ -182,7 +182,7 @@ void Printer::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask,
         DrawBitmap(aMapPt, aMapSz, Point(), aBandBmp.GetSizePixel(), aBandBmp);
     }
 
-    mbMap = bOldMap;
+    EnableMapMode(bOldMap);
 
 }
 
@@ -268,7 +268,7 @@ void Printer::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
     Push( vcl::PushFlags::CLIPREGION | vcl::PushFlags::LINECOLOR );
     IntersectClipRegion(vcl::Region(rPolyPoly));
     SetLineColor( GetFillColor() );
-    const bool bOldMap = mbMap;
+    const bool bOldMap = IsMapModeEnabled();
     EnableMapMode( false );
 
     if(nMove)
@@ -683,8 +683,8 @@ void Printer::ImplInitDisplay()
     mpDisplayDev = VclPtr<VirtualDevice>::Create();
     mxFontCollection    = pSVData->maGDIData.mxScreenFontList;
     mxFontCache         = pSVData->maGDIData.mxScreenFontCache;
-    mnDPIX              = mpDisplayDev->mnDPIX;
-    mnDPIY              = mpDisplayDev->mnDPIY;
+    SetDPIX(mpDisplayDev->GetDPIX());
+    SetDPIY(mpDisplayDev->GetDPIY());
 }
 
 void Printer::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
@@ -736,10 +736,10 @@ void Printer::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
     std::unique_ptr<tools::Long[]> pMapX( new tools::Long[ nSrcWidth + 1 ] );
     std::unique_ptr<tools::Long[]> pMapY( new tools::Long[ nSrcHeight + 1 ] );
     GDIMetaFile*    pOldMetaFile = mpMetaFile;
-    const bool      bOldMap = mbMap;
+    const bool      bOldMap = IsMapModeEnabled();
 
     mpMetaFile = nullptr;
-    mbMap = false;
+    EnableMapMode(false);
     Push( vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR );
     SetLineColor( rMaskColor );
     SetFillColor( rMaskColor );
@@ -769,7 +769,7 @@ void Printer::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
     }
 
     Pop();
-    mbMap = bOldMap;
+    EnableMapMode(bOldMap);
     mpMetaFile = pOldMetaFile;
 }
 
@@ -823,11 +823,16 @@ void Printer::ImplUpdatePageData()
     if ( !AcquireGraphics() )
         return;
 
-    mpGraphics->GetResolution( mnDPIX, mnDPIY );
-    mpInfoPrinter->GetPageInfo( &maJobSetup.ImplGetConstData(),
-                                mnOutWidth, mnOutHeight,
-                                maPageOffset,
-                                maPaperSize );
+    sal_Int32 nDPIX, nDPIY;
+    mpGraphics->GetResolution( nDPIX, nDPIY );
+    SetDPIX(nDPIX);
+    SetDPIY(nDPIY);
+
+    tools::Long nWidth, nHeight;
+    mpInfoPrinter->GetPageInfo(&maJobSetup.ImplGetConstData(), nWidth, nHeight,
+                               maPageOffset, maPaperSize);
+    SetWidth(nWidth);
+    SetHeight(nHeight);
 }
 
 void Printer::ImplUpdateFontList()
@@ -1656,7 +1661,7 @@ css::awt::DeviceInfo Printer::GetDeviceInfo() const
 {
     Size aDevSz = GetPaperSizePixel();
     css::awt::DeviceInfo aInfo = GetCommonDeviceInfo(aDevSz);
-    Size aOutSz = GetOutputSizePixel();
+    Size aOutSz = GetSize();
     Point aOffset = GetPageOffset();
     aInfo.LeftInset = aOffset.X();
     aInfo.TopInset = aOffset.Y();
@@ -1683,7 +1688,7 @@ Size Printer::GetWaveLineSize(tools::Long nLineWidth) const
 {
     // FIXME - do we have a bug here? If the linewidth is 0, then we will return
     // Size(0, 0) - is this correct?
-    return Size(nLineWidth, ((nLineWidth*mnDPIX)+(mnDPIY/2))/mnDPIY);
+    return Size(nLineWidth, ((nLineWidth*GetDPIX())+(GetDPIY()/2))/GetDPIY());
 }
 
 void Printer::SetSystemTextColor(SystemTextColorFlags, bool)

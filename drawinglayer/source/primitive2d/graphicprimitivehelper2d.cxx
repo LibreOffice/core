@@ -95,7 +95,7 @@ namespace drawinglayer::primitive2d
                 if (!isValidData())
                     return;
 
-                const Size aCurrent(maVirtualDevice->GetOutputSizePixel());
+                const Size aCurrent(maVirtualDevice->GetSize());
                 const Size aTarget(maAnimation.GetDisplaySizePixel());
 
                 if (aCurrent != aTarget)
@@ -164,7 +164,7 @@ namespace drawinglayer::primitive2d
             Primitive2DReference createFromBuffer() const
             {
                 // create BitmapEx by extracting from VirtualDevices
-                const Bitmap aMainBitmap(maVirtualDevice->GetBitmap(Point(), maVirtualDevice->GetOutputSizePixel()));
+                const Bitmap aMainBitmap(maVirtualDevice->GetBitmap(Point(), maVirtualDevice->GetSize()));
                 bool useAlphaMask = false;
 #if defined(MACOSX) || defined(IOS)
                 useAlphaMask = true;
@@ -176,12 +176,12 @@ namespace drawinglayer::primitive2d
                 BitmapEx bitmap;
                 if( useAlphaMask )
                 {
-                    const AlphaMask aMaskBitmap(maVirtualDeviceMask->GetBitmap(Point(), maVirtualDeviceMask->GetOutputSizePixel()));
+                    const AlphaMask aMaskBitmap(maVirtualDeviceMask->GetBitmap(Point(), maVirtualDeviceMask->GetSize()));
                     bitmap = BitmapEx(aMainBitmap, aMaskBitmap);
                 }
                 else
                 {
-                    const Bitmap aMaskBitmap(maVirtualDeviceMask->GetBitmap(Point(), maVirtualDeviceMask->GetOutputSizePixel()));
+                    const Bitmap aMaskBitmap(maVirtualDeviceMask->GetBitmap(Point(), maVirtualDeviceMask->GetSize()));
                     bitmap = BitmapEx(aMainBitmap, aMaskBitmap);
                 }
 
@@ -262,7 +262,7 @@ namespace drawinglayer::primitive2d
                             if (aAlphaMask.IsEmpty())
                             {
                                 const Point aEmpty;
-                                const ::tools::Rectangle aRect(aEmpty, maVirtualDeviceMask->GetOutputSizePixel());
+                                const ::tools::Rectangle aRect(aEmpty, maVirtualDeviceMask->GetSize());
                                 const Wallpaper aWallpaper(COL_BLACK);
                                 maVirtualDeviceMask->DrawWallpaper(aRect, aWallpaper);
                             }

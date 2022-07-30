@@ -132,7 +132,6 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
     basegfx::B2DVector aFontScaling, aTranslate;
     double fRotate, fShearX;
     aLocalTransform.decompose(aFontScaling, aTranslate, fRotate, fShearX);
-
     bool bPrimitiveAccepted(false);
 
     // tdf#95581: Assume tiny shears are rounding artefacts or whatever and can be ignored,

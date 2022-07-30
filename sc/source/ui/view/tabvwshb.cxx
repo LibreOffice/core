@@ -511,7 +511,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 
                         if(pNewDBField)
                         {
-                            tools::Rectangle aVisArea = pWin->PixelToLogic(tools::Rectangle(Point(0,0), pWin->GetOutputSizePixel()));
+                            tools::Rectangle aVisArea = pWin->PixelToLogic(tools::Rectangle(Point(0,0), pWin->GetSize()));
                             Point aObjPos(aVisArea.Center());
                             Size aObjSize(pNewDBField->GetLogicRect().GetSize());
                             aObjPos.AdjustX( -(aObjSize.Width() / 2) );

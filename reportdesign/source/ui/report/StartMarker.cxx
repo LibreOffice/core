@@ -98,7 +98,7 @@ void OStartMarker::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
 {
     rRenderContext.Push(vcl::PushFlags::TEXTCOLOR);
 
-    Size aSize(GetOutputSizePixel());
+    Size aSize(GetSize());
     const tools::Long nCornerWidth = tools::Long(CORNER_SPACE * double(GetMapMode().GetScaleX()));
 
     if (isCollapsed())
@@ -170,7 +170,7 @@ void OStartMarker::MouseButtonUp( const MouseEvent& rMEvt )
 
     Point aPos( rMEvt.GetPosPixel());
 
-    const Size aOutputSize = GetOutputSizePixel();
+    const Size aOutputSize = GetSize();
     if( aPos.X() > aOutputSize.Width() || aPos.Y() > aOutputSize.Height() )
         return;
     if ( rMEvt.GetClicks() == 2 || m_aImageRect.Contains( aPos ) )
@@ -215,7 +215,7 @@ void OStartMarker::ImplInitSettings()
 
 void OStartMarker::Resize()
 {
-    const Size aOutputSize( GetOutputSizePixel() );
+    const Size aOutputSize( GetSize() );
     const tools::Long nOutputWidth  = aOutputSize.Width();
     const tools::Long nOutputHeight = aOutputSize.Height();
 

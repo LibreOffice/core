@@ -507,7 +507,7 @@ void BrowserDataWin::StartRowDividerDrag( const Point& _rStartPos )
     GetParent()->bRowDividerDrag = true;
     GetParent()->ImplStartTracking();
 
-    tools::Rectangle aDragSplitRect( 0, m_nDragRowDividerLimit, GetOutputSizePixel().Width(), nDragRowDividerCurrentPos );
+    tools::Rectangle aDragSplitRect( 0, m_nDragRowDividerLimit, GetSize().Width(), nDragRowDividerCurrentPos );
     ShowTracking( aDragSplitRect );
 
     StartTracking();
@@ -521,8 +521,8 @@ void BrowserDataWin::Tracking( const TrackingEvent& rTEvt )
 
     Point aMousePos = rTEvt.GetMouseEvent().GetPosPixel();
     // stop resizing at our bottom line
-    if ( aMousePos.Y() > GetOutputSizePixel().Height() )
-        aMousePos.setY( GetOutputSizePixel().Height() );
+    if ( aMousePos.Y() > GetSize().Height() )
+        aMousePos.setY( GetSize().Height() );
 
     if ( rTEvt.IsTrackingEnded() )
     {
@@ -550,7 +550,7 @@ void BrowserDataWin::Tracking( const TrackingEvent& rTEvt )
         if ( nDragRowDividerCurrentPos < m_nDragRowDividerLimit + GetParent()->QueryMinimumRowHeight() )
             nDragRowDividerCurrentPos = m_nDragRowDividerLimit + GetParent()->QueryMinimumRowHeight();
 
-        tools::Rectangle aDragSplitRect( 0, m_nDragRowDividerLimit, GetOutputSizePixel().Width(), nDragRowDividerCurrentPos );
+        tools::Rectangle aDragSplitRect( 0, m_nDragRowDividerLimit, GetSize().Width(), nDragRowDividerCurrentPos );
         ShowTracking( aDragSplitRect );
     }
 }
@@ -637,7 +637,7 @@ void BrowserDataWin::Invalidate( InvalidateFlags nFlags )
     if ( !GetUpdateMode() )
     {
         aInvalidRegion.clear();
-        aInvalidRegion.emplace_back( Point( 0, 0 ), GetOutputSizePixel() );
+        aInvalidRegion.emplace_back( Point( 0, 0 ), GetSize() );
     }
     else
         Window::Invalidate( nFlags );

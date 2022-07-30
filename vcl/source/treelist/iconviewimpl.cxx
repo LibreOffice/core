@@ -362,7 +362,7 @@ void IconViewImpl::AdjustScrollBars( Size& rSize )
 
     sal_uInt16 nResult = 0;
 
-    Size aOSize( m_pView->Control::GetOutputSizePixel() );
+    Size aOSize( m_pView->Control::GetSize() );
 
     const WinBits nWindowStyle = m_pView->GetStyle();
     bool bVerSBar = ( nWindowStyle & WB_VSCROLL ) != 0;

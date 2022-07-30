@@ -727,7 +727,7 @@ void SvxCropExample::Paint(vcl::RenderContext& rRenderContext, const ::tools::Re
     rRenderContext.SetMapMode(m_aMapMode);
 
     // Win BG
-    const Size aWinSize(rRenderContext.PixelToLogic(GetOutputSizePixel()));
+    const Size aWinSize(rRenderContext.PixelToLogic(GetSize()));
     rRenderContext.SetLineColor();
     rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetWindowColor());
     rRenderContext.DrawRect(::tools::Rectangle(Point(), aWinSize));
@@ -790,7 +790,7 @@ void SvxCropExample::SetFrameSize( const Size& rSz )
         m_aFrameSize.setWidth( 1 );
     if (!m_aFrameSize.Height())
         m_aFrameSize.setHeight( 1 );
-    Size aWinSize( GetOutputSizePixel() );
+    Size aWinSize( GetSize() );
     Fraction aXScale( aWinSize.Width() * 4, m_aFrameSize.Width() * 5 );
     Fraction aYScale( aWinSize.Height() * 4, m_aFrameSize.Height() * 5 );
 

@@ -95,7 +95,7 @@ namespace dbaui
         {
             // calc pos and size of the splitter
             Point aSplitPos     = m_pSplitter->GetPosPixel();
-            Size aSplitSize     = m_pSplitter->GetOutputSizePixel();
+            Size aSplitSize     = m_pSplitter->GetSize();
             aSplitSize.setWidth( aPlayground.GetWidth() );
 
             if ( aSplitPos.Y() <= aPlayground.Top() )
@@ -198,7 +198,7 @@ namespace dbaui
         Reference < XFrames > xFrames = xSup->getFrames();
         xFrames->append( Reference<XFrame>(m_xBeamer,UNO_QUERY_THROW) );
 
-        Size aSize = GetOutputSizePixel();
+        Size aSize = GetSize();
         Size aBeamer(aSize.Width(),sal_Int32(aSize.Height()*0.33));
 
         const tools::Long  nFrameHeight = LogicToPixel(Size(0, 3), MapMode(MapUnit::MapAppFont)).Height();

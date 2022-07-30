@@ -1172,7 +1172,7 @@ void SvxShowText::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
 
     const OUString aText = GetText();
 
-    Size aSize(GetOutputSizePixel());
+    Size aSize(GetSize());
     tools::Long nAvailWidth = aSize.Width();
     tools::Long nWinHeight = aSize.Height();
 
@@ -1247,7 +1247,7 @@ void SvxShowText::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
 
 void SvxShowText::SetFont( const vcl::Font& rFont )
 {
-    tools::Long nWinHeight = GetOutputSizePixel().Height();
+    tools::Long nWinHeight = GetSize().Height();
 
     m_aFont = rFont;
     m_aFont.SetWeight(WEIGHT_NORMAL);

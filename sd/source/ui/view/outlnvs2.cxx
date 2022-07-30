@@ -130,7 +130,7 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
         {
             SetZoom( std::min<::tools::Long>( GetActiveWindow()->GetZoom() * 2, GetActiveWindow()->GetMaxZoom() ) );
             ::tools::Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(0,0),
-                                             GetActiveWindow()->GetOutputSizePixel()) );
+                                             GetActiveWindow()->GetSize()) );
             mpZoomList->InsertZoomRect(aVisAreaWin);
             Invalidate( SID_ATTR_ZOOM );
             Invalidate( SID_ZOOM_IN );
@@ -145,7 +145,7 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
         {
             SetZoom( 100 );
             ::tools::Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(0,0),
-                                             GetActiveWindow()->GetOutputSizePixel()) );
+                                             GetActiveWindow()->GetSize()) );
             mpZoomList->InsertZoomRect(aVisAreaWin);
             Invalidate( SID_ATTR_ZOOM );
             Invalidate( SID_ATTR_ZOOMSLIDER );
@@ -158,7 +158,7 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
         {
             SetZoom( std::max<::tools::Long>( GetActiveWindow()->GetZoom() / 2, GetActiveWindow()->GetMinZoom() ) );
             ::tools::Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(0,0),
-                                             GetActiveWindow()->GetOutputSizePixel()) );
+                                             GetActiveWindow()->GetSize()) );
             mpZoomList->InsertZoomRect(aVisAreaWin);
             Invalidate( SID_ATTR_ZOOM );
             Invalidate( SID_ZOOM_OUT);

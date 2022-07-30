@@ -105,7 +105,7 @@ uno::Reference<awt::XControlContainer> const & SdrPageWindow::GetControlContaine
 
             OutputDevice& rOutDev = rPaintWindow.GetOutputDevice();
             Point aPosPix = rOutDev.GetMapMode().GetOrigin();
-            Size aSizePix = rOutDev.GetOutputSizePixel();
+            Size aSizePix = rOutDev.GetSize();
 
             uno::Reference< awt::XWindow > xContComp(mpImpl->mxControlContainer, uno::UNO_QUERY);
             if( xContComp.is() )

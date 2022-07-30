@@ -81,7 +81,7 @@ void VclAnimationRendererTest::testDrawToPos()
     pAnimationRenderer->drawToIndex(2);
     pAnimationRenderer->drawToIndex(10);
 
-    CPPUNIT_ASSERT_EQUAL(Size(1, 1), pTestRC->GetOutputSizePixel());
+    CPPUNIT_ASSERT_EQUAL(Size(1, 1), pTestRC->GetSize());
 }
 
 void VclAnimationRendererTest::testGetPosSizeWindow()

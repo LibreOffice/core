@@ -392,7 +392,7 @@ void ScAccessiblePreviewHeaderCell::FillTableInfo() const
         Size aOutputSize;
         vcl::Window* pWindow = mpViewShell->GetWindow();
         if ( pWindow )
-            aOutputSize = pWindow->GetOutputSizePixel();
+            aOutputSize = pWindow->GetSize();
         tools::Rectangle aVisRect( Point(), aOutputSize );
 
         mpTableInfo.reset( new ScPreviewTableInfo );

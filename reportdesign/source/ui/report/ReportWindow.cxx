@@ -162,7 +162,7 @@ void OReportWindow::Resize()
     if ( m_aViewsWindow->empty() )
         return;
 
-    const Size aTotalOutputSize = GetOutputSizePixel();
+    const Size aTotalOutputSize = GetSize();
     Fraction aStartWidth(tools::Long(REPORT_STARTMARKER_WIDTH)*m_pView->getController().getZoomValue(),100);
 
     const Point aOffset = LogicToPixel(Point(SECTION_OFFSET, 0), MapMode(MapUnit::MapAppFont));

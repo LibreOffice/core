@@ -55,7 +55,7 @@ class BackendTest : public test::BootstrapFixture
     {
         if (mbExportBitmap)
         {
-            BitmapEx aBitmapEx(device->GetBitmapEx(Point(0, 0), device->GetOutputSizePixel()));
+            BitmapEx aBitmapEx(device->GetBitmapEx(Point(0, 0), device->GetSize()));
             SvFileStream aStream(filename, StreamMode::WRITE | StreamMode::TRUNC);
             GraphicFilter::GetGraphicFilter().compressAsPNG(aBitmapEx, aStream);
         }

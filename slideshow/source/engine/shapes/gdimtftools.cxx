@@ -288,7 +288,7 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
                 if( aMask.IsEmpty() )
                 {
                     const tools::Rectangle aRect(aEmptyPoint,
-                                          pVDevMask->GetOutputSizePixel());
+                                          pVDevMask->GetSize());
                     const Wallpaper aWallpaper(COL_BLACK);
                     pVDevMask->DrawWallpaper(aRect,
                                             aWallpaper);

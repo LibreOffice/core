@@ -71,7 +71,7 @@ namespace sd {
 
 void AnnotationTextWindow::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect)
 {
-    Size aSize = GetOutputSizePixel();
+    Size aSize = GetSize();
 
     const bool bHighContrast = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
     if (!bHighContrast)

@@ -143,7 +143,7 @@ bool SwOneExampleFrame::Command(const CommandEvent& rCEvt)
 
 void SwOneExampleFrame::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    Size aSize(GetOutputSizePixel());
+    Size aSize(GetSize());
     // m_xVirDev instead of rRenderContext just to avoid overlays in writer re-triggering
     // invalidate on rRenderContext if it is a vcl::Window, which is the "classic" gen mode
     m_xVirDev->SetOutputSizePixel(aSize);
@@ -401,7 +401,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer, void )
         }
 
         uno::Reference<awt::XWindow> xWin = xFrame->getContainerWindow();
-        Size aWinSize(GetOutputSizePixel());
+        Size aWinSize(GetSize());
         xWin->setPosSize(0, 0, aWinSize.Width(), aWinSize.Height(), awt::PosSize::SIZE);
 
         // can only be done here - the SFX changes the ScrollBar values

@@ -445,7 +445,7 @@ SvResizeWindow::SvResizeWindow
     OSL_ENSURE( pParent != nullptr && pWrapper != nullptr, "Wrong initialization of hatch window!" );
     SetBackground();
     SetAccessibleRole( css::accessibility::AccessibleRole::EMBEDDED_OBJECT );
-    m_aResizer.SetOuterRectPixel( tools::Rectangle( Point(), GetOutputSizePixel() ) );
+    m_aResizer.SetOuterRectPixel( tools::Rectangle( Point(), GetSize() ) );
 }
 
 /*************************************************************************
@@ -580,7 +580,7 @@ void SvResizeWindow::KeyInput( const KeyEvent & rEvt )
 void SvResizeWindow::Resize()
 {
     m_aResizer.InvalidateBorder( this ); // old area
-    m_aResizer.SetOuterRectPixel( tools::Rectangle( Point(), GetOutputSizePixel() ) );
+    m_aResizer.SetOuterRectPixel( tools::Rectangle( Point(), GetSize() ) );
     m_aResizer.InvalidateBorder( this ); // new area
 }
 

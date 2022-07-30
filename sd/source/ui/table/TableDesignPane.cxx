@@ -288,7 +288,7 @@ void TableValueSet::Resize()
     if( GetItemCount() <= 0 )
         return;
 
-    Size aValueSetSize = GetOutputSizePixel();
+    Size aValueSetSize = GetSize();
 
     Image aImage = GetItemImage(GetItemId(0));
     Size aItemSize = aImage.GetSizePixel();

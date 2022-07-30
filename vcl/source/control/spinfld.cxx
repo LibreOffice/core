@@ -97,7 +97,7 @@ bool ImplDrawNativeSpinfield(vcl::RenderContext& rRenderContext, vcl::Window con
             vcl::RenderContext* pContext = &rRenderContext;
             vcl::Region oldRgn;
             Point aPt;
-            Size aSize(pBorder->GetOutputSizePixel());    // the size of the border window, i.e., the whole control
+            Size aSize(pBorder->GetSize());    // the size of the border window, i.e., the whole control
             tools::Rectangle aNatRgn(aPt, aSize);
 
             if (!pWin->SupportsDoubleBuffering())
@@ -401,7 +401,7 @@ void SpinField::MouseButtonDown( const MouseEvent& rMEvt )
         {
             // put DropDownButton to the right
             mbInDropDown = ShowDropDown( !mbInDropDown );
-            Invalidate(tools::Rectangle(Point(), GetOutputSizePixel()));
+            Invalidate(tools::Rectangle(Point(), GetSize()));
         }
 
         if (mbUpperIn || mbLowerIn)
@@ -512,7 +512,7 @@ bool SpinField::EventNotify(NotifyEvent& rNEvt)
                     else if ((nMod == KEY_MOD2) && !mbInDropDown && (GetStyle() & WB_DROPDOWN))
                     {
                         mbInDropDown = ShowDropDown(true);
-                        Invalidate(tools::Rectangle(Point(), GetOutputSizePixel()));
+                        Invalidate(tools::Rectangle(Point(), GetSize()));
                         bDone = true;
                     }
                 }
@@ -676,7 +676,7 @@ void SpinField::ImplCalcButtonAreas(const OutputDevice* pDev, const Size& rOutSz
             Point aPoint;
 
             // use the full extent of the control
-            tools::Rectangle aArea( aPoint, pBorder->GetOutputSizePixel() );
+            tools::Rectangle aArea( aPoint, pBorder->GetSize() );
 
             bNativeRegionOK =
                 pWin->GetNativeControlRegion(ControlType::Spinbox, ControlPart::ButtonUp,
@@ -719,7 +719,7 @@ void SpinField::Resize()
         return;
 
     Control::Resize();
-    Size aSize = GetOutputSizePixel();
+    Size aSize = GetSize();
     bool bSubEditPositioned = false;
 
     if (GetStyle() & (WB_SPIN | WB_DROPDOWN))
@@ -732,7 +732,7 @@ void SpinField::Resize()
 
         // use the full extent of the control
         vcl::Window *pBorder = GetWindow( GetWindowType::Border );
-        tools::Rectangle aArea( aPoint, pBorder->GetOutputSizePixel() );
+        tools::Rectangle aArea( aPoint, pBorder->GetSize() );
 
         // adjust position and size of the edit field
         if (GetNativeControlRegion(ControlType::Spinbox, ControlPart::SubEdit, aArea, ControlState::NONE,
@@ -905,7 +905,7 @@ bool SpinField::PreNotify(NotifyEvent& rNEvt)
 void SpinField::EndDropDown()
 {
     mbInDropDown = false;
-    Invalidate(tools::Rectangle(Point(), GetOutputSizePixel()));
+    Invalidate(tools::Rectangle(Point(), GetSize()));
 }
 
 bool SpinField::ShowDropDown( bool )

@@ -254,7 +254,7 @@ void SfxTitleDockingWindow::SetWrappedWindow( vcl::Window* const pWindow )
     if (m_pWrappedWindow)
     {
         m_pWrappedWindow->SetParent(this);
-        m_pWrappedWindow->SetSizePixel( GetOutputSizePixel() );
+        m_pWrappedWindow->SetSizePixel( GetSize() );
         m_pWrappedWindow->Show();
     }
 }
@@ -266,7 +266,7 @@ void SfxTitleDockingWindow::StateChanged( StateChangedType nType )
         vcl::Window* pWindow = GetWrappedWindow();
         if ( pWindow )
         {
-            pWindow->SetSizePixel( GetOutputSizePixel() );
+            pWindow->SetSizePixel( GetSize() );
             pWindow->Show();
         }
     }
@@ -278,14 +278,14 @@ void SfxTitleDockingWindow::Resize()
 {
     SfxDockingWindow::Resize();
     if (m_pWrappedWindow)
-        m_pWrappedWindow->SetSizePixel( GetOutputSizePixel() );
+        m_pWrappedWindow->SetSizePixel( GetSize() );
 }
 
 void SfxTitleDockingWindow::Resizing( Size &rSize )
 {
     SfxDockingWindow::Resizing( rSize );
     if (m_pWrappedWindow)
-        m_pWrappedWindow->SetSizePixel( GetOutputSizePixel() );
+        m_pWrappedWindow->SetSizePixel( GetSize() );
 }
 
 static bool lcl_checkDockingWindowID( sal_uInt16 nID )
@@ -788,7 +788,7 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
     if (pInfo && (pInfo->nFlags & SfxChildWindowFlags::FORCEDOCK))
         pImpl->bDockingPrevented = true;
 
-    pImpl->aSplitSize = GetOutputSizePixel();
+    pImpl->aSplitSize = GetSize();
     if ( !GetFloatingSize().Width() )
     {
         Size aMinSize( GetMinOutputSizePixel() );
@@ -1533,7 +1533,7 @@ IMPL_LINK_NOARG(SfxDockingWindow, TimerHdl, Timer *, void)
     pImpl->aMoveIdle.Stop();
     if ( IsReallyVisible() && IsFloatingMode() )
     {
-        SetFloatingSize( GetOutputSizePixel() );
+        SetFloatingSize( GetSize() );
         pImpl->aWinState = GetFloatingWindow()->GetWindowState();
         SfxWorkWindow *pWorkWin = pBindings->GetWorkWindow_Impl();
         pWorkWin->ConfigChild_Impl( SfxChildIdentifier::SPLITWINDOW, SfxDockingConfig::ALIGNDOCKINGWINDOW, pMgr->GetType() );

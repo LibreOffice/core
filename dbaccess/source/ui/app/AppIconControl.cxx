@@ -125,7 +125,7 @@ void OApplicationIconControl::Resize()
 {
     // fill the full width of the allocated area and give two lines of space to
     // center the title in
-    setItemDimensions(GetOutputSizePixel().Width(), m_nMaxHeight, GetTextHeight() * 2, 0);
+    setItemDimensions(GetSize().Width(), m_nMaxHeight, GetTextHeight() * 2, 0);
     ThumbnailView::Resize();
 }
 

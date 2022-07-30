@@ -304,7 +304,7 @@ Svx3DWin::Svx3DWin(SfxBindings* pInBindings, SfxChildWindow *pCW, vcl::Window* p
     // Preview callback
     m_xCtlLightPreview->SetUserSelectionChangeCallback(LINK( this, Svx3DWin, ChangeSelectionCallbackHdl ));
 
-    aSize = GetOutputSizePixel();
+    aSize = GetSize();
     SetMinOutputSizePixel( aSize );
 
     Construct();
@@ -2149,7 +2149,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
 
 void Svx3DWin::Resize()
 {
-    Size aWinSize( GetOutputSizePixel() ); // why rSize in Resizing()?
+    Size aWinSize( GetSize() ); // why rSize in Resizing()?
 
     if( aWinSize.Height() >= GetMinOutputSizePixel().Height() &&
         aWinSize.Width() >= GetMinOutputSizePixel().Width() )

@@ -870,7 +870,7 @@ static tools::Long lcl_DrawGraphic(vcl::RenderContext& rVDev, const SwNumFormat 
 
 void NumberingPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    const Size aSize(rRenderContext.PixelToLogic(GetOutputSizePixel()));
+    const Size aSize(rRenderContext.PixelToLogic(GetSize()));
 
     ScopedVclPtrInstance<VirtualDevice> pVDev(rRenderContext);
     pVDev->SetMapMode(rRenderContext.GetMapMode());

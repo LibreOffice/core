@@ -176,7 +176,7 @@ void SfxFrameWindow_Impl::GetFocus()
 
 void SfxFrameWindow_Impl::Resize()
 {
-    if ( IsReallyVisible() || IsReallyShown() || GetOutputSizePixel().Width() )
+    if ( IsReallyVisible() || IsReallyShown() || GetSize().Width() )
         DoResize();
 }
 
@@ -189,7 +189,7 @@ void SfxFrameWindow_Impl::StateChanged( StateChangedType nStateChange )
             // TODO/MBA: workaround for bug in LayoutManager: the final resize does not get through because the
             // LayoutManager works asynchronously and between resize and time execution the DockingAcceptor was exchanged so that
             // the resize event never is sent to the component
-            SetSizePixel( GetParent()->GetOutputSizePixel() );
+            SetSizePixel( GetParent()->GetSize() );
 
         DoResize();
         SfxViewFrame* pView = m_pFrame->GetCurrentViewFrame();

@@ -314,7 +314,7 @@ void  SwSrcEditWindow::Resize()
 
     tools::Long nVisY = m_pTextView->GetStartDocPos().Y();
     m_pTextView->ShowCursor();
-    Size aOutSz( GetOutputSizePixel() );
+    Size aOutSz( GetSize() );
     tools::Long nMaxVisAreaStart = m_pTextView->GetTextEngine()->GetTextHeight() - aOutSz.Height();
     if ( nMaxVisAreaStart < 0 )
         nMaxVisAreaStart = 0;
@@ -542,7 +542,7 @@ void SwSrcEditWindow::InitScrollBars()
 {
     SetScrollBarRanges();
 
-    Size aOutSz( m_pOutWin->GetOutputSizePixel() );
+    Size aOutSz( m_pOutWin->GetSize() );
     m_pVScrollbar->SetVisibleSize( aOutSz.Height() );
     m_pVScrollbar->SetPageSize(  aOutSz.Height() * 8 / 10 );
     m_pVScrollbar->SetLineSize( m_pOutWin->GetTextHeight() );
@@ -722,7 +722,7 @@ void SwSrcEditWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             break;
 
         case SfxHintId::TextHeightChanged:
-            if ( m_pTextEngine->GetTextHeight() < m_pOutWin->GetOutputSizePixel().Height() )
+            if ( m_pTextEngine->GetTextHeight() < m_pOutWin->GetSize().Height() )
                 m_pTextView->Scroll( 0, m_pTextView->GetStartDocPos().Y() );
             m_pVScrollbar->SetThumbPos( m_pTextView->GetStartDocPos().Y() );
             SetScrollBarRanges();

@@ -645,7 +645,7 @@ private:
             return;
 
         Size aVirSize = aVirDev->LogicToPixel( aSize );
-        if ( aVirDev->GetOutputSizePixel() != aVirSize )
+        if ( aVirDev->GetSize() != aVirSize )
             aVirDev->SetOutputSizePixel( aVirSize );
         aVirDev->SetFillColor( aColorDist );
         aVirDev->DrawRect( tools::Rectangle( Point(), aSize ) );
@@ -2245,7 +2245,7 @@ IMPL_LINK_NOARG(ColorWindow, SelectPaletteHdl, weld::ComboBox&, void)
     int nPos = mxPaletteListBox->get_active();
     mxPaletteManager->SetPalette( nPos );
     mxPaletteManager->ReloadColorSet(*mxColorSet);
-    mxColorSet->layoutToGivenHeight(mxColorSet->GetOutputSizePixel().Height(), mxPaletteManager->GetColorCount());
+    mxColorSet->layoutToGivenHeight(mxColorSet->GetSize().Height(), mxPaletteManager->GetColorCount());
 }
 
 NamedColor ColorWindow::GetAutoColor() const
@@ -2309,7 +2309,7 @@ void ColorWindow::statusChanged( const css::frame::FeatureStateEvent& rEvent )
         if (rEvent.IsEnabled && mxPaletteManager->GetPalette() == 0)
         {
             mxPaletteManager->ReloadColorSet(*mxColorSet);
-            mxColorSet->layoutToGivenHeight(mxColorSet->GetOutputSizePixel().Height(), mxPaletteManager->GetColorCount());
+            mxColorSet->layoutToGivenHeight(mxColorSet->GetSize().Height(), mxPaletteManager->GetColorCount());
         }
     }
     else

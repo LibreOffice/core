@@ -1476,7 +1476,7 @@ void OSelectionBrowseBox::SetColWidth(sal_uInt16 nColId, tools::Long nNewWidth)
 tools::Rectangle OSelectionBrowseBox::GetInvalidRect( sal_uInt16 nColId )
 {
     // The rectangle is the full output area of the window
-    tools::Rectangle aInvalidRect( Point(0,0), GetOutputSizePixel() );
+    tools::Rectangle aInvalidRect( Point(0,0), GetSize() );
 
     // now update the left side
     tools::Rectangle aFieldRect(GetCellRect( 0, nColId )); // used instead of GetFieldRectPixel

@@ -89,7 +89,7 @@ namespace sd
         m_aToolbox->ShowItem( ToolBoxItemId(1), !IsFloatingMode() );
 
         const Size aToolBoxSize( m_aToolbox->CalcWindowSizePixel() );
-        Size aWindowSize( GetOutputSizePixel() );
+        Size aWindowSize( GetSize() );
 
         // position the tool box
         m_nTitleBarHeight = GetSettings().GetStyleSettings().GetTitleHeight();
@@ -145,7 +145,7 @@ namespace sd
         rRenderContext.SetFont(aFont);
 
         // Set border values.
-        Size aWindowSize(GetOutputSizePixel());
+        Size aWindowSize(GetSize());
         int nOuterLeft = 0;
         int nInnerLeft = nOuterLeft + m_aBorder.Left() - 1;
         int nOuterRight = aWindowSize.Width() - 1;

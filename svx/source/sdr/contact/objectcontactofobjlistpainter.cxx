@@ -90,7 +90,7 @@ void ObjectContactOfObjListPainter::ProcessDisplay(DisplayInfo& rDisplayInfo)
     if(!bOutputToRecordingMetaFile)
     {
         // use visible pixels, but transform to world coordinates
-        const Size aOutputSizePixel(pTargetDevice->GetOutputSizePixel());
+        const Size aOutputSizePixel(pTargetDevice->GetSize());
         aViewRange = ::basegfx::B2DRange(0.0, 0.0, aOutputSizePixel.getWidth(), aOutputSizePixel.getHeight());
         aViewRange.transform(pTargetDevice->GetInverseViewTransformation());
     }

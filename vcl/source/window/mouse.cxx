@@ -67,8 +67,8 @@ WindowHitTest Window::ImplHitTest( const Point& rFramePos )
     if ( mpWindowImpl->mbWinRegion )
     {
         Point aTempPos = aFramePos;
-        aTempPos.AdjustX( -GetOutDev()->mnOutOffX );
-        aTempPos.AdjustY( -GetOutDev()->mnOutOffY );
+        aTempPos.AdjustX( -GetOutDev()->maGeometry.GetXFrameOffset() );
+        aTempPos.AdjustY( -GetOutDev()->maGeometry.GetYFrameOffset() );
         if ( !mpWindowImpl->maWinRegion.Contains( aTempPos ) )
             return WindowHitTest::NONE;
     }
@@ -86,7 +86,7 @@ bool Window::ImplTestMousePointerSet()
         return true;
 
     // if the mouse is over the window, switch it
-    tools::Rectangle aClientRect( Point( 0, 0 ), GetOutputSizePixel() );
+    tools::Rectangle aClientRect( Point( 0, 0 ), GetSize() );
     return aClientRect.Contains( GetPointerPosPixel() );
 }
 
@@ -145,8 +145,8 @@ void Window::ImplCallMouseMove( sal_uInt16 nMouseCode, bool bModChanged )
     bool    bLeave;
     // check for MouseLeave
     bLeave = ((nX < 0) || (nY < 0) ||
-              (nX >= mpWindowImpl->mpFrameWindow->GetOutDev()->mnOutWidth) ||
-              (nY >= mpWindowImpl->mpFrameWindow->GetOutDev()->mnOutHeight)) &&
+              (nX >= mpWindowImpl->mpFrameWindow->GetOutDev()->GetWidth()) ||
+              (nY >= mpWindowImpl->mpFrameWindow->GetOutDev()->GetHeight())) &&
              !ImplGetSVData()->mpWinData->mpCaptureWin;
     nMode |= MouseEventModifiers::SYNTHETIC;
     if ( bModChanged )

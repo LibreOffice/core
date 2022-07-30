@@ -156,7 +156,7 @@ void TabPage::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle&
         nState |= ControlState::FOCUSED;
     // pass the whole window region to NWF as the tab body might be a gradient or bitmap
     // that has to be scaled properly, clipping makes sure that we do not paint too much
-    tools::Rectangle aCtrlRegion( Point(), GetOutputSizePixel() );
+    tools::Rectangle aCtrlRegion( Point(), GetSize() );
     rRenderContext.DrawNativeControl( ControlType::TabBody, ControlPart::Entire, aCtrlRegion, nState,
             aControlValue, OUString() );
 }
@@ -212,7 +212,7 @@ void TabPage::SetSizePixel(const Size& rAllocation)
 void TabPage::SetPosPixel(const Point& rAllocPos)
 {
     Window::SetPosPixel(rAllocPos);
-    Size aAllocation(GetOutputSizePixel());
+    Size aAllocation(GetSize());
     if (isLayoutEnabled(this) && aAllocation.Width() && aAllocation.Height())
     {
         VclContainer::setLayoutAllocation(*GetWindow(GetWindowType::FirstChild), Point(0, 0), aAllocation);
@@ -287,7 +287,7 @@ void TabPage::Resize()
 
 void TabPage::ResetScrollBars()
 {
-    Size aOutSz = GetOutputSizePixel();
+    Size aOutSz = GetSize();
 
     Point aVPos( aOutSz.Width() - mnScrWidth, 0 );
     Point aHPos( 0, aOutSz.Height() - mnScrWidth );

@@ -279,20 +279,20 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
 
     // mask output with text colored bitmap
     GDIMetaFile* pOldMetaFile = mpMetaFile;
-    tools::Long nOldOffX = mnOutOffX;
-    tools::Long nOldOffY = mnOutOffY;
-    bool bOldMap = mbMap;
+    tools::Long nOldOffX = maGeometry.GetXFrameOffset();
+    tools::Long nOldOffY = maGeometry.GetYFrameOffset();
+    bool bOldMap = IsMapModeEnabled();
 
-    mnOutOffX   = 0;
-    mnOutOffY   = 0;
+    maGeometry.SetXFrameOffset(0);
+    maGeometry.SetYFrameOffset(0);
     mpMetaFile  = nullptr;
     EnableMapMode( false );
 
     DrawMask( aPoint, aBmp, GetTextColor() );
 
     EnableMapMode( bOldMap );
-    mnOutOffX   = nOldOffX;
-    mnOutOffY   = nOldOffY;
+    maGeometry.SetXFrameOffset(nOldOffX);
+    maGeometry.SetYFrameOffset(nOldOffY);
     mpMetaFile  = pOldMetaFile;
 
     return true;
@@ -308,15 +308,15 @@ void OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout,
     auto nOldX = rSalLayout.DrawBase().getX();
     if( HasMirroredGraphics() )
     {
-        tools::Long w = IsVirtual() ? mnOutWidth : mpGraphics->GetGraphicsWidth();
+        tools::Long w = IsVirtual() ? GetWidth() : mpGraphics->GetGraphicsWidth();
         auto x = rSalLayout.DrawBase().getX();
         rSalLayout.DrawBase().setX( w - 1 - x );
         if( !IsRTLEnabled() )
         {
             OutputDevice *pOutDevRef = this;
             // mirror this window back
-            tools::Long devX = w-pOutDevRef->mnOutWidth-pOutDevRef->mnOutOffX;   // re-mirrored mnOutOffX
-            rSalLayout.DrawBase().setX( devX + ( pOutDevRef->mnOutWidth - 1 - (rSalLayout.DrawBase().getX() - devX) ) ) ;
+            tools::Long devX = w-pOutDevRef->GetWidth()-pOutDevRef->maGeometry.GetXFrameOffset();   // re-mirrored maGeometry.GetXFrameOffset()
+            rSalLayout.DrawBase().setX( devX + ( pOutDevRef->GetWidth() - 1 - (rSalLayout.DrawBase().getX() - devX) ) ) ;
         }
     }
     else if( IsRTLEnabled() )
@@ -324,8 +324,8 @@ void OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout,
         OutputDevice *pOutDevRef = this;
 
         // mirror this window back
-        tools::Long devX = pOutDevRef->mnOutOffX;   // re-mirrored mnOutOffX
-        rSalLayout.DrawBase().setX( pOutDevRef->mnOutWidth - 1 - (rSalLayout.DrawBase().getX() - devX) + devX );
+        tools::Long devX = pOutDevRef->maGeometry.GetXFrameOffset();   // re-mirrored maGeometry.GetXFrameOffset()
+        rSalLayout.DrawBase().setX( pOutDevRef->GetWidth() - 1 - (rSalLayout.DrawBase().getX() - devX) + devX );
     }
 
     rSalLayout.DrawText( *mpGraphics );
@@ -378,7 +378,7 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
         // calculate offset - for high resolution printers the offset
         // should be greater so that the effect is visible
         tools::Long nOff = 1;
-        nOff += mnDPIX/300;
+        nOff += GetDPIX()/300;
 
         if ( eRelief == FontRelief::Engraved )
             nOff = -nOff;
@@ -901,7 +901,7 @@ tools::Long OutputDevice::GetTextHeight() const
 
     tools::Long nHeight = mpFontInstance->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
 
-    if ( mbMap )
+    if (IsMapModeEnabled())
         nHeight = ImplDevicePixelToLogicHeight( nHeight );
 
     return nHeight;
@@ -1005,7 +1005,7 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<sal_In
             (*pDXPixelArray)[i] += (*pDXPixelArray)[i - 1];
         }
     }
-    if( mbMap )
+    if (IsMapModeEnabled())
     {
         if( pDXPixelArray )
         {
@@ -1048,7 +1048,7 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<sal_In
             (*pDXAry)[ i ] += (*pDXAry)[ i-1 ];
 
     // convert from font units to logical units
-    if( mbMap )
+    if (IsMapModeEnabled())
     {
         if( pDXAry )
             for( int i = 0; i < nLen; ++i )
@@ -1112,7 +1112,7 @@ void OutputDevice::GetCaretPositions( const OUString& rStr, sal_Int32* pCaretXAr
     }
 
     // convert from font units to logical units
-    if( mbMap )
+    if (IsMapModeEnabled())
     {
         for( i = 0; i < 2*nLen; ++i )
             pCaretXArray[i] = ImplDevicePixelToLogicWidth( pCaretXArray[i] );
@@ -1360,6 +1360,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
 
     OUString aStr = rOrigStr;
 
+    // convert from logical units to physical units
     // recode string if needed
     if( mpFontInstance->mpConversion ) {
         mpFontInstance->mpConversion->RecodeString( aStr, 0, aStr.getLength() );
@@ -1368,7 +1369,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
     }
 
     DeviceCoordinate nPixelWidth = static_cast<DeviceCoordinate>(nLogicalWidth);
-    if( nLogicalWidth && mbMap )
+    if (nLogicalWidth && IsMapModeEnabled())
     {
         // convert from logical units to physical units
         nPixelWidth = LogicWidthToDeviceCoordinate( nLogicalWidth );
@@ -1384,7 +1385,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
     {
         xNaturalDXPixelArray.reset(new double[nLen]);
 
-        if (mbMap)
+        if (IsMapModeEnabled())
         {
             // convert from logical units to font units without rounding,
             // keeping accuracy for lower levels
@@ -2254,8 +2255,8 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
 
             aTempPos += rPos;
             aTempPos = LogicToPixel( aTempPos );
-            nMnemonicX = mnOutOffX + aTempPos.X();
-            nMnemonicY = mnOutOffY + aTempPos.Y();
+            nMnemonicX = maGeometry.GetXFrameOffset() + aTempPos.X();
+            nMnemonicY = maGeometry.GetYFrameOffset() + aTempPos.Y();
         }
     }
 
@@ -2397,8 +2398,8 @@ bool OutputDevice::GetTextBoundRect( tools::Rectangle& rRect,
             aRotatedOfs -= Point(aPos.getX(), aPos.getY());
             aPixelRect += aRotatedOfs;
             rRect = PixelToLogic( aPixelRect );
-            if( mbMap )
-                rRect += Point( maMapRes.mnMapOfsX, maMapRes.mnMapOfsY );
+            if (IsMapModeEnabled())
+                rRect += Point( maMapMetrics.mnMapOfsX, maMapMetrics.mnMapOfsY );
         }
     }
 
@@ -2425,10 +2426,10 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
 
     // we want to get the Rectangle in logical units, so to
     // avoid rounding errors we just size the font in logical units
-    bool bOldMap = mbMap;
+    bool bOldMap = IsMapModeEnabled();
     if( bOldMap )
     {
-        const_cast<OutputDevice&>(*this).mbMap = false;
+        const_cast<OutputDevice&>(*this).EnableMapMode(false);
         const_cast<OutputDevice&>(*this).mbNewFont = true;
     }
 
@@ -2487,7 +2488,7 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
     if( bOldMap )
     {
         // restore original font size and map mode
-        const_cast<OutputDevice&>(*this).mbMap = bOldMap;
+        const_cast<OutputDevice&>(*this).EnableMapMode(bOldMap);
         const_cast<OutputDevice&>(*this).mbNewFont = true;
     }
 

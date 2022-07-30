@@ -361,8 +361,8 @@ bool OutputDevice::TransformAndReduceBitmapExToTargetRange(
     basegfx::B2DRange aOutPixel(
         0.0,
         0.0,
-        GetOutputSizePixel().Width(),
-        GetOutputSizePixel().Height());
+        GetSize().Width(),
+        GetSize().Height());
 
     if(IsClipRegion())
     {

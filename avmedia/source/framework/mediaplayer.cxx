@@ -82,7 +82,7 @@ void MediaFloater::Resize()
     SfxDockingWindow::Resize();
 
     if( mpMediaWindow )
-        mpMediaWindow->setPosSize( tools::Rectangle( Point(), GetOutputSizePixel() ) );
+        mpMediaWindow->setPosSize( tools::Rectangle( Point(), GetSize() ) );
 }
 
 void MediaFloater::ToggleFloatingMode()
@@ -100,7 +100,7 @@ void MediaFloater::ToggleFloatingMode()
 
     mpMediaWindow.reset( new MediaWindow( this, true ) );
 
-    mpMediaWindow->setPosSize( tools::Rectangle( Point(), GetOutputSizePixel() ) );
+    mpMediaWindow->setPosSize( tools::Rectangle( Point(), GetSize() ) );
     mpMediaWindow->executeMediaItem( aRestoreItem );
 
     vcl::Window* pWindow = mpMediaWindow->getWindow();

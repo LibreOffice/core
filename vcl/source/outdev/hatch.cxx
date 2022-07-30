@@ -80,7 +80,7 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
     {
         tools::PolyPolygon     aPolyPoly( LogicToPixel( rPolyPoly ) );
         GDIMetaFile*    pOldMetaFile = mpMetaFile;
-        bool            bOldMap = mbMap;
+        bool            bOldMap = IsMapModeEnabled();
 
         aPolyPoly.Optimize( PolyOptimizeFlags::NO_SAME );
         aHatch.SetDistance( ImplLogicWidthToDevicePixel( aHatch.GetDistance() ) );

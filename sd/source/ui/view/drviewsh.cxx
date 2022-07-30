@@ -71,7 +71,7 @@ void DrawViewShell::MakeVisible(const ::tools::Rectangle& rRect, vcl::Window& rW
     const Size aLogicSize(rRect.GetSize());
 
     // visible area
-    Size aVisSizePixel(rWin.GetOutputSizePixel());
+    Size aVisSizePixel(rWin.GetSize());
     bool bTiledRendering = comphelper::LibreOfficeKit::isActive() && !rWin.IsMapModeEnabled();
     if (bTiledRendering)
     {

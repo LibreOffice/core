@@ -1294,7 +1294,7 @@ void DataBrowser::ImplAdjustHeaderControls()
 {
     sal_uInt16 nColCount = GetColumnCount();
     sal_uInt32 nCurrentPos = GetPosPixel().getX();
-    sal_uInt32 nMaxPos = nCurrentPos + GetOutputSizePixel().getWidth();
+    sal_uInt32 nMaxPos = nCurrentPos + GetSize().getWidth();
     sal_uInt32 nStartPos = nCurrentPos;
 
     // width of header column

@@ -68,12 +68,12 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
     OReportWindow* pReportWindow = m_pParent->getSectionWindow()->getViewsWindow()->getView();
     OScrollWindowHelper* pScrollWindow = pReportWindow->getScrollWindow();
 
-    Size aOut = pReportWindow->GetOutputSizePixel();
+    Size aOut = pReportWindow->GetSize();
     Fraction aStartWidth(tools::Long(REPORT_STARTMARKER_WIDTH));
     aStartWidth *= m_pParent->GetMapMode().GetScaleX();
 
     aOut.AdjustWidth( -static_cast<tools::Long>(aStartWidth) );
-    aOut.setHeight( m_pParent->GetOutputSizePixel().Height() );
+    aOut.setHeight( m_pParent->GetSize().Height() );
 
     Point aPos = pScrollWindow->getThumbPos();
     aPos.setX( aPos.X() * 0.5 );

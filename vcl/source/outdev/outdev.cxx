@@ -72,19 +72,8 @@ OutputDevice::OutputDevice(OutDevType eOutDevType) :
     mpFontFaceCollection                = nullptr;
     mpAlphaVDev                     = nullptr;
     mpExtOutDevData                 = nullptr;
-    mnOutOffX                       = 0;
-    mnOutOffY                       = 0;
-    mnOutWidth                      = 0;
-    mnOutHeight                     = 0;
-    mnDPIX                          = 0;
-    mnDPIY                          = 0;
-    mnDPIScalePercentage            = 100;
     mnTextOffX                      = 0;
     mnTextOffY                      = 0;
-    mnOutOffOrigX                   = 0;
-    mnOutOffLogicX                  = 0;
-    mnOutOffOrigY                   = 0;
-    mnOutOffLogicY                  = 0;
     mnEmphasisAscent                = 0;
     mnEmphasisDescent               = 0;
     mnDrawMode                      = DrawModeFlags::Default;
@@ -94,7 +83,6 @@ OutputDevice::OutputDevice(OutDevType eOutDevType) :
         mnTextLayoutMode            = vcl::text::ComplexTextLayoutFlags::BiDiRtl | vcl::text::ComplexTextLayoutFlags::TextOriginLeft;
 
     meOutDevViewType                = OutDevViewType::DontKnow;
-    mbMap                           = false;
     mbClipRegion                    = false;
     mbBackground                    = false;
     mbOutput                        = true;
@@ -119,13 +107,13 @@ OutputDevice::OutputDevice(OutDevType eOutDevType) :
     mbRefPoint                      = false;
     mbEnableRTL                     = false;    // mirroring must be explicitly allowed (typically for windows only)
 
-    // struct ImplMapRes
-    maMapRes.mnMapOfsX              = 0;
-    maMapRes.mnMapOfsY              = 0;
-    maMapRes.mnMapScNumX            = 1;
-    maMapRes.mnMapScNumY            = 1;
-    maMapRes.mnMapScDenomX          = 1;
-    maMapRes.mnMapScDenomY          = 1;
+    // struct MappingMetrics
+    maMapMetrics.mnMapOfsX          = 0;
+    maMapMetrics.mnMapOfsY          = 0;
+    maMapMetrics.mnMapScNumX        = 1;
+    maMapMetrics.mnMapScNumY        = 1;
+    maMapMetrics.mnMapScDenomX      = 1;
+    maMapMetrics.mnMapScDenomY      = 1;
 
     // struct ImplOutDevData- see #i82615#
     mpOutDevData.reset(new ImplOutDevData);
@@ -380,16 +368,6 @@ sal_uInt16 OutputDevice::GetBitCount() const
     return mpGraphics->GetBitCount();
 }
 
-void OutputDevice::SetOutOffXPixel(tools::Long nOutOffX)
-{
-    mnOutOffX = nOutOffX;
-}
-
-void OutputDevice::SetOutOffYPixel(tools::Long nOutOffY)
-{
-    mnOutOffY = nOutOffY;
-}
-
 css::uno::Reference< css::awt::XGraphics > OutputDevice::CreateUnoGraphics()
 {
     UnoWrapperBase* pWrapper = UnoWrapperBase::GetUnoWrapper();
@@ -640,7 +618,7 @@ void OutputDevice::DrawOutDevDirectProcess(const OutputDevice& rSrcDev, SalTwoRe
 
 tools::Rectangle OutputDevice::GetBackgroundComponentBounds() const
 {
-    return tools::Rectangle( Point( 0, 0 ), GetOutputSizePixel() );
+    return tools::Rectangle( Point( 0, 0 ), GetSize() );
 }
 
 // Layout public functions
@@ -671,17 +649,17 @@ bool OutputDevice::ImplIsAntiparallel() const
 
 void    OutputDevice::ReMirror( Point &rPoint ) const
 {
-    rPoint.setX( mnOutOffX + mnOutWidth - 1 - rPoint.X() + mnOutOffX );
+    rPoint.setX( maGeometry.GetXFrameOffset() + GetWidth() - 1 - rPoint.X() + maGeometry.GetXFrameOffset() );
 }
 void    OutputDevice::ReMirror( tools::Rectangle &rRect ) const
 {
     tools::Long nWidth = rRect.Right() - rRect.Left();
 
-    //long lc_x = rRect.nLeft - mnOutOffX;    // normalize
-    //lc_x = mnOutWidth - nWidth - 1 - lc_x;  // mirror
-    //rRect.nLeft = lc_x + mnOutOffX;         // re-normalize
+    //long lc_x = rRect.nLeft - maGeometry.GetXFrameOffset();    // normalize
+    //lc_x = GetWidth() - nWidth - 1 - lc_x;  // mirror
+    //rRect.nLeft = lc_x + maGeometry.GetXFrameOffset();         // re-normalize
 
-    rRect.SetLeft( mnOutOffX + mnOutWidth - nWidth - 1 - rRect.Left() + mnOutOffX );
+    rRect.SetLeft( maGeometry.GetXFrameOffset() + GetWidth() - nWidth - 1 - rRect.Left() + maGeometry.GetXFrameOffset() );
     rRect.SetRight( rRect.Left() + nWidth );
 }
 
@@ -734,7 +712,7 @@ css::awt::DeviceInfo OutputDevice::GetCommonDeviceInfo(Size const& rDevSz) const
 
 css::awt::DeviceInfo OutputDevice::GetDeviceInfo() const
 {
-    css::awt::DeviceInfo aInfo = GetCommonDeviceInfo(GetOutputSizePixel());
+    css::awt::DeviceInfo aInfo = GetCommonDeviceInfo(GetSize());
 
     aInfo.LeftInset = 0;
     aInfo.TopInset = 0;
@@ -779,7 +757,7 @@ com::sun::star::uno::Reference< css::rendering::XCanvas > OutputDevice::ImplGetC
      */
     Sequence< Any > aArg{
         Any(reinterpret_cast<sal_Int64>(this)),
-        Any(css::awt::Rectangle( mnOutOffX, mnOutOffY, mnOutWidth, mnOutHeight )),
+        Any(css::awt::Rectangle( maGeometry.GetXFrameOffset(), maGeometry.GetYFrameOffset(), GetWidth(), GetHeight() )),
         Any(false),
         Any(Reference< css::awt::XWindow >()),
         GetSystemGfxDataAny()

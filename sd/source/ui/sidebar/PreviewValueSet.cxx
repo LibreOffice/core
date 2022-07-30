@@ -70,7 +70,7 @@ void PreviewValueSet::Resize()
 {
     ValueSet::Resize();
 
-    Size aWindowSize (GetOutputSizePixel());
+    Size aWindowSize (GetSize());
     if (!aWindowSize.IsEmpty())
     {
         Rearrange();
@@ -80,7 +80,7 @@ void PreviewValueSet::Resize()
 void PreviewValueSet::Rearrange()
 {
     sal_uInt16 nNewColumnCount (CalculateColumnCount (
-        GetOutputSizePixel().Width()));
+        GetSize().Width()));
     sal_uInt16 nNewRowCount (CalculateRowCount (nNewColumnCount));
 
     SetFormat();

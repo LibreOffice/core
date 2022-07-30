@@ -734,7 +734,7 @@ SelectionFunction::EventDescriptor::EventDescriptor (
     // explicit test.
     mbIsLeaving = rEvent.IsLeaveWindow()
         || ! ::tools::Rectangle(Point(0,0),
-             rSlideSorter.GetContentWindow()->GetOutputSizePixel()).Contains(maMousePosition);
+             rSlideSorter.GetContentWindow()->GetSize()).Contains(maMousePosition);
 }
 
 SelectionFunction::EventDescriptor::EventDescriptor (
@@ -762,7 +762,7 @@ SelectionFunction::EventDescriptor::EventDescriptor (
     // explicit test.
     mbIsLeaving = rEvent.mbLeaving
         || ! ::tools::Rectangle(Point(0,0),
-             rSlideSorter.GetContentWindow()->GetOutputSizePixel()).Contains(maMousePosition);
+             rSlideSorter.GetContentWindow()->GetSize()).Contains(maMousePosition);
 }
 
 sal_uInt32 SelectionFunction::EventDescriptor::EncodeMouseEvent (

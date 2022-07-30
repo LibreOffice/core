@@ -142,7 +142,7 @@ void SmGraphicWindow::Resize()
     InterimItemWindow::Resize();
 
     // get the new output-size in pixel
-    Size aOutPixSz = GetOutputSizePixel();
+    Size aOutPixSz = GetSize();
 
     // determine the size of the output-area and if we need scrollbars
     const auto nScrSize = mxScrolledWindow->get_scroll_thickness();
@@ -1033,7 +1033,7 @@ IMPL_LINK_NOARG( SmCmdBoxWindow, InitialFocusTimerHdl, Timer *, void )
 
 void SmCmdBoxWindow::AdjustPosition()
 {
-    const tools::Rectangle aRect( Point(), GetParent()->GetOutputSizePixel() );
+    const tools::Rectangle aRect( Point(), GetParent()->GetSize() );
     Point aTopLeft( Point( aRect.Left(),
                            aRect.Bottom() - GetSizePixel().Height() ) );
     Point aPos( GetParent()->OutputToScreenPixel( aTopLeft ) );

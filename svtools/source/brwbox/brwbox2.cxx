@@ -169,7 +169,7 @@ void BrowseBox::StateChanged( StateChangedType nStateChange )
             )
             // we draw the text in our header bar in a color dependent on the enabled state. So if this state changed
             // -> redraw
-            Invalidate(tools::Rectangle(Point(0, 0), Size(GetOutputSizePixel().Width(), GetTitleHeight() - 1)));
+            Invalidate(tools::Rectangle(Point(0, 0), Size(GetSize().Width(), GetTitleHeight() - 1)));
     }
 }
 
@@ -251,7 +251,7 @@ void BrowseBox::ToggleSelection()
 
     // accumulate old row selection
     sal_Int32 nBottomRow = nTopRow +
-        pDataWin->GetOutputSizePixel().Height() / GetDataRowHeight();
+        pDataWin->GetSize().Height() / GetDataRowHeight();
     if ( nBottomRow > GetRowCount() && GetRowCount() )
         nBottomRow = GetRowCount();
     for ( sal_Int32 nRow = bMultiSelection ? uRow.pSel->FirstSelected() : uRow.nSel;
@@ -289,7 +289,7 @@ void BrowseBox::ToggleSelection()
         aRect.AdjustLeft( -(MIN_COLUMNWIDTH) );
         aRect.AdjustRight(MIN_COLUMNWIDTH );
         aRect.SetTop( 0 );
-        aRect.SetBottom( pDataWin->GetOutputSizePixel().Height() );
+        aRect.SetBottom( pDataWin->GetSize().Height() );
         pDataWin->Invalidate( aRect );
     }
 
@@ -335,7 +335,7 @@ void BrowseBox::DrawCursor()
             Point( ( !mvCols.empty() && mvCols[ 0 ]->GetId() == 0 ) ?
                         mvCols[ 0 ]->Width() : 0,
                         (nCurRow - nTopRow) * GetDataRowHeight() + 1 ),
-            Size( pDataWin->GetOutputSizePixel().Width() + 1,
+            Size( pDataWin->GetSize().Width() + 1,
                   GetDataRowHeight() - 2 ) );
     if ( bHLines )
     {
@@ -478,19 +478,15 @@ void BrowseBox::Resize()
     pDataWin->bResizeOnPaint = false;
 
     // calc the size of the scrollbars
-    sal_uLong nSBHeight = GetBarHeight();
-    sal_uLong nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
+    sal_uLong nSBSize = GetBarHeight();
     if (IsZoom())
-    {
-        nSBHeight = static_cast<sal_uLong>(nSBHeight * static_cast<double>(GetZoom()));
-        nSBWidth = static_cast<sal_uLong>(nSBWidth * static_cast<double>(GetZoom()));
-    }
+        nSBSize = static_cast<sal_uLong>(nSBSize * static_cast<double>(GetZoom()));
 
     DoHideCursor();
     sal_uInt16 nOldVisibleRows = 0;
     //fdo#42694, post #i111125# GetDataRowHeight() can be 0
     if (GetDataRowHeight())
-        nOldVisibleRows = static_cast<sal_uInt16>(pDataWin->GetOutputSizePixel().Height() / GetDataRowHeight() + 1);
+        nOldVisibleRows = static_cast<sal_uInt16>(pDataWin->GetSize().Height() / GetDataRowHeight() + 1);
 
     // did we need a horizontal scroll bar or is there a Control Area?
     if ( !pDataWin->bNoHScroll &&
@@ -500,13 +496,13 @@ void BrowseBox::Resize()
         aHScroll->Hide();
 
     // calculate the size of the data window
-    tools::Long nDataHeight = GetOutputSizePixel().Height() - GetTitleHeight();
+    tools::Long nDataHeight = GetSize().Height() - GetTitleHeight();
     if ( aHScroll->IsVisible() || ( nControlAreaWidth != USHRT_MAX ) )
-        nDataHeight -= nSBHeight;
+        nDataHeight -= nSBSize;
 
-    tools::Long nDataWidth = GetOutputSizePixel().Width();
+    tools::Long nDataWidth = GetSize().Width();
     if ( pVScroll->IsVisible() )
-        nDataWidth -= nSBWidth;
+        nDataWidth -= nSBSize;
 
     // adjust position and size of data window
     pDataWin->SetPosSizePixel(
@@ -516,7 +512,7 @@ void BrowseBox::Resize()
     sal_uInt16 nVisibleRows = 0;
 
     if (GetDataRowHeight())
-        nVisibleRows = static_cast<sal_uInt16>(pDataWin->GetOutputSizePixel().Height() / GetDataRowHeight() + 1);
+        nVisibleRows = static_cast<sal_uInt16>(pDataWin->GetSize().Height() / GetDataRowHeight() + 1);
 
     // TopRow is unchanged, but the number of visible lines has changed.
     if ( nVisibleRows != nOldVisibleRows )
@@ -526,7 +522,7 @@ void BrowseBox::Resize()
 
     // Control-Area
     tools::Rectangle aInvalidArea( GetControlArea() );
-    aInvalidArea.SetRight( GetOutputSizePixel().Width() );
+    aInvalidArea.SetRight( GetSize().Width() );
     aInvalidArea.SetLeft( 0 );
     Invalidate( aInvalidArea );
 
@@ -537,7 +533,7 @@ void BrowseBox::Resize()
         // take the handle column into account
         BrowserColumn *pFirstCol = mvCols[ 0 ].get();
         tools::Long nOfsX = pFirstCol->GetId() ? 0 : pFirstCol->Width();
-        pHeaderBar->SetPosSizePixel( Point( nOfsX, 0 ), Size( GetOutputSizePixel().Width() - nOfsX, GetTitleHeight() ) );
+        pHeaderBar->SetPosSizePixel( Point( nOfsX, 0 ), Size( GetSize().Width() - nOfsX, GetTitleHeight() ) );
     }
 
     AutoSizeLastColumn(); // adjust last column width
@@ -547,6 +543,7 @@ void BrowseBox::Resize()
 
 void BrowseBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
+
     // initializations
     if (!bBootstrapped && IsReallyVisible())
         BrowseBox::StateChanged(StateChangedType::InitShow);
@@ -560,7 +557,7 @@ void BrowseBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
     // draw delimitational lines
     if (!pDataWin->bNoHScroll)
         rRenderContext.DrawLine(Point(0, aHScroll->GetPosPixel().Y()),
-                                Point(GetOutputSizePixel().Width(),
+                                Point(GetSize().Width(),
                                       aHScroll->GetPosPixel().Y()));
 
     if (nTitleLines)
@@ -568,7 +565,7 @@ void BrowseBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
         if (!bHeaderBar)
         {
             rRenderContext.DrawLine(Point(0, GetTitleHeight() - 1),
-                                    Point(GetOutputSizePixel().Width(), GetTitleHeight() - 1));
+                                    Point(GetSize().Width(), GetTitleHeight() - 1));
         }
         else if (bHandleCol)
         {
@@ -630,18 +627,6 @@ void BrowseBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
         rRenderContext.SetLineColor(aColFace);
         rRenderContext.DrawRect(tools::Rectangle(Point(nX, 0),
                                           Point(rRect.Right(), GetTitleHeight() - 2 )));
-        rRenderContext.Pop();
-    }
-
-    if (m_nActualCornerWidth)
-    {
-        const StyleSettings &rSettings = rRenderContext.GetSettings().GetStyleSettings();
-        Color aColFace(rSettings.GetFaceColor());
-        rRenderContext.Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
-        rRenderContext.SetFillColor(aColFace);
-        rRenderContext.SetLineColor(aColFace);
-        rRenderContext.DrawRect(tools::Rectangle(Point(GetOutputSizePixel().Width() - m_nActualCornerWidth, aHScroll->GetPosPixel().Y()),
-                                                 Size(m_nActualCornerWidth, m_nCornerHeight)));
         rRenderContext.Pop();
     }
 }
@@ -794,7 +779,7 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlag
 void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRect, bool _bForeignDevice)
 {
     Point aOverallAreaPos = _bForeignDevice ? _rRect.TopLeft() : Point(0,0);
-    Size aOverallAreaSize = _bForeignDevice ? _rRect.GetSize() : pDataWin->GetOutputSizePixel();
+    Size aOverallAreaSize = _bForeignDevice ? _rRect.GetSize() : pDataWin->GetSize();
     Point aOverallAreaBRPos = _bForeignDevice ? _rRect.BottomRight() : Point( aOverallAreaSize.Width(), aOverallAreaSize.Height() );
 
     tools::Long nDataRowHeight = GetDataRowHeight();
@@ -1063,13 +1048,9 @@ void BrowseBox::UpdateScrollbars()
     pDataWin->bInUpdateScrollbars = true;
 
     // the size of the corner window (and the width of the VSB/height of the HSB)
-    m_nCornerHeight = GetBarHeight();
-    m_nCornerWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
+    sal_uLong nCornerSize = GetBarHeight();
     if (IsZoom())
-    {
-        m_nCornerHeight = static_cast<sal_uLong>(m_nCornerHeight * static_cast<double>(GetZoom()));
-        m_nCornerWidth = static_cast<sal_uLong>(m_nCornerWidth * static_cast<double>(GetZoom()));
-    }
+        nCornerSize = static_cast<sal_uLong>(nCornerSize * static_cast<double>(GetZoom()));
 
     bool bNeedsVScroll = false;
     sal_Int32 nMaxRows = 0;
@@ -1088,14 +1069,14 @@ void BrowseBox::UpdateScrollbars()
         {
             pVScroll->Hide();
             Size aNewSize( aDataWinSize );
-            aNewSize.setWidth( GetOutputSizePixel().Width() );
+            aNewSize.setWidth( GetSize().Width() );
             aDataWinSize = aNewSize;
         }
     }
     else if ( !pVScroll->IsVisible() )
     {
         Size aNewSize( aDataWinSize );
-        aNewSize.setWidth( GetOutputSizePixel().Width() - m_nCornerWidth );
+        aNewSize.setWidth( GetSize().Width() - nCornerSize );
         aDataWinSize = aNewSize;
     }
 
@@ -1112,14 +1093,14 @@ void BrowseBox::UpdateScrollbars()
         {
             aHScroll->Hide();
         }
-        aDataWinSize.setHeight( GetOutputSizePixel().Height() - GetTitleHeight() );
+        aDataWinSize.setHeight( GetSize().Height() - GetTitleHeight() );
         if ( nControlAreaWidth != USHRT_MAX )
-            aDataWinSize.AdjustHeight( -sal_Int32(m_nCornerHeight) );
+            aDataWinSize.AdjustHeight( -sal_Int32(nCornerSize) );
     }
     else if ( !aHScroll->IsVisible() )
     {
         Size aNewSize( aDataWinSize );
-        aNewSize.setHeight( GetOutputSizePixel().Height() - GetTitleHeight() - m_nCornerHeight );
+        aNewSize.setHeight( GetSize().Height() - GetTitleHeight() - nCornerSize );
         aDataWinSize = aNewSize;
     }
 
@@ -1129,8 +1110,8 @@ void BrowseBox::UpdateScrollbars()
         : nControlAreaWidth;
 
     aHScroll->SetPosSizePixel(
-        Point( nHScrX, GetOutputSizePixel().Height() - m_nCornerHeight ),
-        Size( aDataWinSize.Width() - nHScrX, m_nCornerHeight ) );
+        Point( nHScrX, GetSize().Height() - nCornerSize ),
+        Size( aDataWinSize.Width() - nHScrX, nCornerSize ) );
 
     // total scrollable columns
     short nScrollCols = short(mvCols.size()) - static_cast<short>(nFrozenCols);
@@ -1171,7 +1152,7 @@ void BrowseBox::UpdateScrollbars()
     pVScroll->SetRange( Range( 0, nRowCount ) );
     pVScroll->SetPosSizePixel(
         Point( aDataWinSize.Width(), GetTitleHeight() ),
-        Size( m_nCornerWidth, aDataWinSize.Height()) );
+        Size( nCornerSize, aDataWinSize.Height()) );
     tools::Long nLclDataRowHeight = GetDataRowHeight();
     if ( nLclDataRowHeight > 0 && nRowCount < tools::Long( aDataWinSize.Height() / nLclDataRowHeight ) )
         ScrollRows( -nTopRow );
@@ -1184,18 +1165,29 @@ void BrowseBox::UpdateScrollbars()
 
     // needs corner-window?
     // (do that AFTER positioning BOTH scrollbars)
-    m_nActualCornerWidth = 0;
+    sal_uLong nActualCorderWidth = 0;
     if (aHScroll->IsVisible() && pVScroll && pVScroll->IsVisible() )
     {
         // if we have both scrollbars, the corner window fills the point of intersection of these two
-        m_nActualCornerWidth = m_nCornerWidth;
+        nActualCorderWidth = nCornerSize;
     }
     else if ( !aHScroll->IsVisible() && ( nControlAreaWidth != USHRT_MAX ) )
     {
         // if we have no horizontal scrollbar, but a control area, we need the corner window to
         // fill the space between the control are and the right border
-        m_nActualCornerWidth = GetOutputSizePixel().Width() - nControlAreaWidth;
+        nActualCorderWidth = GetSize().Width() - nControlAreaWidth;
     }
+    if ( nActualCorderWidth )
+    {
+        if ( !pDataWin->pCornerWin )
+            pDataWin->pCornerWin = VclPtr<ScrollBarBox>::Create( this, 0 );
+        pDataWin->pCornerWin->SetPosSizePixel(
+            Point( GetSize().Width() - nActualCorderWidth, aHScroll->GetPosPixel().Y() ),
+            Size( nActualCorderWidth, nCornerSize ) );
+        pDataWin->pCornerWin->Show();
+    }
+    else
+        pDataWin->pCornerWin.disposeAndClear();
 
     // scroll headerbar, if necessary
     if ( pDataWin->pHeaderBar )
@@ -1315,7 +1307,7 @@ IMPL_LINK(BrowseBox, HorzScrollHdl, weld::Scrollbar&, rScrollbar, void)
 
 IMPL_LINK( BrowseBox, StartDragHdl, HeaderBar*, pBar, void )
 {
-    pBar->SetDragSize( pDataWin->GetOutputSizePixel().Height() );
+    pBar->SetDragSize( pDataWin->GetSize().Height() );
 }
 
 // usually only the first column was resized
@@ -1330,7 +1322,7 @@ void BrowseBox::MouseButtonDown( const MouseEvent& rEvt )
         return;
 
     tools::Long nX = 0;
-    tools::Long nWidth = GetOutputSizePixel().Width();
+    tools::Long nWidth = GetSize().Width();
     for ( size_t nCol = 0; nCol < mvCols.size() && nX < nWidth; ++nCol )
     {
         // is this column visible?
@@ -1382,7 +1374,7 @@ void BrowseBox::MouseMove( const MouseEvent& rEvt )
     sal_uInt16 nX = 0;
     for ( size_t nCol = 0;
           nCol < mvCols.size() &&
-            ( nX + mvCols[ nCol ]->Width() ) < o3tl::make_unsigned(GetOutputSizePixel().Width());
+            ( nX + mvCols[ nCol ]->Width() ) < o3tl::make_unsigned(GetSize().Width());
           ++nCol )
         // is this column visible?
         if ( mvCols[ nCol ]->IsFrozen() || nCol >= nFirstCol )
@@ -1951,7 +1943,7 @@ tools::Rectangle BrowseBox::calcHeaderRect(bool _bIsColumnBar, bool _bOnScreen)
     tools::Long nHeight;
     if ( _bIsColumnBar )
     {
-        nWidth = pDataWin->GetOutputSizePixel().Width();
+        nWidth = pDataWin->GetSize().Width();
         nHeight = GetDataRowHeight();
     }
     else

@@ -60,8 +60,8 @@ namespace cairocanvas
         OutputDevice* pOutDev = getOutputDevice();
         mpSurface = pOutDev->CreateSurface(pOutDev->GetOutOffXPixel(),
                                            pOutDev->GetOutOffYPixel(),
-                                           pOutDev->GetOutputWidthPixel(),
-                                           pOutDev->GetOutputHeightPixel());
+                                           pOutDev->GetWidth(),
+                                           pOutDev->GetHeight());
     }
 
     void DeviceHelper::disposing()
@@ -116,7 +116,7 @@ namespace cairocanvas
         // Map the pixel dimensions of the output window to millimeter
         const MapMode aOldMapMode( mpRefDevice->GetMapMode() );
         mpRefDevice->SetMapMode( MapMode(MapUnit::MapMM) );
-        const Size aLogSize( mpRefDevice->PixelToLogic(mpRefDevice->GetOutputSizePixel()) );
+        const Size aLogSize( mpRefDevice->PixelToLogic(mpRefDevice->GetSize()) );
         mpRefDevice->SetMapMode( aOldMapMode );
 
         return vcl::unotools::size2DFromSize( aLogSize );
@@ -230,7 +230,7 @@ namespace cairocanvas
         const ::Point aEmptyPoint;
         bool bOldMap( mpRefDevice->IsMapModeEnabled() );
         mpRefDevice->EnableMapMode( false );
-        const ::BitmapEx aTempBitmap(mpRefDevice->GetBitmapEx(aEmptyPoint, mpRefDevice->GetOutputSizePixel()));
+        const ::BitmapEx aTempBitmap(mpRefDevice->GetBitmapEx(aEmptyPoint, mpRefDevice->GetSize()));
         WriteDIB(aTempBitmap, aStream, false);
         mpRefDevice->EnableMapMode( bOldMap );
 

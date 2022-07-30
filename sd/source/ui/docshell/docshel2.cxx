@@ -137,7 +137,7 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect)
 
         if (pWin)
         {
-            aVisArea = pWin->PixelToLogic(::tools::Rectangle(Point(0,0), pWin->GetOutputSizePixel()));
+            aVisArea = pWin->PixelToLogic(::tools::Rectangle(Point(0,0), pWin->GetSize()));
         }
     }
 
@@ -255,7 +255,7 @@ BitmapEx DrawDocShell::GetPagePreviewBitmap(SdPage* pPage)
 
     pVDev->SetMapMode( MapMode() );
 
-    BitmapEx aPreview( pVDev->GetBitmapEx( aNullPt, pVDev->GetOutputSizePixel() ) );
+    BitmapEx aPreview( pVDev->GetBitmapEx( aNullPt, pVDev->GetSize() ) );
 
     DBG_ASSERT(!aPreview.IsEmpty(), "Preview-Bitmap could not be generated");
 

@@ -193,7 +193,7 @@ bool ScColBar::ResizeAllowed() const
 
 void ScColBar::DrawInvert( tools::Long nDragPosP )
 {
-    tools::Rectangle aRect( nDragPosP,0, nDragPosP+HDR_SLIDERSIZE-1,GetOutputSizePixel().Width()-1 );
+    tools::Rectangle aRect( nDragPosP,0, nDragPosP+HDR_SLIDERSIZE-1,GetSize().Width()-1 );
     PaintImmediately();
     GetOutDev()->Invert(aRect);
 
@@ -353,7 +353,7 @@ bool ScRowBar::ResizeAllowed() const
 
 void ScRowBar::DrawInvert( tools::Long nDragPosP )
 {
-    tools::Rectangle aRect( 0,nDragPosP, GetOutputSizePixel().Width()-1,nDragPosP+HDR_SLIDERSIZE-1 );
+    tools::Rectangle aRect( 0,nDragPosP, GetSize().Width()-1,nDragPosP+HDR_SLIDERSIZE-1 );
     PaintImmediately();
     GetOutDev()->Invert(aRect);
 

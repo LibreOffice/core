@@ -197,7 +197,7 @@ void Calendar::ImplFormat()
 
     if ( mbCalc )
     {
-        Size aOutSize = GetOutputSizePixel();
+        Size aOutSize = GetSize();
 
         if ( (aOutSize.Width() <= 1) || (aOutSize.Height() <= 1) )
             return;
@@ -599,7 +599,7 @@ void Calendar::ImplDraw(vcl::RenderContext& rRenderContext)
     ImplFormat();
 
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
-    Size aOutSize(GetOutputSizePixel());
+    Size aOutSize(GetSize());
     tools::Long i;
     tools::Long j;
     tools::Long nY;

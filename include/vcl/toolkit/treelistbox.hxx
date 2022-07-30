@@ -608,7 +608,7 @@ public:
     void            SetEntryHeight( short nHeight );
     short           GetEntryWidth() const { return nEntryWidth; }
     void            SetEntryWidth( short nWidth );
-    Size            GetOutputSizePixel() const;
+    Size            GetSize() const;
     short           GetIndent() const { return nIndent; }
     void            SetSpaceBetweenEntries( short nSpace );
     Point           GetEntryPosition(const SvTreeListEntry*) const;

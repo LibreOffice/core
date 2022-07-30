@@ -1444,7 +1444,7 @@ void TextEngine::UpdateViews( TextView* pCurView )
         pView->HideCursor();
 
         tools::Rectangle aClipRect( maInvalidRect );
-        const Size aOutSz = pView->GetWindow()->GetOutputSizePixel();
+        const Size aOutSz = pView->GetWindow()->GetSize();
         const tools::Rectangle aVisArea( pView->GetStartDocPos(), aOutSz );
         aClipRect.Intersection( aVisArea );
         if ( !aClipRect.IsEmpty() )

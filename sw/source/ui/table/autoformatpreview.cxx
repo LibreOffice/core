@@ -64,7 +64,7 @@ AutoFormatPreview::AutoFormatPreview()
 
 void AutoFormatPreview::Resize()
 {
-    Size aSize = GetOutputSizePixel();
+    Size aSize = GetSize();
     maPreviousSize = Size(aSize.Width() - 6, aSize.Height() - 30);
     mnLabelColumnWidth = (maPreviousSize.Width() - 4) / 4 - 12;
     mnDataColumnWidth1 = (maPreviousSize.Width() - 4 - 2 * mnLabelColumnWidth) / 3;
@@ -437,7 +437,7 @@ void AutoFormatPreview::Paint(vcl::RenderContext& rRenderContext, const tools::R
         rRenderContext.SetDrawMode(DrawModeFlags::SettingsLine | DrawModeFlags::SettingsFill
                                    | DrawModeFlags::SettingsText | DrawModeFlags::SettingsGradient);
 
-    Size theWndSize = rRenderContext.GetOutputSizePixel();
+    Size theWndSize = rRenderContext.GetSize();
 
     vcl::Font aFont(rRenderContext.GetFont());
     aFont.SetTransparent(true);

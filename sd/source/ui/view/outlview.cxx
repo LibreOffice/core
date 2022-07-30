@@ -725,7 +725,7 @@ IMPL_LINK_NOARG(OutlineView, StatusEventHdl, EditStatus&, void)
     ::tools::Rectangle       aText(Point(0,0),
                                    Size(mnPaperWidth,
                                    mrOutliner.GetTextHeight()));
-    ::tools::Rectangle aWin(Point(0,0), pWin->GetOutputSizePixel());
+    ::tools::Rectangle aWin(Point(0,0), pWin->GetSize());
     aWin = pWin->PixelToLogic(aWin);
 
     if (!aVis.IsEmpty())        // not when opening

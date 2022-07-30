@@ -220,7 +220,7 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
     }
     else
     {
-        Size aSize = pOutDev->GetOutputSizePixel();
+        Size aSize = pOutDev->GetSize();
         tools::Rectangle aPixelVisRect(Point(0,0), aSize);
         tools::Rectangle aVisArea = pOutDev->PixelToLogic(aPixelVisRect);
 
