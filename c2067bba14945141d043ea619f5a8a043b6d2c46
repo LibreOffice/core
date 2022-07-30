@@ -34,6 +34,24 @@
       "parentUuid": "5929d3de_b73c1820",
       "revId": "c2067bba14945141d043ea619f5a8a043b6d2c46",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fe8e943_52d6b0bf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-07-30T05:46:40Z",
+      "side": 1,
+      "message": "Hi Michael, I have MacOS and Linux, but not Windows so don\u0027t have Visual Studio. I tested the gdb pretty printer (broke into Test::test_rectangle) and the change I made worked.",
+      "parentUuid": "23d680ac_5fc2e8ef",
+      "revId": "c2067bba14945141d043ea619f5a8a043b6d2c46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
