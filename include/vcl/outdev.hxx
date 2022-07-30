@@ -27,6 +27,7 @@
 #include <tools/solar.h>
 #include <tools/color.hxx>
 #include <tools/poly.hxx>
+#include <vcl/Geometry.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/devicecoordinate.hxx>
@@ -195,12 +196,9 @@ private:
     // TEMP TEMP TEMP
     VclPtr<VirtualDevice>           mpAlphaVDev;
 
-    /// Additional output pixel offset, applied in LogicToPixel (used by SetPixelOffset/GetPixelOffset)
-    tools::Long                            mnOutOffOrigX;
+    Geometry maGeometry;
     /// Additional output offset in _logical_ coordinates, applied in PixelToLogic (used by SetPixelOffset/GetPixelOffset)
     tools::Long                            mnOutOffLogicX;
-    /// Additional output pixel offset, applied in LogicToPixel (used by SetPixelOffset/GetPixelOffset)
-    tools::Long                            mnOutOffOrigY;
     /// Additional output offset in _logical_ coordinates, applied in PixelToLogic (used by SetPixelOffset/GetPixelOffset)
     tools::Long                            mnOutOffLogicY;
     /// Output offset for device output in pixel (pseudo window offset within window system's frames)
@@ -1613,7 +1611,7 @@ public:
 
         @return the current offset in pixel
      */
-    SAL_WARN_UNUSED_RESULT Size GetPixelOffset() const { return Size(mnOutOffOrigX, mnOutOffOrigY);}
+    SAL_WARN_UNUSED_RESULT Size GetPixelOffset() const { return Size(maGeometry.GetXOffsetFromOriginInPixels(), maGeometry.GetYOffsetFromOriginInPixels());}
 
     SAL_WARN_UNUSED_RESULT Point LogicToPixel(const Point& rLogicPt) const;
     SAL_WARN_UNUSED_RESULT Size  LogicToPixel(const Size& rLogicSize) const;
