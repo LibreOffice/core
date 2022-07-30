@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17db9708_c197cf49",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2022-07-30T18:32:52Z",
+      "side": 1,
+      "message": "To trigger it: Write some paragraphs and apply a numbering style to them. Then open context menu of the style -\u003e Modify. In the \u0027Customize\u0027 dialog page set \u0027Number\u0027 field to \u0027None\u0027.",
+      "revId": "fb9098300c0233cd4d2802b39284403e00f487c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
