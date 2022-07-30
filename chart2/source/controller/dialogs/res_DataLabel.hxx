@@ -58,6 +58,14 @@ private:
     weld::Window*       m_pWindow;
     SfxItemPool*        m_pPool;
 
+    weld::TriStateEnabled m_aNumberState;
+    weld::TriStateEnabled m_aPercentState;
+    weld::TriStateEnabled m_aCategoryState;
+    weld::TriStateEnabled m_aSymbolState;
+    weld::TriStateEnabled m_aDataSeriesState;
+    weld::TriStateEnabled m_aWrapTextState;
+    weld::TriStateEnabled m_aCustomLeaderLinesState;
+
     std::unique_ptr<weld::CheckButton> m_xCBNumber;
     std::unique_ptr<weld::Button> m_xPB_NumberFormatForValue;
     std::unique_ptr<weld::CheckButton> m_xCBPercent;

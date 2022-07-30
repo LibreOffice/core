@@ -64,12 +64,18 @@ bool lcl_ReadNumberFormatFromItemSet( const SfxItemSet& rSet, TypedWhichId<SfxUI
     return bSet;
 }
 
-void lcl_setBoolItemToCheckBox(const SfxItemSet& rInAttrs, TypedWhichId<SfxBoolItem> nWhichId, weld::CheckButton& rCheckbox)
+void lcl_setBoolItemToCheckBox(const SfxItemSet& rInAttrs, TypedWhichId<SfxBoolItem> nWhichId, weld::CheckButton& rCheckbox, weld::TriStateEnabled& rTriState)
 {
     if( const SfxBoolItem* pPoolItem = rInAttrs.GetItemIfSet(nWhichId) )
+    {
         rCheckbox.set_active(pPoolItem->GetValue());
+        rTriState.bTriStateEnabled = false;
+    }
     else
+    {
         rCheckbox.set_state(TRISTATE_INDET);
+        rTriState.bTriStateEnabled = true;
+    }
 }
 
 }//end anonymous namespace
@@ -170,9 +176,15 @@ IMPL_LINK(DataLabelResources, NumberFormatDialogHdl, weld::Button&, rButton, voi
     }
 
     if (&rButton == m_xPB_NumberFormatForValue.get() && !m_xCBNumber->get_active())
+    {
         m_xCBNumber->set_active(true);
+        m_aNumberState.bTriStateEnabled = false;
+    }
     else if (&rButton == m_xPB_NumberFormatForPercent.get() && !m_xCBPercent->get_active())
+    {
         m_xCBPercent->set_active(true);
+        m_aPercentState.bTriStateEnabled = false;
+    }
 
     SfxItemSet aNumberSet = NumberFormatDialog::CreateEmptyItemSetForNumberFormatDialog( *m_pPool );
     aNumberSet.Put (SvxNumberInfoItem( m_pNumberFormatter, SID_ATTR_NUMBERFORMAT_INFO));
@@ -209,8 +221,22 @@ IMPL_LINK(DataLabelResources, NumberFormatDialogHdl, weld::Button&, rButton, voi
     }
 }
 
-IMPL_LINK_NOARG(DataLabelResources, CheckHdl, weld::Toggleable&, void)
+IMPL_LINK(DataLabelResources, CheckHdl, weld::Toggleable&, rToggle, void)
 {
+    if (&rToggle == m_xCBNumber.get())
+        m_aNumberState.ButtonToggled(rToggle);
+    else if (&rToggle == m_xCBPercent.get())
+        m_aPercentState.ButtonToggled(rToggle);
+    else if (&rToggle == m_xCBCategory.get())
+        m_aCategoryState.ButtonToggled(rToggle);
+    else if (&rToggle == m_xCBSymbol.get())
+        m_aSymbolState.ButtonToggled(rToggle);
+    else if (&rToggle == m_xCBDataSeries.get())
+        m_aDataSeriesState.ButtonToggled(rToggle);
+    else if (&rToggle == m_xCBWrapText.get())
+        m_aWrapTextState.ButtonToggled(rToggle);
+    else if (&rToggle == m_xCBCustomLeaderLines.get())
+        m_aCustomLeaderLinesState.ButtonToggled(rToggle);
     EnableControls();
 }
 
@@ -308,13 +334,13 @@ void DataLabelResources::Reset(const SfxItemSet& rInAttrs)
     // default state
     m_xCBSymbol->set_sensitive( false );
 
-    lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_SHOW_NUMBER, *m_xCBNumber );
-    lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_SHOW_PERCENTAGE, *m_xCBPercent );
-    lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_SHOW_CATEGORY, *m_xCBCategory );
-    lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_SHOW_SYMBOL, *m_xCBSymbol );
-    lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_SHOW_DATA_SERIES_NAME, *m_xCBDataSeries );
-    lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_WRAP_TEXT, *m_xCBWrapText );
-    lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_CUSTOM_LEADER_LINES, *m_xCBCustomLeaderLines );
+    lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_SHOW_NUMBER, *m_xCBNumber, m_aNumberState );
+    lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_SHOW_PERCENTAGE, *m_xCBPercent, m_aPercentState );
+    lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_SHOW_CATEGORY, *m_xCBCategory, m_aCategoryState );
+    lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_SHOW_SYMBOL, *m_xCBSymbol, m_aSymbolState );
+    lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_SHOW_DATA_SERIES_NAME, *m_xCBDataSeries, m_aDataSeriesState );
+    lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_WRAP_TEXT, *m_xCBWrapText, m_aWrapTextState );
+    lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_CUSTOM_LEADER_LINES, *m_xCBCustomLeaderLines, m_aCustomLeaderLinesState );
 
     m_bNumberFormatMixedState = !lcl_ReadNumberFormatFromItemSet( rInAttrs, SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_SOURCE, m_nNumberFormatForValue, m_bSourceFormatForValue, m_bSourceFormatMixedState );
     m_bPercentFormatMixedState = !lcl_ReadNumberFormatFromItemSet( rInAttrs, SCHATTR_PERCENT_NUMBERFORMAT_VALUE, SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, m_nNumberFormatForPercent, m_bSourceFormatForPercent ,  m_bPercentSourceMixedState);
