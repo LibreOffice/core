@@ -29,7 +29,7 @@ If you tried this and have any suggestions, feel free to send a mail: satmo54[at
 ##Acknowledgements
 Here's some resources I used to make this template:
 ###Images:
-Images used here are licensed uner [Unsplash License](https://unsplash.com/license).
+Images used here are licensed under [Unsplash License](https://unsplash.com/license).
 1. [White clouds and blue skies](https://unsplash.com/photos/DbwYNr8RPbg) by Resul on Unsplash.
 2. [Four on flight hot air balloons](https://unsplash.com/photos/HcuKlhq4osM) by C.Valdez on Unsplash.
 ###Fonts:
