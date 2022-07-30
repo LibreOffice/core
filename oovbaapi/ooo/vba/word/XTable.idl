@@ -54,6 +54,8 @@ interface XTable
 
     any Rows([in] any aIndex );
     any Columns([in] any aIndex );
+
+    [attribute] double RightPadding;
 };
 
 }; }; };

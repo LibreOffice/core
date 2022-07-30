@@ -25,10 +25,16 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/table/XTableRows.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/table/TableBorderDistances.hpp>
 #include "vbaborders.hxx"
 #include "vbapalette.hxx"
 #include "vbarows.hxx"
 #include "vbacolumns.hxx"
+
+#include <tools/UnitConversion.hxx>
+
+#include <sal/log.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -70,7 +76,7 @@ SwVbaTable::Delete(  )
 }
 
 OUString SAL_CALL
-SwVbaTable::getName()
+SwVbaTable::getName(  )
 {
     uno::Reference< container::XNamed > xNamed( mxTextTable, uno::UNO_QUERY_THROW );
     return xNamed->getName();
@@ -87,6 +93,26 @@ SwVbaTable::Borders( const uno::Any& index )
     return uno::Any( xCol );
 }
 
+double SAL_CALL
+SwVbaTable::getRightPadding()
+{
+    uno::Reference< beans::XPropertySet > xPropertySet( mxTextTable, uno::UNO_QUERY_THROW);
+    table::TableBorderDistances aTableBorderDistances;
+    xPropertySet->getPropertyValue("TableBorderDistances") >>= aTableBorderDistances;
+    return aTableBorderDistances.RightDistance;
+    //TODO - make sure this is in correct units
+}
+
+void SAL_CALL
+SwVbaTable::setRightPadding( double fValue )
+{
+    uno::Reference< beans::XPropertySet > xPropertySet( mxTextTable, uno::UNO_QUERY_THROW);
+    table::TableBorderDistances aTableBorderDistances;
+    aTableBorderDistances.IsRightDistanceValid = true;
+    aTableBorderDistances.RightDistance = convertMm100ToPoint(fValue);
+
+    xPropertySet->setPropertyValue( "TableBorderDistances", uno::Any( aTableBorderDistances ) );
+}
 uno::Any SAL_CALL
 SwVbaTable::Rows( const uno::Any& index )
 {

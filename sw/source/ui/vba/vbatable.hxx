@@ -37,8 +37,10 @@ public:
     virtual css::uno::Reference< ::ooo::vba::word::XRange > SAL_CALL Range(  ) override;
     virtual void SAL_CALL Select(  ) override;
     virtual void SAL_CALL Delete(  ) override;
-    virtual OUString SAL_CALL getName( ) override;
+    virtual OUString SAL_CALL getName(  ) override;
     virtual css::uno::Any SAL_CALL Borders( const css::uno::Any& aIndex ) override;
+    virtual double SAL_CALL getRightPadding(  ) override;
+    virtual void SAL_CALL setRightPadding( double fValue ) override;
     virtual css::uno::Any SAL_CALL Rows( const css::uno::Any& aIndex ) override;
     virtual css::uno::Any SAL_CALL Columns( const css::uno::Any& aIndex ) override;
 
