@@ -36,6 +36,7 @@ class GraphicDescriptorTest : public test::BootstrapFixtureBase
     void testDetectBMP();
     void testDetectWEBP();
     void testDetectEMF();
+    void testDetectWMF();
 
     CPPUNIT_TEST_SUITE(GraphicDescriptorTest);
     CPPUNIT_TEST(testDetectPNG);
@@ -45,6 +46,7 @@ class GraphicDescriptorTest : public test::BootstrapFixtureBase
     CPPUNIT_TEST(testDetectBMP);
     CPPUNIT_TEST(testDetectWEBP);
     CPPUNIT_TEST(testDetectEMF);
+    CPPUNIT_TEST(testDetectWMF);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -167,6 +169,28 @@ void GraphicDescriptorTest::testDetectEMF()
     CPPUNIT_ASSERT_EQUAL(tools::Long(142), aDescriptor.GetSizePixel().Height());
     CPPUNIT_ASSERT_EQUAL(tools::Long(300), aDescriptor.GetSize_100TH_MM().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(300), aDescriptor.GetSize_100TH_MM().Height());
+}
+
+void GraphicDescriptorTest::testDetectWMF()
+{
+    // Test placeable wmf
+    {
+        SvFileStream aFileStream(m_directories.getURLFromSrc(u"/emfio/qa/cppunit/wmf/data/")
+                                     + "tdf88163-wrong-font-size.wmf",
+                                 StreamMode::READ);
+        GraphicDescriptor aDescriptor(aFileStream, nullptr);
+        aDescriptor.Detect(true);
+        CPPUNIT_ASSERT_EQUAL(GraphicFileFormat::WMF, aDescriptor.GetFileFormat());
+    }
+    // Test non-placeable wmf
+    {
+        SvFileStream aFileStream(m_directories.getURLFromSrc(u"/emfio/qa/cppunit/wmf/data/")
+                                     + "tdf88163-non-placeable.wmf",
+                                 StreamMode::READ);
+        GraphicDescriptor aDescriptor(aFileStream, nullptr);
+        aDescriptor.Detect(true);
+        CPPUNIT_ASSERT_EQUAL(GraphicFileFormat::WMF, aDescriptor.GetFileFormat());
+    }
 }
 
 } // namespace
