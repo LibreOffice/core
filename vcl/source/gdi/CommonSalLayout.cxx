@@ -438,6 +438,10 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
             const int nRunLen = nEndRunPos - nMinRunPos;
 
             int nHbFlags = HB_BUFFER_FLAGS_DEFAULT;
+#if HB_VERSION_ATLEAST(5, 1, 0)
+            // Produce HB_GLYPH_FLAG_SAFE_TO_INSERT_TATWEEL that we use below.
+            nHbFlags |= HB_BUFFER_FLAG_PRODUCE_SAFE_TO_INSERT_TATWEEL;
+#endif
             if (nMinRunPos == 0)
                 nHbFlags |= HB_BUFFER_FLAG_BOT; /* Beginning-of-text */
             if (nEndRunPos == nLength)
@@ -575,6 +579,14 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
 #else
                 // If support is not present, then always prevent breaking.
                 nGlyphFlags |= GlyphItemFlags::IS_UNSAFE_TO_BREAK;
+#endif
+
+#if HB_VERSION_ATLEAST(5, 1, 0)
+                if (hb_glyph_info_get_glyph_flags(&pHbGlyphInfos[i]) & HB_GLYPH_FLAG_SAFE_TO_INSERT_TATWEEL)
+                    nGlyphFlags |= GlyphItemFlags::IS_SAFE_TO_INSERT_KASHIDA;
+#else
+                // If support is not present, then allow kashida anywhere.
+                nGlyphFlags |= GlyphItemFlags::IS_SAFE_TO_INSERT_KASHIDA;
 #endif
 
                 DeviceCoordinate nAdvance, nXOffset, nYOffset;
@@ -837,18 +849,31 @@ bool GenericSalLayout::IsKashidaPosValid(int nCharPos) const
             if (pIter->glyphId() == 0)
                 break;
 
+            int nClusterEndPos = nCharPos;
             // Search backwards for previous glyph belonging to a different
             // character. We are looking backwards because we are dealing with
             // RTL glyphs, which will be in visual order.
             for (auto pPrev = pIter - 1; pPrev != m_GlyphItems.begin(); --pPrev)
             {
-                if (pPrev->charPos() != nCharPos)
+#if HB_VERSION_ATLEAST(5, 1, 0)
+                // This is a combining mark, keep moving until we find a base,
+                // since HarfBuzz will tell as we can’t insert kashida after a
+                // mark, but we know know enough to move the marks when
+                // inserting kashida.
+                if (pPrev->IsDiacritic())
+                {
+                    nClusterEndPos = pPrev->charPos();
+                    continue;
+                }
+#endif
+                if (pPrev->charPos() > nClusterEndPos)
                 {
                     // Check if the found glyph belongs to the next character,
+                    // and return if it is safe to insert kashida before it,
                     // otherwise the current glyph will be a ligature which is
                     // invalid kashida position.
-                    if (pPrev->charPos() == (nCharPos + 1))
-                        return true;
+                    if (pPrev->charPos() == (nClusterEndPos + 1))
+                        return pPrev->IsSafeToInsertKashida();
                     break;
                 }
             }
