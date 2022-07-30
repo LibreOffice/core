@@ -34,6 +34,24 @@
       "parentUuid": "17db9708_c197cf49",
       "revId": "fb9098300c0233cd4d2802b39284403e00f487c0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0edfa324_637bd02b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2022-07-30T21:53:16Z",
+      "side": 1,
+      "message": "You are right. I have tested some foreign formats too.",
+      "parentUuid": "11b28adb_fd849a38",
+      "revId": "fb9098300c0233cd4d2802b39284403e00f487c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
