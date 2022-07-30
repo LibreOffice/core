@@ -54,7 +54,9 @@ static bool lcl_isInHeaderFooter( const uno::Reference< text::XTextTable >& xTab
 {
     uno::Reference< text::XTextContent > xTextContent( xTable, uno::UNO_QUERY_THROW );
     uno::Reference< text::XText > xText = xTextContent->getAnchor()->getText();
-    uno::Reference< lang::XServiceInfo > xServiceInfo( xText, uno::UNO_QUERY_THROW );
+    uno::Reference< lang::XServiceInfo > xServiceInfo( xText, uno::UNO_QUERY );
+    if ( !xServiceInfo )
+        return false;
     OUString aImplName = xServiceInfo->getImplementationName();
     return aImplName == "SwXHeadFootText";
 }
