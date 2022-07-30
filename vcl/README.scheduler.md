@@ -224,8 +224,7 @@ other long running tasks, so interactivity can be improved.
 
 There were some questions coming up when implementing it:
 
-#### Why does the scheduler not detect that we only have idle tasks pending,
-and skip the instant timeout?
+#### Why does the scheduler not detect that we only have idle tasks pending, and skip the instant timeout?
 
 You never know how long a task will run. Currently the scheduler simply asks
 each task when it'll be ready to run, until two runnable tasks are found.
@@ -274,12 +273,12 @@ the `DBG_TESTSOLARMUTEX` calls are disabled, as we can't release the
 Those wakeup events must be ignored to prevent busy-locks. For more info read
 the "General: main thread deferral" section.
 
-We can neither rely on macOS dispatch_sync code block execution nor the
+We can neither rely on macOS `dispatch_sync` code block execution nor the
 message handling, as both can't be prioritized or filtered and the first
 does also not allow nested execution and is just processed in sequence.
 
 There is also a workaround for a problem for pushing tasks to an empty queue,
-as [NSApp postEvent: ... atStart: NO] doesn't append the event, if the
+as `[NSApp postEvent: ... atStart: NO]` doesn't append the event, if the
 message queue is empty.
 
 An additional problem is the filtering of events on Window close. This drops
@@ -415,7 +414,7 @@ do {
 while ( bHasPending )
 ```
 
-The idea is to use g_main_context_prepare and keep the `max_priority` as an
+The idea is to use `g_main_context_prepare` and keep the `max_priority` as an
 indicator. We cannot prevent running newer lower events, but we can prevent
 running new higher events, which should be sufficient for most stuff.
 
@@ -433,3 +432,12 @@ will also affect the Gtk+ and KDE backend for the user event handling.
 
 This way it can be easier used to profile Tasks, eventually to improve LO's
 interactivity.
+
+## See Also
+
+- [Solar Mutex](https://wiki.openoffice.org/wiki/Terms/Solar_Mutex)
+- [LibreOffice Main Loop](https://wiki.documentfoundation.org/Development/LHM_LiMux/Main_Loop)
+- [AOO Advanced Threading-Architecture (proposal)](https://wiki.openoffice.org/wiki/Architecture/Proposal/Advanced_Threading-Architecture)
+- [Revise OOo Multi-Threading Efforts](https://wiki.openoffice.org/wiki/Effort/Revise_OOo_Multi-Threading)
+- [Multi-Threading Analysis](https://wiki.openoffice.org/wiki/Analysis/Multi-Threading)
+- [AOO Wiki - Category:Multi-Threading](https://wiki.openoffice.org/wiki/Category:Multi-Threading)
