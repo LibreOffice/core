@@ -34,7 +34,7 @@ constexpr sal_uInt32 EMF_CHECK_SIZE      = 44;
 constexpr sal_uInt32 WMF_CHECK_SIZE      = 32;
 constexpr sal_uInt32 EMR_HEADER          = 0x00000001;
 constexpr sal_uInt32 ENHMETA_SIGNATURE   = 0x464d4520;
-constexpr sal_uInt32 PLACEABLE_SIGNATURE = 0xd7cdc69a;
+constexpr sal_uInt32 PLACEABLE_SIGNATURE = 0x9ac6cdd7;
 namespace
 {
 enum class MetafileType : sal_uInt16
