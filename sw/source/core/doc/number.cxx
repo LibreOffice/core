@@ -672,7 +672,7 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
     if (rMyNFormat.GetNumberingType() == SVX_NUM_NUMBER_NONE)
     {
         if (!rMyNFormat.HasListFormat())
-            return OUString();
+            return bInclStrings ? rMyNFormat.GetPrefix() + rMyNFormat.GetSuffix() : OUString();
 
         // If numbering is disabled for this level we should emit just prefix/suffix
         // Remove everything between first %1% and last %n% (including markers)
