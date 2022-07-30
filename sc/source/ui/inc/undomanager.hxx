@@ -11,7 +11,7 @@
 #include <svx/sdrundomanager.hxx>
 
 class SfxViewShell;
-class ScUndoEnterData;
+class ScSimpleUndo;
 
 class SC_DLLPUBLIC ScUndoManager : public SdrUndoManager
 {
@@ -30,7 +30,7 @@ public:
 
 private:
     static std::optional<ScRange> getAffectedRangeFromUndo(const SfxUndoAction*);
-    static const ScUndoEnterData* getScUndoEnterData(const SfxUndoAction*);
+    static const ScSimpleUndo* getScSimpleUndo(const SfxUndoAction*);
 };
 
 class ScUndoRedoContext final : public SfxUndoContext

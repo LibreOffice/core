@@ -25,6 +25,7 @@
 
 #include <memory>
 #include <map>
+#include <optional>
 
 class SdrUndoAction;
 class ScRefUndoData;
@@ -42,6 +43,8 @@ public:
     virtual bool    Merge( SfxUndoAction *pNextAction ) override;
     /// See SfxUndoAction::GetViewShellId().
     ViewShellId GetViewShellId() const override;
+
+    virtual std::optional<ScRange> getAffectedRange() const { return std::nullopt; }
 
 protected:
     ScDocShell*     pDocShell;
@@ -80,6 +83,8 @@ public:
                     ScBlockUndo( ScDocShell* pDocSh, const ScRange& rRange,
                                  ScBlockUndoMode eBlockMode );
     virtual         ~ScBlockUndo() override;
+
+    virtual std::optional<ScRange> getAffectedRange() const override { return aBlockRange; }
 
 protected:
     ScRange         aBlockRange;

@@ -94,7 +94,7 @@ public:
 
     virtual OUString GetComment() const override;
 
-    const ScAddress& GetPositionAddress() const { return maPos; }
+    virtual std::optional<ScRange> getAffectedRange() const override { return maPos; }
 
 private:
     ValuesType maOldValues;
@@ -124,6 +124,8 @@ public:
 
     virtual OUString GetComment() const override;
 
+    virtual std::optional<ScRange> getAffectedRange() const override { return aPos; }
+
 private:
     ScAddress       aPos;
     ScCellValue     maOldCell;
@@ -145,6 +147,8 @@ public:
     virtual void Repeat( SfxRepeatTarget& rTarget ) override;
     virtual bool CanRepeat( SfxRepeatTarget& rTarget ) const override;
     virtual OUString GetComment() const override;
+
+    virtual std::optional<ScRange> getAffectedRange() const override { return maPos; }
 
 private:
     void SetChangeTrack();
@@ -265,6 +269,8 @@ public:
 
     virtual OUString GetComment() const override;
 
+    virtual std::optional<ScRange> getAffectedRange() const override { return maPos; }
+
 private:
     void            DoInsertNote( const ScNoteData& rNoteData );
     void            DoRemoveNote( const ScNoteData& rNoteData );
@@ -289,6 +295,8 @@ public:
     virtual bool    CanRepeat( SfxRepeatTarget& rTarget ) const override;
 
     virtual OUString GetComment() const override;
+
+    virtual std::optional<ScRange> getAffectedRange() const override { return maPos; }
 
 private:
     ScAddress       maPos;
