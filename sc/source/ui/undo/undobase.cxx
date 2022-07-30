@@ -623,10 +623,9 @@ ScUndoManager::~ScUndoManager() {}
  */
 bool ScUndoManager::IsViewUndoActionIndependent(const SfxViewShell* pView) const
 {
-    if (GetUndoActionCount() <= 1 || SdrUndoManager::GetRedoActionCount() > 0)
+    if (GetUndoActionCount() <= 1)
     {
-        // Single or less undo, owned by another view; or redo actions that might depend on the
-        // current undo order.
+        // Single or less undo, owned by another view.
         return false;
     }
 
@@ -662,21 +661,46 @@ bool ScUndoManager::IsViewUndoActionIndependent(const SfxViewShell* pView) const
     if (!viewRange)
         return false;
 
-    return !topRange->Intersects(*viewRange);
+    if (topRange->Intersects(*viewRange))
+        return false;
+
+    for (size_t i = 0; i < GetRedoActionCount(); ++i)
+    {
+        auto pRedoAction = getScUndoEnterData(GetRedoAction(i));
+        if (!pRedoAction)
+        {
+            return false;
+        }
+        std::optional<ScRange> redoRange = getAffectedRangeFromUndo(pRedoAction);
+        if (!redoRange || (redoRange->Intersects(*viewRange) && pRedoAction->GetViewShellId() != nViewId))
+        {
+            // Dependent redo action and owned by another view.
+            return false;
+        }
+    }
+
+    return true;
 }
 
 std::optional<ScRange> ScUndoManager::getAffectedRangeFromUndo(const SfxUndoAction* pAction)
 {
-    auto pListAction = dynamic_cast<const SfxListUndoAction*>(pAction);
-    if (!pListAction)
-        return std::nullopt;
-    if (pListAction->maUndoActions.size() > 1)
-        return std::nullopt;
-    auto pTopScUndoEnterData = dynamic_cast<ScUndoEnterData*>(pListAction->maUndoActions[0].pAction.get());
+    auto pTopScUndoEnterData = getScUndoEnterData(pAction);
     if (!pTopScUndoEnterData)
         return std::nullopt;
     return pTopScUndoEnterData->GetPositionAddress();
 }
 
+const ScUndoEnterData* ScUndoManager::getScUndoEnterData(const SfxUndoAction* pAction)
+{
+    const ScUndoEnterData* pUndoEnterData = dynamic_cast<const ScUndoEnterData*>(pAction);
+    if (pUndoEnterData)
+        return pUndoEnterData;
+    auto pListAction = dynamic_cast<const SfxListUndoAction*>(pAction);
+    if (!pListAction)
+        return nullptr;
+    if (pListAction->maUndoActions.size() > 1)
+        return nullptr;
+    return dynamic_cast<ScUndoEnterData*>(pListAction->maUndoActions[0].pAction.get());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
