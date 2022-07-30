@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4b3fac1_5a5f867e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-07-30T12:05:03Z",
+      "side": 1,
+      "message": "Nice and easy one! I did a search and found the last code use of this define, which was removed as no longer needed.",
+      "revId": "f5c538c24ce8528933eeffe1e7fdaf39d16c09c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
