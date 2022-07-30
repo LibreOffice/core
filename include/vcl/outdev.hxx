@@ -138,12 +138,6 @@ namespace com::sun::star::i18n {
     class XBreakIterator;
 }
 
-#if defined UNX
-#define GLYPH_FONT_HEIGHT   128
-#else
-#define GLYPH_FONT_HEIGHT   256
-#endif
-
 // OutputDevice-Types
 
 enum OutDevType { OUTDEV_WINDOW, OUTDEV_PRINTER, OUTDEV_VIRDEV, OUTDEV_PDF };
