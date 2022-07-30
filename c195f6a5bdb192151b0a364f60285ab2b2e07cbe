@@ -16,6 +16,23 @@
       "message": "I have added Normalize() as a synonym for Justify(). Kept the unit tests. Thanks Regina, I wasn\u0027t aware that was what Justify did!",
       "revId": "c195f6a5bdb192151b0a364f60285ab2b2e07cbe",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81c58492_5b8f8027",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-07-30T05:49:54Z",
+      "side": 1,
+      "message": "Hi Tomaz, I asked on the mailing list about this one but noone responded. What are your thoughts?",
+      "revId": "c195f6a5bdb192151b0a364f60285ab2b2e07cbe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
