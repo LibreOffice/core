@@ -50,7 +50,7 @@ enum class SvItemStateFlags
     UNCHECKED          = 0x01,
     CHECKED            = 0x02,
     TRISTATE           = 0x04,
-    HILIGHTED          = 0x08
+    HIGHLIGHTED          = 0x08
 };
 namespace o3tl
 {
@@ -195,7 +195,7 @@ public:
     }
     bool IsStateHilighted() const
     {
-        return bool(nItemFlags & SvItemStateFlags::HILIGHTED);
+        return bool(nItemFlags & SvItemStateFlags::HIGHLIGHTED);
     }
     void SetStateChecked();
     void SetStateUnchecked();
@@ -205,26 +205,26 @@ public:
 
 inline void SvLBoxButton::SetStateChecked()
 {
-    nItemFlags &= SvItemStateFlags::HILIGHTED;
+    nItemFlags &= SvItemStateFlags::HIGHLIGHTED;
     nItemFlags |= SvItemStateFlags::CHECKED;
 }
 
 inline void SvLBoxButton::SetStateUnchecked()
 {
-    nItemFlags &= SvItemStateFlags::HILIGHTED;
+    nItemFlags &= SvItemStateFlags::HIGHLIGHTED;
     nItemFlags |= SvItemStateFlags::UNCHECKED;
 }
 inline void SvLBoxButton::SetStateTristate()
 {
-    nItemFlags &= SvItemStateFlags::HILIGHTED;
+    nItemFlags &= SvItemStateFlags::HIGHLIGHTED;
     nItemFlags |= SvItemStateFlags::TRISTATE;
 }
 inline void SvLBoxButton::SetStateHilighted( bool bHilight )
 {
     if ( bHilight )
-        nItemFlags |= SvItemStateFlags::HILIGHTED;
+        nItemFlags |= SvItemStateFlags::HIGHLIGHTED;
     else
-        nItemFlags &= ~SvItemStateFlags::HILIGHTED;
+        nItemFlags &= ~SvItemStateFlags::HIGHLIGHTED;
 }
 
 struct SvLBoxContextBmp_Impl;
