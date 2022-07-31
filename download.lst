@@ -184,8 +184,8 @@ FONT_ALEF_TARBALL := alef-1.001.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-FONT_AMIRI_SHA256SUM := 1fbfccced6348b5db2c1c21d5b319cd488e14d055702fa817a0f6cb83d882166
-FONT_AMIRI_TARBALL := Amiri-0.111.zip
+FONT_AMIRI_SHA256SUM := 9c4e768893e0023a0ad6f488d5c84bd5add6565d3dcadb838ba5b20e75fcc9a7
+FONT_AMIRI_TARBALL := Amiri-0.117.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
