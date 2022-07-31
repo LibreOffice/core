@@ -364,7 +364,7 @@ sal_Int64 ScSamplingDialog::GetPopulationSize() const
 void ScSamplingDialog::LimitSampleSizeAndPeriod()
 {
     // Limit sample size (for WOR methods) and period if population is smaller
-    // than last known value. When enlargening the input population range the
+    // than last known value. When enlarging the input population range the
     // values will be adjusted up to the last known value again.
     const sal_Int64 nPopulationSize = GetPopulationSize();
     if (nPopulationSize <= mnLastSampleSizeValue && !mxWithReplacement->get_active())
