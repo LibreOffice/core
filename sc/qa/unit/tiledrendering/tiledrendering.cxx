@@ -130,6 +130,7 @@ public:
     void testInvalidEntrySave();
     void testUndoReordering();
     void testUndoReorderingRedo();
+    void testUndoReorderingMulti();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnHeaders);
@@ -189,6 +190,7 @@ public:
     CPPUNIT_TEST(testInvalidEntrySave);
     CPPUNIT_TEST(testUndoReordering);
     CPPUNIT_TEST(testUndoReorderingRedo);
+    CPPUNIT_TEST(testUndoReorderingMulti);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3125,6 +3127,76 @@ void ScTiledRenderingTest::testUndoReorderingRedo()
     CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 0, 0)));
     CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 1, 0)));
     CPPUNIT_ASSERT_EQUAL(OUString("CC"), pDoc->GetString(ScAddress(0, 2, 0)));
+}
+
+void ScTiledRenderingTest::testUndoReorderingMulti()
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    ScUndoManager* pUndoManager = pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoManager);
+    CPPUNIT_ASSERT_EQUAL(std::size_t(0), pUndoManager->GetUndoActionCount());
+
+    // view #1
+    int nView1 = SfxLokHelper::getView();
+    ViewCallback aView1;
+
+    // view #2
+    SfxLokHelper::createView();
+    int nView2 = SfxLokHelper::getView();
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ViewCallback aView2;
+
+    // text edit a cell in view #1
+    SfxLokHelper::setView(nView1);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(std::size_t(1), pUndoManager->GetUndoActionCount());
+
+    // text edit a different cell in view #2
+    SfxLokHelper::setView(nView2);
+    ScTabViewShell* pView2 = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    pView2->SetCursor(0, 2);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'C', 0);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'C', 0);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'C', 0);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'C', 0);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(std::size_t(2), pUndoManager->GetUndoActionCount());
+    CPPUNIT_ASSERT_EQUAL(OUString("xx"), pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("CC"), pDoc->GetString(ScAddress(0, 2, 0)));
+
+    // and another cell in view #2
+    pView2->SetCursor(0, 3);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'D', 0);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'D', 0);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'D', 0);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'D', 0);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(std::size_t(3), pUndoManager->GetUndoActionCount());
+    CPPUNIT_ASSERT_EQUAL(OUString("xx"), pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("CC"), pDoc->GetString(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("DD"), pDoc->GetString(ScAddress(0, 3, 0)));
+
+    // View 1 presses undo
+    SfxLokHelper::setView(nView1);
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(std::size_t(2), pUndoManager->GetUndoActionCount());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("CC"), pDoc->GetString(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("DD"), pDoc->GetString(ScAddress(0, 3, 0)));
 }
 
 }

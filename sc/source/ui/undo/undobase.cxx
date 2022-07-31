@@ -621,7 +621,7 @@ ScUndoManager::~ScUndoManager() {}
  * Checks if the topmost undo action owned by pView is independent from the topmost action undo
  * action.
  */
-bool ScUndoManager::IsViewUndoActionIndependent(const SfxViewShell* pView) const
+bool ScUndoManager::IsViewUndoActionIndependent(const SfxViewShell* pView, sal_uInt16& rOffset) const
 {
     if (GetUndoActionCount() <= 1)
     {
@@ -641,10 +641,16 @@ bool ScUndoManager::IsViewUndoActionIndependent(const SfxViewShell* pView) const
 
     // Earlier undo action that belongs to the view, but is not the top one.
     const SfxUndoAction* pViewAction = nullptr;
-    const SfxUndoAction* pAction = GetUndoAction(1);
-    if (pAction->GetViewShellId() == nViewId)
+    size_t nOffset = 0;
+    for (size_t i = 0; i < GetUndoActionCount(); ++i)
     {
-        pViewAction = pAction;
+        const SfxUndoAction* pAction = GetUndoAction(i);
+        if (pAction->GetViewShellId() == nViewId)
+        {
+            pViewAction = pAction;
+            nOffset = i;
+            break;
+        }
     }
 
     if (!pViewAction)
@@ -679,6 +685,7 @@ bool ScUndoManager::IsViewUndoActionIndependent(const SfxViewShell* pView) const
         }
     }
 
+    rOffset = nOffset;
     return true;
 }
 

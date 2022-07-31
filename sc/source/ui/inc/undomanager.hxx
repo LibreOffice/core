@@ -20,9 +20,9 @@ public:
 
     /**
      * Checks if the topmost undo action owned by pView is independent from the topmost action undo
-     * action.
+     * action. Sets rOffset to the offset of that independent undo action on success.
      */
-    bool IsViewUndoActionIndependent(const SfxViewShell* pView) const;
+    bool IsViewUndoActionIndependent(const SfxViewShell* pView, sal_uInt16& rOffset) const;
 
     /// Make these public
     using SdrUndoManager::UndoWithContext;
