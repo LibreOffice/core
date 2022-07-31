@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7efcdd28_d8616008",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003606
+      },
+      "writtenOn": "2022-07-31T21:52:17Z",
+      "side": 1,
+      "message": "The font tarball to be uploaded https://github.com/aliftype/reem-kufi/releases/download/v1.2/ReemKufi-1.2.zip",
+      "revId": "caf28d354c24a37dbe4b9eb0900f1d4959fd25be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
