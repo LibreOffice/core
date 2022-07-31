@@ -33,6 +33,23 @@
       "message": "If the patch is pushed, I suppose \"SetStateHilighted\" and \"IsStateHilighted\" should be modified too.\n\nAlso, there are \"HIUNCHECKED\" and \"HICHECKED\" in the same file in \"SvBmp\" enum class, should they (and their associated methods) changed too?",
       "revId": "f3841c067a224ab6a359591cc4b5915acfef8c49",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70b40f10_d77593dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-07-31T21:22:28Z",
+      "side": 1,
+      "message": "yeah, its safe to change all of that. It\u0027s just the stuff that ends up in the sdk that is a problem (e.g. include/rtl, offapi, udkapi) I still sort of think we should have a more obvious \"physical\" distinction which is which.",
+      "revId": "f3841c067a224ab6a359591cc4b5915acfef8c49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
