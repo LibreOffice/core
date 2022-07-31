@@ -4558,7 +4558,7 @@ static void doc_setWindowTextSelection(LibreOfficeKitDocument* /*pThis*/, unsign
     Application::PostMouseEvent(VclEventId::WindowMouseButtonUp, pWindow, &aCursorEvent);
 }
 
-static bool getFromTransferrable(
+static bool getFromTransferable(
     const css::uno::Reference<css::datatransfer::XTransferable> &xTransferable,
     const OString &aInMimeType, OString &aRet);
 
@@ -4566,7 +4566,7 @@ static bool encodeImageAsHTML(
     const css::uno::Reference<css::datatransfer::XTransferable> &xTransferable,
     const OString &aMimeType, OString &aRet)
 {
-    if (!getFromTransferrable(xTransferable, aMimeType, aRet))
+    if (!getFromTransferable(xTransferable, aMimeType, aRet))
         return false;
 
     // Encode in base64.
@@ -4592,7 +4592,7 @@ static bool encodeTextAsHTML(
     const css::uno::Reference<css::datatransfer::XTransferable> &xTransferable,
     const OString &aMimeType, OString &aRet)
 {
-    if (!getFromTransferrable(xTransferable, aMimeType, aRet))
+    if (!getFromTransferable(xTransferable, aMimeType, aRet))
         return false;
 
     // Embed in HTML - FIXME: needs some escaping.
@@ -4606,7 +4606,7 @@ static bool encodeTextAsHTML(
     return true;
 }
 
-static bool getFromTransferrable(
+static bool getFromTransferable(
     const css::uno::Reference<css::datatransfer::XTransferable> &xTransferable,
     const OString &aInMimeType, OString &aRet)
 {
@@ -4709,7 +4709,7 @@ static char* doc_getTextSelection(LibreOfficeKitDocument* pThis, const char* pMi
         pType = "text/plain;charset=utf-8";
 
     OString aRet;
-    bool bSuccess = getFromTransferrable(xTransferable, OString(pType), aRet);
+    bool bSuccess = getFromTransferable(xTransferable, OString(pType), aRet);
     if (!bSuccess)
         return nullptr;
 
@@ -4750,7 +4750,7 @@ static int doc_getSelectionType(LibreOfficeKitDocument* pThis)
         return LOK_SELTYPE_COMPLEX;
 
     OString aRet;
-    bool bSuccess = getFromTransferrable(xTransferable, "text/plain;charset=utf-8", aRet);
+    bool bSuccess = getFromTransferable(xTransferable, "text/plain;charset=utf-8", aRet);
     if (!bSuccess)
         return LOK_SELTYPE_NONE;
 
@@ -4792,7 +4792,7 @@ static int doc_getSelectionTypeAndText(LibreOfficeKitDocument* pThis, const char
         pType = "text/plain;charset=utf-8";
 
     OString aRet;
-    bool bSuccess = getFromTransferrable(xTransferable, OString(pType), aRet);
+    bool bSuccess = getFromTransferable(xTransferable, OString(pType), aRet);
     if (!bSuccess)
         return LOK_SELTYPE_NONE;
 
@@ -4860,7 +4860,7 @@ static int doc_getClipboard(LibreOfficeKitDocument* pThis,
     rtl::Reference<LOKClipboard> xClip(LOKClipboardFactory::getClipboardForCurView());
 
     css::uno::Reference<css::datatransfer::XTransferable> xTransferable = xClip->getContents();
-    SAL_INFO("lok", "Got from clip: " << xClip.get() << " transferrable: " << xTransferable);
+    SAL_INFO("lok", "Got from clip: " << xClip.get() << " transferable: " << xTransferable);
     if (!xTransferable)
     {
         SetLastExceptionMsg("No clipboard content available");
@@ -4897,7 +4897,7 @@ static int doc_getClipboard(LibreOfficeKitDocument* pThis,
             (*pOutMimeTypes)[i] = strdup(aMimeTypes[i].getStr());
 
         OString aRet;
-        bool bSuccess = getFromTransferrable(xTransferable, (*pOutMimeTypes)[i], aRet);
+        bool bSuccess = getFromTransferable(xTransferable, (*pOutMimeTypes)[i], aRet);
         if (!bSuccess || aRet.getLength() < 1)
         {
             (*pOutSizes)[i] = 0;

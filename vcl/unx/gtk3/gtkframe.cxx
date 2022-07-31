@@ -4862,7 +4862,7 @@ gboolean GtkInstDropTarget::signalDragDrop(GtkDropTargetAsync* context, GdkDrop*
     // For LibreOffice internal D&D we provide the Transferable without Gtk
     // intermediaries as a shortcut, see tdf#100097 for how dbaccess depends on this
     if (GtkInstDragSource::g_ActiveDragSource)
-        xTransferable = GtkInstDragSource::g_ActiveDragSource->GetTransferrable();
+        xTransferable = GtkInstDragSource::g_ActiveDragSource->GetTransferable();
     else
     {
 #if GTK_CHECK_VERSION(4,0,0)
@@ -5048,7 +5048,7 @@ GdkDragAction GtkInstDropTarget::signalDragMotion(GtkDropTargetAsync *context, G
         // For LibreOffice internal D&D we provide the Transferable without Gtk
         // intermediaries as a shortcut, see tdf#100097 for how dbaccess depends on this
         if (GtkInstDragSource::g_ActiveDragSource)
-            xTransferable = GtkInstDragSource::g_ActiveDragSource->GetTransferrable();
+            xTransferable = GtkInstDragSource::g_ActiveDragSource->GetTransferable();
         else
         {
 #if !GTK_CHECK_VERSION(4,0,0)
