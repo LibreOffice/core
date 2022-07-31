@@ -73,9 +73,9 @@ inline constexpr OUStringLiteral RID_BMP_RIBBAR_REP = u"sw/res/sr20016.png";
 inline constexpr OUStringLiteral RID_BMP_RIBBAR_ENTRY = u"sw/res/sr20017.png";
 inline constexpr OUStringLiteral RID_BMP_RIBBAR_FORMULA = u"sw/res/sr20018.png";
 inline constexpr OUStringLiteral RID_BMP_RIBBAR_ERROR = u"sw/res/sr20019.png";
-inline constexpr OUStringLiteral RID_BMP_RIBBAR_RECENCY = u"sw/res/sc20244.png";
-inline constexpr OUStringLiteral RID_BMP_RIBBAR_FIELD = u"sw/res/sc20244.png";
-inline constexpr OUStringLiteral RID_BMP_RIBBAR_FIELD_BYTYPE = u"sw/res/sc20244.png";
+inline constexpr OUStringLiteral RID_BMP_RIBBAR_RECENCY = u"sw/res/sr20020.png";
+inline constexpr OUStringLiteral RID_BMP_RIBBAR_FIELD = u"sw/res/sr20021.png";
+inline constexpr OUStringLiteral RID_BMP_RIBBAR_FIELD_BYTYPE = u"sw/res/sr20022.png";
 
 inline constexpr OUStringLiteral RID_BMP_NAVI_OUTLINE = u"sw/res/nc20000.png";
 inline constexpr OUStringLiteral RID_BMP_NAVI_TABLE = u"sw/res/nc20001.png";
