@@ -33,9 +33,6 @@
 #include <uno/lbnames.h>
 
 
-using namespace ::std;
-using namespace ::osl;
-
 namespace jni_uno
 {
 
@@ -942,7 +939,7 @@ JNI_info const * JNI_info::get_jni_info(
             jni_env, static_cast< jobject >(uno_vm->getClassLoader()), jo_class,
             jo_forName );
 
-        ClearableMutexGuard g( Mutex::getGlobalMutex() );
+        osl::ClearableMutexGuard g( osl::Mutex::getGlobalMutex() );
         jni_info =
             reinterpret_cast< JNI_info const * >(
                 jni->GetStaticLongField(

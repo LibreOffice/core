@@ -31,7 +31,6 @@
 #include <rtl/strbuf.hxx>
 #include <uno/lbnames.h>
 
-using namespace ::osl;
 using namespace ::jni_uno;
 
 namespace

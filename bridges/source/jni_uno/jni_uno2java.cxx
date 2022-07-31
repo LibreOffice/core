@@ -84,7 +84,7 @@ void Bridge::handle_java_exc(
     OUString exc_name(
         jstring_to_oustring( jni, static_cast<jstring>(jo_class_name.get()) ) );
 
-    ::com::sun::star::uno::TypeDescription td( exc_name.pData );
+    css::uno::TypeDescription td( exc_name.pData );
     if (!td.is() || (td.get()->eTypeClass != typelib_TypeClass_EXCEPTION))
     {
         // call toString()
@@ -107,7 +107,7 @@ void Bridge::handle_java_exc(
 
 #if OSL_DEBUG_LEVEL > 0
     // patch Message, append stack trace
-    reinterpret_cast< ::com::sun::star::uno::Exception * >(
+    reinterpret_cast< css::uno::Exception * >(
         uno_data.get() )->Message += jni.get_stack_trace( jo_exc.get() );
 #endif
 
@@ -137,9 +137,9 @@ void Bridge::call_java(
         static_cast<JniUnoEnvironmentData *>(m_java_env->pContext)->machine);
 
     // assure fully initialized iface_td:
-    ::com::sun::star::uno::TypeDescription iface_holder;
+    css::uno::TypeDescription iface_holder;
     if (! iface_td->aBase.bComplete) {
-        iface_holder = ::com::sun::star::uno::TypeDescription(
+        iface_holder = css::uno::TypeDescription(
             reinterpret_cast<typelib_TypeDescription *>(iface_td) );
         iface_holder.makeComplete();
         if (! iface_holder.get()->bComplete) {
@@ -778,22 +778,22 @@ void UNO_proxy_dispatch(
         buf.append( ": " );
         buf.append( err.m_message );
         // binary identical struct
-        ::com::sun::star::uno::RuntimeException exc(
+        css::uno::RuntimeException exc(
             buf.makeStringAndClear(),
-            ::com::sun::star::uno::Reference<
-              ::com::sun::star::uno::XInterface >() );
-        ::com::sun::star::uno::Type const & exc_type = cppu::UnoType<decltype(exc)>::get();
+            css::uno::Reference<
+              css::uno::XInterface >() );
+        css::uno::Type const & exc_type = cppu::UnoType<decltype(exc)>::get();
         uno_type_any_construct( *uno_exc, &exc, exc_type.getTypeLibType(), nullptr );
         SAL_INFO("bridges", exc.Message);
     }
     catch (::jvmaccess::VirtualMachine::AttachGuard::CreationException &)
     {
         // binary identical struct
-        ::com::sun::star::uno::RuntimeException exc(
+        css::uno::RuntimeException exc(
             "[jni_uno bridge error] attaching current thread to java failed!",
-            ::com::sun::star::uno::Reference<
-              ::com::sun::star::uno::XInterface >() );
-        ::com::sun::star::uno::Type const & exc_type = cppu::UnoType<decltype(exc)>::get();
+            css::uno::Reference<
+              css::uno::XInterface >() );
+        css::uno::Type const & exc_type = cppu::UnoType<decltype(exc)>::get();
         uno_type_any_construct( *uno_exc, &exc, exc_type.getTypeLibType(), nullptr );
         SAL_WARN("bridges", exc.Message);
     }

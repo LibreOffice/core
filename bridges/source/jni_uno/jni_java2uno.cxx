@@ -94,7 +94,7 @@ void Bridge::handle_uno_exc( JNI_context const & jni, uno_Any * uno_exc ) const
     {
 #if OSL_DEBUG_LEVEL > 0
         // append java stack trace to Message member
-        static_cast< ::com::sun::star::uno::Exception * >(
+        static_cast< css::uno::Exception * >(
             uno_exc->pData )->Message += jni.get_stack_trace();
 #endif
         SAL_INFO(
