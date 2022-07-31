@@ -607,8 +607,8 @@ void GalleryBrowser2::SelectTheme( std::u16string_view rThemeName )
     m_xHelper.set(new GalleryTransferable(mpCurTheme, 0, true));
     rtl::Reference<TransferDataContainer> xHelper(m_xHelper);
     mxListView->enable_drag_source(xHelper, DND_ACTION_COPY | DND_ACTION_LINK);
-    mxIconView->SetDragDataTransferrable(xHelper, DND_ACTION_COPY | DND_ACTION_LINK);
-    mxPreview->SetDragDataTransferrable(xHelper, DND_ACTION_COPY | DND_ACTION_LINK);
+    mxIconView->SetDragDataTransferable(xHelper, DND_ACTION_COPY | DND_ACTION_LINK);
+    mxPreview->SetDragDataTransferable(xHelper, DND_ACTION_COPY | DND_ACTION_LINK);
 
     mxIconView->SetTheme(mpCurTheme);
     mxPreview->SetTheme(mpCurTheme);
