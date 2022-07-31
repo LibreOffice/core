@@ -75,11 +75,11 @@ SvBmp SvLBoxButtonData::GetIndex( SvItemStateFlags nItemState )
         nIdx = SvBmp::CHECKED;
     else if (nItemState == SvItemStateFlags::TRISTATE)
         nIdx = SvBmp::TRISTATE;
-    else if (nItemState == (SvItemStateFlags::UNCHECKED | SvItemStateFlags::HILIGHTED))
+    else if (nItemState == (SvItemStateFlags::UNCHECKED | SvItemStateFlags::HIGHLIGHTED))
         nIdx = SvBmp::HIUNCHECKED;
-    else if (nItemState == (SvItemStateFlags::CHECKED | SvItemStateFlags::HILIGHTED))
+    else if (nItemState == (SvItemStateFlags::CHECKED | SvItemStateFlags::HIGHLIGHTED))
         nIdx = SvBmp::HICHECKED;
-    else if (nItemState == (SvItemStateFlags::TRISTATE | SvItemStateFlags::HILIGHTED))
+    else if (nItemState == (SvItemStateFlags::TRISTATE | SvItemStateFlags::HIGHLIGHTED))
         nIdx = SvBmp::HITRISTATE;
     else
         nIdx = SvBmp::UNCHECKED;
