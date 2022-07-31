@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b29db6a_15d881bf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003606
+      },
+      "writtenOn": "2022-07-31T21:45:06Z",
+      "side": 1,
+      "message": "The font tarball to be uploaded https://github.com/aliftype/amiri/releases/download/0.117/Amiri-0.117.zip",
+      "revId": "7306a8850ceef88f165b1d765562e0e0fa6d0bb7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
