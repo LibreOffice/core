@@ -756,11 +756,12 @@ void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
                         ViewShellId nViewShellId = GetViewShellId();
                         if (pAction->GetViewShellId() != nViewShellId)
                         {
-                            if (pUndoManager->IsViewUndoActionIndependent(this))
+                            sal_uInt16 nOffset = 0;
+                            if (pUndoManager->IsViewUndoActionIndependent(this, nOffset))
                             {
                                 // Execute the undo with an offset: don't undo the top action, but an
                                 // earlier one, since it's independent and that belongs to our view.
-                                nUndoOffset = 1;
+                                nUndoOffset += nOffset;
                             }
                             else
                             {
