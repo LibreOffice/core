@@ -51,6 +51,24 @@
       "parentUuid": "40067c16_89dc39c9",
       "revId": "fd019945ba4c2e4f07e15ad6e86485901ab9599d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4724923c_af6ab06f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-07-31T12:29:03Z",
+      "side": 1,
+      "message": "OK, fair enough. Please remove the comment, and then I will merge your patch.",
+      "parentUuid": "8f0037bc_8dbaf757",
+      "revId": "fd019945ba4c2e4f07e15ad6e86485901ab9599d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
