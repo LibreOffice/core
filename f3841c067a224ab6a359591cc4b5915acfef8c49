@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "feea0ab4_294193e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-07-31T19:50:21Z",
+      "side": 1,
+      "message": "It doesn\u0027t seem to be used in a public API or something so should be ok but not 100% sure.\nCaolán: any thoughts here?",
+      "revId": "f3841c067a224ab6a359591cc4b5915acfef8c49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
