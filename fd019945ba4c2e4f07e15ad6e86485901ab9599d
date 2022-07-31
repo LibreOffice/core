@@ -33,6 +33,24 @@
       "message": "Looks good to me. But, please also do the following things:\n\n1. In the commit message, add description on what you have done in the patch after describing the problem.\n2. Add the instruction to run the test in the commit message:\n  make CPPUNIT_TEST_NAME\u003d\"testDetectWMF\" -sr CppunitTest_vcl_graphic_test\n3. Add a comment to the code where the test fails without the fix in place\n// Without the fix, equality assertion fails with: - Expected: 246 - Actual  : 0\n4. Use emfio/qa/cppunit/wmf/data/tdf88163-non-placeable.wmf as the nonplaceable wmf file in the test, as TypeDetectionExample.wmf is tested elsewhere.",
       "revId": "fd019945ba4c2e4f07e15ad6e86485901ab9599d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f0037bc_8dbaf757",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-07-31T10:37:15Z",
+      "side": 1,
+      "message": "I disagree with 3. because this is a type detection test not a specific bug test so \"without the fix\" doesn\u0027t really describe what fix it is. I think it\u0027s better without the comment. This was more of a silly typo fix anyway rather than some important fix.\n\nBut I did add the comment regardless. If you disagree with what I said you can merge.",
+      "parentUuid": "40067c16_89dc39c9",
+      "revId": "fd019945ba4c2e4f07e15ad6e86485901ab9599d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
