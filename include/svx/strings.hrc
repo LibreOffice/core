@@ -1494,7 +1494,7 @@
 #define RID_SUBSETSTR_BASIC_GEORGIAN                        NC_("RID_SUBSETMAP", "Basic Georgian")
 #define RID_SUBSETSTR_GEORGIAN_EXTENDED                     NC_("RID_SUBSETMAP", "Georgian Extended")
 #define RID_SUBSETSTR_HANGUL_JAMO                           NC_("RID_SUBSETMAP", "Hangul Jamo")
-#define RID_SUBSETSTR_LATIN_EXTENDED_ADDS                   NC_("RID_SUBSETMAP", "Latin Extended Additionals")
+#define RID_SUBSETSTR_LATIN_EXTENDED_ADDS                   NC_("RID_SUBSETMAP", "Latin Extended Additional")
 #define RID_SUBSETSTR_GREEK_EXTENDED                        NC_("RID_SUBSETMAP", "Greek Extended")
 #define RID_SUBSETSTR_GENERAL_PUNCTUATION                   NC_("RID_SUBSETMAP", "General punctuation")
 #define RID_SUBSETSTR_SUB_SUPER_SCRIPTS                     NC_("RID_SUBSETMAP", "Superscripts and Subscripts")
