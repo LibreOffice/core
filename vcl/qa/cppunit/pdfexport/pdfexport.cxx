@@ -1434,8 +1434,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf66597_2)
                           "<05> <0647>\n"
                           "<06> <062F>\n"
                           "<08> <062C>\n"
-                          "<09> <0628>\n"
-                          "<0B> <0623>\n"
+                          "<0A> <0628>\n"
+                          "<0C> <0623>\n"
                           "endbfchar");
         std::string aData(static_cast<const char*>(aObjectStream.GetData()),
                           aObjectStream.GetSize());
