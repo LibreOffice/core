@@ -1270,7 +1270,7 @@ public:
         m_aPopupMenuHdl = rLink;
     }
 
-    virtual void enable_drag_source(rtl::Reference<TransferDataContainer>& rTransferrable,
+    virtual void enable_drag_source(rtl::Reference<TransferDataContainer>& rTransferable,
                                     sal_uInt8 eDNDConstants)
         = 0;
 
@@ -2316,7 +2316,7 @@ public:
     virtual void queue_draw() = 0;
     virtual void queue_draw_area(int x, int y, int width, int height) = 0;
 
-    virtual void enable_drag_source(rtl::Reference<TransferDataContainer>& rTransferrable,
+    virtual void enable_drag_source(rtl::Reference<TransferDataContainer>& rTransferable,
                                     sal_uInt8 eDNDConstants)
         = 0;
 
