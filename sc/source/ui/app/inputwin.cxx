@@ -2141,7 +2141,7 @@ void ScTextWnd::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     // the input line
     m_xHelper.set(new svt::OStringTransferable(OUString()));
     rtl::Reference<TransferDataContainer> xHelper(m_xHelper);
-    SetDragDataTransferrable(xHelper, DND_ACTION_COPY);
+    SetDragDataTransferable(xHelper, DND_ACTION_COPY);
 
     OutputDevice& rDevice = pDrawingArea->get_ref_device();
     pDrawingArea->set_margin_start(gnBorderWidth);
