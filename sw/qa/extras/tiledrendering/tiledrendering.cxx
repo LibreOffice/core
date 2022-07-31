@@ -2368,7 +2368,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIMEFormattingAtEndOfParagraph)
     //          <bold>a</bold>\n"
     //          b<bold>a</bold>b"
 
-    // the cursor should be at position 3nd
+    // the cursor should be at position 3rd
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), pShellCursor->GetPoint()->nContent.GetIndex());
 
