@@ -5950,10 +5950,10 @@ void SvxMSDffManager::GetCtrlData(sal_uInt32 nOffsDggL)
     if (!checkSeek(rStCtrl, nOffsDggL))
         return;
 
-    sal_uInt8   nVer;
-    sal_uInt16 nInst;
-    sal_uInt16 nFbt;
-    sal_uInt32  nLength;
+    sal_uInt8 nVer(0);
+    sal_uInt16 nInst(0);
+    sal_uInt16 nFbt(0);
+    sal_uInt32 nLength(0);
     if( !ReadCommonRecordHeader( rStCtrl, nVer, nInst, nFbt, nLength ) ) return;
 
     sal_uInt64 nPos = nOffsDggL + DFF_COMMON_RECORD_HEADER_SIZE;
