@@ -618,7 +618,7 @@ void SAL_CALL ORowSet::close(  )
         MutexGuard aGuard( m_aMutex );
         ::connectivity::checkDisposed(ORowSet_BASE1::rBHelper.bDisposed);
     }
-    // additionals things to set
+    // additional things to set
     freeResources( true );
 }
 
