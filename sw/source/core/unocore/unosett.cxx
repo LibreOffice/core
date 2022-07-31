@@ -1553,13 +1553,13 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
         {
             OUString uTmp;
             rProp.Value >>= uTmp;
-            aFormat.SetPrefix(uTmp);
+            aFormat.SetPrefix(uTmp, true);
         }
         else if (rProp.Name == UNO_NAME_SUFFIX)
         {
             OUString uTmp;
             rProp.Value >>= uTmp;
-            aFormat.SetSuffix(uTmp);
+            aFormat.SetSuffix(uTmp, true);
         }
         else if (rProp.Name == UNO_NAME_CHAR_STYLE_NAME)
         {

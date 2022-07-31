@@ -489,6 +489,11 @@ void MSWordExportBase::NumberingLevel(
                 }
             }
         }
+        else
+        {
+            SAL_WARN("JCL","NoListFormat. Prefix["<<rFormat.GetPrefix()<<"] suffix["<<rFormat.GetSuffix()<<"]");
+            assert (rFormat.GetPrefix().isEmpty() && rFormat.GetSuffix().isEmpty());
+        }
     }
 
     if (SVX_NUM_CHAR_SPECIAL == rFormat.GetNumberingType() ||

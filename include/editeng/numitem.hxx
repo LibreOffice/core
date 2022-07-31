@@ -167,9 +167,20 @@ public:
 
     void            SetNumAdjust(SvxAdjust eSet) {eNumAdjust = eSet;}
     SvxAdjust       GetNumAdjust() const {return eNumAdjust;}
-    void            SetPrefix(const OUString& rSet) { sPrefix = rSet;}
+    void            SetPrefix(const OUString& rSet, bool bFallback = false)
+    {
+        SAL_WARN("JCL","::SetPrefix from["<<sPrefix<<"] to ["<<rSet<<"]");
+        assert (bFallback);
+        sPrefix = rSet;
+    }
     const OUString& GetPrefix() const { return sPrefix;}
-    void            SetSuffix(const OUString& rSet) { sSuffix = rSet;}
+    void            SetSuffix(const OUString& rSet, bool bFallback = false)
+        {
+        SAL_WARN("JCL","::SetSuffix from["<<sSuffix<<"] to ["<<rSet<<"]");
+        assert (bFallback);
+        sSuffix = rSet;
+
+        }
     const OUString& GetSuffix() const { return sSuffix;}
     // Based on prefix and suffix initialize them (for backward compatibility) and generate listformat string
     void            SetListFormat(const OUString& rPrefix, const OUString& rSuffix, int nLevel);

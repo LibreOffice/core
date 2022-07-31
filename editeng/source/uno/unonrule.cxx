@@ -293,7 +293,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex(const Sequence<beans::Propert
             OUString aPrefix;
             if( aVal >>= aPrefix )
             {
-                aFmt.SetPrefix(aPrefix);
+                aFmt.SetPrefix(aPrefix, true);
                 continue;
             }
         }
@@ -302,7 +302,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex(const Sequence<beans::Propert
             OUString aSuffix;
             if( aVal >>= aSuffix )
             {
-                aFmt.SetSuffix(aSuffix);
+                aFmt.SetSuffix(aSuffix, true);
                 continue;
             }
         }
