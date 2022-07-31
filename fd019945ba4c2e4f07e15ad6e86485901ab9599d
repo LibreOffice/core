@@ -16,6 +16,23 @@
       "message": "In non-placeable wmf I think it\u0027s not possible to tell the size without playing back the file. The non-placeable header doesn\u0027t seem to have a size property like the placeable header does (BoundingBox, Inch).\n\nThis means the placeable test *could* use a size test. ImpDetectWMF doesn\u0027t currently set the size metadata. I\u0027ll have to add that when we move to using GraphicFormatDetector.\n\nFor now this test should be fine. I can open the placeable wmf on my machine correctly with this patch.",
       "revId": "fd019945ba4c2e4f07e15ad6e86485901ab9599d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40067c16_89dc39c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-07-31T09:59:31Z",
+      "side": 1,
+      "message": "Looks good to me. But, please also do the following things:\n\n1. In the commit message, add description on what you have done in the patch after describing the problem.\n2. Add the instruction to run the test in the commit message:\n  make CPPUNIT_TEST_NAME\u003d\"testDetectWMF\" -sr CppunitTest_vcl_graphic_test\n3. Add a comment to the code where the test fails without the fix in place\n// Without the fix, equality assertion fails with: - Expected: 246 - Actual  : 0\n4. Use emfio/qa/cppunit/wmf/data/tdf88163-non-placeable.wmf as the nonplaceable wmf file in the test, as TypeDetectionExample.wmf is tested elsewhere.",
+      "revId": "fd019945ba4c2e4f07e15ad6e86485901ab9599d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
