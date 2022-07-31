@@ -1686,7 +1686,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteTransposed)
 }
 
 // Test the call of .uno:PasteAsLink (tdf#90101)
-// Note: the paste as link functionaly is tested in ucalc
+// Note: the paste as link functionality is tested in ucalc
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteAsLink)
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
