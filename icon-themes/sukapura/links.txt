@@ -2539,6 +2539,9 @@ sw/res/sr20014.png cmd/sc_setreminder.png
 sw/res/sr20015.png cmd/sc_shownote.png
 sw/res/sr20016.png cmd/sc_recsearch.png
 sw/res/sr20017.png cmd/sc_insertindexesentry.png
+sw/res/sr20020.png sw/res/sc20234.png
+sw/res/sr20021.png cmd/sc_addfield.png
+sw/res/sr20022.png cmd/sc_addfield.png
 sw/res/sx01.png cmd/sc_changedatabasefield.png
 sw/res/sx02.png cmd/sc_dbviewtables.png
 sw/res/sx03.png cmd/sc_dbviewqueries.png

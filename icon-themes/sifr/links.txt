@@ -2640,6 +2640,8 @@ sw/res/sr20016.png cmd/sc_recsearch.png
 sw/res/sr20017.png cmd/sc_insertindexesentry.png
 sw/res/sr20018.png cmd/sc_inserttable.png
 sw/res/sr20019.png cmd/sc_remove.png
+sw/res/sr20021.png cmd/sc_insertfield.png
+sw/res/sr20022.png cmd/sc_insertfield.png
 sw/res/styfamnu.png cmd/sc_defaultbullet.png
 sw/res/sx01.png cmd/sc_dbqueryedit.png
 sw/res/sx02.png cmd/sc_freezepanesfirstrow.png
