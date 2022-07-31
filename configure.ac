@@ -2039,6 +2039,11 @@ AC_ARG_ENABLE(customtarget-components,
     AS_HELP_STRING([--enable-customtarget-components],
         [Generates the static UNO object constructor mapping from the build.]))
 
+AC_ARG_ENABLE(float_device_pixel,
+    AS_HELP_STRING([--enable-float-device-pixel],
+                   [Uses doubles for VCL device coordinates instead of 32-bit integers.]),
+,)
+
 dnl ===================================================================
 dnl Optional Packages (--with/without-)
 dnl ===================================================================
@@ -11666,14 +11671,13 @@ dnl ===================================================================
 dnl Set vcl option: coordinate device in double or sal_Int32
 dnl ===================================================================
 
-dnl disabled for now, we don't want subtle differences between OSs
-dnl AC_MSG_CHECKING([Type to use for Device Pixel coordinates])
-dnl if test "$_os" = "Darwin" -o  $_os = iOS ; then
-dnl     AC_DEFINE(VCL_FLOAT_DEVICE_PIXEL)
-dnl     AC_MSG_RESULT([double])
-dnl else
-dnl     AC_MSG_RESULT([sal_Int32])
-dnl fi
+AC_MSG_CHECKING([Type to use for Device Pixel coordinates])
+if test "$enable_float_device_pixel" = yes; then
+    AC_DEFINE(VCL_FLOAT_DEVICE_PIXEL)
+    AC_MSG_RESULT([double])
+else
+    AC_MSG_RESULT([sal_Int32])
+fi
 
 dnl ===================================================================
 dnl Show which vclplugs will be built.
