@@ -1330,13 +1330,13 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf66597_1)
         aZCodec.Decompress(pStream->GetMemory(), aObjectStream);
         CPPUNIT_ASSERT(aZCodec.EndCompression());
         aObjectStream.Seek(0);
-        // The <01> is glyph id, <0020> is code point.
-        // The document has three characters <space><nbspace><space>, but the font
-        // reuses the same glyph for space and nbspace so we should have a single
-        // CMAP entry for the space, and nbspace will be handled with ActualText
-        // (tested above).
+        // The <01> is glyph id, <2044> is code point.
+        // The document has two characters <2044><2215><2044>, but the font
+        // reuses the same glyph for U+2044 and U+2215 so we should have a single
+        // CMAP entry for the U+2044, and U+2215 will be handled with ActualText
+        // (tested below).
         std::string aCmap("1 beginbfchar\n"
-                          "<01> <0020>\n"
+                          "<01> <2044>\n"
                           "endbfchar");
         std::string aData(static_cast<const char*>(aObjectStream.GetData()),
                           aObjectStream.GetSize());
@@ -1377,7 +1377,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf66597_1)
         CPPUNIT_ASSERT_EQUAL_MESSAGE("The should be one ActualText entry!", static_cast<size_t>(1),
                                      nCount);
 
-        aActualText = "/Span<</ActualText<FEFF00A0>>>";
+        aActualText = "/Span<</ActualText<FEFF2215>>>";
         nPos = aData.find(aActualText);
         CPPUNIT_ASSERT_MESSAGE("ActualText not found!", nPos != std::string::npos);
     }
