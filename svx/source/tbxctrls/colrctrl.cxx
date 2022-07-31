@@ -94,7 +94,7 @@ void SvxColorValueSet_docking::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 
     m_xHelper.set(new SvxColorValueSetData);
     rtl::Reference<TransferDataContainer> xHelper(m_xHelper);
-    SetDragDataTransferrable(xHelper, DND_ACTION_COPY);
+    SetDragDataTransferable(xHelper, DND_ACTION_COPY);
 }
 
 SvxColorValueSet_docking::SvxColorValueSet_docking(std::unique_ptr<weld::ScrolledWindow> xWindow)

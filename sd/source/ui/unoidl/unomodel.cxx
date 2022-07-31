@@ -2609,7 +2609,7 @@ uno::Reference<datatransfer::XTransferable> SdXImpressDocument::getSelection()
     if (!pViewShell)
         return uno::Reference<datatransfer::XTransferable>();
 
-    return pViewShell->GetSelectionTransferrable();
+    return pViewShell->GetSelectionTransferable();
 }
 
 void SdXImpressDocument::setGraphicSelection(int nType, int nX, int nY)
