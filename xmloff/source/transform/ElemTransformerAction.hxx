@@ -37,7 +37,7 @@ enum XMLElemTransformerAction
     XML_ETACTION_RENAME_ELEM_PROC_ATTRS,// rename element and proc attr:
                                         // - param1: elem namespace +
                                         //           token of local name
-                                        // - param2: attr acation map
+                                        // - param2: attr action map
     XML_ETACTION_RENAME_ELEM_ADD_ATTR,  // rename element and add attr:
                                         // - param1: elem namespace +
                                         //           token of local name
@@ -55,11 +55,11 @@ enum XMLElemTransformerAction
                                         // if child of another:
                                         // - param1: elem namespace +
                                         //           token of new local name
-                                        // - param2: attr acation map
+                                        // - param2: attr action map
                                         // - param3: namespace +
                                         //           token of parent element
     XML_ETACTION_PROC_ATTRS,            // proc attr:
-                                        // - param1: attr acation map
+                                        // - param1: attr action map
     XML_ETACTION_MOVE_ATTRS_TO_ELEMS,   // turn some attributes into elems
                                         // - param1: action map specifying
                                         //   the attrs that shall be moved
@@ -69,7 +69,7 @@ enum XMLElemTransformerAction
     XML_ETACTION_PROC_ATTRS_COND,       // proc attr if child of another:
                                         // - param1: namespace +
                                         //           token of parent element
-                                        // - param2: attr acation map
+                                        // - param2: attr action map
     XML_ETACTION_EXTRACT_CHARACTERS,    // takes the characters of the current
                                         // element and all child elements
                                         // and put them together into the
