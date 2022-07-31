@@ -110,10 +110,10 @@ public:
     {
         return m_pDrawingArea->get_clipboard();
     }
-    void SetDragDataTransferrable(rtl::Reference<TransferDataContainer>& rTransferrable,
-                                  sal_uInt8 eDNDConstants)
+    void SetDragDataTransferable(rtl::Reference<TransferDataContainer>& rTransferable,
+                                 sal_uInt8 eDNDConstants)
     {
-        m_pDrawingArea->enable_drag_source(rTransferrable, eDNDConstants);
+        m_pDrawingArea->enable_drag_source(rTransferable, eDNDConstants);
         m_pDrawingArea->connect_drag_begin(LINK(this, CustomWidgetController, DragBeginHdl));
     }
     // return true to disallow drag, false to allow
