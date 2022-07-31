@@ -699,7 +699,7 @@ void ScCopyPasteTest::tdf113500_autofillMixed()
     }
 
     // compare the results of fill-up / -down
-    // do not check the 2. column: 1st,3st. It is another bug to fix
+    // do not check the 2. column: 1st,3rd. It is another bug to fix
     for (int nCol = 1; nCol <= 3; nCol+=2)
     {
         for (int nRow = 16; nRow <= 21; nRow++)
