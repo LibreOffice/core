@@ -9436,7 +9436,7 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
         if (dynamic_cast<SwContentNode const*>(GetExport().m_pOutFormatNode) != nullptr)
         {
             auto pTextNd(static_cast<SwTextNode const*>(GetExport().m_pOutFormatNode));
-            // WW doesn't have a concept of a pararaph that's in a list but not
+            // WW doesn't have a concept of a paragraph that's in a list but not
             // counted in the list - see AttributeOutputBase::ParaNumRule()
             // forcing non-existent numId="0" in this case.
             // This means WW won't apply the indents from the numbering,
