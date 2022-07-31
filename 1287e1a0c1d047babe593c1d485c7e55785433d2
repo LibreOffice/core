@@ -67,6 +67,24 @@
       "message": "I think including NBSP/NNBSP here for DICTIONARY_WORD is not wanted. It\u0027s used for spell-checking and not breaking at (N)NBSP would yield two or more concatenated words, effectively leading to a non-match.",
       "revId": "1287e1a0c1d047babe593c1d485c7e55785433d2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cedd5c17_d2db7171",
+        "filename": "i18npool/source/breakiterator/breakiteratorImpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-07-31T16:53:00Z",
+      "side": 1,
+      "message": "Thank you very much for your opinion!",
+      "parentUuid": "c2dae7a0_ea7af99e",
+      "revId": "1287e1a0c1d047babe593c1d485c7e55785433d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
