@@ -234,7 +234,7 @@ SwFlyFrameFormat* SwDoc::MakeFlySection_( const SwPosition& rAnchPos,
 
     if ( RndStdIds::FLY_AS_CHAR == eAnchorId )
     {
-        const sal_Int32 nStt = rAnchPos.nContent.GetIndex();
+        const sal_Int32 nStt = rAnchPos.GetContentIndex();
         SwTextNode * pTextNode = rAnchPos.GetNode().GetTextNode();
 
         OSL_ENSURE(pTextNode!= nullptr, "There should be a SwTextNode!");
@@ -277,7 +277,7 @@ SwFlyFrameFormat* SwDoc::MakeFlySection_( const SwPosition& rAnchPos,
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         SwNodeOffset nNodeIdx = rAnchPos.GetNodeIndex();
-        const sal_Int32 nCntIdx = rAnchPos.nContent.GetIndex();
+        const sal_Int32 nCntIdx = rAnchPos.GetContentIndex();
         GetIDocumentUndoRedo().AppendUndo(
             std::make_unique<SwUndoInsLayFormat>( pFormat, nNodeIdx, nCntIdx ));
     }
@@ -475,19 +475,19 @@ static bool lcl_TstFlyRange( const SwPaM* pPam, const SwPosition* pFlyPos,
         const SwNodeOffset nPamEndIndex = pPaMEnd->GetNodeIndex();
         if (RndStdIds::FLY_AT_PARA == nAnchorId)
             bOk = (nPamStartIndex < nFlyIndex && nPamEndIndex > nFlyIndex) ||
-               (((nPamStartIndex == nFlyIndex) && (pPaMStart->nContent.GetIndex() == 0)) &&
+               (((nPamStartIndex == nFlyIndex) && (pPaMStart->GetContentIndex() == 0)) &&
                (nPamEndIndex > nFlyIndex));
         else
         {
-            const sal_Int32 nFlyContentIndex = pFlyPos->nContent.GetIndex();
-            const sal_Int32 nPamEndContentIndex = pPaMEnd->nContent.GetIndex();
+            const sal_Int32 nFlyContentIndex = pFlyPos->GetContentIndex();
+            const sal_Int32 nPamEndContentIndex = pPaMEnd->GetContentIndex();
             bOk = (nPamStartIndex < nFlyIndex &&
                 (( nPamEndIndex > nFlyIndex )||
                  ((nPamEndIndex == nFlyIndex) &&
                   (nPamEndContentIndex > nFlyContentIndex))) )
                 ||
                        (((nPamStartIndex == nFlyIndex) &&
-                      (pPaMStart->nContent.GetIndex() <= nFlyContentIndex)) &&
+                      (pPaMStart->GetContentIndex() <= nFlyContentIndex)) &&
                      ((nPamEndIndex > nFlyIndex) ||
                      (nPamEndContentIndex > nFlyContentIndex )));
         }
@@ -793,7 +793,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
                     const SwPosition *pPos = rAnchor.GetContentAnchor();
                     SwTextNode *pTextNode = pPos->GetNode().GetTextNode();
                     OSL_ENSURE( pTextNode->HasHints(), "Missing FlyInCnt-Hint." );
-                    const sal_Int32 nIdx = pPos->nContent.GetIndex();
+                    const sal_Int32 nIdx = pPos->GetContentIndex();
                     SwTextAttr * const pHint =
                         pTextNode->GetTextAttrForCharAt(nIdx, RES_TXTATR_FLYCNT);
 
@@ -1112,7 +1112,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable
         const SwPosition *pPos = rAnchor.GetContentAnchor();
         SwTextNode *pTextNode = pPos->GetNode().GetTextNode();
         OSL_ENSURE( pTextNode->HasHints(), "Missing FlyInCnt-Hint." );
-        const sal_Int32 nIdx = pPos->nContent.GetIndex();
+        const sal_Int32 nIdx = pPos->GetContentIndex();
         SwTextAttr * const pHint =
             pTextNode->GetTextAttrForCharAt( nIdx, RES_TXTATR_FLYCNT );
 

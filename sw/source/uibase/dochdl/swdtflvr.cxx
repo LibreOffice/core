@@ -1294,7 +1294,7 @@ void SwPasteContext::remember()
     // Set point to the previous node, so it is not moved.
     const SwNodeIndex& rNodeIndex = pCursor->GetPoint()->nNode;
     m_pPaM.reset(new SwPaM(rNodeIndex, rNodeIndex, SwNodeOffset(0), SwNodeOffset(-1)));
-    m_nStartContent = pCursor->GetPoint()->nContent.GetIndex();
+    m_nStartContent = pCursor->GetPoint()->GetContentIndex();
 }
 
 void SwPasteContext::forget() { m_pPaM.reset(); }
@@ -1605,7 +1605,7 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
                 // first paragraph of the cell?
                 rSh.GetCursor()->GetNode().GetIndex() == rSh.GetCursor()->GetNode().FindTableBoxStartNode()->GetIndex()+1 &&
                 // beginning of the paragraph?
-                !rSh.GetCursor()->GetPoint()->nContent.GetIndex();
+                !rSh.GetCursor()->GetPoint()->GetContentIndex();
             SfxDispatcher* pDispatch = rSh.GetView().GetViewFrame()->GetDispatcher();
 
             // go start of the cell

@@ -3401,7 +3401,7 @@ void SwHandleAnchorNodeChg::ImplDestroy()
         return;
     }
 
-    const SwTextField* pField = pTextNode->GetFieldTextAttrAt(mpCommentAnchor->nContent.GetIndex());
+    const SwTextField* pField = pTextNode->GetFieldTextAttrAt(mpCommentAnchor->GetContentIndex());
     if (!pField || pField->GetFormatField().GetField()->GetTyp()->Which() != SwFieldIds::Postit)
     {
         return;

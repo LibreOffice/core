@@ -229,7 +229,7 @@ void SwCursorShell::StartAction()
         // save for update of the ribbon bar
         const SwNode& rNd = m_pCurrentCursor->GetPoint()->GetNode();
         m_nCurrentNode = rNd.GetIndex();
-        m_nCurrentContent = m_pCurrentCursor->GetPoint()->nContent.GetIndex();
+        m_nCurrentContent = m_pCurrentCursor->GetPoint()->GetContentIndex();
         m_nCurrentNdTyp = rNd.GetNodeType();
         if( rNd.IsTextNode() )
             m_nLeftFramePos = SwCallLink::getLayoutFrame( GetLayout(), *rNd.GetTextNode(), m_nCurrentContent, true );
@@ -2569,10 +2569,10 @@ OUString SwCursorShell::GetSelText() const
                 else if (rNode.IsTextNode())
                 {
                     sal_Int32 const nStart(i == pStart->GetNodeIndex()
-                            ? pStart->nContent.GetIndex()
+                            ? pStart->GetContentIndex()
                             : 0);
                     sal_Int32 const nEnd(i == pEnd->GetNodeIndex()
-                            ? pEnd->nContent.GetIndex()
+                            ? pEnd->GetContentIndex()
                             : rNode.GetTextNode()->Len());
                     buf.append(rNode.GetTextNode()->GetExpandText(
                                 GetLayout(),
@@ -2590,9 +2590,9 @@ OUString SwCursorShell::GetSelText() const
         SwTextNode* pTextNd = m_pCurrentCursor->GetNode().GetTextNode();
         if( pTextNd )
         {
-            const sal_Int32 nStt = m_pCurrentCursor->Start()->nContent.GetIndex();
+            const sal_Int32 nStt = m_pCurrentCursor->Start()->GetContentIndex();
             aText = pTextNd->GetExpandText(GetLayout(), nStt,
-                    m_pCurrentCursor->End()->nContent.GetIndex() - nStt );
+                    m_pCurrentCursor->End()->GetContentIndex() - nStt );
         }
     }
     return aText;
@@ -2614,7 +2614,7 @@ sal_Unicode SwCursorShell::GetChar( bool bEnd, tools::Long nOffset )
     if( !pTextNd )
         return 0;
 
-    const sal_Int32 nPos = pPos->nContent.GetIndex();
+    const sal_Int32 nPos = pPos->GetContentIndex();
     const OUString& rStr = pTextNd->GetText();
     sal_Unicode cCh = 0;
 
@@ -2638,7 +2638,7 @@ bool SwCursorShell::ExtendSelection( bool bEnd, sal_Int32 nCount )
     SwTextNode* pTextNd = pPos->GetNode().GetTextNode();
     assert(pTextNd);
 
-    sal_Int32 nPos = pPos->nContent.GetIndex();
+    sal_Int32 nPos = pPos->GetContentIndex();
     if( bEnd )
     {
         if ((nPos + nCount) <= pTextNd->GetText().getLength())
@@ -2757,7 +2757,7 @@ sal_uInt16 SwCursorShell::GetCursorCnt( bool bAll ) const
 
 bool SwCursorShell::IsStartOfDoc() const
 {
-    if( m_pCurrentCursor->GetPoint()->nContent.GetIndex() )
+    if( m_pCurrentCursor->GetPoint()->GetContentIndex() )
         return false;
 
     // after EndOfIcons comes the content selection (EndNd+StNd+ContentNd)
@@ -2775,7 +2775,7 @@ bool SwCursorShell::IsEndOfDoc() const
         pCNd = SwNodes::GoPrevious( &aIdx );
 
     return aIdx == m_pCurrentCursor->GetPoint()->nNode &&
-            pCNd->Len() == m_pCurrentCursor->GetPoint()->nContent.GetIndex();
+            pCNd->Len() == m_pCurrentCursor->GetPoint()->GetContentIndex();
 }
 
 /** Invalidate cursors
@@ -3409,8 +3409,8 @@ bool SwCursorShell::IsSelFullPara() const
     if( m_pCurrentCursor->GetPoint()->GetNodeIndex() ==
         m_pCurrentCursor->GetMark()->GetNodeIndex() && !m_pCurrentCursor->IsMultiSelection() )
     {
-        sal_Int32 nStt = m_pCurrentCursor->GetPoint()->nContent.GetIndex();
-        sal_Int32 nEnd = m_pCurrentCursor->GetMark()->nContent.GetIndex();
+        sal_Int32 nStt = m_pCurrentCursor->GetPoint()->GetContentIndex();
+        sal_Int32 nEnd = m_pCurrentCursor->GetMark()->GetContentIndex();
         if( nStt > nEnd )
         {
             sal_Int32 nTmp = nStt;
@@ -3464,7 +3464,7 @@ bool SwCursorShell::SelectHiddenRange()
         const SwTextNode* pNode = rPt.GetNode().GetTextNode();
         if ( pNode )
         {
-            const sal_Int32 nPos = rPt.nContent.GetIndex();
+            const sal_Int32 nPos = rPt.GetContentIndex();
 
             // check if nPos is in hidden range
             sal_Int32 nHiddenStart;
@@ -3755,7 +3755,7 @@ void SwCursorShell::GetSmartTagTerm( std::vector< OUString >& rSmartTagTypes,
     if ( !pSmartTagList )
         return;
 
-    sal_Int32 nCurrent = aPos.nContent.GetIndex();
+    sal_Int32 nCurrent = aPos.GetContentIndex();
     sal_Int32 nBegin = nCurrent;
     sal_Int32 nLen = 1;
 
@@ -3797,7 +3797,7 @@ void SwCursorShell::GetSmartTagRect( const Point& rPt, SwRect& rSelectRect )
     if( pNode->IsInProtectSect() )
         return;
 
-    sal_Int32 nBegin = aPos.nContent.GetIndex();
+    sal_Int32 nBegin = aPos.GetContentIndex();
     sal_Int32 nLen = 1;
 
     if (!pSmartTagList->InWrongWord(nBegin, nLen) || pNode->IsSymbolAt(nBegin))
@@ -3809,9 +3809,9 @@ void SwCursorShell::GetSmartTagRect( const Point& rPt, SwRect& rSelectRect )
     //save the start and end positions of the line and the starting point
     Push();
     LeftMargin();
-    const sal_Int32 nLineStart = GetCursor()->GetPoint()->nContent.GetIndex();
+    const sal_Int32 nLineStart = GetCursor()->GetPoint()->GetContentIndex();
     RightMargin();
-    const sal_Int32 nLineEnd = GetCursor()->GetPoint()->nContent.GetIndex();
+    const sal_Int32 nLineEnd = GetCursor()->GetPoint()->GetContentIndex();
     Pop(PopMode::DeleteCurrent);
 
     // make sure the selection build later from the data below does not

@@ -676,7 +676,7 @@ void SwXMLImport::endDocument()
                                         pPaM->GetBound().GetNodeIndex() )
                 {
                     const sal_Int32 nCntPos =
-                            pPaM->GetBound().nContent.GetIndex();
+                            pPaM->GetBound().GetContentIndex();
                     pPaM->GetBound().nContent.Assign( pTextNode,
                             pTextNode->GetText().getLength() + nCntPos );
                 }
@@ -684,7 +684,7 @@ void SwXMLImport::endDocument()
                                 pPaM->GetBound( false ).GetNodeIndex() )
                 {
                     const sal_Int32 nCntPos =
-                            pPaM->GetBound( false ).nContent.GetIndex();
+                            pPaM->GetBound( false ).GetContentIndex();
                     pPaM->GetBound( false ).nContent.Assign( pTextNode,
                             pTextNode->GetText().getLength() + nCntPos );
                 }
@@ -711,8 +711,8 @@ void SwXMLImport::endDocument()
         }
 
         SwPosition* pPos = pPaM->GetPoint();
-        OSL_ENSURE( !pPos->nContent.GetIndex(), "last paragraph isn't empty" );
-        if( !pPos->nContent.GetIndex() )
+        OSL_ENSURE( !pPos->GetContentIndex(), "last paragraph isn't empty" );
+        if( !pPos->GetContentIndex() )
         {
             SwTextNode* pCurrNd;
             SwNodeOffset nNodeIdx = pPos->GetNodeIndex();

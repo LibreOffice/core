@@ -529,7 +529,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
         case ww::eFORMTEXT:
         if (bUseEnhFields && m_pPaM!=nullptr && m_pPaM->GetPoint()!=nullptr) {
             SwPosition aEndPos = *m_pPaM->GetPoint();
-            SwPaM aFieldPam( m_aFieldStack.back().GetPtNode(), m_aFieldStack.back().GetPtContent(), aEndPos.nNode, aEndPos.nContent.GetIndex());
+            SwPaM aFieldPam( m_aFieldStack.back().GetPtNode(), m_aFieldStack.back().GetPtContent(), aEndPos.nNode, aEndPos.GetContentIndex());
             IDocumentMarkAccess* pMarksAccess = m_rDoc.getIDocumentMarkAccess( );
             IFieldmark *pFieldmark = pMarksAccess->makeFieldBookmark(
                         aFieldPam, m_aFieldStack.back().GetBookmarkName(), ODF_FORMTEXT,
@@ -596,7 +596,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
 
                 SwContentNode* pNd = aRestorePos.GetNode().GetContentNode();
                 sal_Int32 nMaxValidIndex = pNd ? pNd->Len() : 0;
-                if (aRestorePos.nContent.GetIndex() > nMaxValidIndex)
+                if (aRestorePos.GetContentIndex() > nMaxValidIndex)
                 {
                     SAL_WARN("sw.ww8", "Attempt to restore to invalid content position");
                     aRestorePos.nContent.Assign(pNd, nMaxValidIndex);
@@ -637,7 +637,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                     SwPosition aEndPos = *m_pPaM->GetPoint();
                     SwPaM aFieldPam(
                             m_aFieldStack.back().GetPtNode(), m_aFieldStack.back().GetPtContent(),
-                            aEndPos.nNode, aEndPos.nContent.GetIndex());
+                            aEndPos.nNode, aEndPos.GetContentIndex());
 
                     IDocumentMarkAccess* pMarksAccess = m_rDoc.getIDocumentMarkAccess( );
 
@@ -3448,7 +3448,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
         m_bCareFirstParaEndInToc = true;
     }
 
-    if (m_pPaM->GetPoint()->nContent.GetIndex())
+    if (m_pPaM->GetPoint()->GetContentIndex())
         AppendTextNode(*m_pPaM->GetPoint());
 
     const SwPosition* pPos = m_pPaM->GetPoint();

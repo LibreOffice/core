@@ -1197,7 +1197,7 @@ void SwHTMLParser::NewForm( bool bAppend )
 
     if( bAppend )
     {
-        if( m_pPam->GetPoint()->nContent.GetIndex() )
+        if( m_pPam->GetPoint()->GetContentIndex() )
             AppendTextNode( AM_SPACE );
         else
             AddParSpace();
@@ -1360,7 +1360,7 @@ void SwHTMLParser::EndForm( bool bAppend )
     {
         if( bAppend )
         {
-            if( m_pPam->GetPoint()->nContent.GetIndex() )
+            if( m_pPam->GetPoint()->GetContentIndex() )
                 AppendTextNode( AM_SPACE );
             else
                 AddParSpace();

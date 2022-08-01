@@ -1132,7 +1132,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                     const SwPosition *pPos = aAnchor.GetContentAnchor();
                     SwTextNode *pTextNode = pPos->GetNode().GetTextNode();
                     SAL_WARN_IF( !pTextNode->HasHints(), "sw.uno", "Missing FlyInCnt-Hint." );
-                    const sal_Int32 nIdx = pPos->nContent.GetIndex();
+                    const sal_Int32 nIdx = pPos->GetContentIndex();
                     SwTextAttr * const pHint =
                             pTextNode->GetTextAttrForCharAt(
                             nIdx, RES_TXTATR_FLYCNT );
@@ -1151,7 +1151,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                     SAL_WARN_IF( !pNd, "sw.uno", "Cursor not at TextNode." );
                     SwFormatFlyCnt aFormat( pFormat );
                     pNd->InsertItem(aFormat, pInternalPam->GetPoint()
-                            ->nContent.GetIndex(), 0 );
+                            ->GetContentIndex(), 0 );
                     //Refetch in case SwTextNode::InsertItem causes it to be deleted
                     pFormat = GetFrameFormat();
                 }
@@ -1286,7 +1286,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                         const SwPosition *pPos = rOldAnchor.GetContentAnchor();
                         SwTextNode *pTextNode = pPos->GetNode().GetTextNode();
                         SAL_WARN_IF( !pTextNode->HasHints(), "sw.uno", "Missing FlyInCnt-Hint." );
-                        const sal_Int32 nIdx = pPos->nContent.GetIndex();
+                        const sal_Int32 nIdx = pPos->GetContentIndex();
                         SwTextAttr * const pHint =
                             pTextNode->GetTextAttrForCharAt(
                                 nIdx, RES_TXTATR_FLYCNT );
@@ -1345,7 +1345,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                         SAL_WARN_IF( !pNd, "sw.uno", "Cursor is not in a TextNode." );
                         SwFormatFlyCnt aFormat( pFlyFormat );
                         pNd->InsertItem(aFormat,
-                            aPam.GetPoint()->nContent.GetIndex(), 0 );
+                            aPam.GetPoint()->GetContentIndex(), 0 );
                         --aPam.GetPoint()->nContent; // InsertItem moved it
                         SwFormatAnchor aNewAnchor(
                             dynamic_cast<const SwFormatAnchor&>(
@@ -2166,7 +2166,7 @@ void SwXShape::dispose()
             {
                 const SwPosition &rPos = *(pFormat->GetAnchor().GetContentAnchor());
                 SwTextNode *pTextNode = rPos.GetNode().GetTextNode();
-                const sal_Int32 nIdx = rPos.nContent.GetIndex();
+                const sal_Int32 nIdx = rPos.GetContentIndex();
                 pTextNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIdx );
             }
             else

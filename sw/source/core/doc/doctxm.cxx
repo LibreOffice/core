@@ -126,7 +126,7 @@ sal_uInt16 SwDoc::GetCurTOXMark( const SwPosition& rPos,
     sal_Int32 nSttIdx;
     const sal_Int32 *pEndIdx;
 
-    const sal_Int32 nCurrentPos = rPos.nContent.GetIndex();
+    const sal_Int32 nCurrentPos = rPos.GetContentIndex();
 
     for( size_t n = 0; n < rHts.Count(); ++n )
     {

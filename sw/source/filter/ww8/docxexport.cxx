@@ -162,8 +162,8 @@ void DocxExport::AppendBookmarks( const SwTextNode& rNode, sal_Int32 nCurrentPos
     {
         for ( IMark* pMark : aMarks )
         {
-            const sal_Int32 nStart = pMark->GetMarkStart().nContent.GetIndex();
-            const sal_Int32 nEnd = pMark->GetMarkEnd().nContent.GetIndex();
+            const sal_Int32 nStart = pMark->GetMarkStart().GetContentIndex();
+            const sal_Int32 nEnd = pMark->GetMarkEnd().GetContentIndex();
 
             if ( nStart == nCurrentPos )
                 aStarts.push_back( pMark->GetName() );
@@ -200,8 +200,8 @@ void DocxExport::AppendAnnotationMarks( const SwWW8AttrIter& rAttrs, sal_Int32 n
     {
         for ( IMark* pMark : aMarks )
         {
-            const sal_Int32 nStart = pMark->GetMarkStart().nContent.GetIndex();
-            const sal_Int32 nEnd = pMark->GetMarkEnd().nContent.GetIndex();
+            const sal_Int32 nStart = pMark->GetMarkStart().GetContentIndex();
+            const sal_Int32 nEnd = pMark->GetMarkEnd().GetContentIndex();
 
             if ( nStart == nCurrentPos )
                 aStarts.push_back( pMark->GetName() );

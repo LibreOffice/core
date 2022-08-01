@@ -87,9 +87,9 @@ CPPUNIT_TEST_FIXTURE(Test, testGotoContentControl)
     // Then make sure that the content control is selected (without the dummy character):
     // Without the accompanying fix in place, this test would have failed, the user had to manually
     // select the placeholder text.
-    sal_Int32 nStart = pWrtShell->GetCursor()->Start()->nContent.GetIndex();
+    sal_Int32 nStart = pWrtShell->GetCursor()->Start()->GetContentIndex();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), nStart);
-    sal_Int32 nEnd = pWrtShell->GetCursor()->End()->nContent.GetIndex();
+    sal_Int32 nEnd = pWrtShell->GetCursor()->End()->GetContentIndex();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5), nEnd);
 }
 

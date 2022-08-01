@@ -55,7 +55,7 @@ SwExtTextInput::~SwExtTextInput()
 
     SwContentIndex& rIdx = GetPoint()->nContent;
     sal_Int32 nSttCnt = rIdx.GetIndex();
-    sal_Int32 nEndCnt = GetMark()->nContent.GetIndex();
+    sal_Int32 nEndCnt = GetMark()->GetContentIndex();
     if( nEndCnt == nSttCnt )
         return;
 
@@ -153,8 +153,8 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
     if( !pTNd )
         return;
 
-    sal_Int32 nSttCnt = Start()->nContent.GetIndex();
-    sal_Int32 nEndCnt = End()->nContent.GetIndex();
+    sal_Int32 nSttCnt = Start()->GetContentIndex();
+    sal_Int32 nEndCnt = End()->GetContentIndex();
 
     SwContentIndex aIdx( pTNd, nSttCnt );
     const OUString& rNewStr = rData.GetText();
@@ -227,8 +227,8 @@ void SwExtTextInput::SetOverwriteCursor( bool bFlag )
     if (!pTNd)
         return;
 
-    const sal_Int32 nSttCnt = GetPoint()->nContent.GetIndex();
-    const sal_Int32 nEndCnt = GetMark()->nContent.GetIndex();
+    const sal_Int32 nSttCnt = GetPoint()->GetContentIndex();
+    const sal_Int32 nEndCnt = GetMark()->GetContentIndex();
     m_sOverwriteText = pTNd->GetText().copy( std::min(nSttCnt, nEndCnt) );
     if( m_sOverwriteText.isEmpty() )
         return;
@@ -282,8 +282,8 @@ SwExtTextInput* SwDoc::GetExtTextInput( const SwNode& rNd,
         do {
             SwNodeOffset nStartNode = pTmp->Start()->GetNodeIndex(),
                          nEndNode = pTmp->End()->GetNodeIndex();
-            sal_Int32 nStartCnt = pTmp->Start()->nContent.GetIndex();
-            sal_Int32 nEndCnt = pTmp->End()->nContent.GetIndex();
+            sal_Int32 nStartCnt = pTmp->Start()->GetContentIndex();
+            sal_Int32 nEndCnt = pTmp->End()->GetContentIndex();
 
             if( nStartNode <= nNdIdx && nNdIdx <= nEndNode &&
                 ( nContentPos<0 ||

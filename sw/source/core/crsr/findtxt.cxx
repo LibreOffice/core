@@ -430,7 +430,7 @@ bool FindTextImpl(SwPaM & rSearchPam,
                 }
                 else
                 {
-                    nEnd.SetModelIndex(pPam->GetMark()->nContent.GetIndex());
+                    nEnd.SetModelIndex(pPam->GetMark()->GetContentIndex());
                 }
             }
             else
@@ -1155,8 +1155,8 @@ std::optional<OUString> ReplaceBackReferences(const i18nutil::SearchOptions2& rS
                 }
                 else
                 {
-                    nStart.SetModelIndex(pPam->Start()->nContent.GetIndex());
-                    nEnd.SetModelIndex(pPam->End()->nContent.GetIndex());
+                    nStart.SetModelIndex(pPam->Start()->GetContentIndex());
+                    nEnd.SetModelIndex(pPam->End()->GetContentIndex());
                 }
                 std::vector<AmbiguousIndex> aFltArr;
                 OUString const aStr = lcl_CleanStr(*pTextNode->GetTextNode(), pFrame, pLayout,

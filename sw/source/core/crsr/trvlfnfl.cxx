@@ -67,7 +67,7 @@ bool SwCursor::GotoFootnoteText()
 
     SwTextAttr *const pFootnote( pTextNd
         ? pTextNd->GetTextAttrForCharAt(
-            GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN)
+            GetPoint()->GetContentIndex(), RES_TXTATR_FTN)
         : nullptr);
     if (pFootnote)
     {
@@ -214,7 +214,7 @@ bool SwCursor::GotoNextFootnoteAnchor()
         if( nPos < rFootnoteArr.size() )
         {
             SwNodeOffset nNdPos = GetPoint()->GetNodeIndex();
-            const sal_Int32 nCntPos = GetPoint()->nContent.GetIndex();
+            const sal_Int32 nCntPos = GetPoint()->GetContentIndex();
 
             pTextFootnote = rFootnoteArr[ nPos ];
             // search forwards
@@ -285,7 +285,7 @@ bool SwCursor::GotoPrevFootnoteAnchor()
     {
         // there is a footnote with this index, so search also for the next one
         SwNodeOffset nNdPos = GetPoint()->GetNodeIndex();
-        const sal_Int32 nCntPos = GetPoint()->nContent.GetIndex();
+        const sal_Int32 nCntPos = GetPoint()->GetContentIndex();
 
         pTextFootnote = rFootnoteArr[ nPos ];
         // search forwards

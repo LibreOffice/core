@@ -204,13 +204,13 @@ void SwPosition::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwPosition"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nNode"), BAD_CAST(OString::number(sal_Int32(GetNodeIndex())).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nContent"), BAD_CAST(OString::number(nContent.GetIndex()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nContent"), BAD_CAST(OString::number(GetContentIndex()).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 }
 
 std::ostream &operator <<(std::ostream& s, const SwPosition& position)
 {
-    return s << "SwPosition (node " << position.GetNodeIndex() << ", offset " << position.nContent.GetIndex() << ")";
+    return s << "SwPosition (node " << position.GetNodeIndex() << ", offset " << position.GetContentIndex() << ")";
 }
 
 namespace {
@@ -810,11 +810,11 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
                     for (size_t i = 0; i < pHints->Count(); ++i)
                     {
                         SwTextAttr const*const pHint(pHints->Get(i));
-                        if (n == rStart.nNode && pHint->GetStart() < rStart.nContent.GetIndex())
+                        if (n == rStart.nNode && pHint->GetStart() < rStart.GetContentIndex())
                         {
                             continue; // before selection
                         }
-                        if (n == rEnd.nNode && rEnd.nContent.GetIndex() <= pHint->GetStart())
+                        if (n == rEnd.nNode && rEnd.GetContentIndex() <= pHint->GetStart())
                         {
                             break; // after selection
                         }
@@ -837,7 +837,7 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
         SwTextNode* pTextNode = pStart->GetNode().GetTextNode();
         if (pTextNode)
         {
-            sal_Int32 nIndex = pStart->nContent.GetIndex();
+            sal_Int32 nIndex = pStart->GetContentIndex();
             SwTextAttr* pAttr
                 = pTextNode->GetTextAttrAt(nIndex, RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT);
             auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
@@ -1061,7 +1061,7 @@ bool GoCurrPara( SwPaM & rPam, SwMoveFnCollection const & aPosPara )
     SwContentNode * pNd = rPos.GetNode().GetContentNode();
     if( pNd )
     {
-        const sal_Int32 nOld = rPos.nContent.GetIndex();
+        const sal_Int32 nOld = rPos.GetContentIndex();
         const sal_Int32 nNew = &aPosPara == &fnMoveForward ? 0 : pNd->Len();
         // if already at beginning/end then to the next/previous
         if( nOld != nNew )
@@ -1142,10 +1142,10 @@ OUString SwPaM::GetText() const
             {
                 // Handle corner cases of start/end node(s)
                 const sal_Int32 nStart = bIsStartNode
-                    ? Start()->nContent.GetIndex()
+                    ? Start()->GetContentIndex()
                     : 0;
                 const sal_Int32 nEnd = bIsEndNode
-                    ? End()->nContent.GetIndex()
+                    ? End()->GetContentIndex()
                     : aTmpStr.getLength();
 
                 aResult.append(aTmpStr.subView(nStart, nEnd-nStart));
@@ -1176,12 +1176,12 @@ void SwPaM::InvalidatePaM()
         {
             // pretend that the PaM marks changed formatting to reformat...
             sal_Int32 const nStart(
-                index == Start()->nNode ? Start()->nContent.GetIndex() : 0);
+                index == Start()->nNode ? Start()->GetContentIndex() : 0);
             // this should work even for length of 0
             SwUpdateAttr const aHint(
                 nStart,
                 index == End()->nNode
-                    ? End()->nContent.GetIndex() - nStart
+                    ? End()->GetContentIndex() - nStart
                     : pTextNode->Len() - nStart,
                 0);
             pTextNode->TriggerNodeUpdate(sw::LegacyModifyHint(&aHint, &aHint));

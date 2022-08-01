@@ -124,7 +124,7 @@ struct FrameClientSortListLess
             if(rFormat.GetAnchor().GetAnchorId() == nAnchorType)
             {
                 const auto nIdx =
-                    rFormat.GetAnchor().GetContentAnchor()->nContent.GetIndex();
+                    rFormat.GetAnchor().GetContentAnchor()->GetContentIndex();
                 const auto nOrder = rFormat.GetAnchor().GetOrder();
                 FrameClientSortListEntry entry(nIdx, nOrder, std::make_shared<sw::FrameClient>(&rFormat));
                 rFrames.push_back(entry);
@@ -170,7 +170,7 @@ void CollectFrameAtNode( const SwNodeIndex& rIdx,
 
                 // OD 2004-05-07 #i28701# - determine insert position for
                 // sorted <rFrameArr>
-                const sal_Int32 nIndex = pAnchorPos->nContent.GetIndex();
+                const sal_Int32 nIndex = pAnchorPos->GetContentIndex();
                 sal_uInt32 nOrder = rAnchor.GetOrder();
 
                 FrameClientSortListEntry entry(nIndex, nOrder, std::make_shared<sw::FrameClient>(const_cast<SwFrameFormat*>(pFormat)));
@@ -323,9 +323,9 @@ void SwUnoCursorHelper::GetCursorAttr(SwPaM & rPam,
                 case SwNodeType::Text:
                 {
                     const sal_Int32 nStart = (n == nSttNd)
-                        ? rStart.nContent.GetIndex() : 0;
+                        ? rStart.GetContentIndex() : 0;
                     const sal_Int32 nEnd   = (n == nEndNd)
-                        ? rEnd.nContent.GetIndex()
+                        ? rEnd.GetContentIndex()
                         : pNd->GetTextNode()->GetText().getLength();
                     pNd->GetTextNode()->GetParaAttr(*pSet, nStart, nEnd, bOnlyTextAttr, bGetFromChrFormat);
                 }
@@ -404,8 +404,8 @@ struct SwXParagraphEnumerationImpl final : public SwXParagraphEnumeration
         {
             SwUnoCursor & rCursor = GetCursor();
             rCursor.Normalize();
-            m_nFirstParaStart = rCursor.GetPoint()->nContent.GetIndex();
-            m_nLastParaEnd = rCursor.GetMark()->nContent.GetIndex();
+            m_nFirstParaStart = rCursor.GetPoint()->GetContentIndex();
+            m_nLastParaEnd = rCursor.GetMark()->GetContentIndex();
             rCursor.DeleteMark();
         }
     }
@@ -1772,7 +1772,7 @@ void SwXParaFrameEnumerationImpl::FillFrame()
         return;
     // search for objects at the cursor - anchored at/as char
     const auto pTextAttr = m_pUnoCursor->GetNode().GetTextNode()->GetTextAttrForCharAt(
-            m_pUnoCursor->GetPoint()->nContent.GetIndex(), RES_TXTATR_FLYCNT);
+            m_pUnoCursor->GetPoint()->GetContentIndex(), RES_TXTATR_FLYCNT);
     if(!pTextAttr)
         return;
     const SwFormatFlyCnt& rFlyCnt = pTextAttr->GetFlyCnt();

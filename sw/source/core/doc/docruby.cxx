@@ -178,7 +178,7 @@ bool SwDoc::SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry )
     SwPosition* pPos = rPam.GetPoint();
     const SwTextNode* pTNd = pPos->GetNode().GetTextNode();
     OUString const& rText = pTNd->GetText();
-    sal_Int32 nStart = pPos->nContent.GetIndex();
+    sal_Int32 nStart = pPos->GetContentIndex();
     sal_Int32 nEnd = rText.getLength();
 
     bool bHasMark = rPam.HasMark();
@@ -188,7 +188,7 @@ bool SwDoc::SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry )
         if( rPam.GetMark()->nNode == pPos->nNode )
         {
             // then use that end
-            const sal_Int32 nTEnd = rPam.GetMark()->nContent.GetIndex();
+            const sal_Int32 nTEnd = rPam.GetMark()->GetContentIndex();
             if( nTEnd < nEnd )
                 nEnd = nTEnd;
         }
@@ -248,7 +248,7 @@ bool SwDoc::SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry )
             {
                 rPam.SetMark();
                 pPos->nContent = pAttr->GetAnyEnd();
-                if( pPos->nContent.GetIndex() > nEnd )
+                if( pPos->GetContentIndex() > nEnd )
                     pPos->nContent = nEnd;
                 rEntry.SetRubyAttr( pAttr->GetRuby() );
             }
@@ -304,12 +304,12 @@ bool SwDoc::SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry )
             }
         }
         pTNd->GoNext( &pPos->nContent, SwCursorSkipMode::Chars );
-        nStart = pPos->nContent.GetIndex();
+        nStart = pPos->GetContentIndex();
     }
 
-    nStart = rPam.GetMark()->nContent.GetIndex();
+    nStart = rPam.GetMark()->GetContentIndex();
     rEntry.SetText( rText.copy( nStart,
-                           rPam.GetPoint()->nContent.GetIndex() - nStart ));
+                           rPam.GetPoint()->GetContentIndex() - nStart ));
     return rPam.HasMark();
 }
 

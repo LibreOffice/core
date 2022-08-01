@@ -108,8 +108,8 @@ SwUndoInsSection::SwUndoInsSection(
 
     const SwContentNode* pCNd = rPam.GetPoint()->GetNode().GetContentNode();
     if( pCNd && pCNd->HasSwAttrSet() && (
-        !rPam.GetPoint()->nContent.GetIndex() ||
-        rPam.GetPoint()->nContent.GetIndex() == pCNd->Len() ))
+        !rPam.GetPoint()->GetContentIndex() ||
+        rPam.GetPoint()->GetContentIndex() == pCNd->Len() ))
     {
         SfxItemSet aBrkSet( rDoc.GetAttrPool(), aBreakSetRange );
         aBrkSet.Put( *pCNd->GetpSwAttrSet() );

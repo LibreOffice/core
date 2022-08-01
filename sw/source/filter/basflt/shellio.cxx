@@ -180,7 +180,7 @@ ErrCode SwReader::Read( const Reader& rOptions )
                 mxDoc->GetSpzFrameFormats()->end() );
         }
 
-        const sal_Int32 nSttContent = pPam->GetPoint()->nContent.GetIndex();
+        const sal_Int32 nSttContent = pPam->GetPoint()->GetContentIndex();
 
         // make sure the End position is correct for all Readers
         SwContentNode* pCNd = pPam->GetContentNode();

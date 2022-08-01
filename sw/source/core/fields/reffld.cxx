@@ -1230,7 +1230,7 @@ SwTextNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark
                 const SwPosition* pPos = &pBkmk->GetMarkStart();
 
                 pTextNd = pPos->GetNode().GetTextNode();
-                *pStt = pPos->nContent.GetIndex();
+                *pStt = pPos->GetContentIndex();
                 if(pEnd)
                 {
                     if(!pBkmk->IsExpanded())
@@ -1245,7 +1245,7 @@ SwTextNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark
                         }
                     }
                     else if(pBkmk->GetOtherMarkPos().nNode == pBkmk->GetMarkPos().nNode)
-                        *pEnd = pBkmk->GetMarkEnd().nContent.GetIndex();
+                        *pEnd = pBkmk->GetMarkEnd().GetContentIndex();
                     else
                         *pEnd = -1;
                 }

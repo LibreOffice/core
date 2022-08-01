@@ -36,7 +36,7 @@ SwUndoField::SwUndoField(const SwPosition & rPos )
     : SwUndo(SwUndoId::FIELD, &rPos.GetDoc())
 {
     m_nNodeIndex = rPos.GetNodeIndex();
-    m_nOffset = rPos.nContent.GetIndex();
+    m_nOffset = rPos.GetContentIndex();
     m_pDoc = &rPos.GetDoc();
 }
 

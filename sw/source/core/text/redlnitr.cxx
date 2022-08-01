@@ -118,7 +118,7 @@ public:
                 }
                 if (pStart->GetNode().IsTableNode())
                 {
-                    assert(pEnd->nNode == m_Start.nNode && pEnd->nContent.GetIndex() == 0);
+                    assert(pEnd->nNode == m_Start.nNode && pEnd->GetContentIndex() == 0);
                     continue; // known pathology, ignore it
                 }
                 if (*m_pEndPos <= *pStart)
@@ -138,7 +138,7 @@ public:
                     : CH_TXT_ATR_FIELDSEP);
             SwTextNode* pTextNode = m_pEndPos->GetNode().GetTextNode();
             sal_Int32 const nPos = pTextNode ? pTextNode->GetText().indexOf(
-                    magic, m_pEndPos->nContent.GetIndex()) : -1;
+                    magic, m_pEndPos->GetContentIndex()) : -1;
             if (nPos != -1)
             {
                 m_oNextFieldmarkHide.emplace(*pTextNode, nPos);
@@ -230,8 +230,8 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
         assert(pNode != &rTextNode || &pStart->GetNode() == &rTextNode); // detect calls with wrong start node
         if (pStart->nContent != nLastEnd) // not 0 so we eliminate adjacent deletes
         {
-            extents.emplace_back(pNode, nLastEnd, pStart->nContent.GetIndex());
-            mergedText.append(pNode->GetText().subView(nLastEnd, pStart->nContent.GetIndex() - nLastEnd));
+            extents.emplace_back(pNode, nLastEnd, pStart->GetContentIndex());
+            mergedText.append(pNode->GetText().subView(nLastEnd, pStart->GetContentIndex() - nLastEnd));
         }
         if (&pEnd->GetNode() != pNode)
         {
@@ -287,12 +287,12 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
                 pNode = pEnd->GetNode().GetTextNode();
                 nodes.push_back(pNode);
                 pNode->SetRedlineMergeFlag(SwNode::Merge::NonFirst);
-                nLastEnd = pEnd->nContent.GetIndex();
+                nLastEnd = pEnd->GetContentIndex();
             }
         }
         else
         {
-            nLastEnd = pEnd->nContent.GetIndex();
+            nLastEnd = pEnd->GetContentIndex();
         }
     }
     if (pNode == &rTextNode)
@@ -655,7 +655,7 @@ SwRedlineItr::SwRedlineItr( const SwTextNode& rTextNd, SwFont& rFnt,
     {
         assert(pExtInputStart);
         m_pExt.reset( new SwExtend(*pArr, pExtInputStart->GetNodeIndex(),
-                                     pExtInputStart->nContent.GetIndex()) );
+                                     pExtInputStart->GetContentIndex()) );
     }
     else
         m_pExt = nullptr;
@@ -789,7 +789,7 @@ short SwRedlineItr::Seek(SwFont& rFnt,
             if (pRedline->GetType() == RedlineType::Delete
                 && (nNode < pStart->GetNodeIndex()
                     || (nNode == pStart->GetNodeIndex()
-                        && nNew <= pStart->nContent.GetIndex())))
+                        && nNew <= pStart->GetContentIndex())))
             {
                 pRedline->CalcStartEnd(nNode, m_nStart, m_nEnd);
                 break;

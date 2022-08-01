@@ -1431,8 +1431,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testCursorWindows)
     SwShellCursor* pShellCursor1 = pWrtShell1->getShellCursor(false);
     SwShellCursor* pShellCursor2 = pWrtShell2->getShellCursor(false);
     // This was 3, not 0 -- cursor of the other window moved.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), pShellCursor1->Start()->nContent.GetIndex());
-    CPPUNIT_ASSERT_EQUAL(aText.getLength(), pShellCursor2->Start()->nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), pShellCursor1->Start()->GetContentIndex());
+    CPPUNIT_ASSERT_EQUAL(aText.getLength(), pShellCursor2->Start()->GetContentIndex());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testLandscape)

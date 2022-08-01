@@ -3242,7 +3242,7 @@ void SwXTextDocument::getTrackedChanges(tools::JsonWriter& rJson)
             aCursor.SetMark();
             aCursor.GetMark()->nNode = *pContentNd;
             aCursor.GetMark()->nContent.Assign(pContentNd,
-                                               rRedlineTable[i]->End()->nContent.GetIndex());
+                                               rRedlineTable[i]->End()->GetContentIndex());
 
             aCursor.FillRects();
 
@@ -3387,7 +3387,7 @@ void SwXTextDocument::executeContentControlEvent(const StringMap& rArguments)
             return;
         }
 
-        SwTextAttr* pAttr = pTextNode->GetTextAttrAt(pStart->nContent.GetIndex(),
+        SwTextAttr* pAttr = pTextNode->GetTextAttrAt(pStart->GetContentIndex(),
                                                      RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT);
         if (!pAttr)
         {
@@ -3441,7 +3441,7 @@ void SwXTextDocument::executeContentControlEvent(const StringMap& rArguments)
             return;
         }
 
-        SwTextAttr* pAttr = pTextNode->GetTextAttrAt(pStart->nContent.GetIndex(),
+        SwTextAttr* pAttr = pTextNode->GetTextAttrAt(pStart->GetContentIndex(),
                                                      RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT);
         if (!pAttr)
         {

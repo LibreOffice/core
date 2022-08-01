@@ -170,7 +170,7 @@ void SwView::ExecLingu(SfxRequest &rReq)
                             const SwPosition *pPoint = m_pWrtShell->GetCursor()->GetPoint();
                             bool bRestoreCursor = pPoint->GetNode().IsTextNode();
                             const SwNodeIndex aPointNodeIndex( pPoint->nNode );
-                            sal_Int32 nPointIndex = pPoint->nContent.GetIndex();
+                            sal_Int32 nPointIndex = pPoint->GetContentIndex();
 
                             // since this conversion is not interactive the whole converted
                             // document should be undone in a single undo step.

@@ -1279,7 +1279,7 @@ void SwXTextField::TransmuteLeadToInputField(SwSetExpField & rField)
     IDocumentContentOperations & rIDCO(rNode.GetDoc().getIDocumentContentOperations());
     SwTextField::GetPamForTextField(*pOldAttr, pPamForTextField);
     assert(pPamForTextField);
-    sal_Int32 const nStart(pPamForTextField->Start()->nContent.GetIndex());
+    sal_Int32 const nStart(pPamForTextField->Start()->GetContentIndex());
     rIDCO.DeleteAndJoin(*pPamForTextField);
     // ATTENTION: rField is dead now! hope nobody accesses it...
     bool bSuccess = rIDCO.InsertPoolItem(*pPamForTextField, tempFormat);
@@ -1961,7 +1961,7 @@ void SAL_CALL SwXTextField::attach(
         else
             pDoc->getIDocumentContentOperations().InsertPoolItem(aPam, aFormat, nInsertFlags);
 
-        SwTextAttr* pTextAttr = aPam.GetNode().GetTextNode()->GetFieldTextAttrAt( aPam.GetPoint()->nContent.GetIndex()-1, true );
+        SwTextAttr* pTextAttr = aPam.GetNode().GetTextNode()->GetFieldTextAttrAt( aPam.GetPoint()->GetContentIndex()-1, true );
 
         // What about updating the fields? (see fldmgr.cxx)
         if (!pTextAttr)
@@ -2025,7 +2025,7 @@ void SAL_CALL SwXTextField::attach(
             }
             // keep inserted annotation
             {
-                SwTextField* pTextAttr = aEnd.GetNode().GetTextNode()->GetFieldTextAttrAt( aEnd.End()->nContent.GetIndex()-1, true );
+                SwTextField* pTextAttr = aEnd.GetNode().GetTextNode()->GetFieldTextAttrAt( aEnd.End()->GetContentIndex()-1, true );
                 if ( pTextAttr != nullptr )
                 {
                     m_pImpl->SetFormatField(const_cast<SwFormatField*>(&pTextAttr->GetFormatField()), m_pImpl->m_pDoc);

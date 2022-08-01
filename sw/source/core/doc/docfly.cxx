@@ -308,7 +308,7 @@ sal_Int8 SwDoc::SetFlyFrameAnchor( SwFrameFormat& rFormat, SfxItemSet& rSet, boo
         const SwPosition *pPos = rOldAnch.GetContentAnchor();
         SwTextNode *pTextNode = pPos->GetNode().GetTextNode();
         OSL_ENSURE( pTextNode->HasHints(), "Missing FlyInCnt-Hint." );
-        const sal_Int32 nIdx = pPos->nContent.GetIndex();
+        const sal_Int32 nIdx = pPos->GetContentIndex();
         SwTextAttr * const  pHint =
             pTextNode->GetTextAttrForCharAt( nIdx, RES_TXTATR_FLYCNT );
         OSL_ENSURE( pHint && pHint->Which() == RES_TXTATR_FLYCNT,
@@ -338,7 +338,7 @@ sal_Int8 SwDoc::SetFlyFrameAnchor( SwFrameFormat& rFormat, SfxItemSet& rSet, boo
             OSL_ENSURE( pNd, "Cursor does not point to TextNode." );
 
             SwFormatFlyCnt aFormat( static_cast<SwFlyFrameFormat*>(&rFormat) );
-            pNd->InsertItem( aFormat, pPos->nContent.GetIndex(), 0 );
+            pNd->InsertItem( aFormat, pPos->GetContentIndex(), 0 );
         }
 
         if( SfxItemState::SET != rSet.GetItemState( RES_VERT_ORIENT, false ))
@@ -913,7 +913,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     OSL_ENSURE( pNd, "Cursor not positioned at TextNode." );
 
                     SwFormatFlyCnt aFormat( pContact->GetFormat() );
-                    pNd->InsertItem( aFormat, aPos.nContent.GetIndex(), 0 );
+                    pNd->InsertItem( aFormat, aPos.GetContentIndex(), 0 );
 
                     // Has a textbox attached to the format? Sync it as well!
                     if (pContact->GetFormat() && pContact->GetFormat()->GetOtherTextBoxFormats())
@@ -981,7 +981,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     // The TextAttribut needs to be destroyed which, unfortunately, also
                     // destroys the format. To avoid that, we disconnect the format from
                     // the attribute.
-                    const sal_Int32 nIndx( xOldAsCharAnchorPos->nContent.GetIndex() );
+                    const sal_Int32 nIndx( xOldAsCharAnchorPos->GetContentIndex() );
                     SwTextNode* pTextNode( xOldAsCharAnchorPos->GetNode().GetTextNode() );
                     assert(pTextNode && "<SwDoc::ChgAnchor(..)> - missing previous anchor text node for as-character anchored object");
                     SwTextAttr * const pHint =

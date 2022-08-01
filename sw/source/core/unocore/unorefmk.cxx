@@ -214,7 +214,7 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
     if (bMark)
     {
         oldMarks = rPam.GetNode().GetTextNode()->GetTextAttrsAt(
-            rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_REFMARK);
+            rPam.GetPoint()->GetContentIndex(), RES_TXTATR_REFMARK);
     }
 
     rDoc2.getIDocumentContentOperations().InsertPoolItem( rPam, aRefMark, nInsertFlags );
@@ -232,7 +232,7 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
         // ensure that we do not retrieve a different mark at the same position
         std::vector<SwTextAttr *> const newMarks(
             rPam.GetNode().GetTextNode()->GetTextAttrsAt(
-                rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_REFMARK));
+                rPam.GetPoint()->GetContentIndex(), RES_TXTATR_REFMARK));
         std::vector<SwTextAttr *>::const_iterator const iter(
             std::find_if(newMarks.begin(), newMarks.end(),
                 NotContainedIn<SwTextAttr *>(oldMarks)));
@@ -247,7 +247,7 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
         SwTextNode *pTextNd = rPam.GetNode().GetTextNode();
         assert(pTextNd);
         pTextAttr = pTextNd ? rPam.GetNode().GetTextNode()->GetTextAttrForCharAt(
-                rPam.GetPoint()->nContent.GetIndex() - 1, RES_TXTATR_REFMARK) : nullptr;
+                rPam.GetPoint()->GetContentIndex() - 1, RES_TXTATR_REFMARK) : nullptr;
     }
 
     if (!pTextAttr)
@@ -789,7 +789,7 @@ bool SwXMeta::CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb)
                 nullptr, 0);
     }
     bool bForceExpandHints(false);
-    const sal_Int32 nStartPos(pStartPos->nContent.GetIndex());
+    const sal_Int32 nStartPos(pStartPos->GetContentIndex());
     // not <= but < because nMetaStart is behind dummy char!
     // not >= but > because == means insert at end!
     if ((nStartPos < nMetaStart) || (nStartPos > nMetaEnd))
@@ -813,7 +813,7 @@ bool SwXMeta::CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb)
                     "of text range not in same paragraph as text content",
                     nullptr, 0);
         }
-        const sal_Int32 nEndPos(pEndPos->nContent.GetIndex());
+        const sal_Int32 nEndPos(pEndPos->GetContentIndex());
         // not <= but < because nMetaStart is behind dummy char!
         // not >= but > because == means insert at end!
         if ((nEndPos < nMetaStart) || (nEndPos > nMetaEnd))

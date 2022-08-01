@@ -1385,8 +1385,8 @@ void SwRangeRedline::InvalidateRange(Invalidation const eWhy)
     auto [pRStt, pREnd] = StartEnd(); // SwPosition*
     SwNodeOffset nSttNd = pRStt->GetNodeIndex(),
                  nEndNd = pREnd->GetNodeIndex();
-    sal_Int32 nSttCnt = pRStt->nContent.GetIndex();
-    sal_Int32 nEndCnt = pREnd->nContent.GetIndex();
+    sal_Int32 nSttCnt = pRStt->GetContentIndex();
+    sal_Int32 nEndCnt = pREnd->GetContentIndex();
 
     SwNodes& rNds = GetDoc().GetNodes();
     for (SwNodeOffset n(nSttNd); n <= nEndNd; ++n)
@@ -1439,7 +1439,7 @@ void SwRangeRedline::CalcStartEnd( SwNodeOffset nNdIdx, sal_Int32& rStart, sal_I
         else if (pREnd->nNode == nNdIdx)
         {
             rStart = 0;             // Paragraph is overlapped in the beginning
-            rEnd = pREnd->nContent.GetIndex();
+            rEnd = pREnd->GetContentIndex();
         }
         else // redline ends before paragraph
         {
@@ -1449,9 +1449,9 @@ void SwRangeRedline::CalcStartEnd( SwNodeOffset nNdIdx, sal_Int32& rStart, sal_I
     }
     else if( pRStt->nNode == nNdIdx )
     {
-        rStart = pRStt->nContent.GetIndex();
+        rStart = pRStt->GetContentIndex();
         if( pREnd->nNode == nNdIdx )
-            rEnd = pREnd->nContent.GetIndex(); // Within the Paragraph
+            rEnd = pREnd->GetContentIndex(); // Within the Paragraph
         else
             rEnd = COMPLETE_STRING;      // Paragraph is overlapped in the end
     }
@@ -1480,8 +1480,8 @@ static void lcl_storeAnnotationMarks(SwDoc& rDoc, const SwPosition* pStt, const 
                 // at start of redlines use a 1-character length bookmark range
                 // instead of a 0-character length bookmark position to avoid its losing
                 sal_Int32 nLen = (*pStt == rStartPos) ? 1 : 0;
-                SwPaM aPam( rStartPos.nNode, rStartPos.nContent.GetIndex(),
-                                rStartPos.nNode, rStartPos.nContent.GetIndex() + nLen);
+                SwPaM aPam( rStartPos.nNode, rStartPos.GetContentIndex(),
+                                rStartPos.nNode, rStartPos.GetContentIndex() + nLen);
                 ::sw::mark::IMark* pMark = rDMA.makeAnnotationBookmark(
                     aPam,
                     (**iter).GetName(),
@@ -1791,7 +1791,7 @@ void SwRangeRedline::MoveFromSection(size_t nMyPos)
                                 ? pCNd->GetFormatColl() : nullptr;
 
             SwNodeIndex aNdIdx( GetPoint()->nNode, -1 );
-            const sal_Int32 nPos = GetPoint()->nContent.GetIndex();
+            const sal_Int32 nPos = GetPoint()->GetContentIndex();
 
             SwPosition aPos( *GetPoint() );
             if( m_bDelLastPara && *aPam.GetPoint() == *aPam.GetMark() )
@@ -1991,7 +1991,7 @@ OUString SwRangeRedline::GetDescr(bool bSimplified)
     OUString sDescr = DenoteSpecialCharacters(pPaM->GetText().replace('\n', ' '), /*bQuoted=*/!bSimplified);
     if (const SwTextNode *pTextNode = pPaM->GetNode().GetTextNode())
     {
-        if (const SwTextAttr* pTextAttr = pTextNode->GetFieldTextAttrAt(pPaM->GetPoint()->nContent.GetIndex() - 1, true ))
+        if (const SwTextAttr* pTextAttr = pTextNode->GetFieldTextAttrAt(pPaM->GetPoint()->GetContentIndex() - 1, true ))
         {
             sDescr = ( bSimplified ? "" : SwResId(STR_START_QUOTE) )
                 + pTextAttr->GetFormatField().GetField()->GetFieldName()

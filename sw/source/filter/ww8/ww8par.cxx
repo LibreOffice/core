@@ -1474,7 +1474,7 @@ const SfxPoolItem* SwWW8FltControlStack::GetFormatAttr(const SwPosition& rPos,
             */
             if (pNd->IsTextNode())
             {
-                const sal_Int32 nPos = rPos.nContent.GetIndex();
+                const sal_Int32 nPos = rPos.GetContentIndex();
                 m_xScratchSet.reset(new SfxItemSet(m_rDoc.GetAttrPool(), nWhich, nWhich));
                 if (pNd->GetTextNode()->GetParaAttr(*m_xScratchSet, nPos, nPos))
                     pItem = m_xScratchSet->GetItem(nWhich);
@@ -1571,10 +1571,10 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
                     const SwPosition& rBkMrkPos = pMark->GetMarkPos();
 
                     SwTextNode* pText = rBkMrkPos.GetNode().GetTextNode();
-                    if( pText && rBkMrkPos.nContent.GetIndex() )
+                    if( pText && rBkMrkPos.GetContentIndex() )
                     {
                         SwTextAttr* const pFootnote = pText->GetTextAttrForCharAt(
-                            rBkMrkPos.nContent.GetIndex()-1, RES_TXTATR_FTN );
+                            rBkMrkPos.GetContentIndex()-1, RES_TXTATR_FTN );
                         if( pFootnote )
                         {
                             sal_uInt16 nRefNo = static_cast<SwTextFootnote*>(pFootnote)->GetSeqRefNo();
@@ -2503,7 +2503,7 @@ bool SwWW8ImplReader::SetSpacing(SwPaM &rMyPam, int nSpace, bool bIsUpper )
             else
                 aUL.SetLower( static_cast< sal_uInt16 >(nSpace) );
 
-            const sal_Int32 nEnd = pSpacingPos->nContent.GetIndex();
+            const sal_Int32 nEnd = pSpacingPos->GetContentIndex();
             rMyPam.GetPoint()->nContent.Assign(rMyPam.GetContentNode(), 0);
             m_xCtrlStck->NewAttr(*pSpacingPos, aUL);
             rMyPam.GetPoint()->nContent.Assign(rMyPam.GetContentNode(), nEnd);
@@ -3572,7 +3572,7 @@ bool SwWW8ImplReader::HandlePageBreakChar()
         if (!m_bWasParaEnd && IsTemp)
         {
             bParaEndAdded = true;
-            if (0 >= m_pPaM->GetPoint()->nContent.GetIndex())
+            if (0 >= m_pPaM->GetPoint()->GetContentIndex())
             {
                 if (SwTextNode* pTextNode = m_pPaM->GetNode().GetTextNode())
                 {
@@ -4220,7 +4220,7 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
 
     m_xPreviousNode.reset();
 
-    if (m_pPaM->GetPoint()->nContent.GetIndex())
+    if (m_pPaM->GetPoint()->GetContentIndex())
         AppendTextNode(*m_pPaM->GetPoint());
 
     if (!m_bInHyperlink)
@@ -5429,7 +5429,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
                         if (pHt->Which() != RES_TXTATR_FLYCNT)
                             continue;
                         const sal_Int32 st = pHt->GetStart();
-                        if (st >= (*ppBkmk)->GetMarkStart().nContent.GetIndex())
+                        if (st >= (*ppBkmk)->GetMarkStart().GetContentIndex())
                         {
                             SwFrameFormat* pFrameFormat = pHt->GetFlyCnt().GetFrameFormat();
                             vecFrameFormat.push_back(pFrameFormat);
@@ -6722,7 +6722,7 @@ bool SwWW8ImplReader::InEqualApo(int nLvl) const
 namespace sw::hack
 {
         Position::Position(const SwPosition &rPos)
-            : maPtNode(rPos.nNode), mnPtContent(rPos.nContent.GetIndex())
+            : maPtNode(rPos.nNode), mnPtContent(rPos.GetContentIndex())
         {
         }
 

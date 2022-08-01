@@ -703,7 +703,7 @@ bool SwCursorShell::MoveTable( SwWhichTable fnWhichTable, SwMoveFnCollection con
     {
         bCheckPos = true;
         nPtNd = pCursor->GetPoint()->GetNodeIndex();
-        nPtCnt = pCursor->GetPoint()->nContent.GetIndex();
+        nPtCnt = pCursor->GetPoint()->GetContentIndex();
     }
 
     bRet = pCursor->MoveTable( fnWhichTable, fnPosTable );
@@ -717,7 +717,7 @@ bool SwCursorShell::MoveTable( SwWhichTable fnWhichTable, SwMoveFnCollection con
 
         if( bCheckPos &&
             pCursor->GetPoint()->GetNodeIndex() == nPtNd &&
-            pCursor->GetPoint()->nContent.GetIndex() == nPtCnt )
+            pCursor->GetPoint()->GetContentIndex() == nPtCnt )
             bRet = false;
     }
     return bRet;

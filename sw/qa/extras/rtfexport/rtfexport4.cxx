@@ -117,11 +117,11 @@ DECLARE_RTFEXPORT_TEST(testAnchoredAtSamePosition, "anchor.fodt")
     CPPUNIT_ASSERT_EQUAL(RndStdIds::FLY_AT_CHAR, rFlys[0]->GetAnchor().GetAnchorId());
     CPPUNIT_ASSERT_EQUAL(SwNodeOffset(12),
                          rFlys[0]->GetAnchor().GetContentAnchor()->GetNodeIndex());
-    CPPUNIT_ASSERT_EQUAL(nIndex, rFlys[0]->GetAnchor().GetContentAnchor()->nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(nIndex, rFlys[0]->GetAnchor().GetContentAnchor()->GetContentIndex());
     CPPUNIT_ASSERT_EQUAL(RndStdIds::FLY_AT_CHAR, rFlys[1]->GetAnchor().GetAnchorId());
     CPPUNIT_ASSERT_EQUAL(SwNodeOffset(12),
                          rFlys[1]->GetAnchor().GetContentAnchor()->GetNodeIndex());
-    CPPUNIT_ASSERT_EQUAL(nIndex, rFlys[1]->GetAnchor().GetContentAnchor()->nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(nIndex, rFlys[1]->GetAnchor().GetContentAnchor()->GetContentIndex());
 }
 
 DECLARE_RTFEXPORT_TEST(testRedlineInsdel, "redline-insdel.rtf")

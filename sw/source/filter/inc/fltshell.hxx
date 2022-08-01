@@ -65,14 +65,14 @@ public:
     //and the offset to content is de-dynamic-ified
     SwFltPosition(const SwPosition &rPos)
         : m_nNode(rPos.nNode, -1)
-        , m_nContent(rPos.nContent.GetIndex())
+        , m_nContent(rPos.GetContentIndex())
     {
     }
 
     void FromSwPosition(const SwPosition &rPos)
     {
         m_nNode = rPos.GetNodeIndex()-1;
-        m_nContent = rPos.nContent.GetIndex();
+        m_nContent = rPos.GetContentIndex();
     }
 };
 

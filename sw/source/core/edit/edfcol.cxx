@@ -2046,7 +2046,7 @@ bool SwEditShell::IsCursorInParagraphMetadataField() const
     if (GetCursor() && GetCursor()->Start())
     {
         SwTextNode* pNode = GetCursor()->Start()->GetNode().GetTextNode();
-        const sal_uLong index = GetCursor()->Start()->nContent.GetIndex();
+        const sal_uLong index = GetCursor()->Start()->GetContentIndex();
         uno::Reference<text::XTextField> xField = lcl_GetParagraphMetadataFieldAtIndex(GetDoc()->GetDocShell(), pNode, index);
         return xField.is();
     }
@@ -2059,7 +2059,7 @@ bool SwEditShell::RemoveParagraphMetadataFieldAtCursor()
     if (GetCursor() && GetCursor()->Start())
     {
         SwTextNode* pNode = GetCursor()->Start()->GetNode().GetTextNode();
-        sal_uLong index = GetCursor()->Start()->nContent.GetIndex();
+        sal_uLong index = GetCursor()->Start()->GetContentIndex();
         uno::Reference<text::XTextField> xField = lcl_GetParagraphMetadataFieldAtIndex(GetDoc()->GetDocShell(), pNode, index);
         if (!xField.is())
         {

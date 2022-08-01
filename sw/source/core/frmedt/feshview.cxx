@@ -2181,7 +2181,7 @@ bool SwFEShell::ImpEndCreate()
             SwTextNode *pNd = aAnch.GetContentAnchor()->GetNode().GetTextNode();
             SwFormatFlyCnt aFormat( pFormat );
             pNd->InsertItem(aFormat,
-                            aAnch.GetContentAnchor()->nContent.GetIndex(), 0 );
+                            aAnch.GetContentAnchor()->GetContentIndex(), 0 );
             SwFormatVertOrient aVertical( pFormat->GetVertOrient() );
             aVertical.SetVertOrient( text::VertOrientation::LINE_CENTER );
             pFormat->SetFormatAttr( aVertical );

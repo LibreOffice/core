@@ -251,7 +251,7 @@ bool SwPageFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
         if (pContentNode && pContentNode->IsTextNode())
         {
             SwTextNode* pTextNd = pContentNode->GetTextNode();
-            SwTextAttr* pTextAttr = pTextNd->GetTextAttrForCharAt(aTextPos.nContent.GetIndex(), RES_TXTATR_FIELD);
+            SwTextAttr* pTextAttr = pTextNd->GetTextAttrForCharAt(aTextPos.GetContentIndex(), RES_TXTATR_FIELD);
             if (pTextAttr)
             {
                 const SwField* pField = pTextAttr->GetFormatField().GetField();
@@ -2406,8 +2406,8 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
             //            away (i.e. PostIts, RefMarks, TOXMarks), then at
             //            least set the width of the Cursor.
             if( 1 == aRectFnSet.GetWidth(aTmp) &&
-                pStartPos->nContent.GetIndex() !=
-                pEndPos->nContent.GetIndex() )
+                pStartPos->GetContentIndex() !=
+                pEndPos->GetContentIndex() )
             {
                 OutputDevice* pOut = pSh->GetOut();
                 tools::Long nCursorWidth = pOut->GetSettings().GetStyleSettings().

@@ -3870,17 +3870,17 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testBtlrCell)
 
     // Test that pressing "up" at the start of the cell goes to the next character position.
     SwNodeOffset nNodeIndex = pWrtShell->GetCursor()->Start()->GetNodeIndex();
-    sal_Int32 nIndex = pWrtShell->GetCursor()->Start()->nContent.GetIndex();
+    sal_Int32 nIndex = pWrtShell->GetCursor()->Start()->GetContentIndex();
     KeyEvent aKeyEvent(0, KEY_UP);
     SwEditWin& rEditWin = pShell->GetView()->GetEditWin();
     rEditWin.KeyInput(aKeyEvent);
     Scheduler::ProcessEventsToIdle();
     // Without the accompanying fix in place, this test would have failed: "up" was interpreted as
     // logical "left", which does nothing if you're at the start of the text anyway.
-    CPPUNIT_ASSERT_EQUAL(nIndex + 1, pWrtShell->GetCursor()->Start()->nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(nIndex + 1, pWrtShell->GetCursor()->Start()->GetContentIndex());
 
     // Test that pressing "right" goes to the next paragraph (logical "down").
-    sal_Int32 nContentIndex = pWrtShell->GetCursor()->Start()->nContent.GetIndex();
+    sal_Int32 nContentIndex = pWrtShell->GetCursor()->Start()->GetContentIndex();
     aKeyEvent = KeyEvent(0, KEY_RIGHT);
     rEditWin.KeyInput(aKeyEvent);
     Scheduler::ProcessEventsToIdle();
@@ -3891,7 +3891,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testBtlrCell)
     // Test that we have the correct character index after traveling to the next paragraph.
     // Without the accompanying fix in place, this test would have failed: char position was 5, i.e.
     // the cursor jumped to the end of the paragraph for no reason.
-    CPPUNIT_ASSERT_EQUAL(nContentIndex, pWrtShell->GetCursor()->Start()->nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(nContentIndex, pWrtShell->GetCursor()->Start()->GetContentIndex());
 
     // Test that clicking "below" the second paragraph positions the cursor at the start of the
     // second paragraph.
@@ -3916,7 +3916,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testBtlrCell)
     CPPUNIT_ASSERT_EQUAL(aCellStart.GetNodeIndex() + 1, aPosition.GetNodeIndex());
     // Without the accompanying fix in place, this test would have failed: character position was 5,
     // i.e. cursor was at the end of the paragraph.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aPosition.nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aPosition.GetContentIndex());
 
     // Test that the selection rectangles are inside the cell frame if we select all the cell
     // content.
@@ -4083,7 +4083,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testImageComment)
     // - Actual  : 4
     // i.e. the cursor got positioned between the image and its comment, so typing extended the
     // comment, instead of adding content after the commented image.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5), aPosition.nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5), aPosition.GetContentIndex());
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testScriptField)
@@ -4116,7 +4116,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testScriptField)
     pCellTextFrame->GetModelPositionForViewPoint(&aPosition, aPoint);
 
     // Position was 1 without the fix from tdf#141079
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aPosition.nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aPosition.GetContentIndex());
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testCommentCursorPosition)
@@ -4146,7 +4146,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testCommentCursorPosition)
     // - Actual  : 3 or 4
     // i.e. the cursor got positioned before the comments,
     // so typing extended the first comment instead of adding content after the comments.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6), aPosition.nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6), aPosition.GetContentIndex());
     // The second line is also important, but can't be auto-tested
     // since the failing situation depends on GetViewWidth which is zero in the headless tests.
     // bb<comment>|   - the cursor should move behind the |, not before it.
@@ -4179,7 +4179,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testCombiningCharacterCursorPosition)
     // - Actual  : 1
     // i.e. the cursor got positioned before the acute, so typing shifted the acute (applying it
     // to newly typed characters) instead of adding content after it.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aPosition.nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aPosition.GetContentIndex());
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf64222)

@@ -858,7 +858,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf77342)
     pCursor->Move(fnMoveForward);
     SwTextNode* pTextNd1 = pCursor->GetNode().GetTextNode();
     SwTextAttr* const pFootnote1
-        = pTextNd1->GetTextAttrForCharAt(pCursor->GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN);
+        = pTextNd1->GetTextAttrForCharAt(pCursor->GetPoint()->GetContentIndex(), RES_TXTATR_FTN);
     const SwFormatFootnote& rFootnote1(pFootnote1->GetFootnote());
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), rFootnote1.GetNumber());
     SwTextFootnote* pTFNote1 = static_cast<SwTextFootnote*>(pFootnote1);
@@ -867,7 +867,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf77342)
     pCursor->Move(fnMoveForward);
     SwTextNode* pTextNd2 = pCursor->GetNode().GetTextNode();
     SwTextAttr* const pFootnote2
-        = pTextNd2->GetTextAttrForCharAt(pCursor->GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN);
+        = pTextNd2->GetTextAttrForCharAt(pCursor->GetPoint()->GetContentIndex(), RES_TXTATR_FTN);
     const SwFormatFootnote& rFootnote2(pFootnote2->GetFootnote());
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), rFootnote2.GetNumber());
     SwTextFootnote* pTFNote2 = static_cast<SwTextFootnote*>(pFootnote2);
@@ -876,7 +876,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf77342)
     pCursor->Move(fnMoveForward);
     SwTextNode* pTextNd3 = pCursor->GetNode().GetTextNode();
     SwTextAttr* const pFootnote3
-        = pTextNd3->GetTextAttrForCharAt(pCursor->GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN);
+        = pTextNd3->GetTextAttrForCharAt(pCursor->GetPoint()->GetContentIndex(), RES_TXTATR_FTN);
     const SwFormatFootnote& rFootnote3(pFootnote3->GetFootnote());
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), rFootnote3.GetNumber());
     SwTextFootnote* pTFNote3 = static_cast<SwTextFootnote*>(pFootnote3);
@@ -899,7 +899,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf77342)
     pCursor->Move(fnMoveForward);
     SwTextNode* pTextNd4 = pCursor->GetNode().GetTextNode();
     SwTextAttr* const pFootnote4
-        = pTextNd4->GetTextAttrForCharAt(pCursor->GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN);
+        = pTextNd4->GetTextAttrForCharAt(pCursor->GetPoint()->GetContentIndex(), RES_TXTATR_FTN);
     const SwFormatFootnote& rFootnote4(pFootnote4->GetFootnote());
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), rFootnote4.GetNumber());
     SwTextFootnote* pTFNote4 = static_cast<SwTextFootnote*>(pFootnote4);
@@ -927,7 +927,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf77342)
     pCursor->Move(fnMoveForward);
     SwTextNode* pTextNd11 = pCursor->GetNode().GetTextNode();
     SwTextAttr* const pFootnote11
-        = pTextNd11->GetTextAttrForCharAt(pCursor->GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN);
+        = pTextNd11->GetTextAttrForCharAt(pCursor->GetPoint()->GetContentIndex(), RES_TXTATR_FTN);
     const SwFormatFootnote& rFootnote11(pFootnote11->GetFootnote());
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), rFootnote11.GetNumber());
     SwTextFootnote* pTFNote11 = static_cast<SwTextFootnote*>(pFootnote11);
@@ -957,7 +957,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf77342)
     pCursor->Move(fnMoveForward);
     SwTextNode* pTextNd12 = pCursor->GetNode().GetTextNode();
     SwTextAttr* const pFootnote12
-        = pTextNd12->GetTextAttrForCharAt(pCursor->GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN);
+        = pTextNd12->GetTextAttrForCharAt(pCursor->GetPoint()->GetContentIndex(), RES_TXTATR_FTN);
     const SwFormatFootnote& rFootnote12(pFootnote12->GetFootnote());
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), rFootnote12.GetNumber());
     SwTextFootnote* pTFNote12 = static_cast<SwTextFootnote*>(pFootnote12);
@@ -966,7 +966,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf77342)
     pCursor->Move(fnMoveForward);
     SwTextNode* pTextNd13 = pCursor->GetNode().GetTextNode();
     SwTextAttr* const pFootnote13
-        = pTextNd13->GetTextAttrForCharAt(pCursor->GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN);
+        = pTextNd13->GetTextAttrForCharAt(pCursor->GetPoint()->GetContentIndex(), RES_TXTATR_FTN);
     const SwFormatFootnote& rFootnote13(pFootnote13->GetFootnote());
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), rFootnote13.GetNumber());
     SwTextFootnote* pTFNote13 = static_cast<SwTextFootnote*>(pFootnote13);
@@ -975,7 +975,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf77342)
     pCursor->Move(fnMoveForward);
     SwTextNode* pTextNd14 = pCursor->GetNode().GetTextNode();
     SwTextAttr* const pFootnote14
-        = pTextNd14->GetTextAttrForCharAt(pCursor->GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN);
+        = pTextNd14->GetTextAttrForCharAt(pCursor->GetPoint()->GetContentIndex(), RES_TXTATR_FTN);
     const SwFormatFootnote& rFootnote14(pFootnote14->GetFootnote());
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), rFootnote14.GetNumber());
     SwTextFootnote* pTFNote14 = static_cast<SwTextFootnote*>(pFootnote14);
@@ -998,7 +998,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf77342)
     pCursor->Move(fnMoveForward);
     SwTextNode* pTextNd15 = pCursor->GetNode().GetTextNode();
     SwTextAttr* const pFootnote15
-        = pTextNd15->GetTextAttrForCharAt(pCursor->GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN);
+        = pTextNd15->GetTextAttrForCharAt(pCursor->GetPoint()->GetContentIndex(), RES_TXTATR_FTN);
     const SwFormatFootnote& rFootnote15(pFootnote15->GetFootnote());
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(5), rFootnote15.GetNumber());
     SwTextFootnote* pTFNote15 = static_cast<SwTextFootnote*>(pFootnote15);

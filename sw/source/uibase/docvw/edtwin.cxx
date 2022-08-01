@@ -766,7 +766,7 @@ bool SwEditWin::IsInputSequenceCheckingRequired( const OUString &rText, const Sw
          !rCTLOptions.IsCTLSequenceChecking() )
          return false;
 
-    if ( 0 == rCursor.Start()->nContent.GetIndex() ) /* first char needs not to be checked */
+    if ( 0 == rCursor.Start()->GetContentIndex() ) /* first char needs not to be checked */
         return false;
 
     SwBreakIt *pBreakIter = SwBreakIt::Get();
@@ -975,7 +975,7 @@ void SwEditWin::FlushInBuffer()
         // if text prior to the original selection needs to be changed
         // as well, we now expand the selection accordingly.
         SwPaM &rCursor = *rSh.GetCursor();
-        const sal_Int32 nCursorStartPos = rCursor.Start()->nContent.GetIndex();
+        const sal_Int32 nCursorStartPos = rCursor.Start()->GetContentIndex();
         OSL_ENSURE( nCursorStartPos >= nExpandSelection, "cannot expand selection as specified!!" );
         if (nExpandSelection && nCursorStartPos >= nExpandSelection)
         {
@@ -1558,7 +1558,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
             if (pTextNode)
             {
                 SwTextAttr* pAttr = pTextNode->GetTextAttrAt(
-                    pAnchorPos->nContent.GetIndex(), RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT);
+                    pAnchorPos->GetContentIndex(), RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT);
                 if (pAttr)
                 {
                     SwTextContentControl* pTextContentControl
@@ -2473,7 +2473,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 SwTextNode* pTextNode = pStart->GetNode().GetTextNode();
                 if (pTextNode)
                 {
-                    sal_Int32 nIndex = pStart->nContent.GetIndex();
+                    sal_Int32 nIndex = pStart->GetContentIndex();
                     SwTextAttr* pAttr = pTextNode->GetTextAttrAt(nIndex, RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT);
                     if (pAttr)
                     {
@@ -4772,7 +4772,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                 if (pTextNode)
                                 {
                                     SwTextAttr* pAttr = pTextNode->GetTextAttrAt(
-                                        pAnchorPos->nContent.GetIndex(), RES_TXTATR_CONTENTCONTROL,
+                                        pAnchorPos->GetContentIndex(), RES_TXTATR_CONTENTCONTROL,
                                         SwTextNode::PARENT);
                                     if (pAttr)
                                     {
@@ -5795,9 +5795,9 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             if( pCursor )
             {
                 SwNodeOffset nPosNodeIdx = pCursor->GetPoint()->GetNodeIndex();
-                const sal_Int32 nPosIdx = pCursor->GetPoint()->nContent.GetIndex();
+                const sal_Int32 nPosIdx = pCursor->GetPoint()->GetContentIndex();
                 SwNodeOffset nMarkNodeIdx = pCursor->GetMark()->GetNodeIndex();
-                const sal_Int32 nMarkIdx = pCursor->GetMark()->nContent.GetIndex();
+                const sal_Int32 nMarkIdx = pCursor->GetMark()->GetContentIndex();
 
                 if( !rSh.GetCursor()->HasMark() )
                     rSh.GetCursor()->SetMark();
@@ -5838,7 +5838,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             const SwPosition& rPos = *rSh.GetCursor()->GetPoint();
             SwDocShell* pDocSh = m_rView.GetDocShell();
             SwDoc *pDoc = pDocSh->GetDoc();
-            SwExtTextInput* pInput = pDoc->GetExtTextInput( rPos.GetNode(), rPos.nContent.GetIndex() );
+            SwExtTextInput* pInput = pDoc->GetExtTextInput( rPos.GetNode(), rPos.GetContentIndex() );
             if ( pInput )
             {
                 const SwPosition& rStart = *pInput->Start();

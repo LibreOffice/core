@@ -215,19 +215,19 @@ public:
             if (nRedlineStart == COMPLETE_STRING)
             {
                 nRedlineStart = pStart->GetNodeIndex() == m_rNode.GetIndex()
-                        ? pStart->nContent.GetIndex()
+                        ? pStart->GetContentIndex()
                         : 0;
             }
             else
             {
-                if (pStart->nContent.GetIndex() != nRedlineEnd)
+                if (pStart->GetContentIndex() != nRedlineEnd)
                 {
-                    assert(nRedlineEnd < pStart->nContent.GetIndex());
+                    assert(nRedlineEnd < pStart->GetContentIndex());
                     break; // no increment, revisit it next call
                 }
             }
             nRedlineEnd = pEnd->GetNodeIndex() == m_rNode.GetIndex()
-                    ? pEnd->nContent.GetIndex()
+                    ? pEnd->GetContentIndex()
                     : COMPLETE_STRING;
         }
         return std::make_pair(nRedlineStart, nRedlineEnd);
@@ -242,12 +242,12 @@ static Writer& OutASC_SwTextNode( Writer& rWrt, SwContentNode& rNode )
 {
     const SwTextNode& rNd = static_cast<SwTextNode&>(rNode);
 
-    sal_Int32 nStrPos = rWrt.m_pCurrentPam->GetPoint()->nContent.GetIndex();
+    sal_Int32 nStrPos = rWrt.m_pCurrentPam->GetPoint()->GetContentIndex();
     const sal_Int32 nNodeEnd = rNd.Len();
     sal_Int32 nEnd = nNodeEnd;
     bool bLastNd =  rWrt.m_pCurrentPam->GetPoint()->nNode == rWrt.m_pCurrentPam->GetMark()->nNode;
     if( bLastNd )
-        nEnd = rWrt.m_pCurrentPam->GetMark()->nContent.GetIndex();
+        nEnd = rWrt.m_pCurrentPam->GetMark()->GetContentIndex();
 
     bool bIsOneParagraph = rWrt.m_pOrigPam->Start()->nNode == rWrt.m_pOrigPam->End()->nNode && !getenv("SW_ASCII_COPY_NUMBERING");
 

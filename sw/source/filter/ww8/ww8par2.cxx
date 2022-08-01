@@ -189,7 +189,7 @@ sal_uInt16 SwWW8ImplReader::End_Footnote()
     //Get the footnote character and remove it from the txtnode. We'll
     //replace it with the footnote
     SwTextNode* pText = m_pPaM->GetNode().GetTextNode();
-    sal_Int32 nPos = m_pPaM->GetPoint()->nContent.GetIndex();
+    sal_Int32 nPos = m_pPaM->GetPoint()->GetContentIndex();
 
     OUString sChar;
     SwTextFootnote* pFN = nullptr;
@@ -2375,7 +2375,7 @@ void WW8TabDesc::CreateSwTable()
     // if there is already some content on the Node append new node to ensure
     // that this content remains ABOVE the table
     SwPosition* pPoint = m_pIo->m_pPaM->GetPoint();
-    bool bInsNode = pPoint->nContent.GetIndex() != 0;
+    bool bInsNode = pPoint->GetContentIndex() != 0;
     bool bSetMinHeight = false;
 
     /*
@@ -3008,7 +3008,7 @@ void WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
 
     SwPosition* pGridPos = m_pIo->m_pPaM->GetPoint();
 
-    const sal_Int32 nEnd = pGridPos->nContent.GetIndex();
+    const sal_Int32 nEnd = pGridPos->GetContentIndex();
     pGridPos->nContent.Assign(m_pIo->m_pPaM->GetContentNode(), 0);
     m_pIo->m_xCtrlStck->NewAttr(*pGridPos, aGridItem);
     pGridPos->nContent.Assign(m_pIo->m_pPaM->GetContentNode(), nEnd);

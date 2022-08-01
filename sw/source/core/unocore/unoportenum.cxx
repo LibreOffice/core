@@ -101,7 +101,7 @@ namespace
         }
         sal_Int32 getIndex () const
         {
-            return aPosition.nContent.GetIndex();
+            return aPosition.GetContentIndex();
         }
     };
     typedef std::shared_ptr < SwXBookmarkPortion_Impl > SwXBookmarkPortion_ImplSharedPtr;
@@ -216,7 +216,7 @@ namespace
 
         sal_Int32 getIndex () const
         {
-            return maPosition.nContent.GetIndex();
+            return maPosition.GetContentIndex();
         }
     };
     typedef std::shared_ptr < SwAnnotationStartPortion_Impl > SwAnnotationStartPortion_ImplSharedPtr;
@@ -388,8 +388,8 @@ lcl_ExportFieldMark(
     uno::Reference<text::XTextRange> xRef;
     SwDoc& rDoc = pUnoCursor->GetDoc();
     // maybe it's a good idea to add a special hint to the hints array and rely on the hint segmentation...
-    const sal_Int32 start = pUnoCursor->Start()->nContent.GetIndex();
-    OSL_ENSURE(pUnoCursor->End()->nContent.GetIndex() == start,
+    const sal_Int32 start = pUnoCursor->Start()->GetContentIndex();
+    OSL_ENSURE(pUnoCursor->End()->GetContentIndex() == start,
                "hmm --- why is this different");
 
     pUnoCursor->Right(1);
@@ -677,8 +677,8 @@ struct SwXRedlinePortion_Impl
 
     sal_Int32 getRealIndex () const
     {
-        return m_bStart ? m_pRedline->Start()->nContent.GetIndex()
-                        : m_pRedline->End()  ->nContent.GetIndex();
+        return m_bStart ? m_pRedline->Start()->GetContentIndex()
+                        : m_pRedline->End()  ->GetContentIndex();
     }
 };
 
@@ -1272,7 +1272,7 @@ static void lcl_ExtractFramePositions(FrameClientSortList_t& rFrames, sal_Int32 
         if (!pPosition)
             continue;
 
-        rFramePositions.insert(pPosition->nContent.GetIndex());
+        rFramePositions.insert(pPosition->GetContentIndex());
     }
 }
 
@@ -1350,7 +1350,7 @@ static void lcl_CreatePortions(
 
     // set the start if a selection should be exported
     if ((i_nStartPos > 0) &&
-        (pUnoCursor->Start()->nContent.GetIndex() != i_nStartPos))
+        (pUnoCursor->Start()->GetContentIndex() != i_nStartPos))
     {
         pUnoCursor->DeleteMark();
         OSL_ENSURE(pUnoCursor->Start()->GetNode().GetTextNode() &&
@@ -1403,7 +1403,7 @@ static void lcl_CreatePortions(
 
         SwpHints * const pHints = pTextNode->GetpSwpHints();
         const sal_Int32 nCurrentIndex =
-            pUnoCursor->GetPoint()->nContent.GetIndex();
+            pUnoCursor->GetPoint()->GetContentIndex();
         // this contains the portion which consumes the character in the
         // text at nCurrentIndex; i.e. it must be set _once_ per iteration
         uno::Reference< XTextRange > xRef;

@@ -406,8 +406,8 @@ namespace {
 void collectUIInformation(SwShellCursor* pCursor)
 {
     EventDescription aDescription;
-    OUString aSelStart = OUString::number(pCursor->Start()->nContent.GetIndex());
-    OUString aSelEnd = OUString::number(pCursor->End()->nContent.GetIndex());
+    OUString aSelStart = OUString::number(pCursor->Start()->GetContentIndex());
+    OUString aSelEnd = OUString::number(pCursor->End()->GetContentIndex());
 
     aDescription.aParameters = {{"START_POS", aSelStart}, {"END_POS", aSelEnd}};
     aDescription.aAction = "SELECT";

@@ -663,15 +663,15 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
 
     // Make sure that the range is on Node Edges
     SwNodeRange aRg( pStt->nNode, pEnd->nNode );
-    if( pStt->nContent.GetIndex() )
+    if( pStt->GetContentIndex() )
         getIDocumentContentOperations().SplitNode( *pStt, false );
 
-    bool bEndContent = 0 != pEnd->nContent.GetIndex();
+    bool bEndContent = 0 != pEnd->GetContentIndex();
 
     // Do not split at the End of a Line (except at the End of the Doc)
     if( bEndContent )
     {
-        if( pEnd->GetNode().GetContentNode()->Len() != pEnd->nContent.GetIndex()
+        if( pEnd->GetNode().GetContentNode()->Len() != pEnd->GetContentIndex()
             || pEnd->GetNodeIndex() >= GetNodes().GetEndOfContent().GetIndex()-1 )
         {
             getIDocumentContentOperations().SplitNode( *pEnd, false );
@@ -1165,15 +1165,15 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
 
     // make sure that the range is on Node Edges
     SwNodeRange aRg( pStt->nNode, pEnd->nNode );
-    if( pStt->nContent.GetIndex() )
+    if( pStt->GetContentIndex() )
         getIDocumentContentOperations().SplitNode( *pStt, false );
 
-    bool bEndContent = 0 != pEnd->nContent.GetIndex();
+    bool bEndContent = 0 != pEnd->GetContentIndex();
 
     // Do not split at the End of a Line (except at the End of the Doc)
     if( bEndContent )
     {
-        if( pEnd->GetNode().GetContentNode()->Len() != pEnd->nContent.GetIndex()
+        if( pEnd->GetNode().GetContentNode()->Len() != pEnd->GetContentIndex()
             || pEnd->GetNodeIndex() >= GetNodes().GetEndOfContent().GetIndex()-1 )
         {
             getIDocumentContentOperations().SplitNode( *pEnd, false );

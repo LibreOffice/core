@@ -79,7 +79,7 @@ bool AnnotationMarkCoversCommentAnchor(const sw::mark::IMark* pAnnotationMark,
         return false;
     }
 
-    return rMarkEnd.nContent.GetIndex() == rMarkStart.nContent.GetIndex() + 1;
+    return rMarkEnd.GetContentIndex() == rMarkStart.GetContentIndex() + 1;
 }
 
 /**
@@ -170,7 +170,7 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos(
                 {
                     const SwPosition& rAnnotationStartPos = pAnnotationMark->GetMarkStart();
                     o_rInfo.mnStartNodeIdx = rAnnotationStartPos.GetNodeIndex();
-                    o_rInfo.mnStartContent = rAnnotationStartPos.nContent.GetIndex();
+                    o_rInfo.mnStartContent = rAnnotationStartPos.GetContentIndex();
                 }
                 else
                 {
@@ -215,7 +215,7 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos(
         }
     }
 
-    return ( (aRet==VISIBLE) && SwScriptInfo::IsInHiddenRange( *pTextNode , rAnchorPos.nContent.GetIndex()) )
+    return ( (aRet==VISIBLE) && SwScriptInfo::IsInHiddenRange( *pTextNode , rAnchorPos.GetContentIndex()) )
              ? HIDDEN
              : aRet;
 }

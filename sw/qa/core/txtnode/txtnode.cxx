@@ -173,7 +173,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testFlyAnchorUndo)
     SwDocShell* pShell = pTextDoc->GetDocShell();
     SwDoc* pDoc = pShell->GetDoc();
     const SwFrameFormats& rSpz = *pDoc->GetSpzFrameFormats();
-    sal_Int32 nExpected = rSpz[0]->GetAnchor().GetContentAnchor()->nContent.GetIndex();
+    sal_Int32 nExpected = rSpz[0]->GetAnchor().GetContentAnchor()->GetContentIndex();
 
     // When deleting that last character and undoing it:
     SwWrtShell* pWrtShell = pShell->GetWrtShell();
@@ -182,7 +182,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testFlyAnchorUndo)
     pWrtShell->Undo();
 
     // Then make sure the anchor position after the undo is the same as the original:
-    sal_Int32 nActual = rSpz[0]->GetAnchor().GetContentAnchor()->nContent.GetIndex();
+    sal_Int32 nActual = rSpz[0]->GetAnchor().GetContentAnchor()->GetContentIndex();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 3
     // - Actual  : 2
@@ -283,7 +283,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testPictureContentControlKeyboard)
     const SwFormatAnchor& rFormatAnchor = pFlyFormat->GetAnchor();
     const SwPosition* pAnchorPos = rFormatAnchor.GetContentAnchor();
     SwTextNode* pTextNode = pAnchorPos->GetNode().GetTextNode();
-    SwTextAttr* pAttr = pTextNode->GetTextAttrAt(pAnchorPos->nContent.GetIndex(),
+    SwTextAttr* pAttr = pTextNode->GetTextAttrAt(pAnchorPos->GetContentIndex(),
                                                  RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT);
     auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
     auto& rFormatContentControl

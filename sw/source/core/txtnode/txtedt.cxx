@@ -678,7 +678,7 @@ OUString SwTextFrame::GetCurWord(SwPosition const& rPos) const
     assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
     const uno::Reference< XBreakIterator > &rxBreak = g_pBreakIt->GetBreakIter();
     sal_Int16 nWordType = WordType::DICTIONARY_WORD;
-    lang::Locale aLocale( g_pBreakIt->GetLocale(pTextNode->GetLang(rPos.nContent.GetIndex())) );
+    lang::Locale aLocale( g_pBreakIt->GetLocale(pTextNode->GetLang(rPos.GetContentIndex())) );
     Boundary aBndry =
         rxBreak->getWordBoundary(rText, sal_Int32(nPos), aLocale, nWordType, true);
 

@@ -1270,7 +1270,7 @@ TextFrameIndex SwTextFrame::MapModelToView(SwTextNode const*const pNode, sal_Int
 TextFrameIndex SwTextFrame::MapModelToViewPos(SwPosition const& rPos) const
 {
     SwTextNode const*const pNode(rPos.GetNode().GetTextNode());
-    sal_Int32 const nIndex(rPos.nContent.GetIndex());
+    sal_Int32 const nIndex(rPos.GetContentIndex());
     return MapModelToView(pNode, nIndex);
 }
 
@@ -1504,7 +1504,7 @@ bool sw_HideObj( const SwTextFrame& _rFrame,
         {
             SwTextNode const& rNode(*rAnchorPos.GetNode().GetTextNode());
             assert(FrameContainsNode(_rFrame, rNode.GetIndex()));
-            sal_Int32 const nObjAnchorPos(rAnchorPos.nContent.GetIndex());
+            sal_Int32 const nObjAnchorPos(rAnchorPos.GetContentIndex());
             const sal_Unicode cAnchorChar = nObjAnchorPos < rNode.Len()
                 ? rNode.GetText()[nObjAnchorPos]
                 : 0;
@@ -1600,7 +1600,7 @@ void SwTextFrame::HideAndShowObjects()
                     const SwPosition& rAnchor = pContact->GetContentAnchor();
                     SwScriptInfo::GetBoundsOfHiddenRange(
                         *rAnchor.GetNode().GetTextNode(),
-                        rAnchor.nContent.GetIndex(), nHiddenStart, nHiddenEnd);
+                        rAnchor.GetContentIndex(), nHiddenStart, nHiddenEnd);
                     // Under certain conditions
                     if ( nHiddenStart != COMPLETE_STRING && bShouldBeHidden &&
                         sw_HideObj(*this, eAnchorType, rAnchor, i))

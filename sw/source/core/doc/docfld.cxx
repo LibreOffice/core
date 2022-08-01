@@ -104,7 +104,7 @@ SetGetExpField::SetGetExpField( const SwSectionNode& rSectNd,
     if( pPos )
     {
         m_nNode = pPos->GetNodeIndex();
-        m_nContent = pPos->nContent.GetIndex();
+        m_nContent = pPos->GetContentIndex();
     }
     else
     {
@@ -124,12 +124,12 @@ SetGetExpField::SetGetExpField(::sw::mark::IBookmark const& rBookmark,
     if (pPos)
     {
         m_nNode = pPos->GetNodeIndex();
-        m_nContent = pPos->nContent.GetIndex();
+        m_nContent = pPos->GetContentIndex();
     }
     else
     {
         m_nNode = rBookmark.GetMarkStart().GetNodeIndex();
-        m_nContent = rBookmark.GetMarkStart().nContent.GetIndex();;
+        m_nContent = rBookmark.GetMarkStart().GetContentIndex();;
     }
 }
 
@@ -163,7 +163,7 @@ SetGetExpField::SetGetExpField( const SwPosition& rPos )
     m_eSetGetExpFieldType = CRSRPOS;
     m_CNTNT.pPos = &rPos;
     m_nNode = rPos.GetNodeIndex();
-    m_nContent = rPos.nContent.GetIndex();
+    m_nContent = rPos.GetContentIndex();
 }
 
 SetGetExpField::SetGetExpField( const SwFlyFrameFormat& rFlyFormat,
@@ -174,7 +174,7 @@ SetGetExpField::SetGetExpField( const SwFlyFrameFormat& rFlyFormat,
     if( pPos )
     {
         m_nNode = pPos->GetNodeIndex();
-        m_nContent = pPos->nContent.GetIndex();
+        m_nContent = pPos->GetContentIndex();
     }
     else
     {
@@ -214,7 +214,7 @@ void SetGetExpField::SetBodyPos( const SwContentFrame& rFrame )
         bool const bResult = ::GetBodyTextNode( rDoc, aPos, rFrame );
         OSL_ENSURE(bResult, "Where is the field?");
         m_nNode = aPos.GetNodeIndex();
-        m_nContent = aPos.nContent.GetIndex();
+        m_nContent = aPos.GetContentIndex();
     }
 }
 
@@ -353,10 +353,10 @@ sal_Int32 SetGetExpField::GetCntPosFromContent() const
             nRet = m_CNTNT.pTextTOX->GetStart();
             break;
         case BOOKMARK:
-            nRet = m_CNTNT.pBookmark->GetMarkStart().nContent.GetIndex();
+            nRet = m_CNTNT.pBookmark->GetMarkStart().GetContentIndex();
             break;
         case CRSRPOS:
-            nRet =  m_CNTNT.pPos->nContent.GetIndex();
+            nRet =  m_CNTNT.pPos->GetContentIndex();
             break;
         default:
             break;

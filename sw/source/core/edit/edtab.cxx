@@ -105,7 +105,7 @@ const SwTable& SwEditShell::InsertTable( const SwInsertTableOptions& rInsTableOp
     StartAllAction();
     SwPosition* pPos = GetCursor()->GetPoint();
 
-    bool bEndUndo = 0 != pPos->nContent.GetIndex();
+    bool bEndUndo = 0 != pPos->GetContentIndex();
     if( bEndUndo )
     {
         StartUndo( SwUndoId::START );
@@ -231,7 +231,7 @@ void SwEditShell::InsertDDETable( const SwInsertTableOptions& rInsTableOpts,
 
     StartAllAction();
 
-    bool bEndUndo = 0 != pPos->nContent.GetIndex();
+    bool bEndUndo = 0 != pPos->GetContentIndex();
     if( bEndUndo )
     {
         StartUndo( SwUndoId::START );

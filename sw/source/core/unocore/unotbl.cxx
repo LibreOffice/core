@@ -2097,7 +2097,7 @@ SwXTextTable::attach(const uno::Reference<text::XTextRange> & xTextRange)
 
         pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
         const SwTable* pTable(nullptr);
-        if( 0 != aPam.Start()->nContent.GetIndex() )
+        if( 0 != aPam.Start()->GetContentIndex() )
         {
             pDoc->getIDocumentContentOperations().SplitNode(*aPam.Start(), false);
         }

@@ -616,7 +616,7 @@ void SwAutoCorrExceptWord::CheckChar( const SwPosition& rPos, sal_Unicode cChr )
 {
     // test only if this is an improvement.
     // If yes, then add the word to the list.
-    if (m_cChar == cChr && rPos.GetNodeIndex() == m_nNode && rPos.nContent.GetIndex() == m_nContent)
+    if (m_cChar == cChr && rPos.GetNodeIndex() == m_nNode && rPos.GetContentIndex() == m_nContent)
     {
         // get the current autocorrection:
         SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get().GetAutoCorrect();
@@ -632,7 +632,7 @@ void SwAutoCorrExceptWord::CheckChar( const SwPosition& rPos, sal_Unicode cChr )
 bool SwAutoCorrExceptWord::CheckDelChar( const SwPosition& rPos )
 {
     bool bRet = false;
-    if (!m_bDeleted && rPos.GetNodeIndex() == m_nNode && rPos.nContent.GetIndex() == m_nContent)
+    if (!m_bDeleted && rPos.GetNodeIndex() == m_nNode && rPos.GetContentIndex() == m_nContent)
         m_bDeleted = bRet = true;
     return bRet;
 }
@@ -648,7 +648,7 @@ void SwDontExpandItem::SaveDontExpandItems( const SwPosition& rPos )
     {
         m_pDontExpandItems.reset( new SfxItemSet( const_cast<SwDoc&>(pTextNd->GetDoc()).GetAttrPool(),
                                             aCharFormatSetRange ) );
-        const sal_Int32 n = rPos.nContent.GetIndex();
+        const sal_Int32 n = rPos.GetContentIndex();
         if (!pTextNd->GetParaAttr( *m_pDontExpandItems, n, n,
                                 n != pTextNd->GetText().getLength() ))
         {
@@ -663,7 +663,7 @@ void SwDontExpandItem::RestoreDontExpandItems( const SwPosition& rPos )
     if( !pTextNd )
         return;
 
-    const sal_Int32 nStart = rPos.nContent.GetIndex();
+    const sal_Int32 nStart = rPos.GetContentIndex();
     if( nStart == pTextNd->GetText().getLength() )
         pTextNd->FormatToTextAttr( pTextNd );
 

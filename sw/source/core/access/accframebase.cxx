@@ -285,7 +285,7 @@ bool SwAccessibleFrameBase::GetSelectedState( )
     const SwPosition *pPos = rAnchor.GetContentAnchor();
     if( !pPos )
         return false;
-    int nIndex = pPos->nContent.GetIndex();
+    int nIndex = pPos->GetContentIndex();
     if( pPos->GetNode().GetTextNode() )
     {
         SwPaM* pCursor = GetCursor();
@@ -310,8 +310,8 @@ bool SwAccessibleFrameBase::GetSelectedState( )
                     {
                         if( rAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR )
                         {
-                            if( ((nHere == nStartIndex) && (nIndex >= pStart->nContent.GetIndex())) || (nHere > nStartIndex) )
-                                if( ((nHere == nEndIndex) && (nIndex < pEnd->nContent.GetIndex())) || (nHere < nEndIndex) )
+                            if( ((nHere == nStartIndex) && (nIndex >= pStart->GetContentIndex())) || (nHere > nStartIndex) )
+                                if( ((nHere == nEndIndex) && (nIndex < pEnd->GetContentIndex())) || (nHere < nEndIndex) )
                                     return true;
                         }
                         else if( rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA )

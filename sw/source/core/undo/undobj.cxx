@@ -64,7 +64,7 @@ void SwUndRng::SetValues( const SwPaM& rPam )
     {
         const SwPosition *pEnd = rPam.End();
         m_nEndNode = pEnd->GetNodeIndex();
-        m_nEndContent = pEnd->nContent.GetIndex();
+        m_nEndContent = pEnd->GetContentIndex();
     }
     else
     {
@@ -74,7 +74,7 @@ void SwUndRng::SetValues( const SwPaM& rPam )
     }
 
     m_nSttNode = pStt->GetNodeIndex();
-    m_nSttContent = pStt->nContent.GetIndex();
+    m_nSttContent = pStt->GetContentIndex();
 }
 
 void SwUndRng::SetPaM( SwPaM & rPam, bool bCorrToContent ) const
@@ -792,12 +792,12 @@ void SwUndoSaveContent::MoveFromUndoNds( SwDoc& rDoc, SwNodeOffset nNodeIdx,
         aPaM.GetPoint()->nNode = nNodeIdx;
         aPaM.GetPoint()->nContent.Assign(aPaM.GetContentNode(), 0);
 
-        SaveRedlEndPosForRestore aRedlRest( rInsPos.nNode, rInsPos.nContent.GetIndex() );
+        SaveRedlEndPosForRestore aRedlRest( rInsPos.nNode, rInsPos.GetContentIndex() );
 
         rNds.MoveRange( aPaM, rInsPos, rDoc.GetNodes() );
 
         // delete the last Node as well
-        if( !aPaM.GetPoint()->nContent.GetIndex() ||
+        if( !aPaM.GetPoint()->GetContentIndex() ||
             ( aPaM.GetPoint()->nNode++ &&       // still empty Nodes at the end?
             &rNds.GetEndOfExtras() != &aPaM.GetPoint()->GetNode() ))
         {
@@ -897,9 +897,9 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                 if( (DelContentType::CheckNoCntnt & nDelContentType )
                     ? (&pEnd->GetNode() == pFootnoteNd )
                     : (( &pStt->GetNode() == pFootnoteNd &&
-                    pStt->nContent.GetIndex() > nFootnoteSttIdx) ||
+                    pStt->GetContentIndex() > nFootnoteSttIdx) ||
                     ( &pEnd->GetNode() == pFootnoteNd &&
-                    nFootnoteSttIdx >= pEnd->nContent.GetIndex() )) )
+                    nFootnoteSttIdx >= pEnd->GetContentIndex() )) )
                 {
                     ++nPos;     // continue searching
                     continue;
@@ -926,9 +926,9 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                 const sal_Int32 nFootnoteSttIdx = pSrch->GetStart();
                 if( !(DelContentType::CheckNoCntnt & nDelContentType) && (
                     ( &pStt->GetNode() == pFootnoteNd &&
-                    pStt->nContent.GetIndex() > nFootnoteSttIdx ) ||
+                    pStt->GetContentIndex() > nFootnoteSttIdx ) ||
                     ( &pEnd->GetNode() == pFootnoteNd &&
-                    nFootnoteSttIdx >= pEnd->nContent.GetIndex() )))
+                    nFootnoteSttIdx >= pEnd->GetContentIndex() )))
                     continue;               // continue searching
 
                 // Unfortunately an index needs to be created. Otherwise there
@@ -977,7 +977,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                         SwTextNode *const pTextNd =
                             pAPos->GetNode().GetTextNode();
                         SwTextAttr* const pFlyHint = pTextNd->GetTextAttrForCharAt(
-                            pAPos->nContent.GetIndex());
+                            pAPos->GetContentIndex());
                         assert(pFlyHint);
                         m_pHistory->Add( pFlyHint, SwNodeOffset(0), false );
                         // reset n so that no Format is skipped
@@ -1162,7 +1162,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                     // delete cross-reference bookmark at <pStt>, if only part of
                     // <pEnd> text node content is deleted.
                     if( pStt->nNode == pBkmk->GetMarkPos().nNode
-                        && pEnd->nContent.GetIndex() != pEnd->GetNode().GetTextNode()->Len() )
+                        && pEnd->GetContentIndex() != pEnd->GetNode().GetTextNode()->Len() )
                     {
                         bSavePos = true;
                         bSaveOtherPos = false; // cross-reference bookmarks are not expanded
@@ -1170,7 +1170,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                     // delete cross-reference bookmark at <pEnd>, if only part of
                     // <pStt> text node content is deleted.
                     else if( pEnd->nNode == pBkmk->GetMarkPos().nNode &&
-                        pStt->nContent.GetIndex() != 0 )
+                        pStt->GetContentIndex() != 0 )
                     {
                         bSavePos = true;
                         bSaveOtherPos = false; // cross-reference bookmarks are not expanded
@@ -1343,19 +1343,19 @@ SwRedlineSaveData::SwRedlineSaveData(
     {
     case SwComparePosition::OverlapBefore:        // Pos1 overlaps Pos2 at the beginning
         m_nEndNode = rEndPos.GetNodeIndex();
-        m_nEndContent = rEndPos.nContent.GetIndex();
+        m_nEndContent = rEndPos.GetContentIndex();
         break;
 
     case SwComparePosition::OverlapBehind:        // Pos1 overlaps Pos2 at the end
         m_nSttNode = rSttPos.GetNodeIndex();
-        m_nSttContent = rSttPos.nContent.GetIndex();
+        m_nSttContent = rSttPos.GetContentIndex();
         break;
 
     case SwComparePosition::Inside:                // Pos1 lays completely in Pos2
         m_nSttNode = rSttPos.GetNodeIndex();
-        m_nSttContent = rSttPos.nContent.GetIndex();
+        m_nSttContent = rSttPos.GetContentIndex();
         m_nEndNode = rEndPos.GetNodeIndex();
-        m_nEndContent = rEndPos.nContent.GetIndex();
+        m_nEndContent = rEndPos.GetContentIndex();
         break;
 
     case SwComparePosition::Outside:               // Pos2 lays completely in Pos1

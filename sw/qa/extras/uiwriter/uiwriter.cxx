@@ -922,13 +922,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCp1000071)
     const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
     CPPUNIT_ASSERT_EQUAL( SwRedlineTable::size_type( 2 ), rTable.size());
     SwNodeOffset redlineStart0NodeIndex = rTable[ 0 ]->Start()->GetNodeIndex();
-    sal_Int32 redlineStart0Index = rTable[ 0 ]->Start()->nContent.GetIndex();
+    sal_Int32 redlineStart0Index = rTable[ 0 ]->Start()->GetContentIndex();
     SwNodeOffset redlineEnd0NodeIndex = rTable[ 0 ]->End()->GetNodeIndex();
-    sal_Int32 redlineEnd0Index = rTable[ 0 ]->End()->nContent.GetIndex();
+    sal_Int32 redlineEnd0Index = rTable[ 0 ]->End()->GetContentIndex();
     SwNodeOffset redlineStart1NodeIndex = rTable[ 1 ]->Start()->GetNodeIndex();
-    sal_Int32 redlineStart1Index = rTable[ 1 ]->Start()->nContent.GetIndex();
+    sal_Int32 redlineStart1Index = rTable[ 1 ]->Start()->GetContentIndex();
     SwNodeOffset redlineEnd1NodeIndex = rTable[ 1 ]->End()->GetNodeIndex();
-    sal_Int32 redlineEnd1Index = rTable[ 1 ]->End()->nContent.GetIndex();
+    sal_Int32 redlineEnd1Index = rTable[ 1 ]->End()->GetContentIndex();
 
     // Change the document layout to be 2 columns, and then undo.
     pWrtShell->SelAll();
@@ -944,13 +944,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCp1000071)
     // Check that redlines are the same like at the beginning.
     CPPUNIT_ASSERT_EQUAL( SwRedlineTable::size_type( 2 ), rTable.size());
     CPPUNIT_ASSERT_EQUAL( redlineStart0NodeIndex, rTable[ 0 ]->Start()->GetNodeIndex());
-    CPPUNIT_ASSERT_EQUAL( redlineStart0Index, rTable[ 0 ]->Start()->nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL( redlineStart0Index, rTable[ 0 ]->Start()->GetContentIndex());
     CPPUNIT_ASSERT_EQUAL( redlineEnd0NodeIndex, rTable[ 0 ]->End()->GetNodeIndex());
-    CPPUNIT_ASSERT_EQUAL( redlineEnd0Index, rTable[ 0 ]->End()->nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL( redlineEnd0Index, rTable[ 0 ]->End()->GetContentIndex());
     CPPUNIT_ASSERT_EQUAL( redlineStart1NodeIndex, rTable[ 1 ]->Start()->GetNodeIndex());
-    CPPUNIT_ASSERT_EQUAL( redlineStart1Index, rTable[ 1 ]->Start()->nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL( redlineStart1Index, rTable[ 1 ]->Start()->GetContentIndex());
     CPPUNIT_ASSERT_EQUAL( redlineEnd1NodeIndex, rTable[ 1 ]->End()->GetNodeIndex());
-    CPPUNIT_ASSERT_EQUAL( redlineEnd1Index, rTable[ 1 ]->End()->nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL( redlineEnd1Index, rTable[ 1 ]->End()->GetContentIndex());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testShapeTextboxVertadjust)
@@ -1014,7 +1014,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCommentedWord)
     // Make sure that not only the word, but its comment anchor is also selected.
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
     // This was 9, only "word", not "word<anchor character>" was selected.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(10), pShellCursor->End()->nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10), pShellCursor->End()->GetContentIndex());
 
     // Test that getAnchor() points to "word", not to an empty string.
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);

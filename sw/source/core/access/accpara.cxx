@@ -1635,9 +1635,9 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
     SwTextNode *const pTextNode(aModelPos.GetNode().GetTextNode());
     {
         SwPosition const aEndPos(*pTextNode,
-            aModelPos.nContent.GetIndex() == pTextNode->Len()
+            aModelPos.GetContentIndex() == pTextNode->Len()
                 ? pTextNode->Len() // ???
-                : aModelPos.nContent.GetIndex() + 1);
+                : aModelPos.GetContentIndex() + 1);
         pPaM.emplace(aModelPos, aEndPos);
     }
 

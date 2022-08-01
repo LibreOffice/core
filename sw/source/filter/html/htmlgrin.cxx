@@ -237,7 +237,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
         }
 
         // determine vertical alignment and anchoring
-        const sal_Int32 nContent = m_pPam->GetPoint()->nContent.GetIndex();
+        const sal_Int32 nContent = m_pPam->GetPoint()->GetContentIndex();
         if( nContent )
         {
             aAnchor.SetType( RndStdIds::FLY_AT_CHAR );
@@ -283,7 +283,7 @@ void SwHTMLParser::RegisterFlyFrame( SwFrameFormat *pFlyFormat )
         css::text::WrapTextMode_THROUGH == pFlyFormat->GetSurround().GetSurround() )
     {
         m_aMoveFlyFrames.emplace_back(std::make_unique<SwHTMLFrameFormatListener>(pFlyFormat));
-        m_aMoveFlyCnts.push_back( m_pPam->GetPoint()->nContent.GetIndex() );
+        m_aMoveFlyCnts.push_back( m_pPam->GetPoint()->GetContentIndex() );
     }
 }
 
@@ -462,7 +462,7 @@ IMAGE_SETEVENT:
 
     // When we are in an ordered list and the paragraph is still empty and not
     // numbered, it may be a graphic for a bullet list.
-    if( !m_pPam->GetPoint()->nContent.GetIndex() &&
+    if( !m_pPam->GetPoint()->GetContentIndex() &&
         GetNumInfo().GetDepth() > 0 && GetNumInfo().GetDepth() <= MAXLEVEL &&
         !m_aBulletGrfs[GetNumInfo().GetDepth()-1].isEmpty() &&
         m_aBulletGrfs[GetNumInfo().GetDepth()-1]==sGrfNm )
@@ -853,7 +853,7 @@ IMAGE_SETEVENT:
             m_xAttrTab->pINetFormat->GetStartParagraph() ==
                         m_pPam->GetPoint()->nNode &&
             m_xAttrTab->pINetFormat->GetStartContent() ==
-                        m_pPam->GetPoint()->nContent.GetIndex() - 1 )
+                        m_pPam->GetPoint()->GetContentIndex() - 1 )
         {
             // the attribute was insert right before as-character anchored
             // graphic, therefore we move it
@@ -1419,7 +1419,7 @@ void SwHTMLParser::StripTrailingPara()
 
     SwContentNode* pCNd = m_pPam->GetContentNode();
     SwNodeOffset nNodeIdx = m_pPam->GetPoint()->GetNodeIndex();
-    if( !m_pPam->GetPoint()->nContent.GetIndex() )
+    if( !m_pPam->GetPoint()->GetContentIndex() )
     {
         if( pCNd && pCNd->StartOfSectionIndex() + 2 <
             pCNd->EndOfSectionIndex() && CanRemoveNode(nNodeIdx))
@@ -1507,7 +1507,7 @@ void SwHTMLParser::StripTrailingPara()
         bSetSmallFont = true;
         SwTextNode* pTextNd = pCNd->GetTextNode();
 
-        sal_Int32 nPos = m_pPam->GetPoint()->nContent.GetIndex();
+        sal_Int32 nPos = m_pPam->GetPoint()->GetContentIndex();
         while( bSetSmallFont && nPos>0 )
         {
             --nPos;

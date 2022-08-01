@@ -137,9 +137,9 @@ struct ObjAnchorOrder
         if (pContentAnchorListed && pContentAnchorNew)
         {
             sal_Int32 nListedIndex = pAnchorListed->GetAnchorId() != RndStdIds::FLY_AT_PARA ?
-                pContentAnchorListed->nContent.GetIndex() : 0;
+                pContentAnchorListed->GetContentIndex() : 0;
             sal_Int32 nNewIndex = pAnchorNew->GetAnchorId() != RndStdIds::FLY_AT_PARA ?
-                pContentAnchorNew->nContent.GetIndex() : 0;
+                pContentAnchorNew->GetContentIndex() : 0;
             if (nListedIndex != nNewIndex)
             {
                 return nListedIndex < nNewIndex;

@@ -103,7 +103,7 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
     }
 
     bool bAppended = false;
-    if( m_pPam->GetPoint()->nContent.GetIndex() )
+    if( m_pPam->GetPoint()->GetContentIndex() )
     {
         AppendTextNode( bHeader||bFooter||!aId.isEmpty()|| !aHRef.isEmpty() ? AM_NORMAL
                                                                 : AM_NOSPACE );
@@ -656,7 +656,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
     bool bAppended = false;
     if( !bPositioned )
     {
-        if( m_pPam->GetPoint()->nContent.GetIndex() )
+        if( m_pPam->GetPoint()->GetContentIndex() )
         {
             AppendTextNode( AM_SPACE );
             bAppended = true;

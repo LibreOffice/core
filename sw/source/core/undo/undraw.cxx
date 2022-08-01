@@ -110,7 +110,7 @@ static void lcl_SaveAnchor( SwFrameFormat* pFormat, SwNodeOffset& rNodePos )
 
     if (RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId())
     {
-        nContentPos = rAnchor.GetContentAnchor()->nContent.GetIndex();
+        nContentPos = rAnchor.GetContentAnchor()->GetContentIndex();
 
         // destroy TextAttribute
         SwTextNode *pTextNd = pFormat->GetDoc()->GetNodes()[ rNodePos ]->GetTextNode();
@@ -128,7 +128,7 @@ static void lcl_SaveAnchor( SwFrameFormat* pFormat, SwNodeOffset& rNodePos )
     }
     else if (RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId())
     {
-        nContentPos = rAnchor.GetContentAnchor()->nContent.GetIndex();
+        nContentPos = rAnchor.GetContentAnchor()->GetContentIndex();
     }
 
     pFormat->SetFormatAttr( SwFormatAnchor( rAnchor.GetAnchorId(), nContentPos ) );

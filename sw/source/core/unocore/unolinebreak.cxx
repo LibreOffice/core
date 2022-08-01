@@ -161,7 +161,7 @@ void SAL_CALL SwXLineBreak::attach(const uno::Reference<text::XTextRange>& xText
     rNewDoc.getIDocumentContentOperations().InsertPoolItem(aPam, aLineBreak, nInsertFlags);
     auto pTextAttr
         = static_cast<SwTextLineBreak*>(aPam.GetNode().GetTextNode()->GetTextAttrForCharAt(
-            aPam.GetPoint()->nContent.GetIndex() - 1, RES_TXTATR_LINEBREAK));
+            aPam.GetPoint()->GetContentIndex() - 1, RES_TXTATR_LINEBREAK));
     if (pTextAttr)
     {
         m_pImpl->EndListeningAll();

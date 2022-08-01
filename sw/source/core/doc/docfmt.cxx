@@ -337,7 +337,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
     bool bAdd = true;
     SwNodeIndex aTmpStt( pStt->nNode );
     SwNodeIndex aTmpEnd( pEnd->nNode );
-    if( pStt->nContent.GetIndex() )     // just one part
+    if( pStt->GetContentIndex() )     // just one part
     {
         // set up a later, and all CharFormatAttr -> TextFormatAttr
         SwTextNode* pTNd = aTmpStt.GetNode().GetTextNode();
@@ -356,13 +356,13 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
 
         ++aTmpStt;
     }
-    if( pEnd->nContent.GetIndex() == pEnd->GetNode().GetContentNode()->Len() )
+    if( pEnd->GetContentIndex() == pEnd->GetNode().GetContentNode()->Len() )
     {
          // set up a later, and all CharFormatAttr -> TextFormatAttr
         ++aTmpEnd;
         bAdd = false;
     }
-    else if( pStt->nNode != pEnd->nNode || !pStt->nContent.GetIndex() )
+    else if( pStt->nNode != pEnd->nNode || !pStt->GetContentIndex() )
     {
         SwTextNode* pTNd = aTmpEnd.GetNode().GetTextNode();
         if( pTNd && pTNd->HasSwAttrSet() && pTNd->GetpSwAttrSet()->Count() )
@@ -411,13 +411,13 @@ void SwDoc::UpdateRsid( const SwPaM &rRg, const sal_Int32 nLen )
     {
         return;
     }
-    const sal_Int32 nStart(rRg.GetPoint()->nContent.GetIndex() - nLen);
+    const sal_Int32 nStart(rRg.GetPoint()->GetContentIndex() - nLen);
     SvxRsidItem aRsid( mnRsid, RES_CHRATR_RSID );
 
     SfxItemSetFixed<RES_CHRATR_RSID, RES_CHRATR_RSID> aSet(GetAttrPool());
     aSet.Put(aRsid);
     bool const bRet(pTextNode->SetAttr(aSet, nStart,
-        rRg.GetPoint()->nContent.GetIndex()));
+        rRg.GetPoint()->GetContentIndex()));
 
     if (bRet && GetIDocumentUndoRedo().DoesUndo())
     {
@@ -1842,7 +1842,7 @@ void SwDoc::SetFormatItemByAutoFormat( const SwPaM& rPam, const SfxItemSet& rSet
         getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld | RedlineFlags::Ignore );
     }
 
-    const sal_Int32 nEnd(rPam.End()->nContent.GetIndex());
+    const sal_Int32 nEnd(rPam.End()->GetContentIndex());
     std::vector<WhichPair> whichIds;
     SfxItemIter iter(rSet);
     for (SfxPoolItem const* pItem = iter.GetCurItem(); pItem; pItem = iter.NextItem())

@@ -521,7 +521,7 @@ namespace SwLangHelper
             aText = pNode->GetText();
             if (!aText.isEmpty())
             {
-                sal_Int32 nEnd = pCursor->GetPoint()->nContent.GetIndex();
+                sal_Int32 nEnd = pCursor->GetPoint()->GetContentIndex();
                 // at most 100 chars to the left...
                 const sal_Int32 nStt = nEnd > 100 ? nEnd - 100 : 0;
                 // ... and 100 to the right of the cursor position

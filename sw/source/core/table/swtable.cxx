@@ -1657,7 +1657,7 @@ SwRedlineTable::size_type SwTableLine::UpdateTextChangesOnly(
                     {
                         bHasRedlineInBox = true;
                         // plain text before the first redline in the text
-                        if ( pRedline->Start()->nContent.GetIndex() > 0 )
+                        if ( pRedline->Start()->GetContentIndex() > 0 )
                             bPlainTextInLine = true;
                     }
 
@@ -1701,7 +1701,7 @@ SwRedlineTable::size_type SwTableLine::UpdateTextChangesOnly(
             // there is text content outside of redlines: not a deletion
             if ( !bInsertion && ( !bHasRedlineInBox || ( pPreviousDeleteRedline &&
                  ( pPreviousDeleteRedline->End()->nNode < aCellEnd.nNode ||
-                   pPreviousDeleteRedline->End()->nContent.GetIndex() <
+                   pPreviousDeleteRedline->End()->GetContentIndex() <
                            aCellEnd.GetNode().GetContentNode()->Len() ) ) ) )
             {
                 bPlainTextInLine = true;

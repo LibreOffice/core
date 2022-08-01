@@ -397,12 +397,12 @@ namespace
     bool IsPrevPos( const SwPosition & rPos1, const SwPosition & rPos2 )
     {
         const SwContentNode* pCNd;
-        if( 0 != rPos2.nContent.GetIndex() )
+        if( 0 != rPos2.GetContentIndex() )
             return false;
         if( rPos2.GetNodeIndex() - 1 != rPos1.GetNodeIndex() )
             return false;
         pCNd = rPos1.GetNode().GetContentNode();
-        return pCNd && rPos1.nContent.GetIndex() == pCNd->Len();
+        return pCNd && rPos1.GetContentIndex() == pCNd->Len();
     }
 
     // copy style or return with SwRedlineExtra_FormatColl with reject data of the upcoming copy
@@ -1025,27 +1025,27 @@ namespace
         // expand to them.
         auto [pStt, pEnd] = rPam.StartEnd(); // SwPosition*
         SwDoc& rDoc = rPam.GetDoc();
-        if( !pStt->nContent.GetIndex() &&
+        if( !pStt->GetContentIndex() &&
             !rDoc.GetNodes()[ pStt->GetNodeIndex() - 1 ]->IsContentNode() )
         {
             const SwRangeRedline* pRedl = rDoc.getIDocumentRedlineAccess().GetRedline( *pStt, nullptr );
             if( pRedl )
             {
                 const SwPosition* pRStt = pRedl->Start();
-                if( !pRStt->nContent.GetIndex() && pRStt->GetNodeIndex() ==
+                if( !pRStt->GetContentIndex() && pRStt->GetNodeIndex() ==
                     pStt->GetNodeIndex() - 1 )
                     *pStt = *pRStt;
             }
         }
         if( pEnd->GetNode().IsContentNode() &&
             !rDoc.GetNodes()[ pEnd->GetNodeIndex() + 1 ]->IsContentNode() &&
-            pEnd->nContent.GetIndex() == pEnd->GetNode().GetContentNode()->Len()    )
+            pEnd->GetContentIndex() == pEnd->GetNode().GetContentNode()->Len()    )
         {
             const SwRangeRedline* pRedl = rDoc.getIDocumentRedlineAccess().GetRedline( *pEnd, nullptr );
             if( pRedl )
             {
                 const SwPosition* pREnd = pRedl->End();
-                if( !pREnd->nContent.GetIndex() && pREnd->GetNodeIndex() ==
+                if( !pREnd->GetContentIndex() && pREnd->GetNodeIndex() ==
                     pEnd->GetNodeIndex() + 1 )
                     *pEnd = *pREnd;
             }
@@ -3144,7 +3144,7 @@ const SwRangeRedline* DocumentRedlineManager::SelNextRedline( SwPaM& rPam ) cons
             SwNodeIndex aTmp( pEnd->nNode );
             SwContentNode* pCNd = SwNodes::GoPrevSection( &aTmp );
             if( !pCNd || ( aTmp == rSttPos.nNode &&
-                pCNd->Len() == rSttPos.nContent.GetIndex() ))
+                pCNd->Len() == rSttPos.GetContentIndex() ))
                 pFnd = nullptr;
         }
         if( pFnd )
@@ -3270,7 +3270,7 @@ const SwRangeRedline* DocumentRedlineManager::SelPrevRedline( SwPaM& rPam ) cons
             SwNodeIndex aTmp( pStt->nNode );
             SwContentNode* pCNd = m_rDoc.GetNodes().GoNextSection( &aTmp );
             if( !pCNd || ( aTmp == rSttPos.nNode &&
-                !rSttPos.nContent.GetIndex() ))
+                !rSttPos.GetContentIndex() ))
                 pFnd = nullptr;
         }
         if( pFnd )

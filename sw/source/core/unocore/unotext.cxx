@@ -1392,7 +1392,7 @@ SwXText::insertTextPortion(
     if (!rText.isEmpty())
     {
         SwNodeIndex const nodeIndex(rCursor.GetPoint()->nNode, -1);
-        const sal_Int32 nContentPos = rCursor.GetPoint()->nContent.GetIndex();
+        const sal_Int32 nContentPos = rCursor.GetPoint()->GetContentIndex();
         SwUnoCursorHelper::DocInsertStringSplitCR(
             *m_pImpl->m_pDoc, rCursor, rText, false);
         SwUnoCursorHelper::SelectPam(rCursor, true);
@@ -1976,7 +1976,7 @@ void SwXText::Impl::ConvertCell(
     if (!pLastCell) // first cell?
     {
         // align the beginning - if necessary
-        if (aStartCellPam.Start()->nContent.GetIndex())
+        if (aStartCellPam.Start()->GetContentIndex())
         {
             m_pDoc->getIDocumentContentOperations().SplitNode(*aStartCellPam.Start(), false);
         }
@@ -1990,7 +1990,7 @@ void SwXText::Impl::ConvertCell(
         if (nLastNodeEndIndex == nStartCellNodeIndex)
         {
             // same node as predecessor then equal nContent?
-            if (0 != aStartCellPam.Start()->nContent.GetIndex())
+            if (0 != aStartCellPam.Start()->GetContentIndex())
             {
                 throw lang::IllegalArgumentException();
             }
@@ -2025,7 +2025,7 @@ void SwXText::Impl::ConvertCell(
         }
     }
     // now check if there's a need to insert another paragraph break
-    if (aEndCellPam.End()->nContent.GetIndex() <
+    if (aEndCellPam.End()->GetContentIndex() <
             aEndCellPam.End()->GetNode().GetTextNode()->Len())
     {
         m_pDoc->getIDocumentContentOperations().SplitNode(*aEndCellPam.End(), false);
@@ -2041,8 +2041,8 @@ void SwXText::Impl::ConvertCell(
             aEndCellPam.GetNode().GetTextNode()->Len();
     }
 
-    assert(aStartCellPam.Start()->nContent.GetIndex() == 0);
-    assert(aEndCellPam.End()->nContent.GetIndex() == aEndCellPam.End()->GetNode().GetTextNode()->Len());
+    assert(aStartCellPam.Start()->GetContentIndex() == 0);
+    assert(aEndCellPam.End()->GetContentIndex() == aEndCellPam.End()->GetNode().GetTextNode()->Len());
     SwNodeRange aCellRange(aStartCellPam.Start()->nNode,
             aEndCellPam.End()->nNode);
     rRowNodes.push_back(aCellRange); // note: invalidates pLastCell!

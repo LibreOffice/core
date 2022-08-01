@@ -328,7 +328,7 @@ SwXFootnote::attach(const uno::Reference< text::XTextRange > & xTextRange)
 
     SwTextFootnote *const pTextAttr = static_cast<SwTextFootnote*>(
         aPam.GetNode().GetTextNode()->GetTextAttrForCharAt(
-                aPam.GetPoint()->nContent.GetIndex()-1, RES_TXTATR_FTN ));
+                aPam.GetPoint()->GetContentIndex()-1, RES_TXTATR_FTN ));
 
     if (pTextAttr)
     {

@@ -78,6 +78,9 @@ struct SAL_WARN_UNUSED SW_DLLPUBLIC SwPosition
     SwNodes& GetNodes() { return nNode.GetNodes(); }
 
     SwNode& GetNode() const { return nNode.GetNode(); }
+
+
+    sal_Int32 GetContentIndex() const { return nContent.GetIndex(); }
 };
 
 SW_DLLPUBLIC std::ostream &operator <<(std::ostream& s, const SwPosition& position);
