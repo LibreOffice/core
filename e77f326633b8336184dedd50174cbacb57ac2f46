@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "040cd600_835df902",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-08-01T06:01:09Z",
+      "side": 1,
+      "message": "The test failures seem related to digital signatures like the loop you changed, for example the UI test was for https://bugs.documentfoundation.org/show_bug.cgi?id\u003d104795\n\nLooks like the build passed on Windows, though, so difficult for you to test (UI tests don\u0027t work on Win). Maybe Hossein can provide tips, I\u0027m not sure if the new loop is correct.",
+      "revId": "e77f326633b8336184dedd50174cbacb57ac2f46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
