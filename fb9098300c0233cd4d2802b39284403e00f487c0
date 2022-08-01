@@ -52,6 +52,23 @@
       "parentUuid": "11b28adb_fd849a38",
       "revId": "fb9098300c0233cd4d2802b39284403e00f487c0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5429b2a2_fe4c9240",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2022-08-01T07:08:01Z",
+      "side": 1,
+      "message": "I can\u0027t imagine scenario for this right now: numbering format \u003d none and missing format string. But anyway this fallback case looks better than before.",
+      "revId": "fb9098300c0233cd4d2802b39284403e00f487c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
