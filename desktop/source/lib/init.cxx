@@ -62,6 +62,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/threadpool.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
 #include <com/sun/star/document/MacroExecMode.hpp>
@@ -421,12 +422,26 @@ RectangleAndPart RectangleAndPart::Create(const std::string& rPayload)
     {
         aRet.m_aRectangle = tools::Rectangle(0, 0, SfxLokHelper::MaxTwips, SfxLokHelper::MaxTwips);
         if (comphelper::LibreOfficeKit::isPartInInvalidation())
-            aRet.m_nPart = std::stol(rPayload.substr(6));
+        {
+            int nSeparatorPos = rPayload.find(',', 6);
+            bool bHasMode = nSeparatorPos > 0;
+            if (bHasMode)
+            {
+                aRet.m_nPart = std::stol(rPayload.substr(6, nSeparatorPos - 6));
+                assert(rPayload.length() > o3tl::make_unsigned(nSeparatorPos));
+                aRet.m_nMode = std::stol(rPayload.substr(nSeparatorPos + 1));
+            }
+            else
+            {
+                aRet.m_nPart = std::stol(rPayload.substr(6));
+                aRet.m_nMode = 0;
+            }
+        }
 
         return aRet;
     }
 
-    // Read '<left>, <top>, <width>, <height>[, <part>]'. C++ streams are simpler but slower.
+    // Read '<left>, <top>, <width>, <height>[, <part>, <mode>]'. C++ streams are simpler but slower.
     const char* pos = rPayload.c_str();
     const char* end = rPayload.c_str() + rPayload.size();
     tools::Long nLeft = rtl_str_toInt64_WithLength(pos, 10, end - pos);
@@ -446,6 +461,7 @@ RectangleAndPart RectangleAndPart::Create(const std::string& rPayload)
     assert(pos < end);
     tools::Long nHeight = rtl_str_toInt64_WithLength(pos, 10, end - pos);
     tools::Long nPart = INT_MIN;
+    tools::Long nMode = 0;
     if (comphelper::LibreOfficeKit::isPartInInvalidation())
     {
         while( *pos != ',' )
@@ -453,10 +469,20 @@ RectangleAndPart RectangleAndPart::Create(const std::string& rPayload)
         ++pos;
         assert(pos < end);
         nPart = rtl_str_toInt64_WithLength(pos, 10, end - pos);
+
+        while( *pos && *pos != ',' )
+            ++pos;
+        if (*pos)
+        {
+            ++pos;
+            assert(pos < end);
+            nMode = rtl_str_toInt64_WithLength(pos, 10, end - pos);
+        }
     }
 
     aRet.m_aRectangle = SanitizedRectangle(nLeft, nTop, nWidth, nHeight);
     aRet.m_nPart = nPart;
+    aRet.m_nMode = nMode;
     return aRet;
 }
 
@@ -978,6 +1004,7 @@ static void doc_paintTileToCGContext(LibreOfficeKitDocument* pThis,
 static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
                               unsigned char* pBuffer,
                               const int nPart,
+                              const int nMode,
                               const int nCanvasWidth, const int nCanvasHeight,
                               const int nTilePosX, const int nTilePosY,
                               const int nTileWidth, const int nTileHeight);
@@ -1451,9 +1478,9 @@ void CallbackFlushHandler::libreOfficeKitViewCallbackWithViewId(int nType, const
     queue(nType, callbackData);
 }
 
-void CallbackFlushHandler::libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart)
+void CallbackFlushHandler::libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart, int nMode)
 {
-    CallbackData callbackData(pRect, nPart);
+    CallbackData callbackData(pRect, nPart, nMode);
     queue(LOK_CALLBACK_INVALIDATE_TILES, callbackData);
 }
 
@@ -3630,6 +3657,7 @@ static void doc_paintTileToCGContext(LibreOfficeKitDocument* pThis,
 static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
                               unsigned char* pBuffer,
                               const int nPart,
+                              const int nMode,
                               const int nCanvasWidth, const int nCanvasHeight,
                               const int nTilePosX, const int nTilePosY,
                               const int nTileWidth, const int nTileHeight)
@@ -3639,13 +3667,20 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    SAL_INFO( "lok.tiledrendering", "paintPartTile: painting @ " << nPart << " ["
+    SAL_INFO( "lok.tiledrendering", "paintPartTile: painting @ " << nPart << " : " << nMode << " ["
                << nTileWidth << "x" << nTileHeight << "]@("
                << nTilePosX << ", " << nTilePosY << ") to ["
                << nCanvasWidth << "x" << nCanvasHeight << "]px" );
 
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
     int nOrigViewId = doc_getView(pThis);
+
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        return;
+    }
 
     if (nOrigViewId < 0)
     {
@@ -3677,14 +3712,17 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
     {
         // Text documents have a single coordinate system; don't change part.
         int nOrigPart = 0;
+        int nOrigEditMode = 0;
+        bool bPaintTextEdit = true;
         const bool isText = (doc_getDocumentType(pThis) == LOK_DOCTYPE_TEXT);
         int nViewId = nOrigViewId;
-        int nLastNonEditorView = nViewId;
+        int nLastNonEditorView = -1;
+        int nViewMatchingMode = -1;
         if (!isText)
         {
             // Check if just switching to another view is enough, that has
             // less side-effects.
-            if (nPart != doc_getPart(pThis))
+            if (nPart != doc_getPart(pThis) || nMode != pDoc->getEditMode())
             {
                 SfxViewShell* pViewShell = SfxViewShell::GetFirst();
                 while (pViewShell)
@@ -3694,23 +3732,40 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
                     if (!bIsInEdit)
                         nLastNonEditorView = pViewShell->GetViewShellId().get();
 
-                    if (pViewShell->getPart() == nPart && !bIsInEdit)
+                    if (pViewShell->getPart() == nPart &&
+                        pViewShell->getEditMode() == nMode &&
+                        !bIsInEdit)
                     {
                         nViewId = pViewShell->GetViewShellId().get();
+                        nViewMatchingMode = nViewId;
                         nLastNonEditorView = nViewId;
                         doc_setView(pThis, nViewId);
                         break;
                     }
+                    else if (pViewShell->getEditMode() == nMode && !bIsInEdit)
+                    {
+                        nViewMatchingMode = pViewShell->GetViewShellId().get();
+                    }
+
                     pViewShell = SfxViewShell::GetNext(*pViewShell);
                 }
             }
 
-            // if not found view with correct part - at least avoid rendering active textbox
+            // if not found view with correct part
+            // - at least avoid rendering active textbox
+            // - prefer view with the same mode
             SfxViewShell* pCurrentViewShell = SfxViewShell::Current();
-            if (pCurrentViewShell && pCurrentViewShell->GetDrawView() &&
+            if (nViewMatchingMode >= 0 && nViewMatchingMode != nViewId)
+            {
+                nViewId = nViewMatchingMode;
+                doc_setView(pThis, nViewId);
+            }
+            else if (nLastNonEditorView >= 0 && nLastNonEditorView != nViewId &&
+                pCurrentViewShell && pCurrentViewShell->GetDrawView() &&
                 pCurrentViewShell->GetDrawView()->GetTextEditOutliner())
             {
-                doc_setView(pThis, nLastNonEditorView);
+                nViewId = nLastNonEditorView;
+                doc_setView(pThis, nViewId);
             }
 
             nOrigPart = doc_getPart(pThis);
@@ -3718,29 +3773,37 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
             {
                 doc_setPartImpl(pThis, nPart, false);
             }
-        }
 
-        ITiledRenderable* pDoc = getTiledRenderable(pThis);
-        if (!pDoc)
-        {
-            SetLastExceptionMsg("Document doesn't support tiled rendering");
-            return;
-        }
+            nOrigEditMode = pDoc->getEditMode();
+            if (nOrigEditMode != nMode)
+            {
+                SfxLokHelper::setEditMode(nMode, pDoc);
+            }
 
-        bool bPaintTextEdit = nPart == nOrigPart;
-        pDoc->setPaintTextEdit( bPaintTextEdit );
+            bPaintTextEdit = (nPart == nOrigPart && nMode == nOrigEditMode);
+            pDoc->setPaintTextEdit(bPaintTextEdit);
+        }
 
         doc_paintTile(pThis, pBuffer, nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 
-        pDoc->setPaintTextEdit( true );
+        if (!isText)
+        {
+            pDoc->setPaintTextEdit(true);
 
-        if (!isText && nPart != nOrigPart)
-        {
-            doc_setPartImpl(pThis, nOrigPart, false);
-        }
-        if (!isText && nViewId != nOrigViewId)
-        {
-            doc_setView(pThis, nOrigViewId);
+            if (nMode != nOrigEditMode)
+            {
+                SfxLokHelper::setEditMode(nOrigEditMode, pDoc);
+            }
+
+            if (nPart != nOrigPart)
+            {
+                doc_setPartImpl(pThis, nOrigPart, false);
+            }
+
+            if (nViewId != nOrigViewId)
+            {
+                doc_setView(pThis, nOrigViewId);
+            }
         }
     }
     catch (const std::exception&)

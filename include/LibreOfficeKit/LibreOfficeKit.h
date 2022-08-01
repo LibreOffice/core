@@ -283,6 +283,7 @@ struct _LibreOfficeKitDocumentClass
     void (*paintPartTile) (LibreOfficeKitDocument* pThis,
                            unsigned char* pBuffer,
                            const int nPart,
+                           const int nMode,
                            const int nCanvasWidth,
                            const int nCanvasHeight,
                            const int nTilePosX,

@@ -59,7 +59,7 @@ void TestLokCallbackWrapper::libreOfficeKitViewCallbackWithViewId(int nType, con
 }
 
 void TestLokCallbackWrapper::libreOfficeKitViewInvalidateTilesCallback(
-    const tools::Rectangle* pRect, int nPart)
+    const tools::Rectangle* pRect, int nPart, int nMode)
 {
     OStringBuffer buf(64);
     if (pRect)
@@ -70,6 +70,8 @@ void TestLokCallbackWrapper::libreOfficeKitViewInvalidateTilesCallback(
     {
         buf.append(", ");
         buf.append(static_cast<sal_Int32>(nPart));
+        buf.append(", ");
+        buf.append(static_cast<sal_Int32>(nMode));
     }
     callCallback(LOK_CALLBACK_INVALIDATE_TILES, buf.makeStringAndClear().getStr(), NO_VIEWID);
 }
