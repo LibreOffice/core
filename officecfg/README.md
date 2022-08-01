@@ -13,4 +13,5 @@ in LibreOffice.
 
 For more details about the file format, see
 <https://www.openoffice.org/projects/util/common/configuration/oor-document-format.html> (also
-mirrored at <https://people.freedesktop.org/~vmiklos/2013/oor-document-format.html>).
+mirrored at
+<https://web.archive.org/web/20101103025920/http://util.openoffice.org/common/configuration/oor-document-format.html>).
