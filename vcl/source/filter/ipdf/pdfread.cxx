@@ -163,6 +163,11 @@ std::vector<PDFGraphicAnnotation>
 findAnnotations(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage, basegfx::B2DSize aPageSize)
 {
     std::vector<PDFGraphicAnnotation> aPDFGraphicAnnotations;
+    if (!pPage)
+    {
+        return aPDFGraphicAnnotations;
+    }
+
     for (int nAnnotation = 0; nAnnotation < pPage->getAnnotationCount(); nAnnotation++)
     {
         auto pAnnotation = pPage->getAnnotation(nAnnotation);
