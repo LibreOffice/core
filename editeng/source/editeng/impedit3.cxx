@@ -1007,8 +1007,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 
                         // Height needed...
                         SeekCursor( pNode, nTmpPos+1, aTmpFont );
-                        pPortion->GetSize().setHeight(
-                            aTmpFont.QuickGetTextSize( GetRefDevice(), OUString(), 0, 0, nullptr ).Height() );
+                        pPortion->GetSize().setHeight( GetRefDevice()->GetTextHeight() );
 
                         DBG_ASSERT( pPortion->GetSize().Width() >= 0, "Tab incorrectly calculated!" );
 
