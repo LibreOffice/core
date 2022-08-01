@@ -134,7 +134,7 @@ namespace oox::ppt {
         {
             maCond.mnType = aElementToken;
             // Convert the node id string to XAnimationNode later
-            maEvent.Source <<= rAttribs.getString(XML_val, OUString());
+            maEvent.Source <<= rAttribs.getStringDefaulted(XML_val);
             return this;
         }
         case PPT_TOKEN( tgtEl ):

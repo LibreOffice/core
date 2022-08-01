@@ -54,11 +54,11 @@ ConstraintListContext::onCreateContext( ::sal_Int32 aElement,
 
         Constraint& rConstraint = pNode->getConstraint();
         rConstraint.mnFor = rAttribs.getToken( XML_for, XML_none );
-        rConstraint.msForName = rAttribs.getString( XML_forName, "" );
+        rConstraint.msForName = rAttribs.getStringDefaulted( XML_forName);
         rConstraint.mnPointType = rAttribs.getToken( XML_ptType, XML_none );
         rConstraint.mnType = rAttribs.getToken( XML_type, XML_none );
         rConstraint.mnRefFor = rAttribs.getToken( XML_refFor, XML_none );
-        rConstraint.msRefForName = rAttribs.getString( XML_refForName, "" );
+        rConstraint.msRefForName = rAttribs.getStringDefaulted( XML_refForName);
         rConstraint.mnRefType = rAttribs.getToken( XML_refType, XML_none );
         rConstraint.mnRefPointType = rAttribs.getToken( XML_refPtType, XML_none );
         rConstraint.mfFactor = rAttribs.getDouble( XML_fact, 1.0 );

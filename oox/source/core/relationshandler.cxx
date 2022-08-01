@@ -67,9 +67,9 @@ Reference< XFastContextHandler > RelationsFragment::createFastChildContext(
         case PR_TOKEN( Relationship ):
         {
             Relation aRelation;
-            aRelation.maId     = aAttribs.getString( XML_Id, OUString() );
-            aRelation.maType   = aAttribs.getString( XML_Type, OUString() );
-            aRelation.maTarget = aAttribs.getString( XML_Target, OUString() );
+            aRelation.maId     = aAttribs.getStringDefaulted( XML_Id);
+            aRelation.maType   = aAttribs.getStringDefaulted( XML_Type);
+            aRelation.maTarget = aAttribs.getStringDefaulted( XML_Target);
             if( !aRelation.maId.isEmpty() && !aRelation.maType.isEmpty() && !aRelation.maTarget.isEmpty() )
             {
                 sal_Int32 nTargetMode = aAttribs.getToken( XML_TargetMode, XML_Internal );

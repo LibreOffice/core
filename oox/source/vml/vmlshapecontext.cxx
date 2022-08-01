@@ -153,7 +153,7 @@ ContextHandlerRef ShapeLayoutContext::onCreateContext( sal_Int32 nElement, const
     {
         case O_TOKEN( idmap ):
         {
-            OUString aBlockIds = rAttribs.getString( XML_data, OUString() );
+            OUString aBlockIds = rAttribs.getStringDefaulted( XML_data);
             sal_Int32 nIndex = 0;
             while( nIndex >= 0 )
             {
@@ -247,7 +247,7 @@ ContextHandlerRef ShapeContextBase::createShapeContext( ContextHandler2Helper co
         case VML_TOKEN( shape ):
             if (rAttribs.hasAttribute(XML_path) &&
                     // tdf#122563 skip in the case of empty path
-                    !rAttribs.getString(XML_path, "").isEmpty())
+                    !rAttribs.getStringDefaulted(XML_path).isEmpty())
                 return new ShapeContext( rParent, rShapes.createShape< BezierShape >(), rAttribs );
             else
                 return new ShapeContext( rParent, rShapes.createShape< ComplexShape >(), rAttribs );
@@ -286,7 +286,7 @@ ShapeTypeContext::ShapeTypeContext(ContextHandler2Helper const & rParent,
     // shape identifier and shape name
     bool bHasOspid = rAttribs.hasAttribute( O_TOKEN( spid ) );
     mrTypeModel.maShapeId = rAttribs.getXString( bHasOspid ? O_TOKEN( spid ) : XML_id, OUString() );
-    mrTypeModel.maLegacyId = rAttribs.getString( XML_id, OUString() );
+    mrTypeModel.maLegacyId = rAttribs.getStringDefaulted( XML_id);
     OSL_ENSURE( !mrTypeModel.maShapeId.isEmpty(), "ShapeTypeContext::ShapeTypeContext - missing shape identifier" );
     // builtin shape type identifier
     mrTypeModel.moShapeType = rAttribs.getInteger( O_TOKEN( spt ) );
@@ -312,7 +312,7 @@ ShapeTypeContext::ShapeTypeContext(ContextHandler2Helper const & rParent,
     // coordinate system position/size, CSS style
     mrTypeModel.moCoordPos = lclDecodeInt32Pair( rAttribs, XML_coordorigin );
     mrTypeModel.moCoordSize = lclDecodeInt32Pair( rAttribs, XML_coordsize );
-    setStyle( rAttribs.getString( XML_style, OUString() ) );
+    setStyle( rAttribs.getStringDefaulted( XML_style) );
     if( lclDecodeBool( rAttribs, O_TOKEN( hr )).value_or( false ))
     {   // MSO's handling of o:hr width is nowhere near what the spec says:
         // - o:hrpct is not in % but in 0.1%
@@ -337,11 +337,11 @@ ShapeTypeContext::ShapeTypeContext(ContextHandler2Helper const & rParent,
     mrTypeModel.maFillModel.moColor = rAttribs.getString( XML_fillcolor );
 
     // For roundrect we may have an arcsize attribute to read
-    mrTypeModel.maArcsize = rAttribs.getString(XML_arcsize, OUString());
+    mrTypeModel.maArcsize = rAttribs.getStringDefaulted(XML_arcsize);
     // editas
-    mrTypeModel.maEditAs = rAttribs.getString(XML_editas, OUString());
+    mrTypeModel.maEditAs = rAttribs.getStringDefaulted(XML_editas);
 
-    mrTypeModel.maAdjustments = rAttribs.getString(XML_adj, OUString());
+    mrTypeModel.maAdjustments = rAttribs.getStringDefaulted(XML_adj);
 }
 
 ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
@@ -507,14 +507,14 @@ ShapeContext::ShapeContext(ContextHandler2Helper const& rParent,
     // collect shape specific attributes
     mrShapeModel.maType = rAttribs.getXString( XML_type, OUString() );
     // polyline path
-    setPoints( rAttribs.getString( XML_points, OUString() ) );
+    setPoints( rAttribs.getStringDefaulted( XML_points) );
     // line start and end positions
-    setFrom(rAttribs.getString(XML_from, OUString()));
-    setTo(rAttribs.getString(XML_to, OUString()));
-    setControl1(rAttribs.getString(XML_control1, OUString()));
-    setControl2(rAttribs.getString(XML_control2, OUString()));
-    setVmlPath(rAttribs.getString(XML_path, OUString()));
-    setHyperlink(rAttribs.getString(XML_href, OUString()));
+    setFrom(rAttribs.getStringDefaulted(XML_from));
+    setTo(rAttribs.getStringDefaulted(XML_to));
+    setControl1(rAttribs.getStringDefaulted(XML_control1));
+    setControl2(rAttribs.getStringDefaulted(XML_control2));
+    setVmlPath(rAttribs.getStringDefaulted(XML_path));
+    setHyperlink(rAttribs.getStringDefaulted(XML_href));
 }
 
 ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
@@ -565,19 +565,19 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 nElement, const Attri
             // and is there because of the lines above which change it to TextFrame
             dynamic_cast< SimpleShape& >( mrShape ).setService(
                     "com.sun.star.drawing.RectangleShape");
-            mrShapeModel.maLegacyDiagramPath = getFragmentPathFromRelId(rAttribs.getString(XML_id, OUString()));
+            mrShapeModel.maLegacyDiagramPath = getFragmentPathFromRelId(rAttribs.getStringDefaulted(XML_id));
             break;
         case O_TOKEN( signatureline ):
             mrShapeModel.mbIsSignatureLine = true;
-            mrShapeModel.maSignatureId = rAttribs.getString(XML_id, OUString());
+            mrShapeModel.maSignatureId = rAttribs.getStringDefaulted(XML_id);
             mrShapeModel.maSignatureLineSuggestedSignerName
-                = rAttribs.getString(O_TOKEN(suggestedsigner), OUString());
+                = rAttribs.getStringDefaulted(O_TOKEN(suggestedsigner));
             mrShapeModel.maSignatureLineSuggestedSignerTitle
-                = rAttribs.getString(O_TOKEN(suggestedsigner2), OUString());
+                = rAttribs.getStringDefaulted(O_TOKEN(suggestedsigner2));
             mrShapeModel.maSignatureLineSuggestedSignerEmail
-                = rAttribs.getString(O_TOKEN(suggestedsigneremail), OUString());
+                = rAttribs.getStringDefaulted(O_TOKEN(suggestedsigneremail));
             mrShapeModel.maSignatureLineSigningInstructions
-                = rAttribs.getString(O_TOKEN(signinginstructions), OUString());
+                = rAttribs.getStringDefaulted(O_TOKEN(signinginstructions));
             mrShapeModel.mbSignatureLineShowSignDate = ConversionHelper::decodeBool(
                 rAttribs.getString(XML_showsigndate, "t")); // default is true
             mrShapeModel.mbSignatureLineCanAddComment = ConversionHelper::decodeBool(
@@ -720,8 +720,8 @@ ControlShapeContext::ControlShapeContext( ::oox::core::ContextHandler2Helper con
 {
     ::oox::vml::ControlInfo aInfo;
     aInfo.maShapeId = rAttribs.getXString( W_TOKEN( shapeid ), OUString() );
-    aInfo.maFragmentPath = getFragmentPathFromRelId(rAttribs.getString( R_TOKEN(id), OUString() ));
-    aInfo.maName = rAttribs.getString( W_TOKEN( name ), OUString() );
+    aInfo.maFragmentPath = getFragmentPathFromRelId(rAttribs.getStringDefaulted( R_TOKEN(id)));
+    aInfo.maName = rAttribs.getStringDefaulted( W_TOKEN( name ));
     aInfo.mbTextContentShape = true;
     rShapes.getDrawing().registerControl(aInfo);
 }

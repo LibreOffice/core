@@ -209,7 +209,7 @@ TextBoxContext::TextBoxContext( ContextHandler2Helper const & rParent, TextBox& 
         rTextBox.borderDistanceSet = true;
     }
 
-    OUString sStyle = rAttribs.getString( XML_style, OUString() );
+    OUString sStyle = rAttribs.getStringDefaulted( XML_style);
     sal_Int32 nIndex = 0;
     while( nIndex >= 0 )
     {

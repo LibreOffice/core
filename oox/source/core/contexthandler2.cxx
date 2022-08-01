@@ -272,7 +272,7 @@ bool ContextHandler2Helper::prepareMceContext( sal_Int32 nElement, const Attribu
             return false;
         default:
             {
-                OUString str = rAttribs.getString( MCE_TOKEN( Ignorable ), OUString() );
+                OUString str = rAttribs.getStringDefaulted( MCE_TOKEN( Ignorable ));
                 if( !str.isEmpty() )
                 {
                     // Sequence< css::xml::FastAttribute > attrs = rAttribs.getFastAttributeList()->getFastAttributes();

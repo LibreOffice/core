@@ -79,7 +79,7 @@ namespace oox::ppt {
         }
         case PPT_TOKEN( strVal ):
         {
-            OUString val = rAttribs.getString( XML_val, OUString() );
+            OUString val = rAttribs.getStringDefaulted( XML_val);
             maValue <<= val;
             return this;
         }

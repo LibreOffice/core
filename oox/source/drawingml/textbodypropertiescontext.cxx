@@ -83,9 +83,9 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper cons
     mrTextBodyProp.maPropertyMap.setProperty(PROP_FromWordArt, bFromWordArt);
 
   // ST_TextHorzOverflowType
-    mrTextBodyProp.msHorzOverflow = rAttribs.getString(XML_horzOverflow, "");
+    mrTextBodyProp.msHorzOverflow = rAttribs.getStringDefaulted(XML_horzOverflow);
     // ST_TextVertOverflowType
-    mrTextBodyProp.msVertOverflow = rAttribs.getString(XML_vertOverflow, "");
+    mrTextBodyProp.msVertOverflow = rAttribs.getStringDefaulted(XML_vertOverflow);
 
     // ST_TextColumnCount
     if (const sal_Int32 nColumns = rAttribs.getInteger(XML_numCol, 0); nColumns > 0)

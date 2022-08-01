@@ -142,7 +142,7 @@ void SAL_CALL FilterDetectDocHandler::characters( const OUString& /*aChars*/ )
 
 void FilterDetectDocHandler::parseRelationship( const AttributeList& rAttribs )
 {
-    OUString aType = rAttribs.getString( XML_Type, OUString() );
+    OUString aType = rAttribs.getStringDefaulted( XML_Type);
 
     // tdf#131936 Remember filter when opening file as 'Office Open XML Text'
     if (aType.startsWithIgnoreAsciiCase("http://schemas.openxmlformats.org/officedocument/2006/relationships/metadata/core-properties"))
@@ -163,7 +163,7 @@ void FilterDetectDocHandler::parseRelationship( const AttributeList& rAttribs )
          // keep the XUriReference implementation happy )
          Reference< XUriReference > xBase = xFactory->parse( "file:///" );
 
-         Reference< XUriReference > xPart = xFactory->parse(  rAttribs.getString( XML_Target, OUString() ) );
+         Reference< XUriReference > xPart = xFactory->parse(  rAttribs.getStringDefaulted( XML_Target) );
          Reference< XUriReference > xAbs = xFactory->makeAbsolute(  xBase, xPart, true, RelativeUriExcessParentSegments_RETAIN );
 
          if ( xAbs.is() )
@@ -242,17 +242,17 @@ void FilterDetectDocHandler::parseContentTypesDefault( const AttributeList& rAtt
     if( mrFilterName.isEmpty() )
     {
         // check if target path ends with extension
-        OUString aExtension = rAttribs.getString( XML_Extension, OUString() );
+        OUString aExtension = rAttribs.getStringDefaulted( XML_Extension);
         sal_Int32 nExtPos = maTargetPath.getLength() - aExtension.getLength();
         if( (nExtPos > 0) && (maTargetPath[ nExtPos - 1 ] == '.') && maTargetPath.match( aExtension, nExtPos ) )
-            mrFilterName = getFilterNameFromContentType( rAttribs.getString( XML_ContentType, OUString() ), maFileName );
+            mrFilterName = getFilterNameFromContentType( rAttribs.getStringDefaulted( XML_ContentType), maFileName );
     }
 }
 
 void FilterDetectDocHandler::parseContentTypesOverride( const AttributeList& rAttribs )
 {
-    if( rAttribs.getString( XML_PartName, OUString() ) == maTargetPath )
-        mrFilterName = getFilterNameFromContentType( rAttribs.getString( XML_ContentType, OUString() ), maFileName );
+    if( rAttribs.getStringDefaulted( XML_PartName) == maTargetPath )
+        mrFilterName = getFilterNameFromContentType( rAttribs.getStringDefaulted( XML_ContentType), maFileName );
 }
 
 FilterDetect::FilterDetect( const Reference< XComponentContext >& rxContext ) :

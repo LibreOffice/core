@@ -55,8 +55,8 @@ TextFont::TextFont() :
 
 void TextFont::setAttributes( const AttributeList& rAttribs )
 {
-    maTypeface = rAttribs.getString( XML_typeface, OUString() );
-    maPanose   = rAttribs.getString( XML_panose, OUString() );
+    maTypeface = rAttribs.getStringDefaulted( XML_typeface);
+    maPanose   = rAttribs.getStringDefaulted( XML_panose);
     mnPitch    = rAttribs.getInteger( XML_pitchFamily, 0 );
     mnCharset  = rAttribs.getInteger( XML_charset, WINDOWS_CHARSET_DEFAULT );
 }

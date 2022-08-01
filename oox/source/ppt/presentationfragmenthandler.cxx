@@ -640,13 +640,13 @@ void PresentationFragmentHandler::finalizeImport()
     case PPT_TOKEN( sldIdLst ):
         return this;
     case PPT_TOKEN( sldMasterId ):
-        maSlideMasterVector.push_back( rAttribs.getString( R_TOKEN( id ), OUString() ) );
+        maSlideMasterVector.push_back( rAttribs.getStringDefaulted( R_TOKEN( id )) );
         return this;
     case PPT_TOKEN( sldId ):
-        maSlidesVector.push_back( rAttribs.getString( R_TOKEN( id ), OUString() ) );
+        maSlidesVector.push_back( rAttribs.getStringDefaulted( R_TOKEN( id )) );
         return this;
     case PPT_TOKEN( notesMasterId ):
-        maNotesMasterVector.push_back( rAttribs.getString( R_TOKEN( id ), OUString() ) );
+        maNotesMasterVector.push_back( rAttribs.getStringDefaulted( R_TOKEN( id )) );
         return this;
     case PPT_TOKEN( sldSz ):
         maSlideSize = GetSize2D( rAttribs.getFastAttributeList() );
@@ -659,12 +659,12 @@ void PresentationFragmentHandler::finalizeImport()
     case PPT_TOKEN( defaultTextStyle ):
         return new TextListStyleContext( *this, *mpTextListStyle );
     case PPT_TOKEN( modifyVerifier ):
-        OUString sAlgorithmClass = rAttribs.getString(XML_cryptAlgorithmClass, OUString());
-        OUString sAlgorithmType = rAttribs.getString(XML_cryptAlgorithmType, OUString());
+        OUString sAlgorithmClass = rAttribs.getStringDefaulted(XML_cryptAlgorithmClass);
+        OUString sAlgorithmType = rAttribs.getStringDefaulted(XML_cryptAlgorithmType);
         sal_Int32 nAlgorithmSid = rAttribs.getInteger(XML_cryptAlgorithmSid, 0);
         sal_Int32 nSpinCount = rAttribs.getInteger(XML_spinCount, 0);
-        OUString sSalt = rAttribs.getString(XML_saltData, OUString());
-        OUString sHash = rAttribs.getString(XML_hashData, OUString());
+        OUString sSalt = rAttribs.getStringDefaulted(XML_saltData);
+        OUString sHash = rAttribs.getStringDefaulted(XML_hashData);
         if (sAlgorithmClass == "hash" && sAlgorithmType == "typeAny" && nAlgorithmSid != 0
             && !sSalt.isEmpty() && !sHash.isEmpty())
         {

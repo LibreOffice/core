@@ -211,7 +211,7 @@ ContextHandlerRef OleObjectGraphicDataContext::onCreateContext( sal_Int32 nEleme
         case PPT_TOKEN( oleObj ):
         {
             mrOleObjectInfo.maShapeId = rAttribs.getXString( XML_spid, OUString() );
-            const Relation* pRelation = getRelations().getRelationFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
+            const Relation* pRelation = getRelations().getRelationFromRelId( rAttribs.getStringDefaulted( R_TOKEN( id )) );
             OSL_ENSURE( pRelation, "OleObjectGraphicDataContext::createFastChildContext - missing relation for OLE object" );
             if( pRelation )
             {
@@ -330,7 +330,7 @@ ContextHandlerRef ChartGraphicDataContext::onCreateContext( ::sal_Int32 nElement
 {
     if( nElement == C_TOKEN( chart ) )
     {
-        mrChartShapeInfo.maFragmentPath = getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
+        mrChartShapeInfo.maFragmentPath = getFragmentPathFromRelId( rAttribs.getStringDefaulted( R_TOKEN( id )) );
     }
     return nullptr;
 }
