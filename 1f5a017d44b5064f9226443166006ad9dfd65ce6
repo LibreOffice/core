@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db9ed02f_2b3c5831",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-08-01T15:16:52Z",
+      "side": 1,
+      "message": "Sorry for the misunderstanding, should be done now.",
+      "revId": "1f5a017d44b5064f9226443166006ad9dfd65ce6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
