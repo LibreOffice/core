@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a751f7a4_20af1b14",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-08-01T11:23:20Z",
+      "side": 1,
+      "message": "No need to have this band-aid in 7.4. A non-technical -1 from my side.",
+      "revId": "7b67eb10cda7e413e099e71bb242f41f5bbecf85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
