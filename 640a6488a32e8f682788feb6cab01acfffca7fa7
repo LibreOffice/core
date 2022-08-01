@@ -16,6 +16,24 @@
       "message": "Nice! I think the Writer work was 3 changes, and so far you did 2 for Calc -- do you plan to do the Calc equivalent of the 3rd Writer change as well? I can dig out the commit hashes if it helps. Thanks.",
       "revId": "640a6488a32e8f682788feb6cab01acfffca7fa7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e5b0723_07beaa79",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-08-01T07:25:27Z",
+      "side": 1,
+      "message": "the last one is here:\nhttps://gerrit.libreoffice.org/c/core/+/137652",
+      "parentUuid": "36ba3a37_b2ef8eaa",
+      "revId": "640a6488a32e8f682788feb6cab01acfffca7fa7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
