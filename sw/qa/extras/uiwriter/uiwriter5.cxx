@@ -1471,7 +1471,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testShapePageMove)
     // Without the accompanying fix in place, this test would have failed with "Expected: 13;
     // Actual: 12", i.e. the shape was anchored to the last paragraph of the 1st page, not to a
     // paragraph on the 2nd page.
-    CPPUNIT_ASSERT_EQUAL(nNodeIndex, pAnchor->nNode.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(nNodeIndex, pAnchor->GetNodeIndex());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testDateFormFieldInsertion)

@@ -522,7 +522,7 @@ bool SwCursorShell::GotoNxtPrvTOXMark( bool bNext )
         aFndPos.nNode = SwNodeOffset(0);
     SetGetExpField aFndGEF( aFndPos ), aCurGEF( rPos );
 
-    if( rPos.nNode.GetIndex() < GetDoc()->GetNodes().GetEndOfExtras().GetIndex() )
+    if( rPos.GetNodeIndex() < GetDoc()->GetNodes().GetEndOfExtras().GetIndex() )
     {
         // also at collection use only the first frame
         std::pair<Point, bool> const tmp(aPt, false);
@@ -678,7 +678,7 @@ lcl_FindField(bool & o_rFound, SetGetExpFields const& rSrtLst,
         pSrch.reset(new SetGetExpField(rPos.nNode, pTextField, pIndex.get()));
     }
 
-    if (rPos.nNode.GetIndex() < pTextNode->GetNodes().GetEndOfExtras().GetIndex())
+    if (rPos.GetNodeIndex() < pTextNode->GetNodes().GetEndOfExtras().GetIndex())
     {
         // also at collection use only the first frame
         Point aPt;
@@ -1930,7 +1930,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                     pTextNd->SwContentNode::GetAttr( aSet );
 
                 rContentAtPos.sStr = "Pos: (";
-                rContentAtPos.sStr += OUString::number( sal_Int32(aPos.nNode.GetIndex()));
+                rContentAtPos.sStr += OUString::number( sal_Int32(aPos.GetNodeIndex()));
                 rContentAtPos.sStr += ":";
                 rContentAtPos.sStr += OUString::number( aPos.nContent.GetIndex());
                 rContentAtPos.sStr += ")";

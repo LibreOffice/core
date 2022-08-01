@@ -152,8 +152,8 @@ bool SwEditShell::SelectionHasNumber() const
     bool bResult = false;
     for (SwPaM& rPaM : GetCursor()->GetRingContainer())
     {
-        SwNodeOffset nStt = rPaM.Start()->nNode.GetIndex();
-        SwNodeOffset nEnd = rPaM.End()->nNode.GetIndex();
+        SwNodeOffset nStt = rPaM.Start()->GetNodeIndex();
+        SwNodeOffset nEnd = rPaM.End()->GetNodeIndex();
         for (SwNodeOffset nPos = nStt; nPos<=nEnd; nPos++)
         {
             SwTextNode* pTextNd = mxDoc->GetNodes()[nPos]->GetTextNode();
@@ -187,8 +187,8 @@ bool SwEditShell::SelectionHasBullet() const
     bool bResult = false;
     for (SwPaM& rPaM : GetCursor()->GetRingContainer())
     {
-        SwNodeOffset nStt = rPaM.Start()->nNode.GetIndex();
-        SwNodeOffset nEnd = rPaM.End()->nNode.GetIndex();
+        SwNodeOffset nStt = rPaM.Start()->GetNodeIndex();
+        SwNodeOffset nEnd = rPaM.End()->GetNodeIndex();
         for (SwNodeOffset nPos = nStt; nPos<=nEnd; nPos++)
         {
             SwTextNode* pTextNd = mxDoc->GetNodes()[nPos]->GetTextNode();
@@ -424,11 +424,11 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
             {
                 SwPosition aPos( *aCursor.GetMark() );
                 if (SwDoc::GotoPrevNum( aPos, GetLayout(), false ))
-                    nOffset = aPos.nNode.GetIndex() -
-                            aCursor.GetMark()->nNode.GetIndex();
+                    nOffset = aPos.GetNodeIndex() -
+                            aCursor.GetMark()->GetNodeIndex();
                 else
                 {
-                    SwNodeOffset nStt = aPos.nNode.GetIndex(), nIdx = nStt - 1;
+                    SwNodeOffset nStt = aPos.GetNodeIndex(), nIdx = nStt - 1;
 
                     if (SwTextNode const*const pStt = aPos.GetNode().GetTextNode())
                     {
@@ -452,7 +452,7 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
                 if( aCursor.GetNode().IsTextNode() &&
                     pOrig == aCursor.GetNode().GetTextNode()->GetNumRule() )
                 {
-                    SwNodeOffset nStt = aCursor.GetPoint()->nNode.GetIndex(), nIdx = nStt+1;
+                    SwNodeOffset nStt = aCursor.GetPoint()->GetNodeIndex(), nIdx = nStt+1;
                     if (SwTextNode const*const pStt = aCursor.GetPoint()->GetNode().GetTextNode())
                     {
                         std::pair<SwTextNode *, SwTextNode *> nodes(

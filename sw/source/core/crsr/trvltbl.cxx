@@ -702,7 +702,7 @@ bool SwCursorShell::MoveTable( SwWhichTable fnWhichTable, SwMoveFnCollection con
     else
     {
         bCheckPos = true;
-        nPtNd = pCursor->GetPoint()->nNode.GetIndex();
+        nPtNd = pCursor->GetPoint()->GetNodeIndex();
         nPtCnt = pCursor->GetPoint()->nContent.GetIndex();
     }
 
@@ -716,7 +716,7 @@ bool SwCursorShell::MoveTable( SwWhichTable fnWhichTable, SwMoveFnCollection con
         UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
 
         if( bCheckPos &&
-            pCursor->GetPoint()->nNode.GetIndex() == nPtNd &&
+            pCursor->GetPoint()->GetNodeIndex() == nPtNd &&
             pCursor->GetPoint()->nContent.GetIndex() == nPtCnt )
             bRet = false;
     }
@@ -839,7 +839,7 @@ bool SwCursorShell::CheckTableBoxContent( const SwPosition* pPos )
     // cursor not anymore in this section?
     if( pChkBox && !pPos &&
         ( m_pCurrentCursor->HasMark() || m_pCurrentCursor->GetNext() != m_pCurrentCursor ||
-          pSttNd->GetIndex() + 1 == m_pCurrentCursor->GetPoint()->nNode.GetIndex() ))
+          pSttNd->GetIndex() + 1 == m_pCurrentCursor->GetPoint()->GetNodeIndex() ))
         pChkBox = nullptr;
 
     // Did the content of a box change at all? This is important if e.g. Undo

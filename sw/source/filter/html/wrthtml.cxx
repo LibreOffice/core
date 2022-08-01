@@ -866,7 +866,7 @@ static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
 
     {
         HTMLSaveData aSaveData( rHTMLWrt,
-            rHTMLWrt.m_pCurrentPam->GetPoint()->nNode.GetIndex()+1,
+            rHTMLWrt.m_pCurrentPam->GetPoint()->GetNodeIndex()+1,
             rSectNd.EndOfSectionIndex(),
             false, pFormat );
         rHTMLWrt.Out_SwDoc( rHTMLWrt.m_pCurrentPam.get() );
@@ -903,8 +903,8 @@ void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
         // search for first on PaM created FlyFrame
         // still missing:
 
-        while( m_pCurrentPam->GetPoint()->nNode.GetIndex() < m_pCurrentPam->GetMark()->nNode.GetIndex() ||
-              (m_pCurrentPam->GetPoint()->nNode.GetIndex() == m_pCurrentPam->GetMark()->nNode.GetIndex() &&
+        while( m_pCurrentPam->GetPoint()->GetNodeIndex() < m_pCurrentPam->GetMark()->GetNodeIndex() ||
+              (m_pCurrentPam->GetPoint()->GetNodeIndex() == m_pCurrentPam->GetMark()->GetNodeIndex() &&
                m_pCurrentPam->GetPoint()->nContent.GetIndex() <= m_pCurrentPam->GetMark()->nContent.GetIndex()) )
         {
             SwNode&  rNd = m_pCurrentPam->GetNode();
@@ -934,7 +934,7 @@ void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
                 break;
 
             ++m_pCurrentPam->GetPoint()->nNode;   // move
-            SwNodeOffset nPos = m_pCurrentPam->GetPoint()->nNode.GetIndex();
+            SwNodeOffset nPos = m_pCurrentPam->GetPoint()->GetNodeIndex();
 
             if( m_bShowProgress )
                 ::SetProgressState( sal_Int32(nPos), m_pDoc->GetDocShell() );   // How far ?
@@ -945,7 +945,7 @@ void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
              * all formats!)
              */
             m_bWriteAll = bSaveWriteAll ||
-                        nPos != m_pCurrentPam->GetMark()->nNode.GetIndex();
+                        nPos != m_pCurrentPam->GetMark()->GetNodeIndex();
             m_bFirstLine = false;
             m_bOutFooter = false; // after one node no footer anymore
         }
@@ -1019,8 +1019,8 @@ static void OutBodyColor( const char* pTag, const SwFormat *pFormat,
 
 sal_uInt16 SwHTMLWriter::OutHeaderAttrs()
 {
-    SwNodeOffset nIdx = m_pCurrentPam->GetPoint()->nNode.GetIndex();
-    SwNodeOffset nEndIdx = m_pCurrentPam->GetMark()->nNode.GetIndex();
+    SwNodeOffset nIdx = m_pCurrentPam->GetPoint()->GetNodeIndex();
+    SwNodeOffset nEndIdx = m_pCurrentPam->GetMark()->GetNodeIndex();
 
     SwTextNode *pTextNd = nullptr;
     while( nIdx<=nEndIdx &&
@@ -1108,7 +1108,7 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 
     // In none HTML documents the first set template will be exported
     // and if none is set the default template
-    SwNodeOffset nNodeIdx = m_pCurrentPam->GetPoint()->nNode.GetIndex();
+    SwNodeOffset nNodeIdx = m_pCurrentPam->GetPoint()->GetNodeIndex();
 
     while( nNodeIdx < m_pDoc->GetNodes().Count() )
     {
@@ -1235,9 +1235,9 @@ void SwHTMLWriter::OutBookmarks()
         pBookmark = pMarkAccess->getAllMarksBegin()[m_nBkmkTabPos];
     // Output all bookmarks in this paragraph. The content position
     // for the moment isn't considered!
-    SwNodeOffset nNode = m_pCurrentPam->GetPoint()->nNode.GetIndex();
+    SwNodeOffset nNode = m_pCurrentPam->GetPoint()->GetNodeIndex();
     while( m_nBkmkTabPos != -1
-           && pBookmark->GetMarkPos().nNode.GetIndex() == nNode )
+           && pBookmark->GetMarkPos().GetNodeIndex() == nNode )
     {
         // The area of bookmarks is first ignored, because it's not read.
 
@@ -1594,7 +1594,7 @@ HTMLSaveData::HTMLSaveData(SwHTMLWriter& rWriter, SwNodeOffset nStt,
     rWrt.m_pCurrentPam = Writer::NewUnoCursor(*rWrt.m_pDoc, nStt, nEnd);
 
     // recognize table in special areas
-    if( nStt != rWrt.m_pCurrentPam->GetMark()->nNode.GetIndex() )
+    if( nStt != rWrt.m_pCurrentPam->GetMark()->GetNodeIndex() )
     {
         const SwNode *pNd = rWrt.m_pDoc->GetNodes()[ nStt ];
         if( pNd->IsTableNode() || pNd->IsSectionNode() )

@@ -421,7 +421,7 @@ bool FindTextImpl(SwPaM & rSearchPam,
             }
             AmbiguousIndex nEnd;
             if (pLayout
-                    ? FrameContainsNode(*pFrame, pPam->GetMark()->nNode.GetIndex())
+                    ? FrameContainsNode(*pFrame, pPam->GetMark()->GetNodeIndex())
                     : rNdIdx == pPam->GetMark()->nNode)
             {
                 if (pLayout)
@@ -518,8 +518,8 @@ bool FindTextImpl(SwPaM & rSearchPam,
                     {
                         const SwPosition* pPosition = pFrameFormat->GetAnchor().GetContentAnchor();
                         if (!pPosition || (pLayout
-                                ? !FrameContainsNode(*pFrame, pPosition->nNode.GetIndex())
-                                : pPosition->nNode.GetIndex() != pNode->GetIndex()))
+                                ? !FrameContainsNode(*pFrame, pPosition->GetNodeIndex())
+                                : pPosition->GetNodeIndex() != pNode->GetIndex()))
                             pObject = nullptr;
                     }
                 }
@@ -899,8 +899,8 @@ bool DoSearch(SwPaM & rSearchPam,
         if( (bSrchForward || pSttNd != &rNdIdx.GetNode()) &&
             rSearchPam.Move(fnMoveForward, GoInContent) &&
             (!bSrchForward || pSttNd != &rSearchPam.GetPoint()->GetNode()) &&
-            SwNodeOffset(1) == abs(rSearchPam.GetPoint()->nNode.GetIndex() -
-                                   rSearchPam.GetMark()->nNode.GetIndex()))
+            SwNodeOffset(1) == abs(rSearchPam.GetPoint()->GetNodeIndex() -
+                                   rSearchPam.GetMark()->GetNodeIndex()))
         {
             // if backward search, switch point and mark
             if( !bSrchForward )
@@ -1129,7 +1129,7 @@ std::optional<OUString> ReplaceBackReferences(const i18nutil::SearchOptions2& rS
             : nullptr);
         const bool bParaEnd = rSearchOpt.searchString == "$" || rSearchOpt.searchString == "^$" || rSearchOpt.searchString == "$^";
         if (bParaEnd || (pLayout
-                ? sw::FrameContainsNode(*pFrame, pPam->GetMark()->nNode.GetIndex())
+                ? sw::FrameContainsNode(*pFrame, pPam->GetMark()->GetNodeIndex())
                 : pTextNode == pMarkTextNode))
         {
             utl::TextSearch aSText( utl::TextSearch::UpgradeToSearchOptions2( rSearchOpt) );

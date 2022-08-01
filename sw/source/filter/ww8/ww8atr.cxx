@@ -5724,8 +5724,8 @@ const SwRedlineData* AttributeOutputBase::GetParagraphMarkerRedline( const SwTex
         if ( pRedl->GetRedlineData().GetType() != aRedlineType )
             continue;
 
-        SwNodeOffset uStartNodeIndex = pRedl->Start()->nNode.GetIndex();
-        SwNodeOffset uEndNodeIndex   = pRedl->End()->nNode.GetIndex();
+        SwNodeOffset uStartNodeIndex = pRedl->Start()->GetNodeIndex();
+        SwNodeOffset uEndNodeIndex   = pRedl->End()->GetNodeIndex();
         SwNodeOffset uNodeIndex = rNode.GetIndex();
 
         if( uStartNodeIndex <= uNodeIndex && uNodeIndex < uEndNodeIndex )

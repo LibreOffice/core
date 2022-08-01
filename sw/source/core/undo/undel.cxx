@@ -63,7 +63,7 @@ static void lcl_MakeAutoFrames( const SwFrameFormats& rSpzArr, SwNodeOffset nMov
         if (pAnchor->GetAnchorId() == RndStdIds::FLY_AT_CHAR)
         {
             const SwPosition* pAPos = pAnchor->GetContentAnchor();
-            if( pAPos && nMovedIndex == pAPos->nNode.GetIndex() )
+            if( pAPos && nMovedIndex == pAPos->GetNodeIndex() )
                 pFormat->MakeFrames();
         }
     }
@@ -243,7 +243,7 @@ SwUndoDelete::SwUndoDelete(
     m_nSetPos = m_pHistory ? m_pHistory->Count() : 0;
 
     // Is already anything deleted?
-    m_nNdDiff = m_nSttNode - pStt->nNode.GetIndex();
+    m_nNdDiff = m_nSttNode - pStt->GetNodeIndex();
 
     m_bJoinNext = !bFullPara && pEnd == rPam.GetPoint();
     m_bBackSp = !bFullPara && !m_bJoinNext;
@@ -267,8 +267,8 @@ SwUndoDelete::SwUndoDelete(
     if( pSttTextNd && pEndTextNd && pSttTextNd != pEndTextNd )
     {
         // two different TextNodes, thus save also the TextFormatCollection
-        m_pHistory->Add( pSttTextNd->GetTextColl(),pStt->nNode.GetIndex(), SwNodeType::Text );
-        m_pHistory->Add( pEndTextNd->GetTextColl(),pEnd->nNode.GetIndex(), SwNodeType::Text );
+        m_pHistory->Add( pSttTextNd->GetTextColl(),pStt->GetNodeIndex(), SwNodeType::Text );
+        m_pHistory->Add( pEndTextNd->GetTextColl(),pEnd->GetNodeIndex(), SwNodeType::Text );
 
         if( !m_bJoinNext )        // Selection from bottom to top
         {
@@ -422,7 +422,7 @@ SwUndoDelete::SwUndoDelete(
     // have ContentNodes)?
     if( !pSttTextNd && !pEndTextNd )
     {
-        m_nNdDiff = m_nSttNode - rPam.GetPoint()->nNode.GetIndex() - (bFullPara ? 0 : 1);
+        m_nNdDiff = m_nSttNode - rPam.GetPoint()->GetNodeIndex() - (bFullPara ? 0 : 1);
         rPam.Move( fnMoveForward, GoInNode );
     }
     else
@@ -430,7 +430,7 @@ SwUndoDelete::SwUndoDelete(
         m_nNdDiff = m_nSttNode;
         if( m_nSectDiff && m_bBackSp )
             m_nNdDiff += m_nSectDiff;
-        m_nNdDiff -= rPam.GetPoint()->nNode.GetIndex();
+        m_nNdDiff -= rPam.GetPoint()->GetNodeIndex();
     }
 
     if( !rPam.GetNode().IsContentNode() )
@@ -444,7 +444,7 @@ SwUndoDelete::SwUndoDelete(
 bool SwUndoDelete::SaveContent( const SwPosition* pStt, const SwPosition* pEnd,
                     SwTextNode* pSttTextNd, SwTextNode* pEndTextNd )
 {
-    SwNodeOffset nNdIdx = pStt->nNode.GetIndex();
+    SwNodeOffset nNdIdx = pStt->GetNodeIndex();
     // 1 - copy start in Start-String
     if( pSttTextNd )
     {
@@ -487,7 +487,7 @@ bool SwUndoDelete::SaveContent( const SwPosition* pStt, const SwPosition* pEnd,
     if( pEndTextNd )
     {
         SwContentIndex aEndIdx( pEndTextNd );
-        nNdIdx = pEnd->nNode.GetIndex();
+        nNdIdx = pEnd->GetNodeIndex();
         SwRegHistory aRHst( *pEndTextNd, m_pHistory.get() );
 
         // always save all text atttibutes because of possibly overlapping
@@ -836,7 +836,7 @@ static void lcl_ReAnchorAtContentFlyFrames( const SwFrameFormats& rSpzArr, const
         if (pAnchor->GetAnchorId() == RndStdIds::FLY_AT_PARA)
         {
             pAPos =  pAnchor->GetContentAnchor();
-            if( pAPos && nOldIdx == pAPos->nNode.GetIndex() )
+            if( pAPos && nOldIdx == pAPos->GetNodeIndex() )
             {
                 SwFormatAnchor aAnch( *pAnchor );
                 aAnch.SetAnchor( &rPos );
@@ -893,7 +893,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
             {   // tdf#134250 section node wasn't deleted; but aPos must point to it in bNodeMove case below
                 assert(m_nSttContent == 0);
                 assert(!m_aSttStr);
-                pTextNd = rDoc.GetNodes()[aPos.nNode.GetIndex() + 1]->GetTextNode();
+                pTextNd = rDoc.GetNodes()[aPos.GetNodeIndex() + 1]->GetTextNode();
             }
             else
             {
@@ -908,7 +908,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
 
             if( m_aSttStr && !m_bFromTableCopy )
             {
-                SwNodeOffset nOldIdx = aPos.nNode.GetIndex();
+                SwNodeOffset nOldIdx = aPos.GetNodeIndex();
                 rDoc.getIDocumentContentOperations().SplitNode( aPos, false );
                 // After the split all objects are anchored at the first
                 // paragraph, but the pHistory of the fly frame formats relies
@@ -936,7 +936,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
             {
                 if (m_nSttContent < pNd->GetText().getLength())
                 {
-                    SwNodeOffset nOldIdx = aPos.nNode.GetIndex();
+                    SwNodeOffset nOldIdx = aPos.GetNodeIndex();
                     rDoc.getIDocumentContentOperations().SplitNode( aPos, false );
                     if( m_bBackSp )
                         lcl_ReAnchorAtContentFlyFrames(*rDoc.GetSpzFrameFormats(), aPos, nOldIdx);
@@ -947,7 +947,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         }
         if( m_nSectDiff )
         {
-            SwNodeOffset nMoveIndex = aPos.nNode.GetIndex();
+            SwNodeOffset nMoveIndex = aPos.GetNodeIndex();
             SwNodeOffset nDiff(0);
             if( m_bJoinNext )
             {
@@ -989,7 +989,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                 else
                 {
                     aPos = SwPosition( aCopyIndex );
-                    nMoveIndex = aPos.nNode.GetIndex() + m_nReplaceDummy + 1;
+                    nMoveIndex = aPos.GetNodeIndex() + m_nReplaceDummy + 1;
                 }
                 SwNodeIndex aMvIdx(rDoc.GetNodes(), nMoveIndex);
                 SwNodeRange aRg( aPos.nNode, SwNodeOffset(0), aPos.nNode, SwNodeOffset(1) );

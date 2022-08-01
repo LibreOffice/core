@@ -63,7 +63,7 @@ void SwEditShell::DeleteSel(SwPaM& rPam, bool const isArtificialSelection, bool 
             aDelPam.SetMark();
             SwNode& rNd = aDelPam.GetNode();
             const SwNode& rEndNd = *rNd.EndOfSectionNode();
-            if( pEndSelPos->nNode.GetIndex() <= rEndNd.GetIndex() )
+            if( pEndSelPos->GetNodeIndex() <= rEndNd.GetIndex() )
             {
                 *aDelPam.GetPoint() = *pEndSelPos;
                 pEndSelPos = nullptr;     // misuse a pointer as a flag
@@ -253,7 +253,7 @@ bool SwEditShell::Copy( SwEditShell& rDestShell )
         if( bFirstMove )
         {
             // Store start position of the new area
-            aSttNdIdx = pPos->nNode.GetIndex()-1;
+            aSttNdIdx = pPos->GetNodeIndex()-1;
             nSttCntIdx = pPos->nContent.GetIndex();
             bFirstMove = false;
         }

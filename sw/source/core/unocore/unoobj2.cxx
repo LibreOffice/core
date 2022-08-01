@@ -303,8 +303,8 @@ void SwUnoCursorHelper::GetCursorAttr(SwPaM & rPam,
     {
         SwPosition const & rStart( *rCurrent.Start() );
         SwPosition const & rEnd( *rCurrent.End() );
-        const SwNodeOffset nSttNd = rStart.nNode.GetIndex();
-        const SwNodeOffset nEndNd = rEnd  .nNode.GetIndex();
+        const SwNodeOffset nSttNd = rStart.GetNodeIndex();
+        const SwNodeOffset nEndNd = rEnd  .GetNodeIndex();
 
         if (nEndNd - nSttNd >= SwNodeOffset(nMaxLookup))
         {
@@ -388,7 +388,7 @@ struct SwXParagraphEnumerationImpl final : public SwXParagraphEnumeration
         // for import of tables in tables we have to remember the actual
         // table and start node of the current position in the enumeration.
         , m_pOwnTable( pTable )
-        , m_nEndIndex( pCursor->End()->nNode.GetIndex() )
+        , m_nEndIndex( pCursor->End()->GetNodeIndex() )
         , m_nFirstParaStart( -1 )
         , m_nLastParaEnd( -1 )
         , m_bFirstParagraph( true )
@@ -512,8 +512,8 @@ lcl_CursorIsInSection(
     if (pUnoCursor && pOwnStartNode)
     {
         const SwEndNode * pOwnEndNode = pOwnStartNode->EndOfSectionNode();
-        bRes = pOwnStartNode->GetIndex() <= pUnoCursor->Start()->nNode.GetIndex() &&
-               pUnoCursor->End()->nNode.GetIndex() <= pOwnEndNode->GetIndex();
+        bRes = pOwnStartNode->GetIndex() <= pUnoCursor->Start()->GetNodeIndex() &&
+               pUnoCursor->End()->GetNodeIndex() <= pOwnEndNode->GetIndex();
     }
     return bRes;
 }
@@ -523,7 +523,7 @@ bool SwXParagraphEnumerationImpl::IgnoreLastElement(SwUnoCursor& rCursor, bool b
     // Ignore the last element of a selection enumeration if this is a stub
     // paragraph (directly after table, selection ends at paragraph start).
 
-    if (rCursor.Start()->nNode.GetIndex() != m_nEndIndex)
+    if (rCursor.Start()->GetNodeIndex() != m_nEndIndex)
         return false;
 
     if (m_eCursorType != CursorType::Selection)
@@ -567,7 +567,7 @@ SwXParagraphEnumerationImpl::NextElement_Impl()
         {
             aNewCursor->MovePara(GoNextPara, fnParaStart);
         }
-        if (m_nEndIndex < aNewCursor->Start()->nNode.GetIndex())
+        if (m_nEndIndex < aNewCursor->Start()->GetNodeIndex())
         {
             return nullptr;
         }
@@ -609,7 +609,7 @@ SwXParagraphEnumerationImpl::NextElement_Impl()
         {
             // This is a selection, check if the cursor would go past the end
             // of the selection.
-            if (rUnoCursor.Start()->nNode.GetIndex() > m_nEndIndex)
+            if (rUnoCursor.Start()->GetNodeIndex() > m_nEndIndex)
                 return nullptr;
         }
 
@@ -617,7 +617,7 @@ SwXParagraphEnumerationImpl::NextElement_Impl()
         const sal_Int32 nFirstContent =
             m_bFirstParagraph ? m_nFirstParaStart : -1;
         const sal_Int32 nLastContent =
-            (m_nEndIndex == pStart->nNode.GetIndex()) ? m_nLastParaEnd : -1;
+            (m_nEndIndex == pStart->GetNodeIndex()) ? m_nLastParaEnd : -1;
 
         // position in a table, or in a simple paragraph?
         SwTableNode * pTableNode = rUnoCursor.GetNode().FindTableNode();

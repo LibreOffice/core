@@ -2224,7 +2224,7 @@ void SwHTMLWriter::AddLinkTarget( const OUString& rURL )
         SwPosition aPos( *m_pCurrentPam->GetPoint() );
         if( m_pDoc->GotoOutline( aPos, aOutline ) )
         {
-            SwNodeOffset nIdx = aPos.nNode.GetIndex();
+            SwNodeOffset nIdx = aPos.GetNodeIndex();
 
             decltype(m_aOutlineMarkPoss)::size_type nIns=0;
             while( nIns < m_aOutlineMarkPoss.size() &&

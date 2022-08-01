@@ -245,7 +245,7 @@ struct SwCursor_SavePos final
     sal_Int32 nContent;
 
     SwCursor_SavePos( const SwCursor& rCursor )
-        : nNode( rCursor.GetPoint()->nNode.GetIndex() ),
+        : nNode( rCursor.GetPoint()->GetNodeIndex() ),
           nContent( rCursor.GetPoint()->nContent.GetIndex() )
     {}
 };
@@ -289,8 +289,8 @@ public:
     // Has table cursor been changed?
     bool IsCursorMoved() const
     {
-        return  m_nTableMkNd != GetMark()->nNode.GetIndex() ||
-                m_nTablePtNd != GetPoint()->nNode.GetIndex() ||
+        return  m_nTableMkNd != GetMark()->GetNodeIndex() ||
+                m_nTablePtNd != GetPoint()->GetNodeIndex() ||
                 m_nTableMkCnt != GetMark()->nContent.GetIndex() ||
                 m_nTablePtCnt != GetPoint()->nContent.GetIndex();
     }

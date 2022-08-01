@@ -1746,7 +1746,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
             const SwContentNode* pCNd;
             if( rSttEnd == rEndStt ||
                 (!rEndStt.nContent.GetIndex() &&
-                rEndStt.nNode.GetIndex() - 1 == rSttEnd.nNode.GetIndex() &&
+                rEndStt.GetNodeIndex() - 1 == rSttEnd.GetNodeIndex() &&
                 nullptr != ( pCNd = rSttEnd.GetNode().GetContentNode() ) &&
                 rSttEnd.nContent.GetIndex() == pCNd->Len()))
             {
@@ -1931,8 +1931,8 @@ SaveMergeRedline::SaveMergeRedline( const SwNode& rDstNd,
     const SwPosition* pEnd = rSrcRedl.End();
 
     pDestRedl->SetMark();
-    pDestRedl->GetPoint()->nNode += pEnd->nNode.GetIndex() -
-                                    pStt->nNode.GetIndex();
+    pDestRedl->GetPoint()->nNode += pEnd->GetNodeIndex() -
+                                    pStt->GetNodeIndex();
     pDestRedl->GetPoint()->nContent.Assign( pDestRedl->GetContentNode(),
                                             pEnd->nContent.GetIndex() );
 }
@@ -2104,7 +2104,7 @@ tools::Long SwDoc::MergeDoc( const SwDoc& rDoc )
         SwNodeOffset nMyEndOfExtra = GetNodes().GetEndOfExtras().GetIndex();
         for(const SwRangeRedline* pRedl : rSrcRedlTable)
         {
-            SwNodeOffset nNd = pRedl->GetPoint()->nNode.GetIndex();
+            SwNodeOffset nNd = pRedl->GetPoint()->GetNodeIndex();
             RedlineType eType = pRedl->GetType();
             if( nEndOfExtra < nNd &&
                 ( RedlineType::Insert == eType || RedlineType::Delete == eType ))

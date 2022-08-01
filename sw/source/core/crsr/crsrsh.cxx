@@ -197,8 +197,8 @@ SwCursor* SwCursorShell::GetCursor( bool bMakeTableCursor ) const
         if( bMakeTableCursor && m_pTableCursor->IsCursorMovedUpdate() )
         {
             //don't re-create 'parked' cursors
-            if( m_pTableCursor->GetPoint()->nNode.GetIndex() &&
-                m_pTableCursor->GetMark()->nNode.GetIndex() )
+            if( m_pTableCursor->GetPoint()->GetNodeIndex() &&
+                m_pTableCursor->GetMark()->GetNodeIndex() )
             {
                 const SwContentNode* pCNd = m_pTableCursor->GetContentNode();
                 if( pCNd && pCNd->getLayoutFrame( GetLayout() ) )
@@ -1084,7 +1084,7 @@ bool SwCursorShell::IsSelOnePara() const
     if (GetLayout()->HasMergedParas())
     {
         SwContentFrame const*const pFrame(GetCurrFrame(false));
-        auto const n(m_pCurrentCursor->GetMark()->nNode.GetIndex());
+        auto const n(m_pCurrentCursor->GetMark()->GetNodeIndex());
         return FrameContainsNode(*pFrame, n);
     }
     return false;
@@ -2553,12 +2553,12 @@ OUString SwCursorShell::GetSelText() const
     if (GetLayout()->HasMergedParas())
     {
         SwContentFrame const*const pFrame(GetCurrFrame(false));
-        if (FrameContainsNode(*pFrame, m_pCurrentCursor->GetMark()->nNode.GetIndex()))
+        if (FrameContainsNode(*pFrame, m_pCurrentCursor->GetMark()->GetNodeIndex()))
         {
             OUStringBuffer buf;
             SwPosition const*const pStart(m_pCurrentCursor->Start());
             SwPosition const*const pEnd(m_pCurrentCursor->End());
-            for (SwNodeOffset i = pStart->nNode.GetIndex(); i <= pEnd->nNode.GetIndex(); ++i)
+            for (SwNodeOffset i = pStart->GetNodeIndex(); i <= pEnd->GetNodeIndex(); ++i)
             {
                 SwNode const& rNode(*pStart->GetNodes()[i]);
                 assert(!rNode.IsEndNode());
@@ -2568,10 +2568,10 @@ OUString SwCursorShell::GetSelText() const
                 }
                 else if (rNode.IsTextNode())
                 {
-                    sal_Int32 const nStart(i == pStart->nNode.GetIndex()
+                    sal_Int32 const nStart(i == pStart->GetNodeIndex()
                             ? pStart->nContent.GetIndex()
                             : 0);
-                    sal_Int32 const nEnd(i == pEnd->nNode.GetIndex()
+                    sal_Int32 const nEnd(i == pEnd->GetNodeIndex()
                             ? pEnd->nContent.GetIndex()
                             : rNode.GetTextNode()->Len());
                     buf.append(rNode.GetTextNode()->GetExpandText(
@@ -2584,8 +2584,8 @@ OUString SwCursorShell::GetSelText() const
             aText = buf.makeStringAndClear();
         }
     }
-    else if( m_pCurrentCursor->GetPoint()->nNode.GetIndex() ==
-        m_pCurrentCursor->GetMark()->nNode.GetIndex() )
+    else if( m_pCurrentCursor->GetPoint()->GetNodeIndex() ==
+        m_pCurrentCursor->GetMark()->GetNodeIndex() )
     {
         SwTextNode* pTextNd = m_pCurrentCursor->GetNode().GetTextNode();
         if( pTextNd )
@@ -3063,8 +3063,8 @@ bool SwCursorShell::ShouldWait() const
         return true;
 
     SwPaM* pPam = GetCursor();
-    return pPam->Start()->nNode.GetIndex() + SwNodeOffset(10) <
-            pPam->End()->nNode.GetIndex();
+    return pPam->Start()->GetNodeIndex() + SwNodeOffset(10) <
+            pPam->End()->GetNodeIndex();
 }
 
 size_t SwCursorShell::UpdateTableSelBoxes()
@@ -3406,8 +3406,8 @@ bool SwCursorShell::IsSelFullPara() const
 {
     bool bRet = false;
 
-    if( m_pCurrentCursor->GetPoint()->nNode.GetIndex() ==
-        m_pCurrentCursor->GetMark()->nNode.GetIndex() && !m_pCurrentCursor->IsMultiSelection() )
+    if( m_pCurrentCursor->GetPoint()->GetNodeIndex() ==
+        m_pCurrentCursor->GetMark()->GetNodeIndex() && !m_pCurrentCursor->IsMultiSelection() )
     {
         sal_Int32 nStt = m_pCurrentCursor->GetPoint()->nContent.GetIndex();
         sal_Int32 nEnd = m_pCurrentCursor->GetMark()->nContent.GetIndex();

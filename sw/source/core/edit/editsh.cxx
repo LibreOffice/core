@@ -464,7 +464,7 @@ OUString SwEditShell::GetDropText( const sal_Int32 nChars ) const
     {
         // if a multi selection exists, search for the first line
         // -> it is the cursor with the lowest index
-        SwNodeOffset nIndex = pCursor->GetMark()->nNode.GetIndex();
+        SwNodeOffset nIndex = pCursor->GetMark()->GetNodeIndex();
         bool bPrev = true;
         SwPaM* pLast = pCursor;
         SwPaM* pTemp = pCursor;
@@ -475,7 +475,7 @@ OUString SwEditShell::GetDropText( const sal_Int32 nChars ) const
             if ( bPrev )
             {
                 pTemp = pPrev2;
-                SwNodeOffset nTemp = pPrev2->GetMark()->nNode.GetIndex();
+                SwNodeOffset nTemp = pPrev2->GetMark()->GetNodeIndex();
                 if ( nTemp < nIndex )
                 {
                     nIndex = nTemp;
@@ -572,7 +572,7 @@ OUString SwEditShell::Calculate()
                         if( !bValidFields )
                         {
                             GetDoc()->getIDocumentFieldsAccess().FieldsToCalc( aCalc,
-                                                  pStart->nNode.GetIndex(),
+                                                  pStart->GetNodeIndex(),
                                                   pStart->nContent.GetIndex() );
                             bValidFields = true;
                         }
@@ -780,8 +780,8 @@ void SwEditShell::SetNumberingRestart()
         else
             MakeFindRange(SwDocPositions::OtherStart, SwDocPositions::OtherEnd, pCursor); // extra content
         SwPosition* pSttPos = pCursor->Start(), *pEndPos = pCursor->End();
-        SwNodeOffset nCurrNd = pSttPos->nNode.GetIndex();
-        SwNodeOffset nEndNd = pEndPos->nNode.GetIndex();
+        SwNodeOffset nCurrNd = pSttPos->GetNodeIndex();
+        SwNodeOffset nEndNd = pEndPos->GetNodeIndex();
         if( nCurrNd <= nEndNd )
         {
             SwContentFrame* pContentFrame;

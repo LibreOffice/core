@@ -276,7 +276,7 @@ SwFlyFrameFormat* SwDoc::MakeFlySection_( const SwPosition& rAnchPos,
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        SwNodeOffset nNodeIdx = rAnchPos.nNode.GetIndex();
+        SwNodeOffset nNodeIdx = rAnchPos.GetNodeIndex();
         const sal_Int32 nCntIdx = rAnchPos.nContent.GetIndex();
         GetIDocumentUndoRedo().AppendUndo(
             std::make_unique<SwUndoInsLayFormat>( pFormat, nNodeIdx, nCntIdx ));
@@ -469,10 +469,10 @@ static bool lcl_TstFlyRange( const SwPaM* pPam, const SwPosition* pFlyPos,
     bool bOk = false;
     const SwPaM* pTmp = pPam;
     do {
-        const SwNodeOffset nFlyIndex = pFlyPos->nNode.GetIndex();
+        const SwNodeOffset nFlyIndex = pFlyPos->GetNodeIndex();
         auto [pPaMStart, pPaMEnd] = pTmp->StartEnd(); // SwPosition*
-        const SwNodeOffset nPamStartIndex = pPaMStart->nNode.GetIndex();
-        const SwNodeOffset nPamEndIndex = pPaMEnd->nNode.GetIndex();
+        const SwNodeOffset nPamStartIndex = pPaMStart->GetNodeIndex();
+        const SwNodeOffset nPamEndIndex = pPaMEnd->GetNodeIndex();
         if (RndStdIds::FLY_AT_PARA == nAnchorId)
             bOk = (nPamStartIndex < nFlyIndex && nPamEndIndex > nFlyIndex) ||
                (((nPamStartIndex == nFlyIndex) && (pPaMStart->nContent.GetIndex() == 0)) &&

@@ -238,7 +238,7 @@ SwUndoInsTable::SwUndoInsTable( const SwPosition& rPos, sal_uInt16 nCl, sal_uInt
                             const OUString & rName)
     : SwUndo( SwUndoId::INSTABLE, &rPos.GetDoc() ),
     m_aInsTableOptions( rInsTableOpts ),
-    m_nStartNode( rPos.nNode.GetIndex() ), m_nRows( nRw ), m_nColumns( nCl ), m_nAdjust( nAdj )
+    m_nStartNode( rPos.GetNodeIndex() ), m_nRows( nRw ), m_nColumns( nCl ), m_nAdjust( nAdj )
 {
     if( pColArr )
     {
@@ -438,8 +438,8 @@ SwUndoTableToText::SwUndoTableToText( const SwTable& rTable, sal_Unicode cCh )
         if (pAPos &&
             ((RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId()) ||
              (RndStdIds::FLY_AT_PARA == pAnchor->GetAnchorId())) &&
-            nTableStt <= pAPos->nNode.GetIndex() &&
-            pAPos->nNode.GetIndex() < nTableEnd )
+            nTableStt <= pAPos->GetNodeIndex() &&
+            pAPos->GetNodeIndex() < nTableEnd )
         {
             m_pHistory->AddChangeFlyAnchor(*pFormat);
         }
@@ -720,7 +720,7 @@ SwUndoTextToTable::SwUndoTextToTable( const SwPaM& rRg,
     SwNodes& rNds = rRg.GetDoc().GetNodes();
     m_bSplitEnd = pEnd->nContent.GetIndex() && ( pEnd->nContent.GetIndex()
                         != pEnd->GetNode().GetContentNode()->Len() ||
-                pEnd->nNode.GetIndex() >= rNds.GetEndOfContent().GetIndex()-1 );
+                pEnd->GetNodeIndex() >= rNds.GetEndOfContent().GetIndex()-1 );
 }
 
 SwUndoTextToTable::~SwUndoTextToTable()

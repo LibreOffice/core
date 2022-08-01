@@ -303,9 +303,9 @@ bool SwAccessibleFrameBase::GetSelectedState( )
                 {
                     // check whether nHere is 'inside' pCursor
                     SwPosition* pStart = pCursor->Start();
-                    SwNodeOffset nStartIndex = pStart->nNode.GetIndex();
+                    SwNodeOffset nStartIndex = pStart->GetNodeIndex();
                     SwPosition* pEnd = pCursor->End();
-                    SwNodeOffset nEndIndex = pEnd->nNode.GetIndex();
+                    SwNodeOffset nEndIndex = pEnd->GetNodeIndex();
                     if( ( nHere >= nStartIndex ) && (nHere <= nEndIndex)  )
                     {
                         if( rAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR )

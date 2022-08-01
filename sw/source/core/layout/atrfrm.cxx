@@ -2689,9 +2689,9 @@ void SwFrameFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         const_cast<SwFormatFooter*>(pF)->RegisterToFormat(*pFormat);
     }
     SwFormat::SwClientNotify(rMod, rHint);
-    if(pOldAnchorPosition != nullptr && (pNewAnchorPosition == nullptr || pOldAnchorPosition->nNode.GetIndex() != pNewAnchorPosition->nNode.GetIndex()))
+    if(pOldAnchorPosition != nullptr && (pNewAnchorPosition == nullptr || pOldAnchorPosition->GetNodeIndex() != pNewAnchorPosition->GetNodeIndex()))
         pOldAnchorPosition->GetNode().RemoveAnchoredFly(this);
-    if(pNewAnchorPosition != nullptr && (pOldAnchorPosition == nullptr || pOldAnchorPosition->nNode.GetIndex() != pNewAnchorPosition->nNode.GetIndex()))
+    if(pNewAnchorPosition != nullptr && (pOldAnchorPosition == nullptr || pOldAnchorPosition->GetNodeIndex() != pNewAnchorPosition->GetNodeIndex()))
         pNewAnchorPosition->GetNode().AddAnchoredFly(this);
 }
 

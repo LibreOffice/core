@@ -898,13 +898,13 @@ bool IsEmptyBox( const SwTableBox& rBox, SwPaM& rPam )
     rPam.GetPoint()->nNode = *rBox.GetSttNd();
     rPam.Move( fnMoveForward, GoInContent );
     bool bRet = *rPam.GetMark() == *rPam.GetPoint()
-        && ( rBox.GetSttNd()->GetIndex() + 1 == rPam.GetPoint()->nNode.GetIndex() );
+        && ( rBox.GetSttNd()->GetIndex() + 1 == rPam.GetPoint()->GetNodeIndex() );
 
     if( bRet )
     {
         // now check for paragraph bound flies
         const SwFrameFormats& rFormats = *rPam.GetDoc().GetSpzFrameFormats();
-        SwNodeOffset nSttIdx = rPam.GetPoint()->nNode.GetIndex(),
+        SwNodeOffset nSttIdx = rPam.GetPoint()->GetNodeIndex(),
               nEndIdx = rBox.GetSttNd()->EndOfSectionIndex(),
               nIdx;
 
@@ -915,7 +915,7 @@ bool IsEmptyBox( const SwTableBox& rBox, SwPaM& rPam )
             if (pAPos &&
                 ((RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId()) ||
                  (RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId())) &&
-                nSttIdx <= ( nIdx = pAPos->nNode.GetIndex() ) &&
+                nSttIdx <= ( nIdx = pAPos->GetNodeIndex() ) &&
                 nIdx < nEndIdx )
             {
                 bRet = false;

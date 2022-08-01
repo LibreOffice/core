@@ -3093,7 +3093,7 @@ void CellSaveStruct::StartNoBreak( const SwPosition& rPos )
         (!rPos.nContent.GetIndex() && m_pCurrCnts == m_xCnts.get() &&
          m_xCnts->GetStartNode() &&
          m_xCnts->GetStartNode()->GetIndex() + 1 ==
-            rPos.nNode.GetIndex()) )
+            rPos.GetNodeIndex()) )
     {
         m_bNoBreak = true;
     }
@@ -3120,7 +3120,7 @@ void CellSaveStruct::CheckNoBreak( const SwPosition& rPos )
         m_xCnts->SetNoBreak();
     }
     else if( m_pNoBreakEndNodeIndex &&
-             m_pNoBreakEndNodeIndex->GetIndex() == rPos.nNode.GetIndex() )
+             m_pNoBreakEndNodeIndex->GetIndex() == rPos.GetNodeIndex() )
     {
         if( m_nNoBreakEndContentPos == rPos.nContent.GetIndex() )
         {
@@ -4735,7 +4735,7 @@ void TableSaveStruct::MakeTable( sal_uInt16 nWidth, SwPosition& rPos, SwDoc *pDo
         {
             pTableNd->DelFrames();
             SwNodeIndex aIdx( *pTableNd->EndOfSectionNode(), 1 );
-            OSL_ENSURE( aIdx.GetIndex() <= pTCntxt->GetPos()->nNode.GetIndex(),
+            OSL_ENSURE( aIdx.GetIndex() <= pTCntxt->GetPos()->GetNodeIndex(),
                     "unexpected node for table layout" );
             pTableNd->MakeOwnFrames(&aIdx);
         }

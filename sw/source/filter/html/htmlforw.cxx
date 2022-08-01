@@ -211,7 +211,7 @@ static bool lcl_html_isHTMLControl( sal_Int16 nClassId )
 
 bool SwHTMLWriter::HasControls() const
 {
-    SwNodeOffset nStartIdx = m_pCurrentPam->GetPoint()->nNode.GetIndex();
+    SwNodeOffset nStartIdx = m_pCurrentPam->GetPoint()->GetNodeIndex();
     size_t i = 0;
 
     // Skip all controls in front of the current paragraph
@@ -240,7 +240,7 @@ void SwHTMLWriter::OutForm( bool bTag_On, const SwStartNode *pStartNd )
 
     uno::Reference< container::XIndexContainer > xNewFormComps;
     SwNodeOffset nStartIdx = pStartNd ? pStartNd->GetIndex()
-                                    : m_pCurrentPam->GetPoint()->nNode.GetIndex();
+                                    : m_pCurrentPam->GetPoint()->GetNodeIndex();
 
     // skip controls before the interesting area
     size_t i = 0;
@@ -1338,7 +1338,7 @@ void SwHTMLWriter::GetControls()
         if( !pSdrObj )
             continue;
 
-        AddControl( m_aHTMLControls, dynamic_cast<const SdrUnoObj&>(*pSdrObj), pPos->nNode.GetIndex() );
+        AddControl( m_aHTMLControls, dynamic_cast<const SdrUnoObj&>(*pSdrObj), pPos->GetNodeIndex() );
     }
 }
 

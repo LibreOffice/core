@@ -66,12 +66,12 @@ ErrCode SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& rPam
 
     // Step 2: Split once and remember the node that has been split.
     rDoc.getIDocumentContentOperations().SplitNode(*pPos, false);
-    *pSttNdIdx = pPos->nNode.GetIndex() - 1;
+    *pSttNdIdx = pPos->GetNodeIndex() - 1;
 
     // Step 3: Split again.
     rDoc.getIDocumentContentOperations().SplitNode(*pPos, false);
     auto pSttNdIdx2 = std::make_shared<SwNodeIndex>(rDoc.GetNodes());
-    *pSttNdIdx2 = pPos->nNode.GetIndex();
+    *pSttNdIdx2 = pPos->GetNodeIndex();
 
     // Step 4: Insert all content into the new node
     rPam.Move(fnMoveBackward);

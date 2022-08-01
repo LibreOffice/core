@@ -70,7 +70,7 @@ bool WW8Glossary::HasBareGraphicEnd(SwDoc *pDoc,SwNodeIndex const &rIdx)
         if (pAPos &&
             ((RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId()) ||
              (RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId())) &&
-            rIdx == pAPos->nNode.GetIndex() )
+            rIdx == pAPos->GetNodeIndex() )
         {
             bRet=true;
             break;

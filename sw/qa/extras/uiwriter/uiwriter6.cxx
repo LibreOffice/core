@@ -316,7 +316,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf113686)
 
     // Remove page 2.
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    while (pWrtShell->GetCursor()->Start()->nNode.GetIndex() < nPage1LastNode)
+    while (pWrtShell->GetCursor()->Start()->GetNodeIndex() < nPage1LastNode)
         pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->EndPara();
     for (int i = 0; i < 3; ++i)
@@ -430,10 +430,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testSectionInTableInTable4)
 
     // Remove page 2.
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    while (pWrtShell->GetCursor()->Start()->nNode.GetIndex() < nPage1LastNode)
+    while (pWrtShell->GetCursor()->Start()->GetNodeIndex() < nPage1LastNode)
         pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->EndPara();
-    while (pWrtShell->GetCursor()->End()->nNode.GetIndex() < nPage3FirstNode)
+    while (pWrtShell->GetCursor()->End()->GetNodeIndex() < nPage3FirstNode)
         pWrtShell->Down(/*bSelect=*/true);
     pWrtShell->EndPara(/*bSelect=*/true);
     pWrtShell->DelLeft();

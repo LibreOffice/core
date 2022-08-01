@@ -372,7 +372,7 @@ void SwUndoFormatAttr::SaveFlyAnchor( const SwFormat * pFormat, bool bSvDrwPt )
         [[fallthrough]];
     case RndStdIds::FLY_AT_PARA:
     case RndStdIds::FLY_AT_FLY:
-        m_nNodeIndex = rAnchor.GetContentAnchor()->nNode.GetIndex();
+        m_nNodeIndex = rAnchor.GetContentAnchor()->GetNodeIndex();
         break;
     default:
         return;
@@ -552,7 +552,7 @@ SwUndoResetAttr::SwUndoResetAttr( const SwPosition& rPos, sal_uInt16 nFormatId )
     , m_pHistory( new SwHistory )
     , m_nFormatId( nFormatId )
 {
-    m_nSttNode = m_nEndNode = rPos.nNode.GetIndex();
+    m_nSttNode = m_nEndNode = rPos.GetNodeIndex();
     m_nSttContent = m_nEndContent = rPos.nContent.GetIndex();
 }
 
@@ -710,7 +710,7 @@ void SwUndoAttr::SaveRedlineData( const SwPaM& rPam, bool bIsContent )
 
     SetRedlineFlags( rDoc.getIDocumentRedlineAccess().GetRedlineFlags() );
     if ( bIsContent ) {
-        m_nNodeIndex = rPam.GetPoint()->nNode.GetIndex();
+        m_nNodeIndex = rPam.GetPoint()->GetNodeIndex();
     }
 }
 
@@ -1029,7 +1029,7 @@ void SwUndoEndNoteInfo::RedoImpl(::sw::UndoRedoContext & rContext)
 
 SwUndoDontExpandFormat::SwUndoDontExpandFormat( const SwPosition& rPos )
     : SwUndo( SwUndoId::DONTEXPAND, &rPos.GetDoc() )
-    , m_nNodeIndex( rPos.nNode.GetIndex() )
+    , m_nNodeIndex( rPos.GetNodeIndex() )
     , m_nContentIndex( rPos.nContent.GetIndex() )
 {
 }

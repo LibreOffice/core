@@ -5794,9 +5794,9 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
 
             if( pCursor )
             {
-                SwNodeOffset nPosNodeIdx = pCursor->GetPoint()->nNode.GetIndex();
+                SwNodeOffset nPosNodeIdx = pCursor->GetPoint()->GetNodeIndex();
                 const sal_Int32 nPosIdx = pCursor->GetPoint()->nContent.GetIndex();
-                SwNodeOffset nMarkNodeIdx = pCursor->GetMark()->nNode.GetIndex();
+                SwNodeOffset nMarkNodeIdx = pCursor->GetMark()->GetNodeIndex();
                 const sal_Int32 nMarkIdx = pCursor->GetMark()->nContent.GetIndex();
 
                 if( !rSh.GetCursor()->HasMark() )

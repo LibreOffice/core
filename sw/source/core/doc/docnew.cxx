@@ -1197,9 +1197,9 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
 
             // Update the rsid of each pasted text node
             SwNodes &rDestNodes = GetNodes();
-            SwNodeOffset const nEndIdx = aPaM.End()->nNode.GetIndex();
+            SwNodeOffset const nEndIdx = aPaM.End()->GetNodeIndex();
 
-            for (SwNodeOffset nIdx = aPaM.Start()->nNode.GetIndex();
+            for (SwNodeOffset nIdx = aPaM.Start()->GetNodeIndex();
                     nIdx <= nEndIdx; ++nIdx)
             {
                 SwTextNode *const pTextNode = rDestNodes[nIdx]->GetTextNode();

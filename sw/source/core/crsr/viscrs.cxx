@@ -1083,7 +1083,7 @@ void SwShellTableCursor::SaveTableBoxContent( const SwPosition* pPos )
 void SwShellTableCursor::FillRects()
 {
     // Calculate the new rectangles. If the cursor is still "parked" do nothing
-    if (m_SelectedBoxes.empty() || m_bParked || !GetPoint()->nNode.GetIndex())
+    if (m_SelectedBoxes.empty() || m_bParked || !GetPoint()->GetNodeIndex())
         return;
 
     bool bStart = true;
@@ -1153,7 +1153,7 @@ void SwShellTableCursor::FillStartEnd(SwRect& rStart, SwRect& rEnd) const
 bool SwShellTableCursor::Contains( const Point& rPt ) const
 {
     // Calculate the new rectangles. If the cursor is still "parked" do nothing
-    if (m_SelectedBoxes.empty() || m_bParked || !GetPoint()->nNode.GetIndex())
+    if (m_SelectedBoxes.empty() || m_bParked || !GetPoint()->GetNodeIndex())
         return false;
 
     SwNodes& rNds = GetDoc().GetNodes();

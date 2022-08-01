@@ -831,13 +831,13 @@ bool SwTextFrame::UnitUp_( SwPaM *pPam, const SwTwips nOffset,
 
                 // See comment in SwTextFrame::GetModelPositionForViewPoint()
 #if OSL_DEBUG_LEVEL > 0
-                const SwNodeOffset nOldNode = pPam->GetPoint()->nNode.GetIndex();
+                const SwNodeOffset nOldNode = pPam->GetPoint()->GetNodeIndex();
 #endif
                 // The node should not be changed
                 TextFrameIndex nTmpOfst = aLine.GetModelPositionForViewPoint(pPam->GetPoint(),
                                                          aCharBox.Pos(), false );
 #if OSL_DEBUG_LEVEL > 0
-                OSL_ENSURE( nOldNode == pPam->GetPoint()->nNode.GetIndex(),
+                OSL_ENSURE( nOldNode == pPam->GetPoint()->GetNodeIndex(),
                         "SwTextFrame::UnitUp: illegal node change" );
 #endif
 
@@ -1192,7 +1192,7 @@ bool SwTextFrame::UnitDown_(SwPaM *pPam, const SwTwips nOffset,
                 aCharBox.Width( aCharBox.SSize().Width() / 2 );
 #if OSL_DEBUG_LEVEL > 0
                 // See comment in SwTextFrame::GetModelPositionForViewPoint()
-                const SwNodeOffset nOldNode = pPam->GetPoint()->nNode.GetIndex();
+                const SwNodeOffset nOldNode = pPam->GetPoint()->GetNodeIndex();
 #endif
                 if ( pNextLine && ! bFirstOfDouble )
                     aLine.NextLine();
@@ -1200,7 +1200,7 @@ bool SwTextFrame::UnitDown_(SwPaM *pPam, const SwTwips nOffset,
                 TextFrameIndex nTmpOfst = aLine.GetModelPositionForViewPoint( pPam->GetPoint(),
                                  aCharBox.Pos(), false );
 #if OSL_DEBUG_LEVEL > 0
-                OSL_ENSURE( nOldNode == pPam->GetPoint()->nNode.GetIndex(),
+                OSL_ENSURE( nOldNode == pPam->GetPoint()->GetNodeIndex(),
                     "SwTextFrame::UnitDown: illegal node change" );
 #endif
 

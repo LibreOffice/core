@@ -584,8 +584,8 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
                      : rFormat.GetULSpace();
 
     if( (rHWrt.m_bOutHeader &&
-         rWrt.m_pCurrentPam->GetPoint()->nNode.GetIndex() ==
-            rWrt.m_pCurrentPam->GetMark()->nNode.GetIndex()) ||
+         rWrt.m_pCurrentPam->GetPoint()->GetNodeIndex() ==
+            rWrt.m_pCurrentPam->GetMark()->GetNodeIndex()) ||
          rHWrt.m_bOutFooter )
     {
         if( rHWrt.m_bCfgOutStyles )
@@ -625,8 +625,8 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     // Consider the lower spacing of the paragraph? (never in the last
     // paragraph of tables)
     bool bUseParSpace = !rHWrt.m_bOutTable ||
-                        (rWrt.m_pCurrentPam->GetPoint()->nNode.GetIndex() !=
-                         rWrt.m_pCurrentPam->GetMark()->nNode.GetIndex());
+                        (rWrt.m_pCurrentPam->GetPoint()->GetNodeIndex() !=
+                         rWrt.m_pCurrentPam->GetMark()->GetNodeIndex());
     // If styles are exported, indented paragraphs become definition lists
     const SvxLRSpaceItem& rLRSpace =
         pNodeItemSet ? pNodeItemSet->Get(RES_LR_SPACE)
@@ -657,7 +657,7 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
         }
 
         bool bIsNextTextNode =
-            rWrt.m_pDoc->GetNodes()[rWrt.m_pCurrentPam->GetPoint()->nNode.GetIndex()+1]
+            rWrt.m_pDoc->GetNodes()[rWrt.m_pCurrentPam->GetPoint()->GetNodeIndex()+1]
                      ->IsTextNode();
 
         if( bForceDL && bDT )
@@ -2106,7 +2106,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
             40 == pFontHeightItem->GetHeight() )
         {
             // ... moreover, the 2pt font is set ...
-            SwNodeOffset nNdPos = rWrt.m_pCurrentPam->GetPoint()->nNode.GetIndex();
+            SwNodeOffset nNdPos = rWrt.m_pCurrentPam->GetPoint()->GetNodeIndex();
             const SwNode *pNextNd = rWrt.m_pDoc->GetNodes()[nNdPos+1];
             const SwNode *pPrevNd = rWrt.m_pDoc->GetNodes()[nNdPos-1];
             bool bStdColl = nPoolId == RES_POOLCOLL_STANDARD;
@@ -2133,7 +2133,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
     bool bPageBreakBehind = false;
     if( rHTMLWrt.m_bCfgFormFeed &&
         !(rHTMLWrt.m_bOutTable || rHTMLWrt.m_bOutFlyFrame) &&
-        rHTMLWrt.m_pStartNdIdx->GetIndex() != rHTMLWrt.m_pCurrentPam->GetPoint()->nNode.GetIndex() )
+        rHTMLWrt.m_pStartNdIdx->GetIndex() != rHTMLWrt.m_pCurrentPam->GetPoint()->GetNodeIndex() )
     {
         bool bPageBreakBefore = false;
         const SfxItemSet* pItemSet = pNd->GetpSwAttrSet();
@@ -2528,8 +2528,8 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
     if( bWriteBreak )
     {
         bool bEndOfCell = rHTMLWrt.m_bOutTable &&
-                         rWrt.m_pCurrentPam->GetPoint()->nNode.GetIndex() ==
-                         rWrt.m_pCurrentPam->GetMark()->nNode.GetIndex();
+                         rWrt.m_pCurrentPam->GetPoint()->GetNodeIndex() ==
+                         rWrt.m_pCurrentPam->GetMark()->GetNodeIndex();
 
         if( bEndOfCell && !nEnd &&
             rHTMLWrt.IsHTMLMode(HTMLMODE_NBSP_IN_TABLES) )

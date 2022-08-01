@@ -145,7 +145,7 @@ bool SwUndoInsert::CanGrouping( sal_Unicode cIns )
 bool SwUndoInsert::CanGrouping( const SwPosition& rPos )
 {
     bool bRet = false;
-    if( m_nNode == rPos.nNode.GetIndex() &&
+    if( m_nNode == rPos.GetNodeIndex() &&
         m_nContent == rPos.nContent.GetIndex() )
     {
         // consider Redline
@@ -263,7 +263,7 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
                 RemoveIdxFromRange( aPaM, false );
             }
 
-            nNd = aPaM.GetPoint()->nNode.GetIndex();
+            nNd = aPaM.GetPoint()->GetNodeIndex();
             nCnt = aPaM.GetPoint()->nContent.GetIndex();
 
             if (!maText)
@@ -272,7 +272,7 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
                         new SwNodeIndex(m_pDoc->GetNodes().GetEndOfContent()));
                 MoveToUndoNds(aPaM, m_pUndoNodeIndex.get());
             }
-            m_nNode = aPaM.GetPoint()->nNode.GetIndex();
+            m_nNode = aPaM.GetPoint()->GetNodeIndex();
             m_nContent = aPaM.GetPoint()->nContent.GetIndex();
         }
 
@@ -348,7 +348,7 @@ void SwUndoInsert::RedoImpl(::sw::UndoRedoContext & rContext)
                 m_pUndoNodeIndex.reset();
                 MoveFromUndoNds(*pTmpDoc, nMvNd, *pPam->GetMark());
             }
-            m_nNode = pPam->GetMark()->nNode.GetIndex();
+            m_nNode = pPam->GetMark()->GetNodeIndex();
             m_nContent = pPam->GetMark()->nContent.GetIndex();
 
             MovePtForward( *pPam, bMvBkwrd );
@@ -589,11 +589,11 @@ SwUndoReplace::Impl::Impl(
 
     auto [pStt, pEnd] = rPam.StartEnd(); // SwPosition*
 
-    m_nSttNd = m_nEndNd = pStt->nNode.GetIndex();
+    m_nSttNd = m_nEndNd = pStt->GetNodeIndex();
     m_nSttCnt = pStt->nContent.GetIndex();
     m_nSelEnd = m_nEndCnt = pEnd->nContent.GetIndex();
 
-    m_bSplitNext = m_nSttNd != pEnd->nNode.GetIndex();
+    m_bSplitNext = m_nSttNd != pEnd->GetNodeIndex();
 
     SwTextNode* pNd = pStt->GetNode().GetTextNode();
     OSL_ENSURE( pNd, "Dude, where's my TextNode?" );
@@ -603,7 +603,7 @@ SwUndoReplace::Impl::Impl(
 
     m_nSetPos = m_pHistory->Count();
 
-    SwNodeOffset nNewPos = pStt->nNode.GetIndex();
+    SwNodeOffset nNewPos = pStt->GetNodeIndex();
     m_nOffset = m_nSttNd - nNewPos;
 
     if ( pNd->GetpSwpHints() )
@@ -770,12 +770,12 @@ void SwUndoReplace::Impl::RedoImpl(::sw::UndoRedoContext & rContext)
 void SwUndoReplace::Impl::SetEnd(SwPaM const& rPam)
 {
     const SwPosition* pEnd = rPam.End();
-    m_nEndNd = m_nOffset + pEnd->nNode.GetIndex();
+    m_nEndNd = m_nOffset + pEnd->GetNodeIndex();
     m_nEndCnt = pEnd->nContent.GetIndex();
 }
 
 SwUndoReRead::SwUndoReRead( const SwPaM& rPam, const SwGrfNode& rGrfNd )
-    : SwUndo( SwUndoId::REREAD, &rPam.GetDoc() ), mnPosition( rPam.GetPoint()->nNode.GetIndex() )
+    : SwUndo( SwUndoId::REREAD, &rPam.GetDoc() ), mnPosition( rPam.GetPoint()->GetNodeIndex() )
 {
     SaveGraphicData( rGrfNd );
 }

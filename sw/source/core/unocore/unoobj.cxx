@@ -617,8 +617,8 @@ SwUnoCursorHelper::GetCurTextFormatColl(SwPaM & rPaM, const bool bConditional)
     SwPaM *pTmpCursor = &rPaM;
     do
     {
-        const SwNodeOffset nSttNd = pTmpCursor->Start()->nNode.GetIndex();
-        const SwNodeOffset nEndNd = pTmpCursor->End()->nNode.GetIndex();
+        const SwNodeOffset nSttNd = pTmpCursor->Start()->GetNodeIndex();
+        const SwNodeOffset nEndNd = pTmpCursor->End()->GetNodeIndex();
 
         if( nEndNd - nSttNd >= SwNodeOffset(nMaxLookup) )
         {
@@ -2853,7 +2853,7 @@ SwXTextCursor::sort(const uno::Sequence< beans::PropertyValue >& rDescriptor)
     SwPosition & rEnd   = *rUnoCursor.End();
 
     SwNodeIndex aPrevIdx( rStart.nNode, -1 );
-    const SwNodeOffset nOffset = rEnd.nNode.GetIndex() - rStart.nNode.GetIndex();
+    const SwNodeOffset nOffset = rEnd.GetNodeIndex() - rStart.GetNodeIndex();
     const sal_Int32 nCntStt  = rStart.nContent.GetIndex();
 
     rUnoCursor.GetDoc().SortText(rUnoCursor, aSortOpt);

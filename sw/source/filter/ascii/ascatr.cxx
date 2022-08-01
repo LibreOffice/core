@@ -191,8 +191,8 @@ public:
             return false;
         }
         SwRangeRedline const*const pRedline(m_rIDRA.GetRedlineTable()[m_nextRedline]);
-        return pRedline->Start()->nNode.GetIndex() < m_rNode.GetIndex()
-            && m_rNode.GetIndex() < pRedline->End()->nNode.GetIndex();
+        return pRedline->Start()->GetNodeIndex() < m_rNode.GetIndex()
+            && m_rNode.GetIndex() < pRedline->End()->GetNodeIndex();
     }
 
     std::pair<sal_Int32, sal_Int32> GetNextRedlineSkip()
@@ -207,14 +207,14 @@ public:
                 continue;
             }
             auto [pStart, pEnd] = pRedline->StartEnd(); // SwPosition*
-            if (m_rNode.GetIndex() < pStart->nNode.GetIndex())
+            if (m_rNode.GetIndex() < pStart->GetNodeIndex())
             {
                 m_nextRedline = SwRedlineTable::npos;
                 break; // done
             }
             if (nRedlineStart == COMPLETE_STRING)
             {
-                nRedlineStart = pStart->nNode.GetIndex() == m_rNode.GetIndex()
+                nRedlineStart = pStart->GetNodeIndex() == m_rNode.GetIndex()
                         ? pStart->nContent.GetIndex()
                         : 0;
             }
@@ -226,7 +226,7 @@ public:
                     break; // no increment, revisit it next call
                 }
             }
-            nRedlineEnd = pEnd->nNode.GetIndex() == m_rNode.GetIndex()
+            nRedlineEnd = pEnd->GetNodeIndex() == m_rNode.GetIndex()
                     ? pEnd->nContent.GetIndex()
                     : COMPLETE_STRING;
         }

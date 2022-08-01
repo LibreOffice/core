@@ -574,7 +574,7 @@ void SwXMLImport::startDocument()
 
             // Split once and remember the node that has been split.
             pDoc->getIDocumentContentOperations().SplitNode( *pPos, false );
-            *m_pSttNdIdx = pPos->nNode.GetIndex()-1;
+            *m_pSttNdIdx = pPos->GetNodeIndex()-1;
 
             // Split again.
             pDoc->getIDocumentContentOperations().SplitNode( *pPos, false );
@@ -666,14 +666,14 @@ void SwXMLImport::endDocument()
 #if OSL_DEBUG_LEVEL > 0
                 // !!! This should be impossible !!!!
                 OSL_ENSURE( m_pSttNdIdx->GetIndex()+1 !=
-                                        pPaM->GetBound().nNode.GetIndex(),
+                                        pPaM->GetBound().GetNodeIndex(),
                         "PaM.Bound1 point to new node " );
                 OSL_ENSURE( m_pSttNdIdx->GetIndex()+1 !=
-                                        pPaM->GetBound( false ).nNode.GetIndex(),
+                                        pPaM->GetBound( false ).GetNodeIndex(),
                         "PaM.Bound2 points to new node" );
 
                 if( m_pSttNdIdx->GetIndex()+1 ==
-                                        pPaM->GetBound().nNode.GetIndex() )
+                                        pPaM->GetBound().GetNodeIndex() )
                 {
                     const sal_Int32 nCntPos =
                             pPaM->GetBound().nContent.GetIndex();
@@ -681,7 +681,7 @@ void SwXMLImport::endDocument()
                             pTextNode->GetText().getLength() + nCntPos );
                 }
                 if( m_pSttNdIdx->GetIndex()+1 ==
-                                pPaM->GetBound( false ).nNode.GetIndex() )
+                                pPaM->GetBound( false ).GetNodeIndex() )
                 {
                     const sal_Int32 nCntPos =
                             pPaM->GetBound( false ).nContent.GetIndex();
@@ -715,7 +715,7 @@ void SwXMLImport::endDocument()
         if( !pPos->nContent.GetIndex() )
         {
             SwTextNode* pCurrNd;
-            SwNodeOffset nNodeIdx = pPos->nNode.GetIndex();
+            SwNodeOffset nNodeIdx = pPos->GetNodeIndex();
             pDoc = &pPaM->GetDoc();
 
             OSL_ENSURE( pPos->GetNode().IsContentNode(),

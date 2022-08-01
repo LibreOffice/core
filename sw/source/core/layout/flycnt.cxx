@@ -1386,7 +1386,7 @@ void SwFlyAtContentFrame::SetAbsPos( const Point &rNew )
             SwCursorMoveState eTmpState( CursorMoveState::SetOnlyText );
             Point aPt( rNew );
             if( pCnt->GetModelPositionForViewPoint( &pos, aPt, &eTmpState )
-                && FrameContainsNode(*pTextFrame, pos.nNode.GetIndex()))
+                && FrameContainsNode(*pTextFrame, pos.GetNodeIndex()))
             {
                 const SwTextAttr *const pTextInputField =
                     pos.GetNode().GetTextNode()->GetTextAttrAt(

@@ -559,7 +559,7 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf92623, "tdf92623.odt", "10-testing-addresses
     // and it's a TEXT_FIELDMARK
     CPPUNIT_ASSERT_EQUAL( sal_Int32(IDocumentMarkAccess::MarkType::TEXT_FIELDMARK),
                             sal_Int32(IDocumentMarkAccess::GetType( **mark )) );
-    SwNodeOffset src_pos = (*mark)->GetMarkPos().nNode.GetIndex();
+    SwNodeOffset src_pos = (*mark)->GetMarkPos().GetNodeIndex();
 
     // Get the size of the document in nodes
     SwDoc *doc = pTextDoc->GetDocShell()->GetDoc();
@@ -583,7 +583,7 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf92623, "tdf92623.odt", "10-testing-addresses
         IDocumentMarkAccess::MarkType markType = IDocumentMarkAccess::GetType( **mark );
         if( markType == IDocumentMarkAccess::MarkType::TEXT_FIELDMARK )
         {
-            SwNodeOffset pos = (*mark)->GetMarkPos().nNode.GetIndex() - src_pos;
+            SwNodeOffset pos = (*mark)->GetMarkPos().GetNodeIndex() - src_pos;
             CPPUNIT_ASSERT_EQUAL(SwNodeOffset(0), pos % size);
             CPPUNIT_ASSERT(pages.insert(pos).second);
             countFieldMarks++;

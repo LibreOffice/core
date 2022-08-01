@@ -234,7 +234,7 @@ void SwDoc::RstTextAttrs(const SwPaM &rRg, bool bInclRefToxMark,
             pStt, pEnd, pHst, nullptr, pLayout );
     aPara.bInclRefToxMark = bInclRefToxMark;
     aPara.bExactRange = bExactRange;
-    GetNodes().ForEach( pStt->nNode.GetIndex(), pEnd->nNode.GetIndex()+1,
+    GetNodes().ForEach( pStt->GetNodeIndex(), pEnd->GetNodeIndex()+1,
                         sw::DocumentContentOperationsManager::lcl_RstTextAttr, &aPara );
     getIDocumentState().SetModified();
 }
@@ -1106,7 +1106,7 @@ bool SwDoc::SetTextFormatColl(const SwPaM &rRg,
     // #i62675#
     aPara.bResetListAttrs = bResetListAttrs;
 
-    GetNodes().ForEach( pStt->nNode.GetIndex(), pEnd->nNode.GetIndex()+1,
+    GetNodes().ForEach( pStt->GetNodeIndex(), pEnd->GetNodeIndex()+1,
                         lcl_SetTextFormatColl, &aPara );
     if( !aPara.nWhich )
         bRet = false;           // didn't find a valid Node

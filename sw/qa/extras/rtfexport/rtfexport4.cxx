@@ -116,11 +116,11 @@ DECLARE_RTFEXPORT_TEST(testAnchoredAtSamePosition, "anchor.fodt")
     sal_Int32 const nIndex(mbExported ? 4 : 3);
     CPPUNIT_ASSERT_EQUAL(RndStdIds::FLY_AT_CHAR, rFlys[0]->GetAnchor().GetAnchorId());
     CPPUNIT_ASSERT_EQUAL(SwNodeOffset(12),
-                         rFlys[0]->GetAnchor().GetContentAnchor()->nNode.GetIndex());
+                         rFlys[0]->GetAnchor().GetContentAnchor()->GetNodeIndex());
     CPPUNIT_ASSERT_EQUAL(nIndex, rFlys[0]->GetAnchor().GetContentAnchor()->nContent.GetIndex());
     CPPUNIT_ASSERT_EQUAL(RndStdIds::FLY_AT_CHAR, rFlys[1]->GetAnchor().GetAnchorId());
     CPPUNIT_ASSERT_EQUAL(SwNodeOffset(12),
-                         rFlys[1]->GetAnchor().GetContentAnchor()->nNode.GetIndex());
+                         rFlys[1]->GetAnchor().GetContentAnchor()->GetNodeIndex());
     CPPUNIT_ASSERT_EQUAL(nIndex, rFlys[1]->GetAnchor().GetContentAnchor()->nContent.GetIndex());
 }
 

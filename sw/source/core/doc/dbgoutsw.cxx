@@ -317,7 +317,7 @@ static OUString lcl_dbg_out(const SwPosition & rPos)
 {
     OUString aStr =
         "( " +
-        OUString::number(sal_Int32(rPos.nNode.GetIndex())) +
+        OUString::number(sal_Int32(rPos.GetNodeIndex())) +
         ", " +
         OUString::number(rPos.nContent.GetIndex()) +
         ": " +

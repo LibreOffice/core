@@ -275,7 +275,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
                     getIDocumentContentOperations().SplitNode( *pEndPos, false );
 
                     SwTextNode* pTNd;
-                    if( pEndPos->nNode.GetIndex() == pSttPos->nNode.GetIndex() )
+                    if( pEndPos->GetNodeIndex() == pSttPos->GetNodeIndex() )
                     {
                         --pSttPos->nNode;
                         --pEndPos->nNode;
@@ -408,11 +408,11 @@ sal_uInt16 SwDoc::IsInsRegionAvailable( const SwPaM& rRange,
             // located at the Section's beginning and End at it's end
             nRet = 0;
             if( !pStt->nContent.GetIndex()
-                && pSectNd->GetIndex() == pStt->nNode.GetIndex() - 1
+                && pSectNd->GetIndex() == pStt->GetNodeIndex() - 1
                 && pEnd->nContent.GetIndex() == pCNd->Len() )
             {
                 SwNodeIndex aIdx( pStt->nNode, -1 );
-                SwNodeOffset nCmp = pEnd->nNode.GetIndex();
+                SwNodeOffset nCmp = pEnd->GetNodeIndex();
                 const SwStartNode* pPrvNd;
                 const SwEndNode* pNxtNd;
                 while( nullptr != ( pPrvNd = (pNd = &aIdx.GetNode())->GetSectionNode() ) &&
@@ -425,8 +425,8 @@ sal_uInt16 SwDoc::IsInsRegionAvailable( const SwPaM& rRange,
                     pPrvNd = pNd->IsStartNode() ? static_cast<const SwStartNode*>(pNd)
                                                 : pNd->StartOfSectionNode();
 
-                aIdx = pEnd->nNode.GetIndex() + 1;
-                nCmp = pStt->nNode.GetIndex();
+                aIdx = pEnd->GetNodeIndex() + 1;
+                nCmp = pStt->GetNodeIndex();
                 while( nullptr != ( pNxtNd = (pNd = &aIdx.GetNode())->GetEndNode() ) &&
                     pNxtNd->StartOfSectionNode()->IsSectionNode() &&
                     ( pNxtNd->StartOfSectionIndex() >= nCmp ||

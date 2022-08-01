@@ -48,7 +48,7 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc& rDoc, SwPosition& rPos,
     assert(pTextNd);
     sal_Int32 const nTextNdLen = pTextNd->GetText().getLength();
 
-    m_nStartNode = rPos.nNode.GetIndex();
+    m_nStartNode = rPos.GetNodeIndex();
     m_nStartContent = rPos.nContent.GetIndex();
 
     if( !rDoc.getIDocumentRedlineAccess().IsIgnoreRedline() && !rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty() )

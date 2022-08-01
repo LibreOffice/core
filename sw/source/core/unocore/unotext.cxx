@@ -1714,8 +1714,8 @@ SwXText::convertToTextFrame(
         const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
         if ( !isGraphicNode(pFrameFormat) &&
                 (RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId() || RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId()) &&
-                pStartPam->Start()->nNode.GetIndex() <= rAnchor.GetContentAnchor()->nNode.GetIndex() &&
-                pStartPam->End()->nNode.GetIndex() >= rAnchor.GetContentAnchor()->nNode.GetIndex())
+                pStartPam->Start()->GetNodeIndex() <= rAnchor.GetContentAnchor()->GetNodeIndex() &&
+                pStartPam->End()->GetNodeIndex() >= rAnchor.GetContentAnchor()->GetNodeIndex())
         {
             if (pFrameFormat->GetName().isEmpty())
             {
@@ -1945,7 +1945,7 @@ void SwXText::Impl::ConvertCell(
         // we must reach zero at the end and must not go below zero
         tools::Long nOpenNodeBlock = 0;
         SwNodeIndex aCellIndex = aStartCellPam.Start()->nNode;
-        while (aCellIndex < aEndCellPam.End()->nNode.GetIndex())
+        while (aCellIndex < aEndCellPam.End()->GetNodeIndex())
         {
             if (aCellIndex.GetNode().IsStartNode())
             {
@@ -1985,7 +1985,7 @@ void SwXText::Impl::ConvertCell(
     {
         // check the predecessor
         const SwNodeOffset nStartCellNodeIndex =
-            aStartCellPam.Start()->nNode.GetIndex();
+            aStartCellPam.Start()->GetNodeIndex();
         const SwNodeOffset nLastNodeEndIndex = pLastCell->aEnd.GetIndex();
         if (nLastNodeEndIndex == nStartCellNodeIndex)
         {
@@ -1996,7 +1996,7 @@ void SwXText::Impl::ConvertCell(
             }
 
             m_pDoc->getIDocumentContentOperations().SplitNode(*aStartCellPam.Start(), false);
-            SwNodeOffset const nNewIndex(aStartCellPam.Start()->nNode.GetIndex());
+            SwNodeOffset const nNewIndex(aStartCellPam.Start()->GetNodeIndex());
             if (nNewIndex != nStartCellNodeIndex)
             {
                 // aStartCellPam now points to the 2nd node

@@ -579,7 +579,7 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
         {
             const SwPosition *pPos = rPam.Start();
             const SwTextNode *pTextNd =
-                rPam.GetDoc().GetNodes()[pPos->nNode.GetIndex()]->GetTextNode();
+                rPam.GetDoc().GetNodes()[pPos->GetNodeIndex()]->GetTextNode();
             const SwTextAttr* pTextAttr = pTextNd
                 ? pTextNd->GetFieldTextAttrAt( pPos->nContent.GetIndex(), true )
                 : nullptr;
