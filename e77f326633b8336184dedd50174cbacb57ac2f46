@@ -33,6 +33,24 @@
       "message": "index incrementation should be after if.\nNot sure if range based loop is the best choice here. Consider using find_if and distance.",
       "revId": "e77f326633b8336184dedd50174cbacb57ac2f46",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd4cc85e_2ff40718",
+        "filename": "xmlsecurity/source/helper/xsecctl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1003640
+      },
+      "writtenOn": "2022-08-01T15:28:28Z",
+      "side": 1,
+      "message": "This function finds and returns the index of the matched Signature id. \u0027index\u0027 is keeping count of parsing. It should be incremented irrespective of a match and returned if a valid match is found.\nI will try to implement it using find_if and distance.",
+      "parentUuid": "ad33b707_700c6ad0",
+      "revId": "e77f326633b8336184dedd50174cbacb57ac2f46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
