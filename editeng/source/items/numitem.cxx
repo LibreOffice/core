@@ -589,12 +589,12 @@ void SvxNumberFormat::SetListFormat(std::optional<OUString> oSet)
     sPrefix.clear();
     sSuffix.clear();
 
+    sListFormat = oSet;
+
     if (!oSet.has_value())
     {
         return;
     }
-
-    sListFormat = oSet;
 
     // For backward compatibility and UI we should create something looking like
     // a prefix, suffix and included levels also. This is not possible in general case
