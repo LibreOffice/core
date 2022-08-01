@@ -1798,7 +1798,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                             const SwPosition* pPosition = rAnch.GetContentAnchor();
                             if ( pPosition && pDoc->IsInHeaderFooter( pPosition->nNode ) )
                             {
-                                const SwTextNode* pTNd = pPosition->nNode.GetNode().GetTextNode();
+                                const SwTextNode* pTNd = pPosition->GetNode().GetTextNode();
                                 if ( pTNd )
                                     MakeHeaderFooterLinks( *pPDFExtOutDevData, *pTNd, aLinkRect, nDestId, aURL, bIntern );
                             }

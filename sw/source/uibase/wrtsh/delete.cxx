@@ -492,7 +492,7 @@ bool SwWrtShell::DelRight(bool const isReplaceHeuristic)
 
             if (pAnchor)
             {
-                SwTextNode* pTextNode = pAnchor->nNode.GetNode().GetTextNode();
+                SwTextNode* pTextNode = pAnchor->GetNode().GetTextNode();
                 if (pTextNode)
                 {
                     const SwTextField* pField(

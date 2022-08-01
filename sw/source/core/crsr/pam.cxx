@@ -75,17 +75,17 @@ SwPosition::SwPosition( const SwNodeIndex & rNodeIndex, SwNodeOffset nDiff, cons
 }
 
 SwPosition::SwPosition( const SwNodeIndex & rNodeIndex, SwNodeOffset nDiff )
-    : nNode( rNodeIndex, nDiff ), nContent( nNode.GetNode().GetContentNode() )
+    : nNode( rNodeIndex, nDiff ), nContent( GetNode().GetContentNode() )
 {
 }
 
 SwPosition::SwPosition( const SwNode& rNode, SwNodeOffset nDiff )
-    : nNode( rNode, nDiff ), nContent( nNode.GetNode().GetContentNode() )
+    : nNode( rNode, nDiff ), nContent( GetNode().GetContentNode() )
 {
 }
 
 SwPosition::SwPosition( SwNodes& rNodes, SwNodeOffset nIndex )
-    : nNode( rNodes, nIndex ), nContent( nNode.GetNode().GetContentNode() )
+    : nNode( rNodes, nIndex ), nContent( GetNode().GetContentNode() )
 {
 }
 
@@ -197,7 +197,7 @@ bool SwPosition::operator!=(const SwPosition &rPos) const
 
 SwDoc& SwPosition::GetDoc() const
 {
-    return nNode.GetNode().GetDoc();
+    return GetNode().GetDoc();
 }
 
 void SwPosition::dumpAsXml(xmlTextWriterPtr pWriter) const
@@ -352,7 +352,7 @@ SwContentNode* GoPreviousNds( SwNodeIndex * pIdx, bool bChk )
 SwPaM::SwPaM( const SwPosition& rPos, SwPaM* pRing )
     : Ring( pRing )
     , m_Bound1( rPos )
-    , m_Bound2( rPos.nNode.GetNode().GetNodes() ) // default initialize
+    , m_Bound2( rPos.GetNode().GetNodes() ) // default initialize
     , m_pPoint( &m_Bound1 )
     , m_pMark( m_pPoint )
     , m_bIsInFrontOfLabel( false )
@@ -386,8 +386,8 @@ SwPaM::SwPaM( const SwNodeIndex& rMark, const SwNodeIndex& rPoint,
     {
         m_pPoint->nNode += nPointOffset;
     }
-    m_Bound1.nContent.Assign( m_Bound1.nNode.GetNode().GetContentNode(), 0 );
-    m_Bound2.nContent.Assign( m_Bound2.nNode.GetNode().GetContentNode(), 0 );
+    m_Bound1.nContent.Assign( m_Bound1.GetNode().GetContentNode(), 0 );
+    m_Bound2.nContent.Assign( m_Bound2.GetNode().GetContentNode(), 0 );
 }
 
 SwPaM::SwPaM( const SwNode& rMark, const SwNode& rPoint,
@@ -407,8 +407,8 @@ SwPaM::SwPaM( const SwNode& rMark, const SwNode& rPoint,
     {
         m_pPoint->nNode += nPointOffset;
     }
-    m_Bound1.nContent.Assign( m_Bound1.nNode.GetNode().GetContentNode(), 0 );
-    m_Bound2.nContent.Assign( m_Bound2.nNode.GetNode().GetContentNode(), 0 );
+    m_Bound1.nContent.Assign( m_Bound1.GetNode().GetContentNode(), 0 );
+    m_Bound2.nContent.Assign( m_Bound2.GetNode().GetContentNode(), 0 );
 }
 
 SwPaM::SwPaM( const SwNodeIndex& rMark, sal_Int32 nMarkContent,
@@ -433,21 +433,21 @@ SwPaM::SwPaM( const SwNode& rMark, sal_Int32 nMarkContent,
     , m_pMark( &m_Bound1 )
     , m_bIsInFrontOfLabel( false )
 {
-    m_pPoint->nContent.Assign( m_pPoint->nNode.GetNode().GetContentNode(),
+    m_pPoint->nContent.Assign( m_pPoint->GetNode().GetContentNode(),
         nPointContent);
-    m_pMark ->nContent.Assign( m_pMark ->nNode.GetNode().GetContentNode(),
+    m_pMark ->nContent.Assign( m_pMark ->GetNode().GetContentNode(),
         nMarkContent );
 }
 
 SwPaM::SwPaM( const SwNode& rNode, sal_Int32 nContent, SwPaM* pRing )
     : Ring( pRing )
     , m_Bound1( rNode )
-    , m_Bound2( m_Bound1.nNode.GetNode().GetNodes() ) // default initialize
+    , m_Bound2( m_Bound1.GetNode().GetNodes() ) // default initialize
     , m_pPoint( &m_Bound1 )
     , m_pMark( &m_Bound1 )
     , m_bIsInFrontOfLabel( false )
 {
-    m_pPoint->nContent.Assign( m_pPoint->nNode.GetNode().GetContentNode(),
+    m_pPoint->nContent.Assign( m_pPoint->GetNode().GetContentNode(),
         nContent );
 }
 
@@ -579,7 +579,7 @@ sal_uInt16 SwPaM::GetPageNum( bool bAtPoint, const Point* pLayPos )
         tmp.first = *pLayPos;
         tmp.second = false;
     }
-    if( nullptr != ( pNd = pPos->nNode.GetNode().GetContentNode() ) &&
+    if( nullptr != ( pNd = pPos->GetNode().GetContentNode() ) &&
         nullptr != (pCFrame = pNd->getLayoutFrame(pNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(), pPos, pLayPos ? &tmp : nullptr)) &&
         nullptr != ( pPg = pCFrame->FindPageFrame() ))
         return pPg->GetPhyPageNum();
@@ -616,7 +616,7 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
 {
     bool bRet = false;
 
-    const SwContentNode* pNd = GetPoint()->nNode.GetNode().GetContentNode();
+    const SwContentNode* pNd = GetPoint()->GetNode().GetContentNode();
     const SwContentFrame *pFrame = nullptr;
     if ( pNd != nullptr )
     {
@@ -662,7 +662,7 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
          && HasMark()
          && GetPoint()->nNode != GetMark()->nNode )
     {
-        pNd = GetMark()->nNode.GetNode().GetContentNode();
+        pNd = GetMark()->GetNode().GetContentNode();
         pFrame = nullptr;
         if ( pNd != nullptr )
         {
@@ -834,7 +834,7 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
     {
         // See if we're inside a read-only content control.
         const SwPosition* pStart = Start();
-        SwTextNode* pTextNode = pStart->nNode.GetNode().GetTextNode();
+        SwTextNode* pTextNode = pStart->GetNode().GetTextNode();
         if (pTextNode)
         {
             sal_Int32 nIndex = pStart->nContent.GetIndex();
@@ -903,7 +903,7 @@ SwContentNode* GetNode( SwPaM & rPam, bool& rbFirst, SwMoveFnCollection const & 
             // go to next/previous ContentNode
             while( true )
             {
-                if (i_pLayout && aPos.nNode.GetNode().IsTextNode())
+                if (i_pLayout && aPos.GetNode().IsTextNode())
                 {
                     auto const fal(sw::GetFirstAndLastNode(*pLayout, aPos.nNode));
                     aPos.nNode = bSrchForward ? *fal.second : *fal.first;
@@ -970,7 +970,7 @@ void GoStartSection( SwPosition * pPos )
     do { SwNodes::GoStartOfSection( &pPos->nNode ); } while( nLevel-- );
 
     // already on a ContentNode
-    pPos->nNode.GetNode().GetContentNode()->MakeStartIndex( &pPos->nContent );
+    pPos->GetNode().GetContentNode()->MakeStartIndex( &pPos->nContent );
 }
 
 /// go to the end of the current base section
@@ -985,7 +985,7 @@ void GoEndSection( SwPosition * pPos )
 
     // now on an EndNode, thus to the previous ContentNode
     if( GoPreviousNds( &pPos->nNode, true ) )
-        pPos->nNode.GetNode().GetContentNode()->MakeEndIndex( &pPos->nContent );
+        pPos->GetNode().GetContentNode()->MakeEndIndex( &pPos->nContent );
 }
 
 bool GoInDoc( SwPaM & rPam, SwMoveFnCollection const & fnMove )
@@ -1011,7 +1011,7 @@ bool GoInNode( SwPaM & rPam, SwMoveFnCollection const & fnMove )
 
 bool GoInContent( SwPaM & rPam, SwMoveFnCollection const & fnMove )
 {
-    if( (*fnMove.fnNd)( &rPam.GetPoint()->nNode.GetNode(),
+    if( (*fnMove.fnNd)( &rPam.GetPoint()->GetNode(),
                         &rPam.GetPoint()->nContent, SwCursorSkipMode::Chars ))
         return true;
     return GoInNode( rPam, fnMove );
@@ -1019,7 +1019,7 @@ bool GoInContent( SwPaM & rPam, SwMoveFnCollection const & fnMove )
 
 bool GoInContentCells( SwPaM & rPam, SwMoveFnCollection const & fnMove )
 {
-    if( (*fnMove.fnNd)( &rPam.GetPoint()->nNode.GetNode(),
+    if( (*fnMove.fnNd)( &rPam.GetPoint()->GetNode(),
                          &rPam.GetPoint()->nContent, SwCursorSkipMode::Cells ))
         return true;
     return GoInNode( rPam, fnMove );
@@ -1027,7 +1027,7 @@ bool GoInContentCells( SwPaM & rPam, SwMoveFnCollection const & fnMove )
 
 bool GoInContentSkipHidden( SwPaM & rPam, SwMoveFnCollection const & fnMove )
 {
-    if( (*fnMove.fnNd)( &rPam.GetPoint()->nNode.GetNode(),
+    if( (*fnMove.fnNd)( &rPam.GetPoint()->GetNode(),
                         &rPam.GetPoint()->nContent, SwCursorSkipMode::Chars | SwCursorSkipMode::Hidden ) )
         return true;
     return GoInNode( rPam, fnMove );
@@ -1035,7 +1035,7 @@ bool GoInContentSkipHidden( SwPaM & rPam, SwMoveFnCollection const & fnMove )
 
 bool GoInContentCellsSkipHidden( SwPaM & rPam, SwMoveFnCollection const & fnMove )
 {
-    if( (*fnMove.fnNd)( &rPam.GetPoint()->nNode.GetNode(),
+    if( (*fnMove.fnNd)( &rPam.GetPoint()->GetNode(),
                          &rPam.GetPoint()->nContent, SwCursorSkipMode::Cells | SwCursorSkipMode::Hidden ) )
         return true;
     return GoInNode( rPam, fnMove );
@@ -1047,7 +1047,7 @@ bool GoPrevPara( SwPaM & rPam, SwMoveFnCollection const & aPosPara )
     {
         // always on a ContentNode
         SwPosition& rPos = *rPam.GetPoint();
-        SwContentNode * pNd = rPos.nNode.GetNode().GetContentNode();
+        SwContentNode * pNd = rPos.GetNode().GetContentNode();
         rPos.nContent.Assign( pNd,
                             ::GetSttOrEnd( &aPosPara == &fnMoveForward, *pNd ) );
         return true;
@@ -1058,7 +1058,7 @@ bool GoPrevPara( SwPaM & rPam, SwMoveFnCollection const & aPosPara )
 bool GoCurrPara( SwPaM & rPam, SwMoveFnCollection const & aPosPara )
 {
     SwPosition& rPos = *rPam.GetPoint();
-    SwContentNode * pNd = rPos.nNode.GetNode().GetContentNode();
+    SwContentNode * pNd = rPos.GetNode().GetContentNode();
     if( pNd )
     {
         const sal_Int32 nOld = rPos.nContent.GetIndex();
@@ -1089,7 +1089,7 @@ bool GoNextPara( SwPaM & rPam, SwMoveFnCollection const & aPosPara )
     {
         // always on a ContentNode
         SwPosition& rPos = *rPam.GetPoint();
-        SwContentNode * pNd = rPos.nNode.GetNode().GetContentNode();
+        SwContentNode * pNd = rPos.GetNode().GetContentNode();
         rPos.nContent.Assign( pNd,
                         ::GetSttOrEnd( &aPosPara == &fnMoveForward, *pNd ) );
         return true;
@@ -1103,7 +1103,7 @@ bool GoCurrSection( SwPaM & rPam, SwMoveFnCollection const & fnMove )
     SwPosition aSavePos( rPos ); // position for comparison
     (fnMove.fnSection)( &rPos.nNode );
     SwContentNode *pNd;
-    if( nullptr == ( pNd = rPos.nNode.GetNode().GetContentNode()) &&
+    if( nullptr == ( pNd = rPos.GetNode().GetContentNode()) &&
         nullptr == ( pNd = (*fnMove.fnNds)( &rPos.nNode, true )) )
     {
         rPos = aSavePos; // do not change cursor

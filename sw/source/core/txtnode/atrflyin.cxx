@@ -144,7 +144,7 @@ void SwTextFlyCnt::SetAnchor( const SwTextNode *pNode )
     SwFrameFormat* pFormat = GetFlyCnt().GetFrameFormat();
     SwFormatAnchor aAnchor( pFormat->GetAnchor() );
     SwNode *const pOldNode(aAnchor.GetContentAnchor()
-            ? &aAnchor.GetContentAnchor()->nNode.GetNode()
+            ? &aAnchor.GetContentAnchor()->GetNode()
             : nullptr);
 
     if (!pOldNode || !pOldNode->GetNodes().IsDocNodes() ||
@@ -188,7 +188,7 @@ void SwTextFlyCnt::SetAnchor( const SwTextNode *pNode )
         // tdf#91228 must notify the anchor nodes despite LockModify
         assert(pOldNode);
         pOldNode->RemoveAnchoredFly(pFormat);
-        aPos.nNode.GetNode().AddAnchoredFly(pFormat);
+        aPos.GetNode().AddAnchoredFly(pFormat);
         pFormat->UnlockModify();
     }
     else
@@ -229,7 +229,7 @@ void SwTextFlyCnt::SetAnchor( const SwTextNode *pNode )
             if (bIsInSplitNode)
             {
                 pOldNode->RemoveAnchoredFly(pTextBox);
-                aPos.nNode.GetNode().AddAnchoredFly(pTextBox);
+                aPos.GetNode().AddAnchoredFly(pTextBox);
                 pTextBox->UnlockModify();
             }
             else

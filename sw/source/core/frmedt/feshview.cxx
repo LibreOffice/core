@@ -1910,10 +1910,10 @@ bool SwFEShell::ImpEndCreate()
         GetLayout()->GetModelPositionForViewPoint( &aPos, aPoint, &aState );
 
         // characterbinding not allowed in readonly-content
-        if( !aPos.nNode.GetNode().IsProtect() )
+        if( !aPos.GetNode().IsProtect() )
         {
             std::pair<Point, bool> const tmp(aPoint, true);
-            pAnch = aPos.nNode.GetNode().GetContentNode()->getLayoutFrame(GetLayout(), &aPos, &tmp);
+            pAnch = aPos.GetNode().GetContentNode()->getLayoutFrame(GetLayout(), &aPos, &tmp);
             SwRect aTmp;
             pAnch->GetCharRect( aTmp, aPos );
 
@@ -1958,14 +1958,14 @@ bool SwFEShell::ImpEndCreate()
         GetLayout()->GetModelPositionForViewPoint( &aPos, aPoint, &aState );
 
         // do not set in ReadnOnly-content
-        if (aPos.nNode.GetNode().IsProtect())
+        if (aPos.GetNode().IsProtect())
         {
             // then only page bound. Or should we
             // search the next not-readonly position?
             bAtPage = true;
         }
 
-        SwContentNode* pCNode = aPos.nNode.GetNode().GetContentNode();
+        SwContentNode* pCNode = aPos.GetNode().GetContentNode();
         std::pair<Point, bool> const tmp(aPoint, false);
         pAnch = pCNode ? pCNode->getLayoutFrame(GetLayout(), nullptr, &tmp) : nullptr;
         if (!pAnch)
@@ -2014,7 +2014,7 @@ bool SwFEShell::ImpEndCreate()
             }
 
             // do not set in ReadnOnly-content
-            if( aPos.nNode.GetNode().IsProtect() )
+            if( aPos.GetNode().IsProtect() )
                 // then only page bound. Or should we
                 // search the next not-readonly position?
                 bAtPage = true;
@@ -2178,7 +2178,7 @@ bool SwFEShell::ImpEndCreate()
         if( bCharBound )
         {
             OSL_ENSURE( aAnch.GetAnchorId() == RndStdIds::FLY_AS_CHAR, "wrong AnchorType" );
-            SwTextNode *pNd = aAnch.GetContentAnchor()->nNode.GetNode().GetTextNode();
+            SwTextNode *pNd = aAnch.GetContentAnchor()->GetNode().GetTextNode();
             SwFormatFlyCnt aFormat( pFormat );
             pNd->InsertItem(aFormat,
                             aAnch.GetContentAnchor()->nContent.GetIndex(), 0 );

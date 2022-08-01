@@ -1193,13 +1193,13 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                     ++aIter;
                     continue;
                 }
-                if( pPos->nNode.GetNode().GetTextNode() )
+                if( pPos->GetNode().GetTextNode() )
                 {
                     int nIndex = pPos->nContent.GetIndex();
                     bool bMarked = false;
                     if( pCursor != nullptr )
                     {
-                        const SwTextNode* pNode = pPos->nNode.GetNode().GetTextNode();
+                        const SwTextNode* pNode = pPos->GetNode().GetTextNode();
                         SwTextFrame const*const pFrame(static_cast<SwTextFrame*>(pNode->getLayoutFrame(pVSh->GetLayout())));
                         SwNodeOffset nFirstNode(pFrame->GetTextNodeFirst()->GetIndex());
                         SwNodeOffset nLastNode;
@@ -3274,8 +3274,8 @@ std::unique_ptr<SwAccessibleSelectedParas_Impl> SwAccessibleMap::BuildSelectedPa
         // for a selection the cursor has to have a mark.
         // for safety reasons assure that point and mark are in text nodes
         if ( pCursor->HasMark() &&
-             pCursor->GetPoint()->nNode.GetNode().IsTextNode() &&
-             pCursor->GetMark()->nNode.GetNode().IsTextNode() )
+             pCursor->GetPoint()->GetNode().IsTextNode() &&
+             pCursor->GetMark()->GetNode().IsTextNode() )
         {
             auto [pStartPos, pEndPos] = pCursor->StartEnd(); // SwPosition*
             // loop on all text nodes inside the selection

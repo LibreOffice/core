@@ -2141,7 +2141,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf121509)
     bool bFlyInFlyFound = false;
     for (auto secondformat : *pSecondFormats)
     {
-        auto& pNd = secondformat->GetAnchor().GetContentAnchor()->nNode.GetNode();
+        auto& pNd = secondformat->GetAnchor().GetContentAnchor()->GetNode();
         if (pNd.FindFlyStartNode())
         {
             // So there is a fly inside another -> problem.

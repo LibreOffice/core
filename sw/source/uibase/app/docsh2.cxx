@@ -1312,7 +1312,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     if ( pRedline->GetType() == RedlineType::Delete )
                     {
                         SwTableNode* pTableNd =
-                            pRedline->GetPoint()->nNode.GetNode().FindTableNode();
+                            pRedline->GetPoint()->GetNode().FindTableNode();
                         if ( pTableNd && pTableNd !=
                                 pOldTableNd && pTableNd->GetTable().HasDeletedRow() )
                         {

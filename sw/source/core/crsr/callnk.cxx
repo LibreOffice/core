@@ -38,7 +38,7 @@ SwCallLink::SwCallLink( SwCursorShell & rSh )
 {
     // remember SPoint-values of current cursor
     SwPaM* pCursor = m_rShell.IsTableMode() ? m_rShell.GetTableCrs() : m_rShell.GetCursor();
-    SwNode& rNd = pCursor->GetPoint()->nNode.GetNode();
+    SwNode& rNd = pCursor->GetPoint()->GetNode();
     m_nNode = rNd.GetIndex();
     m_nContent = pCursor->GetPoint()->nContent.GetIndex();
     m_nNodeType = rNd.GetNodeType();

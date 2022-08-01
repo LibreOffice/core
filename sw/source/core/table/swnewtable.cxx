@@ -331,8 +331,8 @@ std::unique_ptr<SwBoxSelection> SwTable::CollectBoxSelection( const SwPaM& rPam 
     OSL_ENSURE( m_bNewModel, "Don't call me for old tables" );
     if( m_aLines.empty() )
         return nullptr;
-    const SwNode* pStartNd = rPam.Start()->nNode.GetNode().FindTableBoxStartNode();
-    const SwNode* pEndNd = rPam.End()->nNode.GetNode().FindTableBoxStartNode();
+    const SwNode* pStartNd = rPam.Start()->GetNode().FindTableBoxStartNode();
+    const SwNode* pEndNd = rPam.End()->GetNode().FindTableBoxStartNode();
     if( !pStartNd || !pEndNd || pStartNd == pEndNd )
         return nullptr;
 
@@ -1675,8 +1675,8 @@ void SwTable::CreateSelection(  const SwPaM& rPam, SwSelBoxes& rBoxes,
     OSL_ENSURE( m_bNewModel, "Don't call me for old tables" );
     if( m_aLines.empty() )
         return;
-    const SwNode* pStartNd = rPam.GetPoint()->nNode.GetNode().FindTableBoxStartNode();
-    const SwNode* pEndNd = rPam.GetMark()->nNode.GetNode().FindTableBoxStartNode();
+    const SwNode* pStartNd = rPam.GetPoint()->GetNode().FindTableBoxStartNode();
+    const SwNode* pEndNd = rPam.GetMark()->GetNode().FindTableBoxStartNode();
     if( !pStartNd || !pEndNd )
         return;
     CreateSelection( pStartNd, pEndNd, rBoxes, eSearch, bChkProtected );

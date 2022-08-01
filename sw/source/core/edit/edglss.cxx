@@ -230,12 +230,12 @@ bool SwEditShell::CopySelToDoc( SwDoc& rInsDoc )
                         // the first cell as well.
                         // tdf#133982 tables can be nested
                         while (SwTableNode const* pTableNode =
-                            aPaM.Start()->nNode.GetNode().StartOfSectionNode()->FindTableNode())
+                            aPaM.Start()->GetNode().StartOfSectionNode()->FindTableNode())
                         {
                             aPaM.Start()->nNode = *pTableNode;
                         }
                         while (SwSectionNode const* pSectionNode =
-                            aPaM.Start()->nNode.GetNode().StartOfSectionNode()->FindSectionNode())
+                            aPaM.Start()->GetNode().StartOfSectionNode()->FindSectionNode())
                         {
                             aPaM.Start()->nNode = *pSectionNode;
                         }

@@ -126,7 +126,7 @@ ErrCode SwASCWriter::WriteStream()
               (m_pCurrentPam->GetPoint()->nNode.GetIndex() == m_pCurrentPam->GetMark()->nNode.GetIndex() &&
                m_pCurrentPam->GetPoint()->nContent.GetIndex() <= m_pCurrentPam->GetMark()->nContent.GetIndex()) )
         {
-            SwTextNode* pNd = m_pCurrentPam->GetPoint()->nNode.GetNode().GetTextNode();
+            SwTextNode* pNd = m_pCurrentPam->GetPoint()->GetNode().GetTextNode();
             if( pNd )
             {
                 // Should we have frames only?

@@ -282,7 +282,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testPictureContentControlKeyboard)
     const SwFrameFormat* pFlyFormat = pWrtShell->GetFlyFrameFormat();
     const SwFormatAnchor& rFormatAnchor = pFlyFormat->GetAnchor();
     const SwPosition* pAnchorPos = rFormatAnchor.GetContentAnchor();
-    SwTextNode* pTextNode = pAnchorPos->nNode.GetNode().GetTextNode();
+    SwTextNode* pTextNode = pAnchorPos->GetNode().GetTextNode();
     SwTextAttr* pAttr = pTextNode->GetTextAttrAt(pAnchorPos->nContent.GetIndex(),
                                                  RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT);
     auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);

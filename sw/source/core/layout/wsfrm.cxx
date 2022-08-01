@@ -4484,7 +4484,7 @@ static void UnHideRedlines(SwRootFrame & rLayout,
             // be created in UI but by import filters...
             if (pRedline
                 && pRedline->GetType() == RedlineType::Delete
-                && &pRedline->Start()->nNode.GetNode() == &rNode)
+                && &pRedline->Start()->GetNode() == &rNode)
             {
                 for (SwNodeOffset j = rNode.GetIndex(); j <= rNode.EndOfSectionIndex(); ++j)
                 {

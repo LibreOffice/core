@@ -718,7 +718,7 @@ void SwXMLImport::endDocument()
             SwNodeOffset nNodeIdx = pPos->nNode.GetIndex();
             pDoc = &pPaM->GetDoc();
 
-            OSL_ENSURE( pPos->nNode.GetNode().IsContentNode(),
+            OSL_ENSURE( pPos->GetNode().IsContentNode(),
                         "insert position is not a content node" );
             if( !IsInsertMode() )
             {
@@ -744,7 +744,7 @@ void SwXMLImport::endDocument()
                 // the next and the previous one.
                 if( pCurrNd->CanJoinNext( &pPos->nNode ))
                 {
-                    SwTextNode* pNextNd = pPos->nNode.GetNode().GetTextNode();
+                    SwTextNode* pNextNd = pPos->GetNode().GetTextNode();
                     bool endNodeFound = pDoc->GetNodes()[nNodeIdx-1]->IsEndNode();
                     SwNode *pLastPar = pDoc->GetNodes()[nNodeIdx -2];
                     if ( !pLastPar->IsTextNode() ) {

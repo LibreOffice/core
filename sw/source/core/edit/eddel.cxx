@@ -100,13 +100,13 @@ void SwEditShell::DeleteSel(SwPaM& rPam, bool const isArtificialSelection, bool 
             // Selection starts at the first para of the first cell, but we
             // want to delete the table node before the first cell as well.
             while (SwTableNode const* pTableNode =
-                pNewPam->Start()->nNode.GetNode().StartOfSectionNode()->FindTableNode())
+                pNewPam->Start()->GetNode().StartOfSectionNode()->FindTableNode())
             {
                 pNewPam->Start()->nNode = *pTableNode;
             }
             // tdf#133990 ensure section is included in SwUndoDelete
             while (SwSectionNode const* pSectionNode =
-                pNewPam->Start()->nNode.GetNode().StartOfSectionNode()->FindSectionNode())
+                pNewPam->Start()->GetNode().StartOfSectionNode()->FindSectionNode())
             {
                 pNewPam->Start()->nNode = *pSectionNode;
             }

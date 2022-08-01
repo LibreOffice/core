@@ -200,7 +200,7 @@ void SwMacrosTest::testBookmarkDeleteAndJoin()
     {
         // problem was that the nContent was pointing at deleted node
         CPPUNIT_ASSERT_EQUAL((*i)->GetMarkStart().nContent.GetContentNode(),
-            static_cast<const SwContentNode*>((*i)->GetMarkStart().nNode.GetNode().GetContentNode()));
+            static_cast<const SwContentNode*>((*i)->GetMarkStart().GetNode().GetContentNode()));
     }
 }
 
@@ -552,10 +552,10 @@ void SwMacrosTest::testFindReplace()
 
     // problem was that after the 2nd Find, the wrong newline was selected
     CPPUNIT_ASSERT_EQUAL(OUString("foo bar"),
-            pPaM->Start()->nNode.GetNode().GetTextNode()->GetText());
+            pPaM->Start()->GetNode().GetTextNode()->GetText());
     pPaM->Move(fnMoveForward, GoInNode);
     CPPUNIT_ASSERT_EQUAL(OUString("baz"),
-            pPaM->End()->nNode.GetNode().GetTextNode()->GetText());
+            pPaM->End()->GetNode().GetTextNode()->GetText());
 }
 
 SwMacrosTest::SwMacrosTest()

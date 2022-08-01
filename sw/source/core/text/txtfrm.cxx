@@ -344,11 +344,11 @@ namespace sw {
     GetParaPropsPos(SwRootFrame const& rLayout, SwPosition const& rPos)
     {
         SwPosition pos(rPos);
-        SwTextNode const*const pNode(pos.nNode.GetNode().GetTextNode());
+        SwTextNode const*const pNode(pos.GetNode().GetTextNode());
         if (pNode)
         {
             pos.nNode = *sw::GetParaPropsNode(rLayout, *pNode);
-            pos.nContent.Assign(pos.nNode.GetNode().GetContentNode(), 0);
+            pos.nContent.Assign(pos.GetNode().GetContentNode(), 0);
         }
         return pos;
     }
@@ -1269,7 +1269,7 @@ TextFrameIndex SwTextFrame::MapModelToView(SwTextNode const*const pNode, sal_Int
 
 TextFrameIndex SwTextFrame::MapModelToViewPos(SwPosition const& rPos) const
 {
-    SwTextNode const*const pNode(rPos.nNode.GetNode().GetTextNode());
+    SwTextNode const*const pNode(rPos.GetNode().GetTextNode());
     sal_Int32 const nIndex(rPos.nContent.GetIndex());
     return MapModelToView(pNode, nIndex);
 }
@@ -1502,7 +1502,7 @@ bool sw_HideObj( const SwTextFrame& _rFrame,
               pIDSA->get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) &&
              _rFrame.IsInDocBody() && !_rFrame.FindNextCnt() )
         {
-            SwTextNode const& rNode(*rAnchorPos.nNode.GetNode().GetTextNode());
+            SwTextNode const& rNode(*rAnchorPos.GetNode().GetTextNode());
             assert(FrameContainsNode(_rFrame, rNode.GetIndex()));
             sal_Int32 const nObjAnchorPos(rAnchorPos.nContent.GetIndex());
             const sal_Unicode cAnchorChar = nObjAnchorPos < rNode.Len()
@@ -1599,7 +1599,7 @@ void SwTextFrame::HideAndShowObjects()
                     sal_Int32 nHiddenEnd;
                     const SwPosition& rAnchor = pContact->GetContentAnchor();
                     SwScriptInfo::GetBoundsOfHiddenRange(
-                        *rAnchor.nNode.GetNode().GetTextNode(),
+                        *rAnchor.GetNode().GetTextNode(),
                         rAnchor.nContent.GetIndex(), nHiddenStart, nHiddenEnd);
                     // Under certain conditions
                     if ( nHiddenStart != COMPLETE_STRING && bShouldBeHidden &&

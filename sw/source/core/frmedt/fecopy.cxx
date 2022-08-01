@@ -339,7 +339,7 @@ bool SwFEShell::CopyDrawSel( SwFEShell& rDestShell, const Point& rSttPt,
                     SwCursorMoveState aState( CursorMoveState::SetOnlyText );
                     GetLayout()->GetModelPositionForViewPoint( &aPos, aPt, &aState );
                     const SwNode *pNd;
-                    if( (pNd = &aPos.nNode.GetNode())->IsNoTextNode() )
+                    if( (pNd = &aPos.GetNode())->IsNoTextNode() )
                         bRet = false;
                     else
                         bRet = ::lcl_SetAnchor( aPos, *pNd, nullptr, rInsPt,
@@ -488,7 +488,7 @@ bool SwFEShell::Copy( SwFEShell& rDestShell, const Point& rSttPt,
                 SwCursorMoveState aState( CursorMoveState::SetOnlyText );
                 GetLayout()->GetModelPositionForViewPoint( &aPos, aPt, &aState );
                 const SwNode *pNd;
-                if( (pNd = &aPos.nNode.GetNode())->IsNoTextNode() )
+                if( (pNd = &aPos.GetNode())->IsNoTextNode() )
                     bRet = false;
                 else
                 {
@@ -585,7 +585,7 @@ bool SwFEShell::Copy( SwFEShell& rDestShell, const Point& rSttPt,
                 pDstPos.reset(new SwPosition( *GetCursor()->GetPoint() ));
                 Point aPt( rInsPt );
                 GetLayout()->GetModelPositionForViewPoint( pDstPos.get(), aPt );
-                if( !pDstPos->nNode.GetNode().IsNoTextNode() )
+                if( !pDstPos->GetNode().IsNoTextNode() )
                     bRet = true;
             }
             else if( !rDestShell.GetCursor()->GetNode().IsNoTextNode() )
@@ -629,7 +629,7 @@ bool SwFEShell::Copy( SwFEShell& rDestShell, const Point& rSttPt,
             SwPosition aPos( *GetCursor()->GetPoint() );
             Point aPt( rInsPt );
             GetLayout()->GetModelPositionForViewPoint( &aPos, aPt );
-            bRet = !aPos.nNode.GetNode().IsNoTextNode();
+            bRet = !aPos.GetNode().IsNoTextNode();
         }
         else if( rDestShell.GetCursor()->GetNode().IsNoTextNode() )
             bRet = false;
@@ -682,7 +682,7 @@ namespace {
             return false;
         }
 
-        const SwStartNode* pFlyNode = pPosition->nNode.GetNode().FindFlyStartNode();
+        const SwStartNode* pFlyNode = pPosition->GetNode().FindFlyStartNode();
         if (!pFlyNode)
         {
             return false;
@@ -937,7 +937,7 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
         {
             SwPosition& rInsPos = *item.second;
             SwPaM& rCopy = *item.first;
-            const SwStartNode* pBoxNd = rInsPos.nNode.GetNode().FindTableBoxStartNode();
+            const SwStartNode* pBoxNd = rInsPos.GetNode().FindTableBoxStartNode();
             if( pBoxNd && SwNodeOffset(2) == pBoxNd->EndOfSectionIndex() - pBoxNd->GetIndex() &&
                 rCopy.GetPoint()->nNode != rCopy.GetMark()->nNode )
             {
@@ -1028,7 +1028,7 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
                     SwContentNode* pCNd = GetDoc()->GetNodes().GoNext( &aNdIdx );
                     SwPosition aPos( aNdIdx, pCNd, 0 );
                     // #i59539: Don't remove all redline
-                    SwNode & rNode(rPaM.GetPoint()->nNode.GetNode());
+                    SwNode & rNode(rPaM.GetPoint()->GetNode());
                     SwContentNode *const pContentNode( rNode.GetContentNode() );
                     SwPaM const tmpPam(rNode, 0,
                                    rNode, pContentNode ? pContentNode->Len() : 0);
@@ -1070,7 +1070,7 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
                 }
 
                 SwPosition& rInsPos = *rPaM.GetPoint();
-                const SwStartNode* pBoxNd = rInsPos.nNode.GetNode().
+                const SwStartNode* pBoxNd = rInsPos.GetNode().
                                                     FindTableBoxStartNode();
                 if( pBoxNd && SwNodeOffset(2) == pBoxNd->EndOfSectionIndex() -
                                 pBoxNd->GetIndex() &&

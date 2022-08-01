@@ -361,8 +361,8 @@ namespace
 
         if ( ( bChangedPos || bChangedOPos )
              && io_pMark->IsExpanded()
-             && io_pMark->GetOtherMarkPos().nNode.GetNode().FindTableBoxStartNode() !=
-                    io_pMark->GetMarkPos().nNode.GetNode().FindTableBoxStartNode() )
+             && io_pMark->GetOtherMarkPos().GetNode().FindTableBoxStartNode() !=
+                    io_pMark->GetMarkPos().GetNode().FindTableBoxStartNode() )
         {
             if ( !bChangedOPos )
             {
@@ -514,11 +514,11 @@ OUString IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix()
 
 bool IDocumentMarkAccess::IsLegalPaMForCrossRefHeadingBookmark( const SwPaM& rPaM )
 {
-    return rPaM.Start()->nNode.GetNode().IsTextNode() &&
+    return rPaM.Start()->GetNode().IsTextNode() &&
            rPaM.Start()->nContent.GetIndex() == 0 &&
            ( !rPaM.HasMark() ||
              ( rPaM.GetMark()->nNode == rPaM.GetPoint()->nNode &&
-               rPaM.End()->nContent.GetIndex() == rPaM.End()->nNode.GetNode().GetTextNode()->Len() ) );
+               rPaM.End()->nContent.GetIndex() == rPaM.End()->GetNode().GetTextNode()->Len() ) );
 }
 
 void IDocumentMarkAccess::DeleteFieldmarkCommand(::sw::mark::IFieldmark const& rMark)
@@ -559,13 +559,13 @@ namespace sw::mark
                 pPos2->nContent.GetIndex());
         }
 #endif
-        if (   (!rPaM.GetPoint()->nNode.GetNode().IsTextNode()
+        if (   (!rPaM.GetPoint()->GetNode().IsTextNode()
                 && (eType != MarkType::UNO_BOOKMARK
                 // SwXTextRange can be on table node or plain start node (FLY_AT_FLY)
-                    || !rPaM.GetPoint()->nNode.GetNode().IsStartNode()))
-            || (!rPaM.GetMark()->nNode.GetNode().IsTextNode()
+                    || !rPaM.GetPoint()->GetNode().IsStartNode()))
+            || (!rPaM.GetMark()->GetNode().IsTextNode()
                 && (eType != MarkType::UNO_BOOKMARK
-                    || !rPaM.GetMark()->nNode.GetNode().IsStartNode())))
+                    || !rPaM.GetMark()->GetNode().IsStartNode())))
         {
             SAL_WARN("sw.core", "MarkManager::makeMark(..)"
                 " - refusing to create mark on non-textnode");
@@ -593,8 +593,8 @@ namespace sw::mark
         }
 
         if ((eType == MarkType::TEXT_FIELDMARK || eType == MarkType::DATE_FIELDMARK)
-            && (rPaM.GetPoint()->nNode.GetNode().StartOfSectionNode() != rPaM.GetMark()->nNode.GetNode().StartOfSectionNode()
-                || (pSepPos && rPaM.GetPoint()->nNode.GetNode().StartOfSectionNode() != pSepPos->nNode.GetNode().StartOfSectionNode())))
+            && (rPaM.GetPoint()->GetNode().StartOfSectionNode() != rPaM.GetMark()->GetNode().StartOfSectionNode()
+                || (pSepPos && rPaM.GetPoint()->GetNode().StartOfSectionNode() != pSepPos->GetNode().StartOfSectionNode())))
         {
             SAL_WARN("sw.core", "MarkManager::makeMark(..)"
                 " - invalid range on fieldmark, different nodes array sections");
@@ -896,7 +896,7 @@ namespace sw::mark
             assert(pMark);
             // is on position ??
             bool bChangedPos = false;
-            if(&pMark->GetMarkPos().nNode.GetNode() == pOldNode)
+            if(&pMark->GetMarkPos().GetNode() == pOldNode)
             {
                 pMark->SetMarkPos(aNewPos);
                 bChangedPos = true;
@@ -904,7 +904,7 @@ namespace sw::mark
             }
             bool bChangedOPos = false;
             if (pMark->IsExpanded() &&
-                &pMark->GetOtherMarkPos().nNode.GetNode() == pOldNode)
+                &pMark->GetOtherMarkPos().GetNode() == pOldNode)
             {
                 // shift the OtherMark to aNewPos
                 pMark->SetOtherMarkPos(aNewPos);
@@ -939,7 +939,7 @@ namespace sw::mark
             ::sw::mark::MarkBase* const pMark = *ppMark;
             // correction of non-existent non-MarkBase instances cannot be done
             assert(pMark);
-            if(&pMark->GetMarkPos().nNode.GetNode() == pOldNode)
+            if(&pMark->GetMarkPos().GetNode() == pOldNode)
             {
                 SwPosition aNewPosRel(aNewPos);
                 if (dynamic_cast< ::sw::mark::CrossRefBookmark *>(pMark))
@@ -953,7 +953,7 @@ namespace sw::mark
                 bChangedPos = true;
             }
             if(pMark->IsExpanded() &&
-                &pMark->GetOtherMarkPos().nNode.GetNode() == pOldNode)
+                &pMark->GetOtherMarkPos().GetNode() == pOldNode)
             {
                 SwPosition aNewPosRel(aNewPos);
                 aNewPosRel.nContent += pMark->GetOtherMarkPos().nContent.GetIndex();
@@ -1928,7 +1928,7 @@ void DelBookmarks(
             else
             {
                 bool bStt = true;
-                SwContentNode* pCNd = pRStt->nNode.GetNode().GetContentNode();
+                SwContentNode* pCNd = pRStt->GetNode().GetContentNode();
                 if( !pCNd )
                     pCNd = rDoc.GetNodes().GoNext( &pRStt->nNode );
                 if (!pCNd)
@@ -1939,7 +1939,7 @@ void DelBookmarks(
                     if( !pCNd )
                     {
                         pRStt->nNode = pREnd->nNode;
-                        pCNd = pRStt->nNode.GetNode().GetContentNode();
+                        pCNd = pRStt->GetNode().GetContentNode();
                     }
                 }
                 pRStt->nContent.Assign( pCNd, bStt ? 0 : pCNd->Len() );
@@ -1953,7 +1953,7 @@ void DelBookmarks(
             else
             {
                 bool bStt = false;
-                SwContentNode* pCNd = pREnd->nNode.GetNode().GetContentNode();
+                SwContentNode* pCNd = pREnd->GetNode().GetContentNode();
                 if( !pCNd )
                     pCNd = SwNodes::GoPrevious( &pREnd->nNode );
                 if( !pCNd )
@@ -1964,7 +1964,7 @@ void DelBookmarks(
                     if( !pCNd )
                     {
                         pREnd->nNode = pRStt->nNode;
-                        pCNd = pREnd->nNode.GetNode().GetContentNode();
+                        pCNd = pREnd->GetNode().GetContentNode();
                     }
                 }
                 pREnd->nContent.Assign( pCNd, bStt ? 0 : pCNd->Len() );

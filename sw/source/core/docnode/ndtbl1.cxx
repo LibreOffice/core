@@ -322,7 +322,7 @@ static void lcl_ProcessBoxSize(std::vector<std::unique_ptr<SwTableFormatCmp>>& r
 
 void SwDoc::SetRowSplit( const SwCursor& rCursor, const SwFormatRowSplit &rNew )
 {
-    SwTableNode* pTableNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
+    SwTableNode* pTableNd = rCursor.GetPoint()->GetNode().FindTableNode();
     if( !pTableNd )
         return;
 
@@ -348,7 +348,7 @@ void SwDoc::SetRowSplit( const SwCursor& rCursor, const SwFormatRowSplit &rNew )
 
 std::unique_ptr<SwFormatRowSplit> SwDoc::GetRowSplit( const SwCursor& rCursor )
 {
-    SwTableNode* pTableNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
+    SwTableNode* pTableNd = rCursor.GetPoint()->GetNode().FindTableNode();
     if( !pTableNd )
         return nullptr;
 
@@ -387,7 +387,7 @@ std::unique_ptr<SwFormatRowSplit> SwDoc::GetRowSplit( const SwCursor& rCursor )
 
 void SwDoc::SetRowHeight( const SwCursor& rCursor, const SwFormatFrameSize &rNew )
 {
-    SwTableNode* pTableNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
+    SwTableNode* pTableNd = rCursor.GetPoint()->GetNode().FindTableNode();
     if( !pTableNd )
         return;
 
@@ -412,7 +412,7 @@ void SwDoc::SetRowHeight( const SwCursor& rCursor, const SwFormatFrameSize &rNew
 
 std::unique_ptr<SwFormatFrameSize> SwDoc::GetRowHeight( const SwCursor& rCursor )
 {
-    SwTableNode* pTableNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
+    SwTableNode* pTableNd = rCursor.GetPoint()->GetNode().FindTableNode();
     if( !pTableNd )
         return nullptr;
 
@@ -435,7 +435,7 @@ std::unique_ptr<SwFormatFrameSize> SwDoc::GetRowHeight( const SwCursor& rCursor 
 bool SwDoc::BalanceRowHeight( const SwCursor& rCursor, bool bTstOnly, const bool bOptimize )
 {
     bool bRet = false;
-    SwTableNode* pTableNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
+    SwTableNode* pTableNd = rCursor.GetPoint()->GetNode().FindTableNode();
     if( pTableNd )
     {
         std::vector<SwTableLine*> aRowArr; // For Lines collecting
@@ -487,7 +487,7 @@ bool SwDoc::BalanceRowHeight( const SwCursor& rCursor, bool bTstOnly, const bool
 
 void SwDoc::SetRowBackground( const SwCursor& rCursor, const SvxBrushItem &rNew )
 {
-    SwTableNode* pTableNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
+    SwTableNode* pTableNd = rCursor.GetPoint()->GetNode().FindTableNode();
     if( !pTableNd )
         return;
 
@@ -514,7 +514,7 @@ void SwDoc::SetRowBackground( const SwCursor& rCursor, const SvxBrushItem &rNew 
 bool SwDoc::GetRowBackground( const SwCursor& rCursor, std::unique_ptr<SvxBrushItem>& rToFill )
 {
     bool bRet = false;
-    SwTableNode* pTableNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
+    SwTableNode* pTableNd = rCursor.GetPoint()->GetNode().FindTableNode();
     if( pTableNd )
     {
         std::vector<SwTableLine*> aRowArr; // For Lines collecting
@@ -542,7 +542,7 @@ bool SwDoc::GetRowBackground( const SwCursor& rCursor, std::unique_ptr<SvxBrushI
 
 bool SwDoc::HasRowNotTracked( const SwCursor& rCursor )
 {
-    SwTableNode* pTableNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
+    SwTableNode* pTableNd = rCursor.GetPoint()->GetNode().FindTableNode();
     if( !pTableNd )
         return false;
 
@@ -564,7 +564,7 @@ bool SwDoc::HasRowNotTracked( const SwCursor& rCursor )
 
 void SwDoc::SetRowNotTracked( const SwCursor& rCursor, const SvxPrintItem &rNew, bool bAll )
 {
-    SwTableNode* pTableNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
+    SwTableNode* pTableNd = rCursor.GetPoint()->GetNode().FindTableNode();
     if( !pTableNd )
         return;
 
@@ -646,7 +646,7 @@ static void lcl_CollectCells( std::vector<SwCellFrame*> &rArr, const SwRect &rUn
 
 void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
 {
-    SwContentNode* pCntNd = rCursor.GetPoint()->nNode.GetNode().GetContentNode();
+    SwContentNode* pCntNd = rCursor.GetPoint()->GetNode().GetContentNode();
     SwTableNode* pTableNd = pCntNd ? pCntNd->FindTableNode() : nullptr;
     if( !pTableNd )
         return ;
@@ -932,7 +932,7 @@ void SwDoc::SetTabLineStyle( const SwCursor& rCursor,
                              const Color* pColor, bool bSetLine,
                              const SvxBorderLine* pBorderLine )
 {
-    SwContentNode* pCntNd = rCursor.GetPoint()->nNode.GetNode().GetContentNode();
+    SwContentNode* pCntNd = rCursor.GetPoint()->GetNode().GetContentNode();
     SwTableNode* pTableNd = pCntNd ? pCntNd->FindTableNode() : nullptr;
     if( !pTableNd )
         return ;
@@ -1021,7 +1021,7 @@ void SwDoc::SetTabLineStyle( const SwCursor& rCursor,
 
 void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet )
 {
-    SwContentNode* pCntNd = rCursor.GetPoint()->nNode.GetNode().GetContentNode();
+    SwContentNode* pCntNd = rCursor.GetPoint()->GetNode().GetContentNode();
     SwTableNode* pTableNd = pCntNd ? pCntNd->FindTableNode() : nullptr;
     if( !pTableNd )
         return ;
@@ -1242,7 +1242,7 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet )
 
 void SwDoc::SetBoxAttr( const SwCursor& rCursor, const SfxPoolItem &rNew )
 {
-    SwTableNode* pTableNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
+    SwTableNode* pTableNd = rCursor.GetPoint()->GetNode().FindTableNode();
     SwSelBoxes aBoxes;
     if( !(pTableNd && ::lcl_GetBoxSel( rCursor, aBoxes, true )) )
         return;
@@ -1290,7 +1290,7 @@ bool SwDoc::GetBoxAttr( const SwCursor& rCursor, std::unique_ptr<SfxPoolItem>& r
     // tdf#144843 calling GetBoxAttr *requires* object
     assert(rToFill && "requires object here");
     bool bRet = false;
-    SwTableNode* pTableNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
+    SwTableNode* pTableNd = rCursor.GetPoint()->GetNode().FindTableNode();
     SwSelBoxes aBoxes;
     if( pTableNd && lcl_GetBoxSel( rCursor, aBoxes ))
     {
@@ -1362,7 +1362,7 @@ void SwDoc::SetBoxAlign( const SwCursor& rCursor, sal_uInt16 nAlign )
 sal_uInt16 SwDoc::GetBoxAlign( const SwCursor& rCursor )
 {
     sal_uInt16 nAlign = USHRT_MAX;
-    SwTableNode* pTableNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
+    SwTableNode* pTableNd = rCursor.GetPoint()->GetNode().FindTableNode();
     SwSelBoxes aBoxes;
     if( pTableNd && ::lcl_GetBoxSel( rCursor, aBoxes ))
     {
@@ -1575,7 +1575,7 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor,
                              const bool bNoShrink )
 {
     // Check whether the current Cursor has it's Point/Mark in a Table
-    SwContentNode* pCntNd = rCursor.GetPoint()->nNode.GetNode().GetContentNode();
+    SwContentNode* pCntNd = rCursor.GetPoint()->GetNode().GetContentNode();
     SwTableNode* pTableNd = pCntNd ? pCntNd->FindTableNode() : nullptr;
     if( !pTableNd )
         return ;

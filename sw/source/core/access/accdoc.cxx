@@ -605,7 +605,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
                         SwFlyFrame *pFlyFrame = pCurrTextFrame->FindFlyFrame();
                         const SwFormatAnchor& rAnchor = pFlyFrame->GetFormat()->GetAnchor();
                         pPoint = rAnchor.GetContentAnchor();
-                        SwContentNode *const pNode(pPoint->nNode.GetNode().GetContentNode());
+                        SwContentNode *const pNode(pPoint->GetNode().GetContentNode());
                         pCurrTextFrame = pNode
                             ? static_cast<SwTextFrame*>(pNode->getLayoutFrame(
                                         pCurrTextFrame->getRootFrame(), pPoint))

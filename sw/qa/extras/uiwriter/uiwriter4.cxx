@@ -1299,7 +1299,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRedlineParam)
     // This was 'middlezzz', the uno command rejected the redline under the
     // cursor, instead of the requested one.
     CPPUNIT_ASSERT_EQUAL(OUString("aaamiddle"),
-                         pShellCursor->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+                         pShellCursor->GetPoint()->GetNode().GetTextNode()->GetText());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRedlineViewAuthor)

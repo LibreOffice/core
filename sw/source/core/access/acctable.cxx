@@ -1462,7 +1462,7 @@ void SAL_CALL SwAccessibleTable::deselectAccessibleChild(
                                                 : pCursorShell->GetCursor();
     bool bDeselectPoint =
         pBox->GetSttNd() ==
-            pPaM->GetPoint()->nNode.GetNode().FindTableBoxStartNode();
+            pPaM->GetPoint()->GetNode().FindTableBoxStartNode();
 
     SwPaM aPaM( bDeselectPoint ? *pPaM->GetMark() : *pPaM->GetPoint() );
 

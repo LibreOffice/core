@@ -245,7 +245,7 @@ bool SwPageFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
             }
         }
 
-        SwContentNode* pContentNode = aTextPos.nNode.GetNode().GetContentNode();
+        SwContentNode* pContentNode = aTextPos.GetNode().GetContentNode();
         bool bConsiderBackground = true;
         // If the text position is a clickable field, then that should have priority.
         if (pContentNode && pContentNode->IsTextNode())
@@ -333,7 +333,7 @@ bool SwPageFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
 
             double nBackDistance = 0;
             bool bValidBackDistance = false;
-            SwContentNode* pBackNd = aBackPos.nNode.GetNode( ).GetContentNode( );
+            SwContentNode* pBackNd = aBackPos.GetNode( ).GetContentNode( );
             if ( pBackNd && bConsiderBackground)
             {
                 // FIXME There are still cases were we don't have the proper node here.
@@ -980,7 +980,7 @@ bool SwContentFrame::UnitDown( SwPaM* pPam, const SwTwips, bool bInReadOnly ) co
 sal_uInt16 SwRootFrame::GetCurrPage( const SwPaM *pActualCursor ) const
 {
     OSL_ENSURE( pActualCursor, "got no page cursor" );
-    SwFrame const*const pActFrame = pActualCursor->GetPoint()->nNode.GetNode().
+    SwFrame const*const pActFrame = pActualCursor->GetPoint()->GetNode().
                                     GetContentNode()->getLayoutFrame(this,
                                                     pActualCursor->GetPoint());
     return pActFrame->FindPageFrame()->GetPhyPageNum();
@@ -2032,11 +2032,11 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
     SwRegionRects aRegion( !bIgnoreVisArea ?
                            pSh->VisArea() :
                            getFrameArea() );
-    if( !pStartPos->nNode.GetNode().IsContentNode() ||
-        !pStartPos->nNode.GetNode().GetContentNode()->getLayoutFrame(this) ||
+    if( !pStartPos->GetNode().IsContentNode() ||
+        !pStartPos->GetNode().GetContentNode()->getLayoutFrame(this) ||
         ( pStartPos->nNode != pEndPos->nNode &&
-          ( !pEndPos->nNode.GetNode().IsContentNode() ||
-            !pEndPos->nNode.GetNode().GetContentNode()->getLayoutFrame(this) ) ) )
+          ( !pEndPos->GetNode().IsContentNode() ||
+            !pEndPos->GetNode().GetContentNode()->getLayoutFrame(this) ) ) )
     {
         return;
     }
@@ -2046,11 +2046,11 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
     //First obtain the ContentFrames for the start and the end - those are needed
     //anyway.
     std::pair<Point, bool> tmp(rCursor.GetSttPos(), true);
-    SwContentFrame* pStartFrame = pStartPos->nNode.GetNode().
+    SwContentFrame* pStartFrame = pStartPos->GetNode().
         GetContentNode()->getLayoutFrame(this, pStartPos, &tmp);
 
     tmp.first = rCursor.GetEndPos();
-    SwContentFrame* pEndFrame   = pEndPos->nNode.GetNode().
+    SwContentFrame* pEndFrame   = pEndPos->GetNode().
         GetContentNode()->getLayoutFrame(this, pEndPos, &tmp);
 
     assert(pStartFrame && pEndFrame && "No ContentFrames found.");

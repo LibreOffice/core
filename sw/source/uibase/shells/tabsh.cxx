@@ -478,7 +478,7 @@ static bool lcl_CursorInDeletedTable(SwWrtShell &rSh)
     if ( rSh.GetLayout()->IsHideRedlines() )
         return false;
 
-    SwTableNode* pTableNd = rSh.GetCursor()->GetPoint()->nNode.GetNode().FindTableNode();
+    SwTableNode* pTableNd = rSh.GetCursor()->GetPoint()->GetNode().FindTableNode();
     return pTableNd && pTableNd->GetTable().IsDeleted();
 }
 

@@ -119,7 +119,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode,
             {
                 pFieldMark = rIDMA.getFieldmarkFor(*cursor.GetPoint());
                 if (pFieldMark == nullptr
-                    || pFieldMark->GetMarkStart().nNode.GetNode().GetTextNode()->GetText()[
+                    || pFieldMark->GetMarkStart().GetNode().GetTextNode()->GetText()[
                             pFieldMark->GetMarkStart().nContent.GetIndex()]
                         != CH_TXT_ATR_FORMELEMENT)
                 {
@@ -135,7 +135,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode,
             {
                 break;
             }
-            assert(pFieldMark->GetMarkStart().nNode.GetNode().GetTextNode()->GetText()[pFieldMark->GetMarkStart().nContent.GetIndex()] != CH_TXT_ATR_FORMELEMENT);
+            assert(pFieldMark->GetMarkStart().GetNode().GetTextNode()->GetText()[pFieldMark->GetMarkStart().nContent.GetIndex()] != CH_TXT_ATR_FORMELEMENT);
             // getFieldmarkFor may also return one that starts at rNode,0 -
             // skip it, must be handled in loop below
             if (pFieldMark->GetMarkStart().nNode < rNode)

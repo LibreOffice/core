@@ -1637,7 +1637,7 @@ SwRedlineTable::size_type SwTableLine::UpdateTextChangesOnly(
             bool bHasRedlineInBox = false;
             SwPosition aCellStart( *pBox->GetSttNd(), SwNodeOffset(0) );
             SwPosition aCellEnd( *pBox->GetSttNd()->EndOfSectionNode(), SwNodeOffset(-1) );
-            SwNodeIndex pEndNodeIndex(aCellEnd.nNode.GetNode());
+            SwNodeIndex pEndNodeIndex(aCellEnd.GetNode());
             SwRangeRedline* pPreviousDeleteRedline = nullptr;
             for( ; rRedlinePos < aRedlineTable.size(); ++rRedlinePos )
             {
@@ -1702,7 +1702,7 @@ SwRedlineTable::size_type SwTableLine::UpdateTextChangesOnly(
             if ( !bInsertion && ( !bHasRedlineInBox || ( pPreviousDeleteRedline &&
                  ( pPreviousDeleteRedline->End()->nNode < aCellEnd.nNode ||
                    pPreviousDeleteRedline->End()->nContent.GetIndex() <
-                           aCellEnd.nNode.GetNode().GetContentNode()->Len() ) ) ) )
+                           aCellEnd.GetNode().GetContentNode()->Len() ) ) ) )
             {
                 bPlainTextInLine = true;
                 // not deleted cell content: the row is not empty

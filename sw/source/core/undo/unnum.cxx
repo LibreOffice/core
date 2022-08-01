@@ -45,7 +45,7 @@ SwUndoInsNum::SwUndoInsNum( const SwPaM& rPam, const SwNumRule& rRule )
 
 SwUndoInsNum::SwUndoInsNum( const SwPosition& rPos, const SwNumRule& rRule,
                             const OUString& rReplaceRule )
-    : SwUndo( SwUndoId::INSNUM, &rPos.nNode.GetNode().GetDoc() ),
+    : SwUndo( SwUndoId::INSNUM, &rPos.GetNode().GetDoc() ),
     m_aNumRule( rRule ),
     m_sReplaceRule( rReplaceRule ), m_nLRSavePos( 0 )
 {
@@ -338,7 +338,7 @@ SwUndoNumRuleStart::SwUndoNumRuleStart( const SwPosition& rPos, sal_uInt16 nStt 
     , m_bSetStartValue(true)
     , m_bFlag(false)
 {
-    SwTextNode* pTextNd = rPos.nNode.GetNode().GetTextNode();
+    SwTextNode* pTextNd = rPos.GetNode().GetTextNode();
     if ( pTextNd )
     {
         if ( pTextNd->HasAttrListRestartValue() )

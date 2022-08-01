@@ -1229,7 +1229,7 @@ SwTextNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark
                 const ::sw::mark::IMark* pBkmk = *ppMark;
                 const SwPosition* pPos = &pBkmk->GetMarkStart();
 
-                pTextNd = pPos->nNode.GetNode().GetTextNode();
+                pTextNd = pPos->GetNode().GetTextNode();
                 *pStt = pPos->nContent.GetIndex();
                 if(pEnd)
                 {

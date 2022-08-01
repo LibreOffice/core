@@ -216,7 +216,7 @@ namespace
 {
     const SwTextAttr* InputFieldAtPos(SwPosition const *pPos)
     {
-        SwTextNode* pTextNd = pPos->nNode.GetNode().GetTextNode();
+        SwTextNode* pTextNd = pPos->GetNode().GetTextNode();
         if (!pTextNd)
             return nullptr;
         return pTextNd->GetTextAttrAt(pPos->nContent.GetIndex(), RES_TXTATR_INPUTFIELD, SwTextNode::PARENT);
@@ -335,7 +335,7 @@ bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
         }
     }
 
-    const SwNode* pNd = &GetPoint()->nNode.GetNode();
+    const SwNode* pNd = &GetPoint()->GetNode();
     if( pNd->IsContentNode() && !dynamic_cast<SwUnoCursor*>(this) )
     {
         const SwContentFrame* pFrame = static_cast<const SwContentNode*>(pNd)->getLayoutFrame( rDoc.getIDocumentLayoutAccess().GetCurrentLayout() );
@@ -434,7 +434,7 @@ bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
         return true; // we need a frame
     }
 
-    pNd = &GetMark()->nNode.GetNode();
+    pNd = &GetMark()->GetNode();
     if( pNd->IsContentNode()
         && !static_cast<const SwContentNode*>(pNd)->getLayoutFrame( rDoc.getIDocumentLayoutAccess().GetCurrentLayout() )
         && !dynamic_cast<SwUnoCursor*>(this) )
@@ -468,7 +468,7 @@ bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
             {
                 const sal_Int32 nNewPointPos =
                     bIsForwardSelection ? *(pInputFieldTextAttrAtPoint->End()) : pInputFieldTextAttrAtPoint->GetStart();
-                SwTextNode* pTextNdAtPoint = GetPoint()->nNode.GetNode().GetTextNode();
+                SwTextNode* pTextNdAtPoint = GetPoint()->GetNode().GetTextNode();
                 GetPoint()->nContent.Assign( pTextNdAtPoint, nNewPointPos );
             }
 
@@ -476,14 +476,14 @@ bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
             {
                 const sal_Int32 nNewMarkPos =
                     bIsForwardSelection ? pInputFieldTextAttrAtMark->GetStart() : *(pInputFieldTextAttrAtMark->End());
-                SwTextNode* pTextNdAtMark = GetMark()->nNode.GetNode().GetTextNode();
+                SwTextNode* pTextNdAtMark = GetMark()->GetNode().GetTextNode();
                 GetMark()->nContent.Assign( pTextNdAtMark, nNewMarkPos );
             }
         }
     }
 
-    const SwTableNode* pPtNd = GetPoint()->nNode.GetNode().FindTableNode();
-    const SwTableNode* pMrkNd = GetMark()->nNode.GetNode().FindTableNode();
+    const SwTableNode* pPtNd = GetPoint()->GetNode().FindTableNode();
+    const SwTableNode* pMrkNd = GetMark()->GetNode().FindTableNode();
     // both in no or in same table node
     if( ( !pMrkNd && !pPtNd ) || pPtNd == pMrkNd )
         return false;
@@ -721,7 +721,7 @@ bool SwCursor::IsAtValidPos( bool bPoint ) const
 {
     const SwDoc& rDoc = GetDoc();
     const SwPosition* pPos = bPoint ? GetPoint() : GetMark();
-    const SwNode* pNd = &pPos->nNode.GetNode();
+    const SwNode* pNd = &pPos->GetNode();
 
     if( pNd->IsContentNode() && !static_cast<const SwContentNode*>(pNd)->getLayoutFrame( rDoc.getIDocumentLayoutAccess().GetCurrentLayout() ) &&
         !dynamic_cast<const SwUnoCursor*>(this) )
@@ -1628,8 +1628,8 @@ bool SwCursor::GoSentence(SentenceMoveType eMoveType, SwRootFrame const*const pL
 
 void SwCursor::ExpandToSentenceBorders(SwRootFrame const*const pLayout)
 {
-    SwTextNode* pStartNd = Start()->nNode.GetNode().GetTextNode();
-    SwTextNode* pEndNd   = End()->nNode.GetNode().GetTextNode();
+    SwTextNode* pStartNd = Start()->GetNode().GetTextNode();
+    SwTextNode* pEndNd   = End()->GetNode().GetTextNode();
     if (!pStartNd || !pEndNd)
         return;
 
@@ -1685,7 +1685,7 @@ SwCursor::DoSetBidiLevelLeftRight(
 {
     // calculate cursor bidi level
     const SwContentFrame* pSttFrame = nullptr;
-    SwNode& rNode = GetPoint()->nNode.GetNode();
+    SwNode& rNode = GetPoint()->GetNode();
 
     if( rNode.IsTextNode() )
     {
@@ -1741,7 +1741,7 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, SwCursorSkipMode nMode,
                           SwRootFrame const*const pLayout, bool isFieldNames)
 {
     // calculate cursor bidi level
-    SwNode& rNode = GetPoint()->nNode.GetNode();
+    SwNode& rNode = GetPoint()->GetNode();
     const SwContentFrame* pSttFrame = // may side-effect bLeft!
         DoSetBidiLevelLeftRight(bLeft, bVisualAllowed, bInsertCursor);
 
@@ -1780,7 +1780,7 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, SwCursorSkipMode nMode,
 
         if (!bLeft && pLayout && pLayout->GetFieldmarkMode() == sw::FieldmarkMode::ShowResult)
         {
-            SwTextNode const*const pNode(GetPoint()->nNode.GetNode().GetTextNode());
+            SwTextNode const*const pNode(GetPoint()->GetNode().GetTextNode());
             assert(pNode);
             if (pNode->Len() != GetPoint()->nContent.GetIndex()
                 && pNode->GetText()[GetPoint()->nContent.GetIndex()] == CH_TXT_ATR_FIELDSTART)
@@ -1810,7 +1810,7 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, SwCursorSkipMode nMode,
         if (pFrame)
         {
             SwTextFrame const* pNewFrame(static_cast<SwTextFrame const*>(
-                GetPoint()->nNode.GetNode().GetContentNode()->getLayoutFrame(pLayout)));
+                GetPoint()->GetNode().GetContentNode()->getLayoutFrame(pLayout)));
             if (pNewFrame)
             {
                 while (pNewFrame->GetPrecede())
@@ -1836,7 +1836,7 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, SwCursorSkipMode nMode,
 
         if (bLeft && pLayout && pLayout->GetFieldmarkMode() == sw::FieldmarkMode::ShowCommand)
         {
-            SwTextNode const*const pNode(GetPoint()->nNode.GetNode().GetTextNode());
+            SwTextNode const*const pNode(GetPoint()->GetNode().GetTextNode());
             assert(pNode);
             if (pNode->Len() != GetPoint()->nContent.GetIndex()
                 && pNode->GetText()[GetPoint()->nContent.GetIndex()] == CH_TXT_ATR_FIELDEND)
@@ -1850,7 +1850,7 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, SwCursorSkipMode nMode,
 
         if (isFieldNames)
         {
-            SwTextNode const*const pNode(GetPoint()->nNode.GetNode().GetTextNode());
+            SwTextNode const*const pNode(GetPoint()->GetNode().GetTextNode());
             assert(pNode);
             SwTextAttr const*const pInputField(pNode->GetTextAttrAt(
                 GetPoint()->nContent.GetIndex(), RES_TXTATR_INPUTFIELD, SwTextNode::PARENT));
@@ -1868,7 +1868,7 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, SwCursorSkipMode nMode,
         {
             const SwNode* pOldTabBoxSttNode = aOldNodeIdx.GetNode().FindTableBoxStartNode();
             const SwTableNode* pOldTabSttNode = pOldTabBoxSttNode ? pOldTabBoxSttNode->FindTableNode() : nullptr;
-            const SwNode* pNewTabBoxSttNode = GetPoint()->nNode.GetNode().FindTableBoxStartNode();
+            const SwNode* pNewTabBoxSttNode = GetPoint()->GetNode().FindTableBoxStartNode();
             const SwTableNode* pNewTabSttNode = pNewTabBoxSttNode ? pNewTabBoxSttNode->FindTableNode() : nullptr;
 
             const bool bCellChanged = pOldTabSttNode && pNewTabSttNode &&
@@ -1906,7 +1906,7 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, SwCursorSkipMode nMode,
 
         // Check if I'm inside a covered cell. Correct cursor if necessary and
         // store covered cell:
-        const SwNode* pTableBoxStartNode = GetPoint()->nNode.GetNode().FindTableBoxStartNode();
+        const SwNode* pTableBoxStartNode = GetPoint()->GetNode().FindTableBoxStartNode();
         if ( pTableBoxStartNode )
         {
             const SwTableBox* pTableBox = pTableBoxStartNode->GetTableBox();
@@ -1936,7 +1936,7 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, SwCursorSkipMode nMode,
     // here come some special rules for visual cursor travelling
     if ( pSttFrame )
     {
-        SwNode& rTmpNode = GetPoint()->nNode.GetNode();
+        SwNode& rTmpNode = GetPoint()->GetNode();
         if ( &rTmpNode != &rNode && rTmpNode.IsTextNode() )
         {
             Point aPt;
@@ -1965,7 +1965,7 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, SwCursorSkipMode nMode,
 // calculate cursor bidi level: extracted from UpDown()
 void SwCursor::DoSetBidiLevelUpDown()
 {
-    SwNode& rNode = GetPoint()->nNode.GetNode();
+    SwNode& rNode = GetPoint()->GetNode();
     if ( !rNode.IsTextNode() )
         return;
 
@@ -2104,7 +2104,7 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
             // Jump to beginning or end of line when the cursor at first or last line.
             if(!bUp)
             {
-                SwTextNode* pTextNd = GetPoint()->nNode.GetNode().GetTextNode();
+                SwTextNode* pTextNd = GetPoint()->GetNode().GetTextNode();
                 if (pTextNd)
                     nOffset = pTextNd->GetText().getLength();
             }
@@ -2184,7 +2184,7 @@ bool SwCursor::SttEndDoc( bool bStt )
 
 bool SwCursor::GoPrevNextCell( bool bNext, sal_uInt16 nCnt )
 {
-    const SwTableNode* pTableNd = GetPoint()->nNode.GetNode().FindTableNode();
+    const SwTableNode* pTableNd = GetPoint()->GetNode().FindTableNode();
     if( !pTableNd )
         return false;
 
@@ -2274,7 +2274,7 @@ bool SwCursor::GotoTable( const OUString& rName )
 bool SwCursor::GotoTableBox( const OUString& rName )
 {
     bool bRet = false;
-    const SwTableNode* pTableNd = GetPoint()->nNode.GetNode().FindTableNode();
+    const SwTableNode* pTableNd = GetPoint()->GetNode().FindTableNode();
     if( pTableNd )
     {
         // retrieve box by name
@@ -2295,7 +2295,7 @@ bool SwCursor::GotoTableBox( const OUString& rName )
 bool SwCursor::MovePara(SwWhichPara fnWhichPara, SwMoveFnCollection const & fnPosPara )
 {
     // for optimization test something before
-    const SwNode* pNd = &GetPoint()->nNode.GetNode();
+    const SwNode* pNd = &GetPoint()->GetNode();
     bool bShortCut = false;
     if ( fnWhichPara == GoCurrPara )
     {
@@ -2438,9 +2438,9 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pCurrentCursor )
         do {
             size_t nPos;
             bool bDel = false;
-            pSttNd = pCur->GetPoint()->nNode.GetNode().FindTableBoxStartNode();
+            pSttNd = pCur->GetPoint()->GetNode().FindTableBoxStartNode();
             if( !pCur->HasMark() || !pSttNd ||
-                pSttNd != pCur->GetMark()->nNode.GetNode().FindTableBoxStartNode() )
+                pSttNd != pCur->GetMark()->GetNode().FindTableBoxStartNode() )
                 bDel = true;
 
             else if( lcl_SeekEntry( aTmp, pSttNd, nPos ))
@@ -2451,7 +2451,7 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pCurrentCursor )
                     pNd = rNds.GoNextSection( &aIdx, true, false );
 
                 SwPosition* pPos = pCur->GetMark();
-                if( pNd != &pPos->nNode.GetNode() )
+                if( pNd != &pPos->GetNode() )
                     pPos->nNode = *pNd;
                 pPos->nContent.Assign( static_cast<const SwContentNode*>(pNd), 0 );
 
@@ -2461,7 +2461,7 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pCurrentCursor )
                     pNd = SwNodes::GoPrevSection( &aIdx, true, false );
 
                 pPos = pCur->GetPoint();
-                if (pNd && pNd != &pPos->nNode.GetNode())
+                if (pNd && pNd != &pPos->GetNode())
                     pPos->nNode = *pNd;
                 pPos->nContent.Assign( static_cast<const SwContentNode*>(pNd), pNd ? static_cast<const SwContentNode*>(pNd)->Len() : 0);
 
@@ -2504,7 +2504,7 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pCurrentCursor )
 
             SwPosition* pPos = pNew->GetPoint();
             pPos->nNode.Assign( *pSttNd->EndOfSectionNode(), - 1 );
-            pNd = &pPos->nNode.GetNode();
+            pNd = &pPos->GetNode();
             if( !pNd->IsContentNode() )
                 pNd = SwNodes::GoPrevSection( &pPos->nNode, true, false );
 
@@ -2599,13 +2599,13 @@ bool SwTableCursor::IsCursorMovedUpdate()
 void SwTableCursor::ParkCursor()
 {
     // de-register index from text node
-    SwNode* pNd = &GetPoint()->nNode.GetNode();
+    SwNode* pNd = &GetPoint()->GetNode();
     if( !pNd->IsStartNode() )
         pNd = pNd->StartOfSectionNode();
     GetPoint()->nNode = *pNd;
     GetPoint()->nContent.Assign( nullptr, 0 );
 
-    pNd = &GetMark()->nNode.GetNode();
+    pNd = &GetMark()->GetNode();
     if( !pNd->IsStartNode() )
         pNd = pNd->StartOfSectionNode();
     GetMark()->nNode = *pNd;

@@ -1448,7 +1448,7 @@ const SfxPoolItem* SwWW8FltControlStack::GetFormatAttr(const SwPosition& rPos,
     const SfxPoolItem *pItem = GetStackAttr(rPos, nWhich);
     if (!pItem)
     {
-        SwContentNode const*const pNd = rPos.nNode.GetNode().GetContentNode();
+        SwContentNode const*const pNd = rPos.GetNode().GetContentNode();
         if (!pNd)
             pItem = &m_rDoc.GetAttrPool().GetDefaultItem(nWhich);
         else
@@ -1570,7 +1570,7 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
 
                     const SwPosition& rBkMrkPos = pMark->GetMarkPos();
 
-                    SwTextNode* pText = rBkMrkPos.nNode.GetNode().GetTextNode();
+                    SwTextNode* pText = rBkMrkPos.GetNode().GetTextNode();
                     if( pText && rBkMrkPos.nContent.GetIndex() )
                     {
                         SwTextAttr* const pFootnote = pText->GetTextAttrForCharAt(
@@ -4081,13 +4081,13 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
             if (m_bCareFirstParaEndInToc)
             {
                 m_bCareFirstParaEndInToc = false;
-                if (m_pPaM->End() && m_pPaM->End()->nNode.GetNode().GetTextNode() &&  m_pPaM->End()->nNode.GetNode().GetTextNode()->Len() == 0)
+                if (m_pPaM->End() && m_pPaM->End()->GetNode().GetTextNode() &&  m_pPaM->End()->GetNode().GetTextNode()->Len() == 0)
                     bSplit = false;
             }
             if (m_bCareLastParaEndInToc)
             {
                 m_bCareLastParaEndInToc = false;
-                if (m_pPaM->End() && m_pPaM->End()->nNode.GetNode().GetTextNode() &&  m_pPaM->End()->nNode.GetNode().GetTextNode()->Len() == 0)
+                if (m_pPaM->End() && m_pPaM->End()->GetNode().GetTextNode() &&  m_pPaM->End()->GetNode().GetTextNode()->Len() == 0)
                     bSplit = false;
             }
             if (bSplit)
@@ -4607,7 +4607,7 @@ void wwSectionManager::InsertSegments()
             }
 
             const SwPosition* pPos  = aSectPaM.GetPoint();
-            SwTextNode const*const pSttNd = pPos->nNode.GetNode().GetTextNode();
+            SwTextNode const*const pSttNd = pPos->GetNode().GetTextNode();
             const SwTableNode* pTableNd = pSttNd ? pSttNd->FindTableNode() : nullptr;
             if (pTableNd)
             {
@@ -5206,7 +5206,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
         m_rDoc.getIDocumentContentOperations().SplitNode( *pPos, false );
 
         // another split, if insertion position was not at the end of the current paragraph.
-        SwTextNode const*const pTextNd = pPos->nNode.GetNode().GetTextNode();
+        SwTextNode const*const pTextNd = pPos->GetNode().GetTextNode();
         if ( pTextNd->GetText().getLength() )
         {
             m_rDoc.getIDocumentContentOperations().SplitNode( *pPos, false );
@@ -5418,7 +5418,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
             if ( ppBkmk != pMarkAccess->getBookmarksEnd() &&
                        IDocumentMarkAccess::GetType(**ppBkmk) == IDocumentMarkAccess::MarkType::BOOKMARK )
             {
-                SwTextNode* pTextNode = (*ppBkmk)->GetMarkStart().nNode.GetNode().GetTextNode();
+                SwTextNode* pTextNode = (*ppBkmk)->GetMarkStart().GetNode().GetTextNode();
 
                 if ( pTextNode )
                 {
