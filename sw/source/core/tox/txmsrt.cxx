@@ -174,7 +174,7 @@ SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwContentNode* pNd,
                 const SwDoc& rDoc = pNd->GetDoc();
                 bool const bResult = GetBodyTextNode( rDoc, aPos, *pFrame );
                 OSL_ENSURE(bResult, "where is the text node");
-                nPos = aPos.nNode.GetIndex();
+                nPos = aPos.GetNodeIndex();
                 nCntPos = aPos.nContent.GetIndex();
             }
         }

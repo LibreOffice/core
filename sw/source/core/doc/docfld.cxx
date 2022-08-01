@@ -103,7 +103,7 @@ SetGetExpField::SetGetExpField( const SwSectionNode& rSectNd,
 
     if( pPos )
     {
-        m_nNode = pPos->nNode.GetIndex();
+        m_nNode = pPos->GetNodeIndex();
         m_nContent = pPos->nContent.GetIndex();
     }
     else
@@ -123,12 +123,12 @@ SetGetExpField::SetGetExpField(::sw::mark::IBookmark const& rBookmark,
 
     if (pPos)
     {
-        m_nNode = pPos->nNode.GetIndex();
+        m_nNode = pPos->GetNodeIndex();
         m_nContent = pPos->nContent.GetIndex();
     }
     else
     {
-        m_nNode = rBookmark.GetMarkStart().nNode.GetIndex();
+        m_nNode = rBookmark.GetMarkStart().GetNodeIndex();
         m_nContent = rBookmark.GetMarkStart().nContent.GetIndex();;
     }
 }
@@ -162,7 +162,7 @@ SetGetExpField::SetGetExpField( const SwPosition& rPos )
 {
     m_eSetGetExpFieldType = CRSRPOS;
     m_CNTNT.pPos = &rPos;
-    m_nNode = rPos.nNode.GetIndex();
+    m_nNode = rPos.GetNodeIndex();
     m_nContent = rPos.nContent.GetIndex();
 }
 
@@ -173,7 +173,7 @@ SetGetExpField::SetGetExpField( const SwFlyFrameFormat& rFlyFormat,
     m_CNTNT.pFlyFormat = &rFlyFormat;
     if( pPos )
     {
-        m_nNode = pPos->nNode.GetIndex();
+        m_nNode = pPos->GetNodeIndex();
         m_nContent = pPos->nContent.GetIndex();
     }
     else
@@ -213,7 +213,7 @@ void SetGetExpField::SetBodyPos( const SwContentFrame& rFrame )
         SwPosition aPos( aIdx );
         bool const bResult = ::GetBodyTextNode( rDoc, aPos, rFrame );
         OSL_ENSURE(bResult, "Where is the field?");
-        m_nNode = aPos.nNode.GetIndex();
+        m_nNode = aPos.GetNodeIndex();
         m_nContent = aPos.nContent.GetIndex();
     }
 }

@@ -240,7 +240,7 @@ void UpdateFramesForAddDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
             // skip over hidden sections!
             pNode = static_cast<SwTextNode*>(pLast->GetNodes().GoNextSection(&tmp, /*bSkipHidden=*/true, /*bSkipProtect=*/false));
         }
-        while (pNode && pNode->GetIndex() <= rPam.End()->nNode.GetIndex());
+        while (pNode && pNode->GetIndex() <= rPam.End()->GetNodeIndex());
     }
     // fields last - SwGetRefField::UpdateField requires up-to-date frames
     UpdateFieldsForRedline(rDoc.getIDocumentFieldsAccess()); // after footnotes
@@ -368,7 +368,7 @@ void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
             // skip over hidden sections!
             pNode = static_cast<SwTextNode*>(pLast->GetNodes().GoNextSection(&tmp, /*bSkipHidden=*/true, /*bSkipProtect=*/false));
         }
-        while (pNode && pNode->GetIndex() <= rPam.End()->nNode.GetIndex());
+        while (pNode && pNode->GetIndex() <= rPam.End()->GetNodeIndex());
     }
 
     if (!isAppendObjsCalled)
@@ -399,7 +399,7 @@ namespace
         const SwContentNode* pCNd;
         if( 0 != rPos2.nContent.GetIndex() )
             return false;
-        if( rPos2.nNode.GetIndex() - 1 != rPos1.nNode.GetIndex() )
+        if( rPos2.GetNodeIndex() - 1 != rPos1.GetNodeIndex() )
             return false;
         pCNd = rPos1.GetNode().GetContentNode();
         return pCNd && rPos1.nContent.GetIndex() == pCNd->Len();
@@ -1026,27 +1026,27 @@ namespace
         auto [pStt, pEnd] = rPam.StartEnd(); // SwPosition*
         SwDoc& rDoc = rPam.GetDoc();
         if( !pStt->nContent.GetIndex() &&
-            !rDoc.GetNodes()[ pStt->nNode.GetIndex() - 1 ]->IsContentNode() )
+            !rDoc.GetNodes()[ pStt->GetNodeIndex() - 1 ]->IsContentNode() )
         {
             const SwRangeRedline* pRedl = rDoc.getIDocumentRedlineAccess().GetRedline( *pStt, nullptr );
             if( pRedl )
             {
                 const SwPosition* pRStt = pRedl->Start();
-                if( !pRStt->nContent.GetIndex() && pRStt->nNode.GetIndex() ==
-                    pStt->nNode.GetIndex() - 1 )
+                if( !pRStt->nContent.GetIndex() && pRStt->GetNodeIndex() ==
+                    pStt->GetNodeIndex() - 1 )
                     *pStt = *pRStt;
             }
         }
         if( pEnd->GetNode().IsContentNode() &&
-            !rDoc.GetNodes()[ pEnd->nNode.GetIndex() + 1 ]->IsContentNode() &&
+            !rDoc.GetNodes()[ pEnd->GetNodeIndex() + 1 ]->IsContentNode() &&
             pEnd->nContent.GetIndex() == pEnd->GetNode().GetContentNode()->Len()    )
         {
             const SwRangeRedline* pRedl = rDoc.getIDocumentRedlineAccess().GetRedline( *pEnd, nullptr );
             if( pRedl )
             {
                 const SwPosition* pREnd = pRedl->End();
-                if( !pREnd->nContent.GetIndex() && pREnd->nNode.GetIndex() ==
-                    pEnd->nNode.GetIndex() + 1 )
+                if( !pREnd->nContent.GetIndex() && pREnd->GetNodeIndex() ==
+                    pEnd->GetNodeIndex() + 1 )
                     *pEnd = *pREnd;
             }
         }
@@ -2693,14 +2693,14 @@ SwRedlineTable::size_type DocumentRedlineManager::GetRedlinePos( const SwNode& r
         auto it = std::lower_bound(maRedlineTable.begin(), maRedlineTable.end(), rNd,
             [&nNdIdx](const SwRangeRedline* lhs, const SwNode& /*rhs*/)
             {
-                return lhs->End()->nNode.GetIndex() < nNdIdx;
+                return lhs->End()->GetNodeIndex() < nNdIdx;
             });
         for( ; it != maRedlineTable.end(); ++it)
         {
             const SwRangeRedline* pTmp = *it;
             auto [pStart, pEnd] = pTmp->StartEnd(); // SwPosition*
-            SwNodeOffset nStart = pStart->nNode.GetIndex(),
-                         nEnd = pEnd->nNode.GetIndex();
+            SwNodeOffset nStart = pStart->GetNodeIndex(),
+                         nEnd = pEnd->GetNodeIndex();
 
             if( ( RedlineType::Any == nType || nType == pTmp->GetType()) &&
                 nStart <= nNdIdx && nNdIdx <= nEnd )
@@ -2715,8 +2715,8 @@ SwRedlineTable::size_type DocumentRedlineManager::GetRedlinePos( const SwNode& r
         for( SwRedlineTable::size_type n = 0; n < maRedlineTable.size() ; ++n )
         {
             const SwRangeRedline* pTmp = maRedlineTable[ n ];
-            SwNodeOffset nPt = pTmp->GetPoint()->nNode.GetIndex(),
-                  nMk = pTmp->GetMark()->nNode.GetIndex();
+            SwNodeOffset nPt = pTmp->GetPoint()->GetNodeIndex(),
+                  nMk = pTmp->GetMark()->GetNodeIndex();
             if( nPt < nMk ) { SwNodeOffset nTmp = nMk; nMk = nPt; nPt = nTmp; }
 
             if( ( RedlineType::Any == nType || nType == pTmp->GetType()) &&
@@ -2951,14 +2951,14 @@ void DocumentRedlineManager::AcceptRedlineParagraphFormatting( const SwPaM &rPam
 {
     auto [pStt, pEnd] = rPam.StartEnd(); // SwPosition*
 
-    const SwNodeOffset nSttIdx = pStt->nNode.GetIndex();
-    const SwNodeOffset nEndIdx = pEnd->nNode.GetIndex();
+    const SwNodeOffset nSttIdx = pStt->GetNodeIndex();
+    const SwNodeOffset nEndIdx = pEnd->GetNodeIndex();
 
     for( SwRedlineTable::size_type n = 0; n < maRedlineTable.size() ; ++n )
     {
         const SwRangeRedline* pTmp = maRedlineTable[ n ];
-        SwNodeOffset nPt = pTmp->GetPoint()->nNode.GetIndex(),
-              nMk = pTmp->GetMark()->nNode.GetIndex();
+        SwNodeOffset nPt = pTmp->GetPoint()->GetNodeIndex(),
+              nMk = pTmp->GetMark()->GetNodeIndex();
         if( nPt < nMk ) { SwNodeOffset nTmp = nMk; nMk = nPt; nPt = nTmp; }
 
         if( RedlineType::ParagraphFormat == pTmp->GetType() &&

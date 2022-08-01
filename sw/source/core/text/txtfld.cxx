@@ -553,8 +553,8 @@ static const SwRangeRedline* lcl_GetRedlineAtNodeInsertionOrDeletion( const SwTe
         for( ; nRedlPos < rTable.size() ; ++nRedlPos )
         {
             const SwRangeRedline* pTmp = rTable[ nRedlPos ];
-            SwNodeOffset nStart = pTmp->GetPoint()->nNode.GetIndex(),
-                         nEnd = pTmp->GetMark()->nNode.GetIndex();
+            SwNodeOffset nStart = pTmp->GetPoint()->GetNodeIndex(),
+                         nEnd = pTmp->GetMark()->GetNodeIndex();
             if( nStart > nEnd )
                 std::swap(nStart, nEnd);
             if( RedlineType::Delete == pTmp->GetType() ||

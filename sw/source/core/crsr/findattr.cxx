@@ -960,8 +960,8 @@ bool FindAttrImpl(SwPaM & rSearchPam,
                         pAttr = iter.NextAttr(&pAttrNode);
                     }
                     while (pAttr
-                        && (pAttrNode->GetIndex() < pPam->GetPoint()->nNode.GetIndex()
-                            || (pAttrNode->GetIndex() == pPam->GetPoint()->nNode.GetIndex()
+                        && (pAttrNode->GetIndex() < pPam->GetPoint()->GetNodeIndex()
+                            || (pAttrNode->GetIndex() == pPam->GetPoint()->GetNodeIndex()
                                 && pAttr->GetStart() < pPam->GetPoint()->nContent.GetIndex())
                             || pAttr->Which() != nWhich));
                 }
@@ -973,8 +973,8 @@ bool FindAttrImpl(SwPaM & rSearchPam,
                         pAttr = iter.PrevAttr(&pAttrNode);
                     }
                     while (pAttr
-                        && (pPam->GetPoint()->nNode.GetIndex() < pAttrNode->GetIndex()
-                            || (pPam->GetPoint()->nNode.GetIndex() == pAttrNode->GetIndex()
+                        && (pPam->GetPoint()->GetNodeIndex() < pAttrNode->GetIndex()
+                            || (pPam->GetPoint()->GetNodeIndex() == pAttrNode->GetIndex()
                                 && pPam->GetPoint()->nContent.GetIndex() <= pAttr->GetStart())
                             || pAttr->Which() != nWhich));
                 }
@@ -1106,8 +1106,8 @@ static bool FindAttrsImpl(SwPaM & rSearchPam,
                 // to find its node items
                 if (pMergedPara->extents.empty())
                 {
-                    if (rStart.nNode.GetIndex() <= rPropsNode.GetIndex()
-                        && rPropsNode.GetIndex() <= rEnd.nNode.GetIndex())
+                    if (rStart.GetNodeIndex() <= rPropsNode.GetIndex()
+                        && rPropsNode.GetIndex() <= rEnd.GetNodeIndex())
                     {
                         SwPaM tmp(rPropsNode, 0, rPropsNode, 0);
                         bFound = (*fnSearch)(*pNode->GetTextNode(), aCmpArr, tmp);
@@ -1127,8 +1127,8 @@ static bool FindAttrsImpl(SwPaM & rSearchPam,
                         auto const rExtent(pMergedPara->extents[bSrchForward
                                 ? i
                                 : pMergedPara->extents.size() - i - 1]);
-                        if (rExtent.pNode->GetIndex() < rStart.nNode.GetIndex()
-                            || rEnd.nNode.GetIndex() < rExtent.pNode->GetIndex())
+                        if (rExtent.pNode->GetIndex() < rStart.GetNodeIndex()
+                            || rEnd.GetNodeIndex() < rExtent.pNode->GetIndex())
                         {
                             continue;
                         }

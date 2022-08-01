@@ -1441,27 +1441,27 @@ void SwDocTest::testMarkMove()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0) , pBM1->GetMarkStart().nContent.GetIndex());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(11), pBM1->GetMarkEnd().nContent.GetIndex());
     CPPUNIT_ASSERT_EQUAL(
-        pBM1->GetMarkStart().nNode.GetIndex(),
-        pBM1->GetMarkEnd().nNode.GetIndex());
+        pBM1->GetMarkStart().GetNodeIndex(),
+        pBM1->GetMarkEnd().GetNodeIndex());
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0) , pBM2->GetMarkStart().nContent.GetIndex());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(11), pBM2->GetMarkEnd().nContent.GetIndex());
     CPPUNIT_ASSERT_EQUAL(
-        pBM2->GetMarkStart().nNode.GetIndex(),
-        pBM2->GetMarkEnd().nNode.GetIndex());
+        pBM2->GetMarkStart().GetNodeIndex(),
+        pBM2->GetMarkEnd().GetNodeIndex());
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(11), pBM3->GetMarkStart().nContent.GetIndex());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(22), pBM3->GetMarkEnd().nContent.GetIndex());
     CPPUNIT_ASSERT_EQUAL(
-        pBM3->GetMarkStart().nNode.GetIndex(),
-        pBM3->GetMarkEnd().nNode.GetIndex());
+        pBM3->GetMarkStart().GetNodeIndex(),
+        pBM3->GetMarkEnd().GetNodeIndex());
 
     CPPUNIT_ASSERT_EQUAL(
-        pBM1->GetMarkStart().nNode.GetIndex()+1,
-        pBM2->GetMarkStart().nNode.GetIndex());
+        pBM1->GetMarkStart().GetNodeIndex()+1,
+        pBM2->GetMarkStart().GetNodeIndex());
     CPPUNIT_ASSERT_EQUAL(
-        pBM2->GetMarkStart().nNode.GetIndex(),
-        pBM3->GetMarkStart().nNode.GetIndex());
+        pBM2->GetMarkStart().GetNodeIndex(),
+        pBM3->GetMarkStart().GetNodeIndex());
 
     // cut some text
     {
@@ -1478,27 +1478,27 @@ void SwDocTest::testMarkMove()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pBM1->GetMarkStart().nContent.GetIndex());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), pBM1->GetMarkEnd().nContent.GetIndex());
     CPPUNIT_ASSERT_EQUAL(
-        pBM1->GetMarkStart().nNode.GetIndex(),
-        pBM1->GetMarkEnd().nNode.GetIndex());
+        pBM1->GetMarkStart().GetNodeIndex(),
+        pBM1->GetMarkEnd().GetNodeIndex());
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), pBM2->GetMarkStart().nContent.GetIndex());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(12), pBM2->GetMarkEnd().nContent.GetIndex());
     CPPUNIT_ASSERT_EQUAL(
-        pBM2->GetMarkStart().nNode.GetIndex(),
-        pBM2->GetMarkEnd().nNode.GetIndex());
+        pBM2->GetMarkStart().GetNodeIndex(),
+        pBM2->GetMarkEnd().GetNodeIndex());
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(12), pBM3->GetMarkStart().nContent.GetIndex());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(23), pBM3->GetMarkEnd().nContent.GetIndex());
     CPPUNIT_ASSERT_EQUAL(
-        pBM3->GetMarkStart().nNode.GetIndex(),
-        pBM3->GetMarkEnd().nNode.GetIndex());
+        pBM3->GetMarkStart().GetNodeIndex(),
+        pBM3->GetMarkEnd().GetNodeIndex());
 
     CPPUNIT_ASSERT_EQUAL(
-        pBM1->GetMarkStart().nNode.GetIndex(),
-        pBM2->GetMarkStart().nNode.GetIndex());
+        pBM1->GetMarkStart().GetNodeIndex(),
+        pBM2->GetMarkStart().GetNodeIndex());
     CPPUNIT_ASSERT_EQUAL(
-        pBM2->GetMarkStart().nNode.GetIndex(),
-        pBM3->GetMarkStart().nNode.GetIndex());
+        pBM2->GetMarkStart().GetNodeIndex(),
+        pBM3->GetMarkStart().GetNodeIndex());
 
     // split the paragraph
     {
@@ -1514,27 +1514,27 @@ void SwDocTest::testMarkMove()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pBM1->GetMarkStart().nContent.GetIndex());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), pBM1->GetMarkEnd().nContent.GetIndex());
     CPPUNIT_ASSERT_EQUAL(
-        pBM1->GetMarkStart().nNode.GetIndex(),
-        pBM1->GetMarkEnd().nNode.GetIndex());
+        pBM1->GetMarkStart().GetNodeIndex(),
+        pBM1->GetMarkEnd().GetNodeIndex());
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), pBM2->GetMarkStart().nContent.GetIndex());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pBM2->GetMarkEnd().nContent.GetIndex());
     CPPUNIT_ASSERT_EQUAL(
-        pBM2->GetMarkStart().nNode.GetIndex()+1,
-        pBM2->GetMarkEnd().nNode.GetIndex());
+        pBM2->GetMarkStart().GetNodeIndex()+1,
+        pBM2->GetMarkEnd().GetNodeIndex());
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pBM3->GetMarkStart().nContent.GetIndex());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(15), pBM3->GetMarkEnd().nContent.GetIndex());
     CPPUNIT_ASSERT_EQUAL(
-        pBM3->GetMarkStart().nNode.GetIndex(),
-        pBM3->GetMarkEnd().nNode.GetIndex());
+        pBM3->GetMarkStart().GetNodeIndex(),
+        pBM3->GetMarkEnd().GetNodeIndex());
 
     CPPUNIT_ASSERT_EQUAL(
-        pBM1->GetMarkStart().nNode.GetIndex(),
-        pBM2->GetMarkStart().nNode.GetIndex());
+        pBM1->GetMarkStart().GetNodeIndex(),
+        pBM2->GetMarkStart().GetNodeIndex());
     CPPUNIT_ASSERT_EQUAL(
-        pBM2->GetMarkEnd().nNode.GetIndex(),
-        pBM3->GetMarkEnd().nNode.GetIndex());
+        pBM2->GetMarkEnd().GetNodeIndex(),
+        pBM3->GetMarkEnd().GetNodeIndex());
 }
 
 namespace

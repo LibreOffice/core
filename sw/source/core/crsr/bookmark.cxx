@@ -59,8 +59,8 @@ namespace sw::mark
         SwPosition const& rStartPos(rMark.GetMarkStart());
         SwPosition const& rEndPos(rMark.GetMarkEnd());
         SwNodes const& rNodes(rStartPos.GetNodes());
-        SwNodeOffset const nStartNode(rStartPos.nNode.GetIndex());
-        SwNodeOffset const nEndNode(rEndPos.nNode.GetIndex());
+        SwNodeOffset const nStartNode(rStartPos.GetNodeIndex());
+        SwNodeOffset const nEndNode(rEndPos.GetNodeIndex());
         int nFields(0);
         std::optional<SwPosition> ret;
         for (SwNodeOffset n = nEndNode; nStartNode <= n; --n)
@@ -306,7 +306,7 @@ namespace sw::mark
     OUString MarkBase::ToString( ) const
     {
         return "Mark: ( Name, [ Node1, Index1 ] ): ( " + m_aName + ", [ "
-            + OUString::number( sal_Int32(GetMarkPos().nNode.GetIndex()) )  + ", "
+            + OUString::number( sal_Int32(GetMarkPos().GetNodeIndex()) )  + ", "
             + OUString::number( GetMarkPos().nContent.GetIndex( ) ) + " ] )";
     }
 
@@ -519,9 +519,9 @@ namespace sw::mark
     OUString Fieldmark::ToString( ) const
     {
         return "Fieldmark: ( Name, Type, [ Nd1, Id1 ], [ Nd2, Id2 ] ): ( " + m_aName + ", "
-            + m_aFieldname + ", [ " + OUString::number( sal_Int32(GetMarkPos().nNode.GetIndex( )) )
+            + m_aFieldname + ", [ " + OUString::number( sal_Int32(GetMarkPos().GetNodeIndex( )) )
             + ", " + OUString::number( GetMarkPos( ).nContent.GetIndex( ) ) + " ], ["
-            + OUString::number( sal_Int32(GetOtherMarkPos().nNode.GetIndex( )) ) + ", "
+            + OUString::number( sal_Int32(GetOtherMarkPos().GetNodeIndex( )) ) + ", "
             + OUString::number( GetOtherMarkPos( ).nContent.GetIndex( ) ) + " ] ) ";
     }
 

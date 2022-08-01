@@ -259,7 +259,7 @@ void DocumentLayoutManager::DelLayoutFormat( SwFrameFormat *pFormat )
                         SwFrameFormat* pTmpFormat = (*pTable)[i];
                         const SwFormatAnchor &rAnch = pTmpFormat->GetAnchor();
                         if ( rAnch.GetAnchorId() == RndStdIds::FLY_AT_FLY &&
-                             rAnch.GetContentAnchor()->nNode.GetIndex() == nNodeIdxOfFlyFormat )
+                             rAnch.GetContentAnchor()->GetNodeIndex() == nNodeIdxOfFlyFormat )
                         {
                             aToDeleteFrameFormats.push_back( pTmpFormat );
                         }

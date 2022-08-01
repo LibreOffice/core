@@ -169,7 +169,7 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos(
                 if (pAnnotationMark != nullptr)
                 {
                     const SwPosition& rAnnotationStartPos = pAnnotationMark->GetMarkStart();
-                    o_rInfo.mnStartNodeIdx = rAnnotationStartPos.nNode.GetIndex();
+                    o_rInfo.mnStartNodeIdx = rAnnotationStartPos.GetNodeIndex();
                     o_rInfo.mnStartContent = rAnnotationStartPos.nContent.GetIndex();
                 }
                 else

@@ -628,7 +628,7 @@ bool SwWW8AttrIter::IsAnchorLinkedToThisNode( SwNodeOffset nNodePos )
     /* if current node position and the anchor position are the same
         then the frame anchor is linked to this node
     */
-    return nNodePos == maFlyIter->GetPosition().nNode.GetIndex();
+    return nNodePos == maFlyIter->GetPosition().GetNodeIndex();
 }
 
 bool SwWW8AttrIter::HasFlysAt(sal_Int32 nSwPos) const
@@ -1522,7 +1522,7 @@ bool SwWW8AttrIter::IncludeEndOfParaCRInRedlineProperties( sal_Int32 nEnd ) cons
             }
             bBreak = false;
         }
-        if (pStart->nNode.GetIndex()-1 == m_rNode.GetIndex())
+        if (pStart->GetNodeIndex()-1 == m_rNode.GetIndex())
         {
             if (pStart->nContent.GetIndex() == 0)
             {

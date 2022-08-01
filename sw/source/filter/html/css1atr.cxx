@@ -3033,7 +3033,7 @@ static Writer& OutCSS1_SvxFormatBreak_SwFormatPDesc_SvxFormatKeep( Writer& rWrt,
     if( !rHTMLWrt.IsCSS1Source( CSS1_OUTMODE_PARA ) ||
         !rHTMLWrt.m_bCSS1IgnoreFirstPageDesc ||
         rHTMLWrt.m_pStartNdIdx->GetIndex() !=
-                    rHTMLWrt.m_pCurrentPam->GetPoint()->nNode.GetIndex() )
+                    rHTMLWrt.m_pCurrentPam->GetPoint()->GetNodeIndex() )
         pPDescItem = rItemSet.GetItemIfSet( RES_PAGEDESC, bDeep );
 
     const SvxFormatKeepItem *pKeepItem = rItemSet.GetItemIfSet( RES_KEEP, bDeep );

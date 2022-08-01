@@ -734,7 +734,7 @@ namespace sw
                     sw::mark::IFieldmark *const pFieldMark(
                         rPos.GetDoc().getIDocumentMarkAccess()->getFieldmarkAt(end));
                     SAL_WARN_IF(!pFieldMark, "sw.ww8", "expected a field mark");
-                    if (pFieldMark && pFieldMark->GetMarkPos().nNode.GetIndex() == (*aResult)->m_aMkPos.m_nNode.GetIndex()+1
+                    if (pFieldMark && pFieldMark->GetMarkPos().GetNodeIndex() == (*aResult)->m_aMkPos.m_nNode.GetIndex()+1
                         && pFieldMark->GetMarkPos().nContent.GetIndex() < (*aResult)->m_aMkPos.m_nContent)
                     {
                         (*aResult)->SetEndPos(end);
@@ -755,7 +755,7 @@ namespace sw
         void MoveAttrFieldmarkInserted(SwFltPosition& rMkPos, SwFltPosition& rPtPos, const SwPosition& rPos)
         {
             sal_Int32 const nInserted = 2; // CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDSEP
-            SwNodeOffset nPosNd = rPos.nNode.GetIndex();
+            SwNodeOffset nPosNd = rPos.GetNodeIndex();
             sal_Int32 nPosCt = rPos.nContent.GetIndex() - nInserted;
 
             bool const isPoint(rMkPos == rPtPos);

@@ -229,7 +229,7 @@ bool SwCursor::MoveRegion( SwWhichRegion fnWhichRegion, SwMoveFnCollection const
     return !dynamic_cast<SwTableCursor*>(this) &&
             (*fnWhichRegion)( *this, fnPosRegion, IsReadOnlyAvailable()  ) &&
             !IsSelOvr() &&
-            (GetPoint()->nNode.GetIndex() != m_vSavePos.back().nNode ||
+            (GetPoint()->GetNodeIndex() != m_vSavePos.back().nNode ||
              GetPoint()->nContent.GetIndex() != m_vSavePos.back().nContent);
 }
 

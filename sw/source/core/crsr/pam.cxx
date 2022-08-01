@@ -203,14 +203,14 @@ SwDoc& SwPosition::GetDoc() const
 void SwPosition::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwPosition"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nNode"), BAD_CAST(OString::number(sal_Int32(nNode.GetIndex())).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nNode"), BAD_CAST(OString::number(sal_Int32(GetNodeIndex())).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nContent"), BAD_CAST(OString::number(nContent.GetIndex()).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 }
 
 std::ostream &operator <<(std::ostream& s, const SwPosition& position)
 {
-    return s << "SwPosition (node " << position.nNode.GetIndex() << ", offset " << position.nContent.GetIndex() << ")";
+    return s << "SwPosition (node " << position.GetNodeIndex() << ", offset " << position.nContent.GetIndex() << ")";
 }
 
 namespace {
@@ -704,8 +704,8 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
         // check for protected section inside the selection
         if( !bRet )
         {
-            SwNodeOffset nSttIdx = GetMark()->nNode.GetIndex(),
-                    nEndIdx = GetPoint()->nNode.GetIndex();
+            SwNodeOffset nSttIdx = GetMark()->GetNodeIndex(),
+                    nEndIdx = GetPoint()->GetNodeIndex();
             if( nEndIdx <= nSttIdx )
             {
                 SwNodeOffset nTmp = nSttIdx;

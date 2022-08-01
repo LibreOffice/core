@@ -563,7 +563,7 @@ SvParserState SwHTMLParser::CallParser()
 
         m_xDoc->getIDocumentContentOperations().SplitNode( *pPos, false );
 
-        *m_pSttNdIdx = pPos->nNode.GetIndex()-1;
+        *m_pSttNdIdx = pPos->GetNodeIndex()-1;
         m_xDoc->getIDocumentContentOperations().SplitNode( *pPos, false );
 
         SwPaM aInsertionRangePam( *pPos );
@@ -761,18 +761,18 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
 
 #if OSL_DEBUG_LEVEL > 0
 // !!! shouldn't be possible, or ??
-                OSL_ENSURE( m_pSttNdIdx->GetIndex()+1 != m_pPam->GetBound().nNode.GetIndex(),
+                OSL_ENSURE( m_pSttNdIdx->GetIndex()+1 != m_pPam->GetBound().GetNodeIndex(),
                     "Pam.Bound1 is still in the node" );
-                OSL_ENSURE( m_pSttNdIdx->GetIndex()+1 != m_pPam->GetBound( false ).nNode.GetIndex(),
+                OSL_ENSURE( m_pSttNdIdx->GetIndex()+1 != m_pPam->GetBound( false ).GetNodeIndex(),
                     "Pam.Bound2 is still in the node" );
 
-                if( m_pSttNdIdx->GetIndex()+1 == m_pPam->GetBound().nNode.GetIndex() )
+                if( m_pSttNdIdx->GetIndex()+1 == m_pPam->GetBound().GetNodeIndex() )
                 {
                     const sal_Int32 nCntPos = m_pPam->GetBound().nContent.GetIndex();
                     m_pPam->GetBound().nContent.Assign( pTextNode,
                                     pTextNode->GetText().getLength() + nCntPos );
                 }
-                if( m_pSttNdIdx->GetIndex()+1 == m_pPam->GetBound( false ).nNode.GetIndex() )
+                if( m_pSttNdIdx->GetIndex()+1 == m_pPam->GetBound( false ).GetNodeIndex() )
                 {
                     const sal_Int32 nCntPos = m_pPam->GetBound( false ).nContent.GetIndex();
                     m_pPam->GetBound( false ).nContent.Assign( pTextNode,
@@ -804,7 +804,7 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
         if( !pPos->nContent.GetIndex() && !bLFStripped )
         {
             SwTextNode* pCurrentNd;
-            SwNodeOffset nNodeIdx = pPos->nNode.GetIndex();
+            SwNodeOffset nNodeIdx = pPos->GetNodeIndex();
 
             bool bHasFlysOrMarks =
                 HasCurrentParaFlys() || HasCurrentParaBookmarks( true );
@@ -821,7 +821,7 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
                         SwCursorShell *pCursorSh = dynamic_cast<SwCursorShell *>( pVSh );
                         if( pCursorSh &&
                             pCursorSh->GetCursor()->GetPoint()
-                                   ->nNode.GetIndex() == nNodeIdx )
+                                   ->GetNodeIndex() == nNodeIdx )
                         {
                             pCursorSh->MovePara(GoPrevPara, fnParaEnd );
                             pCursorSh->SetMark();
@@ -1779,7 +1779,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
                 EndPara();
             OSL_ENSURE(!m_xTable, "table in table not allowed here");
             if( !m_xTable && (IsNewDoc() || !m_pPam->GetNode().FindTableNode()) &&
-                (m_pPam->GetPoint()->nNode.GetIndex() >
+                (m_pPam->GetPoint()->GetNodeIndex() >
                             m_xDoc->GetNodes().GetEndOfExtras().GetIndex() ||
                 !m_pPam->GetNode().FindFootnoteStartNode() ) )
             {
@@ -2496,7 +2496,7 @@ void SwHTMLParser::AddParSpace()
 
     m_bNoParSpace = false;
 
-    SwNodeOffset nNdIdx = m_pPam->GetPoint()->nNode.GetIndex() - 1;
+    SwNodeOffset nNdIdx = m_pPam->GetPoint()->GetNodeIndex() - 1;
 
     SwTextNode *pTextNode = m_xDoc->GetNodes()[nNdIdx]->GetTextNode();
     if( !pTextNode )
@@ -2879,7 +2879,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
 
                 aAttrPam.GetPoint()->nContent.Assign( pCNd, pAttr->m_nEndContent );
                 if( bBeforeTable &&
-                    aAttrPam.GetPoint()->nNode.GetIndex() ==
+                    aAttrPam.GetPoint()->GetNodeIndex() ==
                         rEndIdx.GetIndex() )
                 {
                     // If we're before inserting a table and the attribute ends
@@ -2888,7 +2888,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                     if( nWhich != RES_BREAK && nWhich != RES_PAGEDESC &&
                          !isTXTATR_NOEND(nWhich) )
                     {
-                        if( aAttrPam.GetMark()->nNode.GetIndex() !=
+                        if( aAttrPam.GetMark()->GetNodeIndex() !=
                             rEndIdx.GetIndex() )
                         {
                             OSL_ENSURE( !aAttrPam.GetPoint()->nContent.GetIndex(),
@@ -2953,8 +2953,8 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                     continue;
 
                 case RES_LR_SPACE:
-                    if( aAttrPam.GetPoint()->nNode.GetIndex() ==
-                        aAttrPam.GetMark()->nNode.GetIndex())
+                    if( aAttrPam.GetPoint()->GetNodeIndex() ==
+                        aAttrPam.GetMark()->GetNodeIndex())
                     {
                         // because of numbering set this attribute directly at node
                         pCNd->SetAttr( *pAttr->m_pItem );
@@ -3013,7 +3013,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
         OSL_ENSURE( RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId(),
                 "Only At-Para flys need special handling" );
         const SwPosition *pFlyPos = rAnchor.GetContentAnchor();
-        SwNodeOffset nFlyParaIdx = pFlyPos->nNode.GetIndex();
+        SwNodeOffset nFlyParaIdx = pFlyPos->GetNodeIndex();
         bool bMoveFly;
         if( bChkEnd )
         {
@@ -3066,7 +3066,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
         aAttrPam.GetPoint()->nContent.Assign( pCNd, field->m_nStartContent );
 
         if( bBeforeTable &&
-            aAttrPam.GetPoint()->nNode.GetIndex() == rEndIdx.GetIndex() )
+            aAttrPam.GetPoint()->GetNodeIndex() == rEndIdx.GetIndex() )
         {
             OSL_ENSURE( !bBeforeTable, "Aha, the case does occur" );
             OSL_ENSURE( !aAttrPam.GetPoint()->nContent.GetIndex(),
@@ -4987,7 +4987,7 @@ void SwHTMLParser::InsertSpacer()
 
                 SetAttr();  // set still open paragraph attributes
 
-                pTextNode = m_xDoc->GetNodes()[m_pPam->GetPoint()->nNode.GetIndex()-1]
+                pTextNode = m_xDoc->GetNodes()[m_pPam->GetPoint()->GetNodeIndex()-1]
                                ->GetTextNode();
 
                 // If the previous paragraph isn't a text node, then now an

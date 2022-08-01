@@ -280,7 +280,7 @@ void RtfAttributeOutput::EndParagraph(ww8::WW8TableNodeInfoInner::Pointer_t pTex
         // We're ending a paragraph that is the last paragraph of a footnote or endnote, or of clipboard.
         bLastPara
             = m_rExport.GetCurrentNodeIndex()
-              && m_rExport.GetCurrentNodeIndex() == m_rExport.m_pCurPam->End()->nNode.GetIndex();
+              && m_rExport.GetCurrentNodeIndex() == m_rExport.m_pCurPam->End()->GetNodeIndex();
     }
 
     FinishTableRowCell(pTextNodeInfoInner);

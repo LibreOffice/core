@@ -104,7 +104,7 @@ public:
             {
                 SwRangeRedline const*const pRed = m_rIDRA.GetRedlineTable()[m_RedlineIndex];
 
-                if (m_pEndPos->nNode.GetIndex() < pRed->Start()->nNode.GetIndex())
+                if (m_pEndPos->GetNodeIndex() < pRed->Start()->GetNodeIndex())
                     break;
 
                 if (pRed->GetType() != RedlineType::Delete)
@@ -240,7 +240,7 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
                 pNode->SetRedlineMergeFlag(SwNode::Merge::First);
             } // else: was already set before
             int nLevel(0);
-            for (SwNodeOffset j = pNode->GetIndex() + 1; j < pEnd->nNode.GetIndex(); ++j)
+            for (SwNodeOffset j = pNode->GetIndex() + 1; j < pEnd->GetNodeIndex(); ++j)
             {
                 SwNode *const pTmp(pNode->GetNodes()[j]);
                 if (nLevel == 0)
@@ -275,7 +275,7 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
                 assert(pEnd->nNode != pStart->nNode);
                 // must set pNode too because it will mark the last node
                 pNode = nodes.back();
-                assert(pNode == pNode->GetNodes()[pEnd->nNode.GetIndex() - 1]);
+                assert(pNode == pNode->GetNodes()[pEnd->GetNodeIndex() - 1]);
                 if (pNode != &rTextNode)
                 {   // something might depend on last merged one being NonFirst?
                     pNode->SetRedlineMergeFlag(SwNode::Merge::NonFirst);
@@ -654,7 +654,7 @@ SwRedlineItr::SwRedlineItr( const SwTextNode& rTextNd, SwFont& rFnt,
     if( pArr )
     {
         assert(pExtInputStart);
-        m_pExt.reset( new SwExtend(*pArr, pExtInputStart->nNode.GetIndex(),
+        m_pExt.reset( new SwExtend(*pArr, pExtInputStart->GetNodeIndex(),
                                      pExtInputStart->nContent.GetIndex()) );
     }
     else
@@ -787,8 +787,8 @@ short SwRedlineItr::Seek(SwFont& rFnt,
                 m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[m_nAct]);
             SwPosition const*const pStart(pRedline->Start());
             if (pRedline->GetType() == RedlineType::Delete
-                && (nNode < pStart->nNode.GetIndex()
-                    || (nNode == pStart->nNode.GetIndex()
+                && (nNode < pStart->GetNodeIndex()
+                    || (nNode == pStart->GetNodeIndex()
                         && nNew <= pStart->nContent.GetIndex())))
             {
                 pRedline->CalcStartEnd(nNode, m_nStart, m_nEnd);

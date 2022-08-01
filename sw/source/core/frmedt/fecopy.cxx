@@ -865,8 +865,8 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
         // Creation of the list of insert positions
         std::vector< Insertion > aCopyVector;
         // The number of text portions of the rectangular selection
-        const SwNodeOffset nSelCount = aCpyPam.GetPoint()->nNode.GetIndex()
-                       - aCpyPam.GetMark()->nNode.GetIndex();
+        const SwNodeOffset nSelCount = aCpyPam.GetPoint()->GetNodeIndex()
+                       - aCpyPam.GetMark()->GetNodeIndex();
         SwNodeOffset nCount = nSelCount;
         SwNodeIndex aClpIdx( aIdx );
         SwPaM* pStartCursor = GetCursor();
@@ -1050,7 +1050,7 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
                     // shouldn't happen here)
                     SwFormatAnchor const& rAnchor(pFlyFormat->GetAnchor());
                     if (RndStdIds::FLY_AT_PAGE == rAnchor.GetAnchorId()
-                        || rClpDoc.GetNodes().GetEndOfExtras().GetIndex() < rAnchor.GetContentAnchor()->nNode.GetIndex())
+                        || rClpDoc.GetNodes().GetEndOfExtras().GetIndex() < rAnchor.GetContentAnchor()->GetNodeIndex())
                     {
                         inserted.emplace_back(
                             lcl_PasteFlyOrDrawFormat(rPaM, pFlyFormat, *this));
@@ -1100,9 +1100,9 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
 
                     // Update the rsid of each pasted text node.
                     SwNodes &rDestNodes = GetDoc()->GetNodes();
-                    SwNodeOffset const nEndIdx = aPaM.End()->nNode.GetIndex();
+                    SwNodeOffset const nEndIdx = aPaM.End()->GetNodeIndex();
 
-                    for (SwNodeOffset nIdx = aPaM.Start()->nNode.GetIndex();
+                    for (SwNodeOffset nIdx = aPaM.Start()->GetNodeIndex();
                         nIdx <= nEndIdx; ++nIdx)
                     {
                         SwTextNode *const pTextNode = rDestNodes[nIdx]->GetTextNode();

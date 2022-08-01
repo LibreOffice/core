@@ -90,13 +90,13 @@ void Writer_Impl::RemoveFontList( SwDoc& rDoc )
 
 void Writer_Impl::InsertBkmk(const ::sw::mark::IMark& rBkmk)
 {
-    SwNodeOffset nNd = rBkmk.GetMarkPos().nNode.GetIndex();
+    SwNodeOffset nNd = rBkmk.GetMarkPos().GetNodeIndex();
 
     aBkmkNodePos.emplace( nNd, &rBkmk );
 
     if(rBkmk.IsExpanded() && rBkmk.GetOtherMarkPos().nNode != nNd)
     {
-        nNd = rBkmk.GetOtherMarkPos().nNode.GetIndex();
+        nNd = rBkmk.GetOtherMarkPos().GetNodeIndex();
         aBkmkNodePos.emplace( nNd, &rBkmk );
     }
 }
@@ -470,7 +470,7 @@ bool Writer::GetBookmarks(const SwContentNode& rNd, sal_Int32 nStt,
                     rArr.push_back( &rBkmk );
                 }
                 else if( rBkmk.IsExpanded() && nNd ==
-                        rBkmk.GetOtherMarkPos().nNode.GetIndex() && (nContent =
+                        rBkmk.GetOtherMarkPos().GetNodeIndex() && (nContent =
                         rBkmk.GetOtherMarkPos().nContent.GetIndex() ) >= nStt &&
                         nContent < nEnd )
                 {

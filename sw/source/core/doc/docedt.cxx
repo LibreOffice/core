@@ -86,7 +86,7 @@ void RestFlyInRange( SaveFlyArr & rArr, const SwPosition& rStartPos,
         }
         else
         {
-            aPos.nNode = rStartPos.nNode.GetIndex() + rSave.nNdDiff;
+            aPos.nNode = rStartPos.GetNodeIndex() + rSave.nNdDiff;
             assert(aPos.GetNode().GetContentNode());
             aPos.nContent.Assign(aPos.GetNode().GetContentNode(),
                 rSave.nNdDiff == SwNodeOffset(0)
@@ -118,7 +118,7 @@ void SaveFlyInRange( const SwNodeRange& rRg, SaveFlyArr& rArr )
              (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
             rRg.aStart <= pAPos->nNode && pAPos->nNode < rRg.aEnd )
         {
-            SaveFly aSave( pAPos->nNode.GetIndex() - rRg.aStart.GetIndex(),
+            SaveFly aSave( pAPos->GetNodeIndex() - rRg.aStart.GetIndex(),
                             (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId())
                                 ? pAPos->nContent.GetIndex()
                                 : 0,
@@ -186,7 +186,7 @@ void SaveFlyInRange( const SwPaM& rPam, const SwPosition& rInsPos,
                 {
                     pHistory->AddChangeFlyAnchor(*pFormat);
                 }
-                SaveFly aSave( pAPos->nNode.GetIndex() - rSttNdIdx.GetIndex(),
+                SaveFly aSave( pAPos->GetNodeIndex() - rSttNdIdx.GetIndex(),
                     (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId())
                         ? (pAPos->nNode == rSttNdIdx)
                             ? pAPos->nContent.GetIndex() - rPam.Start()->nContent.GetIndex()
@@ -538,8 +538,8 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                             pEndPos->GetNode().GetTextNode(), pEndPos->nContent,
                             bGrammarCheck ));
 
-    SwNodeOffset nCurrNd = pSttPos->nNode.GetIndex();
-    SwNodeOffset nEndNd = pEndPos->nNode.GetIndex();
+    SwNodeOffset nCurrNd = pSttPos->GetNodeIndex();
+    SwNodeOffset nEndNd = pEndPos->GetNodeIndex();
 
     uno::Any aRet;
     if( nCurrNd <= nEndNd )
@@ -737,7 +737,7 @@ SwHyphArgs::SwHyphArgs( const SwPaM *pPam, const Point &rCursorPos,
             "SwDoc::Hyphenate: New York, New York");
 
     const SwPosition *pPoint = pPam->GetPoint();
-    m_nNode = pPoint->nNode.GetIndex();
+    m_nNode = pPoint->GetNodeIndex();
 
     // Set start
     m_pStart = pPoint->GetNode().GetTextNode();
@@ -846,8 +846,8 @@ void SwDoc::CountWords( const SwPaM& rPaM, SwDocStat& rStat )
     // This is a modified version of SwDoc::TransliterateText
     auto [pStt, pEnd] = rPaM.StartEnd(); // SwPosition*
 
-    const SwNodeOffset nSttNd = pStt->nNode.GetIndex();
-    const SwNodeOffset nEndNd = pEnd->nNode.GetIndex();
+    const SwNodeOffset nSttNd = pStt->GetNodeIndex();
+    const SwNodeOffset nEndNd = pEnd->GetNodeIndex();
 
     const sal_Int32 nSttCnt = pStt->nContent.GetIndex();
     const sal_Int32 nEndCnt = pEnd->nContent.GetIndex();

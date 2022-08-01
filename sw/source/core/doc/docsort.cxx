@@ -298,8 +298,8 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
 
     // Check if only TextNodes are within the Selection
     {
-        SwNodeOffset nStart = pStart->nNode.GetIndex(),
-                        nEnd = pEnd->nNode.GetIndex();
+        SwNodeOffset nStart = pStart->GetNodeIndex(),
+                        nEnd = pEnd->GetNodeIndex();
         while( nStart <= nEnd )
             // Iterate over a selected range
             if( !GetNodes()[ nStart++ ]->IsTextNode() )
@@ -379,7 +379,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
     }
 
     // Now comes the tricky part: Move Nodes (and always keep Undo in mind)
-    SwNodeOffset nBeg = pStart->nNode.GetIndex();
+    SwNodeOffset nBeg = pStart->GetNodeIndex();
     SwNodeRange aRg( aStart, aStart );
 
     if( bUndo && !pRedlUndo )

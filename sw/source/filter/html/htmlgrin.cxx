@@ -1368,7 +1368,7 @@ void SwHTMLParser::InsertBookmark( const OUString& rName )
 bool SwHTMLParser::HasCurrentParaBookmarks( bool bIgnoreStack ) const
 {
     bool bHasMarks = false;
-    SwNodeOffset nNodeIdx = m_pPam->GetPoint()->nNode.GetIndex();
+    SwNodeOffset nNodeIdx = m_pPam->GetPoint()->GetNodeIndex();
 
     // first step: are there still bookmark in the attribute-stack?
     // bookmarks are added to the end of the stack - thus we only have
@@ -1397,7 +1397,7 @@ bool SwHTMLParser::HasCurrentParaBookmarks( bool bIgnoreStack ) const
         {
             const ::sw::mark::IMark* pBookmark = *ppMark;
 
-            const SwNodeOffset nBookNdIdx = pBookmark->GetMarkPos().nNode.GetIndex();
+            const SwNodeOffset nBookNdIdx = pBookmark->GetMarkPos().GetNodeIndex();
             if( nBookNdIdx==nNodeIdx )
             {
                 bHasMarks = true;
@@ -1418,7 +1418,7 @@ void SwHTMLParser::StripTrailingPara()
     bool bSetSmallFont = false;
 
     SwContentNode* pCNd = m_pPam->GetContentNode();
-    SwNodeOffset nNodeIdx = m_pPam->GetPoint()->nNode.GetIndex();
+    SwNodeOffset nNodeIdx = m_pPam->GetPoint()->GetNodeIndex();
     if( !m_pPam->GetPoint()->nContent.GetIndex() )
     {
         if( pCNd && pCNd->StartOfSectionIndex() + 2 <
@@ -1462,7 +1462,7 @@ void SwHTMLParser::StripTrailingPara()
             {
                 ::sw::mark::IMark* pMark = *ppMark;
 
-                SwNodeOffset nBookNdIdx = pMark->GetMarkPos().nNode.GetIndex();
+                SwNodeOffset nBookNdIdx = pMark->GetMarkPos().GetNodeIndex();
                 if(nBookNdIdx==nNodeIdx)
                 {
                     SwNodeIndex nNewNdIdx(m_pPam->GetPoint()->nNode);

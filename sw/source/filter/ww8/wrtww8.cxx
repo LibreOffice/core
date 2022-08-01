@@ -1442,14 +1442,14 @@ void WW8Export::AppendBookmarks( const SwTextNode& rNd, sal_Int32 nCurrentPos, s
             pOPos = &rBkmk.GetMarkPos();
         }
 
-        if( !pOPos || ( nNd == pPos->nNode.GetIndex() &&
+        if( !pOPos || ( nNd == pPos->GetNodeIndex() &&
             ( nContent = pPos->nContent.GetIndex() ) >= nCurrentPos &&
             nContent < nCurrentEnd ) )
         {
             sal_uLong nCp = nSttCP + pPos->nContent.GetIndex() - nCurrentPos;
             m_pBkmks->Append(nCp, BookmarkToWord(rBkmk.GetName()));
         }
-        if( pOPos && nNd == pOPos->nNode.GetIndex() &&
+        if( pOPos && nNd == pOPos->GetNodeIndex() &&
             ( nContent = pOPos->nContent.GetIndex() ) >= nCurrentPos &&
             nContent < nCurrentEnd )
         {
@@ -1880,7 +1880,7 @@ void MSWordExportBase::SetCurPam(SwNodeOffset nStt, SwNodeOffset nEnd)
     m_pCurPam = Writer::NewUnoCursor( m_rDoc, nStt, nEnd );
 
     // Recognize tables in special cases
-    if ( nStt != m_pCurPam->GetMark()->nNode.GetIndex() &&
+    if ( nStt != m_pCurPam->GetMark()->GetNodeIndex() &&
          m_rDoc.GetNodes()[ nStt ]->IsTableNode() )
     {
         m_pCurPam->GetMark()->nNode = nStt;
@@ -2921,7 +2921,7 @@ void MSWordExportBase::WriteText()
         else
             ++m_pCurPam->GetPoint()->nNode;
 
-        SwNodeOffset nPos = m_pCurPam->GetPoint()->nNode.GetIndex();
+        SwNodeOffset nPos = m_pCurPam->GetPoint()->GetNodeIndex();
         ::SetProgressState( sal_Int32(nPos), m_pCurPam->GetDoc().GetDocShell() );
     }
 
@@ -3154,7 +3154,7 @@ void MSWordExportBase::AddLinkTarget(std::u16string_view rURL)
         // node index number of where it points to
         if( m_rDoc.GotoOutline( aPos, aName ) )
         {
-            nIdx = aPos.nNode.GetIndex();
+            nIdx = aPos.GetNodeIndex();
             noBookmark = true;
         }
     }
@@ -3896,8 +3896,8 @@ MSWordExportBase::MSWordExportBase( SwDoc& rDocument, std::shared_ptr<SwUnoCurso
     , m_bFontSizeWritten(false)
     , m_bAddFootnoteTab(false)
     , m_rDoc(rDocument)
-    , m_nCurStart(pCurrentPam->GetPoint()->nNode.GetIndex())
-    , m_nCurEnd(pCurrentPam->GetMark()->nNode.GetIndex())
+    , m_nCurStart(pCurrentPam->GetPoint()->GetNodeIndex())
+    , m_nCurEnd(pCurrentPam->GetMark()->GetNodeIndex())
     , m_pCurPam(pCurrentPam)
     , m_pOrigPam(pOriginalPam)
 {

@@ -1222,9 +1222,9 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                                 bMarked = true;
                                 // check whether nHere is 'inside' pCursor
                                 SwPosition* pStart = rTmpCursor.Start();
-                                SwNodeOffset nStartIndex = pStart->nNode.GetIndex();
+                                SwNodeOffset nStartIndex = pStart->GetNodeIndex();
                                 SwPosition* pEnd = rTmpCursor.End();
-                                SwNodeOffset nEndIndex = pEnd->nNode.GetIndex();
+                                SwNodeOffset nEndIndex = pEnd->GetNodeIndex();
                                 if ((nStartIndex <= nLastNode) && (nFirstNode <= nEndIndex))
                                 {
                                     if( rAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR )
@@ -3280,7 +3280,7 @@ std::unique_ptr<SwAccessibleSelectedParas_Impl> SwAccessibleMap::BuildSelectedPa
             auto [pStartPos, pEndPos] = pCursor->StartEnd(); // SwPosition*
             // loop on all text nodes inside the selection
             SwNodeIndex aIdx( pStartPos->nNode );
-            for ( ; aIdx.GetIndex() <= pEndPos->nNode.GetIndex(); ++aIdx )
+            for ( ; aIdx.GetIndex() <= pEndPos->GetNodeIndex(); ++aIdx )
             {
                 SwTextNode* pTextNode( aIdx.GetNode().GetTextNode() );
                 if ( pTextNode )
@@ -3296,11 +3296,11 @@ std::unique_ptr<SwAccessibleSelectedParas_Impl> SwAccessibleMap::BuildSelectedPa
                             {
                                 xWeakAcc = (*aMapIter).second;
                                 SwAccessibleParaSelection aDataEntry(
-                                    sw::FrameContainsNode(*pTextFrame, pStartPos->nNode.GetIndex())
+                                    sw::FrameContainsNode(*pTextFrame, pStartPos->GetNodeIndex())
                                         ? pTextFrame->MapModelToViewPos(*pStartPos)
                                         : TextFrameIndex(0),
 
-                                    sw::FrameContainsNode(*pTextFrame, pEndPos->nNode.GetIndex())
+                                    sw::FrameContainsNode(*pTextFrame, pEndPos->GetNodeIndex())
                                         ? pTextFrame->MapModelToViewPos(*pEndPos)
                                         : TextFrameIndex(COMPLETE_STRING));
                                 if ( !pRetSelectedParas )

@@ -459,9 +459,9 @@ namespace
             const SwPosition* const pStPos = &pMark->GetMarkStart();
             const SwPosition* const pEndPos = &pMark->GetMarkEnd();
             SAL_INFO("sw.core",
-                sal_Int32(pStPos->nNode.GetIndex()) << "," <<
+                sal_Int32(pStPos->GetNodeIndex()) << "," <<
                 pStPos->nContent.GetIndex() << " " <<
-                sal_Int32(pEndPos->nNode.GetIndex()) << "," <<
+                sal_Int32(pEndPos->GetNodeIndex()) << "," <<
                 pEndPos->nContent.GetIndex() << " " <<
                 typeid(*pMark).name() << " " <<
                 pMark->GetName());
@@ -553,9 +553,9 @@ namespace sw::mark
                 pPos2 = rPaM.GetMark();
             SAL_INFO("sw.core",
                 rName << " " <<
-                sal_Int32(pPos1->nNode.GetIndex() )<< "," <<
+                sal_Int32(pPos1->GetNodeIndex() )<< "," <<
                 pPos1->nContent.GetIndex() << " " <<
-                sal_Int32(pPos2->nNode.GetIndex()) << "," <<
+                sal_Int32(pPos2->GetNodeIndex()) << "," <<
                 pPos2->nContent.GetIndex());
         }
 #endif
@@ -1817,7 +1817,7 @@ SaveBookmark::SaveBookmark(
             m_pMetadataUndo = pMetadatable->CreateUndo();
         }
     }
-    m_nNode1 = rBkmk.GetMarkPos().nNode.GetIndex();
+    m_nNode1 = rBkmk.GetMarkPos().GetNodeIndex();
     m_nContent1 = rBkmk.GetMarkPos().nContent.GetIndex();
 
     m_nNode1 -= rMvPos.GetIndex();
@@ -1826,7 +1826,7 @@ SaveBookmark::SaveBookmark(
 
     if(rBkmk.IsExpanded())
     {
-        m_nNode2 = rBkmk.GetOtherMarkPos().nNode.GetIndex();
+        m_nNode2 = rBkmk.GetOtherMarkPos().GetNodeIndex();
         m_nContent2 = rBkmk.GetOtherMarkPos().nContent.GetIndex();
 
         m_nNode2 -= rMvPos.GetIndex();

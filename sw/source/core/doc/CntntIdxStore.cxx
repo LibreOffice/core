@@ -53,7 +53,7 @@ namespace
 
     int lcl_RelativePosition( const SwPosition& rPos, SwNodeOffset nNode, sal_Int32 nContent )
     {
-        SwNodeOffset nIndex = rPos.nNode.GetIndex();
+        SwNodeOffset nIndex = rPos.GetNodeIndex();
         int nReturn = BEFORE_NODE;
         if( nIndex == nNode )
         {
@@ -201,7 +201,7 @@ namespace
     void lcl_ChkPaM( std::vector<PaMEntry>& rPaMEntries, const SwNodeOffset nNode, const sal_Int32 nContent, SwPaM& rPaM, const bool bGetPoint, bool bSetMark)
     {
         const SwPosition* pPos = &rPaM.GetBound(bGetPoint);
-        if( pPos->nNode.GetIndex() == nNode && pPos->nContent.GetIndex() < nContent )
+        if( pPos->GetNodeIndex() == nNode && pPos->nContent.GetIndex() < nContent )
         {
             const PaMEntry aEntry = { &rPaM, bSetMark, pPos->nContent.GetIndex() };
             rPaMEntries.push_back(aEntry);
@@ -238,7 +238,7 @@ void ContentIdxStoreImpl::SaveBkmks(SwDoc& rDoc, SwNodeOffset nNode, sal_Int32 n
     {
         const ::sw::mark::IMark* pBkmk = *ppBkmk;
         bool bMarkPosEqual = false;
-        if(pBkmk->GetMarkPos().nNode.GetIndex() == nNode
+        if(pBkmk->GetMarkPos().GetNodeIndex() == nNode
             && pBkmk->GetMarkPos().nContent.GetIndex() <= nContent)
         {
             if(pBkmk->GetMarkPos().nContent.GetIndex() < nContent)
@@ -250,7 +250,7 @@ void ContentIdxStoreImpl::SaveBkmks(SwDoc& rDoc, SwNodeOffset nNode, sal_Int32 n
                 bMarkPosEqual = true; // has to decide if it is added to the array
         }
         if(pBkmk->IsExpanded()
-            && pBkmk->GetOtherMarkPos().nNode.GetIndex() == nNode
+            && pBkmk->GetOtherMarkPos().GetNodeIndex() == nNode
             && pBkmk->GetOtherMarkPos().nContent.GetIndex() <= nContent)
         {
             if(bMarkPosEqual)
@@ -344,7 +344,7 @@ void ContentIdxStoreImpl::SaveFlys(SwDoc& rDoc, SwNodeOffset nNode, sal_Int32 nC
         {
             const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
             SwPosition const*const pAPos = rAnchor.GetContentAnchor();
-            if ( pAPos && ( nNode == pAPos->nNode.GetIndex() ) &&
+            if ( pAPos && ( nNode == pAPos->GetNodeIndex() ) &&
                  ( RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId() ||
                    RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId() ) )
             {

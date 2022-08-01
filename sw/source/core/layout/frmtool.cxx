@@ -965,7 +965,7 @@ void SwContentNotify::ImplDestroy()
                     continue;
                 }
 
-                if (FrameContainsNode(*pCnt, rAnch.GetContentAnchor()->nNode.GetIndex()))
+                if (FrameContainsNode(*pCnt, rAnch.GetContentAnchor()->GetNodeIndex()))
                 {
                     OSL_FAIL( "<SwContentNotify::~SwContentNotify()> - to page anchored object with content position." );
                     if ( !pPage )
@@ -1103,7 +1103,7 @@ static bool IsShown(SwNodeOffset const nIndex,
 {
     assert(!pIter || *pIter == *pEnd || (*pIter)->pNode->GetIndex() == nIndex);
     SwPosition const& rAnchor(*rAnch.GetContentAnchor());
-    if (rAnchor.nNode.GetIndex() != nIndex)
+    if (rAnchor.GetNodeIndex() != nIndex)
     {
         return false;
     }
@@ -1213,7 +1213,7 @@ void RemoveHiddenObjsOfNode(SwTextNode const& rNode,
         if (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR
             || rAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR)
         {
-            assert(rAnchor.GetContentAnchor()->nNode.GetIndex() == rNode.GetIndex());
+            assert(rAnchor.GetContentAnchor()->GetNodeIndex() == rNode.GetIndex());
             if (!IsShown(rNode.GetIndex(), rAnchor, pIter, pEnd, pFirstNode, pLastNode))
             {
                 pFrameFormat->DelFrames();
@@ -1361,7 +1361,7 @@ bool IsAnchoredObjShown(SwTextFrame const& rFrame, SwFormatAnchor const& rAnchor
                     break;
                 }
                 pNode = iter->pNode;
-                if (pAnchor->nNode.GetIndex() < pNode->GetIndex())
+                if (pAnchor->GetNodeIndex() < pNode->GetIndex())
                 {
                     break;
                 }

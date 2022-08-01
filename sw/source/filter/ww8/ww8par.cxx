@@ -1350,8 +1350,8 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 if (rEntry.MakeRegion(m_rDoc, aRegion, SwFltStackEntry::RegionMode::NoCheck))
                 {
                     SvxLRSpaceItem aNewLR( *static_cast<SvxLRSpaceItem*>(rEntry.m_pAttr.get()) );
-                    SwNodeOffset nStart = aRegion.Start()->nNode.GetIndex();
-                    SwNodeOffset nEnd   = aRegion.End()->nNode.GetIndex();
+                    SwNodeOffset nStart = aRegion.Start()->GetNodeIndex();
+                    SwNodeOffset nEnd   = aRegion.End()->GetNodeIndex();
                     for(; nStart <= nEnd; ++nStart)
                     {
                         SwNode* pNode = m_rDoc.GetNodes()[ nStart ];
@@ -4650,8 +4650,8 @@ void wwSectionManager::InsertSegments()
                 SwFormatPageDesc aDesc(SetSwFormatPageDesc(aIter, aStart, true));
                 if (aDesc.GetPageDesc())
                 {
-                    SwNodeOffset nStart = aSectPaM.Start()->nNode.GetIndex();
-                    SwNodeOffset nEnd   = aSectPaM.End()->nNode.GetIndex();
+                    SwNodeOffset nStart = aSectPaM.Start()->GetNodeIndex();
+                    SwNodeOffset nEnd   = aSectPaM.End()->GetNodeIndex();
                     for(; nStart <= nEnd; ++nStart)
                     {
                         SwNode* pNode = mrReader.m_rDoc.GetNodes()[nStart];
@@ -5215,7 +5215,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
         }
 
         // suppress insertion of tables inside footnotes.
-        const SwNodeOffset nNd = pPos->nNode.GetIndex();
+        const SwNodeOffset nNd = pPos->GetNodeIndex();
         m_bReadNoTable = ( nNd < m_rDoc.GetNodes().GetEndOfInserts().GetIndex() &&
                        m_rDoc.GetNodes().GetEndOfInserts().StartOfSectionIndex() < nNd );
     }

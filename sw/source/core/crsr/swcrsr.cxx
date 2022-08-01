@@ -95,8 +95,8 @@ struct PercentHdl
         else
         {
             bNodeIdx = true;
-            nStt = sal_Int32(rPam.GetMark()->nNode.GetIndex());
-            nEnd = sal_Int32(rPam.GetPoint()->nNode.GetIndex());
+            nStt = sal_Int32(rPam.GetMark()->GetNodeIndex());
+            nEnd = sal_Int32(rPam.GetPoint()->GetNodeIndex());
         }
         nActPos = nStt;
         bBack = (nStt > nEnd );
@@ -116,7 +116,7 @@ struct PercentHdl
         {
             sal_Int32 nPos;
             if( bNodeIdx )
-                nPos = sal_Int32(rPos.nNode.GetIndex());
+                nPos = sal_Int32(rPos.GetNodeIndex());
             else
                 nPos = rPos.nContent.GetIndex();
             ::SetProgressState( bBack ? nActPos - nPos : nPos, pDSh );
@@ -184,7 +184,7 @@ void SwCursor::RestoreState()
 /// determine if point is outside of the node-array's content area
 bool SwCursor::IsNoContent() const
 {
-    return GetPoint()->nNode.GetIndex() <
+    return GetPoint()->GetNodeIndex() <
             GetDoc().GetNodes().GetEndOfExtras().GetIndex();
 }
 
@@ -236,7 +236,7 @@ bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
         return true;
     }
 
-    if (m_vSavePos.back().nNode != GetPoint()->nNode.GetIndex() &&
+    if (m_vSavePos.back().nNode != GetPoint()->GetNodeIndex() &&
         // (1997) in UI-ReadOnly everything is allowed
         ( !rDoc.GetDocShell() || !rDoc.GetDocShell()->IsReadOnlyUI() ))
     {
@@ -301,8 +301,8 @@ bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
         // is there a protected section in the section?
         if( HasMark() && bSkipOverProtectSections)
         {
-            SwNodeOffset nSttIdx = GetMark()->nNode.GetIndex(),
-                nEndIdx = GetPoint()->nNode.GetIndex();
+            SwNodeOffset nSttIdx = GetMark()->GetNodeIndex(),
+                nEndIdx = GetPoint()->GetNodeIndex();
             if( nEndIdx <= nSttIdx )
             {
                 SwNodeOffset nTmp = nSttIdx;
@@ -454,14 +454,14 @@ bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
             const SwNodeOffset nRefNodeIdx =
                 ( SwCursorSelOverFlags::Toggle & eFlags )
                 ? m_vSavePos.back().nNode
-                : GetMark()->nNode.GetIndex();
+                : GetMark()->GetNodeIndex();
             const sal_Int32 nRefContentIdx =
                 ( SwCursorSelOverFlags::Toggle & eFlags )
                 ? m_vSavePos.back().nContent
                 : GetMark()->nContent.GetIndex();
             const bool bIsForwardSelection =
-                nRefNodeIdx < GetPoint()->nNode.GetIndex()
-                || ( nRefNodeIdx == GetPoint()->nNode.GetIndex()
+                nRefNodeIdx < GetPoint()->GetNodeIndex()
+                || ( nRefNodeIdx == GetPoint()->GetNodeIndex()
                      && nRefContentIdx < GetPoint()->nContent.GetIndex() );
 
             if ( pInputFieldTextAttrAtPoint != nullptr )
@@ -501,9 +501,9 @@ bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
     // Only Point in Table then go behind/in front of table
     if (SwCursorSelOverFlags::ChangePos & eFlags)
     {
-        bool bSelTop = GetPoint()->nNode.GetIndex() <
+        bool bSelTop = GetPoint()->GetNodeIndex() <
             ((SwCursorSelOverFlags::Toggle & eFlags)
-                 ? m_vSavePos.back().nNode : GetMark()->nNode.GetIndex());
+                 ? m_vSavePos.back().nNode : GetMark()->GetNodeIndex());
 
         do { // loop for table after table
             SwNodeOffset nSEIdx = pPtNd->EndOfSectionIndex();
@@ -577,7 +577,7 @@ bool SwCursor::IsInProtectTable( bool bMove, bool bChgCursor )
         return false;
 
     // Current position == last save position?
-    if (m_vSavePos.back().nNode == GetPoint()->nNode.GetIndex())
+    if (m_vSavePos.back().nNode == GetPoint()->GetNodeIndex())
         return false;
 
     // Check for covered cell:
@@ -612,7 +612,7 @@ bool SwCursor::IsInProtectTable( bool bMove, bool bChgCursor )
     }
 
     // We are in a protected table cell. Traverse top to bottom?
-    if (m_vSavePos.back().nNode < GetPoint()->nNode.GetIndex())
+    if (m_vSavePos.back().nNode < GetPoint()->GetNodeIndex())
     {
         // search next valid box
         // if there is another StartNode after the EndNode of a cell then
@@ -903,8 +903,8 @@ static bool lcl_MakeSelFwrd( const SwNode& rSttNd, const SwNode& rEndNd,
             return false;
         pCNd->MakeStartIndex( &rPam.GetPoint()->nContent );
     }
-    else if( rSttNd.GetIndex() > rPam.GetPoint()->nNode.GetIndex() ||
-             rPam.GetPoint()->nNode.GetIndex() >= rEndNd.GetIndex() )
+    else if( rSttNd.GetIndex() > rPam.GetPoint()->GetNodeIndex() ||
+             rPam.GetPoint()->GetNodeIndex() >= rEndNd.GetIndex() )
         // not in this section
         return false;
 
@@ -935,8 +935,8 @@ static bool lcl_MakeSelBkwrd( const SwNode& rSttNd, const SwNode& rEndNd,
             return false;
         pCNd->MakeEndIndex( &rPam.GetPoint()->nContent );
     }
-    else if( rEndNd.GetIndex() > rPam.GetPoint()->nNode.GetIndex() ||
-             rPam.GetPoint()->nNode.GetIndex() >= rSttNd.GetIndex() )
+    else if( rEndNd.GetIndex() > rPam.GetPoint()->GetNodeIndex() ||
+             rPam.GetPoint()->GetNodeIndex() >= rSttNd.GetIndex() )
         return false;       // not in this section
 
     rPam.SetMark();
@@ -1003,11 +1003,11 @@ sal_Int32 SwCursor::FindAll( SwFindParas& rParas,
             ? lcl_MakeSelBkwrd( rNds.GetEndOfExtras(),
                     *rNds.GetEndOfPostIts().StartOfSectionNode(),
                      *this, rNds.GetEndOfExtras().GetIndex() >=
-                    GetPoint()->nNode.GetIndex() )
+                    GetPoint()->GetNodeIndex() )
             : lcl_MakeSelFwrd( *rNds.GetEndOfPostIts().StartOfSectionNode(),
                     rNds.GetEndOfExtras(), *this,
                     rNds.GetEndOfExtras().GetIndex() >=
-                    GetPoint()->nNode.GetIndex() ))
+                    GetPoint()->GetNodeIndex() ))
         {
             nFound = lcl_FindSelection( rParas, this, fnMove, pFndRing,
                                         aRegion, eFndRngs, bInReadOnly, bCancel );
@@ -2588,8 +2588,8 @@ bool SwTableCursor::IsCursorMovedUpdate()
     if( !IsCursorMoved() )
         return false;
 
-    m_nTableMkNd = GetMark()->nNode.GetIndex();
-    m_nTablePtNd = GetPoint()->nNode.GetIndex();
+    m_nTableMkNd = GetMark()->GetNodeIndex();
+    m_nTablePtNd = GetPoint()->GetNodeIndex();
     m_nTableMkCnt = GetMark()->nContent.GetIndex();
     m_nTablePtCnt = GetPoint()->nContent.GetIndex();
     return true;

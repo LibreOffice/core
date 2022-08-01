@@ -266,7 +266,7 @@ void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
     if( bMoveBack )
         m_pPam->Move( fnMoveForward );
 
-    assert(m_pPam->GetPoint()->nNode.GetIndex() == nOld);
+    assert(m_pPam->GetPoint()->GetNodeIndex() == nOld);
 }
 
 void SwHTMLParser::SaveDocContext( HTMLAttrContext *pCntxt,

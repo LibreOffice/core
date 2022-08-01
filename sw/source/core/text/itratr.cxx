@@ -746,7 +746,7 @@ TextFrameIndex SwAttrIter::GetNextAttr() const
             if (redline.second.first)
             {
                 assert(m_pMergedPara);
-                assert(redline.second.first->End()->nNode.GetIndex() <= m_pMergedPara->pLastNode->GetIndex()
+                assert(redline.second.first->End()->GetNodeIndex() <= m_pMergedPara->pLastNode->GetIndex()
                     || !redline.second.first->End()->GetNode().IsTextNode());
                 if (CanSkipOverRedline(*pTextNode, redline.first, *redline.second.first,
                         nStartIndex, nEndIndex, m_nPosition == redline.first))
@@ -893,7 +893,7 @@ static void lcl_MinMaxNode(SwFrameFormat* pNd, SwMinMaxNodeArgs& rIn)
 
     const SwPosition *pPos = rFormatA.GetContentAnchor();
     OSL_ENSURE(pPos, "Unexpected NULL arguments");
-    if (!pPos || rIn.m_nIndex != pPos->nNode.GetIndex())
+    if (!pPos || rIn.m_nIndex != pPos->GetNodeIndex())
         return;
 
     tools::Long nMin, nMax;

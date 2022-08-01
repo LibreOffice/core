@@ -447,7 +447,7 @@ void SwRedlineTable::CheckOverlapping(vector_type::const_iterator it)
     if (itNext != maVector.end())
     {
         auto pNext = *itNext;
-        if (pCurr->End()->nNode.GetIndex() >= pNext->Start()->nNode.GetIndex())
+        if (pCurr->End()->GetNodeIndex() >= pNext->Start()->GetNodeIndex())
         {
             m_bHasOverlappingElements = true;
             return;
@@ -456,7 +456,7 @@ void SwRedlineTable::CheckOverlapping(vector_type::const_iterator it)
     if (it != maVector.begin())
     {
         auto pPrev = *(it - 1);
-        if (pPrev->End()->nNode.GetIndex() >= pCurr->Start()->nNode.GetIndex())
+        if (pPrev->End()->GetNodeIndex() >= pCurr->Start()->GetNodeIndex())
             m_bHasOverlappingElements = true;
     }
 }
@@ -535,7 +535,7 @@ std::vector<SwRangeRedline*> GetAllValidRanges(std::unique_ptr<SwRangeRedline> p
                         SwNode& rCurNd = aNewStt.GetNode();
                         if( rCurNd.IsStartNode() )
                         {
-                            if( rCurNd.EndOfSectionIndex() < pEnd->nNode.GetIndex() )
+                            if( rCurNd.EndOfSectionIndex() < pEnd->GetNodeIndex() )
                                 aNewStt.nNode = *rCurNd.EndOfSectionNode();
                             else
                                 break;
@@ -543,7 +543,7 @@ std::vector<SwRangeRedline*> GetAllValidRanges(std::unique_ptr<SwRangeRedline> p
                         else if( rCurNd.IsContentNode() )
                             pC = rCurNd.GetContentNode();
                         ++aNewStt.nNode;
-                    } while( aNewStt.nNode.GetIndex() < pEnd->nNode.GetIndex() );
+                    } while( aNewStt.GetNodeIndex() < pEnd->GetNodeIndex() );
 
                 if( aNewStt.nNode == pEnd->nNode )
                     aNewStt.nContent = pEnd->nContent;
@@ -1383,8 +1383,8 @@ void SwRangeRedline::ShowOriginal(sal_uInt16 nLoop, size_t nMyPos, bool /*bForce
 void SwRangeRedline::InvalidateRange(Invalidation const eWhy)
 {
     auto [pRStt, pREnd] = StartEnd(); // SwPosition*
-    SwNodeOffset nSttNd = pRStt->nNode.GetIndex(),
-                 nEndNd = pREnd->nNode.GetIndex();
+    SwNodeOffset nSttNd = pRStt->GetNodeIndex(),
+                 nEndNd = pREnd->GetNodeIndex();
     sal_Int32 nSttCnt = pRStt->nContent.GetIndex();
     sal_Int32 nEndCnt = pREnd->nContent.GetIndex();
 

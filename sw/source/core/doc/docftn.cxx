@@ -436,9 +436,9 @@ bool SwDoc::SetCurFootnote( const SwPaM& rPam, const OUString& rNumStr,
     SwRootFrame* pTmpRoot = getIDocumentLayoutAccess().GetCurrentLayout();
 
     auto [pStt, pEnd] = rPam.StartEnd(); // SwPosition*
-    const SwNodeOffset nSttNd = pStt->nNode.GetIndex();
+    const SwNodeOffset nSttNd = pStt->GetNodeIndex();
     const sal_Int32 nSttCnt = pStt->nContent.GetIndex();
-    const SwNodeOffset nEndNd = pEnd->nNode.GetIndex();
+    const SwNodeOffset nEndNd = pEnd->GetNodeIndex();
     const sal_Int32 nEndCnt = pEnd->nContent.GetIndex();
 
     size_t nPos = 0;

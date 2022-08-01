@@ -183,7 +183,7 @@ SwFltControlStack::~SwFltControlStack()
 // same paragraph further out by one character.
 void SwFltControlStack::MoveAttrs(const SwPosition& rPos, MoveAttrsMode eMode)
 {
-    SwNodeOffset nPosNd = rPos.nNode.GetIndex();
+    SwNodeOffset nPosNd = rPos.GetNodeIndex();
     sal_uInt16 nPosCt = rPos.nContent.GetIndex() - 1;
 
     for (size_t i = 0, nCnt = m_Entries.size(); i < nCnt; ++i)

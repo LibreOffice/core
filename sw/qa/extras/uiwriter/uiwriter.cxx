@@ -921,13 +921,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCp1000071)
 
     const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
     CPPUNIT_ASSERT_EQUAL( SwRedlineTable::size_type( 2 ), rTable.size());
-    SwNodeOffset redlineStart0NodeIndex = rTable[ 0 ]->Start()->nNode.GetIndex();
+    SwNodeOffset redlineStart0NodeIndex = rTable[ 0 ]->Start()->GetNodeIndex();
     sal_Int32 redlineStart0Index = rTable[ 0 ]->Start()->nContent.GetIndex();
-    SwNodeOffset redlineEnd0NodeIndex = rTable[ 0 ]->End()->nNode.GetIndex();
+    SwNodeOffset redlineEnd0NodeIndex = rTable[ 0 ]->End()->GetNodeIndex();
     sal_Int32 redlineEnd0Index = rTable[ 0 ]->End()->nContent.GetIndex();
-    SwNodeOffset redlineStart1NodeIndex = rTable[ 1 ]->Start()->nNode.GetIndex();
+    SwNodeOffset redlineStart1NodeIndex = rTable[ 1 ]->Start()->GetNodeIndex();
     sal_Int32 redlineStart1Index = rTable[ 1 ]->Start()->nContent.GetIndex();
-    SwNodeOffset redlineEnd1NodeIndex = rTable[ 1 ]->End()->nNode.GetIndex();
+    SwNodeOffset redlineEnd1NodeIndex = rTable[ 1 ]->End()->GetNodeIndex();
     sal_Int32 redlineEnd1Index = rTable[ 1 ]->End()->nContent.GetIndex();
 
     // Change the document layout to be 2 columns, and then undo.
@@ -943,13 +943,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCp1000071)
 
     // Check that redlines are the same like at the beginning.
     CPPUNIT_ASSERT_EQUAL( SwRedlineTable::size_type( 2 ), rTable.size());
-    CPPUNIT_ASSERT_EQUAL( redlineStart0NodeIndex, rTable[ 0 ]->Start()->nNode.GetIndex());
+    CPPUNIT_ASSERT_EQUAL( redlineStart0NodeIndex, rTable[ 0 ]->Start()->GetNodeIndex());
     CPPUNIT_ASSERT_EQUAL( redlineStart0Index, rTable[ 0 ]->Start()->nContent.GetIndex());
-    CPPUNIT_ASSERT_EQUAL( redlineEnd0NodeIndex, rTable[ 0 ]->End()->nNode.GetIndex());
+    CPPUNIT_ASSERT_EQUAL( redlineEnd0NodeIndex, rTable[ 0 ]->End()->GetNodeIndex());
     CPPUNIT_ASSERT_EQUAL( redlineEnd0Index, rTable[ 0 ]->End()->nContent.GetIndex());
-    CPPUNIT_ASSERT_EQUAL( redlineStart1NodeIndex, rTable[ 1 ]->Start()->nNode.GetIndex());
+    CPPUNIT_ASSERT_EQUAL( redlineStart1NodeIndex, rTable[ 1 ]->Start()->GetNodeIndex());
     CPPUNIT_ASSERT_EQUAL( redlineStart1Index, rTable[ 1 ]->Start()->nContent.GetIndex());
-    CPPUNIT_ASSERT_EQUAL( redlineEnd1NodeIndex, rTable[ 1 ]->End()->nNode.GetIndex());
+    CPPUNIT_ASSERT_EQUAL( redlineEnd1NodeIndex, rTable[ 1 ]->End()->GetNodeIndex());
     CPPUNIT_ASSERT_EQUAL( redlineEnd1Index, rTable[ 1 ]->End()->nContent.GetIndex());
 }
 

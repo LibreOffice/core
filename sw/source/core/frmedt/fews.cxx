@@ -556,7 +556,7 @@ bool SwFEShell::Sort(const SwSortOptions& rOpt)
             auto [pStart, pEnd] = pPam->StartEnd(); // SwPosition*
 
             SwNodeIndex aPrevIdx( pStart->nNode, -1 );
-            SwNodeOffset nOffset = pEnd->nNode.GetIndex() - pStart->nNode.GetIndex();
+            SwNodeOffset nOffset = pEnd->GetNodeIndex() - pStart->GetNodeIndex();
             const sal_Int32 nCntStt  = pStart->nContent.GetIndex();
 
             // Sorting

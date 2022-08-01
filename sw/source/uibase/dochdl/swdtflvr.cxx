@@ -437,8 +437,8 @@ sal_Bool SAL_CALL SwTransferable::isComplex()
     SwNodes& aNodes = m_pWrtShell->GetDoc()->GetNodes();
     for (SwPaM& rPaM : m_pWrtShell->GetCursor()->GetRingContainer())
     {
-        for (SwNodeOffset nIndex = rPaM.GetMark()->nNode.GetIndex();
-             nIndex <= rPaM.GetPoint()->nNode.GetIndex(); ++nIndex)
+        for (SwNodeOffset nIndex = rPaM.GetMark()->GetNodeIndex();
+             nIndex <= rPaM.GetPoint()->GetNodeIndex(); ++nIndex)
         {
             SwNode& rNd = *aNodes[nIndex];
 

@@ -122,8 +122,8 @@ ErrCode SwASCWriter::WriteStream()
     // Output all areas of the pam into the ASC file
     do {
         bool bTstFly = true;
-        while( m_pCurrentPam->GetPoint()->nNode.GetIndex() < m_pCurrentPam->GetMark()->nNode.GetIndex() ||
-              (m_pCurrentPam->GetPoint()->nNode.GetIndex() == m_pCurrentPam->GetMark()->nNode.GetIndex() &&
+        while( m_pCurrentPam->GetPoint()->GetNodeIndex() < m_pCurrentPam->GetMark()->GetNodeIndex() ||
+              (m_pCurrentPam->GetPoint()->GetNodeIndex() == m_pCurrentPam->GetMark()->GetNodeIndex() &&
                m_pCurrentPam->GetPoint()->nContent.GetIndex() <= m_pCurrentPam->GetMark()->nContent.GetIndex()) )
         {
             SwTextNode* pNd = m_pCurrentPam->GetPoint()->GetNode().GetTextNode();
@@ -140,7 +140,7 @@ ErrCode SwASCWriter::WriteStream()
                     m_pDoc->GetNodes().GetEndOfContent().GetIndex() &&
                     // And exactly this one is selected
                     m_pDoc->GetNodes().GetEndOfContent().GetIndex() - 1 ==
-                    m_pCurrentPam->GetPoint()->nNode.GetIndex() )
+                    m_pCurrentPam->GetPoint()->GetNodeIndex() )
                 {
                     // Print the frame's content.
                     // It is always at position 0!
@@ -195,7 +195,7 @@ ErrCode SwASCWriter::WriteStream()
                 break;
 
             if( m_bShowProgress )
-                ::SetProgressState( sal_Int32(m_pCurrentPam->GetPoint()->nNode.GetIndex()),
+                ::SetProgressState( sal_Int32(m_pCurrentPam->GetPoint()->GetNodeIndex()),
                                     m_pDoc->GetDocShell() );   // How far?
 
         }

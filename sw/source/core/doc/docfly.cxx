@@ -1052,7 +1052,7 @@ SwChainRet SwDoc::Chainable( const SwFrameFormat &rSource, const SwFrameFormat &
             continue;
         if ( nullptr == rAnchor.GetContentAnchor() )
             continue;
-        SwNodeOffset nTstSttNd = rAnchor.GetContentAnchor()->nNode.GetIndex();
+        SwNodeOffset nTstSttNd = rAnchor.GetContentAnchor()->GetNodeIndex();
         if( nFlySttNd <= nTstSttNd && nTstSttNd < nFlySttNd + SwNodeOffset(2) )
         {
             return SwChainRet::NOT_EMPTY;
@@ -1073,7 +1073,7 @@ SwChainRet SwDoc::Chainable( const SwFrameFormat &rSource, const SwFrameFormat &
     {
         if ( (RndStdIds::FLY_AT_PAGE == rDstAnchor.GetAnchorId()) ||
             ( rDstAnchor.GetContentAnchor() &&
-              rDstAnchor.GetContentAnchor()->nNode.GetIndex() > nEndOfExtras ))
+              rDstAnchor.GetContentAnchor()->GetNodeIndex() > nEndOfExtras ))
             bAllowed = true;
     }
     else if( rSrcAnchor.GetContentAnchor() && rDstAnchor.GetContentAnchor() )

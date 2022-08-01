@@ -32,7 +32,7 @@ SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
     , m_nDestStartNode(0)
     , m_nDestEndNode(0)
     , m_nInsPosNode(0)
-    , m_nMoveDestNode(rMvPos.nNode.GetIndex())
+    , m_nMoveDestNode(rMvPos.GetNodeIndex())
     , m_nDestStartContent(0)
     , m_nDestEndContent(0)
     , m_nInsPosContent(0)
@@ -292,7 +292,7 @@ void SwUndoMove::DelFootnote( const SwPaM& rRange )
     SwDoc& rDoc = rRange.GetDoc();
     SwNodeOffset nContentStt = rDoc.GetNodes().GetEndOfAutotext().GetIndex();
     if( m_nMoveDestNode < nContentStt &&
-        rRange.GetPoint()->nNode.GetIndex() >= nContentStt )
+        rRange.GetPoint()->GetNodeIndex() >= nContentStt )
     {
         // delete all footnotes since they are undesired there
         DelContentIndex( *rRange.GetMark(), *rRange.GetPoint(),

@@ -140,7 +140,7 @@ sal_Int32 SwAccessibleParagraph::GetCaretPos()
 
         // check whether the point points into 'our' node
         SwPosition* pPoint = pCaret->GetPoint();
-        if (sw::FrameContainsNode(*pTextFrame, pPoint->nNode.GetIndex()))
+        if (sw::FrameContainsNode(*pTextFrame, pPoint->GetNodeIndex()))
         {
             // same node? Then check whether it's also within 'our' part
             // of the paragraph
@@ -233,7 +233,7 @@ void SwAccessibleParagraph::GetStates( sal_Int64& rStateSet )
     SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
     assert(pFrame);
     if (pCaret != nullptr &&
-        sw::FrameContainsNode(*pFrame, pCaret->GetPoint()->nNode.GetIndex()) &&
+        sw::FrameContainsNode(*pFrame, pCaret->GetPoint()->GetNodeIndex()) &&
         m_nOldCaretPos != -1)
     {
         vcl::Window *pWin = GetWindow();
@@ -774,7 +774,7 @@ void SAL_CALL SwAccessibleParagraph::grabFocus()
 
     if (pCursorSh != nullptr &&
         ( pCursor == nullptr ||
-          !sw::FrameContainsNode(*pTextFrame, pCursor->GetPoint()->nNode.GetIndex()) ||
+          !sw::FrameContainsNode(*pTextFrame, pCursor->GetPoint()->GetNodeIndex()) ||
           !pTextFrame->IsInside(pTextFrame->MapModelToViewPos(*pCursor->GetPoint()))))
     {
         // create pam for selection
@@ -2981,9 +2981,9 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getSelectedPortionCount(  )
             {
                 // check whether frame's node(s) are 'inside' pCursor
                 SwPosition* pStart = rTmpCursor.Start();
-                SwNodeOffset nStartIndex = pStart->nNode.GetIndex();
+                SwNodeOffset nStartIndex = pStart->GetNodeIndex();
                 SwPosition* pEnd = rTmpCursor.End();
-                SwNodeOffset nEndIndex = pEnd->nNode.GetIndex();
+                SwNodeOffset nEndIndex = pEnd->GetNodeIndex();
                 if ((nStartIndex <= nLastNode) && (nFirstNode <= nEndIndex))
                 {
                     nSelected++;
@@ -3056,9 +3056,9 @@ sal_Bool SAL_CALL SwAccessibleParagraph::removeSelection( sal_Int32 selectionInd
             {
                 // check whether frame's node(s) are 'inside' pCursor
                 SwPosition* pStart = pCursor->Start();
-                SwNodeOffset nStartIndex = pStart->nNode.GetIndex();
+                SwNodeOffset nStartIndex = pStart->GetNodeIndex();
                 SwPosition* pEnd = pCursor->End();
-                SwNodeOffset nEndIndex = pEnd->nNode.GetIndex();
+                SwNodeOffset nEndIndex = pEnd->GetNodeIndex();
                 if ((nStartIndex <= nLastNode) && (nFirstNode <= nEndIndex))
                 {
                     if( nSelected == 0 )
@@ -3361,9 +3361,9 @@ bool SwAccessibleParagraph::GetSelectionAtIndex(
             {
                 // check whether frame's node(s) are 'inside' pCursor
                 SwPosition* pStart = rTmpCursor.Start();
-                SwNodeOffset nStartIndex = pStart->nNode.GetIndex();
+                SwNodeOffset nStartIndex = pStart->GetNodeIndex();
                 SwPosition* pEnd = rTmpCursor.End();
-                SwNodeOffset nEndIndex = pEnd->nNode.GetIndex();
+                SwNodeOffset nEndIndex = pEnd->GetNodeIndex();
                 if ((nStartIndex <= nLastNode) && (nFirstNode <= nEndIndex))
                 {
                     if (!pSelection || *pSelection == 0)

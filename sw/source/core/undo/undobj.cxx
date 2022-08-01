@@ -63,7 +63,7 @@ void SwUndRng::SetValues( const SwPaM& rPam )
     if( rPam.HasMark() )
     {
         const SwPosition *pEnd = rPam.End();
-        m_nEndNode = pEnd->nNode.GetIndex();
+        m_nEndNode = pEnd->GetNodeIndex();
         m_nEndContent = pEnd->nContent.GetIndex();
     }
     else
@@ -73,7 +73,7 @@ void SwUndRng::SetValues( const SwPaM& rPam )
         m_nEndContent = COMPLETE_STRING;
     }
 
-    m_nSttNode = pStt->nNode.GetIndex();
+    m_nSttNode = pStt->GetNodeIndex();
     m_nSttContent = pStt->nContent.GetIndex();
 }
 
@@ -743,7 +743,7 @@ void SwUndoSaveContent::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
 
     const SwPosition* pStt = rPaM.Start(), *pEnd = rPaM.End();
 
-    SwNodeOffset nTmpMvNode = aPos.nNode.GetIndex();
+    SwNodeOffset nTmpMvNode = aPos.GetNodeIndex();
 
     if( pCpyNd || pEndNdIdx )
     {
@@ -757,7 +757,7 @@ void SwUndoSaveContent::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
         rDoc.GetNodes().MoveRange( rPaM, aPos, rNds );
     }
     if( pEndNdIdx )
-        *pEndNdIdx = aPos.nNode.GetIndex();
+        *pEndNdIdx = aPos.GetNodeIndex();
 
     // old position
     aPos.nNode = nTmpMvNode;
@@ -805,7 +805,7 @@ void SwUndoSaveContent::MoveFromUndoNds( SwDoc& rDoc, SwNodeOffset nNodeIdx,
             aPaM.SetMark();
             rNds.Delete( aPaM.GetPoint()->nNode,
                         rNds.GetEndOfExtras().GetIndex() -
-                        aPaM.GetPoint()->nNode.GetIndex() );
+                        aPaM.GetPoint()->GetNodeIndex() );
         }
 
         aRedlRest.Restore();
@@ -891,7 +891,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
             // for now delete all that come afterwards
             while( nPos < rFootnoteArr.size() && ( pFootnoteNd =
                 &( pSrch = rFootnoteArr[ nPos ] )->GetTextNode())->GetIndex()
-                        <= pEnd->nNode.GetIndex() )
+                        <= pEnd->GetNodeIndex() )
             {
                 const sal_Int32 nFootnoteSttIdx = pSrch->GetStart();
                 if( (DelContentType::CheckNoCntnt & nDelContentType )
@@ -921,7 +921,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
             }
 
             while( nPos-- && ( pFootnoteNd = &( pSrch = rFootnoteArr[ nPos ] )->
-                    GetTextNode())->GetIndex() >= pStt->nNode.GetIndex() )
+                    GetTextNode())->GetIndex() >= pStt->GetNodeIndex() )
             {
                 const sal_Int32 nFootnoteSttIdx = pSrch->GetStart();
                 if( !(DelContentType::CheckNoCntnt & nDelContentType) && (
@@ -1009,8 +1009,8 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                                 // new node *before* existing one so a no-op
                                 // may need to be done here to add it to
                                 // history for Undo.
-                                (rPoint.nNode.GetIndex() == pAPos->nNode.GetIndex()
-                                 || pStt->nNode.GetIndex() == pAPos->nNode.GetIndex())
+                                (rPoint.GetNodeIndex() == pAPos->GetNodeIndex()
+                                 || pStt->GetNodeIndex() == pAPos->GetNodeIndex())
                                 // Do not try to move the anchor to a table!
                                 && rMark.GetNode().IsTextNode())
                             {
@@ -1342,19 +1342,19 @@ SwRedlineSaveData::SwRedlineSaveData(
     switch (eCmpPos)
     {
     case SwComparePosition::OverlapBefore:        // Pos1 overlaps Pos2 at the beginning
-        m_nEndNode = rEndPos.nNode.GetIndex();
+        m_nEndNode = rEndPos.GetNodeIndex();
         m_nEndContent = rEndPos.nContent.GetIndex();
         break;
 
     case SwComparePosition::OverlapBehind:        // Pos1 overlaps Pos2 at the end
-        m_nSttNode = rSttPos.nNode.GetIndex();
+        m_nSttNode = rSttPos.GetNodeIndex();
         m_nSttContent = rSttPos.nContent.GetIndex();
         break;
 
     case SwComparePosition::Inside:                // Pos1 lays completely in Pos2
-        m_nSttNode = rSttPos.nNode.GetIndex();
+        m_nSttNode = rSttPos.GetNodeIndex();
         m_nSttContent = rSttPos.nContent.GetIndex();
-        m_nEndNode = rEndPos.nNode.GetIndex();
+        m_nEndNode = rEndPos.GetNodeIndex();
         m_nEndContent = rEndPos.nContent.GetIndex();
         break;
 
@@ -1597,7 +1597,7 @@ static bool IsNotBackspaceHeuristic(
         SwPosition const& rStart, SwPosition const& rEnd)
 {
     // check if the selection is backspace/delete created by DelLeft/DelRight
-    if (rStart.nNode.GetIndex() + 1 != rEnd.nNode.GetIndex())
+    if (rStart.GetNodeIndex() + 1 != rEnd.GetNodeIndex())
         return true;
     if (rEnd.nContent != 0)
         return true;

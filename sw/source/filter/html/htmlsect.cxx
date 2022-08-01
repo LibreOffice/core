@@ -352,7 +352,7 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
         // move PageDesc and SwFormatBreak attribute from current node into
         // (first) node of the section
         if( pOldTextNd )
-            MovePageDescAttrs( pOldTextNd, m_pPam->GetPoint()->nNode.GetIndex(),
+            MovePageDescAttrs( pOldTextNd, m_pPam->GetPoint()->GetNodeIndex(),
                                true  );
 
         if( pPostIts )
@@ -436,7 +436,7 @@ void SwHTMLParser::FixHeaderFooterDistance( bool bHeader,
     }
     else
     {
-        nPrvNxtIdx = pOldPos->nNode.GetIndex() - 1;
+        nPrvNxtIdx = pOldPos->GetNodeIndex() - 1;
     }
 
     sal_uInt16 nSpace = 0;
@@ -463,7 +463,7 @@ void SwHTMLParser::FixHeaderFooterDistance( bool bHeader,
 
     if( bHeader )
     {
-        nPrvNxtIdx = pOldPos->nNode.GetIndex();
+        nPrvNxtIdx = pOldPos->GetNodeIndex();
     }
     else
     {
@@ -505,7 +505,7 @@ void SwHTMLParser::FixHeaderFooterDistance( bool bHeader,
 
 bool SwHTMLParser::EndSection( bool bLFStripped )
 {
-    SwEndNode *pEndNd = m_xDoc->GetNodes()[m_pPam->GetPoint()->nNode.GetIndex()+1]
+    SwEndNode *pEndNd = m_xDoc->GetNodes()[m_pPam->GetPoint()->GetNodeIndex()+1]
                             ->GetEndNode();
     if( pEndNd && pEndNd->StartOfSectionNode()->IsSectionNode() )
     {
@@ -732,7 +732,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         // Move PageDesc and SwFormatBreak attributes of the current node
         // to the section's first node.
         if( pOldTextNd )
-            MovePageDescAttrs( pOldTextNd, m_pPam->GetPoint()->nNode.GetIndex(),
+            MovePageDescAttrs( pOldTextNd, m_pPam->GetPoint()->GetNodeIndex(),
                                true  );
 
         if( pPostIts )

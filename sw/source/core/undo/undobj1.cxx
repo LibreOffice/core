@@ -193,7 +193,7 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrame)
     case RndStdIds::FLY_AT_CHAR:
         {
             const SwFormatAnchor& rAnchor = m_pFrameFormat->GetAnchor();
-            m_nNodePagePos = rAnchor.GetContentAnchor()->nNode.GetIndex();
+            m_nNodePagePos = rAnchor.GetContentAnchor()->GetNodeIndex();
             m_nContentPos = rAnchor.GetContentAnchor()->nContent.GetIndex();
         }
         break;
@@ -201,7 +201,7 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrame)
     case RndStdIds::FLY_AT_FLY:
         {
             const SwFormatAnchor& rAnchor = m_pFrameFormat->GetAnchor();
-            m_nNodePagePos = rAnchor.GetContentAnchor()->nNode.GetIndex();
+            m_nNodePagePos = rAnchor.GetContentAnchor()->GetNodeIndex();
         }
         break;
     case RndStdIds::FLY_AT_PAGE:
@@ -243,7 +243,7 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
     m_nRndId = rAnchor.GetAnchorId();
     if (RndStdIds::FLY_AS_CHAR == m_nRndId)
     {
-        m_nNodePagePos = pPos->nNode.GetIndex();
+        m_nNodePagePos = pPos->GetNodeIndex();
         m_nContentPos = pPos->nContent.GetIndex();
         SwTextNode *const pTextNd = pPos->GetNode().GetTextNode();
         OSL_ENSURE( pTextNd, "No Textnode found" );
@@ -260,12 +260,12 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
     }
     else if (RndStdIds::FLY_AT_CHAR == m_nRndId)
     {
-        m_nNodePagePos = pPos->nNode.GetIndex();
+        m_nNodePagePos = pPos->GetNodeIndex();
         m_nContentPos = pPos->nContent.GetIndex();
     }
     else if ((RndStdIds::FLY_AT_PARA == m_nRndId) || (RndStdIds::FLY_AT_FLY == m_nRndId))
     {
-        m_nNodePagePos = pPos->nNode.GetIndex();
+        m_nNodePagePos = pPos->GetNodeIndex();
     }
     else
     {
@@ -676,7 +676,7 @@ void SwUndoSetFlyFormat::PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem )
                 [[fallthrough]];
             case RndStdIds::FLY_AT_PARA:
             case RndStdIds::FLY_AT_FLY:
-                m_nOldNode = pAnchor->GetContentAnchor()->nNode.GetIndex();
+                m_nOldNode = pAnchor->GetContentAnchor()->GetNodeIndex();
                 break;
 
             default:
@@ -693,7 +693,7 @@ void SwUndoSetFlyFormat::PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem )
                 [[fallthrough]];
             case RndStdIds::FLY_AT_PARA:
             case RndStdIds::FLY_AT_FLY:
-                m_nNewNode = pAnchor->GetContentAnchor()->nNode.GetIndex();
+                m_nNewNode = pAnchor->GetContentAnchor()->GetNodeIndex();
                 break;
 
             default:

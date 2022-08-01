@@ -634,8 +634,8 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
     // See if the selection contains a Table
     auto [pStt, pEnd] = rRange.StartEnd(); // SwPosition*
     {
-        SwNodeOffset nCnt = pStt->nNode.GetIndex();
-        for( ; nCnt <= pEnd->nNode.GetIndex(); ++nCnt )
+        SwNodeOffset nCnt = pStt->GetNodeIndex();
+        for( ; nCnt <= pEnd->GetNodeIndex(); ++nCnt )
             if( !GetNodes()[ nCnt ]->IsTextNode() )
                 return nullptr;
     }
@@ -672,14 +672,14 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
     if( bEndContent )
     {
         if( pEnd->GetNode().GetContentNode()->Len() != pEnd->nContent.GetIndex()
-            || pEnd->nNode.GetIndex() >= GetNodes().GetEndOfContent().GetIndex()-1 )
+            || pEnd->GetNodeIndex() >= GetNodes().GetEndOfContent().GetIndex()-1 )
         {
             getIDocumentContentOperations().SplitNode( *pEnd, false );
             --const_cast<SwNodeIndex&>(pEnd->nNode);
             const_cast<SwContentIndex&>(pEnd->nContent).Assign(
                                 pEnd->GetNode().GetContentNode(), 0 );
             // A Node and at the End?
-            if( pStt->nNode.GetIndex() >= pEnd->nNode.GetIndex() )
+            if( pStt->GetNodeIndex() >= pEnd->GetNodeIndex() )
                 --aRg.aStart;
         }
         else
@@ -1174,14 +1174,14 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
     if( bEndContent )
     {
         if( pEnd->GetNode().GetContentNode()->Len() != pEnd->nContent.GetIndex()
-            || pEnd->nNode.GetIndex() >= GetNodes().GetEndOfContent().GetIndex()-1 )
+            || pEnd->GetNodeIndex() >= GetNodes().GetEndOfContent().GetIndex()-1 )
         {
             getIDocumentContentOperations().SplitNode( *pEnd, false );
             --const_cast<SwNodeIndex&>(pEnd->nNode);
             const_cast<SwContentIndex&>(pEnd->nContent).Assign(
                                 pEnd->GetNode().GetContentNode(), 0 );
             // A Node and at the End?
-            if( pStt->nNode.GetIndex() >= pEnd->nNode.GetIndex() )
+            if( pStt->GetNodeIndex() >= pEnd->GetNodeIndex() )
                 --aRg.aStart;
         }
         else
@@ -1689,8 +1689,8 @@ bool SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
         if (pAPos &&
             ((RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId()) ||
              (RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId())) &&
-            nStt <= pAPos->nNode.GetIndex() &&
-            pAPos->nNode.GetIndex() < nEnd )
+            nStt <= pAPos->GetNodeIndex() &&
+            pAPos->GetNodeIndex() < nEnd )
         {
             pFormat->MakeFrames();
         }
@@ -4330,7 +4330,7 @@ bool SwDoc::InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
 
         if( pUndo && bRet )
         {
-            pInsTableNd = GetNodes()[ rInsPos.nNode.GetIndex() - 1 ]->FindTableNode();
+            pInsTableNd = GetNodes()[ rInsPos.GetNodeIndex() - 1 ]->FindTableNode();
 
             pUndo->SetTableSttIdx( pInsTableNd->GetIndex() );
             GetIDocumentUndoRedo().AppendUndo( std::move(pUndo) );
@@ -4531,8 +4531,8 @@ void SwDoc::UnProtectTables( const SwPaM& rPam )
                 SwPaM* pTmp = const_cast<SwPaM*>(&rPam);
                 do {
                     auto [pStt, pEnd] = pTmp->StartEnd(); // SwPosition*
-                    bFound = pStt->nNode.GetIndex() < nTableIdx &&
-                            nTableIdx < pEnd->nNode.GetIndex();
+                    bFound = pStt->GetNodeIndex() < nTableIdx &&
+                            nTableIdx < pEnd->GetNodeIndex();
 
                 } while( !bFound && &rPam != ( pTmp = pTmp->GetNext() ) );
                 if( !bFound )

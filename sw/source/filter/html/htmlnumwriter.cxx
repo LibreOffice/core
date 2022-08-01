@@ -37,7 +37,7 @@ void SwHTMLWriter::FillNextNumInfo()
 {
     m_pNextNumRuleInfo = nullptr;
 
-    SwNodeOffset nPos = m_pCurrentPam->GetPoint()->nNode.GetIndex() + 1;
+    SwNodeOffset nPos = m_pCurrentPam->GetPoint()->GetNodeIndex() + 1;
 
     bool bTable = false;
     do
@@ -99,7 +99,7 @@ Writer& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
     {
         // If the list only consists of non-numbered text nodes, then don't start the list.
         bool bAtLeastOneNumbered = false;
-        SwNodeOffset nPos = rWrt.m_pCurrentPam->GetPoint()->nNode.GetIndex() + 1;
+        SwNodeOffset nPos = rWrt.m_pCurrentPam->GetPoint()->GetNodeIndex() + 1;
         SwNumRule* pNumRule = nullptr;
         while (true)
         {
@@ -150,7 +150,7 @@ Writer& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
                 if( rInfo.GetDepth() > 1 )
                 {
                     SwNodeOffset nPos =
-                        rWrt.m_pCurrentPam->GetPoint()->nNode.GetIndex() + 1;
+                        rWrt.m_pCurrentPam->GetPoint()->GetNodeIndex() + 1;
                     do
                     {
                         const SwNode* pNd = rWrt.m_pDoc->GetNodes()[nPos];
@@ -327,7 +327,7 @@ Writer& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
     if (rWrt.mbXHTML && !rInfo.IsNumbered())
     {
         oAtLeastOneNumbered = false;
-        SwNodeOffset nPos = rWrt.m_pCurrentPam->GetPoint()->nNode.GetIndex() - 1;
+        SwNodeOffset nPos = rWrt.m_pCurrentPam->GetPoint()->GetNodeIndex() - 1;
         SwNumRule* pNumRule = nullptr;
         while (true)
         {

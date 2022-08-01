@@ -1472,8 +1472,8 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
         if( !pEnd->GetNode().IsContentNode() )
         {
             bOneNd = true;
-            SwNodeOffset nSttNdIdx = pStt->nNode.GetIndex() + 1;
-            const SwNodeOffset nEndNdIdx = pEnd->nNode.GetIndex();
+            SwNodeOffset nSttNdIdx = pStt->GetNodeIndex() + 1;
+            const SwNodeOffset nEndNdIdx = pEnd->GetNodeIndex();
             for( ; nSttNdIdx < nEndNdIdx; ++nSttNdIdx )
             {
                 if( (*this)[ nSttNdIdx ]->IsContentNode() )
@@ -1508,7 +1508,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
             }
             bSplitDestNd = true;
 
-            pDestNd = rNodes[ rPos.nNode.GetIndex() - 1 ]->GetTextNode();
+            pDestNd = rNodes[ rPos.GetNodeIndex() - 1 ]->GetTextNode();
             if( nLen )
             {
                 pSrcNd->CutText( pDestNd, SwContentIndex( pDestNd, pDestNd->Len()),
@@ -1628,7 +1628,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
     if( aEndIdx != aSttIdx )
     {
         // move the nodes into the NodesArray
-        const SwNodeOffset nSttDiff = aSttIdx.GetIndex() - pStt->nNode.GetIndex();
+        const SwNodeOffset nSttDiff = aSttIdx.GetIndex() - pStt->GetNodeIndex();
         SwNodeRange aRg( aSttIdx, aEndIdx );
         MoveNodes( aRg, rNodes, rPos.nNode );
 

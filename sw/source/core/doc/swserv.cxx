@@ -128,7 +128,7 @@ void SwServerObject::SendDataChanged( const SwPosition& rPos )
     }
     if( pNd )
     {
-        SwNodeOffset nNd = rPos.nNode.GetIndex();
+        SwNodeOffset nNd = rPos.GetNodeIndex();
         bCall = pNd->GetIndex() < nNd && nNd < pNd->EndOfSectionIndex();
     }
 
@@ -166,8 +166,8 @@ void SwServerObject::SendDataChanged( const SwPaM& rRange )
     if( pNd )
     {
         // Is the start area within the node area?
-        bCall = pStt->nNode.GetIndex() <  pNd->EndOfSectionIndex() &&
-                pEnd->nNode.GetIndex() >= pNd->GetIndex();
+        bCall = pStt->GetNodeIndex() <  pNd->EndOfSectionIndex() &&
+                pEnd->GetNodeIndex() >= pNd->GetIndex();
     }
 
     if( bCall )
@@ -192,8 +192,8 @@ bool SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
             const SwPosition* pStt = &m_CNTNT_TYPE.pBkmk->GetMarkStart(),
                             * pEnd = &m_CNTNT_TYPE.pBkmk->GetMarkEnd();
 
-            nSttNd = pStt->nNode.GetIndex();
-            nEndNd = pEnd->nNode.GetIndex();
+            nSttNd = pStt->GetNodeIndex();
+            nEndNd = pEnd->GetNodeIndex();
             pNds = &pStt->GetNodes();
         }
         break;

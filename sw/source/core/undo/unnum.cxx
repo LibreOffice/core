@@ -52,7 +52,7 @@ SwUndoInsNum::SwUndoInsNum( const SwPosition& rPos, const SwNumRule& rRule,
     // No selection!
     m_nEndNode = SwNodeOffset(0);
     m_nEndContent = COMPLETE_STRING;
-    m_nSttNode = rPos.nNode.GetIndex();
+    m_nSttNode = rPos.GetNodeIndex();
     m_nSttContent = rPos.nContent.GetIndex();
 }
 
@@ -325,14 +325,14 @@ void SwUndoNumOrNoNum::RepeatImpl(::sw::RepeatContext & rContext)
 
 SwUndoNumRuleStart::SwUndoNumRuleStart( const SwPosition& rPos, bool bFlg )
     : SwUndo( SwUndoId::SETNUMRULESTART, &rPos.GetDoc() ),
-    m_nIndex( rPos.nNode.GetIndex() ), m_nOldStart( USHRT_MAX ),
+    m_nIndex( rPos.GetNodeIndex() ), m_nOldStart( USHRT_MAX ),
     m_nNewStart( USHRT_MAX ), m_bSetStartValue( false ), m_bFlag( bFlg )
 {
 }
 
 SwUndoNumRuleStart::SwUndoNumRuleStart( const SwPosition& rPos, sal_uInt16 nStt )
     : SwUndo(SwUndoId::SETNUMRULESTART, &rPos.GetDoc())
-    , m_nIndex(rPos.nNode.GetIndex())
+    , m_nIndex(rPos.GetNodeIndex())
     , m_nOldStart(USHRT_MAX)
     , m_nNewStart(nStt)
     , m_bSetStartValue(true)

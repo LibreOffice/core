@@ -588,7 +588,7 @@ void SwAutoCorrDoc::SaveCpltSttWord( ACFlags nFlag, sal_Int32 nPos,
                                             const OUString& rExceptWord,
                                             sal_Unicode cChar )
 {
-    SwNodeOffset nNode = m_pIndex ? m_pIndex->GetIndex() : m_rCursor.GetPoint()->nNode.GetIndex();
+    SwNodeOffset nNode = m_pIndex ? m_pIndex->GetIndex() : m_rCursor.GetPoint()->GetNodeIndex();
     LanguageType eLang = GetLanguage(nPos);
     m_rEditSh.GetDoc()->SetAutoCorrExceptWord( std::make_unique<SwAutoCorrExceptWord>( nFlag,
                                         nNode, nPos, rExceptWord, cChar, eLang ));
@@ -616,7 +616,7 @@ void SwAutoCorrExceptWord::CheckChar( const SwPosition& rPos, sal_Unicode cChr )
 {
     // test only if this is an improvement.
     // If yes, then add the word to the list.
-    if (m_cChar == cChr && rPos.nNode.GetIndex() == m_nNode && rPos.nContent.GetIndex() == m_nContent)
+    if (m_cChar == cChr && rPos.GetNodeIndex() == m_nNode && rPos.nContent.GetIndex() == m_nContent)
     {
         // get the current autocorrection:
         SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get().GetAutoCorrect();
@@ -632,7 +632,7 @@ void SwAutoCorrExceptWord::CheckChar( const SwPosition& rPos, sal_Unicode cChr )
 bool SwAutoCorrExceptWord::CheckDelChar( const SwPosition& rPos )
 {
     bool bRet = false;
-    if (!m_bDeleted && rPos.nNode.GetIndex() == m_nNode && rPos.nContent.GetIndex() == m_nContent)
+    if (!m_bDeleted && rPos.GetNodeIndex() == m_nNode && rPos.nContent.GetIndex() == m_nContent)
         m_bDeleted = bRet = true;
     return bRet;
 }

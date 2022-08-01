@@ -132,7 +132,7 @@ SwCallLink::~SwCallLink() COVERITY_NOEXCEPT_FALSE
 
     sal_Int32 nCmp, nCurrentContent = pCurrentCursor->GetPoint()->nContent.GetIndex();
     SwNodeType nNdWhich = pCNd->GetNodeType();
-    SwNodeOffset nCurrentNode = pCurrentCursor->GetPoint()->nNode.GetIndex();
+    SwNodeOffset nCurrentNode = pCurrentCursor->GetPoint()->GetNodeIndex();
 
     // Register the Shell as dependent at the current Node. By doing this all
     // attribute changes can be signaled over the link.

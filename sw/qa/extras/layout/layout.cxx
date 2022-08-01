@@ -3869,7 +3869,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testBtlrCell)
     SwPosition aCellStart = *pWrtShell->GetCursor()->Start();
 
     // Test that pressing "up" at the start of the cell goes to the next character position.
-    SwNodeOffset nNodeIndex = pWrtShell->GetCursor()->Start()->nNode.GetIndex();
+    SwNodeOffset nNodeIndex = pWrtShell->GetCursor()->Start()->GetNodeIndex();
     sal_Int32 nIndex = pWrtShell->GetCursor()->Start()->nContent.GetIndex();
     KeyEvent aKeyEvent(0, KEY_UP);
     SwEditWin& rEditWin = pShell->GetView()->GetEditWin();
@@ -3886,7 +3886,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testBtlrCell)
     Scheduler::ProcessEventsToIdle();
     // Without the accompanying fix in place, this test would have failed: the cursor went to the
     // paragraph after the table.
-    CPPUNIT_ASSERT_EQUAL(nNodeIndex + 1, pWrtShell->GetCursor()->Start()->nNode.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(nNodeIndex + 1, pWrtShell->GetCursor()->Start()->GetNodeIndex());
 
     // Test that we have the correct character index after traveling to the next paragraph.
     // Without the accompanying fix in place, this test would have failed: char position was 5, i.e.
@@ -3913,7 +3913,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testBtlrCell)
     aPoint.setY(nSecondParaTop + nSecondParaHeight - 100);
     SwCursorMoveState aState(CursorMoveState::NONE);
     pLayout->GetModelPositionForViewPoint(&aPosition, aPoint, &aState);
-    CPPUNIT_ASSERT_EQUAL(aCellStart.nNode.GetIndex() + 1, aPosition.nNode.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(aCellStart.GetNodeIndex() + 1, aPosition.GetNodeIndex());
     // Without the accompanying fix in place, this test would have failed: character position was 5,
     // i.e. cursor was at the end of the paragraph.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aPosition.nContent.GetIndex());
@@ -4564,13 +4564,13 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf128399)
     SwCursorMoveState aState(CursorMoveState::NONE);
     pLayout->GetModelPositionForViewPoint(&aPosition, aPoint, &aState);
     // Second row is +3: end node, start node and the first text node in the 2nd row.
-    SwNodeOffset nExpected = aFirstRow.nNode.GetIndex() + 3;
+    SwNodeOffset nExpected = aFirstRow.GetNodeIndex() + 3;
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 14
     // - Actual  : 11
     // i.e. clicking on the center of the 2nd row placed the cursor in the 1st row.
-    CPPUNIT_ASSERT_EQUAL(nExpected, aPosition.nNode.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(nExpected, aPosition.GetNodeIndex());
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf145826)

@@ -213,7 +213,7 @@ bool SwCursor::GotoNextFootnoteAnchor()
         // there is a footnote with this index, so search also for the next one
         if( nPos < rFootnoteArr.size() )
         {
-            SwNodeOffset nNdPos = GetPoint()->nNode.GetIndex();
+            SwNodeOffset nNdPos = GetPoint()->GetNodeIndex();
             const sal_Int32 nCntPos = GetPoint()->nContent.GetIndex();
 
             pTextFootnote = rFootnoteArr[ nPos ];
@@ -284,7 +284,7 @@ bool SwCursor::GotoPrevFootnoteAnchor()
     if( rFootnoteArr.SeekEntry( GetPoint()->nNode, &nPos ) )
     {
         // there is a footnote with this index, so search also for the next one
-        SwNodeOffset nNdPos = GetPoint()->nNode.GetIndex();
+        SwNodeOffset nNdPos = GetPoint()->GetNodeIndex();
         const sal_Int32 nCntPos = GetPoint()->nContent.GetIndex();
 
         pTextFootnote = rFootnoteArr[ nPos ];

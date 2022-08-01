@@ -247,8 +247,8 @@ ErrCode SwReader::Read( const Reader& rOptions )
                     if  (   (RndStdIds::FLY_AT_PAGE == rAnchor.GetAnchorId())
                         // TODO: why is this not handled via SetInsertRange?
                         ||  SwUndoInserts::IsCreateUndoForNewFly(rAnchor,
-                                pUndoPam->GetPoint()->nNode.GetIndex(),
-                                pUndoPam->GetMark()->nNode.GetIndex()))
+                                pUndoPam->GetPoint()->GetNodeIndex(),
+                                pUndoPam->GetMark()->GetNodeIndex()))
                     {
                         if( bChkHeaderFooter &&
                             (RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId()) &&

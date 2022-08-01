@@ -609,9 +609,9 @@ SwHistoryBookmark::SwHistoryBookmark(
     , m_aName(rBkmk.GetName())
     , m_bHidden(false)
     , m_nNode(bSavePos ?
-        rBkmk.GetMarkPos().nNode.GetIndex() : SwNodeOffset(0))
+        rBkmk.GetMarkPos().GetNodeIndex() : SwNodeOffset(0))
     , m_nOtherNode(bSaveOtherPos ?
-        rBkmk.GetOtherMarkPos().nNode.GetIndex() : SwNodeOffset(0))
+        rBkmk.GetOtherMarkPos().GetNodeIndex() : SwNodeOffset(0))
     , m_nContent(bSavePos ?
         rBkmk.GetMarkPos().nContent.GetIndex() : 0)
     , m_nOtherContent(bSaveOtherPos ?
@@ -721,7 +721,7 @@ void SwHistoryBookmark::SetInDoc( SwDoc* pDoc, bool )
 
 bool SwHistoryBookmark::IsEqualBookmark(const ::sw::mark::IMark& rBkmk)
 {
-    return m_nNode == rBkmk.GetMarkPos().nNode.GetIndex()
+    return m_nNode == rBkmk.GetMarkPos().GetNodeIndex()
         && m_nContent == rBkmk.GetMarkPos().nContent.GetIndex()
         && m_aName == rBkmk.GetName();
 }
@@ -729,7 +729,7 @@ bool SwHistoryBookmark::IsEqualBookmark(const ::sw::mark::IMark& rBkmk)
 SwHistoryNoTextFieldmark::SwHistoryNoTextFieldmark(const ::sw::mark::IFieldmark& rFieldMark)
     : SwHistoryHint(HSTRY_NOTEXTFIELDMARK)
     , m_sType(rFieldMark.GetFieldname())
-    , m_nNode(rFieldMark.GetMarkStart().nNode.GetIndex())
+    , m_nNode(rFieldMark.GetMarkStart().GetNodeIndex())
     , m_nContent(rFieldMark.GetMarkStart().nContent.GetIndex())
 {
 }
@@ -774,13 +774,13 @@ SwHistoryTextFieldmark::SwHistoryTextFieldmark(const ::sw::mark::IFieldmark& rFi
     : SwHistoryHint(HSTRY_TEXTFIELDMARK)
     , m_sName(rFieldMark.GetName())
     , m_sType(rFieldMark.GetFieldname())
-    , m_nStartNode(rFieldMark.GetMarkStart().nNode.GetIndex())
+    , m_nStartNode(rFieldMark.GetMarkStart().GetNodeIndex())
     , m_nStartContent(rFieldMark.GetMarkStart().nContent.GetIndex())
-    , m_nEndNode(rFieldMark.GetMarkEnd().nNode.GetIndex())
+    , m_nEndNode(rFieldMark.GetMarkEnd().GetNodeIndex())
     , m_nEndContent(rFieldMark.GetMarkEnd().nContent.GetIndex())
 {
     SwPosition const sepPos(sw::mark::FindFieldSep(rFieldMark));
-    m_nSepNode = sepPos.nNode.GetIndex();
+    m_nSepNode = sepPos.GetNodeIndex();
     m_nSepContent = sepPos.nContent.GetIndex();
 }
 
@@ -925,7 +925,7 @@ void SwHistorySetAttrSet::SetInDoc( SwDoc* pDoc, bool )
 SwHistoryChangeFlyAnchor::SwHistoryChangeFlyAnchor( SwFrameFormat& rFormat )
     : SwHistoryHint( HSTRY_CHGFLYANCHOR )
     , m_rFormat( rFormat )
-    , m_nOldNodeIndex( rFormat.GetAnchor().GetContentAnchor()->nNode.GetIndex() )
+    , m_nOldNodeIndex( rFormat.GetAnchor().GetContentAnchor()->GetNodeIndex() )
     , m_nOldContentIndex( (RndStdIds::FLY_AT_CHAR == rFormat.GetAnchor().GetAnchorId())
             ?   rFormat.GetAnchor().GetContentAnchor()->nContent.GetIndex()
             :   COMPLETE_STRING )

@@ -921,7 +921,7 @@ static void InitBookmarks(
                     if (&rStart.GetNode() != iter->pNode // iter moved to next node
                         || rStart.nContent.GetIndex() < iter->nStart)
                     {
-                        if (rEnd.nNode.GetIndex() < iter->pNode->GetIndex()
+                        if (rEnd.GetNodeIndex() < iter->pNode->GetIndex()
                             || (&rEnd.GetNode() == iter->pNode && rEnd.nContent.GetIndex() <= iter->nStart))
                         {
                             break; // deleted - skip it
@@ -938,7 +938,7 @@ static void InitBookmarks(
                         if (rStart.nContent.GetIndex() == iter->nEnd
                             && (iterNext == end
                                 ?   &rEnd.GetNode() == iter->pNode
-                                :  (rEnd.nNode.GetIndex() < iterNext->pNode->GetIndex()
+                                :  (rEnd.GetNodeIndex() < iterNext->pNode->GetIndex()
                                     || (&rEnd.GetNode() == iterNext->pNode && rEnd.nContent.GetIndex() < iterNext->nStart))))
                         {
                             break; // deleted - skip it
@@ -960,7 +960,7 @@ static void InitBookmarks(
                 }
                 if (iter == end)
                 {
-                    if (pNode->GetIndex() < rEnd.nNode.GetIndex()) // pNode is last node of merged
+                    if (pNode->GetIndex() < rEnd.GetNodeIndex()) // pNode is last node of merged
                     {
                         break; // deleted - skip it
                     }
@@ -984,7 +984,7 @@ static void InitBookmarks(
                         SwPosition const& rStart(it.first->GetMarkStart());
                         // oPrevIter may point to pNode or a preceding node
                         if (oPrevIter
-                            ? ((*oPrevIter)->pNode->GetIndex() < rStart.nNode.GetIndex()
+                            ? ((*oPrevIter)->pNode->GetIndex() < rStart.GetNodeIndex()
                                 || ((*oPrevIter)->pNode == &rStart.GetNode()
                                     && ((iter != end && &rEnd.GetNode() == iter->pNode && rEnd.nContent.GetIndex() == iter->nStart)
                                         ? (*oPrevIter)->nEnd < rStart.nContent.GetIndex()

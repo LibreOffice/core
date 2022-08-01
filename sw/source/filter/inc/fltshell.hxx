@@ -71,7 +71,7 @@ public:
 
     void FromSwPosition(const SwPosition &rPos)
     {
-        m_nNode = rPos.nNode.GetIndex()-1;
+        m_nNode = rPos.GetNodeIndex()-1;
         m_nContent = rPos.nContent.GetIndex();
     }
 };
