@@ -16,6 +16,23 @@
       "message": "The test failures seem related to digital signatures like the loop you changed, for example the UI test was for https://bugs.documentfoundation.org/show_bug.cgi?id\u003d104795\n\nLooks like the build passed on Windows, though, so difficult for you to test (UI tests don\u0027t work on Win). Maybe Hossein can provide tips, I\u0027m not sure if the new loop is correct.",
       "revId": "e77f326633b8336184dedd50174cbacb57ac2f46",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad33b707_700c6ad0",
+        "filename": "xmlsecurity/source/helper/xsecctl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-08-01T14:40:40Z",
+      "side": 1,
+      "message": "index incrementation should be after if.\nNot sure if range based loop is the best choice here. Consider using find_if and distance.",
+      "revId": "e77f326633b8336184dedd50174cbacb57ac2f46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
