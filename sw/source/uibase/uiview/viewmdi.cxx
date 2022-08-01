@@ -347,24 +347,30 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
     {
         case NID_PGE:
         {
-            if (USHRT_MAX == rSh.GetNextPrevPageNum(bNext))
+            tools::Long nYPos;
+            SwVisiblePageNumbers aVisiblePageNumbers;
+            rSh.GetFirstLastVisPageNumbers(aVisiblePageNumbers);
+            if ((bNext && aVisiblePageNumbers.nLastPhy + 1 > rSh.GetPageCnt()) ||
+                (!bNext && aVisiblePageNumbers.nFirstPhy == 1))
             {
-                const Point aPt(GetVisArea().Left(),
-                                rSh.GetPagePos(bNext ? 1 : rSh.GetPageCnt()).Y());
-                Point aAlPt(AlignToPixel(aPt) );
-                // If there is a difference, has been truncated --> then add one pixel,
-                // so that no residue of the previous page is visible.
-                if(aPt.Y() != aAlPt.Y())
-                    aAlPt.AdjustY(3 * GetEditWin().PixelToLogic(Size(0, 1)).Height());
-                SetVisArea(aAlPt);
+                nYPos = rSh.GetPagePos(bNext ? 1 : rSh.GetPageCnt()).Y();
                 SvxSearchDialogWrapper::SetSearchLabel(bNext ? SearchLabel::EndWrapped :
                                                                SearchLabel::StartWrapped);
             }
             else
             {
-                bNext ? PhyPageDown() : PhyPageUp();
+                auto nPage = bNext ? aVisiblePageNumbers.nLastPhy + 1 :
+                                     aVisiblePageNumbers.nFirstPhy - 1;
+                nYPos = rSh.GetPagePos(nPage).Y();
                 SvxSearchDialogWrapper::SetSearchLabel(SearchLabel::Empty);
             }
+            const Point aPt(GetVisArea().Left(), nYPos);
+            Point aAlPt(AlignToPixel(aPt));
+            // If there is a difference, has been truncated --> then add one pixel,
+            // so that no residue of the previous page is visible.
+            if(aPt.Y() != aAlPt.Y())
+                aAlPt.AdjustY(3 * GetEditWin().PixelToLogic(Size(0, 1)).Height());
+            SetVisArea(aAlPt);
         }
         break;
         case NID_TBL :
