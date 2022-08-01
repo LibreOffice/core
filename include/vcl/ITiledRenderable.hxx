@@ -337,6 +337,11 @@ public:
     {
         return std::vector<basegfx::B2DRange>();
     }
+
+    /**
+     *  Allow / disable drawing current text edit (used in Impress for slide previews)
+     */
+    virtual void setPaintTextEdit(bool) {}
 };
 } // namespace vcl
 

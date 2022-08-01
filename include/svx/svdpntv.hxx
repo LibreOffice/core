@@ -193,6 +193,7 @@ protected:
     bool                        mbHideChart : 1;
     bool                        mbHideDraw : 1;             // hide draw objects other than form controls
     bool                        mbHideFormControl : 1;      // hide form controls only
+    bool                        mbPaintTextEdit : 1;        // if should paint currently edited text
 
 public:
     // Interface for PagePaintingAllowed flag
@@ -506,6 +507,9 @@ public:
 
     // Access to Drawinglayer configuration options
     const SvtOptionsDrawinglayer& getOptionsDrawinglayer() const { return maDrawinglayerOpt; }
+
+    /// @see vcl::ITiledRenderable::setPaintTextEdit().
+    void SetPaintTextEdit(bool bPaint) { mbPaintTextEdit = bPaint; }
 };
 
 #endif // INCLUDED_SVX_SVDPNTV_HXX
