@@ -76,6 +76,12 @@ public:
         return getTokenPerfectHash( pToken, nLength );
     }
 
+    /** Returns the token identifier for a UTF8 string passed in pToken */
+    sal_Int32 getTokenFromUTF8( std::string_view aToken ) const
+    {
+        return getTokenFromUTF8( aToken.data(), aToken.size() );
+    }
+
 private:
     static sal_Int32 getTokenPerfectHash( const char *pToken, sal_Int32 nLength );
     static const css::uno::Sequence< sal_Int8 > EMPTY_BYTE_SEQ;
