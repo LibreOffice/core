@@ -236,7 +236,8 @@ SdXImpressDocument::SdXImpressDocument(::sd::DrawDocShell* pShell, bool bClipBoa
     mbDisposed(false),
     mbImpressDoc( pShell && pShell->GetDoc() && pShell->GetDoc()->GetDocumentType() == DocumentType::Impress ),
     mbClipBoard( bClipBoard ),
-    mpPropSet( ImplGetDrawModelPropertySet() )
+    mpPropSet( ImplGetDrawModelPropertySet() ),
+    mbPaintTextEdit( true )
 {
     if( mpDoc )
     {
@@ -255,7 +256,8 @@ SdXImpressDocument::SdXImpressDocument(SdDrawDocument* pDoc, bool bClipBoard)
     mbDisposed(false),
     mbImpressDoc( pDoc && pDoc->GetDocumentType() == DocumentType::Impress ),
     mbClipBoard( bClipBoard ),
-    mpPropSet( ImplGetDrawModelPropertySet() )
+    mpPropSet( ImplGetDrawModelPropertySet() ),
+    mbPaintTextEdit( true )
 {
     if( mpDoc )
     {
@@ -2278,7 +2280,14 @@ void SdXImpressDocument::paintTile( VirtualDevice& rDevice,
     Size aSize(nTileWidthHMM, nTileHeightHMM);
     ::tools::Rectangle aRect(aPoint, aSize);
 
+    SdrView* pView = pViewSh->GetDrawView();
+    if (comphelper::LibreOfficeKit::isActive())
+        pView->SetPaintTextEdit(mbPaintTextEdit);
+
     pViewSh->GetView()->CompleteRedraw(&rDevice, vcl::Region(aRect));
+
+    if (comphelper::LibreOfficeKit::isActive())
+        pView->SetPaintTextEdit(true);
 
     LokChartHelper::PaintAllChartsOnTile(rDevice, nOutputWidth, nOutputHeight,
                                          nTilePosX, nTilePosY, nTileWidth, nTileHeight);

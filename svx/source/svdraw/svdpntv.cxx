@@ -160,6 +160,7 @@ SdrPaintView::SdrPaintView(SdrModel& rSdrModel, OutputDevice* pOut)
     , mbHideChart(false)
     , mbHideDraw(false)
     , mbHideFormControl(false)
+    , mbPaintTextEdit(true)
     , maGridColor(COL_BLACK)
 {
     maComeBackIdle.SetPriority(TaskPriority::REPAINT);
@@ -638,7 +639,8 @@ void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFo
         // early and paint text edit to window.
         if(IsTextEdit() && GetSdrPageView())
         {
-            static_cast< SdrView* >(this)->TextEditDrawing(rPaintWindow);
+            if (!comphelper::LibreOfficeKit::isActive() || mbPaintTextEdit)
+                static_cast< SdrView* >(this)->TextEditDrawing(rPaintWindow);
         }
 
         if (comphelper::LibreOfficeKit::isActive())
