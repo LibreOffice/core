@@ -25,6 +25,7 @@
 
 #include <ucbhelper/contenthelper.hxx>
 #include <com/sun/star/ucb/XContentCreator.hpp>
+#include <utility>
 #include "tdoc_provider.hxx"
 
 namespace com::sun::star {
@@ -48,7 +49,7 @@ public:
     : m_eType( STREAM )
     {}
 
-    ContentProperties( const ContentType & rType, const OUString & rTitle )
+    ContentProperties( const ContentType & rType, OUString aTitle )
     : m_eType( rType ),
       m_aContentType( rType == STREAM
         ? OUString( TDOC_STREAM_CONTENT_TYPE )
@@ -57,7 +58,7 @@ public:
             : rType == DOCUMENT
                 ? OUString( TDOC_DOCUMENT_CONTENT_TYPE )
                 : OUString( TDOC_ROOT_CONTENT_TYPE ) ),
-      m_aTitle( rTitle )
+      m_aTitle(std::move( aTitle ))
     {}
 
     ContentType getType() const { return m_eType; }
@@ -101,7 +102,7 @@ private:
     Content( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
              ContentProvider* pProvider,
              const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
-            const ContentProperties & rProps );
+            ContentProperties aProps );
     Content( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
              ContentProvider* pProvider,
              const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,

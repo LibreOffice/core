@@ -26,6 +26,8 @@
    the necessary interfaces, but never recognizes/notifies changes!!!
 
  *************************************************************************/
+#include <utility>
+
 #include "hierarchydatasupplier.hxx"
 #include "dynamicresultset.hxx"
 
@@ -38,10 +40,10 @@ using namespace hierarchy_ucp;
 
 DynamicResultSet::DynamicResultSet(
             const uno::Reference< uno::XComponentContext >& rxContext,
-            const rtl::Reference< HierarchyContent >& rxContent,
+            rtl::Reference< HierarchyContent > xContent,
             const ucb::OpenCommandArgument2& rCommand )
 : ResultSetImplHelper( rxContext, rCommand ),
-  m_xContent( rxContent )
+  m_xContent(std::move( xContent ))
 {
 }
 

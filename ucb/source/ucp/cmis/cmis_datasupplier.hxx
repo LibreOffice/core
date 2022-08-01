@@ -25,7 +25,7 @@ namespace cmis
         css::uno::Reference< css::ucb::XContent > xContent;
         css::uno::Reference< css::sdbc::XRow > xRow;
 
-        explicit ResultListEntry( css::uno::Reference< css::ucb::XContent > const & xCnt ) : xContent( xCnt )
+        explicit ResultListEntry( css::uno::Reference< css::ucb::XContent > xCnt ) : xContent( std::move(xCnt) )
         {
         }
     };

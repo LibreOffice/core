@@ -22,6 +22,7 @@
 #include "ucpext_datasupplier.hxx"
 
 #include <ucbhelper/resultset.hxx>
+#include <utility>
 
 
 namespace ucb::ucp::ext
@@ -37,11 +38,11 @@ namespace ucb::ucp::ext
     //= ResultSet
 
 
-    ResultSet::ResultSet( const Reference< XComponentContext >& rxContext, const ::rtl::Reference< Content >& i_rContent,
+    ResultSet::ResultSet( const Reference< XComponentContext >& rxContext, ::rtl::Reference< Content > i_xContent,
             const OpenCommandArgument2& i_rCommand, const Reference< XCommandEnvironment >& i_rEnv )
         :ResultSetImplHelper( rxContext, i_rCommand )
         ,m_xEnvironment( i_rEnv )
-        ,m_xContent( i_rContent )
+        ,m_xContent(std::move( i_xContent ))
     {
     }
 

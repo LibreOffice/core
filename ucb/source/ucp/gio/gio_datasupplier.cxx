@@ -21,6 +21,7 @@
 #include <ucbhelper/providerhelper.hxx>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
+#include <utility>
 
 #include "gio_datasupplier.hxx"
 #include "gio_content.hxx"
@@ -30,8 +31,8 @@ using namespace gio;
 namespace gio
 {
 
-DataSupplier::DataSupplier( const rtl::Reference< ::gio::Content >& rContent, sal_Int32 nOpenMode )
-    : mxContent(rContent), mnOpenMode(nOpenMode), mbCountFinal(false)
+DataSupplier::DataSupplier( rtl::Reference< ::gio::Content > xContent, sal_Int32 nOpenMode )
+    : mxContent(std::move(xContent)), mnOpenMode(nOpenMode), mbCountFinal(false)
 {
 }
 

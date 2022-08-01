@@ -50,7 +50,7 @@ private:
     friend struct CurlProcessor;
 
 public:
-    explicit CurlSession(css::uno::Reference<css::uno::XComponentContext> const& xContext,
+    explicit CurlSession(css::uno::Reference<css::uno::XComponentContext> xContext,
                          ::rtl::Reference<DAVSessionFactory> const& rpFactory, OUString const& rURI,
                          css::uno::Sequence<css::beans::NamedValue> const& rFlags,
                          ::ucbhelper::InternetProxyDecider const& rProxyDecider);

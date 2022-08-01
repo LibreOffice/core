@@ -23,6 +23,8 @@
 
  *************************************************************************/
 
+#include <utility>
+
 #include "identify.hxx"
 
 using namespace com::sun::star::uno;
@@ -30,8 +32,8 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
 
 // ContentIdentifier Implementation.
-ContentIdentifier::ContentIdentifier(const OUString& ContentId)
-    : m_aContentId(ContentId)
+ContentIdentifier::ContentIdentifier(OUString ContentId)
+    : m_aContentId(std::move(ContentId))
 {
 }
 
