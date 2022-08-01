@@ -44,7 +44,7 @@ namespace sax_fastparser {
 namespace oox {
 
     /* Get the color tokens from their string representatives. */
-    sal_Int32 getHighlightColorTokenFromString(std::u16string_view sColorName);
+    sal_Int32 getHighlightColorTokenFromString(std::string_view sColorName);
 
 /** Static helpers for conversion of strings to attribute values of various
     different data types.
@@ -55,21 +55,34 @@ public:
     /** Returns the XML token identifier from the passed string. */
     static sal_Int32    decodeToken( std::u16string_view rValue );
 
+    /** Returns the XML token identifier from the passed string. */
+    static sal_Int32    decodeToken( std::string_view rValue );
+
     /** Returns the decoded string value. All characters in the format
         '_xHHHH_' (H being a hexadecimal digit), will be decoded. */
     static OUString decodeXString( const OUString& rValue );
 
+    /** Returns the decoded string value. All characters in the format
+        '_xHHHH_' (H being a hexadecimal digit), will be decoded. */
+    static OUString decodeXString( std::string_view rValue );
+
     /** Returns the 32-bit signed integer value from the passed string (decimal). */
     static sal_Int32    decodeInteger( std::u16string_view rValue );
+
+    /** Returns the 32-bit signed integer value from the passed string (decimal). */
+    static sal_Int32    decodeInteger( std::string_view rValue );
 
     /** Returns the 32-bit unsigned integer value from the passed string (decimal). */
     static sal_uInt32   decodeUnsigned( std::u16string_view rValue );
 
+    /** Returns the 32-bit unsigned integer value from the passed string (decimal). */
+    static sal_uInt32   decodeUnsigned( std::string_view rValue );
+
     /** Returns the 64-bit signed integer value from the passed string (decimal). */
-    static sal_Int64    decodeHyper( std::u16string_view rValue );
+    static sal_Int64    decodeHyper( std::string_view rValue );
 
     /** Returns the 32-bit signed integer value from the passed string (hexadecimal). */
-    static sal_Int32    decodeIntegerHex( std::u16string_view rValue );
+    static sal_Int32    decodeIntegerHex( std::string_view rValue );
 };
 
 
