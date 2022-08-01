@@ -3213,13 +3213,13 @@ void DocxAttributeOutput::WriteCollectedRunProperties()
 
     if (m_nCharTransparence != 0 && m_pColorAttrList && m_aTextEffectsGrabBag.empty())
     {
-        const char* pVal = nullptr;
-        m_pColorAttrList->getAsChar(FSNS(XML_w, XML_val), pVal);
-        if (pVal != nullptr && std::string_view("auto") != pVal)
+        std::string_view pVal;
+        m_pColorAttrList->getAsView(FSNS(XML_w, XML_val), pVal);
+        if (!pVal.empty() && pVal != "auto")
         {
             m_pSerializer->startElementNS(XML_w14, XML_textFill);
             m_pSerializer->startElementNS(XML_w14, XML_solidFill);
-            m_pSerializer->startElementNS(XML_w14, XML_srgbClr, FSNS(XML_w14, XML_val), pVal);
+            m_pSerializer->startElementNS(XML_w14, XML_srgbClr, FSNS(XML_w14, XML_val), pVal.data());
             sal_Int32 nTransparence = m_nCharTransparence * oox::drawingml::MAX_PERCENT / 255.0;
             m_pSerializer->singleElementNS(XML_w14, XML_alpha, FSNS(XML_w14, XML_val), OString::number(nTransparence));
             m_pSerializer->endElementNS(XML_w14, XML_srgbClr);
@@ -8075,10 +8075,10 @@ void DocxAttributeOutput::CharColor( const SvxColorItem& rColor )
     const Color aColor( rColor.GetValue() );
     OString aColorString = msfilter::util::ConvertColor( aColor );
 
-    const char* pExistingValue(nullptr);
-    if (m_pColorAttrList.is() && m_pColorAttrList->getAsChar(FSNS(XML_w, XML_val), pExistingValue))
+    std::string_view pExistingValue;
+    if (m_pColorAttrList.is() && m_pColorAttrList->getAsView(FSNS(XML_w, XML_val), pExistingValue))
     {
-        assert(aColorString.equalsL(pExistingValue, rtl_str_getLength(pExistingValue)));
+        assert(aColorString.equalsL(pExistingValue.data(), pExistingValue.size()));
         return;
     }
 

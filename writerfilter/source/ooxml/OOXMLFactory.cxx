@@ -59,7 +59,7 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
         switch (pAttr->m_nResource)
         {
         case ResourceType::Boolean:
-            xValue = OOXMLBooleanValue::Create(rAttribs.getAsCharByIndex(nAttrIndex));
+            xValue = OOXMLBooleanValue::Create(rAttribs.getAsViewByIndex(nAttrIndex));
             break;
         case ResourceType::String:
             xValue = new OOXMLStringValue(rAttribs.getValueByIndex(nAttrIndex));
@@ -68,14 +68,14 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
             xValue = OOXMLIntegerValue::Create(rAttribs.getAsIntegerByIndex(nAttrIndex));
             break;
         case ResourceType::Hex:
-            xValue = new OOXMLHexValue(rAttribs.getAsCharByIndex(nAttrIndex));
+            xValue = new OOXMLHexValue(rAttribs.getAsViewByIndex(nAttrIndex));
             break;
         case ResourceType::HexColor:
-            xValue = new OOXMLHexColorValue(rAttribs.getAsCharByIndex(nAttrIndex));
+            xValue = new OOXMLHexColorValue(rAttribs.getAsViewByIndex(nAttrIndex));
             break;
         case ResourceType::TwipsMeasure_asSigned:
         case ResourceType::TwipsMeasure_asZero:
-            xValue = new OOXMLTwipsMeasureValue(rAttribs.getAsCharByIndex(nAttrIndex));
+            xValue = new OOXMLTwipsMeasureValue(rAttribs.getAsViewByIndex(nAttrIndex));
             if (xValue->getInt() < 0)
             {
                 if (pAttr->m_nResource == ResourceType::TwipsMeasure_asZero)
@@ -83,10 +83,10 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
             }
             break;
         case ResourceType::HpsMeasure:
-            xValue = new OOXMLHpsMeasureValue(rAttribs.getAsCharByIndex(nAttrIndex));
+            xValue = new OOXMLHpsMeasureValue(rAttribs.getAsViewByIndex(nAttrIndex));
             break;
         case ResourceType::MeasurementOrPercent:
-            xValue = new OOXMLMeasurementOrPercentValue(rAttribs.getAsCharByIndex(nAttrIndex));
+            xValue = new OOXMLMeasurementOrPercentValue(rAttribs.getAsViewByIndex(nAttrIndex));
             break;
         case ResourceType::List:
             if (sal_uInt32 nValue;

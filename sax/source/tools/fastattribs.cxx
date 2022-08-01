@@ -242,7 +242,7 @@ bool FastAttributeList::getAsDouble( sal_Int32 nToken, double &rDouble) const
     return false;
 }
 
-bool FastAttributeList::getAsChar( sal_Int32 nToken, const char*& rPos ) const
+bool FastAttributeList::getAsView( sal_Int32 nToken, std::string_view& rPos ) const
 {
     for (size_t i = 0, n = maAttributeTokens.size(); i < n; ++i)
     {
@@ -250,17 +250,12 @@ bool FastAttributeList::getAsChar( sal_Int32 nToken, const char*& rPos ) const
             continue;
 
         sal_Int32 nOffset = maAttributeValues[i];
-        rPos = mpChunk + nOffset;
+        size_t nValueLen = maAttributeValues[i + 1] - maAttributeValues[i] - 1;
+        rPos = { mpChunk + nOffset, nValueLen };
         return true;
     }
 
     return false;
-}
-
-const char* FastAttributeList::getAsCharByIndex( sal_Int32 nTokenIndex ) const
-{
-    sal_Int32 nOffset = maAttributeValues[nTokenIndex];
-    return mpChunk + nOffset;
 }
 
 std::string_view FastAttributeList::getAsViewByIndex( sal_Int32 nTokenIndex ) const

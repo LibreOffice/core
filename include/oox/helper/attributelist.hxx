@@ -145,7 +145,7 @@ public:
         passed default string if the attribute is missing. */
     OUString     getXString( sal_Int32 nAttrToken, const OUString& rDefault ) const;
 
-    const char* getChar( sal_Int32 nAttrToken ) const;
+    std::string_view getView( sal_Int32 nAttrToken ) const;
 
 
     /** Returns the double value of the specified attribute, or the passed

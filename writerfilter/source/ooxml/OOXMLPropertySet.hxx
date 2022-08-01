@@ -101,7 +101,7 @@ class OOXMLBooleanValue final : public OOXMLValue
 
 public:
     static OOXMLValue::Pointer_t const& Create(bool bValue);
-    static OOXMLValue::Pointer_t const& Create(const char* pValue);
+    static OOXMLValue::Pointer_t const& Create(std::string_view pValue);
 
     virtual ~OOXMLBooleanValue() override;
 
@@ -262,7 +262,7 @@ protected:
 
 public:
     explicit OOXMLHexValue(sal_uInt32 nValue);
-    explicit OOXMLHexValue(const char* pValue);
+    explicit OOXMLHexValue(std::string_view pValue);
     virtual ~OOXMLHexValue() override;
 
     OOXMLHexValue(OOXMLHexValue const&) = default;
@@ -280,7 +280,7 @@ public:
 class OOXMLHexColorValue final : public OOXMLHexValue
 {
 public:
-    explicit OOXMLHexColorValue(const char* pValue);
+    explicit OOXMLHexColorValue(std::string_view pValue);
 };
 
 class OOXMLUniversalMeasureValue : public OOXMLValue
@@ -289,7 +289,7 @@ private:
     int mnValue;
 
 public:
-    OOXMLUniversalMeasureValue(const char* pValue, sal_uInt32 npPt);
+    OOXMLUniversalMeasureValue(std::string_view pValue, sal_uInt32 npPt);
     virtual ~OOXMLUniversalMeasureValue() override;
 
     OOXMLUniversalMeasureValue(OOXMLUniversalMeasureValue const&) = default;
@@ -307,7 +307,7 @@ public:
 template <sal_uInt32 npPt> class OOXMLNthPtMeasureValue final : public OOXMLUniversalMeasureValue
 {
 public:
-    explicit OOXMLNthPtMeasureValue(const char* pValue)
+    explicit OOXMLNthPtMeasureValue(std::string_view pValue)
         : OOXMLUniversalMeasureValue(pValue, npPt)
     {
     }
@@ -325,7 +325,7 @@ class OOXMLMeasurementOrPercentValue final : public OOXMLValue
     int mnValue;
 
 public:
-    explicit OOXMLMeasurementOrPercentValue(const char* pValue);
+    explicit OOXMLMeasurementOrPercentValue(std::string_view pValue);
 
     virtual int getInt() const override;
     virtual OOXMLValue* clone() const override { return new OOXMLMeasurementOrPercentValue(*this); }

@@ -123,7 +123,7 @@ public:
                             sal_Int32 nLength = SAL_MAX_INT32 );
 
     static bool parseOoxAddress2d(
-        sal_Int32& ornColumn, sal_Int32& ornRow, const char* pStr );
+        sal_Int32& ornColumn, sal_Int32& ornRow, std::string_view pStr );
 
     /** Tries to parse the passed string for a 2d cell range in A1 notation.
 
@@ -214,7 +214,7 @@ public:
                             sal_Int16 nSheet );
 
     static bool convertToCellAddressUnchecked(
-        ScAddress& orAddress, const char* pStr, sal_Int16 nSheet );
+        ScAddress& orAddress, std::string_view pStr, sal_Int16 nSheet );
 
     /** Tries to convert the passed string to a single cell address.
 
@@ -233,7 +233,7 @@ public:
 
     bool convertToCellAddress(
         ScAddress& rAddress,
-        const char* pStr, sal_Int16 nSheet, bool bTrackOverflow );
+        std::string_view pStr, sal_Int16 nSheet, bool bTrackOverflow );
 
     /** Returns a valid cell address by moving it into allowed dimensions.
 
