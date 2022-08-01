@@ -1447,7 +1447,7 @@ void SwTextNode::Update(
                 // the unused position must not be on a SwTextNode
                 bool const isOneUsed(&pRedl->GetBound() == pRedl->GetPoint());
                 assert(!pRedl->GetBound(!isOneUsed).GetNode().IsTextNode());
-                assert(!pRedl->GetBound(!isOneUsed).nContent.GetContentNode()); (void)isOneUsed;
+                assert(!pRedl->GetBound(!isOneUsed).GetContentNode()); (void)isOneUsed;
             }
         }
 

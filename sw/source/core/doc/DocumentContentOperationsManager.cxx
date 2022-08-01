@@ -2420,7 +2420,7 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
         SwTextNode * pOrigNode = pTNd;
         assert(*aSavePam.GetPoint() == *aSavePam.GetMark() &&
                *aSavePam.GetPoint() == rPos);
-        assert(aSavePam.GetPoint()->nContent.GetContentNode() == pOrigNode);
+        assert(aSavePam.GetPoint()->GetContentNode() == pOrigNode);
         assert(aSavePam.GetPoint()->nNode == rPos.GetNodeIndex());
         assert(rPos.GetNodeIndex() == pOrigNode->GetIndex());
 
@@ -2446,7 +2446,7 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
         //truncated node
         assert(*aSavePam.GetPoint() == *aSavePam.GetMark() &&
                *aSavePam.GetPoint() == rPos);
-        assert(aSavePam.GetPoint()->nContent.GetContentNode() == pOrigNode);
+        assert(aSavePam.GetPoint()->GetContentNode() == pOrigNode);
         assert(aSavePam.GetPoint()->nNode == rPos.GetNodeIndex());
         assert(rPos.GetNodeIndex() == pOrigNode->GetIndex());
         aSavePam.GetPoint()->nContent.Assign(pOrigNode, 0);
