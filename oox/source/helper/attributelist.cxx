@@ -61,10 +61,28 @@ sal_Unicode lclGetXChar( const sal_Unicode*& rpcStr, const sal_Unicode* pcEnd )
     return *rpcStr++;
 }
 
+sal_Unicode lclGetXChar( const char*& rpcStr, const char* pcEnd )
+{
+    sal_Unicode cChar = 0;
+    if( (pcEnd - rpcStr >= XSTRING_ENCCHAR_LEN) &&
+        (rpcStr[ 0 ] == '_') &&
+        (rpcStr[ 1 ] == 'x') &&
+        (rpcStr[ 6 ] == '_') &&
+        lclAddHexDigit( cChar, rpcStr[ 2 ], 12 ) &&
+        lclAddHexDigit( cChar, rpcStr[ 3 ], 8 ) &&
+        lclAddHexDigit( cChar, rpcStr[ 4 ], 4 ) &&
+        lclAddHexDigit( cChar, rpcStr[ 5 ], 0 ) )
+    {
+        rpcStr += XSTRING_ENCCHAR_LEN;
+        return cChar;
+    }
+    return *rpcStr++;
+}
+
 } // namespace
 
-#define STRING_TO_TOKEN(color) if (sColorName == u"" #color) return XML_##color
-sal_Int32 getHighlightColorTokenFromString(std::u16string_view sColorName)
+#define STRING_TO_TOKEN(color) if (sColorName == "" #color) return XML_##color
+sal_Int32 getHighlightColorTokenFromString(std::string_view sColorName)
 {
     STRING_TO_TOKEN(black);
     STRING_TO_TOKEN(blue);
@@ -92,6 +110,11 @@ sal_Int32 AttributeConversion::decodeToken( std::u16string_view rValue )
     return TokenMap::getTokenFromUnicode( rValue );
 }
 
+sal_Int32 AttributeConversion::decodeToken( std::string_view rValue )
+{
+    return StaticTokenMap().getTokenFromUTF8( rValue );
+}
+
 OUString AttributeConversion::decodeXString( const OUString& rValue )
 {
     // string shorter than one encoded character - no need to decode
@@ -105,9 +128,32 @@ OUString AttributeConversion::decodeXString( const OUString& rValue )
     return aBuffer.makeStringAndClear();
 }
 
+OUString AttributeConversion::decodeXString( std::string_view aValue )
+{
+    // string shorter than one encoded character - no need to decode
+    if( aValue.size() < XSTRING_ENCCHAR_LEN )
+        return OUString(aValue.data(), aValue.size(), RTL_TEXTENCODING_UTF8);
+    OUStringBuffer aBuffer;
+    const char* pcStr = aValue.data();
+    const char* pcEnd = pcStr + aValue.size();
+    while( pcStr < pcEnd )
+        aBuffer.append( lclGetXChar( pcStr, pcEnd ) );
+    return aBuffer.makeStringAndClear();
+}
+
+sal_Int32 AttributeConversion::decodeInteger( std::string_view rValue )
+{
+    return o3tl::toInt32(rValue);
+}
+
 sal_Int32 AttributeConversion::decodeInteger( std::u16string_view rValue )
 {
     return o3tl::toInt32(rValue);
+}
+
+sal_uInt32 AttributeConversion::decodeUnsigned( std::string_view rValue )
+{
+    return getLimitedValue< sal_uInt32, sal_Int64 >( o3tl::toInt64(rValue), 0, SAL_MAX_UINT32 );
 }
 
 sal_uInt32 AttributeConversion::decodeUnsigned( std::u16string_view rValue )
@@ -115,12 +161,12 @@ sal_uInt32 AttributeConversion::decodeUnsigned( std::u16string_view rValue )
     return getLimitedValue< sal_uInt32, sal_Int64 >( o3tl::toInt64(rValue), 0, SAL_MAX_UINT32 );
 }
 
-sal_Int64 AttributeConversion::decodeHyper( std::u16string_view rValue )
+sal_Int64 AttributeConversion::decodeHyper( std::string_view rValue )
 {
     return o3tl::toInt64(rValue);
 }
 
-sal_Int32 AttributeConversion::decodeIntegerHex( std::u16string_view rValue )
+sal_Int32 AttributeConversion::decodeIntegerHex( std::string_view rValue )
 {
     // It looks like all Office Open XML attributes containing hexadecimal
     // values are based on xsd:hexBinary and so use an unsigned representation:
@@ -152,7 +198,7 @@ bool AttributeList::hasAttribute( sal_Int32 nAttrToken ) const
 
 oox::drawingml::Color AttributeList::getHighlightColor(sal_Int32 nAttrToken) const
 {
-    OUString sColorVal = mxAttribs->getValue(nAttrToken);
+    std::string_view sColorVal = getView(nAttrToken);
     oox::drawingml::Color aColor;
     aColor.setHighlight(getHighlightColorTokenFromString(sColorVal));
     return aColor;
@@ -186,7 +232,7 @@ std::optional< OUString > AttributeList::getXString( sal_Int32 nAttrToken ) cons
 {
     // check if the attribute exists (empty string may be different to missing attribute)
     if( mxAttribs->hasAttribute( nAttrToken ) )
-        return std::optional< OUString >( AttributeConversion::decodeXString( mxAttribs->getOptionalValue( nAttrToken ) ) );
+        return std::optional< OUString >( AttributeConversion::decodeXString( getView( nAttrToken ) ) );
     return std::optional< OUString >();
 }
 
@@ -206,22 +252,22 @@ std::optional< sal_Int32 > AttributeList::getInteger( sal_Int32 nAttrToken ) con
 
 std::optional< sal_uInt32 > AttributeList::getUnsigned( sal_Int32 nAttrToken ) const
 {
-    OUString aValue = mxAttribs->getOptionalValue( nAttrToken );
-    bool bValid = !aValue.isEmpty();
+    std::string_view aValue = getView( nAttrToken );
+    bool bValid = !aValue.empty();
     return bValid ? std::optional< sal_uInt32 >( AttributeConversion::decodeUnsigned( aValue ) ) : std::optional< sal_uInt32 >();
 }
 
 std::optional< sal_Int64 > AttributeList::getHyper( sal_Int32 nAttrToken ) const
 {
-    OUString aValue = mxAttribs->getOptionalValue( nAttrToken );
-    bool bValid = !aValue.isEmpty();
+    std::string_view aValue = getView( nAttrToken );
+    bool bValid = !aValue.empty();
     return bValid ? std::optional< sal_Int64 >( AttributeConversion::decodeHyper( aValue ) ) : std::optional< sal_Int64 >();
 }
 
 std::optional< sal_Int32 > AttributeList::getIntegerHex( sal_Int32 nAttrToken ) const
 {
-    OUString aValue = mxAttribs->getOptionalValue( nAttrToken );
-    bool bValid = !aValue.isEmpty();
+    std::string_view aValue = getView( nAttrToken );
+    bool bValid = !aValue.empty();
     return bValid ? std::optional< sal_Int32 >( AttributeConversion::decodeIntegerHex( aValue ) ) : std::optional< sal_Int32 >();
 }
 
@@ -256,18 +302,18 @@ std::optional< bool > AttributeList::getBool( sal_Int32 nAttrToken ) const
 
 std::optional< util::DateTime > AttributeList::getDateTime( sal_Int32 nAttrToken ) const
 {
-    OUString aValue = mxAttribs->getOptionalValue( nAttrToken );
+    std::string_view aValue = getView( nAttrToken );
     util::DateTime aDateTime;
-    bool bValid = (aValue.getLength() == 19) && (aValue[ 4 ] == '-') && (aValue[ 7 ] == '-') &&
+    bool bValid = (aValue.size() == 19) && (aValue[ 4 ] == '-') && (aValue[ 7 ] == '-') &&
         (aValue[ 10 ] == 'T') && (aValue[ 13 ] == ':') && (aValue[ 16 ] == ':');
     if (!bValid)
         return std::optional< util::DateTime >();
-    aDateTime.Year    = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.subView( 0, 4 )) );
-    aDateTime.Month   = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.subView( 5, 2 )) );
-    aDateTime.Day     = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.subView( 8, 2 )) );
-    aDateTime.Hours   = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.subView( 11, 2 )) );
-    aDateTime.Minutes = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.subView( 14, 2 )) );
-    aDateTime.Seconds = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.subView( 17, 2 )) );
+    aDateTime.Year    = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.substr( 0, 4 )) );
+    aDateTime.Month   = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.substr( 5, 2 )) );
+    aDateTime.Day     = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.substr( 8, 2 )) );
+    aDateTime.Hours   = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.substr( 11, 2 )) );
+    aDateTime.Minutes = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.substr( 14, 2 )) );
+    aDateTime.Seconds = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.substr( 17, 2 )) );
     return std::optional< util::DateTime >( aDateTime );
 }
 
@@ -349,13 +395,15 @@ util::DateTime AttributeList::getDateTime( sal_Int32 nAttrToken, const util::Dat
 std::vector<sal_Int32> AttributeList::getTokenList(sal_Int32 nAttrToken) const
 {
     std::vector<sal_Int32> aValues;
-    OUString sValue = getString(nAttrToken, "");
-    sal_Int32 nIndex = 0;
-    do
+    std::string_view sValue;
+    if (getAttribList()->getAsView(nAttrToken, sValue))
     {
-        aValues.push_back(AttributeConversion::decodeToken(o3tl::getToken(sValue, 0, ' ', nIndex)));
-    } while (nIndex >= 0);
-
+        sal_Int32 nIndex = 0;
+        do
+        {
+            aValues.push_back(AttributeConversion::decodeToken(o3tl::getToken(sValue, 0, ' ', nIndex)));
+        } while (nIndex >= 0);
+    }
     return aValues;
 }
 
