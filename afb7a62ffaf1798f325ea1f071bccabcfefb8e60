@@ -52,6 +52,24 @@
       "parentUuid": "d0129d85_28af1c08",
       "revId": "afb7a62ffaf1798f325ea1f071bccabcfefb8e60",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95a5f69b_89ea1f26",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-08-01T06:27:48Z",
+      "side": 1,
+      "message": "\u003e To understand correctly: Currently, we e.g. have this in the hierarchy: (...)\n\nHm, Gerrit\u0027s handling of markdown (or whatever it supports) messed that up a bit in the pretty-formatted version. The `sample - LibreOffice Presentation (role: document presentation)` item is meant to be one level higher than the other items, of course.",
+      "parentUuid": "507d461a_53e20a7e",
+      "revId": "afb7a62ffaf1798f325ea1f071bccabcfefb8e60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ],
   "submitRequirementResults": []
