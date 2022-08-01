@@ -16,6 +16,24 @@
       "message": "Not sure here since it seems to concern several elements",
       "revId": "1308b7be38da1a24e3adcc86b72ebdd14333c170",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "162f824c_e0a9eadc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-08-01T18:32:05Z",
+      "side": 1,
+      "message": "Looking at https://en.wikipedia.org/wiki/Unicode_block and https://en.wikipedia.org/wiki/Latin_Extended_Additional the change looks to be correct to make it \"Latin Extended Additional\" instead of \"Latin Extended Additionals\"",
+      "parentUuid": "03ccd09a_3fe78ad6",
+      "revId": "1308b7be38da1a24e3adcc86b72ebdd14333c170",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
