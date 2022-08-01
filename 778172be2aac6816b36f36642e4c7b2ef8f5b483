@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6469996b_cf3eae65",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-08-01T07:08:24Z",
+      "side": 1,
+      "message": "Is it possible to cover this with a test? Perhaps in CppunitTest_sd_import_tests?",
+      "revId": "778172be2aac6816b36f36642e4c7b2ef8f5b483",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2f64fbb9_d2f441d9",
