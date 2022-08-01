@@ -125,6 +125,12 @@ int SfxLokHelper::createView(int nDocId)
     return -1;
 }
 
+void SfxLokHelper::setEditMode(int nMode, vcl::ITiledRenderable* pDoc)
+{
+    DisableCallbacks dc;
+    pDoc->setEditMode(nMode);
+}
+
 void SfxLokHelper::destroyView(int nId)
 {
     const SfxApplication* pApp = SfxApplication::Get();
@@ -371,7 +377,8 @@ static inline OString lcl_generateJSON(const SfxViewShell* pView, int nViewId, s
 {
     assert(pView != nullptr && "pView must be valid");
     return OString::Concat("{ \"viewId\": \"") + OString::number(nViewId)
-           + "\", \"part\": \"" + OString::number(pView->getPart()) + "\", \"" + rKey + "\": \""
+           + "\", \"part\": \"" + OString::number(pView->getPart()) + "\", \"mode\": \""
+           + OString::number(pView->getEditMode()) + "\", \"" + rKey + "\": \""
            + lcl_sanitizeJSONAsValue(rPayload) + "\" }";
 }
 
@@ -544,7 +551,8 @@ void SfxLokHelper::notifyInvalidation(SfxViewShell const* pThisView, tools::Rect
         return;
 
     const int nPart = comphelper::LibreOfficeKit::isPartInInvalidation() ? pThisView->getPart() : INT_MIN;
-    pThisView->libreOfficeKitViewInvalidateTilesCallback(pRect, nPart);
+    const int nMode = comphelper::LibreOfficeKit::isPartInInvalidation() ? pThisView->getEditMode() : 0;
+    pThisView->libreOfficeKitViewInvalidateTilesCallback(pRect, nPart, nMode);
 }
 
 void SfxLokHelper::notifyDocumentSizeChanged(SfxViewShell const* pThisView, const OString& rPayload, vcl::ITiledRenderable* pDoc, bool bInvalidateAll)
@@ -557,7 +565,7 @@ void SfxLokHelper::notifyDocumentSizeChanged(SfxViewShell const* pThisView, cons
         for (int i = 0; i < pDoc->getParts(); ++i)
         {
             tools::Rectangle aRectangle(0, 0, 1000000000, 1000000000);
-            pThisView->libreOfficeKitViewInvalidateTilesCallback(&aRectangle, i);
+            pThisView->libreOfficeKitViewInvalidateTilesCallback(&aRectangle, i, 0);
         }
     }
     pThisView->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, rPayload.getStr());
