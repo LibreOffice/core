@@ -28,6 +28,7 @@
  *************************************************************************/
 
 #include <ucbhelper/resultset.hxx>
+#include <utility>
 
 #include "tdoc_datasupplier.hxx"
 #include "tdoc_resultset.hxx"
@@ -42,10 +43,10 @@ using namespace tdoc_ucp;
 
 DynamicResultSet::DynamicResultSet(
             const uno::Reference< uno::XComponentContext >& rxContext,
-            const rtl::Reference< Content >& rxContent,
+            rtl::Reference< Content > xContent,
             const ucb::OpenCommandArgument2& rCommand )
 : ResultSetImplHelper( rxContext, rCommand ),
-  m_xContent( rxContent )
+  m_xContent(std::move( xContent ))
 {
 }
 

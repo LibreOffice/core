@@ -12,6 +12,7 @@
 #include <com/sun/star/io/IOException.hpp>
 #include <sal/log.hxx>
 #include <cppuhelper/queryinterface.hxx>
+#include <utility>
 
 #include "std_outputstream.hxx"
 
@@ -19,8 +20,8 @@ using namespace com::sun::star;
 
 namespace cmis
 {
-    StdOutputStream::StdOutputStream( boost::shared_ptr< std::ostream > const & pStream ) :
-        m_pStream( pStream )
+    StdOutputStream::StdOutputStream( boost::shared_ptr< std::ostream > pStream ) :
+        m_pStream(std::move( pStream ))
     {
     }
 

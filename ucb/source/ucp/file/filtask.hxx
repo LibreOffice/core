@@ -86,11 +86,11 @@ namespace fileaccess
         public:
 
             explicit TaskHandling(
-                const css::uno::Reference< css::ucb::XCommandEnvironment >&  xCommandEnv )
+                css::uno::Reference< css::ucb::XCommandEnvironment > xCommandEnv )
                 : m_bHandled( false ),
                   m_nErrorCode( TASKHANDLER_NO_ERROR ),
                   m_nMinorCode( TASKHANDLER_NO_ERROR ),
-                  m_xCommandEnvironment( xCommandEnv )
+                  m_xCommandEnvironment( std::move(xCommandEnv) )
             {
             }
 

@@ -36,8 +36,8 @@ private:
     void init() const;
 
 public:
-    explicit HierarchyUri( const OUString & rUri )
-    : m_aUri( rUri ), m_bValid( false ) {}
+    explicit HierarchyUri( OUString aUri )
+    : m_aUri( std::move(aUri) ), m_bValid( false ) {}
 
     bool isValid() const
     { init(); return m_bValid; }

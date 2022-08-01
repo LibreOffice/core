@@ -56,7 +56,7 @@ public:
                 FTPContentProvider* pProvider,
                 const css::uno::Reference<
                 css::ucb::XContentIdentifier >& Identifier,
-                const css::ucb::ContentInfo& aInfo);
+                css::ucb::ContentInfo aInfo);
 
 
     virtual ~FTPContent() override;

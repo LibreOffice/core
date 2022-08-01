@@ -171,7 +171,7 @@ private:
 public:
     PersistentPropertySet(
         PropertySetRegistry& rCreator,
-        const OUString& rKey );
+        OUString aKey );
     virtual ~PersistentPropertySet() override;
 
     // XServiceInfo

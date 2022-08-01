@@ -20,6 +20,7 @@
 #pragma once
 
 #include <rtl/ustring.hxx>
+#include <utility>
 
 namespace package_ucp {
 
@@ -44,8 +45,8 @@ private:
     void init() const;
 
 public:
-    explicit PackageUri( const OUString & rPackageUri )
-    : m_aUri( rPackageUri ), m_bValid( false ) {}
+    explicit PackageUri( OUString aPackageUri )
+    : m_aUri(std::move( aPackageUri )), m_bValid( false ) {}
 
     bool isValid() const
     { init(); return m_bValid; }

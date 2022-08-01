@@ -22,6 +22,7 @@
 
 #include <memory>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Any.hxx>
@@ -48,9 +49,9 @@ public:
     PropertyValue()
     : m_bIsCaseSensitive( true ) {}
 
-    explicit PropertyValue( const css::uno::Any & rValue,
+    explicit PropertyValue( css::uno::Any aValue,
                    bool bIsCaseSensitive )
-    : m_aValue( rValue),
+    : m_aValue(std::move( aValue)),
       m_bIsCaseSensitive( bIsCaseSensitive ) {}
 
     bool isCaseSensitive() const { return m_bIsCaseSensitive; }

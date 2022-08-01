@@ -59,7 +59,7 @@ private:
     bool getData();
     ResultList maResults;
 public:
-    DataSupplier( const rtl::Reference< Content >& rContent, sal_Int32 nOpenMode );
+    DataSupplier( rtl::Reference< Content > xContent, sal_Int32 nOpenMode );
     virtual ~DataSupplier() override;
 
     virtual OUString queryContentIdentifierString( sal_uInt32 nIndex ) override;

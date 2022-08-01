@@ -26,6 +26,8 @@
    the necessary interfaces, but never recognizes/notifies changes!!!
 
  *************************************************************************/
+#include <utility>
+
 #include "pkgdatasupplier.hxx"
 #include "pkgresultset.hxx"
 
@@ -39,12 +41,12 @@ using namespace package_ucp;
 
 DynamicResultSet::DynamicResultSet(
               const uno::Reference< uno::XComponentContext >& rxContext,
-              const rtl::Reference< Content >& rxContent,
+              rtl::Reference< Content > xContent,
               const ucb::OpenCommandArgument2& rCommand,
-              const uno::Reference< ucb::XCommandEnvironment >& rxEnv )
+              uno::Reference< ucb::XCommandEnvironment > xEnv )
 : ResultSetImplHelper(rxContext, rCommand ),
-  m_xContent( rxContent ),
-  m_xEnv( rxEnv )
+  m_xContent(std::move( xContent )),
+  m_xEnv(std::move( xEnv ))
 {
 }
 
