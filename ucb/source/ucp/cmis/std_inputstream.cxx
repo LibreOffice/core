@@ -13,6 +13,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <sal/log.hxx>
 #include <cppuhelper/queryinterface.hxx>
+#include <utility>
 
 #include "std_inputstream.hxx"
 
@@ -20,8 +21,8 @@ using namespace com::sun::star;
 
 namespace cmis
 {
-    StdInputStream::StdInputStream( boost::shared_ptr< std::istream > const & pStream ) :
-        m_pStream( pStream ),
+    StdInputStream::StdInputStream( boost::shared_ptr< std::istream > pStream ) :
+        m_pStream(std::move( pStream )),
         m_nLength( 0 )
     {
         if (m_pStream)

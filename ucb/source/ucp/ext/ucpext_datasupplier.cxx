@@ -35,6 +35,7 @@
 
 #include <memory>
 #include <string_view>
+#include <utility>
 
 
 namespace ucb::ucp::ext
@@ -77,8 +78,8 @@ namespace ucb::ucp::ext
 
 
     DataSupplier::DataSupplier( const Reference< XComponentContext >& rxContext,
-                                const ::rtl::Reference< Content >& i_rContent )
-        :m_xContent( i_rContent )
+                                ::rtl::Reference< Content > i_xContent )
+        :m_xContent(std::move( i_xContent ))
         ,m_xContext( rxContext )
     {
     }

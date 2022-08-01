@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <utility>
+
 #include "gio_datasupplier.hxx"
 #include "gio_resultset.hxx"
 
@@ -28,11 +30,11 @@ using namespace gio;
 
 DynamicResultSet::DynamicResultSet(
     const Reference< XComponentContext >& rxContext,
-    const rtl::Reference< Content >& rxContent,
+    rtl::Reference< Content > xContent,
     const OpenCommandArgument2& rCommand,
     const Reference< XCommandEnvironment >& rxEnv )
     : ResultSetImplHelper( rxContext, rCommand ),
-      m_xContent( rxContent ),
+      m_xContent(std::move( xContent )),
       m_xEnv( rxEnv )
 {
 }

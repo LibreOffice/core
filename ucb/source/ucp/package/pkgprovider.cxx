@@ -37,6 +37,7 @@
 #include "pkgcontent.hxx"
 #include "pkguri.hxx"
 #include <unordered_map>
+#include <utility>
 
 using namespace com::sun::star;
 
@@ -57,10 +58,10 @@ class Package : public cppu::OWeakObject,
     ContentProvider*                                     m_pOwner;
 
 public:
-    Package( const OUString& rName,
-             const uno::Reference< container::XHierarchicalNameAccess > & xNA,
+    Package( OUString aName,
+             uno::Reference< container::XHierarchicalNameAccess > xNA,
              ContentProvider* pOwner )
-    : m_aName( rName ), m_xNA( xNA ), m_pOwner( pOwner ) {}
+    : m_aName(std::move( aName )), m_xNA(std::move( xNA )), m_pOwner( pOwner ) {}
     virtual ~Package() override { m_pOwner->removePackage( m_aName ); }
 
     // XInterface

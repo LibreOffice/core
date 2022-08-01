@@ -40,8 +40,8 @@ private:
 
 public:
     explicit ProviderListEntry_Impl(
-        const css::uno::Reference< css::ucb::XContentProvider >& xProvider )
-    : m_xProvider( xProvider ) {}
+        css::uno::Reference< css::ucb::XContentProvider > xProvider )
+    : m_xProvider( std::move(xProvider) ) {}
 
     const css::uno::Reference< css::ucb::XContentProvider >& getProvider() const
     { return m_xProvider; }
