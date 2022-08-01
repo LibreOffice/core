@@ -23,6 +23,8 @@
  **************************************************************************
 
  *************************************************************************/
+#include <utility>
+
 #include "ftpcontentidentifier.hxx"
 
 using namespace ftp;
@@ -32,9 +34,9 @@ using namespace com::sun::star::lang;
 
 
 FTPContentIdentifier::FTPContentIdentifier(
-    const OUString& ident
+    OUString ident
 )
-    : m_ident(ident)
+    : m_ident(std::move(ident))
 {
 }
 

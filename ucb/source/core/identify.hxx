@@ -25,7 +25,7 @@
 class ContentIdentifier : public cppu::WeakImplHelper<css::ucb::XContentIdentifier>
 {
 public:
-    explicit ContentIdentifier(const OUString& ContentId);
+    explicit ContentIdentifier(OUString ContentId);
     virtual ~ContentIdentifier() override;
 
     // XContentIdentifier

@@ -27,7 +27,7 @@ namespace cmis
     {
         public:
 
-            StdOutputStream( boost::shared_ptr< std::ostream > const & pStream );
+            StdOutputStream( boost::shared_ptr< std::ostream > pStream );
 
             virtual ~StdOutputStream( ) override;
 

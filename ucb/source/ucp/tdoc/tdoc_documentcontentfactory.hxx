@@ -33,7 +33,7 @@ class DocumentContentFactory :
             css::lang::XServiceInfo >
 {
 public:
-    explicit DocumentContentFactory( const css::uno::Reference< css::uno::XComponentContext >& );
+    explicit DocumentContentFactory( css::uno::Reference< css::uno::XComponentContext > );
     virtual ~DocumentContentFactory() override;
 
     // XServiceInfo

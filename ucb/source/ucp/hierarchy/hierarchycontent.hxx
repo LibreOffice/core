@@ -114,7 +114,7 @@ private:
             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
             const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
-            const HierarchyContentProperties& rProps );
+            HierarchyContentProperties aProps );
     HierarchyContent(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,

@@ -22,6 +22,7 @@
 #include <rtl/ref.hxx>
 #include <ucbhelper/resultset.hxx>
 #include <mutex>
+#include <utility>
 #include <vector>
 #include "hierarchydata.hxx"
 
@@ -74,7 +75,7 @@ private:
         css::uno::Reference< css::sdbc::XRow >              xRow;
         HierarchyEntryData                        aData;
 
-        explicit ResultListEntry( const HierarchyEntryData& rEntry ) : aData( rEntry ) {}
+        explicit ResultListEntry( HierarchyEntryData aEntry ) : aData(std::move( aEntry )) {}
     };
     typedef std::vector< std::unique_ptr<ResultListEntry> > ResultList;
     std::mutex                                      m_aMutex;

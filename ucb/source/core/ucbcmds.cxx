@@ -58,6 +58,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/simplenameclashresolverequest.hxx>
+#include <utility>
 #include "ucbcmds.hxx"
 #include "ucb.hxx"
 
@@ -83,13 +84,13 @@ struct TransferCommandContext
     ucb::GlobalTransferCommandArgument2          aArg;
 
     TransferCommandContext(
-        const uno::Reference< uno::XComponentContext > & xContext,
-        const uno::Reference< ucb::XCommandProcessor > & rxProcessor,
-        const uno::Reference< ucb::XCommandEnvironment > & rxEnv,
-        const uno::Reference< ucb::XCommandEnvironment > & rxOrigEnv,
-        const ucb::GlobalTransferCommandArgument2 & rArg )
-    : m_xContext( xContext ), xProcessor( rxProcessor ), xEnv( rxEnv ),
-      xOrigEnv( rxOrigEnv ), aArg( rArg ) {}
+        uno::Reference< uno::XComponentContext > xContext,
+        uno::Reference< ucb::XCommandProcessor > _xProcessor,
+        uno::Reference< ucb::XCommandEnvironment > _xEnv,
+        uno::Reference< ucb::XCommandEnvironment > _xOrigEnv,
+        ucb::GlobalTransferCommandArgument2 _aArg )
+    : m_xContext(std::move( xContext )), xProcessor(std::move( _xProcessor )), xEnv(std::move( _xEnv )),
+      xOrigEnv(std::move( _xOrigEnv )), aArg(std::move( _aArg )) {}
 };
 
 
@@ -102,8 +103,8 @@ class InteractionHandlerProxy :
 
 public:
     explicit InteractionHandlerProxy(
-        const uno::Reference< task::XInteractionHandler > & xOrig )
-    : m_xOrig( xOrig ) {}
+        uno::Reference< task::XInteractionHandler > xOrig )
+    : m_xOrig(std::move( xOrig )) {}
 
     // XInteractionHandler methods.
     virtual void SAL_CALL handle(

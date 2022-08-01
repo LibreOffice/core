@@ -44,7 +44,7 @@ class HierarchyDataSource : public cppu::WeakImplHelper<
     comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_aDisposeEventListeners;
 
 public:
-    explicit HierarchyDataSource( const css::uno::Reference< css::uno::XComponentContext > & rxContext );
+    explicit HierarchyDataSource( css::uno::Reference< css::uno::XComponentContext > xContext );
     virtual ~HierarchyDataSource() override;
 
     // XServiceInfo

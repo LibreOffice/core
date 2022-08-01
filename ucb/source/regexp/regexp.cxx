@@ -26,6 +26,7 @@
 #include <rtl/character.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <utility>
 
 using namespace com::sun::star;
 using namespace ucb_impl;
@@ -34,14 +35,14 @@ using namespace ucb_impl;
 //  Regexp
 
 
-inline Regexp::Regexp(Kind eTheKind, OUString const & rThePrefix,
-                      bool bTheEmptyDomain, OUString const & rTheInfix,
+inline Regexp::Regexp(Kind eTheKind, OUString aThePrefix,
+                      bool bTheEmptyDomain, OUString aTheInfix,
                       bool bTheTranslation,
-                      OUString const & rTheReversePrefix):
+                      OUString aTheReversePrefix):
     m_eKind(eTheKind),
-    m_aPrefix(rThePrefix),
-    m_aInfix(rTheInfix),
-    m_aReversePrefix(rTheReversePrefix),
+    m_aPrefix(std::move(aThePrefix)),
+    m_aInfix(std::move(aTheInfix)),
+    m_aReversePrefix(std::move(aTheReversePrefix)),
     m_bEmptyDomain(bTheEmptyDomain),
     m_bTranslation(bTheTranslation)
 {

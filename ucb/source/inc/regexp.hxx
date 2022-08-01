@@ -55,10 +55,10 @@ private:
     bool m_bEmptyDomain;
     bool m_bTranslation;
 
-    inline Regexp(Kind eTheKind, OUString const & rThePrefix,
-                  bool bTheEmptyDomain, OUString const & rTheInfix,
+    inline Regexp(Kind eTheKind, OUString aThePrefix,
+                  bool bTheEmptyDomain, OUString aTheInfix,
                   bool bTheTranslation,
-                  OUString const & rTheReversePrefix);
+                  OUString aTheReversePrefix);
 };
 
 inline bool Regexp::operator ==(Regexp const & rOther) const

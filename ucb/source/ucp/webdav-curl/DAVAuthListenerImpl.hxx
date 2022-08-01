@@ -22,6 +22,7 @@
 
 #include "DAVAuthListener.hxx"
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <utility>
 
 
 namespace http_dav_ucp
@@ -35,9 +36,9 @@ namespace http_dav_ucp
     public:
 
         DAVAuthListener_Impl(
-            const css::uno::Reference<css::ucb::XCommandEnvironment>& xEnv,
-            const OUString & inURL )
-            : m_xEnv( xEnv ), m_aURL( inURL )
+            css::uno::Reference<css::ucb::XCommandEnvironment> xEnv,
+            OUString inURL )
+            : m_xEnv(std::move( xEnv )), m_aURL(std::move( inURL ))
         {
         }
 

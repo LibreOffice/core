@@ -44,8 +44,8 @@ namespace tdoc_ucp {
     {
     public:
         StorageElementFactory(
-            const css::uno::Reference< css::uno::XComponentContext > & rxContext,
-            const rtl::Reference< OfficeDocumentsManager > & xDocsMgr );
+            css::uno::Reference< css::uno::XComponentContext > xContext,
+            rtl::Reference< OfficeDocumentsManager > xDocsMgr );
         virtual ~StorageElementFactory() override;
 
         /// @throws css::uno::Exception

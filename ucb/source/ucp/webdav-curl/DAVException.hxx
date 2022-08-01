@@ -21,6 +21,7 @@
 #pragma once
 
 #include <rtl/ustring.hxx>
+#include <utility>
 
 namespace http_dav_ucp
 {
@@ -151,16 +152,16 @@ class DAVException : public std::exception
              , mStatusCode( SC_NONE )
          {};
          DAVException( ExceptionCode inExceptionCode,
-                       const OUString & rData )
+                       OUString aData )
              : mExceptionCode( inExceptionCode )
-             , mData( rData )
+             , mData(std::move( aData ))
              , mStatusCode( SC_NONE )
          {};
          DAVException( ExceptionCode inExceptionCode,
-                       const OUString & rData,
+                       OUString aData,
                        sal_uInt16 nStatusCode )
             : mExceptionCode( inExceptionCode )
-            , mData( rData )
+            , mData(std::move( aData ))
             , mStatusCode( nStatusCode )
          {};
 

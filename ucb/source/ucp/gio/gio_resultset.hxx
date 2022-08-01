@@ -37,7 +37,7 @@ namespace gio
     public:
         DynamicResultSet(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-            const rtl::Reference< Content >& rxContent,
+            rtl::Reference< Content > xContent,
             const css::ucb::OpenCommandArgument2& rCommand,
             const css::uno::Reference< css::ucb::XCommandEnvironment >& rxEnv );
     };
