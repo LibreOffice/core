@@ -16,6 +16,24 @@
       "message": "https://dev-www.libreoffice.org/src/ReemKufi-1.2.zip -\u003e 404 not found",
       "revId": "210a7d0df72e2f0079e8419752f7d57f64f3c53c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "094e5ea5_b02df876",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003606
+      },
+      "writtenOn": "2022-08-01T12:16:23Z",
+      "side": 1,
+      "message": "I provided the URL to the file that needs to be uploaded in a comment above, as I can’t upload it myself.\n\nHere it is again: https://github.com/aliftype/reem-kufi/releases/download/v1.2/ReemKufi-1.2.zip",
+      "parentUuid": "4b644e7c_9f0e2e99",
+      "revId": "210a7d0df72e2f0079e8419752f7d57f64f3c53c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
