@@ -872,8 +872,8 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
     SwDoc& rDoc = rMark.nNode.GetNode().GetDoc();
 
     // if it's not in the doc array, probably missing some invalidation somewhere
-    assert(&rPoint.nNode.GetNodes() == &rDoc.GetNodes());
-    assert(&rMark.nNode.GetNodes() == &rDoc.GetNodes());
+    assert(&rPoint.GetNodes() == &rDoc.GetNodes());
+    assert(&rMark.GetNodes() == &rDoc.GetNodes());
 
     ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
 
@@ -1571,7 +1571,7 @@ static bool IsAtEndOfSection(SwPosition const& rAnchorPos)
 
 static bool IsAtStartOfSection(SwPosition const& rAnchorPos)
 {
-    SwNodes const& rNodes(rAnchorPos.nNode.GetNodes());
+    SwNodes const& rNodes(rAnchorPos.GetNodes());
     SwNodeIndex node(*rAnchorPos.nNode.GetNode().StartOfSectionNode());
     SwContentNode *const pNode(rNodes.GoNext(&node));
     assert(pNode);

@@ -1840,7 +1840,7 @@ bool SwTextFrame::FillSelection( SwSelectionList& rSelList, const SwRect& rRect 
         }
         else if( aRect.HasArea() )
         {
-            SwPosition aOld(aPosL.nNode.GetNodes().GetEndOfContent());
+            SwPosition aOld(aPosL.GetNodes().GetEndOfContent());
             SwPosition aPosR( aPosL );
             Point aPoint;
             SwTextInfo aInf( const_cast<SwTextFrame*>(this) );

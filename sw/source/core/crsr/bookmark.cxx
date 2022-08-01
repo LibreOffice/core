@@ -58,7 +58,7 @@ namespace sw::mark
     {
         SwPosition const& rStartPos(rMark.GetMarkStart());
         SwPosition const& rEndPos(rMark.GetMarkEnd());
-        SwNodes const& rNodes(rStartPos.nNode.GetNodes());
+        SwNodes const& rNodes(rStartPos.GetNodes());
         SwNodeOffset const nStartNode(rStartPos.nNode.GetIndex());
         SwNodeOffset const nEndNode(rEndPos.nNode.GetIndex());
         int nFields(0);

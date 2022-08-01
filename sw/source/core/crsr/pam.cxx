@@ -898,7 +898,7 @@ SwContentNode* GetNode( SwPaM & rPam, bool& rbFirst, SwMoveFnCollection const & 
         {
             SwPosition aPos( *rPam.GetPoint() );
             bool bSrchForward = &fnMove == &fnMoveForward;
-            SwNodes& rNodes = aPos.nNode.GetNodes();
+            SwNodes& rNodes = aPos.GetNodes();
 
             // go to next/previous ContentNode
             while( true )
@@ -943,7 +943,7 @@ SwContentNode* GetNode( SwPaM & rPam, bool& rbFirst, SwMoveFnCollection const & 
 
 void GoStartDoc( SwPosition * pPos )
 {
-    SwNodes& rNodes = pPos->nNode.GetNodes();
+    SwNodes& rNodes = pPos->GetNodes();
     pPos->nNode = *rNodes.GetEndOfContent().StartOfSectionNode();
     // we always need to find a ContentNode!
     SwContentNode* pCNd = rNodes.GoNext( &pPos->nNode );
@@ -953,7 +953,7 @@ void GoStartDoc( SwPosition * pPos )
 
 void GoEndDoc( SwPosition * pPos )
 {
-    SwNodes& rNodes = pPos->nNode.GetNodes();
+    SwNodes& rNodes = pPos->GetNodes();
     pPos->nNode = rNodes.GetEndOfContent();
     SwContentNode* pCNd = GoPreviousNds( &pPos->nNode, true );
     if( pCNd )
@@ -963,7 +963,7 @@ void GoEndDoc( SwPosition * pPos )
 void GoStartSection( SwPosition * pPos )
 {
     // jump to section's beginning
-    SwNodes& rNodes = pPos->nNode.GetNodes();
+    SwNodes& rNodes = pPos->GetNodes();
     sal_uInt16 nLevel = SwNodes::GetSectionLevel( pPos->nNode );
     if( pPos->nNode < rNodes.GetEndOfContent().StartOfSectionIndex() )
         nLevel--;
@@ -977,7 +977,7 @@ void GoStartSection( SwPosition * pPos )
 void GoEndSection( SwPosition * pPos )
 {
     // jump to section's beginning/end
-    SwNodes& rNodes = pPos->nNode.GetNodes();
+    SwNodes& rNodes = pPos->GetNodes();
     sal_uInt16 nLevel = SwNodes::GetSectionLevel( pPos->nNode );
     if( pPos->nNode < rNodes.GetEndOfContent().StartOfSectionIndex() )
         nLevel--;

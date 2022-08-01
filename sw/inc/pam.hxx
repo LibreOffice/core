@@ -69,6 +69,11 @@ struct SAL_WARN_UNUSED SW_DLLPUBLIC SwPosition
     bool operator ==(const SwPosition &) const;
     bool operator !=(const SwPosition &) const;
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
+
+
+    // Gets pointer on NodesArray.
+    const SwNodes& GetNodes() const { return nNode.GetNodes(); }
+    SwNodes& GetNodes() { return nNode.GetNodes(); }
 };
 
 SW_DLLPUBLIC std::ostream &operator <<(std::ostream& s, const SwPosition& position);

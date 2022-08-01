@@ -523,7 +523,7 @@ namespace sw
     {
         SwNodeOffset const nStartNode(rPam.Start()->nNode.GetIndex());
         SwNodeOffset const nEndNode(rPam.End()->nNode.GetIndex());
-        SwNodes const& rNodes(rPam.GetPoint()->nNode.GetNodes());
+        SwNodes const& rNodes(rPam.GetPoint()->GetNodes());
         IDocumentMarkAccess const& rIDMA(*rPam.GetDoc().getIDocumentMarkAccess());
 
         std::stack<std::tuple<sw::mark::IFieldmark const*, bool, SwNodeOffset, sal_Int32>> startedFields;
@@ -671,7 +671,7 @@ namespace
         // iterate from end to start, to avoid invalidating the offsets!
         auto iter( Breaks.rbegin() );
         SwNodeOffset nOffset(0);
-        SwNodes const& rNodes(rPam.GetPoint()->nNode.GetNodes());
+        SwNodes const& rNodes(rPam.GetPoint()->GetNodes());
         SwPaM aPam( rSelectionEnd, rSelectionEnd ); // end node!
         SwPosition & rEnd( *aPam.End() );
         SwPosition & rStart( *aPam.Start() );
@@ -3512,7 +3512,7 @@ bool DocumentContentOperationsManager::ReplaceRange( SwPaM& rPam, const OUString
     // iterate from end to start, to avoid invalidating the offsets!
     auto iter( Breaks.rbegin() );
     SwNodeOffset nOffset(0);
-    SwNodes const& rNodes(rPam.GetPoint()->nNode.GetNodes());
+    SwNodes const& rNodes(rPam.GetPoint()->GetNodes());
     OSL_ENSURE(aPam.GetPoint() == aPam.End(), "wrong!");
     SwPosition & rEnd( *aPam.End() );
     SwPosition & rStart( *aPam.Start() );
@@ -4833,7 +4833,7 @@ bool DocumentContentOperationsManager::CopyImpl(SwPaM& rPam, SwPosition& rPos,
     // iterate from end to start, ... don't think it's necessary here?
     auto iter( Breaks.rbegin() );
     SwNodeOffset nOffset(0);
-    SwNodes const& rNodes(rPam.GetPoint()->nNode.GetNodes());
+    SwNodes const& rNodes(rPam.GetPoint()->GetNodes());
     SwPaM aPam( rSelectionEnd, rSelectionEnd ); // end node!
     SwPosition & rEnd( *aPam.End() );
     SwPosition & rStart( *aPam.Start() );

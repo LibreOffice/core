@@ -194,7 +194,7 @@ bool SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
 
             nSttNd = pStt->nNode.GetIndex();
             nEndNd = pEnd->nNode.GetIndex();
-            pNds = &pStt->nNode.GetNodes();
+            pNds = &pStt->GetNodes();
         }
         break;
 

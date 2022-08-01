@@ -133,7 +133,7 @@ bool SwFltStackEntry::MakeRegion(SwDoc& rDoc, SwPaM& rRegion, RegionMode const e
     if (rMkPos.m_nNode != rPtPos.m_nNode)
     {
         SwNodeOffset n = rPtPos.m_nNode.GetIndex() + 1;
-        SwNodes& rNodes = rRegion.GetPoint()->nNode.GetNodes();
+        SwNodes& rNodes = rRegion.GetPoint()->GetNodes();
         if (n >= rNodes.Count())
             return false;
         rRegion.GetPoint()->nNode = n;
