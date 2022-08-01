@@ -343,7 +343,7 @@ public:
     /// Invokes the registered callback, if there are any.
     virtual void libreOfficeKitViewCallback(int nType, const char* pPayload) const override;
     virtual void libreOfficeKitViewCallbackWithViewId(int nType, const char* pPayload, int nViewId) const override;
-    virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart) const override;
+    virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart, int nMode) const override;
     // Performs any pending calls to libreOfficeKitViewInvalidateTilesCallback() as necessary.
     virtual void flushPendingLOKInvalidateTiles();
     virtual void libreOfficeKitViewUpdatedCallback(int nType) const override;
@@ -357,6 +357,8 @@ public:
     void setTiledSearching(bool bTiledSearching);
     /// See lok::Document::getPart().
     virtual int getPart() const;
+    /// See lok::Document::getMode().
+    virtual int getEditMode() const;
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
     /// See OutlinerViewShell::GetViewShellId().
     ViewShellId GetViewShellId() const override;

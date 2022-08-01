@@ -34,8 +34,8 @@ public:
     virtual void libreOfficeKitViewCallback(int nType, const char* pPayload) override;
     virtual void libreOfficeKitViewCallbackWithViewId(int nType, const char* pPayload,
                                                       int nViewId) override;
-    virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect,
-                                                           int nPart) override;
+    virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart,
+                                                           int nMode) override;
     virtual void libreOfficeKitViewUpdatedCallback(int nType) override;
     virtual void libreOfficeKitViewUpdatedCallbackPerViewId(int nType, int nViewId,
                                                             int nSourceViewId) override;
