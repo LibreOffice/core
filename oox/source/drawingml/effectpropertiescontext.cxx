@@ -36,7 +36,7 @@ EffectPropertiesContext::~EffectPropertiesContext()
 void EffectPropertiesContext::saveUnsupportedAttribs( Effect& rEffect, const AttributeList& rAttribs )
 {
     if( rAttribs.hasAttribute( XML_algn ) )
-        rEffect.maAttribs["algn"] <<= rAttribs.getString( XML_algn, "" );
+        rEffect.maAttribs["algn"] <<= rAttribs.getStringDefaulted( XML_algn);
     if( rAttribs.hasAttribute( XML_blurRad ) )
         rEffect.maAttribs["blurRad"] <<= rAttribs.getInteger( XML_blurRad, 0 );
     if( rAttribs.hasAttribute( XML_dir ) )

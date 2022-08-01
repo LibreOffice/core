@@ -168,33 +168,33 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
         case W_TOKEN( rFonts ):
             if( rAttribs.hasAttribute(W_TOKEN(ascii)) )
             {
-                mrTextCharacterProperties.maLatinFont.setAttributes(rAttribs.getString(W_TOKEN(ascii), OUString()));
+                mrTextCharacterProperties.maLatinFont.setAttributes(rAttribs.getStringDefaulted(W_TOKEN(ascii)));
             }
             if (rAttribs.hasAttribute(W_TOKEN(asciiTheme)))
             {
-                mrTextCharacterProperties.maLatinThemeFont.setAttributes(rAttribs.getString(W_TOKEN(asciiTheme), OUString()));
+                mrTextCharacterProperties.maLatinThemeFont.setAttributes(rAttribs.getStringDefaulted(W_TOKEN(asciiTheme)));
             }
             if( rAttribs.hasAttribute(W_TOKEN(cs)) )
             {
-                mrTextCharacterProperties.maComplexFont.setAttributes(rAttribs.getString(W_TOKEN(cs), OUString()));
+                mrTextCharacterProperties.maComplexFont.setAttributes(rAttribs.getStringDefaulted(W_TOKEN(cs)));
             }
             if (rAttribs.hasAttribute(W_TOKEN(cstheme)))
             {
-                mrTextCharacterProperties.maComplexThemeFont.setAttributes(rAttribs.getString(W_TOKEN(cstheme), OUString()));
+                mrTextCharacterProperties.maComplexThemeFont.setAttributes(rAttribs.getStringDefaulted(W_TOKEN(cstheme)));
             }
             if( rAttribs.hasAttribute(W_TOKEN(eastAsia)) )
             {
-                mrTextCharacterProperties.maAsianFont.setAttributes(rAttribs.getString(W_TOKEN(eastAsia), OUString()));
+                mrTextCharacterProperties.maAsianFont.setAttributes(rAttribs.getStringDefaulted(W_TOKEN(eastAsia)));
             }
             if (rAttribs.hasAttribute(W_TOKEN(eastAsiaTheme)))
             {
-                mrTextCharacterProperties.maAsianThemeFont.setAttributes(rAttribs.getString(W_TOKEN(eastAsiaTheme), OUString()));
+                mrTextCharacterProperties.maAsianThemeFont.setAttributes(rAttribs.getStringDefaulted(W_TOKEN(eastAsiaTheme)));
             }
             break;
         case W_TOKEN( u ):
         {
             // If you add here, check if it is in drawingmltypes.cxx 113.
-            auto attrib = rAttribs.getString(W_TOKEN(val), OUString());
+            auto attrib = rAttribs.getStringDefaulted(W_TOKEN(val));
             if (attrib == "single" || attrib == "words") // TODO: implement words properly. Now it is a single line.
                 mrTextCharacterProperties.moUnderline = XML_sng;
             else if (attrib == "wavyHeavy")
@@ -305,7 +305,7 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
             break;
         }
         case W_TOKEN(lang):
-            mrTextCharacterProperties.moLang = rAttribs.getString(W_TOKEN(val), OUString());
+            mrTextCharacterProperties.moLang = rAttribs.getStringDefaulted(W_TOKEN(val));
             break;
         case OOX_TOKEN(w14, glow):
         case OOX_TOKEN(w14, shadow):

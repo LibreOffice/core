@@ -147,7 +147,7 @@ BlipContext::BlipContext( ContextHandler2Helper const & rParent,
     if( rAttribs.hasAttribute( R_TOKEN( embed ) ) )
     {
         // internal picture URL
-        OUString aFragmentPath = getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( embed ), OUString() ) );
+        OUString aFragmentPath = getFragmentPathFromRelId( rAttribs.getStringDefaulted( R_TOKEN( embed )) );
         if (!aFragmentPath.isEmpty())
             mrBlipProps.mxFillGraphic = getFilter().getGraphicHelper().importEmbeddedGraphic( aFragmentPath );
     }
@@ -158,7 +158,7 @@ BlipContext::BlipContext( ContextHandler2Helper const & rParent,
         // we will embed this link, this is better than just doing nothing...
         // TODO: import this graphic as real link, but this requires some
         // code rework.
-        OUString aRelId = rAttribs.getString( R_TOKEN( link ), OUString() );
+        OUString aRelId = rAttribs.getStringDefaulted( R_TOKEN( link ));
         OUString aTargetLink = getFilter().getAbsoluteUrl( getRelations().getExternalTargetFromRelId( aRelId ) );
         GraphicExternalLink aLink(aTargetLink);
         Graphic aGraphic(aLink);
@@ -340,7 +340,7 @@ ContextHandlerRef ArtisticEffectContext::onCreateContext(
     {
         if( rAttribs.hasAttribute( R_TOKEN( embed ) ) )
         {
-            OUString aFragmentPath = getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( embed ), OUString() ) );
+            OUString aFragmentPath = getFragmentPathFromRelId( rAttribs.getStringDefaulted( R_TOKEN( embed )) );
             if( !aFragmentPath.isEmpty() )
             {
                 getFilter().importBinaryData( maEffect.mrOleObjectInfo.maEmbeddedData, aFragmentPath );

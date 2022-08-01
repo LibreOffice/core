@@ -64,7 +64,7 @@ CustomShowContext::CustomShowContext( FragmentHandler2 const & rParent,
         case PPT_TOKEN( sld ) :
             mrCustomShowList.back().maSldLst.push_back(
                 getRelations()
-                    .getRelationFromRelId(rAttribs.getString(R_TOKEN(id), OUString()))
+                    .getRelationFromRelId(rAttribs.getStringDefaulted(R_TOKEN(id)))
                     ->maTarget);
             return this;
         default:

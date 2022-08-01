@@ -104,7 +104,7 @@ void ColorValueContext::onStartElement( const AttributeList& rAttribs )
         case A_TOKEN( shade ):
         case A_TOKEN( tint ):
         {
-            OUString aValue = rAttribs.getString( XML_val, OUString() );
+            OUString aValue = rAttribs.getStringDefaulted( XML_val);
             sal_Int32 nVal = 0;
             if (aValue.endsWith("%"))
             {

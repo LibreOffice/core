@@ -157,7 +157,7 @@ void DiagramQStylesFragmentHandler::onStartElement( const AttributeList& rAttrib
 {
     if( getCurrentElement() == DGM_TOKEN( styleLbl ) )
     {
-        maStyleName = rAttribs.getString( XML_name, OUString() );
+        maStyleName = rAttribs.getStringDefaulted( XML_name);
         maStyleEntry = mrStylesMap[maStyleName];
     }
 }
@@ -218,7 +218,7 @@ void ColorFragmentHandler::onStartElement( const AttributeList& rAttribs )
 {
     if( getCurrentElement() == DGM_TOKEN(styleLbl) )
     {
-        maColorName = rAttribs.getString( XML_name, OUString() );
+        maColorName = rAttribs.getStringDefaulted( XML_name);
         maColorEntry = mrColorsMap[maColorName];
     }
 }

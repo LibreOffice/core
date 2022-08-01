@@ -32,7 +32,7 @@ NumberFormat::NumberFormat() :
 void NumberFormat::setAttributes( const AttributeList& rAttribs )
 {
     mbSourceLinked = rAttribs.getBool( XML_sourceLinked, true);
-    maFormatCode = rAttribs.getString( XML_formatCode, OUString() );
+    maFormatCode = rAttribs.getStringDefaulted( XML_formatCode);
 }
 
 LayoutModel::LayoutModel() :
