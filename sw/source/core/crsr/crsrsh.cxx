@@ -3589,7 +3589,7 @@ static const SwStartNode* lcl_NodeContext( const SwNode& rNode )
 bool sw_PosOk(const SwPosition & aPos)
 {
     return nullptr != aPos.GetNode().GetContentNode() &&
-           aPos.nContent.GetContentNode();
+           aPos.GetContentNode();
 }
 
 /**

@@ -386,7 +386,7 @@ static SwPosition ResolveFlyAnchor(SwFrameFormat const& rFlyFrame)
         {
             return ResolveFlyAnchor(*pParent);
         }
-        else if (pPos->nContent.GetContentNode())
+        else if (pPos->GetContentNode())
         {
             return *pPos;
         }

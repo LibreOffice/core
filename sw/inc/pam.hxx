@@ -72,14 +72,12 @@ struct SAL_WARN_UNUSED SW_DLLPUBLIC SwPosition
 
 
     SwNodeOffset GetNodeIndex() const { return nNode.GetIndex(); }
-
-    // Gets pointer on NodesArray.
     const SwNodes& GetNodes() const { return nNode.GetNodes(); }
     SwNodes& GetNodes() { return nNode.GetNodes(); }
-
     SwNode& GetNode() const { return nNode.GetNode(); }
 
 
+    const SwContentNode* GetContentNode() const { return nContent.GetContentNode(); }
     sal_Int32 GetContentIndex() const { return nContent.GetIndex(); }
     void SetMark(const sw::mark::IMark* pMark) { nContent.SetMark(pMark); }
     void SetRedline(SwRangeRedline* pRangeRedline) { nContent.SetRedline(pRangeRedline); }
