@@ -1799,7 +1799,7 @@ void DesktopLOKTest::testTileInvalidationCompression()
 
         size_t i = 0;
         CPPUNIT_ASSERT_EQUAL(int(LOK_CALLBACK_INVALIDATE_TILES), std::get<0>(notifs[i]));
-        CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 400, 600, 0"), std::get<1>(notifs[i++]));
+        CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 400, 600, 0, 0"), std::get<1>(notifs[i++]));
     }
 
     // Part Number
@@ -1820,10 +1820,10 @@ void DesktopLOKTest::testTileInvalidationCompression()
 
         size_t i = 0;
         CPPUNIT_ASSERT_EQUAL(int(LOK_CALLBACK_INVALIDATE_TILES), std::get<0>(notifs[i]));
-        CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 200, 200, 1"), std::get<1>(notifs[i++]));
+        CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 200, 200, 1, 0"), std::get<1>(notifs[i++]));
 
         CPPUNIT_ASSERT_EQUAL(int(LOK_CALLBACK_INVALIDATE_TILES), std::get<0>(notifs[i]));
-        CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 239, 239, 0"), std::get<1>(notifs[i++]));
+        CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 239, 239, 0, 0"), std::get<1>(notifs[i++]));
     }
 
     // All Parts
@@ -1847,10 +1847,10 @@ void DesktopLOKTest::testTileInvalidationCompression()
 
         size_t i = 0;
         CPPUNIT_ASSERT_EQUAL(int(LOK_CALLBACK_INVALIDATE_TILES), std::get<0>(notifs[i]));
-        CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 1100, 1100, -1"), std::get<1>(notifs[i++]));
+        CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 1100, 1100, -1, 0"), std::get<1>(notifs[i++]));
 
         CPPUNIT_ASSERT_EQUAL(int(LOK_CALLBACK_INVALIDATE_TILES), std::get<0>(notifs[i]));
-        CPPUNIT_ASSERT_EQUAL(std::string("1000, 1000, 1239, 1239, 2"), std::get<1>(notifs[i++]));
+        CPPUNIT_ASSERT_EQUAL(std::string("1000, 1000, 1239, 1239, 2, 0"), std::get<1>(notifs[i++]));
     }
 
     // All Parts (partial)
@@ -1874,19 +1874,19 @@ void DesktopLOKTest::testTileInvalidationCompression()
 
         size_t i = 0;
         CPPUNIT_ASSERT_EQUAL(int(LOK_CALLBACK_INVALIDATE_TILES), std::get<0>(notifs[i]));
-        CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 200, 200, 0"), std::get<1>(notifs[i++]));
+        CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 200, 200, 0, 0"), std::get<1>(notifs[i++]));
 
         CPPUNIT_ASSERT_EQUAL(int(LOK_CALLBACK_INVALIDATE_TILES), std::get<0>(notifs[i]));
-        CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 100, 100, 1"), std::get<1>(notifs[i++]));
+        CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 100, 100, 1, 0"), std::get<1>(notifs[i++]));
 
         CPPUNIT_ASSERT_EQUAL(int(LOK_CALLBACK_INVALIDATE_TILES), std::get<0>(notifs[i]));
-        CPPUNIT_ASSERT_EQUAL(std::string("150, 150, 50, 50, -1"), std::get<1>(notifs[i++]));
+        CPPUNIT_ASSERT_EQUAL(std::string("150, 150, 50, 50, -1, 0"), std::get<1>(notifs[i++]));
 
         CPPUNIT_ASSERT_EQUAL(int(LOK_CALLBACK_INVALIDATE_TILES), std::get<0>(notifs[i]));
-        CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 200, 200, 4"), std::get<1>(notifs[i++]));
+        CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 200, 200, 4, 0"), std::get<1>(notifs[i++]));
 
         CPPUNIT_ASSERT_EQUAL(int(LOK_CALLBACK_INVALIDATE_TILES), std::get<0>(notifs[i]));
-        CPPUNIT_ASSERT_EQUAL(std::string("1000, 1000, 1239, 1239, 1"), std::get<1>(notifs[i++]));
+        CPPUNIT_ASSERT_EQUAL(std::string("1000, 1000, 1239, 1239, 1, 0"), std::get<1>(notifs[i++]));
     }
 
     // Merge with "EMPTY"
@@ -1907,7 +1907,7 @@ void DesktopLOKTest::testTileInvalidationCompression()
 
         size_t i = 0;
         CPPUNIT_ASSERT_EQUAL(int(LOK_CALLBACK_INVALIDATE_TILES), std::get<0>(notifs[i]));
-        CPPUNIT_ASSERT_EQUAL(std::string("EMPTY, 0"), std::get<1>(notifs[i++]));
+        CPPUNIT_ASSERT_EQUAL(std::string("EMPTY, 0, 0"), std::get<1>(notifs[i++]));
     }
 }
 
@@ -2017,7 +2017,7 @@ void DesktopLOKTest::testBinaryCallback()
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackBinaryCallbackTest, &notifs));
         handler->setViewId(SfxLokHelper::getView());
 
-        handler->libreOfficeKitViewInvalidateTilesCallback(&rect1, INT_MIN);
+        handler->libreOfficeKitViewInvalidateTilesCallback(&rect1, INT_MIN, 0);
 
         Scheduler::ProcessEventsToIdle();
 
@@ -2031,7 +2031,7 @@ void DesktopLOKTest::testBinaryCallback()
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackBinaryCallbackTest, &notifs));
         handler->setViewId(SfxLokHelper::getView());
 
-        handler->libreOfficeKitViewInvalidateTilesCallback(nullptr, INT_MIN);
+        handler->libreOfficeKitViewInvalidateTilesCallback(nullptr, INT_MIN, 0);
 
         Scheduler::ProcessEventsToIdle();
 
@@ -2288,7 +2288,7 @@ void DesktopLOKTest::testPaintPartTile()
 
     // Call paintPartTile() to paint the second part (in whichever view it finds suitable for this).
     unsigned char pPixels[256 * 256 * 4];
-    pDocument->m_pDocumentClass->paintPartTile(pDocument, pPixels, 1, 256, 256, 0, 0, 256, 256);
+    pDocument->m_pDocumentClass->paintPartTile(pDocument, pPixels, 1, 0, 256, 256, 0, 0, 256, 256);
 
     // Type again.
     Scheduler::ProcessEventsToIdle();
