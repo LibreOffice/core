@@ -79,12 +79,12 @@ void SwList::InsertListItem(SwNodeNum& rNodeNum, SwListRedlineType const eRedlin
                             const int nLevel, const SwDoc& rDoc)
 {
     const SwPosition aPosOfNodeNum( rNodeNum.GetPosition() );
-    const SwNodes* pNodesOfNodeNum = &(aPosOfNodeNum.nNode.GetNode().GetNodes());
+    const SwNodes* pNodesOfNodeNum = &(aPosOfNodeNum.GetNode().GetNodes());
 
     for ( const auto& rNumberTree : maListTrees )
     {
         auto [pStart, pEnd] = rNumberTree.pSection->StartEnd(); // SwPosition*
-        const SwNodes* pRangeNodes = &(pStart->nNode.GetNode().GetNodes());
+        const SwNodes* pRangeNodes = &(pStart->GetNode().GetNodes());
 
         if ( pRangeNodes == pNodesOfNodeNum &&
              *pStart <= aPosOfNodeNum && aPosOfNodeNum <= *pEnd)

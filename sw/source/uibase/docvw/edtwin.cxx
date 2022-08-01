@@ -1554,7 +1554,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
         const SwPosition* pAnchorPos = rFormatAnchor.GetContentAnchor();
         if (pAnchorPos)
         {
-            SwTextNode* pTextNode = pAnchorPos->nNode.GetNode().GetTextNode();
+            SwTextNode* pTextNode = pAnchorPos->GetNode().GetTextNode();
             if (pTextNode)
             {
                 SwTextAttr* pAttr = pTextNode->GetTextAttrAt(
@@ -2470,7 +2470,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
             if (rSh.CursorInsideContentControl())
             {
                 const SwPosition* pStart = rSh.GetCursor()->Start();
-                SwTextNode* pTextNode = pStart->nNode.GetNode().GetTextNode();
+                SwTextNode* pTextNode = pStart->GetNode().GetTextNode();
                 if (pTextNode)
                 {
                     sal_Int32 nIndex = pStart->nContent.GetIndex();
@@ -2944,8 +2944,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                 if (!rSh.GetViewOptions()->IsHideWhitespaceMode())
                 {
                     SwPaM aPam(*rSh.GetCurrentShellCursor().GetPoint());
-                    const bool bWasInHeader = aPam.GetPoint()->nNode.GetNode().FindHeaderStartNode() != nullptr;
-                    const bool bWasInFooter = aPam.GetPoint()->nNode.GetNode().FindFooterStartNode() != nullptr;
+                    const bool bWasInHeader = aPam.GetPoint()->GetNode().FindHeaderStartNode() != nullptr;
+                    const bool bWasInFooter = aPam.GetPoint()->GetNode().FindFooterStartNode() != nullptr;
 
                     // Is the cursor in a part like similar to the one we clicked on? For example,
                     // if the cursor is in a header and we click on an empty header... don't change anything to
@@ -4768,7 +4768,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                             const SwPosition* pAnchorPos = rFormatAnchor.GetContentAnchor();
                             if (pAnchorPos)
                             {
-                                SwTextNode* pTextNode = pAnchorPos->nNode.GetNode().GetTextNode();
+                                SwTextNode* pTextNode = pAnchorPos->GetNode().GetTextNode();
                                 if (pTextNode)
                                 {
                                     SwTextAttr* pAttr = pTextNode->GetTextAttrAt(
@@ -5838,7 +5838,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             const SwPosition& rPos = *rSh.GetCursor()->GetPoint();
             SwDocShell* pDocSh = m_rView.GetDocShell();
             SwDoc *pDoc = pDocSh->GetDoc();
-            SwExtTextInput* pInput = pDoc->GetExtTextInput( rPos.nNode.GetNode(), rPos.nContent.GetIndex() );
+            SwExtTextInput* pInput = pDoc->GetExtTextInput( rPos.GetNode(), rPos.nContent.GetIndex() );
             if ( pInput )
             {
                 const SwPosition& rStart = *pInput->Start();
@@ -6526,7 +6526,7 @@ bool SwEditWin::IsOverHeaderFooterFly( const Point& rDocPos, FrameControlType& r
     SwPaM aPam( *rSh.GetCurrentShellCursor().GetPoint() );
     rSh.GetLayout()->GetModelPositionForViewPoint( aPam.GetPoint(), aPt, nullptr, true );
 
-    const SwStartNode* pStartFly = aPam.GetPoint()->nNode.GetNode().FindFlyStartNode();
+    const SwStartNode* pStartFly = aPam.GetPoint()->GetNode().FindFlyStartNode();
     if ( pStartFly )
     {
         bOverFly = true;
@@ -6536,8 +6536,8 @@ bool SwEditWin::IsOverHeaderFooterFly( const Point& rDocPos, FrameControlType& r
             const SwPosition* pAnchor = pFlyFormat->GetAnchor( ).GetContentAnchor( );
             if ( pAnchor )
             {
-                bool bInHeader = pAnchor->nNode.GetNode( ).FindHeaderStartNode( ) != nullptr;
-                bool bInFooter = pAnchor->nNode.GetNode( ).FindFooterStartNode( ) != nullptr;
+                bool bInHeader = pAnchor->GetNode( ).FindHeaderStartNode( ) != nullptr;
+                bool bInFooter = pAnchor->GetNode( ).FindFooterStartNode( ) != nullptr;
 
                 bRet = bInHeader || bInFooter;
                 if ( bInHeader )

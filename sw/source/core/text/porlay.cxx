@@ -915,14 +915,14 @@ static void InitBookmarks(
                 // assume "no" because the line break it contains isn't deleted.
                 SwPosition const& rStart(it.first->GetMarkStart());
                 SwPosition const& rEnd(it.first->GetMarkEnd());
-                assert(&rStart.nNode.GetNode() == pNode);
+                assert(&rStart.GetNode() == pNode);
                 while (iter != end)
                 {
-                    if (&rStart.nNode.GetNode() != iter->pNode // iter moved to next node
+                    if (&rStart.GetNode() != iter->pNode // iter moved to next node
                         || rStart.nContent.GetIndex() < iter->nStart)
                     {
                         if (rEnd.nNode.GetIndex() < iter->pNode->GetIndex()
-                            || (&rEnd.nNode.GetNode() == iter->pNode && rEnd.nContent.GetIndex() <= iter->nStart))
+                            || (&rEnd.GetNode() == iter->pNode && rEnd.nContent.GetIndex() <= iter->nStart))
                         {
                             break; // deleted - skip it
                         }
@@ -937,9 +937,9 @@ static void InitBookmarks(
                         auto const iterNext(iter + 1);
                         if (rStart.nContent.GetIndex() == iter->nEnd
                             && (iterNext == end
-                                ?   &rEnd.nNode.GetNode() == iter->pNode
+                                ?   &rEnd.GetNode() == iter->pNode
                                 :  (rEnd.nNode.GetIndex() < iterNext->pNode->GetIndex()
-                                    || (&rEnd.nNode.GetNode() == iterNext->pNode && rEnd.nContent.GetIndex() < iterNext->nStart))))
+                                    || (&rEnd.GetNode() == iterNext->pNode && rEnd.nContent.GetIndex() < iterNext->nStart))))
                         {
                             break; // deleted - skip it
                         }
@@ -974,19 +974,19 @@ static void InitBookmarks(
             case SwScriptInfo::MarkKind::End:
             {
                 SwPosition const& rEnd(it.first->GetMarkEnd());
-                assert(&rEnd.nNode.GetNode() == pNode);
+                assert(&rEnd.GetNode() == pNode);
                 while (true)
                 {
                     if (iter == end
-                        || &rEnd.nNode.GetNode() != iter->pNode // iter moved to next node
+                        || &rEnd.GetNode() != iter->pNode // iter moved to next node
                         || rEnd.nContent.GetIndex() <= iter->nStart)
                     {
                         SwPosition const& rStart(it.first->GetMarkStart());
                         // oPrevIter may point to pNode or a preceding node
                         if (oPrevIter
                             ? ((*oPrevIter)->pNode->GetIndex() < rStart.nNode.GetIndex()
-                                || ((*oPrevIter)->pNode == &rStart.nNode.GetNode()
-                                    && ((iter != end && &rEnd.nNode.GetNode() == iter->pNode && rEnd.nContent.GetIndex() == iter->nStart)
+                                || ((*oPrevIter)->pNode == &rStart.GetNode()
+                                    && ((iter != end && &rEnd.GetNode() == iter->pNode && rEnd.nContent.GetIndex() == iter->nStart)
                                         ? (*oPrevIter)->nEnd < rStart.nContent.GetIndex()
                                         : (*oPrevIter)->nEnd <= rStart.nContent.GetIndex())))
                             : rStart.nNode == rEnd.nNode)
@@ -1018,10 +1018,10 @@ static void InitBookmarks(
             case SwScriptInfo::MarkKind::Point:
             {
                 SwPosition const& rPos(it.first->GetMarkPos());
-                assert(&rPos.nNode.GetNode() == pNode);
+                assert(&rPos.GetNode() == pNode);
                 while (iter != end)
                 {
-                    if (&rPos.nNode.GetNode() != iter->pNode // iter moved to next node
+                    if (&rPos.GetNode() != iter->pNode // iter moved to next node
                         || rPos.nContent.GetIndex() < iter->nStart)
                     {
                         break; // deleted - skip it

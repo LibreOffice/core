@@ -155,7 +155,7 @@ static SwTextNode* GetFirstTextNode( const SwDoc& rDoc, SwPosition& rPos,
     else
     {
         pCFrame->GetModelPositionForViewPoint( &rPos, rPt );
-        pTextNode = rPos.nNode.GetNode().GetTextNode();
+        pTextNode = rPos.GetNode().GetTextNode();
     }
     return pTextNode;
 }
@@ -188,7 +188,7 @@ const SwTextNode* GetBodyTextNode( const SwDoc& rDoc, SwPosition& rPos,
             {
                 OSL_ENSURE( rAnchor.GetContentAnchor(), "no valid position" );
                 rPos = *rAnchor.GetContentAnchor();
-                pTextNode = rPos.nNode.GetNode().GetTextNode();
+                pTextNode = rPos.GetNode().GetTextNode();
                 if ( RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId() )
                 {
                     const_cast<SwTextNode*>(pTextNode)->MakeStartIndex(
@@ -204,7 +204,7 @@ const SwTextNode* GetBodyTextNode( const SwDoc& rDoc, SwPosition& rPos,
             {
                 pLayout->FindPageFrame()->GetContentPosition(
                                                 pLayout->getFrameArea().Pos(), rPos );
-                pTextNode = rPos.nNode.GetNode().GetTextNode();
+                pTextNode = rPos.GetNode().GetTextNode();
             }
         }
         else if( pLayout->IsFootnoteFrame() )
@@ -240,7 +240,7 @@ const SwTextNode* GetBodyTextNode( const SwDoc& rDoc, SwPosition& rPos,
                 assert(pContentFrame->IsTextFrame());
                 SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(pContentFrame));
                 rPos = pFrame->MapViewToModelPos(TextFrameIndex(pFrame->GetText().getLength()));
-                pTextNode = rPos.nNode.GetNode().GetTextNode();
+                pTextNode = rPos.GetNode().GetTextNode();
                 assert(pTextNode);
             }
             else

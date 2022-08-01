@@ -1321,7 +1321,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testMultiParaListItem)
         // Enable numbering.
         sal_uInt16 nPos = pDoc->MakeNumRule(pDoc->GetUniqueNumRuleName());
         SwNumRule* pNumRule = pDoc->GetNumRuleTable()[nPos];
-        SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->nNode.GetNode();
+        SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->GetNode();
         SwTextNode& rTextNode = *rNode.GetTextNode();
         rTextNode.SetAttr(SwNumRuleItem(pNumRule->GetName()));
     }
@@ -1331,7 +1331,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testMultiParaListItem)
     pWrtShell->Insert("C");
     {
         // C is in the same list item as B.
-        SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->nNode.GetNode();
+        SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->GetNode();
         SwTextNode& rTextNode = *rNode.GetTextNode();
         rTextNode.SetCountedInList(false);
     }
@@ -1466,7 +1466,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testListHeading)
     SwDoc* pDoc = pWrtShell->GetDoc();
     sal_uInt16 nPos = pDoc->MakeNumRule(pDoc->GetUniqueNumRuleName());
     SwNumRule* pNumRule = pDoc->GetNumRuleTable()[nPos];
-    SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->nNode.GetNode();
+    SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->GetNode();
     SwTextNode& rTextNode = *rNode.GetTextNode();
     rTextNode.SetAttr(SwNumRuleItem(pNumRule->GetName()));
     rTextNode.SetCountedInList(false);
@@ -1498,7 +1498,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testPartiallyNumberedList)
     sal_uInt16 nPos = pDoc->MakeNumRule(pDoc->GetUniqueNumRuleName());
     SwNumRule* pNumRule = pDoc->GetNumRuleTable()[nPos];
     {
-        SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->nNode.GetNode();
+        SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->GetNode();
         SwTextNode& rTextNode = *rNode.GetTextNode();
         rTextNode.SetAttr(SwNumRuleItem(pNumRule->GetName()));
     }
@@ -1506,7 +1506,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testPartiallyNumberedList)
     pWrtShell->SplitNode();
     pWrtShell->Insert2("not numbered");
     {
-        SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->nNode.GetNode();
+        SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->GetNode();
         SwTextNode& rTextNode = *rNode.GetTextNode();
         rTextNode.SetAttr(SwNumRuleItem(pNumRule->GetName()));
         rTextNode.SetCountedInList(false);
@@ -1540,7 +1540,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testListHeaderAndItem)
     sal_uInt16 nPos = pDoc->MakeNumRule(pDoc->GetUniqueNumRuleName());
     SwNumRule* pNumRule = pDoc->GetNumRuleTable()[nPos];
     {
-        SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->nNode.GetNode();
+        SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->GetNode();
         SwTextNode& rTextNode = *rNode.GetTextNode();
         rTextNode.SetAttr(SwNumRuleItem(pNumRule->GetName()));
         rTextNode.SetCountedInList(false);
@@ -1548,7 +1548,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testListHeaderAndItem)
     pWrtShell->SplitNode();
     pWrtShell->Insert2("numbered");
     {
-        SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->nNode.GetNode();
+        SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->GetNode();
         SwTextNode& rTextNode = *rNode.GetTextNode();
         rTextNode.SetAttr(SwNumRuleItem(pNumRule->GetName()));
     }
@@ -2025,14 +2025,14 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testListsHeading)
         sal_uInt16 nPos = pDoc->MakeNumRule(pDoc->GetUniqueNumRuleName());
         SwNumRule* pNumRule = pDoc->GetNumRuleTable()[nPos];
         {
-            SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->nNode.GetNode();
+            SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->GetNode();
             SwTextNode& rTextNode = *rNode.GetTextNode();
             rTextNode.SetAttr(SwNumRuleItem(pNumRule->GetName()));
             rTextNode.SetCountedInList(false);
         }
         pWrtShell->Down(false, 1);
         {
-            SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->nNode.GetNode();
+            SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->GetNode();
             SwTextNode& rTextNode = *rNode.GetTextNode();
             rTextNode.SetAttr(SwNumRuleItem(pNumRule->GetName()));
             rTextNode.SetCountedInList(false);
@@ -2043,13 +2043,13 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testListsHeading)
         sal_uInt16 nPos = pDoc->MakeNumRule(pDoc->GetUniqueNumRuleName());
         SwNumRule* pNumRule = pDoc->GetNumRuleTable()[nPos];
         {
-            SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->nNode.GetNode();
+            SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->GetNode();
             SwTextNode& rTextNode = *rNode.GetTextNode();
             rTextNode.SetAttr(SwNumRuleItem(pNumRule->GetName()));
         }
         pWrtShell->Down(false, 1);
         {
-            SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->nNode.GetNode();
+            SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->GetNode();
             SwTextNode& rTextNode = *rNode.GetTextNode();
             rTextNode.SetAttr(SwNumRuleItem(pNumRule->GetName()));
         }
@@ -2059,14 +2059,14 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testListsHeading)
         sal_uInt16 nPos = pDoc->MakeNumRule(pDoc->GetUniqueNumRuleName());
         SwNumRule* pNumRule = pDoc->GetNumRuleTable()[nPos];
         {
-            SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->nNode.GetNode();
+            SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->GetNode();
             SwTextNode& rTextNode = *rNode.GetTextNode();
             rTextNode.SetAttr(SwNumRuleItem(pNumRule->GetName()));
             rTextNode.SetCountedInList(false);
         }
         pWrtShell->Down(false, 1);
         {
-            SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->nNode.GetNode();
+            SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->GetNode();
             SwTextNode& rTextNode = *rNode.GetTextNode();
             rTextNode.SetAttr(SwNumRuleItem(pNumRule->GetName()));
             rTextNode.SetCountedInList(false);
@@ -2119,7 +2119,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testNestedBullets)
     sal_uInt16 nPos = pDoc->MakeNumRule(pDoc->GetUniqueNumRuleName());
     SwNumRule* pNumRule = pDoc->GetNumRuleTable()[nPos];
     {
-        SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->nNode.GetNode();
+        SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->GetNode();
         SwTextNode& rTextNode = *rNode.GetTextNode();
         rTextNode.SetAttr(SwNumRuleItem(pNumRule->GetName()));
         rTextNode.SetAttrListLevel(0);
@@ -2127,7 +2127,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testNestedBullets)
     pWrtShell->SplitNode();
     pWrtShell->Insert("second");
     {
-        SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->nNode.GetNode();
+        SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->GetNode();
         SwTextNode& rTextNode = *rNode.GetTextNode();
         rTextNode.SetAttr(SwNumRuleItem(pNumRule->GetName()));
         rTextNode.SetAttrListLevel(1);

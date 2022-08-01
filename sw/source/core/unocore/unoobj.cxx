@@ -1239,7 +1239,7 @@ SwXTextCursor::gotoNextWord(sal_Bool Expand)
     // since the called functions are sometimes a bit unreliable
     // in specific cases...
     SwPosition  *const pPoint     = rUnoCursor.GetPoint();
-    SwNode      *const pOldNode   = &pPoint->nNode.GetNode();
+    SwNode      *const pOldNode   = &pPoint->GetNode();
     sal_Int32 const nOldIndex  = pPoint->nContent.GetIndex();
 
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
@@ -1262,7 +1262,7 @@ SwXTextCursor::gotoNextWord(sal_Bool Expand)
     }
 
     // return true if cursor has moved
-    bRet =  (&pPoint->nNode.GetNode() != pOldNode)  ||
+    bRet =  (&pPoint->GetNode() != pOldNode)  ||
             (pPoint->nContent.GetIndex() != nOldIndex);
     if (bRet && (CursorType::Meta == m_eType))
     {
@@ -1283,7 +1283,7 @@ SwXTextCursor::gotoPreviousWord(sal_Bool Expand)
     // white spaces create problems on the paragraph start
     bool bRet = false;
     SwPosition  *const pPoint     = rUnoCursor.GetPoint();
-    SwNode      *const pOldNode   = &pPoint->nNode.GetNode();
+    SwNode      *const pOldNode   = &pPoint->GetNode();
     sal_Int32 const nOldIndex  = pPoint->nContent.GetIndex();
 
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
@@ -1302,7 +1302,7 @@ SwXTextCursor::gotoPreviousWord(sal_Bool Expand)
     }
 
     // return true if cursor has moved
-    bRet =  (&pPoint->nNode.GetNode() != pOldNode)  ||
+    bRet =  (&pPoint->GetNode() != pOldNode)  ||
             (pPoint->nContent.GetIndex() != nOldIndex);
     if (bRet && (CursorType::Meta == m_eType))
     {
@@ -1322,7 +1322,7 @@ SwXTextCursor::gotoEndOfWord(sal_Bool Expand)
 
     bool bRet = false;
     SwPosition  *const pPoint     = rUnoCursor.GetPoint();
-    SwNode      &      rOldNode   = pPoint->nNode.GetNode();
+    SwNode      &      rOldNode   = pPoint->GetNode();
     sal_Int32 const nOldIndex  = pPoint->nContent.GetIndex();
 
     const sal_Int16 nWordType = i18n::WordType::DICTIONARY_WORD;
@@ -1358,7 +1358,7 @@ SwXTextCursor::gotoStartOfWord(sal_Bool Expand)
 
     bool bRet = false;
     SwPosition  *const pPoint     = rUnoCursor.GetPoint();
-    SwNode      &      rOldNode   = pPoint->nNode.GetNode();
+    SwNode      &      rOldNode   = pPoint->GetNode();
     sal_Int32 const nOldIndex  = pPoint->nContent.GetIndex();
 
     const sal_Int16 nWordType = i18n::WordType::DICTIONARY_WORD;

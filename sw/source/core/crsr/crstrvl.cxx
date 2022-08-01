@@ -405,7 +405,7 @@ bool SwCursorShell::GotoNxtPrvTableFormula( bool bNext, bool bOnlyErrors )
     SetGetExpField aFndGEF( aFndPos ), aCurGEF( rPos );
 
     {
-        const SwNode* pSttNd = rPos.nNode.GetNode().FindTableBoxStartNode();
+        const SwNode* pSttNd = rPos.GetNode().FindTableBoxStartNode();
         if( pSttNd )
         {
             const SwTableBox* pTBox = pSttNd->FindTableNode()->GetTable().
@@ -419,7 +419,7 @@ bool SwCursorShell::GotoNxtPrvTableFormula( bool bNext, bool bOnlyErrors )
     {
         // also at collection use only the first frame
         std::pair<Point, bool> const tmp(aPt, false);
-        aCurGEF.SetBodyPos( *rPos.nNode.GetNode().GetContentNode()->getLayoutFrame( GetLayout(),
+        aCurGEF.SetBodyPos( *rPos.GetNode().GetContentNode()->getLayoutFrame( GetLayout(),
                                 &rPos, &tmp) );
     }
     {
@@ -526,7 +526,7 @@ bool SwCursorShell::GotoNxtPrvTOXMark( bool bNext )
     {
         // also at collection use only the first frame
         std::pair<Point, bool> const tmp(aPt, false);
-        aCurGEF.SetBodyPos( *rPos.nNode.GetNode().
+        aCurGEF.SetBodyPos( *rPos.GetNode().
                     GetContentNode()->getLayoutFrame(GetLayout(), &rPos, &tmp));
     }
 
@@ -615,7 +615,7 @@ const SwTOXMark& SwCursorShell::GotoTOXMark( const SwTOXMark& rStart,
     // set position
     SwPosition& rPos = *GetCursor()->GetPoint();
     rPos.nNode = rNewMark.GetTextTOXMark()->GetTextNode();
-    rPos.nContent.Assign( rPos.nNode.GetNode().GetContentNode(),
+    rPos.nContent.Assign( rPos.GetNode().GetContentNode(),
                          rNewMark.GetTextTOXMark()->GetStart() );
 
     if( !m_pCurrentCursor->IsSelOvr() )
@@ -674,7 +674,7 @@ lcl_FindField(bool & o_rFound, SetGetExpFields const& rSrtLst,
     }
     else
     {
-        pIndex.reset(new SwContentIndex(rPos.nNode.GetNode().GetContentNode(), nContentOffset));
+        pIndex.reset(new SwContentIndex(rPos.GetNode().GetContentNode(), nContentOffset));
         pSrch.reset(new SetGetExpField(rPos.nNode, pTextField, pIndex.get()));
     }
 
@@ -753,7 +753,7 @@ bool SwCursorShell::MoveFieldType(
         // field
         const SwPosition& rPos = *pCursor->GetPoint();
 
-        SwTextNode* pTNd = rPos.nNode.GetNode().GetTextNode();
+        SwTextNode* pTNd = rPos.GetNode().GetTextNode();
         OSL_ENSURE( pTNd, "No ContentNode" );
 
         SwTextField * pTextField = pTNd->GetFieldTextAttrAt( rPos.nContent.GetIndex(), true );
@@ -929,7 +929,7 @@ SwTextField * SwCursorShell::GetTextFieldAtPos(
 {
     SwTextField* pTextField = nullptr;
 
-    SwTextNode * const pNode = pPos->nNode.GetNode().GetTextNode();
+    SwTextNode * const pNode = pPos->GetNode().GetTextNode();
     if ( pNode != nullptr )
     {
         pTextField = pNode->GetFieldTextAttrAt( pPos->nContent.GetIndex(), bIncludeInputFieldAtStart );
@@ -1007,7 +1007,7 @@ SwTextContentControl* SwCursorShell::CursorInsideContentControl() const
     for (SwPaM& rCursor : GetCursor()->GetRingContainer())
     {
         const SwPosition* pStart = rCursor.Start();
-        SwTextNode* pTextNode = pStart->nNode.GetNode().GetTextNode();
+        SwTextNode* pTextNode = pStart->GetNode().GetTextNode();
         if (!pTextNode)
         {
             continue;
@@ -1364,7 +1364,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                                 &aSpecialPos : nullptr;
 
         const bool bCursorFoundExact = GetLayout()->GetModelPositionForViewPoint( &aPos, aPt, &aTmpState );
-        pTextNd = aPos.nNode.GetNode().GetTextNode();
+        pTextNd = aPos.GetNode().GetTextNode();
 
         const SwNodes& rNds = GetDoc()->GetNodes();
         if( pTextNd
@@ -1990,7 +1990,7 @@ const SwPostItField* SwCursorShell::GetPostItFieldAtCursor() const
     if ( !IsTableMode() )
     {
         const SwPosition* pCursorPos = GetCursor_()->GetPoint();
-        const SwTextNode* pTextNd = pCursorPos->nNode.GetNode().GetTextNode();
+        const SwTextNode* pTextNd = pCursorPos->GetNode().GetTextNode();
         if ( pTextNd )
         {
             SwTextAttr* pTextAttr = pTextNd->GetFieldTextAttrAt( pCursorPos->nContent.GetIndex() );
@@ -2101,7 +2101,7 @@ bool SwCursorShell::SelectTextModel( const sal_Int32 nStart,
 TextFrameIndex SwCursorShell::GetCursorPointAsViewIndex() const
 {
     SwPosition const*const pPos(GetCursor()->GetPoint());
-    SwTextNode const*const pTextNode(pPos->nNode.GetNode().GetTextNode());
+    SwTextNode const*const pTextNode(pPos->GetNode().GetTextNode());
     assert(pTextNode);
     SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(pTextNode->getLayoutFrame(GetLayout())));
     assert(pFrame);
@@ -2120,7 +2120,7 @@ bool SwCursorShell::SelectTextView(TextFrameIndex const nStart,
     SwPosition& rPos = *m_pCurrentCursor->GetPoint();
     m_pCurrentCursor->DeleteMark();
     // indexes must correspond to cursor point!
-    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(m_pCurrentCursor->GetPoint()->nNode.GetNode().GetTextNode()->getLayoutFrame(GetLayout())));
+    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(m_pCurrentCursor->GetPoint()->GetNode().GetTextNode()->getLayoutFrame(GetLayout())));
     assert(pFrame);
     rPos = pFrame->MapViewToModelPos(nStart);
     m_pCurrentCursor->SetMark();
@@ -2147,7 +2147,7 @@ bool SwCursorShell::SelectTextAttr( sal_uInt16 nWhich,
         if( !pTextAttr )
         {
             SwPosition& rPos = *m_pCurrentCursor->GetPoint();
-            SwTextNode* pTextNd = rPos.nNode.GetNode().GetTextNode();
+            SwTextNode* pTextNd = rPos.GetNode().GetTextNode();
             pTextAttr = pTextNd
                 ? pTextNd->GetTextAttrAt(rPos.nContent.GetIndex(),
                         nWhich,
@@ -2206,7 +2206,7 @@ bool SwCursorShell::GetShadowCursorPos( const Point& rPt, SwFillMode eFillMode,
         SwCursorMoveState aTmpState( &aFPos );
 
         if( GetLayout()->GetModelPositionForViewPoint( &aPos, aPt, &aTmpState ) &&
-            !aPos.nNode.GetNode().IsProtect())
+            !aPos.GetNode().IsProtect())
         {
             // start position in protected section?
             rRect = aFPos.aCursor;
@@ -2236,7 +2236,7 @@ bool SwCursorShell::SetShadowCursorPos( const Point& rPt, SwFillMode eFillMode )
             SwCallLink aLk( *this ); // watch Cursor-Moves
             StartAction();
 
-            SwContentNode* pCNd = aPos.nNode.GetNode().GetContentNode();
+            SwContentNode* pCNd = aPos.GetNode().GetContentNode();
             SwUndoId nUndoId = SwUndoId::INS_FROM_SHADOWCRSR;
             // If only the paragraph attributes "Adjust" or "LRSpace" are set,
             // then the following should not delete those again.
@@ -2288,7 +2288,7 @@ bool SwCursorShell::SetShadowCursorPos( const Point& rPt, SwFillMode eFillMode )
             switch( aFPos.eMode )
             {
             case SwFillMode::Indent:
-                if( nullptr != (pCNd = aPos.nNode.GetNode().GetContentNode() ))
+                if( nullptr != (pCNd = aPos.GetNode().GetContentNode() ))
                 {
                     SfxItemSetFixed<
                             RES_PARATR_ADJUST, RES_PARATR_ADJUST,

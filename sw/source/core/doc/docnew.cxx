@@ -1136,7 +1136,7 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
             if ( !bDeletePrevious )
             {
                 SAL_INFO( "sw.pageframe", "(Flush pagebreak AKA EndAllAction" );
-                assert(pTargetShell->GetCursor()->GetPoint()->nNode.GetNode().GetTextNode()->GetSwAttrSet().HasItem(RES_PAGEDESC));
+                assert(pTargetShell->GetCursor()->GetPoint()->GetNode().GetTextNode()->GetSwAttrSet().HasItem(RES_PAGEDESC));
                 pTargetShell->EndAllAction();
                 SAL_INFO( "sw.pageframe",  "Flush changes AKA EndAllAction)" );
                 pTargetShell->StartAllAction();

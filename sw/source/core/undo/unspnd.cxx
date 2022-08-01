@@ -43,7 +43,7 @@ SwUndoSplitNode::SwUndoSplitNode( SwDoc& rDoc, const SwPosition& rPos,
         m_nContent( rPos.nContent.GetIndex() ),
         m_bTableFlag( false ), m_bCheckTableStart( bChkTable )
 {
-    SwTextNode *const pTextNd = rPos.nNode.GetNode().GetTextNode();
+    SwTextNode *const pTextNd = rPos.GetNode().GetTextNode();
     OSL_ENSURE( pTextNd, "only for TextNode" );
     if( pTextNd->GetpSwpHints() )
     {
@@ -119,7 +119,7 @@ void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
                 rPam.SetMark();
                 ++rPam.GetMark()->nNode;
                 rPam.GetMark()->nContent.Assign( rPam.GetMark()->
-                                    nNode.GetNode().GetContentNode(), 0 );
+                                    GetNode().GetContentNode(), 0 );
                 pDoc->getIDocumentRedlineAccess().DeleteRedline( rPam, true, RedlineType::Any );
                 rPam.DeleteMark();
             }

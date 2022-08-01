@@ -382,7 +382,7 @@ static SwPosition ResolveFlyAnchor(SwFrameFormat const& rFlyFrame)
     {
         SwPosition const*const pPos(rAnch.GetContentAnchor());
         assert(pPos);
-        if (SwFrameFormat const*const pParent = pPos->nNode.GetNode().GetFlyFormat())
+        if (SwFrameFormat const*const pParent = pPos->GetNode().GetFlyFormat())
         {
             return ResolveFlyAnchor(*pParent);
         }
@@ -392,7 +392,7 @@ static SwPosition ResolveFlyAnchor(SwFrameFormat const& rFlyFrame)
         }
         else
         {
-            return SwPosition(*pPos->nNode.GetNode().GetContentNode(), 0);
+            return SwPosition(*pPos->GetNode().GetContentNode(), 0);
         }
     }
 }

@@ -209,7 +209,7 @@ SwFlyFrameFormat* SwDoc::MakeFlySection_( const SwPosition& rAnchPos,
         SwFormatAnchor aAnch( pFormat->GetAnchor() );
         if (pAnchor && (RndStdIds::FLY_AT_FLY == pAnchor->GetAnchorId()))
         {
-            SwPosition aPos( *rAnchPos.nNode.GetNode().FindFlyStartNode() );
+            SwPosition aPos( *rAnchPos.GetNode().FindFlyStartNode() );
             aAnch.SetAnchor( &aPos );
             eAnchorId = RndStdIds::FLY_AT_FLY;
         }
@@ -235,7 +235,7 @@ SwFlyFrameFormat* SwDoc::MakeFlySection_( const SwPosition& rAnchPos,
     if ( RndStdIds::FLY_AS_CHAR == eAnchorId )
     {
         const sal_Int32 nStt = rAnchPos.nContent.GetIndex();
-        SwTextNode * pTextNode = rAnchPos.nNode.GetNode().GetTextNode();
+        SwTextNode * pTextNode = rAnchPos.GetNode().GetTextNode();
 
         OSL_ENSURE(pTextNode!= nullptr, "There should be a SwTextNode!");
 
@@ -318,7 +318,7 @@ SwFlyFrameFormat* SwDoc::MakeFlySection( RndStdIds eAnchorType,
         SwContentNode * pNewTextNd = GetNodes().MakeTextNode
             (SwNodeIndex( GetNodes().GetEndOfAutotext()),
              getIDocumentStylePoolAccess().GetTextCollFromPool( nCollId ));
-        SwContentNode * pAnchorNode = pAnchorPos->nNode.GetNode().GetContentNode();
+        SwContentNode * pAnchorNode = pAnchorPos->GetNode().GetContentNode();
         // pAnchorNode from cursor must be valid, unless a whole table is selected (in which
         // case the node is not a content node, and pAnchorNode is nullptr). In the latter case,
         // bCalledFromShell is false.
@@ -791,7 +791,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
                 if ( RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId() )
                 {
                     const SwPosition *pPos = rAnchor.GetContentAnchor();
-                    SwTextNode *pTextNode = pPos->nNode.GetNode().GetTextNode();
+                    SwTextNode *pTextNode = pPos->GetNode().GetTextNode();
                     OSL_ENSURE( pTextNode->HasHints(), "Missing FlyInCnt-Hint." );
                     const sal_Int32 nIdx = pPos->nContent.GetIndex();
                     SwTextAttr * const pHint =
@@ -1110,7 +1110,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable
     if ( RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId() )
     {
         const SwPosition *pPos = rAnchor.GetContentAnchor();
-        SwTextNode *pTextNode = pPos->nNode.GetNode().GetTextNode();
+        SwTextNode *pTextNode = pPos->GetNode().GetTextNode();
         OSL_ENSURE( pTextNode->HasHints(), "Missing FlyInCnt-Hint." );
         const sal_Int32 nIdx = pPos->nContent.GetIndex();
         SwTextAttr * const pHint =
@@ -1588,7 +1588,7 @@ bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
                     return false;
                 }
 
-                pNd = &rAnchor.GetContentAnchor()->nNode.GetNode();
+                pNd = &rAnchor.GetContentAnchor()->GetNode();
                 pFlyNd = pNd->FindFlyStartNode();
                 bFound = true;
                 break;
@@ -1610,7 +1610,7 @@ SvxFrameDirection SwDoc::GetTextDirection( const SwPosition& rPos,
 {
     SvxFrameDirection nRet = SvxFrameDirection::Unknown;
 
-    SwContentNode *pNd = rPos.nNode.GetNode().GetContentNode();
+    SwContentNode *pNd = rPos.GetNode().GetContentNode();
 
     // #i42921# - use new method <SwContentNode::GetTextDirection(..)>
     if ( pNd )

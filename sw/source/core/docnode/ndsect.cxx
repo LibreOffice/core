@@ -176,13 +176,13 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
     {
         auto [pStt, pEnd] = rRange.StartEnd(); // SwPosition*
         if( !pStt->nContent.GetIndex() &&
-            pEnd->nNode.GetNode().GetContentNode()->Len() ==
+            pEnd->GetNode().GetContentNode()->Len() ==
             pEnd->nContent.GetIndex() )
         {
             ::lcl_CheckEmptyLayFrame( GetNodes(),
                                     rNewData,
-                                    pStt->nNode.GetNode(),
-                                    pEnd->nNode.GetNode() );
+                                    pStt->GetNode(),
+                                    pEnd->GetNode() );
         }
     }
 
@@ -232,7 +232,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
                     pSttPos->nContent.GetIndex() )
                 {
                     SwTextNode* const pTNd =
-                        pSttPos->nNode.GetNode().GetTextNode();
+                        pSttPos->GetNode().GetTextNode();
                     if (pTNd)
                     {
                         pUndoInsSect->SaveSplitNode( pTNd, true );
@@ -242,7 +242,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
                 if ( !( pPrvNd && 2 == nRegionRet ) )
                 {
                     SwTextNode *const pTNd =
-                        pEndPos->nNode.GetNode().GetTextNode();
+                        pEndPos->GetNode().GetTextNode();
                     if (pTNd && (pTNd->GetText().getLength()
                                     != pEndPos->nContent.GetIndex()))
                     {
@@ -254,7 +254,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
             if( pPrvNd && 1 == nRegionRet )
             {
                 pSttPos->nNode.Assign( *pPrvNd );
-                pSttPos->nContent.Assign( pSttPos->nNode.GetNode().GetContentNode(), 0 );
+                pSttPos->nContent.Assign( pSttPos->GetNode().GetContentNode(), 0 );
             }
             else if( pSttPos->nContent.GetIndex() )
             {
@@ -264,11 +264,11 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
             if( pPrvNd && 2 == nRegionRet )
             {
                 pEndPos->nNode.Assign( *pPrvNd );
-                pEndPos->nContent.Assign( pEndPos->nNode.GetNode().GetContentNode(), 0 );
+                pEndPos->nContent.Assign( pEndPos->GetNode().GetContentNode(), 0 );
             }
             else
             {
-                const SwContentNode* pCNd = pEndPos->nNode.GetNode().GetContentNode();
+                const SwContentNode* pCNd = pEndPos->GetNode().GetContentNode();
                 if( pCNd && pCNd->Len() != pEndPos->nContent.GetIndex() )
                 {
                     sal_Int32 nContent = pSttPos->nContent.GetIndex();
@@ -279,14 +279,14 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
                     {
                         --pSttPos->nNode;
                         --pEndPos->nNode;
-                        pTNd = pSttPos->nNode.GetNode().GetTextNode();
+                        pTNd = pSttPos->GetNode().GetTextNode();
                         pSttPos->nContent.Assign( pTNd, nContent );
                     }
                     else
                     {
                         // Set to the end of the previous
                         --pEndPos->nNode;
-                        pTNd = pEndPos->nNode.GetNode().GetTextNode();
+                        pTNd = pEndPos->GetNode().GetTextNode();
                     }
                     nContent = pTNd ? pTNd->GetText().getLength() : 0;
                     pEndPos->nContent.Assign( pTNd, nContent );
@@ -299,7 +299,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
     else
     {
         const SwPosition* pPos = rRange.GetPoint();
-        const SwContentNode* pCNd = pPos->nNode.GetNode().GetContentNode();
+        const SwContentNode* pCNd = pPos->GetNode().GetContentNode();
         if( !pPos->nContent.GetIndex() )
         {
             pNewSectNode = GetNodes().InsertTextSection(
@@ -398,8 +398,8 @@ sal_uInt16 SwDoc::IsInsRegionAvailable( const SwPaM& rRange,
         // See if we have a valid Section
         auto [pStt, pEnd] = rRange.StartEnd(); // SwPosition*
 
-        const SwContentNode* pCNd = pEnd->nNode.GetNode().GetContentNode();
-        const SwNode* pNd = &pStt->nNode.GetNode();
+        const SwContentNode* pCNd = pEnd->GetNode().GetContentNode();
+        const SwNode* pNd = &pStt->GetNode();
         const SwSectionNode* pSectNd = pNd->FindSectionNode();
         const SwSectionNode* pEndSectNd = pCNd ? pCNd->FindSectionNode() : nullptr;
         if( pSectNd && pEndSectNd && pSectNd != pEndSectNd )
@@ -503,7 +503,7 @@ sal_uInt16 SwDoc::IsInsRegionAvailable( const SwPaM& rRange,
 
 SwSection* SwDoc::GetCurrSection( const SwPosition& rPos )
 {
-    const SwSectionNode* pSectNd = rPos.nNode.GetNode().FindSectionNode();
+    const SwSectionNode* pSectNd = rPos.GetNode().FindSectionNode();
     if( pSectNd )
         return const_cast<SwSection*>(&pSectNd->GetSection());
     return nullptr;

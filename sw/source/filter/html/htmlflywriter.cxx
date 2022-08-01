@@ -320,7 +320,7 @@ void SwHTMLWriter::CollectFlyFrames()
             // spacing.
             if( text::RelOrientation::FRAME == eHoriRel &&
                 (pAPos = rAnchor.GetContentAnchor()) != nullptr &&
-                (pACNd = pAPos->nNode.GetNode().GetContentNode()) != nullptr )
+                (pACNd = pAPos->GetNode().GetContentNode()) != nullptr )
             {
                 const SvxLRSpaceItem& rLRItem =
                     pACNd->GetAttr(RES_LR_SPACE);

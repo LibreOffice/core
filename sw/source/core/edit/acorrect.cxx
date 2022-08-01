@@ -598,7 +598,7 @@ LanguageType SwAutoCorrDoc::GetLanguage( sal_Int32 nPos ) const
 {
     LanguageType eRet = LANGUAGE_SYSTEM;
 
-    SwTextNode* pNd = m_rCursor.GetPoint()->nNode.GetNode().GetTextNode();
+    SwTextNode* pNd = m_rCursor.GetPoint()->GetNode().GetTextNode();
 
     if( pNd )
     {
@@ -643,7 +643,7 @@ SwDontExpandItem::~SwDontExpandItem()
 
 void SwDontExpandItem::SaveDontExpandItems( const SwPosition& rPos )
 {
-    const SwTextNode* pTextNd = rPos.nNode.GetNode().GetTextNode();
+    const SwTextNode* pTextNd = rPos.GetNode().GetTextNode();
     if( pTextNd )
     {
         m_pDontExpandItems.reset( new SfxItemSet( const_cast<SwDoc&>(pTextNd->GetDoc()).GetAttrPool(),
@@ -659,7 +659,7 @@ void SwDontExpandItem::SaveDontExpandItems( const SwPosition& rPos )
 
 void SwDontExpandItem::RestoreDontExpandItems( const SwPosition& rPos )
 {
-    SwTextNode* pTextNd = rPos.nNode.GetNode().GetTextNode();
+    SwTextNode* pTextNd = rPos.GetNode().GetTextNode();
     if( !pTextNd )
         return;
 

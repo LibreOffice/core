@@ -128,7 +128,7 @@ bool IsMarkHidden(SwRootFrame const& rLayout, ::sw::mark::IMark const& rMark)
     {
         return false;
     }
-    SwNode const& rNode(rMark.GetMarkPos().nNode.GetNode());
+    SwNode const& rNode(rMark.GetMarkPos().GetNode());
     SwTextNode const*const pTextNode(rNode.GetTextNode());
     if (pTextNode == nullptr)
     {   // UNO_BOOKMARK may point to table node
@@ -143,7 +143,7 @@ bool IsMarkHidden(SwRootFrame const& rLayout, ::sw::mark::IMark const& rMark)
     if (rMark.IsExpanded())
     {
         SwTextFrame const*const pOtherFrame(static_cast<SwTextFrame const*>(
-            rMark.GetOtherMarkPos().nNode.GetNode().GetTextNode()->getLayoutFrame(&rLayout)));
+            rMark.GetOtherMarkPos().GetNode().GetTextNode()->getLayoutFrame(&rLayout)));
         return pFrame == pOtherFrame
             && pFrame->MapModelToViewPos(rMark.GetMarkPos())
                 == pFrame->MapModelToViewPos(rMark.GetOtherMarkPos());

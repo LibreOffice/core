@@ -1331,7 +1331,7 @@ SwPasteContext::~SwPasteContext()
                 if (!pCursor)
                     return;
 
-                if (!pCursor->GetPoint()->nNode.GetNode().IsTextNode())
+                if (!pCursor->GetPoint()->GetNode().IsTextNode())
                     // Non-text was pasted.
                     return;
 

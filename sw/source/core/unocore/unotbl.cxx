@@ -1480,12 +1480,12 @@ OUString SwXTextTableCursor::getRangeName()
     if(!pTableCursor)
         return OUString();
     pTableCursor->MakeBoxSels();
-    const SwStartNode* pNode = pTableCursor->GetPoint()->nNode.GetNode().FindTableBoxStartNode();
+    const SwStartNode* pNode = pTableCursor->GetPoint()->GetNode().FindTableBoxStartNode();
     const SwTable* pTable = SwTable::FindTable(GetFrameFormat());
     const SwTableBox* pEndBox = pTable->GetTableBox(pNode->GetIndex());
     if(pTableCursor->HasMark())
     {
-        pNode = pTableCursor->GetMark()->nNode.GetNode().FindTableBoxStartNode();
+        pNode = pTableCursor->GetMark()->GetNode().FindTableBoxStartNode();
         const SwTableBox* pStartBox = pTable->GetTableBox(pNode->GetIndex());
         if(pEndBox != pStartBox)
         {

@@ -73,11 +73,11 @@ namespace
         const sal_Int32 nCntIdx)
     {
         for(int nb = 0; nb < 2; ++nb)
-            if(&(pPam->GetBound(bool(nb)).nNode.GetNode()) == pOldNode)
+            if(&(pPam->GetBound(bool(nb)).GetNode()) == pOldNode)
             {
                 pPam->GetBound(bool(nb)).nNode = rNewPos.nNode;
                 pPam->GetBound(bool(nb)).nContent.Assign(
-                    rNewPos.nNode.GetNode().GetContentNode(),
+                    rNewPos.GetNode().GetContentNode(),
                     nCntIdx + pPam->GetBound(bool(nb)).nContent.GetIndex());
             }
     }
@@ -89,7 +89,7 @@ void PaMCorrAbs( const SwPaM& rRange,
     SwPosition const aStart( *rRange.Start() );
     SwPosition const aEnd( *rRange.End() );
     SwPosition const aNewPos( rNewPos );
-    SwDoc& rDoc = aStart.nNode.GetNode().GetDoc();
+    SwDoc& rDoc = aStart.GetNode().GetDoc();
     SwCursorShell *const pShell = rDoc.GetEditShell();
 
     if( pShell )
@@ -134,9 +134,9 @@ void PaMCorrAbs( const SwPaM& rRange,
         // section
         bool const bLeaveSection =
             pUnoCursor->IsRemainInSection() &&
-            ( lcl_FindUnoCursorSection( aNewPos.nNode.GetNode() ) !=
+            ( lcl_FindUnoCursorSection( aNewPos.GetNode() ) !=
                 lcl_FindUnoCursorSection(
-                    pUnoCursor->GetPoint()->nNode.GetNode() ) );
+                    pUnoCursor->GetPoint()->GetNode() ) );
 
         for(SwPaM& rPaM : pUnoCursor->GetRingContainer())
         {

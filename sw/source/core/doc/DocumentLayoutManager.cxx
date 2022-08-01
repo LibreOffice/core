@@ -290,7 +290,7 @@ void DocumentLayoutManager::DelLayoutFormat( SwFrameFormat *pFormat )
         if ((RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId()) && rAnchor.GetContentAnchor())
         {
             const SwPosition* pPos = rAnchor.GetContentAnchor();
-            SwTextNode *pTextNd = pPos->nNode.GetNode().GetTextNode();
+            SwTextNode *pTextNd = pPos->GetNode().GetTextNode();
 
             // attribute is still in text node, delete it
             if ( pTextNd )
@@ -456,7 +456,7 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
     {
         const SwPosition* pPos = rNewAnchor.GetContentAnchor();
         SwFormatFlyCnt aFormat( pDest );
-        pPos->nNode.GetNode().GetTextNode()->InsertItem(
+        pPos->GetNode().GetTextNode()->InsertItem(
             aFormat, pPos->nContent.GetIndex(), 0 );
     }
 

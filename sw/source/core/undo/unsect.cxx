@@ -106,7 +106,7 @@ SwUndoInsSection::SwUndoInsSection(
     if( rPam.HasMark() )
         return;
 
-    const SwContentNode* pCNd = rPam.GetPoint()->nNode.GetNode().GetContentNode();
+    const SwContentNode* pCNd = rPam.GetPoint()->GetNode().GetContentNode();
     if( pCNd && pCNd->HasSwAttrSet() && (
         !rPam.GetPoint()->nContent.GetIndex() ||
         rPam.GetPoint()->nContent.GetIndex() == pCNd->Len() ))

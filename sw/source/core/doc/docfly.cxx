@@ -227,7 +227,7 @@ static Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFormatAnchor& rAnch,
             if( rAnch.GetContentAnchor() )
             {
                 const SwPosition *pPos = rAnch.GetContentAnchor();
-                const SwContentNode* pNd = pPos->nNode.GetNode().GetContentNode();
+                const SwContentNode* pNd = pPos->GetNode().GetContentNode();
                 std::pair<Point, bool> const tmp(aRet, false);
                 const SwFrame* pOld = pNd ? pNd->getLayoutFrame(rDoc.getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp) : nullptr;
                 if( pOld )
@@ -239,7 +239,7 @@ static Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFormatAnchor& rAnch,
             if( rAnch.GetContentAnchor() )
             {
                 const SwFlyFrameFormat* pFormat = static_cast<SwFlyFrameFormat*>(rAnch.GetContentAnchor()->
-                                                nNode.GetNode().GetFlyFormat());
+                                                GetNode().GetFlyFormat());
                 const SwFrame* pOld = pFormat ? pFormat->GetFrame( &aRet ) : nullptr;
                 if( pOld )
                     aRet = pOld->getFrameArea().Pos();
@@ -306,7 +306,7 @@ sal_Int8 SwDoc::SetFlyFrameAnchor( SwFrameFormat& rFormat, SfxItemSet& rSet, boo
         // destroys the format. To avoid that, we disconnect the format from
         // the attribute.
         const SwPosition *pPos = rOldAnch.GetContentAnchor();
-        SwTextNode *pTextNode = pPos->nNode.GetNode().GetTextNode();
+        SwTextNode *pTextNode = pPos->GetNode().GetTextNode();
         OSL_ENSURE( pTextNode->HasHints(), "Missing FlyInCnt-Hint." );
         const sal_Int32 nIdx = pPos->nContent.GetIndex();
         SwTextAttr * const  pHint =
@@ -334,7 +334,7 @@ sal_Int8 SwDoc::SetFlyFrameAnchor( SwFrameFormat& rFormat, SfxItemSet& rSet, boo
             // that no forbidden automatic alignment is left.
         {
             const SwPosition *pPos = aNewAnch.GetContentAnchor();
-            SwTextNode *pNd = pPos->nNode.GetNode().GetTextNode();
+            SwTextNode *pNd = pPos->GetNode().GetTextNode();
             OSL_ENSURE( pNd, "Cursor does not point to TextNode." );
 
             SwFormatFlyCnt aFormat( static_cast<SwFlyFrameFormat*>(&rFormat) );
@@ -827,7 +827,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                         // consider that drawing objects can be in
                         // header/footer. Thus, <GetFrame()> by left-top-corner
                         std::pair<Point, bool> const tmp(aPt, false);
-                        pTextFrame = aPos.nNode.GetNode().
+                        pTextFrame = aPos.GetNode().
                             GetContentNode()->getLayoutFrame(
                                 getIDocumentLayoutAccess().GetCurrentLayout(),
                                 nullptr, &tmp);
@@ -909,7 +909,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     // #i26791# - adjust vertical positioning to 'center to
                     // baseline'
                     SetAttr( SwFormatVertOrient( 0, text::VertOrientation::CENTER, text::RelOrientation::FRAME ), *pContact->GetFormat() );
-                    SwTextNode *pNd = aPos.nNode.GetNode().GetTextNode();
+                    SwTextNode *pNd = aPos.GetNode().GetTextNode();
                     OSL_ENSURE( pNd, "Cursor not positioned at TextNode." );
 
                     SwFormatFlyCnt aFormat( pContact->GetFormat() );
@@ -982,7 +982,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     // destroys the format. To avoid that, we disconnect the format from
                     // the attribute.
                     const sal_Int32 nIndx( xOldAsCharAnchorPos->nContent.GetIndex() );
-                    SwTextNode* pTextNode( xOldAsCharAnchorPos->nNode.GetNode().GetTextNode() );
+                    SwTextNode* pTextNode( xOldAsCharAnchorPos->GetNode().GetTextNode() );
                     assert(pTextNode && "<SwDoc::ChgAnchor(..)> - missing previous anchor text node for as-character anchored object");
                     SwTextAttr * const pHint =
                         pTextNode->GetTextAttrForCharAt( nIndx, RES_TXTATR_FLYCNT );

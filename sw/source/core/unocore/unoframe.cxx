@@ -1870,7 +1870,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                 if(aAnchor.GetAnchorId() == RndStdIds::FLY_AT_FLY)
                 {
                     const ::SwPosition* pPosition = aAnchor.GetContentAnchor();
-                    SwFrameFormat* pFlyFormat = pPosition ? pPosition->nNode.GetNode().GetFlyFormat() : nullptr;
+                    SwFrameFormat* pFlyFormat = pPosition ? pPosition->GetNode().GetFlyFormat() : nullptr;
                     if(!pFlyFormat || pFlyFormat->Which() == RES_DRAWFRMFMT)
                     {
                         lang::IllegalArgumentException aExcept;
@@ -2676,7 +2676,7 @@ void SwXFrame::dispose()
         if (pFormat->GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR)
         {
             const SwPosition &rPos = *(pFormat->GetAnchor().GetContentAnchor());
-            SwTextNode *pTextNode = rPos.nNode.GetNode().GetTextNode();
+            SwTextNode *pTextNode = rPos.GetNode().GetTextNode();
             const sal_Int32 nIdx = rPos.nContent.GetIndex();
             pTextNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIdx, nIdx );
         }

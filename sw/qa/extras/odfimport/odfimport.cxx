@@ -704,16 +704,16 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo37606)
 
     {
         pWrtShell->SelAll(); // Selects A1.
-        SwTextNode& rCellEnd = dynamic_cast<SwTextNode&>(pShellCursor->End()->nNode.GetNode());
+        SwTextNode& rCellEnd = dynamic_cast<SwTextNode&>(pShellCursor->End()->GetNode());
         // fdo#72486 This was "Hello.", i.e. a single select-all selected the whole document, not just the cell only.
         CPPUNIT_ASSERT_EQUAL(OUString("A1"), rCellEnd.GetText());
 
         pWrtShell->SelAll(); // Selects the whole table.
         pWrtShell->SelAll(); // Selects the whole document.
-        SwTextNode& rStart = dynamic_cast<SwTextNode&>(pShellCursor->Start()->nNode.GetNode());
+        SwTextNode& rStart = dynamic_cast<SwTextNode&>(pShellCursor->Start()->GetNode());
         CPPUNIT_ASSERT_EQUAL(OUString("A1"), rStart.GetText());
 
-        SwTextNode& rEnd = dynamic_cast<SwTextNode&>(pShellCursor->End()->nNode.GetNode());
+        SwTextNode& rEnd = dynamic_cast<SwTextNode&>(pShellCursor->End()->GetNode());
         // This was "A1", i.e. Ctrl-A only selected the A1 cell of the table, not the whole document.
         CPPUNIT_ASSERT_EQUAL(OUString("Hello."), rEnd.GetText());
     }
@@ -721,11 +721,11 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo37606)
     {
         pWrtShell->SttEndDoc(false); // Go to the end of the doc.
         pWrtShell->SelAll(); // And now that we're outside of the table, try Ctrl-A again.
-        SwTextNode& rStart = dynamic_cast<SwTextNode&>(pShellCursor->Start()->nNode.GetNode());
+        SwTextNode& rStart = dynamic_cast<SwTextNode&>(pShellCursor->Start()->GetNode());
         // This was "Hello", i.e. Ctrl-A did not select the starting table.
         CPPUNIT_ASSERT_EQUAL(OUString("A1"), rStart.GetText());
 
-        SwTextNode& rEnd = dynamic_cast<SwTextNode&>(pShellCursor->End()->nNode.GetNode());
+        SwTextNode& rEnd = dynamic_cast<SwTextNode&>(pShellCursor->End()->GetNode());
         CPPUNIT_ASSERT_EQUAL(OUString("Hello."), rEnd.GetText());
     }
 
@@ -781,11 +781,11 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo69862)
     pWrtShell->SelAll(); // Selects A1.
     pWrtShell->SelAll(); // Selects the whole table.
     pWrtShell->SelAll(); // Selects the whole document.
-    SwTextNode& rStart = dynamic_cast<SwTextNode&>(pShellCursor->Start()->nNode.GetNode());
+    SwTextNode& rStart = dynamic_cast<SwTextNode&>(pShellCursor->Start()->GetNode());
     // This was "Footnote.", as Ctrl-A also selected footnotes, but it should not.
     CPPUNIT_ASSERT_EQUAL(OUString("A1"), rStart.GetText());
 
-    SwTextNode& rEnd = dynamic_cast<SwTextNode&>(pShellCursor->End()->nNode.GetNode());
+    SwTextNode& rEnd = dynamic_cast<SwTextNode&>(pShellCursor->End()->GetNode());
     CPPUNIT_ASSERT_EQUAL(OUString("H" "\x01" "ello."), rEnd.GetText());
 }
 
@@ -801,11 +801,11 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo69979)
     pWrtShell->SelAll(); // Selects A1.
     pWrtShell->SelAll(); // Selects the whole table.
     pWrtShell->SelAll(); // Selects the whole document.
-    SwTextNode& rStart = dynamic_cast<SwTextNode&>(pShellCursor->Start()->nNode.GetNode());
+    SwTextNode& rStart = dynamic_cast<SwTextNode&>(pShellCursor->Start()->GetNode());
     // This was "", as Ctrl-A also selected headers, but it should not.
     CPPUNIT_ASSERT_EQUAL(OUString("A1"), rStart.GetText());
 
-    SwTextNode& rEnd = dynamic_cast<SwTextNode&>(pShellCursor->End()->nNode.GetNode());
+    SwTextNode& rEnd = dynamic_cast<SwTextNode&>(pShellCursor->End()->GetNode());
     CPPUNIT_ASSERT_EQUAL(OUString("Hello."), rEnd.GetText());
 }
 
@@ -1132,7 +1132,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123968)
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
 
     pWrtShell->SelAll();
-    SwTextNode& rStart = dynamic_cast<SwTextNode&>(pShellCursor->Start()->nNode.GetNode());
+    SwTextNode& rStart = dynamic_cast<SwTextNode&>(pShellCursor->Start()->GetNode());
 
     // The field is now editable like any text, thus the field content "New value" shows up for the cursor.
     CPPUNIT_ASSERT_EQUAL(OUString("inputfield: " + OUStringChar(CH_TXT_ATR_INPUTFIELDSTART)
@@ -1247,7 +1247,7 @@ CPPUNIT_TEST_FIXTURE(Test, testVerticallyMergedCellBorder)
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     pWrtShell->Down(/*bSelect=*/false, /*nCount=*/1);
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(/*bBlock=*/false);
-    SwStartNode* pA1 = pShellCursor->Start()->nNode.GetNode().StartOfSectionNode();
+    SwStartNode* pA1 = pShellCursor->Start()->GetNode().StartOfSectionNode();
     const SwAttrSet& rA1Set = pA1->GetTableBox()->GetFrameFormat()->GetAttrSet();
     CPPUNIT_ASSERT(rA1Set.GetBox().GetRight());
     SwNodeIndex aA2(*pA1->EndOfSectionNode(), 1);

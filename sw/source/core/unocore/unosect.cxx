@@ -448,8 +448,8 @@ SwXTextSection::getAnchor()
             SwPaM aPaM(*pIdx);
             aPaM.Move( fnMoveForward, GoInContent );
             assert(pIdx->GetNode().IsSectionNode());
-            if (aPaM.GetPoint()->nNode.GetNode().FindTableNode() != pIdx->GetNode().FindTableNode()
-                || aPaM.GetPoint()->nNode.GetNode().FindSectionNode() != &pIdx->GetNode())
+            if (aPaM.GetPoint()->GetNode().FindTableNode() != pIdx->GetNode().FindTableNode()
+                || aPaM.GetPoint()->GetNode().FindSectionNode() != &pIdx->GetNode())
             {
                 isMoveIntoTable = true;
             }
@@ -457,8 +457,8 @@ SwXTextSection::getAnchor()
             const SwEndNode* pEndNode = pIdx->GetNode().EndOfSectionNode();
             SwPaM aEnd(*pEndNode);
             aEnd.Move( fnMoveBackward, GoInContent );
-            if (aEnd.GetPoint()->nNode.GetNode().FindTableNode() != pIdx->GetNode().FindTableNode()
-                || aEnd.GetPoint()->nNode.GetNode().FindSectionNode() != &pIdx->GetNode())
+            if (aEnd.GetPoint()->GetNode().FindTableNode() != pIdx->GetNode().FindTableNode()
+                || aEnd.GetPoint()->GetNode().FindSectionNode() != &pIdx->GetNode())
             {
                 isMoveIntoTable = true;
             }

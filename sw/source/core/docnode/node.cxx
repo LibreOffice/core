@@ -466,7 +466,7 @@ bool SwNode::IsProtect() const
         const SwPosition* pAnchorPos = rAnchor.GetContentAnchor();
         if (!pAnchorPos)
             return false;
-        const SwNode& rAnchorNd = pAnchorPos->nNode.GetNode();
+        const SwNode& rAnchorNd = pAnchorPos->GetNode();
         return &rAnchorNd != this && rAnchorNd.IsProtect();
     }
 
@@ -558,7 +558,7 @@ const SwPageDesc* SwNode::FindPageDesc( SwNodeOffset* pPgDescNdIdx ) const
                 if ((RndStdIds::FLY_AT_PAGE != pAnchor->GetAnchorId()) &&
                     pAnchor->GetContentAnchor() )
                 {
-                    pNd = &pAnchor->GetContentAnchor()->nNode.GetNode();
+                    pNd = &pAnchor->GetContentAnchor()->GetNode();
                     const SwNode* pFlyNd = pNd->FindFlyStartNode();
                     while( pFlyNd )
                     {
@@ -2138,7 +2138,7 @@ bool SwNode::IsInRedlines() const
 void SwNode::AddAnchoredFly(SwFrameFormat *const pFlyFormat)
 {
     assert(pFlyFormat);
-    assert(&pFlyFormat->GetAnchor(false).GetContentAnchor()->nNode.GetNode() == this);
+    assert(&pFlyFormat->GetAnchor(false).GetContentAnchor()->GetNode() == this);
     // check node type, cf. SwFormatAnchor::SetAnchor()
     assert(IsTextNode() || IsStartNode() || IsTableNode());
     m_aAnchoredFlys.push_back(pFlyFormat);
@@ -2148,7 +2148,7 @@ void SwNode::RemoveAnchoredFly(SwFrameFormat *const pFlyFormat)
 {
     assert(pFlyFormat);
     // cannot assert this in Remove because it is called when new anchor is already set
-//    assert(&pFlyFormat->GetAnchor(false).GetContentAnchor()->nNode.GetNode() == this);
+//    assert(&pFlyFormat->GetAnchor(false).GetContentAnchor()->GetNode() == this);
     assert(IsTextNode() || IsStartNode() || IsTableNode());
     auto it(std::find(m_aAnchoredFlys.begin(), m_aAnchoredFlys.end(), pFlyFormat));
     assert(it != m_aAnchoredFlys.end());

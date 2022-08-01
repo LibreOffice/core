@@ -145,7 +145,7 @@ void SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
 
     bool bEndUndo = false;
     SwDoc* pMyDoc = GetDoc();
-    SwTextNode *const pTextNd = rPos.nNode.GetNode().GetTextNode();
+    SwTextNode *const pTextNd = rPos.GetNode().GetTextNode();
     if( pTextNd )
         rPos.nContent.Assign( pTextNd, 0 );
     else
@@ -184,7 +184,7 @@ bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
 
     bool bEndUndo = false;
     SwDoc* pMyDoc = GetDoc();
-    SwTextNode* pTextNd = rPos.nNode.GetNode().GetTextNode();
+    SwTextNode* pTextNd = rPos.GetNode().GetTextNode();
     if (pTextNd && pTextNd->GetText().getLength() && rPos.nNode.GetIndex() + 1 !=
         pMyDoc->GetNodes().GetEndOfContent().GetIndex() )
         rPos.nContent.Assign( pTextNd, 0 );
@@ -346,7 +346,7 @@ void SwEditShell::GotoGlobalDocContent( const SwGlblDocContent& rPos )
     rCursorPos.nNode = rPos.GetDocPos();
 
     SwDoc* pMyDoc = GetDoc();
-    SwContentNode * pCNd = rCursorPos.nNode.GetNode().GetContentNode();
+    SwContentNode * pCNd = rCursorPos.GetNode().GetContentNode();
     if( !pCNd )
         pCNd = pMyDoc->GetNodes().GoNext( &rCursorPos.nNode );
 

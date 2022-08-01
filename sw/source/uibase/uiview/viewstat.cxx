@@ -429,7 +429,7 @@ void SwView::GetState(SfxItemSet &rSet)
                     if (nullptr == pDoc->getIDocumentRedlineAccess().GetRedline(*pCursor->Start(), nullptr) &&
                        // except in the case of an inserted or deleted table row
                        ( !m_pWrtShell->IsCursorInTable() ||
-                           (pTableBox = pCursor->Start()->nNode.GetNode().GetTableBox() ) == nullptr ||
+                           (pTableBox = pCursor->Start()->GetNode().GetTableBox() ) == nullptr ||
                            RedlineType::None == pTableBox->GetUpper()->GetRedlineType() ) )
                     {
                         bDisable = true;

@@ -194,7 +194,7 @@ static bool SetGrfFlySize( const Size& rGrfSz, SwGrfNode* pGrfNd, const Size& rO
                 const SwDoc& rDoc = pGrfNd->GetDoc();
                 const SwPosition* pAPos = pFormat->GetAnchor().GetContentAnchor();
                 SwTableNode *pTableNd;
-                if (pAPos && nullptr != (pTableNd = pAPos->nNode.GetNode().FindTableNode()))
+                if (pAPos && nullptr != (pTableNd = pAPos->GetNode().FindTableNode()))
                 {
                     const bool bLastGrf = !pTableNd->GetTable().DecGrfsThatResize();
                     SwHTMLTableLayout *pLayout =
@@ -290,7 +290,7 @@ const SwNode* SwBaseLink::GetAnchor() const
                  (RndStdIds::FLY_AT_FLY  == rAnchor.GetAnchorId()) ||
                  (RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId())))
             {
-                    return &pAPos->nNode.GetNode();
+                    return &pAPos->GetNode();
             }
             return nullptr;
         }

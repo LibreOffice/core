@@ -43,7 +43,7 @@ bool FindFormatImpl(SwPaM & rSearchPam,
         {
             return false;
         }
-        SwContentNode *pNd = pPam->GetPoint()->nNode.GetNode().GetContentNode();
+        SwContentNode *pNd = pPam->GetPoint()->GetNode().GetContentNode();
         pPam->GetPoint()->nContent.Assign( pNd, bSrchForward ? 0 : pNd->Len() );
     }
 

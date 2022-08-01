@@ -864,7 +864,7 @@ void SwView::Execute(SfxRequest &rReq)
                 if ( !pRedline && m_pWrtShell->IsCursorInTable() )
                 {
                     nRedline = 0;
-                    auto pTabLine = pCursor->Start()->nNode.GetNode().GetTableBox()->GetUpper();
+                    auto pTabLine = pCursor->Start()->GetNode().GetTableBox()->GetUpper();
 
                     if ( RedlineType::None != pTabLine->GetRedlineType() )
                     {
@@ -893,7 +893,7 @@ void SwView::Execute(SfxRequest &rReq)
                                 pRedline = rRedlineTable[nRedline];
 
                                 // until next redline is not in the same row
-                                SwTableBox* pTableBox = pRedline->Start()->nNode.GetNode().GetTableBox();
+                                SwTableBox* pTableBox = pRedline->Start()->GetNode().GetTableBox();
                                 if ( !pTableBox || pTableBox->GetUpper() != pTabLine )
                                     break;
 

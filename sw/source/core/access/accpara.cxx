@@ -1632,7 +1632,7 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
     const TextFrameIndex nCorePos(GetPortionData().GetCoreViewPosition(nIndex));
     SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
     SwPosition const aModelPos(pFrame->MapViewToModelPos(nCorePos));
-    SwTextNode *const pTextNode(aModelPos.nNode.GetNode().GetTextNode());
+    SwTextNode *const pTextNode(aModelPos.GetNode().GetTextNode());
     {
         SwPosition const aEndPos(*pTextNode,
             aModelPos.nContent.GetIndex() == pTextNode->Len()

@@ -168,7 +168,7 @@ void SwView::ExecLingu(SfxRequest &rReq)
 
                             // remember cursor position data for later restoration of the cursor
                             const SwPosition *pPoint = m_pWrtShell->GetCursor()->GetPoint();
-                            bool bRestoreCursor = pPoint->nNode.GetNode().IsTextNode();
+                            bool bRestoreCursor = pPoint->GetNode().IsTextNode();
                             const SwNodeIndex aPointNodeIndex( pPoint->nNode );
                             sal_Int32 nPointIndex = pPoint->nContent.GetIndex();
 
@@ -641,7 +641,7 @@ bool SwView::ExecSpellPopup(const Point& rPt)
             SwCursorShell *pCursorShell = m_pWrtShell.get();
             SwPaM *pCursor = pCursorShell->GetCursor();
             SwPosition aPoint(*pCursor->GetPoint());
-            const SwTextNode *pNode = aPoint.nNode.GetNode().GetTextNode();
+            const SwTextNode *pNode = aPoint.GetNode().GetTextNode();
 
             // Spell-check in case the idle jobs haven't had a chance to kick in.
             // This makes it possible to suggest spelling corrections for

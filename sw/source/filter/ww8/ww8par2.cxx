@@ -2389,7 +2389,7 @@ void WW8TabDesc::CreateSwTable()
     {
         const SwPosition* pAPos =
             pFormat->GetAnchor().GetContentAnchor();
-        if (pAPos && &pAPos->nNode.GetNode() == &pPoint->nNode.GetNode())
+        if (pAPos && &pAPos->GetNode() == &pPoint->GetNode())
         {
             bInsNode = true;
             bSetMinHeight = true;
@@ -2465,7 +2465,7 @@ void WW8TabDesc::CreateSwTable()
     // contains a Pagedesc. If so that Pagedesc would be moved to the
     // row after the table, that would be wrong. So delete and
     // set later to the table format.
-    if (SwTextNode *const pNd = m_xTmpPos->GetPoint()->nNode.GetNode().GetTextNode())
+    if (SwTextNode *const pNd = m_xTmpPos->GetPoint()->GetNode().GetTextNode())
     {
         if (const SfxItemSet* pSet = pNd->GetpSwAttrSet())
         {
