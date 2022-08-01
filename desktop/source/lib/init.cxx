@@ -62,6 +62,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/threadpool.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
 #include <com/sun/star/document/MacroExecMode.hpp>
@@ -421,12 +422,26 @@ RectangleAndPart RectangleAndPart::Create(const std::string& rPayload)
     {
         aRet.m_aRectangle = tools::Rectangle(0, 0, SfxLokHelper::MaxTwips, SfxLokHelper::MaxTwips);
         if (comphelper::LibreOfficeKit::isPartInInvalidation())
-            aRet.m_nPart = std::stol(rPayload.substr(6));
+        {
+            int nSeparatorPos = rPayload.find(',', 6);
+            bool bHasMode = nSeparatorPos > 0;
+            if (bHasMode)
+            {
+                aRet.m_nPart = std::stol(rPayload.substr(6, nSeparatorPos - 6));
+                assert(rPayload.length() > o3tl::make_unsigned(nSeparatorPos));
+                aRet.m_nMode = std::stol(rPayload.substr(nSeparatorPos + 1));
+            }
+            else
+            {
+                aRet.m_nPart = std::stol(rPayload.substr(6));
+                aRet.m_nMode = 0;
+            }
+        }
 
         return aRet;
     }
 
-    // Read '<left>, <top>, <width>, <height>[, <part>]'. C++ streams are simpler but slower.
+    // Read '<left>, <top>, <width>, <height>[, <part>, <mode>]'. C++ streams are simpler but slower.
     const char* pos = rPayload.c_str();
     const char* end = rPayload.c_str() + rPayload.size();
     tools::Long nLeft = rtl_str_toInt64_WithLength(pos, 10, end - pos);
@@ -446,6 +461,7 @@ RectangleAndPart RectangleAndPart::Create(const std::string& rPayload)
     assert(pos < end);
     tools::Long nHeight = rtl_str_toInt64_WithLength(pos, 10, end - pos);
     tools::Long nPart = INT_MIN;
+    tools::Long nMode = 0;
     if (comphelper::LibreOfficeKit::isPartInInvalidation())
     {
         while( *pos != ',' )
@@ -453,10 +469,20 @@ RectangleAndPart RectangleAndPart::Create(const std::string& rPayload)
         ++pos;
         assert(pos < end);
         nPart = rtl_str_toInt64_WithLength(pos, 10, end - pos);
+
+        while( *pos && *pos != ',' )
+            ++pos;
+        if (*pos)
+        {
+            ++pos;
+            assert(pos < end);
+            nMode = rtl_str_toInt64_WithLength(pos, 10, end - pos);
+        }
     }
 
     aRet.m_aRectangle = SanitizedRectangle(nLeft, nTop, nWidth, nHeight);
     aRet.m_nPart = nPart;
+    aRet.m_nMode = nMode;
     return aRet;
 }
 
@@ -978,6 +1004,7 @@ static void doc_paintTileToCGContext(LibreOfficeKitDocument* pThis,
 static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
                               unsigned char* pBuffer,
                               const int nPart,
+                              const int nMode,
                               const int nCanvasWidth, const int nCanvasHeight,
                               const int nTilePosX, const int nTilePosY,
                               const int nTileWidth, const int nTileHeight);
@@ -1451,9 +1478,9 @@ void CallbackFlushHandler::libreOfficeKitViewCallbackWithViewId(int nType, const
     queue(nType, callbackData);
 }
 
-void CallbackFlushHandler::libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart)
+void CallbackFlushHandler::libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart, int nMode)
 {
-    CallbackData callbackData(pRect, nPart);
+    CallbackData callbackData(pRect, nPart, nMode);
     queue(LOK_CALLBACK_INVALIDATE_TILES, callbackData);
 }
 
@@ -3582,6 +3609,7 @@ static void doc_paintTileToCGContext(LibreOfficeKitDocument* pThis,
 static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
                               unsigned char* pBuffer,
                               const int nPart,
+                              const int nMode,
                               const int nCanvasWidth, const int nCanvasHeight,
                               const int nTilePosX, const int nTilePosY,
                               const int nTileWidth, const int nTileHeight)
@@ -3591,13 +3619,20 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    SAL_INFO( "lok.tiledrendering", "paintPartTile: painting @ " << nPart << " ["
+    SAL_INFO( "lok.tiledrendering", "paintPartTile: painting @ " << nPart << " : " << nMode << " ["
                << nTileWidth << "x" << nTileHeight << "]@("
                << nTilePosX << ", " << nTilePosY << ") to ["
                << nCanvasWidth << "x" << nCanvasHeight << "]px" );
 
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
     int nOrigViewId = doc_getView(pThis);
+
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        return;
+    }
 
     if (nOrigViewId < 0)
     {
@@ -3672,19 +3707,19 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
             }
         }
 
-        ITiledRenderable* pDoc = getTiledRenderable(pThis);
-        if (!pDoc)
-        {
-            SetLastExceptionMsg("Document doesn't support tiled rendering");
-            return;
-        }
-
         bool bPaintTextEdit = nPart == nOrigPart;
         pDoc->setPaintTextEdit( bPaintTextEdit );
+
+        int nOriginalEditMode = pDoc->getEditMode();
+        if (nOriginalEditMode != nMode)
+            SfxLokHelper::setEditMode(nMode, pDoc);
 
         doc_paintTile(pThis, pBuffer, nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 
         pDoc->setPaintTextEdit( true );
+
+        if (pDoc->getEditMode() != nOriginalEditMode)
+            SfxLokHelper::setEditMode(nOriginalEditMode, pDoc);
 
         if (!isText && nPart != nOrigPart)
         {
