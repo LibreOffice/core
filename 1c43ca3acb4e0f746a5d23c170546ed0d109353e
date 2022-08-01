@@ -16,6 +16,46 @@
       "message": "Heh, another issue with transition from prefix/suffix to format string. ",
       "revId": "1c43ca3acb4e0f746a5d23c170546ed0d109353e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf38225d_28229966",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-08-01T11:55:34Z",
+      "side": 1,
+      "message": "I expect this patch to be highly backported - which is one reason I decided to start a new ooxmlexport18 with this. So I want to get this one perfect - right from the start.\n\nI am worried about the \"bullet\" part of this fix still. Vasily - would it be better to put a SetListFormat(\"\",\"\",n) in the for-loop instead of just an un-set oListFormat?",
+      "revId": "1c43ca3acb4e0f746a5d23c170546ed0d109353e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9e0870c_01b4390c",
+        "filename": "sw/source/core/doc/DocumentStylePoolManager.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2213,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-08-01T11:55:34Z",
+      "side": 1,
+      "message": "This is the one instance I am still a bit worried about - what to do with the list format when dealing with bullets.\n\nIn reviewing previous uses of SetListFormat today, I notice that you typically use SetListFormat( \"\",\"\", i) for bullets. Is there a reason why bullets need/use a format string at all? Or, now that a null SetListFormat() fully removes a prior string would be be better to !HasListFormat for bullets?\n\nBut then in svx/source/sidebar/nbdtmg.cxx it is set to an empty string (not a std::nullopt) which I remember seeing somewhere as being important to distinguish.",
+      "range": {
+        "startLine": 2213,
+        "startChar": 12,
+        "endLine": 2213,
+        "endChar": 36
+      },
+      "revId": "1c43ca3acb4e0f746a5d23c170546ed0d109353e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
