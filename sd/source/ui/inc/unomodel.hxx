@@ -117,6 +117,8 @@ private:
 
     OUString   maBuildId;
 
+    bool mbPaintTextEdit;
+
     void initializeDocument();
 
     sd::DrawViewShell* GetViewShell();
@@ -275,6 +277,8 @@ public:
     {
         return mbDisposed;
     }
+    /// @see vcl::ITiledRenderable::setPaintTextEdit().
+    virtual void setPaintTextEdit(bool bPaint) override { mbPaintTextEdit = bPaint; }
 
     // XComponent
 
