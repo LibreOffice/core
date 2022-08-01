@@ -51,6 +51,24 @@
       "parentUuid": "ad33b707_700c6ad0",
       "revId": "e77f326633b8336184dedd50174cbacb57ac2f46",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36837800_19ab6104",
+        "filename": "xmlsecurity/source/helper/xsecctl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-08-01T15:40:05Z",
+      "side": 1,
+      "message": "\u003e It should be incremented irrespective of a match\nYes but after comparison. Otherwise you have off-by-one error.",
+      "parentUuid": "cd4cc85e_2ff40718",
+      "revId": "e77f326633b8336184dedd50174cbacb57ac2f46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
