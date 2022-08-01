@@ -6491,10 +6491,9 @@ OString DocxAttributeOutput::GetOLEStyle(const SwFlyFrameFormat& rFormat, const 
                         "pt"; //from VMLExport::AddRectangleDimensions(), it does: value/20
 
     const SvxLRSpaceItem& rLRSpace = rFormat.GetLRSpace();
-    if (rLRSpace.IsExplicitZeroMarginValLeft() || rLRSpace.GetLeft())
-        sShapeStyle += ";mso-wrap-distance-left:" + OString::number(double(rLRSpace.GetLeft()) / 20) + "pt";
-    if (rLRSpace.IsExplicitZeroMarginValRight() || rLRSpace.GetRight())
-        sShapeStyle += ";mso-wrap-distance-right:" + OString::number(double(rLRSpace.GetRight()) / 20) + "pt";
+
+    sShapeStyle += ";mso-wrap-distance-left:" + OString::number(double(rLRSpace.GetLeft()) / 20) + "pt";
+    sShapeStyle += ";mso-wrap-distance-right:" + OString::number(double(rLRSpace.GetRight()) / 20) + "pt";
     const SvxULSpaceItem& rULSpace = rFormat.GetULSpace();
     if (rULSpace.GetUpper())
         sShapeStyle += ";mso-wrap-distance-top:" + OString::number(double(rULSpace.GetUpper()) / 20) + "pt";
@@ -9534,14 +9533,9 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
             }
         }
         rtl::Reference<FastAttributeList> pLRSpaceAttrList = FastSerializerHelper::createAttrList();
-        if ((0 != pLRSpace->GetTextLeft()) || (pLRSpace->IsExplicitZeroMarginValLeft()))
-        {
-            pLRSpaceAttrList->add( FSNS(XML_w, (bEcma ? XML_left : XML_start)), OString::number(pLRSpace->GetTextLeft()) );
-        }
-        if ((0 != pLRSpace->GetRight()) || (pLRSpace->IsExplicitZeroMarginValRight()))
-        {
-            pLRSpaceAttrList->add( FSNS(XML_w, (bEcma ? XML_right : XML_end)), OString::number(pLRSpace->GetRight()) );
-        }
+
+        pLRSpaceAttrList->add( FSNS(XML_w, (bEcma ? XML_left : XML_start)), OString::number(pLRSpace->GetTextLeft()) );
+        pLRSpaceAttrList->add( FSNS(XML_w, (bEcma ? XML_right : XML_end)), OString::number(pLRSpace->GetRight()) );
         sal_Int32 const nFirstLineAdjustment = pLRSpace->GetTextFirstLineOffset();
         if (nFirstLineAdjustment > 0)
             pLRSpaceAttrList->add( FSNS( XML_w, XML_firstLine ), OString::number( nFirstLineAdjustment ) );
