@@ -81,6 +81,8 @@ struct SAL_WARN_UNUSED SW_DLLPUBLIC SwPosition
 
 
     sal_Int32 GetContentIndex() const { return nContent.GetIndex(); }
+
+    void SetMark(const sw::mark::IMark* pMark) { nContent.SetMark(pMark); }
 };
 
 SW_DLLPUBLIC std::ostream &operator <<(std::ostream& s, const SwPosition& position);
