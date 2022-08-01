@@ -1104,8 +1104,8 @@ SwRangeRedline::SwRangeRedline(RedlineType eTyp, const SwPaM& rPam )
     m_pContentSect( nullptr ),
     m_nId( s_nLastId++ )
 {
-    GetBound().nContent.SetRedline(this);
-    GetBound(false).nContent.SetRedline(this);
+    GetBound().SetRedline(this);
+    GetBound(false).SetRedline(this);
 
     m_bDelLastPara = false;
     m_bIsVisible = true;
@@ -1127,8 +1127,8 @@ SwRangeRedline::SwRangeRedline( const SwRedlineData& rData, const SwPaM& rPam )
     m_pContentSect( nullptr ),
     m_nId( s_nLastId++ )
 {
-    GetBound().nContent.SetRedline(this);
-    GetBound(false).nContent.SetRedline(this);
+    GetBound().SetRedline(this);
+    GetBound(false).SetRedline(this);
 
     m_bDelLastPara = false;
     m_bIsVisible = true;
@@ -1142,8 +1142,8 @@ SwRangeRedline::SwRangeRedline( const SwRedlineData& rData, const SwPosition& rP
     m_pContentSect( nullptr ),
     m_nId( s_nLastId++ )
 {
-    GetBound().nContent.SetRedline(this);
-    GetBound(false).nContent.SetRedline(this);
+    GetBound().SetRedline(this);
+    GetBound(false).SetRedline(this);
 
     m_bDelLastPara = false;
     m_bIsVisible = true;
@@ -1155,8 +1155,8 @@ SwRangeRedline::SwRangeRedline( const SwRangeRedline& rCpy )
     m_pContentSect( nullptr ),
     m_nId( s_nLastId++ )
 {
-    GetBound().nContent.SetRedline(this);
-    GetBound(false).nContent.SetRedline(this);
+    GetBound().SetRedline(this);
+    GetBound(false).SetRedline(this);
 
     m_bDelLastPara = false;
     m_bIsVisible = true;
