@@ -34,25 +34,25 @@
 
 void SwBreakDlg::rememberResult()
 {
-    nKind = 0;
+    m_nKind = 0;
     if (m_xLineBtn->get_active())
     {
-        nKind = 1;
+        m_nKind = 1;
         m_eClear = static_cast<SwLineBreakClear>(m_xLineClearBox->get_active());
     }
     else if(m_xColumnBtn->get_active())
-        nKind = 2;
+        m_nKind = 2;
     else if(m_xPageBtn->get_active())
     {
-        nKind = 3;
+        m_nKind = 3;
         const int nPos = m_xPageCollBox->get_active();
         if (nPos != 0 && nPos != -1)
         {
             m_aTemplate = m_xPageCollBox->get_active_text();
-            oPgNum.reset();
+            m_oPgNum.reset();
             if (m_xPageNumBox->get_active())
             {
-                oPgNum = o3tl::narrowing<sal_uInt16>(m_xPageNumEdit->get_value());
+                m_oPgNum = o3tl::narrowing<sal_uInt16>(m_xPageNumEdit->get_value());
             }
         }
     }
@@ -97,9 +97,9 @@ IMPL_LINK_NOARG(SwBreakDlg, OkHdl, weld::Button&, void)
         // position 0 says 'Without'.
         const SwPageDesc *pPageDesc;
         if (nPos != 0 && nPos != -1)
-            pPageDesc = rSh.FindPageDescByName(m_xPageCollBox->get_active_text(), true);
+            pPageDesc = m_rSh.FindPageDescByName(m_xPageCollBox->get_active_text(), true);
         else
-            pPageDesc = &rSh.GetPageDesc(rSh.GetCurPageDesc());
+            pPageDesc = &m_rSh.GetPageDesc(m_rSh.GetCurPageDesc());
 
         OSL_ENSURE(pPageDesc, "Page description not found.");
         const sal_uInt16 nUserPage = sal_uInt16(m_xPageNumEdit->get_value());
@@ -137,9 +137,9 @@ SwBreakDlg::SwBreakDlg(weld::Window *pParent, SwWrtShell &rS)
     , m_xPageNumBox(m_xBuilder->weld_check_button("pagenumcb"))
     , m_xPageNumEdit(m_xBuilder->weld_spin_button("pagenumsb"))
     , m_xOkBtn(m_xBuilder->weld_button("ok"))
-    , rSh(rS)
-    , nKind(0)
-    , bHtmlMode(0 != ::GetHtmlMode(rS.GetView().GetDocShell()))
+    , m_rSh(rS)
+    , m_nKind(0)
+    , m_bHtmlMode(0 != ::GetHtmlMode(rS.GetView().GetDocShell()))
 {
     Link<weld::Toggleable&,void> aLk = LINK(this, SwBreakDlg, ToggleHdl);
     m_xPageBtn->connect_toggled(aLk);
@@ -152,10 +152,10 @@ SwBreakDlg::SwBreakDlg(weld::Window *pParent, SwWrtShell &rS)
     m_xPageNumEdit->connect_value_changed(LINK(this, SwBreakDlg, PageNumModifyHdl));
 
     // Insert page description to Listbox
-    const size_t nCount = rSh.GetPageDescCnt();
+    const size_t nCount = m_rSh.GetPageDescCnt();
     for (size_t i = 0; i < nCount; ++i)
     {
-        const SwPageDesc &rPageDesc = rSh.GetPageDesc(i);
+        const SwPageDesc &rPageDesc = m_rSh.GetPageDesc(i);
         ::InsertStringSorted("", rPageDesc.GetName(), *m_xPageCollBox, 1 );
     }
 
@@ -177,13 +177,13 @@ SwBreakDlg::SwBreakDlg(weld::Window *pParent, SwWrtShell &rS)
 void SwBreakDlg::CheckEnable()
 {
     bool bEnable = true;
-    if ( bHtmlMode )
+    if ( m_bHtmlMode )
     {
         m_xColumnBtn->set_sensitive(false);
         m_xPageCollBox->set_sensitive(false);
         bEnable = false;
     }
-    else if(rSh.GetFrameType(nullptr,true)
+    else if(m_rSh.GetFrameType(nullptr,true)
         & (FrameTypeFlags::FLY_ANY | FrameTypeFlags::HEADER | FrameTypeFlags::FOOTER  | FrameTypeFlags::FOOTNOTE))
     {
         m_xPageBtn->set_sensitive(false);
