@@ -67,13 +67,13 @@ ContextHandlerRef ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const
                 case C_TOKEN( txPr ):
                     return new TextBodyContext( *this, mrModel.mxTextProp.create() );
                 case C_TOKEN( userShapes ):
-                    mrModel.maDrawingPath = getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
+                    mrModel.maDrawingPath = getFragmentPathFromRelId( rAttribs.getStringDefaulted( R_TOKEN( id )) );
                     return nullptr;
                 case C_TOKEN( pivotSource ):
                     mrModel.mbPivotChart = true;
                     return nullptr;
                 case C_TOKEN (externalData):
-                    mrModel.maSheetPath = getFragmentPathFromRelId(rAttribs.getString(R_TOKEN(id),OUString()));
+                    mrModel.maSheetPath = getFragmentPathFromRelId(rAttribs.getStringDefaulted(R_TOKEN(id)));
                     return nullptr;
             }
         break;

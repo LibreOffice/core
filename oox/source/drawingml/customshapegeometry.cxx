@@ -674,27 +674,27 @@ XYAdjustHandleContext::XYAdjustHandleContext( ContextHandler2Helper const & rPar
 {
     if ( rAttribs.hasAttribute( XML_gdRefX ) )
     {
-        mrAdjustHandle.gdRef1 = GetGeomGuideName( rAttribs.getString( XML_gdRefX, "" ) );
+        mrAdjustHandle.gdRef1 = GetGeomGuideName( rAttribs.getStringDefaulted( XML_gdRefX) );
     }
     if ( rAttribs.hasAttribute( XML_minX ) )
     {
-        mrAdjustHandle.min1 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_minX, "" ) );
+        mrAdjustHandle.min1 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getStringDefaulted( XML_minX) );
     }
     if ( rAttribs.hasAttribute( XML_maxX ) )
     {
-        mrAdjustHandle.max1 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_maxX, "" ) );
+        mrAdjustHandle.max1 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getStringDefaulted( XML_maxX) );
     }
     if ( rAttribs.hasAttribute( XML_gdRefY ) )
     {
-        mrAdjustHandle.gdRef2 = GetGeomGuideName( rAttribs.getString( XML_gdRefY, "" ) );
+        mrAdjustHandle.gdRef2 = GetGeomGuideName( rAttribs.getStringDefaulted( XML_gdRefY) );
     }
     if ( rAttribs.hasAttribute( XML_minY ) )
     {
-        mrAdjustHandle.min2 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_minY, "" ) );
+        mrAdjustHandle.min2 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getStringDefaulted( XML_minY) );
     }
     if ( rAttribs.hasAttribute( XML_maxY ) )
     {
-        mrAdjustHandle.max2 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_maxY, "" ) );
+        mrAdjustHandle.max2 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getStringDefaulted( XML_maxY) );
     }
 }
 
@@ -729,28 +729,28 @@ PolarAdjustHandleContext::PolarAdjustHandleContext( ContextHandler2Helper const 
     if ( rAttribs.hasAttribute( XML_gdRefR ) )
     {
         mrAdjustHandle.polar = true ;
-        mrAdjustHandle.gdRef1 = GetGeomGuideName( rAttribs.getString( XML_gdRefR, "" ) );
+        mrAdjustHandle.gdRef1 = GetGeomGuideName( rAttribs.getStringDefaulted( XML_gdRefR) );
     }
     if ( rAttribs.hasAttribute( XML_minR ) )
     {
-        mrAdjustHandle.min1 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_minR, "" ) );
+        mrAdjustHandle.min1 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getStringDefaulted( XML_minR) );
     }
     if ( rAttribs.hasAttribute( XML_maxR ) )
     {
-        mrAdjustHandle.max1 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_maxR, "" ) );
+        mrAdjustHandle.max1 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getStringDefaulted( XML_maxR) );
     }
     if ( rAttribs.hasAttribute( XML_gdRefAng ) )
     {
         mrAdjustHandle.polar = true ;
-        mrAdjustHandle.gdRef2 = GetGeomGuideName( rAttribs.getString( XML_gdRefAng, "" ) );
+        mrAdjustHandle.gdRef2 = GetGeomGuideName( rAttribs.getStringDefaulted( XML_gdRefAng) );
     }
     if ( rAttribs.hasAttribute( XML_minAng ) )
     {
-        mrAdjustHandle.min2 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_minAng, "" ) );
+        mrAdjustHandle.min2 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getStringDefaulted( XML_minAng) );
     }
     if ( rAttribs.hasAttribute( XML_maxAng ) )
     {
-        mrAdjustHandle.max2 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_maxAng, "" ) );
+        mrAdjustHandle.max2 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getStringDefaulted( XML_maxAng) );
     }
 }
 

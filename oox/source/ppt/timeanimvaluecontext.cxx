@@ -60,8 +60,8 @@ namespace oox::ppt {
         {
             mbInValue = true;
             TimeAnimationValue val;
-            val.msFormula = rAttribs.getString( XML_fmla, OUString() );
-            val.msTime =  rAttribs.getString( XML_tm, OUString() );
+            val.msFormula = rAttribs.getStringDefaulted( XML_fmla);
+            val.msTime =  rAttribs.getStringDefaulted( XML_tm);
             maTavList.push_back( val );
             return this;
         }

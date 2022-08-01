@@ -64,7 +64,7 @@ ContextHandlerRef AxControlPropertyContext::onCreateContext( sal_Int32 nElement,
                     case XML_MouseIcon:
                         return this;        // import picture path from ax:picture child element
                     default:
-                        mrModel.importProperty( mnPropId, rAttribs.getString( AX_TOKEN( value ), OUString() ) );
+                        mrModel.importProperty( mnPropId, rAttribs.getStringDefaulted( AX_TOKEN( value )) );
                 }
             }
         break;
@@ -72,7 +72,7 @@ ContextHandlerRef AxControlPropertyContext::onCreateContext( sal_Int32 nElement,
         case AX_TOKEN( ocxPr ):
             if( nElement == AX_TOKEN( picture ) )
             {
-                OUString aPicturePath = getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
+                OUString aPicturePath = getFragmentPathFromRelId( rAttribs.getStringDefaulted( R_TOKEN( id )) );
                 if( !aPicturePath.isEmpty() )
                 {
                     BinaryXInputStream aInStrm( getFilter().openInputStream( aPicturePath ), true );
@@ -94,7 +94,7 @@ ContextHandlerRef AxControlFragment::onCreateContext( sal_Int32 nElement, const 
 {
     if( isRootElement() && (nElement == AX_TOKEN( ocx )) )
     {
-        OUString aClassId = rAttribs.getString( AX_TOKEN( classid ), OUString() );
+        OUString aClassId = rAttribs.getStringDefaulted( AX_TOKEN( classid ));
         switch( rAttribs.getToken( AX_TOKEN( persistence ), XML_TOKEN_INVALID ) )
         {
             case XML_persistPropertyBag:
@@ -104,7 +104,7 @@ ContextHandlerRef AxControlFragment::onCreateContext( sal_Int32 nElement, const 
 
             case XML_persistStreamInit:
             {
-                OUString aFragmentPath = getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
+                OUString aFragmentPath = getFragmentPathFromRelId( rAttribs.getStringDefaulted( R_TOKEN( id )) );
                 if( !aFragmentPath.isEmpty() )
                 {
                     BinaryXInputStream aInStrm( getFilter().openInputStream( aFragmentPath ), true );
@@ -123,7 +123,7 @@ ContextHandlerRef AxControlFragment::onCreateContext( sal_Int32 nElement, const 
 
             case XML_persistStorage:
             {
-                OUString aFragmentPath = getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
+                OUString aFragmentPath = getFragmentPathFromRelId( rAttribs.getStringDefaulted( R_TOKEN( id )) );
                 if( !aFragmentPath.isEmpty() )
                 {
                     Reference< XInputStream > xStrgStrm = getFilter().openInputStream( aFragmentPath );

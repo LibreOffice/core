@@ -44,7 +44,7 @@ core::ContextHandlerRef RuleListContext::onCreateContext(sal_Int32 nElement,
             LayoutAtom::connect(mpNode, pNode);
 
             Rule& rRule = pNode->getRule();
-            rRule.msForName = rAttribs.getString(XML_forName, "");
+            rRule.msForName = rAttribs.getStringDefaulted(XML_forName);
             break;
         }
         default:

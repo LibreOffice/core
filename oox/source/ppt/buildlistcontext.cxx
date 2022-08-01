@@ -61,7 +61,7 @@ namespace oox::ppt {
         case PPT_TOKEN( bldGraphic ):
         {
             mbInBldGraphic = true;
-//          OUString sShapeId = rAttribs.getString( XML_spid, OUString() );
+//          OUString sShapeId = rAttribs.getStringDefaulted( XML_spid);
 // TODO
 //      bool uiExpand = rAttribs.getBool( XML_uiExpand, true );
                 /* this is unsigned */

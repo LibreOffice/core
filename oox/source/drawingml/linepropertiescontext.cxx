@@ -74,7 +74,7 @@ ContextHandlerRef LinePropertiesContext::onCreateContext( sal_Int32 nElement, co
             // The code below takes care of both scenarios by converting to '1000th of a percent' always
             OUString aStr;
             sal_Int32 nDash = 0;
-            aStr = rAttribs.getString( XML_d, "" );
+            aStr = rAttribs.getStringDefaulted( XML_d);
             if ( aStr.endsWith("%") )
             {
                 // Ends with a '%'
@@ -91,7 +91,7 @@ ContextHandlerRef LinePropertiesContext::onCreateContext( sal_Int32 nElement, co
             }
 
             sal_Int32 nSp = 0;
-            aStr = rAttribs.getString( XML_sp, "" );
+            aStr = rAttribs.getStringDefaulted( XML_sp);
             if ( aStr.endsWith("%") )
             {
                 // Ends with a '%'
