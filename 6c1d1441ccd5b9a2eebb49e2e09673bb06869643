@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7587ac10_b08704e9",
+        "filename": "editeng/source/uno/unonrule.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-08-01T20:58:15Z",
+      "side": 1,
+      "message": "I wonder if SetPrefix should be \"extended\" to clear oListFormat in these cases. It shouldn\u0027t matter for import cases, but it could matter for API calls - and that is what UNO is primarily for, right?",
+      "range": {
+        "startLine": 296,
+        "startChar": 16,
+        "endLine": 296,
+        "endChar": 46
+      },
+      "revId": "6c1d1441ccd5b9a2eebb49e2e09673bb06869643",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27e9e9d3_2ca06072",
+        "filename": "sd/source/core/stlpool.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1121,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-08-01T20:58:15Z",
+      "side": 1,
+      "message": "went ahead with this in another commit.",
+      "range": {
+        "startLine": 1121,
+        "startChar": 26,
+        "endLine": 1121,
+        "endChar": 51
+      },
+      "revId": "6c1d1441ccd5b9a2eebb49e2e09673bb06869643",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22362c6e_e53e17a2",
+        "filename": "sw/source/uibase/wrtsh/wrtsh1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1510,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-08-01T20:58:15Z",
+      "side": 1,
+      "message": "went ahead with this in another commit.",
+      "range": {
+        "startLine": 1510,
+        "startChar": 20,
+        "endLine": 1510,
+        "endChar": 58
+      },
+      "revId": "6c1d1441ccd5b9a2eebb49e2e09673bb06869643",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
