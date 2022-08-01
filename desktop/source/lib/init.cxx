@@ -3662,7 +3662,19 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
             }
         }
 
+        ITiledRenderable* pDoc = getTiledRenderable(pThis);
+        if (!pDoc)
+        {
+            SetLastExceptionMsg("Document doesn't support tiled rendering");
+            return;
+        }
+
+        bool bPaintTextEdit = nPart == nOrigPart;
+        pDoc->setPaintTextEdit( bPaintTextEdit );
+
         doc_paintTile(pThis, pBuffer, nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+
+        pDoc->setPaintTextEdit( true );
 
         if (!isText && nPart != nOrigPart)
         {

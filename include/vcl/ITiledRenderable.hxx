@@ -342,6 +342,11 @@ public:
      * E.g. select a list item from a drop down content control.
      */
     virtual void executeContentControlEvent(const StringMap&) {}
+
+    /**
+     *  Allow / disable drawing current text edit (used in Impress for slide previews)
+     */
+    virtual void setPaintTextEdit(bool) {}
 };
 } // namespace vcl
 

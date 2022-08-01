@@ -189,6 +189,7 @@ protected:
     bool mbHideChart : 1;
     bool mbHideDraw : 1; // hide draw objects other than form controls
     bool mbHideFormControl : 1; // hide form controls only
+    bool mbPaintTextEdit : 1;        // if should paint currently edited text
 
 public:
     // Interface for PagePaintingAllowed flag
@@ -499,6 +500,9 @@ public:
     // #i38135#
     // Sets the timer for Object animations and restarts.
     void SetAnimationTimer(sal_uInt32 nTime);
+
+    /// @see vcl::ITiledRenderable::setPaintTextEdit().
+    void SetPaintTextEdit(bool bPaint) { mbPaintTextEdit = bPaint; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
