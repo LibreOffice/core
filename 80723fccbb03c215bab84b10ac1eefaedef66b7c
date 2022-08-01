@@ -16,6 +16,24 @@
       "message": "When one doesn\u0027t have a certificate with this exact subject name, the test fails... :(",
       "revId": "80723fccbb03c215bab84b10ac1eefaedef66b7c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6623199_43592d6c",
+        "filename": "filter/qa/pdf.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-08-01T07:38:36Z",
+      "side": 1,
+      "message": "Don\u0027t we set up certificates in unotest::MacrosTest::setUpNssGpg() so that you always have this test cert?",
+      "parentUuid": "27eb6371_fbce5eca",
+      "revId": "80723fccbb03c215bab84b10ac1eefaedef66b7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
