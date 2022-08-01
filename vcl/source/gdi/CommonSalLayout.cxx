@@ -858,7 +858,7 @@ bool GenericSalLayout::IsKashidaPosValid(int nCharPos) const
 #if HB_VERSION_ATLEAST(5, 1, 0)
                 // This is a combining mark, keep moving until we find a base,
                 // since HarfBuzz will tell as we can’t insert kashida after a
-                // mark, but we know know enough to move the marks when
+                // mark, but we know enough to move the marks when
                 // inserting kashida.
                 if (pPrev->IsDiacritic())
                 {
