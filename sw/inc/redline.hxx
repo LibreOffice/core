@@ -179,8 +179,8 @@ public:
         SwPaM( rPos ), m_pRedlineData( pData ), m_pContentSect( nullptr ),
         m_nId( s_nLastId++ ), m_bDelLastPara( bDelLP ), m_bIsVisible( true )
     {
-        GetBound().nContent.SetRedline(this);
-        GetBound(false).nContent.SetRedline(this);
+        GetBound().SetRedline(this);
+        GetBound(false).SetRedline(this);
     }
     SwRangeRedline( const SwRangeRedline& );
     virtual ~SwRangeRedline() override;
