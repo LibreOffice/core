@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3dc14ee1_dcd832c5",
+        "filename": "i18npool/source/breakiterator/breakiteratorImpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-08-01T13:22:40Z",
+      "side": 1,
+      "message": "This still changes the DICTIONARY_WORD case.",
+      "revId": "e40d1014ef40f5a6daa8084766cc37c1fb04d26c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5964df67_b3db3cc2",
+        "filename": "i18npool/source/breakiterator/breakiteratorImpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-08-01T13:22:40Z",
+      "side": 1,
+      "message": "Ditto.",
+      "revId": "e40d1014ef40f5a6daa8084766cc37c1fb04d26c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec920aea_81567353",
+        "filename": "i18npool/source/breakiterator/breakiteratorImpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-08-01T13:22:40Z",
+      "side": 1,
+      "message": "You misunderstood or you mistyped.. the WORD_COUNT is not to be changed unless there are very good reasons, it is expected to be stable because it\u0027s used by authors to suit their contracted requirements.",
+      "revId": "e40d1014ef40f5a6daa8084766cc37c1fb04d26c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1cc537e3_a44de0c6",
+        "filename": "i18npool/source/breakiterator/breakiteratorImpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-08-01T13:22:40Z",
+      "side": 1,
+      "message": "Ditto.",
+      "revId": "e40d1014ef40f5a6daa8084766cc37c1fb04d26c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
