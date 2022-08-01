@@ -70,6 +70,24 @@
       "parentUuid": "507d461a_53e20a7e",
       "revId": "afb7a62ffaf1798f325ea1f071bccabcfefb8e60",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e4e20c5_b1f78e21",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001582
+      },
+      "writtenOn": "2022-08-01T19:21:16Z",
+      "side": 1,
+      "message": "\u003e I don\u0027t know about the exact reasons why off-screen elements are discarded here. If this isn\u0027t anything that is recommended in general (e.g. so that same elements are exposed to both, people looking at the screen and people using AT at one point in time) […]\n\nBasically \"scrolled-off\" doesn\u0027t make much sense to e.g. a blind user, and it\u0027s very hard to scroll to something that is not exposed to the screen reader, as the user might not even know it exists.  So no, usually scrolled-off content is not discarded.\n\nNodes appearing and disappearing without it meaning they actually got added/removed also makes the life of accessibility tools harder (ask e.g. Orca) -- yet OK, it\u0027s not necessarily an argument by itself, they can handle it nonetheless if needed, it\u0027s just harder and more of a tricky special case.\n\n\u003e With your suggestion implemented: Would only the slide(s) remain a direct child of the document, and those elements that are currently siblings turn into children of the slide/page instead, like this: […]\n\nYes, exactly.  I\u0027m really confused by the slide all by itself (and never seen it anywhere else), and have discussed it a bit with a 100% braille+voice user that confirm it doesn\u0027t make sense to him either.  If there\u0027s a rationale for it, it probably doesn\u0027t lie in the user side of it I\u0027d say.",
+      "parentUuid": "95a5f69b_89ea1f26",
+      "revId": "afb7a62ffaf1798f325ea1f071bccabcfefb8e60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ],
   "submitRequirementResults": []
