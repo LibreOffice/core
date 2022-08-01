@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36ba3a37_b2ef8eaa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-08-01T07:05:16Z",
+      "side": 1,
+      "message": "Nice! I think the Writer work was 3 changes, and so far you did 2 for Calc -- do you plan to do the Calc equivalent of the 3rd Writer change as well? I can dig out the commit hashes if it helps. Thanks.",
+      "revId": "640a6488a32e8f682788feb6cab01acfffca7fa7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
