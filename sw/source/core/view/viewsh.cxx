@@ -2771,6 +2771,44 @@ SwPostItMgr* SwViewShell::GetPostItMgr()
     return nullptr;
 }
 
+void SwViewShell::GetFirstLastVisPageNumbers(SwVisiblePageNumbers& rVisiblePageNumbers)
+{
+    SwView* pView = GetDoc()->GetDocShell() ? GetDoc()->GetDocShell()->GetView() : nullptr;
+    if (!pView)
+        return;
+    SwRect rViewVisArea(pView->GetVisArea());
+    vcl::RenderContext* pRenderContext = GetOut();
+    const SwPageFrame* pPageFrame = Imp()->GetFirstVisPage(pRenderContext);
+    SwRect rPageRect = pPageFrame->getFrameArea();
+    rPageRect.AddBottom(-pPageFrame->GetBottomMargin());
+    while (!rPageRect.Overlaps(rViewVisArea) && pPageFrame->GetNext())
+    {
+        pPageFrame = static_cast<const SwPageFrame*>(pPageFrame->GetNext());
+        rPageRect = pPageFrame->getFrameArea();
+        if (rPageRect.Top() > 0)
+            rPageRect.AddBottom(-pPageFrame->GetBottomMargin());
+    }
+    rVisiblePageNumbers.nFirstPhy = pPageFrame->GetPhyPageNum();
+    rVisiblePageNumbers.nFirstVirt = pPageFrame->GetVirtPageNum();
+    const SvxNumberType& rFirstVisNum = pPageFrame->GetPageDesc()->GetNumType();
+    rVisiblePageNumbers.sFirstCustomPhy = rFirstVisNum.GetNumStr(rVisiblePageNumbers.nFirstPhy);
+    rVisiblePageNumbers.sFirstCustomVirt = rFirstVisNum.GetNumStr(rVisiblePageNumbers.nFirstVirt);
+    pPageFrame = Imp()->GetLastVisPage(pRenderContext);
+    rPageRect = pPageFrame->getFrameArea();
+    rPageRect.AddTop(pPageFrame->GetTopMargin());
+    while (!rPageRect.Overlaps(rViewVisArea) && pPageFrame->GetPrev())
+    {
+        pPageFrame = static_cast<const SwPageFrame*>(pPageFrame->GetPrev());
+        rPageRect = pPageFrame->getFrameArea();
+        rPageRect.AddTop(pPageFrame->GetTopMargin());
+    }
+    rVisiblePageNumbers.nLastPhy = pPageFrame->GetPhyPageNum();
+    rVisiblePageNumbers.nLastVirt = pPageFrame->GetVirtPageNum();
+    const SvxNumberType& rLastVisNum = pPageFrame->GetPageDesc()->GetNumType();
+    rVisiblePageNumbers.sLastCustomPhy = rLastVisNum.GetNumStr(rVisiblePageNumbers.nLastPhy);
+    rVisiblePageNumbers.sLastCustomVirt = rLastVisNum.GetNumStr(rVisiblePageNumbers.nLastVirt);
+}
+
 /*
  * Document Interface Access
  */
