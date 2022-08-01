@@ -211,7 +211,7 @@ bool GotoCurrRegionAndSkip( SwPaM& rCurrentCursor, SwMoveFnCollection const & fn
 
         pPos->nContent.Assign( pCNd, bMoveBackward ? pCNd->Len() : 0 );
 
-        if( &pPos->nNode.GetNode() != &rCurrNd ||
+        if( &pPos->GetNode() != &rCurrNd ||
             pPos->nContent.GetIndex() != nCurrCnt )
             // there was a change
             return true;

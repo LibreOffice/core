@@ -286,12 +286,12 @@ bool SwAccessibleFrameBase::GetSelectedState( )
     if( !pPos )
         return false;
     int nIndex = pPos->nContent.GetIndex();
-    if( pPos->nNode.GetNode().GetTextNode() )
+    if( pPos->GetNode().GetTextNode() )
     {
         SwPaM* pCursor = GetCursor();
         if( pCursor != nullptr )
         {
-            const SwTextNode* pNode = pPos->nNode.GetNode().GetTextNode();
+            const SwTextNode* pNode = pPos->GetNode().GetTextNode();
             SwNodeOffset nHere = pNode->GetIndex();
 
             // iterate over ring

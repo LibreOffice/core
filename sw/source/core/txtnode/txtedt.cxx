@@ -667,7 +667,7 @@ static sal_Int32 clipIndexBounds(const OUString &rStr, sal_Int32 nPos)
 OUString SwTextFrame::GetCurWord(SwPosition const& rPos) const
 {
     TextFrameIndex const nPos(MapModelToViewPos(rPos));
-    SwTextNode *const pTextNode(rPos.nNode.GetNode().GetTextNode());
+    SwTextNode *const pTextNode(rPos.GetNode().GetTextNode());
     assert(pTextNode);
     OUString const& rText(GetText());
     assert(sal_Int32(nPos) <= rText.getLength()); // invalid index

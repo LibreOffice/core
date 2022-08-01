@@ -1335,10 +1335,10 @@ bool IsAnchoredObjShown(SwTextFrame const& rFrame, SwFormatAnchor const& rAnchor
             && (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA
                 || rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR))
         {
-            ret = (&pAnchor->nNode.GetNode() == pMergedPara->pFirstNode
+            ret = (&pAnchor->GetNode() == pMergedPara->pFirstNode
                     && (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA
                         || pAnchor->nContent == 0))
-                || (&pAnchor->nNode.GetNode() == pMergedPara->pLastNode
+                || (&pAnchor->GetNode() == pMergedPara->pLastNode
                     && (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA
                         || pAnchor->nContent == pMergedPara->pLastNode->Len()));
         }
@@ -1350,7 +1350,7 @@ bool IsAnchoredObjShown(SwTextFrame const& rFrame, SwFormatAnchor const& rAnchor
                 || iter->pNode != pNode)
             {
                 assert(pNode->GetRedlineMergeFlag() != SwNode::Merge::Hidden);
-                if (pNode == &pAnchor->nNode.GetNode())
+                if (pNode == &pAnchor->GetNode())
                 {
                     ret = IsShown(pNode->GetIndex(), rAnchor, &iterFirst, &iter,
                             pMergedPara->pFirstNode, pMergedPara->pLastNode);
@@ -1651,7 +1651,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                 // be created in UI but by import filters...
                 if (pRedline
                     && pRedline->GetType() == RedlineType::Delete
-                    && &pRedline->Start()->nNode.GetNode() == pNd)
+                    && &pRedline->Start()->GetNode() == pNd)
                 {
                     SAL_WARN("sw.pageframe", "skipping table frame creation on bizarre redline");
                     while (true)

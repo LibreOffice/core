@@ -194,13 +194,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineMoveInsertInDelete)
 
     // hiding used to copy the 2nd delete redline "foo", but not delete it
     pWrtShell->SetRedlineFlags(mode & ~RedlineFlags::ShowDelete); // hide
-    CPPUNIT_ASSERT_EQUAL(
-        OUString(" "),
-        pWrtShell->GetCursor()->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString(" "),
+                         pWrtShell->GetCursor()->GetPoint()->GetNode().GetTextNode()->GetText());
     pWrtShell->SetRedlineFlags(mode); // show again
-    CPPUNIT_ASSERT_EQUAL(
-        OUString(u"\u0001 foo"),
-        pWrtShell->GetCursor()->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\u0001 foo"),
+                         pWrtShell->GetCursor()->GetPoint()->GetNode().GetTextNode()->GetText());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineInHiddenSection)
@@ -1770,7 +1768,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf147414)
                          pWrtShell->getShellCursor(false)->GetPoint()->nContent.GetIndex());
     CPPUNIT_ASSERT_EQUAL(
         OUString("Ab c"),
-        pWrtShell->getShellCursor(false)->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+        pWrtShell->getShellCursor(false)->GetPoint()->GetNode().GetTextNode()->GetText());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf147310)

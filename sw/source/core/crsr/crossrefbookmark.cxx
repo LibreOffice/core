@@ -51,7 +51,7 @@ namespace sw::mark
 
     void CrossRefBookmark::SetMarkPos(const SwPosition& rNewPos)
     {
-        assert(rNewPos.nNode.GetNode().GetTextNode() &&
+        assert(rNewPos.GetNode().GetTextNode() &&
             "<sw::mark::CrossRefBookmark::SetMarkPos(..)>"
             " - new bookmark position for cross-reference bookmark doesn't mark text node");
         assert(rNewPos.nContent.GetIndex() == 0 &&

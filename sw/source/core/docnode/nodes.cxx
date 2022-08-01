@@ -1445,7 +1445,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
     SwNodeIndex aEndIdx( pEnd->nNode );
     SwNodeIndex aSttIdx( pStt->nNode );
     SwTextNode *const pSrcNd = aSttIdx.GetNode().GetTextNode();
-    SwTextNode * pDestNd = rPos.nNode.GetNode().GetTextNode();
+    SwTextNode * pDestNd = rPos.GetNode().GetTextNode();
     bool bSplitDestNd = true;
     bool bCopyCollFormat = pDestNd && pDestNd->GetText().isEmpty();
 
@@ -1461,7 +1461,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
             bCopyCollFormat = true;
         }
         bSplitDestNd = pDestNd->Len() > rPos.nContent.GetIndex() ||
-                        pEnd->nNode.GetNode().IsTextNode();
+                        pEnd->GetNode().IsTextNode();
 
         // move the content into the new node
         bool bOneNd = pStt->nNode == pEnd->nNode;
@@ -1469,7 +1469,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
                 ( bOneNd ? std::min(pEnd->nContent.GetIndex(), pSrcNd->Len()) : pSrcNd->Len() )
                 - pStt->nContent.GetIndex();
 
-        if( !pEnd->nNode.GetNode().IsContentNode() )
+        if( !pEnd->GetNode().IsContentNode() )
         {
             bOneNd = true;
             SwNodeOffset nSttNdIdx = pStt->nNode.GetIndex() + 1;
@@ -1594,7 +1594,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
         }
         else
         {
-            pDestNd = rPos.nNode.GetNode().GetTextNode();
+            pDestNd = rPos.GetNode().GetTextNode();
         }
 
         if (pDestNd && pEnd->nContent.GetIndex())
@@ -1621,7 +1621,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
         if( !bSplitDestNd )
         {
             ++rPos.nNode;
-            rPos.nContent.Assign( rPos.nNode.GetNode().GetContentNode(), 0 );
+            rPos.nContent.Assign( rPos.GetNode().GetContentNode(), 0 );
         }
     }
 
@@ -1641,12 +1641,12 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
 
     // if the StartNode was moved to whom the cursor pointed, so
     // the content must be registered in the current content!
-    if ( &pStt->nNode.GetNode() == &GetEndOfContent() )
+    if ( &pStt->GetNode() == &GetEndOfContent() )
     {
         const bool bSuccess = GoPrevious( &pStt->nNode );
         OSL_ENSURE( bSuccess, "Move() - no ContentNode here" );
     }
-    pStt->nContent.Assign( pStt->nNode.GetNode().GetContentNode(),
+    pStt->nContent.Assign( pStt->GetNode().GetContentNode(),
                             pStt->nContent.GetIndex() );
     // Correct the PaM, because it might have happened that the move
     // went over the node borders (so the data might be in different nodes).

@@ -119,7 +119,7 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrame)
         aNewPos.nNode = m_nNodePagePos;
         if ((RndStdIds::FLY_AS_CHAR == m_nRndId) || (RndStdIds::FLY_AT_CHAR == m_nRndId))
         {
-            aNewPos.nContent.Assign( aNewPos.nNode.GetNode().GetContentNode(),
+            aNewPos.nContent.Assign( aNewPos.GetNode().GetContentNode(),
                                     m_nContentPos );
         }
         aAnchor.SetAnchor( &aNewPos );
@@ -141,7 +141,7 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrame)
     if (RndStdIds::FLY_AS_CHAR == m_nRndId)
     {
         // there must be at least the attribute in a TextNode
-        SwContentNode* pCNd = aAnchor.GetContentAnchor()->nNode.GetNode().GetContentNode();
+        SwContentNode* pCNd = aAnchor.GetContentAnchor()->GetNode().GetContentNode();
         OSL_ENSURE( pCNd->IsTextNode(), "no Text Node at position." );
         SwFormatFlyCnt aFormat( m_pFrameFormat );
         pCNd->GetTextNode()->InsertItem(aFormat, m_nContentPos, m_nContentPos, SetAttrMode::NOHINTEXPAND);
@@ -245,7 +245,7 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
     {
         m_nNodePagePos = pPos->nNode.GetIndex();
         m_nContentPos = pPos->nContent.GetIndex();
-        SwTextNode *const pTextNd = pPos->nNode.GetNode().GetTextNode();
+        SwTextNode *const pTextNd = pPos->GetNode().GetTextNode();
         OSL_ENSURE( pTextNd, "No Textnode found" );
         SwTextFlyCnt* const pAttr = static_cast<SwTextFlyCnt*>(
             pTextNd->GetTextAttrForCharAt( m_nContentPos, RES_TXTATR_FLYCNT ) );
@@ -596,7 +596,7 @@ void SwUndoSetFlyFormat::UndoImpl(::sw::UndoRedoContext & rContext)
             // also the format. To prevent that, first detach the
             // connection between attribute and format.
             const SwPosition *pPos = rOldAnch.GetContentAnchor();
-            SwTextNode *pTextNode = pPos->nNode.GetNode().GetTextNode();
+            SwTextNode *pTextNode = pPos->GetNode().GetTextNode();
             OSL_ENSURE( pTextNode->HasHints(), "Missing FlyInCnt-Hint." );
             const sal_Int32 nIdx = pPos->nContent.GetIndex();
             SwTextAttr * pHint = pTextNode->GetTextAttrForCharAt(
@@ -622,7 +622,7 @@ void SwUndoSetFlyFormat::UndoImpl(::sw::UndoRedoContext & rContext)
         {
             const SwPosition* pPos = aNewAnchor.GetContentAnchor();
             SwFormatFlyCnt aFormat( m_pFrameFormat );
-            pPos->nNode.GetNode().GetTextNode()->InsertItem( aFormat,
+            pPos->GetNode().GetTextNode()->InsertItem( aFormat,
                 m_nOldContent, 0 );
         }
 

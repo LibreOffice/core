@@ -194,10 +194,10 @@ void SwFEShell::InsertRow( sal_uInt16 nCnt, bool bBehind )
     {
         // Set the end of the selection to the last paragraph of the last cell of the table.
         SwPaM* pPaM = getShellCursor(false);
-        SwNode* pNode = pPaM->Start()->nNode.GetNode().FindTableNode()->EndOfSectionNode();
+        SwNode* pNode = pPaM->Start()->GetNode().FindTableNode()->EndOfSectionNode();
         // pNode is the end node of the table, we want the last node before the end node of the last cell.
         pPaM->End()->nNode = pNode->GetIndex() - 2;
-        pPaM->End()->nContent.Assign(pPaM->End()->nNode.GetNode().GetContentNode(), 0);
+        pPaM->End()->nContent.Assign(pPaM->End()->GetNode().GetContentNode(), 0);
     }
     GetTableSel( *this, aBoxes, SwTableSearchType::Row );
 
@@ -1095,7 +1095,7 @@ static sal_uInt16 lcl_GetRowNumber( const SwPosition& rPos )
     const SwContentFrame *pFrame;
 
     std::pair<Point, bool> const tmp(aTmpPt, false);
-    pNd = rPos.nNode.GetNode().GetContentNode();
+    pNd = rPos.GetNode().GetContentNode();
     if( nullptr != pNd )
         pFrame = pNd->getLayoutFrame(pNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(), &rPos, &tmp);
     else
@@ -1921,8 +1921,8 @@ bool SwFEShell::SelTableRowCol( const Point& rPt, const Point* pEnd, bool bRowDr
 
             if ( ppPos[1] )
             {
-                if ( ppPos[1]->nNode.GetNode().StartOfSectionNode() !=
-                     aOldPos.nNode.GetNode().StartOfSectionNode() )
+                if ( ppPos[1]->GetNode().StartOfSectionNode() !=
+                     aOldPos.GetNode().StartOfSectionNode() )
                 {
                     pCursor->SetMark();
                     SwCursorSaveState aSaveState2( *pCursor );

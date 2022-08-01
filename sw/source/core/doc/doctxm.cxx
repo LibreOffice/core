@@ -118,7 +118,7 @@ sal_uInt16 SwDoc::GetCurTOXMark( const SwPosition& rPos,
                                 SwTOXMarks& rArr )
 {
     // search on Position rPos for all SwTOXMarks
-    SwTextNode *const pTextNd = rPos.nNode.GetNode().GetTextNode();
+    SwTextNode *const pTextNd = rPos.GetNode().GetTextNode();
     if( !pTextNd || !pTextNd->GetpSwpHints() )
         return 0;
 
@@ -447,7 +447,7 @@ void SwDoc::InsertTableOf( SwNodeOffset nSttNd, SwNodeOffset nEndNd,
 /// Get current table of contents
 SwTOXBase* SwDoc::GetCurTOX( const SwPosition& rPos )
 {
-    SwNode& rNd = rPos.nNode.GetNode();
+    SwNode& rNd = rPos.GetNode();
     SwSectionNode* pSectNd = rNd.FindSectionNode();
     while( pSectNd )
     {

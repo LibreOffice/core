@@ -349,14 +349,14 @@ void SwTextFrame::MakePos()
     for (SwRedlineTable::size_type nRedlnPos = 0; nRedlnPos < rTable.size(); ++nRedlnPos)
     {
         SwRangeRedline* pRedln = rTable[nRedlnPos];
-        if (pTextNode->GetIndex() == pRedln->GetPoint()->nNode.GetNode().GetIndex())
+        if (pTextNode->GetIndex() == pRedln->GetPoint()->GetNode().GetIndex())
         {
             pRedln->MaybeNotifyRedlinePositionModification(getFrameArea().Top());
             if (GetMergedPara()
                 && pRedln->GetType() == RedlineType::Delete
                 && pRedln->GetPoint()->nNode != pRedln->GetMark()->nNode)
             {
-                pTextNode = pRedln->End()->nNode.GetNode().GetTextNode();
+                pTextNode = pRedln->End()->GetNode().GetTextNode();
             }
         }
     }

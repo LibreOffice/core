@@ -131,7 +131,7 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos(
     const sw::mark::IMark* pAnnotationMark )
 {
     SwLayoutStatus aRet = INVISIBLE;
-    SwTextNode* pTextNode = rAnchorPos.nNode.GetNode().GetTextNode();
+    SwTextNode* pTextNode = rAnchorPos.GetNode().GetTextNode();
     if ( pTextNode == nullptr )
         return aRet;
 

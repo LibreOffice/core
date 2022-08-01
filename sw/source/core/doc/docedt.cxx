@@ -67,8 +67,8 @@ void RestFlyInRange( SaveFlyArr & rArr, const SwPosition& rStartPos,
                 if (aAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA)
                 {
                     aPos.nNode = *pInsertPos;
-                    assert(aPos.nNode.GetNode().GetContentNode());
-                    aPos.nContent.Assign(aPos.nNode.GetNode().GetContentNode(),
+                    assert(aPos.GetNode().GetContentNode());
+                    aPos.nContent.Assign(aPos.GetNode().GetContentNode(),
                         rSave.nContentIndex);
                 }
                 else
@@ -80,15 +80,15 @@ void RestFlyInRange( SaveFlyArr & rArr, const SwPosition& rStartPos,
             else
             {
                 aPos.nNode = rStartPos.nNode;
-                assert(aPos.nNode.GetNode().GetContentNode());
-                aPos.nContent.Assign(aPos.nNode.GetNode().GetContentNode(), 0);
+                assert(aPos.GetNode().GetContentNode());
+                aPos.nContent.Assign(aPos.GetNode().GetContentNode(), 0);
             }
         }
         else
         {
             aPos.nNode = rStartPos.nNode.GetIndex() + rSave.nNdDiff;
-            assert(aPos.nNode.GetNode().GetContentNode());
-            aPos.nContent.Assign(aPos.nNode.GetNode().GetContentNode(),
+            assert(aPos.GetNode().GetContentNode());
+            aPos.nContent.Assign(aPos.GetNode().GetContentNode(),
                 rSave.nNdDiff == SwNodeOffset(0)
                     ? rStartPos.nContent.GetIndex() + rSave.nContentIndex
                     : rSave.nContentIndex);
@@ -98,11 +98,11 @@ void RestFlyInRange( SaveFlyArr & rArr, const SwPosition& rStartPos,
         pFormat->GetDoc()->GetSpzFrameFormats()->push_back( pFormat );
         // SetFormatAttr should call Modify() and add it to the node
         pFormat->SetFormatAttr( aAnchor );
-        SwContentNode* pCNd = aPos.nNode.GetNode().GetContentNode();
+        SwContentNode* pCNd = aPos.GetNode().GetContentNode();
         if (pCNd && pCNd->getLayoutFrame(pFormat->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, nullptr))
             pFormat->MakeFrames();
     }
-    sw::CheckAnchoredFlyConsistency(rStartPos.nNode.GetNode().GetDoc());
+    sw::CheckAnchoredFlyConsistency(rStartPos.GetNode().GetDoc());
 }
 
 void SaveFlyInRange( const SwNodeRange& rRg, SaveFlyArr& rArr )
@@ -138,7 +138,7 @@ void SaveFlyInRange( const SwNodeRange& rRg, SaveFlyArr& rArr )
 void SaveFlyInRange( const SwPaM& rPam, const SwPosition& rInsPos,
         SaveFlyArr& rArr, bool bMoveAllFlys, SwHistory *const pHistory)
 {
-    SwFrameFormats& rFormats = *rPam.GetPoint()->nNode.GetNode().GetDoc().GetSpzFrameFormats();
+    SwFrameFormats& rFormats = *rPam.GetPoint()->GetNode().GetDoc().GetSpzFrameFormats();
     SwFrameFormat* pFormat;
     const SwFormatAnchor* pAnchor;
 
@@ -148,10 +148,10 @@ void SaveFlyInRange( const SwPaM& rPam, const SwPosition& rInsPos,
     SwPosition atParaEnd(*rPam.End());
     if (bMoveAllFlys)
     {
-        assert(!rPam.End()->nNode.GetNode().IsTextNode() // can be table end-node
-            || rPam.End()->nContent.GetIndex() == rPam.End()->nNode.GetNode().GetTextNode()->Len());
+        assert(!rPam.End()->GetNode().IsTextNode() // can be table end-node
+            || rPam.End()->nContent.GetIndex() == rPam.End()->GetNode().GetTextNode()->Len());
         ++atParaEnd.nNode;
-        atParaEnd.nContent.Assign(atParaEnd.nNode.GetNode().GetContentNode(), 0);
+        atParaEnd.nContent.Assign(atParaEnd.GetNode().GetContentNode(), 0);
     }
 
     for( SwFrameFormats::size_type n = 0; n < rFormats.size(); ++n )
@@ -203,7 +203,7 @@ void SaveFlyInRange( const SwPaM& rPam, const SwPosition& rInsPos,
             }
         }
     }
-    sw::CheckAnchoredFlyConsistency(rPam.GetPoint()->nNode.GetNode().GetDoc());
+    sw::CheckAnchoredFlyConsistency(rPam.GetPoint()->GetNode().GetDoc());
 }
 
 /// Delete and move all Flys at the paragraph, that are within the selection.
@@ -335,11 +335,11 @@ void sw_GetJoinFlags( SwPaM& rPam, bool& rJoinText, bool& rJoinPrev )
         return;
 
     auto [pStt, pEnd] = rPam.StartEnd(); // SwPosition*
-    SwTextNode *pSttNd = pStt->nNode.GetNode().GetTextNode();
+    SwTextNode *pSttNd = pStt->GetNode().GetTextNode();
     if( !pSttNd )
         return;
 
-    SwTextNode *pEndNd = pEnd->nNode.GetNode().GetTextNode();
+    SwTextNode *pEndNd = pEnd->GetNode().GetTextNode();
     rJoinText = nullptr != pEndNd;
     if( !rJoinText )
         return;
@@ -529,13 +529,13 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
     std::unique_ptr<SwSpellArgs> pSpellArgs;
     if (pConvArgs)
     {
-        pConvArgs->SetStart(pSttPos->nNode.GetNode().GetTextNode(), pSttPos->nContent);
-        pConvArgs->SetEnd(  pEndPos->nNode.GetNode().GetTextNode(), pEndPos->nContent );
+        pConvArgs->SetStart(pSttPos->GetNode().GetTextNode(), pSttPos->nContent);
+        pConvArgs->SetEnd(  pEndPos->GetNode().GetTextNode(), pEndPos->nContent );
     }
     else
         pSpellArgs.reset(new SwSpellArgs( xSpeller,
-                            pSttPos->nNode.GetNode().GetTextNode(), pSttPos->nContent,
-                            pEndPos->nNode.GetNode().GetTextNode(), pEndPos->nContent,
+                            pSttPos->GetNode().GetTextNode(), pSttPos->nContent,
+                            pEndPos->GetNode().GetTextNode(), pEndPos->nContent,
                             bGrammarCheck ));
 
     SwNodeOffset nCurrNd = pSttPos->nNode.GetIndex();
@@ -740,12 +740,12 @@ SwHyphArgs::SwHyphArgs( const SwPaM *pPam, const Point &rCursorPos,
     m_nNode = pPoint->nNode.GetIndex();
 
     // Set start
-    m_pStart = pPoint->nNode.GetNode().GetTextNode();
+    m_pStart = pPoint->GetNode().GetTextNode();
     m_nPamStart = pPoint->nContent.GetIndex();
 
     // Set End and Length
     const SwPosition *pMark = pPam->GetMark();
-    m_pEnd = pMark->nNode.GetNode().GetTextNode();
+    m_pEnd = pMark->GetNode().GetTextNode();
     m_nPamLen = pMark->nContent.GetIndex();
     if( pPoint->nNode == pMark->nNode )
         m_nPamLen = m_nPamLen - pPoint->nContent.GetIndex();
@@ -852,7 +852,7 @@ void SwDoc::CountWords( const SwPaM& rPaM, SwDocStat& rStat )
     const sal_Int32 nSttCnt = pStt->nContent.GetIndex();
     const sal_Int32 nEndCnt = pEnd->nContent.GetIndex();
 
-    const SwTextNode* pTNd = pStt->nNode.GetNode().GetTextNode();
+    const SwTextNode* pTNd = pStt->GetNode().GetTextNode();
     if( pStt == pEnd && pTNd )                  // no region ?
     {
         // do nothing
@@ -873,7 +873,7 @@ void SwDoc::CountWords( const SwPaM& rPaM, SwDocStat& rStat )
             if( nullptr != ( pTNd = aIdx.GetNode().GetTextNode() ))
                 pTNd->CountWords( rStat, 0, pTNd->GetText().getLength() );
 
-        if( nEndCnt && nullptr != ( pTNd = pEnd->nNode.GetNode().GetTextNode() ))
+        if( nEndCnt && nullptr != ( pTNd = pEnd->GetNode().GetTextNode() ))
             pTNd->CountWords( rStat, 0, nEndCnt );
     }
     else if( pTNd && nSttCnt < nEndCnt )

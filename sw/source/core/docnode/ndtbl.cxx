@@ -388,7 +388,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
             0;
 
     /* Save content node to extract FRAMEDIR from. */
-    const SwContentNode * pContentNd = rPos.nNode.GetNode().GetContentNode();
+    const SwContentNode * pContentNd = rPos.GetNode().GetContentNode();
 
     /* If we are called from a shell pass the attrset from
         pContentNd (aka the node the table is inserted at) thus causing
@@ -641,7 +641,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
     }
 
     // Save first node in the selection if it is a context node
-    SwContentNode * pSttContentNd = pStt->nNode.GetNode().GetContentNode();
+    SwContentNode * pSttContentNd = pStt->GetNode().GetContentNode();
 
     SwPaM aOriginal( *pStt, *pEnd );
     pStt = aOriginal.GetMark();
@@ -671,13 +671,13 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
     // Do not split at the End of a Line (except at the End of the Doc)
     if( bEndContent )
     {
-        if( pEnd->nNode.GetNode().GetContentNode()->Len() != pEnd->nContent.GetIndex()
+        if( pEnd->GetNode().GetContentNode()->Len() != pEnd->nContent.GetIndex()
             || pEnd->nNode.GetIndex() >= GetNodes().GetEndOfContent().GetIndex()-1 )
         {
             getIDocumentContentOperations().SplitNode( *pEnd, false );
             --const_cast<SwNodeIndex&>(pEnd->nNode);
             const_cast<SwContentIndex&>(pEnd->nContent).Assign(
-                                pEnd->nNode.GetNode().GetContentNode(), 0 );
+                                pEnd->GetNode().GetContentNode(), 0 );
             // A Node and at the End?
             if( pStt->nNode.GetIndex() >= pEnd->nNode.GetIndex() )
                 --aRg.aStart;
@@ -1173,13 +1173,13 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
     // Do not split at the End of a Line (except at the End of the Doc)
     if( bEndContent )
     {
-        if( pEnd->nNode.GetNode().GetContentNode()->Len() != pEnd->nContent.GetIndex()
+        if( pEnd->GetNode().GetContentNode()->Len() != pEnd->nContent.GetIndex()
             || pEnd->nNode.GetIndex() >= GetNodes().GetEndOfContent().GetIndex()-1 )
         {
             getIDocumentContentOperations().SplitNode( *pEnd, false );
             --const_cast<SwNodeIndex&>(pEnd->nNode);
             const_cast<SwContentIndex&>(pEnd->nContent).Assign(
-                                pEnd->nNode.GetNode().GetContentNode(), 0 );
+                                pEnd->GetNode().GetContentNode(), 0 );
             // A Node and at the End?
             if( pStt->nNode.GetIndex() >= pEnd->nNode.GetIndex() )
                 --aRg.aStart;
@@ -3119,7 +3119,7 @@ void sw_BoxSetSplitBoxFormats( SwTableBox* pBox, SwCollectTableLineBoxes* pSplPa
 void SwDoc::SplitTable( const SwPosition& rPos, SplitTable_HeadlineOption eHdlnMode,
                         bool bCalcNewSize )
 {
-    SwNode* pNd = &rPos.nNode.GetNode();
+    SwNode* pNd = &rPos.GetNode();
     SwTableNode* pTNd = pNd->FindTableNode();
     if( !pTNd || pNd->IsTableNode() )
         return;
@@ -3480,7 +3480,7 @@ SwTableNode* SwNodes::SplitTable( const SwNodeIndex& rPos, bool bAfter,
  */
 bool SwDoc::MergeTable( const SwPosition& rPos, bool bWithPrev, sal_uInt16 nMode )
 {
-    SwTableNode* pTableNd = rPos.nNode.GetNode().FindTableNode(), *pDelTableNd;
+    SwTableNode* pTableNd = rPos.GetNode().FindTableNode(), *pDelTableNd;
     if( !pTableNd )
         return false;
 
@@ -4310,7 +4310,7 @@ bool SwDoc::InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
             ? pCpyTable->GetTableNode()
             : rBoxes[ 0 ]->GetSttNd()->FindTableNode();
 
-    SwTableNode * pInsTableNd = rInsPos.nNode.GetNode().FindTableNode();
+    SwTableNode * pInsTableNd = rInsPos.GetNode().FindTableNode();
 
     bool const bUndo( GetIDocumentUndoRedo().DoesUndo() );
     if( !pCpyTable && !pInsTableNd )
@@ -4372,10 +4372,10 @@ bool SwDoc::InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
                 return false;
             }
             aPos.nNode -= SwNodeOffset(1); // Set to the Table's EndNode
-            pSrcTableNd = aPos.nNode.GetNode().FindTableNode();
+            pSrcTableNd = aPos.GetNode().FindTableNode();
         }
 
-        const SwStartNode* pSttNd = rInsPos.nNode.GetNode().FindTableBoxStartNode();
+        const SwStartNode* pSttNd = rInsPos.GetNode().FindTableBoxStartNode();
 
         rInsPos.nContent.Assign( nullptr, 0 );
 
@@ -4558,7 +4558,7 @@ bool SwDoc::HasTableAnyProtection( const SwPosition* pPos,
         pTable = SwTable::FindTable( FindTableFormatByName( *pTableName ) );
     else if( pPos )
     {
-        SwTableNode* pTableNd = pPos->nNode.GetNode().FindTableNode();
+        SwTableNode* pTableNd = pPos->GetNode().FindTableNode();
         if( pTableNd )
             pTable = &pTableNd->GetTable();
     }

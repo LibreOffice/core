@@ -99,7 +99,7 @@ void SwEditShell::Insert2(const OUString &rStr, const bool bForceExpandHints )
 
                 // Set paragraph rsid if beginning of paragraph
                 SwTextNode *const pTextNode =
-                    rCurrentCursor.GetPoint()->nNode.GetNode().GetTextNode();
+                    rCurrentCursor.GetPoint()->GetNode().GetTextNode();
                 if( pTextNode && pTextNode->Len() == 1)
                     GetDoc()->UpdateParRsid( pTextNode );
             }
@@ -116,7 +116,7 @@ void SwEditShell::Insert2(const OUString &rStr, const bool bForceExpandHints )
 
     if ( ! bDoNotSetBidiLevel )
     {
-        SwNode& rNode = pTmpCursor->GetPoint()->nNode.GetNode();
+        SwNode& rNode = pTmpCursor->GetPoint()->GetNode();
         if ( rNode.IsTextNode() )
         {
             SwContentIndex& rIdx = pTmpCursor->GetPoint()->nContent;
@@ -229,7 +229,7 @@ SwGrfNode * SwEditShell::GetGrfNode_() const
     SwPaM* pCursor = GetCursor();
     if( !pCursor->HasMark() ||
         pCursor->GetPoint()->nNode == pCursor->GetMark()->nNode )
-        pGrfNode = pCursor->GetPoint()->nNode.GetNode().GetGrfNode();
+        pGrfNode = pCursor->GetPoint()->GetNode().GetGrfNode();
 
     return pGrfNode;
 }
@@ -962,7 +962,7 @@ void SwEditShell::CreateExtTextInput(LanguageType eInputLanguage)
 OUString SwEditShell::DeleteExtTextInput( bool bInsText )
 {
     const SwPosition& rPos = *GetCursor()->GetPoint();
-    SwExtTextInput* pDel = GetDoc()->GetExtTextInput( rPos.nNode.GetNode(),
+    SwExtTextInput* pDel = GetDoc()->GetExtTextInput( rPos.GetNode(),
                                       rPos.nContent.GetIndex() );
     if( !pDel )
     {
@@ -998,7 +998,7 @@ void SwEditShell::SetExtTextInputData( const CommandExtTextInputData& rData )
 {
     SwPaM* pCurrentCursor = GetCursor();
     const SwPosition& rPos = *pCurrentCursor->GetPoint();
-    SwExtTextInput* pInput = GetDoc()->GetExtTextInput( rPos.nNode.GetNode() );
+    SwExtTextInput* pInput = GetDoc()->GetExtTextInput( rPos.GetNode() );
     if( !pInput )
         return;
 

@@ -347,7 +347,7 @@ void SwEditShell::SetIndent(short nIndent, const SwPosition & rPos)
         }
         else
         {
-            const SwTextNode* pTextNode = pos.nNode.GetNode().GetTextNode();
+            const SwTextNode* pTextNode = pos.GetNode().GetTextNode();
             if ( pTextNode != nullptr
                  && pTextNode->GetActualListLevel() >= 0 )
             {
@@ -430,7 +430,7 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
                 {
                     SwNodeOffset nStt = aPos.nNode.GetIndex(), nIdx = nStt - 1;
 
-                    if (SwTextNode const*const pStt = aPos.nNode.GetNode().GetTextNode())
+                    if (SwTextNode const*const pStt = aPos.GetNode().GetTextNode())
                     {
                         std::pair<SwTextNode *, SwTextNode *> nodes(
                             sw::GetFirstAndLastNode(*GetLayout(), *pStt));
@@ -453,7 +453,7 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
                     pOrig == aCursor.GetNode().GetTextNode()->GetNumRule() )
                 {
                     SwNodeOffset nStt = aCursor.GetPoint()->nNode.GetIndex(), nIdx = nStt+1;
-                    if (SwTextNode const*const pStt = aCursor.GetPoint()->nNode.GetNode().GetTextNode())
+                    if (SwTextNode const*const pStt = aCursor.GetPoint()->GetNode().GetTextNode())
                     {
                         std::pair<SwTextNode *, SwTextNode *> nodes(
                             sw::GetFirstAndLastNode(*GetLayout(), *pStt));
@@ -554,7 +554,7 @@ bool SwEditShell::MoveOutlinePara( SwOutlineNodes::difference_type nOffset )
 bool SwEditShell::IsProtectedOutlinePara() const
 {
     bool bRet = false;
-    const SwNode& rNd = GetCursor()->Start()->nNode.GetNode();
+    const SwNode& rNd = GetCursor()->Start()->GetNode();
     if( rNd.IsTextNode() )
     {
         const SwOutlineNodes& rOutlNd = GetDoc()->GetNodes().GetOutLineNds();

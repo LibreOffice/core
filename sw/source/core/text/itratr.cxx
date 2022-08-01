@@ -460,8 +460,8 @@ static bool CanSkipOverRedline(
     size_t nStartIndex(rStartIndex);
     size_t nEndIndex(rEndIndex);
     SwPosition const*const pRLEnd(rRedline.End());
-    if (!pRLEnd->nNode.GetNode().IsTextNode() // if fully deleted...
-        || pRLEnd->nContent == pRLEnd->nNode.GetNode().GetTextNode()->Len())
+    if (!pRLEnd->GetNode().IsTextNode() // if fully deleted...
+        || pRLEnd->nContent == pRLEnd->GetNode().GetTextNode()->Len())
     {
         // shortcut: nothing follows redline
         // current state is end state
@@ -471,14 +471,14 @@ static bool CanSkipOverRedline(
     // can't compare the SwFont that's stored somewhere, it doesn't have compare
     // operator, so try to recreate the situation with some temp arrays here
     SfxPoolItem const* activeCharAttrsStart[RES_CHRATR_END - RES_CHRATR_BEGIN + 1] = { nullptr, };
-    if (&rStartNode != &pRLEnd->nNode.GetNode())
+    if (&rStartNode != &pRLEnd->GetNode())
     {   // nodes' attributes are only needed if there are different nodes
         InsertCharAttrs(activeCharAttrsStart, rStartNode.GetSwAttrSet());
     }
     if (SwpHints const*const pStartHints = rStartNode.GetpSwpHints())
     {
         // check hint ends of hints that start before and end within
-        sal_Int32 const nRedlineEnd(&rStartNode == &pRLEnd->nNode.GetNode()
+        sal_Int32 const nRedlineEnd(&rStartNode == &pRLEnd->GetNode()
                 ? pRLEnd->nContent.GetIndex()
                 : rStartNode.Len());
         for ( ; nEndIndex < pStartHints->Count(); ++nEndIndex)
@@ -544,7 +544,7 @@ static bool CanSkipOverRedline(
             pRLEnd->nContent.GetIndex() < pStartHints->GetSortedByEnd(nEndIndex)->GetAnyEnd());
     }
 
-    if (&rStartNode != &pRLEnd->nNode.GetNode())
+    if (&rStartNode != &pRLEnd->GetNode())
     {
         nStartIndex = 0;
         nEndIndex = 0;
@@ -556,17 +556,17 @@ static bool CanSkipOverRedline(
         // ... and the charfmt must be *nominally* the same
 
     SfxPoolItem const* activeCharAttrsEnd[RES_CHRATR_END - RES_CHRATR_BEGIN + 1] = { nullptr, };
-    if (&rStartNode != &pRLEnd->nNode.GetNode())
+    if (&rStartNode != &pRLEnd->GetNode())
     {   // nodes' attributes are only needed if there are different nodes
         InsertCharAttrs(activeCharAttrsEnd,
-                pRLEnd->nNode.GetNode().GetTextNode()->GetSwAttrSet());
+                pRLEnd->GetNode().GetTextNode()->GetSwAttrSet());
     }
 
-    if (SwpHints *const pEndHints = pRLEnd->nNode.GetNode().GetTextNode()->GetpSwpHints())
+    if (SwpHints *const pEndHints = pRLEnd->GetNode().GetTextNode()->GetpSwpHints())
     {
         // check hint starts of hints that start within and end after
 #ifndef NDEBUG
-        sal_Int32 const nRedlineStart(&rStartNode == &pRLEnd->nNode.GetNode()
+        sal_Int32 const nRedlineStart(&rStartNode == &pRLEnd->GetNode()
                 ? nStartRedline
                 : 0);
 #endif
@@ -632,7 +632,7 @@ static bool CanSkipOverRedline(
                 default: assert(false);
             }
         }
-        if (&rStartNode != &pRLEnd->nNode.GetNode())
+        if (&rStartNode != &pRLEnd->GetNode())
         {
             // need to iterate the nEndIndex forward too so the loop in the
             // caller can look for the right ends in the next iteration
@@ -747,14 +747,14 @@ TextFrameIndex SwAttrIter::GetNextAttr() const
             {
                 assert(m_pMergedPara);
                 assert(redline.second.first->End()->nNode.GetIndex() <= m_pMergedPara->pLastNode->GetIndex()
-                    || !redline.second.first->End()->nNode.GetNode().IsTextNode());
+                    || !redline.second.first->End()->GetNode().IsTextNode());
                 if (CanSkipOverRedline(*pTextNode, redline.first, *redline.second.first,
                         nStartIndex, nEndIndex, m_nPosition == redline.first))
                 {   // if current position is start of the redline, must skip!
                     nActRedline += redline.second.second;
-                    if (&redline.second.first->End()->nNode.GetNode() != pTextNode)
+                    if (&redline.second.first->End()->GetNode() != pTextNode)
                     {
-                        pTextNode = redline.second.first->End()->nNode.GetNode().GetTextNode();
+                        pTextNode = redline.second.first->End()->GetNode().GetTextNode();
                         nPosition = redline.second.first->End()->nContent.GetIndex();
                     }
                     else

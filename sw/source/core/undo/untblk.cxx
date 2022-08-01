@@ -75,7 +75,7 @@ SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
     m_pHistory.reset( new SwHistory );
     SwDoc& rDoc = rPam.GetDoc();
 
-    SwTextNode* pTextNd = rPam.GetPoint()->nNode.GetNode().GetTextNode();
+    SwTextNode* pTextNd = rPam.GetPoint()->GetNode().GetTextNode();
     if( pTextNd )
     {
         m_pTextFormatColl = pTextNd->GetTextColl();
@@ -265,8 +265,8 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
 
     // if Point and Mark are different text nodes so a JoinNext has to be done
     bool bJoinNext = m_nSttNode != m_nEndNode &&
-                rPam.GetMark()->nNode.GetNode().GetTextNode() &&
-                rPam.GetPoint()->nNode.GetNode().GetTextNode();
+                rPam.GetMark()->GetNode().GetTextNode() &&
+                rPam.GetPoint()->GetNode().GetTextNode();
 
     // Is there any content? (loading from template does not have content)
     if( m_nSttNode != m_nEndNode || m_nSttContent != m_nEndContent )
@@ -423,7 +423,7 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
 
     if (m_pTextFormatColl && rDoc.GetTextFormatColls()->IsAlive(m_pTextFormatColl))
     {
-        SwTextNode* pTextNd = rPam.GetMark()->nNode.GetNode().GetTextNode();
+        SwTextNode* pTextNd = rPam.GetMark()->GetNode().GetTextNode();
         if( pTextNd )
             pTextNd->ChgFormatColl( m_pTextFormatColl );
     }
@@ -432,7 +432,7 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
     if (m_pLastNodeColl && rDoc.GetTextFormatColls()->IsAlive(m_pLastNodeColl)
         && rPam.GetPoint()->nNode != rPam.GetMark()->nNode)
     {
-        SwTextNode* pTextNd = rPam.GetPoint()->nNode.GetNode().GetTextNode();
+        SwTextNode* pTextNd = rPam.GetPoint()->GetNode().GetTextNode();
         if( pTextNd )
             pTextNd->ChgFormatColl( m_pLastNodeColl );
     }

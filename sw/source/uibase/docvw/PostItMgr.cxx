@@ -107,9 +107,9 @@ namespace {
         bool aAnchorBInFooter = false;
 
         // is the anchor placed in Footnote or the Footer?
-        if( aPosAnchorA.nNode.GetNode().FindFootnoteStartNode() || aPosAnchorA.nNode.GetNode().FindFooterStartNode() )
+        if( aPosAnchorA.GetNode().FindFootnoteStartNode() || aPosAnchorA.GetNode().FindFooterStartNode() )
             aAnchorAInFooter = true;
-        if( aPosAnchorB.nNode.GetNode().FindFootnoteStartNode() || aPosAnchorB.nNode.GetNode().FindFooterStartNode() )
+        if( aPosAnchorB.GetNode().FindFootnoteStartNode() || aPosAnchorB.GetNode().FindFooterStartNode() )
             aAnchorBInFooter = true;
 
         // fdo#34800

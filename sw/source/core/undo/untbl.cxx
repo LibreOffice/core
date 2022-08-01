@@ -248,7 +248,7 @@ SwUndoInsTable::SwUndoInsTable( const SwPosition& rPos, sal_uInt16 nCl, sal_uInt
         m_pAutoFormat.reset( new SwTableAutoFormat( *pTAFormat ) );
 
     // consider redline
-    SwDoc& rDoc = rPos.nNode.GetNode().GetDoc();
+    SwDoc& rDoc = rPos.GetNode().GetDoc();
     if( rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
     {
         m_pRedlineData.reset( new SwRedlineData( RedlineType::Insert, rDoc.getIDocumentRedlineAccess().GetRedlineAuthor() ) );
@@ -719,7 +719,7 @@ SwUndoTextToTable::SwUndoTextToTable( const SwPaM& rRg,
     const SwPosition* pEnd = rRg.End();
     SwNodes& rNds = rRg.GetDoc().GetNodes();
     m_bSplitEnd = pEnd->nContent.GetIndex() && ( pEnd->nContent.GetIndex()
-                        != pEnd->nNode.GetNode().GetContentNode()->Len() ||
+                        != pEnd->GetNode().GetContentNode()->Len() ||
                 pEnd->nNode.GetIndex() >= rNds.GetEndOfContent().GetIndex()-1 );
 }
 
@@ -772,7 +772,7 @@ void SwUndoTextToTable::UndoImpl(::sw::UndoRedoContext & rContext)
     if( m_nSttContent )
     {
         pPos->nNode = nTableNd;
-        pPos->nContent.Assign(pPos->nNode.GetNode().GetContentNode(), 0);
+        pPos->nContent.Assign(pPos->GetNode().GetContentNode(), 0);
         if (aPam.Move(fnMoveBackward, GoInContent))
         {
             SwNodeIndex & rIdx = aPam.GetPoint()->nNode;
@@ -2235,7 +2235,7 @@ void SwUndoTableNumFormat::RedoImpl(::sw::UndoRedoContext & rContext)
     pPam->DeleteMark();
     pPam->GetPoint()->nNode = m_nNode;
 
-    SwNode * pNd = & pPam->GetPoint()->nNode.GetNode();
+    SwNode * pNd = & pPam->GetPoint()->GetNode();
     SwStartNode* pSttNd = pNd->FindSttNodeByType( SwTableBoxStartNode );
     assert(pSttNd && "without StartNode no TableBox");
     SwTableBox* pBox = pSttNd->FindTableNode()->GetTable().GetTableBox(
@@ -2691,11 +2691,11 @@ std::unique_ptr<SwUndo> SwUndoTableCpyTable::PrepareRedline( SwDoc* pDoc, const 
         // If the content is not merged, the end of the insertion is at the end of the node
         // _before_ the given position rPos
         --aInsertEnd.nNode;
-        pText = aInsertEnd.nNode.GetNode().GetTextNode();
+        pText = aInsertEnd.GetNode().GetTextNode();
         if( pText )
         {
             aInsertEnd.nContent.Assign(pText, pText->GetText().getLength());
-            if( !bRedo && rPos.nNode.GetNode().GetTextNode() )
+            if( !bRedo && rPos.GetNode().GetTextNode() )
             {   // Try to merge, if not called by Redo()
                 rJoin = true;
 
@@ -2713,12 +2713,12 @@ std::unique_ptr<SwUndo> SwUndoTableCpyTable::PrepareRedline( SwDoc* pDoc, const 
     SwPosition aDeleteStart( rJoin ? aInsertEnd : rPos );
     if( !rJoin )
     {
-        pText = aDeleteStart.nNode.GetNode().GetTextNode();
+        pText = aDeleteStart.GetNode().GetTextNode();
         if( pText )
             aDeleteStart.nContent.Assign( pText, 0 );
     }
     SwPosition aCellEnd( *rBox.GetSttNd()->EndOfSectionNode(), SwNodeOffset(-1) );
-    pText = aCellEnd.nNode.GetNode().GetTextNode();
+    pText = aCellEnd.GetNode().GetTextNode();
     if( pText )
         aCellEnd.nContent.Assign(pText, pText->GetText().getLength());
     if( aDeleteStart != aCellEnd )
@@ -2734,7 +2734,7 @@ std::unique_ptr<SwUndo> SwUndoTableCpyTable::PrepareRedline( SwDoc* pDoc, const 
         pUndo = std::make_unique<SwUndoDelete>(aTmpPam, SwDeleteFlags::Default, true);
     }
     SwPosition aCellStart( *rBox.GetSttNd(), SwNodeOffset(2) );
-    pText = aCellStart.nNode.GetNode().GetTextNode();
+    pText = aCellStart.GetNode().GetTextNode();
     if( pText )
         aCellStart.nContent.Assign( pText, 0 );
     if( aCellStart != aInsertEnd ) // An empty insertion will not been marked

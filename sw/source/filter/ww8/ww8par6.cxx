@@ -875,7 +875,7 @@ void wwSectionManager::CreateSep(const tools::Long nTextPos)
         bool insert = true;
         SwPaM pam( *mrReader.m_pLastAnchorPos );
         if( pam.Move(fnMoveBackward, GoInNode))
-            if( SwTextNode* txtNode = pam.GetPoint()->nNode.GetNode().GetTextNode())
+            if( SwTextNode* txtNode = pam.GetPoint()->GetNode().GetTextNode())
                 if( txtNode->Len() == 0 )
                     insert = false;
         if( insert )
@@ -2824,13 +2824,13 @@ void SwWW8ImplReader::NewAttr( const SfxPoolItem& rAttr,
         // #i103711#
         if ( bFirstLineOfStSet )
         {
-            const SwNode* pNd = &(m_pPaM->GetPoint()->nNode.GetNode());
+            const SwNode* pNd = &(m_pPaM->GetPoint()->GetNode());
             m_aTextNodesHavingFirstLineOfstSet.insert( pNd );
         }
         // #i105414#
         if ( bLeftIndentSet )
         {
-            const SwNode* pNd = &(m_pPaM->GetPoint()->nNode.GetNode());
+            const SwNode* pNd = &(m_pPaM->GetPoint()->GetNode());
             m_aTextNodesHavingLeftIndentSet.insert( pNd );
         }
     }

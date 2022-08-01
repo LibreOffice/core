@@ -251,10 +251,10 @@ SwUndoDelete::SwUndoDelete(
     SwTextNode *pSttTextNd = nullptr, *pEndTextNd = nullptr;
     if( !bFullPara )
     {
-        pSttTextNd = pStt->nNode.GetNode().GetTextNode();
+        pSttTextNd = pStt->GetNode().GetTextNode();
         pEndTextNd = m_nSttNode == m_nEndNode
                     ? pSttTextNd
-                    : pEnd->nNode.GetNode().GetTextNode();
+                    : pEnd->GetNode().GetTextNode();
     }
     else if (m_pRedlSaveData)
     {
@@ -553,7 +553,7 @@ bool SwUndoDelete::CanGrouping( SwDoc& rDoc, const SwPaM& rDelPam )
         return false;
 
     // are both Nodes (Node/Undo array) TextNodes at all?
-    SwTextNode * pDelTextNd = pStt->nNode.GetNode().GetTextNode();
+    SwTextNode * pDelTextNd = pStt->GetNode().GetTextNode();
     if( !pDelTextNd ) return false;
 
     sal_Int32 nUChrPos = m_bBackSp ? 0 : m_aSttStr->getLength()-1;
@@ -889,7 +889,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         {
             // discard attributes since they all saved!
             SwTextNode * pTextNd;
-            if (!m_bDelFullPara && aPos.nNode.GetNode().IsSectionNode())
+            if (!m_bDelFullPara && aPos.GetNode().IsSectionNode())
             {   // tdf#134250 section node wasn't deleted; but aPos must point to it in bNodeMove case below
                 assert(m_nSttContent == 0);
                 assert(!m_aSttStr);
@@ -897,7 +897,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
             }
             else
             {
-                pTextNd = aPos.nNode.GetNode().GetTextNode();
+                pTextNd = aPos.GetNode().GetTextNode();
             }
 
             if( pTextNd && pTextNd->HasSwAttrSet() )
@@ -916,7 +916,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                 // => selection backwards needs a correction.
                 if( m_bBackSp )
                     lcl_ReAnchorAtContentFlyFrames(*rDoc.GetSpzFrameFormats(), aPos, nOldIdx);
-                pTextNd = aPos.nNode.GetNode().GetTextNode();
+                pTextNd = aPos.GetNode().GetTextNode();
             }
             assert(pTextNd); // else where does m_aEndStr come from?
             if( pTextNd )
@@ -931,7 +931,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         }
         else if (m_aSttStr && bNodeMove && pInsNd == nullptr)
         {
-            SwTextNode * pNd = aPos.nNode.GetNode().GetTextNode();
+            SwTextNode * pNd = aPos.GetNode().GetTextNode();
             if( pNd )
             {
                 if (m_nSttContent < pNd->GetText().getLength())
@@ -952,7 +952,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
             if( m_bJoinNext )
             {
                 nMoveIndex += m_nSectDiff + 1;
-                pMovedNode = &aPos.nNode.GetNode();
+                pMovedNode = &aPos.GetNode();
             }
             else
             {
@@ -963,7 +963,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
             SwNodeRange aRg( aPos.nNode, SwNodeOffset(0) - nDiff, aPos.nNode, SwNodeOffset(1) - nDiff );
             --aPos.nNode;
             if( !m_bJoinNext )
-                pMovedNode = &aPos.nNode.GetNode();
+                pMovedNode = &aPos.GetNode();
             rDoc.GetNodes().MoveNodes(aRg, rDoc.GetNodes(), aMvIdx);
             ++aPos.nNode;
         }
@@ -993,7 +993,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                 }
                 SwNodeIndex aMvIdx(rDoc.GetNodes(), nMoveIndex);
                 SwNodeRange aRg( aPos.nNode, SwNodeOffset(0), aPos.nNode, SwNodeOffset(1) );
-                pMovedNode = &aPos.nNode.GetNode();
+                pMovedNode = &aPos.GetNode();
                 // tdf#131684 without deleting frames
                 rDoc.GetNodes().MoveNodes(aRg, rDoc.GetNodes(), aMvIdx, false);
                 rDoc.GetNodes().Delete( aMvIdx);
@@ -1003,7 +1003,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         if( m_aSttStr )
         {
             aPos.nNode = m_nSttNode - m_nNdDiff + ( m_bJoinNext ? SwNodeOffset(0) : m_nReplaceDummy );
-            SwTextNode * pTextNd = aPos.nNode.GetNode().GetTextNode();
+            SwTextNode * pTextNd = aPos.GetNode().GetTextNode();
             // If more than a single Node got deleted, also all "Node"
             // attributes were saved
             if (pTextNd != nullptr)

@@ -179,7 +179,7 @@ static bool lcl_FindAnchorPos(
             aTmpPnt.setX(aTmpPnt.getX() - 1);                   // do not land in the fly!
             rDoc.getIDocumentLayoutAccess().GetCurrentLayout()->GetModelPositionForViewPoint( &aPos, aTmpPnt, &aState );
             pNewAnch = ::FindAnchor(
-                aPos.nNode.GetNode().GetContentNode()->getLayoutFrame(rFrame.getRootFrame(), nullptr, nullptr),
+                aPos.GetNode().GetContentNode()->getLayoutFrame(rFrame.getRootFrame(), nullptr, nullptr),
                 aTmpPnt )->FindFlyFrame();
 
             if( pNewAnch && &rFrame != pNewAnch && !pNewAnch->IsProtected() )
@@ -359,7 +359,7 @@ const SwFrameFormat* SwFEShell::IsFlyInFly()
         aPoint.setX(aPoint.getX() - 1);                    //do not land in the fly!!
         GetLayout()->GetModelPositionForViewPoint( &aPos, aPoint, &aState );
         // determine text frame by left-top-corner of object
-        SwContentNode *pNd = aPos.nNode.GetNode().GetContentNode();
+        SwContentNode *pNd = aPos.GetNode().GetContentNode();
         std::pair<Point, bool> const tmp(aTmpPos, false);
         pTextFrame = pNd ? pNd->getLayoutFrame(GetLayout(), nullptr, &tmp) : nullptr;
     }
@@ -502,7 +502,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
         if (aPos.nNode != GetDoc()->GetNodes().GetEndOfExtras().GetIndex()
             && (nAnchorId != RndStdIds::FLY_AT_CHAR || !PosInsideInputField(aPos)))
         {
-            SwContentNode* pCNode = aPos.nNode.GetNode().GetContentNode();
+            SwContentNode* pCNode = aPos.GetNode().GetContentNode();
             assert(pCNode);
             pTextFrame = pCNode->getLayoutFrame(GetLayout(), &aPos, nullptr);
         }
@@ -711,7 +711,7 @@ const SwFrameFormat *SwFEShell::NewFlyFrame( const SfxItemSet& rSet, bool bAnchV
             {
                 rAnch.SetAnchor( &rPos );
             }
-            else if( lcl_SetNewFlyPos( rPos.nNode.GetNode(), rAnch, aPt ) )
+            else if( lcl_SetNewFlyPos( rPos.GetNode(), rAnch, aPt ) )
             {
                 eRndId = RndStdIds::FLY_AT_PAGE;
             }
@@ -907,8 +907,8 @@ void SwFEShell::Insert( const OUString& rGrfName, const OUString& rFltName,
         if ( IsRedlineOn() )
         {
             SwPosition aPos(*pFormat->GetAnchor().GetContentAnchor());
-            SwPaM aPaM(aPos.nNode.GetNode(), aPos.nContent.GetIndex(),
-                    aPos.nNode.GetNode(), aPos.nContent.GetIndex() + 1);
+            SwPaM aPaM(aPos.GetNode(), aPos.nContent.GetIndex(),
+                    aPos.GetNode(), aPos.nContent.GetIndex() + 1);
             GetDoc()->getIDocumentRedlineAccess().AppendRedline(
                     new SwRangeRedline( RedlineType::Insert, aPaM ), true);
         }
@@ -1656,7 +1656,7 @@ const SwFrameFormat* SwFEShell::GetFormatFromAnyObj( const Point& rPt ) const
         SwPosition aPos( *GetCursor()->GetPoint() );
         Point aPt( rPt );
         GetLayout()->GetModelPositionForViewPoint( &aPos, aPt );
-        SwContentNode *pNd = aPos.nNode.GetNode().GetContentNode();
+        SwContentNode *pNd = aPos.GetNode().GetContentNode();
         std::pair<Point, bool> const tmp(rPt, false);
         SwFrame* pFrame = pNd->getLayoutFrame(GetLayout(), nullptr, &tmp)->FindFlyFrame();
         pRet = pFrame ? static_cast<SwLayoutFrame*>(pFrame)->GetFormat() : nullptr;
