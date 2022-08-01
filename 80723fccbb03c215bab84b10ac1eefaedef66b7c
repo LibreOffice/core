@@ -70,6 +70,24 @@
       "parentUuid": "59d6673c_ef7b2233",
       "revId": "80723fccbb03c215bab84b10ac1eefaedef66b7c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92297842_0694b8f7",
+        "filename": "filter/qa/pdf.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-08-01T09:49:01Z",
+      "side": 1,
+      "message": "Thanks for checking. If you\u0027re interested in fixing this, could you please set it to some value that is part of test.p7b? Hopefully there is a subset that is common in the nss and Win32 API cases. As you can see from the test, the intention is to just sign the PDF, the name of the cert is not interesting.",
+      "parentUuid": "647fc6a5_614e344a",
+      "revId": "80723fccbb03c215bab84b10ac1eefaedef66b7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
