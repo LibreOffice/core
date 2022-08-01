@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c594829b_8c057416",
+        "filename": "vcl/source/filter/idxf/dxftblrd.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-08-01T07:29:42Z",
+      "side": 1,
+      "message": "Nitpicking: can you remove the two extra blank lines at this position, so only one blank line remains?",
+      "revId": "ba0479a62f7ed0bfc4f38777de270438fad92e9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
