@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8e39fc2_1f828e0c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-08-01T11:22:15Z",
+      "side": 1,
+      "message": "Wish we could have had a discussion first. It\u0027s your ticket on BZ, your patch to master, and now it should go into 7.4? Let\u0027s a least see how people accept master, meaning -1 to 7.4 from my side. But since I had no time to check the patch I remain silent.",
+      "revId": "ac5190bcd7d60775bbda12f9714602a807350c42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
