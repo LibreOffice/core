@@ -33,6 +33,24 @@
       "message": "Also, Heiko, the original tickets dates back from 2018, and Caolán patched it, don\u0027t try to frame it as if I am forcing this unilaterally",
       "revId": "ac5190bcd7d60775bbda12f9714602a807350c42",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73af989f_b58de174",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-08-01T12:09:51Z",
+      "side": 1,
+      "message": "You mean tdf#119827. Sure, and it\u0027s not that I\u0027m against 90% size for secondary labels. But it\u0027s a large scale change and my advice is to first have users taking a look. Thanks for following my suggestion.",
+      "parentUuid": "a64ce22c_95a41f51",
+      "revId": "ac5190bcd7d60775bbda12f9714602a807350c42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ],
   "submitRequirementResults": []
