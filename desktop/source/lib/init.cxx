@@ -62,6 +62,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/threadpool.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
 #include <com/sun/star/document/MacroExecMode.hpp>
@@ -978,6 +979,7 @@ static void doc_paintTileToCGContext(LibreOfficeKitDocument* pThis,
 static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
                               unsigned char* pBuffer,
                               const int nPart,
+                              const int nMode,
                               const int nCanvasWidth, const int nCanvasHeight,
                               const int nTilePosX, const int nTilePosY,
                               const int nTileWidth, const int nTileHeight);
@@ -1451,9 +1453,9 @@ void CallbackFlushHandler::libreOfficeKitViewCallbackWithViewId(int nType, const
     queue(nType, callbackData);
 }
 
-void CallbackFlushHandler::libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart)
+void CallbackFlushHandler::libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart, int nMode)
 {
-    CallbackData callbackData(pRect, nPart);
+    CallbackData callbackData(pRect, nPart, nMode);
     queue(LOK_CALLBACK_INVALIDATE_TILES, callbackData);
 }
 
@@ -3582,6 +3584,7 @@ static void doc_paintTileToCGContext(LibreOfficeKitDocument* pThis,
 static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
                               unsigned char* pBuffer,
                               const int nPart,
+                              const int nMode,
                               const int nCanvasWidth, const int nCanvasHeight,
                               const int nTilePosX, const int nTilePosY,
                               const int nTileWidth, const int nTileHeight)
@@ -3591,13 +3594,20 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    SAL_INFO( "lok.tiledrendering", "paintPartTile: painting @ " << nPart << " ["
+    SAL_INFO( "lok.tiledrendering", "paintPartTile: painting @ " << nPart << " : " << nMode << " ["
                << nTileWidth << "x" << nTileHeight << "]@("
                << nTilePosX << ", " << nTilePosY << ") to ["
                << nCanvasWidth << "x" << nCanvasHeight << "]px" );
 
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
     int nOrigViewId = doc_getView(pThis);
+
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        return;
+    }
 
     if (nOrigViewId < 0)
     {
@@ -3672,19 +3682,19 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
             }
         }
 
-        ITiledRenderable* pDoc = getTiledRenderable(pThis);
-        if (!pDoc)
-        {
-            SetLastExceptionMsg("Document doesn't support tiled rendering");
-            return;
-        }
-
         bool bPaintTextEdit = nPart == nOrigPart;
         pDoc->setPaintTextEdit( bPaintTextEdit );
+
+        int nOriginalEditMode = pDoc->getEditMode();
+        if (nOriginalEditMode != nMode)
+            SfxLokHelper::setEditMode(nMode, pDoc);
 
         doc_paintTile(pThis, pBuffer, nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 
         pDoc->setPaintTextEdit( true );
+
+        if (pDoc->getEditMode() != nOriginalEditMode)
+            SfxLokHelper::setEditMode(nOriginalEditMode, pDoc);
 
         if (!isText && nPart != nOrigPart)
         {
