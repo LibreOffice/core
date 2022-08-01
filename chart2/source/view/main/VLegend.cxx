@@ -418,7 +418,7 @@ awt::Size lcl_placeLegendEntries(
                     {
                         OUString aLabelString = rEntries[0].aLabel[0]->getString();
                         static const OUStringLiteral sDots = u"...";
-                        for (sal_Int32 nNewLen = aLabelString.getLength() - sDots.getLength(); nNewLen > 0; nNewLen--)
+                        for (sal_Int32 nNewLen = aLabelString.getLength() - sDots.getLength(); nNewLen > 0; )
                         {
                             OUString aNewLabel = aLabelString.subView(0, nNewLen) + sDots;
                             rtl::Reference<SvxShapeText> xEntry = ShapeFactory::createText(
@@ -438,6 +438,12 @@ awt::Size lcl_placeLegendEntries(
                                 }
                             }
                             DrawModelWrapper::removeShape(xEntry);
+                            // The intention here is to make pathological cases with extremely large labels
+                            // converge a little faster
+                            if (std::abs(nRemainingSpace) > nSumHeight / 10)
+                                nNewLen -= nNewLen / 10;
+                            else
+                                --nNewLen;
                         }
                         if (aTextShapes.size() == 0)
                         {
