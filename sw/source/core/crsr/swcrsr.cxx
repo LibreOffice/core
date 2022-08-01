@@ -2345,7 +2345,7 @@ void SwCursor::RestoreSavePos()
 {
     // This method is not supposed to be used in cases when nodes may be
     // deleted; detect such cases, but do not crash (example: fdo#40831).
-    SwNodeOffset uNodeCount(GetPoint()->nNode.GetNodes().Count());
+    SwNodeOffset uNodeCount(GetPoint()->GetNodes().Count());
     OSL_ENSURE(m_vSavePos.empty() || m_vSavePos.back().nNode < uNodeCount,
         "SwCursor::RestoreSavePos: invalid node: "
         "probably something was deleted; consider using SwUnoCursor instead");

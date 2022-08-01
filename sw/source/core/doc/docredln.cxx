@@ -483,7 +483,7 @@ std::vector<SwRangeRedline*> GetAllValidRanges(std::unique_ptr<SwRangeRedline> p
     // Create valid "sub-ranges" from the Selection
     auto [pStt, pEnd] = p->StartEnd(); // SwPosition*
     SwPosition aNewStt( *pStt );
-    SwNodes& rNds = aNewStt.nNode.GetNodes();
+    SwNodes& rNds = aNewStt.GetNodes();
     SwContentNode* pC;
 
     if( !aNewStt.nNode.GetNode().IsContentNode() )

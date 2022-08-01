@@ -2560,7 +2560,7 @@ OUString SwCursorShell::GetSelText() const
             SwPosition const*const pEnd(m_pCurrentCursor->End());
             for (SwNodeOffset i = pStart->nNode.GetIndex(); i <= pEnd->nNode.GetIndex(); ++i)
             {
-                SwNode const& rNode(*pStart->nNode.GetNodes()[i]);
+                SwNode const& rNode(*pStart->GetNodes()[i]);
                 assert(!rNode.IsEndNode());
                 if (rNode.IsStartNode())
                 {

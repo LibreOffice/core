@@ -117,7 +117,7 @@ namespace
             {
                 // the anchor position will be invalidated by SetRedlineFlags
                 // so set a dummy position and fix it in UpdateFramePositions
-                SwPosition const dummy(const_cast<SwNodes&>(pAnchor->nNode.GetNodes()));
+                SwPosition const dummy(const_cast<SwNodes&>(pAnchor->GetNodes()));
                 aRet.emplace_back(rEntry, dummy);
             }
             else
@@ -763,7 +763,7 @@ namespace sw
                 (nPosCt <= rMkPos.m_nContent))
             {
                 rMkPos.m_nContent += nInserted;
-                SAL_WARN_IF(rMkPos.m_nContent > rPos.nNode.GetNodes()[nPosNd]->GetContentNode()->Len(),
+                SAL_WARN_IF(rMkPos.m_nContent > rPos.GetNodes()[nPosNd]->GetContentNode()->Len(),
                         "sw.ww8", "redline ends after end of line");
                 if (isPoint) // sigh ... important special case...
                 {
@@ -777,7 +777,7 @@ namespace sw
                 (nPosCt < rPtPos.m_nContent))
             {
                 rPtPos.m_nContent += nInserted;
-                SAL_WARN_IF(rPtPos.m_nContent > rPos.nNode.GetNodes()[nPosNd]->GetContentNode()->Len(),
+                SAL_WARN_IF(rPtPos.m_nContent > rPos.GetNodes()[nPosNd]->GetContentNode()->Len(),
                         "sw.ww8", "range ends after end of line");
             }
         }
