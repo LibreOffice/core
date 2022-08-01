@@ -445,7 +445,7 @@ IMPL_LINK_NOARG(SvxBulletPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
             SvxNumberFormat aFmt(pActNum->GetLevel(i));
             aFmt.SetNumberingType( SVX_NUM_CHAR_SPECIAL );
             // #i93908# clear suffix for bullet lists
-            aFmt.SetListFormat("", "", i);
+            aFmt.SetListFormat();
             aFmt.SetBulletFont(&rActBulletFont);
             aFmt.SetBulletChar(cChar );
             aFmt.SetCharFormatName(sBulletCharFormatName);
@@ -632,7 +632,7 @@ IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
         if(aFmt.GetNumberingType() == SVX_NUM_CHAR_SPECIAL)
         {
             // #i93908# clear suffix for bullet lists
-            aFmt.SetListFormat("", "", i);
+            aFmt.SetListFormat();
             if( !pLevelSettings->sBulletFont.isEmpty() &&
                 pLevelSettings->sBulletFont != rActBulletFont.GetFamilyName())
             {
@@ -864,7 +864,7 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
         {
             SvxNumberFormat aFmt(pActNum->GetLevel(i));
             aFmt.SetNumberingType(SVX_NUM_BITMAP);
-            aFmt.SetListFormat("", "", i);
+            aFmt.SetListFormat();
             aFmt.SetCharFormatName( "" );
 
             Graphic aGraphic;
@@ -1631,7 +1631,7 @@ IMPL_LINK(SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, weld::ComboBox&, rBox,
             {
                 bBmp |= nullptr != aNumFmt.GetBrush();
                 aNumFmt.SetIncludeUpperLevels( 1 );
-                aNumFmt.SetListFormat("", "", i);
+                aNumFmt.SetListFormat();
                 if(!bBmp)
                     aNumFmt.SetGraphic("");
                 pActNum->SetLevel(i, aNumFmt);
@@ -1641,7 +1641,7 @@ IMPL_LINK(SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, weld::ComboBox&, rBox,
             else if( SVX_NUM_CHAR_SPECIAL == nNumberingType )
             {
                 aNumFmt.SetIncludeUpperLevels( 1 );
-                aNumFmt.SetListFormat("", "", i);
+                aNumFmt.SetListFormat();
                 if( !aNumFmt.GetBulletFont() )
                     aNumFmt.SetBulletFont(&aActBulletFont);
                 if( !aNumFmt.GetBulletChar() )

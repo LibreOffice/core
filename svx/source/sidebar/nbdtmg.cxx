@@ -335,7 +335,7 @@ void BulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
             aFmt.SetBulletFont(&rActBulletFont);
             aFmt.SetBulletChar(cChar);
             aFmt.SetCharFormatName(sBulletCharFormatName);
-            aFmt.SetListFormat( "" );
+            aFmt.SetListFormat();
             if (isResetSize) aFmt.SetBulletRelSize(45);
             aNum.SetLevel(i, aFmt);
         }

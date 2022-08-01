@@ -714,7 +714,7 @@ IMPL_LINK(SvxBulletAndPositionDlg, NumberTypeSelectHdl_Impl, weld::ComboBox&, rB
             {
                 bBmp |= nullptr != aNumFmt.GetBrush();
                 aNumFmt.SetIncludeUpperLevels(0);
-                aNumFmt.SetListFormat("", "", i);
+                aNumFmt.SetListFormat();
                 if (!bBmp)
                     aNumFmt.SetGraphic("");
                 pActNum->SetLevel(i, aNumFmt);
@@ -723,7 +723,7 @@ IMPL_LINK(SvxBulletAndPositionDlg, NumberTypeSelectHdl_Impl, weld::ComboBox&, rB
             else if (SVX_NUM_CHAR_SPECIAL == nNumberingType)
             {
                 aNumFmt.SetIncludeUpperLevels(0);
-                aNumFmt.SetListFormat("", "", i);
+                aNumFmt.SetListFormat();
                 if (!aNumFmt.GetBulletFont())
                     aNumFmt.SetBulletFont(&aActBulletFont);
                 if (!aNumFmt.GetBulletChar())
