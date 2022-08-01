@@ -2103,11 +2103,11 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
             // Is completely in the range and is the own Redline too?
             if( aTmpRedl.IsOwnRedline( *pTmp ) &&
                 (pRStt->nNode < pStt->nNode ||
-                (pRStt->nNode == pStt->nNode && !pRStt->nContent.GetIndex()) ) &&
+                (pRStt->nNode == pStt->nNode && !pRStt->GetContentIndex()) ) &&
                 (pEnd->nNode < pREnd->nNode ||
                 (pEnd->nNode == pREnd->nNode &&
-                 pCEndNd ? pREnd->nContent.GetIndex() == pCEndNd->Len()
-                         : !pREnd->nContent.GetIndex() )) )
+                 pCEndNd ? pREnd->GetContentIndex() == pCEndNd->Len()
+                         : !pREnd->GetContentIndex() )) )
             {
                 pOwnRedl = pTmp;
                 if( nRedlPos + 1 < getIDocumentRedlineAccess().GetRedlineTable().size() )
@@ -2122,7 +2122,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
                     ( pRStt->nNode > aIdx || aIdx > pREnd->nNode ||
                     // pOwnRedl doesn't start at the beginning of a node, so it's not
                     // possible to resize it to contain the line moved before it
-                    ( pRStt->nNode == aIdx && pRStt->nContent.GetIndex() > 0 ) ) )
+                    ( pRStt->nNode == aIdx && pRStt->GetContentIndex() > 0 ) ) )
                 {
                     // it's not in itself, so don't move it
                     pOwnRedl = nullptr;
@@ -2211,9 +2211,9 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
                         SwNodeOffset const nCurrentOffset(
                             nOrigIdx - aPam.Start()->GetNodeIndex());
                         pam.GetPoint()->nNode += nCurrentOffset;
-                        pam.GetPoint()->nContent.Assign(pam.GetPoint()->GetNode().GetContentNode(), pam.GetPoint()->nContent.GetIndex());
+                        pam.GetPoint()->nContent.Assign(pam.GetPoint()->GetNode().GetContentNode(), pam.GetPoint()->GetContentIndex());
                         pam.GetMark()->nNode += nCurrentOffset;
-                        pam.GetMark()->nContent.Assign(pam.GetMark()->GetNode().GetContentNode(), pam.GetMark()->nContent.GetIndex());
+                        pam.GetMark()->nContent.Assign(pam.GetMark()->GetNode().GetContentNode(), pam.GetMark()->GetContentIndex());
 
                         pNewRedline = new SwRangeRedline( RedlineType::Delete, pam );
                     }

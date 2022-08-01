@@ -169,7 +169,7 @@ void SwHHCWrapper::GetNextPortion(
 
     // build last pos from currently selected text
     SwPaM* pCursor = m_rWrtShell.GetCursor();
-    m_nLastPos =  pCursor->Start()->nContent.GetIndex();
+    m_nLastPos =  pCursor->Start()->GetContentIndex();
 }
 
 void SwHHCWrapper::SelectNewUnit_impl( sal_Int32 nUnitStart, sal_Int32 nUnitEnd )
@@ -222,7 +222,7 @@ void SwHHCWrapper::ChangeText( const OUString &rNewText,
     {
         // remember cursor start position for later setting of the cursor
         const SwPosition *pStart = pCursor->Start();
-        const sal_Int32 nStartIndex = pStart->nContent.GetIndex();
+        const sal_Int32 nStartIndex = pStart->GetContentIndex();
         const SwNodeIndex aStartNodeIndex  = pStart->nNode;
         SwTextNode *pStartTextNode = aStartNodeIndex.GetNode().GetTextNode();
 
@@ -326,7 +326,7 @@ void SwHHCWrapper::ChangeText_impl( const OUString &rNewText, bool bKeepAttribut
         if (!m_rWrtShell.GetCursor()->HasMark())
             m_rWrtShell.GetCursor()->SetMark();
         SwPosition *pMark = m_rWrtShell.GetCursor()->GetMark();
-        pMark->nContent = pMark->nContent.GetIndex() - rNewText.getLength();
+        pMark->nContent = pMark->GetContentIndex() - rNewText.getLength();
 
         // since 'SetAttr' below functions like merging with the attributes
         // from the itemset with any existing ones we have to get rid of all

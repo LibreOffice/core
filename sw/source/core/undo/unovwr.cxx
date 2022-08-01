@@ -49,12 +49,12 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc& rDoc, SwPosition& rPos,
     sal_Int32 const nTextNdLen = pTextNd->GetText().getLength();
 
     m_nStartNode = rPos.GetNodeIndex();
-    m_nStartContent = rPos.nContent.GetIndex();
+    m_nStartContent = rPos.GetContentIndex();
 
     if( !rDoc.getIDocumentRedlineAccess().IsIgnoreRedline() && !rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty() )
     {
-        SwPaM aPam( rPos.nNode, rPos.nContent.GetIndex(),
-                    rPos.nNode, rPos.nContent.GetIndex()+1 );
+        SwPaM aPam( rPos.nNode, rPos.GetContentIndex(),
+                    rPos.nNode, rPos.GetContentIndex()+1 );
         m_pRedlSaveData.reset( new SwRedlineSaveDatas );
         if( !FillSaveData( aPam, *m_pRedlSaveData, false ))
         {
@@ -113,8 +113,8 @@ bool SwUndoOverwrite::CanGrouping( SwDoc& rDoc, SwPosition& rPos,
     // Is the node a TextNode at all?
     SwTextNode * pDelTextNd = rPos.GetNode().GetTextNode();
     if( !pDelTextNd ||
-        (pDelTextNd->GetText().getLength() != rPos.nContent.GetIndex() &&
-            rPos.nContent.GetIndex() != ( m_nStartContent + m_aInsStr.getLength() )))
+        (pDelTextNd->GetText().getLength() != rPos.GetContentIndex() &&
+            rPos.GetContentIndex() != ( m_nStartContent + m_aInsStr.getLength() )))
         return false;
 
     CharClass& rCC = GetAppCharClass();
@@ -125,18 +125,18 @@ bool SwUndoOverwrite::CanGrouping( SwDoc& rDoc, SwPosition& rPos,
         rCC.isLetterNumeric( m_aInsStr, m_aInsStr.getLength()-1 ) )
         return false;
 
-    if (!m_bInsChar && rPos.nContent.GetIndex() < pDelTextNd->GetText().getLength())
+    if (!m_bInsChar && rPos.GetContentIndex() < pDelTextNd->GetText().getLength())
     {
         SwRedlineSaveDatas aTmpSav;
-        SwPaM aPam( rPos.nNode, rPos.nContent.GetIndex(),
-                    rPos.nNode, rPos.nContent.GetIndex()+1 );
+        SwPaM aPam( rPos.nNode, rPos.GetContentIndex(),
+                    rPos.nNode, rPos.GetContentIndex()+1 );
 
         const bool bSaved = FillSaveData( aPam, aTmpSav, false );
 
         bool bOk = ( !m_pRedlSaveData && !bSaved ) ||
                    ( m_pRedlSaveData && bSaved &&
                         SwUndo::CanRedlineGroup( *m_pRedlSaveData, aTmpSav,
-                            m_nStartContent > rPos.nContent.GetIndex() ));
+                            m_nStartContent > rPos.GetContentIndex() ));
         // aTmpSav.DeleteAndDestroyAll();
         if( !bOk )
             return false;
@@ -147,9 +147,9 @@ bool SwUndoOverwrite::CanGrouping( SwDoc& rDoc, SwPosition& rPos,
     // both 'overwrites' can be combined so 'move' the corresponding character
     if( !m_bInsChar )
     {
-        if (rPos.nContent.GetIndex() < pDelTextNd->GetText().getLength())
+        if (rPos.GetContentIndex() < pDelTextNd->GetText().getLength())
         {
-            m_aDelStr += OUStringChar( pDelTextNd->GetText()[rPos.nContent.GetIndex()] );
+            m_aDelStr += OUStringChar( pDelTextNd->GetText()[rPos.GetContentIndex()] );
             ++rPos.nContent;
         }
         else
@@ -232,7 +232,7 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
         m_pHistory->TmpRollback( &rDoc, 0, false );
     }
 
-    if( rCurrentPam.GetMark()->nContent.GetIndex() != m_nStartContent )
+    if( rCurrentPam.GetMark()->GetContentIndex() != m_nStartContent )
     {
         rCurrentPam.SetMark();
         rCurrentPam.GetMark()->nContent = m_nStartContent;
@@ -302,7 +302,7 @@ void SwUndoOverwrite::RedoImpl(::sw::UndoRedoContext & rContext)
     // get back old start position from UndoNodes array
     if( m_pHistory )
         m_pHistory->SetTmpEnd( m_pHistory->Count() );
-    if( rCurrentPam.GetMark()->nContent.GetIndex() != m_nStartContent )
+    if( rCurrentPam.GetMark()->GetContentIndex() != m_nStartContent )
     {
         rCurrentPam.SetMark();
         rCurrentPam.GetMark()->nContent = m_nStartContent;

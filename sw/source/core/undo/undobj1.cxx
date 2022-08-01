@@ -194,7 +194,7 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrame)
         {
             const SwFormatAnchor& rAnchor = m_pFrameFormat->GetAnchor();
             m_nNodePagePos = rAnchor.GetContentAnchor()->GetNodeIndex();
-            m_nContentPos = rAnchor.GetContentAnchor()->nContent.GetIndex();
+            m_nContentPos = rAnchor.GetContentAnchor()->GetContentIndex();
         }
         break;
     case RndStdIds::FLY_AT_PARA:
@@ -244,7 +244,7 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
     if (RndStdIds::FLY_AS_CHAR == m_nRndId)
     {
         m_nNodePagePos = pPos->GetNodeIndex();
-        m_nContentPos = pPos->nContent.GetIndex();
+        m_nContentPos = pPos->GetContentIndex();
         SwTextNode *const pTextNd = pPos->GetNode().GetTextNode();
         OSL_ENSURE( pTextNd, "No Textnode found" );
         SwTextFlyCnt* const pAttr = static_cast<SwTextFlyCnt*>(
@@ -261,7 +261,7 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
     else if (RndStdIds::FLY_AT_CHAR == m_nRndId)
     {
         m_nNodePagePos = pPos->GetNodeIndex();
-        m_nContentPos = pPos->nContent.GetIndex();
+        m_nContentPos = pPos->GetContentIndex();
     }
     else if ((RndStdIds::FLY_AT_PARA == m_nRndId) || (RndStdIds::FLY_AT_FLY == m_nRndId))
     {
@@ -598,7 +598,7 @@ void SwUndoSetFlyFormat::UndoImpl(::sw::UndoRedoContext & rContext)
             const SwPosition *pPos = rOldAnch.GetContentAnchor();
             SwTextNode *pTextNode = pPos->GetNode().GetTextNode();
             OSL_ENSURE( pTextNode->HasHints(), "Missing FlyInCnt-Hint." );
-            const sal_Int32 nIdx = pPos->nContent.GetIndex();
+            const sal_Int32 nIdx = pPos->GetContentIndex();
             SwTextAttr * pHint = pTextNode->GetTextAttrForCharAt(
                     nIdx, RES_TXTATR_FLYCNT );
             assert(pHint && "Missing Hint.");
@@ -672,7 +672,7 @@ void SwUndoSetFlyFormat::PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem )
             {
             case RndStdIds::FLY_AS_CHAR:
             case RndStdIds::FLY_AT_CHAR:
-                m_nOldContent = pAnchor->GetContentAnchor()->nContent.GetIndex();
+                m_nOldContent = pAnchor->GetContentAnchor()->GetContentIndex();
                 [[fallthrough]];
             case RndStdIds::FLY_AT_PARA:
             case RndStdIds::FLY_AT_FLY:
@@ -689,7 +689,7 @@ void SwUndoSetFlyFormat::PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem )
             {
             case RndStdIds::FLY_AS_CHAR:
             case RndStdIds::FLY_AT_CHAR:
-                m_nNewContent = pAnchor->GetContentAnchor()->nContent.GetIndex();
+                m_nNewContent = pAnchor->GetContentAnchor()->GetContentIndex();
                 [[fallthrough]];
             case RndStdIds::FLY_AT_PARA:
             case RndStdIds::FLY_AT_FLY:

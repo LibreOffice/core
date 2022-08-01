@@ -124,7 +124,7 @@ ErrCode SwASCWriter::WriteStream()
         bool bTstFly = true;
         while( m_pCurrentPam->GetPoint()->GetNodeIndex() < m_pCurrentPam->GetMark()->GetNodeIndex() ||
               (m_pCurrentPam->GetPoint()->GetNodeIndex() == m_pCurrentPam->GetMark()->GetNodeIndex() &&
-               m_pCurrentPam->GetPoint()->nContent.GetIndex() <= m_pCurrentPam->GetMark()->nContent.GetIndex()) )
+               m_pCurrentPam->GetPoint()->GetContentIndex() <= m_pCurrentPam->GetMark()->GetContentIndex()) )
         {
             SwTextNode* pNd = m_pCurrentPam->GetPoint()->GetNode().GetTextNode();
             if( pNd )

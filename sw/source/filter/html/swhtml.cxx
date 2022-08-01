@@ -768,13 +768,13 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
 
                 if( m_pSttNdIdx->GetIndex()+1 == m_pPam->GetBound().GetNodeIndex() )
                 {
-                    const sal_Int32 nCntPos = m_pPam->GetBound().nContent.GetIndex();
+                    const sal_Int32 nCntPos = m_pPam->GetBound().GetContentIndex();
                     m_pPam->GetBound().nContent.Assign( pTextNode,
                                     pTextNode->GetText().getLength() + nCntPos );
                 }
                 if( m_pSttNdIdx->GetIndex()+1 == m_pPam->GetBound( false ).GetNodeIndex() )
                 {
-                    const sal_Int32 nCntPos = m_pPam->GetBound( false ).nContent.GetIndex();
+                    const sal_Int32 nCntPos = m_pPam->GetBound( false ).GetContentIndex();
                     m_pPam->GetBound( false ).nContent.Assign( pTextNode,
                                     pTextNode->GetText().getLength() + nCntPos );
                 }
@@ -801,7 +801,7 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
 
         // now remove the last useless paragraph
         SwPosition* pPos = m_pPam->GetPoint();
-        if( !pPos->nContent.GetIndex() && !bLFStripped )
+        if( !pPos->GetContentIndex() && !bLFStripped )
         {
             SwTextNode* pCurrentNd;
             SwNodeOffset nNodeIdx = pPos->GetNodeIndex();
@@ -811,7 +811,7 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
 
             if( IsNewDoc() )
             {
-                if (!m_pPam->GetPoint()->nContent.GetIndex() && CanRemoveNode(nNodeIdx))
+                if (!m_pPam->GetPoint()->GetContentIndex() && CanRemoveNode(nNodeIdx))
                 {
                     SwContentNode* pCNd = m_pPam->GetContentNode();
                     if( pCNd && pCNd->StartOfSectionIndex()+2 <
@@ -855,7 +855,7 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
         // annul the SplitNode from the beginning
         else if( !IsNewDoc() )
         {
-            if( pPos->nContent.GetIndex() )                 // then there was no <p> at the end
+            if( pPos->GetContentIndex() )                 // then there was no <p> at the end
                 m_pPam->Move( fnMoveForward, GoInNode );    // therefore to the next
             SwTextNode* pTextNode = pPos->GetNode().GetTextNode();
             SwNodeIndex aPrvIdx( pPos->nNode );
@@ -1488,7 +1488,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
         // CR in PRE/LISTING/XMP
         {
             if( HtmlTokenId::NEWPARA==nToken ||
-                m_pPam->GetPoint()->nContent.GetIndex() )
+                m_pPam->GetPoint()->GetContentIndex() )
             {
                 AppendTextNode(); // there is no LF at this place
                                  // therefore it will cause no problems
@@ -1509,7 +1509,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
         break;
 
     case HtmlTokenId::LINEFEEDCHAR:
-        if( m_pPam->GetPoint()->nContent.GetIndex() )
+        if( m_pPam->GetPoint()->GetContentIndex() )
             AppendTextNode();
         if (!m_xTable && !m_xDoc->IsInHeaderFooter(m_pPam->GetPoint()->nNode))
         {
@@ -1522,7 +1522,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
         // insert string without spanning attributes at the end.
         if( !aToken.isEmpty() && ' '==aToken[0] && !IsReadPRE() )
         {
-            sal_Int32 nPos = m_pPam->GetPoint()->nContent.GetIndex();
+            sal_Int32 nPos = m_pPam->GetPoint()->GetContentIndex();
             const SwTextNode* pTextNode = nPos ? m_pPam->GetPoint()->GetNode().GetTextNode() : nullptr;
             if (pTextNode)
             {
@@ -1820,7 +1820,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
     case HtmlTokenId::LI_ON:
     case HtmlTokenId::LISTHEADER_ON:
         if( m_nOpenParaToken != HtmlTokenId::NONE &&
-            (m_pPam->GetPoint()->nContent.GetIndex()
+            (m_pPam->GetPoint()->GetContentIndex()
             || HtmlTokenId::PARABREAK_ON==m_nOpenParaToken) )
         {
             // only finish paragraph for <P><LI>, not for <DD><LI>
@@ -2145,7 +2145,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
 
     // if there are temporary paragraph attributes and the
     // paragraph isn't empty then the paragraph attributes are final.
-    if( !m_aParaAttrs.empty() && m_pPam->GetPoint()->nContent.GetIndex() )
+    if( !m_aParaAttrs.empty() && m_pPam->GetPoint()->GetContentIndex() )
         m_aParaAttrs.clear();
 }
 
@@ -2237,7 +2237,7 @@ bool SwHTMLParser::AppendTextNode( SwHTMLAppendMode eMode, bool bUpdateNum )
     // split character attributes and maybe set none,
     // which are set for the whole paragraph
     const SwNodeIndex& rEndIdx = aOldPos.nNode;
-    const sal_Int32 nEndCnt = aOldPos.nContent.GetIndex();
+    const sal_Int32 nEndCnt = aOldPos.GetContentIndex();
     const SwPosition& rPos = *m_pPam->GetPoint();
 
     HTMLAttr** pHTMLAttributes = reinterpret_cast<HTMLAttr**>(m_xAttrTab.get());
@@ -2746,7 +2746,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
 {
     SwPaM aAttrPam( *m_pPam->GetPoint() );
     const SwNodeIndex& rEndIdx = m_pPam->GetPoint()->nNode;
-    const sal_Int32 nEndCnt = m_pPam->GetPoint()->nContent.GetIndex();
+    const sal_Int32 nEndCnt = m_pPam->GetPoint()->GetContentIndex();
     HTMLAttr* pAttr;
     SwContentNode* pCNd;
 
@@ -2891,7 +2891,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                         if( aAttrPam.GetMark()->GetNodeIndex() !=
                             rEndIdx.GetIndex() )
                         {
-                            OSL_ENSURE( !aAttrPam.GetPoint()->nContent.GetIndex(),
+                            OSL_ENSURE( !aAttrPam.GetPoint()->GetContentIndex(),
                                     "Content-Position before table not 0???" );
                             aAttrPam.Move( fnMoveBackward );
                         }
@@ -3069,7 +3069,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
             aAttrPam.GetPoint()->GetNodeIndex() == rEndIdx.GetIndex() )
         {
             OSL_ENSURE( !bBeforeTable, "Aha, the case does occur" );
-            OSL_ENSURE( !aAttrPam.GetPoint()->nContent.GetIndex(),
+            OSL_ENSURE( !aAttrPam.GetPoint()->GetContentIndex(),
                     "Content-Position before table not 0???" );
             // !!!
             aAttrPam.Move( fnMoveBackward );
@@ -3109,7 +3109,7 @@ bool SwHTMLParser::EndAttr( HTMLAttr* pAttr, bool bChkEmpty )
 
     // save the current position as end position
     const SwNodeIndex* pEndIdx = &m_pPam->GetPoint()->nNode;
-    sal_Int32 nEndCnt = m_pPam->GetPoint()->nContent.GetIndex();
+    sal_Int32 nEndCnt = m_pPam->GetPoint()->GetContentIndex();
 
     // Is the last started or an earlier started attribute being ended?
     HTMLAttr *pLast = nullptr;
@@ -3134,7 +3134,7 @@ bool SwHTMLParser::EndAttr( HTMLAttr* pAttr, bool bChkEmpty )
     {
         // Then move back one position in the content!
         bMoveBack = m_pPam->Move( fnMoveBackward );
-        nEndCnt = m_pPam->GetPoint()->nContent.GetIndex();
+        nEndCnt = m_pPam->GetPoint()->GetContentIndex();
     }
 
     // now end the attribute
@@ -3360,7 +3360,7 @@ void SwHTMLParser::SplitAttrTab( std::shared_ptr<HTMLAttrTable> const & rNewAttr
     HTMLAttr** pHTMLAttributes = reinterpret_cast<HTMLAttr**>(m_xAttrTab.get());
     HTMLAttr** pSaveAttributes = reinterpret_cast<HTMLAttr**>(rNewAttrTab.get());
     bool bSetAttr = true;
-    const sal_Int32 nSttCnt = m_pPam->GetPoint()->nContent.GetIndex();
+    const sal_Int32 nSttCnt = m_pPam->GetPoint()->GetContentIndex();
     sal_Int32 nEndCnt = nSttCnt;
 
     if( bMoveEndBack )
@@ -3948,7 +3948,7 @@ void SwHTMLParser::EndFontAttr( HtmlTokenId nToken )
 
 void SwHTMLParser::NewPara()
 {
-    if( m_pPam->GetPoint()->nContent.GetIndex() )
+    if( m_pPam->GetPoint()->GetContentIndex() )
         AppendTextNode( AM_SPACE );
     else
         AddParSpace();
@@ -4035,7 +4035,7 @@ void SwHTMLParser::EndPara( bool bReal )
     // Netscape skips empty paragraphs, we do the same.
     if( bReal )
     {
-        if( m_pPam->GetPoint()->nContent.GetIndex() )
+        if( m_pPam->GetPoint()->GetContentIndex() )
             AppendTextNode( AM_SPACE );
         else
             AddParSpace();
@@ -4104,7 +4104,7 @@ void SwHTMLParser::NewHeading( HtmlTokenId nToken )
     }
 
     // open a new paragraph
-    if( m_pPam->GetPoint()->nContent.GetIndex() )
+    if( m_pPam->GetPoint()->GetContentIndex() )
         AppendTextNode( AM_SPACE );
     else
         AddParSpace();
@@ -4158,7 +4158,7 @@ void SwHTMLParser::NewHeading( HtmlTokenId nToken )
 void SwHTMLParser::EndHeading()
 {
     // open a new paragraph
-    if( m_pPam->GetPoint()->nContent.GetIndex() )
+    if( m_pPam->GetPoint()->GetContentIndex() )
         AppendTextNode( AM_SPACE );
     else
         AddParSpace();
@@ -4253,7 +4253,7 @@ void SwHTMLParser::NewTextFormatColl( HtmlTokenId nToken, sal_uInt16 nColl )
         OSL_ENSURE( false, "unknown style" );
         break;
     }
-    if( m_pPam->GetPoint()->nContent.GetIndex() )
+    if( m_pPam->GetPoint()->GetContentIndex() )
         AppendTextNode( eMode );
     else if( AM_SPACE==eMode )
         AddParSpace();
@@ -4306,7 +4306,7 @@ void SwHTMLParser::EndTextFormatColl( HtmlTokenId nToken )
         OSL_ENSURE( false, "unknown style" );
         break;
     }
-    if( m_pPam->GetPoint()->nContent.GetIndex() )
+    if( m_pPam->GetPoint()->GetContentIndex() )
         AppendTextNode( eMode );
     else if( AM_SPACE==eMode )
         AddParSpace();
@@ -4357,7 +4357,7 @@ void SwHTMLParser::NewDefList()
 
     // open a new paragraph
     bool bSpace = (GetNumInfo().GetDepth() + m_nDefListDeep) == 0;
-    if( m_pPam->GetPoint()->nContent.GetIndex() )
+    if( m_pPam->GetPoint()->GetContentIndex() )
         AppendTextNode( bSpace ? AM_SPACE : AM_SOFTNOSPACE );
     else if( bSpace )
         AddParSpace();
@@ -4432,7 +4432,7 @@ void SwHTMLParser::NewDefList()
 void SwHTMLParser::EndDefList()
 {
     bool bSpace = (GetNumInfo().GetDepth() + m_nDefListDeep) == 1;
-    if( m_pPam->GetPoint()->nContent.GetIndex() )
+    if( m_pPam->GetPoint()->GetContentIndex() )
         AppendTextNode( bSpace ? AM_SPACE : AM_SOFTNOSPACE );
     else if( bSpace )
         AddParSpace();
@@ -4495,7 +4495,7 @@ void SwHTMLParser::NewDefListItem( HtmlTokenId nToken )
 void SwHTMLParser::EndDefListItem( HtmlTokenId nToken )
 {
     // open a new paragraph
-    if( nToken == HtmlTokenId::NONE && m_pPam->GetPoint()->nContent.GetIndex() )
+    if( nToken == HtmlTokenId::NONE && m_pPam->GetPoint()->GetContentIndex() )
         AppendTextNode( AM_SOFTNOSPACE );
 
     // search context matching the token and fetch it from stack
@@ -4980,7 +4980,7 @@ void SwHTMLParser::InsertSpacer()
 
             // set a paragraph margin
             SwTextNode *pTextNode = nullptr;
-            if( !m_pPam->GetPoint()->nContent.GetIndex() )
+            if( !m_pPam->GetPoint()->GetContentIndex() )
             {
                 // if possible change the bottom paragraph margin
                 // of previous node
@@ -5025,7 +5025,7 @@ void SwHTMLParser::InsertSpacer()
                                             MapMode(MapUnit::MapTwip) ).Width();
             }
 
-            if( !m_pPam->GetPoint()->nContent.GetIndex() )
+            if( !m_pPam->GetPoint()->GetContentIndex() )
             {
                 sal_uInt16 nLeft=0, nRight=0;
                 short nIndent = 0;
@@ -5188,12 +5188,12 @@ void SwHTMLParser::InsertLineBreak()
             if (pTextNode)
             {
                 SwFormatLineBreak aLineBreak(eClear);
-                sal_Int32 nPos = m_pPam->GetPoint()->nContent.GetIndex();
+                sal_Int32 nPos = m_pPam->GetPoint()->GetContentIndex();
                 pTextNode->InsertItem(aLineBreak, nPos, nPos);
             }
         }
     }
-    else if( m_pPam->GetPoint()->nContent.GetIndex() )
+    else if( m_pPam->GetPoint()->GetContentIndex() )
     {
         // If a CLEAR is executed in a non-empty paragraph, then after it
         // a new paragraph has to be opened.
@@ -5260,7 +5260,7 @@ void SwHTMLParser::InsertHorzRule()
         }
     }
 
-    if( m_pPam->GetPoint()->nContent.GetIndex() )
+    if( m_pPam->GetPoint()->GetContentIndex() )
         AppendTextNode( AM_NOSPACE );
     if( m_nOpenParaToken != HtmlTokenId::NONE )
         EndPara();
@@ -5446,8 +5446,8 @@ HTMLAttr::HTMLAttr( const SwPosition& rPos, const SfxPoolItem& rItem,
                       HTMLAttr **ppHd, const std::shared_ptr<HTMLAttrTable>& rAttrTab ) :
     m_nStartPara( rPos.nNode ),
     m_nEndPara( rPos.nNode ),
-    m_nStartContent( rPos.nContent.GetIndex() ),
-    m_nEndContent(rPos.nContent.GetIndex() ),
+    m_nStartContent( rPos.GetContentIndex() ),
+    m_nEndContent(rPos.GetContentIndex() ),
     m_bInsAtStart( true ),
     m_bLikePara( false ),
     m_bValid( true ),

@@ -1744,8 +1744,8 @@ OUString SwDoc::GetPaMDescr(const SwPaM & rPam)
 
         if (nullptr != pTextNode)
         {
-            const sal_Int32 nStart = rPam.Start()->nContent.GetIndex();
-            const sal_Int32 nEnd = rPam.End()->nContent.GetIndex();
+            const sal_Int32 nStart = rPam.Start()->GetContentIndex();
+            const sal_Int32 nEnd = rPam.End()->GetContentIndex();
 
             return SwResId(STR_START_QUOTE)
                 + ShortenString(pTextNode->GetText().copy(nStart, nEnd - nStart),

@@ -254,7 +254,7 @@ bool SwEditShell::Copy( SwEditShell& rDestShell )
         {
             // Store start position of the new area
             aSttNdIdx = pPos->GetNodeIndex()-1;
-            nSttCntIdx = pPos->nContent.GetIndex();
+            nSttCntIdx = pPos->GetContentIndex();
             bFirstMove = false;
         }
 

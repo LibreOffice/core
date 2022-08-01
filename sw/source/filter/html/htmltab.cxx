@@ -2668,7 +2668,7 @@ sal_Int32 SwHTMLParser::StripTrailingLF()
         return nStripped;
     }
 
-    const sal_Int32 nLen = m_pPam->GetPoint()->nContent.GetIndex();
+    const sal_Int32 nLen = m_pPam->GetPoint()->GetContentIndex();
     if( nLen )
     {
         SwTextNode* pTextNd = m_pPam->GetPoint()->GetNode().GetTextNode();
@@ -3090,7 +3090,7 @@ void CellSaveStruct::InsertCell( SwHTMLParser& rParser,
 void CellSaveStruct::StartNoBreak( const SwPosition& rPos )
 {
     if( !m_xCnts ||
-        (!rPos.nContent.GetIndex() && m_pCurrCnts == m_xCnts.get() &&
+        (!rPos.GetContentIndex() && m_pCurrCnts == m_xCnts.get() &&
          m_xCnts->GetStartNode() &&
          m_xCnts->GetStartNode()->GetIndex() + 1 ==
             rPos.GetNodeIndex()) )
@@ -3104,7 +3104,7 @@ void CellSaveStruct::EndNoBreak( const SwPosition& rPos )
     if( m_bNoBreak )
     {
         m_pNoBreakEndNodeIndex.reset( new SwNodeIndex( rPos.nNode ) );
-        m_nNoBreakEndContentPos = rPos.nContent.GetIndex();
+        m_nNoBreakEndContentPos = rPos.GetContentIndex();
         m_bNoBreak = false;
     }
 }
@@ -3122,12 +3122,12 @@ void CellSaveStruct::CheckNoBreak( const SwPosition& rPos )
     else if( m_pNoBreakEndNodeIndex &&
              m_pNoBreakEndNodeIndex->GetIndex() == rPos.GetNodeIndex() )
     {
-        if( m_nNoBreakEndContentPos == rPos.nContent.GetIndex() )
+        if( m_nNoBreakEndContentPos == rPos.GetContentIndex() )
         {
             // <NOBR> was closed immediately before the cell end
             m_xCnts->SetNoBreak();
         }
-        else if( m_nNoBreakEndContentPos + 1 == rPos.nContent.GetIndex() )
+        else if( m_nNoBreakEndContentPos + 1 == rPos.GetContentIndex() )
         {
             SwTextNode const*const pTextNd(rPos.GetNode().GetTextNode());
             if( pTextNd )
@@ -3162,7 +3162,7 @@ std::unique_ptr<HTMLTableCnts> SwHTMLParser::InsertTableContents(
 
     // Reset attributation start
     const SwNodeIndex& rSttPara = m_pPam->GetPoint()->nNode;
-    sal_Int32 nSttCnt = m_pPam->GetPoint()->nContent.GetIndex();
+    sal_Int32 nSttCnt = m_pPam->GetPoint()->GetContentIndex();
 
     HTMLAttr** pHTMLAttributes = reinterpret_cast<HTMLAttr**>(m_xAttrTab.get());
     for (sal_uInt16 nCnt = sizeof(HTMLAttrTable) / sizeof(HTMLAttr*); nCnt--; ++pHTMLAttributes)
@@ -3302,13 +3302,13 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                     // Otherwise, we need to open a new paragraph if the paragraph
                     // is empty or contains text frames or bookmarks
                     bAppend =
-                        m_pPam->GetPoint()->nContent.GetIndex() ||
+                        m_pPam->GetPoint()->GetContentIndex() ||
                         HasCurrentParaFlys() ||
                         HasCurrentParaBookmarks();
                 }
                 if( bAppend )
                 {
-                    if( !m_pPam->GetPoint()->nContent.GetIndex() )
+                    if( !m_pPam->GetPoint()->GetContentIndex() )
                     {
                         //Set default to CJK and CTL
                         m_xDoc->SetTextFormatColl( *m_pPam,
@@ -3383,7 +3383,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                 // still empty paragraph, since it's not gonna be deleted that way
                 if( (bTopTable && !bAppended) ||
                     (!bTopTable && !bParentLFStripped &&
-                     !m_pPam->GetPoint()->nContent.GetIndex()) )
+                     !m_pPam->GetPoint()->GetContentIndex()) )
                     pPostIts.emplace();
                 SetAttr( bTopTable, bTopTable, pPostIts ? &*pPostIts : nullptr );
             }
@@ -3468,7 +3468,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                 // create a SwTable with a box and set the PaM to the content of
                 // the box section (the adjustment parameter is a dummy for now
                 // and will be corrected later)
-                OSL_ENSURE( !m_pPam->GetPoint()->nContent.GetIndex(),
+                OSL_ENSURE( !m_pPam->GetPoint()->GetContentIndex(),
                         "The paragraph after the table is not empty!" );
                 const SwTable* pSwTable = m_xDoc->InsertTable(
                         SwInsertTableOptions( SwInsertTableFlags::HeadlineNoBorder, 1 ),
@@ -3844,7 +3844,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
         }
 
         // Remove LFs at the paragraph end
-        if (StripTrailingLF() == 0 && !m_pPam->GetPoint()->nContent.GetIndex())
+        if (StripTrailingLF() == 0 && !m_pPam->GetPoint()->GetContentIndex())
         {
             HTMLTableContext* pTableContext = m_xTable ? m_xTable->GetContext() : nullptr;
             SwPosition* pSavedPos = pTableContext ? pTableContext->GetPos() : nullptr;
@@ -4665,13 +4665,13 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
     {
         // On moving the caption later, the last paragraph isn't moved as well.
         // That means, there has to be an empty paragraph at the end of the section
-        if( m_pPam->GetPoint()->nContent.GetIndex() || bLFStripped )
+        if( m_pPam->GetPoint()->GetContentIndex() || bLFStripped )
             AppendTextNode( AM_NOSPACE );
     }
     else
     {
         // Strip LFs at the end of the paragraph
-        if( !m_pPam->GetPoint()->nContent.GetIndex() && !bLFStripped )
+        if( !m_pPam->GetPoint()->GetContentIndex() && !bLFStripped )
             StripTrailingPara();
     }
 

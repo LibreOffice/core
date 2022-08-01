@@ -1973,7 +1973,7 @@ void SwAutoFormat::AutoCorrect(TextFrameIndex nPos)
                                     sal_Int32(nPos), cChar, true ));
 
                 m_aDelPam.SetMark();
-                m_aDelPam.GetPoint()->nContent = m_aDelPam.GetMark()->nContent.GetIndex() + 1;
+                m_aDelPam.GetPoint()->nContent = m_aDelPam.GetMark()->GetContentIndex() + 1;
                 if( 2 == sReplace.getLength() && ' ' == sReplace[ 1 ])
                 {
                     sReplace = sReplace.copy( 0, 1 );
@@ -2032,7 +2032,7 @@ void SwAutoFormat::AutoCorrect(TextFrameIndex nPos)
                         }
 
                         m_aDelPam.SetMark();
-                        m_aDelPam.GetPoint()->nContent = m_aDelPam.GetMark()->nContent.GetIndex() + 1;
+                        m_aDelPam.GetPoint()->nContent = m_aDelPam.GetMark()->GetContentIndex() + 1;
                         m_pDoc->getIDocumentContentOperations().ReplaceRange( m_aDelPam, sReplace, false );
 
                         if( m_aFlags.bWithRedlining )

@@ -639,7 +639,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             SwPaM* pCursorPos = rSh.GetCursor();
             if( pCursorPos )
             {
-                LanguageType nLang = pCursorPos->GetPoint()->GetNode().GetTextNode()->GetLang(pCursorPos->GetPoint()->nContent.GetIndex());
+                LanguageType nLang = pCursorPos->GetPoint()->GetNode().GetTextNode()->GetLang(pCursorPos->GetPoint()->GetContentIndex());
                 if (nLang == LANGUAGE_HUNGARIAN)
                     nInsertFormat = rSh.GetNumberFormatter()->GetFormatIndex(NF_DATE_SYSTEM_LONG, nLang);
             }
@@ -697,8 +697,8 @@ FIELD_INSERT:
                 if(bSuccess)
                 {
                     IDocumentMarkAccess* pMarksAccess = rSh.GetDoc()->getIDocumentMarkAccess();
-                    SwPaM aFieldPam(pCursorPos->GetPoint()->nNode, pCursorPos->GetPoint()->nContent.GetIndex() - vEnSpaces.getLength(),
-                                    pCursorPos->GetPoint()->nNode, pCursorPos->GetPoint()->nContent.GetIndex());
+                    SwPaM aFieldPam(pCursorPos->GetPoint()->nNode, pCursorPos->GetPoint()->GetContentIndex() - vEnSpaces.getLength(),
+                                    pCursorPos->GetPoint()->nNode, pCursorPos->GetPoint()->GetContentIndex());
                     pMarksAccess->makeFieldBookmark(aFieldPam, OUString(), ODF_FORMTEXT,
                             aFieldPam.Start());
                 }
@@ -751,8 +751,8 @@ FIELD_INSERT:
             if(bSuccess)
             {
                 IDocumentMarkAccess* pMarksAccess = rSh.GetDoc()->getIDocumentMarkAccess();
-                SwPaM aFieldPam(pCursorPos->GetPoint()->nNode, pCursorPos->GetPoint()->nContent.GetIndex() - ODF_FORMFIELD_DEFAULT_LENGTH,
-                                pCursorPos->GetPoint()->nNode, pCursorPos->GetPoint()->nContent.GetIndex());
+                SwPaM aFieldPam(pCursorPos->GetPoint()->nNode, pCursorPos->GetPoint()->GetContentIndex() - ODF_FORMFIELD_DEFAULT_LENGTH,
+                                pCursorPos->GetPoint()->nNode, pCursorPos->GetPoint()->GetContentIndex());
                 sw::mark::IFieldmark* pFieldBM = pMarksAccess->makeFieldBookmark(aFieldPam, OUString(), ODF_FORMDATE,
                             aFieldPam.Start());
 
@@ -955,7 +955,7 @@ void SwTextShell::StateField( SfxItemSet &rSet )
                 SwPosition aCursorPos(*rSh.GetCursor()->GetPoint());
                 sw::mark::IFieldmark* pFieldBM = GetShell().getIDocumentMarkAccess()->getFieldmarkFor(aCursorPos);
                 if ((!pFieldBM || pFieldBM->GetFieldname() != ODF_FORMTEXT)
-                    && aCursorPos.nContent.GetIndex() > 0)
+                    && aCursorPos.GetContentIndex() > 0)
                 {
                     SwPosition aPos(aCursorPos);
                     --aPos.nContent;

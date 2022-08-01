@@ -107,8 +107,8 @@ bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
 
         SwNodeOffset nSttNd = rCurrentPaM.Start()->GetNodeIndex(),
                      nEndNd = rCurrentPaM.End()->GetNodeIndex();
-        sal_Int32 nSttCnt = rCurrentPaM.Start()->nContent.GetIndex();
-        sal_Int32 nEndCnt = rCurrentPaM.End()->nContent.GetIndex();
+        sal_Int32 nSttCnt = rCurrentPaM.Start()->GetContentIndex();
+        sal_Int32 nEndCnt = rCurrentPaM.End()->GetContentIndex();
 
         if( sal_Int32(nEndNd - nSttNd) >= getMaxLookup() )
         {
@@ -291,8 +291,8 @@ std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >> SwEditShell
         // get the start and the end node of the current selection
         SwNodeOffset nSttNd = rCurrentPaM.Start()->GetNodeIndex(),
               nEndNd = rCurrentPaM.End()->GetNodeIndex();
-        sal_Int32 nSttCnt = rCurrentPaM.Start()->nContent.GetIndex();
-        sal_Int32 nEndCnt = rCurrentPaM.End()->nContent.GetIndex();
+        sal_Int32 nSttCnt = rCurrentPaM.Start()->GetContentIndex();
+        sal_Int32 nEndCnt = rCurrentPaM.End()->GetContentIndex();
 
         SwPaM* pNewPaM = nullptr;
         const SfxPoolItem* pItem = nullptr;
@@ -400,7 +400,7 @@ bool SwEditShell::GetCurFootnote( SwFormatFootnote* pFillFootnote )
         return false;
 
     SwTextAttr *const pFootnote = pTextNd->GetTextAttrForCharAt(
-        pCursor->GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN);
+        pCursor->GetPoint()->GetContentIndex(), RES_TXTATR_FTN);
     if( pFootnote && pFillFootnote )
     {
         // Transfer data from the attribute
@@ -677,7 +677,7 @@ SvtScriptType SwEditShell::GetScriptType() const
                     const SwScriptInfo *const pScriptInfo =
                         SwScriptInfo::GetScriptInfo(*pTNd, &pFrame);
 
-                    sal_Int32 nPos = pStt->nContent.GetIndex();
+                    sal_Int32 nPos = pStt->GetContentIndex();
                     //Task 90448: we need the scripttype of the previous
                     //              position, if no selection exist!
                     if( nPos )
@@ -718,10 +718,10 @@ SvtScriptType SwEditShell::GetScriptType() const
                             SwScriptInfo::GetScriptInfo(*pTNd, &pFrame);
 
                         sal_Int32 nChg = aIdx == pStt->nNode
-                                                ? pStt->nContent.GetIndex()
+                                                ? pStt->GetContentIndex()
                                                 : 0;
                         sal_Int32 nEndPos = aIdx == nEndIdx
-                                                ? pEnd->nContent.GetIndex()
+                                                ? pEnd->GetContentIndex()
                                                 : rText.getLength();
 
                         OSL_ENSURE( nEndPos <= rText.getLength(),
@@ -808,7 +808,7 @@ LanguageType SwEditShell::GetCurLang() const
     {
         //JP 24.9.2001: if exist no selection, then get the language before
         //              the current character!
-        sal_Int32 nPos = rPos.nContent.GetIndex();
+        sal_Int32 nPos = rPos.GetContentIndex();
         if( nPos && !pCursor->HasMark() )
             --nPos;
         nLang = pTNd->GetLang( nPos );

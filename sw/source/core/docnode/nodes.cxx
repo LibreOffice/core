@@ -1460,14 +1460,14 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
             rPos.nContent.Assign( pDestNd, 0 );
             bCopyCollFormat = true;
         }
-        bSplitDestNd = pDestNd->Len() > rPos.nContent.GetIndex() ||
+        bSplitDestNd = pDestNd->Len() > rPos.GetContentIndex() ||
                         pEnd->GetNode().IsTextNode();
 
         // move the content into the new node
         bool bOneNd = pStt->nNode == pEnd->nNode;
         const sal_Int32 nLen =
-                ( bOneNd ? std::min(pEnd->nContent.GetIndex(), pSrcNd->Len()) : pSrcNd->Len() )
-                - pStt->nContent.GetIndex();
+                ( bOneNd ? std::min(pEnd->GetContentIndex(), pSrcNd->Len()) : pSrcNd->Len() )
+                - pStt->GetContentIndex();
 
         if( !pEnd->GetNode().IsContentNode() )
         {
@@ -1487,7 +1487,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
         // templates must be copied/set after a split
         if( !bOneNd && bSplitDestNd )
         {
-            if( !rPos.nContent.GetIndex() )
+            if( !rPos.GetContentIndex() )
             {
                 bCopyCollFormat = true;
             }
@@ -1543,13 +1543,13 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
     }
     else if( pDestNd )
     {
-        if( rPos.nContent.GetIndex() )
+        if( rPos.GetContentIndex() )
         {
-            if( rPos.nContent.GetIndex() == pDestNd->Len() )
+            if( rPos.GetContentIndex() == pDestNd->Len() )
             {
                 ++rPos.nNode;
             }
-            else if( rPos.nContent.GetIndex() )
+            else if( rPos.GetContentIndex() )
             {
                 // if the EndNode is split than correct the EndIdx
                 const bool bCorrEnd = aEndIdx == rPos.nNode;
@@ -1597,12 +1597,12 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
             pDestNd = rPos.GetNode().GetTextNode();
         }
 
-        if (pDestNd && pEnd->nContent.GetIndex())
+        if (pDestNd && pEnd->GetContentIndex())
         {
             // move the content into the new node
             SwContentIndex aIdx( pEndSrcNd, 0 );
             pEndSrcNd->CutText( pDestNd, rPos.nContent, aIdx,
-                            pEnd->nContent.GetIndex());
+                            pEnd->GetContentIndex());
         }
 
         if (pDestNd && bCopyCollFormat)
@@ -1647,7 +1647,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
         OSL_ENSURE( bSuccess, "Move() - no ContentNode here" );
     }
     pStt->nContent.Assign( pStt->GetNode().GetContentNode(),
-                            pStt->nContent.GetIndex() );
+                            pStt->GetContentIndex() );
     // Correct the PaM, because it might have happened that the move
     // went over the node borders (so the data might be in different nodes).
     // Also, a selection is invalidated.

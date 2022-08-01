@@ -907,8 +907,8 @@ void SwFEShell::Insert( const OUString& rGrfName, const OUString& rFltName,
         if ( IsRedlineOn() )
         {
             SwPosition aPos(*pFormat->GetAnchor().GetContentAnchor());
-            SwPaM aPaM(aPos.GetNode(), aPos.nContent.GetIndex(),
-                    aPos.GetNode(), aPos.nContent.GetIndex() + 1);
+            SwPaM aPaM(aPos.GetNode(), aPos.GetContentIndex(),
+                    aPos.GetNode(), aPos.GetContentIndex() + 1);
             GetDoc()->getIDocumentRedlineAccess().AppendRedline(
                     new SwRangeRedline( RedlineType::Insert, aPaM ), true);
         }

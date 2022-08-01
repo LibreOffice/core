@@ -216,7 +216,7 @@ SwUndoRedlineDelete::SwUndoRedlineDelete(
             m_bCanGroup = true;
             m_bIsDelim = !GetAppCharClass().isLetterNumeric( pTNd->GetText(),
                                                             m_nSttContent );
-            m_bIsBackspace = m_nSttContent == rRange.GetPoint()->nContent.GetIndex();
+            m_bIsBackspace = m_nSttContent == rRange.GetPoint()->GetContentIndex();
         }
     }
 
@@ -386,7 +386,7 @@ void SwUndoRedlineSort::RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
 
     SwNodeIndex aPrevIdx( pStart->nNode, -1 );
     SwNodeOffset nOffsetTemp = pEnd->GetNodeIndex() - pStart->GetNodeIndex();
-    const sal_Int32 nCntStt  = pStart->nContent.GetIndex();
+    const sal_Int32 nCntStt  = pStart->GetContentIndex();
 
     rDoc.SortText(rPam, *m_pOpt);
 
@@ -419,7 +419,7 @@ void SwUndoRedlineSort::SetSaveRange( const SwPaM& rRange )
 {
     const SwPosition& rPos = *rRange.End();
     m_nSaveEndNode = rPos.GetNodeIndex();
-    m_nSaveEndContent = rPos.nContent.GetIndex();
+    m_nSaveEndContent = rPos.GetContentIndex();
 }
 
 SwUndoAcceptRedline::SwUndoAcceptRedline( const SwPaM& rRange )

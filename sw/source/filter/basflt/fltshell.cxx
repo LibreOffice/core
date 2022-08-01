@@ -184,7 +184,7 @@ SwFltControlStack::~SwFltControlStack()
 void SwFltControlStack::MoveAttrs(const SwPosition& rPos, MoveAttrsMode eMode)
 {
     SwNodeOffset nPosNd = rPos.GetNodeIndex();
-    sal_uInt16 nPosCt = rPos.nContent.GetIndex() - 1;
+    sal_uInt16 nPosCt = rPos.GetContentIndex() - 1;
 
     for (size_t i = 0, nCnt = m_Entries.size(); i < nCnt; ++i)
     {
@@ -591,7 +591,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 SwTextNode const*const pTextNode(
                         aRegion.End()->GetNode().GetTextNode());
                 SwTextField const*const pField = pTextNode ? pTextNode->GetFieldTextAttrAt(
-                        aRegion.End()->nContent.GetIndex() - 1, true) : nullptr;
+                        aRegion.End()->GetContentIndex() - 1, true) : nullptr;
                 if (pField)
                 {
                     SwPostItField const*const pPostIt(
@@ -770,9 +770,9 @@ void SwFltControlStack::Delete(const SwPaM &rPam)
         return;
 
     SwNodeIndex aStartNode(pStt->nNode, -1);
-    const sal_Int32 nStartIdx = pStt->nContent.GetIndex();
+    const sal_Int32 nStartIdx = pStt->GetContentIndex();
     SwNodeIndex aEndNode(pEnd->nNode, -1);
-    const sal_Int32 nEndIdx = pEnd->nContent.GetIndex();
+    const sal_Int32 nEndIdx = pEnd->GetContentIndex();
 
     // We don't support deleting content that is over one node, or removing a node.
     OSL_ENSURE(aEndNode == aStartNode, "nodes must be the same, or this method extended");

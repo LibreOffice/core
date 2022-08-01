@@ -2677,7 +2677,7 @@ void SwXFrame::dispose()
         {
             const SwPosition &rPos = *(pFormat->GetAnchor().GetContentAnchor());
             SwTextNode *pTextNode = rPos.GetNode().GetTextNode();
-            const sal_Int32 nIdx = rPos.nContent.GetIndex();
+            const sal_Int32 nIdx = rPos.GetContentIndex();
             pTextNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIdx, nIdx );
         }
         else

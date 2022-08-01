@@ -756,7 +756,7 @@ bool SwCursorShell::MoveFieldType(
         SwTextNode* pTNd = rPos.GetNode().GetTextNode();
         OSL_ENSURE( pTNd, "No ContentNode" );
 
-        SwTextField * pTextField = pTNd->GetFieldTextAttrAt( rPos.nContent.GetIndex(), true );
+        SwTextField * pTextField = pTNd->GetFieldTextAttrAt( rPos.GetContentIndex(), true );
         const bool bDelField = ( pTextField == nullptr );
         sal_Int32 nContentOffset = -1;
 
@@ -766,7 +766,7 @@ bool SwCursorShell::MoveFieldType(
             SwFormatField* pFormatField = new SwFormatField( SwDateTimeField(
                 static_cast<SwDateTimeFieldType*>(mxDoc->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::DateTime ) ) ) );
 
-            pTextField = new SwTextField( *pFormatField, rPos.nContent.GetIndex(),
+            pTextField = new SwTextField( *pFormatField, rPos.GetContentIndex(),
                         mxDoc->IsClipBoard() );
             pTextField->ChgTextNode( pTNd );
         }
@@ -775,7 +775,7 @@ bool SwCursorShell::MoveFieldType(
             // the cursor might be anywhere inside the input field,
             // but we will be searching for the field start
             if (pTextField->Which() == RES_TXTATR_INPUTFIELD
-                    && rPos.nContent.GetIndex() != pTextField->GetStart())
+                    && rPos.GetContentIndex() != pTextField->GetStart())
                 nContentOffset = pTextField->GetStart();
         }
         bool isSrch;
@@ -932,7 +932,7 @@ SwTextField * SwCursorShell::GetTextFieldAtPos(
     SwTextNode * const pNode = pPos->GetNode().GetTextNode();
     if ( pNode != nullptr )
     {
-        pTextField = pNode->GetFieldTextAttrAt( pPos->nContent.GetIndex(), bIncludeInputFieldAtStart );
+        pTextField = pNode->GetFieldTextAttrAt( pPos->GetContentIndex(), bIncludeInputFieldAtStart );
     }
 
     return pTextField;
@@ -952,7 +952,7 @@ SwTextField* SwCursorShell::GetTextFieldAtCursor(
             pTextField->End() != nullptr
             ? *(pTextField->End()) - pTextField->GetStart()
             : 1;
-        if ( ( pCursor->End()->nContent.GetIndex() - pCursor->Start()->nContent.GetIndex() ) <= nTextFieldLength )
+        if ( ( pCursor->End()->GetContentIndex() - pCursor->Start()->GetContentIndex() ) <= nTextFieldLength )
         {
             pFieldAtCursor = pTextField;
         }
@@ -1013,7 +1013,7 @@ SwTextContentControl* SwCursorShell::CursorInsideContentControl() const
             continue;
         }
 
-        sal_Int32 nIndex = pStart->nContent.GetIndex();
+        sal_Int32 nIndex = pStart->GetContentIndex();
         if (SwTextAttr* pAttr = pTextNode->GetTextAttrAt(nIndex, RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT))
         {
             return static_txtattr_cast<SwTextContentControl*>(pAttr);
@@ -1406,7 +1406,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                      && !aTmpState.m_bFootnoteNoInfo )
                 {
                     const SwWrongList* pSmartTagList = pTextNd->GetSmartTags();
-                    sal_Int32 nCurrent = aPos.nContent.GetIndex();
+                    sal_Int32 nCurrent = aPos.GetContentIndex();
                     const sal_Int32 nBegin = nCurrent;
                     sal_Int32 nLen = 1;
 
@@ -1454,7 +1454,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                      && ( IsAttrAtPos::Field | IsAttrAtPos::ClickField ) & rContentAtPos.eContentAtPos
                      && !aTmpState.m_bFootnoteNoInfo )
                 {
-                    pTextAttr = pTextNd->GetFieldTextAttrAt( aPos.nContent.GetIndex() );
+                    pTextAttr = pTextNd->GetFieldTextAttrAt( aPos.GetContentIndex() );
                     const SwField* pField = pTextAttr != nullptr
                                           ? pTextAttr->GetFormatField().GetField()
                                           : nullptr;
@@ -1533,7 +1533,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                 if (!bRet && rContentAtPos.eContentAtPos & IsAttrAtPos::ContentControl)
                 {
                     SwTextAttr* pAttr = pTextNd->GetTextAttrAt(
-                        aPos.nContent.GetIndex(), RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT);
+                        aPos.GetContentIndex(), RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT);
                     if (pAttr)
                     {
                         rContentAtPos.eContentAtPos = IsAttrAtPos::ContentControl;
@@ -1558,7 +1558,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                             rContentAtPos.eContentAtPos = IsAttrAtPos::Ftn;
                     }
                     else if ( nullptr != ( pTextAttr = pTextNd->GetTextAttrForCharAt(
-                        aPos.nContent.GetIndex(), RES_TXTATR_FTN )) )
+                        aPos.GetContentIndex(), RES_TXTATR_FTN )) )
                     {
                         bRet = true;
                         if( bSetCursor )
@@ -1612,7 +1612,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                     {
                         std::vector<SwTextAttr *> const marks(
                             pTextNd->GetTextAttrsAt(
-                               aPos.nContent.GetIndex(), RES_TXTATR_TOXMARK));
+                               aPos.GetContentIndex(), RES_TXTATR_TOXMARK));
                         if (!marks.empty())
                         {   // hmm... can only return 1 here
                             pTextAttr = *marks.begin();
@@ -1624,7 +1624,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                     {
                         std::vector<SwTextAttr *> const marks(
                             pTextNd->GetTextAttrsAt(
-                               aPos.nContent.GetIndex(), RES_TXTATR_REFMARK));
+                               aPos.GetContentIndex(), RES_TXTATR_REFMARK));
                         if (!marks.empty())
                         {   // hmm... can only return 1 here
                             pTextAttr = *marks.begin();
@@ -1678,7 +1678,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                      && IsAttrAtPos::InetAttr & rContentAtPos.eContentAtPos
                      && !aTmpState.m_bFootnoteNoInfo )
                 {
-                    sal_Int32 index = aPos.nContent.GetIndex();
+                    sal_Int32 index = aPos.GetContentIndex();
                     pTextAttr = pTextNd->GetTextAttrAt(index, RES_TXTATR_INETFMT);
 
                     if(!pTextAttr && index > 0)
@@ -1895,7 +1895,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
 #ifdef DBG_UTIL
             if( !bRet && IsAttrAtPos::CurrAttrs & rContentAtPos.eContentAtPos )
             {
-                const sal_Int32 n = aPos.nContent.GetIndex();
+                const sal_Int32 n = aPos.GetContentIndex();
                 SfxItemSetFixed<POOLATTR_BEGIN, POOLATTR_END - 1>  aSet( GetDoc()->GetAttrPool() );
                 if( pTextNd->GetpSwpHints() )
                 {
@@ -1932,7 +1932,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                 rContentAtPos.sStr = "Pos: (";
                 rContentAtPos.sStr += OUString::number( sal_Int32(aPos.GetNodeIndex()));
                 rContentAtPos.sStr += ":";
-                rContentAtPos.sStr += OUString::number( aPos.nContent.GetIndex());
+                rContentAtPos.sStr += OUString::number( aPos.GetContentIndex());
                 rContentAtPos.sStr += ")";
                 rContentAtPos.sStr += "\nParagraph Style: ";
                 rContentAtPos.sStr += pTextNd->GetFormatColl()->GetName();
@@ -1993,7 +1993,7 @@ const SwPostItField* SwCursorShell::GetPostItFieldAtCursor() const
         const SwTextNode* pTextNd = pCursorPos->GetNode().GetTextNode();
         if ( pTextNd )
         {
-            SwTextAttr* pTextAttr = pTextNd->GetFieldTextAttrAt( pCursorPos->nContent.GetIndex() );
+            SwTextAttr* pTextAttr = pTextNd->GetFieldTextAttrAt( pCursorPos->GetContentIndex() );
             const SwField* pField = pTextAttr != nullptr ? pTextAttr->GetFormatField().GetField() : nullptr;
             if ( pField && pField->Which()== SwFieldIds::Postit )
             {
@@ -2149,7 +2149,7 @@ bool SwCursorShell::SelectTextAttr( sal_uInt16 nWhich,
             SwPosition& rPos = *m_pCurrentCursor->GetPoint();
             SwTextNode* pTextNd = rPos.GetNode().GetTextNode();
             pTextAttr = pTextNd
-                ? pTextNd->GetTextAttrAt(rPos.nContent.GetIndex(),
+                ? pTextNd->GetTextAttrAt(rPos.GetContentIndex(),
                         nWhich,
                         bExpand ? SwTextNode::EXPAND : SwTextNode::DEFAULT)
                 : nullptr;
@@ -2264,7 +2264,7 @@ bool SwCursorShell::SetShadowCursorPos( const Point& rPt, SwFillMode eFillMode )
                     ++aEnd;
 
                 if( aEnd.GetNode().IsEndNode() &&
-                    pCNd->Len() == aPos.nContent.GetIndex() )
+                    pCNd->Len() == aPos.GetContentIndex() )
                     aPos.nNode = *pSectNd->EndOfSectionNode();
             }
 

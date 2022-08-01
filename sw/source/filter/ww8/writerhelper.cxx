@@ -722,7 +722,7 @@ namespace sw
             if (aResult != maStack.rend())
             {
                 SwTextNode *const pNode(rPos.GetNode().GetTextNode());
-                sal_Int32 const nIndex(rPos.nContent.GetIndex());
+                sal_Int32 const nIndex(rPos.GetContentIndex());
                 // HACK to prevent overlap of field-mark and redline,
                 // which would destroy field-mark invariants when the redline
                 // is hidden: move the redline end one to the left
@@ -735,7 +735,7 @@ namespace sw
                         rPos.GetDoc().getIDocumentMarkAccess()->getFieldmarkAt(end));
                     SAL_WARN_IF(!pFieldMark, "sw.ww8", "expected a field mark");
                     if (pFieldMark && pFieldMark->GetMarkPos().GetNodeIndex() == (*aResult)->m_aMkPos.m_nNode.GetIndex()+1
-                        && pFieldMark->GetMarkPos().nContent.GetIndex() < (*aResult)->m_aMkPos.m_nContent)
+                        && pFieldMark->GetMarkPos().GetContentIndex() < (*aResult)->m_aMkPos.m_nContent)
                     {
                         (*aResult)->SetEndPos(end);
                         return true;
@@ -756,7 +756,7 @@ namespace sw
         {
             sal_Int32 const nInserted = 2; // CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDSEP
             SwNodeOffset nPosNd = rPos.GetNodeIndex();
-            sal_Int32 nPosCt = rPos.nContent.GetIndex() - nInserted;
+            sal_Int32 nPosCt = rPos.GetContentIndex() - nInserted;
 
             bool const isPoint(rMkPos == rPtPos);
             if ((rMkPos.m_nNode.GetIndex()+1 == nPosNd) &&

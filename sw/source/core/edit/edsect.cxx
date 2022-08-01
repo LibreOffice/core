@@ -252,9 +252,9 @@ sal_uInt16 SwEditShell::GetFullSelectedSectionCount() const
         auto [pStt, pEnd] = rPaM.StartEnd(); // SwPosition*
         const SwContentNode* pCNd;
         // check the selection, if Start at Node begin and End at Node end
-        if( pStt->nContent.GetIndex() ||
+        if( pStt->GetContentIndex() ||
             ( nullptr == ( pCNd = pEnd->GetNode().GetContentNode() )) ||
-            pCNd->Len() != pEnd->nContent.GetIndex() )
+            pCNd->Len() != pEnd->GetContentIndex() )
         {
             nRet = 0;
             break;
@@ -346,7 +346,7 @@ static const SwNode* lcl_SpecialInsertNode(const SwPosition* pCurrentPos)
         // - there are only start nodes between the current and pInnermostNode
         SwNodeIndex aBegin( pCurrentPos->nNode );
         if( rCurrentNode.IsContentNode() &&
-            (pCurrentPos->nContent.GetIndex() == 0))
+            (pCurrentPos->GetContentIndex() == 0))
             --aBegin;
         while( (aBegin != pInnermostNode->GetIndex()) &&
                aBegin.GetNode().IsStartNode() )
@@ -359,7 +359,7 @@ static const SwNode* lcl_SpecialInsertNode(const SwPosition* pCurrentPos)
         //   pInnermostNode's end node
         SwNodeIndex aEnd( pCurrentPos->nNode );
         if( rCurrentNode.IsContentNode() &&
-            ( pCurrentPos->nContent.GetIndex() ==
+            ( pCurrentPos->GetContentIndex() ==
               rCurrentNode.GetContentNode()->Len() ) )
             ++aEnd;
         while( (aEnd != pInnermostNode->EndOfSectionNode()->GetIndex()) &&

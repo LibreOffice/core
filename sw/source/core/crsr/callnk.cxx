@@ -40,7 +40,7 @@ SwCallLink::SwCallLink( SwCursorShell & rSh )
     SwPaM* pCursor = m_rShell.IsTableMode() ? m_rShell.GetTableCrs() : m_rShell.GetCursor();
     SwNode& rNd = pCursor->GetPoint()->GetNode();
     m_nNode = rNd.GetIndex();
-    m_nContent = pCursor->GetPoint()->nContent.GetIndex();
+    m_nContent = pCursor->GetPoint()->GetContentIndex();
     m_nNodeType = rNd.GetNodeType();
     m_bHasSelection = ( *pCursor->GetPoint() != *pCursor->GetMark() );
 
@@ -130,7 +130,7 @@ SwCallLink::~SwCallLink() COVERITY_NOEXCEPT_FALSE
         }
     }
 
-    sal_Int32 nCmp, nCurrentContent = pCurrentCursor->GetPoint()->nContent.GetIndex();
+    sal_Int32 nCmp, nCurrentContent = pCurrentCursor->GetPoint()->GetContentIndex();
     SwNodeType nNdWhich = pCNd->GetNodeType();
     SwNodeOffset nCurrentNode = pCurrentCursor->GetPoint()->GetNodeIndex();
 

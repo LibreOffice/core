@@ -538,7 +538,7 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
             if (rPam.GetNode().IsTextNode())
             {
                 marks = rPam.GetNode().GetTextNode()->GetTextAttrsAt(
-                    rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_TOXMARK);
+                    rPam.GetPoint()->GetContentIndex(), RES_TXTATR_TOXMARK);
             }
             if (!marks.empty())
             {
@@ -581,7 +581,7 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
             const SwTextNode *pTextNd =
                 rPam.GetDoc().GetNodes()[pPos->GetNodeIndex()]->GetTextNode();
             const SwTextAttr* pTextAttr = pTextNd
-                ? pTextNd->GetFieldTextAttrAt( pPos->nContent.GetIndex(), true )
+                ? pTextNd->GetFieldTextAttrAt( pPos->GetContentIndex(), true )
                 : nullptr;
             if ( pTextAttr != nullptr )
             {
@@ -681,7 +681,7 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
         {
             SwTextAttr *const pTextAttr = rPam.GetNode().IsTextNode() ?
                 rPam.GetNode().GetTextNode()->GetTextAttrForCharAt(
-                    rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN) : nullptr;
+                    rPam.GetPoint()->GetContentIndex(), RES_TXTATR_FTN) : nullptr;
             if(pTextAttr)
             {
                 const SwFormatFootnote& rFootnote = pTextAttr->GetFootnote();
@@ -708,7 +708,7 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
             if (rPam.GetNode().IsTextNode())
             {
                 marks = rPam.GetNode().GetTextNode()->GetTextAttrsAt(
-                            rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_REFMARK);
+                            rPam.GetPoint()->GetContentIndex(), RES_TXTATR_REFMARK);
             }
             if (!marks.empty())
             {
@@ -729,7 +729,7 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
         {
             uno::Reference<XTextContent> const xRet(rPam.GetNode().IsTextNode()
                 ? GetNestedTextContent(*rPam.GetNode().GetTextNode(),
-                    rPam.GetPoint()->nContent.GetIndex(), false)
+                    rPam.GetPoint()->GetContentIndex(), false)
                 : nullptr);
             if (xRet.is())
             {
@@ -751,8 +751,8 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
             if (&rPam.GetNode() == &rPam.GetNode(false)
                 && pTextNode && pTextNode->GetpSwpHints())
             {
-                sal_Int32 nPaMStart = rPam.Start()->nContent.GetIndex();
-                sal_Int32 nPaMEnd = rPam.End()->nContent.GetIndex();
+                sal_Int32 nPaMStart = rPam.Start()->GetContentIndex();
+                sal_Int32 nPaMEnd = rPam.End()->GetContentIndex();
                 Sequence< OUString> aCharStyles;
                 SwpHints* pHints = pTextNode->GetpSwpHints();
                 for( size_t nAttr = 0; nAttr < pHints->Count(); ++nAttr )
@@ -1028,13 +1028,13 @@ void InsertFile(SwUnoCursor* pUnoCursor, const OUString& rURL,
     if (SwTextNode const*const pTextNode = pUnoCursor->GetPoint()->GetNode().GetTextNode())
     {
         // TODO: check meta field here too in case it ever grows a 2nd char
-        if (pTextNode->GetTextAttrAt(pUnoCursor->GetPoint()->nContent.GetIndex(),
+        if (pTextNode->GetTextAttrAt(pUnoCursor->GetPoint()->GetContentIndex(),
                     RES_TXTATR_INPUTFIELD, SwTextNode::PARENT))
         {
             throw uno::RuntimeException("cannot insert file inside input field");
         }
 
-        if (pTextNode->GetTextAttrAt(pUnoCursor->GetPoint()->nContent.GetIndex(),
+        if (pTextNode->GetTextAttrAt(pUnoCursor->GetPoint()->GetContentIndex(),
                                      RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT))
         {
             throw uno::RuntimeException("cannot insert file inside content controls");
@@ -1147,7 +1147,7 @@ void InsertFile(SwUnoCursor* pUnoCursor, const OUString& rURL,
         rDoc.getIDocumentContentOperations().DeleteAndJoin(*pUnoCursor);
 
     SwNodeIndex aSave(  pUnoCursor->GetPoint()->nNode, -1 );
-    sal_Int32 nContent = pUnoCursor->GetPoint()->nContent.GetIndex();
+    sal_Int32 nContent = pUnoCursor->GetPoint()->GetContentIndex();
 
     ErrCode nErrno = pRdr->Read( *pRead );   // and paste the document
 

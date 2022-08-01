@@ -3434,9 +3434,9 @@ SwFrameFormat *SwWW8ImplReader::ContainsSingleInlineGraphic(const SwPaM &rRegion
     */
     SwFrameFormat *pRet=nullptr;
     SwNodeIndex aBegin(rRegion.Start()->nNode);
-    const sal_Int32 nBegin(rRegion.Start()->nContent.GetIndex());
+    const sal_Int32 nBegin(rRegion.Start()->GetContentIndex());
     SwNodeIndex aEnd(rRegion.End()->nNode);
-    const sal_Int32 nEnd(rRegion.End()->nContent.GetIndex());
+    const sal_Int32 nEnd(rRegion.End()->GetContentIndex());
     const SwTextNode* pTNd;
     const SwTextAttr* pTFlyAttr;
     if (
@@ -4546,7 +4546,7 @@ void SwWW8ImplReader::Read_LineBreakClear(sal_uInt16 /*nId*/, const sal_uInt8* p
     if (nLen == -1 && m_oLineBreakClear.has_value())
     {
         SwTextNode* pText = m_pPaM->GetNode().GetTextNode();
-        sal_Int32 nPos = m_pPaM->GetPoint()->nContent.GetIndex();
+        sal_Int32 nPos = m_pPaM->GetPoint()->GetContentIndex();
         if (!pText || !nPos)
         {
             // There should have been a linebreak char.

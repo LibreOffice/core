@@ -2184,7 +2184,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
 
     if( rHTMLWrt.m_pCurrentPam->GetPoint()->nNode == rHTMLWrt.m_pCurrentPam->GetMark()->nNode )
     {
-        nEnd = rHTMLWrt.m_pCurrentPam->GetMark()->nContent.GetIndex();
+        nEnd = rHTMLWrt.m_pCurrentPam->GetMark()->GetContentIndex();
     }
 
     // are there any hard attributes that must be written as options?
@@ -2281,7 +2281,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
     rHTMLWrt.m_bTextAttr = true;
 
     size_t nAttrPos = 0;
-    sal_Int32 nStrPos = rHTMLWrt.m_pCurrentPam->GetPoint()->nContent.GetIndex();
+    sal_Int32 nStrPos = rHTMLWrt.m_pCurrentPam->GetPoint()->GetContentIndex();
     const SwTextAttr * pHt = nullptr;
     const size_t nCntAttr = pNd->HasHints() ? pNd->GetSwpHints().Count() : 0;
     if( nCntAttr && nStrPos > ( pHt = pNd->GetSwpHints().Get(0) )->GetStart() )
@@ -2470,7 +2470,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
                         // Placeholder for a single-point fieldmark.
 
                         SwPosition aMarkPos = *rWrt.m_pCurrentPam->GetPoint();
-                        aMarkPos.nContent += nStrPos - aMarkPos.nContent.GetIndex();
+                        aMarkPos.nContent += nStrPos - aMarkPos.GetContentIndex();
                         rHTMLWrt.OutPointFieldmarks(aMarkPos);
                     }
                     else

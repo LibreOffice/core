@@ -296,7 +296,7 @@ void DocumentLayoutManager::DelLayoutFormat( SwFrameFormat *pFormat )
             if ( pTextNd )
             {
                 SwTextFlyCnt* const pAttr = static_cast<SwTextFlyCnt*>(
-                    pTextNd->GetTextAttrForCharAt( pPos->nContent.GetIndex(),
+                    pTextNd->GetTextAttrForCharAt( pPos->GetContentIndex(),
                         RES_TXTATR_FLYCNT ));
                 if ( pAttr && (pAttr->GetFlyCnt().GetFrameFormat() == pFormat) )
                 {
@@ -457,7 +457,7 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
         const SwPosition* pPos = rNewAnchor.GetContentAnchor();
         SwFormatFlyCnt aFormat( pDest );
         pPos->GetNode().GetTextNode()->InsertItem(
-            aFormat, pPos->nContent.GetIndex(), 0 );
+            aFormat, pPos->GetContentIndex(), 0 );
     }
 
     if( bMakeFrames )

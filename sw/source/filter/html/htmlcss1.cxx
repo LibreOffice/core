@@ -1974,7 +1974,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( const SvxCSS1PropertyInfo &rPropInfo,
         // still empty and otherwise auto-bound.
         // Auto-bound frames for the time being inserted at the previous position
         // and later moved.
-        const sal_Int32 nContent = m_pPam->GetPoint()->nContent.GetIndex();
+        const sal_Int32 nContent = m_pPam->GetPoint()->GetContentIndex();
         if( nContent )
         {
             aAnchor.SetType( RndStdIds::FLY_AT_CHAR );
@@ -2220,7 +2220,7 @@ void SwHTMLParser::EndContextAttrs( HTMLAttrContext *pContext )
         {
             // Set the number of characters for DropCaps. If it's zero at the
             // end, the attribute is set to invalid and then isn't set from SetAttr.
-            sal_Int32 nChars = m_pPam->GetPoint()->nContent.GetIndex();
+            sal_Int32 nChars = m_pPam->GetPoint()->GetContentIndex();
             if( nChars < 1 )
                 pAttr->Invalidate();
             else if( nChars > MAX_DROPCAP_CHARS )

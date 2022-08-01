@@ -81,7 +81,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testCreateTextRangeByPixelPosition)
     auto pTextRange = dynamic_cast<SwXTextRange*>(xTextRange.get());
     SwPaM aPaM(pDoc->GetNodes());
     pTextRange->GetPositions(aPaM);
-    sal_Int32 nActual = aPaM.GetPoint()->nContent.GetIndex();
+    sal_Int32 nActual = aPaM.GetPoint()->GetContentIndex();
     // Without the needed PixelToLogic() call in place, this test would have failed with:
     // - Expected: 1
     // - Actual  : 0

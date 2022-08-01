@@ -919,10 +919,10 @@ static void InitBookmarks(
                 while (iter != end)
                 {
                     if (&rStart.GetNode() != iter->pNode // iter moved to next node
-                        || rStart.nContent.GetIndex() < iter->nStart)
+                        || rStart.GetContentIndex() < iter->nStart)
                     {
                         if (rEnd.GetNodeIndex() < iter->pNode->GetIndex()
-                            || (&rEnd.GetNode() == iter->pNode && rEnd.nContent.GetIndex() <= iter->nStart))
+                            || (&rEnd.GetNode() == iter->pNode && rEnd.GetContentIndex() <= iter->nStart))
                         {
                             break; // deleted - skip it
                         }
@@ -932,21 +932,21 @@ static void InitBookmarks(
                             break;
                         }
                     }
-                    else if (rStart.nContent.GetIndex() <= iter->nEnd)
+                    else if (rStart.GetContentIndex() <= iter->nEnd)
                     {
                         auto const iterNext(iter + 1);
-                        if (rStart.nContent.GetIndex() == iter->nEnd
+                        if (rStart.GetContentIndex() == iter->nEnd
                             && (iterNext == end
                                 ?   &rEnd.GetNode() == iter->pNode
                                 :  (rEnd.GetNodeIndex() < iterNext->pNode->GetIndex()
-                                    || (&rEnd.GetNode() == iterNext->pNode && rEnd.nContent.GetIndex() < iterNext->nStart))))
+                                    || (&rEnd.GetNode() == iterNext->pNode && rEnd.GetContentIndex() < iterNext->nStart))))
                         {
                             break; // deleted - skip it
                         }
                         else
                         {
                             o_rBookmarks.emplace_back(
-                                nOffset + TextFrameIndex(rStart.nContent.GetIndex() - iter->nStart),
+                                nOffset + TextFrameIndex(rStart.GetContentIndex() - iter->nStart),
                                 it.second);
                             break;
                         }
@@ -979,16 +979,16 @@ static void InitBookmarks(
                 {
                     if (iter == end
                         || &rEnd.GetNode() != iter->pNode // iter moved to next node
-                        || rEnd.nContent.GetIndex() <= iter->nStart)
+                        || rEnd.GetContentIndex() <= iter->nStart)
                     {
                         SwPosition const& rStart(it.first->GetMarkStart());
                         // oPrevIter may point to pNode or a preceding node
                         if (oPrevIter
                             ? ((*oPrevIter)->pNode->GetIndex() < rStart.GetNodeIndex()
                                 || ((*oPrevIter)->pNode == &rStart.GetNode()
-                                    && ((iter != end && &rEnd.GetNode() == iter->pNode && rEnd.nContent.GetIndex() == iter->nStart)
-                                        ? (*oPrevIter)->nEnd < rStart.nContent.GetIndex()
-                                        : (*oPrevIter)->nEnd <= rStart.nContent.GetIndex())))
+                                    && ((iter != end && &rEnd.GetNode() == iter->pNode && rEnd.GetContentIndex() == iter->nStart)
+                                        ? (*oPrevIter)->nEnd < rStart.GetContentIndex()
+                                        : (*oPrevIter)->nEnd <= rStart.GetContentIndex())))
                             : rStart.nNode == rEnd.nNode)
                         {
                             break; // deleted - skip it
@@ -999,10 +999,10 @@ static void InitBookmarks(
                             break;
                         }
                     }
-                    else if (rEnd.nContent.GetIndex() <= iter->nEnd)
+                    else if (rEnd.GetContentIndex() <= iter->nEnd)
                     {
                         o_rBookmarks.emplace_back(
-                            nOffset + TextFrameIndex(rEnd.nContent.GetIndex() - iter->nStart),
+                            nOffset + TextFrameIndex(rEnd.GetContentIndex() - iter->nStart),
                             it.second);
                         break;
                     }
@@ -1022,21 +1022,21 @@ static void InitBookmarks(
                 while (iter != end)
                 {
                     if (&rPos.GetNode() != iter->pNode // iter moved to next node
-                        || rPos.nContent.GetIndex() < iter->nStart)
+                        || rPos.GetContentIndex() < iter->nStart)
                     {
                         break; // deleted - skip it
                     }
-                    else if (rPos.nContent.GetIndex() <= iter->nEnd)
+                    else if (rPos.GetContentIndex() <= iter->nEnd)
                     {
-                        if (rPos.nContent.GetIndex() == iter->nEnd
-                            && rPos.nContent.GetIndex() != iter->pNode->Len())
+                        if (rPos.GetContentIndex() == iter->nEnd
+                            && rPos.GetContentIndex() != iter->pNode->Len())
                         {
                             break; // deleted - skip it
                         }
                         else
                         {
                             o_rBookmarks.emplace_back(
-                                nOffset + TextFrameIndex(rPos.nContent.GetIndex() - iter->nStart),
+                                nOffset + TextFrameIndex(rPos.GetContentIndex() - iter->nStart),
                                 it.second);
                         }
                         break;
@@ -1173,13 +1173,13 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
             switch (it.second)
             {
                 case MarkKind::Start:
-                    m_Bookmarks.emplace_back(TextFrameIndex(it.first->GetMarkStart().nContent.GetIndex()), it.second);
+                    m_Bookmarks.emplace_back(TextFrameIndex(it.first->GetMarkStart().GetContentIndex()), it.second);
                     break;
                 case MarkKind::End:
-                    m_Bookmarks.emplace_back(TextFrameIndex(it.first->GetMarkEnd().nContent.GetIndex()), it.second);
+                    m_Bookmarks.emplace_back(TextFrameIndex(it.first->GetMarkEnd().GetContentIndex()), it.second);
                     break;
                 case MarkKind::Point:
-                    m_Bookmarks.emplace_back(TextFrameIndex(it.first->GetMarkPos().nContent.GetIndex()), it.second);
+                    m_Bookmarks.emplace_back(TextFrameIndex(it.first->GetMarkPos().GetContentIndex()), it.second);
                     break;
             }
         }
@@ -2714,8 +2714,8 @@ void SwScriptInfo::selectHiddenTextProperty(const SwTextNode& rNode,
         {
             // intersect bookmark range with textnode range and add the intersection to rHiddenMulti
 
-            const sal_Int32 nSt =  pBookmark->GetMarkStart().nContent.GetIndex();
-            const sal_Int32 nEnd = pBookmark->GetMarkEnd().nContent.GetIndex();
+            const sal_Int32 nSt =  pBookmark->GetMarkStart().GetContentIndex();
+            const sal_Int32 nEnd = pBookmark->GetMarkEnd().GetContentIndex();
 
             if( nEnd > nSt )
             {

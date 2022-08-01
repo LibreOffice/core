@@ -182,10 +182,10 @@ void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
 #ifndef NDEBUG
     auto const nOld(pOldEndPara->GetIndex());
 #endif
-    sal_Int32 nOldEndCnt = m_pPam->GetPoint()->nContent.GetIndex();
+    sal_Int32 nOldEndCnt = m_pPam->GetPoint()->GetContentIndex();
 
     const SwNodeIndex& rNewSttPara = rNewPos.nNode;
-    sal_Int32 nNewSttCnt = rNewPos.nContent.GetIndex();
+    sal_Int32 nNewSttCnt = rNewPos.GetContentIndex();
 
     bool bMoveBack = false;
 
@@ -207,13 +207,13 @@ void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
                 if( !bMoveBack )
                 {
                     bMoveBack = m_pPam->Move( fnMoveBackward );
-                    nOldEndCnt = m_pPam->GetPoint()->nContent.GetIndex();
+                    nOldEndCnt = m_pPam->GetPoint()->GetContentIndex();
                 }
             }
             else if( bMoveBack )
             {
                 m_pPam->Move( fnMoveForward );
-                nOldEndCnt = m_pPam->GetPoint()->nContent.GetIndex();
+                nOldEndCnt = m_pPam->GetPoint()->GetContentIndex();
                 bMoveBack = false;
             }
 
@@ -400,7 +400,7 @@ void SwHTMLParser::EndContext( HTMLAttrContext *pContext )
 
     // Add a paragraph break if needed
     if( AM_NONE != pContext->GetAppendMode() &&
-        m_pPam->GetPoint()->nContent.GetIndex() )
+        m_pPam->GetPoint()->GetContentIndex() )
         AppendTextNode( pContext->GetAppendMode() );
 
     // Restart PRE, LISTING and XMP environments
@@ -535,7 +535,7 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                                 bool bCharLvl )
 {
     // Put together a DropCap attribute, if a "float:left" is before the first character
-    if( bCharLvl && !m_pPam->GetPoint()->nContent.GetIndex() &&
+    if( bCharLvl && !m_pPam->GetPoint()->GetContentIndex() &&
         SvxAdjust::Left == rPropInfo.m_eFloat )
     {
         SwFormatDrop aDrop;

@@ -533,8 +533,8 @@ void SwSpellDialogChildWindow::GetFocus()
                     SwPaM* pCursor = pWrtShell->GetCursor();
                     if(m_pSpellState->m_pPointNode != &pCursor->GetNode() ||
                         m_pSpellState->m_pMarkNode != &pCursor->GetNode(false)||
-                        m_pSpellState->m_nPointPos != pCursor->GetPoint()->nContent.GetIndex()||
-                        m_pSpellState->m_nMarkPos != pCursor->GetMark()->nContent.GetIndex())
+                        m_pSpellState->m_nPointPos != pCursor->GetPoint()->GetContentIndex()||
+                        m_pSpellState->m_nMarkPos != pCursor->GetMark()->GetContentIndex())
                             bInvalidate = true;
                 }
                 break;
@@ -590,8 +590,8 @@ void SwSpellDialogChildWindow::LoseFocus()
                 SwPaM* pCursor = pWrtShell->GetCursor();
                 m_pSpellState->m_pPointNode = &pCursor->GetNode();
                 m_pSpellState->m_pMarkNode = &pCursor->GetNode(false);
-                m_pSpellState->m_nPointPos = pCursor->GetPoint()->nContent.GetIndex();
-                m_pSpellState->m_nMarkPos = pCursor->GetMark()->nContent.GetIndex();
+                m_pSpellState->m_nPointPos = pCursor->GetPoint()->GetContentIndex();
+                m_pSpellState->m_nMarkPos = pCursor->GetMark()->GetContentIndex();
 
             }
             break;

@@ -187,7 +187,7 @@ bool GotoCurrRegionAndSkip( SwPaM& rCurrentCursor, SwMoveFnCollection const & fn
         return false;
 
     SwPosition* pPos = rCurrentCursor.GetPoint();
-    const sal_Int32 nCurrCnt = pPos->nContent.GetIndex();
+    const sal_Int32 nCurrCnt = pPos->GetContentIndex();
     bool bMoveBackward = &fnPosRegion == &fnMoveBackward;
 
     do {
@@ -212,7 +212,7 @@ bool GotoCurrRegionAndSkip( SwPaM& rCurrentCursor, SwMoveFnCollection const & fn
         pPos->nContent.Assign( pCNd, bMoveBackward ? pCNd->Len() : 0 );
 
         if( &pPos->GetNode() != &rCurrNd ||
-            pPos->nContent.GetIndex() != nCurrCnt )
+            pPos->GetContentIndex() != nCurrCnt )
             // there was a change
             return true;
 
@@ -230,7 +230,7 @@ bool SwCursor::MoveRegion( SwWhichRegion fnWhichRegion, SwMoveFnCollection const
             (*fnWhichRegion)( *this, fnPosRegion, IsReadOnlyAvailable()  ) &&
             !IsSelOvr() &&
             (GetPoint()->GetNodeIndex() != m_vSavePos.back().nNode ||
-             GetPoint()->nContent.GetIndex() != m_vSavePos.back().nContent);
+             GetPoint()->GetContentIndex() != m_vSavePos.back().nContent);
 }
 
 bool SwCursorShell::MoveRegion( SwWhichRegion fnWhichRegion, SwMoveFnCollection const & fnPosRegion )

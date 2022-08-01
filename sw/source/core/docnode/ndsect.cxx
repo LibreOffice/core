@@ -175,9 +175,9 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
     if (rNewData.IsHidden() && rRange.HasMark())
     {
         auto [pStt, pEnd] = rRange.StartEnd(); // SwPosition*
-        if( !pStt->nContent.GetIndex() &&
+        if( !pStt->GetContentIndex() &&
             pEnd->GetNode().GetContentNode()->Len() ==
-            pEnd->nContent.GetIndex() )
+            pEnd->GetContentIndex() )
         {
             ::lcl_CheckEmptyLayFrame( GetNodes(),
                                     rNewData,
@@ -229,7 +229,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
             if( pUndoInsSect )
             {
                 if( !( pPrvNd && 1 == nRegionRet ) &&
-                    pSttPos->nContent.GetIndex() )
+                    pSttPos->GetContentIndex() )
                 {
                     SwTextNode* const pTNd =
                         pSttPos->GetNode().GetTextNode();
@@ -244,7 +244,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
                     SwTextNode *const pTNd =
                         pEndPos->GetNode().GetTextNode();
                     if (pTNd && (pTNd->GetText().getLength()
-                                    != pEndPos->nContent.GetIndex()))
+                                    != pEndPos->GetContentIndex()))
                     {
                         pUndoInsSect->SaveSplitNode( pTNd, false );
                     }
@@ -256,7 +256,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
                 pSttPos->nNode.Assign( *pPrvNd );
                 pSttPos->nContent.Assign( pSttPos->GetNode().GetContentNode(), 0 );
             }
-            else if( pSttPos->nContent.GetIndex() )
+            else if( pSttPos->GetContentIndex() )
             {
                 getIDocumentContentOperations().SplitNode( *pSttPos, false );
             }
@@ -269,9 +269,9 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
             else
             {
                 const SwContentNode* pCNd = pEndPos->GetNode().GetContentNode();
-                if( pCNd && pCNd->Len() != pEndPos->nContent.GetIndex() )
+                if( pCNd && pCNd->Len() != pEndPos->GetContentIndex() )
                 {
-                    sal_Int32 nContent = pSttPos->nContent.GetIndex();
+                    sal_Int32 nContent = pSttPos->GetContentIndex();
                     getIDocumentContentOperations().SplitNode( *pEndPos, false );
 
                     SwTextNode* pTNd;
@@ -300,12 +300,12 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
     {
         const SwPosition* pPos = rRange.GetPoint();
         const SwContentNode* pCNd = pPos->GetNode().GetContentNode();
-        if( !pPos->nContent.GetIndex() )
+        if( !pPos->GetContentIndex() )
         {
             pNewSectNode = GetNodes().InsertTextSection(
                 pPos->nNode, *pFormat, rNewData, pTOXBase, nullptr);
         }
-        else if( pPos->nContent.GetIndex() == pCNd->Len() )
+        else if( pPos->GetContentIndex() == pCNd->Len() )
         {
             pNewSectNode = GetNodes().InsertTextSection(
                 pPos->nNode, *pFormat, rNewData, pTOXBase, nullptr, false);
@@ -407,9 +407,9 @@ sal_uInt16 SwDoc::IsInsRegionAvailable( const SwPaM& rRange,
             // Try to create an enclosing Section, but only if Start is
             // located at the Section's beginning and End at it's end
             nRet = 0;
-            if( !pStt->nContent.GetIndex()
+            if( !pStt->GetContentIndex()
                 && pSectNd->GetIndex() == pStt->GetNodeIndex() - 1
-                && pEnd->nContent.GetIndex() == pCNd->Len() )
+                && pEnd->GetContentIndex() == pCNd->Len() )
             {
                 SwNodeIndex aIdx( pStt->nNode, -1 );
                 SwNodeOffset nCmp = pEnd->GetNodeIndex();
@@ -451,7 +451,7 @@ sal_uInt16 SwDoc::IsInsRegionAvailable( const SwPaM& rRange,
             // Try to create an enclosing Section, but only if the End
             // is at the Section's end.
             nRet = 0;
-            if( pEnd->nContent.GetIndex() == pCNd->Len() )
+            if( pEnd->GetContentIndex() == pCNd->Len() )
             {
                 SwNodeIndex aIdx( pEnd->nNode, 1 );
                 if( aIdx.GetNode().IsEndNode() &&
@@ -477,7 +477,7 @@ sal_uInt16 SwDoc::IsInsRegionAvailable( const SwPaM& rRange,
             // Try to create an enclosing Section, but only if Start
             // is at the Section's start.
             nRet = 0;
-            if( !pStt->nContent.GetIndex() )
+            if( !pStt->GetContentIndex() )
             {
                 SwNodeIndex aIdx( pStt->nNode, -1 );
                 if( aIdx.GetNode().IsSectionNode() )

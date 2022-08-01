@@ -150,14 +150,14 @@ bool IsMarkHidden(SwRootFrame const& rLayout, ::sw::mark::IMark const& rMark)
     }
     else
     {
-        if (rMark.GetMarkPos().nContent.GetIndex() == pTextNode->Len())
+        if (rMark.GetMarkPos().GetContentIndex() == pTextNode->Len())
         {   // at end of node: never deleted (except if node deleted)
             return pTextNode->GetRedlineMergeFlag() == SwNode::Merge::Hidden;
         }
         else
         {   // check character following mark pos
             return pFrame->MapModelToViewPos(rMark.GetMarkPos())
-                == pFrame->MapModelToView(pTextNode, rMark.GetMarkPos().nContent.GetIndex() + 1);
+                == pFrame->MapModelToView(pTextNode, rMark.GetMarkPos().GetContentIndex() + 1);
         }
     }
 }

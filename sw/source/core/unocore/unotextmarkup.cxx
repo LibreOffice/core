@@ -113,7 +113,7 @@ void SAL_CALL SwXTextMarkup::commitTextRangeMarkup(::sal_Int32 nType, const OUSt
 
         auto [startPos, endPos] = aPam.StartEnd(); // SwPosition*
 
-        commitStringMarkup (nType, aIdentifier, startPos->nContent.GetIndex(), endPos->nContent.GetIndex() - startPos->nContent.GetIndex(), xMarkupInfoContainer);
+        commitStringMarkup (nType, aIdentifier, startPos->GetContentIndex(), endPos->GetContentIndex() - startPos->GetContentIndex(), xMarkupInfoContainer);
     }
     else if (auto pCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xRangeTunnel))
     {
@@ -121,7 +121,7 @@ void SAL_CALL SwXTextMarkup::commitTextRangeMarkup(::sal_Int32 nType, const OUSt
 
         auto [startPos, endPos] = rPam.StartEnd(); // SwPosition*
 
-        commitStringMarkup (nType, aIdentifier, startPos->nContent.GetIndex(), endPos->nContent.GetIndex() - startPos->nContent.GetIndex(), xMarkupInfoContainer);
+        commitStringMarkup (nType, aIdentifier, startPos->GetContentIndex(), endPos->GetContentIndex() - startPos->GetContentIndex(), xMarkupInfoContainer);
     }
 }
 

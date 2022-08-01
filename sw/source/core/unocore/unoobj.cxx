@@ -1240,7 +1240,7 @@ SwXTextCursor::gotoNextWord(sal_Bool Expand)
     // in specific cases...
     SwPosition  *const pPoint     = rUnoCursor.GetPoint();
     SwNode      *const pOldNode   = &pPoint->GetNode();
-    sal_Int32 const nOldIndex  = pPoint->nContent.GetIndex();
+    sal_Int32 const nOldIndex  = pPoint->GetContentIndex();
 
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
     // end of paragraph
@@ -1263,7 +1263,7 @@ SwXTextCursor::gotoNextWord(sal_Bool Expand)
 
     // return true if cursor has moved
     bRet =  (&pPoint->GetNode() != pOldNode)  ||
-            (pPoint->nContent.GetIndex() != nOldIndex);
+            (pPoint->GetContentIndex() != nOldIndex);
     if (bRet && (CursorType::Meta == m_eType))
     {
         bRet = lcl_ForceIntoMeta(rUnoCursor, m_xParentText,
@@ -1284,7 +1284,7 @@ SwXTextCursor::gotoPreviousWord(sal_Bool Expand)
     bool bRet = false;
     SwPosition  *const pPoint     = rUnoCursor.GetPoint();
     SwNode      *const pOldNode   = &pPoint->GetNode();
-    sal_Int32 const nOldIndex  = pPoint->nContent.GetIndex();
+    sal_Int32 const nOldIndex  = pPoint->GetContentIndex();
 
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
     // start of paragraph?
@@ -1303,7 +1303,7 @@ SwXTextCursor::gotoPreviousWord(sal_Bool Expand)
 
     // return true if cursor has moved
     bRet =  (&pPoint->GetNode() != pOldNode)  ||
-            (pPoint->nContent.GetIndex() != nOldIndex);
+            (pPoint->GetContentIndex() != nOldIndex);
     if (bRet && (CursorType::Meta == m_eType))
     {
         bRet = lcl_ForceIntoMeta(rUnoCursor, m_xParentText,
@@ -1323,7 +1323,7 @@ SwXTextCursor::gotoEndOfWord(sal_Bool Expand)
     bool bRet = false;
     SwPosition  *const pPoint     = rUnoCursor.GetPoint();
     SwNode      &      rOldNode   = pPoint->GetNode();
-    sal_Int32 const nOldIndex  = pPoint->nContent.GetIndex();
+    sal_Int32 const nOldIndex  = pPoint->GetContentIndex();
 
     const sal_Int16 nWordType = i18n::WordType::DICTIONARY_WORD;
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
@@ -1359,7 +1359,7 @@ SwXTextCursor::gotoStartOfWord(sal_Bool Expand)
     bool bRet = false;
     SwPosition  *const pPoint     = rUnoCursor.GetPoint();
     SwNode      &      rOldNode   = pPoint->GetNode();
-    sal_Int32 const nOldIndex  = pPoint->nContent.GetIndex();
+    sal_Int32 const nOldIndex  = pPoint->GetContentIndex();
 
     const sal_Int16 nWordType = i18n::WordType::DICTIONARY_WORD;
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
@@ -2854,7 +2854,7 @@ SwXTextCursor::sort(const uno::Sequence< beans::PropertyValue >& rDescriptor)
 
     SwNodeIndex aPrevIdx( rStart.nNode, -1 );
     const SwNodeOffset nOffset = rEnd.GetNodeIndex() - rStart.GetNodeIndex();
-    const sal_Int32 nCntStt  = rStart.nContent.GetIndex();
+    const sal_Int32 nCntStt  = rStart.GetContentIndex();
 
     rUnoCursor.GetDoc().SortText(rUnoCursor, aSortOpt);
 

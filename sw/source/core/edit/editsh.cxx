@@ -540,9 +540,9 @@ OUString SwEditShell::Calculate()
         if(pTextNd)
         {
             const SwPosition *pStart = rCurrentPaM.Start(), *pEnd = rCurrentPaM.End();
-            const sal_Int32 nStt = pStart->nContent.GetIndex();
+            const sal_Int32 nStt = pStart->GetContentIndex();
             OUString aStr = pTextNd->GetExpandText(GetLayout(),
-                                nStt, pEnd->nContent.GetIndex() - nStt);
+                                nStt, pEnd->GetContentIndex() - nStt);
 
             aStr = rCC.lowercase( aStr );
 
@@ -573,7 +573,7 @@ OUString SwEditShell::Calculate()
                         {
                             GetDoc()->getIDocumentFieldsAccess().FieldsToCalc( aCalc,
                                                   pStart->GetNodeIndex(),
-                                                  pStart->nContent.GetIndex() );
+                                                  pStart->GetContentIndex() );
                             bValidFields = true;
                         }
                         aFormel.append("(" + aCalc.GetStrResult( aCalc.VarLook( sVar )->nValue ) + ")");
@@ -963,7 +963,7 @@ OUString SwEditShell::DeleteExtTextInput( bool bInsText )
 {
     const SwPosition& rPos = *GetCursor()->GetPoint();
     SwExtTextInput* pDel = GetDoc()->GetExtTextInput( rPos.GetNode(),
-                                      rPos.nContent.GetIndex() );
+                                      rPos.GetContentIndex() );
     if( !pDel )
     {
         //JP 25.10.2001: under UNIX the cursor is moved before the Input-
@@ -1009,23 +1009,23 @@ void SwEditShell::SetExtTextInputData( const CommandExtTextInputData& rData )
         pInput->SetInputData( rData );
     // position cursor
     const SwPosition& rStt = *pInput->Start();
-    const sal_Int32 nNewCursorPos = rStt.nContent.GetIndex() + rData.GetCursorPos();
+    const sal_Int32 nNewCursorPos = rStt.GetContentIndex() + rData.GetCursorPos();
 
     // ugly but works
     ShowCursor();
-    const sal_Int32 nDiff = nNewCursorPos - rPos.nContent.GetIndex();
+    const sal_Int32 nDiff = nNewCursorPos - rPos.GetContentIndex();
     if( nDiff != 0)
     {
         bool bLeft = nDiff < 0;
         sal_Int32 nMaxGuard = std::abs(nDiff);
         while (true)
         {
-            auto nOldPos = pCurrentCursor->GetPoint()->nContent.GetIndex();
+            auto nOldPos = pCurrentCursor->GetPoint()->GetContentIndex();
             if (bLeft)
                 Left(1, SwCursorSkipMode::Chars);
             else
                 Right(1, SwCursorSkipMode::Chars);
-            auto nNewPos = pCurrentCursor->GetPoint()->nContent.GetIndex();
+            auto nNewPos = pCurrentCursor->GetPoint()->GetContentIndex();
 
             // expected success
             if (nNewPos == nNewCursorPos)

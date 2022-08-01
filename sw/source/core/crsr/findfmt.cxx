@@ -36,8 +36,8 @@ bool FindFormatImpl(SwPaM & rSearchPam,
 
     // if at beginning/end then move it out of the node
     if( bSrchForward
-        ? pPam->GetPoint()->nContent.GetIndex() == pPam->GetContentNode()->Len()
-        : !pPam->GetPoint()->nContent.GetIndex() )
+        ? pPam->GetPoint()->GetContentIndex() == pPam->GetContentNode()->Len()
+        : !pPam->GetPoint()->GetContentIndex() )
     {
         if( !(*fnMove.fnNds)( &pPam->GetPoint()->nNode, false ))
         {

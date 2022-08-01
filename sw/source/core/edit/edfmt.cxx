@@ -63,18 +63,18 @@ void SwEditShell::FillByEx(SwCharFormat* pCharFormat)
             const SwPosition* pMkPos = pPam->GetMark();
             if( pPtPos->nNode == pMkPos->nNode )        // in the same node?
             {
-                nStt = pPtPos->nContent.GetIndex();
-                if( nStt < pMkPos->nContent.GetIndex() )
-                    nEnd = pMkPos->nContent.GetIndex();
+                nStt = pPtPos->GetContentIndex();
+                if( nStt < pMkPos->GetContentIndex() )
+                    nEnd = pMkPos->GetContentIndex();
                 else
                 {
                     nEnd = nStt;
-                    nStt = pMkPos->nContent.GetIndex();
+                    nStt = pMkPos->GetContentIndex();
                 }
             }
             else
             {
-                nStt = pMkPos->nContent.GetIndex();
+                nStt = pMkPos->GetContentIndex();
                 if( pPtPos->nNode < pMkPos->nNode )
                 {
                     nEnd = nStt;
@@ -85,7 +85,7 @@ void SwEditShell::FillByEx(SwCharFormat* pCharFormat)
             }
         }
         else
-            nStt = nEnd = pPam->GetPoint()->nContent.GetIndex();
+            nStt = nEnd = pPam->GetPoint()->GetContentIndex();
 
         SfxItemSet aSet( mxDoc->GetAttrPool(),
                             pCharFormat->GetAttrSet().GetRanges() );

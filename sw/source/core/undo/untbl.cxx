@@ -718,7 +718,7 @@ SwUndoTextToTable::SwUndoTextToTable( const SwPaM& rRg,
 
     const SwPosition* pEnd = rRg.End();
     SwNodes& rNds = rRg.GetDoc().GetNodes();
-    m_bSplitEnd = pEnd->nContent.GetIndex() && ( pEnd->nContent.GetIndex()
+    m_bSplitEnd = pEnd->GetContentIndex() && ( pEnd->GetContentIndex()
                         != pEnd->GetNode().GetContentNode()->Len() ||
                 pEnd->GetNodeIndex() >= rNds.GetEndOfContent().GetIndex()-1 );
 }

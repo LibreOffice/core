@@ -479,7 +479,7 @@ static bool CanSkipOverRedline(
     {
         // check hint ends of hints that start before and end within
         sal_Int32 const nRedlineEnd(&rStartNode == &pRLEnd->GetNode()
-                ? pRLEnd->nContent.GetIndex()
+                ? pRLEnd->GetContentIndex()
                 : rStartNode.Len());
         for ( ; nEndIndex < pStartHints->Count(); ++nEndIndex)
         {
@@ -541,7 +541,7 @@ static bool CanSkipOverRedline(
             }
         }
         assert(nEndIndex == pStartHints->Count() ||
-            pRLEnd->nContent.GetIndex() < pStartHints->GetSortedByEnd(nEndIndex)->GetAnyEnd());
+            pRLEnd->GetContentIndex() < pStartHints->GetSortedByEnd(nEndIndex)->GetAnyEnd());
     }
 
     if (&rStartNode != &pRLEnd->GetNode())
@@ -577,7 +577,7 @@ static bool CanSkipOverRedline(
             // of the 1st char after the redline; should not cause problems
             // with consecutive delete redlines because those are handed by
             // GetNextRedln() and here we have the last end pos.
-            if (pRLEnd->nContent.GetIndex() < pAttr->GetStart())
+            if (pRLEnd->GetContentIndex() < pAttr->GetStart())
             {
                 break;
             }
@@ -588,7 +588,7 @@ static bool CanSkipOverRedline(
                 continue;
             }
             assert(nRedlineStart <= pAttr->GetStart()); // we wouldn't be here otherwise?
-            if (*pAttr->End() <= pRLEnd->nContent.GetIndex())
+            if (*pAttr->End() <= pRLEnd->GetContentIndex())
             {
                 continue;
             }
@@ -641,7 +641,7 @@ static bool CanSkipOverRedline(
                 SwTextAttr *const pAttr(pEndHints->GetSortedByEnd(nEndIndex));
                 if (!pAttr->End())
                     continue;
-                if (pRLEnd->nContent.GetIndex() < *pAttr->End())
+                if (pRLEnd->GetContentIndex() < *pAttr->End())
                 {
                     break;
                 }
@@ -755,11 +755,11 @@ TextFrameIndex SwAttrIter::GetNextAttr() const
                     if (&redline.second.first->End()->GetNode() != pTextNode)
                     {
                         pTextNode = redline.second.first->End()->GetNode().GetTextNode();
-                        nPosition = redline.second.first->End()->nContent.GetIndex();
+                        nPosition = redline.second.first->End()->GetContentIndex();
                     }
                     else
                     {
-                        nPosition = redline.second.first->End()->nContent.GetIndex();
+                        nPosition = redline.second.first->End()->GetContentIndex();
                     }
                 }
                 else

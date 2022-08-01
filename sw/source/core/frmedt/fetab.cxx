@@ -952,7 +952,7 @@ bool SwFEShell::HasBoxSelection() const
     SwNode* pNd;
     if( pPam->GetPoint()->GetNodeIndex() -1 ==
         ( pNd = &pPam->GetNode())->StartOfSectionIndex() &&
-        !pPam->GetPoint()->nContent.GetIndex() &&
+        !pPam->GetPoint()->GetContentIndex() &&
         pPam->GetMark()->GetNodeIndex() + 1 ==
         pNd->EndOfSectionIndex())
     {

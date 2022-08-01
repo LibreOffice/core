@@ -303,10 +303,10 @@ static SwTextNode* getModelToViewTestDocument(SwDoc *pDoc)
     pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
     pDoc->getIDocumentContentOperations().InsertString(aPaM, "AAAAA BBBBB ");
     SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
-    sal_Int32 nPos = aPaM.GetPoint()->nContent.GetIndex();
+    sal_Int32 nPos = aPaM.GetPoint()->GetContentIndex();
     pTextNode->InsertItem(aFootnote, nPos, nPos);
     pDoc->getIDocumentContentOperations().InsertString(aPaM, " CCCCC ");
-    nPos = aPaM.GetPoint()->nContent.GetIndex();
+    nPos = aPaM.GetPoint()->GetContentIndex();
     pTextNode->InsertItem(aFootnote, nPos, nPos);
     pDoc->getIDocumentContentOperations().InsertString(aPaM, " DDDDD");
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>((4*5) + 5 + 2), pTextNode->GetText().getLength());
@@ -699,7 +699,7 @@ void SwDocTest::testSwScanner()
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "Apple");
         pTextNode = aPaM.GetNode().GetTextNode();
-        sal_Int32 nPos = aPaM.GetPoint()->nContent.GetIndex();
+        sal_Int32 nPos = aPaM.GetPoint()->GetContentIndex();
         SwFormatFootnote aFootnote;
         aFootnote.SetNumStr("banana");
         SwTextAttr* pTA = pTextNode->InsertItem(aFootnote, nPos, nPos);
@@ -709,7 +709,7 @@ void SwDocTest::testSwScanner()
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(1), aDocStat.nWord);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("footnote should be expanded", static_cast<sal_uLong>(11), aDocStat.nChar);
 
-        const sal_Int32 nNextPos = aPaM.GetPoint()->nContent.GetIndex();
+        const sal_Int32 nNextPos = aPaM.GetPoint()->GetContentIndex();
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(nPos+1), nNextPos);
         SwFormatRefMark aRef("refmark");
         pTA = pTextNode->InsertItem(aRef, nNextPos, nNextPos);
@@ -1409,21 +1409,21 @@ void SwDocTest::testMarkMove()
         SwPaM aPaM(aIdx);
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "Paragraph 1");
         aPaM.SetMark();
-        aPaM.GetMark()->nContent -= aPaM.GetMark()->nContent.GetIndex();
+        aPaM.GetMark()->nContent -= aPaM.GetMark()->GetContentIndex();
         pMarksAccess->makeMark(aPaM, "Para1",
             IDocumentMarkAccess::MarkType::BOOKMARK, sw::mark::InsertMode::New);
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "Paragraph 2");
         aPaM.SetMark();
-        aPaM.GetMark()->nContent -= aPaM.GetMark()->nContent.GetIndex();
+        aPaM.GetMark()->nContent -= aPaM.GetMark()->GetContentIndex();
         pMarksAccess->makeMark(aPaM, "Para2",
             IDocumentMarkAccess::MarkType::BOOKMARK, sw::mark::InsertMode::New);
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "Paragraph 3");
         aPaM.SetMark();
-        aPaM.GetMark()->nContent -= aPaM.GetMark()->nContent.GetIndex();
+        aPaM.GetMark()->nContent -= aPaM.GetMark()->GetContentIndex();
         pMarksAccess->makeMark(aPaM, "Para3",
             IDocumentMarkAccess::MarkType::BOOKMARK, sw::mark::InsertMode::New);
     }
@@ -1438,20 +1438,20 @@ void SwDocTest::testMarkMove()
     ::sw::mark::IMark* pBM2 = *pMarksAccess->findMark("Para2");
     ::sw::mark::IMark* pBM3 = *pMarksAccess->findMark("Para3");
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0) , pBM1->GetMarkStart().nContent.GetIndex());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(11), pBM1->GetMarkEnd().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0) , pBM1->GetMarkStart().GetContentIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(11), pBM1->GetMarkEnd().GetContentIndex());
     CPPUNIT_ASSERT_EQUAL(
         pBM1->GetMarkStart().GetNodeIndex(),
         pBM1->GetMarkEnd().GetNodeIndex());
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0) , pBM2->GetMarkStart().nContent.GetIndex());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(11), pBM2->GetMarkEnd().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0) , pBM2->GetMarkStart().GetContentIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(11), pBM2->GetMarkEnd().GetContentIndex());
     CPPUNIT_ASSERT_EQUAL(
         pBM2->GetMarkStart().GetNodeIndex(),
         pBM2->GetMarkEnd().GetNodeIndex());
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(11), pBM3->GetMarkStart().nContent.GetIndex());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(22), pBM3->GetMarkEnd().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(11), pBM3->GetMarkStart().GetContentIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(22), pBM3->GetMarkEnd().GetContentIndex());
     CPPUNIT_ASSERT_EQUAL(
         pBM3->GetMarkStart().GetNodeIndex(),
         pBM3->GetMarkEnd().GetNodeIndex());
@@ -1475,20 +1475,20 @@ void SwDocTest::testMarkMove()
     pBM2 = *pMarksAccess->findMark("Para2");
     pBM3 = *pMarksAccess->findMark("Para3");
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pBM1->GetMarkStart().nContent.GetIndex());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), pBM1->GetMarkEnd().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pBM1->GetMarkStart().GetContentIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), pBM1->GetMarkEnd().GetContentIndex());
     CPPUNIT_ASSERT_EQUAL(
         pBM1->GetMarkStart().GetNodeIndex(),
         pBM1->GetMarkEnd().GetNodeIndex());
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), pBM2->GetMarkStart().nContent.GetIndex());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(12), pBM2->GetMarkEnd().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), pBM2->GetMarkStart().GetContentIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(12), pBM2->GetMarkEnd().GetContentIndex());
     CPPUNIT_ASSERT_EQUAL(
         pBM2->GetMarkStart().GetNodeIndex(),
         pBM2->GetMarkEnd().GetNodeIndex());
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(12), pBM3->GetMarkStart().nContent.GetIndex());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(23), pBM3->GetMarkEnd().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(12), pBM3->GetMarkStart().GetContentIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(23), pBM3->GetMarkEnd().GetContentIndex());
     CPPUNIT_ASSERT_EQUAL(
         pBM3->GetMarkStart().GetNodeIndex(),
         pBM3->GetMarkEnd().GetNodeIndex());
@@ -1511,20 +1511,20 @@ void SwDocTest::testMarkMove()
     pBM2 = *pMarksAccess->findMark("Para2");
     pBM3 = *pMarksAccess->findMark("Para3");
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pBM1->GetMarkStart().nContent.GetIndex());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), pBM1->GetMarkEnd().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pBM1->GetMarkStart().GetContentIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), pBM1->GetMarkEnd().GetContentIndex());
     CPPUNIT_ASSERT_EQUAL(
         pBM1->GetMarkStart().GetNodeIndex(),
         pBM1->GetMarkEnd().GetNodeIndex());
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), pBM2->GetMarkStart().nContent.GetIndex());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pBM2->GetMarkEnd().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), pBM2->GetMarkStart().GetContentIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pBM2->GetMarkEnd().GetContentIndex());
     CPPUNIT_ASSERT_EQUAL(
         pBM2->GetMarkStart().GetNodeIndex()+1,
         pBM2->GetMarkEnd().GetNodeIndex());
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pBM3->GetMarkStart().nContent.GetIndex());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(15), pBM3->GetMarkEnd().nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pBM3->GetMarkStart().GetContentIndex());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(15), pBM3->GetMarkEnd().GetContentIndex());
     CPPUNIT_ASSERT_EQUAL(
         pBM3->GetMarkStart().GetNodeIndex(),
         pBM3->GetMarkEnd().GetNodeIndex());

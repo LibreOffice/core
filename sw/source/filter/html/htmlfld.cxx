@@ -610,7 +610,7 @@ void SwHTMLParser::InsertComment( const OUString& rComment, const char *pTag )
     // MIB 24.06.97: If a PostIt should be insert after a space, we
     // will insert before the space. Then there are less problems
     // during formatting. (bug #40483#)
-    const sal_Int32 nPos = m_pPam->GetPoint()->nContent.GetIndex();
+    const sal_Int32 nPos = m_pPam->GetPoint()->GetContentIndex();
     SwTextNode *pTextNd = m_pPam->GetNode().GetTextNode();
     bool bMoveFwd = false;
     if (nPos>0 && pTextNd && (' ' == pTextNd->GetText()[nPos-1]))
@@ -618,7 +618,7 @@ void SwHTMLParser::InsertComment( const OUString& rComment, const char *pTag )
         bMoveFwd = true;
 
         SwNodeOffset nNodeIdx = m_pPam->GetPoint()->GetNodeIndex();
-        const sal_Int32 nIdx = m_pPam->GetPoint()->nContent.GetIndex();
+        const sal_Int32 nIdx = m_pPam->GetPoint()->GetContentIndex();
         for( auto i = m_aSetAttrTab.size(); i > 0; )
         {
             HTMLAttr *pAttr = m_aSetAttrTab[--i];

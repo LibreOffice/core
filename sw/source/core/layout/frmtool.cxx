@@ -1126,7 +1126,7 @@ static bool IsShown(SwNodeOffset const nIndex,
         {
             assert(iter->nStart != iter->nEnd); // TODO possible?
             assert(iter->pNode->GetIndex() == nIndex);
-            if (rAnchor.nContent.GetIndex() < iter->nStart)
+            if (rAnchor.GetContentIndex() < iter->nStart)
             {
                 return false;
             }
@@ -1144,7 +1144,7 @@ static bool IsShown(SwNodeOffset const nIndex,
                 // the interesting corner cases are on the edge of the extent!
                 // no need to check for > the last extent because those
                 // are never visible.
-                if (rAnchor.nContent.GetIndex() <= iter->nEnd)
+                if (rAnchor.GetContentIndex() <= iter->nEnd)
                 {
                     if (iter->nStart == 0)
                     {
@@ -1187,7 +1187,7 @@ static bool IsShown(SwNodeOffset const nIndex,
             {
                 assert(rAnch.GetAnchorId() == RndStdIds::FLY_AS_CHAR);
                 // for AS_CHAR obviously must be <
-                if (rAnchor.nContent.GetIndex() < iter->nEnd)
+                if (rAnchor.GetContentIndex() < iter->nEnd)
                 {
                     return true;
                 }

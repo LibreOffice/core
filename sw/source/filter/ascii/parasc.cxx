@@ -161,7 +161,7 @@ ErrCode SwASCIIParser::CallParser()
     {
         const SwNodeIndex& rTmp = m_pPam->GetPoint()->nNode;
         pInsPam.emplace( rTmp, rTmp, SwNodeOffset(0), SwNodeOffset(-1) );
-        nSttContent = m_pPam->GetPoint()->nContent.GetIndex();
+        nSttContent = m_pPam->GetPoint()->GetContentIndex();
     }
 
     SwTextFormatColl *pColl = nullptr;

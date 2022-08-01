@@ -53,7 +53,7 @@ SwUndoInsNum::SwUndoInsNum( const SwPosition& rPos, const SwNumRule& rRule,
     m_nEndNode = SwNodeOffset(0);
     m_nEndContent = COMPLETE_STRING;
     m_nSttNode = rPos.GetNodeIndex();
-    m_nSttContent = rPos.nContent.GetIndex();
+    m_nSttContent = rPos.GetContentIndex();
 }
 
 SwUndoInsNum::~SwUndoInsNum()

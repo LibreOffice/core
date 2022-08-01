@@ -418,7 +418,7 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
     bool parentIsOutline = IsOutline();
 
     // create a node "in front" of me
-    const sal_Int32 nSplitPos = rPos.nContent.GetIndex();
+    const sal_Int32 nSplitPos = rPos.GetContentIndex();
     const sal_Int32 nTextLen = m_Text.getLength();
     SwTextNode* const pNode =
         MakeNewTextNode( rPos.nNode, false, nSplitPos==nTextLen );
@@ -1490,7 +1490,7 @@ void SwTextNode::Update(
                     {
                         const SwPosition* pStart = &pMark->GetMarkStart();
                         if ( this == &pStart->GetNode()
-                             && rPos.GetIndex() == pStart->nContent.GetIndex() )
+                             && rPos.GetIndex() == pStart->GetContentIndex() )
                         {
                             bAtLeastOneExpandedBookmarkAtInsertionPosition = true;
                         }
@@ -1595,7 +1595,7 @@ void SwTextNode::Update(
             if (this == &pRedln->End()->GetNode() && *pRedln->GetPoint() != *pRedln->GetMark())
             {
                 // Redline is changed only when some change occurs before it
-                if (nChangePos <= pRedln->Start()->nContent.GetIndex())
+                if (nChangePos <= pRedln->Start()->GetContentIndex())
                 {
                     SwRedlineTable::LOKRedlineNotification(RedlineNotification::Modify, pRedln);
                 }
@@ -3685,15 +3685,15 @@ OUString SwTextNode::GetRedlineText() const
                     {
                         // deleted from 0 to nContent
                         aRedlArr.push_back( 0 );
-                        aRedlArr.push_back( pREnd->nContent.GetIndex() );
+                        aRedlArr.push_back( pREnd->GetContentIndex() );
                     }
                 }
                 else if( pRStt->nNode == nNdIdx )
                 {
-                    //aRedlArr.Insert( pRStt->nContent.GetIndex(), aRedlArr.Count() );
-                    aRedlArr.push_back( pRStt->nContent.GetIndex() );
+                    //aRedlArr.Insert( pRStt->GetContentIndex(), aRedlArr.Count() );
+                    aRedlArr.push_back( pRStt->GetContentIndex() );
                     if( pREnd->nNode == nNdIdx )
-                        aRedlArr.push_back( pREnd->nContent.GetIndex() );
+                        aRedlArr.push_back( pREnd->GetContentIndex() );
                     else
                     {
                         aRedlArr.push_back(GetText().getLength());

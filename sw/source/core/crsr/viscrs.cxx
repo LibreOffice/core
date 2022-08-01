@@ -302,7 +302,7 @@ OString SwVisibleCursor::getLOKPayload(int nType, int nViewId, bool*) const
                     pNode = aPos.GetNode().GetTextNode();
                 if (pNode && !pNode->IsInProtectSect())
                 {
-                    sal_Int32 nBegin = aPos.nContent.GetIndex();
+                    sal_Int32 nBegin = aPos.GetContentIndex();
                     sal_Int32 nLen = 1;
 
                     SwWrongList *pWrong = pNode->GetWrong();
@@ -653,7 +653,7 @@ void SwSelPaintRects::HighlightContentControl()
             // SwTextNode::PARENT because this way we highlight when the user will type inside the
             // content control, not outside of it.
             SwTextAttr* pAttr = pTextNode->GetTextAttrAt(
-                pStart->nContent.GetIndex(), RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT);
+                pStart->GetContentIndex(), RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT);
             if (pAttr)
             {
                 pCurContentControlAtCursor = static_txtattr_cast<SwTextContentControl*>(pAttr);

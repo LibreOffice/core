@@ -289,7 +289,7 @@ sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
         const SwPosition* pEnd = m_pCurRedline->End();
         if (pEnd->nNode == m_rNode)
         {
-            const sal_Int32 i = pEnd->nContent.GetIndex();
+            const sal_Int32 i = pEnd->GetContentIndex();
             if ( i >= nStartPos && i < nMinPos )
             {
                 nMinPos = i;
@@ -312,7 +312,7 @@ sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
 
             if( pStt->nNode == m_rNode )
             {
-                const sal_Int32 i = pStt->nContent.GetIndex();
+                const sal_Int32 i = pStt->GetContentIndex();
                 if( i >= nStartPos && i < nMinPos )
                     nMinPos = i;
             }
@@ -321,7 +321,7 @@ sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
 
             if( pEnd->nNode == m_rNode )
             {
-                const sal_Int32 i = pEnd->nContent.GetIndex();
+                const sal_Int32 i = pEnd->GetContentIndex();
                 if( i >= nStartPos && i < nMinPos )
                 {
                     nMinPos = i;
@@ -376,7 +376,7 @@ sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
     while (aTmpFlyIter != maFlyFrames.end() && nNextFlyPos < nStartPos)
     {
         const SwPosition &rAnchor = aTmpFlyIter->GetPosition();
-        nNextFlyPos = rAnchor.nContent.GetIndex();
+        nNextFlyPos = rAnchor.GetContentIndex();
 
         ++aTmpFlyIter;
     }
@@ -636,7 +636,7 @@ bool SwWW8AttrIter::HasFlysAt(sal_Int32 nSwPos) const
     for (const auto& rFly : maFlyFrames)
     {
         const SwPosition& rAnchor = rFly.GetPosition();
-        const sal_Int32 nPos = rAnchor.nContent.GetIndex();
+        const sal_Int32 nPos = rAnchor.GetContentIndex();
         if (nPos == nSwPos)
         {
             return true;
@@ -720,7 +720,7 @@ FlyProcessingState SwWW8AttrIter::OutFlys(sal_Int32 nSwPos)
     while ( maFlyIter != maFlyFrames.end() )
     {
         const SwPosition &rAnchor = maFlyIter->GetPosition();
-        const sal_Int32 nPos = rAnchor.nContent.GetIndex();
+        const sal_Int32 nPos = rAnchor.GetContentIndex();
 
         assert(nPos >= nSwPos && "a fly must get flagged as a nextAttr/CurrentPos");
         if ( nPos != nSwPos )
@@ -1500,7 +1500,7 @@ bool SwWW8AttrIter::IncludeEndOfParaCRInRedlineProperties( sal_Int32 nEnd ) cons
         // attributes that contains the redlining information.
         if (pEnd->nNode == m_rNode)
         {
-            if (pEnd->nContent.GetIndex() == nEnd)
+            if (pEnd->GetContentIndex() == nEnd)
             {
                 // This condition detects if the pseudo-char we will export
                 // should be explicitly included by the redlining char
@@ -1512,7 +1512,7 @@ bool SwWW8AttrIter::IncludeEndOfParaCRInRedlineProperties( sal_Int32 nEnd ) cons
         }
         if (pStart->nNode == m_rNode)
         {
-            if (pStart->nContent.GetIndex() == nEnd)
+            if (pStart->GetContentIndex() == nEnd)
             {
                 // This condition detects if the pseudo-char we will export
                 // should be explicitly included by the redlining char
@@ -1524,7 +1524,7 @@ bool SwWW8AttrIter::IncludeEndOfParaCRInRedlineProperties( sal_Int32 nEnd ) cons
         }
         if (pStart->GetNodeIndex()-1 == m_rNode.GetIndex())
         {
-            if (pStart->nContent.GetIndex() == 0)
+            if (pStart->GetContentIndex() == 0)
             {
                 // This condition detects if the pseudo-char we will export
                 // should be implicitly excluded by the redlining char
@@ -1570,7 +1570,7 @@ const SwRedlineData* SwWW8AttrIter::GetRunLevelRedline( sal_Int32 nPos )
     if( m_pCurRedline )
     {
         const SwPosition* pEnd = m_pCurRedline->End();
-        if (pEnd->nNode != m_rNode || pEnd->nContent.GetIndex() > nPos)
+        if (pEnd->nNode != m_rNode || pEnd->GetContentIndex() > nPos)
         {
             switch( m_pCurRedline->GetType() )
             {
@@ -1598,9 +1598,9 @@ const SwRedlineData* SwWW8AttrIter::GetRunLevelRedline( sal_Int32 nPos )
 
         if( pStt->nNode == m_rNode )
         {
-            if( pStt->nContent.GetIndex() >= nPos )
+            if( pStt->GetContentIndex() >= nPos )
             {
-                if( pStt->nContent.GetIndex() == nPos )
+                if( pStt->GetContentIndex() == nPos )
                 {
                         switch( pRedl->GetType() )
                         {
@@ -1623,7 +1623,7 @@ const SwRedlineData* SwWW8AttrIter::GetRunLevelRedline( sal_Int32 nPos )
         }
 
         if( pEnd->nNode == m_rNode &&
-            pEnd->nContent.GetIndex() < nPos )
+            pEnd->GetContentIndex() < nPos )
         {
             m_pCurRedline = pRedl;
             break;
@@ -1989,8 +1989,8 @@ bool MSWordExportBase::GetBookmarks( const SwTextNode& rNd, sal_Int32 nStt,
         if ( pMark->GetMarkStart().nNode == nNd ||
              pMark->GetMarkEnd().nNode == nNd )
         {
-            const sal_Int32 nBStart = pMark->GetMarkStart().nContent.GetIndex();
-            const sal_Int32 nBEnd = pMark->GetMarkEnd().nContent.GetIndex();
+            const sal_Int32 nBStart = pMark->GetMarkStart().GetContentIndex();
+            const sal_Int32 nBEnd = pMark->GetMarkEnd().GetContentIndex();
 
             // Keep only the bookmarks starting or ending in the snippet
             bool bIsStartOk = ( pMark->GetMarkStart().nNode == nNd ) && ( nBStart >= nStt ) && ( nBStart <= nEnd );
@@ -2020,8 +2020,8 @@ bool MSWordExportBase::GetAnnotationMarks( const SwWW8AttrIter& rAttrs, sal_Int3
         if ( pMark->GetMarkStart().nNode == nNd ||
              pMark->GetMarkEnd().nNode == nNd )
         {
-            const sal_Int32 nBStart = pMark->GetMarkStart().nContent.GetIndex();
-            const sal_Int32 nBEnd = pMark->GetMarkEnd().nContent.GetIndex();
+            const sal_Int32 nBStart = pMark->GetMarkStart().GetContentIndex();
+            const sal_Int32 nBEnd = pMark->GetMarkEnd().GetContentIndex();
 
             // Keep only the bookmarks starting or ending in the snippet
             bool bIsStartOk = ( pMark->GetMarkStart().nNode == nNd ) && ( nBStart >= nStt ) && ( nBStart <= nEnd );
@@ -2058,8 +2058,8 @@ class CompareMarksEnd
 public:
     bool operator() ( const IMark * pOneB, const IMark * pTwoB ) const
     {
-        const sal_Int32 nOEnd = pOneB->GetMarkEnd().nContent.GetIndex();
-        const sal_Int32 nTEnd = pTwoB->GetMarkEnd().nContent.GetIndex();
+        const sal_Int32 nOEnd = pOneB->GetMarkEnd().GetContentIndex();
+        const sal_Int32 nTEnd = pTwoB->GetMarkEnd().GetContentIndex();
 
         return nOEnd < nTEnd;
     }
@@ -2074,7 +2074,7 @@ bool MSWordExportBase::NearestBookmark( sal_Int32& rNearest, const sal_Int32 nCu
     if ( !m_rSortedBookmarksStart.empty() )
     {
         IMark* pMarkStart = m_rSortedBookmarksStart.front();
-        const sal_Int32 nNext = pMarkStart->GetMarkStart().nContent.GetIndex();
+        const sal_Int32 nNext = pMarkStart->GetMarkStart().GetContentIndex();
         if( !bNextPositionOnly || (nNext > nCurrentPos ))
         {
             rNearest = nNext;
@@ -2085,7 +2085,7 @@ bool MSWordExportBase::NearestBookmark( sal_Int32& rNearest, const sal_Int32 nCu
     if ( !m_rSortedBookmarksEnd.empty() )
     {
         IMark* pMarkEnd = m_rSortedBookmarksEnd[0];
-        const sal_Int32 nNext = pMarkEnd->GetMarkEnd().nContent.GetIndex();
+        const sal_Int32 nNext = pMarkEnd->GetMarkEnd().GetContentIndex();
         if( !bNextPositionOnly || nNext > nCurrentPos )
         {
             if ( !bHasBookmark )
@@ -2106,7 +2106,7 @@ void MSWordExportBase::NearestAnnotationMark( sal_Int32& rNearest, const sal_Int
     if ( !m_rSortedAnnotationMarksStart.empty() )
     {
         IMark* pMarkStart = m_rSortedAnnotationMarksStart.front();
-        const sal_Int32 nNext = pMarkStart->GetMarkStart().nContent.GetIndex();
+        const sal_Int32 nNext = pMarkStart->GetMarkStart().GetContentIndex();
         if( !bNextPositionOnly || (nNext > nCurrentPos ))
         {
             rNearest = nNext;
@@ -2117,7 +2117,7 @@ void MSWordExportBase::NearestAnnotationMark( sal_Int32& rNearest, const sal_Int
     if ( !m_rSortedAnnotationMarksEnd.empty() )
     {
         IMark* pMarkEnd = m_rSortedAnnotationMarksEnd[0];
-        const sal_Int32 nNext = pMarkEnd->GetMarkEnd().nContent.GetIndex();
+        const sal_Int32 nNext = pMarkEnd->GetMarkEnd().GetContentIndex();
         if( !bNextPositionOnly || nNext > nCurrentPos )
         {
             if ( !bHasAnnotationMark )
@@ -2138,8 +2138,8 @@ void MSWordExportBase::GetSortedAnnotationMarks( const SwWW8AttrIter& rAttrs, sa
         for ( IMark* pMark : aMarksStart )
         {
             // Remove the positions equal to the current pos
-            const sal_Int32 nStart = pMark->GetMarkStart().nContent.GetIndex();
-            const sal_Int32 nEnd = pMark->GetMarkEnd().nContent.GetIndex();
+            const sal_Int32 nStart = pMark->GetMarkStart().GetContentIndex();
+            const sal_Int32 nEnd = pMark->GetMarkEnd().GetContentIndex();
 
             const SwTextNode& rNode = rAttrs.GetNode();
             if ( nStart > nCurrentPos && ( pMark->GetMarkStart().nNode == rNode.GetIndex()) )
@@ -2172,8 +2172,8 @@ void MSWordExportBase::GetSortedBookmarks( const SwTextNode& rNode, sal_Int32 nC
         for ( IMark* pMark : aMarksStart )
         {
             // Remove the positions equal to the current pos
-            const sal_Int32 nStart = pMark->GetMarkStart().nContent.GetIndex();
-            const sal_Int32 nEnd = pMark->GetMarkEnd().nContent.GetIndex();
+            const sal_Int32 nStart = pMark->GetMarkStart().GetContentIndex();
+            const sal_Int32 nEnd = pMark->GetMarkEnd().GetContentIndex();
 
             if ( nStart > nCurrentPos && ( pMark->GetMarkStart().nNode == rNode.GetIndex()) )
                 aSortedStart.push_back( pMark );
@@ -2233,7 +2233,7 @@ bool MSWordExportBase::NeedTextNodeSplit( const SwTextNode& rNd, SwSoftPageBreak
                     pos = rNd.Len(); // skip everything
                     break;
                 }
-                pos = pMark->GetMarkEnd().nContent.GetIndex(); // no +1, it's behind the char
+                pos = pMark->GetMarkEnd().GetContentIndex(); // no +1, it's behind the char
             }
             pList.insert(pos);
         }

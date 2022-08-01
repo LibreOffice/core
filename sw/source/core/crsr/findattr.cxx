@@ -104,9 +104,9 @@ static void lcl_SetAttrPam( SwPaM& rPam, sal_Int32 nStart, const sal_Int32* pEnd
 {
     sal_Int32 nContentPos;
     if( bSaveMark )
-        nContentPos = rPam.GetMark()->nContent.GetIndex();
+        nContentPos = rPam.GetMark()->GetContentIndex();
     else
-        nContentPos = rPam.GetPoint()->nContent.GetIndex();
+        nContentPos = rPam.GetPoint()->GetContentIndex();
     bool bTstEnd = rPam.GetPoint()->nNode == rPam.GetMark()->nNode;
 
     SwContentNode* pCNd = rPam.GetContentNode();
@@ -146,7 +146,7 @@ static bool lcl_SearchAttr( const SwTextNode& rTextNd, SwPaM& rPam,
     const SwTextAttr *pTextHt = nullptr;
     bool bForward = &fnMove == &fnMoveForward;
     size_t nPos = bForward ? 0 : rTextNd.GetSwpHints().Count();
-    sal_Int32 nContentPos = rPam.GetPoint()->nContent.GetIndex();
+    sal_Int32 nContentPos = rPam.GetPoint()->GetContentIndex();
 
     while( nullptr != ( pTextHt=(*fnMove.fnGetHint)(rTextNd.GetSwpHints(),nPos,nContentPos)))
         if (pTextHt->Which() == rCmpItem.Which())
@@ -247,16 +247,16 @@ void SwAttrCheckArr::SetNewSet( const SwTextNode& rTextNd, const SwPaM& rPam )
 
     if( m_bForward )
     {
-        m_nNodeStart = rPam.GetPoint()->nContent.GetIndex();
+        m_nNodeStart = rPam.GetPoint()->GetContentIndex();
         m_nNodeEnd = rPam.GetPoint()->nNode == rPam.GetMark()->nNode
-                ? rPam.GetMark()->nContent.GetIndex()
+                ? rPam.GetMark()->GetContentIndex()
                 : rTextNd.GetText().getLength();
     }
     else
     {
-        m_nNodeEnd = rPam.GetPoint()->nContent.GetIndex();
+        m_nNodeEnd = rPam.GetPoint()->GetContentIndex();
         m_nNodeStart = rPam.GetPoint()->nNode == rPam.GetMark()->nNode
-                ? rPam.GetMark()->nContent.GetIndex()
+                ? rPam.GetMark()->GetContentIndex()
                 : 0;
     }
 
@@ -927,8 +927,8 @@ bool FindAttrImpl(SwPaM & rSearchPam,
 
     // if at beginning/end then move it out of the node
     if( bSrchForward
-        ? pPam->GetPoint()->nContent.GetIndex() == pPam->GetContentNode()->Len()
-        : !pPam->GetPoint()->nContent.GetIndex() )
+        ? pPam->GetPoint()->GetContentIndex() == pPam->GetContentNode()->Len()
+        : !pPam->GetPoint()->GetContentIndex() )
     {
         if( !(*fnMove.fnNds)( &pPam->GetPoint()->nNode, false ))
         {
@@ -962,7 +962,7 @@ bool FindAttrImpl(SwPaM & rSearchPam,
                     while (pAttr
                         && (pAttrNode->GetIndex() < pPam->GetPoint()->GetNodeIndex()
                             || (pAttrNode->GetIndex() == pPam->GetPoint()->GetNodeIndex()
-                                && pAttr->GetStart() < pPam->GetPoint()->nContent.GetIndex())
+                                && pAttr->GetStart() < pPam->GetPoint()->GetContentIndex())
                             || pAttr->Which() != nWhich));
                 }
                 else
@@ -975,7 +975,7 @@ bool FindAttrImpl(SwPaM & rSearchPam,
                     while (pAttr
                         && (pPam->GetPoint()->GetNodeIndex() < pAttrNode->GetIndex()
                             || (pPam->GetPoint()->GetNodeIndex() == pAttrNode->GetIndex()
-                                && pPam->GetPoint()->nContent.GetIndex() <= pAttr->GetStart())
+                                && pPam->GetPoint()->GetContentIndex() <= pAttr->GetStart())
                             || pAttr->Which() != nWhich));
                 }
                 if (pAttr)
@@ -1064,8 +1064,8 @@ static bool FindAttrsImpl(SwPaM & rSearchPam,
     // if at beginning/end then move it out of the node
     if( bMoveFirst &&
         ( bSrchForward
-        ? pPam->GetPoint()->nContent.GetIndex() == pPam->GetContentNode()->Len()
-        : !pPam->GetPoint()->nContent.GetIndex() ) )
+        ? pPam->GetPoint()->GetContentIndex() == pPam->GetContentNode()->Len()
+        : !pPam->GetPoint()->GetContentIndex() ) )
     {
         if( !(*fnMove.fnNds)( &pPam->GetPoint()->nNode, false ))
         {
@@ -1133,14 +1133,14 @@ static bool FindAttrsImpl(SwPaM & rSearchPam,
                             continue;
                         }
                         sal_Int32 const nStart(rExtent.pNode == &rStart.GetNode()
-                                ? rStart.nContent.GetIndex()
+                                ? rStart.GetContentIndex()
                                 : 0);
                         if (rExtent.nEnd <= nStart)
                         {
                             continue;
                         }
                         sal_Int32 const nEnd(rExtent.pNode == &rEnd.GetNode()
-                                ? rEnd.nContent.GetIndex()
+                                ? rEnd.GetContentIndex()
                                 : rExtent.pNode->Len());
                         if (nEnd < rExtent.nStart
                             || (nStart != nEnd && nEnd == rExtent.nStart))

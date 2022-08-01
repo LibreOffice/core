@@ -459,9 +459,9 @@ bool SwUndoDelete::SaveContent( const SwPosition* pStt, const SwPosition* pEnd,
 
         // the length might have changed (!!Fields!!)
         sal_Int32 nLen = (bOneNode
-                    ? pEnd->nContent.GetIndex()
+                    ? pEnd->GetContentIndex()
                     : pSttTextNd->GetText().getLength())
-            - pStt->nContent.GetIndex();
+            - pStt->GetContentIndex();
 
         // delete now also the text (all attribute changes are added to
         // UNDO history)
@@ -500,8 +500,8 @@ bool SwUndoDelete::SaveContent( const SwPosition* pStt, const SwPosition* pEnd,
 
         // delete now also the text (all attribute changes are added to
         // UNDO history)
-        m_aEndStr = pEndTextNd->GetText().copy( 0, pEnd->nContent.GetIndex() );
-        pEndTextNd->EraseText( aEndIdx, pEnd->nContent.GetIndex() );
+        m_aEndStr = pEndTextNd->GetText().copy( 0, pEnd->GetContentIndex() );
+        pEndTextNd->EraseText( aEndIdx, pEnd->GetContentIndex() );
         if( pEndTextNd->GetpSwpHints() )
             pEndTextNd->GetpSwpHints()->DeRegister();
 
@@ -533,7 +533,7 @@ bool SwUndoDelete::CanGrouping( SwDoc& rDoc, const SwPaM& rDelPam )
     auto [pStt, pEnd] = rDelPam.StartEnd(); // SwPosition*
 
     if( pStt->nNode != pEnd->nNode ||
-        pStt->nContent.GetIndex()+1 != pEnd->nContent.GetIndex() ||
+        pStt->GetContentIndex()+1 != pEnd->GetContentIndex() ||
         pEnd->nNode != m_nSttNode )
         return false;
 
@@ -557,7 +557,7 @@ bool SwUndoDelete::CanGrouping( SwDoc& rDoc, const SwPaM& rDelPam )
     if( !pDelTextNd ) return false;
 
     sal_Int32 nUChrPos = m_bBackSp ? 0 : m_aSttStr->getLength()-1;
-    sal_Unicode cDelChar = pDelTextNd->GetText()[ pStt->nContent.GetIndex() ];
+    sal_Unicode cDelChar = pDelTextNd->GetText()[ pStt->GetContentIndex() ];
     CharClass& rCC = GetAppCharClass();
     if( ( CH_TXTATR_BREAKWORD == cDelChar || CH_TXTATR_INWORD == cDelChar ) ||
         rCC.isLetterNumeric( OUString( cDelChar ), 0 ) !=

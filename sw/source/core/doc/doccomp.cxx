@@ -1745,10 +1745,10 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
                       & rEndStt = *pTmp->GetNext()->Start();
             const SwContentNode* pCNd;
             if( rSttEnd == rEndStt ||
-                (!rEndStt.nContent.GetIndex() &&
+                (!rEndStt.GetContentIndex() &&
                 rEndStt.GetNodeIndex() - 1 == rSttEnd.GetNodeIndex() &&
                 nullptr != ( pCNd = rSttEnd.GetNode().GetContentNode() ) &&
-                rSttEnd.nContent.GetIndex() == pCNd->Len()))
+                rSttEnd.GetContentIndex() == pCNd->Len()))
             {
                 if( pTmp->GetNext() == m_pInsertRing.get() )
                 {
@@ -1921,7 +1921,7 @@ SaveMergeRedline::SaveMergeRedline( const SwNode& rDstNd,
 
     const SwPosition* pStt = rSrcRedl.Start();
     if( rDstNd.IsContentNode() )
-        aPos.nContent.Assign( static_cast<const SwContentNode*>(&rDstNd), pStt->nContent.GetIndex() );
+        aPos.nContent.Assign( static_cast<const SwContentNode*>(&rDstNd), pStt->GetContentIndex() );
     pDestRedl = new SwRangeRedline( rSrcRedl.GetRedlineData(), aPos );
 
     if( RedlineType::Delete != pDestRedl->GetType() )
@@ -1934,7 +1934,7 @@ SaveMergeRedline::SaveMergeRedline( const SwNode& rDstNd,
     pDestRedl->GetPoint()->nNode += pEnd->GetNodeIndex() -
                                     pStt->GetNodeIndex();
     pDestRedl->GetPoint()->nContent.Assign( pDestRedl->GetContentNode(),
-                                            pEnd->nContent.GetIndex() );
+                                            pEnd->GetContentIndex() );
 }
 
 sal_uInt16 SaveMergeRedline::InsertRedline(SwPaM* pLastDestRedline)
@@ -1948,7 +1948,7 @@ sal_uInt16 SaveMergeRedline::InsertRedline(SwPaM* pLastDestRedline)
         ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
 
         SwNodeIndex aSaveNd( pDestRedl->GetPoint()->nNode, -1 );
-        const sal_Int32 nSaveCnt = pDestRedl->GetPoint()->nContent.GetIndex();
+        const sal_Int32 nSaveCnt = pDestRedl->GetPoint()->GetContentIndex();
 
         RedlineFlags eOld = rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
         rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern(eOld | RedlineFlags::Ignore);

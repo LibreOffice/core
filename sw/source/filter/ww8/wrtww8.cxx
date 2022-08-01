@@ -1443,17 +1443,17 @@ void WW8Export::AppendBookmarks( const SwTextNode& rNd, sal_Int32 nCurrentPos, s
         }
 
         if( !pOPos || ( nNd == pPos->GetNodeIndex() &&
-            ( nContent = pPos->nContent.GetIndex() ) >= nCurrentPos &&
+            ( nContent = pPos->GetContentIndex() ) >= nCurrentPos &&
             nContent < nCurrentEnd ) )
         {
-            sal_uLong nCp = nSttCP + pPos->nContent.GetIndex() - nCurrentPos;
+            sal_uLong nCp = nSttCP + pPos->GetContentIndex() - nCurrentPos;
             m_pBkmks->Append(nCp, BookmarkToWord(rBkmk.GetName()));
         }
         if( pOPos && nNd == pOPos->GetNodeIndex() &&
-            ( nContent = pOPos->nContent.GetIndex() ) >= nCurrentPos &&
+            ( nContent = pOPos->GetContentIndex() ) >= nCurrentPos &&
             nContent < nCurrentEnd )
         {
-            sal_uLong nCp = nSttCP + pOPos->nContent.GetIndex() - nCurrentPos;
+            sal_uLong nCp = nSttCP + pOPos->GetContentIndex() - nCurrentPos;
             m_pBkmks->Append(nCp, BookmarkToWord(rBkmk.GetName()));
         }
     }
@@ -1466,7 +1466,7 @@ void WW8Export::AppendAnnotationMarks(const SwWW8AttrIter& rAttrs, sal_Int32 nCu
     {
         for (const sw::mark::IMark* pMark : aMarks)
         {
-            const sal_Int32 nStart = pMark->GetMarkStart().nContent.GetIndex();
+            const sal_Int32 nStart = pMark->GetMarkStart().GetContentIndex();
             if (nStart == nCurrentPos)
             {
                 m_pAtn->AddRangeStartPosition(pMark->GetName(), Fc2Cp(Strm().Tell()),
@@ -2755,7 +2755,7 @@ public:
     {
         bool bSimpleContentRemains = m_pCurPam->GetPoint()->nNode < m_pCurPam->GetMark()->nNode ||
             (m_pCurPam->GetPoint()->nNode == m_pCurPam->GetMark()->nNode &&
-              m_pCurPam->GetPoint()->nContent.GetIndex() <= m_pCurPam->GetMark()->nContent.GetIndex());
+              m_pCurPam->GetPoint()->GetContentIndex() <= m_pCurPam->GetMark()->GetContentIndex());
         if (bSimpleContentRemains)
             return true;
 

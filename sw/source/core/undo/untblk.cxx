@@ -116,7 +116,7 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, bool bScanFlys,
 {
     const SwPosition* pTmpPos = rPam.End();
     m_nEndNode = pTmpPos->GetNodeIndex();
-    m_nEndContent = pTmpPos->nContent.GetIndex();
+    m_nEndContent = pTmpPos->GetContentIndex();
     if( rPam.HasMark() )
     {
         if( pTmpPos == rPam.GetPoint() )
@@ -125,7 +125,7 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, bool bScanFlys,
             pTmpPos = rPam.GetPoint();
 
         m_nSttNode = pTmpPos->GetNodeIndex();
-        m_nSttContent = pTmpPos->nContent.GetIndex();
+        m_nSttContent = pTmpPos->GetContentIndex();
 
         m_nDeleteTextNodes = nDeleteTextNodes;
         if (m_nDeleteTextNodes == SwNodeOffset(0)) // if a table selection is added...

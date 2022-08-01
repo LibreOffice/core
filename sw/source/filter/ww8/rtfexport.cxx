@@ -126,8 +126,8 @@ void RtfExport::AppendBookmarks(const SwTextNode& rNode, sal_Int32 nCurrentPos, 
     {
         for (const auto& pMark : aMarks)
         {
-            const sal_Int32 nStart = pMark->GetMarkStart().nContent.GetIndex();
-            const sal_Int32 nEnd = pMark->GetMarkEnd().nContent.GetIndex();
+            const sal_Int32 nStart = pMark->GetMarkStart().GetContentIndex();
+            const sal_Int32 nEnd = pMark->GetMarkEnd().GetContentIndex();
 
             if (nStart == nCurrentPos)
                 aStarts.push_back(pMark->GetName());
@@ -159,8 +159,8 @@ void RtfExport::AppendAnnotationMarks(const SwWW8AttrIter& rAttrs, sal_Int32 nCu
     {
         for (const auto& pMark : aMarks)
         {
-            const sal_Int32 nStart = pMark->GetMarkStart().nContent.GetIndex();
-            const sal_Int32 nEnd = pMark->GetMarkEnd().nContent.GetIndex();
+            const sal_Int32 nStart = pMark->GetMarkStart().GetContentIndex();
+            const sal_Int32 nEnd = pMark->GetMarkEnd().GetContentIndex();
 
             if (nStart == nCurrentPos)
                 aStarts.push_back(pMark->GetName());

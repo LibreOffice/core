@@ -1195,7 +1195,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                 }
                 if( pPos->GetNode().GetTextNode() )
                 {
-                    int nIndex = pPos->nContent.GetIndex();
+                    int nIndex = pPos->GetContentIndex();
                     bool bMarked = false;
                     if( pCursor != nullptr )
                     {
@@ -1229,8 +1229,8 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                                 {
                                     if( rAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR )
                                     {
-                                        if( ( ((nHere == nStartIndex) && (nIndex >= pStart->nContent.GetIndex())) || (nHere > nStartIndex) )
-                                            &&( ((nHere == nEndIndex) && (nIndex < pEnd->nContent.GetIndex())) || (nHere < nEndIndex) ) )
+                                        if( ( ((nHere == nStartIndex) && (nIndex >= pStart->GetContentIndex())) || (nHere > nStartIndex) )
+                                            &&( ((nHere == nEndIndex) && (nIndex < pEnd->GetContentIndex())) || (nHere < nEndIndex) ) )
                                         {
                                             uno::Reference < XAccessible > xAcc( (*aIter).second );
                                             if( xAcc.is() )

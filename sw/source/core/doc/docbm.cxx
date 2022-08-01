@@ -211,8 +211,8 @@ namespace
         {
             return rFirstStart.nNode < rSecondStart.nNode;
         }
-        const sal_Int32 nFirstContent = rFirstStart.nContent.GetIndex();
-        const sal_Int32 nSecondContent = rSecondStart.nContent.GetIndex();
+        const sal_Int32 nFirstContent = rFirstStart.GetContentIndex();
+        const sal_Int32 nSecondContent = rSecondStart.GetContentIndex();
         if (nFirstContent != 0 || nSecondContent != 0)
         {
             return nFirstContent < nSecondContent;
@@ -460,9 +460,9 @@ namespace
             const SwPosition* const pEndPos = &pMark->GetMarkEnd();
             SAL_INFO("sw.core",
                 sal_Int32(pStPos->GetNodeIndex()) << "," <<
-                pStPos->nContent.GetIndex() << " " <<
+                pStPos->GetContentIndex() << " " <<
                 sal_Int32(pEndPos->GetNodeIndex()) << "," <<
-                pEndPos->nContent.GetIndex() << " " <<
+                pEndPos->GetContentIndex() << " " <<
                 typeid(*pMark).name() << " " <<
                 pMark->GetName());
         }
@@ -515,10 +515,10 @@ OUString IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix()
 bool IDocumentMarkAccess::IsLegalPaMForCrossRefHeadingBookmark( const SwPaM& rPaM )
 {
     return rPaM.Start()->GetNode().IsTextNode() &&
-           rPaM.Start()->nContent.GetIndex() == 0 &&
+           rPaM.Start()->GetContentIndex() == 0 &&
            ( !rPaM.HasMark() ||
              ( rPaM.GetMark()->nNode == rPaM.GetPoint()->nNode &&
-               rPaM.End()->nContent.GetIndex() == rPaM.End()->GetNode().GetTextNode()->Len() ) );
+               rPaM.End()->GetContentIndex() == rPaM.End()->GetNode().GetTextNode()->Len() ) );
 }
 
 void IDocumentMarkAccess::DeleteFieldmarkCommand(::sw::mark::IFieldmark const& rMark)
@@ -554,9 +554,9 @@ namespace sw::mark
             SAL_INFO("sw.core",
                 rName << " " <<
                 sal_Int32(pPos1->GetNodeIndex() )<< "," <<
-                pPos1->nContent.GetIndex() << " " <<
+                pPos1->GetContentIndex() << " " <<
                 sal_Int32(pPos2->GetNodeIndex()) << "," <<
-                pPos2->nContent.GetIndex());
+                pPos2->GetContentIndex());
         }
 #endif
         if (   (!rPaM.GetPoint()->GetNode().IsTextNode()
@@ -585,7 +585,7 @@ namespace sw::mark
                 ? *rPaM.GetPoint() != *rPaM.GetMark()
                 // CopyText: pam covers CH_TXT_ATR_FORMELEMENT
                 : (rPaM.GetPoint()->nNode != rPaM.GetMark()->nNode
-                    || rPaM.Start()->nContent.GetIndex() + 1 != rPaM.End()->nContent.GetIndex())))
+                    || rPaM.Start()->GetContentIndex() + 1 != rPaM.End()->GetContentIndex())))
         {
             SAL_WARN("sw.core", "MarkManager::makeMark(..)"
                 " - invalid range on point fieldmark");
@@ -948,7 +948,7 @@ namespace sw::mark
                     aNewPosRel.nContent = 0; // HACK for WW8 import
                     isSortingNeeded = true; // and sort them to be safe...
                 }
-                aNewPosRel.nContent += pMark->GetMarkPos().nContent.GetIndex();
+                aNewPosRel.nContent += pMark->GetMarkPos().GetContentIndex();
                 pMark->SetMarkPos(aNewPosRel);
                 bChangedPos = true;
             }
@@ -956,7 +956,7 @@ namespace sw::mark
                 &pMark->GetOtherMarkPos().GetNode() == pOldNode)
             {
                 SwPosition aNewPosRel(aNewPos);
-                aNewPosRel.nContent += pMark->GetOtherMarkPos().nContent.GetIndex();
+                aNewPosRel.nContent += pMark->GetOtherMarkPos().GetContentIndex();
                 pMark->SetOtherMarkPos(aNewPosRel);
                 bChangedOPos = true;
             }
@@ -1386,7 +1386,7 @@ namespace sw::mark
             [&rPos] (::sw::mark::MarkBase const*const pMark) {
                     return pMark->GetMarkStart() == rPos
                             // end position includes the CH_TXT_ATR_FIELDEND
-                        || (pMark->GetMarkEnd().nContent.GetIndex() == rPos.nContent.GetIndex() + 1
+                        || (pMark->GetMarkEnd().GetContentIndex() == rPos.GetContentIndex() + 1
                             && pMark->GetMarkEnd().nNode == rPos.nNode);
                 } );
         return (pFieldmark == m_vFieldmarks.end())
@@ -1487,7 +1487,7 @@ namespace sw::mark
         IFieldmark* pFieldBM = getFieldmarkFor(aPos);
         FieldmarkWithDropDownButton* pNewActiveFieldmark = nullptr;
         if ((!pFieldBM || (pFieldBM->GetFieldname() != ODF_FORMDROPDOWN && pFieldBM->GetFieldname() != ODF_FORMDATE))
-            && aPos.nContent.GetIndex() > 0 )
+            && aPos.GetContentIndex() > 0 )
         {
             --aPos.nContent;
             pFieldBM = getFieldmarkFor(aPos);
@@ -1818,7 +1818,7 @@ SaveBookmark::SaveBookmark(
         }
     }
     m_nNode1 = rBkmk.GetMarkPos().GetNodeIndex();
-    m_nContent1 = rBkmk.GetMarkPos().nContent.GetIndex();
+    m_nContent1 = rBkmk.GetMarkPos().GetContentIndex();
 
     m_nNode1 -= rMvPos.GetIndex();
     if(pIdx && !m_nNode1)
@@ -1827,7 +1827,7 @@ SaveBookmark::SaveBookmark(
     if(rBkmk.IsExpanded())
     {
         m_nNode2 = rBkmk.GetOtherMarkPos().GetNodeIndex();
-        m_nContent2 = rBkmk.GetOtherMarkPos().nContent.GetIndex();
+        m_nContent2 = rBkmk.GetOtherMarkPos().GetContentIndex();
 
         m_nNode2 -= rMvPos.GetIndex();
         if(pIdx && !m_nNode2)

@@ -368,7 +368,7 @@ void SwUndoFormatAttr::SaveFlyAnchor( const SwFormat * pFormat, bool bSvDrwPt )
     switch( rAnchor.GetAnchorId() ) {
     case RndStdIds::FLY_AS_CHAR:
     case RndStdIds::FLY_AT_CHAR:
-        nContent = rAnchor.GetContentAnchor()->nContent.GetIndex();
+        nContent = rAnchor.GetContentAnchor()->GetContentIndex();
         [[fallthrough]];
     case RndStdIds::FLY_AT_PARA:
     case RndStdIds::FLY_AT_FLY:
@@ -410,7 +410,7 @@ bool SwUndoFormatAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
         if ((RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId()) ||
             (RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId())) {
             aPos.nContent.Assign( static_cast<SwTextNode*>(pNd), rAnchor.GetPageNum() );
-            if ( aPos.nContent.GetIndex() > pNd->GetTextNode()->GetText().getLength()) {
+            if ( aPos.GetContentIndex() > pNd->GetTextNode()->GetText().getLength()) {
                 // #i35443# - invalid position.
                 // Thus, anchor attribute not restored
                 return false;
@@ -447,7 +447,7 @@ bool SwUndoFormatAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
         const SwPosition *pPos = rOldAnch.GetContentAnchor();
         SwTextNode *pTextNode = static_cast<SwTextNode*>(&pPos->GetNode());
         OSL_ENSURE( pTextNode->HasHints(), "Missing FlyInCnt-Hint." );
-        const sal_Int32 nIdx = pPos->nContent.GetIndex();
+        const sal_Int32 nIdx = pPos->GetContentIndex();
         SwTextAttr * const pHint =
             pTextNode->GetTextAttrForCharAt( nIdx, RES_TXTATR_FLYCNT );
         assert(pHint && "Missing Hint.");
@@ -492,7 +492,7 @@ bool SwUndoFormatAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
         SwTextNode* pTextNd = pPos->GetNode().GetTextNode();
         OSL_ENSURE( pTextNd, "no Text Node at position." );
         SwFormatFlyCnt aFormat( pFrameFormat );
-        pTextNd->InsertItem( aFormat, pPos->nContent.GetIndex(), 0 );
+        pTextNd->InsertItem( aFormat, pPos->GetContentIndex(), 0 );
     }
 
     if (RES_DRAWFRMFMT != pFrameFormat->Which())
@@ -553,7 +553,7 @@ SwUndoResetAttr::SwUndoResetAttr( const SwPosition& rPos, sal_uInt16 nFormatId )
     , m_nFormatId( nFormatId )
 {
     m_nSttNode = m_nEndNode = rPos.GetNodeIndex();
-    m_nSttContent = m_nEndContent = rPos.nContent.GetIndex();
+    m_nSttContent = m_nEndContent = rPos.GetContentIndex();
 }
 
 SwUndoResetAttr::~SwUndoResetAttr()
@@ -1030,7 +1030,7 @@ void SwUndoEndNoteInfo::RedoImpl(::sw::UndoRedoContext & rContext)
 SwUndoDontExpandFormat::SwUndoDontExpandFormat( const SwPosition& rPos )
     : SwUndo( SwUndoId::DONTEXPAND, &rPos.GetDoc() )
     , m_nNodeIndex( rPos.GetNodeIndex() )
-    , m_nContentIndex( rPos.nContent.GetIndex() )
+    , m_nContentIndex( rPos.GetContentIndex() )
 {
 }
 

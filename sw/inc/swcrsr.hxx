@@ -246,7 +246,7 @@ struct SwCursor_SavePos final
 
     SwCursor_SavePos( const SwCursor& rCursor )
         : nNode( rCursor.GetPoint()->GetNodeIndex() ),
-          nContent( rCursor.GetPoint()->nContent.GetIndex() )
+          nContent( rCursor.GetPoint()->GetContentIndex() )
     {}
 };
 
@@ -291,8 +291,8 @@ public:
     {
         return  m_nTableMkNd != GetMark()->GetNodeIndex() ||
                 m_nTablePtNd != GetPoint()->GetNodeIndex() ||
-                m_nTableMkCnt != GetMark()->nContent.GetIndex() ||
-                m_nTablePtCnt != GetPoint()->nContent.GetIndex();
+                m_nTableMkCnt != GetMark()->GetContentIndex() ||
+                m_nTablePtCnt != GetPoint()->GetContentIndex();
     }
 
     bool IsChgd() const { return m_bChanged; }

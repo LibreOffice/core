@@ -2187,7 +2187,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 // Enable it if we have a valid object other than what form shell knows
                 SwPosition aPos(*GetShell().GetCursor()->GetPoint());
                 sw::mark::IFieldmark* pFieldBM = GetShell().getIDocumentMarkAccess()->getFieldmarkFor(aPos);
-                if ( !pFieldBM && aPos.nContent.GetIndex() > 0)
+                if ( !pFieldBM && aPos.GetContentIndex() > 0)
                 {
                     --aPos.nContent;
                     pFieldBM = GetShell().getIDocumentMarkAccess()->getFieldmarkFor(aPos);

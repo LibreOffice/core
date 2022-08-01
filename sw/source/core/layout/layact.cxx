@@ -2015,7 +2015,7 @@ bool SwLayIdle::DoIdleJob_( const SwContentFrame *pCnt, IdleJobType eJob )
                     if( !pCursor->HasMark() && !pCursor->IsMultiSelection() )
                     {
                         m_pContentNode = pCursor->GetContentNode();
-                        m_nTextPos =  pCursor->GetPoint()->nContent.GetIndex();
+                        m_nTextPos =  pCursor->GetPoint()->GetContentIndex();
                     }
                 }
         }

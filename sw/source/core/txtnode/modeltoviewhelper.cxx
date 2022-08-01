@@ -120,7 +120,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode,
                 pFieldMark = rIDMA.getFieldmarkFor(*cursor.GetPoint());
                 if (pFieldMark == nullptr
                     || pFieldMark->GetMarkStart().GetNode().GetTextNode()->GetText()[
-                            pFieldMark->GetMarkStart().nContent.GetIndex()]
+                            pFieldMark->GetMarkStart().GetContentIndex()]
                         != CH_TXT_ATR_FORMELEMENT)
                 {
                     break;
@@ -135,7 +135,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode,
             {
                 break;
             }
-            assert(pFieldMark->GetMarkStart().GetNode().GetTextNode()->GetText()[pFieldMark->GetMarkStart().nContent.GetIndex()] != CH_TXT_ATR_FORMELEMENT);
+            assert(pFieldMark->GetMarkStart().GetNode().GetTextNode()->GetText()[pFieldMark->GetMarkStart().GetContentIndex()] != CH_TXT_ATR_FORMELEMENT);
             // getFieldmarkFor may also return one that starts at rNode,0 -
             // skip it, must be handled in loop below
             if (pFieldMark->GetMarkStart().nNode < rNode)
@@ -316,7 +316,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode,
 
             for (sw::mark::IFieldmark *const pMark : aNoTextFieldmarks)
             {
-                const sal_Int32 nDummyCharPos = pMark->GetMarkStart().nContent.GetIndex();
+                const sal_Int32 nDummyCharPos = pMark->GetMarkStart().GetContentIndex();
                 if (aHiddenMulti.IsSelected(nDummyCharPos))
                     continue;
                 std::vector<block>::iterator aFind = std::find_if(aBlocks.begin(), aBlocks.end(),

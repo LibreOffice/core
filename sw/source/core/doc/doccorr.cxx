@@ -78,7 +78,7 @@ namespace
                 pPam->GetBound(bool(nb)).nNode = rNewPos.nNode;
                 pPam->GetBound(bool(nb)).nContent.Assign(
                     rNewPos.GetNode().GetContentNode(),
-                    nCntIdx + pPam->GetBound(bool(nb)).nContent.GetIndex());
+                    nCntIdx + pPam->GetBound(bool(nb)).GetContentIndex());
             }
     }
 }
@@ -246,7 +246,7 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
     SwPosition aNewPos( rNewPos );
     const SwDoc& rDoc = pOldNode->GetDoc();
 
-    const sal_Int32 nCntIdx = rNewPos.nContent.GetIndex() + nOffset;
+    const sal_Int32 nCntIdx = rNewPos.GetContentIndex() + nOffset;
 
     SwCursorShell const* pShell = rDoc.GetEditShell();
     if( pShell )
@@ -315,7 +315,7 @@ void SwDoc::CorrRel(const SwNodeIndex& rOldNode,
         for(SwRangeRedline* p : rTable)
         {
             // lies on the position ??
-            lcl_PaMCorrRel1( p, &rOldNode.GetNode(), aNewPos, aNewPos.nContent.GetIndex() + nOffset );
+            lcl_PaMCorrRel1( p, &rOldNode.GetNode(), aNewPos, aNewPos.GetContentIndex() + nOffset );
         }
 
         // To-Do - need to add here 'SwExtraRedlineTable' also ?

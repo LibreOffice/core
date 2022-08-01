@@ -987,7 +987,7 @@ static auto verifyNestedFieldmark(OUString const& rTestName,
     SwPosition const innerPos(*node1.GetNode().GetTextNode(),
         node1.GetNode().GetTextNode()->GetText().indexOf(CH_TXT_ATR_FIELDSTART));
     CPPUNIT_ASSERT_EQUAL_MESSAGE(rTestName.toUtf8().getStr(),
-            sal_Int32(1), innerPos.nContent.GetIndex());
+            sal_Int32(1), innerPos.GetContentIndex());
     ::sw::mark::IFieldmark *const pInner(rIDMA.getFieldmarkAt(innerPos));
     CPPUNIT_ASSERT_MESSAGE(rTestName.toUtf8().getStr(), pInner);
     OUString const innerString(SwPaM(pInner->GetMarkPos(), pInner->GetOtherMarkPos()).GetText());
@@ -1003,7 +1003,7 @@ static auto verifyNestedFieldmark(OUString const& rTestName,
     SwPosition const outerPos(*node2.GetNode().GetTextNode(),
         node2.GetNode().GetTextNode()->GetText().indexOf(CH_TXT_ATR_FIELDSTART));
     CPPUNIT_ASSERT_EQUAL_MESSAGE(rTestName.toUtf8().getStr(),
-            sal_Int32(0), outerPos.nContent.GetIndex());
+            sal_Int32(0), outerPos.GetContentIndex());
     ::sw::mark::IFieldmark const*const pOuter(rIDMA.getFieldmarkAt(outerPos));
     CPPUNIT_ASSERT_MESSAGE(rTestName.toUtf8().getStr(), pOuter);
     OUString const outerString(SwPaM(pOuter->GetMarkPos(), pOuter->GetOtherMarkPos()).GetText());
@@ -1703,7 +1703,7 @@ void Test::testDateFormField()
                     CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString(vEnSpaces, 5), sCurrentDate);
 
                     CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), SwNodeOffset(9), pFieldmark->GetMarkStart().GetNodeIndex());
-                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(5), pFieldmark->GetMarkStart().nContent.GetIndex());
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(5), pFieldmark->GetMarkStart().GetContentIndex());
                 }
                 else if (nIndex == 1) // The second has the default format
                 {
@@ -1712,7 +1712,7 @@ void Test::testDateFormField()
                     CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("06/12/19"), sCurrentDate);
 
                     CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), SwNodeOffset(9), pFieldmark->GetMarkStart().GetNodeIndex());
-                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(20), pFieldmark->GetMarkStart().nContent.GetIndex());
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(20), pFieldmark->GetMarkStart().GetContentIndex());
                 }
                 else if (nIndex == 2) // The third one has special format
                 {
@@ -1721,7 +1721,7 @@ void Test::testDateFormField()
                     CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("2019. febr. 12."), sCurrentDate);
 
                     CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), SwNodeOffset(9), pFieldmark->GetMarkStart().GetNodeIndex());
-                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(40), pFieldmark->GetMarkStart().nContent.GetIndex());
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(40), pFieldmark->GetMarkStart().GetContentIndex());
 
                 }
                 else if (nIndex == 3) // The fourth one has placeholder text
@@ -1731,7 +1731,7 @@ void Test::testDateFormField()
                     CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("[select date]"), sCurrentDate);
 
                     CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), SwNodeOffset(9), pFieldmark->GetMarkStart().GetNodeIndex());
-                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(62), pFieldmark->GetMarkStart().nContent.GetIndex());
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(62), pFieldmark->GetMarkStart().GetContentIndex());
 
                 }
                 else // The last one is really empty
@@ -1741,7 +1741,7 @@ void Test::testDateFormField()
                     CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString(""), sCurrentDate);
 
                     CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), SwNodeOffset(9), pFieldmark->GetMarkStart().GetNodeIndex());
-                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(82), pFieldmark->GetMarkStart().nContent.GetIndex());
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(82), pFieldmark->GetMarkStart().GetContentIndex());
 
                 }
                 ++nIndex;
@@ -1865,8 +1865,8 @@ void Test::testDateFormFieldCharacterFormatting()
             ::sw::mark::IDateFieldmark* pFieldmark = dynamic_cast<::sw::mark::IDateFieldmark*>(*pMarkAccess->getAllMarksBegin());
             CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pFieldmark);
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(0), pFieldmark->GetMarkStart().nContent.GetIndex());
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(11), pFieldmark->GetMarkEnd().nContent.GetIndex());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(0), pFieldmark->GetMarkStart().GetContentIndex());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(11), pFieldmark->GetMarkEnd().GetContentIndex());
 
             // We have one date field, first half of the field has bold character weight and second part has red character color
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), awt::FontWeight::BOLD, getProperty<float>(getRun(getParagraph(1), 3), "CharWeight"));

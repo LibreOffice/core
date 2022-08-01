@@ -146,7 +146,7 @@ bool SwUndoInsert::CanGrouping( const SwPosition& rPos )
 {
     bool bRet = false;
     if( m_nNode == rPos.GetNodeIndex() &&
-        m_nContent == rPos.nContent.GetIndex() )
+        m_nContent == rPos.GetContentIndex() )
     {
         // consider Redline
         SwDoc& rDoc = rPos.GetNode().GetDoc();
@@ -245,11 +245,11 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
                     // set on the deleted text; EraseText will leave empty
                     // ones behind otherwise
                     pTextNode->DeleteAttributes(RES_TXTATR_AUTOFMT,
-                        aPaM.GetPoint()->nContent.GetIndex(),
-                        aPaM.GetMark()->nContent.GetIndex());
+                        aPaM.GetPoint()->GetContentIndex(),
+                        aPaM.GetMark()->GetContentIndex());
                     pTextNode->DeleteAttributes(RES_TXTATR_CHARFMT,
-                        aPaM.GetPoint()->nContent.GetIndex(),
-                        aPaM.GetMark()->nContent.GetIndex());
+                        aPaM.GetPoint()->GetContentIndex(),
+                        aPaM.GetMark()->GetContentIndex());
                 }
                 RemoveIdxFromRange( aPaM, false );
                 maText = pTextNode->GetText().copy(m_nContent-m_nLen, m_nLen);
@@ -264,7 +264,7 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
             }
 
             nNd = aPaM.GetPoint()->GetNodeIndex();
-            nCnt = aPaM.GetPoint()->nContent.GetIndex();
+            nCnt = aPaM.GetPoint()->GetContentIndex();
 
             if (!maText)
             {
@@ -273,7 +273,7 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
                 MoveToUndoNds(aPaM, m_pUndoNodeIndex.get());
             }
             m_nNode = aPaM.GetPoint()->GetNodeIndex();
-            m_nContent = aPaM.GetPoint()->nContent.GetIndex();
+            m_nContent = aPaM.GetPoint()->GetContentIndex();
         }
 
         // set cursor to Undo range
@@ -349,7 +349,7 @@ void SwUndoInsert::RedoImpl(::sw::UndoRedoContext & rContext)
                 MoveFromUndoNds(*pTmpDoc, nMvNd, *pPam->GetMark());
             }
             m_nNode = pPam->GetMark()->GetNodeIndex();
-            m_nContent = pPam->GetMark()->nContent.GetIndex();
+            m_nContent = pPam->GetMark()->GetContentIndex();
 
             MovePtForward( *pPam, bMvBkwrd );
             pPam->Exchange();
@@ -590,8 +590,8 @@ SwUndoReplace::Impl::Impl(
     auto [pStt, pEnd] = rPam.StartEnd(); // SwPosition*
 
     m_nSttNd = m_nEndNd = pStt->GetNodeIndex();
-    m_nSttCnt = pStt->nContent.GetIndex();
-    m_nSelEnd = m_nEndCnt = pEnd->nContent.GetIndex();
+    m_nSttCnt = pStt->GetContentIndex();
+    m_nSelEnd = m_nEndCnt = pEnd->GetContentIndex();
 
     m_bSplitNext = m_nSttNd != pEnd->GetNodeIndex();
 
@@ -636,7 +636,7 @@ SwUndoReplace::Impl::Impl(
     }
 
     const sal_Int32 nECnt = m_bSplitNext ? pNd->GetText().getLength()
-        : pEnd->nContent.GetIndex();
+        : pEnd->GetContentIndex();
     m_sOld = pNd->GetText().copy( m_nSttCnt, nECnt - m_nSttCnt );
 }
 
@@ -771,7 +771,7 @@ void SwUndoReplace::Impl::SetEnd(SwPaM const& rPam)
 {
     const SwPosition* pEnd = rPam.End();
     m_nEndNd = m_nOffset + pEnd->GetNodeIndex();
-    m_nEndCnt = pEnd->nContent.GetIndex();
+    m_nEndCnt = pEnd->GetContentIndex();
 }
 
 SwUndoReRead::SwUndoReRead( const SwPaM& rPam, const SwGrfNode& rGrfNd )
