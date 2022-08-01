@@ -227,15 +227,15 @@ std::optional< sal_Int32 > AttributeList::getIntegerHex( sal_Int32 nAttrToken ) 
 
 std::optional< bool > AttributeList::getBool( sal_Int32 nAttrToken ) const
 {
-    const char *pAttr;
+    std::string_view pAttr;
 
     // catch the common cases as quickly as possible first
-    bool bHasAttr = getAttribList()->getAsChar( nAttrToken, pAttr );
+    bool bHasAttr = getAttribList()->getAsView( nAttrToken, pAttr );
     if( !bHasAttr )
         return std::optional< bool >();
-    if( !strcmp( pAttr, "false" ) )
+    if( pAttr == "false" )
         return std::optional< bool >( false );
-    if( !strcmp( pAttr, "true" ) )
+    if( pAttr == "true" )
         return std::optional< bool >( true );
 
     // now for all the crazy stuff
@@ -299,13 +299,10 @@ OUString AttributeList::getXString( sal_Int32 nAttrToken, const OUString& rDefau
     return getXString( nAttrToken ).value_or( rDefault );
 }
 
-const char* AttributeList::getChar( sal_Int32 nAttrToken ) const
+std::string_view AttributeList::getView( sal_Int32 nAttrToken ) const
 {
-    const char* p = nullptr;
-    bool bValid = getAttribList()->getAsChar(nAttrToken, p);
-    if (!bValid)
-        p = nullptr;
-
+    std::string_view p;
+    getAttribList()->getAsView(nAttrToken, p);
     return p;
 }
 

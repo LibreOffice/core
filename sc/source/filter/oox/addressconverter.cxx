@@ -138,13 +138,14 @@ bool AddressConverter::parseOoxAddress2d(
     return (ornColumn >= 0) && (ornRow >= 0);
 }
 
-bool AddressConverter::parseOoxAddress2d( sal_Int32& ornColumn, sal_Int32& ornRow, const char* pStr )
+bool AddressConverter::parseOoxAddress2d( sal_Int32& ornColumn, sal_Int32& ornRow, std::string_view aStr )
 {
     ornColumn = ornRow = 0;
 
     enum { STATE_COL, STATE_ROW } eState = STATE_COL;
 
-    while (*pStr)
+    const char* pStr = aStr.data();
+    while (pStr != aStr.data() + aStr.size())
     {
         char cChar = *pStr;
         switch( eState )
@@ -267,7 +268,7 @@ bool AddressConverter::convertToCellAddressUnchecked( ScAddress& orAddress,
 }
 
 bool AddressConverter::convertToCellAddressUnchecked(
-        ScAddress& orAddress, const char* pStr, sal_Int16 nSheet )
+        ScAddress& orAddress, std::string_view pStr, sal_Int16 nSheet )
 {
     orAddress.SetTab(nSheet);
     sal_Int32 nCol = 0;
@@ -289,7 +290,7 @@ bool AddressConverter::convertToCellAddress( ScAddress& orAddress,
 
 bool AddressConverter::convertToCellAddress(
     ScAddress& rAddress,
-    const char* pStr, sal_Int16 nSheet, bool bTrackOverflow )
+    std::string_view pStr, sal_Int16 nSheet, bool bTrackOverflow )
 {
     if (!convertToCellAddressUnchecked(rAddress, pStr, nSheet))
         return false;

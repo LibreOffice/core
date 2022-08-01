@@ -103,9 +103,8 @@ public:
     // performance sensitive shortcuts to avoid allocation ...
     bool getAsInteger( sal_Int32 nToken, sal_Int32 &rInt) const;
     bool getAsDouble( sal_Int32 nToken, double &rDouble) const;
-    bool getAsChar( sal_Int32 nToken, const char*& rPos ) const;
+    bool getAsView( sal_Int32 nToken, std::string_view& rPos ) const;
     sal_Int32 getAsIntegerByIndex( sal_Int32 nTokenIndex ) const;
-    const char* getAsCharByIndex( sal_Int32 nTokenIndex ) const;
     std::string_view getAsViewByIndex( sal_Int32 nTokenIndex ) const;
     OUString getValueByIndex( sal_Int32 nTokenIndex ) const;
 

@@ -312,9 +312,9 @@ void SheetDataContext::importRow( const AttributeList& rAttribs )
 bool SheetDataContext::importCell( const AttributeList& rAttribs )
 {
     bool bValid = true;
-    const char* p = rAttribs.getChar(XML_r);
+    std::string_view p = rAttribs.getView(XML_r);
 
-    if (!p)
+    if (p.empty())
     {
         ++mnCol;
         ScAddress aAddress( mnCol, mnRow, mnSheet );
