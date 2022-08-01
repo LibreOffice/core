@@ -696,7 +696,8 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                             sExpandedTextOfReferencedTextNode = OUString::Concat(
                                         sExpandedTextOfReferencedTextNode.subView(0, 80)) + u"...";
                         }
-                        sText = pField->GetDescription() + u" - " + sExpandedTextOfReferencedTextNode;
+                        sText = pField->GetDescription() + u" - "
+                                + sExpandedTextOfReferencedTextNode + sExpandField;
                     }
                     else
                     {
