@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b644e7c_9f0e2e99",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-08-01T11:25:13Z",
+      "side": 1,
+      "message": "https://dev-www.libreoffice.org/src/ReemKufi-1.2.zip -\u003e 404 not found",
+      "revId": "210a7d0df72e2f0079e8419752f7d57f64f3c53c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
