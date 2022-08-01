@@ -22,6 +22,30 @@
       },
       "revId": "9507e96153cea750c6582f05a98af174270bdf33",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73c54979_0d5f3f21",
+        "filename": "editeng/source/uno/unotext.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1234,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-08-01T18:49:55Z",
+      "side": 0,
+      "message": ".",
+      "parentUuid": "96c6ddfe_fc8008ad",
+      "range": {
+        "startLine": 1234,
+        "startChar": 11,
+        "endLine": 1234,
+        "endChar": 46
+      },
+      "revId": "9507e96153cea750c6582f05a98af174270bdf33",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

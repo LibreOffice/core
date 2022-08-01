@@ -35,6 +35,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e81403b5_4fac0cf4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-08-01T18:49:55Z",
+      "side": 1,
+      "message": "I don\u0027t like these uitests. I think they are incredibly fragile and are almost entirely depending on assumptions (and built with hours of random attempts to find the right objects/properties). But it is done.",
+      "parentUuid": "6469996b_cf3eae65",
+      "revId": "778172be2aac6816b36f36642e4c7b2ef8f5b483",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2f64fbb9_d2f441d9",
@@ -58,6 +76,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cedde46d_f88a496b",
+        "filename": "editeng/source/uno/unotext.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1967,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-08-01T18:49:55Z",
+      "side": 1,
+      "message": ".",
+      "parentUuid": "2f64fbb9_d2f441d9",
+      "range": {
+        "startLine": 1967,
+        "startChar": 38,
+        "endLine": 1967,
+        "endChar": 69
+      },
+      "revId": "778172be2aac6816b36f36642e4c7b2ef8f5b483",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8650ec8c_cda7171e",
@@ -71,6 +113,30 @@
       "writtenOn": "2022-07-29T02:30:10Z",
       "side": 1,
       "message": "This too \"feels\" like it should be all that is needed.",
+      "range": {
+        "startLine": 2014,
+        "startChar": 12,
+        "endLine": 2014,
+        "endChar": 75
+      },
+      "revId": "778172be2aac6816b36f36642e4c7b2ef8f5b483",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "506953b8_17f7b352",
+        "filename": "editeng/source/uno/unotext.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2014,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-08-01T18:49:55Z",
+      "side": 1,
+      "message": ".",
+      "parentUuid": "8650ec8c_cda7171e",
       "range": {
         "startLine": 2014,
         "startChar": 12,
