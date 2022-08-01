@@ -1132,14 +1132,14 @@ static bool FindAttrsImpl(SwPaM & rSearchPam,
                         {
                             continue;
                         }
-                        sal_Int32 const nStart(rExtent.pNode == &rStart.nNode.GetNode()
+                        sal_Int32 const nStart(rExtent.pNode == &rStart.GetNode()
                                 ? rStart.nContent.GetIndex()
                                 : 0);
                         if (rExtent.nEnd <= nStart)
                         {
                             continue;
                         }
-                        sal_Int32 const nEnd(rExtent.pNode == &rEnd.nNode.GetNode()
+                        sal_Int32 const nEnd(rExtent.pNode == &rEnd.GetNode()
                                 ? rEnd.nContent.GetIndex()
                                 : rExtent.pNode->Len());
                         if (nEnd < rExtent.nStart

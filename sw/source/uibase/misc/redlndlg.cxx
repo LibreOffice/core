@@ -805,7 +805,7 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
         SwRedlineTable::size_type nNewTableParent = SwRedlineTable::npos;
         if ( // not recognized yet as tracked table row change
              nLastChangeInRow == SwRedlineTable::npos &&
-             nullptr != ( pTableBox = pSh->GetRedline(i).Start()->nNode.GetNode().GetTableBox() ) &&
+             nullptr != ( pTableBox = pSh->GetRedline(i).Start()->GetNode().GetTableBox() ) &&
              nullptr != ( pTableLine = pTableBox->GetUpper() ) &&
              // it's a tracked row change based on the cached row data
              RedlineType::None != pTableLine->GetRedlineType() )

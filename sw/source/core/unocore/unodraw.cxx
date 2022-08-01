@@ -1130,7 +1130,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                     //Tbis removes the frame format too.
                     //To prevent this the connection between format and attribute has to be broken before.
                     const SwPosition *pPos = aAnchor.GetContentAnchor();
-                    SwTextNode *pTextNode = pPos->nNode.GetNode().GetTextNode();
+                    SwTextNode *pTextNode = pPos->GetNode().GetTextNode();
                     SAL_WARN_IF( !pTextNode->HasHints(), "sw.uno", "Missing FlyInCnt-Hint." );
                     const sal_Int32 nIdx = pPos->nContent.GetIndex();
                     SwTextAttr * const pHint =
@@ -1284,7 +1284,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                         //Tbis removes the frame format too.
                         //To prevent this the connection between format and attribute has to be broken before.
                         const SwPosition *pPos = rOldAnchor.GetContentAnchor();
-                        SwTextNode *pTextNode = pPos->nNode.GetNode().GetTextNode();
+                        SwTextNode *pTextNode = pPos->GetNode().GetTextNode();
                         SAL_WARN_IF( !pTextNode->HasHints(), "sw.uno", "Missing FlyInCnt-Hint." );
                         const sal_Int32 nIdx = pPos->nContent.GetIndex();
                         SwTextAttr * const pHint =
@@ -2165,7 +2165,7 @@ void SwXShape::dispose()
             if (pFormat->GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR)
             {
                 const SwPosition &rPos = *(pFormat->GetAnchor().GetContentAnchor());
-                SwTextNode *pTextNode = rPos.nNode.GetNode().GetTextNode();
+                SwTextNode *pTextNode = rPos.GetNode().GetTextNode();
                 const sal_Int32 nIdx = rPos.nContent.GetIndex();
                 pTextNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIdx );
             }

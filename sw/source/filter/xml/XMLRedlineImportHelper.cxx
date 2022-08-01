@@ -162,7 +162,7 @@ XTextRangeOrNodeIndexPosition::CopyPositionInto(SwPosition& rPos, SwDoc & rDoc)
     {
         rPos.nNode = *m_pIndex;
         rPos.nNode++;           // pIndex points to previous index !!!
-        rPos.nContent.Assign( rPos.nNode.GetNode().GetContentNode(), 0 );
+        rPos.nContent.Assign( rPos.GetNode().GetContentNode(), 0 );
     }
 }
 

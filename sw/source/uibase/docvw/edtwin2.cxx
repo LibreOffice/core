@@ -201,7 +201,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                          IDocumentMarkAccess::GetType(**ppBkmk)
                             == IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK )
                     {
-                        SwTextNode* pTextNode = (*ppBkmk)->GetMarkStart().nNode.GetNode().GetTextNode();
+                        SwTextNode* pTextNode = (*ppBkmk)->GetMarkStart().GetNode().GetTextNode();
                         if ( pTextNode )
                         {
                             sText = sw::GetExpandTextMerged(rSh.GetLayout(), *pTextNode, true, false, ExpandMode(0));

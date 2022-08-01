@@ -124,7 +124,7 @@ namespace ww8
             The SwTextNode this frame is anchored inside
         */
         const SwContentNode *GetContentNode() const
-            { return maPos.nNode.GetNode().GetContentNode(); }
+            { return maPos.GetNode().GetContentNode(); }
 
         /** Get the type of frame that this wraps
 

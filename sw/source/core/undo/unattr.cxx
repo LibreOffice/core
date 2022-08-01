@@ -445,7 +445,7 @@ bool SwUndoFormatAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
         // To prevent that, first detach the connection between attribute and
         // format.
         const SwPosition *pPos = rOldAnch.GetContentAnchor();
-        SwTextNode *pTextNode = static_cast<SwTextNode*>(&pPos->nNode.GetNode());
+        SwTextNode *pTextNode = static_cast<SwTextNode*>(&pPos->GetNode());
         OSL_ENSURE( pTextNode->HasHints(), "Missing FlyInCnt-Hint." );
         const sal_Int32 nIdx = pPos->nContent.GetIndex();
         SwTextAttr * const pHint =
@@ -489,7 +489,7 @@ bool SwUndoFormatAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
 
     if (RndStdIds::FLY_AS_CHAR == aNewAnchor.GetAnchorId()) {
         const SwPosition* pPos = aNewAnchor.GetContentAnchor();
-        SwTextNode* pTextNd = pPos->nNode.GetNode().GetTextNode();
+        SwTextNode* pTextNd = pPos->GetNode().GetTextNode();
         OSL_ENSURE( pTextNd, "no Text Node at position." );
         SwFormatFlyCnt aFormat( pFrameFormat );
         pTextNd->InsertItem( aFormat, pPos->nContent.GetIndex(), 0 );
@@ -1041,7 +1041,7 @@ void SwUndoDontExpandFormat::UndoImpl(::sw::UndoRedoContext & rContext)
 
     SwPosition& rPos = *pPam->GetPoint();
     rPos.nNode = m_nNodeIndex;
-    rPos.nContent.Assign( rPos.nNode.GetNode().GetContentNode(), m_nContentIndex);
+    rPos.nContent.Assign( rPos.GetNode().GetContentNode(), m_nContentIndex);
     pDoc->DontExpandFormat( rPos, false );
 }
 
@@ -1052,7 +1052,7 @@ void SwUndoDontExpandFormat::RedoImpl(::sw::UndoRedoContext & rContext)
 
     SwPosition& rPos = *pPam->GetPoint();
     rPos.nNode = m_nNodeIndex;
-    rPos.nContent.Assign( rPos.nNode.GetNode().GetContentNode(), m_nContentIndex);
+    rPos.nContent.Assign( rPos.GetNode().GetContentNode(), m_nContentIndex);
     pDoc->DontExpandFormat( rPos );
 }
 

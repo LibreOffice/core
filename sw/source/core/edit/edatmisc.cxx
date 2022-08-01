@@ -59,7 +59,7 @@ void SwEditShell::GCAttr()
         if ( !rPaM.HasMark() )
         {
             SwTextNode *const pTextNode =
-                rPaM.GetPoint()->nNode.GetNode().GetTextNode();
+                rPaM.GetPoint()->GetNode().GetTextNode();
             if (pTextNode)
             {
                 pTextNode->GCAttr();

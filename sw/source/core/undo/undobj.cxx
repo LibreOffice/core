@@ -154,7 +154,7 @@ void SwUndo::RemoveIdxRel( SwNodeOffset nIdx, const SwPosition& rPos )
 {
     // Move only the Cursor. Bookmarks/TOXMarks/etc. are done by the corresponding
     // JoinNext/JoinPrev
-    SwNodeIndex aIdx( rPos.nNode.GetNode().GetNodes(), nIdx );
+    SwNodeIndex aIdx( rPos.GetNode().GetNodes(), nIdx );
     ::PaMCorrRel( aIdx, rPos );
 }
 
@@ -799,7 +799,7 @@ void SwUndoSaveContent::MoveFromUndoNds( SwDoc& rDoc, SwNodeOffset nNodeIdx,
         // delete the last Node as well
         if( !aPaM.GetPoint()->nContent.GetIndex() ||
             ( aPaM.GetPoint()->nNode++ &&       // still empty Nodes at the end?
-            &rNds.GetEndOfExtras() != &aPaM.GetPoint()->nNode.GetNode() ))
+            &rNds.GetEndOfExtras() != &aPaM.GetPoint()->GetNode() ))
         {
             aPaM.GetPoint()->nContent.Assign( nullptr, 0 );
             aPaM.SetMark();
@@ -869,7 +869,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
     const SwPosition *pStt = rMark < rPoint ? &rMark : &rPoint,
                     *pEnd = &rMark == pStt ? &rPoint : &rMark;
 
-    SwDoc& rDoc = rMark.nNode.GetNode().GetDoc();
+    SwDoc& rDoc = rMark.GetNode().GetDoc();
 
     // if it's not in the doc array, probably missing some invalidation somewhere
     assert(&rPoint.GetNodes() == &rDoc.GetNodes());
@@ -895,10 +895,10 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
             {
                 const sal_Int32 nFootnoteSttIdx = pSrch->GetStart();
                 if( (DelContentType::CheckNoCntnt & nDelContentType )
-                    ? (&pEnd->nNode.GetNode() == pFootnoteNd )
-                    : (( &pStt->nNode.GetNode() == pFootnoteNd &&
+                    ? (&pEnd->GetNode() == pFootnoteNd )
+                    : (( &pStt->GetNode() == pFootnoteNd &&
                     pStt->nContent.GetIndex() > nFootnoteSttIdx) ||
-                    ( &pEnd->nNode.GetNode() == pFootnoteNd &&
+                    ( &pEnd->GetNode() == pFootnoteNd &&
                     nFootnoteSttIdx >= pEnd->nContent.GetIndex() )) )
                 {
                     ++nPos;     // continue searching
@@ -925,9 +925,9 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
             {
                 const sal_Int32 nFootnoteSttIdx = pSrch->GetStart();
                 if( !(DelContentType::CheckNoCntnt & nDelContentType) && (
-                    ( &pStt->nNode.GetNode() == pFootnoteNd &&
+                    ( &pStt->GetNode() == pFootnoteNd &&
                     pStt->nContent.GetIndex() > nFootnoteSttIdx ) ||
-                    ( &pEnd->nNode.GetNode() == pFootnoteNd &&
+                    ( &pEnd->GetNode() == pFootnoteNd &&
                     nFootnoteSttIdx >= pEnd->nContent.GetIndex() )))
                     continue;               // continue searching
 
@@ -975,7 +975,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                         if( !m_pHistory )
                             m_pHistory.reset( new SwHistory );
                         SwTextNode *const pTextNd =
-                            pAPos->nNode.GetNode().GetTextNode();
+                            pAPos->GetNode().GetTextNode();
                         SwTextAttr* const pFlyHint = pTextNd->GetTextAttrForCharAt(
                             pAPos->nContent.GetIndex());
                         assert(pFlyHint);
@@ -1012,7 +1012,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                                 (rPoint.nNode.GetIndex() == pAPos->nNode.GetIndex()
                                  || pStt->nNode.GetIndex() == pAPos->nNode.GetIndex())
                                 // Do not try to move the anchor to a table!
-                                && rMark.nNode.GetNode().IsTextNode())
+                                && rMark.GetNode().IsTextNode())
                             {
                                 m_pHistory->AddChangeFlyAnchor(*pFormat);
                                 SwFormatAnchor aAnch( *pAnchor );
@@ -1045,7 +1045,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                                 // These are the objects anchored
                                 // between section start and end position
                                 // Do not try to move the anchor to a table!
-                                if( rMark.nNode.GetNode().GetTextNode() )
+                                if( rMark.GetNode().GetTextNode() )
                                 {
                                     m_pHistory->AddChangeFlyAnchor(*pFormat);
                                     SwFormatAnchor aAnch( *pAnchor );
@@ -1141,7 +1141,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                         && !(nDelContentType & DelContentType::Replace)
                         && type == IDocumentMarkAccess::MarkType::BOOKMARK
                         && pStt->nContent == 0 // entire paragraph deleted?
-                        && pEnd->nContent == pEnd->nNode.GetNode().GetTextNode()->Len()))
+                        && pEnd->nContent == pEnd->GetNode().GetTextNode()->Len()))
                 {
                     if( bMaybe )
                         bSavePos = true;
@@ -1155,14 +1155,14 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                 // certain special handling for cross-reference bookmarks
                 const bool bDifferentTextNodesAtMarkAndPoint =
                     rMark.nNode != rPoint.nNode
-                    && rMark.nNode.GetNode().GetTextNode()
-                    && rPoint.nNode.GetNode().GetTextNode();
+                    && rMark.GetNode().GetTextNode()
+                    && rPoint.GetNode().GetTextNode();
                 if ( bDifferentTextNodesAtMarkAndPoint )
                 {
                     // delete cross-reference bookmark at <pStt>, if only part of
                     // <pEnd> text node content is deleted.
                     if( pStt->nNode == pBkmk->GetMarkPos().nNode
-                        && pEnd->nContent.GetIndex() != pEnd->nNode.GetNode().GetTextNode()->Len() )
+                        && pEnd->nContent.GetIndex() != pEnd->GetNode().GetTextNode()->Len() )
                     {
                         bSavePos = true;
                         bSaveOtherPos = false; // cross-reference bookmarks are not expanded
@@ -1253,8 +1253,8 @@ void SwUndoSaveSection::SaveSection(
 
     {
         // move certain indexes out of deleted range
-        SwNodeIndex aSttIdx( aPam.Start()->nNode.GetNode() );
-        SwNodeIndex aEndIdx( aPam.End()->nNode.GetNode() );
+        SwNodeIndex aSttIdx( aPam.Start()->GetNode() );
+        SwNodeIndex aEndIdx( aPam.End()->GetNode() );
         SwNodeIndex aMvStt( aEndIdx, 1 );
         SwDoc::CorrAbs( aSttIdx, aEndIdx, SwPosition( aMvStt ), true );
     }
@@ -1375,7 +1375,7 @@ SwRedlineSaveData::SwRedlineSaveData(
     }
 
 #if OSL_DEBUG_LEVEL > 0
-    m_nRedlineCount = rSttPos.nNode.GetNode().GetDoc().getIDocumentRedlineAccess().GetRedlineTable().size();
+    m_nRedlineCount = rSttPos.GetNode().GetDoc().getIDocumentRedlineAccess().GetRedlineTable().size();
     m_bRedlineMoved = rRedl.IsMoved();
 #endif
 }
@@ -1560,7 +1560,7 @@ OUString ShortenString(const OUString & rStr, sal_Int32 nLength, const OUString 
 
 static bool IsAtEndOfSection(SwPosition const& rAnchorPos)
 {
-    SwNodeIndex node(*rAnchorPos.nNode.GetNode().EndOfSectionNode());
+    SwNodeIndex node(*rAnchorPos.GetNode().EndOfSectionNode());
     SwContentNode *const pNode(SwNodes::GoPrevious(&node));
     assert(pNode);
     assert(rAnchorPos.nNode <= node); // last valid anchor pos is last content
@@ -1572,7 +1572,7 @@ static bool IsAtEndOfSection(SwPosition const& rAnchorPos)
 static bool IsAtStartOfSection(SwPosition const& rAnchorPos)
 {
     SwNodes const& rNodes(rAnchorPos.GetNodes());
-    SwNodeIndex node(*rAnchorPos.nNode.GetNode().StartOfSectionNode());
+    SwNodeIndex node(*rAnchorPos.GetNode().StartOfSectionNode());
     SwContentNode *const pNode(rNodes.GoNext(&node));
     assert(pNode);
     (void) pNode;
@@ -1583,13 +1583,13 @@ static bool IsAtStartOfSection(SwPosition const& rAnchorPos)
 /// passed start / end position could be on section start / end node
 static bool IsAtEndOfSection2(SwPosition const& rPos)
 {
-    return rPos.nNode.GetNode().IsEndNode()
+    return rPos.GetNode().IsEndNode()
         || IsAtEndOfSection(rPos);
 }
 
 static bool IsAtStartOfSection2(SwPosition const& rPos)
 {
-    return rPos.nNode.GetNode().IsStartNode()
+    return rPos.GetNode().IsStartNode()
         || IsAtStartOfSection(rPos);
 }
 
@@ -1601,7 +1601,7 @@ static bool IsNotBackspaceHeuristic(
         return true;
     if (rEnd.nContent != 0)
         return true;
-    const SwTextNode* pTextNode = rStart.nNode.GetNode().GetTextNode();
+    const SwTextNode* pTextNode = rStart.GetNode().GetTextNode();
     if (!pTextNode || rStart.nContent != pTextNode->Len())
         return true;
     return false;
@@ -1643,7 +1643,7 @@ bool IsDestroyFrameAnchoredAtChar(SwPosition const & rAnchorPos,
         && ((rAnchorPos < rEnd)
             || (rAnchorPos == rEnd
                 // special case: fully deleted node
-                && ((rEnd.nNode != rStart.nNode && rEnd.nContent == rEnd.nNode.GetNode().GetTextNode()->Len()
+                && ((rEnd.nNode != rStart.nNode && rEnd.nContent == rEnd.GetNode().GetTextNode()->Len()
                         && IsNotBackspaceHeuristic(rStart, rEnd))
                     || (IsAtEndOfSection(rAnchorPos) && IsAtStartOfSection2(rStart)))));
 }
@@ -1685,7 +1685,7 @@ bool IsSelectFrameAnchoredAtPara(SwPosition const & rAnchorPos,
             || (rAnchorPos.nNode == rEnd.nNode
                 && !(nDelContentType & DelContentType::ExcludeFlyAtStartEnd)
                 // special case: fully deleted node
-                && ((rEnd.nNode != rStart.nNode && rEnd.nContent == rEnd.nNode.GetNode().GetTextNode()->Len()
+                && ((rEnd.nNode != rStart.nNode && rEnd.nContent == rEnd.GetNode().GetTextNode()->Len()
                         && IsNotBackspaceHeuristic(rStart, rEnd))
                     || (IsAtEndOfSection2(rEnd) && IsAtStartOfSection2(rStart)))));
 }

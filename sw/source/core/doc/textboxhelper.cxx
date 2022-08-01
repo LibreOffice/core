@@ -1017,9 +1017,9 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
         return;
 
     const bool bInlineAnchored = rShape.GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR;
-    const bool bLayoutInCell
-        = rShape.GetFollowTextFlow().GetValue() && rShape.GetAnchor().GetContentAnchor()
-          && rShape.GetAnchor().GetContentAnchor()->nNode.GetNode().FindTableNode();
+    const bool bLayoutInCell = rShape.GetFollowTextFlow().GetValue()
+                               && rShape.GetAnchor().GetContentAnchor()
+                               && rShape.GetAnchor().GetContentAnchor()->GetNode().FindTableNode();
     SfxItemSet aTextBoxSet(pFormat->GetDoc()->GetAttrPool(), aFrameFormatSetRange);
 
     SfxItemIter aIter(rSet);
@@ -1439,14 +1439,14 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pOb
 
             // Other special case: shape is inside a table or floating table following the text flow
             if (pShape->GetFollowTextFlow().GetValue() && pShape->GetAnchor().GetContentAnchor()
-                && pShape->GetAnchor().GetContentAnchor()->nNode.GetNode().FindTableNode())
+                && pShape->GetAnchor().GetContentAnchor()->GetNode().FindTableNode())
             {
                 // Table position
                 Point nTableOffset;
                 // Floating table
                 if (auto pFly = pShape->GetAnchor()
                                     .GetContentAnchor()
-                                    ->nNode.GetNode()
+                                    ->GetNode()
                                     .FindTableNode()
                                     ->FindFlyStartNode())
                 {
@@ -1460,7 +1460,7 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pOb
                 // Normal table
                 {
                     auto pTableNode
-                        = pShape->GetAnchor().GetContentAnchor()->nNode.GetNode().FindTableNode();
+                        = pShape->GetAnchor().GetContentAnchor()->GetNode().FindTableNode();
                     if (auto pTableFormat = pTableNode->GetTable().GetFrameFormat())
                     {
                         nTableOffset.setX(pTableFormat->GetHoriOrient().GetPos());

@@ -559,8 +559,8 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                         m_aTOXEndCps.insert(nCP);
                         m_bLoadingTOXCache = false;
                         if ( m_pPaM->End() &&
-                             m_pPaM->End()->nNode.GetNode().GetTextNode() &&
-                             m_pPaM->End()->nNode.GetNode().GetTextNode()->Len() == 0 )
+                             m_pPaM->End()->GetNode().GetTextNode() &&
+                             m_pPaM->End()->GetNode().GetTextNode()->Len() == 0 )
                         {
                             JoinNode(*m_pPaM);
                         }
@@ -594,7 +594,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                 //Move outside the section associated with this type of field
                 SwPosition aRestorePos(m_aFieldStack.back().maStartPos);
 
-                SwContentNode* pNd = aRestorePos.nNode.GetNode().GetContentNode();
+                SwContentNode* pNd = aRestorePos.GetNode().GetContentNode();
                 sal_Int32 nMaxValidIndex = pNd ? pNd->Len() : 0;
                 if (aRestorePos.nContent.GetIndex() > nMaxValidIndex)
                 {
@@ -3442,8 +3442,8 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
 
     //#i10028# inserting a toc implicitly acts like a parabreak in word and writer
     if ( m_pPaM->End() &&
-         m_pPaM->End()->nNode.GetNode().GetTextNode() &&
-         m_pPaM->End()->nNode.GetNode().GetTextNode()->Len() != 0 )
+         m_pPaM->End()->GetNode().GetTextNode() &&
+         m_pPaM->End()->GetNode().GetTextNode()->Len() != 0 )
     {
         m_bCareFirstParaEndInToc = true;
     }
@@ -3456,7 +3456,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
     SwFltTOX aFltTOX( pBase );
 
     // test if there is already a break item on this node
-    if(SwContentNode* pNd = pPos->nNode.GetNode().GetContentNode())
+    if(SwContentNode* pNd = pPos->GetNode().GetContentNode())
     {
         const SfxItemSet* pSet = pNd->GetpSwAttrSet();
         if( pSet )

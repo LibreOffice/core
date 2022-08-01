@@ -67,12 +67,12 @@ namespace {
         // On a selection setup a corresponding Point-and-Mark in order to get
         // the indentation attribute reset on all paragraphs touched by the selection
         if ( rPam.HasMark() &&
-             rPam.End()->nNode.GetNode().GetTextNode() )
+             rPam.End()->GetNode().GetTextNode() )
         {
             SwPaM aPam( rPam.Start()->nNode,
                         rPam.End()->nNode );
             aPam.Start()->nContent = 0;
-            aPam.End()->nContent = rPam.End()->nNode.GetNode().GetTextNode()->Len();
+            aPam.End()->nContent = rPam.End()->GetNode().GetTextNode()->Len();
             pDoc->ResetAttrs( aPam, false, aResetAttrsArray, true, pLayout );
         }
         else
@@ -88,15 +88,15 @@ namespace {
 
         // ensure that selection from the Shell includes the para-props node
         // to which the attributes should be applied
-        if (rPam.GetPoint()->nNode.GetNode().IsTextNode())
+        if (rPam.GetPoint()->GetNode().IsTextNode())
         {
             rPam.GetPoint()->nNode = *sw::GetParaPropsNode(*pLayout, rPam.GetPoint()->nNode);
-            rPam.GetPoint()->nContent.Assign(rPam.GetPoint()->nNode.GetNode().GetContentNode(), 0);
+            rPam.GetPoint()->nContent.Assign(rPam.GetPoint()->GetNode().GetContentNode(), 0);
         }
-        if (rPam.GetMark()->nNode.GetNode().IsTextNode())
+        if (rPam.GetMark()->GetNode().IsTextNode())
         {
             rPam.GetMark()->nNode = *sw::GetParaPropsNode(*pLayout, rPam.GetMark()->nNode);
-            rPam.GetMark()->nContent.Assign(rPam.GetMark()->nNode.GetNode().GetContentNode(), 0);
+            rPam.GetMark()->nContent.Assign(rPam.GetMark()->GetNode().GetContentNode(), 0);
         }
     }
 }
@@ -210,8 +210,8 @@ bool SwDoc::OutlineUpDown(const SwPaM& rPam, short nOffset,
     SwPaM aPam(rPam, nullptr);
     ExpandPamForParaPropsNodes(aPam, pLayout);
     const SwOutlineNodes& rOutlNds = GetNodes().GetOutLineNds();
-    SwNode* const pSttNd = &aPam.Start()->nNode.GetNode();
-    SwNode* const pEndNd = &aPam.End()->nNode.GetNode();
+    SwNode* const pSttNd = &aPam.Start()->GetNode();
+    SwNode* const pEndNd = &aPam.End()->GetNode();
     SwOutlineNodes::size_type nSttPos, nEndPos;
 
     if( !rOutlNds.Seek_Entry( pSttNd, &nSttPos ) &&
@@ -942,7 +942,7 @@ OUString SwDoc::SetNumRule( const SwPaM& rPam,
 
     if (!aPam.HasMark())
     {
-        SwTextNode * pTextNd = aPam.GetPoint()->nNode.GetNode().GetTextNode();
+        SwTextNode * pTextNd = aPam.GetPoint()->GetNode().GetTextNode();
         // robust code: consider case that the PaM doesn't denote a text node - e.g. it denotes a graphic node
         if ( pTextNd != nullptr )
         {
@@ -1015,7 +1015,7 @@ void SwDoc::SetCounted(const SwPaM & rPam, bool bCounted,
 
 void SwDoc::SetNumRuleStart( const SwPosition& rPos, bool bFlag )
 {
-    SwTextNode* pTextNd = rPos.nNode.GetNode().GetTextNode();
+    SwTextNode* pTextNd = rPos.GetNode().GetTextNode();
 
     if (!pTextNd)
         return;
@@ -1037,7 +1037,7 @@ void SwDoc::SetNumRuleStart( const SwPosition& rPos, bool bFlag )
 
 void SwDoc::SetNodeNumStart( const SwPosition& rPos, sal_uInt16 nStt )
 {
-    SwTextNode* pTextNd = rPos.nNode.GetNode().GetTextNode();
+    SwTextNode* pTextNd = rPos.GetNode().GetTextNode();
 
     if (!pTextNd)
         return;
@@ -1199,7 +1199,7 @@ void SwDoc::ReplaceNumRule( const SwPosition& rPos,
     {
         SwRegHistory aRegH( pUndo ? pUndo->GetHistory() : nullptr );
 
-        const SwTextNode* pGivenTextNode = rPos.nNode.GetNode().GetTextNode();
+        const SwTextNode* pGivenTextNode = rPos.GetNode().GetTextNode();
         SwNumRuleItem aRule( rNewRule );
         for ( SwTextNode* pTextNd : aTextNodeList )
         {
@@ -1503,7 +1503,7 @@ static bool lcl_GotoNextPrevNum( SwPosition& rPos, bool bNext,
         bool bOverUpper, sal_uInt8* pUpper, sal_uInt8* pLower,
         SwRootFrame const*const pLayout)
 {
-    const SwTextNode* pNd = rPos.nNode.GetNode().GetTextNode();
+    const SwTextNode* pNd = rPos.GetNode().GetTextNode();
     if (pNd && pLayout)
     {
         pNd = sw::GetParaPropsNode(*pLayout, *pNd);
@@ -1630,7 +1630,7 @@ const SwNumRule *  SwDoc::SearchNumRule(const SwPosition & rPos,
                                         const bool bInvestigateStartNode)
 {
     const SwNumRule * pResult = nullptr;
-    SwTextNode * pTextNd = rPos.nNode.GetNode().GetTextNode();
+    SwTextNode * pTextNd = rPos.GetNode().GetTextNode();
     if (pLayout)
     {
         pTextNd = sw::GetParaPropsNode(*pLayout, rPos.nNode);
@@ -1840,7 +1840,7 @@ bool SwDoc::MoveParagraph(SwPaM& rPam, SwNodeOffset nOffset, bool const bIsOutlM
     {
         std::pair<SwTextNode *, SwTextNode *> nodes(
             sw::GetFirstAndLastNode(*pLayout, rPam.Start()->nNode));
-        if (nodes.first && nodes.first != &rPam.Start()->nNode.GetNode())
+        if (nodes.first && nodes.first != &rPam.Start()->GetNode())
         {
             assert(nodes.second);
             if (nOffset < SwNodeOffset(0))
@@ -1860,7 +1860,7 @@ bool SwDoc::MoveParagraph(SwPaM& rPam, SwNodeOffset nOffset, bool const bIsOutlM
             rPam.Start()->nContent.Assign(nodes.first, 0);
         }
         nodes = sw::GetFirstAndLastNode(*pLayout, rPam.End()->nNode);
-        if (nodes.second && nodes.second != &rPam.End()->nNode.GetNode())
+        if (nodes.second && nodes.second != &rPam.End()->GetNode())
         {
             assert(nodes.first);
             if (SwNodeOffset(0) < nOffset)
@@ -2036,12 +2036,12 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
     // Test for Redlining - Can the Selection be moved at all, actually?
     if( !getIDocumentRedlineAccess().IsIgnoreRedline() )
     {
-        SwRedlineTable::size_type nRedlPos = getIDocumentRedlineAccess().GetRedlinePos( pStt->nNode.GetNode(), RedlineType::Delete );
+        SwRedlineTable::size_type nRedlPos = getIDocumentRedlineAccess().GetRedlinePos( pStt->GetNode(), RedlineType::Delete );
         if( SwRedlineTable::npos != nRedlPos )
         {
             SwPosition aStPos( *pStt ), aEndPos( *pEnd );
             aStPos.nContent = 0;
-            SwContentNode* pCNd = pEnd->nNode.GetNode().GetContentNode();
+            SwContentNode* pCNd = pEnd->GetNode().GetContentNode();
             aEndPos.nContent = pCNd ? pCNd->Len() : 1;
             bool bCheckDel = true;
 
@@ -2093,13 +2093,13 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
     if( getIDocumentRedlineAccess().IsRedlineOn() )
     {
         // If the range is completely in the own Redline, we can move it!
-        SwRedlineTable::size_type nRedlPos = getIDocumentRedlineAccess().GetRedlinePos( pStt->nNode.GetNode(), RedlineType::Insert );
+        SwRedlineTable::size_type nRedlPos = getIDocumentRedlineAccess().GetRedlinePos( pStt->GetNode(), RedlineType::Insert );
         if( SwRedlineTable::npos != nRedlPos )
         {
             SwRangeRedline* pTmp = getIDocumentRedlineAccess().GetRedlineTable()[ nRedlPos ];
             auto [pRStt, pREnd] = pTmp->StartEnd(); // SwPosition*
             SwRangeRedline aTmpRedl( RedlineType::Insert, rPam );
-            const SwContentNode* pCEndNd = pEnd->nNode.GetNode().GetContentNode();
+            const SwContentNode* pCEndNd = pEnd->GetNode().GetContentNode();
             // Is completely in the range and is the own Redline too?
             if( aTmpRedl.IsOwnRedline( *pTmp ) &&
                 (pRStt->nNode < pStt->nNode ||
@@ -2145,7 +2145,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
             rOrigPam.GetPoint()->nNode = aIdx.GetIndex() - 1;
             rOrigPam.GetPoint()->nContent.Assign( rOrigPam.GetContentNode(), 0 );
 
-            bool bDelLastPara = !aInsPos.nNode.GetNode().IsContentNode();
+            bool bDelLastPara = !aInsPos.GetNode().IsContentNode();
             SwNodeOffset nOrigIdx = aIdx.GetIndex();
 
             /* When copying to a non-content node Copy will
@@ -2177,7 +2177,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
 
             // adjust empty nodes later
             SwTextNode const*const pIsEmptyNode(nOffset < SwNodeOffset(0)
-                           ? aInsPos.nNode.GetNode().GetTextNode()
+                           ? aInsPos.GetNode().GetTextNode()
                            : aIdx.GetNode().GetTextNode());
             bool bIsEmptyNode = pIsEmptyNode && pIsEmptyNode->Len() == 0;
 
@@ -2211,9 +2211,9 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
                         SwNodeOffset const nCurrentOffset(
                             nOrigIdx - aPam.Start()->nNode.GetIndex());
                         pam.GetPoint()->nNode += nCurrentOffset;
-                        pam.GetPoint()->nContent.Assign(pam.GetPoint()->nNode.GetNode().GetContentNode(), pam.GetPoint()->nContent.GetIndex());
+                        pam.GetPoint()->nContent.Assign(pam.GetPoint()->GetNode().GetContentNode(), pam.GetPoint()->nContent.GetIndex());
                         pam.GetMark()->nNode += nCurrentOffset;
-                        pam.GetMark()->nContent.Assign(pam.GetMark()->nNode.GetNode().GetContentNode(), pam.GetMark()->nContent.GetIndex());
+                        pam.GetMark()->nContent.Assign(pam.GetMark()->GetNode().GetContentNode(), pam.GetMark()->nContent.GetIndex());
 
                         pNewRedline = new SwRangeRedline( RedlineType::Delete, pam );
                     }
@@ -2238,13 +2238,13 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
                     if( pPos->nNode == aIdx )
                     {
                         ++pPos->nNode;
-                        pPos->nContent.Assign( pPos->nNode.GetNode().GetContentNode(),0);
+                        pPos->nContent.Assign( pPos->GetNode().GetContentNode(),0);
                     }
                     pPos = &pTmp->GetBound(false);
                     if( pPos->nNode == aIdx )
                     {
                         ++pPos->nNode;
-                        pPos->nContent.Assign( pPos->nNode.GetNode().GetContentNode(),0);
+                        pPos->nContent.Assign( pPos->GetNode().GetContentNode(),0);
                     }
                 }
                 CorrRel( aIdx, aInsPos );
@@ -2256,11 +2256,11 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
             ++rOrigPam.GetPoint()->nNode;
             rOrigPam.GetPoint()->nContent.Assign( rOrigPam.GetContentNode(), 0 );
             assert(*aPam.GetMark() < *aPam.GetPoint());
-            if (aPam.GetPoint()->nNode.GetNode().IsEndNode())
+            if (aPam.GetPoint()->GetNode().IsEndNode())
             {   // ensure redline ends on content node
                 --aPam.GetPoint()->nNode;
-                assert(aPam.GetPoint()->nNode.GetNode().IsTextNode());
-                SwTextNode *const pNode(aPam.GetPoint()->nNode.GetNode().GetTextNode());
+                assert(aPam.GetPoint()->GetNode().IsTextNode());
+                SwTextNode *const pNode(aPam.GetPoint()->GetNode().GetTextNode());
                 aPam.GetPoint()->nContent.Assign(pNode, pNode->Len());
             }
 
@@ -2287,8 +2287,8 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
 
             getIDocumentRedlineAccess().AppendRedline( pNewRedline, true );
 
-            aPam.GetBound().nContent.Assign(aPam.GetBound().nNode.GetNode().GetContentNode(), 0);
-            aPam.GetBound(false).nContent.Assign(aPam.GetBound(false).nNode.GetNode().GetContentNode(), 0);
+            aPam.GetBound().nContent.Assign(aPam.GetBound().GetNode().GetContentNode(), 0);
+            aPam.GetBound(false).nContent.Assign(aPam.GetBound(false).GetNode().GetContentNode(), 0);
             sw::UpdateFramesForAddDeleteRedline(*this, aPam);
 
             // avoid setting empty nodes to tracked insertion
@@ -2296,7 +2296,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
             {
                 SwRedlineTable& rTable = getIDocumentRedlineAccess().GetRedlineTable();
                 SwRedlineTable::size_type nRedlPosWithEmpty =
-                    getIDocumentRedlineAccess().GetRedlinePos( pStt->nNode.GetNode(), RedlineType::Insert );
+                    getIDocumentRedlineAccess().GetRedlinePos( pStt->GetNode(), RedlineType::Insert );
                 if ( SwRedlineTable::npos != nRedlPosWithEmpty )
                 {
                     pOwnRedl = rTable[nRedlPosWithEmpty];
@@ -2389,12 +2389,12 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
         if( pRStt->nNode.GetIndex() != nRedlSttNd )
         {
             pRStt->nNode = nRedlSttNd;
-            pRStt->nContent.Assign( pRStt->nNode.GetNode().GetContentNode(),0);
+            pRStt->nContent.Assign( pRStt->GetNode().GetContentNode(),0);
         }
         if( pREnd->nNode.GetIndex() != nRedlEndNd )
         {
             pREnd->nNode = nRedlEndNd;
-            SwContentNode* pCNd = pREnd->nNode.GetNode().GetContentNode();
+            SwContentNode* pCNd = pREnd->GetNode().GetContentNode();
             pREnd->nContent.Assign( pCNd, pCNd ? pCNd->Len() : 0 );
         }
     }
@@ -2445,7 +2445,7 @@ SwNumRule* SwDoc::GetNumRuleAtPos(SwPosition& rPos,
         SwRootFrame const*const pLayout)
 {
     SwNumRule* pRet = nullptr;
-    SwTextNode* pTNd = rPos.nNode.GetNode().GetTextNode();
+    SwTextNode* pTNd = rPos.GetNode().GetTextNode();
 
     if ( pTNd != nullptr )
     {

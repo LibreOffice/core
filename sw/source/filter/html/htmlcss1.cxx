@@ -1934,7 +1934,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( const SvxCSS1PropertyInfo &rPropInfo,
             // Absolute positioned objects are page-bound, when they
             // aren't in a frame and otherwise frame-bound.
             const SwStartNode *pFlySttNd =
-                m_pPam->GetPoint()->nNode.GetNode().FindFlyStartNode();
+                m_pPam->GetPoint()->GetNode().FindFlyStartNode();
             if( pFlySttNd )
             {
                 aAnchor.SetType( RndStdIds::FLY_AT_FLY );

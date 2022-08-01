@@ -160,7 +160,7 @@ namespace
         {
             // Crossrefbookmarks only remember the start position but have to span the whole paragraph
             pCrossRefEndPos = std::make_unique<SwPosition>(rEndPos);
-            pCrossRefEndPos->nContent = pCrossRefEndPos->nNode.GetNode().GetTextNode()->Len();
+            pCrossRefEndPos->nContent = pCrossRefEndPos->GetNode().GetTextNode()->Len();
             pEndPos = pCrossRefEndPos.get();
         }
         if(pEndPos)
@@ -244,7 +244,7 @@ namespace
 
         // no need to consider annotation marks starting after aEndOfPara
         SwPosition aEndOfPara(*rUnoCursor.GetPoint());
-        aEndOfPara.nContent = aEndOfPara.nNode.GetNode().GetTextNode()->Len();
+        aEndOfPara.nContent = aEndOfPara.GetNode().GetTextNode()->Len();
         const IDocumentMarkAccess::const_iterator_t pCandidatesEnd =
             pMarkAccess->findFirstAnnotationStartsAfter(aEndOfPara);
 
@@ -318,7 +318,7 @@ SwXTextPortionEnumeration::SwXTextPortionEnumeration(
     m_pUnoCursor = rParaCursor.GetDoc().CreateUnoCursor(*rParaCursor.GetPoint());
 
     OSL_ENSURE(nEnd == -1 || (nStart <= nEnd &&
-        nEnd <= m_pUnoCursor->Start()->nNode.GetNode().GetTextNode()->GetText().getLength()),
+        nEnd <= m_pUnoCursor->Start()->GetNode().GetTextNode()->GetText().getLength()),
             "start or end value invalid!");
 
     // find all frames, graphics and OLEs that are bound AT character in para
@@ -366,7 +366,7 @@ lcl_FillFieldMarkArray(std::deque<sal_Int32> & rFieldMarks, SwUnoCursor const & 
         const sal_Int32 i_nStartPos)
 {
     const SwTextNode * const pTextNode =
-        rUnoCursor.GetPoint()->nNode.GetNode().GetTextNode();
+        rUnoCursor.GetPoint()->GetNode().GetTextNode();
     if (!pTextNode) return;
 
     const sal_Unicode fld[] = {
@@ -1138,7 +1138,7 @@ static void lcl_FillSoftPageBreakArray(
     SwSoftPageBreakList& rBreakArr )
 {
     const SwTextNode *pTextNode =
-        rUnoCursor.GetPoint()->nNode.GetNode().GetTextNode();
+        rUnoCursor.GetPoint()->GetNode().GetTextNode();
     if( pTextNode )
         pTextNode->fillSoftPageBreakList( rBreakArr );
 }
@@ -1353,8 +1353,8 @@ static void lcl_CreatePortions(
         (pUnoCursor->Start()->nContent.GetIndex() != i_nStartPos))
     {
         pUnoCursor->DeleteMark();
-        OSL_ENSURE(pUnoCursor->Start()->nNode.GetNode().GetTextNode() &&
-            (i_nStartPos <= pUnoCursor->Start()->nNode.GetNode().GetTextNode()->
+        OSL_ENSURE(pUnoCursor->Start()->GetNode().GetTextNode() &&
+            (i_nStartPos <= pUnoCursor->Start()->GetNode().GetTextNode()->
                         GetText().getLength()), "Incorrect start position" );
         // ??? should this be i_nStartPos - current position ?
         pUnoCursor->Right(i_nStartPos);

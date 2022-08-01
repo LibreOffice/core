@@ -2139,7 +2139,7 @@ void SwHTMLWriter::OutCSS1_FrameFormatBackground( const SwFrameFormat& rFrameFor
     const SwPosition *pAnchorPos = rAnchor.GetContentAnchor();
     if (RndStdIds::FLY_AT_PAGE != eAnchorId && pAnchorPos)
     {
-        const SwNode& rNode = pAnchorPos->nNode.GetNode();
+        const SwNode& rNode = pAnchorPos->GetNode();
         if( rNode.IsContentNode() )
         {
             // If the frame is linked to a content-node,

@@ -63,7 +63,7 @@ bool SwCursor::GotoFootnoteText()
 {
     // jump from content to footnote
     bool bRet = false;
-    SwTextNode* pTextNd = GetPoint()->nNode.GetNode().GetTextNode();
+    SwTextNode* pTextNd = GetPoint()->GetNode().GetTextNode();
 
     SwTextAttr *const pFootnote( pTextNd
         ? pTextNd->GetTextAttrForCharAt(
@@ -93,7 +93,7 @@ bool SwCursorShell::GotoFootnoteText()
     if( !bRet )
     {
         SwTextNode* pTextNd = GetCursor_() ?
-                   GetCursor_()->GetPoint()->nNode.GetNode().GetTextNode() : nullptr;
+                   GetCursor_()->GetPoint()->GetNode().GetTextNode() : nullptr;
         if( pTextNd )
         {
             std::pair<Point, bool> const tmp(GetCursor_()->GetSttPos(), true);

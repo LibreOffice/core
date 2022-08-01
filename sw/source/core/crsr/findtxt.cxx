@@ -562,7 +562,7 @@ bool FindTextImpl(SwPaM & rSearchPam,
                     {
                         aPaM.GetPoint()->nNode = rTextNode;
                         aPaM.GetPoint()->nContent.Assign(
-                            aPaM.GetPoint()->nNode.GetNode().GetTextNode(),
+                            aPaM.GetPoint()->GetNode().GetTextNode(),
                             nStart.GetModelIndex());
                     }
                     aPaM.SetMark();
@@ -577,7 +577,7 @@ bool FindTextImpl(SwPaM & rSearchPam,
                     {
                         aPaM.GetMark()->nNode = rTextNode.GetIndex() + 1;
                     }
-                    aPaM.GetMark()->nContent.Assign(aPaM.GetMark()->nNode.GetNode().GetTextNode(), 0);
+                    aPaM.GetMark()->nContent.Assign(aPaM.GetMark()->GetNode().GetTextNode(), 0);
                     if (pNode->GetDoc().getIDocumentDrawModelAccess().Search(aPaM, *xSearchItem) && pSdrView)
                     {
                         if (SdrObject* pObject = pSdrView->GetTextEditObject())
@@ -589,7 +589,7 @@ bool FindTextImpl(SwPaM & rSearchPam,
                                 {
                                     // Set search position to the shape's anchor point.
                                     *rSearchPam.GetPoint() = *pPosition;
-                                    rSearchPam.GetPoint()->nContent.Assign(pPosition->nNode.GetNode().GetContentNode(), 0);
+                                    rSearchPam.GetPoint()->nContent.Assign(pPosition->GetNode().GetContentNode(), 0);
                                     rSearchPam.SetMark();
                                     bFound = true;
                                     break;
@@ -891,14 +891,14 @@ bool DoSearch(SwPaM & rSearchPam,
         }
         rSearchPam.SetMark();
         const SwNode *const pSttNd = bSrchForward
-            ? &rSearchPam.GetPoint()->nNode.GetNode() // end of the frame
+            ? &rSearchPam.GetPoint()->GetNode() // end of the frame
             : &rNdIdx.GetNode(); // keep the bug as-is for now...
         /* FIXME: this condition does not work for !bSrchForward backward
          * search, it probably never did. (pSttNd != &rNdIdx.GetNode())
          * is never true in this case. */
         if( (bSrchForward || pSttNd != &rNdIdx.GetNode()) &&
             rSearchPam.Move(fnMoveForward, GoInContent) &&
-            (!bSrchForward || pSttNd != &rSearchPam.GetPoint()->nNode.GetNode()) &&
+            (!bSrchForward || pSttNd != &rSearchPam.GetPoint()->GetNode()) &&
             SwNodeOffset(1) == abs(rSearchPam.GetPoint()->nNode.GetIndex() -
                                    rSearchPam.GetMark()->nNode.GetIndex()))
         {

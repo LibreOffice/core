@@ -663,7 +663,7 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
         break;
         case FN_UNO_TEXT_PARAGRAPH:
         {
-            SwTextNode* pTextNode = rPam.GetPoint()->nNode.GetNode().GetTextNode();
+            SwTextNode* pTextNode = rPam.GetPoint()->GetNode().GetTextNode();
             if (pTextNode)
             {
                 if (pAny)
@@ -1025,7 +1025,7 @@ void resetCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry, SwPaM& rPam
 void InsertFile(SwUnoCursor* pUnoCursor, const OUString& rURL,
     const uno::Sequence< beans::PropertyValue >& rOptions)
 {
-    if (SwTextNode const*const pTextNode = pUnoCursor->GetPoint()->nNode.GetNode().GetTextNode())
+    if (SwTextNode const*const pTextNode = pUnoCursor->GetPoint()->GetNode().GetTextNode())
     {
         // TODO: check meta field here too in case it ever grows a 2nd char
         if (pTextNode->GetTextAttrAt(pUnoCursor->GetPoint()->nContent.GetIndex(),
@@ -1193,7 +1193,7 @@ bool DocInsertStringSplitCR(
     // grouping done in InsertString is intended for typing, not API calls
     ::sw::GroupUndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
     SwTextNode* const pTextNd =
-        rNewCursor.GetPoint()->nNode.GetNode().GetTextNode();
+        rNewCursor.GetPoint()->GetNode().GetTextNode();
     if (!pTextNd)
     {
         SAL_INFO("sw.uno", "DocInsertStringSplitCR: need a text node");

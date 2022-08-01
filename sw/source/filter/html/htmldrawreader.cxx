@@ -154,7 +154,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
         SVX_CSS1_LTYPE_TWIP == rCSS1PropInfo.m_eTopType )
     {
         const SwStartNode *pFlySttNd =
-            m_pPam->GetPoint()->nNode.GetNode().FindFlyStartNode();
+            m_pPam->GetPoint()->GetNode().FindFlyStartNode();
 
         if( pFlySttNd )
         {
@@ -406,7 +406,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
         0
     };
     SwTextNode const*const pTextNd =
-        m_pPam->GetPoint()->nNode.GetNode().GetTextNode();
+        m_pPam->GetPoint()->GetNode().GetTextNode();
     if( pTextNd )
     {
         const SfxItemSet& rItemSet = pTextNd->GetAnyFormatColl().GetAttrSet();

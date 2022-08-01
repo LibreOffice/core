@@ -149,7 +149,7 @@ bool SwUndoInsert::CanGrouping( const SwPosition& rPos )
         m_nContent == rPos.nContent.GetIndex() )
     {
         // consider Redline
-        SwDoc& rDoc = rPos.nNode.GetNode().GetDoc();
+        SwDoc& rDoc = rPos.GetNode().GetDoc();
         if( ( ~RedlineFlags::ShowMask & rDoc.getIDocumentRedlineAccess().GetRedlineFlags() ) ==
             ( ~RedlineFlags::ShowMask & GetRedlineFlags() ) )
         {
@@ -281,7 +281,7 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
 
         pPam->GetPoint()->nNode = nNd;
         pPam->GetPoint()->nContent.Assign(
-                pPam->GetPoint()->nNode.GetNode().GetContentNode(), nCnt );
+                pPam->GetPoint()->GetNode().GetContentNode(), nCnt );
     }
 
     maUndoText.reset();
@@ -319,7 +319,7 @@ void SwUndoInsert::RedoImpl(::sw::UndoRedoContext & rContext)
     {
         pPam->GetPoint()->nNode = m_nNode;
         SwContentNode *const pCNd =
-            pPam->GetPoint()->nNode.GetNode().GetContentNode();
+            pPam->GetPoint()->GetNode().GetContentNode();
         pPam->GetPoint()->nContent.Assign( pCNd, m_nContent );
 
         if( m_nLen )
@@ -595,7 +595,7 @@ SwUndoReplace::Impl::Impl(
 
     m_bSplitNext = m_nSttNd != pEnd->nNode.GetIndex();
 
-    SwTextNode* pNd = pStt->nNode.GetNode().GetTextNode();
+    SwTextNode* pNd = pStt->GetNode().GetTextNode();
     OSL_ENSURE( pNd, "Dude, where's my TextNode?" );
 
     m_pHistory.reset( new SwHistory );
@@ -618,7 +618,7 @@ SwUndoReplace::Impl::Impl(
             m_pHistory->CopyFormatAttr( *pNd->GetpSwAttrSet(), nNewPos );
         m_pHistory->Add( pNd->GetTextColl(), nNewPos, SwNodeType::Text );
 
-        SwTextNode* pNext = pEnd->nNode.GetNode().GetTextNode();
+        SwTextNode* pNext = pEnd->GetNode().GetTextNode();
         SwNodeOffset nTmp = pNext->GetIndex();
         m_pHistory->CopyAttr( pNext->GetpSwpHints(), nTmp, 0,
                             pNext->GetText().getLength(), true );
@@ -673,7 +673,7 @@ void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
         assert(ret); (void)ret;
         if (m_nSttNd != m_nEndNd)
         {   // in case of regex inserting paragraph breaks, join nodes...
-            assert(rPam.GetMark()->nContent == rPam.GetMark()->nNode.GetNode().GetTextNode()->Len());
+            assert(rPam.GetMark()->nContent == rPam.GetMark()->GetNode().GetTextNode()->Len());
             rPam.GetPoint()->nNode = m_nEndNd - m_nOffset;
             rPam.GetPoint()->nContent.Assign(rPam.GetContentNode(true), m_nEndCnt);
             pDoc->getIDocumentContentOperations().DeleteAndJoin(rPam);
@@ -720,7 +720,7 @@ void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
     }
 
     rPam.GetPoint()->nNode = m_nSttNd;
-    rPam.GetPoint()->nContent.Assign(rPam.GetPoint()->nNode.GetNode().GetTextNode(), m_nSttCnt);
+    rPam.GetPoint()->nContent.Assign(rPam.GetPoint()->GetNode().GetTextNode(), m_nSttCnt);
 }
 
 void SwUndoReplace::Impl::RedoImpl(::sw::UndoRedoContext & rContext)
@@ -730,14 +730,14 @@ void SwUndoReplace::Impl::RedoImpl(::sw::UndoRedoContext & rContext)
     rPam.DeleteMark();
     rPam.GetPoint()->nNode = m_nSttNd;
 
-    SwTextNode* pNd = rPam.GetPoint()->nNode.GetNode().GetTextNode();
+    SwTextNode* pNd = rPam.GetPoint()->GetNode().GetTextNode();
     OSL_ENSURE( pNd, "Dude, where's my TextNode?" );
     rPam.GetPoint()->nContent.Assign( pNd, m_nSttCnt );
     rPam.SetMark();
     if( m_bSplitNext )
     {
         rPam.GetPoint()->nNode = m_nSttNd + 1;
-        pNd = rPam.GetPoint()->nNode.GetNode().GetTextNode();
+        pNd = rPam.GetPoint()->GetNode().GetTextNode();
     }
     rPam.GetPoint()->nContent.Assign( pNd, m_nSelEnd );
 
@@ -966,7 +966,7 @@ void SwUndoInsertLabel::RepeatImpl(::sw::RepeatContext & rContext)
 
     SwNodeOffset nIdx(0);
 
-    SwContentNode* pCNd = rPos.nNode.GetNode().GetContentNode();
+    SwContentNode* pCNd = rPos.GetNode().GetContentNode();
     if( pCNd )
         switch( m_eType )
         {

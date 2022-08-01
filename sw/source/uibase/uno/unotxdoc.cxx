@@ -3381,7 +3381,7 @@ void SwXTextDocument::executeContentControlEvent(const StringMap& rArguments)
     {
         SwWrtShell* pWrtShell = m_pDocShell->GetWrtShell();
         const SwPosition* pStart = pWrtShell->GetCursor()->Start();
-        SwTextNode* pTextNode = pStart->nNode.GetNode().GetTextNode();
+        SwTextNode* pTextNode = pStart->GetNode().GetTextNode();
         if (!pTextNode)
         {
             return;
@@ -3435,7 +3435,7 @@ void SwXTextDocument::executeContentControlEvent(const StringMap& rArguments)
     {
         SwWrtShell* pWrtShell = m_pDocShell->GetWrtShell();
         const SwPosition* pStart = pWrtShell->GetCursor()->Start();
-        SwTextNode* pTextNode = pStart->nNode.GetNode().GetTextNode();
+        SwTextNode* pTextNode = pStart->GetNode().GetTextNode();
         if (!pTextNode)
         {
             return;

@@ -198,7 +198,7 @@ void SetGetExpField::GetPosOfContent( SwPosition& rPos ) const
     else
     {
         rPos.nNode = m_nNode;
-        rPos.nContent.Assign( rPos.nNode.GetNode().GetContentNode(), m_nContent );
+        rPos.nContent.Assign( rPos.GetNode().GetContentNode(), m_nContent );
     }
 }
 
@@ -308,11 +308,11 @@ const SwNode* SetGetExpField::GetNodeFromContent() const
             break;
 
         case BOOKMARK:
-            pRet = &m_CNTNT.pBookmark->GetMarkStart().nNode.GetNode();
+            pRet = &m_CNTNT.pBookmark->GetMarkStart().GetNode();
             break;
 
         case CRSRPOS:
-            pRet = &m_CNTNT.pPos->nNode.GetNode();
+            pRet = &m_CNTNT.pPos->GetNode();
             break;
 
         case TEXTTOXMARK:
@@ -927,7 +927,7 @@ void SwDocUpdateField::MakeFieldList_( SwDoc& rDoc, int eGetMode )
             assert(pBookmark);
             if (!pBookmark->GetHideCondition().isEmpty())
             {
-                GetBodyNodeGeneric((*it)->GetMarkStart().nNode.GetNode(), *pBookmark);
+                GetBodyNodeGeneric((*it)->GetMarkStart().GetNode(), *pBookmark);
             }
         }
     }

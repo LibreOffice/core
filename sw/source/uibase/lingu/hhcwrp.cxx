@@ -508,12 +508,12 @@ void SwHHCWrapper::Convert()
         SwPaM *pCursor = m_pView->GetWrtShell().GetCursor();
         auto [pSttPos, pEndPos] = pCursor->StartEnd(); // SwPosition*
 
-        if (pSttPos->nNode.GetNode().IsTextNode() &&
-            pEndPos->nNode.GetNode().IsTextNode())
+        if (pSttPos->GetNode().IsTextNode() &&
+            pEndPos->GetNode().IsTextNode())
         {
             m_pConvArgs.reset( new SwConversionArgs( GetSourceLanguage(),
-                            pSttPos->nNode.GetNode().GetTextNode(), pSttPos->nContent,
-                            pEndPos->nNode.GetNode().GetTextNode(), pEndPos->nContent ) );
+                            pSttPos->GetNode().GetTextNode(), pSttPos->nContent,
+                            pEndPos->GetNode().GetTextNode(), pEndPos->nContent ) );
         }
         else    // we are not in the text (maybe a graphic or OLE object is selected) let's start from the top
         {
@@ -523,7 +523,7 @@ void SwHHCWrapper::Convert()
             aPam.Move( fnMoveBackward, GoInDoc ); // move to start of document
 
             pSttPos = aPam.GetPoint();  //! using a PaM here makes sure we will get only text nodes
-            SwTextNode *pTextNode = pSttPos->nNode.GetNode().GetTextNode();
+            SwTextNode *pTextNode = pSttPos->GetNode().GetTextNode();
             // just in case we check anyway...
             if (!pTextNode || !pTextNode->IsTextNode())
                 return;

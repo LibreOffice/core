@@ -252,7 +252,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
 
     if( !rRg.HasMark() )
     {
-        SwTextNode* pTextNd = rRg.GetPoint()->nNode.GetNode().GetTextNode();
+        SwTextNode* pTextNd = rRg.GetPoint()->GetNode().GetTextNode();
         if( !pTextNd )
             return ;
 
@@ -356,7 +356,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
 
         ++aTmpStt;
     }
-    if( pEnd->nContent.GetIndex() == pEnd->nNode.GetNode().GetContentNode()->Len() )
+    if( pEnd->nContent.GetIndex() == pEnd->GetNode().GetContentNode()->Len() )
     {
          // set up a later, and all CharFormatAttr -> TextFormatAttr
         ++aTmpEnd;
@@ -384,7 +384,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
     else if( !rRg.HasMark() )
     {
         aPara.bResetAll = false ;
-        ::lcl_RstAttr( &pStt->nNode.GetNode(), &aPara );
+        ::lcl_RstAttr( &pStt->GetNode(), &aPara );
         aPara.bResetAll = true ;
     }
 
@@ -406,7 +406,7 @@ void SwDoc::UpdateRsid( const SwPaM &rRg, const sal_Int32 nLen )
     if (!SW_MOD()->GetModuleConfig()->IsStoreRsid())
         return;
 
-    SwTextNode *pTextNode = rRg.GetPoint()->nNode.GetNode().GetTextNode();
+    SwTextNode *pTextNode = rRg.GetPoint()->GetNode().GetTextNode();
     if (!pTextNode)
     {
         return;
@@ -1702,7 +1702,7 @@ void SwDoc::MoveLeftMargin(const SwPaM& rPam, bool bRight, bool bModulus,
 bool SwDoc::DontExpandFormat( const SwPosition& rPos, bool bFlag )
 {
     bool bRet = false;
-    SwTextNode* pTextNd = rPos.nNode.GetNode().GetTextNode();
+    SwTextNode* pTextNd = rPos.GetNode().GetTextNode();
     if( pTextNd )
     {
         bRet = pTextNd->DontExpandFormat( rPos.nContent, bFlag );
@@ -1772,7 +1772,7 @@ void SwDoc::SetTextFormatCollByAutoFormat( const SwPosition& rPos, sal_uInt16 nP
                                     const SfxItemSet* pSet )
 {
     SwPaM aPam( rPos );
-    SwTextNode* pTNd = rPos.nNode.GetNode().GetTextNode();
+    SwTextNode* pTNd = rPos.GetNode().GetTextNode();
     assert(pTNd);
 
     if (mbIsAutoFormatRedline)
@@ -1818,7 +1818,7 @@ void SwDoc::SetTextFormatCollByAutoFormat( const SwPosition& rPos, sal_uInt16 nP
 
 void SwDoc::SetFormatItemByAutoFormat( const SwPaM& rPam, const SfxItemSet& rSet )
 {
-    SwTextNode* pTNd = rPam.GetPoint()->nNode.GetNode().GetTextNode();
+    SwTextNode* pTNd = rPam.GetPoint()->GetNode().GetTextNode();
     assert(pTNd);
 
     RedlineFlags eOld = getIDocumentRedlineAccess().GetRedlineFlags();

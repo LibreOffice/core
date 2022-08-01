@@ -44,7 +44,7 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc& rDoc, SwPosition& rPos,
     : SwUndo(SwUndoId::OVERWRITE, &rDoc),
       m_bGroup( false )
 {
-    SwTextNode *const pTextNd = rPos.nNode.GetNode().GetTextNode();
+    SwTextNode *const pTextNd = rPos.GetNode().GetTextNode();
     assert(pTextNd);
     sal_Int32 const nTextNdLen = pTextNd->GetText().getLength();
 
@@ -111,7 +111,7 @@ bool SwUndoOverwrite::CanGrouping( SwDoc& rDoc, SwPosition& rPos,
         return false;
 
     // Is the node a TextNode at all?
-    SwTextNode * pDelTextNd = rPos.nNode.GetNode().GetTextNode();
+    SwTextNode * pDelTextNd = rPos.GetNode().GetTextNode();
     if( !pDelTextNd ||
         (pDelTextNd->GetText().getLength() != rPos.nContent.GetIndex() &&
             rPos.nContent.GetIndex() != ( m_nStartContent + m_aInsStr.getLength() )))

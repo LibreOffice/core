@@ -1267,7 +1267,7 @@ void SwEditShell::ApplyParagraphClassification(std::vector<svx::ClassificationRe
     if (!pDocShell || !GetCursor() || !GetCursor()->Start())
         return;
 
-    SwTextNode* pNode = GetCursor()->Start()->nNode.GetNode().GetTextNode();
+    SwTextNode* pNode = GetCursor()->Start()->GetNode().GetTextNode();
     if (pNode == nullptr)
         return;
 
@@ -1348,7 +1348,7 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectParagraphClassificati
     if (!pDocShell || !GetCursor() || !GetCursor()->Start())
         return aResult;
 
-    SwTextNode* pNode = GetCursor()->Start()->nNode.GetNode().GetTextNode();
+    SwTextNode* pNode = GetCursor()->Start()->GetNode().GetTextNode();
     if (pNode == nullptr)
         return aResult;
 
@@ -1757,7 +1757,7 @@ void SwEditShell::SignParagraph()
     const SwPosition* pPosStart = GetCursor()->Start();
     if (!pPosStart)
         return;
-    SwTextNode* pNode = pPosStart->nNode.GetNode().GetTextNode();
+    SwTextNode* pNode = pPosStart->GetNode().GetTextNode();
     if (!pNode)
         return;
 
@@ -1848,7 +1848,7 @@ void SwEditShell::ValidateCurrentParagraphSignatures(bool updateDontRemove)
 
     SwPaM* pPaM = GetCursor();
     const SwPosition* pPosStart = pPaM->Start();
-    SwTextNode* pNode = pPosStart->nNode.GetNode().GetTextNode();
+    SwTextNode* pNode = pPosStart->GetNode().GetTextNode();
     ValidateParagraphSignatures(pNode, updateDontRemove);
 }
 
@@ -2045,7 +2045,7 @@ bool SwEditShell::IsCursorInParagraphMetadataField() const
 {
     if (GetCursor() && GetCursor()->Start())
     {
-        SwTextNode* pNode = GetCursor()->Start()->nNode.GetNode().GetTextNode();
+        SwTextNode* pNode = GetCursor()->Start()->GetNode().GetTextNode();
         const sal_uLong index = GetCursor()->Start()->nContent.GetIndex();
         uno::Reference<text::XTextField> xField = lcl_GetParagraphMetadataFieldAtIndex(GetDoc()->GetDocShell(), pNode, index);
         return xField.is();
@@ -2058,7 +2058,7 @@ bool SwEditShell::RemoveParagraphMetadataFieldAtCursor()
 {
     if (GetCursor() && GetCursor()->Start())
     {
-        SwTextNode* pNode = GetCursor()->Start()->nNode.GetNode().GetTextNode();
+        SwTextNode* pNode = GetCursor()->Start()->GetNode().GetTextNode();
         sal_uLong index = GetCursor()->Start()->nContent.GetIndex();
         uno::Reference<text::XTextField> xField = lcl_GetParagraphMetadataFieldAtIndex(GetDoc()->GetDocShell(), pNode, index);
         if (!xField.is())
@@ -2104,7 +2104,7 @@ static OUString lcl_GetHighestClassificationParagraphClass(SwPaM* pCursor)
 {
     OUString sHighestClass;
 
-    SwTextNode* pNode = pCursor->Start()->nNode.GetNode().GetTextNode();
+    SwTextNode* pNode = pCursor->Start()->GetNode().GetTextNode();
     if (pNode == nullptr)
         return sHighestClass;
 
@@ -2204,7 +2204,7 @@ void SwEditShell::SetTextFormatColl(SwTextFormatColl *pFormat,
             // store previous paragraph style for track changes
             OUString sParaStyleName;
             sal_uInt16 nPoolId = USHRT_MAX;
-            SwContentNode * pCnt = rPaM.Start()->nNode.GetNode().GetContentNode();
+            SwContentNode * pCnt = rPaM.Start()->GetNode().GetContentNode();
             if ( pCnt && pCnt->GetTextNode() && GetDoc()->getIDocumentRedlineAccess().IsRedlineOn() )
             {
                 const SwTextFormatColl* pTextFormatColl = pCnt->GetTextNode()->GetTextColl();
@@ -2221,7 +2221,7 @@ void SwEditShell::SetTextFormatColl(SwTextFormatColl *pFormat,
 
             // If there are hints on the nodes which cover the whole node, then remove those, too.
             SwPaM aPaM(*rPaM.Start(), *rPaM.End());
-            if (SwTextNode* pEndTextNode = aPaM.End()->nNode.GetNode().GetTextNode())
+            if (SwTextNode* pEndTextNode = aPaM.End()->GetNode().GetTextNode())
             {
                 aPaM.Start()->nContent = 0;
                 aPaM.End()->nContent = pEndTextNode->GetText().getLength();

@@ -89,7 +89,7 @@ bool SwWrtShell::InsertField2(SwField const& rField, SwPaM* pAnnotationRange)
             if ( IsTableMode() )
             {
                 GetTableCrs()->Normalize( false );
-                const SwPosition rStartPos( *(GetTableCrs()->GetMark()->nNode.GetNode().GetContentNode()), 0 );
+                const SwPosition rStartPos( *(GetTableCrs()->GetMark()->GetNode().GetContentNode()), 0 );
                 KillPams();
                 if ( !IsEndOfPara() )
                 {

@@ -672,7 +672,7 @@ SwXText::insertTextContentBefore(
         const SwNodeIndex aTableIdx( *pTableNode, -1 );
         SwPosition aBefore(aTableIdx);
         bRet = GetDoc()->getIDocumentContentOperations().AppendTextNode( aBefore );
-        pTextNode = aBefore.nNode.GetNode().GetTextNode();
+        pTextNode = aBefore.GetNode().GetTextNode();
     }
     else if (pXSection && pXSection->GetFormat() &&
             pXSection->GetFormat()->GetDoc() == GetDoc())
@@ -683,7 +683,7 @@ SwXText::insertTextContentBefore(
         const SwNodeIndex aSectIdx( *pSectNode, -1 );
         SwPosition aBefore(aSectIdx);
         bRet = GetDoc()->getIDocumentContentOperations().AppendTextNode( aBefore );
-        pTextNode = aBefore.nNode.GetNode().GetTextNode();
+        pTextNode = aBefore.GetNode().GetTextNode();
     }
     if (!bRet || !pTextNode)
     {
@@ -728,7 +728,7 @@ SwXText::insertTextContentAfter(
         SwEndNode *const pTableEnd = pTableNode->EndOfSectionNode();
         SwPosition aTableEnd(*pTableEnd);
         bRet = GetDoc()->getIDocumentContentOperations().AppendTextNode( aTableEnd );
-        pTextNode = aTableEnd.nNode.GetNode().GetTextNode();
+        pTextNode = aTableEnd.GetNode().GetTextNode();
     }
     else if (pXSection && pXSection->GetFormat() &&
             pXSection->GetFormat()->GetDoc() == GetDoc())
@@ -738,7 +738,7 @@ SwXText::insertTextContentAfter(
         SwEndNode *const pEnd = pSectNode->EndOfSectionNode();
         SwPosition aEnd(*pEnd);
         bRet = GetDoc()->getIDocumentContentOperations().AppendTextNode( aEnd );
-        pTextNode = aEnd.nNode.GetNode().GetTextNode();
+        pTextNode = aEnd.GetNode().GetTextNode();
     }
     if (!bRet || !pTextNode)
     {
@@ -1299,7 +1299,7 @@ SwXText::Impl::finishOrAppendParagraph(
 
         // tdf#127616 keep direct character formatting of empty paragraphs,
         // if character style of the paragraph sets also the same attributes
-        if (aPam.Start()->nNode.GetNode().GetTextNode()->Len() == 0)
+        if (aPam.Start()->GetNode().GetTextNode()->Len() == 0)
         {
             auto itCharStyle = std::find_if(rProperties.begin(), rProperties.end(), [](const beans::PropertyValue& rValue)
             {
@@ -1350,7 +1350,7 @@ SwXText::Impl::finishOrAppendParagraph(
             throw aEx;
         }
     }
-    SwTextNode *const pTextNode( aPam.Start()->nNode.GetNode().GetTextNode() );
+    SwTextNode *const pTextNode( aPam.Start()->GetNode().GetTextNode() );
     OSL_ENSURE(pTextNode, "no SwTextNode?");
     if (pTextNode)
     {
@@ -1787,7 +1787,7 @@ SwXText::convertToTextFrame(
                                     && pStartPam->ContainsPosition(*pFrameFormat->GetAnchor().GetContentAnchor()))
                                 {
                                     const auto& rAnchorNode
-                                        = pFrameFormat->GetAnchor().GetContentAnchor()->nNode.GetNode();
+                                        = pFrameFormat->GetAnchor().GetContentAnchor()->GetNode();
                                     if (!(rAnchorNode.FindFooterStartNode() || rAnchorNode.FindHeaderStartNode()))
                                     {
                                         SwFormatAnchor aAnchor(pFrameFormat->GetAnchor());
@@ -2026,7 +2026,7 @@ void SwXText::Impl::ConvertCell(
     }
     // now check if there's a need to insert another paragraph break
     if (aEndCellPam.End()->nContent.GetIndex() <
-            aEndCellPam.End()->nNode.GetNode().GetTextNode()->Len())
+            aEndCellPam.End()->GetNode().GetTextNode()->Len())
     {
         m_pDoc->getIDocumentContentOperations().SplitNode(*aEndCellPam.End(), false);
         // take care that the new start/endcell is moved to the right position
@@ -2042,7 +2042,7 @@ void SwXText::Impl::ConvertCell(
     }
 
     assert(aStartCellPam.Start()->nContent.GetIndex() == 0);
-    assert(aEndCellPam.End()->nContent.GetIndex() == aEndCellPam.End()->nNode.GetNode().GetTextNode()->Len());
+    assert(aEndCellPam.End()->nContent.GetIndex() == aEndCellPam.End()->GetNode().GetTextNode()->Len());
     SwNodeRange aCellRange(aStartCellPam.Start()->nNode,
             aEndCellPam.End()->nNode);
     rRowNodes.push_back(aCellRange); // note: invalidates pLastCell!
@@ -2379,12 +2379,12 @@ SwXText::copyText(
         SwTextNode * pFirstNode;
         {
             SwPaM temp(*pSource->GetStartNode(), *pSource->GetStartNode()->EndOfSectionNode(), SwNodeOffset(+1), SwNodeOffset(-1));
-            pFirstNode = temp.GetMark()->nNode.GetNode().GetTextNode();
+            pFirstNode = temp.GetMark()->GetNode().GetTextNode();
             if (pFirstNode)
             {
                 pFirstNode->MakeStartIndex(&temp.GetMark()->nContent);
             }
-            if (SwTextNode *const pNode = temp.GetPoint()->nNode.GetNode().GetTextNode())
+            if (SwTextNode *const pNode = temp.GetPoint()->GetNode().GetTextNode())
             {
                 pNode->MakeEndIndex(&temp.GetPoint()->nContent);
             }

@@ -325,7 +325,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPostKeyEvent)
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
     Scheduler::ProcessEventsToIdle();
     // Did we manage to insert the character after the first one?
-    CPPUNIT_ASSERT_EQUAL(OUString("Axaa bbb."), pShellCursor->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("Axaa bbb."), pShellCursor->GetPoint()->GetNode().GetTextNode()->GetText());
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPostMouseEvent)
@@ -510,12 +510,12 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSearch)
     SwXTextDocument* pXTextDocument = createDoc("search.odt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
-    SwNodeOffset nNode = pWrtShell->getShellCursor(false)->Start()->nNode.GetNode().GetIndex();
+    SwNodeOffset nNode = pWrtShell->getShellCursor(false)->Start()->GetNode().GetIndex();
 
     // First hit, in the second paragraph, before the shape.
     lcl_search(false);
     CPPUNIT_ASSERT(!pWrtShell->GetDrawView()->GetTextEditObject());
-    SwNodeOffset nActual = pWrtShell->getShellCursor(false)->Start()->nNode.GetNode().GetIndex();
+    SwNodeOffset nActual = pWrtShell->getShellCursor(false)->Start()->GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(nNode + 1, nActual);
     /// Make sure we get search result selection for normal find as well, not only find all.
     CPPUNIT_ASSERT(!m_aSearchResultSelection.empty());
@@ -531,7 +531,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSearch)
     // Last hit, in the last paragraph, after the shape.
     lcl_search(false);
     CPPUNIT_ASSERT(!pWrtShell->GetDrawView()->GetTextEditObject());
-    nActual = pWrtShell->getShellCursor(false)->Start()->nNode.GetNode().GetIndex();
+    nActual = pWrtShell->getShellCursor(false)->Start()->GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(nNode + 7, nActual);
 
     // Now change direction and make sure that the first 2 hits are in the shape, but not the 3rd one.
@@ -541,7 +541,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSearch)
     CPPUNIT_ASSERT(pWrtShell->GetDrawView()->GetTextEditObject());
     lcl_search(true);
     CPPUNIT_ASSERT(!pWrtShell->GetDrawView()->GetTextEditObject());
-    nActual = pWrtShell->getShellCursor(false)->Start()->nNode.GetNode().GetIndex();
+    nActual = pWrtShell->getShellCursor(false)->Start()->GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(nNode + 1, nActual);
 }
 
@@ -567,7 +567,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSearchViewArea)
                 }));
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
     // This was just "Heading", i.e. SwView::SearchAndWrap() did not search from only the top of the second page.
-    CPPUNIT_ASSERT_EQUAL(OUString("Heading on second page"), pShellCursor->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading on second page"), pShellCursor->GetPoint()->GetNode().GetTextNode()->GetText());
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSearchTextFrame)
@@ -1140,7 +1140,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoInvalidations)
     // ProcessEventsToIdle resets the view; set it again
     SfxLokHelper::setView(nView1);
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
-    CPPUNIT_ASSERT_EQUAL(OUString("Aaa bbb.c"), pShellCursor->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("Aaa bbb.c"), pShellCursor->GetPoint()->GetNode().GetTextNode()->GetText());
 
     // Undo and assert that both views are invalidated.
     Scheduler::ProcessEventsToIdle();
@@ -1169,7 +1169,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoLimiting)
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'c', 0);
     Scheduler::ProcessEventsToIdle();
     SwShellCursor* pShellCursor = pWrtShell2->getShellCursor(false);
-    CPPUNIT_ASSERT_EQUAL(OUString("Aaa bbb.c"), pShellCursor->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("Aaa bbb.c"), pShellCursor->GetPoint()->GetNode().GetTextNode()->GetText());
 
     // Assert that the first view can't undo, but the second view can.
     CPPUNIT_ASSERT(!pWrtShell1->GetLastUndoInfo(nullptr, nullptr, &pWrtShell1->GetView()));
@@ -1563,7 +1563,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChanges)
     // Assert that the reject was performed.
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
     // This was 'Aaa bbb.zzz', the change wasn't rejected.
-    CPPUNIT_ASSERT_EQUAL(OUString("Aaa bbb."), pShellCursor->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("Aaa bbb."), pShellCursor->GetPoint()->GetNode().GetTextNode()->GetText());
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesCallback)
@@ -2039,7 +2039,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAllTrackedChanges)
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(0), rTable.size());
     {
         SwShellCursor* pShellCursor = pWrtShell1->getShellCursor(false);
-        CPPUNIT_ASSERT_EQUAL(OUString("Aaa bbb."), pShellCursor->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+        CPPUNIT_ASSERT_EQUAL(OUString("Aaa bbb."), pShellCursor->GetPoint()->GetNode().GetTextNode()->GetText());
     }
 
     // Insert text and accept all
@@ -2062,7 +2062,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAllTrackedChanges)
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(0), rTable.size());
     {
         SwShellCursor* pShellCursor = pWrtShell2->getShellCursor(false);
-        CPPUNIT_ASSERT_EQUAL(OUString("hyyAaa bbb.cyy"), pShellCursor->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+        CPPUNIT_ASSERT_EQUAL(OUString("hyyAaa bbb.cyy"), pShellCursor->GetPoint()->GetNode().GetTextNode()->GetText());
     }
 
     SfxLokHelper::setView(nView1);
@@ -2268,7 +2268,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIMESupport)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), pShellCursor->GetPoint()->nContent.GetIndex());
 
     // content contains only the last IME composition, not all
-    CPPUNIT_ASSERT_EQUAL(OUString(aInputs[aInputs.size() - 1] + "Aaa bbb."), pShellCursor->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString(aInputs[aInputs.size() - 1] + "Aaa bbb."), pShellCursor->GetPoint()->GetNode().GetTextNode()->GetText());
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIMEFormattingAtEndOfParagraph)
@@ -2373,7 +2373,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIMEFormattingAtEndOfParagraph)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), pShellCursor->GetPoint()->nContent.GetIndex());
 
     // check the content
-    CPPUNIT_ASSERT_EQUAL(OUString("bab"), pShellCursor->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("bab"), pShellCursor->GetPoint()->GetNode().GetTextNode()->GetText());
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIMEFormattingAfterHeader)
@@ -3623,7 +3623,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPictureContentControl)
     const SwFrameFormat* pFlyFormat = pWrtShell->GetFlyFrameFormat();
     const SwFormatAnchor& rFormatAnchor = pFlyFormat->GetAnchor();
     const SwPosition* pAnchorPos = rFormatAnchor.GetContentAnchor();
-    SwTextNode* pTextNode = pAnchorPos->nNode.GetNode().GetTextNode();
+    SwTextNode* pTextNode = pAnchorPos->GetNode().GetTextNode();
     SwTextAttr* pAttr = pTextNode->GetTextAttrForCharAt(0, RES_TXTATR_CONTENTCONTROL);
     auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
     auto& rFormatContentControl

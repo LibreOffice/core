@@ -1000,7 +1000,7 @@ void SwAutoFormat::SetColl( sal_uInt16 nId, bool bHdLineOrText )
 {
     m_aDelPam.DeleteMark();
     m_aDelPam.GetPoint()->nNode = *m_pCurTextFrame->GetTextNodeForParaProps();
-    m_aDelPam.GetPoint()->nContent.Assign(m_aDelPam.GetPoint()->nNode.GetNode().GetContentNode(), 0);
+    m_aDelPam.GetPoint()->nContent.Assign(m_aDelPam.GetPoint()->GetNode().GetContentNode(), 0);
 
     // keep hard tabs, alignment, language, hyphenation, DropCaps and nearly all frame attributes
     SfxItemSetFixed<
@@ -1009,9 +1009,9 @@ void SwAutoFormat::SetColl( sal_uInt16 nId, bool bHdLineOrText )
             RES_PARATR_TABSTOP, RES_PARATR_DROP,
             RES_BACKGROUND, RES_SHADOW>  aSet(m_pDoc->GetAttrPool());
 
-    if (m_aDelPam.GetPoint()->nNode.GetNode().GetTextNode()->HasSwAttrSet())
+    if (m_aDelPam.GetPoint()->GetNode().GetTextNode()->HasSwAttrSet())
     {
-        aSet.Put(*m_aDelPam.GetPoint()->nNode.GetNode().GetTextNode()->GetpSwAttrSet());
+        aSet.Put(*m_aDelPam.GetPoint()->GetNode().GetTextNode()->GetpSwAttrSet());
         // take HeaderLine/TextBody only if centered or right aligned, otherwise only justification
         if( SvxAdjustItem const * pAdj = aSet.GetItemIfSet( RES_PARATR_ADJUST, false) )
         {
@@ -1735,7 +1735,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
 
             SfxItemSet aSet( m_pDoc->GetAttrPool(), aTextNodeSetRange );
             *m_aDelPam.GetPoint() = m_pCurTextFrame->MapViewToModelPos(TextFrameIndex(0));
-            assert(&m_aDelPam.GetPoint()->nNode.GetNode() == m_pCurTextFrame->GetTextNodeForParaProps());
+            assert(&m_aDelPam.GetPoint()->GetNode() == m_pCurTextFrame->GetTextNodeForParaProps());
             if( bChgBullet )
             {
                 m_aDelPam.SetMark();
@@ -1755,7 +1755,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
             SvxTabStopItem aTStops( RES_PARATR_TABSTOP );
             aTStops.Insert( SvxTabStop( 0 ) );
             aSet.Put( aTStops );
-            assert(&m_aDelPam.GetPoint()->nNode.GetNode() == m_pCurTextFrame->GetTextNodeForParaProps());
+            assert(&m_aDelPam.GetPoint()->GetNode() == m_pCurTextFrame->GetTextNodeForParaProps());
             m_pDoc->SetFormatItemByAutoFormat( m_aDelPam, aSet );
         }
     }

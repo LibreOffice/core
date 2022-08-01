@@ -538,7 +538,7 @@ void SwHyphIter::DelSoftHyph( SwPaM &rPam )
     const SwPosition* pStt = rPam.Start();
     const sal_Int32 nStart = pStt->nContent.GetIndex();
     const sal_Int32 nEnd   = rPam.End()->nContent.GetIndex();
-    SwTextNode *pNode = pStt->nNode.GetNode().GetTextNode();
+    SwTextNode *pNode = pStt->GetNode().GetTextNode();
     pNode->DelSoftHyph( nStart, nEnd );
 }
 
@@ -838,14 +838,14 @@ void SwEditShell::HandleCorrectionError(const OUString& aText, SwPosition aPos, 
                                         SwRect& rSelectRect)
 {
     // save the start and end positions of the line and the starting point
-    SwNode const& rNode(GetCursor()->GetPoint()->nNode.GetNode());
+    SwNode const& rNode(GetCursor()->GetPoint()->GetNode());
     Push();
     LeftMargin();
-    const sal_Int32 nLineStart = &rNode == &GetCursor()->GetPoint()->nNode.GetNode()
+    const sal_Int32 nLineStart = &rNode == &GetCursor()->GetPoint()->GetNode()
         ? GetCursor()->GetPoint()->nContent.GetIndex()
         : 0;
     RightMargin();
-    const sal_Int32 nLineEnd = &rNode == &GetCursor()->GetPoint()->nNode.GetNode()
+    const sal_Int32 nLineEnd = &rNode == &GetCursor()->GetPoint()->GetNode()
         ? GetCursor()->GetPoint()->nContent.GetIndex()
         : rNode.GetTextNode()->Len();
     Pop(PopMode::DeleteCurrent);
@@ -918,7 +918,7 @@ uno::Reference< XSpellAlternatives >
     SwTextNode *pNode = nullptr;
     SwWrongList *pWrong = nullptr;
     if (pPt && GetLayout()->GetModelPositionForViewPoint( &aPos, *const_cast<Point*>(pPt), &eTmpState ))
-        pNode = aPos.nNode.GetNode().GetTextNode();
+        pNode = aPos.GetNode().GetTextNode();
     if (nullptr == pNode)
         pNode = pCursor->GetNode().GetTextNode();
     if (nullptr != pNode)
@@ -989,7 +989,7 @@ bool SwEditShell::GetGrammarCorrection(
     SwTextNode *pNode = nullptr;
     SwGrammarMarkUp *pWrong = nullptr;
     if (pPt && GetLayout()->GetModelPositionForViewPoint( &aPos, *const_cast<Point*>(pPt), &eTmpState ))
-        pNode = aPos.nNode.GetNode().GetTextNode();
+        pNode = aPos.GetNode().GetTextNode();
     if (nullptr == pNode)
         pNode = pCursor->GetNode().GetTextNode();
     if (nullptr != pNode)
@@ -1418,7 +1418,7 @@ bool SwSpellIter::SpellSentence(svx::SpellPortions& rPortions, bool bIsGrammarCh
             if( pCursor->End()->nContent.GetIndex() < nSentenceEnd )
             {
                 pCursor->End()->nContent.Assign(
-                    pCursor->End()->nNode.GetNode().GetContentNode(), nSentenceEnd);
+                    pCursor->End()->GetNode().GetContentNode(), nSentenceEnd);
             }
         }
 

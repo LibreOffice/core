@@ -1704,7 +1704,7 @@ void SwDoc::AppendUndoForInsertFromDB( const SwPaM& rPam, bool bIsTable )
 {
     if( bIsTable )
     {
-        const SwTableNode* pTableNd = rPam.GetPoint()->nNode.GetNode().FindTableNode();
+        const SwTableNode* pTableNd = rPam.GetPoint()->GetNode().FindTableNode();
         if( pTableNd )
         {
             std::unique_ptr<SwUndoCpyTable> pUndo(new SwUndoCpyTable(*this));

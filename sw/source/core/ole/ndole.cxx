@@ -481,7 +481,7 @@ bool SwOLENode::IsInGlobalDocSection() const
         if( !rAnchor.GetContentAnchor() )
             return false;
 
-        pAnchorNd = &rAnchor.GetContentAnchor()->nNode.GetNode();
+        pAnchorNd = &rAnchor.GetContentAnchor()->GetNode();
     } while( pAnchorNd->GetIndex() < nEndExtraIdx );
 
     const SwSectionNode* pSectNd = pAnchorNd->FindSectionNode();
