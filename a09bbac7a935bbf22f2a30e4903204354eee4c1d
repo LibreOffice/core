@@ -16,6 +16,23 @@
       "message": "Any ideas how to debug this?",
       "revId": "a09bbac7a935bbf22f2a30e4903204354eee4c1d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fe0e8ed_ec02b294",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-08-01T08:29:21Z",
+      "side": 1,
+      "message": "online.git unit-bad-doc-load failed, let\u0027s try once more to see if it fails at the same test or it\u0027s random.",
+      "revId": "a09bbac7a935bbf22f2a30e4903204354eee4c1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
