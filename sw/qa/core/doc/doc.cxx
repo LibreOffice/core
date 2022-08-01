@@ -247,7 +247,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testContentControlDelete)
 
     // Then make sure that we only enter the content control, to be consistent with the start dummy
     // character:
-    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetMark()->nNode.GetNode().GetTextNode();
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetMark()->GetNode().GetTextNode();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: ^Atest^A
     // - Actual  : ^Atest

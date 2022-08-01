@@ -211,7 +211,7 @@ static OUString GetCellRangeName( const SwFrameFormat &rTableFormat, SwUnoCursor
     const SwTableBox*   pStartBox   = nullptr;
     const SwTableBox*   pEndBox     = nullptr;
 
-    pStart = pUnoTableCursor->GetPoint()->nNode.GetNode().FindTableBoxStartNode();
+    pStart = pUnoTableCursor->GetPoint()->GetNode().FindTableBoxStartNode();
     if (pStart)
     {
         const SwTable* pTable = SwTable::FindTable( &rTableFormat );
@@ -220,7 +220,7 @@ static OUString GetCellRangeName( const SwFrameFormat &rTableFormat, SwUnoCursor
 
         if(pUnoTableCursor->HasMark())
         {
-            pStart = pUnoTableCursor->GetMark()->nNode.GetNode().FindTableBoxStartNode();
+            pStart = pUnoTableCursor->GetMark()->GetNode().FindTableBoxStartNode();
             pStartBox = pTable->GetTableBox( pStart->GetIndex());
         }
         OSL_ENSURE( pStartBox, "start box not found" );
@@ -2302,8 +2302,8 @@ bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
     // if the implementation cursor gets affected (i.e. the box where it is located
     // in gets removed) we need to move it before that... (otherwise it does not need to change)
 
-    const SwStartNode* pPointStartNode = m_pTableCursor->GetPoint()->nNode.GetNode().FindTableBoxStartNode();
-    const SwStartNode* pMarkStartNode  = m_pTableCursor->GetMark()->nNode.GetNode().FindTableBoxStartNode();
+    const SwStartNode* pPointStartNode = m_pTableCursor->GetPoint()->GetNode().FindTableBoxStartNode();
+    const SwStartNode* pMarkStartNode  = m_pTableCursor->GetMark()->GetNode().FindTableBoxStartNode();
 
     if (!m_pTableCursor->HasMark() || (pPointStartNode == rBox.GetSttNd()  &&  pMarkStartNode == rBox.GetSttNd()))
     {
@@ -2443,11 +2443,11 @@ void SwChartDataSequence::ExtendTo( bool bExtendCol,
 
     // get range descriptor (cell range) for current data-sequence
 
-    pStartNd = pUnoTableCursor->GetPoint()->nNode.GetNode().FindTableBoxStartNode();
+    pStartNd = pUnoTableCursor->GetPoint()->GetNode().FindTableBoxStartNode();
     pEndBox = pTable->GetTableBox( pStartNd->GetIndex() );
     const OUString aEndBox( pEndBox->GetName() );
 
-    pStartNd = pUnoTableCursor->GetMark()->nNode.GetNode().FindTableBoxStartNode();
+    pStartNd = pUnoTableCursor->GetMark()->GetNode().FindTableBoxStartNode();
     pStartBox = pTable->GetTableBox( pStartNd->GetIndex() );
     const OUString aStartBox( pStartBox->GetName() );
 

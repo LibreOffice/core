@@ -6639,7 +6639,7 @@ void DocxAttributeOutput::WriteFlyFrame(const ww8::Frame& rFrame)
                         if(aAPos)
                         {
                             //Get the text node what the formula anchored to
-                            const SwTextNode* pTextNode = aAPos->nNode.GetNode().GetTextNode();
+                            const SwTextNode* pTextNode = aAPos->GetNode().GetTextNode();
                             if(pTextNode && pTextNode->Len() == 1)
                             {
                                 //Get the paragraph alignment

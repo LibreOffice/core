@@ -781,7 +781,7 @@ bool SwXMeta::CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb)
         throw lang::DisposedException();
 
     SwPosition const * const pStartPos( rPam.Start() );
-    if (&pStartPos->nNode.GetNode() != pTextNode)
+    if (&pStartPos->GetNode() != pTextNode)
     {
         throw lang::IllegalArgumentException(
             "trying to insert into a nesting text content, but start "
@@ -806,7 +806,7 @@ bool SwXMeta::CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb)
     if (rPam.HasMark() && bAbsorb)
     {
         SwPosition const * const pEndPos( rPam.End() );
-        if (&pEndPos->nNode.GetNode() != pTextNode)
+        if (&pEndPos->GetNode() != pTextNode)
         {
             throw lang::IllegalArgumentException(
                 "trying to insert into a nesting text content, but end "

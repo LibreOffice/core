@@ -837,7 +837,7 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
             {
                 if( pCurrentNd->CanJoinNext( &pPos->nNode ))
                 {
-                    SwTextNode* pNextNd = pPos->nNode.GetNode().GetTextNode();
+                    SwTextNode* pNextNd = pPos->GetNode().GetTextNode();
                     pPos->nContent.Assign( pNextNd, 0 );
                     m_pPam->SetMark(); m_pPam->DeleteMark();
                     pNextNd->JoinPrev();
@@ -857,7 +857,7 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
         {
             if( pPos->nContent.GetIndex() )                 // then there was no <p> at the end
                 m_pPam->Move( fnMoveForward, GoInNode );    // therefore to the next
-            SwTextNode* pTextNode = pPos->nNode.GetNode().GetTextNode();
+            SwTextNode* pTextNode = pPos->GetNode().GetTextNode();
             SwNodeIndex aPrvIdx( pPos->nNode );
             if( pTextNode && pTextNode->CanJoinPrev( &aPrvIdx ) &&
                 *m_pSttNdIdx <= aPrvIdx )
@@ -875,9 +875,9 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
                 if( pPrev->HasSwAttrSet() )
                     pTextNode->SetAttr( *pPrev->GetpSwAttrSet() );
 
-                if( &m_pPam->GetBound().nNode.GetNode() == pPrev )
+                if( &m_pPam->GetBound().GetNode() == pPrev )
                     m_pPam->GetBound().nContent.Assign( pTextNode, 0 );
-                if( &m_pPam->GetBound(false).nNode.GetNode() == pPrev )
+                if( &m_pPam->GetBound(false).GetNode() == pPrev )
                     m_pPam->GetBound(false).nContent.Assign( pTextNode, 0 );
 
                 pTextNode->JoinPrev();
@@ -1523,7 +1523,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
         if( !aToken.isEmpty() && ' '==aToken[0] && !IsReadPRE() )
         {
             sal_Int32 nPos = m_pPam->GetPoint()->nContent.GetIndex();
-            const SwTextNode* pTextNode = nPos ? m_pPam->GetPoint()->nNode.GetNode().GetTextNode() : nullptr;
+            const SwTextNode* pTextNode = nPos ? m_pPam->GetPoint()->GetNode().GetTextNode() : nullptr;
             if (pTextNode)
             {
                 const OUString& rText = pTextNode->GetText();
@@ -2197,7 +2197,7 @@ bool SwHTMLParser::AppendTextNode( SwHTMLAppendMode eMode, bool bUpdateNum )
     m_aParaAttrs.clear();
 
     SwTextNode *pTextNode = (AM_SPACE==eMode || AM_NOSPACE==eMode) ?
-        m_pPam->GetPoint()->nNode.GetNode().GetTextNode() : nullptr;
+        m_pPam->GetPoint()->GetNode().GetTextNode() : nullptr;
 
     if (pTextNode)
     {
@@ -2592,7 +2592,7 @@ void SwHTMLParser::Show()
     // is the current node not visible anymore, then we use a bigger increment
     if( pVSh )
     {
-        m_nParaCnt = (m_pPam->GetPoint()->nNode.GetNode().IsInVisibleArea(pVSh))
+        m_nParaCnt = (m_pPam->GetPoint()->GetNode().IsInVisibleArea(pVSh))
             ? 5 : 50;
     }
 }

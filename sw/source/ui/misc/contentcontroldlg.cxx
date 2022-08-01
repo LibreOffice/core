@@ -72,7 +72,7 @@ SwContentControlDlg::SwContentControlDlg(weld::Window* pParent, SwWrtShell& rWrt
     m_xMoveDownBtn->connect_clicked(LINK(this, SwContentControlDlg, MoveDownHdl));
 
     const SwPosition* pStart = rWrtShell.GetCursor()->Start();
-    SwTextNode* pTextNode = pStart->nNode.GetNode().GetTextNode();
+    SwTextNode* pTextNode = pStart->GetNode().GetTextNode();
     if (!pTextNode)
     {
         return;

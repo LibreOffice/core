@@ -74,6 +74,8 @@ struct SAL_WARN_UNUSED SW_DLLPUBLIC SwPosition
     // Gets pointer on NodesArray.
     const SwNodes& GetNodes() const { return nNode.GetNodes(); }
     SwNodes& GetNodes() { return nNode.GetNodes(); }
+
+    SwNode& GetNode() const { return nNode.GetNode(); }
 };
 
 SW_DLLPUBLIC std::ostream &operator <<(std::ostream& s, const SwPosition& position);

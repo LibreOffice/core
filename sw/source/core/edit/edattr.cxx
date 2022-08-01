@@ -669,7 +669,7 @@ SvtScriptType SwEditShell::GetScriptType() const
             auto [pStt, pEnd] = rPaM.StartEnd(); // SwPosition*
             if( pStt == pEnd || *pStt == *pEnd )
             {
-                const SwTextNode* pTNd = pStt->nNode.GetNode().GetTextNode();
+                const SwTextNode* pTNd = pStt->GetNode().GetTextNode();
                 if( pTNd )
                 {
                     // try to get SwScriptInfo
@@ -802,7 +802,7 @@ LanguageType SwEditShell::GetCurLang() const
 {
     const SwPaM* pCursor = GetCursor();
     const SwPosition& rPos = *pCursor->GetPoint();
-    const SwTextNode* pTNd = rPos.nNode.GetNode().GetTextNode();
+    const SwTextNode* pTNd = rPos.GetNode().GetTextNode();
     LanguageType nLang;
     if( pTNd )
     {
@@ -822,7 +822,7 @@ sal_uInt16 SwEditShell::GetScalingOfSelectedText() const
 {
     const SwPaM* pCursor = GetCursor();
     const SwPosition* pStt = pCursor->Start();
-    const SwTextNode* pTNd = pStt->nNode.GetNode().GetTextNode();
+    const SwTextNode* pTNd = pStt->GetNode().GetTextNode();
     OSL_ENSURE( pTNd, "no textnode available" );
 
     sal_uInt16 nScaleWidth;

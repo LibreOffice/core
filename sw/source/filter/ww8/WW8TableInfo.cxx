@@ -576,7 +576,7 @@ WW8TableInfo::processSwTableByLayout(const SwTable * pTable, RowEndInners_t &rLa
             bool bDone = false;
             do
             {
-                SwNode & rNode = aPam.GetPoint()->nNode.GetNode();
+                SwNode & rNode = aPam.GetPoint()->GetNode();
 
                 insertTableNodeInfo(&rNode, pTable, pTableBox, 0, 0, 1, & aRect);
 
@@ -701,7 +701,7 @@ WW8TableInfo::processTableBoxLines(const SwTableBox * pBox,
         bool bDone = false;
         while (!bDone)
         {
-            SwNode & rNode = aPaM.GetPoint()->nNode.GetNode();
+            SwNode & rNode = aPaM.GetPoint()->GetNode();
 
             pNodeInfo = insertTableNodeInfo(&rNode, pTable, pBoxToSet, nRow, nCell, nDepth);
 
@@ -771,7 +771,7 @@ WW8TableInfo::processTableBox(const SwTable * pTable,
 
         do
         {
-            SwNode & rNode = aPaM.GetPoint()->nNode.GetNode();
+            SwNode & rNode = aPaM.GetPoint()->GetNode();
 
             if (rNode.IsStartNode())
             {

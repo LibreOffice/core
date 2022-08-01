@@ -116,7 +116,7 @@ public:
 //                  assert(IDocumentRedlineAccess::IsHideChanges(rIDRA.GetRedlineFlags()));
                     continue;
                 }
-                if (pStart->nNode.GetNode().IsTableNode())
+                if (pStart->GetNode().IsTableNode())
                 {
                     assert(pEnd->nNode == m_Start.nNode && pEnd->nContent.GetIndex() == 0);
                     continue; // known pathology, ignore it
@@ -136,7 +136,7 @@ public:
             sal_Unicode const magic(m_eFieldmarkMode == sw::FieldmarkMode::ShowResult
                     ? CH_TXT_ATR_FIELDSTART
                     : CH_TXT_ATR_FIELDSEP);
-            SwTextNode* pTextNode = m_pEndPos->nNode.GetNode().GetTextNode();
+            SwTextNode* pTextNode = m_pEndPos->GetNode().GetTextNode();
             sal_Int32 const nPos = pTextNode ? pTextNode->GetText().indexOf(
                     magic, m_pEndPos->nContent.GetIndex()) : -1;
             if (nPos != -1)
@@ -227,13 +227,13 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
         SwPosition const*const pStart(iter.GetStartPos());
         SwPosition const*const pEnd(iter.GetEndPos());
         bHaveRedlines = true;
-        assert(pNode != &rTextNode || &pStart->nNode.GetNode() == &rTextNode); // detect calls with wrong start node
+        assert(pNode != &rTextNode || &pStart->GetNode() == &rTextNode); // detect calls with wrong start node
         if (pStart->nContent != nLastEnd) // not 0 so we eliminate adjacent deletes
         {
             extents.emplace_back(pNode, nLastEnd, pStart->nContent.GetIndex());
             mergedText.append(pNode->GetText().subView(nLastEnd, pStart->nContent.GetIndex() - nLastEnd));
         }
-        if (&pEnd->nNode.GetNode() != pNode)
+        if (&pEnd->GetNode() != pNode)
         {
             if (pNode == &rTextNode)
             {
@@ -270,7 +270,7 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
             }
             // note: in DelLastPara() case, the end node is not actually merged
             // and is likely a SwTableNode!
-            if (!pEnd->nNode.GetNode().IsTextNode())
+            if (!pEnd->GetNode().IsTextNode())
             {
                 assert(pEnd->nNode != pStart->nNode);
                 // must set pNode too because it will mark the last node
@@ -284,7 +284,7 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
             }
             else
             {
-                pNode = pEnd->nNode.GetNode().GetTextNode();
+                pNode = pEnd->GetNode().GetTextNode();
                 nodes.push_back(pNode);
                 pNode->SetRedlineMergeFlag(SwNode::Merge::NonFirst);
                 nLastEnd = pEnd->nContent.GetIndex();

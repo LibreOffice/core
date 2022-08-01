@@ -451,8 +451,8 @@ static bool MakeBookRegionOrPoint(const SwFltStackEntry& rEntry, SwDoc& rDoc,
 {
     if (rEntry.MakeRegion(rDoc, rRegion, SwFltStackEntry::RegionMode::CheckNodes))
     {
-        if (rRegion.GetPoint()->nNode.GetNode().FindTableBoxStartNode()
-              != rRegion.GetMark()->nNode.GetNode().FindTableBoxStartNode())
+        if (rRegion.GetPoint()->GetNode().FindTableBoxStartNode()
+              != rRegion.GetMark()->GetNode().FindTableBoxStartNode())
         {
             rRegion.Exchange();         // invalid range
             rRegion.DeleteMark();       // -> both to mark
@@ -589,7 +589,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
             if (MakeBookRegionOrPoint(rEntry, m_rDoc, aRegion))
             {
                 SwTextNode const*const pTextNode(
-                        aRegion.End()->nNode.GetNode().GetTextNode());
+                        aRegion.End()->GetNode().GetTextNode());
                 SwTextField const*const pField = pTextNode ? pTextNode->GetFieldTextAttrAt(
                         aRegion.End()->nContent.GetIndex() - 1, true) : nullptr;
                 if (pField)
@@ -664,7 +664,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
             SwContentNode* pNd = nullptr;
             if( !pTOXAttr->HadBreakItem() || !pTOXAttr->HadPageDescItem() )
             {
-                pNd = pPoint->nNode.GetNode().GetContentNode();
+                pNd = pPoint->GetNode().GetContentNode();
                 if( pNd )
                 {
                     const SfxItemSet* pSet = pNd->GetpSwAttrSet();

@@ -102,7 +102,7 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
             SwPosition aPos( *GetCursor()->GetPoint() );
             Point aPt( *pPt );
             GetLayout()->GetModelPositionForViewPoint( &aPos, aPt );
-            SwContentNode *pNd = aPos.nNode.GetNode().GetContentNode();
+            SwContentNode *pNd = aPos.GetNode().GetContentNode();
             std::pair<Point, bool> const tmp(*pPt, true);
             pFrame = pNd->getLayoutFrame(GetLayout(), nullptr, &tmp);
         }
@@ -243,7 +243,7 @@ FrameTypeFlags SwFEShell::GetFrameType( const Point *pPt, bool bStopAtFly ) cons
         SwPosition aPos( *GetCursor()->GetPoint() );
         Point aPt( *pPt );
         GetLayout()->GetModelPositionForViewPoint( &aPos, aPt );
-        SwContentNode *pNd = aPos.nNode.GetNode().GetContentNode();
+        SwContentNode *pNd = aPos.GetNode().GetContentNode();
         std::pair<Point, bool> const tmp(*pPt, true);
         pFrame = pNd->getLayoutFrame(GetLayout(), nullptr, &tmp);
     }

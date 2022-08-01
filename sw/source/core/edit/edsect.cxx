@@ -88,7 +88,7 @@ SwSection* SwEditShell::GetAnySection( bool bOutOfTab, const Point* pPt )
         SwPosition aPos( *GetCursor()->GetPoint() );
         Point aPt( *pPt );
         GetLayout()->GetModelPositionForViewPoint( &aPos, aPt );
-        SwContentNode *pNd = aPos.nNode.GetNode().GetContentNode();
+        SwContentNode *pNd = aPos.GetNode().GetContentNode();
         std::pair<Point, bool> const tmp(*pPt, true);
         pFrame = pNd->getLayoutFrame(GetLayout(), nullptr, &tmp);
     }
@@ -181,8 +181,8 @@ void SwEditShell::SetSectionAttr( const SfxItemSet& rSet,
         {
             auto [pStt, pEnd] = rPaM.StartEnd(); // SwPosition*
 
-            SwSectionNode* pSttSectNd = pStt->nNode.GetNode().FindSectionNode(),
-                               * pEndSectNd = pEnd->nNode.GetNode().FindSectionNode();
+            SwSectionNode* pSttSectNd = pStt->GetNode().FindSectionNode(),
+                               * pEndSectNd = pEnd->GetNode().FindSectionNode();
 
             if( pSttSectNd || pEndSectNd )
             {
@@ -253,7 +253,7 @@ sal_uInt16 SwEditShell::GetFullSelectedSectionCount() const
         const SwContentNode* pCNd;
         // check the selection, if Start at Node begin and End at Node end
         if( pStt->nContent.GetIndex() ||
-            ( nullptr == ( pCNd = pEnd->nNode.GetNode().GetContentNode() )) ||
+            ( nullptr == ( pCNd = pEnd->GetNode().GetContentNode() )) ||
             pCNd->Len() != pEnd->nContent.GetIndex() )
         {
             nRet = 0;
@@ -302,7 +302,7 @@ static const SwNode* lcl_SpecialInsertNode(const SwPosition* pCurrentPos)
 
     // the current position
     OSL_ENSURE( pCurrentPos != nullptr, "Strange, we have no position!" );
-    const SwNode& rCurrentNode = pCurrentPos->nNode.GetNode();
+    const SwNode& rCurrentNode = pCurrentPos->GetNode();
 
     // find innermost section or table.  At the end of this scope,
     // pInnermostNode contains the section/table before/after which we should

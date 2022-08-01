@@ -2423,7 +2423,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
             // as they would only shrink but never grow
             m_xLayoutInfo->SetMustNotRecalc( true );
             if( m_pContext->GetFrameFormat()->GetAnchor().GetContentAnchor()
-                ->nNode.GetNode().FindTableNode() )
+                ->GetNode().FindTableNode() )
             {
                 sal_uInt32 nMax = m_xLayoutInfo->GetMax();
                 if( nMax > USHRT_MAX )
@@ -2546,7 +2546,7 @@ const SwStartNode *SwHTMLParser::InsertTableSection
     const SwStartNode *pStNd;
     if (m_xTable->m_bFirstCell )
     {
-        SwNode *const pNd = & m_pPam->GetPoint()->nNode.GetNode();
+        SwNode *const pNd = & m_pPam->GetPoint()->GetNode();
         pNd->GetTextNode()->ChgFormatColl( pColl );
         pStNd = pNd->FindTableBoxStartNode();
         m_xTable->m_bFirstCell = false;
@@ -2595,7 +2595,7 @@ const SwStartNode *SwHTMLParser::InsertTableSection( sal_uInt16 nPoolId )
 
     SwTextFormatColl *pColl = m_pCSS1Parser->GetTextCollFromPool( nPoolId );
 
-    SwNode *const pNd = & m_pPam->GetPoint()->nNode.GetNode();
+    SwNode *const pNd = & m_pPam->GetPoint()->GetNode();
     const SwStartNode *pStNd;
     if (m_xTable->m_bFirstCell)
     {
@@ -2631,7 +2631,7 @@ const SwStartNode *SwHTMLParser::InsertTableSection( sal_uInt16 nPoolId )
                                                   pColl );
 
         m_pPam->GetPoint()->nNode = pStNd->GetIndex() + 1;
-        SwTextNode *pTextNd = m_pPam->GetPoint()->nNode.GetNode().GetTextNode();
+        SwTextNode *pTextNd = m_pPam->GetPoint()->GetNode().GetTextNode();
         m_pPam->GetPoint()->nContent.Assign( pTextNd, 0 );
         m_xTable->IncBoxCount();
     }
@@ -2671,7 +2671,7 @@ sal_Int32 SwHTMLParser::StripTrailingLF()
     const sal_Int32 nLen = m_pPam->GetPoint()->nContent.GetIndex();
     if( nLen )
     {
-        SwTextNode* pTextNd = m_pPam->GetPoint()->nNode.GetNode().GetTextNode();
+        SwTextNode* pTextNd = m_pPam->GetPoint()->GetNode().GetTextNode();
         // careful, when comments aren't ignored!!!
         if( pTextNd )
         {
@@ -3129,7 +3129,7 @@ void CellSaveStruct::CheckNoBreak( const SwPosition& rPos )
         }
         else if( m_nNoBreakEndContentPos + 1 == rPos.nContent.GetIndex() )
         {
-            SwTextNode const*const pTextNd(rPos.nNode.GetNode().GetTextNode());
+            SwTextNode const*const pTextNd(rPos.GetNode().GetTextNode());
             if( pTextNd )
             {
                 sal_Unicode const cLast =
@@ -3491,9 +3491,9 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                     m_pPam->Move( fnMoveBackward );
                 }
 
-                SwNode const*const pNd = & m_pPam->GetPoint()->nNode.GetNode();
+                SwNode const*const pNd = & m_pPam->GetPoint()->GetNode();
                 SwTextNode *const pOldTextNd = (!bAppended && !bForceFrame) ?
-                    pSavePos->nNode.GetNode().GetTextNode() : nullptr;
+                    pSavePos->GetNode().GetTextNode() : nullptr;
 
                 if (pFrameFormat && pOldTextNd)
                 {
@@ -3559,7 +3559,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                     }
                 }
 
-                SwNode const*const pNd = & m_pPam->GetPoint()->nNode.GetNode();
+                SwNode const*const pNd = & m_pPam->GetPoint()->GetNode();
                 const SwStartNode *pStNd = (m_xTable->m_bFirstCell ? pNd->FindTableNode()
                                                             : pNd->FindTableBoxStartNode() );
 

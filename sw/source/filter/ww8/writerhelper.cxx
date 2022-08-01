@@ -124,7 +124,7 @@ namespace
             {
                 SwPosition aPos(rpFly->GetNdIndex());
 
-                if (SwTextNode* pTextNd = aPos.nNode.GetNode().GetTextNode())
+                if (SwTextNode* pTextNd = aPos.GetNode().GetTextNode())
                 {
                     aPos.nContent.Assign(pTextNd, 0);
                 }
@@ -144,7 +144,7 @@ namespace
         explicit anchoredto(SwNodeOffset nNode) : mnNode(nNode) {}
         bool operator()(const ww8::Frame &rFrame) const
         {
-            return (mnNode == rFrame.GetPosition().nNode.GetNode().GetIndex());
+            return (mnNode == rFrame.GetPosition().GetNode().GetIndex());
         }
     };
 }
@@ -721,7 +721,7 @@ namespace sw
                 SameOpenRedlineType(eType));
             if (aResult != maStack.rend())
             {
-                SwTextNode *const pNode(rPos.nNode.GetNode().GetTextNode());
+                SwTextNode *const pNode(rPos.GetNode().GetTextNode());
                 sal_Int32 const nIndex(rPos.nContent.GetIndex());
                 // HACK to prevent overlap of field-mark and redline,
                 // which would destroy field-mark invariants when the redline
@@ -729,7 +729,7 @@ namespace sw
                 if (pNode && nIndex > 0
                     && pNode->GetText()[nIndex - 1] == CH_TXT_ATR_FIELDEND)
                 {
-                    SwPosition const end(*rPos.nNode.GetNode().GetTextNode(),
+                    SwPosition const end(*rPos.GetNode().GetTextNode(),
                                          nIndex - 1);
                     sw::mark::IFieldmark *const pFieldMark(
                         rPos.GetDoc().getIDocumentMarkAccess()->getFieldmarkAt(end));

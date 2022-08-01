@@ -639,7 +639,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             SwPaM* pCursorPos = rSh.GetCursor();
             if( pCursorPos )
             {
-                LanguageType nLang = pCursorPos->GetPoint()->nNode.GetNode().GetTextNode()->GetLang(pCursorPos->GetPoint()->nContent.GetIndex());
+                LanguageType nLang = pCursorPos->GetPoint()->GetNode().GetTextNode()->GetLang(pCursorPos->GetPoint()->nContent.GetIndex());
                 if (nLang == LANGUAGE_HUNGARIAN)
                     nInsertFormat = rSh.GetNumberFormatter()->GetFormatIndex(NF_DATE_SYSTEM_LONG, nLang);
             }

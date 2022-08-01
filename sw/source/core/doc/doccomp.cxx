@@ -1671,7 +1671,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
             // #i101009#
             // prevent redlines that end on structural end node
             if (& GetEndOfContent() ==
-                & pTmp->GetPoint()->nNode.GetNode())
+                & pTmp->GetPoint()->GetNode())
             {
                 --pTmp->GetPoint()->nNode;
                 SwContentNode *const pContentNode( pTmp->GetContentNode() );
@@ -1715,7 +1715,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
         // #i101009#
         // prevent redlines that end on structural end node
         if (& GetEndOfContent() ==
-            & pTmp->GetPoint()->nNode.GetNode())
+            & pTmp->GetPoint()->GetNode())
         {
             --pTmp->GetPoint()->nNode;
             SwContentNode *const pContentNode( pTmp->GetContentNode() );
@@ -1747,7 +1747,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
             if( rSttEnd == rEndStt ||
                 (!rEndStt.nContent.GetIndex() &&
                 rEndStt.nNode.GetIndex() - 1 == rSttEnd.nNode.GetIndex() &&
-                nullptr != ( pCNd = rSttEnd.nNode.GetNode().GetContentNode() ) &&
+                nullptr != ( pCNd = rSttEnd.GetNode().GetContentNode() ) &&
                 rSttEnd.nContent.GetIndex() == pCNd->Len()))
             {
                 if( pTmp->GetNext() == m_pInsertRing.get() )

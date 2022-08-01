@@ -1894,7 +1894,7 @@ void SwDrawContact::ConnectToLayout( const SwFormatAnchor* pAnch )
                     }
                     else
                     {
-                        pModify = pAnch->GetContentAnchor()->nNode.GetNode().GetContentNode();
+                        pModify = pAnch->GetContentAnchor()->GetNode().GetContentNode();
                     }
                 }
 

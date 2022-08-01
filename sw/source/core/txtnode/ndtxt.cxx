@@ -1427,7 +1427,7 @@ void SwTextNode::Update(
             if ( pRedl->HasMark() )
             {
                 SwPosition* const pEnd = pRedl->End();
-                if ( this == &pEnd->nNode.GetNode() &&
+                if ( this == &pEnd->GetNode() &&
                      *pRedl->GetPoint() != *pRedl->GetMark() )
                 {
                     SwContentIndex & rIdx = pEnd->nContent;
@@ -1437,7 +1437,7 @@ void SwTextNode::Update(
                     }
                 }
             }
-            else if ( this == &pRedl->GetPoint()->nNode.GetNode() )
+            else if ( this == &pRedl->GetPoint()->GetNode() )
             {
                 SwContentIndex & rIdx = pRedl->GetPoint()->nContent;
                 if (nChangePos == rIdx.GetIndex())
@@ -1446,7 +1446,7 @@ void SwTextNode::Update(
                 }
                 // the unused position must not be on a SwTextNode
                 bool const isOneUsed(&pRedl->GetBound() == pRedl->GetPoint());
-                assert(!pRedl->GetBound(!isOneUsed).nNode.GetNode().IsTextNode());
+                assert(!pRedl->GetBound(!isOneUsed).GetNode().IsTextNode());
                 assert(!pRedl->GetBound(!isOneUsed).nContent.GetContentNode()); (void)isOneUsed;
             }
         }
@@ -1472,7 +1472,7 @@ void SwTextNode::Update(
                     continue;
                 const SwPosition* pEnd = &pMark->GetMarkEnd();
                 SwContentIndex & rEndIdx = const_cast<SwContentIndex&>(pEnd->nContent);
-                if( this == &pEnd->nNode.GetNode() &&
+                if( this == &pEnd->GetNode() &&
                     rPos.GetIndex() == rEndIdx.GetIndex() )
                 {
                     if (&rEndIdx == next) // nasty corner case:
@@ -1489,7 +1489,7 @@ void SwTextNode::Update(
                     if ( pMark->IsExpanded() )
                     {
                         const SwPosition* pStart = &pMark->GetMarkStart();
-                        if ( this == &pStart->nNode.GetNode()
+                        if ( this == &pStart->GetNode()
                              && rPos.GetIndex() == pStart->nContent.GetIndex() )
                         {
                             bAtLeastOneExpandedBookmarkAtInsertionPosition = true;
@@ -1514,7 +1514,7 @@ void SwTextNode::Update(
                 {
                     // The fly is at-char anchored and has an anchor position.
                     SwContentIndex& rEndIdx = const_cast<SwContentIndex&>(pContentAnchor->nContent);
-                    if (&pContentAnchor->nNode.GetNode() == this && rEndIdx.GetIndex() == rPos.GetIndex())
+                    if (&pContentAnchor->GetNode() == this && rEndIdx.GetIndex() == rPos.GetIndex())
                     {
                         // The anchor position is exactly our insert position.
                         rEndIdx.Assign(&aTmpIdxReg, rEndIdx.GetIndex());
@@ -1539,7 +1539,7 @@ void SwTextNode::Update(
                         continue;
 
                     SwContentIndex& rIndex = pCursor->Start()->nContent;
-                    if (&pCursor->Start()->nNode.GetNode() == this && rIndex.GetIndex() == rPos.GetIndex())
+                    if (&pCursor->Start()->GetNode() == this && rIndex.GetIndex() == rPos.GetIndex())
                     {
                         // The cursor position of this other shell is exactly our insert position.
                         rIndex.Assign(&aTmpIdxReg, rIndex.GetIndex());
@@ -1592,7 +1592,7 @@ void SwTextNode::Update(
         SwRangeRedline* pRedln = rTable[nRedlnPos];
         if (pRedln->HasMark())
         {
-            if (this == &pRedln->End()->nNode.GetNode() && *pRedln->GetPoint() != *pRedln->GetMark())
+            if (this == &pRedln->End()->GetNode() && *pRedln->GetPoint() != *pRedln->GetMark())
             {
                 // Redline is changed only when some change occurs before it
                 if (nChangePos <= pRedln->Start()->nContent.GetIndex())
@@ -1601,7 +1601,7 @@ void SwTextNode::Update(
                 }
             }
         }
-        else if (this == &pRedln->GetPoint()->nNode.GetNode())
+        else if (this == &pRedln->GetPoint()->GetNode())
             SwRedlineTable::LOKRedlineNotification(RedlineNotification::Modify, pRedln);
     }
 }
@@ -4360,7 +4360,7 @@ void SwTextNode::AddToList()
         const SwRedlineTable& rRedTable = GetDoc().getIDocumentRedlineAccess().GetRedlineTable();
         SwRedlineTable::size_type nRedlPos = GetDoc().getIDocumentRedlineAccess().GetRedlinePos(*this, RedlineType::Insert);
         // paragraph start is not in a tracked insertion
-        if ( SwRedlineTable::npos == nRedlPos || GetIndex() <= rRedTable[nRedlPos]->Start()->nNode.GetNode().GetIndex() )
+        if ( SwRedlineTable::npos == nRedlPos || GetIndex() <= rRedTable[nRedlPos]->Start()->GetNode().GetIndex() )
         {
             AddToListOrig();
 

@@ -400,9 +400,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf147220)
     // currently the deleted text is before the replacement text, not sure if
     // that is really required
     CPPUNIT_ASSERT_EQUAL(OUString(u"élÉl"),
-        pWrtShell->GetCursor()->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+        pWrtShell->GetCursor()->GetPoint()->GetNode().GetTextNode()->GetText());
     CPPUNIT_ASSERT_EQUAL(OUString(u"Él"),
-        static_cast<SwTextFrame const*>(pWrtShell->GetCursor()->GetPoint()->nNode.GetNode().GetTextNode()->getLayoutFrame(nullptr))->GetText());
+        static_cast<SwTextFrame const*>(pWrtShell->GetCursor()->GetPoint()->GetNode().GetTextNode()->getLayoutFrame(nullptr))->GetText());
 
     SwRedlineTable const& rRedlines(pDoc->getIDocumentRedlineAccess().GetRedlineTable());
     CPPUNIT_ASSERT_EQUAL(SwRedlineTable::size_type(2), rRedlines.size());
@@ -486,7 +486,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo75898)
 
     // Now check if the table has 3 lines.
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
-    SwTableNode* pTableNode = pShellCursor->Start()->nNode.GetNode().FindTableNode();
+    SwTableNode* pTableNode = pShellCursor->Start()->GetNode().FindTableNode();
     // This was 1, when doing the same using the UI, Writer even crashed.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pTableNode->GetTable().GetTabLines().size());
 }
@@ -524,7 +524,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo69893)
     pWrtShell->SelAll(); // Selects the whole document.
 
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
-    SwTextNode& rEnd = dynamic_cast<SwTextNode&>(pShellCursor->End()->nNode.GetNode());
+    SwTextNode& rEnd = dynamic_cast<SwTextNode&>(pShellCursor->End()->GetNode());
     // Selection did not include the para after table, this was "B1".
     CPPUNIT_ASSERT_EQUAL(OUString("Para after table."), rEnd.GetText());
 }

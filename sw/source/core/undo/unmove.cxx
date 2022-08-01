@@ -71,7 +71,7 @@ SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
             m_pHistory->CopyFormatAttr( *pEndTextNd->GetpSwAttrSet(), m_nEndNode );
     }
 
-    pTextNd = rMvPos.nNode.GetNode().GetTextNode();
+    pTextNd = rMvPos.GetNode().GetTextNode();
     if (nullptr != pTextNd)
     {
         m_pHistory->Add( pTextNd->GetTextColl(), m_nMoveDestNode, SwNodeType::Text );
@@ -124,7 +124,7 @@ SwUndoMove::SwUndoMove( SwDoc& rDoc, const SwNodeRange& rRg,
         if( pCNd )
             aPtPos.nContent.Assign( pCNd, pCNd->Len() );
         SwPosition aMkPos( rRg.aStart );
-        pCNd = aMkPos.nNode.GetNode().GetContentNode();
+        pCNd = aMkPos.GetNode().GetContentNode();
         if( nullptr != pCNd )
             aMkPos.nContent.Assign( pCNd, 0 );
 
@@ -184,7 +184,7 @@ void SwUndoMove::UndoImpl(::sw::UndoRedoContext & rContext)
                 RemoveIdxFromRange( aPam, false );
 
             SwPosition aPos( *pDoc->GetNodes()[ m_nInsPosNode] );
-            SwContentNode* pCNd = aPos.nNode.GetNode().GetContentNode();
+            SwContentNode* pCNd = aPos.GetNode().GetContentNode();
             aPos.nContent.Assign( pCNd, m_nInsPosContent );
 
             if( pCNd->HasSwAttrSet() )

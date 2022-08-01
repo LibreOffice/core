@@ -616,7 +616,7 @@ SwXParagraph::setPropertyValuesTolerant(
 
     SwTextNode & rTextNode(m_pImpl->GetTextNodeOrThrow());
 
-    //SwNode& rTextNode = pUnoCursor->GetPoint()->nNode.GetNode();
+    //SwNode& rTextNode = pUnoCursor->GetPoint()->GetNode();
     //const SwAttrSet& rAttrSet = static_cast<SwTextNode&>(rTextNode).GetSwAttrSet();
     //sal_uInt16 nAttrCount = rAttrSet.Count();
 

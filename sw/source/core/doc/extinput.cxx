@@ -49,7 +49,7 @@ SwExtTextInput::~SwExtTextInput()
     SwDoc& rDoc = GetDoc();
     if (rDoc.IsInDtor()) { return; /* #i58606# */ }
 
-    SwTextNode* pTNd = GetPoint()->nNode.GetNode().GetTextNode();
+    SwTextNode* pTNd = GetPoint()->GetNode().GetTextNode();
     if( !pTNd )
         return;
 
@@ -149,7 +149,7 @@ SwExtTextInput::~SwExtTextInput()
 
 void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
 {
-    SwTextNode* pTNd = GetPoint()->nNode.GetNode().GetTextNode();
+    SwTextNode* pTNd = GetPoint()->GetNode().GetTextNode();
     if( !pTNd )
         return;
 
@@ -223,7 +223,7 @@ void SwExtTextInput::SetOverwriteCursor( bool bFlag )
     if (!m_bIsOverwriteCursor)
         return;
 
-    const SwTextNode *const pTNd = GetPoint()->nNode.GetNode().GetTextNode();
+    const SwTextNode *const pTNd = GetPoint()->GetNode().GetTextNode();
     if (!pTNd)
         return;
 

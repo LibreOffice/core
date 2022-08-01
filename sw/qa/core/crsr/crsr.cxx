@@ -128,7 +128,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreCrsrTest, testContentControlLineBreak)
     dispatchCommand(mxComponent, ".uno:InsertPara", {});
 
     // Then make sure that we only insert a line break, not a new paragraph:
-    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetMark()->nNode.GetNode().GetTextNode();
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetMark()->GetNode().GetTextNode();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: t\nest
     // - Actual  : est

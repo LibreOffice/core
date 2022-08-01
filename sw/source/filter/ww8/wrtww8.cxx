@@ -2767,7 +2767,7 @@ public:
         //skipped cell to output it in a sane sequence. See ooo47778-3.sxw for one of these
         //horrors. So if we are at the end of the selection, but this end point is a table
         //cell whose next cell is in the selection allow jumping back to it
-        const SwNode* pCurrentNode = &m_pCurPam->GetPoint()->nNode.GetNode();
+        const SwNode* pCurrentNode = &m_pCurPam->GetPoint()->GetNode();
         const SwNode* pNextNode = pTableInfo->getNextNode(pCurrentNode);
 
         if (pNextNode && pCurrentNode != pNextNode)
@@ -2907,7 +2907,7 @@ void MSWordExportBase::WriteText()
         if ( &rNd == &rNd.GetNodes().GetEndOfContent() )
             break;
 
-        const SwNode * pCurrentNode = &m_pCurPam->GetPoint()->nNode.GetNode();
+        const SwNode * pCurrentNode = &m_pCurPam->GetPoint()->GetNode();
         const SwNode * pNextNode = m_pTableInfo->getNextNode(pCurrentNode);
 
         if (pCurrentNode == pNextNode)
@@ -2949,7 +2949,7 @@ void WW8Export::WriteMainText()
     // save the StyleId of the last paragraph. Because WW97 take the style
     // from the last CR, that will be written after footer/Header/footnotes/
     // annotation etc.
-    const SwTextNode* pLastNd = m_pCurPam->GetMark()->nNode.GetNode().GetTextNode();
+    const SwTextNode* pLastNd = m_pCurPam->GetMark()->GetNode().GetTextNode();
     if( pLastNd )
         m_nLastFormatId = GetId( static_cast<SwTextFormatColl&>(pLastNd->GetAnyFormatColl()) );
 

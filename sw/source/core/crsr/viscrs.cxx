@@ -160,7 +160,7 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
 
     if ( pTmpCursor && !m_pCursorShell->IsOverwriteCursor() )
     {
-        SwNode& rNode = pTmpCursor->GetPoint()->nNode.GetNode();
+        SwNode& rNode = pTmpCursor->GetPoint()->GetNode();
         if( rNode.IsTextNode() )
         {
             const SwTextNode& rTNd = *rNode.GetTextNode();
@@ -299,7 +299,7 @@ OString SwVisibleCursor::getLOKPayload(int nType, int nViewId, bool*) const
                 SwCursorMoveState eTmpState(CursorMoveState::SetOnlyText);
                 SwTextNode *pNode = nullptr;
                 if (m_pCursorShell->GetLayout()->GetModelPositionForViewPoint(&aPos, aPt, &eTmpState))
-                    pNode = aPos.nNode.GetNode().GetTextNode();
+                    pNode = aPos.GetNode().GetTextNode();
                 if (pNode && !pNode->IsInProtectSect())
                 {
                     sal_Int32 nBegin = aPos.nContent.GetIndex();
@@ -401,7 +401,7 @@ void SwSelPaintRects::Hide()
  */
 static SwRect lcl_getLayoutRect(const Point& rPoint, const SwPosition& rPosition)
 {
-    const SwContentNode* pNode = rPosition.nNode.GetNode().GetContentNode();
+    const SwContentNode* pNode = rPosition.GetNode().GetContentNode();
     std::pair<Point, bool> const tmp(rPoint, true);
     const SwContentFrame* pFrame = pNode->getLayoutFrame(
             pNode->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(),
@@ -646,7 +646,7 @@ void SwSelPaintRects::HighlightContentControl()
     if (m_bShowContentControlOverlay)
     {
         const SwPosition* pStart = GetShell()->GetCursor()->Start();
-        SwTextNode* pTextNode = pStart->nNode.GetNode().GetTextNode();
+        SwTextNode* pTextNode = pStart->GetNode().GetTextNode();
         SwTextContentControl* pCurContentControlAtCursor = nullptr;
         if (pTextNode)
         {
@@ -909,11 +909,11 @@ void SwShellCursor::FillRects()
 {
     // calculate the new rectangles
     if( HasMark() &&
-        GetPoint()->nNode.GetNode().IsContentNode() &&
-        GetPoint()->nNode.GetNode().GetContentNode()->getLayoutFrame( GetShell()->GetLayout() ) &&
+        GetPoint()->GetNode().IsContentNode() &&
+        GetPoint()->GetNode().GetContentNode()->getLayoutFrame( GetShell()->GetLayout() ) &&
         (GetMark()->nNode == GetPoint()->nNode ||
-        (GetMark()->nNode.GetNode().IsContentNode() &&
-         GetMark()->nNode.GetNode().GetContentNode()->getLayoutFrame( GetShell()->GetLayout() ) )   ))
+        (GetMark()->GetNode().IsContentNode() &&
+         GetMark()->GetNode().GetContentNode()->getLayoutFrame( GetShell()->GetLayout() ) )   ))
         GetShell()->GetLayout()->CalcFrameRects( *this );
 }
 

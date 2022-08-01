@@ -171,10 +171,10 @@ bool SwUnoTableCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
     bool bRet = SwUnoCursor::IsSelOvr( eFlags );
     if( !bRet )
     {
-        const SwTableNode* pTNd = GetPoint()->nNode.GetNode().FindTableNode();
+        const SwTableNode* pTNd = GetPoint()->GetNode().FindTableNode();
         bRet = !(pTNd == GetDoc().GetNodes()[ GetSavePos()->nNode ]->
                 FindTableNode() && (!HasMark() ||
-                pTNd == GetMark()->nNode.GetNode().FindTableNode() ));
+                pTNd == GetMark()->GetNode().FindTableNode() ));
     }
     return bRet;
 }
@@ -203,7 +203,7 @@ void SwUnoTableCursor::MakeBoxSels()
         if (!GetSelectedBoxesCount())
         {
             const SwTableBox* pBox;
-            const SwNode* pBoxNd = GetPoint()->nNode.GetNode().FindTableBoxStartNode();
+            const SwNode* pBoxNd = GetPoint()->GetNode().FindTableBoxStartNode();
             const SwTableNode* pTableNd = pBoxNd ? pBoxNd->FindTableNode() : nullptr;
             if( pTableNd && nullptr != ( pBox = pTableNd->GetTable().GetTableBox( pBoxNd->GetIndex() )) )
                 InsertBox( *pBox );

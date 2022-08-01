@@ -1692,7 +1692,7 @@ SvxFrameDirection MSWordExportBase::TrueFrameDirection( const SwFrameFormat &rFl
             if ((RndStdIds::FLY_AT_PAGE != pAnchor->GetAnchorId()) &&
                 pAnchor->GetContentAnchor() )
             {
-                pFlyFormat = pAnchor->GetContentAnchor()->nNode.GetNode().GetFlyFormat();
+                pFlyFormat = pAnchor->GetContentAnchor()->GetNode().GetFlyFormat();
             }
             else
                 pFlyFormat = nullptr;
@@ -1746,7 +1746,7 @@ std::shared_ptr<SvxBrushItem> WW8Export::TrueFrameBgBrush(const SwFrameFormat &r
                 pAnchor->GetContentAnchor())
             {
                 pFlyFormat =
-                    pAnchor->GetContentAnchor()->nNode.GetNode().GetFlyFormat();
+                    pAnchor->GetContentAnchor()->GetNode().GetFlyFormat();
             }
             else
                 pFlyFormat = nullptr;
@@ -1854,9 +1854,9 @@ static SwTextFormatColl& lcl_getFormatCollection( MSWordExportBase& rExport, con
         // Looking for deletions, which ends in current pTextNode
         if( RedlineType::Delete == pRedl->GetRedlineData().GetType() &&
             pEnd->nNode == *pTextNode && pStt->nNode != *pTextNode &&
-            pStt->nNode.GetNode().IsTextNode() )
+            pStt->GetNode().IsTextNode() )
         {
-            pTextNode = pStt->nNode.GetNode().GetTextNode();
+            pTextNode = pStt->GetNode().GetTextNode();
             nMax = nPos;
             nPos = 0;
         }
@@ -3452,7 +3452,7 @@ void WW8AttributeOutput::OutputFlyFrame_Impl( const ww8::Frame& rFormat, const P
         if ( !m_rWW8Export.IsInTable() && rFormat.IsInline() )
         {
             //Test to see if this textbox contains only a single graphic/ole
-            SwTextNode* pParTextNode = rAnch.GetContentAnchor()->nNode.GetNode().GetTextNode();
+            SwTextNode* pParTextNode = rAnch.GetContentAnchor()->GetNode().GetTextNode();
             if ( pParTextNode && !m_rWW8Export.m_rDoc.GetNodes()[ nStt ]->IsNoTextNode() )
                 bDone = true;
         }
@@ -3465,7 +3465,7 @@ void WW8AttributeOutput::OutputFlyFrame_Impl( const ww8::Frame& rFormat, const P
             if ( m_rWW8Export.m_pParentFrame )
             {
                 /* Munge flys in fly into absolutely positioned elements for word 6 */
-                const SwTextNode* pParTextNode = rAnch.GetContentAnchor()->nNode.GetNode().GetTextNode();
+                const SwTextNode* pParTextNode = rAnch.GetContentAnchor()->GetNode().GetTextNode();
                 const SwRect aPageRect = pParTextNode->FindPageFrameRect();
 
                 aOffset = rFrameFormat.FindLayoutRect().Pos();

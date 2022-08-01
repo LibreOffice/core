@@ -466,7 +466,7 @@ rtl::Reference<SwXParagraphEnumeration> SwXParagraphEnumeration::Create(
         case CursorType::SelectionInTable:
         {
             SwTableNode const*const pTableNode(
-                pCursor->GetPoint()->nNode.GetNode().FindTableNode());
+                pCursor->GetPoint()->GetNode().FindTableNode());
             pStartNode = pTableNode;
             pTable = & pTableNode->GetTable();
             break;
@@ -633,7 +633,7 @@ SwXParagraphEnumerationImpl::NextElement_Impl()
         {
             text::XText *const pText = m_xParentText.get();
             xRef = SwXParagraph::CreateXParagraph(rUnoCursor.GetDoc(),
-                pStart->nNode.GetNode().GetTextNode(),
+                pStart->GetNode().GetTextNode(),
                 static_cast<SwXText*>(pText), nFirstContent, nLastContent);
         }
     }
@@ -1076,12 +1076,12 @@ bool SwXTextRange::GetPositions(SwPaM& rToFill, ::sw::TextRangeMode const eMode)
             assert(pSectionNode->GetNodes().IsDocNodes());
             rToFill.GetPoint()->nNode = *pSectionNode;
             ++rToFill.GetPoint()->nNode;
-            rToFill.GetPoint()->nContent.Assign(rToFill.GetPoint()->nNode.GetNode().GetContentNode(), 0);
+            rToFill.GetPoint()->nContent.Assign(rToFill.GetPoint()->GetNode().GetContentNode(), 0);
             rToFill.SetMark();
             rToFill.GetMark()->nNode = *pSectionNode->GetNode().EndOfSectionNode();
             --rToFill.GetMark()->nNode;
-            rToFill.GetMark()->nContent.Assign(rToFill.GetMark()->nNode.GetNode().GetContentNode(),
-                rToFill.GetMark()->nNode.GetNode().GetContentNode() ? rToFill.GetMark()->nNode.GetNode().GetContentNode()->Len() : 0);
+            rToFill.GetMark()->nContent.Assign(rToFill.GetMark()->GetNode().GetContentNode(),
+                rToFill.GetMark()->GetNode().GetContentNode() ? rToFill.GetMark()->GetNode().GetContentNode()->Len() : 0);
             return true;
         }
     }
@@ -1236,7 +1236,7 @@ uno::Reference< text::XText >
 CreateParentXText(SwDoc & rDoc, const SwPosition& rPos)
 {
     uno::Reference< text::XText > xParentText;
-    SwStartNode* pSttNode = rPos.nNode.GetNode().StartOfSectionNode();
+    SwStartNode* pSttNode = rPos.GetNode().StartOfSectionNode();
     while(pSttNode && pSttNode->IsSectionNode())
     {
         pSttNode = pSttNode->StartOfSectionNode();
