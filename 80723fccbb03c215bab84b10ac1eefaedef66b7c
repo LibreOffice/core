@@ -88,6 +88,23 @@
       "parentUuid": "647fc6a5_614e344a",
       "revId": "80723fccbb03c215bab84b10ac1eefaedef66b7c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "714b2200_30be7424",
+        "filename": "unotest/source/cpp/macros_test.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-01T09:56:26Z",
+      "side": 1,
+      "message": "FTR: putting the following code after this line:\n\n    {\n        uno::Reference\u003cxml::crypto::XSEInitializer\u003e xSEInitializer\n            \u003d xml::crypto::SEInitializer::create(comphelper::getProcessComponentContext());\n        uno::Reference\u003cxml::crypto::XXMLSecurityContext\u003e xSecurityContext\n            \u003d xSEInitializer-\u003ecreateSecurityContext(OUString());\n        uno::Reference\u003cxml::crypto::XSecurityEnvironment\u003e xSecurityEnvironment\n            \u003d xSecurityContext-\u003egetSecurityEnvironment();\n        auto xCert \u003d GetValidCertificate(\n            xSecurityEnvironment-\u003egetPersonalCertificates(), xSecurityEnvironment,\n            { comphelper::makePropertyValue(\n                \"SignCertificateSubjectName\",\n                OUString(\"CN\u003dXmlsecurity RSA Test example Alice,O\u003dXmlsecurity RSA Test,\"\n                         \"ST\u003dEngland,C\u003dUK\")) });\n        CPPUNIT_ASSERT(xCert);\n    }\n\nfails the test; and CheckUnitTestStore in xmlsecurity/source/xmlsec/mscrypt/securityenvironment_mscryptimpl.cxx (the only place that tests LIBO_TEST_CRYPTOAPI_PKCS7 env var) isn\u0027t called during the initialization.",
+      "revId": "80723fccbb03c215bab84b10ac1eefaedef66b7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
