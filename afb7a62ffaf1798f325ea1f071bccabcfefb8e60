@@ -34,6 +34,24 @@
       "parentUuid": "c5f34b0f_c47a1b82",
       "revId": "afb7a62ffaf1798f325ea1f071bccabcfefb8e60",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "507d461a_53e20a7e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-08-01T06:24:23Z",
+      "side": 1,
+      "message": "\u003e However, I\u0027m really not sure that the whole \"a11y children off view are discarded\" makes sense.  It\u0027s a pain for a11y users, and AFAICT in the case of Impress it only ever shows 1 page at a time, and only presents that page to a11y, so additionally collecting children further don\u0027t seem very useful for performance to me.\n\nI don\u0027t know about the exact reasons why off-screen elements are discarded here. If this isn\u0027t anything that is recommended in general (e.g. so that same elements are exposed to both, people looking at the screen and people using AT at one point in time), I\u0027d currently also see no reason to do so in the case of Impress slides/Draw pages.\nI\u0027m not an a11y expert, so if you say you\u0027re not aware of anything like that and it doesn\u0027t make sense to you to discard them, I\u0027d fully trust that assessment.\n\n\u003e If really not all pages and content should be presented (which could be a performance issue for very large documents indeed), I would think that having pages at the root of the document (and them FLOWing_TO/FROM one to the next) and all visible pages being fully populated would be fine, simpler and better for consumers.\n\nTo understand correctly: Currently, we e.g. have this in the hierarchy:\n\n- sample - LibreOffice Presentation (role: document presentation)\n  - PageShape: Slide 1\n  - PresentationTitle\n    - Paragraph\n  - PresentationSubtitle\n    - Paragraph\n    - Paragraph\n    \nWith your suggestion implemented: Would only the slide(s) remain a direct child of the document, and those elements that are currently siblings turn into children of the slide/page instead, like this:\n\n- sample - LibreOffice Presentation (role: document presentation)\n  - PageShape: Slide 1\n    - PresentationTitle\n      - Paragraph\n    - PresentationSubtitle\n      - Paragraph\n      - Paragraph\n      \nThen, by navigating between the slides/pages using the FLOW_TO/FROM relation, one could navigate between the slides, and access the items on the slide via the hierarchy?\nSince the items are positioned inside the slide, having them as children would sound good and logical to me.\n\n\u003e Yes and no, I didn\u0027t plan specifically writing anything for Draw/Impress but to check which helpers could be useful, and what would be useful to reuse; but I could do that nonetheless.  I have tried your changes also with an additional test case that has 2 pages and switches back and forth between them to test that part as well as the loading.  I can either submit that here or in a follow up.  It currently uses https://gerrit.libreoffice.org/c/core/+/137337 though, and I\u0027m not sure how I can submit that before yours is merged (I tried submitting after cherry-picking yours on top of mine, and it tells me I\u0027m not allowed to do that).\n\nThanks, that\u0027s much appreciated. I have merged my changes now.",
+      "parentUuid": "d0129d85_28af1c08",
+      "revId": "afb7a62ffaf1798f325ea1f071bccabcfefb8e60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ],
   "submitRequirementResults": []
