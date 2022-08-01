@@ -2210,10 +2210,10 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
                 aFormat.SetFirstLineIndent( - nOffs );
             }
 
+            aFormat.SetListFormat();
             for (sal_uInt16 n = 3; n < MAXLEVEL; ++n)
             {
                 aFormat.SetStart( n+1 );
-                aFormat.SetListFormat("", "", n);
 
                 if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {

@@ -1511,7 +1511,7 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
                     aFormat.SetBulletChar( numfunc::GetBulletChar(static_cast<sal_uInt8>(nLevel)));
                     aFormat.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
                     // #i93908# clear suffix for bullet lists
-                    aFormat.SetListFormat("", "", nLevel);
+                    aFormat.SetListFormat();
                 }
                 aNumRule.Set(o3tl::narrowing<sal_uInt16>(nLevel), aFormat);
             }
@@ -1569,7 +1569,7 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
                 aFormat.SetBulletChar( numfunc::GetBulletChar(nLvl) );
                 aFormat.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
                 // #i93908# clear suffix for bullet lists
-                aFormat.SetListFormat("", "", nLvl);
+                aFormat.SetListFormat();
             }
 
             // #i95907#
