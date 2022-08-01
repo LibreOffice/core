@@ -16,6 +16,24 @@
       "message": "The font tarball to be uploaded https://github.com/aliftype/amiri/releases/download/0.117/Amiri-0.117.zip",
       "revId": "7306a8850ceef88f165b1d765562e0e0fa6d0bb7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98a7d475_74ea20a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003606
+      },
+      "writtenOn": "2022-08-01T12:18:07Z",
+      "side": 1,
+      "message": "\u003e The font tarball to be uploaded https://github.com/aliftype/amiri/releases/download/0.117/Amiri-0.117.zip\n\nHere is the UL of the file to be uploaded.",
+      "parentUuid": "8b29db6a_15d881bf",
+      "revId": "7306a8850ceef88f165b1d765562e0e0fa6d0bb7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
