@@ -35,6 +35,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ed58ef4_0af98db4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-08-01T13:37:15Z",
+      "side": 1,
+      "message": "I don\u0027t see any usage of listFormat in sd / editeng. So my answer must be here:\n\nif (SVX_NUM_CHAR_SPECIAL \u003d\u003d rFormat.GetNumberingType() ||\n    SVX_NUM_BITMAP \u003d\u003d rFormat.GetNumberingType())\n{\n    // Use bullet\n    sal_UCS4 cBullet \u003d rFormat.GetBulletChar();\n    sNumStr \u003d OUString(\u0026cBullet, 1);\n}\nelse\n{\n    // Create level string\n    if (rFormat.HasListFormat())\n...\n\nThis indicates that ListFormat is completely irrelevant to special/bitmap numbering. I guess the only question is whether there is any code that looks for ListFormat without knowledge of NumberingType. In that case, SOMETHING there might help.\n\nOK - I am chickening out and will modify this patch to use SetListFormat(\"\",\"\",n), even though a make.check is running clean when I replace ALL bullet calls to SetListFormat().\n[That can be a follow-up patch that doesn\u0027t get backported everywhere.]\n",
+      "revId": "1c43ca3acb4e0f746a5d23c170546ed0d109353e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d9e0870c_01b4390c",
