@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a81bd1cf_ef883922",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-08-02T12:06:42Z",
+      "side": 1,
+      "message": "Have you any examples of where you can see an improvement/change that I could play with to see for myself?\n\nI earlier went with a conservative opt-in approach for just writer, the \"SetTextRenderModeForResolutionIndependentLayout\" stuff which seems to be working out ok without much complaint except for tdf#150145 and I ended up setting CAIRO_HINT_METRICS_OFF because I guessed that\u0027s something we want to do, but then forcing CAIRO_HINT_STYLE_NONE to avoid https://gitlab.freedesktop.org/cairo/cairo/-/issues/390 so I wonder if we just toggled long to double for the general case should we leave those cairo settings untouched from their defaults or always overrule.",
+      "revId": "b95c8cd71da2f4acb0f8f089ee525d29c15cfb31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
