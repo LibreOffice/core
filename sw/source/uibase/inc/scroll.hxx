@@ -23,7 +23,7 @@
 class SwScrollbar final : public ScrollBar
 {
     Size    m_aDocSz;
-    bool    m_bHori       :1;     // horizontal = salTrue, otherwise vertical
+    bool    m_bHori       :1;     // horizontal = true, otherwise vertical
     bool    m_bAuto       :1;     // for scrolling mode
     bool    m_bVisible    :1;     // show/hide should only set this flag
     bool    m_bSizeSet    :1;     // was the size already set?
