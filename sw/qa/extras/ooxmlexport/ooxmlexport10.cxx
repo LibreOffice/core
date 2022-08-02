@@ -1062,18 +1062,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf95376, "tdf95376.docx")
     CPPUNIT_ASSERT(!(getProperty<OUString>(xStyle, "NumberingStyleName")).isEmpty());
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf92124, "tdf92124.docx")
-{
-    // Get the second paragraph's numbering style's 1st level's suffix.
-    uno::Reference<text::XTextRange> xParagraph = getParagraph(2);
-    auto xLevels = getProperty< uno::Reference<container::XIndexAccess> >(xParagraph, "NumberingRules");
-    uno::Sequence<beans::PropertyValue> aLevel;
-    xLevels->getByIndex(0) >>= aLevel; // 1st level
-    OUString aSuffix = std::find_if(std::cbegin(aLevel), std::cend(aLevel), [](const beans::PropertyValue& rValue) { return rValue.Name == "Suffix"; })->Value.get<OUString>();
-    // Make sure it's empty as the source document contains <w:suff w:val="nothing"/>.
-    CPPUNIT_ASSERT(aSuffix.isEmpty());
-}
-
 DECLARE_OOXMLEXPORT_TEST(testTdf90153, "tdf90153.docx")
 {
     // This was at-para, so the line-level VertOrientRelation was lost, resulting in an incorrect vertical position.
