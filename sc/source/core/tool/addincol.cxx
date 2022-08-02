@@ -138,7 +138,7 @@ void ScUnoAddInFuncData::SetCompNames( ::std::vector< ScUnoAddInFuncData::Locali
     bCompInitialized = true;
 }
 
-bool ScUnoAddInFuncData::GetExcelName( LanguageType eDestLang, OUString& rRetExcelName ) const
+bool ScUnoAddInFuncData::GetExcelName( LanguageType eDestLang, OUString& rRetExcelName, bool bFallbackToAny ) const
 {
     const ::std::vector<LocalizedName>& rCompNames = GetCompNames();
     if ( !rCompNames.empty() )
@@ -180,9 +180,12 @@ bool ScUnoAddInFuncData::GetExcelName( LanguageType eDestLang, OUString& rRetExc
             }
         }
 
-        // Third, last resort, use first (default) entry.
-        rRetExcelName = rCompNames[0].maName;
-        return true;
+        if (bFallbackToAny)
+        {
+            // Third, last resort, use first (default) entry.
+            rRetExcelName = rCompNames[0].maName;
+            return true;
+        }
     }
     return false;
 }
@@ -226,6 +229,7 @@ void ScUnoAddInCollection::Clear()
     pExactHashMap.reset();
     pNameHashMap.reset();
     pLocalHashMap.reset();
+    pEnglishHashMap.reset();
     ppFuncData.reset();
     nFuncCount = 0;
 
@@ -380,6 +384,8 @@ void ScUnoAddInCollection::ReadConfiguration()
             pNameHashMap.reset( new ScAddInHashMap );
         if ( !pLocalHashMap )
             pLocalHashMap.reset( new ScAddInHashMap );
+        if ( !pEnglishHashMap )
+            pEnglishHashMap.reset( new ScAddInHashMap );
 
         //TODO: get the function information in a single call for all functions?
 
@@ -395,6 +401,7 @@ void ScUnoAddInCollection::ReadConfiguration()
 
             if ( pExactHashMap->find( aFuncName ) == pExactHashMap->end() )
             {
+                OUString aEnglishName;
                 OUString aLocalName;
                 OUString aDescription;
                 sal_uInt16 nCategory = ID_FUNCTION_GRP_ADDINS;
@@ -441,6 +448,11 @@ void ScUnoAddInCollection::ReadConfiguration()
                             OUString aName;
                             rConfig.Value >>= aName;
                             aCompNames.emplace_back( aLocale, aName);
+                            // Accept 'en' and 'en-...' but prefer 'en-US'.
+                            if (aLocale == "en-US")
+                                aEnglishName = aName;
+                            else if (aEnglishName.isEmpty() && (aLocale == "en" || aLocale.startsWith("en-")))
+                                aEnglishName = aName;
                         }
                     }
                 }
@@ -527,6 +539,15 @@ void ScUnoAddInCollection::ReadConfiguration()
                 pLocalHashMap->emplace(
                             pData->GetUpperLocal(),
                             pData );
+
+                if (aEnglishName.isEmpty())
+                    SAL_WARN("sc.core", "no English name for " << aLocalName << " " << aFuncName);
+                else
+                {
+                    pEnglishHashMap->emplace(
+                            aEnglishName.toAsciiUpperCase(),
+                            pData );
+                }
             }
         }
     }
@@ -746,6 +767,8 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
         pNameHashMap.reset( new ScAddInHashMap );
     if ( !pLocalHashMap )
         pLocalHashMap.reset( new ScAddInHashMap );
+    if ( !pEnglishHashMap )
+        pEnglishHashMap.reset( new ScAddInHashMap );
 
     const uno::Reference<reflection::XIdlMethod>* pArray = aMethods.getConstArray();
     for (tools::Long nFuncPos=0; nFuncPos<nNewCount; nFuncPos++)
@@ -907,6 +930,16 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                     pLocalHashMap->emplace(
                                 pData->GetUpperLocal(),
                                 pData );
+
+                    OUString aEnglishName;
+                    if (!pData->GetExcelName( LANGUAGE_ENGLISH_US, aEnglishName, false /*bFallbackToAny*/))
+                        SAL_WARN("sc.core", "no English name for " << aLocalName << " " << aFuncName);
+                    else
+                    {
+                        pEnglishHashMap->emplace(
+                                aEnglishName.toAsciiUpperCase(),
+                                pData );
+                    }
                 }
             }
         }
@@ -1076,7 +1109,7 @@ OUString ScUnoAddInCollection::FindFunction( const OUString& rUpperName, bool bL
 
     if ( bLocalFirst )
     {
-        //  first scan all local names (used for entering formulas)
+        // Only scan local names (used for entering formulas).
 
         ScAddInHashMap::const_iterator iLook( pLocalHashMap->find( rUpperName ) );
         if ( iLook != pLocalHashMap->end() )
@@ -1084,14 +1117,22 @@ OUString ScUnoAddInCollection::FindFunction( const OUString& rUpperName, bool bL
     }
     else
     {
-        //  first scan international names (used when calling a function)
-        //TODO: before that, check for exact match???
+        // First scan international programmatic names (used when calling a
+        // function).
 
         ScAddInHashMap::const_iterator iLook( pNameHashMap->find( rUpperName ) );
         if ( iLook != pNameHashMap->end() )
             return iLook->second->GetOriginalName();
 
-        //  after that, scan all local names (to allow replacing old AddIns with Uno)
+        // Then scan English names (as FunctionAccess API could expect).
+
+        iLook = pEnglishHashMap->find( rUpperName );
+        if ( iLook != pEnglishHashMap->end() )
+            return iLook->second->GetOriginalName();
+
+        // After that, scan all local names; either to allow replacing old
+        // AddIns with Uno, or for functions where the AddIn did not provide an
+        // English name.
 
         iLook = pLocalHashMap->find( rUpperName );
         if ( iLook != pLocalHashMap->end() )
