@@ -253,7 +253,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
 
             if( pPrvNd && 1 == nRegionRet )
             {
-                pSttPos->nNode.Assign( *pPrvNd );
+                pSttPos->Assign( *pPrvNd );
                 pSttPos->nContent.Assign( pSttPos->GetNode().GetContentNode(), 0 );
             }
             else if( pSttPos->GetContentIndex() )
@@ -263,7 +263,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
 
             if( pPrvNd && 2 == nRegionRet )
             {
-                pEndPos->nNode.Assign( *pPrvNd );
+                pEndPos->Assign( *pPrvNd );
                 pEndPos->nContent.Assign( pEndPos->GetNode().GetContentNode(), 0 );
             }
             else

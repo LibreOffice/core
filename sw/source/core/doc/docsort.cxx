@@ -340,10 +340,8 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
             getIDocumentRedlineAccess().DeleteRedline( *pRedlPam, true, RedlineType::Any );
 
             pRedlPam->GetMark()->nNode.Assign( pEnd->GetNode(), 1 );
-            pCNd = pRedlPam->GetContentNode( false );
-            pRedlPam->GetMark()->nContent.Assign( pCNd, 0 );
 
-            pRedlPam->GetPoint()->nNode.Assign( aEndIdx.GetNode() );
+            pRedlPam->GetPoint()->Assign( aEndIdx.GetNode() );
             pCNd = pRedlPam->GetContentNode();
             sal_Int32 nCLen = 0;
             if( !pCNd )
@@ -352,7 +350,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
                 if( pCNd )
                 {
                     nCLen = pCNd->Len();
-                    pRedlPam->GetPoint()->nNode.Assign( *pCNd );
+                    pRedlPam->GetPoint()->Assign( *pCNd );
                 }
             }
             pRedlPam->GetPoint()->nContent.Assign( pCNd, nCLen );
