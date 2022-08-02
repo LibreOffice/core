@@ -1054,8 +1054,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf149313, "tdf149313.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8000), getXPath(pXmlDoc, "/root/page[2]/infos/bounds", "width").toInt32());
 }
 
-#include <docsh.hxx>
-#include <unotxdoc.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <rootfrm.hxx>
 
