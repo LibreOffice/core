@@ -81,6 +81,11 @@ struct SAL_WARN_UNUSED SW_DLLPUBLIC SwPosition
     sal_Int32 GetContentIndex() const { return nContent.GetIndex(); }
     void SetMark(const sw::mark::IMark* pMark) { nContent.SetMark(pMark); }
     void SetRedline(SwRangeRedline* pRangeRedline) { nContent.SetRedline(pRangeRedline); }
+
+    /// These all set both nNode and nContent
+    void Assign( const SwNode& rNd, SwNodeOffset nDelta, sal_Int32 nContentOffset = 0 );
+    void Assign( SwNodeOffset nNodeOffset, sal_Int32 nContentOffset = 0 );
+    void Assign( const SwNode& rNd );
 };
 
 SW_DLLPUBLIC std::ostream &operator <<(std::ostream& s, const SwPosition& position);
