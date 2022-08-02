@@ -28,7 +28,7 @@ namespace oox::drawingml {
 class DiagramDefinitionContext : public ::oox::core::ContextHandler2
 {
 public:
-    DiagramDefinitionContext( ::oox::core::ContextHandler2Helper const & rParent, const ::oox::AttributeList& rAttributes, const DiagramLayoutPtr &pLayout );
+    DiagramDefinitionContext( ::oox::core::ContextHandler2Helper const & rParent, const ::oox::AttributeList& rAttributes, DiagramLayoutPtr pLayout );
     virtual ~DiagramDefinitionContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;

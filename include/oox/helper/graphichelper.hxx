@@ -61,7 +61,7 @@ public:
     explicit            GraphicHelper(
                             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                             const css::uno::Reference< css::frame::XFrame >& rxTargetFrame,
-                            const StorageRef& rxStorage );
+                            StorageRef xStorage );
     virtual             ~GraphicHelper();
 
     // Avoid implicitly defined copy constructors/assignments for the DLLPUBLIC class (they may

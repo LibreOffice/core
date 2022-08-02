@@ -24,6 +24,7 @@
 #include <ooxml/resourceids.hxx>
 #include <oox/mathml/import.hxx>
 #include <oox/token/namespaces.hxx>
+#include <oox/shape/ShapeFilterBase.hxx>
 #include <sal/log.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/propertyvalue.hxx>

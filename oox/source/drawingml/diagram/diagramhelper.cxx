@@ -28,6 +28,7 @@
 #include <comphelper/processfactory.hxx>
 #include <oox/drawingml/themefragmenthandler.hxx>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
+#include <utility>
 
 using namespace ::com::sun::star;
 
@@ -39,12 +40,12 @@ bool AdvancedDiagramHelper::hasDiagramData() const
 }
 
 AdvancedDiagramHelper::AdvancedDiagramHelper(
-    const std::shared_ptr< Diagram >& rDiagramPtr,
-    const std::shared_ptr<::oox::drawingml::Theme>& rTheme,
+    std::shared_ptr< Diagram > xDiagramPtr,
+    std::shared_ptr<::oox::drawingml::Theme> xTheme,
     css::awt::Size aImportSize)
 : svx::diagram::IDiagramHelper()
-, mpDiagramPtr(rDiagramPtr)
-, mpThemePtr(rTheme)
+, mpDiagramPtr(std::move(xDiagramPtr))
+, mpThemePtr(std::move(xTheme))
 , maImportSize(aImportSize)
 {
 }

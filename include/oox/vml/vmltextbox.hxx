@@ -71,7 +71,7 @@ struct TextPortionModel
     TextFontModel       maFont;
     OUString     maText;
 
-    explicit            TextPortionModel( const TextParagraphModel& rParagraph, const TextFontModel& rFont, const OUString& rText );
+    explicit            TextPortionModel( TextParagraphModel aParagraph, TextFontModel aFont, OUString aText );
 };
 
 

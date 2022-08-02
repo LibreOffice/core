@@ -46,6 +46,7 @@
 #include <oox/ole/vbainputstream.hxx>
 #include <oox/ole/vbamodule.hxx>
 #include <oox/token/properties.hxx>
+#include <utility>
 
 namespace oox::ole {
 
@@ -115,8 +116,8 @@ bool VbaFilterConfig::isExportVba() const
     return lclReadConfigItem( mxConfigAccess, "Save" );
 }
 
-VbaMacroAttacherBase::VbaMacroAttacherBase( const OUString& rMacroName ) :
-    maMacroName( rMacroName )
+VbaMacroAttacherBase::VbaMacroAttacherBase( OUString aMacroName ) :
+    maMacroName(std::move( aMacroName ))
 {
     OSL_ENSURE( !maMacroName.isEmpty(), "VbaMacroAttacherBase::VbaMacroAttacherBase - empty macro name" );
 }

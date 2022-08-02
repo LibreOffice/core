@@ -43,7 +43,7 @@ private:
 class RegularTextRunContext final : public ::oox::core::ContextHandler2
 {
 public:
-    RegularTextRunContext( ::oox::core::ContextHandler2Helper const & rParent, TextRunPtr const & pRunPtr );
+    RegularTextRunContext( ::oox::core::ContextHandler2Helper const & rParent, TextRunPtr pRunPtr );
 
     virtual void onEndElement() override;
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;

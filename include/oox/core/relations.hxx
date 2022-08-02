@@ -66,7 +66,7 @@ typedef std::shared_ptr< Relations > RelationsRef;
 class OOX_DLLPUBLIC Relations
 {
 public:
-    explicit            Relations( const OUString& rFragmentPath );
+    explicit            Relations( OUString aFragmentPath );
 
     size_t size() const { return maMap.size(); }
     size_t count( const OUString& rId ) const { return maMap.count( rId ); }

@@ -21,6 +21,7 @@
 #include <drawingml/textliststylecontext.hxx>
 #include <oox/ppt/slidemastertextstylescontext.hxx>
 #include <oox/token/namespaces.hxx>
+#include <utility>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
@@ -28,9 +29,9 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox::ppt {
 
-SlideMasterTextStylesContext::SlideMasterTextStylesContext( FragmentHandler2 const & rParent, SlidePersistPtr const & pSlidePersistPtr )
+SlideMasterTextStylesContext::SlideMasterTextStylesContext( FragmentHandler2 const & rParent, SlidePersistPtr pSlidePersistPtr )
 : FragmentHandler2( rParent )
-, mpSlidePersistPtr( pSlidePersistPtr )
+, mpSlidePersistPtr(std::move( pSlidePersistPtr ))
 {
 }
 

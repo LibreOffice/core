@@ -37,7 +37,7 @@ private:
     css::uno::Reference< css::packages::XPackageEncryption > mxPackageEncryption;
 
 public:
-    DocumentDecryption(const css::uno::Reference< css::uno::XComponentContext >& rxContext, oox::ole::OleStorage& rOleStorage);
+    DocumentDecryption(css::uno::Reference< css::uno::XComponentContext > xContext, oox::ole::OleStorage& rOleStorage);
 
     bool decrypt(const css::uno::Reference< css::io::XStream >& xDocumentStream);
     bool readEncryptionInfo();

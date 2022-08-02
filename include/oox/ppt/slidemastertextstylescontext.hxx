@@ -32,7 +32,7 @@ namespace oox::ppt {
 class SlideMasterTextStylesContext final : public oox::core::FragmentHandler2
 {
 public:
-    SlideMasterTextStylesContext( ::oox::core::FragmentHandler2 const & rParent, SlidePersistPtr const & pSlidePersistPtr );
+    SlideMasterTextStylesContext( ::oox::core::FragmentHandler2 const & rParent, SlidePersistPtr pSlidePersistPtr );
     virtual ~SlideMasterTextStylesContext() override;
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;
 
