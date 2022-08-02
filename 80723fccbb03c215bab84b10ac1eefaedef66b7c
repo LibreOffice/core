@@ -141,6 +141,24 @@
       "parentUuid": "8ca586ee_78e9e4d9",
       "revId": "80723fccbb03c215bab84b10ac1eefaedef66b7c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4618bc88_33e54d09",
+        "filename": "unotest/source/cpp/macros_test.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-02T06:20:10Z",
+      "side": 1,
+      "message": "Currently, after https://gerrit.libreoffice.org/c/core/+/137593 and https://gerrit.libreoffice.org/c/core/+/137620, this is not a problem for now, so even having certificates in the local store should not create problems. The only real problem is, AFAICT, we have no real testing of the signing functionality on Windows.\n\nYes, should be revisited at some stage.",
+      "parentUuid": "5d5ee0c0_28e68988",
+      "revId": "80723fccbb03c215bab84b10ac1eefaedef66b7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
