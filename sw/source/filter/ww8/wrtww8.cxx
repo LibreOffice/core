@@ -2917,7 +2917,7 @@ void MSWordExportBase::WriteText()
         }
 
         if (pNextNode != nullptr)
-            m_pCurPam->GetPoint()->nNode.Assign(*pNextNode);
+            m_pCurPam->GetPoint()->Assign(*pNextNode);
         else
             ++m_pCurPam->GetPoint()->nNode;
 

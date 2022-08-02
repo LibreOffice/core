@@ -1396,8 +1396,7 @@ SwXText::insertTextPortion(
         SwUnoCursorHelper::DocInsertStringSplitCR(
             *m_pImpl->m_pDoc, rCursor, rText, false);
         SwUnoCursorHelper::SelectPam(rCursor, true);
-        rCursor.GetPoint()->nNode.Assign(nodeIndex.GetNode(), +1);
-        rCursor.GetPoint()->nContent = nContentPos;
+        rCursor.GetPoint()->Assign(nodeIndex.GetNode(), SwNodeOffset(+1), nContentPos);
     }
 
     try
