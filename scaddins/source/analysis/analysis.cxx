@@ -298,7 +298,7 @@ inline const lang::Locale& AnalysisAddIn::GetLocale( sal_uInt32 nInd )
     if( !pDefLocales )
         InitDefLocales();
 
-    if( nInd < sizeof( pLang ) )
+    if( nInd < nNumOfLoc )
         return pDefLocales[ nInd ];
     else
         return aFuncLoc;
