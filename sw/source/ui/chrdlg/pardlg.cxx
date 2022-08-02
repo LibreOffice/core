@@ -94,9 +94,7 @@ SwParaDlg::SwParaDlg(weld::Window *pParent,
     else
         RemoveTabPage("labelTP_PARA_ASIAN");
 
-    const sal_uInt16 nWhich(rCoreSet.GetPool()->GetWhich(SID_ATTR_LRSPACE));
-    bool bLRValid = SfxItemState::DEFAULT <= rCoreSet.GetItemState(nWhich);
-    if(bHtmlMode || !bLRValid)
+    if(bHtmlMode)
         RemoveTabPage("labelTP_TABULATOR");
     else
     {
