@@ -2239,7 +2239,10 @@ OUString SAL_CALL ScChart2DataProvider::convertRangeToXML( const OUString& sRang
     ScRefTokenHelper::compileRangeRepresentation(
         aRefTokens, sRangeRepresentation, *m_pDocument, cSep, m_pDocument->GetGrammar(), true);
     if (aRefTokens.empty())
+    {
+        SAL_WARN("sc", "convertRangeToXML throw IllegalArgumentException from input of: " << sRangeRepresentation);
         throw lang::IllegalArgumentException();
+    }
 
     Tokens2RangeStringXML converter(*m_pDocument);
     converter = ::std::for_each(aRefTokens.begin(), aRefTokens.end(), converter);
