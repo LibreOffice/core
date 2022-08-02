@@ -1178,7 +1178,7 @@ Check:
 	SF_Utils._EnterFunction(cstThisSub, cstSubArgs)
 
 Try:
-	lRandom = SF_Session.ExecuteCalcFunction(&quot;RANDBETWEEN&quot;, 1, 999999)
+	lRandom = SF_Session.ExecuteCalcFunction(&quot;RANDBETWEEN.NV&quot;, 1, 999999)
 	sFile = SF_FileSystem.TemporaryFolder &amp; &quot;SF_&quot; &amp; Right(&quot;000000&quot; &amp; lRandom, 6)
 
 Finally:
