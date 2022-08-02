@@ -123,7 +123,8 @@ public:
     const OString&          GetHelpId() const           { return sHelpId; }
 
     const ::std::vector< LocalizedName >&  GetCompNames() const;
-    bool                    GetExcelName( LanguageType eDestLang, OUString& rRetExcelName ) const;
+    bool                    GetExcelName( LanguageType eDestLang, OUString& rRetExcelName,
+                                          bool bFallbackToAny = true ) const;
 
     void    SetFunction( const css::uno::Reference< css::reflection::XIdlMethod>& rNewFunc,
                          const css::uno::Any& rNewObj );
@@ -140,6 +141,7 @@ private:
     std::unique_ptr<ScAddInHashMap>       pExactHashMap;      ///< exact internal name
     std::unique_ptr<ScAddInHashMap>       pNameHashMap;       ///< internal name upper
     std::unique_ptr<ScAddInHashMap>       pLocalHashMap;      ///< localized name upper
+    std::unique_ptr<ScAddInHashMap>       pEnglishHashMap;    ///< English name upper
     bool                    bInitialized;
 
     void        Initialize();
