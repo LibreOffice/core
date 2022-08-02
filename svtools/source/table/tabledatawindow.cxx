@@ -24,6 +24,7 @@
 #include "tablegeometry.hxx"
 
 #include <vcl/help.hxx>
+#include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
 

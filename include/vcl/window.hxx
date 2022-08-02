@@ -43,6 +43,7 @@ struct SystemParentData;
 class ImplBorderWindow;
 class Timer;
 class DockingManager;
+class Scrollable;
 class ScrollBar;
 class FixedText;
 class MouseEvent;
@@ -687,7 +688,7 @@ private:
     SAL_DLLPRIVATE void                 ImplCallActivateListeners(vcl::Window*);
     SAL_DLLPRIVATE void                 ImplCallDeactivateListeners(vcl::Window*);
 
-    SAL_DLLPRIVATE static void          ImplHandleScroll(ScrollBar* pHScrl, double nX, ScrollBar* pVScrl, double nY);
+    SAL_DLLPRIVATE static void          ImplHandleScroll(Scrollable* pHScrl, double nX, Scrollable* pVScrl, double nY);
 
     SAL_DLLPRIVATE tools::Rectangle     ImplOutputToUnmirroredAbsoluteScreenPixel( const tools::Rectangle& rRect ) const;
     SAL_DLLPRIVATE tools::Rectangle     ImplUnmirroredAbsoluteScreenToOutputPixel( const tools::Rectangle& rRect ) const;
@@ -1086,8 +1087,8 @@ public:
     void                                EndAutoScroll();
 
     bool                                HandleScrollCommand( const CommandEvent& rCmd,
-                                                             ScrollBar* pHScrl,
-                                                             ScrollBar* pVScrl );
+                                                             Scrollable* pHScrl,
+                                                             Scrollable* pVScrl );
 
     virtual const SystemEnvData*        GetSystemData() const;
 

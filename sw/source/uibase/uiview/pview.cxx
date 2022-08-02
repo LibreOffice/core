@@ -22,6 +22,7 @@
 #include <sfx2/objface.hxx>
 #include <vcl/help.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
@@ -1240,14 +1241,14 @@ void SwPagePreview::CreateScrollbar( bool bHori )
     VclPtr<SwScrollbar>& ppScrollbar = bHori ? m_pHScrollbar : m_pVScrollbar;
 
     assert(!ppScrollbar); //check beforehand!
-
     ppScrollbar = VclPtr<SwScrollbar>::Create( pMDI, bHori );
 
     ScrollDocSzChg();
-    ppScrollbar->EnableDrag();
-    ppScrollbar->SetEndScrollHdl( LINK( this, SwPagePreview, EndScrollHdl ));
 
-    ppScrollbar->SetScrollHdl( LINK( this, SwPagePreview, ScrollHdl ));
+    if (bHori)
+        ppScrollbar->SetScrollHdl( LINK( this, SwPagePreview, HoriScrollHdl ));
+    else
+        ppScrollbar->SetScrollHdl( LINK( this, SwPagePreview, VertScrollHdl ));
 
     InvalidateBorder();
     ppScrollbar->ExtendedShow();
@@ -1386,56 +1387,65 @@ void SwPagePreview::SetVisArea( const tools::Rectangle &rRect )
     m_pViewWin->Invalidate();
 }
 
-IMPL_LINK( SwPagePreview, ScrollHdl, ScrollBar *, p, void )
+IMPL_LINK(SwPagePreview, HoriScrollHdl, weld::Scrollbar&, rScrollbar, void)
 {
-    SwScrollbar* pScrollbar = static_cast<SwScrollbar*>(p);
+    ScrollHdl(rScrollbar, true);
+}
+
+IMPL_LINK(SwPagePreview, VertScrollHdl, weld::Scrollbar&, rScrollbar, void)
+{
+    ScrollHdl(rScrollbar, false);
+}
+
+void SwPagePreview::ScrollHdl(weld::Scrollbar& rScrollbar, bool bHori)
+{
     if(!GetViewShell())
         return;
-    if( !pScrollbar->IsHoriScroll() &&
-        pScrollbar->GetType() == ScrollType::Drag &&
+
+    if( !bHori &&
+        rScrollbar.get_scroll_type() == ScrollType::Drag &&
         Help::IsQuickHelpEnabled() &&
         GetViewShell()->PagePreviewLayout()->DoesPreviewLayoutRowsFitIntoWindow())
     {
         // Scroll how many pages??
         OUString sStateStr(m_sPageStr);
-        tools::Long nThmbPos = pScrollbar->GetThumbPos();
+        tools::Long nThmbPos = rScrollbar.adjustment_get_value();
         if( 1 == m_pViewWin->GetCol() || !nThmbPos )
             ++nThmbPos;
         sStateStr += OUString::number( nThmbPos );
-        Point aPos = pScrollbar->GetParent()->OutputToScreenPixel(
-                                        pScrollbar->GetPosPixel());
-        aPos.setY( pScrollbar->OutputToScreenPixel(pScrollbar->GetPointerPosPixel()).Y() );
+        Point aPos = m_pVScrollbar->GetParent()->OutputToScreenPixel(
+                                        m_pVScrollbar->GetPosPixel());
+        aPos.setY( m_pVScrollbar->OutputToScreenPixel(m_pVScrollbar->GetPointerPosPixel()).Y() );
         tools::Rectangle aRect;
         aRect.SetLeft( aPos.X() -8 );
         aRect.SetRight( aRect.Left() );
         aRect.SetTop( aPos.Y() );
         aRect.SetBottom( aRect.Top() );
 
-        Help::ShowQuickHelp(pScrollbar, aRect, sStateStr,
+        Help::ShowQuickHelp(m_pVScrollbar, aRect, sStateStr,
                 QuickHelpFlags::Right|QuickHelpFlags::VCenter);
 
     }
     else
-        EndScrollHdl( pScrollbar );
+        EndScrollHdl(rScrollbar, bHori);
 }
 
-IMPL_LINK( SwPagePreview, EndScrollHdl, ScrollBar *, p, void )
+void SwPagePreview::EndScrollHdl(weld::Scrollbar& rScrollbar, bool bHori)
 {
-    SwScrollbar* pScrollbar = static_cast<SwScrollbar*>(p);
     if(!GetViewShell())
         return;
 
     // boolean to avoid unnecessary invalidation of the window.
     bool bInvalidateWin = true;
 
-    if( !pScrollbar->IsHoriScroll() )       // scroll vertically
+    if (!bHori)       // scroll vertically
     {
         if ( Help::IsQuickHelpEnabled() )
-            Help::ShowQuickHelp(pScrollbar, tools::Rectangle(), OUString());
+            Help::ShowQuickHelp(m_pVScrollbar, tools::Rectangle(), OUString());
         if ( GetViewShell()->PagePreviewLayout()->DoesPreviewLayoutRowsFitIntoWindow() )
         {
             // Scroll how many pages ??
-            const sal_uInt16 nThmbPos = o3tl::narrowing<sal_uInt16>(pScrollbar->GetThumbPos());
+            const sal_uInt16 nThmbPos = o3tl::narrowing<sal_uInt16>(rScrollbar.adjustment_get_value());
             // adjust to new preview functionality
             if( nThmbPos != m_pViewWin->SelectedPage() )
             {
@@ -1486,13 +1496,13 @@ IMPL_LINK( SwPagePreview, EndScrollHdl, ScrollBar *, p, void )
         }
         else
         {
-            tools::Long nThmbPos = pScrollbar->GetThumbPos();
+            tools::Long nThmbPos = rScrollbar.adjustment_get_value();
             m_pViewWin->Scroll(0, nThmbPos - m_pViewWin->GetPaintedPreviewDocRect().Top());
         }
     }
     else
     {
-        tools::Long nThmbPos = pScrollbar->GetThumbPos();
+        tools::Long nThmbPos = rScrollbar.adjustment_get_value();
         m_pViewWin->Scroll(nThmbPos - m_pViewWin->GetPaintedPreviewDocRect().Left(), 0);
     }
     // additional invalidate page status.

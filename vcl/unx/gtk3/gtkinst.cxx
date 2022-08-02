@@ -8488,9 +8488,19 @@ public:
         gtk_adjustment_set_page_size(m_pAdjustment, size);
     }
 
+    virtual int adjustment_get_page_increment() const override
+    {
+        return gtk_adjustment_get_page_increment(m_pAdjustment);
+    }
+
     virtual void adjustment_set_page_increment(int size) override
     {
         gtk_adjustment_set_page_increment(m_pAdjustment, size);
+    }
+
+    virtual int adjustment_get_step_increment() const override
+    {
+        return gtk_adjustment_get_step_increment(m_pAdjustment);
     }
 
     virtual void adjustment_set_step_increment(int size) override
