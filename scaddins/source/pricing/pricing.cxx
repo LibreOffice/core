@@ -125,7 +125,7 @@ const lang::Locale& ScaPricingAddIn::GetLocale( sal_uInt32 nIndex )
     if( !pDefLocales )
         InitDefLocales();
 
-    return (nIndex < sizeof( pLang )) ? pDefLocales[ nIndex ] : aFuncLoc;
+    return (nIndex < nNumOfLoc) ? pDefLocales[ nIndex ] : aFuncLoc;
 }
 
 void ScaPricingAddIn::InitData()
