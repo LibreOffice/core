@@ -208,6 +208,23 @@ void SwPosition::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterEndElement(pWriter);
 }
 
+void SwPosition::Assign( const SwNode& rNd, SwNodeOffset nDelta, sal_Int32 nContentOffset )
+{
+    nNode.Assign(rNd, nDelta);
+    assert((nNode.GetNode().GetContentNode() || nContentOffset == 0) && "setting contentoffset, but node is not SwContentNode");
+    nContent.Assign(nNode.GetNode().GetContentNode(), nContentOffset);
+}
+void SwPosition::Assign( SwNodeOffset nNodeOffset, sal_Int32 nContentOffset )
+{
+    nNode = nNodeOffset;
+    nContent.Assign(nNode.GetNode().GetContentNode(), nContentOffset);
+}
+void SwPosition::Assign( const SwNode& rNd )
+{
+    nNode.Assign(rNd);
+    nContent.Assign(rNd.GetContentNode(), 0);
+}
+
 std::ostream &operator <<(std::ostream& s, const SwPosition& position)
 {
     return s << "SwPosition (node " << position.GetNodeIndex() << ", offset " << position.GetContentIndex() << ")";
