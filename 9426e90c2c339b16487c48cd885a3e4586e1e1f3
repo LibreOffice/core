@@ -16,6 +16,24 @@
       "message": "oddly crashtesting has a new crash on exporting to docx since this commit\n\nwget https://bz.apache.org/ooo/attachment.cgi?id\u003d16491 -O ~/ooo31543-1.sxw\n./instdir/program/soffice --headless --convert-to docx ~/ooo31543-1.sxw",
       "revId": "9426e90c2c339b16487c48cd885a3e4586e1e1f3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91ecaed0_66e58a8f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-02T20:19:37Z",
+      "side": 1,
+      "message": "Thank you!\n\nVery strange. It doesn\u0027t crash on my Win system; and even further - the changed code (and the functions themselves!) don\u0027t get called during the conversion.\n\nCould you please re-check if this is the real cause of the crash, and also please provide some more information how to repro. Thank you!",
+      "parentUuid": "2994a71c_2ff56573",
+      "revId": "9426e90c2c339b16487c48cd885a3e4586e1e1f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
