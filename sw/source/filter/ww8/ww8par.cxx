@@ -4615,7 +4615,7 @@ void wwSectionManager::InsertSegments()
                     mrReader.m_rDoc.GetNodes().MakeTextNode(aAnchor,
                     mrReader.m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TEXT ));
 
-                aSectPaM.GetPoint()->nNode.Assign(*pTextNd);
+                aSectPaM.GetPoint()->Assign(*pTextNd);
                 aSectPaM.GetPoint()->nContent.Assign(
                     aSectPaM.GetContentNode(), 0);
             }

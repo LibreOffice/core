@@ -471,8 +471,7 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
                 const SwTableNode* pTableNd = pContentNd->FindTableNode();
                 if( pTableNd )
                 {
-                    aCpyPam.GetPoint()->nContent.Assign( nullptr, 0 );
-                    aCpyPam.GetPoint()->nNode = *pTableNd;
+                    aCpyPam.GetPoint()->Assign( *pTableNd );
                 }
                 aCpyPam.SetMark();
 
