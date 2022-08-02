@@ -213,9 +213,9 @@ std::optional< sal_uInt32 > AttributeList::getUnsigned( sal_Int32 nAttrToken ) c
 
 std::optional< sal_Int64 > AttributeList::getHyper( sal_Int32 nAttrToken ) const
 {
-    OUString aValue = mxAttribs->getOptionalValue( nAttrToken );
-    bool bValid = !aValue.isEmpty();
-    return bValid ? std::optional< sal_Int64 >( AttributeConversion::decodeHyper( aValue ) ) : std::optional< sal_Int64 >();
+    std::string_view aValue = getView( nAttrToken );
+    bool bValid = !aValue.empty();
+    return bValid ? std::optional< sal_Int64 >( o3tl::toInt64( aValue ) ) : std::optional< sal_Int64 >();
 }
 
 std::optional< sal_Int32 > AttributeList::getIntegerHex( sal_Int32 nAttrToken ) const
@@ -256,18 +256,18 @@ std::optional< bool > AttributeList::getBool( sal_Int32 nAttrToken ) const
 
 std::optional< util::DateTime > AttributeList::getDateTime( sal_Int32 nAttrToken ) const
 {
-    OUString aValue = mxAttribs->getOptionalValue( nAttrToken );
+    std::string_view aValue = getView( nAttrToken );
     util::DateTime aDateTime;
-    bool bValid = (aValue.getLength() == 19) && (aValue[ 4 ] == '-') && (aValue[ 7 ] == '-') &&
+    bool bValid = (aValue.size() == 19) && (aValue[ 4 ] == '-') && (aValue[ 7 ] == '-') &&
         (aValue[ 10 ] == 'T') && (aValue[ 13 ] == ':') && (aValue[ 16 ] == ':');
     if (!bValid)
         return std::optional< util::DateTime >();
-    aDateTime.Year    = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.subView( 0, 4 )) );
-    aDateTime.Month   = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.subView( 5, 2 )) );
-    aDateTime.Day     = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.subView( 8, 2 )) );
-    aDateTime.Hours   = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.subView( 11, 2 )) );
-    aDateTime.Minutes = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.subView( 14, 2 )) );
-    aDateTime.Seconds = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.subView( 17, 2 )) );
+    aDateTime.Year    = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.substr( 0, 4 )) );
+    aDateTime.Month   = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.substr( 5, 2 )) );
+    aDateTime.Day     = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.substr( 8, 2 )) );
+    aDateTime.Hours   = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.substr( 11, 2 )) );
+    aDateTime.Minutes = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.substr( 14, 2 )) );
+    aDateTime.Seconds = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.substr( 17, 2 )) );
     return std::optional< util::DateTime >( aDateTime );
 }
 
