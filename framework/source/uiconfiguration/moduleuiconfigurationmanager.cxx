@@ -1625,29 +1625,21 @@ sal_Bool SAL_CALL ModuleUIConfigurationManager::isReadOnly()
 void ModuleUIConfigurationManager::implts_notifyContainerListener( const ui::ConfigurationEvent& aEvent, NotifyOp eOp )
 {
     std::unique_lock aGuard(m_mutex);
-    comphelper::OInterfaceIteratorHelper4 pIterator( aGuard, m_aConfigListeners );
-    while ( pIterator.hasMoreElements() )
+    using ListenerMethodType = void (SAL_CALL css::ui::XUIConfigurationListener::*)(const ui::ConfigurationEvent&);
+    ListenerMethodType aListenerMethod {};
+    switch ( eOp )
     {
-        try
-        {
-            switch ( eOp )
-            {
-                case NotifyOp_Replace:
-                    pIterator.next()->elementReplaced( aEvent );
-                    break;
-                case NotifyOp_Insert:
-                    pIterator.next()->elementInserted( aEvent );
-                    break;
-                case NotifyOp_Remove:
-                    pIterator.next()->elementRemoved( aEvent );
-                    break;
-            }
-        }
-        catch( const css::uno::RuntimeException& )
-        {
-            pIterator.remove(aGuard);
-        }
+        case NotifyOp_Replace:
+            aListenerMethod = &css::ui::XUIConfigurationListener::elementReplaced;
+            break;
+        case NotifyOp_Insert:
+            aListenerMethod = &css::ui::XUIConfigurationListener::elementInserted;
+            break;
+        case NotifyOp_Remove:
+            aListenerMethod = &css::ui::XUIConfigurationListener::elementRemoved;
+            break;
     }
+    m_aConfigListeners.notifyEach(aGuard, aListenerMethod, aEvent);
 }
 
 }
