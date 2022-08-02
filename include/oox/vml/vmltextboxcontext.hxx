@@ -41,8 +41,8 @@ public:
     explicit            TextPortionContext(
                             ::oox::core::ContextHandler2Helper const & rParent,
                             TextBox& rTextBox,
-                            TextParagraphModel const & rParagraph,
-                            const TextFontModel& rParentFont,
+                            TextParagraphModel aParagraph,
+                            TextFontModel aParentFont,
                             sal_Int32 nElement,
                             const AttributeList& rAttribs );
 

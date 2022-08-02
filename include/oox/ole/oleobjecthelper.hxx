@@ -59,7 +59,7 @@ class OleObjectHelper
 public:
     explicit            OleObjectHelper(
                             const css::uno::Reference<css::lang::XMultiServiceFactory>& rxModelFactory,
-                            const css::uno::Reference<css::frame::XModel>& xModel);
+                            css::uno::Reference<css::frame::XModel> xModel);
                         ~OleObjectHelper();
 
     bool                importOleObject(

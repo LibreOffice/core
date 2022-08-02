@@ -19,10 +19,10 @@ class ExtDrawingFragmentHandler : public ::oox::core::FragmentHandler2
 {
 public:
     ExtDrawingFragmentHandler( oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath,
-        const oox::ppt::SlidePersistPtr& rSlidePersistPtr,
+        oox::ppt::SlidePersistPtr pSlidePersistPtr,
         const oox::ppt::ShapeLocation eShapeLocation,
-        oox::drawingml::ShapePtr const & pGroupShapePtr,
-        oox::drawingml::ShapePtr const & pShapePtr );
+        oox::drawingml::ShapePtr pGroupShapePtr,
+        oox::drawingml::ShapePtr pShapePtr );
     virtual ~ExtDrawingFragmentHandler() noexcept override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const AttributeList& rAttribs ) override;

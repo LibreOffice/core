@@ -20,6 +20,7 @@
 #include <oox/core/contexthandler.hxx>
 
 #include <oox/core/fragmenthandler.hxx>
+#include <utility>
 
 namespace oox::core {
 
@@ -32,8 +33,8 @@ ContextHandler::ContextHandler( const ContextHandler& rParent ) :
 {
 }
 
-ContextHandler::ContextHandler( const FragmentBaseDataRef& rxBaseData ) :
-    mxBaseData( rxBaseData )
+ContextHandler::ContextHandler( FragmentBaseDataRef xBaseData ) :
+    mxBaseData(std::move( xBaseData ))
 {
 }
 

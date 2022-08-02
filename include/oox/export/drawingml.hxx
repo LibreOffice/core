@@ -24,6 +24,7 @@
 #include <stack>
 #include <string_view>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 #include <com/sun/star/beans/PropertyState.hpp>
@@ -213,7 +214,7 @@ protected:
 
 public:
     DrawingML( ::sax_fastparser::FSHelperPtr pFS, ::oox::core::XmlFilterBase* pFB, DocumentType eDocumentType = DOCUMENT_PPTX, DMLTextExport* pTextExport = nullptr )
-        : meDocumentType( eDocumentType ), mpTextExport(pTextExport), mpFS( pFS ), mpFB( pFB ), mbIsBackgroundDark( false ), mbPlaceholder(false) {}
+        : meDocumentType( eDocumentType ), mpTextExport(pTextExport), mpFS(std::move( pFS )), mpFB( pFB ), mbIsBackgroundDark( false ), mbPlaceholder(false) {}
     void SetFS( ::sax_fastparser::FSHelperPtr pFS ) { mpFS = pFS; }
     const ::sax_fastparser::FSHelperPtr& GetFS() const { return mpFS; }
     ::oox::core::XmlFilterBase* GetFB() { return mpFB; }

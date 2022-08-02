@@ -12,6 +12,7 @@
 #include <oox/ppt/pptshapegroupcontext.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/core/xmlfilterbase.hxx>
+#include <utility>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::xml::sax;
@@ -21,15 +22,15 @@ namespace oox::ppt {
 
 ExtDrawingFragmentHandler::ExtDrawingFragmentHandler( XmlFilterBase& rFilter,
                                                         const OUString& rFragmentPath,
-        const oox::ppt::SlidePersistPtr& rSlidePersistPtr,
+        oox::ppt::SlidePersistPtr pSlidePersistPtr,
         const oox::ppt::ShapeLocation   eShapeLocation,
-        oox::drawingml::ShapePtr const & pGroupShapePtr,
-        oox::drawingml::ShapePtr const & pShapePtr)
+        oox::drawingml::ShapePtr pGroupShapePtr,
+        oox::drawingml::ShapePtr pShapePtr)
     : FragmentHandler2( rFilter, rFragmentPath ),
-     mpSlidePersistPtr (rSlidePersistPtr ),
+     mpSlidePersistPtr (std::move(pSlidePersistPtr )),
      meShapeLocation( eShapeLocation ),
-     mpGroupShapePtr( pGroupShapePtr ),
-     mpShapePtr( pShapePtr )
+     mpGroupShapePtr(std::move( pGroupShapePtr )),
+     mpShapePtr(std::move( pShapePtr ))
 {
 }
 

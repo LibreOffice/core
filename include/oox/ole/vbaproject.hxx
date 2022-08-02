@@ -91,7 +91,7 @@ private:
 class OOX_DLLPUBLIC VbaMacroAttacherBase
 {
 public:
-    explicit            VbaMacroAttacherBase( const OUString& rMacroName );
+    explicit            VbaMacroAttacherBase( OUString aMacroName );
     virtual             ~VbaMacroAttacherBase();
 
     /** Resolves the internal macro name to the related macro URL, and attaches

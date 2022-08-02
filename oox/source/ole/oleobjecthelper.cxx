@@ -35,6 +35,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <oox/helper/propertymap.hxx>
 #include <oox/token/properties.hxx>
+#include <utility>
 
 namespace oox::ole {
 
@@ -57,8 +58,8 @@ const char g_aEmbeddedObjScheme[] = "vnd.sun.star.EmbeddedObject:";
 
 OleObjectHelper::OleObjectHelper(
         const Reference< XMultiServiceFactory >& rxModelFactory,
-        uno::Reference<frame::XModel> const& xModel)
-    : m_xModel(xModel)
+        uno::Reference<frame::XModel> xModel)
+    : m_xModel(std::move(xModel))
     , mnObjectId( 100 )
 {
     assert(m_xModel.is());

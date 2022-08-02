@@ -93,7 +93,7 @@ public:
 
 protected:
     /** Helper constructor for the FragmentHandler. */
-    explicit            ContextHandler( const FragmentBaseDataRef& rxBaseData );
+    explicit            ContextHandler( FragmentBaseDataRef  rxBaseData );
 
     void                implSetLocator( const css::uno::Reference< css::xml::sax::XLocator >& rxLocator );
 

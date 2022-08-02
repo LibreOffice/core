@@ -18,6 +18,7 @@
 #include <oox/token/namespaces.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
+#include <utility>
 
 #define OPENING( token ) XML_STREAM_OPENING( token )
 #define CLOSING( token ) XML_STREAM_CLOSING( token )
@@ -140,9 +141,9 @@ XmlStream::Tag::Tag( int t, const uno::Reference< xml::sax::XFastAttributeList >
 {
 }
 
-XmlStream::Tag::Tag( int t, const AttributeList& a )
+XmlStream::Tag::Tag( int t, AttributeList a )
 : token( t )
-, attributes( a )
+, attributes(std::move( a ))
 {
 }
 

@@ -34,6 +34,7 @@
 #include <oox/mathml/import.hxx>
 
 #include <sal/log.hxx>
+#include <utility>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
@@ -122,9 +123,9 @@ ContextHandlerRef TextParagraphContext::onCreateContext( sal_Int32 aElementToken
     return nullptr;
 }
 
-RegularTextRunContext::RegularTextRunContext( ContextHandler2Helper const & rParent, TextRunPtr const & pRunPtr )
+RegularTextRunContext::RegularTextRunContext( ContextHandler2Helper const & rParent, TextRunPtr pRunPtr )
 : ContextHandler2( rParent )
-, mpRunPtr( pRunPtr )
+, mpRunPtr(std::move( pRunPtr ))
 , mbIsInText( false )
 {
 }

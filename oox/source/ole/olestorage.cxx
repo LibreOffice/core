@@ -35,6 +35,7 @@
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/binaryoutputstream.hxx>
 #include <oox/helper/containerhelper.hxx>
+#include <utility>
 
 namespace oox::ole {
 
@@ -55,7 +56,7 @@ public:
     explicit            OleOutputStream(
                             const Reference< XComponentContext >& rxContext,
                             const Reference< XNameContainer >& rxStorage,
-                            const OUString& rElementName );
+                            OUString aElementName );
 
     virtual void SAL_CALL seek( sal_Int64 nPos ) override;
     virtual sal_Int64 SAL_CALL getPosition() override;
@@ -80,9 +81,9 @@ private:
 };
 
 OleOutputStream::OleOutputStream( const Reference< XComponentContext >& rxContext,
-        const Reference< XNameContainer >& rxStorage, const OUString& rElementName ) :
+        const Reference< XNameContainer >& rxStorage, OUString aElementName ) :
     mxStorage( rxStorage ),
-    maElementName( rElementName )
+    maElementName(std::move( aElementName ))
 {
     try
     {

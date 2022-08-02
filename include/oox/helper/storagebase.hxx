@@ -138,7 +138,7 @@ public:
 
 protected:
     /** Special constructor for sub storage objects. */
-    explicit            StorageBase( const StorageBase& rParentStorage, const OUString& rStorageName, bool bReadOnly );
+    explicit            StorageBase( const StorageBase& rParentStorage, OUString aStorageName, bool bReadOnly );
 
 private:
                         StorageBase( const StorageBase& ) = delete;

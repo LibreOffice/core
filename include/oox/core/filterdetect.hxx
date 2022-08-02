@@ -63,7 +63,7 @@ enum class OOXMLVariant {
 class FilterDetectDocHandler final : public ::cppu::WeakImplHelper< css::xml::sax::XFastDocumentHandler >
 {
 public:
-    explicit            FilterDetectDocHandler( const css::uno::Reference< css::uno::XComponentContext >& rxContext, OUString& rFilter, const OUString& rFileName );
+    explicit            FilterDetectDocHandler( const css::uno::Reference< css::uno::XComponentContext >& rxContext, OUString& rFilter, OUString aFileName );
     virtual             ~FilterDetectDocHandler() override;
 
     // XFastDocumentHandler

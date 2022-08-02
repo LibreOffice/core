@@ -18,6 +18,7 @@
  */
 
 #include <oox/dump/dffdumper.hxx>
+#include <utility>
 
 #ifdef DBG_UTIL
 
@@ -161,8 +162,8 @@ struct PropInfo
     PropType            meType;
     sal_uInt16          mnId;
     sal_uInt32          mnSize;
-    explicit     PropInfo( const OUString& rName, PropType eType, sal_uInt16 nId, sal_uInt32 nSize ) :
-                            maName( rName ), meType( eType ), mnId( nId ), mnSize( nSize ) {}
+    explicit     PropInfo( OUString aName, PropType eType, sal_uInt16 nId, sal_uInt32 nSize ) :
+                            maName(std::move( aName )), meType( eType ), mnId( nId ), mnSize( nSize ) {}
 };
 
 typedef ::std::vector< PropInfo > PropInfoVector;

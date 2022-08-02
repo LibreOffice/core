@@ -36,7 +36,7 @@ class PPTShapeContext final : public ::oox::drawingml::ShapeContext
     SlidePersistPtr     mpSlidePersistPtr;
 
 public:
-    PPTShapeContext( ::oox::core::ContextHandler2Helper const & rParent, const SlidePersistPtr& rSlidePersistPtr, const oox::drawingml::ShapePtr& pMasterShapePtr, const oox::drawingml::ShapePtr& pShapePtr );
+    PPTShapeContext( ::oox::core::ContextHandler2Helper const & rParent, SlidePersistPtr xSlidePersistPtr, const oox::drawingml::ShapePtr& pMasterShapePtr, const oox::drawingml::ShapePtr& pShapePtr );
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 };
 

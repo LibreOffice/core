@@ -32,7 +32,7 @@ namespace oox::drawingml {
 class OOX_DLLPUBLIC ShapeGroupContext : public ::oox::core::FragmentHandler2
 {
 public:
-    ShapeGroupContext( ::oox::core::FragmentHandler2 const & rParent, ShapePtr const & pMasterShapePtr, ShapePtr const & pGroupShapePtr );
+    ShapeGroupContext( ::oox::core::FragmentHandler2 const & rParent, ShapePtr const & pMasterShapePtr, ShapePtr pGroupShapePtr );
     virtual ~ShapeGroupContext() override;
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 

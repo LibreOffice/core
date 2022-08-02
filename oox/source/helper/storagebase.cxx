@@ -24,6 +24,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/binaryoutputstream.hxx>
+#include <utility>
 
 namespace oox {
 
@@ -74,9 +75,9 @@ StorageBase::StorageBase( const Reference< XStream >& rxOutStream, bool bBaseStr
     OSL_ENSURE( mxOutStream.is(), "StorageBase::StorageBase - missing base output stream" );
 }
 
-StorageBase::StorageBase( const StorageBase& rParentStorage, const OUString& rStorageName, bool bReadOnly ) :
+StorageBase::StorageBase( const StorageBase& rParentStorage, OUString aStorageName, bool bReadOnly ) :
     maParentPath( rParentStorage.getPath() ),
-    maStorageName( rStorageName ),
+    maStorageName(std::move( aStorageName )),
     mbBaseStreamAccess( false ),
     mbReadOnly( bReadOnly )
 {

@@ -43,7 +43,7 @@ namespace oox::ppt {
         static rtl::Reference<TimeNodeContext> makeContext( ::oox::core::FragmentHandler2 const & rParent, sal_Int32  aElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttribs, const TimeNodePtr & pNode );
 
     protected:
-        TimeNodeContext( ::oox::core::FragmentHandler2 const & rParent, sal_Int32  aElement, const TimeNodePtr & pNode ) noexcept;
+        TimeNodeContext( ::oox::core::FragmentHandler2 const & rParent, sal_Int32  aElement, TimeNodePtr pNode ) noexcept;
 
         sal_Int32 mnElement;
         TimeNodePtr mpNode;

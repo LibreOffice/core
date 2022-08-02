@@ -19,6 +19,7 @@
 
 #include <oox/core/recordparser.hxx>
 
+#include <utility>
 #include <vector>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -93,7 +94,7 @@ OUString SAL_CALL Locator::getSystemId()
 class ContextStack
 {
 public:
-    explicit            ContextStack( FragmentHandlerRef const & xHandler );
+    explicit            ContextStack( FragmentHandlerRef xHandler );
 
     bool         empty() const { return maStack.empty(); }
 
@@ -112,8 +113,8 @@ private:
     ContextInfoVec      maStack;
 };
 
-ContextStack::ContextStack( FragmentHandlerRef const & xHandler ) :
-    mxHandler( xHandler )
+ContextStack::ContextStack( FragmentHandlerRef xHandler ) :
+    mxHandler(std::move( xHandler ))
 {
 }
 
