@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "061eb38e_aca0df0b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-08-02T08:58:53Z",
+      "side": 1,
+      "message": "FYI - I merged this to make things consistent. The only other uses of SetPrefix/Suffix are in UNO calls. I wonder whether a UNO call to SetSuffix should also clear out an oListFormat? Otherwise we will have the two mixing together!",
+      "revId": "5c68399e6bea3aa18477487400f8bb143d6ed84e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
