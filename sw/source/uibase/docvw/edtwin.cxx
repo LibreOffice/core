@@ -3513,6 +3513,19 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     break;
                     case KEY_SHIFT:
                     {
+                        if (nNumberOfClicks == 2)
+                        {
+                            // Left mouse button, shift, double-click: see if we have a graphic and
+                            // dispatch its dialog in this case.
+                            if (rSh.GetSelectionType() == SelectionType::Graphic)
+                            {
+                                GetView().GetViewFrame()->GetBindings().Execute(
+                                    FN_FORMAT_GRAFIC_DLG, nullptr,
+                                    SfxCallMode::RECORD | SfxCallMode::SLOT);
+                                return;
+                            }
+                        }
+
                         if ( !m_bInsDraw && IsDrawObjSelectable( rSh, aDocPos ) )
                         {
                             m_rView.NoRotate();
@@ -3542,6 +3555,20 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         }
                         else
                         {
+                            bool bShould = rSh.ShouldObjectBeSelected(aDocPos);
+                            if (bShould)
+                            {
+                                // Left mouse button, shift, non-double-click, not a draw object and
+                                // have an object to select: select it.
+                                rSh.HideCursor();
+                                bool bSelObj = rSh.SelectObj(aDocPos);
+                                if (bSelObj)
+                                {
+                                    rSh.EnterSelFrameMode(&aDocPos);
+                                }
+                                return;
+                            }
+
                             if ( rSh.IsSelFrameMode() &&
                                  rSh.IsInsideSelectedObj( aDocPos ) )
                             {
