@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9c9e647_49343725",
+        "filename": "toolkit/source/helper/property.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-08-02T14:42:40Z",
+      "side": 0,
+      "message": "Those new properties need to be added to offapi/com/sun/star/awt/UnoControlListBoxModel.idl and/or offapi/com/sun/star/awt/UnoControlComboBoxModel.idl I guess (as optional)",
+      "revId": "9dff8edf97f454f24a40acbed4a9297816f91da6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
