@@ -123,6 +123,24 @@
       "parentUuid": "714b2200_30be7424",
       "revId": "80723fccbb03c215bab84b10ac1eefaedef66b7c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d5ee0c0_28e68988",
+        "filename": "unotest/source/cpp/macros_test.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-08-02T06:08:01Z",
+      "side": 1,
+      "message": "I see, thanks. I assume this passes on Jenkins because that one has no certs at all; so perhaps just make sure that your dev machine has no signing certs installed in certmgr.msc, and then we can revisit this later. I only ran \"make check\" locally (on Linux) + saw jenkins passing, that\u0027s how I didn\u0027t notice the problem when I merged this change.",
+      "parentUuid": "8ca586ee_78e9e4d9",
+      "revId": "80723fccbb03c215bab84b10ac1eefaedef66b7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
