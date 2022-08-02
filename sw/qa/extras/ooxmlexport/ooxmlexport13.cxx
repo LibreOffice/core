@@ -426,7 +426,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123636_newlinePageBreak3, "tdf123636_newlinePage
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of Pages", 2, getPages() );
 
     xmlDocUniquePtr pDump = parseLayoutDump();
-    assertXPath(pDump, "/root/page[1]/body/txt[3]/Text[1]", "Portion", "Last line on page 1");
+    assertXPath(pDump, "/root/page[1]/body/txt[3]/SwParaPortion/SwLineLayout/SwParaPortion[1]", "portion", "Last line on page 1");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf123636_newlinePageBreak4, "tdf123636_newlinePageBreak4.docx")
@@ -668,7 +668,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf124594, "tdf124594.docx")
     // Without the accompanying fix in place, this test would have failed, as the portion text was
     // only "Er horte leise Schritte hinter", which means the 1st line of the 2nd paragraph was
     // split into two by a Special portion, i.e. the top margin of the shape was too large.
-    assertXPath(pDump, "/root/page/body/txt[2]/Text[1]", "Portion",
+    assertXPath(pDump, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout[1]/SwLinePortion[1]", "portion",
                 "Er horte leise Schritte hinter sich. Das bedeutete nichts Gutes. Wer wu"); // ... until the bookmark.
 }
 
