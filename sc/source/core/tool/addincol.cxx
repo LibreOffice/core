@@ -138,13 +138,12 @@ void ScUnoAddInFuncData::SetCompNames( ::std::vector< ScUnoAddInFuncData::Locali
     bCompInitialized = true;
 }
 
-bool ScUnoAddInFuncData::GetExcelName( LanguageType eDestLang, OUString& rRetExcelName, bool bFallbackToAny ) const
+bool ScUnoAddInFuncData::GetExcelName( const LanguageTag& rDestLang, OUString& rRetExcelName, bool bFallbackToAny ) const
 {
     const ::std::vector<LocalizedName>& rCompNames = GetCompNames();
     if ( !rCompNames.empty() )
     {
-        LanguageTag aLanguageTag( eDestLang);
-        const OUString& aSearch( aLanguageTag.getBcp47());
+        const OUString& aSearch( rDestLang.getBcp47());
 
         // First, check exact match without fallback overhead.
         ::std::vector<LocalizedName>::const_iterator itNames = std::find_if(rCompNames.begin(), rCompNames.end(),
@@ -157,7 +156,7 @@ bool ScUnoAddInFuncData::GetExcelName( LanguageType eDestLang, OUString& rRetExc
 
         // Second, try match of fallback search with fallback locales,
         // appending also 'en-US' and 'en' to search if not queried.
-        ::std::vector< OUString > aFallbackSearch( aLanguageTag.getFallbackStrings( true));
+        ::std::vector< OUString > aFallbackSearch( rDestLang.getFallbackStrings( true));
         if (aSearch != "en-US")
         {
             aFallbackSearch.emplace_back("en-US");
@@ -582,7 +581,7 @@ bool ScUnoAddInCollection::GetExcelName( const OUString& rCalcName,
 {
     const ScUnoAddInFuncData* pFuncData = GetFuncData( rCalcName );
     if ( pFuncData )
-        return pFuncData->GetExcelName( eDestLang, rRetExcelName);
+        return pFuncData->GetExcelName( LanguageTag( eDestLang), rRetExcelName);
     return false;
 }
 
@@ -770,6 +769,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
     if ( !pEnglishHashMap )
         pEnglishHashMap.reset( new ScAddInHashMap );
 
+    const LanguageTag aEnglishLanguageTag(LANGUAGE_ENGLISH_US);
     const uno::Reference<reflection::XIdlMethod>* pArray = aMethods.getConstArray();
     for (tools::Long nFuncPos=0; nFuncPos<nNewCount; nFuncPos++)
     {
@@ -932,7 +932,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                 pData );
 
                     OUString aEnglishName;
-                    if (!pData->GetExcelName( LANGUAGE_ENGLISH_US, aEnglishName, false /*bFallbackToAny*/))
+                    if (!pData->GetExcelName( aEnglishLanguageTag, aEnglishName, false /*bFallbackToAny*/))
                         SAL_WARN("sc.core", "no English name for " << aLocalName << " " << aFuncName);
                     else
                     {

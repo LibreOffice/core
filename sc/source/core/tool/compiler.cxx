@@ -148,6 +148,7 @@ void ScCompiler::fillFromAddInCollectionUpperName( const NonConstOpCodeMapPtr& x
 
 void ScCompiler::fillFromAddInCollectionEnglishName( const NonConstOpCodeMapPtr& xMap ) const
 {
+    const LanguageTag aEnglishLanguageTag(LANGUAGE_ENGLISH_US);
     ScUnoAddInCollection* pColl = ScGlobal::GetAddInCollection();
     tools::Long nCount = pColl->GetFuncCount();
     for (tools::Long i=0; i < nCount; ++i)
@@ -156,7 +157,7 @@ void ScCompiler::fillFromAddInCollectionEnglishName( const NonConstOpCodeMapPtr&
         if (pFuncData)
         {
             OUString aName;
-            if (pFuncData->GetExcelName( LANGUAGE_ENGLISH_US, aName))
+            if (pFuncData->GetExcelName( aEnglishLanguageTag, aName))
                 xMap->putExternalSoftly( aName, pFuncData->GetOriginalName());
             else
                 xMap->putExternalSoftly( pFuncData->GetUpperName(),
@@ -5505,6 +5506,7 @@ void ScCompiler::fillAddInToken(::std::vector< css::sheet::FormulaOpCodeMapEntry
     sheet::FormulaOpCodeMapEntry aEntry;
     aEntry.Token.OpCode = ocExternal;
 
+    const LanguageTag aEnglishLanguageTag(LANGUAGE_ENGLISH_US);
     ScUnoAddInCollection* pColl = ScGlobal::GetAddInCollection();
     const tools::Long nCount = pColl->GetFuncCount();
     for (tools::Long i=0; i < nCount; ++i)
@@ -5515,7 +5517,7 @@ void ScCompiler::fillAddInToken(::std::vector< css::sheet::FormulaOpCodeMapEntry
             if ( _bIsEnglish )
             {
                 OUString aName;
-                if (pFuncData->GetExcelName( LANGUAGE_ENGLISH_US, aName))
+                if (pFuncData->GetExcelName( aEnglishLanguageTag, aName))
                     aEntry.Name = aName;
                 else
                     aEntry.Name = pFuncData->GetUpperName();
