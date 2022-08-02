@@ -61,8 +61,8 @@ struct ScaFuncDataBase
     const TranslateId*          pDescrID;           // resource ID to description, parameter names and ~ description
     // pCompName was originally meant to be able to load Excel documents that for
     // some time were stored with localized function names.
-    // This is not relevant to this add-in, so we only supply the same
-    // (English) function names again.
+    // This is not relevant to this add-in, so we only supply the
+    // English function name.
     // see also: GetExcelName() or GetCompNames() or getCompatibilityNames()
     const char*                 pCompName;
     sal_uInt16                  nParamCount;        // number of named / described parameters

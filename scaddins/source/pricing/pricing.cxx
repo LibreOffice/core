@@ -105,8 +105,8 @@ ScaPricingAddIn::~ScaPricingAddIn()
 {
 }
 
-static const char*  pLang[] = { "de", "en" };
-static const char*  pCoun[] = { "DE", "US" };
+static const char*  pLang[] = { "en" };
+static const char*  pCoun[] = { "US" };
 const sal_uInt32 nNumOfLoc = SAL_N_ELEMENTS( pLang );
 
 void ScaPricingAddIn::InitDefLocales()
@@ -125,7 +125,7 @@ const lang::Locale& ScaPricingAddIn::GetLocale( sal_uInt32 nIndex )
     if( !pDefLocales )
         InitDefLocales();
 
-    return (nIndex < sizeof( pLang )) ? pDefLocales[ nIndex ] : aFuncLoc;
+    return (nIndex < nNumOfLoc) ? pDefLocales[ nIndex ] : aFuncLoc;
 }
 
 void ScaPricingAddIn::InitData()
