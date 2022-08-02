@@ -1419,6 +1419,11 @@ Size ScrollBar::getCurrentCalcSize() const
     return aCtrlRegion.GetSize();
 }
 
+bool ScrollBar::Inactive() const
+{
+    return !IsEnabled() || !IsInputEnabled() || IsInModalMode();
+}
+
 void ScrollBarBox::ImplInit(vcl::Window* pParent, WinBits nStyle)
 {
     Window::ImplInit( pParent, nStyle, nullptr );

@@ -2494,7 +2494,6 @@ class SalInstanceScrollbar : public SalInstanceWidget, public virtual weld::Scro
 {
 private:
     VclPtr<ScrollBar> m_xScrollBar;
-    Link<ScrollBar*, void> m_aOrigScrollHdl;
 
     DECL_LINK(ScrollHdl, ScrollBar*, void);
 
@@ -2503,8 +2502,8 @@ public:
         : SalInstanceWidget(pScrollbar, pBuilder, bTakeOwnership)
         , m_xScrollBar(pScrollbar)
     {
-        m_aOrigScrollHdl = m_xScrollBar->GetScrollHdl();
         m_xScrollBar->SetScrollHdl(LINK(this, SalInstanceScrollbar, ScrollHdl));
+        m_xScrollBar->EnableDrag();
     }
 
     virtual void adjustment_configure(int value, int lower, int upper, int step_increment,
@@ -2520,11 +2519,7 @@ public:
 
     virtual int adjustment_get_value() const override { return m_xScrollBar->GetThumbPos(); }
 
-    virtual void adjustment_set_value(int value) override
-    {
-        m_xScrollBar->SetThumbPos(value);
-        m_aOrigScrollHdl.Call(m_xScrollBar.get());
-    }
+    virtual void adjustment_set_value(int value) override { m_xScrollBar->SetThumbPos(value); }
 
     virtual int adjustment_get_upper() const override { return m_xScrollBar->GetRangeMax(); }
 
@@ -2536,32 +2531,33 @@ public:
 
     virtual int adjustment_get_page_size() const override { return m_xScrollBar->GetVisibleSize(); }
 
-    virtual void adjustment_set_page_size(int size) override
+    virtual void adjustment_set_page_size(int size) override { m_xScrollBar->SetVisibleSize(size); }
+
+    virtual int adjustment_get_page_increment() const override
     {
-        return m_xScrollBar->SetVisibleSize(size);
+        return m_xScrollBar->GetPageSize();
     }
 
     virtual void adjustment_set_page_increment(int size) override
     {
-        return m_xScrollBar->SetPageSize(size);
+        m_xScrollBar->SetPageSize(size);
+    }
+
+    virtual int adjustment_get_step_increment() const override
+    {
+        return m_xScrollBar->GetLineSize();
     }
 
     virtual void adjustment_set_step_increment(int size) override
     {
-        return m_xScrollBar->SetLineSize(size);
+        m_xScrollBar->SetLineSize(size);
     }
 
     virtual ScrollType get_scroll_type() const override { return m_xScrollBar->GetType(); }
-
-    virtual ~SalInstanceScrollbar() override { m_xScrollBar->SetScrollHdl(m_aOrigScrollHdl); }
 };
 }
 
-IMPL_LINK_NOARG(SalInstanceScrollbar, ScrollHdl, ScrollBar*, void)
-{
-    signal_adjustment_changed();
-    m_aOrigScrollHdl.Call(m_xScrollBar.get());
-}
+IMPL_LINK_NOARG(SalInstanceScrollbar, ScrollHdl, ScrollBar*, void) { signal_adjustment_changed(); }
 
 SalInstanceNotebook::SalInstanceNotebook(TabControl* pNotebook, SalInstanceBuilder* pBuilder,
                                          bool bTakeOwnership)

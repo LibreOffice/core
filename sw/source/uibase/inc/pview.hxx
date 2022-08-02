@@ -194,8 +194,10 @@ class SW_DLLPUBLIC SwPagePreview final : public SfxViewShell
     SAL_DLLPRIVATE Point AlignToPixel(const Point& rPt) const;
 
     SAL_DLLPRIVATE void CreateScrollbar( bool bHori);
-    DECL_DLLPRIVATE_LINK(ScrollHdl, ScrollBar*, void);
-    DECL_DLLPRIVATE_LINK(EndScrollHdl, ScrollBar*, void);
+    DECL_DLLPRIVATE_LINK(HoriScrollHdl, weld::Scrollbar&, void);
+    DECL_DLLPRIVATE_LINK(VertScrollHdl, weld::Scrollbar&, void);
+    SAL_DLLPRIVATE void ScrollHdl(weld::Scrollbar&, bool bHorizontal);
+    SAL_DLLPRIVATE void EndScrollHdl(weld::Scrollbar&, bool bHorizontal);
     SAL_DLLPRIVATE bool ChgPage( int eMvMode, bool bUpdateScrollbar = true );
 
     SAL_DLLPRIVATE virtual SfxPrinter*     GetPrinter( bool bCreate = false ) override;

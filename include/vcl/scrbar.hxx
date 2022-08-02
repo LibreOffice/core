@@ -22,11 +22,13 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
+#include <vcl/scrollable.hxx>
 #include <memory>
 
 struct ImplScrollBarData;
 
 class VCL_DLLPUBLIC ScrollBar : public Control
+                              , public Scrollable
 {
 private:
     tools::Rectangle       maBtn1Rect;
@@ -97,27 +99,29 @@ public:
     void            Scroll();
     virtual void    EndScroll();
 
-    tools::Long            DoScroll( tools::Long nNewPos );
-    tools::Long            DoScrollAction( ScrollType eScrollType );
+    tools::Long     DoScroll( tools::Long nNewPos ) override;
+    tools::Long     DoScrollAction( ScrollType eScrollType );
 
     void            EnableDrag() { mbFullDrag = true; }
 
-    void            SetRangeMin( tools::Long nNewRange );
-    tools::Long            GetRangeMin() const { return mnMinRange; }
-    void            SetRangeMax( tools::Long nNewRange );
-    tools::Long            GetRangeMax() const { return mnMaxRange; }
-    void            SetRange( const Range& rRange );
-    Range           GetRange() const { return Range( GetRangeMin(), GetRangeMax() ); }
-    void            SetThumbPos( tools::Long nThumbPos );
-    tools::Long            GetThumbPos() const { return mnThumbPos; }
-    void            SetLineSize( tools::Long nNewSize ) { mnLineSize = nNewSize; }
-    tools::Long            GetLineSize() const { return mnLineSize; }
-    void            SetPageSize( tools::Long nNewSize ) { mnPageSize = nNewSize; }
-    tools::Long            GetPageSize() const { return mnPageSize; }
-    void            SetVisibleSize( tools::Long nNewSize );
-    tools::Long            GetVisibleSize() const { return mnVisibleSize; }
+    void            SetRangeMin( tools::Long nNewRange ) override;
+    tools::Long     GetRangeMin() const override { return mnMinRange; }
+    void            SetRangeMax( tools::Long nNewRange ) override;
+    tools::Long     GetRangeMax() const override { return mnMaxRange; }
+    void            SetRange( const Range& rRange ) override;
+    Range           GetRange() const override { return Range( GetRangeMin(), GetRangeMax() ); }
+    void            SetThumbPos( tools::Long nThumbPos ) override;
+    tools::Long     GetThumbPos() const override { return mnThumbPos; }
+    void            SetLineSize( tools::Long nNewSize ) override { mnLineSize = nNewSize; }
+    tools::Long     GetLineSize() const override { return mnLineSize; }
+    void            SetPageSize( tools::Long nNewSize ) override { mnPageSize = nNewSize; }
+    tools::Long     GetPageSize() const override { return mnPageSize; }
+    void            SetVisibleSize( tools::Long nNewSize ) override;
+    tools::Long     GetVisibleSize() const override { return mnVisibleSize; }
 
-    tools::Long            GetDelta() const { return mnDelta; }
+    bool Inactive() const override;
+
+    tools::Long     GetDelta() const { return mnDelta; }
     ScrollType      GetType() const { return meScrollType; }
 
     void            SetScrollHdl( const Link<ScrollBar*,void>& rLink ) { maScrollHdl = rLink; }
