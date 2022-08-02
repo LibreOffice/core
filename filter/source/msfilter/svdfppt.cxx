@@ -3494,83 +3494,79 @@ bool PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport const &
             case 0 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_CHARS_LOWER_LETTER );
-                rNumberFormat.SetSuffix( "." );
+                rNumberFormat.SetListFormat("", ".", nLevel);
             }
             break;
             case 1 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_CHARS_UPPER_LETTER );
-                rNumberFormat.SetSuffix( "." );
+                rNumberFormat.SetListFormat("", ".", nLevel);
             }
             break;
             case 2 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_ARABIC );
-                rNumberFormat.SetSuffix( ")" );
+                rNumberFormat.SetListFormat("",  ")", nLevel);
             }
             break;
             case 3 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_ARABIC );
-                rNumberFormat.SetSuffix( "." );
+                rNumberFormat.SetListFormat("", ".", nLevel);
             }
             break;
             case 4 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_ROMAN_LOWER );
-                rNumberFormat.SetSuffix( ")" );
-                rNumberFormat.SetPrefix( "(" );
+                rNumberFormat.SetListFormat("(", ")", nLevel);
             }
             break;
             case 5 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_ROMAN_LOWER );
-                rNumberFormat.SetSuffix( ")" );
+                rNumberFormat.SetListFormat("", ")", nLevel);
             }
             break;
             case 6 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_ROMAN_LOWER );
-                rNumberFormat.SetSuffix( "." );
+                rNumberFormat.SetListFormat("", ".", nLevel);
             }
             break;
             case 7 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_ROMAN_UPPER );
-                rNumberFormat.SetSuffix( "." );
+                rNumberFormat.SetListFormat("", ".", nLevel);
             }
             break;
             case 8 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_CHARS_LOWER_LETTER );
-                rNumberFormat.SetSuffix( ")" );
-                rNumberFormat.SetPrefix( "(" );
+                rNumberFormat.SetListFormat("(", ")", nLevel);
             }
             break;
             case 9 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_CHARS_LOWER_LETTER );
-                rNumberFormat.SetSuffix( ")" );
+                rNumberFormat.SetListFormat("", ")", nLevel);
             }
             break;
             case 10 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_CHARS_UPPER_LETTER );
-                rNumberFormat.SetSuffix( ")" );
-                rNumberFormat.SetPrefix( "(" );
+                rNumberFormat.SetListFormat("(", ")", nLevel);
             }
             break;
             case 11 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_CHARS_UPPER_LETTER );
-                rNumberFormat.SetSuffix( ")" );
+                rNumberFormat.SetListFormat("", ")", nLevel);
             }
             break;
             case 12 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_ARABIC );
-                rNumberFormat.SetSuffix( ")" );
-                rNumberFormat.SetPrefix( "(" );
+                rNumberFormat.SetListFormat("(", ")", nLevel);
             }
             break;
             case 13 :
@@ -3581,14 +3577,13 @@ bool PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport const &
             case 14 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_ROMAN_UPPER );
-                rNumberFormat.SetSuffix( ")" );
-                rNumberFormat.SetPrefix( "(" );
+                rNumberFormat.SetListFormat("(", ")", nLevel);
             }
             break;
             case 15 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_ROMAN_UPPER );
-                rNumberFormat.SetSuffix( ")" );
+                rNumberFormat.SetListFormat("", ")", nLevel);
             }
             break;
             case 16: // Simplified Chinese.
@@ -3599,7 +3594,7 @@ bool PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport const &
             case 17: // Simplified Chinese with single-byte period.
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_NUMBER_UPPER_ZH );
-                rNumberFormat.SetSuffix( "." );
+                rNumberFormat.SetListFormat("", ".", nLevel);
             }
             break;
             case 18: // Double byte circle numbers.
@@ -3617,13 +3612,13 @@ bool PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport const &
             case 22: // Traditional Chinese with single-byte period.
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_NUMBER_UPPER_ZH_TW );
-                rNumberFormat.SetSuffix( "." );
+                rNumberFormat.SetListFormat("", ".", nLevel);
             }
             break;
             case 25: // Bidi Hebrew 2 with ANSI minus symbol.
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_NUMBER_HEBREW );
-                rNumberFormat.SetSuffix( "-" );
+                rNumberFormat.SetListFormat("", "-", nLevel);
             }
             break;
             case 26: // Japanese/Korean.
@@ -3634,7 +3629,7 @@ bool PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport const &
             case 27: // Japanese/Korean with single-byte period.
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_NUMBER_LOWER_ZH );
-                rNumberFormat.SetSuffix( "." );
+                rNumberFormat.SetListFormat("", ".", nLevel);
             }
             break;
             case 28: // Double-byte Arabic numbers.
@@ -3645,13 +3640,13 @@ bool PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport const &
             case 29: // Double-byte Arabic numbers with double-byte period.
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_FULL_WIDTH_ARABIC );
-                rNumberFormat.SetSuffix( OUString( u'\xff0e' ) );
+                rNumberFormat.SetListFormat("", OUString(u'\xff0e'), nLevel);
             }
             break;
             case 38: // Japanese with double-byte period.
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_NUMBER_LOWER_ZH ); // No such type. Instead with Lower Chinese Number
-                rNumberFormat.SetSuffix( OUString( u'\xff0e' ) );
+                rNumberFormat.SetListFormat("", OUString(u'\xff0e'), nLevel);
             }
             break;
         }

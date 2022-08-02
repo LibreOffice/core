@@ -590,7 +590,7 @@ static void SetBaseAnlv(SwNumFormat &rNum, WW8_ANLV const &rAV, sal_uInt8 nSwLev
     if( rAV.nfc == 5 || rAV.nfc == 7 )
     {
         OUString sP = "." + rNum.GetSuffix();
-        rNum.SetSuffix( sP );   // ordinal number
+        rNum.SetListFormat("", sP, nSwLevel); // ordinal number
     }
 }
 

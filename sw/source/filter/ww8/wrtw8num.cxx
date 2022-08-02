@@ -489,6 +489,8 @@ void MSWordExportBase::NumberingLevel(
                 }
             }
         }
+        else if (rFormat.GetNumberingType() != SVX_NUM_NUMBER_NONE)
+            assert(false && "depricated format still exists and is unhandled. Inform Vasily or Justin");
     }
 
     if (SVX_NUM_CHAR_SPECIAL == rFormat.GetNumberingType() ||

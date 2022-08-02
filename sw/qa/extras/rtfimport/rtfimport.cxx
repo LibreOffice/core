@@ -334,27 +334,6 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo85812)
     CPPUNIT_ASSERT_EQUAL(OUString("EG"), locale.Country);
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testFdo49692)
-{
-    load(mpTestDocumentPath, "fdo49692.rtf");
-    uno::Reference<beans::XPropertySet> xPropertySet(
-        getStyles("NumberingStyles")->getByName("WWNum1"), uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xLevels(
-        xPropertySet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aProps;
-    xLevels->getByIndex(0) >>= aProps; // 1st level
-
-    for (int i = 0; i < aProps.getLength(); ++i)
-    {
-        const beans::PropertyValue& rProp = aProps[i];
-
-        if (rProp.Name == "Suffix")
-        {
-            CPPUNIT_ASSERT(rProp.Value.get<OUString>().isEmpty());
-        }
-    }
-}
-
 CPPUNIT_TEST_FIXTURE(Test, testFdo45190)
 {
     load(mpTestDocumentPath, "fdo45190.rtf");
@@ -1364,26 +1343,6 @@ CPPUNIT_TEST_FIXTURE(Test, testFlip)
                                                             "CustomShapeGeometry");
     CPPUNIT_ASSERT(!aMap["MirroredX"].hasValue());
     CPPUNIT_ASSERT(!aMap["MirroredY"].hasValue());
-}
-
-CPPUNIT_TEST_FIXTURE(Test, testTdf78506)
-{
-    load(mpTestDocumentPath, "tdf78506.rtf");
-    uno::Reference<beans::XPropertySet> xPropertySet(
-        getStyles("NumberingStyles")->getByName("WWNum1"), uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xLevels(
-        xPropertySet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aProps;
-    xLevels->getByIndex(0) >>= aProps; // 1sd level
-
-    for (int i = 0; i < aProps.getLength(); ++i)
-    {
-        const beans::PropertyValue& rProp = aProps[i];
-
-        if (rProp.Name == "Suffix")
-            // This was '0', invalid \levelnumbers wasn't ignored.
-            CPPUNIT_ASSERT(rProp.Value.get<OUString>().isEmpty());
-    }
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf117403)

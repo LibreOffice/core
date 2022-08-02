@@ -247,7 +247,6 @@ enum PropertyIds
         ,PROP_POSITION_AND_SPACE_MODE
         ,PROP_POSITION_PROTECTED
         ,PROP_IS_PROTECTED
-        ,PROP_PREFIX
         ,PROP_REDLINE_AUTHOR
         ,PROP_REDLINE_DATE_TIME
         ,PROP_REDLINE_TYPE
@@ -272,7 +271,6 @@ enum PropertyIds
         ,PROP_START_WITH
         ,PROP_STREAM_NAME
         ,PROP_SUB_TYPE
-        ,PROP_SUFFIX
         ,PROP_SURROUND
         ,PROP_SURROUND_CONTOUR
         ,PROP_TABLE_BORDER
