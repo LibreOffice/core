@@ -30,6 +30,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/window.hxx>
+#include <vcl/scrollable.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/settings.hxx>
@@ -597,9 +598,9 @@ tools::Long Window::GetDrawPixel( OutputDevice const * pDev, tools::Long nPixels
     return nP;
 }
 
-static void lcl_HandleScrollHelper( ScrollBar* pScrl, double nN, bool isMultiplyByLineSize )
+static void lcl_HandleScrollHelper( Scrollable* pScrl, double nN, bool isMultiplyByLineSize )
 {
-    if ( !pScrl || !nN || !pScrl->IsEnabled() || !pScrl->IsInputEnabled() || pScrl->IsInModalMode() )
+    if (!pScrl || !nN || pScrl->Inactive())
         return;
 
     tools::Long nNewPos = pScrl->GetThumbPos();
@@ -625,7 +626,7 @@ static void lcl_HandleScrollHelper( ScrollBar* pScrl, double nN, bool isMultiply
 }
 
 bool Window::HandleScrollCommand( const CommandEvent& rCmd,
-                                  ScrollBar* pHScrl, ScrollBar* pVScrl )
+                                  Scrollable* pHScrl, Scrollable* pVScrl )
 {
     bool bRet = false;
 
@@ -639,13 +640,13 @@ bool Window::HandleScrollCommand( const CommandEvent& rCmd,
                 if ( pHScrl )
                 {
                     if ( (pHScrl->GetVisibleSize() < pHScrl->GetRangeMax()) &&
-                         pHScrl->IsEnabled() && pHScrl->IsInputEnabled() && ! pHScrl->IsInModalMode() )
+                         !pHScrl->Inactive() )
                         nFlags |= StartAutoScrollFlags::Horz;
                 }
                 if ( pVScrl )
                 {
                     if ( (pVScrl->GetVisibleSize() < pVScrl->GetRangeMax()) &&
-                         pVScrl->IsEnabled() && pVScrl->IsInputEnabled() && ! pVScrl->IsInModalMode() )
+                         !pVScrl->Inactive() )
                         nFlags |= StartAutoScrollFlags::Vert;
                 }
 
@@ -811,8 +812,8 @@ bool Window::HandleScrollCommand( const CommandEvent& rCmd,
 // horizontal or vertical scroll bar. nY is correspondingly either
 // the horizontal or vertical scroll amount.
 
-void Window::ImplHandleScroll( ScrollBar* pHScrl, double nX,
-                               ScrollBar* pVScrl, double nY )
+void Window::ImplHandleScroll( Scrollable* pHScrl, double nX,
+                               Scrollable* pVScrl, double nY )
 {
     lcl_HandleScrollHelper( pHScrl, nX, true );
     lcl_HandleScrollHelper( pVScrl, nY, true );

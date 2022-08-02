@@ -2510,7 +2510,9 @@ public:
     virtual void adjustment_set_upper(int upper) = 0;
     virtual int adjustment_get_page_size() const = 0;
     virtual void adjustment_set_page_size(int size) = 0;
+    virtual int adjustment_get_page_increment() const = 0;
     virtual void adjustment_set_page_increment(int size) = 0;
+    virtual int adjustment_get_step_increment() const = 0;
     virtual void adjustment_set_step_increment(int size) = 0;
     virtual int adjustment_get_lower() const = 0;
     virtual void adjustment_set_lower(int upper) = 0;

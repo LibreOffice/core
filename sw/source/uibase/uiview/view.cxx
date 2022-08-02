@@ -32,6 +32,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/inputctx.hxx>
+#include <vcl/scrbar.hxx>
 #include <svl/eitem.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/lingucfg.hxx>

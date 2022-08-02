@@ -74,16 +74,16 @@ static tools::Long GetLeftMargin( SwView const &rView )
 
 static void lcl_GetPos(SwView const * pView,
                 Point& rPos,
-                SwScrollbar const * pScrollbar,
+                const weld::Scrollbar& rScrollbar,
+                bool bHori,
                 bool bBorder)
 {
     SwWrtShell &rSh = pView->GetWrtShell();
     const Size aDocSz( rSh.GetDocSize() );
 
     const tools::Long lBorder = bBorder ? DOCUMENTBORDER : DOCUMENTBORDER * 2;
-    const bool bHori = pScrollbar->IsHoriScroll();
 
-    const tools::Long lPos = pScrollbar->GetThumbPos() + (bBorder ? DOCUMENTBORDER : 0);
+    const tools::Long lPos = rScrollbar.adjustment_get_value() + (bBorder ? DOCUMENTBORDER : 0);
 
     tools::Long lDelta = lPos - (bHori ? rSh.VisArea().Pos().X() : rSh.VisArea().Pos().Y());
 
@@ -669,30 +669,28 @@ bool SwView::PageDownCursor(bool bSelect)
 }
 
 // Handler of the scrollbars
-
-IMPL_LINK( SwView, ScrollHdl, ScrollBar *, p, void )
+IMPL_LINK(SwView, VertScrollHdl, weld::Scrollbar&, rScrollbar, void)
 {
-    SwScrollbar* pScrollbar = static_cast<SwScrollbar*>(p);
     if ( GetWrtShell().ActionPend() )
         return;
 
-    if ( pScrollbar->GetType() == ScrollType::Drag )
+    if (rScrollbar.get_scroll_type() == ScrollType::Drag)
         m_pWrtShell->EnableSmooth( false );
 
-    if(!m_pWrtShell->GetViewOptions()->getBrowseMode() &&
-        pScrollbar->GetType() == ScrollType::Drag)
+    if (!m_pWrtShell->GetViewOptions()->getBrowseMode() &&
+        rScrollbar.get_scroll_type() == ScrollType::Drag)
     {
         // Here comment out again if it is not desired to scroll together:
         // The end scrollhandler invalidate the FN_STAT_PAGE,
         // so we don't must do it again.
-        EndScrollHdl(pScrollbar);
+        EndScrollHdl(rScrollbar, false);
 
         if ( !m_bWheelScrollInProgress && Help::IsQuickHelpEnabled() &&
              m_pWrtShell->GetViewOptions()->IsShowScrollBarTips())
         {
 
             Point aPos( m_aVisArea.TopLeft() );
-            lcl_GetPos(this, aPos, pScrollbar, IsDocumentBorder());
+            lcl_GetPos(this, aPos, rScrollbar, false, IsDocumentBorder());
 
             sal_uInt16 nPhNum = 1;
             sal_uInt16 nVirtNum = 1;
@@ -711,10 +709,10 @@ IMPL_LINK( SwView, ScrollHdl, ScrollBar *, p, void )
                     if( !nPgNum || nPgNum != nPhNum )
                     {
                         tools::Rectangle aRect;
-                        aRect.SetLeft( pScrollbar->GetParent()->OutputToScreenPixel(
-                                            pScrollbar->GetPosPixel() ).X() -8 );
-                        aRect.SetTop( pScrollbar->OutputToScreenPixel(
-                                        pScrollbar->GetPointerPosPixel() ).Y() );
+                        aRect.SetLeft( m_pVScrollbar->GetParent()->OutputToScreenPixel(
+                                            m_pVScrollbar->GetPosPixel() ).X() -8 );
+                        aRect.SetTop( m_pVScrollbar->OutputToScreenPixel(
+                                        m_pVScrollbar->GetPointerPosPixel() ).Y() );
                         aRect.SetRight( aRect.Left() );
                         aRect.SetBottom( aRect.Top() );
 
@@ -731,7 +729,7 @@ IMPL_LINK( SwView, ScrollHdl, ScrollBar *, p, void )
                             sPageStr = sPageStr.replace(0x0a, ' ');
                         }
 
-                        Help::ShowQuickHelp( pScrollbar, aRect, sPageStr,
+                        Help::ShowQuickHelp(m_pVScrollbar, aRect, sPageStr,
                                         QuickHelpFlags::Right|QuickHelpFlags::VCenter);
                     }
                     nPgNum = nPhNum;
@@ -740,34 +738,37 @@ IMPL_LINK( SwView, ScrollHdl, ScrollBar *, p, void )
         }
     }
     else
-        EndScrollHdl(pScrollbar);
+        EndScrollHdl(rScrollbar, false);
 
-    if ( pScrollbar->GetType() == ScrollType::Drag )
+    if (rScrollbar.get_scroll_type() == ScrollType::Drag)
         m_pWrtShell->EnableSmooth( true );
 }
 
 // Handler of the scrollbars
-
-IMPL_LINK( SwView, EndScrollHdl, ScrollBar *, p, void )
+void SwView::EndScrollHdl(weld::Scrollbar& rScrollbar, bool bHorizontal)
 {
-    SwScrollbar* pScrollbar = static_cast<SwScrollbar*>(p);
     if ( GetWrtShell().ActionPend() )
         return;
 
     if(nPgNum)
     {
         nPgNum = 0;
-        Help::ShowQuickHelp(pScrollbar, tools::Rectangle(), OUString());
+        Help::ShowQuickHelp(bHorizontal ? m_pHScrollbar : m_pVScrollbar, tools::Rectangle(), OUString());
     }
     Point aPos( m_aVisArea.TopLeft() );
     bool bBorder = IsDocumentBorder();
-    lcl_GetPos(this, aPos, pScrollbar, bBorder);
+    lcl_GetPos(this, aPos, rScrollbar, bHorizontal, bBorder);
     if ( bBorder && aPos == m_aVisArea.TopLeft() )
         UpdateScrollbars();
     else
         SetVisArea( aPos, false );
 
     GetViewFrame()->GetBindings().Update(FN_STAT_PAGE);
+}
+
+IMPL_LINK(SwView, HoriScrollHdl, weld::Scrollbar&, rScrollBar, void)
+{
+    EndScrollHdl(rScrollBar, true);
 }
 
 // Calculates the size of the m_aVisArea in dependency of the size of

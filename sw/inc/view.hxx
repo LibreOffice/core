@@ -72,6 +72,7 @@ enum class SelectionType : sal_Int32;
 namespace com::sun::star::view { class XSelectionSupplier; }
 namespace sfx2 { class FileDialogHelper; }
 namespace sw::mark { class IFieldmark; }
+namespace weld { class Scrollbar; }
 
 const tools::Long nLeftOfst = -370;
 const tools::Long nScrollX  =   30;
@@ -298,8 +299,9 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SAL_DLLPRIVATE void          PhyPageDown();
 
     SAL_DLLPRIVATE void           CreateScrollbar( bool bHori );
-    DECL_DLLPRIVATE_LINK(  ScrollHdl, ScrollBar*, void );
-    DECL_DLLPRIVATE_LINK(  EndScrollHdl, ScrollBar*, void );
+    DECL_DLLPRIVATE_LINK(HoriScrollHdl, weld::Scrollbar&, void);
+    DECL_DLLPRIVATE_LINK(VertScrollHdl, weld::Scrollbar&, void);
+    SAL_DLLPRIVATE void EndScrollHdl(weld::Scrollbar& rScrollbar, bool bHorizontal);
     SAL_DLLPRIVATE bool          UpdateScrollbars();
     DECL_DLLPRIVATE_LINK( WindowChildEventListener, VclWindowEvent&, void );
     SAL_DLLPRIVATE void          CalcVisArea( const Size &rPixelSz );
