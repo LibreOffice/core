@@ -872,8 +872,8 @@ private:
     /// Name of the last opened bookmark.
     OString m_sLastOpenedBookmark;
 
-    /// Set of ids of the saved bookmarks (used only for moveRange, yet)
-    std::unordered_set<sal_Int32> m_rSavedBookmarksIds;
+    /// Set of ids of the saved moveFromRange/moveToRange bookmarks
+    std::unordered_set<sal_Int32> m_rSavedMoveRangeIds;
 
     /// Maps of the annotation marks ids
     std::map<OString, sal_Int32> m_rOpenedAnnotationMarksIds;

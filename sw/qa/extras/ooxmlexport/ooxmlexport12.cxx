@@ -1247,6 +1247,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf150166, "tdf150166.docx")
         assertXPath(pXmlDoc, "//w:moveFromRangeStart", 0);
         // This was 2 (missing RangeStart elements, but bad unpaired RangeEnds)
         assertXPath(pXmlDoc, "//w:moveFromRangeEnd", 0);
+
+        // These were 0 (moveFrom, moveTo and t)
+        assertXPath(pXmlDoc, "//w:del", 11);
+        assertXPath(pXmlDoc, "//w:ins", 12);
+        assertXPath(pXmlDoc, "//w:delText", 7);
+
+        // no more moveFrom/moveTo to avoid of problems with ToC
+        assertXPath(pXmlDoc, "//w:moveFrom", 0);
+        assertXPath(pXmlDoc, "//w:moveTo", 0);
     }
 }
 
