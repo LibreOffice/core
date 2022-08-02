@@ -22,6 +22,7 @@
 #include <sfx2/objface.hxx>
 #include <vcl/help.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
@@ -1240,7 +1241,7 @@ void SwPagePreview::CreateScrollbar( bool bHori )
     VclPtr<SwScrollbar>& ppScrollbar = bHori ? m_pHScrollbar : m_pVScrollbar;
 
     assert(!ppScrollbar); //check beforehand!
-
+#if 0
     ppScrollbar = VclPtr<SwScrollbar>::Create( pMDI, bHori );
 
     ScrollDocSzChg();
@@ -1251,6 +1252,7 @@ void SwPagePreview::CreateScrollbar( bool bHori )
 
     InvalidateBorder();
     ppScrollbar->ExtendedShow();
+#endif
 }
 
 bool SwPagePreview::ChgPage( int eMvMode, bool bUpdateScrollbar )
@@ -1386,6 +1388,7 @@ void SwPagePreview::SetVisArea( const tools::Rectangle &rRect )
     m_pViewWin->Invalidate();
 }
 
+#if 0
 IMPL_LINK( SwPagePreview, ScrollHdl, ScrollBar *, p, void )
 {
     SwScrollbar* pScrollbar = static_cast<SwScrollbar*>(p);
@@ -1421,9 +1424,11 @@ IMPL_LINK( SwPagePreview, ScrollHdl, ScrollBar *, p, void )
 
 IMPL_LINK( SwPagePreview, EndScrollHdl, ScrollBar *, p, void )
 {
-    SwScrollbar* pScrollbar = static_cast<SwScrollbar*>(p);
     if(!GetViewShell())
         return;
+
+#if 0 //TODO
+    SwScrollbar* pScrollbar = static_cast<SwScrollbar*>(p);
 
     // boolean to avoid unnecessary invalidation of the window.
     bool bInvalidateWin = true;
@@ -1508,7 +1513,9 @@ IMPL_LINK( SwPagePreview, EndScrollHdl, ScrollBar *, p, void )
     {
         m_pViewWin->Invalidate();
     }
+#endif
 }
+#endif
 
 Point SwPagePreview::AlignToPixel(const Point &rPt) const
 {
@@ -1803,8 +1810,10 @@ bool SwPagePreview::HandleWheelCommands( const CommandEvent& rCEvt )
         }
         bOk = true;
     }
+#if 0 // TODO
     else
         bOk = m_pViewWin->HandleScrollCommand( rCEvt, m_pHScrollbar, m_pVScrollbar );
+#endif
     return bOk;
 }
 

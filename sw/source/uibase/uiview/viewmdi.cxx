@@ -307,12 +307,12 @@ void SwView::CreateScrollbar( bool bHori )
     ppScrollbar = VclPtr<SwScrollbar>::Create( pMDI, bHori );
     UpdateScrollbars();
     if(bHori)
-        ppScrollbar->SetScrollHdl( LINK( this, SwView, EndScrollHdl ));
+        ppScrollbar->SetScrollHdl( LINK( this, SwView, HoriScrollHdl ));
     else
-        ppScrollbar->SetScrollHdl( LINK( this, SwView, ScrollHdl ));
-    ppScrollbar->SetEndScrollHdl( LINK( this, SwView, EndScrollHdl ));
+        ppScrollbar->SetScrollHdl( LINK( this, SwView, VertScrollHdl ));
+    //TODO? ppScrollbar->SetEndScrollHdl( LINK( this, SwView, EndScrollHdl ));
 
-    ppScrollbar->EnableDrag();
+    //TODO? ppScrollbar->EnableDrag();
 
     if(GetWindow())
         InvalidateBorder();

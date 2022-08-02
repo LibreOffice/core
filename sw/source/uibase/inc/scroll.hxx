@@ -18,15 +18,16 @@
  */
 #pragma once
 
-#include <vcl/scrbar.hxx>
+#include <vcl/InterimItemWindow.hxx>
 
-class SwScrollbar final : public ScrollBar
+class SwScrollbar final : public InterimItemWindow
 {
     Size    m_aDocSz;
     bool    m_bHori       :1;     // horizontal = salTrue, otherwise vertical
     bool    m_bAuto       :1;     // for scrolling mode
     bool    m_bVisible    :1;     // show/hide should only set this flag
     bool    m_bSizeSet    :1;     // was the size already set?
+    std::unique_ptr<weld::Scrollbar> m_xScrollBar;
 
     void    AutoShow();
 
@@ -36,7 +37,7 @@ class SwScrollbar final : public ScrollBar
 public:
     void    ExtendedShow( bool bVisible = true );
     void    SetPosSizePixel( const Point& rNewPos, const Size& rNewSize ) override;
-    bool    IsVisible(bool bReal) const { return bReal ? ScrollBar::IsVisible() : m_bVisible; }
+    bool    IsVisible(bool bReal) const { return bReal ? InterimItemWindow::IsVisible() : m_bVisible; }
 
         // changing of document size
     void    DocSzChgd(const Size &rNewSize);
@@ -47,6 +48,27 @@ public:
 
     void    SetAuto(bool bSet);
     bool    IsAuto() const { return m_bAuto;}
+
+    void    SetRange(const Range& rRange);
+    Range   GetRange() const;
+
+    void    SetRangeMax(tools::Long nNewRange);
+    tools::Long GetRangeMax() const;
+
+    void    SetLineSize(tools::Long nNewSize);
+
+    void    SetPageSize(tools::Long nNewSize);
+
+    void    SetVisibleSize(tools::Long nNewSize);
+    tools::Long GetVisibleSize() const;
+
+    void    SetThumbPos(tools::Long nThumbPos);
+    tools::Long GetThumbPos() const;
+
+    void SetScrollHdl(const Link<weld::Scrollbar&, void>& rLink)
+    {
+        m_xScrollBar->connect_adjustment_changed(rLink);
+    }
 
     SwScrollbar(vcl::Window *pParent, bool bHori );
     virtual ~SwScrollbar() override;
