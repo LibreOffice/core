@@ -935,7 +935,7 @@ Try:
 			&apos;	If a sheet with same name as input exists in the target sheet, rename it first with a random name
 			sRandom = &quot;&quot;
 			If ScriptForge.SF_Array.Contains(vSheets, .SheetName) Then
-				lRandom = ScriptForge.SF_Session.ExecuteCalcFunction(&quot;RANDBETWEEN&quot;, 1, 9999999)
+				lRandom = ScriptForge.SF_Session.ExecuteCalcFunction(&quot;RANDBETWEEN.NV&quot;, 1, 9999999)
 				sRandom = &quot;SF_&quot; &amp; Right(&quot;0000000&quot; &amp; lRandom, 7)
 				oSheets.getByName(.SheetName).setName(sRandom)
 			End If
@@ -944,7 +944,7 @@ Try:
 			&apos;	Rename to new sheet name
 			oSheets.getByName(.SheetName).setName(NewName)
 			&apos;	Reset random name
-			If Len(sRandom) &gt; 0 Then oSheets.getByName(srandom).setName(.SheetName)
+			If Len(sRandom) &gt; 0 Then oSheets.getByName(sRandom).setName(.SheetName)
 		End With
 	End If
 	bCopy = True
