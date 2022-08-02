@@ -489,6 +489,11 @@ void MSWordExportBase::NumberingLevel(
                 }
             }
         }
+        else
+        {
+            assert(false && "depricated format still exists and is unhandled. Inform Vasily or Justin");
+            SAL_WARN("writerfilter","Depricated numbering format lost on export. Use SetListFormat");
+        }
     }
 
     if (SVX_NUM_CHAR_SPECIAL == rFormat.GetNumberingType() ||

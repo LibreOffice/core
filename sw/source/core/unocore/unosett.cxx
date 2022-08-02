@@ -1303,22 +1303,24 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFormat
     nINT16 = rFormat.GetIncludeUpperLevels();
     aPropertyValues.push_back(comphelper::makePropertyValue("ParentNumbering", nINT16));
 
-    //prefix
-    OUString aUString = rFormat.GetPrefix();
-    aPropertyValues.push_back(comphelper::makePropertyValue("Prefix", aUString));
-
-    //suffix
-    aUString = rFormat.GetSuffix();
-    aPropertyValues.push_back(comphelper::makePropertyValue("Suffix", aUString));
-
     //listformat
     if (rFormat.HasListFormat())
     {
         aPropertyValues.push_back(comphelper::makePropertyValue("ListFormat", rFormat.GetListFormat()));
     }
+    else
+    {
+        //prefix
+        OUString aUString = rFormat.GetPrefix();
+        aPropertyValues.push_back(comphelper::makePropertyValue("Prefix", aUString));
+
+        //suffix
+        aUString = rFormat.GetSuffix();
+        aPropertyValues.push_back(comphelper::makePropertyValue("Suffix", aUString));
+    }
 
     //char style name
-    aUString.clear();
+    OUString aUString;
     SwStyleNameMapper::FillProgName( rCharFormatName, aUString, SwGetPoolIdFromName::ChrFmt);
     aPropertyValues.push_back(comphelper::makePropertyValue("CharStyleName", aUString));
 

@@ -559,6 +559,34 @@ OUString SvxNumberFormat::CreateRomanString( sal_Int32 nNo, bool bUpper )
                   : sRet.makeStringAndClear().toAsciiLowerCase();
 }
 
+void SvxNumberFormat::SetPrefix(const OUString& rSet)
+{
+    sPrefix = rSet;
+    assert (!sListFormat && "Do not use (depricated) SetPrefix together with SetListFormat.");
+    // ListFormat manages the prefix. If changed via this function, sListFormat is invalidated
+    if (sListFormat)
+        sListFormat.reset();
+}
+
+const OUString& SvxNumberFormat::GetPrefix() const
+{
+    return sPrefix;
+}
+
+void SvxNumberFormat::SetSuffix(const OUString& rSet)
+{
+    sSuffix = rSet;
+    assert (!sListFormat && "Do not use (depricated) SetSuffix together with SetListFormat.");
+    // ListFormat manages the suffix. If changed via this function, sListFormat is invalidated
+    if (sListFormat)
+        sListFormat.reset();
+}
+
+const OUString& SvxNumberFormat::GetSuffix() const
+{
+    return sSuffix;
+}
+
 void SvxNumberFormat::SetListFormat(const OUString& rPrefix, const OUString& rSuffix, int nLevel)
 {
     sPrefix = rPrefix;

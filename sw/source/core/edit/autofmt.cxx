@@ -1562,8 +1562,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                         aFormat.SetBulletChar( cBullChar );
                         aFormat.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
                         // #i93908# clear suffix for bullet lists
-                        aFormat.SetPrefix(OUString());
-                        aFormat.SetSuffix(OUString());
+                        aFormat.SetListFormat();
                         aFormat.SetFirstLineOffset( lBulletFirstLineOffset );
                         aFormat.SetAbsLSpace( nAbsPos );
                         if( !aFormat.GetCharFormat() )
@@ -1620,9 +1619,8 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                 if( !nDigitLevel )
                 {
                     SwNumFormat aFormat( aRule.Get( nLvl ) );
-                    aFormat.SetPrefix( aPrefix.getToken( 0, u'\x0001', nPrefixIdx ));
                     aFormat.SetStart( o3tl::narrowing<sal_uInt16>(o3tl::toInt32(o3tl::getToken(aPrefix, 0, u'\x0001', nPrefixIdx ))));
-                    aFormat.SetSuffix( aPostfix.getToken( 0, u'\x0001' ));
+                    aFormat.SetListFormat(aPrefix.getToken(0, u'\x0001', nPrefixIdx), aPostfix.getToken(0, u'\x0001'), nLvl);
                     aFormat.SetIncludeUpperLevels( 0 );
 
                     if( !aFormat.GetCharFormat() )
@@ -1644,10 +1642,9 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                     {
                         SwNumFormat aFormat( aRule.Get( n ) );
 
-                        if( !n )
-                            aFormat.SetPrefix( aPrefix.getToken( 0, u'\x0001', nPrefixIdx )); // token 0, read only on first loop
+                        const OUString sPrefix = n ? "" : aPrefix.getToken(0, u'\x0001', nPrefixIdx);
+                        aFormat.SetListFormat(sPrefix, aPostfix.getToken(0, u'\x0001', nPostfixIdx), n);
                         aFormat.SetStart( o3tl::narrowing<sal_uInt16>(o3tl::toInt32(o3tl::getToken(aPrefix, 0, u'\x0001', nPrefixIdx )) ));
-                        aFormat.SetSuffix( aPostfix.getToken( 0, u'\x0001', nPostfixIdx ));
                         aFormat.SetIncludeUpperLevels( MAXLEVEL );
                         if( n < aNumTypes.getLength() )
                             aFormat.SetNumberingType(static_cast<SvxNumType>(aNumTypes[ n ] - '0'));

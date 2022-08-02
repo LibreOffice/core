@@ -167,10 +167,10 @@ public:
 
     void            SetNumAdjust(SvxAdjust eSet) {eNumAdjust = eSet;}
     SvxAdjust       GetNumAdjust() const {return eNumAdjust;}
-    void            SetPrefix(const OUString& rSet) { sPrefix = rSet;}
-    const OUString& GetPrefix() const { return sPrefix;}
-    void            SetSuffix(const OUString& rSet) { sSuffix = rSet;}
-    const OUString& GetSuffix() const { return sSuffix;}
+    void            SetPrefix(const OUString& rSet);
+    const OUString& GetPrefix() const;
+    void            SetSuffix(const OUString& rSet);
+    const OUString& GetSuffix() const;
     // Based on prefix and suffix initialize them (for backward compatibility) and generate listformat string
     void            SetListFormat(const OUString& rPrefix, const OUString& rSuffix, int nLevel);
     void            SetListFormat(std::optional<OUString> oSet = std::nullopt);
