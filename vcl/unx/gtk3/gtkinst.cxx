@@ -8406,6 +8406,116 @@ public:
     }
 };
 
+class GtkInstanceScrollbar final : public GtkInstanceWidget, public virtual weld::Scrollbar
+{
+private:
+    GtkScrollbar* m_pScrollbar;
+    GtkAdjustment* m_pAdjustment;
+    gulong m_nAdjustChangedSignalId;
+
+    static void signalAdjustValueChanged(GtkAdjustment*, gpointer widget)
+    {
+        GtkInstanceScrollbar* pThis = static_cast<GtkInstanceScrollbar*>(widget);
+        SolarMutexGuard aGuard;
+        pThis->signal_adjustment_changed();
+    }
+
+public:
+    GtkInstanceScrollbar(GtkScrollbar* pScrollbar, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
+        : GtkInstanceWidget(GTK_WIDGET(pScrollbar), pBuilder, bTakeOwnership)
+        , m_pScrollbar(pScrollbar)
+#if GTK_CHECK_VERSION(4, 0, 0)
+        , m_pAdjustment(gtk_scrollbar_get_adjustment(m_pScrollbar))
+#else
+        , m_pAdjustment(gtk_range_get_adjustment(GTK_RANGE(m_pScrollbar)))
+#endif
+        , m_nAdjustChangedSignalId(g_signal_connect(m_pAdjustment, "value-changed", G_CALLBACK(signalAdjustValueChanged), this))
+    {
+    }
+
+    virtual void adjustment_configure(int value, int lower, int upper,
+                                       int step_increment, int page_increment,
+                                       int page_size) override
+    {
+        disable_notify_events();
+        gtk_adjustment_configure(m_pAdjustment, value, lower, upper, step_increment, page_increment, page_size);
+        enable_notify_events();
+    }
+
+    virtual int adjustment_get_value() const override
+    {
+        return gtk_adjustment_get_value(m_pAdjustment);
+    }
+
+    virtual void adjustment_set_value(int value) override
+    {
+        disable_notify_events();
+        gtk_adjustment_set_value(m_pAdjustment, value);
+        enable_notify_events();
+    }
+
+    virtual int adjustment_get_upper() const override
+    {
+         return gtk_adjustment_get_upper(m_pAdjustment);
+    }
+
+    virtual void adjustment_set_upper(int upper) override
+    {
+        disable_notify_events();
+        gtk_adjustment_set_upper(m_pAdjustment, upper);
+        enable_notify_events();
+    }
+
+    virtual int adjustment_get_lower() const override
+    {
+         return gtk_adjustment_get_lower(m_pAdjustment);
+    }
+
+    virtual void adjustment_set_lower(int lower) override
+    {
+        disable_notify_events();
+        gtk_adjustment_set_lower(m_pAdjustment, lower);
+        enable_notify_events();
+    }
+
+    virtual int adjustment_get_page_size() const override
+    {
+        return gtk_adjustment_get_page_size(m_pAdjustment);
+    }
+
+    virtual void adjustment_set_page_size(int size) override
+    {
+        gtk_adjustment_set_page_size(m_pAdjustment, size);
+    }
+
+    virtual void adjustment_set_page_increment(int size) override
+    {
+        gtk_adjustment_set_page_increment(m_pAdjustment, size);
+    }
+
+    virtual void adjustment_set_step_increment(int size) override
+    {
+        gtk_adjustment_set_step_increment(m_pAdjustment, size);
+    }
+
+    virtual void disable_notify_events() override
+    {
+        g_signal_handler_block(m_pAdjustment, m_nAdjustChangedSignalId);
+        GtkInstanceWidget::disable_notify_events();
+    }
+
+    virtual void enable_notify_events() override
+    {
+        GtkInstanceWidget::enable_notify_events();
+        g_signal_handler_unblock(m_pAdjustment, m_nAdjustChangedSignalId);
+    }
+
+    virtual ~GtkInstanceScrollbar() override
+    {
+        g_signal_handler_disconnect(m_pAdjustment, m_nAdjustChangedSignalId);
+    }
+};
+
 }
 
 namespace {
@@ -23720,6 +23830,15 @@ public:
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pToolbar));
         return std::make_unique<GtkInstanceToolbar>(pToolbar, this, false);
+    }
+
+    virtual std::unique_ptr<weld::Scrollbar> weld_scrollbar(const OString &id) override
+    {
+        GtkScrollbar* pScrollbar = GTK_SCROLLBAR(gtk_builder_get_object(m_pBuilder, id.getStr()));
+        if (!pScrollbar)
+            return nullptr;
+        auto_add_parentless_widgets_to_container(GTK_WIDGET(pScrollbar));
+        return std::make_unique<GtkInstanceScrollbar>(pScrollbar, this, false);
     }
 
     virtual std::unique_ptr<weld::SizeGroup> create_size_group() override

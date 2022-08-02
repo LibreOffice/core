@@ -2488,6 +2488,79 @@ IMPL_LINK_NOARG(SalInstanceScrolledWindow, HscrollHdl, ScrollBar*, void)
         m_aOrigHScrollHdl.Call(&m_xScrolledWindow->getHorzScrollBar());
 }
 
+namespace
+{
+class SalInstanceScrollbar : public SalInstanceWidget, public virtual weld::Scrollbar
+{
+private:
+    VclPtr<ScrollBar> m_xScrollBar;
+    Link<ScrollBar*, void> m_aOrigScrollHdl;
+
+    DECL_LINK(ScrollHdl, ScrollBar*, void);
+
+public:
+    SalInstanceScrollbar(ScrollBar* pScrollbar, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+        : SalInstanceWidget(pScrollbar, pBuilder, bTakeOwnership)
+        , m_xScrollBar(pScrollbar)
+    {
+        m_aOrigScrollHdl = m_xScrollBar->GetScrollHdl();
+        m_xScrollBar->SetScrollHdl(LINK(this, SalInstanceScrollbar, ScrollHdl));
+    }
+
+    virtual void adjustment_configure(int value, int lower, int upper, int step_increment,
+                                      int page_increment, int page_size) override
+    {
+        m_xScrollBar->SetRangeMin(lower);
+        m_xScrollBar->SetRangeMax(upper);
+        m_xScrollBar->SetLineSize(step_increment);
+        m_xScrollBar->SetPageSize(page_increment);
+        m_xScrollBar->SetThumbPos(value);
+        m_xScrollBar->SetVisibleSize(page_size);
+    }
+
+    virtual int adjustment_get_value() const override { return m_xScrollBar->GetThumbPos(); }
+
+    virtual void adjustment_set_value(int value) override
+    {
+        m_xScrollBar->SetThumbPos(value);
+        m_aOrigScrollHdl.Call(m_xScrollBar.get());
+    }
+
+    virtual int adjustment_get_upper() const override { return m_xScrollBar->GetRangeMax(); }
+
+    virtual void adjustment_set_upper(int upper) override { m_xScrollBar->SetRangeMax(upper); }
+
+    virtual int adjustment_get_lower() const override { return m_xScrollBar->GetRangeMin(); }
+
+    virtual void adjustment_set_lower(int lower) override { m_xScrollBar->SetRangeMin(lower); }
+
+    virtual int adjustment_get_page_size() const override { return m_xScrollBar->GetVisibleSize(); }
+
+    virtual void adjustment_set_page_size(int size) override
+    {
+        return m_xScrollBar->SetVisibleSize(size);
+    }
+
+    virtual void adjustment_set_page_increment(int size) override
+    {
+        return m_xScrollBar->SetPageSize(size);
+    }
+
+    virtual void adjustment_set_step_increment(int size) override
+    {
+        return m_xScrollBar->SetLineSize(size);
+    }
+
+    virtual ~SalInstanceScrollbar() override { m_xScrollBar->SetScrollHdl(m_aOrigScrollHdl); }
+};
+}
+
+IMPL_LINK_NOARG(SalInstanceScrollbar, ScrollHdl, ScrollBar*, void)
+{
+    signal_adjustment_changed();
+    m_aOrigScrollHdl.Call(m_xScrollBar.get());
+}
+
 SalInstanceNotebook::SalInstanceNotebook(TabControl* pNotebook, SalInstanceBuilder* pBuilder,
                                          bool bTakeOwnership)
     : SalInstanceWidget(pNotebook, pBuilder, bTakeOwnership)
@@ -7353,6 +7426,12 @@ std::unique_ptr<weld::Toolbar> SalInstanceBuilder::weld_toolbar(const OString& i
 {
     ToolBox* pToolBox = m_xBuilder->get<ToolBox>(id);
     return pToolBox ? std::make_unique<SalInstanceToolbar>(pToolBox, this, false) : nullptr;
+}
+
+std::unique_ptr<weld::Scrollbar> SalInstanceBuilder::weld_scrollbar(const OString& id)
+{
+    ScrollBar* pScrollbar = m_xBuilder->get<ScrollBar>(id);
+    return pScrollbar ? std::make_unique<SalInstanceScrollbar>(pScrollbar, this, false) : nullptr;
 }
 
 std::unique_ptr<weld::SizeGroup> SalInstanceBuilder::create_size_group()

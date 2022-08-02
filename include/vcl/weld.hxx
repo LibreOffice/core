@@ -2493,6 +2493,31 @@ public:
     void connect_menu_toggled(const Link<const OString&, void>& rLink) { m_aToggleMenuHdl = rLink; }
 };
 
+class VCL_DLLPUBLIC Scrollbar : virtual public Widget
+{
+protected:
+    Link<Scrollbar&, void> m_aChangeHdl;
+
+    void signal_adjustment_changed() { m_aChangeHdl.Call(*this); }
+
+public:
+    virtual void adjustment_configure(int value, int lower, int upper, int step_increment,
+                                      int page_increment, int page_size)
+        = 0;
+    virtual int adjustment_get_value() const = 0;
+    virtual void adjustment_set_value(int value) = 0;
+    virtual int adjustment_get_upper() const = 0;
+    virtual void adjustment_set_upper(int upper) = 0;
+    virtual int adjustment_get_page_size() const = 0;
+    virtual void adjustment_set_page_size(int size) = 0;
+    virtual void adjustment_set_page_increment(int size) = 0;
+    virtual void adjustment_set_step_increment(int size) = 0;
+    virtual int adjustment_get_lower() const = 0;
+    virtual void adjustment_set_lower(int upper) = 0;
+
+    void connect_adjustment_changed(const Link<Scrollbar&, void>& rLink) { m_aChangeHdl = rLink; }
+};
+
 class VCL_DLLPUBLIC SizeGroup
 {
 public:
@@ -2555,6 +2580,7 @@ public:
     virtual std::unique_ptr<Menu> weld_menu(const OString& id) = 0;
     virtual std::unique_ptr<Popover> weld_popover(const OString& id) = 0;
     virtual std::unique_ptr<Toolbar> weld_toolbar(const OString& id) = 0;
+    virtual std::unique_ptr<Scrollbar> weld_scrollbar(const OString& id) = 0;
     virtual std::unique_ptr<SizeGroup> create_size_group() = 0;
     /* return a Dialog suitable to take a screenshot of containing the contents of the .ui file.
 
