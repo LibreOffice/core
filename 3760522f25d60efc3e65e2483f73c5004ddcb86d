@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15702ce7_3b7e46dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-08-02T08:55:46Z",
+      "side": 1,
+      "message": "Vasily - what do you think about this? Is the right direction? Or is it better to have an empty-but-not-null value for bullets?",
+      "revId": "3760522f25d60efc3e65e2483f73c5004ddcb86d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
