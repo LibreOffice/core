@@ -35,6 +35,8 @@
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
 #include <wrtsh.hxx>
+#include <IDocumentLayoutAccess.hxx>
+#include <rootfrm.hxx>
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/ooxmlexport/data/";
 
@@ -1053,9 +1055,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf149313, "tdf149313.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4989), getXPath(pXmlDoc, "/root/page[2]/infos/bounds", "height").toInt32());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8000), getXPath(pXmlDoc, "/root/page[2]/infos/bounds", "width").toInt32());
 }
-
-#include <IDocumentLayoutAccess.hxx>
-#include <rootfrm.hxx>
 
 DECLARE_OOXMLEXPORT_TEST(testTdf148360, "tdf148360.docx")
 {
