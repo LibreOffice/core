@@ -53,6 +53,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b992bb0f_227f1476",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-08-02T06:15:23Z",
+      "side": 1,
+      "message": "\u003e I don\u0027t like these uitests.\n\nFair enough! You can\u0027t avoid uitests when you want to test how vcl widgets work, but in this case it may be the case that you can cover the same functionality with cppunit. I would suggest to get this fix in as-is, but if you are interested, you can try to convert the uitest to a cppunit test in a follow-up change.\n\nSee how sd/qa/unit/uiimpress.cxx:257 uses MarkObj() to select a shape and then dispatches an uno command to begin the text edit on that shape. And then possibly calling functions on that EditView would allow you to do the same as what what the uitest currently does.",
+      "parentUuid": "e81403b5_4fac0cf4",
+      "revId": "778172be2aac6816b36f36642e4c7b2ef8f5b483",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2f64fbb9_d2f441d9",
