@@ -62,7 +62,7 @@ protected:
 
 public:
     MessBox(vcl::Window* pParent, MessBoxStyle nMessBoxStyle, WinBits n, const OUString& rTitle,
-            const OUString& rMessage);
+            OUString rMessage);
     virtual ~MessBox() override;
     virtual void dispose() override;
 

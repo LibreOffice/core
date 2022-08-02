@@ -26,6 +26,7 @@
 #include <toolkit/helper/property.hxx>
 #include <algorithm>
 #include <functional>
+#include <utility>
 
 
 #define GCM_PROPERTY_ID_POS_X               1
@@ -455,9 +456,9 @@ constexpr OUStringLiteral GCM_PROPERTY_RESOURCERESOLVER = u"ResourceResolver";
     // service specifier.
 
 
-    OCommonGeometryControlModel::OCommonGeometryControlModel( Reference< XCloneable >& _rxAgg, const OUString& _rServiceSpecifier )
+    OCommonGeometryControlModel::OCommonGeometryControlModel( Reference< XCloneable >& _rxAgg, OUString _aServiceSpecifier )
         :OGeometryControlModel_Base( _rxAgg )
-        ,m_sServiceSpecifier( _rServiceSpecifier )
+        ,m_sServiceSpecifier(std::move( _aServiceSpecifier ))
         ,m_nPropertyMapId( 0 )
     {
         Reference< XPropertySetInfo > xPI;
