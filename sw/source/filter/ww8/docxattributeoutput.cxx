@@ -1967,19 +1967,19 @@ void DocxAttributeOutput::DoWriteMoveRangeTagStart(const OString & bookmarkName,
     m_pSerializer->singleElementNS( XML_w, bFrom ? XML_moveFromRangeStart : XML_moveToRangeStart, pAttributeList );
 
     // tdf#150166 avoid of unpaired moveRangeEnd at moved ToC
-    m_rSavedBookmarksIds.insert(m_nNextBookmarkId);
+    m_rSavedMoveRangeIds.insert(m_nNextBookmarkId);
 }
 
 void DocxAttributeOutput::DoWriteMoveRangeTagEnd(sal_Int32 const nId, bool bFrom)
 {
-    if ( m_rSavedBookmarksIds.count(nId) )
+    if ( m_rSavedMoveRangeIds.count(nId) )
     {
         m_pSerializer->singleElementNS(XML_w, bFrom
                 ? XML_moveFromRangeEnd
                 : XML_moveToRangeEnd,
             FSNS(XML_w, XML_id), OString::number(nId));
 
-        m_rSavedBookmarksIds.erase(nId);
+        m_rSavedMoveRangeIds.erase(nId);
     }
 }
 
@@ -3404,8 +3404,8 @@ void DocxAttributeOutput::RunText( const OUString& rText, rtl_TextEncoding /*eCh
 
     // the text run is usually XML_t, with the exception of the deleted (and not moved) text
     sal_Int32 nTextToken = XML_t;
-    if ( m_pRedlineData && !m_pRedlineData->IsMoved() &&
-            m_pRedlineData->GetType() == RedlineType::Delete )
+    bool bMoved = m_pRedlineData && m_pRedlineData->IsMoved() && !m_rSavedMoveRangeIds.empty();
+    if ( !bMoved && m_pRedlineData->GetType() == RedlineType::Delete )
     {
         nTextToken = XML_delText;
     }
@@ -3809,7 +3809,8 @@ void DocxAttributeOutput::StartRedline( const SwRedlineData * pRedlineData )
     const DateTime aDateTime = pRedlineData->GetTimeStamp();
     bool bNoDate = bRemovePersonalInfo ||
         ( aDateTime.GetYear() == 1970 && aDateTime.GetMonth() == 1 && aDateTime.GetDay() == 1 );
-    bool bMoved = pRedlineData->IsMoved();
+    bool bMoved = pRedlineData->IsMoved() && !m_rSavedMoveRangeIds.empty();
+
     switch ( pRedlineData->GetType() )
     {
         case RedlineType::Insert:
@@ -3842,7 +3843,7 @@ void DocxAttributeOutput::EndRedline( const SwRedlineData * pRedlineData )
     if ( !pRedlineData || m_bWritingField )
         return;
 
-    bool bMoved = pRedlineData->IsMoved();
+    bool bMoved = pRedlineData->IsMoved() && !m_rSavedMoveRangeIds.empty();
     switch ( pRedlineData->GetType() )
     {
         case RedlineType::Insert:
