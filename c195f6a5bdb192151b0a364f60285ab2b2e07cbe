@@ -33,6 +33,47 @@
       "message": "Hi Tomaz, I asked on the mailing list about this one but noone responded. What are your thoughts?",
       "revId": "c195f6a5bdb192151b0a364f60285ab2b2e07cbe",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e063b156_03cb6bd2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-08-02T07:29:46Z",
+      "side": 1,
+      "message": "Justify sounds weird to me, Normalize is more common IMHO, so this patch makes sense to me. \n\nBut then I would rather that this method wouldn\u0027t exist at all - the amount of time we call Justify \"just in case\" is just ridiculous. It\u0027s either needed or it\u0027s not and even if it is needed, there should be a very good reason why.",
+      "parentUuid": "81c58492_5b8f8027",
+      "revId": "c195f6a5bdb192151b0a364f60285ab2b2e07cbe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bdbc840c_f2ec18d4",
+        "filename": "tools/qa/cppunit/test_rectangle.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-08-02T07:29:46Z",
+      "side": 1,
+      "message": "Can you inline what is the expected value - reading this is hard as I need to always check the expected value at a different place in the code.",
+      "range": {
+        "startLine": 161,
+        "startChar": 71,
+        "endLine": 161,
+        "endChar": 72
+      },
+      "revId": "c195f6a5bdb192151b0a364f60285ab2b2e07cbe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
