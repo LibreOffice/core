@@ -1598,8 +1598,7 @@ static bool lcl_GotoNextPrevNum( SwPosition& rPos, bool bNext,
         }
         else
         {
-            rPos.nNode.Assign( *pLast );
-            rPos.nContent.Assign( pLast, 0 );
+            rPos.Assign( *pLast );
         }
         bRet = true;
     }

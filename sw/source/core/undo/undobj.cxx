@@ -789,8 +789,7 @@ void SwUndoSaveContent::MoveFromUndoNds( SwDoc& rDoc, SwNodeOffset nNodeIdx,
     if (!pEndNdIdx && pTextNd)
     {
         aPaM.SetMark();
-        aPaM.GetPoint()->nNode = nNodeIdx;
-        aPaM.GetPoint()->nContent.Assign(aPaM.GetContentNode(), 0);
+        aPaM.GetPoint()->Assign(nNodeIdx, 0);
 
         SaveRedlEndPosForRestore aRedlRest( rInsPos.nNode, rInsPos.GetContentIndex() );
 

@@ -1357,7 +1357,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 
         for( const auto &rPt : aPosArr )
         {
-            aPam.GetPoint()->nNode.Assign( *rPt.pSelBox->GetSttNd()->
+            aPam.GetPoint()->Assign( *rPt.pSelBox->GetSttNd()->
                                             EndOfSectionNode(), SwNodeOffset(-1) );
             SwContentNode* pCNd = aPam.GetContentNode();
             aPam.GetPoint()->nContent.Assign( pCNd, pCNd ? pCNd->Len() : 0 );
