@@ -221,7 +221,7 @@ namespace com::sun::star {
         */
         OCommonGeometryControlModel(
                     css::uno::Reference< css::util::XCloneable >& _rxAgg,
-            const   OUString& _rxServiceSpecifier
+            OUString _aServiceSpecifier
         );
 
         // OIdPropertyArrayUsageHelper overridables
