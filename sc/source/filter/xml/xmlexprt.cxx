@@ -108,6 +108,7 @@
 
 #include <tools/color.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/diagnose_ex.h>
 #include <rtl/math.hxx>
 #include <svl/zforlist.hxx>
 #include <svx/unoshape.hxx>
@@ -3453,16 +3454,23 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
                                 uno::Sequence< OUString > aRepresentations(
                                     xReceiver->getUsedRangeRepresentations());
                                 SvXMLAttributeList* pAttrList = nullptr;
-                                if(aRepresentations.getLength())
+                                try
                                 {
-                                    // add the ranges used by the chart to the shape
-                                    // element to be able to start listening after
-                                    // load (when the chart is not yet loaded)
-                                    uno::Reference< chart2::data::XRangeXMLConversion > xRangeConverter( xChartDoc->getDataProvider(), uno::UNO_QUERY );
-                                    sRanges = lcl_RangeSequenceToString( aRepresentations, xRangeConverter );
-                                    pAttrList = new SvXMLAttributeList();
-                                    pAttrList->AddAttribute(
-                                        GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_DRAW, GetXMLToken(XML_NOTIFY_ON_UPDATE_OF_RANGES) ), sRanges );
+                                    if (aRepresentations.getLength())
+                                    {
+                                        // add the ranges used by the chart to the shape
+                                        // element to be able to start listening after
+                                        // load (when the chart is not yet loaded)
+                                        uno::Reference< chart2::data::XRangeXMLConversion > xRangeConverter( xChartDoc->getDataProvider(), uno::UNO_QUERY );
+                                        sRanges = lcl_RangeSequenceToString( aRepresentations, xRangeConverter );
+                                        pAttrList = new SvXMLAttributeList();
+                                        pAttrList->AddAttribute(
+                                            GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_DRAW, GetXMLToken(XML_NOTIFY_ON_UPDATE_OF_RANGES) ), sRanges );
+                                    }
+                                }
+                                catch (const lang::IllegalArgumentException&)
+                                {
+                                    //TOOLS_WARN_EXCEPTION("sc", "Exception in lcl_RangeSequenceToString - invalid range?");
                                 }
                                 GetShapeExport()->exportShape(xShape, XMLShapeExportFlags::NO_CHART_DATA | SEF_DEFAULT, pPoint, pAttrList);
                             }
