@@ -624,19 +624,9 @@ void OutputDevice::DrawTransformedBitmapEx(
         aTransformed = BitmapEx(aContent, aMaskBmp);
     }
 
-    // Remove scaling from aFulltransform: we transform due to shearing or rotation, scaling
-    // will happen according to aDestSize.
     basegfx::B2DVector aFullScale, aFullTranslate;
     double fFullRotate, fFullShearX;
     aFullTransform.decompose(aFullScale, aFullTranslate, fFullRotate, fFullShearX);
-    // Require positive scaling, negative scaling would loose horizontal or vertical flip.
-    if (aFullScale.getX() > 0 && aFullScale.getY() > 0)
-    {
-        basegfx::B2DHomMatrix aTransform = basegfx::utils::createScaleB2DHomMatrix(
-            rOriginalSizePixel.getWidth() / aFullScale.getX(),
-            rOriginalSizePixel.getHeight() / aFullScale.getY());
-        aFullTransform *= aTransform;
-    }
 
     double fSourceRatio = 1.0;
     if (rOriginalSizePixel.getHeight() != 0)
