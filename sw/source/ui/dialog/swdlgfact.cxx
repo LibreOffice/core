@@ -120,6 +120,11 @@ short AbstractSplitTableDialog_Impl::Execute()
     return m_xDlg->run();
 }
 
+bool AbstractSplitTableDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return weld::GenericDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 short AbstractSwTableWidthDlg_Impl::Execute()
 {
     return m_xDlg->run();
