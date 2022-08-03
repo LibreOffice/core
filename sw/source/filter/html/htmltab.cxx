@@ -2630,9 +2630,7 @@ const SwStartNode *SwHTMLParser::InsertTableSection( sal_uInt16 nPoolId )
         pStNd = m_xDoc->GetNodes().MakeTextSection( aIdx, SwTableBoxStartNode,
                                                   pColl );
 
-        m_pPam->GetPoint()->nNode = pStNd->GetIndex() + 1;
-        SwTextNode *pTextNd = m_pPam->GetPoint()->GetNode().GetTextNode();
-        m_pPam->GetPoint()->nContent.Assign( pTextNd, 0 );
+        m_pPam->GetPoint()->Assign( pStNd->GetIndex() + 1 );
         m_xTable->IncBoxCount();
     }
 

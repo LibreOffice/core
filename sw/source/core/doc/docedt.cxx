@@ -79,9 +79,8 @@ void RestFlyInRange( SaveFlyArr & rArr, const SwPosition& rStartPos,
             }
             else
             {
-                aPos.nNode = rStartPos.nNode;
+                aPos.Assign(rStartPos.nNode);
                 assert(aPos.GetNode().GetContentNode());
-                aPos.nContent.Assign(aPos.GetNode().GetContentNode(), 0);
             }
         }
         else
@@ -150,8 +149,7 @@ void SaveFlyInRange( const SwPaM& rPam, const SwPosition& rInsPos,
     {
         assert(!rPam.End()->GetNode().IsTextNode() // can be table end-node
             || rPam.End()->GetContentIndex() == rPam.End()->GetNode().GetTextNode()->Len());
-        ++atParaEnd.nNode;
-        atParaEnd.nContent.Assign(atParaEnd.GetNode().GetContentNode(), 0);
+        atParaEnd.Adjust(SwNodeOffset(1));
     }
 
     for( SwFrameFormats::size_type n = 0; n < rFormats.size(); ++n )

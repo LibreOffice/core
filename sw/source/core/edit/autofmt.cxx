@@ -999,8 +999,7 @@ CHECK_ROMAN_5:
 void SwAutoFormat::SetColl( sal_uInt16 nId, bool bHdLineOrText )
 {
     m_aDelPam.DeleteMark();
-    m_aDelPam.GetPoint()->nNode = *m_pCurTextFrame->GetTextNodeForParaProps();
-    m_aDelPam.GetPoint()->nContent.Assign(m_aDelPam.GetPoint()->GetNode().GetContentNode(), 0);
+    m_aDelPam.GetPoint()->Assign( *m_pCurTextFrame->GetTextNodeForParaProps() );
 
     // keep hard tabs, alignment, language, hyphenation, DropCaps and nearly all frame attributes
     SfxItemSetFixed<
@@ -1329,8 +1328,7 @@ void SwAutoFormat::DelMoreLinesBlanks( bool bWithLineBreaks )
 void SwAutoFormat::JoinPrevPara()
 {
     m_aDelPam.DeleteMark();
-    m_aDelPam.GetPoint()->nNode = *m_pCurTextFrame->GetTextNodeFirst();
-    m_aDelPam.GetPoint()->nContent.Assign(m_pCurTextFrame->GetTextNodeFirst(), 0);
+    m_aDelPam.GetPoint()->Assign( *m_pCurTextFrame->GetTextNodeFirst() );
     m_aDelPam.SetMark();
 
     --m_aDelPam.GetPoint()->nNode;
@@ -1898,8 +1896,7 @@ void SwAutoFormat::BuildHeadLine( sal_uInt16 nLvl )
             pNextFrame = GetNextNode(false);
         }
         m_aDelPam.DeleteMark();
-        m_aDelPam.GetPoint()->nNode = *pNextFrame->GetTextNodeForParaProps();
-        m_aDelPam.GetPoint()->nContent.Assign( m_aDelPam.GetContentNode(), 0 );
+        m_aDelPam.GetPoint()->Assign( *pNextFrame->GetTextNodeForParaProps() );
         m_pDoc->SetTextFormatColl( m_aDelPam, &rNxtColl );
     }
     else

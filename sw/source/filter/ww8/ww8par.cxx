@@ -2107,8 +2107,7 @@ void SwWW8ImplReader::Read_HdFtFootnoteText( const SwNodeIndex* pSttIdx,
     // Saves Flags (amongst other things) and resets them
     WW8ReaderSave aSave( this );
 
-    m_pPaM->GetPoint()->nNode = pSttIdx->GetIndex() + 1;
-    m_pPaM->GetPoint()->nContent.Assign( m_pPaM->GetContentNode(), 0 );
+    m_pPaM->GetPoint()->Assign( pSttIdx->GetIndex() + 1 );
 
     // Read Text for Header, Footer or Footnote
     ReadText( nStartCp, nLen, nType ); // Ignore Sepx when doing so
@@ -2203,8 +2202,7 @@ void SwWW8ImplReader::Read_HdFtTextAsHackedFrame(WW8_CP nStart, WW8_CP nLen,
 
     SwPosition aTmpPos(*m_pPaM->GetPoint());
 
-    m_pPaM->GetPoint()->nNode = pSttIdx->GetIndex() + 1;
-    m_pPaM->GetPoint()->nContent.Assign(m_pPaM->GetContentNode(), 0);
+    m_pPaM->GetPoint()->Assign( pSttIdx->GetIndex() + 1 );
 
     // tdf#122425: Explicitly remove borders and spacing
     SfxItemSetFixed<RES_FRMATR_BEGIN, RES_FRMATR_END - 1> aFlySet(m_rDoc.GetAttrPool());
@@ -5239,8 +5237,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
             SwStartNode *pNode =
                 m_rDoc.GetNodes().MakeTextSection(aIdx,
                 SwNormalStartNode,pColl);
-            m_pPaM->GetPoint()->nNode = pNode->GetIndex()+1;
-            m_pPaM->GetPoint()->nContent.Assign(m_pPaM->GetContentNode(),0);
+            m_pPaM->GetPoint()->Assign( pNode->GetIndex()+1 );
             aPlc.Get( nStart, nEnd, pDummy );
             ReadText(nStart,nEnd-nStart-1,MAN_MAINTEXT);
         }
@@ -6363,7 +6360,6 @@ bool TestImportDOC(SvStream &rStream, const OUString &rFltName)
 
     SwNodeIndex aIdx(pD->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
-    aPaM.GetPoint()->nContent.Assign(aIdx.GetNode().GetContentNode(), 0);
     pD->SetInReading(true);
     bool bRet = xReader->Read(*pD, OUString(), aPaM, OUString()) == ERRCODE_NONE;
     pD->SetInReading(false);

@@ -2324,8 +2324,7 @@ void SwWW8ImplReader::MoveInsideFly(const SwFrameFormat *pFlyFormat)
     // set Pam in FlyFrame
     const SwFormatContent& rContent = pFlyFormat->GetContent();
     OSL_ENSURE( rContent.GetContentIdx(), "No content prepared." );
-    m_pPaM->GetPoint()->nNode = rContent.GetContentIdx()->GetIndex() + 1;
-    m_pPaM->GetPoint()->nContent.Assign( m_pPaM->GetContentNode(), 0 );
+    m_pPaM->GetPoint()->Assign( rContent.GetContentIdx()->GetIndex() + 1 );
 
     aDup.Insert(*m_pPaM->GetPoint());
 }

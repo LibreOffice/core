@@ -1620,8 +1620,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
         }
         if( !bSplitDestNd )
         {
-            ++rPos.nNode;
-            rPos.nContent.Assign( rPos.GetNode().GetContentNode(), 0 );
+            rPos.Adjust(SwNodeOffset(1));
         }
     }
 

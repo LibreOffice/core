@@ -86,6 +86,9 @@ struct SAL_WARN_UNUSED SW_DLLPUBLIC SwPosition
     void Assign( const SwNode& rNd, SwNodeOffset nDelta, sal_Int32 nContentOffset = 0 );
     void Assign( SwNodeOffset nNodeOffset, sal_Int32 nContentOffset = 0 );
     void Assign( const SwNode& rNd );
+    void Assign( const SwNodeIndex& rNdIdx );
+    /// Adjust node position, and resets content position to zero
+    void Adjust( SwNodeOffset nDelta );
 };
 
 SW_DLLPUBLIC std::ostream &operator <<(std::ostream& s, const SwPosition& position);

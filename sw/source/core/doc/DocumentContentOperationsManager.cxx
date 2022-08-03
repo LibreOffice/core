@@ -876,8 +876,8 @@ namespace
     {
         SwDoc& rDoc = rRg.aStart.GetNode().GetDoc();
         SwRedlineTable::size_type nRedlPos;
-        SwPosition aSrchPos( rRg.aStart ); aSrchPos.nNode--;
-        aSrchPos.nContent.Assign( aSrchPos.GetNode().GetContentNode(), 0 );
+        SwPosition aSrchPos( rRg.aStart );
+        aSrchPos.Adjust(SwNodeOffset(-1));
         if( rDoc.getIDocumentRedlineAccess().GetRedline( aSrchPos, &nRedlPos ) && nRedlPos )
             --nRedlPos;
         else if( nRedlPos >= rDoc.getIDocumentRedlineAccess().GetRedlineTable().size() )
@@ -2468,8 +2468,7 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
     const bool bNullContent = !bSplit && aSavePam.GetPoint()->nContent == 0;
     if( bNullContent )
     {
-        aSavePam.GetPoint()->nNode--;
-        aSavePam.GetPoint()->nContent.Assign(aSavePam.GetContentNode(), 0);
+        aSavePam.GetPoint()->Adjust(SwNodeOffset(-1));
     }
     else
     {
@@ -2526,8 +2525,7 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
     }
     if (bNullContent)
     {
-        aSavePam.GetPoint()->nNode++;
-        aSavePam.GetPoint()->nContent.Assign( aSavePam.GetContentNode(), 0 );
+        aSavePam.GetPoint()->Adjust(SwNodeOffset(1));
     }
     else if (bRemove) // No move forward after joining with next paragraph
     {
@@ -5215,8 +5213,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
                 pEnd->nContent = 0; // TODO why this?
                 CopyWithFlyInFly(aRg, aInsPos, &tmp, /*bMakeNewFrames*/true, false, /*bCopyFlyAtFly=*/false, flags);
                 ++aSaveIdx;
-                pEnd->nNode = aSaveIdx;
-                pEnd->nContent.Assign( aSaveIdx.GetNode().GetTextNode(), 0 );
+                pEnd->Assign(aSaveIdx);
             }
             else
                 CopyWithFlyInFly(aRg, aInsPos, &tmp, /*bMakeNewFrames*/true, false, /*bCopyFlyAtFly=*/false, flags);

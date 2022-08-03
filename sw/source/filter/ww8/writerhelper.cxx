@@ -123,12 +123,6 @@ namespace
             else
             {
                 SwPosition aPos(rpFly->GetNdIndex());
-
-                if (SwTextNode* pTextNd = aPos.GetNode().GetTextNode())
-                {
-                    aPos.nContent.Assign(pTextNd, 0);
-                }
-
                 aRet.emplace_back(rEntry, aPos);
             }
         }

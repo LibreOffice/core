@@ -699,9 +699,7 @@ bool SwNoTextFrame::GetCharRect( SwRect &rRect, const SwPosition& rPos,
 bool SwNoTextFrame::GetModelPositionForViewPoint(SwPosition* pPos, Point& ,
                              SwCursorMoveState*, bool ) const
 {
-    SwContentNode* pCNd = const_cast<SwContentNode*>(GetNode());
-    pPos->nNode = *pCNd;
-    pPos->nContent.Assign( pCNd, 0 );
+    pPos->Assign(*GetNode());
     return true;
 }
 

@@ -2498,8 +2498,7 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pCurrentCursor )
             SwPaM *const pNew = (!pCurrentCursor->IsMultiSelection() && !pCurrentCursor->HasMark())
                 ? pCurrentCursor
                 : pCurrentCursor->Create( pCurrentCursor );
-            pNew->GetPoint()->nNode = *pNd;
-            pNew->GetPoint()->nContent.Assign( static_cast<SwContentNode*>(pNd), 0 );
+            pNew->GetPoint()->Assign( *pNd );
             pNew->SetMark();
 
             SwPosition* pPos = pNew->GetPoint();
@@ -2602,14 +2601,12 @@ void SwTableCursor::ParkCursor()
     SwNode* pNd = &GetPoint()->GetNode();
     if( !pNd->IsStartNode() )
         pNd = pNd->StartOfSectionNode();
-    GetPoint()->nNode = *pNd;
-    GetPoint()->nContent.Assign( nullptr, 0 );
+    GetPoint()->Assign(*pNd);
 
     pNd = &GetMark()->GetNode();
     if( !pNd->IsStartNode() )
         pNd = pNd->StartOfSectionNode();
-    GetMark()->nNode = *pNd;
-    GetMark()->nContent.Assign( nullptr, 0 );
+    GetMark()->Assign(*pNd);
 
     m_bChanged = true;
     m_bParked = true;
