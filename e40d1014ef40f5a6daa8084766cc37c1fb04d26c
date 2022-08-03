@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1f64603_6ef823b2",
+        "filename": "i18npool/source/breakiterator/breakiteratorImpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-08-03T13:43:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3dc14ee1_dcd832c5",
+      "revId": "e40d1014ef40f5a6daa8084766cc37c1fb04d26c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5964df67_b3db3cc2",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-08-01T13:22:40Z",
       "side": 1,
       "message": "Ditto.",
+      "revId": "e40d1014ef40f5a6daa8084766cc37c1fb04d26c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84f134a4_3970cfa6",
+        "filename": "i18npool/source/breakiterator/breakiteratorImpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-08-03T13:43:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5964df67_b3db3cc2",
       "revId": "e40d1014ef40f5a6daa8084766cc37c1fb04d26c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -52,6 +88,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2c812d8_2acce0c4",
+        "filename": "i18npool/source/breakiterator/breakiteratorImpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-08-03T13:43:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ec920aea_81567353",
+      "revId": "e40d1014ef40f5a6daa8084766cc37c1fb04d26c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1cc537e3_a44de0c6",
@@ -65,6 +119,24 @@
       "writtenOn": "2022-08-01T13:22:40Z",
       "side": 1,
       "message": "Ditto.",
+      "revId": "e40d1014ef40f5a6daa8084766cc37c1fb04d26c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d477fe3_8887f8f7",
+        "filename": "i18npool/source/breakiterator/breakiteratorImpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-08-03T13:43:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1cc537e3_a44de0c6",
       "revId": "e40d1014ef40f5a6daa8084766cc37c1fb04d26c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
