@@ -1986,8 +1986,10 @@ bool SwDocStyleSheet::FillStyleSheet(
         {
             nPoolId = m_pDesc->GetPoolFormatId();
             nHelpId = m_pDesc->GetPoolHelpId();
-            if( m_pDesc->GetPoolHlpFileId() != UCHAR_MAX )
-                aHelpFile = *m_rDoc.GetDocPattern( m_pDesc->GetPoolHlpFileId() );
+            if (const OUString* pattern = m_pDesc->GetPoolHlpFileId() != UCHAR_MAX
+                                              ? m_rDoc.GetDocPattern(m_pDesc->GetPoolHlpFileId())
+                                              : nullptr)
+                aHelpFile = *pattern;
             else
                 aHelpFile.clear();
         }
@@ -2015,8 +2017,10 @@ bool SwDocStyleSheet::FillStyleSheet(
         {
             nPoolId = m_pNumRule->GetPoolFormatId();
             nHelpId = m_pNumRule->GetPoolHelpId();
-            if( m_pNumRule->GetPoolHlpFileId() != UCHAR_MAX )
-                aHelpFile = *m_rDoc.GetDocPattern( m_pNumRule->GetPoolHlpFileId() );
+            if (const OUString* pattern = m_pNumRule->GetPoolHlpFileId() != UCHAR_MAX
+                                              ? m_rDoc.GetDocPattern(m_pNumRule->GetPoolHlpFileId())
+                                              : nullptr)
+                aHelpFile = *pattern;
             else
                 aHelpFile.clear();
         }
@@ -2071,8 +2075,10 @@ bool SwDocStyleSheet::FillStyleSheet(
             OSL_ENSURE( m_bPhysical, "Format not found" );
 
             nHelpId = pFormat->GetPoolHelpId();
-            if( pFormat->GetPoolHlpFileId() != UCHAR_MAX )
-                aHelpFile = *m_rDoc.GetDocPattern( pFormat->GetPoolHlpFileId() );
+            if (const OUString* pattern = pFormat->GetPoolHlpFileId() != UCHAR_MAX
+                                              ? m_rDoc.GetDocPattern(pFormat->GetPoolHlpFileId())
+                                              : nullptr)
+                aHelpFile = *pattern;
             else
                 aHelpFile.clear();
 
