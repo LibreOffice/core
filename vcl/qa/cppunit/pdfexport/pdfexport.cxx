@@ -1513,7 +1513,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf128630)
     // The document has one page.
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
 
-    // Assert the aspect ratio of the only bitmap on the page.
+    // Assert the size of the only bitmap on the page.
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(pPdfPage);
     int nPageObjectCount = pPdfPage->getObjectCount();
@@ -1526,12 +1526,13 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf128630)
         std::unique_ptr<vcl::pdf::PDFiumBitmap> pBitmap = pPageObject->getImageBitmap();
         CPPUNIT_ASSERT(pBitmap);
         int nWidth = pBitmap->getWidth();
-        int nHeight = pBitmap->getHeight();
         // Without the accompanying fix in place, this test would have failed with:
-        // assertion failed
-        // - Expression: nWidth != nHeight
-        // i.e. the bitmap lost its custom aspect ratio during export.
-        CPPUNIT_ASSERT(nWidth != nHeight);
+        // - Expected: 466
+        // - Actual  : 289
+        // i.e. the rotated + scaled arrow was more thin than it should be.
+        CPPUNIT_ASSERT_EQUAL(466, nWidth);
+        int nHeight = pBitmap->getHeight();
+        CPPUNIT_ASSERT_EQUAL(466, nHeight);
     }
 }
 
@@ -3246,6 +3247,40 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testPdfImageEncryption)
     // missing encryption.
     CPPUNIT_ASSERT_EQUAL(2, pPageObject->getFormObjectCount());
 }
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testBitmapScaledown)
+{
+    // Given a document with an upscaled and rotated barcode bitmap in it:
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+
+    // When saving as PDF:
+    saveAsPDF(u"bitmap-scaledown.odt");
+
+    // Then verify that the bitmap is not downscaled:
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
+    CPPUNIT_ASSERT(pPdfDocument);
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(pPdfPage);
+    int nPageObjectCount = pPdfPage->getObjectCount();
+    for (int i = 0; i < nPageObjectCount; ++i)
+    {
+        std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPdfPage->getObject(i);
+        if (pPageObject->getType() != vcl::pdf::PDFPageObjectType::Image)
+            continue;
+
+        std::unique_ptr<vcl::pdf::PDFiumBitmap> pBitmap = pPageObject->getImageBitmap();
+        CPPUNIT_ASSERT(pBitmap);
+        // In-file sizes: good is 2631x380, bad is 1565x14.
+        int nWidth = pBitmap->getWidth();
+        // Without the accompanying fix in place, this test would have failed with:
+        // - Expected: 2616
+        // - Actual  : 1565
+        // i.e. the bitmap in the pdf result was small enough to be blurry.
+        CPPUNIT_ASSERT_EQUAL(2616, nWidth);
+    }
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
