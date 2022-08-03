@@ -374,6 +374,14 @@ namespace o3tl
     template<> struct typed_flags<TrackingEventFlags> : is_typed_flags<TrackingEventFlags, 0x1107> {};
 }
 
+enum class ScrollType
+{
+    DontKnow,
+    LineUp, LineDown,
+    PageUp, PageDown,
+    Drag
+};
+
 #endif // INCLUDED_VCL_VCLENUM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,16 +24,6 @@
 #include <vcl/ctrl.hxx>
 #include <memory>
 
-
-enum class ScrollType
-{
-    DontKnow,
-    LineUp, LineDown,
-    PageUp, PageDown,
-    Drag
-};
-
-
 struct ImplScrollBarData;
 
 class VCL_DLLPUBLIC ScrollBar : public Control

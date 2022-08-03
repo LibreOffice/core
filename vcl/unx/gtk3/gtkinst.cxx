@@ -8510,6 +8510,11 @@ public:
         g_signal_handler_unblock(m_pAdjustment, m_nAdjustChangedSignalId);
     }
 
+    virtual ScrollType get_scroll_type() const override
+    {
+        return ScrollType::DontKnow;
+    }
+
     virtual ~GtkInstanceScrollbar() override
     {
         g_signal_handler_disconnect(m_pAdjustment, m_nAdjustChangedSignalId);

@@ -2551,6 +2551,8 @@ public:
         return m_xScrollBar->SetLineSize(size);
     }
 
+    virtual ScrollType get_scroll_type() const override { return m_xScrollBar->GetType(); }
+
     virtual ~SalInstanceScrollbar() override { m_xScrollBar->SetScrollHdl(m_aOrigScrollHdl); }
 };
 }
