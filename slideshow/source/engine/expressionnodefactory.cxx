@@ -21,6 +21,7 @@
 #include <expressionnodefactory.hxx>
 
 #include <algorithm>
+#include <utility>
 
 
 /* Implementation of ExpressionNodeFactory class */
@@ -78,10 +79,10 @@ namespace slideshow::internal
             class BinaryExpressionBase : public ExpressionNode
             {
             public:
-                BinaryExpressionBase( const std::shared_ptr<ExpressionNode>&    rFirstArg,
-                                      const std::shared_ptr<ExpressionNode>&    rSecondArg ) :
-                    mpFirstArg( rFirstArg ),
-                    mpSecondArg( rSecondArg )
+                BinaryExpressionBase( std::shared_ptr<ExpressionNode> pFirstArg,
+                                      std::shared_ptr<ExpressionNode> pSecondArg ) :
+                    mpFirstArg(std::move( pFirstArg )),
+                    mpSecondArg(std::move( pSecondArg ))
                 {
                 }
 

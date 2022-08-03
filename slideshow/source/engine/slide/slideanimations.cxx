@@ -22,14 +22,15 @@
 
 #include "slideanimations.hxx"
 #include <animationnodefactory.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 
 namespace slideshow::internal
 {
-        SlideAnimations::SlideAnimations( const SlideShowContext&     rContext,
+        SlideAnimations::SlideAnimations( SlideShowContext      aContext,
                                           const ::basegfx::B2DVector& rSlideSize ) :
-            maContext( rContext ),
+            maContext(std::move( aContext )),
             maSlideSize( rSlideSize ),
             mpRootNode()
         {

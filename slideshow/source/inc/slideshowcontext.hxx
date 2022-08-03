@@ -93,7 +93,7 @@ namespace slideshow::internal
                               CursorManager&                                    rCursorManager,
                               MediaFileManager&                                 rMediaFileManager,
                               const UnoViewContainer&                           rViewContainer,
-                              const css::uno::Reference< css::uno::XComponentContext>&    rComponentContext,
+                              css::uno::Reference< css::uno::XComponentContext> xComponentContext,
                               box2d::utils::Box2DWorldSharedPtr&                rBox2DWorldPtr );
             void dispose();
 

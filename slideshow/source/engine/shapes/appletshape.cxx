@@ -27,6 +27,7 @@
 #include <osl/diagnose.h>
 
 #include <algorithm>
+#include <utility>
 
 
 using namespace ::com::sun::star;
@@ -67,7 +68,7 @@ namespace slideshow::internal
              */
             AppletShape( const css::uno::Reference< css::drawing::XShape >& xShape,
                          double                                     nPrio,
-                         const OUString&                            rServiceName,
+                         OUString                                   aServiceName,
                          const char**                               pPropCopyTable,
                          std::size_t                                nNumPropEntries,
                          const SlideShowContext&                    rContext ); // throw ShapeLoadFailedException;
@@ -109,12 +110,12 @@ namespace slideshow::internal
 
         AppletShape::AppletShape( const uno::Reference< drawing::XShape >& xShape,
                                   double                                   nPrio,
-                                  const OUString&                   rServiceName,
+                                  OUString                                 aServiceName,
                                   const char**                             pPropCopyTable,
                                   std::size_t                                 nNumPropEntries,
                                   const SlideShowContext&                  rContext ) :
             ExternalShapeBase( xShape, nPrio, rContext ),
-            maServiceName( rServiceName ),
+            maServiceName(std::move( aServiceName )),
             mpPropCopyTable( pPropCopyTable ),
             mnNumPropEntries( nNumPropEntries ),
             maViewAppletShapes(),

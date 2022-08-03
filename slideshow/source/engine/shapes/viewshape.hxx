@@ -67,7 +67,7 @@ namespace slideshow::internal
                 @param rView
                 The associated View object.
              */
-            explicit ViewShape( const ViewLayerSharedPtr& rViewLayer );
+            explicit ViewShape( ViewLayerSharedPtr xViewLayer );
 
             ///Forbid copy construction
             ViewShape(const ViewShape&) = delete;

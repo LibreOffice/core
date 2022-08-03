@@ -23,6 +23,7 @@
 #include <basegfx/range/b2dpolyrange.hxx>
 
 #include <shape.hxx>
+#include <utility>
 #include <view.hxx>
 
 #include <vector>
@@ -228,10 +229,10 @@ namespace slideshow::internal
 
             struct ViewEntry
             {
-                ViewEntry( const ViewSharedPtr&      rView,
-                           const ViewLayerSharedPtr& rViewLayer ) :
-                    mpView( rView ),
-                    mpViewLayer( rViewLayer )
+                ViewEntry( ViewSharedPtr       xView,
+                           ViewLayerSharedPtr  xViewLayer ) :
+                    mpView(std::move( xView )),
+                    mpViewLayer(std::move( xViewLayer ))
                 {}
 
                 ViewSharedPtr      mpView;

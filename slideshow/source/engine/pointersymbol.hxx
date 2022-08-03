@@ -46,7 +46,7 @@ public:
     void viewsChanged(const css::geometry::RealPoint2D pos);
 
 private:
-    PointerSymbol( const css::uno::Reference<css::rendering::XBitmap>& xBitmap,
+    PointerSymbol( css::uno::Reference<css::rendering::XBitmap> xBitmap,
                    ScreenUpdater&                               rScreenUpdater,
                    const UnoViewContainer&                      rViewContainer );
 

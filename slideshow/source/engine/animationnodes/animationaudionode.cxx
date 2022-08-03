@@ -24,6 +24,7 @@
 #include <eventqueue.hxx>
 #include "animationaudionode.hxx"
 #include <delayevent.hxx>
+#include <utility>
 
 using namespace com::sun::star;
 
@@ -106,8 +107,8 @@ struct NotifyAudioStopped
     EventMultiplexer & m_rEventMultiplexer;
     ::std::shared_ptr<BaseNode> m_pSelf;
     NotifyAudioStopped(EventMultiplexer & rEventMultiplexer,
-            ::std::shared_ptr<BaseNode> const& pSelf)
-        : m_rEventMultiplexer(rEventMultiplexer), m_pSelf(pSelf) { }
+            ::std::shared_ptr<BaseNode> pSelf)
+        : m_rEventMultiplexer(rEventMultiplexer), m_pSelf(std::move(pSelf)) { }
 
     void operator()()
     {

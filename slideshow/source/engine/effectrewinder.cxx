@@ -28,6 +28,7 @@
 #include <com/sun/star/animations/EventTrigger.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <utility>
 
 using ::com::sun::star::uno::Reference;
 using namespace ::com::sun::star;
@@ -41,7 +42,7 @@ class RewinderEventHandler : public EventHandler
 {
 public:
     typedef ::std::function<bool ()> Action;
-    explicit RewinderEventHandler (const Action& rAction) : maAction(rAction) {}
+    explicit RewinderEventHandler (Action aAction) : maAction(std::move(aAction)) {}
 
 private:
     const Action maAction;
@@ -53,7 +54,7 @@ class RewinderAnimationEventHandler : public AnimationEventHandler
 {
 public:
     typedef ::std::function<bool (const AnimationNodeSharedPtr& rpNode)> Action;
-    explicit RewinderAnimationEventHandler (const Action& rAction) : maAction(rAction) {}
+    explicit RewinderAnimationEventHandler (Action aAction) : maAction(std::move(aAction)) {}
 
 private:
     const Action maAction;

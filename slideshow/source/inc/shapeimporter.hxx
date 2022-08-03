@@ -70,8 +70,8 @@ public:
         object imports the draw page.
     */
     ShapeImporter( const css::uno::Reference< css::drawing::XDrawPage >& xPage,
-                   const css::uno::Reference< css::drawing::XDrawPage >& xActualPage,
-                   const css::uno::Reference< css::drawing::XDrawPagesSupplier>& xPagesSupplier,
+                   css::uno::Reference< css::drawing::XDrawPage >  xActualPage,
+                   css::uno::Reference< css::drawing::XDrawPagesSupplier>  xPagesSupplier,
                    const SlideShowContext&                       rContext,
                    sal_Int32                                     nOrdNumStart,
                    bool                                          bConvertingMasterPage );
