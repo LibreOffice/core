@@ -633,6 +633,10 @@ public:
 #endif
     static OUString             GetPreeditDetails(GtkIMContext* pIMContext, std::vector<ExtTextInputAttr>& rInputFlags, sal_Int32& rCursorPos, sal_uInt8& rCursorFlags);
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+    gboolean                    event_controller_scroll_forward(GtkEventControllerScroll* pController, double delta_x, double delta_y);
+#endif
+
     const cairo_font_options_t* get_font_options();
 
     void SetColorScheme(GVariant* variant);

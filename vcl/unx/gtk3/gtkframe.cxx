@@ -3383,6 +3383,11 @@ gboolean GtkSalFrame::signalScroll(GtkEventControllerScroll* pController, double
     return true;
 }
 
+gboolean GtkSalFrame::event_controller_scroll_forward(GtkEventControllerScroll* pController, double delta_x, double delta_y)
+{
+    return GtkSalFrame::signalScroll(pController, delta_x, delta_y, this);
+}
+
 #endif
 
 void GtkSalFrame::gestureSwipe(GtkGestureSwipe* gesture, gdouble velocity_x, gdouble velocity_y, gpointer frame)
