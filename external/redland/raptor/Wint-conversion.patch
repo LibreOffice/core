@@ -1,0 +1,22 @@
+--- src/raptor_parse.c
++++ src/raptor_parse.c
+@@ -257,7 +257,7 @@
+ int
+ raptor_world_get_parsers_count(raptor_world* world)
+ {
+-  RAPTOR_ASSERT_OBJECT_POINTER_RETURN_VALUE(world, raptor_world, NULL);
++  RAPTOR_ASSERT_OBJECT_POINTER_RETURN_VALUE(world, raptor_world, 0);
+ 
+   raptor_world_open(world);
+ 
+--- src/raptor_serialize.c
++++ src/raptor_serialize.c
+@@ -240,7 +240,7 @@
+ int
+ raptor_world_get_serializers_count(raptor_world* world)
+ {
+-  RAPTOR_ASSERT_OBJECT_POINTER_RETURN_VALUE(world, raptor_world, NULL);
++  RAPTOR_ASSERT_OBJECT_POINTER_RETURN_VALUE(world, raptor_world, 0);
+ 
+   raptor_world_open(world);
+ 
