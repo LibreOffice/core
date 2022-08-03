@@ -34,7 +34,6 @@ private:
     std::unique_ptr<weld::RadioButton> m_xBorderCopyRB;
 
     SwWrtShell& rShell;
-    SplitTable_HeadlineOption m_nSplit;
 
     void Apply();
 
@@ -49,7 +48,16 @@ public:
         return nRet;
     }
 
-    SplitTable_HeadlineOption GetSplitMode() const { return m_nSplit; }
+    SplitTable_HeadlineOption GetSplitMode() const {
+        auto nSplit = SplitTable_HeadlineOption::ContentCopy;
+        if (m_xBoxAttrCopyWithParaRB->get_active())
+            nSplit = SplitTable_HeadlineOption::BoxAttrAllCopy;
+        else if (m_xBoxAttrCopyNoParaRB->get_active())
+            nSplit = SplitTable_HeadlineOption::BoxAttrCopy;
+        else if (m_xBorderCopyRB->get_active())
+            nSplit = SplitTable_HeadlineOption::BorderCopy;
+        return nSplit;
+    }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
