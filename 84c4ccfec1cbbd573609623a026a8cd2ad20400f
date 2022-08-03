@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09b2e11f_9382bb60",
+        "filename": "sw/source/ui/chrdlg/pardlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-08-03T07:40:48Z",
+      "side": 0,
+      "message": "Please also backport the warning fix to co-22.05 as a separate change, since the werror build is now broken there. Thanks!",
+      "range": {
+        "startLine": 98,
+        "startChar": 9,
+        "endLine": 98,
+        "endChar": 17
+      },
+      "revId": "84c4ccfec1cbbd573609623a026a8cd2ad20400f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
