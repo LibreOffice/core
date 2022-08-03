@@ -341,6 +341,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "24c80466_fb4ad9ee",
+        "filename": "cui/uiconfig/ui/optlanguagespage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-08-03T09:07:11Z",
+      "side": 1,
+      "message": "Think \"Localization\" on top as done in this patch fits better there.",
+      "parentUuid": "4c89ffbe_ee8fe0f8",
+      "range": {
+        "startLine": 62,
+        "startChar": 92,
+        "endLine": 62,
+        "endChar": 108
+      },
+      "revId": "62dfcd0ab64d98d211135e849f76e1772c485178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b2522abe_a3d148b6",
         "filename": "cui/uiconfig/ui/optlanguagespage.ui",
         "patchSetId": 2

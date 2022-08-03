@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6dbd659e_69e3ea06",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-08-03T09:07:11Z",
+      "side": 1,
+      "message": "The patch is now very much cosmetic, no harm in it. Unsure if it solves the ticket.",
+      "revId": "ac730cd31f19518bb8cc5b66675845785a57e469",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
