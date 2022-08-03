@@ -16,6 +16,24 @@
       "message": "Shouldn\u0027t here be an assert(aListenerMethod) before this line?",
       "revId": "84c4ccfec1cbbd573609623a026a8cd2ad20400f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8d53c07_103b0e66",
+        "filename": "framework/source/uiconfiguration/moduleuiconfigurationmanager.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1642,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-03T08:01:22Z",
+      "side": 1,
+      "message": "I suppose https://gerrit.libreoffice.org/c/core/+/137719 is the correct thing to do.",
+      "parentUuid": "3818017d_f580a7b2",
+      "revId": "84c4ccfec1cbbd573609623a026a8cd2ad20400f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
