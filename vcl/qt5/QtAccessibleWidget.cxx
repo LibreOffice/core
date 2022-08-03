@@ -941,10 +941,24 @@ int QtAccessibleWidget::characterCount() const
         return xText->getCharacterCount();
     return 0;
 }
-QRect QtAccessibleWidget::characterRect(int /* offset */) const
+QRect QtAccessibleWidget::characterRect(int nOffset) const
 {
-    SAL_INFO("vcl.qt", "Unsupported QAccessibleTextInterface::characterRect");
-    return QRect();
+    Reference<XAccessibleText> xText(getAccessibleContextImpl(), UNO_QUERY);
+    if (!xText.is())
+        return QRect();
+
+    if (nOffset < 0 || nOffset > xText->getCharacterCount())
+    {
+        SAL_WARN("vcl.qt",
+                 "QtAccessibleWidget::characterRect called with invalid offset: " << nOffset);
+        return QRect();
+    }
+
+    const awt::Rectangle aBounds = xText->getCharacterBounds(nOffset);
+    const QRect aRect(aBounds.X, aBounds.Y, aBounds.Width, aBounds.Height);
+    // convert to screen coordinates
+    const QRect aScreenPos = rect();
+    return aRect.translated(aScreenPos.x(), aScreenPos.y());
 }
 
 int QtAccessibleWidget::cursorPosition() const
