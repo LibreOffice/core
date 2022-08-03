@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e4d70f2_3545f173",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-08-03T07:11:17Z",
+      "side": 1,
+      "message": "Before you submit a patch, remember to build it locally.",
+      "revId": "f4fdf2fc9162c858d61847926b100c90003e78e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
