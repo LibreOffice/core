@@ -117,7 +117,23 @@ QtAccessibleWidget::getAccessibleTableForParent() const
     return Reference<XAccessibleTable>(xParentContext, UNO_QUERY);
 }
 
-QWindow* QtAccessibleWidget::window() const { return nullptr; }
+QWindow* QtAccessibleWidget::window() const
+{
+    assert(m_pObject);
+    if (m_pObject->isWidgetType())
+    {
+        QWidget* pWidget = static_cast<QWidget*>(m_pObject);
+        QWidget* pWindow = pWidget->window();
+        if (pWindow)
+            return pWindow->windowHandle();
+    }
+
+    QAccessibleInterface* pParent = parent();
+    if (pParent)
+        return pParent->window();
+
+    return nullptr;
+}
 
 int QtAccessibleWidget::childCount() const
 {
