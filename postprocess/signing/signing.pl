@@ -147,9 +147,10 @@ sub sign_files      #09.07.2007 10:36
     }
     $signtool .= " -v" if ($opt_verbose);
     $commandline_base = $signtool;
+    $commandline_base .= " -fd sha256 -td sha256";
     $commandline_base .= " -f $opt_pfxfile" if ($opt_pfxfile ne "");
     $commandline_base .= " -p $opt_pass" if ($opt_pass ne "");
-    $commandline_base .= " -t $opt_timestamp_url" if ($opt_timestamp_url ne "");
+    $commandline_base .= " -tr $opt_timestamp_url" if ($opt_timestamp_url ne "");
     $commandline_base .= " -d \"$opt_desc\"" if ($opt_desc ne "");
 
     # Here switch between:
