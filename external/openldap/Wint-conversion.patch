@@ -1,0 +1,11 @@
+--- configure
++++ configure
+@@ -19241,7 +19241,7 @@
+ int
+ main ()
+ {
+-pthread_detach(NULL);
++pthread_t t; pthread_detach(t);
+   ;
+   return 0;
+ }
