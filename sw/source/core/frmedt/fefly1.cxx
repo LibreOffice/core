@@ -906,9 +906,9 @@ void SwFEShell::Insert( const OUString& rGrfName, const OUString& rFltName,
         // add a redline to the anchor point at tracked insertion of picture
         if ( IsRedlineOn() )
         {
-            SwPosition aPos(*pFormat->GetAnchor().GetContentAnchor());
-            SwPaM aPaM(aPos.GetNode(), aPos.GetContentIndex(),
-                    aPos.GetNode(), aPos.GetContentIndex() + 1);
+            const SwPosition & rPos(*pFormat->GetAnchor().GetContentAnchor());
+            SwPaM aPaM(rPos.GetNode(), rPos.GetContentIndex(),
+                    rPos.GetNode(), rPos.GetContentIndex() + 1);
             GetDoc()->getIDocumentRedlineAccess().AppendRedline(
                     new SwRangeRedline( RedlineType::Insert, aPaM ), true);
         }

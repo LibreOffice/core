@@ -232,8 +232,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
             pBox = pCell->FindBox(pTable, pBox);
             if (pBox)
             {
-                SwPosition const aPos(*pBox->GetSttNd());
-                SwPaM aPam(aPos);
+                SwPaM aPam(*pBox->GetSttNd());
                 aPam.Move(fnMoveForward, GoInNode);
                 o_rpPaM = lcl_createPamCopy(aPam);
             }

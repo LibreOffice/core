@@ -47,9 +47,8 @@ SwUndoField::~SwUndoField()
 SwPosition SwUndoField::GetPosition()
 {
     SwNode * pNode = m_pDoc->GetNodes()[m_nNodeIndex];
-    SwNodeIndex aNodeIndex(*pNode);
     SwContentIndex aIndex(pNode->GetContentNode(), m_nOffset);
-    SwPosition aResult(aNodeIndex, aIndex);
+    SwPosition aResult(*pNode, aIndex);
 
     return aResult;
 }

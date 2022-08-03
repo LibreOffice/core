@@ -117,8 +117,7 @@ ErrCode SwReader::Read( const Reader& rOptions )
     else
     {
         // if the Reader was not called by a Shell, create a PaM ourselves
-        SwNodeIndex nNode( mxDoc->GetNodes().GetEndOfContent(), -1 );
-        pPam = new SwPaM( nNode );
+        pPam = new SwPaM( mxDoc->GetNodes().GetEndOfContent(), SwNodeOffset(-1) );
         // For Web documents the default template was set already by InitNew,
         // unless the filter is not HTML,
         // or a SetTemplateName was called in ConvertFrom.

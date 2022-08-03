@@ -685,7 +685,7 @@ void SwDoc::ClearDoc()
         pFirstNd->SetAttr( SwFormatPageDesc( pDummyPgDsc ));
 
         SwPosition aPos( *pFirstNd );
-        SwPaM const tmpPaM(aSttIdx, SwNodeIndex(GetNodes().GetEndOfContent()));
+        SwPaM const tmpPaM(aSttIdx, GetNodes().GetEndOfContent());
         ::PaMCorrAbs(tmpPaM, aPos);
     }
 
@@ -1151,8 +1151,7 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
     SwNodeIndex aFixupIdx( GetNodes().GetEndOfContent(), -1 );
 
     // append at the end of document / content
-    SwNodeIndex aTargetIdx( GetNodes().GetEndOfContent() );
-    SwPaM aInsertPam( aTargetIdx );
+    SwPaM aInsertPam( GetNodes().GetEndOfContent() );
 
 #ifdef DBG_UTIL
     SAL_INFO( "sw.docappend", "Pam-Nd: " << aCpyPam.GetNode().GetIndex() - aCpyPam.GetNode( false ).GetIndex() + 1

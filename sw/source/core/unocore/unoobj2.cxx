@@ -747,8 +747,7 @@ SwXTextRange::SwXTextRange(SwTableFormat& rTableFormat)
 {
     SwTable *const pTable = SwTable::FindTable( &rTableFormat );
     SwTableNode *const pTableNode = pTable->GetTableNode();
-    SwPosition aPosition( *pTableNode );
-    SwPaM aPam( aPosition );
+    SwPaM aPam( *pTableNode );
 
     SetPositions( aPam );
 }

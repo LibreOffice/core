@@ -969,8 +969,7 @@ SwXText::setString(const OUString& rString)
         if(bInsertNodes)
         {
             GetDoc()->getIDocumentContentOperations().AppendTextNode( aStartPos );
-            SwPosition aEndPos(aEndIdx.GetNode());
-            SwPaM aPam(aEndPos);
+            SwPaM aPam(aEndIdx.GetNode());
             GetDoc()->getIDocumentContentOperations().AppendTextNode( *aPam.Start() );
         }
     }
@@ -1272,8 +1271,7 @@ SwXText::Impl::finishOrAppendParagraph(
     // find end node, go backward - don't skip tables because the new
     // paragraph has to be the last node
     //aPam.Move( fnMoveBackward, GoInNode );
-    SwPosition aInsertPosition( *pStartNode->EndOfSectionNode(), SwNodeOffset(-1) );
-    SwPaM aPam(aInsertPosition);
+    SwPaM aPam(*pStartNode->EndOfSectionNode(), SwNodeOffset(-1));
     // If we got a position reference, then the insert point is not the end of
     // the document.
     if (xInsertPosition.is())

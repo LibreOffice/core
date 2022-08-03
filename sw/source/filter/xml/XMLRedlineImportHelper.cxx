@@ -631,12 +631,11 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
             // They have to be deleted as well (#i80689)!
             if( m_bIgnoreRedlines && pRedlineInfo->pContentIndex != nullptr )
             {
-                SwNodeIndex aIdx( *pRedlineInfo->pContentIndex );
-                const SwNode* pEnd = aIdx.GetNode().EndOfSectionNode();
+                const SwNodeIndex& rIdx( *pRedlineInfo->pContentIndex );
+                const SwNode* pEnd = rIdx.GetNode().EndOfSectionNode();
                 if( pEnd )
                 {
-                    SwNodeIndex aEnd( *pEnd, 1 );
-                    SwPaM aDel( aIdx, aEnd );
+                    SwPaM aDel( rIdx.GetNode(), 0, *pEnd, 1 );
                     pDoc->getIDocumentContentOperations().DeleteRange(aDel);
                 }
             }
