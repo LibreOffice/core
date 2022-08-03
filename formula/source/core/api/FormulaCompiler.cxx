@@ -1012,10 +1012,18 @@ void FormulaCompiler::loadSymbols(const std::pair<const char*, int>* pSymbols, F
 
     fillFromAddInMap( rxMap, eGrammar);
     // Fill from collection for AddIns not already present.
-    if ( FormulaGrammar::GRAM_ENGLISH != eGrammar )
-        fillFromAddInCollectionUpperName( rxMap);
-    else
+    if (FormulaGrammar::GRAM_ENGLISH == eGrammar)
         fillFromAddInCollectionEnglishName( rxMap);
+    else
+    {
+        fillFromAddInCollectionUpperName( rxMap);
+        if (FormulaGrammar::GRAM_API == eGrammar)
+        {
+            // Add known but not in AddInMap English names, e.g. from the
+            // PricingFunctions AddIn or any user supplied AddIn.
+            fillFromAddInCollectionEnglishName( rxMap);
+        }
+    }
 }
 
 void FormulaCompiler::fillFromAddInCollectionUpperName( const NonConstOpCodeMapPtr& /*xMap */) const
