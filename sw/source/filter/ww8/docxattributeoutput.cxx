@@ -3404,8 +3404,12 @@ void DocxAttributeOutput::RunText( const OUString& rText, rtl_TextEncoding /*eCh
 
     // the text run is usually XML_t, with the exception of the deleted (and not moved) text
     sal_Int32 nTextToken = XML_t;
-    if ( m_pRedlineData && !m_pRedlineData->IsMoved() &&
-            m_pRedlineData->GetType() == RedlineType::Delete )
+
+    bool bMoved = m_pRedlineData && m_pRedlineData->IsMoved() &&
+       // tdf#150166 save tracked moving around TOC as w:ins, w:del
+       SwDoc::GetCurTOX(*m_rExport.m_pCurPam->GetPoint()) == nullptr;
+
+    if ( m_pRedlineData && m_pRedlineData->GetType() == RedlineType::Delete && !bMoved )
     {
         nTextToken = XML_delText;
     }
@@ -3809,7 +3813,9 @@ void DocxAttributeOutput::StartRedline( const SwRedlineData * pRedlineData )
     const DateTime aDateTime = pRedlineData->GetTimeStamp();
     bool bNoDate = bRemovePersonalInfo ||
         ( aDateTime.GetYear() == 1970 && aDateTime.GetMonth() == 1 && aDateTime.GetDay() == 1 );
-    bool bMoved = pRedlineData->IsMoved();
+    bool bMoved = pRedlineData->IsMoved() &&
+       // tdf#150166 save tracked moving around TOC as w:ins, w:del
+       SwDoc::GetCurTOX(*m_rExport.m_pCurPam->GetPoint()) == nullptr;
     switch ( pRedlineData->GetType() )
     {
         case RedlineType::Insert:
@@ -3842,7 +3848,9 @@ void DocxAttributeOutput::EndRedline( const SwRedlineData * pRedlineData )
     if ( !pRedlineData || m_bWritingField )
         return;
 
-    bool bMoved = pRedlineData->IsMoved();
+    bool bMoved = pRedlineData->IsMoved() &&
+       // tdf#150166 save tracked moving around TOC as w:ins, w:del
+       SwDoc::GetCurTOX(*m_rExport.m_pCurPam->GetPoint()) == nullptr;
     switch ( pRedlineData->GetType() )
     {
         case RedlineType::Insert:
