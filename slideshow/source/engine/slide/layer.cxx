@@ -23,6 +23,7 @@
 #include <basegfx/range/b2dpolyrange.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
+#include <utility>
 #include <osl/diagnose.h>
 
 #include "layer.hxx"
@@ -194,8 +195,8 @@ namespace slideshow::internal
         public:
             LayerEndUpdate( const LayerEndUpdate& ) = delete;
             LayerEndUpdate& operator=( const LayerEndUpdate& ) = delete;
-            explicit LayerEndUpdate( LayerSharedPtr const& rLayer ) :
-                mpLayer( rLayer )
+            explicit LayerEndUpdate( LayerSharedPtr xLayer ) :
+                mpLayer(std::move( xLayer ))
             {}
 
             ~LayerEndUpdate() { if(mpLayer) mpLayer->endUpdate(); }

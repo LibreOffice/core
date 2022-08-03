@@ -22,6 +22,8 @@
 
 #include "delayevent.hxx"
 
+#include <utility>
+
 namespace slideshow::internal
     {
         /** Event, which delays calling passed Event's fire() method
@@ -34,10 +36,10 @@ namespace slideshow::internal
         class DelayFacade : public Event
         {
         public:
-            DelayFacade( const EventSharedPtr&  rEvent,
+            DelayFacade( EventSharedPtr         xEvent,
                          double                 nTimeout    ) :
                 Event("DelayFacade"),
-                mpEvent( rEvent ),
+                mpEvent(std::move( xEvent )),
                 mnTimeout( nTimeout )
             {
             }

@@ -22,6 +22,7 @@
 #include "event.hxx"
 
 #include <functional>
+#include <utility>
 
 namespace slideshow::internal {
 
@@ -39,12 +40,12 @@ public:
             ) : Event(rsDescription),
             mnTimeout(nTimeout), maFunc(func), mbWasFired(false) {}
 
-    Delay( const std::function<void ()>& func,
+    Delay( std::function<void ()> func,
            double nTimeout
         , const OUString& rsDescription
         ) : Event(rsDescription),
         mnTimeout(nTimeout),
-        maFunc(func),
+        maFunc(std::move(func)),
         mbWasFired(false) {}
     Delay(const Delay&) = delete;
     Delay& operator=(const Delay&) = delete;

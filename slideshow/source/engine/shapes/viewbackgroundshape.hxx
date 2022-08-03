@@ -52,7 +52,7 @@ namespace slideshow::internal
                 Bounds of the background shape, in document coordinate
                 system.
              */
-            ViewBackgroundShape( const ViewLayerSharedPtr&      rViewLayer,
+            ViewBackgroundShape( ViewLayerSharedPtr xViewLayer,
                                  const ::basegfx::B2DRectangle& rShapeBounds );
             /// Forbid copy construction
             ViewBackgroundShape(const ViewBackgroundShape&) = delete;

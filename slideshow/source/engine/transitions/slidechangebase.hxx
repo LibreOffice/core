@@ -21,6 +21,7 @@
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_SLIDECHANGEBASE_HXX
 
 #include <unoview.hxx>
+#include <utility>
 #include <vieweventhandler.hxx>
 #include <numberanimation.hxx>
 #include <slide.hxx>
@@ -72,9 +73,9 @@ protected:
         entering slides.
     */
     SlideChangeBase(
-        ::std::optional<SlideSharedPtr> const & leavingSlide,
+        ::std::optional<SlideSharedPtr>           leavingSlide,
         const SlideSharedPtr&                     pEnteringSlide,
-        const SoundPlayerSharedPtr&               pSoundPlayer,
+        SoundPlayerSharedPtr                      pSoundPlayer,
         const UnoViewContainer&                   rViewContainer,
         ScreenUpdater&                            rScreenUpdater,
         EventMultiplexer&                         rEventMultiplexer,
@@ -84,8 +85,8 @@ protected:
     /// Info on a per-view basis
     struct ViewEntry
     {
-        explicit ViewEntry( const UnoViewSharedPtr& rView ) :
-            mpView( rView )
+        explicit ViewEntry( UnoViewSharedPtr  rView ) :
+            mpView(std::move( rView ))
         {
         }
 

@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_FIGUREWIPE_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_FIGUREWIPE_HXX
 
+#include <utility>
+
 #include "parametricpolypolygon.hxx"
 
 
@@ -35,7 +37,7 @@ public:
     static std::shared_ptr<FigureWipe> createHexagonWipe();
 
     virtual ::basegfx::B2DPolyPolygon operator () ( double t ) override;
-    explicit FigureWipe( ::basegfx::B2DPolygon const & figure ) : m_figure(figure) {}
+    explicit FigureWipe( ::basegfx::B2DPolygon figure ) : m_figure(std::move(figure)) {}
 private:
     const ::basegfx::B2DPolygon m_figure;
 };

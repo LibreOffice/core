@@ -28,6 +28,7 @@
 #include <usereventqueue.hxx>
 #include <eventmultiplexer.hxx>
 #include <unoviewcontainer.hxx>
+#include <utility>
 
 
 using namespace ::com::sun::star;
@@ -44,8 +45,8 @@ SlideShowContext::SlideShowContext( SubsettableShapeManagerSharedPtr& rSubsettab
                                     CursorManager&                    rCursorManager,
                                     MediaFileManager&                    rMediaFileManager,
                                     const UnoViewContainer&           rViewContainer,
-                                    const uno::Reference<
-                                          uno::XComponentContext>&    rComponentContext,
+                                    uno::Reference<
+                                          uno::XComponentContext>     xComponentContext,
                                     box2d::utils::Box2DWorldSharedPtr& rBox2DWorldPtr ) :
         mpSubsettableShapeManager( rSubsettableShapeManager ),
         mrEventQueue( rEventQueue ),
@@ -56,7 +57,7 @@ SlideShowContext::SlideShowContext( SubsettableShapeManagerSharedPtr& rSubsettab
         mrCursorManager( rCursorManager ),
         mrMediaFileManager( rMediaFileManager ),
         mrViewContainer( rViewContainer ),
-        mxComponentContext( rComponentContext ),
+        mxComponentContext(std::move( xComponentContext )),
         mpBox2DWorld( rBox2DWorldPtr )
     {}
 

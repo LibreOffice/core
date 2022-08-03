@@ -22,6 +22,7 @@
 #include "disposable.hxx"
 #include <rtl/ustring.hxx>
 #include <memory>
+#include <utility>
 #include <vector>
 
 namespace slideshow::internal
@@ -31,8 +32,8 @@ namespace slideshow::internal
 class Event : public Disposable
 {
 public:
-    Event(const OUString& rsDescription)
-        : msDescription(rsDescription)
+    Event(OUString sDescription)
+        : msDescription(std::move(sDescription))
     {
     }
 

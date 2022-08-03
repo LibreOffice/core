@@ -37,6 +37,7 @@
 #include "pairanimation.hxx"
 
 #include <optional>
+#include <utility>
 
 /* Definition of ActivitiesFactory class */
 
@@ -46,7 +47,7 @@ namespace slideshow::internal::ActivitiesFactory
     struct CommonParameters
     {
         CommonParameters(
-            const EventSharedPtr&                 rEndEvent,
+            EventSharedPtr                        xEndEvent,
             EventQueue&                           rEventQueue,
             ActivitiesQueue&                      rActivitiesQueue,
             double                                nMinDuration,
@@ -55,9 +56,9 @@ namespace slideshow::internal::ActivitiesFactory
             ::std::optional<double> const&      aRepeats,
             double                                nAcceleration,
             double                                nDeceleration,
-            const ShapeSharedPtr&                 rShape,
+            ShapeSharedPtr                        xShape,
             const ::basegfx::B2DVector&           rSlideBounds )
-            : mpEndEvent( rEndEvent ),
+            : mpEndEvent(std::move( xEndEvent )),
               mrEventQueue( rEventQueue ),
               mrActivitiesQueue( rActivitiesQueue ),
               mnMinDuration( nMinDuration ),
@@ -65,7 +66,7 @@ namespace slideshow::internal::ActivitiesFactory
               maRepeats( aRepeats ),
               mnAcceleration( nAcceleration ),
               mnDeceleration( nDeceleration ),
-              mpShape( rShape ),
+              mpShape(std::move( xShape )),
               maSlideBounds( rSlideBounds ),
               mbAutoReverse( bAutoReverse ) {}
 

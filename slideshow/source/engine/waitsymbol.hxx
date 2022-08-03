@@ -57,7 +57,7 @@ public:
     void hide() { setVisible(false); }
 
 private:
-    WaitSymbol( const css::uno::Reference<css::rendering::XBitmap>& xBitmap,
+    WaitSymbol( css::uno::Reference<css::rendering::XBitmap> xBitmap,
                 ScreenUpdater&                               rScreenUpdater,
                 const UnoViewContainer&                      rViewContainer );
 

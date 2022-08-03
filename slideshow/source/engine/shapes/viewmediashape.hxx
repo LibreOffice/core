@@ -64,8 +64,8 @@ namespace slideshow::internal
                 The associated View object.
              */
             ViewMediaShape( const ViewLayerSharedPtr&                                  rViewLayer,
-                            const css::uno::Reference< css::drawing::XShape >&         rxShape,
-                            const css::uno::Reference< css::uno::XComponentContext >&  rxContext );
+                            css::uno::Reference< css::drawing::XShape >          xShape,
+                            css::uno::Reference< css::uno::XComponentContext >   xContext );
 
             /** destroy the object
              */

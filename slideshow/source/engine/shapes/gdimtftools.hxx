@@ -29,6 +29,7 @@
 
 #include <tools.hxx>
 
+#include <utility>
 #include <vector>
 
 class MetaAction;
@@ -58,9 +59,9 @@ namespace slideshow::internal
 
         struct MtfAnimationFrame
         {
-            MtfAnimationFrame( const GDIMetaFileSharedPtr& rMtf,
+            MtfAnimationFrame( GDIMetaFileSharedPtr        xMtf,
                                double                      nDuration ) :
-                mpMtf( rMtf ),
+                mpMtf(std::move( xMtf )),
                 mnDuration( nDuration )
             {
             }

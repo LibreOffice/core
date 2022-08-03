@@ -48,7 +48,7 @@ namespace slideshow::internal
                 adjusting and holding global presentation time.
              */
             explicit ActivitiesQueue(
-                const std::shared_ptr< ::canvas::tools::ElapsedTime >&  pPresTimer );
+                std::shared_ptr< ::canvas::tools::ElapsedTime > pPresTimer );
             ~ActivitiesQueue();
             ActivitiesQueue(const ActivitiesQueue&) = delete;
             ActivitiesQueue& operator=(const ActivitiesQueue&) = delete;

@@ -25,6 +25,7 @@
 #include "animationcolornode.hxx"
 #include <animationfactory.hxx>
 #include <activitiesfactory.hxx>
+#include <utility>
 
 using namespace com::sun::star;
 
@@ -40,8 +41,8 @@ namespace {
 class HSLWrapper : public HSLColorAnimation
 {
 public:
-    explicit HSLWrapper( const ColorAnimationSharedPtr& rAnimation )
-        : mpAnimation( rAnimation )
+    explicit HSLWrapper( ColorAnimationSharedPtr xAnimation )
+        : mpAnimation(std::move( xAnimation ))
     {
         ENSURE_OR_THROW(
             mpAnimation,
