@@ -35,6 +35,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a912e83c_a852936a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003648
+      },
+      "writtenOn": "2022-08-03T15:26:03Z",
+      "side": 1,
+      "message": "I did not- I assumed I was under the existing Collabora one. Is this not the case?",
+      "parentUuid": "81afba48_9f2c46f9",
+      "revId": "59aafd34652f8326b8a1e2f2f8c2df9f57a997ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e8a97f86_38c02d0a",
