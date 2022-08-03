@@ -961,8 +961,7 @@ void FormulaCompiler::InitSymbolsAPI() const
     static OpCodeMapData aMap;
     osl::MutexGuard aGuard(&aMap.maMtx);
     if (!aMap.mxSymbolMap)
-        // XFunctionAccess API always used PODF grammar, keep it.
-        loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH_API, FormulaGrammar::GRAM_PODF, aMap.mxSymbolMap, SeparatorType::RESOURCE_BASE);
+        loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH_API, FormulaGrammar::GRAM_API, aMap.mxSymbolMap, SeparatorType::RESOURCE_BASE);
     mxSymbolsAPI = aMap.mxSymbolMap;
 }
 
@@ -1013,10 +1012,18 @@ void FormulaCompiler::loadSymbols(const std::pair<const char*, int>* pSymbols, F
 
     fillFromAddInMap( rxMap, eGrammar);
     // Fill from collection for AddIns not already present.
-    if ( FormulaGrammar::GRAM_ENGLISH != eGrammar )
-        fillFromAddInCollectionUpperName( rxMap);
-    else
+    if (FormulaGrammar::GRAM_ENGLISH == eGrammar)
         fillFromAddInCollectionEnglishName( rxMap);
+    else
+    {
+        fillFromAddInCollectionUpperName( rxMap);
+        if (FormulaGrammar::GRAM_API == eGrammar)
+        {
+            // Add known but not in AddInMap English names, e.g. from the
+            // PricingFunctions AddIn or any user supplied AddIn.
+            fillFromAddInCollectionEnglishName( rxMap);
+        }
+    }
 }
 
 void FormulaCompiler::fillFromAddInCollectionUpperName( const NonConstOpCodeMapPtr& /*xMap */) const

@@ -110,6 +110,9 @@ void ScCompiler::fillFromAddInMap( const NonConstOpCodeMapPtr& xMap,FormulaGramm
     size_t nSymbolOffset;
     switch( _eGrammar )
     {
+        // XFunctionAccess and XCell::setFormula()/getFormula() API always used
+        // PODF grammar symbols, keep it.
+        case FormulaGrammar::GRAM_API:
         case FormulaGrammar::GRAM_PODF:
             nSymbolOffset = offsetof( AddInMap, pUpper);
             break;
@@ -121,15 +124,30 @@ void ScCompiler::fillFromAddInMap( const NonConstOpCodeMapPtr& xMap,FormulaGramm
             nSymbolOffset = offsetof( AddInMap, pEnglish);
             break;
     }
-    const AddInMap* pMap = g_aAddInMap;
-    const AddInMap* const pStop = pMap + GetAddInMapCount();
-    for ( ; pMap < pStop; ++pMap)
+    const AddInMap* const pStop = g_aAddInMap + GetAddInMapCount();
+    for (const AddInMap* pMap = g_aAddInMap; pMap < pStop; ++pMap)
     {
         char const * const * ppSymbol =
             reinterpret_cast< char const * const * >(
                     reinterpret_cast< char const * >(pMap) + nSymbolOffset);
         xMap->putExternal( OUString::createFromAscii( *ppSymbol),
                 OUString::createFromAscii( pMap->pOriginal));
+    }
+    if (_eGrammar == FormulaGrammar::GRAM_API)
+    {
+        // Add English names additionally to programmatic names, so they
+        // can be used in XCell::setFormula() non-localized API calls.
+        // Note the reverse map will still deliver programmatic names for
+        // XCell::getFormula().
+        nSymbolOffset = offsetof( AddInMap, pEnglish);
+        for (const AddInMap* pMap = g_aAddInMap; pMap < pStop; ++pMap)
+        {
+            char const * const * ppSymbol =
+                reinterpret_cast< char const * const * >(
+                        reinterpret_cast< char const * >(pMap) + nSymbolOffset);
+            xMap->putExternal( OUString::createFromAscii( *ppSymbol),
+                    OUString::createFromAscii( pMap->pOriginal));
+        }
     }
 }
 
