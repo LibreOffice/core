@@ -664,12 +664,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146171_invalid_change_date)
 
     xmlDocUniquePtr pXmlDoc = parseExport();
     // This was 0
-    assertXPath(pXmlDoc, "//w:ins", 4);
+    assertXPath(pXmlDoc, "//w:ins", 5);
     // This was 0
-    assertXPath(pXmlDoc, "//w:del", 1);
+    assertXPath(pXmlDoc, "//w:del", 2);
     // no date (anonymized change)
     // This failed, date was exported as w:date="1970-01-01T00:00:00Z" before fixing tdf#147760
-    assertXPathNoAttribute(pXmlDoc, "//w:del", "date");
+    assertXPathNoAttribute(pXmlDoc, "//w:del[1]", "date");
+    assertXPathNoAttribute(pXmlDoc, "//w:del[2]", "date");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf139580, "tdf139580.odt")
