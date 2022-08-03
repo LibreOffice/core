@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "691388ce_93b9fe5a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-08-03T06:22:24Z",
+      "side": 1,
+      "message": "This looks reasonable to me, though the commit message fails to explain the motivation behind this change. Let me comment here about that, but next time please include this in the commit message yourself. I titled each section, though in an actual commit message you would omit the titles. (You don\u0027t have to be this verbose all the time, but if you fix a bug by code deletion and you don\u0027t add a testcase, then a detailed commit message is great.)\n\nTitle (single line, short and to the point, imperative present):\n\nsw: always show \"tabs\" tab in the paragraph dialog for multiple paragraphs\n\nIntro (observation of the current state):\n\nIn case multiple paragraphs were selected and the various paragraphs had different left/right margins in their item sets, we used to hide the \"tabs\" tab page on the paragraph dialog.\n\nProblem description (pros and cons of the current state):\n\nThis had the benefit that we avoided presenting information that is not entirely true for all paragraphs, but had the downside that it was not possible to set tab stops for multiple paragraphs when at least one of the paragraph had different left/right margins compared to the reset of the paragraphs. This required the user to \"hunt\" for the offending paragraph(s). The ability to always have the possibility to set tab stops seems to provide more benefit than the cost of presenting a partially confusing \"tabs\" tab page when reading the doc model.\n\nSolution (give orders to the codebase):\n\nFix the problem by relaxing the requirements and only hiding the \"tabs\" tab page in the writer/web page, show the tab page is now always shown for normal documents.\n\nOther comments (caveats, etc.):\n\nThis change makes no effort to show the common tab stops of all selected paragraphs on the UI, which would probably make sense, but can be done in a follow-up change.",
+      "revId": "0bc662a48c502fb5556c20ec3f92ab621e75d567",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
