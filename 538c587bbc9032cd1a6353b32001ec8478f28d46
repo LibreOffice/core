@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d008cc7_7dedd7d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-08-03T11:25:11Z",
+      "side": 1,
+      "message": "Jenkins builds are broken. Resumed builds don\u0027t start hanging ~forever and the first two can\u0027t even be aborted.\nhttps://ci.libreoffice.org/job/gerrit_74/481/\nhttps://ci.libreoffice.org/job/gerrit_74/482/\nhttps://ci.libreoffice.org/job/gerrit_74/484/\n",
+      "revId": "538c587bbc9032cd1a6353b32001ec8478f28d46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
