@@ -708,25 +708,31 @@ IMPL_LINK( SwView, ScrollHdl, ScrollBar *, p, void )
                 //QuickHelp:
                 if( m_pWrtShell->GetPageCnt() > 1 )
                 {
-                    tools::Rectangle aRect;
-                    aRect.SetLeft( pScrollbar->GetParent()->OutputToScreenPixel(
-                                        pScrollbar->GetPosPixel() ).X() -8 );
-                    aRect.SetTop( pScrollbar->OutputToScreenPixel(
-                                    pScrollbar->GetPointerPosPixel() ).Y() );
-                    aRect.SetRight( aRect.Left() );
-                    aRect.SetBottom( aRect.Top() );
-
-                    OUString sPageStr( GetPageStr( nPhNum, nVirtNum, sDisplay ));
-                    SwContentAtPos aCnt( IsAttrAtPos::Outline );
-                    bool bSuccess = m_pWrtShell->GetContentAtPos(aPos, aCnt);
-                    if (bSuccess && !aCnt.sStr.isEmpty())
+                    if( !nPgNum || nPgNum != nPhNum )
                     {
-                        sPageStr += "  - ";
-                        sal_Int32 nChunkLen = std::min<sal_Int32>(aCnt.sStr.getLength(), 80);
-                        std::u16string_view sChunk = aCnt.sStr.subView(0, nChunkLen);
-                        sPageStr = sChunk + sPageStr;
-                        sPageStr = sPageStr.replace('\t', ' ');
-                        sPageStr = sPageStr.replace(0x0a, ' ');
+                        tools::Rectangle aRect;
+                        aRect.SetLeft( pScrollbar->GetParent()->OutputToScreenPixel(
+                                            pScrollbar->GetPosPixel() ).X() -8 );
+                        aRect.SetTop( pScrollbar->OutputToScreenPixel(
+                                        pScrollbar->GetPointerPosPixel() ).Y() );
+                        aRect.SetRight( aRect.Left() );
+                        aRect.SetBottom( aRect.Top() );
+
+                        OUString sPageStr( GetPageStr( nPhNum, nVirtNum, sDisplay ));
+                        SwContentAtPos aCnt( IsAttrAtPos::Outline );
+                        bool bSuccess = m_pWrtShell->GetContentAtPos(aPos, aCnt);
+                        if (bSuccess && !aCnt.sStr.isEmpty())
+                        {
+                            sPageStr += "  - ";
+                            sal_Int32 nChunkLen = std::min<sal_Int32>(aCnt.sStr.getLength(), 80);
+                            std::u16string_view sChunk = aCnt.sStr.subView(0, nChunkLen);
+                            sPageStr = sChunk + sPageStr;
+                            sPageStr = sPageStr.replace('\t', ' ');
+                            sPageStr = sPageStr.replace(0x0a, ' ');
+                        }
+
+                        Help::ShowQuickHelp( pScrollbar, aRect, sPageStr,
+                                        QuickHelpFlags::Right|QuickHelpFlags::VCenter);
                     }
                     nPgNum = nPhNum;
                 }
