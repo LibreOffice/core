@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99f87dcd_61172511",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-08-03T10:29:30Z",
+      "side": 1,
+      "message": "hmm that sounds like an inherent limitation of DOCX...\n\ni found a similar problem about some TOC field \"\\t\" switch some years ago...\n\nhttps://support.microsoft.com/en-us/office/field-codes-toc-table-of-contents-field-1f538bc4-60e6-4854-9f64-67754d78d05c?ui\u003den-US\u0026rs\u003den-US\u0026ad\u003dUS\n\n\"Because of language-specific dependencies, we recommend not using the \\t switch in templates or documents that are intended for users across multiple language configurations.\" 😭",
+      "revId": "2a93e9b54e1b4c6b5ca02ed4be26cfb3fdf66116",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
