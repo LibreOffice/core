@@ -40,10 +40,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf150086)
     // Load a document where an insert redline ends right before a ToC
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf150086.docx");
     const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
-    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(9), rTable.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(8), rTable.size());
 
     // This was "Conte" (stripped redline)
-    CPPUNIT_ASSERT_EQUAL(OUString("Content"), rTable[6]->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("Content\n"), rTable[6]->GetText());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
