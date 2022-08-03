@@ -243,11 +243,11 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
         {
             // Retrieve the text argument from the sequence property value
             rtl::OUString aText;
-            for ( sal_Int32 i = 0; i < lArgs.getLength(); i++ )
+            for ( auto & i: lArgs)
             {
-                if ( lArgs[i].Name == "Text" )
+                if ( i.Name == "Text" )
                 {
-                    lArgs[i].Value >>= aText;
+                    i.Value >>= aText;
                     break;
                 }
             }
