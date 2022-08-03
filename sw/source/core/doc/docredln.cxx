@@ -795,7 +795,11 @@ bool SwRedlineTable::isMoved( size_type rPos ) const
     }
 
     const OUString sTrimmed = pPaM->GetText().trim();
-    if ( sTrimmed.getLength() < 2 )
+    // detection of move needs at least 6 characters with an inner
+    // space after stripping white spaces of the redline to skip
+    // frequent deleted and inserted articles or other common
+    // word parts, e.g. 'the' and 'of a' to detect as text moving
+    if ( sTrimmed.getLength() < 6 || sTrimmed.indexOf(' ') == -1 )
     {
         if ( bDeletePaM )
             delete pPaM;

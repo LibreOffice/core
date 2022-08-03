@@ -509,6 +509,40 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineMoving)
     CPPUNIT_ASSERT(pXmlDoc);
 
     // text and numbering colors show moving of the list item
+    // tdf#145719: the moved text item "It" is not detected as text moving,
+    // because it consists of less than 6 characters after stripping its spaces
+    assertXPath(pXmlDoc, "/metafile/push/push/push/textcolor[@color='#008000']", 0);
+    assertXPath(pXmlDoc, "/metafile/push/push/push/font[@color='#008000']", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineMoving2)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf42748.fodt");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // create a 3-element list without change tracking
+    SwEditShell* const pEditShell(pDoc->GetEditShell());
+    pEditShell->RejectRedline(0);
+    pEditShell->AcceptRedline(0);
+
+    // extend the first item to "An ItemIt", because detection of move needs
+    // at least 6 characters with an inner space after stripping white spaces
+    // of the redline
+    dispatchCommand(mxComponent, ".uno:GoToStartOfDoc", {});
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Insert("An Item");
+
+    // move down first list item with track changes
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    dispatchCommand(mxComponent, ".uno:MoveDown", {});
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // text and numbering colors show moving of the list item
     // These were 0 (other color, not COL_GREEN, color of the tracked text movement)
     assertXPath(pXmlDoc, "/metafile/push/push/push/textcolor[@color='#008000']", 5);
     assertXPath(pXmlDoc, "/metafile/push/push/push/font[@color='#008000']", 11);
