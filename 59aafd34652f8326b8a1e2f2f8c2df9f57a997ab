@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "81afba48_9f2c46f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-08-03T15:15:28Z",
+      "side": 1,
+      "message": "btw @Skyler did you send your license statement already?\n\nhttps://wiki.documentfoundation.org/Development/GetInvolved/pl#License_statement",
+      "revId": "59aafd34652f8326b8a1e2f2f8c2df9f57a997ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e8a97f86_38c02d0a",
