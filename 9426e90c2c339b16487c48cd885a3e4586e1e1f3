@@ -34,6 +34,24 @@
       "parentUuid": "2994a71c_2ff56573",
       "revId": "9426e90c2c339b16487c48cd885a3e4586e1e1f3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f485fbdf_d8103c27",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-08-03T18:58:10Z",
+      "side": 1,
+      "message": "yeah, I revert and it is crash-free, I restore and the crash returns. For me it used to take the\n\n    if (nBottom \u003e (m_pWrtShell-\u003eGetDocSize().Height()+nAdd) )\n        return;\n        \npath (with a 0 for GetDocSize().Height()) and that somehow matters.\n\nIf I do the load/save interactively I have no problem, but it is reproducible with this --headless --convert-to situation.\n\npatching like...\n\n    SelectShell();\n\n+    if (!m_pWrtShell-\u003eGetDocSize().Height())\n+        return;\n\nis sufficient for it to not crash again. \n\nOtherwise I end up with an empty m_LastOpenCell and back() called on that at...\n\n#3  0x00007ffff72a52ad in std::__throw_bad_exception() () at /lib64/libstdc++.so.6\n#4  0x00007fff47720586 in std::__debug::vector\u003cint, std::allocator\u003cint\u003e \u003e::back() (this\u003d0x5875018) at /usr/bin/../lib/gcc/x86_64-redhat-linux/12/../../../../include/c++/12/debug/vector:476\n#5  0x00007fff476cd3da in DocxAttributeOutput::SyncNodelessCells(std::shared_ptr\u003cww8::WW8TableNodeInfoInner\u003e const\u0026, int, unsigned int) (this\u003d0x58747f0, pInner\u003dwarning: RTTI symbol not found for class \u0027std::_Sp_counted_ptr_inplace\u003cww8::WW8TableNodeInfoInner, std::allocator\u003cvoid\u003e, (__gnu_cxx::_Lock_policy)2\u003e\u0027\nwarning: RTTI symbol not found for class \u0027std::_Sp_counted_ptr_inplace\u003cww8::WW8TableNodeInfoInner, std::allocator\u003cvoid\u003e, (__gnu_cxx::_Lock_policy)2\u003e\u0027\n\nstd::shared_ptr\u003cww8::WW8TableNodeInfoInner\u003e (use count 3, weak count 0) \u003d {...}, nCell\u003d4, nRow\u003d0) at sw/source/filter/ww8/docxattributeoutput.cxx:1142\n#6  0x00007fff476d24b1 in DocxAttributeOutput::FinishTableRowCell(std::shared_ptr\u003cww8::WW8TableNodeInfoInner\u003e const\u0026, bool) (this\u003d0x58747f0, pInner\u003dwarning: RTTI symbol not found for class \u0027std::_Sp_counted_ptr_inplace\u003cww8::WW8TableNodeInfoInner, std::allocator\u003cvoid\u003e, (__gnu_cxx::_Lock_policy)2\u003e\u0027\nwarning: RTTI symbol not found for class \u0027std::_Sp_counted_ptr_inplace\u003cww8::WW8TableNodeInfoInner, std::allocator\u003cvoid\u003e, (__gnu_cxx::_Lock_policy)2\u003e\u0027\n\nstd::shared_ptr\u003cww8::WW8TableNodeInfoInner\u003e (use count 3, weak count 0) \u003d {...}, bForceEmptyParagraph\u003dfalse) at sw/source/filter/ww8/docxattributeoutput.cxx:1192\n#7  0x00007fff476d202c in DocxAttributeOutput::EndParagraph(std::shared_ptr\u003cww8::WW8TableNodeInfoInner\u003e) (this\u003d0x58747f0, pTextNodeInfoInner\u003dwarning: RTTI symbol not found for class \u0027std::_Sp_counted_ptr_inplace\u003cww8::WW8TableNodeInfoInner, std::allocator\u003cvoid\u003e, (__gnu_cxx::_Lock_policy)2\u003e\u0027\nwarning: RTTI symbol not found for class \u0027std::_Sp_counted_ptr_inplace\u003cww8::WW8TableNodeInfoInner, std::allocator\u003cvoid\u003e, (__gnu_cxx::_Lock_policy)2\u003e\u0027\n\nstd::shared_ptr\u003cww8::WW8TableNodeInfoInner\u003e (use count 3, weak count 0) \u003d {...}) at sw/source/filter/ww8/docxattributeoutput.cxx:1128\n#8  0x00007fff47936a20 in MSWordExportBase::OutputTextNode(SwTextNode\u0026) (this\u003d0x7fffffff46f0, rNode\u003d...) at sw/source/filter/ww8/wrtw8nds.cxx:3218\n#9  0x00007fff479394d8 in MSWordExportBase::OutputContentNode(SwContentNode\u0026) (this\u003d0x7fffffff46f0, rNode\u003d...) at sw/source/filter/ww8/wrtw8nds.cxx:3580\n#10 0x00007fff479dd619 in MSWordExportBase::WriteText() (this\u003d0x7fffffff46f0) at sw/source/filter/ww8/wrtww8.cxx:2813\n#11 0x00007fff477b682d in DocxExport::WriteMainText() (this\u003d0x7fffffff46f0) at sw/source/filter/ww8/docxexport.cxx:1878",
+      "parentUuid": "91ecaed0_66e58a8f",
+      "revId": "9426e90c2c339b16487c48cd885a3e4586e1e1f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
