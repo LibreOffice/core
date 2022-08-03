@@ -430,9 +430,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
 
         // pRedlPam points to nodes that may be deleted (hidden) by
         // AppendRedline, so adjust it beforehand to prevent ASSERT
-        pRedlPam->GetPoint()->nNode = aSttIdx;
-        SwContentNode* pCNd = aSttIdx.GetNode().GetContentNode();
-        pRedlPam->GetPoint()->nContent.Assign( pCNd, 0 );
+        pRedlPam->GetPoint()->Assign(aSttIdx);
 
         getIDocumentRedlineAccess().AppendRedline(pDeleteRedline, true);
 

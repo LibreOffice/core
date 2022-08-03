@@ -139,8 +139,7 @@ void SwUndo::RemoveIdxFromRange( SwPaM& rPam, bool bMoveNext )
             rPam.Exchange();
             if( !rPam.Move( fnMoveBackward ) )
             {
-                rPam.GetPoint()->nNode = rPam.GetDoc().GetNodes().GetEndOfPostIts();
-                rPam.GetPoint()->nContent.Assign( nullptr, 0 );
+                rPam.GetPoint()->Assign( rPam.GetDoc().GetNodes().GetEndOfPostIts() );
             }
         }
 

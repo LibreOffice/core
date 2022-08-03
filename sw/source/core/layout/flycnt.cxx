@@ -1413,8 +1413,7 @@ void SwFlyAtContentFrame::SetAbsPos( const Point &rNew )
         else // is that even possible? maybe if there was a change of anchor type from AT_FLY or something?
         {
             assert(pCnt->IsNoTextFrame());
-            pos.nNode = *static_cast<SwNoTextFrame*>(pCnt)->GetNode();
-            pos.nContent.Assign(static_cast<SwNoTextFrame*>(pCnt)->GetNode(), 0);
+            pos.Assign(*static_cast<SwNoTextFrame*>(pCnt)->GetNode());
         }
         aAnch.SetAnchor( &pos );
 

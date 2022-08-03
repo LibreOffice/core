@@ -124,9 +124,6 @@ SwUndoMove::SwUndoMove( SwDoc& rDoc, const SwNodeRange& rRg,
         if( pCNd )
             aPtPos.nContent.Assign( pCNd, pCNd->Len() );
         SwPosition aMkPos( rRg.aStart );
-        pCNd = aMkPos.GetNode().GetContentNode();
-        if( nullptr != pCNd )
-            aMkPos.nContent.Assign( pCNd, 0 );
 
         DelContentIndex( aMkPos, aPtPos, DelContentType::Ftn );
 

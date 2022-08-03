@@ -99,11 +99,9 @@ SwPaM& SwPamRanges::SetPam( size_t nArrPos, SwPaM& rPam )
 {
     assert( nArrPos < Count() );
     const SwPamRange& rTmp = maVector[ nArrPos ];
-    rPam.GetPoint()->nNode = rTmp.nStart;
-    rPam.GetPoint()->nContent.Assign( rPam.GetContentNode(), 0 );
+    rPam.GetPoint()->Assign(rTmp.nStart);
     rPam.SetMark();
-    rPam.GetPoint()->nNode = rTmp.nEnd;
-    rPam.GetPoint()->nContent.Assign( rPam.GetContentNode(), 0 );
+    rPam.GetPoint()->Assign(rTmp.nEnd);
     return rPam;
 }
 

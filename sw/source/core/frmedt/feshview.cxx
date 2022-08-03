@@ -817,8 +817,7 @@ const SwFrameFormat* SwFEShell::SelFlyGrabCursor()
                 {
                     assert(pCFrame->IsNoTextFrame());
                     SwContentNode *const pCNode = static_cast<SwNoTextFrame *>(pCFrame)->GetNode();
-                    pCursor->GetPoint()->nNode = *pCNode;
-                    pCursor->GetPoint()->nContent.Assign( pCNode, 0 );
+                    pCursor->GetPoint()->Assign(*pCNode);
                 }
 
                 SwRect& rChrRect = const_cast<SwRect&>(GetCharRect());
@@ -2655,8 +2654,7 @@ bool SwFEShell::GotoFly( const OUString& rName, FlyCntType eType, bool bSelFrame
                         assert(pCFrame->IsNoTextFrame());
                         SwContentNode *const pCNode = static_cast<SwNoTextFrame *>(pCFrame)->GetNode();
 
-                        pCursor->GetPoint()->nNode = *pCNode;
-                        pCursor->GetPoint()->nContent.Assign( pCNode, 0 );
+                        pCursor->GetPoint()->Assign(*pCNode);
                     }
 
                     SwRect& rChrRect = const_cast<SwRect&>(GetCharRect());

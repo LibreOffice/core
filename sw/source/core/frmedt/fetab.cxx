@@ -196,8 +196,7 @@ void SwFEShell::InsertRow( sal_uInt16 nCnt, bool bBehind )
         SwPaM* pPaM = getShellCursor(false);
         SwNode* pNode = pPaM->Start()->GetNode().FindTableNode()->EndOfSectionNode();
         // pNode is the end node of the table, we want the last node before the end node of the last cell.
-        pPaM->End()->nNode = pNode->GetIndex() - 2;
-        pPaM->End()->nContent.Assign(pPaM->End()->GetNode().GetContentNode(), 0);
+        pPaM->End()->Assign( pNode->GetIndex() - 2 );
     }
     GetTableSel( *this, aBoxes, SwTableSearchType::Row );
 

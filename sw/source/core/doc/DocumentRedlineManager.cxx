@@ -178,8 +178,7 @@ void UpdateFramesForAddDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
                 }
             }
         }
-        currentStart.nNode = pTableOrSectionNode->EndOfSectionIndex() + 1;
-        currentStart.nContent.Assign(currentStart.GetNode().GetContentNode(), 0);
+        currentStart.Assign( pTableOrSectionNode->EndOfSectionIndex() + 1 );
         pStartNode = currentStart.GetNode().GetTextNode();
     }
     if (currentStart < *rPam.End())
@@ -281,8 +280,7 @@ void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
             ::MakeFrames(&rDoc, currentStart.nNode, end);
             isAppendObjsCalled = true;
         }
-        currentStart.nNode = pTableOrSectionNode->EndOfSectionIndex() + 1;
-        currentStart.nContent.Assign(currentStart.GetNode().GetContentNode(), 0);
+        currentStart.Assign( pTableOrSectionNode->EndOfSectionIndex() + 1 );
         pStartNode = currentStart.GetNode().GetTextNode();
     }
     if (currentStart < *rPam.End())

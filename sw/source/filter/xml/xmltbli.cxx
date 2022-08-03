@@ -2710,7 +2710,6 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
             SwContentNode *pCNd = pDoc->GetNodes()[ pStNd->GetIndex() + 1 ]
                                                             ->GetContentNode();
             SwPosition aPos( *pCNd );
-            aPos.nContent.Assign( pCNd, 0U );
 
             const uno::Reference< text::XTextRange > xTextRange =
                 SwXTextRange::CreateXTextRange( *pDoc, aPos, nullptr );

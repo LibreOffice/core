@@ -224,6 +224,17 @@ void SwPosition::Assign( const SwNode& rNd )
     nNode.Assign(rNd);
     nContent.Assign(rNd.GetContentNode(), 0);
 }
+void SwPosition::Assign( const SwNodeIndex& rNdIdx )
+{
+    nNode = rNdIdx;
+    nContent.Assign(nNode.GetNode().GetContentNode(), 0);
+}
+void SwPosition::Adjust( SwNodeOffset nDelta )
+{
+    nNode += nDelta;
+    nContent.Assign(nNode.GetNode().GetContentNode(), 0);
+}
+
 
 std::ostream &operator <<(std::ostream& s, const SwPosition& position)
 {

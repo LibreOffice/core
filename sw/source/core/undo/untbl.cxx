@@ -305,8 +305,7 @@ void SwUndoInsTable::UndoImpl(::sw::UndoRedoContext & rContext)
 
     SwPaM & rPam( rContext.GetCursorSupplier().CreateNewShellCursor() );
     rPam.DeleteMark();
-    rPam.GetPoint()->nNode = aIdx;
-    rPam.GetPoint()->nContent.Assign( rPam.GetContentNode(), 0 );
+    rPam.GetPoint()->Assign(aIdx);
 }
 
 void SwUndoInsTable::RedoImpl(::sw::UndoRedoContext & rContext)
@@ -771,8 +770,7 @@ void SwUndoTextToTable::UndoImpl(::sw::UndoRedoContext & rContext)
     SwPosition *const pPos = aPam.GetPoint();
     if( m_nSttContent )
     {
-        pPos->nNode = nTableNd;
-        pPos->nContent.Assign(pPos->GetNode().GetContentNode(), 0);
+        pPos->Assign(nTableNd);
         if (aPam.Move(fnMoveBackward, GoInContent))
         {
             SwNodeIndex & rIdx = aPam.GetPoint()->nNode;
@@ -2441,15 +2439,7 @@ void SwUndoTableCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
                     // for step forward later on.
                     bDeleteCompleteParagraph = true;
                     bShiftPam = true;
-                    SwNodeIndex aTmpIdx( *pEndNode, -1 );
-                    SwTextNode *pText = aTmpIdx.GetNode().GetTextNode();
-                    if( pText )
-                    {
-                        aPam.GetPoint()->nNode = *pText;
-                        aPam.GetPoint()->nContent.Assign( pText, 0 );
-                    }
-                    else
-                        *aPam.GetPoint() = SwPosition( aTmpIdx );
+                    aPam.GetPoint()->Assign(*pEndNode, SwNodeOffset(-1));
                 }
             }
             rDoc.getIDocumentRedlineAccess().DeleteRedline( aPam, true, RedlineType::Any );
@@ -2463,15 +2453,7 @@ void SwUndoTableCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
             {
                 // The aPam.Point is at the moment at the last position of the new content and has to be
                 // moved to the first position of the old content for the SwUndoDelete operation
-                SwNodeIndex aTmpIdx( aPam.GetPoint()->nNode, 1 );
-                SwTextNode *pText = aTmpIdx.GetNode().GetTextNode();
-                if( pText )
-                {
-                    aPam.GetPoint()->nNode = *pText;
-                    aPam.GetPoint()->nContent.Assign( pText, 0 );
-                }
-                else
-                    *aPam.GetPoint() = SwPosition( aTmpIdx );
+                aPam.GetPoint()->Assign(aPam.GetPoint()->nNode.GetNode(), SwNodeOffset(1));
             }
             pUndo = std::make_unique<SwUndoDelete>(aPam, SwDeleteFlags::Default, bDeleteCompleteParagraph, true);
         }

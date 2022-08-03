@@ -357,12 +357,10 @@ SwFlyFrameFormat* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rS
             const SwFormatContent &rContent = pFormat->GetContent();
             OSL_ENSURE( rContent.GetContentIdx(), "No content prepared." );
             SwNodeIndex aIndex( *(rContent.GetContentIdx()), 1 );
-            SwContentNode *pNode = aIndex.GetNode().GetContentNode();
 
             // Attention: Do not create an index on the stack, or we
             // cannot delete ContentNode in the end!
             SwPosition aPos( aIndex );
-            aPos.nContent.Assign( pNode, 0 );
 
             if( pSelBoxes && !pSelBoxes->empty() )
             {

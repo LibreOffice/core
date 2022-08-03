@@ -1665,8 +1665,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
             // #i65201#: Expand again, see comment above.
             if( pTmp->GetPoint()->nContent == 0 )
             {
-                ++pTmp->GetPoint()->nNode;
-                pTmp->GetPoint()->nContent.Assign( pTmp->GetContentNode(), 0 );
+                pTmp->GetPoint()->Adjust(SwNodeOffset(1));
             }
             // #i101009#
             // prevent redlines that end on structural end node
@@ -1709,8 +1708,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
     do {
         if( pTmp->GetPoint()->nContent == 0 )
         {
-            ++pTmp->GetPoint()->nNode;
-            pTmp->GetPoint()->nContent.Assign( pTmp->GetContentNode(), 0 );
+            pTmp->GetPoint()->Adjust(SwNodeOffset(1));
         }
         // #i101009#
         // prevent redlines that end on structural end node

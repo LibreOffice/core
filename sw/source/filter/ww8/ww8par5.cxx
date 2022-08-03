@@ -2580,8 +2580,7 @@ eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc* /*pF*/, OUString& rSt
     if (!pSectionNode)
         return eF_ResT::TEXT;
 
-    m_pPaM->GetPoint()->nNode = pSectionNode->GetIndex()+1;
-    m_pPaM->GetPoint()->nContent.Assign(m_pPaM->GetContentNode(), 0 );
+    m_pPaM->GetPoint()->Assign( pSectionNode->GetIndex()+1 );
 
     //we have inserted a section before this point, so adjust pos
     //for future page/section segment insertion

@@ -346,10 +346,7 @@ namespace sw {
         SwPosition pos(rPos);
         SwTextNode const*const pNode(pos.GetNode().GetTextNode());
         if (pNode)
-        {
-            pos.nNode = *sw::GetParaPropsNode(rLayout, *pNode);
-            pos.nContent.Assign(pos.GetNode().GetContentNode(), 0);
-        }
+            pos.Assign( *sw::GetParaPropsNode(rLayout, *pNode) );
         return pos;
     }
 

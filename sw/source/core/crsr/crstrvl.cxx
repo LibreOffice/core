@@ -251,8 +251,7 @@ bool SwCursorShell::SetCursorInHdFt( size_t nDescNo, bool bInHeader )
                 ClearMark();
 
                 SwPosition& rPos = *m_pCurrentCursor->GetPoint();
-                rPos.nNode = *pCNd;
-                rPos.nContent.Assign( pCNd, 0 );
+                rPos.Assign( *pCNd );
 
                 bRet = !m_pCurrentCursor->IsSelOvr();
                 if( bRet )
@@ -306,8 +305,7 @@ bool SwCursorShell::GotoNextTOXBase( const OUString* pName )
     {
         SwCallLink aLk( *this ); // watch Cursor-Moves
         SwCursorSaveState aSaveState( *m_pCurrentCursor );
-        m_pCurrentCursor->GetPoint()->nNode = *pFnd;
-        m_pCurrentCursor->GetPoint()->nContent.Assign( pFnd, 0 );
+        m_pCurrentCursor->GetPoint()->Assign( *pFnd );
         bRet = !m_pCurrentCursor->IsSelOvr();
         if( bRet )
             UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
@@ -358,8 +356,7 @@ bool SwCursorShell::GotoPrevTOXBase( const OUString* pName )
     {
         SwCallLink aLk( *this ); // watch Cursor-Moves
         SwCursorSaveState aSaveState( *m_pCurrentCursor );
-        m_pCurrentCursor->GetPoint()->nNode = *pFnd;
-        m_pCurrentCursor->GetPoint()->nContent.Assign( pFnd, 0 );
+        m_pCurrentCursor->GetPoint()->Assign(*pFnd);
         bRet = !m_pCurrentCursor->IsSelOvr();
         if( bRet )
             UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
@@ -1065,8 +1062,7 @@ void SwCursorShell::GotoOutline( SwOutlineNodes::size_type nIdx )
 
     const SwNodes& rNds = GetDoc()->GetNodes();
     SwTextNode* pTextNd = rNds.GetOutLineNds()[ nIdx ]->GetTextNode();
-    pCursor->GetPoint()->nNode = *pTextNd;
-    pCursor->GetPoint()->nContent.Assign( pTextNd, 0 );
+    pCursor->GetPoint()->Assign(*pTextNd);
 
     if( !pCursor->IsSelOvr() )
         UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
@@ -1147,8 +1143,7 @@ bool SwCursorShell::GotoNextOutline()
     CurrShell aCurr( this );
     SwCallLink aLk( *this ); // watch Cursor-Moves
     SwCursorSaveState aSaveState( *pCursor );
-    pCursor->GetPoint()->nNode = *pNd;
-    pCursor->GetPoint()->nContent.Assign( pNd->GetTextNode(), 0 );
+    pCursor->GetPoint()->Assign(*pNd);
 
     bool bRet = !pCursor->IsSelOvr();
     if( bRet )
@@ -1207,8 +1202,7 @@ bool SwCursorShell::GotoPrevOutline()
         CurrShell aCurr( this );
         SwCallLink aLk( *this ); // watch Cursor-Moves
         SwCursorSaveState aSaveState( *pCursor );
-        pCursor->GetPoint()->nNode = *pNd;
-        pCursor->GetPoint()->nContent.Assign( pNd->GetTextNode(), 0 );
+        pCursor->GetPoint()->Assign(*pNd);
 
         bRet = !pCursor->IsSelOvr();
         if( bRet )
@@ -1295,8 +1289,7 @@ void SwCursorShell::MakeOutlineSel(SwOutlineNodes::size_type nSttPos, SwOutlineN
     SwCursorSaveState aSaveState( *m_pCurrentCursor );
 
     // set end to the end of the previous content node
-    m_pCurrentCursor->GetPoint()->nNode = *pSttNd;
-    m_pCurrentCursor->GetPoint()->nContent.Assign( pSttNd->GetContentNode(), 0 );
+    m_pCurrentCursor->GetPoint()->Assign(*pSttNd);
     m_pCurrentCursor->SetMark();
     m_pCurrentCursor->GetPoint()->nNode = *pEndNd;
     m_pCurrentCursor->Move( fnMoveBackward, GoInNode ); // end of predecessor
