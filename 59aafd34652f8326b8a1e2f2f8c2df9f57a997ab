@@ -35,6 +35,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d3dac2b_87d04c42",
+        "filename": "sw/source/uibase/inc/splittbl.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1003648
+      },
+      "writtenOn": "2022-08-03T14:40:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e8a97f86_38c02d0a",
+      "revId": "59aafd34652f8326b8a1e2f2f8c2df9f57a997ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f202ef78_ae3e6f47",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-08-03T14:34:01Z",
       "side": 1,
       "message": "just a nitpick: should start with lowercase letter prefix: aSplitMode",
+      "revId": "59aafd34652f8326b8a1e2f2f8c2df9f57a997ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34801fd6_8b6dc048",
+        "filename": "sw/source/uibase/shells/tabsh.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1091,
+      "author": {
+        "id": 1003648
+      },
+      "writtenOn": "2022-08-03T14:40:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f202ef78_ae3e6f47",
       "revId": "59aafd34652f8326b8a1e2f2f8c2df9f57a997ab",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
