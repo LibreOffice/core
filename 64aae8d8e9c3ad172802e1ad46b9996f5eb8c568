@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf6bb835_df7fe7c6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000521
+      },
+      "writtenOn": "2022-08-03T14:55:51Z",
+      "side": 1,
+      "message": "File passes the\n    msgfmt --check \u0027pt.po\u0027\ntest without errors",
+      "revId": "64aae8d8e9c3ad172802e1ad46b9996f5eb8c568",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
