@@ -151,7 +151,7 @@ namespace slideshow::internal
             virtual bool render() const override;
             virtual bool isContentChanged() const override;
 
-            // Sub item specialities
+            // Sub item specialties
 
 
             virtual const DocTreeNodeSupplier&  getTreeNodeSupplier() const override;

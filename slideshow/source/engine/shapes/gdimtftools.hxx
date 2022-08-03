@@ -39,7 +39,7 @@ class Graphic;
 
 namespace slideshow::internal
     {
-        /// meta file loading specialities:
+        /// meta file loading specialties:
         enum mtf_load_flags {
             /// no flags
             MTF_LOAD_NONE = 0,
