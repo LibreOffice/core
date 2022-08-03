@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f167a37e_bd330a8e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-08-03T14:34:01Z",
+      "side": 1,
+      "message": "hi, great, patch looks nice, but have to test it :)\nJust added 2 comments about variable naming.",
+      "revId": "59aafd34652f8326b8a1e2f2f8c2df9f57a997ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8a97f86_38c02d0a",
+        "filename": "sw/source/uibase/inc/splittbl.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-08-03T14:34:01Z",
+      "side": 1,
+      "message": "m_ prefix is for members, in this context: nSplit",
+      "revId": "59aafd34652f8326b8a1e2f2f8c2df9f57a997ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f202ef78_ae3e6f47",
+        "filename": "sw/source/uibase/shells/tabsh.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1091,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-08-03T14:34:01Z",
+      "side": 1,
+      "message": "just a nitpick: should start with lowercase letter prefix: aSplitMode",
+      "revId": "59aafd34652f8326b8a1e2f2f8c2df9f57a997ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
