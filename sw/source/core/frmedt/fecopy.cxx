@@ -1093,8 +1093,7 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
                     // Note: aCpyPam is invalid now
 
                     ++aIndexBefore;
-                    SwPaM aPaM(SwPosition(aIndexBefore),
-                           SwPosition(rInsPos.nNode));
+                    SwPaM aPaM(aIndexBefore, rInsPos.nNode);
 
                     aPaM.GetDoc().MakeUniqueNumRules(aPaM);
 
@@ -1193,8 +1192,7 @@ void SwFEShell::PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt1
         //remove the inserted paragraph
         Undo();
         //remove the paragraph in the second doc, too
-        SwNodeIndex aIdx( rToFill.GetDoc()->GetNodes().GetEndOfExtras(), 2 );
-        SwPaM aPara( aIdx ); //DocStart
+        SwPaM aPara( rToFill.GetDoc()->GetNodes().GetEndOfExtras(), SwNodeOffset(2) ); //DocStart
         rToFill.GetDoc()->getIDocumentContentOperations().DelFullPara(aPara);
     }
     // now the page bound objects

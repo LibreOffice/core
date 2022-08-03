@@ -595,8 +595,7 @@ bool SwTable::InsertRow_( SwDoc* pDoc, const SwSelBoxes& rBoxes,
                 SvxPrintItem aSetTracking(RES_PRINT, false);
                 SwPosition aPos(*pNewTableLine->GetTabBoxes()[0]->GetSttNd());
                 SwCursor aCursor( aPos, nullptr );
-                SwNodeIndex aInsPos(*pNewTableLine->GetTabBoxes()[0]->GetSttNd(), 1 );
-                SwPaM aPaM(aInsPos);
+                SwPaM aPaM(*pNewTableLine->GetTabBoxes()[0]->GetSttNd(), SwNodeOffset(1));
                 pDoc->getIDocumentContentOperations().InsertString( aPaM,
                         OUStringChar(CH_TXT_TRACKED_DUMMY_CHAR) );
                 pDoc->SetRowNotTracked( aCursor, aSetTracking );

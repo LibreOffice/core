@@ -423,8 +423,7 @@ void SwFlyFrame::FinitDrawObj()
                             rCurrentShell.Imp()->GetDrawView()->UnmarkAll();
                             if (pOldSelFly)
                             {
-                                SwPosition const pos(ResolveFlyAnchor(*pOldSelFly->GetFormat()));
-                                SwPaM const temp(pos);
+                                SwPaM const temp(ResolveFlyAnchor(*pOldSelFly->GetFormat()));
                                 pFEShell->SetSelection(temp);
                                 // could also call SetCursor() like SwFEShell::SelectObj()
                                 // does, but that would access layout a bit much...

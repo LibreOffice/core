@@ -1555,8 +1555,7 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
         case RES_TXTATR_ANNOTATION:
         case RES_TXTATR_INPUTFIELD:
         {
-            SwNodeIndex aIdx(rEntry.m_aMkPos.m_nNode, 1);
-            SwPaM aPaM(aIdx, rEntry.m_aMkPos.m_nContent);
+            SwPaM aPaM(rEntry.m_aMkPos.m_nNode.GetNode(), SwNodeOffset(1), rEntry.m_aMkPos.m_nContent);
 
             SwFormatField& rFormatField   = *static_cast<SwFormatField*>(rEntry.m_pAttr.get());
             SwField* pField = rFormatField.GetField();
@@ -4691,8 +4690,7 @@ void wwSectionManager::InsertSegments()
 
         if (pTextNd)
         {
-            SwNodeIndex aIdx(*pTextNd);
-            SwPaM aTest(aIdx);
+            SwPaM aTest(*pTextNd);
             mrReader.m_rDoc.getIDocumentContentOperations().DelFullPara(aTest);
             pTextNd = nullptr;
         }
@@ -4708,8 +4706,7 @@ void wwExtraneousParas::delete_all_from_doc()
         SwTextNode* pTextNode = rListener.GetTextNode();
         rListener.StopListening(pTextNode);
 
-        SwNodeIndex aIdx(*pTextNode);
-        SwPaM aTest(aIdx);
+        SwPaM aTest(*pTextNode);
         m_rDoc.getIDocumentContentOperations().DelFullPara(aTest);
     }
     m_aTextNodes.clear();
@@ -6358,8 +6355,7 @@ bool TestImportDOC(SvStream &rStream, const OUString &rFltName)
     xDocSh->DoInitNew();
     SwDoc *pD =  static_cast<SwDocShell*>((&xDocSh))->GetDoc();
 
-    SwNodeIndex aIdx(pD->GetNodes().GetEndOfContent(), -1);
-    SwPaM aPaM(aIdx);
+    SwPaM aPaM(pD->GetNodes().GetEndOfContent(), -1);
     pD->SetInReading(true);
     bool bRet = xReader->Read(*pD, OUString(), aPaM, OUString()) == ERRCODE_NONE;
     pD->SetInReading(false);

@@ -467,9 +467,44 @@ SwPaM::SwPaM( const SwNode& rMark, sal_Int32 nMarkContent,
         nMarkContent );
 }
 
+SwPaM::SwPaM( const SwNode& rMark, SwNodeOffset nMarkOffset, sal_Int32 nMarkContent,
+              const SwNode& rPoint, SwNodeOffset nPointOffset, sal_Int32 nPointContent, SwPaM* pRing )
+    : Ring( pRing )
+    , m_Bound1( rMark )
+    , m_Bound2( rPoint )
+    , m_pPoint( &m_Bound2 )
+    , m_pMark( &m_Bound1 )
+    , m_bIsInFrontOfLabel( false )
+{
+    if ( nMarkOffset )
+    {
+        m_pMark->nNode += nMarkOffset;
+    }
+    if ( nPointOffset )
+    {
+        m_pPoint->nNode += nPointOffset;
+    }
+    m_pPoint->nContent.Assign( m_pPoint->GetNode().GetContentNode(),
+        nPointContent);
+    m_pMark ->nContent.Assign( m_pMark ->GetNode().GetContentNode(),
+        nMarkContent );
+}
+
 SwPaM::SwPaM( const SwNode& rNode, sal_Int32 nContent, SwPaM* pRing )
     : Ring( pRing )
     , m_Bound1( rNode )
+    , m_Bound2( m_Bound1.GetNode().GetNodes() ) // default initialize
+    , m_pPoint( &m_Bound1 )
+    , m_pMark( &m_Bound1 )
+    , m_bIsInFrontOfLabel( false )
+{
+    m_pPoint->nContent.Assign( m_pPoint->GetNode().GetContentNode(),
+        nContent );
+}
+
+SwPaM::SwPaM( const SwNode& rNode, SwNodeOffset nNdOffset, sal_Int32 nContent, SwPaM* pRing )
+    : Ring( pRing )
+    , m_Bound1( rNode, nNdOffset )
     , m_Bound2( m_Bound1.GetNode().GetNodes() ) // default initialize
     , m_pPoint( &m_Bound1 )
     , m_pMark( &m_Bound1 )

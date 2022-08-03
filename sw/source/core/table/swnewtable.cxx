@@ -1531,8 +1531,7 @@ bool SwTable::InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
                             SwContentNode* pCNd = aIdx.GetNode().GetContentNode();
                             if( pCNd && pCNd->IsTextNode() && pCNd->GetTextNode()->GetNumRule() )
                             {
-                                SwPosition aPos( *pCNd->GetTextNode() );
-                                SwPaM aPam( aPos, aPos );
+                                SwPaM aPam( *pCNd->GetTextNode(), *pCNd->GetTextNode() );
                                 pDoc->DelNumRules( aPam );
                             }
                         }

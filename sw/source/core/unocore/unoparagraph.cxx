@@ -522,8 +522,7 @@ uno::Sequence< uno::Any > SwXParagraph::Impl::GetPropertyValues_Impl(
     SwTextNode & rTextNode(GetTextNodeOrThrow());
 
     uno::Sequence< uno::Any > aValues(rPropertyNames.getLength());
-    SwPosition aPos( rTextNode );
-    SwPaM aPam( aPos );
+    SwPaM aPam( rTextNode );
     uno::Any* pValues = aValues.getArray();
     const OUString* pPropertyNames = rPropertyNames.getConstArray();
     const SfxItemPropertyMap &rMap = m_rPropSet.getPropertyMap();
@@ -778,8 +777,7 @@ SwXParagraph::Impl::GetPropertyValuesTolerant_Impl(
                     if (! ::sw::GetDefaultTextContentValue(
                                 aValue, rProp, pEntry->nWID ) )
                     {
-                        SwPosition aPos( rTextNode );
-                        SwPaM aPam( aPos );
+                        SwPaM aPam( rTextNode );
                         // handle properties that are not part of the attribute
                         // and thus only pretended to be paragraph attributes
                         beans::PropertyState eTemp;
@@ -1257,8 +1255,7 @@ SwXParagraph::createEnumeration()
 
     SwTextNode & rTextNode(m_pImpl->GetTextNodeOrThrow());
 
-    SwPosition aPos( rTextNode );
-    SwPaM aPam ( aPos );
+    SwPaM aPam ( rTextNode );
     const uno::Reference< container::XEnumeration > xRef =
         new SwXTextPortionEnumeration(aPam, m_pImpl->m_xParentText,
             m_pImpl->m_nSelectionStartPos, m_pImpl->m_nSelectionEndPos);
@@ -1272,8 +1269,7 @@ SwXParagraph::createTextFieldsEnumeration()
     SolarMutexGuard aGuard;
 
     SwTextNode & rTextNode(m_pImpl->GetTextNodeOrThrow());
-    SwPosition aPos( rTextNode );
-    SwPaM aPam ( aPos );
+    SwPaM aPam ( rTextNode );
 
     return new SwXTextPortionEnumeration(aPam, m_pImpl->m_xParentText,
             m_pImpl->m_nSelectionStartPos, m_pImpl->m_nSelectionEndPos, /*bOnlyTextFields*/true);
@@ -1398,8 +1394,7 @@ SwXParagraph::createContentEnumeration(const OUString& rServiceName)
 
     SwTextNode & rTextNode(m_pImpl->GetTextNodeOrThrow());
 
-    SwPosition aPos( rTextNode );
-    SwPaM aPam( aPos );
+    SwPaM aPam( rTextNode );
     uno::Reference< container::XEnumeration > xRet =
         SwXParaFrameEnumeration::Create(aPam, PARAFRAME_PORTION_PARAGRAPH);
     return xRet;

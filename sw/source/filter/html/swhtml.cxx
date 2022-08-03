@@ -5601,8 +5601,7 @@ bool TestImportHTML(SvStream &rStream)
     xDocSh->DoInitNew();
     SwDoc *pD =  static_cast<SwDocShell*>((&xDocSh))->GetDoc();
 
-    SwNodeIndex aIdx(pD->GetNodes().GetEndOfContent(), -1);
-    SwPaM aPaM(aIdx);
+    SwPaM aPaM(pD->GetNodes().GetEndOfContent(), SwNodeOffset(-1));
     pD->SetInReading(true);
     bool bRet = false;
     try

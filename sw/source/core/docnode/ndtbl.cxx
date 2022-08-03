@@ -1216,7 +1216,8 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
             }
         }
         // another one to break between last cell and node after table
-        SwPaM pam(SwNodeIndex(*pPrev, +1), 0, *pPrev,
+        SwPaM pam(pPrev->GetNode(), SwNodeOffset(+1), 0,
+                  pPrev->GetNode(), SwNodeOffset(0),
                     (pPrev->GetNode().IsContentNode())
                         ? pPrev->GetNode().GetContentNode()->Len() : 0);
         rIDRA.SplitRedline(pam);
@@ -2023,7 +2024,7 @@ bool SwDoc::DeleteRowCol(const SwSelBoxes& rBoxes, RowColMode const eMode)
             }
 
             // Save the cursors (UNO and otherwise)
-            SwPaM aSavePaM( SwNodeIndex( *pTableNd->EndOfSectionNode() ) );
+            SwPaM aSavePaM( *pTableNd->EndOfSectionNode() );
             if( ! aSavePaM.Move( fnMoveForward, GoInNode ) )
             {
                 *aSavePaM.GetMark() = SwPosition( *pTableNd );
@@ -2073,7 +2074,7 @@ bool SwDoc::DeleteRowCol(const SwSelBoxes& rBoxes, RowColMode const eMode)
             }
 
             // Save the cursors (UNO and otherwise)
-            SwPaM aSavePaM( SwNodeIndex( *pTableNd->EndOfSectionNode() ) );
+            SwPaM aSavePaM( *pTableNd->EndOfSectionNode() );
             if( ! aSavePaM.Move( fnMoveForward, GoInNode ) )
             {
                 *aSavePaM.GetMark() = SwPosition( *pTableNd );

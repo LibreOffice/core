@@ -314,8 +314,7 @@ void SwUndoInsLayFormat::UndoImpl(::sw::UndoRedoContext & rContext)
                         rContent.GetContentIdx()->GetIndex() );
                 SwNodeIndex aEndIdx( rDoc.GetNodes(),
                         aIdx.GetNode().EndOfSectionIndex() );
-                SwContentIndex aIndex( pNode, mnCursorSaveIndexPos );
-                SwPosition aPos( *pNode, aIndex );
+                SwPosition aPos( *pNode, mnCursorSaveIndexPos );
                 // don't delete bookmarks here, DelFly() will save them in history
                 ::PaMCorrAbs(SwPaM(aIdx, aEndIdx), aPos);
                 // TODO: is aPos actually a sensible pos for e.g. SwXText* ?
