@@ -310,7 +310,7 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getColumns(
             // COLUMN_NAME
             aRow[4] = new ORowSetValueDecorator( getFieldName( i ) );
             // ORDINAL_POSITION
-            aRow[17] = new ORowSetValueDecorator( i );
+            aRow[17] = new ORowSetValueDecorator( sal_Int32(i) );
             aRows.push_back( aRow );
         }
     }
