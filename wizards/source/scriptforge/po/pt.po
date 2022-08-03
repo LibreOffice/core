@@ -7,7 +7,7 @@
 #  *** are part of the LibreOffice project.                          ***
 #  *********************************************************************
 #
-#  ScriptForge Release 7.3
+#  ScriptForge Release 7.4
 #  -----------------------
 #
 msgid ""
@@ -16,21 +16,16 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.libreoffice.org/enter_bug.cgi?"
 "product=LibreOffice&bug_status=UNCONFIRMED&component=UI\n"
 "POT-Creation-Date: 2021-06-19 16:57:15\n"
-"PO-Revision-Date: 2021-06-28 18:30-0300\n"
-"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2022-08-03 18:30-0300\n"
+"Language-Team: pt-BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 3.0\n"
 "X-Accelerator-Marker: ~\n"
-"Last-Translator: \n"
+"Last-Translator: Rafael Lima\n"
 "Language: pt_BR\n"
-
-#. Text in close buttons of progress and console dialog boxes
-msgctxt "CLOSEBUTTON"
-msgid "Close"
-msgstr "Fechar"
 
 #. Title in error message box
 #. %1: an error number
@@ -56,6 +51,13 @@ msgstr "Erro %1 - Localização = %2 - Descrição = %3"
 msgctxt "STOPEXECUTION"
 msgid "THE EXECUTION IS CANCELLED."
 msgstr "A EXECUÇÃO FOI CANCELADA."
+
+#. Any blocking error message
+#. %1: a method name
+#, kde-format
+msgctxt "NEEDMOREHELP"
+msgid  "Do you want to receive more information about the '%1' method ?"
+msgstr "Você quer saber mais informações sobre o método '%1' ?"
 
 #. SF_Exception.RaiseAbort error message
 msgctxt "INTERNALERROR"
@@ -924,6 +926,74 @@ msgstr ""
 "« %9 » = %10\n"
 "« %11 » = %12"
 
+#. SF_Calc CreateChart
+#. %1: An identifier
+#. %2: A string
+#. %3: An identifier
+#. %4: A string
+#. %5: An identifier
+#. %6: A file name
+#, kde-format
+msgctxt "DUPLICATECHART"
+msgid  ""
+"A chart with the same name exists already in the sheet.\n"
+"\n"
+"« %1 » = %2\n"
+"« %3 » = %4\n"
+"« %5 » = %6\n"
+""
+msgstr ""
+"Um gráfico com o mesmo nome já existe na planilha.\n"
+"\n"
+"« %1 » = %2\n"
+"« %3 » = %4\n"
+"« %5 » = %6\n"
+""
+
+#. SF_Calc.ExportRangeToFile error message
+#. %1: An identifier
+#. %2: A file name
+#. %3: An identifier
+#. %4: True or False
+#, kde-format
+msgctxt "RANGEEXPORT"
+msgid  ""
+"The given range could not be exported.\n"
+"Either the destination file must not be overwritten, or it has a "
+"read-only attribute set.\n"
+"\n"
+"%1 = '%2'\n"
+"%3 = %4"
+msgstr ""
+"O intervalo fornecido não pode ser exportado.\n"
+"O arquivo de destino não pode ser sobrescrito ou ele está"
+"configurado como somente leitura.\n"
+"\n"
+"%1 = '%2'\n"
+"%3 = %4"
+
+#. SF_Chart.ExportToFile error message
+#. %1: An identifier
+#. %2: A file name
+#. %3: An identifier
+#. %4: True or False
+#, kde-format
+msgctxt "CHARTEXPORT"
+msgid  ""
+"The chart could not be exported.\n"
+"Either the destination file must not be overwritten, or it has a "
+"read-only attribute set.\n"
+"\n"
+"%1 = '%2'\n"
+"%3 = %4"
+msgstr ""
+"O gráfico não pode ser exportado.\n"
+"O arquivo de destino não pode ser sobrescrito ou ele está"
+"configurado como somente leitura.\n"
+"\n"
+"%1 = '%2'\n"
+"%3 = %4"
+
 #. SF_Dialog._IsStillAlive error message
 #. %1: An identifier%2: A file name
 #, kde-format
@@ -1139,3 +1209,29 @@ msgid ""
 "The APSO extension could not be located in your LibreOffice installation."
 msgstr ""
 "A extensão APSO não pode ser localizada sem sua instalação do LibreOffice."
+
+#. SFUnitTest could not locate the library gven as argument
+#. %1: The name of the library
+#, kde-format
+msgctxt "UNITTESTLIBRARY"
+msgid  ""
+"The requested library could not be located.\n"
+"The UnitTest service has not been initialized.\n"
+"\n"
+"Library name : « %1 »"
+msgstr ""
+"A biblioteca requerida não pode ser localizada.\n"
+"O serviço UnitTest não foi inicializado.\n"
+"\n"
+"Nome da biblioteca : « %1 »"
+
+#. SFUnitTest finds a RunTest() call in a inappropriate location
+#. %1: The name of a method
+#, kde-format
+msgctxt "UNITTESTMETHOD"
+msgid  ""
+"The method '%1' is unexpected in the current context.\n"
+"The UnitTest service cannot proceed further with the on-going test."
+msgstr ""
+"O método '%1' não é esperado no contexto atual.\n"
+"O serviço UnitTest não pode proceder com os testes em execução."
