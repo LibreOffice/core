@@ -961,8 +961,7 @@ void FormulaCompiler::InitSymbolsAPI() const
     static OpCodeMapData aMap;
     osl::MutexGuard aGuard(&aMap.maMtx);
     if (!aMap.mxSymbolMap)
-        // XFunctionAccess API always used PODF grammar, keep it.
-        loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH_API, FormulaGrammar::GRAM_PODF, aMap.mxSymbolMap, SeparatorType::RESOURCE_BASE);
+        loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH_API, FormulaGrammar::GRAM_API, aMap.mxSymbolMap, SeparatorType::RESOURCE_BASE);
     mxSymbolsAPI = aMap.mxSymbolMap;
 }
 
