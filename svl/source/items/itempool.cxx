@@ -317,7 +317,7 @@ void SfxItemPool::SetDefaults( std::vector<SfxPoolItem*>* pDefaults )
         for ( sal_uInt16 n = 0; n <= pImpl->mnEnd - pImpl->mnStart; ++n )
         {
             assert(  ((*pImpl->mpStaticDefaults)[n]->Which() == n + pImpl->mnStart)
-                        && "static defaults not sorted" );
+                        && "items ids in pool-ranges and in static-defaults do not match" );
             (*pImpl->mpStaticDefaults)[n]->SetKind(SfxItemKind::StaticDefault);
             DBG_ASSERT( pImpl->maPoolItemArrays[n].empty(), "defaults with setitems with items?!" );
         }
