@@ -1082,10 +1082,20 @@ void SwTableShell::Execute(SfxRequest &rReq)
             else
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractSplitTableDialog> pDlg(pFact->CreateSplitTableDialog(GetView().GetFrameWeld(), rSh));
-                pDlg->Execute();
-                rReq.AppendItem( SfxUInt16Item( FN_PARAM_1, static_cast<sal_uInt16>(pDlg->GetSplitMode()) ) );
-                bCallDone = true;
+                VclPtr<AbstractSplitTableDialog> pDlg(pFact->CreateSplitTableDialog(GetView().GetFrameWeld(), rSh));
+
+                SwWrtShell* pSh = &rSh;
+
+                pDlg->StartExecuteAsync([pDlg, pSh](int nResult) {
+                    if (nResult == RET_OK)
+                    {
+                        const auto aSplitMode = pDlg->GetSplitMode();
+                        pSh->SplitTable( aSplitMode );
+                    }
+
+                    pDlg->disposeOnce();
+                });
+                rReq.Ignore(); // We're already handling the request in our async bit
             }
             break;
         }

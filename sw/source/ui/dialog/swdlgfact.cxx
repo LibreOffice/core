@@ -120,6 +120,11 @@ short AbstractSplitTableDialog_Impl::Execute()
     return m_xDlg->run();
 }
 
+bool AbstractSplitTableDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return weld::GenericDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 short AbstractSwTableWidthDlg_Impl::Execute()
 {
     return m_xDlg->run();
@@ -978,7 +983,7 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwSortingDialog(we
 
 VclPtr<AbstractSplitTableDialog> SwAbstractDialogFactory_Impl::CreateSplitTableDialog(weld::Window *pParent, SwWrtShell &rSh)
 {
-    return VclPtr<AbstractSplitTableDialog_Impl>::Create(std::make_unique<SwSplitTableDlg>(pParent, rSh));
+    return VclPtr<AbstractSplitTableDialog_Impl>::Create(std::make_shared<SwSplitTableDlg>(pParent, rSh));
 }
 
 VclPtr<AbstractSwSelGlossaryDlg> SwAbstractDialogFactory_Impl::CreateSwSelGlossaryDlg(weld::Window *pParent, const OUString &rShortName)

@@ -236,13 +236,14 @@ public:
 
 class AbstractSplitTableDialog_Impl : public AbstractSplitTableDialog // add for
 {
-    std::unique_ptr<SwSplitTableDlg> m_xDlg;
+    std::shared_ptr<SwSplitTableDlg> m_xDlg;
 public:
-    explicit AbstractSplitTableDialog_Impl(std::unique_ptr<SwSplitTableDlg> p)
+    explicit AbstractSplitTableDialog_Impl(std::shared_ptr<SwSplitTableDlg> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
+    virtual bool  StartExecuteAsync(AsyncContext &rCtx) override;
     virtual SplitTable_HeadlineOption GetSplitMode() override;
 };
 
