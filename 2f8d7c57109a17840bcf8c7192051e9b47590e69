@@ -16,6 +16,24 @@
       "message": "What about replacing several arrays with one array of struct? Not in this patch of course.\nIt removes need of arrays sizes comparison, allows using range-based for and probably improves readability.",
       "revId": "2f8d7c57109a17840bcf8c7192051e9b47590e69",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "882d5eb2_848b66b2",
+        "filename": "xmloff/source/forms/elementexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-08-03T11:08:22Z",
+      "side": 1,
+      "message": "Ack\nLet\u0027s merge the patch, and do this later.",
+      "parentUuid": "d2f71716_d0b724ff",
+      "revId": "2f8d7c57109a17840bcf8c7192051e9b47590e69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
