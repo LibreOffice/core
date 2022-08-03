@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75f1656c_ecb447a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-08-03T10:01:29Z",
+      "side": 1,
+      "message": "okay thanks of course you can\u0027t be expected to install Windows to test this, let me try to review...",
+      "revId": "37b11458c411c57cf2c16a19a0dbd36c0a3d9008",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a54cb9c_cb3a5a2b",
+        "filename": "solenv/vs/LibreOffice.natvis",
+        "patchSetId": 3
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-08-03T10:01:29Z",
+      "side": 1,
+      "message": "seems there\u0027s another one here",
+      "range": {
+        "startLine": 110,
+        "startChar": 36,
+        "endLine": 110,
+        "endChar": 42
+      },
+      "revId": "37b11458c411c57cf2c16a19a0dbd36c0a3d9008",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "128c901f_bbbb374b",
+        "filename": "solenv/vs/LibreOffice.natvis",
+        "patchSetId": 3
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-08-03T10:01:29Z",
+      "side": 1,
+      "message": "and here",
+      "range": {
+        "startLine": 111,
+        "startChar": 36,
+        "endLine": 111,
+        "endChar": 43
+      },
+      "revId": "37b11458c411c57cf2c16a19a0dbd36c0a3d9008",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
