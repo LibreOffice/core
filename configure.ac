@@ -8383,7 +8383,7 @@ if test "$COM_IS_CLANG" = "TRUE"; then
             AC_MSG_CHECKING([for clang libraries to use])
             if test -z "$CLANGTOOLLIBS"; then
                 LIBS="-lclangTooling -lclangFrontend -lclangDriver -lclangParse -lclangSema -lclangEdit \
- -lclangAnalysis -lclangAST -lclangLex -lclangSerialization -lclangBasic $COMPILER_PLUGINS_LINKFLAGS"
+ -lclangAnalysis -lclangAST -lclangLex -lclangSerialization -lclangBasic -lclangSupport $COMPILER_PLUGINS_LINKFLAGS"
                 AC_LINK_IFELSE([
                     AC_LANG_PROGRAM([[#include "clang/Basic/SourceLocation.h"]],
                         [[ clang::FullSourceLoc().dump(); ]])
