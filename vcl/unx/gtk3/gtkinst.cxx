@@ -8420,6 +8420,33 @@ private:
         pThis->signal_adjustment_changed();
     }
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+    // if the widget is inside a GtkSalFrame then ensure the event is processed by the GtkSalFrame and not the
+    // GtkScrollbar
+    static gboolean signalScroll(GtkEventControllerScroll* pController, double delta_x, double delta_y, gpointer widget)
+    {
+        GtkInstanceScrollbar* pThis = static_cast<GtkInstanceScrollbar*>(widget);
+
+        GtkWidget* pParent = widget_get_toplevel(GTK_WIDGET(pThis->m_pScrollbar));
+        GtkSalFrame* pFrame = pParent ? GtkSalFrame::getFromWindow(pParent) : nullptr;
+
+        return pFrame && pFrame->event_controller_scroll_forward(pController, delta_x, delta_y);
+    }
+#else
+    static gboolean signalScroll(GtkWidget* pWidget, GdkEventScroll* /*pEvent*/, gpointer widget)
+    {
+        GtkInstanceScrollbar* pThis = static_cast<GtkInstanceScrollbar*>(widget);
+
+        GtkWidget* pParent = widget_get_toplevel(GTK_WIDGET(pThis->m_pScrollbar));
+        GtkSalFrame* pFrame = pParent ? GtkSalFrame::getFromWindow(pParent) : nullptr;
+
+        if (pFrame)
+            g_signal_stop_emission_by_name(pWidget, "scroll-event");
+
+        return false;
+    }
+#endif
+
 public:
     GtkInstanceScrollbar(GtkScrollbar* pScrollbar, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceWidget(GTK_WIDGET(pScrollbar), pBuilder, bTakeOwnership)
@@ -8431,6 +8458,14 @@ public:
 #endif
         , m_nAdjustChangedSignalId(g_signal_connect(m_pAdjustment, "value-changed", G_CALLBACK(signalAdjustValueChanged), this))
     {
+#if GTK_CHECK_VERSION(4, 0, 0)
+        GtkEventController* pScrollController = gtk_event_controller_scroll_new(GTK_EVENT_CONTROLLER_SCROLL_BOTH_AXES);
+        gtk_event_controller_set_propagation_phase(pScrollController, GTK_PHASE_CAPTURE);
+        g_signal_connect(pScrollController, "scroll", G_CALLBACK(signalScroll), this);
+        gtk_widget_add_controller(GTK_WIDGET(pScrollbar), pScrollController);
+#else
+        g_signal_connect(pScrollbar, "scroll-event", G_CALLBACK(signalScroll), this);
+#endif
     }
 
     virtual void adjustment_configure(int value, int lower, int upper,
