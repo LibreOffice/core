@@ -32,10 +32,8 @@ namespace dbaui
 
 class OUserAdmin final : public OGenericAdministrationPage
 {
+    std::unique_ptr<weld::MenuButton> mxActionBar;
     std::unique_ptr<weld::ComboBox> m_xUSER;
-    std::unique_ptr<weld::Button> m_xNEWUSER;
-    std::unique_ptr<weld::Button> m_xCHANGEPWD;
-    std::unique_ptr<weld::Button> m_xDELETEUSER;
     std::unique_ptr<weld::Container> m_xTable;
     css::uno::Reference<css::awt::XWindow> m_xTableCtrlParent;
     VclPtr<OTableGrantControl> m_xTableCtrl; // show the grant rights of one user
@@ -48,7 +46,7 @@ class OUserAdmin final : public OGenericAdministrationPage
 
     // methods
     DECL_LINK(ListDblClickHdl, weld::ComboBox&, void);
-    DECL_LINK(UserHdl, weld::Button&, void);
+    DECL_LINK(MenuSelectHdl, const OString&, void);
 
     void        FillUserNames();
 

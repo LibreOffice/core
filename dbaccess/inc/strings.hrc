@@ -420,6 +420,9 @@
 #define STR_EXCEPTION_INFO                          NC_("STR_EXCEPTION_INFO", "Information")
 #define STR_EXCEPTION_DETAILS                       NC_("STR_EXCEPTION_DETAILS", "Details")
 
+#define STR_ADD_USER                                NC_("STR_ADD_USER", "Add User")
+#define STR_DELETE_USER                             NC_("STR_DELETE_USER", "Delete User")
+#define STR_CHANGE_PASSWORD                         NC_("STR_CHANGE_PASSWORD", "Change Password")
 #define STR_QUERY_USERADMIN_DELETE_USER             NC_("STR_QUERY_USERADMIN_DELETE_USER", "Do you really want to delete the user?")
 #define STR_USERADMIN_NOT_AVAILABLE                 NC_("STR_USERADMIN_NOT_AVAILABLE", "The database does not support user administration." )
 #define STR_ERROR_PASSWORDS_NOT_IDENTICAL           NC_("STR_ERROR_PASSWORDS_NOT_IDENTICAL", "The passwords do not match. Please enter the password again.")
