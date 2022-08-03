@@ -275,8 +275,19 @@ QAccessibleInterface* QtAccessibleWidget::parent() const
     if (!xAc.is())
         return nullptr;
 
-    return QAccessible::queryAccessibleInterface(new QtXAccessible(xAc->getAccessibleParent()));
+    if (xAc->getAccessibleParent().is())
+        return QAccessible::queryAccessibleInterface(new QtXAccessible(xAc->getAccessibleParent()));
+
+    // go via the QObject hierarchy; some a11y objects like the application
+    // (at the root of the a11y hierarchy) are handled solely by Qt and have
+    // no LO-internal a11y objects associated with them
+    QObject* pObj = object();
+    if (pObj && pObj->parent())
+        return QAccessible::queryAccessibleInterface(pObj->parent());
+
+    return nullptr;
 }
+
 QAccessibleInterface* QtAccessibleWidget::child(int index) const
 {
     Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
