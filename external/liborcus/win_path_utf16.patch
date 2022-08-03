@@ -1,0 +1,33 @@
+diff --git a/src/parser/stream.cpp b/src/parser/stream.cpp
+index 00395f59ff25..8f385fb8965a 100644
+--- a/src/parser/stream.cpp
++++ b/src/parser/stream.cpp
+@@ -147,6 +147,14 @@ std::tuple<std::string_view, size_t, size_t> find_line_with_offset(std::string_v
+     return std::make_tuple(line, line_num, offset_on_line);
+ }
+ 
++#ifdef _WIN32
++std::wstring to_wstring(std::string_view s)
++{
++    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> conversion;
++    return conversion.from_bytes(s.data(), s.data() + s.size());
++}
++#endif
++
+ } // anonymous namespace
+ 
+ struct file_content::impl
+@@ -162,8 +170,13 @@ struct file_content::impl
+     impl() : content_size(0), content(nullptr) {}
+ 
+     impl(std::string_view filepath) :
++#ifdef _WIN32
++        content_size(fs::file_size(to_wstring(filepath))),
++        mapped_file(to_wstring(filepath).c_str(), bip::read_only),
++#else
+         content_size(fs::file_size(std::string{filepath}.c_str())),
+         mapped_file(std::string{filepath}.c_str(), bip::read_only),
++#endif
+         mapped_region(mapped_file, bip::read_only, 0, content_size),
+         content(nullptr)
+     {
