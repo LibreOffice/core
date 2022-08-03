@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0789b2e2_d0b37c77",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-08-03T15:02:39Z",
+      "side": 1,
+      "message": "i can\u0027t reproduce this on yesterday\u0027s master\n\nbisecting it in linux-64-7.4 i get this fixed it?:\n\ncommit 6f3953236070c186bc9356053d8b368d1c28372d\nAuthor:     Michael Stahl \u003cmichael.stahl@allotropia.de\u003e\nAuthorDate: Fri Jul 8 17:32:49 2022 +0200\nCommit:     Xisco Fauli \u003cxiscofauli@libreoffice.org\u003e\nCommitDate: Mon Jul 11 10:30:55 2022 +0200\n\n    tdf#149649 sw_fieldmarkhide: delete any fieldmarks overlapping cells\n\n\nhmm it does contain a footer with a table and nested fields in it, so perhaps it\u0027s plausible.\n\n",
+      "revId": "fdac2af7370ed5373fa4f31d8ae43202fc3a128b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
