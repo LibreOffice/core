@@ -1081,9 +1081,20 @@ void SwTableShell::Execute(SfxRequest &rReq)
             else
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractSplitTableDialog> pDlg(pFact->CreateSplitTableDialog(GetView().GetFrameWeld(), rSh));
-                pDlg->Execute();
-                rReq.AppendItem( SfxUInt16Item( FN_PARAM_1, static_cast<sal_uInt16>(pDlg->GetSplitMode()) ) );
+                VclPtr<AbstractSplitTableDialog> pDlg(pFact->CreateSplitTableDialog(GetView().GetFrameWeld(), rSh));
+
+                auto pReq = std::make_shared<SfxRequest>(rReq);
+                rReq.Ignore(); // the 'old' request is not relevant any more
+
+                pDlg->StartExecuteAsync([pDlg, pReq](int nResult) {
+                    if (nResult == RET_OK)
+                    {
+                        const sal_uInt16 SplitMode = static_cast<sal_uInt16>(pDlg->GetSplitMode());
+                        pReq->AppendItem( SfxUInt16Item( FN_PARAM_1, SplitMode ) );
+                    }
+
+                    pDlg->disposeOnce();
+                });
                 bCallDone = true;
             }
             break;
