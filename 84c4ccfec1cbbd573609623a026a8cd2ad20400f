@@ -22,6 +22,30 @@
       },
       "revId": "84c4ccfec1cbbd573609623a026a8cd2ad20400f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "897e0316_c57ca719",
+        "filename": "sw/source/ui/chrdlg/pardlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1002266
+      },
+      "writtenOn": "2022-08-03T11:24:46Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "09b2e11f_9382bb60",
+      "range": {
+        "startLine": 98,
+        "startChar": 9,
+        "endLine": 98,
+        "endChar": 17
+      },
+      "revId": "84c4ccfec1cbbd573609623a026a8cd2ad20400f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
