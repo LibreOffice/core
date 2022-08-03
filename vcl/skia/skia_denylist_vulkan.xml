@@ -27,7 +27,7 @@
         <entry os="all" vendor="intel" compare="equal" version="0.402.743"> <!-- tdf#138729 -->
             <device id="all"/>
         </entry>
-        <entry os="windows" vendor="intel" compare="equal" version="0.402.1173"> <!-- tdf#144923 off-topic comment 14 -->
+        <entry os="windows" vendor="intel"> <!-- tdf#144923 off-topic comment 14 + tdf#150232 -->
             <device id="0x9a49"/>
         </entry>
         <entry os="all" vendor="amd" compare="less" version="2.0.198"> <!-- tdf#146402 -->
@@ -35,6 +35,9 @@
         </entry>
         <entry os="windows" vendor="nvidia" compare="less" version="457.36.0">
             <device id="all"/>
+        </entry>
+        <entry os="windows" vendor="nvidia"> <!-- tdf#150232 -->
+            <device id="0x1401"/>
         </entry>
         <entry os="7" vendor="all">
             <device id="all"/>
