@@ -49,6 +49,10 @@ using namespace comphelper;
 
 namespace {
 
+#define MNI_ACTION_ADD_USER "add"
+#define MNI_ACTION_DEL_USER "delete"
+#define MNI_ACTION_CHANGE_PASSWORD "password"
+
 class OPasswordDialog : public weld::GenericDialogController
 {
     std::unique_ptr<weld::Frame> m_xUser;
@@ -111,20 +115,87 @@ IMPL_LINK(OPasswordDialog, ModifiedHdl, weld::Entry&, rEdit, void)
 // OUserAdmin
 OUserAdmin::OUserAdmin(weld::Container* pPage, weld::DialogController* pController,const SfxItemSet& _rAttrSet)
     : OGenericAdministrationPage(pPage, pController, "dbaccess/ui/useradminpage.ui", "UserAdminPage", _rAttrSet)
+    , mxActionBar(m_xBuilder->weld_menu_button("action_menu"))
     , m_xUSER(m_xBuilder->weld_combo_box("user"))
-    , m_xNEWUSER(m_xBuilder->weld_button("add"))
-    , m_xCHANGEPWD(m_xBuilder->weld_button("changepass"))
-    , m_xDELETEUSER(m_xBuilder->weld_button("delete"))
     , m_xTable(m_xBuilder->weld_container("table"))
     , m_xTableCtrlParent(m_xTable->CreateChildFrame())
     , m_xTableCtrl(VclPtr<OTableGrantControl>::Create(m_xTableCtrlParent))
 {
+    mxActionBar->append_item(MNI_ACTION_ADD_USER, DBA_RES(STR_ADD_USER));
+    mxActionBar->append_item(MNI_ACTION_DEL_USER, DBA_RES(STR_DELETE_USER));
+    mxActionBar->append_item(MNI_ACTION_CHANGE_PASSWORD, DBA_RES(STR_CHANGE_PASSWORD));
+    mxActionBar->connect_selected(LINK(this,OUserAdmin,MenuSelectHdl));
+
     m_xTableCtrl->Show();
 
     m_xUSER->connect_changed(LINK(this, OUserAdmin, ListDblClickHdl));
-    m_xNEWUSER->connect_clicked(LINK(this, OUserAdmin, UserHdl));
-    m_xCHANGEPWD->connect_clicked(LINK(this, OUserAdmin, UserHdl));
-    m_xDELETEUSER->connect_clicked(LINK(this, OUserAdmin, UserHdl));
+}
+
+IMPL_LINK(OUserAdmin, MenuSelectHdl, const OString&, rIdent, void)
+{
+    try
+    {
+        if (rIdent == MNI_ACTION_ADD_USER) {
+            SfxPasswordDialog aPwdDlg(GetFrameWeld());
+            aPwdDlg.ShowExtras(SfxShowExtras::ALL);
+            if (aPwdDlg.run())
+            {
+                Reference<XDataDescriptorFactory> xUserFactory(m_xUsers,UNO_QUERY);
+                Reference<XPropertySet> xNewUser = xUserFactory->createDataDescriptor();
+                if(xNewUser.is())
+                {
+                    xNewUser->setPropertyValue(PROPERTY_NAME,Any(aPwdDlg.GetUser()));
+                    xNewUser->setPropertyValue(PROPERTY_PASSWORD,Any(aPwdDlg.GetPassword()));
+                    Reference<XAppend> xAppend(m_xUsers,UNO_QUERY);
+                    if(xAppend.is())
+                        xAppend->appendByDescriptor(xNewUser);
+                }
+            }
+        }
+        else if (rIdent == MNI_ACTION_DEL_USER) {
+            if (m_xUsers.is() && m_xUsers->hasByName(GetUser()))
+            {
+                Reference<XDrop> xDrop(m_xUsers,UNO_QUERY);
+                if(xDrop.is())
+                {
+                    std::unique_ptr<weld::MessageDialog> xQry(Application::CreateMessageDialog(GetFrameWeld(),
+                                                            VclMessageType::Question, VclButtonsType::YesNo,
+                                                            DBA_RES(STR_QUERY_USERADMIN_DELETE_USER)));
+                    if (xQry->run() == RET_YES)
+                        xDrop->dropByName(GetUser());
+                }
+            }
+        }
+        else if (rIdent == MNI_ACTION_CHANGE_PASSWORD) {
+            OUString sName = GetUser();
+            if(m_xUsers->hasByName(sName))
+            {
+                Reference<XUser> xUser;
+                m_xUsers->getByName(sName) >>= xUser;
+                if(xUser.is())
+                {
+                    OPasswordDialog aDlg(GetFrameWeld(), sName);
+                    if (aDlg.run() == RET_OK)
+                    {
+                        OUString sNewPassword,sOldPassword;
+                        sNewPassword = aDlg.GetNewPassword();
+                        sOldPassword = aDlg.GetOldPassword();
+
+                        if(!sNewPassword.isEmpty())
+                            xUser->changePassword(sOldPassword,sNewPassword);
+                    }
+                }
+            }
+        }
+        FillUserNames();
+    }
+    catch(const SQLException& e)
+    {
+        ::dbtools::showError(::dbtools::SQLExceptionInfo(e), GetDialogController()->getDialog()->GetXWindow(), m_xORB);
+    }
+    catch(Exception& )
+    {
+    }
 }
 
 OUserAdmin::~OUserAdmin()
@@ -173,88 +244,17 @@ void OUserAdmin::FillUserNames()
     }
 
     Reference<XAppend> xAppend(m_xUsers,UNO_QUERY);
-    m_xNEWUSER->set_sensitive(xAppend.is());
+    mxActionBar->set_item_sensitive(MNI_ACTION_ADD_USER, xAppend.is());
     Reference<XDrop> xDrop(m_xUsers,UNO_QUERY);
-    m_xDELETEUSER->set_sensitive(xDrop.is());
+    mxActionBar->set_item_sensitive(MNI_ACTION_DEL_USER, xDrop.is());
+    mxActionBar->set_item_sensitive(MNI_ACTION_CHANGE_PASSWORD, m_xUsers.is());
 
-    m_xCHANGEPWD->set_sensitive(m_xUsers.is());
     m_xTableCtrl->Enable(m_xUsers.is());
 }
 
 std::unique_ptr<SfxTabPage> OUserAdmin::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* _rAttrSet )
 {
     return std::make_unique<OUserAdmin>( pPage, pController, *_rAttrSet );
-}
-
-IMPL_LINK(OUserAdmin, UserHdl, weld::Button&, rButton, void)
-{
-    try
-    {
-        if (&rButton == m_xNEWUSER.get())
-        {
-            SfxPasswordDialog aPwdDlg(GetFrameWeld());
-            aPwdDlg.ShowExtras(SfxShowExtras::ALL);
-            if (aPwdDlg.run())
-            {
-                Reference<XDataDescriptorFactory> xUserFactory(m_xUsers,UNO_QUERY);
-                Reference<XPropertySet> xNewUser = xUserFactory->createDataDescriptor();
-                if(xNewUser.is())
-                {
-                    xNewUser->setPropertyValue(PROPERTY_NAME,Any(aPwdDlg.GetUser()));
-                    xNewUser->setPropertyValue(PROPERTY_PASSWORD,Any(aPwdDlg.GetPassword()));
-                    Reference<XAppend> xAppend(m_xUsers,UNO_QUERY);
-                    if(xAppend.is())
-                        xAppend->appendByDescriptor(xNewUser);
-                }
-            }
-        }
-        else if (&rButton == m_xCHANGEPWD.get())
-        {
-            OUString sName = GetUser();
-
-            if(m_xUsers->hasByName(sName))
-            {
-                Reference<XUser> xUser;
-                m_xUsers->getByName(sName) >>= xUser;
-                if(xUser.is())
-                {
-                    OPasswordDialog aDlg(GetFrameWeld(), sName);
-                    if (aDlg.run() == RET_OK)
-                    {
-                        OUString sNewPassword,sOldPassword;
-                        sNewPassword = aDlg.GetNewPassword();
-                        sOldPassword = aDlg.GetOldPassword();
-
-                        if(!sNewPassword.isEmpty())
-                            xUser->changePassword(sOldPassword,sNewPassword);
-                    }
-                }
-            }
-        }
-        else
-        {// delete user
-            if(m_xUsers.is() && m_xUsers->hasByName(GetUser()))
-            {
-                Reference<XDrop> xDrop(m_xUsers,UNO_QUERY);
-                if(xDrop.is())
-                {
-                    std::unique_ptr<weld::MessageDialog> xQry(Application::CreateMessageDialog(GetFrameWeld(),
-                                                              VclMessageType::Question, VclButtonsType::YesNo,
-                                                              DBA_RES(STR_QUERY_USERADMIN_DELETE_USER)));
-                    if (xQry->run() == RET_YES)
-                        xDrop->dropByName(GetUser());
-                }
-            }
-        }
-        FillUserNames();
-    }
-    catch(const SQLException& e)
-    {
-        ::dbtools::showError(::dbtools::SQLExceptionInfo(e), GetDialogController()->getDialog()->GetXWindow(), m_xORB);
-    }
-    catch(Exception& )
-    {
-    }
 }
 
 IMPL_LINK_NOARG(OUserAdmin, ListDblClickHdl, weld::ComboBox&, void)
