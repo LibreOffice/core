@@ -1037,11 +1037,11 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                     || sClass == "GtkFrame" || sClass == "GtkGrid" || sClass == "GtkImage"
                     || sClass == "GtkLabel" || sClass == "GtkMenuButton" || sClass == "GtkNotebook"
                     || sClass == "GtkOverlay" || sClass == "GtkPaned" || sClass == "GtkProgressBar"
-                    || sClass == "GtkScrolledWindow" || sClass == "GtkSeparator"
-                    || sClass == "GtkSpinButton" || sClass == "GtkSpinner"
-                    || sClass == "GtkTextView" || sClass == "GtkTreeView" || sClass == "GtkViewport"
-                    || sClass == "GtkLinkButton" || sClass == "GtkToggleButton"
-                    || sClass == "GtkButtonBox")
+                    || sClass == "GtkScrolledWindow" || sClass == "GtkScrollbar"
+                    || sClass == "GtkSeparator" || sClass == "GtkSpinButton"
+                    || sClass == "GtkSpinner" || sClass == "GtkTextView" || sClass == "GtkTreeView"
+                    || sClass == "GtkViewport" || sClass == "GtkLinkButton"
+                    || sClass == "GtkToggleButton" || sClass == "GtkButtonBox")
 
                 {
                     auto xVisible = CreateProperty(xDoc, "visible", "False");
