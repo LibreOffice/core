@@ -23,6 +23,7 @@
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <o3tl/cow_wrapper.hxx>
+#include <cassert>
 #include <mutex>
 #include <vector>
 
@@ -259,6 +260,7 @@ private:
             : m_pMethod(method)
             , m_rEvent(event)
         {
+            assert(m_pMethod);
         }
 
         void operator()(const css::uno::Reference<ListenerT>& listener) const
