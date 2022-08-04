@@ -34,6 +34,24 @@
       "parentUuid": "169deb1b_cad2ca99",
       "revId": "2878a5621890daa7d5cd075434008f0fb2dfd054",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c6ff15c_47a7acc6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-08-04T05:01:45Z",
+      "side": 1,
+      "message": "Yes, please add them as [optional, property] to the appropriate UnoControl*Model.idl files.\nThese properties can be set with setPropertyValue / getPropertyValue. \n\nI\u0027m not sure why the UnoControl*Model files are not accessible from Java. Maybe @Stephan has an idea here?",
+      "parentUuid": "4e8c4bfd_b9525c01",
+      "revId": "2878a5621890daa7d5cd075434008f0fb2dfd054",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
