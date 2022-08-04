@@ -1024,9 +1024,7 @@ void GoStartDoc( SwPosition * pPos )
     SwNodes& rNodes = pPos->GetNodes();
     pPos->nNode = *rNodes.GetEndOfContent().StartOfSectionNode();
     // we always need to find a ContentNode!
-    SwContentNode* pCNd = rNodes.GoNext( &pPos->nNode );
-    if( pCNd )
-        pPos->AssignStartIndex(*pCNd);
+    rNodes.GoNext( pPos );
 }
 
 void GoEndDoc( SwPosition * pPos )
