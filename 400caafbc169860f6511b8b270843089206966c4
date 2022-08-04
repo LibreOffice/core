@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e899ac07_9099c7b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-08-04T14:48:57Z",
+      "side": 1,
+      "message": "Heiko: w.r.t. the commit message, to refer to other commits, use the SHA, not the Gerrit ID (i.e., it should not start with an “I”.)",
+      "revId": "400caafbc169860f6511b8b270843089206966c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
