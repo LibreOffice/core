@@ -834,14 +834,14 @@ void SwView::CalcAndSetBorderPixel( SvBorder &rToFill )
 
     const StyleSettings &rSet = GetEditWin().GetSettings().GetStyleSettings();
     const tools::Long nTmp = rSet.GetScrollBarSize();
-    if( m_pVScrollbar->IsVisible(true) )
+    if( m_pVScrollbar->IsScrollbarVisible(true) )
     {
         if(bRightVRuler)
             rToFill.Left() = nTmp;
         else
             rToFill.Right()  = nTmp;
     }
-    if ( m_pHScrollbar->IsVisible(true) )
+    if ( m_pHScrollbar->IsScrollbarVisible(true) )
         rToFill.Bottom() = nTmp;
 
     SetBorderPixel( rToFill );
@@ -868,8 +868,8 @@ void ViewResizePixel( const vcl::RenderContext &rRef,
                         pVRuler->GetSizePixel().Width() : 0;
 
     const tools::Long nScrollBarSize = rRef.GetSettings().GetStyleSettings().GetScrollBarSize();
-    const tools::Long nHBSzHeight = rHScrollbar.IsVisible(true) ? nScrollBarSize : 0;
-    const tools::Long nVBSzWidth = rVScrollbar.IsVisible(true) ? nScrollBarSize : 0;
+    const tools::Long nHBSzHeight = rHScrollbar.IsScrollbarVisible(true) ? nScrollBarSize : 0;
+    const tools::Long nVBSzWidth = rVScrollbar.IsScrollbarVisible(true) ? nScrollBarSize : 0;
 
     if(pVRuler)
     {
@@ -967,8 +967,8 @@ void SwView::InnerResizePixel( const Point &rOfst, const Size &rSize, bool )
     }
 
     m_bInInnerResizePixel = true;
-    const bool bHScrollVisible = m_pHScrollbar->IsVisible(true);
-    const bool bVScrollVisible = m_pVScrollbar->IsVisible(true);
+    const bool bHScrollVisible = m_pHScrollbar->IsScrollbarVisible(true);
+    const bool bVScrollVisible = m_pVScrollbar->IsScrollbarVisible(true);
     bool bRepeat = false;
     do
     {
@@ -1023,8 +1023,8 @@ void SwView::InnerResizePixel( const Point &rOfst, const Size &rSize, bool )
         // require to repeat the ViewResizePixel() call - but only once!
         if(bRepeat)
             bRepeat = false;
-        else if(bHScrollVisible != m_pHScrollbar->IsVisible(true) ||
-                bVScrollVisible != m_pVScrollbar->IsVisible(true))
+        else if(bHScrollVisible != m_pHScrollbar->IsScrollbarVisible(true) ||
+                bVScrollVisible != m_pVScrollbar->IsScrollbarVisible(true))
             bRepeat = true;
     }while( bRepeat );
     bProtectDocShellVisArea = false;
@@ -1066,10 +1066,10 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
     {
         bShowH = bShowV = bHAuto = bAuto = false;
     }
-    if(m_pHScrollbar->IsVisible(false) != bShowH && !bHAuto)
+    if(m_pHScrollbar->IsScrollbarVisible(false) != bShowH && !bHAuto)
         ShowHScrollbar(bShowH);
     m_pHScrollbar->SetAuto( bHAuto );
-    if(m_pVScrollbar->IsVisible(false) != bShowV && !bAuto)
+    if(m_pVScrollbar->IsScrollbarVisible(false) != bShowV && !bAuto)
         ShowVScrollbar(bShowV);
     m_pVScrollbar->SetAuto(bAuto);
 
@@ -1083,8 +1083,8 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
 
     do {
         ++nCnt;
-        const bool bScroll1 = m_pVScrollbar->IsVisible(true);
-        const bool bScroll2 = m_pHScrollbar->IsVisible(true);
+        const bool bScroll1 = m_pVScrollbar->IsScrollbarVisible(true);
+        const bool bScroll2 = m_pHScrollbar->IsScrollbarVisible(true);
         SvBorder aBorder;
         CalcAndSetBorderPixel( aBorder );
         const Size aEditSz( GetEditWin().GetOutputSizePixel() );
@@ -1122,9 +1122,9 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
             SetZoom_( aEditSz, m_pWrtShell->GetViewOptions()->GetZoomType(), 100, true );
         m_pWrtShell->EndAction();
 
-        bRepeat = bScroll1 != m_pVScrollbar->IsVisible(true);
+        bRepeat = bScroll1 != m_pVScrollbar->IsScrollbarVisible(true);
         if ( !bRepeat )
-            bRepeat = bScroll2 != m_pHScrollbar->IsVisible(true);
+            bRepeat = bScroll2 != m_pHScrollbar->IsScrollbarVisible(true);
 
         // Do no infinite loops.
         // If possible stop when the (auto-) scroll bars are visible.
@@ -1179,19 +1179,19 @@ bool SwView::UpdateScrollbars()
         aTmpSz.AdjustWidth(lOfst ); aTmpSz.AdjustHeight(lOfst );
 
         {
-            const bool bVScrollVisible = m_pVScrollbar->IsVisible(true);
+            const bool bVScrollVisible = m_pVScrollbar->IsScrollbarVisible(true);
             m_pVScrollbar->DocSzChgd( aTmpSz );
             m_pVScrollbar->ViewPortChgd( aTmpRect );
-            if ( bVScrollVisible != m_pVScrollbar->IsVisible(true) )
+            if ( bVScrollVisible != m_pVScrollbar->IsScrollbarVisible(true) )
                 bRet = true;
         }
         {
-            const bool bHScrollVisible = m_pHScrollbar->IsVisible(true);
+            const bool bHScrollVisible = m_pHScrollbar->IsScrollbarVisible(true);
             m_pHScrollbar->DocSzChgd( aTmpSz );
             m_pHScrollbar->ViewPortChgd( aTmpRect );
-            if ( bHScrollVisible != m_pHScrollbar->IsVisible(true) )
+            if ( bHScrollVisible != m_pHScrollbar->IsScrollbarVisible(true) )
                 bRet = true;
-            m_pScrollFill->Show(m_pHScrollbar->IsVisible(true) && m_pVScrollbar->IsVisible(true) );
+            m_pScrollFill->Show(m_pHScrollbar->IsScrollbarVisible(true) && m_pVScrollbar->IsScrollbarVisible(true) );
         }
     }
     return bRet;

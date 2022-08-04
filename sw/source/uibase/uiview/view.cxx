@@ -1049,9 +1049,9 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
         rDocSh.EnableSetModified();
     InvalidateBorder();
 
-    if( !m_pHScrollbar->IsVisible( true ) )
+    if( !m_pHScrollbar->IsScrollbarVisible(true) )
         ShowHScrollbar( false );
-    if( !m_pVScrollbar->IsVisible( true ) )
+    if( !m_pVScrollbar->IsScrollbarVisible(true) )
         ShowVScrollbar( false );
 
     if (m_pWrtShell && m_pWrtShell->GetViewOptions()->IsShowOutlineContentVisibilityButton())
