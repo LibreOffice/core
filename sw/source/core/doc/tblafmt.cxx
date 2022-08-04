@@ -360,8 +360,8 @@ bool SwBoxAutoFormat::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
     return ERRCODE_NONE == rStream.GetError();
 }
 
-SwTableAutoFormat::SwTableAutoFormat( const OUString& rName )
-    : m_aName( rName )
+SwTableAutoFormat::SwTableAutoFormat( OUString aName )
+    : m_aName( std::move(aName) )
     , m_nStrResId( USHRT_MAX )
     , m_aKeepWithNextPara(std::make_shared<SvxFormatKeepItem>(false, RES_KEEP))
     , m_aRepeatHeading( 0 )

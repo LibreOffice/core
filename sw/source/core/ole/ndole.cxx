@@ -782,9 +782,9 @@ SwOLEObj::SwOLEObj( const svt::EmbeddedObjectRef& xObj ) :
     }
 }
 
-SwOLEObj::SwOLEObj( const OUString &rString, sal_Int64 nAspect ) :
+SwOLEObj::SwOLEObj( OUString aString, sal_Int64 nAspect ) :
     m_pOLENode( nullptr ),
-    m_aName( rString )
+    m_aName( std::move(aString) )
 {
     m_xOLERef.Lock();
     m_xOLERef.SetViewAspect( nAspect );

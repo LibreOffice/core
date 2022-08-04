@@ -217,9 +217,9 @@ OUString SwTOXMark::GetText(SwRootFrame const*const pLayout) const
 }
 
 // Manage types of TOX
-SwTOXType::SwTOXType(SwDoc& rDoc, TOXTypes eTyp, const OUString& rName)
+SwTOXType::SwTOXType(SwDoc& rDoc, TOXTypes eTyp, OUString aName)
     : m_rDoc(rDoc)
-    , m_aName(rName)
+    , m_aName(std::move(aName))
     , m_eType(eTyp)
 {
 }
@@ -532,10 +532,10 @@ OUString SwForm::GetFormText()        {return "<X>";}
 OUString SwForm::GetFormAuth()        {return "<A>";}
 
 SwTOXBase::SwTOXBase(const SwTOXType* pTyp, const SwForm& rForm,
-                     SwTOXElement nCreaType, const OUString& rTitle )
+                     SwTOXElement nCreaType, OUString aTitle )
     : SwClient(const_cast<sw::BroadcastingModify*>(static_cast<sw::BroadcastingModify const *>(pTyp)))
     , m_aForm(rForm)
-    , m_aTitle(rTitle)
+    , m_aTitle(std::move(aTitle))
     , m_eLanguage(::GetAppLanguage())
     , m_nCreateType(nCreaType)
     , m_nOLEOptions(SwTOOElements::NONE)

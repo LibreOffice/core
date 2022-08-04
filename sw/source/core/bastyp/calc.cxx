@@ -1435,8 +1435,8 @@ bool SwCalc::IsValidVarName( const OUString& rStr, OUString* pValidName )
     return bRet;
 }
 
-SwHash::SwHash(const OUString& rStr)
-    : aStr(rStr)
+SwHash::SwHash(OUString _aStr)
+    : aStr(std::move(_aStr))
 {
 }
 
@@ -1444,10 +1444,10 @@ SwHash::~SwHash()
 {
 }
 
-SwCalcExp::SwCalcExp(const OUString& rStr, const SwSbxValue& rVal,
+SwCalcExp::SwCalcExp(const OUString& rStr, SwSbxValue aVal,
                       const SwFieldType* pType)
     : SwHash(rStr)
-    , nValue(rVal)
+    , nValue(std::move(aVal))
     , pFieldType(pType)
 {
 }

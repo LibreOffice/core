@@ -41,7 +41,7 @@ class FinalThreadManager final : public ::cppu::WeakImplHelper< css::lang::XServ
                                                            css::frame::XTerminateListener2 >
 {
 public:
-    explicit FinalThreadManager(css::uno::Reference< css::uno::XComponentContext > const & context);
+    explicit FinalThreadManager(css::uno::Reference< css::uno::XComponentContext > context);
 
     // css::lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName() override;

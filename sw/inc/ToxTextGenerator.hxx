@@ -58,7 +58,7 @@ class ToxWhitespaceStripper;
 class ToxTextGenerator
 {
 public:
-    ToxTextGenerator(const SwForm& toxForm, std::shared_ptr<ToxTabStopTokenHandler> const & tabStopHandler);
+    ToxTextGenerator(const SwForm& toxForm, std::shared_ptr<ToxTabStopTokenHandler> tabStopHandler);
 
     virtual ~ToxTextGenerator();
 

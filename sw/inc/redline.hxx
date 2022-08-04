@@ -56,7 +56,7 @@ class SW_DLLPUBLIC SwRedlineExtraData_FormatColl final : public SwRedlineExtraDa
     sal_uInt16 m_nPoolId;
     bool m_bFormatAll; // don't strip the last paragraph mark
 public:
-    SwRedlineExtraData_FormatColl( const OUString& rColl, sal_uInt16 nPoolFormatId,
+    SwRedlineExtraData_FormatColl( OUString aColl, sal_uInt16 nPoolFormatId,
                                 const SfxItemSet* pSet = nullptr, bool bFormatAll = true );
     virtual ~SwRedlineExtraData_FormatColl() override;
     virtual SwRedlineExtraData* CreateNew() const override;
@@ -103,7 +103,7 @@ public:
 
     // For sw3io: pNext/pExtraData are taken over.
     SwRedlineData( RedlineType eT, std::size_t nAut, const DateTime& rDT,
-                   const OUString& rCmnt, SwRedlineData* pNxt );
+                   OUString aCmnt, SwRedlineData* pNxt );
 
     ~SwRedlineData();
 

@@ -101,7 +101,7 @@ protected:
     // !!! every derived class must override this !!!
     virtual const SwNode* GetNodeOfFormula() const = 0;
 
-    SwTableFormula( const OUString& rFormula );
+    SwTableFormula( OUString aFormula );
 
     OUString MakeFormula( SwTableCalcPara& rCalcPara ) const
     {

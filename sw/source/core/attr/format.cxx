@@ -56,10 +56,10 @@ SwFormat::SwFormat( SwAttrPool& rPool, const char* pFormatNm,
     }
 }
 
-SwFormat::SwFormat( SwAttrPool& rPool, const OUString& rFormatNm,
+SwFormat::SwFormat( SwAttrPool& rPool, OUString aFormatNm,
               const WhichRangesContainer& pWhichRanges, SwFormat* pDrvdFrame,
               sal_uInt16 nFormatWhich ) :
-    m_aFormatName( rFormatNm ),
+    m_aFormatName( std::move(aFormatNm) ),
     m_aSet( rPool, pWhichRanges ),
     m_nWhichId( nFormatWhich ),
     m_nPoolFormatId( USHRT_MAX ),

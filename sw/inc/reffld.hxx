@@ -99,7 +99,7 @@ private:
     virtual std::unique_ptr<SwField> Copy() const override;
 
 public:
-    SwGetRefField( SwGetRefFieldType*, const OUString& rSetRef, const OUString& rReferenceLanguage,
+    SwGetRefField( SwGetRefFieldType*, OUString aSetRef, OUString aReferenceLanguage,
                     sal_uInt16 nSubType, sal_uInt16 nSeqNo, sal_uLong nFormat );
 
     virtual ~SwGetRefField() override;

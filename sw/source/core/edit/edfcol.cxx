@@ -1667,13 +1667,13 @@ void SwEditShell::SetWatermark(const SfxWatermarkItem& rWatermark)
 }
 
 SwUndoParagraphSigning::SwUndoParagraphSigning(SwDoc& rDoc,
-                                               const uno::Reference<text::XTextField>& xField,
-                                               const uno::Reference<text::XTextContent>& xParent,
+                                               uno::Reference<text::XTextField> xField,
+                                               uno::Reference<text::XTextContent> xParent,
                                                const bool bRemove)
   : SwUndo(SwUndoId::PARA_SIGN_ADD, &rDoc),
     m_rDoc(rDoc),
-    m_xField(xField),
-    m_xParent(xParent),
+    m_xField(std::move(xField)),
+    m_xParent(std::move(xParent)),
     m_bRemove(bRemove)
 {
     // Save the metadata and field content to undo/redo.

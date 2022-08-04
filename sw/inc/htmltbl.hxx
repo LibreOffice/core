@@ -58,8 +58,8 @@ class SwHTMLTableLayoutCnts
 
 public:
 
-    SwHTMLTableLayoutCnts(const SwStartNode* pSttNd, std::shared_ptr<SwHTMLTableLayout> const& rTab,
-                          bool bNoBreakTag, std::shared_ptr<SwHTMLTableLayoutCnts> const& rNxt);
+    SwHTMLTableLayoutCnts(const SwStartNode* pSttNd, std::shared_ptr<SwHTMLTableLayout> aTab,
+                          bool bNoBreakTag, std::shared_ptr<SwHTMLTableLayoutCnts>  rNxt);
 
     void SetTableBox( SwTableBox *pBx ) { m_pBox = pBx; }
     SwTableBox *GetTableBox() const { return m_pBox; }
@@ -93,7 +93,7 @@ class SwHTMLTableLayoutCell
 
 public:
 
-    SwHTMLTableLayoutCell(std::shared_ptr<SwHTMLTableLayoutCnts> const& rCnts,
+    SwHTMLTableLayoutCell(std::shared_ptr<SwHTMLTableLayoutCnts> xCnts,
                          sal_uInt16 nRSpan, sal_uInt16 nCSpan,
                          sal_uInt16 nWidthOpt, bool bPercentWidthOpt,
                          bool bNWrapOpt );

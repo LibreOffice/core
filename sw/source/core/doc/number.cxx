@@ -360,11 +360,11 @@ const SwFormatVertOrient*      SwNumFormat::GetGraphicOrientation() const
     }
 }
 
-SwNumRule::SwNumRule( const OUString& rNm,
+SwNumRule::SwNumRule( OUString aNm,
                       const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode,
                       SwNumRuleType eType )
   : mpNumRuleMap(nullptr),
-    msName( rNm ),
+    msName( std::move(aNm) ),
     meRuleType( eType ),
     mnPoolFormatId( USHRT_MAX ),
     mnPoolHelpId( USHRT_MAX ),

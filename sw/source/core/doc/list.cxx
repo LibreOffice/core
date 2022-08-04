@@ -23,10 +23,10 @@
 #include <ndarr.hxx>
 #include <node.hxx>
 
-SwList::SwList( const OUString& sListId,
+SwList::SwList( OUString sListId,
                         SwNumRule& rDefaultListStyle,
                         const SwNodes& rNodes )
-    : msListId( sListId ),
+    : msListId( std::move(sListId) ),
       msDefaultListStyleName( rDefaultListStyle.GetName() ),
       mnMarkedListLevel( MAXLEVEL )
 {
