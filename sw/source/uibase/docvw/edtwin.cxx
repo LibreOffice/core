@@ -147,6 +147,7 @@
 #include <strings.hrc>
 #include <textcontentcontrol.hxx>
 #include <contentcontrolbutton.hxx>
+// #include <mention.hxx>
 
 using namespace sw::mark;
 using namespace ::com::sun::star;
@@ -1352,6 +1353,8 @@ void SwEditWin::ChangeDrawing( sal_uInt8 nDir )
     rSh.EndUndo();
 }
 
+// sal_uInt32 Mention::lastMentionId = 1;
+// std::map<sal_uInt32, UnoCursorPointer> Mention::mentionMap;
 /**
  * KeyEvents
  */
@@ -2529,6 +2532,11 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     )
                 {
                     FlushInBuffer();
+                    // SwPosition& rPos = *rSh.GetCursor()->GetPoint();
+                    // sw::UnoCursorPointer pCursor(rSh.GetDoc()->CreateUnoCursor(rPos));
+                    // StartListening(pCursor->m_aNotifier);
+                    // Mention::s_mentionMap.insert({s_nLastMentionId++, pCursor});
+                    // SfxViewShell* pViewShell = rSh.GetSfxViewShell();
                     rSh.AutoCorrect( *pACorr, aCh );
                 }
                 else

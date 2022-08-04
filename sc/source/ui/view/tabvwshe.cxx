@@ -241,6 +241,16 @@ void ScTabViewShell::InsertURLField( const OUString& rName, const OUString& rURL
     }
     if ( pTableView )
     {
+        if (comphelper::LibreOfficeKit::isActive() && rURL.startsWith("im:"))
+        {
+
+            ESelection aSel = pTableView->GetSelection();
+            if ( aSel.nStartPos == aSel.nEndPos && aSel.nStartPos > 0 )
+            {
+                aSel.nStartPos -= rName.getLength();
+                pTableView->SetSelection( aSel );
+            }
+        }
         pTableView->InsertField( aURLItem );
         lcl_SelectFieldAfterInsert( *pTableView );
     }
