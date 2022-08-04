@@ -427,7 +427,7 @@ interface XAccessibleText : ::com::sun::star::uno::XInterface
 
         @param nIndex
             Index of the character for which to return the text part after
-            it.  The index character will be part of the returned string.
+            it.  The index character will not be part of the returned string.
             The valid range is 0..length.
 
         @param nTextType
