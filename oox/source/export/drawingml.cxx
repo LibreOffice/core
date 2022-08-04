@@ -3516,8 +3516,15 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
         }
         else if (nTextPreRotateAngle == -180 || nTextPreRotateAngle == 180)
         {
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 12
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
             nTextRotateAngleDeg100
                 = NormAngle18000(nTextRotateAngleDeg100.value_or(0_deg100) + 18000_deg100);
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 12
+#pragma GCC diagnostic pop
+#endif
             // ToDo: Examine insets. They might need rotation too.
         }
         else
@@ -3540,8 +3547,15 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
 
     std::optional<OString> sTextRotateAngleMSUnit;
     if (nTextRotateAngleDeg100.has_value())
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 12
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
         sTextRotateAngleMSUnit
             = oox::drawingml::calcRotationValue(nTextRotateAngleDeg100.value().get());
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 12
+#pragma GCC diagnostic pop
+#endif
 
     TextHorizontalAdjust eHorizontalAlignment( TextHorizontalAdjust_CENTER );
     bool bHorizontalCenter = false;
