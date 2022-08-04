@@ -417,9 +417,79 @@ float SAL_CALL SwVbaApplication::CentimetersToPoints( float Centimeters )
     return VbaApplicationBase::CentimetersToPoints( Centimeters );
 }
 
+float SAL_CALL SwVbaApplication::PointsToCentimeters( float Points )
+{
+    float Millimeters = PointsToMillimeters( Points );
+    float Centimeters = Millimeters/10;
+    return Centimeters;
+}
+
+float SAL_CALL SwVbaApplication::PixelsToPoints( float Pixels, ::sal_Bool fVertical )
+{
+    //Set up xDevice
+    uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_SET_THROW );
+    uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_SET_THROW );
+    uno::Reference< frame::XFrame > xFrame( xController->getFrame(), uno::UNO_SET_THROW );
+    uno::Reference< awt::XWindow > xWindow( xFrame->getContainerWindow(), uno::UNO_SET_THROW );
+    css::uno::Reference< css::awt::XDevice > xDevice( xWindow, css::uno::UNO_QUERY );
+
+    return ooo::vba::PixelsToPoints(xDevice, Pixels, fVertical);
+}
+
+float SAL_CALL SwVbaApplication::PointsToPixels( float Pixels, ::sal_Bool fVertical )
+{
+    uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_SET_THROW );
+    uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_SET_THROW );
+    uno::Reference< frame::XFrame > xFrame( xController->getFrame(), uno::UNO_SET_THROW );
+    uno::Reference< awt::XWindow > xWindow( xFrame->getContainerWindow(), uno::UNO_SET_THROW );
+    css::uno::Reference< css::awt::XDevice > xDevice( xWindow, css::uno::UNO_QUERY );
+
+    return ooo::vba::PointsToPixels(xDevice, Pixels, fVertical);
+}
+
+float SAL_CALL SwVbaApplication::InchesToPoints( float Inches )
+{
+    //One inch is 25.4mm
+    //One inch is 72 points
+    float Points = Inches*72;
+    return Points;
+}
+
+float SAL_CALL SwVbaApplication::PointsToInches( float Points )
+{
+    float Inches = Points/72;
+    return Inches;
+}
+
+float SAL_CALL SwVbaApplication::MillimetersToPoints( float Millimeters )
+{
+    Millimeters*=100;
+    return ooo::vba::HmmToPoints( Millimeters );
+}
+
+float SAL_CALL SwVbaApplication::PointsToMillimeters( float Points )
+{
+    Points/=100;
+    return ooo::vba::PointsToHmm( Points );
+}
+
+float SAL_CALL SwVbaApplication::PicasToPoints( float Picas )
+{
+    //6 picas in an inch
+    //12 points in a pica
+    float Points = Picas*12;
+    return Points;
+}
+
+float SAL_CALL SwVbaApplication::PointsToPicas( float Points )
+{
+    float Picas = Points/12;
+    return Picas;
+}
+
 void SAL_CALL SwVbaApplication::ShowMe()
 {
-    // No idea what we should or could do
+    // Method no longer supported in word - deprecated
 }
 
 void SAL_CALL SwVbaApplication::Resize( sal_Int32 Width, sal_Int32 Height )
