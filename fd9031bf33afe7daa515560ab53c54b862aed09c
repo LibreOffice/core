@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13fdc498_9e91bad5",
+        "filename": "sw/qa/extras/uiwriter/uiwriter6.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 693,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-04T16:17:26Z",
+      "side": 1,
+      "message": "If I understand your goal, you need not have the *ODT* to be named using non-ASCII characters, but the data source file.\n\nThe assertion here happens after you convert the resulting ODT path to 8-bit string using toChar call, and then pass to createSwDoc, which expects the path to be ASCII. But as mentioned, the ODT itself may have pure ASCII name, and the data source (say, ODS) would be non-ASCII. And you would not need to open the data source yourself from the test, so createSwDoc would not fail.",
+      "revId": "fd9031bf33afe7daa515560ab53c54b862aed09c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
