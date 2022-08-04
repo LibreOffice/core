@@ -31,10 +31,10 @@ namespace cmis
         OUString m_sBindingUrl;
 
         public:
-            AuthProvider ( css::uno::Reference< css::ucb::XCommandEnvironment> xEnv,
+            AuthProvider ( const css::uno::Reference< css::ucb::XCommandEnvironment> & xEnv,
                            OUString sUrl,
                            OUString sBindingUrl ):
-                m_xEnv( std::move(xEnv) ), m_sUrl( std::move(sUrl) ), m_sBindingUrl( std::move(sBindingUrl) ) { }
+                m_xEnv( xEnv ), m_sUrl( std::move(sUrl) ), m_sBindingUrl( std::move(sBindingUrl) ) { }
 
             bool authenticationQuery( std::string& username, std::string& password ) override;
 
