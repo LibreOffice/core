@@ -52,6 +52,24 @@
       "parentUuid": "4e8c4bfd_b9525c01",
       "revId": "2878a5621890daa7d5cd075434008f0fb2dfd054",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc8b3413_faafe39d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-08-04T06:50:27Z",
+      "side": 1,
+      "message": "\u003e I\u0027m not sure why the UnoControl*Model files are not accessible from Java. Maybe @Stephan has an idea here?\n\nWith \"UnoControl*Model files\" you mean the offapi/com/sun/star/awt/UnoControl*Model.idl UNOIDL source files?  These appear to all define old-style services, which are effectively some kind of fancy documentation rather than something that maps to constructs in e.g. the C++ and Java UNO language bindings.  That\u0027s why those UNOIDL services don\u0027t show up neither in the generated C++ .hdl/.hpp include files nor in the generated Java jars.",
+      "parentUuid": "7c6ff15c_47a7acc6",
+      "revId": "2878a5621890daa7d5cd075434008f0fb2dfd054",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
