@@ -778,13 +778,7 @@ void SwView::CalcVisArea( const Size &rOutPixel )
 {
     Point aTopLeft;
     tools::Rectangle aRect( aTopLeft, rOutPixel );
-    aTopLeft = GetEditWin().PixelToLogic( aTopLeft );
-    Point aBottomRight( GetEditWin().PixelToLogic( aRect.BottomRight() ) );
-
-    aRect.SetLeft( aTopLeft.X() );
-    aRect.SetTop( aTopLeft.Y() );
-    aRect.SetRight( aBottomRight.X() );
-    aRect.SetBottom( aBottomRight.Y() );
+    aRect = GetEditWin().PixelToLogic(aRect);
 
     // The shifts to the right and/or below can now be incorrect
     // (e.g. change zoom level, change view size).
