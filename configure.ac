@@ -8389,6 +8389,15 @@ if test "$COM_IS_CLANG" = "TRUE"; then
                         [[ clang::FullSourceLoc().dump(); ]])
                 ],[CLANGTOOLLIBS="$LIBS"],[])
             fi
+            dnl -lclangSupport above is only available since Clang 15, so check again without it:
+            if test -z "$CLANGTOOLLIBS"; then
+                LIBS="-lclangTooling -lclangFrontend -lclangDriver -lclangParse -lclangSema -lclangEdit \
+ -lclangAnalysis -lclangAST -lclangLex -lclangSerialization -lclangBasic $COMPILER_PLUGINS_LINKFLAGS"
+                AC_LINK_IFELSE([
+                    AC_LANG_PROGRAM([[#include "clang/Basic/SourceLocation.h"]],
+                        [[ clang::FullSourceLoc().dump(); ]])
+                ],[CLANGTOOLLIBS="$LIBS"],[])
+            fi
             if test -z "$CLANGTOOLLIBS"; then
                 LIBS="-lclang-cpp $COMPILER_PLUGINS_LINKFLAGS"
                 AC_LINK_IFELSE([
