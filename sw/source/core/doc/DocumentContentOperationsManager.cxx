@@ -2164,11 +2164,11 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
         }
         if (SwTextNode *const pNode = temp.Start()->GetNode().GetTextNode())
         { // rPam may not have nContent set but IsFieldmarkOverlap requires it
-            pNode->MakeStartIndex(&temp.Start()->nContent);
+            temp.Start()->AssignStartIndex(*pNode);
         }
         if (SwTextNode *const pNode = temp.End()->GetNode().GetTextNode())
         {
-            pNode->MakeEndIndex(&temp.End()->nContent);
+            temp.End()->AssignEndIndex(*pNode);
         }
         if (sw::mark::IsFieldmarkOverlap(temp))
         {   // a bit of a problem: we want to completely remove the nodes
@@ -5290,14 +5290,13 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
 
     if( rPos.nNode != aInsPos )
     {
-        pCopyPam->GetMark()->nNode = aInsPos;
         if (aInsPos < rPos.nNode)
         {   // tdf#134250 decremented in (pEndTextNd && !pDestTextNd) above
-            pCopyPam->GetContentNode(false)->MakeEndIndex(&pCopyPam->GetMark()->nContent);
+            pCopyPam->GetMark()->AssignEndIndex(*aInsPos.GetNode().GetContentNode());
         }
         else // incremented in (!pSttTextNd && pDestTextNd) above
         {
-            pCopyPam->GetMark()->nContent.Assign(pCopyPam->GetContentNode(false), 0);
+            pCopyPam->GetMark()->Assign(aInsPos);
         }
         rPos = *pCopyPam->GetMark();
     }

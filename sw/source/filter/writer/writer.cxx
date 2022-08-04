@@ -206,8 +206,7 @@ Writer::NewUnoCursor(SwDoc & rDoc, SwNodeOffset const nStartIdx, SwNodeOffset co
     if (!pCNode)
         pCNode = SwNodes::GoPrevious(&aStt);
     assert(pCNode && "No more ContentNode at StartPos");
-    pCNode->MakeEndIndex( &pNew->GetPoint()->nContent );
-    pNew->GetPoint()->nNode = aStt;
+    pNew->GetPoint()->AssignEndIndex( *pCNode );
     return pNew;
 }
 

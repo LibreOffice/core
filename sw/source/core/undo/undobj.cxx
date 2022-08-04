@@ -842,11 +842,9 @@ void SwUndoSaveContent::MovePtForward( SwPaM& rPam, bool bMvBkwrd )
         rPam.Move( fnMoveForward );
     else
     {
-        ++rPam.GetPoint()->nNode;
+        rPam.GetPoint()->Adjust(SwNodeOffset(1));
         SwContentNode* pCNd = rPam.GetContentNode();
-        if( pCNd )
-            pCNd->MakeStartIndex( &rPam.GetPoint()->nContent );
-        else
+        if( !pCNd )
             rPam.Move( fnMoveForward );
     }
 }

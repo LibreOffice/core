@@ -617,8 +617,7 @@ bool SwNoTextFrame::LeftMargin(SwPaM *pPam) const
 {
     if( &pPam->GetNode() != GetNode() )
         return false;
-    const_cast<SwContentNode*>(GetNode())->
-        MakeStartIndex(&pPam->GetPoint()->nContent);
+    pPam->GetPoint()->AssignStartIndex(*GetNode());
     return true;
 }
 
@@ -626,8 +625,7 @@ bool SwNoTextFrame::RightMargin(SwPaM *pPam, bool) const
 {
     if( &pPam->GetNode() != GetNode() )
         return false;
-    const_cast<SwContentNode*>(GetNode())->
-        MakeEndIndex(&pPam->GetPoint()->nContent);
+    pPam->GetPoint()->AssignEndIndex(*GetNode());
     return true;
 }
 
@@ -953,11 +951,10 @@ static bool lcl_UpDown( SwPaM *pPam, const SwContentFrame *pStart,
     {   // set the Point on the Content-Node
         assert(pCnt->IsNoTextFrame());
         SwContentNode *const pCNd = const_cast<SwContentNode*>(static_cast<SwNoTextFrame const*>(pCnt)->GetNode());
-        pPam->GetPoint()->nNode = *pCNd;
         if ( fnNxtPrv == lcl_GetPrvCnt )
-            pCNd->MakeEndIndex( &pPam->GetPoint()->nContent );
+            pPam->GetPoint()->AssignEndIndex(*pCNd);
         else
-            pCNd->MakeStartIndex( &pPam->GetPoint()->nContent );
+            pPam->GetPoint()->AssignStartIndex(*pCNd);
     }
     return true;
 }

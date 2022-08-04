@@ -838,7 +838,7 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
     SwPaM aCpyPam(aIdx, SwNodeIndex(rClpDoc.GetNodes().GetEndOfContent(), -1));
     if (SwContentNode *const pAtEnd = aCpyPam.GetNode(true).GetContentNode())
     {
-        pAtEnd->MakeEndIndex(&aCpyPam.GetPoint()->nContent);
+        aCpyPam.GetPoint()->AssignEndIndex(*pAtEnd);
     }
 
     // If there are table formulas in the area, then display the table first
