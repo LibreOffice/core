@@ -1371,8 +1371,24 @@ bool QtAccessibleWidget::unselectRow(int row)
 // QAccessibleTableCellInterface
 QList<QAccessibleInterface*> QtAccessibleWidget::columnHeaderCells() const
 {
-    SAL_WARN("vcl.qt", "Unsupported QAccessibleTableCellInterface::columnHeaderCells");
-    return QList<QAccessibleInterface*>();
+    Reference<XAccessibleTable> xTable = getAccessibleTableForParent();
+    if (!xTable.is())
+        return QList<QAccessibleInterface*>();
+
+    Reference<XAccessibleTable> xHeaders = xTable->getAccessibleColumnHeaders();
+    if (!xHeaders.is())
+        return QList<QAccessibleInterface*>();
+
+    const sal_Int32 nCol = columnIndex();
+    QList<QAccessibleInterface*> aHeaderCells;
+    for (sal_Int32 nRow = 0; nRow < xHeaders->getAccessibleRowCount(); nRow++)
+    {
+        Reference<XAccessible> xCell = xHeaders->getAccessibleCellAt(nRow, nCol);
+        QAccessibleInterface* pInterface
+            = QAccessible::queryAccessibleInterface(new QtXAccessible(xCell));
+        aHeaderCells.push_back(pInterface);
+    }
+    return aHeaderCells;
 }
 
 int QtAccessibleWidget::columnIndex() const
@@ -1421,8 +1437,24 @@ int QtAccessibleWidget::columnExtent() const
 
 QList<QAccessibleInterface*> QtAccessibleWidget::rowHeaderCells() const
 {
-    SAL_WARN("vcl.qt", "Unsupported QAccessibleTableCellInterface::rowHeaderCells");
-    return QList<QAccessibleInterface*>();
+    Reference<XAccessibleTable> xTable = getAccessibleTableForParent();
+    if (!xTable.is())
+        return QList<QAccessibleInterface*>();
+
+    Reference<XAccessibleTable> xHeaders = xTable->getAccessibleRowHeaders();
+    if (!xHeaders.is())
+        return QList<QAccessibleInterface*>();
+
+    const sal_Int32 nRow = rowIndex();
+    QList<QAccessibleInterface*> aHeaderCells;
+    for (sal_Int32 nCol = 0; nCol < xHeaders->getAccessibleColumnCount(); nCol++)
+    {
+        Reference<XAccessible> xCell = xHeaders->getAccessibleCellAt(nRow, nCol);
+        QAccessibleInterface* pInterface
+            = QAccessible::queryAccessibleInterface(new QtXAccessible(xCell));
+        aHeaderCells.push_back(pInterface);
+    }
+    return aHeaderCells;
 }
 
 int QtAccessibleWidget::rowExtent() const
