@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d7ac29e_cea824db",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1197,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-04T07:38:47Z",
+      "side": 1,
+      "message": "The name of the member \u0027m_xIgnoreLanguageChangeCB\u0027 should also change accordingly - otherwise, the name becomes confusing to the developer (it really does the opposite to its name). E.g., \u0027m_xUseInputLanguageCB\u0027.",
+      "range": {
+        "startLine": 1197,
+        "startChar": 4,
+        "endLine": 1197,
+        "endChar": 29
+      },
+      "revId": "d8817b1d7acd887f8ad7c920d9dc67288a21aa54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2599901_30f3c9ea",
+        "filename": "cui/uiconfig/ui/optlanguagespage.ui",
+        "patchSetId": 4
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-04T07:38:47Z",
+      "side": 1,
+      "message": "Not \"system language\", but \"system input language\". The former is completely misleading - \"system language\" might refer to UI language of the system.",
+      "range": {
+        "startLine": 335,
+        "startChar": 125,
+        "endLine": 335,
+        "endChar": 140
+      },
+      "revId": "d8817b1d7acd887f8ad7c920d9dc67288a21aa54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b24198ba_d2ca68fb",
+        "filename": "officecfg/registry/schema/org/openoffice/Setup.xcs",
+        "patchSetId": 4
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-04T07:38:47Z",
+      "side": 1,
+      "message": "Why this change in the *schema*? The value we store in settings internally doesn\u0027t change its meaning or name - this change here is completely wrong.\n\nAnd it changes the default - which is both out of scope of the bug, and needs careful discussion (e.g., I would strongly oppose it, because its current default makes sense for the majority of users who use non-Roman languages).",
+      "revId": "d8817b1d7acd887f8ad7c920d9dc67288a21aa54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
