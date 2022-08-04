@@ -155,8 +155,7 @@ bool SwCursor::GotoFootnoteAnchor()
                 SwCursorSaveState aSaveState( *this );
 
                 SwTextNode& rTNd = const_cast<SwTextNode&>(pTextFootnote->GetTextNode());
-                GetPoint()->nNode = rTNd;
-                GetPoint()->nContent.Assign( &rTNd, pTextFootnote->GetStart() );
+                GetPoint()->Assign( rTNd, pTextFootnote->GetStart() );
 
                 return !IsSelOvr( SwCursorSelOverFlags::CheckNodeSection |
                                   SwCursorSelOverFlags::Toggle );
@@ -262,8 +261,7 @@ bool SwCursor::GotoNextFootnoteAnchor()
         SwCursorSaveState aSaveState( *this );
 
         SwTextNode& rTNd = const_cast<SwTextNode&>(pTextFootnote->GetTextNode());
-        GetPoint()->nNode = rTNd;
-        GetPoint()->nContent.Assign( &rTNd, pTextFootnote->GetStart() );
+        GetPoint()->Assign( rTNd, pTextFootnote->GetStart() );
         bRet = !IsSelOvr();
     }
     return bRet;
@@ -333,8 +331,7 @@ bool SwCursor::GotoPrevFootnoteAnchor()
         SwCursorSaveState aSaveState( *this );
 
         SwTextNode& rTNd = const_cast<SwTextNode&>(pTextFootnote->GetTextNode());
-        GetPoint()->nNode = rTNd;
-        GetPoint()->nContent.Assign( &rTNd, pTextFootnote->GetStart() );
+        GetPoint()->Assign( rTNd, pTextFootnote->GetStart() );
         bRet = !IsSelOvr();
     }
     return bRet;

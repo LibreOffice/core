@@ -212,8 +212,7 @@ const SwTextNode* GetBodyTextNode( const SwDoc& rDoc, SwPosition& rPos,
             // get the anchor's node
             const SwTextFootnote* pFootnote = static_cast<const SwFootnoteFrame*>(pLayout)->GetAttr();
             pTextNode = &pFootnote->GetTextNode();
-            rPos.nNode = *pTextNode;
-            rPos.nContent = pFootnote->GetStart();
+            rPos.Assign( *pTextNode, pFootnote->GetStart() );
         }
         else if( pLayout->IsHeaderFrame() || pLayout->IsFooterFrame() )
         {

@@ -126,8 +126,7 @@ ErrCode SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& rPam
             // end of the previous node.
             if (aPam.GetPoint()->nNode == aNxtIdx)
             {
-                aPam.GetPoint()->nNode = *pSttNdIdx;
-                aPam.GetPoint()->nContent.Assign(pTextNode, pTextNode->GetText().getLength());
+                aPam.GetPoint()->Assign(*pTextNode, pTextNode->GetText().getLength());
             }
             // If the first new node isn't empty, convert  the node's text
             // attributes into hints. Otherwise, set the new node's

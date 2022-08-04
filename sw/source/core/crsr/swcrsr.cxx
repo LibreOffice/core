@@ -1445,8 +1445,7 @@ bool SwCursor::SelectWordWT( SwViewShell const * pViewShell, sal_Int16 nWordType
 
             assert(pMark->GetMarkEnd() != *GetPoint());
             SetMark();
-            GetMark()->nNode = rEnd.nNode;
-            GetMark()->nContent = rEnd.nContent;
+            *GetMark() = rEnd;
             --GetMark()->nContent; // Don't select the end delimiter
 
             bRet = true;

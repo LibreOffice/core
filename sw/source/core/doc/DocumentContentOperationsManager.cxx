@@ -4931,8 +4931,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
     if ((rPos.GetNodeIndex() - pCopyPam->GetPoint()->GetNodeIndex()) > SwNodeOffset(1))
     {
         // First go back to the original place
-        pCopyPam->GetPoint()->nNode = rPos.nNode;
-        pCopyPam->GetPoint()->nContent = rPos.nContent;
+        *(pCopyPam->GetPoint()) = rPos;
 
         bCanMoveBack = false;
         bAfterTable = true;

@@ -3240,9 +3240,7 @@ void SwXTextDocument::getTrackedChanges(tools::JsonWriter& rJson)
         {
             SwShellCursor aCursor(pView->GetWrtShell(), *(rRedlineTable[i]->Start()));
             aCursor.SetMark();
-            aCursor.GetMark()->nNode = *pContentNd;
-            aCursor.GetMark()->nContent.Assign(pContentNd,
-                                               rRedlineTable[i]->End()->GetContentIndex());
+            aCursor.GetMark()->Assign(*pContentNd, rRedlineTable[i]->End()->GetContentIndex());
 
             aCursor.FillRects();
 

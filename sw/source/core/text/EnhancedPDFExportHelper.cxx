@@ -1938,8 +1938,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
             const SwTextFootnote* pTextFootnote = pDoc->GetFootnoteIdxs()[ nIdx ];
             SwTextNode& rTNd = const_cast<SwTextNode&>(pTextFootnote->GetTextNode());
 
-            mrSh.GetCursor_()->GetPoint()->nNode = rTNd;
-            mrSh.GetCursor_()->GetPoint()->nContent.Assign( &rTNd, pTextFootnote->GetStart() );
+            mrSh.GetCursor_()->GetPoint()->Assign(rTNd, pTextFootnote->GetStart());
 
             // 1. Check if the whole paragraph is hidden
             // 2. Check for hidden text attribute

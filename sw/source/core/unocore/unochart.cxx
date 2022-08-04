@@ -2383,8 +2383,7 @@ bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
                         m_pTableCursor->GetPoint() : m_pTableCursor->GetMark();
             if (pPos)
             {
-                pPos->nNode     = aNewPos.nNode;
-                pPos->nContent  = aNewPos.nContent;
+                *pPos = aNewPos;
             }
             else {
                 OSL_FAIL( "neither point nor mark available for change" );
