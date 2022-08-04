@@ -373,6 +373,8 @@ QAccessible::Role QtAccessibleWidget::role() const
             return QAccessible::UserRole;
         case AccessibleRole::END_NOTE:
             return QAccessible::Note;
+        case AccessibleRole::FILE_CHOOSER:
+            return QAccessible::Dialog;
         case AccessibleRole::FILLER:
             return QAccessible::Whitespace;
         case AccessibleRole::FONT_CHOOSER:
