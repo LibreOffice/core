@@ -20,6 +20,7 @@
 #include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/util/thePathSettings.hpp>
+#include <com/sun/star/awt/XDevice.hpp>
 
 #include "vbaapplication.hxx"
 #include "vbadocument.hxx"
@@ -417,9 +418,67 @@ float SAL_CALL SwVbaApplication::CentimetersToPoints( float Centimeters )
     return VbaApplicationBase::CentimetersToPoints( Centimeters );
 }
 
+float SAL_CALL SwVbaApplication::PointsToCentimeters( float Points )
+{
+    return o3tl::convert(Points, o3tl::Length::pt, o3tl::Length::cm);
+}
+
+float SAL_CALL SwVbaApplication::PixelsToPoints( float Pixels, ::sal_Bool fVertical )
+{
+    //Set up xDevice
+    uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_SET_THROW );
+    uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_SET_THROW );
+    uno::Reference< frame::XFrame > xFrame( xController->getFrame(), uno::UNO_SET_THROW );
+    uno::Reference< awt::XWindow > xWindow( xFrame->getContainerWindow(), uno::UNO_SET_THROW );
+    css::uno::Reference< css::awt::XDevice > xDevice( xWindow, css::uno::UNO_QUERY );
+
+    return ooo::vba::PixelsToPoints(xDevice, Pixels, fVertical);
+}
+
+float SAL_CALL SwVbaApplication::PointsToPixels( float Pixels, ::sal_Bool fVertical )
+{
+    uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_SET_THROW );
+    uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_SET_THROW );
+    uno::Reference< frame::XFrame > xFrame( xController->getFrame(), uno::UNO_SET_THROW );
+    uno::Reference< awt::XWindow > xWindow( xFrame->getContainerWindow(), uno::UNO_SET_THROW );
+    css::uno::Reference< css::awt::XDevice > xDevice( xWindow, css::uno::UNO_QUERY );
+
+    return ooo::vba::PointsToPixels(xDevice, Pixels, fVertical);
+}
+
+float SAL_CALL SwVbaApplication::InchesToPoints( float Inches )
+{
+    return o3tl::convert(Inches, o3tl::Length::ch, o3tl::Length::pt);
+}
+
+float SAL_CALL SwVbaApplication::PointsToInches( float Points )
+{
+    return o3tl::convert(Points, o3tl::Length::pt, o3tl::Length::ch);
+}
+
+float SAL_CALL SwVbaApplication::MillimetersToPoints( float Millimeters )
+{
+    return o3tl::convert(Millimeters, o3tl::Length::mm, o3tl::Length::pt);
+}
+
+float SAL_CALL SwVbaApplication::PointsToMillimeters( float Points )
+{
+    return o3tl::convert(Points, o3tl::Length::pt, o3tl::Length::mm);
+}
+
+float SAL_CALL SwVbaApplication::PicasToPoints( float Picas )
+{
+    return o3tl::convert(Picas, o3tl::Length::pc, o3tl::Length::pt);
+}
+
+float SAL_CALL SwVbaApplication::PointsToPicas( float Points )
+{
+    return o3tl::convert(Points, o3tl::Length::pt, o3tl::Length::pc);
+}
+
 void SAL_CALL SwVbaApplication::ShowMe()
 {
-    // No idea what we should or could do
+    // Method no longer supported in word - deprecated
 }
 
 void SAL_CALL SwVbaApplication::Resize( sal_Int32 Width, sal_Int32 Height )
