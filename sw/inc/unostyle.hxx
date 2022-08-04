@@ -189,7 +189,7 @@ private:
 
 public:
 
-    SwXAutoStyle( SwDoc* pDoc, std::shared_ptr<SfxItemSet> const & pInitSet, IStyleAccess::SwAutoStyleFamily eFam );
+    SwXAutoStyle( SwDoc* pDoc, std::shared_ptr<SfxItemSet> pInitSet, IStyleAccess::SwAutoStyleFamily eFam );
     virtual ~SwXAutoStyle() override;
 
     //XPropertySet
@@ -340,9 +340,9 @@ class SwXTextCellStyle final : public cppu::WeakImplHelper
     bool m_bPhysical;
 
  public:
-    SwXTextCellStyle(SwDocShell* pDocShell, SwBoxAutoFormat* pBoxAutoFormat, const OUString& sParentStyle);
+    SwXTextCellStyle(SwDocShell* pDocShell, SwBoxAutoFormat* pBoxAutoFormat, OUString sParentStyle);
     /// Create non physical style
-    SwXTextCellStyle(SwDocShell* pDocShell, const OUString& sName);
+    SwXTextCellStyle(SwDocShell* pDocShell, OUString  sName);
 
     /**
     * This function looks for a SwBoxAutoFormat with given name. Parses the name and returns parent name.

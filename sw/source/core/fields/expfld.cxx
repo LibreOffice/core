@@ -506,9 +506,9 @@ bool SwGetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     return true;
 }
 
-SwSetExpFieldType::SwSetExpFieldType( SwDoc* pDc, const OUString& rName, sal_uInt16 nTyp )
+SwSetExpFieldType::SwSetExpFieldType( SwDoc* pDc, OUString aName, sal_uInt16 nTyp )
     : SwValueFieldType( pDc, SwFieldIds::SetExp ),
-    m_sName( rName ),
+    m_sName( std::move(aName) ),
     m_sDelim( "." ),
     m_nType(nTyp), m_nLevel( UCHAR_MAX ),
     m_bDeleted( false )
@@ -1215,14 +1215,14 @@ std::unique_ptr<SwFieldType> SwInputFieldType::Copy() const
 }
 
 SwInputField::SwInputField( SwInputFieldType* pFieldType,
-                            const OUString& rContent,
-                            const OUString& rPrompt,
+                            OUString aContent,
+                            OUString aPrompt,
                             sal_uInt16 nSub,
                             sal_uLong nFormat,
                             bool bIsFormField )
     : SwField( pFieldType, nFormat, LANGUAGE_SYSTEM, false )
-    , maContent(rContent)
-    , maPText(rPrompt)
+    , maContent(std::move(aContent))
+    , maPText(std::move(aPrompt))
     , mnSubType(nSub)
     , mbIsFormField( bIsFormField )
     , mpFormatField( nullptr )

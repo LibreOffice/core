@@ -668,13 +668,13 @@ SwDoc* SwXTextCursor::GetDoc()
 
 SwXTextCursor::SwXTextCursor(
         SwDoc & rDoc,
-        uno::Reference< text::XText > const& xParent,
+        uno::Reference< text::XText > xParent,
         const CursorType eType,
         const SwPosition& rPos,
         SwPosition const*const pMark)
     : m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR))
     , m_eType(eType)
-    , m_xParentText(xParent)
+    , m_xParentText(std::move(xParent))
     , m_pUnoCursor(rDoc.CreateUnoCursor(rPos))
 {
     if (pMark)
@@ -684,11 +684,11 @@ SwXTextCursor::SwXTextCursor(
     }
 }
 
-SwXTextCursor::SwXTextCursor(uno::Reference< text::XText > const& xParent,
+SwXTextCursor::SwXTextCursor(uno::Reference< text::XText > xParent,
         SwPaM const& rSourceCursor, const CursorType eType)
     : m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR))
     , m_eType(eType)
-    , m_xParentText(xParent)
+    , m_xParentText(std::move(xParent))
     , m_pUnoCursor(rSourceCursor.GetDoc().CreateUnoCursor(*rSourceCursor.GetPoint()))
 {
     if (rSourceCursor.HasMark())

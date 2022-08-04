@@ -49,8 +49,8 @@ SwBreakIt * SwBreakIt::Get()
     return g_pBreakIt;
 }
 
-SwBreakIt::SwBreakIt( const uno::Reference<uno::XComponentContext> & rxContext )
-    : m_xContext(rxContext)
+SwBreakIt::SwBreakIt( uno::Reference<uno::XComponentContext> xContext )
+    : m_xContext(std::move(xContext))
     , m_xBreak(i18n::BreakIterator::create(m_xContext))
     , m_aForbiddenLang(LANGUAGE_DONTKNOW)
 {

@@ -48,7 +48,7 @@ class SW_DLLPUBLIC SwBreakIt
     SwBreakIt& operator=(SwBreakIt const&) = delete;
 
     // private (see @ Create_, Delete_).
-    explicit SwBreakIt(const css::uno::Reference<css::uno::XComponentContext> & rxContext);
+    explicit SwBreakIt(css::uno::Reference<css::uno::XComponentContext> xContext);
 
 public:
     // private (see @ source/core/bastyp/init.cxx).

@@ -133,7 +133,7 @@ public:
 // Calculate HashTables for VarTable and Operations
 struct SwHash
 {
-    SwHash( const OUString& rStr );
+    SwHash( OUString aStr );
     virtual ~SwHash();
     OUString aStr;
     std::unique_ptr<SwHash> pNext;
@@ -144,7 +144,7 @@ struct SwCalcExp final : public SwHash
     SwSbxValue  nValue;
     const SwFieldType* pFieldType;
 
-    SwCalcExp( const OUString& rStr, const SwSbxValue& rVal,
+    SwCalcExp( const OUString& rStr, SwSbxValue aVal,
                 const SwFieldType* pFieldType );
 };
 

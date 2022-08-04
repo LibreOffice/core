@@ -22,6 +22,7 @@
 #include "swcrsr.hxx"
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/lstner.hxx>
+#include <utility>
 
 namespace sw
 {
@@ -108,8 +109,8 @@ namespace sw
         public:
             UnoCursorPointer()
            {}
-            UnoCursorPointer(std::shared_ptr<SwUnoCursor> const & pCursor)
-                : m_pCursor(pCursor)
+            UnoCursorPointer(std::shared_ptr<SwUnoCursor> pCursor)
+                : m_pCursor(std::move(pCursor))
             {
                 StartListening(m_pCursor->m_aNotifier);
             }

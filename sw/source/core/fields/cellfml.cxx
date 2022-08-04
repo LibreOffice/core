@@ -320,8 +320,8 @@ bool SwTableCalcPara::CalcWithStackOverflow()
     return !m_rCalc.IsCalcError();
 }
 
-SwTableFormula::SwTableFormula( const OUString& rFormula )
-: m_sFormula( rFormula )
+SwTableFormula::SwTableFormula( OUString aFormula )
+: m_sFormula( std::move(aFormula) )
 , m_eNmType( EXTRNL_NAME )
 , m_bValidValue( false )
 {

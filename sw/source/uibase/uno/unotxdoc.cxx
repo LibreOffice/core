@@ -4097,20 +4097,20 @@ Sequence< OUString > SwXLinkTargetSupplier::getSupportedServiceNames()
 }
 
 SwXLinkNameAccessWrapper::SwXLinkNameAccessWrapper(
-            Reference< XNameAccess > const & xAccess, const OUString& rLinkDisplayName, const OUString& sSuffix ) :
+            Reference< XNameAccess > const & xAccess, OUString aLinkDisplayName, OUString sSuffix ) :
     m_xRealAccess(xAccess),
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_LINK_TARGET)),
-    m_sLinkSuffix(sSuffix),
-    m_sLinkDisplayName(rLinkDisplayName),
+    m_sLinkSuffix(std::move(sSuffix)),
+    m_sLinkDisplayName(std::move(aLinkDisplayName)),
     m_pxDoc(nullptr)
 {
 }
 
 SwXLinkNameAccessWrapper::SwXLinkNameAccessWrapper(SwXTextDocument& rxDoc,
-            const OUString& rLinkDisplayName, const OUString& sSuffix) :
+            OUString aLinkDisplayName, OUString sSuffix) :
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_LINK_TARGET)),
-    m_sLinkSuffix(sSuffix),
-    m_sLinkDisplayName(rLinkDisplayName),
+    m_sLinkSuffix(std::move(sSuffix)),
+    m_sLinkDisplayName(std::move(aLinkDisplayName)),
     m_pxDoc(&rxDoc)
 {
 }
@@ -4410,11 +4410,11 @@ Sequence< OUString > SwXLinkNameAccessWrapper::getSupportedServiceNames()
     return aRet;
 }
 
-SwXOutlineTarget::SwXOutlineTarget(const OUString& rOutlineText, const OUString& rActualText,
+SwXOutlineTarget::SwXOutlineTarget(OUString aOutlineText, OUString aActualText,
                                    const sal_Int32 nOutlineLevel) :
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_LINK_TARGET)),
-    m_sOutlineText(rOutlineText),
-    m_sActualText(rActualText),
+    m_sOutlineText(std::move(aOutlineText)),
+    m_sActualText(std::move(aActualText)),
     m_nOutlineLevel(nOutlineLevel)
 {
 }
@@ -4487,9 +4487,9 @@ Sequence< OUString > SwXOutlineTarget::getSupportedServiceNames()
     return aRet;
 }
 
-SwXDrawingObjectTarget::SwXDrawingObjectTarget(const OUString& rDrawingObjectText) :
+SwXDrawingObjectTarget::SwXDrawingObjectTarget(OUString aDrawingObjectText) :
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_LINK_TARGET)),
-    m_sDrawingObjectText(rDrawingObjectText)
+    m_sDrawingObjectText(std::move(aDrawingObjectText))
 {
 }
 

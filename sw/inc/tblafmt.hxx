@@ -181,7 +181,7 @@ class SW_DLLPUBLIC SwTableAutoFormat
     bool m_bHidden;
     bool m_bUserDefined;
 public:
-    SwTableAutoFormat( const OUString& rName );
+    SwTableAutoFormat( OUString aName );
     SwTableAutoFormat( const SwTableAutoFormat& rNew );
     ~SwTableAutoFormat();
 

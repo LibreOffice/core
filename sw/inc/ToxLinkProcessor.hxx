@@ -14,6 +14,7 @@
 #include <rtl/ustring.hxx>
 
 #include <memory>
+#include <utility>
 #include <vector>
 
 class SwTextNode;
@@ -58,8 +59,8 @@ private:
 
     /** Information about a started link */
     struct StartedLink {
-        StartedLink(sal_Int32 startPosition, const OUString& characterStyle) :
-                mStartPosition(startPosition), mCharacterStyle(characterStyle) {
+        StartedLink(sal_Int32 startPosition, OUString characterStyle) :
+                mStartPosition(startPosition), mCharacterStyle(std::move(characterStyle)) {
         }
         sal_Int32 mStartPosition;
         OUString mCharacterStyle;

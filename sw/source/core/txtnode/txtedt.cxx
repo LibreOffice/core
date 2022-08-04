@@ -714,14 +714,14 @@ SwScanner::SwScanner( const SwTextNode& rNd, const OUString& rText,
 {
 }
 
-SwScanner::SwScanner(std::function<LanguageType(sal_Int32, sal_Int32, bool)> const& pGetLangOfChar,
-                     const OUString& rText, const LanguageType* pLang,
-                     const ModelToViewHelper& rConvMap, sal_uInt16 nType, sal_Int32 nStart,
+SwScanner::SwScanner(std::function<LanguageType(sal_Int32, sal_Int32, bool)> aGetLangOfChar,
+                     OUString aText, const LanguageType* pLang,
+                     ModelToViewHelper aConvMap, sal_uInt16 nType, sal_Int32 nStart,
                      sal_Int32 nEnd, bool bClp)
-    : m_pGetLangOfChar(pGetLangOfChar)
-    , m_aPreDashReplacementText(rText)
+    : m_pGetLangOfChar(std::move(aGetLangOfChar))
+    , m_aPreDashReplacementText(std::move(aText))
     , m_pLanguage(pLang)
-    , m_ModelToView(rConvMap)
+    , m_ModelToView(std::move(aConvMap))
     , m_nLength(0)
     , m_nOverriddenDashCount(0)
     , m_nWordType(nType)

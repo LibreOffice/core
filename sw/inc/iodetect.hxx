@@ -25,6 +25,7 @@
 #include <o3tl/string_view.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/lineend.hxx>
+#include <utility>
 #include <tools/solar.h>
 #include "swdllapi.h"
 
@@ -56,8 +57,8 @@ struct SwIoDetect
 {
     const OUString sName;
 
-    SwIoDetect(const OUString &rN)
-        : sName(rN)
+    SwIoDetect(OUString aN)
+        : sName(std::move(aN))
     {
     }
 

@@ -24,6 +24,7 @@
 
 #include <svl/itemset.hxx>
 #include <svl/ownlist.hxx>
+#include <utility>
 
 namespace com::sun::star::embed { class XEmbeddedObject; }
 
@@ -46,7 +47,7 @@ class SwApplet_Impl
 public:
     static SwHtmlOptType GetOptionType( const OUString& rName, bool bApplet );
     SwApplet_Impl( SfxItemPool& rPool );
-    SwApplet_Impl( SfxItemSet const & rSet ): m_aItemSet ( rSet) {}
+    SwApplet_Impl( SfxItemSet aSet ): m_aItemSet (std::move(aSet)) {}
     ~SwApplet_Impl();
     void CreateApplet( const OUString& rCode, const OUString& rName,
                        bool bMayScript, const OUString& rCodeBase,

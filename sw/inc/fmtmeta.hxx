@@ -108,7 +108,7 @@ private:
 
 public:
     /// takes ownership
-    explicit SwFormatMeta( std::shared_ptr< ::sw::Meta > const & i_pMeta,
+    explicit SwFormatMeta( std::shared_ptr< ::sw::Meta > i_pMeta,
                         const sal_uInt16 i_nWhich );
     virtual ~SwFormatMeta() override;
 

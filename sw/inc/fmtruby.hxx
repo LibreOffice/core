@@ -37,7 +37,7 @@ class SW_DLLPUBLIC SwFormatRuby final : public SfxPoolItem
     css::text::RubyAdjust m_eAdjustment;      ///< Specific adjustment of the Ruby-ch.
 
 public:
-    SwFormatRuby( const OUString& rRubyText );
+    SwFormatRuby( OUString aRubyText );
     SwFormatRuby( const SwFormatRuby& rAttr );
     virtual ~SwFormatRuby() override;
 

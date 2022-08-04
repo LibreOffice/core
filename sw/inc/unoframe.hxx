@@ -313,7 +313,7 @@ class SwXOLEListener final : public cppu::WeakImplHelper<css::util::XModifyListe
     css::uno::Reference<css::frame::XModel> m_xOLEModel;
 
 public:
-    SwXOLEListener(SwFormat& rOLEFormat, css::uno::Reference< css::frame::XModel > const & xOLE);
+    SwXOLEListener(SwFormat& rOLEFormat, css::uno::Reference< css::frame::XModel > xOLE);
     virtual ~SwXOLEListener() override;
 
 // css::lang::XEventListener

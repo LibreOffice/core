@@ -47,8 +47,8 @@ class SwScanner
     bool m_bClip;
 
 public:
-    SwScanner(const std::function<LanguageType(sal_Int32, sal_Int32, bool)>& pGetLangOfChar,
-              const OUString& rText, const LanguageType* pLang, const ModelToViewHelper& rConvMap,
+    SwScanner(std::function<LanguageType(sal_Int32, sal_Int32, bool)>  pGetLangOfChar,
+              OUString aText, const LanguageType* pLang, ModelToViewHelper aConvMap,
               sal_uInt16 nWordType, sal_Int32 nStart, sal_Int32 nEnd, bool bClip = false);
     SwScanner( const SwTextNode& rNd, const OUString& rText,
                const LanguageType* pLang,
