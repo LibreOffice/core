@@ -8382,15 +8382,19 @@ if test "$COM_IS_CLANG" = "TRUE"; then
             LDFLAGS=""
             AC_MSG_CHECKING([for clang libraries to use])
             if test -z "$CLANGTOOLLIBS"; then
-                LIBS="-lclangTooling -lclangFrontend -lclangDriver -lclangParse -lclangSema -lclangEdit \
- -lclangAnalysis -lclangAST -lclangLex -lclangSerialization -lclangBasic -lclangSupport $COMPILER_PLUGINS_LINKFLAGS"
+                LIBS="-lclang-cpp $COMPILER_PLUGINS_LINKFLAGS"
                 AC_LINK_IFELSE([
                     AC_LANG_PROGRAM([[#include "clang/Basic/SourceLocation.h"]],
                         [[ clang::FullSourceLoc().dump(); ]])
                 ],[CLANGTOOLLIBS="$LIBS"],[])
             fi
+            dnl If the above check for the combined -lclang-cpp failed, fall back to a hand-curated
+            dnl list of individual -lclang* (but note that that list can become outdated over time,
+            dnl see e.g. the since-reverted 5078591de9a0e65ca560a4f1913e90dfe95f66bf "CLANGTOOLLIBS
+            dnl needs to include -lclangSupport now"):
             if test -z "$CLANGTOOLLIBS"; then
-                LIBS="-lclang-cpp $COMPILER_PLUGINS_LINKFLAGS"
+                LIBS="-lclangTooling -lclangFrontend -lclangDriver -lclangParse -lclangSema -lclangEdit \
+ -lclangAnalysis -lclangAST -lclangLex -lclangSerialization -lclangBasic $COMPILER_PLUGINS_LINKFLAGS"
                 AC_LINK_IFELSE([
                     AC_LANG_PROGRAM([[#include "clang/Basic/SourceLocation.h"]],
                         [[ clang::FullSourceLoc().dump(); ]])
