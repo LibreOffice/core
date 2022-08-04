@@ -594,12 +594,13 @@ void SwCursorShell::ExtendedSelectAll(bool bFootnotes)
 {
     SwNodes& rNodes = GetDoc()->GetNodes();
     SwPosition* pPos = m_pCurrentCursor->GetPoint();
-    pPos->nNode = bFootnotes ? rNodes.GetEndOfPostIts() : rNodes.GetEndOfAutotext();
-    pPos->nContent.Assign( rNodes.GoNext( &pPos->nNode ), 0 );
+    pPos->Assign( bFootnotes ? rNodes.GetEndOfPostIts() : rNodes.GetEndOfAutotext() );
+    rNodes.GoNext( pPos );
     pPos = m_pCurrentCursor->GetMark();
-    pPos->nNode = rNodes.GetEndOfContent();
-    SwContentNode* pCNd = SwNodes::GoPrevious( &pPos->nNode );
-    pPos->nContent.Assign( pCNd, pCNd ? pCNd->Len() : 0 );
+    pPos->Assign(rNodes.GetEndOfContent());
+    SwContentNode* pCNd = SwNodes::GoPrevious( pPos );
+    if (pCNd)
+        pPos->AssignEndIndex(*pCNd);
 }
 
 bool SwCursorShell::ExtendedSelectedAll()

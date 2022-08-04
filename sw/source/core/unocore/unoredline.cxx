@@ -106,16 +106,13 @@ uno::Reference<text::XTextCursor> SwXRedlineText::createTextCursor()
 
     // skip all tables at the beginning
     SwTableNode* pTableNode = rUnoCursor.GetNode().FindTableNode();
-    SwContentNode* pContentNode = nullptr;
     bool bTable = pTableNode != nullptr;
     while( pTableNode != nullptr )
     {
         rUnoCursor.GetPoint()->nNode = *(pTableNode->EndOfSectionNode());
-        pContentNode = GetDoc()->GetNodes().GoNext(&rUnoCursor.GetPoint()->nNode);
+        SwContentNode* pContentNode = GetDoc()->GetNodes().GoNext(rUnoCursor.GetPoint());
         pTableNode = pContentNode->FindTableNode();
     }
-    if( pContentNode != nullptr )
-        rUnoCursor.GetPoint()->nContent.Assign( pContentNode, 0 );
     if( bTable && rUnoCursor.GetNode().FindSttNodeByType( SwNormalStartNode )
                                                             != GetStartNode() )
     {
@@ -543,15 +540,12 @@ uno::Reference< text::XTextCursor >  SwXRedline::createTextCursor()
 
     // is here a table?
     SwTableNode* pTableNode = rUnoCursor.GetNode().FindTableNode();
-    SwContentNode* pCont = nullptr;
     while( pTableNode )
     {
         rUnoCursor.GetPoint()->nNode = *pTableNode->EndOfSectionNode();
-        pCont = GetDoc()->GetNodes().GoNext(&rUnoCursor.GetPoint()->nNode);
+        SwContentNode* pCont = GetDoc()->GetNodes().GoNext(rUnoCursor.GetPoint());
         pTableNode = pCont->FindTableNode();
     }
-    if(pCont)
-        rUnoCursor.GetPoint()->nContent.Assign(pCont, 0);
 
     return static_cast<text::XWordCursor*>(pXCursor.get());
 }

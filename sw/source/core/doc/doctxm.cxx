@@ -838,9 +838,8 @@ bool SwTOXBaseSection::SetPosAtStartEnd( SwPosition& rPos ) const
     const SwSectionNode* pSectNd = GetFormat()->GetSectionNode();
     if( pSectNd )
     {
-        rPos.nNode = *pSectNd;
-        SwContentNode* pCNd = pSectNd->GetDoc().GetNodes().GoNext( &rPos.nNode );
-        rPos.nContent.Assign( pCNd, 0 );
+        rPos.Assign(*pSectNd);
+        pSectNd->GetDoc().GetNodes().GoNext( &rPos );
         bRet = true;
     }
     return bRet;

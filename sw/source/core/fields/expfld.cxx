@@ -139,13 +139,12 @@ static SwTextNode* GetFirstTextNode( const SwDoc& rDoc, SwPosition& rPos,
     if ( !pCFrame )
     {
         const SwNodes& rNodes = rDoc.GetNodes();
-        rPos.nNode = *rNodes.GetEndOfContent().StartOfSectionNode();
+        rPos.Assign( *rNodes.GetEndOfContent().StartOfSectionNode() );
         SwContentNode* pCNd;
-        while( nullptr != (pCNd = rNodes.GoNext( &rPos.nNode ) ) &&
+        while( nullptr != (pCNd = rNodes.GoNext( &rPos ) ) &&
                 nullptr == ( pTextNode = pCNd->GetTextNode() ) )
                         ;
         OSL_ENSURE( pTextNode, "Where is the 1. TextNode?" );
-        rPos.nContent.Assign( pTextNode, 0 );
     }
     else if ( !pCFrame->isFrameAreaDefinitionValid() )
     {

@@ -1114,29 +1114,29 @@ void SwCursor::FillFindPos( SwDocPositions ePos, SwPosition& rPos ) const
     {
     case SwDocPositions::Start:
         rPos.nNode = *rNds.GetEndOfContent().StartOfSectionNode();
-        pCNd = rNds.GoNext( &rPos.nNode );
+        pCNd = rNds.GoNext( &rPos );
         break;
     case SwDocPositions::End:
         rPos.nNode = rNds.GetEndOfContent();
-        pCNd = SwNodes::GoPrevious( &rPos.nNode );
+        pCNd = SwNodes::GoPrevious( &rPos );
         bIsStart = false;
         break;
     case SwDocPositions::OtherStart:
         rPos.nNode = *rNds[ SwNodeOffset(0) ];
-        pCNd = rNds.GoNext( &rPos.nNode );
+        pCNd = rNds.GoNext( &rPos );
         break;
     case SwDocPositions::OtherEnd:
         rPos.nNode = *rNds.GetEndOfContent().StartOfSectionNode();
-        pCNd = SwNodes::GoPrevious( &rPos.nNode );
+        pCNd = SwNodes::GoPrevious( &rPos );
         bIsStart = false;
         break;
     default:
         rPos = *GetPoint();
     }
 
-    if( pCNd )
+    if( pCNd && !bIsStart )
     {
-        rPos.nContent.Assign( pCNd, bIsStart ? 0 : pCNd->Len() );
+        rPos.AssignEndIndex( *pCNd );
     }
 }
 

@@ -2214,8 +2214,9 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
             {
                 // We need to remove the last empty Node again
                 aIdx = aInsPos.nNode;
-                SwContentNode* pCNd = SwNodes::GoPrevious( &aInsPos.nNode );
-                aInsPos.nContent.Assign( pCNd, pCNd ? pCNd->Len() : 0 );
+                SwContentNode* pCNd = SwNodes::GoPrevious( &aInsPos );
+                if (pCNd)
+                    aInsPos.AssignEndIndex( *pCNd );
 
                 // All, that are in the to-be-deleted Node, need to be
                 // moved to the next Node

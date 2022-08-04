@@ -1929,19 +1929,20 @@ void DelBookmarks(
                 bool bStt = true;
                 SwContentNode* pCNd = pRStt->GetNode().GetContentNode();
                 if( !pCNd )
-                    pCNd = rDoc.GetNodes().GoNext( &pRStt->nNode );
+                    pCNd = rDoc.GetNodes().GoNext( pRStt );
                 if (!pCNd)
                 {
                     bStt = false;
-                    pRStt->nNode = rStt;
-                    pCNd = SwNodes::GoPrevious( &pRStt->nNode );
+                    pRStt->Assign(rStt);
+                    pCNd = SwNodes::GoPrevious( pRStt );
                     if( !pCNd )
                     {
-                        pRStt->nNode = pREnd->nNode;
+                        *pRStt = *pREnd;
                         pCNd = pRStt->GetNode().GetContentNode();
                     }
                 }
-                pRStt->nContent.Assign( pCNd, bStt ? 0 : pCNd->Len() );
+                if (pCNd && !bStt)
+                    pRStt->AssignEndIndex( *pCNd );
             }
         }
         if( lcl_Greater( *pREnd, rStt, pSttIdx ) && lcl_Lower( *pREnd, rEnd, pEndIdx ))
@@ -1954,19 +1955,20 @@ void DelBookmarks(
                 bool bStt = false;
                 SwContentNode* pCNd = pREnd->GetNode().GetContentNode();
                 if( !pCNd )
-                    pCNd = SwNodes::GoPrevious( &pREnd->nNode );
+                    pCNd = SwNodes::GoPrevious( pREnd );
                 if( !pCNd )
                 {
                     bStt = true;
-                    pREnd->nNode = rEnd;
-                    pCNd = rDoc.GetNodes().GoNext( &pREnd->nNode );
+                    pREnd->Assign(rEnd);
+                    pCNd = rDoc.GetNodes().GoNext( pREnd );
                     if( !pCNd )
                     {
-                        pREnd->nNode = pRStt->nNode;
+                        *pREnd = *pRStt;
                         pCNd = pREnd->GetNode().GetContentNode();
                     }
                 }
-                pREnd->nContent.Assign( pCNd, bStt ? 0 : pCNd->Len() );
+                if (pCNd && !bStt)
+                    pREnd->AssignEndIndex( *pCNd );
             }
         }
     }
