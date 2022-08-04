@@ -98,14 +98,12 @@ bool SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
 
 bool SwViewOption::IsShowOutlineContentVisibilityButton() const
 {
-    return officecfg::Office::Common::Misc::ExperimentalMode::get() &&
-        (m_nCoreOptions & ViewOptFlags1::ShowOutlineContentVisibilityButton);
+    return static_cast<bool>(m_nCoreOptions & ViewOptFlags1::ShowOutlineContentVisibilityButton);
 }
 
 bool SwViewOption::IsTreatSubOutlineLevelsAsContent() const
 {
-    return officecfg::Office::Common::Misc::ExperimentalMode::get() &&
-        (m_nCoreOptions & ViewOptFlags1::TreatSubOutlineLevelsAsContent);
+    return static_cast<bool>(m_nCoreOptions & ViewOptFlags1::TreatSubOutlineLevelsAsContent);
 }
 
 void SwViewOption::DrawRect( OutputDevice *pOut,
