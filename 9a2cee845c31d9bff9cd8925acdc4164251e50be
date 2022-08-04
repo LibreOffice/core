@@ -16,6 +16,24 @@
       "message": "thanks, works as expected",
       "revId": "9a2cee845c31d9bff9cd8925acdc4164251e50be",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69d723f0_44ccd239",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003648
+      },
+      "writtenOn": "2022-08-04T15:32:17Z",
+      "side": 1,
+      "message": "What should I do about the failing test? Should I attempt to modify the test \u0026 make a patchset 3 from it? I believe it relies on the canvas which no longer exists now that we\u0027re using JSDialogs for this dialog",
+      "parentUuid": "3320bbed_6454075a",
+      "revId": "9a2cee845c31d9bff9cd8925acdc4164251e50be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
