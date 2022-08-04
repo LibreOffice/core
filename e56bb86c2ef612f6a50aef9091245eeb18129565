@@ -16,6 +16,24 @@
       "message": "on hold until my comment at \u003chttps://gerrit.libreoffice.org/c/core/+/80300/10#message-43af48aacbe60d7c8eb67f4ac429fc90f1a73863\u003e \"try to autodetect flags needed to build Clang plugins\" is clarified, which might lead the way to an even better fix",
       "revId": "e56bb86c2ef612f6a50aef9091245eeb18129565",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20a86bf8_6d0fc609",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-08-04T13:48:00Z",
+      "side": 1,
+      "message": "addressed with patch set 2",
+      "parentUuid": "f6964aed_d6c1721a",
+      "revId": "e56bb86c2ef612f6a50aef9091245eeb18129565",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
