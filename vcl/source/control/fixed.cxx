@@ -295,7 +295,7 @@ void FixedText::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-Size FixedText::getTextDimensions(Control const *pControl, const OUString &rTxt, tools::Long nMaxWidth)
+Size FixedText::getTextDimensions(Control* const pControl, const OUString &rTxt, tools::Long nMaxWidth)
 {
     DrawTextFlags nStyle = ImplGetTextStyle( pControl->GetStyle() );
     if ( !( pControl->GetStyle() & WB_NOLABEL ) )
@@ -305,7 +305,7 @@ Size FixedText::getTextDimensions(Control const *pControl, const OUString &rTxt,
                                        rTxt, nStyle).GetSize();
 }
 
-Size FixedText::CalcMinimumTextSize( Control const *pControl, tools::Long nMaxWidth )
+Size FixedText::CalcMinimumTextSize(Control* const pControl, tools::Long nMaxWidth)
 {
     Size aSize = getTextDimensions(pControl, pControl->GetText(), nMaxWidth);
 
@@ -321,12 +321,12 @@ Size FixedText::CalcMinimumTextSize( Control const *pControl, tools::Long nMaxWi
     return aSize;
 }
 
-Size FixedText::CalcMinimumSize( tools::Long nMaxWidth ) const
+Size FixedText::CalcMinimumSize(tools::Long nMaxWidth)
 {
     return CalcWindowSize( CalcMinimumTextSize ( this, nMaxWidth ) );
 }
 
-Size FixedText::GetOptimalSize() const
+Size FixedText::GetOptimalSize()
 {
     sal_Int32 nMaxAvailWidth = 0x7fffffff;
     if (m_nMaxWidthChars != -1)
@@ -657,7 +657,7 @@ void FixedLine::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-Size FixedLine::GetOptimalSize() const
+Size FixedLine::GetOptimalSize()
 {
     return CalcWindowSize( FixedText::CalcMinimumTextSize ( this ) );
 }
@@ -874,7 +874,7 @@ void FixedImage::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangl
     ImplDraw(&rRenderContext, Point(), GetOutputSizePixel());
 }
 
-Size FixedImage::GetOptimalSize() const
+Size FixedImage::GetOptimalSize()
 {
     return maImage.GetSizePixel();
 }

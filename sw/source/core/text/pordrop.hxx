@@ -73,7 +73,7 @@ class SwDropPortion : public SwTextPortion
     short m_nY;               // Y Offset
 
     bool FormatText( SwTextFormatInfo &rInf );
-    void PaintText( const SwTextPaintInfo &rInf ) const;
+    void PaintText( SwTextPaintInfo &rInf );
 
 public:
     SwDropPortion( const sal_uInt16 nLineCnt,
@@ -82,8 +82,8 @@ public:
                    const sal_uInt16 nDistance );
     virtual ~SwDropPortion() override;
 
-    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
-            void PaintDrop( const SwTextPaintInfo &rInf ) const;
+    virtual void Paint( SwTextPaintInfo &rInf ) override;
+            void PaintDrop( SwTextPaintInfo &rInf );
     virtual bool Format( SwTextFormatInfo &rInf ) override;
     virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const override;
     virtual TextFrameIndex GetModelPositionForViewPoint(sal_uInt16 nOfst) const override;

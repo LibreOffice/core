@@ -788,7 +788,7 @@ sal_Int64 NumericFormatter::ClipAgainstMinMax(sal_Int64 nValue) const
 
 namespace
 {
-    Size calcMinimumSize(const Edit &rSpinField, const NumericFormatter &rFormatter)
+    Size calcMinimumSize(Edit &rSpinField, const NumericFormatter &rFormatter)
     {
         OUStringBuffer aBuf;
         sal_Int32 nTextLen;
@@ -837,7 +837,7 @@ void NumericBox::dispose()
     ComboBox::dispose();
 }
 
-Size NumericBox::CalcMinimumSize() const
+Size NumericBox::CalcMinimumSize()
 {
     Size aRet(calcMinimumSize(*this, *this));
 
@@ -1412,7 +1412,7 @@ void MetricField::dispose()
     SpinField::dispose();
 }
 
-Size MetricField::CalcMinimumSize() const
+Size MetricField::CalcMinimumSize()
 {
     return calcMinimumSize(*this, *this);
 }
@@ -1569,7 +1569,7 @@ void MetricBox::dispose()
     ComboBox::dispose();
 }
 
-Size MetricBox::CalcMinimumSize() const
+Size MetricBox::CalcMinimumSize()
 {
     Size aRet(calcMinimumSize(*this, *this));
 

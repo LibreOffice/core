@@ -23,12 +23,12 @@ UScriptCode otCoverageToScript(vcl::UnicodeCoverage::UnicodeCoverageEnum eOTCove
 
 bool isSymbolFont(const vcl::Font& rFont);
 
-bool canRenderNameOfSelectedFont(OutputDevice const& rDevice);
+bool canRenderNameOfSelectedFont(OutputDevice& rDevice);
 
 //These ones are typically for use in the font dropdown box beside the
 //fontname, so say things roughly like "Script/Alphabet/Name-Of-Major-Language"
-OUString makeShortRepresentativeSymbolTextForSelectedFont(OutputDevice const& rDevice);
-OUString makeShortRepresentativeTextForSelectedFont(OutputDevice const& rDevice);
+OUString makeShortRepresentativeSymbolTextForSelectedFont(OutputDevice& rDevice);
+OUString makeShortRepresentativeTextForSelectedFont(OutputDevice& rDevice);
 OUString makeShortRepresentativeTextForScript(UScriptCode eScript);
 //For the cases where the font doesn't fully support a script, but has partial support
 //for a useful subset

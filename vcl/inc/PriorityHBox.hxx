@@ -50,7 +50,7 @@ public:
 
     void SetSizeFromParent();
 
-    virtual Size calculateRequisition() const override;
+    virtual Size calculateRequisition() override;
 
     virtual void Resize() override;
 

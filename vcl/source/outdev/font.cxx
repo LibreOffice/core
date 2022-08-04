@@ -96,7 +96,7 @@ void OutputDevice::SetFont( const vcl::Font& rNewFont )
     mpAlphaVDev->SetFont( aFont );
 }
 
-FontMetric OutputDevice::GetFontMetricFromCollection(int nDevFontIndex) const
+FontMetric OutputDevice::GetFontMetricFromCollection(int nDevFontIndex)
 {
     ImplInitFontList();
 
@@ -126,7 +126,7 @@ int OutputDevice::GetFontFaceCollectionCount() const
     return mpFontFaceCollection->Count();
 }
 
-bool OutputDevice::IsFontAvailable( std::u16string_view rFontName ) const
+bool OutputDevice::IsFontAvailable(std::u16string_view rFontName)
 {
     ImplInitFontList();
     vcl::font::PhysicalFontFamily* pFound = mxFontCollection->FindFontFamily( rFontName );
@@ -151,7 +151,7 @@ bool OutputDevice::AddTempDevFont( const OUString& rFileURL, const OUString& rFo
     return true;
 }
 
-bool OutputDevice::GetFontFeatures(std::vector<vcl::font::Feature>& rFontFeatures) const
+bool OutputDevice::GetFontFeatures(std::vector<vcl::font::Feature>& rFontFeatures)
 {
     if (!ImplNewFont())
         return false;
@@ -176,7 +176,7 @@ bool OutputDevice::GetFontFeatures(std::vector<vcl::font::Feature>& rFontFeature
     return true;
 }
 
-FontMetric OutputDevice::GetFontMetric() const
+FontMetric OutputDevice::GetFontMetric()
 {
     FontMetric aMetric;
     if (!ImplNewFont())
@@ -226,17 +226,17 @@ FontMetric OutputDevice::GetFontMetric() const
     return aMetric;
 }
 
-FontMetric OutputDevice::GetFontMetric( const vcl::Font& rFont ) const
+FontMetric OutputDevice::GetFontMetric(vcl::Font const& rFont)
 {
     // select font, query metrics, select original font again
     vcl::Font aOldFont = GetFont();
-    const_cast<OutputDevice*>(this)->SetFont( rFont );
-    FontMetric aMetric( GetFontMetric() );
-    const_cast<OutputDevice*>(this)->SetFont( aOldFont );
+    SetFont(rFont);
+    FontMetric aMetric(GetFontMetric());
+    SetFont(aOldFont);
     return aMetric;
 }
 
-bool OutputDevice::GetFontCharMap( FontCharMapRef& rxFontCharMap ) const
+bool OutputDevice::GetFontCharMap(FontCharMapRef& rxFontCharMap)
 {
     if (!InitFont())
         return false;
@@ -253,7 +253,7 @@ bool OutputDevice::GetFontCharMap( FontCharMapRef& rxFontCharMap ) const
     return !rxFontCharMap->IsDefaultMap();
 }
 
-bool OutputDevice::GetFontCapabilities( vcl::FontCapabilities& rFontCapabilities ) const
+bool OutputDevice::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilities)
 {
     if (!InitFont())
         return false;
@@ -608,8 +608,8 @@ void OutputDevice::RemoveFontsSubstitute()
 }
 
 //hidpi TODO: This routine has hard-coded font-sizes that break places such as DialControl
-vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLang,
-                                        GetDefaultFontFlags nFlags, const OutputDevice* pOutDev )
+vcl::Font OutputDevice::GetDefaultFont(DefaultFontType nType, LanguageType eLang,
+                                       GetDefaultFontFlags nFlags, OutputDevice* pOutDev)
 {
     if (!pOutDev && !utl::ConfigManager::IsFuzzing()) // default is NULL
         pOutDev = Application::GetDefaultDevice();
@@ -805,7 +805,7 @@ vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLan
     return aFont;
 }
 
-void OutputDevice::ImplInitFontList() const
+void OutputDevice::ImplInitFontList()
 {
     if( mxFontCollection->Count() )
         return;
@@ -828,7 +828,7 @@ void OutputDevice::ImplInitFontList() const
     }
 }
 
-bool OutputDevice::InitFont() const
+bool OutputDevice::InitFont()
 {
     DBG_TESTSOLARMUTEX();
 
@@ -850,14 +850,14 @@ bool OutputDevice::InitFont() const
     return true;
 }
 
-const LogicalFontInstance* OutputDevice::GetFontInstance() const
+const LogicalFontInstance* OutputDevice::GetFontInstance()
 {
     if (!InitFont())
         return nullptr;
     return mpFontInstance.get();
 }
 
-bool OutputDevice::ImplNewFont() const
+bool OutputDevice::ImplNewFont()
 {
     DBG_TESTSOLARMUTEX();
 
@@ -992,12 +992,12 @@ bool OutputDevice::ImplNewFont() const
 
     // #95414# fix for OLE objects which use scale factors very creatively
     if (mbMap && !aSize.Width())
-        bRet = AttemptOLEFontScaleFix(const_cast<vcl::Font&>(maFont), aSize.Height());
+        bRet = AttemptOLEFontScaleFix(maFont, aSize.Height());
 
     return bRet;
 }
 
-bool OutputDevice::AttemptOLEFontScaleFix(vcl::Font& rFont, tools::Long nHeight) const
+bool OutputDevice::AttemptOLEFontScaleFix(vcl::Font& rFont, tools::Long nHeight)
 {
     const float fDenominator = static_cast<float>(maMapRes.mnMapScNumY) * maMapRes.mnMapScDenomX;
     if (fDenominator == 0.0)
@@ -1293,7 +1293,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplGlyphFallbackLayout( std::unique_pt
     return pSalLayout;
 }
 
-tools::Long OutputDevice::GetMinKashida() const
+tools::Long OutputDevice::GetMinKashida()
 {
     if (!ImplNewFont())
         return 0;
@@ -1301,11 +1301,11 @@ tools::Long OutputDevice::GetMinKashida() const
     return ImplDevicePixelToLogicWidth( mpFontInstance->mxFontMetric->GetMinKashida() );
 }
 
-sal_Int32 OutputDevice::ValidateKashidas ( const OUString& rTxt,
-                                            sal_Int32 nIdx, sal_Int32 nLen,
-                                            sal_Int32 nKashCount,
-                                            const sal_Int32* pKashidaPos,
-                                            sal_Int32* pKashidaPosDropped ) const
+sal_Int32 OutputDevice::ValidateKashidas(OUString const& rTxt,
+                                         sal_Int32 nIdx, sal_Int32 nLen,
+                                         sal_Int32 nKashCount,
+                                         sal_Int32 const* pKashidaPos,
+                                         sal_Int32* pKashidaPosDropped)
 {
    // do layout
     std::unique_ptr<SalLayout> pSalLayout = ImplLayout( rTxt, nIdx, nLen );
@@ -1323,8 +1323,8 @@ sal_Int32 OutputDevice::ValidateKashidas ( const OUString& rTxt,
     return nDropped;
 }
 
-bool OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr,
-                                           int nIndex, int nLen, std::vector< tools::Rectangle >& rVector ) const
+bool OutputDevice::GetGlyphBoundRects(Point const& rOrigin, OUString const& rStr,
+                                      int nIndex, int nLen, std::vector< tools::Rectangle >& rVector)
 {
     rVector.clear();
 
@@ -1348,8 +1348,8 @@ bool OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const OUString& rSt
     return (nLen == static_cast<int>(rVector.size()));
 }
 
-sal_Int32 OutputDevice::HasGlyphs( const vcl::Font& rTempFont, const OUString& rStr,
-    sal_Int32 nIndex, sal_Int32 nLen ) const
+sal_Int32 OutputDevice::HasGlyphs(vcl::Font const& rTempFont, OUString const& rStr,
+                                  sal_Int32 nIndex, sal_Int32 nLen)
 {
     if( nIndex >= rStr.getLength() )
         return nIndex;
@@ -1364,10 +1364,10 @@ sal_Int32 OutputDevice::HasGlyphs( const vcl::Font& rTempFont, const OUString& r
 
     // to get the map temporarily set font
     const vcl::Font aOrigFont = GetFont();
-    const_cast<OutputDevice&>(*this).SetFont( rTempFont );
+    SetFont(rTempFont);
     FontCharMapRef xFontCharMap;
     bool bRet = GetFontCharMap( xFontCharMap );
-    const_cast<OutputDevice&>(*this).SetFont( aOrigFont );
+    SetFont(aOrigFont);
 
     // if fontmap is unknown assume it doesn't have the glyphs
     if( !bRet )

@@ -36,7 +36,7 @@ public:
         : SwFixPortion(rFlyRect), m_nBlankWidth( 0 ) { SetWhichPor( PortionType::Fly ); }
     sal_uInt16 GetBlankWidth( ) const { return m_nBlankWidth; }
     void SetBlankWidth( const sal_uInt16 nNew ) { m_nBlankWidth = nNew; }
-    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+    virtual void Paint( SwTextPaintInfo &rInf ) override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
 };
 
@@ -77,7 +77,7 @@ namespace sw
             static FlyContentPortion* Create(const SwTextFrame& rFrame, SwFlyInContentFrame* pFly, const Point& rBase, tools::Long nAscent, tools::Long nDescent, tools::Long nFlyAsc, tools::Long nFlyDesc, AsCharFlags nFlags);
             SwFlyInContentFrame* GetFlyFrame() { return m_pFly; }
             void GetFlyCursorOfst(Point& rPoint, SwPosition& rPos, SwCursorMoveState* pCMS) const { m_pFly->GetModelPositionForViewPoint(&rPos, rPoint, pCMS); };
-            virtual void Paint(const SwTextPaintInfo& rInf) const override;
+            virtual void Paint(SwTextPaintInfo& rInf) override;
             virtual ~FlyContentPortion() override;
     };
     class DrawFlyCntPortion final : public SwFlyCntPortion
@@ -87,7 +87,7 @@ namespace sw
         public:
             DrawFlyCntPortion(SwFrameFormat const & rFormat);
             static DrawFlyCntPortion* Create(const SwTextFrame& rFrame, SwFrameFormat const & rFormat, const Point& rBase, tools::Long nAsc, tools::Long nDescent, tools::Long nFlyAsc, tools::Long nFlyDesc, AsCharFlags nFlags);
-            virtual void Paint(const SwTextPaintInfo& rInf) const override;
+            virtual void Paint(SwTextPaintInfo& rInf) override;
             virtual ~DrawFlyCntPortion() override;
     };
 }

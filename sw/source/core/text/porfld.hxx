@@ -68,12 +68,12 @@ public:
     void CheckScript( const SwTextSizeInfo &rInf );
     bool HasFont() const { return nullptr != m_pFont; }
     // #i89179# - made public
-    const SwFont *GetFont() const { return m_pFont.get(); }
+    SwFont *GetFont() const { return m_pFont.get(); }
 
     const OUString& GetExp() const { return m_aExpand; }
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
-    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+    virtual void Paint( SwTextPaintInfo &rInf ) override;
 
     // Empty fields are also allowed
     virtual SwLinePortion *Compress() override;
@@ -124,7 +124,7 @@ public:
     SwHiddenPortion( const OUString &rExpand, std::unique_ptr<SwFont> pFntL = nullptr )
          : SwFieldPortion( rExpand, std::move(pFntL) )
         { SetLen(TextFrameIndex(1)); SetWhichPor( PortionType::Hidden ); }
-    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+    virtual void Paint( SwTextPaintInfo &rInf ) override;
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
 
     // Field cloner for SplitGlue
@@ -145,7 +145,7 @@ public:
                      const bool bCenter,
                      const sal_uInt16 nMinDst,
                      const bool bLabelAlignmentPosAndSpaceModeActive );
-    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+    virtual void Paint( SwTextPaintInfo &rInf ) override;
     virtual TextFrameIndex GetModelPositionForViewPoint(sal_uInt16 nOfst) const override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
 
@@ -184,7 +184,7 @@ public:
                      const sal_uInt16 nMinDst,
                      const bool bLabelAlignmentPosAndSpaceModeActive );
     virtual ~SwGrfNumPortion() override;
-    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+    virtual void Paint( SwTextPaintInfo &rInf ) override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
 
     void SetBase( tools::Long nLnAscent, tools::Long nLnDescent,
@@ -220,7 +220,7 @@ class SwCombinedPortion : public SwFieldPortion
     sal_uInt8 m_nProportion;  // relative font height
 public:
     explicit SwCombinedPortion( const OUString &rExpand );
-    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+    virtual void Paint( SwTextPaintInfo &rInf ) override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
     virtual sal_uInt16 GetViewWidth( const SwTextSizeInfo &rInf ) const override;
 };
@@ -238,7 +238,7 @@ public:
     // Field cloner for SplitGlue
     virtual SwFieldPortion *Clone( const OUString &rExpand ) const override;
 
-    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+    virtual void Paint( SwTextPaintInfo &rInf ) override;
 
 private:
     sw::mark::IFieldmark* m_pFieldMark;
@@ -256,7 +256,7 @@ public:
     // Field cloner for SplitGlue
     virtual SwFieldPortion *Clone( const OUString &rExpand) const override;
 
-    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+    virtual void Paint( SwTextPaintInfo &rInf ) override;
 
 private:
     sw::mark::IFieldmark* m_pFieldMark;

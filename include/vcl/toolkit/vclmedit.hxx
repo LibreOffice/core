@@ -148,8 +148,8 @@ public:
     virtual void    Resize() override;
     virtual void    GetFocus() override;
 
-    virtual Size    CalcMinimumSize() const override;
-    Size            CalcAdjustedSize( const Size& rPrefSize ) const;
+    virtual Size    CalcMinimumSize() override;
+    Size            CalcAdjustedSize(Size const& rPrefSize);
     Size            CalcBlockSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const;
     void            GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const;
 

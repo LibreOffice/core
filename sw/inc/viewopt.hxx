@@ -282,7 +282,7 @@ public:
 
     static void PaintPostIts( OutputDevice *pOut, const SwRect &rRect,
                               bool bIsScript );
-    static sal_uInt16 GetPostItsWidth( const OutputDevice *pOut );
+    static sal_uInt16 GetPostItsWidth( OutputDevice *pOut );
 
     //show/hide tooltips on tracked changes
     bool IsShowInlineTooltips() const

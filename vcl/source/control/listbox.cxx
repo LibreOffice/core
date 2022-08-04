@@ -1140,7 +1140,7 @@ bool ListBox::IsMultiSelectionEnabled() const
     return mpImplLB->IsMultiSelectionEnabled();
 }
 
-Size ListBox::CalcMinimumSize() const
+Size ListBox::CalcMinimumSize()
 {
     Size aSz;
 
@@ -1196,7 +1196,7 @@ Size ListBox::CalcMinimumSize() const
     return aSz;
 }
 
-Size ListBox::CalcSubEditSize() const
+Size ListBox::CalcSubEditSize()
 {
     Size aSz;
 
@@ -1225,16 +1225,16 @@ Size ListBox::CalcSubEditSize() const
     return aSz;
 }
 
-Size ListBox::GetOptimalSize() const
+Size ListBox::GetOptimalSize()
 {
     return CalcMinimumSize();
 }
 
-Size ListBox::CalcAdjustedSize( const Size& rPrefSize ) const
+Size ListBox::CalcAdjustedSize(Size const& rPrefSize)
 {
     Size aSz = rPrefSize;
     sal_Int32 nLeft, nTop, nRight, nBottom;
-    static_cast<vcl::Window*>(const_cast<ListBox *>(this))->GetBorder( nLeft, nTop, nRight, nBottom );
+    static_cast<vcl::Window*>(this)->GetBorder( nLeft, nTop, nRight, nBottom );
     aSz.AdjustHeight( -(nTop+nBottom) );
     if ( !IsDropDownBox() )
     {
@@ -1254,7 +1254,7 @@ Size ListBox::CalcAdjustedSize( const Size& rPrefSize ) const
     return aSz;
 }
 
-Size ListBox::CalcBlockSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
+Size ListBox::CalcBlockSize(sal_uInt16 nColumns, sal_uInt16 nLines)
 {
     // ScrollBars are shown if needed
     Size aMinSz = CalcMinimumSize();
@@ -1294,7 +1294,7 @@ Size ListBox::CalcBlockSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
     return aSz;
 }
 
-void ListBox::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const
+void ListBox::GetMaxVisColumnsAndLines(sal_uInt16& rnCols, sal_uInt16& rnLines)
 {
     float nCharWidth = approximate_char_width();
     if ( !IsDropDownBox() )

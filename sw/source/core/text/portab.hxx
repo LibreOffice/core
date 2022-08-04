@@ -30,7 +30,7 @@ class SwTabPortion : public SwFixPortion
     bool PreFormat( SwTextFormatInfo &rInf );
 public:
     SwTabPortion( const sal_uInt16 nTabPos, const sal_Unicode cFill, const bool bAutoTab = true );
-    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+    virtual void Paint( SwTextPaintInfo &rInf ) override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
     virtual void FormatEOL( SwTextFormatInfo &rInf ) override;
     bool PostFormat( SwTextFormatInfo &rInf );
@@ -105,7 +105,7 @@ public:
     {
         SetLen(TextFrameIndex(0));
     }
-    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+    virtual void Paint( SwTextPaintInfo &rInf ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -866,7 +866,7 @@ void ValueSet::SetStyle(WinBits nStyle)
     }
 }
 
-void ValueSet::Format(vcl::RenderContext const & rRenderContext)
+void ValueSet::Format(vcl::RenderContext& rRenderContext)
 {
     Size aWinSize(GetOutputSizePixel());
     size_t nItemCount = mItemList.size();
@@ -1370,7 +1370,7 @@ void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext,
     ImplDrawItemText(rRenderContext, pItem->maText);
 }
 
-void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSetItem* pItem, tools::Rectangle aRect)
+void ValueSet::ImplFormatItem(vcl::RenderContext& rRenderContext, ValueSetItem* pItem, tools::Rectangle aRect)
 {
     WinBits nStyle = GetStyle();
     if (nStyle & WB_ITEMBORDER)

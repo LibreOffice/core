@@ -75,7 +75,7 @@ SwLinePortion::SwLinePortion( ) :
 }
 
 void SwLinePortion::PrePaint( const SwTextPaintInfo& rInf,
-                              const SwLinePortion* pLast ) const
+                              const SwLinePortion* pLast )
 {
     OSL_ENSURE( rInf.OnWin(), "SwLinePortion::PrePaint: don't prepaint on a printer");
     OSL_ENSURE( !Width(), "SwLinePortion::PrePaint: For Width()==0 only!");
@@ -130,10 +130,9 @@ void SwLinePortion::PrePaint( const SwTextPaintInfo& rInf,
         }
     }
 
-    SwLinePortion *pThis = const_cast<SwLinePortion*>(this);
-    pThis->Width( nViewWidth );
+    Width( nViewWidth );
     Paint( aInf );
-    pThis->Width(0);
+    Width(0);
 }
 
 void SwLinePortion::CalcTextSize( const SwTextSizeInfo &rInf )

@@ -61,7 +61,7 @@ SwTmpEndPortion::SwTmpEndPortion( const SwLinePortion &rPortion,
     SetWhichPor( PortionType::TempEnd );
 }
 
-void SwTmpEndPortion::Paint( const SwTextPaintInfo &rInf ) const
+void SwTmpEndPortion::Paint( SwTextPaintInfo &rInf )
 {
     if (!(rInf.OnWin() && rInf.GetOpt().IsParagraph()))
         return;
@@ -79,7 +79,7 @@ void SwTmpEndPortion::Paint( const SwTextPaintInfo &rInf ) const
         aFont.SetUnderline( m_eUnderline );
         aFont.SetStrikeout( m_eStrikeout );
 
-        const_cast<SwTextPaintInfo&>(rInf).SetFont(&aFont);
+        rInf.SetFont(&aFont);
 
         // draw the pilcrow with strikeout/underline in redline color
         rInf.DrawText(CH_PAR, *this);
@@ -89,12 +89,12 @@ void SwTmpEndPortion::Paint( const SwTextPaintInfo &rInf ) const
     aFont.SetColor( NON_PRINTING_CHARACTER_COLOR );
     aFont.SetStrikeout( STRIKEOUT_NONE );
     aFont.SetUnderline( LINESTYLE_NONE );
-    const_cast<SwTextPaintInfo&>(rInf).SetFont(&aFont);
+    rInf.SetFont(&aFont);
 
     // draw the pilcrow
     rInf.DrawText(CH_PAR, *this);
 
-    const_cast<SwTextPaintInfo&>(rInf).SetFont(const_cast<SwFont*>(pOldFnt));
+    rInf.SetFont(const_cast<SwFont*>(pOldFnt));
 }
 
 SwBreakPortion::SwBreakPortion( const SwLinePortion &rPortion, const SwTextAttr* pAttr )
@@ -123,7 +123,7 @@ sal_uInt16 SwBreakPortion::GetViewWidth( const SwTextSizeInfo & ) const
 SwLinePortion *SwBreakPortion::Compress()
 { return (GetNextPortion() && GetNextPortion()->InTextGrp() ? nullptr : this); }
 
-void SwBreakPortion::Paint( const SwTextPaintInfo &rInf ) const
+void SwBreakPortion::Paint( SwTextPaintInfo &rInf )
 {
     if( !(rInf.OnWin() && rInf.GetOpt().IsLineBreak()) )
         return;
@@ -131,9 +131,8 @@ void SwBreakPortion::Paint( const SwTextPaintInfo &rInf ) const
     // Reduce height to text height for the duration of the print, so the vertical height will look
     // correct for the line break character, even for clearing breaks.
     SwTwips nHeight = Height();
-    auto pPortion = const_cast<SwBreakPortion*>(this);
-    pPortion->Height(m_nTextHeight, false);
-    comphelper::ScopeGuard g([pPortion, nHeight] { pPortion->Height(nHeight, false); });
+    Height(m_nTextHeight, false);
+    comphelper::ScopeGuard g([nHeight, this] { Height(nHeight, false); });
 
     rInf.DrawLineBreak( *this );
 
@@ -161,11 +160,11 @@ void SwBreakPortion::Paint( const SwTextPaintInfo &rInf ) const
         else
             aFont.SetStrikeout( STRIKEOUT_NONE );
 
-        const_cast<SwTextPaintInfo&>(rInf).SetFont(&aFont);
+        rInf.SetFont(&aFont);
 
         rInf.DrawText(aBuf.makeStringAndClear(), *this);
 
-        const_cast<SwTextPaintInfo&>(rInf).SetFont(const_cast<SwFont*>(pOldFnt));
+        rInf.SetFont(const_cast<SwFont*>(pOldFnt));
     }
 }
 
@@ -246,7 +245,7 @@ SwKernPortion::SwKernPortion( const SwLinePortion& rPortion ) :
     SetWhichPor( PortionType::Kern );
 }
 
-void SwKernPortion::Paint( const SwTextPaintInfo &rInf ) const
+void SwKernPortion::Paint( SwTextPaintInfo &rInf )
 {
     if( !Width() )
         return;
@@ -267,7 +266,7 @@ void SwKernPortion::Paint( const SwTextPaintInfo &rInf ) const
     {
         SwRect aClipRect;
         rInf.CalcRect( *this, &aClipRect );
-        SwSaveClip aClip( const_cast<OutputDevice*>(rInf.GetOut()) );
+        SwSaveClip aClip( rInf.GetOut() );
         aClip.ChgClip( aClipRect );
         rInf.DrawText("  ", *this, TextFrameIndex(0), TextFrameIndex(2), true );
     }
@@ -307,9 +306,9 @@ SwArrowPortion::SwArrowPortion( const SwTextPaintInfo &rInf )
     SetWhichPor( PortionType::Arrow );
 }
 
-void SwArrowPortion::Paint( const SwTextPaintInfo &rInf ) const
+void SwArrowPortion::Paint( SwTextPaintInfo &rInf )
 {
-    const_cast<SwArrowPortion*>(this)->m_aPos = rInf.GetPos();
+    m_aPos = rInf.GetPos();
 }
 
 SwLinePortion *SwArrowPortion::Compress() { return this; }
@@ -579,10 +578,10 @@ bool SwTextFrame::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
     return ( 0 != rRegDiff );
 }
 
-void SwHiddenTextPortion::Paint( const SwTextPaintInfo & rInf) const
+void SwHiddenTextPortion::Paint( SwTextPaintInfo & rInf)
 {
 #ifdef DBG_UTIL
-    OutputDevice* pOut = const_cast<OutputDevice*>(rInf.GetOut());
+    OutputDevice* pOut = rInf.GetOut();
     Color aCol( SwViewOption::GetFieldShadingsColor() );
     Color aOldColor( pOut->GetFillColor() );
     pOut->SetFillColor( aCol );
@@ -605,8 +604,8 @@ bool SwHiddenTextPortion::Format( SwTextFormatInfo &rInf )
     return false;
 };
 
-bool SwControlCharPortion::DoPaint(SwTextPaintInfo const&,
-        OUString & rOutString, SwFont & rTmpFont, int &) const
+bool SwControlCharPortion::DoPaint(SwTextPaintInfo&,
+        OUString & rOutString, SwFont & rTmpFont, int &)
 {
     if (mcChar == CHAR_WJ || !SwViewOption::IsFieldShadings())
     {
@@ -633,8 +632,8 @@ bool SwControlCharPortion::DoPaint(SwTextPaintInfo const&,
     return true;
 }
 
-bool SwBookmarkPortion::DoPaint(SwTextPaintInfo const& rTextPaintInfo,
-        OUString & rOutString, SwFont & rFont, int & rDeltaY) const
+bool SwBookmarkPortion::DoPaint(SwTextPaintInfo& rTextPaintInfo,
+        OUString & rOutString, SwFont & rFont, int & rDeltaY)
 {
     if (!rTextPaintInfo.GetOpt().IsShowBookmarks())
     {
@@ -675,7 +674,7 @@ bool SwBookmarkPortion::DoPaint(SwTextPaintInfo const& rTextPaintInfo,
     return true;
 }
 
-void SwControlCharPortion::Paint( const SwTextPaintInfo &rInf ) const
+void SwControlCharPortion::Paint( SwTextPaintInfo &rInf )
 {
     if ( !Width() )  // is only set during prepaint mode
         return;
@@ -718,11 +717,11 @@ void SwControlCharPortion::Paint( const SwTextPaintInfo &rInf ) const
             assert(false);
             break;
     }
-    const_cast< SwTextPaintInfo& >( rInf ).SetPos( aNewPos );
+    rInf.SetPos( aNewPos );
 
     rInf.DrawText( aOutString, *this );
 
-    const_cast< SwTextPaintInfo& >( rInf ).SetPos( aOldPos );
+    rInf.SetPos( aOldPos );
 }
 
 bool SwControlCharPortion::Format( SwTextFormatInfo &rInf )

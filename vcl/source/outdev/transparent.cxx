@@ -998,7 +998,7 @@ bool ImplIsNotTransparent( const MetaAction& rAct, const OutputDevice& rOut )
 }
 
 // #i10613# Extracted from ImplCheckRect::ImplCreate
-tools::Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevice& rOut )
+tools::Rectangle ImplCalcActionBounds(MetaAction const& rAct, OutputDevice& rOut)
 {
     tools::Rectangle aActionBounds;
 
