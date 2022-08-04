@@ -1086,7 +1086,7 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll, void )
         }
     }
 
-    tools::Long nDelta = pScroll->GetDelta();
+    tools::Long nDelta(0);
     switch ( eType )
     {
         case ScrollType::LineUp:
@@ -1109,6 +1109,7 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll, void )
             if ( pScroll == aVScrollBottom.get() ) nDelta = aViewData.VisibleCellsY( SC_SPLIT_BOTTOM );
             if (nDelta==0) nDelta=1;
             break;
+        default: // added to avoid warnings
         case ScrollType::Drag:
             {
                 // only scroll in the correct direction, do not jitter around hidden ranges
@@ -1133,10 +1134,6 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll, void )
                 nPrevDragPos = nScrollPos;
             }
             break;
-        default:
-        {
-            // added to avoid warnings
-        }
     }
 
     if (nDelta)
