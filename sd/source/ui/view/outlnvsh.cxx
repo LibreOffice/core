@@ -1050,7 +1050,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
 /**
  * gets invoked when ScrollBar is used
  */
-void OutlineViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
+void OutlineViewShell::VirtHScrollHdl(ScrollAdaptor* pHScroll)
 {
     ::tools::Long   nThumb = pHScroll->GetThumbPos();
     ::tools::Long   nRange = pHScroll->GetRange().Len();
@@ -1071,7 +1071,7 @@ void OutlineViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
     pOutlinerView->ShowCursor(false);
 }
 
-void OutlineViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
+void OutlineViewShell::VirtVScrollHdl(ScrollAdaptor* pVScroll)
 {
     ::tools::Long nThumb = pVScroll->GetThumbPos();
     ::tools::Long nRange = pVScroll->GetRange().Len();

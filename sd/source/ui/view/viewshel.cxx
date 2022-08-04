@@ -207,12 +207,12 @@ void ViewShell::construct()
     if ( ! GetDocSh()->IsPreview())
     {
         // Create scroll bars and the filler between the scroll bars.
-        mpHorizontalScrollBar.reset (VclPtr<ScrollBar>::Create(GetParentWindow(), WinBits(WB_HSCROLL | WB_DRAG)));
+        mpHorizontalScrollBar.reset (VclPtr<ScrollAdaptor>::Create(GetParentWindow(), true));
         mpHorizontalScrollBar->EnableRTL (false);
         mpHorizontalScrollBar->SetRange(Range(0, 32000));
         mpHorizontalScrollBar->SetScrollHdl(LINK(this, ViewShell, HScrollHdl));
 
-        mpVerticalScrollBar.reset (VclPtr<ScrollBar>::Create(GetParentWindow(), WinBits(WB_VSCROLL | WB_DRAG)));
+        mpVerticalScrollBar.reset (VclPtr<ScrollAdaptor>::Create(GetParentWindow(), false));
         mpVerticalScrollBar->SetRange(Range(0, 32000));
         mpVerticalScrollBar->SetScrollHdl(LINK(this, ViewShell, VScrollHdl));
 

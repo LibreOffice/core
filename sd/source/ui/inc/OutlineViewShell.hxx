@@ -73,8 +73,8 @@ public:
 
     virtual bool PrepareClose( bool bUI = true ) override;
 
-    virtual void VirtHScrollHdl(ScrollBar* pHScroll) override;
-    virtual void VirtVScrollHdl(ScrollBar* pVHScroll) override;
+    virtual void VirtHScrollHdl(ScrollAdaptor* pHScroll) override;
+    virtual void VirtVScrollHdl(ScrollAdaptor* pVHScroll) override;
 
     virtual void Activate( bool IsMDIActivate ) override;
     virtual void Deactivate( bool IsMDIActivate ) override;
