@@ -36,6 +36,13 @@
 #include <SwRewriter.hxx>
 #include <frameformats.hxx>
 
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <tools/json_writer.hxx>
+#include <comphelper/lok.hxx>
+#include <sfx2/lokhelper.hxx>
+#include <o3tl/deleter.hxx>
+#include <viewsh.hxx>
+
 // masqueraded copy constructor
 SwEditShell::SwEditShell( SwEditShell& rEdSH, vcl::Window *pWindow )
     : SwCursorShell( rEdSH, pWindow )
@@ -251,6 +258,10 @@ bool SwEditShell::GetFirstRedoInfo(OUString *const o_pStr,
 SwUndoId SwEditShell::GetRepeatInfo(OUString *const o_pStr) const
 { return GetDoc()->GetIDocumentUndoRedo().GetRepeatInfo(o_pStr); }
 
+
+sal_uInt32 SwEditShell::lastMentionId = 1;
+std::map<sal_uInt32, sw::UnoCursorPointer>SwEditShell::mentionMap;
+
 /** Auto correction */
 void SwEditShell::AutoCorrect( SvxAutoCorrect& rACorr, bool bInsert,
                                 sal_Unicode cChar )
@@ -273,9 +284,31 @@ void SwEditShell::AutoCorrect( SvxAutoCorrect& rACorr, bool bInsert,
     // point will then be moved forward when something is inserted.
     *pCursor->GetPoint() = pFrame->MapViewToModelPos(nPos);
     OUString const& rMergedText(pFrame->GetText());
+    OUStringBuffer mentionText = OUStringBuffer();
     rACorr.DoAutoCorrect( aSwAutoCorrDoc,
                     rMergedText, sal_Int32(nPos),
-                    cChar, bInsert, m_bNbspRunNext, GetWin() );
+                    cChar, bInsert, m_bNbspRunNext, GetWin(), &mentionText );
+
+    // ("Mention Text: " << mentionText.toString());
+    if (!mentionText.isEmpty())
+    {
+        SwPosition& rPos = *GetCursor()->GetPoint();
+        sw::UnoCursorPointer aCursor(GetDoc()->CreateUnoCursor(rPos));
+
+        // StartListening(aCursor->m_aNotifier);
+        mentionMap.insert({lastMentionId, aCursor });
+
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            tools::JsonWriter aJson;
+            aJson.put("text", mentionText.toString());
+            aJson.put("id", lastMentionId);
+
+            std::unique_ptr<char, o3tl::free_delete> pJson(aJson.extractData());
+            SfxViewShell::Current()->libreOfficeKitViewCallback(LOK_CALLBACK_MENTION, pJson.get());
+        }
+        lastMentionId++;
+    }
     if( cChar )
         SaveTableBoxContent( pCursor->GetPoint() );
     EndAllAction();

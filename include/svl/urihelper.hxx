@@ -117,6 +117,7 @@ SVL_DLLPUBLIC OUString FindFirstURLInText(OUString const & rText,
                                           sal_Int32 & rBegin,
                                           sal_Int32 & rEnd,
                                           CharClass const & rCharClass,
+                                          OUStringBuffer* mentionText = nullptr,
                                           INetURLObject::EncodeMechanism eMechanism = INetURLObject::EncodeMechanism::WasEncoded,
                                           rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 

@@ -32,6 +32,7 @@
 #include <memory>
 #include <vector>
 #include <o3tl/sorted_vector.hxx>
+#include <unocrsr.hxx>
 
 namespace tools { class PolyPolygon; }
 class SwDoc;
@@ -989,6 +990,9 @@ public:
     /// Copy-Constructor in disguise.
     SwEditShell( SwEditShell&, vcl::Window* );
     virtual ~SwEditShell() override;
+
+    static sal_uInt32 lastMentionId;
+    static std::map<sal_uInt32, sw::UnoCursorPointer> mentionMap;
 
 private:
     SwEditShell(const SwEditShell &) = delete;
