@@ -990,16 +990,11 @@ SwXTextCursor::gotoStart(sal_Bool Expand)
         rUnoCursor.Move( fnMoveBackward, GoInDoc );
         //check, that the cursor is not in a table
         SwTableNode * pTableNode = rUnoCursor.GetNode().FindTableNode();
-        SwContentNode * pCNode = nullptr;
         while (pTableNode)
         {
             rUnoCursor.GetPoint()->nNode = *pTableNode->EndOfSectionNode();
-            pCNode = GetDoc()->GetNodes().GoNext(&rUnoCursor.GetPoint()->nNode);
+            SwContentNode* pCNode = GetDoc()->GetNodes().GoNext(rUnoCursor.GetPoint());
             pTableNode = pCNode ? pCNode->FindTableNode() : nullptr;
-        }
-        if (pCNode)
-        {
-            rUnoCursor.GetPoint()->nContent.Assign(pCNode, 0);
         }
         SwStartNode const*const pTmp =
             rUnoCursor.GetNode().StartOfSectionNode();
@@ -1009,7 +1004,7 @@ SwXTextCursor::gotoStart(sal_Bool Expand)
                 static_cast<SwSectionNode const*>(pTmp);
             if (pSectionStartNode->GetSection().IsHiddenFlag())
             {
-                pCNode = GetDoc()->GetNodes().GoNextSection(
+                SwContentNode* pCNode = GetDoc()->GetNodes().GoNextSection(
                         &rUnoCursor.GetPoint()->nNode, true, false);
                 if (pCNode)
                 {

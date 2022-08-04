@@ -2217,8 +2217,7 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
             SwPosition aTmpPos( *aDelPam.GetPoint() );
             if( bGoNext )
             {
-                pTmpNode = m_rDoc.GetNodes().GoNext( &aTmpPos.nNode );
-                aTmpPos.nContent.Assign( pTmpNode, 0 );
+                m_rDoc.GetNodes().GoNext( &aTmpPos );
             }
             ::PaMCorrAbs( aDelPam, aTmpPos );
         }

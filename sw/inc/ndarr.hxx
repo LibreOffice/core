@@ -183,7 +183,9 @@ public:
     static void GoEndOfSection(SwNodeIndex *);
 
     SwContentNode* GoNext(SwNodeIndex *) const;
+    SwContentNode* GoNext(SwPosition *) const;
     static SwContentNode* GoPrevious(SwNodeIndex *);
+    static SwContentNode* GoPrevious(SwPosition *);
 
     /** Go to next content-node that is not protected or hidden
        (Both set FALSE ==> GoNext/GoPrevious!!!). */

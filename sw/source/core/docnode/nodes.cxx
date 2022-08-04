@@ -1314,6 +1314,23 @@ SwContentNode* SwNodes::GoNext(SwNodeIndex *pIdx) const
     return static_cast<SwContentNode*>(pNd);
 }
 
+SwContentNode* SwNodes::GoNext(SwPosition *pIdx) const
+{
+    if( pIdx->GetNodeIndex() >= Count() - 1 )
+        return nullptr;
+
+    SwNodeIndex aTmp(pIdx->GetNode(), +1);
+    SwNode* pNd = nullptr;
+    while( aTmp < Count()-1 && !( pNd = &aTmp.GetNode())->IsContentNode() )
+        ++aTmp;
+
+    if( aTmp == Count()-1 )
+        pNd = nullptr;
+    else
+        pIdx->Assign(aTmp);
+    return static_cast<SwContentNode*>(pNd);
+}
+
 SwContentNode* SwNodes::GoPrevious(SwNodeIndex *pIdx)
 {
     if( !pIdx->GetIndex() )
@@ -1328,6 +1345,23 @@ SwContentNode* SwNodes::GoPrevious(SwNodeIndex *pIdx)
         pNd = nullptr;
     else
         (*pIdx) = aTmp;
+    return static_cast<SwContentNode*>(pNd);
+}
+
+SwContentNode* SwNodes::GoPrevious(SwPosition *pIdx)
+{
+    if( !pIdx->GetNodeIndex() )
+        return nullptr;
+
+    SwNodeIndex aTmp( pIdx->GetNode(), -1 );
+    SwNode* pNd = nullptr;
+    while( aTmp.GetIndex() && !( pNd = &aTmp.GetNode())->IsContentNode() )
+        --aTmp;
+
+    if( !aTmp.GetIndex() )
+        pNd = nullptr;
+    else
+        pIdx->Assign(aTmp);
     return static_cast<SwContentNode*>(pNd);
 }
 

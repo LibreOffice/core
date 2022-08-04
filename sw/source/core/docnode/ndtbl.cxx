@@ -869,9 +869,8 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
     {
         SwPaM& rTmp = const_cast<SwPaM&>(rRange); // Point always at the Start
         rTmp.DeleteMark();
-        rTmp.GetPoint()->nNode = *pTableNd;
-        SwContentNode* pCNd = GetNodes().GoNext( &rTmp.GetPoint()->nNode );
-        rTmp.GetPoint()->nContent.Assign( pCNd, 0 );
+        rTmp.GetPoint()->Assign( *pTableNd );
+        GetNodes().GoNext( rTmp.GetPoint() );
     }
 
     if( pUndo )
@@ -4420,8 +4419,8 @@ bool SwDoc::InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
 
         if( bCorrPos )
         {
-            rInsPos.nNode = *pSttNd;
-            rInsPos.nContent.Assign( GetNodes().GoNext( &rInsPos.nNode ), 0 );
+            rInsPos.Assign( *pSttNd );
+            GetNodes().GoNext( &rInsPos );
         }
         getIDocumentRedlineAccess().SetRedlineFlags( eOld );
     }

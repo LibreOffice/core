@@ -3294,15 +3294,12 @@ uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursor()
     SwPaM aPam(rNode);
     aPam.Move(fnMoveForward, GoInNode);
     SwTableNode* pTableNode = aPam.GetNode().FindTableNode();
-    SwContentNode* pCont = nullptr;
     while( pTableNode )
     {
         aPam.GetPoint()->nNode = *pTableNode->EndOfSectionNode();
-        pCont = GetDoc()->GetNodes().GoNext(&aPam.GetPoint()->nNode);
+        SwContentNode* pCont = GetDoc()->GetNodes().GoNext(aPam.GetPoint());
         pTableNode = pCont->FindTableNode();
     }
-    if(pCont)
-        aPam.GetPoint()->nContent.Assign(pCont, 0);
 
     const SwStartNode* pNewStartNode =
         aPam.GetNode().FindSttNodeByType(SwFlyStartNode);
