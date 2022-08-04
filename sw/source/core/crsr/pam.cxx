@@ -239,6 +239,16 @@ void SwPosition::Adjust( SwNodeOffset nDelta )
     nNode += nDelta;
     nContent.Assign(nNode.GetNode().GetContentNode(), 0);
 }
+void SwPosition::AssignStartIndex( const SwContentNode& rNd )
+{
+    nNode = rNd;
+    nContent.Assign(&rNd, 0);
+}
+void SwPosition::AssignEndIndex( const SwContentNode& rNd )
+{
+    nNode = rNd;
+    nContent.Assign(&rNd, rNd.Len());
+}
 
 
 std::ostream &operator <<(std::ostream& s, const SwPosition& position)
@@ -1016,7 +1026,7 @@ void GoStartDoc( SwPosition * pPos )
     // we always need to find a ContentNode!
     SwContentNode* pCNd = rNodes.GoNext( &pPos->nNode );
     if( pCNd )
-        pCNd->MakeStartIndex( &pPos->nContent );
+        pPos->AssignStartIndex(*pCNd);
 }
 
 void GoEndDoc( SwPosition * pPos )
@@ -1025,7 +1035,7 @@ void GoEndDoc( SwPosition * pPos )
     pPos->nNode = rNodes.GetEndOfContent();
     SwContentNode* pCNd = GoPreviousNds( &pPos->nNode, true );
     if( pCNd )
-        pCNd->MakeEndIndex( &pPos->nContent );
+        pPos->AssignEndIndex(*pCNd);
 }
 
 void GoStartSection( SwPosition * pPos )
@@ -1038,7 +1048,7 @@ void GoStartSection( SwPosition * pPos )
     do { SwNodes::GoStartOfSection( &pPos->nNode ); } while( nLevel-- );
 
     // already on a ContentNode
-    pPos->GetNode().GetContentNode()->MakeStartIndex( &pPos->nContent );
+    pPos->AssignStartIndex(*pPos->GetNode().GetContentNode());
 }
 
 /// go to the end of the current base section
@@ -1052,8 +1062,8 @@ void GoEndSection( SwPosition * pPos )
     do { SwNodes::GoEndOfSection( &pPos->nNode ); } while( nLevel-- );
 
     // now on an EndNode, thus to the previous ContentNode
-    if( GoPreviousNds( &pPos->nNode, true ) )
-        pPos->GetNode().GetContentNode()->MakeEndIndex( &pPos->nContent );
+    if( SwContentNode* pCNd = GoPreviousNds( &pPos->nNode, true ) )
+        pPos->AssignEndIndex(*pCNd);
 }
 
 bool GoInDoc( SwPaM & rPam, SwMoveFnCollection const & fnMove )

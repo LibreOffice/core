@@ -2390,11 +2390,11 @@ SwXText::copyText(
             pFirstNode = temp.GetMark()->GetNode().GetTextNode();
             if (pFirstNode)
             {
-                pFirstNode->MakeStartIndex(&temp.GetMark()->nContent);
+                temp.GetMark()->AssignStartIndex(*pFirstNode);
             }
             if (SwTextNode *const pNode = temp.GetPoint()->GetNode().GetTextNode())
             {
-                pNode->MakeEndIndex(&temp.GetPoint()->nContent);
+                temp.GetPoint()->AssignEndIndex(*pNode);
             }
             // Explicitly request copy text mode, so
             // sw::DocumentContentOperationsManager::CopyFlyInFlyImpl() will copy shapes anchored to

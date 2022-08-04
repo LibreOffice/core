@@ -191,8 +191,7 @@ const SwTextNode* GetBodyTextNode( const SwDoc& rDoc, SwPosition& rPos,
                 pTextNode = rPos.GetNode().GetTextNode();
                 if ( RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId() )
                 {
-                    const_cast<SwTextNode*>(pTextNode)->MakeStartIndex(
-                            &rPos.nContent );
+                    rPos.AssignStartIndex(*pTextNode);
                 }
 
                 // do not break yet, might be as well in Header/Footer/Footnote/Fly

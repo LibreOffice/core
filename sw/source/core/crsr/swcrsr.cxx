@@ -901,7 +901,7 @@ static bool lcl_MakeSelFwrd( const SwNode& rSttNd, const SwNode& rEndNd,
         pCNd = rNds.GoNext( &rPam.GetPoint()->nNode );
         if( !pCNd )
             return false;
-        pCNd->MakeStartIndex( &rPam.GetPoint()->nContent );
+        rPam.GetPoint()->AssignStartIndex(*pCNd);
     }
     else if( rSttNd.GetIndex() > rPam.GetPoint()->GetNodeIndex() ||
              rPam.GetPoint()->GetNodeIndex() >= rEndNd.GetIndex() )
@@ -913,7 +913,7 @@ static bool lcl_MakeSelFwrd( const SwNode& rSttNd, const SwNode& rEndNd,
     pCNd = SwNodes::GoPrevious( &rPam.GetPoint()->nNode );
     if( !pCNd )
         return false;
-    pCNd->MakeEndIndex( &rPam.GetPoint()->nContent );
+    rPam.GetPoint()->AssignEndIndex(*pCNd);
 
     return *rPam.GetMark() < *rPam.GetPoint();
 }
@@ -933,7 +933,7 @@ static bool lcl_MakeSelBkwrd( const SwNode& rSttNd, const SwNode& rEndNd,
         pCNd = SwNodes::GoPrevious( &rPam.GetPoint()->nNode );
         if( !pCNd )
             return false;
-        pCNd->MakeEndIndex( &rPam.GetPoint()->nContent );
+        rPam.GetPoint()->AssignEndIndex(*pCNd);
     }
     else if( rEndNd.GetIndex() > rPam.GetPoint()->GetNodeIndex() ||
              rPam.GetPoint()->GetNodeIndex() >= rSttNd.GetIndex() )
