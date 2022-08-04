@@ -88,6 +88,24 @@
       "parentUuid": "1ef35c1c_fe809cab",
       "revId": "9a2cee845c31d9bff9cd8925acdc4164251e50be",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "237232c4_0a2ef696",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003648
+      },
+      "writtenOn": "2022-08-04T22:29:15Z",
+      "side": 1,
+      "message": "A pull has been opened online-side: https://github.com/CollaboraOnline/online/pull/5106",
+      "parentUuid": "6e51ea64_af57f8e0",
+      "revId": "9a2cee845c31d9bff9cd8925acdc4164251e50be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
