@@ -16,6 +16,24 @@
       "message": "Have you any examples of where you can see an improvement/change that I could play with to see for myself?\n\nI earlier went with a conservative opt-in approach for just writer, the \"SetTextRenderModeForResolutionIndependentLayout\" stuff which seems to be working out ok without much complaint except for tdf#150145 and I ended up setting CAIRO_HINT_METRICS_OFF because I guessed that\u0027s something we want to do, but then forcing CAIRO_HINT_STYLE_NONE to avoid https://gitlab.freedesktop.org/cairo/cairo/-/issues/390 so I wonder if we just toggled long to double for the general case should we leave those cairo settings untouched from their defaults or always overrule.",
       "revId": "b95c8cd71da2f4acb0f8f089ee525d29c15cfb31",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4b8e69f_8ece9cd7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003606
+      },
+      "writtenOn": "2022-08-04T19:11:03Z",
+      "side": 1,
+      "message": "I’m not actually sure any more. I though I saw a slight improvement in glyph positioning, e.g. “لا” in Amiri (in most fonts this forms a ligature, but in Amiri it gives two contextually substituted glyphs, so subtle displacement can be visible). But now I can’t get any difference with or without this option set, so may be it was a change in zoom or some other change that caused the change I was seeing.\n\nI don’t really understand the relations between these Cairo setting, FreeType hinting and what fonts actually do. What we want is to disable any change in glyph advances as we use unhinted glyph advances in layout (so that hinting does not reflow text), which basically means no horizontal hinting. I believe this is what DirectWrite in Windows does as well, and is the preference in modern text layout and rendering in general.\n\nI think I probably should abandon this change.",
+      "parentUuid": "a81bd1cf_ef883922",
+      "revId": "b95c8cd71da2f4acb0f8f089ee525d29c15cfb31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
