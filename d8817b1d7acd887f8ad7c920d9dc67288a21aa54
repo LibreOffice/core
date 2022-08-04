@@ -80,6 +80,24 @@
       "parentUuid": "b24198ba_d2ca68fb",
       "revId": "d8817b1d7acd887f8ad7c920d9dc67288a21aa54",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0358a767_f5923285",
+        "filename": "officecfg/registry/schema/org/openoffice/Setup.xcs",
+        "patchSetId": 4
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-04T08:09:22Z",
+      "side": 1,
+      "message": "Of course no: we changed the wording in the dialog, and the checkbox will now use the *opposite* values (see the `!` introduced in the cui/source/options/optgdlg.cxx); so for the *same* stored value, we will show the *opposite* checked state.",
+      "parentUuid": "c1f6ea10_525de8d2",
+      "revId": "d8817b1d7acd887f8ad7c920d9dc67288a21aa54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
