@@ -52,6 +52,24 @@
       "parentUuid": "91ecaed0_66e58a8f",
       "revId": "9426e90c2c339b16487c48cd885a3e4586e1e1f3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05af5bfb_48f0ffe5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-04T12:54:44Z",
+      "side": 1,
+      "message": "Thank you!\n\nI mush had done something silly, because it is reproducible locally just fine.\n\nAnd it must be something really weird in the outer code, because the problem arises from running the line\n\n        SetZoom( eZoom, nZoomFactor, true );\n\nwith eZoom \u003d PERCENT (0) and nZoomFactor \u003d 99.\n\nAfter this line, the following export calls DocxAttributeOutput::FinishTableRowCell for the first time with pInner having mnRow \u003d 0 and mnCell \u003d 4 (!), pointing actually to the first table cell (where mnCell should be 0, as without setting zoom).\n\nDebugging. I am sure that the fix will be elsewhere.",
+      "parentUuid": "f485fbdf_d8103c27",
+      "revId": "9426e90c2c339b16487c48cd885a3e4586e1e1f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
