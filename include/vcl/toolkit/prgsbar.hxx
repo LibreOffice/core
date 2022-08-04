@@ -72,7 +72,7 @@ public:
     virtual void        Resize() override;
     virtual void        StateChanged( StateChangedType nStateChange ) override;
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
-    virtual Size        GetOptimalSize() const override;
+    virtual Size        GetOptimalSize() override;
 
     void                SetValue( sal_uInt16 nNewPercent );
 };

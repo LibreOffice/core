@@ -21,7 +21,7 @@ public:
     virtual void dispose() override;
 
     virtual void Resize() override;
-    virtual Size GetOptimalSize() const override;
+    virtual Size GetOptimalSize() override;
     // throw away cached size request of child so GetOptimalSize will
     // fetch it anew
     void InvalidateChildSizeCache();

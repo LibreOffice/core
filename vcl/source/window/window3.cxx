@@ -23,7 +23,7 @@
 
 namespace vcl
 {
-Size Window::GetOptimalSize() const { return Size(); }
+Size Window::GetOptimalSize() { return Size(); }
 
 void Window::ImplAdjustNWFSizes()
 {
@@ -58,18 +58,18 @@ void WindowOutputDevice::ImplInitMapModeObjects()
 const Font& Window::GetFont() const { return GetOutDev()->GetFont(); }
 void Window::SetFont(Font const& font) { return GetOutDev()->SetFont(font); }
 
-float Window::approximate_char_width() const { return GetOutDev()->approximate_char_width(); }
+float Window::approximate_char_width() { return GetOutDev()->approximate_char_width(); }
 
 const Wallpaper& Window::GetBackground() const { return GetOutDev()->GetBackground(); }
 bool Window::IsBackground() const { return GetOutDev()->IsBackground(); }
-tools::Long Window::GetTextHeight() const { return GetOutDev()->GetTextHeight(); }
-tools::Long Window::GetTextWidth(const OUString& rStr, sal_Int32 nIndex, sal_Int32 nLen,
+tools::Long Window::GetTextHeight() { return GetOutDev()->GetTextHeight(); }
+tools::Long Window::GetTextWidth(OUString const& rStr, sal_Int32 nIndex, sal_Int32 nLen,
                                  vcl::text::TextLayoutCache const* pCache,
-                                 SalLayoutGlyphs const* const pLayoutCache) const
+                                 SalLayoutGlyphs const* const pLayoutCache)
 {
     return GetOutDev()->GetTextWidth(rStr, nIndex, nLen, pCache, pLayoutCache);
 }
-float Window::approximate_digit_width() const { return GetOutDev()->approximate_digit_width(); }
+float Window::approximate_digit_width() { return GetOutDev()->approximate_digit_width(); }
 
 bool Window::IsNativeControlSupported(ControlType nType, ControlPart nPart) const
 {
@@ -200,7 +200,7 @@ Size Window::LogicToLogic(const Size& rSzSource, const MapMode* pMapModeSource,
 
 tools::Rectangle Window::GetTextRect(const tools::Rectangle& rRect, const OUString& rStr,
                                      DrawTextFlags nStyle, TextRectInfo* pInfo,
-                                     const vcl::ITextLayout* _pTextLayout) const
+                                     const vcl::ITextLayout* _pTextLayout)
 {
     return GetOutDev()->GetTextRect(rRect, rStr, nStyle, pInfo, _pTextLayout);
 }

@@ -218,7 +218,7 @@ public:
 
     void            SetLayoutDataParent( const Control* pParent ) const;
 
-    virtual Size    GetOptimalSize() const override;
+    virtual Size    GetOptimalSize() override;
 
     /** sets a reference device used for rendering control text
         @see DrawControlText

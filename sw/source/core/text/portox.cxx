@@ -23,7 +23,7 @@
 #include "portox.hxx"
 #include "inftxt.hxx"
 
-void SwToxPortion::Paint( const SwTextPaintInfo &rInf ) const
+void SwToxPortion::Paint( SwTextPaintInfo &rInf )
 {
     if( Width() )
     {
@@ -63,7 +63,7 @@ bool SwIsoToxPortion::Format( SwTextFormatInfo &rInf )
     return SwLinePortion::Format( rInf );
 }
 
-void SwIsoToxPortion::Paint( const SwTextPaintInfo &rInf ) const
+void SwIsoToxPortion::Paint( SwTextPaintInfo &rInf )
 {
     if( Width() )
         rInf.DrawViewOpt( *this, PortionType::Tox );

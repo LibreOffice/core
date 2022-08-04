@@ -60,7 +60,7 @@ public:
     virtual void    SetPosSizePixel(const Point& rNewPos, const Size& rNewSize) override;
     virtual void    SetPosPixel(const Point& rNewPos) override;
     virtual void    SetSizePixel(const Size& rNewSize) override;
-    virtual Size    GetOptimalSize() const override;
+    virtual Size    GetOptimalSize() override;
 
     // for scrollable tabpage
     virtual void Resize() override;

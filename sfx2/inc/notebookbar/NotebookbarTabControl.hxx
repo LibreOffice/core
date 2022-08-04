@@ -27,7 +27,7 @@ public:
     virtual void KeyInput( const KeyEvent& rKEvt ) override;
     virtual bool EventNotify( NotifyEvent& rNEvt ) override;
     virtual void StateChanged(StateChangedType nStateChange) override;
-    virtual Size calculateRequisition() const override;
+    virtual Size calculateRequisition() override;
 
 private:
     static void FillShortcutsToolBox(css::uno::Reference<css::uno::XComponentContext> const & xContext,

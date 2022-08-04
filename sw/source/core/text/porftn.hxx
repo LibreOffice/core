@@ -39,7 +39,7 @@ public:
                   sal_uInt16 nOrig = USHRT_MAX );
     sal_uInt16& Orig() { return m_nOrigHeight; }
 
-    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+    virtual void Paint( SwTextPaintInfo &rInf ) override;
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
     virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
@@ -70,7 +70,7 @@ class SwQuoVadisPortion : public SwFieldPortion
 public:
     SwQuoVadisPortion( const OUString &rExp, const OUString& rStr );
     virtual bool Format( SwTextFormatInfo &rInf ) override;
-    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+    virtual void Paint( SwTextPaintInfo &rInf ) override;
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
 
     void SetNumber( const OUString& rStr ) { m_aErgo = rStr; }

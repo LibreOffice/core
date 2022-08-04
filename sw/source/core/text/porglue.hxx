@@ -40,7 +40,7 @@ public:
     inline void MoveAllGlue( SwGluePortion *pTarget );
     inline void MoveHalfGlue( SwGluePortion *pTarget );
     inline void AdjFixWidth();
-    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+    virtual void Paint( SwTextPaintInfo &rInf ) override;
     virtual TextFrameIndex GetModelPositionForViewPoint(sal_uInt16 nOfst) const override;
     virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const override;
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;

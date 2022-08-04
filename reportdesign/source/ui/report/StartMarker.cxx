@@ -87,7 +87,7 @@ void OStartMarker::dispose()
     OColorListener::dispose();
 }
 
-sal_Int32 OStartMarker::getMinHeight() const
+sal_Int32 OStartMarker::getMinHeight()
 {
     Fraction aExtraWidth(tools::Long(2 * REPORT_EXTRA_SPACE));
     aExtraWidth *= GetMapMode().GetScaleX();

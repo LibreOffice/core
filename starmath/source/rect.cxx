@@ -31,7 +31,7 @@
 
 namespace {
 
-bool SmGetGlyphBoundRect(const vcl::RenderContext &rDev,
+bool SmGetGlyphBoundRect(vcl::RenderContext &rDev,
                          const OUString &rText, tools::Rectangle &rRect)
     // basically the same as 'GetTextBoundRect' (in class 'OutputDevice')
     // but with a string as argument.
@@ -46,7 +46,7 @@ bool SmGetGlyphBoundRect(const vcl::RenderContext &rDev,
     // get a device where 'OutputDevice::GetTextBoundRect' will be successful
     OutputDevice *pGlyphDev;
     if (rDev.GetOutDevType() != OUTDEV_PRINTER)
-        pGlyphDev = const_cast<OutputDevice *>(&rDev);
+        pGlyphDev = &rDev;
     else
     {
         // since we format for the printer (where GetTextBoundRect will fail)
@@ -175,7 +175,7 @@ void SmRect::CopyAlignInfo(const SmRect &rRect)
 }
 
 
-SmRect::SmRect(const OutputDevice &rDev, const SmFormat *pFormat,
+SmRect::SmRect(OutputDevice &rDev, const SmFormat *pFormat,
                const OUString &rText, sal_uInt16 nBorder)
     // get rectangle fitting for drawing 'rText' on OutputDevice 'rDev'
     : aTopLeft(0, 0)

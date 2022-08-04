@@ -118,7 +118,7 @@ public:
     /// @throws css::uno::RuntimeException
     void elementRemoved(const css::container::ContainerEvent& rEvent);
 
-    virtual Size GetOptimalSize() const override;
+    virtual Size GetOptimalSize() override;
 
     void        fillColumns(const uno::Reference< container::XNameAccess>& _xColumns);
     void        lateInit();
@@ -777,7 +777,7 @@ IMPL_LINK_NOARG( OFieldExpressionControl, DelayedDelete, void*, void )
     DeleteRows();
 }
 
-Size OFieldExpressionControl::GetOptimalSize() const
+Size OFieldExpressionControl::GetOptimalSize()
 {
     return LogicToPixel(Size(106, 75), MapMode(MapUnit::MapAppFont));
 }

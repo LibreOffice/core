@@ -54,10 +54,10 @@ public:
     void            SetUpHdl( const Link<SpinField&,void>& rLink ) { maUpHdlLink = rLink; }
     void            SetDownHdl( const Link<SpinField&,void>& rLink ) { maDownHdlLink = rLink; }
 
-    virtual Size    CalcMinimumSize() const override;
-    virtual Size    CalcMinimumSizeForText(const OUString &rString) const override;
-    virtual Size    GetOptimalSize() const override;
-    virtual Size    CalcSize(sal_Int32 nChars) const override;
+    virtual Size    CalcMinimumSize() override;
+    virtual Size    CalcMinimumSizeForText(const OUString &rString) override;
+    virtual Size    GetOptimalSize() override;
+    virtual Size    CalcSize(sal_Int32 nChars) override;
 
     virtual FactoryFunction GetUITestFactory() const override;
 

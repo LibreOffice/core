@@ -64,7 +64,7 @@ namespace rptui
         virtual void RequestHelp(const HelpEvent& rHEvt) override;
 
         void setTitle(const OUString& _sTitle);
-        sal_Int32 getMinHeight() const;
+        sal_Int32 getMinHeight();
 
         /** shows or hides the ruler.
         */

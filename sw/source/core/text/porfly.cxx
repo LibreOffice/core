@@ -45,7 +45,7 @@
  * class SwFlyPortion => we expect a frame-locale SwRect!
  */
 
-void SwFlyPortion::Paint( const SwTextPaintInfo& ) const
+void SwFlyPortion::Paint( SwTextPaintInfo& )
 {
 }
 
@@ -199,7 +199,7 @@ TextFrameIndex SwTextFrame::CalcFlyPos( SwFrameFormat const * pSearch )
     return TextFrameIndex(COMPLETE_STRING);
 }
 
-void sw::FlyContentPortion::Paint(const SwTextPaintInfo& rInf) const
+void sw::FlyContentPortion::Paint(SwTextPaintInfo& rInf)
 {
     // Baseline output
     // Re-paint everything at a CompletePaint call
@@ -223,7 +223,7 @@ void sw::FlyContentPortion::Paint(const SwTextPaintInfo& rInf) const
     // GetFlyFrame() may change the layout mode at the output device.
     {
         SwLayoutModeModifier aLayoutModeModifier(*rInf.GetOut());
-        m_pFly->PaintSwFrame(const_cast<vcl::RenderContext&>(*rInf.GetOut()), aRect);
+        m_pFly->PaintSwFrame(*rInf.GetOut(), aRect);
 
         // track changes: cross out the image, if it is deleted
         const SwFrame *pFrame = m_pFly->Lower();
@@ -234,30 +234,30 @@ void sw::FlyContentPortion::Paint(const SwTextPaintInfo& rInf) const
             const AntialiasingFlags nFormerAntialiasing( rInf.GetOut()->GetAntialiasing() );
             const bool bIsAntiAliasing = officecfg::Office::Common::Drawinglayer::AntiAliasing::get();
             if ( bIsAntiAliasing )
-                const_cast<vcl::RenderContext&>(*rInf.GetOut()).SetAntialiasing(AntialiasingFlags::Enable);
+                rInf.GetOut()->SetAntialiasing(AntialiasingFlags::Enable);
             tools::Long startX = aPaintRect.Left(  ), endX = aPaintRect.Right();
             tools::Long startY = aPaintRect.Top(  ),  endY = aPaintRect.Bottom();
-            const_cast<vcl::RenderContext&>(*rInf.GetOut()).SetLineColor(
+            rInf.GetOut()->SetLineColor(
                 SwPostItMgr::GetColorAnchor(GetAuthor()) );
-            const_cast<vcl::RenderContext&>(*rInf.GetOut()).DrawLine(Point(startX, startY), Point(endX, endY));
-            const_cast<vcl::RenderContext&>(*rInf.GetOut()).DrawLine(Point(startX, endY), Point(endX, startY));
+            rInf.GetOut()->DrawLine(Point(startX, startY), Point(endX, endY));
+            rInf.GetOut()->DrawLine(Point(startX, endY), Point(endX, startY));
             if ( bIsAntiAliasing )
-                const_cast<vcl::RenderContext&>(*rInf.GetOut()).SetAntialiasing(nFormerAntialiasing);
+                rInf.GetOut()->SetAntialiasing(nFormerAntialiasing);
         }
     }
-    const_cast<SwTextPaintInfo&>(rInf).GetRefDev()->SetLayoutMode(rInf.GetOut()->GetLayoutMode());
+    rInf.GetRefDev()->SetLayoutMode(rInf.GetOut()->GetLayoutMode());
 
     // As the OutputDevice might be anything, the font must be re-selected.
     // Being in const method should not be a problem.
-    const_cast<SwTextPaintInfo&>(rInf).SelectFont();
+    rInf.SelectFont();
 
     assert(rInf.GetVsh());
     SAL_WARN_IF(rInf.GetVsh()->GetOut() != rInf.GetOut(), "sw.core", "SwFlyCntPortion::Paint: Outdev has changed");
     if(rInf.GetVsh())
-        const_cast<SwTextPaintInfo&>(rInf).SetOut(rInf.GetVsh()->GetOut());
+        rInf.SetOut(rInf.GetVsh()->GetOut());
 }
 
-void sw::DrawFlyCntPortion::Paint(const SwTextPaintInfo&) const
+void sw::DrawFlyCntPortion::Paint(SwTextPaintInfo&)
 {
     if(!m_pContact->GetAnchorFrame())
     {

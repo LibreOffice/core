@@ -223,7 +223,7 @@ public:
 
     virtual void SetText( const OUString& rStr ) override;
     virtual OUString GetText() const override;
-    virtual Size GetOptimalSize() const override;
+    virtual Size GetOptimalSize() override;
     virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
 };
 

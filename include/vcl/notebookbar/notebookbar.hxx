@@ -35,7 +35,7 @@ public:
     virtual void dispose() override;
 
     virtual bool PreNotify( NotifyEvent& rNEvt ) override;
-    virtual Size GetOptimalSize() const override;
+    virtual Size GetOptimalSize() override;
     virtual void setPosSizePixel(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, PosSizeFlags nFlags = PosSizeFlags::All) override;
     virtual void Resize() override;
 

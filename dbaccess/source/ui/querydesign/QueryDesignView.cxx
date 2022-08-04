@@ -2636,7 +2636,7 @@ SqlParseError OQueryDesignView::InsertField( const OTableFieldDescRef& rInfo, bo
     return m_pSelectionBox->InsertField( rInfo, BROWSER_INVALIDID, true/*bVis*/, bActivate ).is() ? eOk : eTooManyColumns;
 }
 
-sal_Int32 OQueryDesignView::getColWidth(sal_uInt16 _nColPos) const
+sal_Int32 OQueryDesignView::getColWidth(sal_uInt16 _nColPos)
 {
     static sal_Int32 s_nDefaultWidth = GetTextWidth("0") * 15;
     sal_Int32 nWidth = static_cast<OQueryController&>(getController()).getColWidth(_nColPos);

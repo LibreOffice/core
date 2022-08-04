@@ -75,7 +75,7 @@ sal_uInt16 VclContainer::getDefaultAccessibleRole() const
     return css::accessibility::AccessibleRole::PANEL;
 }
 
-Size VclContainer::GetOptimalSize() const
+Size VclContainer::GetOptimalSize()
 {
     return calculateRequisition();
 }
@@ -167,7 +167,7 @@ namespace
     }
 }
 
-Size VclContainer::getLayoutRequisition(const vcl::Window &rWindow)
+Size VclContainer::getLayoutRequisition(vcl::Window& rWindow)
 {
     return subtractBorder(rWindow, rWindow.get_preferred_size());
 }
@@ -248,7 +248,7 @@ void VclBox::accumulateMaxes(const Size &rChildSize, Size &rSize) const
         setPrimaryDimension(rSize, nPrimaryBoxDimension + nPrimaryChildDimension);
 }
 
-Size VclBox::calculateRequisition() const
+Size VclBox::calculateRequisition()
 {
     sal_uInt16 nVisibleChildren = 0;
 
@@ -503,7 +503,7 @@ VclButtonBox::Requisition VclButtonBox::calculatePrimarySecondaryRequisitions() 
     std::vector<tools::Long> aSubGroupSizes;
     std::vector<bool> aSubGroupNonHomogeneous;
 
-    for (const vcl::Window *pChild = GetWindow(GetWindowType::FirstChild); pChild; pChild = pChild->GetWindow(GetWindowType::Next))
+    for (vcl::Window* pChild = GetWindow(GetWindowType::FirstChild); pChild; pChild = pChild->GetWindow(GetWindowType::Next))
     {
         if (!pChild->IsVisible())
             continue;
@@ -598,7 +598,7 @@ Size VclButtonBox::addSpacing(const Size &rSize, sal_uInt16 nVisibleChildren) co
     return aRet;
 }
 
-Size VclButtonBox::calculateRequisition() const
+Size VclButtonBox::calculateRequisition()
 {
     Requisition aReq(calculatePrimarySecondaryRequisitions());
     sal_uInt16 nVisibleChildren = aReq.m_aMainGroupDimensions.size() +
@@ -1073,7 +1073,7 @@ static void calcMaxs(const array_type &A, std::vector<VclGrid::Value> &rWidths, 
         for (sal_Int32 y = 0; y < nMaxY; ++y)
         {
             const GridEntry &rEntry = A[x][y];
-            const vcl::Window *pChild = rEntry.pChild;
+            vcl::Window *pChild = rEntry.pChild;
             if (!pChild || !pChild->IsVisible())
                 continue;
 
@@ -1104,7 +1104,7 @@ static void calcMaxs(const array_type &A, std::vector<VclGrid::Value> &rWidths, 
         for (sal_Int32 y = 0; y < nMaxY; ++y)
         {
             const GridEntry &rEntry = A[x][y];
-            const vcl::Window *pChild = rEntry.pChild;
+            vcl::Window *pChild = rEntry.pChild;
             if (!pChild || !pChild->IsVisible())
                 continue;
 
@@ -1190,7 +1190,7 @@ static VclGrid::Value accumulateValues(const VclGrid::Value &i, const VclGrid::V
     return aRet;
 }
 
-Size VclGrid::calculateRequisition() const
+Size VclGrid::calculateRequisition()
 {
     return calculateRequisitionForSpacings(get_row_spacing(), get_column_spacing());
 }
@@ -1413,9 +1413,9 @@ vcl::Window *VclBin::get_child()
     return const_cast<vcl::Window*>(const_cast<const VclBin*>(this)->get_child());
 }
 
-Size VclBin::calculateRequisition() const
+Size VclBin::calculateRequisition()
 {
-    const vcl::Window *pChild = get_child();
+    vcl::Window *pChild = get_child();
     if (pChild && pChild->IsVisible())
         return getLayoutRequisition(*pChild);
     return Size(0, 0);
@@ -1441,12 +1441,12 @@ void VclFrame::dispose()
 
 //To-Do, hook a DecorationView into VclFrame ?
 
-Size VclFrame::calculateRequisition() const
+Size VclFrame::calculateRequisition()
 {
     Size aRet(0, 0);
 
-    const vcl::Window *pChild = get_child();
-    const vcl::Window *pLabel = get_label_widget();
+    vcl::Window *pChild = get_child();
+    vcl::Window *pLabel = get_label_widget();
 
     if (pChild && pChild->IsVisible())
         aRet = getLayoutRequisition(*pChild);
@@ -1690,14 +1690,14 @@ vcl::Window *VclExpander::get_child()
     return const_cast<vcl::Window*>(const_cast<const VclExpander*>(this)->get_child());
 }
 
-Size VclExpander::calculateRequisition() const
+Size VclExpander::calculateRequisition()
 {
     Size aRet(0, 0);
 
     WindowImpl* pWindowImpl = ImplGetWindowImpl();
 
-    const vcl::Window *pChild = get_child();
-    const vcl::Window *pLabel = pChild != pWindowImpl->mpLastChild ? pWindowImpl->mpLastChild.get() : nullptr;
+    vcl::Window *pChild = get_child();
+    vcl::Window *pLabel = pChild != pWindowImpl->mpLastChild ? pWindowImpl->mpLastChild.get() : nullptr;
 
     if (pChild && pChild->IsVisible() && m_pDisclosureButton->IsChecked())
         aRet = getLayoutRequisition(*pChild);
@@ -1901,11 +1901,11 @@ vcl::Window *VclScrolledWindow::get_child()
     return const_cast<vcl::Window*>(const_cast<const VclScrolledWindow*>(this)->get_child());
 }
 
-Size VclScrolledWindow::calculateRequisition() const
+Size VclScrolledWindow::calculateRequisition()
 {
     Size aRet(0, 0);
 
-    const vcl::Window *pChild = get_child();
+    vcl::Window *pChild = get_child();
     if (pChild && pChild->IsVisible())
         aRet = getLayoutRequisition(*pChild);
 
@@ -2182,11 +2182,11 @@ void VclEventBox::setAllocation(const Size& rAllocation)
     }
 }
 
-Size VclEventBox::calculateRequisition() const
+Size VclEventBox::calculateRequisition()
 {
     Size aRet(0, 0);
 
-    for (const vcl::Window* pChild = get_child(); pChild;
+    for (vcl::Window* pChild = get_child(); pChild;
         pChild = pChild->GetWindow(GetWindowType::Next))
     {
         if (!pChild->IsVisible())
@@ -2690,7 +2690,7 @@ void VclVPaned::setAllocation(const Size& rAllocation)
     bool bSecondCanResize = true;
     const bool bInitialAllocation = get_position() < 0;
     int nElement = 0;
-    for (const vcl::Window* pChild = GetWindow(GetWindowType::FirstChild); pChild;
+    for (vcl::Window* pChild = GetWindow(GetWindowType::FirstChild); pChild;
         pChild = pChild->GetWindow(GetWindowType::Next))
     {
         if (!pChild->IsVisible())
@@ -2722,11 +2722,11 @@ void VclVPaned::setAllocation(const Size& rAllocation)
     arrange(rAllocation, nFirstHeight, rAllocation.Height() - nFirstHeight - aSplitterSize.Height());
 }
 
-Size VclVPaned::calculateRequisition() const
+Size VclVPaned::calculateRequisition()
 {
     Size aRet(0, 0);
 
-    for (const vcl::Window* pChild = GetWindow(GetWindowType::FirstChild); pChild;
+    for (vcl::Window* pChild = GetWindow(GetWindowType::FirstChild); pChild;
         pChild = pChild->GetWindow(GetWindowType::Next))
     {
         if (!pChild->IsVisible())
@@ -2809,7 +2809,7 @@ void VclHPaned::setAllocation(const Size& rAllocation)
     bool bSecondCanResize = true;
     const bool bInitialAllocation = get_position() < 0;
     int nElement = 0;
-    for (const vcl::Window* pChild = GetWindow(GetWindowType::FirstChild); pChild;
+    for (vcl::Window* pChild = GetWindow(GetWindowType::FirstChild); pChild;
         pChild = pChild->GetWindow(GetWindowType::Next))
     {
         if (!pChild->IsVisible())
@@ -2841,11 +2841,11 @@ void VclHPaned::setAllocation(const Size& rAllocation)
     arrange(rAllocation, nFirstWidth, rAllocation.Width() - nFirstWidth - aSplitterSize.Width());
 }
 
-Size VclHPaned::calculateRequisition() const
+Size VclHPaned::calculateRequisition()
 {
     Size aRet(0, 0);
 
-    for (const vcl::Window* pChild = GetWindow(GetWindowType::FirstChild); pChild;
+    for (vcl::Window* pChild = GetWindow(GetWindowType::FirstChild); pChild;
         pChild = pChild->GetWindow(GetWindowType::Next))
     {
         if (!pChild->IsVisible())

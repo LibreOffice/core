@@ -140,13 +140,13 @@ bool isSymbolFont(const vcl::Font &rFont)
             IsStarSymbol(rFont.GetFamilyName());
 }
 
-bool canRenderNameOfSelectedFont(OutputDevice const &rDevice)
+bool canRenderNameOfSelectedFont(OutputDevice& rDevice)
 {
     const vcl::Font &rFont = rDevice.GetFont();
     return !isSymbolFont(rFont) && ( -1 == rDevice.HasGlyphs(rFont, rFont.GetFamilyName()) );
 }
 
-OUString makeShortRepresentativeSymbolTextForSelectedFont(OutputDevice const &rDevice)
+OUString makeShortRepresentativeSymbolTextForSelectedFont(OutputDevice& rDevice)
 {
     if (rDevice.GetFont().GetFamilyName() == "Symbol")
     {
@@ -1186,7 +1186,7 @@ const std::map<UScriptCode, std::vector<OUString>> distCjkMap =
 };
 namespace
 {
-    UScriptCode attemptToDisambiguateHan(UScriptCode eScript, OutputDevice const &rDevice)
+    UScriptCode attemptToDisambiguateHan(UScriptCode eScript, OutputDevice& rDevice)
     {
         //If we're a CJK font, see if we seem to be tuned for C, J or K
         if (eScript == USCRIPT_HAN)
@@ -1246,7 +1246,7 @@ namespace
     }
 }
 
-OUString makeShortRepresentativeTextForSelectedFont(OutputDevice const &rDevice)
+OUString makeShortRepresentativeTextForSelectedFont(OutputDevice& rDevice)
 {
     UScriptCode eScript = lcl_getHardCodedScriptNameForFont(rDevice);
     if (eScript == USCRIPT_INVALID_CODE)

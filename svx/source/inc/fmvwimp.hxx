@@ -243,7 +243,7 @@ private:
     SdrObjectUniquePtr implCreateXFormsControl( const svx::OXFormsDescriptor &_rDesc );
 
     static bool createControlLabelPair(
-        OutputDevice const & _rOutDev,
+        OutputDevice& _rOutDev,
         sal_Int32 _nXOffsetMM,
         sal_Int32 _nYOffsetMM,
         const css::uno::Reference< css::beans::XPropertySet >& _rxField,
@@ -262,7 +262,7 @@ private:
     );
 
     bool    createControlLabelPair(
-        OutputDevice const & _rOutDev,
+        OutputDevice& _rOutDev,
         sal_Int32 _nXOffsetMM,
         sal_Int32 _nYOffsetMM,
         const css::uno::Reference< css::beans::XPropertySet >& _rxField,

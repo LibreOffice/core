@@ -73,7 +73,7 @@ public:
 
     void SetImage(const Image& rImage) { maImage = rImage; }
 
-    virtual Size GetOptimalSize() const override;
+    virtual Size GetOptimalSize() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

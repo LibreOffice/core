@@ -131,7 +131,7 @@ public:
     const Link<ScrollBar*,void>&   GetScrollHdl() const { return maScrollHdl; }
     void            SetEndScrollHdl( const Link<ScrollBar*,void>& rLink ) { maEndScrollHdl = rLink; }
 
-    virtual Size    GetOptimalSize() const override;
+    virtual Size    GetOptimalSize() override;
 };
 
 

@@ -1472,7 +1472,7 @@ SdrObjectUniquePtr FmXFormView::implCreateXFormsControl( const svx::OXFormsDescr
     return nullptr;
 }
 
-bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int32 _nXOffsetMM, sal_Int32 _nYOffsetMM,
+bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXOffsetMM, sal_Int32 _nYOffsetMM,
         const Reference< XPropertySet >& _rxField, const Reference< XNumberFormats >& _rxNumberFormats,
         SdrObjKind _nControlObjectID, std::u16string_view _rFieldPostfix,
         std::unique_ptr<SdrUnoObj, SdrObjectFreeOp>& _rpLabel,
@@ -1517,7 +1517,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
 }
 
 
-bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int32 _nXOffsetMM, sal_Int32 _nYOffsetMM,
+bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXOffsetMM, sal_Int32 _nYOffsetMM,
     const Reference< XPropertySet >& _rxField,
     const Reference< XNumberFormats >& _rxNumberFormats, SdrObjKind _nControlObjectID,
     std::u16string_view _rFieldPostfix, SdrInventor _nInventor, SdrObjKind _nLabelObjectID,

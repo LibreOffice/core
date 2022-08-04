@@ -266,7 +266,7 @@ public:
                             TextFrameIndex& rExtraCharPos,
                             vcl::text::TextLayoutCache const*) const;
 
-    sal_uInt16 GetAscent() const;
+    sal_uInt16 GetAscent();
     sal_uInt16 GetHangingBaseline() const;
 
     TextFrameIndex GetIdx() const { return m_nIdx; }
@@ -396,10 +396,10 @@ public:
 
     void DrawRect( const SwRect &rRect, bool bRetouche ) const;
 
-    void DrawTab( const SwLinePortion &rPor ) const;
-    void DrawLineBreak( const SwLinePortion &rPor ) const;
-    void DrawRedArrow( const SwLinePortion &rPor ) const;
-    void DrawPostIts( bool bScript ) const;
+    void DrawTab( const SwLinePortion &rPor );
+    void DrawLineBreak( const SwLinePortion &rPor );
+    void DrawRedArrow( const SwLinePortion &rPor );
+    void DrawPostIts( bool bScript );
     void DrawBackground( const SwLinePortion &rPor, const Color *pColor=nullptr ) const;
     void DrawViewOpt( const SwLinePortion &rPor, PortionType nWhich, const Color *pColor=nullptr ) const;
     void DrawBackBrush( const SwLinePortion &rPor ) const;
@@ -704,22 +704,22 @@ public:
     ~SwFontSave();
 };
 
-inline sal_uInt16 SwTextSizeInfo::GetAscent() const
+inline sal_uInt16 SwTextSizeInfo::GetAscent()
 {
     assert(GetOut());
-    return const_cast<SwFont*>(GetFont())->GetAscent( m_pVsh, *GetOut() );
+    return GetFont()->GetAscent( m_pVsh, *GetOut() );
 }
 
 inline sal_uInt16 SwTextSizeInfo::GetTextHeight() const
 {
     assert(GetOut());
-    return const_cast<SwFont*>(GetFont())->GetHeight( m_pVsh, *GetOut() );
+    return const_cast<SwFont*>(GetFont())->GetHeight( m_pVsh, *const_cast<OutputDevice*>(GetOut()) );
 }
 
 inline sal_uInt16 SwTextSizeInfo::GetHangingBaseline() const
 {
     assert(GetOut());
-    return const_cast<SwFont*>(GetFont())->GetHangingBaseline( m_pVsh, *GetOut() );
+    return const_cast<SwFont*>(GetFont())->GetHangingBaseline( m_pVsh, *const_cast<OutputDevice*>(GetOut()) );
 }
 
 inline SwPosSize SwTextSizeInfo::GetTextSize( const OUString &rText ) const

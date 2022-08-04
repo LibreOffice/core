@@ -163,8 +163,8 @@ public:
 
     void            EndSelection();
 
-    Size            CalcMinimumSize() const;
-    virtual Size    GetOptimalSize() const override;
+    Size            CalcMinimumSize();
+    virtual Size    GetOptimalSize() override;
 
     virtual bool    set_property(const OString &rKey, const OUString &rValue) override;
     virtual void    ShowFocus(const tools::Rectangle& rRect) override;
@@ -357,8 +357,8 @@ public:
 
     static Image    GetCheckImage( const AllSettings& rSettings, DrawButtonFlags nFlags );
 
-    Size            CalcMinimumSize( tools::Long nMaxWidth = 0 ) const;
-    virtual Size    GetOptimalSize() const override;
+    Size            CalcMinimumSize(tools::Long nMaxWidth = 0);
+    virtual Size    GetOptimalSize() override;
 
     void            SetToggleHdl( const Link<CheckBox&,void>& rLink ) { maToggleHdl = rLink; }
 
@@ -456,8 +456,8 @@ public:
 
     static Image    GetRadioImage( const AllSettings& rSettings, DrawButtonFlags nFlags );
 
-    Size            CalcMinimumSize( tools::Long nMaxWidth = 0 ) const;
-    virtual Size    GetOptimalSize() const override;
+    Size            CalcMinimumSize(tools::Long nMaxWidth = 0);
+    virtual Size    GetOptimalSize() override;
 
     void            SetToggleHdl( const Link<RadioButton&,void>& rLink ) { maToggleHdl = rLink; }
 

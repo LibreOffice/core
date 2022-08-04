@@ -155,7 +155,7 @@ protected:
     virtual ::svt::CellController*  GetController(sal_Int32 nRow, sal_uInt16 nCol) override;
     virtual bool                    SaveModified() override;
 
-    std::vector<tools::Long>               GetOptimalColWidths() const;
+    std::vector<tools::Long>               GetOptimalColWidths();
 
 public:
     SwEntryBrowseBox(const css::uno::Reference<css::awt::XWindow> &rParent);
@@ -168,7 +168,7 @@ public:
 
     virtual OUString GetCellText( sal_Int32 nRow, sal_uInt16 nColumn ) const override;
     virtual void                    Resize() override;
-    virtual Size                    GetOptimalSize() const override;
+    virtual Size                    GetOptimalSize() override;
 };
 
 class SwAutoMarkDlg_Impl : public weld::GenericDialogController
@@ -3733,7 +3733,7 @@ void SwEntryBrowseBox::Resize()
         SetColumnWidth(i+1, aWidths[i] + nExcess);
 }
 
-std::vector<tools::Long> SwEntryBrowseBox::GetOptimalColWidths() const
+std::vector<tools::Long> SwEntryBrowseBox::GetOptimalColWidths()
 {
     std::vector<tools::Long> aWidths;
 
@@ -3760,7 +3760,7 @@ std::vector<tools::Long> SwEntryBrowseBox::GetOptimalColWidths() const
     return aWidths;
 }
 
-Size SwEntryBrowseBox::GetOptimalSize() const
+Size SwEntryBrowseBox::GetOptimalSize()
 {
     Size aSize = LogicToPixel(Size(276 , 175), MapMode(MapUnit::MapAppFont));
 

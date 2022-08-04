@@ -297,7 +297,7 @@ bool SwTextNode::GetDropSize(int& rFontHeight, int& rDropHeight, int& rDropDesce
 }
 
 /// Manipulate the width, otherwise the chars are being stretched
-void SwDropPortion::PaintText( const SwTextPaintInfo &rInf ) const
+void SwDropPortion::PaintText( SwTextPaintInfo &rInf )
 {
     OSL_ENSURE( m_nDropHeight && m_pPart && m_nLines != 1, "Drop Portion painted twice" );
 
@@ -307,8 +307,8 @@ void SwDropPortion::PaintText( const SwTextPaintInfo &rInf ) const
     const sal_uInt16 nOldAscent = GetAscent();
 
     const SwTwips nBasePosY  = rInf.Y();
-    const_cast<SwTextPaintInfo&>(rInf).Y( nBasePosY + m_nY );
-    const_cast<SwDropPortion*>(this)->SetAscent( nOldAscent + m_nY );
+    rInf.Y( nBasePosY + m_nY );
+    SetAscent( nOldAscent + m_nY );
     SwDropSave aSave( rInf );
     // for text inside drop portions we let vcl handle the text directions
     SwLayoutModeModifier aLayoutModeModifier( *rInf.GetOut() );
@@ -316,12 +316,12 @@ void SwDropPortion::PaintText( const SwTextPaintInfo &rInf ) const
 
     while ( pCurrPart )
     {
-        const_cast<SwDropPortion*>(this)->SetLen( pCurrPart->GetLen() );
-        const_cast<SwDropPortion*>(this)->Width( pCurrPart->GetWidth() );
-        const_cast<SwTextPaintInfo&>(rInf).SetLen( pCurrPart->GetLen() );
+        SetLen( pCurrPart->GetLen() );
+        Width( pCurrPart->GetWidth() );
+        rInf.SetLen( pCurrPart->GetLen() );
         SwFontSave aFontSave( rInf, &pCurrPart->GetFont() );
-        const_cast<SwDropPortion*>(this)->SetJoinBorderWithNext(pCurrPart->GetJoinBorderWithNext());
-        const_cast<SwDropPortion*>(this)->SetJoinBorderWithPrev(pCurrPart->GetJoinBorderWithPrev());
+        SetJoinBorderWithNext(pCurrPart->GetJoinBorderWithNext());
+        SetJoinBorderWithPrev(pCurrPart->GetJoinBorderWithPrev());
 
         if ( rInf.OnWin() &&
             !rInf.GetOpt().IsPagePreview() && !rInf.GetOpt().IsReadonly() && SwViewOption::IsFieldShadings() &&
@@ -332,20 +332,20 @@ void SwDropPortion::PaintText( const SwTextPaintInfo &rInf ) const
 
         SwTextPortion::Paint( rInf );
 
-        const_cast<SwTextPaintInfo&>(rInf).SetIdx( rInf.GetIdx() + pCurrPart->GetLen() );
-        const_cast<SwTextPaintInfo&>(rInf).X( rInf.X() + pCurrPart->GetWidth() );
+        rInf.SetIdx( rInf.GetIdx() + pCurrPart->GetLen() );
+        rInf.X( rInf.X() + pCurrPart->GetWidth() );
         pCurrPart = pCurrPart->GetFollow();
     }
 
-    const_cast<SwTextPaintInfo&>(rInf).Y( nBasePosY );
-    const_cast<SwDropPortion*>(this)->Width( nOldWidth );
-    const_cast<SwDropPortion*>(this)->SetLen( nOldLen );
-    const_cast<SwDropPortion*>(this)->SetAscent( nOldAscent );
-    const_cast<SwDropPortion*>(this)->SetJoinBorderWithNext(false);
-    const_cast<SwDropPortion*>(this)->SetJoinBorderWithPrev(false);
+    rInf.Y( nBasePosY );
+    Width( nOldWidth );
+    SetLen( nOldLen );
+    SetAscent( nOldAscent );
+    SetJoinBorderWithNext(false);
+    SetJoinBorderWithPrev(false);
 }
 
-void SwDropPortion::PaintDrop( const SwTextPaintInfo &rInf ) const
+void SwDropPortion::PaintDrop( SwTextPaintInfo &rInf )
 {
     // normal output is being done during the normal painting
     if( ! m_nDropHeight || ! m_pPart || m_nLines == 1 )
@@ -363,11 +363,11 @@ void SwDropPortion::PaintDrop( const SwTextPaintInfo &rInf ) const
     // make good for retouching
 
     // Set baseline
-    const_cast<SwTextPaintInfo&>(rInf).Y( aOutPos.Y() + m_nDropHeight );
+    rInf.Y( aOutPos.Y() + m_nDropHeight );
 
     // for background
-    const_cast<SwDropPortion*>(this)->Height( m_nDropHeight + m_nDropDescent );
-    const_cast<SwDropPortion*>(this)->SetAscent( m_nDropHeight );
+    Height( m_nDropHeight + m_nDropDescent );
+    SetAscent( m_nDropHeight );
 
     // Always adapt Clipregion to us, never set it off using the existing ClipRect
     // as that could be set for the line
@@ -377,20 +377,20 @@ void SwDropPortion::PaintDrop( const SwTextPaintInfo &rInf ) const
         aClipRect = SwRect( aOutPos, SvLSize() );
         aClipRect.Intersection( rInf.GetPaintRect() );
     }
-    SwSaveClip aClip( const_cast<OutputDevice*>(rInf.GetOut()) );
+    SwSaveClip aClip( rInf.GetOut() );
     aClip.ChgClip( aClipRect, rInf.GetTextFrame() );
 
     // Just do, what we always do ...
     PaintText( rInf );
 
     // save old values
-    const_cast<SwDropPortion*>(this)->Height( nOldHeight );
-    const_cast<SwDropPortion*>(this)->Width( nOldWidth );
-    const_cast<SwDropPortion*>(this)->SetAscent( nOldAscent );
-    const_cast<SwTextPaintInfo&>(rInf).Y( nOldPosY );
+    Height( nOldHeight );
+    Width( nOldWidth );
+    SetAscent( nOldAscent );
+    rInf.Y( nOldPosY );
 }
 
-void SwDropPortion::Paint( const SwTextPaintInfo &rInf ) const
+void SwDropPortion::Paint( SwTextPaintInfo &rInf )
 {
     // normal output is being done here
     if( !(! m_nDropHeight || ! m_pPart || 1 == m_nLines) )
@@ -649,7 +649,7 @@ SwDropPortion *SwTextFormatter::NewDropPortion( SwTextFormatInfo &rInf )
 
 void SwTextPainter::PaintDropPortion()
 {
-    const SwDropPortion *pDrop = GetInfo().GetParaPortion()->FindDropPortion();
+    SwDropPortion* pDrop = GetInfo().GetParaPortion()->FindDropPortion();
     OSL_ENSURE( pDrop, "DrapCop-Portion not available." );
     if( !pDrop )
         return;

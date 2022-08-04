@@ -41,7 +41,7 @@ public:
 
     int GetHiddenCount() const override;
 
-    Size calculateRequisition() const override;
+    Size calculateRequisition() override;
 
     void GetChildrenWithPriorities() override{};
 };

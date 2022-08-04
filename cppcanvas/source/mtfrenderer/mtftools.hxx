@@ -70,7 +70,7 @@ namespace cppcanvas
             VDev to obtain font metrics from.
          */
         ::Size getBaselineOffset( const ::cppcanvas::internal::OutDevState& outdevState,
-                                  const VirtualDevice&                      rVDev );
+                                  VirtualDevice&                            rVDev );
 
         /** Construct a matrix that converts from logical to pixel
             coordinate system.
@@ -176,7 +176,7 @@ namespace cppcanvas
         /** Generate text underline/strikeout info struct from OutDev
             state.
          */
-        TextLineInfo createTextLineInfo( const ::VirtualDevice&                     rVDev,
+        TextLineInfo createTextLineInfo( ::VirtualDevice&                           rVDev,
                                          const ::cppcanvas::internal::OutDevState&  rState );
 
         /** Create a poly-polygon representing the given combination

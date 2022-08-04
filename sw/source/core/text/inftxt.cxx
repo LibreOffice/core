@@ -819,7 +819,7 @@ void SwTextPaintInfo::CalcRect( const SwLinePortion& rPor,
  * @param bCenter Draw the character centered, otherwise left aligned
  * @param bRotate Rotate the character if character rotation is set
  */
-static void lcl_DrawSpecial( const SwTextPaintInfo& rTextPaintInfo, const SwLinePortion& rPor,
+static void lcl_DrawSpecial( SwTextPaintInfo& rTextPaintInfo, const SwLinePortion& rPor,
                       SwRect& rRect, const Color& rCol, sal_Unicode cChar,
                       sal_uInt8 nOptions )
 {
@@ -856,9 +856,7 @@ static void lcl_DrawSpecial( const SwTextPaintInfo& rTextPaintInfo, const SwLine
     Size aFontSize( 0, SPECIAL_FONT_HEIGHT );
     s_aFnt.SetSize( aFontSize, s_aFnt.GetActual() );
 
-    SwTextPaintInfo& rNonConstTextPaintInfo = const_cast<SwTextPaintInfo&>(rTextPaintInfo);
-
-    rNonConstTextPaintInfo.SetFont( &s_aFnt );
+    rTextPaintInfo.SetFont( &s_aFnt );
 
     // The maximum width depends on the current orientation
     const Degree10 nDir = s_aFnt.GetOrientation( rTextPaintInfo.GetTextFrame()->IsVertical() );
@@ -920,13 +918,13 @@ static void lcl_DrawSpecial( const SwTextPaintInfo& rTextPaintInfo, const SwLine
     }
 
     Point aTmpPos( nX, nY );
-    rNonConstTextPaintInfo.SetPos( aTmpPos );
+    rTextPaintInfo.SetPos( aTmpPos );
     sal_uInt16 nOldWidth = rPor.Width();
     const_cast<SwLinePortion&>(rPor).Width( o3tl::narrowing<sal_uInt16>(aFontSize.Width()) );
     rTextPaintInfo.DrawText( aTmp, rPor );
     const_cast<SwLinePortion&>(rPor).Width( nOldWidth );
-    rNonConstTextPaintInfo.SetFont( const_cast<SwFont*>(pOldFnt) );
-    rNonConstTextPaintInfo.SetPos( aOldPos );
+    rTextPaintInfo.SetFont( const_cast<SwFont*>(pOldFnt) );
+    rTextPaintInfo.SetPos( aOldPos );
 }
 
 void SwTextPaintInfo::DrawRect( const SwRect &rRect, bool bRetouche ) const
@@ -941,7 +939,7 @@ void SwTextPaintInfo::DrawRect( const SwRect &rRect, bool bRetouche ) const
     }
 }
 
-void SwTextPaintInfo::DrawTab( const SwLinePortion &rPor ) const
+void SwTextPaintInfo::DrawTab( const SwLinePortion &rPor )
 {
     if( !OnWin() )
         return;
@@ -958,7 +956,7 @@ void SwTextPaintInfo::DrawTab( const SwLinePortion &rPor ) const
     lcl_DrawSpecial( *this, rPor, aRect, NON_PRINTING_CHARACTER_COLOR, cChar, nOptions );
 }
 
-void SwTextPaintInfo::DrawLineBreak( const SwLinePortion &rPor ) const
+void SwTextPaintInfo::DrawLineBreak( const SwLinePortion &rPor )
 {
     if( !OnWin() )
         return;
@@ -1005,7 +1003,7 @@ void SwTextPaintInfo::DrawLineBreak( const SwLinePortion &rPor ) const
     const_cast<SwLinePortion&>(rPor).Width( nOldWidth );
 }
 
-void SwTextPaintInfo::DrawRedArrow( const SwLinePortion &rPor ) const
+void SwTextPaintInfo::DrawRedArrow( const SwLinePortion &rPor )
 {
     Size aSize( SPECIAL_FONT_HEIGHT, SPECIAL_FONT_HEIGHT );
     SwRect aRect( static_cast<const SwArrowPortion&>(rPor).GetPos(), aSize );
@@ -1037,7 +1035,7 @@ void SwTextPaintInfo::DrawRedArrow( const SwLinePortion &rPor ) const
     }
 }
 
-void SwTextPaintInfo::DrawPostIts( bool bScript ) const
+void SwTextPaintInfo::DrawPostIts( bool bScript )
 {
     if( !OnWin() || !m_pOpt->IsPostIts() )
         return;
@@ -1080,7 +1078,7 @@ void SwTextPaintInfo::DrawPostIts( bool bScript ) const
     if ( GetTextFrame()->IsVertical() )
         GetTextFrame()->SwitchHorizontalToVertical( aTmpRect );
 
-    SwViewOption::PaintPostIts( const_cast<OutputDevice*>(GetOut()), aTmpRect, bScript );
+    SwViewOption::PaintPostIts( GetOut(), aTmpRect, bScript );
 
 }
 

@@ -71,14 +71,14 @@ bool SwExpandPortion::Format( SwTextFormatInfo &rInf )
     return SwTextPortion::Format( rInf );
 }
 
-void SwExpandPortion::Paint( const SwTextPaintInfo &rInf ) const
+void SwExpandPortion::Paint( SwTextPaintInfo &rInf )
 {
     SwTextSlot aDiffText( &rInf, this, true, true );
     const SwFont aOldFont = *rInf.GetFont();
     if( GetJoinBorderWithPrev() )
-        const_cast<SwTextPaintInfo&>(rInf).GetFont()->SetLeftBorder(nullptr);
+        rInf.GetFont()->SetLeftBorder(nullptr);
     if( GetJoinBorderWithNext() )
-        const_cast<SwTextPaintInfo&>(rInf).GetFont()->SetRightBorder(nullptr);
+        rInf.GetFont()->SetRightBorder(nullptr);
 
     rInf.DrawBackBrush( *this );
     rInf.DrawBorder( *this );
@@ -101,7 +101,7 @@ void SwExpandPortion::Paint( const SwTextPaintInfo &rInf ) const
         rInf.DrawText( *this, rInf.GetLen() );
 
     if( GetJoinBorderWithPrev() || GetJoinBorderWithNext() )
-        *const_cast<SwTextPaintInfo&>(rInf).GetFont() = aOldFont;
+        *rInf.GetFont() = aOldFont;
 }
 
 SwLinePortion *SwBlankPortion::Compress() { return this; }
@@ -202,7 +202,7 @@ bool SwBlankPortion::Format( SwTextFormatInfo &rInf )
     return bFull;
 }
 
-void SwBlankPortion::Paint( const SwTextPaintInfo &rInf ) const
+void SwBlankPortion::Paint( SwTextPaintInfo &rInf )
 {
     if( !m_bMulti ) // No gray background for multiportion brackets
         rInf.DrawViewOpt( *this, PortionType::Blank );
@@ -242,7 +242,7 @@ SwPostItsPortion::SwPostItsPortion( bool bScrpt )
     SetWhichPor( PortionType::PostIts );
 }
 
-void SwPostItsPortion::Paint( const SwTextPaintInfo &rInf ) const
+void SwPostItsPortion::Paint( SwTextPaintInfo &rInf )
 {
     if( rInf.OnWin() && Width() )
         rInf.DrawPostIts( IsScript() );
@@ -251,7 +251,7 @@ void SwPostItsPortion::Paint( const SwTextPaintInfo &rInf ) const
 sal_uInt16 SwPostItsPortion::GetViewWidth( const SwTextSizeInfo &rInf ) const
 {
     // Unbelievable: PostIts are always visible
-    return rInf.OnWin() ? SwViewOption::GetPostItsWidth( rInf.GetOut() ) : 0;
+    return rInf.OnWin() ? SwViewOption::GetPostItsWidth( const_cast<OutputDevice*>(rInf.GetOut()) ) : 0;
 }
 
 bool SwPostItsPortion::Format( SwTextFormatInfo &rInf )

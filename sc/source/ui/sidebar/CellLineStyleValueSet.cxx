@@ -71,7 +71,7 @@ void CellLineStyleValueSet::SetSelItem(sal_uInt16 nSel)
     }
 }
 
-tools::Long CellLineStyleValueSet::GetMaxTextWidth(const vcl::RenderContext* pDev)
+tools::Long CellLineStyleValueSet::GetMaxTextWidth(vcl::RenderContext* const pDev)
 {
     if (mnMaxTextWidth > 0)
         return mnMaxTextWidth;

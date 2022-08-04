@@ -260,9 +260,9 @@ class SmViewShell final : public SfxViewShell
     DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper*, void );
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
-    static Size GetTextLineSize(OutputDevice const & rDevice,
+    static Size GetTextLineSize(OutputDevice& rDevice,
                          const OUString& rLine);
-    static Size GetTextSize(OutputDevice const & rDevice,
+    static Size GetTextSize(OutputDevice& rDevice,
                      std::u16string_view rText,
                      tools::Long          MaxWidth);
     static void DrawTextLine(OutputDevice& rDevice,

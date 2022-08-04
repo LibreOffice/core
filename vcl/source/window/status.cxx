@@ -71,10 +71,10 @@ struct ImplStatusItem
     OUString                            maAccessibleName;
     OUString                            maCommand;
     std::optional<SalLayoutGlyphs>      mLayoutGlyphsCache;
-    SalLayoutGlyphs*                    GetTextGlyphs(const OutputDevice* pOutputDevice);
+    SalLayoutGlyphs*                    GetTextGlyphs(OutputDevice* const pOutputDevice);
 };
 
-SalLayoutGlyphs* ImplStatusItem::GetTextGlyphs(const OutputDevice* outputDevice)
+SalLayoutGlyphs* ImplStatusItem::GetTextGlyphs(OutputDevice* const outputDevice)
 {
     if(!mLayoutGlyphsCache.has_value())
     {
@@ -1065,7 +1065,7 @@ tools::Rectangle StatusBar::GetItemRect( sal_uInt16 nItemId ) const
     return aRect;
 }
 
-Point StatusBar::GetItemTextPos( sal_uInt16 nItemId ) const
+Point StatusBar::GetItemTextPos(sal_uInt16 nItemId)
 {
     if ( !mbFormat )
     {
@@ -1396,7 +1396,7 @@ void StatusBar::SetText(const OUString& rText)
     }
 }
 
-Size StatusBar::CalcWindowSizePixel() const
+Size StatusBar::CalcWindowSizePixel()
 {
     size_t  i = 0;
     size_t  nCount = mvItemList.size();

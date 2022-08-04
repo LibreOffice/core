@@ -913,7 +913,7 @@ bool SpinField::ShowDropDown( bool )
     return false;
 }
 
-Size SpinField::CalcMinimumSizeForText(const OUString &rString) const
+Size SpinField::CalcMinimumSizeForText(OUString const& rString)
 {
     Size aSz = Edit::CalcMinimumSizeForText(rString);
 
@@ -942,17 +942,17 @@ Size SpinField::CalcMinimumSizeForText(const OUString &rString) const
     return aSz;
 }
 
-Size SpinField::CalcMinimumSize() const
+Size SpinField::CalcMinimumSize()
 {
     return CalcMinimumSizeForText(GetText());
 }
 
-Size SpinField::GetOptimalSize() const
+Size SpinField::GetOptimalSize()
 {
     return CalcMinimumSize();
 }
 
-Size SpinField::CalcSize(sal_Int32 nChars) const
+Size SpinField::CalcSize(sal_Int32 nChars)
 {
     Size aSz = Edit::CalcSize( nChars );
 

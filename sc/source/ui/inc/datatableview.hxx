@@ -102,7 +102,7 @@ public:
     virtual void MouseButtonUp(const MouseEvent& rMEvt) override;
     virtual void Resize() override;
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
-    virtual Size GetOptimalSize() const override;
+    virtual Size GetOptimalSize() override;
 
     void getColRange(SCCOL& rStartCol, SCCOL& rEndCol) const;
     void getRowRange(SCROW& rStartRow, SCROW& rEndRow) const;

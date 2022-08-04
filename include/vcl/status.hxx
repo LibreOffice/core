@@ -142,7 +142,7 @@ public:
     sal_uInt16          GetItemId( const Point& rPos ) const;
     sal_uInt16          GetItemPos( sal_uInt16 nItemId ) const;
     tools::Rectangle           GetItemRect( sal_uInt16 nItemId ) const;
-    Point               GetItemTextPos( sal_uInt16 nItemId ) const;
+    Point               GetItemTextPos(sal_uInt16 nItemId);
     sal_uInt16          GetCurItemId() const { return mnCurItemId; }
 
     sal_uLong           GetItemWidth( sal_uInt16 nItemId ) const;
@@ -177,7 +177,7 @@ public:
 
     void                SetText( const OUString& rText ) override;
 
-    Size                CalcWindowSizePixel() const;
+    Size                CalcWindowSizePixel();
 
     void                SetClickHdl( const Link<StatusBar*,void>& rLink ) { maClickHdl = rLink; }
     void                SetDoubleClickHdl( const Link<StatusBar*,void>& rLink ) { maDoubleClickHdl = rLink; }

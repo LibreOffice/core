@@ -86,7 +86,7 @@ public:
     virtual void DeleteWindowFromPaintView(OutputDevice* pOldWin) override;
 
     static void createControlLabelPair(
-        OutputDevice const * _pOutDev,
+        OutputDevice* _pOutDev,
         sal_Int32 _nXOffsetMM,
         sal_Int32 _nYOffsetMM,
         const css::uno::Reference< css::beans::XPropertySet >& _rxField,

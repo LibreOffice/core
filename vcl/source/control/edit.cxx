@@ -454,7 +454,7 @@ void Edit::ImplInvalidateOrRepaint()
         Invalidate();
 }
 
-tools::Long Edit::ImplGetTextYPosition() const
+tools::Long Edit::ImplGetTextYPosition()
 {
     if ( GetStyle() & WB_TOP )
         return ImplGetExtraXOffset();
@@ -1189,7 +1189,7 @@ void Edit::ImplAlignAndPaint()
     ImplShowCursor();
 }
 
-sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
+sal_Int32 Edit::ImplGetCharPos(Point const& rWindowPos)
 {
     sal_Int32 nIndex = EDIT_NOLIMIT;
     OUString aText = ImplGetText();
@@ -2606,7 +2606,7 @@ void Edit::SetSubEdit(Edit* pEdit)
     }
 }
 
-Size Edit::CalcMinimumSizeForText(const OUString &rString) const
+Size Edit::CalcMinimumSizeForText(const OUString &rString)
 {
     ControlType eCtrlType = ImplGetNativeControlType();
 
@@ -2656,17 +2656,17 @@ Size Edit::CalcMinimumSizeForText(const OUString &rString) const
     return aSize;
 }
 
-Size Edit::CalcMinimumSize() const
+Size Edit::CalcMinimumSize()
 {
     return CalcMinimumSizeForText(GetText());
 }
 
-Size Edit::GetOptimalSize() const
+Size Edit::GetOptimalSize()
 {
     return CalcMinimumSize();
 }
 
-Size Edit::CalcSize(sal_Int32 nChars) const
+Size Edit::CalcSize(sal_Int32 nChars)
 {
     // width for N characters, independent from content.
     // works only correct for fixed fonts, average otherwise
@@ -2677,9 +2677,14 @@ Size Edit::CalcSize(sal_Int32 nChars) const
     return aSz;
 }
 
-sal_Int32 Edit::GetMaxVisChars() const
+sal_Int32 Edit::GetMaxVisChars()
 {
-    const vcl::Window* pW = mpSubEdit ? mpSubEdit : this;
+    const vcl::Window* pW = nullptr;
+    if (mpSubEdit)
+        pW = mpSubEdit.get();
+    else
+        pW = this;
+
     sal_Int32 nOutWidth = pW->GetOutputSizePixel().Width();
     float fUnitWidth = std::max(approximate_char_width(), approximate_digit_width());
     return nOutWidth / fUnitWidth;

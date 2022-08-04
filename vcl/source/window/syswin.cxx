@@ -1007,14 +1007,14 @@ bool SystemWindow::isLayoutEnabled() const
     return mpImplData && ::isLayoutEnabled(this);
 }
 
-Size SystemWindow::GetOptimalSize() const
+Size SystemWindow::GetOptimalSize()
 {
     if (!isLayoutEnabled())
         return Window::GetOptimalSize();
 
     Window *pBox = GetWindow(GetWindowType::FirstChild);
     // tdf#141318 Do the same as SystemWindow::setOptimalLayoutSize in case we're called before initial layout
-    const_cast<SystemWindow*>(this)->settingOptimalLayoutSize(pBox);
+    settingOptimalLayoutSize(pBox);
     Size aSize = VclContainer::getLayoutRequisition(*pBox);
 
     sal_Int32 nBorderWidth = get_border_width();

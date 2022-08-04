@@ -121,9 +121,9 @@ public:
                         SvLBoxItem();
     virtual             ~SvLBoxItem();
     virtual SvLBoxItemType GetType() const = 0;
-    virtual int CalcWidth(const SvTreeListBox* pView) const;
-    int GetWidth(const SvTreeListBox* pView, const SvTreeListEntry* pEntry) const;
-    int GetWidth(const SvTreeListBox* pView, const SvViewDataEntry* pData, sal_uInt16 nItemPos) const;
+    virtual int CalcWidth(SvTreeListBox* const pView);
+    int GetWidth(SvTreeListBox const* pView, SvTreeListEntry const* pEntry) const;
+    int GetWidth(SvTreeListBox* pView, SvViewDataEntry const* pData, sal_uInt16 nItemPos);
     int GetHeight(const SvTreeListBox* pView, const SvTreeListEntry* pEntry) const;
     static int GetHeight(const SvViewDataEntry* pData, sal_uInt16 nItemPos);
     void Enable(bool bEnabled) { mbDisabled = !bEnabled; }
@@ -388,9 +388,9 @@ public:
     sal_uInt32          GetChildCount( SvTreeListEntry const * pParent ) const;
     sal_uInt32          GetLevelChildCount( SvTreeListEntry* pParent ) const;
 
-    SvViewDataEntry* GetViewDataEntry( SvTreeListEntry const * pEntry ) const;
+    SvViewDataEntry* GetViewDataEntry(SvTreeListEntry const* pEntry) const;
     SvViewDataItem*  GetViewDataItem(SvTreeListEntry const *, SvLBoxItem const *);
-    const SvViewDataItem*  GetViewDataItem(const SvTreeListEntry*, const SvLBoxItem*) const;
+    const SvViewDataItem* GetViewDataItem(SvTreeListEntry const*, SvLBoxItem const*) const;
 
     VclPtr<Edit> GetEditWidget() const; // for UITest
     bool IsInplaceEditingEnabled() const { return bool(nImpFlags & SvTreeListBoxFlags::EDT_ENABLED); }
@@ -655,7 +655,7 @@ public:
 
     tools::Long            getPreferredDimensions(std::vector<tools::Long> &rWidths) const;
 
-    virtual Size    GetOptimalSize() const override;
+    virtual Size    GetOptimalSize() override;
 
     void            SetAlternatingRowColors( const bool bEnable );
 

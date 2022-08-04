@@ -101,7 +101,7 @@ namespace dbaui
         virtual ~ORelationControl() override { disposeOnce(); }
         virtual void dispose() override { m_pListCell.disposeAndClear(); ORelationControl_Base::dispose(); }
         virtual void Resize() override;
-        virtual Size GetOptimalSize() const override;
+        virtual Size GetOptimalSize() override;
         virtual bool PreNotify(NotifyEvent& rNEvt ) override;
 
         virtual bool IsTabAllowed(bool bForward) const override;
@@ -429,7 +429,7 @@ namespace dbaui
         m_pBoxControl->NotifyCellChange();
     }
 
-    Size ORelationControl::GetOptimalSize() const
+    Size ORelationControl::GetOptimalSize()
     {
         return LogicToPixel(Size(140, 80), MapMode(MapUnit::MapAppFont));
     }

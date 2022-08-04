@@ -496,7 +496,7 @@ public:
     DECL_DLLPRIVATE_LINK( ImplHandleResizeTimerHdl, Timer*, void );
 
 
-    SAL_DLLPRIVATE static void          ImplInitAppFontData( vcl::Window const * pWindow );
+    SAL_DLLPRIVATE static void          ImplInitAppFontData(vcl::Window* const pWindow );
 
     SAL_DLLPRIVATE vcl::Window*         ImplGetFrameWindow() const;
     weld::Window*                       GetFrameWeld() const;
@@ -801,7 +801,7 @@ public:
                                                    sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const;
     Size                                CalcWindowSize( const Size& rOutSz ) const;
     Size                                CalcOutputSize( const Size& rWinSz ) const;
-    tools::Long                                CalcTitleWidth() const;
+    tools::Long                         CalcTitleWidth();
 
     void                                EnableClipSiblings( bool bClipSiblings = true );
 
@@ -1192,7 +1192,7 @@ protected:
      * Use get_preferred_size to retrieve this value
      * cached and mediated via height and width requests
      */
-    virtual Size GetOptimalSize() const;
+    virtual Size GetOptimalSize();
     /// clear OptimalSize cache
     void InvalidateSizeCache();
 private:
@@ -1214,7 +1214,7 @@ private:
      *
      * @see get_preferred_size
      */
-    Size get_ungrouped_preferred_size() const;
+    Size get_ungrouped_preferred_size();
 public:
     /*  records all DrawText operations within the passed rectangle;
      *  a synchronous paint is sent to achieve this
@@ -1281,7 +1281,7 @@ public:
      *
      * akin to gtk_widget_get_preferred_size
      */
-    Size get_preferred_size() const;
+    Size get_preferred_size();
 
     /*
      * How to horizontally align this widget
@@ -1502,10 +1502,10 @@ public:
     void SetSettings( const AllSettings& rSettings );
     void SetSettings( const AllSettings& rSettings, bool bChild );
 
-    tools::Rectangle            GetTextRect( const tools::Rectangle& rRect,
-                                             const OUString& rStr, DrawTextFlags nStyle = DrawTextFlags::WordBreak,
-                                             TextRectInfo* pInfo = nullptr,
-                                             const vcl::ITextLayout* _pTextLayout = nullptr ) const;
+    tools::Rectangle            GetTextRect(tools::Rectangle const& rRect,
+                                            OUString const& rStr, DrawTextFlags nStyle = DrawTextFlags::WordBreak,
+                                            TextRectInfo* pInfo = nullptr,
+                                            vcl::ITextLayout const* _pTextLayout = nullptr);
     float                       GetDPIScaleFactor() const;
     tools::Long                 GetOutOffXPixel() const;
     tools::Long                 GetOutOffYPixel() const;
@@ -1526,16 +1526,16 @@ public:
 
         See also GetTextBoundRect() for more explanation + code examples.
     */
-    tools::Long                 GetTextWidth( const OUString& rStr, sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
+    tools::Long                 GetTextWidth(OUString const& rStr, sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
                                     vcl::text::TextLayoutCache const* = nullptr,
-                                    SalLayoutGlyphs const*const pLayoutCache = nullptr) const;
+                                    SalLayoutGlyphs const * const pLayoutCache = nullptr);
 
     /** Height where any character of the current font fits; in logic coordinates.
 
         See also GetTextBoundRect() for more explanation + code examples.
     */
-    tools::Long                 GetTextHeight() const;
-    float                       approximate_digit_width() const;
+    tools::Long                 GetTextHeight();
+    float                       approximate_digit_width();
 
     void                        SetTextColor( const Color& rColor );
     const Color&                GetTextColor() const;
@@ -1575,7 +1575,7 @@ public:
                                     tools::Rectangle &rNativeBoundingRegion,
                                     tools::Rectangle &rNativeContentRegion ) const;
 protected:
-    SAL_DLLPRIVATE float        approximate_char_width() const;
+    SAL_DLLPRIVATE float        approximate_char_width();
 private:
     SAL_DLLPRIVATE void         ImplEnableRTL(bool bEnable);
 };

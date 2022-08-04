@@ -264,7 +264,7 @@ public:
     virtual void        StateChanged( StateChangedType nStateChange ) override;
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    virtual Size        GetOptimalSize() const override;
+    virtual Size        GetOptimalSize() override;
 
     virtual void        EndDrag();
     virtual void        Select();
@@ -298,7 +298,7 @@ public:
 
     OUString            GetHelpText( sal_uInt16 nItemId ) const;
 
-    Size                CalcWindowSizePixel() const;
+    Size                CalcWindowSizePixel();
 
     using Window::SetHelpId;
 

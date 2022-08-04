@@ -56,7 +56,7 @@ SwMultiPortion::~SwMultiPortion()
 {
 }
 
-void SwMultiPortion::Paint( const SwTextPaintInfo & ) const
+void SwMultiPortion::Paint( SwTextPaintInfo & )
 {
     OSL_FAIL( "Don't try SwMultiPortion::Paint, try SwTextPainter::PaintMultiPortion" );
 }

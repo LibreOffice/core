@@ -2304,7 +2304,7 @@ void BrowseBox::SetHeaderBar( BrowserHeader* pHeaderBar )
     pDataWin->pHeaderBar->SetStartDragHdl( LINK( this, BrowseBox, StartDragHdl ) );
 }
 
-tools::Long BrowseBox::GetTitleHeight() const
+tools::Long BrowseBox::GetTitleHeight()
 {
     tools::Long nHeight;
     // ask the header bar for the text height (if possible), as the header bar's font is adjusted with

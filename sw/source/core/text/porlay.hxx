@@ -323,7 +323,7 @@ public:
     // Set nErgo in the QuoVadisPortion
     void SetErgoSumNum( const OUString &rErgo );
 
-    const SwDropPortion *FindDropPortion() const;
+    SwDropPortion *FindDropPortion() const;
 
     void dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText,
                    TextFrameIndex& nOffset) const override;

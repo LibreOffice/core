@@ -88,7 +88,7 @@ namespace vclcanvas::tools
                                  vcl::Font&                    io_rVCLFont,
                                  const rendering::ViewState&    rViewState,
                                  const rendering::RenderState&  rRenderState,
-                                 ::OutputDevice const &         rOutDev )
+                                 ::OutputDevice&                rOutDev )
         {
             ::basegfx::B2DHomMatrix aMatrix;
 

@@ -29,7 +29,7 @@ public:
     virtual TextFrameIndex GetModelPositionForViewPoint(sal_uInt16 nOfst) const override;
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
     virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const override;
-    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+    virtual void Paint( SwTextPaintInfo &rInf ) override;
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const override;
@@ -52,7 +52,7 @@ public:
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
     virtual void FormatEOL( SwTextFormatInfo &rInf ) override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
-    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+    virtual void Paint( SwTextPaintInfo &rInf ) override;
     static sal_uInt16 MayUnderflow(const SwTextFormatInfo &rInf, TextFrameIndex nIdx,
         bool bUnderflow );
 
@@ -68,7 +68,7 @@ class SwPostItsPortion : public SwExpandPortion
     bool    m_bScript;
 public:
     explicit SwPostItsPortion( bool bScrpt );
-    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+    virtual void Paint( SwTextPaintInfo &rInf ) override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
     virtual sal_uInt16 GetViewWidth( const SwTextSizeInfo &rInf ) const override;
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;

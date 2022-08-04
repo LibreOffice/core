@@ -910,7 +910,7 @@ void MenuFloatingWindow::RenderHighlightItem(vcl::RenderContext& rRenderContext,
     }
 }
 
-tools::Rectangle MenuFloatingWindow::ImplGetItemRect( sal_uInt16 nPos ) const
+tools::Rectangle MenuFloatingWindow::ImplGetItemRect(sal_uInt16 nPos)
 {
     if( ! pMenu )
         return tools::Rectangle();

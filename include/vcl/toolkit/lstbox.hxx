@@ -217,12 +217,12 @@ public:
 
     void                SetSelectHdl( const Link<ListBox&,void>& rLink )     { maSelectHdl = rLink; }
 
-    Size                CalcSubEditSize() const;    //size of area inside lstbox, i.e. no scrollbar/dropdown
-    Size                CalcMinimumSize() const;    //size of lstbox area, i.e. including scrollbar/dropdown
-    virtual Size        GetOptimalSize() const override;
-    Size                CalcAdjustedSize( const Size& rPrefSize ) const;
-    Size                CalcBlockSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const;
-    void                GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const;
+    Size                CalcSubEditSize();    //size of area inside lstbox, i.e. no scrollbar/dropdown
+    Size                CalcMinimumSize();    //size of lstbox area, i.e. including scrollbar/dropdown
+    virtual Size        GetOptimalSize() override;
+    Size                CalcAdjustedSize(Size const& rPrefSize);
+    Size                CalcBlockSize(sal_uInt16 nColumns, sal_uInt16 nLines);
+    void                GetMaxVisColumnsAndLines(sal_uInt16& rnCols, sal_uInt16& rnLines);
 
     sal_uInt16          GetDisplayLineCount() const;
 

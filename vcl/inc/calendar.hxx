@@ -183,7 +183,7 @@ class Calendar final : public Control
     void         ImplEndTracking( bool bCancel );
     DayOfWeek    ImplGetWeekStart() const;
 
-    virtual Size GetOptimalSize() const override;
+    virtual Size GetOptimalSize() override;
 public:
                     Calendar( vcl::Window* pParent, WinBits nWinStyle );
     virtual         ~Calendar() override;
@@ -217,7 +217,7 @@ public:
 
     void            EndSelection();
 
-    Size            CalcWindowSizePixel() const;
+    Size            CalcWindowSizePixel();
 
     void            SetSelectHdl( const Link<Calendar*,void>& rLink ) { maSelectHdl = rLink; }
     void            SetActivateHdl( const Link<Calendar*,void>& rLink ) { maActivateHdl = rLink; }

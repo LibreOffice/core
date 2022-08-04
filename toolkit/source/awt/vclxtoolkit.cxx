@@ -394,7 +394,7 @@ void MessBox::StateChanged( StateChangedType nType )
     ButtonDialog::StateChanged( nType );
 }
 
-Size MessBox::GetOptimalSize() const
+Size MessBox::GetOptimalSize()
 {
     // FIXME: base me on the font size ?
     return Size( 250, 100 );

@@ -993,7 +993,7 @@ void ComboBox::SetEntryActivateHdl(const Link<Edit&,bool>& rLink)
     m_pImpl->m_pSubEdit->SetActivateHdl(rLink);
 }
 
-Size ComboBox::GetOptimalSize() const
+Size ComboBox::GetOptimalSize()
 {
     return CalcMinimumSize();
 }
@@ -1020,7 +1020,7 @@ tools::Long ComboBox::getMaxWidthScrollBarAndDownButton() const
     return std::max(nScrollBarWidth, nButtonDownWidth);
 }
 
-Size ComboBox::CalcMinimumSize() const
+Size ComboBox::CalcMinimumSize()
 {
     Size aSz;
 
@@ -1061,11 +1061,11 @@ Size ComboBox::CalcMinimumSize() const
     return aSz;
 }
 
-Size ComboBox::CalcAdjustedSize( const Size& rPrefSize ) const
+Size ComboBox::CalcAdjustedSize(Size const& rPrefSize)
 {
     Size aSz = rPrefSize;
     sal_Int32 nLeft, nTop, nRight, nBottom;
-    static_cast<vcl::Window*>(const_cast<ComboBox *>(this))->GetBorder( nLeft, nTop, nRight, nBottom );
+    static_cast<vcl::Window*>(this)->GetBorder(nLeft, nTop, nRight, nBottom);
     aSz.AdjustHeight( -(nTop+nBottom) );
     if ( !IsDropDownBox() )
     {
@@ -1086,7 +1086,7 @@ Size ComboBox::CalcAdjustedSize( const Size& rPrefSize ) const
     return aSz;
 }
 
-Size ComboBox::CalcBlockSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
+Size ComboBox::CalcBlockSize(sal_uInt16 nColumns, sal_uInt16 nLines)
 {
     // show ScrollBars where appropriate
     Size aMinSz = CalcMinimumSize();
@@ -1131,7 +1131,7 @@ tools::Long ComboBox::GetDropDownEntryHeight() const
     return m_pImpl->m_pImplLB->GetEntryHeight();
 }
 
-void ComboBox::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const
+void ComboBox::GetMaxVisColumnsAndLines(sal_uInt16& rnCols, sal_uInt16& rnLines)
 {
     tools::Long nCharWidth = GetTextWidth(OUString(u'x'));
     if ( !IsDropDownBox() )

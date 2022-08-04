@@ -52,7 +52,7 @@ public:
     short GetEscapement() const { return nEsc; }
     void SetEscapement( const short nNewEsc ) { nEsc = nNewEsc; }
     // set specific values instead of automatic, and ensure valid value. Depends on nPropr being set already.
-    void SetNonAutoEscapement(short nNewEsc, const OutputDevice* pOutDev = nullptr);
+    void SetNonAutoEscapement(short nNewEsc, OutputDevice* pOutDev = nullptr);
 
     sal_uInt8 GetPropr() const { return nPropr; }
     void SetPropr( const sal_uInt8 nNewPropr ) { nPropr = nNewPropr; }
@@ -81,24 +81,24 @@ public:
     void SetPhysFont(OutputDevice& rOut) const;
     vcl::Font ChgPhysFont(OutputDevice& rOut) const;
 
-    Size GetCapitalSize( const OutputDevice *pOut, const OUString &rTxt,
+    Size GetCapitalSize( OutputDevice *pOut, const OUString &rTxt,
                           const sal_Int32 nIdx, const sal_Int32 nLen) const;
     void DrawCapital( OutputDevice *pOut, const Point &rPos, const OUString &rTxt,
                       const sal_Int32 nIdx, const sal_Int32 nLen ) const;
 
-    Size GetPhysTxtSize( const OutputDevice *pOut, const OUString &rTxt,
+    Size GetPhysTxtSize( OutputDevice *pOut, const OUString &rTxt,
                          const sal_Int32 nIdx, const sal_Int32 nLen ) const;
 
-    Size GetPhysTxtSize( const OutputDevice *pOut );
+    Size GetPhysTxtSize( OutputDevice *pOut );
 
-    Size GetTextSize(const OutputDevice& rOut, const OUString &rTxt,
+    Size GetTextSize(OutputDevice& rOut, const OUString &rTxt,
                      const sal_Int32 nIdx = 0, const sal_Int32 nLen = SAL_MAX_INT32) const;
 
     void QuickDrawText( OutputDevice *pOut, const Point &rPos, const OUString &rTxt,
                         const sal_Int32 nIdx = 0, const sal_Int32 nLen = SAL_MAX_INT32,
                         o3tl::span<const sal_Int32> pDXArray = {} ) const;
 
-    Size QuickGetTextSize( const OutputDevice *pOut, const OUString &rTxt,
+    Size QuickGetTextSize( OutputDevice *pOut, const OUString &rTxt,
                            const sal_Int32 nIdx, const sal_Int32 nLen,
                            std::vector<sal_Int32>* pDXArray = nullptr ) const;
 

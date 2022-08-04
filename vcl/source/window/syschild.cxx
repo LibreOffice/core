@@ -141,7 +141,7 @@ void SystemChildWindow::EnableEraseBackground( bool bEnable )
         mpWindowImpl->mpSysObj->EnableEraseBackground( bEnable );
 }
 
-Size SystemChildWindow::GetOptimalSize() const
+Size SystemChildWindow::GetOptimalSize()
 {
     if (mpWindowImpl->mpSysObj)
         return mpWindowImpl->mpSysObj->GetOptimalSize();

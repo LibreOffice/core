@@ -1343,14 +1343,14 @@ void PDFWriterImpl::dispose()
     VirtualDevice::dispose();
 }
 
-bool PDFWriterImpl::ImplNewFont() const
+bool PDFWriterImpl::ImplNewFont()
 {
     const ImplSVData* pSVData = ImplGetSVData();
 
     if( mxFontCollection == pSVData->maGDIData.mxScreenFontList
         ||  mxFontCache == pSVData->maGDIData.mxScreenFontCache )
     {
-        const_cast<vcl::PDFWriterImpl&>(*this).ImplUpdateFontData();
+        ImplUpdateFontData();
     }
 
     return OutputDevice::ImplNewFont();

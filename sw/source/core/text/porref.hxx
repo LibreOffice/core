@@ -24,7 +24,7 @@ class SwRefPortion : public SwTextPortion
 {
 public:
     SwRefPortion() { SetWhichPor(PortionType::Ref); }
-    virtual void Paint(const SwTextPaintInfo& rInf) const override;
+    virtual void Paint(SwTextPaintInfo& rInf) override;
 };
 
 class SwIsoRefPortion : public SwRefPortion
@@ -34,7 +34,7 @@ class SwIsoRefPortion : public SwRefPortion
 public:
     SwIsoRefPortion();
     virtual bool Format(SwTextFormatInfo& rInf) override;
-    virtual void Paint(const SwTextPaintInfo& rInf) const override;
+    virtual void Paint(SwTextPaintInfo& rInf) override;
     virtual SwLinePortion* Compress() override;
     virtual sal_uInt16 GetViewWidth(const SwTextSizeInfo& rInf) const override;
 

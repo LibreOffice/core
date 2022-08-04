@@ -330,13 +330,14 @@ SvLBoxItem::~SvLBoxItem()
 {
 }
 
-int SvLBoxItem::GetWidth(const SvTreeListBox* pView, const SvTreeListEntry* pEntry) const
+int SvLBoxItem::GetWidth(SvTreeListBox const* pView, SvTreeListEntry const* pEntry) const
 {
-    const SvViewDataItem* pViewData = pView->GetViewDataItem( pEntry, this );
+    SvViewDataItem const* pViewData = pView->GetViewDataItem(pEntry, this);
     int nWidth = pViewData->mnWidth;
     if (nWidth == -1)
     {
-        nWidth = CalcWidth(pView);
+        SvLBoxItem* pThis = const_cast<SvLBoxItem*>(this);
+        nWidth = pThis->CalcWidth(const_cast<SvTreeListBox*>(pView));
         const_cast<SvViewDataItem*>(pViewData)->mnWidth = nWidth;
     }
     return nWidth;
@@ -348,7 +349,7 @@ int SvLBoxItem::GetHeight(const SvTreeListBox* pView, const SvTreeListEntry* pEn
     return pViewData->mnHeight;
 }
 
-int SvLBoxItem::GetWidth(const SvTreeListBox* pView, const SvViewDataEntry* pData, sal_uInt16 nItemPos) const
+int SvLBoxItem::GetWidth(SvTreeListBox* pView, SvViewDataEntry const* pData, sal_uInt16 nItemPos)
 {
     const SvViewDataItem& rIData = pData->GetItem(nItemPos);
     int nWidth = rIData.mnWidth;
@@ -366,7 +367,7 @@ int SvLBoxItem::GetHeight(const SvViewDataEntry* pData, sal_uInt16 nItemPos)
     return rIData.mnHeight;
 }
 
-int SvLBoxItem::CalcWidth(const SvTreeListBox* /*pView*/) const
+int SvLBoxItem::CalcWidth(SvTreeListBox* const /*pView*/)
 {
     return 0;
 }
@@ -812,7 +813,7 @@ SvViewDataItem* SvTreeListBox::GetViewDataItem(SvTreeListEntry const * pEntry, S
     return const_cast<SvViewDataItem*>(static_cast<const SvTreeListBox*>(this)->GetViewDataItem(pEntry, pItem));
 }
 
-const SvViewDataItem* SvTreeListBox::GetViewDataItem(const SvTreeListEntry* pEntry, const SvLBoxItem* pItem) const
+const SvViewDataItem* SvTreeListBox::GetViewDataItem(SvTreeListEntry const* pEntry, SvLBoxItem const* pItem) const
 {
     const SvViewDataEntry* pEntryData = SvListView::GetViewData(pEntry);
     assert(pEntryData && "Entry not in View");
@@ -3105,7 +3106,7 @@ tools::Long SvTreeListBox::getPreferredDimensions(std::vector<tools::Long> &rWid
     return nHeight;
 }
 
-Size SvTreeListBox::GetOptimalSize() const
+Size SvTreeListBox::GetOptimalSize()
 {
     std::vector<tools::Long> aWidths;
     Size aRet(0, getPreferredDimensions(aWidths));

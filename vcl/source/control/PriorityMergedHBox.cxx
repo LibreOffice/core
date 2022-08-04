@@ -130,7 +130,7 @@ int PriorityMergedHBox::GetHiddenCount() const
     return nCount;
 }
 
-Size PriorityMergedHBox::calculateRequisition() const
+Size PriorityMergedHBox::calculateRequisition()
 {
     if (!m_bInitialized)
     {

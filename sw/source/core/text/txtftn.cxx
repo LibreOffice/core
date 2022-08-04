@@ -1413,7 +1413,7 @@ bool SwFootnotePortion::Format( SwTextFormatInfo &rInf )
     return bFull;
 }
 
-void SwFootnotePortion::Paint( const SwTextPaintInfo &rInf ) const
+void SwFootnotePortion::Paint( SwTextPaintInfo &rInf )
 {
     // #i98418#
 //    SwFootnoteSave aFootnoteSave( rInf, pFootnote );
@@ -1491,7 +1491,7 @@ void SwQuoVadisPortion::HandlePortion( SwPortionHandler& rPH ) const
     rPH.Special( GetLen(), m_aExpand + m_aErgo, GetWhichPor() );
 }
 
-void SwQuoVadisPortion::Paint( const SwTextPaintInfo &rInf ) const
+void SwQuoVadisPortion::Paint( SwTextPaintInfo &rInf )
 {
     // We _always_ want to output per DrawStretchText, because nErgo
     // can quickly switch

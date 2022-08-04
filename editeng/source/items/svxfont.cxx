@@ -32,7 +32,7 @@
 #include <sal/log.hxx>
 #include <limits>
 
-static tools::Long GetTextArray( const OutputDevice* pOut, const OUString& rStr, std::vector<sal_Int32>* pDXAry,
+static tools::Long GetTextArray( OutputDevice* pOut, const OUString& rStr, std::vector<sal_Int32>* pDXAry,
                                  sal_Int32 nIndex, sal_Int32 nLen )
 
 {
@@ -67,7 +67,7 @@ SvxFont::SvxFont( const SvxFont &rFont )
     SetLanguage(rFont.GetLanguage());
 }
 
-void SvxFont::SetNonAutoEscapement(short nNewEsc, const OutputDevice* pOutDev)
+void SvxFont::SetNonAutoEscapement(short nNewEsc, OutputDevice* pOutDev)
 {
     nEsc = nNewEsc;
     if ( abs(nEsc) == DFLT_ESC_AUTO_SUPER )
@@ -406,7 +406,7 @@ vcl::Font SvxFont::ChgPhysFont(OutputDevice& rOut) const
     return aOldFont;
 }
 
-Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut, const OUString &rTxt,
+Size SvxFont::GetPhysTxtSize( OutputDevice *pOut, const OUString &rTxt,
                          const sal_Int32 nIdx, const sal_Int32 nLen ) const
 {
     if ( !IsCaseMap() && !IsKern() )
@@ -459,7 +459,7 @@ Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut, const OUString &rTxt,
     return aTxtSize;
 }
 
-Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut )
+Size SvxFont::GetPhysTxtSize( OutputDevice *pOut )
 {
     if ( !IsCaseMap() && !IsKern() )
         return Size( pOut->GetTextWidth( "" ), pOut->GetTextHeight() );
@@ -474,7 +474,7 @@ Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut )
     return aTxtSize;
 }
 
-Size SvxFont::QuickGetTextSize( const OutputDevice *pOut, const OUString &rTxt,
+Size SvxFont::QuickGetTextSize( OutputDevice *pOut, const OUString &rTxt,
                          const sal_Int32 nIdx, const sal_Int32 nLen, std::vector<sal_Int32>* pDXArray ) const
 {
     if ( !IsCaseMap() && !IsKern() )
@@ -526,20 +526,19 @@ Size SvxFont::QuickGetTextSize( const OutputDevice *pOut, const OUString &rTxt,
     return aTxtSize;
 }
 
-Size SvxFont::GetTextSize(const OutputDevice& rOut, const OUString &rTxt,
+Size SvxFont::GetTextSize(OutputDevice& rOut, const OUString &rTxt,
                           const sal_Int32 nIdx, const sal_Int32 nLen) const
 {
     sal_Int32 nTmp = nLen;
     if ( nTmp == SAL_MAX_INT32 )   // already initialized?
         nTmp = rTxt.getLength();
-    Font aOldFont( ChgPhysFont(const_cast<OutputDevice&>(rOut)));
+    Font aOldFont( ChgPhysFont(rOut));
     Size aTxtSize;
     if( IsCapital() && !rTxt.isEmpty() )
-    {
         aTxtSize = GetCapitalSize(&rOut, rTxt, nIdx, nTmp);
-    }
-    else aTxtSize = GetPhysTxtSize(&rOut,rTxt,nIdx,nTmp);
-    const_cast<OutputDevice&>(rOut).SetFont(aOldFont);
+    else
+        aTxtSize = GetPhysTxtSize(&rOut,rTxt,nIdx,nTmp);
+    rOut.SetFont(aOldFont);
     return aTxtSize;
 }
 
@@ -737,7 +736,7 @@ void SvxDoGetCapitalSize::Do( const OUString &_rTxt, const sal_Int32 _nIdx,
     aTxtSize.AdjustWidth( _nLen * tools::Long( nKern ) );
 }
 
-Size SvxFont::GetCapitalSize( const OutputDevice *pOut, const OUString &rTxt,
+Size SvxFont::GetCapitalSize( OutputDevice *pOut, const OUString &rTxt,
                              const sal_Int32 nIdx, const sal_Int32 nLen) const
 {
     // Start:

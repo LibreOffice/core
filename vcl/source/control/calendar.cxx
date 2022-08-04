@@ -1495,7 +1495,7 @@ void Calendar::EndSelection()
     }
 }
 
-Size Calendar::CalcWindowSizePixel() const
+Size Calendar::CalcWindowSizePixel()
 {
     Size    aSize;
     tools::Long    n99TextWidth = GetTextWidth( "99" );
@@ -1512,7 +1512,7 @@ Size Calendar::CalcWindowSizePixel() const
     return aSize;
 }
 
-Size Calendar::GetOptimalSize() const
+Size Calendar::GetOptimalSize()
 {
     return CalcWindowSizePixel();
 }

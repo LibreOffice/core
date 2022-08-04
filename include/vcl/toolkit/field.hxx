@@ -213,7 +213,7 @@ public:
     virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
     virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    virtual Size            CalcMinimumSize() const override;
+    virtual Size            CalcMinimumSize() override;
 
     virtual void            Modify() override;
 
@@ -245,7 +245,7 @@ public:
     virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
     virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    virtual Size            CalcMinimumSize() const override;
+    virtual Size            CalcMinimumSize() override;
 
     virtual void            Modify() override;
 
@@ -511,7 +511,7 @@ class UNLESS_MERGELIBS(VCL_DLLPUBLIC) NumericBox final : public ComboBox, public
 public:
     explicit                NumericBox( vcl::Window* pParent, WinBits nWinStyle );
 
-    virtual Size            CalcMinimumSize() const override;
+    virtual Size            CalcMinimumSize() override;
 
     virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
     virtual bool            EventNotify( NotifyEvent& rNEvt ) override;

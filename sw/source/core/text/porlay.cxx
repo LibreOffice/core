@@ -2571,18 +2571,18 @@ TextFrameIndex SwParaPortion::GetParLen() const
     return nLen;
 }
 
-const SwDropPortion *SwParaPortion::FindDropPortion() const
+SwDropPortion *SwParaPortion::FindDropPortion() const
 {
     const SwLineLayout *pLay = this;
     while( pLay && pLay->IsDummy() )
         pLay = pLay->GetNext();
     while( pLay )
     {
-        const SwLinePortion *pPos = pLay->GetNextPortion();
+        SwLinePortion *pPos = pLay->GetNextPortion();
         while ( pPos && !pPos->GetLen() )
             pPos = pPos->GetNextPortion();
         if( pPos && pPos->IsDropPortion() )
-            return static_cast<const SwDropPortion *>(pPos);
+            return static_cast<SwDropPortion* >(pPos);
         pLay = pLay->GetLen() ? nullptr : pLay->GetNext();
     }
     return nullptr;

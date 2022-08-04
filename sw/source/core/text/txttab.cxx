@@ -570,7 +570,7 @@ bool SwTabPortion::PostFormat( SwTextFormatInfo &rInf )
 /**
  * Ex: LineIter::DrawTab()
  */
-void SwTabPortion::Paint( const SwTextPaintInfo &rInf ) const
+void SwTabPortion::Paint( SwTextPaintInfo &rInf )
 {
     // #i89179#
     // tab portion representing the list tab of a list label gets the
@@ -579,15 +579,14 @@ void SwTabPortion::Paint( const SwTextPaintInfo &rInf ) const
     bool bAfterNumbering = false;
     if (GetLen() == TextFrameIndex(0))
     {
-        const SwLinePortion* pPrevPortion =
-            const_cast<SwTabPortion*>(this)->FindPrevPortion( rInf.GetParaPortion() );
+        SwLinePortion* pPrevPortion = FindPrevPortion( rInf.GetParaPortion() );
         if ( pPrevPortion &&
              pPrevPortion->InNumberGrp() &&
-             static_cast<const SwNumberPortion*>(pPrevPortion)->HasFont() )
+             static_cast<SwNumberPortion*>(pPrevPortion)->HasFont() )
         {
-            const SwFont* pNumberPortionFont =
-                    static_cast<const SwNumberPortion*>(pPrevPortion)->GetFont();
-            pSave.reset( new SwFontSave( rInf, const_cast<SwFont*>(pNumberPortionFont) ) );
+            SwFont* pNumberPortionFont =
+                static_cast<SwNumberPortion*>(pPrevPortion)->GetFont();
+            pSave.reset( new SwFontSave( rInf, pNumberPortionFont ) );
             bAfterNumbering = true;
         }
     }
@@ -649,7 +648,7 @@ void SwTabPortion::Paint( const SwTextPaintInfo &rInf ) const
     }
 }
 
-void SwAutoTabDecimalPortion::Paint( const SwTextPaintInfo & ) const
+void SwAutoTabDecimalPortion::Paint( SwTextPaintInfo & )
 {
 }
 

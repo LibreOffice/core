@@ -527,7 +527,7 @@ public:
     void            SetDataRowHeight( tools::Long nPixel );
     tools::Long            GetDataRowHeight() const;
     void            SetTitleLines( sal_uInt16 nLines );
-    tools::Long            GetTitleHeight() const;
+    tools::Long            GetTitleHeight();
 
     // access to dynamic values of cursor row
     OUString        GetColumnTitle( sal_uInt16 nColumnId ) const;

@@ -66,7 +66,7 @@ void PriorityHBox::SetSizeFromParent()
     }
 }
 
-Size PriorityHBox::calculateRequisition() const
+Size PriorityHBox::calculateRequisition()
 {
     if (!m_bInitialized)
     {

@@ -135,7 +135,7 @@ public:
     RubyPosition GetRubyPosition() const { return m_eRubyPosition; }
     void ActualizeTabulator();
 
-    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+    virtual void Paint( SwTextPaintInfo &rInf ) override;
     virtual tools::Long CalcSpacing( tools::Long nSpaceAdd, const SwTextSizeInfo &rInf ) const override;
     virtual bool ChgSpaceAdd( SwLineLayout* pCurr, tools::Long nSpaceAdd ) const;
 

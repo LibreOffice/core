@@ -168,7 +168,7 @@ public:
 
     tools::Rectangle               GetMenuRect() const;
 
-    virtual Size            GetOptimalSize() const override;
+    virtual Size            GetOptimalSize() override;
 };
 
 struct ImplBorderFrameData

@@ -81,7 +81,7 @@ struct ImplEntryType
     }
 
     /// Computes maStr's text layout (glyphs), cached in maStrGlyphs.
-    SalLayoutGlyphs* GetTextGlyphs(const OutputDevice* pOutputDevice);
+    SalLayoutGlyphs* GetTextGlyphs(OutputDevice* const pOutputDevice);
 };
 
 class ImplEntryList

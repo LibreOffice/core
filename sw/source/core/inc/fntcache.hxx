@@ -96,10 +96,10 @@ public:
     sal_uInt16 GetGuessedLeading() const  { return m_nGuessedLeading; }
     sal_uInt16 GetExternalLeading() const  { return m_nExtLeading; }
 
-    sal_uInt16 GetFontAscent( const SwViewShell *pSh, const OutputDevice& rOut );
-    sal_uInt16 GetFontHeight( const SwViewShell *pSh, const OutputDevice& rOut );
-    sal_uInt16 GetFontLeading( const SwViewShell *pSh, const OutputDevice& rOut );
-    sal_uInt16 GetFontHangingBaseline( const SwViewShell *pSh, const OutputDevice& rOut );
+    sal_uInt16 GetFontAscent( const SwViewShell *pSh, OutputDevice& rOut );
+    sal_uInt16 GetFontHeight( const SwViewShell *pSh, OutputDevice& rOut );
+    sal_uInt16 GetFontLeading( const SwViewShell *pSh, OutputDevice& rOut );
+    sal_uInt16 GetFontHangingBaseline( const SwViewShell *pSh, OutputDevice& rOut );
 
     void GuessLeading( const SwViewShell& rSh, const FontMetric& rMet );
 
@@ -115,7 +115,7 @@ public:
     TextFrameIndex GetModelPositionForViewPoint(SwDrawTextInfo &rInf);
 
     void CreateScrFont( const SwViewShell& rSh, const OutputDevice& rOut );
-    void CreatePrtFont( const OutputDevice& rOut );
+    void CreatePrtFont( OutputDevice& rOut );
 };
 
 SwFntObj *SwFntCache::First( )

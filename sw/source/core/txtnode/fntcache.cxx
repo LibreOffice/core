@@ -115,7 +115,7 @@ SwFntObj::~SwFntObj()
         delete m_pPrtFont;
 }
 
-void SwFntObj::CreatePrtFont( const OutputDevice& rPrt )
+void SwFntObj::CreatePrtFont( OutputDevice& rPrt )
 {
     if ( m_nPropWidth == 100 || m_pPrinter == &rPrt )
         return;
@@ -126,9 +126,9 @@ void SwFntObj::CreatePrtFont( const OutputDevice& rPrt )
         delete m_pPrtFont;
 
     const vcl::Font aOldFnt( rPrt.GetFont() );
-    const_cast<OutputDevice&>(rPrt).SetFont( m_aFont );
+    rPrt.SetFont( m_aFont );
     const FontMetric aWinMet( rPrt.GetFontMetric() );
-    const_cast<OutputDevice&>(rPrt).SetFont( aOldFnt );
+    rPrt.SetFont( aOldFnt );
     auto nWidth = ( aWinMet.GetFontSize().Width() * m_nPropWidth ) / 100;
 
     if( !nWidth )
@@ -255,10 +255,10 @@ static void lcl_calcLinePos( const CalcLinePosData &rData,
 
 // Returns the Ascent of the Font on the given output device;
 // it may be necessary to create the screen font first.
-sal_uInt16 SwFntObj::GetFontAscent( const SwViewShell *pSh, const OutputDevice& rOut )
+sal_uInt16 SwFntObj::GetFontAscent( const SwViewShell *pSh, OutputDevice& rOut )
 {
     sal_uInt16 nRet = 0;
-    const OutputDevice& rRefDev = pSh ? pSh->GetRefDev() : rOut;
+    OutputDevice& rRefDev = pSh ? pSh->GetRefDev() : rOut;
 
     if ( pSh && lcl_IsFontAdjustNecessary( rOut, rRefDev ) )
     {
@@ -272,11 +272,11 @@ sal_uInt16 SwFntObj::GetFontAscent( const SwViewShell *pSh, const OutputDevice& 
         {
             CreatePrtFont( rOut );
             const vcl::Font aOldFnt( rRefDev.GetFont() );
-            const_cast<OutputDevice&>(rRefDev).SetFont( *m_pPrtFont );
+            rRefDev.SetFont( *m_pPrtFont );
             const FontMetric aOutMet( rRefDev.GetFontMetric() );
             m_nPrtAscent = o3tl::narrowing<sal_uInt16>(aOutMet.GetAscent());
             m_nPrtHangingBaseline = o3tl::narrowing<sal_uInt16>(aOutMet.GetHangingBaseline());
-            const_cast<OutputDevice&>(rRefDev).SetFont( aOldFnt );
+            rRefDev.SetFont( aOldFnt );
         }
 
         nRet = m_nPrtAscent;
@@ -293,10 +293,10 @@ sal_uInt16 SwFntObj::GetFontAscent( const SwViewShell *pSh, const OutputDevice& 
 
 // Returns the height of the Font on the given output device;
 // it may be necessary to create the screen font first.
-sal_uInt16 SwFntObj::GetFontHeight( const SwViewShell* pSh, const OutputDevice& rOut )
+sal_uInt16 SwFntObj::GetFontHeight( const SwViewShell* pSh, OutputDevice& rOut )
 {
     sal_uInt16 nRet = 0;
-    const OutputDevice& rRefDev = pSh ? pSh->GetRefDev() : rOut;
+    OutputDevice& rRefDev = pSh ? pSh->GetRefDev() : rOut;
 
     if ( pSh && lcl_IsFontAdjustNecessary( rOut, rRefDev ) )
     {
@@ -310,7 +310,7 @@ sal_uInt16 SwFntObj::GetFontHeight( const SwViewShell* pSh, const OutputDevice& 
         {
             CreatePrtFont( rOut );
             const vcl::Font aOldFnt( rRefDev.GetFont() );
-            const_cast<OutputDevice&>(rRefDev).SetFont( *m_pPrtFont );
+            rRefDev.SetFont( *m_pPrtFont );
             m_nPrtHeight = o3tl::narrowing<sal_uInt16>(rRefDev.GetTextHeight());
 
 #if OSL_DEBUG_LEVEL > 0
@@ -322,7 +322,7 @@ sal_uInt16 SwFntObj::GetFontHeight( const SwViewShell* pSh, const OutputDevice& 
                     "GetTextHeight != Ascent + Descent" );
 #endif
 
-            const_cast<OutputDevice&>(rRefDev).SetFont( aOldFnt );
+            rRefDev.SetFont( aOldFnt );
         }
 
         nRet = m_nPrtHeight + GetFontLeading( pSh, rRefDev );
@@ -332,7 +332,7 @@ sal_uInt16 SwFntObj::GetFontHeight( const SwViewShell* pSh, const OutputDevice& 
     return nRet;
 }
 
-sal_uInt16 SwFntObj::GetFontLeading( const SwViewShell *pSh, const OutputDevice& rOut )
+sal_uInt16 SwFntObj::GetFontLeading( const SwViewShell *pSh, OutputDevice& rOut )
 {
     sal_uInt16 nRet = 0;
 
@@ -343,9 +343,9 @@ sal_uInt16 SwFntObj::GetFontLeading( const SwViewShell *pSh, const OutputDevice&
             SolarMutexGuard aGuard;
 
             const vcl::Font aOldFnt( rOut.GetFont() );
-            const_cast<OutputDevice&>(rOut).SetFont( *m_pPrtFont );
-            const FontMetric aMet( rOut.GetFontMetric() );
-            const_cast<OutputDevice&>(rOut).SetFont( aOldFnt );
+            rOut.SetFont( *m_pPrtFont );
+            FontMetric aMet( rOut.GetFontMetric() );
+            rOut.SetFont( aOldFnt );
             m_bSymbol = RTL_TEXTENCODING_SYMBOL == aMet.GetCharSet();
             GuessLeading( *pSh, aMet );
             m_nExtLeading = o3tl::narrowing<sal_uInt16>(aMet.GetExternalLeading());
@@ -383,7 +383,7 @@ sal_uInt16 SwFntObj::GetFontLeading( const SwViewShell *pSh, const OutputDevice&
     return nRet;
 }
 
-sal_uInt16 SwFntObj::GetFontHangingBaseline( const SwViewShell* pSh, const OutputDevice& rOut )
+sal_uInt16 SwFntObj::GetFontHangingBaseline( const SwViewShell* pSh, OutputDevice& rOut )
 {
     sal_uInt16 nRet = 0;
     const OutputDevice& rRefDev = pSh ? pSh->GetRefDev() : rOut;
@@ -556,7 +556,7 @@ void SwFntObj::GuessLeading( const SwViewShell&
 // necessary to do some adjustment first.
 void SwFntObj::SetDevFont( const SwViewShell *pSh, OutputDevice& rOut )
 {
-    const OutputDevice& rRefDev = pSh ? pSh->GetRefDev() : rOut;
+    OutputDevice& rRefDev = pSh ? pSh->GetRefDev() : rOut;
 
     if ( pSh && lcl_IsFontAdjustNecessary( rOut, rRefDev ) )
     {
@@ -586,14 +586,14 @@ void SwFntObj::SetDevFont( const SwViewShell *pSh, OutputDevice& rOut )
  *      on printer, !Kerning   => DrawText
  *      on printer + Kerning   => DrawStretchText
  */
-static bool lcl_IsMonoSpaceFont( const vcl::RenderContext& rOut )
+static bool lcl_IsMonoSpaceFont( vcl::RenderContext& rOut )
 {
     const tools::Long nWidth1 = rOut.GetTextWidth( OUString( u'\x3008' ) );
     const tools::Long nWidth2 = rOut.GetTextWidth( OUString( u'\x307C' ) );
     return nWidth1 == nWidth2;
 }
 
-static bool lcl_IsFullstopCentered( const vcl::RenderContext& rOut )
+static bool lcl_IsFullstopCentered( vcl::RenderContext& rOut )
 {
     const FontMetric aMetric( rOut.GetFontMetric() );
     return aMetric.IsFullstopCentered() ;
@@ -731,7 +731,7 @@ static void lcl_DrawLineForWrongListData(
         rInf.GetOut().Pop();
 }
 
-static void GetTextArray(const OutputDevice& rDevice, const OUString& rStr, std::vector<sal_Int32>& rDXAry,
+static void GetTextArray(OutputDevice& rDevice, const OUString& rStr, std::vector<sal_Int32>& rDXAry,
                          sal_Int32 nIndex, sal_Int32 nLen, const vcl::text::TextLayoutCache* layoutCache = nullptr)
 {
     const SalLayoutGlyphs* pLayoutCache = SalLayoutGlyphsCache::self()->GetLayoutGlyphs(&rDevice, rStr, nIndex, nLen,
@@ -739,12 +739,12 @@ static void GetTextArray(const OutputDevice& rDevice, const OUString& rStr, std:
     rDevice.GetTextArray(rStr, &rDXAry, nIndex, nLen, layoutCache, pLayoutCache);
 }
 
-static void GetTextArray(const OutputDevice& rOutputDevice, const SwDrawTextInfo& rInf, std::vector<sal_Int32>& rDXAry)
+static void GetTextArray(OutputDevice& rOutputDevice, const SwDrawTextInfo& rInf, std::vector<sal_Int32>& rDXAry)
 {
     return GetTextArray(rOutputDevice, rInf.GetText(), rDXAry, rInf.GetIdx().get(), rInf.GetLen().get(), rInf.GetVclCache());
 }
 
-static void GetTextArray(const OutputDevice& rOutputDevice, const SwDrawTextInfo& rInf, std::vector<sal_Int32>& rDXAry, sal_Int32 nLen)
+static void GetTextArray(OutputDevice& rOutputDevice, const SwDrawTextInfo& rInf, std::vector<sal_Int32>& rDXAry, sal_Int32 nLen)
 {
     // Substring is fine.
     assert( nLen <= rInf.GetLen().get());

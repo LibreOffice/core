@@ -1180,7 +1180,7 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
         ImplInitAppFontData( this );
 }
 
-void Window::ImplInitAppFontData( vcl::Window const * pWindow )
+void Window::ImplInitAppFontData(vcl::Window* const pWindow )
 {
     ImplSVData* pSVData = ImplGetSVData();
     tools::Long nTextHeight = pWindow->GetTextHeight();
@@ -2047,7 +2047,7 @@ WindowBorderStyle Window::GetBorderStyle() const
     return WindowBorderStyle::NONE;
 }
 
-tools::Long Window::CalcTitleWidth() const
+tools::Long Window::CalcTitleWidth()
 {
 
     if ( mpWindowImpl->mpBorderWindow )
@@ -2063,9 +2063,9 @@ tools::Long Window::CalcTitleWidth() const
         // border of external dialogs
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
         vcl::Font aFont = GetFont();
-        const_cast<vcl::Window*>(this)->SetPointFont(const_cast<::OutputDevice&>(*GetOutDev()), rStyleSettings.GetTitleFont());
+        SetPointFont(*GetOutDev(), rStyleSettings.GetTitleFont());
         tools::Long nTitleWidth = GetTextWidth( GetText() );
-        const_cast<vcl::Window*>(this)->SetFont( aFont );
+        SetFont(aFont);
         nTitleWidth += rStyleSettings.GetTitleHeight() * 3;
         nTitleWidth += StyleSettings::GetBorderSize() * 2;
         nTitleWidth += 10;

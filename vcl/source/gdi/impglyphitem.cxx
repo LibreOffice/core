@@ -345,7 +345,7 @@ static void checkGlyphsEqual(const SalLayoutGlyphs& g1, const SalLayoutGlyphs& g
 #endif
 
 const SalLayoutGlyphs*
-SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, const OUString& text,
+SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<OutputDevice> outputDevice, const OUString& text,
                                       sal_Int32 nIndex, sal_Int32 nLen, tools::Long nLogicWidth,
                                       const vcl::text::TextLayoutCache* layoutCache)
 {
@@ -488,9 +488,9 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
     return nullptr;
 }
 
-SalLayoutGlyphsCache::CachedGlyphsKey::CachedGlyphsKey(
-    const VclPtr<const OutputDevice>& outputDevice, OUString t, sal_Int32 i, sal_Int32 l,
-    tools::Long w)
+SalLayoutGlyphsCache::CachedGlyphsKey::CachedGlyphsKey(const VclPtr<OutputDevice>& outputDevice,
+                                                       OUString t, sal_Int32 i, sal_Int32 l,
+                                                       tools::Long w)
     : text(std::move(t))
     , index(i)
     , len(l)

@@ -50,7 +50,7 @@ public:
                     const FontLineStyle eUnderline,
                     const FontStrikeout eStrikeout,
                     const Color& rColor );
-    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+    virtual void Paint( SwTextPaintInfo &rInf ) override;
 };
 
 enum class SwLineBreakClear;
@@ -69,7 +69,7 @@ public:
     explicit SwBreakPortion(const SwLinePortion& rPortion, const SwTextAttr* pAttr);
     // Returns 0 if we have no usable data
     virtual SwLinePortion *Compress() override;
-    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+    virtual void Paint( SwTextPaintInfo &rInf ) override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
     virtual sal_uInt16 GetViewWidth( const SwTextSizeInfo &rInf ) const override;
     virtual TextFrameIndex GetModelPositionForViewPoint(sal_uInt16 nOfst) const override;
@@ -107,7 +107,7 @@ public:
     explicit SwKernPortion( const SwLinePortion &rPortion );
 
     virtual void FormatEOL( SwTextFormatInfo &rInf ) override;
-    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+    virtual void Paint( SwTextPaintInfo &rInf ) override;
 };
 
 /// Indicator that the content does not fit into a fixed height frame (red triangle on the UI).
@@ -118,7 +118,7 @@ class SwArrowPortion : public SwLinePortion
 public:
     explicit SwArrowPortion( const SwLinePortion &rPortion );
     explicit SwArrowPortion( const SwTextPaintInfo &rInf );
-    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+    virtual void Paint( SwTextPaintInfo &rInf ) override;
     virtual SwLinePortion *Compress() override;
     bool IsLeft() const { return m_bLeft; }
     const Point& GetPos() const { return m_aPos; }
@@ -151,7 +151,7 @@ public:
         SetWhichPor( PortionType::HiddenText );  SetLen( nLen );
     }
 
-    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+    virtual void Paint( SwTextPaintInfo &rInf ) override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
 };
 
@@ -172,9 +172,9 @@ public:
         SetWhichPor( PortionType::ControlChar ); SetLen( TextFrameIndex(1) );
     }
 
-    virtual bool DoPaint(SwTextPaintInfo const& rInf,
-        OUString & rOutString, SwFont & rTmpFont, int & rDeltaY) const;
-    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+    virtual bool DoPaint(SwTextPaintInfo& rInf,
+        OUString & rOutString, SwFont & rTmpFont, int & rDeltaY);
+    virtual void Paint( SwTextPaintInfo &rInf ) override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
     virtual sal_uInt16 GetViewWidth( const SwTextSizeInfo& rInf ) const override;
 };
@@ -191,8 +191,8 @@ public:
         SetLen(TextFrameIndex(0));
     }
 
-    virtual bool DoPaint(SwTextPaintInfo const& rInf,
-        OUString & rOutString, SwFont & rTmpFont, int & rDeltaY) const override;
+    virtual bool DoPaint(SwTextPaintInfo& rInf,
+        OUString & rOutString, SwFont & rTmpFont, int & rDeltaY) override;
     virtual SwLinePortion * Compress() override { return this; }
 };
 

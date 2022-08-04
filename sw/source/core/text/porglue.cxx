@@ -62,7 +62,7 @@ bool SwGluePortion::GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) co
     return false;
 }
 
-void SwGluePortion::Paint( const SwTextPaintInfo &rInf ) const
+void SwGluePortion::Paint( SwTextPaintInfo &rInf )
 {
     if( !GetLen() )
         return;

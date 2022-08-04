@@ -37,7 +37,7 @@ public:
     //These take into account the external margins of the rWindow widget
     //while GetOptimalSize/get_preferred_size and SetPosSizePixel are
     //oblivious to them
-    static Size getLayoutRequisition(const vcl::Window &rWindow);
+    static Size getLayoutRequisition(vcl::Window &rWindow);
     static void setLayoutPosSize(vcl::Window &rWindow, const Point &rPos, const Size &rSize);
 
     //applies the allocation pos and size onto rWindow via setLayoutPosSize taking into account
@@ -48,7 +48,7 @@ public:
 protected:
     //these are the two that need to be implemented by
     //containers, figure out how much space you want...
-    virtual Size calculateRequisition() const = 0;
+    virtual Size calculateRequisition() = 0;
     //..and decide what to do when set to this size
     virtual void setAllocation(const Size &rAllocation) = 0;
 
@@ -59,7 +59,7 @@ protected:
 
 public:
     //you don't want to override these
-    virtual Size GetOptimalSize() const override;
+    virtual Size GetOptimalSize() override;
     virtual void SetPosSizePixel(const Point& rNewPos, const Size& rNewSize) override;
     virtual void SetPosPixel(const Point& rAllocPos) override;
     virtual void SetSizePixel(const Size& rAllocation) override;
@@ -104,7 +104,7 @@ protected:
     void accumulateMaxes(const Size &rChildSize, Size &rSize) const;
     Size finalizeMaxes(const Size &rSize, sal_uInt16 nVisibleChildren) const;
 
-    virtual Size calculateRequisition() const override;
+    virtual Size calculateRequisition() override;
     virtual void setAllocation(const Size &rAllocation) override;
 
     virtual tools::Long getPrimaryDimension(const Size &rSize) const = 0;
@@ -216,7 +216,7 @@ public:
     virtual bool set_property(const OString &rKey, const OUString &rValue) override;
     virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 protected:
-    virtual Size calculateRequisition() const override;
+    virtual Size calculateRequisition() override;
     virtual void setAllocation(const Size &rAllocation) override;
     Size addSpacing(const Size &rSize, sal_uInt16 nVisibleChildren) const;
 private:
@@ -328,7 +328,7 @@ public:
 private:
 
     Size calculateRequisitionForSpacings(sal_Int32 nRowSpacing, sal_Int32 nColSpacing) const;
-    virtual Size calculateRequisition() const override;
+    virtual Size calculateRequisition() override;
     virtual void setAllocation(const Size &rAllocation) override;
     virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 public:
@@ -374,7 +374,7 @@ public:
     }
     virtual vcl::Window *get_child();
     virtual const vcl::Window *get_child() const;
-    virtual Size calculateRequisition() const override;
+    virtual Size calculateRequisition() override;
     virtual void setAllocation(const Size &rAllocation) override;
 };
 
@@ -401,7 +401,7 @@ private:
 public:
     VclVPaned(vcl::Window *pParent);
     virtual ~VclVPaned() override;
-    virtual Size calculateRequisition() const override;
+    virtual Size calculateRequisition() override;
     virtual void setAllocation(const Size &rAllocation) override;
     virtual void set_position(tools::Long nPosition) override;
 };
@@ -415,7 +415,7 @@ private:
 public:
     VclHPaned(vcl::Window *pParent);
     virtual ~VclHPaned() override;
-    virtual Size calculateRequisition() const override;
+    virtual Size calculateRequisition() override;
     virtual void setAllocation(const Size &rAllocation) override;
     virtual void set_position(tools::Long nPosition) override;
 };
@@ -444,7 +444,7 @@ public:
     const vcl::Window *get_label_widget() const;
     virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 private:
-    virtual Size calculateRequisition() const override;
+    virtual Size calculateRequisition() override;
     virtual void setAllocation(const Size &rAllocation) override;
     virtual OUString getDefaultAccessibleName() const override;
 };
@@ -472,7 +472,7 @@ public:
     virtual void DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
     virtual FactoryFunction GetUITestFactory() const override;
 private:
-    virtual Size calculateRequisition() const override;
+    virtual Size calculateRequisition() override;
     virtual void setAllocation(const Size &rAllocation) override;
     bool m_bResizeTopLevel;
     VclPtr<DisclosureButton> m_pDisclosureButton;
@@ -499,7 +499,7 @@ public:
     void setUserManagedScrolling(bool bUserManagedScrolling) { m_bUserManagedScrolling = bUserManagedScrolling;}
     void doSetAllocation(const Size &rAllocation, bool bRetryOnFailure);
 private:
-    virtual Size calculateRequisition() const override;
+    virtual Size calculateRequisition() override;
     virtual void setAllocation(const Size &rAllocation) override;
     int CalcBorderWidth() const;
     DECL_LINK(ScrollBarHdl, ScrollBar*, void);
@@ -567,7 +567,7 @@ public:
     }
     virtual vcl::Window *get_child() override;
     virtual const vcl::Window *get_child() const override;
-    virtual Size calculateRequisition() const override;
+    virtual Size calculateRequisition() override;
     virtual void setAllocation(const Size &rAllocation) override;
 
     virtual void Command(const CommandEvent& rCEvt) override;

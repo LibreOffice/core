@@ -133,7 +133,7 @@ void SwViewOption::DrawRectPrinter( OutputDevice *pOut,
     pOut->SetLineColor( aOldColor );
 }
 
-sal_uInt16 SwViewOption::GetPostItsWidth( const OutputDevice *pOut )
+sal_uInt16 SwViewOption::GetPostItsWidth( OutputDevice *pOut )
 {
     assert(pOut && "no Outdev");
     return sal_uInt16(pOut->GetTextWidth("  "));

@@ -86,7 +86,7 @@ namespace vclcanvas
                                  vcl::Font&                            io_rVCLFont,
                                  const css::rendering::ViewState&      viewState,
                                  const css::rendering::RenderState&    renderState,
-                                 ::OutputDevice const &                rOutDev );
+                                 ::OutputDevice&                       rOutDev );
 
         /** Predicate, to determine whether polygon is actually an axis-aligned rectangle
 

@@ -1667,7 +1667,7 @@ void Window::set_width_request(sal_Int32 nWidthRequest)
     }
 }
 
-Size Window::get_ungrouped_preferred_size() const
+Size Window::get_ungrouped_preferred_size()
 {
     Size aRet(get_width_request(), get_height_request());
     if (aRet.Width() == -1 || aRet.Height() == -1)
@@ -1689,7 +1689,7 @@ Size Window::get_ungrouped_preferred_size() const
     return aRet;
 }
 
-Size Window::get_preferred_size() const
+Size Window::get_preferred_size()
 {
     Size aRet(get_ungrouped_preferred_size());
 
@@ -1703,7 +1703,7 @@ Size Window::get_preferred_size() const
             const std::set<VclPtr<vcl::Window> > &rWindows = pWindowImpl->m_xSizeGroup->get_widgets();
             for (auto const& window : rWindows)
             {
-                const vcl::Window *pOther = window;
+                vcl::Window* const pOther = window;
                 if (pOther == this)
                     continue;
                 if (bIgnoreInHidden && !pOther->IsVisible())

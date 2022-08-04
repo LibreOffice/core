@@ -100,7 +100,7 @@ private:
     SAL_DLLPRIVATE void        ImplShowCursor( bool bOnlyIfVisible = true );
     SAL_DLLPRIVATE void        ImplAlign();
     SAL_DLLPRIVATE void        ImplAlignAndPaint();
-    SAL_DLLPRIVATE sal_Int32   ImplGetCharPos( const Point& rWindowPos ) const;
+    SAL_DLLPRIVATE sal_Int32   ImplGetCharPos(Point const& rWindowPos);
     SAL_DLLPRIVATE void        ImplSetCursorPos( sal_Int32 nChar, bool bSelect );
     SAL_DLLPRIVATE void        ImplShowDDCursor();
     SAL_DLLPRIVATE void        ImplHideDDCursor();
@@ -108,7 +108,7 @@ private:
     SAL_DLLPRIVATE void        ImplCopyToSelectionClipboard();
     SAL_DLLPRIVATE void        ImplCopy(css::uno::Reference<css::datatransfer::clipboard::XClipboard> const & rxClipboard);
     SAL_DLLPRIVATE void        ImplPaste(css::uno::Reference<css::datatransfer::clipboard::XClipboard> const & rxClipboard);
-    SAL_DLLPRIVATE tools::Long        ImplGetTextYPosition() const;
+    SAL_DLLPRIVATE tools::Long        ImplGetTextYPosition();
     SAL_DLLPRIVATE css::uno::Reference<css::i18n::XExtendedInputSequenceChecker> const& ImplGetInputSequenceChecker();
     SAL_DLLPRIVATE css::uno::Reference<css::i18n::XBreakIterator> const& ImplGetBreakIterator();
     SAL_DLLPRIVATE void        filterText();
@@ -219,11 +219,11 @@ public:
     void                SetAutocompleteHdl( const Link<Edit&,void>& rLink ) { maAutocompleteHdl = rLink; }
     const Link<Edit&,void>& GetAutocompleteHdl() const { return maAutocompleteHdl; }
 
-    virtual Size        CalcMinimumSize() const;
-    virtual Size        CalcMinimumSizeForText(const OUString &rString) const;
-    virtual Size        GetOptimalSize() const override;
-    virtual Size        CalcSize(sal_Int32 nChars) const;
-    sal_Int32           GetMaxVisChars() const;
+    virtual Size        CalcMinimumSize();
+    virtual Size        CalcMinimumSizeForText(const OUString &rString);
+    virtual Size        GetOptimalSize() override;
+    virtual Size        CalcSize(sal_Int32 nChars);
+    sal_Int32           GetMaxVisChars();
 
     // shows a warning box saying "text too long, truncated"
     static void         ShowTruncationWarning(weld::Widget* pParent);

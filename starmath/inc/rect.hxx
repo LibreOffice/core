@@ -105,7 +105,7 @@ class SmRect
 
 public:
             SmRect();
-            SmRect(const OutputDevice &rDev, const SmFormat *pFormat,
+            SmRect(OutputDevice &rDev, const SmFormat *pFormat,
                    const OUString &rText, sal_uInt16 nBorderWidth);
             SmRect(tools::Long nWidth, tools::Long nHeight);
 

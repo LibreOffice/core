@@ -165,7 +165,7 @@ bool NotebookBar::PreNotify(NotifyEvent& rNEvt)
     return Window::PreNotify( rNEvt );
 }
 
-Size NotebookBar::GetOptimalSize() const
+Size NotebookBar::GetOptimalSize()
 {
     if (isLayoutEnabled(this))
         return VclContainer::getLayoutRequisition(*GetWindow(GetWindowType::FirstChild));

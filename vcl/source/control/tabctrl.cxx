@@ -2100,21 +2100,20 @@ tools::Rectangle TabControl::GetTabBounds( sal_uInt16 nPageId ) const
     return aRet;
 }
 
-Size TabControl::ImplCalculateRequisition(sal_uInt16& nHeaderHeight) const
+Size TabControl::ImplCalculateRequisition(sal_uInt16& nHeaderHeight)
 {
     Size aOptimalPageSize(0, 0);
 
     sal_uInt16 nOrigPageId = GetCurPageId();
-    for (auto const& item : mpTabCtrlData->maItemList)
+    for (auto& item : mpTabCtrlData->maItemList)
     {
-        const TabPage *pPage = item.mpTabPage;
+        TabPage* pPage = item.mpTabPage;
         //it's a real nuisance if the page is not inserted yet :-(
         //We need to force all tabs to exist to get overall optimal size for dialog
         if (!pPage)
         {
-            TabControl *pThis = const_cast<TabControl*>(this);
-            pThis->SetCurPageId(item.id());
-            pThis->ActivatePage();
+            SetCurPageId(item.id());
+            ActivatePage();
             pPage = item.mpTabPage;
         }
 
@@ -2134,9 +2133,8 @@ Size TabControl::ImplCalculateRequisition(sal_uInt16& nHeaderHeight) const
     //page and re-activate it
     if (nOrigPageId != GetCurPageId())
     {
-        TabControl *pThis = const_cast<TabControl*>(this);
-        pThis->SetCurPageId(nOrigPageId);
-        pThis->ActivatePage();
+        SetCurPageId(nOrigPageId);
+        ActivatePage();
     }
 
     tools::Long nTabLabelsBottom = 0, nTabLabelsRight = 0;
@@ -2145,9 +2143,7 @@ Size TabControl::ImplCalculateRequisition(sal_uInt16& nHeaderHeight) const
         for (sal_uInt16 nPos(0), sizeList(static_cast <sal_uInt16> (mpTabCtrlData->maItemList.size()));
                 nPos < sizeList; ++nPos)
         {
-            TabControl* pThis = const_cast<TabControl*>(this);
-
-            tools::Rectangle aTabRect = pThis->ImplGetTabRect(nPos, aOptimalPageSize.Width(), LONG_MAX);
+            tools::Rectangle aTabRect = ImplGetTabRect(nPos, aOptimalPageSize.Width(), LONG_MAX);
             if (aTabRect.Bottom() > nTabLabelsBottom)
             {
                 nTabLabelsBottom = aTabRect.Bottom();
@@ -2168,13 +2164,13 @@ Size TabControl::ImplCalculateRequisition(sal_uInt16& nHeaderHeight) const
     return aOptimalSize;
 }
 
-Size TabControl::calculateRequisition() const
+Size TabControl::calculateRequisition()
 {
     sal_uInt16 nHeaderHeight;
     return ImplCalculateRequisition(nHeaderHeight);
 }
 
-Size TabControl::GetOptimalSize() const
+Size TabControl::GetOptimalSize()
 {
     return calculateRequisition();
 }
@@ -2441,7 +2437,7 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( tools::Long nWidth )
     return true;
 }
 
-Size NotebookbarTabControlBase::calculateRequisition() const
+Size NotebookbarTabControlBase::calculateRequisition()
 {
     return TabControl::ImplCalculateRequisition(m_nHeaderHeight);
 }
