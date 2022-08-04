@@ -912,11 +912,18 @@ int QtAccessibleWidget::cursorPosition() const
     return 0;
 }
 
-int QtAccessibleWidget::offsetAtPoint(const QPoint& /* point */) const
+int QtAccessibleWidget::offsetAtPoint(const QPoint& rPoint) const
 {
-    SAL_INFO("vcl.qt", "Unsupported QAccessibleTextInterface::offsetAtPoint");
-    return 0;
+    Reference<XAccessibleText> xText(getAccessibleContextImpl(), UNO_QUERY);
+    if (!xText.is())
+        return -1;
+
+    // convert from screen to local coordinates
+    QPoint aLocalCoords = rPoint - rect().topLeft();
+    awt::Point aPoint(aLocalCoords.x(), aLocalCoords.y());
+    return xText->getIndexAtPoint(aPoint);
 }
+
 void QtAccessibleWidget::removeSelection(int /* selectionIndex */)
 {
     SAL_INFO("vcl.qt", "Unsupported QAccessibleTextInterface::removeSelection");
