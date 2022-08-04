@@ -111,8 +111,7 @@ void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
         SwTextNode * pTNd = pDoc->GetNodes()[ m_nNode ]->GetTextNode();
         if( pTNd )
         {
-            rPam.GetPoint()->nNode = *pTNd;
-            rPam.GetPoint()->nContent.Assign(pTNd, pTNd->GetText().getLength());
+            rPam.GetPoint()->Assign(*pTNd, pTNd->GetText().getLength());
 
             if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ))
             {

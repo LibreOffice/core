@@ -662,8 +662,7 @@ void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
 
     // don't look at m_sIns for deletion, maybe it was not completely inserted
     {
-        rPam.GetPoint()->nNode = *pNd;
-        rPam.GetPoint()->nContent.Assign( pNd, m_nSttCnt );
+        rPam.GetPoint()->Assign(*pNd, m_nSttCnt );
         rPam.SetMark();
         rPam.GetPoint()->nNode = m_nSttNd - m_nOffset;
         rPam.GetPoint()->nContent.Assign(rPam.GetContentNode(), m_nSttNd == m_nEndNd ? m_nEndCnt : pNd->Len());

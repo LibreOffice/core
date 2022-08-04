@@ -2423,8 +2423,7 @@ void SwUndoTableCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
                     SwTextNode *pText = aTmpIdx.GetNode().GetTextNode();
                     if( pText )
                     {
-                        aPam.GetPoint()->nNode = *pText;
-                        aPam.GetPoint()->nContent.Assign( pText,
+                        aPam.GetPoint()->Assign(*pText,
                                 pUndoRedlineDelete->ContentStart() );
                     }
                     else

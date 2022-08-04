@@ -560,10 +560,7 @@ bool FindTextImpl(SwPaM & rSearchPam,
                     }
                     else
                     {
-                        aPaM.GetPoint()->nNode = rTextNode;
-                        aPaM.GetPoint()->nContent.Assign(
-                            aPaM.GetPoint()->GetNode().GetTextNode(),
-                            nStart.GetModelIndex());
+                        aPaM.GetPoint()->Assign(rTextNode, nStart.GetModelIndex());
                     }
                     aPaM.SetMark();
                     if (pLayout)

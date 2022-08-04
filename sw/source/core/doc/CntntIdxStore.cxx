@@ -96,8 +96,7 @@ namespace
             : m_pNewContentNode(pNewContentNode), m_nOffset(nOffset) {};
         void operator()(SwPosition& rPos, sal_Int32 nContent) const
         {
-            rPos.nNode = *m_pNewContentNode;
-            rPos.nContent.Assign(m_pNewContentNode, nContent + m_nOffset);
+            rPos.Assign(*m_pNewContentNode, nContent + m_nOffset);
         };
     };
     struct LimitUpdater

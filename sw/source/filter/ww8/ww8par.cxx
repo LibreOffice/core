@@ -4597,9 +4597,7 @@ void wwSectionManager::InsertSegments()
             if (aNext != aEnd)
             {
                 aAnchor = aNext->maStart;
-                aSectPaM.GetPoint()->nNode = aAnchor;
-                aSectPaM.GetPoint()->nContent.Assign(
-                    aNext->maStart.GetNode().GetContentNode(), 0);
+                aSectPaM.GetPoint()->Assign(aAnchor);
                 aSectPaM.Move(fnMoveBackward);
             }
 
@@ -4619,9 +4617,7 @@ void wwSectionManager::InsertSegments()
 
             aSectPaM.SetMark();
 
-            aSectPaM.GetPoint()->nNode = aIter->maStart;
-            aSectPaM.GetPoint()->nContent.Assign(
-                aSectPaM.GetContentNode(), 0);
+            aSectPaM.GetPoint()->Assign(aIter->maStart);
 
             bool bHasOwnHdFt = false;
             /*

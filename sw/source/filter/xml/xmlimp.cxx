@@ -658,8 +658,7 @@ void SwXMLImport::endDocument()
                 // end of the previous node.
                 if( pPaM->GetPoint()->nNode == aNxtIdx )
                 {
-                    pPaM->GetPoint()->nNode = *m_pSttNdIdx;
-                    pPaM->GetPoint()->nContent.Assign( pTextNode,
+                    pPaM->GetPoint()->Assign( *pTextNode,
                                             pTextNode->GetText().getLength());
                 }
 

@@ -2557,8 +2557,7 @@ bool SwWW8ImplReader::JoinNode(SwPaM &rPam, bool bStealAttr)
     if (SwTextNode* pNode = aPref.GetNode().GetTextNode())
     {
         m_aSectionManager.JoinNode(*rPam.GetPoint(), aPref.GetNode());
-        rPam.GetPoint()->nNode = aPref;
-        rPam.GetPoint()->nContent.Assign(pNode, pNode->GetText().getLength());
+        rPam.GetPoint()->Assign(*pNode, pNode->GetText().getLength());
         if (bStealAttr)
             m_xCtrlStck->StealAttr(rPam.GetPoint()->nNode);
 

@@ -590,8 +590,7 @@ void SwSelPaintRects::HighlightInputField()
             std::unique_ptr<SwShellCursor> pCursorForInputTextField(
                 new SwShellCursor( *GetShell(), SwPosition( *pTextNode, pCurTextInputFieldAtCursor->GetStart() ) ) );
             pCursorForInputTextField->SetMark();
-            pCursorForInputTextField->GetMark()->nNode = *pTextNode;
-            pCursorForInputTextField->GetMark()->nContent.Assign( pTextNode, *(pCurTextInputFieldAtCursor->End()) );
+            pCursorForInputTextField->GetMark()->Assign(*pTextNode, *(pCurTextInputFieldAtCursor->End()) );
 
             pCursorForInputTextField->FillRects();
             SwRects* pRects = pCursorForInputTextField.get();
@@ -664,9 +663,8 @@ void SwSelPaintRects::HighlightContentControl()
             auto pCursorForContentControl = std::make_unique<SwShellCursor>(
                 *GetShell(), SwPosition(*pTextNode, pCurContentControlAtCursor->GetStart()));
             pCursorForContentControl->SetMark();
-            pCursorForContentControl->GetMark()->nNode = *pTextNode;
-            pCursorForContentControl->GetMark()->nContent.Assign(
-                pTextNode, *(pCurContentControlAtCursor->End()));
+            pCursorForContentControl->GetMark()->Assign(
+                *pTextNode, *(pCurContentControlAtCursor->End()));
 
             pCursorForContentControl->FillRects();
             SwRects* pRects = pCursorForContentControl.get();

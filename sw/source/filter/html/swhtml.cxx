@@ -755,8 +755,7 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
                 // when the cursor is still in the node, then set him at the end
                 if( m_pPam->GetPoint()->nNode == aNxtIdx )
                 {
-                    m_pPam->GetPoint()->nNode = *m_pSttNdIdx;
-                    m_pPam->GetPoint()->nContent.Assign( pTextNode, nStt );
+                    m_pPam->GetPoint()->Assign( *pTextNode, nStt );
                 }
 
 #if OSL_DEBUG_LEVEL > 0
@@ -3062,8 +3061,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
     for (auto & field : aFields)
     {
         pCNd = field->m_nStartPara.GetNode().GetContentNode();
-        aAttrPam.GetPoint()->nNode = field->m_nStartPara;
-        aAttrPam.GetPoint()->nContent.Assign( pCNd, field->m_nStartContent );
+        aAttrPam.GetPoint()->Assign( *pCNd, field->m_nStartContent );
 
         if( bBeforeTable &&
             aAttrPam.GetPoint()->GetNodeIndex() == rEndIdx.GetIndex() )
