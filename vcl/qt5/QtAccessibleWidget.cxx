@@ -344,252 +344,170 @@ QAccessible::Role QtAccessibleWidget::role() const
     {
         case AccessibleRole::UNKNOWN:
             return QAccessible::NoRole;
-
         case AccessibleRole::ALERT:
             return QAccessible::AlertMessage;
-
         case AccessibleRole::COLUMN_HEADER:
             return QAccessible::ColumnHeader;
-
         case AccessibleRole::CANVAS:
             return QAccessible::Canvas;
-
         case AccessibleRole::CHECK_BOX:
             return QAccessible::CheckBox;
-
         case AccessibleRole::CHECK_MENU_ITEM:
             return QAccessible::MenuItem;
-
         case AccessibleRole::COLOR_CHOOSER:
             return QAccessible::ColorChooser;
-
         case AccessibleRole::COMBO_BOX:
             return QAccessible::ComboBox;
-
         case AccessibleRole::DATE_EDITOR:
             return QAccessible::EditableText;
-
         case AccessibleRole::DESKTOP_ICON:
             return QAccessible::Graphic;
-
         case AccessibleRole::DESKTOP_PANE:
         case AccessibleRole::DIRECTORY_PANE:
             return QAccessible::Pane;
-
         case AccessibleRole::DIALOG:
             return QAccessible::Dialog;
-
         case AccessibleRole::DOCUMENT:
             return QAccessible::Document;
-
         case AccessibleRole::EMBEDDED_OBJECT:
             return QAccessible::UserRole;
-
         case AccessibleRole::END_NOTE:
             return QAccessible::Note;
-
         case AccessibleRole::FILLER:
             return QAccessible::Whitespace;
-
         case AccessibleRole::FONT_CHOOSER:
             return QAccessible::UserRole;
-
         case AccessibleRole::FOOTER:
             return QAccessible::Footer;
-
         case AccessibleRole::FOOTNOTE:
             return QAccessible::Note;
-
         case AccessibleRole::FRAME: // top-level window with title bar
             return QAccessible::Window;
-
         case AccessibleRole::GLASS_PANE:
             return QAccessible::UserRole;
-
         case AccessibleRole::GRAPHIC:
             return QAccessible::Graphic;
-
         case AccessibleRole::GROUP_BOX:
             return QAccessible::Grouping;
-
         case AccessibleRole::HEADER:
             return QAccessible::UserRole;
-
         case AccessibleRole::HEADING:
             return QAccessible::Heading;
-
         case AccessibleRole::HYPER_LINK:
             return QAccessible::Link;
-
         case AccessibleRole::ICON:
             return QAccessible::Graphic;
-
         case AccessibleRole::INTERNAL_FRAME:
             return QAccessible::UserRole;
-
         case AccessibleRole::LABEL:
             return QAccessible::StaticText;
-
         case AccessibleRole::LAYERED_PANE:
             return QAccessible::Pane;
-
         case AccessibleRole::LIST:
             return QAccessible::List;
-
         case AccessibleRole::LIST_ITEM:
             return QAccessible::ListItem;
-
         case AccessibleRole::MENU:
         case AccessibleRole::MENU_BAR:
             return QAccessible::MenuBar;
-
         case AccessibleRole::MENU_ITEM:
             return QAccessible::MenuItem;
-
         case AccessibleRole::OPTION_PANE:
             return QAccessible::Pane;
-
         case AccessibleRole::PAGE_TAB:
             return QAccessible::PageTab;
-
         case AccessibleRole::PAGE_TAB_LIST:
             return QAccessible::PageTabList;
-
         case AccessibleRole::PANEL:
             return QAccessible::Pane;
-
         case AccessibleRole::PARAGRAPH:
             return QAccessible::Paragraph;
-
         case AccessibleRole::PASSWORD_TEXT:
             return QAccessible::EditableText;
-
         case AccessibleRole::POPUP_MENU:
             return QAccessible::PopupMenu;
-
         case AccessibleRole::PUSH_BUTTON:
             return QAccessible::Button;
-
         case AccessibleRole::PROGRESS_BAR:
             return QAccessible::ProgressBar;
-
         case AccessibleRole::RADIO_BUTTON:
             return QAccessible::RadioButton;
-
         case AccessibleRole::RADIO_MENU_ITEM:
             return QAccessible::MenuItem;
-
         case AccessibleRole::ROW_HEADER:
             return QAccessible::RowHeader;
-
         case AccessibleRole::ROOT_PANE:
             return QAccessible::Pane;
-
         case AccessibleRole::SCROLL_BAR:
             return QAccessible::ScrollBar;
-
         case AccessibleRole::SCROLL_PANE:
             return QAccessible::Pane;
-
         case AccessibleRole::SHAPE:
             return QAccessible::Graphic;
-
         case AccessibleRole::SEPARATOR:
             return QAccessible::Separator;
-
         case AccessibleRole::SLIDER:
             return QAccessible::Slider;
-
         case AccessibleRole::SPIN_BOX:
             return QAccessible::SpinBox;
-
         case AccessibleRole::SPLIT_PANE:
             return QAccessible::Pane;
-
         case AccessibleRole::STATUS_BAR:
             return QAccessible::StatusBar;
-
         case AccessibleRole::TABLE:
             return QAccessible::Table;
-
         case AccessibleRole::TABLE_CELL:
             return QAccessible::Cell;
-
         case AccessibleRole::TEXT:
             return QAccessible::EditableText;
-
         case AccessibleRole::TEXT_FRAME:
             return QAccessible::UserRole;
-
         case AccessibleRole::TOGGLE_BUTTON:
             return QAccessible::Button;
-
         case AccessibleRole::TOOL_BAR:
             return QAccessible::ToolBar;
-
         case AccessibleRole::TOOL_TIP:
             return QAccessible::ToolTip;
-
         case AccessibleRole::TREE:
             return QAccessible::Tree;
-
         case AccessibleRole::VIEW_PORT:
             return QAccessible::UserRole;
-
         case AccessibleRole::BUTTON_DROPDOWN:
             return QAccessible::Button;
-
         case AccessibleRole::BUTTON_MENU:
             return QAccessible::Button;
-
         case AccessibleRole::CAPTION:
             return QAccessible::StaticText;
-
         case AccessibleRole::CHART:
             return QAccessible::Chart;
-
         case AccessibleRole::EDIT_BAR:
             return QAccessible::Equation;
-
         case AccessibleRole::FORM:
             return QAccessible::Form;
-
         case AccessibleRole::IMAGE_MAP:
             return QAccessible::Graphic;
-
         case AccessibleRole::NOTE:
             return QAccessible::Note;
-
         case AccessibleRole::RULER:
             return QAccessible::UserRole;
-
         case AccessibleRole::SECTION:
             return QAccessible::Section;
-
         case AccessibleRole::TREE_ITEM:
             return QAccessible::TreeItem;
-
         case AccessibleRole::TREE_TABLE:
             return QAccessible::Tree;
-
         case AccessibleRole::COMMENT:
             return QAccessible::Note;
-
         case AccessibleRole::COMMENT_END:
             return QAccessible::UserRole;
-
         case AccessibleRole::DOCUMENT_PRESENTATION:
             return QAccessible::Document;
-
         case AccessibleRole::DOCUMENT_SPREADSHEET:
             return QAccessible::Document;
-
         case AccessibleRole::DOCUMENT_TEXT:
             return QAccessible::Document;
-
         case AccessibleRole::STATIC:
             return QAccessible::StaticText;
-
         case AccessibleRole::WINDOW: // top-level window without title bar
             return QAccessible::Window;
     }
