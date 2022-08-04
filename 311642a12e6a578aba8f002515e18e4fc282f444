@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2bd4662c_762141ba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-08-04T06:28:19Z",
+      "side": 1,
+      "message": "Both exist:\nhttps://www.wordreference.com/enfr/speciality",
+      "revId": "311642a12e6a578aba8f002515e18e4fc282f444",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
