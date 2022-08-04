@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22aefc01_a6a0d6ac",
+        "filename": "reportdesign/source/ui/misc/UITools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-08-04T17:04:43Z",
+      "side": 1,
+      "message": "I don\u0027t think adding a poolitem that reportdesigner cannot use\nis a good idea.\n\nProbably a better fix, is to fix the ranges to look like:\n    XATTR_FILLSTYLE, XATTR_FILLBACKGROUND,\n    ITEMID_FONT, ITEMID_WEIGHT_COMPLEX",
+      "revId": "6ba2c1642579d589a8993532cf5fa52d6f8d6cf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
