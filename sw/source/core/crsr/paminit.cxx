@@ -29,7 +29,7 @@ const SwMoveFnCollection aFwrd = {
     /* fnCmpOp      */  &SwPosition::operator<,
     /* fnGetHint    */  &GetFrwrdTextHint,
     /* fnSearch     */  &utl::TextSearch::SearchForward,
-    /* fnSection    */  &SwNodes::GoStartOfSection
+    /* fnSection    */  &GoStartOfSection
 };
 
 const SwMoveFnCollection aBwrd = {
@@ -40,7 +40,7 @@ const SwMoveFnCollection aBwrd = {
     /* fnCmpOp      */  &SwPosition::operator>,
     /* fnGetHint    */  &GetBkwrdTextHint,
     /* fnSearch     */  &utl::TextSearch::SearchBackward,
-    /* fnSection    */  &SwNodes::GoEndOfSection
+    /* fnSection    */  &GoEndOfSection
 };
 
 SwMoveFnCollection const & fnParaStart   = aFwrd;

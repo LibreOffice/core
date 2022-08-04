@@ -1051,6 +1051,13 @@ void GoStartSection( SwPosition * pPos )
     pPos->AssignStartIndex(*pPos->GetNode().GetContentNode());
 }
 
+void GoStartOfSection( SwPosition * pPos )
+{
+    // jump to section's beginning
+    SwNodes::GoStartOfSection( &pPos->nNode );
+    pPos->nContent.Assign(pPos->GetNode().GetContentNode(), 0);
+}
+
 /// go to the end of the current base section
 void GoEndSection( SwPosition * pPos )
 {
@@ -1064,6 +1071,13 @@ void GoEndSection( SwPosition * pPos )
     // now on an EndNode, thus to the previous ContentNode
     if( SwContentNode* pCNd = GoPreviousNds( &pPos->nNode, true ) )
         pPos->AssignEndIndex(*pCNd);
+}
+
+void GoEndOfSection( SwPosition * pPos )
+{
+    SwNodes::GoEndOfSection( &pPos->nNode );
+    SwContentNode* pCNd = pPos->nNode.GetNode().GetContentNode();
+    pPos->nContent.Assign(pCNd, pCNd ? pCNd->Len() : 0);
 }
 
 bool GoInDoc( SwPaM & rPam, SwMoveFnCollection const & fnMove )
@@ -1179,7 +1193,7 @@ bool GoCurrSection( SwPaM & rPam, SwMoveFnCollection const & fnMove )
 {
     SwPosition& rPos = *rPam.GetPoint();
     SwPosition aSavePos( rPos ); // position for comparison
-    (fnMove.fnSection)( &rPos.nNode );
+    (fnMove.fnSection)( &rPos );
     SwContentNode *pNd;
     if( nullptr == ( pNd = rPos.GetNode().GetContentNode()) &&
         nullptr == ( pNd = (*fnMove.fnNds)( &rPos.nNode, true )) )
