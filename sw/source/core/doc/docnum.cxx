@@ -1869,9 +1869,8 @@ bool SwDoc::MoveParagraph(SwPaM& rPam, SwNodeOffset nOffset, bool const bIsOutlM
                 rPam.SetMark();
             }
             assert(rPam.End()->GetNodeIndex() < nodes.second->GetIndex());
-            rPam.End()->nNode = *nodes.second;
             // until end, otherwise Impl will detect overlapping redline
-            rPam.End()->nContent.Assign(nodes.second, nodes.second->GetTextNode()->Len());
+            rPam.End()->Assign(*nodes.second, nodes.second->GetTextNode()->Len());
         }
 
         if (nOffset > SwNodeOffset(0))

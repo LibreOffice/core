@@ -66,9 +66,8 @@ void RestFlyInRange( SaveFlyArr & rArr, const SwPosition& rStartPos,
             {
                 if (aAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA)
                 {
-                    aPos.nNode = *pInsertPos;
-                    assert(aPos.GetNode().GetContentNode());
-                    aPos.nContent.Assign(aPos.GetNode().GetContentNode(),
+                    assert(pInsertPos->GetNode().GetContentNode());
+                    aPos.Assign( *pInsertPos->GetNode().GetContentNode(),
                         rSave.nContentIndex);
                 }
                 else

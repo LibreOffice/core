@@ -219,6 +219,11 @@ void SwPosition::Assign( SwNodeOffset nNodeOffset, sal_Int32 nContentOffset )
     nNode = nNodeOffset;
     nContent.Assign(nNode.GetNode().GetContentNode(), nContentOffset);
 }
+void SwPosition::Assign( const SwContentNode& rNode, sal_Int32 nContentOffset )
+{
+    nNode = rNode;
+    nContent.Assign(&rNode, nContentOffset);
+}
 void SwPosition::Assign( const SwNode& rNd )
 {
     nNode.Assign(rNd);

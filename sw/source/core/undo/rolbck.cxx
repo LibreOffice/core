@@ -674,8 +674,7 @@ void SwHistoryBookmark::SetInDoc( SwDoc* pDoc, bool )
         if (pPam && pContentNd)
         {
             pPam->SetMark();
-            pPam->GetMark()->nNode = m_nOtherNode;
-            pPam->GetMark()->nContent.Assign(pContentNd, m_nOtherContent);
+            pPam->GetMark()->Assign(*pContentNd, m_nOtherContent);
         }
     }
     else if(m_bHadOtherPos)

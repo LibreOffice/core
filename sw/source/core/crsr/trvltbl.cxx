@@ -546,8 +546,7 @@ bool GotoPrevTable( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosTable
             SwTextNode* pTextNode = aIdx.GetNode().GetTextNode();
             if ( pTextNode )
             {
-                rCurrentCursor.GetPoint()->nNode = *pTextNode;
-                rCurrentCursor.GetPoint()->nContent.Assign( pTextNode, &fnPosTable == &fnMoveBackward ?
+                rCurrentCursor.GetPoint()->Assign(*pTextNode, &fnPosTable == &fnMoveBackward ?
                                                       pTextNode->Len() :
                                                       0 );
             }
@@ -616,8 +615,7 @@ bool GotoNextTable( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosTable
         SwTextNode* pTextNode = aIdx.GetNode().GetTextNode();
         if ( pTextNode )
         {
-            rCurrentCursor.GetPoint()->nNode = *pTextNode;
-            rCurrentCursor.GetPoint()->nContent.Assign( pTextNode, &fnPosTable == &fnMoveBackward ?
+            rCurrentCursor.GetPoint()->Assign(*pTextNode, &fnPosTable == &fnMoveBackward ?
                                                   pTextNode->Len() :
                                                   0 );
         }
@@ -655,8 +653,7 @@ bool GotoCurrTable( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosTable
 
     if ( pTextNode )
     {
-        rCurrentCursor.GetPoint()->nNode = *pTextNode;
-        rCurrentCursor.GetPoint()->nContent.Assign( pTextNode, &fnPosTable == &fnMoveBackward ?
+        rCurrentCursor.GetPoint()->Assign(*pTextNode, &fnPosTable == &fnMoveBackward ?
                                                         pTextNode->Len() :
                                                         0 );
     }

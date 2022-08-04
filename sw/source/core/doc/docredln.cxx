@@ -362,8 +362,7 @@ void SwRedlineTable::LOKRedlineNotification(RedlineNotification nType, SwRangeRe
     {
         SwShellCursor aCursor(pView->GetWrtShell(), *pStartPos);
         aCursor.SetMark();
-        aCursor.GetMark()->nNode = pEndPos->nNode;
-        aCursor.GetMark()->nContent = pEndPos->nContent;
+        *aCursor.GetMark() = *pEndPos;
 
         aCursor.FillRects();
 
@@ -549,8 +548,7 @@ std::vector<SwRangeRedline*> GetAllValidRanges(std::unique_ptr<SwRangeRedline> p
                     aNewStt.nContent = pEnd->nContent;
                 else if( pC )
                 {
-                    aNewStt.nNode = *pC;
-                    aNewStt.nContent.Assign( pC, pC->Len() );
+                    aNewStt.Assign(*pC, pC->Len() );
                 }
 
                 if( aNewStt <= *pEnd )

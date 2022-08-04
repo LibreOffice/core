@@ -611,9 +611,8 @@ const SwTOXMark& SwCursorShell::GotoTOXMark( const SwTOXMark& rStart,
                                                     IsReadOnlyAvailable() );
     // set position
     SwPosition& rPos = *GetCursor()->GetPoint();
-    rPos.nNode = rNewMark.GetTextTOXMark()->GetTextNode();
-    rPos.nContent.Assign( rPos.GetNode().GetContentNode(),
-                         rNewMark.GetTextTOXMark()->GetStart() );
+    rPos.Assign(rNewMark.GetTextTOXMark()->GetTextNode(),
+                 rNewMark.GetTextTOXMark()->GetStart() );
 
     if( !m_pCurrentCursor->IsSelOvr() )
         UpdateCursor( SwCursorShell::SCROLLWIN | SwCursorShell::CHKRANGE |
@@ -841,9 +840,8 @@ bool SwCursorShell::GotoFootnoteAnchor(const SwTextFootnote& rTextFootnote)
     SwCallLink aLk(*this); // watch Cursor-Moves
     SwCursorSaveState aSaveState(*pCursor);
 
-    pCursor->GetPoint()->nNode = rTextFootnote.GetTextNode();
-    pCursor->GetPoint()->nContent.Assign(&rTextFootnote.GetTextNode(),
-                                         rTextFootnote.GetStart());
+    pCursor->GetPoint()->Assign(rTextFootnote.GetTextNode(),
+                                rTextFootnote.GetStart());
     bRet = !pCursor->IsSelOvr();
     if (bRet)
         UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
@@ -871,14 +869,12 @@ bool SwCursorShell::GotoFormatContentControl(const SwFormatContentControl& rCont
 
         pCursor->SetMark();
         SwTextNode* pTextNode = pContentControl->GetTextNode();
-        pCursor->GetPoint()->nNode = *pTextNode;
         // Don't select the text attribute itself at the start.
         sal_Int32 nStart = pTextContentControl->GetStart() + 1;
-        pCursor->GetPoint()->nContent.Assign(pTextNode, nStart);
-        pCursor->GetMark()->nNode = *pTextNode;
+        pCursor->GetPoint()->Assign(*pTextNode, nStart);
         // Don't select the CH_TXTATR_BREAKWORD itself at the end.
         sal_Int32 nEnd = *pTextContentControl->End() - 1;
-        pCursor->GetMark()->nContent.Assign(pTextNode, nEnd);
+        pCursor->GetMark()->Assign(*pTextNode, nEnd);
 
         // Assume that once the placeholder is selected, the content is no longer the placeholder.
         pContentControl->SetShowingPlaceHolder(false);
@@ -910,8 +906,7 @@ bool SwCursorShell::GotoFormatField( const SwFormatField& rField )
         SwCursorSaveState aSaveState( *pCursor );
 
         SwTextNode* pTNd = pTextField->GetpTextNode();
-        pCursor->GetPoint()->nNode = *pTNd;
-        pCursor->GetPoint()->nContent.Assign( pTNd, pTextField->GetStart() );
+        pCursor->GetPoint()->Assign(*pTNd, pTextField->GetStart() );
 
         bRet = !pCursor->IsSelOvr();
         if( bRet )
@@ -1313,8 +1308,7 @@ bool SwCursorShell::GotoRefMark( const OUString& rRefMark, sal_uInt16 nSubType,
                                 nSubType, nSeqNo, &nPos, nullptr, GetLayout());
     if( pTextNd && pTextNd->GetNodes().IsDocNodes() )
     {
-        m_pCurrentCursor->GetPoint()->nNode = *pTextNd;
-        m_pCurrentCursor->GetPoint()->nContent.Assign( pTextNd, nPos );
+        m_pCurrentCursor->GetPoint()->Assign(*pTextNd, nPos );
 
         if( !m_pCurrentCursor->IsSelOvr() )
         {
@@ -2168,8 +2162,7 @@ bool SwCursorShell::GotoINetAttr( const SwTextINetFormat& rAttr )
         SwCallLink aLk( *this ); // watch Cursor-Moves
         SwCursorSaveState aSaveState( *pCursor );
 
-        pCursor->GetPoint()->nNode = *rAttr.GetpTextNode();
-        pCursor->GetPoint()->nContent.Assign( rAttr.GetpTextNode(), rAttr.GetStart() );
+        pCursor->GetPoint()->Assign(*rAttr.GetpTextNode(), rAttr.GetStart() );
         bRet = !pCursor->IsSelOvr();
         if( bRet )
             UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
