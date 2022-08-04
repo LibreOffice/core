@@ -64,7 +64,8 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"cui/ui/widgettestdialog.ui"
         || rUIFile == u"modules/swriter/ui/contentcontroldlg.ui"
         || rUIFile == u"modules/swriter/ui/contentcontrollistitemdlg.ui"
-        || rUIFile == u"modules/swriter/ui/splittable.ui")
+        || rUIFile == u"modules/swriter/ui/splittable.ui"
+        || rUIFile == u"cui/ui/splitcellsdialog.ui")
     {
         return true;
     }
