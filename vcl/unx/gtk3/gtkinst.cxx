@@ -8557,7 +8557,7 @@ public:
 
     virtual ScrollType get_scroll_type() const override
     {
-        return ScrollType::DontKnow;
+        return ScrollType::Drag;
     }
 
     virtual ~GtkInstanceScrollbar() override
