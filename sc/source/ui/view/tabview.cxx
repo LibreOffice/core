@@ -176,10 +176,10 @@ ScTabView::ScTabView( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* 
     aViewData( rDocSh, pViewShell ),
     aFunctionSet( &aViewData ),
     aHdrFunc( &aViewData ),
-    aVScrollTop( VclPtr<ScrollBar>::Create( pFrameWin, WinBits( WB_VSCROLL | WB_DRAG ) ) ),
-    aVScrollBottom( VclPtr<ScrollBar>::Create( pFrameWin, WinBits( WB_VSCROLL | WB_DRAG ) ) ),
-    aHScrollLeft( VclPtr<ScrollBar>::Create( pFrameWin, WinBits( WB_HSCROLL | WB_DRAG ) ) ),
-    aHScrollRight( VclPtr<ScrollBar>::Create( pFrameWin, WinBits( WB_HSCROLL | WB_DRAG ) ) ),
+    aVScrollTop( VclPtr<ScrollAdaptor>::Create( pFrameWin, false ) ),
+    aVScrollBottom( VclPtr<ScrollAdaptor>::Create( pFrameWin, false ) ),
+    aHScrollLeft( VclPtr<ScrollAdaptor>::Create( pFrameWin, true ) ),
+    aHScrollRight( VclPtr<ScrollAdaptor>::Create( pFrameWin, true ) ),
     aCornerButton( VclPtr<ScCornerButton>::Create( pFrameWin, &aViewData ) ),
     aTopButton( VclPtr<ScCornerButton>::Create( pFrameWin, &aViewData ) ),
     aScrollBarBox( VclPtr<ScrollBarBox>::Create( pFrameWin, WB_SIZEABLE ) ),
@@ -221,21 +221,19 @@ ScTabView::ScTabView( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* 
     Init();
 }
 
-void ScTabView::InitScrollBar( ScrollBar& rScrollBar, tools::Long nMaxVal )
+void ScTabView::InitScrollBar(ScrollAdaptor& rScrollBar, tools::Long nMaxVal, const Link<weld::Scrollbar&, void>& rLink)
 {
     rScrollBar.SetRange( Range( 0, nMaxVal ) );
     rScrollBar.SetLineSize( 1 );
     rScrollBar.SetPageSize( 1 );                // is queried separately
     rScrollBar.SetVisibleSize( 10 );            // is reset by Resize
 
-    rScrollBar.SetScrollHdl( LINK(this, ScTabView, ScrollHdl) );
-    rScrollBar.SetEndScrollHdl( LINK(this, ScTabView, EndScrollHdl) );
+    rScrollBar.SetScrollHdl(rLink);
 
     rScrollBar.EnableRTL( aViewData.GetDocument().IsLayoutRTL( aViewData.GetTabNo() ) );
 }
 
 //  Scroll-Timer
-
 void ScTabView::SetTimer( ScGridWindow* pWin, const MouseEvent& rMEvt )
 {
     pTimerWindow = pWin;
@@ -989,24 +987,35 @@ bool ScTabView::ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos )
     {
         ScHSplitPos eHPos = WhichH(ePos);
         ScVSplitPos eVPos = WhichV(ePos);
-        ScrollBar* pHScroll = ( eHPos == SC_SPLIT_LEFT ) ? aHScrollLeft.get() : aHScrollRight.get();
-        ScrollBar* pVScroll = ( eVPos == SC_SPLIT_TOP )  ? aVScrollTop.get()  : aVScrollBottom.get();
+        ScrollAdaptor* pHScroll = ( eHPos == SC_SPLIT_LEFT ) ? aHScrollLeft.get() : aHScrollRight.get();
+        ScrollAdaptor* pVScroll = ( eVPos == SC_SPLIT_TOP )  ? aVScrollTop.get()  : aVScrollBottom.get();
         if ( pGridWin[ePos] )
             bDone = pGridWin[ePos]->HandleScrollCommand( rCEvt, pHScroll, pVScroll );
     }
     return bDone;
 }
 
-IMPL_LINK_NOARG(ScTabView, EndScrollHdl, ScrollBar*, void)
+IMPL_LINK_NOARG(ScTabView, HScrollLeftHdl, weld::Scrollbar&, void)
 {
-    if ( bDragging )
-    {
-        UpdateScrollBars();
-        bDragging = false;
-    }
+    ScrollHdl(aHScrollLeft.get());
 }
 
-IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll, void )
+IMPL_LINK_NOARG(ScTabView, HScrollRightHdl, weld::Scrollbar&, void)
+{
+    ScrollHdl(aHScrollRight.get());
+}
+
+IMPL_LINK_NOARG(ScTabView, VScrollTopHdl, weld::Scrollbar&, void)
+{
+    ScrollHdl(aVScrollTop.get());
+}
+
+IMPL_LINK_NOARG(ScTabView, VScrollBottomHdl, weld::Scrollbar&, void)
+{
+    ScrollHdl(aVScrollBottom.get());
+}
+
+void ScTabView::ScrollHdl(ScrollAdaptor* pScroll)
 {
     bool bHoriz = ( pScroll == aHScrollLeft.get() || pScroll == aHScrollRight.get() );
     tools::Long nViewPos;
@@ -1019,7 +1028,7 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll, void )
 
     bool bLayoutRTL = aViewData.GetDocument().IsLayoutRTL( aViewData.GetTabNo() );
 
-    ScrollType eType = pScroll->GetType();
+    ScrollType eType = pScroll->GetScrollType();
     if ( eType == ScrollType::Drag )
     {
         if (!bDragging)
@@ -1085,6 +1094,8 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll, void )
             Help::ShowQuickHelp(pScroll->GetParent(), aRect, aHelpStr, nAlign);
         }
     }
+    else
+        bDragging = false;
 
     tools::Long nDelta(0);
     switch ( eType )

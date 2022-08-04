@@ -58,6 +58,10 @@ public:
     // what is it
     bool IsHoriScroll() const { return m_bHori; }
 
+    ScrollType GetScrollType() const;
+
+    virtual void EnableRTL(bool bEnable = true) override;
+
     virtual tools::Long DoScroll(tools::Long nNewPos) override;
 
     virtual bool Inactive() const override { return !m_xScrollBar->get_sensitive(); }

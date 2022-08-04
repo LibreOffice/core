@@ -340,7 +340,7 @@ void ScTabView::InitRefMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, ScRefType eT
     }
 }
 
-void ScTabView::SetScrollBar( ScrollBar& rScroll, tools::Long nRangeMax, tools::Long nVisible, tools::Long nPos, bool bLayoutRTL )
+void ScTabView::SetScrollBar( ScrollAdaptor& rScroll, tools::Long nRangeMax, tools::Long nVisible, tools::Long nPos, bool bLayoutRTL )
 {
     if ( nVisible == 0 )
         nVisible = 1;       // #i59893# don't use visible size 0
@@ -352,14 +352,13 @@ void ScTabView::SetScrollBar( ScrollBar& rScroll, tools::Long nRangeMax, tools::
     rScroll.EnableRTL( bLayoutRTL );
 }
 
-tools::Long ScTabView::GetScrollBarPos( const ScrollBar& rScroll )
+tools::Long ScTabView::GetScrollBarPos( const ScrollAdaptor& rScroll )
 {
     return rScroll.GetThumbPos();
 }
 
 //  UpdateScrollBars - set visible area and scroll width of scroll bars
-
-static tools::Long lcl_UpdateBar( ScrollBar& rScroll, SCCOLROW nSize )        // Size = (complete) cells
+static tools::Long lcl_UpdateBar( ScrollAdaptor& rScroll, SCCOLROW nSize )        // Size = (complete) cells
 {
     tools::Long nOldPos;
     tools::Long nNewPos;

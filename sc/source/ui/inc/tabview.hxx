@@ -22,6 +22,7 @@
 
 #include <array>
 #include <memory>
+#include <svtools/scrolladaptor.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/help.hxx>
 
@@ -147,10 +148,10 @@ private:
     VclPtr<ScTabSplitter>       pHSplitter;
     VclPtr<ScTabSplitter>       pVSplitter;
     VclPtr<ScTabControl>        pTabControl;
-    VclPtr<ScrollBar>           aVScrollTop;
-    VclPtr<ScrollBar>           aVScrollBottom;         // initially visible
-    VclPtr<ScrollBar>           aHScrollLeft;           // initially visible
-    VclPtr<ScrollBar>           aHScrollRight;
+    VclPtr<ScrollAdaptor>       aVScrollTop;
+    VclPtr<ScrollAdaptor>       aVScrollBottom;         // initially visible
+    VclPtr<ScrollAdaptor>       aHScrollLeft;           // initially visible
+    VclPtr<ScrollAdaptor>       aHScrollRight;
     VclPtr<ScCornerButton>      aCornerButton;
     VclPtr<ScCornerButton>      aTopButton;
     VclPtr<ScrollBarBox>        aScrollBarBox;
@@ -219,9 +220,12 @@ private:
 
     void            DoAddWin( ScGridWindow* pWin );
 
-    void            InitScrollBar( ScrollBar& rScrollBar, tools::Long nMaxVal );
-    DECL_LINK(ScrollHdl, ScrollBar*, void );
-    DECL_LINK(EndScrollHdl, ScrollBar*, void );
+    void            InitScrollBar(ScrollAdaptor& rScrollBar, tools::Long nMaxVal, const Link<weld::Scrollbar&, void>& rLink);
+    DECL_LINK(HScrollLeftHdl, weld::Scrollbar&, void );
+    DECL_LINK(HScrollRightHdl, weld::Scrollbar&, void );
+    DECL_LINK(VScrollTopHdl, weld::Scrollbar&, void );
+    DECL_LINK(VScrollBottomHdl, weld::Scrollbar&, void );
+    void ScrollHdl(ScrollAdaptor* rScrollBar);
 
     DECL_LINK(SplitHdl, Splitter*, void);
     void            DoHSplit(tools::Long nSplitPos);
@@ -231,8 +235,8 @@ private:
 
     void            UpdateVarZoom();
 
-    static void     SetScrollBar( ScrollBar& rScroll, tools::Long nRangeMax, tools::Long nVisible, tools::Long nPos, bool bLayoutRTL );
-    static tools::Long     GetScrollBarPos( const ScrollBar& rScroll );
+    static void     SetScrollBar( ScrollAdaptor& rScroll, tools::Long nRangeMax, tools::Long nVisible, tools::Long nPos, bool bLayoutRTL );
+    static tools::Long     GetScrollBarPos( const ScrollAdaptor& rScroll );
 
     void            GetAreaMoveEndPosition(SCCOL nMovX, SCROW nMovY, ScFollowMode eMode,
                                            SCCOL& rAreaX, SCROW& rAreaY, ScFollowMode& rMode);
