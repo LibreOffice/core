@@ -590,13 +590,8 @@ QAccessible::Role QtAccessibleWidget::role() const
         case AccessibleRole::STATIC:
             return QAccessible::StaticText;
 
-        /* Ignore window objects for sub-menus, combo- and list boxes,
-         *  which are exposed as children of their parents.
-         */
         case AccessibleRole::WINDOW: // top-level window without title bar
-        {
             return QAccessible::Window;
-        }
     }
 
     SAL_WARN("vcl.qt", "Unmapped role: " << getAccessibleContextImpl()->getAccessibleRole());
