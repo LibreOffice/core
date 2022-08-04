@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e14a8da6_59d6a290",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-08-04T13:01:11Z",
+      "side": 1,
+      "message": "uh i hope this is only in a test?\n\n...seems there\u0027s a similar antipattern in the code:\n\ndrawinglayer/source/processor2d/vclmetafileprocessor2d.cxx:                mpMetaFile-\u003eAddAction(new MetaCommentAction(\ndrawinglayer/source/processor2d/vclmetafileprocessor2d.cxx-                    aCommentStringCommon, 0, reinterpret_cast\u003cconst sal_uInt8*\u003e(aURL.getStr()),\ndrawinglayer/source/processor2d/vclmetafileprocessor2d.cxx-                    2 * aURL.getLength()));\n",
+      "revId": "8a5b2506cab2372db66ba6c5b1c6e9c0a5254457",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
