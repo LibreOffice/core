@@ -119,6 +119,7 @@
 #include <svx/xflhtit.hxx>
 #include <svx/xflftrit.hxx>
 #include <svx/xsflclit.hxx>
+#include <svx/xfilluseslidebackgrounditem.hxx>
 
 #define ITEMID_FONT                     TypedWhichId<SvxFontItem>(XATTR_FILL_LAST + 1)
 #define ITEMID_FONTHEIGHT               TypedWhichId<SvxFontHeightItem>(XATTR_FILL_LAST + 2)
@@ -553,26 +554,27 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
     // UNO->ItemSet
     static SfxItemInfo aItemInfos[] =
     {
-        { XATTR_FILLSTYLE,      true },
-        { XATTR_FILLCOLOR,      true },
-        { XATTR_FILLGRADIENT,       true },
-        { XATTR_FILLHATCH,      true },
-        { XATTR_FILLBITMAP,     true },
-        { XATTR_FILLTRANSPARENCE,       true },
-        { XATTR_GRADIENTSTEPCOUNT,      true },
-        { XATTR_FILLBMP_TILE,       true },
-        { XATTR_FILLBMP_POS,        true },
-        { XATTR_FILLBMP_SIZEX,      true },
-        { XATTR_FILLBMP_SIZEY,      true },
-        { XATTR_FILLFLOATTRANSPARENCE,  true },
-        { XATTR_SECONDARYFILLCOLOR,     true },
-        { XATTR_FILLBMP_SIZELOG,        true },
-        { XATTR_FILLBMP_TILEOFFSETX,    true },
-        { XATTR_FILLBMP_TILEOFFSETY,    true },
-        { XATTR_FILLBMP_STRETCH,        true },
-        { XATTR_FILLBMP_POSOFFSETX,     true },
-        { XATTR_FILLBMP_POSOFFSETY,     true },
-        { XATTR_FILLBACKGROUND,     true },
+        { 0,      true },
+        { 0,      true },
+        { 0,       true },
+        { 0,      true },
+        { 0,     true },
+        { 0,       true },
+        { 0,      true },
+        { 0,       true },
+        { 0,        true },
+        { 0,      true },
+        { 0,      true },
+        { 0,  true },
+        { 0,     true },
+        { 0,        true },
+        { 0,    true },
+        { 0,    true },
+        { 0,        true },
+        { 0,     true },
+        { 0,     true },
+        { 0,     true },
+        { 0,     true },
 
         { SID_ATTR_CHAR_FONT, true },
         { SID_ATTR_CHAR_FONTHEIGHT, true },
@@ -643,6 +645,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         new XFillBmpPosOffsetXItem,
         new XFillBmpPosOffsetYItem,
         new XFillBackgroundItem,
+        new XFillUseSlideBackgroundItem,
 
         new SvxFontItem(ITEMID_FONT),
         new SvxFontHeightItem(240,100,ITEMID_FONTHEIGHT),
