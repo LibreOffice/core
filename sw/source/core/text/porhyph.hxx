@@ -66,7 +66,7 @@ public:
     SwSoftHyphPortion();
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
     virtual SwLinePortion *Compress() override;
-    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+    virtual void Paint( SwTextPaintInfo &rInf ) override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
     virtual void FormatEOL( SwTextFormatInfo &rInf ) override;
     void SetExpand( const bool bNew ) { m_bExpand = bNew; }
@@ -82,7 +82,7 @@ class SwSoftHyphStrPortion : public SwHyphStrPortion
 {
 public:
     explicit SwSoftHyphStrPortion( std::u16string_view rStr );
-    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+    virtual void Paint( SwTextPaintInfo &rInf ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

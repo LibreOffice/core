@@ -430,7 +430,7 @@ sal_uInt16 SwSoftHyphPortion::GetViewWidth( const SwTextSizeInfo &rInf ) const
  *  3) SoftHyph is at the end of the line, ViewOpt on or off
  *     -> always visible, neighbors unchanged
  */
-void SwSoftHyphPortion::Paint( const SwTextPaintInfo &rInf ) const
+void SwSoftHyphPortion::Paint( SwTextPaintInfo &rInf )
 {
     if( Width() )
     {
@@ -564,7 +564,7 @@ void SwSoftHyphPortion::HandlePortion( SwPortionHandler& rPH ) const
     rPH.Special( GetLen(), OUString('-'), nWhich );
 }
 
-void SwSoftHyphStrPortion::Paint( const SwTextPaintInfo &rInf ) const
+void SwSoftHyphStrPortion::Paint( SwTextPaintInfo &rInf )
 {
     // Bug or feature?:
     // {Zu}{k-}{ker}, {k-} will be gray instead of {-}

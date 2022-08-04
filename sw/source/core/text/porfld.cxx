@@ -436,7 +436,7 @@ bool SwFieldPortion::Format( SwTextFormatInfo &rInf )
     return bFull;
 }
 
-void SwFieldPortion::Paint( const SwTextPaintInfo &rInf ) const
+void SwFieldPortion::Paint( SwTextPaintInfo &rInf )
 {
     SwFontSave aSave( rInf, m_pFont.get() );
 
@@ -505,7 +505,7 @@ SwFieldPortion *SwHiddenPortion::Clone(const OUString &rExpand ) const
     return new SwHiddenPortion( rExpand, std::move(pNewFnt) );
 }
 
-void SwHiddenPortion::Paint( const SwTextPaintInfo &rInf ) const
+void SwHiddenPortion::Paint( SwTextPaintInfo &rInf )
 {
     if( Width() )
     {
@@ -650,7 +650,7 @@ void SwNumberPortion::FormatEOL( SwTextFormatInfo& )
  * A hidden NumberPortion is not displayed, unless there are TextPortions in
  * this line or there's just one line at all
  */
-void SwNumberPortion::Paint( const SwTextPaintInfo &rInf ) const
+void SwNumberPortion::Paint( SwTextPaintInfo &rInf )
 {
     if ( IsHide() && rInf.GetParaPortion() && rInf.GetParaPortion()->GetNext() )
     {
@@ -683,10 +683,9 @@ void SwNumberPortion::Paint( const SwTextPaintInfo &rInf ) const
     // follow field portions
     if ( ! IsFollow() )
     {
-        SwNumberPortion *pThis = const_cast<SwNumberPortion*>(this);
-        pThis->Width( nSumWidth );
+        Width( nSumWidth );
         rInf.DrawViewOpt( *this, PortionType::Number );
-        pThis->Width( nOldWidth );
+        Width( nOldWidth );
     }
 
     if( m_aExpand.isEmpty() )
@@ -710,10 +709,9 @@ void SwNumberPortion::Paint( const SwTextPaintInfo &rInf ) const
     else
     {
         // logical const: reset width
-        SwNumberPortion *pThis = const_cast<SwNumberPortion*>(this);
         bPaintSpace = bPaintSpace && m_nFixWidth < nOldWidth;
         sal_uInt16 nSpaceOffs = m_nFixWidth;
-        pThis->Width( m_nFixWidth );
+        Width( m_nFixWidth );
 
         if( ( IsLeft() && ! rInf.GetTextFrame()->IsRightToLeft() ) ||
             ( ! IsLeft() && ! IsCenter() && rInf.GetTextFrame()->IsRightToLeft() ) )
@@ -753,13 +751,13 @@ void SwNumberPortion::Paint( const SwTextPaintInfo &rInf ) const
                 rInf.GetUnderFnt()->SetPos( aNewPos );
             }
 
-            pThis->Width( nOldWidth - nSpaceOffs + 12 );
+            Width( nOldWidth - nSpaceOffs + 12 );
             {
                 SwTextSlot aDiffText( &aInf, this, true, false, "  " );
                 aInf.DrawText( *this, aInf.GetLen(), true );
             }
         }
-        pThis->Width( nOldWidth );
+        Width( nOldWidth );
     }
 }
 
@@ -904,7 +902,7 @@ bool SwGrfNumPortion::Format( SwTextFormatInfo &rInf )
  * A hidden NumberPortion is not displayed, unless there are TextPortions in
  * this line or there's only one line at all
  */
-void SwGrfNumPortion::Paint( const SwTextPaintInfo &rInf ) const
+void SwGrfNumPortion::Paint( SwTextPaintInfo &rInf )
 {
     if( m_bNoPaint )
         return;
@@ -1117,7 +1115,7 @@ SwCombinedPortion::SwCombinedPortion( const OUString &rText )
     }
 }
 
-void SwCombinedPortion::Paint( const SwTextPaintInfo &rInf ) const
+void SwCombinedPortion::Paint( SwTextPaintInfo &rInf )
 {
     OSL_ENSURE(GetLen() <= TextFrameIndex(1), "SwFieldPortion::Paint: rest-portion pollution?");
     if( !Width() )
@@ -1163,11 +1161,10 @@ void SwCombinedPortion::Paint( const SwTextPaintInfo &rInf ) const
                 aTmpFont.SetSize( aTmpSz, nAct );
             }
         }
-        const_cast<SwTextPaintInfo&>(rInf).SetPos( aOutPos );
+        rInf.SetPos( aOutPos );
         rInf.DrawText(m_aExpand, *this, TextFrameIndex(i), TextFrameIndex(1));
     }
-    // rInf is const, so we have to take back our manipulations
-    const_cast<SwTextPaintInfo&>(rInf).SetPos( aOldPos );
+    rInf.SetPos( aOldPos );
 
 }
 
@@ -1346,7 +1343,7 @@ SwFieldPortion *SwFieldFormDropDownPortion::Clone(const OUString &rExpand) const
     return new SwFieldFormDropDownPortion(m_pFieldMark, rExpand);
 }
 
-void SwFieldFormDropDownPortion::Paint( const SwTextPaintInfo &rInf ) const
+void SwFieldFormDropDownPortion::Paint( SwTextPaintInfo &rInf )
 {
     SwFieldPortion::Paint( rInf );
 
@@ -1364,7 +1361,7 @@ SwFieldPortion *SwFieldFormDatePortion::Clone(const OUString &/*rExpand*/) const
     return new SwFieldFormDatePortion(m_pFieldMark, m_bStart);
 }
 
-void SwFieldFormDatePortion::Paint( const SwTextPaintInfo &rInf ) const
+void SwFieldFormDatePortion::Paint( SwTextPaintInfo &rInf )
 {
     SwFieldPortion::Paint( rInf );
 

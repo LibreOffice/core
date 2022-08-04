@@ -351,9 +351,9 @@ void OSelectionBrowseBox::Init()
     GetDataWindow().SetFont( aFont );
 
     Size aHeight;
-    const Control* pControls[] = { m_pTextCell,m_pVisibleCell,m_pTableCell,m_pFieldCell };
+    Control* pControls[] = { m_pTextCell,m_pVisibleCell,m_pTableCell,m_pFieldCell };
 
-    for (const Control* pControl : pControls)
+    for (Control* pControl : pControls)
     {
         const Size aTemp(pControl->GetOptimalSize());
         if ( aTemp.Height() > aHeight.Height() )

@@ -67,10 +67,10 @@ public:
 
     void            setMaxWidthChars(sal_Int32 nWidth);
     void            setMinWidthChars(sal_Int32 nWidth);
-    static Size     CalcMinimumTextSize(Control const* pControl, tools::Long nMaxWidth = 0x7fffffff);
-    static Size     getTextDimensions(Control const *pControl, const OUString &rTxt, tools::Long nMaxWidth);
-    Size            CalcMinimumSize(tools::Long nMaxWidth = 0x7fffffff) const;
-    virtual Size    GetOptimalSize() const override;
+    static Size     CalcMinimumTextSize(Control* const pControl, tools::Long nMaxWidth = 0x7fffffff);
+    static Size     getTextDimensions(Control* const pControl, const OUString &rTxt, tools::Long nMaxWidth);
+    Size            CalcMinimumSize(tools::Long nMaxWidth = 0x7fffffff);
+    virtual Size    GetOptimalSize() override;
     virtual bool    set_property(const OString &rKey, const OUString &rValue) override;
     void            set_mnemonic_widget(vcl::Window *pWindow);
     vcl::Window*    get_mnemonic_widget() const { return m_pMnemonicWindow; }
@@ -112,7 +112,7 @@ public:
     virtual void    StateChanged( StateChangedType nType ) override;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    virtual Size    GetOptimalSize() const override;
+    virtual Size    GetOptimalSize() override;
     virtual void    DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
 };
 
@@ -165,7 +165,7 @@ public:
     virtual void    Resize() override;
     virtual void    StateChanged( StateChangedType nType ) override;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
-    virtual Size    GetOptimalSize() const override;
+    virtual Size    GetOptimalSize() override;
 
     void            SetImage( const Image& rImage );
     const Image&    GetImage() const { return maImage; }

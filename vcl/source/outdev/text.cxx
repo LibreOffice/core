@@ -882,9 +882,9 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
         mpAlphaVDev->DrawText( rStartPt, rStr, nIndex, nLen, pVector, pDisplayText );
 }
 
-tools::Long OutputDevice::GetTextWidth( const OUString& rStr, sal_Int32 nIndex, sal_Int32 nLen,
-     vcl::text::TextLayoutCache const*const pLayoutCache,
-     SalLayoutGlyphs const*const pSalLayoutCache) const
+tools::Long OutputDevice::GetTextWidth(OUString const& rStr, sal_Int32 nIndex, sal_Int32 nLen,
+                                       vcl::text::TextLayoutCache const * const pLayoutCache,
+                                       SalLayoutGlyphs const * const pSalLayoutCache)
 {
 
     tools::Long nWidth = GetTextArray( rStr, nullptr, nIndex,
@@ -893,7 +893,7 @@ tools::Long OutputDevice::GetTextWidth( const OUString& rStr, sal_Int32 nIndex, 
     return nWidth;
 }
 
-tools::Long OutputDevice::GetTextHeight() const
+tools::Long OutputDevice::GetTextHeight()
 {
     if (!InitFont())
         return 0;
@@ -906,7 +906,7 @@ tools::Long OutputDevice::GetTextHeight() const
     return nHeight;
 }
 
-float OutputDevice::approximate_char_width() const
+float OutputDevice::approximate_char_width()
 {
     //note pango uses "The quick brown fox jumps over the lazy dog." for english
     //and has a bunch of per-language strings which corresponds somewhat with
@@ -914,7 +914,7 @@ float OutputDevice::approximate_char_width() const
     return GetTextWidth("aemnnxEM") / 8.0;
 }
 
-float OutputDevice::approximate_digit_width() const
+float OutputDevice::approximate_digit_width()
 {
     return GetTextWidth("0123456789") / 10.0;
 }
@@ -953,10 +953,10 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
         mpAlphaVDev->DrawTextArray( rStartPt, rStr, pDXAry, nIndex, nLen, flags );
 }
 
-tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<sal_Int32>* pDXAry,
-                                 sal_Int32 nIndex, sal_Int32 nLen,
-                                 vcl::text::TextLayoutCache const*const pLayoutCache,
-                                 SalLayoutGlyphs const*const pSalLayoutCache) const
+tools::Long OutputDevice::GetTextArray(OUString const& rStr, std::vector<sal_Int32>* pDXAry,
+                                       sal_Int32 nIndex, sal_Int32 nLen,
+                                       vcl::text::TextLayoutCache const * const pLayoutCache,
+                                       SalLayoutGlyphs const * const pSalLayoutCache)
 {
     if( nIndex >= rStr.getLength() )
         return 0; // TODO: this looks like a buggy caller?
@@ -1065,9 +1065,9 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<sal_In
 #endif /* VCL_FLOAT_DEVICE_PIXEL */
 }
 
-void OutputDevice::GetCaretPositions( const OUString& rStr, sal_Int32* pCaretXArray,
-                                      sal_Int32 nIndex, sal_Int32 nLen,
-                                      const SalLayoutGlyphs* pGlyphs ) const
+void OutputDevice::GetCaretPositions(OUString const& rStr, sal_Int32* pCaretXArray,
+                                     sal_Int32 nIndex, sal_Int32 nLen,
+                                     SalLayoutGlyphs const* pGlyphs)
 {
 
     if( nIndex >= rStr.getLength() )
@@ -1314,7 +1314,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
                                     const Point& rLogicalPos, tools::Long nLogicalWidth,
                                     o3tl::span<const sal_Int32> pDXArray, SalLayoutFlags flags,
          vcl::text::TextLayoutCache const* pLayoutCache,
-         const SalLayoutGlyphs* pGlyphs) const
+         const SalLayoutGlyphs* pGlyphs)
 {
     if (pGlyphs && !pGlyphs->IsValid())
     {
@@ -1498,11 +1498,11 @@ bool OutputDevice::GetTextIsRTL( const OUString& rString, sal_Int32 nIndex, sal_
     return (nCharPos != nIndex);
 }
 
-sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, tools::Long nTextWidth,
-                                       sal_Int32 nIndex, sal_Int32 nLen,
-                                       tools::Long nCharExtra,
-         vcl::text::TextLayoutCache const*const pLayoutCache,
-         const SalLayoutGlyphs* pGlyphs) const
+sal_Int32 OutputDevice::GetTextBreak(OUString const& rStr, tools::Long nTextWidth,
+                                     sal_Int32 nIndex, sal_Int32 nLen,
+                                     tools::Long nCharExtra,
+                                     vcl::text::TextLayoutCache const * const pLayoutCache,
+                                     SalLayoutGlyphs const* pGlyphs)
 {
     std::unique_ptr<SalLayout> pSalLayout = ImplLayout( rStr, nIndex, nLen,
             Point(0,0), 0, {}, eDefaultLayout, pLayoutCache, pGlyphs);
@@ -1529,12 +1529,12 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, tools::Long nTextWid
     return nRetVal;
 }
 
-sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, tools::Long nTextWidth,
-                                       sal_Unicode nHyphenChar, sal_Int32& rHyphenPos,
-                                       sal_Int32 nIndex, sal_Int32 nLen,
-                                       tools::Long nCharExtra,
-         vcl::text::TextLayoutCache const*const pLayoutCache,
-         const SalLayoutGlyphs* pGlyphs) const
+sal_Int32 OutputDevice::GetTextBreak(OUString const& rStr, tools::Long nTextWidth,
+                                     sal_Unicode nHyphenChar, sal_Int32& rHyphenPos,
+                                     sal_Int32 nIndex, sal_Int32 nLen,
+                                     tools::Long nCharExtra,
+                                     vcl::text::TextLayoutCache const * const pLayoutCache,
+                                     SalLayoutGlyphs const* pGlyphs)
 {
     rHyphenPos = -1;
 
@@ -1929,10 +1929,10 @@ void OutputDevice::DrawText( const tools::Rectangle& rRect, const OUString& rOri
         mpAlphaVDev->DrawText( rRect, rOrigStr, nStyle, pVector, pDisplayText );
 }
 
-tools::Rectangle OutputDevice::GetTextRect( const tools::Rectangle& rRect,
-                                     const OUString& rStr, DrawTextFlags nStyle,
+tools::Rectangle OutputDevice::GetTextRect(tools::Rectangle const& rRect,
+                                     OUString const& rStr, DrawTextFlags nStyle,
                                      TextRectInfo* pInfo,
-                                     const vcl::ITextLayout* _pTextLayout ) const
+                                     vcl::ITextLayout const* _pTextLayout)
 {
 
     tools::Rectangle           aRect = rRect;
@@ -1952,7 +1952,7 @@ tools::Rectangle OutputDevice::GetTextRect( const tools::Rectangle& rRect,
         sal_Int32               i;
 
         nMaxWidth = 0;
-        vcl::DefaultTextLayout aDefaultLayout( *const_cast< OutputDevice* >( this ) );
+        vcl::DefaultTextLayout aDefaultLayout(*this);
         ImplGetTextLines( rRect, nTextHeight, aMultiLineInfo, nWidth, aStr, nStyle, _pTextLayout ? *_pTextLayout : aDefaultLayout );
         nFormatLines = aMultiLineInfo.Count();
         if ( !nTextHeight )
@@ -2341,7 +2341,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
         mpAlphaVDev->DrawCtrlText( rPos, rStr, nIndex, nLen, nStyle, pVector, pDisplayText );
 }
 
-tools::Long OutputDevice::GetCtrlTextWidth( const OUString& rStr, const SalLayoutGlyphs* pGlyphs ) const
+tools::Long OutputDevice::GetCtrlTextWidth(OUString const& rStr, SalLayoutGlyphs const* pGlyphs)
 {
     sal_Int32 nLen = rStr.getLength();
     sal_Int32 nIndex = 0;
@@ -2393,11 +2393,11 @@ OUString OutputDevice::GetNonMnemonicString( const OUString& rStr, sal_Int32& rM
     return aStr;
 }
 
-bool OutputDevice::GetTextBoundRect( tools::Rectangle& rRect,
-                                         const OUString& rStr, sal_Int32 nBase,
-                                         sal_Int32 nIndex, sal_Int32 nLen,
-                                         sal_uLong nLayoutWidth, o3tl::span<const sal_Int32> pDXAry,
-                                         const SalLayoutGlyphs* pGlyphs ) const
+bool OutputDevice::GetTextBoundRect(tools::Rectangle& rRect,
+                                    OUString const& rStr, sal_Int32 nBase,
+                                    sal_Int32 nIndex, sal_Int32 nLen,
+                                    sal_uLong nLayoutWidth, o3tl::span<const sal_Int32> pDXAry,
+                                    SalLayoutGlyphs const* pGlyphs)
 {
     bool bRet = false;
     rRect.SetEmpty();
@@ -2458,10 +2458,10 @@ bool OutputDevice::GetTextBoundRect( tools::Rectangle& rRect,
     return bRet;
 }
 
-bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
-                                        const OUString& rStr, sal_Int32 nBase,
-                                        sal_Int32 nIndex, sal_Int32 nLen,
-                                        sal_uLong nLayoutWidth, o3tl::span<const sal_Int32> pDXArray ) const
+bool OutputDevice::GetTextOutlines(basegfx::B2DPolyPolygonVector& rVector,
+                                   OUString const& rStr, sal_Int32 nBase,
+                                   sal_Int32 nIndex, sal_Int32 nLen,
+                                   sal_uLong nLayoutWidth, o3tl::span<const sal_Int32> pDXArray)
 {
     if (!InitFont())
         return false;
@@ -2479,8 +2479,8 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
     bool bOldMap = mbMap;
     if( bOldMap )
     {
-        const_cast<OutputDevice&>(*this).mbMap = false;
-        const_cast<OutputDevice&>(*this).mbNewFont = true;
+        mbMap = false;
+        mbNewFont = true;
     }
 
     std::unique_ptr<SalLayout> pSalLayout;
@@ -2538,17 +2538,17 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
     if( bOldMap )
     {
         // restore original font size and map mode
-        const_cast<OutputDevice&>(*this).mbMap = bOldMap;
-        const_cast<OutputDevice&>(*this).mbNewFont = true;
+        mbMap = bOldMap;
+        mbNewFont = true;
     }
 
     return bRet;
 }
 
-bool OutputDevice::GetTextOutlines( PolyPolyVector& rResultVector,
-                                        const OUString& rStr, sal_Int32 nBase,
-                                        sal_Int32 nIndex, sal_Int32 nLen,
-                                        sal_uLong nLayoutWidth, o3tl::span<const sal_Int32> pDXArray ) const
+bool OutputDevice::GetTextOutlines(PolyPolyVector& rResultVector,
+                                   OUString const& rStr, sal_Int32 nBase,
+                                   sal_Int32 nIndex, sal_Int32 nLen,
+                                   sal_uLong nLayoutWidth, o3tl::span<const sal_Int32> pDXArray)
 {
     rResultVector.clear();
 
@@ -2566,7 +2566,7 @@ bool OutputDevice::GetTextOutlines( PolyPolyVector& rResultVector,
     return true;
 }
 
-bool OutputDevice::GetTextOutline( tools::PolyPolygon& rPolyPoly, const OUString& rStr ) const
+bool OutputDevice::GetTextOutline(tools::PolyPolygon& rPolyPoly, OUString const& rStr)
 {
     rPolyPoly.Clear();
 

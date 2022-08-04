@@ -41,7 +41,7 @@ public:
                             // create a SystemChildWindow using the given SystemWindowData
     explicit                SystemChildWindow( vcl::Window* pParent, WinBits nStyle, SystemWindowData *pData, bool bShow = true );
     virtual                 ~SystemChildWindow() override;
-    virtual Size            GetOptimalSize() const override;
+    virtual Size            GetOptimalSize() override;
     virtual void            dispose() override;
 
     virtual const SystemEnvData* GetSystemData() const override;

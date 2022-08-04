@@ -188,7 +188,7 @@ void TabPage::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags 
     pDev->Pop();
 }
 
-Size TabPage::GetOptimalSize() const
+Size TabPage::GetOptimalSize()
 {
     if (isLayoutEnabled(this))
         return VclContainer::getLayoutRequisition(*GetWindow(GetWindowType::FirstChild));

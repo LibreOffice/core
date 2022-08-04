@@ -32,7 +32,7 @@ class SwTextPortion : public SwLinePortion
 public:
     SwTextPortion(){ SetWhichPor( PortionType::Text ); }
     static SwTextPortion * CopyLinePortion(const SwLinePortion &rPortion);
-    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+    virtual void Paint( SwTextPaintInfo &rInf ) override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
     virtual void FormatEOL( SwTextFormatInfo &rInf ) override;
     virtual TextFrameIndex GetModelPositionForViewPoint(sal_uInt16 nOfst) const override;
@@ -55,7 +55,7 @@ public:
     SwTextInputFieldPortion();
 
     virtual bool Format( SwTextFormatInfo &rInf ) override;
-    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+    virtual void Paint( SwTextPaintInfo &rInf ) override;
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
     virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const override;
 };
@@ -70,7 +70,7 @@ public:
     virtual SwLinePortion *Compress() override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
     virtual SwPosSize GetTextSize(const SwTextSizeInfo& rInfo) const override;
-    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+    virtual void Paint( SwTextPaintInfo &rInf ) override;
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const override;
@@ -86,7 +86,7 @@ class SwFieldMarkPortion : public SwTextPortion
         {
             SetWhichPor(PortionType::FieldMark);
         }
-        virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+        virtual void Paint( SwTextPaintInfo &rInf ) override;
         virtual bool Format( SwTextFormatInfo &rInf ) override;
 };
 
@@ -97,7 +97,7 @@ public:
     {
         SetWhichPor(PortionType::FieldFormCheckbox);
     }
-    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+    virtual void Paint( SwTextPaintInfo &rInf ) override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
 };
 

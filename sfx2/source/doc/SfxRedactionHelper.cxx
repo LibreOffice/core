@@ -126,7 +126,7 @@ void setPageMargins(const uno::Reference<beans::XPropertySet>& xPageProperySet,
 }
 
 // #i10613# Extracted from ImplCheckRect::ImplCreate
-tools::Rectangle ImplCalcActionBounds(const MetaAction& rAct, const OutputDevice& rOut,
+tools::Rectangle ImplCalcActionBounds(const MetaAction& rAct, OutputDevice& rOut,
                                       sal_Int32 nStrStartPos, sal_Int32 nStrEndPos)
 {
     tools::Rectangle aActionBounds;

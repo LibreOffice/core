@@ -224,8 +224,8 @@ void OTableEditorCtrl::InitCellController()
     pHelpTextCell->SetHelpId(HID_TABDESIGN_HELPTEXT);
 
     Size aHeight;
-    const Control* pControls[] = { pTypeCell,pDescrCell,pNameCell,pHelpTextCell};
-    for(const Control* pControl : pControls)
+    Control* pControls[] = { pTypeCell,pDescrCell,pNameCell,pHelpTextCell};
+    for(Control* pControl : pControls)
     {
         const Size aTemp(pControl->GetOptimalSize());
         if ( aTemp.Height() > aHeight.Height() )

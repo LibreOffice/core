@@ -357,7 +357,7 @@ IMPL_LINK(NotebookbarTabControl, OpenNotebookbarPopupMenu, NotebookBar*, pNotebo
         xComponent->dispose();
 }
 
-Size NotebookbarTabControl::calculateRequisition() const
+Size NotebookbarTabControl::calculateRequisition()
 {
     Size aSize = NotebookbarTabControlBase::calculateRequisition();
 

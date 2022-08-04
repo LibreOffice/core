@@ -156,7 +156,7 @@ public:
     virtual void    TitleButtonClick( TitleButton nButton );
     virtual void    Resizing( Size& rSize );
     virtual void    Resize() override;
-    virtual Size    GetOptimalSize() const override;
+    virtual Size    GetOptimalSize() override;
     virtual void    queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
     bool            isLayoutEnabled() const;
     void            setOptimalLayoutSize(bool bAllowWindowShrink);

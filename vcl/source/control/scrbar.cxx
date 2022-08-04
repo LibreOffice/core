@@ -1387,10 +1387,10 @@ void ScrollBar::SetVisibleSize( tools::Long nNewSize )
     }
 }
 
-Size ScrollBar::GetOptimalSize() const
+Size ScrollBar::GetOptimalSize()
 {
     if (mbCalcSize)
-        const_cast<ScrollBar*>(this)->ImplCalc(false);
+        ImplCalc(false);
 
     Size aRet = getCurrentCalcSize();
 

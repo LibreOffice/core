@@ -46,7 +46,7 @@ bool SmGetGlyphBoundRect(const vcl::RenderContext &rDev,
     // get a device where 'OutputDevice::GetTextBoundRect' will be successful
     OutputDevice *pGlyphDev;
     if (rDev.GetOutDevType() != OUTDEV_PRINTER)
-        pGlyphDev = const_cast<OutputDevice *>(&rDev);
+        pGlyphDev = &rDev;
     else
     {
         // since we format for the printer (where GetTextBoundRect will fail)

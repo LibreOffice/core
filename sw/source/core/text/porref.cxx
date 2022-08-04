@@ -23,7 +23,7 @@
 #include "porref.hxx"
 #include "inftxt.hxx"
 
-void SwRefPortion::Paint( const SwTextPaintInfo &rInf ) const
+void SwRefPortion::Paint( SwTextPaintInfo &rInf )
 {
     if( Width() )
     {
@@ -61,7 +61,7 @@ bool SwIsoRefPortion::Format( SwTextFormatInfo &rInf )
     return SwLinePortion::Format( rInf );
 }
 
-void SwIsoRefPortion::Paint( const SwTextPaintInfo &rInf ) const
+void SwIsoRefPortion::Paint( SwTextPaintInfo &rInf )
 {
     if( Width() )
         rInf.DrawViewOpt( *this, PortionType::Ref );

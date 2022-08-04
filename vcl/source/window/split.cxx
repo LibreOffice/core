@@ -690,7 +690,7 @@ void Splitter::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&
     }
 }
 
-Size Splitter::GetOptimalSize() const
+Size Splitter::GetOptimalSize()
 {
     return LogicToPixel(Size(3, 3), MapMode(MapUnit::MapAppFont));
 }

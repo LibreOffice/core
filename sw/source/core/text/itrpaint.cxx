@@ -446,7 +446,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                         GetTextFrame()->MapViewToModel(nOffset));
                 GetRedln()->Seek(*m_pFont, pos.first->GetIndex(), pos.second, 0);
             }
-            const SwTmpEndPortion aEnd( *pEndTempl,
+            SwTmpEndPortion aEnd( *pEndTempl,
                            bHasRedlineEnd && eRedlineEnd != RedlineType::Delete ? m_pFont->GetUnderline() : LINESTYLE_NONE,
                            bHasRedlineEnd && eRedlineEnd == RedlineType::Delete ? m_pFont->GetStrikeout() : STRIKEOUT_NONE,
                            bHasRedlineEnd ? m_pFont->GetColor() : COL_AUTO );

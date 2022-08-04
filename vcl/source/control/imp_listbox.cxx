@@ -583,7 +583,7 @@ tools::Long ImplEntryType::getHeightWithMargin() const
     return mnHeight + ImplGetSVData()->maNWFData.mnListBoxEntryMargin;
 }
 
-SalLayoutGlyphs* ImplEntryType::GetTextGlyphs(const OutputDevice* pOutputDevice)
+SalLayoutGlyphs* ImplEntryType::GetTextGlyphs(OutputDevice* const pOutputDevice)
 {
     if (maStrGlyphs.IsValid())
         // Use pre-calculated result.
