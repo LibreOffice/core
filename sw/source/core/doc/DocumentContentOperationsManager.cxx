@@ -770,23 +770,21 @@ namespace
 
         void SetPos( SwNodeOffset nInsPos )
         {
-            pRedl->GetPoint()->nNode = nInsPos + nStt;
-            pRedl->GetPoint()->nContent.Assign( pRedl->GetContentNode(), nSttCnt );
+            pRedl->GetPoint()->Assign( nInsPos + nStt, nSttCnt );
             if( pRedl->HasMark() )
             {
-                pRedl->GetMark()->nNode = nInsPos + nEnd;
-                pRedl->GetMark()->nContent.Assign( pRedl->GetContentNode(false), nEndCnt );
+                pRedl->GetMark()->Assign( nInsPos + nEnd, nEndCnt );
             }
         }
 
         void SetPos( const SwPosition& aPos )
         {
-            pRedl->GetPoint()->nNode = aPos.GetNodeIndex() + nStt;
-            pRedl->GetPoint()->nContent.Assign( pRedl->GetContentNode(), nSttCnt + ( nStt == SwNodeOffset(0) ? aPos.GetContentIndex() : 0 ) );
+            pRedl->GetPoint()->Assign( aPos.GetNodeIndex() + nStt,
+                                nSttCnt + ( nStt == SwNodeOffset(0) ? aPos.GetContentIndex() : 0 ) );
             if( pRedl->HasMark() )
             {
-                pRedl->GetMark()->nNode = aPos.GetNodeIndex() + nEnd;
-                pRedl->GetMark()->nContent.Assign( pRedl->GetContentNode(false), nEndCnt  + ( nEnd == SwNodeOffset(0) ? aPos.GetContentIndex() : 0 ) );
+                pRedl->GetMark()->Assign( aPos.GetNodeIndex() + nEnd,
+                                    nEndCnt + ( nEnd == SwNodeOffset(0) ? aPos.GetContentIndex() : 0 ) );
             }
         }
     };
@@ -900,23 +898,17 @@ namespace
                     // The copy is moved too.
                     SwRangeRedline* pNewRedl = new SwRangeRedline( *pTmp );
                     SwPosition* pTmpPos = pNewRedl->Start();
-                    pTmpPos->nNode = rRg.aStart;
-                    pTmpPos->nContent.Assign(
-                                pTmpPos->GetNode().GetContentNode(), 0 );
+                    pTmpPos->Assign(rRg.aStart);
 
                     rArr.emplace_back(pNewRedl, rRg.aStart);
 
                     pTmpPos = pTmp->End();
-                    pTmpPos->nNode = rRg.aEnd;
-                    pTmpPos->nContent.Assign(
-                                pTmpPos->GetNode().GetContentNode(), 0 );
+                    pTmpPos->Assign(rRg.aEnd);
                 }
                 else if( pREnd->nNode == rRg.aStart )
                 {
                     SwPosition* pTmpPos = pTmp->End();
-                    pTmpPos->nNode = rRg.aEnd;
-                    pTmpPos->nContent.Assign(
-                                pTmpPos->GetNode().GetContentNode(), 0 );
+                    pTmpPos->Assign(rRg.aEnd);
                 }
             }
             else if( pRStt->nNode < rRg.aEnd )
@@ -933,16 +925,12 @@ namespace
                     // split
                     SwRangeRedline* pNewRedl = new SwRangeRedline( *pTmp );
                     SwPosition* pTmpPos = pNewRedl->End();
-                    pTmpPos->nNode = rRg.aEnd;
-                    pTmpPos->nContent.Assign(
-                                pTmpPos->GetNode().GetContentNode(), 0 );
+                    pTmpPos->Assign(rRg.aEnd);
 
                     rArr.emplace_back( pNewRedl, rRg.aStart );
 
                     pTmpPos = pTmp->Start();
-                    pTmpPos->nNode = rRg.aEnd;
-                    pTmpPos->nContent.Assign(
-                                pTmpPos->GetNode().GetContentNode(), 0 );
+                    pTmpPos->Assign(rRg.aEnd);
                     rDoc.getIDocumentRedlineAccess().AppendRedline( pTmp, true );
                 }
             }
@@ -4566,9 +4554,7 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
                         SplitNode( *aDelPam.GetPoint(), false );
 
                         ++aMkNd;
-                        aDelPam.GetMark()->nNode = aMkNd;
-                        aDelPam.GetMark()->nContent.Assign(
-                                    aMkNd.GetNode().GetContentNode(), nMkCnt );
+                        aDelPam.GetMark()->Assign( aMkNd, nMkCnt );
                         bFirst = false;
                     }
                     else
@@ -4583,9 +4569,7 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
                 aTmpRange.SetMark();
 
                 ++aPtNd;
-                aDelPam.GetPoint()->nNode = aPtNd;
-                aDelPam.GetPoint()->nContent.Assign( aPtNd.GetNode().GetContentNode(),
-                                                    nPtCnt);
+                aDelPam.GetPoint()->Assign(aPtNd, nPtCnt);
                 *aTmpRange.GetMark() = *aDelPam.GetPoint();
 
                 m_rDoc.RstTextAttrs( aTmpRange );
@@ -4700,9 +4684,7 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
 
             *rPam.GetPoint() = *aDelPam.GetMark();
             ++aPtNd;
-            rPam.GetMark()->nNode = aPtNd;
-            rPam.GetMark()->nContent.Assign( aPtNd.GetNode().GetContentNode(),
-                                                nPtCnt );
+            rPam.GetMark()->Assign( aPtNd, nPtCnt );
 
             if (bJoinText)
             {

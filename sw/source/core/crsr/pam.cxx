@@ -224,15 +224,15 @@ void SwPosition::Assign( const SwContentNode& rNode, sal_Int32 nContentOffset )
     nNode = rNode;
     nContent.Assign(&rNode, nContentOffset);
 }
-void SwPosition::Assign( const SwNode& rNd )
+void SwPosition::Assign( const SwNode& rNd, sal_Int32 nContentOffset )
 {
     nNode.Assign(rNd);
-    nContent.Assign(rNd.GetContentNode(), 0);
+    nContent.Assign(rNd.GetContentNode(), nContentOffset);
 }
-void SwPosition::Assign( const SwNodeIndex& rNdIdx )
+void SwPosition::Assign( const SwNodeIndex& rNdIdx, sal_Int32 nContentOffset )
 {
     nNode = rNdIdx;
-    nContent.Assign(nNode.GetNode().GetContentNode(), 0);
+    nContent.Assign(nNode.GetNode().GetContentNode(), nContentOffset);
 }
 void SwPosition::Adjust( SwNodeOffset nDelta )
 {

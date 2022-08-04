@@ -1759,9 +1759,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                             if( (pStt->nContent == 0) &&
                                 pEnd->GetNode().IsEndNode() )
                             {
-                                pEnd->nNode--;
-                                pEnd->nContent.Assign(
-                                    pEnd->GetNode().GetTextNode(), 0);
+                                pEnd->Adjust(SwNodeOffset(-1));
                                 m_rDoc.getIDocumentContentOperations().DelFullPara( *pNewRedl );
                             }
                             else

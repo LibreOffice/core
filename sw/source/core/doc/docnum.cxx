@@ -69,10 +69,8 @@ namespace {
         if ( rPam.HasMark() &&
              rPam.End()->GetNode().GetTextNode() )
         {
-            SwPaM aPam( rPam.Start()->nNode,
-                        rPam.End()->nNode );
-            aPam.Start()->nContent = 0;
-            aPam.End()->nContent = rPam.End()->GetNode().GetTextNode()->Len();
+            SwPaM aPam( rPam.Start()->nNode, 0,
+                        rPam.End()->nNode, rPam.End()->GetNode().GetTextNode()->Len() );
             pDoc->ResetAttrs( aPam, false, aResetAttrsArray, true, pLayout );
         }
         else
@@ -1563,8 +1561,7 @@ static bool lcl_GotoNextPrevNum( SwPosition& rPos, bool bNext,
                 if( ::lcl_IsNumOk( nSrchNum, nLower, nUpper, bOverUpper,
                                     static_cast<sal_uInt8>(pNd->GetActualListLevel()) ))
                 {
-                    rPos.nNode = aIdx;
-                    rPos.nContent.Assign( pNd, 0 );
+                    rPos.Assign(aIdx);
                     bRet = true;
                     break;
                 }

@@ -86,8 +86,8 @@ struct SAL_WARN_UNUSED SW_DLLPUBLIC SwPosition
     void Assign( const SwNode& rNd, SwNodeOffset nDelta, sal_Int32 nContentOffset = 0 );
     void Assign( SwNodeOffset nNodeOffset, sal_Int32 nContentOffset = 0 );
     void Assign( const SwContentNode& rNode, sal_Int32 nContentOffset = 0 );
-    void Assign( const SwNode& rNd );
-    void Assign( const SwNodeIndex& rNdIdx );
+    void Assign( const SwNode& rNd, sal_Int32 nContentOffset = 0 );
+    void Assign( const SwNodeIndex& rNdIdx, sal_Int32 nContentOffset = 0 );
     /// Set nNode to rNd, and nContent to the beginning of rNd
     void AssignStartIndex( const SwContentNode& rNd );
     /// Set nNode to rNd, and nContent to the end of rNd

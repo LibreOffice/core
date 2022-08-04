@@ -279,9 +279,7 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
         // set cursor to Undo range
         pPam->DeleteMark();
 
-        pPam->GetPoint()->nNode = nNd;
-        pPam->GetPoint()->nContent.Assign(
-                pPam->GetPoint()->GetNode().GetContentNode(), nCnt );
+        pPam->GetPoint()->Assign( nNd, nCnt );
     }
 
     maUndoText.reset();
@@ -673,8 +671,7 @@ void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
         if (m_nSttNd != m_nEndNd)
         {   // in case of regex inserting paragraph breaks, join nodes...
             assert(rPam.GetMark()->nContent == rPam.GetMark()->GetNode().GetTextNode()->Len());
-            rPam.GetPoint()->nNode = m_nEndNd - m_nOffset;
-            rPam.GetPoint()->nContent.Assign(rPam.GetContentNode(true), m_nEndCnt);
+            rPam.GetPoint()->Assign( m_nEndNd - m_nOffset, m_nEndCnt );
             pDoc->getIDocumentContentOperations().DeleteAndJoin(rPam);
         }
         rPam.DeleteMark();
@@ -718,8 +715,7 @@ void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
         }
     }
 
-    rPam.GetPoint()->nNode = m_nSttNd;
-    rPam.GetPoint()->nContent.Assign(rPam.GetPoint()->GetNode().GetTextNode(), m_nSttCnt);
+    rPam.GetPoint()->Assign( m_nSttNd, m_nSttCnt );
 }
 
 void SwUndoReplace::Impl::RedoImpl(::sw::UndoRedoContext & rContext)

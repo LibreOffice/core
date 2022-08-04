@@ -1458,13 +1458,13 @@ namespace sw::mark
         // Remove the old fieldmark and create a new one with the new type
         if (rNewType == ODF_FORMDROPDOWN || rNewType == ODF_FORMCHECKBOX)
         {
-            SwPosition aNewPos (aPaM.GetPoint()->nNode, aPaM.GetPoint()->nContent);
+            SwPosition aNewPos (*aPaM.GetPoint());
             deleteFieldmarkAt(aNewPos);
             return makeNoTextFieldBookmark(aPaM, sName, rNewType);
         }
         else if(rNewType == ODF_FORMDATE)
         {
-            SwPosition aPos (aPaM.GetPoint()->nNode, aPaM.GetPoint()->nContent);
+            SwPosition aPos (*aPaM.GetPoint());
             SwPaM aNewPaM(pFieldmark->GetMarkStart(), pFieldmark->GetMarkEnd());
             deleteFieldmarkAt(aPos);
             // HACK: hard-code the separator position here at the start because

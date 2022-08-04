@@ -671,8 +671,7 @@ void SwUndoTableToText::RedoImpl(::sw::UndoRedoContext & rContext)
         OSL_FAIL( "Where is the TextNode now?" );
     }
 
-    pPam->GetPoint()->nNode = aSaveIdx;
-    pPam->GetPoint()->nContent.Assign( pCNd, 0 );
+    pPam->GetPoint()->Assign( aSaveIdx );
 
     pPam->SetMark();            // log off all indices
     pPam->DeleteMark();
@@ -1990,8 +1989,7 @@ void SwUndoTableMerge::UndoImpl(::sw::UndoRedoContext & rContext)
     }
     SwPaM *const pPam(& rContext.GetCursorSupplier().CreateNewShellCursor());
     pPam->DeleteMark();
-    pPam->GetPoint()->nNode = m_nSttNode;
-    pPam->GetPoint()->nContent.Assign( pPam->GetContentNode(), m_nSttContent );
+    pPam->GetPoint()->Assign(m_nSttNode, m_nSttContent );
     pPam->SetMark();
     pPam->DeleteMark();
 

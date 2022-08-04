@@ -239,9 +239,8 @@ ErrCode SwASCIIParser::CallParser()
             {
                 // then set over the insert range the defined attributes
                 *pInsPam->GetMark() = *m_pPam->GetPoint();
-                ++pInsPam->GetPoint()->nNode;
-                pInsPam->GetPoint()->nContent.Assign(
-                                    pInsPam->GetContentNode(), nSttContent );
+                pInsPam->GetPoint()->Assign(pInsPam->GetPoint()->GetNode(), SwNodeOffset(1),
+                                    nSttContent );
 
                 // !!!!!
                 OSL_ENSURE( false, "Have to change - hard attr. to para. style" );
