@@ -16,6 +16,24 @@
       "message": "m_xEnv is a (c++) reference, which is unusual, coverity warns \"1507745 Pointer to local outside scope\" on m_xEnv(std::move(xEnv)) here",
       "revId": "b4b4c129e9f00189978cd7b71fd74d0dca4c9ebc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de0a969a_5d642f8d",
+        "filename": "ucb/source/ucp/cmis/auth_provider.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-08-04T07:58:52Z",
+      "side": 1,
+      "message": "Yes, agreed, the std::move recommendation here was bad",
+      "parentUuid": "447bf4cd_418d88b4",
+      "revId": "b4b4c129e9f00189978cd7b71fd74d0dca4c9ebc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
