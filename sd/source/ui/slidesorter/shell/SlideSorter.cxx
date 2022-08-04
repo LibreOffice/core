@@ -70,8 +70,8 @@ private:
 std::shared_ptr<SlideSorter> SlideSorter::CreateSlideSorter(
     ViewShell& rViewShell,
     sd::Window* pContentWindow,
-    ScrollBar* pHorizontalScrollBar,
-    ScrollBar* pVerticalScrollBar,
+    ScrollAdaptor* pHorizontalScrollBar,
+    ScrollAdaptor* pVerticalScrollBar,
     ScrollBarBox* pScrollBarBox)
 {
     std::shared_ptr<SlideSorter> pSlideSorter(
@@ -102,8 +102,8 @@ std::shared_ptr<SlideSorter> SlideSorter::CreateSlideSorter (
 SlideSorter::SlideSorter (
     ViewShell& rViewShell,
     sd::Window* pContentWindow,
-    ScrollBar* pHorizontalScrollBar,
-    ScrollBar* pVerticalScrollBar,
+    ScrollAdaptor* pHorizontalScrollBar,
+    ScrollAdaptor* pVerticalScrollBar,
     ScrollBarBox* pScrollBarBox)
     : mbIsValid(false),
       mpViewShell(&rViewShell),
@@ -124,8 +124,8 @@ SlideSorter::SlideSorter (
       mpViewShell(nullptr),
       mpViewShellBase(&rBase),
       mpContentWindow(VclPtr<ContentWindow>::Create(rParentWindow,*this )),
-      mpHorizontalScrollBar(VclPtr<ScrollBar>::Create(&rParentWindow,WinBits(WB_HSCROLL | WB_DRAG))),
-      mpVerticalScrollBar(VclPtr<ScrollBar>::Create(&rParentWindow,WinBits(WB_VSCROLL | WB_DRAG))),
+      mpHorizontalScrollBar(VclPtr<ScrollAdaptor>::Create(&rParentWindow, true)),
+      mpVerticalScrollBar(VclPtr<ScrollAdaptor>::Create(&rParentWindow, false)),
       mpScrollBarBox(VclPtr<ScrollBarBox>::Create(&rParentWindow)),
       mpProperties(std::make_shared<controller::Properties>()),
       mpTheme(std::make_shared<view::Theme>(mpProperties))

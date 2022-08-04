@@ -741,8 +741,10 @@ void SlideSorterView::DragFinished (sal_Int8 nDropAction)
 
 void SlideSorterView::UpdatePageUnderMouse ()
 {
-    VclPtr<ScrollBar> pVScrollBar (mrSlideSorter.GetVerticalScrollBar());
-    VclPtr<ScrollBar> pHScrollBar (mrSlideSorter.GetHorizontalScrollBar());
+#if 0
+    // Tracking TODO check
+    VclPtr<ScrollAdaptor> pVScrollBar (mrSlideSorter.GetVerticalScrollBar());
+    VclPtr<ScrollAdaptor> pHScrollBar (mrSlideSorter.GetHorizontalScrollBar());
     if ((pVScrollBar && pVScrollBar->IsVisible() && pVScrollBar->IsTracking())
         || (pHScrollBar && pHScrollBar->IsVisible() && pHScrollBar->IsTracking()))
     {
@@ -751,6 +753,7 @@ void SlideSorterView::UpdatePageUnderMouse ()
         SetPageUnderMouse(SharedPageDescriptor());
         return;
     }
+#endif
 
     sd::Window *pWindow (mrSlideSorter.GetContentWindow().get());
     if (pWindow && pWindow->IsVisible() && ! pWindow->IsMouseCaptured())

@@ -87,11 +87,11 @@ void ScrollBarManager::Disconnect()
 {
     if (mpVerticalScrollBar != nullptr)
     {
-        mpVerticalScrollBar->SetScrollHdl( Link<ScrollBar*,void>() );
+        mpVerticalScrollBar->SetScrollHdl( Link<weld::Scrollbar&,void>() );
     }
     if (mpHorizontalScrollBar != nullptr)
     {
-        mpHorizontalScrollBar->SetScrollHdl( Link<ScrollBar*,void>() );
+        mpHorizontalScrollBar->SetScrollHdl( Link<weld::Scrollbar&,void>() );
     }
 }
 
@@ -239,30 +239,24 @@ void ScrollBarManager::UpdateScrollBars(bool bUseScrolling)
     }
 }
 
-IMPL_LINK(ScrollBarManager, VerticalScrollBarHandler, ScrollBar*, pScrollBar, void)
+IMPL_LINK_NOARG(ScrollBarManager, VerticalScrollBarHandler, weld::Scrollbar&, void)
 {
-    if (pScrollBar!=nullptr
-        && pScrollBar==mpVerticalScrollBar.get()
-        && pScrollBar->IsVisible()
-        && mrSlideSorter.GetContentWindow())
+    if (mpVerticalScrollBar->IsVisible() && mrSlideSorter.GetContentWindow())
     {
-        double nRelativePosition = double(pScrollBar->GetThumbPos())
-            / double(pScrollBar->GetRange().Len());
+        double nRelativePosition = double(mpVerticalScrollBar->GetThumbPos())
+            / double(mpVerticalScrollBar->GetRange().Len());
         mrSlideSorter.GetView().InvalidatePageObjectVisibilities();
         mrSlideSorter.GetContentWindow()->SetVisibleXY(-1, nRelativePosition);
         mrSlideSorter.GetController().GetVisibleAreaManager().DeactivateCurrentSlideTracking();
     }
 }
 
-IMPL_LINK(ScrollBarManager, HorizontalScrollBarHandler, ScrollBar*, pScrollBar, void)
+IMPL_LINK_NOARG(ScrollBarManager, HorizontalScrollBarHandler, weld::Scrollbar&, void)
 {
-    if (pScrollBar!=nullptr
-        && pScrollBar==mpHorizontalScrollBar.get()
-        && pScrollBar->IsVisible()
-        && mrSlideSorter.GetContentWindow())
+    if (mpHorizontalScrollBar->IsVisible() && mrSlideSorter.GetContentWindow())
     {
-        double nRelativePosition = double(pScrollBar->GetThumbPos())
-            / double(pScrollBar->GetRange().Len());
+        double nRelativePosition = double(mpHorizontalScrollBar->GetThumbPos())
+            / double(mpHorizontalScrollBar->GetRange().Len());
         mrSlideSorter.GetView().InvalidatePageObjectVisibilities();
         mrSlideSorter.GetContentWindow()->SetVisibleXY(nRelativePosition, -1);
         mrSlideSorter.GetController().GetVisibleAreaManager().DeactivateCurrentSlideTracking();

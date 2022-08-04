@@ -20,6 +20,7 @@
 #pragma once
 
 #include <cppuhelper/weakref.hxx>
+#include <svtools/scrolladaptor.hxx>
 #include <vcl/scrbar.hxx>
 #include <sddllapi.h>
 #include <memory>
@@ -93,8 +94,8 @@ public:
     static std::shared_ptr<SlideSorter> CreateSlideSorter (
         ViewShell& rViewShell,
         sd::Window* pContentWindow,
-        ScrollBar* pHorizontalScrollBar,
-        ScrollBar* pVerticalScrollBar,
+        ScrollAdaptor* pHorizontalScrollBar,
+        ScrollAdaptor* pVerticalScrollBar,
         ScrollBarBox* pScrollBarBox);
 
     /** Create a new slide sorter that is loosely coupled to the given view
@@ -113,11 +114,11 @@ public:
 
     /** Return the control of the vertical scroll bar.
     */
-    const VclPtr<ScrollBar>& GetVerticalScrollBar() const { return mpVerticalScrollBar;}
+    const VclPtr<ScrollAdaptor>& GetVerticalScrollBar() const { return mpVerticalScrollBar;}
 
     /** Return the control of the horizontal scroll bar.
     */
-    const VclPtr<ScrollBar>& GetHorizontalScrollBar() const { return mpHorizontalScrollBar;}
+    const VclPtr<ScrollAdaptor>& GetHorizontalScrollBar() const { return mpHorizontalScrollBar;}
 
     /** Return the scroll bar filler that paints the little square that is
         enclosed by the two scroll bars.
@@ -204,8 +205,8 @@ private:
     ViewShell* mpViewShell;
     ViewShellBase* mpViewShellBase;
     VclPtr<sd::Window> mpContentWindow;
-    VclPtr<ScrollBar> mpHorizontalScrollBar;
-    VclPtr<ScrollBar> mpVerticalScrollBar;
+    VclPtr<ScrollAdaptor> mpHorizontalScrollBar;
+    VclPtr<ScrollAdaptor> mpVerticalScrollBar;
     VclPtr<ScrollBarBox> mpScrollBarBox;
 
     /** Some slide sorter wide properties that are used in different
@@ -217,8 +218,8 @@ private:
     SlideSorter (
         ViewShell& rViewShell,
         sd::Window* pContentWindow,
-        ScrollBar* pHorizontalScrollBar,
-        ScrollBar* pVerticalScrollBar,
+        ScrollAdaptor* pHorizontalScrollBar,
+        ScrollAdaptor* pVerticalScrollBar,
         ScrollBarBox* pScrollBarBox);
     SlideSorter (
         ViewShellBase& rBase,
