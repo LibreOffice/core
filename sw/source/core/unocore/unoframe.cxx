@@ -3637,9 +3637,9 @@ namespace
     }
 }
 
-SwXOLEListener::SwXOLEListener( SwFormat& rOLEFormat, uno::Reference< XModel > const & xOLE)
+SwXOLEListener::SwXOLEListener( SwFormat& rOLEFormat, uno::Reference< XModel > xOLE)
     : m_pOLEFormat(&rOLEFormat)
-    , m_xOLEModel(xOLE)
+    , m_xOLEModel(std::move(xOLE))
 {
     StartListening(m_pOLEFormat->GetNotifier());
 }

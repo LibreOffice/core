@@ -3881,9 +3881,9 @@ uno::Any SwXAutoStylesEnumerator::nextElement(  )
 
 SwXAutoStyle::SwXAutoStyle(
     SwDoc* pDoc,
-    std::shared_ptr<SfxItemSet> const & pInitSet,
+    std::shared_ptr<SfxItemSet> pInitSet,
     IStyleAccess::SwAutoStyleFamily eFam)
-:   mpSet(pInitSet),
+:   mpSet(std::move(pInitSet)),
     meFamily(eFam),
     mrDoc(*pDoc)
 {
@@ -4671,17 +4671,17 @@ css::uno::Sequence<OUString> SAL_CALL SwXTextTableStyle::getSupportedServiceName
 }
 
 // SwXTextCellStyle
-SwXTextCellStyle::SwXTextCellStyle(SwDocShell* pDocShell, SwBoxAutoFormat* pBoxAutoFormat, const OUString& sParentStyle) :
+SwXTextCellStyle::SwXTextCellStyle(SwDocShell* pDocShell, SwBoxAutoFormat* pBoxAutoFormat, OUString sParentStyle) :
     m_pDocShell(pDocShell),
     m_pBoxAutoFormat(pBoxAutoFormat),
-    m_sParentStyle(sParentStyle),
+    m_sParentStyle(std::move(sParentStyle)),
     m_bPhysical(true)
 { }
 
-SwXTextCellStyle::SwXTextCellStyle(SwDocShell* pDocShell, const OUString& sName) :
+SwXTextCellStyle::SwXTextCellStyle(SwDocShell* pDocShell, OUString sName) :
     m_pDocShell(pDocShell),
     m_pBoxAutoFormat_Impl(std::make_shared<SwBoxAutoFormat>()),
-    m_sName(sName),
+    m_sName(std::move(sName)),
     m_bPhysical(false)
 {
     m_pBoxAutoFormat = m_pBoxAutoFormat_Impl.get();

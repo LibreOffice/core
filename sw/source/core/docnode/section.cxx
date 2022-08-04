@@ -91,9 +91,9 @@ namespace {
     };
 }
 
-SwSectionData::SwSectionData(SectionType const eType, OUString const& rName)
+SwSectionData::SwSectionData(SectionType const eType, OUString aName)
     : m_eType(eType)
-    , m_sSectionName(rName)
+    , m_sSectionName(std::move(aName))
     , m_bHiddenFlag(false)
     , m_bProtectFlag(false)
     , m_bEditInReadonlyFlag(false) // edit in readonly sections

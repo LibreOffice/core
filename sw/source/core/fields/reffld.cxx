@@ -346,11 +346,11 @@ static void lcl_formatReferenceLanguage( OUString& rRefText,
 
 /// get references
 SwGetRefField::SwGetRefField( SwGetRefFieldType* pFieldType,
-                              const OUString& rSetRef, const OUString& rSetReferenceLanguage, sal_uInt16 nSubTyp,
+                              OUString aSetRef, OUString aSetReferenceLanguage, sal_uInt16 nSubTyp,
                               sal_uInt16 nSequenceNo, sal_uLong nFormat )
     : SwField( pFieldType, nFormat ),
-      m_sSetRefName( rSetRef ),
-      m_sSetReferenceLanguage( rSetReferenceLanguage ),
+      m_sSetRefName( std::move(aSetRef) ),
+      m_sSetReferenceLanguage( std::move(aSetReferenceLanguage) ),
       m_nSubType( nSubTyp ),
       m_nSeqNo( nSequenceNo )
 {

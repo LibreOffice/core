@@ -35,7 +35,7 @@ class SW_DLLPUBLIC SwDBFieldType final : public SwValueFieldType
 
 public:
 
-    SwDBFieldType(SwDoc* pDocPtr, const OUString& rColumnName, const SwDBData& rDBData);
+    SwDBFieldType(SwDoc* pDocPtr, const OUString& rColumnName, SwDBData aDBData);
     virtual ~SwDBFieldType() override;
 
     virtual OUString GetName() const override;
@@ -128,7 +128,7 @@ protected:
     const SwDBData& GetDBData() const {return m_aDBData;}
     SwDBData&       GetDBData() {return m_aDBData;}
 
-    SwDBNameInfField(SwFieldType* pTyp, const SwDBData& rDBData, sal_uInt32 nFormat = 0);
+    SwDBNameInfField(SwFieldType* pTyp, SwDBData aDBData, sal_uInt32 nFormat = 0);
 
 public:
     /// DBName
@@ -163,7 +163,7 @@ class SW_DLLPUBLIC SwDBNextSetField final : public SwDBNameInfField
 
 public:
     SwDBNextSetField( SwDBNextSetFieldType*,
-                      const OUString& rCond, const SwDBData& rDBData);
+                      OUString aCond, const SwDBData& rDBData);
 
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
@@ -203,7 +203,7 @@ class SwDBNumSetField final : public SwDBNameInfField
     bool    m_bCondValid;
 
 public:
-    SwDBNumSetField(SwDBNumSetFieldType*, const OUString& rCond, const OUString& rDBNum, const SwDBData& rDBData);
+    SwDBNumSetField(SwDBNumSetFieldType*, OUString aCond, OUString aDBNum, const SwDBData& rDBData);
 
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;

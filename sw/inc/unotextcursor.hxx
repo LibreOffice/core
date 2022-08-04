@@ -89,12 +89,12 @@ public:
 
     SwXTextCursor(
             SwDoc & rDoc,
-            css::uno::Reference< css::text::XText > const& xParent,
+            css::uno::Reference< css::text::XText > xParent,
             const CursorType eType,
             SwPosition const& rPos,
             SwPosition const*const pMark = nullptr);
     SwXTextCursor(
-            css::uno::Reference< css::text::XText > const& xParent,
+            css::uno::Reference< css::text::XText > xParent,
             SwPaM const& rSourceCursor,
             const CursorType eType = CursorType::All);
 

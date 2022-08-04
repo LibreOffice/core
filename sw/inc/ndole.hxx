@@ -56,7 +56,7 @@ class SW_DLLPUBLIC SwOLEObj
 
 public:
     SwOLEObj( const svt::EmbeddedObjectRef& pObj );
-    SwOLEObj( const OUString &rName, sal_Int64 nAspect );
+    SwOLEObj( OUString aName, sal_Int64 nAspect );
     ~SwOLEObj() COVERITY_NOEXCEPT_FALSE;
 
     bool UnloadObject();

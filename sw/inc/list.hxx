@@ -39,7 +39,7 @@ enum class SwListRedlineType
 class SwList
 {
     public:
-        SwList( const OUString& sListId,
+        SwList( OUString sListId,
                 SwNumRule& rDefaultListStyle,
                 const SwNodes& rNodes );
         ~SwList() COVERITY_NOEXCEPT_FALSE;

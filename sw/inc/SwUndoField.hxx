@@ -70,8 +70,8 @@ class SwUndoFieldFromAPI final : public SwUndoField
 
 public:
     SwUndoFieldFromAPI(const SwPosition & rPos,
-                       const css::uno::Any & rOldVal,
-                       const css::uno::Any & rNewVal,
+                       css::uno::Any aOldVal,
+                       css::uno::Any aNewVal,
                        sal_uInt16 nWhich);
     virtual ~SwUndoFieldFromAPI() override;
 

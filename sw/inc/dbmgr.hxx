@@ -32,6 +32,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <memory>
+#include <utility>
 #include <vector>
 
 namespace com::sun::star{
@@ -119,10 +120,10 @@ struct SwDSParam : public SwDBData
         {}
 
     SwDSParam(const SwDBData& rData,
-        const css::uno::Reference< css::sdbc::XResultSet>&    xResSet,
+        css::uno::Reference< css::sdbc::XResultSet> xResSet,
         const css::uno::Sequence<  css::uno::Any >&   rSelection) :
         SwDBData(rData),
-        xResultSet(xResSet),
+        xResultSet(std::move(xResSet)),
         aSelection(rSelection),
         bScrollable(true),
         bEndOfDB(false),

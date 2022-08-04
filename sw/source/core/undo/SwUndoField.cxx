@@ -110,9 +110,9 @@ void SwUndoFieldFromDoc::RepeatImpl(::sw::RepeatContext &)
 }
 
 SwUndoFieldFromAPI::SwUndoFieldFromAPI(const SwPosition & rPos,
-                                       const Any & rOldVal, const Any & rNewVal,
+                                       Any aOldVal, Any aNewVal,
                                        sal_uInt16 _nWhich)
-    : SwUndoField(rPos), m_aOldVal(rOldVal), m_aNewVal(rNewVal), m_nWhich(_nWhich)
+    : SwUndoField(rPos), m_aOldVal(std::move(aOldVal)), m_aNewVal(std::move(aNewVal)), m_nWhich(_nWhich)
 {
 }
 

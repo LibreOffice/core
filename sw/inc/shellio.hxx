@@ -163,13 +163,13 @@ public:
     // Initial reading. Document is created only at Read(...)
     // or in case it is given, into that.
     // Special case for Load with Sw3Reader.
-    SwReader( SfxMedium&, const OUString& rFilename, SwDoc *pDoc = nullptr );
+    SwReader( SfxMedium&, OUString aFilename, SwDoc *pDoc = nullptr );
 
     // Read into existing document.
     // Document and position in document are taken from SwPaM.
-    SwReader( SvStream&, const OUString& rFilename, const OUString& rBaseURL, SwPaM& );
-    SwReader( SfxMedium&, const OUString& rFilename, SwPaM& );
-    SwReader( const css::uno::Reference < css::embed::XStorage >&, const OUString& rFilename, SwPaM& );
+    SwReader( SvStream&, OUString aFilename, const OUString& rBaseURL, SwPaM& );
+    SwReader( SfxMedium&, OUString aFilename, SwPaM& );
+    SwReader( css::uno::Reference < css::embed::XStorage > , OUString aFilename, SwPaM& );
 
     // The only export interface is SwReader::Read(...)!!!
     ErrCode Read( const Reader& );
@@ -520,7 +520,7 @@ public:
     SwWriter( SvStream&, SwDoc & );
     SwWriter( SvStream&, SwPaM &, bool bWriteAll = false );
 
-    SwWriter( const css::uno::Reference < css::embed::XStorage >&, SwDoc& );
+    SwWriter( css::uno::Reference < css::embed::XStorage > , SwDoc& );
 
     SwWriter( SfxMedium&, SwCursorShell &, bool bWriteAll );
     SwWriter( SfxMedium&, SwDoc & );

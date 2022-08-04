@@ -48,7 +48,7 @@ class SW_DLLPUBLIC SwFormatINetFormat final
     sal_uInt16 mnINetFormatId;
     sal_uInt16 mnVisitedFormatId;
 public:
-    SwFormatINetFormat( const OUString& rURL, const OUString& rTarget );
+    SwFormatINetFormat( OUString aURL, OUString aTarget );
     SwFormatINetFormat( const SwFormatINetFormat& rAttr );
     SwFormatINetFormat();                     ///< For TypeInfo.
     virtual ~SwFormatINetFormat() override;

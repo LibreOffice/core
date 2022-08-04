@@ -26,6 +26,7 @@
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 
 #include <functional>
+#include <utility>
 
 class SwTextFrame;
 class SwTextNode;
@@ -91,13 +92,12 @@ struct SwSpellArgs : SwArgsBase
 
     bool bIsGrammarCheck;
 
-    SwSpellArgs(css::uno::Reference<
-            css::linguistic2::XSpellChecker1 > const &rxSplChk,
+    SwSpellArgs(css::uno::Reference< css::linguistic2::XSpellChecker1 > xSplChk,
             SwTextNode* pStart, SwContentIndex& rStart,
             SwTextNode* pEnd, SwContentIndex& rEnd,
             bool bGrammar )
         :   SwArgsBase( pStart, rStart, pEnd, rEnd ),
-            xSpeller( rxSplChk ),
+            xSpeller(std::move( xSplChk )),
             bIsGrammarCheck( bGrammar )
         {}
 };

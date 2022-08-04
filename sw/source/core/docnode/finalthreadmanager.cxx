@@ -222,8 +222,8 @@ void SAL_CALL TerminateOfficeThread::onTerminated()
         delete this;
 }
 
-FinalThreadManager::FinalThreadManager(css::uno::Reference< css::uno::XComponentContext > const & context)
-    : m_xContext(context),
+FinalThreadManager::FinalThreadManager(css::uno::Reference< css::uno::XComponentContext > context)
+    : m_xContext(std::move(context)),
       mpTerminateOfficeThread( nullptr ),
       mbRegisteredAtDesktop( false )
 {

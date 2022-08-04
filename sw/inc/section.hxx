@@ -84,7 +84,7 @@ private:
 
 public:
 
-    SwSectionData(SectionType const eType, OUString const& rName);
+    SwSectionData(SectionType const eType, OUString aName);
     explicit SwSectionData(SwSection const&);
     SwSectionData(SwSectionData const&);
     SwSectionData & operator=(SwSectionData const&);

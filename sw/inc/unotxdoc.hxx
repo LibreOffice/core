@@ -522,9 +522,9 @@ class SwXLinkNameAccessWrapper final : public cppu::WeakImplHelper
 
 public:
     SwXLinkNameAccessWrapper(css::uno::Reference< css::container::XNameAccess >  const & xAccess,
-            const OUString& rLinkDisplayName, const OUString& sSuffix);
+            OUString aLinkDisplayName, OUString  sSuffix);
     SwXLinkNameAccessWrapper(SwXTextDocument& rxDoc,
-            const OUString& rLinkDisplayName, const OUString& sSuffix);
+            OUString aLinkDisplayName, OUString sSuffix);
     virtual ~SwXLinkNameAccessWrapper() override;
 
     //XNameAccess
@@ -567,7 +567,7 @@ class SwXOutlineTarget final : public cppu::WeakImplHelper
     const sal_Int32             m_nOutlineLevel;
 
 public:
-    SwXOutlineTarget(const OUString& rOutlineText, const rtl::OUString &rActualText,
+    SwXOutlineTarget(OUString aOutlineText, OUString aActualText,
                      const sal_Int32 nOutlineLevel);
     virtual ~SwXOutlineTarget() override;
 
@@ -596,7 +596,7 @@ class SwXDrawingObjectTarget final : public cppu::WeakImplHelper
     OUString                    m_sDrawingObjectText;
 
 public:
-    SwXDrawingObjectTarget(const OUString& rDrawingObjectText);
+    SwXDrawingObjectTarget(OUString aDrawingObjectText);
     virtual ~SwXDrawingObjectTarget() override;
 
     //XPropertySet

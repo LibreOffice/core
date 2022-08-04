@@ -35,9 +35,9 @@ std::unique_ptr<SwFieldType> SwScriptFieldType::Copy() const
 }
 
 SwScriptField::SwScriptField( SwScriptFieldType* pInitType,
-                                const OUString& rType, const OUString& rCode,
+                                OUString aType, OUString aCode,
                                 bool bURL )
-    : SwField( pInitType ), m_sType( rType ), m_sCode( rCode ), m_bCodeURL( bURL )
+    : SwField( pInitType ), m_sType( std::move(aType) ), m_sCode( std::move(aCode) ), m_bCodeURL( bURL )
 {
 }
 

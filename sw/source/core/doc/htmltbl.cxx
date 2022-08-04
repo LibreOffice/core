@@ -78,10 +78,10 @@ public:
 }
 
 SwHTMLTableLayoutCnts::SwHTMLTableLayoutCnts(const SwStartNode *pSttNd,
-                                             std::shared_ptr<SwHTMLTableLayout> const& rTab,
+                                             std::shared_ptr<SwHTMLTableLayout> xTab,
                                              bool bNoBrTag,
-                                             std::shared_ptr<SwHTMLTableLayoutCnts> const& rNxt ) :
-    m_xNext( rNxt ), m_pBox( nullptr ), m_xTable( rTab ), m_pStartNode( pSttNd ),
+                                             std::shared_ptr<SwHTMLTableLayoutCnts> xNxt ) :
+    m_xNext( std::move(xNxt) ), m_pBox( nullptr ), m_xTable( std::move(xTab) ), m_pStartNode( pSttNd ),
     m_nPass1Done( 0 ), m_nWidthSet( 0 ), m_bNoBreakTag( bNoBrTag )
 {}
 
@@ -90,11 +90,11 @@ const SwStartNode *SwHTMLTableLayoutCnts::GetStartNode() const
     return m_pBox ? m_pBox->GetSttNd() : m_pStartNode;
 }
 
-SwHTMLTableLayoutCell::SwHTMLTableLayoutCell(std::shared_ptr<SwHTMLTableLayoutCnts> const& rCnts,
+SwHTMLTableLayoutCell::SwHTMLTableLayoutCell(std::shared_ptr<SwHTMLTableLayoutCnts> xCnts,
                                           sal_uInt16 nRSpan, sal_uInt16 nCSpan,
                                           sal_uInt16 nWidth, bool bPercentWidth,
                                           bool bNWrapOpt ) :
-    m_xContents(rCnts),
+    m_xContents(std::move(xCnts)),
     m_nRowSpan( nRSpan ), m_nColSpan( nCSpan ),
     m_nWidthOption( nWidth ), m_bPercentWidthOption( bPercentWidth ),
     m_bNoWrapOption( bNWrapOpt )

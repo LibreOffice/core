@@ -45,9 +45,9 @@ static OUString lcl_DBSeparatorConvert(const OUString& aContent)
 
 // database field type
 
-SwDBFieldType::SwDBFieldType(SwDoc* pDocPtr, const OUString& rNam, const SwDBData& rDBData ) :
+SwDBFieldType::SwDBFieldType(SwDoc* pDocPtr, const OUString& rNam, SwDBData aDBData ) :
     SwValueFieldType( pDocPtr, SwFieldIds::Database ),
-    m_aDBData(rDBData),
+    m_aDBData(std::move(aDBData)),
     m_sName(rNam),
     m_sColumn(rNam),
     m_nRefCnt(0)
@@ -439,9 +439,9 @@ bool SwDBField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 
 // base class for all further database fields
 
-SwDBNameInfField::SwDBNameInfField(SwFieldType* pTyp, const SwDBData& rDBData, sal_uInt32 nFormat) :
+SwDBNameInfField::SwDBNameInfField(SwFieldType* pTyp, SwDBData aDBData, sal_uInt32 nFormat) :
     SwField(pTyp, nFormat),
-    m_aDBData(rDBData),
+    m_aDBData(std::move(aDBData)),
     m_nSubType(0)
 {
 }
@@ -553,9 +553,9 @@ std::unique_ptr<SwFieldType> SwDBNextSetFieldType::Copy() const
 // SwDBSetField
 
 SwDBNextSetField::SwDBNextSetField(SwDBNextSetFieldType* pTyp,
-                                   const OUString& rCond,
+                                   OUString aCond,
                                    const SwDBData& rDBData) :
-    SwDBNameInfField(pTyp, rDBData), m_aCond(rCond), m_bCondValid(true)
+    SwDBNameInfField(pTyp, rDBData), m_aCond(std::move(aCond)), m_bCondValid(true)
 {}
 
 OUString SwDBNextSetField::ExpandImpl(SwRootFrame const*const) const
@@ -635,12 +635,12 @@ std::unique_ptr<SwFieldType> SwDBNumSetFieldType::Copy() const
 }
 
 SwDBNumSetField::SwDBNumSetField(SwDBNumSetFieldType* pTyp,
-                                 const OUString& rCond,
-                                 const OUString& rDBNum,
+                                 OUString aCond,
+                                 OUString aDBNum,
                                  const SwDBData& rDBData) :
     SwDBNameInfField(pTyp, rDBData),
-    m_aCond(rCond),
-    m_aPar2(rDBNum),
+    m_aCond(std::move(aCond)),
+    m_aPar2(std::move(aDBNum)),
     m_bCondValid(true)
 {}
 
