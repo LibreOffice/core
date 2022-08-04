@@ -123,15 +123,15 @@ void ViewShell::UpdateScrollBars()
 /**
  * Handling for horizontal Scrollbars
  */
-IMPL_LINK(ViewShell, HScrollHdl, ScrollBar *, pHScroll, void )
+IMPL_LINK_NOARG(ViewShell, HScrollHdl, weld::Scrollbar&, void)
 {
-    VirtHScrollHdl(pHScroll);
+    VirtHScrollHdl(mpHorizontalScrollBar);
 }
 
 /**
  * virtual scroll handler for horizontal Scrollbars
  */
-void ViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
+void ViewShell::VirtHScrollHdl(ScrollAdaptor* pHScroll)
 {
     double fX = static_cast<double>(pHScroll->GetThumbPos()) / pHScroll->GetRange().Len();
 
@@ -171,15 +171,15 @@ void ViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
 /**
  * handling for vertical Scrollbars
  */
-IMPL_LINK(ViewShell, VScrollHdl, ScrollBar *, pVScroll, void )
+IMPL_LINK_NOARG(ViewShell, VScrollHdl, weld::Scrollbar&, void)
 {
-    VirtVScrollHdl(pVScroll);
+    VirtVScrollHdl(mpVerticalScrollBar);
 }
 
 /**
  * handling for vertical Scrollbars
  */
-void ViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
+void ViewShell::VirtVScrollHdl(ScrollAdaptor* pVScroll)
 {
     if(IsPageFlipMode())
     {

@@ -23,6 +23,7 @@
 
 #include <sfx2/viewsh.hxx>
 #include <svl/typedwhich.hxx>
+#include <svtools/scrolladaptor.hxx>
 #include <vcl/prntypes.hxx>
 #include <vcl/scrbar.hxx>
 #include <o3tl/deleter.hxx>
@@ -434,9 +435,9 @@ protected:
     VclPtr<sd::Window> mpContentWindow;
 
     /// Horizontal scroll bar for the current slide is displayed when needed.
-    VclPtr<ScrollBar> mpHorizontalScrollBar;
+    VclPtr<ScrollAdaptor> mpHorizontalScrollBar;
     /// Vertical scroll bar for whole document is always visible.
-    VclPtr<ScrollBar> mpVerticalScrollBar;
+    VclPtr<ScrollAdaptor> mpVerticalScrollBar;
     /// Horizontal ruler is not shown by default.
     VclPtr<SvxRuler> mpHorizontalRuler;
     /// Vertical ruler is not shown by default.
@@ -491,12 +492,12 @@ protected:
     void ImpSidUndo(SfxRequest& rReq);
     void ImpSidRedo(SfxRequest& rReq);
 
-    DECL_DLLPRIVATE_LINK( HScrollHdl, ScrollBar *, void );
-    DECL_DLLPRIVATE_LINK( VScrollHdl, ScrollBar *, void );
+    DECL_DLLPRIVATE_LINK( HScrollHdl, weld::Scrollbar&, void );
+    DECL_DLLPRIVATE_LINK( VScrollHdl, weld::Scrollbar&, void );
 
     // virtual scroll handler, here, derivative classes can add themselves here
-    virtual void VirtHScrollHdl(ScrollBar* pHScroll);
-    virtual void VirtVScrollHdl(ScrollBar* pVScroll);
+    virtual void VirtHScrollHdl(ScrollAdaptor* pHScroll);
+    virtual void VirtVScrollHdl(ScrollAdaptor* pVScroll);
 
     // virtual functions ruler handling
     virtual VclPtr<SvxRuler> CreateHRuler(::sd::Window* pWin);

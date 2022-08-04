@@ -66,6 +66,8 @@ public:
 
     virtual bool Inactive() const override { return !m_xScrollBar->get_sensitive(); }
 
+    bool HasGrab() const { return m_xScrollBar->has_grab(); }
+
     ScrollAdaptor(vcl::Window* pParent, bool bHori);
     virtual void dispose() override;
 };
