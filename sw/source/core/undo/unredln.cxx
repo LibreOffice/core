@@ -356,8 +356,7 @@ void SwUndoRedlineSort::UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
         SwPaM aTmp( *rPam.GetMark() );
         aTmp.GetMark()->nContent = 0;
         aTmp.SetMark();
-        aTmp.GetPoint()->nNode = m_nSaveEndNode;
-        aTmp.GetPoint()->nContent.Assign( aTmp.GetContentNode(), m_nSaveEndContent );
+        aTmp.GetPoint()->Assign( m_nSaveEndNode, m_nSaveEndContent );
         rDoc.getIDocumentRedlineAccess().DeleteRedline( aTmp, true, RedlineType::Any );
     }
 
@@ -404,8 +403,7 @@ void SwUndoRedlineSort::RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
     SetValues( rPam );
 
     SetPaM( rPam );
-    rPam.GetPoint()->nNode = m_nSaveEndNode;
-    rPam.GetPoint()->nContent.Assign( rPam.GetContentNode(), m_nSaveEndContent );
+    rPam.GetPoint()->Assign( m_nSaveEndNode, m_nSaveEndContent );
 }
 
 void SwUndoRedlineSort::RepeatImpl(::sw::RepeatContext & rContext)
