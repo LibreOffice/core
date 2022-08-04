@@ -76,6 +76,7 @@ class SwRenameXNamedDlg;
 class SwModalRedlineAcceptDlg;
 class SwTOXMark;
 class SwSplitTableDlg;
+class SwNumFormatDlg;
 namespace sw
 {
 class DropDownFieldDialog;
@@ -123,6 +124,20 @@ public:
     virtual short Execute() override;
     virtual const SfxItemSet* GetOutputItemSet() const override;
     virtual void SetText(const OUString& rStr) override;
+};
+
+class AbstractNumFormatDlg_Impl : public AbstractNumFormatDlg
+{
+    std::shared_ptr<SwNumFormatDlg> m_xDlg;
+public:
+    explicit AbstractNumFormatDlg_Impl(std::shared_ptr<SwNumFormatDlg> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+
+    virtual short Execute() override;
+    virtual bool StartExecuteAsync(AsyncContext &rCtx) override;
+    virtual const SfxItemSet* GetOutputItemSet() const;
 };
 
 class AbstractSwAsciiFilterDlg_Impl : public AbstractSwAsciiFilterDlg
@@ -668,7 +683,7 @@ class SwAbstractDialogFactory_Impl : public SwAbstractDialogFactory
 public:
     virtual ~SwAbstractDialogFactory_Impl() {}
 
-    virtual VclPtr<SfxAbstractDialog> CreateNumFormatDialog(weld::Widget* pParent, const SfxItemSet& rAttr) override;
+    virtual VclPtr<AbstractNumFormatDlg> CreateNumFormatDialog(weld::Widget* pParent, const SfxItemSet& rAttr) override;
     virtual VclPtr<SfxAbstractDialog> CreateSwDropCapsDialog(weld::Window* pParent, const SfxItemSet& rSet) override;
     virtual VclPtr<SfxAbstractDialog> CreateSwBackgroundDialog(weld::Window* pParent, const SfxItemSet& rSet) override;
     virtual VclPtr<AbstractSwWordCountFloatDlg> CreateSwWordCountDialog(SfxBindings* pBindings,

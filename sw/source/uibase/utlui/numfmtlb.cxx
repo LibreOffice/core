@@ -406,7 +406,8 @@ void SwNumFormatBase::CallSelectHdl()
     set_active(-1);
 
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateNumFormatDialog(&get_widget(), aCoreSet));
+    ScopedVclPtr<AbstractNumFormatDlg> pDlg(pFact->CreateNumFormatDialog(&get_widget(), aCoreSet));
+    // TODO: Make this async too
 
     if (RET_OK == pDlg->Execute())
     {

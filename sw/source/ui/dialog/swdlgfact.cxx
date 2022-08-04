@@ -115,6 +115,21 @@ short AbstractSwAsciiFilterDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
+const SfxItemSet* AbstractNumFormatDlg_Impl::GetOutputItemSet() const
+{
+    return m_xDlg->GetOutputItemSet();
+}
+
+short AbstractNumFormatDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
+bool AbstractNumFormatDlg_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return weld::GenericDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 short AbstractSplitTableDialog_Impl::Execute()
 {
     return m_xDlg->run();
@@ -830,9 +845,9 @@ VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwBackgroundDialog
     return VclPtr<SwAbstractSfxController_Impl>::Create(std::make_unique<SwBackgroundDlg>(pParent, rSet));
 }
 
-VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateNumFormatDialog(weld::Widget* pParent, const SfxItemSet& rSet)
+VclPtr<AbstractNumFormatDlg> SwAbstractDialogFactory_Impl::CreateNumFormatDialog(weld::Widget* pParent, const SfxItemSet& rSet)
 {
-    return VclPtr<SwAbstractSfxController_Impl>::Create(std::make_unique<SwNumFormatDlg>(pParent, rSet));
+    return VclPtr<AbstractNumFormatDlg_Impl>::Create(std::make_shared<SwNumFormatDlg>(pParent, rSet));
 }
 
 VclPtr<AbstractSwAsciiFilterDlg> SwAbstractDialogFactory_Impl::CreateSwAsciiFilterDlg(weld::Window* pParent,

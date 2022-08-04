@@ -27,6 +27,7 @@
 #include "dbmgr.hxx"
 #include <cnttab.hxx>
 #include "tblenum.hxx"
+#include "tblnumfm.hxx"
 
 class SfxViewFrame;
 class SfxBindings;
@@ -220,6 +221,14 @@ public:
     virtual sal_uInt8   GetPara() const = 0;
 };
 
+class AbstractNumFormatDlg : public VclAbstractDialog
+{
+protected:
+    virtual ~AbstractNumFormatDlg() override = default;
+public:
+    virtual const SfxItemSet* GetOutputItemSet() const = 0;
+};
+
 class AbstractSwAsciiFilterDlg : public VclAbstractDialog
 {
 protected:
@@ -380,7 +389,7 @@ class SwAbstractDialogFactory
 public:
     static SwAbstractDialogFactory*     Create();
 
-    virtual VclPtr<SfxAbstractDialog> CreateNumFormatDialog(weld::Widget* pParent, const SfxItemSet& rAttr) = 0;
+    virtual VclPtr<AbstractNumFormatDlg> CreateNumFormatDialog(weld::Widget* pParent, const SfxItemSet& rAttr) = 0;
     virtual VclPtr<SfxAbstractDialog> CreateSwDropCapsDialog(weld::Window* pParent, const SfxItemSet& rSet) = 0;
     virtual VclPtr<SfxAbstractDialog> CreateSwBackgroundDialog(weld::Window* pParent, const SfxItemSet& rSet) = 0;
 

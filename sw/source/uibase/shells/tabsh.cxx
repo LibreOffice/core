@@ -721,31 +721,35 @@ void SwTableShell::Execute(SfxRequest &rReq)
                                     sCurText, SID_ATTR_NUMBERFORMAT_INFO ));
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateNumFormatDialog(GetView().GetFrameWeld(), aCoreSet));
+                VclPtr<AbstractNumFormatDlg> pDlg(pFact->CreateNumFormatDialog(GetView().GetFrameWeld(), aCoreSet));
 
-                if (RET_OK == pDlg->Execute())
-                {
-                    const SvxNumberInfoItem* pNumberFormatItem
-                        = GetView().GetDocShell()->GetItem( SID_ATTR_NUMBERFORMAT_INFO );
+                SwWrtShell* pSh = &rSh;
 
-                    if( pNumberFormatItem )
+                pDlg->StartExecuteAsync([pDlg, pSh, aCoreSet](int nResult) {
+                    if (nResult == RET_OK)
                     {
-                        for ( sal_uInt32 key : pNumberFormatItem->GetDelFormats() )
-                            pNumberFormatItem->GetNumberFormatter()->DeleteEntry( key );
+                        const SvxNumberInfoItem* pNumberFormatItem = pSh->GetView().GetDocShell()->GetItem( SID_ATTR_NUMBERFORMAT_INFO );
+
+                        if ( pNumberFormatItem )
+                        {
+                            for ( sal_uInt32 key : pNumberFormatItem->GetDelFormats() )
+                                pNumberFormatItem->GetNumberFormatter()->DeleteEntry( key );
+                        }
+
+                        const SfxPoolItem* pNumberFormatValueItem = nullptr;
+                        if( SfxItemState::SET == pDlg->GetOutputItemSet()->GetItemState(
+                            SID_ATTR_NUMBERFORMAT_VALUE, false, &pNumberFormatValueItem ))
+                        {
+                            SfxItemSetFixed<RES_BOXATR_FORMAT, RES_BOXATR_FORMAT> aBoxFormatSet( *aCoreSet.GetPool() );
+                            aBoxFormatSet.Put( SwTableBoxNumFormat(
+                                    static_cast<const SfxUInt32Item*>(pNumberFormatValueItem)->GetValue() ));
+                            pSh->SetTableBoxFormulaAttrs( aBoxFormatSet );
+                        }
                     }
 
-                    const SfxPoolItem* pNumberFormatValueItem = nullptr;
-                    if( SfxItemState::SET == pDlg->GetOutputItemSet()->GetItemState(
-                        SID_ATTR_NUMBERFORMAT_VALUE, false, &pNumberFormatValueItem ))
-                    {
-                        SfxItemSetFixed<RES_BOXATR_FORMAT, RES_BOXATR_FORMAT>
-                                aBoxFormatSet( *aCoreSet.GetPool() );
-                        aBoxFormatSet.Put( SwTableBoxNumFormat(
-                                static_cast<const SfxUInt32Item*>(pNumberFormatValueItem)->GetValue() ));
-                        rSh.SetTableBoxFormulaAttrs( aBoxFormatSet );
-
-                    }
-                }
+                    pDlg->disposeOnce();
+                });
+                rReq.Ignore(); // We're already handling the request in our async bit
             }
             break;
         }
