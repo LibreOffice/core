@@ -52,6 +52,24 @@
       "parentUuid": "64cc2029_a2e065f0",
       "revId": "6ba2c1642579d589a8993532cf5fa52d6f8d6cf9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6dff8448_82314534",
+        "filename": "reportdesign/source/ui/misc/UITools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-08-04T18:13:27Z",
+      "side": 1,
+      "message": "It fails with:\n\nTODO 1033 1033\nTODO 1035 1034\nsoffice.bin: /home/julien/lo/libreoffice/svl/source/items/itempool.cxx:322: void SfxItemPool::SetDefaults(std::vector\u003cSfxPoolItem *\u003e *): Assertion `((*pImpl-\u003empStaticDefaults)[n]-\u003eWhich() \u003d\u003d n + pImpl-\u003emnStart) \u0026\u0026 \"items ids in pool-ranges and in static-defaults do not match\"\u0027 failed.\n\nThe TODO lines come from this slight patch to log a bit more:\ndiff --git a/svl/source/items/itempool.cxx b/svl/source/items/itempool.cxx\nindex 601e90aee862..d98c6e37eae8 100644\n--- a/svl/source/items/itempool.cxx\n+++ b/svl/source/items/itempool.cxx\n@@ -19,6 +19,7 @@\n \n #include \u003csvl/itempool.hxx\u003e\n #include \u003csvl/setitem.hxx\u003e\n+#include \u003ciostream\u003e\n \n #include \u003cstring.h\u003e\n #include \u003clibxml/xmlwriter.h\u003e\n@@ -316,6 +317,7 @@ void SfxItemPool::SetDefaults( std::vector\u003cSfxPoolItem*\u003e* pDefaults )\n                     \"these are not static\" );\n         for ( sal_uInt16 n \u003d 0; n \u003c\u003d pImpl-\u003emnEnd - pImpl-\u003emnStart; ++n )\n         {\n+            std::cerr \u003c\u003c \"TODO \" \u003c\u003c (*pImpl-\u003empStaticDefaults)[n]-\u003eWhich() \u003c\u003c \" \" \u003c\u003c  (n + pImpl-\u003emnStart) \u003c\u003c \"\\n\";\n             assert(  ((*pImpl-\u003empStaticDefaults)[n]-\u003eWhich() \u003d\u003d n + pImpl-\u003emnStart)\n                         \u0026\u0026 \"items ids in pool-ranges and in static-defaults do not match\" );\n             (*pImpl-\u003empStaticDefaults)[n]-\u003eSetKind(SfxItemKind::StaticDefault);",
+      "parentUuid": "610c96fc_b7f87c39",
+      "revId": "6ba2c1642579d589a8993532cf5fa52d6f8d6cf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
