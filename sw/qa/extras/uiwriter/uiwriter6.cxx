@@ -16,6 +16,7 @@
 #include <drawdoc.hxx>
 #include <view.hxx>
 #include <com/sun/star/text/XTextColumns.hpp>
+#include <osl/file.hxx>
 
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
@@ -682,6 +683,19 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf113481)
     const uno::Reference<text::XTextRange> xPara3 = getParagraph(3);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xPara3->getString().getLength());
     CPPUNIT_ASSERT_EQUAL(u'\x1820', xPara3->getString()[0]);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf149915)
+{
+    utl::TempFile tmp(u"à");
+    tmp.EnableKillingFile();
+    OUString sURL = tmp.GetURL();
+    osl::File::copy(m_directories.getURLFromSrc(DATA_DIRECTORY) + "a.odt", sURL);
+
+    sal_uInt16 nInd = sURL.lastIndexOf('/') + 1;
+    OUString sTmpDir = sURL.copy(0, nInd);
+    const char pFileName = sURL.copy(nInd, sURL.getLength() - nInd).toChar();
+    SwDoc* pDoc = createSwDoc(sTmpDir, &pFileName);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf115013)
