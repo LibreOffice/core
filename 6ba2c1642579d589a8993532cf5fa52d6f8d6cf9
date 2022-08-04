@@ -16,6 +16,24 @@
       "message": "I don\u0027t think adding a poolitem that reportdesigner cannot use\nis a good idea.\n\nProbably a better fix, is to fix the ranges to look like:\n    XATTR_FILLSTYLE, XATTR_FILLBACKGROUND,\n    ITEMID_FONT, ITEMID_WEIGHT_COMPLEX",
       "revId": "6ba2c1642579d589a8993532cf5fa52d6f8d6cf9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64cc2029_a2e065f0",
+        "filename": "reportdesign/source/ui/misc/UITools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-08-04T17:23:37Z",
+      "side": 1,
+      "message": "Ok but since XATTR_FILL_LAST corresponds to XATTR_FILLUSESLIDEBACKGROUND (see include/svx/xdef.hxx line 129), it means I should change all these lines:\n    123 #define ITEMID_FONT                     TypedWhichId\u003cSvxFontItem\u003e(XATTR_FILL_LAST + 1)\n    124 #define ITEMID_FONTHEIGHT               TypedWhichId\u003cSvxFontHeightItem\u003e(XATTR_FILL_LAST + 2)\n    125 #define ITEMID_LANGUAGE                 TypedWhichId\u003cSvxLanguageItem\u003e(XATTR_FILL_LAST + 3)\n...\n\nto use XATTR_FILLBACKGROUND instead of XATTR_FILL_LAST.\n\nDoes it seem right or is there a better solution?",
+      "parentUuid": "22aefc01_a6a0d6ac",
+      "revId": "6ba2c1642579d589a8993532cf5fa52d6f8d6cf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
