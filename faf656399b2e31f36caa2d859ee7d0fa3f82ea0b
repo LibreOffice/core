@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa4cd3ee_041bc816",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-08-04T05:35:20Z",
+      "side": 1,
+      "message": "I noticed outline folding options are always shown in the Options - Writer - View page but setting them doesn\u0027t stick unless experimental features are enabled. Here is a fix.",
+      "revId": "faf656399b2e31f36caa2d859ee7d0fa3f82ea0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
