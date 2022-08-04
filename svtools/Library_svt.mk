@@ -99,6 +99,7 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/control/inettbc \
     svtools/source/control/ruler \
     svtools/source/control/scriptedtext \
+    svtools/source/control/scrolladaptor \
     svtools/source/control/tabbar \
     svtools/source/control/toolbarmenu \
     svtools/source/control/valueacc \

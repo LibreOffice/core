@@ -18,72 +18,31 @@
  */
 #pragma once
 
-#include <vcl/InterimItemWindow.hxx>
-#include <vcl/scrollable.hxx>
+#include <svtools/scrolladaptor.hxx>
 
-class SwScrollbar final : public InterimItemWindow
-                        , public Scrollable
+class SwScrollbar final : public ScrollAdaptor
 {
     Size    m_aDocSz;
-    bool    m_bHori       :1;     // horizontal = true, otherwise vertical
     bool    m_bAuto       :1;     // for scrolling mode
     bool    m_bVisible    :1;     // show/hide should only set this flag
     bool    m_bSizeSet    :1;     // was the size already set?
-    std::unique_ptr<weld::Scrollbar> m_xScrollBar;
-    Link<weld::Scrollbar&, void> m_aLink;
 
     void    AutoShow();
-
-    using Window::Hide;
-    using Window::IsVisible;
 
 public:
     void    ExtendedShow( bool bVisible = true );
     void    SetPosSizePixel( const Point& rNewPos, const Size& rNewSize ) override;
-    bool    IsVisible(bool bReal) const { return bReal ? InterimItemWindow::IsVisible() : m_bVisible; }
+    bool    IsScrollbarVisible(bool bReal) const { return bReal ? ScrollAdaptor::IsVisible() : m_bVisible; }
 
         // changing of document size
     void    DocSzChgd(const Size &rNewSize);
         // changing of visible region
     void    ViewPortChgd(const tools::Rectangle &rRectangle);
-        // what is it??
-    bool    IsHoriScroll() const { return m_bHori; }
 
     void    SetAuto(bool bSet);
     bool    IsAuto() const { return m_bAuto;}
 
-    virtual void SetRange(const Range& rRange) override;
-    virtual Range GetRange() const override;
-
-    virtual void SetRangeMin(tools::Long nNewRange) override;
-    virtual tools::Long GetRangeMin() const override;
-
-    virtual void SetRangeMax(tools::Long nNewRange) override;
-    virtual tools::Long GetRangeMax() const override;
-
-    virtual void SetLineSize(tools::Long nNewSize) override;
-    virtual tools::Long GetLineSize() const override;
-
-    virtual void SetPageSize(tools::Long nNewSize) override;
-    virtual tools::Long GetPageSize() const override;
-
-    virtual void SetVisibleSize(tools::Long nNewSize) override;
-    virtual tools::Long GetVisibleSize() const override;
-
-    virtual void SetThumbPos(tools::Long nThumbPos) override;
-    virtual tools::Long GetThumbPos() const override;
-
-    void SetScrollHdl(const Link<weld::Scrollbar&, void>& rLink);
-
-    virtual tools::Long DoScroll(tools::Long nNewPos) override;
-
-    virtual bool Inactive() const override
-    {
-        return !m_xScrollBar->get_sensitive();
-    }
-
     SwScrollbar(vcl::Window *pParent, bool bHori );
-    virtual void dispose() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

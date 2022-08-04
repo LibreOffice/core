@@ -22,24 +22,16 @@
 #define SCROLL_LINE_SIZE 250
 
 SwScrollbar::SwScrollbar(vcl::Window *pWin, bool bHoriz)
-    : InterimItemWindow(pWin, "modules/swriter/ui/scrollbars.ui", "ScrollBars")
-    , m_bHori(bHoriz)
+    : ScrollAdaptor(pWin, bHoriz)
     , m_bAuto(false)
     , m_bVisible(false)
     , m_bSizeSet(false)
-    , m_xScrollBar(m_xBuilder->weld_scrollbar(bHoriz ? "horizontal" : "vertical"))
 {
     m_xScrollBar->show();
 
     // No mirroring for horizontal scrollbars
     if (bHoriz)
         m_xScrollBar->set_direction(false);
-}
-
-void SwScrollbar::dispose()
-{
-    m_xScrollBar.reset();
-    InterimItemWindow::dispose();
 }
 
 // Will be called after a change of the document size
@@ -80,13 +72,13 @@ void SwScrollbar::ExtendedShow( bool bSet )
     m_bVisible = bSet;
     if( (!bSet ||  !m_bAuto) && IsUpdateMode() && m_bSizeSet)
     {
-        InterimItemWindow::Show(bSet);
+        ScrollAdaptor::Show(bSet);
     }
 }
 
 void SwScrollbar::SetPosSizePixel( const Point& rNewPos, const Size& rNewSize )
 {
-    InterimItemWindow::SetPosSizePixel(rNewPos, rNewSize);
+    ScrollAdaptor::SetPosSizePixel(rNewPos, rNewSize);
     m_bSizeSet = true;
     if(m_bVisible)
         ExtendedShow();
@@ -99,7 +91,7 @@ void SwScrollbar::SetAuto(bool bSet)
         m_bAuto = bSet;
 
         // hide automatically - then show
-        if(!m_bAuto && m_bVisible && !InterimItemWindow::IsVisible())
+        if(!m_bAuto && m_bVisible && !ScrollAdaptor::IsVisible())
             ExtendedShow();
         else if(m_bAuto)
             AutoShow(); // or hide automatically
@@ -110,101 +102,15 @@ void SwScrollbar::AutoShow()
 {
     tools::Long nVis = GetVisibleSize();
     tools::Long nLen = GetRange().Len();
-    if( nVis >= nLen - 1)
+    if (nVis >= nLen - 1)
     {
-        if(InterimItemWindow::IsVisible())
-            InterimItemWindow::Show(false);
+        if (ScrollAdaptor::IsVisible())
+            ScrollAdaptor::Show(false);
     }
-    else if ( !InterimItemWindow::IsVisible() )
+    else if (!ScrollAdaptor::IsVisible())
     {
-        InterimItemWindow::Show();
+        ScrollAdaptor::Show();
     }
-}
-
-void SwScrollbar::SetRange(const Range& rRange)
-{
-    m_xScrollBar->adjustment_set_lower(rRange.Min());
-    m_xScrollBar->adjustment_set_upper(rRange.Max());
-}
-
-Range SwScrollbar::GetRange() const
-{
-    return Range(m_xScrollBar->adjustment_get_lower(),
-                 m_xScrollBar->adjustment_get_upper());
-}
-
-void SwScrollbar::SetRangeMin(tools::Long nNewRange)
-{
-    m_xScrollBar->adjustment_set_lower(nNewRange);
-}
-
-tools::Long SwScrollbar::GetRangeMin() const
-{
-    return m_xScrollBar->adjustment_get_lower();
-}
-
-void SwScrollbar::SetRangeMax(tools::Long nNewRange)
-{
-    m_xScrollBar->adjustment_set_upper(nNewRange);
-}
-
-tools::Long SwScrollbar::GetRangeMax() const
-{
-    return m_xScrollBar->adjustment_get_upper();
-}
-
-void SwScrollbar::SetLineSize(tools::Long nNewSize)
-{
-    m_xScrollBar->adjustment_set_step_increment(nNewSize);
-}
-
-tools::Long SwScrollbar::GetLineSize() const
-{
-    return m_xScrollBar->adjustment_get_step_increment();
-}
-
-void SwScrollbar::SetPageSize(tools::Long nNewSize)
-{
-    m_xScrollBar->adjustment_set_page_increment(nNewSize);
-}
-
-tools::Long SwScrollbar::GetPageSize() const
-{
-    return m_xScrollBar->adjustment_get_page_increment();
-}
-
-void SwScrollbar::SetVisibleSize(tools::Long nNewSize)
-{
-    m_xScrollBar->adjustment_set_page_size(nNewSize);
-}
-
-tools::Long SwScrollbar::GetVisibleSize() const
-{
-    return m_xScrollBar->adjustment_get_page_size();
-}
-
-void SwScrollbar::SetThumbPos(tools::Long nThumbPos)
-{
-    m_xScrollBar->adjustment_set_value(nThumbPos);
-}
-
-tools::Long SwScrollbar::GetThumbPos() const
-{
-    return m_xScrollBar->adjustment_get_value();
-}
-
-void SwScrollbar::SetScrollHdl(const Link<weld::Scrollbar&, void>& rLink)
-{
-    m_aLink = rLink;
-    m_xScrollBar->connect_adjustment_changed(rLink);
-}
-
-tools::Long SwScrollbar::DoScroll(tools::Long nNewPos)
-{
-    const auto nOrig = m_xScrollBar->adjustment_get_value();
-    m_xScrollBar->adjustment_set_value(nNewPos);
-    m_aLink.Call(*m_xScrollBar);
-    return m_xScrollBar->adjustment_get_value() - nOrig;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

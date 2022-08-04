@@ -728,7 +728,7 @@ void SwView::ShowHScrollbar(bool bShow)
 bool SwView::IsHScrollbarVisible()const
 {
     assert(m_pHScrollbar && "Scrollbar invalid");
-    return m_pHScrollbar->IsVisible( false ) || m_pHScrollbar->IsAuto();
+    return m_pHScrollbar->IsScrollbarVisible(false) || m_pHScrollbar->IsAuto();
 }
 
 void SwView::ShowVScrollbar(bool bShow)
@@ -740,7 +740,7 @@ void SwView::ShowVScrollbar(bool bShow)
 bool SwView::IsVScrollbarVisible()const
 {
     assert(m_pVScrollbar && "Scrollbar invalid");
-    return m_pVScrollbar->IsVisible( false );
+    return m_pVScrollbar->IsScrollbarVisible(false);
 }
 
 void SwView::EnableHScrollbar(bool bEnable)
