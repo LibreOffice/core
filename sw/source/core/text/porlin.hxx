@@ -154,8 +154,8 @@ public:
     void CalcTextSize( const SwTextSizeInfo &rInfo );
 
     // Output
-    virtual void Paint( const SwTextPaintInfo &rInf ) const = 0;
-    void PrePaint( const SwTextPaintInfo &rInf, const SwLinePortion *pLast ) const;
+    virtual void Paint( SwTextPaintInfo &rInf ) = 0;
+    void PrePaint( const SwTextPaintInfo &rInf, const SwLinePortion *pLast );
 
     virtual bool Format( SwTextFormatInfo &rInf );
     // Is called for the line's last portion

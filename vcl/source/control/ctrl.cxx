@@ -366,7 +366,7 @@ ControlLayoutData::~ControlLayoutData()
         m_pParent->ImplClearLayoutData();
 }
 
-Size Control::GetOptimalSize() const
+Size Control::GetOptimalSize()
 {
     return Size( GetTextWidth( GetText() ) + 2 * 12,
                  GetTextHeight() + 2 * 6 );

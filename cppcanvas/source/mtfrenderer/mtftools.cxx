@@ -49,7 +49,7 @@ namespace cppcanvas::tools
         }
 
         ::Size getBaselineOffset( const ::cppcanvas::internal::OutDevState& outdevState,
-                                  const VirtualDevice&                      rVDev )
+                                  VirtualDevice&                            rVDev )
         {
             const ::FontMetric& aMetric = rVDev.GetFontMetric();
 
@@ -215,7 +215,7 @@ namespace cppcanvas::tools
         }
 
         // create overline/underline/strikeout line info struct
-        TextLineInfo createTextLineInfo( const ::VirtualDevice&                     rVDev,
+        TextLineInfo createTextLineInfo( ::VirtualDevice&                           rVDev,
                                          const ::cppcanvas::internal::OutDevState&  rState )
         {
             const bool bOldMode( rVDev.IsMapModeEnabled() );
@@ -225,7 +225,7 @@ namespace cppcanvas::tools
             rVDev.GetFontMetric();
 
             // will restore map mode below
-            const_cast< ::VirtualDevice& >(rVDev).EnableMapMode( false );
+            rVDev.EnableMapMode( false );
 
             const ::FontMetric aMetric = rVDev.GetFontMetric();
 
@@ -239,7 +239,7 @@ namespace cppcanvas::tools
                 rState.textUnderlineStyle,
                 rState.textStrikeoutStyle );
 
-            const_cast< ::VirtualDevice& >(rVDev).EnableMapMode( bOldMode );
+            rVDev.EnableMapMode( bOldMode );
 
             return aTextInfo;
         }

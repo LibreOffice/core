@@ -109,7 +109,7 @@ namespace dbaui
         // called when a table from tabview was deleted
         void TableDeleted(const OUString& rAliasName);
 
-        sal_Int32 getColWidth( sal_uInt16 _nColPos) const;
+        sal_Int32 getColWidth( sal_uInt16 _nColPos);
         void fillValidFields(std::u16string_view strTableName, weld::ComboBox& rFieldList);
 
         void SaveUIConfig();

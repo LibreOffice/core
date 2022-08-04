@@ -227,7 +227,7 @@ private:
     friend class ValueSetAcc;
 
     SVT_DLLPRIVATE void         ImplDeleteItems();
-    SVT_DLLPRIVATE void         ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSetItem* pItem, tools::Rectangle aRect);
+    SVT_DLLPRIVATE void         ImplFormatItem(vcl::RenderContext& rRenderContext, ValueSetItem* pItem, tools::Rectangle aRect);
     SVT_DLLPRIVATE void         ImplDrawItemText(vcl::RenderContext& rRenderContext, const OUString& rStr);
     // nItemId is the item to draw selected, but if nothing is selected something else may be drawn as selected instead, the item to draw
     // selected is returned
@@ -370,7 +370,7 @@ public:
 
     void            SetExtraSpacing( sal_uInt16 nNewSpacing );
 
-    void            Format(vcl::RenderContext const & rRenderContext);
+    void            Format(vcl::RenderContext& rRenderContext);
     void            SetFormat();
 
     Size            CalcWindowSizePixel(const Size& rItemSize,

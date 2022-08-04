@@ -277,7 +277,7 @@ void ScDataTableView::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
     Control::Paint(rRenderContext, rRectangle);
 }
 
-Size ScDataTableView::GetOptimalSize() const
+Size ScDataTableView::GetOptimalSize()
 {
     return Size(450, 400);
 }

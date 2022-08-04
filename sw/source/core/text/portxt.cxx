@@ -526,7 +526,7 @@ SwPosSize SwTextPortion::GetTextSize( const SwTextSizeInfo &rInf ) const
     return aSize;
 }
 
-void SwTextPortion::Paint( const SwTextPaintInfo &rInf ) const
+void SwTextPortion::Paint( SwTextPaintInfo &rInf )
 {
     if (rInf.OnWin() && TextFrameIndex(1) == rInf.GetLen()
         && CH_TXT_ATR_FIELDEND == rInf.GetText()[sal_Int32(rInf.GetIdx())])
@@ -686,7 +686,7 @@ bool SwTextInputFieldPortion::Format(SwTextFormatInfo &rTextFormatInfo)
     return SwTextPortion::Format(rTextFormatInfo);
 }
 
-void SwTextInputFieldPortion::Paint( const SwTextPaintInfo &rInf ) const
+void SwTextInputFieldPortion::Paint( SwTextPaintInfo &rInf )
 {
     if ( Width() )
     {
@@ -708,7 +708,7 @@ void SwTextInputFieldPortion::Paint( const SwTextPaintInfo &rInf ) const
             && SwViewOption::IsFieldShadings()
             && !rInf.GetOpt().IsPagePreview())
         {
-            OutputDevice* pOut = const_cast<OutputDevice*>(rInf.GetOut());
+            OutputDevice* pOut = rInf.GetOut();
             pOut->Push(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
             pOut->SetFillColor(SwViewOption::GetFieldShadingsColor());
             pOut->SetLineColor();
@@ -775,7 +775,7 @@ SwPosSize SwHolePortion::GetTextSize(const SwTextSizeInfo& rInf) const
     return aSize;
 }
 
-void SwHolePortion::Paint( const SwTextPaintInfo &rInf ) const
+void SwHolePortion::Paint( SwTextPaintInfo &rInf )
 {
     if( !rInf.GetOut() )
         return;
@@ -838,7 +838,7 @@ void SwHolePortion::dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText, T
     (void)xmlTextWriterEndElement(pWriter);
 }
 
-void SwFieldMarkPortion::Paint( const SwTextPaintInfo & /*rInf*/) const
+void SwFieldMarkPortion::Paint( SwTextPaintInfo & /*rInf*/)
 {
     // These shouldn't be painted!
     //SwTextPortion::Paint(rInf);
@@ -850,7 +850,7 @@ bool SwFieldMarkPortion::Format( SwTextFormatInfo & )
     return false;
 }
 
-void SwFieldFormCheckboxPortion::Paint( const SwTextPaintInfo& rInf ) const
+void SwFieldFormCheckboxPortion::Paint( SwTextPaintInfo& rInf )
 {
     SwPosition const aPosition(rInf.GetTextFrame()->MapViewToModelPos(rInf.GetIdx()));
 

@@ -91,7 +91,7 @@ protected:
     virtual const vcl::Font&    GetCanonicalFont( const StyleSettings& _rStyle ) const override;
     virtual const Color&        GetCanonicalTextColor( const StyleSettings& _rStyle ) const override;
     virtual bool                ImplPlaceTabs( tools::Long nWidth );
-    SAL_DLLPRIVATE Size ImplCalculateRequisition(sal_uInt16& nHeaderHeight) const;
+    SAL_DLLPRIVATE Size ImplCalculateRequisition(sal_uInt16& nHeaderHeight);
 
 public:
                         TabControl( vcl::Window* pParent,
@@ -115,7 +115,7 @@ public:
     void                ActivatePage();
     bool                DeactivatePage();
 
-    virtual Size GetOptimalSize() const override;
+    virtual Size GetOptimalSize() override;
 
     void                SetTabPageSizePixel( const Size& rSize );
 
@@ -180,7 +180,7 @@ public:
     virtual void SetSizePixel(const Size& rNewSize) override;
     virtual void SetPosSizePixel(const Point& rNewPos, const Size& rNewSize) override;
 
-    virtual Size calculateRequisition() const;
+    virtual Size calculateRequisition();
     void setAllocation(const Size &rAllocation);
 
     std::vector<sal_uInt16> GetPageIDs() const;
@@ -210,7 +210,7 @@ public:
     ToolBox* GetToolBox() { return m_pShortcuts; }
     Control* GetOpenMenu();
 
-    virtual Size        calculateRequisition() const override;
+    virtual Size        calculateRequisition() override;
     static sal_uInt16   GetHeaderHeight();
 
 protected:

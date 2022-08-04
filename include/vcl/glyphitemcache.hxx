@@ -45,14 +45,13 @@ class VCL_DLLPUBLIC SalLayoutGlyphsCache final
 public:
     // NOTE: The lifetime of the returned value is guaranteed only until the next call
     // to any function in this class.
-    const SalLayoutGlyphs* GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice,
-                                           const OUString& text,
+    const SalLayoutGlyphs* GetLayoutGlyphs(VclPtr<OutputDevice> outputDevice, const OUString& text,
                                            const vcl::text::TextLayoutCache* layoutCache = nullptr)
     {
         return GetLayoutGlyphs(outputDevice, text, 0, text.getLength(), 0, layoutCache);
     }
-    const SalLayoutGlyphs* GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice,
-                                           const OUString& text, sal_Int32 nIndex, sal_Int32 nLen,
+    const SalLayoutGlyphs* GetLayoutGlyphs(VclPtr<OutputDevice> outputDevice, const OUString& text,
+                                           sal_Int32 nIndex, sal_Int32 nLen,
                                            tools::Long nLogicWidth = 0,
                                            const vcl::text::TextLayoutCache* layoutCache = nullptr);
     void clear();
@@ -78,7 +77,7 @@ private:
         vcl::text::ComplexTextLayoutFlags layoutMode;
         LanguageType digitLanguage;
         size_t hashValue;
-        CachedGlyphsKey(const VclPtr<const OutputDevice>& dev, OUString t, sal_Int32 i, sal_Int32 l,
+        CachedGlyphsKey(const VclPtr<OutputDevice>& dev, OUString t, sal_Int32 i, sal_Int32 l,
                         tools::Long w);
         bool operator==(const CachedGlyphsKey& other) const;
     };

@@ -1143,23 +1143,23 @@ const Selection& VclMultiLineEdit::GetSelection() const
     return pImpVclMEdit->GetSelection();
 }
 
-Size VclMultiLineEdit::CalcMinimumSize() const
+Size VclMultiLineEdit::CalcMinimumSize()
 {
     Size aSz = pImpVclMEdit->CalcMinimumSize();
 
     sal_Int32 nLeft, nTop, nRight, nBottom;
-    static_cast<vcl::Window*>(const_cast<VclMultiLineEdit *>(this))->GetBorder( nLeft, nTop, nRight, nBottom );
-    aSz.AdjustWidth(nLeft+nRight );
-    aSz.AdjustHeight(nTop+nBottom );
+    static_cast<vcl::Window*>(this)->GetBorder(nLeft, nTop, nRight, nBottom);
+    aSz.AdjustWidth(nLeft+nRight);
+    aSz.AdjustHeight(nTop+nBottom);
 
     return aSz;
 }
 
-Size VclMultiLineEdit::CalcAdjustedSize( const Size& rPrefSize ) const
+Size VclMultiLineEdit::CalcAdjustedSize(Size const& rPrefSize)
 {
     Size aSz = rPrefSize;
     sal_Int32 nLeft, nTop, nRight, nBottom;
-    static_cast<vcl::Window*>(const_cast<VclMultiLineEdit *>(this))->GetBorder( nLeft, nTop, nRight, nBottom );
+    static_cast<vcl::Window*>(this)->GetBorder(nLeft, nTop, nRight, nBottom);
 
     // center vertically for whole lines
 

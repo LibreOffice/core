@@ -865,7 +865,7 @@ class SwMetaPortion : public SwTextPortion
     Color m_aShadowColor;
 public:
     SwMetaPortion() { SetWhichPor( PortionType::Meta ); }
-    virtual void Paint( const SwTextPaintInfo &rInf ) const override;
+    virtual void Paint( SwTextPaintInfo &rInf ) override;
     void SetShadowColor(const Color& rCol ) { m_aShadowColor = rCol; }
 };
 
@@ -874,11 +874,11 @@ class SwContentControlPortion : public SwTextPortion
 {
 public:
     SwContentControlPortion() { SetWhichPor(PortionType::ContentControl); }
-    virtual void Paint(const SwTextPaintInfo& rInf) const override;
+    virtual void Paint(SwTextPaintInfo& rInf) override;
 };
 }
 
-void SwMetaPortion::Paint( const SwTextPaintInfo &rInf ) const
+void SwMetaPortion::Paint( SwTextPaintInfo &rInf )
 {
     if ( Width() )
     {
@@ -892,7 +892,7 @@ void SwMetaPortion::Paint( const SwTextPaintInfo &rInf ) const
     }
 }
 
-void SwContentControlPortion::Paint(const SwTextPaintInfo& rInf) const
+void SwContentControlPortion::Paint(SwTextPaintInfo& rInf)
 {
     if (Width())
     {

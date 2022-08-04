@@ -50,7 +50,7 @@ static WinBits clearProgressBarBorder( vcl::Window const * pParent, WinBits nOrg
     return nOutStyle;
 }
 
-Size ProgressBar::GetOptimalSize() const
+Size ProgressBar::GetOptimalSize()
 {
     return Size(150, 20);
 }

@@ -106,7 +106,7 @@ HeaderBar::HeaderBar(vcl::Window* pParent, WinBits nWinStyle)
     SetSizePixel( CalcWindowSizePixel() );
 }
 
-Size HeaderBar::GetOptimalSize() const
+Size HeaderBar::GetOptimalSize()
 {
     return CalcWindowSizePixel();
 }
@@ -1250,7 +1250,7 @@ OUString HeaderBar::GetHelpText( sal_uInt16 nItemId ) const
     return OUString();
 }
 
-Size HeaderBar::CalcWindowSizePixel() const
+Size HeaderBar::CalcWindowSizePixel()
 {
     tools::Long nMaxImageSize = 0;
     Size aSize( 0, GetTextHeight() );

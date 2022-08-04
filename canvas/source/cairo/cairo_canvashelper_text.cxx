@@ -57,7 +57,7 @@ namespace cairocanvas
     }
 
     static bool
-    setupFontTransform( ::OutputDevice const &          rOutDev,
+    setupFontTransform( ::OutputDevice&                 rOutDev,
                         ::Point&                        o_rPoint,
                         vcl::Font&                      io_rVCLFont,
                         const rendering::ViewState&     rViewState,

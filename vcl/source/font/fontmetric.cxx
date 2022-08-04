@@ -175,7 +175,7 @@ ImplFontMetricData::ImplFontMetricData( const vcl::font::FontSelectPattern& rFon
     SetStyleName( rFontSelData.GetStyleName() );
 }
 
-void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
+void ImplFontMetricData::ImplInitTextLineSize( OutputDevice* const pDev)
 {
     tools::Long nDescent = mnDescent;
     if ( nDescent <= 0 )
@@ -315,7 +315,7 @@ void ImplFontMetricData::ImplInitAboveTextLineSize()
     mnAboveWUnderlineOffset = nCeiling + (nIntLeading + 1) / 2;
 }
 
-void ImplFontMetricData::ImplInitFlags( const OutputDevice* pDev )
+void ImplFontMetricData::ImplInitFlags(OutputDevice* const pDev)
 {
     const vcl::Font& rFont ( pDev->GetFont() );
     bool bCentered = true;

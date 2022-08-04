@@ -121,11 +121,11 @@ public:
     void            SetEntryActivateHdl(const Link<Edit&,bool>& rLink);
     void            SetUserDrawHdl(const Link<UserDrawEvent*, void>& rLink);
 
-    Size            CalcMinimumSize() const override;
-    virtual Size    GetOptimalSize() const override;
-    Size            CalcAdjustedSize( const Size& rPrefSize ) const;
-    Size            CalcBlockSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const;
-    void            GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const;
+    Size            CalcMinimumSize() override;
+    virtual Size    GetOptimalSize() override;
+    Size            CalcAdjustedSize(Size const& rPrefSize);
+    Size            CalcBlockSize(sal_uInt16 nColumns, sal_uInt16 nLines);
+    void            GetMaxVisColumnsAndLines(sal_uInt16& rnCols, sal_uInt16& rnLines);
 
     void            SetMRUEntries( std::u16string_view rEntries );
     OUString        GetMRUEntries() const;

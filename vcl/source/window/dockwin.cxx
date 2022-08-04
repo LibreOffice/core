@@ -1014,7 +1014,7 @@ void DockingWindow::setPosSizeOnContainee()
     VclContainer::setLayoutAllocation(*pBox, Point(nBorderWidth, nBorderWidth), aSize);
 }
 
-Size DockingWindow::GetOptimalSize() const
+Size DockingWindow::GetOptimalSize()
 {
     if (!isLayoutEnabled())
         return Window::GetOptimalSize();

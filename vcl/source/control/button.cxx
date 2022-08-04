@@ -1682,7 +1682,7 @@ void PushButton::EndSelection()
     }
 }
 
-Size PushButton::CalcMinimumSize() const
+Size PushButton::CalcMinimumSize()
 {
     Size aSize;
 
@@ -1732,7 +1732,7 @@ Size PushButton::CalcMinimumSize() const
     return CalcWindowSize( aSize );
 }
 
-Size PushButton::GetOptimalSize() const
+Size PushButton::GetOptimalSize()
 {
     return CalcMinimumSize();
 }
@@ -2937,7 +2937,7 @@ void RadioButton::ImplAdjustNWFSizes()
     GetOutDev()->Pop();
 }
 
-Size RadioButton::CalcMinimumSize(tools::Long nMaxWidth) const
+Size RadioButton::CalcMinimumSize(tools::Long nMaxWidth)
 {
     Size aSize;
     if ( !maImage )
@@ -2985,7 +2985,7 @@ Size RadioButton::CalcMinimumSize(tools::Long nMaxWidth) const
     return CalcWindowSize( aSize );
 }
 
-Size RadioButton::GetOptimalSize() const
+Size RadioButton::GetOptimalSize()
 {
     return CalcMinimumSize();
 }
@@ -3739,7 +3739,7 @@ void CheckBox::ImplAdjustNWFSizes()
     GetOutDev()->Pop();
 }
 
-Size CheckBox::CalcMinimumSize( tools::Long nMaxWidth ) const
+Size CheckBox::CalcMinimumSize(tools::Long nMaxWidth)
 {
     Size aSize = ImplGetCheckImageSize();
     nMaxWidth -= aSize.Width();
@@ -3772,7 +3772,7 @@ Size CheckBox::CalcMinimumSize( tools::Long nMaxWidth ) const
     return CalcWindowSize( aSize );
 }
 
-Size CheckBox::GetOptimalSize() const
+Size CheckBox::GetOptimalSize()
 {
     int nWidthRequest(get_width_request());
     return CalcMinimumSize(nWidthRequest != -1 ? nWidthRequest : 0);

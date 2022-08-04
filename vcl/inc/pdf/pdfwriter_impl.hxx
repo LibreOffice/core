@@ -657,7 +657,7 @@ public:
     static void convertLineInfoToExtLineInfo( const LineInfo& rIn, PDFWriter::ExtLineInfo& rOut );
 
 private:
-    bool ImplNewFont() const override;
+    bool ImplNewFont() override;
     void ImplClearFontData(bool bNewFontLists) override;
     void ImplRefreshFontData(bool bNewFontLists) override;
     vcl::Region ClipToDeviceBounds(vcl::Region aRegion) const override;

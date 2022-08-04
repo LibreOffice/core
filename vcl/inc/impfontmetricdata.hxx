@@ -96,9 +96,9 @@ public:
     tools::Long            GetDoubleStrikeoutOffset1() const                               { return mnDStrikeoutOffset1; }
     tools::Long            GetDoubleStrikeoutOffset2() const                               { return mnDStrikeoutOffset2; }
 
-    void            ImplInitTextLineSize( const OutputDevice* pDev );
+    void            ImplInitTextLineSize(OutputDevice* const pDev);
     void            ImplInitAboveTextLineSize();
-    void            ImplInitFlags( const OutputDevice* pDev );
+    void            ImplInitFlags(OutputDevice* const pDev);
     void            ImplCalcLineSpacing(LogicalFontInstance *pFontInstance);
     void            ImplInitBaselines(LogicalFontInstance *pFontInstance);
 

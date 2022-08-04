@@ -4037,7 +4037,7 @@ void ToolBox::Resizing( Size& rSize )
     mnLastResizeDY = rSize.Height();
 }
 
-Size ToolBox::GetOptimalSize() const
+Size ToolBox::GetOptimalSize()
 {
     // If we have any expandable entries, then force them to their
     // optimal sizes, then reset them afterwards
@@ -4058,7 +4058,7 @@ Size ToolBox::GetOptimalSize() const
         }
     }
 
-    Size aSize(const_cast<ToolBox *>(this)->ImplCalcSize( mnLines ));
+    Size aSize(ImplCalcSize(mnLines));
 
     for (auto const& [pWindow, aWinSize] : aExpandables)
         pWindow->SetSizePixel(aWinSize);

@@ -100,7 +100,7 @@ void InterimItemWindow::Layout()
     Control::Resize();
 }
 
-Size InterimItemWindow::GetOptimalSize() const
+Size InterimItemWindow::GetOptimalSize()
 {
     return VclContainer::getLayoutRequisition(*GetWindow(GetWindowType::FirstChild));
 }

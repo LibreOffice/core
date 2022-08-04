@@ -295,7 +295,7 @@ public:
     virtual bool        Docking( const Point& rPos, tools::Rectangle& rRect ) override;
     virtual void        EndDocking( const tools::Rectangle& rRect, bool bFloatMode ) override;
     virtual void        Resizing( Size& rSize ) override;
-    virtual Size        GetOptimalSize() const override;
+    virtual Size        GetOptimalSize() override;
     virtual void        doDeferredInit(WinBits nBits) override;
     virtual void        queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
 

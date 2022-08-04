@@ -1982,9 +1982,9 @@ tools::Rectangle ImplBorderWindow::GetMenuRect() const
     return mpBorderView->GetMenuRect();
 }
 
-Size ImplBorderWindow::GetOptimalSize() const
+Size ImplBorderWindow::GetOptimalSize()
 {
-    const vcl::Window* pClientWindow = ImplGetClientWindow();
+    vcl::Window* const pClientWindow = ImplGetClientWindow();
     if (pClientWindow)
         return pClientWindow->GetOptimalSize();
     return Size(mnMinWidth, mnMinHeight);
