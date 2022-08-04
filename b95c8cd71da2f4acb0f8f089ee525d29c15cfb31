@@ -52,6 +52,24 @@
       "parentUuid": "f4b8e69f_8ece9cd7",
       "revId": "b95c8cd71da2f4acb0f8f089ee525d29c15cfb31",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "701dfdfd_937978d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003606
+      },
+      "writtenOn": "2022-08-04T19:54:11Z",
+      "side": 1,
+      "message": "CAIRO_HINT_METRICS_OFF seems to affect font metrics (ascender, descender, etc), but we don’t get these value from Cairo, but I don’t know what effect they would have on rendering inside Cairo.\n\nFor hinting, CAIRO_HINT_STYLE_SLIGHT looks indeed like what we want, may be together with CAIRO_ANTIALIAS_SUBPIXEL, but I haven’t tested their effect together.\n\nI updated the change to keep the option and default it to off.",
+      "parentUuid": "c37c0cd6_b8d678da",
+      "revId": "b95c8cd71da2f4acb0f8f089ee525d29c15cfb31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
