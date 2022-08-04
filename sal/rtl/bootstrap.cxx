@@ -761,7 +761,7 @@ void SAL_CALL rtl_bootstrap_set (
         }
     }
 
-    SAL_INFO("sal.bootstrap", "explicitly getting: name=" << name << " value=" <<value);
+    SAL_INFO("sal.bootstrap", "explicitly setting: name=" << name << " value=" <<value);
 
     rtl_bootstrap_set_vector.emplace_back(name, value);
 }
