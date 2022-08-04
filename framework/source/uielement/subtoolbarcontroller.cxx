@@ -46,7 +46,6 @@ namespace {
 
 class SubToolBarController : public ToolBarBase
 {
-    DECL_LINK(OnPopoverClose, weld::Popover&, void);
     OUString m_aSubTbName;
     OUString m_aLastCommand;
     css::uno::Reference< css::ui::XUIElement > m_xUIElement;
@@ -55,6 +54,8 @@ public:
     explicit SubToolBarController( const rtl::Reference< com::sun::star::uno::XComponentContext >& rxContext,
                                    const css::uno::Sequence< css::uno::Any >& rxArgs );
     virtual ~SubToolBarController() override;
+
+    void PopoverDestroyed();
 
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rxArgs ) override;
@@ -209,22 +210,24 @@ namespace {
 class SubToolbarControl final : public WeldToolbarPopup
 {
 public:
-    explicit SubToolbarControl(css::uno::Reference< css::frame::XFrame > xFrame,
-                               weld::Widget* pParent);
+    explicit SubToolbarControl(SubToolBarController& rController, weld::Widget* pParent);
+    virtual ~SubToolbarControl() override;
 
     virtual void GrabFocus() override;
 
     weld::Container* GetContainer() { return m_xTargetContainer.get(); }
 
 private:
+    SubToolBarController& m_rController;
     std::unique_ptr<weld::Container> m_xTargetContainer;
 };
 }
 
-SubToolbarControl::SubToolbarControl(css::uno::Reference< css::frame::XFrame > xFrame,
+SubToolbarControl::SubToolbarControl(SubToolBarController& rController,
                                      weld::Widget* pParent)
-: WeldToolbarPopup(xFrame, pParent, "svt/ui/subtoolbar.ui", "subtoolbar")
-, m_xTargetContainer(m_xBuilder->weld_container("container"))
+    : WeldToolbarPopup(rController.getFrameInterface(), pParent, "svt/ui/subtoolbar.ui", "subtoolbar")
+    , m_rController(rController)
+    , m_xTargetContainer(m_xBuilder->weld_container("container"))
 {
 }
 
@@ -233,11 +236,16 @@ void SubToolbarControl::GrabFocus()
     // TODO
 }
 
+SubToolbarControl::~SubToolbarControl()
+{
+    m_rController.PopoverDestroyed();
+}
+
 std::unique_ptr<WeldToolbarPopup> SubToolBarController::weldPopupWindow()
 {
     SolarMutexGuard aGuard;
 
-    auto pPopup = std::make_unique<SubToolbarControl>(getFrameInterface(), m_pToolbar);
+    auto pPopup = std::make_unique<SubToolbarControl>(*this, m_pToolbar);
 
     css::uno::Reference< css::frame::XFrame > xFrame ( getFrameInterface() );
 
@@ -267,10 +275,6 @@ std::unique_ptr<WeldToolbarPopup> SubToolBarController::weldPopupWindow()
     {}
     catch ( css::lang::IllegalArgumentException& )
     {}
-
-    weld::Popover* pPopover = dynamic_cast<weld::Popover*>(pPopup->getTopLevel());
-    if (pPopover)
-        pPopover->connect_closed(LINK(this, SubToolBarController, OnPopoverClose));
 
     return pPopup;
 }
@@ -501,7 +505,7 @@ void SubToolBarController::initialize( const css::uno::Sequence< css::uno::Any >
     updateImage();
 }
 
-IMPL_LINK_NOARG(SubToolBarController, OnPopoverClose, weld::Popover&, void)
+void SubToolBarController::PopoverDestroyed()
 {
     disposeUIElement();
     m_xUIElement = nullptr;
