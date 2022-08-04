@@ -475,9 +475,9 @@ QAccessible::Role QtAccessibleWidget::role() const
         case AccessibleRole::VIEW_PORT:
             return QAccessible::UserRole;
         case AccessibleRole::BUTTON_DROPDOWN:
-            return QAccessible::Button;
+            return QAccessible::ButtonDropDown;
         case AccessibleRole::BUTTON_MENU:
-            return QAccessible::Button;
+            return QAccessible::ButtonMenu;
         case AccessibleRole::CAPTION:
             return QAccessible::StaticText;
         case AccessibleRole::CHART:
