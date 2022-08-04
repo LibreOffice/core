@@ -91,6 +91,18 @@ public:
     virtual css::uno::Any SAL_CALL getCustomizationContext() override;
     virtual void SAL_CALL setCustomizationContext( const css::uno::Any& _customizationcontext ) override;
     virtual float SAL_CALL CentimetersToPoints( float Centimeters ) override;
+    virtual float SAL_CALL PointsToCentimeters( float Points ) override;
+    virtual float SAL_CALL PixelsToPoints( float Pixels, ::sal_Bool fVertical ) override;
+    virtual float SAL_CALL PointsToPixels( float Pixels, ::sal_Bool fVertical ) override;
+    virtual float SAL_CALL InchesToPoints( float Inches ) override;
+    virtual float SAL_CALL PointsToInches( float Points ) override;
+    virtual float SAL_CALL MillimetersToPoints( float Millimeters ) override;
+    virtual float SAL_CALL PointsToMillimeters( float Points ) override;
+    virtual float SAL_CALL PicasToPoints( float Picas ) override;
+    virtual float SAL_CALL PointsToPicas( float Points ) override;
+
+
+
     virtual void SAL_CALL ShowMe() override;
     virtual void SAL_CALL Resize( sal_Int32 Width, sal_Int32 Height ) override;
     virtual void SAL_CALL Move( sal_Int32 Left, sal_Int32 Top ) override;
