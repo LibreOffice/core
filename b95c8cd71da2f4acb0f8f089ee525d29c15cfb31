@@ -34,6 +34,24 @@
       "parentUuid": "a81bd1cf_ef883922",
       "revId": "b95c8cd71da2f4acb0f8f089ee525d29c15cfb31",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c37c0cd6_b8d678da",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-08-04T19:36:21Z",
+      "side": 1,
+      "message": "How about to add the configure option, but toggle the default to off for now?\n\nwrt the cairo settings, yeah, I\u0027m also unsure what the right settings should be and rather hoped you could verify them for me :-)\n\nhttps://chromium.googlesource.com/chromiumos/third_party/cairo/+/master/src/cairo-ft-font.c#1771 is what the CAIRO_HINT_STYLE_* ones map to in terms of freetype hints. https://freetype.org/freetype2/docs/reference/ft2-base_interface.html says that FT_LOAD_TARGET_LIGHT \"This is achieved by snapping glyphs to the pixel grid only vertically (Y-axis)\" which would suggest CAIRO_HINT_STYLE_SLIGHT is ok, but as I said earlier I ran into https://gitlab.freedesktop.org/cairo/cairo/-/issues/390 with that, so currently its CAIRO_HINT_STYLE_NONE.\n\nCAIRO_HINT_METRICS_OFF description at https://www.cairographics.org/manual/cairo-cairo-font-options-t.html sounds like something we should be using (so that\u0027s the current setting I\u0027m using for this currently writer-only effort seen in 7.4). And for 7.4 I think I have also made appropriate tweaks for directwrite/skia under windows for this new mode.",
+      "parentUuid": "f4b8e69f_8ece9cd7",
+      "revId": "b95c8cd71da2f4acb0f8f089ee525d29c15cfb31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
