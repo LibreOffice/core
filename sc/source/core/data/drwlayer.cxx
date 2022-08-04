@@ -1657,7 +1657,8 @@ void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
                         ScAnchorType aAnchorType = ScDrawLayer::GetAnchorType(*pObject);
                         bool bObjectAnchoredToMarkedCell
                             = ((aAnchorType == SCA_CELL || aAnchorType == SCA_CELL_RESIZE)
-                               && pObjData && rMark.IsCellMarked(pObjData->maStart.Col(),
+                               && pObjData && pObjData->maStart.IsValid()
+                               && rMark.IsCellMarked(pObjData->maStart.Col(),
                                                                  pObjData->maStart.Row()));
                         if (bObjectInMarkArea || bObjectAnchoredToMarkedCell)
                         {
