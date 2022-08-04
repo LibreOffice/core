@@ -16,6 +16,23 @@
       "message": "The backport to 7.4.",
       "revId": "5d72a000a0f9d127d1263a6df628898af08f14f9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7e83f53_91c807a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-08-04T10:45:04Z",
+      "side": 1,
+      "message": "Vasily - ping.",
+      "revId": "5d72a000a0f9d127d1263a6df628898af08f14f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
