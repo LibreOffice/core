@@ -1959,9 +1959,7 @@ sal_uInt16 SaveMergeRedline::InsertRedline(SwPaM* pLastDestRedline)
 
         pDestRedl->SetMark();
         ++aSaveNd;
-        pDestRedl->GetMark()->nNode = aSaveNd;
-        pDestRedl->GetMark()->nContent.Assign( aSaveNd.GetNode().GetContentNode(),
-                                                nSaveCnt );
+        pDestRedl->GetMark()->Assign( aSaveNd, nSaveCnt );
 
         if( pLastDestRedline && *pLastDestRedline->GetPoint() == *pDestRedl->GetPoint() )
             *pLastDestRedline->GetPoint() = *pDestRedl->GetMark();

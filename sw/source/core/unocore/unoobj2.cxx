@@ -1075,10 +1075,9 @@ bool SwXTextRange::GetPositions(SwPaM& rToFill, ::sw::TextRangeMode const eMode)
             assert(pSectionNode->GetNodes().IsDocNodes());
             rToFill.GetPoint()->Assign( pSectionNode->GetNode(), SwNodeOffset(1) );
             rToFill.SetMark();
-            rToFill.GetMark()->nNode = *pSectionNode->GetNode().EndOfSectionNode();
-            --rToFill.GetMark()->nNode;
-            rToFill.GetMark()->nContent.Assign(rToFill.GetMark()->GetNode().GetContentNode(),
-                rToFill.GetMark()->GetNode().GetContentNode() ? rToFill.GetMark()->GetNode().GetContentNode()->Len() : 0);
+            rToFill.GetMark()->Assign( *pSectionNode->GetNode().EndOfSectionNode(), SwNodeOffset(-1) );
+            if (const SwContentNode* pCNd = rToFill.GetMark()->GetContentNode())
+                rToFill.GetMark()->AssignEndIndex(*pCNd);
             return true;
         }
     }

@@ -197,8 +197,7 @@ void SetGetExpField::GetPosOfContent( SwPosition& rPos ) const
     }
     else
     {
-        rPos.nNode = m_nNode;
-        rPos.nContent.Assign( rPos.GetNode().GetContentNode(), m_nContent );
+        rPos.Assign( m_nNode, m_nContent );
     }
 }
 

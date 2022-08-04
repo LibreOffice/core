@@ -273,8 +273,7 @@ bool SwEditShell::Copy( SwEditShell& rDestShell )
     {
         SwPaM* pCursor = rDestShell.GetCursor();
         pCursor->SetMark();
-        pCursor->GetPoint()->nNode = aSttNdIdx.GetIndex()+1;
-        pCursor->GetPoint()->nContent.Assign( pCursor->GetContentNode(),nSttCntIdx);
+        pCursor->GetPoint()->Assign( aSttNdIdx.GetIndex()+1, nSttCntIdx );
         pCursor->Exchange();
     }
     else

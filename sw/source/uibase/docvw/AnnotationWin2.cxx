@@ -670,8 +670,7 @@ void SwAnnotationWin::SetPosAndSize()
             {
                 SwShellTableCursor* pTableCursor = new SwShellTableCursor( mrView.GetWrtShell(), aStartPos );
                 pTableCursor->SetMark();
-                pTableCursor->GetMark()->nNode = *pTextNode;
-                pTableCursor->GetMark()->nContent.Assign( pTextNode, pTextAnnotationField->GetStart()+1 );
+                pTableCursor->GetMark()->Assign( *pTextNode, pTextAnnotationField->GetStart()+1 );
                 pTableCursor->NewTableSelection();
                 pTmpCursor = pTableCursor;
             }
@@ -679,8 +678,7 @@ void SwAnnotationWin::SetPosAndSize()
             {
                 SwShellCursor* pCursor = new SwShellCursor( mrView.GetWrtShell(), aStartPos );
                 pCursor->SetMark();
-                pCursor->GetMark()->nNode = *pTextNode;
-                pCursor->GetMark()->nContent.Assign( pTextNode, pTextAnnotationField->GetStart()+1 );
+                pCursor->GetMark()->Assign(*pTextNode, pTextAnnotationField->GetStart()+1 );
                 pTmpCursor = pCursor;
             }
             std::unique_ptr<SwShellCursor> pTmpCursorForAnnotationTextRange( pTmpCursor );
