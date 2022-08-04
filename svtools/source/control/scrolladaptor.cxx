@@ -95,6 +95,10 @@ void ScrollAdaptor::SetThumbPos(tools::Long nThumbPos)
 
 tools::Long ScrollAdaptor::GetThumbPos() const { return m_xScrollBar->adjustment_get_value(); }
 
+ScrollType ScrollAdaptor::GetScrollType() const { return m_xScrollBar->get_scroll_type(); }
+
+void ScrollAdaptor::EnableRTL(bool bEnable) { m_xScrollBar->set_direction(bEnable); }
+
 void ScrollAdaptor::SetScrollHdl(const Link<weld::Scrollbar&, void>& rLink)
 {
     m_aLink = rLink;

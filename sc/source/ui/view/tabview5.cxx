@@ -107,10 +107,10 @@ void ScTabView::Init()
         explicitly because the parent frame window is already RTL disabled. */
     pTabControl->EnableRTL( AllSettings::GetLayoutRTL() );
 
-    InitScrollBar( *aHScrollLeft,    aViewData.GetDocument().MaxCol()+1 );
-    InitScrollBar( *aHScrollRight,   aViewData.GetDocument().MaxCol()+1 );
-    InitScrollBar( *aVScrollTop,     aViewData.GetDocument().MaxRow()+1 );
-    InitScrollBar( *aVScrollBottom,  aViewData.GetDocument().MaxRow()+1 );
+    InitScrollBar( *aHScrollLeft,    aViewData.GetDocument().MaxCol()+1, LINK(this, ScTabView, HScrollLeftHdl) );
+    InitScrollBar( *aHScrollRight,   aViewData.GetDocument().MaxCol()+1, LINK(this, ScTabView, HScrollRightHdl) );
+    InitScrollBar( *aVScrollTop,     aViewData.GetDocument().MaxRow()+1, LINK(this, ScTabView, VScrollTopHdl) );
+    InitScrollBar( *aVScrollBottom,  aViewData.GetDocument().MaxRow()+1, LINK(this, ScTabView, VScrollBottomHdl) );
     /*  #i97900# scrollbars remain in correct RTL mode, needed mirroring etc.
         is now handled correctly at the respective places. */
 
