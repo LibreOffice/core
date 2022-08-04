@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9aae6f29_5d22f0c4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-08-04T14:41:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "acec4198_85fae587",
+      "revId": "c305ac376620a8c5c34efd3c78085d47c059cf04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "82790cd0_6e962ba4",
@@ -35,6 +53,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "56725328_ce808594",
+        "filename": "offapi/com/sun/star/awt/UnoControlComboBoxModel.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-08-04T14:41:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82790cd0_6e962ba4",
+      "revId": "c305ac376620a8c5c34efd3c78085d47c059cf04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c76424ad_ed4c8b8b",
@@ -48,6 +84,24 @@
       "writtenOn": "2022-08-04T11:35:48Z",
       "side": 1,
       "message": "here and elsewhere: I\u0027d try to be consistent with the number of empty separating lines you add (you varyingly add one or two, even in source files that already have occurrences of two); I\u0027d stick to just a single empty line in all the files, regardless whether there is already precedent of two empty lines in a given file",
+      "revId": "c305ac376620a8c5c34efd3c78085d47c059cf04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56f56c16_f52d6824",
+        "filename": "offapi/com/sun/star/awt/UnoControlCurrencyFieldModel.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-08-04T14:41:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c76424ad_ed4c8b8b",
       "revId": "c305ac376620a8c5c34efd3c78085d47c059cf04",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
