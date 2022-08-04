@@ -675,9 +675,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
             || pEnd->GetNodeIndex() >= GetNodes().GetEndOfContent().GetIndex()-1 )
         {
             getIDocumentContentOperations().SplitNode( *pEnd, false );
-            --const_cast<SwNodeIndex&>(pEnd->nNode);
-            const_cast<SwContentIndex&>(pEnd->nContent).Assign(
-                                pEnd->GetNode().GetContentNode(), 0 );
+            const_cast<SwPosition*>(pEnd)->Adjust(SwNodeOffset(-1));
             // A Node and at the End?
             if( pStt->GetNodeIndex() >= pEnd->GetNodeIndex() )
                 --aRg.aStart;
@@ -1152,7 +1150,7 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
     //!!! not necessarily TextNodes !!!
     SwPaM aOriginal( rStartRange.aStart, rEndRange.aEnd );
     const SwPosition *pStt = aOriginal.GetMark();
-    const SwPosition *pEnd = aOriginal.GetPoint();
+    SwPosition *pEnd = aOriginal.GetPoint();
 
     bool const bUndo(GetIDocumentUndoRedo().DoesUndo());
     if (bUndo)
@@ -1177,9 +1175,7 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
             || pEnd->GetNodeIndex() >= GetNodes().GetEndOfContent().GetIndex()-1 )
         {
             getIDocumentContentOperations().SplitNode( *pEnd, false );
-            --const_cast<SwNodeIndex&>(pEnd->nNode);
-            const_cast<SwContentIndex&>(pEnd->nContent).Assign(
-                                pEnd->GetNode().GetContentNode(), 0 );
+            pEnd->Adjust(SwNodeOffset(-1));
             // A Node and at the End?
             if( pStt->GetNodeIndex() >= pEnd->GetNodeIndex() )
                 --aRg.aStart;

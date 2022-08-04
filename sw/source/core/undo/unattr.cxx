@@ -724,8 +724,7 @@ void SwUndoAttr::UndoImpl(::sw::UndoRedoContext & rContext)
         SwPaM aPam(pDoc->GetNodes().GetEndOfContent());
         if ( NODE_OFFSET_MAX != m_nNodeIndex ) {
             aPam.DeleteMark();
-            aPam.GetPoint()->nNode = m_nNodeIndex;
-            aPam.GetPoint()->nContent.Assign( aPam.GetContentNode(), m_nSttContent );
+            aPam.GetPoint()->Assign( m_nNodeIndex, m_nSttContent );
             aPam.SetMark();
             ++aPam.GetPoint()->nContent;
             pDoc->getIDocumentRedlineAccess().DeleteRedline(aPam, false, RedlineType::Any);
@@ -1040,8 +1039,7 @@ void SwUndoDontExpandFormat::UndoImpl(::sw::UndoRedoContext & rContext)
     SwDoc *const pDoc = & rContext.GetDoc();
 
     SwPosition& rPos = *pPam->GetPoint();
-    rPos.nNode = m_nNodeIndex;
-    rPos.nContent.Assign( rPos.GetNode().GetContentNode(), m_nContentIndex);
+    rPos.Assign( m_nNodeIndex, m_nContentIndex );
     pDoc->DontExpandFormat( rPos, false );
 }
 
@@ -1051,8 +1049,7 @@ void SwUndoDontExpandFormat::RedoImpl(::sw::UndoRedoContext & rContext)
     SwDoc *const pDoc = & rContext.GetDoc();
 
     SwPosition& rPos = *pPam->GetPoint();
-    rPos.nNode = m_nNodeIndex;
-    rPos.nContent.Assign( rPos.GetNode().GetContentNode(), m_nContentIndex);
+    rPos.Assign( m_nNodeIndex, m_nContentIndex );
     pDoc->DontExpandFormat( rPos );
 }
 

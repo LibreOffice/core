@@ -473,8 +473,7 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
             if( pCNd )
             {
                 SwPaM* pPam = GetCursor();
-                pPam->GetPoint()->nNode = aIdx;
-                pPam->GetPoint()->nContent.Assign( pCNd, 0 );
+                pPam->GetPoint()->Assign( *pCNd, 0 );
                 pPam->SetMark();            // both want something
                 pPam->DeleteMark();
             }

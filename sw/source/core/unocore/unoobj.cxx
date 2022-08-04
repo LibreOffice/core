@@ -1337,8 +1337,7 @@ SwXTextCursor::gotoEndOfWord(sal_Bool Expand)
     bRet = rUnoCursor.IsEndWordWT( nWordType );
     if (!bRet)
     {
-        pPoint->nNode       = rOldNode;
-        pPoint->nContent    = nOldIndex;
+        pPoint->Assign(rOldNode, nOldIndex);
     }
     else if (CursorType::Meta == m_eType)
     {
@@ -1373,8 +1372,7 @@ SwXTextCursor::gotoStartOfWord(sal_Bool Expand)
     bRet = rUnoCursor.IsStartWordWT( nWordType );
     if (!bRet)
     {
-        pPoint->nNode       = rOldNode;
-        pPoint->nContent    = nOldIndex;
+        pPoint->Assign(rOldNode, nOldIndex);
     }
     else if (CursorType::Meta == m_eType)
     {

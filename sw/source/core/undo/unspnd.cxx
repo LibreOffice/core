@@ -116,9 +116,7 @@ void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
             if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ))
             {
                 rPam.SetMark();
-                ++rPam.GetMark()->nNode;
-                rPam.GetMark()->nContent.Assign( rPam.GetMark()->
-                                    GetNode().GetContentNode(), 0 );
+                rPam.GetMark()->Adjust(SwNodeOffset(1));
                 pDoc->getIDocumentRedlineAccess().DeleteRedline( rPam, true, RedlineType::Any );
                 rPam.DeleteMark();
             }
@@ -142,8 +140,7 @@ void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
 
     // also set the cursor onto undo section
     rPam.DeleteMark();
-    rPam.GetPoint()->nNode = m_nNode;
-    rPam.GetPoint()->nContent.Assign( rPam.GetContentNode(), m_nContent );
+    rPam.GetPoint()->Assign( m_nNode, m_nContent );
 }
 
 void SwUndoSplitNode::RedoImpl(::sw::UndoRedoContext & rContext)
