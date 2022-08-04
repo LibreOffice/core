@@ -70,6 +70,24 @@
       "parentUuid": "03240048_eea492c6",
       "revId": "9a2cee845c31d9bff9cd8925acdc4164251e50be",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e51ea64_af57f8e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-08-04T18:09:41Z",
+      "side": 1,
+      "message": "Ah, you are right. So we have to:\n1. disable cypress test on online side (could you prepare PR on github?)\n2. retrigger CI here and merge\n3. modify disabled test to work with jsdialog version\n\nI was suprised as we didn\u0027t test many tunneled old-style dialogs in cypress...",
+      "parentUuid": "1ef35c1c_fe809cab",
+      "revId": "9a2cee845c31d9bff9cd8925acdc4164251e50be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
