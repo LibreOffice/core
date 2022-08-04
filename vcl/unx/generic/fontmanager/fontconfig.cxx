@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if defined __GNUC__ && !defined __clang_ && __GNUC__ == 10
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 10
 // gcc 10.2.0 gets unhappy about one of the OString inside PrintFont at line 656 (while at least a
 // recent GCC 12 trunk is happy);
 // I have to turn it off here because the warning actually occurs inside rtl::OString

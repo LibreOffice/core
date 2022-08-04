@@ -179,14 +179,14 @@ ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode,
                             [](auto const& it) { return it.second; }))
                     {
 // prevent -Werror=maybe-uninitialized under gcc 11.2.0
-#if defined __GNUC__ && !defined __clang_ && __GNUC__ >= 11 && __GNUC__ <= 12
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ >= 11 && __GNUC__ <= 12
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 #endif
                         // i is still hidden but the Range end is oddly "-1"
                         aHiddenMulti.Select({*oStartHidden, i}, true);
                         oStartHidden.reset();
-#if defined __GNUC__ && !defined __clang_ && __GNUC__ >= 11 && __GNUC__ <= 12
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ >= 11 && __GNUC__ <= 12
 #pragma GCC diagnostic pop
 #endif
                     }
