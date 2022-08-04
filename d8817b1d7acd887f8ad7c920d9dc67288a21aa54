@@ -62,6 +62,24 @@
       "message": "Why this change in the *schema*? The value we store in settings internally doesn\u0027t change its meaning or name - this change here is completely wrong.\n\nAnd it changes the default - which is both out of scope of the bug, and needs careful discussion (e.g., I would strongly oppose it, because its current default makes sense for the majority of users who use non-Roman languages).",
       "revId": "d8817b1d7acd887f8ad7c920d9dc67288a21aa54",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1f6ea10_525de8d2",
+        "filename": "officecfg/registry/schema/org/openoffice/Setup.xcs",
+        "patchSetId": 4
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-08-04T08:05:56Z",
+      "side": 1,
+      "message": "If we change the meaning to the opposite don\u0027t we have to also change the default?",
+      "parentUuid": "b24198ba_d2ca68fb",
+      "revId": "d8817b1d7acd887f8ad7c920d9dc67288a21aa54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
