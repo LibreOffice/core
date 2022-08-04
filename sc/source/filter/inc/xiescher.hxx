@@ -98,6 +98,7 @@ public:
     sal_uInt32   GetDffShapeId() const { return mnDffShapeId; }
     /** Returns the shape flags from the DFF stream. */
     ShapeFlag    GetDffFlags() const { return mnDffFlags; }
+    const tools::Rectangle& GetDffRect() const;
 
     /** Returns true, if the object is hidden. */
     bool         IsHidden() const { return mbHidden; }
@@ -191,6 +192,7 @@ private:
     sal_uInt16          mnObjType;      /// The Excel object type from OBJ record.
     sal_uInt32          mnDffShapeId;   /// Shape ID from DFF stream.
     ShapeFlag           mnDffFlags;     /// Shape flags from DFF stream.
+    tools::Rectangle maDffRect;
     OUString       maObjName;      /// Name of the object.
     OUString       maMacroName;    /// Name of an attached macro.
     OUString       maHyperlink;    /// On-click hyperlink URL.
@@ -470,6 +472,7 @@ public:
 
     /** Sets additional properties to the form control model, calls virtual DoProcessControl(). */
     void                ProcessControl( const XclImpDrawObjBase& rDrawObj ) const;
+    void SetStringProperty(const OUString& sName, const OUString& sVal);
 
 protected:
     /** Reads the formula for the linked cell from the current position of the stream. */
@@ -571,6 +574,7 @@ class XclImpOptionButtonObj final : public XclImpCheckBoxObj
 {
 public:
     explicit            XclImpOptionButtonObj( const XclImpRoot& rRoot );
+    bool IsInGroup() const;
 
 private:
     /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
@@ -1061,6 +1065,8 @@ public:
     XclImpDrawObjRef    FindDrawObj( sal_uInt16 nObjId ) const;
     /** Finds the textbox data related to the DFF shape at the passed position. */
     const XclImpObjTextData* FindTextData( const DffRecordHeader& rHeader ) const;
+
+    void ApplyGroupBoxes();
 
     /** Sets the object with the passed identification to be skipped on import. */
     void                SetSkipObj( sal_uInt16 nObjId );

@@ -378,6 +378,11 @@ void XclImpDrawObjBase::SetAnchor( const XclObjAnchor& rAnchor )
     mbHasAnchor = true;
 }
 
+const tools::Rectangle& XclImpDrawObjBase::GetDffRect() const
+{
+    return maDffRect;
+}
+
 void XclImpDrawObjBase::SetDffData(
     const DffObjData& rDffObjData, const OUString& rObjName, const OUString& rHyperlink,
     bool bVisible, bool bAutoMargin )
@@ -388,6 +393,7 @@ void XclImpDrawObjBase::SetDffData(
     maHyperlink = rHyperlink;
     mbVisible = bVisible;
     mbAutoMargin = bAutoMargin;
+    maDffRect = rDffObjData.aChildAnchor;
 }
 
 OUString XclImpDrawObjBase::GetObjName() const
@@ -2086,6 +2092,16 @@ void XclImpTbxObjBase::SetDffProperties( const DffPropSet& rDffPropSet )
     ::set_flag( maLineData.mnAuto, EXC_OBJ_FILL_AUTO, false );
 }
 
+void XclImpControlHelper::SetStringProperty(const OUString& sName, const OUString& sVal)
+{
+    Reference<XControlModel> xCtrlModel = XclControlHelper::GetControlModel(mxShape);
+    if (!xCtrlModel.is())
+        return;
+
+    ScfPropertySet aProps(xCtrlModel);
+    aProps.SetStringProperty(sName, sVal);
+}
+
 bool XclImpTbxObjBase::FillMacroDescriptor( ScriptEventDescriptor& rDescriptor ) const
 {
     return XclControlHelper::FillMacroDescriptor( rDescriptor, DoGetEventType(), GetMacroName(), GetDocShell() );
@@ -2391,6 +2407,11 @@ OUString XclImpOptionButtonObj::DoGetServiceName() const
 XclTbxEventType XclImpOptionButtonObj::DoGetEventType() const
 {
     return EXC_TBX_EVENT_ACTION;
+}
+
+bool XclImpOptionButtonObj::IsInGroup() const
+{
+    return mnNextInGroup;
 }
 
 XclImpLabelObj::XclImpLabelObj( const XclImpRoot& rRoot ) :
@@ -4070,6 +4091,43 @@ const XclImpObjTextData* XclImpDrawing::FindTextData( const DffRecordHeader& rHe
     return nullptr;
 }
 
+void XclImpDrawing::ApplyGroupBoxes()
+{
+    // sorted: smallest to largest - looking for smallest contained-in GroupBox
+    // multimap: allows duplicate key values - may have identical areas.
+    std::multimap<double, XclImpDrawObjRef> aGroupBoxAreaMap;
+    for (auto& rGroupBox : maObjMapId)
+    {
+        if (rGroupBox.second->GetObjType() != EXC_OBJTYPE_GROUPBOX)
+            continue;
+        const tools::Rectangle& rRect = rGroupBox.second->GetDffRect();
+        const double fArea = double(rRect.GetWidth()) * rRect.GetHeight();
+        aGroupBoxAreaMap.insert(std::pair<double, XclImpDrawObjRef>(fArea, rGroupBox.second));
+    }
+
+    for (auto& rGroupedObj : maObjMapId)
+    {
+        auto pRadioButton = dynamic_cast<XclImpOptionButtonObj*>(rGroupedObj.second.get());
+        if (!pRadioButton || pRadioButton->IsInGroup())
+            continue;
+
+        OUString sGroupName("autoGroup_");
+        for (auto& rGroupBox : aGroupBoxAreaMap)
+        {
+            assert(pRadioButton->GetTab() == rGroupBox.second->GetTab() && "impossible right?");
+            if (!rGroupBox.second->GetDffRect().Contains(pRadioButton->GetDffRect()))
+                continue;
+
+            sGroupName = rGroupBox.second->GetObjName();
+            if (sGroupName.isEmpty())
+                sGroupName += "autoGroup_" + OUString::number(rGroupBox.second->GetObjId());
+            // I ASSUME the smallest box wins in MS Word. (otherwise first? last?)
+            break;
+        }
+        pRadioButton->SetStringProperty("GroupName", sGroupName);
+    }
+}
+
 void XclImpDrawing::SetSkipObj( sal_uInt16 nObjId )
 {
     maSkipObjs.push_back( nObjId );
@@ -4097,6 +4155,8 @@ void XclImpDrawing::ImplConvertObjects( XclImpDffConverter& rDffConv, SdrModel& 
     rDffConv.ProcessDrawing( maRawObjs );
     // process all objects in the DFF stream
     rDffConv.ProcessDrawing( maDffStrm );
+    // assign groups based on being contained in the same GroupBox/sheet
+    ApplyGroupBoxes();
     // unregister this drawing manager at the passed (global) DFF manager
     rDffConv.FinalizeDrawing();
     rSdrModel.EnableUndo(bOrigUndoStatus);

@@ -116,6 +116,26 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testControlImport)
                                                          UNO_QUERY_THROW);
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testLegacyOptionButtonGroupBox)
+{
+    createScDoc("xls/tdf79542_radioGroupBox.xls");
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xIA(xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xIA->getByIndex(0),
+                                                                 UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xIA_DrawPage(xDrawPageSupplier->getDrawPage(),
+                                                         UNO_QUERY_THROW);
+
+    OUString sGroupName;
+    uno::Reference<drawing::XControlShape> xControlShape(xIA_DrawPage->getByIndex(1),
+                                                         UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(),
+                                                     uno::UNO_QUERY_THROW);
+    // The radio buttons are grouped by GroupBoxes - so the name comes from the group shape name
+    xPropertySet->getPropertyValue("GroupName") >>= sGroupName;
+    CPPUNIT_ASSERT_EQUAL(OUString("Casella di gruppo 1"), sGroupName);
+}
+
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testActiveXOptionButtonGroup)
 {
     createScDoc("xlsx/tdf111980_radioButtons.xlsx");
