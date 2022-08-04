@@ -34,6 +34,24 @@
       "parentUuid": "3320bbed_6454075a",
       "revId": "9a2cee845c31d9bff9cd8925acdc4164251e50be",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03240048_eea492c6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-08-04T15:45:34Z",
+      "side": 1,
+      "message": "I\u0027ve sent a retrigger signal for CI. Some steps are not reliable and in this case it is clearly not a fault of a patch... But to be sure I will try to get CI green. So just wait...",
+      "parentUuid": "69d723f0_44ccd239",
+      "revId": "9a2cee845c31d9bff9cd8925acdc4164251e50be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
