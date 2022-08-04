@@ -41,6 +41,7 @@
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <com/sun/star/accessibility/XAccessibleKeyBinding.hpp>
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
+#include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 #include <com/sun/star/accessibility/XAccessibleTableSelection.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
@@ -1250,14 +1251,37 @@ bool QtAccessibleWidget::selectRow(int row)
 
 int QtAccessibleWidget::selectedCellCount() const
 {
-    SAL_INFO("vcl.qt", "Unsupported QAccessibleTableInterface::selectedCellCount");
-    return 0;
+    Reference<XAccessibleContext> xAcc = getAccessibleContextImpl();
+    if (!xAcc.is())
+        return 0;
+
+    Reference<XAccessibleSelection> xSelection(xAcc, UNO_QUERY);
+    if (!xSelection.is())
+        return 0;
+
+    return xSelection->getSelectedAccessibleChildCount();
 }
 
 QList<QAccessibleInterface*> QtAccessibleWidget::selectedCells() const
 {
-    SAL_INFO("vcl.qt", "Unsupported QAccessibleTableInterface::selectedCells");
-    return QList<QAccessibleInterface*>();
+    Reference<XAccessibleContext> xAcc = getAccessibleContextImpl();
+    if (!xAcc.is())
+        return QList<QAccessibleInterface*>();
+
+    Reference<XAccessibleSelection> xSelection(xAcc, UNO_QUERY);
+    if (!xSelection.is())
+        return QList<QAccessibleInterface*>();
+
+    QList<QAccessibleInterface*> aSelectedCells;
+    const sal_Int32 nSelected = xSelection->getSelectedAccessibleChildCount();
+    for (int i = 0; i < nSelected; i++)
+    {
+        Reference<XAccessible> xChild = xSelection->getSelectedAccessibleChild(i);
+        QAccessibleInterface* pInterface
+            = QAccessible::queryAccessibleInterface(new QtXAccessible(xChild));
+        aSelectedCells.push_back(pInterface);
+    }
+    return aSelectedCells;
 }
 
 int QtAccessibleWidget::selectedColumnCount() const
