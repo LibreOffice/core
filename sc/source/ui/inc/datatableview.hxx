@@ -22,7 +22,6 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <svtools/scrolladaptor.hxx>
 #include <vcl/ctrl.hxx>
-#include <vcl/scrbar.hxx>
 #include <types.hxx>
 #include "hdrcont.hxx"
 
@@ -77,7 +76,6 @@ class ScDataTableView : public Control
 {
     std::shared_ptr<ScDocument> mpDoc;
     std::unique_ptr<SelectionEngine> mpSelectionEngine;
-    VclPtr<ScrollBarBox> mpTopLeft;
     VclPtr<ScDataTableColView> mpColView;
     VclPtr<ScDataTableRowView> mpRowView;
     VclPtr<ScrollAdaptor> mpVScroll;
