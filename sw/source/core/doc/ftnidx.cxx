@@ -405,7 +405,7 @@ void SwFootnoteIdxs::UpdateAllFootnote()
             aLayout->UpdateFootnoteNums();
 }
 
-SwTextFootnote* SwFootnoteIdxs::SeekEntry( const SwNodeIndex& rPos, size_t* pFndPos ) const
+SwTextFootnote* SwFootnoteIdxs::SeekEntry( const SwNode& rPos, size_t* pFndPos ) const
 {
     SwNodeOffset nIdx = rPos.GetIndex();
 

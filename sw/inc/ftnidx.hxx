@@ -27,6 +27,7 @@ class IDocumentRedlineAccess;
 class SwTextFootnote;
 class SwNodeIndex;
 class SwSectionNode;
+class SwNode;
 
 // Everywhere where NodeIndex is used, the header files missing here
 // are already included. Therefore put here as defines only and
@@ -46,7 +47,7 @@ public:
     void UpdateFootnote( const SwNodeIndex& rStt ); // Update all from pos.
     void UpdateAllFootnote();                       // Update all footnotes.
 
-    SwTextFootnote* SeekEntry( const SwNodeIndex& rIdx, size_t* pPos = nullptr ) const;
+    SwTextFootnote* SeekEntry( const SwNode& rNd, size_t* pPos = nullptr ) const;
 };
 
 class SwUpdFootnoteEndNtAtEnd

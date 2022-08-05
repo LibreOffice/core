@@ -751,7 +751,7 @@ void sw_DeleteFootnote( SwSectionNode *pNd, SwNodeOffset nStt, SwNodeOffset nEnd
         return;
 
     size_t nPos = 0;
-    rFootnoteArr.SeekEntry( SwNodeIndex( *pNd ), &nPos );
+    rFootnoteArr.SeekEntry( *pNd, &nPos );
     SwTextFootnote* pSrch;
 
     // Delete all succeeding Footnotes
