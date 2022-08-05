@@ -70,10 +70,10 @@ public:
 
     // IAccessibleTableCell interfaces
     STDMETHOD(get_columnExtent)(long*) override;
-    STDMETHOD(get_columnHeaderCells)(IUnknown***, long*) override { return E_FAIL; }
+    STDMETHOD(get_columnHeaderCells)(IUnknown***, long*) override;
     STDMETHOD(get_columnIndex)(long*) override;
     STDMETHOD(get_rowExtent)(long*) override;
-    STDMETHOD(get_rowHeaderCells)(IUnknown***, long*) override { return E_FAIL; }
+    STDMETHOD(get_rowHeaderCells)(IUnknown***, long*) override;
     STDMETHOD(get_rowIndex)(long*) override;
     STDMETHOD(get_isSelected)(boolean*) override;
     STDMETHOD(get_rowColumnExtents)(long*, long*, long*, long*, boolean*) override;
