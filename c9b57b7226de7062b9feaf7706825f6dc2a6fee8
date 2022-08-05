@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7910cfe5_92c84183",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-05T10:29:53Z",
+      "side": 1,
+      "message": "I am sorry that I only found the inch mismatch this late. Please address the inline comments in a follow-up. Thanks!\n\nAlso consider the Application.PointsToLines/LinesToPoints that exist in Word\u0027s Application [1].\n\n[1] https://docs.microsoft.com/en-us/office/vba/api/word.application.linestopoints",
+      "revId": "c9b57b7226de7062b9feaf7706825f6dc2a6fee8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4e2fa53_549ad257",
+        "filename": "sw/source/ui/vba/vbaapplication.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-05T10:29:53Z",
+      "side": 1,
+      "message": "Oh - o3tl::Length::ch is a \"character unit\"; for inch, please use o3tl::Length::in",
+      "range": {
+        "startLine": 451,
+        "startChar": 47,
+        "endLine": 451,
+        "endChar": 49
+      },
+      "revId": "c9b57b7226de7062b9feaf7706825f6dc2a6fee8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb7fa23d_a81b0cfe",
+        "filename": "sw/source/ui/vba/vbaapplication.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-05T10:29:53Z",
+      "side": 1,
+      "message": "Here, too.",
+      "range": {
+        "startLine": 456,
+        "startChar": 65,
+        "endLine": 456,
+        "endChar": 67
+      },
+      "revId": "c9b57b7226de7062b9feaf7706825f6dc2a6fee8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
