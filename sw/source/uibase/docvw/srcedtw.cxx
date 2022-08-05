@@ -33,7 +33,6 @@
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/textview.hxx>
-#include <vcl/scrbar.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -44,6 +43,7 @@
 #include <editeng/flstitem.hxx>
 #include <vcl/metric.hxx>
 #include <svtools/ctrltool.hxx>
+#include <svtools/scrolladaptor.hxx>
 #include <tools/time.hxx>
 #include <swmodule.hxx>
 #include <docsh.hxx>
@@ -490,15 +490,14 @@ void SwSrcEditWindow::CreateTextEngine()
     m_pOutWin->Show();
 
     // create Scrollbars
-    m_pHScrollbar = VclPtr<ScrollBar>::Create(this, WB_3DLOOK |WB_HSCROLL|WB_DRAG);
+    m_pHScrollbar = VclPtr<ScrollAdaptor>::Create(this, true);
     m_pHScrollbar->EnableRTL( false );
-    m_pHScrollbar->SetScrollHdl(LINK(this, SwSrcEditWindow, ScrollHdl));
+    m_pHScrollbar->SetScrollHdl(LINK(this, SwSrcEditWindow, HorzScrollHdl));
     m_pHScrollbar->Show();
 
-    m_pVScrollbar = VclPtr<ScrollBar>::Create(this, WB_3DLOOK |WB_VSCROLL|WB_DRAG);
+    m_pVScrollbar = VclPtr<ScrollAdaptor>::Create(this, false);
     m_pVScrollbar->EnableRTL( false );
-    m_pVScrollbar->SetScrollHdl(LINK(this, SwSrcEditWindow, ScrollHdl));
-    m_pHScrollbar->EnableDrag();
+    m_pVScrollbar->SetScrollHdl(LINK(this, SwSrcEditWindow, VertScrollHdl));
     m_pVScrollbar->Show();
 
     m_pTextEngine.reset(new ExtTextEngine);
@@ -555,22 +554,21 @@ void SwSrcEditWindow::InitScrollBars()
 
 }
 
-IMPL_LINK(SwSrcEditWindow, ScrollHdl, ScrollBar*, pScroll, void)
+IMPL_LINK_NOARG(SwSrcEditWindow, HorzScrollHdl, weld::Scrollbar&, void)
 {
-    if(pScroll == m_pVScrollbar)
-    {
-        tools::Long nDiff = m_pTextView->GetStartDocPos().Y() - pScroll->GetThumbPos();
-        GetTextView()->Scroll( 0, nDiff );
-        m_pTextView->ShowCursor( false );
-        pScroll->SetThumbPos( m_pTextView->GetStartDocPos().Y() );
-    }
-    else
-    {
-        tools::Long nDiff = m_pTextView->GetStartDocPos().X() - pScroll->GetThumbPos();
-        GetTextView()->Scroll( nDiff, 0 );
-        m_pTextView->ShowCursor( false );
-        pScroll->SetThumbPos( m_pTextView->GetStartDocPos().X() );
-    }
+    tools::Long nDiff = m_pTextView->GetStartDocPos().X() - m_pHScrollbar->GetThumbPos();
+    GetTextView()->Scroll( nDiff, 0 );
+    m_pTextView->ShowCursor( false );
+    m_pHScrollbar->SetThumbPos( m_pTextView->GetStartDocPos().X() );
+    GetSrcView()->GetViewFrame()->GetBindings().Invalidate( SID_TABLE_CELL );
+}
+
+IMPL_LINK_NOARG(SwSrcEditWindow, VertScrollHdl, weld::Scrollbar&, void)
+{
+    tools::Long nDiff = m_pTextView->GetStartDocPos().Y() - m_pVScrollbar->GetThumbPos();
+    GetTextView()->Scroll( 0, nDiff );
+    m_pTextView->ShowCursor( false );
+    m_pVScrollbar->SetThumbPos( m_pTextView->GetStartDocPos().Y() );
     GetSrcView()->GetViewFrame()->GetBindings().Invalidate( SID_TABLE_CELL );
 }
 

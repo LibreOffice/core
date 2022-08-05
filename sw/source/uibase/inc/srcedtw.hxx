@@ -29,7 +29,8 @@
 #include <set>
 
 namespace com::sun::star::beans { class XMultiPropertySet; }
-class ScrollBar;
+namespace weld { class Scrollbar; }
+class ScrollAdaptor;
 class SwSrcView;
 class SwSrcEditWindow;
 class TextEngine;
@@ -65,7 +66,7 @@ private:
     std::unique_ptr<ExtTextEngine>  m_pTextEngine;
 
     VclPtr<TextViewOutWin> m_pOutWin;
-    VclPtr<ScrollBar>      m_pHScrollbar,
+    VclPtr<ScrollAdaptor>  m_pHScrollbar,
                            m_pVScrollbar;
 
     SwSrcView*      m_pSrcView;
@@ -95,14 +96,14 @@ private:
     virtual void    Resize() override;
     virtual void    DataChanged( const DataChangedEvent& ) override;
     virtual void    GetFocus() override;
-//  virtual void    LoseFocus();
 
     void            CreateTextEngine();
     void            DoSyntaxHighlight( sal_uInt16 nPara );
 
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
-    DECL_LINK(ScrollHdl, ScrollBar*, void);
+    DECL_LINK(HorzScrollHdl, weld::Scrollbar&, void);
+    DECL_LINK(VertScrollHdl, weld::Scrollbar&, void);
 
 public:
                     SwSrcEditWindow( vcl::Window* pParent, SwSrcView* pParentView );
