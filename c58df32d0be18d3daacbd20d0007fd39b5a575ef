@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d465ce42_eb720bb8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-08-05T08:10:41Z",
+      "side": 1,
+      "message": "Works like a charm with gen, kf5, gtk3 and gtk4. Only UI quirk I see is the missing description of the second column (the status). But I\u0027m afraid of touching anything :-).",
+      "revId": "c58df32d0be18d3daacbd20d0007fd39b5a575ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
