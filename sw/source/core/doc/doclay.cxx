@@ -773,7 +773,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
                 pNewSet->Put( std::move(aFrameSize) );
 
                 SwStartNode* pSttNd = rDoc.GetNodes().MakeTextSection(
-                            SwNodeIndex( rDoc.GetNodes().GetEndOfAutotext() ),
+                            rDoc.GetNodes().GetEndOfAutotext(),
                             SwFlyStartNode, pColl );
                 pNewSet->Put( SwFormatContent( pSttNd ));
 
@@ -1087,8 +1087,8 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable
 
     SwStartNode* pSttNd =
         rDoc.GetNodes().MakeTextSection(
-            SwNodeIndex( rDoc.GetNodes().GetEndOfAutotext() ),
-                                    SwFlyStartNode, pColl );
+            rDoc.GetNodes().GetEndOfAutotext(),
+            SwFlyStartNode, pColl );
 
     pNewFormat = rDoc.MakeFlyFrameFormat( rDoc.GetUniqueFrameName(),
                  rDoc.getIDocumentStylePoolAccess().GetFrameFormatFromPool( RES_POOLFRM_FRAME ) );

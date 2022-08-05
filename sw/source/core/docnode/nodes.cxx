@@ -1924,7 +1924,7 @@ SwStartNode* SwNodes::MakeEmptySection( const SwNodeIndex& rIdx,
     return pSttNd;
 }
 
-SwStartNode* SwNodes::MakeTextSection( const SwNodeIndex & rWhere,
+SwStartNode* SwNodes::MakeTextSection( const SwNode & rWhere,
                                         SwStartNodeType eSttNdTyp,
                                         SwTextFormatColl *pColl )
 {

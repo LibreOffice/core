@@ -2559,7 +2559,7 @@ const SwStartNode *SwHTMLParser::InsertTableSection
         else
             pNd = pPrevStNd->EndOfSectionNode();
         SwNodeIndex nIdx( *pNd, 1 );
-        pStNd = m_xDoc->GetNodes().MakeTextSection( nIdx, SwTableBoxStartNode,
+        pStNd = m_xDoc->GetNodes().MakeTextSection( nIdx.GetNode(), SwTableBoxStartNode,
                                                   pColl );
         m_xTable->IncBoxCount();
     }
@@ -2626,8 +2626,7 @@ const SwStartNode *SwHTMLParser::InsertTableSection( sal_uInt16 nPoolId )
                 pOutTable = pOutTable->StartOfSectionNode()->FindTableNode();
             } while( pOutTable && pTableNd->GetTable().GetHTMLTableLayout() );
         }
-        SwNodeIndex aIdx( *pTableNd->EndOfSectionNode() );
-        pStNd = m_xDoc->GetNodes().MakeTextSection( aIdx, SwTableBoxStartNode,
+        pStNd = m_xDoc->GetNodes().MakeTextSection( *pTableNd->EndOfSectionNode(), SwTableBoxStartNode,
                                                   pColl );
 
         m_pPam->GetPoint()->Assign( pStNd->GetIndex() + 1 );
@@ -2647,7 +2646,7 @@ SwStartNode *SwHTMLParser::InsertTempTableCaptionSection()
     SwTextFormatColl *pColl = m_pCSS1Parser->GetTextCollFromPool( RES_POOLCOLL_TEXT );
     SwNodeIndex& rIdx = m_pPam->GetPoint()->nNode;
     rIdx = m_xDoc->GetNodes().GetEndOfExtras();
-    SwStartNode *pStNd = m_xDoc->GetNodes().MakeTextSection( rIdx,
+    SwStartNode *pStNd = m_xDoc->GetNodes().MakeTextSection( rIdx.GetNode(),
                                           SwNormalStartNode, pColl );
 
     rIdx = pStNd->GetIndex() + 1;

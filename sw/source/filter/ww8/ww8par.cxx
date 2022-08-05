@@ -5228,7 +5228,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
                 m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD,
                 false);
             SwStartNode *pNode =
-                m_rDoc.GetNodes().MakeTextSection(aIdx,
+                m_rDoc.GetNodes().MakeTextSection(aIdx.GetNode(),
                 SwNormalStartNode,pColl);
             m_pPaM->GetPoint()->Assign( pNode->GetIndex()+1 );
             aPlc.Get( nStart, nEnd, pDummy );
