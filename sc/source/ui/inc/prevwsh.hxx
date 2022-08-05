@@ -24,6 +24,7 @@
 
 #include <sfx2/viewsh.hxx>
 #include <sfx2/zoomitem.hxx>
+#include <svtools/scrolladaptor.hxx>
 #include <vcl/syswin.hxx>
 
 #include <shellids.hxx>
@@ -42,19 +43,23 @@ class SC_DLLPUBLIC ScPreviewShell final : public SfxViewShell
 
     VclPtr<SystemWindow>   mpFrameWindow;
     VclPtr<ScPreview>      pPreview;               // Output window
-    VclPtr<ScrollBar>      pHorScroll;
-    VclPtr<ScrollBar>      pVerScroll;
+    VclPtr<ScrollAdaptor>  pHorScroll;
+    VclPtr<ScrollAdaptor>  pVerScroll;
     VclPtr<vcl::Window>    pCorner;
 
     TriState        nSourceDesignMode;      // form design mode from TabView
     SvxZoomType     eZoom;
-    tools::Long            nMaxVertPos;
+    tools::Long     nMaxVertPos;
+    tools::Long     nPrevHThumbPos;
+    tools::Long     nPrevVThumbPos;
 
     std::unique_ptr<SfxBroadcaster> pAccessibilityBroadcaster;
     bool            GetPageSize( Size& aPageSize );
 private:
     void            Construct( vcl::Window* pParent );
-    DECL_DLLPRIVATE_LINK( ScrollHandler, ScrollBar*, void );
+    DECL_DLLPRIVATE_LINK( HorzScrollHandler, weld::Scrollbar&, void );
+    DECL_DLLPRIVATE_LINK( VertScrollHandler, weld::Scrollbar&, void );
+    void ScrollHandler(ScrollAdaptor* pScrollBar);
     DECL_DLLPRIVATE_LINK( CloseHdl, SystemWindow&, void);
     void            DoScroll( sal_uInt16 nMode );
     void            ExitPreview();
