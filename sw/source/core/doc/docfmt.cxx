@@ -1016,7 +1016,7 @@ static bool lcl_SetTextFormatColl( SwNode* pNode, void* pArgs )
         }
         if (pCNd->IsTextNode())
         {
-            pCNd = sw::GetParaPropsNode(*pPara->pLayout, SwNodeIndex(*pCNd));
+            pCNd = sw::GetParaPropsNode(*pPara->pLayout, *pCNd);
         }
     }
 
@@ -1656,7 +1656,7 @@ void SwDoc::MoveLeftMargin(const SwPaM& rPam, bool bRight, bool bModulus,
         SwTextNode* pTNd = aIdx.GetNode().GetTextNode();
         if( pTNd )
         {
-            pTNd = sw::GetParaPropsNode(*pLayout, aIdx);
+            pTNd = sw::GetParaPropsNode(*pLayout, aIdx.GetNode());
             SvxLRSpaceItem aLS(pTNd->SwContentNode::GetAttr(RES_LR_SPACE));
 
             // #i93873# See also lcl_MergeListLevelIndentAsLRSpaceItem in thints.cxx

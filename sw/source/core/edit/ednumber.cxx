@@ -157,7 +157,7 @@ bool SwEditShell::SelectionHasNumber() const
             SwTextNode* pTextNd = mxDoc->GetNodes()[nPos]->GetTextNode();
             if (pTextNd)
             {
-                pTextNd = sw::GetParaPropsNode(*GetLayout(), SwNodeIndex(*pTextNd));
+                pTextNd = sw::GetParaPropsNode(*GetLayout(), *pTextNd);
             }
             if (pTextNd && (!bResult || pTextNd->Len()!=0))
             {
@@ -192,7 +192,7 @@ bool SwEditShell::SelectionHasBullet() const
             SwTextNode* pTextNd = mxDoc->GetNodes()[nPos]->GetTextNode();
             if (pTextNd)
             {
-                pTextNd = sw::GetParaPropsNode(*GetLayout(), SwNodeIndex(*pTextNd));
+                pTextNd = sw::GetParaPropsNode(*GetLayout(), *pTextNd);
             }
             if (pTextNd && (!bResult || pTextNd->Len()!=0))
             {
@@ -212,7 +212,7 @@ bool SwEditShell::HasNumber() const
 {
     bool bResult = false;
 
-    const SwTextNode *const pTextNd = sw::GetParaPropsNode(*GetLayout(), GetCursor()->GetPoint()->nNode);
+    const SwTextNode *const pTextNd = sw::GetParaPropsNode(*GetLayout(), GetCursor()->GetPoint()->GetNode());
 
     if (pTextNd)
     {
@@ -234,7 +234,7 @@ bool SwEditShell::HasBullet() const
 {
     bool bResult = false;
 
-    const SwTextNode *const pTextNd = sw::GetParaPropsNode(*GetLayout(), GetCursor()->GetPoint()->nNode);
+    const SwTextNode *const pTextNd = sw::GetParaPropsNode(*GetLayout(), GetCursor()->GetPoint()->GetNode());
 
     if (pTextNd)
     {
@@ -379,7 +379,7 @@ int SwEditShell::GetCurrentParaOutlineLevel( ) const
     int nLevel = 0;
 
     SwPaM* pCursor = GetCursor();
-    const SwTextNode *const pTextNd = sw::GetParaPropsNode(*GetLayout(), pCursor->GetPoint()->nNode);
+    const SwTextNode *const pTextNd = sw::GetParaPropsNode(*GetLayout(), pCursor->GetPoint()->GetNode());
     if (pTextNd)
         nLevel = pTextNd->GetAttrOutlineLevel();
     return nLevel;
@@ -470,7 +470,7 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
                         else if (pNd->IsTextNode())
                         {
                             SwTextNode const*const pTextNode =
-                                sw::GetParaPropsNode(*GetLayout(), SwNodeIndex(*pNd));
+                                sw::GetParaPropsNode(*GetLayout(), *pNd);
                             if (pOrig == pTextNode->GetNumRule()
                                 && pTextNode->GetActualListLevel() > nUpperLevel)
                             {
@@ -656,7 +656,7 @@ bool SwEditShell::IsNoNum( bool bChkStart ) const
          && !HasSelection()
          && ( !bChkStart || IsSttPara() ) )
     {
-        const SwTextNode* pTextNd = sw::GetParaPropsNode(*GetLayout(), GetCursor()->GetPoint()->nNode);
+        const SwTextNode* pTextNd = sw::GetParaPropsNode(*GetLayout(), GetCursor()->GetPoint()->GetNode());
         if ( pTextNd != nullptr )
         {
             bResult =  !pTextNd->IsCountedInList();
@@ -672,7 +672,7 @@ sal_uInt8 SwEditShell::GetNumLevel() const
     sal_uInt8 nLevel = MAXLEVEL;
 
     SwPaM* pCursor = GetCursor();
-    const SwTextNode *const pTextNd = sw::GetParaPropsNode(*GetLayout(), pCursor->GetPoint()->nNode);
+    const SwTextNode *const pTextNd = sw::GetParaPropsNode(*GetLayout(), pCursor->GetPoint()->GetNode());
 
     OSL_ENSURE( pTextNd, "GetNumLevel() without text node" );
     if ( pTextNd == nullptr )
@@ -825,7 +825,7 @@ void SwEditShell::SetNumRuleStart( bool bFlag, SwPaM* pPaM )
 bool SwEditShell::IsNumRuleStart( SwPaM* pPaM ) const
 {
     SwPaM* pCursor = pPaM ? pPaM : GetCursor( );
-    const SwTextNode *const pTextNd = sw::GetParaPropsNode(*GetLayout(), pCursor->GetPoint()->nNode);
+    const SwTextNode *const pTextNd = sw::GetParaPropsNode(*GetLayout(), pCursor->GetPoint()->GetNode());
     return pTextNd && pTextNd->IsListRestart();
 }
 
@@ -858,7 +858,7 @@ void SwEditShell::SetNodeNumStart( sal_uInt16 nStt )
 sal_uInt16 SwEditShell::GetNodeNumStart( SwPaM* pPaM ) const
 {
     SwPaM* pCursor = pPaM ? pPaM : GetCursor();
-    const SwTextNode *const pTextNd = sw::GetParaPropsNode(*GetLayout(), pCursor->GetPoint()->nNode);
+    const SwTextNode *const pTextNd = sw::GetParaPropsNode(*GetLayout(), pCursor->GetPoint()->GetNode());
     // correction: check, if list restart value is set at text node and
     // use new method <SwTextNode::GetAttrListRestartValue()>.
     // return USHRT_MAX, if no list restart value is found.

@@ -88,11 +88,11 @@ namespace {
         // to which the attributes should be applied
         if (rPam.GetPoint()->GetNode().IsTextNode())
         {
-            rPam.GetPoint()->Assign( *sw::GetParaPropsNode(*pLayout, rPam.GetPoint()->nNode) );
+            rPam.GetPoint()->Assign( *sw::GetParaPropsNode(*pLayout, rPam.GetPoint()->GetNode()) );
         }
         if (rPam.GetMark()->GetNode().IsTextNode())
         {
-            rPam.GetMark()->Assign( *sw::GetParaPropsNode(*pLayout, rPam.GetMark()->nNode) );
+            rPam.GetMark()->Assign( *sw::GetParaPropsNode(*pLayout, rPam.GetMark()->GetNode()) );
         }
     }
 }
@@ -1624,7 +1624,7 @@ const SwNumRule *  SwDoc::SearchNumRule(const SwPosition & rPos,
     SwTextNode * pTextNd = rPos.GetNode().GetTextNode();
     if (pLayout)
     {
-        pTextNd = sw::GetParaPropsNode(*pLayout, rPos.nNode);
+        pTextNd = sw::GetParaPropsNode(*pLayout, rPos.GetNode());
     }
     SwNode * pStartFromNode = pTextNd;
 
@@ -2653,7 +2653,7 @@ bool SwDoc::IsFirstOfNumRuleAtPos(const SwPosition & rPos,
 {
     bool bResult = false;
 
-    const SwTextNode *const pTextNode = sw::GetParaPropsNode(rLayout, rPos.nNode);
+    const SwTextNode *const pTextNode = sw::GetParaPropsNode(rLayout, rPos.GetNode());
     if ( pTextNode != nullptr )
     {
         bResult = pTextNode->IsFirstOfNumRule(rLayout);
