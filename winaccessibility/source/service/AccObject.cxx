@@ -928,35 +928,6 @@ void AccObject::UpdateState()
 }
 
 /**
-   * update location information from uno to com
-   * @param
-   * @return
-   */
-void AccObject::UpdateLocation()
-{
-    if (!m_pIMAcc)
-    {
-        return;
-    }
-    XAccessibleContext* pContext  = m_xAccContextRef.get();
-
-    Reference< XAccessibleComponent > pRComponent(pContext,UNO_QUERY);
-    if( pRComponent.is() )
-    {
-        css::awt::Point pCPoint = pRComponent->getLocationOnScreen();
-        css::awt::Size pCSize = pRComponent->getSize();
-        Location tempLocation;
-        tempLocation.m_dLeft = pCPoint.X;
-        tempLocation.m_dTop =  pCPoint.Y;
-        tempLocation.m_dWidth = pCSize.Width;
-        tempLocation.m_dHeight = pCSize.Height;
-        m_pIMAcc->Put_XAccLocation( tempLocation );
-    }
-
-}
-
-
-/**
    * Public method to mapping information between MSAA and UNO.
    * @param
    * @return If the method is correctly processed.
@@ -976,8 +947,6 @@ bool AccObject::UpdateAccessibleInfoFromUnoToMSAA()
     UpdateActionDesc();
 
     UpdateRole();
-
-    UpdateLocation();
 
     UpdateState();
 

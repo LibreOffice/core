@@ -38,7 +38,6 @@ import "defines.idl";
         [id(4), helpstring("method IncreaseState")] HRESULT IncreaseState(DWORD pXSate);
         [id(6), helpstring("method Put_XAccValue")] HRESULT Put_XAccValue(const OLECHAR* pszAccValue);
         [id(7), helpstring("method SetState")] HRESULT SetState(DWORD pXSate);
-        [id(8), helpstring("method Put_XAccLocation")] HRESULT Put_XAccLocation(const Location sLocation);
         [id(9), helpstring("method Put_XAccFocus")] HRESULT Put_XAccFocus(long dChildID);
         [id(10), helpstring("method Put_XAccParent")] HRESULT Put_XAccParent(IMAccessible* pIParent);
         [id(13), helpstring("method Put_XAccWindowHandle")] HRESULT Put_XAccWindowHandle(HWND hwnd);

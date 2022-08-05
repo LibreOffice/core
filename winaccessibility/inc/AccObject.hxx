@@ -122,7 +122,6 @@ public:
     void  UpdateValue();
     void  UpdateAction();
     void  UpdateValidWindow();
-    void  UpdateLocation();
 
     void  setFocus();
     void  unsetFocus();
