@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f895bb01_3430478a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-05T11:18:16Z",
+      "side": 1,
+      "message": "Nice!\n\nJust a nitpick: you likely made a typo in the commit message - it starts with a single \"f\" character.",
+      "revId": "6bf9ce25aaeffe51dd8a14f06fe120cadda30f6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
