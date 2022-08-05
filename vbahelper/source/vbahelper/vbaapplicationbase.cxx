@@ -409,9 +409,7 @@ void SAL_CALL VbaApplicationBase::OnTime( const uno::Any& aEarliestTime, const O
 
 float SAL_CALL VbaApplicationBase::CentimetersToPoints( float Centimeters )
 {
-    // i cm = 28.35 points
-    static const float rate = 28.35f;
-    return ( Centimeters * rate );
+    return o3tl::convert(Centimeters, o3tl::Length::cm, o3tl::Length::pt);
 }
 
 uno::Any SAL_CALL VbaApplicationBase::getVBE()
