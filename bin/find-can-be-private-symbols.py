@@ -182,7 +182,6 @@ with open("bin/find-can-be-private-symbols.functions.results", "wt") as f:
         elif sym.endswith("component_getFactory"): continue
         elif sym == "CreateDialogFactory": continue
         elif sym == "CreateUnoWrapper": continue
-        elif sym == "CreateWindow": continue
         elif sym == "ExportDOC": continue
         elif sym == "ExportPPT": continue
         elif sym == "ExportRTF": continue

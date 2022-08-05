@@ -403,12 +403,6 @@ Size MessBox::GetOptimalSize() const
 
 namespace {
 
-extern "C" typedef vcl::Window* (*FN_SvtCreateWindow)(
-        rtl::Reference<VCLXWindow>* ppNewComp,
-        const css::awt::WindowDescriptor* pDescriptor,
-        vcl::Window* pParent,
-        WinBits nWinBits );
-
 class Pause : public Idle
 {
 public:
@@ -439,9 +433,6 @@ class VCLXToolkit : public cppu::BaseMutex,
 {
     css::uno::Reference< css::datatransfer::clipboard::XClipboard > mxClipboard;
     css::uno::Reference< css::datatransfer::clipboard::XClipboard > mxSelection;
-
-    oslModule           hSvToolsLib;
-    FN_SvtCreateWindow  fnSvtCreateWindow;
 
     ::comphelper::OInterfaceContainerHelper3<css::awt::XTopWindowListener> m_aTopWindowListeners;
     ::comphelper::OInterfaceContainerHelper3<css::awt::XKeyHandler> m_aKeyHandlers;
@@ -941,9 +932,6 @@ VCLXToolkit::VCLXToolkit():
     m_bEventListener(false),
     m_bKeyListener(false)
 {
-    hSvToolsLib = nullptr;
-    fnSvtCreateWindow = nullptr;
-
 #ifndef IOS
     osl::Guard< osl::Mutex > aGuard( getInitMutex() );
     nVCLToolkitInstanceCount++;
@@ -958,15 +946,6 @@ VCLXToolkit::VCLXToolkit():
 
 void SAL_CALL VCLXToolkit::disposing()
 {
-#ifndef DISABLE_DYNLOADING
-    if ( hSvToolsLib )
-    {
-        osl_unloadModule( hSvToolsLib );
-        hSvToolsLib = nullptr;
-        fnSvtCreateWindow = nullptr;
-    }
-#endif
-
 #ifndef IOS
     {
         osl::Guard< osl::Mutex > aGuard( getInitMutex() );
@@ -1855,16 +1834,6 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( rtl::Reference<VCLXWindow>* ppNewCom
     return pNewWindow;
 }
 
-#ifndef DISABLE_DYNLOADING
-
-extern "C" { static void thisModule() {} }
-
-#else
-
-extern "C" vcl::Window* SAL_CALL CreateWindow( rtl::Reference<VCLXWindow>* ppNewComp, const css::awt::WindowDescriptor* pDescriptor, vcl::Window* pParent, WinBits nWinBits );
-
-#endif
-
 css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     const css::awt::WindowDescriptor& rDescriptor,
     MessBoxStyle nForceMessBoxStyle )
@@ -1893,37 +1862,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
 
     rtl::Reference<VCLXWindow> pNewComp;
 
-    vcl::Window* pNewWindow = nullptr;
-    // Try to create the window with SvTools
-    // (do this _before_ creating it on our own: The old mechanism (extended toolkit in SvTools) did it this way,
-    // and we need to stay compatible)
-    // try to load the lib
-    if ( !fnSvtCreateWindow
-#ifndef DISABLE_DYNLOADING
-         && !hSvToolsLib
-#endif
-         )
-    {
-#ifndef DISABLE_DYNLOADING
-        OUString aLibName(SVT_DLL_NAME);
-        hSvToolsLib = osl_loadModuleRelative(
-            &thisModule, aLibName.pData, SAL_LOADMODULE_DEFAULT );
-        if ( hSvToolsLib )
-        {
-            OUString aFunctionName( "CreateWindow" );
-            fnSvtCreateWindow = reinterpret_cast<FN_SvtCreateWindow>(osl_getFunctionSymbol( hSvToolsLib, aFunctionName.pData ));
-        }
-#else
-        fnSvtCreateWindow = nullptr;
-#endif
-    }
-    // ask the SvTool creation function
-    if ( fnSvtCreateWindow )
-        pNewWindow = fnSvtCreateWindow( &pNewComp, &rDescriptor, pParent, nWinBits );
-
-    // if SvTools could not provide a window, create it ourself
-    if ( !pNewWindow )
-        pNewWindow = ImplCreateWindow( &pNewComp, rDescriptor, pParent, nWinBits, aPair.second );
+    vcl::Window* pNewWindow = ImplCreateWindow( &pNewComp, rDescriptor, pParent, nWinBits, aPair.second );
 
     DBG_ASSERT( pNewWindow, "createWindow: Unknown Component!" );
     SAL_INFO_IF( !pNewComp, "toolkit", "createWindow: No special Interface!" );
