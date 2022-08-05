@@ -237,7 +237,7 @@ void DialogWindow::DoInit()
     m_pEditor->SetScrollBars( GetHScrollBar(), GetVScrollBar() );
 }
 
-void DialogWindow::DoScroll( ScrollBar*  )
+void DialogWindow::DoScroll( Scrollable*  )
 {
     m_pEditor->DoScroll();
 }

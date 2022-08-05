@@ -72,49 +72,51 @@ BaseWindow::~BaseWindow()
 
 void BaseWindow::dispose()
 {
-    if ( pShellVScrollBar )
-        pShellVScrollBar->SetScrollHdl( Link<ScrollBar*,void>() );
-    if ( pShellHScrollBar )
-        pShellHScrollBar->SetScrollHdl( Link<ScrollBar*,void>() );
+    if (pShellVScrollBar && !pShellVScrollBar>isDisposed())
+        pShellVScrollBar->SetScrollHdl( Link<weld::Scrollbar&,void>() );
+    if (pShellHScrollBar && !pShellHScrollBar->isDisposed())
+        pShellHScrollBar->SetScrollHdl( Link<weld::Scrollbar&,void>() );
     pShellVScrollBar.clear();
     pShellHScrollBar.clear();
     vcl::Window::dispose();
 }
 
-
 void BaseWindow::Init()
 {
     if ( pShellVScrollBar )
-        pShellVScrollBar->SetScrollHdl( LINK( this, BaseWindow, ScrollHdl ) );
+        pShellVScrollBar->SetScrollHdl( LINK( this, BaseWindow, VertScrollHdl ) );
     if ( pShellHScrollBar )
-        pShellHScrollBar->SetScrollHdl( LINK( this, BaseWindow, ScrollHdl ) );
+        pShellHScrollBar->SetScrollHdl( LINK( this, BaseWindow, HorzScrollHdl ) );
     DoInit();   // virtual...
 }
 
-
 void BaseWindow::DoInit()
-{ }
+{
+}
 
-
-void BaseWindow::GrabScrollBars( ScrollBar* pHScroll, ScrollBar* pVScroll )
+void BaseWindow::GrabScrollBars(ScrollAdaptor* pHScroll, ScrollAdaptor* pVScroll)
 {
     pShellHScrollBar = pHScroll;
     pShellVScrollBar = pVScroll;
-//  Init(); // does not make sense, leads to flickering and errors...
 }
 
-
-IMPL_LINK( BaseWindow, ScrollHdl, ScrollBar *, pCurScrollBar, void )
+IMPL_LINK_NOARG(BaseWindow, VertScrollHdl, weld::Scrollbar&, void)
 {
-    DoScroll( pCurScrollBar );
+    DoScroll(pShellVScrollBar);
+}
+
+IMPL_LINK_NOARG(BaseWindow, HorzScrollHdl, weld::Scrollbar&, void)
+{
+    DoScroll(pShellHScrollBar);
 }
 
 void BaseWindow::ExecuteCommand (SfxRequest&)
-{ }
+{
+}
 
 void BaseWindow::ExecuteGlobal (SfxRequest&)
-{ }
-
+{
+}
 
 bool BaseWindow::EventNotify( NotifyEvent& rNEvt )
 {
@@ -145,11 +147,9 @@ bool BaseWindow::EventNotify( NotifyEvent& rNEvt )
     return bDone || Window::EventNotify( rNEvt );
 }
 
-
-void BaseWindow::DoScroll( ScrollBar* )
+void BaseWindow::DoScroll( Scrollable* )
 {
 }
-
 
 void BaseWindow::StoreData()
 {
@@ -159,7 +159,6 @@ bool BaseWindow::AllowUndo()
 {
     return true;
 }
-
 
 void BaseWindow::UpdateData()
 {

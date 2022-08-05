@@ -21,6 +21,7 @@
 #include "scriptdocument.hxx"
 
 #include "sbxitem.hxx"
+#include <svtools/scrolladaptor.hxx>
 #include <svtools/tabbar.hxx>
 #include <basic/sbdef.hxx>
 #include <vcl/dockwin.hxx>
@@ -155,10 +156,11 @@ class EntryDescriptor;
 class BaseWindow : public vcl::Window
 {
 private:
-    VclPtr<ScrollBar>      pShellHScrollBar;
-    VclPtr<ScrollBar>      pShellVScrollBar;
+    VclPtr<ScrollAdaptor>  pShellHScrollBar;
+    VclPtr<ScrollAdaptor>  pShellVScrollBar;
 
-    DECL_LINK( ScrollHdl, ScrollBar*, void );
+    DECL_LINK( VertScrollHdl, weld::Scrollbar&, void );
+    DECL_LINK( HorzScrollHdl, weld::Scrollbar&, void );
     int nStatus;
 
     ScriptDocument      m_aDocument;
@@ -169,7 +171,7 @@ private:
     friend class DialogWindow;
 
 protected:
-    virtual void    DoScroll( ScrollBar* pCurScrollBar );
+    virtual void    DoScroll(Scrollable* pCurScrollBar);
 
 public:
     BaseWindow( vcl::Window* pParent, ScriptDocument aDocument, OUString aLibName, OUString aName );
@@ -180,10 +182,10 @@ public:
     virtual void    DoInit();
     virtual void    Activating () = 0;
     virtual void    Deactivating () = 0;
-    void            GrabScrollBars( ScrollBar* pHScroll, ScrollBar* pVScroll );
+    void            GrabScrollBars(ScrollAdaptor* pHScroll, ScrollAdaptor* pVScroll);
 
-    ScrollBar*      GetHScrollBar() const { return pShellHScrollBar; }
-    ScrollBar*      GetVScrollBar() const { return pShellVScrollBar; }
+    ScrollAdaptor*  GetHScrollBar() const { return pShellHScrollBar; }
+    ScrollAdaptor*  GetVScrollBar() const { return pShellVScrollBar; }
 
     virtual void    ExecuteCommand (SfxRequest&);
     virtual void    ExecuteGlobal (SfxRequest&);

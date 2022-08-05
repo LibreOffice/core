@@ -67,7 +67,7 @@ protected:
 
     static void         NotifyUndoActionHdl( std::unique_ptr<SdrUndoAction> );
     virtual void        DoInit() override;
-    virtual void        DoScroll( ScrollBar* pCurScrollBar ) override;
+    virtual void        DoScroll( Scrollable* pCurScrollBar ) override;
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
     void                InitSettings();
 

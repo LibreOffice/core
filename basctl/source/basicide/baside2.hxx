@@ -32,6 +32,7 @@
 #include <vcl/weld.hxx>
 
 #include <svtools/colorcfg.hxx>
+#include <svtools/scrolladaptor.hxx>
 #include <o3tl/enumarray.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -253,12 +254,12 @@ private:
     VclPtr<BreakPointWindow> aBrkWindow;
     VclPtr<LineNumberWindow> aLineNumberWindow;
     VclPtr<EditorWindow>     aEdtWindow;
-    VclPtr<ScrollBar>        aEWVScrollBar;
+    VclPtr<ScrollAdaptor>    aEWVScrollBar;
 
     virtual void DataChanged(DataChangedEvent const & rDCEvt) override;
 
     virtual void        Resize() override;
-    DECL_LINK( ScrollHdl, ScrollBar*, void );
+    DECL_LINK(ScrollHdl, weld::Scrollbar&, void);
 
 public:
     explicit ComplexEditorWindow( ModulWindow* pParent );
@@ -267,7 +268,7 @@ public:
     BreakPointWindow&   GetBrkWindow()      { return *aBrkWindow; }
     LineNumberWindow&   GetLineNumberWindow() { return *aLineNumberWindow; }
     EditorWindow&       GetEdtWindow()      { return *aEdtWindow; }
-    ScrollBar&          GetEWVScrollBar()   { return *aEWVScrollBar; }
+    ScrollAdaptor&      GetEWVScrollBar()   { return *aEWVScrollBar; }
 
     void SetLineNumberDisplay(bool b);
 };
@@ -294,7 +295,7 @@ protected:
     virtual void    GetFocus() override;
     virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& ) override;
     virtual void    DoInit() override;
-    virtual void    DoScroll( ScrollBar* pCurScrollBar ) override;
+    virtual void    DoScroll(Scrollable* pCurScrollBar) override;
 
 public:
     ModulWindow( ModulWindowLayout* pParent, const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName, OUString aModule );
@@ -360,7 +361,7 @@ public:
     EditorWindow&       GetEditorWindow()       { return m_aXEditorWindow->GetEdtWindow(); }
     BreakPointWindow&   GetBreakPointWindow()   { return m_aXEditorWindow->GetBrkWindow(); }
     LineNumberWindow&   GetLineNumberWindow()   { return m_aXEditorWindow->GetLineNumberWindow(); }
-    ScrollBar&          GetEditVScrollBar()     { return m_aXEditorWindow->GetEWVScrollBar(); }
+    ScrollAdaptor&      GetEditVScrollBar()     { return m_aXEditorWindow->GetEWVScrollBar(); }
     ExtTextEngine*      GetEditEngine()         { return GetEditorWindow().GetEditEngine(); }
     TextView*           GetEditView()           { return GetEditorWindow().GetEditView(); }
     BreakPointList&     GetBreakPoints()        { return GetBreakPointWindow().GetBreakPoints(); }

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/scrbar.hxx>
+#include <svtools/scrolladaptor.hxx>
 #include <svx/svdview.hxx>
 #include <dlgedfunc.hxx>
 #include <dlged.hxx>
@@ -45,8 +45,8 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
     tools::Rectangle aOutRect( aDefPoint, rWindow.GetOutputSizePixel() );
     aOutRect = rWindow.PixelToLogic( aOutRect );
 
-    ScrollBar* pHScroll = rParent.GetHScroll();
-    ScrollBar* pVScroll = rParent.GetVScroll();
+    ScrollAdaptor* pHScroll = rParent.GetHScroll();
+    ScrollAdaptor* pVScroll = rParent.GetVScroll();
     tools::Long nDeltaX = pHScroll->GetLineSize();
     tools::Long nDeltaY = pVScroll->GetLineSize();
 
@@ -294,7 +294,7 @@ bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
             else
             {
                 // scroll page
-                ScrollBar* pScrollBar = ( nX != 0 ) ? rParent.GetHScroll() : rParent.GetVScroll();
+                ScrollAdaptor* pScrollBar = ( nX != 0 ) ? rParent.GetHScroll() : rParent.GetVScroll();
                 if ( pScrollBar )
                 {
                     tools::Long nRangeMin = pScrollBar->GetRangeMin();
