@@ -25,9 +25,4 @@ interface IMAccessible;
 
 const long UACC_NO_FOCUS=0xFFFF;
 
-typedef struct {
-    long m_dChildID;//identify a unique child node
-    IMAccessible* m_pIMAccessible;
-}AccChildNode;
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
