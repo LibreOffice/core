@@ -18,6 +18,7 @@
  */
 
 #include <sfx2/objsh.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 
 #include <addinlis.hxx>
@@ -46,8 +47,8 @@ ScAddInListener* ScAddInListener::CreateListener(
     return xNew.get();
 }
 
-ScAddInListener::ScAddInListener( uno::Reference<sheet::XVolatileResult> const & xVR, ScDocument* pDoc ) :
-    xVolRes( xVR ),
+ScAddInListener::ScAddInListener( uno::Reference<sheet::XVolatileResult> xVR, ScDocument* pDoc ) :
+    xVolRes(std::move( xVR )),
     pDocs( new ScAddInDocs )
 {
     pDocs->insert( pDoc );

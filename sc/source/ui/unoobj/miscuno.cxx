@@ -22,6 +22,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/any.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 
 #include <miscuno.hxx>
@@ -186,10 +187,10 @@ void ScUnoHelpFunctions::SetOptionalPropertyValue(
     }
 }
 
-ScIndexEnumeration::ScIndexEnumeration(const uno::Reference<container::XIndexAccess>& rInd,
-                                       const OUString& rServiceName) :
-    xIndex( rInd ),
-    sServiceName(rServiceName),
+ScIndexEnumeration::ScIndexEnumeration(uno::Reference<container::XIndexAccess> xInd,
+                                       OUString aServiceName) :
+    xIndex(std::move( xInd )),
+    sServiceName(std::move(aServiceName)),
     nPos( 0 )
 {
 }
@@ -237,9 +238,9 @@ css::uno::Sequence< OUString >
     return { sServiceName };
 }
 
-ScNameToIndexAccess::ScNameToIndexAccess( const css::uno::Reference<
-                                            css::container::XNameAccess>& rNameObj ) :
-    xNameAccess( rNameObj )
+ScNameToIndexAccess::ScNameToIndexAccess( css::uno::Reference<
+                                            css::container::XNameAccess> xNameObj ) :
+    xNameAccess(std::move( xNameObj ))
 {
     //! test for XIndexAccess interface at rNameObj, use that instead!
 

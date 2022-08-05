@@ -42,6 +42,7 @@
 #include <rangenam.hxx>
 #include <chgtrack.hxx>
 #include <stringutil.hxx>
+#include <utility>
 
 namespace HelperNotifyChanges
 {
@@ -159,9 +160,9 @@ ScUndoEnterData::Value::Value() : mnTab(-1), mbHasFormat(false), mnFormat(0) {}
 
 ScUndoEnterData::ScUndoEnterData(
     ScDocShell* pNewDocShell, const ScAddress& rPos, ValuesType& rOldValues,
-    const OUString& rNewStr, std::unique_ptr<EditTextObject> pObj ) :
+    OUString aNewStr, std::unique_ptr<EditTextObject> pObj ) :
     ScSimpleUndo( pNewDocShell ),
-    maNewString(rNewStr),
+    maNewString(std::move(aNewStr)),
     mpNewEditData(std::move(pObj)),
     mnEndChangeAction(0),
     maPos(rPos)
@@ -306,10 +307,10 @@ bool ScUndoEnterData::CanRepeat(SfxRepeatTarget& rTarget) const
 
 ScUndoEnterValue::ScUndoEnterValue(
     ScDocShell* pNewDocShell, const ScAddress& rNewPos,
-    const ScCellValue& rUndoCell, double nVal ) :
+    ScCellValue aUndoCell, double nVal ) :
     ScSimpleUndo( pNewDocShell ),
     aPos        ( rNewPos ),
-    maOldCell(rUndoCell),
+    maOldCell(std::move(aUndoCell)),
     nValue      ( nVal )
 {
     SetChangeTrack();
@@ -380,8 +381,8 @@ bool ScUndoEnterValue::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;
 }
 
-ScUndoSetCell::ScUndoSetCell( ScDocShell* pDocSh, const ScAddress& rPos, const ScCellValue& rOldVal, const ScCellValue& rNewVal ) :
-    ScSimpleUndo(pDocSh), maPos(rPos), maOldValue(rOldVal), maNewValue(rNewVal), mnEndChangeAction(0)
+ScUndoSetCell::ScUndoSetCell( ScDocShell* pDocSh, const ScAddress& rPos, ScCellValue aOldVal, ScCellValue aNewVal ) :
+    ScSimpleUndo(pDocSh), maPos(rPos), maOldValue(std::move(aOldVal)), maNewValue(std::move(aNewVal)), mnEndChangeAction(0)
 {
     SetChangeTrack();
 }
@@ -640,13 +641,13 @@ bool ScUndoPrintZoom::CanRepeat(SfxRepeatTarget& rTarget) const
 
 ScUndoThesaurus::ScUndoThesaurus(
     ScDocShell* pNewDocShell, SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
-    const ScCellValue& rOldText, const ScCellValue& rNewText ) :
+    ScCellValue aOldText, ScCellValue aNewText ) :
     ScSimpleUndo( pNewDocShell ),
     nCol( nNewCol ),
     nRow( nNewRow ),
     nTab( nNewTab ),
-    maOldText(rOldText),
-    maNewText(rNewText)
+    maOldText(std::move(aOldText)),
+    maNewText(std::move(aNewText))
 {
     SetChangeTrack(maOldText);
 }
@@ -740,11 +741,11 @@ ScUndoReplaceNote::ScUndoReplaceNote( ScDocShell& rDocShell, const ScAddress& rP
 }
 
 ScUndoReplaceNote::ScUndoReplaceNote( ScDocShell& rDocShell, const ScAddress& rPos,
-        const ScNoteData& rOldData, const ScNoteData& rNewData, std::unique_ptr<SdrUndoAction> pDrawUndo ) :
+        ScNoteData aOldData, ScNoteData aNewData, std::unique_ptr<SdrUndoAction> pDrawUndo ) :
     ScSimpleUndo( &rDocShell ),
     maPos( rPos ),
-    maOldData( rOldData ),
-    maNewData( rNewData ),
+    maOldData(std::move( aOldData )),
+    maNewData(std::move( aNewData )),
     mpDrawUndo( std::move(pDrawUndo) )
 {
     OSL_ENSURE( maOldData.mxCaption || maNewData.mxCaption, "ScUndoReplaceNote::ScUndoReplaceNote - missing note captions" );

@@ -43,10 +43,10 @@ private:
     bool bAddUndo:1;
 
 public:
-    ScTableLink( ScDocShell* pDocSh, const OUString& rFile,
-                    const OUString& rFilter, const OUString& rOpt, sal_Int32 nRefreshDelaySeconds );
-    ScTableLink( SfxObjectShell* pShell, const OUString& rFile,
-                    const OUString& rFilter, const OUString& rOpt, sal_Int32 nRefreshDelaySeconds );
+    ScTableLink( ScDocShell* pDocSh, OUString aFile,
+                    OUString aFilter, OUString aOpt, sal_Int32 nRefreshDelaySeconds );
+    ScTableLink( SfxObjectShell* pShell, OUString aFile,
+                    OUString aFilter, OUString aOpt, sal_Int32 nRefreshDelaySeconds );
     virtual ~ScTableLink() override;
     virtual void Closed() override;
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(

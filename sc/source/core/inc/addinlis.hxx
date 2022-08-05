@@ -43,7 +43,7 @@ private:
     static ::std::vector<rtl::Reference<ScAddInListener>> aAllListeners;
 
     // always allocated via CreateListener
-    ScAddInListener( css::uno::Reference<css::sheet::XVolatileResult> const & xVR,
+    ScAddInListener( css::uno::Reference<css::sheet::XVolatileResult> xVR,
                     ScDocument* pD );
 
 public:

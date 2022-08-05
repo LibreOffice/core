@@ -56,6 +56,7 @@
 #include <svx/rotmodit.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/UnitConversion.hxx>
+#include <utility>
 #include <vcl/unohelp.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/ustrbuf.hxx>
@@ -544,9 +545,9 @@ Font::Font( const WorkbookHelper& rHelper, bool bDxf ) :
 {
 }
 
-Font::Font( const WorkbookHelper& rHelper, const FontModel& rModel ) :
+Font::Font( const WorkbookHelper& rHelper, FontModel aModel ) :
     WorkbookHelper( rHelper ),
-    maModel( rModel ),
+    maModel(std::move( aModel )),
     maUsedFlags( true ),
     mbDxf( false )
 {

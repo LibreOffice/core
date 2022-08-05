@@ -56,7 +56,7 @@ class ScVbaInterior final :  public ScVbaInterior_BASE
 public:
         /// @throws css::lang::IllegalArgumentException
         ScVbaInterior( const css::uno::Reference< ov::XHelperInterface >& xParent,  const css::uno::Reference< css::uno::XComponentContext >& xContext,
-                 const css::uno::Reference< css::beans::XPropertySet >& xProps, ScDocument* pScDoc = nullptr);
+                 css::uno::Reference< css::beans::XPropertySet > xProps, ScDocument* pScDoc = nullptr);
 
     virtual css::uno::Any SAL_CALL getColor() override ;
     virtual void SAL_CALL setColor( const css::uno::Any& _color ) override ;

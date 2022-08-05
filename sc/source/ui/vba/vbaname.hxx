@@ -36,7 +36,7 @@ class ScVbaName : public NameImpl_BASE
     OUString getContent( const formula::FormulaGrammar::Grammar eGrammar );
     void setContent( const OUString& sContent, const formula::FormulaGrammar::Grammar eGrammar );
 public:
-    ScVbaName( const css::uno::Reference< ov::XHelperInterface >& xParent,  const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::sheet::XNamedRange >& xName , const css::uno::Reference< css::sheet::XNamedRanges >& xNames , const css::uno::Reference< css::frame::XModel >& xModel );
+    ScVbaName( const css::uno::Reference< ov::XHelperInterface >& xParent,  const css::uno::Reference< css::uno::XComponentContext >& xContext, css::uno::Reference< css::sheet::XNamedRange > xName , css::uno::Reference< css::sheet::XNamedRanges > xNames , css::uno::Reference< css::frame::XModel > xModel );
     virtual ~ScVbaName() override;
 
     // Attributes

@@ -27,8 +27,7 @@ private:
     std::shared_ptr<sc::SparklineGroup> mpSparklineGroup;
 
 public:
-    UndoInsertSparkline(ScDocShell& rDocShell,
-                        std::vector<SparklineData> const& rSparklineDataVector,
+    UndoInsertSparkline(ScDocShell& rDocShell, std::vector<SparklineData> pSparklineDataVector,
                         std::shared_ptr<sc::SparklineGroup> pSparklineGroup);
 
     virtual ~UndoInsertSparkline() override;

@@ -62,6 +62,7 @@
 
 #include <limits>
 #include <string_view>
+#include <utility>
 #include <vector>
 
 using namespace com::sun::star;
@@ -93,9 +94,9 @@ struct ScDPOutLevelData
     bool                                mbPageDim:1;
 
     ScDPOutLevelData(tools::Long nDim, tools::Long nHier, tools::Long nLevel, tools::Long nDimPos, sal_uInt32 nSrcNumFmt, const uno::Sequence<sheet::MemberResult>  &aResult,
-                       const OUString &aName, const OUString &aCaption, bool bHasHiddenMember, bool bDataLayout, bool bPageDim) :
+                       OUString aName, OUString aCaption, bool bHasHiddenMember, bool bDataLayout, bool bPageDim) :
         mnDim(nDim), mnHier(nHier), mnLevel(nLevel), mnDimPos(nDimPos), mnSrcNumFmt(nSrcNumFmt), maResult(aResult),
-        maName(aName), maCaption(aCaption), mbHasHiddenMember(bHasHiddenMember), mbDataLayout(bDataLayout),
+        maName(std::move(aName)), maCaption(std::move(aCaption)), mbHasHiddenMember(bHasHiddenMember), mbDataLayout(bDataLayout),
         mbPageDim(bPageDim)
     {
     }
@@ -502,10 +503,10 @@ uno::Sequence<sheet::MemberResult> getVisiblePageMembersAsResults( const uno::Re
 
 }
 
-ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsSupplier>& xSrc,
+ScDPOutput::ScDPOutput( ScDocument* pD, uno::Reference<sheet::XDimensionsSupplier> xSrc,
                         const ScAddress& rPos, bool bFilter ) :
     pDoc( pD ),
-    xSource( xSrc ),
+    xSource(std::move( xSrc )),
     aStartPos( rPos ),
     nColFmtCount( 0 ),
     nRowFmtCount( 0 ),

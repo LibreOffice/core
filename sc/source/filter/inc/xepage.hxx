@@ -33,7 +33,7 @@ class XclExpImgData;
 class XclExpHeaderFooter : public XclExpRecord
 {
 public:
-    explicit            XclExpHeaderFooter( sal_uInt16 nRecId, const OUString& rHdrString );
+    explicit            XclExpHeaderFooter( sal_uInt16 nRecId, OUString aHdrString );
 
     virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 private:
