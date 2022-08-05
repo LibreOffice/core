@@ -18,6 +18,7 @@
  */
 
 #include "AccTableCell.h"
+#include "MAccessible.h"
 
 #include <vcl/svapp.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -203,6 +204,28 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTableCell::get_rowColumnExtents(long* pRow
         return E_FAIL;
     if (get_isSelected(pIsSelected) != S_OK)
         return E_FAIL;
+    return S_OK;
+}
+
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTableCell::get_table(IUnknown** ppTable)
+{
+    if (!ppTable)
+        return E_INVALIDARG;
+
+    if (!m_xTable.is())
+        return E_FAIL;
+
+    Reference<XAccessible> xAcc(m_xTable, UNO_QUERY);
+    if (!xAcc.is())
+        return E_FAIL;
+
+    IAccessible* pRet = nullptr;
+    bool bOK = CMAccessible::get_IAccessibleFromXAccessible(xAcc.get(), &pRet);
+    if (!bOK)
+        return E_FAIL;
+
+    *ppTable = pRet;
+    pRet->AddRef();
     return S_OK;
 }
 
