@@ -2664,9 +2664,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf122942)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rFormats.size());
 
     reload("writer8", "tdf122942.odt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
-    pDoc = pWrtShell->GetDoc();
+    pDoc = getSwDoc();
     const SwFrameFormats& rFormats2 = *pDoc->GetSpzFrameFormats();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rFormats2.size());
 

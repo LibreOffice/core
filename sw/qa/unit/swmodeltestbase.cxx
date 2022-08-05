@@ -144,10 +144,7 @@ void SwModelTestBase::dumpLayout(const uno::Reference<lang::XComponent>& rCompon
     (void)xmlTextWriterStartDocument(pXmlWriter, nullptr, nullptr, nullptr);
 
     // create the dump
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(rComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
-    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    SwRootFrame* pLayout = getSwDoc()->getIDocumentLayoutAccess().GetCurrentLayout();
     pLayout->dumpAsXml(pXmlWriter);
 
     // delete xml writer
@@ -166,10 +163,7 @@ void SwModelTestBase::discardDumpedLayout()
 
 void SwModelTestBase::calcLayout()
 {
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
-    pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
+    getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
 }
 
 int SwModelTestBase::getLength() const { return getBodyText().getLength(); }
@@ -730,9 +724,7 @@ SwDoc* SwModelTestBase::createSwDoc(std::u16string_view rDataDirectory, const ch
     else
         load(rDataDirectory, pName);
 
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    return pTextDoc->GetDocShell()->GetDoc();
+    return getSwDoc();
 }
 
 SwDoc* SwModelTestBase::createSwWebDoc(std::u16string_view rDataDirectory, const char* pName)
@@ -742,9 +734,16 @@ SwDoc* SwModelTestBase::createSwWebDoc(std::u16string_view rDataDirectory, const
     else
         load_web(rDataDirectory, pName);
 
+    return getSwDoc();
+}
+
+SwXTextDocument& SwModelTestBase::getSwXTextDocument()
+{
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
-    return pTextDoc->GetDocShell()->GetDoc();
+    return *pTextDoc;
 }
+
+SwDoc* SwModelTestBase::getSwDoc() { return getSwXTextDocument().GetDocShell()->GetDoc(); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

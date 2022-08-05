@@ -601,9 +601,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf96479)
         // occurred because a broken bookmark was saved and loading silently
         // dropped the broken bookmark!
         reload("writer8", "testTdf96479.odt");
-        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-        CPPUNIT_ASSERT(pTextDoc);
-        pDoc = pTextDoc->GetDocShell()->GetDoc();
+        pDoc = getSwDoc();
 
         // Lookup "replacement" bookmark
         IDocumentMarkAccess& rIDMA = *pDoc->getIDocumentMarkAccess();

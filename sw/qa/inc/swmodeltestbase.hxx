@@ -83,6 +83,8 @@
     CPPUNIT_TEST_SUITE_REGISTRATION(TestName); \
     void TestName::verify()
 
+class SwXTextDocument;
+
 /// Base class for filter tests loading or roundtripping a document, then asserting the document model.
 class SWQAHELPER_DLLPUBLIC SwModelTestBase : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools
 {
@@ -382,6 +384,16 @@ protected:
      */
     SwDoc* createSwWebDoc(
         std::u16string_view rDataDirectory = std::u16string_view(), const char* pName = nullptr);
+
+    /**
+     * Gets SwXTextDocument from loaded component
+     */
+    SwXTextDocument& getSwXTextDocument();
+
+    /**
+     * Gets SwDoc from loaded component
+     */
+    SwDoc* getSwDoc();
 };
 
 /**
