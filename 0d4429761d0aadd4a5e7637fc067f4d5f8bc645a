@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b52ff0d0_f2b30ee5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-08-05T17:09:03Z",
+      "side": 1,
+      "message": "@cloph:\nCould you please help me make fix the issues with CI? In the previous patch set, I tried to limit the inclusion of LibreOfficeKitGtk.h to Linux, but now even without this file, CI doesn\u0027t pass for Linux.",
+      "revId": "0d4429761d0aadd4a5e7637fc067f4d5f8bc645a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
