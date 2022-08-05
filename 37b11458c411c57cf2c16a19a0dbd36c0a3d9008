@@ -35,6 +35,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7dfcf5c0_07f4c85b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-08-05T14:39:40Z",
+      "side": 1,
+      "message": "Yeah, sorry about this. I literally own two aging iMacs now, one which runs Linux.",
+      "parentUuid": "75f1656c_ecb447a6",
+      "revId": "37b11458c411c57cf2c16a19a0dbd36c0a3d9008",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7a54cb9c_cb3a5a2b",
