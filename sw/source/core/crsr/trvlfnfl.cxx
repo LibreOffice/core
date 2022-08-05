@@ -206,7 +206,7 @@ bool SwCursor::GotoNextFootnoteAnchor()
         return false;
     }
 
-    if( rFootnoteArr.SeekEntry( GetPoint()->nNode, &nPos ))
+    if( rFootnoteArr.SeekEntry( GetPoint()->GetNode(), &nPos ))
     {
         // there is a footnote with this index, so search also for the next one
         if( nPos < rFootnoteArr.size() )
@@ -278,7 +278,7 @@ bool SwCursor::GotoPrevFootnoteAnchor()
         return false;
     }
 
-    if( rFootnoteArr.SeekEntry( GetPoint()->nNode, &nPos ) )
+    if( rFootnoteArr.SeekEntry( GetPoint()->GetNode(), &nPos ) )
     {
         // there is a footnote with this index, so search also for the next one
         SwNodeOffset nNdPos = GetPoint()->GetNodeIndex();

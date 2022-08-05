@@ -474,7 +474,7 @@ bool SwNode::IsProtect() const
     if( nullptr != pSttNd )
     {
         const SwTextFootnote* pTFootnote = GetDoc().GetFootnoteIdxs().SeekEntry(
-                                SwNodeIndex( *pSttNd ) );
+                                *pSttNd );
         if( pTFootnote )
             return pTFootnote->GetTextNode().IsProtect();
     }

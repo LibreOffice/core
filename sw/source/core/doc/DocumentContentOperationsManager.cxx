@@ -976,7 +976,7 @@ namespace
         {
 
             size_t nPos = 0;
-            rFootnoteArr.SeekEntry( rSttNd, &nPos );
+            rFootnoteArr.SeekEntry( rSttNd.GetNode(), &nPos );
             SwTextFootnote* pSrch;
             const SwNode* pFootnoteNd;
 

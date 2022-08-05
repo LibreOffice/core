@@ -881,7 +881,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
         {
             const SwNode* pFootnoteNd;
             size_t nPos = 0;
-            rFootnoteArr.SeekEntry( pStt->nNode, &nPos );
+            rFootnoteArr.SeekEntry( pStt->GetNode(), &nPos );
             SwTextFootnote* pSrch;
 
             // for now delete all that come afterwards
