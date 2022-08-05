@@ -87,6 +87,7 @@ private:
     OUString            aLocalName;         ///< for display
     OUString            aUpperName;         ///< for entering formulas
     OUString            aUpperLocal;        ///< for entering formulas
+    OUString            aUpperEnglish;      ///< for Function Wizard and tooltips
     OUString            aDescription;
     css::uno::Reference< css::reflection::XIdlMethod> xFunction;
     css::uno::Any       aObject;
@@ -113,6 +114,7 @@ public:
     const OUString&  GetLocalName() const        { return aLocalName; }
     const OUString&  GetUpperName() const        { return aUpperName; }
     const OUString&  GetUpperLocal() const       { return aUpperLocal; }
+    const OUString&  GetUpperEnglish() const     { return aUpperEnglish; }
     const css::uno::Reference< css::reflection::XIdlMethod>&   GetFunction() const
                                                         { return xFunction; }
     const css::uno::Any& GetObject() const   { return aObject; }
@@ -132,6 +134,9 @@ public:
     void    SetArguments( tools::Long nNewCount, const ScAddInArgDesc* pNewDescs );
     void    SetCallerPos( tools::Long nNewPos );
     void    SetCompNames( ::std::vector< LocalizedName >&& rNew );
+
+    /// Takes care of handling an empty name *after* upper local name was set.
+    void    SetEnglishName( const OUString& rEnglishName );
 };
 
 class SC_DLLPUBLIC ScUnoAddInCollection
@@ -175,9 +180,10 @@ public:
     void                LocalizeString( OUString& rName );    ///< modify rName - input: exact name
 
     tools::Long                GetFuncCount();
-    bool                FillFunctionDesc( tools::Long nFunc, ScFuncDesc& rDesc );
+    bool                FillFunctionDesc( tools::Long nFunc, ScFuncDesc& rDesc, bool bEnglishFunctionNames );
 
-    static bool         FillFunctionDescFromData( const ScUnoAddInFuncData& rFuncData, ScFuncDesc& rDesc );
+    static bool         FillFunctionDescFromData( const ScUnoAddInFuncData& rFuncData, ScFuncDesc& rDesc,
+                                                  bool bEnglishFunctionNames );
                   /// leave rRetExcelName unchanged, if no matching name is found
     bool                GetExcelName( const OUString& rCalcName, LanguageType eDestLang, OUString& rRetExcelName );
                   /// leave rRetCalcName unchanged, if no matching name is found
