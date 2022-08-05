@@ -12,17 +12,18 @@
 
 #include <undobase.hxx>
 #include <memory>
+#include <utility>
 
 namespace sc
 {
 /** Previous sparkline group data, which is restored at Undo grouping */
 struct UndoGroupSparklinesData
 {
-    UndoGroupSparklinesData(ScAddress const& rAddress, ScRangeList const& rDataRangeList,
-                            std::shared_ptr<sc::SparklineGroup> const& rpGroup)
+    UndoGroupSparklinesData(ScAddress const& rAddress, ScRangeList aDataRangeList,
+                            std::shared_ptr<sc::SparklineGroup> pGroup)
         : m_aAddress(rAddress)
-        , m_aDataRangeList(rDataRangeList)
-        , m_pSparklineGroup(rpGroup)
+        , m_aDataRangeList(std::move(aDataRangeList))
+        , m_pSparklineGroup(std::move(pGroup))
     {
     }
 
@@ -41,7 +42,7 @@ private:
 
 public:
     UndoGroupSparklines(ScDocShell& rDocShell, ScRange const& rRange,
-                        std::shared_ptr<sc::SparklineGroup> const& rpSparklineGroup);
+                        std::shared_ptr<sc::SparklineGroup> pSparklineGroup);
     virtual ~UndoGroupSparklines() override;
 
     void Undo() override;

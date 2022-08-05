@@ -29,7 +29,7 @@ class CondFormatContext;
 class ColorScaleContext final : public WorksheetContextBase
 {
 public:
-    explicit ColorScaleContext( CondFormatContext& rFragment, CondFormatRuleRef const & xRule );
+    explicit ColorScaleContext( CondFormatContext& rFragment, CondFormatRuleRef xRule );
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
     virtual void        onStartElement( const AttributeList& rAttribs ) override;
@@ -41,7 +41,7 @@ private:
 class DataBarContext final : public WorksheetContextBase
 {
 public:
-    explicit DataBarContext( CondFormatContext& rFormat, CondFormatRuleRef const & xRule );
+    explicit DataBarContext( CondFormatContext& rFormat, CondFormatRuleRef xRule );
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
     virtual void        onStartElement( const AttributeList& rAttribs ) override;

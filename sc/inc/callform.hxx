@@ -62,8 +62,8 @@ class LegacyFuncData
     ParamType   eParamType[MAXFUNCPARAM];
 public:
     LegacyFuncData(const ModuleData*pModule,
-             const OUString& rIName,
-             const OUString& rFName,
+             OUString aIName,
+             OUString aFName,
                    sal_uInt16     nNo,
                    sal_uInt16     nCount,
              const ParamType* peType,

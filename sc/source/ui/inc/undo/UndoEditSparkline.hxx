@@ -30,8 +30,8 @@ private:
     ScRangeList maNewDataRange;
 
 public:
-    UndoEditSparkline(ScDocShell& rDocShell, std::shared_ptr<sc::Sparkline> const& rpSparkline,
-                      SCTAB nTab, ScRangeList const& rDataRange);
+    UndoEditSparkline(ScDocShell& rDocShell, std::shared_ptr<sc::Sparkline> pSparkline, SCTAB nTab,
+                      ScRangeList rDataRange);
 
     virtual ~UndoEditSparkline() override;
 

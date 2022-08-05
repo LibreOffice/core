@@ -137,7 +137,7 @@ class ScDPSubtotalOptDlg : public weld::GenericDialogController
 {
 public:
     explicit            ScDPSubtotalOptDlg(weld::Window* pParent, ScDPObject& rDPObj,
-                            const ScDPLabelData& rLabelData, const ScDPNameVec& rDataFields,
+                            ScDPLabelData aLabelData, const ScDPNameVec& rDataFields,
                             bool bEnableLayout );
     virtual              ~ScDPSubtotalOptDlg() override;
     void                FillLabelData( ScDPLabelData& rLabelData ) const;

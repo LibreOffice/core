@@ -13,6 +13,7 @@
 #include <document.hxx>
 #include <tokenarray.hxx>
 
+#include <utility>
 #include <vcl/weld.hxx>
 #include <ucbhelper/content.hxx>
 #include <sal/log.hxx>
@@ -156,8 +157,8 @@ void loadContentFromURL(const OUString& rURL, std::string& rStrm)
 
 }
 
-ScOrcusXMLContextImpl::ScOrcusXMLContextImpl(ScDocument& rDoc, const OUString& rPath) :
-    ScOrcusXMLContext(), mrDoc(rDoc), maPath(rPath) {}
+ScOrcusXMLContextImpl::ScOrcusXMLContextImpl(ScDocument& rDoc, OUString aPath) :
+    ScOrcusXMLContext(), mrDoc(rDoc), maPath(std::move(aPath)) {}
 
 ScOrcusXMLContextImpl::~ScOrcusXMLContextImpl() {}
 

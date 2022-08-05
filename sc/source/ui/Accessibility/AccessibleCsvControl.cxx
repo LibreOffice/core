@@ -1280,11 +1280,11 @@ css::uno::Reference<css::accessibility::XAccessible> SAL_CALL ScAccessibleCsvGri
 
 ScAccessibleCsvCell::ScAccessibleCsvCell(
         ScCsvGrid& rGrid,
-        const OUString& rCellText,
+        OUString aCellText,
         sal_Int32 nRow, sal_Int32 nColumn ) :
     ScAccessibleCsvControl( rGrid ),
     AccessibleStaticTextBase( SvxEditSourcePtr() ),
-    maCellText( rCellText ),
+    maCellText(std::move( aCellText )),
     mnLine( nRow ? (nRow + rGrid.GetFirstVisLine() - 1) : CSV_LINE_HEADER ),
     mnColumn( lcl_GetGridColumn( nColumn ) ),
     mnIndex( nRow * (rGrid.GetColumnCount() + 1) + nColumn )

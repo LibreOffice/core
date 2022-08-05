@@ -193,7 +193,7 @@ private:
 
 public:
                             ScStyleObj() = delete;
-                            ScStyleObj(ScDocShell* pDocSh, SfxStyleFamily eFam, const OUString& rName);
+                            ScStyleObj(ScDocShell* pDocSh, SfxStyleFamily eFam, OUString aName);
     virtual                 ~ScStyleObj() override;
 
                             // created by getImplementation:

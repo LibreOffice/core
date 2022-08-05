@@ -103,7 +103,7 @@ protected:
 class SC_DLLPUBLIC ScMultiBlockUndo: public ScSimpleUndo
 {
 public:
-    ScMultiBlockUndo(ScDocShell* pDocSh, const ScRangeList& rRanges);
+    ScMultiBlockUndo(ScDocShell* pDocSh, ScRangeList aRanges);
     virtual ~ScMultiBlockUndo() override;
 
 protected:

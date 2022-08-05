@@ -42,9 +42,9 @@ private:
     static bool FindExtRange( ScRange& rRange, const ScDocument& rSrcDoc, const OUString& rAreaName );
 
 public:
-    ScAreaLink( SfxObjectShell* pShell, const OUString& rFile,
-                    const OUString& rFilter, const OUString& rOpt,
-                    const OUString& rArea, const ScRange& rDest, sal_Int32 nRefreshDelaySeconds );
+    ScAreaLink( SfxObjectShell* pShell, OUString aFile,
+                    OUString aFilter, OUString aOpt,
+                    OUString aArea, const ScRange& rDest, sal_Int32 nRefreshDelaySeconds );
     virtual ~ScAreaLink() override;
 
     virtual void Closed() override;

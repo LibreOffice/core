@@ -41,6 +41,7 @@
 #include <editeng/justifyitem.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/algitem.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 
 class ScViewForwarder : public SvxViewForwarder
@@ -977,10 +978,10 @@ ScDocShell* ScAccessiblePreviewCellTextData::GetDocShell(ScPreviewShell* pViewSh
 //  ScAccessiblePreviewHeaderCellTextData: shared data between sub objects of an accessible cell text object
 
 ScAccessiblePreviewHeaderCellTextData::ScAccessiblePreviewHeaderCellTextData(ScPreviewShell* pViewShell,
-            const OUString& rText, const ScAddress& rP, bool bColHeader, bool bRowHeader)
+            OUString aText, const ScAddress& rP, bool bColHeader, bool bRowHeader)
     : ScAccessibleCellBaseTextData(GetDocShell(pViewShell), rP),
     mpViewShell(pViewShell),
-    maText(rText),
+    maText(std::move(aText)),
     mbColHeader(bColHeader),
     mbRowHeader(bRowHeader)
 {
@@ -1181,11 +1182,11 @@ SvxViewForwarder* ScAccessibleHeaderTextData::GetViewForwarder()
 }
 
 ScAccessibleNoteTextData::ScAccessibleNoteTextData(ScPreviewShell* pViewShell,
-                            const OUString& sText, const ScAddress& aCellPos, bool bMarkNote)
+                            OUString  sText, const ScAddress& aCellPos, bool bMarkNote)
     :
     mpViewShell(pViewShell),
     mpDocSh(nullptr),
-    msText(sText),
+    msText(std::move(sText)),
     maCellPos(aCellPos),
     mbMarkNote(bMarkNote),
     mbDataValid(false)
@@ -1327,10 +1328,10 @@ void ScCsvViewForwarder::SetInvalid()
 
 ScAccessibleCsvTextData::ScAccessibleCsvTextData(
         OutputDevice* pWindow, EditEngine* pEditEngine,
-        const OUString& rCellText, const Size& rCellSize ) :
+        OUString aCellText, const Size& rCellSize ) :
     mpWindow( pWindow ),
     mpEditEngine( pEditEngine ),
-    maCellText( rCellText ),
+    maCellText(std::move( aCellText )),
     maCellSize( rCellSize )
 {
 }

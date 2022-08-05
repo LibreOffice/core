@@ -255,7 +255,7 @@ class XclExpXmlChTrHeader : public ExcXmlRecord
 
 public:
     XclExpXmlChTrHeader(
-        const OUString& rUserName, const DateTime& rDateTime, const sal_uInt8* pGUID,
+        OUString aUserName, const DateTime& rDateTime, const sal_uInt8* pGUID,
         sal_Int32 nLogNumber, const XclExpChTrTabIdBuffer& rBuf );
 
     virtual void SaveXml( XclExpXmlStream& rStrm ) override;

@@ -15,15 +15,16 @@
 #include <Sparkline.hxx>
 #include <SparklineGroup.hxx>
 #include <SparklineData.hxx>
+#include <utility>
 
 namespace sc
 {
 UndoInsertSparkline::UndoInsertSparkline(ScDocShell& rDocShell,
-                                         std::vector<SparklineData> const& rSparklineDataVector,
+                                         std::vector<SparklineData> aSparklineDataVector,
                                          std::shared_ptr<sc::SparklineGroup> pSparklineGroup)
     : ScSimpleUndo(&rDocShell)
-    , maSparklineDataVector(rSparklineDataVector)
-    , mpSparklineGroup(pSparklineGroup)
+    , maSparklineDataVector(std::move(aSparklineDataVector))
+    , mpSparklineGroup(std::move(pSparklineGroup))
 {
 }
 

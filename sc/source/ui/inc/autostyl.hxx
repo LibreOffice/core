@@ -20,6 +20,7 @@
 #pragma once
 
 #include <address.hxx>
+#include <utility>
 #include <vector>
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
@@ -35,8 +36,8 @@ struct ScAutoStyleData
     ScRange   aRange;
     OUString  aStyle;
 
-    ScAutoStyleData( sal_uLong nT, const ScRange& rR, const OUString& rT ) :
-        nTimeout(nT), aRange(rR), aStyle(rT) {}
+    ScAutoStyleData( sal_uLong nT, const ScRange& rR, OUString aT ) :
+        nTimeout(nT), aRange(rR), aStyle(std::move(aT)) {}
 };
 struct ScAutoStyleInitData
 {
@@ -45,8 +46,8 @@ struct ScAutoStyleInitData
     sal_uLong   nTimeout;
     OUString    aStyle2;
 
-    ScAutoStyleInitData( const ScRange& rR, const OUString& rSt1, sal_uLong nT, const OUString& rSt2 ) :
-        aRange(rR), aStyle1(rSt1), nTimeout(nT), aStyle2(rSt2) {}
+    ScAutoStyleInitData( const ScRange& rR, OUString aSt1, sal_uLong nT, OUString aSt2 ) :
+        aRange(rR), aStyle1(std::move(aSt1)), nTimeout(nT), aStyle2(std::move(aSt2)) {}
 };
 
 

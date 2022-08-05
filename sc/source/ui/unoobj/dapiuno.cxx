@@ -22,6 +22,7 @@
 
 #include <o3tl/safeint.hxx>
 #include <svl/hint.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
 
@@ -986,10 +987,10 @@ const Sequence<sal_Int8>& ScDataPilotDescriptorBase::getUnoTunnelId()
     return theScDataPilotDescriptorBaseUnoTunnelId.getSeq();
 }
 
-ScDataPilotTableObj::ScDataPilotTableObj(ScDocShell& rDocSh, SCTAB nT, const OUString& rN) :
+ScDataPilotTableObj::ScDataPilotTableObj(ScDocShell& rDocSh, SCTAB nT, OUString aN) :
     ScDataPilotDescriptorBase( rDocSh ),
     nTab( nT ),
-    aName( rN ),
+    aName(std::move( aN )),
     aModifyListeners( 0 )
 {
 }
@@ -1320,9 +1321,9 @@ ScDataPilotChildObjBase::ScDataPilotChildObjBase( ScDataPilotDescriptorBase& rPa
 {
 }
 
-ScDataPilotChildObjBase::ScDataPilotChildObjBase( ScDataPilotDescriptorBase& rParent, const ScFieldIdentifier& rFieldId ) :
+ScDataPilotChildObjBase::ScDataPilotChildObjBase( ScDataPilotDescriptorBase& rParent, ScFieldIdentifier aFieldId ) :
     mxParent( &rParent ),
-    maFieldId( rFieldId )
+    maFieldId(std::move( aFieldId ))
 {
 }
 
@@ -1634,10 +1635,10 @@ ScDataPilotFieldObj::ScDataPilotFieldObj(
 }
 
 ScDataPilotFieldObj::ScDataPilotFieldObj( ScDataPilotDescriptorBase& rParent,
-        const ScFieldIdentifier& rFieldId, const Any& rOrient ) :
+        const ScFieldIdentifier& rFieldId, Any aOrient ) :
     ScDataPilotChildObjBase( rParent, rFieldId ),
     maPropSet( lcl_GetDataPilotFieldMap() ),
-    maOrient( rOrient )
+    maOrient(std::move( aOrient ))
 {
 }
 
@@ -2902,9 +2903,9 @@ OUString lclExtractMember( const Any& rElement )
 
 } // namespace
 
-ScDataPilotFieldGroupObj::ScDataPilotFieldGroupObj( ScDataPilotFieldGroupsObj& rParent, const OUString& rGroupName ) :
+ScDataPilotFieldGroupObj::ScDataPilotFieldGroupObj( ScDataPilotFieldGroupsObj& rParent, OUString aGroupName ) :
     mxParent( &rParent ),
-    maGroupName( rGroupName )
+    maGroupName(std::move( aGroupName ))
 {
 }
 
@@ -3044,9 +3045,9 @@ void SAL_CALL ScDataPilotFieldGroupObj::setName( const OUString& rName )
     maGroupName = rName;
 }
 
-ScDataPilotFieldGroupItemObj::ScDataPilotFieldGroupItemObj( ScDataPilotFieldGroupObj& rParent, const OUString& rName ) :
+ScDataPilotFieldGroupItemObj::ScDataPilotFieldGroupItemObj( ScDataPilotFieldGroupObj& rParent, OUString aName ) :
     mxParent( &rParent ),
-    maName( rName )
+    maName(std::move( aName ))
 {
 }
 

@@ -24,6 +24,7 @@
 #include <convuno.hxx>
 
 #include <o3tl/safeint.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
@@ -434,9 +435,9 @@ uno::Reference<beans::XPropertySet> createConditionEntry(const ScFormatEntry* pE
 
 }
 
-ScCondFormatObj::ScCondFormatObj(ScDocShell* pDocShell, rtl::Reference<ScCondFormatsObj> const & xCondFormats,
+ScCondFormatObj::ScCondFormatObj(ScDocShell* pDocShell, rtl::Reference<ScCondFormatsObj> xCondFormats,
         sal_Int32 nKey):
-    mxCondFormatList(xCondFormats),
+    mxCondFormatList(std::move(xCondFormats)),
     mpDocShell(pDocShell),
     maPropSet(getCondFormatPropset()),
     mnKey(nKey)
@@ -825,9 +826,9 @@ void SAL_CALL ScConditionEntryObj::removeVetoableChangeListener( const OUString&
     SAL_WARN("sc", "not implemented");
 }
 
-ScColorScaleFormatObj::ScColorScaleFormatObj(rtl::Reference<ScCondFormatObj> const & xParent,
+ScColorScaleFormatObj::ScColorScaleFormatObj(rtl::Reference<ScCondFormatObj> xParent,
         const ScColorScaleFormat* pFormat):
-    mxParent(xParent),
+    mxParent(std::move(xParent)),
     maPropSet(getColorScalePropSet()),
     mpFormat(pFormat)
 {
@@ -986,9 +987,9 @@ void SAL_CALL ScColorScaleFormatObj::removeVetoableChangeListener( const OUStrin
     SAL_WARN("sc", "not implemented");
 }
 
-ScColorScaleEntryObj::ScColorScaleEntryObj(rtl::Reference<ScColorScaleFormatObj> const & xParent,
+ScColorScaleEntryObj::ScColorScaleEntryObj(rtl::Reference<ScColorScaleFormatObj> xParent,
         size_t nPos):
-    mxParent(xParent),
+    mxParent(std::move(xParent)),
     mnPos(nPos)
 {
 }
@@ -1076,9 +1077,9 @@ void ScColorScaleEntryObj::setFormula(const OUString& rFormula)
 }
 
 
-ScDataBarFormatObj::ScDataBarFormatObj(rtl::Reference<ScCondFormatObj> const & xParent,
+ScDataBarFormatObj::ScDataBarFormatObj(rtl::Reference<ScCondFormatObj> xParent,
         const ScDataBarFormat* pFormat):
-    mxParent(xParent),
+    mxParent(std::move(xParent)),
     maPropSet(getDataBarPropSet()),
     mpFormat(pFormat)
 {
@@ -1370,9 +1371,9 @@ void SAL_CALL ScDataBarFormatObj::removeVetoableChangeListener( const OUString&,
     SAL_WARN("sc", "not implemented");
 }
 
-ScDataBarEntryObj::ScDataBarEntryObj(rtl::Reference<ScDataBarFormatObj> const & xParent,
+ScDataBarEntryObj::ScDataBarEntryObj(rtl::Reference<ScDataBarFormatObj> xParent,
         size_t nPos):
-    mxParent(xParent),
+    mxParent(std::move(xParent)),
     mnPos(nPos)
 {
 }
@@ -1452,9 +1453,9 @@ void ScDataBarEntryObj::setFormula(const OUString& rFormula)
 }
 
 
-ScIconSetFormatObj::ScIconSetFormatObj(rtl::Reference<ScCondFormatObj> const & xParent,
+ScIconSetFormatObj::ScIconSetFormatObj(rtl::Reference<ScCondFormatObj> xParent,
         const ScIconSetFormat* pFormat):
-    mxParent(xParent),
+    mxParent(std::move(xParent)),
     maPropSet(getIconSetPropSet()),
     mpFormat(pFormat)
 {
@@ -1670,9 +1671,9 @@ void SAL_CALL ScIconSetFormatObj::removeVetoableChangeListener( const OUString&,
     SAL_WARN("sc", "not implemented");
 }
 
-ScIconSetEntryObj::ScIconSetEntryObj(rtl::Reference<ScIconSetFormatObj> const & xParent,
+ScIconSetEntryObj::ScIconSetEntryObj(rtl::Reference<ScIconSetFormatObj> xParent,
         size_t nPos):
-    mxParent(xParent),
+    mxParent(std::move(xParent)),
     mnPos(nPos)
 {
 }
@@ -1756,9 +1757,9 @@ void ScIconSetEntryObj::setFormula(const OUString& rFormula)
     }
 }
 
-ScCondDateFormatObj::ScCondDateFormatObj(rtl::Reference<ScCondFormatObj> const & xParent,
+ScCondDateFormatObj::ScCondDateFormatObj(rtl::Reference<ScCondFormatObj> xParent,
         const ScCondDateFormatEntry* pFormat):
-    mxParent(xParent),
+    mxParent(std::move(xParent)),
     maPropSet(getCondDatePropSet()),
     mpFormat(pFormat)
 {

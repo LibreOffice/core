@@ -50,6 +50,7 @@
 #include <stylesbuffer.hxx>
 #include <orcus/exception.hpp>
 #include <stylehelper.hxx>
+#include <utility>
 
 using namespace com::sun::star;
 
@@ -289,9 +290,9 @@ ScOrcusFactory::CellStoreToken::CellStoreToken(const ScAddress& rPos, uint32_t n
 {
 }
 
-ScOrcusFactory::CellStoreToken::CellStoreToken(const ScAddress& rPos, const OUString& rFormula,
+ScOrcusFactory::CellStoreToken::CellStoreToken(const ScAddress& rPos, OUString aFormula,
         formula::FormulaGrammar::Grammar eGrammar)
-    : maStr1(rFormula)
+    : maStr1(std::move(aFormula))
     , mfValue(std::numeric_limits<double>::quiet_NaN())
     , maPos(rPos)
     , meType(Type::Formula)

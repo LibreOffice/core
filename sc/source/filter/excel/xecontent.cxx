@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <utility>
 #include <xecontent.hxx>
 
 #include <vector>
@@ -1473,11 +1474,11 @@ void XclExpColorScale::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->endElement( XML_cfRule );
 }
 
-XclExpDataBar::XclExpDataBar( const XclExpRoot& rRoot, const ScDataBarFormat& rFormat, sal_Int32 nPriority, const OString& rGUID):
+XclExpDataBar::XclExpDataBar( const XclExpRoot& rRoot, const ScDataBarFormat& rFormat, sal_Int32 nPriority, OString aGUID):
     XclExpRoot( rRoot ),
     mrFormat( rFormat ),
     mnPriority( nPriority ),
-    maGUID(rGUID)
+    maGUID(std::move(aGUID))
 {
     const ScRange & rRange = rFormat.GetRange().front();
     ScAddress aAddr = rRange.aStart;

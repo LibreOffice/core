@@ -43,6 +43,7 @@
 #include <tools/json_writer.hxx>
 #include <algorithm>
 #include <memory>
+#include <utility>
 
 ScChangeAction::ScChangeAction( ScChangeActionType eTypeP, const ScRange& rRange )
         :
@@ -63,14 +64,14 @@ ScChangeAction::ScChangeAction( ScChangeActionType eTypeP, const ScRange& rRange
 }
 
 ScChangeAction::ScChangeAction(
-    ScChangeActionType eTypeP, const ScBigRange& rRange,
+    ScChangeActionType eTypeP, ScBigRange aRange,
     const sal_uLong nTempAction, const sal_uLong nTempRejectAction,
     const ScChangeActionState eTempState, const DateTime& aTempDateTime,
-    const OUString& aTempUser,  const OUString& aTempComment) :
-        aBigRange( rRange ),
+    OUString aTempUser,  OUString aTempComment) :
+        aBigRange(std::move( aRange )),
         aDateTime( aTempDateTime ),
-        aUser( aTempUser ),
-        aComment( aTempComment ),
+        aUser(std::move( aTempUser )),
+        aComment(std::move( aTempComment )),
         pNext( nullptr ),
         pPrev( nullptr ),
         pLinkAny( nullptr ),
@@ -84,10 +85,10 @@ ScChangeAction::ScChangeAction(
 {
 }
 
-ScChangeAction::ScChangeAction( ScChangeActionType eTypeP, const ScBigRange& rRange,
+ScChangeAction::ScChangeAction( ScChangeActionType eTypeP, ScBigRange aRange,
                         const sal_uLong nTempAction)
         :
-        aBigRange( rRange ),
+        aBigRange(std::move( aRange )),
         aDateTime( DateTime::SYSTEM ),
         pNext( nullptr ),
         pPrev( nullptr ),
@@ -1093,10 +1094,10 @@ ScChangeActionMove::ScChangeActionMove(
     const sal_uLong nActionNumber, const ScChangeActionState eStateP,
     const sal_uLong nRejectingNumber, const ScBigRange& aToBigRange,
     const OUString& aUserP, const DateTime& aDateTimeP,
-    const OUString &sComment, const ScBigRange& aFromBigRange,
+    const OUString &sComment, ScBigRange  aFromBigRange,
     ScChangeTrack* pTrackP) : // which of nDx and nDy is set depends on the type
     ScChangeAction(SC_CAT_MOVE, aToBigRange, nActionNumber, nRejectingNumber, eStateP, aDateTimeP, aUserP, sComment),
-    aFromRange(aFromBigRange),
+    aFromRange(std::move(aFromBigRange)),
     pTrack( pTrackP ),
     nStartLastCut(0),
     nEndLastCut(0)
@@ -1246,9 +1247,9 @@ ScChangeActionContent::ScChangeActionContent( const sal_uLong nActionNumber,
             const ScChangeActionState eStateP, const sal_uLong nRejectingNumber,
             const ScBigRange& aBigRangeP, const OUString& aUserP,
             const DateTime& aDateTimeP, const OUString& sComment,
-            const ScCellValue& rOldCell, const ScDocument* pDoc, const OUString& sOldValue ) :
+            ScCellValue aOldCell, const ScDocument* pDoc, const OUString& sOldValue ) :
     ScChangeAction(SC_CAT_CONTENT, aBigRangeP, nActionNumber, nRejectingNumber, eStateP, aDateTimeP, aUserP, sComment),
-    maOldCell(rOldCell),
+    maOldCell(std::move(aOldCell)),
     maOldValue(sOldValue),
     pNextContent(nullptr),
     pPrevContent(nullptr),
@@ -1263,10 +1264,10 @@ ScChangeActionContent::ScChangeActionContent( const sal_uLong nActionNumber,
 }
 
 ScChangeActionContent::ScChangeActionContent( const sal_uLong nActionNumber,
-            const ScCellValue& rNewCell, const ScBigRange& aBigRangeP,
+            ScCellValue aNewCell, const ScBigRange& aBigRangeP,
             const ScDocument* pDoc, const OUString& sNewValue ) :
     ScChangeAction(SC_CAT_CONTENT, aBigRangeP, nActionNumber),
-    maNewCell(rNewCell),
+    maNewCell(std::move(aNewCell)),
     maNewValue(sNewValue),
     pNextContent(nullptr),
     pPrevContent(nullptr),

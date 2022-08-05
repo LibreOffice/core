@@ -28,6 +28,7 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
+#include <utility>
 #include <vcl/unohelp.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <vcl/svapp.hxx>
@@ -36,11 +37,11 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
 ScAccessibleContextBase::ScAccessibleContextBase(
-                                                 const uno::Reference<XAccessible>& rxParent,
+                                                 uno::Reference<XAccessible> xParent,
                                                  const sal_Int16 aRole)
                                                  :
     ScAccessibleContextBaseWeakImpl(m_aMutex),
-    mxParent(rxParent),
+    mxParent(std::move(xParent)),
     mnClientId(0),
     maRole(aRole)
 {

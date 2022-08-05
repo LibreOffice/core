@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <utility>
 #include <xistring.hxx>
 #include <xlstyle.hxx>
 #include <xistream.hxx>
@@ -33,8 +34,8 @@ XclImpString::XclImpString()
 {
 }
 
-XclImpString::XclImpString( const OUString& rString ) :
-    maString( rString )
+XclImpString::XclImpString( OUString aString ) :
+    maString(std::move( aString ))
 {
 }
 

@@ -385,8 +385,8 @@ bool ScDBInternalRange::isRangeEqual(const ScRange& rRange) const
     return maRange == rRange;
 }
 
-ScDBExternalRange::ScDBExternalRange(ScDocument* pDoc, const ScMatrixRef& pMat) :
-    ScDBRangeBase(pDoc), mpMatrix(pMat)
+ScDBExternalRange::ScDBExternalRange(ScDocument* pDoc, ScMatrixRef pMat) :
+    ScDBRangeBase(pDoc), mpMatrix(std::move(pMat))
 {
     SCSIZE nC, nR;
     mpMatrix->GetDimensions(nC, nR);

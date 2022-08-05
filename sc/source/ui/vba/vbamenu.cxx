@@ -10,11 +10,12 @@
 #include "vbamenu.hxx"
 #include "vbamenuitems.hxx"
 #include <ooo/vba/XCommandBarControls.hpp>
+#include <utility>
 
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-ScVbaMenu::ScVbaMenu( const uno::Reference< ov::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< XCommandBarControl >& rCommandBarControl ) : Menu_BASE( rParent, rContext ), m_xCommandBarControl( rCommandBarControl )
+ScVbaMenu::ScVbaMenu( const uno::Reference< ov::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, uno::Reference< XCommandBarControl > xCommandBarControl ) : Menu_BASE( rParent, rContext ), m_xCommandBarControl(std::move( xCommandBarControl ))
 {
 }
 

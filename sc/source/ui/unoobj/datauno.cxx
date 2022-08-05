@@ -22,6 +22,7 @@
 #include <svl/hint.hxx>
 #include <svl/numformat.hxx>
 #include <svl/sharedstringpool.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <unotools/charclass.hxx>
 #include <osl/diagnose.h>
@@ -1562,9 +1563,9 @@ void ScDataPilotFilterDescriptor::PutData( const ScQueryParam& rParam )
     }
 }
 
-ScDatabaseRangeObj::ScDatabaseRangeObj(ScDocShell* pDocSh, const OUString& rNm) :
+ScDatabaseRangeObj::ScDatabaseRangeObj(ScDocShell* pDocSh, OUString aNm) :
     pDocShell( pDocSh ),
-    aName( rNm ),
+    aName(std::move( aNm )),
     aPropSet( lcl_GetDBRangePropertyMap() ),
     bIsUnnamed(false),
     aTab( 0 )

@@ -35,7 +35,7 @@ struct ScDPResultFilter
     bool mbHasValue : 1;
     bool mbDataLayout : 1;
 
-    ScDPResultFilter(const OUString& rDimName, bool bDataLayout);
+    ScDPResultFilter(OUString aDimName, bool bDataLayout);
 };
 
 /**

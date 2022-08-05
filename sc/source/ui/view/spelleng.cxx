@@ -27,6 +27,7 @@
 #include <editeng/editview.hxx>
 #include <editeng/eeitem.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <utility>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -399,12 +400,12 @@ ScConversionParam::ScConversionParam( ScConversionType eConvType,
 }
 
 ScConversionParam::ScConversionParam( ScConversionType eConvType,
-        LanguageType eSourceLang, LanguageType eTargetLang, const vcl::Font& rTargetFont,
+        LanguageType eSourceLang, LanguageType eTargetLang, vcl::Font aTargetFont,
         sal_Int32 nOptions, bool bIsInteractive ) :
     meConvType( eConvType ),
     meSourceLang( eSourceLang ),
     meTargetLang( eTargetLang ),
-    maTargetFont( rTargetFont ),
+    maTargetFont(std::move( aTargetFont )),
     mnOptions( nOptions ),
     mbUseTargetFont( true ),
     mbIsInteractive( bIsInteractive )
@@ -415,10 +416,10 @@ ScConversionParam::ScConversionParam( ScConversionType eConvType,
 
 ScTextConversionEngine::ScTextConversionEngine(
         SfxItemPool* pEnginePoolP, ScViewData& rViewData,
-        const ScConversionParam& rConvParam,
+        ScConversionParam aConvParam,
         ScDocument* pUndoDoc, ScDocument* pRedoDoc ) :
     ScConversionEngineBase( pEnginePoolP, rViewData, pUndoDoc, pRedoDoc ),
-    maConvParam( rConvParam )
+    maConvParam(std::move( aConvParam ))
 {
 }
 

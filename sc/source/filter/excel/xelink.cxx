@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <utility>
 #include <xelink.hxx>
 
 #include <algorithm>
@@ -198,7 +199,7 @@ class XclExpXct : public XclExpRecordBase, protected XclExpRoot
 public:
     explicit            XclExpXct( const XclExpRoot& rRoot,
                             const OUString& rTabName, sal_uInt16 nSBTab,
-                            ScExternalRefCache::TableTypeRef const & xCacheTable );
+                            ScExternalRefCache::TableTypeRef xCacheTable );
 
     /** Returns the external sheet name. */
     const XclExpString& GetTabName() const { return maTabName; }
@@ -1293,9 +1294,9 @@ void XclExpCrn::SaveXml( XclExpXmlStream& rStrm )
 // Cached cells of a sheet ====================================================
 
 XclExpXct::XclExpXct( const XclExpRoot& rRoot, const OUString& rTabName,
-        sal_uInt16 nSBTab, ScExternalRefCache::TableTypeRef const & xCacheTable ) :
+        sal_uInt16 nSBTab, ScExternalRefCache::TableTypeRef xCacheTable ) :
     XclExpRoot( rRoot ),
-    mxCacheTable( xCacheTable ),
+    mxCacheTable(std::move( xCacheTable )),
     maUsedCells( rRoot.GetDoc().GetSheetLimits() ),
     maBoundRange( ScAddress::INITIALIZE_INVALID ),
     maTabName( rTabName ),

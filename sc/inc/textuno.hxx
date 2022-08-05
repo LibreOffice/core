@@ -113,7 +113,7 @@ public:
     ScHeaderFooterTextData(const ScHeaderFooterTextData&) = delete;
     const ScHeaderFooterTextData& operator=(const ScHeaderFooterTextData&) = delete;
     ScHeaderFooterTextData(
-        css::uno::WeakReference<css::sheet::XHeaderFooterContent> const & xContent, ScHeaderFooterPart nP, const EditTextObject* pTextObj);
+        css::uno::WeakReference<css::sheet::XHeaderFooterContent> xContent, ScHeaderFooterPart nP, const EditTextObject* pTextObj);
     ~ScHeaderFooterTextData();
 
                             // helper functions
@@ -271,7 +271,7 @@ private:
     css::uno::Reference< css::text::XText > xParentText;
 
 public:
-                            ScDrawTextCursor( const css::uno::Reference< css::text::XText >& xParent,
+                            ScDrawTextCursor( css::uno::Reference< css::text::XText > xParent,
                                             const SvxUnoTextBase& rText );
     virtual                  ~ScDrawTextCursor() noexcept override;
 

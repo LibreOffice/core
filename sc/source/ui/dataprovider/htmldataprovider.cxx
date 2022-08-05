@@ -11,6 +11,7 @@
 #include <datamapper.hxx>
 #include <datatransformation.hxx>
 #include <salhelper/thread.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <tools/stream.hxx>
 

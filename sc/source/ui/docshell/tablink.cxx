@@ -30,6 +30,7 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/linkmgr.hxx>
+#include <utility>
 #include <vcl/weld.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/transliterationwrapper.hxx>
@@ -61,15 +62,15 @@ struct TableLink_Impl
 };
 
 
-ScTableLink::ScTableLink(ScDocShell* pDocSh, const OUString& rFile,
-                            const OUString& rFilter, const OUString& rOpt,
+ScTableLink::ScTableLink(ScDocShell* pDocSh, OUString aFile,
+                            OUString aFilter, OUString aOpt,
                             sal_Int32 nRefreshDelaySeconds ):
     ::sfx2::SvBaseLink(SfxLinkUpdateMode::ONCALL,SotClipboardFormatId::SIMPLE_FILE),
     ScRefreshTimer( nRefreshDelaySeconds ),
     pImpl( new TableLink_Impl ),
-    aFileName(rFile),
-    aFilterName(rFilter),
-    aOptions(rOpt),
+    aFileName(std::move(aFile)),
+    aFilterName(std::move(aFilter)),
+    aOptions(std::move(aOpt)),
     bInCreate( false ),
     bInEdit( false ),
     bAddUndo( true )
@@ -77,15 +78,15 @@ ScTableLink::ScTableLink(ScDocShell* pDocSh, const OUString& rFile,
     pImpl->m_pDocSh = pDocSh;
 }
 
-ScTableLink::ScTableLink(SfxObjectShell* pShell, const OUString& rFile,
-                            const OUString& rFilter, const OUString& rOpt,
+ScTableLink::ScTableLink(SfxObjectShell* pShell, OUString aFile,
+                            OUString aFilter, OUString aOpt,
                             sal_Int32 nRefreshDelaySeconds ):
     ::sfx2::SvBaseLink(SfxLinkUpdateMode::ONCALL,SotClipboardFormatId::SIMPLE_FILE),
     ScRefreshTimer( nRefreshDelaySeconds ),
     pImpl( new TableLink_Impl ),
-    aFileName(rFile),
-    aFilterName(rFilter),
-    aOptions(rOpt),
+    aFileName(std::move(aFile)),
+    aFilterName(std::move(aFilter)),
+    aOptions(std::move(aOpt)),
     bInCreate( false ),
     bInEdit( false ),
     bAddUndo( true )

@@ -50,6 +50,7 @@
 #include <docsh.hxx>
 #include <drwlayer.hxx>
 #include <drawview.hxx>
+#include <utility>
 #include <viewdata.hxx>
 #include <scmod.hxx>
 #include <dragdata.hxx>
@@ -66,9 +67,9 @@ constexpr sal_uInt32 SCDRAWTRANS_TYPE_DRAWMODEL = 2;
 constexpr sal_uInt32 SCDRAWTRANS_TYPE_DOCUMENT  = 3;
 
 ScDrawTransferObj::ScDrawTransferObj( std::unique_ptr<SdrModel> pClipModel, ScDocShell* pContainerShell,
-                                        const TransferableObjectDescriptor& rDesc ) :
+                                        TransferableObjectDescriptor aDesc ) :
     m_pModel( std::move(pClipModel) ),
-    m_aObjDesc( rDesc ),
+    m_aObjDesc(std::move( aDesc )),
     m_bGraphic( false ),
     m_bGrIsBit( false ),
     m_bOleObj( false ),

@@ -29,14 +29,15 @@
 #include <imoptdlg.hxx>
 #include <svx/txencbox.hxx>
 #include <o3tl/string_view.hxx>
+#include <utility>
 
 // ScDelimiterTable
 
 class ScDelimiterTable
 {
 public:
-    explicit ScDelimiterTable( const OUString& rDelTab )
-            :   theDelTab ( rDelTab ),
+    explicit ScDelimiterTable( OUString aDelTab )
+            :   theDelTab (std::move( aDelTab )),
                 nDelIdx   ( 0 )
             {}
 

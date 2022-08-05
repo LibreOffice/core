@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <utility>
 #include <xeescher.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -384,8 +385,8 @@ XclExpMsoDrawing::XclExpMsoDrawing( XclEscherEx& rEscherEx ) :
 {
 }
 
-XclExpImgData::XclExpImgData( const Graphic& rGraphic, sal_uInt16 nRecId ) :
-    maGraphic( rGraphic ),
+XclExpImgData::XclExpImgData( Graphic aGraphic, sal_uInt16 nRecId ) :
+    maGraphic(std::move( aGraphic )),
     mnRecId( nRecId )
 {
 }
@@ -525,10 +526,10 @@ void XclExpControlHelper::WriteFormulaSubRec( XclExpStream& rStrm, sal_uInt16 nS
 //#if EXC_EXP_OCX_CTRL
 
 XclExpOcxControlObj::XclExpOcxControlObj( XclExpObjectManager& rObjMgr, Reference< XShape > const & xShape,
-        const tools::Rectangle* pChildAnchor, const OUString& rClassName, sal_uInt32 nStrmStart, sal_uInt32 nStrmSize ) :
+        const tools::Rectangle* pChildAnchor, OUString aClassName, sal_uInt32 nStrmStart, sal_uInt32 nStrmSize ) :
     XclObj( rObjMgr, EXC_OBJTYPE_PICTURE, true ),
     XclExpControlHelper( rObjMgr.GetRoot() ),
-    maClassName( rClassName ),
+    maClassName(std::move( aClassName )),
     mnStrmStart( nStrmStart ),
     mnStrmSize( nStrmSize )
 {
@@ -1098,7 +1099,7 @@ class VmlFormControlExporter : public oox::vml::VMLExport
 public:
     VmlFormControlExporter(const sax_fastparser::FSHelperPtr& p, sal_uInt16 nObjType,
                            const tools::Rectangle& rAreaFrom, const tools::Rectangle& rAreaTo,
-                           const OUString& rLabel, const OUString& rMacroName);
+                           OUString aLabel, OUString aMacroName);
 
 protected:
     using VMLExport::StartShape;
@@ -1111,13 +1112,13 @@ VmlFormControlExporter::VmlFormControlExporter(const sax_fastparser::FSHelperPtr
                                                sal_uInt16 nObjType,
                                                const tools::Rectangle& rAreaFrom,
                                                const tools::Rectangle& rAreaTo,
-                                               const OUString& rLabel, const OUString& rMacroName)
+                                               OUString aLabel, OUString aMacroName)
     : VMLExport(p)
     , m_nObjType(nObjType)
     , m_aAreaFrom(rAreaFrom)
     , m_aAreaTo(rAreaTo)
-    , m_aLabel(rLabel)
-    , m_aMacroName(rMacroName)
+    , m_aLabel(std::move(aLabel))
+    , m_aMacroName(std::move(aMacroName))
 {
 }
 

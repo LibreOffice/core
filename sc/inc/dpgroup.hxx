@@ -58,7 +58,7 @@ class ScDPGroupDimension
     mutable std::vector<SCROW> maMemberEntries;
     bool mbDateDimension;
 public:
-                ScDPGroupDimension( tools::Long nSource, const OUString& rNewName );
+                ScDPGroupDimension( tools::Long nSource, OUString aNewName );
                 ScDPGroupDimension( const ScDPGroupDimension& rOther );
                 ~ScDPGroupDimension();
 

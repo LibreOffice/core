@@ -83,7 +83,7 @@ class ScXMLImportWrapper
 public:
 
     ScXMLImportWrapper(
-        ScDocShell& rDocSh, SfxMedium* pM, const css::uno::Reference<css::embed::XStorage>& xStor );
+        ScDocShell& rDocSh, SfxMedium* pM, css::uno::Reference<css::embed::XStorage> xStor );
 
     bool Import( ImportFlags nMode, ErrCode& rError );
     bool Export(bool bStylesOnly);

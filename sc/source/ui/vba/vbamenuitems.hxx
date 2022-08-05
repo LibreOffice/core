@@ -23,7 +23,7 @@ private:
 
 public:
     /// @throws css::uno::RuntimeException
-    ScVbaMenuItems( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< ov::XCommandBarControls >& xCommandBarControls );
+    ScVbaMenuItems( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, css::uno::Reference< ov::XCommandBarControls > xCommandBarControls );
 
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() override;

@@ -40,6 +40,7 @@
 #include "vbacharttitle.hxx"
 #include "vbaaxes.hxx"
 #include <document.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
@@ -66,7 +67,7 @@ constexpr OUStringLiteral DIM3D(u"Dim3D");
 constexpr OUStringLiteral HASMAINTITLE(u"HasMainTitle");
 constexpr OUStringLiteral HASLEGEND(u"HasLegend");
 
-ScVbaChart::ScVbaChart( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, const css::uno::Reference< css::lang::XComponent >& _xChartComponent, const css::uno::Reference< css::table::XTableChart >& _xTableChart ) : ChartImpl_BASE( _xParent, _xContext ), mxTableChart( _xTableChart )
+ScVbaChart::ScVbaChart( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, const css::uno::Reference< css::lang::XComponent >& _xChartComponent, css::uno::Reference< css::table::XTableChart >  _xTableChart ) : ChartImpl_BASE( _xParent, _xContext ), mxTableChart(std::move( _xTableChart ))
 {
     mxChartDocument.set( _xChartComponent, uno::UNO_QUERY_THROW ) ;
     // #TODO is it possible that the XPropertySet interface is not set

@@ -30,7 +30,7 @@ class FormulaTreeNode;
 class UnhandledToken
 {
 public:
-    UnhandledToken( const char* m, const std::string& fn, int ln );
+    UnhandledToken( const char* m, std::string fn, int ln );
 
     std::string mMessage;
     std::string mFile;
@@ -41,7 +41,7 @@ public:
 class OpenCLError
 {
 public:
-    OpenCLError( const std::string& function, cl_int error, const std::string& file, int line );
+    OpenCLError( std::string  function, cl_int error, std::string file, int line );
 
     std::string mFunction;
     cl_int mError;
@@ -53,7 +53,7 @@ public:
 class Unhandled
 {
 public:
-    Unhandled( const std::string& fn, int ln );
+    Unhandled( std::string fn, int ln );
 
     std::string mFile;
     int mLineNumber;
@@ -62,7 +62,7 @@ public:
 class InvalidParameterCount
 {
 public:
-    InvalidParameterCount( int parameterCount, const std::string& file, int ln );
+    InvalidParameterCount( int parameterCount, std::string file, int ln );
 
     int mParameterCount;
     std::string mFile;
@@ -107,7 +107,7 @@ public:
     /// delete copy-assignment operator
     const DynamicKernelArgument& operator=( const DynamicKernelArgument& ) = delete;
 
-    DynamicKernelArgument( const ScCalcConfig& config, const std::string& s, const FormulaTreeNodeRef& ft );
+    DynamicKernelArgument( const ScCalcConfig& config, std::string s, FormulaTreeNodeRef  ft );
     virtual ~DynamicKernelArgument() {}
 
     /// Generate declaration

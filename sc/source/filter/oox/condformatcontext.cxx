@@ -23,14 +23,15 @@
 #include <biffhelper.hxx>
 #include <condformatbuffer.hxx>
 #include <oox/token/namespaces.hxx>
+#include <utility>
 
 namespace oox::xls {
 
 using ::oox::core::ContextHandlerRef;
 
-ColorScaleContext::ColorScaleContext( CondFormatContext& rFragment, CondFormatRuleRef const & xRule ) :
+ColorScaleContext::ColorScaleContext( CondFormatContext& rFragment, CondFormatRuleRef xRule ) :
     WorksheetContextBase( rFragment ),
-    mxRule( xRule )
+    mxRule(std::move( xRule ))
 {
 }
 
@@ -64,9 +65,9 @@ void ColorScaleContext::onStartElement( const AttributeList& rAttribs )
     }
 }
 
-DataBarContext::DataBarContext( CondFormatContext& rFragment, CondFormatRuleRef const & xRule ) :
+DataBarContext::DataBarContext( CondFormatContext& rFragment, CondFormatRuleRef xRule ) :
     WorksheetContextBase( rFragment ),
-    mxRule( xRule )
+    mxRule(std::move( xRule ))
 {
 }
 

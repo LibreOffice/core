@@ -22,6 +22,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdocapt.hxx>
 #include <svl/itempool.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/window.hxx>
@@ -34,7 +35,7 @@
 #define SC_NOTEMARK_SHORT   70
 
 ScNoteMarker::ScNoteMarker( vcl::Window* pWin, vcl::Window* pRight, vcl::Window* pBottom, vcl::Window* pDiagonal,
-                            ScDocument* pD, const ScAddress& aPos, const OUString& rUser,
+                            ScDocument* pD, const ScAddress& aPos, OUString aUser,
                             const MapMode& rMap, bool bLeftEdge, bool bForce, bool bKeyboard) :
     m_pWindow( pWin ),
     m_pRightWin( pRight ),
@@ -42,7 +43,7 @@ ScNoteMarker::ScNoteMarker( vcl::Window* pWin, vcl::Window* pRight, vcl::Window*
     m_pDiagWin( pDiagonal ),
     m_pDoc( pD ),
     m_aDocPos( aPos ),
-    m_aUserText( rUser ),
+    m_aUserText(std::move( aUser )),
     m_aTimer("ScNoteMarker m_aTimer"),
     m_aMapMode( rMap ),
     m_bLeft( bLeftEdge ),

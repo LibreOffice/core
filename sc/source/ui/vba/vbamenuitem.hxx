@@ -21,7 +21,7 @@ private:
 
 public:
     /// @throws css::uno::RuntimeException
-    ScVbaMenuItem( const css::uno::Reference< ov::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< ov::XCommandBarControl >& rCommandBarControl );
+    ScVbaMenuItem( const css::uno::Reference< ov::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, css::uno::Reference< ov::XCommandBarControl > xCommandBarControl );
 
     virtual OUString SAL_CALL getCaption() override;
     virtual void SAL_CALL setCaption( const OUString& _caption ) override;
