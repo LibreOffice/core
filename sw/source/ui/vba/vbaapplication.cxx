@@ -448,12 +448,12 @@ float SAL_CALL SwVbaApplication::PointsToPixels( float Pixels, ::sal_Bool fVerti
 
 float SAL_CALL SwVbaApplication::InchesToPoints( float Inches )
 {
-    return o3tl::convert(Inches, o3tl::Length::ch, o3tl::Length::pt);
+    return o3tl::convert(Inches, o3tl::Length::in, o3tl::Length::pt);
 }
 
 float SAL_CALL SwVbaApplication::PointsToInches( float Points )
 {
-    return o3tl::convert(Points, o3tl::Length::pt, o3tl::Length::ch);
+    return o3tl::convert(Points, o3tl::Length::pt, o3tl::Length::in);
 }
 
 float SAL_CALL SwVbaApplication::MillimetersToPoints( float Millimeters )
