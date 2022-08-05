@@ -139,7 +139,7 @@ void SwMacrosTest::testVba()
         },
         {
             OUString("testTables.docm"),
-            OUString("vnd.sun.Star.script:Project.ThisDocument.RightPadding?language=Basic&location=document")
+            OUString("vnd.sun.Star.script:Project.ThisDocument.TestAll?language=Basic&location=document")
         }*/
 
     };
