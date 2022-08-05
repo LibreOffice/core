@@ -1867,7 +1867,7 @@ void SaveBookmark::SetInDoc(
         aPam.GetPoint()->nContent.Assign(aPam.GetContentNode(), m_nContent1);
 
     if(aPam.HasMark()
-        && !CheckNodesRange(aPam.GetPoint()->nNode, aPam.GetMark()->nNode, true))
+        && !CheckNodesRange(aPam.GetPoint()->GetNode(), aPam.GetMark()->GetNode(), true))
         return;
 
     ::sw::mark::IBookmark* const pBookmark = dynamic_cast<::sw::mark::IBookmark*>(

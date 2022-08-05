@@ -611,8 +611,8 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
         // in sw3io), so no action here
     }
     else if ( m_bIgnoreRedlines ||
-         !CheckNodesRange( aPaM.GetPoint()->nNode,
-                           aPaM.GetMark()->nNode,
+         !CheckNodesRange( aPaM.GetPoint()->GetNode(),
+                           aPaM.GetMark()->GetNode(),
                            true )
          || (pRedlineInfo->pContentIndex
              && (pRedlineInfo->pContentIndex->GetIndex() + 2

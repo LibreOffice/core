@@ -837,7 +837,7 @@ int SwCursorShell::SetCursor( const Point &rLPt, bool bOnlyText, bool bBlock )
     else
     {
         // SSelection over not allowed sections or if in header/footer -> different
-        if( !CheckNodesRange( aPos.nNode, pCursor->GetMark()->nNode, true )
+        if( !CheckNodesRange( aPos.GetNode(), pCursor->GetMark()->GetNode(), true )
             || ( pFrame && !pFrame->getFrameArea().Contains( pCursor->GetMkPos() ) ))
             return bRet;
 
@@ -2343,8 +2343,8 @@ void SwCursorShell::Combine()
     SwCursorSaveState aSaveState(*m_pStackCursor);
     // stack cursor & current cursor in same Section?
     assert(!m_pStackCursor->HasMark() ||
-            CheckNodesRange(m_pStackCursor->GetMark()->nNode,
-                            m_pCurrentCursor->GetPoint()->nNode, true));
+            CheckNodesRange(m_pStackCursor->GetMark()->GetNode(),
+                            m_pCurrentCursor->GetPoint()->GetNode(), true));
     *m_pStackCursor->GetPoint() = *m_pCurrentCursor->GetPoint();
     m_pStackCursor->GetPtPos() = m_pCurrentCursor->GetPtPos();
 

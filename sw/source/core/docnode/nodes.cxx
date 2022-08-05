@@ -913,7 +913,7 @@ void SwNodes::SectionDown(SwNodeRange *pRange, SwStartNodeType eSttNdTyp )
 {
     if( pRange->aStart >= pRange->aEnd ||
         pRange->aEnd >= Count() ||
-        !::CheckNodesRange(pRange->aStart, pRange->aEnd, false))
+        !::CheckNodesRange(pRange->aStart.GetNode(), pRange->aEnd.GetNode(), false))
     {
         return;
     }
@@ -967,7 +967,7 @@ void SwNodes::SectionUp(SwNodeRange *pRange)
 {
     if( pRange->aStart >= pRange->aEnd ||
         pRange->aEnd >= Count() ||
-        !::CheckNodesRange(pRange->aStart, pRange->aEnd, false) ||
+        !::CheckNodesRange(pRange->aStart.GetNode(), pRange->aEnd.GetNode(), false) ||
         ( HighestLevel( *this, *pRange ) <= 1 ))
     {
         return;
@@ -1097,7 +1097,7 @@ void SwNodes::Delete(const SwNodeIndex &rIndex, SwNodeOffset nNodes)
     // check if [rIndex..rIndex + nCnt] is larger than the range
     if( ( !aRg.aStart.GetNode().StartOfSectionIndex() &&
             !aRg.aStart.GetIndex() ) ||
-            !::CheckNodesRange(aRg.aStart, aRg.aEnd, false))
+            !::CheckNodesRange(aRg.aStart.GetNode(), aRg.aEnd.GetNode(), false))
     {
         return;
     }
@@ -2247,7 +2247,7 @@ SwNode* SwNodes::FindPrvNxtFrameNode( SwNodeIndex& rFrameIdx,
                 {
                     pFrameNd = GoPrevSection( &aIdx, true, false );
                     if ( nullptr != pFrameNd && !(
-                            ::CheckNodesRange( aIdx, rFrameIdx, true ) &&
+                            ::CheckNodesRange( aIdx.GetNode(), rFrameIdx.GetNode(), true ) &&
                             // Never out of the table at the start
                             pFrameNd->FindTableNode() == pTableNd &&
                             // Bug 37652: Never out of the table at the end
@@ -2311,7 +2311,7 @@ SwNode* SwNodes::FindPrvNxtFrameNode( SwNodeIndex& rFrameIdx,
                     pFrameNd = GoNextSection( &aIdx, true, false );
                     // NEVER leave the section when doing this!
                     if (pFrameNd
-                        && !(::CheckNodesRange(aIdx, rFrameIdx, true)
+                        && !(::CheckNodesRange(aIdx.GetNode(), rFrameIdx.GetNode(), true)
                              && (pFrameNd->FindTableNode() == pTableNd &&
                                 // NEVER go out of the table cell at the end
                                 (!pFrameNd->FindTableNode() || pFrameNd->FindTableBoxStartNode()
