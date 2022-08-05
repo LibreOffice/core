@@ -33,6 +33,23 @@
       "message": "Vasily - ping.",
       "revId": "5d72a000a0f9d127d1263a6df628898af08f14f9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5640929_d8e38f72",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-08-05T19:53:51Z",
+      "side": 1,
+      "message": "Vasily gave a +2 to the master commit (which thereafter got modified very slightly to make it a bit more conservative).",
+      "revId": "5d72a000a0f9d127d1263a6df628898af08f14f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
