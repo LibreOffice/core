@@ -29,7 +29,7 @@ private:
 public:
     UndoEditSparklneGroup(ScDocShell& rDocShell,
                           std::shared_ptr<sc::SparklineGroup> const& rSparklineGroup,
-                          sc::SparklineAttributes const& rAttributes);
+                          sc::SparklineAttributes aAttributes);
     virtual ~UndoEditSparklneGroup() override;
 
     void Undo() override;

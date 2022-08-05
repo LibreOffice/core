@@ -36,7 +36,7 @@ class ScOrcusXMLContextImpl : public ScOrcusXMLContext
     orcus::xmlns_repository maNsRepo; /// XML namespace repository for this context.
 
 public:
-    ScOrcusXMLContextImpl(ScDocument& rDoc, const OUString& rPath);
+    ScOrcusXMLContextImpl(ScDocument& rDoc, OUString aPath);
     virtual ~ScOrcusXMLContextImpl() override;
 
     virtual void loadXMLStructure(weld::TreeView& rTreeCtrl, ScOrcusXMLTreeParam& rParam) override;

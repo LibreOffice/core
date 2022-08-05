@@ -663,8 +663,8 @@ bool ScRefListToken::operator==( const FormulaToken& r ) const
     return p && mbArrayResult == p->IsArrayResult();
 }
 
-ScMatrixToken::ScMatrixToken( const ScMatrixRef& p ) :
-    FormulaToken(formula::svMatrix), pMatrix(p) {}
+ScMatrixToken::ScMatrixToken( ScMatrixRef p ) :
+    FormulaToken(formula::svMatrix), pMatrix(std::move(p)) {}
 
 ScMatrixToken::ScMatrixToken( const ScMatrixToken& ) = default;
 
@@ -718,10 +718,10 @@ FormulaToken* ScMatrixRangeToken::Clone() const
     return new ScMatrixRangeToken(*this);
 }
 
-ScExternalSingleRefToken::ScExternalSingleRefToken( sal_uInt16 nFileId, const svl::SharedString& rTabName, const ScSingleRefData& r ) :
+ScExternalSingleRefToken::ScExternalSingleRefToken( sal_uInt16 nFileId, svl::SharedString aTabName, const ScSingleRefData& r ) :
     FormulaToken( svExternalSingleRef, ocPush),
     mnFileId(nFileId),
-    maTabName(rTabName),
+    maTabName(std::move(aTabName)),
     maSingleRef(r)
 {
 }
@@ -764,10 +764,10 @@ bool ScExternalSingleRefToken::operator ==( const FormulaToken& r ) const
     return maSingleRef == *r.GetSingleRef();
 }
 
-ScExternalDoubleRefToken::ScExternalDoubleRefToken( sal_uInt16 nFileId, const svl::SharedString& rTabName, const ScComplexRefData& r ) :
+ScExternalDoubleRefToken::ScExternalDoubleRefToken( sal_uInt16 nFileId, svl::SharedString aTabName, const ScComplexRefData& r ) :
     FormulaToken( svExternalDoubleRef, ocPush),
     mnFileId(nFileId),
-    maTabName(rTabName),
+    maTabName(std::move(aTabName)),
     maDoubleRef(r)
 {
 }
@@ -830,10 +830,10 @@ bool ScExternalDoubleRefToken::operator ==( const FormulaToken& r ) const
     return maDoubleRef == *r.GetDoubleRef();
 }
 
-ScExternalNameToken::ScExternalNameToken( sal_uInt16 nFileId, const svl::SharedString& rName ) :
+ScExternalNameToken::ScExternalNameToken( sal_uInt16 nFileId, svl::SharedString aName ) :
     FormulaToken( svExternalName, ocPush),
     mnFileId(nFileId),
-    maName(rName)
+    maName(std::move(aName))
 {
 }
 
@@ -976,8 +976,8 @@ bool ScEmptyCellToken::operator==( const FormulaToken& r ) const
         bDisplayedAsString == static_cast< const ScEmptyCellToken & >(r).IsDisplayedAsString();
 }
 
-ScMatrixCellResultToken::ScMatrixCellResultToken( const ScConstMatrixRef& pMat, const formula::FormulaToken* pUL ) :
-    FormulaToken(formula::svMatrixCell), xMatrix(pMat), xUpperLeft(pUL) {}
+ScMatrixCellResultToken::ScMatrixCellResultToken( ScConstMatrixRef pMat, const formula::FormulaToken* pUL ) :
+    FormulaToken(formula::svMatrixCell), xMatrix(std::move(pMat)), xUpperLeft(pUL) {}
 
 ScMatrixCellResultToken::ScMatrixCellResultToken( const ScMatrixCellResultToken& ) = default;
 
@@ -1109,10 +1109,10 @@ void ScMatrixFormulaCellToken::ResetResult()
 }
 
 ScHybridCellToken::ScHybridCellToken(
-    double f, const svl::SharedString & rStr, const OUString & rFormula, bool bEmptyDisplayedAsString ) :
+    double f, const svl::SharedString & rStr, OUString aFormula, bool bEmptyDisplayedAsString ) :
         FormulaToken( formula::svHybridCell ),
         mfDouble( f ), maString( rStr ),
-        maFormula( rFormula ),
+        maFormula(std::move( aFormula )),
         mbEmptyDisplayedAsString( bEmptyDisplayedAsString)
 {
     // caller, make up your mind...

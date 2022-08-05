@@ -27,6 +27,7 @@
 #include <com/sun/star/i18n/Calendar2.hpp>
 
 #include <algorithm>
+#include <utility>
 
 namespace {
 
@@ -44,8 +45,8 @@ public:
 
 }
 
-ScUserListData::SubStr::SubStr(const OUString& rReal, const OUString& rUpper) :
-    maReal(rReal), maUpper(rUpper) {}
+ScUserListData::SubStr::SubStr(OUString aReal, OUString aUpper) :
+    maReal(std::move(aReal)), maUpper(std::move(aUpper)) {}
 
 void ScUserListData::InitTokens()
 {
@@ -84,8 +85,8 @@ void ScUserListData::InitTokens()
     }
 }
 
-ScUserListData::ScUserListData(const OUString& rStr) :
-    aStr(rStr)
+ScUserListData::ScUserListData(OUString _aStr) :
+    aStr(std::move(_aStr))
 {
     InitTokens();
 }

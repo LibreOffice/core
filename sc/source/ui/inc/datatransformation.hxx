@@ -96,7 +96,7 @@ class SC_DLLPUBLIC MergeColumnTransformation : public DataTransformation
 
 public:
 
-    MergeColumnTransformation(std::set<SCCOL>&& rColumns, const OUString& rMergeString);
+    MergeColumnTransformation(std::set<SCCOL>&& rColumns, OUString aMergeString);
     virtual void Transform(ScDocument& rDoc) const  override;
     virtual TransformationType getTransformationType() const override;
     const OUString & getMergeString() const;
@@ -163,7 +163,7 @@ class SC_DLLPUBLIC ReplaceNullTransformation : public DataTransformation
     OUString msReplaceWith;
 
     public:
-        ReplaceNullTransformation(std::set<SCCOL>&& nCol, const OUString& sReplaceWith);
+        ReplaceNullTransformation(std::set<SCCOL>&& nCol, OUString sReplaceWith);
         virtual void Transform(ScDocument& rDoc) const override;
         virtual TransformationType getTransformationType() const override;
         const std::set<SCCOL>& getColumn() const;
@@ -191,7 +191,7 @@ class FindReplaceTransformation : public DataTransformation
     OUString maReplaceString;
 
     public:
-        FindReplaceTransformation(SCCOL nCol, const OUString& aFindString, const OUString& aReplaceString);
+        FindReplaceTransformation(SCCOL nCol, OUString aFindString, OUString aReplaceString);
         virtual void Transform(ScDocument& rDoc) const override;
         virtual TransformationType getTransformationType() const override;
         SCCOL getColumn() const;
@@ -205,7 +205,7 @@ class DeleteRowTransformation : public DataTransformation
     OUString maFindString;
 
     public:
-        DeleteRowTransformation(SCCOL nCol, const OUString& aFindString);
+        DeleteRowTransformation(SCCOL nCol, OUString aFindString);
         virtual void Transform(ScDocument& rDoc) const override;
         virtual TransformationType getTransformationType() const override;
         SCCOL getColumn() const;

@@ -42,6 +42,7 @@
 #include <docuno.hxx>
 #include <sc.hrc>
 #include <sfx2/viewfrm.hxx>
+#include <utility>
 #include <vcl/wrkwin.hxx>
 #include <unonames.hxx>
 #include <markdata.hxx>
@@ -72,8 +73,8 @@ public:
     Sheets::const_iterator m_it;
 
     /// @throws uno::RuntimeException
-    SelectedSheetsEnum( const uno::Reference< uno::XComponentContext >& xContext, Sheets&& sheets, const uno::Reference< frame::XModel >& xModel )
-        :  m_xContext( xContext ), m_sheets( std::move(sheets) ), m_xModel( xModel )
+    SelectedSheetsEnum( uno::Reference< uno::XComponentContext > xContext, Sheets&& sheets, uno::Reference< frame::XModel > xModel )
+        :  m_xContext(std::move( xContext )), m_sheets( std::move(sheets) ), m_xModel(std::move( xModel ))
     {
         m_it = m_sheets.begin();
     }
@@ -101,7 +102,7 @@ class SelectedSheetsEnumAccess : public SelectedSheets_BASE
     Sheets sheets;
     uno::Reference< frame::XModel > m_xModel;
 public:
-    SelectedSheetsEnumAccess( const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel ):m_xContext( xContext ), m_xModel( xModel )
+    SelectedSheetsEnumAccess( uno::Reference< uno::XComponentContext > xContext, uno::Reference< frame::XModel > xModel ):m_xContext(std::move( xContext )), m_xModel(std::move( xModel ))
     {
         ScModelObj* pModel = static_cast< ScModelObj* >( m_xModel.get() );
         if ( !pModel )

@@ -88,7 +88,7 @@ public:
         OUString maUpperName;
         OUString maRealName;
 
-        explicit TableName(const OUString& rUpper, const OUString& rReal);
+        explicit TableName(OUString aUpper, OUString aReal);
     };
 
     struct CellFormat

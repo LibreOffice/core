@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <utility>
 #include <xlroot.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/awt/XDevice.hpp>
@@ -81,11 +82,11 @@ XclDebugObjCounter::~XclDebugObjCounter()
 #endif
 
 XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
-        tools::SvRef<SotStorage> const & xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc, bool bExport ) :
+        tools::SvRef<SotStorage> xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc, bool bExport ) :
     meBiff( eBiff ),
     meOutput( EXC_OUTPUT_BINARY ),
     mrMedium( rMedium ),
-    mxRootStrg( xRootStrg ),
+    mxRootStrg(std::move( xRootStrg )),
     mrDoc( rDoc ),
     meTextEnc( eTextEnc ),
     meSysLang( Application::GetSettings().GetLanguageTag().getLanguageType() ),

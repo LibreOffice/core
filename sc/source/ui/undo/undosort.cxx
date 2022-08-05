@@ -12,11 +12,12 @@
 #include <scresid.hxx>
 #include <global.hxx>
 #include <undoutil.hxx>
+#include <utility>
 
 namespace sc {
 
-UndoSort::UndoSort( ScDocShell* pDocSh, const ReorderParam& rParam ) :
-    ScSimpleUndo(pDocSh), maParam(rParam) {}
+UndoSort::UndoSort( ScDocShell* pDocSh, ReorderParam aParam ) :
+    ScSimpleUndo(pDocSh), maParam(std::move(aParam)) {}
 
 OUString UndoSort::GetComment() const
 {

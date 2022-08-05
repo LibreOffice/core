@@ -12,12 +12,13 @@
 #include <token.hxx>
 
 #include <sal/log.hxx>
+#include <utility>
 
 namespace sc {
 
 FormulaResultValue::FormulaResultValue() : mfValue(0.0), meType(Invalid), mnError(FormulaError::NONE) {}
 FormulaResultValue::FormulaResultValue( double fValue ) : mfValue(fValue), meType(Value), mnError(FormulaError::NONE) {}
-FormulaResultValue::FormulaResultValue( const svl::SharedString& rStr ) : mfValue(0.0), maString(rStr), meType(String), mnError(FormulaError::NONE) {}
+FormulaResultValue::FormulaResultValue( svl::SharedString aStr ) : mfValue(0.0), maString(std::move(aStr)), meType(String), mnError(FormulaError::NONE) {}
 FormulaResultValue::FormulaResultValue( FormulaError nErr ) : mfValue(0.0), meType(Error), mnError(nErr) {}
 
 }

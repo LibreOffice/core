@@ -20,6 +20,7 @@
 #pragma once
 
 #include <list>
+#include <utility>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/EventObject.hpp>
 
@@ -35,10 +36,10 @@ struct ScUnoListenerEntry
         css::util::XModifyListener >   xListener;
     css::lang::EventObject             aEvent;
 
-    ScUnoListenerEntry( const css::uno::Reference< css::util::XModifyListener >& rL,
-                        const css::lang::EventObject& rE ) :
-        xListener( rL ),
-        aEvent( rE )
+    ScUnoListenerEntry( css::uno::Reference< css::util::XModifyListener > xL,
+                        css::lang::EventObject aE ) :
+        xListener(std::move( xL )),
+        aEvent(std::move( aE ))
     {}
 };
 

@@ -19,6 +19,7 @@
 
 #include <o3tl/safeint.hxx>
 #include <svl/hint.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>
@@ -81,10 +82,10 @@ static bool lcl_UserVisibleName(const ScRangeData& rData)
     return !rData.HasType(ScRangeData::Type::Database);
 }
 
-ScNamedRangeObj::ScNamedRangeObj( rtl::Reference< ScNamedRangesObj > const & xParent, ScDocShell* pDocSh, const OUString& rNm, Reference<container::XNamed> const & xSheet):
-    mxParent(xParent),
+ScNamedRangeObj::ScNamedRangeObj( rtl::Reference< ScNamedRangesObj > xParent, ScDocShell* pDocSh, OUString aNm, Reference<container::XNamed> const & xSheet):
+    mxParent(std::move(xParent)),
     pDocShell( pDocSh ),
-    aName( rNm ),
+    aName(std::move( aNm )),
     mxSheet( xSheet )
 {
     pDocShell->GetDocument().AddUnoObject(*this);
@@ -828,9 +829,9 @@ SCTAB ScGlobalNamedRangesObj::GetTab_Impl()
     return -1;
 }
 
-ScLocalNamedRangesObj::ScLocalNamedRangesObj( ScDocShell* pDocSh, uno::Reference<container::XNamed> const & xSheet )
+ScLocalNamedRangesObj::ScLocalNamedRangesObj( ScDocShell* pDocSh, uno::Reference<container::XNamed> xSheet )
     : ScNamedRangesObj(pDocSh),
-    mxSheet(xSheet)
+    mxSheet(std::move(xSheet))
 {
 
 }

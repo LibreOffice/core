@@ -49,6 +49,7 @@
 #include <svl/zforlist.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/charclass.hxx>
+#include <utility>
 #include <vcl/help.hxx>
 #include <vcl/jsdialog/executor.hxx>
 #include <vcl/commandevent.hxx>
@@ -4605,12 +4606,12 @@ void ScInputHandler::InputTurnOffWinEngine()
 ScInputHdlState::ScInputHdlState( const ScAddress& rCurPos,
                                   const ScAddress& rStartPos,
                                   const ScAddress& rEndPos,
-                                  const OUString& rString,
+                                  OUString _aString,
                                   const EditTextObject* pData )
     :   aCursorPos  ( rCurPos ),
         aStartPos   ( rStartPos ),
         aEndPos     ( rEndPos ),
-        aString     ( rString ),
+        aString     (std::move( _aString )),
         pEditData   ( pData ? pData->Clone() : nullptr )
 {
 }

@@ -23,6 +23,7 @@
 #include <ooo/vba/excel/XRange.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <utility>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -83,7 +84,7 @@ class EnumWrapper : public EnumerationHelper_BASE
 
         sal_Int32 nIndex;
 public:
-        EnumWrapper( const uno::Reference< container::XIndexAccess >& xIndexAccess, const uno::Reference<XHelperInterface >& xParent, const uno::Reference<uno::XComponentContext >& xContext, const uno::Reference<frame::XModel >& xModel ) : m_xIndexAccess( xIndexAccess ), m_xParent( xParent ), m_xContext( xContext ), m_xModel( xModel ), nIndex( 0 ) {}
+        EnumWrapper( uno::Reference< container::XIndexAccess > xIndexAccess, uno::Reference<XHelperInterface > xParent, uno::Reference<uno::XComponentContext > xContext, uno::Reference<frame::XModel > xModel ) : m_xIndexAccess(std::move( xIndexAccess )), m_xParent(std::move( xParent )), m_xContext(std::move( xContext )), m_xModel(std::move( xModel )), nIndex( 0 ) {}
         virtual sal_Bool SAL_CALL hasMoreElements(  ) override
         {
                 return ( nIndex < m_xIndexAccess->getCount() );

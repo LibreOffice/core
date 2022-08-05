@@ -36,7 +36,7 @@ public:
     {
         OUString maReal;
         OUString maUpper;
-        SubStr(const OUString& rReal, const OUString& rUpper);
+        SubStr(OUString aReal, OUString aUpper);
     };
 
 private:
@@ -47,7 +47,7 @@ private:
     SAL_DLLPRIVATE void InitTokens();
 
 public:
-    ScUserListData(const OUString& rStr);
+    ScUserListData(OUString aStr);
     ScUserListData(const ScUserListData& rData);
     ~ScUserListData();
 

@@ -67,7 +67,7 @@ private:
     static void GetAreaSize( const ScDocument& rDoc, SCTAB nTab1, SCTAB nTab2, SCROW& nRow, SCCOL& nCol );
 
 public:
-            ScTransferObj( const std::shared_ptr<ScDocument>& pClipDoc, const TransferableObjectDescriptor& rDesc );
+            ScTransferObj( const std::shared_ptr<ScDocument>& pClipDoc, TransferableObjectDescriptor aDesc );
     virtual ~ScTransferObj() override;
 
     virtual void        AddSupportedFormats() override;

@@ -74,8 +74,8 @@ struct ScDPServiceDesc
     OUString aParUser;
     OUString aParPass;
 
-    ScDPServiceDesc( const OUString& rServ, const OUString& rSrc, const OUString& rNam,
-                     const OUString& rUser, const OUString& rPass );
+    ScDPServiceDesc( OUString aServ, OUString aSrc, OUString aNam,
+                     OUString aUser, OUString aPass );
 
     bool operator== ( const ScDPServiceDesc& rOther ) const;
 };
@@ -343,7 +343,7 @@ public:
         sal_Int32 mnSdbType;
         OUString maDBName;
         OUString maCommand;
-        DBType(sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand);
+        DBType(sal_Int32 nSdbType, OUString aDBName, OUString aCommand);
 
         struct less
         {

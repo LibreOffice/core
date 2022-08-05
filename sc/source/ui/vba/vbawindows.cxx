@@ -30,6 +30,7 @@
 #include "vbaworkbook.hxx"
 
 #include <unordered_map>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
@@ -65,14 +66,14 @@ protected:
 
 public:
     /// @throws uno::RuntimeException
-    WindowComponentEnumImpl( const uno::Reference< uno::XComponentContext >& xContext, Components&& components )
-        :  m_xContext( xContext ), m_components( std::move(components) )
+    WindowComponentEnumImpl( uno::Reference< uno::XComponentContext > xContext, Components&& components )
+        :  m_xContext(std::move( xContext )), m_components( std::move(components) )
     {
         m_it = m_components.begin();
     }
 
     /// @throws uno::RuntimeException
-    explicit WindowComponentEnumImpl( const uno::Reference< uno::XComponentContext >& xContext ) :  m_xContext( xContext )
+    explicit WindowComponentEnumImpl( uno::Reference< uno::XComponentContext > xContext ) :  m_xContext(std::move( xContext ))
     {
         uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(m_xContext);
         uno::Reference< container::XEnumeration > xComponents = xDesktop->getComponents()->createEnumeration();
@@ -104,7 +105,7 @@ class WindowEnumImpl : public  WindowComponentEnumImpl
 {
     uno::Any m_aApplication;
 public:
-    WindowEnumImpl( const uno::Reference< uno::XComponentContext >& xContext,  const uno::Any& aApplication ): WindowComponentEnumImpl( xContext ), m_aApplication( aApplication ) {}
+    WindowEnumImpl( const uno::Reference< uno::XComponentContext >& xContext,  uno::Any  aApplication ): WindowComponentEnumImpl( xContext ), m_aApplication(std::move( aApplication )) {}
     virtual uno::Any SAL_CALL nextElement(  ) override
     {
         return ComponentToWindow( WindowComponentEnumImpl::nextElement(), m_xContext, m_aApplication );
@@ -126,7 +127,7 @@ class WindowsAccessImpl : public WindowsAccessImpl_BASE
     Components m_windows;
     NameIndexHash namesToIndices;
 public:
-    explicit WindowsAccessImpl( const uno::Reference< uno::XComponentContext >& xContext ):m_xContext( xContext )
+    explicit WindowsAccessImpl( uno::Reference< uno::XComponentContext > xContext ):m_xContext(std::move( xContext ))
     {
         uno::Reference< container::XEnumeration > xEnum = new WindowComponentEnumImpl( m_xContext );
         sal_Int32 nIndex=0;

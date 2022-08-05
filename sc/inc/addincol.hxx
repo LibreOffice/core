@@ -32,6 +32,7 @@
 #include "types.hxx"
 
 #include <string_view>
+#include <utility>
 #include <vector>
 #include <unordered_map>
 
@@ -79,8 +80,8 @@ public:
         OUString    maLocale;
         OUString    maName;
 
-                    LocalizedName( const OUString& rLocale, const OUString& rName )
-                        : maLocale( rLocale), maName( rName) { }
+                    LocalizedName( OUString aLocale, OUString aName )
+                        : maLocale(std::move(aLocale)), maName(std::move(aName)) { }
     };
 private:
     OUString            aOriginalName;      ///< kept in formula
@@ -102,10 +103,10 @@ private:
 
 public:
                 ScUnoAddInFuncData( const OUString& rNam, const OUString& rLoc,
-                                    const OUString& rDesc,
-                                    sal_uInt16 nCat, const OString&,
-                                    const css::uno::Reference< css::reflection::XIdlMethod>& rFunc,
-                                    const css::uno::Any& rO,
+                                    OUString aDesc,
+                                    sal_uInt16 nCat, OString ,
+                                    css::uno::Reference< css::reflection::XIdlMethod> aFunc,
+                                    css::uno::Any aO,
                                     tools::Long nAC, const ScAddInArgDesc* pAD,
                                     tools::Long nCP );
                 ~ScUnoAddInFuncData();

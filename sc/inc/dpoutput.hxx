@@ -99,7 +99,7 @@ private:
 
 public:
                     ScDPOutput( ScDocument* pD,
-                                const css::uno::Reference< css::sheet::XDimensionsSupplier>& xSrc,
+                                css::uno::Reference< css::sheet::XDimensionsSupplier> xSrc,
                                 const ScAddress& rPos, bool bFilter );
                     ~ScDPOutput();
 

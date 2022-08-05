@@ -22,6 +22,7 @@
 #include <ooo/vba/excel/XlPageBreak.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
@@ -29,10 +30,10 @@ using namespace ::ooo::vba;
 template< typename... Ifc >
 ScVbaPageBreak< Ifc... >::ScVbaPageBreak( const uno::Reference< XHelperInterface >& xParent,
                     const uno::Reference< uno::XComponentContext >& xContext,
-                    const uno::Reference< beans::XPropertySet >& xProps,
+                    uno::Reference< beans::XPropertySet > xProps,
                     sheet::TablePageBreakData aTablePageBreakData):
             ScVbaPageBreak_BASE( xParent, xContext ),
-            mxRowColPropertySet( xProps ),
+            mxRowColPropertySet(std::move( xProps )),
             maTablePageBreakData( aTablePageBreakData )
 {
 }

@@ -13,6 +13,7 @@
 #include <stringutil.hxx>
 
 #include <tools/stream.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <docsh.hxx>
 #include <orcus/csv_parser.hpp>
@@ -65,11 +66,11 @@ public:
 
 namespace sc {
 CSVFetchThread::CSVFetchThread(
-    ScDocument& rDoc, const OUString& mrURL, std::function<void()> aImportFinishedHdl,
+    ScDocument& rDoc, OUString aURL, std::function<void()> aImportFinishedHdl,
     std::vector<std::shared_ptr<sc::DataTransformation>>&& rDataTransformations)
     : Thread("CSV Fetch Thread")
     , mrDocument(rDoc)
-    , maURL(mrURL)
+    , maURL(std::move(aURL))
     , mbTerminate(false)
     , maDataTransformations(std::move(rDataTransformations))
     , maImportFinishedHdl(std::move(aImportFinishedHdl))

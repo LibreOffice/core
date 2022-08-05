@@ -19,6 +19,7 @@
 
 #include <rfindlst.hxx>
 #include <tools/debug.hxx>
+#include <utility>
 
 #define SC_RANGECOLORS  8
 
@@ -26,8 +27,8 @@ const Color aColNames[SC_RANGECOLORS] =
     { COL_LIGHTBLUE, COL_LIGHTRED, COL_LIGHTMAGENTA, COL_GREEN,
         COL_BLUE, COL_RED, COL_MAGENTA, COL_BROWN };
 
-ScRangeFindList::ScRangeFindList(const OUString& rName) :
-    aDocName( rName ),
+ScRangeFindList::ScRangeFindList(OUString aName) :
+    aDocName(std::move( aName )),
     bHidden( false ),
     nIndexColor( 0 )
 {

@@ -413,7 +413,7 @@ private:
     void                    Refreshed_Impl();
 
 public:
-    ScDatabaseRangeObj(ScDocShell* pDocSh, const OUString& rNm);
+    ScDatabaseRangeObj(ScDocShell* pDocSh, OUString aNm);
     SC_DLLPUBLIC ScDatabaseRangeObj(ScDocShell* pDocSh, const SCTAB nTab);
     virtual ~ScDatabaseRangeObj() override;
 

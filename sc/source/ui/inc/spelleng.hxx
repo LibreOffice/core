@@ -130,7 +130,7 @@ public:
     explicit            ScTextConversionEngine(
                             SfxItemPool* pEnginePool,
                             ScViewData& rViewData,
-                            const ScConversionParam& rConvParam,
+                            ScConversionParam aConvParam,
                             ScDocument* pUndoDoc,
                             ScDocument* pRedoDoc );
 

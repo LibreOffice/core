@@ -68,7 +68,7 @@ class ScCondFormatObj : public cppu::WeakImplHelper<css::sheet::XConditionalForm
                             css::beans::XPropertySet>
 {
 public:
-    ScCondFormatObj(ScDocShell* pDocShell, rtl::Reference<ScCondFormatsObj> const & xCondFormats, sal_Int32 nKey);
+    ScCondFormatObj(ScDocShell* pDocShell, rtl::Reference<ScCondFormatsObj> xCondFormats, sal_Int32 nKey);
 
     virtual ~ScCondFormatObj() override;
 
@@ -156,7 +156,7 @@ class ScColorScaleFormatObj : public cppu::WeakImplHelper<css::beans::XPropertyS
 {
 public:
 
-    ScColorScaleFormatObj(rtl::Reference<ScCondFormatObj> const & xParent, const ScColorScaleFormat* pFormat);
+    ScColorScaleFormatObj(rtl::Reference<ScCondFormatObj> xParent, const ScColorScaleFormat* pFormat);
     virtual ~ScColorScaleFormatObj() override;
 
     // XConditionEntry
@@ -190,7 +190,7 @@ private:
 class ScColorScaleEntryObj : public cppu::WeakImplHelper<css::sheet::XColorScaleEntry>
 {
 public:
-    ScColorScaleEntryObj(rtl::Reference<ScColorScaleFormatObj> const & xParent, size_t nPos);
+    ScColorScaleEntryObj(rtl::Reference<ScColorScaleFormatObj> xParent, size_t nPos);
 
     virtual ~ScColorScaleEntryObj() override;
 
@@ -217,7 +217,7 @@ class ScDataBarFormatObj : public cppu::WeakImplHelper<css::beans::XPropertySet,
                                 css::sheet::XConditionEntry>
 {
 public:
-    ScDataBarFormatObj(rtl::Reference<ScCondFormatObj> const & xParent,
+    ScDataBarFormatObj(rtl::Reference<ScCondFormatObj> xParent,
             const ScDataBarFormat* pFormat);
     virtual ~ScDataBarFormatObj() override;
 
@@ -251,7 +251,7 @@ private:
 class ScDataBarEntryObj : public cppu::WeakImplHelper<css::sheet::XDataBarEntry>
 {
 public:
-    ScDataBarEntryObj(rtl::Reference<ScDataBarFormatObj> const & xParent, size_t nPos);
+    ScDataBarEntryObj(rtl::Reference<ScDataBarFormatObj> xParent, size_t nPos);
 
     virtual ~ScDataBarEntryObj() override;
 
@@ -274,7 +274,7 @@ class ScIconSetFormatObj : public cppu::WeakImplHelper<css::beans::XPropertySet,
                                 css::sheet::XConditionEntry>
 {
 public:
-    ScIconSetFormatObj(rtl::Reference<ScCondFormatObj> const & xParent,
+    ScIconSetFormatObj(rtl::Reference<ScCondFormatObj> xParent,
             const ScIconSetFormat* pFormat);
     virtual ~ScIconSetFormatObj() override;
 
@@ -308,7 +308,7 @@ private:
 class ScIconSetEntryObj : public cppu::WeakImplHelper<css::sheet::XIconSetEntry>
 {
 public:
-    ScIconSetEntryObj(rtl::Reference<ScIconSetFormatObj> const & xParent, size_t nPos);
+    ScIconSetEntryObj(rtl::Reference<ScIconSetFormatObj> xParent, size_t nPos);
 
     virtual ~ScIconSetEntryObj() override;
 
@@ -331,7 +331,7 @@ class ScCondDateFormatObj : public cppu::WeakImplHelper<css::beans::XPropertySet
                                 css::sheet::XConditionEntry>
 {
 public:
-    ScCondDateFormatObj(rtl::Reference<ScCondFormatObj> const & xParent,
+    ScCondDateFormatObj(rtl::Reference<ScCondFormatObj> xParent,
             const ScCondDateFormatEntry* pFormat);
 
     virtual ~ScCondDateFormatObj() override;

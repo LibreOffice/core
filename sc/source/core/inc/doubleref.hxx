@@ -134,7 +134,7 @@ private:
 class ScDBExternalRange final : public ScDBRangeBase
 {
 public:
-    explicit ScDBExternalRange(ScDocument* pDoc, const ScMatrixRef& pMat);
+    explicit ScDBExternalRange(ScDocument* pDoc, ScMatrixRef pMat);
     virtual ~ScDBExternalRange() override;
 
     virtual SCCOL getColSize() const override;

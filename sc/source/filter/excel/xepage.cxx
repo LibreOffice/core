@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <utility>
 #include <xepage.hxx>
 #include <svl/itemset.hxx>
 #include <scitems.hxx>
@@ -49,9 +50,9 @@ using ::std::numeric_limits;
 
 // Header/footer --------------------------------------------------------------
 
-XclExpHeaderFooter::XclExpHeaderFooter( sal_uInt16 nRecId, const OUString& rHdrString ) :
+XclExpHeaderFooter::XclExpHeaderFooter( sal_uInt16 nRecId, OUString aHdrString ) :
     XclExpRecord( nRecId ),
-    maHdrString( rHdrString )
+    maHdrString(std::move( aHdrString ))
 {
 }
 

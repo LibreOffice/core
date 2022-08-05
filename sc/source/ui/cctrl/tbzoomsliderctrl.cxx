@@ -19,6 +19,7 @@
 #include <tbzoomsliderctrl.hxx>
 
 #include <comphelper/propertyvalue.hxx>
+#include <utility>
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/event.hxx>
 #include <vcl/image.hxx>
@@ -204,13 +205,13 @@ void ScZoomSliderWnd::dispose()
     InterimItemWindow::dispose();
 }
 
-ScZoomSlider::ScZoomSlider(const css::uno::Reference< css::frame::XDispatchProvider>& rDispatchProvider,
+ScZoomSlider::ScZoomSlider(css::uno::Reference< css::frame::XDispatchProvider> xDispatchProvider,
                            sal_uInt16 nCurrentZoom)
     : mnCurrentZoom( nCurrentZoom ),
       mnMinZoom( 10 ),
       mnMaxZoom( 400 ),
       mbOmitPaint( false ),
-      m_xDispatchProvider(rDispatchProvider)
+      m_xDispatchProvider(std::move(xDispatchProvider))
 {
     maSliderButton      = Image(StockImage::Yes, RID_SVXBMP_SLIDERBUTTON);
     maIncreaseButton    = Image(StockImage::Yes, RID_SVXBMP_SLIDERINCREASE);

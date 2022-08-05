@@ -37,7 +37,7 @@ public:
 
     SparklineGroup();
     SparklineGroup(SparklineGroup const& pOtherSparkline);
-    SparklineGroup(SparklineAttributes const& rSparklineAttributes);
+    SparklineGroup(SparklineAttributes aSparklineAttributes);
 
     SparklineGroup& operator=(const SparklineGroup&) = delete;
 };

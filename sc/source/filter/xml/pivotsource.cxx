@@ -18,14 +18,14 @@ namespace sc {
 PivotTableSources::SelectedPages::SelectedPages( ScDPObject* pObj, SelectedPagesType&& rSelected ) :
     mpDP(pObj), maSelectedPages(std::move(rSelected)) {}
 
-PivotTableSources::SheetSource::SheetSource( ScDPObject* pObj, const ScSheetSourceDesc& rDesc ) :
-    mpDP(pObj), maDesc(rDesc) {}
+PivotTableSources::SheetSource::SheetSource( ScDPObject* pObj, ScSheetSourceDesc aDesc ) :
+    mpDP(pObj), maDesc(std::move(aDesc)) {}
 
-PivotTableSources::DBSource::DBSource( ScDPObject* pObj, const ScImportSourceDesc& rDesc ) :
-    mpDP(pObj), maDesc(rDesc) {}
+PivotTableSources::DBSource::DBSource( ScDPObject* pObj, ScImportSourceDesc aDesc ) :
+    mpDP(pObj), maDesc(std::move(aDesc)) {}
 
-PivotTableSources::ServiceSource::ServiceSource( ScDPObject* pObj, const ScDPServiceDesc& rDesc ) :
-    mpDP(pObj), maDesc(rDesc) {}
+PivotTableSources::ServiceSource::ServiceSource( ScDPObject* pObj, ScDPServiceDesc aDesc ) :
+    mpDP(pObj), maDesc(std::move(aDesc)) {}
 
 PivotTableSources::PivotTableSources() {}
 

@@ -30,6 +30,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <utility>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/itempool.hxx>
@@ -930,11 +931,11 @@ void SAL_CALL ScStyleFamilyObj::removeVetoableChangeListener( const OUString&, c
 
 //  default ctor is needed for reflection
 
-ScStyleObj::ScStyleObj(ScDocShell* pDocSh, SfxStyleFamily eFam, const OUString& rName)
+ScStyleObj::ScStyleObj(ScDocShell* pDocSh, SfxStyleFamily eFam, OUString aName)
     : pPropSet( (eFam == SfxStyleFamily::Para) ? lcl_GetCellStyleSet() : lcl_GetPageStyleSet() )
     , pDocShell(pDocSh)
     , eFamily(eFam)
-    , aStyleName(rName)
+    , aStyleName(std::move(aName))
     , pStyle_cached(nullptr)
 {
     //  if create by ServiceProvider then pDocShell is NULL

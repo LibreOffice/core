@@ -49,6 +49,7 @@
 #include <cellsuno.hxx>
 #include <scitems.hxx>
 #include <attrib.hxx>
+#include <utility>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -59,13 +60,13 @@ constexpr OUStringLiteral LOCALE = u"Locale";
 template< typename... Ifc >
 ScVbaFormat< Ifc... >::ScVbaFormat( const uno::Reference< XHelperInterface >& xParent,
                                     const uno::Reference< uno::XComponentContext > & xContext,
-                                    const uno::Reference< beans::XPropertySet >& _xPropertySet,
-                                    const uno::Reference< frame::XModel >& xModel,
+                                    uno::Reference< beans::XPropertySet >  _xPropertySet,
+                                    uno::Reference< frame::XModel > xModel,
                                     bool bCheckAmbiguoity )
     : ScVbaFormat_BASE( xParent, xContext ),
       m_aDefaultLocale( "en", "US", OUString() ),
-      mxPropertySet( _xPropertySet ),
-      mxModel( xModel ),
+      mxPropertySet(std::move( _xPropertySet )),
+      mxModel(std::move( xModel )),
       mbCheckAmbiguoity( bCheckAmbiguoity ),
       mbAddIndent( false )
 {

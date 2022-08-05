@@ -70,7 +70,7 @@ private:
 
 public:
     ScCellFieldsObj(
-        const css::uno::Reference<css::text::XTextRange>& xContent,
+        css::uno::Reference<css::text::XTextRange> xContent,
         ScDocShell* pDocSh, const ScAddress& rPos);
     virtual ~ScCellFieldsObj() override;
 
@@ -197,7 +197,7 @@ private:
 
 public:
     ScEditFieldObj(
-        const css::uno::Reference<css::text::XTextRange>& rContent,
+        css::uno::Reference<css::text::XTextRange> xContent,
         std::unique_ptr<ScEditSource> pEditSrc, sal_Int32 eType, const ESelection& rSel);
     virtual ~ScEditFieldObj() override;
 

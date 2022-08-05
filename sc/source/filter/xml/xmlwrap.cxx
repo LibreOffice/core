@@ -18,6 +18,7 @@
  */
 
 #include <officecfg/Office/Common.hxx>
+#include <utility>
 #include <vcl/errinf.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
@@ -79,11 +80,11 @@
 using namespace com::sun::star;
 using namespace css::uno;
 
-ScXMLImportWrapper::ScXMLImportWrapper( ScDocShell& rDocSh, SfxMedium* pM, const uno::Reference < embed::XStorage >& xStor ) :
+ScXMLImportWrapper::ScXMLImportWrapper( ScDocShell& rDocSh, SfxMedium* pM, uno::Reference < embed::XStorage > xStor ) :
     mrDocShell(rDocSh),
     rDoc(rDocSh.GetDocument()),
     pMedium(pM),
-    xStorage(xStor)
+    xStorage(std::move(xStor))
 {
     OSL_ENSURE( pMedium || xStorage.is(), "ScXMLImportWrapper: Medium or Storage must be set" );
 }

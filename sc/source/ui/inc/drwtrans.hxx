@@ -66,7 +66,7 @@ private:
 
 public:
             ScDrawTransferObj( std::unique_ptr<SdrModel> pClipModel, ScDocShell* pContainerShell,
-                                const TransferableObjectDescriptor& rDesc );
+                                TransferableObjectDescriptor aDesc );
     virtual ~ScDrawTransferObj() override;
 
     virtual void        AddSupportedFormats() override;
