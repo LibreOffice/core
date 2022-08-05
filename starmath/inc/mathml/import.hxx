@@ -13,6 +13,7 @@
 #include "element.hxx"
 
 // XML tools
+#include <utility>
 #include <vcl/errcode.hxx>
 #include <xmloff/xmlimp.hxx>
 
@@ -39,8 +40,8 @@ public:
 public:
     /** Constructor
      */
-    explicit SmMLImportWrapper(css::uno::Reference<css::frame::XModel> const& rRef)
-        : m_xModel(rRef)
+    explicit SmMLImportWrapper(css::uno::Reference<css::frame::XModel> xRef)
+        : m_xModel(std::move(xRef))
         , m_pDocShell(nullptr)
         , m_pMlImport(nullptr)
     {

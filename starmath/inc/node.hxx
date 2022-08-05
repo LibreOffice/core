@@ -140,7 +140,7 @@ class SmNode : public SmRect
     sal_Int32       mnAccIndex;
 
 protected:
-    SmNode(SmNodeType eNodeType, const SmToken &rNodeToken);
+    SmNode(SmNodeType eNodeType, SmToken aNodeToken);
 
 public:
     SmNode(const SmNode&) = delete;

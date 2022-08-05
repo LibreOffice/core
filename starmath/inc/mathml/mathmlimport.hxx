@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <utility>
 #include <xmloff/xmlimp.hxx>
 #include <vcl/errcode.hxx>
 
@@ -45,8 +46,8 @@ private:
     bool m_bUseHTMLMLEntities;
 
 public:
-    explicit SmXMLImportWrapper(css::uno::Reference<css::frame::XModel> const& rRef)
-        : xModel(rRef)
+    explicit SmXMLImportWrapper(css::uno::Reference<css::frame::XModel> xRef)
+        : xModel(std::move(xRef))
         , m_bUseHTMLMLEntities(false)
     {
     }
