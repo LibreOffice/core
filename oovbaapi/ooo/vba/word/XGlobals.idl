@@ -37,6 +37,15 @@ interface XGlobals : com::sun::star::uno::XInterface
     any Dialogs( [in] any Index );
     any ListGalleries( [in] any aIndex );
     float CentimetersToPoints([in] float Centimeters );
+    float PointsToCentimeters( [in] float Points);
+    float PixelsToPoints( [in] float Pixels, [in] boolean fVertical );
+    float PointsToPixels( [in] float Points, [in] boolean fVertical);
+    float InchesToPoints( [in] float Inches);
+    float PointsToInches( [in] float Points);
+    float MillimetersToPoints( [in] float Millimeters );
+    float PointsToMillimeters( [in] float Points);
+    float PicasToPoints( [in] float Picas);
+    float PointsToPicas( [in] float Points);
 };
 
 }; }; };

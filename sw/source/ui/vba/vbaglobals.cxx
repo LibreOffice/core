@@ -129,6 +129,51 @@ float SAL_CALL SwVbaGlobals::CentimetersToPoints( float Centimeters )
     return getApplication()->CentimetersToPoints( Centimeters );
 }
 
+float SAL_CALL SwVbaGlobals::PointsToCentimeters( float Points )
+{
+    return getApplication()->PointsToCentimeters( Points );
+}
+
+float SAL_CALL SwVbaGlobals::PixelsToPoints( float Pixels, ::sal_Bool fVertical )
+{
+    return getApplication()->PixelsToPoints( Pixels, fVertical );
+}
+
+float SAL_CALL SwVbaGlobals::PointsToPixels( float Points, ::sal_Bool fVertical )
+{
+    return getApplication()->PointsToPixels( Points, fVertical );
+}
+
+float SAL_CALL SwVbaGlobals::InchesToPoints( float Inches )
+{
+    return getApplication()->InchesToPoints( Inches );
+}
+
+float SAL_CALL SwVbaGlobals::PointsToInches( float Points )
+{
+    return getApplication()->PointsToInches( Points );
+}
+
+float SAL_CALL SwVbaGlobals::MillimetersToPoints( float Millimeters )
+{
+    return getApplication()->MillimetersToPoints( Millimeters );
+}
+
+float SAL_CALL SwVbaGlobals::PointsToMillimeters( float Points )
+{
+    return getApplication()->PointsToMillimeters( Points );
+}
+
+float SAL_CALL SwVbaGlobals::PicasToPoints( float Picas )
+{
+    return getApplication()->PicasToPoints( Picas );
+}
+
+float SAL_CALL SwVbaGlobals::PointsToPicas( float Points )
+{
+    return getApplication()->PointsToPicas( Points );
+}
+
 OUString
 SwVbaGlobals::getServiceImplName()
 {
