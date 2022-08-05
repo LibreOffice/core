@@ -32,7 +32,7 @@ public:
                      FillDir        eFillDir,
                      FillCmd        eFillCmd,
                      FillDateCmd    eFillDateCmd,
-                     const OUString& aStartStr,
+                     OUString  aStartStr,
                      double         fStep,
                      double         fMax,
                      SCSIZE       nSelectHeight,

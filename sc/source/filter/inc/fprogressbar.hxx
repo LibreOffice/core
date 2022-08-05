@@ -105,7 +105,7 @@ public:
     ScfProgressBar(const ScfProgressBar&) = delete;
     const ScfProgressBar operator=(const ScfProgressBar&) = delete;
 
-    explicit            ScfProgressBar(SfxObjectShell* pDocShell, const OUString& rText);
+    explicit            ScfProgressBar(SfxObjectShell* pDocShell, OUString aText);
     explicit            ScfProgressBar(SfxObjectShell* pDocShell, TranslateId pResId);
                         ~ScfProgressBar();
 

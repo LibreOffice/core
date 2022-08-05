@@ -33,6 +33,7 @@
 #include <ooo/vba/excel/XlPaperSize.hpp>
 #include <basic/sberrors.hxx>
 #include <filter/msfilter/util.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
@@ -42,9 +43,9 @@ using namespace ::ooo::vba;
 
 ScVbaPageSetup::ScVbaPageSetup(const uno::Reference< XHelperInterface >& xParent,
                 const uno::Reference< uno::XComponentContext >& xContext,
-                const uno::Reference< sheet::XSpreadsheet >& xSheet,
+                uno::Reference< sheet::XSpreadsheet > xSheet,
                 const uno::Reference< frame::XModel >& xModel):
-           ScVbaPageSetup_BASE( xParent, xContext ), mxSheet( xSheet ), mbIsLandscape( false )
+           ScVbaPageSetup_BASE( xParent, xContext ), mxSheet(std::move( xSheet )), mbIsLandscape( false )
 {
     // query for current page style
     mxModel.set( xModel, uno::UNO_SET_THROW );

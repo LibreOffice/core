@@ -59,6 +59,7 @@
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/broadcast.hxx>
+#include <utility>
 #include <vcl/outdev.hxx>
 #include <formula/errorcodes.hxx>
 #include <formula/vectortoken.hxx>
@@ -1134,7 +1135,7 @@ protected:
         SCROW mnRow;
         OUString maStr;
 
-        StrEntry(SCROW nRow, const OUString& rStr) : mnRow(nRow), maStr(rStr) {}
+        StrEntry(SCROW nRow, OUString aStr) : mnRow(nRow), maStr(std::move(aStr)) {}
     };
 
     std::vector<StrEntry> maStrEntries;

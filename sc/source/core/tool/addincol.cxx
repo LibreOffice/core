@@ -19,6 +19,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <sfx2/objsh.hxx>
@@ -66,23 +67,23 @@ using namespace com::sun::star;
 #define SC_CALLERPOS_NONE   (-1)
 
 ScUnoAddInFuncData::ScUnoAddInFuncData( const OUString& rNam, const OUString& rLoc,
-                                        const OUString& rDesc,
-                                        sal_uInt16 nCat, const OString& sHelp,
-                                        const uno::Reference<reflection::XIdlMethod>& rFunc,
-                                        const uno::Any& rO,
+                                        OUString aDesc,
+                                        sal_uInt16 nCat, OString sHelp,
+                                        uno::Reference<reflection::XIdlMethod> xFunc,
+                                        uno::Any aO,
                                         tools::Long nAC, const ScAddInArgDesc* pAD,
                                         tools::Long nCP ) :
     aOriginalName( rNam ),
     aLocalName( rLoc ),
     aUpperName( rNam ),
     aUpperLocal( rLoc ),
-    aDescription( rDesc ),
-    xFunction( rFunc ),
-    aObject( rO ),
+    aDescription(std::move( aDesc )),
+    xFunction(std::move( xFunc )),
+    aObject(std::move( aO )),
     nArgCount( nAC ),
     nCallerPos( nCP ),
     nCategory( nCat ),
-    sHelpId( sHelp ),
+    sHelpId(std::move( sHelp )),
     bCompInitialized( false )
 {
     if ( nArgCount )

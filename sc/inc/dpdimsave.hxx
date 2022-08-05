@@ -50,7 +50,7 @@ class SC_DLLPUBLIC ScDPSaveGroupItem
     mutable std::vector<ScDPItemData> maItems;  ///< items converted from the strings.
 
 public:
-    ScDPSaveGroupItem( const OUString& rName );
+    ScDPSaveGroupItem( OUString aName );
     ~ScDPSaveGroupItem();
 
     ScDPSaveGroupItem(ScDPSaveGroupItem const &) = default;
@@ -96,8 +96,8 @@ class SC_DLLPUBLIC ScDPSaveGroupDimension
     sal_Int32               nDatePart;
 
 public:
-                ScDPSaveGroupDimension( const OUString& rSource, const OUString& rName );
-                ScDPSaveGroupDimension( const OUString& rSource, const OUString& rName, const ScDPNumGroupInfo& rDateInfo, sal_Int32 nPart );
+                ScDPSaveGroupDimension( OUString aSource, OUString aName );
+                ScDPSaveGroupDimension( OUString aSource, OUString aName, const ScDPNumGroupInfo& rDateInfo, sal_Int32 nPart );
 
     void    AddToData( ScDPGroupTableData& rData ) const;
     void AddToCache(ScDPCache& rCache) const;
@@ -140,8 +140,8 @@ class SC_DLLPUBLIC ScDPSaveNumGroupDimension
     sal_Int32           nDatePart;
 
 public:
-                ScDPSaveNumGroupDimension( const OUString& rName, const ScDPNumGroupInfo& rInfo );
-                ScDPSaveNumGroupDimension( const OUString& rName, const ScDPNumGroupInfo& rDateInfo, sal_Int32 nPart );
+                ScDPSaveNumGroupDimension( OUString aName, const ScDPNumGroupInfo& rInfo );
+                ScDPSaveNumGroupDimension( OUString aName, const ScDPNumGroupInfo& rDateInfo, sal_Int32 nPart );
 
     void        AddToData( ScDPGroupTableData& rData ) const;
     void AddToCache(ScDPCache& rCache) const;

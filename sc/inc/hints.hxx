@@ -104,8 +104,8 @@ class ScAutoStyleHint final : public SfxHint
     sal_uLong   nTimeout;
 
 public:
-                    ScAutoStyleHint( const ScRange& rR, const OUString& rSt1,
-                                        sal_uLong nT, const OUString& rSt2 );
+                    ScAutoStyleHint( const ScRange& rR, OUString aSt1,
+                                        sal_uLong nT, OUString aSt2 );
                     virtual ~ScAutoStyleHint() override;
 
     const ScRange&  GetRange() const    { return aRange; }
@@ -130,7 +130,7 @@ class ScDataPilotModifiedHint final : public SfxHint
     OUString        maName;
 
 public:
-                    ScDataPilotModifiedHint( const OUString& rName );
+                    ScDataPilotModifiedHint( OUString aName );
                     virtual ~ScDataPilotModifiedHint() override;
 
     const OUString&   GetName() const { return maName; }

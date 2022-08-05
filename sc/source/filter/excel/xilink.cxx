@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <utility>
 #include <xilink.hxx>
 #include <document.hxx>
 #include <scextopt.hxx>
@@ -64,7 +65,7 @@ class XclImpSupbookTab
 public:
     /** Stores the sheet name and marks the sheet index as invalid.
         The sheet index is set while creating the Calc sheet with CreateTable(). */
-    explicit            XclImpSupbookTab( const OUString& rTabName );
+    explicit            XclImpSupbookTab( OUString aTabName );
 
     const OUString& GetTabName() const { return maTabName; }
 
@@ -558,8 +559,8 @@ XclImpCrn::XclImpCrn( XclImpStream& rStrm, const XclAddress& rXclPos ) :
 
 // Sheet in an external document ==============================================
 
-XclImpSupbookTab::XclImpSupbookTab( const OUString& rTabName ) :
-    maTabName( rTabName )
+XclImpSupbookTab::XclImpSupbookTab( OUString aTabName ) :
+    maTabName(std::move( aTabName ))
 {
 }
 

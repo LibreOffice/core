@@ -27,6 +27,7 @@
 #include <ooo/vba/excel/XlAxisType.hpp>
 #include <ooo/vba/excel/XlAxisGroup.hpp>
 #include <ooo/vba/excel/XAxis.hpp>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
@@ -46,7 +47,7 @@ class EnumWrapper : public EnumerationHelper_BASE
         uno::Reference<container::XIndexAccess > m_xIndexAccess;
         sal_Int32 nIndex;
 public:
-        explicit EnumWrapper( const uno::Reference< container::XIndexAccess >& xIndexAccess ) : m_xIndexAccess( xIndexAccess ), nIndex( 0 ) {}
+        explicit EnumWrapper( uno::Reference< container::XIndexAccess > xIndexAccess ) : m_xIndexAccess(std::move( xIndexAccess )), nIndex( 0 ) {}
         virtual sal_Bool SAL_CALL hasMoreElements(  ) override
         {
                 return ( nIndex < m_xIndexAccess->getCount() );
@@ -93,7 +94,7 @@ class AxisIndexWrapper : public ::cppu::WeakImplHelper< container::XIndexAccess 
     std::vector< AxesCoordinate > mCoordinates;
     uno::Reference< excel::XChart > mxChart;
 public:
-    AxisIndexWrapper( const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< excel::XChart >& xChart ) : mxContext( xContext ), mxChart( xChart )
+    AxisIndexWrapper( uno::Reference< uno::XComponentContext > xContext, uno::Reference< excel::XChart > xChart ) : mxContext(std::move( xContext )), mxChart(std::move( xChart ))
     {
         if ( !mxChart.is() )
             return;

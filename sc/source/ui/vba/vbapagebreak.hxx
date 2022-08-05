@@ -38,7 +38,7 @@ public:
     /// @throws css::uno::RuntimeException
     ScVbaPageBreak( const css::uno::Reference< ov::XHelperInterface >& xParent,
                     const css::uno::Reference< css::uno::XComponentContext >& xContext,
-                    const css::uno::Reference< css::beans::XPropertySet >& xProps,
+                    css::uno::Reference< css::beans::XPropertySet > xProps,
                     css::sheet::TablePageBreakData aTablePageBreakData);
 
     virtual sal_Int32 SAL_CALL getType( ) override;

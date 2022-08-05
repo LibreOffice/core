@@ -24,6 +24,7 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <limits>
+#include <utility>
 
 class ScDocument;
 
@@ -59,9 +60,9 @@ struct ValueAndFormat
         , m_nNumberFormat(nNumberFormat)
     {}
 
-    explicit ValueAndFormat(OUString const & rString)
+    explicit ValueAndFormat(OUString aString)
         : m_fValue(std::numeric_limits<double>::quiet_NaN())
-        , m_aString(rString)
+        , m_aString(std::move(aString))
         , m_eType(ValueType::String)
         , m_nNumberFormat(0)
     {
@@ -81,7 +82,7 @@ class PivotTableDataSequence final : public PivotTableDataSequence_Base, public 
 {
 public:
     explicit PivotTableDataSequence(ScDocument* pDocument,
-                                    OUString const & sID, std::vector<ValueAndFormat>&& rData);
+                                    OUString sID, std::vector<ValueAndFormat>&& rData);
 
     virtual ~PivotTableDataSequence() override;
     PivotTableDataSequence(const PivotTableDataSequence&) = delete;

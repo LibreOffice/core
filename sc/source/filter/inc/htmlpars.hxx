@@ -25,6 +25,7 @@
 #include <stack>
 #include <string_view>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 #include <o3tl/sorted_vector.hxx>
 
@@ -110,14 +111,14 @@ struct ScHTMLTableStackEntry
     sal_uInt16          nColOffset;
     sal_uInt16          nColOffsetStart;
     bool                bFirstRow;
-                        ScHTMLTableStackEntry( const std::shared_ptr<ScEEParseEntry>& rE,
-                                const ScRangeListRef& rL, ScHTMLColOffset* pTO,
+                        ScHTMLTableStackEntry( std::shared_ptr<ScEEParseEntry> xE,
+                                ScRangeListRef xL, ScHTMLColOffset* pTO,
                                 sal_uLong nFTC,
                                 SCROW nRow,
                                 SCCOL nStart, SCCOL nMax, sal_uInt16 nTab,
                                 sal_uInt16 nTW, sal_uInt16 nCO, sal_uInt16 nCOS,
                                 bool bFR )
-                            : xLockedList( rL ), xCellEntry(rE),
+                            : xLockedList(std::move( xL )), xCellEntry(std::move(xE)),
                             pLocalColOffset( pTO ),
                             nFirstTableCell( nFTC ),
                             nRowCnt( nRow ),
@@ -212,7 +213,7 @@ private:
     void                FontOn( HtmlImportInfo* );
 
 public:
-                        ScHTMLLayoutParser( EditEngine*, const OUString& rBaseURL, const Size& aPageSize, ScDocument* );
+                        ScHTMLLayoutParser( EditEngine*, OUString aBaseURL, const Size& aPageSize, ScDocument* );
     virtual             ~ScHTMLLayoutParser() override;
     virtual ErrCode     Read( SvStream&, const OUString& rBaseURL  ) override;
     virtual const ScHTMLTable*  GetGlobalTable() const override;

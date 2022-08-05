@@ -37,6 +37,7 @@
 #include <root.hxx>
 #include <excimp8.hxx>
 #include <documentimport.hxx>
+#include <sot/storage.hxx>
 
 // Global data ================================================================
 

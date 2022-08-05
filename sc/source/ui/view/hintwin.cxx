@@ -28,6 +28,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <tools/lineend.hxx>
+#include <utility>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/metric.hxx>
@@ -37,11 +38,11 @@
 #define HINT_INDENT     3
 #define HINT_MARGIN     4
 
-ScOverlayHint::ScOverlayHint(const OUString& rTit, const OUString& rMsg, const Color& rColor, const vcl::Font& rFont)
+ScOverlayHint::ScOverlayHint(OUString aTit, const OUString& rMsg, const Color& rColor, vcl::Font aFont)
     : OverlayObject(rColor)
-    , m_aTitle(rTit)
+    , m_aTitle(std::move(aTit))
     , m_aMessage(convertLineEnd(rMsg, LINEEND_CR))
-    , m_aTextFont(rFont)
+    , m_aTextFont(std::move(aFont))
     , m_aMapMode(MapUnit::MapPixel)
     , m_nLeft(0)
     , m_nTop(0)

@@ -14,6 +14,7 @@
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <sc.hrc>
+#include <utility>
 
 using namespace utl;
 using namespace com::sun::star::uno;
@@ -38,9 +39,9 @@ bool ScDefaultsOptions::operator==( const ScDefaultsOptions& rOpt ) const
         && rOpt.bJumboSheets == bJumboSheets;
 }
 
-ScTpDefaultsItem::ScTpDefaultsItem( const ScDefaultsOptions& rOpt ) :
+ScTpDefaultsItem::ScTpDefaultsItem( ScDefaultsOptions aOpt ) :
     SfxPoolItem ( SID_SCDEFAULTSOPTIONS ),
-    theOptions  ( rOpt )
+    theOptions  (std::move( aOpt ))
 {
 }
 
