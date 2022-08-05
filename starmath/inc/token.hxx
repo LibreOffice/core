@@ -34,6 +34,7 @@
 
 // std imports
 #include <memory>
+#include <utility>
 
 // TokenGroups
 enum class TG
@@ -182,15 +183,15 @@ struct SmColorTokenTableEntry
     {
     }
 
-    SmColorTokenTableEntry(const OUString& name, SmTokenType ctype, Color ncolor)
-        : aIdent(name)
+    SmColorTokenTableEntry(OUString name, SmTokenType ctype, Color ncolor)
+        : aIdent(std::move(name))
         , eType(ctype)
         , cColor(ncolor)
     {
     }
 
-    SmColorTokenTableEntry(const OUString& name, SmTokenType ctype, sal_uInt32 ncolor)
-        : aIdent(name)
+    SmColorTokenTableEntry(OUString name, SmTokenType ctype, sal_uInt32 ncolor)
+        : aIdent(std::move(name))
         , eType(ctype)
         , cColor(ColorTransparency, ncolor)
     {
@@ -224,9 +225,9 @@ struct SmToken
     {
     }
 
-    SmToken(SmTokenType eTokenType, sal_Unicode cMath, const OUString& rText,
-            TG nTokenGroup = TG::NONE, sal_uInt16 nTokenLevel = 0)
-        : aText(rText)
+    SmToken(SmTokenType eTokenType, sal_Unicode cMath, OUString rText, TG nTokenGroup = TG::NONE,
+            sal_uInt16 nTokenLevel = 0)
+        : aText(std::move(rText))
         , eType(eTokenType)
         , cMathChar(cMath)
         , nGroup(nTokenGroup)

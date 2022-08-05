@@ -64,7 +64,7 @@ struct SmFntFmtListEntry
     OUString aId;
     SmFontFormat aFntFmt;
 
-    SmFntFmtListEntry(const OUString& rId, const SmFontFormat& rFntFmt);
+    SmFntFmtListEntry(OUString aId, SmFontFormat rFntFmt);
 };
 
 class SmFontFormatList

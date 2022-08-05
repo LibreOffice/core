@@ -24,6 +24,7 @@
 #include <smmod.hxx>
 #include <cfgitem.hxx>
 #include <parse.hxx>
+#include <utility>
 #include <view.hxx>
 #include <visitors.hxx>
 #include <document.hxx>

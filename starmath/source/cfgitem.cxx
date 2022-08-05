@@ -22,6 +22,7 @@
 #include <svl/eitem.hxx>
 #include <svl/languageoptions.hxx>
 #include <unotools/configmgr.hxx>
+#include <utility>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -218,9 +219,9 @@ bool SmFontFormat::operator == ( const SmFontFormat &rFntFmt ) const
 }
 
 
-SmFntFmtListEntry::SmFntFmtListEntry( const OUString &rId, const SmFontFormat &rFntFmt ) :
-    aId     (rId),
-    aFntFmt (rFntFmt)
+SmFntFmtListEntry::SmFntFmtListEntry( OUString _aId, SmFontFormat _aFntFmt ) :
+    aId     (std::move(_aId)),
+    aFntFmt (std::move(_aFntFmt))
 {
 }
 

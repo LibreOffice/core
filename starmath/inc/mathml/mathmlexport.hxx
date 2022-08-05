@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <utility>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmltoken.hxx>
 
@@ -48,8 +49,8 @@ private:
     bool m_bUseHTMLMLEntities;
 
 public:
-    explicit SmXMLExportWrapper(css::uno::Reference<css::frame::XModel> const& rRef)
-        : xModel(rRef)
+    explicit SmXMLExportWrapper(css::uno::Reference<css::frame::XModel> xRef)
+        : xModel(std::move(xRef))
         , bFlat(true)
         , m_bUseHTMLMLEntities(false)
     {

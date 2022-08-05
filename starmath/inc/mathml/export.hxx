@@ -23,6 +23,7 @@
 #include "element.hxx"
 
 // Xml tools
+#include <utility>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -76,8 +77,8 @@ public:
     void setUseExportTag(bool bUseExportTag) { m_bUseExportTag = bUseExportTag; }
 
 public:
-    explicit SmMLExportWrapper(css::uno::Reference<css::frame::XModel> const& rRef)
-        : m_xModel(rRef)
+    explicit SmMLExportWrapper(css::uno::Reference<css::frame::XModel> xRef)
+        : m_xModel(std::move(xRef))
         , m_bFlat(true)
         , m_bUseHTMLMLEntities(false)
         , m_pElementTree(nullptr)

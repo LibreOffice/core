@@ -21,6 +21,7 @@
 #include <symbol.hxx>
 #include <smmod.hxx>
 #include "tmpdevice.hxx"
+#include <utility>
 #include <visitors.hxx>
 #include <vcl/metric.hxx>
 #include <osl/diagnose.h>
@@ -42,8 +43,8 @@ void ForEachNonNull(SmNode *pNode, F && f)
 
 }
 
-SmNode::SmNode(SmNodeType eNodeType, const SmToken &rNodeToken)
-    : maNodeToken( rNodeToken )
+SmNode::SmNode(SmNodeType eNodeType, SmToken aNodeToken)
+    : maNodeToken(std::move( aNodeToken ))
     , meType( eNodeType )
     , meScaleMode( SmScaleMode::None )
     , meRectHorAlign( RectHorAlign::Left )

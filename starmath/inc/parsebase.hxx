@@ -28,6 +28,7 @@
 #include "node.hxx"
 
 #include <set>
+#include <utility>
 
 #define DEPTH_LIMIT 1024
 
@@ -61,7 +62,7 @@ struct SmErrorDesc
     SmErrorDesc(SmParseError eType, SmNode* pNode, OUString aText)
         : m_eType(eType)
         , m_pNode(pNode)
-        , m_aText(aText)
+        , m_aText(std::move(aText))
     {
     }
 };
