@@ -15,8 +15,6 @@ wina11y_SOURCE := $(SRCDIR)/winaccessibility/source/UAccCOMIDL
 # We cannot depend on *.tlb because they only produced by IDL compiler
 # if idl contains 'library' statement.
 $(call gb_CustomTarget_get_target,winaccessibility/ia2/idl) : \
-	$(wina11y_COMIDLDIR)/AccessibleKeyBinding.h \
-	$(wina11y_COMIDLDIR)/AccessibleKeyStroke.h \
 	$(wina11y_COMIDLDIR)/UAccCOM.h \
 	$(wina11y_COMIDLDIR)/defines.h \
 	$(wina11y_COMIDLDIR)/ia2_api_all.h

@@ -32,8 +32,6 @@
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <comphelper/AccessibleImplementationHelper.hxx>
 
-#include "AccessibleKeyStroke.h"
-
 #include "acccommon.h"
 
 using namespace com::sun::star::accessibility::AccessibleRole;
