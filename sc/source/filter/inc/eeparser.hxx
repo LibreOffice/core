@@ -20,6 +20,7 @@
 #pragma once
 
 #include <tools/gen.hxx>
+#include <utility>
 #include <vcl/errcode.hxx>
 #include <vcl/graph.hxx>
 #include <svl/itemset.hxx>
@@ -79,8 +80,8 @@ struct ScEEParseEntry
         nOffset(0), nWidth(0), bHasGraphic(false), bEntirePara(true)
         {}
 
-    ScEEParseEntry( const SfxItemSet& rItemSet ) :
-        aItemSet( rItemSet ),
+    ScEEParseEntry( SfxItemSet _aItemSet ) :
+        aItemSet(std::move( _aItemSet )),
         nCol(SCCOL_MAX), nRow(SCROW_MAX), nTab(0),
         nTwips(0), nColOverlap(1), nRowOverlap(1),
         nOffset(0), nWidth(0), bHasGraphic(false), bEntirePara(true)

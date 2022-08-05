@@ -272,7 +272,7 @@ public:
 class ExtCfCondFormat
 {
 public:
-    ExtCfCondFormat(const ScRangeList& aRange, std::vector< std::unique_ptr<ScFormatEntry> >& rEntries,
+    ExtCfCondFormat(ScRangeList aRange, std::vector< std::unique_ptr<ScFormatEntry> >& rEntries,
                     const std::vector<sal_Int32>* pPriorities = nullptr);
     ~ExtCfCondFormat();
 

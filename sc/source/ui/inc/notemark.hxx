@@ -55,7 +55,7 @@ private:
 
 public:
                 ScNoteMarker( vcl::Window* pWin, vcl::Window* pRight, vcl::Window* pBottom, vcl::Window* pDiagonal,
-                                ScDocument* pD, const ScAddress& aPos, const OUString& rUser,
+                                ScDocument* pD, const ScAddress& aPos, OUString aUser,
                                 const MapMode& rMap, bool bLeftEdge, bool bForce, bool bKeyboard);
                 ~ScNoteMarker();
 

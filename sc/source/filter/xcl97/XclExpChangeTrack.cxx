@@ -22,6 +22,7 @@
 #include <stdio.h>
 #include <sot/storage.hxx>
 #include <XclExpChangeTrack.hxx>
+#include <utility>
 #include <xeformula.hxx>
 #include <xehelper.hxx>
 #include <xltools.hxx>
@@ -391,9 +392,9 @@ void XclExpXmlChTrHeaders::SaveXml( XclExpXmlStream& rStrm )
 }
 
 XclExpXmlChTrHeader::XclExpXmlChTrHeader(
-    const OUString& rUserName, const DateTime& rDateTime, const sal_uInt8* pGUID,
+    OUString aUserName, const DateTime& rDateTime, const sal_uInt8* pGUID,
     sal_Int32 nLogNumber, const XclExpChTrTabIdBuffer& rBuf ) :
-    maUserName(rUserName), maDateTime(rDateTime), mnLogNumber(nLogNumber),
+    maUserName(std::move(aUserName)), maDateTime(rDateTime), mnLogNumber(nLogNumber),
     mnMinAction(0), mnMaxAction(0)
 {
     memcpy(maGUID, pGUID, 16);

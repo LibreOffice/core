@@ -16,15 +16,16 @@
 #include <Sparkline.hxx>
 #include <SparklineGroup.hxx>
 #include <SparklineAttributes.hxx>
+#include <utility>
 
 namespace sc
 {
 UndoEditSparklneGroup::UndoEditSparklneGroup(
     ScDocShell& rDocShell, std::shared_ptr<sc::SparklineGroup> const& pSparklineGroup,
-    sc::SparklineAttributes const& rAttributes)
+    sc::SparklineAttributes aAttributes)
     : ScSimpleUndo(&rDocShell)
     , m_pSparklineGroup(pSparklineGroup)
-    , m_aNewAttributes(rAttributes)
+    , m_aNewAttributes(std::move(aAttributes))
     , m_aOriginalAttributes(pSparklineGroup->getAttributes())
 {
 }

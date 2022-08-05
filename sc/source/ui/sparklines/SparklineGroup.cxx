@@ -9,11 +9,12 @@
  */
 
 #include <SparklineGroup.hxx>
+#include <utility>
 
 namespace sc
 {
-SparklineGroup::SparklineGroup(SparklineAttributes const& rSparklineAttributes)
-    : m_aAttributes(rSparklineAttributes)
+SparklineGroup::SparklineGroup(SparklineAttributes aSparklineAttributes)
+    : m_aAttributes(std::move(aSparklineAttributes))
     , m_aGUID(tools::Guid::Generate)
 {
 }

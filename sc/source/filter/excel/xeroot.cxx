@@ -23,6 +23,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <sot/storage.hxx>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <xecontent.hxx>

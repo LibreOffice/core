@@ -60,7 +60,7 @@ struct SC_DLLPUBLIC ScDPName
     sal_uInt8    mnDupCount;
 
     ScDPName();
-    explicit ScDPName(const OUString& rName, const OUString& rLayoutName, sal_uInt8 nDupCount);
+    explicit ScDPName(OUString aName, OUString aLayoutName, sal_uInt8 nDupCount);
 };
 
 struct ScDPLabelData

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <utility>
 #include <xlchart.hxx>
 
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -540,11 +541,11 @@ const XclChTypeInfo& XclChTypeInfoProvider::GetTypeInfoFromService( std::u16stri
 
 // Property helpers ===========================================================
 
-XclChObjectTable::XclChObjectTable(uno::Reference<lang::XMultiServiceFactory> const & xFactory,
-        const OUString& rServiceName, const OUString& rObjNameBase ) :
-    mxFactory( xFactory ),
-    maServiceName( rServiceName ),
-    maObjNameBase( rObjNameBase ),
+XclChObjectTable::XclChObjectTable(uno::Reference<lang::XMultiServiceFactory> xFactory,
+        OUString aServiceName, OUString aObjNameBase ) :
+    mxFactory(std::move( xFactory )),
+    maServiceName(std::move( aServiceName )),
+    maObjNameBase(std::move( aObjNameBase )),
     mnIndex( 0 )
 {
 }

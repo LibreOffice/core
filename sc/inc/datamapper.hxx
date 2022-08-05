@@ -70,7 +70,7 @@ private:
     ScDocument* mpDoc;
 
 public:
-    ExternalDataSource(const OUString& rURL, const OUString& rProvider, ScDocument* pDoc);
+    ExternalDataSource(OUString aURL, OUString aProvider, ScDocument* pDoc);
 
     void setUpdateFrequency(double nUpdateFrequency);
 

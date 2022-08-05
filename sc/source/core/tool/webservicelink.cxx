@@ -15,15 +15,16 @@
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 
+#include <utility>
 #include <webservicelink.hxx>
 #include <brdcst.hxx>
 #include <document.hxx>
 #include <sc.hrc>
 
-ScWebServiceLink::ScWebServiceLink(ScDocument* pD, const OUString& rURL)
+ScWebServiceLink::ScWebServiceLink(ScDocument* pD, OUString _aURL)
     : ::sfx2::SvBaseLink(SfxLinkUpdateMode::ALWAYS, SotClipboardFormatId::STRING)
     , pDoc(pD)
-    , aURL(rURL)
+    , aURL(std::move(_aURL))
     , bHasResult(false)
 {
 }

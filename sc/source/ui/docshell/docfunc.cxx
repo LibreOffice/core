@@ -27,6 +27,7 @@
 #include <editeng/justifyitem.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/bindings.hxx>
+#include <utility>
 #include <vcl/weld.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
@@ -1151,8 +1152,8 @@ namespace {
         sal_Int32   nIndex;
         SfxItemSet  aItemSet;
 
-        ScMyRememberItem(const SfxItemSet& rItemSet, sal_Int32 nTempIndex) :
-            nIndex(nTempIndex), aItemSet(rItemSet) {}
+        ScMyRememberItem(SfxItemSet _aItemSet, sal_Int32 nTempIndex) :
+            nIndex(nTempIndex), aItemSet(std::move(_aItemSet)) {}
     };
 
 }

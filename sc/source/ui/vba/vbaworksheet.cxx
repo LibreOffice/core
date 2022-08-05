@@ -55,6 +55,7 @@
 #include <basic/sberrors.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <utility>
 #include <vbahelper/vbashapes.hxx>
 
 //zhangyun showdataform
@@ -147,8 +148,8 @@ openNewDoc(const OUString& aSheetName )
 }
 
 ScVbaWorksheet::ScVbaWorksheet(const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext,
-        const uno::Reference< sheet::XSpreadsheet >& xSheet,
-        const uno::Reference< frame::XModel >& xModel ) : WorksheetImpl_BASE( xParent, xContext ), mxSheet( xSheet ), mxModel(xModel), mbVeryHidden( false )
+        uno::Reference< sheet::XSpreadsheet > xSheet,
+        uno::Reference< frame::XModel > xModel ) : WorksheetImpl_BASE( xParent, xContext ), mxSheet(std::move( xSheet )), mxModel(std::move(xModel)), mbVeryHidden( false )
 {
 }
 

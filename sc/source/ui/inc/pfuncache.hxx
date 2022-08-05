@@ -93,7 +93,7 @@ class ScPrintFuncCache
 
 public:
             ScPrintFuncCache( ScDocShell* pD, const ScMarkData& rMark,
-                                const ScPrintSelectionStatus& rStatus );
+                                ScPrintSelectionStatus aStatus );
             ~ScPrintFuncCache();
 
     bool    IsSameSelection( const ScPrintSelectionStatus& rStatus ) const;

@@ -44,6 +44,7 @@
 #include <chgtrack.hxx>
 #include <refundo.hxx>
 #include <markdata.hxx>
+#include <utility>
 
 // Show or hide outline groups
 
@@ -897,9 +898,9 @@ bool ScUndoQuery::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 //      Show or hide AutoFilter buttons (doesn't include filter settings)
 
 ScUndoAutoFilter::ScUndoAutoFilter( ScDocShell* pNewDocShell, const ScRange& rRange,
-                                    const OUString& rName, bool bSet ) :
+                                    OUString aName, bool bSet ) :
     ScDBFuncUndo( pNewDocShell, rRange ),
-    aDBName( rName ),
+    aDBName(std::move( aName )),
     bFilterSet( bSet )
 {
 }
@@ -1685,11 +1686,11 @@ void ScUndoChartData::Init()
     rDoc.GetOldChartParameters( aChartName, *aOldRangeListRef, bOldColHeaders, bOldRowHeaders );
 }
 
-ScUndoChartData::ScUndoChartData( ScDocShell* pNewDocShell, const OUString& rName,
+ScUndoChartData::ScUndoChartData( ScDocShell* pNewDocShell, OUString aName,
                                     const ScRange& rNew, bool bColHdr, bool bRowHdr,
                                     bool bAdd ) :
     ScSimpleUndo( pNewDocShell ),
-    aChartName( rName ),
+    aChartName(std::move( aName )),
     bOldColHeaders(false),
     bOldRowHeaders(false),
     bNewColHeaders( bColHdr ),
@@ -1702,14 +1703,14 @@ ScUndoChartData::ScUndoChartData( ScDocShell* pNewDocShell, const OUString& rNam
     Init();
 }
 
-ScUndoChartData::ScUndoChartData( ScDocShell* pNewDocShell, const OUString& rName,
-                                    const ScRangeListRef& rNew, bool bColHdr, bool bRowHdr,
+ScUndoChartData::ScUndoChartData( ScDocShell* pNewDocShell, OUString aName,
+                                    ScRangeListRef xNew, bool bColHdr, bool bRowHdr,
                                     bool bAdd ) :
     ScSimpleUndo( pNewDocShell ),
-    aChartName( rName ),
+    aChartName(std::move( aName )),
     bOldColHeaders(false),
     bOldRowHeaders(false),
-    aNewRangeListRef( rNew ),
+    aNewRangeListRef(std::move( xNew )),
     bNewColHeaders( bColHdr ),
     bNewRowHeaders( bRowHdr ),
     bAddRange( bAdd )

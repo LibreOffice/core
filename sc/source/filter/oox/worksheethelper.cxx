@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <utility>
 #include <worksheethelper.hxx>
 
 #include <algorithm>
@@ -209,7 +210,7 @@ class WorksheetGlobals : public WorkbookHelper, public IWorksheetProgress
 public:
     explicit            WorksheetGlobals(
                             const WorkbookHelper& rHelper,
-                            const ISegmentProgressBarRef& rxProgressBar,
+                            ISegmentProgressBarRef xProgressBar,
                             WorksheetType eSheetType,
                             SCTAB nSheet );
 
@@ -403,7 +404,7 @@ private:
 
 constexpr OUStringLiteral gaSheetCellRanges( u"com.sun.star.sheet.SheetCellRanges" ); /// Service name for a SheetCellRanges object.
 
-WorksheetGlobals::WorksheetGlobals( const WorkbookHelper& rHelper, const ISegmentProgressBarRef& rxProgressBar, WorksheetType eSheetType, SCTAB nSheet ) :
+WorksheetGlobals::WorksheetGlobals( const WorkbookHelper& rHelper, ISegmentProgressBarRef xProgressBar, WorksheetType eSheetType, SCTAB nSheet ) :
     WorkbookHelper( rHelper ),
     mrMaxApiPos( rHelper.getAddressConverter().getMaxApiAddress() ),
     maUsedArea( SCCOL_MAX, SCROW_MAX, nSheet, -1, -1, nSheet ), // Set start address to largest possible value, and end address to smallest
@@ -415,7 +416,7 @@ WorksheetGlobals::WorksheetGlobals( const WorkbookHelper& rHelper, const ISegmen
     maSheetSett( *this ),
     maPageSett( *this ),
     maSheetViewSett( *this ),
-    mxProgressBar( rxProgressBar ),
+    mxProgressBar(std::move( xProgressBar )),
     mbFastRowProgress( false ),
     meSheetType( eSheetType ),
     mxSheet(getSheetFromDoc( nSheet )),

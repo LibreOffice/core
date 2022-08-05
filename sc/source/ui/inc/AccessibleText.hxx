@@ -178,7 +178,7 @@ class ScAccessiblePreviewHeaderCellTextData : public ScAccessibleCellBaseTextDat
 {
 public:
                         ScAccessiblePreviewHeaderCellTextData(ScPreviewShell* pViewShell,
-                            const OUString& rText, const ScAddress& rP, bool bColHeader, bool bRowHeader);
+                            OUString aText, const ScAddress& rP, bool bColHeader, bool bRowHeader);
     virtual             ~ScAccessiblePreviewHeaderCellTextData() override;
 
     virtual ScAccessibleTextData* Clone() const override;
@@ -231,7 +231,7 @@ class ScAccessibleNoteTextData : public ScAccessibleTextData
 {
 public:
                         ScAccessibleNoteTextData(ScPreviewShell* pViewShell,
-                            const OUString& sText, const ScAddress& aCellPos, bool bMarkNote);
+                            OUString sText, const ScAddress& aCellPos, bool bMarkNote);
     virtual             ~ScAccessibleNoteTextData() override;
 
     virtual ScAccessibleTextData* Clone() const override;
@@ -272,7 +272,7 @@ public:
     explicit                    ScAccessibleCsvTextData(
                                     OutputDevice* pWindow,
                                     EditEngine* pEditEngine,
-                                    const OUString& rCellText,
+                                    OUString aCellText,
                                     const Size& rCellSize );
     virtual                     ~ScAccessibleCsvTextData() override;
 
