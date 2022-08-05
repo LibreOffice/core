@@ -54,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a3a5f52a_a19e547d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-08-05T11:48:42Z",
+      "side": 1,
+      "message": "Here is a suggestion: You can find some possible instances with this search:\n git grep \"for (\" *.cxx|grep SAL_N_ELEMENTS\n\nFor example:\n xmloff/qa/unit/uxmloff.cxx",
+      "parentUuid": "a1e371b4_3dc60d3d",
+      "revId": "84387e2db14f1ef906fe7839066c330c3993022d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "22e11a62_3663cc84",
         "filename": "xmlsecurity/source/helper/xsecctl.cxx",
         "patchSetId": 3
