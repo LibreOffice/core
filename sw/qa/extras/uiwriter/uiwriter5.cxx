@@ -1884,8 +1884,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletionWithExport)
 
     // Save it and load it back.
     reload("writer8", "tdf60382_tracked_table_deletion.odt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    pDoc = pTextDoc->GetDocShell()->GetWrtShell()->GetDoc();
+    pDoc = getSwDoc();
 
     // accept the deletion of the content of the first cell
     SwEditShell* const pEditShell(pDoc->GetEditShell());
@@ -1940,8 +1939,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletionWithDOCXExport)
     // Exporting change tracking of the row wasn't supported.
     // Also Manage Changes for the import.
     reload("Office Open XML Text", "tdf79069_tracked_table_deletion.docx");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    pDoc = pTextDoc->GetDocShell()->GetWrtShell()->GetDoc();
+    pDoc = getSwDoc();
 
     // accept the deletion of the content of the first cell
     SwEditShell* const pEditShell(pDoc->GetEditShell());
@@ -2160,8 +2158,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletionWithReject)
 
     // Save it and load it back.
     reload("writer8", "tdf60382_tracked_table_deletion.odt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    pDoc = pTextDoc->GetDocShell()->GetWrtShell()->GetDoc();
+    pDoc = getSwDoc();
 
     // reject the deletion of the content of the first cell
     // HasTextChangesOnly property of the table row will be true
