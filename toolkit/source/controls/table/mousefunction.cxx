@@ -17,10 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include <mousefunction.hxx>
-#include <table/tablecontrolinterface.hxx>
-#include <table/tablesort.hxx>
+#include <controls/table/mousefunction.hxx>
+#include <controls/table/tablecontrolinterface.hxx>
+#include <controls/table/tablesort.hxx>
 
 #include <tools/diagnose_ex.h>
 #include <vcl/ptrstyle.hxx>

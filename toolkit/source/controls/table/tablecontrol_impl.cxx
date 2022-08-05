@@ -18,9 +18,9 @@
  */
 
 
-#include <table/tablecontrol.hxx>
-#include <table/defaultinputhandler.hxx>
-#include <table/tablemodel.hxx>
+#include <controls/table/tablecontrol.hxx>
+#include <controls/table/defaultinputhandler.hxx>
+#include <controls/table/tablemodel.hxx>
 
 #include "tabledatawindow.hxx"
 #include "tablecontrol_impl.hxx"

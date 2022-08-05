@@ -89,6 +89,7 @@
 #include <toolkit/helper/convert.hxx>
 #include <controls/filectrl.hxx>
 #include <controls/svmedit.hxx>
+#include <controls/table/tablecontrol.hxx>
 #include <controls/treecontrolpeer.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/calendar.hxx>
@@ -1834,6 +1835,11 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( rtl::Reference<VCLXWindow>* ppNewCom
                     rtl::Reference<SVTXDateField> newComp = new SVTXDateField;
                     *ppNewComp = newComp;
                     newComp->SetFormatter( static_cast<FormatterBase*>(static_cast<DateField*>(pNewWindow.get())) );
+                }
+                else if (aServiceName == "grid")
+                {
+                    pNewWindow = VclPtr<::svt::table::TableControl>::Create(pParent, nWinBits);
+                    *ppNewComp = new SVTXGridControl;
                 }
             break;
             default:

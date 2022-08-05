@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <table/tablecontrol.hxx>
+#include <controls/table/tablecontrol.hxx>
 
 #include "tablecontrol_impl.hxx"
 #include "tabledatawindow.hxx"
