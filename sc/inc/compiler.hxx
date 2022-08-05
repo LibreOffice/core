@@ -257,6 +257,7 @@ public:
 
 private:
 
+    static osl::Mutex           maMutex;
     static const CharClass      *pCharClassEnglish;     // character classification for en_US locale
     static const CharClass      *pCharClassLocalized;   // character classification for UI locale
     static const Convention     *pConventions[ formula::FormulaGrammar::CONV_LAST ];
@@ -377,8 +378,9 @@ private:
 
     bool HasPossibleNamedRangeConflict(SCTAB nTab) const;
 
-    static const CharClass* GetCharClassEnglish();
     static const CharClass* GetCharClassLocalized();
+public:
+    static const CharClass* GetCharClassEnglish();
 
 public:
     ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos,

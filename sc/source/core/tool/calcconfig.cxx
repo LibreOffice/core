@@ -187,7 +187,11 @@ bool ScCalcConfig::operator!= (const ScCalcConfig& r) const
 OUString ScOpCodeSetToSymbolicString(const ScCalcConfig::OpCodeSet& rOpCodes)
 {
     OUStringBuffer result(256);
+    // If GetOpCodeMap() initializes the map at base class
+    // formula::FormulaCompiler before any ScCompiler did, all AddIn mapping
+    // would be missing also in future. So if it didn't exist destroy it again.
     formula::FormulaCompiler aCompiler;
+    const bool bTemporary = !aCompiler.HasOpCodeMap(css::sheet::FormulaLanguage::ENGLISH);
     formula::FormulaCompiler::OpCodeMapPtr pOpCodeMap(aCompiler.GetOpCodeMap(css::sheet::FormulaLanguage::ENGLISH));
 
     for (auto i = rOpCodes->begin(); i != rOpCodes->end(); ++i)
@@ -197,13 +201,18 @@ OUString ScOpCodeSetToSymbolicString(const ScCalcConfig::OpCodeSet& rOpCodes)
         result.append(pOpCodeMap->getSymbol(*i));
     }
 
+    if (bTemporary)
+        aCompiler.DestroyOpCodeMap(css::sheet::FormulaLanguage::ENGLISH);
+
     return result.makeStringAndClear();
 }
 
 ScCalcConfig::OpCodeSet ScStringToOpCodeSet(std::u16string_view rOpCodes)
 {
     ScCalcConfig::OpCodeSet result = std::make_shared<o3tl::sorted_vector< OpCode >>();
+    // Same as above.
     formula::FormulaCompiler aCompiler;
+    const bool bTemporary = !aCompiler.HasOpCodeMap(css::sheet::FormulaLanguage::ENGLISH);
     formula::FormulaCompiler::OpCodeMapPtr pOpCodeMap(aCompiler.GetOpCodeMap(css::sheet::FormulaLanguage::ENGLISH));
 
     const formula::OpCodeHashMap& rHashMap(pOpCodeMap->getHashMap());
@@ -234,6 +243,10 @@ ScCalcConfig::OpCodeSet ScStringToOpCodeSet(std::u16string_view rOpCodes)
     // HACK: Both unary and binary minus have the same string but different opcodes.
     if( result->find( ocSub ) != result->end())
         result->insert( ocNegSub );
+
+    if (bTemporary)
+        aCompiler.DestroyOpCodeMap(css::sheet::FormulaLanguage::ENGLISH);
+
     return result;
 }
 

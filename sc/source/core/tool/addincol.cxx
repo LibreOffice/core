@@ -59,6 +59,7 @@
 #include <funcdesc.hxx>
 #include <svl/sharedstring.hxx>
 #include <formulaopt.hxx>
+#include <compiler.hxx>
 #include <memory>
 
 using namespace com::sun::star;
@@ -136,6 +137,19 @@ void ScUnoAddInFuncData::SetCompNames( ::std::vector< ScUnoAddInFuncData::Locali
     maCompNames = std::move(rNew);
 
     bCompInitialized = true;
+}
+
+void ScUnoAddInFuncData::SetEnglishName( const OUString& rEnglishName )
+{
+    if (!rEnglishName.isEmpty())
+        aUpperEnglish = ScCompiler::GetCharClassEnglish()->uppercase(rEnglishName);
+    else
+    {
+        // A dumb fallback to not have an empty name, mainly just for the
+        // assignment to ScFuncDesc::mxFuncName for the Function Wizard and
+        // formula input tooltips.
+        aUpperEnglish = aUpperLocal;
+    }
 }
 
 bool ScUnoAddInFuncData::GetExcelName( const LanguageTag& rDestLang, OUString& rRetExcelName, bool bFallbackToAny ) const
@@ -544,9 +558,10 @@ void ScUnoAddInCollection::ReadConfiguration()
                 else
                 {
                     pEnglishHashMap->emplace(
-                            aEnglishName.toAsciiUpperCase(),
+                            ScCompiler::GetCharClassEnglish()->uppercase(aEnglishName),
                             pData );
                 }
+                pData->SetEnglishName(aEnglishName);    // takes care of handling empty
             }
         }
     }
@@ -720,12 +735,11 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
     if ( !(xAddIn.is() && xName.is()) )
         return;
 
-    // fdo50118 when GetUseEnglishFunctionName() returns true, set the
-    // locale to en-US to get English function names
-    if ( SC_MOD()->GetFormulaOptions().GetUseEnglishFuncName() )
-        xAddIn->setLocale( lang::Locale( "en", "US", ""));
-    else
-        xAddIn->setLocale( Application::GetSettings().GetUILanguageTag().getLocale());
+    // Even if GetUseEnglishFunctionName() would return true, do not set the
+    // locale to en-US to get English function names as that also would mix in
+    // English descriptions and parameter names. English function names are now
+    // handled below.
+    xAddIn->setLocale( Application::GetSettings().GetUILanguageTag().getLocale());
 
     OUString aServiceName( xName->getServiceName() );
     ScUnoAddInHelpIdGenerator aHelpIdGenerator( aServiceName );
@@ -919,8 +933,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                         xFunc, aObject,
                         nVisibleCount, pVisibleArgs.get(), nCallerPos ) );
 
-                    const ScUnoAddInFuncData* pData =
-                        ppFuncData[nFuncPos+nOld].get();
+                    ScUnoAddInFuncData* pData = ppFuncData[nFuncPos+nOld].get();
                     pExactHashMap->emplace(
                                 pData->GetOriginalName(),
                                 pData );
@@ -937,18 +950,21 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                     else
                     {
                         pEnglishHashMap->emplace(
-                                aEnglishName.toAsciiUpperCase(),
+                                ScCompiler::GetCharClassEnglish()->uppercase(aEnglishName),
                                 pData );
                     }
+                    pData->SetEnglishName(aEnglishName);    // takes care of handling empty
                 }
             }
         }
     }
 }
 
-static void lcl_UpdateFunctionList( const ScFunctionList& rFunctionList, const ScUnoAddInFuncData& rFuncData )
+static void lcl_UpdateFunctionList( const ScFunctionList& rFunctionList, const ScUnoAddInFuncData& rFuncData,
+        bool bEnglishFunctionNames )
 {
-    const OUString& aCompare = rFuncData.GetUpperLocal();    // as used in FillFunctionDescFromData
+    // as used in FillFunctionDescFromData
+    const OUString& aCompare = (bEnglishFunctionNames ? rFuncData.GetUpperEnglish() : rFuncData.GetUpperLocal());
 
     sal_uLong nCount = rFunctionList.GetCount();
     for (sal_uLong nPos=0; nPos<nCount; nPos++)
@@ -956,7 +972,8 @@ static void lcl_UpdateFunctionList( const ScFunctionList& rFunctionList, const S
         const ScFuncDesc* pDesc = rFunctionList.GetFunction( nPos );
         if ( pDesc && pDesc->mxFuncName && *pDesc->mxFuncName == aCompare )
         {
-            ScUnoAddInCollection::FillFunctionDescFromData( rFuncData, *const_cast<ScFuncDesc*>(pDesc) );
+            ScUnoAddInCollection::FillFunctionDescFromData( rFuncData, *const_cast<ScFuncDesc*>(pDesc),
+                    bEnglishFunctionNames);
             break;
         }
     }
@@ -977,16 +994,10 @@ static const ScAddInArgDesc* lcl_FindArgDesc( const ScUnoAddInFuncData& rFuncDat
 void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface>& xInterface,
                                             std::u16string_view rServiceName )
 {
+    const bool bEnglishFunctionNames = SC_MOD()->GetFormulaOptions().GetUseEnglishFuncName();
     uno::Reference<lang::XLocalizable> xLoc( xInterface, uno::UNO_QUERY );
     if ( xLoc.is() )        // optional in new add-ins
-    {
-        // fdo50118 when GetUseEnglishFunctionName() returns true, set the
-        // locale to en-US to get English function names
-        if ( SC_MOD()->GetFormulaOptions().GetUseEnglishFuncName() )
-            xLoc->setLocale( lang::Locale( "en", "US", ""));
-        else
-            xLoc->setLocale( Application::GetSettings().GetUILanguageTag().getLocale());
-    }
+        xLoc->setLocale( Application::GetSettings().GetUILanguageTag().getLocale());
 
     // if function list was already initialized, it must be updated
 
@@ -1092,7 +1103,7 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
                     pOldData->SetCallerPos( nCallerPos );
 
                     if ( pFunctionList )
-                        lcl_UpdateFunctionList( *pFunctionList, *pOldData );
+                        lcl_UpdateFunctionList( *pFunctionList, *pOldData, bEnglishFunctionNames );
                 }
             }
         }
@@ -1193,7 +1204,7 @@ tools::Long ScUnoAddInCollection::GetFuncCount()
     return nFuncCount;
 }
 
-bool ScUnoAddInCollection::FillFunctionDesc( tools::Long nFunc, ScFuncDesc& rDesc )
+bool ScUnoAddInCollection::FillFunctionDesc( tools::Long nFunc, ScFuncDesc& rDesc, bool bEnglishFunctionNames )
 {
     if (!bInitialized)
         Initialize();
@@ -1203,10 +1214,11 @@ bool ScUnoAddInCollection::FillFunctionDesc( tools::Long nFunc, ScFuncDesc& rDes
 
     const ScUnoAddInFuncData& rFuncData = *ppFuncData[nFunc];
 
-    return FillFunctionDescFromData( rFuncData, rDesc );
+    return FillFunctionDescFromData( rFuncData, rDesc, bEnglishFunctionNames );
 }
 
-bool ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncData& rFuncData, ScFuncDesc& rDesc )
+bool ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncData& rFuncData, ScFuncDesc& rDesc,
+        bool bEnglishFunctionNames )
 {
     rDesc.Clear();
 
@@ -1221,7 +1233,7 @@ bool ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncData& r
 
     // nFIndex is set from outside
 
-    rDesc.mxFuncName = rFuncData.GetUpperLocal();     //TODO: upper?
+    rDesc.mxFuncName = (bEnglishFunctionNames ? rFuncData.GetUpperEnglish() : rFuncData.GetUpperLocal());
     rDesc.nCategory = rFuncData.GetCategory();
     rDesc.sHelpId = rFuncData.GetHelpId();
 

@@ -241,7 +241,7 @@ public:
 class ScFunctionList
 {
 public:
-    ScFunctionList();
+    explicit ScFunctionList( bool bEnglishFunctionNames );
     ~ScFunctionList();
 
     sal_uInt32 GetCount() const

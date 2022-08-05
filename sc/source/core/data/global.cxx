@@ -74,6 +74,7 @@
 #include <editutil.hxx>
 #include <docsh.hxx>
 #include <sharedstringpoolpurge.hxx>
+#include <formulaopt.hxx>
 
 tools::SvRef<ScDocShell>  ScGlobal::xDrawClipDocShellRef;
 std::unique_ptr<SvxSearchItem> ScGlobal::xSearchItem;
@@ -621,7 +622,7 @@ ScFunctionList* ScGlobal::GetStarCalcFunctionList()
 {
     assert(!bThreadedGroupCalcInProgress);
     if ( !xStarCalcFunctionList )
-        xStarCalcFunctionList.reset(new ScFunctionList);
+        xStarCalcFunctionList.reset( new ScFunctionList( SC_MOD()->GetFormulaOptions().GetUseEnglishFuncName()));
 
     return xStarCalcFunctionList.get();
 }

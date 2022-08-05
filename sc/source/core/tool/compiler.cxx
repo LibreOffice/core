@@ -77,6 +77,7 @@ using namespace formula;
 using namespace ::com::sun::star;
 using ::std::vector;
 
+osl::Mutex                          ScCompiler::maMutex;
 const CharClass*                    ScCompiler::pCharClassEnglish = nullptr;
 const CharClass*                    ScCompiler::pCharClassLocalized = nullptr;
 const ScCompiler::Convention*       ScCompiler::pConventions[ ]   = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
@@ -225,9 +226,12 @@ const CharClass* ScCompiler::GetCharClassEnglish()
 {
     if (!pCharClassEnglish)
     {
-        css::lang::Locale aLocale( "en", "US", "");
-        pCharClassEnglish = new CharClass(
-                ::comphelper::getProcessComponentContext(), LanguageTag( aLocale));
+        osl::MutexGuard aGuard(maMutex);
+        if (!pCharClassEnglish)
+        {
+            pCharClassEnglish = new CharClass( ::comphelper::getProcessComponentContext(),
+                    LanguageTag( LANGUAGE_ENGLISH_US));
+        }
     }
     return pCharClassEnglish;
 }
