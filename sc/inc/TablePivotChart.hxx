@@ -39,7 +39,7 @@ private:
     OUString m_aChartName;
 
 public:
-    TablePivotChart(ScDocShell* pDocShell, SCTAB nTab, OUString const & rName);
+    TablePivotChart(ScDocShell* pDocShell, SCTAB nTab, OUString aName);
     virtual ~TablePivotChart() override;
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;

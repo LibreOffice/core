@@ -590,7 +590,7 @@ class ScOrcusFactory : public orcus::spreadsheet::iface::import_factory
         CellStoreToken( const ScAddress& rPos, Type eType );
         CellStoreToken( const ScAddress& rPos, double fValue );
         CellStoreToken( const ScAddress& rPos, uint32_t nIndex );
-        CellStoreToken( const ScAddress& rPos, const OUString& rFormula, formula::FormulaGrammar::Grammar eGrammar );
+        CellStoreToken( const ScAddress& rPos, OUString aFormula, formula::FormulaGrammar::Grammar eGrammar );
     };
 
     typedef std::unordered_map<OUString, size_t> StringHashType;

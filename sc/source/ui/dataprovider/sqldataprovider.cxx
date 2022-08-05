@@ -18,6 +18,7 @@
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <dbdocutl.hxx>
 #include <datamapper.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/diagnose_ex.h>

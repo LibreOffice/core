@@ -33,6 +33,7 @@
 #include <com/sun/star/sheet/XSolver.hpp>
 #include <com/sun/star/sheet/XSolverDescription.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <utility>
 
 using namespace com::sun::star;
 
@@ -57,11 +58,11 @@ struct ScSolverOptionsEntry
 ScSolverOptionsDialog::ScSolverOptionsDialog(weld::Window* pParent,
                         const uno::Sequence<OUString>& rImplNames,
                         const uno::Sequence<OUString>& rDescriptions,
-                        const OUString& rEngine,
+                        OUString aEngine,
                         const uno::Sequence<beans::PropertyValue>& rProperties )
     : GenericDialogController(pParent, "modules/scalc/ui/solveroptionsdialog.ui", "SolverOptionsDialog")
     , maImplNames(rImplNames)
-    , maEngine(rEngine)
+    , maEngine(std::move(aEngine))
     , maProperties(rProperties)
     , m_xLbEngine(m_xBuilder->weld_combo_box("engine"))
     , m_xLbSettings(m_xBuilder->weld_tree_view("settings"))

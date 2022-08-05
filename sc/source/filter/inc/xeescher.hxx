@@ -148,7 +148,7 @@ public:
 class XclExpImgData : public XclExpRecordBase
 {
 public:
-    explicit            XclExpImgData( const Graphic& rGraphic, sal_uInt16 nRecId );
+    explicit            XclExpImgData( Graphic aGraphic, sal_uInt16 nRecId );
 
     /** Writes the BITMAP record. */
     virtual void        Save( XclExpStream& rStrm ) override;
@@ -231,7 +231,7 @@ public:
                             XclExpObjectManager& rObjMgr,
                             css::uno::Reference< css::drawing::XShape > const & xShape,
                             const tools::Rectangle* pChildAnchor,
-                            const OUString& rClassName,
+                            OUString aClassName,
                             sal_uInt32 nStrmStart, sal_uInt32 nStrmSize );
 
 private:

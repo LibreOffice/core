@@ -18,6 +18,7 @@
  */
 
 #include <scitems.hxx>
+#include <utility>
 #include <vcl/virdev.hxx>
 #include <editeng/boxitem.hxx>
 #include <sfx2/app.hxx>
@@ -813,9 +814,9 @@ bool ScUndoDeleteMulti::CanRepeat(SfxRepeatTarget& rTarget) const
 }
 
 ScUndoCut::ScUndoCut(ScDocShell* pNewDocShell, const ScRange& aRange, const ScAddress& aOldEnd,
-                     const ScMarkData& rMark, ScDocumentUniquePtr pNewUndoDoc)
+                     ScMarkData aMark, ScDocumentUniquePtr pNewUndoDoc)
     : ScBlockUndo(pNewDocShell, ScRange(aRange.aStart, aOldEnd), SC_UNDO_AUTOHEIGHT)
-    , aMarkData(rMark)
+    , aMarkData(std::move(aMark))
     , pUndoDoc(std::move(pNewUndoDoc))
     , aExtendedRange(aRange)
 {
@@ -912,13 +913,13 @@ bool ScUndoCut::CanRepeat(SfxRepeatTarget& rTarget) const
 }
 
 ScUndoPaste::ScUndoPaste( ScDocShell* pNewDocShell, const ScRangeList& rRanges,
-                const ScMarkData& rMark,
+                ScMarkData aMark,
                 ScDocumentUniquePtr pNewUndoDoc, ScDocumentUniquePtr pNewRedoDoc,
                 InsertDeleteFlags nNewFlags,
                 std::unique_ptr<ScRefUndoData> pRefData,
                 bool bRedoIsFilled, const ScUndoPasteOptions* pOptions ) :
     ScMultiBlockUndo( pNewDocShell, rRanges ),
-    aMarkData( rMark ),
+    aMarkData(std::move( aMark )),
     pUndoDoc( std::move(pNewUndoDoc) ),
     pRedoDoc( std::move(pNewRedoDoc) ),
     nFlags( nNewFlags ),
@@ -1670,14 +1671,14 @@ bool ScUndoConditionalFormatList::CanRepeat(SfxRepeatTarget& ) const
 }
 
 ScUndoUseScenario::ScUndoUseScenario( ScDocShell* pNewDocShell,
-                        const ScMarkData& rMark,
+                        ScMarkData aMark,
 /*C*/                   const ScArea& rDestArea,
                               ScDocumentUniquePtr pNewUndoDoc,
-                        const OUString& rNewName ) :
+                        OUString aNewName ) :
     ScSimpleUndo( pNewDocShell ),
     pUndoDoc( std::move(pNewUndoDoc) ),
-    aMarkData( rMark ),
-    aName( rNewName )
+    aMarkData(std::move( aMark )),
+    aName(std::move( aNewName ))
 {
     aRange.aStart.SetCol(rDestArea.nColStart);
     aRange.aStart.SetRow(rDestArea.nRowStart);
@@ -1789,14 +1790,14 @@ bool ScUndoUseScenario::CanRepeat(SfxRepeatTarget& rTarget) const
 }
 
 ScUndoSelectionStyle::ScUndoSelectionStyle( ScDocShell* pNewDocShell,
-                                      const ScMarkData& rMark,
+                                      ScMarkData aMark,
                                       const ScRange& rRange,
-                                      const OUString& rName,
+                                      OUString aName,
                                             ScDocumentUniquePtr pNewUndoDoc ) :
     ScSimpleUndo( pNewDocShell ),
-    aMarkData( rMark ),
+    aMarkData(std::move( aMark )),
     pUndoDoc( std::move(pNewUndoDoc) ),
-    aStyleName( rName ),
+    aStyleName(std::move( aName )),
     aRange( rRange )
 {
     aMarkData.MarkToMulti();
@@ -1893,10 +1894,10 @@ bool ScUndoSelectionStyle::CanRepeat(SfxRepeatTarget& rTarget) const
 }
 
 ScUndoEnterMatrix::ScUndoEnterMatrix( ScDocShell* pNewDocShell, const ScRange& rArea,
-                                      ScDocumentUniquePtr pNewUndoDoc, const OUString& rForm ) :
+                                      ScDocumentUniquePtr pNewUndoDoc, OUString aForm ) :
     ScBlockUndo( pNewDocShell, rArea, SC_UNDO_SIMPLE ),
     pUndoDoc( std::move(pNewUndoDoc) ),
-    aFormula( rForm )
+    aFormula(std::move( aForm ))
 {
     SetChangeTrack();
 }

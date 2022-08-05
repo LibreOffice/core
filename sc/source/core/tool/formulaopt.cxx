@@ -16,6 +16,7 @@
 #include <global.hxx>
 #include <formulagroup.hxx>
 #include <sc.hrc>
+#include <utility>
 
 using namespace utl;
 using namespace com::sun::star::uno;
@@ -123,9 +124,9 @@ bool ScFormulaOptions::operator!=( const ScFormulaOptions& rOpt ) const
     return !(operator==(rOpt));
 }
 
-ScTpFormulaItem::ScTpFormulaItem( const ScFormulaOptions& rOpt ) :
+ScTpFormulaItem::ScTpFormulaItem( ScFormulaOptions aOpt ) :
     SfxPoolItem ( SID_SCFORMULAOPTIONS ),
-    theOptions  ( rOpt )
+    theOptions  (std::move( aOpt ))
 {
 }
 

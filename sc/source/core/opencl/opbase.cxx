@@ -10,6 +10,7 @@
 #include <opencl/openclwrapper.hxx>
 #include <formula/vectortoken.hxx>
 #include <sal/log.hxx>
+#include <utility>
 
 #include "opbase.hxx"
 
@@ -18,11 +19,11 @@ using namespace formula;
 namespace sc::opencl {
 
 UnhandledToken::UnhandledToken(
-    const char* m, const std::string& fn, int ln ) :
-    mMessage(m), mFile(fn), mLineNumber(ln) {}
+    const char* m, std::string  fn, int ln ) :
+    mMessage(m), mFile(std::move(fn)), mLineNumber(ln) {}
 
-OpenCLError::OpenCLError( const std::string& function, cl_int error, const std::string& file, int line ) :
-    mFunction(function), mError(error), mFile(file), mLineNumber(line)
+OpenCLError::OpenCLError( std::string  function, cl_int error, std::string  file, int line ) :
+    mFunction(std::move(function)), mError(error), mFile(std::move(file)), mLineNumber(line)
 {
     // Not sure if this SAL_INFO() is useful; the place in
     // CLInterpreterContext::launchKernel() where OpenCLError is
@@ -31,15 +32,15 @@ OpenCLError::OpenCLError( const std::string& function, cl_int error, const std::
     // SAL_INFO("sc.opencl", "OpenCL error: " << openclwrapper::errorString(mError));
 }
 
-Unhandled::Unhandled( const std::string& fn, int ln ) :
-    mFile(fn), mLineNumber(ln) {}
+Unhandled::Unhandled( std::string  fn, int ln ) :
+    mFile(std::move(fn)), mLineNumber(ln) {}
 
-InvalidParameterCount::InvalidParameterCount( int parameterCount, const std::string& file, int ln ) :
-    mParameterCount(parameterCount), mFile(file), mLineNumber(ln) {}
+InvalidParameterCount::InvalidParameterCount( int parameterCount, std::string file, int ln ) :
+    mParameterCount(parameterCount), mFile(std::move(file)), mLineNumber(ln) {}
 
-DynamicKernelArgument::DynamicKernelArgument( const ScCalcConfig& config, const std::string& s,
-    const FormulaTreeNodeRef& ft ) :
-    mCalcConfig(config), mSymName(s), mFormulaTree(ft) { }
+DynamicKernelArgument::DynamicKernelArgument( const ScCalcConfig& config, std::string s,
+    FormulaTreeNodeRef  ft ) :
+    mCalcConfig(config), mSymName(std::move(s)), mFormulaTree(std::move(ft)) { }
 
 std::string DynamicKernelArgument::GenDoubleSlidingWindowDeclRef( bool ) const
 {

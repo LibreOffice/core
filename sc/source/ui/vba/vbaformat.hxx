@@ -61,7 +61,7 @@ protected:
     virtual ScCellRangesBase* getCellRangesBase();
 public:
     /// @throws css::script::BasicErrorException
-    ScVbaFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::beans::XPropertySet >& _xPropertySet, const css::uno::Reference< css::frame::XModel >& xModel, bool bCheckAmbiguoity );
+    ScVbaFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, css::uno::Reference< css::beans::XPropertySet >  _xPropertySet, css::uno::Reference< css::frame::XModel > xModel, bool bCheckAmbiguoity );
     virtual css::uno::Reference< ov::XHelperInterface > thisHelperIface() = 0;
      /// @throws css::uno::RuntimeException
      void SAL_CALL setAddIndent( const css::uno::Any& BAddIndent) { BAddIndent >>= mbAddIndent; }

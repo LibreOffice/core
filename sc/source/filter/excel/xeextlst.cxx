@@ -11,6 +11,7 @@
 
 #include <string_view>
 
+#include <utility>
 #include <xeextlst.hxx>
 #include <xeroot.hxx>
 #include <xestyle.hxx>
@@ -433,9 +434,9 @@ void XclExpExtIconSet::SaveXml(XclExpXmlStream& rStrm)
     rWorksheet->endElementNS(XML_x14, XML_iconSet);
 }
 
-XclExpExtCfRule::XclExpExtCfRule( const XclExpRoot& rRoot, const ScFormatEntry& rFormat, const ScAddress& rPos, const OString& rId, sal_Int32 nPriority ):
+XclExpExtCfRule::XclExpExtCfRule( const XclExpRoot& rRoot, const ScFormatEntry& rFormat, const ScAddress& rPos, OString aId, sal_Int32 nPriority ):
     XclExpRoot(rRoot),
-    maId(rId),
+    maId(std::move(aId)),
     pType(nullptr),
     mnPriority(nPriority),
     mOperator(nullptr)
@@ -488,9 +489,9 @@ void XclExpExtCfRule::SaveXml( XclExpXmlStream& rStrm )
 }
 
 XclExpExtConditionalFormatting::XclExpExtConditionalFormatting( const XclExpRoot& rRoot,
-        std::vector<XclExpExtCondFormatData>& rData, const ScRangeList& rRange):
+        std::vector<XclExpExtCondFormatData>& rData, ScRangeList aRange):
     XclExpRoot(rRoot),
-    maRange(rRange)
+    maRange(std::move(aRange))
 {
     ScAddress aAddr = maRange.front().aStart;
     for (const auto& rItem : rData)

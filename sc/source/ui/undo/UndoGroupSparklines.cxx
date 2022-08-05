@@ -16,15 +16,15 @@
 #include <Sparkline.hxx>
 #include <SparklineGroup.hxx>
 #include <SparklineAttributes.hxx>
+#include <utility>
 
 namespace sc
 {
-UndoGroupSparklines::UndoGroupSparklines(
-    ScDocShell& rDocShell, ScRange const& rRange,
-    std::shared_ptr<sc::SparklineGroup> const& rpSparklineGroup)
+UndoGroupSparklines::UndoGroupSparklines(ScDocShell& rDocShell, ScRange const& rRange,
+                                         std::shared_ptr<sc::SparklineGroup> pSparklineGroup)
     : ScSimpleUndo(&rDocShell)
     , m_aRange(rRange)
-    , m_pSparklineGroup(rpSparklineGroup)
+    , m_pSparklineGroup(std::move(pSparklineGroup))
 {
 }
 

@@ -21,6 +21,7 @@
 
 #include <memory>
 #include <map>
+#include <utility>
 #include <vector>
 #include <rtl/ustring.hxx>
 #include "root.hxx"
@@ -130,10 +131,10 @@ private:
                                 // 0xFFFE -> tried to set, but failed
                                 // 0xFFFD -> should be in the same workbook, but not found
         bool          bSWB;
-                    Cont( const OUString& rFilePathAndName, const OUString& rTabName,
+                    Cont( OUString aFilePathAndName, OUString aTabName,
                         const bool bSameWB ) :
-                        aFile( rFilePathAndName ),
-                        aTab( rTabName )
+                        aFile(std::move( aFilePathAndName )),
+                        aTab(std::move( aTabName ))
                     {
                         nTabNum = 0xFFFF;   // -> table not created yet
                         bSWB = bSameWB;

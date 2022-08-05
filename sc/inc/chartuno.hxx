@@ -122,7 +122,7 @@ private:
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
 
 public:
-                            ScChartObj(ScDocShell* pDocSh, SCTAB nT, const OUString& rN);
+                            ScChartObj(ScDocShell* pDocSh, SCTAB nT, OUString aN);
     virtual                 ~ScChartObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;

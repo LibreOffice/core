@@ -759,8 +759,8 @@ namespace {
 class TableColumnNameSearch
 {
 public:
-    explicit TableColumnNameSearch( const OUString& rSearchName ) :
-        maSearchName( rSearchName )
+    explicit TableColumnNameSearch( OUString aSearchName ) :
+        maSearchName(std::move( aSearchName ))
     {
     }
 

@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <utility>
 #include <xmloff/xmlictxt.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <editeng/editdata.hxx>
@@ -36,9 +37,9 @@ struct ScXMLAnnotationStyleEntry
     OUString             maName;
     ESelection           maSelection;
 
-    ScXMLAnnotationStyleEntry( XmlStyleFamily nFam, const OUString& rNam, const ESelection& rSel ) :
+    ScXMLAnnotationStyleEntry( XmlStyleFamily nFam, OUString aNam, const ESelection& rSel ) :
         mnFamily( nFam ),
-        maName( rNam ),
+        maName(std::move( aNam )),
         maSelection( rSel )
     {
     }

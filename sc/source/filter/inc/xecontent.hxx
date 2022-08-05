@@ -262,7 +262,7 @@ private:
 class XclExpDataBar : public XclExpRecord, protected XclExpRoot
 {
 public:
-    explicit XclExpDataBar( const XclExpRoot& rRoot, const ScDataBarFormat& rFormat, sal_Int32 nPriority, const OString& rGUID);
+    explicit XclExpDataBar( const XclExpRoot& rRoot, const ScDataBarFormat& rFormat, sal_Int32 nPriority, OString aGUID);
 
     virtual void SaveXml( XclExpXmlStream& rStrm ) override;
 private:

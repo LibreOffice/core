@@ -24,6 +24,7 @@
 #include <sal/log.hxx>
 
 #include <memory>
+#include <utility>
 #include <vector>
 
 namespace svl {
@@ -151,8 +152,8 @@ private:
         {
             DefTokenId              eId;
             OUString                aText;
-                                    EXTCONT( const DefTokenId e, const OUString& r ) :
-                                        eId( e ), aText( r ){}
+                                    EXTCONT( const DefTokenId e, OUString a ) :
+                                        eId( e ), aText(std::move( a )){}
         };
         TokenPoolPool<std::unique_ptr<EXTCONT>, 32>
                                         ppP_Ext;

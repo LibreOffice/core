@@ -39,6 +39,7 @@
 #include <sfx2/objsh.hxx>
 #include <svl/numformat.hxx>
 #include <svl/intitem.hxx>
+#include <utility>
 #include <vcl/graphicfilter.hxx>
 #include <svtools/parhtml.hxx>
 #include <svtools/htmlkywd.hxx>
@@ -203,11 +204,11 @@ ScHTMLParser::~ScHTMLParser()
 }
 
 ScHTMLLayoutParser::ScHTMLLayoutParser(
-    EditEngine* pEditP, const OUString& rBaseURL, const Size& aPageSizeP,
+    EditEngine* pEditP, OUString _aBaseURL, const Size& aPageSizeP,
     ScDocument* pDocP ) :
         ScHTMLParser( pEditP, pDocP ),
         aPageSize( aPageSizeP ),
-        aBaseURL( rBaseURL ),
+        aBaseURL(std::move( _aBaseURL )),
         xLockedList( new ScRangeList ),
         pLocalColOffset( new ScHTMLColOffset ),
         nFirstTableCell(0),

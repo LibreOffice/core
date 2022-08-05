@@ -55,7 +55,7 @@ public:
                                                const ScAddress& rCurPos,
                                                const ScAddress& rStartPos,
                                                const ScAddress& rEndPos,
-                                               const OUString& rString,
+                                               OUString aString,
                                                const EditTextObject* pData );
                             ScInputStatusItem( const ScInputStatusItem& rItem );
                             virtual ~ScInputStatusItem() override;

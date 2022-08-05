@@ -11,6 +11,7 @@
 #include <global.hxx>
 
 #include <unotools/collatorwrapper.hxx>
+#include <utility>
 
 bool ScTypedStrData::LessHiddenRows::operator() (const ScTypedStrData& left, const ScTypedStrData& right) const
 {
@@ -110,8 +111,8 @@ ScTypedStrData::ScTypedStrData(
     mbIsDate( bDate ),
     mbIsHiddenByFilter(bIsHiddenByFilter) {}
 
-FindTypedStrData::FindTypedStrData(const ScTypedStrData& rVal, bool bCaseSens) :
-    maVal(rVal), mbCaseSens(bCaseSens) {}
+FindTypedStrData::FindTypedStrData(ScTypedStrData aVal, bool bCaseSens) :
+    maVal(std::move(aVal)), mbCaseSens(bCaseSens) {}
 
 bool FindTypedStrData::operator() (const ScTypedStrData& r) const
 {

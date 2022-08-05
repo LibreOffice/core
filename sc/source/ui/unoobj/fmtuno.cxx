@@ -22,6 +22,7 @@
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <svl/style.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/sheet/ConditionOperator2.hpp>
@@ -448,8 +449,8 @@ sal_Bool SAL_CALL ScTableConditionalFormat::hasByName( const OUString& aName )
 
 UNO3_GETIMPLEMENTATION_IMPL(ScTableConditionalFormat);
 
-ScTableConditionalEntry::ScTableConditionalEntry(const ScCondFormatEntryItem& aItem) :
-    aData( aItem )
+ScTableConditionalEntry::ScTableConditionalEntry(ScCondFormatEntryItem  aItem) :
+    aData(std::move( aItem ))
 {
     // #i113668# only store the settings, keep no reference to parent object
 }

@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <utility>
 #include <vector>
 #include <svl/hint.hxx>
 #include "rangelst.hxx"
@@ -28,9 +29,9 @@ struct ScUnoRefEntry
     sal_Int64   nObjectId;
     ScRangeList aRanges;
 
-    ScUnoRefEntry( sal_Int64 nId, const ScRangeList& rOldRanges ) :
+    ScUnoRefEntry( sal_Int64 nId, ScRangeList aOldRanges ) :
         nObjectId( nId ),
-        aRanges( rOldRanges )
+        aRanges(std::move( aOldRanges ))
     {
     }
 };
@@ -61,7 +62,7 @@ class ScUnoRefUndoHint final : public SfxHint
     ScUnoRefEntry   aEntry;
 
 public:
-                ScUnoRefUndoHint( const ScUnoRefEntry& rRefEntry );
+                ScUnoRefUndoHint( ScUnoRefEntry aRefEntry );
                 virtual ~ScUnoRefUndoHint() override;
 
     sal_Int64   GetObjectId() const         { return aEntry.nObjectId; }

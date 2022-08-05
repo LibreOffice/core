@@ -48,6 +48,7 @@
 #include <editeng/scriptspaceitem.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/itempool.hxx>
+#include <utility>
 #include <vcl/canvastools.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -228,11 +229,11 @@ static ScRange lcl_getClipRangeFromClipDoc(ScDocument* pClipDoc, SCTAB nClipTab)
     return ScRange(nClipStartX, nClipStartY, nClipTab, nClipEndX, nClipEndY, nClipTab);
 }
 
-ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const OUString& rName ) :
+ScDrawLayer::ScDrawLayer( ScDocument* pDocument, OUString _aName ) :
     FmFormModel(
         nullptr,
         pGlobalDrawPersist ? pGlobalDrawPersist : (pDocument ? pDocument->GetDocumentShell() : nullptr)),
-    aName( rName ),
+    aName(std::move( _aName )),
     pDoc( pDocument ),
     bRecording( false ),
     bAdjustEnabled( true ),

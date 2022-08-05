@@ -25,6 +25,7 @@
 #include <tools/stream.hxx>
 
 #include <limits>
+#include <utility>
 
 ScfProgressBar::ScfProgressSegment::ScfProgressSegment( std::size_t nSize ) :
     mnSize( nSize ),
@@ -36,8 +37,8 @@ ScfProgressBar::ScfProgressSegment::~ScfProgressSegment()
 {
 }
 
-ScfProgressBar::ScfProgressBar( SfxObjectShell* pDocShell, const OUString& rText ) :
-    maText( rText )
+ScfProgressBar::ScfProgressBar( SfxObjectShell* pDocShell, OUString aText ) :
+    maText(std::move( aText ))
 {
     Init( pDocShell );
 }

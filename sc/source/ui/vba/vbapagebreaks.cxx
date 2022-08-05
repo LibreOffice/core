@@ -25,6 +25,7 @@
 #include <com/sun/star/sheet/XSheetPageBreak.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
@@ -40,10 +41,10 @@ private:
     bool m_bColumn;
 
 public:
-    RangePageBreaks( const uno::Reference< XHelperInterface >& xParent,
-                     const uno::Reference< uno::XComponentContext >& xContext,
-                     const uno::Reference< sheet::XSheetPageBreak >& xSheetPageBreak,
-                     bool bColumn ) : mxParent( xParent ), mxContext( xContext ), mxSheetPageBreak( xSheetPageBreak ), m_bColumn( bColumn )
+    RangePageBreaks( uno::Reference< XHelperInterface > xParent,
+                     uno::Reference< uno::XComponentContext > xContext,
+                     uno::Reference< sheet::XSheetPageBreak > xSheetPageBreak,
+                     bool bColumn ) : mxParent(std::move( xParent )), mxContext(std::move( xContext )), mxSheetPageBreak(std::move( xSheetPageBreak )), m_bColumn( bColumn )
     {
     }
 
@@ -195,7 +196,7 @@ class RangePageBreaksEnumWrapper : public EnumerationHelper_BASE
     uno::Reference<container::XIndexAccess > m_xIndexAccess;
     sal_Int32 nIndex;
 public:
-    explicit RangePageBreaksEnumWrapper( const uno::Reference< container::XIndexAccess >& xIndexAccess ) : m_xIndexAccess( xIndexAccess ), nIndex( 0 ) {}
+    explicit RangePageBreaksEnumWrapper( uno::Reference< container::XIndexAccess > xIndexAccess ) : m_xIndexAccess(std::move( xIndexAccess )), nIndex( 0 ) {}
     virtual sal_Bool SAL_CALL hasMoreElements(  ) override
     {
         return ( nIndex < m_xIndexAccess->getCount() );

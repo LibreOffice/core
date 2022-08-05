@@ -18,6 +18,7 @@
  */
 
 #include <svl/itemset.hxx>
+#include <utility>
 #include <vcl/virdev.hxx>
 #include <osl/diagnose.h>
 
@@ -219,15 +220,15 @@ bool ScUndoModifyStyle::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 
 //      apply page style
 
-ScUndoApplyPageStyle::ApplyStyleEntry::ApplyStyleEntry( SCTAB nTab, const OUString& rOldStyle ) :
+ScUndoApplyPageStyle::ApplyStyleEntry::ApplyStyleEntry( SCTAB nTab, OUString aOldStyle ) :
     mnTab( nTab ),
-    maOldStyle( rOldStyle )
+    maOldStyle(std::move( aOldStyle ))
 {
 }
 
-ScUndoApplyPageStyle::ScUndoApplyPageStyle( ScDocShell* pDocSh, const OUString& rNewStyle ) :
+ScUndoApplyPageStyle::ScUndoApplyPageStyle( ScDocShell* pDocSh, OUString aNewStyle ) :
     ScSimpleUndo( pDocSh ),
-    maNewStyle( rNewStyle )
+    maNewStyle(std::move( aNewStyle ))
 {
 }
 

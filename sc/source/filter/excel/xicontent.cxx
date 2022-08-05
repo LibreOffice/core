@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/sheet/TableValidationVisibility.hpp>
+#include <utility>
 #include <xicontent.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
@@ -739,8 +740,8 @@ void XclImpCondFormatManager::Apply()
 
 // Data Validation ============================================================
 
-XclImpValidationManager::DVItem::DVItem( const ScRangeList& rRanges, const ScValidationData& rValidData ) :
-    maRanges(rRanges), maValidData(rValidData) {}
+XclImpValidationManager::DVItem::DVItem( ScRangeList aRanges, const ScValidationData& rValidData ) :
+    maRanges(std::move(aRanges)), maValidData(rValidData) {}
 
 XclImpValidationManager::XclImpValidationManager( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot )

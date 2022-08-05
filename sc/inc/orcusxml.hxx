@@ -61,7 +61,7 @@ struct ScOrcusImportXMLParam
         ScAddress maPos;
         OString maPath;
 
-        CellLink(const ScAddress& rPos, const OString& rPath);
+        CellLink(const ScAddress& rPos, OString aPath);
     };
 
     struct RangeLink

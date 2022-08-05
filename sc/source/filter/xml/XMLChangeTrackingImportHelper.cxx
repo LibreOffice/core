@@ -26,18 +26,19 @@
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <sax/tools/converter.hxx>
+#include <utility>
 
 constexpr OStringLiteral SC_CHANGE_ID_PREFIX = "ct";
 
 ScMyCellInfo::ScMyCellInfo(
-    const ScCellValue& rCell, const OUString& rFormulaAddress, const OUString& rFormula,
-    const formula::FormulaGrammar::Grammar eTempGrammar, const OUString& rInputString,
+    ScCellValue aCell, OUString aFormulaAddress, OUString aFormula,
+    const formula::FormulaGrammar::Grammar eTempGrammar, OUString aInputString,
     const double& rValue, const sal_uInt16 nTempType, const ScMatrixMode nTempMatrixFlag, const sal_Int32 nTempMatrixCols,
     const sal_Int32 nTempMatrixRows ) :
-    maCell(rCell),
-    sFormulaAddress(rFormulaAddress),
-    sFormula(rFormula),
-    sInputString(rInputString),
+    maCell(std::move(aCell)),
+    sFormulaAddress(std::move(aFormulaAddress)),
+    sFormula(std::move(aFormula)),
+    sInputString(std::move(aInputString)),
     fValue(rValue),
     nMatrixCols(nTempMatrixCols),
     nMatrixRows(nTempMatrixRows),

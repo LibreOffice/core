@@ -109,7 +109,7 @@ struct XclRootData
     const bool          mbExport;           /// false = Import, true = Export.
 
     explicit            XclRootData( XclBiff eBiff, SfxMedium& rMedium,
-                            tools::SvRef<SotStorage> const & xRootStrg, ScDocument& rDoc,
+                            tools::SvRef<SotStorage> xRootStrg, ScDocument& rDoc,
                             rtl_TextEncoding eTextEnc, bool bExport );
     virtual             ~XclRootData();
 };

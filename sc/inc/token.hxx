@@ -95,7 +95,7 @@ class ScMatrixToken final : public formula::FormulaToken
 private:
             ScMatrixRef         pMatrix;
 public:
-    ScMatrixToken( const ScMatrixRef& p );
+    ScMatrixToken( ScMatrixRef p );
     ScMatrixToken( const ScMatrixToken& );
 
     virtual const ScMatrix*     GetMatrix() const override;
@@ -133,7 +133,7 @@ class ScExternalSingleRefToken final : public formula::FormulaToken
     ScSingleRefData             maSingleRef;
 
 public:
-    ScExternalSingleRefToken( sal_uInt16 nFileId, const svl::SharedString& rTabName, const ScSingleRefData& r );
+    ScExternalSingleRefToken( sal_uInt16 nFileId, svl::SharedString aTabName, const ScSingleRefData& r );
     ScExternalSingleRefToken() = delete;
     virtual ~ScExternalSingleRefToken() override;
 
@@ -158,7 +158,7 @@ class ScExternalDoubleRefToken final : public formula::FormulaToken
 
 public:
     ScExternalDoubleRefToken() = delete;
-    ScExternalDoubleRefToken( sal_uInt16 nFileId, const svl::SharedString& rTabName, const ScComplexRefData& r );
+    ScExternalDoubleRefToken( sal_uInt16 nFileId, svl::SharedString aTabName, const ScComplexRefData& r );
     virtual ~ScExternalDoubleRefToken() override;
 
     ScExternalDoubleRefToken(ScExternalDoubleRefToken const &) = default;
@@ -185,7 +185,7 @@ class ScExternalNameToken final : public formula::FormulaToken
 
 public:
     ScExternalNameToken() = delete;
-    ScExternalNameToken( sal_uInt16 nFileId, const svl::SharedString& rName );
+    ScExternalNameToken( sal_uInt16 nFileId, svl::SharedString aName );
     virtual ~ScExternalNameToken() override;
 
     ScExternalNameToken(ScExternalNameToken const &) = default;
@@ -301,7 +301,7 @@ protected:
     ScConstMatrixRef xMatrix;
     formula::FormulaConstTokenRef     xUpperLeft;
 public:
-    ScMatrixCellResultToken( const ScConstMatrixRef& pMat, const formula::FormulaToken* pUL );
+    ScMatrixCellResultToken( ScConstMatrixRef pMat, const formula::FormulaToken* pUL );
     ScMatrixCellResultToken( const ScMatrixCellResultToken& );
     virtual ~ScMatrixCellResultToken() override;
     virtual double              GetDouble() const override;
@@ -384,7 +384,7 @@ private:
     bool mbEmptyDisplayedAsString;
 public:
     ScHybridCellToken(
-        double f, const svl::SharedString & rStr, const OUString & rFormula, bool bEmptyDisplayedAsString );
+        double f, const svl::SharedString & rStr, OUString aFormula, bool bEmptyDisplayedAsString );
 
     const OUString& GetFormula() const  { return maFormula; }
     bool IsEmptyDisplayedAsString() const   { return mbEmptyDisplayedAsString; }

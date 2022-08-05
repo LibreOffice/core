@@ -151,6 +151,7 @@
 
 #include "vbastyle.hxx"
 #include "vbaname.hxx"
+#include <utility>
 #include <vector>
 #include <vbahelper/vbacollectionimpl.hxx>
 
@@ -272,7 +273,7 @@ class SingleRangeEnumeration : public EnumerationHelper_BASE
     bool bHasMore;
 public:
     /// @throws uno::RuntimeException
-    explicit SingleRangeEnumeration( const uno::Reference< table::XCellRange >& xRange ) : m_xRange( xRange ), bHasMore( true ) { }
+    explicit SingleRangeEnumeration( uno::Reference< table::XCellRange > xRange ) : m_xRange(std::move( xRange )), bHasMore( true ) { }
     virtual sal_Bool SAL_CALL hasMoreElements(  ) override { return bHasMore; }
     virtual uno::Any SAL_CALL nextElement(  ) override
     {
@@ -293,7 +294,7 @@ private:
     uno::Reference< table::XCellRange > m_xRange;
 
 public:
-    explicit SingleRangeIndexAccess( const uno::Reference< table::XCellRange >& xRange ) : m_xRange( xRange ) {}
+    explicit SingleRangeIndexAccess( uno::Reference< table::XCellRange > xRange ) : m_xRange(std::move( xRange )) {}
     // XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount() override { return 1; }
     virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
@@ -596,7 +597,7 @@ class ColumnsRowEnumeration: public CellsEnumeration_BASE
     sal_Int32 mCurElem;
 
 public:
-    ColumnsRowEnumeration( const uno::Reference< excel::XRange >& xRange, sal_Int32 nElems ) : mxRange( xRange ), mMaxElems( nElems ), mCurElem( 0 )
+    ColumnsRowEnumeration( uno::Reference< excel::XRange > xRange, sal_Int32 nElems ) : mxRange(std::move( xRange )), mMaxElems( nElems ), mCurElem( 0 )
     {
     }
 
@@ -642,7 +643,7 @@ class CellsEnumeration : public CellsEnumeration_BASE
         }
     }
 public:
-    CellsEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< XCollection >& xAreas ): mxParent( xParent ), mxContext( xContext ), m_xAreas( xAreas )
+    CellsEnumeration( const uno::Reference< XHelperInterface >& xParent, uno::Reference< uno::XComponentContext > xContext, uno::Reference< XCollection > xAreas ): mxParent( xParent ), mxContext(std::move( xContext )), m_xAreas(std::move( xAreas ))
     {
         sal_Int32 nItems = m_xAreas->getCount();
         for ( sal_Int32 index=1; index <= nItems; ++index )
@@ -685,7 +686,7 @@ class CellValueSetter : public ValueSetter
 protected:
     uno::Any maValue;
 public:
-    explicit CellValueSetter( const uno::Any& aValue );
+    explicit CellValueSetter( uno::Any  aValue );
     virtual bool processValue( const uno::Any& aValue,  const uno::Reference< table::XCell >& xCell ) override;
     virtual void visitNode( sal_Int32 x, sal_Int32 y, const uno::Reference< table::XCell >& xCell ) override;
 
@@ -693,7 +694,7 @@ public:
 
 }
 
-CellValueSetter::CellValueSetter( const uno::Any& aValue ): maValue( aValue ) {}
+CellValueSetter::CellValueSetter( uno::Any aValue ): maValue(std::move( aValue )) {}
 
 void
 CellValueSetter::visitNode( sal_Int32 /*i*/, sal_Int32 /*j*/, const uno::Reference< table::XCell >& xCell )
@@ -1076,7 +1077,7 @@ class AreasVisitor
 private:
     uno::Reference< XCollection > m_Areas;
 public:
-    explicit AreasVisitor( const uno::Reference< XCollection >& rAreas ):m_Areas( rAreas ){}
+    explicit AreasVisitor( uno::Reference< XCollection > xAreas ):m_Areas(std::move( xAreas )){}
 
     void visit( RangeProcessor& processor )
     {
@@ -1098,7 +1099,7 @@ class RangeHelper
 
 public:
     /// @throws uno::RuntimeException
-    explicit RangeHelper( const uno::Reference< table::XCellRange >& xCellRange ) : m_xCellRange( xCellRange )
+    explicit RangeHelper( uno::Reference< table::XCellRange > xCellRange ) : m_xCellRange(std::move( xCellRange ))
     {
         if ( !m_xCellRange.is() )
             throw uno::RuntimeException();

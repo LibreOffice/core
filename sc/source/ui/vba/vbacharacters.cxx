@@ -21,6 +21,7 @@
 #include "vbafont.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <utility>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -28,12 +29,12 @@ using namespace ::com::sun::star;
 ScVbaCharacters::ScVbaCharacters( const uno::Reference< XHelperInterface >& xParent,
                                   const uno::Reference< uno::XComponentContext >& xContext,
                                   const ScVbaPalette& dPalette,
-                                  const uno::Reference< text::XSimpleText>& xRange,
+                                  uno::Reference< text::XSimpleText> xRange,
                                   const css::uno::Any& Start,
                                   const css::uno::Any& Length,
                                   bool Replace  )
     : ScVbaCharacters_BASE( xParent, xContext ),
-      m_xSimpleText(xRange), m_aPalette( dPalette), bReplace( Replace )
+      m_xSimpleText(std::move(xRange)), m_aPalette( dPalette), bReplace( Replace )
 {
     sal_Int16 nLength(-1);
     sal_Int16 nStart(1);

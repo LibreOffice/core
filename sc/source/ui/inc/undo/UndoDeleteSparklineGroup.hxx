@@ -28,7 +28,7 @@ private:
 
 public:
     UndoDeleteSparklineGroup(ScDocShell& rDocShell,
-                             std::shared_ptr<sc::SparklineGroup> const& pSparklineGroup,
+                             std::shared_ptr<sc::SparklineGroup> pSparklineGroup,
                              SCTAB nSheetIndex);
 
     virtual ~UndoDeleteSparklineGroup() override;
