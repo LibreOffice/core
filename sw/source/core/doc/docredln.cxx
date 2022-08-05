@@ -1531,7 +1531,7 @@ void SwRangeRedline::MoveToSection()
                                         ? pCEndNd->GetTextNode()->GetTextColl()
                                         : rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD);
 
-            pSttNd = rNds.MakeTextSection( SwNodeIndex( rNds.GetEndOfRedlines() ),
+            pSttNd = rNds.MakeTextSection( rNds.GetEndOfRedlines(),
                                             SwNormalStartNode, pColl );
             SwTextNode* pTextNd = rNds[ pSttNd->GetIndex() + 1 ]->GetTextNode();
 
@@ -1598,7 +1598,7 @@ void SwRangeRedline::CopyToSection()
                                 ? pCSttNd->GetTextNode()->GetTextColl()
                                 : rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD);
 
-        pSttNd = rNds.MakeTextSection( SwNodeIndex( rNds.GetEndOfRedlines() ),
+        pSttNd = rNds.MakeTextSection( rNds.GetEndOfRedlines(),
                                         SwNormalStartNode, pColl );
 
         SwPosition aPos( *pSttNd, SwNodeOffset(1) );

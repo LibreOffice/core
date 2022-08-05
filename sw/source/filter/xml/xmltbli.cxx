@@ -2700,7 +2700,7 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
         SwNodeIndex aIdx( *pEndNd, nOffset );
         SwTextFormatColl *pColl =
             pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD, false );
-        pStNd = pDoc->GetNodes().MakeTextSection( aIdx, SwTableBoxStartNode,
+        pStNd = pDoc->GetNodes().MakeTextSection( aIdx.GetNode(), SwTableBoxStartNode,
                                                  pColl );
         // Consider the case that a table is defined without a row.
         if( !pPrevSttNd && m_pBox1 != nullptr )
