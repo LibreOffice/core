@@ -21,7 +21,6 @@
     <child>
       <object class="GtkScrollbar" id="vertical">
         <property name="can-focus">False</property>
-        <property name="halign">start</property>
         <property name="vexpand">True</property>
         <property name="orientation">vertical</property>
         <property name="adjustment">adjustment1</property>
@@ -35,7 +34,6 @@
     <child>
       <object class="GtkScrollbar" id="horizontal">
         <property name="can-focus">False</property>
-        <property name="valign">start</property>
         <property name="hexpand">True</property>
         <property name="adjustment">adjustment2</property>
       </object>
