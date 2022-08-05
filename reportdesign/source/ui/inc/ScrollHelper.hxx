@@ -16,9 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_SCROLLHELPER_HXX
-#define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_SCROLLHELPER_HXX
 
+#pragma once
+
+#include <svtools/scrolladaptor.hxx>
 #include <vcl/scrbar.hxx>
 #include <com/sun/star/report/XSection.hpp>
 #include <comphelper/propmultiplex.hxx>
@@ -44,8 +45,8 @@ namespace rptui
                                 ,   public IMarkedSection
     {
     private:
-        VclPtr<ScrollBar>           m_aHScroll;
-        VclPtr<ScrollBar>           m_aVScroll;
+        VclPtr<ScrollAdaptor>       m_aHScroll;
+        VclPtr<ScrollAdaptor>       m_aVScroll;
         VclPtr<ScrollBarBox>        m_aCornerWin;       // window in the bottom right corner
         Size                        m_aTotalPixelSize;
         VclPtr<ODesignView>         m_pParent;
@@ -53,10 +54,10 @@ namespace rptui
         ::rtl::Reference<comphelper::OPropertyChangeMultiplexer >
                                     m_pReportDefinitionMultiPlexer; // listener for property changes
 
-        DECL_LINK( ScrollHdl, ScrollBar*, void);
+        DECL_LINK( ScrollHdl, weld::Scrollbar&, void);
         Size ResizeScrollBars();
         void ImplInitSettings();
-        void impl_initScrollBar( ScrollBar& _rScrollBar ) const;
+        void impl_initScrollBar(ScrollAdaptor& rScrollBar) const;
 
         OScrollWindowHelper(OScrollWindowHelper const &) = delete;
         void operator =(OScrollWindowHelper const &) = delete;
@@ -79,8 +80,8 @@ namespace rptui
         Point            getThumbPos() const { return Point(m_aHScroll->GetThumbPos(),m_aVScroll->GetThumbPos())/*m_aScrollOffset*/; }
         void                    setTotalSize(sal_Int32 _nWidth, sal_Int32 _nHeight);
         const Size&             getTotalSize() const { return m_aTotalPixelSize; }
-        ScrollBar&       GetHScroll() { return *m_aHScroll; }
-        ScrollBar&       GetVScroll() { return *m_aVScroll; }
+        ScrollAdaptor&   GetHScroll() { return *m_aHScroll; }
+        ScrollAdaptor&   GetVScroll() { return *m_aVScroll; }
 
         // forwards
         void                    SetMode( DlgEdMode _eMode );
@@ -205,6 +206,5 @@ namespace rptui
         sal_uInt16 getZoomFactor(SvxZoomType _eType) const;
     };
 }
-#endif // INCLUDED_REPORTDESIGN_SOURCE_UI_INC_SCROLLHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

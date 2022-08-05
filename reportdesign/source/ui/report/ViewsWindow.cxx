@@ -1371,9 +1371,13 @@ void OViewsWindow::handleKey(const vcl::KeyCode& _rCode)
     {
         // scroll page
         OScrollWindowHelper* pScrollWindow = getView()->getScrollWindow();
-        ScrollBar& rScrollBar = ( nCode == KEY_LEFT || nCode == KEY_RIGHT ) ? pScrollWindow->GetHScroll() : pScrollWindow->GetVScroll();
+        ScrollAdaptor& rScrollBar = ( nCode == KEY_LEFT || nCode == KEY_RIGHT ) ? pScrollWindow->GetHScroll() : pScrollWindow->GetVScroll();
         if ( rScrollBar.IsVisible() )
-            rScrollBar.DoScrollAction(( nCode == KEY_RIGHT || nCode == KEY_UP ) ? ScrollType::LineUp : ScrollType::LineDown );
+        {
+            auto nCurrentPos = rScrollBar.GetThumbPos();
+            auto nLineSize = rScrollBar.GetLineSize();
+            rScrollBar.DoScroll(( nCode == KEY_RIGHT || nCode == KEY_UP ) ? (nCurrentPos - nLineSize) : (nCurrentPos + nLineSize));
+        }
         return;
     }
 
