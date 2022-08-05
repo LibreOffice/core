@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9850640f_46a15993",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-08-05T19:38:35Z",
+      "side": 1,
+      "message": "Both exist (see https://en.wikipedia.org/wiki/Marshalling_(computer_science))",
+      "revId": "de18e0b00f779b586d7b431fd9bd251fe6e9c247",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
