@@ -132,7 +132,6 @@ ScDataTableView::ScDataTableView(const css::uno::Reference<css::awt::XWindow> &r
     Control(VCLUnoHelper::GetWindow(rParent)),
     mpDoc(std::move(pDoc)),
     mpSelectionEngine(new SelectionEngine(this)),
-    mpTopLeft(VclPtr<ScrollBarBox>::Create(this, WB_SIZEABLE)),
     mpColView(VclPtr<ScDataTableColView>::Create(this, mpDoc.get(), mpSelectionEngine.get())),
     mpRowView(VclPtr<ScDataTableRowView>::Create(this, mpDoc.get(), mpSelectionEngine.get())),
     mpVScroll(VclPtr<ScrollAdaptor>::Create(this, false)),
@@ -141,7 +140,6 @@ ScDataTableView::ScDataTableView(const css::uno::Reference<css::awt::XWindow> &r
     mnFirstVisibleRow(0),
     mnFirstVisibleCol(0)
 {
-    mpTopLeft->setPosSizePixel(0, 0, nRowHeaderWidth, nColHeaderHeight);
     mpColView->setPosSizePixel(nRowHeaderWidth, 0, nRowHeaderWidth, nColHeaderHeight);
     mpRowView->setPosSizePixel(0, nColHeaderHeight, nRowHeaderWidth, nColHeaderHeight);
 
@@ -153,7 +151,6 @@ ScDataTableView::ScDataTableView(const css::uno::Reference<css::awt::XWindow> &r
     mpHScroll->SetRangeMax(50);
     mpHScroll->SetScrollHdl(LINK(this, ScDataTableView, HorzScrollHdl));
 
-    mpTopLeft->Show();
     mpColView->Show();
     mpRowView->Show();
     mpVScroll->Show();
@@ -167,7 +164,6 @@ ScDataTableView::~ScDataTableView()
 
 void ScDataTableView::dispose()
 {
-    mpTopLeft.disposeAndClear();
     mpColView.disposeAndClear();
     mpRowView.disposeAndClear();
     mpVScroll.disposeAndClear();
@@ -249,7 +245,6 @@ void ScDataTableView::MouseButtonUp(const MouseEvent& rMEvt)
 void ScDataTableView::Resize()
 {
     Size aSize = GetSizePixel();
-    mpTopLeft->setPosSizePixel(0, 0, nRowHeaderWidth, nColHeaderHeight);
     mpColView->setPosSizePixel(nRowHeaderWidth, 0, aSize.Width() - mnScrollBarSize, nColHeaderHeight);
     mpRowView->setPosSizePixel(0, nColHeaderHeight, nRowHeaderWidth, aSize.Height());
 
@@ -274,6 +269,13 @@ void ScDataTableView::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
     aOutput.DrawDocumentBackground();
     aOutput.DrawGrid(rRenderContext, true, false);
     aOutput.DrawStrings();
+
+    Color aFaceColor(rRenderContext.GetSettings().GetStyleSettings().GetFaceColor());
+    rRenderContext.SetLineColor(aFaceColor);
+    rRenderContext.SetFillColor(aFaceColor);
+    rRenderContext.DrawRect(tools::Rectangle(Point(0, 0), Size(nRowHeaderWidth, nColHeaderHeight)));
+    rRenderContext.DrawRect(tools::Rectangle(Point(aSize.Width() - mnScrollBarSize, aSize.Height() - mnScrollBarSize), Size(mnScrollBarSize, mnScrollBarSize)));
+
     Control::Paint(rRenderContext, rRectangle);
 }
 
