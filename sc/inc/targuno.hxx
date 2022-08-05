@@ -122,7 +122,7 @@ private:
     css::uno::Reference< css::container::XNameAccess >            xCollection;
 
 public:
-                            ScLinkTargetsObj( const css::uno::Reference< css::container::XNameAccess > & rColl );
+                            ScLinkTargetsObj( css::uno::Reference< css::container::XNameAccess > xColl );
     virtual                 ~ScLinkTargetsObj() override;
 
                             // css::container::XNameAccess

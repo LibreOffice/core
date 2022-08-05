@@ -1289,8 +1289,8 @@ typedef css::uno::Reference< css::drawing::XShape >
 class XclChObjectTable
 {
 public:
-    explicit            XclChObjectTable( css::uno::Reference< css::lang::XMultiServiceFactory > const & xFactory,
-                            const OUString& rServiceName, const OUString& rObjNameBase );
+    explicit            XclChObjectTable( css::uno::Reference< css::lang::XMultiServiceFactory > xFactory,
+                            OUString aServiceName, OUString aObjNameBase );
 
     /** Returns a named formatting object from the chart document. */
     css::uno::Any GetObject( const OUString& rObjName );

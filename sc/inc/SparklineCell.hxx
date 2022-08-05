@@ -13,6 +13,7 @@
 #include "scdllapi.h"
 #include "Sparkline.hxx"
 #include <memory>
+#include <utility>
 
 namespace sc
 {
@@ -23,8 +24,8 @@ private:
     std::shared_ptr<Sparkline> m_pSparkline;
 
 public:
-    SparklineCell(std::shared_ptr<Sparkline> const& pSparkline)
-        : m_pSparkline(pSparkline)
+    SparklineCell(std::shared_ptr<Sparkline> pSparkline)
+        : m_pSparkline(std::move(pSparkline))
     {
     }
 

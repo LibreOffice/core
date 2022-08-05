@@ -74,7 +74,7 @@ public:
 class ScUndoApplyPageStyle: public ScSimpleUndo
 {
 public:
-                    ScUndoApplyPageStyle( ScDocShell* pDocSh, const OUString& rNewStyle );
+                    ScUndoApplyPageStyle( ScDocShell* pDocSh, OUString aNewStyle );
     virtual         ~ScUndoApplyPageStyle() override;
 
     void            AddSheetAction( SCTAB nTab, const OUString& rOld );
@@ -91,7 +91,7 @@ private:
     {
         SCTAB           mnTab;
         OUString        maOldStyle;
-        explicit        ApplyStyleEntry( SCTAB nTab, const OUString& rOldStyle );
+        explicit        ApplyStyleEntry( SCTAB nTab, OUString aOldStyle );
     };
     typedef ::std::vector< ApplyStyleEntry > ApplyStyleVec;
 

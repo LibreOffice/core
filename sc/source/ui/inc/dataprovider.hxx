@@ -48,7 +48,7 @@ class CSVFetchThread : public salhelper::Thread
 
 
 public:
-    CSVFetchThread(ScDocument& rDoc, const OUString&, std::function<void()> aImportFinishedHdl,
+    CSVFetchThread(ScDocument& rDoc, OUString , std::function<void()> aImportFinishedHdl,
             std::vector<std::shared_ptr<sc::DataTransformation>>&& mrDataTransformations);
     virtual ~CSVFetchThread() override;
 
@@ -121,7 +121,7 @@ class ScDBDataManager
     ScDocument* mpDoc;
 
 public:
-    ScDBDataManager(const OUString& rDBName, ScDocument* pDoc);
+    ScDBDataManager(OUString aDBName, ScDocument* pDoc);
     ~ScDBDataManager();
 
     void SetDatabase(const OUString& rDBName);

@@ -34,6 +34,7 @@
 #include <drwlayer.hxx>
 
 #include <root.hxx>
+#include <utility>
 #include <xcl97rec.hxx>
 #include <xcl97esc.hxx>
 #include <xeescher.hxx>
@@ -1365,8 +1366,8 @@ ExcBundlesheet8::ExcBundlesheet8( const RootData& rRootData, SCTAB _nTab ) :
 {
 }
 
-ExcBundlesheet8::ExcBundlesheet8( const OUString& rString ) :
-    sUnicodeName( rString )
+ExcBundlesheet8::ExcBundlesheet8( OUString aString ) :
+    sUnicodeName(std::move( aString ))
 {
 }
 
@@ -1723,10 +1724,10 @@ void XclExpSheetProtectOptions::WriteBody( XclExpStream& rStrm )
 }
 
 XclExpSheetEnhancedProtection::XclExpSheetEnhancedProtection( const XclExpRoot& rRoot,
-        const ScEnhancedProtection & rProt ) :
+        ScEnhancedProtection aProt ) :
     XclExpRecord( 0x0868 ),
     mrRoot( rRoot ),
-    maEnhancedProtection( rProt )
+    maEnhancedProtection(std::move( aProt ))
 {
 }
 

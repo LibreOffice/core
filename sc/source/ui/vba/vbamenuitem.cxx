@@ -6,12 +6,14 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+#include <utility>
+
 #include "vbamenuitem.hxx"
 
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-ScVbaMenuItem::ScVbaMenuItem( const uno::Reference< ov::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< XCommandBarControl >& rCommandBarControl ) : MenuItem_BASE( rParent, rContext ), m_xCommandBarControl( rCommandBarControl )
+ScVbaMenuItem::ScVbaMenuItem( const uno::Reference< ov::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, uno::Reference< XCommandBarControl > xCommandBarControl ) : MenuItem_BASE( rParent, rContext ), m_xCommandBarControl(std::move( xCommandBarControl ))
 {
 }
 

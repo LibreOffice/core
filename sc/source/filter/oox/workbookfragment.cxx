@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <utility>
 #include <workbookfragment.hxx>
 
 #include <oox/core/filterbase.hxx>
@@ -223,12 +224,12 @@ class WorkerThread : public comphelper::ThreadTask
 public:
     WorkerThread( const std::shared_ptr<comphelper::ThreadTaskTag> & pTag,
                   WorkbookFragment& rWorkbookHandler,
-                  const rtl::Reference<FragmentHandler>& xHandler,
+                  rtl::Reference<FragmentHandler> xHandler,
                   sal_Int32 &rSheetsLeft ) :
         comphelper::ThreadTask( pTag ),
         mrSheetsLeft( rSheetsLeft ),
         mrWorkbookHandler( rWorkbookHandler ),
-        mxHandler( xHandler )
+        mxHandler(std::move( xHandler ))
     {
     }
 
@@ -263,9 +264,9 @@ class ProgressBarTimer : private Timer
         double mfPosition;
         ISegmentProgressBarRef mxWrapped;
     public:
-        explicit ProgressWrapper(const ISegmentProgressBarRef &xRef)
+        explicit ProgressWrapper(ISegmentProgressBarRef xRef)
             : mfPosition(0.0)
-            , mxWrapped(xRef)
+            , mxWrapped(std::move(xRef))
         {
         }
 

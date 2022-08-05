@@ -21,6 +21,7 @@
 #include <unonames.hxx>
 #include <ooo/vba/excel/XlFormatConditionType.hpp>
 #include <basic/sberrors.hxx>
+#include <utility>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -38,12 +39,12 @@ lcl_getScVbaFormatConditionsPtr( const uno::Reference< excel::XFormatConditions 
 ScVbaFormatCondition::ScVbaFormatCondition( const uno::Reference< XHelperInterface >& xParent,
                                             const uno::Reference< uno::XComponentContext > & xContext,
                                             const uno::Reference< sheet::XSheetConditionalEntry >& _xSheetConditionalEntry,
-                                            const uno::Reference< excel::XStyle >& _xStyle,
-                                            const uno::Reference< excel::XFormatConditions >& _xFormatConditions,
-                                            const uno::Reference< css::beans::XPropertySet >& _xPropertySet )
+                                            uno::Reference< excel::XStyle >  _xStyle,
+                                            uno::Reference< excel::XFormatConditions >  _xFormatConditions,
+                                            uno::Reference< css::beans::XPropertySet >  _xPropertySet )
     : ScVbaFormatCondition_BASE( xParent, xContext,
                                  uno::Reference< sheet::XSheetCondition >( _xSheetConditionalEntry, css::uno::UNO_QUERY_THROW ) ),
-                                 moFormatConditions( _xFormatConditions ), mxStyle( _xStyle ), mxParentRangePropertySet( _xPropertySet )
+                                 moFormatConditions(std::move( _xFormatConditions )), mxStyle(std::move( _xStyle )), mxParentRangePropertySet(std::move( _xPropertySet ))
 {
         mxSheetConditionalEntries = lcl_getScVbaFormatConditionsPtr( moFormatConditions )->getSheetConditionalEntries();
 

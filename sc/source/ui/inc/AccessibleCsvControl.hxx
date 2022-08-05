@@ -443,7 +443,7 @@ private:
 public:
     explicit                    ScAccessibleCsvCell(
                                     ScCsvGrid& rGrid,
-                                    const OUString& rCellText,
+                                    OUString aCellText,
                                     sal_Int32 nRow, sal_Int32 nColumn);
     virtual                     ~ScAccessibleCsvCell() override;
 

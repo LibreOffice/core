@@ -19,7 +19,7 @@ class UndoSort : public ScSimpleUndo
     ReorderParam maParam;
 
 public:
-    UndoSort( ScDocShell* pDocSh, const ReorderParam& rParam );
+    UndoSort( ScDocShell* pDocSh, ReorderParam aParam );
 
     virtual OUString GetComment() const override;
     virtual void Undo() override;

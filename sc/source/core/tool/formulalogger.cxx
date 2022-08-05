@@ -21,6 +21,7 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <cstdlib>
+#include <utility>
 
 namespace sc {
 
@@ -68,9 +69,9 @@ struct FormulaLogger::GroupScope::Impl
     bool mbCalcComplete;
     bool mbOutputEnabled;
 
-    Impl( FormulaLogger& rLogger, const OUString& rPrefix, const ScDocument& rDoc,
+    Impl( FormulaLogger& rLogger, OUString aPrefix, const ScDocument& rDoc,
         const ScFormulaCell& rCell, bool bOutputEnabled ) :
-        mrLogger(rLogger), mrDoc(rDoc), maPrefix(rPrefix),
+        mrLogger(rLogger), mrDoc(rDoc), maPrefix(std::move(aPrefix)),
         mbCalcComplete(false), mbOutputEnabled(bOutputEnabled)
     {
         ++mrLogger.mnNestLevel;

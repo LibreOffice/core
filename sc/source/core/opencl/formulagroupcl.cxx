@@ -134,6 +134,7 @@ const char* const publicFunc =
  "}\n"
  ;
 
+#include <utility>
 #include <vector>
 #include <map>
 #include <iostream>
@@ -1046,9 +1047,9 @@ class DynamicKernelSlidingArgument : public Base
 public:
     DynamicKernelSlidingArgument(const ScCalcConfig& config, const std::string& s,
                                  const FormulaTreeNodeRef& ft,
-                                 const std::shared_ptr<SlidingFunctionBase>& CodeGen, int index)
+                                 std::shared_ptr<SlidingFunctionBase> CodeGen, int index)
         : Base(config, s, ft, index)
-        , mpCodeGen(CodeGen)
+        , mpCodeGen(std::move(CodeGen))
     {
         FormulaToken* t = ft->GetFormulaToken();
         if (t->GetType() != formula::svDoubleVectorRef)
@@ -1336,9 +1337,9 @@ class ParallelReductionVectorRef : public Base
 public:
     ParallelReductionVectorRef(const ScCalcConfig& config, const std::string& s,
                                const FormulaTreeNodeRef& ft,
-                               const std::shared_ptr<SlidingFunctionBase>& CodeGen, int index)
+                               std::shared_ptr<SlidingFunctionBase> CodeGen, int index)
         : Base(config, s, ft, index)
-        , mpCodeGen(CodeGen)
+        , mpCodeGen(std::move(CodeGen))
         , mpClmem2(nullptr)
     {
         FormulaToken* t = ft->GetFormulaToken();
@@ -3826,7 +3827,7 @@ namespace {
 class DynamicKernel : public CompiledFormula
 {
 public:
-    DynamicKernel( const ScCalcConfig& config, const FormulaTreeNodeRef& r, int nResultSize );
+    DynamicKernel( ScCalcConfig  config, FormulaTreeNodeRef r, int nResultSize );
     virtual ~DynamicKernel() override;
 
     static std::shared_ptr<DynamicKernel> create( const ScCalcConfig& config, const ScTokenArray& rCode, int nResultSize );
@@ -3865,9 +3866,9 @@ private:
 
 }
 
-DynamicKernel::DynamicKernel( const ScCalcConfig& config, const FormulaTreeNodeRef& r, int nResultSize ) :
-    mCalcConfig(config),
-    mpRoot(r),
+DynamicKernel::DynamicKernel( ScCalcConfig config, FormulaTreeNodeRef x, int nResultSize ) :
+    mCalcConfig(std::move(config)),
+    mpRoot(std::move(x)),
     mpProgram(nullptr),
     mpKernel(nullptr),
     mpResClmem(nullptr),

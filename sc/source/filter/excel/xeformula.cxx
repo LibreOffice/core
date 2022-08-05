@@ -25,6 +25,7 @@
 #include <rangelst.hxx>
 #include <tokenarray.hxx>
 #include <scmatrix.hxx>
+#include <utility>
 #include <xeformula.hxx>
 #include <xehelper.hxx>
 #include <xelink.hxx>
@@ -125,7 +126,7 @@ public:
     explicit            XclExpFuncData(
                             const XclExpScToken& rTokData,
                             const XclFunctionInfo& rFuncInfo,
-                            const XclExpExtFuncData& rExtFuncData );
+                            XclExpExtFuncData aExtFuncData );
 
     const FormulaToken& GetScToken() const { return *mrTokData.mpScToken; }
     OpCode       GetOpCode() const { return mrFuncInfo.meOpCode; }
@@ -162,10 +163,10 @@ private:
 };
 
 XclExpFuncData::XclExpFuncData( const XclExpScToken& rTokData,
-        const XclFunctionInfo& rFuncInfo, const XclExpExtFuncData& rExtFuncData ) :
+        const XclFunctionInfo& rFuncInfo, XclExpExtFuncData aExtFuncData ) :
     mrTokData( rTokData ),
     mrFuncInfo( rFuncInfo ),
-    maExtFuncData( rExtFuncData ),
+    maExtFuncData(std::move( aExtFuncData )),
     mxOperands( std::make_shared<XclExpOperandList>() ),
     mpParamInfo( rFuncInfo.mpParamInfos )
 {

@@ -27,6 +27,7 @@
 #include <scextopt.hxx>
 #include <rangenam.hxx>
 #include <formulacell.hxx>
+#include <utility>
 #include <viewdata.hxx>
 #include <tabvwsh.hxx>
 #include <sc.hrc>
@@ -471,8 +472,8 @@ ScExternalRefCache::TokenRef ScExternalRefCache::Table::getEmptyOrNullToken(
     return TokenRef();
 }
 
-ScExternalRefCache::TableName::TableName(const OUString& rUpper, const OUString& rReal) :
-    maUpperName(rUpper), maRealName(rReal)
+ScExternalRefCache::TableName::TableName(OUString aUpper, OUString aReal) :
+    maUpperName(std::move(aUpper)), maRealName(std::move(aReal))
 {
 }
 

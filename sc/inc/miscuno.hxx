@@ -104,8 +104,8 @@ private:
     sal_Int32               nPos;
 
 public:
-                            ScIndexEnumeration(const css::uno::Reference<
-                                css::container::XIndexAccess>& rInd, const OUString& rServiceName);
+                            ScIndexEnumeration(css::uno::Reference<
+                                css::container::XIndexAccess> xInd, OUString aServiceName);
     virtual                 ~ScIndexEnumeration() override;
 
                             // XEnumeration
@@ -129,7 +129,7 @@ private:
 
 public:
                             ScNameToIndexAccess(
-                                const css::uno::Reference< css::container::XNameAccess>& rNameObj );
+                                css::uno::Reference< css::container::XNameAccess> xNameObj );
     virtual                 ~ScNameToIndexAccess() override;
 
                             // XIndexAccess
