@@ -53,6 +53,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9910c15f_ad1f011b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-08-05T14:52:55Z",
+      "side": 1,
+      "message": "Sure, for now I\u0027ll just switch out Justify() with Normalize(). It might be worthwhile me following up with another patch to remove the need to normalize the rectangle (and ranges).",
+      "parentUuid": "e063b156_03cb6bd2",
+      "revId": "c195f6a5bdb192151b0a364f60285ab2b2e07cbe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bdbc840c_f2ec18d4",
@@ -66,6 +84,30 @@
       "writtenOn": "2022-08-02T07:29:46Z",
       "side": 1,
       "message": "Can you inline what is the expected value - reading this is hard as I need to always check the expected value at a different place in the code.",
+      "range": {
+        "startLine": 161,
+        "startChar": 71,
+        "endLine": 161,
+        "endChar": 72
+      },
+      "revId": "c195f6a5bdb192151b0a364f60285ab2b2e07cbe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce26ed5a_7ca528f2",
+        "filename": "tools/qa/cppunit/test_rectangle.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-08-05T14:52:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bdbc840c_f2ec18d4",
       "range": {
         "startLine": 161,
         "startChar": 71,
