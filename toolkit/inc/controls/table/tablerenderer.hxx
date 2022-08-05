@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <table/tabletypes.hxx>
+#include <controls/table/tabletypes.hxx>
 
 #include <rtl/ustring.hxx>
 

@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <table/tablemodel.hxx>
+#include <controls/table/tablemodel.hxx>
 #include <vcl/accessibletable.hxx>
 
 #include <vcl/ctrl.hxx>

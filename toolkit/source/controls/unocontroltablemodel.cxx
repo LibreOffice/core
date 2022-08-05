@@ -20,8 +20,8 @@
 #include "unocontroltablemodel.hxx"
 #include "unogridcolumnfacade.hxx"
 
-#include <table/defaultinputhandler.hxx>
-#include <table/gridtablerenderer.hxx>
+#include <controls/table/defaultinputhandler.hxx>
+#include <controls/table/gridtablerenderer.hxx>
 
 #include <com/sun/star/awt/grid/XSortableGridData.hpp>
 #include <com/sun/star/util/Color.hpp>
