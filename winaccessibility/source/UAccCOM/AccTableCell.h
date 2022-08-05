@@ -77,7 +77,7 @@ public:
     STDMETHOD(get_rowIndex)(long*) override;
     STDMETHOD(get_isSelected)(boolean*) override;
     STDMETHOD(get_rowColumnExtents)(long*, long*, long*, long*, boolean*) override;
-    STDMETHOD(get_table)(IUnknown**) { return E_FAIL; }
+    STDMETHOD(get_table)(IUnknown**) override;
 
 private:
     css::uno::Reference<css::accessibility::XAccessibleTable> m_xTable;
