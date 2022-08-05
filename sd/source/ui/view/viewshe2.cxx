@@ -133,11 +133,6 @@ IMPL_LINK(ViewShell, HScrollHdl, ScrollBar *, pHScroll, void )
  */
 void ViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
 {
-    ::tools::Long nDelta = pHScroll->GetDelta();
-
-    if (nDelta == 0)
-        return;
-
     double fX = static_cast<double>(pHScroll->GetThumbPos()) / pHScroll->GetRange().Len();
 
     // scroll all windows of the column
