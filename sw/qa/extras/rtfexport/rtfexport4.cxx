@@ -19,6 +19,8 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <o3tl/cppunittraitshelper.hxx>
 
+#include <xmloff/odffields.hxx>
+
 #include <docsh.hxx>
 #include <unotxdoc.hxx>
 #include <pam.hxx>
@@ -94,6 +96,25 @@ DECLARE_RTFEXPORT_TEST(testCjklist31, "cjklist31.rtf")
 {
     sal_Int16 numFormat = getNumberingTypeOfParagraph(1);
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::DI_ZI_ZH, numFormat);
+}
+
+DECLARE_RTFEXPORT_TEST(test148518, "FORMDROPDOWN.rtf")
+{
+    SwXTextDocument* const pTextDoc(dynamic_cast<SwXTextDocument*>(mxComponent.get()));
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* const pDoc(pTextDoc->GetDocShell()->GetDoc());
+
+    CPPUNIT_ASSERT(pDoc->getIDocumentMarkAccess()->getFieldmarksBegin()
+                   != pDoc->getIDocumentMarkAccess()->getFieldmarksEnd());
+    ::sw::mark::IFieldmark* pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(
+        *pDoc->getIDocumentMarkAccess()->getFieldmarksBegin());
+    uno::Sequence<OUString> entries;
+    (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_LISTENTRY] >>= entries;
+    uno::Sequence<OUString> const expected{ OUString("x"), OUString("v"), OUString("d") };
+    CPPUNIT_ASSERT_EQUAL(expected, entries);
+    sal_Int32 result(-1);
+    (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_RESULT] >>= result;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), result);
 }
 
 DECLARE_RTFEXPORT_TEST(testAnchoredAtSamePosition, "anchor.fodt")
