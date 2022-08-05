@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "74b3939e_b52a1023",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-05T11:24:40Z",
+      "side": 1,
+      "message": "Note that *if* you decide to add the lines-handling functions, you would need to use own conversion factors, because VBA idea of \"line\" unit (12 pt \u003d 1/6 in) is different from our idea (312 twip \u003d 13/60 in).",
+      "parentUuid": "7910cfe5_92c84183",
+      "revId": "c9b57b7226de7062b9feaf7706825f6dc2a6fee8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c4e2fa53_549ad257",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-08-05T10:29:53Z",
       "side": 1,
       "message": "Oh - o3tl::Length::ch is a \"character unit\"; for inch, please use o3tl::Length::in",
+      "range": {
+        "startLine": 451,
+        "startChar": 47,
+        "endLine": 451,
+        "endChar": 49
+      },
+      "revId": "c9b57b7226de7062b9feaf7706825f6dc2a6fee8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0835e356_014b3ef9",
+        "filename": "sw/source/ui/vba/vbaapplication.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-05T11:24:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c4e2fa53_549ad257",
       "range": {
         "startLine": 451,
         "startChar": 47,
