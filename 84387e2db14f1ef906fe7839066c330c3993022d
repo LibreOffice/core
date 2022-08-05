@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "997e3946_1db1baa4",
+        "filename": "xmlsecurity/source/helper/xsecctl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-05T07:31:09Z",
+      "side": 0,
+      "message": "Any reason why you delete this file?",
+      "revId": "84387e2db14f1ef906fe7839066c330c3993022d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
