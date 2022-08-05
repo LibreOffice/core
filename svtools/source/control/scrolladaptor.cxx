@@ -25,6 +25,7 @@ ScrollAdaptor::ScrollAdaptor(vcl::Window* pWin, bool bHoriz)
     , m_bHori(bHoriz)
 {
     m_xScrollBar->show();
+    SetSizePixel(GetOptimalSize());
 }
 
 void ScrollAdaptor::dispose()
