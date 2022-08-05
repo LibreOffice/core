@@ -17,11 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "svtxgridcontrol.hxx"
+#include <awt/vclxwindows.hxx>
+#include <cppuhelper/implbase.hxx>
+#include <toolkit/helper/listenermultiplexer.hxx>
 #include <com/sun/star/view/SelectionType.hpp>
-#include <table/tablecontrolinterface.hxx>
-#include <table/gridtablerenderer.hxx>
-#include <table/tablecontrol.hxx>
+#include <controls/table/tablecontrol.hxx>
+#include <controls/table/tablecontrolinterface.hxx>
+#include <controls/table/gridtablerenderer.hxx>
+#include <controls/table/tablecontrol.hxx>
 #include "unocontroltablemodel.hxx"
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>

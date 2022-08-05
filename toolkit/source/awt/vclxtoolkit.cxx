@@ -89,6 +89,7 @@
 #include <toolkit/helper/convert.hxx>
 #include <controls/filectrl.hxx>
 #include <controls/svmedit.hxx>
+#include <controls/table/tablecontrol.hxx>
 #include <controls/treecontrolpeer.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/calendar.hxx>
@@ -729,6 +730,7 @@ ComponentInfo const aComponentInfos [] =
     { std::u16string_view(u"formattedfield"),     WindowType::CONTROL },
     { std::u16string_view(u"frame"),              WindowType::GROUPBOX },
     { std::u16string_view(u"framewindow"),        WindowType::TOOLKIT_FRAMEWINDOW },
+    { std::u16string_view(u"grid"),               WindowType::CONTROL },
     { std::u16string_view(u"groupbox"),           WindowType::GROUPBOX },
     { std::u16string_view(u"helpbutton"),         WindowType::HELPBUTTON },
     { std::u16string_view(u"imagebutton"),        WindowType::IMAGEBUTTON },
@@ -1834,6 +1836,11 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( rtl::Reference<VCLXWindow>* ppNewCom
                     rtl::Reference<SVTXDateField> newComp = new SVTXDateField;
                     *ppNewComp = newComp;
                     newComp->SetFormatter( static_cast<FormatterBase*>(static_cast<DateField*>(pNewWindow.get())) );
+                }
+                else if (aServiceName == "grid")
+                {
+                    pNewWindow = VclPtr<::svt::table::TableControl>::Create(pParent, nWinBits);
+                    *ppNewComp = new SVTXGridControl;
                 }
             break;
             default:

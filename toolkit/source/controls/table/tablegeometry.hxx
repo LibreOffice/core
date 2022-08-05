@@ -19,10 +19,8 @@
 
 #pragma once
 
-#include <table/tabletypes.hxx>
-
+#include <controls/table/tabletypes.hxx>
 #include <tools/gen.hxx>
-
 
 namespace svt::table
 {

@@ -20,9 +20,9 @@
 #pragma once
 
 #include <svtools/svtdllapi.h>
-#include <table/tabletypes.hxx>
-#include <table/tablerenderer.hxx>
-#include <table/tableinputhandler.hxx>
+#include <controls/table/tabletypes.hxx>
+#include <controls/table/tablerenderer.hxx>
+#include <controls/table/tableinputhandler.hxx>
 
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/style/HorizontalAlignment.hpp>
