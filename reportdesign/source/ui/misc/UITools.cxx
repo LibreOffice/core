@@ -120,46 +120,50 @@
 #include <svx/xflftrit.hxx>
 #include <svx/xsflclit.hxx>
 
-#define ITEMID_FONT                     TypedWhichId<SvxFontItem>(XATTR_FILL_LAST + 1)
-#define ITEMID_FONTHEIGHT               TypedWhichId<SvxFontHeightItem>(XATTR_FILL_LAST + 2)
-#define ITEMID_LANGUAGE                 TypedWhichId<SvxLanguageItem>(XATTR_FILL_LAST + 3)
+/// Note that we deliberately overlap an existing item id, so that we can have contiguous item ids for
+/// the static defaults.
+#define ITEMID_FIRST                    XATTR_FILL_LAST
 
-#define ITEMID_POSTURE                  TypedWhichId<SvxPostureItem>(XATTR_FILL_LAST + 4)
-#define ITEMID_WEIGHT                   TypedWhichId<SvxWeightItem>(XATTR_FILL_LAST + 5)
-#define ITEMID_SHADOWED                 TypedWhichId<SvxShadowedItem>(XATTR_FILL_LAST + 6)
-#define ITEMID_WORDLINEMODE             TypedWhichId<SvxWordLineModeItem>(XATTR_FILL_LAST + 7)
-#define ITEMID_CONTOUR                  TypedWhichId<SvxContourItem>(XATTR_FILL_LAST + 8)
-#define ITEMID_CROSSEDOUT               TypedWhichId<SvxCrossedOutItem>(XATTR_FILL_LAST + 9)
-#define ITEMID_UNDERLINE                TypedWhichId<SvxUnderlineItem>(XATTR_FILL_LAST + 10)
+#define ITEMID_FONT                     TypedWhichId<SvxFontItem>(ITEMID_FIRST)
+#define ITEMID_FONTHEIGHT               TypedWhichId<SvxFontHeightItem>(ITEMID_FIRST + 1)
+#define ITEMID_LANGUAGE                 TypedWhichId<SvxLanguageItem>(ITEMID_FIRST + 2)
 
-#define ITEMID_COLOR                    TypedWhichId<SvxColorItem>(XATTR_FILL_LAST + 11)
-#define ITEMID_KERNING                  TypedWhichId<SvxKerningItem>(XATTR_FILL_LAST + 12)
-#define ITEMID_CASEMAP                  TypedWhichId<SvxCaseMapItem>(XATTR_FILL_LAST + 13)
+#define ITEMID_POSTURE                  TypedWhichId<SvxPostureItem>(ITEMID_FIRST + 3)
+#define ITEMID_WEIGHT                   TypedWhichId<SvxWeightItem>(ITEMID_FIRST + 4)
+#define ITEMID_SHADOWED                 TypedWhichId<SvxShadowedItem>(ITEMID_FIRST + 5)
+#define ITEMID_WORDLINEMODE             TypedWhichId<SvxWordLineModeItem>(ITEMID_FIRST + 6)
+#define ITEMID_CONTOUR                  TypedWhichId<SvxContourItem>(ITEMID_FIRST + 7)
+#define ITEMID_CROSSEDOUT               TypedWhichId<SvxCrossedOutItem>(ITEMID_FIRST + 8)
+#define ITEMID_UNDERLINE                TypedWhichId<SvxUnderlineItem>(ITEMID_FIRST + 9)
 
-#define ITEMID_ESCAPEMENT               TypedWhichId<SvxEscapementItem>(XATTR_FILL_LAST + 14)
-#define ITEMID_FONTLIST                 XATTR_FILL_LAST + 15
-#define ITEMID_AUTOKERN                 TypedWhichId<SvxAutoKernItem>(XATTR_FILL_LAST + 16)
-#define ITEMID_COLOR_TABLE              TypedWhichId<SvxColorListItem>(XATTR_FILL_LAST + 17)
-#define ITEMID_BLINK                    TypedWhichId<SvxBlinkItem>(XATTR_FILL_LAST + 18)
-#define ITEMID_EMPHASISMARK             TypedWhichId<SvxEmphasisMarkItem>(XATTR_FILL_LAST + 19)
-#define ITEMID_TWOLINES                 TypedWhichId<SvxTwoLinesItem>(XATTR_FILL_LAST + 20)
-#define ITEMID_CHARROTATE               TypedWhichId<SvxCharRotateItem>(XATTR_FILL_LAST + 21)
-#define ITEMID_CHARSCALE_W              TypedWhichId<SvxCharScaleWidthItem>(XATTR_FILL_LAST + 22)
-#define ITEMID_CHARRELIEF               TypedWhichId<SvxCharReliefItem>(XATTR_FILL_LAST + 23)
-#define ITEMID_CHARHIDDEN               TypedWhichId<SvxCharHiddenItem>(XATTR_FILL_LAST + 24)
-#define ITEMID_BRUSH                    TypedWhichId<SvxBrushItem>(XATTR_FILL_LAST + 25)
-#define ITEMID_HORJUSTIFY               TypedWhichId<SvxHorJustifyItem>(XATTR_FILL_LAST + 26)
-#define ITEMID_VERJUSTIFY               TypedWhichId<SvxVerJustifyItem>(XATTR_FILL_LAST + 27)
-#define ITEMID_FONT_ASIAN               TypedWhichId<SvxFontItem>(XATTR_FILL_LAST + 28)
-#define ITEMID_FONTHEIGHT_ASIAN         TypedWhichId<SvxFontHeightItem>(XATTR_FILL_LAST + 29)
-#define ITEMID_LANGUAGE_ASIAN           TypedWhichId<SvxLanguageItem>(XATTR_FILL_LAST + 30)
-#define ITEMID_POSTURE_ASIAN            TypedWhichId<SvxPostureItem>(XATTR_FILL_LAST + 31)
-#define ITEMID_WEIGHT_ASIAN             TypedWhichId<SvxWeightItem>(XATTR_FILL_LAST + 32)
-#define ITEMID_FONT_COMPLEX             TypedWhichId<SvxFontItem>(XATTR_FILL_LAST + 33)
-#define ITEMID_FONTHEIGHT_COMPLEX       TypedWhichId<SvxFontHeightItem>(XATTR_FILL_LAST + 34)
-#define ITEMID_LANGUAGE_COMPLEX         TypedWhichId<SvxLanguageItem>(XATTR_FILL_LAST + 35)
-#define ITEMID_POSTURE_COMPLEX          TypedWhichId<SvxPostureItem>(XATTR_FILL_LAST + 36)
-#define ITEMID_WEIGHT_COMPLEX           TypedWhichId<SvxWeightItem>(XATTR_FILL_LAST + 37)
+#define ITEMID_COLOR                    TypedWhichId<SvxColorItem>(ITEMID_FIRST + 10)
+#define ITEMID_KERNING                  TypedWhichId<SvxKerningItem>(ITEMID_FIRST + 11)
+#define ITEMID_CASEMAP                  TypedWhichId<SvxCaseMapItem>(ITEMID_FIRST + 12)
+
+#define ITEMID_ESCAPEMENT               TypedWhichId<SvxEscapementItem>(ITEMID_FIRST + 13)
+#define ITEMID_FONTLIST                 ITEMID_FIRST + 14
+#define ITEMID_AUTOKERN                 TypedWhichId<SvxAutoKernItem>(ITEMID_FIRST + 15)
+#define ITEMID_COLOR_TABLE              TypedWhichId<SvxColorListItem>(ITEMID_FIRST + 16)
+#define ITEMID_BLINK                    TypedWhichId<SvxBlinkItem>(ITEMID_FIRST + 17)
+#define ITEMID_EMPHASISMARK             TypedWhichId<SvxEmphasisMarkItem>(ITEMID_FIRST + 18)
+#define ITEMID_TWOLINES                 TypedWhichId<SvxTwoLinesItem>(ITEMID_FIRST + 19)
+#define ITEMID_CHARROTATE               TypedWhichId<SvxCharRotateItem>(ITEMID_FIRST + 20)
+#define ITEMID_CHARSCALE_W              TypedWhichId<SvxCharScaleWidthItem>(ITEMID_FIRST + 21)
+#define ITEMID_CHARRELIEF               TypedWhichId<SvxCharReliefItem>(ITEMID_FIRST + 22)
+#define ITEMID_CHARHIDDEN               TypedWhichId<SvxCharHiddenItem>(ITEMID_FIRST + 23)
+#define ITEMID_BRUSH                    TypedWhichId<SvxBrushItem>(ITEMID_FIRST + 24)
+#define ITEMID_HORJUSTIFY               TypedWhichId<SvxHorJustifyItem>(ITEMID_FIRST + 25)
+#define ITEMID_VERJUSTIFY               TypedWhichId<SvxVerJustifyItem>(ITEMID_FIRST + 26)
+#define ITEMID_FONT_ASIAN               TypedWhichId<SvxFontItem>(ITEMID_FIRST + 27)
+#define ITEMID_FONTHEIGHT_ASIAN         TypedWhichId<SvxFontHeightItem>(ITEMID_FIRST + 28)
+#define ITEMID_LANGUAGE_ASIAN           TypedWhichId<SvxLanguageItem>(ITEMID_FIRST + 29)
+#define ITEMID_POSTURE_ASIAN            TypedWhichId<SvxPostureItem>(ITEMID_FIRST + 30)
+#define ITEMID_WEIGHT_ASIAN             TypedWhichId<SvxWeightItem>(ITEMID_FIRST + 31)
+#define ITEMID_FONT_COMPLEX             TypedWhichId<SvxFontItem>(ITEMID_FIRST + 32)
+#define ITEMID_FONTHEIGHT_COMPLEX       TypedWhichId<SvxFontHeightItem>(ITEMID_FIRST + 33)
+#define ITEMID_LANGUAGE_COMPLEX         TypedWhichId<SvxLanguageItem>(ITEMID_FIRST + 34)
+#define ITEMID_POSTURE_COMPLEX          TypedWhichId<SvxPostureItem>(ITEMID_FIRST + 35)
+#define ITEMID_WEIGHT_COMPLEX           TypedWhichId<SvxWeightItem>(ITEMID_FIRST + 36)
 
 #define WESTERN 0
 #define ASIAN   1
@@ -553,26 +557,26 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
     // UNO->ItemSet
     static SfxItemInfo aItemInfos[] =
     {
-        { XATTR_FILLSTYLE,      true },
-        { XATTR_FILLCOLOR,      true },
-        { XATTR_FILLGRADIENT,       true },
-        { XATTR_FILLHATCH,      true },
-        { XATTR_FILLBITMAP,     true },
-        { XATTR_FILLTRANSPARENCE,       true },
-        { XATTR_GRADIENTSTEPCOUNT,      true },
-        { XATTR_FILLBMP_TILE,       true },
-        { XATTR_FILLBMP_POS,        true },
-        { XATTR_FILLBMP_SIZEX,      true },
-        { XATTR_FILLBMP_SIZEY,      true },
-        { XATTR_FILLFLOATTRANSPARENCE,  true },
-        { XATTR_SECONDARYFILLCOLOR,     true },
-        { XATTR_FILLBMP_SIZELOG,        true },
-        { XATTR_FILLBMP_TILEOFFSETX,    true },
-        { XATTR_FILLBMP_TILEOFFSETY,    true },
-        { XATTR_FILLBMP_STRETCH,        true },
-        { XATTR_FILLBMP_POSOFFSETX,     true },
-        { XATTR_FILLBMP_POSOFFSETY,     true },
-        { XATTR_FILLBACKGROUND,     true },
+        { 0,      true },
+        { 0,      true },
+        { 0,       true },
+        { 0,      true },
+        { 0,     true },
+        { 0,       true },
+        { 0,      true },
+        { 0,       true },
+        { 0,        true },
+        { 0,      true },
+        { 0,      true },
+        { 0,  true },
+        { 0,     true },
+        { 0,        true },
+        { 0,    true },
+        { 0,    true },
+        { 0,        true },
+        { 0,     true },
+        { 0,     true },
+        { 0,     true },
 
         { SID_ATTR_CHAR_FONT, true },
         { SID_ATTR_CHAR_FONTHEIGHT, true },
@@ -691,7 +695,8 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
     OSL_ASSERT( pDefaults.size() == SAL_N_ELEMENTS(aItemInfos) );
 
     static const WhichRangesContainer pRanges(svl::Items<
-        XATTR_FILL_FIRST, ITEMID_WEIGHT_COMPLEX
+        XATTR_FILLSTYLE, XATTR_FILLBACKGROUND,
+        ITEMID_FONT, ITEMID_WEIGHT_COMPLEX
     >);
 
     rtl::Reference<SfxItemPool> pPool(new SfxItemPool("ReportCharProperties", XATTR_FILL_FIRST,ITEMID_WEIGHT_COMPLEX, aItemInfos, &pDefaults));
