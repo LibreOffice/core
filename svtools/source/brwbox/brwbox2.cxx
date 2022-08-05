@@ -23,11 +23,12 @@
 #include <tools/debug.hxx>
 #include <svtools/brwbox.hxx>
 #include <svtools/brwhead.hxx>
-#include "datwin.hxx"
 #include <svtools/colorcfg.hxx>
+#include <svtools/scrolladaptor.hxx>
+#include "datwin.hxx"
 #include <vcl/commandevent.hxx>
+#include <vcl/help.hxx>
 #include <vcl/ptrstyle.hxx>
-#include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
 
 #include <tools/multisel.hxx>
@@ -1120,9 +1121,18 @@ void BrowseBox::UpdateScrollbars()
         ? static_cast<short>( mvCols.size() - nFirstCol )
         : static_cast<short>( nLastCol - nFirstCol );
 
-    short nRange = std::max( nScrollCols, short(0) );
-    aHScroll->SetVisibleSize( nVisibleHSize );
-    aHScroll->SetRange( Range( 0, nRange ));
+    if (nVisibleHSize)
+    {
+        short nRange = std::max( nScrollCols, short(0) );
+        aHScroll->SetVisibleSize( nVisibleHSize );
+        aHScroll->SetRange( Range( 0, nRange ));
+    }
+    else
+    {
+        // ensure scrollbar is shown as fully filled
+        aHScroll->SetVisibleSize(1);
+        aHScroll->SetRange(Range(0, 1));
+    }
     if ( bNeedsHScroll && !aHScroll->IsVisible() )
         aHScroll->Show();
 
@@ -1251,14 +1261,12 @@ tools::Long BrowseBox::GetFrozenWidth() const
     return nWidth;
 }
 
-
 void BrowseBox::ColumnInserted( sal_uInt16 nPos )
 {
     if ( pColSel )
         pColSel->Insert( nPos );
     UpdateScrollbars();
 }
-
 
 sal_uInt16 BrowseBox::FrozenColCount() const
 {
@@ -1270,27 +1278,39 @@ sal_uInt16 BrowseBox::FrozenColCount() const
     return nCol; //TODO: BrowserColumns::size_type -> sal_uInt16!
 }
 
-
-IMPL_LINK(BrowseBox, ScrollHdl, ScrollBar*, pBar, void)
+IMPL_LINK(BrowseBox, VertScrollHdl, weld::Scrollbar&, rScrollbar, void)
 {
-    if ( pBar->GetDelta() == 0 )
-        return;
+    auto nCurScrollRow = nTopRow;
+    auto nPos = rScrollbar.adjustment_get_value();
+    ScrollRows(nPos - nCurScrollRow);
 
-    if ( pBar == aHScroll.get() )
-        ScrollColumns( aHScroll->GetDelta() );
-    if ( pBar == pVScroll )
-        ScrollRows( pVScroll->GetDelta() );
+    bool bShowTooltip = ((m_nCurrentMode & BrowserMode::TRACKING_TIPS) == BrowserMode::TRACKING_TIPS);
+    if (bShowTooltip &&
+        rScrollbar.get_scroll_type() == ScrollType::Drag &&
+        Help::IsQuickHelpEnabled())
+    {
+        OUString aTip = OUString::number(nPos) + "/";
+        if (!pDataWin->GetRealRowCount().isEmpty())
+            aTip += pDataWin->GetRealRowCount();
+        else
+            aTip += OUString::number(rScrollbar.adjustment_get_upper());
+        tools::Rectangle aRect(GetPointerPosPixel(), Size(GetTextWidth(aTip), GetTextHeight()));
+        Help::ShowQuickHelp(this, aRect, aTip);
+    }
 }
 
+IMPL_LINK(BrowseBox, HorzScrollHdl, weld::Scrollbar&, rScrollbar, void)
+{
+    auto nCurScrollCol = nFirstCol - FrozenColCount();
+    ScrollColumns(rScrollbar.adjustment_get_value() - nCurScrollCol);
+}
 
 IMPL_LINK( BrowseBox, StartDragHdl, HeaderBar*, pBar, void )
 {
     pBar->SetDragSize( pDataWin->GetOutputSizePixel().Height() );
 }
 
-
 // usually only the first column was resized
-
 void BrowseBox::MouseButtonDown( const MouseEvent& rEvt )
 {
 

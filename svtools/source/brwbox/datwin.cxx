@@ -20,6 +20,7 @@
 #include "datwin.hxx"
 #include <o3tl/numeric.hxx>
 #include <svtools/brwhead.hxx>
+#include <svtools/scrolladaptor.hxx>
 #include <utility>
 #include <vcl/commandevent.hxx>
 #include <vcl/help.hxx>
@@ -635,7 +636,6 @@ void BrowserDataWin::DoOutstandingInvalidations()
     aInvalidRegion.clear();
 }
 
-
 void BrowserDataWin::Invalidate( InvalidateFlags nFlags )
 {
     if ( !GetUpdateMode() )
@@ -654,42 +654,6 @@ void BrowserDataWin::Invalidate( const tools::Rectangle& rRect, InvalidateFlags 
         aInvalidRegion.emplace_back( rRect );
     else
         Window::Invalidate( rRect, nFlags );
-}
-
-BrowserScrollBar::~BrowserScrollBar()
-{
-    disposeOnce();
-}
-
-void BrowserScrollBar::dispose()
-{
-    _pDataWin.clear();
-    ScrollBar::dispose();
-}
-
-void BrowserScrollBar::Tracking( const TrackingEvent& rTEvt )
-{
-    tools::Long nPos = GetThumbPos();
-    if ( nPos != _nLastPos )
-    {
-        OUString aTip = OUString::number(nPos) + "/";
-        if ( !_pDataWin->GetRealRowCount().isEmpty() )
-            aTip += _pDataWin->GetRealRowCount();
-        else
-            aTip += OUString::number(GetRangeMax());
-
-        tools::Rectangle aRect(GetPointerPosPixel(), Size(GetTextWidth(aTip), GetTextHeight()));
-        Help::ShowQuickHelp(this, aRect, aTip);
-        _nLastPos = nPos;
-    }
-
-    ScrollBar::Tracking( rTEvt );
-}
-
-void BrowserScrollBar::EndScroll()
-{
-    Help::HideBalloonAndQuickHelp();
-    ScrollBar::EndScroll();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -37,7 +37,7 @@
 
 class BrowserColumn;
 class BrowserHeader;
-class ScrollBar;
+class ScrollAdaptor;
 class MeasureStatusBar;
 
 namespace svt {
@@ -46,6 +46,10 @@ namespace svt {
 
 namespace vcl {
     class IAccessibleFactory;
+}
+
+namespace weld {
+    class Scrollbar;
 }
 
 #define BROWSER_INVALIDID           SAL_MAX_UINT16
@@ -268,8 +272,8 @@ public:
 
 private:
     VclPtr<BrowserDataWin> pDataWin;       // window to display data rows
-    VclPtr<ScrollBar>      pVScroll;       // vertical scrollbar
-    VclPtr<ScrollBar>      aHScroll;       // horizontal scrollbar
+    VclPtr<ScrollAdaptor>  pVScroll;       // vertical scrollbar
+    VclPtr<ScrollAdaptor>  aHScroll;       // horizontal scrollbar
     VclPtr<MeasureStatusBar> aStatusBarHeight; // statusbar, just to measure its height
 
     tools::Long     m_nDataRowHeight; // height of a single data-row
@@ -359,7 +363,8 @@ private:
 
     SVT_DLLPRIVATE void            ColumnInserted( sal_uInt16 nPos );
 
-    DECL_DLLPRIVATE_LINK(    ScrollHdl, ScrollBar*, void );
+    DECL_DLLPRIVATE_LINK(VertScrollHdl, weld::Scrollbar&, void);
+    DECL_DLLPRIVATE_LINK(HorzScrollHdl, weld::Scrollbar&, void);
     DECL_DLLPRIVATE_LINK(    StartDragHdl, HeaderBar*, void );
 
     SVT_DLLPRIVATE tools::Long GetFrozenWidth() const;
