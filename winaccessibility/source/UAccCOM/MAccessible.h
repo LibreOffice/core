@@ -141,7 +141,6 @@ public:
     STDMETHOD(IncreaseState)(DWORD pXSate) override;
     STDMETHOD(SetState)(DWORD pXSate) override;
     STDMETHOD(Put_XAccValue)(const OLECHAR __RPC_FAR *pszAccValue) override;
-    STDMETHOD(Put_XAccLocation)(const Location sLocation) override;
     STDMETHOD(Put_XAccFocus)(long dChildID) override;
     STDMETHOD(Put_XAccParent)(IMAccessible __RPC_FAR *pIParent) override;
     STDMETHOD(Put_XAccWindowHandle)(HWND hwnd) override;
@@ -160,7 +159,6 @@ private:
     unsigned short m_iRole;
     DWORD   m_dState;
     IMAccessible* m_pIParent;
-    Location m_sLocation;
 
     // identify a COM object/Acc object uniquely
     long m_dChildID;

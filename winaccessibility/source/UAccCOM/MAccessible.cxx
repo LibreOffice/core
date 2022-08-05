@@ -198,10 +198,6 @@ m_dFocusChildID(UACC_NO_FOCUS),
 m_hwnd(nullptr),
 m_isDestroy(false)
 {
-    m_sLocation.m_dLeft=0;
-    m_sLocation.m_dTop = 0;
-    m_sLocation.m_dWidth=0;
-    m_sLocation.m_dHeight=0;
     CEnumVariant::Create(&m_pEnumVar);
     m_containedObjects.clear();
 }
@@ -892,35 +888,25 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::accLocation(long *pxLeft, long *
         {
             if(varChild.lVal==CHILDID_SELF)
             {
+                if (!m_xAccessible.is())
+                    return S_FALSE;
 
-                if (m_xAccessible.is())
-                {
-                    Reference<XAccessibleContext> const pRContext =
-                        m_xAccessible->getAccessibleContext();
-                    if( !pRContext.is() )
-                        return S_FALSE;
-                    Reference< XAccessibleComponent > pRComponent(pRContext,UNO_QUERY);
-                    if( !pRComponent.is() )
-                        return S_FALSE;
+                Reference<XAccessibleContext> const pRContext =
+                    m_xAccessible->getAccessibleContext();
+                if( !pRContext.is() )
+                    return S_FALSE;
+                Reference< XAccessibleComponent > pRComponent(pRContext,UNO_QUERY);
+                if( !pRComponent.is() )
+                    return S_FALSE;
 
-                    css::awt::Point pCPoint = pRComponent->getLocationOnScreen();
-                    css::awt::Size pCSize = pRComponent->getSize();
-                    *pxLeft = pCPoint.X;
-                    *pyTop =  pCPoint.Y;
-                    *pcxWidth = pCSize.Width;
-                    *pcyHeight = pCSize.Height;
-                    return S_OK;
-                }
-                else
-                {
-                    *pxLeft = m_sLocation.m_dLeft;
-                    *pyTop = m_sLocation.m_dTop;
-                    *pcxWidth = m_sLocation.m_dWidth;
-                    *pcyHeight = m_sLocation.m_dHeight;
-                    return S_OK;
-                }
+                css::awt::Point pCPoint = pRComponent->getLocationOnScreen();
+                css::awt::Size pCSize = pRComponent->getSize();
+                *pxLeft = pCPoint.X;
+                *pyTop =  pCPoint.Y;
+                *pcxWidth = pCSize.Width;
+                *pcyHeight = pCSize.Height;
+                return S_OK;
             }
-
         }
         return S_FALSE;
 
@@ -1240,19 +1226,6 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccFocus(long dChildID)
         return S_OK;
 
         } catch(...) { return E_FAIL; }
-}
-
-/**
-*Set accessible object location for the current COM object
-* @param    sLocation, the location of the current object.
-* @return   S_OK if successful and E_FAIL if failure.
-*/
-COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccLocation(const Location sLocation)
-{
-    // internal IMAccessible - no mutex meeded
-
-    this->m_sLocation = sLocation;
-    return S_OK;
 }
 
 /**
