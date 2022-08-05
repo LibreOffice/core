@@ -20,6 +20,7 @@
 #pragma once
 
 #include <com/sun/star/awt/XWindow.hpp>
+#include <svtools/scrolladaptor.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/scrbar.hxx>
 #include <types.hxx>
@@ -79,15 +80,18 @@ class ScDataTableView : public Control
     VclPtr<ScrollBarBox> mpTopLeft;
     VclPtr<ScDataTableColView> mpColView;
     VclPtr<ScDataTableRowView> mpRowView;
-    VclPtr<ScrollBar> mpVScroll;
-    VclPtr<ScrollBar> mpHScroll;
+    VclPtr<ScrollAdaptor> mpVScroll;
+    VclPtr<ScrollAdaptor> mpHScroll;
+
+    sal_uInt16 mnScrollBarSize;
 
     SCROW mnFirstVisibleRow;
     SCCOL mnFirstVisibleCol;
 
     std::unique_ptr<MouseEvent> mpMouseEvent;
 
-    DECL_LINK(ScrollHdl, ScrollBar*, void);
+    DECL_LINK(VertScrollHdl, weld::Scrollbar&, void);
+    DECL_LINK(HorzScrollHdl, weld::Scrollbar&, void);
 
 public:
     ScDataTableView(const css::uno::Reference<css::awt::XWindow>& rParent,
