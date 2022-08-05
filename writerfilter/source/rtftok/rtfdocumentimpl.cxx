@@ -1667,6 +1667,14 @@ void RTFDocumentImpl::replayRowBuffer(RTFBuffer_t& rBuffer, ::std::deque<RTFSprm
     for (Buf_t& i : rBuffer)
     {
         SAL_WARN_IF(BUFFER_CELLEND == std::get<0>(i), "writerfilter.rtf", "dropping table cell!");
+#if 0
+        if (BUFFER_CELLEND == std::get<0>(i))
+        {
+            replayBuffer(rBuffer, &rCellsSrpms.front(), &rCellsAttributes.front());
+            rCellsSrpms.pop_front();
+            rCellsAttributes.pop_front();
+        }
+#endif
     }
     assert(rCellsSrpms.empty());
     assert(rCellsAttributes.empty());

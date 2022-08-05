@@ -235,15 +235,21 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             m_bAfterCellBeforeRow = false;
             if (m_aStates.top().getTableRowWidthAfter() > 0)
             {
+#if 0
                 // Add fake cellx / cell, RTF equivalent of
                 // OOXMLFastContextHandlerTextTableRow::handleGridAfter().
                 auto pXValue = new RTFValue(m_aStates.top().getTableRowWidthAfter());
                 m_aStates.top().getTableRowSprms().set(NS_ooxml::LN_CT_TblGridBase_gridCol, pXValue,
                                                        RTFOverwrite::NO_APPEND);
+#endif
+                dispatchTableValue(RTFKeyword::CELLX,
+                                   m_nTopLevelCurrentCellX
+                                       + m_aStates.top().getTableRowWidthAfter());
                 dispatchSymbol(RTFKeyword::CELL);
 
                 // Adjust total width, which is done in the \cellx handler for normal cells.
-                m_nTopLevelCurrentCellX += m_aStates.top().getTableRowWidthAfter();
+                //                m_nTopLevelCurrentCellX += m_aStates.top().getTableRowWidthAfter();
+                //++m_nTopLevelCells;
 
                 m_aStates.top().setTableRowWidthAfter(0);
             }
