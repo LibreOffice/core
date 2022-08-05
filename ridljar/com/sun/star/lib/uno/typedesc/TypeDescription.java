@@ -34,7 +34,7 @@ import java.util.HashMap;
 
 /**
  * Supplies information about UNO types. Allows to examine a type
- * in detail (e.g. it is used for marshaling/unmarshaling).
+ * in detail (e.g. it is used for marshalling/unmarshalling).
  *
  * @since UDK2.0
  */
