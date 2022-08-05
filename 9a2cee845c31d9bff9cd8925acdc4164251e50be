@@ -106,6 +106,24 @@
       "parentUuid": "6e51ea64_af57f8e0",
       "revId": "9a2cee845c31d9bff9cd8925acdc4164251e50be",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16f90733_1dca2f8a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-08-05T06:57:30Z",
+      "side": 1,
+      "message": "Thanks, now it is ready to be fixed on online side (cypress test)",
+      "parentUuid": "237232c4_0a2ef696",
+      "revId": "9a2cee845c31d9bff9cd8925acdc4164251e50be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ],
   "submitRequirementResults": []
