@@ -66,12 +66,11 @@ using namespace ::com::sun::star::lang;
 #define TABWIN_HEIGHT_STD   120
 
 OScrollWindowHelper::OScrollWindowHelper( vcl::Window* pParent) : Window( pParent)
-    ,m_aHScrollBar( VclPtr<ScrollBar>::Create(this, WB_HSCROLL|WB_REPEAT|WB_DRAG) )
-    ,m_aVScrollBar( VclPtr<ScrollBar>::Create(this, WB_VSCROLL|WB_REPEAT|WB_DRAG) )
+    ,m_aHScrollBar( VclPtr<ScrollAdaptor>::Create(this, true) )
+    ,m_aVScrollBar( VclPtr<ScrollAdaptor>::Create(this, false) )
     ,m_pCornerWindow(VclPtr<ScrollBarBox>::Create(this, WB_3DLOOK))
     ,m_pTableView(nullptr)
 {
-
     // ScrollBars
 
     GetHScrollBar().SetRange( Range(0, 1000) );
@@ -106,8 +105,8 @@ void OScrollWindowHelper::setTableView(OJoinTableView* _pTableView)
 {
     m_pTableView = _pTableView;
     // ScrollBars
-    GetHScrollBar().SetScrollHdl( LINK(m_pTableView, OJoinTableView, ScrollHdl) );
-    GetVScrollBar().SetScrollHdl( LINK(m_pTableView, OJoinTableView, ScrollHdl) );
+    GetHScrollBar().SetScrollHdl( LINK(m_pTableView, OJoinTableView, HorzScrollHdl) );
+    GetVScrollBar().SetScrollHdl( LINK(m_pTableView, OJoinTableView, VertScrollHdl) );
 }
 
 void OScrollWindowHelper::resetRange(const Point& _aSize)
@@ -201,10 +200,16 @@ void OJoinTableView::dispose()
     vcl::Window::dispose();
 }
 
-IMPL_LINK( OJoinTableView, ScrollHdl, ScrollBar*, pScrollBar, void )
+IMPL_LINK(OJoinTableView, HorzScrollHdl, weld::Scrollbar&, rScrollbar, void)
 {
     // move all windows
-    ScrollPane( pScrollBar->GetDelta(), (pScrollBar == &GetHScrollBar()), false );
+    ScrollPane(m_aScrollOffset.X() - rScrollbar.adjustment_get_value(), true, false);
+}
+
+IMPL_LINK(OJoinTableView, VertScrollHdl, weld::Scrollbar&, rScrollbar, void)
+{
+    // move all windows
+    ScrollPane(m_aScrollOffset.Y() - rScrollbar.adjustment_get_value(), false, false);
 }
 
 void OJoinTableView::Resize()
@@ -405,7 +410,7 @@ namespace
     bool isScrollAllowed( OJoinTableView* _pView,tools::Long nDelta, bool bHoriz)
     {
         // adjust ScrollBar-Positions
-        ScrollBar& rBar = bHoriz ? _pView->GetHScrollBar() : _pView->GetVScrollBar() ;
+        ScrollAdaptor& rBar = bHoriz ? _pView->GetHScrollBar() : _pView->GetVScrollBar();
 
         tools::Long nOldThumbPos = rBar.GetThumbPos();
         tools::Long nNewThumbPos = nOldThumbPos + nDelta;
