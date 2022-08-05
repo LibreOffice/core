@@ -63,8 +63,8 @@ public:
     /// @throws css::uno::RuntimeException
     ScVbaWorksheet( const css::uno::Reference< ov::XHelperInterface >& xParent,
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
-        const css::uno::Reference< css::sheet::XSpreadsheet >& xSheet,
-        const css::uno::Reference< css::frame::XModel >& xModel )  ;
+        css::uno::Reference< css::sheet::XSpreadsheet > xSheet,
+        css::uno::Reference< css::frame::XModel > xModel )  ;
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
     ScVbaWorksheet( css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );

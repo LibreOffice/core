@@ -22,6 +22,7 @@
 #include <o3tl/safeint.hxx>
 #include <svx/svdpool.hxx>
 
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <svx/algitem.hxx>
 #include <editeng/borderline.hxx>
@@ -1393,10 +1394,10 @@ ScCellRangesBase::ScCellRangesBase(ScDocShell* pDocSh, const ScRange& rR) :
     }
 }
 
-ScCellRangesBase::ScCellRangesBase(ScDocShell* pDocSh, const ScRangeList& rR) :
+ScCellRangesBase::ScCellRangesBase(ScDocShell* pDocSh, ScRangeList aR) :
     pPropSet(lcl_GetCellsPropertySet()),
     pDocShell( pDocSh ),
-    aRanges( rR ),
+    aRanges(std::move( aR )),
     nObjectId( 0 ),
     bChartColAsHdr( false ),
     bChartRowAsHdr( false ),
@@ -8594,9 +8595,9 @@ const SfxItemPropertyMap& ScTableRowObj::GetItemPropertyMap()
     return pRowPropSet->getPropertyMap();
 }
 
-ScCellsObj::ScCellsObj(ScDocShell* pDocSh, const ScRangeList& rR) :
+ScCellsObj::ScCellsObj(ScDocShell* pDocSh, ScRangeList aR) :
     pDocShell( pDocSh ),
-    aRanges( rR )
+    aRanges(std::move( aR ))
 {
     pDocShell->GetDocument().AddUnoObject(*this);
 }
@@ -8651,9 +8652,9 @@ sal_Bool SAL_CALL ScCellsObj::hasElements()
     return bHas;
 }
 
-ScCellsEnumeration::ScCellsEnumeration(ScDocShell* pDocSh, const ScRangeList& rR) :
+ScCellsEnumeration::ScCellsEnumeration(ScDocShell* pDocSh, ScRangeList aR) :
     pDocShell( pDocSh ),
-    aRanges( rR ),
+    aRanges(std::move( aR )),
     bAtEnd( false )
 {
     ScDocument& rDoc = pDocShell->GetDocument();

@@ -14,6 +14,7 @@
 #include <sal/log.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
+#include <utility>
 #include <vcl/svapp.hxx>
 
 #include <miscuno.hxx>
@@ -38,10 +39,10 @@ static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetDataSequencePropertyMap(
     return aDataSequencePropertyMap_Impl;
 }
 
-PivotTableDataSequence::PivotTableDataSequence(ScDocument* pDocument, OUString const & sID,
+PivotTableDataSequence::PivotTableDataSequence(ScDocument* pDocument, OUString sID,
                                                std::vector<ValueAndFormat>&& rData)
     : m_pDocument(pDocument)
-    , m_aID(sID)
+    , m_aID(std::move(sID))
     , m_aData(std::move(rData))
     , m_aPropSet(lcl_GetDataSequencePropertyMap())
 {

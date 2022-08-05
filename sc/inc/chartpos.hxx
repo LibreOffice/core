@@ -120,7 +120,7 @@ public:
     ScChartPositioner( ScDocument& rDoc, SCTAB nTab,
                     SCCOL nStartColP, SCROW nStartRowP,
                     SCCOL nEndColP, SCROW nEndRowP );
-    ScChartPositioner( ScDocument& rDoc, const ScRangeListRef& rRangeList );
+    ScChartPositioner( ScDocument& rDoc, ScRangeListRef xRangeList );
     ScChartPositioner( const ScChartPositioner& rPositioner );
 
     ~ScChartPositioner();

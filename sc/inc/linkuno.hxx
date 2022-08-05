@@ -65,7 +65,7 @@ private:
     void                    ModifyRefreshDelay_Impl( sal_Int32 nRefresh );
 
 public:
-                            ScSheetLinkObj(ScDocShell* pDocSh, const OUString& rName);
+                            ScSheetLinkObj(ScDocShell* pDocSh, OUString aName);
     virtual                 ~ScSheetLinkObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
@@ -283,8 +283,8 @@ private:
     void                    Refreshed_Impl();
 
 public:
-                            ScDDELinkObj(ScDocShell* pDocSh, const OUString& rA,
-                                            const OUString& rT, const OUString& rI);
+                            ScDDELinkObj(ScDocShell* pDocSh, OUString aA,
+                                            OUString aT, OUString aI);
     virtual                 ~ScDDELinkObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
@@ -365,7 +365,7 @@ public:
 class ScExternalSheetCacheObj final : public cppu::WeakImplHelper< css::sheet::XExternalSheetCache >
 {
 public:
-    explicit ScExternalSheetCacheObj(ScDocShell* pDocShell, ScExternalRefCache::TableTypeRef const & pTable, size_t nIndex);
+    explicit ScExternalSheetCacheObj(ScDocShell* pDocShell, ScExternalRefCache::TableTypeRef pTable, size_t nIndex);
     virtual ~ScExternalSheetCacheObj() override;
 
                             // XExternalSheetCache

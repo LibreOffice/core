@@ -32,6 +32,7 @@
 
 #include <unordered_map>
 #include <unordered_set>
+#include <utility>
 #include <vector>
 #include <algorithm>
 
@@ -330,10 +331,10 @@ void ScDPGroupItem::FillGroupFilter( ScDPFilteredCache::GroupFilter& rFilter ) c
         rFilter.addMatchItem(rElement);
 }
 
-ScDPGroupDimension::ScDPGroupDimension( tools::Long nSource, const OUString& rNewName ) :
+ScDPGroupDimension::ScDPGroupDimension( tools::Long nSource, OUString aNewName ) :
     nSourceDim( nSource ),
     nGroupDim( -1 ),
-    aGroupName( rNewName ),
+    aGroupName(std::move( aNewName )),
     mbDateDimension(false)
 {
 }

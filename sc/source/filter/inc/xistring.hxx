@@ -33,7 +33,7 @@ public:
     /** Constructs an empty string. */
     explicit            XclImpString();
     /** Constructs an unformatted string. */
-    explicit            XclImpString( const OUString& rString );
+    explicit            XclImpString( OUString aString );
 
     /** Reads a complete string from the passed stream. */
     void                Read( XclImpStream& rStrm, XclStrFlags nFlags = XclStrFlags::NONE );

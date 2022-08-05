@@ -22,6 +22,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svl/itemprop.hxx>
 #include <svl/hint.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/awt/XBitmap.hpp>
@@ -246,8 +247,8 @@ uno::Any SAL_CALL ScLinkTargetTypeObj::getPropertyValue(const OUString& Property
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScLinkTargetTypeObj )
 
-ScLinkTargetsObj::ScLinkTargetsObj( const uno::Reference< container::XNameAccess > & rColl ) :
-    xCollection( rColl )
+ScLinkTargetsObj::ScLinkTargetsObj( uno::Reference< container::XNameAccess > xColl ) :
+    xCollection(std::move( xColl ))
 {
     OSL_ENSURE( xCollection.is(), "ScLinkTargetsObj: NULL" );
 }

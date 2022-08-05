@@ -52,6 +52,7 @@
 #include <userdat.hxx>
 #include <detfunc.hxx>
 #include <editutil.hxx>
+#include <utility>
 
 using namespace com::sun::star;
 
@@ -166,7 +167,7 @@ public:
     /** Create a new caption. The caption will not be inserted into the document. */
     explicit            ScCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, bool bTailFront );
     /** Manipulate an existing caption. */
-    explicit            ScCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, const ScCaptionPtr& xCaption );
+    explicit            ScCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, ScCaptionPtr xCaption );
 
     /** Returns the drawing layer page of the sheet contained in maPos. */
     SdrPage*            GetDrawPage();
@@ -212,10 +213,10 @@ ScCaptionCreator::ScCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, boo
     CreateCaption( true/*bShown*/, bTailFront );
 }
 
-ScCaptionCreator::ScCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, const ScCaptionPtr& xCaption ) :
+ScCaptionCreator::ScCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, ScCaptionPtr xCaption ) :
     mrDoc( rDoc ),
     maPos( rPos ),
-    mxCaption( xCaption )
+    mxCaption(std::move( xCaption ))
 {
     Initialize();
 }
@@ -861,9 +862,9 @@ ScPostIt::ScPostIt( ScDocument& rDoc, const ScAddress& rPos, const ScPostIt& rNo
     CreateCaption( rPos, rNote.maNoteData.mxCaption.get() );
 }
 
-ScPostIt::ScPostIt( ScDocument& rDoc, const ScAddress& rPos, const ScNoteData& rNoteData, bool bAlwaysCreateCaption, sal_uInt32 nPostItId ) :
+ScPostIt::ScPostIt( ScDocument& rDoc, const ScAddress& rPos, ScNoteData aNoteData, bool bAlwaysCreateCaption, sal_uInt32 nPostItId ) :
     mrDoc( rDoc ),
-    maNoteData( rNoteData )
+    maNoteData(std::move( aNoteData ))
 {
     mnPostItId = nPostItId == 0 ? mnLastPostItId++ : nPostItId;
     if( bAlwaysCreateCaption || maNoteData.mbShown )

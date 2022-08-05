@@ -37,7 +37,7 @@ private:
 public:
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
-    ScVbaCharacters( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,  const ScVbaPalette& dPalette, const css::uno::Reference< css::text::XSimpleText >& xRange, const css::uno::Any& Start, const css::uno::Any& Length, bool bReplace = false  );
+    ScVbaCharacters( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,  const ScVbaPalette& dPalette, css::uno::Reference< css::text::XSimpleText > xRange, const css::uno::Any& Start, const css::uno::Any& Length, bool bReplace = false  );
 
     // Attributes
     virtual OUString SAL_CALL getCaption() override;

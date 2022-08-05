@@ -27,19 +27,20 @@
 #include <tokenarray.hxx>
 
 #include <memory>
+#include <utility>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 ScVbaName::ScVbaName(const css::uno::Reference< ov::XHelperInterface >& xParent,
             const css::uno::Reference< css::uno::XComponentContext >& xContext,
-            const css::uno::Reference< css::sheet::XNamedRange >& xName,
-            const css::uno::Reference< css::sheet::XNamedRanges >& xNames,
-            const css::uno::Reference< css::frame::XModel >& xModel ):
+            css::uno::Reference< css::sheet::XNamedRange > xName,
+            css::uno::Reference< css::sheet::XNamedRanges > xNames,
+            css::uno::Reference< css::frame::XModel > xModel ):
             NameImpl_BASE(  xParent , xContext ),
-            mxModel( xModel ),
-            mxNamedRange( xName ),
-            mxNames( xNames )
+            mxModel(std::move( xModel )),
+            mxNamedRange(std::move( xName )),
+            mxNames(std::move( xNames ))
 {
 }
 

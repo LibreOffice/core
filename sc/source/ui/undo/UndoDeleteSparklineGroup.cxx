@@ -16,13 +16,14 @@
 #include <Sparkline.hxx>
 #include <SparklineList.hxx>
 #include <SparklineGroup.hxx>
+#include <utility>
 
 namespace sc
 {
 UndoDeleteSparklineGroup::UndoDeleteSparklineGroup(
-    ScDocShell& rDocShell, std::shared_ptr<sc::SparklineGroup> const& pSparklineGroup, SCTAB nTab)
+    ScDocShell& rDocShell, std::shared_ptr<sc::SparklineGroup> pSparklineGroup, SCTAB nTab)
     : ScSimpleUndo(&rDocShell)
-    , mpSparklineGroup(pSparklineGroup)
+    , mpSparklineGroup(std::move(pSparklineGroup))
     , mnTab(nTab)
 {
 }

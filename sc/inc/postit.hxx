@@ -181,7 +181,7 @@ public:
      */
     explicit            ScPostIt(
                             ScDocument& rDoc, const ScAddress& rPos,
-                            const ScNoteData& rNoteData, bool bAlwaysCreateCaption, sal_uInt32 nPostItId = 0  );
+                            ScNoteData aNoteData, bool bAlwaysCreateCaption, sal_uInt32 nPostItId = 0  );
 
     /** Removes the caption object from drawing layer, if this note is its owner. */
                         ~ScPostIt();

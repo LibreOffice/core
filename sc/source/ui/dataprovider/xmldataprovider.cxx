@@ -13,6 +13,7 @@
 #include <filter.hxx>
 #include <document.hxx>
 #include <datamapper.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <orcusfilters.hxx>
 #include <utility>
