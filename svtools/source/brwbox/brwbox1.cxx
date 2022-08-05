@@ -19,6 +19,7 @@
 
 #include <svtools/brwbox.hxx>
 #include <svtools/brwhead.hxx>
+#include <svtools/scrolladaptor.hxx>
 #include <o3tl/numeric.hxx>
 #include <o3tl/safeint.hxx>
 #include "datwin.hxx"
@@ -101,7 +102,7 @@ void BrowseBox::ConstructImpl( BrowserMode nMode )
     uRow.nSel = BROWSER_ENDOFSELECTION;
 
     aHScroll->SetLineSize(1);
-    aHScroll->SetScrollHdl( LINK( this, BrowseBox, ScrollHdl ) );
+    aHScroll->SetScrollHdl( LINK( this, BrowseBox, HorzScrollHdl ) );
     pDataWin->Show();
 
     SetMode( nMode );
@@ -161,7 +162,7 @@ BrowseBox::BrowseBox( vcl::Window* pParent, WinBits nBits, BrowserMode nMode )
     :Control( pParent, nBits | WB_3DLOOK )
     ,DragSourceHelper( this )
     ,DropTargetHelper( this )
-    ,aHScroll( VclPtr<ScrollBar>::Create(this, WB_HSCROLL) )
+    ,aHScroll( VclPtr<ScrollAdaptor>::Create(this, true) )
     // see NavigationBar ctor, here we just want to know its height
     ,aStatusBarHeight(VclPtr<MeasureStatusBar>::Create(this))
 {
@@ -2187,7 +2188,7 @@ void BrowseBox::SetMode( BrowserMode nMode )
                 : VclPtr<ScrollBar>::Create( this, nVScrollWinBits );
     pVScroll->SetLineSize( 1 );
     pVScroll->SetPageSize(1);
-    pVScroll->SetScrollHdl( LINK( this, BrowseBox, ScrollHdl ) );
+    pVScroll->SetScrollHdl( LINK( this, BrowseBox, VertScrollHdl ) );
 
     pDataWin->bAutoSizeLastCol =
             BrowserMode::AUTOSIZE_LASTCOL == ( nMode & BrowserMode::AUTOSIZE_LASTCOL );

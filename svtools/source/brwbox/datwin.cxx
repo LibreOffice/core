@@ -20,6 +20,7 @@
 #include "datwin.hxx"
 #include <o3tl/numeric.hxx>
 #include <svtools/brwhead.hxx>
+#include <svtools/scrolladaptor.hxx>
 #include <utility>
 #include <vcl/commandevent.hxx>
 #include <vcl/help.hxx>
