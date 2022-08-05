@@ -1296,7 +1296,16 @@ void FormulaCompiler::OpCodeMap::copyFrom( const OpCodeMap& r )
         }
     }
 
-    // TODO: maybe copy the external maps too?
+    // This was meant to copy to native map that does not have AddIn symbols
+    // but needs them from the source map. It is unclear what should happen if
+    // the destination already had externals, so do it only if it doesn't.
+    if (!hasExternals())
+    {
+        maExternalHashMap = r.maExternalHashMap;
+        maReverseExternalHashMap = r.maReverseExternalHashMap;
+        mbCore = r.mbCore;
+        mbEnglish = r.mbEnglish;
+    }
 }
 
 
