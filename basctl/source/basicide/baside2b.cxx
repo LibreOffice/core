@@ -1940,7 +1940,7 @@ ComplexEditorWindow::ComplexEditorWindow( ModulWindow* pParent ) :
     aBrkWindow(VclPtr<BreakPointWindow>::Create(this, pParent)),
     aLineNumberWindow(VclPtr<LineNumberWindow>::Create(this, pParent)),
     aEdtWindow(VclPtr<EditorWindow>::Create(this, pParent)),
-    aEWVScrollBar( VclPtr<ScrollBar>::Create(this, WB_VSCROLL | WB_DRAG) )
+    aEWVScrollBar( VclPtr<ScrollAdaptor>::Create(this, false) )
 {
     aEdtWindow->Show();
     aBrkWindow->Show();
@@ -1995,17 +1995,16 @@ void ComplexEditorWindow::Resize()
     aEWVScrollBar->SetPosSizePixel( Point( aOutSz.Width() - DWBORDER - nSBWidth, DWBORDER ), Size( nSBWidth, aSz.Height() ) );
 }
 
-IMPL_LINK(ComplexEditorWindow, ScrollHdl, ScrollBar *, pCurScrollBar, void )
+IMPL_LINK_NOARG(ComplexEditorWindow, ScrollHdl, weld::Scrollbar&, void)
 {
     if (aEdtWindow->GetEditView())
     {
-        DBG_ASSERT( pCurScrollBar == aEWVScrollBar.get(), "Who is scrolling?" );
-        tools::Long nDiff = aEdtWindow->GetEditView()->GetStartDocPos().Y() - pCurScrollBar->GetThumbPos();
+        tools::Long nDiff = aEdtWindow->GetEditView()->GetStartDocPos().Y() - aEWVScrollBar->GetThumbPos();
         aEdtWindow->GetEditView()->Scroll( 0, nDiff );
         aBrkWindow->DoScroll( nDiff );
         aLineNumberWindow->DoScroll( nDiff );
         aEdtWindow->GetEditView()->ShowCursor(false);
-        pCurScrollBar->SetThumbPos( aEdtWindow->GetEditView()->GetStartDocPos().Y() );
+        aEWVScrollBar->SetThumbPos( aEdtWindow->GetEditView()->GetStartDocPos().Y() );
     }
 }
 

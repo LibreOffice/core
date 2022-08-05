@@ -26,6 +26,7 @@
 #include <sfx2/viewsh.hxx>
 #include <svx/ifaceids.hxx>
 #include <svl/srchitem.hxx>
+#include <svtools/scrolladaptor.hxx>
 #include <vcl/scrbar.hxx>
 #include <map>
 #include <memory>
@@ -68,8 +69,8 @@ private:
     OUString            m_aCurLibName;
     std::shared_ptr<LocalizationMgr> m_pCurLocalizationMgr;
 
-    VclPtr<ScrollBar>    aHScrollBar;
-    VclPtr<ScrollBar>    aVScrollBar;
+    VclPtr<ScrollAdaptor> aHScrollBar;
+    VclPtr<ScrollAdaptor> aVScrollBar;
     VclPtr<ScrollBarBox> aScrollBarBox;
     VclPtr<TabBar>       pTabBar;           // basctl::TabBar
     bool                 bCreatingWindow;

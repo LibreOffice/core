@@ -1164,7 +1164,7 @@ void ModulWindow::GetState( SfxItemSet &rSet )
     }
 }
 
-void ModulWindow::DoScroll( ScrollBar* pCurScrollBar )
+void ModulWindow::DoScroll( Scrollable* pCurScrollBar )
 {
     if ( ( pCurScrollBar == GetHScrollBar() ) && GetEditView() )
     {

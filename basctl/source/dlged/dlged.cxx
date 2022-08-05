@@ -237,14 +237,12 @@ DlgEditor::DlgEditor (
     SetDialog(xDialogModel);
 }
 
-
 DlgEditor::~DlgEditor()
 {
     aMarkIdle.Stop();
 
     ::comphelper::disposeComponent( m_xControlContainer );
 }
-
 
 Reference< awt::XControlContainer > const & DlgEditor::GetWindowControlContainer()
 {
@@ -253,15 +251,13 @@ Reference< awt::XControlContainer > const & DlgEditor::GetWindowControlContainer
     return m_xControlContainer;
 }
 
-
-void DlgEditor::SetScrollBars( ScrollBar* pHS, ScrollBar* pVS )
+void DlgEditor::SetScrollBars(ScrollAdaptor* pHS, ScrollAdaptor* pVS)
 {
     pHScroll = pHS;
     pVScroll = pVS;
 
     InitScrollBars();
 }
-
 
 void DlgEditor::InitScrollBars()
 {

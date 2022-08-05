@@ -21,8 +21,8 @@
 #include <dlged.hxx>
 #include <dlgedpage.hxx>
 
+#include <svtools/scrolladaptor.hxx>
 #include <vcl/canvastools.hxx>
-#include <vcl/scrbar.hxx>
 
 #include <dlgedobj.hxx>
 

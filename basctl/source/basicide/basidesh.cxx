@@ -159,8 +159,8 @@ unsigned Shell::nShellCount = 0;
 Shell::Shell( SfxViewFrame* pFrame_, SfxViewShell* /* pOldShell */ ) :
     SfxViewShell( pFrame_, SfxViewShellFlags::NO_NEWWINDOW ),
     m_aCurDocument( ScriptDocument::getApplicationScriptDocument() ),
-    aHScrollBar( VclPtr<ScrollBar>::Create(&GetViewFrame()->GetWindow(), WinBits( WB_HSCROLL | WB_DRAG )) ),
-    aVScrollBar( VclPtr<ScrollBar>::Create(&GetViewFrame()->GetWindow(), WinBits( WB_VSCROLL | WB_DRAG )) ),
+    aHScrollBar( VclPtr<ScrollAdaptor>::Create(&GetViewFrame()->GetWindow(), true) ),
+    aVScrollBar( VclPtr<ScrollAdaptor>::Create(&GetViewFrame()->GetWindow(), false) ),
     aScrollBarBox( VclPtr<ScrollBarBox>::Create(&GetViewFrame()->GetWindow(), WinBits( WB_SIZEABLE )) ),
     pLayout(nullptr),
     aObjectCatalog(VclPtr<ObjectCatalog>::Create(&GetViewFrame()->GetWindow())),

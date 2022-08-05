@@ -36,7 +36,7 @@
 
 #include <memory>
 
-class ScrollBar;
+class ScrollAdaptor;
 class Printer;
 class KeyEvent;
 class MouseEvent;
@@ -107,8 +107,8 @@ private:
     static void Print( Printer* pPrinter, const OUString& rTitle );
 
 private:
-    VclPtr<ScrollBar>          pHScroll;
-    VclPtr<ScrollBar>          pVScroll;
+    VclPtr<ScrollAdaptor>      pHScroll;
+    VclPtr<ScrollAdaptor>      pVScroll;
     std::unique_ptr<DlgEdModel> pDlgEdModel; // never nullptr
     DlgEdPage*          pDlgEdPage;  // never nullptr
     std::unique_ptr<DlgEdView> pDlgEdView; // never nullptr
@@ -149,10 +149,10 @@ public:
     css::uno::Reference< css::awt::XControlContainer > const &
                     GetWindowControlContainer();
 
-    void            SetScrollBars( ScrollBar* pHScroll, ScrollBar* pVScroll );
+    void            SetScrollBars(ScrollAdaptor* pHScroll, ScrollAdaptor* pVScroll);
     void            InitScrollBars();
-    ScrollBar*      GetHScroll() const { return pHScroll; }
-    ScrollBar*      GetVScroll() const { return pVScroll; }
+    ScrollAdaptor*  GetHScroll() const { return pHScroll; }
+    ScrollAdaptor*  GetVScroll() const { return pVScroll; }
     void            DoScroll();
     void            UpdateScrollBars();
 
