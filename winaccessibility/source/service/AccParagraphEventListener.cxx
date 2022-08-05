@@ -94,7 +94,6 @@ void  AccParagraphEventListener::notifyEvent( const css::accessibility::Accessib
  */
 void AccParagraphEventListener::HandleCaretChangedEvent(Any, Any)
 {
-    AccObjectManagerAgent::UpdateLocation(m_xAccessible.get());
     pAgent->NotifyAccEvent(UnoMSAAEvent::OBJECT_CARETCHANGE, m_xAccessible.get());
 }
 

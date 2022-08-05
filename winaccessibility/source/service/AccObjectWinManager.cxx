@@ -919,21 +919,6 @@ void  AccObjectWinManager::UpdateAction( XAccessible* pXAcc )
 }
 
 /**
-   * Set corresponding com object's accessible location via XAccessible interface and new
-   * location.
-   * @param pXAcc XAccessible interface.
-   * @return
-   */
-void  AccObjectWinManager::SetLocation( XAccessible* pXAcc, long /*top*/, long /*left*/, long /*width*/, long /*height*/ )
-{
-    AccObject* pObj = GetAccObjByXAcc( pXAcc );
-    //get the location from XComponent.
-    Reference< XAccessibleContext > pRContext = pXAcc->getAccessibleContext();
-    if( pObj )
-        pObj->UpdateLocation();
-}
-
-/**
    * Set corresponding com object's value  via XAccessible interface and new value.
    * @param pXAcc XAccessible interface.
    * @param pAny new value.

@@ -106,7 +106,6 @@ void AccEventListener::HandleDescriptionChangedEvent()
  */
 void AccEventListener::HandleBoundrectChangedEvent()
 {
-    AccObjectManagerAgent::UpdateLocation(m_xAccessible.get());
     pAgent->NotifyAccEvent(UnoMSAAEvent::BOUNDRECT_CHANGED, m_xAccessible.get());
 }
 

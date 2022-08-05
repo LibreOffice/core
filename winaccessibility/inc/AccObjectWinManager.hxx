@@ -114,8 +114,6 @@ public:
     void  DecreaseState( css::accessibility::XAccessible* pXAcc,unsigned short pState );
     void  IncreaseState( css::accessibility::XAccessible* pXAcc,unsigned short pState );
     void  UpdateState( css::accessibility::XAccessible* pXAcc );
-    void  SetLocation( css::accessibility::XAccessible* pXAcc,
-                       long Top = 0,long left = 0,long width = 0,long height = 0);
 
     void  SetValue( css::accessibility::XAccessible* pXAcc, css::uno::Any pAny );
     void  UpdateValue( css::accessibility::XAccessible* pXAcc );
