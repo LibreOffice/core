@@ -62,6 +62,30 @@
       },
       "revId": "c9b57b7226de7062b9feaf7706825f6dc2a6fee8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4046eb32_0721c75d",
+        "filename": "sw/source/ui/vba/vbaapplication.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1003573
+      },
+      "writtenOn": "2022-08-05T10:49:51Z",
+      "side": 1,
+      "message": "So sorry about this, fixed now hopefully!",
+      "parentUuid": "bb7fa23d_a81b0cfe",
+      "range": {
+        "startLine": 456,
+        "startChar": 65,
+        "endLine": 456,
+        "endChar": 67
+      },
+      "revId": "c9b57b7226de7062b9feaf7706825f6dc2a6fee8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
