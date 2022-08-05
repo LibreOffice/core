@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <utility>
 #include <xestyle.hxx>
 
 #include <algorithm>
@@ -2274,9 +2275,9 @@ void XclExpDefaultXF::SetNumFmt( sal_uInt16 nXclNumFmt )
     mbFmtUsed = true;
 }
 
-XclExpStyle::XclExpStyle( sal_uInt32 nXFId, const OUString& rStyleName ) :
+XclExpStyle::XclExpStyle( sal_uInt32 nXFId, OUString aStyleName ) :
     XclExpRecord( EXC_ID_STYLE, 4 ),
-    maName( rStyleName ),
+    maName(std::move( aStyleName )),
     maXFId( nXFId ),
     mnStyleId( EXC_STYLE_USERDEF ),
     mnLevel( EXC_STYLE_NOLEVEL )

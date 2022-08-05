@@ -206,7 +206,7 @@ class Font : public WorkbookHelper
 {
 public:
     explicit            Font( const WorkbookHelper& rHelper, bool bDxf );
-    explicit            Font( const WorkbookHelper& rHelper, const FontModel& rModel );
+    explicit            Font( const WorkbookHelper& rHelper, FontModel aModel );
 
     /** Sets font formatting attributes for the passed element. */
     void                importAttribs( sal_Int32 nElement, const AttributeList& rAttribs );

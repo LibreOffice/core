@@ -32,6 +32,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <sot/storage.hxx>
+#include <utility>
 #include <vcl/gdimtf.hxx>
 #include <vcl/jobset.hxx>
 #include <vcl/svapp.hxx>
@@ -109,10 +110,10 @@ void ScTransferObj::PaintToDev( OutputDevice* pDev, ScDocument& rDoc, double nPr
     ScPrintFunc::DrawToDev( rDoc, pDev, nPrintFactor, aBound, &aViewData, false/*bMetaFile*/ );
 }
 
-ScTransferObj::ScTransferObj( const std::shared_ptr<ScDocument>& pClipDoc, const TransferableObjectDescriptor& rDesc ) :
+ScTransferObj::ScTransferObj( const std::shared_ptr<ScDocument>& pClipDoc, TransferableObjectDescriptor aDesc ) :
     m_pDoc( pClipDoc ),
     m_nNonFiltered(0),
-    m_aObjDesc( rDesc ),
+    m_aObjDesc(std::move( aDesc )),
     m_nDragHandleX( 0 ),
     m_nDragHandleY( 0 ),
     m_nSourceCursorX( m_pDoc->MaxCol() + 1 ),

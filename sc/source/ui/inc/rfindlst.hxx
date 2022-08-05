@@ -45,7 +45,7 @@ class ScRangeFindList
     sal_uInt16  nIndexColor;
 
 public:
-                     ScRangeFindList(const OUString& rName);
+                     ScRangeFindList(OUString aName);
 
     sal_uLong        Count() const                       { return maEntries.size(); }
     Color            Insert( const ScRangeFindData &rNew );

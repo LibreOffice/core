@@ -28,6 +28,7 @@
 #include "xeroot.hxx"
 #include <fonthelper.hxx>
 #include <memory>
+#include <utility>
 #include <vector>
 
 /* ============================================================================
@@ -256,8 +257,8 @@ struct XclExpNumFmt
     sal_uInt16          mnXclNumFmt;    /// Resulting Excel format index.
     OUString            maNumFmtString; /// format string
 
-    explicit     XclExpNumFmt( sal_uInt32 nScNumFmt, sal_uInt16 nXclNumFmt, const OUString& rFrmt ) :
-                            mnScNumFmt( nScNumFmt ), mnXclNumFmt( nXclNumFmt ), maNumFmtString( rFrmt ) {}
+    explicit     XclExpNumFmt( sal_uInt32 nScNumFmt, sal_uInt16 nXclNumFmt, OUString aFrmt ) :
+                            mnScNumFmt( nScNumFmt ), mnXclNumFmt( nXclNumFmt ), maNumFmtString(std::move( aFrmt )) {}
 
     void SaveXml( XclExpXmlStream& rStrm );
 };
@@ -538,7 +539,7 @@ public:
 class XclExpStyle : public XclExpRecord
 {
 public:
-    explicit            XclExpStyle( sal_uInt32 nXFId, const OUString& rStyleName );
+    explicit            XclExpStyle( sal_uInt32 nXFId, OUString aStyleName );
     explicit            XclExpStyle( sal_uInt32 nXFId, sal_uInt8 nStyleId, sal_uInt8 nLevel );
 
     /** Returns true, if this record represents an Excel built-in style. */

@@ -25,6 +25,7 @@
 #include <global.hxx>
 #include <compiler.hxx>
 #include <document.hxx>
+#include <utility>
 
 namespace {
 
@@ -203,9 +204,9 @@ void ExpandToText(const sal_Unicode* p, sal_Int32 nLen, sal_Int32& rStartPos, sa
 }
 
 ScRefFinder::ScRefFinder(
-    const OUString& rFormula, const ScAddress& rPos,
+    OUString aFormula, const ScAddress& rPos,
     ScDocument& rDoc, formula::FormulaGrammar::AddressConvention eConvP) :
-    maFormula(rFormula),
+    maFormula(std::move(aFormula)),
     meConv(eConvP),
     mrDoc(rDoc),
     maPos(rPos),

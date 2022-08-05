@@ -26,6 +26,7 @@
 #include <textuno.hxx>
 #include <editutil.hxx>
 #include <document.hxx>
+#include <utility>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -151,7 +152,7 @@ class ScXMLChangeTextPContext : public ScXMLImportContext
 public:
 
     ScXMLChangeTextPContext( ScXMLImport& rImport, sal_Int32 nElement,
-                       const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                       css::uno::Reference<css::xml::sax::XFastAttributeList> xAttrList,
                         ScXMLChangeCellContext* pChangeCellContext);
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
@@ -643,10 +644,10 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDeletionsContext::
 
 ScXMLChangeTextPContext::ScXMLChangeTextPContext( ScXMLImport& rImport,
                                       sal_Int32 nElement,
-                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                                      css::uno::Reference<css::xml::sax::XFastAttributeList> xAttrList,
                                       ScXMLChangeCellContext* pTempChangeCellContext) :
     ScXMLImportContext( rImport ),
-    mxAttrList(xAttrList),
+    mxAttrList(std::move(xAttrList)),
     mnElement(nElement),
     pChangeCellContext(pTempChangeCellContext)
 {

@@ -24,6 +24,7 @@
 #include "vbaoleobject.hxx"
 #include "vbaoleobjects.hxx"
 #include <cppuhelper/implbase.hxx>
+#include <utility>
 
 using namespace com::sun::star;
 using namespace ooo::vba;
@@ -81,10 +82,10 @@ class EnumWrapper : public EnumerationHelper_BASE
         uno::Reference<container::XIndexAccess > m_xIndexAccess;
         sal_Int32 nIndex;
 public:
-        EnumWrapper( const uno::Reference< XHelperInterface >& xParent,
-                     const uno::Reference< uno::XComponentContext >& xContext,
-                     const uno::Reference< container::XIndexAccess >& xIndexAccess )
-            :  m_xParent( xParent ), m_xContext( xContext), m_xIndexAccess( xIndexAccess ), nIndex( 0 ) {}
+        EnumWrapper( uno::Reference< XHelperInterface > xParent,
+                     uno::Reference< uno::XComponentContext > xContext,
+                     uno::Reference< container::XIndexAccess > xIndexAccess )
+            :  m_xParent(std::move( xParent )), m_xContext(std::move( xContext)), m_xIndexAccess(std::move( xIndexAccess )), nIndex( 0 ) {}
 
         virtual sal_Bool SAL_CALL hasMoreElements(  ) override
         {

@@ -22,6 +22,7 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
+#include <utility>
 #include "vbarange.hxx"
 
 using namespace com::sun::star;
@@ -29,13 +30,13 @@ using namespace ooo::vba;
 
 ScVbaPane::ScVbaPane(
         const css::uno::Reference< ov::XHelperInterface >& xParent,
-        const uno::Reference< uno::XComponentContext >& xContext,
+        uno::Reference< uno::XComponentContext > xContext,
         const uno::Reference< frame::XModel >& rModel,
         const uno::Reference< sheet::XViewPane >& rViewPane ) :
     m_xModel(rModel, uno::UNO_SET_THROW),
     m_xViewPane(rViewPane, uno::UNO_SET_THROW),
     m_xParent(xParent),
-    m_xContext(xContext)
+    m_xContext(std::move(xContext))
 {
 }
 

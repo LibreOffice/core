@@ -28,7 +28,7 @@ private:
     OUString aResult;
 
 public:
-    ScWebServiceLink(ScDocument* pD, const OUString& rURL);
+    ScWebServiceLink(ScDocument* pD, OUString aURL);
     virtual ~ScWebServiceLink() override;
 
     // SvBaseLink override:

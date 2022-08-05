@@ -22,6 +22,7 @@
 #include <scmod.hxx>
 
 #include <memory>
+#include <utility>
 #include <vector>
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
@@ -30,8 +31,8 @@
 using namespace css::uno;
 using namespace css::sheet;
 
-ScItemValue::ScItemValue(OUString const & aName, SCCOL nColumn, PivotFunc nFunctionMask) :
-    maName(aName),
+ScItemValue::ScItemValue(OUString aName, SCCOL nColumn, PivotFunc nFunctionMask) :
+    maName(std::move(aName)),
     maFunctionData(nColumn, nFunctionMask),
     mpOriginalItemValue(this)
 {}

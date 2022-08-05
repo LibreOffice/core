@@ -22,6 +22,7 @@
 #include <basic/sberrors.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <utility>
 #include <vector>
 #include <unonames.hxx>
 #include "vbaformatconditions.hxx"
@@ -89,7 +90,7 @@ class EnumWrapper : public EnumerationHelper_BASE
 
         sal_Int32 nIndex;
 public:
-        EnumWrapper( const uno::Reference< container::XIndexAccess >& xIndexAccess, const uno::Reference<excel::XRange >& xRange, const uno::Reference<uno::XComponentContext >& xContext, const uno::Reference<excel::XStyles >& xStyles, const uno::Reference< excel::XFormatConditions >& xCollection, const uno::Reference<beans::XPropertySet >& xProps  ) : m_xIndexAccess( xIndexAccess ), m_xParentRange( xRange ), m_xContext( xContext ), m_xStyles( xStyles ), m_xParentCollection( xCollection ), m_xProps( xProps ), nIndex( 0 ) {}
+        EnumWrapper( uno::Reference< container::XIndexAccess > xIndexAccess, uno::Reference<excel::XRange > xRange, uno::Reference<uno::XComponentContext > xContext, uno::Reference<excel::XStyles > xStyles, uno::Reference< excel::XFormatConditions > xCollection, uno::Reference<beans::XPropertySet > xProps  ) : m_xIndexAccess(std::move( xIndexAccess )), m_xParentRange(std::move( xRange )), m_xContext(std::move( xContext )), m_xStyles(std::move( xStyles )), m_xParentCollection(std::move( xCollection )), m_xProps(std::move( xProps )), nIndex( 0 ) {}
         virtual sal_Bool SAL_CALL hasMoreElements(  ) override
         {
                 return ( nIndex < m_xIndexAccess->getCount() );

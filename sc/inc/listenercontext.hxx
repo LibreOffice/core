@@ -32,7 +32,7 @@ public:
     StartListeningContext(const StartListeningContext&) = delete;
     const StartListeningContext& operator=(const StartListeningContext&) = delete;
     StartListeningContext(ScDocument& rDoc);
-    StartListeningContext(ScDocument& rDoc, const std::shared_ptr<ColumnBlockPositionSet>& pSet);
+    StartListeningContext(ScDocument& rDoc, std::shared_ptr<ColumnBlockPositionSet> pSet);
     void setColumnSet(const std::shared_ptr<const ColumnSet>& pColSet);
     const std::shared_ptr<const ColumnSet>& getColumnSet() const;
     ScDocument& getDoc() { return mrDoc; }
@@ -52,7 +52,7 @@ public:
     EndListeningContext(const EndListeningContext&) = delete;
     const EndListeningContext& operator=(const EndListeningContext&) = delete;
     EndListeningContext(ScDocument& rDoc, ScTokenArray* pOldCode = nullptr);
-    EndListeningContext(ScDocument& rDoc, const std::shared_ptr<ColumnBlockPositionSet>& pSet,
+    EndListeningContext(ScDocument& rDoc, std::shared_ptr<ColumnBlockPositionSet> pSet,
                         ScTokenArray* pOldCode = nullptr);
 
     void setPositionDelta(const ScAddress& rDelta);

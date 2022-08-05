@@ -172,8 +172,8 @@ class ScHTMLExport : public ScExportBase
     }
 
 public:
-                        ScHTMLExport( SvStream&, const OUString&, ScDocument*, const ScRange&,
-                                      bool bAll, const OUString& aStreamPath, std::u16string_view rFilterOptions );
+                        ScHTMLExport( SvStream&, OUString , ScDocument*, const ScRange&,
+                                      bool bAll, OUString aStreamPath, std::u16string_view aFilterOptions );
     virtual             ~ScHTMLExport() override;
     void                Write();
     const OUString&     GetNonConvertibleChars() const

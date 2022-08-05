@@ -16,13 +16,15 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#include <utility>
+
 #include "vbapivottable.hxx"
 #include "vbapivotcache.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-ScVbaPivotTable::ScVbaPivotTable( const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< sheet::XDataPilotTable >& xTable ) : PivotTableImpl_BASE( uno::Reference< XHelperInterface >(),  xContext), m_xTable( xTable )
+ScVbaPivotTable::ScVbaPivotTable( const uno::Reference< uno::XComponentContext >& xContext, uno::Reference< sheet::XDataPilotTable > xTable ) : PivotTableImpl_BASE( uno::Reference< XHelperInterface >(),  xContext), m_xTable(std::move( xTable ))
 {
 }
 

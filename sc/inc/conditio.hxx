@@ -453,7 +453,7 @@ public:
             ScCondFormatEntry( ScConditionMode eOper,
                                 const OUString& rExpr1, const OUString& rExpr2,
                                 ScDocument& rDocument, const ScAddress& rPos,
-                                const OUString& rStyle,
+                                OUString aStyle,
                                 const OUString& rExprNmsp1 = OUString(),
                                 const OUString& rExprNmsp2 = OUString(),
                                 formula::FormulaGrammar::Grammar eGrammar1 = formula::FormulaGrammar::GRAM_DEFAULT,
@@ -462,7 +462,7 @@ public:
             ScCondFormatEntry( ScConditionMode eOper,
                                 const ScTokenArray* pArr1, const ScTokenArray* pArr2,
                                 ScDocument& rDocument, const ScAddress& rPos,
-                                const OUString& rStyle );
+                                OUString aStyle );
             ScCondFormatEntry( const ScCondFormatEntry& r );
             ScCondFormatEntry( ScDocument& rDocument, const ScCondFormatEntry& r );
     virtual ~ScCondFormatEntry() override;

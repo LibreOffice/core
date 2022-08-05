@@ -37,6 +37,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/globname.hxx>
 #include <svtools/embedhlp.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 
 #include <ChartTools.hxx>
@@ -404,12 +405,12 @@ sal_Bool SAL_CALL ScChartsObj::hasByName( const OUString& aName )
     return aOle2Obj != nullptr;
 }
 
-ScChartObj::ScChartObj(ScDocShell* pDocSh, SCTAB nT, const OUString& rN)
+ScChartObj::ScChartObj(ScDocShell* pDocSh, SCTAB nT, OUString aN)
     :ScChartObj_Base( m_aMutex )
     ,ScChartObj_PBase( ScChartObj_Base::rBHelper )
     ,pDocShell( pDocSh )
     ,nTab( nT )
-    ,aChartName( rN )
+    ,aChartName(std::move( aN ))
 {
     pDocShell->GetDocument().AddUnoObject(*this);
 

@@ -24,6 +24,7 @@
 #include <formula/token.hxx>
 #include <svl/hint.hxx>
 #include <sfx2/linkmgr.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <svl/sharedstringpool.hxx>
 
@@ -72,10 +73,10 @@ SC_SIMPLE_SERVICE_INFO( ScDDELinksObj, "ScDDELinksObj", "com.sun.star.sheet.DDEL
 SC_SIMPLE_SERVICE_INFO( ScSheetLinkObj, "ScSheetLinkObj", "com.sun.star.sheet.SheetLink" )
 SC_SIMPLE_SERVICE_INFO( ScSheetLinksObj, "ScSheetLinksObj", "com.sun.star.sheet.SheetLinks" )
 
-ScSheetLinkObj::ScSheetLinkObj(ScDocShell* pDocSh, const OUString& rName) :
+ScSheetLinkObj::ScSheetLinkObj(ScDocShell* pDocSh, OUString aName) :
     aPropSet( lcl_GetSheetLinkMap() ),
     pDocShell( pDocSh ),
-    aFileName( rName )
+    aFileName(std::move( aName ))
 {
     pDocShell->GetDocument().AddUnoObject(*this);
 }
@@ -986,12 +987,12 @@ sal_Bool SAL_CALL ScAreaLinksObj::hasElements()
     return ( getCount() != 0 );
 }
 
-ScDDELinkObj::ScDDELinkObj(ScDocShell* pDocSh, const OUString& rA,
-                            const OUString& rT, const OUString& rI) :
+ScDDELinkObj::ScDDELinkObj(ScDocShell* pDocSh, OUString aA,
+                            OUString aT, OUString aI) :
     pDocShell( pDocSh ),
-    aAppl( rA ),
-    aTopic( rT ),
-    aItem( rI )
+    aAppl(std::move( aA )),
+    aTopic(std::move( aT )),
+    aItem(std::move( aI ))
 {
     pDocShell->GetDocument().AddUnoObject(*this);
 }
@@ -1377,9 +1378,9 @@ uno::Reference< sheet::XDDELink > ScDDELinksObj::addDDELink(
     return xLink;
 }
 
-ScExternalSheetCacheObj::ScExternalSheetCacheObj(ScDocShell* pDocShell, ScExternalRefCache::TableTypeRef const & pTable, size_t nIndex) :
+ScExternalSheetCacheObj::ScExternalSheetCacheObj(ScDocShell* pDocShell, ScExternalRefCache::TableTypeRef pTable, size_t nIndex) :
     mpDocShell(pDocShell),
-    mpTable(pTable),
+    mpTable(std::move(pTable)),
     mnIndex(nIndex)
 {
 }

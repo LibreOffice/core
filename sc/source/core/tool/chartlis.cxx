@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <utility>
 #include <vcl/svapp.hxx>
 
 #include <chartlis.hxx>
@@ -40,9 +41,9 @@ class ScChartUnoData
     uno::Reference< chart::XChartData >                     xSource;
 
 public:
-            ScChartUnoData( const uno::Reference< chart::XChartDataChangeEventListener >& rL,
-                            const uno::Reference< chart::XChartData >& rS ) :
-                    xListener( rL ), xSource( rS ) {}
+            ScChartUnoData( uno::Reference< chart::XChartDataChangeEventListener > xL,
+                            uno::Reference< chart::XChartData > xS ) :
+                    xListener(std::move( xL )), xSource(std::move( xS )) {}
 
     const uno::Reference< chart::XChartDataChangeEventListener >& GetListener() const   { return xListener; }
     const uno::Reference< chart::XChartData >& GetSource() const                        { return xSource; }
@@ -95,9 +96,9 @@ void ScChartListener::ExternalRefListener::removeFileId(sal_uInt16 nFileId)
     maFileIds.erase(nFileId);
 }
 
-ScChartListener::ScChartListener( const OUString& rName, ScDocument& rDocP,
+ScChartListener::ScChartListener( OUString aName, ScDocument& rDocP,
         const ScRangeListRef& rRangeList ) :
-    maName(rName),
+    maName(std::move(aName)),
     mrDoc( rDocP ),
     bUsed( false ),
     bDirty( false )
@@ -105,9 +106,9 @@ ScChartListener::ScChartListener( const OUString& rName, ScDocument& rDocP,
     ScRefTokenHelper::getTokensFromRangeList(&rDocP, maTokens, *rRangeList);
 }
 
-ScChartListener::ScChartListener( const OUString& rName, ScDocument& rDocP, vector<ScTokenRef> aTokens ) :
+ScChartListener::ScChartListener( OUString aName, ScDocument& rDocP, vector<ScTokenRef> aTokens ) :
     maTokens(std::move(aTokens)),
-    maName(rName),
+    maName(std::move(aName)),
     mrDoc( rDocP ),
     bUsed( false ),
     bDirty( false )
