@@ -86,8 +86,8 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
     aWorkArea = pScrollWindow->PixelToLogic( aWorkArea );
     if( !aOutRect.Contains( rPos ) && aWorkArea.Contains( rPos ) )
     {
-        ScrollBar& rHScroll = pScrollWindow->GetHScroll();
-        ScrollBar& rVScroll = pScrollWindow->GetVScroll();
+        ScrollAdaptor& rHScroll = pScrollWindow->GetHScroll();
+        ScrollAdaptor& rVScroll = pScrollWindow->GetVScroll();
         ScrollType eH = ScrollType::LineDown,eV = ScrollType::LineDown;
         if( rPos.X() < aOutRect.Left() )
             eH = ScrollType::LineUp;
@@ -99,8 +99,21 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
         else if( rPos.Y() <= aOutRect.Bottom() )
             eV = ScrollType::DontKnow;
 
-        rHScroll.DoScrollAction(eH);
-        rVScroll.DoScrollAction(eV);
+        if (eH != ScrollType::DontKnow)
+        {
+            auto nCurrentPos = rHScroll.GetThumbPos();
+            auto nLineSize = rHScroll.GetLineSize();
+            assert(eH == ScrollType::LineUp || eH == ScrollType::LineDown);
+            rHScroll.DoScroll(eH == ScrollType::LineUp ? (nCurrentPos - nLineSize) : (nCurrentPos + nLineSize));
+        }
+
+        if (eV != ScrollType::DontKnow)
+        {
+            auto nCurrentPos = rVScroll.GetThumbPos();
+            auto nLineSize = rVScroll.GetLineSize();
+            assert(eV == ScrollType::LineUp || eV == ScrollType::LineDown);
+            rVScroll.DoScroll(eV == ScrollType::LineUp ? (nCurrentPos - nLineSize) : (nCurrentPos + nLineSize));
+        }
     }
 
     aScrollTimer.Start();
