@@ -55,6 +55,7 @@
 #include <svtools/rtfkeywd.hxx>
 #include <filter/msfilter/rtfutil.hxx>
 #include <unotools/docinfohelper.hxx>
+#include <xmloff/odffields.hxx>
 #include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <rtl/tencinfo.h>
@@ -318,9 +319,62 @@ void RtfExport::OutputField(const SwField* pField, ww::eField eFieldType, const 
     m_pAttrOutput->WriteField_Impl(pField, eFieldType, rFieldCmd, nMode);
 }
 
-void RtfExport::WriteFormData(const ::sw::mark::IFieldmark& /*rFieldmark*/)
+void RtfExport::WriteFormData(const ::sw::mark::IFieldmark& rFieldmark)
 {
-    SAL_INFO("sw.rtf", "TODO: " << __func__);
+    sal_Int32 nType;
+    if (rFieldmark.GetFieldname() == ODF_FORMDROPDOWN)
+    {
+        nType = 2;
+    }
+    /* TODO
+    else if (rFieldmark.GetFieldname() == ODF_FORMCHECKBOX)
+    {
+        nType = 1;
+    }
+    else if (rFieldmark.GetFieldname() == ODF_FORMTEXT)
+    {
+        nType = 0;
+    }
+*/
+    else
+    {
+        SAL_INFO("sw.rtf", "unknown field type");
+        return;
+    }
+    m_pAttrOutput->RunText().append(
+        "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FORMFIELD
+        "{" OOO_STRING_SVTOOLS_RTF_FFTYPE);
+    m_pAttrOutput->RunText().append(nType);
+    if (rFieldmark.GetFieldname() == ODF_FORMDROPDOWN)
+    {
+        m_pAttrOutput->RunText().append(OOO_STRING_SVTOOLS_RTF_FFHASLISTBOX "1");
+        uno::Sequence<OUString> entries;
+        if (auto const it = rFieldmark.GetParameters()->find(ODF_FORMDROPDOWN_LISTENTRY);
+            it != rFieldmark.GetParameters()->end())
+        {
+            it->second >>= entries;
+        }
+        if (auto const it = rFieldmark.GetParameters()->find(ODF_FORMDROPDOWN_RESULT);
+            it != rFieldmark.GetParameters()->end())
+        {
+            sal_Int32 result(-1);
+            it->second >>= result;
+            if (0 <= result && result < entries.getLength())
+            {
+                m_pAttrOutput->RunText().append(OOO_STRING_SVTOOLS_RTF_FFRES);
+                m_pAttrOutput->RunText().append(result);
+            }
+        }
+        for (OUString const& rEntry : entries)
+        {
+            m_pAttrOutput->RunText().append(
+                "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFL " ");
+            m_pAttrOutput->RunText().append(
+                msfilter::rtfutil::OutString(rEntry, m_eDefaultEncoding));
+            m_pAttrOutput->RunText().append("}");
+        }
+    }
+    m_pAttrOutput->RunText().append("}}"); // close FORMFIELD destination
 }
 
 void RtfExport::WriteHyperlinkData(const ::sw::mark::IFieldmark& /*rFieldmark*/)
