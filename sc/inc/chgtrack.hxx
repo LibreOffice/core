@@ -207,16 +207,16 @@ protected:
 
     // only to be used in the XML import
     ScChangeAction( ScChangeActionType,
-                    const ScBigRange&,
+                    ScBigRange ,
                     const sal_uLong nAction,
                     const sal_uLong nRejectAction,
                     const ScChangeActionState eState,
                     const DateTime& aDateTime,
-                    const OUString& aUser,
-                    const OUString& aComment );
+                    OUString aUser,
+                    OUString aComment );
 
     // only to be used in the XML import
-    ScChangeAction( ScChangeActionType, const ScBigRange&, const sal_uLong nAction);
+    ScChangeAction( ScChangeActionType, ScBigRange , const sal_uLong nAction);
 
     OUString GetRefString(
         const ScBigRange& rRange, const ScDocument& rDoc, bool bFlag3D = false) const;
@@ -549,7 +549,7 @@ public:
                     const OUString& aUser,
                     const DateTime& aDateTime,
                     const OUString &sComment,
-                    const ScBigRange& aFromBigRange,
+                    ScBigRange aFromBigRange,
                     ScChangeTrack* pTrack); // only to use in the XML import
 
     const ScBigRange&   GetFromRange() const { return aFromRange; }
@@ -686,11 +686,11 @@ public:
         const sal_uLong nActionNumber,  const ScChangeActionState eState,
         const sal_uLong nRejectingNumber, const ScBigRange& aBigRange,
         const OUString& aUser, const DateTime& aDateTime,
-        const OUString &sComment, const ScCellValue& rOldCell,
+        const OUString &sComment, ScCellValue aOldCell,
         const ScDocument* pDoc, const OUString& sOldValue ); // to use for XML Import
 
     ScChangeActionContent(
-        const sal_uLong nActionNumber, const ScCellValue& rNewCell,
+        const sal_uLong nActionNumber, ScCellValue aNewCell,
         const ScBigRange& aBigRange, const ScDocument* pDoc,
         const OUString& sNewValue ); // to use for XML Import of Generated Actions
 

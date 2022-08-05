@@ -77,7 +77,7 @@ public:
 class SC_DLLPUBLIC ScTpFormulaItem final : public SfxPoolItem
 {
 public:
-    ScTpFormulaItem( const ScFormulaOptions& rOpt );
+    ScTpFormulaItem( ScFormulaOptions aOpt );
     virtual ~ScTpFormulaItem() override;
 
     ScTpFormulaItem(ScTpFormulaItem const &) = default;

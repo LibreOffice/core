@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <utility>
+
 #include "excelhandlers.hxx"
 #include "stylesbuffer.hxx"
 
@@ -38,8 +40,8 @@ class FontContext : public WorkbookContextBase
 {
 public:
     template< typename ParentType >
-    explicit     FontContext( ParentType& rParent, const FontRef& rxFont ) :
-                            WorkbookContextBase( rParent ), mxFont( rxFont ) {}
+    explicit     FontContext( ParentType& rParent, FontRef xFont ) :
+                            WorkbookContextBase( rParent ), mxFont(std::move( xFont )) {}
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
@@ -52,8 +54,8 @@ class BorderContext : public WorkbookContextBase
 {
 public:
     template< typename ParentType >
-    explicit     BorderContext( ParentType& rParent, const BorderRef& rxBorder ) :
-                            WorkbookContextBase( rParent ), mxBorder( rxBorder ) {}
+    explicit     BorderContext( ParentType& rParent, BorderRef xBorder ) :
+                            WorkbookContextBase( rParent ), mxBorder(std::move( xBorder )) {}
 
 protected:
     virtual void        onStartElement( const AttributeList& rAttribs ) override;
@@ -67,8 +69,8 @@ class FillContext : public WorkbookContextBase
 {
 public:
     template< typename ParentType >
-    explicit     FillContext( ParentType& rParent, const FillRef& rxFill ) :
-                            WorkbookContextBase( rParent ), mxFill( rxFill ), mfGradPos( -1.0 ) {}
+    explicit     FillContext( ParentType& rParent, FillRef xFill ) :
+                            WorkbookContextBase( rParent ), mxFill(std::move( xFill )), mfGradPos( -1.0 ) {}
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
@@ -82,8 +84,8 @@ class XfContext : public WorkbookContextBase
 {
 public:
     template< typename ParentType >
-    explicit     XfContext( ParentType& rParent, const XfRef& rxXf, bool bCellXf ) :
-                            WorkbookContextBase( rParent ), mxXf( rxXf ), mbCellXf( bCellXf ) {}
+    explicit     XfContext( ParentType& rParent, XfRef xXf, bool bCellXf ) :
+                            WorkbookContextBase( rParent ), mxXf(std::move( xXf )), mbCellXf( bCellXf ) {}
 
 protected:
     virtual void        onStartElement( const AttributeList& rAttribs ) override;

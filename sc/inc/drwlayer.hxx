@@ -111,7 +111,7 @@ private:
     void            ResizeLastRectFromAnchor( const SdrObject* pObj, ScDrawObjData& rData, bool bNegativePage, bool bCanResize );
 
 public:
-                    ScDrawLayer( ScDocument* pDocument, const OUString& rName );
+                    ScDrawLayer( ScDocument* pDocument, OUString aName );
     virtual         ~ScDrawLayer() override;
 
     virtual rtl::Reference<SdrPage> AllocPage(bool bMasterPage) override;

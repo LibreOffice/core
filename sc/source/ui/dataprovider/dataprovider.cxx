@@ -24,6 +24,7 @@
 #include <datamapper.hxx>
 #include <dbdata.hxx>
 #include <docsh.hxx>
+#include <utility>
 
 using namespace com::sun::star;
 
@@ -63,10 +64,10 @@ std::unique_ptr<SvStream> DataProvider::FetchStreamFromURL(const OUString& rURL,
     }
 }
 
-ExternalDataSource::ExternalDataSource(const OUString& rURL,
-        const OUString& rProvider, ScDocument* pDoc)
-    : maURL(rURL)
-    , maProvider(rProvider)
+ExternalDataSource::ExternalDataSource(OUString aURL,
+        OUString aProvider, ScDocument* pDoc)
+    : maURL(std::move(aURL))
+    , maProvider(std::move(aProvider))
     , mpDoc(pDoc)
 {
 }
@@ -246,8 +247,8 @@ void ScDBDataManager::WriteToDoc(ScDocument& rDoc)
         pDocShell->PostPaint(aDestRange, PaintPartFlags::All);
 }
 
-ScDBDataManager::ScDBDataManager(const OUString& rDBName, ScDocument* pDoc):
-    maDBName(rDBName),
+ScDBDataManager::ScDBDataManager(OUString aDBName, ScDocument* pDoc):
+    maDBName(std::move(aDBName)),
     mpDoc(pDoc)
 {
 }

@@ -10,6 +10,7 @@
 #include <listenercontext.hxx>
 #include <document.hxx>
 #include <mtvelements.hxx>
+#include <utility>
 
 namespace sc {
 
@@ -17,8 +18,8 @@ StartListeningContext::StartListeningContext(ScDocument& rDoc) :
     mrDoc(rDoc), mpSet(std::make_shared<ColumnBlockPositionSet>(rDoc)) {}
 
 StartListeningContext::StartListeningContext(
-    ScDocument& rDoc, const std::shared_ptr<ColumnBlockPositionSet>& pSet) :
-    mrDoc(rDoc), mpSet(pSet) {}
+    ScDocument& rDoc, std::shared_ptr<ColumnBlockPositionSet> pSet) :
+    mrDoc(rDoc), mpSet(std::move(pSet)) {}
 
 void StartListeningContext::setColumnSet( const std::shared_ptr<const ColumnSet>& rpColSet )
 {
@@ -40,8 +41,8 @@ EndListeningContext::EndListeningContext(ScDocument& rDoc, ScTokenArray* pOldCod
     mpOldCode(pOldCode), maPosDelta(0,0,0) {}
 
 EndListeningContext::EndListeningContext(
-    ScDocument& rDoc, const std::shared_ptr<ColumnBlockPositionSet>& pSet, ScTokenArray* pOldCode) :
-    mrDoc(rDoc),  mpPosSet(pSet),
+    ScDocument& rDoc, std::shared_ptr<ColumnBlockPositionSet> pSet, ScTokenArray* pOldCode) :
+    mrDoc(rDoc),  mpPosSet(std::move(pSet)),
     mpOldCode(pOldCode), maPosDelta(0,0,0) {}
 
 void EndListeningContext::setPositionDelta( const ScAddress& rDelta )

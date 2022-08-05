@@ -36,6 +36,7 @@
 #include "vbaworksheet.hxx"
 #include <markdata.hxx>
 
+#include <utility>
 #include <vector>
 #include <prevwsh.hxx>
 #include <preview.hxx>
@@ -136,7 +137,7 @@ class SheetsEnumeration : public EnumerationHelperImpl
     uno::Reference< frame::XModel > m_xModel;
 public:
     /// @throws uno::RuntimeException
-    SheetsEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration,  const uno::Reference< frame::XModel >& xModel  ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ), m_xModel( xModel ) {}
+    SheetsEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration,  uno::Reference< frame::XModel > xModel  ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ), m_xModel(std::move( xModel )) {}
 
     virtual uno::Any SAL_CALL nextElement(  ) override
     {
@@ -159,11 +160,11 @@ public:
 
 }
 
-ScVbaWorksheets::ScVbaWorksheets( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< css::uno::XComponentContext > & xContext, const uno::Reference< container::XIndexAccess >& xSheets, const uno::Reference< frame::XModel >& xModel ): ScVbaWorksheets_BASE( xParent, xContext,  xSheets ), mxModel( xModel ), m_xSheets( uno::Reference< sheet::XSpreadsheets >( xSheets, uno::UNO_QUERY ) )
+ScVbaWorksheets::ScVbaWorksheets( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< css::uno::XComponentContext > & xContext, const uno::Reference< container::XIndexAccess >& xSheets, uno::Reference< frame::XModel > xModel ): ScVbaWorksheets_BASE( xParent, xContext,  xSheets ), mxModel(std::move( xModel )), m_xSheets( uno::Reference< sheet::XSpreadsheets >( xSheets, uno::UNO_QUERY ) )
 {
 }
 
-ScVbaWorksheets::ScVbaWorksheets( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< css::uno::XComponentContext > & xContext, const uno::Reference< container::XEnumerationAccess >& xEnumAccess, const uno::Reference< frame::XModel >& xModel  ):  ScVbaWorksheets_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( xEnumAccess, uno::UNO_QUERY ) ), mxModel(xModel)
+ScVbaWorksheets::ScVbaWorksheets( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< css::uno::XComponentContext > & xContext, const uno::Reference< container::XEnumerationAccess >& xEnumAccess, uno::Reference< frame::XModel > xModel  ):  ScVbaWorksheets_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( xEnumAccess, uno::UNO_QUERY ) ), mxModel(std::move(xModel))
 {
 }
 

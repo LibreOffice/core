@@ -231,7 +231,7 @@ protected:
 
 public:
                             ScCellRangesBase(ScDocShell* pDocSh, const ScRange& rR);
-                            ScCellRangesBase(ScDocShell* pDocSh, const ScRangeList& rR);
+                            ScCellRangesBase(ScDocShell* pDocSh, ScRangeList aR);
     virtual                 ~ScCellRangesBase() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
@@ -1041,7 +1041,7 @@ private:
     ScRangeList             aRanges;
 
 public:
-                            ScCellsObj(ScDocShell* pDocSh, const ScRangeList& rR);
+                            ScCellsObj(ScDocShell* pDocSh, ScRangeList aR);
     virtual                 ~ScCellsObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
@@ -1077,7 +1077,7 @@ private:
     void                    CheckPos_Impl();
 
 public:
-                            ScCellsEnumeration(ScDocShell* pDocSh, const ScRangeList& rR);
+                            ScCellsEnumeration(ScDocShell* pDocSh, ScRangeList aR);
     virtual                 ~ScCellsEnumeration() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;

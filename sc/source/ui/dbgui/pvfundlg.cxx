@@ -36,6 +36,7 @@
 #include <globstr.hrc>
 #include <dputil.hxx>
 
+#include <utility>
 #include <vector>
 
 using namespace ::com::sun::star::sheet;
@@ -645,7 +646,7 @@ namespace
 }
 
 ScDPSubtotalOptDlg::ScDPSubtotalOptDlg(weld::Window* pParent, ScDPObject& rDPObj,
-        const ScDPLabelData& rLabelData, const ScDPNameVec& rDataFields,
+        ScDPLabelData aLabelData, const ScDPNameVec& rDataFields,
         bool bEnableLayout )
     : GenericDialogController(pParent, "modules/scalc/ui/datafieldoptionsdialog.ui",
                               "DataFieldOptionsDialog")
@@ -671,7 +672,7 @@ ScDPSubtotalOptDlg::ScDPSubtotalOptDlg(weld::Window* pParent, ScDPObject& rDPObj
     , m_xBtnOk(m_xBuilder->weld_button("ok"))
     , m_xBtnCancel(m_xBuilder->weld_button("cancel"))
     , mrDPObj(rDPObj)
-    , maLabelData(rLabelData)
+    , maLabelData(std::move(aLabelData))
 {
     m_xLbHide->enable_toggle_buttons(weld::ColumnToggleType::Check);
 

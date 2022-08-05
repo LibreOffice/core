@@ -30,7 +30,7 @@ public:
     /// @throws css::uno::RuntimeException
     ScVbaPane(
         const css::uno::Reference< ov::XHelperInterface >& rParent,
-        const css::uno::Reference< css::uno::XComponentContext >& rContext,
+        css::uno::Reference< css::uno::XComponentContext > xContext,
         const css::uno::Reference< css::frame::XModel >& rModel,
         const css::uno::Reference< css::sheet::XViewPane >& rViewPane );
 

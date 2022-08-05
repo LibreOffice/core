@@ -34,7 +34,7 @@ class ScRefFinder
     sal_Int32 mnSelEnd;
 
 public:
-    ScRefFinder(const OUString& rFormula, const ScAddress& rPos, ScDocument& rDoc,
+    ScRefFinder(OUString aFormula, const ScAddress& rPos, ScDocument& rDoc,
                 formula::FormulaGrammar::AddressConvention eConvP
                 = formula::FormulaGrammar::CONV_OOO);
     ~ScRefFinder();

@@ -49,7 +49,7 @@ static bool bIsInUpdate;
 public:
 
             ScDdeLink( ScDocument& rD,
-                        const OUString& rA, const OUString& rT, const OUString& rI,
+                        OUString aA, OUString aT, OUString aI,
                         sal_uInt8 nM );
             ScDdeLink( ScDocument& rD, SvStream& rStream, ScMultipleReadHeader& rHdr );
             ScDdeLink( ScDocument& rD, const ScDdeLink& rOther );

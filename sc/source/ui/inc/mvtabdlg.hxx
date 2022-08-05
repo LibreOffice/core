@@ -27,7 +27,7 @@ class ScDocument;
 class ScMoveTableDlg : public weld::GenericDialogController
 {
 public:
-    ScMoveTableDlg(weld::Window* pParent, const OUString& rDefault);
+    ScMoveTableDlg(weld::Window* pParent, OUString aDefault);
     virtual ~ScMoveTableDlg() override;
 
     sal_uInt16  GetSelectedDocument     () const { return nDocument; }

@@ -85,7 +85,7 @@ public:
 
     ScUndoEnterData(
         ScDocShell* pNewDocShell, const ScAddress& rPos,
-        ValuesType& rOldValues, const OUString& rNewStr, std::unique_ptr<EditTextObject> pObj );
+        ValuesType& rOldValues, OUString aNewStr, std::unique_ptr<EditTextObject> pObj );
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -113,7 +113,7 @@ class ScUndoEnterValue: public ScSimpleUndo
 public:
     ScUndoEnterValue(
         ScDocShell* pNewDocShell, const ScAddress& rNewPos,
-        const ScCellValue& rUndoCell, double nVal );
+        ScCellValue aUndoCell, double nVal );
 
     virtual         ~ScUndoEnterValue() override;
 
@@ -138,7 +138,7 @@ private:
 class ScUndoSetCell : public ScSimpleUndo
 {
 public:
-    ScUndoSetCell( ScDocShell* pDocSh, const ScAddress& rPos, const ScCellValue& rOldVal, const ScCellValue& rNewVal );
+    ScUndoSetCell( ScDocShell* pDocSh, const ScAddress& rPos, ScCellValue aOldVal, ScCellValue aNewVal );
 
     virtual ~ScUndoSetCell() override;
 
@@ -216,7 +216,7 @@ class ScUndoThesaurus: public ScSimpleUndo
 public:
     ScUndoThesaurus( ScDocShell* pNewDocShell,
                      SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
-                     const ScCellValue& rOldText, const ScCellValue& rNewText );
+                     ScCellValue aOldText, ScCellValue aNewText );
     virtual         ~ScUndoThesaurus() override;
 
     virtual void    Undo() override;
@@ -256,8 +256,8 @@ public:
                     ScUndoReplaceNote(
                         ScDocShell& rDocShell,
                         const ScAddress& rPos,
-                        const ScNoteData& rOldData,
-                        const ScNoteData& rNewData,
+                        ScNoteData aOldData,
+                        ScNoteData aNewData,
                         std::unique_ptr<SdrUndoAction> pDrawUndo );
 
     virtual         ~ScUndoReplaceNote() override;

@@ -67,7 +67,7 @@ friend class ScVbaName;
     SCTAB                   GetTab_Impl();
 
 public:
-                            ScNamedRangeObj( rtl::Reference< ScNamedRangesObj > const & xParent, ScDocShell* pDocSh, const OUString& rNm,
+                            ScNamedRangeObj( rtl::Reference< ScNamedRangesObj > xParent, ScDocShell* pDocSh, OUString aNm,
                                     css::uno::Reference< css::container::XNamed > const & xSheet = css::uno::Reference< css::container::XNamed > ());
     virtual                 ~ScNamedRangeObj() override;
 
@@ -241,7 +241,7 @@ private:
 
     css::uno::Reference< css::container::XNamed > mxSheet;
 public:
-                            ScLocalNamedRangesObj(ScDocShell* pDocSh, css::uno::Reference< css::container::XNamed > const & xNamed );
+                            ScLocalNamedRangesObj(ScDocShell* pDocSh, css::uno::Reference< css::container::XNamed > xNamed );
     virtual                 ~ScLocalNamedRangesObj() override;
 };
 
