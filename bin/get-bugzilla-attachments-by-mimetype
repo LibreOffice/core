@@ -415,7 +415,8 @@ def generate_multi_threading():
 
     jobs.join()
 
-max_threads = 20 # Number of threads to create, (1 = without multi-threading)
+# Number of threads to create, (1 = without multi-threading, default = 20)
+max_threads = int(os.environ.get('PARALLELISM', 20))
 jobs = queue.Queue()
 
 generate_multi_threading()

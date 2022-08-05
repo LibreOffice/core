@@ -160,8 +160,8 @@ if __name__ == '__main__':
         sys.exit(1)
 
     processes = []
-    # 10 at a time seems to work fine
-    with ThreadPoolExecutor(max_workers=10) as executor:
+    # by default, 10 at a time seems to work fine
+    with ThreadPoolExecutor(max_workers=int(os.environ.get('PARALLELISM', 10))) as executor:
         for lang, config in forums.items():
             processes.append(executor.submit(get_attachments_from_url, lang, config, pathes))
 
