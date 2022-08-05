@@ -16,6 +16,24 @@
       "message": "Works like a charm with gen, kf5, gtk3 and gtk4. Only UI quirk I see is the missing description of the second column (the status). But I\u0027m afraid of touching anything :-).",
       "revId": "c58df32d0be18d3daacbd20d0007fd39b5a575ef",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a62c57a_b39f9e3d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-08-05T14:25:43Z",
+      "side": 1,
+      "message": "yeah me too :-) treeviews are a pain, lets go with what we have here",
+      "parentUuid": "d465ce42_eb720bb8",
+      "revId": "c58df32d0be18d3daacbd20d0007fd39b5a575ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
