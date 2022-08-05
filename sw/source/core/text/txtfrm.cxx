@@ -351,9 +351,9 @@ namespace sw {
     }
 
     std::pair<SwTextNode *, SwTextNode *>
-    GetFirstAndLastNode(SwRootFrame const& rLayout, SwNodeIndex const& rPos)
+    GetFirstAndLastNode(SwRootFrame const& rLayout, SwNode const& rPos)
     {
-        SwTextNode *const pTextNode(rPos.GetNode().GetTextNode());
+        SwTextNode *const pTextNode(const_cast<SwTextNode*>(rPos.GetTextNode()));
         if (pTextNode && rLayout.HasMergedParas())
         {
             if (SwTextFrame const*const pFrame = static_cast<SwTextFrame*>(pTextNode->getLayoutFrame(&rLayout)))

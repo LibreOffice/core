@@ -1830,7 +1830,7 @@ bool SwDoc::MoveParagraph(SwPaM& rPam, SwNodeOffset nOffset, bool const bIsOutlM
     if (pLayout)
     {
         std::pair<SwTextNode *, SwTextNode *> nodes(
-            sw::GetFirstAndLastNode(*pLayout, rPam.Start()->nNode));
+            sw::GetFirstAndLastNode(*pLayout, rPam.Start()->GetNode()));
         if (nodes.first && nodes.first != &rPam.Start()->GetNode())
         {
             assert(nodes.second);
@@ -1849,7 +1849,7 @@ bool SwDoc::MoveParagraph(SwPaM& rPam, SwNodeOffset nOffset, bool const bIsOutlM
             assert(nodes.first->GetIndex() < rPam.Start()->GetNodeIndex());
             rPam.Start()->Assign(*nodes.first);
         }
-        nodes = sw::GetFirstAndLastNode(*pLayout, rPam.End()->nNode);
+        nodes = sw::GetFirstAndLastNode(*pLayout, rPam.End()->GetNode());
         if (nodes.second && nodes.second != &rPam.End()->GetNode())
         {
             assert(nodes.first);

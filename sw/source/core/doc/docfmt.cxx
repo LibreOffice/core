@@ -1692,7 +1692,7 @@ void SwDoc::MoveLeftMargin(const SwPaM& rPam, bool bRight, bool bModulus,
 
             SwRegHistory aRegH( pTNd, *pTNd, pHistory );
             pTNd->SetAttr( aLS );
-            aIdx = *sw::GetFirstAndLastNode(*pLayout, aIdx).second;
+            aIdx = *sw::GetFirstAndLastNode(*pLayout, aIdx.GetNode()).second;
         }
         ++aIdx;
     }
