@@ -91,6 +91,47 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTableCell::get_columnExtent(long* pColumns
     }
 }
 
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTableCell::get_columnHeaderCells(IUnknown*** cellAccessibles,
+                                                                       long* pColumnHeaderCellCount)
+{
+    SolarMutexGuard g;
+
+    if (!cellAccessibles || !pColumnHeaderCellCount)
+        return E_INVALIDARG;
+
+    if (!m_xTable.is())
+        return E_FAIL;
+
+    Reference<XAccessibleTable> xHeaders = m_xTable->getAccessibleColumnHeaders();
+    if (!xHeaders.is())
+        return E_FAIL;
+
+    const sal_Int32 nCount = xHeaders->getAccessibleRowCount();
+    *pColumnHeaderCellCount = nCount;
+    *cellAccessibles = static_cast<IUnknown**>(CoTaskMemAlloc(nCount * sizeof(IUnknown*)));
+    sal_Int32 nCol = 0;
+    get_columnIndex(&nCol);
+    for (sal_Int32 nRow = 0; nRow < nCount; nRow++)
+    {
+        Reference<XAccessible> xCell = xHeaders->getAccessibleCellAt(nRow, nCol);
+        assert(xCell.is());
+
+        IAccessible* pIAccessible;
+        bool bOK = CMAccessible::get_IAccessibleFromXAccessible(xCell.get(), &pIAccessible);
+        if (!bOK)
+        {
+            Reference<XAccessible> xTableAcc(m_xTable, UNO_QUERY);
+            CMAccessible::g_pAgent->InsertAccObj(xCell.get(), xTableAcc.get());
+            bOK = CMAccessible::get_IAccessibleFromXAccessible(xCell.get(), &pIAccessible);
+        }
+        assert(bOK && "Couldn't retrieve IAccessible object for cell.");
+
+        pIAccessible->AddRef();
+        (*cellAccessibles)[nRow] = pIAccessible;
+    }
+    return S_OK;
+}
+
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTableCell::get_columnIndex(long* pColumnIndex)
 {
     SolarMutexGuard g;
@@ -136,6 +177,47 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTableCell::get_rowExtent(long* pRowsSpanne
     {
         return E_FAIL;
     }
+}
+
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTableCell::get_rowHeaderCells(IUnknown*** cellAccessibles,
+                                                                    long* pRowHeaderCellCount)
+{
+    SolarMutexGuard g;
+
+    if (!cellAccessibles || !pRowHeaderCellCount)
+        return E_INVALIDARG;
+
+    if (!m_xTable.is())
+        return E_FAIL;
+
+    Reference<XAccessibleTable> xHeaders = m_xTable->getAccessibleRowHeaders();
+    if (!xHeaders.is())
+        return E_FAIL;
+
+    const sal_Int32 nCount = xHeaders->getAccessibleColumnCount();
+    *pRowHeaderCellCount = nCount;
+    *cellAccessibles = static_cast<IUnknown**>(CoTaskMemAlloc(nCount * sizeof(IUnknown*)));
+    sal_Int32 nRow = 0;
+    get_rowIndex(&nRow);
+    for (sal_Int32 nCol = 0; nCol < nCount; nCol++)
+    {
+        Reference<XAccessible> xCell = xHeaders->getAccessibleCellAt(nRow, nCol);
+        assert(xCell.is());
+
+        IAccessible* pIAccessible;
+        bool bOK = CMAccessible::get_IAccessibleFromXAccessible(xCell.get(), &pIAccessible);
+        if (!bOK)
+        {
+            Reference<XAccessible> xTableAcc(m_xTable, UNO_QUERY);
+            CMAccessible::g_pAgent->InsertAccObj(xCell.get(), xTableAcc.get());
+            bOK = CMAccessible::get_IAccessibleFromXAccessible(xCell.get(), &pIAccessible);
+        }
+        assert(bOK && "Couldn't retrieve IAccessible object for cell.");
+
+        pIAccessible->AddRef();
+        (*cellAccessibles)[nRow] = pIAccessible;
+    }
+    return S_OK;
 }
 
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTableCell::get_rowIndex(long* pRowIndex)
