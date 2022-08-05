@@ -203,6 +203,26 @@ public:
      */
     OpCodeMapPtr GetOpCodeMap( const sal_Int32 nLanguage ) const;
 
+    /** Destroy the singleton OpCodeMap for formula language.
+
+        This unconditionally destroys the underlying singleton instance of the
+        map to be reinitialized again later on the next GetOpCodeMap() call.
+        Use if the base class FormulaCompiler::GetOpCodeMap() was called and
+        created the map (i.e. HasOpCodeMap() before returned false) and later a
+        derived class like ScCompiler shall initialize it including AddIns.
+
+        @param nLanguage
+            One of css::sheet::FormulaLanguage constants.
+     */
+    void DestroyOpCodeMap( const sal_Int32 nLanguage );
+
+    /** Whether the singleton OpCodeMap for formula language exists already.
+
+        @param nLanguage
+            One of css::sheet::FormulaLanguage constants.
+     */
+    bool HasOpCodeMap( const sal_Int32 nLanguage ) const;
+
     /** Create an internal symbol map from API mapping.
         @param bEnglish
             Use English number parser / formatter instead of native.
@@ -370,14 +390,22 @@ protected:
     bool mbComputeII;  // whether to attempt computing implicit intersection ranges while building the RPN array.
     bool mbMatrixFlag; // whether the formula is a matrix formula (needed for II computation)
 
+public:
+    enum InitSymbols
+    {
+        ASK = 0,
+        INIT,
+        DESTROY
+    };
+
 private:
-    void InitSymbolsNative() const;    /// only SymbolsNative, on first document creation
-    void InitSymbolsEnglish() const;   /// only SymbolsEnglish, maybe later
-    void InitSymbolsPODF() const;      /// only SymbolsPODF, on demand
-    void InitSymbolsAPI() const;       /// only SymbolsAPI, on demand
-    void InitSymbolsODFF() const;      /// only SymbolsODFF, on demand
-    void InitSymbolsEnglishXL() const; /// only SymbolsEnglishXL, on demand
-    void InitSymbolsOOXML() const;     /// only SymbolsOOXML, on demand
+    bool InitSymbolsNative( InitSymbols ) const;    /// only SymbolsNative, on first document creation
+    bool InitSymbolsEnglish( InitSymbols ) const;   /// only SymbolsEnglish, maybe later
+    bool InitSymbolsPODF( InitSymbols ) const;      /// only SymbolsPODF, on demand
+    bool InitSymbolsAPI( InitSymbols ) const;       /// only SymbolsAPI, on demand
+    bool InitSymbolsODFF( InitSymbols ) const;      /// only SymbolsODFF, on demand
+    bool InitSymbolsEnglishXL( InitSymbols ) const; /// only SymbolsEnglishXL, on demand
+    bool InitSymbolsOOXML( InitSymbols ) const;     /// only SymbolsOOXML, on demand
 
     void loadSymbols(const std::pair<const char*, int>* pSymbols, FormulaGrammar::Grammar eGrammar, NonConstOpCodeMapPtr& rxMap,
             SeparatorType eSepType = SeparatorType::SEMICOLON_BASE) const;

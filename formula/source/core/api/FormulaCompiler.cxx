@@ -823,43 +823,99 @@ FormulaCompiler::OpCodeMapPtr FormulaCompiler::GetOpCodeMap( const sal_Int32 nLa
     {
         case FormulaLanguage::ODFF :
             if (!mxSymbolsODFF)
-                InitSymbolsODFF();
+                InitSymbolsODFF( InitSymbols::INIT);
             xMap = mxSymbolsODFF;
             break;
         case FormulaLanguage::ODF_11 :
             if (!mxSymbolsPODF)
-                InitSymbolsPODF();
+                InitSymbolsPODF( InitSymbols::INIT);
             xMap = mxSymbolsPODF;
             break;
         case FormulaLanguage::ENGLISH :
             if (!mxSymbolsEnglish)
-                InitSymbolsEnglish();
+                InitSymbolsEnglish( InitSymbols::INIT);
             xMap = mxSymbolsEnglish;
             break;
         case FormulaLanguage::NATIVE :
             if (!mxSymbolsNative)
-                InitSymbolsNative();
+                InitSymbolsNative( InitSymbols::INIT);
             xMap = mxSymbolsNative;
             break;
         case FormulaLanguage::XL_ENGLISH:
             if (!mxSymbolsEnglishXL)
-                InitSymbolsEnglishXL();
+                InitSymbolsEnglishXL( InitSymbols::INIT);
             xMap = mxSymbolsEnglishXL;
             break;
         case FormulaLanguage::OOXML:
             if (!mxSymbolsOOXML)
-                InitSymbolsOOXML();
+                InitSymbolsOOXML( InitSymbols::INIT);
             xMap = mxSymbolsOOXML;
             break;
         case FormulaLanguage::API :
             if (!mxSymbolsAPI)
-                InitSymbolsAPI();
+                InitSymbolsAPI( InitSymbols::INIT);
             xMap = mxSymbolsAPI;
             break;
         default:
             ;   // nothing, NULL map returned
     }
     return xMap;
+}
+
+void FormulaCompiler::DestroyOpCodeMap( const sal_Int32 nLanguage )
+{
+    using namespace sheet;
+    switch (nLanguage)
+    {
+        case FormulaLanguage::ODFF :
+            InitSymbolsODFF( InitSymbols::DESTROY);
+            break;
+        case FormulaLanguage::ODF_11 :
+            InitSymbolsPODF( InitSymbols::DESTROY);
+            break;
+        case FormulaLanguage::ENGLISH :
+            InitSymbolsEnglish( InitSymbols::DESTROY);
+            break;
+        case FormulaLanguage::NATIVE :
+            InitSymbolsNative( InitSymbols::DESTROY);
+            break;
+        case FormulaLanguage::XL_ENGLISH:
+            InitSymbolsEnglishXL( InitSymbols::DESTROY);
+            break;
+        case FormulaLanguage::OOXML:
+            InitSymbolsOOXML( InitSymbols::DESTROY);
+            break;
+        case FormulaLanguage::API :
+            InitSymbolsAPI( InitSymbols::DESTROY);
+            break;
+        default:
+            ;   // nothing
+    }
+}
+
+bool FormulaCompiler::HasOpCodeMap( const sal_Int32 nLanguage ) const
+{
+    using namespace sheet;
+    switch (nLanguage)
+    {
+        case FormulaLanguage::ODFF :
+            return InitSymbolsODFF( InitSymbols::ASK);
+        case FormulaLanguage::ODF_11 :
+            return InitSymbolsPODF( InitSymbols::ASK);
+        case FormulaLanguage::ENGLISH :
+            return InitSymbolsEnglish( InitSymbols::ASK);
+        case FormulaLanguage::NATIVE :
+            return InitSymbolsNative( InitSymbols::ASK);
+        case FormulaLanguage::XL_ENGLISH:
+            return InitSymbolsEnglishXL( InitSymbols::ASK);
+        case FormulaLanguage::OOXML:
+            return InitSymbolsOOXML( InitSymbols::ASK);
+        case FormulaLanguage::API :
+            return InitSymbolsAPI( InitSymbols::ASK);
+        default:
+            ;   // nothing
+    }
+    return false;
 }
 
 OUString FormulaCompiler::FindAddInFunction( const OUString& /*rUpperName*/, bool /*bLocalFirst*/ ) const
@@ -898,12 +954,16 @@ FormulaCompiler::OpCodeMapPtr FormulaCompiler::CreateOpCodeMap(
     return xMap;
 }
 
-static void lcl_fillNativeSymbols( FormulaCompiler::NonConstOpCodeMapPtr& xMap, bool bDestroy = false )
+static bool lcl_fillNativeSymbols( FormulaCompiler::NonConstOpCodeMapPtr& xMap, FormulaCompiler::InitSymbols eWhat = FormulaCompiler::InitSymbols::INIT )
 {
     static OpCodeMapData aSymbolMap;
     osl::MutexGuard aGuard(&aSymbolMap.maMtx);
 
-    if ( bDestroy )
+    if (eWhat == FormulaCompiler::InitSymbols::ASK)
+    {
+        return bool(aSymbolMap.mxSymbolMap);
+    }
+    else if (eWhat == FormulaCompiler::InitSymbols::DESTROY)
     {
         aSymbolMap.mxSymbolMap.reset();
     }
@@ -919,6 +979,8 @@ static void lcl_fillNativeSymbols( FormulaCompiler::NonConstOpCodeMapPtr& xMap, 
     }
 
     xMap = aSymbolMap.mxSymbolMap;
+
+    return true;
 }
 
 const OUString& FormulaCompiler::GetNativeSymbol( OpCode eOp )
@@ -933,54 +995,80 @@ sal_Unicode FormulaCompiler::GetNativeSymbolChar( OpCode eOp )
     return GetNativeSymbol(eOp)[0];
 }
 
-void FormulaCompiler::InitSymbolsNative() const
+bool FormulaCompiler::InitSymbolsNative( FormulaCompiler::InitSymbols eWhat ) const
 {
-    lcl_fillNativeSymbols( mxSymbolsNative);
+    return lcl_fillNativeSymbols( mxSymbolsNative, eWhat);
 }
 
-void FormulaCompiler::InitSymbolsEnglish() const
+bool FormulaCompiler::InitSymbolsEnglish( FormulaCompiler::InitSymbols eWhat ) const
 {
     static OpCodeMapData aMap;
     osl::MutexGuard aGuard(&aMap.maMtx);
-    if (!aMap.mxSymbolMap)
+    if (eWhat == InitSymbols::ASK)
+        return bool(aMap.mxSymbolMap);
+    else if (eWhat == InitSymbols::DESTROY)
+        aMap.mxSymbolMap.reset();
+    else if (!aMap.mxSymbolMap)
         loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH, FormulaGrammar::GRAM_ENGLISH, aMap.mxSymbolMap);
     mxSymbolsEnglish = aMap.mxSymbolMap;
+    return true;
 }
 
-void FormulaCompiler::InitSymbolsPODF() const
+bool FormulaCompiler::InitSymbolsPODF( FormulaCompiler::InitSymbols eWhat ) const
 {
     static OpCodeMapData aMap;
     osl::MutexGuard aGuard(&aMap.maMtx);
-    if (!aMap.mxSymbolMap)
+    if (eWhat == InitSymbols::ASK)
+        return bool(aMap.mxSymbolMap);
+    else if (eWhat == InitSymbols::DESTROY)
+        aMap.mxSymbolMap.reset();
+    else if (!aMap.mxSymbolMap)
         loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH_PODF, FormulaGrammar::GRAM_PODF, aMap.mxSymbolMap, SeparatorType::RESOURCE_BASE);
     mxSymbolsPODF = aMap.mxSymbolMap;
+    return true;
 }
 
-void FormulaCompiler::InitSymbolsAPI() const
+bool FormulaCompiler::InitSymbolsAPI( FormulaCompiler::InitSymbols eWhat ) const
 {
     static OpCodeMapData aMap;
     osl::MutexGuard aGuard(&aMap.maMtx);
-    if (!aMap.mxSymbolMap)
+    if (eWhat == InitSymbols::ASK)
+        return bool(aMap.mxSymbolMap);
+    else if (eWhat == InitSymbols::DESTROY)
+        aMap.mxSymbolMap.reset();
+    else if (!aMap.mxSymbolMap)
         loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH_API, FormulaGrammar::GRAM_API, aMap.mxSymbolMap, SeparatorType::RESOURCE_BASE);
     mxSymbolsAPI = aMap.mxSymbolMap;
+    return true;
 }
 
-void FormulaCompiler::InitSymbolsODFF() const
+bool FormulaCompiler::InitSymbolsODFF( FormulaCompiler::InitSymbols eWhat ) const
 {
     static OpCodeMapData aMap;
     osl::MutexGuard aGuard(&aMap.maMtx);
-    if (!aMap.mxSymbolMap)
+    if (eWhat == InitSymbols::ASK)
+        return bool(aMap.mxSymbolMap);
+    else if (eWhat == InitSymbols::DESTROY)
+        aMap.mxSymbolMap.reset();
+    else if (!aMap.mxSymbolMap)
         loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF, FormulaGrammar::GRAM_ODFF, aMap.mxSymbolMap, SeparatorType::RESOURCE_BASE);
     mxSymbolsODFF = aMap.mxSymbolMap;
+    return true;
 }
 
-void FormulaCompiler::InitSymbolsEnglishXL() const
+bool FormulaCompiler::InitSymbolsEnglishXL( FormulaCompiler::InitSymbols eWhat ) const
 {
     static OpCodeMapData aMap;
     osl::MutexGuard aGuard(&aMap.maMtx);
-    if (!aMap.mxSymbolMap)
+    if (eWhat == InitSymbols::ASK)
+        return bool(aMap.mxSymbolMap);
+    else if (eWhat == InitSymbols::DESTROY)
+        aMap.mxSymbolMap.reset();
+    else if (!aMap.mxSymbolMap)
         loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH, FormulaGrammar::GRAM_ENGLISH, aMap.mxSymbolMap);
     mxSymbolsEnglishXL = aMap.mxSymbolMap;
+    if (eWhat != InitSymbols::INIT)
+        return true;
 
     // TODO: For now, just replace the separators to the Excel English
     // variants. Later, if we want to properly map Excel functions with Calc
@@ -988,15 +1076,22 @@ void FormulaCompiler::InitSymbolsEnglishXL() const
     mxSymbolsEnglishXL->putOpCode( OUString(','), ocSep, nullptr);
     mxSymbolsEnglishXL->putOpCode( OUString(','), ocArrayColSep, nullptr);
     mxSymbolsEnglishXL->putOpCode( OUString(';'), ocArrayRowSep, nullptr);
+
+    return true;
 }
 
-void FormulaCompiler::InitSymbolsOOXML() const
+bool FormulaCompiler::InitSymbolsOOXML( FormulaCompiler::InitSymbols eWhat ) const
 {
     static OpCodeMapData aMap;
     osl::MutexGuard aGuard(&aMap.maMtx);
-    if (!aMap.mxSymbolMap)
+    if (eWhat == InitSymbols::ASK)
+        return bool(aMap.mxSymbolMap);
+    else if (eWhat == InitSymbols::DESTROY)
+        aMap.mxSymbolMap.reset();
+    else if (!aMap.mxSymbolMap)
         loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML, FormulaGrammar::GRAM_OOXML, aMap.mxSymbolMap, SeparatorType::RESOURCE_BASE);
     mxSymbolsOOXML = aMap.mxSymbolMap;
+    return true;
 }
 
 
@@ -2588,7 +2683,7 @@ void FormulaCompiler::UpdateSeparatorsNative(
 void FormulaCompiler::ResetNativeSymbols()
 {
     NonConstOpCodeMapPtr xSymbolsNative;
-    lcl_fillNativeSymbols( xSymbolsNative, true);
+    lcl_fillNativeSymbols( xSymbolsNative, InitSymbols::DESTROY);
     lcl_fillNativeSymbols( xSymbolsNative);
 }
 
