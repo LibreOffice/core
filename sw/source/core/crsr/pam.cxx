@@ -988,11 +988,12 @@ SwContentNode* GetNode( SwPaM & rPam, bool& rbFirst, SwMoveFnCollection const & 
                 }
 
                 pNd = bSrchForward
-                        ? rNodes.GoNextSection( &aPos.nNode, true, !bInReadOnly )
-                        : SwNodes::GoPrevSection( &aPos.nNode, true, !bInReadOnly );
+                        ? rNodes.GoNextSection( &aPos, true, !bInReadOnly )
+                        : SwNodes::GoPrevSection( &aPos, true, !bInReadOnly );
                 if( pNd )
                 {
-                    aPos.nContent.Assign( pNd, ::GetSttOrEnd( bSrchForward,*pNd ));
+                    if (!bSrchForward)
+                        aPos.AssignEndIndex( *pNd );
                     // is the position still in the area
                     if( (aPos.*fnMove.fnCmpOp)( *rPam.GetMark() ) )
                     {

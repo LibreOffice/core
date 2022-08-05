@@ -75,11 +75,10 @@ bool SwCursor::GotoFootnoteText()
         GetPoint()->nNode = *static_cast<SwTextFootnote*>(pFootnote)->GetStartNode();
 
         SwContentNode* pCNd = GetDoc().GetNodes().GoNextSection(
-                                            &GetPoint()->nNode,
+                                            GetPoint(),
                                             true, !IsReadOnlyAvailable() );
         if( pCNd )
         {
-            GetPoint()->nContent.Assign( pCNd, 0 );
             bRet = !IsSelOvr( SwCursorSelOverFlags::CheckNodeSection |
                               SwCursorSelOverFlags::Toggle );
         }
