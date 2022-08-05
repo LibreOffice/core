@@ -79,30 +79,6 @@ public:
     void                ZoomChanged(const Fraction& rNewZoom);
 };
 
-
-class BrowserScrollBar: public ScrollBar
-{
-    tools::Long _nLastPos;
-    VclPtr<BrowserDataWin> _pDataWin;
-
-public:
-                    BrowserScrollBar( vcl::Window* pParent, WinBits nStyle,
-                                      BrowserDataWin *pDataWin )
-                    :   ScrollBar( pParent, nStyle ),
-                        _nLastPos( std::numeric_limits<tools::Long>::max() ),
-                        _pDataWin( pDataWin )
-                    {}
-   virtual          ~BrowserScrollBar() override;
-   virtual void     dispose() override;
-                    //ScrollBar( vcl::Window* pParent, const ResId& rResId );
-
-    virtual void    Tracking( const TrackingEvent& rTEvt ) override;
-    virtual void    EndScroll() override;
-};
-
-
 void InitSettings_Impl( vcl::Window *pWin );
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
