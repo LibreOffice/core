@@ -76,7 +76,7 @@ public:
     STDMETHOD(get_rowHeaderCells)(IUnknown***, long*) override { return E_FAIL; }
     STDMETHOD(get_rowIndex)(long*) override;
     STDMETHOD(get_isSelected)(boolean*) override;
-    STDMETHOD(get_rowColumnExtents)(long*, long*, long*, long*, boolean*) { return E_FAIL; }
+    STDMETHOD(get_rowColumnExtents)(long*, long*, long*, long*, boolean*) override;
     STDMETHOD(get_table)(IUnknown**) { return E_FAIL; }
 
 private:

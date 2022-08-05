@@ -183,4 +183,27 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTableCell::get_isSelected(boolean* pIsSele
     }
 }
 
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTableCell::get_rowColumnExtents(long* pRow, long* pColumn,
+                                                                      long* pRowExtents,
+                                                                      long* pColumnExtents,
+                                                                      boolean* pIsSelected)
+{
+    SolarMutexGuard g;
+
+    if (!pRow || !pColumn || !pRowExtents || !pColumnExtents || !pIsSelected)
+        return E_INVALIDARG;
+
+    if (get_rowIndex(pRow) != S_OK)
+        return E_FAIL;
+    if (get_columnIndex(pColumn) != S_OK)
+        return E_FAIL;
+    if (get_rowExtent(pRowExtents) != S_OK)
+        return E_FAIL;
+    if (get_columnExtent(pColumnExtents) != S_OK)
+        return E_FAIL;
+    if (get_isSelected(pIsSelected) != S_OK)
+        return E_FAIL;
+    return S_OK;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
