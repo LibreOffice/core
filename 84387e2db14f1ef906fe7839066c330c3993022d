@@ -16,6 +16,40 @@
       "message": "Please remove executable bits from file.",
       "revId": "84387e2db14f1ef906fe7839066c330c3993022d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0627f1e_af71c83e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-05T07:33:51Z",
+      "side": 1,
+      "message": "Please abandon - it doesn\u0027t make sense.",
+      "revId": "84387e2db14f1ef906fe7839066c330c3993022d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22e11a62_3663cc84",
+        "filename": "xmlsecurity/source/helper/xsecctl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-05T07:33:51Z",
+      "side": 1,
+      "message": "This change does not improve readability. When you need an index anyway, there is no improvement in changing the loop to renge-based one, and keep index separately.",
+      "revId": "84387e2db14f1ef906fe7839066c330c3993022d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
