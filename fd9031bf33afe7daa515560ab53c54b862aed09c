@@ -34,6 +34,24 @@
       "parentUuid": "13fdc498_9e91bad5",
       "revId": "fd9031bf33afe7daa515560ab53c54b862aed09c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd730029_2d5aed23",
+        "filename": "sw/qa/extras/uiwriter/uiwriter6.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 693,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-05T05:12:36Z",
+      "side": 1,
+      "message": "Note also, that you likely should not use createSwDoc at all, because it only loads files from source directory (you pass a *subdirectory* + *filename*, but the full URL is constructed inside using source directory); you maybe want to use loadURL that takes a full URL (OUString, so not a problem to use non-ASCII), a name (that may be nullptr!), and an optional password.",
+      "parentUuid": "2ea16ccb_6d0e803f",
+      "revId": "fd9031bf33afe7daa515560ab53c54b862aed09c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
