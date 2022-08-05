@@ -121,14 +121,14 @@ void ScPreviewShell::Construct( vcl::Window* pParent )
 
     pCorner = VclPtr<ScrollBarBox>::Create( pParent, WB_SIZEABLE );
 
-    pHorScroll = VclPtr<ScrollBar>::Create(pParent, WB_HSCROLL );
-    pVerScroll = VclPtr<ScrollBar>::Create(pParent, WB_VSCROLL);
+    pHorScroll = VclPtr<ScrollAdaptor>::Create(pParent, true);
+    pVerScroll = VclPtr<ScrollAdaptor>::Create(pParent, false);
 
     // RTL: no mirroring for horizontal scrollbars
     pHorScroll->EnableRTL( false );
 
-    pHorScroll->SetEndScrollHdl( LINK( this, ScPreviewShell, ScrollHandler ) );
-    pVerScroll->SetEndScrollHdl( LINK( this, ScPreviewShell, ScrollHandler ) );
+    pHorScroll->SetScrollHdl(LINK(this, ScPreviewShell, HorzScrollHandler));
+    pVerScroll->SetScrollHdl(LINK(this, ScPreviewShell, VertScrollHandler));
 
     pPreview = VclPtr<ScPreview>::Create( pParent, pDocShell, this );
 
@@ -152,7 +152,9 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
     pDocShell( static_cast<ScDocShell*>(pViewFrame->GetObjectShell()) ),
     mpFrameWindow(nullptr),
     nSourceDesignMode( TRISTATE_INDET ),
-    nMaxVertPos(0)
+    nMaxVertPos(0),
+    nPrevHThumbPos(0),
+    nPrevVThumbPos(0)
 {
     Construct( &pViewFrame->GetWindow() );
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Printpreview));
@@ -358,6 +360,7 @@ void ScPreviewShell::UpdateScrollBars()
             pPreview->SetXOffset(nMaxPos);
         }
         pHorScroll->SetThumbPos( aOfs.X() );
+        nPrevHThumbPos = pHorScroll->GetThumbPos();
     }
 
     if( !pVerScroll )
@@ -394,12 +397,22 @@ void ScPreviewShell::UpdateScrollBars()
         pPreview->SetYOffset( nMaxVertPos );
         pVerScroll->SetThumbPos( aOfs.Y() );
     }
+    nPrevVThumbPos = pVerScroll->GetThumbPos();
 }
 
-IMPL_LINK( ScPreviewShell, ScrollHandler, ScrollBar*, pScroll, void )
+IMPL_LINK_NOARG(ScPreviewShell, HorzScrollHandler, weld::Scrollbar&, void)
+{
+    ScrollHandler(pHorScroll);
+}
+
+IMPL_LINK_NOARG(ScPreviewShell, VertScrollHandler, weld::Scrollbar&, void)
+{
+    ScrollHandler(pVerScroll);
+}
+
+void ScPreviewShell::ScrollHandler(ScrollAdaptor* pScroll)
 {
     tools::Long nPos           = pScroll->GetThumbPos();
-    tools::Long nDelta         = pScroll->GetDelta();
     tools::Long nMaxRange      = pScroll->GetRangeMax();
     tools::Long nTotalPages    = pPreview->GetTotalPages();
     tools::Long nPageNo        = 0;
@@ -420,6 +433,9 @@ IMPL_LINK( ScPreviewShell, ScrollHandler, ScrollBar*, pScroll, void )
     }
 
     bool bHoriz = ( pScroll == pHorScroll );
+
+    tools::Long nDelta = bHoriz ? (pHorScroll->GetThumbPos() - nPrevHThumbPos)
+                                : (pVerScroll->GetThumbPos() - nPrevVThumbPos);
 
     if( bHoriz )
         pPreview->SetXOffset( nPos );
@@ -1110,6 +1126,7 @@ void ScPreviewShell::DoScroll( sal_uInt16 nMode )
         if( aCurPos.Y() != aPrevPos.Y() )
         {
             pVerScroll->SetThumbPos( aCurPos.Y() );
+            nPrevVThumbPos = pVerScroll->GetThumbPos();
             pPreview->SetYOffset( aCurPos.Y() );
         }
     }
@@ -1117,6 +1134,7 @@ void ScPreviewShell::DoScroll( sal_uInt16 nMode )
     if( aCurPos.X() != aPrevPos.X() )
     {
         pHorScroll->SetThumbPos( aCurPos.X() );
+        nPrevHThumbPos = pHorScroll->GetThumbPos();
         pPreview->SetXOffset( aCurPos.X() );
     }
 
