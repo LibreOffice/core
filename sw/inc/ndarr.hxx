@@ -209,7 +209,7 @@ public:
     SwTextNode *MakeTextNode( const SwNodeIndex & rWhere,
                             SwTextFormatColl *pColl,
                             bool bNewFrames = true); ///< in ndtxt.cxx
-    SwStartNode* MakeTextSection( const SwNodeIndex & rWhere,
+    SwStartNode* MakeTextSection( const SwNode & rWhere,
                             SwStartNodeType eSttNdTyp,
                             SwTextFormatColl *pColl );
 

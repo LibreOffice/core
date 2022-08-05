@@ -1884,7 +1884,7 @@ void SwUndoTableMerge::UndoImpl(::sw::UndoRedoContext & rContext)
     for (const auto& rBox : m_Boxes)
     {
         aIdx = rBox;
-        SwStartNode* pSttNd = rDoc.GetNodes().MakeTextSection( aIdx,
+        SwStartNode* pSttNd = rDoc.GetNodes().MakeTextSection( aIdx.GetNode(),
                                             SwTableBoxStartNode, pColl );
         pBox = new SwTableBox( static_cast<SwTableBoxFormat*>(pCpyBox->GetFrameFormat()), *pSttNd,
                                 pCpyBox->GetUpper() );

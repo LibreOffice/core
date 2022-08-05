@@ -131,10 +131,10 @@ SwFrameFormat *DocumentLayoutManager::MakeLayoutFormat( RndStdIds eRequest, cons
                                  (bHeader ? "Right header" : "Right footer"),
                                  m_rDoc.GetDfltFrameFormat() );
 
-            SwNodeIndex aTmpIdx( m_rDoc.GetNodes().GetEndOfAutotext() );
+            const SwNode& rEndOfAutotext( m_rDoc.GetNodes().GetEndOfAutotext() );
             SwStartNode* pSttNd =
                 m_rDoc.GetNodes().MakeTextSection
-                ( aTmpIdx,
+                ( rEndOfAutotext,
                   bHeader ? SwHeaderStartNode : SwFooterStartNode,
                   m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(o3tl::narrowing<sal_uInt16>( bHeader
                                      ? ( eRequest == RndStdIds::HEADERL
