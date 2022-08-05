@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc767553_f65dff9b",
+        "filename": "vcl/qa/cppunit/GraphicTest.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-08-05T23:34:54Z",
+      "side": 1,
+      "message": "So this test used to pass by sheer luck because checkWMForEMF checks for both but the formats were reversed here and below, since we are opening a emf (to-wmf.emf) here, not a wmf.",
+      "revId": "674a1def385b939c95245ae5c8d5a538ad0dfe11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "977d39bc_11d60cfc",
+        "filename": "vcl/source/filter/GraphicFormatDetector.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-08-05T23:34:54Z",
+      "side": 1,
+      "message": "So this patch is getting pretty big, sorry about that. I had to separate checkWMForEMF to checkWMF/EMF because ImpDetectWMF (GraphicDescriptor) would trigger on EMFs",
+      "revId": "674a1def385b939c95245ae5c8d5a538ad0dfe11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
