@@ -351,7 +351,7 @@ bool SwCursorShell::LeftRight( bool bLeft, sal_uInt16 nCnt, SwCursorSkipMode nMo
             )->MapModelToViewPos(*pShellCursor->GetPoint()) == TextFrameIndex(0)
         && !pShellCursor->IsInFrontOfLabel()
         && !pShellCursor->HasMark()
-        && nullptr != (pTextNd = sw::GetParaPropsNode(*GetLayout(), pShellCursor->GetPoint()->nNode))
+        && nullptr != (pTextNd = sw::GetParaPropsNode(*GetLayout(), pShellCursor->GetPoint()->GetNode()))
         && pTextNd->HasVisibleNumberingOrBullet())
     {
         SetInFrontOfLabel( true );
@@ -405,7 +405,7 @@ void SwCursorShell::MarkListLevel( const OUString& sListId,
 void SwCursorShell::UpdateMarkedListLevel()
 {
     SwTextNode const*const pTextNd = sw::GetParaPropsNode(*GetLayout(),
-            GetCursor_()->GetPoint()->nNode);
+            GetCursor_()->GetPoint()->GetNode());
 
     if ( !pTextNd )
         return;
@@ -547,7 +547,7 @@ bool SwCursorShell::LRMargin( bool bLeft, bool bAPI)
     if ( bLeft && !bTableMode && bRet && bWasAtLM && !GetCursor_()->HasMark() )
     {
         const SwTextNode * pTextNd = GetCursor_()->GetNode().GetTextNode();
-        assert(sw::GetParaPropsNode(*GetLayout(), GetCursor_()->GetPoint()->nNode) == pTextNd);
+        assert(sw::GetParaPropsNode(*GetLayout(), GetCursor_()->GetPoint()->GetNode()) == pTextNd);
         if ( pTextNd && pTextNd->HasVisibleNumberingOrBullet() )
             SetInFrontOfLabel( true );
     }
@@ -769,7 +769,7 @@ int SwCursorShell::SetCursor( const Point &rLPt, bool bOnlyText, bool bBlock )
                                     bOnlyText ?  CursorMoveState::SetOnlyText : CursorMoveState::NONE );
     aTmpState.m_bSetInReadOnly = IsReadOnlyAvailable();
 
-    SwTextNode const*const pTextNd = sw::GetParaPropsNode(*GetLayout(), pCursor->GetPoint()->nNode);
+    SwTextNode const*const pTextNd = sw::GetParaPropsNode(*GetLayout(), pCursor->GetPoint()->GetNode());
 
     if ( pTextNd && !IsTableMode() &&
         // #i37515# No bInFrontOfLabel during selection
