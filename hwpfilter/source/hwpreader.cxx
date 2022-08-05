@@ -575,7 +575,8 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                 }
                 if( prop->angle > 0 && ( prop->gstyle == 1 || prop->gstyle == 4))
                 {
-                    int angle = 1800 - prop->angle * 10;
+                    auto normangle = prop->angle % 360;
+                    int angle = 1800 - normangle * 10;
                     mxList->addAttribute( "draw:angle", sXML_CDATA, OUString::number(angle));
                 }
                 startEl("draw:gradient");
