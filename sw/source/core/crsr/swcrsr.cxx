@@ -202,7 +202,7 @@ bool SwTableCursor::IsSelOvrCheck(SwCursorSelOverFlags eFlags)
         && HasMark() )
     {
         SwNodeIndex aOldPos( rNds, GetSavePos()->nNode );
-        if( !CheckNodesRange( aOldPos, GetPoint()->nNode, true ))
+        if( !CheckNodesRange( aOldPos.GetNode(), GetPoint()->GetNode(), true ))
         {
             GetPoint()->nNode = aOldPos;
             GetPoint()->nContent.Assign( GetContentNode(), GetSavePos()->nContent );
@@ -270,7 +270,7 @@ bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
 
             bool bIsValidPos = nullptr != pCNd;
             const bool bValidNodesRange = bIsValidPos &&
-                ::CheckNodesRange( rPtIdx, aIdx, true );
+                ::CheckNodesRange( rPtIdx.GetNode(), aIdx.GetNode(), true );
             if( !bValidNodesRange )
             {
                 rPtIdx = m_vSavePos.back().nNode;
@@ -427,7 +427,7 @@ bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
         return false;
 
     // check for invalid sections
-    if( !::CheckNodesRange( GetMark()->nNode, GetPoint()->nNode, true ))
+    if( !::CheckNodesRange( GetMark()->GetNode(), GetPoint()->GetNode(), true ))
     {
         DeleteMark();
         RestoreSavePos();
@@ -533,8 +533,8 @@ bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
 
             // we permit these
             if( pMyNd->IsContentNode() &&
-                ::CheckNodesRange( GetMark()->nNode,
-                GetPoint()->nNode, true ))
+                ::CheckNodesRange( GetMark()->GetNode(),
+                GetPoint()->GetNode(), true ))
             {
                 // table in table
                 const SwTableNode* pOuterTableNd = pMyNd->FindTableNode();
@@ -2059,7 +2059,7 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
         while( nCnt &&
                (bUp ? pFrame->UnitUp( this, nUpDownX, bInReadOnly )
                     : pFrame->UnitDown( this, nUpDownX, bInReadOnly ) ) &&
-                CheckNodesRange( aOldPos.nNode, GetPoint()->nNode, bChkRange ))
+                CheckNodesRange( aOldPos.GetNode(), GetPoint()->GetNode(), bChkRange ))
         {
             std::pair<Point, bool> const tmp(aPt, true);
             pFrame = GetContentNode()->getLayoutFrame(&rLayout, GetPoint(), &tmp);

@@ -329,7 +329,7 @@ public:
 
 SW_DLLPUBLIC std::ostream &operator <<(std::ostream& s, const SwPaM& pam);
 
-bool CheckNodesRange(const SwNodeIndex&, const SwNodeIndex&, bool bChkSection);
+bool CheckNodesRange(const SwNode&, const SwNode&, bool bChkSection);
 
 #endif // INCLUDED_SW_INC_PAM_HXX
 

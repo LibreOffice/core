@@ -143,14 +143,14 @@ bool SwFltStackEntry::MakeRegion(SwDoc& rDoc, SwPaM& rRegion, RegionMode const e
         "invalid content index " << rPtPos.m_nContent << " but text node has only " << pCNd->Len());
     rRegion.GetPoint()->nContent.Assign(pCNd,
             std::min<sal_Int32>(rPtPos.m_nContent, pCNd->Len()));
-    OSL_ENSURE( CheckNodesRange( rRegion.Start()->nNode,
-                             rRegion.End()->nNode, true ),
+    OSL_ENSURE( CheckNodesRange( rRegion.Start()->GetNode(),
+                             rRegion.End()->GetNode(), true ),
              "attribute or similar crosses section-boundaries" );
     bool bRet = true;
     if (eCheck & RegionMode::CheckNodes)
     {
-        bRet &= CheckNodesRange(rRegion.Start()->nNode,
-                                rRegion.End()->nNode, true);
+        bRet &= CheckNodesRange(rRegion.Start()->GetNode(),
+                                rRegion.End()->GetNode(), true);
     }
     if (eCheck & RegionMode::CheckFieldmark)
     {

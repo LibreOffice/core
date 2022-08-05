@@ -148,7 +148,7 @@ SwFrame const* FindNeighbourFrameForNode(SwNode const& rNode)
     SwFlowFrame const* pFlow(nullptr);
     if (SwNode *const pNode = GoPreviousWithFrame(&idx, &pFlow))
     {
-        if (::CheckNodesRange(rNode, idx, true))
+        if (::CheckNodesRange(rNode, idx.GetNode(), true))
         {
             while (pFlow->HasFollow())
             {   // try to get the one on the current page
@@ -160,7 +160,7 @@ SwFrame const* FindNeighbourFrameForNode(SwNode const& rNode)
     idx = rNode;
     if (SwNode *const pNode = GoNextWithFrame(idx.GetNodes(), &idx, &pFlow))
     {
-        if (::CheckNodesRange(rNode, idx, true))
+        if (::CheckNodesRange(rNode, idx.GetNode(), true))
         {
             while (pFlow->IsFollow())
             {   // try to get the one on the current page

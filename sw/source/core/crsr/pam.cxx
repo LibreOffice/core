@@ -316,8 +316,8 @@ static bool lcl_ChkOneRange( CHKSECTION eSec, bool bChkSections,
  *
  * @return <true> if valid range
  */
-bool CheckNodesRange( const SwNodeIndex& rStt,
-                      const SwNodeIndex& rEnd, bool bChkSection )
+bool CheckNodesRange( const SwNode& rStt,
+                      const SwNode& rEnd, bool bChkSection )
 {
     const SwNodes& rNds = rStt.GetNodes();
     SwNodeOffset nStt = rStt.GetIndex(), nEnd = rEnd.GetIndex();
@@ -369,7 +369,7 @@ SwContentNode* GoNextNds( SwNodeIndex* pIdx, bool bChk )
     if( pNd )
     {
         if( bChk && SwNodeOffset(1) != aIdx.GetIndex() - pIdx->GetIndex() &&
-            !CheckNodesRange( *pIdx, aIdx, true ) )
+            !CheckNodesRange( pIdx->GetNode(), aIdx.GetNode(), true ) )
                 pNd = nullptr;
         else
             *pIdx = aIdx;
@@ -384,7 +384,7 @@ SwContentNode* GoPreviousNds( SwNodeIndex * pIdx, bool bChk )
     if( pNd )
     {
         if( bChk && SwNodeOffset(1) != pIdx->GetIndex() - aIdx.GetIndex() &&
-            !CheckNodesRange( *pIdx, aIdx, true ) )
+            !CheckNodesRange( pIdx->GetNode(), aIdx.GetNode(), true ) )
                 pNd = nullptr;
         else
             *pIdx = aIdx;
