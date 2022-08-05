@@ -35,6 +35,7 @@
 #include <osl/diagnose.h>
 
 #include <memory>
+#include <utility>
 #include <vector>
 #include <limits>
 
@@ -1315,7 +1316,7 @@ class WalkAndMatchElements
 
 public:
     WalkAndMatchElements(Type aMatchValue, const MatrixImplType::size_pair_type& aSize, size_t nCol1, size_t nCol2) :
-        maMatchValue(aMatchValue),
+        maMatchValue(std::move(aMatchValue)),
         mnStartIndex( nCol1 * aSize.row ),
         mnStopIndex( (nCol2 + 1) * aSize.row ),
         mnResult(ResultNotSet),
@@ -2209,8 +2210,8 @@ private:
 
 public:
 
-    wrapped_iterator(typename T::const_iterator const & it_, U const & aOp):
-        it(it_),
+    wrapped_iterator(typename T::const_iterator  it_, U const & aOp):
+        it(std::move(it_)),
         val(value_type()),
         maOp(aOp)
     {
@@ -2274,9 +2275,9 @@ private:
     typename T::const_iterator m_itEnd;
     U maOp;
 public:
-    MatrixIteratorWrapper(typename T::const_iterator const & itBegin, typename T::const_iterator const & itEnd, U const & aOp):
-        m_itBegin(itBegin),
-        m_itEnd(itEnd),
+    MatrixIteratorWrapper(typename T::const_iterator itBegin, typename T::const_iterator itEnd, U const & aOp):
+        m_itBegin(std::move(itBegin)),
+        m_itEnd(std::move(itEnd)),
         maOp(aOp)
     {
     }
@@ -2409,17 +2410,17 @@ namespace {
 struct ElementBlock
 {
     ElementBlock(size_t nRowSize,
-            ScMatrix::DoubleOpFunction const & aDoubleFunc,
-            ScMatrix::BoolOpFunction const & aBoolFunc,
-            ScMatrix::StringOpFunction const & aStringFunc,
-            ScMatrix::EmptyOpFunction const & aEmptyFunc):
+            ScMatrix::DoubleOpFunction aDoubleFunc,
+            ScMatrix::BoolOpFunction aBoolFunc,
+            ScMatrix::StringOpFunction aStringFunc,
+            ScMatrix::EmptyOpFunction aEmptyFunc):
         mnRowSize(nRowSize),
         mnRowPos(0),
         mnColPos(0),
-        maDoubleFunc(aDoubleFunc),
-        maBoolFunc(aBoolFunc),
-        maStringFunc(aStringFunc),
-        maEmptyFunc(aEmptyFunc)
+        maDoubleFunc(std::move(aDoubleFunc)),
+        maBoolFunc(std::move(aBoolFunc)),
+        maStringFunc(std::move(aStringFunc)),
+        maEmptyFunc(std::move(aEmptyFunc))
     {
     }
 

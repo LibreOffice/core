@@ -29,6 +29,7 @@
 #include "vbainterior.hxx"
 #include "vbapalette.hxx"
 #include <document.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
@@ -61,7 +62,7 @@ static std::map< sal_Int32, sal_Int32 > aPatternMap {
     { xlPatternVertical, 6 }
 };
 
-ScVbaInterior::ScVbaInterior( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< beans::XPropertySet >&  xProps, ScDocument* pScDoc ) : ScVbaInterior_BASE( xParent, xContext ), m_xProps(xProps), m_pScDoc( pScDoc )
+ScVbaInterior::ScVbaInterior( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, uno::Reference< beans::XPropertySet >   xProps, ScDocument* pScDoc ) : ScVbaInterior_BASE( xParent, xContext ), m_xProps(std::move(xProps)), m_pScDoc( pScDoc )
 {
     // auto color
     m_aPattColor = Color(0);

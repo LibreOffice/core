@@ -19,6 +19,7 @@
 
 #include <unoreflist.hxx>
 #include <document.hxx>
+#include <utility>
 
 ScUnoRefList::ScUnoRefList()
 {
@@ -42,8 +43,8 @@ void ScUnoRefList::Undo( ScDocument* pDoc )
     }
 }
 
-ScUnoRefUndoHint::ScUnoRefUndoHint( const ScUnoRefEntry& rRefEntry ) :
-    aEntry( rRefEntry )
+ScUnoRefUndoHint::ScUnoRefUndoHint( ScUnoRefEntry aRefEntry ) :
+    aEntry(std::move( aRefEntry ))
 {
 }
 

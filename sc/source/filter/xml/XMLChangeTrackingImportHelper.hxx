@@ -22,6 +22,7 @@
 #include <memory>
 #include <chgtrack.hxx>
 #include <com/sun/star/util/DateTime.hpp>
+#include <utility>
 
 class ScDocument;
 class DateTime;
@@ -48,8 +49,8 @@ struct ScMyCellInfo
     ScMatrixMode       nMatrixFlag;
 
     ScMyCellInfo(
-        const ScCellValue& rCell, const OUString& sFormulaAddress, const OUString& sFormula,
-        const formula::FormulaGrammar::Grammar eGrammar, const OUString& sInputString,
+        ScCellValue aCell, OUString  sFormulaAddress, OUString  sFormula,
+        const formula::FormulaGrammar::Grammar eGrammar, OUString  sInputString,
         const double& fValue, const sal_uInt16 nType, const ScMatrixMode nMatrixFlag,
         const sal_Int32 nMatrixCols, const sal_Int32 nMatrixRows );
     ~ScMyCellInfo();
@@ -72,7 +73,7 @@ struct ScMyGenerated
     std::unique_ptr<ScMyCellInfo> pCellInfo;
 
     ScMyGenerated(ScBigRange range, sal_uInt32 id, std::unique_ptr<ScMyCellInfo> p)
-      : aBigRange(range), nID(id), pCellInfo(std::move(p)) {}
+      : aBigRange(std::move(range)), nID(id), pCellInfo(std::move(p)) {}
 };
 
 struct ScMyInsertionCutOff
@@ -99,8 +100,8 @@ struct ScMyMoveRanges
     ScBigRange aSourceRange;
     ScBigRange aTargetRange;
 
-    ScMyMoveRanges(const ScBigRange& rSource, const ScBigRange& rTarget) :
-            aSourceRange(rSource), aTargetRange(rTarget) {}
+    ScMyMoveRanges(ScBigRange aSource, ScBigRange aTarget) :
+            aSourceRange(std::move(aSource)), aTargetRange(std::move(aTarget)) {}
 };
 
 struct ScMyBaseAction

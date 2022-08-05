@@ -44,6 +44,7 @@
 #include <svl/sharedstringpool.hxx>
 #include <memory>
 #include <numeric>
+#include <utility>
 
 using namespace formula;
 
@@ -1459,13 +1460,13 @@ bool ScConditionEntry::NeedsRepaint() const
 ScCondFormatEntry::ScCondFormatEntry( ScConditionMode eOper,
                                         const OUString& rExpr1, const OUString& rExpr2,
                                         ScDocument& rDocument, const ScAddress& rPos,
-                                        const OUString& rStyle,
+                                        OUString aStyle,
                                         const OUString& rExprNmsp1, const OUString& rExprNmsp2,
                                         FormulaGrammar::Grammar eGrammar1,
                                         FormulaGrammar::Grammar eGrammar2,
                                         ScFormatEntry::Type eType ) :
     ScConditionEntry( eOper, rExpr1, rExpr2, rDocument, rPos, rExprNmsp1, rExprNmsp2, eGrammar1, eGrammar2, eType ),
-    aStyleName( rStyle ),
+    aStyleName(std::move( aStyle )),
     eCondFormatType( eType )
 {
 }
@@ -1473,9 +1474,9 @@ ScCondFormatEntry::ScCondFormatEntry( ScConditionMode eOper,
 ScCondFormatEntry::ScCondFormatEntry( ScConditionMode eOper,
                                         const ScTokenArray* pArr1, const ScTokenArray* pArr2,
                                         ScDocument& rDocument, const ScAddress& rPos,
-                                        const OUString& rStyle ) :
+                                        OUString aStyle ) :
     ScConditionEntry( eOper, pArr1, pArr2, rDocument, rPos ),
-    aStyleName( rStyle )
+    aStyleName(std::move( aStyle ))
 {
 }
 

@@ -43,6 +43,7 @@
 #include <tokenarray.hxx>
 #include <tokenuno.hxx>
 #include <extlstcontext.hxx>
+#include <utility>
 
 namespace oox::xls {
 
@@ -1369,9 +1370,9 @@ void ExtCfDataBarRule::importCfvo( const AttributeList& rAttribs )
     maModel.maColorScaleType = rAttribs.getString( XML_type, OUString() );
 }
 
-ExtCfCondFormat::ExtCfCondFormat(const ScRangeList& rRange, std::vector< std::unique_ptr<ScFormatEntry> >& rEntries,
+ExtCfCondFormat::ExtCfCondFormat(ScRangeList aRange, std::vector< std::unique_ptr<ScFormatEntry> >& rEntries,
                                  const std::vector<sal_Int32>* pPriorities):
-    maRange(rRange)
+    maRange(std::move(aRange))
 {
     maEntries.swap(rEntries);
     if (pPriorities)

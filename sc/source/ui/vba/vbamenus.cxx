@@ -11,6 +11,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <ooo/vba/office/MsoControlType.hpp>
 #include <ooo/vba/XCommandBarControls.hpp>
+#include <utility>
 
 using namespace com::sun::star;
 using namespace ooo::vba;
@@ -26,7 +27,7 @@ class MenuEnumeration : public MenuEnumeration_BASE
     uno::Reference< container::XEnumeration > m_xEnumeration;
 public:
     /// @throws uno::RuntimeException
-    MenuEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration) : m_xParent( xParent ), m_xContext( xContext ), m_xEnumeration( xEnumeration )
+    MenuEnumeration( uno::Reference< XHelperInterface > xParent, uno::Reference< uno::XComponentContext > xContext, uno::Reference< container::XEnumeration > xEnumeration) : m_xParent(std::move( xParent )), m_xContext(std::move( xContext )), m_xEnumeration(std::move( xEnumeration ))
     {
     }
     virtual sal_Bool SAL_CALL hasMoreElements() override
@@ -53,7 +54,7 @@ public:
 
 }
 
-ScVbaMenus::ScVbaMenus( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< XCommandBarControls >& xCommandBarControls ) : Menus_BASE( xParent, xContext, uno::Reference< container::XIndexAccess>() ), m_xCommandBarControls( xCommandBarControls )
+ScVbaMenus::ScVbaMenus( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, uno::Reference< XCommandBarControls > xCommandBarControls ) : Menus_BASE( xParent, xContext, uno::Reference< container::XIndexAccess>() ), m_xCommandBarControls(std::move( xCommandBarControls ))
 {
 }
 

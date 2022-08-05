@@ -23,6 +23,7 @@
 #include <svl/numformat.hxx>
 
 #include <memory>
+#include <utility>
 
 namespace
 {
@@ -55,8 +56,8 @@ ScChartPositioner::ScChartPositioner( ScDocument& rDoc, SCTAB nTab,
     CheckColRowHeaders();
 }
 
-ScChartPositioner::ScChartPositioner( ScDocument& rDoc, const ScRangeListRef& rRangeList ) :
-        aRangeListRef( rRangeList ),
+ScChartPositioner::ScChartPositioner( ScDocument& rDoc, ScRangeListRef xRangeList ) :
+        aRangeListRef(std::move( xRangeList )),
         rDocument( rDoc ),
         eGlue( ScChartGlue::NA ),
         nStartCol(0),

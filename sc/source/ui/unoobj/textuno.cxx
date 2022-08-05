@@ -31,6 +31,7 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/unoprnms.hxx>
 #include <editeng/unofored.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 
 #include <editeng/unoipset.hxx>
@@ -157,9 +158,9 @@ void ScHeaderFooterContentObj::Init( const EditTextObject* pLeft,
 }
 
 ScHeaderFooterTextData::ScHeaderFooterTextData(
-    uno::WeakReference<sheet::XHeaderFooterContent> const & xContent, ScHeaderFooterPart nP, const EditTextObject* pTextObj) :
+    uno::WeakReference<sheet::XHeaderFooterContent> xContent, ScHeaderFooterPart nP, const EditTextObject* pTextObj) :
     mpTextObj(pTextObj ? pTextObj->Clone() : nullptr),
-    xContentObj( xContent ),
+    xContentObj(std::move( xContent )),
     nPart( nP ),
     bDataValid(false)
 {
@@ -634,10 +635,10 @@ uno::Reference<text::XTextRange> SAL_CALL ScHeaderFooterTextCursor::getEnd()
 
 UNO3_GETIMPLEMENTATION2_IMPL(ScHeaderFooterTextCursor, SvxUnoTextCursor);
 
-ScDrawTextCursor::ScDrawTextCursor( const uno::Reference<text::XText>& xParent,
+ScDrawTextCursor::ScDrawTextCursor( uno::Reference<text::XText> xParent,
                                     const SvxUnoTextBase& rText ) :
     SvxUnoTextCursor( rText ),
-    xParentText( xParent )
+    xParentText(std::move( xParent ))
 
 {
 }

@@ -41,9 +41,9 @@ public:
     ScVbaFormatCondition( const css::uno::Reference< ov::XHelperInterface >& xParent,
                           const css::uno::Reference< css::uno::XComponentContext > & xContext,
                           const css::uno::Reference< css::sheet::XSheetConditionalEntry >& _xSheetConditionalEntry,
-                          const css::uno::Reference< ov::excel::XStyle >&,
-                          const css::uno::Reference< ov::excel::XFormatConditions >& _xFormatConditions,
-                          const css::uno::Reference< css::beans::XPropertySet >& _xPropertySet );
+                          css::uno::Reference< ov::excel::XStyle > ,
+                          css::uno::Reference< ov::excel::XFormatConditions >  _xFormatConditions,
+                          css::uno::Reference< css::beans::XPropertySet >  _xPropertySet );
 
     /// @throws css::script::BasicErrorException
     void notifyRange();
