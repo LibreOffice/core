@@ -983,7 +983,7 @@ SwContentNode* GetNode( SwPaM & rPam, bool& rbFirst, SwMoveFnCollection const & 
             {
                 if (i_pLayout && aPos.GetNode().IsTextNode())
                 {
-                    auto const fal(sw::GetFirstAndLastNode(*pLayout, aPos.nNode));
+                    auto const fal(sw::GetFirstAndLastNode(*pLayout, aPos.GetNode()));
                     aPos.nNode = bSrchForward ? *fal.second : *fal.first;
                 }
 

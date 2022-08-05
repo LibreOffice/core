@@ -112,7 +112,7 @@ bool IsParaPropsNode(SwRootFrame const& rLayout, SwTextNode const& rNode);
 SwTextNode * GetParaPropsNode(SwRootFrame const& rLayout, SwNode const& rNode);
 SwPosition GetParaPropsPos(SwRootFrame const& rLayout, SwPosition const& rPos);
 std::pair<SwTextNode *, SwTextNode *>
-GetFirstAndLastNode(SwRootFrame const& rLayout, SwNodeIndex const& rPos);
+GetFirstAndLastNode(SwRootFrame const& rLayout, SwNode const& rPos);
 
 SwTextNode const& GetAttrMerged(SfxItemSet & rFormatSet,
         SwTextNode const& rNode, SwRootFrame const* pLayout);

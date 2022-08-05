@@ -1625,7 +1625,7 @@ namespace //local functions originally from docfmt.cxx
                         SwContentNode * pFirstNode(pNode);
                         if (pLayout && pLayout->HasMergedParas())
                         {
-                            pFirstNode = sw::GetFirstAndLastNode(*pLayout, pStt->nNode).first;
+                            pFirstNode = sw::GetFirstAndLastNode(*pLayout, pStt->GetNode()).first;
                         }
                         SwRegHistory aRegH( pFirstNode, *pFirstNode, pHistory );
                         bRet = pFirstNode->SetAttr( aNew ) || bRet;
