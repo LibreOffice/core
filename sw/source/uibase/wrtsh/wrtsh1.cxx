@@ -1374,7 +1374,7 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
                 // If not, let it been counted. Then it has to be checked,
                 // of the outline numbering has to be activated or continued.
                 SwTextNode const*const pTextNode = sw::GetParaPropsNode(
-                        *GetLayout(), GetCursor()->GetPoint()->nNode);
+                        *GetLayout(), GetCursor()->GetPoint()->GetNode());
                 if ( pTextNode && !pTextNode->IsCountedInList() )
                 {
                     // check, if numbering of the outline level of the paragraph
@@ -1481,7 +1481,7 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
         if ( !bContinueFoundNumRule )
         {
             SwTextNode const*const pTextNode = sw::GetParaPropsNode(
-                    *GetLayout(), GetCursor()->GetPoint()->nNode);
+                    *GetLayout(), GetCursor()->GetPoint()->GetNode());
 
             if (pTextNode)
             {
@@ -1545,7 +1545,7 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
         }
 
         const SwTextNode *const pTextNode = sw::GetParaPropsNode(*GetLayout(),
-                GetCursor()->GetPoint()->nNode);
+                GetCursor()->GetPoint()->GetNode());
         const SwTwips nWidthOfTabs = pTextNode
                                      ? pTextNode->GetWidthOfLeadingTabs()
                                      : 0;
@@ -1654,7 +1654,7 @@ void SwWrtShell::NumOrBulletOff()
         SwNumRule aNumRule(*pCurNumRule);
 
         SwTextNode * pTextNode =
-            sw::GetParaPropsNode(*GetLayout(), GetCursor()->GetPoint()->nNode);
+            sw::GetParaPropsNode(*GetLayout(), GetCursor()->GetPoint()->GetNode());
 
         if (pTextNode)
         {
@@ -1767,7 +1767,7 @@ SelectionType SwWrtShell::GetSelectionType() const
     if ( pNumRule )
     {
         const SwTextNode* pTextNd =
-            sw::GetParaPropsNode(*GetLayout(), GetCursor()->GetPoint()->nNode);
+            sw::GetParaPropsNode(*GetLayout(), GetCursor()->GetPoint()->GetNode());
 
         if ( pTextNd && pTextNd->IsInList() )
         {

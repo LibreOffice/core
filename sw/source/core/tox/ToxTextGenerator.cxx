@@ -84,7 +84,7 @@ ToxTextGenerator::GetNumStringOfFirstNode(const SwTOXSortTabBase& rBase,
     }
     if (pLayout && pLayout->HasMergedParas())
     {   // note: pNd could be any node, since it could be Sequence etc.
-        pNd = sw::GetParaPropsNode(*pLayout, SwNodeIndex(*pNd));
+        pNd = sw::GetParaPropsNode(*pLayout, *pNd);
     }
 
     const SwNumRule* pRule = pNd->GetNumRule();

@@ -49,6 +49,7 @@ class SwScriptInfo;
 enum class ExpandMode;
 class SwTextAttr;
 class SwWrtShell;
+class SwNode;
 
 #define NON_PRINTING_CHARACTER_COLOR Color(0x26, 0x8b, 0xd2)
 
@@ -108,7 +109,7 @@ SwTextFrame * MakeTextFrame(SwTextNode & rNode, SwFrame *, sw::FrameMode eMode);
 
 bool FrameContainsNode(SwContentFrame const& rFrame, SwNodeOffset nNodeIndex);
 bool IsParaPropsNode(SwRootFrame const& rLayout, SwTextNode const& rNode);
-SwTextNode * GetParaPropsNode(SwRootFrame const& rLayout, SwNodeIndex const& rNode);
+SwTextNode * GetParaPropsNode(SwRootFrame const& rLayout, SwNode const& rNode);
 SwPosition GetParaPropsPos(SwRootFrame const& rLayout, SwPosition const& rPos);
 std::pair<SwTextNode *, SwTextNode *>
 GetFirstAndLastNode(SwRootFrame const& rLayout, SwNodeIndex const& rPos);

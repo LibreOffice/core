@@ -76,7 +76,7 @@ bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
         if (rCurrentPaM.IsInFrontOfLabel())
         {
             SwTextNode const*const pTextNd = sw::GetParaPropsNode(*GetLayout(),
-                    rCurrentPaM.GetPoint()->nNode);
+                    rCurrentPaM.GetPoint()->GetNode());
 
             if (pTextNd)
             {
@@ -266,7 +266,7 @@ SwTextFormatColl* SwEditShell::GetPaMTextFormatColl( SwPaM* pPaM ) const
 
             if( pNd->IsTextNode() )
             {
-                SwTextNode *const pTextNode(sw::GetParaPropsNode(*GetLayout(), SwNodeIndex(*pNd)));
+                SwTextNode *const pTextNode(sw::GetParaPropsNode(*GetLayout(), *pNd));
                 // if it's a text node get its named paragraph format
                 SwTextFormatColl *const pFormat = pTextNode->GetTextColl();
 
