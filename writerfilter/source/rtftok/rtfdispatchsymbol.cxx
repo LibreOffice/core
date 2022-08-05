@@ -177,7 +177,17 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         case RTFKeyword::NESTCELL:
         {
             if (nKeyword == RTFKeyword::CELL)
+            {
                 m_bAfterCellBeforeRow = true;
+                if (m_nTopLevelCells > 0)
+                { // the cell properties were read at start of row -> ignore duplicates at end of row
+                    m_bTopLevelReadCellProps = false;
+                }
+            }
+            else if (m_nNestedCells > 0)
+            { // the cell properties were read at start of row -> ignore duplicates at end of row
+                m_bNestedReadCellProps = false;
+            }
 
             checkFirstRun();
             if (m_bNeedPap)
@@ -227,6 +237,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             m_aNestedTableCellsSprms.clear();
             m_aNestedTableCellsAttributes.clear();
             m_nNestedCells = 0;
+            m_bNestedReadCellProps = true;
             m_bNeedPap = true;
         }
         break;
@@ -235,15 +246,47 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             m_bAfterCellBeforeRow = false;
             if (m_aStates.top().getTableRowWidthAfter() > 0)
             {
+#if 0
                 // Add fake cellx / cell, RTF equivalent of
                 // OOXMLFastContextHandlerTextTableRow::handleGridAfter().
                 auto pXValue = new RTFValue(m_aStates.top().getTableRowWidthAfter());
                 m_aStates.top().getTableRowSprms().set(NS_ooxml::LN_CT_TblGridBase_gridCol, pXValue,
                                                        RTFOverwrite::NO_APPEND);
+#else
+                // clear borders
+                static Id borders[]
+                    = { NS_ooxml::LN_CT_TcBorders_top, NS_ooxml::LN_CT_TcBorders_bottom,
+                        NS_ooxml::LN_CT_TcBorders_left, NS_ooxml::LN_CT_TcBorders_right };
+                for (auto border : borders)
+                {
+                    RTFSprms aAttributes;
+                    RTFSprms aSprms;
+                    aSprms.set(NS_ooxml::LN_CT_Border_val,
+                               new RTFValue(NS_ooxml::LN_Value_ST_Border_none));
+                    aAttributes.set(NS_ooxml::LN_CT_Border_val,
+                                    new RTFValue(NS_ooxml::LN_Value_ST_Border_none));
+                    putNestedSprm(m_aStates.top().getTableCellSprms(),
+                                  NS_ooxml::LN_CT_TcPrBase_tcBorders, border,
+                                  new RTFValue(aAttributes, aSprms), RTFOverwrite::YES);
+#if 0
+                    getLastAttributes(aStates.top().getTableCellSprms(),
+                                             NS_ooxml::LN_CT_TcPrBase_tcBorders)
+                        .set(border)
+                        .set(
+                            NS_ooxml::LN_CT_Border_val, new RTFValue(NS_ooxml::LN_Value_ST_Border_none));
+#endif
+                }
+                dispatchTableValue(RTFKeyword::CELLX,
+                                   m_nTopLevelCurrentCellX
+                                       + m_aStates.top().getTableRowWidthAfter());
+#endif
                 dispatchSymbol(RTFKeyword::CELL);
 
+#if 0
                 // Adjust total width, which is done in the \cellx handler for normal cells.
-                m_nTopLevelCurrentCellX += m_aStates.top().getTableRowWidthAfter();
+                                m_nTopLevelCurrentCellX += m_aStates.top().getTableRowWidthAfter();
+#endif
+                //++m_nTopLevelCells;
 
                 m_aStates.top().setTableRowWidthAfter(0);
             }
@@ -319,6 +362,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             m_bNeedFinalPar = true;
             m_aTableBufferStack.back().clear();
             m_nTopLevelCells = 0;
+            m_bTopLevelReadCellProps = true;
 
             if (bRestored)
                 // We restored cell definitions, clear these now.

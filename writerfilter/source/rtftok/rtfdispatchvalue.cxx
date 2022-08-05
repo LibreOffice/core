@@ -415,17 +415,25 @@ bool RTFDocumentImpl::dispatchTableValue(RTFKeyword nKeyword, int nParam)
                                                    RTFOverwrite::NO_APPEND);
             if (Destination::NESTEDTABLEPROPERTIES == m_aStates.top().getDestination())
             {
-                m_nNestedCells++;
-                // Push cell properties.
-                m_aNestedTableCellsSprms.push_back(m_aStates.top().getTableCellSprms());
-                m_aNestedTableCellsAttributes.push_back(m_aStates.top().getTableCellAttributes());
+                if (m_bNestedReadCellProps)
+                {
+                    m_nNestedCells++;
+                    // Push cell properties.
+                    m_aNestedTableCellsSprms.push_back(m_aStates.top().getTableCellSprms());
+                    m_aNestedTableCellsAttributes.push_back(
+                        m_aStates.top().getTableCellAttributes());
+                }
             }
             else
             {
-                m_nTopLevelCells++;
-                // Push cell properties.
-                m_aTopLevelTableCellsSprms.push_back(m_aStates.top().getTableCellSprms());
-                m_aTopLevelTableCellsAttributes.push_back(m_aStates.top().getTableCellAttributes());
+                if (m_bTopLevelReadCellProps)
+                {
+                    m_nTopLevelCells++;
+                    // Push cell properties.
+                    m_aTopLevelTableCellsSprms.push_back(m_aStates.top().getTableCellSprms());
+                    m_aTopLevelTableCellsAttributes.push_back(
+                        m_aStates.top().getTableCellAttributes());
+                }
             }
 
             m_aStates.top().getTableCellSprms() = m_aDefaultState.getTableCellSprms();

@@ -865,10 +865,12 @@ private:
     /// nested cells, so it should be sufficient to store the
     /// currently active one, no need for a stack of them
     int m_nNestedCells;
+    bool m_bNestedReadCellProps = true; ///< prevent duplicates (start of row/end of row)
     std::deque<RTFSprms> m_aNestedTableCellsSprms;
     std::deque<RTFSprms> m_aNestedTableCellsAttributes;
     /// cell props buffer for top-level table, reset by \row
     int m_nTopLevelCells;
+    bool m_bTopLevelReadCellProps = true; ///< prevent duplicates (start of row/end of row)
     std::deque<RTFSprms> m_aTopLevelTableCellsSprms;
     std::deque<RTFSprms> m_aTopLevelTableCellsAttributes;
     /// backup of top-level props, to support inheriting cell props
