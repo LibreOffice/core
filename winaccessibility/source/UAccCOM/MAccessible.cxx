@@ -1225,7 +1225,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccFocus(long dChildID)
         }
         return S_OK;
 
-        } catch(...) { return E_FAIL; }
+    } catch(...) { return E_FAIL; }
 }
 
 /**
