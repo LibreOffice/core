@@ -108,6 +108,8 @@ public:
 
     /** Returns the object anchor if existing, null otherwise. */
     const XclObjAnchor* GetAnchor() const;
+
+    const tools::Rectangle& GetDffRect() const;
     /** Returns true, if the passed size is valid for this object. */
     bool                IsValidSize( const tools::Rectangle& rAnchorRect ) const;
     /** Returns the range in the sheet covered by this object. */
@@ -191,6 +193,7 @@ private:
     sal_uInt16          mnObjType;      /// The Excel object type from OBJ record.
     sal_uInt32          mnDffShapeId;   /// Shape ID from DFF stream.
     ShapeFlag           mnDffFlags;     /// Shape flags from DFF stream.
+    tools::Rectangle maDffRect;
     OUString       maObjName;      /// Name of the object.
     OUString       maMacroName;    /// Name of an attached macro.
     OUString       maHyperlink;    /// On-click hyperlink URL.
@@ -1061,6 +1064,8 @@ public:
     XclImpDrawObjRef    FindDrawObj( sal_uInt16 nObjId ) const;
     /** Finds the textbox data related to the DFF shape at the passed position. */
     const XclImpObjTextData* FindTextData( const DffRecordHeader& rHeader ) const;
+    /** Finds the smallest GroupBox that contains the passed control. */
+    const XclImpDrawObjRef FindGroupBox(const XclImpDrawObjBase& rObj) const;
 
     /** Sets the object with the passed identification to be skipped on import. */
     void                SetSkipObj( sal_uInt16 nObjId );

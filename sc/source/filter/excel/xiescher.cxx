@@ -378,6 +378,11 @@ void XclImpDrawObjBase::SetAnchor( const XclObjAnchor& rAnchor )
     mbHasAnchor = true;
 }
 
+const tools::Rectangle& XclImpDrawObjBase::GetDffRect() const
+{
+    return maDffRect;
+}
+
 void XclImpDrawObjBase::SetDffData(
     const DffObjData& rDffObjData, const OUString& rObjName, const OUString& rHyperlink,
     bool bVisible, bool bAutoMargin )
@@ -388,6 +393,7 @@ void XclImpDrawObjBase::SetDffData(
     maHyperlink = rHyperlink;
     mbVisible = bVisible;
     mbAutoMargin = bAutoMargin;
+    maDffRect = rDffObjData.aChildAnchor;
 }
 
 OUString XclImpDrawObjBase::GetObjName() const
@@ -2376,7 +2382,17 @@ void XclImpOptionButtonObj::DoProcessControl( ScfPropertySet& rPropSet ) const
     }
     else
     {
-        // not the leader? try and find it
+        // Either default grouping (same sheet) or covered by a GroupBox control
+        Reference< XControlModel > xCtrlModel = XclControlHelper::GetControlModel(mxShape);
+        if (xCtrlModel.is())
+        {
+            ScfPropertySet aProps(xCtrlModel);
+
+            // This assumes that the GroupBox is always defined prior to the controls inside.
+            XclImpDrawObjRef pGroupBox = GetObjectManager().GetSheetDrawing(GetTab()).FindGroupBox(*this);
+            OUString sGroupName = pGroupBox ? OUString("autoGroup_") + OUString::number(pGroupBox->GetObjId()) : OUString("autoGroup_0");
+            aProps.SetStringProperty( "GroupName", sGroupName );
+        }
     }
 }
 
@@ -4065,6 +4081,31 @@ const XclImpObjTextData* XclImpDrawing::FindTextData( const DffRecordHeader& rHe
     if( (aIt != maTextMap.end()) && (aIt->first <= rHeader.GetRecEndFilePos()) )
         return aIt->second.get();
     return nullptr;
+}
+
+const XclImpDrawObjRef XclImpDrawing::FindGroupBox(const XclImpDrawObjBase& rObj) const
+{
+    // for each item - if GetObjType() is group, and GetTab() is the same
+    double fSmallestArea = 0;
+    sal_uInt16 nSmallestObjId = 0;
+    for (auto& rGroupObj : maObjMapId)
+    {
+        assert(rGroupObj.second->GetTab() == rObj.GetTab() && "right?");
+        if (rGroupObj.second->GetObjType() != EXC_OBJTYPE_GROUPBOX)
+            continue;
+        if (rGroupObj.first == rObj.GetObjId())
+            continue;
+        const tools::Rectangle& rGroupRect = rGroupObj.second->GetDffRect();
+        const double fArea = double(rGroupRect.GetWidth()) * rGroupRect.GetHeight();
+        if (fSmallestArea > 0 && fArea > fSmallestArea)
+            continue;
+        if (rGroupRect.Contains(rObj.GetDffRect()))
+        {
+            nSmallestObjId = rGroupObj.first;
+            fSmallestArea = fArea;
+        }
+    }
+    return FindDrawObj(nSmallestObjId);
 }
 
 void XclImpDrawing::SetSkipObj( sal_uInt16 nObjId )
