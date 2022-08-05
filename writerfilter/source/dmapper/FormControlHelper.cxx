@@ -286,7 +286,8 @@ void FormControlHelper::processField(uno::Reference<text::XFormField> const& xFo
                 xNameCont->insertByName(ODF_FORMDROPDOWN_LISTENTRY, uno::Any(comphelper::containerToSequence(rEntries)));
 
             sal_Int32 nResult = m_pFFData->getDropDownResult().toInt32();
-            if ( nResult )
+            // 0 is valid, but also how toInt32 reports parse error, but it's a sensible default...
+            if (0 <= nResult && nResult < rEntries.size())
             {
                 if ( xNameCont->hasByName(ODF_FORMDROPDOWN_RESULT) )
                     xNameCont->replaceByName(ODF_FORMDROPDOWN_RESULT, uno::Any( nResult ) );

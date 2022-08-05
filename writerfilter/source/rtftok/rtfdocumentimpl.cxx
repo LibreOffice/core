@@ -2545,7 +2545,9 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
                 break; // not for nested group
             auto pValue
                 = new RTFValue(m_aStates.top().getCurrentDestinationText()->makeStringAndClear());
-            m_aFormfieldSprms.set(NS_ooxml::LN_CT_FFDDList_listEntry, pValue);
+            // OOXML puts these into a LN_CT_FFData_ddList but FFDataHandler should handle this too
+            m_aFormfieldSprms.set(NS_ooxml::LN_CT_FFDDList_listEntry, pValue,
+                                  RTFOverwrite::NO_APPEND);
         }
         break;
         case Destination::DATAFIELD:
