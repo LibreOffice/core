@@ -104,24 +104,6 @@ void  AccObjectManagerAgent::UpdateAccName( XAccessible* pXAcc, Any newName)
         pWinManager->SetAccName( pXAcc, newName );
 }
 
-
-/**
-   * Interface of updating MSAA location when UNO location_changed event occurs.
-   * @param pXAcc Uno XAccessible interface of control.
-   * @param pXAcc Uno The top position of new location.
-   * @param pXAcc Uno The left position of new location.
-   * @param pXAcc Uno The width of new location.
-   * @param pXAcc Uno The width of new location.
-   * @return
-   */
-void  AccObjectManagerAgent::UpdateLocation( XAccessible* /* pXAcc */, long /*top*/, long /*left*/, long /*width*/, long /*height*/ )
-{
-#ifdef _IMPL_WIN
-    if( pWinManager )
-        pWinManager->SetLocation( pXAcc, top, left, width, height );
-#endif
-}
-
 /**
    * When a new UNO XAccessible object is found by listener, we create a corresponding
    * com object and insert it to our manager list.
