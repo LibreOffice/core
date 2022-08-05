@@ -90,6 +90,7 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/controls/grid/gridcontrol \
     toolkit/source/controls/roadmapcontrol \
     toolkit/source/controls/roadmapentry \
+    toolkit/source/controls/svtxgridcontrol \
     toolkit/source/controls/svmedit \
     toolkit/source/controls/tabpagecontainer \
     toolkit/source/controls/tabpagemodel \
@@ -99,6 +100,14 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/controls/tkspinbutton \
     toolkit/source/controls/animatedimages \
     toolkit/source/controls/spinningprogress \
+    toolkit/source/controls/table/cellvalueconversion \
+    toolkit/source/controls/table/defaultinputhandler \
+    toolkit/source/controls/table/gridtablerenderer \
+    toolkit/source/controls/table/mousefunction \
+    toolkit/source/controls/table/tablecontrol \
+    toolkit/source/controls/table/tablecontrol_impl \
+    toolkit/source/controls/table/tabledatawindow \
+    toolkit/source/controls/table/tablegeometry \
     toolkit/source/controls/tree/treecontrol \
     toolkit/source/controls/tree/treecontrolpeer \
     toolkit/source/controls/tree/treedatamodel \
@@ -107,7 +116,9 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/controls/unocontrolcontainer \
     toolkit/source/controls/unocontrolcontainermodel \
     toolkit/source/controls/unocontrolmodel \
+    toolkit/source/controls/unocontroltablemodel \
     toolkit/source/controls/unocontrols \
+    toolkit/source/controls/unogridcolumnfacade \
     toolkit/source/hatchwindow/documentcloser \
     toolkit/source/hatchwindow/hatchwindow \
     toolkit/source/hatchwindow/hatchwindowfactory \

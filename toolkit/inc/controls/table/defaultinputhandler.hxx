@@ -19,12 +19,11 @@
 
 #pragma once
 
-#include <table/tableinputhandler.hxx>
+#include <controls/table/mousefunction.hxx>
+#include <controls/table/tableinputhandler.hxx>
 #include <rtl/ref.hxx>
-#include <mousefunction.hxx>
 
 #include <vector>
-
 
 namespace svt::table
 {

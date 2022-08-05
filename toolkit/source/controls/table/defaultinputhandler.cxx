@@ -17,13 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include <table/defaultinputhandler.hxx>
-#include <table/tablecontrolinterface.hxx>
+#include <controls/table/defaultinputhandler.hxx>
+#include <controls/table/tablecontrolinterface.hxx>
 
 #include <vcl/event.hxx>
 #include <osl/diagnose.h>
-
 
 namespace svt::table
 {

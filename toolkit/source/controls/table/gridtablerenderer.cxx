@@ -19,8 +19,8 @@
 
 
 #include "cellvalueconversion.hxx"
-#include <table/gridtablerenderer.hxx>
-#include <table/tablesort.hxx>
+#include <controls/table/gridtablerenderer.hxx>
+#include <controls/table/tablesort.hxx>
 
 #include <com/sun/star/graphic/XGraphic.hpp>
 
