@@ -344,7 +344,8 @@ def get_launchpad_bugs(prefix):
                 os.rename(tmpfile, download)
 
 rss_bugzillas = (
-    ( 'abi', 'http://bugzilla.abisource.com/buglist.cgi' ), #added for abiword
+# note: currently abisource has an expired TLS cert
+#    ( 'abi', 'http://bugzilla.abisource.com/buglist.cgi' ), #added for abiword
     ( 'fdo', 'http://bugs.freedesktop.org/buglist.cgi' ),
     ( 'gentoo', 'http://bugs.gentoo.org/buglist.cgi' ),
     ( 'gnome', 'http://bugzilla.gnome.org/buglist.cgi' ), # added for gnumeric
