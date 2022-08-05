@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <table/tablemodel.hxx>
+#include <controls/table/tablemodel.hxx>
 
 #include <com/sun/star/awt/grid/XGridColumn.hpp>
 #include <com/sun/star/style/HorizontalAlignment.hpp>

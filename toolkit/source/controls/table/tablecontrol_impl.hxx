@@ -19,8 +19,8 @@
 
 #pragma once
 
-#include <table/tablemodel.hxx>
-#include <table/tablecontrolinterface.hxx>
+#include <controls/table/tablemodel.hxx>
+#include <controls/table/tablecontrolinterface.hxx>
 
 #include <vcl/svtaccessiblefactory.hxx>
 #include <vcl/accessibletable.hxx>

@@ -145,14 +145,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/svrtf/rtfkeywd \
     svtools/source/svrtf/rtfout \
     svtools/source/svrtf/svparser \
-    svtools/source/table/defaultinputhandler \
-    svtools/source/table/gridtablerenderer \
-    svtools/source/table/tablecontrol \
-    svtools/source/table/tablecontrol_impl \
-    svtools/source/table/tabledatawindow \
-    svtools/source/table/mousefunction \
-    svtools/source/table/cellvalueconversion \
-    svtools/source/table/tablegeometry \
     svtools/source/uno/addrtempuno \
     svtools/source/uno/fpicker \
     svtools/source/uno/framestatuslistener \
@@ -161,12 +153,8 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/uno/popupmenucontrollerbase \
     svtools/source/uno/popupwindowcontroller \
     svtools/source/uno/statusbarcontroller \
-    svtools/source/uno/svtxgridcontrol \
     svtools/source/uno/toolboxcontroller \
-    svtools/source/uno/unocontroltablemodel \
-    svtools/source/uno/unogridcolumnfacade \
     svtools/source/uno/unoevent \
-    svtools/source/uno/unoiface \
     svtools/source/uno/unoimap \
     svtools/source/uno/wizard/unowizard \
     svtools/source/uno/wizard/wizardpagecontroller \

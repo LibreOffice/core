@@ -19,10 +19,10 @@
 
 #pragma once
 
-#include <svtools/svtdllapi.h>
-#include <table/tabletypes.hxx>
-#include <table/tablerenderer.hxx>
-#include <table/tableinputhandler.hxx>
+#include <toolkit/dllapi.h>
+#include <controls/table/tabletypes.hxx>
+#include <controls/table/tablerenderer.hxx>
+#include <controls/table/tableinputhandler.hxx>
 
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/style/HorizontalAlignment.hpp>
@@ -238,7 +238,7 @@ namespace svt::table
 
     /** declares the interface to implement by an abstract table model
     */
-    class SAL_NO_VTABLE SVT_DLLPUBLIC ITableModel
+    class SAL_NO_VTABLE TOOLKIT_DLLPUBLIC ITableModel
     {
     public:
         /** returns the number of columns in the table

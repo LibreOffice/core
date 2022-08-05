@@ -19,8 +19,8 @@
 
 #pragma once
 
-#include <table/tablemodel.hxx>
-#include <table/tablesort.hxx>
+#include <controls/table/tablemodel.hxx>
+#include <controls/table/tablesort.hxx>
 #include <tools/color.hxx>
 
 #include <com/sun/star/awt/grid/GridDataEvent.hpp>

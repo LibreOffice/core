@@ -23,8 +23,8 @@
 #include <vcl/seleng.hxx>
 #include <vcl/window.hxx>
 
-#include <table/tabletypes.hxx>
-#include <table/tablemodel.hxx>
+#include <controls/table/tabletypes.hxx>
+#include <controls/table/tablemodel.hxx>
 
 namespace svt::table
 {
