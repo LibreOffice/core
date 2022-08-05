@@ -1004,12 +1004,8 @@ SwXTextCursor::gotoStart(sal_Bool Expand)
                 static_cast<SwSectionNode const*>(pTmp);
             if (pSectionStartNode->GetSection().IsHiddenFlag())
             {
-                SwContentNode* pCNode = GetDoc()->GetNodes().GoNextSection(
-                        &rUnoCursor.GetPoint()->nNode, true, false);
-                if (pCNode)
-                {
-                    rUnoCursor.GetPoint()->nContent.Assign(pCNode, 0);
-                }
+                GetDoc()->GetNodes().GoNextSection(
+                        rUnoCursor.GetPoint(), true, false);
             }
         }
     }

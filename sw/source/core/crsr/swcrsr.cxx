@@ -2501,12 +2501,12 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pCurrentCursor )
             pNew->SetMark();
 
             SwPosition* pPos = pNew->GetPoint();
-            pPos->nNode.Assign( *pSttNd->EndOfSectionNode(), - 1 );
+            pPos->Assign( *pSttNd->EndOfSectionNode(), - 1 );
             pNd = &pPos->GetNode();
             if( !pNd->IsContentNode() )
-                pNd = SwNodes::GoPrevSection( &pPos->nNode, true, false );
-
-            pPos->nContent.Assign(static_cast<SwContentNode*>(pNd), pNd ? static_cast<SwContentNode*>(pNd)->Len() : 0);
+                pNd = SwNodes::GoPrevSection( pPos, true, false );
+            if (pNd)
+                pPos->AssignEndIndex(*static_cast<SwContentNode*>(pNd));
         }
     }
     return pCurrentCursor;

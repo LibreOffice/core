@@ -191,7 +191,11 @@ public:
        (Both set FALSE ==> GoNext/GoPrevious!!!). */
     SwContentNode* GoNextSection( SwNodeIndex *, bool bSkipHidden  = true,
                                            bool bSkipProtect = true ) const;
+    SwContentNode* GoNextSection( SwPosition *, bool bSkipHidden  = true,
+                                           bool bSkipProtect = true ) const;
     static SwContentNode* GoPrevSection( SwNodeIndex *, bool bSkipHidden  = true,
+                                           bool bSkipProtect = true );
+    static SwContentNode* GoPrevSection( SwPosition *, bool bSkipHidden  = true,
                                            bool bSkipProtect = true );
 
     /** Create an empty section of Start- and EndNote. It may be called

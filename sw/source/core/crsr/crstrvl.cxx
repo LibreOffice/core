@@ -1557,12 +1557,11 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                             SwCursorSaveState aSaveState( *m_pCurrentCursor );
                             m_pCurrentCursor->GetPoint()->nNode = *static_cast<SwTextFootnote*>(pTextAttr)->GetStartNode();
                             SwContentNode* pCNd = GetDoc()->GetNodes().GoNextSection(
-                                &m_pCurrentCursor->GetPoint()->nNode,
+                                m_pCurrentCursor->GetPoint(),
                                 true, !IsReadOnlyAvailable() );
 
                             if( pCNd )
                             {
-                                m_pCurrentCursor->GetPoint()->nContent.Assign( pCNd, 0 );
                                 if( m_pCurrentCursor->IsSelOvr( SwCursorSelOverFlags::CheckNodeSection |
                                     SwCursorSelOverFlags::Toggle ))
                                     bRet = false;
