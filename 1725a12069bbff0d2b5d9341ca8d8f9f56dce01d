@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b0796ef_93ad21b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-08-06T19:31:13Z",
+      "side": 1,
+      "message": "Ignore the windows jenkins bot, which seems to have \"leftovers\" issues.",
+      "revId": "1725a12069bbff0d2b5d9341ca8d8f9f56dce01d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
