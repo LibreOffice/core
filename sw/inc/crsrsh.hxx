@@ -338,7 +338,7 @@ public:
     void    SetSelection(const SwPaM& rCursor);
 
     // remove all cursors from ContentNodes and set to 0
-    void ParkCursor( const SwNodeIndex &rIdx );
+    void ParkCursor( const SwNode &rIdx );
 
     // return the current cursor stack
     // (required in EditShell when deleting contents)

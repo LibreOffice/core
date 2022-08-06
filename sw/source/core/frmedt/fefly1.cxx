@@ -677,7 +677,7 @@ const SwFrameFormat *SwFEShell::NewFlyFrame( const SfxItemSet& rSet, bool bAnchV
             // Always put it after/on the table; via the
             // document position they will be set to the old
             // position
-            ParkCursor( SwNodeIndex( *aBoxes[0]->GetSttNd() ));
+            ParkCursor( *aBoxes[0]->GetSttNd() );
 
             // #i127787# pCurrentCursor will be deleted in ParkCursor,
             // we better get the current pCurrentCursor instead of working with the

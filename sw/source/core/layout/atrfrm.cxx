@@ -196,7 +196,7 @@ static void lcl_DelHFFormat( SwClient *pToRemove, SwFrameFormat *pFormat )
                     SwCursorShell *pShell = SwIterator<SwCursorShell,SwContentNode>( *static_cast<SwContentNode*>(pNode) ).First();
                     if( pShell )
                     {
-                        pShell->ParkCursor( aIdx );
+                        pShell->ParkCursor( aIdx.GetNode() );
                         aIdx = nEnd-1;
                     }
                 }
