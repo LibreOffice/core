@@ -467,8 +467,8 @@ namespace {
 
 struct PostItField_ : public SetGetExpField
 {
-    PostItField_( const SwNodeIndex& rNdIdx, const SwTextField* pField )
-        : SetGetExpField( rNdIdx, pField, nullptr ) {}
+    PostItField_( const SwNode& rNd, const SwTextField* pField )
+        : SetGetExpField( rNd, pField, nullptr ) {}
 
     sal_uInt16 GetPageNo( const StringRangeEnumerator &rRangeEnum,
             const o3tl::sorted_vector< sal_Int32 > &rPossiblePages,
@@ -524,8 +524,7 @@ bool sw_GetPostIts(const IDocumentFieldsAccess& rIDFA, SetGetExpFields* pSrtLst)
         for(auto pField: vFields)
         {
             auto pTextField = pField->GetTextField();
-            SwNodeIndex aIdx(pTextField->GetTextNode());
-            std::unique_ptr<PostItField_> pNew(new PostItField_(aIdx, pTextField));
+            std::unique_ptr<PostItField_> pNew(new PostItField_(pTextField->GetTextNode(), pTextField));
             pSrtLst->insert(std::move(pNew));
 
         }

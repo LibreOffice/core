@@ -727,7 +727,7 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                             if( GetBodyTextNode( m_rDoc, aPos, *pFrame ) )
                             {
                                 FieldsToCalc( *pCalc, SetGetExpField(
-                                        aPos.nNode, pFormatField->GetTextField(),
+                                        aPos.GetNode(), pFormatField->GetTextField(),
                                         &aPos.nContent, pFrame->GetPhyPageNum()),
                                     pLayout);
                             }
@@ -738,10 +738,9 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                     if( !pFrame )
                     {
                         // create index to determine the TextNode
-                        SwNodeIndex aIdx( rTextNd );
                         SwFrame const*const pFrame2 = ::sw::FindNeighbourFrameForNode(rTextNd);
                         FieldsToCalc( *pCalc,
-                            SetGetExpField(aIdx, pFormatField->GetTextField(),
+                            SetGetExpField(rTextNd, pFormatField->GetTextField(),
                                 nullptr,
                                 pFrame2 ? pFrame2->GetPhyPageNum() : 0),
                             pLayout);
@@ -804,7 +803,7 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                                 SwPosition aPos( *pCNd );
                                 if( GetBodyTextNode( m_rDoc, aPos, *pFrame ) )
                                 {
-                                    FieldsToCalc(*pCalc, SetGetExpField(aPos.nNode,
+                                    FieldsToCalc(*pCalc, SetGetExpField(aPos.GetNode(),
                                             nullptr, nullptr, pFrame->GetPhyPageNum()),
                                         pLayout);
                                 }
@@ -816,9 +815,8 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                     if( !pFrame )
                     {
                         // create index to determine the TextNode
-                        SwNodeIndex aIdx( *pTableNd );
                         SwFrame const*const pFrame2 = ::sw::FindNeighbourFrameForNode(*pTableNd);
-                        FieldsToCalc(*pCalc, SetGetExpField(aIdx, nullptr, nullptr,
+                        FieldsToCalc(*pCalc, SetGetExpField(*pTableNd, nullptr, nullptr,
                                 pFrame2 ? pFrame2->GetPhyPageNum() : 0),
                             pLayout);
                     }

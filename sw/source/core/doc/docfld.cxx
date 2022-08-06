@@ -64,7 +64,7 @@ using namespace ::com::sun::star::uno;
 // the StartIndex can be supplied optionally (e.g. if it was queried before - is a virtual
 // method otherwise!)
 SetGetExpField::SetGetExpField(
-    const SwNodeIndex& rNdIdx,
+    const SwNode& rNdIdx,
     const SwTextField* pField,
     const SwContentIndex* pIdx,
     sal_uInt16 const nPageNumber)
@@ -81,7 +81,7 @@ SetGetExpField::SetGetExpField(
         m_nContent = 0;
 }
 
-SetGetExpField::SetGetExpField( const SwNodeIndex& rNdIdx,
+SetGetExpField::SetGetExpField( const SwNode& rNdIdx,
                             const SwTextINetFormat& rINet )
 {
     m_eSetGetExpFieldType = TEXTINET;
@@ -149,7 +149,7 @@ SetGetExpField::SetGetExpField( const SwTableBox& rTBox )
     }
 }
 
-SetGetExpField::SetGetExpField( const SwNodeIndex& rNdIdx,
+SetGetExpField::SetGetExpField( const SwNode& rNdIdx,
                                 const SwTextTOXMark& rTOX )
 {
     m_eSetGetExpFieldType = TEXTTOXMARK;
@@ -1076,9 +1076,7 @@ void SwDocUpdateField::GetBodyNode( const SwTextField& rTField, SwFieldIds nFiel
 
     if( !pFrame || pFrame->IsInDocBody() )
     {
-        // create index to determine the TextNode
-        SwNodeIndex aIdx( rTextNd );
-        bIsInBody = rDoc.GetNodes().GetEndOfExtras().GetIndex() < aIdx.GetIndex();
+        bIsInBody = rDoc.GetNodes().GetEndOfExtras().GetIndex() < rTextNd.GetIndex();
 
         // We don't want to update fields in redlines, or those
         // in frames whose anchor is in redline. However, we do want to update
@@ -1091,7 +1089,7 @@ void SwDocUpdateField::GetBodyNode( const SwTextField& rTField, SwFieldIds nFiel
         }
         if( (pFrame != nullptr) || bIsInBody )
         {
-            pNew.reset(new SetGetExpField(aIdx, &rTField, nullptr,
+            pNew.reset(new SetGetExpField(rTextNd, &rTField, nullptr,
                 pFrame ? pFrame->GetPhyPageNum() : 0));
         }
     }
@@ -1101,7 +1099,7 @@ void SwDocUpdateField::GetBodyNode( const SwTextField& rTField, SwFieldIds nFiel
         SwPosition aPos( rDoc.GetNodes().GetEndOfPostIts() );
         bool const bResult = GetBodyTextNode( rDoc, aPos, *pFrame );
         OSL_ENSURE(bResult, "where is the Field");
-        pNew.reset(new SetGetExpField(aPos.nNode, &rTField, &aPos.nContent,
+        pNew.reset(new SetGetExpField(aPos.GetNode(), &rTField, &aPos.nContent,
             pFrame->GetPhyPageNum()));
     }
 

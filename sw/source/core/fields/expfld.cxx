@@ -373,7 +373,7 @@ void SwGetExpField::ChangeExpansion( const SwFrame& rFrame, const SwTextField& r
     SwRootFrame const& rLayout(*rFrame.getRootFrame());
     OUString & rExpand(rLayout.IsHideRedlines() ? m_sExpandRLHidden : m_sExpand);
     // here a page number is needed to sort correctly
-    SetGetExpField aEndField(aPos.nNode, &rField, &aPos.nContent, rFrame.GetPhyPageNum());
+    SetGetExpField aEndField(aPos.GetNode(), &rField, &aPos.nContent, rFrame.GetPhyPageNum());
     if(GetSubType() & nsSwGetSetExpType::GSE_STRING)
     {
         SwHashTable<HashStr> aHashTable(0);
