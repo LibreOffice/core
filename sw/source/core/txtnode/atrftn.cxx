@@ -354,8 +354,7 @@ void SwTextFootnote::SetStartNode( const SwNodeIndex *pNewNode, bool bDelNode )
                 // if necessary, update following footnotes
                 if( !pDoc->IsInDtor() && n < pDoc->GetFootnoteIdxs().size() )
                 {
-                    SwNodeIndex aTmp( pDoc->GetFootnoteIdxs()[n]->GetTextNode() );
-                    pDoc->GetFootnoteIdxs().UpdateFootnote( aTmp );
+                    pDoc->GetFootnoteIdxs().UpdateFootnote( pDoc->GetFootnoteIdxs()[n]->GetTextNode() );
                 }
                 break;
             }
