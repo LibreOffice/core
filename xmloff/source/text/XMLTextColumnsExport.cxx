@@ -24,6 +24,7 @@
 
 
 #include <com/sun/star/text/XTextColumns.hpp>
+#include <com/sun/star/text/ColumnSeparatorStyle.hpp>
 #include <com/sun/star/text/TextColumn.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -117,7 +118,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
 
             // style:height
             aAny = xPropSet->getPropertyValue( gsSeparatorLineRelativeHeight );
-            sal_Int8 nHeight = 0;
+            sal_Int32 nHeight = 0;
             aAny >>= nHeight;
             ::sax::Converter::convertPercent( sValue, nHeight );
             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_HEIGHT,
@@ -125,16 +126,16 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
 
             // style::style
             aAny = xPropSet->getPropertyValue( gsSeparatorLineStyle );
-            sal_Int8 nStyle = 0;
+            sal_Int16 nStyle = css::text::ColumnSeparatorStyle::NONE;
             aAny >>= nStyle;
 
             enum XMLTokenEnum eStr = XML_TOKEN_INVALID;
             switch ( nStyle )
             {
-                case 0:  eStr = XML_NONE; break;
-                case 1:  eStr = XML_SOLID; break;
-                case 2:  eStr = XML_DOTTED; break;
-                case 3:  eStr = XML_DASHED; break;
+                case css::text::ColumnSeparatorStyle::NONE:  eStr = XML_NONE; break;
+                case css::text::ColumnSeparatorStyle::SOLID:  eStr = XML_SOLID; break;
+                case css::text::ColumnSeparatorStyle::DOTTED:  eStr = XML_DOTTED; break;
+                case css::text::ColumnSeparatorStyle::DASHED:  eStr = XML_DASHED; break;
                 default:
                          break;
             }
