@@ -2874,9 +2874,9 @@ void SwCursorShell::ParkPams( SwPaM* pDelRg, SwShellCursor** ppDelRing )
 
     @param rIdx ???
 */
-void SwCursorShell::ParkCursor( const SwNodeIndex &rIdx )
+void SwCursorShell::ParkCursor( const SwNode &rIdx )
 {
-    SwNode *pNode = &rIdx.GetNode();
+    const SwNode *pNode = &rIdx;
 
     // create a new PaM
     SwPaM aNew( *GetCursor()->GetPoint() );

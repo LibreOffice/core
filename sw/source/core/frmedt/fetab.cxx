@@ -1378,7 +1378,7 @@ bool SwFEShell::DeleteTableSel()
         // position they'll be set to the old position
         while( !pFrame->IsCellFrame() )
             pFrame = pFrame->GetUpper();
-        ParkCursor( SwNodeIndex( *static_cast<SwCellFrame*>(pFrame)->GetTabBox()->GetSttNd() ));
+        ParkCursor( *static_cast<SwCellFrame*>(pFrame)->GetTabBox()->GetSttNd() );
 
         bRet = GetDoc()->DeleteRowCol( aBoxes );
 
