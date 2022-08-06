@@ -29,6 +29,7 @@ class SvxAccessibilityOptionsTabPage : public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xAutoDetectHC;
     std::unique_ptr<weld::CheckButton> m_xAutomaticFontColor;
     std::unique_ptr<weld::CheckButton> m_xPagePreviews;
+    std::unique_ptr<weld::CheckButton> m_xShowInfoDialogs;
 
 public:
     SvxAccessibilityOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);

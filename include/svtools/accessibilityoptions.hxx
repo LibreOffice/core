@@ -39,6 +39,7 @@ public:
     bool        GetIsAllowAnimatedText() const;
     bool        GetIsAutomaticFontColor() const;
     bool        IsSelectionInReadonly() const;
+    bool IsShowInfoDialogs() const;
 
     void        SetVCLSettings();
 };

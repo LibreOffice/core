@@ -6256,6 +6256,13 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="IsShowInfoDialogs" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Indicates whether to show information dialogs that can be read by a screen reader.</desc>
+          <label>Show information dialogs</label>
+        </info>
+        <value>false</value>
+      </prop>
       <prop oor:name="IsAutomaticFontColor" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Overrides all text color attributes set in a SO/OO document for

@@ -32,6 +32,7 @@ SvxAccessibilityOptionsTabPage::SvxAccessibilityOptionsTabPage(weld::Container* 
     , m_xAutoDetectHC(m_xBuilder->weld_check_button("autodetecthc"))
     , m_xAutomaticFontColor(m_xBuilder->weld_check_button("autofontcolor"))
     , m_xPagePreviews(m_xBuilder->weld_check_button("systempagepreviewcolor"))
+    , m_xShowInfoDialogs(m_xBuilder->weld_check_button("infodialogs"))
 {
 #ifdef UNX
     // UNIX: read the gconf2 setting instead to use the checkbox
@@ -63,6 +64,8 @@ bool SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet* )
         officecfg::Office::Common::Accessibility::IsSelectionInReadonly::set(m_xTextSelectionInReadonly->get_active(), batch);
     if ( !officecfg::Office::Common::Accessibility::AutoDetectSystemHC::isReadOnly() )
         officecfg::Office::Common::Accessibility::AutoDetectSystemHC::set(m_xAutoDetectHC->get_active(), batch);
+    if (!officecfg::Office::Common::Accessibility::IsShowInfoDialogs::isReadOnly())
+        officecfg::Office::Common::Accessibility::IsShowInfoDialogs::set(m_xShowInfoDialogs->get_active(), batch);
     batch->commit();
 
     AllSettings aAllSettings = Application::GetSettings();
@@ -102,6 +105,10 @@ void SvxAccessibilityOptionsTabPage::Reset( const SfxItemSet* )
     m_xAutoDetectHC->set_active( officecfg::Office::Common::Accessibility::AutoDetectSystemHC::get() );
     if( officecfg::Office::Common::Accessibility::AutoDetectSystemHC::isReadOnly() )
         m_xAutoDetectHC->set_sensitive(false);
+
+    m_xShowInfoDialogs->set_active(officecfg::Office::Common::Accessibility::IsShowInfoDialogs::get());
+    if (officecfg::Office::Common::Accessibility::IsShowInfoDialogs::isReadOnly())
+        m_xShowInfoDialogs->set_sensitive(false);
 
     AllSettings aAllSettings = Application::GetSettings();
     const MiscSettings& aMiscSettings = aAllSettings.GetMiscSettings();

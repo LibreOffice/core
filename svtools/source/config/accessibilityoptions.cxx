@@ -58,6 +58,7 @@ public:
     bool        GetIsAutomaticFontColor() const;
     sal_Int16   GetHelpTipSeconds() const;
     bool        IsSelectionInReadonly() const;
+    bool IsShowInfoDialogs() const;
     sal_Int16   GetEdgeBlending() const;
     sal_Int16   GetListBoxMaximumLineCount() const;
     sal_Int16   GetColorValueSetColumnCount() const;
@@ -141,6 +142,24 @@ bool SvtAccessibilityOptions_Impl::GetIsAllowAnimatedText() const
     try
     {
         static constexpr OUStringLiteral PROPNAME = u"IsAllowAnimatedText";
+        if(m_xNode.is())
+            m_xNode->getPropertyValue(PROPNAME) >>= bRet;
+    }
+    catch(const css::uno::Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION("svtools.config");
+    }
+
+    return bRet;
+}
+
+bool SvtAccessibilityOptions_Impl::IsShowInfoDialogs() const
+{
+    bool                                            bRet = true;
+
+    try
+    {
+        static constexpr OUStringLiteral PROPNAME = u"IsShowInfoDialogs";
         if(m_xNode.is())
             m_xNode->getPropertyValue(PROPNAME) >>= bRet;
     }
@@ -378,6 +397,10 @@ bool SvtAccessibilityOptions::GetIsAutomaticFontColor() const
 bool SvtAccessibilityOptions::IsSelectionInReadonly() const
 {
     return sm_pSingleImplConfig->IsSelectionInReadonly();
+}
+bool SvtAccessibilityOptions::IsShowInfoDialogs() const
+{
+    return sm_pSingleImplConfig->IsShowInfoDialogs();
 }
 
 
