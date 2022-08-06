@@ -578,7 +578,7 @@ void SwUndoUpdateIndex::UndoImpl(::sw::UndoRedoContext & rContext)
         SwNodeIndex(*rDoc.GetNodes()[m_nStartIndex]->EndOfSectionNode()),
         rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_TEXT));
     m_pSaveSectionUpdated->SaveSection(SwNodeRange(first, last), false);
-    m_pSaveSectionOriginal->RestoreSection(&rDoc, first, true);
+    m_pSaveSectionOriginal->RestoreSection(&rDoc, first.GetNode(), true);
     // delete before restoring nested undo, so its node indexes match
     SwNodeIndex const del(*pDeletionPrevention);
     SwDoc::CorrAbs(del, del, SwPosition(*rDoc.GetNodes()[m_nStartIndex]->EndOfSectionNode(), SwNodeOffset(0)), true);
@@ -599,7 +599,7 @@ void SwUndoUpdateIndex::RedoImpl(::sw::UndoRedoContext & rContext)
         SwNodeIndex(*rDoc.GetNodes()[m_nStartIndex]->EndOfSectionNode()),
         rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_TEXT));
     m_pSaveSectionOriginal->SaveSection(SwNodeRange(first, last), false);
-    m_pSaveSectionUpdated->RestoreSection(&rDoc, first, true);
+    m_pSaveSectionUpdated->RestoreSection(&rDoc, first.GetNode(), true);
     // delete before restoring nested undo, so its node indexes match
     SwNodeIndex const del(*pDeletionPrevention);
     SwDoc::CorrAbs(del, del, SwPosition(*rDoc.GetNodes()[m_nStartIndex]->EndOfSectionNode(), SwNodeOffset(0)), true);
