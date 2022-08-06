@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2bef84d3_8d04e425",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-08-06T14:30:23Z",
+      "side": 1,
+      "message": "Let\u0027s push this one, at worst it can reverted.",
+      "revId": "b74e9f1a0ec7e7b7ba2d67b3c3f97c671cb676cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
