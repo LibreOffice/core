@@ -685,7 +685,7 @@ void SwDoc::ClearDoc()
         pFirstNd->SetAttr( SwFormatPageDesc( pDummyPgDsc ));
 
         SwPosition aPos( *pFirstNd );
-        SwPaM const tmpPaM(aSttIdx, GetNodes().GetEndOfContent());
+        SwPaM const tmpPaM(aSttIdx.GetNode(), GetNodes().GetEndOfContent());
         ::PaMCorrAbs(tmpPaM, aPos);
     }
 

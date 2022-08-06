@@ -216,7 +216,10 @@ static SwTableBoxFormat *lcl_CreateAFormatBoxFormat( SwDoc &rDoc, std::vector<Sw
     return rBoxFormatArr[nId];
 }
 
-SwTableNode* SwDoc::IsIdxInTable(const SwNodeIndex& rIdx)
+SwTableNode* SwDoc::IsIdxInTable( const SwNodeIndex& rIdx ) { return IsInTable(rIdx.GetNode()); }
+const SwTableNode* SwDoc::IsIdxInTable( const SwNodeIndex& rIdx ) const { return IsInTable(rIdx.GetNode()); }
+
+SwTableNode* SwDoc::IsInTable(const SwNode& rIdx) const
 {
     SwTableNode* pTableNd = nullptr;
     SwNodeOffset nIndex = rIdx.GetIndex();
@@ -1302,11 +1305,9 @@ void SwNodes::ExpandRangeForTableBox(const SwNodeRange & rRange, std::optional<S
         else if (rNode.IsEndNode())
         {
             SwNode * pStartNode = rNode.StartOfSectionNode();
-            SwNodeIndex aStartIndex = *pStartNode;
-
-            if (aStartIndex < aNewStart)
+            if (pStartNode->GetIndex() < aNewStart.GetIndex())
             {
-                aNewStart = aStartIndex;
+                aNewStart = *pStartNode;
                 bChanged = true;
             }
         }
@@ -1319,8 +1320,7 @@ void SwNodes::ExpandRangeForTableBox(const SwNodeRange & rRange, std::optional<S
     while (pNode->IsEndNode() && aIndex < Count() - 1)
     {
         SwNode * pStartNode = pNode->StartOfSectionNode();
-        SwNodeIndex aStartIndex(*pStartNode);
-        aNewStart = aStartIndex;
+        aNewStart = *pStartNode;
         aNewEnd = aIndex;
         bChanged = true;
 

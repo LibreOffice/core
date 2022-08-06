@@ -1928,8 +1928,8 @@ SwStartNode* SwNodes::MakeTextSection( const SwNode & rWhere,
                                         SwStartNodeType eSttNdTyp,
                                         SwTextFormatColl *pColl )
 {
-    SwStartNode* pSttNd = new SwStartNode( rWhere, SwNodeType::Start, eSttNdTyp );
-    new SwEndNode( rWhere, *pSttNd );
+    SwStartNode* pSttNd = new SwStartNode( SwNodeIndex(rWhere), SwNodeType::Start, eSttNdTyp );
+    new SwEndNode( SwNodeIndex(rWhere), *pSttNd );
     MakeTextNode( SwNodeIndex( rWhere, - 1 ), pColl );
     return pSttNd;
 }
