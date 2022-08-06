@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f521f78f_22a8b95f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-08-06T17:37:08Z",
+      "side": 1,
+      "message": "Windows is broken, Jenkins is broken, resume doesn\u0027t do anything; the change is already rebased to branch head. Force this in.",
+      "revId": "6360cc3a7d272c47ddb4a723ce27732695189328",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
