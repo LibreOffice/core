@@ -1290,14 +1290,14 @@ void SwUndoSaveSection::RestoreSection( SwDoc* pDoc, SwNodeIndex* pIdx,
     SwStartNode* pSttNd = SwNodes::MakeEmptySection( aSttIdx,
                                             static_cast<SwStartNodeType>(nSectType) );
 
-    RestoreSection( pDoc, SwNodeIndex( *pSttNd->EndOfSectionNode() ));
+    RestoreSection( pDoc, *pSttNd->EndOfSectionNode() );
 
     if( pIdx )
         *pIdx = *pSttNd;
 }
 
 void SwUndoSaveSection::RestoreSection(
-        SwDoc *const pDoc, const SwNodeIndex& rInsPos, bool bForceCreateFrames)
+        SwDoc *const pDoc, const SwNode& rInsPos, bool bForceCreateFrames)
 {
     if( NODE_OFFSET_MAX == m_nStartPos )        // was there any content?
         return;

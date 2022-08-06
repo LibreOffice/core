@@ -36,6 +36,7 @@ class SwDoc;
 class SwTextFormatColl;
 class SwFrameFormat;
 class SwFormatAnchor;
+class SwNode;
 class SwNodeIndex;
 class SwNodeRange;
 class SwRedlineData;
@@ -215,7 +216,7 @@ public:
     void SaveSection( const SwNodeIndex& rSttIdx );
     void SaveSection(const SwNodeRange& rRange, bool bExpandNodes = true);
     void RestoreSection( SwDoc* pDoc, SwNodeIndex* pIdx, sal_uInt16 nSectType );
-    void RestoreSection(SwDoc* pDoc, const SwNodeIndex& rInsPos, bool bForceCreateFrames = false);
+    void RestoreSection(SwDoc* pDoc, const SwNode& rInsPos, bool bForceCreateFrames = false);
 
     const SwHistory* GetHistory() const { return m_pHistory.get(); }
           SwHistory* GetHistory()       { return m_pHistory.get(); }
