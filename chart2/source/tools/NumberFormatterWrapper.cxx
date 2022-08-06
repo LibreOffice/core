@@ -66,12 +66,31 @@ NumberFormatterWrapper::~NumberFormatterWrapper()
 {
 }
 
+namespace
+{
+    bool getDate(const css::uno::Any& rAny, util::Date& rDate)
+    {
+        if (rAny >>= rDate)
+            return true;
+        util::DateTime aUtilDateTime;
+        if (rAny >>= aUtilDateTime)
+        {
+            rDate.Day = aUtilDateTime.Day;
+            rDate.Month = aUtilDateTime.Month;
+            rDate.Year = aUtilDateTime.Year;
+            return true;
+        }
+        SAL_WARN("chart2.tools", "neither a util::Date nor a util::DateTime");
+        return false;
+    }
+}
+
 Date NumberFormatterWrapper::getNullDate() const
 {
     Date aRet(30,12,1899);
 
     util::Date aUtilDate;
-    if( m_aNullDate.hasValue() && (m_aNullDate >>= aUtilDate) )
+    if (m_aNullDate.hasValue() && getDate(m_aNullDate, aUtilDate))
     {
         aRet = Date(aUtilDate.Day,aUtilDate.Month,aUtilDate.Year);
     }
@@ -102,8 +121,8 @@ OUString NumberFormatterWrapper::getFormattedString( sal_Int32 nNumberFormatKey,
         nMonth = rDate.GetMonth();
         nDay = rDate.GetDay();
         util::Date aNewNullDate;
-        m_aNullDate >>= aNewNullDate;
-        m_pNumberFormatter->ChangeNullDate(aNewNullDate.Day,aNewNullDate.Month,aNewNullDate.Year);
+        if (getDate(m_aNullDate, aNewNullDate))
+            m_pNumberFormatter->ChangeNullDate(aNewNullDate.Day,aNewNullDate.Month,aNewNullDate.Year);
     }
     // tdf#130969: use UNLIMITED_PRECISION in case of GENERAL Number Format
     if( m_pNumberFormatter->GetStandardPrec() != SvNumberFormatter::UNLIMITED_PRECISION )
