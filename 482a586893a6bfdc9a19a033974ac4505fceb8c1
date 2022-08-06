@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4418a71e_9d0e7d4c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-08-06T16:54:58Z",
+      "side": 1,
+      "message": "When opening the attachment of the bugtracker it works, but I don\u0027t know if it\u0027s the right way to fix this.\n\nAt least, it seems SwFramePage::UpdateExample in sw/source/ui/frmdlg/frmpage.cxx has the right values:\n\"3\" when selecting \"Left of frame text area\" which corresponds to PAGE_LEFT in offapi/com/sun/star/text/RelOrientation.idl\n\"4\" when selecting \"Right of frame text area\" which corresponds to PAGE_RIGHT in the same idl file.\n(BTW, I wonder why it wasn\u0027t 5 and 6 for FRAME_LEFT and FRAME_RIGHT but that\u0027s another story).\nso if parameters provided to m_aExampleWN which is SwFrameExample, I thought the pb may be in SwFrameExample implementation.\n\nHope I\u0027m right and won\u0027t trigger some regression because of a misinterpretation.",
+      "revId": "482a586893a6bfdc9a19a033974ac4505fceb8c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
