@@ -24,7 +24,6 @@
 #include <controls/table/tablecontrol.hxx>
 #include <controls/table/tablecontrolinterface.hxx>
 #include <controls/table/gridtablerenderer.hxx>
-#include <controls/table/tablecontrol.hxx>
 #include "unocontroltablemodel.hxx"
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>

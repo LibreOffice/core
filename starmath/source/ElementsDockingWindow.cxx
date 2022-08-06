@@ -40,7 +40,6 @@
 #include <vcl/virdev.hxx>
 
 #include <unordered_map>
-#include <utility>
 
 namespace
 {
