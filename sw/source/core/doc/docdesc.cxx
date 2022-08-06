@@ -484,7 +484,7 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
                                 SwCursorShell* pShell = SwIterator<SwCursorShell, SwContentNode>(*static_cast<SwContentNode*>(pNode)).First();
                                 if (pShell)
                                 {
-                                    pShell->ParkCursor(aIdx);
+                                    pShell->ParkCursor(aIdx.GetNode());
                                     aIdx = nEnd - 1;
                                 }
                             }

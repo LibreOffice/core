@@ -1928,7 +1928,7 @@ void SwDoc::DeleteCol( const SwCursor& rCursor )
     if( pESh )
     {
         const SwNode* pNd = rCursor.GetNode().FindTableBoxStartNode();
-        pESh->ParkCursor( SwNodeIndex( *pNd ) );
+        pESh->ParkCursor( *pNd );
     }
 
     // Thus delete the Columns
