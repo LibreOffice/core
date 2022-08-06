@@ -67,7 +67,7 @@ namespace XSLT
 
         static const sal_Int32 OUTPUT_BUFFER_SIZE;
         static const sal_Int32 INPUT_BUFFER_SIZE;
-        LibXSLTTransformer* m_transformer;
+        rtl::Reference<LibXSLTTransformer> m_transformer;
         Sequence<sal_Int8> m_readBuf;
         Sequence<sal_Int8> m_writeBuf;
 
