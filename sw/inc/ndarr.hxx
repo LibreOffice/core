@@ -25,6 +25,7 @@
 #include <limits>
 #include <vector>
 #include <memory>
+#include <optional>
 
 #include "bparr.hxx"
 #include "ndtyp.hxx"
@@ -260,7 +261,8 @@ public:
                                 SwTextFormatColl* pTextColl,
                                 SwUndoTextToTable* pUndo );
 
-    std::unique_ptr<SwNodeRange> ExpandRangeForTableBox(const SwNodeRange & rRange);
+    void ExpandRangeForTableBox(const SwNodeRange & rRange,
+                                std::optional<SwNodeRange>& rExpandedRange);
 
     /// create a table from a vector of NodeRanges - API support
     SwTableNode* TextToTable( const TableRanges_t& rTableNodes,
