@@ -1490,7 +1490,7 @@ bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
             if (pContact && !pContact->ObjAnchoredAtPage() )
             {
                 const SwPosition& rPos = pContact->GetContentAnchor();
-                bool bInHdrFtr = GetDoc()->IsInHeaderFooter( rPos.nNode );
+                bool bInHdrFtr = GetDoc()->IsInHeaderFooter( rPos.GetNode() );
                 if (IsHeaderFooterEdit() != bInHdrFtr)
                 {
                     bRet = false;
@@ -1931,7 +1931,7 @@ bool SwFEShell::ImpEndCreate()
 
             // anchor in header/footer also not allowed.
             if( bCharBound )
-                bCharBound = !GetDoc()->IsInHeaderFooter( aPos.nNode );
+                bCharBound = !GetDoc()->IsInHeaderFooter( aPos.GetNode() );
 
             if( bCharBound )
             {

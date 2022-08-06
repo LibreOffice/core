@@ -5339,7 +5339,7 @@ bool SwTextNode::IsInUndo() const
 
 bool SwTextNode::IsInContent() const
 {
-    return !GetDoc().IsInHeaderFooter( SwNodeIndex(*this) );
+    return !GetDoc().IsInHeaderFooter( *this );
 }
 
 void SwTextNode::TriggerNodeUpdate(const sw::LegacyModifyHint& rHint)

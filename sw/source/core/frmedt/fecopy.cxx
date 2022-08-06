@@ -762,7 +762,7 @@ namespace {
         {
             SwPosition* pPos = rPaM.GetPoint();
             // allow shapes (no controls) in header/footer
-            if(RES_DRAWFRMFMT == pCpyFormat->Which() && rDoc.IsInHeaderFooter(pPos->nNode))
+            if(RES_DRAWFRMFMT == pCpyFormat->Which() && rDoc.IsInHeaderFooter(pPos->GetNode()))
             {
                 const SdrObject *pCpyObj = pCpyFormat->FindSdrObject();
                 if(pCpyObj && CheckControlLayer(pCpyObj))
