@@ -490,7 +490,7 @@ namespace sw::mark
     bool Bookmark::IsInContent() const
     {
         SwDoc& rDoc( GetMarkPos().GetDoc() );
-        return !rDoc.IsInHeaderFooter( GetMarkPos().nNode );
+        return !rDoc.IsInHeaderFooter( GetMarkPos().GetNode() );
     }
 
     uno::Reference< rdf::XMetadatable > Bookmark::MakeUnoObject()

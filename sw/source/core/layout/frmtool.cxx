@@ -1385,9 +1385,9 @@ void AppendAllObjs(const SwFrameFormats* pTable, const SwFrame* pSib)
         // frames nor objects which are anchored to character bounds.
         if ((rAnch.GetAnchorId() != RndStdIds::FLY_AT_PAGE) && (rAnch.GetAnchorId() != RndStdIds::FLY_AS_CHAR))
         {
-            auto pContentAnchor = rAnch.GetContentAnchor();
+            const SwPosition* pContentAnchor = rAnch.GetContentAnchor();
             // formats in header/footer have no dependencies
-            if(pContentAnchor && pFormat->GetDoc()->IsInHeaderFooter(pContentAnchor->nNode))
+            if(pContentAnchor && pFormat->GetDoc()->IsInHeaderFooter(pContentAnchor->GetNode()))
                 pFormat->MakeFrames();
             else
                 vFormatsToConnect.push_back(pFormat);

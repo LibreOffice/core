@@ -1682,8 +1682,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     if ( !bIntern || -1 != nDestId )
                     {
                         // #i44368# Links in Header/Footer
-                        const SwPosition aPos( *pTNd );
-                        const bool bHeaderFooter = pDoc->IsInHeaderFooter( aPos.nNode );
+                        const bool bHeaderFooter = pDoc->IsInHeaderFooter( *pTNd );
 
                         // Create links for all selected rectangles:
                         const size_t nNumOfRects = aTmp.size();
@@ -1796,7 +1795,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                         if (RndStdIds::FLY_AT_PAGE != rAnch.GetAnchorId())
                         {
                             const SwPosition* pPosition = rAnch.GetContentAnchor();
-                            if ( pPosition && pDoc->IsInHeaderFooter( pPosition->nNode ) )
+                            if ( pPosition && pDoc->IsInHeaderFooter( pPosition->GetNode() ) )
                             {
                                 const SwTextNode* pTNd = pPosition->GetNode().GetTextNode();
                                 if ( pTNd )
@@ -1888,8 +1887,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     const sal_Int32 nDestId = pPDFExtOutDevData->CreateDest(aRect, nDestPageNum);
 
                     // #i44368# Links in Header/Footer
-                    const SwPosition aPos( *pTNd );
-                    const bool bHeaderFooter = pDoc->IsInHeaderFooter( aPos.nNode );
+                    const bool bHeaderFooter = pDoc->IsInHeaderFooter( *pTNd );
 
                     // Create links for all selected rectangles:
                     const size_t nNumOfRects = aTmp.size();

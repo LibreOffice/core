@@ -179,7 +179,7 @@ bool SwXMLTextImportHelper::IsInHeaderFooter() const
     SAL_WARN_IF(!pTextCursor, "sw.uno", "SwXTextCursor missing");
     SwDoc *pDoc = pTextCursor ? pTextCursor->GetDoc() : nullptr;
 
-    return pDoc && pDoc->IsInHeaderFooter( pTextCursor->GetPaM()->GetPoint()->nNode );
+    return pDoc && pDoc->IsInHeaderFooter( pTextCursor->GetPaM()->GetPoint()->GetNode() );
 }
 
 static SwOLENode *lcl_GetOLENode( const SwFrameFormat *pFrameFormat )

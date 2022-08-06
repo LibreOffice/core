@@ -1196,7 +1196,6 @@ void SwXMLTextParagraphExport::exportTable(
             OSL_ENSURE( pTableNd, "table node missing" );
             if( bAutoStyles )
             {
-                SwNodeIndex aIdx( *pTableNd );
                 // AUTOSTYLES: Optimization: Do not export table autostyle if
                 // we are currently exporting the content.xml stuff and
                 // the table is located in header/footer:
@@ -1204,7 +1203,7 @@ void SwXMLTextParagraphExport::exportTable(
                 // ALL flags are set at the same time.
                 const bool bExportStyles = bool( GetExport().getExportFlags() & SvXMLExportFlags::STYLES );
                 if (!isAutoStylesCollected()
-                    && (bExportStyles || !pFormat->GetDoc()->IsInHeaderFooter(aIdx)))
+                    && (bExportStyles || !pFormat->GetDoc()->IsInHeaderFooter(*pTableNd)))
                 {
                     maTableNodes.push_back(pTableNd);
                     m_TableFormats.emplace(pTableNd, ::std::make_pair(SwXMLTextParagraphExport::FormatMap(), SwXMLTextParagraphExport::FormatMap()));

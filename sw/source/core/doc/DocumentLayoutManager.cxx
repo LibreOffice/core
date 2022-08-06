@@ -344,7 +344,7 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
         bMayNotCopy =
             bCheckControlLayer &&
             ((RndStdIds::FLY_AT_PARA == rNewAnchor.GetAnchorId()) || (RndStdIds::FLY_AT_FLY  == rNewAnchor.GetAnchorId()) || (RndStdIds::FLY_AT_CHAR == rNewAnchor.GetAnchorId())) &&
-            pCAnchor && m_rDoc.IsInHeaderFooter(pCAnchor->nNode);
+            pCAnchor && m_rDoc.IsInHeaderFooter(pCAnchor->GetNode());
     }
 
     // just return if we can't copy this
