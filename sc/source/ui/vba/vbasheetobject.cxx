@@ -27,6 +27,7 @@
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <comphelper/documentinfo.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <ooo/vba/excel/Constants.hpp>
 #include <ooo/vba/excel/XlOrientation.hpp>
 #include <ooo/vba/excel/XlPlacement.hpp>
@@ -39,6 +40,15 @@ using namespace ::ooo::vba;
 constexpr OUStringLiteral gaListenerType = u"XActionListener";
 constexpr OUStringLiteral gaEventMethod = u"actionPerformed";
 
+static double HmmToPoints(double nHmm)
+{
+    return o3tl::convert(nHmm, o3tl::Length::mm100, o3tl::Length::pt);
+}
+
+static sal_Int32 PointsToHmm(double fPoints)
+{
+    return std::round(o3tl::convert(fPoints, o3tl::Length::pt, o3tl::Length::mm100));
+}
 
 ScVbaButtonCharacters::ScVbaButtonCharacters(
         const uno::Reference< XHelperInterface >& rxParent,

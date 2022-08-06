@@ -62,6 +62,7 @@
 #include <basic/sbmod.hxx>
 #include <basic/sbuno.hxx>
 #include <basic/sberrors.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sal/log.hxx>
@@ -607,34 +608,21 @@ OUString VBAToRegexp(const OUString &rIn)
     return sResult.makeStringAndClear( );
 }
 
-double getPixelTo100thMillimeterConversionFactor( const css::uno::Reference< css::awt::XDevice >& xDevice, bool bVertical)
+static double getPixelToMeterConversionFactor( const css::uno::Reference< css::awt::XDevice >& xDevice, bool bVertical)
 {
-    double fConvertFactor = 1.0;
-    if( bVertical )
-    {
-        fConvertFactor = xDevice->getInfo().PixelPerMeterY/100000;
-    }
-    else
-    {
-        fConvertFactor = xDevice->getInfo().PixelPerMeterX/100000;
-    }
-    return fConvertFactor;
+    return bVertical ? xDevice->getInfo().PixelPerMeterY : xDevice->getInfo().PixelPerMeterX;
 }
 
 double PointsToPixels( const css::uno::Reference< css::awt::XDevice >& xDevice, double fPoints, bool bVertical)
 {
-    double fConvertFactor = getPixelTo100thMillimeterConversionFactor( xDevice, bVertical );
-    return convertPointToMm100(fPoints) * fConvertFactor;
+    double fConvertFactor = getPixelToMeterConversionFactor( xDevice, bVertical );
+    return o3tl::convert(fPoints, o3tl::Length::pt, o3tl::Length::m) * fConvertFactor;
 }
 double PixelsToPoints( const css::uno::Reference< css::awt::XDevice >& xDevice, double fPixels, bool bVertical)
 {
-    double fConvertFactor = getPixelTo100thMillimeterConversionFactor( xDevice, bVertical );
-    return convertMm100ToPoint(fPixels / fConvertFactor);
+    double fConvertFactor = getPixelToMeterConversionFactor( xDevice, bVertical );
+    return o3tl::convert(fPixels / fConvertFactor, o3tl::Length::m, o3tl::Length::pt);
 }
-
-sal_Int32 PointsToHmm(double fPoints) { return std::round(convertPointToMm100(fPoints)); }
-
-double HmmToPoints(sal_Int32 nHmm) { return convertMm100ToPoint<double>(nHmm); }
 
 ConcreteXShapeGeometryAttributes::ConcreteXShapeGeometryAttributes( const css::uno::Reference< css::drawing::XShape >& xShape )
 {
