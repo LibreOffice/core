@@ -1925,23 +1925,23 @@ void SwXText::Impl::ConvertCell(
 
     SwNodeRange aTmpRange(aStartCellPam.Start()->nNode,
                           aEndCellPam.End()->nNode);
-    std::unique_ptr<SwNodeRange> pCorrectedRange =
-        m_pDoc->GetNodes().ExpandRangeForTableBox(aTmpRange);
+    std::optional<SwNodeRange> oCorrectedRange;
+    m_pDoc->GetNodes().ExpandRangeForTableBox(aTmpRange, oCorrectedRange);
 
-    if (pCorrectedRange)
+    if (oCorrectedRange)
     {
-        SwPaM aNewStartPaM(pCorrectedRange->aStart, 0);
+        SwPaM aNewStartPaM(oCorrectedRange->aStart, 0);
         aStartCellPam = aNewStartPaM;
 
         sal_Int32 nEndLen = 0;
-        SwTextNode * pTextNode = pCorrectedRange->aEnd.GetNode().GetTextNode();
+        SwTextNode * pTextNode = oCorrectedRange->aEnd.GetNode().GetTextNode();
         if (pTextNode != nullptr)
             nEndLen = pTextNode->Len();
 
-        SwPaM aNewEndPaM(pCorrectedRange->aEnd, nEndLen);
+        SwPaM aNewEndPaM(oCorrectedRange->aEnd, nEndLen);
         aEndCellPam = aNewEndPaM;
 
-        pCorrectedRange.reset();
+        oCorrectedRange.reset();
     }
 
     /** check the nodes between start and end
