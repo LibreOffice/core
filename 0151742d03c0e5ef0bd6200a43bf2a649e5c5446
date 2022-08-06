@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af013d48_5b33bcc5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-08-06T05:21:45Z",
+      "side": 1,
+      "message": "Hi Tomaz, took your comments into consideration - definitely needs to be changed from Justify() to Normalize().",
+      "revId": "0151742d03c0e5ef0bd6200a43bf2a649e5c5446",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
