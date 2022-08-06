@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fe5730e_8cc154c4",
+        "filename": "sw/qa/core/macros-test.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-08-06T20:33:16Z",
+      "side": 1,
+      "message": "is this expected to be commented out?",
+      "range": {
+        "startLine": 140,
+        "startChar": 8,
+        "endLine": 143,
+        "endChar": 11
+      },
+      "revId": "6168e9634cbc2ac49b341ff8b07ac71565b36236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
