@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc5f685b_a336ce51",
+        "filename": "sw/source/filter/ww8/ww8par.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 6358,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-08-06T15:44:20Z",
+      "side": 1,
+      "message": "This ended up calling\n\na) SwPaM( const SwNode\u0026 rNode, sal_Int32 nContent, SwPaM* pRing )\nand not \nb) SwPaM( const SwNode\u0026 rNd, SwNodeOffset nNdOffset, sal_Int32 nContent \u003d 0, SwPaM* pRing \u003d nullptr );\n\nhttps://gerrit.libreoffice.org/c/core/+/137902 for this one, don\u0027t know if there was others though.",
+      "revId": "96fb8f88bd56c113eb23e50d23a038509703c288",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
