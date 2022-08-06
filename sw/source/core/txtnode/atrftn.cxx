@@ -412,7 +412,7 @@ void SwTextFootnote::CopyFootnote(
         SwNodes &rDstNodes = rDstDoc.GetNodes();
 
         // copy only the content of the section
-        SwNodeRange aRg( *m_pStartNode, SwNodeOffset(1),
+        SwNodeRange aRg( m_pStartNode->GetNode(), SwNodeOffset(1),
                     *m_pStartNode->GetNode().EndOfSectionNode() );
 
         // insert at the end of rDest, i.e., the nodes are appended.

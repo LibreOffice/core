@@ -1174,8 +1174,9 @@ public:
                                 bool bNewModel = true );
 
     // If index is in a table, return TableNode, else 0.
-                 SwTableNode* IsIdxInTable( const SwNodeIndex& rIdx );
-    inline const SwTableNode* IsIdxInTable( const SwNodeIndex& rIdx ) const;
+    SwTableNode* IsIdxInTable( const SwNodeIndex& rIdx );
+    const SwTableNode* IsIdxInTable( const SwNodeIndex& rIdx ) const;
+    SwTableNode* IsInTable( const SwNode& ) const;
 
     // Create a balanced table out of the selected range.
     const SwTable* TextToTable( const SwInsertTableOptions& rInsTableOpts, // HeadlineNoBorder,
@@ -1685,11 +1686,6 @@ namespace o3tl {
 
 // This method is called in Dtor of SwDoc and deletes cache of ContourObjects.
 void ClrContourCache();
-
-inline const SwTableNode* SwDoc::IsIdxInTable( const SwNodeIndex& rIdx ) const
-{
-    return const_cast<SwDoc*>(this)->IsIdxInTable( rIdx );
-}
 
 inline void SwDoc::SetOLEPrtNotifyPending( bool bSet )
 {

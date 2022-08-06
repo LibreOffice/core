@@ -1521,7 +1521,7 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
 
         // convert the worksheet to a temporary native table using HTML format, and copy that into the original native table
         if (!bSingleCellTable && rData.HasFormat( SotClipboardFormatId::HTML ) &&
-                        rSh.GetDoc()->IsIdxInTable(rSh.GetCursor()->GetNode()) != nullptr && rSh.DoesUndo())
+                        rSh.GetDoc()->IsInTable(rSh.GetCursor()->GetNode()) != nullptr && rSh.DoesUndo())
         {
             SfxDispatcher* pDispatch = rSh.GetView().GetViewFrame()->GetDispatcher();
             sal_uInt32 nLevel = 0;
@@ -1534,13 +1534,13 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
                 pDispatch->Execute(FN_INSERT_NNBSP, SfxCallMode::SYNCHRON);
                 pDispatch->Execute(FN_TABLE_DELETE_TABLE, SfxCallMode::SYNCHRON);
                 nLevel++;
-            } while (rSh.GetDoc()->IsIdxInTable(rSh.GetCursor()->GetNode()) != nullptr);
+            } while (rSh.GetDoc()->IsInTable(rSh.GetCursor()->GetNode()) != nullptr);
             if ( SwTransferable::PasteData( rData, rSh, EXCHG_OUT_ACTION_INSERT_STRING, nActionFlags, SotClipboardFormatId::HTML,
                                         nDestination, false, false, nullptr, 0, false, nAnchorType, bIgnoreComments, &aPasteContext, ePasteTable) )
             {
                 bool bFoundTemporaryTable = false;
                 pDispatch->Execute(FN_LINE_UP, SfxCallMode::SYNCHRON);
-                if (rSh.GetDoc()->IsIdxInTable(rSh.GetCursor()->GetNode()) != nullptr)
+                if (rSh.GetDoc()->IsInTable(rSh.GetCursor()->GetNode()) != nullptr)
                 {
                     bFoundTemporaryTable = true;
                     pDispatch->Execute(FN_TABLE_SELECT_ALL, SfxCallMode::SYNCHRON);
@@ -1570,7 +1570,7 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
     // insert clipboard content as new table rows/columns before the actual row/column instead of overwriting it
     else if ( (rSh.GetTableInsertMode() != SwTable::SEARCH_NONE || ePasteTable == PasteTableType::PASTE_ROW || ePasteTable == PasteTableType::PASTE_COLUMN) &&
         rData.HasFormat( SotClipboardFormatId::HTML ) &&
-        rSh.GetDoc()->IsIdxInTable(rSh.GetCursor()->GetNode()) != nullptr )
+        rSh.GetDoc()->IsInTable(rSh.GetCursor()->GetNode()) != nullptr )
     {
         OUString aExpand;
         sal_Int32 nIdx;
