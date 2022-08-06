@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4bc31d6_46533c8a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-08-06T12:00:06Z",
+      "side": 1,
+      "message": "Andras - I assume you will be interested in this DOCX fix. The regression commit doesn\u0027t exist in co-2021, so I think this is the only branch you need it in.",
+      "revId": "efdf26a8dadac3f2963986ba2b25bb9f097ff78c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
