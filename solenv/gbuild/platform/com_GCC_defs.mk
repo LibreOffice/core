@@ -70,6 +70,7 @@ gb_CFLAGS_COMMON := \
 	-Wunreachable-code \
 	$(if $(or $(and $(COM_IS_CLANG),$(or $(findstring icecc,$(CC)),$(findstring icecc,$(CCACHE_PREFIX)))),$(findstring sccache,$(CC))),,-Wunused-macros) \
 	$(if $(COM_IS_CLANG),-Wembedded-directive) \
+	$(if $(COM_IS_CLANG),-Wshadow-all) \
 	-finput-charset=UTF-8 \
 	-fmessage-length=0 \
 	-fno-common \
