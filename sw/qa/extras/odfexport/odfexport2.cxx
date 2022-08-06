@@ -9,6 +9,9 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/style/VerticalAlignment.hpp>
+#include <com/sun/star/text/ColumnSeparatorStyle.hpp>
+#include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <unotools/localedatawrapper.hxx>
@@ -226,6 +229,38 @@ CPPUNIT_TEST_FIXTURE(Test, tdf120972)
         pXmlDoc,
         "//style:style[@style:name='P2']/style:paragraph-properties/style:tab-stops/style:tab-stop",
         "char", cDecimal);
+}
+
+DECLARE_ODFEXPORT_TEST(testSectionColumnSeparator, "section-columns-separator.fodt")
+{
+    // tdf#150235: due to wrong types used in column export, 'style:height' and 'style:style'
+    // attributes were exported incorrectly for 'style:column-sep' element
+    auto xSection = getProperty<uno::Reference<uno::XInterface>>(getParagraph(1), "TextSection");
+    auto xColumns = getProperty<uno::Reference<text::XTextColumns>>(xSection, "TextColumns");
+    CPPUNIT_ASSERT(xColumns);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xColumns->getColumnCount());
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 50
+    // - Actual  : 100
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(50),
+                         getProperty<sal_Int32>(xColumns, "SeparatorLineRelativeHeight"));
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(css::text::ColumnSeparatorStyle::DOTTED,
+                         getProperty<sal_Int16>(xColumns, "SeparatorLineStyle"));
+
+    // Check the rest of the properties, too
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xColumns, "IsAutomatic"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(600), getProperty<sal_Int32>(xColumns, "AutomaticDistance"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(9), getProperty<sal_Int32>(xColumns, "SeparatorLineWidth"));
+    CPPUNIT_ASSERT_EQUAL(Color(0x99, 0xAA, 0xBB),
+                         getProperty<Color>(xColumns, "SeparatorLineColor"));
+    CPPUNIT_ASSERT_EQUAL(
+        css::style::VerticalAlignment_BOTTOM,
+        getProperty<css::style::VerticalAlignment>(xColumns, "SeparatorLineVerticalAlignment"));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xColumns, "SeparatorLineIsOn"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
