@@ -550,8 +550,7 @@ bool SwCursorShell::GotoNxtPrvTOXMark( bool bNext )
                     const SwContentFrame* pCFrame = pTextNd->getLayoutFrame(GetLayout(), nullptr, &tmp);
                     if( pCFrame && ( IsReadOnlyAvailable() || !pCFrame->IsProtected() ))
                     {
-                        SwNodeIndex aNdIndex( *pTextNd ); // UNIX needs this object
-                        SetGetExpField aCmp( aNdIndex, *pTextTOX );
+                        SetGetExpField aCmp( *pTextNd, *pTextTOX );
                         aCmp.SetBodyPos( *pCFrame );
 
                         if( bNext ? ( aCurGEF < aCmp && aCmp < aFndGEF )
@@ -648,7 +647,7 @@ static void lcl_MakeFieldLst(
             if ( pCFrame != nullptr
                  && ( bInReadOnly || !pCFrame->IsProtected() ) )
             {
-                std::unique_ptr<SetGetExpField> pNew(new SetGetExpField( SwNodeIndex( rTextNode ), pTextField ));
+                std::unique_ptr<SetGetExpField> pNew(new SetGetExpField( rTextNode, pTextField ));
                 pNew->SetBodyPos( *pCFrame );
                 rLst.insert( std::move(pNew) );
             }
@@ -666,12 +665,12 @@ lcl_FindField(bool & o_rFound, SetGetExpFields const& rSrtLst,
     std::unique_ptr<SwContentIndex> pIndex;
     if (-1 == nContentOffset)
     {
-        pSrch.reset(new SetGetExpField(rPos.nNode, pTextField, &rPos.nContent));
+        pSrch.reset(new SetGetExpField(rPos.GetNode(), pTextField, &rPos.nContent));
     }
     else
     {
         pIndex.reset(new SwContentIndex(rPos.GetNode().GetContentNode(), nContentOffset));
-        pSrch.reset(new SetGetExpField(rPos.nNode, pTextField, pIndex.get()));
+        pSrch.reset(new SetGetExpField(rPos.GetNode(), pTextField, pIndex.get()));
     }
 
     if (rPos.GetNodeIndex() < pTextNode->GetNodes().GetEndOfExtras().GetIndex())
@@ -2616,8 +2615,7 @@ bool SwCursorShell::SelectNxtPrvHyperlink( bool bNext )
                 if( pTextNd && pTextNd->GetNodes().IsDocNodes() )
                 {
                     SwTextINetFormat& rAttr = *pFnd;
-                    SwPosition aTmpPos( *pTextNd );
-                    SetGetExpField aPos( aTmpPos.nNode, rAttr );
+                    SetGetExpField aPos( *pTextNd, rAttr );
                     if (pTextNd->GetIndex() < nBodySttNdIdx)
                     {
                         std::pair<Point, bool> tmp(aPt, true);

@@ -65,11 +65,11 @@ class SetGetExpField
         } m_eSetGetExpFieldType;
 
 public:
-    SetGetExpField( const SwNodeIndex& rNdIdx, const SwTextField* pField = nullptr,
+    SetGetExpField( const SwNode& rNd, const SwTextField* pField = nullptr,
                     const SwContentIndex* pIdx = nullptr,
                     sal_uInt16 nPageNumber = 0);
 
-    SetGetExpField( const SwNodeIndex& rNdIdx, const SwTextINetFormat& rINet );
+    SetGetExpField( const SwNode& rNd, const SwTextINetFormat& rINet );
 
     SetGetExpField( const SwSectionNode& rSectNode,
                     const SwPosition* pPos = nullptr,
@@ -81,7 +81,7 @@ public:
 
     SetGetExpField( const SwTableBox& rTableBox  );
 
-    SetGetExpField( const SwNodeIndex& rNdIdx, const SwTextTOXMark& rTOX );
+    SetGetExpField( const SwNode& rNd, const SwTextTOXMark& rTOX );
 
     SetGetExpField( const SwPosition& rPos );
 
