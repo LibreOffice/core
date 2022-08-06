@@ -1286,7 +1286,7 @@ void SwDocShell::UpdateLinks()
     // #i50703# Update footnote numbers
     SwTextFootnote::SetUniqueSeqRefNo( *GetDoc() );
     SwNodeIndex aTmp( GetDoc()->GetNodes() );
-    GetDoc()->GetFootnoteIdxs().UpdateFootnote( aTmp );
+    GetDoc()->GetFootnoteIdxs().UpdateFootnote( aTmp.GetNode() );
 }
 
 uno::Reference< frame::XController >

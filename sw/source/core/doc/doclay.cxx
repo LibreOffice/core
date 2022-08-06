@@ -1543,7 +1543,7 @@ void SwDoc::SetAllUniqueFlyNames()
     else
     {
         SwNodeIndex aTmp( GetNodes() );
-        GetFootnoteIdxs().UpdateFootnote( aTmp );
+        GetFootnoteIdxs().UpdateFootnote( aTmp.GetNode() );
     }
 }
 

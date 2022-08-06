@@ -1628,9 +1628,7 @@ void SwTextNode::ChgTextCollUpdateNum( const SwTextFormatColl *pOldColl,
         FTNNUM_CHAPTER == rDoc.GetFootnoteInfo().m_eNum &&
         rNds.IsDocNodes() )
     {
-        SwNodeIndex aTmpIndex( rNds, GetIndex());
-
-        rDoc.GetFootnoteIdxs().UpdateFootnote( aTmpIndex);
+        rDoc.GetFootnoteIdxs().UpdateFootnote( *rNds[GetIndex()] );
     }
 
     if( pNewColl && RES_CONDTXTFMTCOLL == pNewColl->Which() )
