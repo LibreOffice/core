@@ -19,6 +19,7 @@
 
 #include "vbasheetobjects.hxx"
 #include <vector>
+#include <o3tl/unit_conversion.hxx>
 #include <rtl/math.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
@@ -58,9 +59,10 @@ bool lclGetProperty( Type& orValue, const uno::Reference< beans::XPropertySet >&
 
     @throws uno::RuntimeException
 */
-double lclPointsToHmm( const uno::Any& rPoints )
+sal_Int32 lclPointsToHmm( const uno::Any& rPoints )
 {
-    return PointsToHmm( ::rtl::math::approxFloor( rPoints.get< double >() / 0.75 ) * 0.75 );
+    return std::round(o3tl::convert(::rtl::math::approxFloor(rPoints.get<double>() / 0.75) * 0.75,
+                                    o3tl::Length::pt, o3tl::Length::mm100));
 }
 
 } // namespace
@@ -349,8 +351,8 @@ uno::Any SAL_CALL ScVbaGraphicObjectsBase::Add( const uno::Any& rLeft, const uno
     /*  Extract double values from passed Anys (the lclPointsToHmm() helper
         function will throw a RuntimeException on any error), and convert from
         points to 1/100 mm. */
-    awt::Point aPos( static_cast<sal_Int32>(lclPointsToHmm( rLeft )),  static_cast<sal_Int32>(lclPointsToHmm( rTop )) );
-    awt::Size aSize( static_cast<sal_Int32>(lclPointsToHmm( rWidth )), static_cast<sal_Int32>(lclPointsToHmm( rHeight )) );
+    awt::Point aPos( lclPointsToHmm( rLeft ),  lclPointsToHmm( rTop ) );
+    awt::Size aSize( lclPointsToHmm( rWidth ), lclPointsToHmm( rHeight ) );
     // TODO: translate coordinates for RTL sheets
     if( (aPos.X < 0) || (aPos.Y < 0) || (aSize.Width <= 0) || (aSize.Height <= 0) )
         throw uno::RuntimeException();
