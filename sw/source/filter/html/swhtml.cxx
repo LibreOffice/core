@@ -1510,7 +1510,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
     case HtmlTokenId::LINEFEEDCHAR:
         if( m_pPam->GetPoint()->GetContentIndex() )
             AppendTextNode();
-        if (!m_xTable && !m_xDoc->IsInHeaderFooter(m_pPam->GetPoint()->nNode))
+        if (!m_xTable && !m_xDoc->IsInHeaderFooter(m_pPam->GetPoint()->GetNode()))
         {
             NewAttr(m_xAttrTab, &m_xAttrTab->pBreak, SvxFormatBreakItem(SvxBreak::PageBefore, RES_BREAK));
             EndAttr( m_xAttrTab->pBreak, false );

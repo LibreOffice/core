@@ -228,7 +228,7 @@ bool sw_ChkAndSetNewAnchor(
 #if OSL_DEBUG_LEVEL > 0
     OSL_ENSURE( !(nNew == RndStdIds::FLY_AT_PAGE &&
         (RndStdIds::FLY_AT_PARA==nOld || RndStdIds::FLY_AT_CHAR==nOld || RndStdIds::FLY_AS_CHAR==nOld ) &&
-        pDoc->IsInHeaderFooter( rOldAnch.GetContentAnchor()->nNode )),
+        pDoc->IsInHeaderFooter( rOldAnch.GetContentAnchor()->GetNode() )),
             "forbidden anchor change in Head/Foot." );
 #endif
 

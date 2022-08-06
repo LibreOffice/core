@@ -966,7 +966,7 @@ bool SwSectionFormat::IsInContent() const
 {
     SwNodeIndex const*const pIdx = GetContent(false).GetContentIdx();
     OSL_ENSURE(pIdx, "SwSectionFormat::IsInContent: no index?");
-    return pIdx == nullptr || !GetDoc()->IsInHeaderFooter(*pIdx);
+    return pIdx == nullptr || !GetDoc()->IsInHeaderFooter(pIdx->GetNode());
 }
 
 // n.b.: if the section format represents an index, then there is both a

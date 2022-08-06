@@ -1604,7 +1604,7 @@ bool SwDoc::ConvertFieldsToText(SwRootFrame const& rLayout)
 
             if (!bSkip)
             {
-                bool bInHeaderFooter = IsInHeaderFooter(SwNodeIndex(*pTextField->GetpTextNode()));
+                bool bInHeaderFooter = IsInHeaderFooter(*pTextField->GetpTextNode());
                 const SwFormatField& rFormatField = pTextField->GetFormatField();
                 const SwField*  pField = rFormatField.GetField();
 

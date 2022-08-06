@@ -272,7 +272,7 @@ uno::Any  SwXRedlinePortion::GetPropertyValue( std::u16string_view rPropertyName
     }
     else if (rPropertyName == u"" UNO_NAME_IS_IN_HEADER_FOOTER)
     {
-        aRet <<= rRedline.GetDoc().IsInHeaderFooter( rRedline.GetPoint()->nNode );
+        aRet <<= rRedline.GetDoc().IsInHeaderFooter( rRedline.GetPoint()->GetNode() );
     }
     else if (rPropertyName == u"" UNO_NAME_MERGE_LAST_PARA)
     {

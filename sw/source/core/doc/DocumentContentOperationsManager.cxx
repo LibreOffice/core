@@ -3190,7 +3190,7 @@ SwDrawFrameFormat* DocumentContentOperationsManager::InsertDrawObj(
     // allow drawing objects in header/footer, but control objects aren't allowed in header/footer.
     if( pChkIdx != nullptr
         && ::CheckControlLayer( &rDrawObj )
-        && m_rDoc.IsInHeaderFooter( *pChkIdx ) )
+        && m_rDoc.IsInHeaderFooter( pChkIdx->GetNode() ) )
     {
         // apply at-page anchor format
         eAnchorId = RndStdIds::FLY_AT_PAGE;
