@@ -72,7 +72,7 @@ BaseWindow::~BaseWindow()
 
 void BaseWindow::dispose()
 {
-    if (pShellVScrollBar && !pShellVScrollBar>isDisposed())
+    if (pShellVScrollBar && !pShellVScrollBar->isDisposed())
         pShellVScrollBar->SetScrollHdl( Link<weld::Scrollbar&,void>() );
     if (pShellHScrollBar && !pShellHScrollBar->isDisposed())
         pShellHScrollBar->SetScrollHdl( Link<weld::Scrollbar&,void>() );
