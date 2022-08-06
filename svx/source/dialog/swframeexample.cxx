@@ -289,12 +289,12 @@ void SwFrameExample::CalcBoundRect_Impl(const vcl::RenderContext& rRenderContext
                     rRect.SetRight( aFrameAtFrame.Right() - FLYINFLY_BORDER );
                     break;
 
-                case RelOrientation::PAGE_RIGHT:
+                case RelOrientation::PAGE_LEFT:
                     rRect.SetLeft( aFrameAtFrame.Left() );
                     rRect.SetRight( aFrameAtFrame.Left() + FLYINFLY_BORDER );
                     break;
 
-                case RelOrientation::PAGE_LEFT:
+                case RelOrientation::PAGE_RIGHT:
                     rRect.SetLeft( aFrameAtFrame.Right() );
                     rRect.SetRight( aFrameAtFrame.Right() - FLYINFLY_BORDER );
                     break;
