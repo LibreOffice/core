@@ -6351,7 +6351,7 @@ bool TestImportDOC(SvStream &rStream, const OUString &rFltName)
     xDocSh->DoInitNew();
     SwDoc *pD =  static_cast<SwDocShell*>((&xDocSh))->GetDoc();
 
-    SwPaM aPaM(pD->GetNodes().GetEndOfContent(), -1);
+    SwPaM aPaM(pD->GetNodes().GetEndOfContent(), SwNodeOffset(-1));
     pD->SetInReading(true);
     bool bRet = xReader->Read(*pD, OUString(), aPaM, OUString()) == ERRCODE_NONE;
     pD->SetInReading(false);
