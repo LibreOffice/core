@@ -380,7 +380,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
 
     if( bUpdateFootnote )
     {
-        GetFootnoteIdxs().UpdateFootnote( SwNodeIndex( *pNewSectNode ));
+        GetFootnoteIdxs().UpdateFootnote( *pNewSectNode );
     }
 
     getIDocumentState().SetModified();
@@ -539,7 +539,7 @@ void SwDoc::DelSectionFormat( SwSectionFormat *pFormat, bool bDelNodes )
                 SwPaM aPaM( *pSectNd->EndOfSectionNode(), *pSectNd );
                 GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoDelete>(aPaM, SwDeleteFlags::Default));
                 if( pFootnoteEndAtTextEnd )
-                    GetFootnoteIdxs().UpdateFootnote( aUpdIdx );
+                    GetFootnoteIdxs().UpdateFootnote( aUpdIdx.GetNode() );
                 getIDocumentState().SetModified();
                 //#126178# start/end undo have to be pairs!
                 GetIDocumentUndoRedo().EndUndo(SwUndoId::DELSECTION, nullptr);
@@ -553,7 +553,7 @@ void SwDoc::DelSectionFormat( SwSectionFormat *pFormat, bool bDelNodes )
             SwNodeIndex aUpdIdx( *pIdx );
             getIDocumentContentOperations().DeleteSection( const_cast<SwNode*>(static_cast<SwNode const *>(pSectNd)) );
             if( pFootnoteEndAtTextEnd )
-                GetFootnoteIdxs().UpdateFootnote( aUpdIdx );
+                GetFootnoteIdxs().UpdateFootnote( aUpdIdx.GetNode() );
             getIDocumentState().SetModified();
             //#126178# start/end undo have to be pairs!
             GetIDocumentUndoRedo().EndUndo(SwUndoId::DELSECTION, nullptr);
@@ -584,7 +584,7 @@ void SwDoc::DelSectionFormat( SwSectionFormat *pFormat, bool bDelNodes )
         if( nSttNd && pFootnoteEndAtTextEnd )
         {
             SwNodeIndex aUpdIdx( GetNodes(), nSttNd );
-            GetFootnoteIdxs().UpdateFootnote( aUpdIdx );
+            GetFootnoteIdxs().UpdateFootnote( aUpdIdx.GetNode() );
         }
 
 //FEATURE::CONDCOLL

@@ -145,7 +145,7 @@ void UpdateFramesForAddDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
     }
     // no need to call UpdateFootnoteNums for FTNNUM_PAGE:
     // the AppendFootnote/RemoveFootnote will do it by itself!
-    rDoc.GetFootnoteIdxs().UpdateFootnote(rPam.Start()->nNode);
+    rDoc.GetFootnoteIdxs().UpdateFootnote(rPam.Start()->GetNode());
     SwPosition currentStart(*rPam.Start());
     SwTextNode * pStartNode(rPam.Start()->GetNode().GetTextNode());
     while (!pStartNode)
@@ -257,7 +257,7 @@ void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
         return;
     }
     bool isAppendObjsCalled(false);
-    rDoc.GetFootnoteIdxs().UpdateFootnote(rPam.Start()->nNode);
+    rDoc.GetFootnoteIdxs().UpdateFootnote(rPam.Start()->GetNode());
     SwPosition currentStart(*rPam.Start());
     SwTextNode * pStartNode(rPam.Start()->GetNode().GetTextNode());
     while (!pStartNode)

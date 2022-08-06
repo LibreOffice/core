@@ -1533,8 +1533,7 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                     const bool bSuccess = rDoc.GetFootnoteIdxs().insert(pTextFootnote).second;
                     OSL_ENSURE( bSuccess, "FootnoteIdx not inserted." );
                 }
-                SwNodeIndex aTmpIndex( *this );
-                rDoc.GetFootnoteIdxs().UpdateFootnote( aTmpIndex);
+                rDoc.GetFootnoteIdxs().UpdateFootnote( *this );
                 static_cast<SwTextFootnote*>(pAttr)->SetSeqRefNo();
             }
             break;

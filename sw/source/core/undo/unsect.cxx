@@ -167,7 +167,7 @@ void SwUndoInsSection::UndoImpl(::sw::UndoRedoContext & rContext)
 
     if (m_bUpdateFootnote)
     {
-        rDoc.GetFootnoteIdxs().UpdateFootnote( aIdx );
+        rDoc.GetFootnoteIdxs().UpdateFootnote( aIdx.GetNode() );
     }
 
     AddUndoRedoPaM(rContext);
@@ -385,7 +385,7 @@ void SwUndoDelSection::UndoImpl(::sw::UndoRedoContext & rContext)
         if( SfxItemState::SET == pFormat->GetItemState( RES_FTN_AT_TXTEND ) ||
             SfxItemState::SET == pFormat->GetItemState( RES_END_AT_TXTEND ))
         {
-            rDoc.GetFootnoteIdxs().UpdateFootnote( aStt );
+            rDoc.GetFootnoteIdxs().UpdateFootnote( aStt.GetNode() );
         }
 
         /// OD 04.10.2002 #102894#

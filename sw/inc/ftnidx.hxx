@@ -44,7 +44,7 @@ class SwFootnoteIdxs : public o3tl::sorted_vector<SwTextFootnote*, CompareSwFoot
 public:
     SwFootnoteIdxs() {}
 
-    void UpdateFootnote( const SwNodeIndex& rStt ); // Update all from pos.
+    void UpdateFootnote( const SwNode& rStt ); // Update all from pos.
     void UpdateAllFootnote();                       // Update all footnotes.
 
     SwTextFootnote* SeekEntry( const SwNode& rNd, size_t* pPos = nullptr ) const;

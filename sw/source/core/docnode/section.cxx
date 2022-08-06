@@ -491,7 +491,7 @@ void SwSection::Notify(SfxHint const& rHint)
     {
         SwSectionNode* pSectNd = GetFormat()->GetSectionNode();
         if( pSectNd )
-            pSectNd->GetDoc().GetFootnoteIdxs().UpdateFootnote(SwNodeIndex( *pSectNd ));
+            pSectNd->GetDoc().GetFootnoteIdxs().UpdateFootnote(*pSectNd);
     }
 }
 
