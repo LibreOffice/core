@@ -36,6 +36,7 @@
 #include <window.h>
 #include <accel.hxx>
 #include <brdwin.hxx>
+#include <salinst.hxx>
 
 #include <rtl/bootstrap.hxx>
 #include <rtl/strbuf.hxx>
@@ -943,6 +944,12 @@ bool Dialog::ImplStartExecute()
                     break;
                 else
                     SAL_WARN("lok.dialog", "Dialog \"" << ImplGetDialogText(this) << "\" is being synchronously executed over an existing synchronously executing dialog.");
+            }
+
+            if (SalInstance::IsRunningUnitTest())
+            { // helps starbasic unit tests show their errors
+                std::cerr << "Dialog \"" << ImplGetDialogText(this)
+                          << "\"cancelled in silent mode";
             }
 
             SAL_INFO(
