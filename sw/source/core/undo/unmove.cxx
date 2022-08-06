@@ -243,7 +243,7 @@ void SwUndoMove::RedoImpl(::sw::UndoRedoContext & rContext)
     if( m_bMoveRange )
     {
         // only a move with SwRange
-        SwNodeRange aRg( rNds, m_nSttNode, rNds, m_nEndNode );
+        SwNodeRange aRg( rNds, m_nSttNode, m_nEndNode );
         rDoc.getIDocumentContentOperations().MoveNodeRange( aRg, aIdx, m_bMoveRedlines
                 ? SwMoveFlags::REDLINES
                 : SwMoveFlags::DEFAULT );

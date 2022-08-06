@@ -455,7 +455,7 @@ Reference<XTextCursor> XMLRedlineImportHelper::CreateRedlineTextSection(
         SwTextFormatColl *pColl = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool
             (RES_POOLCOLL_STANDARD, false );
         SwStartNode* pRedlineNode = pDoc->GetNodes().MakeTextSection(
-            pDoc->GetNodes().GetEndOfRedlines(),
+            SwNodeIndex(pDoc->GetNodes().GetEndOfRedlines()),
             SwNormalStartNode,
             pColl);
 

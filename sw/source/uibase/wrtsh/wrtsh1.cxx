@@ -1260,7 +1260,7 @@ static bool lcl_FoldedOutlineNodeEndOfParaSplit(SwWrtShell *pThis)
             // insert at end of tablebox doesn't work correct without
             MakeAllOutlineContentTemporarilyVisible a(pDoc);
 
-            SwTextNode* pNd = pDoc->GetNodes().MakeTextNode(*pEndNd, pTextNode->GetTextColl(), true);
+            SwTextNode* pNd = pDoc->GetNodes().MakeTextNode(SwNodeIndex(*pEndNd), pTextNode->GetTextColl(), true);
 
             (void) rOutlineNodes.Seek_Entry(pNd, &nPos);
             pThis->GotoOutline(nPos);
@@ -1268,7 +1268,7 @@ static bool lcl_FoldedOutlineNodeEndOfParaSplit(SwWrtShell *pThis)
             if (pDoc->GetIDocumentUndoRedo().DoesUndo())
             {
                 pDoc->GetIDocumentUndoRedo().ClearRedo();
-                pDoc->GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoInsert>(*pNd));
+                pDoc->GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoInsert>(SwNodeIndex(*pNd)));
                 pDoc->GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoFormatColl>
                                                         (*pNd, pNd->GetTextColl(), true, true));
             }
@@ -2430,7 +2430,7 @@ void SwWrtShell::MakeOutlineContentVisible(const size_t nPos, bool bMakeVisible)
     {
         // reset the index marker and make frames
         aIdx.Assign(*pSttNd, +1);
-        MakeFrames(GetDoc(), aIdx, *pEndNd);
+        MakeFrames(GetDoc(), aIdx, SwNodeIndex(*pEndNd));
 
         pSttNd->GetTextNode()->SetAttrOutlineContentVisible(true);
 

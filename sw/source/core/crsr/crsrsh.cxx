@@ -606,7 +606,7 @@ void SwCursorShell::ExtendedSelectAll(bool bFootnotes)
 bool SwCursorShell::ExtendedSelectedAll()
 {
     SwNodes& rNodes = GetDoc()->GetNodes();
-    SwNodeIndex nNode = rNodes.GetEndOfAutotext();
+    SwNodeIndex nNode(rNodes.GetEndOfAutotext());
     SwContentNode* pStart = rNodes.GoNext(&nNode);
     if (!pStart)
         return false;

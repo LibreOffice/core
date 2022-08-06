@@ -448,7 +448,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                             // they are fully enclosed in [pSectNd,aEndIdx].
                             if( aEndIdx < pSectNd->EndOfSectionIndex() )
                             {
-                                SwNodeRange aRg( *pSectNd, SwNodeOffset(1), aEndIdx, SwNodeOffset(1) );
+                                SwNodeRange aRg( *pSectNd, SwNodeOffset(1), aEndIdx.GetNode(), SwNodeOffset(1) );
                                 SwNodeIndex aIdx( *pSectNd );
                                 GetNodes().MoveNodes( aRg, GetNodes(), aIdx );
                             }

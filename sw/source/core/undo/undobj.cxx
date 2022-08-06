@@ -810,7 +810,7 @@ void SwUndoSaveContent::MoveFromUndoNds( SwDoc& rDoc, SwNodeOffset nNodeIdx,
     }
     else
     {
-        SwNodeRange aRg( rNds, nNodeIdx, rNds, (pEndNdIdx
+        SwNodeRange aRg( rNds, nNodeIdx, (pEndNdIdx
                         ? ((*pEndNdIdx) + 1)
                         : rNds.GetEndOfExtras().GetIndex() ) );
         rNds.MoveNodes(aRg, rDoc.GetNodes(), rInsPos.nNode, nullptr == pEndNdIdx || bForceCreateFrames);

@@ -62,6 +62,11 @@ SwPosition::SwPosition( const SwNodeIndex & rNodeIndex, const SwContentIndex & r
 {
 }
 
+SwPosition::SwPosition( const SwNode & rNode, const SwContentIndex & rContent )
+    : nNode( rNode ), nContent( rContent )
+{
+}
+
 SwPosition::SwPosition( const SwNodeIndex & rNodeIndex, const SwContentNode* pContentNode, sal_Int32 nContentOffset )
     : nNode( rNodeIndex ), nContent( pContentNode, nContentOffset )
 {
@@ -538,6 +543,16 @@ SwPaM::SwPaM( const SwNodeIndex& rNodeIdx, sal_Int32 nContent, SwPaM* pRing )
     , m_bIsInFrontOfLabel( false )
 {
     m_pPoint->nContent.Assign( rNodeIdx.GetNode().GetContentNode(), nContent );
+}
+
+SwPaM::SwPaM( SwNodes& rNodes, SwNodeOffset nNdOffset, SwPaM* pRing )
+    : Ring( pRing )
+    , m_Bound1( rNodes, nNdOffset )
+    , m_Bound2( rNodes ) // default initialize
+    , m_pPoint( &m_Bound1 )
+    , m_pMark( &m_Bound1 )
+    , m_bIsInFrontOfLabel( false )
+{
 }
 
 SwPaM::~SwPaM() {}

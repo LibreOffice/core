@@ -287,19 +287,19 @@ namespace
         return false;
     }
 // Gets "YPos" for content, i.e. a number used to sort content members in Navigator's list
-sal_Int32 getYPos(const SwNodeIndex& rNodeIndex)
+sal_Int32 getYPos(const SwNode& rNode)
 {
-    SwNodeOffset nIndex = rNodeIndex.GetIndex();
-    if (rNodeIndex.GetNodes().GetEndOfExtras().GetIndex() >= nIndex)
+    SwNodeOffset nIndex = rNode.GetIndex();
+    if (rNode.GetNodes().GetEndOfExtras().GetIndex() >= nIndex)
     {
         // Not a node of BodyText
         // Are we in a fly?
-        if (const auto pFlyFormat = rNodeIndex.GetNode().GetFlyFormat())
+        if (const auto pFlyFormat = rNode.GetFlyFormat())
         {
             // Get node index of anchor
             if (auto pSwPosition = pFlyFormat->GetAnchor().GetContentAnchor())
             {
-                return getYPos(pSwPosition->nNode);
+                return getYPos(pSwPosition->GetNode());
             }
         }
     }
@@ -781,7 +781,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                     }
 
                     std::unique_ptr<SwContent> pCnt(new SwRegionContent(this, sSectionName,
-                            nLevel, m_bAlphabeticSort ? 0 : getYPos(*pNodeIndex)));
+                            nLevel, m_bAlphabeticSort ? 0 : getYPos(pNodeIndex->GetNode())));
                     if( !pFormat->GetInfo( aAskItem ) &&
                         !aAskItem.pObject )     // not visible
                         pCnt->SetInvisible();
@@ -4333,7 +4333,7 @@ IMPL_LINK(SwContentTree, QueryTooltipHdl, const weld::TreeIter&, rEntry, OUStrin
                         pIdx->GetNode().GetNodes().IsDocNodes())
                     {
                         SwDocStat aDocStat;
-                        SwPaM aPaM(*pIdx, *pIdx->GetNode().EndOfSectionNode());
+                        SwPaM aPaM(pIdx->GetNode(), *pIdx->GetNode().EndOfSectionNode());
                         SwDoc::CountWords(aPaM, aDocStat);
                         sEntry = SwResId(STR_REGION_DEFNAME) + ": " + sEntry + "\n" +
                                  SwResId(FLD_STAT_WORD) + ": " + OUString::number(aDocStat.nWord) + "\n" +

@@ -779,7 +779,7 @@ bool SwRedlineTable::isMoved( size_type rPos ) const
     }
     else // otherwise it is saved in pContentSect, e.g. during ODT import
     {
-        pPaM = new SwPaM(*pRedline->GetContentIdx(), *pRedline->GetContentIdx()->GetNode().EndOfSectionNode() );
+        pPaM = new SwPaM(pRedline->GetContentIdx()->GetNode(), *pRedline->GetContentIdx()->GetNode().EndOfSectionNode() );
         bDeletePaM = true;
     }
 
@@ -822,7 +822,7 @@ bool SwRedlineTable::isMoved( size_type rPos ) const
         else // otherwise it is saved in pContentSect, e.g. during ODT import
         {
             // saved in pContentSect, e.g. during ODT import
-            pPairPaM = new SwPaM(*pPair->GetContentIdx(), *pPair->GetContentIdx()->GetNode().EndOfSectionNode() );
+            pPairPaM = new SwPaM(pPair->GetContentIdx()->GetNode(), *pPair->GetContentIdx()->GetNode().EndOfSectionNode() );
             bDeletePairPaM = true;
         }
 

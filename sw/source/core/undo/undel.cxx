@@ -306,8 +306,7 @@ SwUndoDelete::SwUndoDelete(
     {
         SwNodes& rNds = rDoc.GetUndoManager().GetUndoNodes();
         SwNodes& rDocNds = rDoc.GetNodes();
-        SwNodeRange aRg( rDocNds, m_nSttNode - m_nNdDiff,
-                         rDocNds, m_nEndNode - m_nNdDiff );
+        SwNodeRange aRg( rDocNds, m_nSttNode - m_nNdDiff, m_nEndNode - m_nNdDiff );
         if( !bFullPara && !pEndTextNd &&
             &aRg.aEnd.GetNode() != &rDoc.GetNodes().GetEndOfContent() )
         {
