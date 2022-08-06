@@ -2250,9 +2250,7 @@ bool SwRefPageGetFieldType::MakeSetList(SetGetExpFields& rTmpLst,
                 // Check if pFrame is not yet connected to the layout.
                 !pFrame->FindPageFrame() )
             {
-                //  create index for determination of the TextNode
-                SwNodeIndex aIdx( rTextNd );
-                pNew.reset( new SetGetExpField( aIdx, pTField ) );
+                pNew.reset( new SetGetExpField( rTextNd, pTField ) );
             }
             else
             {
@@ -2260,7 +2258,7 @@ bool SwRefPageGetFieldType::MakeSetList(SetGetExpFields& rTmpLst,
                 SwPosition aPos( m_rDoc.GetNodes().GetEndOfPostIts() );
                 bool const bResult = GetBodyTextNode( m_rDoc, aPos, *pFrame );
                 OSL_ENSURE(bResult, "where is the Field?");
-                pNew.reset( new SetGetExpField( aPos.nNode, pTField,
+                pNew.reset( new SetGetExpField( aPos.GetNode(), pTField,
                                             &aPos.nContent ) );
             }
 
@@ -2282,8 +2280,7 @@ void SwRefPageGetFieldType::UpdateField( SwTextField const * pTextField,
     if( pTextNode->StartOfSectionIndex() >
         m_rDoc.GetNodes().GetEndOfExtras().GetIndex() )
     {
-        SwNodeIndex aIdx( *pTextNode );
-        SetGetExpField aEndField( aIdx, pTextField );
+        SetGetExpField aEndField( *pTextNode, pTextField );
 
         SetGetExpFields::const_iterator itLast = rSetList.lower_bound( &aEndField );
 
@@ -2390,7 +2387,7 @@ void SwRefPageGetField::ChangeExpansion(const SwFrame& rFrame,
     if(!pTextNode)
         return;
 
-    SetGetExpField aEndField( aPos.nNode, pField, &aPos.nContent );
+    SetGetExpField aEndField( aPos.GetNode(), pField, &aPos.nContent );
 
     SetGetExpFields::const_iterator itLast = aTmpLst.lower_bound( &aEndField );
 
