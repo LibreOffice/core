@@ -1570,8 +1570,7 @@ SwFormatAnchor::SwFormatAnchor( RndStdIds nRnd, sal_uInt16 nPage )
 
 SwFormatAnchor::SwFormatAnchor( const SwFormatAnchor &rCpy )
     : SfxPoolItem( RES_ANCHOR )
-    , m_pContentAnchor( (rCpy.GetContentAnchor())
-            ?  new SwPosition( *rCpy.GetContentAnchor() ) : nullptr )
+    , m_oContentAnchor( rCpy.m_oContentAnchor )
     , m_eAnchorId( rCpy.GetAnchorId() )
     , m_nPageNumber( rCpy.GetPageNum() )
     // OD 2004-05-05 #i28701# - get always new increased order number
@@ -1592,12 +1591,15 @@ void SwFormatAnchor::SetAnchor( const SwPosition *pPos )
                     dynamic_cast<SwStartNode*>(&pPos->GetNode()))
             || (RndStdIds::FLY_AT_PARA == m_eAnchorId && dynamic_cast<SwTableNode*>(&pPos->GetNode()))
             || dynamic_cast<SwTextNode*>(&pPos->GetNode()));
-    m_pContentAnchor .reset( pPos ? new SwPosition( *pPos ) : nullptr );
+    if (pPos)
+        m_oContentAnchor.emplace(*pPos);
+    else
+        m_oContentAnchor.reset();
     // Flys anchored AT paragraph should not point into the paragraph content
-    if (m_pContentAnchor &&
+    if (m_oContentAnchor &&
         ((RndStdIds::FLY_AT_PARA == m_eAnchorId) || (RndStdIds::FLY_AT_FLY == m_eAnchorId)))
     {
-        m_pContentAnchor->nContent.Assign( nullptr, 0 );
+        m_oContentAnchor->nContent.Assign( nullptr, 0 );
     }
 }
 
@@ -1609,10 +1611,7 @@ SwFormatAnchor& SwFormatAnchor::operator=(const SwFormatAnchor& rAnchor)
         m_nPageNumber   = rAnchor.GetPageNum();
         // OD 2004-05-05 #i28701# - get always new increased order number
         m_nOrder = ++s_nOrderCounter;
-
-        m_pContentAnchor.reset( (rAnchor.GetContentAnchor())
-            ? new SwPosition(*(rAnchor.GetContentAnchor()))
-            : nullptr );
+        m_oContentAnchor  = rAnchor.m_oContentAnchor;
     }
     return *this;
 }
@@ -1625,10 +1624,8 @@ bool SwFormatAnchor::operator==( const SfxPoolItem& rAttr ) const
     return ( m_eAnchorId == rFormatAnchor.GetAnchorId() &&
              m_nPageNumber == rFormatAnchor.GetPageNum()   &&
                 // compare anchor: either both do not point into a textnode or
-                // both do (valid m_pContentAnchor) and the positions are equal
-             ((m_pContentAnchor.get() == rFormatAnchor.m_pContentAnchor.get()) ||
-              (m_pContentAnchor && rFormatAnchor.GetContentAnchor() &&
-               (*m_pContentAnchor == *rFormatAnchor.GetContentAnchor()))));
+                // both do (valid m_oContentAnchor) and the positions are equal
+             (m_oContentAnchor == rFormatAnchor.m_oContentAnchor) );
 }
 
 SwFormatAnchor* SwFormatAnchor::Clone( SfxItemPool* ) const
@@ -1676,9 +1673,9 @@ bool SwFormatAnchor::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         break;
         case MID_ANCHOR_ANCHORFRAME:
         {
-            if (m_pContentAnchor && RndStdIds::FLY_AT_FLY == m_eAnchorId)
+            if (m_oContentAnchor && RndStdIds::FLY_AT_FLY == m_eAnchorId)
             {
-                SwFrameFormat* pFormat = m_pContentAnchor->GetNode().GetFlyFormat();
+                SwFrameFormat* pFormat = m_oContentAnchor->GetNode().GetFlyFormat();
                 if(pFormat)
                 {
                     uno::Reference<text::XTextFrame> const xRet(
@@ -1717,7 +1714,7 @@ bool SwFormatAnchor::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                         // If the anchor type is page and a valid page number
                         // has been set, the content position isn't required
                         // any longer.
-                        m_pContentAnchor.reset();
+                        m_oContentAnchor.reset();
                     }
                     break;
                 case  text::TextContentAnchorType_AT_FRAME:
@@ -1747,7 +1744,7 @@ bool SwFormatAnchor::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     // confuse the layout (frmtool.cxx). However, if the
                     // anchor type is not page, any content position will
                     // be kept.
-                    m_pContentAnchor.reset();
+                    m_oContentAnchor.reset();
                 }
             }
             else
@@ -1768,14 +1765,14 @@ void SwFormatAnchor::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatAnchor"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
 
-    if (m_pContentAnchor)
+    if (m_oContentAnchor)
     {
         std::stringstream aContentAnchor;
-        aContentAnchor << *m_pContentAnchor;
+        aContentAnchor << *m_oContentAnchor;
         (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_pContentAnchor"), BAD_CAST(aContentAnchor.str().c_str()));
     }
     else
-        (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("m_pContentAnchor"), "%p", m_pContentAnchor.get());
+        (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("m_pContentAnchor"), "%p", nullptr);
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_eAnchorType"), BAD_CAST(OString::number(static_cast<int>(m_eAnchorId)).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nPageNumber"), BAD_CAST(OString::number(m_nPageNumber).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nOrder"), BAD_CAST(OString::number(m_nOrder).getStr()));
@@ -3372,7 +3369,7 @@ SwHandleAnchorNodeChg::SwHandleAnchorNodeChg( SwFlyFrameFormat& _rFlyFrameFormat
     if (aOldAnchorFormat.GetContentAnchor()
         && aOldAnchorFormat.GetAnchorId() == RndStdIds::FLY_AT_CHAR)
     {
-        mpCommentAnchor.reset(new SwPosition(*aOldAnchorFormat.GetContentAnchor()));
+        moCommentAnchor.emplace(*aOldAnchorFormat.GetContentAnchor());
     }
 
     if (_pKeepThisFlyFrame)
@@ -3390,18 +3387,18 @@ void SwHandleAnchorNodeChg::ImplDestroy()
     }
 
     // See if the fly frame had a comment: if so, move it to the new anchor as well.
-    if (!mpCommentAnchor)
+    if (!moCommentAnchor)
     {
         return;
     }
 
-    SwTextNode* pTextNode = mpCommentAnchor->GetNode().GetTextNode();
+    SwTextNode* pTextNode = moCommentAnchor->GetNode().GetTextNode();
     if (!pTextNode)
     {
         return;
     }
 
-    const SwTextField* pField = pTextNode->GetFieldTextAttrAt(mpCommentAnchor->GetContentIndex());
+    const SwTextField* pField = pTextNode->GetFieldTextAttrAt(moCommentAnchor->GetContentIndex());
     if (!pField || pField->GetFormatField().GetField()->GetTyp()->Which() != SwFieldIds::Postit)
     {
         return;
@@ -3418,9 +3415,9 @@ void SwHandleAnchorNodeChg::ImplDestroy()
     // Set up the source of the move: the old comment anchor.
     {
         SwPaM& rCursor = mpWrtShell->GetCurrentShellCursor();
-        *rCursor.GetPoint() = *mpCommentAnchor;
+        *rCursor.GetPoint() = *moCommentAnchor;
         rCursor.SetMark();
-        *rCursor.GetMark() = *mpCommentAnchor;
+        *rCursor.GetMark() = *moCommentAnchor;
         ++rCursor.GetMark()->nContent;
     }
 

@@ -63,7 +63,7 @@ private:
     bool mbAnchorNodeChanged;
 
     /// If the fly frame has a comment, this points to the old comment anchor.
-    std::unique_ptr<SwPosition> mpCommentAnchor;
+    std::optional<SwPosition> moCommentAnchor;
 
     SwWrtShell* mpWrtShell;
 

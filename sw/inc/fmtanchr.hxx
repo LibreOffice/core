@@ -22,10 +22,12 @@
 #include "swdllapi.h"
 #include "hintids.hxx"
 #include "format.hxx"
+#include "pam.hxx"
 #include <svl/poolitem.hxx>
 #include <svx/swframetypes.hxx>
 
 #include <memory>
+#include <optional>
 
 struct SwPosition;
 class IntlWrapper;
@@ -33,7 +35,7 @@ class IntlWrapper;
 /// FlyAnchors
 class SW_DLLPUBLIC SwFormatAnchor final : public SfxPoolItem
 {
-    std::unique_ptr<SwPosition> m_pContentAnchor; /**< 0 for page-bound frames.
+    std::optional<SwPosition> m_oContentAnchor; /**< 0 for page-bound frames.
                                                      Index for paragraph-bound frames.
                                                      Position for character-bound frames. */
     RndStdIds  m_eAnchorId;
@@ -64,7 +66,7 @@ public:
 
     RndStdIds GetAnchorId() const { return m_eAnchorId; }
     sal_uInt16 GetPageNum() const { return m_nPageNumber; }
-    const SwPosition *GetContentAnchor() const { return m_pContentAnchor.get(); }
+    const SwPosition* GetContentAnchor() const { return m_oContentAnchor ? &*m_oContentAnchor : nullptr; }
     // #i28701#
     sal_uInt32 GetOrder() const { return m_nOrder;}
 
