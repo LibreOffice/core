@@ -22,7 +22,6 @@
 #include <worksheethelper.hxx>
 
 #include <algorithm>
-#include <utility>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>

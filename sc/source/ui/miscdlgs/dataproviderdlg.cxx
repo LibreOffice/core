@@ -22,8 +22,6 @@
 #include <utility>
 #include <vcl/svapp.hxx>
 
-#include <utility>
-
 class ScDataTransformationBaseControl
 {
 protected:

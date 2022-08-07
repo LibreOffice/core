@@ -16,7 +16,6 @@
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <orcusfilters.hxx>
-#include <utility>
 
 using namespace com::sun::star;
 

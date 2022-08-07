@@ -65,7 +65,6 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <numeric>
-#include <utility>
 #include <officecfg/Office/Common.hxx>
 
 using ::editeng::SvxBorderLine;

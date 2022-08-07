@@ -58,7 +58,6 @@
 #include <documentimport.hxx>
 
 #include <memory>
-#include <utility>
 #include <oox/helper/helper.hxx>
 #include <sal/log.hxx>
 

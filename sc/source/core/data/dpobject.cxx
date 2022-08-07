@@ -77,7 +77,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 
-#include <utility>
 #include <vector>
 #include <memory>
 #include <algorithm>

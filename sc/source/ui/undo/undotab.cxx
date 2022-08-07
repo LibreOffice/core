@@ -55,7 +55,6 @@
 #include <tools/json_writer.hxx>
 
 #include <memory>
-#include <utility>
 #include <vector>
 
 using namespace com::sun::star;
