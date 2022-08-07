@@ -306,24 +306,22 @@ namespace frm
             m_pVScroll->SetThumbPos( m_pView->GetVisArea().Top() );
     }
 
-
     IMPL_LINK_NOARG( RichTextControlImpl, OnInvalidateAllAttributes, LinkParamNone*, void )
     {
         updateAllAttributes();
     }
 
-
-    IMPL_LINK( RichTextControlImpl, OnHScroll, ScrollBar*, _pScrollbar, void )
+    IMPL_LINK( RichTextControlImpl, OnHScroll, weld::Scrollbar&, rScrollbar, void )
     {
-        m_pView->Scroll( -_pScrollbar->GetDelta(), 0, ScrollRangeCheck::PaperWidthTextSize );
+        auto nDiff = m_pView->GetVisArea().Left() - rScrollbar.adjustment_get_value();
+        m_pView->Scroll(nDiff, 0, ScrollRangeCheck::PaperWidthTextSize);
     }
 
-
-    IMPL_LINK( RichTextControlImpl, OnVScroll, ScrollBar*, _pScrollbar, void )
+    IMPL_LINK(RichTextControlImpl, OnVScroll, weld::Scrollbar&, rScrollbar, void)
     {
-        m_pView->Scroll( 0, -_pScrollbar->GetDelta(), ScrollRangeCheck::PaperWidthTextSize );
+        auto nDiff = m_pView->GetVisArea().Top() - rScrollbar.adjustment_get_value();
+        m_pView->Scroll(0, nDiff, ScrollRangeCheck::PaperWidthTextSize);
     }
-
 
     void RichTextControlImpl::ensureScrollbars()
     {
@@ -341,7 +339,7 @@ namespace frm
         }
         else
         {
-            m_pVScroll = VclPtr<ScrollBar>::Create( m_pAntiImpl, WB_VSCROLL | WB_DRAG | WB_REPEAT );
+            m_pVScroll = VclPtr<ScrollAdaptor>::Create( m_pAntiImpl, false );
             m_pVScroll->SetScrollHdl ( LINK( this, RichTextControlImpl, OnVScroll ) );
             m_pVScroll->Show();
         }
@@ -352,7 +350,7 @@ namespace frm
         }
         else
         {
-            m_pHScroll = VclPtr<ScrollBar>::Create( m_pAntiImpl, WB_HSCROLL | WB_DRAG | WB_REPEAT );
+            m_pHScroll = VclPtr<ScrollAdaptor>::Create( m_pAntiImpl, true );
             m_pHScroll->SetScrollHdl ( LINK( this, RichTextControlImpl, OnHScroll ) );
             m_pHScroll->Show();
         }
@@ -417,9 +415,15 @@ namespace frm
         m_pViewport->SetPosSizePixel( Point( nOffset, nOffset ), aViewportSizePixel );
         // position the scrollbars
         if ( m_pVScroll )
+        {
+            m_pVScroll->SetThickness(nScrollBarWidth);
             m_pVScroll->SetPosSizePixel( Point( aViewportPlaygroundPixel.Width(), 0 ), Size( nScrollBarWidth, aViewportPlaygroundPixel.Height() ) );
+        }
         if ( m_pHScroll )
+        {
+            m_pHScroll->SetThickness(nScrollBarHeight);
             m_pHScroll->SetPosSizePixel( Point( 0, aViewportPlaygroundPixel.Height() ), Size( aViewportPlaygroundPixel.Width(), nScrollBarHeight ) );
+        }
         if ( m_pScrollCorner )
             m_pScrollCorner->SetPosSizePixel( Point( aViewportPlaygroundPixel.Width(), aViewportPlaygroundPixel.Height() ), Size( nScrollBarWidth, nScrollBarHeight ) );
 

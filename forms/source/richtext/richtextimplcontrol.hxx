@@ -21,6 +21,7 @@
 #include "rtattributehandler.hxx"
 #include "richtextviewport.hxx"
 #include "richtextengine.hxx"
+#include <svtools/scrolladaptor.hxx>
 #include <vcl/scrbar.hxx>
 #include <editeng/editdata.hxx>
 
@@ -53,8 +54,8 @@ namespace frm
 
         VclPtr<Control>                m_pAntiImpl;
         VclPtr<RichTextViewPort>       m_pViewport;
-        VclPtr<ScrollBar>              m_pHScroll;
-        VclPtr<ScrollBar>              m_pVScroll;
+        VclPtr<ScrollAdaptor>          m_pHScroll;
+        VclPtr<ScrollAdaptor>          m_pVScroll;
         VclPtr<ScrollBarBox>           m_pScrollCorner;
         RichTextEngine*         m_pEngine;
         std::unique_ptr<EditView> m_pView;
@@ -173,8 +174,8 @@ namespace frm
 
     private:
         DECL_LINK( OnInvalidateAllAttributes, LinkParamNone*, void );
-        DECL_LINK( OnHScroll, ScrollBar*, void );
-        DECL_LINK( OnVScroll, ScrollBar*, void );
+        DECL_LINK( OnHScroll, weld::Scrollbar&, void );
+        DECL_LINK( OnVScroll, weld::Scrollbar&, void );
     };
 
 
