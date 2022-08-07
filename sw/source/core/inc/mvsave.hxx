@@ -21,8 +21,10 @@
 
 #include <vcl/keycod.hxx>
 #include <IDocumentMarkAccess.hxx>
-#include <vector>
+#include <ndindex.hxx>
 #include <deque>
+#include <optional>
+#include <vector>
 #include <o3tl/typed_flags_set.hxx>
 
 namespace sfx2 {
@@ -34,7 +36,6 @@ class SwDoc;
 class SwFormatAnchor;
 class SwFrameFormat;
 class SwContentIndex;
-class SwNodeIndex;
 class SwNodeRange;
 class SwPaM;
 class SwNode;
@@ -187,7 +188,7 @@ public:
 class SaveRedlEndPosForRestore
 {
     std::vector<SwPosition*> mvSavArr;
-    std::unique_ptr<SwNodeIndex> mpSaveIndex;
+    std::optional<SwNodeIndex> moSaveIndex;
     sal_Int32 mnSaveContent;
 
 public:
