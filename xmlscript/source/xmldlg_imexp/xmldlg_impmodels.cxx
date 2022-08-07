@@ -691,6 +691,8 @@ void DateFieldElement::endElement()
     }
 
     ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
+    ctx.importAlignProperty( "Align", "align", _xAttributes );
+    ctx.importVerticalAlignProperty( "VerticalAlign", "valign", _xAttributes );
     ctx.importBooleanProperty( "Tabstop", "tabstop", _xAttributes );
     ctx.importBooleanProperty( "ReadOnly", "readonly", _xAttributes );
     ctx.importBooleanProperty( "StrictFormat", "strict-format", _xAttributes );
