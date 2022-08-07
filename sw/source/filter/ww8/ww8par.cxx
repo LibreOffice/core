@@ -2074,15 +2074,15 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
 
     pRdr->m_xRedlineStack->closeall(*pRdr->m_pPaM->GetPoint());
 
-    // ofz#37322 drop m_pLastAnchorPos during RedlineStack dtor and restore it afterwards to the same
+    // ofz#37322 drop m_oLastAnchorPos during RedlineStack dtor and restore it afterwards to the same
     // place, or somewhere close if that place got destroyed
-    std::shared_ptr<SwUnoCursor> xLastAnchorCursor(pRdr->m_pLastAnchorPos ? pRdr->m_rDoc.CreateUnoCursor(*pRdr->m_pLastAnchorPos) : nullptr);
-    pRdr->m_pLastAnchorPos.reset();
+    std::shared_ptr<SwUnoCursor> xLastAnchorCursor(pRdr->m_oLastAnchorPos ? pRdr->m_rDoc.CreateUnoCursor(*pRdr->m_oLastAnchorPos) : nullptr);
+    pRdr->m_oLastAnchorPos.reset();
 
     pRdr->m_xRedlineStack = std::move(mxOldRedlines);
 
     if (xLastAnchorCursor)
-        pRdr->m_pLastAnchorPos.reset(new SwPosition(*xLastAnchorCursor->GetPoint()));
+        pRdr->m_oLastAnchorPos.emplace(*xLastAnchorCursor->GetPoint());
 
     pRdr->DeleteAnchorStack();
     pRdr->m_xAnchorStck = std::move(mxOldAnchorStck);
@@ -5385,7 +5385,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
     DeleteCtrlStack();
     DeleteAnchorStack();
     DeleteRefStacks();
-    m_pLastAnchorPos.reset();//ensure this is deleted before UpdatePageDescs
+    m_oLastAnchorPos.reset();//ensure this is deleted before UpdatePageDescs
     // ofz#10994 remove any trailing fly paras before processing redlines
     m_xWFlyPara.reset();
     // ofz#12660 remove any trailing fly paras before deleting extra paras
