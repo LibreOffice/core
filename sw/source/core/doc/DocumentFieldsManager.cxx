@@ -528,7 +528,7 @@ bool DocumentFieldsManager::UpdateField(SwTextField * pDstTextField, SwField & r
         case SwFieldIds::Table:
             {
                 const SwTableNode* pTableNd =
-                    m_rDoc.IsIdxInTable(aTableNdIdx);
+                    SwDoc::IsIdxInTable(aTableNdIdx);
                 if( pTableNd )
                 {
                     SwTableFormulaUpdate aTableUpdate( &pTableNd->
