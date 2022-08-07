@@ -33,6 +33,23 @@
       "message": "\u003e Patch Set 4:\n\u003e \n\u003e A polite ping, still working on this patch? Do not forget to rebase it first. See https://wiki.documentfoundation.org/Development/Review_bot\n\nYes.",
       "revId": "24605b81fb9f44196d7bab1b9e19399897aee287",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f307baf9_26cb45ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-08-07T00:51:57Z",
+      "side": 1,
+      "message": "I noticed if the tab key is used to move to the search combo box when the text displayed in the search label is read by the screen reader. This can be done programmatically by grabbing focus to the search combo box after a find push button is activated. The disadvantage focus will no longer be on the push button which is useful for find next/previous. Please see https://gerrit.libreoffice.org/c/core/+/137913\n\nAnother idea is to have an accessibility option to show information dialogs. Please see demo of this at the bug report.",
+      "revId": "24605b81fb9f44196d7bab1b9e19399897aee287",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
