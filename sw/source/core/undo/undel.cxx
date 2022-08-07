@@ -385,7 +385,7 @@ SwUndoDelete::SwUndoDelete(
         // Step 3: Moving into UndoArray...
         m_nNode = rNds.GetEndOfContent().GetIndex();
         rDocNds.MoveNodes( aRg, rNds, SwNodeIndex( rNds.GetEndOfContent() ));
-        m_pMvStt.reset( new SwNodeIndex( rNds, m_nNode ) );
+        m_oMvStt.emplace( rNds, m_nNode );
         // remember difference!
         m_nNode = rNds.GetEndOfContent().GetIndex() - m_nNode;
 
@@ -602,11 +602,11 @@ bool SwUndoDelete::CanGrouping( SwDoc& rDoc, const SwPaM& rDelPam )
 
 SwUndoDelete::~SwUndoDelete()
 {
-    if( m_pMvStt )        // Delete also the selection from UndoNodes array
+    if( m_oMvStt )        // Delete also the selection from UndoNodes array
     {
         // Insert saves content in IconSection
-        m_pMvStt->GetNode().GetNodes().Delete( *m_pMvStt, m_nNode );
-        m_pMvStt.reset();
+        m_oMvStt->GetNode().GetNodes().Delete( *m_oMvStt, m_nNode );
+        m_oMvStt.reset();
     }
     m_pRedlSaveData.reset();
 }
@@ -969,7 +969,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
 
         if( bNodeMove )
         {
-            SwNodeRange aRange( *m_pMvStt, SwNodeOffset(0), *m_pMvStt, m_nNode );
+            SwNodeRange aRange( *m_oMvStt, SwNodeOffset(0), *m_oMvStt, m_nNode );
             SwNodeIndex aCopyIndex( aPos.nNode, -1 );
             rDoc.GetUndoManager().GetUndoNodes().Copy_(aRange, aPos.nNode,
                     // sw_redlinehide: delay creating frames: the flags on the
