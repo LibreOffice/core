@@ -68,6 +68,8 @@ public:
 
     bool HasGrab() const { return m_xScrollBar->has_grab(); }
 
+    void SetThickness(int nThickness);
+
     ScrollAdaptor(vcl::Window* pParent, bool bHori);
     virtual void dispose() override;
 };
