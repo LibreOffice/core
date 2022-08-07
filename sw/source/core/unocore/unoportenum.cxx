@@ -149,7 +149,7 @@ namespace
         if(rEndPos.nNode != nOwnNode)
             return;
 
-        unique_ptr<SwPosition> pCrossRefEndPos;
+        std::optional<SwPosition> oCrossRefEndPos;
         const SwPosition* pEndPos = nullptr;
         ::sw::mark::CrossRefBookmark *const pCrossRefMark(dynamic_cast< ::sw::mark::CrossRefBookmark*>(pBkmk));
         if(hasOther)
@@ -159,9 +159,9 @@ namespace
         else if (pCrossRefMark)
         {
             // Crossrefbookmarks only remember the start position but have to span the whole paragraph
-            pCrossRefEndPos = std::make_unique<SwPosition>(rEndPos);
-            pCrossRefEndPos->nContent = pCrossRefEndPos->GetNode().GetTextNode()->Len();
-            pEndPos = pCrossRefEndPos.get();
+            oCrossRefEndPos.emplace(rEndPos);
+            oCrossRefEndPos->nContent = oCrossRefEndPos->GetNode().GetTextNode()->Len();
+            pEndPos = &*oCrossRefEndPos;
         }
         if(pEndPos)
         {

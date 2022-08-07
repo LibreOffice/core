@@ -41,9 +41,9 @@ namespace sw::mark {
             // getters
             virtual SwPosition& GetOtherMarkPos() const override;
             virtual SwPosition& GetMarkStart() const override
-                { return *m_pPos1; }
+                { return const_cast<SwPosition&>(*m_oPos1); }
             virtual SwPosition& GetMarkEnd() const override
-                { return *m_pPos1; }
+                { return const_cast<SwPosition&>(*m_oPos1); }
             virtual bool IsExpanded() const override
                 { return false; }
 

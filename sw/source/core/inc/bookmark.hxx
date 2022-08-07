@@ -24,6 +24,7 @@
 #include <vcl/keycod.hxx>
 #include <unotools/weakref.hxx>
 #include <memory>
+#include <optional>
 #include <string_view>
 #include <com/sun/star/text/XTextContent.hpp>
 
@@ -48,13 +49,13 @@ namespace sw::mark {
         public:
             //getters
             virtual SwPosition& GetMarkPos() const override
-                { return *m_pPos1; }
+                { return const_cast<SwPosition&>(*m_oPos1); }
             virtual const OUString& GetName() const override
                 { return m_aName; }
             virtual SwPosition& GetOtherMarkPos() const override
             {
                 OSL_PRECOND(IsExpanded(), "<SwPosition::GetOtherMarkPos(..)> - I have no other Pos set." );
-                return *m_pPos2;
+                return const_cast<SwPosition&>(*m_oPos2);
             }
             virtual SwPosition& GetMarkStart() const override
             {
@@ -75,14 +76,14 @@ namespace sw::mark {
 
             virtual bool IsCoveringPosition(const SwPosition& rPos) const override;
             virtual bool IsExpanded() const override
-                { return static_cast< bool >(m_pPos2); }
+                { return m_oPos2.has_value(); }
 
             void SetName(const OUString& rName)
                 { m_aName = rName; }
             virtual void SetMarkPos(const SwPosition& rNewPos);
             virtual void SetOtherMarkPos(const SwPosition& rNewPos);
             virtual void ClearOtherMarkPos()
-                { m_pPos2.reset(); }
+                { m_oPos2.reset(); }
 
             virtual auto InvalidateFrames() -> void;
 
@@ -91,8 +92,8 @@ namespace sw::mark {
 
             void Swap()
             {
-                if(m_pPos2)
-                    m_pPos1.swap(m_pPos2);
+                if(m_oPos2)
+                    m_oPos1.swap(m_oPos2);
             }
 
             virtual void InitDoc(SwDoc&, sw::mark::InsertMode, SwPosition const*)
@@ -110,8 +111,8 @@ namespace sw::mark {
             virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
             MarkBase(const SwPaM& rPaM, const OUString& rName);
-            std::unique_ptr<SwPosition> m_pPos1;
-            std::unique_ptr<SwPosition> m_pPos2;
+            std::optional<SwPosition> m_oPos1;
+            std::optional<SwPosition> m_oPos2;
             OUString m_aName;
             static OUString GenerateNewName(std::u16string_view rPrefix);
 
