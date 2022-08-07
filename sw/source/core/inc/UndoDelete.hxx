@@ -21,6 +21,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_UNDODELETE_HXX
 
 #include <undobj.hxx>
+#include <ndindex.hxx>
 #include <rtl/ustring.hxx>
 #include <memory>
 #include <optional>
@@ -39,7 +40,7 @@ class SwUndoDelete final
     , private SwUndRng
     , private SwUndoSaveContent
 {
-    std::unique_ptr<SwNodeIndex> m_pMvStt;            // Position of Nodes in UndoNodes-Array
+    std::optional<SwNodeIndex> m_oMvStt;            // Position of Nodes in UndoNodes-Array
     std::optional<OUString> m_aSttStr, m_aEndStr;
     std::unique_ptr<SwRedlineSaveDatas> m_pRedlSaveData;
     std::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoStart;
