@@ -1114,7 +1114,8 @@ bool SwFormatCol::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             }
         }
         uno::Any aVal;
-        aVal <<= o3tl::narrowing<sal_Int32>(GetLineWidth());
+        aVal <<= o3tl::narrowing<sal_Int32>(
+            o3tl::convert(GetLineWidth(), o3tl::Length::twip, o3tl::Length::mm100));
         xProps->setPropertyValue(UNO_NAME_SEPARATOR_LINE_WIDTH, aVal);
         aVal <<= GetLineColor();
         xProps->setPropertyValue(UNO_NAME_SEPARATOR_LINE_COLOR, aVal);
@@ -1204,6 +1205,7 @@ bool SwFormatCol::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             {
                 xProps->getPropertyValue(UNO_NAME_IS_AUTOMATIC) >>= m_bOrtho;
                 xProps->getPropertyValue(UNO_NAME_SEPARATOR_LINE_WIDTH) >>= m_nLineWidth;
+                m_nLineWidth = o3tl::toTwips(m_nLineWidth, o3tl::Length::mm100);
                 xProps->getPropertyValue(UNO_NAME_SEPARATOR_LINE_COLOR) >>= m_aLineColor;
                 if (sal_Int32 nHeight;
                     xProps->getPropertyValue(UNO_NAME_SEPARATOR_LINE_RELATIVE_HEIGHT) >>= nHeight)
