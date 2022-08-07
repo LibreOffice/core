@@ -1207,7 +1207,10 @@ bool SdPageObjsTLV::SelectEntry(const SdrObject *pObj)
         }
     }
     if (!bFound)
+    {
+        m_xTreeView->unselect_all();
         m_xTreeView->set_cursor(-1);
+    }
     return bFound;
 }
 
