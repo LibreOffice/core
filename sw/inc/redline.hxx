@@ -156,7 +156,7 @@ public:
 class SW_DLLPUBLIC SwRangeRedline final : public SwPaM
 {
     SwRedlineData* m_pRedlineData;
-    SwNodeIndex* m_pContentSect;
+    std::optional<SwNodeIndex> m_oContentSect;
     std::optional<tools::Long> m_oLOKLastNodeTop;
     sal_uInt32 m_nId;
     bool m_bDelLastPara : 1;
@@ -176,7 +176,7 @@ public:
     // For sw3io: pData is taken over!
     SwRangeRedline(SwRedlineData* pData, const SwPosition& rPos,
                bool bDelLP) :
-        SwPaM( rPos ), m_pRedlineData( pData ), m_pContentSect( nullptr ),
+        SwPaM( rPos ), m_pRedlineData( pData ),
         m_nId( s_nLastId++ ), m_bDelLastPara( bDelLP ), m_bIsVisible( true )
     {
         GetBound().SetRedline(this);
@@ -186,9 +186,10 @@ public:
     virtual ~SwRangeRedline() override;
 
     sal_uInt32 GetId() const { return m_nId; }
-    SwNodeIndex* GetContentIdx() const { return m_pContentSect; }
+    const SwNodeIndex* GetContentIdx() const { return m_oContentSect ? &*m_oContentSect : nullptr; }
     // For Undo.
-    void SetContentIdx( const SwNodeIndex* );
+    void SetContentIdx( const SwNodeIndex& );
+    void ClearContentIdx();
 
     bool IsVisible() const { return m_bIsVisible; }
     bool IsDelLastPara() const { return m_bDelLastPara; }

@@ -680,7 +680,7 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
             SwNodeOffset nPoint = aPaM.GetPoint()->GetNodeIndex();
             if( nPoint < pRedlineInfo->pContentIndex->GetIndex() ||
                 nPoint > pRedlineInfo->pContentIndex->GetNode().EndOfSectionIndex() )
-                pRedline->SetContentIdx(pRedlineInfo->pContentIndex);
+                pRedline->SetContentIdx(*pRedlineInfo->pContentIndex);
             else
                 SAL_WARN("sw", "Recursive change tracking");
         }

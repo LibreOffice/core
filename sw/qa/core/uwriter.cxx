@@ -788,7 +788,7 @@ void SwDocTest::testSwScanner()
         SwNodes& rNds = m_pDoc->GetNodes();
         CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), rTable.size());
 
-        SwNodeIndex* pNodeIdx = rTable[0]->GetContentIdx();
+        const SwNodeIndex* pNodeIdx = rTable[0]->GetContentIdx();
         CPPUNIT_ASSERT(pNodeIdx);
 
         pTextNode = rNds[ pNodeIdx->GetIndex() + 1 ]->GetTextNode();        //first deleted txtnode

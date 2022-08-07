@@ -1359,7 +1359,7 @@ SwRedlineSaveData::SwRedlineSaveData(
         {
             // than move section into UndoArray and memorize it
             SaveSection( *rRedl.GetContentIdx() );
-            rRedl.SetContentIdx( nullptr );
+            rRedl.ClearContentIdx();
         }
         break;
 
@@ -1391,7 +1391,7 @@ void SwRedlineSaveData::RedlineToDoc( SwPaM const & rPam )
         RestoreSection( &rDoc, &aIdx, SwNormalStartNode );
         if( GetHistory() )
             GetHistory()->Rollback( &rDoc );
-        pRedl->SetContentIdx( &aIdx );
+        pRedl->SetContentIdx( aIdx );
     }
     SetPaM( *pRedl );
     // First, delete the "old" so that in an Append no unexpected things will
