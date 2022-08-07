@@ -874,7 +874,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf147181_TrackedMovingOfMultipleTable
     Scheduler::ProcessEventsToIdle();
     uno::Reference<container::XIndexAccess> xTables2(xTablesSupplier->getTextTables(),
                                                      uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables2->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTables2->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable2->getRows()->getCount());
 
     // Undo results 2 tables
