@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "130cf938_b95151de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2022-08-07T01:45:50Z",
+      "side": 1,
+      "message": "The new behavior copies the selected cell\u0027s formatting for its own when inserting a row.  Should it instead have default table style formatting?  I can see arguments for both ways.",
+      "revId": "d95d2618b70496eaa77801c3b3cb64bc95885484",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
