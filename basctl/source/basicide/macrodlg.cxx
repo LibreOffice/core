@@ -122,7 +122,8 @@ MacroChooser::~MacroChooser()
 
 void MacroChooser::StoreMacroDescription()
 {
-    m_xBasicBox->get_selected(m_xBasicBoxIter.get());
+    if (!m_xBasicBox->get_selected(m_xBasicBoxIter.get()))
+        return;
     EntryDescriptor aDesc = m_xBasicBox->GetEntryDescriptor(m_xBasicBoxIter.get());
     OUString aMethodName;
     if (m_xMacroBox->get_selected(m_xMacroBoxIter.get()))
