@@ -199,7 +199,7 @@ uno::Any SwXRedlinePortion::getPropertyValue( const OUString& rPropertyName )
     uno::Any aRet;
     if(rPropertyName == UNO_NAME_REDLINE_TEXT)
     {
-        SwNodeIndex* pNodeIdx = m_rRedline.GetContentIdx();
+        const SwNodeIndex* pNodeIdx = m_rRedline.GetContentIdx();
         if(pNodeIdx )
         {
             if ( SwNodeOffset(1) < ( pNodeIdx->GetNode().EndOfSectionIndex() - pNodeIdx->GetNode().GetIndex() ) )
@@ -311,7 +311,7 @@ uno::Sequence< beans::PropertyValue > SwXRedlinePortion::CreateRedlineProperties
     pRet[nPropIdx].Name = UNO_NAME_MERGE_LAST_PARA;
     pRet[nPropIdx++].Value <<= !rRedline.IsDelLastPara();
 
-    SwNodeIndex* pNodeIdx = rRedline.GetContentIdx();
+    const SwNodeIndex* pNodeIdx = rRedline.GetContentIdx();
     if(pNodeIdx )
     {
         if ( SwNodeOffset(1) < ( pNodeIdx->GetNode().EndOfSectionIndex() - pNodeIdx->GetNode().GetIndex() ) )
@@ -442,7 +442,7 @@ uno::Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
     }
     else if(rPropertyName == UNO_NAME_REDLINE_TEXT)
     {
-        SwNodeIndex* pNodeIdx = m_pRedline->GetContentIdx();
+        const SwNodeIndex* pNodeIdx = m_pRedline->GetContentIdx();
         if( pNodeIdx )
         {
             if ( SwNodeOffset(1) < ( pNodeIdx->GetNode().EndOfSectionIndex() - pNodeIdx->GetNode().GetIndex() ) )
@@ -499,7 +499,7 @@ uno::Reference< container::XEnumeration >  SwXRedline::createEnumeration()
     if(!m_pDoc)
         throw uno::RuntimeException();
 
-    SwNodeIndex* pNodeIndex = m_pRedline->GetContentIdx();
+    const SwNodeIndex* pNodeIndex = m_pRedline->GetContentIdx();
     if(!pNodeIndex)
         return nullptr;
     SwPaM aPam(*pNodeIndex);
@@ -526,7 +526,7 @@ uno::Reference< text::XTextCursor >  SwXRedline::createTextCursor()
     if(!m_pDoc)
         throw uno::RuntimeException();
 
-    SwNodeIndex* pNodeIndex = m_pRedline->GetContentIdx();
+    const SwNodeIndex* pNodeIndex = m_pRedline->GetContentIdx();
     if(!pNodeIndex)
     {
         throw uno::RuntimeException();
