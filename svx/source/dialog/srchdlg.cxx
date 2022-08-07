@@ -1360,6 +1360,9 @@ IMPL_LINK(SvxSearchDialog, CommandHdl_Impl, weld::Button&, rBtn, void)
         nModifyFlag = ModifyFlags::NONE;
         const SfxPoolItem* ppArgs[] = { pSearchItem.get(), nullptr };
         rBindings.ExecuteSynchron( FID_SEARCH_NOW, ppArgs );
+
+        // grabbing focus to the search combo box makes the search label read by the screen reader
+        m_xSearchLB->grab_focus();
     }
     else if ( &rBtn == m_xCloseBtn.get() )
     {
