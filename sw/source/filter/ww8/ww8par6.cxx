@@ -870,10 +870,10 @@ void wwSectionManager::CreateSep(const tools::Long nTextPos)
     if (!pSep)
         return;
 
-    if (!maSegments.empty() && mrReader.m_pLastAnchorPos && *mrReader.m_pLastAnchorPos == *mrReader.m_pPaM->GetPoint())
+    if (!maSegments.empty() && mrReader.m_oLastAnchorPos && *mrReader.m_oLastAnchorPos == *mrReader.m_pPaM->GetPoint())
     {
         bool insert = true;
-        SwPaM pam( *mrReader.m_pLastAnchorPos );
+        SwPaM pam( *mrReader.m_oLastAnchorPos );
         if( pam.Move(fnMoveBackward, GoInNode))
             if( SwTextNode* txtNode = pam.GetPoint()->GetNode().GetTextNode())
                 if( txtNode->Len() == 0 )
@@ -1962,7 +1962,7 @@ bTogglePos(false)
 
     //#i53725# - absolute positioned objects have to be
     // anchored at-paragraph to assure its correct anchor position.
-    rIo.m_pLastAnchorPos.reset( new SwPosition(*rPaM.GetPoint()));
+    rIo.m_oLastAnchorPos.emplace(*rPaM.GetPoint());
 
     switch (nYBind)
     {
@@ -2561,11 +2561,11 @@ bool SwWW8ImplReader::JoinNode(SwPaM &rPam, bool bStealAttr)
         if (bStealAttr)
             m_xCtrlStck->StealAttr(rPam.GetPoint()->nNode);
 
-        if (m_pLastAnchorPos || m_xPreviousNode || (m_xSFlyPara && m_xSFlyPara->xMainTextPos))
+        if (m_oLastAnchorPos || m_xPreviousNode || (m_xSFlyPara && m_xSFlyPara->xMainTextPos))
         {
             SwNodeIndex aToBeJoined(aPref, 1);
 
-            if (m_pLastAnchorPos)
+            if (m_oLastAnchorPos)
             {
                 //If the last anchor pos is here, then clear the anchor pos.
                 //This "last anchor pos" is only used for fixing up the
@@ -2574,9 +2574,9 @@ bool SwWW8ImplReader::JoinNode(SwPaM &rPam, bool bStealAttr)
                 //cannot be a page break at this point so we can
                 //safely reset m_pLastAnchorPos to avoid any dangling
                 //SwContentIndex's pointing into the deleted paragraph
-                SwNodeIndex aLastAnchorPos(m_pLastAnchorPos->nNode);
+                SwNodeIndex aLastAnchorPos(m_oLastAnchorPos->nNode);
                 if (aLastAnchorPos == aToBeJoined)
-                    m_pLastAnchorPos.reset();
+                    m_oLastAnchorPos.reset();
             }
 
             if (m_xPreviousNode)
@@ -2687,7 +2687,7 @@ void SwWW8ImplReader::StopApo()
             if (rBrush.GetColor() != COL_AUTO)
                 aBg = rBrush.GetColor();
 
-            if (m_pLastAnchorPos)
+            if (m_oLastAnchorPos)
             {
                 //If the last anchor pos is here, then clear the anchor pos.
                 //This "last anchor pos" is only used for fixing up the
@@ -2696,10 +2696,10 @@ void SwWW8ImplReader::StopApo()
                 //cannot be a page break at this point so we can
                 //safely reset m_pLastAnchorPos to avoid any dangling
                 //SwContentIndex's pointing into the deleted paragraph
-                SwNodeIndex aLastAnchorPos(m_pLastAnchorPos->nNode);
+                SwNodeIndex aLastAnchorPos(m_oLastAnchorPos->nNode);
                 SwNodeIndex aToBeJoined(aPref, 1);
                 if (aLastAnchorPos == aToBeJoined)
-                    m_pLastAnchorPos.reset();
+                    m_oLastAnchorPos.reset();
             }
 
             //Get rid of extra empty paragraph

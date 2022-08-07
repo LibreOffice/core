@@ -393,23 +393,22 @@ void SwView::GetState(SfxItemSet &rSet)
                         // TODO: adjust this for column selections, where the selected columns
                         // don't contain any redlines and any tracked row changes, but the
                         // adjacent not selected columns do to avoid false Enable
-                        std::unique_ptr<SwPosition> pSelectionEnd;
+                        std::optional<SwPosition> oSelectionEnd;
                         if ( m_pWrtShell->IsTableMode() &&
                                             m_pWrtShell->GetTableCursor()->GetSelectedBoxesCount() )
                         {
                             const SwSelBoxes& rBoxes = m_pWrtShell->GetTableCursor()->GetSelectedBoxes();
                             const SwStartNode *pSttNd = rBoxes.back()->GetSttNd();
                             const SwNode* pEndNode = pSttNd->GetNodes()[pSttNd->EndOfSectionIndex()];
-                            pSelectionEnd.reset(new SwPosition(*pEndNode));
+                            oSelectionEnd.emplace(*pEndNode);
                         }
                         else
-                            pSelectionEnd.reset(
-                                new SwPosition(pCursor->End()->nNode, pCursor->End()->nContent));
+                            oSelectionEnd.emplace(pCursor->End()->nNode, pCursor->End()->nContent);
 
                         for(; index < table.size(); ++index )
                         {
                             const SwRangeRedline* tmp = table[ index ];
-                            if( *tmp->Start() >= *pSelectionEnd )
+                            if( *tmp->Start() >= *oSelectionEnd )
                                 break;
                             if( tmp->HasMark() && tmp->IsVisible())
                             {

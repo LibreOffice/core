@@ -199,12 +199,12 @@ sal_uInt16 SwWW8ImplReader::End_Footnote()
         sChar += OUStringChar(pText->GetText()[--nPos]);
         m_pPaM->SetMark();
         --m_pPaM->GetMark()->nContent;
-        std::shared_ptr<SwUnoCursor> xLastAnchorCursor(m_pLastAnchorPos ? m_rDoc.CreateUnoCursor(*m_pLastAnchorPos) : nullptr);
-        m_pLastAnchorPos.reset();
+        std::shared_ptr<SwUnoCursor> xLastAnchorCursor(m_oLastAnchorPos ? m_rDoc.CreateUnoCursor(*m_oLastAnchorPos) : nullptr);
+        m_oLastAnchorPos.reset();
         m_rDoc.getIDocumentContentOperations().DeleteRange( *m_pPaM );
         m_pPaM->DeleteMark();
         if (xLastAnchorCursor)
-            m_pLastAnchorPos.reset(new SwPosition(*xLastAnchorCursor->GetPoint()));
+            m_oLastAnchorPos.emplace(*xLastAnchorCursor->GetPoint());
         SwFormatFootnote aFootnote(rDesc.meType == MAN_EDN);
         pFN = static_cast<SwTextFootnote*>(pText->InsertItem(aFootnote, nPos, nPos));
     }
@@ -2760,15 +2760,15 @@ void WW8TabDesc::FinishSwTable()
 
     // ofz#38011 drop m_pLastAnchorPos during RedlineStack dtor and restore it afterwards to the same
     // place, or somewhere close if that place got destroyed
-    std::shared_ptr<SwUnoCursor> xLastAnchorCursor(m_pIo->m_pLastAnchorPos ? m_pIo->m_rDoc.CreateUnoCursor(*m_pIo->m_pLastAnchorPos) : nullptr);
-    m_pIo->m_pLastAnchorPos.reset();
+    std::shared_ptr<SwUnoCursor> xLastAnchorCursor(m_pIo->m_oLastAnchorPos ? m_pIo->m_rDoc.CreateUnoCursor(*m_pIo->m_oLastAnchorPos) : nullptr);
+    m_pIo->m_oLastAnchorPos.reset();
 
     SwTableNode* pTableNode = m_pTable->GetTableNode();
     SwDeleteListener aListener(*pTableNode);
     m_pIo->m_xRedlineStack = std::move(mxOldRedlineStack);
 
     if (xLastAnchorCursor)
-        m_pIo->m_pLastAnchorPos.reset(new SwPosition(*xLastAnchorCursor->GetPoint()));
+        m_pIo->m_oLastAnchorPos.emplace(*xLastAnchorCursor->GetPoint());
 
     WW8DupProperties aDup(m_pIo->m_rDoc,m_pIo->m_xCtrlStck.get());
     m_pIo->m_xCtrlStck->SetAttr( *m_pIo->m_pPaM->GetPoint(), 0, false);

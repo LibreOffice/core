@@ -46,7 +46,7 @@ namespace sw::mark
                     "- creation of cross-reference bookmark with an illegal PaM that does not expand over exactly one whole paragraph.");
         if(rName.isEmpty())
             m_aName = MarkBase::GenerateNewName(rPrefix);
-        assert(!m_pPos2);
+        assert(!m_oPos2);
     }
 
     void CrossRefBookmark::SetMarkPos(const SwPosition& rNewPos)
