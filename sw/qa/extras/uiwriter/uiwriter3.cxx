@@ -4213,10 +4213,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf143244)
     // Without the fix in place, this test would have failed with
     // - Expected: Color: R:255 G:255 B:255 A:255
     // - Actual  : Color: R:190 G:227 B:211 A:0
-    CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(xCell, "BackColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0xbee3d3), getProperty<Color>(xCell, "BackColor"));
 
     xCell.set(xTextTable->getCellByName("A7"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(Color(0xdddddd), getProperty<Color>(xCell, "BackColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0xbee3d3), getProperty<Color>(xCell, "BackColor"));
 
     xCell.set(xTextTable->getCellByName("A8"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(xCell, "BackColor"));
@@ -4279,7 +4279,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf136715)
     xParaEnumAccess.set(xCell->getText(), uno::UNO_QUERY);
     xParaEnum.set(xParaEnumAccess->createEnumeration());
     xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xPara, "CharWeight"));
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(xPara, "CharWeight"));
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
 

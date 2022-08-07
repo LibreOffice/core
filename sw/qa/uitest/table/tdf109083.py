@@ -54,7 +54,7 @@ class tdf109083(UITestCase):
                     btncolor.executeAction("CLICK", tuple())
                     hex_custom = xDialog.getChild("hex_custom")
                     if i >= 2:
-                        self.assertEqual(get_state_as_dict(hex_custom)["Text"], "ffff00")
+                        self.assertEqual(get_state_as_dict(hex_custom)["Text"], "ffffff")
                     else:
                         self.assertEqual(get_state_as_dict(hex_custom)["Text"], "ffffff")
                 self.xUITest.executeCommand(".uno:GoRight")
