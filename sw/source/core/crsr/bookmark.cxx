@@ -268,15 +268,15 @@ namespace sw::mark
 {
     MarkBase::MarkBase(const SwPaM& aPaM,
         const OUString& rName)
-        : m_pPos1(new SwPosition(*(aPaM.GetPoint())))
+        : m_oPos1(*aPaM.GetPoint())
         , m_aName(rName)
     {
-        m_pPos1->SetMark(this);
-        lcl_FixPosition(*m_pPos1);
+        m_oPos1->SetMark(this);
+        lcl_FixPosition(*m_oPos1);
         if (aPaM.HasMark() && (*aPaM.GetMark() != *aPaM.GetPoint()))
         {
             MarkBase::SetOtherMarkPos(*(aPaM.GetMark()));
-            lcl_FixPosition(*m_pPos2);
+            lcl_FixPosition(*m_oPos2);
         }
     }
 
@@ -293,14 +293,14 @@ namespace sw::mark
 
     void MarkBase::SetMarkPos(const SwPosition& rNewPos)
     {
-        std::make_unique<SwPosition>(rNewPos).swap(m_pPos1);
-        m_pPos1->SetMark(this);
+        m_oPos1.emplace(rNewPos);
+        m_oPos1->SetMark(this);
     }
 
     void MarkBase::SetOtherMarkPos(const SwPosition& rNewPos)
     {
-        std::make_unique<SwPosition>(rNewPos).swap(m_pPos2);
-        m_pPos2->SetMark(this);
+        m_oPos2.emplace(rNewPos);
+        m_oPos2->SetMark(this);
     }
 
     OUString MarkBase::ToString( ) const
