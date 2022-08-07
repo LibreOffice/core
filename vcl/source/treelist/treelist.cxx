@@ -101,8 +101,6 @@ bool SvTreeList::IsEntryVisible( const SvListView* pView, SvTreeListEntry* pEntr
 
 sal_uInt16 SvTreeList::GetDepth( const SvTreeListEntry* pEntry ) const
 {
-    if (!pEntry)
-        return 0;
     DBG_ASSERT(pEntry && pEntry!=pRootItem.get(),"GetDepth:Bad Entry");
     sal_uInt16 nDepth = 0;
     while( pEntry && pEntry->pParent != pRootItem.get() )
@@ -1503,8 +1501,6 @@ SvTreeListEntries& SvTreeList::GetChildList( SvTreeListEntry* pParent )
 
 const SvTreeListEntry* SvTreeList::GetParent( const SvTreeListEntry* pEntry ) const
 {
-    if (!pEntry)
-        return nullptr;
     const SvTreeListEntry* pParent = pEntry->pParent;
     if (pParent == pRootItem.get())
         pParent = nullptr;
@@ -1513,8 +1509,6 @@ const SvTreeListEntry* SvTreeList::GetParent( const SvTreeListEntry* pEntry ) co
 
 SvTreeListEntry* SvTreeList::GetParent( SvTreeListEntry* pEntry )
 {
-    if (!pEntry)
-        return nullptr;
     SvTreeListEntry* pParent = pEntry->pParent;
     if (pParent == pRootItem.get())
         pParent = nullptr;
