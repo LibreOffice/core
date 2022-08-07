@@ -554,6 +554,13 @@ bool GraphicFormatDetector::checkGIF()
         && maFirstBytes[5] == 0x61)
     {
         maMetadata.mnFormat = GraphicFileFormat::GIF;
+        if (mbExtendedInfo)
+        {
+            sal_uInt16 nWidth = maFirstBytes[6] | (maFirstBytes[7] << 8);
+            sal_uInt16 nHeight = maFirstBytes[8] | (maFirstBytes[9] << 8);
+            maMetadata.maPixSize = Size(nWidth, nHeight);
+            maMetadata.mnBitsPerPixel = ((maFirstBytes[10] & 112) >> 4) + 1;
+        }
         return true;
     }
     return false;
