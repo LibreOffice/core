@@ -17,7 +17,6 @@
 #include <vcl/svapp.hxx>
 #include <docsh.hxx>
 #include <orcus/csv_parser.hpp>
-#include <utility>
 
 namespace {
 

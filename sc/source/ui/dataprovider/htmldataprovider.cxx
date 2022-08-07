@@ -20,7 +20,6 @@
 #include <libxml/xpath.h>
 
 #include <comphelper/string.hxx>
-#include <utility>
 
 namespace sc {
 

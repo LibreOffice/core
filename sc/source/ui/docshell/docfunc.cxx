@@ -109,7 +109,6 @@
 #include <config_features.h>
 
 #include <memory>
-#include <utility>
 #include <basic/basmgr.hxx>
 #include <set>
 #include <vector>
