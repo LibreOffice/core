@@ -129,8 +129,8 @@ void SwWrtShell::SelAll()
             LeaveBlockMode();
         SwMvContext aMvContext(this);
         bool bMoveTable = false;
-        std::unique_ptr<SwPosition> pStartPos;
-        std::unique_ptr<SwPosition> pEndPos;
+        std::optional<SwPosition> oStartPos;
+        std::optional<SwPosition> oEndPos;
         SwShellCursor* pTmpCursor = nullptr;
 
         // Query these early, before we move the cursor.
@@ -144,8 +144,8 @@ void SwWrtShell::SelAll()
             pTmpCursor = getShellCursor( false );
             if( pTmpCursor )
             {
-                pStartPos.reset(new SwPosition( *pTmpCursor->GetPoint() ));
-                pEndPos.reset(new SwPosition( *pTmpCursor->GetMark() ));
+                oStartPos.emplace( *pTmpCursor->GetPoint() );
+                oEndPos.emplace( *pTmpCursor->GetMark() );
             }
             Push();
             bool bIsFullSel = !MoveSection( GoCurrSection, fnSectionStart);
@@ -186,7 +186,7 @@ void SwWrtShell::SelAll()
             pDoc->SetPrepareSelAll();
         }
 
-        if( pStartPos )
+        if( oStartPos )
         {
             pTmpCursor = getShellCursor( false );
             if( pTmpCursor )
@@ -196,9 +196,9 @@ void SwWrtShell::SelAll()
                 // if the last selection was behind the first section or
                 // if the last selection was already the first section
                 // In this both cases we select to the end of document
-                if( ( *pTmpCursor->GetPoint() < *pEndPos ||
-                    ( *pStartPos == *pTmpCursor->GetMark() &&
-                      *pEndPos == *pTmpCursor->GetPoint() ) ) && !bNeedsExtendedSelectAll)
+                if( ( *pTmpCursor->GetPoint() < *oEndPos ||
+                    ( *oStartPos == *pTmpCursor->GetMark() &&
+                      *oEndPos == *pTmpCursor->GetPoint() ) ) && !bNeedsExtendedSelectAll)
                     SwCursorShell::SttEndDoc(false);
             }
         }
