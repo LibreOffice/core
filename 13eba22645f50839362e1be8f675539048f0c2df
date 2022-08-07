@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac2b7d7a_58a0a0b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-08-07T14:55:46Z",
+      "side": 1,
+      "message": "@Julien: very nice fix! ODT export/import works, as intended. During a DOCX round-trip, the 1 value is converted to 2.",
+      "revId": "13eba22645f50839362e1be8f675539048f0c2df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
