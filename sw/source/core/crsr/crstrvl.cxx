@@ -661,16 +661,16 @@ lcl_FindField(bool & o_rFound, SetGetExpFields const& rSrtLst,
         SwTextField const *const pTextField, SwPosition const& rPos,
         sal_Int32 const nContentOffset)
 {
-    std::unique_ptr<SetGetExpField> pSrch;
-    std::unique_ptr<SwContentIndex> pIndex;
+    std::optional<SetGetExpField> oSrch;
+    std::optional<SwContentIndex> oIndex;
     if (-1 == nContentOffset)
     {
-        pSrch.reset(new SetGetExpField(rPos.GetNode(), pTextField, &rPos.nContent));
+        oSrch.emplace(rPos.GetNode(), pTextField, &rPos.nContent);
     }
     else
     {
-        pIndex.reset(new SwContentIndex(rPos.GetNode().GetContentNode(), nContentOffset));
-        pSrch.reset(new SetGetExpField(rPos.GetNode(), pTextField, pIndex.get()));
+        oIndex.emplace(rPos.GetNode().GetContentNode(), nContentOffset);
+        oSrch.emplace(rPos.GetNode(), pTextField, &*oIndex);
     }
 
     if (rPos.GetNodeIndex() < pTextNode->GetNodes().GetEndOfExtras().GetIndex())
@@ -678,12 +678,12 @@ lcl_FindField(bool & o_rFound, SetGetExpFields const& rSrtLst,
         // also at collection use only the first frame
         Point aPt;
         std::pair<Point, bool> const tmp(aPt, false);
-        pSrch->SetBodyPos(*pTextNode->getLayoutFrame(pLayout, &rPos, &tmp));
+        oSrch->SetBodyPos(*pTextNode->getLayoutFrame(pLayout, &rPos, &tmp));
     }
 
-    SetGetExpFields::const_iterator it = rSrtLst.lower_bound(pSrch.get());
+    SetGetExpFields::const_iterator it = rSrtLst.lower_bound(&*oSrch);
 
-    o_rFound = (it != rSrtLst.end()) && (**it == *pSrch);
+    o_rFound = (it != rSrtLst.end()) && (**it == *oSrch);
     return it;
 }
 
