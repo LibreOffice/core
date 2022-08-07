@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30e2095a_ad7d910b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-08-07T09:20:49Z",
+      "side": 1,
+      "message": "Since it concerns above above all use of libs, I\u0027ll trust you about this.",
+      "revId": "3ef4d50add24fbfad34c757e53af816c669202d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
