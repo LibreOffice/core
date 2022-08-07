@@ -25,10 +25,10 @@
 #include <svl/itemset.hxx>
 #include <editeng/svxacorr.hxx>
 #include <nodeoffset.hxx>
+#include <ndindex.hxx>
 
 class SwEditShell;
 class SwPaM;
-class SwNodeIndex;
 struct SwPosition;
 class SfxItemSet;
 
@@ -49,7 +49,7 @@ class SwAutoCorrDoc final : public SvxAutoCorrDoc
 {
     SwEditShell& m_rEditSh;
     SwPaM& m_rCursor;
-    std::unique_ptr<SwNodeIndex> m_pIndex;
+    std::optional<SwNodeIndex> m_oIndex;
     int m_nEndUndoCounter;
     bool    m_bUndoIdInitialized;
 
