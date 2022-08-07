@@ -1403,7 +1403,7 @@ private:
     // used for some dropcap tweaking
     std::unique_ptr<TextNodeListener> m_xPreviousNode;
 
-    std::unique_ptr< SwPosition > m_pLastAnchorPos;
+    std::optional< SwPosition > m_oLastAnchorPos;
 
     bool m_bCareFirstParaEndInToc;
     bool m_bCareLastParaEndInToc;
