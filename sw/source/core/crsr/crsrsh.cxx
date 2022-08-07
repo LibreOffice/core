@@ -1601,7 +1601,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
     // then the table mode is active (also if it is already active: m_pTableCursor)
     SwPaM* pTstCursor = getShellCursor( true );
     if( pTstCursor->HasMark() && !m_pBlockCursor &&
-        mxDoc->IsIdxInTable( pTstCursor->GetPoint()->nNode ) &&
+        SwDoc::IsIdxInTable( pTstCursor->GetPoint()->nNode ) &&
           ( m_pTableCursor ||
             pTstCursor->GetNode().StartOfSectionNode() !=
             pTstCursor->GetNode( false ).StartOfSectionNode() ) && !mbSelectAll)

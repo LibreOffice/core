@@ -966,7 +966,7 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
         for(SwPaM& rPaM : GetCursor()->GetRingContainer())
         {
 
-            SwTableNode *const pDestNd(GetDoc()->IsIdxInTable(rPaM.GetPoint()->nNode));
+            SwTableNode *const pDestNd(SwDoc::IsIdxInTable(rPaM.GetPoint()->nNode));
             if (pSrcNd && nullptr != pDestNd &&
                 // not a forced nested table insertion
                 !bNestedTable &&

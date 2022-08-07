@@ -151,7 +151,7 @@ bool SwEditShell::TableToText( sal_Unicode cCh )
     SwWait aWait( *GetDoc()->GetDocShell(), true );
     SwPaM* pCursor = GetCursor();
     const SwTableNode* pTableNd =
-            GetDoc()->IsIdxInTable( pCursor->GetPoint()->nNode );
+            SwDoc::IsIdxInTable( pCursor->GetPoint()->nNode );
     if (!pTableNd)
         return false;
 

@@ -707,7 +707,7 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwNodeIndex& rSttBox,
 
     SwDoc* pDoc = GetFrameFormat()->GetDoc();
 
-    SwTableNode* pTableNd = pDoc->IsIdxInTable( rSttBox );
+    SwTableNode* pTableNd = SwDoc::IsIdxInTable( rSttBox );
 
     // Find the Box, to which should be copied:
     SwTableBox* pMyBox = GetTableBox(
