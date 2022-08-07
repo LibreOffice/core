@@ -89,7 +89,7 @@ namespace {
 class XTextRangeOrNodeIndexPosition
 {
     Reference<XTextRange> m_xRange;
-    std::unique_ptr<SwNodeIndex> m_pIndex;    // pIndex will point to the *previous* node
+    std::optional<SwNodeIndex> m_oIndex;    // pIndex will point to the *previous* node
 
 public:
     XTextRangeOrNodeIndexPosition();
@@ -113,13 +113,13 @@ XTextRangeOrNodeIndexPosition::XTextRangeOrNodeIndexPosition()
 void XTextRangeOrNodeIndexPosition::Set( Reference<XTextRange> const & rRange )
 {
     m_xRange = rRange->getStart();    // set bookmark
-    m_pIndex.reset();
+    m_oIndex.reset();
 }
 
 void XTextRangeOrNodeIndexPosition::Set( SwNodeIndex const & rIndex )
 {
-    m_pIndex.reset( new SwNodeIndex(rIndex) );
-    (*m_pIndex)-- ;   // previous node!!!
+    m_oIndex = rIndex;
+    (*m_oIndex)-- ;   // previous node!!!
     m_xRange = nullptr;
 }
 
@@ -150,7 +150,7 @@ XTextRangeOrNodeIndexPosition::CopyPositionInto(SwPosition& rPos, SwDoc & rDoc)
     OSL_ENSURE(IsValid(), "Can't get Position");
 
     // create PAM from start cursor (if no node index is present)
-    if (nullptr == m_pIndex)
+    if (!m_oIndex.has_value())
     {
         SwUnoInternalPaM aUnoPaM(rDoc);
         bool bSuccess = ::sw::XTextRangeToSwPaM(aUnoPaM, m_xRange);
@@ -160,7 +160,7 @@ XTextRangeOrNodeIndexPosition::CopyPositionInto(SwPosition& rPos, SwDoc & rDoc)
     }
     else
     {
-        rPos.Assign( m_pIndex->GetNode(), SwNodeOffset(1) ); // pIndex points to previous index !!!
+        rPos.Assign( m_oIndex->GetNode(), SwNodeOffset(1) ); // pIndex points to previous index !!!
     }
 }
 
@@ -168,12 +168,12 @@ SwDoc* XTextRangeOrNodeIndexPosition::GetDoc()
 {
     OSL_ENSURE(IsValid(), "Can't get Doc");
 
-    return (nullptr != m_pIndex) ? &m_pIndex->GetNodes().GetDoc() : lcl_GetDocViaTunnel(m_xRange);
+    return m_oIndex.has_value() ? &m_oIndex->GetNodes().GetDoc() : lcl_GetDocViaTunnel(m_xRange);
 }
 
 bool XTextRangeOrNodeIndexPosition::IsValid() const
 {
-    return ( m_xRange.is() || (m_pIndex != nullptr) );
+    return m_xRange.is() || m_oIndex.has_value();
 }
 
 // RedlineInfo: temporary storage for redline data
