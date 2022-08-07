@@ -426,7 +426,7 @@ bool SwWrtShell::DelRight(bool const isReplaceHeuristic)
             Point aTmpPt = GetObjRect().TopLeft();
 
             // Remember the anchor of the selected object before deletion.
-            std::unique_ptr<SwPosition> pAnchor;
+            std::optional<SwPosition> oAnchor;
             RndStdIds eAnchorId = RndStdIds::FLY_AT_PARA;
             SwFlyFrame* pFly = GetSelectedFlyFrame();
             SwFrameFormat* pFormat = nullptr;
@@ -450,16 +450,16 @@ bool SwWrtShell::DelRight(bool const isReplaceHeuristic)
                     if ((eAnchorId == RndStdIds::FLY_AS_CHAR || eAnchorId == RndStdIds::FLY_AT_CHAR)
                         && pFormat->GetAnchor().GetContentAnchor())
                     {
-                        pAnchor.reset(new SwPosition(*pFormat->GetAnchor().GetContentAnchor()));
+                        oAnchor.emplace(*pFormat->GetAnchor().GetContentAnchor());
                         // set cursor before the anchor point
                         if ( IsRedlineOn() )
-                            *GetCurrentShellCursor().GetPoint() = *pAnchor;
+                            *GetCurrentShellCursor().GetPoint() = *oAnchor;
                     }
                 }
             }
 
             // track changes: create redline at anchor point of the image to record the deletion
-            if ( IsRedlineOn() && pAnchor && SelectionType::Graphic & nSelection && pFormat &&
+            if ( IsRedlineOn() && oAnchor && SelectionType::Graphic & nSelection && pFormat &&
                     ( eAnchorId == RndStdIds::FLY_AT_CHAR || eAnchorId == RndStdIds::FLY_AS_CHAR ) )
             {
                 sal_Int32 nRedlineLength = 1;
@@ -490,18 +490,18 @@ bool SwWrtShell::DelRight(bool const isReplaceHeuristic)
             else
                 DelSelectedObj();
 
-            if (pAnchor)
+            if (oAnchor)
             {
-                SwTextNode* pTextNode = pAnchor->GetNode().GetTextNode();
+                SwTextNode* pTextNode = oAnchor->GetNode().GetTextNode();
                 if (pTextNode)
                 {
                     const SwTextField* pField(
-                        pTextNode->GetFieldTextAttrAt(pAnchor->GetContentIndex(), true));
+                        pTextNode->GetFieldTextAttrAt(oAnchor->GetContentIndex(), true));
                     if (pField
                         && dynamic_cast<const SwPostItField*>(pField->GetFormatField().GetField()))
                     {
                         // Remove the comment of the deleted object.
-                        *GetCurrentShellCursor().GetPoint() = *pAnchor;
+                        *GetCurrentShellCursor().GetPoint() = *oAnchor;
                         DelRight();
                     }
                 }
