@@ -281,9 +281,9 @@ SaveRedlEndPosForRestore::SaveRedlEndPosForRestore( const SwNodeIndex& rInsIdx, 
           && *( pEnd = ( pRedl = rDest.getIDocumentRedlineAccess().GetRedlineTable()[ nFndPos ] )->End() ) == aSrcPos
           && *pRedl->Start() < aSrcPos )
     {
-        if( !mpSaveIndex )
+        if( !moSaveIndex )
         {
-            mpSaveIndex.reset(new SwNodeIndex( rInsIdx, -1 ));
+            moSaveIndex.emplace( rInsIdx, -1 );
         }
         mvSavArr.push_back( const_cast<SwPosition*>(pEnd) );
     }
@@ -291,20 +291,20 @@ SaveRedlEndPosForRestore::SaveRedlEndPosForRestore( const SwNodeIndex& rInsIdx, 
 
 SaveRedlEndPosForRestore::~SaveRedlEndPosForRestore()
 {
-    mpSaveIndex.reset();
+    moSaveIndex.reset();
 }
 
 void SaveRedlEndPosForRestore::Restore()
 {
     if (mvSavArr.empty())
         return;
-    ++(*mpSaveIndex);
-    SwContentNode* pNode = mpSaveIndex->GetNode().GetContentNode();
+    ++(*moSaveIndex);
+    SwContentNode* pNode = moSaveIndex->GetNode().GetContentNode();
     // If there's no content node at the remembered position, we will not restore the old position
     // This may happen if a table (or section?) will be inserted.
     if( pNode )
     {
-        SwPosition aPos( *mpSaveIndex, pNode, mnSaveContent );
+        SwPosition aPos( *moSaveIndex, pNode, mnSaveContent );
         for( auto n = mvSavArr.size(); n; )
             *mvSavArr[ --n ] = aPos;
     }
