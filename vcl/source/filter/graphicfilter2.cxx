@@ -954,12 +954,15 @@ bool GraphicDescriptor::ImpDetectEPS( SvStream& rStm, bool )
     return bRet;
 }
 
-bool GraphicDescriptor::ImpDetectDXF( SvStream&, bool )
+bool GraphicDescriptor::ImpDetectDXF( SvStream& rStm, bool )
 {
-    bool bRet = aPathExt.startsWith( "dxf" );
-    if (bRet)
-        aMetadata.mnFormat = GraphicFileFormat::DXF;
-
+    sal_Int32 nStmPos = rStm.Tell();
+    vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /*bExtendedInfo*/ );
+    bool bRet = aDetector.detect();
+    bRet &= aDetector.checkDXF();
+    if ( bRet )
+        aMetadata = aDetector.getMetadata();
+    rStm.Seek( nStmPos );
     return bRet;
 }
 
