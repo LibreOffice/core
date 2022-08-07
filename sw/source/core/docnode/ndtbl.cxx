@@ -3804,10 +3804,11 @@ bool SwDoc::SetTableAutoFormat(const SwSelBoxes& rBoxes, const SwTableAutoFormat
         aPara.nCurBox = 0;
         aPara.nEndBox = pLine->GetBoxes().size()-1;
         aPara.pUndo = pUndo;
-        for (auto const& it : pLine->GetBoxes())
+        // tdf#126008 don't update formats on insert
+        /* for (auto const& it : pLine->GetBoxes())
         {
             lcl_SetAFormatBox(*it, &aPara, bResetDirect);
-        }
+        }*/
 
         pLine->SetUpper( pSaveBox );
     }
