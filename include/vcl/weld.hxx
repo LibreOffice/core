@@ -2517,6 +2517,9 @@ public:
     virtual int adjustment_get_lower() const = 0;
     virtual void adjustment_set_lower(int upper) = 0;
 
+    virtual int get_scroll_thickness() const = 0;
+    virtual void set_scroll_thickness(int nThickness) = 0;
+
     virtual ScrollType get_scroll_type() const = 0;
 
     void connect_adjustment_changed(const Link<Scrollbar&, void>& rLink) { m_aChangeHdl = rLink; }

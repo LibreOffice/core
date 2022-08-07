@@ -2554,6 +2554,21 @@ public:
     }
 
     virtual ScrollType get_scroll_type() const override { return m_xScrollBar->GetType(); }
+
+    virtual int get_scroll_thickness() const override
+    {
+        if (m_xScrollBar->GetStyle() & WB_HORZ)
+            return m_xScrollBar->get_preferred_size().Height();
+        return m_xScrollBar->get_preferred_size().Width();
+    }
+
+    virtual void set_scroll_thickness(int nThickness) override
+    {
+        if (m_xScrollBar->GetStyle() & WB_HORZ)
+            m_xScrollBar->set_height_request(nThickness);
+        else
+            m_xScrollBar->set_width_request(nThickness);
+    }
 };
 }
 

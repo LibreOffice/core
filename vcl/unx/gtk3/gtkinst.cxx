@@ -8411,6 +8411,7 @@ class GtkInstanceScrollbar final : public GtkInstanceWidget, public virtual weld
 private:
     GtkScrollbar* m_pScrollbar;
     GtkAdjustment* m_pAdjustment;
+    GtkCssProvider* m_pThicknessCssProvider;
     gulong m_nAdjustChangedSignalId;
 
     static void signalAdjustValueChanged(GtkAdjustment*, gpointer widget)
@@ -8456,6 +8457,7 @@ public:
 #else
         , m_pAdjustment(gtk_range_get_adjustment(GTK_RANGE(m_pScrollbar)))
 #endif
+        , m_pThicknessCssProvider(nullptr)
         , m_nAdjustChangedSignalId(g_signal_connect(m_pAdjustment, "value-changed", G_CALLBACK(signalAdjustValueChanged), this))
     {
 #if GTK_CHECK_VERSION(4, 0, 0)
@@ -8560,9 +8562,45 @@ public:
         return ScrollType::Drag;
     }
 
+    virtual int get_scroll_thickness() const override
+    {
+        if (gtk_orientable_get_orientation(GTK_ORIENTABLE(m_pScrollbar)) == GTK_ORIENTATION_HORIZONTAL)
+            return gtk_widget_get_allocated_height(GTK_WIDGET(m_pScrollbar));
+        return gtk_widget_get_allocated_width(GTK_WIDGET(m_pScrollbar));
+    }
+
+    virtual void set_scroll_thickness(int nThickness) override
+    {
+        GtkStyleContext *pStyleContext = gtk_widget_get_style_context(GTK_WIDGET(m_pScrollbar));
+
+        if (m_pThicknessCssProvider)
+        {
+            gtk_style_context_remove_provider(pStyleContext, GTK_STYLE_PROVIDER(m_pThicknessCssProvider));
+            m_pThicknessCssProvider = nullptr;
+        }
+
+        m_pThicknessCssProvider = gtk_css_provider_new();
+        int nSlider = nThickness > 6 ? nThickness - 6 : 1;
+        const OString sData = "slider { min-height: " + OString::number(nSlider) + "px;"
+                                      " min-width: " + OString::number(nSlider) + "px; }";
+        css_provider_load_from_data(m_pThicknessCssProvider, sData.getStr(), sData.getLength());
+        gtk_style_context_add_provider(pStyleContext, GTK_STYLE_PROVIDER(m_pThicknessCssProvider),
+                                       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+
+        if (gtk_orientable_get_orientation(GTK_ORIENTABLE(m_pScrollbar)) == GTK_ORIENTATION_HORIZONTAL)
+            gtk_widget_set_size_request(GTK_WIDGET(m_pScrollbar), -1, nThickness);
+        else
+            gtk_widget_set_size_request(GTK_WIDGET(m_pScrollbar), nThickness, -1);
+    }
+
     virtual ~GtkInstanceScrollbar() override
     {
         g_signal_handler_disconnect(m_pAdjustment, m_nAdjustChangedSignalId);
+        if (m_pThicknessCssProvider)
+        {
+            GtkStyleContext *pStyleContext = gtk_widget_get_style_context(GTK_WIDGET(m_pScrollbar));
+            gtk_style_context_remove_provider(pStyleContext, GTK_STYLE_PROVIDER(m_pThicknessCssProvider));
+        }
     }
 };
 
