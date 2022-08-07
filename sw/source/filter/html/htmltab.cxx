@@ -2835,7 +2835,7 @@ class CellSaveStruct : public SectionSaveStruct
 
     std::shared_ptr<HTMLTableCnts> m_xCnts;              // List of all contents
     HTMLTableCnts* m_pCurrCnts;                          // current content or 0
-    std::unique_ptr<SwNodeIndex> m_pNoBreakEndNodeIndex; // Paragraph index of a <NOBR>
+    std::optional<SwNodeIndex> m_oNoBreakEndNodeIndex; // Paragraph index of a <NOBR>
 
     double m_nValue;
 
@@ -3100,7 +3100,7 @@ void CellSaveStruct::EndNoBreak( const SwPosition& rPos )
 {
     if( m_bNoBreak )
     {
-        m_pNoBreakEndNodeIndex.reset( new SwNodeIndex( rPos.nNode ) );
+        m_oNoBreakEndNodeIndex.emplace( rPos.nNode );
         m_nNoBreakEndContentPos = rPos.GetContentIndex();
         m_bNoBreak = false;
     }
@@ -3116,8 +3116,8 @@ void CellSaveStruct::CheckNoBreak( const SwPosition& rPos )
         // <NOBR> wasn't closed
         m_xCnts->SetNoBreak();
     }
-    else if( m_pNoBreakEndNodeIndex &&
-             m_pNoBreakEndNodeIndex->GetIndex() == rPos.GetNodeIndex() )
+    else if( m_oNoBreakEndNodeIndex &&
+             m_oNoBreakEndNodeIndex->GetIndex() == rPos.GetNodeIndex() )
     {
         if( m_nNoBreakEndContentPos == rPos.GetContentIndex() )
         {
