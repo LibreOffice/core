@@ -567,7 +567,7 @@ class WW8FieldEntry
         WW8FieldEntry &operator=(const WW8FieldEntry &rOther) noexcept;
         void Swap(WW8FieldEntry &rOther) noexcept;
 
-        SwNodeIndex GetPtNode() const { return maStartPos.GetPtNode(); };
+        const SwNodeIndex& GetPtNode() const { return maStartPos.GetPtNode(); };
         sal_Int32 GetPtContent() const { return maStartPos.GetPtContent(); };
 
         const OUString& GetBookmarkName() const { return msBookmarkName;}
