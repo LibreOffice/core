@@ -1475,7 +1475,7 @@ public:
     void SetDumpAsPropertyTreeHdl(const Link<tools::JsonWriter&, void>& rLink);
 
     Size                        GetSize() const;
-    tools::Rectangle            GetOutputRectPixel() const;
+    tools::Rectangle            GetFrameRect() const;
 
     Point                       LogicToPixel( const Point& rLogicPt ) const;
     Size                        LogicToPixel( const Size& rLogicSize ) const;
@@ -1513,8 +1513,7 @@ public:
                                              TextRectInfo* pInfo = nullptr,
                                              const vcl::ITextLayout* _pTextLayout = nullptr ) const;
     float                       GetDPIScaleFactor() const;
-    tools::Long                 GetOutOffXPixel() const;
-    tools::Long                 GetOutOffYPixel() const;
+    Point GetFrameOffset() const;
 
     void                        EnableMapMode( bool bEnable = true );
     bool                        IsMapModeEnabled() const;

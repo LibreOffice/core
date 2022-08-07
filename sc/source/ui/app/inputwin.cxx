@@ -439,7 +439,7 @@ void ScInputWindow::PixelInvalidate(const tools::Rectangle* pRectangle)
     if (pRectangle)
     {
         tools::Rectangle aRect(*pRectangle);
-        aRect.Move(-GetOutOffXPixel(), -GetOutOffYPixel());
+        aRect.Move(-GetFrameOffset().X(), -GetFrameOffset().Y());
         Window::PixelInvalidate(&aRect);
     }
     else

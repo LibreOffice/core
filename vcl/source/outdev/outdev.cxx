@@ -451,7 +451,7 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
                            ImplLogicXToDevicePixel(rDestPt.X()), ImplLogicYToDevicePixel(rDestPt.Y()),
                            nDestWidth, nDestHeight);
 
-        AdjustTwoRect( aPosAry, GetOutputRectPixel() );
+        AdjustTwoRect( aPosAry, GetFrameRect() );
 
         if ( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
             mpGraphics->CopyBits(aPosAry, *this);
@@ -557,7 +557,7 @@ void OutputDevice::CopyArea( const Point& rDestPt,
                            ImplLogicXToDevicePixel(rDestPt.X()), ImplLogicYToDevicePixel(rDestPt.Y()),
                            nSrcWidth, nSrcHeight);
 
-        AdjustTwoRect( aPosAry, GetOutputRectPixel() );
+        AdjustTwoRect( aPosAry, GetFrameRect() );
 
         CopyDeviceArea( aPosAry, bWindowInvalidate );
     }
@@ -599,7 +599,7 @@ void OutputDevice::drawOutDevDirect(const OutputDevice& rSrcDev, SalTwoRect& rPo
 
     // #102532# Offset only has to be pseudo window offset
 
-    AdjustTwoRect( rPosAry, rSrcDev.GetOutputRectPixel() );
+    AdjustTwoRect( rPosAry, rSrcDev.GetFrameRect() );
 
     if ( rPosAry.mnSrcWidth && rPosAry.mnSrcHeight && rPosAry.mnDestWidth && rPosAry.mnDestHeight )
     {

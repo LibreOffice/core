@@ -219,7 +219,7 @@ void Window::ImplCalcToTop( ImplCalcToTopData* pPrevData )
         return;
 
     // calculate region, where the window overlaps with other windows
-    vcl::Region  aRegion( GetOutputRectPixel() );
+    vcl::Region  aRegion( GetFrameRect() );
     vcl::Region  aInvalidateRegion;
     ImplCalcOverlapRegionOverlaps( aRegion, aInvalidateRegion );
 
@@ -554,7 +554,7 @@ void Window::SetZOrder( vcl::Window* pRefWindow, ZOrderFlags nFlags )
 
     // Invalidate all windows which are next to each other
     // Is INCOMPLETE !!!
-    tools::Rectangle   aWinRect = GetOutputRectPixel();
+    tools::Rectangle   aWinRect = GetFrameRect();
     vcl::Window*     pWindow = nullptr;
     if ( ImplIsOverlapWindow() )
     {
@@ -568,7 +568,7 @@ void Window::SetZOrder( vcl::Window* pRefWindow, ZOrderFlags nFlags )
     {
         if ( pWindow == this )
             break;
-        tools::Rectangle aCompRect = pWindow->GetOutputRectPixel();
+        tools::Rectangle aCompRect = pWindow->GetFrameRect();
         if ( aWinRect.Overlaps( aCompRect ) )
             pWindow->Invalidate( InvalidateFlags::Children | InvalidateFlags::NoTransparent );
         pWindow = pWindow->mpWindowImpl->mpNext;
@@ -580,7 +580,7 @@ void Window::SetZOrder( vcl::Window* pRefWindow, ZOrderFlags nFlags )
     {
         if ( pWindow != this )
         {
-            tools::Rectangle aCompRect = pWindow->GetOutputRectPixel();
+            tools::Rectangle aCompRect = pWindow->GetFrameRect();
             if ( aWinRect.Overlaps( aCompRect ) )
             {
                 Invalidate( InvalidateFlags::Children | InvalidateFlags::NoTransparent );

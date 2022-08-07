@@ -792,8 +792,8 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                         // mbNegativeX is set only for Calc in RTL mode.
                         // If global RTL flag is set, vcl-window X offset of chart window is
                         // mirrored w.r.t parent window rectangle. This needs to be reverted.
-                        aOffsetPx.setX(pViewShellWindow->GetOutOffXPixel() + pViewShellWindow->GetSizePixel().Width()
-                            - pWin->GetOutOffXPixel() - pWin->GetSizePixel().Width());
+                        aOffsetPx.setX(pViewShellWindow->GetFrameOffset().X() + pViewShellWindow->GetSizePixel().Width()
+                            - pWin->GetFrameOffset().X() - pWin->GetSizePixel().Width());
                     }
                     Point aLogicOffset = pWin->PixelToLogic(aOffsetPx);
                     addLogicOffset = aLogicOffset;

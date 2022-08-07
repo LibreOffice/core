@@ -287,7 +287,7 @@ static void lcl_translateTwips(const OutputDevice& rParent, OutputDevice& rChild
         return;
 
     // Set map mode, so that callback payloads will contain absolute coordinates instead of relative ones.
-    Point aOffset(rChild.GetOutOffXPixel() - rParent.GetOutOffXPixel(), rChild.GetOutOffYPixel() - rParent.GetOutOffYPixel());
+    Point aOffset(rChild.GetFrameOffset().X() - rParent.GetFrameOffset().X(), rChild.GetFrameOffset().Y() - rParent.GetFrameOffset().Y());
     if (!rChild.IsMapModeEnabled())
     {
         MapMode aMapMode(rChild.GetMapMode());
@@ -326,8 +326,8 @@ void ImpEditView::lokSelectionCallback(const std::optional<tools::PolyPolygon> &
 
     if (pParent && pParent->GetLOKWindowId() != 0)
     {
-        const tools::Long nX = pOutWin->GetOutOffXPixel() - pParent->GetOutOffXPixel();
-        const tools::Long nY = pOutWin->GetOutOffYPixel() - pParent->GetOutOffYPixel();
+        const tools::Long nX = pOutWin->GetFrameOffset().X() - pParent->GetFrameOffset().X();
+        const tools::Long nY = pOutWin->GetFrameOffset().Y() - pParent->GetFrameOffset().Y();
 
         std::vector<tools::Rectangle> aRectangles;
         aRegion.GetRegionRectangles(aRectangles);
@@ -357,8 +357,8 @@ void ImpEditView::lokSelectionCallback(const std::optional<tools::PolyPolygon> &
             // on top of us to use its offset.
             vcl::Window* parent = pOutWin->GetParent();
             while (parent &&
-                    parent->GetOutOffXPixel() == pOutWin->GetOutOffXPixel() &&
-                    parent->GetOutOffYPixel() == pOutWin->GetOutOffYPixel())
+                    parent->GetFrameOffset().X() == pOutWin->GetFrameOffset().X() &&
+                    parent->GetFrameOffset().Y() == pOutWin->GetFrameOffset().Y())
             {
                 parent = parent->GetParent();
             }
