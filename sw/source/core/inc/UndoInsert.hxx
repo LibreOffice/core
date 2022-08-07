@@ -41,7 +41,7 @@ enum class MirrorGraph;
 class SwUndoInsert final : public SwUndo, private SwUndoSaveContent
 {
     /// start of Content in UndoNodes for Redo
-    std::unique_ptr<SwNodeIndex> m_pUndoNodeIndex;
+    std::optional<SwNodeIndex> m_oUndoNodeIndex;
     std::optional<OUString> maText;
     std::optional<OUString> maUndoText;
     std::unique_ptr<SwRedlineData> m_pRedlData;
