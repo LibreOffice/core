@@ -311,7 +311,7 @@ void SwBreakDashedLine::execute(std::string_view rIdent)
             rSh.Push( );
             rSh.ClearMark();
 
-            rSh.SetSelection( rNd );
+            rSh.SetSelection( SwPaM(rNd) );
 
             SfxStringItem aItem(m_pEditWin->GetView().GetPool().GetWhich(FN_FORMAT_TABLE_DLG), "textflow");
             m_pEditWin->GetView().GetViewFrame()->GetDispatcher()->ExecuteList(

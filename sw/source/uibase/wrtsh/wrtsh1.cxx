@@ -1270,7 +1270,7 @@ static bool lcl_FoldedOutlineNodeEndOfParaSplit(SwWrtShell *pThis)
                 pDoc->GetIDocumentUndoRedo().ClearRedo();
                 pDoc->GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoInsert>(SwNodeIndex(*pNd)));
                 pDoc->GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoFormatColl>
-                                                        (*pNd, pNd->GetTextColl(), true, true));
+                                                        (SwPaM(*pNd), pNd->GetTextColl(), true, true));
             }
 
             pThis->SetModified();

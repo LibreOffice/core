@@ -203,9 +203,9 @@ public:
     SwPaM(  const SwNode& rMk, SwNodeOffset nMkOffset, sal_Int32 nMkContent,
             const SwNode& rPt, SwNodeOffset nPtOffset, sal_Int32 nPtContent, SwPaM* pRing = nullptr );
     SwPaM( const SwNode& rNd, SwNodeOffset nNdOffset, sal_Int32 nContent = 0, SwPaM* pRing = nullptr );
-    SwPaM( const SwNode& rNd, sal_Int32 nContent = 0, SwPaM* pRing = nullptr );
-    SwPaM( const SwNodeIndex& rNd, sal_Int32 nContent = 0, SwPaM* pRing = nullptr );
-    SwPaM( SwNodes& rNds, SwNodeOffset nMkOffset = SwNodeOffset(0), SwPaM* pRing = nullptr );
+    explicit SwPaM( const SwNode& rNd, sal_Int32 nContent = 0, SwPaM* pRing = nullptr );
+    explicit SwPaM( const SwNodeIndex& rNd, sal_Int32 nContent = 0, SwPaM* pRing = nullptr );
+    explicit SwPaM( SwNodes& rNds, SwNodeOffset nMkOffset = SwNodeOffset(0), SwPaM* pRing = nullptr );
     virtual ~SwPaM() override;
 
     /// this takes a second parameter, which indicates the Ring that
