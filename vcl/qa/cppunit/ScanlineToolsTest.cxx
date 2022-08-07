@@ -122,10 +122,10 @@ void ScanlineToolsTest::ScanlineTransformer_8bit_Palette()
 
     pScanlineTransformer->startLine(aScanLine.data());
 
-    for (size_t i = 0; i < aColors.size(); ++i)
+    for (Color const& rColor : aColors)
     {
         Color aColor = pScanlineTransformer->readPixel();
-        CPPUNIT_ASSERT_EQUAL(aColors[i], aColor);
+        CPPUNIT_ASSERT_EQUAL(rColor, aColor);
     }
 }
 
@@ -162,10 +162,10 @@ void ScanlineToolsTest::ScanlineTransformer_4bit_Palette()
 
     pScanlineTransformer->startLine(aScanLine.data());
 
-    for (size_t i = 0; i < aColors.size(); ++i)
+    for (Color const& rColor : aColors)
     {
         Color aColor = pScanlineTransformer->readPixel();
-        CPPUNIT_ASSERT_EQUAL(aColors[i], aColor);
+        CPPUNIT_ASSERT_EQUAL(rColor, aColor);
     }
 }
 
@@ -213,10 +213,10 @@ void ScanlineToolsTest::ScanlineTransformer_1bit_Palette()
         Color(110, 150, 70),
     };
 
-    for (size_t i = 0; i < aColors.size(); ++i)
+    for (Color const& rColor : aColorsExpected)
     {
         Color aColor = pScanlineTransformer->readPixel();
-        CPPUNIT_ASSERT_EQUAL(aColorsExpected[i], aColor);
+        CPPUNIT_ASSERT_EQUAL(rColor, aColor);
     }
 }
 
