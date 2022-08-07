@@ -217,41 +217,12 @@ bool GraphicDescriptor::ImpDetectBMP( SvStream& rStm, bool bExtendedInfo )
 
 bool GraphicDescriptor::ImpDetectGIF( SvStream& rStm, bool bExtendedInfo )
 {
-    sal_uInt32  n32 = 0;
-    bool    bRet = false;
-
     sal_Int32 nStmPos = rStm.Tell();
-    rStm.SetEndian( SvStreamEndian::LITTLE );
-    rStm.ReadUInt32( n32 );
-
-    if ( n32 == 0x38464947 )
-    {
-        sal_uInt16  n16 = 0;
-        rStm.ReadUInt16( n16 );
-        if ( ( n16 == 0x6137 ) || ( n16 == 0x6139 ) )
-        {
-            aMetadata.mnFormat = GraphicFileFormat::GIF;
-            bRet = true;
-
-            if ( bExtendedInfo )
-            {
-                sal_uInt16 nTemp16 = 0;
-                sal_uInt8  cByte = 0;
-
-                // Pixel width
-                rStm.ReadUInt16( nTemp16 );
-                aMetadata.maPixSize.setWidth( nTemp16 );
-
-                // Pixel height
-                rStm.ReadUInt16( nTemp16 );
-                aMetadata.maPixSize.setHeight( nTemp16 );
-
-                // Bits/Pixel
-                rStm.ReadUChar( cByte );
-                aMetadata.mnBitsPerPixel = ( ( cByte & 112 ) >> 4 ) + 1;
-            }
-        }
-    }
+    vcl::GraphicFormatDetector aDetector( rStm, aPathExt, bExtendedInfo );
+    bool bRet = aDetector.detect();
+    bRet &= aDetector.checkGIF();
+    if ( bRet )
+        aMetadata = aDetector.getMetadata();
     rStm.Seek( nStmPos );
     return bRet;
 }
