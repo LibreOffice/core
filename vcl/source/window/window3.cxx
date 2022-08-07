@@ -88,7 +88,7 @@ bool Window::GetNativeControlRegion(ControlType nType, ControlPart nPart,
 
 Size Window::GetSize() const { return GetOutDev()->GetSize(); }
 
-tools::Rectangle Window::GetOutputRectPixel() const { return GetOutDev()->GetOutputRectPixel(); }
+tools::Rectangle Window::GetFrameRect() const { return GetOutDev()->GetFrameRect(); }
 
 void Window::SetTextLineColor() { GetOutDev()->SetTextLineColor(); }
 void Window::SetTextLineColor(const Color& rColor) { GetOutDev()->SetTextLineColor(rColor); }
@@ -120,8 +120,7 @@ bool Window::IsOverlineColor() const { return GetOutDev()->IsOverlineColor(); }
 void Window::SetTextAlign(TextAlign eAlign) { GetOutDev()->SetTextAlign(eAlign); }
 
 float Window::GetDPIScaleFactor() const { return GetOutDev()->GetDPIScaleFactor(); }
-tools::Long Window::GetOutOffXPixel() const { return GetOutDev()->GetOutOffXPixel(); }
-tools::Long Window::GetOutOffYPixel() const { return GetOutDev()->GetOutOffYPixel(); }
+Point Window::GetFrameOffset() const { return GetOutDev()->GetFrameOffset(); }
 void Window::SetMapMode() { GetOutDev()->SetMapMode(); }
 void Window::SetMapMode(const MapMode& rNewMapMode) { GetOutDev()->SetMapMode(rNewMapMode); }
 bool Window::IsRTLEnabled() const { return GetOutDev()->IsRTLEnabled(); }

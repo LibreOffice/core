@@ -132,8 +132,8 @@ tools::Rectangle LokChartHelper::GetChartBoundingBox()
                     {
                         // If global RTL flag is set, vcl-window X offset of chart window is
                         // mirrored w.r.t parent window rectangle. This needs to be reverted.
-                        aOffset.setX(pRootWin->GetOutOffXPixel() + pRootWin->GetSizePixel().Width()
-                            - pWindow->GetOutOffXPixel() - pWindow->GetSizePixel().Width());
+                        aOffset.setX(pRootWin->GetFrameOffset().X() + pRootWin->GetSizePixel().Width()
+                            - pWindow->GetFrameOffset().X() - pWindow->GetSizePixel().Width());
 
                     }
 

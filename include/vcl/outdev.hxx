@@ -203,7 +203,6 @@ private:
     mutable tools::Long                    mnEmphasisDescent;
     DrawModeFlags                   mnDrawMode;
     vcl::text::ComplexTextLayoutFlags mnTextLayoutMode;
-    MappingMetrics                  maMapMetrics;
     const OutDevType                meOutDevType;
     OutDevViewType                  meOutDevViewType;
     vcl::Region                     maRegion;           // contains the clip region, see SetClipRegion(...)
@@ -301,12 +300,8 @@ public:
     tools::Long GetHeight() const { return maGeometry.GetHeight(); }
     void SetWidth(tools::Long nWidth) { maGeometry.SetWidth(nWidth); }
     void SetHeight(tools::Long nHeight) { maGeometry.SetHeight(nHeight); }
-    tools::Long                        GetOutOffXPixel() const { return maGeometry.GetXFrameOffset(); }
-    tools::Long                        GetOutOffYPixel() const { return maGeometry.GetYFrameOffset(); }
-    Point                       GetOutputOffPixel() const
-                                    { return Point( maGeometry.GetXFrameOffset(), maGeometry.GetYFrameOffset() ); }
-    tools::Rectangle            GetOutputRectPixel() const
-                                    { return tools::Rectangle(GetOutputOffPixel(), GetSize() ); }
+    Point GetFrameOffset() const { return maGeometry.GetFrameOffset(); }
+    tools::Rectangle GetFrameRect() const { return tools::Rectangle(GetFrameOffset(), GetSize() ); }
 
     Size                        GetOutputSize() const
                                     { return PixelToLogic( GetSize() ); }

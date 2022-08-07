@@ -307,7 +307,7 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
         return;
 
     {
-        Point aRelPt = aOutPt + Point(maGeometry.GetXFrameOffset(), maGeometry.GetYFrameOffset());
+        Point aRelPt = aOutPt + maGeometry.GetFrameOffset();
         SalTwoRect aTR(
             rSrcPtPixel.X(), rSrcPtPixel.Y(),
             rSrcSizePixel.Width(), rSrcSizePixel.Height(),

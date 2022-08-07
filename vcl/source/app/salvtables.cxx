@@ -1426,13 +1426,13 @@ void SalInstanceWidget::DoRecursivePaint(vcl::Window* pWindow, const Point& rRen
         if (!pChild->IsVisible())
             continue;
 
-        tools::Long nDeltaX
-            = pChild->GetOutDev()->GetOutOffXPixel() - pWindow->GetOutDev()->GetOutOffXPixel();
+        tools::Long nDeltaX = pChild->GetOutDev()->GetFrameOffset().X()
+                              - pWindow->GetOutDev()->GetFrameOffset().X();
         if (bHasMirroredGraphics)
             nDeltaX = pWindow->GetOutDev()->GetWidth() - nDeltaX - pChild->GetOutDev()->GetWidth();
 
-        tools::Long nDeltaY
-            = pChild->GetOutDev()->GetOutOffYPixel() - pWindow->GetOutDev()->GetOutOffYPixel();
+        tools::Long nDeltaY = pChild->GetOutDev()->GetFrameOffset().Y()
+                              - pWindow->GetOutDev()->GetFrameOffset().Y();
 
         Point aPos(rRenderLogicPos);
         aPos += Point(nDeltaX, nDeltaY);

@@ -13,6 +13,7 @@
 #include <tools/long.hxx>
 
 #include <vcl/dllapi.h>
+#include <vcl/rendercontext/MappingMetrics.hxx>
 
 class VCL_DLLPUBLIC Geometry
 {
@@ -31,21 +32,33 @@ public:
 
     tools::Long GetXOffsetFromOriginInPixels() const;
     void SetXOffsetFromOriginInPixels(tools::Long nOffsetFromOriginXpx);
-
     tools::Long GetYOffsetFromOriginInPixels() const;
     void SetYOffsetFromOriginInPixels(tools::Long nOffsetFromOriginYpx);
-
     tools::Long GetXOffsetFromOriginInLogicalUnits() const;
     void SetXOffsetFromOriginInLogicalUnits(tools::Long nOffsetFromOriginXInLogicalUnits);
-
     tools::Long GetYOffsetFromOriginInLogicalUnits() const;
     void SetYOffsetFromOriginInLogicalUnits(tools::Long nOffsetFromOriginYInLogicalUnits);
 
+    Point GetFrameOffset() const;
     tools::Long GetXFrameOffset() const;
     void SetXFrameOffset(tools::Long nOffset);
-
     tools::Long GetYFrameOffset() const;
     void SetYFrameOffset(tools::Long nOffset);
+
+    MappingMetrics GetMapMetrics() const;
+
+    Point GetMappingOffset() const;
+    void SetMappingXOffset(tools::Long nX);
+    void SetMappingYOffset(tools::Long nY);
+
+    tools::Long GetMapScalingXNumerator() const;
+    void SetMapScalingXNumerator(tools::Long nX);
+    tools::Long GetMapScalingXDenominator() const;
+    void SetMapScalingXDenominator(tools::Long nX);
+    tools::Long GetMapScalingYNumerator() const;
+    void SetMapScalingYNumerator(tools::Long nY);
+    tools::Long GetMapScalingYDenominator() const;
+    void SetMapScalingYDenominator(tools::Long nY);
 
     sal_Int32 GetDPIX() const;
     sal_Int32 GetDPIY() const;
@@ -74,6 +87,8 @@ private:
     sal_Int32 mnDPIY;
     sal_Int32
         mnDPIScalePercentage; ///< For HiDPI displays, we want to draw elements for a percentage larger
+
+    MappingMetrics maMapMetrics;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

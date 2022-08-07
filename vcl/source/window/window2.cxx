@@ -196,7 +196,7 @@ void Window::InvertTracking( const tools::Rectangle& rRect, ShowTrackFlags nFlag
 
         if ( nFlags & ShowTrackFlags::Clip )
         {
-            vcl::Region aRegion( GetOutputRectPixel() );
+            vcl::Region aRegion( GetFrameRect() );
             ImplClipBoundaries( aRegion, false, false );
             pOutDev->SelectClipRegion( aRegion, pGraphics );
         }
@@ -1181,7 +1181,7 @@ bool Window::IsDefaultSize() const
 
 Point Window::GetOffsetPixelFrom(const vcl::Window& rWindow) const
 {
-    return Point(GetOutOffXPixel() - rWindow.GetOutOffXPixel(), GetOutOffYPixel() - rWindow.GetOutOffYPixel());
+    return Point(GetFrameOffset().X() - rWindow.GetFrameOffset().X(), GetFrameOffset().Y() - rWindow.GetFrameOffset().Y());
 }
 
 void Window::EnablePaint( bool bEnable )

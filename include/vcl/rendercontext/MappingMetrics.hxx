@@ -21,16 +21,23 @@
 
 #include <tools/long.hxx>
 
+#include <o3tl/unit_conversion.hxx>
+
+class MapMode;
+
 struct MappingMetrics
 {
     MappingMetrics() = default;
 
-    tools::Long mnMapOfsX = 0; ///< Offset in X direction
-    tools::Long mnMapOfsY = 0; ///< Offset in Y direction
-    tools::Long mnMapScNumX = 1; ///< Scaling factor - numerator in X direction
-    tools::Long mnMapScNumY = 1; ///< Scaling factor - numerator in Y direction
-    tools::Long mnMapScDenomX = 1; ///< Scaling factor - denominator in X direction
-    tools::Long mnMapScDenomY = 1; ///< Scaling factor - denominator in Y direction
+    void CalculateScale(const o3tl::Length eUnit);
+    void CalculateMappingResolution(MapMode const& rMapMode, tools::Long nDPIX, tools::Long nDPIY);
+
+    tools::Long mnMappingXOffset = 0; ///< Offset in X direction
+    tools::Long mnMappingYOffset = 0; ///< Offset in Y direction
+    tools::Long mnMapScalingXNumerator = 1; ///< Scaling factor - numerator in X direction
+    tools::Long mnMapScalingYNumerator = 1; ///< Scaling factor - numerator in Y direction
+    tools::Long mnMapScalingXDenominator = 1; ///< Scaling factor - denominator in X direction
+    tools::Long mnMapScalingYDenominator = 1; ///< Scaling factor - denominator in Y direction
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

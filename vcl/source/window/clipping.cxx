@@ -120,7 +120,7 @@ vcl::Region Window::GetWindowClipRegionPixel() const
         const_cast<vcl::Window*>(this)->ImplInitWinClipRegion();
     aWinClipRegion = mpWindowImpl->maWinClipRegion;
 
-    vcl::Region   aWinRegion( GetOutputRectPixel() );
+    vcl::Region   aWinRegion( GetFrameRect() );
 
     if ( aWinRegion == aWinClipRegion )
         aWinClipRegion.SetNull();
@@ -249,7 +249,7 @@ void Window::ImplClipSiblings( vcl::Region& rRegion ) const
 void Window::ImplInitWinClipRegion()
 {
     // Build Window Region
-    mpWindowImpl->maWinClipRegion = GetOutputRectPixel();
+    mpWindowImpl->maWinClipRegion = GetFrameRect();
     if ( mpWindowImpl->mbWinRegion )
         mpWindowImpl->maWinClipRegion.Intersect( GetOutDev()->ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
 
@@ -319,7 +319,7 @@ bool Window::ImplSysObjClip( const vcl::Region* pOldRegion )
                 }
 
                 vcl::Region      aRegion = rWinChildClipRegion;
-                vcl::Region      aWinRectRegion( GetOutputRectPixel() );
+                vcl::Region      aWinRectRegion( GetFrameRect() );
 
                 if ( aRegion == aWinRectRegion )
                     mpWindowImpl->mpSysObj->ResetClipRegion();
@@ -501,7 +501,7 @@ void Window::ImplIntersectWindowClipRegion( vcl::Region& rRegion )
 
 void Window::ImplIntersectWindowRegion( vcl::Region& rRegion )
 {
-    rRegion.Intersect( GetOutputRectPixel() );
+    rRegion.Intersect( GetFrameRect() );
     if ( mpWindowImpl->mbWinRegion )
         rRegion.Intersect( GetOutDev()->ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
 }
@@ -510,13 +510,13 @@ void Window::ImplExcludeWindowRegion( vcl::Region& rRegion )
 {
     if ( mpWindowImpl->mbWinRegion )
     {
-        vcl::Region aRegion( GetOutputRectPixel() );
+        vcl::Region aRegion( GetFrameRect() );
         aRegion.Intersect( GetOutDev()->ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
         rRegion.Exclude( aRegion );
     }
     else
     {
-        rRegion.Exclude( GetOutputRectPixel() );
+        rRegion.Exclude( GetFrameRect() );
     }
 }
 

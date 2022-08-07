@@ -107,14 +107,6 @@ OutputDevice::OutputDevice(OutDevType eOutDevType) :
     mbRefPoint                      = false;
     mbEnableRTL                     = false;    // mirroring must be explicitly allowed (typically for windows only)
 
-    // struct MappingMetrics
-    maMapMetrics.mnMapOfsX          = 0;
-    maMapMetrics.mnMapOfsY          = 0;
-    maMapMetrics.mnMapScNumX        = 1;
-    maMapMetrics.mnMapScNumY        = 1;
-    maMapMetrics.mnMapScDenomX      = 1;
-    maMapMetrics.mnMapScDenomY      = 1;
-
     // struct ImplOutDevData- see #i82615#
     mpOutDevData.reset(new ImplOutDevData);
     mpOutDevData->mpRotateDev       = nullptr;
@@ -436,7 +428,7 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
                            ImplLogicXToDevicePixel(rDestPt.X()), ImplLogicYToDevicePixel(rDestPt.Y()),
                            nDestWidth, nDestHeight);
 
-        AdjustTwoRect( aPosAry, GetOutputRectPixel() );
+        AdjustTwoRect( aPosAry, GetFrameRect() );
 
         if ( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
             mpGraphics->CopyBits(aPosAry, *this);
@@ -542,7 +534,7 @@ void OutputDevice::CopyArea( const Point& rDestPt,
                            ImplLogicXToDevicePixel(rDestPt.X()), ImplLogicYToDevicePixel(rDestPt.Y()),
                            nSrcWidth, nSrcHeight);
 
-        AdjustTwoRect( aPosAry, GetOutputRectPixel() );
+        AdjustTwoRect( aPosAry, GetFrameRect() );
 
         CopyDeviceArea( aPosAry, bWindowInvalidate );
     }
@@ -584,7 +576,7 @@ void OutputDevice::drawOutDevDirect(const OutputDevice& rSrcDev, SalTwoRect& rPo
 
     // #102532# Offset only has to be pseudo window offset
 
-    AdjustTwoRect( rPosAry, rSrcDev.GetOutputRectPixel() );
+    AdjustTwoRect( rPosAry, rSrcDev.GetFrameRect() );
 
     if ( rPosAry.mnSrcWidth && rPosAry.mnSrcHeight && rPosAry.mnDestWidth && rPosAry.mnDestHeight )
     {
