@@ -338,15 +338,15 @@ OUString const* SwAutoCorrDoc::GetPrevPara(bool const bAtNormalPos)
 {
     OUString const* pStr(nullptr);
 
-    if( bAtNormalPos || !m_pIndex )
+    if( bAtNormalPos || !m_oIndex )
     {
-        m_pIndex.reset(new SwNodeIndex(m_rCursor.GetPoint()->nNode));
+        m_oIndex.emplace(m_rCursor.GetPoint()->nNode);
     }
-    sw::GotoPrevLayoutTextFrame(*m_pIndex, m_rEditSh.GetLayout());
+    sw::GotoPrevLayoutTextFrame(*m_oIndex, m_rEditSh.GetLayout());
 
     SwTextFrame const* pFrame(nullptr);
-    for (SwTextNode * pTextNd = m_pIndex->GetNode().GetTextNode();
-             pTextNd; pTextNd = m_pIndex->GetNode().GetTextNode())
+    for (SwTextNode * pTextNd = m_oIndex->GetNode().GetTextNode();
+             pTextNd; pTextNd = m_oIndex->GetNode().GetTextNode())
     {
         pFrame = static_cast<SwTextFrame const*>(
                 pTextNd->getLayoutFrame(m_rEditSh.GetLayout()));
@@ -354,7 +354,7 @@ OUString const* SwAutoCorrDoc::GetPrevPara(bool const bAtNormalPos)
         {
             break;
         }
-        sw::GotoPrevLayoutTextFrame(*m_pIndex, m_rEditSh.GetLayout());
+        sw::GotoPrevLayoutTextFrame(*m_oIndex, m_rEditSh.GetLayout());
     }
     if (pFrame && !pFrame->GetText().isEmpty() &&
         0 == pFrame->GetTextNodeForParaProps()->GetAttrOutlineLevel())
@@ -458,9 +458,9 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
 
                 if( pPara )
                 {
-                    OSL_ENSURE( !m_pIndex, "who has not deleted his Index?" );
-                    m_pIndex.reset(new SwNodeIndex( m_rCursor.GetPoint()->nNode ));
-                    sw::GotoPrevLayoutTextFrame(*m_pIndex, m_rEditSh.GetLayout());
+                    OSL_ENSURE( !m_oIndex, "who has not deleted his Index?" );
+                    m_oIndex.emplace(m_rCursor.GetPoint()->nNode);
+                    sw::GotoPrevLayoutTextFrame(*m_oIndex, m_rEditSh.GetLayout());
                 }
 
                 SwDoc* pAutoDoc = aTBlks.GetDoc();
@@ -490,8 +490,8 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
 
                 if( pPara )
                 {
-                    sw::GotoNextLayoutTextFrame(*m_pIndex, m_rEditSh.GetLayout());
-                    pTextNd = m_pIndex->GetNode().GetTextNode();
+                    sw::GotoNextLayoutTextFrame(*m_oIndex, m_rEditSh.GetLayout());
+                    pTextNd = m_oIndex->GetNode().GetTextNode();
                 }
                 bRet = true;
             }
@@ -587,7 +587,7 @@ void SwAutoCorrDoc::SaveCpltSttWord( ACFlags nFlag, sal_Int32 nPos,
                                             const OUString& rExceptWord,
                                             sal_Unicode cChar )
 {
-    SwNodeOffset nNode = m_pIndex ? m_pIndex->GetIndex() : m_rCursor.GetPoint()->GetNodeIndex();
+    SwNodeOffset nNode = m_oIndex ? m_oIndex->GetIndex() : m_rCursor.GetPoint()->GetNodeIndex();
     LanguageType eLang = GetLanguage(nPos);
     m_rEditSh.GetDoc()->SetAutoCorrExceptWord( std::make_unique<SwAutoCorrExceptWord>( nFlag,
                                         nNode, nPos, rExceptWord, cChar, eLang ));
