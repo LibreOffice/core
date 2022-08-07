@@ -221,17 +221,14 @@ const SwTableNode* SwDoc::IsIdxInTable( const SwNodeIndex& rIdx ) const { return
 
 SwTableNode* SwDoc::IsInTable(const SwNode& rIdx) const
 {
-    SwTableNode* pTableNd = nullptr;
-    SwNodeOffset nIndex = rIdx.GetIndex();
+    SwNode* pNd = const_cast<SwNode*>(&rIdx);
     do {
-        SwNode* pNd = GetNodes()[ nIndex ]->StartOfSectionNode();
-        pTableNd = pNd->GetTableNode();
-        if( nullptr != pTableNd )
-            break;
-
-        nIndex = pNd->GetIndex();
-    } while ( nIndex );
-    return pTableNd;
+        pNd = pNd->StartOfSectionNode();
+        SwTableNode* pTableNd = pNd->GetTableNode();
+        if( pTableNd )
+            return pTableNd;
+    } while ( pNd->GetIndex() );
+    return nullptr;
 }
 
 /**
