@@ -2238,7 +2238,7 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
             SwFlyFrame* pFly = GetSelectedFlyFrame();
 
             // Remember the anchor of the selected object before deletion.
-            std::unique_ptr<SwPosition> pAnchor;
+            std::optional<SwPosition> oAnchor;
             if (pFly)
             {
                 SwFrameFormat* pFormat = pFly->GetFormat();
@@ -2247,7 +2247,7 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
                     RndStdIds eAnchorId = pFormat->GetAnchor().GetAnchorId();
                     if ((eAnchorId == RndStdIds::FLY_AS_CHAR || eAnchorId == RndStdIds::FLY_AT_CHAR) && pFormat->GetAnchor().GetContentAnchor())
                     {
-                        pAnchor.reset(new SwPosition(*pFormat->GetAnchor().GetContentAnchor()));
+                        oAnchor.emplace(*pFormat->GetAnchor().GetContentAnchor());
                     }
                 }
             }
@@ -2260,8 +2260,8 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
             // comment.
             if (pFly)
             {
-                if (pAnchor)
-                    *GetCurrentShellCursor().GetPoint() = *pAnchor;
+                if (oAnchor)
+                    *GetCurrentShellCursor().GetPoint() = *oAnchor;
                 SwFrameFormat* pFormat = pFly->GetFormat();
                 if (pFormat && pFormat->GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR)
                 {

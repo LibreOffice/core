@@ -577,20 +577,20 @@ bool SwFEShell::Copy( SwFEShell& rDestShell, const Point& rSttPt,
             aBoxes.empty() ? nullptr : aBoxes[0]->GetSttNd()->FindTableNode());
         if (nullptr != pTableNd)
         {
-            std::unique_ptr<SwPosition> pDstPos;
+            std::optional<SwPosition> oDstPos;
             if( this == &rDestShell )
             {
                 // same shell? Then create new Cursor at the
                 // DocumentPosition passed
-                pDstPos.reset(new SwPosition( *GetCursor()->GetPoint() ));
+                oDstPos.emplace( *GetCursor()->GetPoint() );
                 Point aPt( rInsPt );
-                GetLayout()->GetModelPositionForViewPoint( pDstPos.get(), aPt );
-                if( !pDstPos->GetNode().IsNoTextNode() )
+                GetLayout()->GetModelPositionForViewPoint( &*oDstPos, aPt );
+                if( !oDstPos->GetNode().IsNoTextNode() )
                     bRet = true;
             }
             else if( !rDestShell.GetCursor()->GetNode().IsNoTextNode() )
             {
-                pDstPos.reset(new SwPosition( *rDestShell.GetCursor()->GetPoint() ));
+                oDstPos.emplace( *rDestShell.GetCursor()->GetPoint() );
                 bRet = true;
             }
 
@@ -599,14 +599,14 @@ bool SwFEShell::Copy( SwFEShell& rDestShell, const Point& rSttPt,
                 if( GetDoc() == rDestShell.GetDoc() )
                     ParkTableCursor();
 
-                bRet = rDestShell.GetDoc()->InsCopyOfTable( *pDstPos, aBoxes,nullptr,
+                bRet = rDestShell.GetDoc()->InsCopyOfTable( *oDstPos, aBoxes,nullptr,
                                         bIsMove && this == &rDestShell &&
                                         aBoxes.size() == pTableNd->GetTable().
                                         GetTabSortBoxes().size(),
                                         this != &rDestShell );
 
                 if( this != &rDestShell )
-                    *rDestShell.GetCursor()->GetPoint() = *pDstPos;
+                    *rDestShell.GetCursor()->GetPoint() = *oDstPos;
 
                 // create all parked Cursor?
                 if( GetDoc() == rDestShell.GetDoc() )

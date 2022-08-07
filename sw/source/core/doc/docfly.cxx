@@ -767,11 +767,11 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
             // anchored object the complete <SwPosition> is kept, because the
             // anchor index position could be moved, if the object again is
             // anchored as character.
-            std::unique_ptr<const SwPosition> xOldAsCharAnchorPos;
+            std::optional<const SwPosition> oOldAsCharAnchorPos;
             const RndStdIds eOldAnchorType = pContact->GetAnchorId();
             if ( !_bSameOnly && eOldAnchorType == RndStdIds::FLY_AS_CHAR )
             {
-                xOldAsCharAnchorPos.reset(new SwPosition(pContact->GetContentAnchor()));
+                oOldAsCharAnchorPos.emplace(pContact->GetContentAnchor());
             }
 
             if ( _bSameOnly )
@@ -973,7 +973,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
             pAnchoredObj->UpdateObjInSortedList();
 
             // #i54336#
-            if (xOldAsCharAnchorPos)
+            if (oOldAsCharAnchorPos)
             {
                 if ( pNewAnchorFrame)
                 {
@@ -981,8 +981,8 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     // The TextAttribut needs to be destroyed which, unfortunately, also
                     // destroys the format. To avoid that, we disconnect the format from
                     // the attribute.
-                    const sal_Int32 nIndx( xOldAsCharAnchorPos->GetContentIndex() );
-                    SwTextNode* pTextNode( xOldAsCharAnchorPos->GetNode().GetTextNode() );
+                    const sal_Int32 nIndx( oOldAsCharAnchorPos->GetContentIndex() );
+                    SwTextNode* pTextNode( oOldAsCharAnchorPos->GetNode().GetTextNode() );
                     assert(pTextNode && "<SwDoc::ChgAnchor(..)> - missing previous anchor text node for as-character anchored object");
                     SwTextAttr * const pHint =
                         pTextNode->GetTextAttrForCharAt( nIndx, RES_TXTATR_FLYCNT );

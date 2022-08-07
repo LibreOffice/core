@@ -66,7 +66,7 @@ private:
     /// next redline
     SwRedlineTable::size_type m_RedlineIndex;
     /// next fieldmark
-    std::pair<sw::mark::IFieldmark const*, std::unique_ptr<SwPosition>> m_Fieldmark;
+    std::pair<sw::mark::IFieldmark const*, std::optional<SwPosition>> m_Fieldmark;
     std::optional<SwPosition> m_oNextFieldmarkHide;
     /// current start/end pair
     SwPosition const* m_pStartPos;
@@ -154,15 +154,14 @@ public:
                 // always hide the CH_TXT_ATR_FIELDSEP for now
                 if (m_eFieldmarkMode == sw::FieldmarkMode::ShowResult)
                 {
-                    m_Fieldmark.second.reset(
-                        new SwPosition(sw::mark::FindFieldSep(*m_Fieldmark.first)));
+                    m_Fieldmark.second.emplace(
+                        sw::mark::FindFieldSep(*m_Fieldmark.first));
                     ++m_Fieldmark.second->nContent;
                     ++m_oNextFieldmarkHide->nContent; // skip start
                 }
                 else
                 {
-                    m_Fieldmark.second.reset(
-                        new SwPosition(pFieldmark->GetMarkEnd()));
+                    m_Fieldmark.second.emplace(pFieldmark->GetMarkEnd());
                     --m_Fieldmark.second->nContent;
                 }
             }
@@ -186,7 +185,7 @@ public:
         {
             assert(!pNextRedlineHide || *m_oNextFieldmarkHide <= *pNextRedlineHide);
             m_pStartPos = &*m_oNextFieldmarkHide;
-            m_pEndPos = m_Fieldmark.second.get();
+            m_pEndPos = &*m_Fieldmark.second;
             return true;
         }
         else // nothing
