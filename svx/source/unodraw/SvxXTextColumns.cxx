@@ -209,7 +209,7 @@ void SvxXTextColumns::setPropertyValue(const OUString& rPropertyName, const css:
             sal_Int32 nTmp;
             if (!(aValue >>= nTmp) || nTmp < 0)
                 throw css::lang::IllegalArgumentException();
-            m_nSepLineWidth = o3tl::toTwips(nTmp, o3tl::Length::mm100);
+            m_nSepLineWidth = nTmp;
             break;
         }
         case WID_TXTCOL_LINE_COLOR:
@@ -270,7 +270,7 @@ css::uno::Any SvxXTextColumns::getPropertyValue(const OUString& rPropertyName)
     switch (pEntry->nWID)
     {
         case WID_TXTCOL_LINE_WIDTH:
-            aRet <<= o3tl::narrowing<sal_Int32>(convertTwipToMm100(m_nSepLineWidth));
+            aRet <<= m_nSepLineWidth;
             break;
         case WID_TXTCOL_LINE_COLOR:
             aRet <<= m_nSepLineColor;
