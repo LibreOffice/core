@@ -50,11 +50,11 @@ ScNoteMarker::ScNoteMarker( vcl::Window* pWin, vcl::Window* pRight, vcl::Window*
     m_bByKeyboard( bKeyboard ),
     m_bVisible( false )
 {
-    Size aSizePixel = m_pWindow->GetOutputSizePixel();
+    Size aSizePixel = m_pWindow->GetSize();
     if( m_pRightWin )
-        aSizePixel.AdjustWidth(m_pRightWin->GetOutputSizePixel().Width() );
+        aSizePixel.AdjustWidth(m_pRightWin->GetSize().Width() );
     if( m_pBottomWin )
-        aSizePixel.AdjustHeight(m_pBottomWin->GetOutputSizePixel().Height() );
+        aSizePixel.AdjustHeight(m_pBottomWin->GetSize().Height() );
     tools::Rectangle aVisPixel( Point( 0, 0 ), aSizePixel );
     m_aVisRect = m_pWindow->PixelToLogic( aVisPixel, m_aMapMode );
 
@@ -155,7 +155,7 @@ void ScNoteMarker::Draw()
 
     if ( m_pRightWin || m_pBottomWin )
     {
-        Size aWinSize = m_pWindow->PixelToLogic( m_pWindow->GetOutputSizePixel(), m_aMapMode );
+        Size aWinSize = m_pWindow->PixelToLogic( m_pWindow->GetSize(), m_aMapMode );
         if ( m_pRightWin )
             lcl_DrawWin( m_xObject.get(), m_pRightWin->GetOutDev(),
                             lcl_MoveMapMode( m_aMapMode, Size( aWinSize.Width(), 0 ) ) );
@@ -186,7 +186,7 @@ void ScNoteMarker::InvalidateWin()
     if ( !(m_pRightWin || m_pBottomWin) )
         return;
 
-    Size aWinSize = m_pWindow->PixelToLogic( m_pWindow->GetOutputSizePixel(), m_aMapMode );
+    Size aWinSize = m_pWindow->PixelToLogic( m_pWindow->GetSize(), m_aMapMode );
     if ( m_pRightWin )
         m_pRightWin->Invalidate( OutputDevice::LogicToLogic(aRect,
                                 lcl_MoveMapMode( m_aMapMode, Size( aWinSize.Width(), 0 ) ),

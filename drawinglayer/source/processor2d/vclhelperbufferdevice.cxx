@@ -105,8 +105,8 @@ VDevBuffer::~VDevBuffer()
 
 bool VDevBuffer::isSizeSuitable(const VclPtr<VirtualDevice>& device, const Size& rSizePixel)
 {
-    if (device->GetOutputWidthPixel() >= rSizePixel.getWidth()
-        && device->GetOutputHeightPixel() >= rSizePixel.getHeight())
+    if (device->GetWidth() >= rSizePixel.getWidth()
+        && device->GetHeight() >= rSizePixel.getHeight())
     {
         bool requireSmall = false;
 #if defined(UNX)
@@ -121,7 +121,7 @@ bool VDevBuffer::isSizeSuitable(const VclPtr<VirtualDevice>& device, const Size&
         if (requireSmall)
         {
             if (rSizePixel.getWidth() <= 32 && rSizePixel.getHeight() <= 32
-                && (device->GetOutputWidthPixel() > 32 || device->GetOutputHeightPixel() > 32))
+                && (device->GetWidth() > 32 || device->GetHeight() > 32))
             {
                 return false;
             }
@@ -162,10 +162,10 @@ VclPtr<VirtualDevice> VDevBuffer::alloc(OutputDevice& rOutDev, const Size& rSize
                         if (bCandidateOkay)
                         {
                             // found and candidate are valid
-                            const sal_uLong aSquare(aFound->buf->GetOutputWidthPixel()
-                                                    * aFound->buf->GetOutputHeightPixel());
-                            const sal_uLong aCandidateSquare(a->buf->GetOutputWidthPixel()
-                                                             * a->buf->GetOutputHeightPixel());
+                            const sal_uLong aSquare(aFound->buf->GetWidth()
+                                                    * aFound->buf->GetHeight());
+                            const sal_uLong aCandidateSquare(a->buf->GetWidth()
+                                                             * a->buf->GetHeight());
 
                             if (aCandidateSquare < aSquare)
                             {
@@ -304,7 +304,7 @@ impBufferDevice::impBufferDevice(OutputDevice& rOutDev, const basegfx::B2DRange&
     maDestPixel = tools::Rectangle(floor(aRangePixel.getMinX()), floor(aRangePixel.getMinY()),
                                    ceil(aRangePixel.getMaxX()), ceil(aRangePixel.getMaxY()));
     if (bCrop)
-        maDestPixel.Intersection({ {}, mrOutDev.GetOutputSizePixel() });
+        maDestPixel.Intersection({ {}, mrOutDev.GetSize() });
 
     if (!isVisible())
         return;

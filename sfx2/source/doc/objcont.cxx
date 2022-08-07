@@ -108,7 +108,7 @@ BitmapEx SfxObjectShell::GetPreviewBitmap() const
     pDevice->SetAntialiasing(AntialiasingFlags::Enable | pDevice->GetAntialiasing());
     if(!CreatePreview_Impl(/*bFullContent*/false, pDevice, nullptr))
         return BitmapEx();
-    Size size = pDevice->GetOutputSizePixel();
+    Size size = pDevice->GetSize();
     BitmapEx aBitmap = pDevice->GetBitmapEx( Point(), size);
     // Scale down the image to the desired size from the 4*size from CreatePreview_Impl().
     size = Size( size.Width() / 4, size.Height() / 4 );

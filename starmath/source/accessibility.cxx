@@ -117,7 +117,7 @@ sal_Bool SAL_CALL SmGraphicAccessible::containsPoint( const awt::Point& aPoint )
     if (!pWin)
         throw RuntimeException();
 
-    Size aSz( pWin->GetOutputSizePixel() );
+    Size aSz( pWin->GetSize() );
     return  aPoint.X >= 0  &&  aPoint.Y >= 0  &&
             aPoint.X < aSz.Width()  &&  aPoint.Y < aSz.Height();
 }
@@ -139,7 +139,7 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getBounds()
         throw RuntimeException();
 
     const Point aOutPos;
-    const Size aOutSize(pWin->GetOutputSizePixel());
+    const Size aOutSize(pWin->GetSize());
     css::awt::Rectangle aRet;
 
     aRet.X = aOutPos.X();
@@ -199,7 +199,7 @@ awt::Size SAL_CALL SmGraphicAccessible::getSize()
     SolarMutexGuard aGuard;
     if (!pWin)
         throw RuntimeException();
-    Size aSz(pWin->GetOutputSizePixel());
+    Size aSz(pWin->GetSize());
     return css::awt::Size(aSz.Width(), aSz.Height());
 }
 

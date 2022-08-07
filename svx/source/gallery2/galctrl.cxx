@@ -74,7 +74,7 @@ namespace
 {
     bool ImplGetGraphicCenterRect(const weld::CustomWidgetController& rWidget, const Graphic& rGraphic, tools::Rectangle& rResultRect)
     {
-        const Size  aWinSize(rWidget.GetOutputSizePixel());
+        const Size  aWinSize(rWidget.GetSize());
         Size        aNewSize(rWidget.GetDrawingArea()->get_ref_device().LogicToPixel(rGraphic.GetPrefSize(), rGraphic.GetPrefMapMode()));
         bool        bRet = false;
 

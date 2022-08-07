@@ -110,7 +110,7 @@ void ScCsvTableBox::InitControls()
     else
         mxRuler->Hide();
 
-    Size aWinSize = mxGrid->GetOutputSizePixel();
+    Size aWinSize = mxGrid->GetSize();
     maData.mnWinWidth = aWinSize.Width();
     maData.mnWinHeight = aWinSize.Height();
 

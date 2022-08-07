@@ -694,7 +694,7 @@ void SlideshowImpl::disposing(std::unique_lock<std::mutex>&)
 
             if (pActWin)
             {
-                Size aVisSizePixel = pActWin->GetOutputSizePixel();
+                Size aVisSizePixel = pActWin->GetSize();
                 ::tools::Rectangle aVisAreaWin = pActWin->PixelToLogic( ::tools::Rectangle( Point(0,0), aVisSizePixel) );
                 mpViewShell->VisAreaChanged(aVisAreaWin);
                 if (mpView)

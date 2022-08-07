@@ -793,7 +793,7 @@ Document::retrieveParagraphBounds(Paragraph const * pParagraph,
     return css::awt::Rectangle(
         static_cast< ::sal_Int32 >(aOrig.X()),
         static_cast< ::sal_Int32 >(aOrig.Y()) + nPos - m_nViewOffset,
-        m_rView.GetWindow()->GetOutputSizePixel().Width(), aPara->getHeight());
+        m_rView.GetWindow()->GetSize().Width(), aPara->getHeight());
         // XXX  numeric overflow (3x)
 }
 
@@ -1343,7 +1343,7 @@ Document::getAccessibleAtPoint(css::awt::Point const & rPoint)
     ::comphelper::OExternalLockGuard aGuard(this);
     init();
     if (rPoint.X >= 0
-        && rPoint.X < m_rView.GetWindow()->GetOutputSizePixel().Width()
+        && rPoint.X < m_rView.GetWindow()->GetSize().Width()
         && rPoint.Y >= 0 && rPoint.Y < m_nViewHeight)
     {
         ::sal_Int32 nOffset = m_nViewOffset + rPoint.Y; // XXX  numeric overflow
@@ -1500,7 +1500,7 @@ IMPL_LINK(Document, WindowEventHandler, ::VclWindowEvent&, rEvent, void)
                 break;
 
             ::sal_Int32 nHeight = static_cast< ::sal_Int32 >(
-                m_rView.GetWindow()->GetOutputSizePixel().Height());
+                m_rView.GetWindow()->GetSize().Height());
                 // XXX  numeric overflow
             if (nHeight != m_nViewHeight)
             {
@@ -1584,7 +1584,7 @@ void Document::init()
     m_nViewOffset = static_cast< ::sal_Int32 >(
         m_rView.GetStartDocPos().Y()); // XXX  numeric overflow
     m_nViewHeight = static_cast< ::sal_Int32 >(
-        m_rView.GetWindow()->GetOutputSizePixel().Height());
+        m_rView.GetWindow()->GetSize().Height());
         // XXX  numeric overflow
     determineVisibleRange();
     m_nSelectionFirstPara = -1;

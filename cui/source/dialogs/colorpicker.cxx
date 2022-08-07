@@ -183,7 +183,7 @@ void ColorPreviewControl::Paint(vcl::RenderContext& rRenderContext, const tools:
 {
     rRenderContext.SetFillColor(m_aColor);
     rRenderContext.SetLineColor(m_aColor);
-    rRenderContext.DrawRect(tools::Rectangle(Point(0, 0), GetOutputSizePixel()));
+    rRenderContext.DrawRect(tools::Rectangle(Point(0, 0), GetSize()));
 }
 
 namespace {
@@ -256,9 +256,9 @@ private:
 
 void ColorFieldControl::UpdateBitmap()
 {
-    const Size aSize(GetOutputSizePixel());
+    const Size aSize(GetSize());
 
-    if (mxBitmap && mxBitmap->GetOutputSizePixel() != aSize)
+    if (mxBitmap && mxBitmap->GetSize() != aSize)
         mxBitmap.disposeAndClear();
 
     const sal_Int32 nWidth = aSize.Width();
@@ -404,7 +404,7 @@ void ColorFieldControl::ShowPosition( const Point& rPos, bool bUpdate )
     if (!mxBitmap)
         return;
 
-    const Size aSize(mxBitmap->GetOutputSizePixel());
+    const Size aSize(mxBitmap->GetSize());
 
     tools::Long nX = rPos.X();
     tools::Long nY = rPos.Y();
@@ -466,7 +466,7 @@ void ColorFieldControl::Paint(vcl::RenderContext& rRenderContext, const tools::R
 
     if (mxBitmap)
     {
-        Size aSize(GetOutputSizePixel());
+        Size aSize(GetSize());
         rRenderContext.DrawOutDev(Point(0, 0), aSize, Point(0, 0), aSize, *mxBitmap);
     }
 
@@ -513,7 +513,7 @@ void ColorFieldControl::SetValues( Color aColor, ColorMode eMode, double x, doub
 
 void ColorFieldControl::UpdatePosition()
 {
-    Size aSize(GetOutputSizePixel());
+    Size aSize(GetSize());
     ShowPosition(Point(static_cast<tools::Long>(mdX * aSize.Width()), static_cast<tools::Long>((1.0 - mdY) * aSize.Height())), false);
 }
 
@@ -575,9 +575,9 @@ ColorSliderControl::~ColorSliderControl()
 
 void ColorSliderControl::UpdateBitmap()
 {
-    Size aSize(1, GetOutputSizePixel().Height());
+    Size aSize(1, GetSize().Height());
 
-    if (mxBitmap && mxBitmap->GetOutputSizePixel() != aSize)
+    if (mxBitmap && mxBitmap->GetSize() != aSize)
         mxBitmap.disposeAndClear();
 
     if (!mxBitmap)
@@ -652,7 +652,7 @@ void ColorSliderControl::UpdateBitmap()
 
 void ColorSliderControl::ChangePosition(tools::Long nY)
 {
-    const tools::Long nHeight = GetOutputSizePixel().Height() - 1;
+    const tools::Long nHeight = GetSize().Height() - 1;
 
     if (nY < 0)
         nY = 0;
@@ -692,7 +692,7 @@ void ColorSliderControl::Paint(vcl::RenderContext& rRenderContext, const tools::
     if (!mxBitmap)
         UpdateBitmap();
 
-    const Size aSize(GetOutputSizePixel());
+    const Size aSize(GetSize());
 
     Point aPos;
     int x = aSize.Width();
@@ -721,7 +721,7 @@ void ColorSliderControl::SetValue(const Color& rColor, ColorMode eMode, double d
     {
         maColor = rColor;
         mdValue = dValue;
-        mnLevel = static_cast<sal_Int16>((1.0-dValue) * GetOutputSizePixel().Height());
+        mnLevel = static_cast<sal_Int16>((1.0-dValue) * GetSize().Height());
         meMode = eMode;
         if (bUpdateBitmap)
             UpdateBitmap();

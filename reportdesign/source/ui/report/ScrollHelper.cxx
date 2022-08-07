@@ -112,7 +112,7 @@ void OScrollWindowHelper::setTotalSize(sal_Int32 _nWidth ,sal_Int32 _nHeight)
 Size OScrollWindowHelper::ResizeScrollBars()
 {
     // get the new output-size in pixel
-    Size aOutPixSz = GetOutputSizePixel();
+    Size aOutPixSz = GetSize();
     if ( aOutPixSz.IsEmpty() )
         return aOutPixSz;
 

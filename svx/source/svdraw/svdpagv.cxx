@@ -372,7 +372,7 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const tools::Rectangle& r
         return;
 
     // no more global output size, use window size instead to decide grid sizes
-    tools::Long nScreenWdt = rOut.GetOutputSizePixel().Width();
+    tools::Long nScreenWdt = rOut.GetSize().Width();
 
     tools::Long nMinDotPix=2;
     tools::Long nMinLinPix=4;

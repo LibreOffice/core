@@ -190,7 +190,7 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
     {
         assert(mpGraphics);
 
-        if ( nWidth > 0 && nHeight  > 0 && nX <= (mnOutWidth + maGeometry.GetXFrameOffset()) && nY <= (mnOutHeight + maGeometry.GetYFrameOffset()))
+        if ( nWidth > 0 && nHeight  > 0 && nX <= (GetWidth() + maGeometry.GetXFrameOffset()) && nY <= (GetHeight() + maGeometry.GetYFrameOffset()))
         {
             tools::Rectangle   aRect( Point( nX, nY ), Size( nWidth, nHeight ) );
             bool        bClipped = false;
@@ -212,16 +212,16 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
             }
 
             // Width outside of draw area?
-            if ( (nWidth + nX) > (mnOutWidth + maGeometry.GetXFrameOffset()) )
+            if ( (nWidth + nX) > (GetWidth() + maGeometry.GetXFrameOffset()) )
             {
-                nWidth  = maGeometry.GetXFrameOffset() + mnOutWidth - nX;
+                nWidth  = maGeometry.GetXFrameOffset() + GetWidth() - nX;
                 bClipped = true;
             }
 
             // Height outside of draw area?
-            if ( (nHeight + nY) > (mnOutHeight + maGeometry.GetYFrameOffset()) )
+            if ( (nHeight + nY) > (GetHeight() + maGeometry.GetYFrameOffset()) )
             {
-                nHeight = maGeometry.GetYFrameOffset() + mnOutHeight - nY;
+                nHeight = maGeometry.GetYFrameOffset() + GetHeight() - nY;
                 bClipped = true;
             }
 
@@ -249,7 +249,7 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
                             OSL_ENSURE(false, "CopyBits with zero or negative width or height");
                         }
 
-                        aBmp = aVDev->GetBitmap( Point(), aVDev->GetOutputSizePixel() );
+                        aBmp = aVDev->GetBitmap( Point(), aVDev->GetSize() );
                     }
                     else
                         bClipped = false;
@@ -281,7 +281,7 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
 
     Point     aOutPt(LogicToPixel(rDestPt));
     Size      aOutSz(LogicToPixel(rDestSize));
-    tools::Rectangle aDstRect(Point(), GetOutputSizePixel());
+    tools::Rectangle aDstRect(Point(), GetSize());
 
     const bool bHMirr = aOutSz.Width() < 0;
     const bool bVMirr = aOutSz.Height() < 0;

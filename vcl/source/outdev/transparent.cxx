@@ -290,7 +290,7 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
 
     tools::PolyPolygon aPolyPoly( LogicToPixel( rPolyPoly ) );
     tools::Rectangle aPolyRect( aPolyPoly.GetBoundRect() );
-    tools::Rectangle aDstRect( Point(), GetOutputSizePixel() );
+    tools::Rectangle aDstRect( Point(), GetSize() );
 
     aDstRect.Intersection( aPolyRect );
 
@@ -587,7 +587,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
         GDIMetaFile* pOldMetaFile = mpMetaFile;
         tools::Rectangle aOutRect( LogicToPixel( rPos ), LogicToPixel( rSize ) );
         Point aPoint;
-        tools::Rectangle aDstRect( aPoint, GetOutputSizePixel() );
+        tools::Rectangle aDstRect( aPoint, GetSize() );
 
         mpMetaFile = nullptr;
         aDstRect.Intersection( aOutRect );
@@ -599,8 +599,8 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
             // Create transparent buffer
             ScopedVclPtrInstance<VirtualDevice> xVDev(DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
 
-            xVDev->mnDPIX = mnDPIX;
-            xVDev->mnDPIY = mnDPIY;
+            xVDev->SetDPIX(GetDPIX());
+            xVDev->SetDPIY(GetDPIY());
 
             if( xVDev->SetOutputSizePixel( aDstRect.GetSize() ) )
             {
@@ -628,8 +628,8 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     xVDev->EnableMapMode(false);
 
                     // copy content from original to buffer
-                    xVDev->DrawOutDev( aPoint, xVDev->GetOutputSizePixel(), // dest
-                                       aDstRect.TopLeft(), xVDev->GetOutputSizePixel(), // source
+                    xVDev->DrawOutDev( aPoint, xVDev->GetSize(), // dest
+                                       aDstRect.TopLeft(), xVDev->GetSize(), // source
                                        *this);
 
                     // draw MetaFile to buffer
@@ -641,7 +641,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     // get content bitmap from buffer
                     xVDev->EnableMapMode(false);
 
-                    const Bitmap aPaint(xVDev->GetBitmap(aPoint, xVDev->GetOutputSizePixel()));
+                    const Bitmap aPaint(xVDev->GetBitmap(aPoint, xVDev->GetSize()));
 
                     // create alpha mask from gradient and get as Bitmap
                     xVDev->EnableMapMode(bBufferMapModeEnabled);
@@ -650,7 +650,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     xVDev->SetDrawMode(DrawModeFlags::Default);
                     xVDev->EnableMapMode(false);
 
-                    const AlphaMask aAlpha(xVDev->GetBitmap(aPoint, xVDev->GetOutputSizePixel()));
+                    const AlphaMask aAlpha(xVDev->GetBitmap(aPoint, xVDev->GetSize()));
 
                     xVDev.disposeAndClear();
 
@@ -673,7 +673,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     const_cast<GDIMetaFile&>(rMtf).Play(*xVDev, rPos, rSize);
                     const_cast<GDIMetaFile&>(rMtf).WindStart();
                     xVDev->EnableMapMode( false );
-                    BitmapEx aPaint = xVDev->GetBitmapEx(Point(), xVDev->GetOutputSizePixel());
+                    BitmapEx aPaint = xVDev->GetBitmapEx(Point(), xVDev->GetSize());
                     xVDev->EnableMapMode( bVDevOldMap ); // #i35331#: MUST NOT use EnableMapMode( sal_True ) here!
 
                     // create alpha mask from gradient
@@ -682,7 +682,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     xVDev->SetDrawMode( DrawModeFlags::Default );
                     xVDev->EnableMapMode( false );
 
-                    AlphaMask aAlpha(xVDev->GetBitmap(Point(), xVDev->GetOutputSizePixel()));
+                    AlphaMask aAlpha(xVDev->GetBitmap(Point(), xVDev->GetSize()));
                     aAlpha.BlendWith(aPaint.GetAlpha());
 
                     xVDev.disposeAndClear();
@@ -1322,8 +1322,8 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
 
         // create an OutputDevice to record mapmode changes and the like
         ScopedVclPtrInstance< VirtualDevice > aMapModeVDev;
-        aMapModeVDev->mnDPIX = mnDPIX;
-        aMapModeVDev->mnDPIY = mnDPIY;
+        aMapModeVDev->SetDPIX(GetDPIX());
+        aMapModeVDev->SetDPIY(GetDPIY());
         aMapModeVDev->EnableOutput(false);
 
         // weed out page-filling background objects (if they are
@@ -1683,7 +1683,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
         //  STAGE 3.2: Generate banded bitmaps for special regions
 
         Point aPageOffset;
-        Size aTmpSize( GetOutputSizePixel() );
+        Size aTmpSize( GetSize() );
         if( meOutDevType == OUTDEV_PDF )
         {
             auto pPdfWriter = static_cast<vcl::PDFWriterImpl*>(this);
@@ -1760,8 +1760,10 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                                     aPaintVDev->Push();
                                     aMapVDev->Push();
 
-                                    aMapVDev->mnDPIX = aPaintVDev->mnDPIX = mnDPIX;
-                                    aMapVDev->mnDPIY = aPaintVDev->mnDPIY = mnDPIY;
+                                    aMapVDev->SetDPIX(GetDPIX());
+                                    aPaintVDev->SetDPIX(GetDPIX());
+                                    aMapVDev->SetDPIY(GetDPIY());
+                                    aPaintVDev->SetDPIY(GetDPIY());
 
                                     aPaintVDev->EnableOutput(false);
 

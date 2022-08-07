@@ -68,7 +68,7 @@ void SfxFrameViewWindow_Impl::StateChanged( StateChangedType nStateChange )
 
 void SfxFrameViewWindow_Impl::Resize()
 {
-    if ( IsReallyVisible() || IsReallyShown() || GetOutputSizePixel().Width() )
+    if ( IsReallyVisible() || IsReallyShown() || GetSize().Width() )
         pFrame->Resize();
 }
 

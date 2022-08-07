@@ -73,7 +73,7 @@ void collectUIInformation(const OUString& aFactor)
 void SwView::SetZoom( SvxZoomType eZoomType, short nFactor, bool bViewOnly )
 {
     bool const bCursorIsVisible(m_pWrtShell->IsCursorVisible());
-    SetZoom_( GetEditWin().GetOutputSizePixel(), eZoomType, nFactor, bViewOnly );
+    SetZoom_( GetEditWin().GetSize(), eZoomType, nFactor, bViewOnly );
     // fdo#40465 force the cursor to stay in view whilst zooming
     if (bCursorIsVisible)
         m_pWrtShell->ShowCursor();

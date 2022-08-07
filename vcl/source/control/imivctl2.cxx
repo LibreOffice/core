@@ -535,7 +535,7 @@ void IcnGridMap_Impl::GetMinMapSize( sal_uInt16& rDX, sal_uInt16& rDY ) const
         // The view grows in vertical direction. Its max. width is _pView->nMaxVirtWidth
         nX = _pView->nMaxVirtWidth;
         if( !nX )
-            nX = _pView->pView->GetOutputSizePixel().Width();
+            nX = _pView->pView->GetSize().Width();
         if( !(_pView->nFlags & IconChoiceFlags::Arranging) )
             nX -= _pView->nVerSBarWidth;
 
@@ -546,7 +546,7 @@ void IcnGridMap_Impl::GetMinMapSize( sal_uInt16& rDX, sal_uInt16& rDY ) const
         // The view grows in horizontal direction. Its max. height is _pView->nMaxVirtHeight
         nY = _pView->nMaxVirtHeight;
         if( !nY )
-            nY = _pView->pView->GetOutputSizePixel().Height();
+            nY = _pView->pView->GetSize().Height();
         if( !(_pView->nFlags & IconChoiceFlags::Arranging) )
             nY -= _pView->nHorSBarHeight;
         nX = _pView->aVirtOutputSize.Width();

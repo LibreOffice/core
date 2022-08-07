@@ -336,7 +336,7 @@ void DrawViewShell::WriteFrameViewData()
 
     mpFrameView->SetDesignMode( mpDrawView->IsDesignMode() );
 
-    Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
+    Size aVisSizePixel = GetActiveWindow()->GetSize();
     ::tools::Rectangle aVisArea = GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(0,0), aVisSizePixel) );
     if (comphelper::LibreOfficeKit::isActive())
     {

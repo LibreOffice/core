@@ -307,15 +307,15 @@ void OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout,
     auto nOldX = rSalLayout.DrawBase().getX();
     if( HasMirroredGraphics() )
     {
-        tools::Long w = IsVirtual() ? mnOutWidth : mpGraphics->GetGraphicsWidth();
+        tools::Long w = IsVirtual() ? GetWidth() : mpGraphics->GetGraphicsWidth();
         auto x = rSalLayout.DrawBase().getX();
         rSalLayout.DrawBase().setX( w - 1 - x );
         if( !IsRTLEnabled() )
         {
             OutputDevice *pOutDevRef = this;
             // mirror this window back
-            tools::Long devX = w-pOutDevRef->mnOutWidth-pOutDevRef->maGeometry.GetXFrameOffset();   // re-mirrored maGeometry.GetXFrameOffset()
-            rSalLayout.DrawBase().setX( devX + ( pOutDevRef->mnOutWidth - 1 - (rSalLayout.DrawBase().getX() - devX) ) ) ;
+            tools::Long devX = w-pOutDevRef->GetWidth()-pOutDevRef->maGeometry.GetXFrameOffset();   // re-mirrored maGeometry.GetXFrameOffset()
+            rSalLayout.DrawBase().setX( devX + ( pOutDevRef->GetWidth() - 1 - (rSalLayout.DrawBase().getX() - devX) ) ) ;
         }
     }
     else if( IsRTLEnabled() )
@@ -324,7 +324,7 @@ void OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout,
 
         // mirror this window back
         tools::Long devX = pOutDevRef->maGeometry.GetXFrameOffset();   // re-mirrored maGeometry.GetXFrameOffset()
-        rSalLayout.DrawBase().setX( pOutDevRef->mnOutWidth - 1 - (rSalLayout.DrawBase().getX() - devX) + devX );
+        rSalLayout.DrawBase().setX( pOutDevRef->GetWidth() - 1 - (rSalLayout.DrawBase().getX() - devX) + devX );
     }
 
     rSalLayout.DrawText( *mpGraphics );
@@ -377,7 +377,7 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
         // calculate offset - for high resolution printers the offset
         // should be greater so that the effect is visible
         tools::Long nOff = 1;
-        nOff += mnDPIX/300;
+        nOff += GetDPIX()/300;
 
         if ( eRelief == FontRelief::Engraved )
             nOff = -nOff;

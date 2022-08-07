@@ -1801,8 +1801,8 @@ void DrawingAreaUIObject::execute(const OUString& rAction, const StringMap& rPar
                 double fPosX = std::atof(sPosX2.getStr());
                 double fPosY = std::atof(sPoxY2.getStr());
 
-                fPosX = fPosX * mxDrawingArea->GetOutputSizePixel().Width();
-                fPosY = fPosY * mxDrawingArea->GetOutputSizePixel().Height();
+                fPosX = fPosX * mxDrawingArea->GetSize().Width();
+                fPosY = fPosY * mxDrawingArea->GetSize().Height();
 
                 MouseEvent aEvent(Point(fPosX, fPosY), 1, MouseEventModifiers::NONE, MOUSE_LEFT, 0);
                 mxDrawingArea->MouseButtonDown(aEvent);

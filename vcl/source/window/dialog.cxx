@@ -330,7 +330,7 @@ static void ImplMouseAutoPos( Dialog* pDialog )
     MouseSettingsOptions nMouseOptions = pDialog->GetSettings().GetMouseSettings().GetOptions();
     if ( nMouseOptions & MouseSettingsOptions::AutoCenterPos )
     {
-        Size aSize = pDialog->GetOutputSizePixel();
+        Size aSize = pDialog->GetSize();
         pDialog->SetPointerPosPixel( Point( aSize.Width()/2, aSize.Height()/2 ) );
     }
     else if ( nMouseOptions & MouseSettingsOptions::AutoDefBtnPos )
@@ -342,7 +342,7 @@ static void ImplMouseAutoPos( Dialog* pDialog )
             pWindow = ImplGetCancelButton( pDialog );
         if ( !pWindow )
             pWindow = pDialog;
-        Size aSize = pWindow->GetOutputSizePixel();
+        Size aSize = pWindow->GetSize();
         pWindow->SetPointerPosPixel( Point( aSize.Width()/2, aSize.Height()/2 ) );
     }
 }

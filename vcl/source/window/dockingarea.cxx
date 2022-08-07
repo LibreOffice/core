@@ -136,8 +136,8 @@ void DockingAreaWindow::ApplySettings(vcl::RenderContext& rRenderContext)
         MenuBar* pMenuBar = pSysWin ? pSysWin->GetMenuBar() : nullptr;
         int nMenubarHeight = pMenuBar ? pMenuBar->GetMenuBarHeight() : 0;
         aWallpaper.SetRect(tools::Rectangle(Point(0, -nMenubarHeight),
-                           Size(rRenderContext.GetOutputWidthPixel(),
-                                rRenderContext.GetOutputHeightPixel() + nMenubarHeight)));
+                           Size(rRenderContext.GetWidth(),
+                                rRenderContext.GetHeight() + nMenubarHeight)));
 
         rRenderContext.SetBackground(aWallpaper);
     }
@@ -177,7 +177,7 @@ void DockingAreaWindow::Paint(vcl::RenderContext& rRenderContext, const tools::R
     else if (!ImplGetSVData()->maNWFData.mbDockingAreaSeparateTB)
     {
         // draw a single toolbar background covering the whole docking area
-        tools::Rectangle aCtrlRegion(Point(), GetOutputSizePixel());
+        tools::Rectangle aCtrlRegion(Point(), GetSize());
 
         rRenderContext.DrawNativeControl(ControlType::Toolbar, IsHorizontal() ? ControlPart::DrawBackgroundHorz : ControlPart::DrawBackgroundVert,
                                          aCtrlRegion, nState, aControlValue, OUString() );
@@ -209,7 +209,7 @@ void DockingAreaWindow::Paint(vcl::RenderContext& rRenderContext, const tools::R
     else
     {
         // create map to find toolbar lines
-        Size aOutSz(GetOutputSizePixel());
+        Size aOutSz(GetSize());
         std::map<int, int> ranges;
         sal_uInt16 nChildren = GetChildCount();
         for (sal_uInt16 n = 0; n < nChildren; n++)

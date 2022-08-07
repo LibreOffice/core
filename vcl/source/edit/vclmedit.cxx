@@ -144,7 +144,7 @@ void ImpVclMEdit::ImpUpdateScrollBarVis( WinBits nWinStyle )
         tools::Long nOverallTextHeight(0);
         for ( sal_uInt32 i=0; i<rEngine.GetParagraphCount(); ++i )
             nOverallTextHeight += rEngine.GetTextHeight( i );
-        if ( nOverallTextHeight > mpTextWindow->GetOutputSizePixel().Height() )
+        if ( nOverallTextHeight > mpTextWindow->GetSize().Height() )
             bNeedVScroll = true;
     }
 
@@ -231,7 +231,7 @@ void ImpVclMEdit::ImpInitScrollBars()
     Size aCharBox;
     aCharBox.setWidth( mpTextWindow->GetTextWidth( OUString(sampleChar) ) );
     aCharBox.setHeight( mpTextWindow->GetTextHeight() );
-    Size aOutSz = mpTextWindow->GetOutputSizePixel();
+    Size aOutSz = mpTextWindow->GetSize();
 
     mpHScrollBar->SetVisibleSize( aOutSz.Width() );
     mpHScrollBar->SetPageSize( aOutSz.Width() * 8 / 10 );
@@ -335,7 +335,7 @@ void ImpVclMEdit::Resize()
         if ( ( nWinStyle & WB_AUTOVSCROLL ) == WB_AUTOVSCROLL )
             ImpUpdateScrollBarVis( nWinStyle );
 
-        Size aSz = pVclMultiLineEdit->GetOutputSizePixel();
+        Size aSz = pVclMultiLineEdit->GetSize();
         Size aEditSize = aSz;
         tools::Long nSBWidth = pVclMultiLineEdit->GetSettings().GetStyleSettings().GetScrollBarSize();
         nSBWidth = pVclMultiLineEdit->CalcZoom( nSBWidth );
@@ -455,7 +455,7 @@ void ImpVclMEdit::Notify( SfxBroadcaster&, const SfxHint& rHint )
         case SfxHintId::TextHeightChanged:
             if ( mpTextWindow->GetTextView()->GetStartDocPos().Y() )
             {
-                tools::Long nOutHeight = mpTextWindow->GetOutputSizePixel().Height();
+                tools::Long nOutHeight = mpTextWindow->GetSize().Height();
                 tools::Long nTextHeight = mpTextWindow->GetTextEngine()->GetTextHeight();
                 if ( nTextHeight < nOutHeight )
                     mpTextWindow->GetTextView()->Scroll( 0, mpTextWindow->GetTextView()->GetStartDocPos().Y() );
@@ -604,7 +604,7 @@ Size ImpVclMEdit::CalcBlockSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
 void ImpVclMEdit::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const
 {
     static const sal_Unicode sampleChar = { 'x' };
-    Size aOutSz = mpTextWindow->GetOutputSizePixel();
+    Size aOutSz = mpTextWindow->GetSize();
     Size aCharSz( mpTextWindow->GetTextWidth( OUString(sampleChar) ), mpTextWindow->GetTextHeight() );
     rnCols = static_cast<sal_uInt16>(aOutSz.Width()/aCharSz.Width());
     rnLines = static_cast<sal_uInt16>(aOutSz.Height()/aCharSz.Height());
@@ -787,7 +787,7 @@ void TextWindow::Command( const CommandEvent& rCEvt )
         if ( !rCEvt.IsMouseEvent() )
         {
             // Sometime do show Menu centered in the selection !!!
-            Size aSize = GetOutputSizePixel();
+            Size aSize = GetSize();
             aPos = Point( aSize.Width()/2, aSize.Height()/2 );
         }
         sal_uInt16 n = pPopup->Execute( this, aPos );

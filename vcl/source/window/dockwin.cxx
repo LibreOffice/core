@@ -248,7 +248,7 @@ void DockingWindow::ImplStartDocking( const Point& rPos )
         pWin.disposeAndClear();
 
     Point   aPos    = ImplOutputToFrame( Point() );
-    Size    aSize   = Window::GetOutputSizePixel();
+    Size    aSize   = Window::GetSize();
     mnTrackX        = aPos.X();
     mnTrackY        = aPos.Y();
     mnTrackWidth    = aSize.Width();
@@ -446,7 +446,7 @@ void DockingWindow::Tracking( const TrackingEvent& rTEvt )
     {
         Point   aMousePos = rTEvt.GetMouseEvent().GetPosPixel();
         Point   aFrameMousePos = ImplOutputToFrame( aMousePos );
-        Size    aFrameSize = mpWindowImpl->mpFrameWindow->GetOutputSizePixel();
+        Size    aFrameSize = mpWindowImpl->mpFrameWindow->GetSize();
         if ( aFrameMousePos.X() < 0 )
             aFrameMousePos.setX( 0 );
         if ( aFrameMousePos.Y() < 0 )
@@ -898,21 +898,21 @@ void DockingWindow::SetOutputSizePixel( const Size& rNewSize )
         Window::SetOutputSizePixel( rNewSize );
 }
 
-Size DockingWindow::GetOutputSizePixel() const
+Size DockingWindow::GetSize() const
 {
     ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
     if( pWrapper )
     {
         if ( pWrapper->mpFloatWin )
-            return pWrapper->mpFloatWin->GetOutputSizePixel();
+            return pWrapper->mpFloatWin->GetSize();
         else
-            return Window::GetOutputSizePixel();
+            return Window::GetSize();
     }
 
     if ( mpFloatWin )
-        return mpFloatWin->GetOutputSizePixel();
+        return mpFloatWin->GetSize();
     else
-        return Window::GetOutputSizePixel();
+        return Window::GetSize();
 }
 
 Point DockingWindow::GetFloatingPos() const
@@ -1000,7 +1000,7 @@ void DockingWindow::setOptimalLayoutSize()
 
 void DockingWindow::setPosSizeOnContainee()
 {
-    Size aSize = GetOutputSizePixel();
+    Size aSize = GetSize();
 
     // Don't make the border width accessible via get_border_width(),
     // otherwise the floating window will handle the border as well.

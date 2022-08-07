@@ -65,7 +65,7 @@ namespace vclcanvas
         OutputDevice& rOutDev = mpOutDev->getOutDev();
         const MapMode aOldMapMode( rOutDev.GetMapMode() );
         rOutDev.SetMapMode( MapMode(MapUnit::MapMM) );
-        const Size aLogSize( rOutDev.PixelToLogic(rOutDev.GetOutputSizePixel()) );
+        const Size aLogSize( rOutDev.PixelToLogic(rOutDev.GetSize()) );
         rOutDev.SetMapMode( aOldMapMode );
 
         return vcl::unotools::size2DFromSize( aLogSize );
@@ -206,7 +206,7 @@ namespace vclcanvas
         OutputDevice& rOutDev = mpOutDev->getOutDev();
         bool bOldMap( rOutDev.IsMapModeEnabled() );
         rOutDev.EnableMapMode( false );
-        WriteDIB(rOutDev.GetBitmapEx(aEmptyPoint, rOutDev.GetOutputSizePixel()), aStream, false);
+        WriteDIB(rOutDev.GetBitmapEx(aEmptyPoint, rOutDev.GetSize()), aStream, false);
         rOutDev.EnableMapMode( bOldMap );
 
         ++nFilePostfixCount;

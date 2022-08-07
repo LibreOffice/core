@@ -138,7 +138,7 @@ void SwLabPreview::SetDrawingArea(weld::DrawingArea* pWidget)
 
 void SwLabPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    const Size aSize(GetOutputSizePixel());
+    const Size aSize(GetSize());
     const tools::Long lOutWPix = aSize.Width();
     const tools::Long lOutHPix = aSize.Height();
 

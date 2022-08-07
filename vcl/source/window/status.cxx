@@ -740,7 +740,7 @@ void StatusBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
 void StatusBar::Resize()
 {
     // save width and height
-    Size aSize = GetOutputSizePixel();
+    Size aSize = GetSize();
     mnDX = aSize.Width() - ImplGetSVData()->maNWFData.mnStatusBarLowerRightOffset;
     mnDY = aSize.Height();
     mnCalcHeight = mnDY;

@@ -202,11 +202,6 @@ private:
     // TEMP TEMP TEMP
     VclPtr<VirtualDevice>           mpAlphaVDev;
 
-    tools::Long                            mnOutWidth;
-    tools::Long                            mnOutHeight;
-    sal_Int32                       mnDPIX;
-    sal_Int32                       mnDPIY;
-    sal_Int32                       mnDPIScalePercentage; ///< For HiDPI displays, we want to draw elements for a percentage larger
     /// font specific text alignment offsets in pixel units
     mutable tools::Long                    mnTextOffX;
     mutable tools::Long                    mnTextOffY;
@@ -308,19 +303,20 @@ public:
 
     virtual sal_uInt16          GetBitCount() const;
 
-    Size                        GetOutputSizePixel() const
-                                    { return Size( mnOutWidth, mnOutHeight ); }
-    tools::Long                        GetOutputWidthPixel() const { return mnOutWidth; }
-    tools::Long                        GetOutputHeightPixel() const { return mnOutHeight; }
+    Size GetSize() const { return Size(maGeometry.GetWidth(), maGeometry.GetHeight()); }
+    tools::Long GetWidth() const { return maGeometry.GetWidth(); }
+    tools::Long GetHeight() const { return maGeometry.GetHeight(); }
+    void SetWidth(tools::Long nWidth) { maGeometry.SetWidth(nWidth); }
+    void SetHeight(tools::Long nHeight) { maGeometry.SetHeight(nHeight); }
     tools::Long                        GetOutOffXPixel() const { return maGeometry.GetXFrameOffset(); }
     tools::Long                        GetOutOffYPixel() const { return maGeometry.GetYFrameOffset(); }
     Point                       GetOutputOffPixel() const
                                     { return Point( maGeometry.GetXFrameOffset(), maGeometry.GetYFrameOffset() ); }
     tools::Rectangle            GetOutputRectPixel() const
-                                    { return tools::Rectangle(GetOutputOffPixel(), GetOutputSizePixel() ); }
+                                    { return tools::Rectangle(GetOutputOffPixel(), GetSize() ); }
 
     Size                        GetOutputSize() const
-                                    { return PixelToLogic( GetOutputSizePixel() ); }
+                                    { return PixelToLogic( GetSize() ); }
 
     css::uno::Reference< css::awt::XGraphics >
                                 CreateUnoGraphics();
@@ -377,25 +373,27 @@ public:
 
      @returns x-axis DPI value
      */
-    SAL_DLLPRIVATE sal_Int32    GetDPIX() const { return mnDPIX; }
+    SAL_DLLPRIVATE sal_Int32    GetDPIX() const { return maGeometry.GetDPIX(); }
 
     /** Get the output device's DPI y-axis value.
 
      @returns y-axis DPI value
      */
-    SAL_DLLPRIVATE sal_Int32    GetDPIY() const { return mnDPIY; }
+    SAL_DLLPRIVATE sal_Int32    GetDPIY() const { return maGeometry.GetDPIY(); }
 
-    SAL_DLLPRIVATE void         SetDPIX( sal_Int32 nDPIX ) { mnDPIX = nDPIX; }
-    SAL_DLLPRIVATE void         SetDPIY( sal_Int32 nDPIY ) { mnDPIY = nDPIY; }
+    SAL_DLLPRIVATE void         SetDPIX( sal_Int32 nDPIX ) { maGeometry.SetDPIX(nDPIX); }
+    SAL_DLLPRIVATE void         SetDPIY( sal_Int32 nDPIY ) { maGeometry.SetDPIY(nDPIY); }
 
-    float GetDPIScaleFactor() const
-    {
-        return mnDPIScalePercentage / 100.0f;
-    }
+    float GetDPIScaleFactor() const { return maGeometry.GetDPIScaleFactor(); }
 
     sal_Int32 GetDPIScalePercentage() const
     {
-        return mnDPIScalePercentage;
+        return maGeometry.GetDPIScalePercentage();
+    }
+
+    void SetDPIScalePercentage(sal_Int32 nPercent)
+    {
+        maGeometry.SetDPIScalePercentage(std::max(100, nPercent));
     }
 
     OutDevType                  GetOutDevType() const { return meOutDevType; }
@@ -951,7 +949,7 @@ public:
 
         // bitmap that contains even the space around the text,
         // that means, preserves the baseline etc.
-        Bitmap aBitmap(aDevice.GetBitmap(Point(0, 0), aDevice.GetOutputSize()));
+        Bitmap aBitmap(aDevice.GetBitmap(Point(0, 0), aDevice.GetSize()));
         </code>
     */
     bool                        GetTextBoundRect( tools::Rectangle& rRect,

@@ -137,7 +137,7 @@ void SvxNumberPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::
     rRenderContext.SetBackground(aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor);
 
     vcl::Font aDrawFont = rRenderContext.GetFont();
-    Size aSzWnd(GetOutputSizePixel());
+    Size aSzWnd(GetSize());
     OUString aTmpStr(aPrevStr);
     tools::Long nLeadSpace = (aSzWnd.Width() - rRenderContext.GetTextWidth(aTmpStr)) / 2;
 

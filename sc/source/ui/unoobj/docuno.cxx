@@ -547,7 +547,7 @@ void ScModelObj::paintTile( VirtualDevice& rDevice,
     // following; but for the moment there is too many problems with that and
     // interaction with editeng used for the cell editing
     //Size aTileSize(nOutputWidth, nOutputHeight);
-    //if (pGridWindow->GetOutputSizePixel() != aTileSize)
+    //if (pGridWindow->GetSize() != aTileSize)
     //    pGridWindow->SetOutputSizePixel(Size(nOutputWidth, nOutputHeight));
     // so instead for now, set the viewport size to document size
     Size aDocSize = getDocumentSize();

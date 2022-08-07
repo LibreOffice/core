@@ -81,7 +81,7 @@ void ScAutoFmtPreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 
 void ScAutoFmtPreview::Resize()
 {
-    Size aSize(GetOutputSizePixel());
+    Size aSize(GetSize());
     aPrvSize  = Size(aSize.Width() - 6, aSize.Height() - 30);
     mnLabelColWidth = (aPrvSize.Width() - 4) / 4 - 12;
     mnDataColWidth1 = (aPrvSize.Width() - 4 - 2 * mnLabelColWidth) / 3;
@@ -497,7 +497,7 @@ void ScAutoFmtPreview::DoPaint(vcl::RenderContext& rRenderContext)
     rRenderContext.Push(vcl::PushFlags::ALL);
     DrawModeFlags nOldDrawMode = aVD->GetDrawMode();
 
-    Size aWndSize(GetOutputSizePixel());
+    Size aWndSize(GetSize());
     vcl::Font aFont(aVD->GetFont());
     const Color& aBackCol = SC_MOD()->GetColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor;
     tools::Rectangle aRect(Point(), aWndSize);

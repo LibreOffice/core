@@ -995,7 +995,7 @@ void Window::ImplUpdateAll()
     if ( mpWindowImpl->mpFrameWindow->mpWindowImpl->mbPaintFrame )
     {
         Point aPoint( 0, 0 );
-        vcl::Region aRegion( tools::Rectangle( aPoint, GetOutputSizePixel() ) );
+        vcl::Region aRegion( tools::Rectangle( aPoint, GetSize() ) );
         ImplInvalidateOverlapFrameRegion( aRegion );
         if ( mpWindowImpl->mbFrame || (mpWindowImpl->mpBorderWindow && mpWindowImpl->mpBorderWindow->mpWindowImpl->mbFrame) )
             bFlush = true;
@@ -1143,8 +1143,11 @@ vcl::Region Window::GetPaintRegion() const
 
 void Window::Invalidate( InvalidateFlags nFlags )
 {
-    if ( !comphelper::LibreOfficeKit::isActive() && (!GetOutDev()->IsDeviceOutputNecessary() || !GetOutDev()->mnOutWidth || !GetOutDev()->mnOutHeight) )
+    if ( !comphelper::LibreOfficeKit::isActive()
+         && (!GetOutDev()->IsDeviceOutputNecessary() || !GetOutDev()->GetWidth()|| !GetOutDev()->GetHeight()) )
+    {
         return;
+    }
 
     ImplInvalidate( nullptr, nFlags );
     LogicInvalidate(nullptr);
@@ -1152,8 +1155,11 @@ void Window::Invalidate( InvalidateFlags nFlags )
 
 void Window::Invalidate( const tools::Rectangle& rRect, InvalidateFlags nFlags )
 {
-    if ( !comphelper::LibreOfficeKit::isActive() && (!GetOutDev()->IsDeviceOutputNecessary() || !GetOutDev()->mnOutWidth || !GetOutDev()->mnOutHeight) )
+    if ( !comphelper::LibreOfficeKit::isActive() && (!GetOutDev()->IsDeviceOutputNecessary()
+         || !GetOutDev()->GetWidth()|| !GetOutDev()->GetHeight()) )
+    {
         return;
+    }
 
     OutputDevice *pOutDev = GetOutDev();
     tools::Rectangle aRect = pOutDev->ImplLogicToDevicePixel( rRect );
@@ -1168,8 +1174,11 @@ void Window::Invalidate( const tools::Rectangle& rRect, InvalidateFlags nFlags )
 
 void Window::Invalidate( const vcl::Region& rRegion, InvalidateFlags nFlags )
 {
-    if ( !comphelper::LibreOfficeKit::isActive() && (!GetOutDev()->IsDeviceOutputNecessary() || !GetOutDev()->mnOutWidth || !GetOutDev()->mnOutHeight) )
+    if ( !comphelper::LibreOfficeKit::isActive()
+         && (!GetOutDev()->IsDeviceOutputNecessary() || !GetOutDev()->GetWidth() || !GetOutDev()->GetHeight()) )
+    {
         return;
+    }
 
     if ( rRegion.IsNull() )
     {
@@ -1233,8 +1242,11 @@ void Window::PixelInvalidate(const tools::Rectangle* pRectangle)
 
 void Window::Validate()
 {
-    if ( !comphelper::LibreOfficeKit::isActive() && (!GetOutDev()->IsDeviceOutputNecessary() || !GetOutDev()->mnOutWidth || !GetOutDev()->mnOutHeight) )
+    if ( !comphelper::LibreOfficeKit::isActive()
+         && (!GetOutDev()->IsDeviceOutputNecessary() || !GetOutDev()->GetWidth() || !GetOutDev()->GetHeight()) )
+    {
         return;
+    }
 
     ImplValidate();
 }
@@ -1284,7 +1296,7 @@ void Window::PaintImmediately()
     if ( mpWindowImpl->mpFrameWindow->mpWindowImpl->mbPaintFrame )
     {
         Point aPoint( 0, 0 );
-        vcl::Region aRegion( tools::Rectangle( aPoint, GetOutputSizePixel() ) );
+        vcl::Region aRegion( tools::Rectangle( aPoint, GetSize() ) );
         ImplInvalidateOverlapFrameRegion( aRegion );
         if ( mpWindowImpl->mbFrame || (mpWindowImpl->mpBorderWindow && mpWindowImpl->mpBorderWindow->mpWindowImpl->mbFrame) )
             bFlush = true;
@@ -1357,7 +1369,7 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
         VclPtrInstance<VirtualDevice> pDevice(*i_pTargetOutDev);
         pDevice->EnableRTL(IsRTLEnabled());
 
-        Size aSize(GetOutputSizePixel());
+        Size aSize(GetSize());
         pDevice->SetOutputSizePixel(aSize);
 
         vcl::Font aCopyFont = GetFont();
@@ -1392,7 +1404,7 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
         pDevice->SetTextAlign(GetTextAlign());
         pDevice->SetRasterOp(GetOutDev()->GetRasterOp());
 
-        tools::Rectangle aPaintRect(Point(), GetOutputSizePixel());
+        tools::Rectangle aPaintRect(Point(), GetSize());
 
         vcl::Region aClipRegion(GetOutDev()->GetClipRegion());
         pDevice->SetClipRegion();
@@ -1404,7 +1416,7 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
 
         pDevice->SetMapMode(GetMapMode());
 
-        Paint(*pDevice, tools::Rectangle(Point(), GetOutputSizePixel()));
+        Paint(*pDevice, tools::Rectangle(Point(), GetSize()));
 
         i_pTargetOutDev->DrawOutDev(i_rPos, aSize, Point(), pDevice->PixelToLogic(aSize), *pDevice);
 
@@ -1420,7 +1432,7 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
             {
                 tools::Long nDeltaX = pChild->GetOutDev()->maGeometry.GetXFrameOffset() - GetOutDev()->maGeometry.GetXFrameOffset();
                 if( bHasMirroredGraphics )
-                    nDeltaX = GetOutDev()->mnOutWidth - nDeltaX - pChild->GetOutDev()->mnOutWidth;
+                    nDeltaX = GetOutDev()->GetWidth() - nDeltaX - pChild->GetOutDev()->GetWidth();
 
                 tools::Long nDeltaY = pChild->GetOutOffYPixel() - GetOutOffYPixel();
 
@@ -1442,8 +1454,8 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     const OutputDevice *pOutDev = GetOutDev();
     tools::Long nOldDPIX = pOutDev->GetDPIX();
     tools::Long nOldDPIY = pOutDev->GetDPIY();
-    GetOutDev()->mnDPIX = i_pTargetOutDev->GetDPIX();
-    GetOutDev()->mnDPIY = i_pTargetOutDev->GetDPIY();
+    GetOutDev()->SetDPIX(i_pTargetOutDev->GetDPIX());
+    GetOutDev()->SetDPIY(i_pTargetOutDev->GetDPIY());
     bool bOutput = GetOutDev()->IsOutputEnabled();
     GetOutDev()->EnableOutput();
 
@@ -1464,10 +1476,10 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     GetOutDev()->Push();
     // copy graphics state to metafile
     vcl::Font aCopyFont = GetFont();
-    if( nOldDPIX != GetOutDev()->mnDPIX || nOldDPIY != GetOutDev()->mnDPIY )
+    if( nOldDPIX != GetOutDev()->GetDPIX() || nOldDPIY != GetOutDev()->GetDPIY() )
     {
-        aCopyFont.SetFontHeight( aCopyFont.GetFontHeight() * GetOutDev()->mnDPIY / nOldDPIY );
-        aCopyFont.SetAverageFontWidth( aCopyFont.GetAverageFontWidth() * GetOutDev()->mnDPIX / nOldDPIX );
+        aCopyFont.SetFontHeight( aCopyFont.GetFontHeight() * GetOutDev()->GetDPIY() / nOldDPIY );
+        aCopyFont.SetAverageFontWidth( aCopyFont.GetAverageFontWidth() * GetOutDev()->GetDPIX() / nOldDPIX );
     }
     SetFont( aCopyFont );
     SetTextColor( GetTextColor() );
@@ -1500,7 +1512,7 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     GetOutDev()->SetLayoutMode( GetOutDev()->GetLayoutMode() );
 
     GetOutDev()->SetDigitLanguage( GetOutDev()->GetDigitLanguage() );
-    tools::Rectangle aPaintRect(Point(0, 0), GetOutputSizePixel());
+    tools::Rectangle aPaintRect(Point(0, 0), GetSize());
     aClipRegion.Intersect( aPaintRect );
     GetOutDev()->SetClipRegion( aClipRegion );
 
@@ -1525,7 +1537,7 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
                                                 DeviceFormat::DEFAULT,
                                                 DeviceFormat::DEFAULT);
 
-    pMaskedDevice->SetOutputSizePixel( GetOutputSizePixel() );
+    pMaskedDevice->SetOutputSizePixel( GetSize() );
     pMaskedDevice->EnableRTL( IsRTLEnabled() );
     aMtf.WindStart();
     aMtf.Play(*pMaskedDevice);
@@ -1541,7 +1553,7 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
             tools::Long nDeltaX = pChild->GetOutDev()->maGeometry.GetXFrameOffset() - GetOutDev()->maGeometry.GetXFrameOffset();
 
             if( pOutDev->HasMirroredGraphics() )
-                nDeltaX = GetOutDev()->mnOutWidth - nDeltaX - pChild->GetOutDev()->mnOutWidth;
+                nDeltaX = GetOutDev()->GetWidth() - nDeltaX - pChild->GetOutDev()->GetWidth();
             tools::Long nDeltaY = pChild->GetOutOffYPixel() - GetOutOffYPixel();
             Point aPos( i_rPos );
             Point aDelta( nDeltaX, nDeltaY );
@@ -1556,8 +1568,8 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     GetOutDev()->EnableOutput( bOutput );
     mpWindowImpl->mbReallyVisible = bRVisible;
     GetOutDev()->mbDevOutput = bDevOutput;
-    GetOutDev()->mnDPIX = nOldDPIX;
-    GetOutDev()->mnDPIY = nOldDPIY;
+    GetOutDev()->SetDPIX(nOldDPIX);
+    GetOutDev()->SetDPIY(nOldDPIY);
 }
 
 void Window::PaintToDevice(OutputDevice* pDev, const Point& rPos)
@@ -1610,7 +1622,7 @@ void Window::Erase(vcl::RenderContext& rRenderContext)
     }
     else if (aCtrlPart != ControlPart::NONE && ! IsControlBackground())
     {
-        tools::Rectangle aCtrlRegion(Point(), GetOutputSizePixel());
+        tools::Rectangle aCtrlRegion(Point(), GetSize());
         ControlState nState = ControlState::NONE;
 
         if (IsEnabled())
@@ -1625,7 +1637,7 @@ void Window::Erase(vcl::RenderContext& rRenderContext)
         RasterOp eRasterOp = GetOutDev()->GetRasterOp();
         if (eRasterOp != RasterOp::OverPaint)
             GetOutDev()->SetRasterOp(RasterOp::OverPaint);
-        rRenderContext.DrawWallpaper(0, 0, GetOutDev()->mnOutWidth, GetOutDev()->mnOutHeight, GetOutDev()->maBackground);
+        rRenderContext.DrawWallpaper(0, 0, GetOutDev()->GetWidth(), GetOutDev()->GetHeight(), GetOutDev()->maBackground);
         if (eRasterOp != RasterOp::OverPaint)
             rRenderContext.SetRasterOp(eRasterOp);
     }

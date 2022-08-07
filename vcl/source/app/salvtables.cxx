@@ -842,7 +842,7 @@ Image createImage(const OUString& rImage)
 
 Image createImage(const VirtualDevice& rDevice)
 {
-    return Image(rDevice.GetBitmapEx(Point(), rDevice.GetOutputSizePixel()));
+    return Image(rDevice.GetBitmapEx(Point(), rDevice.GetSize()));
 }
 
 sal_uInt16 insert_to_menu(sal_uInt16 nLastId, PopupMenu* pMenu, int pos, std::u16string_view rId,
@@ -1430,8 +1430,7 @@ void SalInstanceWidget::DoRecursivePaint(vcl::Window* pWindow, const Point& rRen
         tools::Long nDeltaX
             = pChild->GetOutDev()->GetOutOffXPixel() - pWindow->GetOutDev()->GetOutOffXPixel();
         if (bHasMirroredGraphics)
-            nDeltaX = pWindow->GetOutDev()->GetOutputWidthPixel() - nDeltaX
-                      - pChild->GetOutDev()->GetOutputWidthPixel();
+            nDeltaX = pWindow->GetOutDev()->GetWidth() - nDeltaX - pChild->GetOutDev()->GetWidth();
 
         tools::Long nDeltaY
             = pChild->GetOutDev()->GetOutOffYPixel() - pWindow->GetOutDev()->GetOutOffYPixel();
@@ -5232,7 +5231,7 @@ IMPL_LINK(SalInstanceTreeView, TooltipHdl, const HelpEvent&, rHEvt, bool)
         OUString aTooltip = signal_query_tooltip(aIter);
         if (aTooltip.isEmpty())
             return false;
-        Size aSize(m_xTreeView->GetOutputSizePixel().Width(), m_xTreeView->GetEntryHeight());
+        Size aSize(m_xTreeView->GetSize().Width(), m_xTreeView->GetEntryHeight());
         tools::Rectangle aScreenRect(
             m_xTreeView->OutputToScreenPixel(m_xTreeView->GetEntryPosition(pEntry)), aSize);
         Help::ShowQuickHelp(m_xTreeView, aScreenRect, aTooltip);
@@ -5603,7 +5602,7 @@ IMPL_LINK(SalInstanceIconView, TooltipHdl, const HelpEvent&, rHEvt, bool)
         OUString aTooltip = signal_query_tooltip(aIter);
         if (aTooltip.isEmpty())
             return false;
-        Size aSize(m_xIconView->GetOutputSizePixel().Width(), m_xIconView->GetEntryHeight());
+        Size aSize(m_xIconView->GetSize().Width(), m_xIconView->GetEntryHeight());
         tools::Rectangle aScreenRect(
             m_xIconView->OutputToScreenPixel(m_xIconView->GetEntryPosition(pEntry)), aSize);
         Help::ShowQuickHelp(m_xIconView, aScreenRect, aTooltip);

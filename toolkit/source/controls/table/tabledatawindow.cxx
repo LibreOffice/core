@@ -93,7 +93,7 @@ namespace svt::table
                     pTableModel->getCellContent( hitCol, hitRow, aCellToolTip );
 
                     // use the cell content as tool tip only if it doesn't fit into the cell.
-                    tools::Rectangle const aWindowRect( Point( 0, 0 ), GetOutputSizePixel() );
+                    tools::Rectangle const aWindowRect( Point( 0, 0 ), GetSize() );
                     TableCellGeometry const aCell( m_rTableControl, aWindowRect, hitCol, hitRow );
                     tools::Rectangle const aCellRect( aCell.getRect() );
 
@@ -116,7 +116,7 @@ namespace svt::table
 
             tools::Rectangle const aControlScreenRect(
                 OutputToScreenPixel( Point( 0, 0 ) ),
-                GetOutputSizePixel()
+                GetSize()
             );
 
             Help::ShowQuickHelp(this, aControlScreenRect, sHelpText, nHelpStyle);

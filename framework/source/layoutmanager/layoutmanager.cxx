@@ -715,7 +715,7 @@ void LayoutManager::implts_writeWindowStateData( const OUString& aName, const UI
     SolarMutexGuard aGuard;
     pContainerWindow  = VCLUnoHelper::GetWindow( m_xContainerWindow );
     if ( pContainerWindow )
-        aContainerWinSize = pContainerWindow->GetOutputSizePixel();
+        aContainerWinSize = pContainerWindow->GetSize();
 
     return aContainerWinSize;
 }

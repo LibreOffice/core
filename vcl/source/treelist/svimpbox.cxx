@@ -252,7 +252,7 @@ void SvImpLBox::Clear()
     m_aVerSBar->SetThumbPos( 0 );
     Range aRange( 0, 0 );
     m_aVerSBar->SetRange( aRange );
-    m_aOutputSize = m_pView->Control::GetOutputSizePixel();
+    m_aOutputSize = m_pView->Control::GetSize();
     m_aHorSBar->Hide();
     m_aHorSBar->SetThumbPos( 0 );
     MapMode aMapMode( m_pView->GetMapMode());
@@ -1107,7 +1107,7 @@ void SvImpLBox::AdjustScrollBars( Size& rSize )
 
     sal_uInt16 nResult = 0;
 
-    Size aOSize( m_pView->Control::GetOutputSizePixel() );
+    Size aOSize( m_pView->Control::GetSize() );
 
     const WinBits nWindowStyle = m_pView->GetStyle();
     bool bVerSBar = ( nWindowStyle & WB_VSCROLL ) != 0;
@@ -1223,13 +1223,13 @@ void SvImpLBox::AdjustScrollBars( Size& rSize )
 void SvImpLBox::InitScrollBarBox()
 {
     m_aScrBarBox->SetSizePixel( Size(m_nVerSBarWidth, m_nHorSBarHeight) );
-    Size aSize( m_pView->Control::GetOutputSizePixel() );
+    Size aSize( m_pView->Control::GetSize() );
     m_aScrBarBox->SetPosPixel( Point(aSize.Width()-m_nVerSBarWidth, aSize.Height()-m_nHorSBarHeight));
 }
 
 void SvImpLBox::Resize()
 {
-    m_aOutputSize = m_pView->Control::GetOutputSizePixel();
+    m_aOutputSize = m_pView->Control::GetSize();
     if( m_aOutputSize.IsEmpty() )
         return;
     m_nFlags |= LBoxFlags::InResize;
@@ -1400,7 +1400,7 @@ void SvImpLBox::SetEntryHeight()
     SetNodeBmpWidth( GetCollapsedNodeBmp() );
     if(!m_pView->HasViewData()) // are we within the Clear?
     {
-        Size aSize = m_pView->Control::GetOutputSizePixel();
+        Size aSize = m_pView->Control::GetSize();
         AdjustScrollBars( aSize );
     }
     else

@@ -50,7 +50,7 @@ void CuiGraphicPreviewWindow::Paint(vcl::RenderContext& rRenderContext, const ::
     rRenderContext.SetBackground(Wallpaper(Application::GetSettings().GetStyleSettings().GetDialogColor()));
     rRenderContext.Erase();
 
-    const Size aOutputSize(GetOutputSizePixel());
+    const Size aOutputSize(GetSize());
 
     if (maPreview.IsAnimated())
     {
@@ -81,7 +81,7 @@ void CuiGraphicPreviewWindow::ScaleImageToFit()
 
     maScaledOrig = *mpOrigGraphic;
 
-    const Size aPreviewSize(GetOutputSizePixel());
+    const Size aPreviewSize(GetSize());
     Size aGrfSize(maOrigGraphicSizePixel);
 
     if( mpOrigGraphic->GetType() == GraphicType::Bitmap &&
@@ -119,7 +119,7 @@ void CuiGraphicPreviewWindow::ScaleImageToFit()
 
 void CuiGraphicPreviewWindow::Resize()
 {
-    maOutputSizePixel = GetOutputSizePixel();
+    maOutputSizePixel = GetSize();
     ScaleImageToFit();
 }
 

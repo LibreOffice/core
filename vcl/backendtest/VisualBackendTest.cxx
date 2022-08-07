@@ -714,8 +714,8 @@ public:
             tools::Rectangle aGradientRect(Point(200, 200), Size(200 + fTime * 300, 200 + fTime * 300));
             mpVDev->DrawGradient(aGradientRect, Gradient(GradientStyle::Linear, COL_YELLOW, COL_BLUE));
 
-            rRenderContext.DrawOutDev(Point(), mpVDev->GetOutputSizePixel(),
-                                      Point(), mpVDev->GetOutputSizePixel(),
+            rRenderContext.DrawOutDev(Point(), mpVDev->GetSize(),
+                                      Point(), mpVDev->GetSize(),
                                       *mpVDev);
             rRenderContext.SetTextColor(COL_LIGHTRED);
             rRenderContext.DrawText(Point(10, 10), "FPS: " + OUString::number(int(fps)));
@@ -724,7 +724,7 @@ public:
 
         rRenderContext.SetBackground(Wallpaper(COL_GREEN));
 
-        Size aSize = GetOutputSizePixel();
+        Size aSize = GetSize();
 
         tools::Long nWidth = aSize.Width();
         tools::Long nHeight = aSize.Height();

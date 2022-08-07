@@ -2471,7 +2471,7 @@ css::awt::Size SAL_CALL VCLXWindow::getOutputSize(  )
 {
     SolarMutexGuard aGuard;
     if( VclPtr<vcl::Window> pWindow = GetWindow() )
-        return AWTSize( pWindow->GetOutputSizePixel() );
+        return AWTSize( pWindow->GetSize() );
     else
         return css::awt::Size();
 }

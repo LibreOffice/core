@@ -278,7 +278,7 @@ bool FuDraw::MouseButtonUp(const MouseEvent& rMEvt)
 
     if ( bDragHelpLine )
     {
-        ::tools::Rectangle aOutputArea(Point(0,0), mpWindow->GetOutputSizePixel());
+        ::tools::Rectangle aOutputArea(Point(0,0), mpWindow->GetSize());
 
         if (mpView && !aOutputArea.Contains(rMEvt.GetPosPixel()))
             mpView->GetSdrPageView()->DeleteHelpLine(nHelpLine);

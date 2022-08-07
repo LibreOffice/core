@@ -85,7 +85,7 @@ void SvxPageWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
         aMapMode.SetScaleY(aXScale);
     }
     rRenderContext.SetMapMode(aMapMode);
-    Size aSz(rRenderContext.PixelToLogic(GetOutputSizePixel()));
+    Size aSz(rRenderContext.PixelToLogic(GetSize()));
     tools::Long nYPos = (aSz.Height() - aSize.Height()) / 2;
 
     if (eUsage == SvxPageUsage::All)
@@ -102,7 +102,7 @@ void SvxPageWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
             aMapMode.SetScaleX(aX);
             aMapMode.SetScaleY(aY);
             rRenderContext.SetMapMode(aMapMode);
-            aSz = rRenderContext.PixelToLogic(GetOutputSizePixel());
+            aSz = rRenderContext.PixelToLogic(GetSize());
             nYPos = (aSz.Height() - aSize.Height()) / 2;
             tools::Long nXPos = (aSz.Width() - aSize.Width()) / 2;
             DrawPage(rRenderContext, Point(nXPos,nYPos),true,true);

@@ -93,7 +93,7 @@ void SwFrameExample::StyleUpdated()
 
 void SwFrameExample::InitAllRects_Impl(vcl::RenderContext& rRenderContext)
 {
-    aPage.SetSize(GetOutputSizePixel());
+    aPage.SetSize(GetSize());
 
     sal_uInt32 nOutWPix = aPage.GetWidth();
     sal_uInt32 nOutHPix = aPage.GetHeight();

@@ -219,7 +219,7 @@ public:
     Point           GetPosPixel() const override;
     Size            GetSizePixel() const override;
     void            SetOutputSizePixel( const Size& rNewSize ) override;
-    Size            GetOutputSizePixel() const;
+    Size            GetSize() const;
 
     virtual void SetText( const OUString& rStr ) override;
     virtual OUString GetText() const override;

@@ -52,7 +52,7 @@ ImplWheelWindow::ImplWheelWindow( vcl::Window* pParent ) :
     // we need a parent
     SAL_WARN_IF( !pParent, "vcl", "ImplWheelWindow::ImplWheelWindow(): Parent not set!" );
 
-    const Size      aSize( pParent->GetOutputSizePixel() );
+    const Size      aSize( pParent->GetSize() );
     const StartAutoScrollFlags nFlags = ImplGetSVData()->mpWinData->mnAutoScrollFlags;
     const bool      bHorz( nFlags & StartAutoScrollFlags::Horz );
     const bool      bVert( nFlags & StartAutoScrollFlags::Vert );

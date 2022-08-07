@@ -87,7 +87,7 @@ void SdDisplay::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectang
     rRenderContext.Erase();
 
     Point aPt;
-    Size aSize = GetOutputSizePixel();
+    Size aSize = GetSize();
 
     Size aBmpSize = aBitmapEx.GetBitmap().GetSizePixel();
     aBmpSize.setWidth( static_cast<::tools::Long>( static_cast<double>(aBmpSize.Width()) * static_cast<double>(aScale) ) );
@@ -648,7 +648,7 @@ Fraction AnimationWindow::GetScale()
         aBmpSize.AdjustWidth(10 );
         aBmpSize.AdjustHeight(10 );
 
-        Size aDisplaySize(m_xCtlDisplay->GetOutputSizePixel());
+        Size aDisplaySize(m_xCtlDisplay->GetSize());
 
         aFrac = Fraction( std::min( static_cast<double>(aDisplaySize.Width()) / static_cast<double>(aBmpSize.Width()),
                              static_cast<double>(aDisplaySize.Height()) / static_cast<double>(aBmpSize.Height()) ) );
@@ -871,7 +871,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
     const MapMode       aMap100( MapUnit::Map100thMM );
     Size                aMaxSizeLog;
     Size                aMaxSizePix;
-    Size                aTemp( pOutWin->GetOutputSizePixel() );
+    Size                aTemp( pOutWin->GetSize() );
     const Point         aWindowCenter( pOutWin->PixelToLogic( Point( aTemp.Width() >> 1, aTemp.Height() >> 1 ) ) );
     const OutputDevice* pDefDev = Application::GetDefaultDevice();
     const size_t nCount = m_FrameList.size();

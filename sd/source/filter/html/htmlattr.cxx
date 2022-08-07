@@ -33,7 +33,7 @@ SdHtmlAttrPreview::~SdHtmlAttrPreview()
 void SdHtmlAttrPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect)
 {
     ::tools::Rectangle aTextRect;
-    aTextRect.SetSize(GetOutputSizePixel());
+    aTextRect.SetSize(GetSize());
 
     rRenderContext.SetLineColor(m_aBackColor);
     rRenderContext.SetFillColor(m_aBackColor);

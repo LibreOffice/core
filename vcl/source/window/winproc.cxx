@@ -211,7 +211,7 @@ static bool ImplCallCommand( const VclPtr<vcl::Window>& pChild, CommandEventId n
         else
         {
             // simulate mouseposition at center of window
-            Size aSize( pChild->GetOutputSizePixel() );
+            Size aSize( pChild->GetSize() );
             aPos = Point( aSize.getWidth()/2, aSize.getHeight()/2 );
         }
     }
@@ -1853,7 +1853,7 @@ static void KillOwnPopups( vcl::Window const * pWindow )
 
 void ImplHandleResize( vcl::Window* pWindow, tools::Long nNewWidth, tools::Long nNewHeight )
 {
-    const bool bChanged = (nNewWidth != pWindow->GetOutputSizePixel().Width()) || (nNewHeight != pWindow->GetOutDev()->GetOutputHeightPixel());
+    const bool bChanged = (nNewWidth != pWindow->GetSize().Width()) || (nNewHeight != pWindow->GetOutDev()->GetHeight());
     if (bChanged && pWindow->GetStyle() & (WB_MOVEABLE|WB_SIZEABLE))
     {
         KillOwnPopups( pWindow );
@@ -1868,8 +1868,8 @@ void ImplHandleResize( vcl::Window* pWindow, tools::Long nNewWidth, tools::Long 
     {
         if (bChanged)
         {
-            pWindow->GetOutDev()->mnOutWidth  = nNewWidth;
-            pWindow->GetOutDev()->mnOutHeight = nNewHeight;
+            pWindow->GetOutDev()->SetWidth(nNewWidth);
+            pWindow->GetOutDev()->SetHeight(nNewHeight);
             pWindow->ImplGetWindowImpl()->mbWaitSystemResize = false;
             if ( pWindow->IsReallyVisible() )
                 pWindow->ImplSetClipFlag();
@@ -1912,7 +1912,7 @@ void ImplHandleResize( vcl::Window* pWindow, tools::Long nNewWidth, tools::Long 
             if (pWindow->SupportsDoubleBuffering() && pWindow->ImplGetWindowImpl()->mbFrame)
             {
                 // Propagate resize for the frame's buffer.
-                pWindow->ImplGetWindowImpl()->mpFrameData->mpBuffer->SetOutputSizePixel(pWindow->GetOutputSizePixel());
+                pWindow->ImplGetWindowImpl()->mpFrameData->mpBuffer->SetOutputSizePixel(pWindow->GetSize());
             }
         }
     }

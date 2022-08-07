@@ -195,7 +195,7 @@ void FixedText::ApplySettings(vcl::RenderContext& rRenderContext)
 
 void FixedText::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& )
 {
-    ImplDraw(&rRenderContext, SystemTextColorFlags::NONE, Point(), GetOutputSizePixel());
+    ImplDraw(&rRenderContext, SystemTextColorFlags::NONE, Point(), GetSize());
 }
 
 void FixedText::Draw( OutputDevice* pDev, const Point& rPos,
@@ -351,7 +351,7 @@ Size FixedText::GetOptimalSize() const
 void FixedText::FillLayoutData() const
 {
     mxLayoutData.emplace();
-    ImplDraw(const_cast<FixedText*>(this)->GetOutDev(), SystemTextColorFlags::NONE, Point(), GetOutputSizePixel(), true);
+    ImplDraw(const_cast<FixedText*>(this)->GetOutDev(), SystemTextColorFlags::NONE, Point(), GetSize(), true);
     //const_cast<FixedText*>(this)->Invalidate();
 }
 
@@ -489,7 +489,7 @@ void FixedLine::ImplDraw(vcl::RenderContext& rRenderContext)
 {
     // we need to measure according to the window, not according to the
     // RenderContext we paint to
-    Size aOutSize = GetOutputSizePixel();
+    Size aOutSize = GetSize();
 
     OUString aText = GetText();
     WinBits nWinStyle = GetStyle();
@@ -729,7 +729,7 @@ void FixedBitmap::ApplySettings(vcl::RenderContext& rRenderContext)
 
 void FixedBitmap::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    ImplDraw(&rRenderContext, Point(), GetOutputSizePixel());
+    ImplDraw(&rRenderContext, Point(), GetSize());
 }
 
 void FixedBitmap::Draw( OutputDevice* pDev, const Point& rPos,
@@ -871,7 +871,7 @@ void FixedImage::ApplySettings(vcl::RenderContext& rRenderContext)
 
 void FixedImage::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    ImplDraw(&rRenderContext, Point(), GetOutputSizePixel());
+    ImplDraw(&rRenderContext, Point(), GetSize());
 }
 
 Size FixedImage::GetOptimalSize() const

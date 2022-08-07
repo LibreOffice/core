@@ -336,7 +336,7 @@ void MenuBarWindow::ImplCreatePopup( bool bPreSelectFirst )
     if ( GetSizePixel().Height() )
     {
         // #107747# give menuitems the height of the menubar
-        aItemBottomRight.AdjustY(GetOutputSizePixel().Height()-1 );
+        aItemBottomRight.AdjustY(GetSize().Height()-1 );
     }
 
     // ImplExecute is not modal...
@@ -567,9 +567,9 @@ static int ImplGetTopDockingAreaHeight( vcl::Window const *pWindow )
                         pDockingArea = static_cast< DockingAreaWindow* >( pChildWin );
 
                     if( pDockingArea && pDockingArea->GetAlign() == WindowAlign::Top &&
-                        pDockingArea->IsVisible() && pDockingArea->GetOutputSizePixel().Height() != 0 )
+                        pDockingArea->IsVisible() && pDockingArea->GetSize().Height() != 0 )
                     {
-                        return pDockingArea->GetOutputSizePixel().Height();
+                        return pDockingArea->GetSize().Height();
                     }
 
                     pChildWin = pChildWin->GetWindow( GetWindowType::Next ); //mpWindowImpl->mpNext;
@@ -608,7 +608,7 @@ void MenuBarWindow::HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16
     tools::Long nX = 0;
     size_t nCount = m_pMenu->pItemList->size();
 
-    Size aOutputSize = GetOutputSizePixel();
+    Size aOutputSize = GetSize();
     aOutputSize.AdjustWidth( -(m_aCloseBtn->GetSizePixel().Width()) );
 
     for (size_t n = 0; n < nCount; n++)
@@ -694,7 +694,7 @@ tools::Rectangle MenuBarWindow::ImplGetItemRect( sal_uInt16 nPos ) const
             {
                 if ( pData->eType != MenuItemType::SEPARATOR )
                     // #107747# give menuitems the height of the menubar
-                    aRect = tools::Rectangle( Point( nX, 1 ), Size( pData->aSz.Width(), GetOutputSizePixel().Height()-2 ) );
+                    aRect = tools::Rectangle( Point( nX, 1 ), Size( pData->aSz.Width(), GetSize().Height()-2 ) );
                 break;
             }
 
@@ -866,7 +866,7 @@ void MenuBarWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
 
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
-    Size aOutputSize = GetOutputSizePixel();
+    Size aOutputSize = GetSize();
 
     // no VCL paint if native menus
     if (m_pMenu->GetNativeMenuBar())
@@ -920,7 +920,7 @@ void MenuBarWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
 
 void MenuBarWindow::Resize()
 {
-    Size aOutSz = GetOutputSizePixel();
+    Size aOutSz = GetSize();
     tools::Long n      = aOutSz.Height()-4;
     tools::Long nX     = aOutSz.Width()-3;
     tools::Long nY     = 2;

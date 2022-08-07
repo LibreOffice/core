@@ -1141,7 +1141,7 @@ BitmapEx SfxTabDialogController::createScreenshot() const
     }
 
     VclPtr<VirtualDevice> xDialogSurface(m_xDialog->screenshot());
-    return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
+    return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetSize());
 }
 
 OString SfxTabDialogController::GetScreenshotId() const

@@ -106,7 +106,7 @@ tools::Long SalGraphics::mirror2( tools::Long x, const OutputDevice& rOutDev ) c
 
 inline tools::Long SalGraphics::GetDeviceWidth(const OutputDevice& rOutDev) const
 {
-    return rOutDev.IsVirtual() ? rOutDev.GetOutputWidthPixel() : GetGraphicsWidth();
+    return rOutDev.IsVirtual() ? rOutDev.GetWidth() : GetGraphicsWidth();
 }
 
 void SalGraphics::mirror( tools::Long& x, const OutputDevice& rOutDev ) const
@@ -120,13 +120,13 @@ void SalGraphics::mirror( tools::Long& x, const OutputDevice& rOutDev ) const
         // mirror this window back
         if( m_nLayout & SalLayoutFlags::BiDiRtl )
         {
-            tools::Long devX = w - rOutDev.GetOutputWidthPixel() - rOutDev.GetOutOffXPixel();   // re-mirrored mnOutOffX
+            tools::Long devX = w - rOutDev.GetWidth() - rOutDev.GetOutOffXPixel();   // re-mirrored mnOutOffX
             x = devX + (x - rOutDev.GetOutOffXPixel());
         }
         else
         {
             tools::Long devX = rOutDev.GetOutOffXPixel();   // re-mirrored mnOutOffX
-            x = rOutDev.GetOutputWidthPixel() - (x - devX) + rOutDev.GetOutOffXPixel() - 1;
+            x = rOutDev.GetWidth() - (x - devX) + rOutDev.GetOutOffXPixel() - 1;
         }
     }
     else if( m_nLayout & SalLayoutFlags::BiDiRtl )
@@ -144,7 +144,7 @@ void SalGraphics::mirror( tools::Long& x, tools::Long nWidth, const OutputDevice
         // mirror this window back
         if( m_nLayout & SalLayoutFlags::BiDiRtl )
         {
-            tools::Long devX = w - rOutDev.GetOutputWidthPixel() - rOutDev.GetOutOffXPixel();   // re-mirrored mnOutOffX
+            tools::Long devX = w - rOutDev.GetWidth() - rOutDev.GetOutOffXPixel();   // re-mirrored mnOutOffX
             if( bBack )
                 x = x - devX + rOutDev.GetOutOffXPixel();
             else
@@ -154,9 +154,9 @@ void SalGraphics::mirror( tools::Long& x, tools::Long nWidth, const OutputDevice
         {
             tools::Long devX = rOutDev.GetOutOffXPixel();   // re-mirrored mnOutOffX
             if( bBack )
-                x = devX + (rOutDev.GetOutputWidthPixel() + devX) - (x + nWidth);
+                x = devX + (rOutDev.GetWidth() + devX) - (x + nWidth);
             else
-                x = rOutDev.GetOutputWidthPixel() - (x - devX) + rOutDev.GetOutOffXPixel() - nWidth;
+                x = rOutDev.GetWidth() - (x - devX) + rOutDev.GetOutOffXPixel() - nWidth;
         }
     }
     else if( m_nLayout & SalLayoutFlags::BiDiRtl )
@@ -175,7 +175,7 @@ bool SalGraphics::mirror( sal_uInt32 nPoints, const Point *pPtAry, Point *pPtAry
             // mirror this window back
             if( m_nLayout & SalLayoutFlags::BiDiRtl )
             {
-                tools::Long devX = w - rOutDev.GetOutputWidthPixel() - rOutDev.GetOutOffXPixel();   // re-mirrored mnOutOffX
+                tools::Long devX = w - rOutDev.GetWidth() - rOutDev.GetOutOffXPixel();   // re-mirrored mnOutOffX
                 for( i=0, j=nPoints-1; i<nPoints; i++,j-- )
                 {
                     pPtAry2[j].setX( devX + (pPtAry[i].getX() - rOutDev.GetOutOffXPixel()) );
@@ -187,7 +187,7 @@ bool SalGraphics::mirror( sal_uInt32 nPoints, const Point *pPtAry, Point *pPtAry
                 tools::Long devX = rOutDev.GetOutOffXPixel();   // re-mirrored mnOutOffX
                 for( i=0, j=nPoints-1; i<nPoints; i++,j-- )
                 {
-                    pPtAry2[j].setX( rOutDev.GetOutputWidthPixel() - (pPtAry[i].getX() - devX) + rOutDev.GetOutOffXPixel() - 1 );
+                    pPtAry2[j].setX( rOutDev.GetWidth() - (pPtAry[i].getX() - devX) + rOutDev.GetOutOffXPixel() - 1 );
                     pPtAry2[j].setY( pPtAry[i].getY() );
                 }
             }
@@ -296,12 +296,12 @@ const basegfx::B2DHomMatrix& SalGraphics::getMirror( const OutputDevice& i_rOutD
         {
             const tools::Long w = GetDeviceWidth(i_rOutDev);
             SAL_WARN_IF(!w, "vcl", "missing graphics width");
-            nTranslate = w - i_rOutDev.GetOutputWidthPixel() - (2 * i_rOutDev.GetOutOffXPixel());
+            nTranslate = w - i_rOutDev.GetWidth() - (2 * i_rOutDev.GetOutOffXPixel());
             break;
         }
         case MirrorMode::Antiparallel:
         {
-            nTranslate = i_rOutDev.GetOutputWidthPixel() + (2 * i_rOutDev.GetOutOffXPixel()) - 1;
+            nTranslate = i_rOutDev.GetWidth() + (2 * i_rOutDev.GetOutOffXPixel()) - 1;
             break;
         }
         case MirrorMode::BiDi:
@@ -331,7 +331,7 @@ const basegfx::B2DHomMatrix& SalGraphics::getMirror( const OutputDevice& i_rOutD
                    with its LTR horizontal scrollbar */
 
                 // Original code was:
-                //      double devX = w-i_rOutDev.GetOutputWidthPixel()-i_rOutDev.GetOutOffXPixel();   // re-mirrored mnOutOffX
+                //      double devX = w-i_rOutDev.GetWidth()-i_rOutDev.GetOutOffXPixel();   // re-mirrored mnOutOffX
                 //      aRet.setX( devX + (i_rPoint.getX() - i_rOutDev.GetOutOffXPixel()) );
                 const_cast<SalGraphics*>(this)->m_aLastMirror = basegfx::utils::createTranslateB2DHomMatrix(
                    nTranslate, 0.0);
@@ -345,7 +345,7 @@ const basegfx::B2DHomMatrix& SalGraphics::getMirror( const OutputDevice& i_rOutD
 
                 // Original code was;
                 //      tools::Long devX = rOutDev.GetOutOffXPixel();   // re-mirrored mnOutOffX
-                //      x = rOutDev.GetOutputWidthPixel() - (x - devX) + rOutDev.GetOutOffXPixel() - 1;
+                //      x = rOutDev.GetWidth() - (x - devX) + rOutDev.GetOutOffXPixel() - 1;
                 const_cast<SalGraphics*>(this)->m_aLastMirror = basegfx::utils::createScaleTranslateB2DHomMatrix(
                     -1.0,
                     1.0,

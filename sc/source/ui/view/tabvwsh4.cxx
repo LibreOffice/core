@@ -331,7 +331,7 @@ void ScTabViewShell::UpdateOleZoom()
         if ( !aObjSize.IsEmpty() )
         {
             vcl::Window* pWin = GetActiveWin();
-            Size aWinHMM = pWin->PixelToLogic(pWin->GetOutputSizePixel(), MapMode(MapUnit::Map100thMM));
+            Size aWinHMM = pWin->PixelToLogic(pWin->GetSize(), MapMode(MapUnit::Map100thMM));
             SetZoomFactor( Fraction( aWinHMM.Width(),aObjSize.Width() ),
                             Fraction( aWinHMM.Height(),aObjSize.Height() ) );
         }

@@ -377,7 +377,7 @@ void SwAddressPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Re
     const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();
     rRenderContext.SetFillColor(rSettings.GetWindowColor());
     rRenderContext.SetLineColor(COL_TRANSPARENT);
-    rRenderContext.DrawRect(tools::Rectangle(Point(0, 0), GetOutputSizePixel()));
+    rRenderContext.DrawRect(tools::Rectangle(Point(0, 0), GetSize()));
     Color aPaintColor(IsEnabled() ? rSettings.GetWindowTextColor() : rSettings.GetDisableColor());
     rRenderContext.SetLineColor(aPaintColor);
 
@@ -386,7 +386,7 @@ void SwAddressPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Re
     aFont.SetColor(aPaintColor);
     rRenderContext.SetFont(aFont);
 
-    Size aSize(GetOutputSizePixel());
+    Size aSize(GetSize());
     sal_uInt16 nStartRow = 0;
     if (m_xVScrollBar->get_vpolicy() != VclPolicyType::NEVER)
     {
@@ -426,7 +426,7 @@ bool SwAddressPreview::MouseButtonDown( const MouseEvent& rMEvt )
     {
         //determine the selected address
         const Point& rMousePos = rMEvt.GetPosPixel();
-        Size aSize(GetOutputSizePixel());
+        Size aSize(GetSize());
         Size aPartSize( aSize.Width()/m_pImpl->nColumns, aSize.Height()/m_pImpl->nRows );
         sal_uInt32 nRow = rMousePos.Y() / aPartSize.Height() ;
         if (m_xVScrollBar->get_vpolicy() != VclPolicyType::NEVER)

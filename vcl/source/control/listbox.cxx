@@ -554,7 +554,7 @@ void ListBox::setPosSizePixel( tools::Long nX, tools::Long nY, tools::Long nWidt
 
 void ListBox::Resize()
 {
-    Size aOutSz = GetOutputSizePixel();
+    Size aOutSz = GetSize();
     if( IsDropDownBox() )
     {
         // Initialize the dropdown button size with the standard scrollbar width
@@ -568,7 +568,7 @@ void ListBox::Resize()
         tools::Rectangle aContent, aBound;
 
         // Use the full extent of the control
-        tools::Rectangle aArea( aPoint, pBorder->GetOutputSizePixel() );
+        tools::Rectangle aArea( aPoint, pBorder->GetSize() );
 
         if ( GetNativeControlRegion( ControlType::Listbox, ControlPart::ButtonDown,
                     aArea, ControlState::NONE, aControlValue, aBound, aContent) )
@@ -595,7 +595,7 @@ void ListBox::Resize()
                     // native rect relies on the border to draw the focus
                     // let's do the best we can and center vertically, so it doesn't look
                     // completely wrong.
-                    Size aSz( GetOutputSizePixel() );
+                    Size aSz( GetSize() );
                     tools::Long nDiff = aContent.Top() - (aSz.Height() - aContent.GetHeight())/2;
                     aContent.AdjustTop( -nDiff );
                     aContent.AdjustBottom( -nDiff );
@@ -678,7 +678,7 @@ tools::Long ListBox::GetIndexForPoint( const Point& rPoint, sal_Int32& rPos ) co
                 aConvPoint = mpImplWin->AbsoluteScreenToOutputPixel( aConvPoint );
 
                 // Check whether converted point is inside impl window
-                Size aImplWinSize = mpImplWin->GetOutputSizePixel();
+                Size aImplWinSize = mpImplWin->GetSize();
                 if( aConvPoint.X() >= 0 && aConvPoint.Y() >= 0 && aConvPoint.X() < aImplWinSize.Width() && aConvPoint.Y() < aImplWinSize.Height() )
                 {
                     // Inside the impl window, the position is the current item pos
@@ -1299,13 +1299,13 @@ void ListBox::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines 
     float nCharWidth = approximate_char_width();
     if ( !IsDropDownBox() )
     {
-        Size aOutSz = mpImplLB->GetMainWindow()->GetOutputSizePixel();
+        Size aOutSz = mpImplLB->GetMainWindow()->GetSize();
         rnCols = static_cast<sal_uInt16>(aOutSz.Width()/nCharWidth);
         rnLines = static_cast<sal_uInt16>(aOutSz.Height()/mpImplLB->GetEntryHeightWithMargin());
     }
     else
     {
-        Size aOutSz = mpImplWin->GetOutputSizePixel();
+        Size aOutSz = mpImplWin->GetSize();
         rnCols = static_cast<sal_uInt16>(aOutSz.Width()/nCharWidth);
         rnLines = 1;
     }

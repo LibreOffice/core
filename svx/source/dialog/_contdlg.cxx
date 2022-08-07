@@ -602,7 +602,7 @@ void StatusColor::Paint(vcl::RenderContext& rDevice, const tools::Rectangle&)
     const Color& rOldLineColor = rDevice.GetLineColor();
     const Color& rOldFillColor = rDevice.GetFillColor();
 
-    tools::Rectangle aRect(Point(), GetOutputSizePixel());
+    tools::Rectangle aRect(Point(), GetSize());
     const Color& rColor = m_rWnd.GetPipetteColor();
 
     rDevice.SetLineColor(rColor);

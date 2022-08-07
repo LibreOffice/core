@@ -277,7 +277,7 @@ void ExtensionBox_Impl::CalcActiveHeight( const tools::Long nPos )
         aTextHeight = nIconHeight;
 
     // calc description height
-    Size aSize = GetOutputSizePixel();
+    Size aSize = GetSize();
 
     aSize.AdjustWidth( -(ICON_OFFSET) );
     aSize.setHeight( 10000 );
@@ -304,7 +304,7 @@ tools::Rectangle ExtensionBox_Impl::GetEntryRect( const tools::Long nPos ) const
 {
     const ::osl::MutexGuard aGuard( m_entriesMutex );
 
-    Size aSize( GetOutputSizePixel() );
+    Size aSize( GetSize() );
 
     if ( m_vEntries[ nPos ]->m_bActive )
         aSize.setHeight( m_nActiveHeight );
@@ -562,7 +562,7 @@ void ExtensionBox_Impl::RecalcAll()
 
             // If the bottom of the selected entry isn't visible, make it visible even if now the top
             // isn't visible any longer ( the buttons are more important )
-            Size aOutputSize = GetOutputSizePixel();
+            Size aOutputSize = GetSize();
             if ( aEntryRect.Bottom() > aOutputSize.Height() )
             {
                 m_nTopIndex += ( aEntryRect.Bottom() - aOutputSize.Height() );
@@ -598,7 +598,7 @@ bool ExtensionBox_Impl::HandleCursorKey( sal_uInt16 nKeyCode )
 
     if ( m_bHasActive )
     {
-        tools::Long nPageSize = GetOutputSizePixel().Height() / m_nStdHeight;
+        tools::Long nPageSize = GetSize().Height() / m_nStdHeight;
         if ( nPageSize < 2 )
             nPageSize = 2;
 
@@ -643,7 +643,7 @@ void ExtensionBox_Impl::Paint(vcl::RenderContext& rRenderContext, const tools::R
         RecalcAll();
 
     Point aStart( 0, -m_nTopIndex );
-    Size aSize(GetOutputSizePixel());
+    Size aSize(GetSize());
 
     const ::osl::MutexGuard aGuard( m_entriesMutex );
 
@@ -672,7 +672,7 @@ tools::Long ExtensionBox_Impl::GetTotalHeight() const
 
 void ExtensionBox_Impl::SetupScrollBar()
 {
-    const Size aSize = GetOutputSizePixel();
+    const Size aSize = GetSize();
     const auto nTotalHeight = GetTotalHeight();
     const bool bNeedsScrollBar = ( nTotalHeight > aSize.Height() );
 

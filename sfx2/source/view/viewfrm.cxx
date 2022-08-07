@@ -1194,7 +1194,7 @@ void SfxViewFrame::InvalidateBorderImpl( const SfxViewShell* pSh )
         }
 
         DoAdjustPosSizePixel( GetViewShell(), Point(),
-                                        GetWindow().GetOutputSizePixel(),
+                                        GetWindow().GetSize(),
                                         false );
     }
 }
@@ -1210,18 +1210,18 @@ void SfxViewFrame::SetBorderPixelImpl
 
     if ( m_pImpl->bResizeInToOut && !GetFrame().IsInPlace() )
     {
-        Size aSize = pVSh->GetWindow()->GetOutputSizePixel();
+        Size aSize = pVSh->GetWindow()->GetSize();
         if ( aSize.Width() && aSize.Height() )
         {
             aSize.AdjustWidth(rBorder.Left() + rBorder.Right() );
             aSize.AdjustHeight(rBorder.Top() + rBorder.Bottom() );
 
-            Size aOldSize = GetWindow().GetOutputSizePixel();
+            Size aOldSize = GetWindow().GetSize();
             GetWindow().SetOutputSizePixel( aSize );
             vcl::Window* pParent = &GetWindow();
             while ( pParent->GetParent() )
                 pParent = pParent->GetParent();
-            Size aOuterSize = pParent->GetOutputSizePixel();
+            Size aOuterSize = pParent->GetSize();
             aOuterSize.AdjustWidth( aSize.Width() - aOldSize.Width() );
             aOuterSize.AdjustHeight( aSize.Height() - aOldSize.Height() );
             pParent->SetOutputSizePixel( aOuterSize );
@@ -1229,7 +1229,7 @@ void SfxViewFrame::SetBorderPixelImpl
     }
     else
     {
-        tools::Rectangle aEditArea( Point(), GetWindow().GetOutputSizePixel() );
+        tools::Rectangle aEditArea( Point(), GetWindow().GetSize() );
         aEditArea.AdjustLeft(rBorder.Left() );
         aEditArea.AdjustRight( -(rBorder.Right()) );
         aEditArea.AdjustTop(rBorder.Top() );
@@ -1801,7 +1801,7 @@ SfxViewFrame::SfxViewFrame
     Construct_Impl( pObjShell );
 
     m_pImpl->pWindow = VclPtr<SfxFrameViewWindow_Impl>::Create( this, rFrame.GetWindow() );
-    m_pImpl->pWindow->SetSizePixel( rFrame.GetWindow().GetOutputSizePixel() );
+    m_pImpl->pWindow->SetSizePixel( rFrame.GetWindow().GetSize() );
     rFrame.SetOwnsBindings_Impl( true );
     rFrame.CreateWorkWindow_Impl();
 }
@@ -2410,7 +2410,7 @@ bool SfxViewFrame::SwitchToViewShell_Impl
         UnlockAdjustPosSizePixel();
 
         if ( GetWindow().IsReallyVisible() )
-            DoAdjustPosSizePixel( pNewSh, Point(), GetWindow().GetOutputSizePixel(), false );
+            DoAdjustPosSizePixel( pNewSh, Point(), GetWindow().GetSize(), false );
 
         GetBindings().LEAVEREGISTRATIONS();
         delete pOldSh;
@@ -2722,7 +2722,7 @@ bool SfxViewFrame::IsInModalMode() const
 
 void SfxViewFrame::Resize( bool bForce )
 {
-    Size aSize = GetWindow().GetOutputSizePixel();
+    Size aSize = GetWindow().GetSize();
     if ( !bForce && aSize == m_pImpl->aSize )
         return;
 

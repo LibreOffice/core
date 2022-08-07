@@ -486,7 +486,7 @@ namespace frm
         // resize/position the toolbox as a whole
         sal_Int32 nToolbarHeight = m_pToolbar->CalcWindowSizePixel().Height();
 
-        sal_Int32 nMyHeight = GetOutputSizePixel().Height();
+        sal_Int32 nMyHeight = GetSize().Height();
         m_pToolbar->SetPosSizePixel( Point( 0, ( nMyHeight - nToolbarHeight ) / 2 ),
                                      Size( GetSizePixel().Width(), nToolbarHeight ) );
 

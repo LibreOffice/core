@@ -132,7 +132,7 @@ namespace vcl
 
     void RoadmapWizard::ImplPosCtrls()
     {
-        Size    aDlgSize = GetOutputSizePixel();
+        Size    aDlgSize = GetSize();
         tools::Long    nBtnWidth = 0;
         tools::Long    nMaxHeight = 0;
         tools::Long    nOffY = aDlgSize.Height();
@@ -251,7 +251,7 @@ namespace vcl
             nMaxHeight += WIZARDDIALOG_BUTTON_OFFSET_Y*2;
 
         // position TabPage
-        Size aDlgSize = GetOutputSizePixel();
+        Size aDlgSize = GetSize();
         aDlgSize.AdjustHeight( -nMaxHeight );
         tools::Long nOffX = 0;
         tools::Long nOffY = 0;

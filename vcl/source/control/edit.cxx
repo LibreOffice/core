@@ -459,8 +459,8 @@ tools::Long Edit::ImplGetTextYPosition() const
     if ( GetStyle() & WB_TOP )
         return ImplGetExtraXOffset();
     else if ( GetStyle() & WB_BOTTOM )
-        return GetOutputSizePixel().Height() - GetTextHeight() - ImplGetExtraXOffset();
-    return ( GetOutputSizePixel().Height() - GetTextHeight() ) / 2;
+        return GetSize().Height() - GetTextHeight() - ImplGetExtraXOffset();
+    return ( GetSize().Height() - GetTextHeight() ) / 2;
 }
 
 void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRectangle)
@@ -496,7 +496,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangl
     if (pCursor)
         pCursor->Hide();
 
-    ImplClearBackground(rRenderContext, rRectangle, 0, GetOutputSizePixel().Width()-1);
+    ImplClearBackground(rRenderContext, rRectangle, 0, GetSize().Width()-1);
 
     bool bPaintPlaceholderText = aText.isEmpty() && !maPlaceholderText.isEmpty();
 
@@ -512,7 +512,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangl
         rRenderContext.Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
         rRenderContext.SetLineColor();
         rRenderContext.SetFillColor(GetControlBackground());
-        rRenderContext.DrawRect(tools::Rectangle(aPos, Size(GetOutputSizePixel().Width() - 2 * mnXOffset, GetOutputSizePixel().Height())));
+        rRenderContext.DrawRect(tools::Rectangle(aPos, Size(GetSize().Width() - 2 * mnXOffset, GetSize().Height())));
         rRenderContext.Pop();
 
         rRenderContext.SetTextFillColor(GetControlBackground());
@@ -984,7 +984,7 @@ void Edit::ImplClearBackground(vcl::RenderContext& rRenderContext, const tools::
     /*
     * note: at this point the cursor must be switched off already
     */
-    tools::Rectangle aRect(Point(), GetOutputSizePixel());
+    tools::Rectangle aRect(Point(), GetSize());
     aRect.SetLeft( nXStart );
     aRect.SetRight( nXEnd );
 
@@ -1033,7 +1033,7 @@ void Edit::ImplPaintBorder(vcl::RenderContext const & rRenderContext)
 
             // mirror
             tools::Rectangle aBounds(aClipRgn.GetBoundRect());
-            int xNew = GetOutputSizePixel().Width() - aBounds.GetWidth() - aBounds.Left();
+            int xNew = GetSize().Width() - aBounds.GetWidth() - aBounds.Left();
             aClipRgn.Move(xNew - aBounds.Left(), 0);
 
             // move offset of border window
@@ -1096,7 +1096,7 @@ void Edit::ImplShowCursor( bool bOnlyIfVisible )
     tools::Long nCursorPosX = nTextPos + mnXOffset + ImplGetExtraXOffset();
 
     // cursor should land in visible area
-    const Size aOutSize = GetOutputSizePixel();
+    const Size aOutSize = GetSize();
     if ( (nCursorPosX < 0) || (nCursorPosX >= aOutSize.Width()) )
     {
         tools::Long nOldXOffset = mnXOffset;
@@ -1149,7 +1149,7 @@ void Edit::ImplAlign()
     }
 
     tools::Long nTextWidth = GetTextWidth( ImplGetText() );
-    tools::Long nOutWidth = GetOutputSizePixel().Width();
+    tools::Long nOutWidth = GetSize().Width();
 
     if ( mnAlign == EDIT_ALIGN_LEFT )
     {
@@ -1987,7 +1987,7 @@ void Edit::Command( const CommandEvent& rCEvt )
         if ( !rCEvt.IsMouseEvent() )
         {
             // Show menu eventually centered in selection
-            Size aSize = GetOutputSizePixel();
+            Size aSize = GetSize();
             aPos = Point( aSize.Width()/2, aSize.Height()/2 );
         }
         sal_uInt16 n = pPopup->Execute( this, aPos );
@@ -2680,7 +2680,7 @@ Size Edit::CalcSize(sal_Int32 nChars) const
 sal_Int32 Edit::GetMaxVisChars() const
 {
     const vcl::Window* pW = mpSubEdit ? mpSubEdit : this;
-    sal_Int32 nOutWidth = pW->GetOutputSizePixel().Width();
+    sal_Int32 nOutWidth = pW->GetSize().Width();
     float fUnitWidth = std::max(approximate_char_width(), approximate_digit_width());
     return nOutWidth / fUnitWidth;
 }
@@ -2862,7 +2862,7 @@ void Edit::dragOver( const css::datatransfer::dnd::DropTargetDragEvent& rDTDE )
     mpDDInfo->nDropPos = ImplGetCharPos( aMousePos );
 
     /*
-    Size aOutSize = GetOutputSizePixel();
+    Size aOutSize = GetSize();
     if ( ( aMousePos.X() < 0 ) || ( aMousePos.X() > aOutSize.Width() ) )
     {
         // Scroll?

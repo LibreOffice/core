@@ -1474,7 +1474,7 @@ public:
     void SetModalHierarchyHdl(const Link<bool, void>& rLink);
     void SetDumpAsPropertyTreeHdl(const Link<tools::JsonWriter&, void>& rLink);
 
-    Size                        GetOutputSizePixel() const;
+    Size                        GetSize() const;
     tools::Rectangle            GetOutputRectPixel() const;
 
     Point                       LogicToPixel( const Point& rLogicPt ) const;
@@ -1490,7 +1490,7 @@ public:
 
     Point                       PixelToLogic( const Point& rDevicePt ) const;
     Size                        PixelToLogic( const Size& rDeviceSize ) const;
-    tools::Rectangle                   PixelToLogic( const tools::Rectangle& rDeviceRect ) const;
+    tools::Rectangle            PixelToLogic( const tools::Rectangle& rDeviceRect ) const;
     tools::PolyPolygon          PixelToLogic( const tools::PolyPolygon& rDevicePolyPoly ) const;
     vcl::Region                 PixelToLogic( const vcl::Region& rDeviceRegion ) const;
     Point                       PixelToLogic( const Point& rDevicePt,

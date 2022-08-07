@@ -360,7 +360,7 @@ void GDIMetaFile::Play(OutputDevice& rOut, size_t nPos)
     rOut.SetLayoutMode(vcl::text::ComplexTextLayoutFlags::Default);
     rOut.SetDigitLanguage(LANGUAGE_SYSTEM);
 
-    SAL_INFO( "vcl.gdi", "GDIMetaFile::Play on device of size: " << rOut.GetOutputSizePixel().Width() << " " << rOut.GetOutputSizePixel().Height());
+    SAL_INFO( "vcl.gdi", "GDIMetaFile::Play on device of size: " << rOut.GetSize().Width() << " " << rOut.GetSize().Height());
 
     if (!ImplPlayWithRenderer(rOut, Point(0,0), rOut.GetOutputSize())) {
         size_t  i  = 0;
@@ -2314,7 +2314,7 @@ bool GDIMetaFile::CreateThumbnail(BitmapEx& rBitmapEx, BmpConversion eColorConve
         const_cast<GDIMetaFile *>(this)->Play(*aVDev, Point(), aAntialias);
 
         // get paint bitmap
-        BitmapEx aBitmap( aVDev->GetBitmapEx( aNullPt, aVDev->GetOutputSizePixel() ) );
+        BitmapEx aBitmap( aVDev->GetBitmapEx( aNullPt, aVDev->GetSize() ) );
 
         // scale down the image to the desired size - use the input scaler for the scaling operation
         aBitmap.Scale(aDrawSize, nScaleFlag);

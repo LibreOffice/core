@@ -269,7 +269,7 @@ ui::LayoutSize LayoutMenu::GetHeightForWidth (const sal_Int32 nWidth)
 
 void LayoutValueSet::Resize()
 {
-    Size aWindowSize = GetOutputSizePixel();
+    Size aWindowSize = GetSize();
     if (IsVisible() && aWindowSize.Width() > 0)
     {
         // Calculate the number of rows and columns.

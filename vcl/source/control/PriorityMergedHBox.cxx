@@ -69,8 +69,8 @@ void PriorityMergedHBox::Resize()
 
         if (pWindow && pWindow->GetParent() == this && pWindow->IsVisible())
         {
-            if (pWindow->GetOutputSizePixel().Width())
-                nCurrentWidth -= pWindow->GetOutputSizePixel().Width();
+            if (pWindow->GetSize().Width())
+                nCurrentWidth -= pWindow->GetSize().Width();
             else
                 nCurrentWidth -= DUMMY_WIDTH;
             pWindow->Hide();

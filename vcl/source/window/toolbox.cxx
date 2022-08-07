@@ -133,7 +133,7 @@ int ToolBox::ImplGetDragWidth( const vcl::RenderContext& rRenderContext, bool bH
 
         ImplControlValue aControlValue;
         tools::Rectangle aContent, aBound;
-        tools::Rectangle aArea( Point(), rRenderContext.GetOutputSizePixel() );
+        tools::Rectangle aArea( Point(), rRenderContext.GetSize() );
 
         if ( rRenderContext.GetNativeControlRegion(ControlType::Toolbar,
                 bHorz ? ControlPart::ThumbVert : ControlPart::ThumbHorz,
@@ -179,9 +179,9 @@ void ToolBox::ImplUpdateDragArea() const
         else
         {
             if( meAlign == WindowAlign::Top || meAlign == WindowAlign::Bottom )
-                pWrapper->SetDragArea( tools::Rectangle( 0, 0, ImplGetDragWidth(), GetOutputSizePixel().Height() ) );
+                pWrapper->SetDragArea( tools::Rectangle( 0, 0, ImplGetDragWidth(), GetSize().Height() ) );
             else
-                pWrapper->SetDragArea( tools::Rectangle( 0, 0, GetOutputSizePixel().Width(), ImplGetDragWidth() ) );
+                pWrapper->SetDragArea( tools::Rectangle( 0, 0, GetSize().Width(), ImplGetDragWidth() ) );
         }
     }
 }
@@ -251,7 +251,7 @@ void ToolBox::ImplDrawGrip(vcl::RenderContext& rRenderContext,
 {
     bool bNativeOk = false;
     const ControlPart ePart = bHorz ? ControlPart::ThumbVert : ControlPart::ThumbHorz;
-    const Size aSz( rRenderContext.GetOutputSizePixel() );
+    const Size aSz( rRenderContext.GetSize() );
     if (rRenderContext.IsNativeControlSupported(ControlType::Toolbar, ePart))
     {
         ToolbarValue aToolbarValue;
@@ -334,7 +334,7 @@ void ToolBox::ImplDrawGradientBackground(vcl::RenderContext& rRenderContext)
     Color aOldCol = rRenderContext.GetLineColor();
     rRenderContext.SetLineColor(rRenderContext.GetSettings().GetStyleSettings().GetShadowColor());
 
-    Size aFullSz(GetOutputSizePixel());
+    Size aFullSz(GetSize());
     Size aLineSz(aFullSz);
 
     // use the linesize only when floating
@@ -438,7 +438,7 @@ void ToolBox::ImplDrawGradientBackground(vcl::RenderContext& rRenderContext)
 bool ToolBox::ImplDrawNativeBackground(vcl::RenderContext& rRenderContext) const
 {
     // use NWF
-    tools::Rectangle aCtrlRegion(Point(), GetOutputSizePixel());
+    tools::Rectangle aCtrlRegion(Point(), GetSize());
 
     return rRenderContext.DrawNativeControl( ControlType::Toolbar, mbHorz ? ControlPart::DrawBackgroundHorz : ControlPart::DrawBackgroundVert,
                                     aCtrlRegion, ControlState::ENABLED, ImplControlValue(), OUString() );
@@ -3491,7 +3491,7 @@ void ToolBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& 
 
 void ToolBox::Resize()
 {
-    Size aSize = GetOutputSizePixel();
+    Size aSize = GetSize();
     // #i31422# some WindowManagers send (0,0) sizes when
     // switching virtual desktops - ignore this and avoid reformatting
     if( !aSize.Width() && !aSize.Height() )

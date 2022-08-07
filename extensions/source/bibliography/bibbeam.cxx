@@ -113,7 +113,7 @@ namespace bib
     {
         if(m_xGridWin.is())
         {
-            ::Size aSize = GetOutputSizePixel();
+            ::Size aSize = GetSize();
             m_xGridWin->setPosSize(0, 0, aSize.Width(),aSize.Height(), awt::PosSize::SIZE);
         }
     }
@@ -153,7 +153,7 @@ namespace bib
         m_xControl->setDesignMode( true );
         // initially switch on the design mode - switch it off _after_ loading the form
 
-        ::Size aSize = GetOutputSizePixel();
+        ::Size aSize = GetSize();
         m_xGridWin->setPosSize(0, 0, aSize.Width(),aSize.Height(), awt::PosSize::POSSIZE);
     }
 

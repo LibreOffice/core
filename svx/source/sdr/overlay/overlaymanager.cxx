@@ -141,7 +141,7 @@ namespace sdr::overlay
 
                 if(OUTDEV_WINDOW == getOutputDevice().GetOutDevType())
                 {
-                    const Size aOutputSizePixel(getOutputDevice().GetOutputSizePixel());
+                    const Size aOutputSizePixel(getOutputDevice().GetSize());
 
                     // only set when we *have* an output size, else let aViewRange
                     // stay on empty

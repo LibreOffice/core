@@ -388,7 +388,7 @@ awt::Rectangle SvxRectCtlAccessibleContext::implGetBounds()
     if (mpRepr)
     {
         const Point   aOutPos;
-        Size          aOutSize(mpRepr->GetOutputSizePixel());
+        Size          aOutSize(mpRepr->GetSize());
 
         aRet.X = aOutPos.X();
         aRet.Y = aOutPos.Y();

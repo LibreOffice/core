@@ -280,7 +280,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
                     if(pNewDBField)
                     {
-                        ::tools::Rectangle aVisArea = GetActiveWindow()->PixelToLogic(::tools::Rectangle(Point(0,0), GetActiveWindow()->GetOutputSizePixel()));
+                        ::tools::Rectangle aVisArea = GetActiveWindow()->PixelToLogic(::tools::Rectangle(Point(0,0), GetActiveWindow()->GetSize()));
                         Point aObjPos(aVisArea.Center());
                         Size aObjSize(pNewDBField->GetLogicRect().GetSize());
                         aObjPos.AdjustX( -(aObjSize.Width() / 2) );
@@ -623,7 +623,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
     sal_uInt32 nDefaultObjectSizeHeight(pOptions->GetDefaultObjectSizeHeight());
 
     // calc position and size
-    ::tools::Rectangle aVisArea = GetActiveWindow()->PixelToLogic(::tools::Rectangle(Point(0,0), GetActiveWindow()->GetOutputSizePixel()));
+    ::tools::Rectangle aVisArea = GetActiveWindow()->PixelToLogic(::tools::Rectangle(Point(0,0), GetActiveWindow()->GetSize()));
     if (comphelper::LibreOfficeKit::isActive())
     {
         // aVisArea is nonsensical in the LOK case, use the slide size
@@ -942,7 +942,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                 {
                     sal_Int8 nAction = DND_ACTION_COPY;
                     mpDrawView->InsertData( aDataHelper,
-                                            GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(), GetActiveWindow()->GetOutputSizePixel() ).Center() ),
+                                            GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(), GetActiveWindow()->GetSize() ).Center() ),
                                             nAction, false, SotClipboardFormatId::STRING);
                 }
             }
@@ -969,7 +969,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                 sal_Int8 nAction = DND_ACTION_COPY;
 
                 if( !mpDrawView->InsertData( aDataHelper,
-                                          GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(), GetActiveWindow()->GetOutputSizePixel() ).Center() ),
+                                          GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(), GetActiveWindow()->GetSize() ).Center() ),
                                           nAction, false, nFormat ) )
                 {
                     INetBookmark    aINetBookmark( "", "" );
@@ -1163,7 +1163,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                 SetZoomRect( ::tools::Rectangle( aPagePos, aPageSize ) );
 
                 ::tools::Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(0,0),
-                                              GetActiveWindow()->GetOutputSizePixel()) );
+                                              GetActiveWindow()->GetSize()) );
                 mpZoomList->InsertZoomRect(aVisAreaWin);
             }
             Invalidate( SID_ZOOM_IN );
@@ -1178,7 +1178,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             mbZoomOnPage = false;
             SetZoom( 100 );
             ::tools::Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(0,0),
-                                              GetActiveWindow()->GetOutputSizePixel()) );
+                                              GetActiveWindow()->GetSize()) );
             mpZoomList->InsertZoomRect(aVisAreaWin);
             Invalidate( SID_ZOOM_IN );
             Invalidate( SID_ZOOM_OUT );
@@ -1192,7 +1192,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             mbZoomOnPage = false;
             SetZoom( std::max<::tools::Long>( GetActiveWindow()->GetZoom() / 2, GetActiveWindow()->GetMinZoom() ) );
             ::tools::Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(0,0),
-                                              GetActiveWindow()->GetOutputSizePixel()) );
+                                              GetActiveWindow()->GetSize()) );
             mpZoomList->InsertZoomRect(aVisAreaWin);
             Invalidate( SID_ZOOM_IN );
             Invalidate( SID_ZOOM_OUT );
@@ -1206,7 +1206,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             mbZoomOnPage = false;
             SetZoom( std::min<::tools::Long>( GetActiveWindow()->GetZoom() * 2, GetActiveWindow()->GetMaxZoom() ) );
             ::tools::Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(0,0),
-                                              GetActiveWindow()->GetOutputSizePixel()) );
+                                              GetActiveWindow()->GetSize()) );
             mpZoomList->InsertZoomRect(aVisAreaWin);
             Invalidate( SID_ZOOM_IN );
             Invalidate(SID_ZOOM_OUT);
@@ -1250,7 +1250,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                     SetZoomRect(::tools::Rectangle(aPos, Size(nW, nH)));
 
                     ::tools::Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(0,0),
-                                              GetActiveWindow()->GetOutputSizePixel()) );
+                                              GetActiveWindow()->GetSize()) );
                     mpZoomList->InsertZoomRect(aVisAreaWin);
                 }
             }
@@ -1282,7 +1282,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                     SetZoomRect( ::tools::Rectangle( aPos, Size( nW, nH ) ) );
 
                     ::tools::Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(0,0),
-                                              GetActiveWindow()->GetOutputSizePixel()) );
+                                              GetActiveWindow()->GetSize()) );
                     mpZoomList->InsertZoomRect(aVisAreaWin);
                 }
 
@@ -1509,7 +1509,7 @@ void DrawViewShell::InsertURLField(const OUString& rURL, const OUString& rText,
         pOutl->SetUpdateLayout( false );
 
         Point aPos;
-        ::tools::Rectangle aRect(aPos, GetActiveWindow()->GetOutputSizePixel() );
+        ::tools::Rectangle aRect(aPos, GetActiveWindow()->GetSize() );
         aPos = aRect.Center();
         aPos = GetActiveWindow()->PixelToLogic(aPos);
 
@@ -1613,7 +1613,7 @@ void DrawViewShell::InsertURLButton(const OUString& rURL, const OUString& rText,
         }
         else
         {
-            aPos = ::tools::Rectangle(aPos, GetActiveWindow()->GetOutputSizePixel()).Center();
+            aPos = ::tools::Rectangle(aPos, GetActiveWindow()->GetSize()).Center();
             aPos = GetActiveWindow()->PixelToLogic(aPos);
         }
 

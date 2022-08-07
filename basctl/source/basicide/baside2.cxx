@@ -267,7 +267,7 @@ void ModulWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const tools::Rec
 
 void ModulWindow::Resize()
 {
-    m_aXEditorWindow->SetPosSizePixel( Point( 0, 0 ), GetOutputSizePixel() );
+    m_aXEditorWindow->SetPosSizePixel( Point( 0, 0 ), GetSize() );
 }
 
 void ModulWindow::CheckCompileBasic()
@@ -746,7 +746,7 @@ void ModulWindow::EditMacro( const OUString& rMacroName )
     AssertValidEditEngine();
     TextView * pView = GetEditView();
     // scroll if applicable so that first line is at the top
-    tools::Long nVisHeight = GetOutputSizePixel().Height();
+    tools::Long nVisHeight = GetSize().Height();
     if ( pView->GetTextEngine()->GetTextHeight() > nVisHeight )
     {
         tools::Long nMaxY = pView->GetTextEngine()->GetTextHeight() - nVisHeight;

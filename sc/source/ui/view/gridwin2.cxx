@@ -245,7 +245,7 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, bool bMove )
         nDx = -1;
     if ( aPixel.Y() < 0 )
         nDy = -1;
-    Size aSize = GetOutputSizePixel();
+    Size aSize = GetSize();
     if ( aPixel.X() >= aSize.Width() )
         nDx = 1;
     if ( aPixel.Y() >= aSize.Height() )
@@ -829,7 +829,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
     SCROW nDy = 0;
     if ( aPos.X() < 0 ) nDx = -1;
     if ( aPos.Y() < 0 ) nDy = -1;
-    Size aSize = GetOutputSizePixel();
+    Size aSize = GetSize();
     if ( aPos.X() >= aSize.Width() )
         nDx = 1;
     if ( aPos.Y() >= aSize.Height() )

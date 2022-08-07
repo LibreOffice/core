@@ -141,7 +141,7 @@ void TabDialog::ImplPosControls()
     // store offset
     if ( nOffY )
     {
-        Size aDlgSize = GetOutputSizePixel();
+        Size aDlgSize = GetSize();
         if ( !mpFixedLine )
             mpFixedLine = VclPtr<FixedLine>::Create( this );
         mpFixedLine->SetPosSizePixel( Point( 0, nOffY ),

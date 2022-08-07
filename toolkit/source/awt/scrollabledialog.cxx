@@ -154,7 +154,7 @@ void ScrollableDialog::Resize()
 
 void ScrollableDialog::ResetScrollBars()
 {
-    Size aOutSz = GetOutputSizePixel();
+    Size aOutSz = GetSize();
 
     Point aVPos( aOutSz.Width() - mnScrWidth, 0 );
     Point aHPos( 0, aOutSz.Height() - mnScrWidth );

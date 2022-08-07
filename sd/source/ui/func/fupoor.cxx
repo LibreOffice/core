@@ -916,7 +916,7 @@ void FuPoor::DoPasteUnformatted()
         {
             sal_Int8 nAction = DND_ACTION_COPY;
             mpView->InsertData( aDataHelper,
-                                mpWindow->PixelToLogic( ::tools::Rectangle( Point(), mpWindow->GetOutputSizePixel() ).Center() ),
+                                mpWindow->PixelToLogic( ::tools::Rectangle( Point(), mpWindow->GetSize() ).Center() ),
                                 nAction, false, SotClipboardFormatId::STRING);
         }
     }

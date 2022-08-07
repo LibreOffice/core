@@ -226,7 +226,7 @@ void OSectionWindow::Resize()
 {
     Window::Resize();
 
-    Size aOutputSize = GetOutputSizePixel();
+    Size aOutputSize = GetSize();
     tools::Long nEndWidth = tools::Long(REPORT_ENDMARKER_WIDTH * GetMapMode().GetScaleX());
 
     const Point aThumbPos = m_pParent->getView()->getThumbPos();

@@ -241,7 +241,7 @@ void RecentDocsView::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
     tools::Long nTextHeight = rRenderContext.GetTextHeight();
 
     const Size& rImgSize = maWelcomeImage.GetSizePixel();
-    const Size& rSize = GetOutputSizePixel();
+    const Size& rSize = GetSize();
 
     const int nX = (rSize.Width() - rImgSize.Width())/2;
     int nY = (rSize.Height() - 3 * nTextHeight - rImgSize.Height())/2;

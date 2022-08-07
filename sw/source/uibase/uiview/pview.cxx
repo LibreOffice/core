@@ -197,7 +197,7 @@ void  SwPagePreviewWin::Paint(vcl::RenderContext& rRenderContext, const tools::R
     {
         // This is the size to which I always relate.
         if (!maPxWinSize.Height() || !maPxWinSize.Width())
-            maPxWinSize = GetOutputSizePixel();
+            maPxWinSize = GetSize();
 
         tools::Rectangle aRect(rRenderContext.LogicToPixel(rRect));
         mpPgPreviewLayout->Prepare(1, Point(0,0), maPxWinSize,
@@ -1307,7 +1307,7 @@ void  SwPagePreview::InnerResizePixel( const Point &rOfst, const Size &rSize, bo
     tools::Rectangle aRect( rOfst, rSize );
     aRect += aBorder;
     ViewResizePixel( *m_pViewWin->GetOutDev(), aRect.TopLeft(), aRect.GetSize(),
-                    m_pViewWin->GetOutputSizePixel(),
+                    m_pViewWin->GetSize(),
                     *m_pVScrollbar, *m_pHScrollbar, *m_pScrollFill );
 
     // Never set EditWin !
@@ -1321,7 +1321,7 @@ void SwPagePreview::OuterResizePixel( const Point &rOfst, const Size &rSize )
 
     // Never set EditWin !
 
-    Size aTmpSize( m_pViewWin->GetOutputSizePixel() );
+    Size aTmpSize( m_pViewWin->GetSize() );
     Point aBottomRight( m_pViewWin->PixelToLogic( Point( aTmpSize.Width(), aTmpSize.Height() ) ) );
     SetVisArea( tools::Rectangle( Point(), aBottomRight ) );
 
@@ -1335,7 +1335,7 @@ void SwPagePreview::OuterResizePixel( const Point &rOfst, const Size &rSize )
 
     SvBorder aBorderNew;
     CalcAndSetBorderPixel( aBorderNew );
-    ViewResizePixel( *m_pViewWin->GetOutDev(), rOfst, rSize, m_pViewWin->GetOutputSizePixel(),
+    ViewResizePixel( *m_pViewWin->GetOutDev(), rOfst, rSize, m_pViewWin->GetSize(),
                     *m_pVScrollbar, *m_pHScrollbar, *m_pScrollFill );
 }
 

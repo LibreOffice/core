@@ -799,7 +799,7 @@ sal_uInt16 ScPreview::GetOptimalZoom(bool bWidthOnly)
 {
     double nWinScaleX = ScGlobal::nScreenPPTX / pDocShell->GetOutputFactor();
     double nWinScaleY = ScGlobal::nScreenPPTY;
-    Size aWinSize = GetOutputSizePixel();
+    Size aWinSize = GetSize();
 
     //  desired margin is 0.25cm in default MapMode (like Writer),
     //  but some additional margin is introduced by integer scale values

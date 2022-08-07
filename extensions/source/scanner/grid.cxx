@@ -191,7 +191,7 @@ void GridWindow::Resize()
 
 void GridWindow::onResize()
 {
-    Size aSize = GetOutputSizePixel();
+    Size aSize = GetSize();
     m_aGridArea.setWidth( aSize.Width() - 80 );
     m_aGridArea.setHeight( aSize.Height() - 40 );
 }

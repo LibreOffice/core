@@ -1433,7 +1433,7 @@ TextPaM TextView::PageUp( const TextPaM& rPaM )
 {
     tools::Rectangle aRect = mpImpl->mpTextEngine->PaMtoEditCursor( rPaM );
     Point aTopLeft = aRect.TopLeft();
-    aTopLeft.AdjustY( -(mpImpl->mpWindow->GetOutputSizePixel().Height() * 9/10) );
+    aTopLeft.AdjustY( -(mpImpl->mpWindow->GetSize().Height() * 9/10) );
     aTopLeft.AdjustX(1 );
     if ( aTopLeft.Y() < 0 )
         aTopLeft.setY( 0 );
@@ -1446,7 +1446,7 @@ TextPaM TextView::PageDown( const TextPaM& rPaM )
 {
     tools::Rectangle aRect = mpImpl->mpTextEngine->PaMtoEditCursor( rPaM );
     Point aBottomRight = aRect.BottomRight();
-    aBottomRight.AdjustY(mpImpl->mpWindow->GetOutputSizePixel().Height() * 9/10 );
+    aBottomRight.AdjustY(mpImpl->mpWindow->GetSize().Height() * 9/10 );
     aBottomRight.AdjustX(1 );
     tools::Long nHeight = mpImpl->mpTextEngine->GetTextHeight();
     if ( aBottomRight.Y() > nHeight )
@@ -1507,7 +1507,7 @@ void TextView::ImpShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bSpec
         }
     }
 
-    Size aOutSz = mpImpl->mpWindow->GetOutputSizePixel();
+    Size aOutSz = mpImpl->mpWindow->GetSize();
     if ( aEditCursor.GetHeight() > aOutSz.Height() )
         aEditCursor.SetBottom( aEditCursor.Top() + aOutSz.Height() - 1 );
 
@@ -1907,7 +1907,7 @@ Point TextView::ImpGetOutputStartPos( const Point& rStartDocPos ) const
     Point aStartPos( -rStartDocPos.X(), -rStartDocPos.Y() );
     if ( mpImpl->mpTextEngine->IsRightToLeft() )
     {
-        Size aSz = mpImpl->mpWindow->GetOutputSizePixel();
+        Size aSz = mpImpl->mpWindow->GetSize();
         aStartPos.setX( rStartDocPos.X() + aSz.Width() - 1 ); // -1: Start is 0
     }
     return aStartPos;
@@ -1927,7 +1927,7 @@ Point TextView::GetDocPos( const Point& rWindowPos ) const
     }
     else
     {
-        Size aSz = mpImpl->mpWindow->GetOutputSizePixel();
+        Size aSz = mpImpl->mpWindow->GetSize();
         aPoint.setX( ( aSz.Width() - 1 ) - rWindowPos.X() + mpImpl->maStartDocPos.X() );
     }
 
@@ -1948,7 +1948,7 @@ Point TextView::GetWindowPos( const Point& rDocPos ) const
     }
     else
     {
-        Size aSz = mpImpl->mpWindow->GetOutputSizePixel();
+        Size aSz = mpImpl->mpWindow->GetSize();
         aPoint.setX( ( aSz.Width() - 1 ) - ( rDocPos.X() - mpImpl->maStartDocPos.X() ) );
     }
 
@@ -2060,7 +2060,7 @@ void TextView::MatchGroup()
 void TextView::CenterPaM( const TextPaM& rPaM )
 {
     // Get textview size and the corresponding y-coordinates
-    Size aOutSz = mpImpl->mpWindow->GetOutputSizePixel();
+    Size aOutSz = mpImpl->mpWindow->GetSize();
     tools::Long nVisStartY = mpImpl->maStartDocPos.Y();
     tools::Long nVisEndY = mpImpl->maStartDocPos.Y() + aOutSz.Height();
 

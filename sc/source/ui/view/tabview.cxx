@@ -90,7 +90,7 @@ void ScCornerButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     SetBackground(rStyleSettings.GetFaceColor());
 
-    Size aSize(GetOutputSizePixel());
+    Size aSize(GetSize());
     tools::Long nPosX = aSize.Width() - 1;
     tools::Long nPosY = aSize.Height() - 1;
 
@@ -1539,7 +1539,7 @@ void ScTabView::DoHSplit(tools::Long nSplitPos)
 
     bool bLayoutRTL = aViewData.GetDocument().IsLayoutRTL( aViewData.GetTabNo() );
     if ( bLayoutRTL )
-        nSplitPos = pFrameWin->GetOutputSizePixel().Width() - nSplitPos - 1;
+        nSplitPos = pFrameWin->GetSize().Width() - nSplitPos - 1;
 
     tools::Long nMinPos;
     tools::Long nMaxPos;
@@ -1717,7 +1717,7 @@ Point ScTabView::GetChartInsertPos( const Size& rSize, const ScRange& rCellRange
         tools::Rectangle aVisible(
             bLOKActive ?
             OutputDevice::LogicToLogic( aViewData.getLOKVisibleArea(), MapMode(MapUnit::MapTwip), MapMode(MapUnit::Map100thMM) )
-            : pWin->PixelToLogic( tools::Rectangle( Point(0,0), pWin->GetOutputSizePixel() ), aDrawMode ) );
+            : pWin->PixelToLogic( tools::Rectangle( Point(0,0), pWin->GetSize() ), aDrawMode ) );
 
         ScDocument& rDoc = aViewData.GetDocument();
         SCTAB nTab = aViewData.GetTabNo();
@@ -1959,7 +1959,7 @@ void ScTabView::FreezeSplitters( bool bFreeze, SplitMethod eSplitMethod, SCCOLRO
             {
                 tools::Long nSplitPos = aViewData.GetHSplitPos();
                 if ( bLayoutRTL )
-                    nSplitPos = pFrameWin->GetOutputSizePixel().Width() - nSplitPos - 1;
+                    nSplitPos = pFrameWin->GetSize().Width() - nSplitPos - 1;
                 aSplit.setX( nSplitPos - aWinStart.X() );
             }
 
@@ -2040,7 +2040,7 @@ void ScTabView::FreezeSplitters( bool bFreeze, SplitMethod eSplitMethod, SCCOLRO
             {
                 tools::Long nSplitPos = aSplit.X() + aWinStart.X();
                 if ( bLayoutRTL )
-                    nSplitPos = pFrameWin->GetOutputSizePixel().Width() - nSplitPos - 1;
+                    nSplitPos = pFrameWin->GetSize().Width() - nSplitPos - 1;
 
                 aViewData.SetHSplitMode( SC_SPLIT_FIX );
                 aViewData.SetHSplitPos( nSplitPos );

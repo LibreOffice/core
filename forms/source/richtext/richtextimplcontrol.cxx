@@ -400,7 +400,7 @@ namespace frm
         }
 
         // the overall size we can use
-        Size aPlaygroundSizePixel( m_pAntiImpl->GetOutputSizePixel() );
+        Size aPlaygroundSizePixel( m_pAntiImpl->GetSize() );
 
         // the size of the viewport - note that the viewport does *not* occupy all the place
         // which is left when subtracting the scrollbar width/height

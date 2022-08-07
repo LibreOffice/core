@@ -759,7 +759,7 @@ void FloatingWindow::SetTitleType( FloatWinTitleType nTitle )
         return;
 
     mnTitle = nTitle;
-    Size aOutSize = GetOutputSizePixel();
+    Size aOutSize = GetSize();
     BorderWindowTitleType nTitleStyle;
     if ( nTitle == FloatWinTitleType::Normal )
         nTitleStyle = BorderWindowTitleType::Small;

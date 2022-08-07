@@ -213,7 +213,7 @@ namespace vclcanvas
         // state when done.
         tools::OutDevStateKeeper aStateKeeper( rOutDev );
 
-        const Size  aOutDevSize( rBackOutDev.GetOutputSizePixel() );
+        const Size  aOutDevSize( rBackOutDev.GetSize() );
         const Point aEmptyPoint(0,0);
 
         vcl::Window* pTargetWindow = nullptr;
@@ -341,7 +341,7 @@ namespace vclcanvas
         BackBufferSharedPtr pBackBuffer( mpOwningSpriteCanvas->getBackBuffer() );
         OutputDevice&       rBackOutDev( pBackBuffer->getOutDev() );
 
-        const Size&                rTargetSizePixel( rOutDev.GetOutputSizePixel() );
+        const Size&                rTargetSizePixel( rOutDev.GetSize() );
         const ::basegfx::B2IRange  aOutputBounds( 0,0,
                                                   rTargetSizePixel.Width(),
                                                   rTargetSizePixel.Height() );
@@ -467,7 +467,7 @@ namespace vclcanvas
         OutputDevice&       rBackOutDev( pBackBuffer->getOutDev() );
 
         // limit size of update VDev to target outdev's size
-        const Size& rTargetSizePixel( rOutDev.GetOutputSizePixel() );
+        const Size& rTargetSizePixel( rOutDev.GetSize() );
 
         // round output position towards zero. Don't want to truncate
         // a fraction of a sprite pixel...  Clip position at origin,
@@ -498,7 +498,7 @@ namespace vclcanvas
         }
 
         const Point aEmptyPoint(0,0);
-        const Size  aCurrOutputSize( maVDev->GetOutputSizePixel() );
+        const Size  aCurrOutputSize( maVDev->GetSize() );
 
         // adapt maVDev's size to the area that actually needs the
         // repaint.
@@ -635,8 +635,8 @@ namespace vclcanvas
         static const int NUM_VIRDEV(2);
         static const int BYTES_PER_PIXEL(3);
 
-        const Size& rVDevSize( maVDev->GetOutputSizePixel() );
-        const Size& rBackBufferSize( pBackBuffer->getOutDev().GetOutputSizePixel() );
+        const Size& rVDevSize( maVDev->GetSize() );
+        const Size& rBackBufferSize( pBackBuffer->getOutDev().GetSize() );
 
         const double nMemUsage( nPixel * NUM_VIRDEV * BYTES_PER_PIXEL +
                                 rVDevSize.Width()*rVDevSize.Height() * BYTES_PER_PIXEL +

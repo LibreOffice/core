@@ -708,7 +708,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
                                         --nLine;
 
                                     // scroll window and set selection
-                                    tools::Long nVisHeight = pModWin->GetOutputSizePixel().Height();
+                                    tools::Long nVisHeight = pModWin->GetSize().Height();
                                     tools::Long nTextHeight = pTextEngine->GetTextHeight();
                                     if ( nTextHeight > nVisHeight )
                                     {
@@ -1148,7 +1148,7 @@ void Shell::SetCurWindow( BaseWindow* pNewWin, bool bUpdateTabBar, bool bRemembe
             pLayout = pModulLayout.get();
         else
             pLayout = pDialogLayout.get();
-        AdjustPosSizePixel(Point(0, 0), GetViewFrame()->GetWindow().GetOutputSizePixel());
+        AdjustPosSizePixel(Point(0, 0), GetViewFrame()->GetWindow().GetSize());
         pLayout->Activating(*pCurWin);
         GetViewFrame()->GetWindow().SetHelpId(pCurWin->GetHid());
         if (bRememberAsCurrent)
@@ -1345,7 +1345,7 @@ VclPtr<ModulWindow> Shell::ShowActiveModuleWindow( StarBASIC const * pBasic )
 void Shell::AdjustPosSizePixel( const Point &rPos, const Size &rSize )
 {
     // not if iconified because the whole text would be displaced then at restore
-    if ( GetViewFrame()->GetWindow().GetOutputSizePixel().Height() == 0 )
+    if ( GetViewFrame()->GetWindow().GetSize().Height() == 0 )
         return;
 
     Size aTabBarSize;

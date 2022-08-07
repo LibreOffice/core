@@ -120,7 +120,7 @@ void OScrollWindowHelper::Resize()
 {
     Window::Resize();
 
-    Size aTotalOutputSize = GetOutputSizePixel();
+    Size aTotalOutputSize = GetSize();
     tools::Long nHScrollHeight = GetHScrollBar().GetSizePixel().Height();
     tools::Long nVScrollWidth = GetVScrollBar().GetSizePixel().Width();
 
@@ -439,7 +439,7 @@ namespace
         Point aLowerRight(aUpperLeft.X() + _rSize.Width(), aUpperLeft.Y() + _rSize.Height());
 
         // data about ourself
-        Size aSize = _pView->getRealOutputSize(); //GetOutputSizePixel();
+        Size aSize = _pView->getRealOutputSize(); //GetSize();
 
         bool bVisible = true;
         bool bFitsHor = (aUpperLeft.X() >= 0) && (aLowerRight.X() <= aSize.Width());

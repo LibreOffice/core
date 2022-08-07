@@ -2598,7 +2598,7 @@ void BmpWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
 
     // Paint
     Point aPntPos;
-    Size aPntSz(GetOutputSizePixel());
+    Size aPntSz(GetSize());
     Size aGrfSize;
     if (bGraphic)
         aGrfSize = ::GetGraphicSizeTwip(aGraphic, &rRenderContext);

@@ -34,7 +34,7 @@ class VclTextTest : public test::BootstrapFixture
     {
         if (mbExportBitmap)
         {
-            BitmapEx aBitmapEx(device->GetBitmapEx(Point(0, 0), device->GetOutputSizePixel()));
+            BitmapEx aBitmapEx(device->GetBitmapEx(Point(0, 0), device->GetSize()));
             OUString cwd;
             CPPUNIT_ASSERT_EQUAL(osl_Process_E_None, osl_getProcessWorkingDir(&cwd.pData));
             OUString url;
@@ -86,7 +86,7 @@ public:
 // For 'L' this gives the width of the base of the character.
 static tools::Long getCharacterBaseWidth(VirtualDevice* device, const Point& start)
 {
-    Bitmap bitmap = device->GetBitmap(Point(), device->GetOutputSizePixel());
+    Bitmap bitmap = device->GetBitmap(Point(), device->GetSize());
     Bitmap::ScopedReadAccess access(bitmap);
     tools::Long y = start.Y();
     while (y >= 0 && access->GetColor(y, start.X()) != COL_BLACK)
@@ -105,7 +105,7 @@ static tools::Long getCharacterBaseWidth(VirtualDevice* device, const Point& sta
 // Similar to above but this time from the top, for U+30E8 (it's straight at the top, not at the bottom).
 static tools::Long getCharacterTopWidth(VirtualDevice* device, const Point& start)
 {
-    Bitmap bitmap = device->GetBitmap(Point(), device->GetOutputSizePixel());
+    Bitmap bitmap = device->GetBitmap(Point(), device->GetSize());
     Bitmap::ScopedReadAccess access(bitmap);
     tools::Long y = start.Y();
     while (y < bitmap.GetSizePixel().Height() && access->GetColor(y, start.X()) != COL_BLACK)
@@ -126,7 +126,7 @@ static tools::Long getCharacterTopWidth(VirtualDevice* device, const Point& star
 // For 'L' this gives the height of the left line.
 static tools::Long getCharacterLeftSideHeight(VirtualDevice* device, const Point& start)
 {
-    Bitmap bitmap = device->GetBitmap(Point(), device->GetOutputSizePixel());
+    Bitmap bitmap = device->GetBitmap(Point(), device->GetSize());
     Bitmap::ScopedReadAccess access(bitmap);
     tools::Long x = start.X();
     while (x < bitmap.GetSizePixel().Width() && access->GetColor(start.Y(), x) != COL_BLACK)
@@ -145,7 +145,7 @@ static tools::Long getCharacterLeftSideHeight(VirtualDevice* device, const Point
 // The same, but from the right side, for U+30E8 (it's straight on the right side, not the left one).
 static tools::Long getCharacterRightSideHeight(VirtualDevice* device, const Point& start)
 {
-    Bitmap bitmap = device->GetBitmap(Point(), device->GetOutputSizePixel());
+    Bitmap bitmap = device->GetBitmap(Point(), device->GetSize());
     Bitmap::ScopedReadAccess access(bitmap);
     tools::Long x = start.X();
     while (x >= 0 && access->GetColor(start.Y(), x) != COL_BLACK)

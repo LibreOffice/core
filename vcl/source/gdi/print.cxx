@@ -683,8 +683,8 @@ void Printer::ImplInitDisplay()
     mpDisplayDev = VclPtr<VirtualDevice>::Create();
     mxFontCollection    = pSVData->maGDIData.mxScreenFontList;
     mxFontCache         = pSVData->maGDIData.mxScreenFontCache;
-    mnDPIX              = mpDisplayDev->mnDPIX;
-    mnDPIY              = mpDisplayDev->mnDPIY;
+    SetDPIX(mpDisplayDev->GetDPIX());
+    SetDPIY(mpDisplayDev->GetDPIY());
 }
 
 void Printer::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
@@ -823,11 +823,16 @@ void Printer::ImplUpdatePageData()
     if ( !AcquireGraphics() )
         return;
 
-    mpGraphics->GetResolution( mnDPIX, mnDPIY );
-    mpInfoPrinter->GetPageInfo( &maJobSetup.ImplGetConstData(),
-                                mnOutWidth, mnOutHeight,
-                                maPageOffset,
-                                maPaperSize );
+    sal_Int32 nDPIX, nDPIY;
+    mpGraphics->GetResolution( nDPIX, nDPIY );
+    SetDPIX(nDPIX);
+    SetDPIY(nDPIY);
+
+    tools::Long nWidth, nHeight;
+    mpInfoPrinter->GetPageInfo(&maJobSetup.ImplGetConstData(), nWidth, nHeight,
+                               maPageOffset, maPaperSize);
+    SetWidth(nWidth);
+    SetHeight(nHeight);
 }
 
 void Printer::ImplUpdateFontList()
@@ -1656,7 +1661,7 @@ css::awt::DeviceInfo Printer::GetDeviceInfo() const
 {
     Size aDevSz = GetPaperSizePixel();
     css::awt::DeviceInfo aInfo = GetCommonDeviceInfo(aDevSz);
-    Size aOutSz = GetOutputSizePixel();
+    Size aOutSz = GetSize();
     Point aOffset = GetPageOffset();
     aInfo.LeftInset = aOffset.X();
     aInfo.TopInset = aOffset.Y();
@@ -1683,7 +1688,7 @@ Size Printer::GetWaveLineSize(tools::Long nLineWidth) const
 {
     // FIXME - do we have a bug here? If the linewidth is 0, then we will return
     // Size(0, 0) - is this correct?
-    return Size(nLineWidth, ((nLineWidth*mnDPIX)+(mnDPIY/2))/mnDPIY);
+    return Size(nLineWidth, ((nLineWidth*GetDPIX())+(GetDPIY()/2))/GetDPIY());
 }
 
 void Printer::SetSystemTextColor(SystemTextColorFlags, bool)

@@ -313,7 +313,7 @@ void OTableWindow::DataChanged(const DataChangedEvent& rDCEvt)
 
 void OTableWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
-    tools::Rectangle aRect(Point(0,0), GetOutputSizePixel());
+    tools::Rectangle aRect(Point(0,0), GetSize());
     Window::Paint(rRenderContext, rRect);
     Draw3DBorder(rRenderContext, aRect);
 }
@@ -358,7 +358,7 @@ tools::Rectangle OTableWindow::getSizingRect(const Point& _rPos,const Size& _rOu
 
 void OTableWindow::setSizingFlag(const Point& _rPos)
 {
-    Size    aOutSize = GetOutputSizePixel();
+    Size    aOutSize = GetSize();
     // Set the flags when the mouse cursor is in the sizing area
     m_nSizingFlags = SizingFlags::NONE;
 
@@ -417,7 +417,7 @@ void OTableWindow::MouseButtonDown( const MouseEvent& rEvt )
 void OTableWindow::Resize()
 {
     // The window must not disappear so we enforce a minimum size
-    Size    aOutSize = GetOutputSizePixel();
+    Size    aOutSize = GetSize();
     aOutSize = Size(CalcZoom(aOutSize.Width()),CalcZoom(aOutSize.Height()));
 
     tools::Long nTitleHeight = CalcZoom( GetTextHeight() )+ CalcZoom( 4 );

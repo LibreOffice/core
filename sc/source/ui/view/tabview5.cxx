@@ -559,7 +559,7 @@ void ScTabView::ScrollToObject( const SdrObject* pDrawObj )
 void ScTabView::MakeVisible( const tools::Rectangle& rHMMRect )
 {
     vcl::Window* pWin = GetActiveWin();
-    Size aWinSize = pWin->GetOutputSizePixel();
+    Size aWinSize = pWin->GetSize();
     SCTAB nTab = aViewData.GetTabNo();
 
     tools::Rectangle aRect = pWin->LogicToPixel( rHMMRect );

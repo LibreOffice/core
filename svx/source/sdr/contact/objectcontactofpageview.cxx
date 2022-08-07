@@ -123,7 +123,7 @@ namespace sdr::contact
         void ObjectContactOfPageView::DoProcessDisplay(DisplayInfo& rDisplayInfo)
         {
             OutputDevice& rTargetOutDev = GetPageWindow().GetPaintWindow().GetTargetOutputDevice();
-            const Size aOutputSizePixel(rTargetOutDev.GetOutputSizePixel());
+            const Size aOutputSizePixel(rTargetOutDev.GetSize());
             if (!isOutputToRecordingMetaFile() // do those have outdev too?
                 && (0 == aOutputSizePixel.getWidth() ||
                     0 == aOutputSizePixel.getHeight()))

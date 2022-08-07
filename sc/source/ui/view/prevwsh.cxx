@@ -270,7 +270,7 @@ void ScPreviewShell::UpdateNeededScrollBars( bool bFromZoom )
     bool bHori = pHorScroll->IsVisible();
     Size aWindowSize = pPreview->GetOutDev()->GetOutputSize();
     Point aPos = pPreview->GetPosPixel();
-    Size aWindowPixelSize = pPreview->GetOutputSizePixel();
+    Size aWindowPixelSize = pPreview->GetSize();
 
     // if we are called from Zoom then we need to compensate for whatever
     // scrollbars were displayed before the zoom was called

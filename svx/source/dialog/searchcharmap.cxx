@@ -155,7 +155,7 @@ void SvxSearchCharSet::DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1
     if (n1 > LastInView() || n2 < FirstInView())
         return;
 
-    Size aOutputSize(GetOutputSizePixel());
+    Size aOutputSize(GetSize());
 
     int i;
     for (i = 1; i < COLUMN_COUNT; ++i)
@@ -289,7 +289,7 @@ void SvxSearchCharSet::RecalculateFont(vcl::RenderContext& rRenderContext)
     if (!mbRecalculateFont)
         return;
 
-    Size aSize(GetOutputSizePixel());
+    Size aSize(GetSize());
 
     vcl::Font aFont = rRenderContext.GetFont();
     aFont.SetWeight(WEIGHT_LIGHT);

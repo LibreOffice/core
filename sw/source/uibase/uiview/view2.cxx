@@ -1816,7 +1816,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                         Size aRootSize( aRootRect.SSize() );
 
                         const MapMode aTmpMap( MapUnit::MapTwip );
-                        const Size& rEditSize = GetEditWin().GetOutputSizePixel();
+                        const Size& rEditSize = GetEditWin().GetSize();
                         const Size aWindowSize( GetEditWin().PixelToLogic( rEditSize, aTmpMap ) );
 
                         const tools::Long nOf = pVOpt->GetDocumentBorder() * 2;

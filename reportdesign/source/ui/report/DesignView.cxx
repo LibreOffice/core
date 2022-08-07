@@ -71,7 +71,7 @@ public:
 
     virtual void Resize() override
     {
-        const Size aSize = GetOutputSizePixel();
+        const Size aSize = GetSize();
         if ( m_pPropWin && aSize.Height() && aSize.Width() )
             m_pPropWin->SetSizePixel(aSize);
     }
@@ -401,7 +401,7 @@ void ODesignView::ImplInitSettings()
 
 IMPL_LINK_NOARG( ODesignView, SplitHdl, SplitWindow*, void )
 {
-    const Size aOutputSize = GetOutputSizePixel();
+    const Size aOutputSize = GetSize();
     const tools::Long nTest = aOutputSize.Width() * m_aSplitWin->GetItemSize(TASKPANE_ID) / 100;
     tools::Long nMinWidth = static_cast<tools::Long>(0.1*aOutputSize.Width());
     if ( m_pPropWin && m_pPropWin->IsVisible() )

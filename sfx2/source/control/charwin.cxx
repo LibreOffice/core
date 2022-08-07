@@ -138,7 +138,7 @@ void SvxCharView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
 
     const OUString aText = GetText();
 
-    Size aSize(GetOutputSizePixel());
+    Size aSize(GetSize());
     tools::Long nAvailWidth = aSize.Width();
     tools::Long nWinHeight = aSize.Height();
 
@@ -230,7 +230,7 @@ void SvxCharView::setClearAllClickHdl(const Link<SvxCharView*, void>& rLink)
 
 void SvxCharView::SetFont(const vcl::Font& rFont)
 {
-    tools::Long nWinHeight = GetOutputSizePixel().Height();
+    tools::Long nWinHeight = GetSize().Height();
     maFont = rFont;
     maFont.SetWeight(WEIGHT_NORMAL);
     maFont.SetAlignment(ALIGN_TOP);

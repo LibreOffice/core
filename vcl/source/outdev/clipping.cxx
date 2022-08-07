@@ -186,8 +186,8 @@ vcl::Region OutputDevice::ClipToDeviceBounds(vcl::Region aRegion) const
 {
     aRegion.Intersect(tools::Rectangle{maGeometry.GetXFrameOffset(),
                                        maGeometry.GetYFrameOffset(),
-                                       maGeometry.GetXFrameOffset() + GetOutputWidthPixel() - 1,
-                                       maGeometry.GetYFrameOffset() + GetOutputHeightPixel() - 1
+                                       maGeometry.GetXFrameOffset() + GetWidth() - 1,
+                                       maGeometry.GetYFrameOffset() + GetHeight() - 1
                                       });
     return aRegion;
 }
