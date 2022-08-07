@@ -185,13 +185,13 @@ bool SwUndoInsert::CanGrouping( const SwPosition& rPos )
 
 SwUndoInsert::~SwUndoInsert()
 {
-    if (m_pUndoNodeIndex) // delete the section from UndoNodes array
+    if (m_oUndoNodeIndex) // delete the section from UndoNodes array
     {
         // Insert saves the content in IconSection
-        SwNodes& rUNds = m_pUndoNodeIndex->GetNodes();
-        rUNds.Delete(*m_pUndoNodeIndex,
-            rUNds.GetEndOfExtras().GetIndex() - m_pUndoNodeIndex->GetIndex());
-        m_pUndoNodeIndex.reset();
+        SwNodes& rUNds = m_oUndoNodeIndex->GetNodes();
+        rUNds.Delete(*m_oUndoNodeIndex,
+            rUNds.GetEndOfExtras().GetIndex() - m_oUndoNodeIndex->GetIndex());
+        m_oUndoNodeIndex.reset();
     }
     else     // the inserted text
     {
@@ -268,9 +268,8 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
 
             if (!maText)
             {
-                m_pUndoNodeIndex.reset(
-                        new SwNodeIndex(m_pDoc->GetNodes().GetEndOfContent()));
-                MoveToUndoNds(aPaM, m_pUndoNodeIndex.get());
+                m_oUndoNodeIndex.emplace(m_pDoc->GetNodes().GetEndOfContent());
+                MoveToUndoNds(aPaM, &*m_oUndoNodeIndex);
             }
             m_nNode = aPaM.GetPoint()->GetNodeIndex();
             m_nContent = aPaM.GetPoint()->GetContentIndex();
@@ -341,9 +340,9 @@ void SwUndoInsert::RedoImpl(::sw::UndoRedoContext & rContext)
             }
             else
             {
-                // re-insert content again (first detach m_pUndoNodeIndex!)
-                SwNodeOffset const nMvNd = m_pUndoNodeIndex->GetIndex();
-                m_pUndoNodeIndex.reset();
+                // re-insert content again (first detach m_oUndoNodeIndex!)
+                SwNodeOffset const nMvNd = m_oUndoNodeIndex->GetIndex();
+                m_oUndoNodeIndex.reset();
                 MoveFromUndoNds(*pTmpDoc, nMvNd, *pPam->GetMark());
             }
             m_nNode = pPam->GetMark()->GetNodeIndex();
