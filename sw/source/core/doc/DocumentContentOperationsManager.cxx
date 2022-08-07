@@ -2618,17 +2618,17 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
     // Set it to before the Position, so that it cannot be moved further.
     SwNodeIndex aIdx( rPos, -1 );
 
-    std::unique_ptr<SwNodeIndex> pSaveInsPos;
+    std::optional<SwNodeIndex> oSaveInsPos;
     if( pUndo )
-        pSaveInsPos.reset(new SwNodeIndex( rRange.aStart, -1 ));
+        oSaveInsPos.emplace(rRange.aStart, -1 );
 
     // move the Nodes
     bool bNoDelFrames = bool(SwMoveFlags::NO_DELFRMS & eMvFlags);
     if( m_rDoc.GetNodes().MoveNodes( rRange, m_rDoc.GetNodes(), rPos, !bNoDelFrames ) )
     {
         ++aIdx;     // again back to old position
-        if( pSaveInsPos )
-            ++(*pSaveInsPos);
+        if( oSaveInsPos )
+            ++(*oSaveInsPos);
     }
     else
     {
@@ -2666,11 +2666,11 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
 
     if( pUndo )
     {
-        pUndo->SetDestRange( aIdx, rPos, *pSaveInsPos );
+        pUndo->SetDestRange( aIdx, rPos, *oSaveInsPos );
         m_rDoc.GetIDocumentUndoRedo().AppendUndo(std::move(pUndo));
     }
 
-    pSaveInsPos.reset();
+    oSaveInsPos.reset();
 
     if( bUpdateFootnote )
     {
