@@ -667,6 +667,8 @@ void ElementDescriptor::readCurrencyFieldModel( StyleBag * all_styles )
 
     // collect elements
     readDefaults();
+    readAlignAttr( "Align", XMLNS_DIALOGS_PREFIX ":align" );
+    readVerticalAlignAttr( "VerticalAlign", XMLNS_DIALOGS_PREFIX ":valign" );
     readBoolAttr( "Tabstop", XMLNS_DIALOGS_PREFIX ":tabstop" );
     readBoolAttr( "ReadOnly", XMLNS_DIALOGS_PREFIX ":readonly" );
     readBoolAttr( "HideInactiveSelection", XMLNS_DIALOGS_PREFIX ":hide-inactive-selection" );
