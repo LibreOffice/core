@@ -566,7 +566,7 @@ void SwXMLImport::startDocument()
 
     if( (getImportFlags() & SvXMLImportFlags::CONTENT) && !IsStylesOnlyMode() )
     {
-        m_pSttNdIdx.reset(new SwNodeIndex( pDoc->GetNodes() ));
+        m_oSttNdIdx.emplace( pDoc->GetNodes() );
         if( IsInsertMode() )
         {
             SwPaM *pPaM = pTextCursor->GetPaM();
@@ -574,7 +574,7 @@ void SwXMLImport::startDocument()
 
             // Split once and remember the node that has been split.
             pDoc->getIDocumentContentOperations().SplitNode( *pPos, false );
-            *m_pSttNdIdx = pPos->GetNodeIndex()-1;
+            *m_oSttNdIdx = pPos->GetNodeIndex()-1;
 
             // Split again.
             pDoc->getIDocumentContentOperations().SplitNode( *pPos, false );
@@ -644,15 +644,15 @@ void SwXMLImport::endDocument()
         OTextCursorHelper* pTextCursor = comphelper::getFromUnoTunnel<OTextCursorHelper>(xCursorTunnel);
         assert(pTextCursor && "SwXTextCursor missing");
         SwPaM *pPaM = pTextCursor->GetPaM();
-        if( IsInsertMode() && m_pSttNdIdx->GetIndex() )
+        if( IsInsertMode() && m_oSttNdIdx->GetIndex() )
         {
             // If we are in insert mode, join the split node that is in front
             // of the new content with the first new node. Or in other words:
             // Revert the first split node.
-            SwTextNode* pTextNode = m_pSttNdIdx->GetNode().GetTextNode();
-            SwNodeIndex aNxtIdx( *m_pSttNdIdx );
+            SwTextNode* pTextNode = m_oSttNdIdx->GetNode().GetTextNode();
+            SwNodeIndex aNxtIdx( *m_oSttNdIdx );
             if( pTextNode && pTextNode->CanJoinNext( &aNxtIdx ) &&
-                m_pSttNdIdx->GetIndex() + 1 == aNxtIdx.GetIndex() )
+                m_oSttNdIdx->GetIndex() + 1 == aNxtIdx.GetIndex() )
             {
                 // If the PaM points to the first new node, move the PaM to the
                 // end of the previous node.
@@ -664,14 +664,14 @@ void SwXMLImport::endDocument()
 
 #if OSL_DEBUG_LEVEL > 0
                 // !!! This should be impossible !!!!
-                OSL_ENSURE( m_pSttNdIdx->GetIndex()+1 !=
+                OSL_ENSURE( m_oSttNdIdx->GetIndex()+1 !=
                                         pPaM->GetBound().GetNodeIndex(),
                         "PaM.Bound1 point to new node " );
-                OSL_ENSURE( m_pSttNdIdx->GetIndex()+1 !=
+                OSL_ENSURE( m_oSttNdIdx->GetIndex()+1 !=
                                         pPaM->GetBound( false ).GetNodeIndex(),
                         "PaM.Bound2 points to new node" );
 
-                if( m_pSttNdIdx->GetIndex()+1 ==
+                if( m_oSttNdIdx->GetIndex()+1 ==
                                         pPaM->GetBound().GetNodeIndex() )
                 {
                     const sal_Int32 nCntPos =
@@ -679,7 +679,7 @@ void SwXMLImport::endDocument()
                     pPaM->GetBound().nContent.Assign( pTextNode,
                             pTextNode->GetText().getLength() + nCntPos );
                 }
-                if( m_pSttNdIdx->GetIndex()+1 ==
+                if( m_oSttNdIdx->GetIndex()+1 ==
                                 pPaM->GetBound( false ).GetNodeIndex() )
                 {
                     const sal_Int32 nCntPos =
@@ -762,7 +762,7 @@ void SwXMLImport::endDocument()
                     // but only if one has been inserted and
                     // no endNode found to avoid removing section
                     if( pNextNd->CanJoinPrev(/* &pPos->nNode*/ ) && !endNodeFound &&
-                         *m_pSttNdIdx != pPos->nNode )
+                         *m_oSttNdIdx != pPos->nNode )
                     {
                         pNextNd->JoinPrev();
                     }
@@ -819,7 +819,7 @@ void SwXMLImport::endDocument()
 
     GetTextImport()->ResetCursor();
 
-    m_pSttNdIdx.reset();
+    m_oSttNdIdx.reset();
 
     // SJ: #i49801# -> now permitting repaints
     if ( pDoc )
@@ -944,16 +944,16 @@ void SwXMLImport::MergeListsAtDocumentInsertPosition(SwDoc *pDoc)
     if (! pDoc)
         return;
 
-    if (! IsInsertMode() || ! m_pSttNdIdx->GetIndex())
+    if (! IsInsertMode() || ! m_oSttNdIdx->GetIndex())
         return;
 
     SwNodeOffset index(1);
 
     // the last node of the main document where we have inserted a document
-    SwNode* const node1 = pDoc->GetNodes()[m_pSttNdIdx->GetIndex() + 0];
+    SwNode* const node1 = pDoc->GetNodes()[m_oSttNdIdx->GetIndex() + 0];
 
     // the first node of the inserted document
-    SwNode* node2 = pDoc->GetNodes()[m_pSttNdIdx->GetIndex() + index];
+    SwNode* node2 = pDoc->GetNodes()[m_oSttNdIdx->GetIndex() + index];
 
     if (! (node1 && node2
         && (node1->GetNodeType() == node2->GetNodeType())
@@ -1066,7 +1066,7 @@ void SwXMLImport::MergeListsAtDocumentInsertPosition(SwDoc *pDoc)
             return;
         }
 
-        node2 = pDoc->GetNodes()[m_pSttNdIdx->GetIndex() + index];
+        node2 = pDoc->GetNodes()[m_oSttNdIdx->GetIndex() + index];
     }
 }
 

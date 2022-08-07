@@ -23,6 +23,7 @@
 #include <sal/config.h>
 
 #include <memory>
+#include <optional>
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
@@ -31,13 +32,13 @@
 
 #include "xmlitmap.hxx"
 #include <o3tl/typed_flags_set.hxx>
+#include <ndindex.hxx>
 
 class SwDoc;
 class SvXMLUnitConverter;
 class SvXMLTokenMap;
 class SvXMLImportItemMapper;
 class SfxItemSet;
-class SwNodeIndex;
 class XMLTextImportHelper;
 class SvXMLGraphicHelper;
 class SvXMLEmbeddedObjectHelper;
@@ -59,7 +60,7 @@ namespace o3tl
 
 class SwXMLImport: public SvXMLImport
 {
-    std::unique_ptr<SwNodeIndex> m_pSttNdIdx;
+    std::optional<SwNodeIndex> m_oSttNdIdx;
 
     std::unique_ptr<SvXMLUnitConverter> m_pTwipUnitConv;
     std::unique_ptr<SvXMLImportItemMapper> m_pTableItemMapper;// paragraph item import
