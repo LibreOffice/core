@@ -27,7 +27,6 @@
 #include <tools/fract.hxx>
 #include <sal/log.hxx>
 #include <vcl/InterimItemWindow.hxx>
-#include <vcl/scrbar.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 
@@ -165,6 +164,8 @@ BrowseBox::BrowseBox( vcl::Window* pParent, WinBits nBits, BrowserMode nMode )
     ,aHScroll( VclPtr<ScrollAdaptor>::Create(this, true) )
     // see NavigationBar ctor, here we just want to know its height
     ,aStatusBarHeight(VclPtr<MeasureStatusBar>::Create(this))
+    ,m_nCornerSize(0)
+    ,m_nActualCornerWidth(0)
 {
     ConstructImpl( nMode );
 }
@@ -193,7 +194,6 @@ void BrowseBox::dispose()
 
     Hide();
     pDataWin->pHeaderBar.disposeAndClear();
-    pDataWin->pCornerWin.disposeAndClear();
     pDataWin.disposeAndClear();
     pVScroll.disposeAndClear();
     aHScroll.disposeAndClear();
