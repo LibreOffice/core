@@ -569,10 +569,10 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                             m_bCareLastParaEndInToc = true;
                         }
 
-                        if (m_pPosAfterTOC)
+                        if (m_oPosAfterTOC)
                         {
-                            *m_pPaM = *m_pPosAfterTOC;
-                            m_pPosAfterTOC.reset();
+                            *m_pPaM = *m_oPosAfterTOC;
+                            m_oPosAfterTOC.reset();
                         }
                     }
                 }
@@ -3479,7 +3479,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
 
     //The TOC field representation contents should be inserted into TOC section, but not after TOC section.
     //So we need update the document position when loading TOC representation and after loading TOC;
-    m_pPosAfterTOC.reset(new SwPaM(*m_pPaM, m_pPaM));
+    m_oPosAfterTOC.emplace(*m_pPaM, m_pPaM);
     (*m_pPaM).Move(fnMoveBackward);
     SwPaM aRegion(*m_pPaM, m_pPaM);
 
@@ -3500,7 +3500,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
 
         // inserting a toc inserts a section before this point, so adjust pos
         // for future page/section segment insertion
-        m_aSectionManager.PrependedInlineNode( *m_pPosAfterTOC->GetPoint(), aRegion.GetNode() );
+        m_aSectionManager.PrependedInlineNode( *m_oPosAfterTOC->GetPoint(), aRegion.GetNode() );
     }
 
     // Set end in stack

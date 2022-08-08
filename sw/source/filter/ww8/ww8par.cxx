@@ -5478,7 +5478,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
         m_xLstManager.reset();
     }
 
-    m_pPosAfterTOC.reset();
+    m_oPosAfterTOC.reset();
     m_xRedlineStack.reset();
     mpCursor.reset();
     m_pPaM = nullptr;
