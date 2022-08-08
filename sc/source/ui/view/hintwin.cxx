@@ -83,7 +83,7 @@ drawinglayer::primitive2d::Primitive2DContainer ScOverlayHint::createOverlaySequ
     rtl::Reference<drawinglayer::primitive2d::TextSimplePortionPrimitive2D> pTitle =
         new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
                         aTextMatrix, m_aTitle, 0, m_aTitle.getLength(),
-                        std::vector<double>(), std::move(aFontAttr), css::lang::Locale(),
+                        std::vector<double>(), {}, std::move(aFontAttr), css::lang::Locale(),
                         rColor.getBColor());
 
     Point aTextStart(nLeft + aHintMargin.Width() + aIndent.Width(),
@@ -123,7 +123,7 @@ drawinglayer::primitive2d::Primitive2DContainer ScOverlayHint::createOverlaySequ
         rtl::Reference<drawinglayer::primitive2d::TextSimplePortionPrimitive2D> pMessage =
                                         new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
                                                 aTextMatrix, aLine, 0, aLine.getLength(),
-                                                std::vector<double>(), aFontAttr, css::lang::Locale(),
+                                                std::vector<double>(), {}, aFontAttr, css::lang::Locale(),
                                                 rColor.getBColor());
 
         rRange.expand(pMessage->getB2DRange(aDummy));

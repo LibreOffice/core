@@ -1828,7 +1828,7 @@ namespace emfio
                 {
                     Point aCharDisplacement( i ? (*pDXArry)[i-1] : 0, i ? pDYArry[i-1] : 0 );
                     Point().RotateAround(aCharDisplacement, maFont.GetOrientation());
-                    mpGDIMetaFile->AddAction( new MetaTextArrayAction( rPosition + aCharDisplacement, OUString( rText[i] ), o3tl::span<const sal_Int32>{}, 0, 1 ) );
+                    mpGDIMetaFile->AddAction( new MetaTextArrayAction( rPosition + aCharDisplacement, OUString( rText[i] ), o3tl::span<const sal_Int32>{}, {}, 0, 1 ) );
                 }
             }
             else
@@ -1859,7 +1859,7 @@ namespace emfio
                     pVDev->GetTextArray( rText, &aMyDXArray, 0, rText.getLength());
                     pDX = aMyDXArray;
                 }
-                mpGDIMetaFile->AddAction( new MetaTextArrayAction( rPosition, rText, pDX, 0, rText.getLength() ) );
+                mpGDIMetaFile->AddAction( new MetaTextArrayAction( rPosition, rText, pDX, {}, 0, rText.getLength() ) );
             }
         }
         SetGfxMode( nOldGfxMode );

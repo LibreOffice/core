@@ -143,7 +143,7 @@ private:
                     GenericSalLayout& operator=( const GenericSalLayout& ) = delete;
 
     template<typename DC>
-    void            ApplyDXArray(const DC*, SalLayoutFlags nLayoutFlags);
+    void            ApplyDXArray(const DC*, const sal_Bool*);
     void            Justify(DeviceCoordinate nNewWidth);
     void            ApplyAsianKerning(const OUString& rStr);
 

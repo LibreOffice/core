@@ -463,6 +463,7 @@ public:
 
 private:
     CharPosArrayType aPositions;
+    std::vector<sal_Bool> aKashidaPositions;
     sal_Int32          nTxtWidth;
     sal_Int32          nStartPosX;
     sal_Int32          nStart;     // could be replaced by nStartPortion
@@ -530,6 +531,9 @@ public:
 
     CharPosArrayType& GetCharPosArray() { return aPositions;}
     const CharPosArrayType& GetCharPosArray() const { return aPositions;}
+
+    std::vector<sal_Bool>& GetKashidaArray() { return aKashidaPositions; }
+    const std::vector<sal_Bool>& GetKashidaArray() const { return aKashidaPositions; }
 
     EditLine*       Clone() const;
 

@@ -167,7 +167,8 @@ void OverlayDiagramPrimitive::create2DDecomposition(
             aName,
             0,
             aName.getLength(),
-            aDXArray);
+            aDXArray,
+            {});
 
         // put into one PolyPolygon (also simplification - overlapping chars
         // may create XOR gaps, so these exist for a reason, but low probability)
