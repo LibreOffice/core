@@ -27,7 +27,6 @@
 #include <table.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
-#include <vcl/scrbar.hxx>
 #include <vcl/seleng.hxx>
 #include <sal/log.hxx>
 

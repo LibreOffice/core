@@ -119,8 +119,6 @@ void ScPreviewShell::Construct( vcl::Window* pParent )
 
     eZoom = SvxZoomType::WHOLEPAGE;
 
-    pCorner = VclPtr<ScrollBarBox>::Create( pParent, WB_SIZEABLE );
-
     pHorScroll = VclPtr<ScrollAdaptor>::Create(pParent, true);
     pVerScroll = VclPtr<ScrollAdaptor>::Create(pParent, false);
 
@@ -142,7 +140,6 @@ void ScPreviewShell::Construct( vcl::Window* pParent )
 
     pHorScroll->Show( false );
     pVerScroll->Show( false );
-    pCorner->Show();
     SetName("Preview");
 }
 
@@ -199,7 +196,6 @@ ScPreviewShell::~ScPreviewShell()
     pPreview.disposeAndClear();
     pHorScroll.disposeAndClear();
     pVerScroll.disposeAndClear();
-    pCorner.disposeAndClear();
 
     //  normal mode of operation is switching back to default view in the same frame,
     //  so there's no need to activate any other window here anymore
@@ -317,8 +313,6 @@ void ScPreviewShell::UpdateNeededScrollBars( bool bFromZoom )
                                  Size( aWindowPixelSize.Width(), nBarH ) );
     pVerScroll->SetPosSizePixel( Point( aPos.X() + aWindowPixelSize.Width(), aPos.Y() ),
                                  Size( nBarW, aWindowPixelSize.Height() ) );
-    pCorner->SetPosSizePixel( Point( aPos.X() + aWindowPixelSize.Width(), aPos.Y() + aWindowPixelSize.Height() ),
-                              Size( nBarW, nBarH ) );
     UpdateScrollBars();
 }
 

@@ -23,7 +23,6 @@
 #include <array>
 #include <memory>
 #include <svtools/scrolladaptor.hxx>
-#include <vcl/scrbar.hxx>
 #include <vcl/help.hxx>
 
 #include "hiranges.hxx"
@@ -154,7 +153,6 @@ private:
     VclPtr<ScrollAdaptor>       aHScrollRight;
     VclPtr<ScCornerButton>      aCornerButton;
     VclPtr<ScCornerButton>      aTopButton;
-    VclPtr<ScrollBarBox>        aScrollBarBox;
 
     std::shared_ptr<sc::SpellCheckContext> mpSpellCheckCxt;
 

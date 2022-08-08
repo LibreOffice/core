@@ -117,7 +117,7 @@ void ScTabView::Init()
     //  Don't show anything here, because still in wrong order
     //  Show is received from UpdateShow during first resize
     //      pTabControl, pGridWin, aHScrollLeft, aVScrollBottom,
-    //      aCornerButton, aScrollBarBox, pHSplitter, pVSplitter
+    //      aCornerButton, pHSplitter, pVSplitter
 
     //      fragment
 
@@ -212,7 +212,6 @@ ScTabView::~ScTabView()
         pRowOutline[i].disposeAndClear();
     }
 
-    aScrollBarBox.disposeAndClear();
     aCornerButton.disposeAndClear();
     aTopButton.disposeAndClear();
     aHScrollLeft.disposeAndClear();

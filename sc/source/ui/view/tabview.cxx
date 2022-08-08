@@ -182,7 +182,6 @@ ScTabView::ScTabView( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* 
     aHScrollRight( VclPtr<ScrollAdaptor>::Create( pFrameWin, true ) ),
     aCornerButton( VclPtr<ScCornerButton>::Create( pFrameWin, &aViewData ) ),
     aTopButton( VclPtr<ScCornerButton>::Create( pFrameWin, &aViewData ) ),
-    aScrollBarBox( VclPtr<ScrollBarBox>::Create( pFrameWin, WB_SIZEABLE ) ),
     aScrollTimer("ScTabView aScrollTimer"),
     pTimerWindow( nullptr ),
     aExtraEditViewManager( pViewShell, pGridWin ),
@@ -373,10 +372,6 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
             nSizeY -= nBarY;
         }
 
-        //  window at the bottom right
-        lcl_SetPosSize( *aScrollBarBox, Point( nPosX+nSizeX, nPosY+nSizeY ), Size( nBarX, nBarY ),
-                        nTotalWidth, bLayoutRTL );
-
         if (bHScroll) // Scrollbars horizontal
         {
             tools::Long nSizeLt = 0;       // left scroll bar
@@ -531,8 +526,6 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
         lcl_SetPosSize( *pTabControl, Point(nPosX, nPosY+nSizeY-nBarY),
                                         Size(nTabSize, nBarY), nTotalWidth, bLayoutRTL );
         nSizeY -= nBarY;
-        lcl_SetPosSize( *aScrollBarBox, Point( nPosX+nSizeX, nPosY+nSizeY ), Size( nBarX, nBarY ),
-                                        nTotalWidth, bLayoutRTL );
 
         if( bVScroll )
         {
@@ -1478,7 +1471,6 @@ void ScTabView::UpdateShow()
     ShowHide( aHScrollRight.get(), bShowH && bHScrollMode );
     ShowHide( aVScrollBottom.get(), bVScrollMode );
     ShowHide( aVScrollTop.get(), bShowV && bVScrollMode );
-    ShowHide( aScrollBarBox.get(), bVScrollMode || bHScrollMode );
 
     ShowHide( pHSplitter, bHScrollMode || bShowH );         // always generated
     ShowHide( pVSplitter, bVScrollMode || bShowV );
@@ -2239,7 +2231,6 @@ void ScTabView::EnableRefInput(bool bFlag)
     aHScrollRight->EnableInput(bFlag);
     aVScrollBottom->EnableInput(bFlag);
     aVScrollTop->EnableInput(bFlag);
-    aScrollBarBox->EnableInput(bFlag);
 
     // from here on dynamically created ones
 
