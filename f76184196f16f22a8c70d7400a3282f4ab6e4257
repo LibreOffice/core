@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8cd8fefa_71eccb78",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-08-08T18:48:39Z",
+      "side": 1,
+      "message": "Julien and Xisco have already reviewed it; it’s three with me",
+      "revId": "f76184196f16f22a8c70d7400a3282f4ab6e4257",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
