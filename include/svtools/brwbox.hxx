@@ -275,7 +275,8 @@ private:
     VclPtr<MeasureStatusBar> aStatusBarHeight; // statusbar, just to measure its height
 
     tools::Long     m_nDataRowHeight; // height of a single data-row
-    tools::Long     m_nCornerSize; // size of scrollbox corner
+    tools::Long     m_nCornerHeight; // height of scrollbox corner
+    tools::Long     m_nCornerWidth; // width of scrollbox corner
     tools::Long     m_nActualCornerWidth; // size of scrollbox corner
     sal_uInt16      nTitleLines;    // number of lines in title row
     sal_uLong       nControlAreaWidth; // width of fixed area beneath hscroll
