@@ -814,9 +814,9 @@ bool ScUndoDeleteMulti::CanRepeat(SfxRepeatTarget& rTarget) const
 }
 
 ScUndoCut::ScUndoCut(ScDocShell* pNewDocShell, const ScRange& aRange, const ScAddress& aOldEnd,
-                     ScMarkData aMark, ScDocumentUniquePtr pNewUndoDoc)
+                     const ScMarkData& rMark, ScDocumentUniquePtr pNewUndoDoc)
     : ScBlockUndo(pNewDocShell, ScRange(aRange.aStart, aOldEnd), SC_UNDO_AUTOHEIGHT)
-    , aMarkData(std::move(aMark))
+    , aMarkData(rMark)
     , pUndoDoc(std::move(pNewUndoDoc))
     , aExtendedRange(aRange)
 {
@@ -913,13 +913,13 @@ bool ScUndoCut::CanRepeat(SfxRepeatTarget& rTarget) const
 }
 
 ScUndoPaste::ScUndoPaste( ScDocShell* pNewDocShell, const ScRangeList& rRanges,
-                ScMarkData aMark,
+                const ScMarkData& rMark,
                 ScDocumentUniquePtr pNewUndoDoc, ScDocumentUniquePtr pNewRedoDoc,
                 InsertDeleteFlags nNewFlags,
                 std::unique_ptr<ScRefUndoData> pRefData,
                 bool bRedoIsFilled, const ScUndoPasteOptions* pOptions ) :
     ScMultiBlockUndo( pNewDocShell, rRanges ),
-    aMarkData(std::move( aMark )),
+    aMarkData( rMark ),
     pUndoDoc( std::move(pNewUndoDoc) ),
     pRedoDoc( std::move(pNewRedoDoc) ),
     nFlags( nNewFlags ),
@@ -1671,13 +1671,13 @@ bool ScUndoConditionalFormatList::CanRepeat(SfxRepeatTarget& ) const
 }
 
 ScUndoUseScenario::ScUndoUseScenario( ScDocShell* pNewDocShell,
-                        ScMarkData aMark,
+                        const ScMarkData& rMark,
 /*C*/                   const ScArea& rDestArea,
                               ScDocumentUniquePtr pNewUndoDoc,
                         OUString aNewName ) :
     ScSimpleUndo( pNewDocShell ),
     pUndoDoc( std::move(pNewUndoDoc) ),
-    aMarkData(std::move( aMark )),
+    aMarkData( rMark ),
     aName(std::move( aNewName ))
 {
     aRange.aStart.SetCol(rDestArea.nColStart);
@@ -1790,12 +1790,12 @@ bool ScUndoUseScenario::CanRepeat(SfxRepeatTarget& rTarget) const
 }
 
 ScUndoSelectionStyle::ScUndoSelectionStyle( ScDocShell* pNewDocShell,
-                                      ScMarkData aMark,
+                                      const ScMarkData& rMark,
                                       const ScRange& rRange,
                                       OUString aName,
                                             ScDocumentUniquePtr pNewUndoDoc ) :
     ScSimpleUndo( pNewDocShell ),
-    aMarkData(std::move( aMark )),
+    aMarkData( rMark ),
     pUndoDoc( std::move(pNewUndoDoc) ),
     aStyleName(std::move( aName )),
     aRange( rRange )
