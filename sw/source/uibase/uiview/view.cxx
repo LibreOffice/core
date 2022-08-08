@@ -32,7 +32,6 @@
 #include <officecfg/Office/Common.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/inputctx.hxx>
-#include <vcl/scrbar.hxx>
 #include <svl/eitem.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/lingucfg.hxx>
@@ -724,7 +723,6 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     m_pFormShell(nullptr),
     m_pHScrollbar(nullptr),
     m_pVScrollbar(nullptr),
-    m_pScrollFill(VclPtr<ScrollBarBox>::Create( &_pFrame->GetWindow(), WB_SIZEABLE )),
     m_pVRuler(VclPtr<SvxRuler>::Create(&GetViewFrame()->GetWindow(), m_pEditWin,
                             SvxRulerSupportFlags::TABS | SvxRulerSupportFlags::PARAGRAPH_MARGINS_VERTICAL|
                                 SvxRulerSupportFlags::BORDERS | SvxRulerSupportFlags::REDUCED_METRIC,
@@ -1113,7 +1111,6 @@ SwView::~SwView()
     m_pViewImpl->Invalidate();
     EndListening(*GetViewFrame());
     EndListening(*GetDocShell());
-    m_pScrollFill.disposeAndClear();
     m_pWrtShell.reset(); // reset here so that it is not accessible by the following dtors.
     m_pHScrollbar.disposeAndClear();
     m_pVScrollbar.disposeAndClear();
