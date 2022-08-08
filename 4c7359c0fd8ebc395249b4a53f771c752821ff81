@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57a615d4_6e48fff7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-08T05:31:39Z",
+      "side": 1,
+      "message": "Nice!\n\nPlease address one inline nitpick.",
+      "revId": "4c7359c0fd8ebc395249b4a53f771c752821ff81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "953ef479_335f3a7c",
+        "filename": "vcl/qa/cppunit/ScanlineToolsTest.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-08T05:31:39Z",
+      "side": 1,
+      "message": "Please don\u0027t name it like \"..It\": range-based loops (unlike \"conventional\" \u0027for (auto it \u003d container.begin(); it \u003c container.end();...)\u0027) do not operate on *iterators*, but rather on their (dereferenced) values. In this case, it\u0027s rather \u0027rColor\u0027 (\u0027r\u0027 for reference).",
+      "revId": "4c7359c0fd8ebc395249b4a53f771c752821ff81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
