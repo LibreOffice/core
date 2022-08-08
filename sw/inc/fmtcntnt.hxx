@@ -23,14 +23,14 @@
 #include <svl/poolitem.hxx>
 #include "hintids.hxx"
 #include "format.hxx"
+#include "ndindex.hxx"
 
-class SwNodeIndex;
 class SwStartNode;
 
 /// Content, content of frame (header, footer, fly).
 class SAL_DLLPUBLIC_RTTI SwFormatContent final : public SfxPoolItem
 {
-    std::unique_ptr<SwNodeIndex> m_pStartNode;
+    std::optional<SwNodeIndex> m_oStartNode;
 
     SwFormatContent &operator=( const SwFormatContent & ) = delete;
 
@@ -43,7 +43,7 @@ public:
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SwFormatContent* Clone( SfxItemPool* pPool = nullptr ) const override;
 
-    const SwNodeIndex *GetContentIdx() const { return m_pStartNode.get(); }
+    const SwNodeIndex *GetContentIdx() const { return m_oStartNode ? &*m_oStartNode : nullptr; }
     void SetNewContentIdx( const SwNodeIndex *pIdx );
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
