@@ -1353,16 +1353,15 @@ void Shell::AdjustPosSizePixel( const Point &rPos, const Size &rSize )
     aTabBarSize.setWidth( rSize.Width() );
 
     Size aSz( rSize );
-    Size aScrollBarBoxSz( aScrollBarBox->GetSizePixel() );
-    aSz.AdjustHeight( -(aScrollBarBoxSz.Height()) );
-    aSz.AdjustHeight( -(aTabBarSize.Height()) );
+    auto nScrollBarSz(Application::GetSettings().GetStyleSettings().GetScrollBarSize());
+    aSz.AdjustHeight(-nScrollBarSz);
+    aSz.AdjustHeight(-aTabBarSize.Height());
 
     Size aOutSz( aSz );
-    aSz.AdjustWidth( -(aScrollBarBoxSz.Width()) );
-    aScrollBarBox->SetPosPixel( Point( rSize.Width() - aScrollBarBoxSz.Width(), rSize.Height() - aScrollBarBoxSz.Height() ) );
-    aVScrollBar->SetPosSizePixel( Point( rPos.X()+aSz.Width(), rPos.Y() ), Size( aScrollBarBoxSz.Width(), aSz.Height() ) );
-    aHScrollBar->SetPosSizePixel( Point( rPos.X(), rPos.Y()+aSz.Height() ), Size( aSz.Width(), aScrollBarBoxSz.Height() ) );
-    pTabBar->SetPosSizePixel( Point( rPos.X(), rPos.Y()+aScrollBarBoxSz.Height()+aSz.Height()), aTabBarSize );
+    aSz.AdjustWidth(-nScrollBarSz);
+    aVScrollBar->SetPosSizePixel( Point( rPos.X()+aSz.Width(), rPos.Y() ), Size( nScrollBarSz, aSz.Height() ) );
+    aHScrollBar->SetPosSizePixel( Point( rPos.X(), rPos.Y()+aSz.Height() ), Size( aOutSz.Width(), nScrollBarSz ) );
+    pTabBar->SetPosSizePixel( Point( rPos.X(), rPos.Y() + nScrollBarSz + aSz.Height()), aTabBarSize );
 
     if (pLayout)
         pLayout->SetPosSizePixel(rPos, dynamic_cast<DialogWindow*>(pCurWin.get()) ? aSz : aOutSz);

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2022-06-27 18:59:37 using:
+ Generated on 2022-08-08 12:07:41 using:
  ./bin/update_pch basctl basctl --cutoff=3 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -54,6 +54,7 @@
 #include <string.h>
 #include <string>
 #include <string_view>
+#include <thread>
 #include <type_traits>
 #include <unordered_map>
 #include <unordered_set>
@@ -70,7 +71,6 @@
 #include <osl/interlck.h>
 #include <osl/mutex.h>
 #include <osl/mutex.hxx>
-#include <osl/thread.h>
 #include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/character.hxx>
@@ -156,7 +156,6 @@
 #include <vcl/salgtype.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
-#include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
