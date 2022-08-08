@@ -963,8 +963,8 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     {
         comphelper::FlagRestorationGuard aStartedParaSdtGuard(m_aParagraphSdt.m_bStartedSdt, false);
 
-        assert(!m_pPostponedCustomShape);
-        m_pPostponedCustomShape.reset(new std::vector<PostponedDrawing>);
+        assert(!m_oPostponedCustomShape);
+        m_oPostponedCustomShape.emplace();
 
         // The for loop can change the size of m_aFramesOfParagraph, so the max size cannot be set in stone before the loop.
         size_t nFrames = m_aFramesOfParagraph.size() ? m_aFramesOfParagraph.top().size() : 0;
@@ -1037,13 +1037,13 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
 
             nFrames = m_aFramesOfParagraph.size() ? m_aFramesOfParagraph.top().size() : 0;
         }
-        if (!m_pPostponedCustomShape->empty())
+        if (!m_oPostponedCustomShape->empty())
         {
             m_pSerializer->startElementNS(XML_w, XML_r);
             WritePostponedCustomShape();
             m_pSerializer->endElementNS( XML_w, XML_r );
         }
-        m_pPostponedCustomShape.reset();
+        m_oPostponedCustomShape.reset();
 
         if ( m_aFramesOfParagraph.size() )
             m_aFramesOfParagraph.top().clear();
@@ -2937,17 +2937,17 @@ void DocxAttributeOutput::StartRunProperties()
     }
     InitCollectedRunProperties();
 
-    assert( !m_pPostponedGraphic );
-    m_pPostponedGraphic.reset(new std::vector<PostponedGraphic>);
+    assert( !m_oPostponedGraphic );
+    m_oPostponedGraphic.emplace();
 
-    assert( !m_pPostponedDiagrams );
-    m_pPostponedDiagrams.reset(new std::vector<PostponedDiagram>);
+    assert( !m_oPostponedDiagrams );
+    m_oPostponedDiagrams.emplace();
 
-    assert(!m_pPostponedDMLDrawings);
-    m_pPostponedDMLDrawings.reset(new std::vector<PostponedDrawing>);
+    assert(!m_oPostponedDMLDrawings);
+    m_oPostponedDMLDrawings.emplace();
 
-    assert( !m_pPostponedOLEs );
-    m_pPostponedOLEs.reset(new std::vector<PostponedOLE>);
+    assert( !m_oPostponedOLEs );
+    m_oPostponedOLEs.emplace();
 }
 
 void DocxAttributeOutput::InitCollectedRunProperties()
@@ -3313,19 +3313,19 @@ void DocxAttributeOutput::GetSdtEndBefore(const SdrObject* pSdrObj)
 
 void DocxAttributeOutput::WritePostponedGraphic()
 {
-    for (const auto & rPostponedDiagram : *m_pPostponedGraphic)
+    for (const auto & rPostponedDiagram : *m_oPostponedGraphic)
         FlyFrameGraphic(rPostponedDiagram.grfNode, rPostponedDiagram.size,
             nullptr, nullptr,
             rPostponedDiagram.pSdrObj);
-    m_pPostponedGraphic.reset();
+    m_oPostponedGraphic.reset();
 }
 
 void DocxAttributeOutput::WritePostponedDiagram()
 {
-    for( const auto & rPostponedDiagram : *m_pPostponedDiagrams )
+    for( const auto & rPostponedDiagram : *m_oPostponedDiagrams )
         m_rExport.SdrExporter().writeDiagram(rPostponedDiagram.object,
             *rPostponedDiagram.frame, m_anchorId++);
-    m_pPostponedDiagrams.reset();
+    m_oPostponedDiagrams.reset();
 }
 
 bool DocxAttributeOutput::FootnoteEndnoteRefTag()
@@ -6093,11 +6093,11 @@ bool DocxAttributeOutput::ExportAsActiveXControl(const SdrObject* pObject) const
 
 void DocxAttributeOutput::PostponeOLE( SwOLENode& rNode, const Size& rSize, const SwFlyFrameFormat* pFlyFrameFormat )
 {
-    if( !m_pPostponedOLEs )
+    if( !m_oPostponedOLEs )
         //cannot be postponed, try to write now
         WriteOLE( rNode, rSize, pFlyFrameFormat );
     else
-        m_pPostponedOLEs->push_back( PostponedOLE( &rNode, rSize, pFlyFrameFormat ) );
+        m_oPostponedOLEs->push_back( PostponedOLE( &rNode, rSize, pFlyFrameFormat ) );
 }
 
 /*
@@ -6105,16 +6105,16 @@ void DocxAttributeOutput::PostponeOLE( SwOLENode& rNode, const Size& rSize, cons
  */
 void DocxAttributeOutput::WritePostponedOLE()
 {
-    if( !m_pPostponedOLEs )
+    if( !m_oPostponedOLEs )
         return;
 
-    for( const auto & rPostponedOLE : *m_pPostponedOLEs )
+    for( const auto & rPostponedOLE : *m_oPostponedOLEs )
     {
         WriteOLE( *rPostponedOLE.object, rPostponedOLE.size, rPostponedOLE.frame );
     }
 
     // clear list of postponed objects
-    m_pPostponedOLEs.reset();
+    m_oPostponedOLEs.reset();
 }
 
 void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const SwFlyFrameFormat* pFlyFrameFormat )
@@ -6482,27 +6482,29 @@ void DocxAttributeOutput::ExportOLESurround(const SwFormatSurround& rWrap)
 
 void DocxAttributeOutput::WritePostponedCustomShape()
 {
-    if (!m_pPostponedCustomShape)
+    if (!m_oPostponedCustomShape)
         return;
 
-    for( const auto & rPostponedDrawing : *m_pPostponedCustomShape)
+    for( const auto & rPostponedDrawing : *m_oPostponedCustomShape)
     {
         if ( IsAlternateContentChoiceOpen() )
             m_rExport.SdrExporter().writeDMLDrawing(rPostponedDrawing.object, rPostponedDrawing.frame, m_anchorId++);
         else
             m_rExport.SdrExporter().writeDMLAndVMLDrawing(rPostponedDrawing.object, *rPostponedDrawing.frame, m_anchorId++);
     }
-    m_pPostponedCustomShape.reset();
+    m_oPostponedCustomShape.reset();
 }
 
 void DocxAttributeOutput::WritePostponedDMLDrawing()
 {
-    if (!m_pPostponedDMLDrawings)
+    if (!m_oPostponedDMLDrawings)
         return;
 
     // Clear the list early, this method may be called recursively.
-    std::unique_ptr< std::vector<PostponedDrawing> > pPostponedDMLDrawings(std::move(m_pPostponedDMLDrawings));
-    std::unique_ptr< std::vector<PostponedOLE> > pPostponedOLEs(std::move(m_pPostponedOLEs));
+    std::optional< std::vector<PostponedDrawing> > pPostponedDMLDrawings(std::move(m_oPostponedDMLDrawings));
+    std::optional< std::vector<PostponedOLE> > pPostponedOLEs(std::move(m_oPostponedOLEs));
+    m_oPostponedDMLDrawings.reset();
+    m_oPostponedOLEs.reset();
 
     for( const auto & rPostponedDrawing : *pPostponedDMLDrawings )
     {
@@ -6513,7 +6515,7 @@ void DocxAttributeOutput::WritePostponedDMLDrawing()
             m_rExport.SdrExporter().writeDMLAndVMLDrawing(rPostponedDrawing.object, *rPostponedDrawing.frame, m_anchorId++);
     }
 
-    m_pPostponedOLEs = std::move(pPostponedOLEs);
+    m_oPostponedOLEs = std::move(pPostponedOLEs);
 }
 
 void DocxAttributeOutput::WriteFlyFrame(const ww8::Frame& rFrame)
@@ -6529,7 +6531,7 @@ void DocxAttributeOutput::WriteFlyFrame(const ww8::Frame& rFrame)
                 const SwGrfNode *pGrfNode = pNode ? pNode->GetGrfNode() : nullptr;
                 if ( pGrfNode )
                 {
-                    if (!m_pPostponedGraphic)
+                    if (!m_oPostponedGraphic)
                     {
                         m_bPostponedProcessingFly = false ;
                         FlyFrameGraphic( pGrfNode, rFrame.GetLayoutSize(), nullptr, nullptr, pSdrObj);
@@ -6537,7 +6539,7 @@ void DocxAttributeOutput::WriteFlyFrame(const ww8::Frame& rFrame)
                     else // we are writing out attributes, but w:drawing should not be inside w:rPr,
                     {    // so write it out later
                         m_bPostponedProcessingFly = true ;
-                        m_pPostponedGraphic->push_back(PostponedGraphic(pGrfNode, rFrame.GetLayoutSize(), pSdrObj));
+                        m_oPostponedGraphic->push_back(PostponedGraphic(pGrfNode, rFrame.GetLayoutSize(), pSdrObj));
                     }
                 }
             }
@@ -6551,7 +6553,7 @@ void DocxAttributeOutput::WriteFlyFrame(const ww8::Frame& rFrame)
 
                     if (bIsDiagram)
                     {
-                        if ( !m_pPostponedDiagrams )
+                        if ( !m_oPostponedDiagrams )
                         {
                             m_bPostponedProcessingFly = false ;
                             m_rExport.SdrExporter().writeDiagram( pSdrObj, rFrame.GetFrameFormat(), m_anchorId++);
@@ -6559,18 +6561,18 @@ void DocxAttributeOutput::WriteFlyFrame(const ww8::Frame& rFrame)
                         else // we are writing out attributes, but w:drawing should not be inside w:rPr,
                         {    // so write it out later
                             m_bPostponedProcessingFly = true ;
-                            m_pPostponedDiagrams->push_back( PostponedDiagram( pSdrObj, &(rFrame.GetFrameFormat()) ));
+                            m_oPostponedDiagrams->push_back( PostponedDiagram( pSdrObj, &(rFrame.GetFrameFormat()) ));
                         }
                     }
                     else
                     {
-                        if (!m_pPostponedDMLDrawings)
+                        if (!m_oPostponedDMLDrawings)
                         {
                             if ( IsAlternateContentChoiceOpen() )
                             {
                                 // Do not write w:drawing inside w:drawing. Instead Postpone the Inner Drawing.
                                 if( m_rExport.SdrExporter().IsDrawingOpen() )
-                                    m_pPostponedCustomShape->push_back(PostponedDrawing(pSdrObj, &(rFrame.GetFrameFormat())));
+                                    m_oPostponedCustomShape->push_back(PostponedDrawing(pSdrObj, &(rFrame.GetFrameFormat())));
                                 else
                                     m_rExport.SdrExporter().writeDMLDrawing( pSdrObj, &rFrame.GetFrameFormat(), m_anchorId++);
                             }
@@ -6582,12 +6584,12 @@ void DocxAttributeOutput::WriteFlyFrame(const ww8::Frame& rFrame)
                         // IsAlternateContentChoiceOpen(): check is to ensure that only one object is getting added. Without this check, plus one object gets added
                         // m_bParagraphFrameOpen: check if the frame is open.
                         else if (IsAlternateContentChoiceOpen() && m_bParagraphFrameOpen)
-                            m_pPostponedCustomShape->push_back(PostponedDrawing(pSdrObj, &(rFrame.GetFrameFormat())));
+                            m_oPostponedCustomShape->push_back(PostponedDrawing(pSdrObj, &(rFrame.GetFrameFormat())));
                         else
                         {
                             // we are writing out attributes, but w:drawing should not be inside w:rPr, so write it out later
                             m_bPostponedProcessingFly = true ;
-                            m_pPostponedDMLDrawings->push_back(PostponedDrawing(pSdrObj, &(rFrame.GetFrameFormat())));
+                            m_oPostponedDMLDrawings->push_back(PostponedDrawing(pSdrObj, &(rFrame.GetFrameFormat())));
                         }
                     }
                 }

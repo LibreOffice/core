@@ -937,14 +937,14 @@ private:
         Size size;
         const SdrObject* pSdrObj;
     };
-    std::unique_ptr< std::vector<PostponedGraphic> > m_pPostponedGraphic;
+    std::optional< std::vector<PostponedGraphic> > m_oPostponedGraphic;
     struct PostponedDiagram
     {
         PostponedDiagram( const SdrObject* o, const SwFrameFormat* frm ) : object( o ), frame( frm ) {};
         const SdrObject* object;
         const SwFrameFormat* frame;
     };
-    std::unique_ptr< std::vector<PostponedDiagram> > m_pPostponedDiagrams;
+    std::optional< std::vector<PostponedDiagram> > m_oPostponedDiagrams;
 
     struct PostponedDrawing
     {
@@ -952,8 +952,8 @@ private:
         const SdrObject* object;
         const SwFrameFormat* frame;
     };
-    std::unique_ptr< std::vector<PostponedDrawing> > m_pPostponedDMLDrawings;
-    std::unique_ptr< std::vector<PostponedDrawing> > m_pPostponedCustomShape;
+    std::optional< std::vector<PostponedDrawing> > m_oPostponedDMLDrawings;
+    std::optional< std::vector<PostponedDrawing> > m_oPostponedCustomShape;
 
     struct PostponedOLE
     {
@@ -962,7 +962,7 @@ private:
         const Size size;
         const SwFlyFrameFormat* frame;
     };
-    std::unique_ptr< std::vector<PostponedOLE> > m_pPostponedOLEs;
+    std::optional< std::vector<PostponedOLE> > m_oPostponedOLEs;
 
     struct PostponedMathObjects
     {
