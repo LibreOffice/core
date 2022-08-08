@@ -319,7 +319,7 @@ void SwHeaderFooterWin::PaintButton()
     aSeq.push_back(drawinglayer::primitive2d::Primitive2DReference(
                     new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
                         aTextMatrix, m_sLabel, 0, m_sLabel.getLength(),
-                        std::vector<double>(), std::move(aFontAttr), css::lang::Locale(), aLineColor)));
+                        std::vector<double>(), {}, std::move(aFontAttr), css::lang::Locale(), aLineColor)));
 
     // Create the 'plus' or 'arrow' primitive
     B2DRectangle aSignArea(B2DPoint(aRect.Right() - BUTTON_WIDTH, 0.0),

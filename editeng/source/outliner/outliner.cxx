@@ -974,7 +974,7 @@ void Outliner::PaintBullet(sal_Int32 nPara, const Point& rStartPos, const Point&
                     aTextPos.AdjustY( -(aMetric.GetDescent()) );
                 }
 
-                DrawingText(aTextPos, pPara->GetText(), 0, pPara->GetText().getLength(), aBuf,
+                DrawingText(aTextPos, pPara->GetText(), 0, pPara->GetText().getLength(), aBuf, {},
                     aSvxFont, nPara, bRightToLeftPara ? 1 : 0, nullptr, nullptr, false, false, true, nullptr, Color(), Color());
             }
             else
@@ -1650,7 +1650,8 @@ void Outliner::StripPortions()
 }
 
 void Outliner::DrawingText( const Point& rStartPos, const OUString& rText, sal_Int32 nTextStart,
-                            sal_Int32 nTextLen, o3tl::span<const sal_Int32> pDXArray,const SvxFont& rFont,
+                            sal_Int32 nTextLen, o3tl::span<const sal_Int32> pDXArray,
+                            o3tl::span<const sal_Bool> pKashidaArray, const SvxFont& rFont,
                             sal_Int32 nPara, sal_uInt8 nRightToLeft,
                             const EEngineData::WrongSpellVector* pWrongSpellVector,
                             const SvxFieldData* pFieldData,
@@ -1663,7 +1664,7 @@ void Outliner::DrawingText( const Point& rStartPos, const OUString& rText, sal_I
 {
     if(aDrawPortionHdl.IsSet())
     {
-        DrawPortionInfo aInfo( rStartPos, rText, nTextStart, nTextLen, rFont, nPara, pDXArray, pWrongSpellVector,
+        DrawPortionInfo aInfo( rStartPos, rText, nTextStart, nTextLen, rFont, nPara, pDXArray, pKashidaArray, pWrongSpellVector,
             pFieldData, pLocale, rOverlineColor, rTextLineColor, nRightToLeft, false, 0, bEndOfLine, bEndOfParagraph, bEndOfBullet);
 
         aDrawPortionHdl.Call( &aInfo );
@@ -1676,7 +1677,7 @@ void Outliner::DrawingTab( const Point& rStartPos, tools::Long nWidth, const OUS
 {
     if(aDrawPortionHdl.IsSet())
     {
-        DrawPortionInfo aInfo( rStartPos, rChar, 0, rChar.getLength(), rFont, nPara, {}, nullptr,
+        DrawPortionInfo aInfo( rStartPos, rChar, 0, rChar.getLength(), rFont, nPara, {}, {}, nullptr,
             nullptr, nullptr, rOverlineColor, rTextLineColor, nRightToLeft, true, nWidth, bEndOfLine, bEndOfParagraph, false);
 
         aDrawPortionHdl.Call( &aInfo );

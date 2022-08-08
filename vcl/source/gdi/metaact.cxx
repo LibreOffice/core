@@ -601,6 +601,7 @@ MetaTextArrayAction::MetaTextArrayAction( const MetaTextArrayAction& rAction ) :
     maStartPt   ( rAction.maStartPt ),
     maStr       ( rAction.maStr ),
     maDXAry     ( rAction.maDXAry ),
+    maKashidaAry( rAction.maKashidaAry ),
     mnIndex     ( rAction.mnIndex ),
     mnLen       ( rAction.mnLen )
 {
@@ -609,12 +610,14 @@ MetaTextArrayAction::MetaTextArrayAction( const MetaTextArrayAction& rAction ) :
 MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
                                           OUString aStr,
                                           std::vector<sal_Int32> aDXAry,
+                                          std::vector<sal_Bool> aKashidaAry,
                                           sal_Int32 nIndex,
                                           sal_Int32 nLen ) :
     MetaAction  ( MetaActionType::TEXTARRAY ),
     maStartPt   ( rStartPt ),
     maStr       (std::move( aStr )),
     maDXAry     (std::move( aDXAry )),
+    maKashidaAry(std::move( aKashidaAry )),
     mnIndex     ( nIndex ),
     mnLen       ( nLen )
 {
@@ -623,12 +626,14 @@ MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
 MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
                                           OUString aStr,
                                           o3tl::span<const sal_Int32> pDXAry,
+                                          o3tl::span<const sal_Bool> pKashidaAry,
                                           sal_Int32 nIndex,
                                           sal_Int32 nLen ) :
     MetaAction  ( MetaActionType::TEXTARRAY ),
     maStartPt   ( rStartPt ),
     maStr       (std::move( aStr )),
     maDXAry     ( pDXAry.begin(), pDXAry.end() ),
+    maKashidaAry( pKashidaAry.begin(), pKashidaAry.end() ),
     mnIndex     ( nIndex ),
     mnLen       ( nLen )
 {
@@ -640,7 +645,7 @@ MetaTextArrayAction::~MetaTextArrayAction()
 
 void MetaTextArrayAction::Execute( OutputDevice* pOut )
 {
-    pOut->DrawTextArray( maStartPt, maStr, maDXAry, mnIndex, mnLen );
+    pOut->DrawTextArray( maStartPt, maStr, maDXAry, maKashidaAry, mnIndex, mnLen );
 }
 
 rtl::Reference<MetaAction> MetaTextArrayAction::Clone() const
@@ -667,6 +672,11 @@ void MetaTextArrayAction::Scale( double fScaleX, double fScaleY )
 void MetaTextArrayAction::SetDXArray(std::vector<sal_Int32> aArray)
 {
     maDXAry = std::move(aArray);
+}
+
+void MetaTextArrayAction::SetKashidaArray(std::vector<sal_Bool> aArray)
+{
+    maKashidaAry = std::move(aArray);
 }
 
 MetaStretchTextAction::MetaStretchTextAction() :

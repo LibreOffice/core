@@ -132,13 +132,13 @@ void TextSimplePortionPrimitive2D::getTextOutlinesAndTransformation(
 
         // get the text outlines
         aTextLayouter.getTextOutlines(rTarget, getText(), getTextPosition(), getTextLength(),
-                                      aScaledDXArray);
+                                      aScaledDXArray, getKashidaArray());
     }
     else
     {
         // get the text outlines
         aTextLayouter.getTextOutlines(rTarget, getText(), getTextPosition(), getTextLength(),
-                                      getDXArray());
+                                      getDXArray(), getKashidaArray());
     }
 
     // create primitives for the outlines
@@ -202,14 +202,16 @@ void TextSimplePortionPrimitive2D::create2DDecomposition(
 
 TextSimplePortionPrimitive2D::TextSimplePortionPrimitive2D(
     basegfx::B2DHomMatrix rNewTransform, OUString rText, sal_Int32 nTextPosition,
-    sal_Int32 nTextLength, std::vector<double>&& rDXArray, attribute::FontAttribute aFontAttribute,
-    css::lang::Locale aLocale, const basegfx::BColor& rFontColor, bool bFilled,
-    tools::Long nWidthToFill, const Color& rTextFillColor)
+    sal_Int32 nTextLength, std::vector<double>&& rDXArray, std::vector<sal_Bool>&& rKashidaArray,
+    attribute::FontAttribute aFontAttribute, css::lang::Locale aLocale,
+    const basegfx::BColor& rFontColor, bool bFilled, tools::Long nWidthToFill,
+    const Color& rTextFillColor)
     : maTextTransform(std::move(rNewTransform))
     , maText(std::move(rText))
     , mnTextPosition(nTextPosition)
     , mnTextLength(nTextLength)
     , maDXArray(std::move(rDXArray))
+    , maKashidaArray(std::move(rKashidaArray))
     , maFontAttribute(std::move(aFontAttribute))
     , maLocale(std::move(aLocale))
     , maFontColor(rFontColor)
@@ -241,6 +243,7 @@ bool TextSimplePortionPrimitive2D::operator==(const BasePrimitive2D& rPrimitive)
                 && getTextPosition() == rCompare.getTextPosition()
                 && getTextLength() == rCompare.getTextLength()
                 && getDXArray() == rCompare.getDXArray()
+                && getKashidaArray() == rCompare.getKashidaArray()
                 && getFontAttribute() == rCompare.getFontAttribute()
                 && LocalesAreEqual(getLocale(), rCompare.getLocale())
                 && getFontColor() == rCompare.getFontColor() && mbFilled == rCompare.mbFilled

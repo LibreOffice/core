@@ -269,6 +269,7 @@ void ThumbnailViewItem::addTextPrimitives (const OUString& rText, const Thumbnai
                     new TextSimplePortionPrimitive2D(aTextMatrix,
                                                      aText, nLineStart, nLineLength,
                                                      std::vector<double>(),
+                                                     {},
                                                      pAttrs->aFontAttr,
                                                      css::lang::Locale(),
                                                      aTextColor));

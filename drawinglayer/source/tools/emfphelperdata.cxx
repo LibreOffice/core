@@ -1683,6 +1683,7 @@ namespace emfplushelper
                                             0,             // text always starts at 0
                                             stringLength,
                                             std::move(emptyVector),   // EMF-PLUS has no DX-array
+                                            {},
                                             fontAttribute,
                                             locale,
                                             color.getBColor(), // Font Color
@@ -1702,6 +1703,7 @@ namespace emfplushelper
                                             0,             // text always starts at 0
                                             stringLength,
                                             std::move(emptyVector),   // EMF-PLUS has no DX-array
+                                            {},
                                             fontAttribute,
                                             locale,
                                             color.getBColor());
@@ -2195,6 +2197,7 @@ namespace emfplushelper
                                                     pos,            // take character at current pos
                                                     aLength,        // use determined length
                                                     std::move(aDXArray),       // generated DXArray
+                                                    {},
                                                     fontAttribute,
                                                     Application::GetSettings().GetLanguageTag().getLocale(),
                                                     color.getBColor(),
@@ -2214,6 +2217,7 @@ namespace emfplushelper
                                                     pos,            // take character at current pos
                                                     aLength,        // use determined length
                                                     std::move(aDXArray),       // generated DXArray
+                                                    {},
                                                     fontAttribute,
                                                     Application::GetSettings().GetLanguageTag().getLocale(),
                                                     color.getBColor());

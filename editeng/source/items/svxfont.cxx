@@ -545,21 +545,24 @@ Size SvxFont::GetTextSize(const OutputDevice& rOut, const OUString &rTxt,
 
 static void DrawTextArray( OutputDevice* pOut, const Point& rStartPt, const OUString& rStr,
                            o3tl::span<const sal_Int32> pDXAry,
+                           o3tl::span<const sal_Bool> pKashidaAry,
                            sal_Int32 nIndex, sal_Int32 nLen )
 {
     const SalLayoutGlyphs* layoutGlyphs = SalLayoutGlyphsCache::self()->GetLayoutGlyphs(pOut, rStr, nIndex, nLen);
-    pOut->DrawTextArray(rStartPt, rStr, pDXAry, nIndex, nLen, SalLayoutFlags::NONE, layoutGlyphs);
+    pOut->DrawTextArray(rStartPt, rStr, pDXAry, pKashidaAry, nIndex, nLen, SalLayoutFlags::NONE, layoutGlyphs);
 }
 
 void SvxFont::QuickDrawText( OutputDevice *pOut,
     const Point &rPos, const OUString &rTxt,
-    const sal_Int32 nIdx, const sal_Int32 nLen, o3tl::span<const sal_Int32> pDXArray ) const
+    const sal_Int32 nIdx, const sal_Int32 nLen,
+    o3tl::span<const sal_Int32> pDXArray,
+    o3tl::span<const sal_Bool> pKashidaArray) const
 {
 
     // Font has to be selected in OutputDevice...
     if ( !IsCaseMap() && !IsCapital() && !IsKern() && !IsEsc() )
     {
-        DrawTextArray( pOut, rPos, rTxt, pDXArray, nIdx, nLen );
+        DrawTextArray( pOut, rPos, rTxt, pDXArray, pKashidaArray, nIdx, nLen );
         return;
     }
 
@@ -596,9 +599,9 @@ void SvxFont::QuickDrawText( OutputDevice *pOut,
         else
         {
             if ( !IsCaseMap() )
-                DrawTextArray( pOut, aPos, rTxt, pDXArray, nIdx, nLen );
+                DrawTextArray( pOut, aPos, rTxt, pDXArray, pKashidaArray, nIdx, nLen );
             else
-                DrawTextArray( pOut, aPos, CalcCaseMap( rTxt ), pDXArray, nIdx, nLen );
+                DrawTextArray( pOut, aPos, CalcCaseMap( rTxt ), pDXArray, pKashidaArray, nIdx, nLen );
         }
     }
 }
