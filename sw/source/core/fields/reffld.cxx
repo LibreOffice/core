@@ -1269,7 +1269,7 @@ SwTextNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark
                     }
                     // otherwise: the position at the start of the footnote
                     // will be mapped to something visible at least...
-                    SwNodeIndex* pIdx = pFootnoteIdx->GetStartNode();
+                    const SwNodeIndex* pIdx = pFootnoteIdx->GetStartNode();
                     if( pIdx )
                     {
                         SwNodeIndex aIdx( *pIdx, 1 );
