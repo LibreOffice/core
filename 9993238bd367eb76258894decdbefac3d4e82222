@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a55a799_b3e89ca1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2022-08-08T09:10:48Z",
+      "side": 1,
+      "message": "Unfortunately there is a build (linking) error at the end of the WASM build,\nI built it with this configuration on linux with docker:\n--disable-ccache\n--disable-crashdump\n--enable-dbgutil\n--enable-symbols\n--disable-dynamic-loading\n--enable-wasm-strip\n--with-system-lockfile\n--disable-gtk3\n--enable-qt5\n\n.\n.\n[LNK] Executable/soffice.html: wait for lock at Mon Aug  8 08:24:59 UTC 2022\n[LNK] Executable/soffice.html: got link lock at Mon Aug  8 08:24:59 UTC 2022\n[LNK] Executable/vcldemo.html: wait for lock at Mon Aug  8 08:24:59 UTC 2022\n[BIN] scp2\n[BIN] static\n[MOD] scp2\n[MOD] static\n[LNK] Executable/vcldemo.html: got link lock at Mon Aug  8 08:29:59 UTC 2022\nem++: error: \u0027/home/builder/emsdk/upstream/bin/wasm-ld @/tmp/emscripten_909knxrh.rsp\u0027 failed (received SIGKILL (-9))\nmake[1]: *** [/home/bvarga/builds/core/desktop/Executable_soffice_bin.mk:10: /home/bvarga/builddir/instdir/program/soffice.html] Error 1\nmake[1]: *** Waiting for unfinished jobs....\n\nem++: error: \u0027/home/builder/emsdk/upstream/bin/wasm-ld @/tmp/emscripten_drc40yac.rsp\u0027 failed (received SIGKILL (-9))\nmake[1]: *** [/home/bvarga/builds/core/solenv/gbuild/LinkTarget.mk:842: /home/bvarga/builddir/workdir/LinkTarget/Executable/vcldemo.html] Error 1\nmake: *** [Makefile:290: build] Error 2\ncompose.cli.verbose_proxy.proxy_callable: docker remove_container \u003c- (\u00277e6e6b9f3a266bc92dada4e141bb662fa6f645ee024cd18d70b47ad65c88f4be\u0027, force\u003dTrue, v\u003dTrue)\ncompose.cli.verbose_proxy.proxy_callable: docker remove_container -\u003e None\nERROR: compose.cli.main.exit_with_metrics: 2\n\n",
+      "revId": "9993238bd367eb76258894decdbefac3d4e82222",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
