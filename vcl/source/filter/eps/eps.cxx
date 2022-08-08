@@ -201,7 +201,7 @@ private:
 
     void                ImplSetClipRegion( vcl::Region const & rRegion );
     void                ImplBmp( Bitmap const *, Bitmap const *, const Point &, double nWidth, double nHeight );
-    void                ImplText( const OUString& rUniString, const Point& rPos, o3tl::span<const sal_Int32> pDXArry, sal_Int32 nWidth, VirtualDevice const & rVDev );
+    void                ImplText( const OUString& rUniString, const Point& rPos, o3tl::span<const sal_Int32> pDXArry, o3tl::span<const sal_Bool> pKashidaArry, sal_Int32 nWidth, VirtualDevice const & rVDev );
     void                ImplSetAttrForText( const Point & rPoint );
     void                ImplWriteCharacter( char );
     void                ImplWriteString( const OString&, VirtualDevice const & rVDev, o3tl::span<const sal_Int32> pDXArry, bool bStretch );
@@ -748,7 +748,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                 OUString  aUniStr = pA->GetText().copy( pA->GetIndex(), pA->GetLen() );
                 Point     aPoint( pA->GetPoint() );
 
-                ImplText( aUniStr, aPoint, {}, 0, rVDev );
+                ImplText( aUniStr, aPoint, {}, {}, 0, rVDev );
             }
             break;
 
@@ -764,7 +764,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                 OUString  aUniStr = pA->GetText().copy( pA->GetIndex(), pA->GetLen() );
                 Point     aPoint( pA->GetPoint() );
 
-                ImplText( aUniStr, aPoint, {}, pA->GetWidth(), rVDev );
+                ImplText( aUniStr, aPoint, {}, {}, pA->GetWidth(), rVDev );
             }
             break;
 
@@ -774,7 +774,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                 OUString  aUniStr = pA->GetText().copy( pA->GetIndex(), pA->GetLen() );
                 Point     aPoint( pA->GetPoint() );
 
-                ImplText( aUniStr, aPoint, pA->GetDXArray(), 0, rVDev );
+                ImplText( aUniStr, aPoint, pA->GetDXArray(), pA->GetKashidaArray(), 0, rVDev );
             }
             break;
 
@@ -1988,7 +1988,7 @@ void PSWriter::ImplWriteString( const OString& rString, VirtualDevice const & rV
     }
 }
 
-void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, o3tl::span<const sal_Int32> pDXArry, sal_Int32 nWidth, VirtualDevice const & rVDev )
+void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, o3tl::span<const sal_Int32> pDXArry, o3tl::span<const sal_Bool> pKashidaArry, sal_Int32 nWidth, VirtualDevice const & rVDev )
 {
     if ( rUniString.isEmpty() )
         return;
@@ -2015,7 +2015,7 @@ void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, o3tl::sp
         bool bOldLineColor = bLineColor;
         bLineColor = false;
         std::vector<tools::PolyPolygon> aPolyPolyVec;
-        if ( pVirDev->GetTextOutlines( aPolyPolyVec, rUniString, 0, 0, -1, nWidth, pDXArry ) )
+        if ( pVirDev->GetTextOutlines( aPolyPolyVec, rUniString, 0, 0, -1, nWidth, pDXArry, pKashidaArry ) )
         {
             // always adjust text position to match baseline alignment
             ImplWriteLine( "pum" );

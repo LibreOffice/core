@@ -234,6 +234,18 @@ namespace
             }
         }
 
+        ::std::vector< sal_Bool > aKashidaArray;
+
+        if(!rInfo.mpKashidaArray.empty() && rInfo.mnTextLen)
+        {
+            aKashidaArray.reserve(rInfo.mnTextLen);
+
+            for(sal_Int32 a=0; a < rInfo.mnTextLen; a++)
+            {
+                aKashidaArray.push_back(rInfo.mpKashidaArray[a]);
+            }
+        }
+
         // create complex text primitive and append
         const Color aFontColor(rInfo.mrFont.GetColor());
         const basegfx::BColor aBFontColor(aFontColor.getBColor());
@@ -316,6 +328,7 @@ namespace
                 rInfo.mnTextStart,
                 rInfo.mnTextLen,
                 std::vector(aDXArray),
+                std::vector(aKashidaArray),
                 aFontAttribute,
                 rInfo.mpLocale ? *rInfo.mpLocale : css::lang::Locale(),
                 aBFontColor,
@@ -344,6 +357,7 @@ namespace
                 rInfo.mnTextStart,
                 rInfo.mnTextLen,
                 std::vector(aDXArray),
+                std::vector(aKashidaArray),
                 std::move(aFontAttribute),
                 rInfo.mpLocale ? *rInfo.mpLocale : css::lang::Locale(),
                 aBFontColor,

@@ -2231,6 +2231,7 @@ tools::Long SwScriptInfo::Compress(sal_Int32* pKernArray, TextFrameIndex nIdx, T
 // have been dropped, depending on the state of the m_KashidaInvalid set.
 
 sal_Int32 SwScriptInfo::KashidaJustify( sal_Int32* pKernArray,
+                                        sal_Bool* pKashidaArray,
                                         TextFrameIndex const nStt,
                                         TextFrameIndex const nLen,
                                         tools::Long nSpaceAdd ) const
@@ -2285,6 +2286,11 @@ sal_Int32 SwScriptInfo::KashidaJustify( sal_Int32* pKernArray,
         while ( nIdx < nEnd )
         {
             TextFrameIndex nArrayPos = nIdx - nStt;
+
+            // mark Kashida insertion positions, code in VCL will use this
+            // array to know where to insert Kashida.
+            if (pKashidaArray)
+                pKashidaArray[sal_Int32(nArrayPos)] = true;
 
             // next kashida position
             ++nCntKash;

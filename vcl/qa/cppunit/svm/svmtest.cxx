@@ -860,7 +860,7 @@ void SvmTest::testTextArray()
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
     setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
     sal_Int32 const aDX[] = { 10, 15, 20, 25, 30, 35 };
-    pVirtualDev->DrawTextArray(Point(4,6), "123456", aDX, 1, 4);
+    pVirtualDev->DrawTextArray(Point(4,6), "123456", aDX, {}, 1, 4);
 
     checkTextArray(writeAndReadStream(aGDIMetaFile));
     checkTextArray(readFile(u"textarray.svm"));

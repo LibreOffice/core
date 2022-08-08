@@ -215,8 +215,8 @@ double TextLayouterDevice::getTextWidth(const OUString& rText, sal_uInt32 nIndex
 
 void TextLayouterDevice::getTextOutlines(basegfx::B2DPolyPolygonVector& rB2DPolyPolyVector,
                                          const OUString& rText, sal_uInt32 nIndex,
-                                         sal_uInt32 nLength,
-                                         const std::vector<double>& rDXArray) const
+                                         sal_uInt32 nLength, const std::vector<double>& rDXArray,
+                                         const std::vector<sal_Bool>& rKashidaArray) const
 {
     const sal_uInt32 nDXArrayCount(rDXArray.size());
     sal_uInt32 nTextLength(nLength);
@@ -239,7 +239,7 @@ void TextLayouterDevice::getTextOutlines(basegfx::B2DPolyPolygonVector& rB2DPoly
         }
 
         mrDevice.GetTextOutlines(rB2DPolyPolyVector, rText, nIndex, nIndex, nLength, 0,
-                                 aIntegerDXArray);
+                                 aIntegerDXArray, rKashidaArray);
     }
     else
     {
