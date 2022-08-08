@@ -47,7 +47,6 @@ OScrollWindowHelper::OScrollWindowHelper( ODesignView* _pDesignView)
     ,OPropertyChangeListener(m_aMutex)
     ,m_aHScroll( VclPtr<ScrollAdaptor>::Create(this, true) )
     ,m_aVScroll( VclPtr<ScrollAdaptor>::Create(this, false) )
-    ,m_aCornerWin( VclPtr<ScrollBarBox>::Create(this) )
     ,m_pParent(_pDesignView)
     ,m_aReportWindow(VclPtr<rptui::OReportWindow>::Create(this,m_pParent))
 {
@@ -77,7 +76,6 @@ void OScrollWindowHelper::dispose()
 
     m_aHScroll.disposeAndClear();
     m_aVScroll.disposeAndClear();
-    m_aCornerWin.disposeAndClear();
     m_aReportWindow.disposeAndClear();
     m_pParent.clear();
     OScrollWindowHelper_BASE::dispose();
@@ -150,15 +148,6 @@ Size OScrollWindowHelper::ResizeScrollBars()
     // show or hide scrollbars
     m_aVScroll->Show( bVVisible );
     m_aHScroll->Show( bHVisible );
-
-    // disable painting in the corner between the scrollbars
-    if ( bVVisible && bHVisible )
-    {
-        m_aCornerWin->SetPosSizePixel(Point(aOutPixSz.Width(), aOutPixSz.Height()), Size(nScrSize, nScrSize) );
-        m_aCornerWin->Show();
-    }
-    else
-        m_aCornerWin->Hide();
 
     const Point aOffset = LogicToPixel(Point(SECTION_OFFSET, SECTION_OFFSET), MapMode(MapUnit::MapAppFont));
     // resize scrollbars and set their ranges

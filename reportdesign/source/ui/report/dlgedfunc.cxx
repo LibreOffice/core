@@ -16,7 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <vcl/scrbar.hxx>
 #include <vcl/seleng.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <com/sun/star/embed/EmbedStates.hpp>
