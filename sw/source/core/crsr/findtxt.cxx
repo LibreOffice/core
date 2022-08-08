@@ -376,10 +376,11 @@ bool FindTextImpl(SwPaM & rSearchPam,
     if( rSearchOpt.searchString.isEmpty() )
         return false;
 
-    std::unique_ptr<SwPaM> pPam = sw::MakeRegion(fnMove, rRegion);
+    std::optional<SwPaM> oPam;
+    sw::MakeRegion(fnMove, rRegion, oPam);
     const bool bSrchForward = &fnMove == &fnMoveForward;
-    SwNodeIndex& rNdIdx = pPam->GetPoint()->nNode;
-    SwContentIndex& rContentIdx = pPam->GetPoint()->nContent;
+    SwNodeIndex& rNdIdx = oPam->GetPoint()->nNode;
+    SwContentIndex& rContentIdx = oPam->GetPoint()->nContent;
 
     // If bFound is true then the string was found and is between nStart and nEnd
     bool bFound = false;
@@ -401,7 +402,7 @@ bool FindTextImpl(SwPaM & rSearchPam,
     }
 
     // LanguageType eLastLang = 0;
-    while (nullptr != (pNode = ::GetNode(*pPam, bFirst, fnMove, bInReadOnly, pLayout)))
+    while (nullptr != (pNode = ::GetNode(*oPam, bFirst, fnMove, bInReadOnly, pLayout)))
     {
         if( pNode->IsTextNode() )
         {
@@ -421,16 +422,16 @@ bool FindTextImpl(SwPaM & rSearchPam,
             }
             AmbiguousIndex nEnd;
             if (pLayout
-                    ? FrameContainsNode(*pFrame, pPam->GetMark()->GetNodeIndex())
-                    : rNdIdx == pPam->GetMark()->nNode)
+                    ? FrameContainsNode(*pFrame, oPam->GetMark()->GetNodeIndex())
+                    : rNdIdx == oPam->GetMark()->nNode)
             {
                 if (pLayout)
                 {
-                    nEnd.SetFrameIndex(pFrame->MapModelToViewPos(*pPam->GetMark()));
+                    nEnd.SetFrameIndex(pFrame->MapModelToViewPos(*oPam->GetMark()));
                 }
                 else
                 {
-                    nEnd.SetModelIndex(pPam->GetMark()->GetContentIndex());
+                    nEnd.SetModelIndex(oPam->GetMark()->GetContentIndex());
                 }
             }
             else
@@ -454,7 +455,7 @@ bool FindTextImpl(SwPaM & rSearchPam,
             AmbiguousIndex nStart;
             if (pLayout)
             {
-                nStart.SetFrameIndex(pFrame->MapModelToViewPos(*pPam->GetPoint()));
+                nStart.SetFrameIndex(pFrame->MapModelToViewPos(*oPam->GetPoint()));
             }
             else
             {
@@ -679,7 +680,7 @@ bool FindTextImpl(SwPaM & rSearchPam,
                                        bRegSearch, bChkEmptyPara, bChkParaEnd,
                                        nStartInside, nEndInside, nTextLen,
                                        pNode->GetTextNode(), pFrame, pLayout,
-                                       pPam.get() );
+                                       oPam ? &*oPam : nullptr );
                     if ( bFound )
                         break;
                     else
@@ -712,7 +713,7 @@ bool FindTextImpl(SwPaM & rSearchPam,
                                    bRegSearch, bChkEmptyPara, bChkParaEnd,
                                    nStart, nEnd, nTextLen,
                                    pNode->GetTextNode(), pFrame, pLayout,
-                                   pPam.get() );
+                                   oPam ? &*oPam : nullptr );
             }
             if (bFound)
                 break;
