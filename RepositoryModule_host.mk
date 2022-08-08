@@ -50,14 +50,12 @@ endif
 
 $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	android \
-    $(if $(ENABLE_WASM_STRIP_BASIC_CALC_DRAW_MATH_IMPRESS),, \
+    $(if $(ENABLE_WASM_STRIP_BASIC_DRAW_MATH_IMPRESS),, \
 	animations \
     ) \
 	apple_remote \
 	avmedia \
-    $(if $(ENABLE_WASM_STRIP_BASIC_CALC_DRAW_MATH_IMPRESS),, \
 	basctl \
-    ) \
 	basegfx \
 	basic \
 	bean \
@@ -129,28 +127,26 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	sal \
 	salhelper \
 	sax \
-    $(if $(ENABLE_WASM_STRIP_BASIC_CALC_DRAW_MATH_IMPRESS),, \
 	sc \
 	scaddins \
 	sccomp \
-    ) \
 	$(call gb_Helper_optional,DESKTOP,scp2) \
 	scripting \
-    $(if $(ENABLE_WASM_STRIP_BASIC_CALC_DRAW_MATH_IMPRESS),, \
+    $(if $(ENABLE_WASM_STRIP_BASIC_DRAW_MATH_IMPRESS),, \
 	sd \
 	sdext \
     ) \
 	$(call gb_Helper_optional,DESKTOP,setup_native) \
 	sfx2 \
 	shell \
-    $(if $(ENABLE_WASM_STRIP_BASIC_CALC_DRAW_MATH_IMPRESS),, \
+    $(if $(ENABLE_WASM_STRIP_BASIC_DRAW_MATH_IMPRESS),, \
 	slideshow \
     ) \
 	smoketest \
 	solenv \
 	soltools \
 	sot \
-    $(if $(ENABLE_WASM_STRIP_BASIC_CALC_DRAW_MATH_IMPRESS),, \
+    $(if $(ENABLE_WASM_STRIP_BASIC_DRAW_MATH_IMPRESS),, \
 	starmath \
     ) \
     $(if $(ENABLE_CUSTOMTARGET_COMPONENTS),static) \
