@@ -53,6 +53,42 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b80f10b_b20b5d85",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003627
+      },
+      "writtenOn": "2022-08-08T09:41:20Z",
+      "side": 1,
+      "message": "I know this is a close duplicate of mips64, and only the code related to abi and asm has been modified, but loongarch64 as a new architecture, has its own directory structure, which is better. User on loongarch64 architecture can also judge whether the project supports loongarch64 based on this. At present, loongarch64\u0027 software ecoysystem is improving, and it needs more easily identifiable identifiers. Thank you",
+      "parentUuid": "794384e2_cd5c844a",
+      "revId": "3680a5748953ad08b4f15f4104069d22a70c730d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15c59985_9d13bd44",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003627
+      },
+      "writtenOn": "2022-08-08T09:41:20Z",
+      "side": 1,
+      "message": "Not yet,I\u0027m not familiar with these processes yet. I\u0027ll try to do it later, thank you",
+      "parentUuid": "cd7d8a9c_cf8b99bf",
+      "revId": "3680a5748953ad08b4f15f4104069d22a70c730d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2a6813ae_7a10fe93",
@@ -100,6 +136,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a9544c2_cc5fe5c9",
+        "filename": "bridges/source/cpp_uno/gcc3_linux_loongarch64/call.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1003627
+      },
+      "writtenOn": "2022-08-08T09:41:20Z",
+      "side": 1,
+      "message": "I have seen the latest template style, and I will modify the code according to the latest template",
+      "parentUuid": "2a6813ae_7a10fe93",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 79
+      },
+      "revId": "3680a5748953ad08b4f15f4104069d22a70c730d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0ec1922f_335e7b15",
@@ -136,6 +196,30 @@
       "writtenOn": "2022-08-08T07:12:59Z",
       "side": 1,
       "message": "Done",
+      "parentUuid": "0ec1922f_335e7b15",
+      "range": {
+        "startLine": 475,
+        "startChar": 0,
+        "endLine": 479,
+        "endChar": 57
+      },
+      "revId": "3680a5748953ad08b4f15f4104069d22a70c730d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0af603f0_7d279744",
+        "filename": "solenv/clang-format/excludelist",
+        "patchSetId": 1
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1003627
+      },
+      "writtenOn": "2022-08-08T09:41:20Z",
+      "side": 1,
+      "message": "Ack",
       "parentUuid": "0ec1922f_335e7b15",
       "range": {
         "startLine": 475,

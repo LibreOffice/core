@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f221c50_ab1ec3fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003627
+      },
+      "writtenOn": "2022-08-08T09:41:20Z",
+      "side": 1,
+      "message": "I know this is a close duplicate of mips64, and only the code related to abi and asm has been modified, but loongarch64 as a new architecture, has its own directory structure, which is better. User on loongarch64 architecture can also judge whether the project supports loongarch64 based on this. At present, loongarch64\u0027 software ecoysystem is improving, and it needs more easily identifiable identifiers. Thank you",
+      "revId": "b68489b63263205fffee0183f3e3175acea125b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
