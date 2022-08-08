@@ -358,7 +358,8 @@ void StyleItemController::DrawText(vcl::RenderContext& rRenderContext)
     const SalLayoutGlyphs* layoutGlyphs
         = SalLayoutGlyphsCache::self()->GetLayoutGlyphs(&rRenderContext, m_aStyleName.second);
     tools::Rectangle aTextRect;
-    rRenderContext.GetTextBoundRect(aTextRect, m_aStyleName.second, 0, 0, -1, 0, {}, layoutGlyphs);
+    rRenderContext.GetTextBoundRect(aTextRect, m_aStyleName.second, 0, 0, -1, 0, {}, {},
+                                    layoutGlyphs);
 
     Point aPos(0, 0);
     aPos.AdjustX(LEFT_MARGIN);

@@ -809,7 +809,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     if ( nUnicodeCommentActionNumber == i )
                         ImplReadUnicodeComment( nUnicodeCommentStreamPos, rIStm, aStr );
                     ClampRange(aStr, nIndex, nLen, &aDXAry);
-                    rMtf.AddAction( new MetaTextArrayAction( aPt, aStr, std::move(aDXAry), nIndex, nLen ) );
+                    rMtf.AddAction( new MetaTextArrayAction( aPt, aStr, std::move(aDXAry), {}, nIndex, nLen ) );
                 }
 
                 if (nActionSize < 24)
