@@ -45,7 +45,6 @@ class SC_DLLPUBLIC ScPreviewShell final : public SfxViewShell
     VclPtr<ScPreview>      pPreview;               // Output window
     VclPtr<ScrollAdaptor>  pHorScroll;
     VclPtr<ScrollAdaptor>  pVerScroll;
-    VclPtr<vcl::Window>    pCorner;
 
     TriState        nSourceDesignMode;      // form design mode from TabView
     SvxZoomType     eZoom;
