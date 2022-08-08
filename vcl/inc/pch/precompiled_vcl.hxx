@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-11-29 09:46:20 using:
+ Generated on 2022-08-08 12:39:25 using:
  ./bin/update_pch vcl vcl --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -37,7 +37,9 @@
 #include <hb.h>
 #include <initializer_list>
 #include <iomanip>
+#include <iterator>
 #include <limits>
+#include <list>
 #include <map>
 #include <math.h>
 #include <memory>
@@ -53,6 +55,7 @@
 #include <string_view>
 #include <type_traits>
 #include <unordered_map>
+#include <unordered_set>
 #include <utility>
 #include <vector>
 #include <boost/math/special_functions/sinc.hpp>
@@ -60,6 +63,7 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ptree_fwd.hpp>
+#include <boost/rational.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/conditn.hxx>
@@ -74,8 +78,10 @@
 #include <osl/mutex.h>
 #include <osl/mutex.hxx>
 #include <osl/nlsupport.h>
-#include <osl/process.h>
+#include <osl/security.h>
 #include <osl/signal.h>
+#include <osl/socket.h>
+#include <osl/socket.hxx>
 #include <osl/thread.h>
 #include <osl/time.h>
 #include <rtl/alloc.h>
@@ -86,8 +92,10 @@
 #include <rtl/crc.h>
 #include <rtl/digest.h>
 #include <rtl/instance.hxx>
+#include <rtl/locale.h>
 #include <rtl/math.h>
 #include <rtl/math.hxx>
+#include <rtl/process.h>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
@@ -120,6 +128,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/range/Range2D.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/basicrange.hxx>
 #include <basegfx/tuple/Tuple2D.hxx>
@@ -146,14 +155,6 @@
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
-#include <com/sun/star/i18n/Calendar2.hpp>
-#include <com/sun/star/i18n/DirectionProperty.hpp>
-#include <com/sun/star/i18n/KCharacterType.hpp>
-#include <com/sun/star/i18n/NativeNumberXmlAttributes.hpp>
-#include <com/sun/star/i18n/ParseResult.hpp>
-#include <com/sun/star/i18n/TransliterationModules.hpp>
-#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
-#include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/Locale.hpp>
@@ -164,7 +165,6 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -186,13 +186,13 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/string.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
@@ -205,10 +205,11 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nutil/i18nutildllapi.h>
-#include <i18nutil/transliteration.hxx>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/hash_combine.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
+#include <o3tl/string_view.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
@@ -259,7 +260,6 @@
 #include <uno/any2.h>
 #include <uno/data.h>
 #include <uno/sequence2.h>
-#include <unotools/calendarwrapper.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/fontdefs.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -275,8 +275,11 @@
 #include <configsettings.hxx>
 #include <drawmode.hxx>
 #include <fontattributes.hxx>
+#include <fontsubset.hxx>
+#include <glyphid.hxx>
 #include <impfontcache.hxx>
 #include <impglyphitem.hxx>
+#include <ppdparser.hxx>
 #include <salbmp.hxx>
 #include <salframe.hxx>
 #include <salgdi.hxx>
@@ -302,7 +305,6 @@
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/QueueInfo.hxx>
 #include <vcl/TypeSerializer.hxx>
-#include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/builder.hxx>
@@ -325,6 +327,8 @@
 #include <vcl/font.hxx>
 #include <vcl/formatter.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/gfxlink.hxx>
+#include <vcl/glyphitem.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -341,7 +345,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/quickselectionengine.hxx>
-#include <vcl/scrbar.hxx>
+#include <vcl/salnativewidgets.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
@@ -357,6 +361,7 @@
 #include <vcl/toolkit/fixed.hxx>
 #include <vcl/toolkit/floatwin.hxx>
 #include <vcl/toolkit/lstbox.hxx>
+#include <vcl/toolkit/scrbar.hxx>
 #include <vcl/toolkit/spinfld.hxx>
 #include <vcl/toolkit/svlbitm.hxx>
 #include <vcl/toolkit/treelist.hxx>

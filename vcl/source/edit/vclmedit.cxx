@@ -26,7 +26,6 @@
 #include <vcl/menu.hxx>
 #include <vcl/specialchars.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/toolkit/vclmedit.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/xtextedt.hxx>
 #include <vcl/textview.hxx>
@@ -36,8 +35,9 @@
 #include <svl/lstner.hxx>
 #include <vcl/uitest/uiobject.hxx>
 
-#include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/toolkit/scrbar.hxx>
+#include <vcl/toolkit/vclmedit.hxx>
 #include <vcl/weld.hxx>
 #include <osl/diagnose.h>
 #include <tools/json_writer.hxx>

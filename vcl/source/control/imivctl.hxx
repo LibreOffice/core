@@ -23,14 +23,14 @@
 #include <sal/config.h>
 
 #include <o3tl/safeint.hxx>
-#include <vcl/toolkit/ivctrl.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/scrbar.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/vclptr.hxx>
 #include <tools/debug.hxx>
 #include <vcl/svtaccessiblefactory.hxx>
+#include <vcl/toolkit/ivctrl.hxx>
+#include <vcl/toolkit/scrbar.hxx>
 
 #include <limits.h>
 

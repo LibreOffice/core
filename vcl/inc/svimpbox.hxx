@@ -22,11 +22,11 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/seleng.hxx>
-#include <vcl/scrbar.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/image.hxx>
 #include <vcl/svtaccessiblefactory.hxx>
 #include <vcl/vclevent.hxx>
+#include <vcl/toolkit/scrbar.hxx>
 #include <vcl/toolkit/treelistbox.hxx>
 #include <o3tl/enumarray.hxx>
 #include <memory>

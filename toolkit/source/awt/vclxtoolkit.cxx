@@ -111,7 +111,7 @@
 #include <vcl/toolkit/longcurr.hxx>
 #include <vcl/toolkit/menubtn.hxx>
 #include <vcl/stdtext.hxx>
-#include <vcl/scrbar.hxx>
+#include <vcl/toolkit/scrbar.hxx>
 #include <vcl/split.hxx>
 #include <vcl/splitwin.hxx>
 #include <vcl/status.hxx>
