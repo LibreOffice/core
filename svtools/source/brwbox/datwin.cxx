@@ -177,7 +177,6 @@ BrowserDataWin::BrowserDataWin( BrowseBox* pParent )
     ,DragSourceHelper( this )
     ,DropTargetHelper( this )
     ,pHeaderBar( nullptr )
-    ,pCornerWin( nullptr )
     ,bInDtor( false )
     ,aMouseTimer("BrowserDataWin aMouseTimer")
     ,bInPaint( false )
@@ -202,7 +201,6 @@ BrowserDataWin::BrowserDataWin( BrowseBox* pParent )
     aMouseTimer.SetTimeout( 100 );
 }
 
-
 BrowserDataWin::~BrowserDataWin()
 {
     disposeOnce();
@@ -214,12 +212,10 @@ void BrowserDataWin::dispose()
 
     aInvalidRegion.clear();
     pHeaderBar.clear();
-    pCornerWin.clear();
     DragSourceHelper::dispose();
     DropTargetHelper::dispose();
     Control::dispose();
 }
-
 
 void BrowserDataWin::LeaveUpdateLock()
 {

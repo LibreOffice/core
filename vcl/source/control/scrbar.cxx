@@ -1443,7 +1443,7 @@ void ScrollBarBox::ApplySettings(vcl::RenderContext& rRenderContext)
 {
     if (rRenderContext.IsBackground())
     {
-        Color aColor = rRenderContext.GetSettings().GetStyleSettings().GetFaceColor();
+        Color aColor = COL_RED;
         ApplyControlBackground(rRenderContext, aColor);
     }
 }
