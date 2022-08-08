@@ -205,9 +205,6 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     bool                m_bHScrollbarEnabled;
     bool                m_bVScrollbarEnabled;
 
-    VclPtr<vcl::Window> m_pScrollFill;   // dummy window for filling the lower right edge
-                                        // when both scrollbars are active
-
     VclPtr<SvxRuler>    m_pHRuler,
                         m_pVRuler;
 
