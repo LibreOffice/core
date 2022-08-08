@@ -2495,19 +2495,18 @@ void LocalizeDecimalSeparator(guint& keyval)
 
 void set_cursor(GtkWidget* pWidget, const char *pName)
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
     if (!gtk_widget_get_realized(pWidget))
         gtk_widget_realize(pWidget);
     GdkDisplay *pDisplay = gtk_widget_get_display(pWidget);
+#if GTK_CHECK_VERSION(4, 0, 0)
+    GdkCursor *pCursor = pName ? gdk_cursor_new_from_name(pName, nullptr) : nullptr;
+#else
     GdkCursor *pCursor = pName ? gdk_cursor_new_from_name(pDisplay, pName) : nullptr;
+#endif
     widget_set_cursor(pWidget, pCursor);
     gdk_display_flush(pDisplay);
     if (pCursor)
         g_object_unref(pCursor);
-#else
-    (void)pWidget;
-    (void)pName;
-#endif
 }
 
 vcl::Font get_font(GtkWidget* pWidget)
