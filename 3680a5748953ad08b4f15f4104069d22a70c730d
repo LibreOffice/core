@@ -91,6 +91,42 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "039ed786_ff2d969b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-08-08T10:13:05Z",
+      "side": 1,
+      "message": "...then lets wait for that before merging this",
+      "parentUuid": "15c59985_9d13bd44",
+      "revId": "3680a5748953ad08b4f15f4104069d22a70c730d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4eca61ca_3d8d65ad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-08-08T10:13:05Z",
+      "side": 1,
+      "message": "\u003e but loongarch64 as a new architecture, has its own directory structure, which is better\n\nNo, it is not necessarily better, as it increases our maintenance burden.\n\n\u003e User on loongarch64 architecture can also judge whether the project supports loongarch64 based on this.\n\nThere is already precedent that new implementations share the source for existing ones, witness e.g. macOS aarch64 reusing bridges/source/cpp_uno/gcc3_linux_aarch64, see bridges/Library_cpp_uno.mk.  That presence of bridges/source/cpp_uno/gcc3_linux_loongarch64/ would make anything more obvious for the casual observer is IMO no valid argument to outweigh the added maintenance costs.\n\n\u003e At present, loongarch64\u0027 software ecoysystem is improving, and it needs more easily identifiable identifiers.\n\nI don\u0027t understand that sentence about \"easily identifiable identifiers\".\n\n\nAnyway, looking at\n```\n$ git fetch https://git.libreoffice.org/core refs/changes/86/137486/1 \u0026\u0026 git cherry-pick FETCH_HEAD\n$ diff -ru bridges/source/cpp_uno/gcc3_linux_mips64 bridges/source/cpp_uno/gcc3_linux_loongarch64\n```\n(besides dropping all the `#ifdef BRDEBUG` debug printfs) there apparently is substantial difference in the assembler syntax (and semantics, presumably) that adding #ifs to the existing bridge implementation might be considered adding more noise than I\u0027d be worth.\n\n(You could have stated in the commit message which existing bridge implementation you mostly copied this from, though.)",
+      "parentUuid": "4b80f10b_b20b5d85",
+      "revId": "3680a5748953ad08b4f15f4104069d22a70c730d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2a6813ae_7a10fe93",
         "filename": "bridges/source/cpp_uno/gcc3_linux_loongarch64/call.hxx",
         "patchSetId": 1
