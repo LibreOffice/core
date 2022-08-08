@@ -1287,7 +1287,10 @@ void SfxHelpWindow_Impl::loadHelpContent(const OUString& sHelpURL, bool bAddToHi
 
 IMPL_LINK(SfxHelpIndexWindow_Impl, ActivatePageHdl, const OString&, rPage, void)
 {
-    GetPage(rPage)->Activate();
+    HelpTabPage_Impl* pPage = GetPage(rPage);
+
+    if( pPage )
+        pPage->Activate();
 }
 
 SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl(SfxHelpWindow_Impl* _pParent, weld::Container* pContainer)
