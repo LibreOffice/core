@@ -81,7 +81,19 @@ void ScClipUtil::PasteFromClipboard( ScViewData& rViewData, ScTabViewShell* pTab
         // normal paste
         weld::WaitObject aWait( rViewData.GetDialogParent() );
         if (!pOwnClip)
+        {
             pTabViewShell->PasteFromSystem();
+            // Anchor To Cell rather than To Page
+            ScDrawView* pDrawView = pTabViewShell->GetScDrawView();
+            if(pDrawView && 1 == pDrawView->GetMarkedObjectCount())
+            {
+                SdrObject* pPickObj = pDrawView->GetMarkedObjectByIndex(0);
+                if(pPickObj)
+                {
+                    ScDrawLayer::SetCellAnchoredFromPosition( *pPickObj,  rThisDoc, nThisTab, false );
+                }
+            }
+        }
         else
         {
             ScDocument* pClipDoc = pOwnClip->GetDocument();
