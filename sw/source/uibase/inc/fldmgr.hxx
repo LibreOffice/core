@@ -25,6 +25,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Any.h>
 #include <memory>
+#include <optional>
 #include <vector>
 
 namespace com::sun::star{
@@ -80,7 +81,7 @@ struct SwInsertField_Data
     css::uno::Any m_aDBColumn;
     weld::Widget* m_pParent; // parent widget used for SwWrtShell::StartInputFieldDlg()
     /// Marks the PostIt field's annotation start/end if it differs from the cursor selection.
-    std::unique_ptr<SwPaM> m_pAnnotationRange;
+    std::optional<SwPaM> m_oAnnotationRange;
 
     SwInsertField_Data(SwFieldTypesEnum nType, sal_uInt16 nSub, const OUString& rPar1, const OUString& rPar2,
                     sal_uInt32 nFormatId, SwWrtShell* pShell = nullptr, sal_Unicode cSep = ' ', bool bIsAutoLanguage = true) :
@@ -123,7 +124,7 @@ public:
                         {   m_pWrtShell = pShell;     }
 
      // insert field using TypeID (TYP_ ...)
-    bool InsertField( const SwInsertField_Data& rData );
+    bool InsertField( SwInsertField_Data& rData );
 
     // change the current field directly
     void            UpdateCurField(sal_uInt32 nFormat,
