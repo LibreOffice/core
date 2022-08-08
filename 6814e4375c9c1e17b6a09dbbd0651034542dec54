@@ -16,6 +16,23 @@
       "message": "Hello Jean-Pierre, Rafael, Eike,\nShould this patch be reverted after Eike\u0027s fixes for tdf#150203 ?",
       "revId": "6814e4375c9c1e17b6a09dbbd0651034542dec54",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "084533cc_f3836557",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-08-08T10:26:49Z",
+      "side": 1,
+      "message": "Hello Jean-Pierre, Rafael, Eike,\nShould this patch be reverted after Eike\u0027s fixes for tdf#150203 ?",
+      "revId": "6814e4375c9c1e17b6a09dbbd0651034542dec54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
