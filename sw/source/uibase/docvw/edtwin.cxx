@@ -163,6 +163,9 @@
 #include <sfx2/event.hxx>
 #include <memory>
 
+#include "../../core/crsr/callnk.hxx"
+
+
 using namespace sw::mark;
 using namespace ::com::sun::star;
 
@@ -6316,13 +6319,15 @@ Selection SwEditWin::GetSurroundingTextSelection() const
         // around the visible cursor.
         TextFrameIndex const nPos(rSh.GetCursorPointAsViewIndex());
 
+        // store shell state *before* Push
+        ::std::unique_ptr<SwCallLink> pLink(::std::make_unique<SwCallLink>(rSh));
         rSh.Push();
 
         rSh.HideCursor();
         rSh.GoStartSentence();
         TextFrameIndex const nStartPos(rSh.GetCursorPointAsViewIndex());
 
-        rSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
+        rSh.Pop(SwCursorShell::PopMode::DeleteCurrent, ::std::move(pLink));
         rSh.ShowCursor();
 
         return Selection(sal_Int32(nPos - nStartPos), sal_Int32(nPos - nStartPos));
