@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "055b88df_994a5bb6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-08-08T12:20:45Z",
+      "side": 1,
+      "message": "Hmm, now you have a total of three patches about this topic. Remember that as long as the Change-Id line matches, a new patch will not be created. See also https://wiki.documentfoundation.org/Development/gerrit/SubmitPatch#Cherry_picking_yourself_out_of_trouble",
+      "revId": "96eb6707b8ab3be7a63f7a8e1941524bff6cbc56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
