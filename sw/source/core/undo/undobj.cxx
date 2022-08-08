@@ -1212,14 +1212,14 @@ SwUndoSaveSection::SwUndoSaveSection()
 
 SwUndoSaveSection::~SwUndoSaveSection()
 {
-    if (m_pMovedStart) // delete also the section from UndoNodes array
+    if (m_oMovedStart) // delete also the section from UndoNodes array
     {
         // SaveSection saves the content in the PostIt section.
-        SwNodes& rUNds = m_pMovedStart->GetNode().GetNodes();
+        SwNodes& rUNds = m_oMovedStart->GetNode().GetNodes();
         // cid#1486004 Uncaught exception
-        suppress_fun_call_w_exception(rUNds.Delete(*m_pMovedStart, m_nMoveLen));
+        suppress_fun_call_w_exception(rUNds.Delete(*m_oMovedStart, m_nMoveLen));
 
-        m_pMovedStart.reset();
+        m_oMovedStart.reset();
     }
     m_pRedlineSaveData.reset();
 }
@@ -1272,9 +1272,9 @@ void SwUndoSaveSection::SaveSection(
 
     // Keep positions as SwContentIndex so that this section can be deleted in DTOR
     SwNodeOffset nEnd;
-    m_pMovedStart.reset(new SwNodeIndex(rRange.aStart));
-    MoveToUndoNds(aPam, m_pMovedStart.get(), &nEnd);
-    m_nMoveLen = nEnd - m_pMovedStart->GetIndex() + 1;
+    m_oMovedStart = rRange.aStart;
+    MoveToUndoNds(aPam, &*m_oMovedStart, &nEnd);
+    m_nMoveLen = nEnd - m_oMovedStart->GetIndex() + 1;
 }
 
 void SwUndoSaveSection::RestoreSection( SwDoc* pDoc, SwNodeIndex* pIdx,
@@ -1303,11 +1303,11 @@ void SwUndoSaveSection::RestoreSection(
         return;
 
     SwPosition aInsPos( rInsPos );
-    SwNodeOffset nEnd = m_pMovedStart->GetIndex() + m_nMoveLen - 1;
-    MoveFromUndoNds(*pDoc, m_pMovedStart->GetIndex(), aInsPos, &nEnd, bForceCreateFrames);
+    SwNodeOffset nEnd = m_oMovedStart->GetIndex() + m_nMoveLen - 1;
+    MoveFromUndoNds(*pDoc, m_oMovedStart->GetIndex(), aInsPos, &nEnd, bForceCreateFrames);
 
     // destroy indices again, content was deleted from UndoNodes array
-    m_pMovedStart.reset();
+    m_oMovedStart.reset();
     m_nMoveLen = SwNodeOffset(0);
 
     if( m_pRedlineSaveData )
