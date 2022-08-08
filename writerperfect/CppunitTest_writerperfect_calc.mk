@@ -32,9 +32,11 @@ $(eval $(call gb_CppunitTest_use_rdb,writerperfect_calc,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,writerperfect_calc))
 
+ifneq ($(ENABLE_WASM_STRIP_SCEXPORTS),TRUE)
 $(eval $(call gb_CppunitTest_add_exception_objects,writerperfect_calc,\
 	writerperfect/qa/unit/WpftCalcFilterTest \
 ))
+endif
 
 $(call gb_CppunitTest_get_target,writerperfect_calc): \
     $(call gb_Library_get_target,ipb)
