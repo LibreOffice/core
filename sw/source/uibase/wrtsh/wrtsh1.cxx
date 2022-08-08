@@ -118,6 +118,9 @@
 #include <comphelper/lok.hxx>
 #include <memory>
 
+#include "../../core/crsr/callnk.hxx"
+
+
 using namespace sw::mark;
 using namespace com::sun::star;
 namespace {
@@ -1730,7 +1733,13 @@ SwWrtShell::~SwWrtShell()
 
 bool SwWrtShell::Pop(SwCursorShell::PopMode const eDelete)
 {
-    bool bRet = SwCursorShell::Pop(eDelete);
+    ::std::unique_ptr<SwCallLink> pLink(::std::make_unique<SwCallLink>(*this));
+    return Pop(eDelete, ::std::move(pLink));
+}
+
+bool SwWrtShell::Pop(SwCursorShell::PopMode const eDelete, ::std::unique_ptr<SwCallLink> pLink)
+{
+    bool bRet = SwCursorShell::Pop(eDelete, ::std::move(pLink));
     if( bRet && IsSelection() )
     {
         m_fnSetCursor = &SwWrtShell::SetCursorKillSel;
