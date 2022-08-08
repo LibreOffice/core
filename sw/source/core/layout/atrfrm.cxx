@@ -1774,7 +1774,7 @@ void SwFormatAnchor::dumpAsXml(xmlTextWriterPtr pWriter) const
         (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_pContentAnchor"), BAD_CAST(aContentAnchor.str().c_str()));
     }
     else
-        (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("m_pContentAnchor"), "%p", nullptr);
+        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_pContentAnchor"), BAD_CAST("(nil)"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_eAnchorType"), BAD_CAST(OString::number(static_cast<int>(m_eAnchorId)).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nPageNumber"), BAD_CAST(OString::number(m_nPageNumber).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nOrder"), BAD_CAST(OString::number(m_nOrder).getStr()));
