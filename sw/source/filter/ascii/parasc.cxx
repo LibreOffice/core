@@ -86,17 +86,18 @@ ErrCode AsciiReader::Read( SwDoc& rDoc, const OUString&, SwPaM &rPam, const OUSt
         return ERR_SWG_READ_ERROR;
     }
 
-    std::unique_ptr<SwASCIIParser> xParser(new SwASCIIParser( rDoc, rPam, *m_pStream,
-                                        !m_bInsertMode, m_aOption.GetASCIIOpts() ));
-    ErrCode nRet = xParser->CallParser();
+    ErrCode nRet;
+    {
+        SwASCIIParser aParser( rDoc, rPam, *m_pStream,
+                                !m_bInsertMode, m_aOption.GetASCIIOpts() );
+        nRet = aParser.CallParser();
 
-    OUString optionsString;
-    xParser->GetUsedAsciiOptions().WriteUserData(optionsString);
+        OUString optionsString;
+        aParser.GetUsedAsciiOptions().WriteUserData(optionsString);
 
-    if(m_pMedium != nullptr && m_pMedium->GetItemSet() != nullptr)
-        m_pMedium->GetItemSet()->Put(SfxStringItem(SID_FILE_FILTEROPTIONS, optionsString));
-
-    xParser.reset();
+        if(m_pMedium != nullptr && m_pMedium->GetItemSet() != nullptr)
+            m_pMedium->GetItemSet()->Put(SfxStringItem(SID_FILE_FILTEROPTIONS, optionsString));
+    }
     // after Read reset the options
     m_aOption.ResetASCIIOpts();
     return nRet;
