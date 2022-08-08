@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2b62009_38aefab4",
+        "filename": "sw/source/uibase/docvw/edtwin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-08-08T15:10:27Z",
+      "side": 1,
+      "message": "if we need to do this I guess callnk.hxx should be moved to sw/inc/ ?",
+      "revId": "b15085b6869dbd86b7d47eeba832646ec67be27b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ac2366d_779344bf",
+        "filename": "sw/source/uibase/inc/wrtsh.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-08-08T15:10:27Z",
+      "side": 1,
+      "message": "why do we need to pass around a heap-allocated object? possibly it is sufficient to just pass a SwCallLink\u0026 around?",
+      "revId": "b15085b6869dbd86b7d47eeba832646ec67be27b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
