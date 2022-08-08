@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33ae8e89_4beb869b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-08-08T14:49:04Z",
+      "side": 1,
+      "message": "I wonder if there\u0027s any motivation for such a change?",
+      "revId": "b9d360405a26ec976e443d501757ad806ffdcd6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
