@@ -16,6 +16,23 @@
       "message": "I know this is a close duplicate of mips64, and only the code related to abi and asm has been modified, but loongarch64 as a new architecture, has its own directory structure, which is better. User on loongarch64 architecture can also judge whether the project supports loongarch64 based on this. At present, loongarch64\u0027 software ecoysystem is improving, and it needs more easily identifiable identifiers. Thank you",
       "revId": "b68489b63263205fffee0183f3e3175acea125b4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b5ce147_e9b1ed1f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2022-08-08T10:25:20Z",
+      "side": 1,
+      "message": "\u003e I don\u0027t understand that sentence about \"easily identifiable identifiers\".\n\nI think he mainly means PLATFORMID etc but they would be different anyway. \n\nThat said, if you say that the diff is big and semantics change as in your last comment I\u0027d also be in favour of keeping them separately. MIPS(64)EL is a release ar h in Debian (no comment on whether that makes sense, but that is how it is) and should not break ;)",
+      "revId": "b68489b63263205fffee0183f3e3175acea125b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
