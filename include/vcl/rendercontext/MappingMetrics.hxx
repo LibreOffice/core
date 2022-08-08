@@ -21,9 +21,17 @@
 
 #include <tools/long.hxx>
 
+#include <o3tl/unit_conversion.hxx>
+
+class MapMode;
+
 struct MappingMetrics
 {
     MappingMetrics() = default;
+    MappingMetrics& operator=(MappingMetrics const& rMetrics) = default;
+
+    void CalculateScale(const o3tl::Length eUnit);
+    void CalculateMappingResolution(MapMode const& rMapMode, tools::Long nDPIX, tools::Long nDPIY);
 
     tools::Long mnMappingXOffset = 0; ///< Offset in X direction
     tools::Long mnMappingYOffset = 0; ///< Offset in Y direction

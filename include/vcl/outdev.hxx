@@ -209,7 +209,6 @@ private:
     mutable tools::Long                    mnEmphasisDescent;
     DrawModeFlags                   mnDrawMode;
     vcl::text::ComplexTextLayoutFlags mnTextLayoutMode;
-    MappingMetrics                  maMapMetrics;
     const OutDevType                meOutDevType;
     OutDevViewType                  meOutDevViewType;
     vcl::Region                     maRegion;           // contains the clip region, see SetClipRegion(...)
