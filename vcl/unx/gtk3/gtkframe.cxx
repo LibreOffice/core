@@ -1011,7 +1011,6 @@ void GtkSalFrame::InitCommon()
     g_signal_connect(pMotionController, "motion", G_CALLBACK(signalMotion), this);
     g_signal_connect(pMotionController, "enter", G_CALLBACK(signalEnter), this);
     g_signal_connect(pMotionController, "leave", G_CALLBACK(signalLeave), this);
-    gtk_event_controller_set_propagation_phase(pMotionController, GTK_PHASE_TARGET);
     gtk_widget_add_controller(pEventWidget, pMotionController);
 
     GtkEventController* pScrollController = gtk_event_controller_scroll_new(GTK_EVENT_CONTROLLER_SCROLL_BOTH_AXES);
