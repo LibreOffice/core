@@ -60,6 +60,7 @@
 #include <funcdesc.hxx>
 #include <svl/sharedstring.hxx>
 #include <formulaopt.hxx>
+#include <compiler.hxx>
 #include <memory>
 
 using namespace com::sun::star;
@@ -142,7 +143,7 @@ void ScUnoAddInFuncData::SetCompNames( ::std::vector< ScUnoAddInFuncData::Locali
 void ScUnoAddInFuncData::SetEnglishName( const OUString& rEnglishName )
 {
     if (!rEnglishName.isEmpty())
-        aUpperEnglish = rEnglishName.toAsciiUpperCase();
+        aUpperEnglish = ScCompiler::GetCharClassEnglish()->uppercase(rEnglishName);
     else
     {
         // A dumb fallback to not have an empty name, mainly just for the
@@ -558,7 +559,7 @@ void ScUnoAddInCollection::ReadConfiguration()
                 else
                 {
                     pEnglishHashMap->emplace(
-                            aEnglishName.toAsciiUpperCase(),
+                            ScCompiler::GetCharClassEnglish()->uppercase(aEnglishName),
                             pData );
                 }
                 pData->SetEnglishName(aEnglishName);    // takes care of handling empty
@@ -950,7 +951,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                     else
                     {
                         pEnglishHashMap->emplace(
-                                aEnglishName.toAsciiUpperCase(),
+                                ScCompiler::GetCharClassEnglish()->uppercase(aEnglishName),
                                 pData );
                     }
                     pData->SetEnglishName(aEnglishName);    // takes care of handling empty
