@@ -200,13 +200,13 @@ public:
 // Save a complete section in nodes-array.
 class SwUndoSaveSection : private SwUndoSaveContent
 {
-    std::unique_ptr<SwNodeIndex> m_pMovedStart;
+    std::optional<SwNodeIndex> m_oMovedStart;
     std::unique_ptr<SwRedlineSaveDatas> m_pRedlineSaveData;
     SwNodeOffset m_nMoveLen;           // Index into UndoNodes-Array.
     SwNodeOffset m_nStartPos;
 
 protected:
-    SwNodeIndex* GetMvSttIdx() const { return m_pMovedStart.get(); }
+    const SwNodeIndex* GetMvSttIdx() const { return m_oMovedStart ? &*m_oMovedStart : nullptr; }
     SwNodeOffset GetMvNodeCnt() const { return m_nMoveLen; }
 
 public:
@@ -309,7 +309,7 @@ protected:
 
     SwUndoFlyBase( SwFrameFormat* pFormat, SwUndoId nUndoId );
 
-    SwNodeIndex* GetMvSttIdx() const { return SwUndoSaveSection::GetMvSttIdx(); }
+    const SwNodeIndex* GetMvSttIdx() const { return SwUndoSaveSection::GetMvSttIdx(); }
     SwNodeOffset GetMvNodeCnt() const { return SwUndoSaveSection::GetMvNodeCnt(); }
 
 public:
