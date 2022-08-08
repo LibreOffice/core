@@ -25,7 +25,6 @@
 #include <svl/typedwhich.hxx>
 #include <svtools/scrolladaptor.hxx>
 #include <vcl/prntypes.hxx>
-#include <vcl/scrbar.hxx>
 #include <o3tl/deleter.hxx>
 #include <pres.hxx>
 #include "View.hxx"
@@ -442,8 +441,6 @@ protected:
     VclPtr<SvxRuler> mpHorizontalRuler;
     /// Vertical ruler is not shown by default.
     VclPtr<SvxRuler> mpVerticalRuler;
-    /// Filler of the little square enclosed by the two scroll bars.
-    VclPtr<ScrollBarBox> mpScrollBarBox;
     /// Layer tab bar.
     VclPtr<LayerTabBar> mpLayerTabBar;
 
