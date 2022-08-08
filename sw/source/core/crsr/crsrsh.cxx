@@ -2267,7 +2267,13 @@ void SwCursorShell::Push()
 */
 bool SwCursorShell::Pop(PopMode const eDelete)
 {
-    SwCallLink aLk( *this ); // watch Cursor-Moves; call Link if needed
+    ::std::unique_ptr<SwCallLink> pLink(::std::make_unique<SwCallLink>(*this)); // watch Cursor-Moves; call Link if needed
+    return Pop(eDelete, ::std::move(pLink));
+}
+
+bool SwCursorShell::Pop(PopMode const eDelete, ::std::unique_ptr<SwCallLink> const pLink)
+{
+    assert(pLink);
 
     // are there any left?
     if (nullptr == m_pStackCursor)
