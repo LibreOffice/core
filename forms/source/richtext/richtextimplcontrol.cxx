@@ -46,7 +46,6 @@ namespace frm
         ,m_pViewport            ( nullptr                )
         ,m_pHScroll             ( nullptr                )
         ,m_pVScroll             ( nullptr                )
-        ,m_pScrollCorner        ( nullptr                )
         ,m_pEngine              ( _pEngine            )
         ,m_pTextAttrListener    ( _pTextAttrListener  )
         ,m_pSelectionListener   ( _pSelectionListener )
@@ -84,7 +83,6 @@ namespace frm
         m_pAntiImpl->SetBackground( Wallpaper( m_pAntiImpl->GetSettings().GetStyleSettings().GetFieldColor() ) );
     }
 
-
     RichTextControlImpl::~RichTextControlImpl( )
     {
         m_pEngine->RemoveView( m_pView.get() );
@@ -93,9 +91,7 @@ namespace frm
         m_pViewport.disposeAndClear();
         m_pHScroll.disposeAndClear();
         m_pVScroll.disposeAndClear();
-        m_pScrollCorner.disposeAndClear();
     }
-
 
     void RichTextControlImpl::implUpdateAttribute( const AttributeHandlerPool::const_iterator& _pHandler )
     {
@@ -355,20 +351,8 @@ namespace frm
             m_pHScroll->Show();
         }
 
-        if ( m_pHScroll && m_pVScroll )
-        {
-            m_pScrollCorner.disposeAndClear();
-            m_pScrollCorner = VclPtr<ScrollBarBox>::Create( m_pAntiImpl );
-            m_pScrollCorner->Show();
-        }
-        else
-        {
-            m_pScrollCorner.disposeAndClear();
-        }
-
         layoutWindow();
     }
-
 
     void RichTextControlImpl::ensureLineBreakSetting()
     {
@@ -377,7 +361,6 @@ namespace frm
 
         layoutWindow();
     }
-
 
     void RichTextControlImpl::layoutWindow()
     {
@@ -424,8 +407,6 @@ namespace frm
             m_pHScroll->SetThickness(nScrollBarHeight);
             m_pHScroll->SetPosSizePixel( Point( 0, aViewportPlaygroundPixel.Height() ), Size( aViewportPlaygroundPixel.Width(), nScrollBarHeight ) );
         }
-        if ( m_pScrollCorner )
-            m_pScrollCorner->SetPosSizePixel( Point( aViewportPlaygroundPixel.Width(), aViewportPlaygroundPixel.Height() ), Size( nScrollBarWidth, nScrollBarHeight ) );
 
         // paper size
         if ( windowHasAutomaticLineBreak() )
