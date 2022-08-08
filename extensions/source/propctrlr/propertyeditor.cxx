@@ -347,9 +347,9 @@ namespace pcr
         return xControl;
     }
 
-    IMPL_LINK_NOARG(OPropertyEditor, OnPageActivate, const OString&, void)
+    IMPL_LINK(OPropertyEditor, OnPageActivate, const OString&, rNewPage, void)
     {
-        m_aPageActivationHandler.Call(nullptr);
+        m_aPageActivationHandler.Call(rNewPage);
     }
 
     IMPL_LINK(OPropertyEditor, OnPageDeactivate, const OString&, rIdent, bool)
