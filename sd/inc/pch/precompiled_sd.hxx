@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2022-06-27 18:58:59 using:
+ Generated on 2022-08-08 10:27:15 using:
  ./bin/update_pch sd sd --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -23,6 +23,7 @@
 #include <sal/config.h>
 #if PCH_LEVEL >= 1
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cstddef>
 #include <functional>
@@ -98,7 +99,6 @@
 #include <vcl/outdev.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/region.hxx>
-#include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>

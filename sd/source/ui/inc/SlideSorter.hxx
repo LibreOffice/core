@@ -21,7 +21,6 @@
 
 #include <cppuhelper/weakref.hxx>
 #include <svtools/scrolladaptor.hxx>
-#include <vcl/scrbar.hxx>
 #include <sddllapi.h>
 #include <memory>
 
@@ -87,16 +86,12 @@ public:
             Typically the horizontal scroll bar of the ViewShell.
         @param rpVerticalScrollBar
             Typically the vertical scroll bar of the ViewShell.
-        @param rpScrollBarBox
-            The little square enclosed by the two scroll bars.  Typically
-            the one from the ViewShell.
     */
     static std::shared_ptr<SlideSorter> CreateSlideSorter (
         ViewShell& rViewShell,
         sd::Window* pContentWindow,
         ScrollAdaptor* pHorizontalScrollBar,
-        ScrollAdaptor* pVerticalScrollBar,
-        ScrollBarBox* pScrollBarBox);
+        ScrollAdaptor* pVerticalScrollBar);
 
     /** Create a new slide sorter that is loosely coupled to the given view
         shell.  The view shell may even be missing.
@@ -119,11 +114,6 @@ public:
     /** Return the control of the horizontal scroll bar.
     */
     const VclPtr<ScrollAdaptor>& GetHorizontalScrollBar() const { return mpHorizontalScrollBar;}
-
-    /** Return the scroll bar filler that paints the little square that is
-        enclosed by the two scroll bars.
-    */
-    const VclPtr<ScrollBarBox>& GetScrollBarFiller (void) const { return mpScrollBarBox;}
 
     /** Return the content window.  This is a sibling and is geometrically
         enclosed by the scroll bars.
@@ -207,7 +197,6 @@ private:
     VclPtr<sd::Window> mpContentWindow;
     VclPtr<ScrollAdaptor> mpHorizontalScrollBar;
     VclPtr<ScrollAdaptor> mpVerticalScrollBar;
-    VclPtr<ScrollBarBox> mpScrollBarBox;
 
     /** Some slide sorter wide properties that are used in different
         classes.
@@ -219,8 +208,7 @@ private:
         ViewShell& rViewShell,
         sd::Window* pContentWindow,
         ScrollAdaptor* pHorizontalScrollBar,
-        ScrollAdaptor* pVerticalScrollBar,
-        ScrollBarBox* pScrollBarBox);
+        ScrollAdaptor* pVerticalScrollBar);
     SlideSorter (
         ViewShellBase& rBase,
         vcl::Window& rParentWindow);

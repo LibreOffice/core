@@ -33,7 +33,6 @@
 #include <svx/svdoole2.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/module.hxx>
-#include <vcl/scrbar.hxx>
 #include <svx/svdopage.hxx>
 #include <svx/fmshell.hxx>
 #include <tools/debug.hxx>
