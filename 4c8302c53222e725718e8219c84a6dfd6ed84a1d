@@ -16,6 +16,23 @@
       "message": "Hi Caolán,\nanother one that needs reviewing.\nThanks in advance",
       "revId": "4c8302c53222e725718e8219c84a6dfd6ed84a1d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a22d989f_4b148c0e",
+        "filename": "sfx2/source/appl/newhelp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1317,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-08-08T15:59:22Z",
+      "side": 1,
+      "message": "backtrace like https://crashreport.libreoffice.org/stats/crash_details/9376bd72-ed86-4e04-b215-e44a73ee3882 indicates that the ActivatePageHdl is called directly here, and seeing as it always works for me with the default of \"index\" it must be that there is a page id in the users config that doesn\u0027t exist, i.e. that aViewOpt.GetPageID() returns something that doesn\u0027t exist and that must be how this comes about. Probably safer to check that the page exists before attempting to use it as the default.",
+      "revId": "4c8302c53222e725718e8219c84a6dfd6ed84a1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
