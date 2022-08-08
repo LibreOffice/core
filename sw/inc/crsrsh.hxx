@@ -45,6 +45,7 @@
 
 class SfxItemSet;
 class SfxPoolItem;
+class SwCallLink;
 class SwContentFrame;
 class SwUnoCursor;
 class SwFormatField;
@@ -436,6 +437,7 @@ public:
      *      stack
      *  @return <true> if there was one on the stack, <false> otherwise
      */
+    bool Pop(PopMode, ::std::unique_ptr<SwCallLink> pLink);
     bool Pop(PopMode);
     /*
      * Combine 2 Cursors.
