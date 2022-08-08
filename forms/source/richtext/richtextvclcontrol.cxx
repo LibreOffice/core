@@ -43,13 +43,11 @@ namespace frm
         implInit( _pEngine, _pTextAttribListener, _pSelectionListener );
     }
 
-
     void RichTextControl::implInit( RichTextEngine* _pEngine, ITextAttributeListener* _pTextAttribListener, ITextSelectionListener* _pSelectionListener )
     {
         m_pImpl.reset( new RichTextControlImpl( this, _pEngine, _pTextAttribListener, _pSelectionListener ) );
         SetCompoundControl( true );
     }
-
 
     RichTextControl::~RichTextControl( )
     {

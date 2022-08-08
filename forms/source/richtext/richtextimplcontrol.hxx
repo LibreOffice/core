@@ -22,7 +22,6 @@
 #include "richtextviewport.hxx"
 #include "richtextengine.hxx"
 #include <svtools/scrolladaptor.hxx>
-#include <vcl/scrbar.hxx>
 #include <editeng/editdata.hxx>
 
 #include <map>
@@ -56,7 +55,6 @@ namespace frm
         VclPtr<RichTextViewPort>       m_pViewport;
         VclPtr<ScrollAdaptor>          m_pHScroll;
         VclPtr<ScrollAdaptor>          m_pVScroll;
-        VclPtr<ScrollBarBox>           m_pScrollCorner;
         RichTextEngine*         m_pEngine;
         std::unique_ptr<EditView> m_pView;
         ITextAttributeListener* m_pTextAttrListener;
