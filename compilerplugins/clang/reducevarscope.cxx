@@ -537,7 +537,7 @@ bool ReduceVarScope::VisitLambdaExpr(const LambdaExpr* lambdaExpr)
         const LambdaCapture& capture = *captureIt;
         if (capture.capturesVariable())
         {
-            auto varDecl = capture.getCapturedVar();
+            auto varDecl = cast<VarDecl>(capture.getCapturedVar());
             maVarDeclMap.erase(varDecl);
             maVarUseSourceRangeMap.erase(varDecl);
         }
