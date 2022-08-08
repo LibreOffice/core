@@ -89,6 +89,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "16d74220_cb4c9c35",
+        "filename": "svx/uiconfig/ui/dockingfontwork.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2022-08-08T10:54:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d5704e40_774d9230",
+      "range": {
+        "startLine": 47,
+        "startChar": 43,
+        "endLine": 47,
+        "endChar": 48
+      },
+      "revId": "de053d9b8b9a9dcaac548fcc60248085fefd4276",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6823af86_b054e53e",
@@ -126,6 +150,30 @@
       "side": 1,
       "message": "done.",
       "parentUuid": "6823af86_b054e53e",
+      "range": {
+        "startLine": 452,
+        "startChar": 110,
+        "endLine": 452,
+        "endChar": 127
+      },
+      "revId": "de053d9b8b9a9dcaac548fcc60248085fefd4276",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de3f56f9_64573370",
+        "filename": "svx/uiconfig/ui/dockingfontwork.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2022-08-08T10:54:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9c0713c4_26886914",
       "range": {
         "startLine": 452,
         "startChar": 110,
