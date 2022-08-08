@@ -16,6 +16,23 @@
       "message": "CI not happy yet",
       "revId": "7849efcc1aa4d929cfa2c77a2df2d5687f4ff67a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e526455a_31e07d18",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-08-08T11:37:24Z",
+      "side": 1,
+      "message": "CI now happy",
+      "revId": "7849efcc1aa4d929cfa2c77a2df2d5687f4ff67a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
