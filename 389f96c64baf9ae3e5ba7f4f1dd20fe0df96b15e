@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcb3dd48_115ee3a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-08-08T18:54:31Z",
+      "side": 1,
+      "message": "Perhaps I missed it but could you provide license statement?\n\nAlso could you change the description to have:\n\ntdf#133123: fix crash when importing defusedxml.ElementTree after pyuno\n?\n\n(from \"tdf#133123\", a link will be automatically generated)",
+      "revId": "389f96c64baf9ae3e5ba7f4f1dd20fe0df96b15e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
