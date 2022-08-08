@@ -389,6 +389,8 @@ protected:
     ::vcl::IAccessibleFactory&   getAccessibleFactory();
 
 protected:
+    bool                m_bNavigationBar;
+
     sal_uInt16          ColCount() const;
 
     // software plug for database access

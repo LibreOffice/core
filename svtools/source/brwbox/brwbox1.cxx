@@ -148,13 +148,16 @@ public:
 
 tools::Long BrowseBox::GetBarHeight() const
 {
+    tools::Long nScrollBarSize = GetSettings().GetStyleSettings().GetScrollBarSize();
+    if (!m_bNavigationBar)
+        return nScrollBarSize;
+
     // tdf#115941 because some platforms have things like overlay scrollbars, take a max
     // of a statusbar height and a scrollbar height as the control area height
 
     // (we can't ask the scrollbars for their size cause if we're zoomed they still have to be
     // resized - which is done in UpdateScrollbars)
-
-    return std::max(aStatusBarHeight->GetSizePixel().Height(), static_cast<tools::Long>(GetSettings().GetStyleSettings().GetScrollBarSize()));
+    return std::max(aStatusBarHeight->GetSizePixel().Height(), nScrollBarSize);
 }
 
 BrowseBox::BrowseBox( vcl::Window* pParent, WinBits nBits, BrowserMode nMode )
@@ -167,6 +170,7 @@ BrowseBox::BrowseBox( vcl::Window* pParent, WinBits nBits, BrowserMode nMode )
     ,m_nCornerHeight(0)
     ,m_nCornerWidth(0)
     ,m_nActualCornerWidth(0)
+    ,m_bNavigationBar(false)
 {
     ConstructImpl( nMode );
 }
