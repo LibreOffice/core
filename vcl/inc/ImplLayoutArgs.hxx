@@ -37,6 +37,7 @@ public:
     // positioning related inputs
     const DeviceCoordinate* mpDXArray; // in integer pixel units
     const double* mpAltNaturalDXArray; // in floating point pixel units
+    const sal_Bool* mpKashidaArray;
     DeviceCoordinate mnLayoutWidth; // in pixel units
     Degree10 mnOrientation; // in 0-3600 system
 
@@ -50,6 +51,7 @@ public:
     void SetLayoutWidth(DeviceCoordinate nWidth);
     void SetDXArray(const DeviceCoordinate* pDXArray);
     void SetAltNaturalDXArray(const double* pDXArray);
+    void SetKashidaArray(const sal_Bool* pKashidaArray);
     void SetOrientation(Degree10 nOrientation);
 
     void ResetPos();

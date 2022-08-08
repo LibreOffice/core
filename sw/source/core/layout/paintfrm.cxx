@@ -3782,6 +3782,7 @@ void SwColumnFrame::PaintBreak( ) const
                 aTextMatrix,
                 aBreakText, 0, aBreakText.getLength(),
                 std::vector< double >(),
+                {},
                 std::move(aFontAttr),
                 lang::Locale(),
                 aLineColor ) );

@@ -297,27 +297,6 @@ static SalLayoutGlyphs makeGlyphsSubset(const SalLayoutGlyphs& source,
         // would assert on flags being different.
         cloned->SetFlags(cloned->GetFlags()
                          | outputDevice->GetBiDiLayoutFlags(text, index, index + len));
-        // SalLayoutFlags::KashidaJustification is set only if any glyph
-        // in the range has GlyphItemFlags::ALLOW_KASHIDA (otherwise unset it).
-        if (cloned->GetFlags() & SalLayoutFlags::KashidaJustification)
-        {
-            bool hasKashida = false;
-            for (const GlyphItem& item : *cloned)
-            {
-                if (item.AllowKashida())
-                {
-                    hasKashida = true;
-                    break;
-                }
-            }
-            if (!hasKashida)
-                cloned->SetFlags(cloned->GetFlags() & ~SalLayoutFlags::KashidaJustification);
-        }
-#ifdef DBG_UTIL
-        else
-            for (const GlyphItem& item : *cloned)
-                assert(!item.AllowKashida());
-#endif
         ret.AppendImpl(cloned);
     }
     return ret;
@@ -433,7 +412,7 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
                 // Check if the subset result really matches what we would get normally,
                 // to make sure corner cases are handled well (see SalLayoutGlyphsImpl::cloneCharRange()).
                 std::unique_ptr<SalLayout> layout
-                    = outputDevice->ImplLayout(text, nIndex, nLen, Point(0, 0), nLogicWidth, {},
+                    = outputDevice->ImplLayout(text, nIndex, nLen, Point(0, 0), nLogicWidth, {}, {},
                                                SalLayoutFlags::GlyphItemsOnly, layoutCache);
                 assert(layout);
                 checkGlyphsEqual(mLastTemporaryGlyphs, layout->GetGlyphs());
@@ -458,7 +437,7 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
         layoutCache = tmpLayoutCache.get();
     }
     std::unique_ptr<SalLayout> layout
-        = outputDevice->ImplLayout(text, nIndex, nLen, Point(0, 0), nLogicWidth, {},
+        = outputDevice->ImplLayout(text, nIndex, nLen, Point(0, 0), nLogicWidth, {}, {},
                                    SalLayoutFlags::GlyphItemsOnly, layoutCache);
     if (layout)
     {

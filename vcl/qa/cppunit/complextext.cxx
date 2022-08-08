@@ -49,14 +49,12 @@ public:
 
     /// Play with font measuring etc.
     void testArabic();
-    void testKashida();
     void testTdf95650(); // Windows-only issue
     void testCaching();
     void testCachingSubstring();
 
     CPPUNIT_TEST_SUITE(VclComplexTextTest);
     CPPUNIT_TEST(testArabic);
-    CPPUNIT_TEST(testKashida);
     CPPUNIT_TEST(testTdf95650);
     CPPUNIT_TEST(testCaching);
     CPPUNIT_TEST(testCachingSubstring);
@@ -114,31 +112,6 @@ void VclComplexTextTest::testArabic()
 #endif
 }
 
-void VclComplexTextTest::testKashida()
-{
-#if HAVE_MORE_FONTS
-    // Cache the glyph list of some Arabic text.
-    ScopedVclPtrInstance<VirtualDevice> pOutputDevice;
-    auto aText
-        = OUString(u"عنصر الفوسفور عنصر فلزي صلب. تتكون الدورة الرابعة من 15 عنصرا.");
-    std::unique_ptr<SalLayout> pLayout = pOutputDevice->ImplLayout(
-        aText, 0, aText.getLength(), Point(0, 0), 0, {}, SalLayoutFlags::GlyphItemsOnly);
-    SalLayoutGlyphs aGlyphs = pLayout->GetGlyphs();
-    CPPUNIT_ASSERT(aGlyphs.IsValid());
-    CPPUNIT_ASSERT(aGlyphs.Impl(0) != nullptr);
-
-    // Now lay it out using the cached glyph list.
-    vcl::text::ImplLayoutArgs aLayoutArgs(aText, 0, aText.getLength(), SalLayoutFlags::NONE,
-                               pOutputDevice->GetFont().GetLanguageTag(), nullptr);
-    pLayout = pOutputDevice->GetGraphics()->GetTextLayout(0);
-    CPPUNIT_ASSERT(pLayout->LayoutText(aLayoutArgs, aGlyphs.Impl(0)));
-
-    // Without the accompanying fix in place, this test would have failed with 'assertion failed'.
-    // The kashida justification flag was lost when going via the glyph cache.
-    CPPUNIT_ASSERT(aLayoutArgs.mnFlags & SalLayoutFlags::KashidaJustification);
-#endif
-}
-
 void VclComplexTextTest::testTdf95650()
 {
     static constexpr OUStringLiteral aTxt =
@@ -152,7 +125,7 @@ void VclComplexTextTest::testTdf95650()
 
     OutputDevice *pOutDev = pWin->GetOutDev();
     // Check that the following executes without failing assertion
-    pOutDev->ImplLayout(aTxt, 9, 1, Point(), 0, {}, SalLayoutFlags::BiDiRtl);
+    pOutDev->ImplLayout(aTxt, 9, 1, Point(), 0, {}, {}, SalLayoutFlags::BiDiRtl);
 }
 
 static void checkCompareGlyphs( const SalLayoutGlyphs& aGlyphs1, const SalLayoutGlyphs& aGlyphs2,
@@ -190,11 +163,11 @@ static void testCachedGlyphs( const OUString& aText, const OUString& aFontName )
     SalLayoutGlyphsCache::self()->clear();
     // Get the glyphs for the text.
     std::unique_ptr<SalLayout> pLayout1 = pOutputDevice->ImplLayout(
-        aText, 0, aText.getLength(), Point(0, 0), 0, {}, SalLayoutFlags::GlyphItemsOnly);
+        aText, 0, aText.getLength(), Point(0, 0), 0, {}, {}, SalLayoutFlags::GlyphItemsOnly);
     SalLayoutGlyphs aGlyphs1 = pLayout1->GetGlyphs();
     // Reuse the cached glyphs to get glyphs again.
     std::unique_ptr<SalLayout> pLayout2 = pOutputDevice->ImplLayout(
-        aText, 0, aText.getLength(), Point(0, 0), 0, {}, SalLayoutFlags::GlyphItemsOnly, nullptr, &aGlyphs1);
+        aText, 0, aText.getLength(), Point(0, 0), 0, {}, {}, SalLayoutFlags::GlyphItemsOnly, nullptr, &aGlyphs1);
     SalLayoutGlyphs aGlyphs2 = pLayout2->GetGlyphs();
     checkCompareGlyphs(aGlyphs1, aGlyphs2, message + " (reuse)");
     // Get cached glyphs from SalLayoutGlyphsCache.
@@ -228,7 +201,7 @@ static void testCachedGlyphsSubstring( const OUString& aText, const OUString& aF
     SalLayoutGlyphsCache::self()->clear();
     std::shared_ptr<const vcl::text::TextLayoutCache> layoutCache = OutputDevice::CreateTextLayoutCache(aText);
     // Get the glyphs for the entire text once, to ensure the cache can built subsets from it.
-    pOutputDevice->ImplLayout( aText, 0, aText.getLength(), Point(0, 0), 0, {}, SalLayoutFlags::GlyphItemsOnly,
+    pOutputDevice->ImplLayout( aText, 0, aText.getLength(), Point(0, 0), 0, {}, {}, SalLayoutFlags::GlyphItemsOnly,
         layoutCache.get());
     // Now check for all subsets. Some of them possibly do not make sense in practice, but the code
     // should cope with them.
@@ -237,7 +210,7 @@ static void testCachedGlyphsSubstring( const OUString& aText, const OUString& aF
         {
             std::string message = prefix + " (" + std::to_string(pos) + "/" + std::to_string(len) + ")";
             std::unique_ptr<SalLayout> pLayout1 = pOutputDevice->ImplLayout(
-                aText, pos, len, Point(0, 0), 0, {}, SalLayoutFlags::GlyphItemsOnly, layoutCache.get());
+                aText, pos, len, Point(0, 0), 0, {}, {}, SalLayoutFlags::GlyphItemsOnly, layoutCache.get());
             SalLayoutGlyphs aGlyphs1 = pLayout1->GetGlyphs();
             const SalLayoutGlyphs* aGlyphs2 = SalLayoutGlyphsCache::self()->GetLayoutGlyphs(
                 pOutputDevice, aText, pos, len, 0, layoutCache.get());

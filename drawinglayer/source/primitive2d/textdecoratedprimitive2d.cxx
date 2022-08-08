@@ -36,6 +36,7 @@ namespace drawinglayer::primitive2d
             sal_Int32 nTextPosition,
             sal_Int32 nTextLength,
             const std::vector< double >& rDXArray,
+            const std::vector< sal_Bool >& rKashidaArray,
             const attribute::FontAttribute& rFontAttribute) const
         {
             // create the SimpleTextPrimitive needed in any case
@@ -46,6 +47,7 @@ namespace drawinglayer::primitive2d
                     nTextPosition,
                     nTextLength,
                     std::vector(rDXArray),
+                    std::vector(rKashidaArray),
                     rFontAttribute,
                     getLocale(),
                     getFontColor())));
@@ -189,7 +191,7 @@ namespace drawinglayer::primitive2d
                 getFontAttribute().getBiDiStrong());
 
             // handle as one word
-            impCreateGeometryContent(aRetval, aDecTrans, getText(), getTextPosition(), getTextLength(), getDXArray(), aNewFontAttribute);
+            impCreateGeometryContent(aRetval, aDecTrans, getText(), getTextPosition(), getTextLength(), getDXArray(), getKashidaArray(), aNewFontAttribute);
 
             // Handle Shadow, Outline and TextRelief
             if(!aRetval.empty())
@@ -294,6 +296,7 @@ namespace drawinglayer::primitive2d
             sal_Int32 nTextPosition,
             sal_Int32 nTextLength,
             std::vector< double >&& rDXArray,
+            std::vector< sal_Bool >&& rKashidaArray,
             const attribute::FontAttribute& rFontAttribute,
             const css::lang::Locale& rLocale,
             const basegfx::BColor& rFontColor,
@@ -312,7 +315,7 @@ namespace drawinglayer::primitive2d
             bool bEmphasisMarkBelow,
             TextRelief eTextRelief,
             bool bShadow)
-        :   TextSimplePortionPrimitive2D(rNewTransform, rText, nTextPosition, nTextLength, std::move(rDXArray), rFontAttribute, rLocale, rFontColor, false, 0, rFillColor),
+        :   TextSimplePortionPrimitive2D(rNewTransform, rText, nTextPosition, nTextLength, std::move(rDXArray), std::move(rKashidaArray), rFontAttribute, rLocale, rFontColor, false, 0, rFillColor),
             maOverlineColor(rOverlineColor),
             maTextlineColor(rTextlineColor),
             meFontOverline(eFontOverline),
