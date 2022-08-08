@@ -872,7 +872,7 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
         if(mpFontInstance->mpConversion)
             pLayoutCache = nullptr;
 
-    std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, 0, {}, eDefaultLayout, nullptr, pLayoutCache);
+    std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, 0, {}, {}, eDefaultLayout, nullptr, pLayoutCache);
     if(pSalLayout)
     {
         ImplDrawText( *pSalLayout );
@@ -921,6 +921,7 @@ float OutputDevice::approximate_digit_width() const
 
 void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
                                   o3tl::span<const sal_Int32> pDXAry,
+                                  o3tl::span<const sal_Bool> pKashidaAry,
                                   sal_Int32 nIndex, sal_Int32 nLen, SalLayoutFlags flags,
                                   const SalLayoutGlyphs* pSalLayoutCache )
 {
@@ -931,7 +932,7 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
         nLen = rStr.getLength() - nIndex;
     }
     if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaTextArrayAction( rStartPt, rStr, pDXAry, nIndex, nLen ) );
+        mpMetaFile->AddAction( new MetaTextArrayAction( rStartPt, rStr, pDXAry, pKashidaAry, nIndex, nLen ) );
 
     if ( !IsDeviceOutputNecessary() )
         return;
@@ -943,14 +944,14 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
     if( mbOutputClipped )
         return;
 
-    std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, 0, pDXAry, flags, nullptr, pSalLayoutCache);
+    std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, 0, pDXAry, pKashidaAry, flags, nullptr, pSalLayoutCache);
     if( pSalLayout )
     {
         ImplDrawText( *pSalLayout );
     }
 
     if( mpAlphaVDev )
-        mpAlphaVDev->DrawTextArray( rStartPt, rStr, pDXAry, nIndex, nLen, flags );
+        mpAlphaVDev->DrawTextArray( rStartPt, rStr, pDXAry, pKashidaAry, nIndex, nLen, flags );
 }
 
 tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<sal_Int32>* pDXAry,
@@ -968,7 +969,7 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<sal_In
 
     // do layout
     std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen,
-            Point(0,0), 0, {}, eDefaultLayout, pLayoutCache, pSalLayoutCache);
+            Point(0,0), 0, {}, {}, eDefaultLayout, pLayoutCache, pSalLayoutCache);
     if( !pSalLayout )
     {
         // The caller expects this to init the elements of pDXAry.
@@ -1076,7 +1077,7 @@ void OutputDevice::GetCaretPositions( const OUString& rStr, sal_Int32* pCaretXAr
         nLen = rStr.getLength() - nIndex;
 
     // layout complex text
-    std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen, Point(0, 0), 0, {},
+    std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen, Point(0, 0), 0, {}, {},
                                                        eDefaultLayout, nullptr, pGlyphs);
     if( !pSalLayout )
     {
@@ -1312,7 +1313,9 @@ OutputDevice::FontMappingUseData OutputDevice::FinishTrackingFontMappingUse()
 std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
                                     sal_Int32 nMinIndex, sal_Int32 nLen,
                                     const Point& rLogicalPos, tools::Long nLogicalWidth,
-                                    o3tl::span<const sal_Int32> pDXArray, SalLayoutFlags flags,
+                                    o3tl::span<const sal_Int32> pDXArray,
+                                    o3tl::span<const sal_Bool> pKashidaArray,
+                                    SalLayoutFlags flags,
          vcl::text::TextLayoutCache const* pLayoutCache,
          const SalLayoutGlyphs* pGlyphs) const
 {
@@ -1427,6 +1430,9 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
         }
     }
 
+    if (!pKashidaArray.empty())
+        aLayoutArgs.SetKashidaArray(pKashidaArray.data());
+
     // get matching layout object for base font
     std::unique_ptr<SalLayout> pSalLayout = mpGraphics->GetTextLayout(0);
 
@@ -1505,7 +1511,7 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, tools::Long nTextWid
          const SalLayoutGlyphs* pGlyphs) const
 {
     std::unique_ptr<SalLayout> pSalLayout = ImplLayout( rStr, nIndex, nLen,
-            Point(0,0), 0, {}, eDefaultLayout, pLayoutCache, pGlyphs);
+            Point(0,0), 0, {}, {}, eDefaultLayout, pLayoutCache, pGlyphs);
     sal_Int32 nRetVal = -1;
     if( pSalLayout )
     {
@@ -1539,7 +1545,7 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, tools::Long nTextWid
     rHyphenPos = -1;
 
     std::unique_ptr<SalLayout> pSalLayout = ImplLayout( rStr, nIndex, nLen,
-            Point(0,0), 0, {}, eDefaultLayout, pLayoutCache, pGlyphs);
+            Point(0,0), 0, {}, {}, eDefaultLayout, pLayoutCache, pGlyphs);
     sal_Int32 nRetVal = -1;
     if( pSalLayout )
     {
@@ -2397,6 +2403,7 @@ bool OutputDevice::GetTextBoundRect( tools::Rectangle& rRect,
                                          const OUString& rStr, sal_Int32 nBase,
                                          sal_Int32 nIndex, sal_Int32 nLen,
                                          sal_uLong nLayoutWidth, o3tl::span<const sal_Int32> pDXAry,
+                                         o3tl::span<const sal_Bool> pKashidaAry,
                                          const SalLayoutGlyphs* pGlyphs ) const
 {
     bool bRet = false;
@@ -2410,7 +2417,7 @@ bool OutputDevice::GetTextBoundRect( tools::Rectangle& rRect,
     {
         sal_Int32 nStart = std::min( nBase, nIndex );
         sal_Int32 nOfsLen = std::max( nBase, nIndex ) - nStart;
-        pSalLayout = ImplLayout( rStr, nStart, nOfsLen, aPoint, nLayoutWidth, pDXAry );
+        pSalLayout = ImplLayout( rStr, nStart, nOfsLen, aPoint, nLayoutWidth, pDXAry, pKashidaAry );
         if( pSalLayout )
         {
             nXOffset = pSalLayout->GetTextWidth();
@@ -2421,7 +2428,7 @@ bool OutputDevice::GetTextBoundRect( tools::Rectangle& rRect,
         }
     }
 
-    pSalLayout = ImplLayout(rStr, nIndex, nLen, aPoint, nLayoutWidth, pDXAry, eDefaultLayout,
+    pSalLayout = ImplLayout(rStr, nIndex, nLen, aPoint, nLayoutWidth, pDXAry, pKashidaAry, eDefaultLayout,
                             nullptr, pGlyphs);
     if( pSalLayout )
     {
@@ -2461,7 +2468,9 @@ bool OutputDevice::GetTextBoundRect( tools::Rectangle& rRect,
 bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
                                         const OUString& rStr, sal_Int32 nBase,
                                         sal_Int32 nIndex, sal_Int32 nLen,
-                                        sal_uLong nLayoutWidth, o3tl::span<const sal_Int32> pDXArray ) const
+                                        sal_uLong nLayoutWidth,
+                                        o3tl::span<const sal_Int32> pDXArray,
+                                        o3tl::span<const sal_Bool> pKashidaArray ) const
 {
     if (!InitFont())
         return false;
@@ -2491,7 +2500,7 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
     {
         sal_Int32 nStart = std::min( nBase, nIndex );
         sal_Int32 nOfsLen = std::max( nBase, nIndex ) - nStart;
-        pSalLayout = ImplLayout( rStr, nStart, nOfsLen, Point(0,0), nLayoutWidth, pDXArray );
+        pSalLayout = ImplLayout( rStr, nStart, nOfsLen, Point(0,0), nLayoutWidth, pDXArray, pKashidaArray);
         if( pSalLayout )
         {
             nXOffset = pSalLayout->GetTextWidth();
@@ -2502,7 +2511,7 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
         }
     }
 
-    pSalLayout = ImplLayout( rStr, nIndex, nLen, Point(0,0), nLayoutWidth, pDXArray );
+    pSalLayout = ImplLayout( rStr, nIndex, nLen, Point(0,0), nLayoutWidth, pDXArray, pKashidaArray );
     if( pSalLayout )
     {
         bRet = pSalLayout->GetOutline(rVector);
@@ -2548,14 +2557,15 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
 bool OutputDevice::GetTextOutlines( PolyPolyVector& rResultVector,
                                         const OUString& rStr, sal_Int32 nBase,
                                         sal_Int32 nIndex, sal_Int32 nLen,
-                                        sal_uLong nLayoutWidth, o3tl::span<const sal_Int32> pDXArray ) const
+                                        sal_uLong nLayoutWidth, o3tl::span<const sal_Int32> pDXArray,
+                                        o3tl::span<const sal_Bool> pKashidaArray ) const
 {
     rResultVector.clear();
 
     // get the basegfx polypolygon vector
     basegfx::B2DPolyPolygonVector aB2DPolyPolyVector;
     if( !GetTextOutlines( aB2DPolyPolyVector, rStr, nBase, nIndex, nLen,
-                         nLayoutWidth, pDXArray ) )
+                         nLayoutWidth, pDXArray, pKashidaArray ) )
         return false;
 
     // convert to a tool polypolygon vector

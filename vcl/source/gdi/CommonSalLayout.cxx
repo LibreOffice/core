@@ -197,9 +197,9 @@ void GenericSalLayout::AdjustLayout(vcl::text::ImplLayoutArgs& rArgs)
     SalLayout::AdjustLayout(rArgs);
 
     if (rArgs.mpAltNaturalDXArray) // Used when "TextRenderModeForResolutionIndependentLayout" is set
-        ApplyDXArray(rArgs.mpAltNaturalDXArray, rArgs.mnFlags);
+        ApplyDXArray(rArgs.mpAltNaturalDXArray, rArgs.mpKashidaArray);
     else if (rArgs.mpDXArray)   // Normal case
-        ApplyDXArray(rArgs.mpDXArray, rArgs.mnFlags);
+        ApplyDXArray(rArgs.mpDXArray, rArgs.mpKashidaArray);
     else if (rArgs.mnLayoutWidth)
         Justify(rArgs.mnLayoutWidth);
     // apply asian kerning if the glyphs are not already formatted
@@ -565,14 +565,6 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
                 if (u_isUWhiteSpace(aChar))
                     nGlyphFlags |= GlyphItemFlags::IS_SPACING;
 
-                if (aSubRun.maScript == HB_SCRIPT_ARABIC &&
-                    HB_DIRECTION_IS_BACKWARD(aSubRun.maDirection) &&
-                    !(nGlyphFlags & GlyphItemFlags::IS_SPACING))
-                {
-                    nGlyphFlags |= GlyphItemFlags::ALLOW_KASHIDA;
-                    rArgs.mnFlags |= SalLayoutFlags::KashidaJustification;
-                }
-
 #if HB_VERSION_ATLEAST(1, 5, 0)
                 if (hb_glyph_info_get_glyph_flags(&pHbGlyphInfos[i]) & HB_GLYPH_FLAG_UNSAFE_TO_BREAK)
                     nGlyphFlags |= GlyphItemFlags::IS_UNSAFE_TO_BREAK;
@@ -657,24 +649,12 @@ void GenericSalLayout::GetCharWidths(std::vector<DeviceCoordinate>& rCharWidths)
     }
 }
 
-// A note on how Kashida justification is implemented (because it took me 5
-// years to figure it out):
-// The decision to insert Kashidas, where and how much is taken by Writer.
-// This decision is communicated to us in a very indirect way; by increasing
-// the width of the character after which Kashidas should be inserted by the
-// desired amount.
-//
-// Writer eventually calls IsKashidaPosValid() to check whether it can insert a
-// Kashida between two characters or not.
-//
-// Here we do:
-// - In LayoutText() set KashidaJustification flag based on text script.
-// - In ApplyDXArray():
-//   * Check the above flag to decide whether to insert Kashidas or not.
-//   * For any RTL glyph that has DX adjustment, insert enough Kashidas to
-//     fill in the added space.
+// - pDXArray: is the adjustments to glyph advances (usually due to
+//   justification).
+// - pKashidaArray: is the places where kashidas are inserted (for Arabic
+//   justification). The number of kashidas is calculated from the pDXArray.
 template<typename DC>
-void GenericSalLayout::ApplyDXArray(const DC* pDXArray, SalLayoutFlags nLayoutFlags)
+void GenericSalLayout::ApplyDXArray(const DC* pDXArray, const sal_Bool* pKashidaArray)
 {
     int nCharCount = mnEndCharPos - mnMinCharPos;
     std::vector<DeviceCoordinate> aOldCharWidths;
@@ -692,16 +672,13 @@ void GenericSalLayout::ApplyDXArray(const DC* pDXArray, SalLayoutFlags nLayoutFl
             pNewCharWidths[i] = pDXArray[i] - pDXArray[i - 1];
     }
 
-    bool bKashidaJustify = false;
     DeviceCoordinate nKashidaWidth = 0;
     hb_codepoint_t nKashidaIndex = 0;
-    if (nLayoutFlags & SalLayoutFlags::KashidaJustification)
     {
         hb_font_t *pHbFont = GetFont().GetHbFont();
         // Find Kashida glyph width and index.
         if (hb_font_get_glyph(pHbFont, 0x0640, 0, &nKashidaIndex))
             nKashidaWidth = GetFont().GetKashidaWidth();
-        bKashidaJustify = nKashidaWidth != 0;
     }
 
     // Map of Kashida insertion points (in the glyph items vector) and the
@@ -730,12 +707,8 @@ void GenericSalLayout::ApplyDXArray(const DC* pDXArray, SalLayoutFlags nLayoutFl
             m_GlyphItems[i].adjustLinearPosX(nDelta);
 
             // Adjust the position of the rest of the glyphs in the cluster.
-            while (++i < m_GlyphItems.size())
-            {
-                if (!m_GlyphItems[i].IsInCluster())
-                    break;
+            while (++i < m_GlyphItems.size() && m_GlyphItems[i].IsInCluster())
                 m_GlyphItems[i].adjustLinearPosX(nDelta);
-            }
         }
         else if (m_GlyphItems[i].IsInCluster())
         {
@@ -743,41 +716,29 @@ void GenericSalLayout::ApplyDXArray(const DC* pDXArray, SalLayoutFlags nLayoutFl
             // loop below.
             i++;
         }
-        else
+        else // RTL
         {
             // Adjust the width and position of the first (rightmost) glyph in
-            // the cluster.
-            // For RTL, we put all the adjustment to the left of the glyph.
+            // the cluster. This is RTL, so we put all the adjustment to the
+            // left of the glyph.
             m_GlyphItems[i].addNewWidth(nDiff);
             m_GlyphItems[i].adjustLinearPosX(nDelta + nDiff);
 
-            // Adjust the X position of all glyphs in the cluster.
+            // Adjust the X position of the rest of the glyphs in the cluster.
             size_t j = i;
-            while (j > 0)
-            {
-                --j;
-                if (!m_GlyphItems[j].IsInCluster())
-                    break;
+            while (--j >= 0 && m_GlyphItems[j].IsInCluster())
                 m_GlyphItems[j].adjustLinearPosX(nDelta + nDiff);
-            }
 
-            // If this glyph is Kashida-justifiable, then mark this as a
-            // Kashida position. Since this must be a RTL glyph, we mark the
-            // last glyph in the cluster not the first as this would be the
-            // base glyph.
-            if (bKashidaJustify && m_GlyphItems[i].AllowKashida() &&
-                nDiff > m_GlyphItems[i].charCount()) // Rounding errors, 1 pixel per character!
-            {
+            j = i;
+            // Move any non-spacing marks to keep attached to this cluster.
+            while (--j >= 0 && m_GlyphItems[j].IsDiacritic())
+                m_GlyphItems[j].adjustLinearPosX(nDiff);
+
+            // This is a Kashida insertion position, mark it. Kashida glyphs
+            // will be inserted below.
+            if (pKashidaArray && pKashidaArray[nCharPos])
                 pKashidas[i] = nDiff;
-                // Move any non-spacing marks attached to this cluster as well.
-                // Looping backward because this is RTL glyph.
-                while (j > 0)
-                {
-                    if (!m_GlyphItems[j].IsDiacritic())
-                        break;
-                    m_GlyphItems[j--].adjustLinearPosX(nDiff);
-                }
-            }
+
             i++;
         }
 
@@ -789,7 +750,7 @@ void GenericSalLayout::ApplyDXArray(const DC* pDXArray, SalLayoutFlags nLayoutFl
     }
 
     // Insert Kashida glyphs.
-    if (!bKashidaJustify || pKashidas.empty())
+    if (pKashidas.empty())
         return;
 
     size_t nInserted = 0;
