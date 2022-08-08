@@ -951,7 +951,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 rInf.GetFrame()->SwitchHorizontalToVertical( aTextOriginPos );
 
             rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
-                aKernArray, sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
+                aKernArray, {}, sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
 
             return;
         }
@@ -980,6 +980,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         {
             std::vector<sal_Int32> aKernArray;
             GetTextArray(rInf.GetOut(), rInf, aKernArray);
+            std::vector<sal_Bool> aKashidaArray(aKernArray.size());
 
             if( bStretch )
             {
@@ -1051,7 +1052,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     if ( SwScriptInfo::IsArabicText( rInf.GetText(), rInf.GetIdx(), rInf.GetLen() ) )
                     {
                         if ( pSI && pSI->CountKashida() &&
-                            pSI->KashidaJustify( aKernArray.data(), rInf.GetIdx(),
+                            pSI->KashidaJustify( aKernArray.data(), aKashidaArray.data(), rInf.GetIdx(),
                                                  rInf.GetLen(), nSpaceAdd ) != -1 )
                         {
                             bSpecialJust = true;
@@ -1104,18 +1105,18 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         aKernArray[0] = rInf.GetWidth() + nSpaceAdd;
 
                         rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
-                             aKernArray, sal_Int32(rInf.GetIdx()), 1 );
+                             aKernArray, aKashidaArray, sal_Int32(rInf.GetIdx()), 1 );
                     }
                     else
                     {
                         aKernArray[ sal_Int32(rInf.GetLen()) - 2 ] += nSpaceAdd;
                         rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
-                            aKernArray, sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
+                            aKernArray, aKashidaArray, sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
                     }
                 }
                 else
                     rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
-                            aKernArray, sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
+                            aKernArray, aKashidaArray, sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
             }
             else
             {
@@ -1209,6 +1210,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             GetTextArray(rInf.GetOut(), rInf, aKernArray);
         }
 
+        std::vector<sal_Bool> aKashidaArray(aKernArray.size());
+
         // Modify Printer and ScreenArrays for special justifications
 
         tools::Long nSpaceAdd = rInf.GetSpace() / SPACING_PRECISION_FACTOR;
@@ -1249,7 +1252,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 if ( SwScriptInfo::IsArabicText( rInf.GetText(), rInf.GetIdx(), rInf.GetLen() ) )
                 {
                     if ( pSI && pSI->CountKashida() &&
-                         pSI->KashidaJustify( aKernArray.data(), rInf.GetIdx(),
+                         pSI->KashidaJustify( aKernArray.data(), aKashidaArray.data(), rInf.GetIdx(),
                                               rInf.GetLen(), nSpaceAdd ) != -1 )
                         nSpaceAdd = 0;
                     else
@@ -1339,9 +1342,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 rInf.GetFrame()->SwitchHorizontalToVertical( aTextOriginPos );
 
             rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
-                         aKernArray, sal_Int32(rInf.GetIdx()), 1 );
+                         aKernArray, aKashidaArray, sal_Int32(rInf.GetIdx()), 1 );
             if( bBullet )
-                rInf.GetOut().DrawTextArray( aTextOriginPos, *pStr, aKernArray,
+                rInf.GetOut().DrawTextArray( aTextOriginPos, *pStr, aKernArray, aKashidaArray,
                                              rInf.GetIdx() ? 1 : 0, 1 );
         }
         else
@@ -1464,7 +1467,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                             : sal_Int32(rInf.GetIdx());
                 const SalLayoutGlyphs* pGlyphs = SalLayoutGlyphsCache::self()->GetLayoutGlyphs(&rInf.GetOut(),
                      *pStr, nTmpIdx, nLen);
-                rInf.GetOut().DrawTextArray( aTextOriginPos, *pStr, aKernArray,
+                rInf.GetOut().DrawTextArray( aTextOriginPos, *pStr, aKernArray, aKashidaArray,
                                              nTmpIdx , nLen, SalLayoutFlags::NONE, pGlyphs );
                 if (bBullet)
                 {
@@ -1503,7 +1506,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         }
                     }
                     rInf.GetOut().DrawTextArray( aTextOriginPos, aBulletOverlay, aKernArray,
-                                                 nTmpIdx , nLen );
+                                                 aKashidaArray, nTmpIdx , nLen );
                     pTmpFont->SetColor( aPreviousColor );
 
                     pTmpFont->SetUnderline(aPreviousUnderline);
@@ -1738,7 +1741,7 @@ TextFrameIndex SwFntObj::GetModelPositionForViewPoint(SwDrawTextInfo &rInf)
             if ( SwScriptInfo::IsArabicText( rInf.GetText(), rInf.GetIdx(), rInf.GetLen() ) )
             {
                 if ( pSI && pSI->CountKashida() &&
-                    pSI->KashidaJustify( aKernArray.data(), rInf.GetIdx(), rInf.GetLen(),
+                    pSI->KashidaJustify( aKernArray.data(), nullptr, rInf.GetIdx(), rInf.GetLen(),
                                          nSpaceAdd ) != -1 )
                     nSpaceAdd = 0;
             }

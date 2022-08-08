@@ -702,7 +702,7 @@ void VclTextTest::testImplLayoutArgs_PrepareFallback_precalculatedglyphs()
     const OString sUTF8String(u8"Тхе яуицк\n ыумпед овер");
     const OUString sTestString(OUString::fromUtf8(sUTF8String));
     std::unique_ptr<SalLayout> pLayout
-        = pVirDev->ImplLayout(sTestString, 0, sTestString.getLength(), Point(0, 0), 0, {},
+        = pVirDev->ImplLayout(sTestString, 0, sTestString.getLength(), Point(0, 0), 0, {}, {},
                               SalLayoutFlags::GlyphItemsOnly);
     SalLayoutGlyphs aGlyphs = pLayout->GetGlyphs();
     SalLayoutGlyphsImpl* pGlyphsImpl = aGlyphs.Impl(1);
