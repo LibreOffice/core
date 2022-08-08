@@ -26,6 +26,7 @@
 #include "SwRewriter.hxx"
 #include "swundo.hxx"
 #include "nodeoffset.hxx"
+#include "ndindex.hxx"
 #include <o3tl/typed_flags_set.hxx>
 #include <optional>
 
@@ -37,7 +38,6 @@ class SwTextFormatColl;
 class SwFrameFormat;
 class SwFormatAnchor;
 class SwNode;
-class SwNodeIndex;
 class SwNodeRange;
 class SwRedlineData;
 class SwRedlineSaveDatas;
@@ -261,7 +261,7 @@ class SwUndoInserts : public SwUndo, public SwUndRng, private SwUndoSaveContent
 protected:
     SwNodeOffset m_nNodeDiff;
     /// start of Content in UndoNodes for Redo
-    std::unique_ptr<SwNodeIndex> m_pUndoNodeIndex;
+    std::optional<SwNodeIndex> m_oUndoNodeIndex;
     sal_uInt16 m_nSetPos;                 // Start in the history list.
 
     SwUndoInserts( SwUndoId nUndoId, const SwPaM& );
