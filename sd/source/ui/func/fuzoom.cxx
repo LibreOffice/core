@@ -117,10 +117,14 @@ bool FuZoom::MouseMove(const MouseEvent& rMEvt)
             {
                 Size aWorkSize = mpView->GetWorkArea().GetSize();
                 Size aPageSize = mpView->GetSdrPageView()->GetPage()->GetSize();
-                aScroll.setX( aScroll.X() / ( aWorkSize.Width()  / aPageSize.Width()) );
-                aScroll.setY( aScroll.Y() / ( aWorkSize.Height() / aPageSize.Height()) );
-                mpViewShell->Scroll(aScroll.X(), aScroll.Y());
-                aBeginPosPix = aPosPix;
+                if (aWorkSize.Width() != 0 && aWorkSize.Height() != 0 &&
+                        aPageSize.Width() != 0 && aPageSize.Height() != 0)
+                {
+                    aScroll.setX( aScroll.X() / ( aWorkSize.Width()  / aPageSize.Width()) );
+                    aScroll.setY( aScroll.Y() / ( aWorkSize.Height() / aPageSize.Height()) );
+                    mpViewShell->Scroll(aScroll.X(), aScroll.Y());
+                    aBeginPosPix = aPosPix;
+                }
             }
         }
         else
