@@ -27,7 +27,6 @@
 #include <svx/ifaceids.hxx>
 #include <svl/srchitem.hxx>
 #include <svtools/scrolladaptor.hxx>
-#include <vcl/scrbar.hxx>
 #include <map>
 #include <memory>
 #include <string_view>
@@ -71,7 +70,6 @@ private:
 
     VclPtr<ScrollAdaptor> aHScrollBar;
     VclPtr<ScrollAdaptor> aVScrollBar;
-    VclPtr<ScrollBarBox> aScrollBarBox;
     VclPtr<TabBar>       pTabBar;           // basctl::TabBar
     bool                 bCreatingWindow;
 

@@ -161,7 +161,6 @@ Shell::Shell( SfxViewFrame* pFrame_, SfxViewShell* /* pOldShell */ ) :
     m_aCurDocument( ScriptDocument::getApplicationScriptDocument() ),
     aHScrollBar( VclPtr<ScrollAdaptor>::Create(&GetViewFrame()->GetWindow(), true) ),
     aVScrollBar( VclPtr<ScrollAdaptor>::Create(&GetViewFrame()->GetWindow(), false) ),
-    aScrollBarBox( VclPtr<ScrollBarBox>::Create(&GetViewFrame()->GetWindow(), WinBits( WB_SIZEABLE )) ),
     pLayout(nullptr),
     aObjectCatalog(VclPtr<ObjectCatalog>::Create(&GetViewFrame()->GetWindow())),
     m_bAppBasicModified( false ),
@@ -231,7 +230,6 @@ Shell::~Shell()
     SetCurWindow( nullptr );
 
     aObjectCatalog.disposeAndClear();
-    aScrollBarBox.disposeAndClear();
     aVScrollBar.disposeAndClear();
     aHScrollBar.disposeAndClear();
 
@@ -414,9 +412,7 @@ void Shell::InitScrollBars()
     aVScrollBar->Enable();
     aVScrollBar->Show();
     aHScrollBar->Show();
-    aScrollBarBox->Show();
 }
-
 
 void Shell::InitTabBar()
 {
@@ -425,12 +421,10 @@ void Shell::InitTabBar()
     pTabBar->SetSelectHdl( LINK( this, Shell, TabBarHdl ) );
 }
 
-
 void Shell::OuterResizePixel( const Point &rPos, const Size &rSize )
 {
     AdjustPosSizePixel( rPos, rSize );
 }
-
 
 IMPL_LINK( Shell, TabBarHdl, ::TabBar *, pCurTabBar, void )
 {
