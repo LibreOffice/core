@@ -21,16 +21,16 @@
 
 #include <rtl/ustring.hxx>
 #include "txatbase.hxx"
+#include "ndindex.hxx"
 
 class SwNodeIndex;
-class SwTextNode;
 class SwNodes;
 class SwDoc;
 class SwRootFrame;
 
 class SW_DLLPUBLIC SwTextFootnote final : public SwTextAttr
 {
-    std::unique_ptr<SwNodeIndex> m_pStartNode;
+    std::optional<SwNodeIndex> m_oStartNode;
     SwTextNode * m_pTextNode;
     sal_uInt16 m_nSeqNo;
 
@@ -38,7 +38,7 @@ public:
     SwTextFootnote( SwFormatFootnote& rAttr, sal_Int32 nStart );
     virtual ~SwTextFootnote() override;
 
-    SwNodeIndex *GetStartNode() const { return m_pStartNode.get(); }
+    const SwNodeIndex *GetStartNode() const { return m_oStartNode ? &*m_oStartNode : nullptr; }
     void SetStartNode( const SwNodeIndex *pNode, bool bDelNodes = true );
     void SetNumber(sal_uInt16 nNumber, sal_uInt16 nNumberRLHidden, const OUString &sNumStr);
     void CopyFootnote(SwTextFootnote & rDest, SwTextNode & rDestNode) const;

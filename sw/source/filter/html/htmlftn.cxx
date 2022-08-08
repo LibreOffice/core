@@ -230,7 +230,7 @@ SwNodeIndex *SwHTMLParser::GetFootEndNoteSection( const OUString& rName )
         {
             if (m_pFootEndNoteImpl->aTextFootnotes[i].sName == aName)
             {
-                pStartNodeIdx = m_pFootEndNoteImpl->aTextFootnotes[i].pTextFootnote->GetStartNode();
+                pStartNodeIdx = const_cast<SwNodeIndex*>(m_pFootEndNoteImpl->aTextFootnotes[i].pTextFootnote->GetStartNode());
                 m_pFootEndNoteImpl->aTextFootnotes.erase( m_pFootEndNoteImpl->aTextFootnotes.begin() + i );
                 if (m_pFootEndNoteImpl->aTextFootnotes.empty())
                 {
@@ -371,7 +371,7 @@ void SwHTMLWriter::OutFootEndNotes()
         IncIndentLevel();   // indent content of <DIV>
 
         OSL_ENSURE( pTextFootnote, "SwHTMLWriter::OutFootEndNotes: SwTextFootnote is missing" );
-        SwNodeIndex *pSttNdIdx = pTextFootnote->GetStartNode();
+        const SwNodeIndex *pSttNdIdx = pTextFootnote->GetStartNode();
         OSL_ENSURE( pSttNdIdx,
                 "SwHTMLWriter::OutFootEndNotes: StartNode-Index is missing" );
         if( pSttNdIdx )

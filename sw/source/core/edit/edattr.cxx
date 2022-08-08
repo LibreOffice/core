@@ -455,7 +455,7 @@ size_t SwEditShell::GetSeqFootnoteList( SwSeqFieldList& rList, bool bEndNotes )
         if ( rFootnote.IsEndNote() != bEndNotes )
             continue;
 
-        SwNodeIndex* pIdx = pTextFootnote->GetStartNode();
+        const SwNodeIndex* pIdx = pTextFootnote->GetStartNode();
         if( pIdx )
         {
             SwNodeIndex aIdx( *pIdx, 1 );
