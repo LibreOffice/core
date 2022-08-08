@@ -280,7 +280,7 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
     GDIMetaFile* pOldMetaFile = mpMetaFile;
     tools::Long nOldOffX = mnOutOffX;
     tools::Long nOldOffY = mnOutOffY;
-    bool bOldMap = mbMap;
+    bool bOldMap = IsMapModeEnabled();
 
     mnOutOffX   = 0;
     mnOutOffY   = 0;
@@ -900,7 +900,7 @@ tools::Long OutputDevice::GetTextHeight() const
 
     tools::Long nHeight = mpFontInstance->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
 
-    if ( mbMap )
+    if (IsMapModeEnabled())
         nHeight = ImplDevicePixelToLogicHeight( nHeight );
 
     return nHeight;
@@ -1003,7 +1003,7 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<sal_In
             (*pDXPixelArray)[i] += (*pDXPixelArray)[i - 1];
         }
     }
-    if( mbMap )
+    if (IsMapModeEnabled())
     {
         if( pDXPixelArray )
         {
@@ -1046,7 +1046,7 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<sal_In
             (*pDXAry)[ i ] += (*pDXAry)[ i-1 ];
 
     // convert from font units to logical units
-    if( mbMap )
+    if (IsMapModeEnabled())
     {
         if( pDXAry )
             for( int i = 0; i < nLen; ++i )
@@ -1110,7 +1110,7 @@ void OutputDevice::GetCaretPositions( const OUString& rStr, sal_Int32* pCaretXAr
     }
 
     // convert from font units to logical units
-    if( mbMap )
+    if (IsMapModeEnabled())
     {
         for( i = 0; i < 2*nLen; ++i )
             pCaretXArray[i] = ImplDevicePixelToLogicWidth( pCaretXArray[i] );
@@ -1362,7 +1362,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
     }
 
     DeviceCoordinate nPixelWidth = static_cast<DeviceCoordinate>(nLogicalWidth);
-    if( nLogicalWidth && mbMap )
+    if (nLogicalWidth && IsMapModeEnabled())
     {
         nPixelWidth = LogicWidthToDeviceCoordinate( nLogicalWidth );
     }
@@ -1377,7 +1377,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
     if( !pDXArray.empty() )
     {
         DeviceCoordinate* pDXPixelArray(nullptr);
-        if (mbMap)
+        if (IsMapModeEnabled())
         {
             if (GetTextRenderModeForResolutionIndependentLayout())
             {
@@ -2450,7 +2450,7 @@ bool OutputDevice::GetTextBoundRect( tools::Rectangle& rRect,
             aRotatedOfs -= Point(aPos.getX(), aPos.getY());
             aPixelRect += aRotatedOfs;
             rRect = PixelToLogic( aPixelRect );
-            if( mbMap )
+            if (IsMapModeEnabled())
                 rRect += Point( maMapRes.mnMapOfsX, maMapRes.mnMapOfsY );
         }
     }
@@ -2476,10 +2476,10 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
 
     // we want to get the Rectangle in logical units, so to
     // avoid rounding errors we just size the font in logical units
-    bool bOldMap = mbMap;
+    bool bOldMap = IsMapModeEnabled();
     if( bOldMap )
     {
-        const_cast<OutputDevice&>(*this).mbMap = false;
+        const_cast<OutputDevice&>(*this).EnableMapMode(false);
         const_cast<OutputDevice&>(*this).mbNewFont = true;
     }
 
@@ -2538,7 +2538,7 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
     if( bOldMap )
     {
         // restore original font size and map mode
-        const_cast<OutputDevice&>(*this).mbMap = bOldMap;
+        const_cast<OutputDevice&>(*this).EnableMapMode(bOldMap);
         const_cast<OutputDevice&>(*this).mbNewFont = true;
     }
 

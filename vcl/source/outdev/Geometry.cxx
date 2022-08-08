@@ -10,10 +10,15 @@
 #include <vcl/Geometry.hxx>
 
 Geometry::Geometry()
-    : mnOffsetOriginX(0)
+    : mbMap(false)
+    , mnOffsetOriginX(0)
     , mnOffsetOriginY(0)
 {
 }
+
+bool Geometry::IsMapModeEnabled() const { return mbMap; }
+
+void Geometry::EnableMapMode(bool bEnable) { mbMap = bEnable; }
 
 tools::Long Geometry::GetXOffsetFromOriginInPixels() const { return mnOffsetOriginX; }
 

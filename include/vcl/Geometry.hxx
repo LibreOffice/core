@@ -18,12 +18,17 @@ class VCL_DLLPUBLIC Geometry
 public:
     Geometry();
 
+    bool IsMapModeEnabled() const;
+    void EnableMapMode(bool bEnable = true);
+
     tools::Long GetXOffsetFromOriginInPixels() const;
     void SetXOffsetFromOriginInPixels(tools::Long nOffsetFromOriginXpx);
     tools::Long GetYOffsetFromOriginInPixels() const;
     void SetYOffsetFromOriginInPixels(tools::Long nOffsetFromOriginYpx);
 
 private:
+    bool mbMap;
+
     tools::Long mnOffsetOriginX;
     tools::Long mnOffsetOriginY;
 };

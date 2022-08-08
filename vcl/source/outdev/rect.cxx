@@ -298,8 +298,8 @@ void OutputDevice::DrawGrid( const tools::Rectangle& rRect, const Size& rDist, D
     if( mbInitFillColor )
         InitFillColor();
 
-    const bool bOldMap = mbMap;
-    EnableMapMode( false );
+    const bool bOldMap = IsMapModeEnabled();
+    EnableMapMode(false);
 
     if( nFlags & DrawGridFlags::Dots )
     {

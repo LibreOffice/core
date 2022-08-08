@@ -242,7 +242,6 @@ private:
     LanguageType                    meTextLanguage;
     bool mbTextRenderModeForResolutionIndependentLayout;
 
-    mutable bool                    mbMap : 1;
     mutable bool                    mbClipRegion : 1;
     mutable bool                    mbBackground : 1;
     mutable bool                    mbOutput : 1;
@@ -1561,7 +1560,7 @@ protected:
 public:
 
     void                        EnableMapMode( bool bEnable = true );
-    bool                        IsMapModeEnabled() const { return mbMap; }
+    bool                        IsMapModeEnabled() const { return maGeometry.IsMapModeEnabled(); }
 
     void                        SetMapMode();
     void                        SetMapMode( const MapMode& rNewMapMode );

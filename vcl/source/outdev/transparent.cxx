@@ -348,7 +348,7 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
 
             if( aVDev->SetOutputSizePixel( aDstSz ) )
             {
-                const bool bOldMap = mbMap;
+                const bool bOldMap = IsMapModeEnabled();
 
                 EnableMapMode( false );
 
@@ -662,7 +662,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                 {
                     MapMode aMap( GetMapMode() );
                     Point aOutPos( PixelToLogic( aDstRect.TopLeft() ) );
-                    const bool bOldMap = mbMap;
+                    const bool bOldMap = IsMapModeEnabled();
 
                     aMap.SetOrigin( Point( -aOutPos.X(), -aOutPos.Y() ) );
                     xVDev->SetMapMode( aMap );
@@ -1812,8 +1812,9 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                                         Application::Reschedule( true );
                                     }
 
-                                    const bool bOldMap = mbMap;
-                                    mbMap = aPaintVDev->mbMap = false;
+                                    const bool bOldMap = IsMapModeEnabled();
+                                    EnableMapMode(false);
+                                    aPaintVDev->EnableMapMode(false);
 
                                     Bitmap aBandBmp( aPaintVDev->GetBitmap( Point(), aDstSzPix ) );
 
@@ -1827,8 +1828,8 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                                     rOutMtf.AddAction( new MetaBmpScaleAction( aDstPtPix, aDstSzPix, aBandBmp ) );
                                     rOutMtf.AddAction( new MetaCommentAction( "PRNSPOOL_TRANSPARENTBITMAP_END" ) );
 
-                                    aPaintVDev->mbMap = true;
-                                    mbMap = bOldMap;
+                                    aPaintVDev->EnableMapMode();
+                                    EnableMapMode(bOldMap);
                                     aMapVDev->Pop();
                                     aPaintVDev->Pop();
                                 }

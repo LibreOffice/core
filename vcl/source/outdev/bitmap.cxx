@@ -601,10 +601,10 @@ void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap,
     // The scaling in this code path produces really ugly results - it
     // does the most trivial scaling with no smoothing.
     GDIMetaFile* pOldMetaFile = mpMetaFile;
-    const bool   bOldMap = mbMap;
+    const bool bOldMap = IsMapModeEnabled();
 
     mpMetaFile = nullptr; // fdo#55044 reset before GetBitmap!
-    mbMap = false;
+    EnableMapMode(false);
 
     Bitmap aBmp(GetBitmap(aDstRect.TopLeft(), aDstRect.GetSize()));
 
@@ -687,7 +687,7 @@ void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap,
         mpAlphaVDev = pOldVDev;
     }
 
-    mbMap = bOldMap;
+    EnableMapMode(bOldMap);
     mpMetaFile = pOldMetaFile;
 }
 

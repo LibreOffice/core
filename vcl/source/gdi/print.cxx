@@ -155,9 +155,9 @@ void Printer::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask,
     tools::Long nX, nY; // , nWorkX, nWorkY, nWorkWidth, nWorkHeight;
     std::unique_ptr<tools::Long[]> pMapX(new tools::Long[ nSrcWidth + 1 ]);
     std::unique_ptr<tools::Long[]> pMapY(new tools::Long[ nSrcHeight + 1 ]);
-    const bool bOldMap = mbMap;
+    const bool bOldMap = IsMapModeEnabled();
 
-    mbMap = false;
+    EnableMapMode(false);
 
     // create forward mapping tables
     for( nX = 0; nX <= nSrcWidth; nX++ )
@@ -182,7 +182,7 @@ void Printer::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask,
         DrawBitmap(aMapPt, aMapSz, Point(), aBandBmp.GetSizePixel(), aBandBmp);
     }
 
-    mbMap = bOldMap;
+    EnableMapMode(bOldMap);
 
 }
 
@@ -268,7 +268,7 @@ void Printer::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
     Push( vcl::PushFlags::CLIPREGION | vcl::PushFlags::LINECOLOR );
     IntersectClipRegion(vcl::Region(rPolyPoly));
     SetLineColor( GetFillColor() );
-    const bool bOldMap = mbMap;
+    const bool bOldMap = IsMapModeEnabled();
     EnableMapMode( false );
 
     if(nMove)
@@ -736,10 +736,10 @@ void Printer::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
     std::unique_ptr<tools::Long[]> pMapX( new tools::Long[ nSrcWidth + 1 ] );
     std::unique_ptr<tools::Long[]> pMapY( new tools::Long[ nSrcHeight + 1 ] );
     GDIMetaFile*    pOldMetaFile = mpMetaFile;
-    const bool      bOldMap = mbMap;
+    const bool      bOldMap = IsMapModeEnabled();
 
     mpMetaFile = nullptr;
-    mbMap = false;
+    EnableMapMode(false);
     Push( vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR );
     SetLineColor( rMaskColor );
     SetFillColor( rMaskColor );
@@ -769,7 +769,7 @@ void Printer::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
     }
 
     Pop();
-    mbMap = bOldMap;
+    EnableMapMode(bOldMap);
     mpMetaFile = pOldMetaFile;
 }
 

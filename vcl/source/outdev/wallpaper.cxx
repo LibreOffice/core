@@ -85,7 +85,7 @@ void OutputDevice::DrawColorWallpaper( tools::Long nX, tools::Long nY,
     SetLineColor();
     SetFillColor( rWallpaper.GetColor() );
 
-    bool bMap = mbMap;
+    bool bMap = IsMapModeEnabled();
     EnableMapMode( false );
     DrawRect( tools::Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ) );
     SetLineColor( aOldLineColor );
@@ -134,7 +134,7 @@ void OutputDevice::DrawBitmapWallpaper( tools::Long nX, tools::Long nY,
     const BitmapEx* pCached = rWallpaper.ImplGetCachedBitmap();
 
     GDIMetaFile* pOldMetaFile = mpMetaFile;
-    const bool bOldMap = mbMap;
+    const bool bOldMap = IsMapModeEnabled();
 
     BitmapEx aBmpEx;
     if( pCached )
@@ -377,7 +377,7 @@ void OutputDevice::DrawGradientWallpaper( tools::Long nX, tools::Long nY,
 
     tools::Rectangle aBound;
     GDIMetaFile* pOldMetaFile = mpMetaFile;
-    const bool bOldMap = mbMap;
+    const bool bOldMap = IsMapModeEnabled();
 
     aBound = tools::Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) );
 

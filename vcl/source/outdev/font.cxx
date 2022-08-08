@@ -991,7 +991,7 @@ bool OutputDevice::ImplNewFont() const
     bool bRet = true;
 
     // #95414# fix for OLE objects which use scale factors very creatively
-    if (mbMap && !aSize.Width())
+    if (IsMapModeEnabled() && !aSize.Width())
         bRet = AttemptOLEFontScaleFix(const_cast<vcl::Font&>(maFont), aSize.Height());
 
     return bRet;
@@ -1011,10 +1011,10 @@ bool OutputDevice::AttemptOLEFontScaleFix(vcl::Font& rFont, tools::Long nHeight)
     {
         Size aOrigSize = rFont.GetFontSize();
         rFont.SetFontSize(Size(nNewWidth, nHeight));
-        mbMap = false;
+        const_cast<OutputDevice*>(this)->EnableMapMode(false);
         mbNewFont = true;
         bRet = ImplNewFont();  // recurse once using stretched width
-        mbMap = true;
+        const_cast<OutputDevice*>(this)->EnableMapMode();
         rFont.SetFontSize(aOrigSize);
     }
     return bRet;
@@ -1079,7 +1079,7 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
 {
     Color               aOldLineColor   = GetLineColor();
     Color               aOldFillColor   = GetFillColor();
-    bool                bOldMap         = mbMap;
+    bool                bOldMap         = IsMapModeEnabled();
     GDIMetaFile*        pOldMetaFile    = mpMetaFile;
     mpMetaFile = nullptr;
     EnableMapMode( false );
