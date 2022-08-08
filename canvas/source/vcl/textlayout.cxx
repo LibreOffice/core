@@ -344,6 +344,7 @@ namespace vclcanvas
             rOutDev.DrawTextArray( rOutpos,
                                    maText.Text,
                                    aOffsets,
+                                   {},
                                    ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
                                    ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length) );
         }

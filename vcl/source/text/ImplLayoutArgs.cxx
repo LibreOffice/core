@@ -39,6 +39,7 @@ ImplLayoutArgs::ImplLayoutArgs(const OUString& rStr, int nMinCharPos, int nEndCh
     , m_pTextLayoutCache(pLayoutCache)
     , mpDXArray(nullptr)
     , mpAltNaturalDXArray(nullptr)
+    , mpKashidaArray(nullptr)
     , mnLayoutWidth(0)
     , mnOrientation(0)
 {
@@ -95,6 +96,11 @@ void ImplLayoutArgs::SetDXArray(DeviceCoordinate const* pDXArray) { mpDXArray = 
 void ImplLayoutArgs::SetAltNaturalDXArray(double const* pDXArray)
 {
     mpAltNaturalDXArray = pDXArray;
+}
+
+void ImplLayoutArgs::SetKashidaArray(sal_Bool const* pKashidaArray)
+{
+    mpKashidaArray = pKashidaArray;
 }
 
 void ImplLayoutArgs::SetOrientation(Degree10 nOrientation) { mnOrientation = nOrientation; }
@@ -269,7 +275,6 @@ std::ostream& operator<<(std::ostream& s, vcl::text::ImplLayoutArgs const& rArgs
         TEST(DisableKerning);
         TEST(KerningAsian);
         TEST(Vertical);
-        TEST(KashidaJustification);
         TEST(ForFallback);
 #undef TEST
         s << "}";
@@ -327,6 +332,31 @@ std::ostream& operator<<(std::ostream& s, vcl::text::ImplLayoutArgs const& rArgs
                 s << rArgs.mpDXArray[count - 1];
             else
                 s << rArgs.mpAltNaturalDXArray[count - 1];
+        }
+        s << "]";
+    }
+    else
+        s << "NULL";
+
+    s << ",KashidaArray=";
+    if (rArgs.mpKashidaArray)
+    {
+        s << "[";
+        int count = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
+        lim = count;
+        if (lim > 10)
+            lim = 7;
+        for (int i = 0; i < lim; i++)
+        {
+            s << rArgs.mpKashidaArray[i];
+            if (i < lim - 1)
+                s << ",";
+        }
+        if (count > lim)
+        {
+            if (count > lim + 1)
+                s << "...";
+            s << rArgs.mpKashidaArray[count - 1];
         }
         s << "]";
     }

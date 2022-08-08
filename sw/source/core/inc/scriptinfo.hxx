@@ -289,7 +289,7 @@ public:
                 The value which has to be added to a kashida opportunity.
     @return The number of kashida opportunities in the given range
 */
-    sal_Int32 KashidaJustify( sal_Int32* pKernArray,
+    sal_Int32 KashidaJustify( sal_Int32* pKernArray, sal_Bool* pKashidaArray,
           TextFrameIndex nStt, TextFrameIndex nLen, tools::Long nSpaceAdd = 0) const;
 
 /** Clears array of kashidas marked as invalid

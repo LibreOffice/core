@@ -96,7 +96,8 @@ public:
 
     void QuickDrawText( OutputDevice *pOut, const Point &rPos, const OUString &rTxt,
                         const sal_Int32 nIdx = 0, const sal_Int32 nLen = SAL_MAX_INT32,
-                        o3tl::span<const sal_Int32> pDXArray = {} ) const;
+                        o3tl::span<const sal_Int32> pDXArray = {},
+                        o3tl::span<const sal_Bool> pKashidaArray = {} ) const;
 
     Size QuickGetTextSize( const OutputDevice *pOut, const OUString &rTxt,
                            const sal_Int32 nIdx, const sal_Int32 nLen,
