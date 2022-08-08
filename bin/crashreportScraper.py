@@ -62,7 +62,12 @@ def parse_reports_and_get_most_recent_report_from_last_page(url):
         raise
 
     count = 0
-    os_tab = soup.find("table", {"id": "os_tab"}).tbody
+    try:
+        os_tab = soup.find("table", {"id": "os_tab"}).tbody
+    except AttributeError:
+        print("os_tab not found")
+        raise
+
     tr_list = os_tab.find_all("tr")
     for tr in tr_list:
         td_list = tr.find_all("td")
@@ -206,5 +211,5 @@ if __name__ == '__main__':
                             crashID, crashVersion, crashReason, crashOS, crashStack, codeLine, '\n'])
                     f.write(line)
                     f.flush()
-                except requests.exceptions.Timeout:
+                except (requests.exceptions.Timeout, AttributeError):
                     continue
