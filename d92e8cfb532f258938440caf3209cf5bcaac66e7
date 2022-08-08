@@ -16,6 +16,24 @@
       "message": "@samuel: do you remember how to reproduce the original problem? is it solved by my previous commit or is there a different issue?",
       "revId": "d92e8cfb532f258938440caf3209cf5bcaac66e7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee74d7d1_9ec94919",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-08-08T07:03:11Z",
+      "side": 1,
+      "message": "I just tried with your other patch, but it doesn\u0027t help sadly.\nThe use case involves a user profile from a different computer, so it might have an invalid entry descriptor stored.",
+      "parentUuid": "05783980_d27a7bfd",
+      "revId": "d92e8cfb532f258938440caf3209cf5bcaac66e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ],
   "submitRequirementResults": []
