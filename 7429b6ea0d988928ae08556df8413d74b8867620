@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73420e77_cfaa2290",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-08T20:17:32Z",
+      "side": 1,
+      "message": "Nice! Please send your license statement to the mailing list, as explained at\n\nhttps://wiki.documentfoundation.org/Development/Developers#License_Statements",
+      "revId": "7429b6ea0d988928ae08556df8413d74b8867620",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
