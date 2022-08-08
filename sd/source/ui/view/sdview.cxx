@@ -430,6 +430,7 @@ void ViewRedirector::createRedirectedPrimitive2DSequence(
                                 0,
                                 nTextLength,
                                 std::move(aDXArray),
+                                {},
                                 std::move(aFontAttribute),
                                 std::move(aLocale),
                                 aRGBColor));

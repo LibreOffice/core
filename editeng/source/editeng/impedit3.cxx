@@ -2147,6 +2147,10 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
         nLastScript = nScript;
     }
 
+    // Save the number of blanks, we will use it below when marking Kashida
+    // positions.
+    auto nBlankSize = aPositions.size();
+
     // Kashidas ?
     ImpFindKashidas( pNode, nFirstChar, nLastChar, aPositions );
 
@@ -2186,6 +2190,19 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
     DBG_ASSERT( nSomeExtraSpace < static_cast<tools::Long>(nGaps), "AdjustBlocks: ExtraSpace too large" );
     DBG_ASSERT( nSomeExtraSpace >= 0, "AdjustBlocks: ExtraSpace < 0 " );
 
+    // Mark Kashida positions, so that VCL knows where to insert Kashida and
+    // where to only expand the width.
+    if (aPositions.size() > nBlankSize)
+    {
+        pLine->GetKashidaArray().resize(pLine->GetCharPosArray().size(), false);
+        for (auto i = nBlankSize; i < aPositions.size(); i++)
+        {
+            auto nChar = aPositions[i];
+            if ( nChar < nLastChar )
+                pLine->GetKashidaArray()[nChar-nFirstChar] = true;
+        }
+    }
+
     // Correct the positions in the Array and the portion widths:
     // Last character won't be considered...
     for (auto const& nChar : aPositions)
@@ -2202,7 +2219,6 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
                 rLastPortion.GetSize().AdjustWidth( 1 );
 
             // Correct positions in array
-            // Even for kashidas just change positions, VCL will then draw the kashida automatically
             sal_Int32 nPortionEnd = nPortionStart + rLastPortion.GetLen();
             for ( sal_Int32 _n = nChar; _n < nPortionEnd; _n++ )
             {
@@ -2223,6 +2239,9 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
 void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd, std::vector<sal_Int32>& rArray )
 {
     // the search has to be performed on a per word base
+
+    if (GetRefDevice()->GetMinKashida() < 0)
+        return;
 
     EditSelection aWordSel( EditPaM( pNode, nStart ) );
     aWordSel = SelectWord( aWordSel, css::i18n::WordType::DICTIONARY_WORD );
@@ -3293,6 +3312,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                 sal_Int32 nTextStart = 0;
                                 sal_Int32 nTextLen = 0;
                                 o3tl::span<const sal_Int32> pDXArray;
+                                o3tl::span<const sal_Bool> pKashidaArray;
                                 std::vector<sal_Int32> aTmpDXArray;
 
                                 if ( rTextPortion.GetKind() == PortionKind::TEXT )
@@ -3302,6 +3322,12 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                     nTextLen = rTextPortion.GetLen();
                                     pDXArray = o3tl::span(pLine->GetCharPosArray().data() + (nIndex - pLine->GetStart()),
                                                     pLine->GetCharPosArray().size() - (nIndex - pLine->GetStart()));
+
+                                    if (!pLine->GetKashidaArray().empty())
+                                    {
+                                        pKashidaArray = o3tl::span(pLine->GetKashidaArray().data() + (nIndex - pLine->GetStart()),
+                                                    pLine->GetKashidaArray().size() - (nIndex - pLine->GetStart()));
+                                    }
 
                                     // Paint control characters (#i55716#)
                                     /* XXX: Given that there's special handling
@@ -3552,7 +3578,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                         ImplCalcDigitLang(aTmpFont.GetLanguage()));
 
                                     // StripPortions() data callback
-                                    GetEditEnginePtr()->DrawingText( aOutPos, aText, nTextStart, nTextLen, pDXArray,
+                                    GetEditEnginePtr()->DrawingText( aOutPos, aText, nTextStart, nTextLen, pDXArray, pKashidaArray,
                                         aTmpFont, n, rTextPortion.GetRightToLeftLevel(),
                                         !aWrongSpellVector.empty() ? &aWrongSpellVector : nullptr,
                                         pFieldData,
@@ -3656,7 +3682,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                             --nTextLen;
 
                                         // output directly
-                                        aTmpFont.QuickDrawText( &rOutDev, aRealOutPos, aText, nTextStart, nTextLen, pDXArray );
+                                        aTmpFont.QuickDrawText( &rOutDev, aRealOutPos, aText, nTextStart, nTextLen, pDXArray, pKashidaArray );
 
                                         if ( bDrawFrame )
                                         {
@@ -3792,7 +3818,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                     const Color aTextLineColor(rOutDev.GetTextLineColor());
 
                                     GetEditEnginePtr()->DrawingText(
-                                        aTmpPos, OUString(), 0, 0, {},
+                                        aTmpPos, OUString(), 0, 0, {}, {},
                                         aTmpFont, n, 0,
                                         nullptr,
                                         nullptr,
@@ -3841,7 +3867,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                 const Color aTextLineColor(rOutDev.GetTextLineColor());
 
                 GetEditEnginePtr()->DrawingText(
-                    aTmpPos, OUString(), 0, 0, {},
+                    aTmpPos, OUString(), 0, 0, {}, {},
                     aTmpFont, n, 0,
                     nullptr,
                     nullptr,

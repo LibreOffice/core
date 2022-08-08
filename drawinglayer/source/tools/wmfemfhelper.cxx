@@ -1077,6 +1077,7 @@ namespace wmfemfhelper
         sal_uInt16 nTextStart,
         sal_uInt16 nTextLength,
         std::vector< double >&& rDXArray,
+        std::vector< sal_Bool >&& rKashidaArray,
         TargetHolder& rTarget,
         PropertyHolder const & rProperty)
     {
@@ -1161,6 +1162,7 @@ namespace wmfemfhelper
                     nTextStart,
                     nTextLength,
                     std::move(rDXArray),
+                    std::move(rKashidaArray),
                     aFontAttribute,
                     aLocale,
                     aFontColor,
@@ -1189,6 +1191,7 @@ namespace wmfemfhelper
                     nTextStart,
                     nTextLength,
                     std::vector(rDXArray),
+                    std::vector(rKashidaArray),
                     std::move(aFontAttribute),
                     std::move(aLocale),
                     aFontColor);
@@ -1770,6 +1773,7 @@ namespace wmfemfhelper
                             nTextIndex,
                             nTextLength,
                             std::move(aDXArray),
+                            {},
                             rTargetHolders.Current(),
                             rPropertyHolders.Current());
                     }
@@ -1794,6 +1798,7 @@ namespace wmfemfhelper
                         // prepare DXArray (if used)
                         std::vector< double > aDXArray;
                         const std::vector<sal_Int32> & rDXArray = pA->GetDXArray();
+                        std::vector< sal_Bool > aKashidaArray = pA->GetKashidaArray();
 
                         if(!rDXArray.empty())
                         {
@@ -1811,6 +1816,7 @@ namespace wmfemfhelper
                             nTextIndex,
                             nTextLength,
                             std::move(aDXArray),
+                            std::move(aKashidaArray),
                             rTargetHolders.Current(),
                             rPropertyHolders.Current());
                     }
@@ -1874,6 +1880,7 @@ namespace wmfemfhelper
                             nTextIndex,
                             nTextLength,
                             std::move(aTextArray),
+                            {},
                             rTargetHolders.Current(),
                             rPropertyHolders.Current());
                     }

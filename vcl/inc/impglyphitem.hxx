@@ -37,7 +37,6 @@ enum class GlyphItemFlags : sal_uInt16
     IS_DIACRITIC = 0x04,
     IS_VERTICAL = 0x08,
     IS_SPACING = 0x10,
-    ALLOW_KASHIDA = 0x20,
     IS_DROPPED = 0x40,
     IS_CLUSTER_START = 0x80,
     IS_UNSAFE_TO_BREAK = 0x100, // HB_GLYPH_FLAG_UNSAFE_TO_BREAK from harfbuzz
@@ -45,7 +44,7 @@ enum class GlyphItemFlags : sal_uInt16
 };
 namespace o3tl
 {
-template <> struct typed_flags<GlyphItemFlags> : is_typed_flags<GlyphItemFlags, 0x3ff>
+template <> struct typed_flags<GlyphItemFlags> : is_typed_flags<GlyphItemFlags, 0x3df>
 {
 };
 };
@@ -82,7 +81,6 @@ public:
     bool IsDiacritic() const { return bool(m_nFlags & GlyphItemFlags::IS_DIACRITIC); }
     bool IsVertical() const { return bool(m_nFlags & GlyphItemFlags::IS_VERTICAL); }
     bool IsSpacing() const { return bool(m_nFlags & GlyphItemFlags::IS_SPACING); }
-    bool AllowKashida() const { return bool(m_nFlags & GlyphItemFlags::ALLOW_KASHIDA); }
     bool IsDropped() const { return bool(m_nFlags & GlyphItemFlags::IS_DROPPED); }
     bool IsClusterStart() const { return bool(m_nFlags & GlyphItemFlags::IS_CLUSTER_START); }
     bool IsUnsafeToBreak() const { return bool(m_nFlags & GlyphItemFlags::IS_UNSAFE_TO_BREAK); }

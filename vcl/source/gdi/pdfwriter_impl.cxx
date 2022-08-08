@@ -6616,14 +6616,14 @@ void PDFWriterImpl::drawText( const Point& rPos, const OUString& rText, sal_Int3
     const SalLayoutGlyphs* layoutGlyphs = SalLayoutGlyphsCache::self()->
         GetLayoutGlyphs( this, rText, nIndex, nLen );
     std::unique_ptr<SalLayout> pLayout = ImplLayout( rText, nIndex, nLen, rPos,
-        0, {}, SalLayoutFlags::NONE, nullptr, layoutGlyphs );
+        0, {}, {}, SalLayoutFlags::NONE, nullptr, layoutGlyphs );
     if( pLayout )
     {
         drawLayout( *pLayout, rText, bTextLines );
     }
 }
 
-void PDFWriterImpl::drawTextArray( const Point& rPos, const OUString& rText, o3tl::span<const sal_Int32> pDXArray, sal_Int32 nIndex, sal_Int32 nLen )
+void PDFWriterImpl::drawTextArray( const Point& rPos, const OUString& rText, o3tl::span<const sal_Int32> pDXArray, o3tl::span<const sal_Bool> pKashidaArray, sal_Int32 nIndex, sal_Int32 nLen )
 {
     MARK( "drawText with array" );
 
@@ -6633,7 +6633,7 @@ void PDFWriterImpl::drawTextArray( const Point& rPos, const OUString& rText, o3t
     // this also enforces font substitution and sets the font on SalGraphics
     const SalLayoutGlyphs* layoutGlyphs = SalLayoutGlyphsCache::self()->
         GetLayoutGlyphs( this, rText, nIndex, nLen );
-    std::unique_ptr<SalLayout> pLayout = ImplLayout( rText, nIndex, nLen, rPos, 0, pDXArray,
+    std::unique_ptr<SalLayout> pLayout = ImplLayout( rText, nIndex, nLen, rPos, 0, pDXArray, pKashidaArray,
         SalLayoutFlags::NONE, nullptr, layoutGlyphs );
     if( pLayout )
     {
@@ -6652,7 +6652,7 @@ void PDFWriterImpl::drawStretchText( const Point& rPos, sal_uLong nWidth, const 
     const SalLayoutGlyphs* layoutGlyphs = SalLayoutGlyphsCache::self()->
         GetLayoutGlyphs( this, rText, nIndex, nLen, nWidth );
     std::unique_ptr<SalLayout> pLayout = ImplLayout( rText, nIndex, nLen, rPos, nWidth,
-        {}, SalLayoutFlags::NONE, nullptr, layoutGlyphs );
+        {}, {}, SalLayoutFlags::NONE, nullptr, layoutGlyphs );
     if( pLayout )
     {
         drawLayout( *pLayout, rText, true );

@@ -79,7 +79,7 @@ SalLayoutGlyphs* lcl_GetRulerTextGlyphs(const vcl::RenderContext& rRenderContext
     // Calculate glyph items.
 
     std::unique_ptr<SalLayout> pLayout = rRenderContext.ImplLayout(
-        rText, 0, rText.getLength(), Point(0, 0), 0, {}, SalLayoutFlags::GlyphItemsOnly);
+        rText, 0, rText.getLength(), Point(0, 0), 0, {}, {}, SalLayoutFlags::GlyphItemsOnly);
     if (!pLayout)
         return nullptr;
 
@@ -339,7 +339,7 @@ void Ruler::ImplVDrawText(vcl::RenderContext& rRenderContext, tools::Long nX, to
     tools::Rectangle aRect;
     SalLayoutGlyphs* pTextLayout
         = lcl_GetRulerTextGlyphs(rRenderContext, rText, maTextGlyphs[rText]);
-    rRenderContext.GetTextBoundRect(aRect, rText, 0, 0, -1, 0, {}, pTextLayout);
+    rRenderContext.GetTextBoundRect(aRect, rText, 0, 0, -1, 0, {}, {}, pTextLayout);
 
     tools::Long nShiftX = ( aRect.GetWidth() / 2 ) + aRect.Left();
     tools::Long nShiftY = ( aRect.GetHeight() / 2 ) + aRect.Top();
