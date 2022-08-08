@@ -829,8 +829,8 @@ LineFormatter::LineFormatter( ObjectFormatterData& rData, const AutoFormatEntry*
     if( const Theme* pTheme = mrData.mrFilter.getCurrentTheme() )
         if( const LineProperties* pLineProps = pTheme->getLineStyle( pAutoFormatEntry->mnThemedIdx ) )
             *mxAutoLine = *pLineProps;
-    // set automatic border property for chartarea, because of tdf#81437 and tdf#82217
-    if ( eObjType == OBJECTTYPE_CHARTSPACE )
+    // set automatic border property for chartarea, because of tdf#81437 and tdf#82217, except for pptx (tdf#150176)
+    if ( eObjType == OBJECTTYPE_CHARTSPACE && !rData.mrFilter.getFileUrl().endsWithIgnoreAsciiCase(".pptx") )
     {
         mxAutoLine->maLineFill.moFillType = oox::GraphicHelper::getDefaultChartAreaLineStyle();
         mxAutoLine->moLineWidth = oox::GraphicHelper::getDefaultChartAreaLineWidth();
