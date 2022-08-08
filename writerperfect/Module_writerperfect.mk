@@ -20,12 +20,16 @@
 $(eval $(call gb_Module_Module,writerperfect))
 
 $(eval $(call gb_Module_add_targets,writerperfect,\
-    $(if $(ENABLE_WASM_STRIP_BASIC_CALC_DRAW_MATH_IMPRESS),, \
-	Library_wpftcalc \
+    $(if $(ENABLE_WASM_STRIP_BASIC_DRAW_MATH_IMPRESS),, \
 	Library_wpftdraw \
 	Library_wpftimpress \
     ) \
+	$(if $(ENABLE_WASM_STRIP_CALC),, \
+	Library_wpftcalc \
+	) \
+	$(if $(ENABLE_WASM_STRIP_WRITER),, \
 	Library_wpftwriter \
+    ) \
 	Library_writerperfect \
 	UIConfig_writerperfect \
 ))

@@ -2026,6 +2026,12 @@ AC_ARG_ENABLE(wasm-strip,
         [Strip the static build like for WASM/emscripten platform.]),
 ,)
 
+AC_ARG_WITH(main-module,
+    AS_HELP_STRING([--with-main-module=<writer/calc>],
+        [Specify which main module to build for wasm.
+        Default value is 'writer'.]),
+,)
+
 AC_ARG_ENABLE(wasm-exceptions,
     AS_HELP_STRING([--enable-wasm-exceptions],
         [Build with native WASM exceptions (AKA -fwasm-exceptions),
@@ -3047,6 +3053,8 @@ if test "$enable_wasm_strip" = "yes"; then
     test "${with_locales+set}" = set || with_locales=en
 
     AC_DEFINE(ENABLE_WASM_STRIP_ACCESSIBILITY)
+    AC_DEFINE(ENABLE_WASM_STRIP_WRITER)
+    AC_DEFINE(ENABLE_WASM_STRIP_CALC)
     AC_DEFINE(ENABLE_WASM_STRIP_CANVAS)
 #    AC_DEFINE(ENABLE_WASM_STRIP_CHART)
     AC_DEFINE(ENABLE_WASM_STRIP_DBACCESS)
@@ -3060,6 +3068,7 @@ if test "$enable_wasm_strip" = "yes"; then
     AC_DEFINE(ENABLE_WASM_STRIP_RECOVERYUI)
     AC_DEFINE(ENABLE_WASM_STRIP_SPLASH)
     AC_DEFINE(ENABLE_WASM_STRIP_SWEXPORTS)
+    AC_DEFINE(ENABLE_WASM_STRIP_SCEXPORTS)
 fi
 
 EMSCRIPTEN_NEH_MAJOR=3
@@ -3955,12 +3964,21 @@ if test "$cross_compiling" = "yes"; then
     if test "$enable_dynamic_loading" != yes -a "$enable_wasm_strip" = yes; then
         ENABLE_WASM_STRIP=TRUE
     fi
+    if test "$_os" = "Emscripten"; then
+        if test "$with_main_module" = "calc"; then
+            ENABLE_WASM_STRIP_WRITER=TRUE
+        else
+            ENABLE_WASM_STRIP_CALC=TRUE
+        fi
+    fi
 else
     CROSS_COMPILING=
     BUILD_TYPE="$BUILD_TYPE NATIVE"
 fi
 AC_SUBST(CROSS_COMPILING)
 AC_SUBST(ENABLE_WASM_STRIP)
+AC_SUBST(ENABLE_WASM_STRIP_WRITER)
+AC_SUBST(ENABLE_WASM_STRIP_CALC)
 
 # Use -isystem (gcc) if possible, to avoid warnings in 3rd party headers.
 # NOTE: must _not_ be used for bundled external libraries!
@@ -5714,6 +5732,11 @@ if test "$cross_compiling" = "yes"; then
     test "${enable_fuzzers}" = yes && sub_conf_opts="$sub_conf_opts --without-system-libxml"
     if test "$_os" = "Emscripten"; then
         sub_conf_opts="$sub_conf_opts --without-system-libxml --without-system-fontconfig --without-system-freetype --without-system-zlib"
+        if test "${with_main_module+set}" = set; then
+            sub_conf_opts="$sub_conf_opts --with-main-module=${with_main_module}"
+        else
+            sub_conf_opts="$sub_conf_opts --with-main-module=writer"
+        fi
     fi
 
     # Don't bother having configure look for stuff not needed for the build platform anyway
