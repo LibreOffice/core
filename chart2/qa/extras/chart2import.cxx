@@ -85,6 +85,7 @@ public:
     void testTdf126033();
     void testAutoBackgroundXLSX();
     void testAutoChartAreaBorderPropXLSX();
+    void testAutoChartAreaBorderPropPPTX();
     void testChartAreaStyleBackgroundXLSX();
     void testChartHatchFillXLSX();
     void testAxisTextRotationXLSX();
@@ -178,6 +179,7 @@ public:
     CPPUNIT_TEST(testTdf126033);
     CPPUNIT_TEST(testAutoBackgroundXLSX);
     CPPUNIT_TEST(testAutoChartAreaBorderPropXLSX);
+    CPPUNIT_TEST(testAutoChartAreaBorderPropPPTX);
     CPPUNIT_TEST(testChartAreaStyleBackgroundXLSX);
     CPPUNIT_TEST(testChartHatchFillXLSX);
     CPPUNIT_TEST(testAxisTextRotationXLSX);
@@ -1104,6 +1106,20 @@ void Chart2ImportTest::testAutoChartAreaBorderPropXLSX()
         sal_Int32(0xD9D9D9), nColor);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("'Automatic' chartarea border width should be loaded as 0.75 pt (~0.026 cm)",
         sal_Int32(26), nWidth);
+}
+
+void Chart2ImportTest::testAutoChartAreaBorderPropPPTX()
+{
+    load(u"/chart2/qa/extras/data/pptx/", u"tdf150176.pptx");
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
+
+    // Test "Automatic" chartarea border style/color/width.
+    Reference<beans::XPropertySet> xPropSet = xChartDoc->getPageBackground();
+    CPPUNIT_ASSERT(xPropSet.is());
+    drawing::LineStyle eStyle = xPropSet->getPropertyValue("LineStyle").get<drawing::LineStyle>();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("'Automatic' chartarea border should be loaded as none style for pptx.",
+        drawing::LineStyle_NONE, eStyle);
 }
 
 void Chart2ImportTest::testChartAreaStyleBackgroundXLSX()
