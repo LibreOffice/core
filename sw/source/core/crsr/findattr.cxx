@@ -918,7 +918,8 @@ bool FindAttrImpl(SwPaM & rSearchPam,
     bool bCharAttr = isCHRATR(nWhich) || isTXTATR(nWhich);
     assert(isTXTATR(nWhich)); // sw_redlinehide: only works for non-formatting hints such as needed in UpdateFields; use FindAttrsImpl for others
 
-    std::unique_ptr<SwPaM> pPam(sw::MakeRegion(fnMove, rRegion));
+    std::optional<SwPaM> oPam;
+    sw::MakeRegion(fnMove, rRegion, oPam);
 
     bool bFound = false;
     bool bFirst = true;
@@ -927,18 +928,18 @@ bool FindAttrImpl(SwPaM & rSearchPam,
 
     // if at beginning/end then move it out of the node
     if( bSrchForward
-        ? pPam->GetPoint()->GetContentIndex() == pPam->GetContentNode()->Len()
-        : !pPam->GetPoint()->GetContentIndex() )
+        ? oPam->GetPoint()->GetContentIndex() == oPam->GetContentNode()->Len()
+        : !oPam->GetPoint()->GetContentIndex() )
     {
-        if( !(*fnMove.fnNds)( &pPam->GetPoint()->nNode, false ))
+        if( !(*fnMove.fnNds)( &oPam->GetPoint()->nNode, false ))
         {
             return false;
         }
-        SwContentNode *pNd = pPam->GetContentNode();
-        pPam->GetPoint()->nContent.Assign( pNd, bSrchForward ? 0 : pNd->Len() );
+        SwContentNode *pNd = oPam->GetContentNode();
+        oPam->GetPoint()->nContent.Assign( pNd, bSrchForward ? 0 : pNd->Len() );
     }
 
-    while (nullptr != (pNode = ::GetNode(*pPam, bFirst, fnMove, bInReadOnly, pLayout)))
+    while (nullptr != (pNode = ::GetNode(*oPam, bFirst, fnMove, bInReadOnly, pLayout)))
     {
         if( bCharAttr )
         {
@@ -960,9 +961,9 @@ bool FindAttrImpl(SwPaM & rSearchPam,
                         pAttr = iter.NextAttr(&pAttrNode);
                     }
                     while (pAttr
-                        && (pAttrNode->GetIndex() < pPam->GetPoint()->GetNodeIndex()
-                            || (pAttrNode->GetIndex() == pPam->GetPoint()->GetNodeIndex()
-                                && pAttr->GetStart() < pPam->GetPoint()->GetContentIndex())
+                        && (pAttrNode->GetIndex() < oPam->GetPoint()->GetNodeIndex()
+                            || (pAttrNode->GetIndex() == oPam->GetPoint()->GetNodeIndex()
+                                && pAttr->GetStart() < oPam->GetPoint()->GetContentIndex())
                             || pAttr->Which() != nWhich));
                 }
                 else
@@ -973,22 +974,22 @@ bool FindAttrImpl(SwPaM & rSearchPam,
                         pAttr = iter.PrevAttr(&pAttrNode);
                     }
                     while (pAttr
-                        && (pPam->GetPoint()->GetNodeIndex() < pAttrNode->GetIndex()
-                            || (pPam->GetPoint()->GetNodeIndex() == pAttrNode->GetIndex()
-                                && pPam->GetPoint()->GetContentIndex() <= pAttr->GetStart())
+                        && (oPam->GetPoint()->GetNodeIndex() < pAttrNode->GetIndex()
+                            || (oPam->GetPoint()->GetNodeIndex() == pAttrNode->GetIndex()
+                                && oPam->GetPoint()->GetContentIndex() <= pAttr->GetStart())
                             || pAttr->Which() != nWhich));
                 }
                 if (pAttr)
                 {
                     assert(pAttrNode);
-                    pPam->GetPoint()->nNode = *pAttrNode;
-                    lcl_SetAttrPam(*pPam, pAttr->GetStart(), pAttr->End(), bSrchForward);
+                    oPam->GetPoint()->nNode = *pAttrNode;
+                    lcl_SetAttrPam(*oPam, pAttr->GetStart(), pAttr->End(), bSrchForward);
                     bFound = true;
                     break;
                 }
             }
             else if (!pLayout && pNode->GetTextNode()->HasHints() &&
-                lcl_SearchAttr(*pNode->GetTextNode(), *pPam, rAttr, fnMove))
+                lcl_SearchAttr(*pNode->GetTextNode(), *oPam, rAttr, fnMove))
             {
                 bFound = true;
             }
@@ -996,8 +997,8 @@ bool FindAttrImpl(SwPaM & rSearchPam,
             {
                 // set to the values of the attribute
                 rSearchPam.SetMark();
-                *rSearchPam.GetPoint() = *pPam->GetPoint();
-                *rSearchPam.GetMark() = *pPam->GetMark();
+                *rSearchPam.GetPoint() = *oPam->GetPoint();
+                *rSearchPam.GetMark() = *oPam->GetMark();
                 break;
             }
             else if (isTXTATR(nWhich))
@@ -1044,7 +1045,8 @@ static bool FindAttrsImpl(SwPaM & rSearchPam,
         const SwPaM & rRegion, bool bInReadOnly, bool bMoveFirst,
         SwRootFrame const*const pLayout)
 {
-    std::unique_ptr<SwPaM> pPam(sw::MakeRegion(fnMove, rRegion));
+    std::optional<SwPaM> oPam;
+    sw::MakeRegion(fnMove, rRegion, oPam);
 
     bool bFound = false;
     bool bFirst = true;
@@ -1064,18 +1066,18 @@ static bool FindAttrsImpl(SwPaM & rSearchPam,
     // if at beginning/end then move it out of the node
     if( bMoveFirst &&
         ( bSrchForward
-        ? pPam->GetPoint()->GetContentIndex() == pPam->GetContentNode()->Len()
-        : !pPam->GetPoint()->GetContentIndex() ) )
+        ? oPam->GetPoint()->GetContentIndex() == oPam->GetContentNode()->Len()
+        : !oPam->GetPoint()->GetContentIndex() ) )
     {
-        if( !(*fnMove.fnNds)( &pPam->GetPoint()->nNode, false ))
+        if( !(*fnMove.fnNds)( &oPam->GetPoint()->nNode, false ))
         {
             return false;
         }
-        SwContentNode *pNd = pPam->GetContentNode();
-        pPam->GetPoint()->nContent.Assign( pNd, bSrchForward ? 0 : pNd->Len() );
+        SwContentNode *pNd = oPam->GetContentNode();
+        oPam->GetPoint()->nContent.Assign( pNd, bSrchForward ? 0 : pNd->Len() );
     }
 
-    while (nullptr != (pNode = ::GetNode(*pPam, bFirst, fnMove, bInReadOnly, pLayout)))
+    while (nullptr != (pNode = ::GetNode(*oPam, bFirst, fnMove, bInReadOnly, pLayout)))
     {
         SwTextFrame const*const pFrame(pLayout && pNode->IsTextNode()
             ? static_cast<SwTextFrame const*>(pNode->getLayoutFrame(pLayout))
@@ -1100,8 +1102,8 @@ static bool FindAttrsImpl(SwPaM & rSearchPam,
             sw::MergedPara const*const pMergedPara(pFrame ? pFrame->GetMergedPara() : nullptr);
             if (pMergedPara)
             {
-                SwPosition const& rStart(*pPam->Start());
-                SwPosition const& rEnd(*pPam->End());
+                SwPosition const& rStart(*oPam->Start());
+                SwPosition const& rEnd(*oPam->End());
                 // no extents? fall back to searching index 0 of propsnode
                 // to find its node items
                 if (pMergedPara->extents.empty())
@@ -1113,7 +1115,7 @@ static bool FindAttrsImpl(SwPaM & rSearchPam,
                         bFound = (*fnSearch)(*pNode->GetTextNode(), aCmpArr, tmp);
                         if (bFound)
                         {
-                            *pPam = tmp;
+                            *oPam = tmp;
                         }
                     }
                 }
@@ -1153,7 +1155,7 @@ static bool FindAttrsImpl(SwPaM & rSearchPam,
                         bFound = (*fnSearch)(*rExtent.pNode, aCmpArr, tmp);
                         if (bFound)
                         {
-                            *pPam = tmp;
+                            *oPam = tmp;
                             break;
                         }
                     }
@@ -1161,14 +1163,14 @@ static bool FindAttrsImpl(SwPaM & rSearchPam,
             }
             else
             {
-                bFound = (*fnSearch)(*pNode->GetTextNode(), aCmpArr, *pPam);
+                bFound = (*fnSearch)(*pNode->GetTextNode(), aCmpArr, *oPam);
             }
             if (bFound)
             {
                 // set to the values of the attribute
                 rSearchPam.SetMark();
-                *rSearchPam.GetPoint() = *pPam->GetPoint();
-                *rSearchPam.GetMark() = *pPam->GetMark();
+                *rSearchPam.GetPoint() = *oPam->GetPoint();
+                *rSearchPam.GetMark() = *oPam->GetMark();
                 break;
             }
             continue; // text attribute
@@ -1192,14 +1194,14 @@ static bool FindAttrsImpl(SwPaM & rSearchPam,
             // BACKWARD: SPoint at the beginning, GetMark at the end of the node
             if (pFrame)
             {
-                *rSearchPam.GetPoint() = *pPam->GetPoint();
+                *rSearchPam.GetPoint() = *oPam->GetPoint();
                 rSearchPam.SetMark();
                 *rSearchPam.GetMark() = pFrame->MapViewToModelPos(
                     TextFrameIndex(bSrchForward ? pFrame->GetText().getLength() : 0));
             }
             else
             {
-                *rSearchPam.GetPoint() = *pPam->GetPoint();
+                *rSearchPam.GetPoint() = *oPam->GetPoint();
                 rSearchPam.SetMark();
                 if (bSrchForward)
                 {

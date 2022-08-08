@@ -629,22 +629,17 @@ namespace sw {
 
     @param fnMove  Contains information if beginning or end of document.
     @param pOrigRg The given region.
-
-    @return Newly created range, in Ring with parameter pOrigRg.
+    @param rPam    returns newly created range, in Ring with parameter pOrigRg.
 */
-std::unique_ptr<SwPaM> MakeRegion(SwMoveFnCollection const & fnMove,
-        const SwPaM & rOrigRg)
+void MakeRegion(SwMoveFnCollection const & fnMove,
+        const SwPaM & rOrigRg, std::optional<SwPaM>& rPam)
 {
-    std::unique_ptr<SwPaM> pPam;
-    {
-        pPam.reset(new SwPaM(rOrigRg, const_cast<SwPaM*>(&rOrigRg))); // given search range
-        // make sure that SPoint is on the "real" start position
-        // FORWARD: SPoint always smaller than GetMark
-        // BACKWARD: SPoint always bigger than GetMark
-        if( (pPam->GetMark()->*fnMove.fnCmpOp)( *pPam->GetPoint() ) )
-            pPam->Exchange();
-    }
-    return pPam;
+    rPam.emplace(rOrigRg, const_cast<SwPaM*>(&rOrigRg)); // given search range
+    // make sure that SPoint is on the "real" start position
+    // FORWARD: SPoint always smaller than GetMark
+    // BACKWARD: SPoint always bigger than GetMark
+    if( (rPam->GetMark()->*fnMove.fnCmpOp)( *rPam->GetPoint() ) )
+        rPam->Exchange();
 }
 
 } // namespace sw
