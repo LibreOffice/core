@@ -137,7 +137,7 @@ public:
     ScUndoCut(ScDocShell* pNewDocShell,
               const ScRange& aRange, // adjusted for merged cells
               const ScAddress& aOldEnd, // end position without adjustment
-              ScMarkData aMark, // selected sheets
+              const ScMarkData& rMark, // selected sheets
               ScDocumentUniquePtr pNewUndoDoc);
     virtual         ~ScUndoCut() override;
 
@@ -181,7 +181,7 @@ class SC_DLLPUBLIC ScUndoPaste: public ScMultiBlockUndo
 {
 public:
     ScUndoPaste(ScDocShell* pNewDocShell, const ScRangeList& rRanges,
-                ScMarkData aMark,
+                const ScMarkData& rMark,
                 ScDocumentUniquePtr pNewUndoDoc, ScDocumentUniquePtr pNewRedoDoc,
                 InsertDeleteFlags nNewFlags,
                 std::unique_ptr<ScRefUndoData> pRefData,
@@ -249,7 +249,7 @@ class ScUndoDeleteContents: public ScSimpleUndo
 {
 public:
                     ScUndoDeleteContents( ScDocShell* pNewDocShell,
-                                          ScMarkData aMark,
+                                          const ScMarkData& rMark,
                                           const ScRange& rRange,
                                           ScDocumentUniquePtr&& pNewUndoDoc, bool bNewMulti,
                                           InsertDeleteFlags nNewFlags, bool bObjects );
@@ -284,7 +284,7 @@ class ScUndoFillTable: public ScSimpleUndo
 {
 public:
                     ScUndoFillTable( ScDocShell* pNewDocShell,
-                                     ScMarkData aMark,
+                                     const ScMarkData& rMark,
                                      SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                                      SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
                                      ScDocumentUniquePtr pNewUndoDoc, bool bNewMulti, SCTAB nSrc,
@@ -320,7 +320,7 @@ class ScUndoSelectionAttr: public ScSimpleUndo
 {
 public:
                     ScUndoSelectionAttr( ScDocShell* pNewDocShell,
-                                         ScMarkData aMark,
+                                         const ScMarkData& rMark,
                                          SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                                          SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
                                          ScDocumentUniquePtr pNewUndoDoc, bool bNewMulti,
@@ -357,7 +357,7 @@ class ScUndoWidthOrHeight: public ScSimpleUndo
 {
 public:
                     ScUndoWidthOrHeight( ScDocShell* pNewDocShell,
-                                         ScMarkData aMark,
+                                         const ScMarkData& rMark,
                                          SCCOLROW nNewStart, SCTAB nNewStartTab,
                                          SCCOLROW nNewEnd, SCTAB nNewEndTab,
                                          ScDocumentUniquePtr pNewUndoDoc,
@@ -394,7 +394,7 @@ class ScUndoAutoFill: public ScBlockUndo
 public:
                     ScUndoAutoFill( ScDocShell* pNewDocShell,
                                     const ScRange& rRange, const ScRange& rSourceArea,
-                                    ScDocumentUniquePtr pNewUndoDoc, ScMarkData aMark,
+                                    ScDocumentUniquePtr pNewUndoDoc, const ScMarkData& rMark,
                                     FillDir eNewFillDir,
                                     FillCmd eNewFillCmd, FillDateCmd eNewFillDateCmd,
                                     double fNewStartValue, double fNewStepValue, double fNewMaxValue );
@@ -453,7 +453,7 @@ class ScUndoAutoFormat: public ScBlockUndo
 public:
                     ScUndoAutoFormat( ScDocShell* pNewDocShell,
                                       const ScRange& rRange, ScDocumentUniquePtr pNewUndoDoc,
-                                      ScMarkData aMark,
+                                      const ScMarkData& rMark,
                                       bool bNewSize, sal_uInt16 nNewFormatNo );
     virtual         ~ScUndoAutoFormat() override;
 
@@ -476,7 +476,7 @@ class ScUndoReplace: public ScSimpleUndo
 {
 public:
                     ScUndoReplace( ScDocShell* pNewDocShell,
-                                   ScMarkData aMark,
+                                   const ScMarkData& rMark,
                                    SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
                                    OUString aNewUndoStr, ScDocumentUniquePtr pNewUndoDoc,
                                    const SvxSearchItem* pItem );
@@ -537,7 +537,7 @@ class ScUndoConversion : public ScSimpleUndo
 {
 public:
 
-                    ScUndoConversion( ScDocShell* pNewDocShell, ScMarkData aMark,
+                    ScUndoConversion( ScDocShell* pNewDocShell, const ScMarkData& rMark,
                                       SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, ScDocumentUniquePtr pNewUndoDoc,
                                       SCCOL nNewX, SCROW nNewY, SCTAB nNewZ, ScDocumentUniquePtr pNewRedoDoc,
                                       ScConversionParam aConvParam );
@@ -568,7 +568,7 @@ class ScUndoRefConversion: public ScSimpleUndo
 {
 public:
                     ScUndoRefConversion( ScDocShell* pNewDocShell,
-                                         const ScRange& aMarkRange, ScMarkData aMark,
+                                         const ScRange& aMarkRange, const ScMarkData& rMark,
                                          ScDocumentUniquePtr pNewUndoDoc, ScDocumentUniquePtr pNewRedoDoc, bool bNewMulti);
     virtual         ~ScUndoRefConversion() override;
 
@@ -659,7 +659,7 @@ class ScUndoUseScenario: public ScSimpleUndo
 {
 public:
                     ScUndoUseScenario( ScDocShell* pNewDocShell,
-                                       ScMarkData aMark,
+                                       const ScMarkData& rMark,
                                        const ScArea& rDestArea, ScDocumentUniquePtr pNewUndoDoc,
                                        OUString aNewName );
     virtual         ~ScUndoUseScenario() override;
@@ -683,7 +683,7 @@ class ScUndoSelectionStyle: public ScSimpleUndo
 {
 public:
                     ScUndoSelectionStyle( ScDocShell* pNewDocShell,
-                                          ScMarkData aMark,
+                                          const ScMarkData& rMark,
                                           const ScRange& rRange,
                                           OUString aName,
                                           ScDocumentUniquePtr pNewUndoDoc );

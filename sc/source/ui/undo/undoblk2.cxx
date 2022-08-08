@@ -31,17 +31,16 @@
 #include <undoolk.hxx>
 
 #include <svx/svdundo.hxx>
-#include <utility>
 
 /** Change column widths or row heights */
 ScUndoWidthOrHeight::ScUndoWidthOrHeight( ScDocShell* pNewDocShell,
-                ScMarkData aMark,
+                const ScMarkData& rMark,
                 SCCOLROW nNewStart, SCTAB nNewStartTab, SCCOLROW nNewEnd, SCTAB nNewEndTab,
                 ScDocumentUniquePtr pNewUndoDoc, std::vector<sc::ColRowSpan>&& rRanges,
                 std::unique_ptr<ScOutlineTable> pNewUndoTab,
                 ScSizeMode eNewMode, sal_uInt16 nNewSizeTwips, bool bNewWidth ) :
     ScSimpleUndo( pNewDocShell ),
-    aMarkData(std::move( aMark )),
+    aMarkData( rMark ),
     nStart( nNewStart ),
     nEnd( nNewEnd ),
     nStartTab( nNewStartTab ),
