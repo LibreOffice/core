@@ -218,7 +218,7 @@ public:
 
 private:
     SwWrtShell& m_rWrtShell;
-    std::unique_ptr<SwPaM> m_pPaM;
+    std::optional<SwPaM> m_oPaM;
     sal_Int32 m_nStartContent = 0;
 };
 
@@ -1293,11 +1293,11 @@ void SwPasteContext::remember()
 
     // Set point to the previous node, so it is not moved.
     const SwNodeIndex& rNodeIndex = pCursor->GetPoint()->nNode;
-    m_pPaM.reset(new SwPaM(rNodeIndex, rNodeIndex, SwNodeOffset(0), SwNodeOffset(-1)));
+    m_oPaM.emplace(rNodeIndex, rNodeIndex, SwNodeOffset(0), SwNodeOffset(-1));
     m_nStartContent = pCursor->GetPoint()->GetContentIndex();
 }
 
-void SwPasteContext::forget() { m_pPaM.reset(); }
+void SwPasteContext::forget() { m_oPaM.reset(); }
 
 SwPasteContext::~SwPasteContext()
 {
@@ -1324,7 +1324,7 @@ SwPasteContext::~SwPasteContext()
 
             default:
             {
-                if (!m_pPaM)
+                if (!m_oPaM)
                     return;
 
                 SwPaM* pCursor = m_rWrtShell.GetCursor();
@@ -1336,21 +1336,21 @@ SwPasteContext::~SwPasteContext()
                     return;
 
                 // Update mark after paste.
-                *m_pPaM->GetMark() = *pCursor->GetPoint();
+                *m_oPaM->GetMark() = *pCursor->GetPoint();
 
                 // Restore point.
-                ++m_pPaM->GetPoint()->nNode;
-                SwNode& rNode = m_pPaM->GetNode();
+                ++m_oPaM->GetPoint()->nNode;
+                SwNode& rNode = m_oPaM->GetNode();
                 if (!rNode.IsTextNode())
                     // Starting point is no longer text.
                     return;
 
-                m_pPaM->GetPoint()->nContent.Assign(static_cast<SwContentNode*>(&rNode),
+                m_oPaM->GetPoint()->nContent.Assign(static_cast<SwContentNode*>(&rNode),
                                                     m_nStartContent);
 
                 aPropertyValue.Name = "TextRange";
                 const uno::Reference<text::XTextRange> xTextRange = SwXTextRange::CreateXTextRange(
-                    m_pPaM->GetDoc(), *m_pPaM->GetPoint(), m_pPaM->GetMark());
+                    m_oPaM->GetDoc(), *m_oPaM->GetPoint(), m_oPaM->GetMark());
                 aPropertyValue.Value <<= xTextRange;
                 break;
             }
