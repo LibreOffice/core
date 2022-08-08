@@ -211,12 +211,11 @@ std::unique_ptr<SfxChildWindow> SfxChildWindow::CreateChildWindow( sal_uInt16 nI
         pFact = pApp->GetChildWinFactoryById(nId);
         if ( pFact )
         {
-            SfxChildWinInfo& rFactInfo = pFact->aInfo;
             if ( rInfo.bVisible )
             {
                 if ( pBindings )
                     pBindings->ENTERREGISTRATIONS();
-                SfxChildWinInfo aInfo = rFactInfo;
+                SfxChildWinInfo aInfo = rInfo;
                 Application::SetSystemWindowMode( SystemWindowFlags::NOAUTOMODE );
                 pChild = pFact->pCtor( pParent, nId, pBindings, &aInfo );
                 Application::SetSystemWindowMode( nOldMode );
