@@ -33,7 +33,7 @@
 
 #include <comphelper/flagguard.hxx>
 #include <vcl/accessiblefactory.hxx>
-#include <vcl/scrbar.hxx>
+#include <vcl/toolkit/scrbar.hxx>
 #include <vcl/seleng.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/image.hxx>

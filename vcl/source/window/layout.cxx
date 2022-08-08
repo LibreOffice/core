@@ -44,7 +44,7 @@
 #include <vcl/help.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/scrbar.hxx>
+#include <vcl/toolkit/scrbar.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/split.hxx>
 #include <vcl/svapp.hxx>

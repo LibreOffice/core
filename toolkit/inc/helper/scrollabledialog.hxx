@@ -21,7 +21,7 @@
 #define INCLUDED_TOOLKIT_AWT_SCROLLABLEDIALOG_HXX
 
 #include <vcl/toolkit/dialog.hxx>
-#include <vcl/scrbar.hxx>
+#include <vcl/toolkit/scrbar.hxx>
 
 namespace toolkit
 {

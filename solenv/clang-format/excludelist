@@ -6386,7 +6386,6 @@ include/vcl/salgtype.hxx
 include/vcl/salnativewidgets.hxx
 include/vcl/scheduler.hxx
 include/vcl/scopedbitmapaccess.hxx
-include/vcl/scrbar.hxx
 include/vcl/seleng.hxx
 include/vcl/settings.hxx
 include/vcl/split.hxx
@@ -6428,6 +6427,7 @@ include/vcl/toolkit/menubtn.hxx
 include/vcl/toolkit/morebtn.hxx
 include/vcl/toolkit/prgsbar.hxx
 include/vcl/toolkit/roadmap.hxx
+include/vcl/toolkit/scrbar.hxx
 include/vcl/toolkit/spin.hxx
 include/vcl/toolkit/spinfld.hxx
 include/vcl/toolkit/svlbitm.hxx

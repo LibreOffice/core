@@ -44,7 +44,7 @@
 #include <vcl/toolkit/menubtn.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/toolkit/prgsbar.hxx>
-#include <vcl/scrbar.hxx>
+#include <vcl/toolkit/scrbar.hxx>
 #include <vcl/split.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolkit/svtabbx.hxx>

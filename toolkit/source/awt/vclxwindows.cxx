@@ -52,7 +52,7 @@
 #include <vcl/toolkit/imgctrl.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/toolkit/prgsbar.hxx>
-#include <vcl/scrbar.hxx>
+#include <vcl/toolkit/scrbar.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>
