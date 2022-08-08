@@ -578,15 +578,15 @@ SwFormatFooter* SwFormatFooter::Clone( SfxItemPool* ) const
 // Partially implemented inline in hxx
 SwFormatContent::SwFormatContent( const SwFormatContent &rCpy )
     : SfxPoolItem( RES_CNTNT )
+    , m_oStartNode( rCpy.m_oStartNode )
 {
-    m_pStartNode.reset( rCpy.GetContentIdx() ?
-                      new SwNodeIndex( *rCpy.GetContentIdx() ) : nullptr);
 }
 
 SwFormatContent::SwFormatContent( const SwStartNode *pStartNd )
     : SfxPoolItem( RES_CNTNT )
 {
-    m_pStartNode.reset( pStartNd ? new SwNodeIndex( *pStartNd ) : nullptr);
+    if (pStartNd)
+        m_oStartNode = *pStartNd;
 }
 
 SwFormatContent::~SwFormatContent()
@@ -595,17 +595,16 @@ SwFormatContent::~SwFormatContent()
 
 void SwFormatContent::SetNewContentIdx( const SwNodeIndex *pIdx )
 {
-    m_pStartNode.reset( pIdx ? new SwNodeIndex( *pIdx ) : nullptr );
+    if (pIdx)
+        m_oStartNode = *pIdx;
+    else
+        m_oStartNode.reset();
 }
 
 bool SwFormatContent::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    if( static_cast<bool>(m_pStartNode) != static_cast<bool>(static_cast<const SwFormatContent&>(rAttr).m_pStartNode) )
-        return false;
-    if( m_pStartNode )
-        return ( *m_pStartNode == *static_cast<const SwFormatContent&>(rAttr).GetContentIdx() );
-    return true;
+    return m_oStartNode == static_cast<const SwFormatContent&>(rAttr).m_oStartNode;
 }
 
 SwFormatContent* SwFormatContent::Clone( SfxItemPool* ) const
@@ -617,13 +616,13 @@ void SwFormatContent::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatContent"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    if (m_pStartNode)
+    if (m_oStartNode)
     {
         (void)xmlTextWriterWriteAttribute(
             pWriter, BAD_CAST("startNode"),
-            BAD_CAST(OString::number(sal_Int32(m_pStartNode->GetNode().GetIndex())).getStr()));
+            BAD_CAST(OString::number(sal_Int32(m_oStartNode->GetNode().GetIndex())).getStr()));
         (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("startNodePtr"), "%p",
-                                          &m_pStartNode->GetNode());
+                                          &m_oStartNode->GetNode());
     }
     (void)xmlTextWriterEndElement(pWriter);
 }
