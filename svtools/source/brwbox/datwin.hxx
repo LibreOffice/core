@@ -22,7 +22,6 @@
 #include <svtools/brwbox.hxx>
 #include <tools/long.hxx>
 #include <utility>
-#include <vcl/scrbar.hxx>
 
 #include <limits>
 

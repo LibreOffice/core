@@ -137,7 +137,6 @@ public:
 };
 
 class BrowseBox;
-class ScrollBarBox;
 class BrowserMouseEvent;
 
 class BrowserDataWin final
@@ -147,7 +146,6 @@ class BrowserDataWin final
 {
 public:
     VclPtr<BrowserHeader> pHeaderBar;     // only for BrowserMode::HEADERBAR_NEW
-    VclPtr<ScrollBarBox>  pCornerWin;     // Window in the corner btw the ScrollBars
     bool            bInDtor;
     AutoTimer       aMouseTimer;    // recalls MouseMove on dragging out
     MouseEvent      aRepeatEvt;     // a MouseEvent to repeat
@@ -277,6 +275,8 @@ private:
     VclPtr<MeasureStatusBar> aStatusBarHeight; // statusbar, just to measure its height
 
     tools::Long     m_nDataRowHeight; // height of a single data-row
+    tools::Long     m_nCornerSize; // size of scrollbox corner
+    tools::Long     m_nActualCornerWidth; // size of scrollbox corner
     sal_uInt16      nTitleLines;    // number of lines in title row
     sal_uLong       nControlAreaWidth; // width of fixed area beneath hscroll
     bool            bColumnCursor;  // single columns and fields selectable

@@ -543,7 +543,6 @@ void BrowseBox::Resize()
 
 void BrowseBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
-
     // initializations
     if (!bBootstrapped && IsReallyVisible())
         BrowseBox::StateChanged(StateChangedType::InitShow);
@@ -627,6 +626,18 @@ void BrowseBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
         rRenderContext.SetLineColor(aColFace);
         rRenderContext.DrawRect(tools::Rectangle(Point(nX, 0),
                                           Point(rRect.Right(), GetTitleHeight() - 2 )));
+        rRenderContext.Pop();
+    }
+
+    if (m_nActualCornerWidth)
+    {
+        const StyleSettings &rSettings = rRenderContext.GetSettings().GetStyleSettings();
+        Color aColFace(rSettings.GetFaceColor());
+        rRenderContext.Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
+        rRenderContext.SetFillColor(aColFace);
+        rRenderContext.SetLineColor(aColFace);
+        rRenderContext.DrawRect(tools::Rectangle(Point(GetOutputSizePixel().Width() - m_nActualCornerWidth, aHScroll->GetPosPixel().Y()),
+                                                 Size(m_nActualCornerWidth, m_nCornerSize)));
         rRenderContext.Pop();
     }
 }
@@ -1048,9 +1059,9 @@ void BrowseBox::UpdateScrollbars()
     pDataWin->bInUpdateScrollbars = true;
 
     // the size of the corner window (and the width of the VSB/height of the HSB)
-    sal_uLong nCornerSize = GetBarHeight();
+    m_nCornerSize = GetBarHeight();
     if (IsZoom())
-        nCornerSize = static_cast<sal_uLong>(nCornerSize * static_cast<double>(GetZoom()));
+        m_nCornerSize = static_cast<sal_uLong>(m_nCornerSize * static_cast<double>(GetZoom()));
 
     bool bNeedsVScroll = false;
     sal_Int32 nMaxRows = 0;
@@ -1076,7 +1087,7 @@ void BrowseBox::UpdateScrollbars()
     else if ( !pVScroll->IsVisible() )
     {
         Size aNewSize( aDataWinSize );
-        aNewSize.setWidth( GetOutputSizePixel().Width() - nCornerSize );
+        aNewSize.setWidth( GetOutputSizePixel().Width() - m_nCornerSize );
         aDataWinSize = aNewSize;
     }
 
@@ -1095,12 +1106,12 @@ void BrowseBox::UpdateScrollbars()
         }
         aDataWinSize.setHeight( GetOutputSizePixel().Height() - GetTitleHeight() );
         if ( nControlAreaWidth != USHRT_MAX )
-            aDataWinSize.AdjustHeight( -sal_Int32(nCornerSize) );
+            aDataWinSize.AdjustHeight( -sal_Int32(m_nCornerSize) );
     }
     else if ( !aHScroll->IsVisible() )
     {
         Size aNewSize( aDataWinSize );
-        aNewSize.setHeight( GetOutputSizePixel().Height() - GetTitleHeight() - nCornerSize );
+        aNewSize.setHeight( GetOutputSizePixel().Height() - GetTitleHeight() - m_nCornerSize );
         aDataWinSize = aNewSize;
     }
 
@@ -1110,8 +1121,8 @@ void BrowseBox::UpdateScrollbars()
         : nControlAreaWidth;
 
     aHScroll->SetPosSizePixel(
-        Point( nHScrX, GetOutputSizePixel().Height() - nCornerSize ),
-        Size( aDataWinSize.Width() - nHScrX, nCornerSize ) );
+        Point( nHScrX, GetOutputSizePixel().Height() - m_nCornerSize ),
+        Size( aDataWinSize.Width() - nHScrX, m_nCornerSize ) );
 
     // total scrollable columns
     short nScrollCols = short(mvCols.size()) - static_cast<short>(nFrozenCols);
@@ -1152,7 +1163,7 @@ void BrowseBox::UpdateScrollbars()
     pVScroll->SetRange( Range( 0, nRowCount ) );
     pVScroll->SetPosSizePixel(
         Point( aDataWinSize.Width(), GetTitleHeight() ),
-        Size( nCornerSize, aDataWinSize.Height()) );
+        Size( m_nCornerSize, aDataWinSize.Height()) );
     tools::Long nLclDataRowHeight = GetDataRowHeight();
     if ( nLclDataRowHeight > 0 && nRowCount < tools::Long( aDataWinSize.Height() / nLclDataRowHeight ) )
         ScrollRows( -nTopRow );
@@ -1165,29 +1176,18 @@ void BrowseBox::UpdateScrollbars()
 
     // needs corner-window?
     // (do that AFTER positioning BOTH scrollbars)
-    sal_uLong nActualCorderWidth = 0;
+    m_nActualCornerWidth = 0;
     if (aHScroll->IsVisible() && pVScroll && pVScroll->IsVisible() )
     {
         // if we have both scrollbars, the corner window fills the point of intersection of these two
-        nActualCorderWidth = nCornerSize;
+        m_nActualCornerWidth = m_nCornerSize;
     }
     else if ( !aHScroll->IsVisible() && ( nControlAreaWidth != USHRT_MAX ) )
     {
         // if we have no horizontal scrollbar, but a control area, we need the corner window to
         // fill the space between the control are and the right border
-        nActualCorderWidth = GetOutputSizePixel().Width() - nControlAreaWidth;
+        m_nActualCornerWidth = GetOutputSizePixel().Width() - nControlAreaWidth;
     }
-    if ( nActualCorderWidth )
-    {
-        if ( !pDataWin->pCornerWin )
-            pDataWin->pCornerWin = VclPtr<ScrollBarBox>::Create( this, 0 );
-        pDataWin->pCornerWin->SetPosSizePixel(
-            Point( GetOutputSizePixel().Width() - nActualCorderWidth, aHScroll->GetPosPixel().Y() ),
-            Size( nActualCorderWidth, nCornerSize ) );
-        pDataWin->pCornerWin->Show();
-    }
-    else
-        pDataWin->pCornerWin.disposeAndClear();
 
     // scroll headerbar, if necessary
     if ( pDataWin->pHeaderBar )
