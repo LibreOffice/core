@@ -54,7 +54,7 @@ public:
 
     void RedlineToDoc( SwPaM const & rPam );
 
-    SwNodeIndex* GetMvSttIdx() const
+    const SwNodeIndex* GetMvSttIdx() const
     {
         return SwUndoSaveSection::GetMvSttIdx();
     }
