@@ -221,13 +221,13 @@ void SwUndoInserts::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 SwUndoInserts::~SwUndoInserts()
 {
-    if (m_pUndoNodeIndex) // delete also the section from UndoNodes array
+    if (m_oUndoNodeIndex) // delete also the section from UndoNodes array
     {
         // Insert saves content in IconSection
-        SwNodes& rUNds = m_pUndoNodeIndex->GetNodes();
-        rUNds.Delete(*m_pUndoNodeIndex,
-            rUNds.GetEndOfExtras().GetIndex() - m_pUndoNodeIndex->GetIndex());
-        m_pUndoNodeIndex.reset();
+        SwNodes& rUNds = m_oUndoNodeIndex->GetNodes();
+        rUNds.Delete(*m_oUndoNodeIndex,
+            rUNds.GetEndOfExtras().GetIndex() - m_oUndoNodeIndex->GetIndex());
+        m_oUndoNodeIndex.reset();
     }
     m_pFrameFormats.reset();
     m_pRedlineData.reset();
@@ -311,9 +311,8 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
         m_nNodeDiff += nTmp - rPam.GetMark()->GetNodeIndex();
         if( *rPam.GetPoint() != *rPam.GetMark() )
         {
-            m_pUndoNodeIndex.reset(
-                    new SwNodeIndex(rDoc.GetNodes().GetEndOfContent()));
-            MoveToUndoNds(rPam, m_pUndoNodeIndex.get());
+            m_oUndoNodeIndex.emplace(rDoc.GetNodes().GetEndOfContent());
+            MoveToUndoNds(rPam, &*m_oUndoNodeIndex);
 
             if (m_nDeleteTextNodes == SwNodeOffset(0))
             {
@@ -387,16 +386,16 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
     m_pHistory->SetTmpEnd( m_nSetPos );
 
     // retrieve start position for rollback
-    if( ( m_nSttNode != m_nEndNode || m_nSttContent != m_nEndContent ) && m_pUndoNodeIndex)
+    if( ( m_nSttNode != m_nEndNode || m_nSttContent != m_nEndContent ) && m_oUndoNodeIndex)
     {
         auto const pFlysAtInsPos(sw::GetFlysAnchoredAt(rDoc,
             rPam.GetPoint()->GetNodeIndex()));
 
         const bool bMvBkwrd = MovePtBackward(rPam);
 
-        // re-insert content again (first detach m_pUndoNodeIndex!)
-        SwNodeOffset const nMvNd = m_pUndoNodeIndex->GetIndex();
-        m_pUndoNodeIndex.reset();
+        // re-insert content again (first detach m_oUndoNodeIndex!)
+        SwNodeOffset const nMvNd = m_oUndoNodeIndex->GetIndex();
+        m_oUndoNodeIndex.reset();
         MoveFromUndoNds(rDoc, nMvNd, *rPam.GetMark());
         if (m_nDeleteTextNodes != SwNodeOffset(0))
         {
