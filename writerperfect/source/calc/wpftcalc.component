@@ -23,6 +23,7 @@
       constructor="org_libreoffice_comp_Calc_NumbersImportFilter_get_implementation">
     <service name="com.sun.star.document.ImportFilter"/>
     <service name="com.sun.star.document.ExtendedTypeDetection"/>
+    <optional/>
   </implementation>
   <implementation name="org.libreoffice.comp.Calc.StarOfficeCalcImportFilter"
       constructor="org_libreoffice_comp_Calc_StarOfficeCalcImportFilter_get_implementation">

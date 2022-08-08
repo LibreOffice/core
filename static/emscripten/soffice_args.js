@@ -1,6 +1,6 @@
 Module['arguments'] = [
     '--norestore',
     '--nologo',
-    '--writer',
-    '/android/default-document/example.odt'
+    '--calc',
+    '/android/default-document/example_test.ods'
 ];

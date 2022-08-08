@@ -3048,7 +3048,7 @@ if test "$enable_wasm_strip" = "yes"; then
     test "${with_fonts+set}" = set || with_fonts=yes
     test "${with_locales+set}" = set || with_locales=en
 
-    AC_DEFINE(ENABLE_WASM_STRIP_ACCESSIBILITY)
+#    AC_DEFINE(ENABLE_WASM_STRIP_ACCESSIBILITY)
     AC_DEFINE(ENABLE_WASM_STRIP_CANVAS)
 #    AC_DEFINE(ENABLE_WASM_STRIP_CHART)
     AC_DEFINE(ENABLE_WASM_STRIP_DBACCESS)
@@ -3062,6 +3062,7 @@ if test "$enable_wasm_strip" = "yes"; then
     AC_DEFINE(ENABLE_WASM_STRIP_RECOVERYUI)
     AC_DEFINE(ENABLE_WASM_STRIP_SPLASH)
     AC_DEFINE(ENABLE_WASM_STRIP_SWEXPORTS)
+    AC_DEFINE(ENABLE_WASM_STRIP_SCEXPORTS)
 fi
 
 EMSCRIPTEN_NEH_MAJOR=3

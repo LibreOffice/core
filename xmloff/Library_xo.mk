@@ -24,10 +24,8 @@ $(eval $(call gb_Library_set_componentfile,xo,xmloff/util/xo,services))
 $(eval $(call gb_Library_add_componentimpls,xo, \
     $(if $(ENABLE_WASM_STRIP_CHART),,chart) \
     draw \
-    $(if $(ENABLE_WASM_STRIP_BASIC_CALC_DRAW_MATH_IMPRESS),, \
-        impress \
-        writer \
-    ) \
+    impress \
+    writer \
 ))
 
 $(eval $(call gb_Library_set_precompiled_header,xo,xmloff/inc/pch/precompiled_xo))
