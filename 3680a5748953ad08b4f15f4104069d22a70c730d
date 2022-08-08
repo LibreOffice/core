@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4f2713fa_b3f77199",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-08-08T07:12:59Z",
+      "side": 1,
+      "message": "\u003e I didn\u0027t check, but in case bridges/source/cpp_uno/gcc3_linux_loongarch64/ is a close duplicate of e.g. bridges/source/cpp_uno/gcc3_linux_mips64/, it might make more sense to reuse the latter with whatever #if\u0027s added for the differences.\n\nCan you please briefly comment on this?  (The differences to any existing bridges/source/cpp_uno/gcc3_linux_*/ are rather large, or you didn\u0027t reuse an existing one for a different reason, or...?)",
+      "parentUuid": "794384e2_cd5c844a",
+      "revId": "3680a5748953ad08b4f15f4104069d22a70c730d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2a6813ae_7a10fe93",
         "filename": "bridges/source/cpp_uno/gcc3_linux_loongarch64/call.hxx",
         "patchSetId": 1
@@ -95,6 +113,30 @@
       "writtenOn": "2022-08-03T19:57:16Z",
       "side": 1,
       "message": "The convention is to format newly added C/C++ source files with clang-format, instead of adding them to this excludelist.",
+      "range": {
+        "startLine": 475,
+        "startChar": 0,
+        "endLine": 479,
+        "endChar": 57
+      },
+      "revId": "3680a5748953ad08b4f15f4104069d22a70c730d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bd1757b_4f4205db",
+        "filename": "solenv/clang-format/excludelist",
+        "patchSetId": 1
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-08-08T07:12:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0ec1922f_335e7b15",
       "range": {
         "startLine": 475,
         "startChar": 0,
