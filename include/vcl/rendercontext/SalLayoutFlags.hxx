@@ -30,7 +30,6 @@ enum class SalLayoutFlags
     DisableKerning = 0x0010,
     KerningAsian = 0x0020,
     Vertical = 0x0040,
-    KashidaJustification = 0x0800,
     ForFallback = 0x2000,
     GlyphItemsOnly = 0x4000,
 };

@@ -590,7 +590,7 @@ SalLayoutGlyphs* ImplEntryType::GetTextGlyphs(const OutputDevice* pOutputDevice)
         return &maStrGlyphs;
 
     std::unique_ptr<SalLayout> pLayout = pOutputDevice->ImplLayout(
-        maStr, 0, maStr.getLength(), Point(0, 0), 0, {}, SalLayoutFlags::GlyphItemsOnly);
+        maStr, 0, maStr.getLength(), Point(0, 0), 0, {}, {}, SalLayoutFlags::GlyphItemsOnly);
     if (!pLayout)
         return nullptr;
 
