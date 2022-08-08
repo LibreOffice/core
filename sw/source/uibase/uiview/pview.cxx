@@ -22,7 +22,6 @@
 #include <sfx2/objface.hxx>
 #include <vcl/help.hxx>
 #include <vcl/commandevent.hxx>
-#include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
@@ -1143,7 +1142,6 @@ SwPagePreview::SwPagePreview(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
     m_sPageStr(SwResId(STR_PAGE)),
     m_pHScrollbar(nullptr),
     m_pVScrollbar(nullptr),
-    m_pScrollFill(VclPtr<ScrollBarBox>::Create( &pViewFrame->GetWindow(), WB_SIZEABLE )),
     mnPageCount( 0 ),
     mbResetFormDesignMode( false ),
     mbFormDesignModeToReset( false )
@@ -1219,7 +1217,6 @@ SwPagePreview::~SwPagePreview()
     delete pVShell;
 
     m_pViewWin.disposeAndClear();
-    m_pScrollFill.disposeAndClear();
     m_pHScrollbar.disposeAndClear();
     m_pVScrollbar.disposeAndClear();
 }
@@ -1308,7 +1305,7 @@ void  SwPagePreview::InnerResizePixel( const Point &rOfst, const Size &rSize, bo
     aRect += aBorder;
     ViewResizePixel( *m_pViewWin->GetOutDev(), aRect.TopLeft(), aRect.GetSize(),
                     m_pViewWin->GetOutputSizePixel(),
-                    *m_pVScrollbar, *m_pHScrollbar, *m_pScrollFill );
+                    *m_pVScrollbar, *m_pHScrollbar );
 
     // Never set EditWin !
     // Never set VisArea !
@@ -1336,7 +1333,7 @@ void SwPagePreview::OuterResizePixel( const Point &rOfst, const Size &rSize )
     SvBorder aBorderNew;
     CalcAndSetBorderPixel( aBorderNew );
     ViewResizePixel( *m_pViewWin->GetOutDev(), rOfst, rSize, m_pViewWin->GetOutputSizePixel(),
-                    *m_pVScrollbar, *m_pHScrollbar, *m_pScrollFill );
+                    *m_pVScrollbar, *m_pHScrollbar );
 }
 
 void SwPagePreview::SetVisArea( const tools::Rectangle &rRect )
@@ -1632,7 +1629,6 @@ void SwPagePreview::ScrollViewSzChg()
 
         ShowHScrollbar(bShowHScrollbar);
     }
-    m_pScrollFill->Show(bShowVScrollbar && bShowHScrollbar);
 }
 
 void SwPagePreview::ScrollDocSzChg()

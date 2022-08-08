@@ -847,7 +847,6 @@ void ViewResizePixel( const vcl::RenderContext &rRef,
                     const Size &rEditSz,
                     SwScrollbar& rVScrollbar,
                     SwScrollbar& rHScrollbar,
-                    vcl::Window& rScrollBarBox,
                     SvxRuler* pVRuler,
                     SvxRuler* pHRuler,
                     bool bVRulerRight )
@@ -935,8 +934,6 @@ void ViewResizePixel( const vcl::RenderContext &rRef,
 
         aScrollFillPos.setX( aPos.X() );
     }
-
-    rScrollBarBox.SetPosSizePixel(aScrollFillPos, Size(nVBSzWidth, nHBSzHeight));
 }
 
 void SwView::ShowAtResize()
@@ -987,7 +984,7 @@ void SwView::InnerResizePixel( const Point &rOfst, const Size &rSize, bool )
 
         Size aEditSz( GetEditWin().GetOutputSizePixel() );
         ViewResizePixel( *GetEditWin().GetOutDev(), rOfst, aSz, aEditSz, *m_pVScrollbar,
-                            *m_pHScrollbar, *m_pScrollFill, m_pVRuler, m_pHRuler,
+                            *m_pHScrollbar, m_pVRuler, m_pHRuler,
                             m_pWrtShell->GetViewOptions()->IsVRulerRight());
         if ( m_bShowAtResize )
             ShowAtResize();
@@ -1083,7 +1080,7 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
         CalcAndSetBorderPixel( aBorder );
         const Size aEditSz( GetEditWin().GetOutputSizePixel() );
         ViewResizePixel( *GetEditWin().GetOutDev(), rOfst, rSize, aEditSz, *m_pVScrollbar,
-                                *m_pHScrollbar, *m_pScrollFill, m_pVRuler, m_pHRuler,
+                                *m_pHScrollbar, m_pVRuler, m_pHRuler,
                                 m_pWrtShell->GetViewOptions()->IsVRulerRight() );
         if ( m_bShowAtResize )
             ShowAtResize();
@@ -1185,7 +1182,6 @@ bool SwView::UpdateScrollbars()
             m_pHScrollbar->ViewPortChgd( aTmpRect );
             if ( bHScrollVisible != m_pHScrollbar->IsScrollbarVisible(true) )
                 bRet = true;
-            m_pScrollFill->Show(m_pHScrollbar->IsScrollbarVisible(true) && m_pVScrollbar->IsScrollbarVisible(true) );
         }
     }
     return bRet;
