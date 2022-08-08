@@ -16,6 +16,7 @@
 #include "clang/AST/ExprCXX.h"
 #include "clang/Basic/SourceManager.h"
 #include "clang/Basic/Specifiers.h"
+#include "llvm/ADT/Optional.h"
 #include "llvm/ADT/StringExtras.h"
 #include "llvm/Support/FileSystem.h"
 
@@ -23,6 +24,24 @@
 
 // Compatibility wrapper to abstract over (trivial) changes in the Clang API:
 namespace compat {
+
+template<typename T>
+constexpr bool has_value(llvm::Optional<T> const & o) {
+#if CLANG_VERSION >= 150000
+    return o.has_value();
+#else
+    return o.hasValue();
+#endif
+}
+
+template<typename T>
+constexpr T const & value(llvm::Optional<T> const & o) {
+#if CLANG_VERSION >= 150000
+    return o.value();
+#else
+    return o.getValue();
+#endif
+}
 
 inline std::string toString(llvm::APSInt const & i, unsigned radix) {
 #if CLANG_VERSION >= 130000
