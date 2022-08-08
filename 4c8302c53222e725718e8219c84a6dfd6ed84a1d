@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60587f40_141583b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-08-08T15:15:12Z",
+      "side": 1,
+      "message": "Hi Caolán,\nanother one that needs reviewing.\nThanks in advance",
+      "revId": "4c8302c53222e725718e8219c84a6dfd6ed84a1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
