@@ -444,7 +444,7 @@ SwRewriter SwUndoDelLayFormat::GetRewriter() const
 
     if (pDoc)
     {
-        SwNodeIndex* pIdx = GetMvSttIdx();
+        const SwNodeIndex* pIdx = GetMvSttIdx();
         if( SwNodeOffset(1) == GetMvNodeCnt() && pIdx)
         {
             SwNode *const pNd = & pIdx->GetNode();
