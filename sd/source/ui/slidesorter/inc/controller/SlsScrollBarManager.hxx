@@ -23,7 +23,6 @@
 #include <tools/gen.hxx>
 #include <svtools/scrolladaptor.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/scrbar.hxx>
 #include <vcl/vclptr.hxx>
 
 #include <functional>
@@ -179,11 +178,6 @@ private:
         when entered while in drag mode leads to a scrolling of the window.
     */
     Size maScrollBorder;
-    /** The only task of this little window is to paint the little square at
-        the bottom right corner left by the two scroll bars (when both are
-        visible).
-    */
-    VclPtr<ScrollBarBox> mpScrollBarFiller;
 
     /** The auto scroll timer is used for keep scrolling the window when the
         mouse reaches its border while dragging a selection.  When the mouse
@@ -241,7 +235,6 @@ private:
 
     void PlaceHorizontalScrollBar (const ::tools::Rectangle& aArea);
     void PlaceVerticalScrollBar (const ::tools::Rectangle& aArea);
-    void PlaceFiller (const ::tools::Rectangle& aArea);
 };
 
 } // end of namespace ::sd::slidesorter::controller

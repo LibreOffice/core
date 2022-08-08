@@ -32,7 +32,6 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/commandevent.hxx>
-#include <vcl/scrbar.hxx>
 #include <svl/eitem.hxx>
 #include <svx/ruler.hxx>
 #include <svx/svxids.hrc>
@@ -163,7 +162,6 @@ ViewShell::~ViewShell()
         mpContentWindow.disposeAndClear();
     }
 
-    mpScrollBarBox.disposeAndClear();
     mpVerticalRuler.disposeAndClear();
     mpHorizontalRuler.disposeAndClear();
     mpVerticalScrollBar.disposeAndClear();
@@ -197,7 +195,7 @@ void ViewShell::construct()
     mpContentWindow.reset(VclPtr< ::sd::Window >::Create(GetParentWindow()));
     SetActiveWindow (mpContentWindow.get());
 
-    GetParentWindow()->SetBackground (Wallpaper());
+    GetParentWindow()->SetBackground(Application::GetSettings().GetStyleSettings().GetFaceColor());
     mpContentWindow->SetBackground (Wallpaper());
     mpContentWindow->SetCenterAllowed(true);
     mpContentWindow->SetViewShell(this);
@@ -215,8 +213,6 @@ void ViewShell::construct()
         mpVerticalScrollBar.reset (VclPtr<ScrollAdaptor>::Create(GetParentWindow(), false));
         mpVerticalScrollBar->SetRange(Range(0, 32000));
         mpVerticalScrollBar->SetScrollHdl(LINK(this, ViewShell, VScrollHdl));
-
-        mpScrollBarBox.reset(VclPtr<ScrollBarBox>::Create(GetParentWindow(), WB_SIZEABLE));
     }
 
     SetName ("ViewShell");
@@ -256,8 +252,6 @@ void ViewShell::doShow()
         maScrBarWH = Size(
             mpVerticalScrollBar->GetSizePixel().Width(),
             mpHorizontalScrollBar->GetSizePixel().Height());
-
-        mpScrollBarBox->Show();
     }
 
     GetParentWindow()->Show();
@@ -955,21 +949,6 @@ void ViewShell::ArrangeGUIElements()
             Size (maScrBarWH.Width(), nBottom-nTop));
     }
 
-    // Filler in the lower right corner.
-    if (mpScrollBarBox)
-    {
-        if (mpHorizontalScrollBar
-            && mpHorizontalScrollBar->IsVisible()
-            && mpVerticalScrollBar
-            && mpVerticalScrollBar->IsVisible())
-        {
-            mpScrollBarBox->Show();
-            mpScrollBarBox->SetPosSizePixel(Point(nRight, nBottom), maScrBarWH);
-        }
-        else
-            mpScrollBarBox->Hide();
-    }
-
     // Place horizontal ruler below tab bar.
     if (mbHasRulers && mpContentWindow)
     {
@@ -1504,9 +1483,6 @@ void ViewShell::ShowUIControls (bool bVisible)
     if (mpHorizontalScrollBar)
         mpHorizontalScrollBar->Show( bVisible );
 
-    if (mpScrollBarBox)
-        mpScrollBarBox->Show(bVisible);
-
     if (mpContentWindow)
         mpContentWindow->Show( bVisible );
 }
@@ -1524,8 +1500,6 @@ bool ViewShell::RelocateToParentWindow (vcl::Window* pParentWindow)
         mpHorizontalScrollBar->SetParent(mpParentWindow);
     if (mpVerticalScrollBar)
         mpVerticalScrollBar->SetParent(mpParentWindow);
-    if (mpScrollBarBox)
-        mpScrollBarBox->SetParent(mpParentWindow);
 
     return true;
 }

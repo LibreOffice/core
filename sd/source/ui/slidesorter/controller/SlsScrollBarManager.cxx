@@ -31,8 +31,6 @@
 #include <sdpage.hxx>
 #include <osl/diagnose.h>
 
-#include <vcl/scrbar.hxx>
-
 namespace sd::slidesorter::controller {
 
 constexpr double gnHorizontalScrollFactor(0.15);
@@ -45,7 +43,6 @@ ScrollBarManager::ScrollBarManager (SlideSorter& rSlideSorter)
       mnHorizontalPosition (0),
       mnVerticalPosition (0),
       maScrollBorder (20,20),
-      mpScrollBarFiller(mrSlideSorter.GetScrollBarFiller()),
       maAutoScrollTimer("sd ScrollBarManager maAutoScrollTimer"),
       maAutoScrollOffset(0,0),
       mbIsAutoScrollActive(false),
@@ -58,7 +55,6 @@ ScrollBarManager::ScrollBarManager (SlideSorter& rSlideSorter)
     // ViewTabBar.
     mpHorizontalScrollBar->Hide();
     mpVerticalScrollBar->Hide();
-    mpScrollBarFiller->Hide();
 
     maAutoScrollTimer.SetTimeout(25);
     maAutoScrollTimer.SetInvokeHandler (
@@ -122,9 +118,6 @@ void ScrollBarManager::Disconnect()
     if (mpVerticalScrollBar!=nullptr && mpVerticalScrollBar->IsVisible())
         PlaceVerticalScrollBar (rAvailableArea);
 
-    if (mpScrollBarFiller!=nullptr && mpScrollBarFiller->IsVisible())
-        PlaceFiller (rAvailableArea);
-
     return aRemainingSpace;
 }
 
@@ -160,17 +153,6 @@ void ScrollBarManager::PlaceVerticalScrollBar (const ::tools::Rectangle& aArea)
     // Restore the position.
     mpVerticalScrollBar->SetThumbPos(static_cast<::tools::Long>(nThumbPosition));
     mnVerticalPosition = nThumbPosition / double(mpVerticalScrollBar->GetRange().Len());
-}
-
-void ScrollBarManager::PlaceFiller (const ::tools::Rectangle& aArea)
-{
-    mpScrollBarFiller->SetPosSizePixel(
-        Point(
-            aArea.Right()-mpVerticalScrollBar->GetSizePixel().Width()+1,
-            aArea.Bottom()-mpHorizontalScrollBar->GetSizePixel().Height()+1),
-        Size (
-            mpVerticalScrollBar->GetSizePixel().Width(),
-            mpHorizontalScrollBar->GetSizePixel().Height()));
 }
 
 void ScrollBarManager::UpdateScrollBars(bool bUseScrolling)
@@ -327,7 +309,6 @@ void ScrollBarManager::SetWindowOrigin (
     // Make the visibility of the scroll bars permanent.
     mpVerticalScrollBar->Show(bShowVertical);
     mpHorizontalScrollBar->Show(bShowHorizontal);
-    mpScrollBarFiller->Show(bShowVertical && bShowHorizontal);
 
     // Adapt the remaining space accordingly.
     ::tools::Rectangle aRemainingSpace (rAvailableArea);

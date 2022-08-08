@@ -43,7 +43,6 @@
 #include <comphelper/lok.hxx>
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
-#include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/graphicfilter.hxx>
 

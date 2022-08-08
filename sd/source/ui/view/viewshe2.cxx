@@ -27,7 +27,6 @@
 #include <FactoryIds.hxx>
 
 #include <svx/svxids.hrc>
-#include <vcl/scrbar.hxx>
 #include <svx/svdpagv.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/ruler.hxx>
@@ -852,9 +851,6 @@ void ViewShell::SetScrollBarsVisible(bool bVisible)
 
     if (mpHorizontalScrollBar)
         mpHorizontalScrollBar->Show( bVisible );
-
-    if (mpScrollBarBox)
-        mpScrollBarBox->Show(bVisible);
 }
 
 sal_Int8 ViewShell::AcceptDrop (

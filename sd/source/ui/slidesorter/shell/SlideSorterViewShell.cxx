@@ -172,8 +172,7 @@ void SlideSorterViewShell::Initialize()
         *this,
         mpContentWindow,
         mpHorizontalScrollBar,
-        mpVerticalScrollBar,
-        mpScrollBarBox);
+        mpVerticalScrollBar);
     mpView = &mpSlideSorter->GetView();
 
     doShow();
