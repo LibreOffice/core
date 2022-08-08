@@ -146,6 +146,7 @@ public:
         // is there a text- or frameselection?
     bool    HasSelection() const { return SwCursorShell::HasSelection() ||
                                         IsMultiSelection() || IsSelFrameMode() || IsObjSelected(); }
+    bool    Pop(SwCursorShell::PopMode, ::std::unique_ptr<SwCallLink> const pLink);
     bool    Pop(SwCursorShell::PopMode = SwCursorShell::PopMode::DeleteStack);
 
     void    EnterStdMode();
