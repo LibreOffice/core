@@ -707,7 +707,6 @@ DbGridControl::DbGridControl(
             ,m_nLastRowId(-1)
             ,m_bDesignMode(false)
             ,m_bRecordCountFinal(false)
-            ,m_bNavigationBar(true)
             ,m_bSynchDisplay(true)
             ,m_bHandle(true)
             ,m_bFilterMode(false)
@@ -716,6 +715,7 @@ DbGridControl::DbGridControl(
             ,m_bHideScrollbars( false )
             ,m_bUpdating(false)
 {
+    m_bNavigationBar = true;
 
     OUString sName(SvxResId(RID_STR_NAVIGATIONBAR));
     m_aBar->SetAccessibleName(sName);
