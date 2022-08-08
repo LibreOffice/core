@@ -164,7 +164,8 @@ BrowseBox::BrowseBox( vcl::Window* pParent, WinBits nBits, BrowserMode nMode )
     ,aHScroll( VclPtr<ScrollAdaptor>::Create(this, true) )
     // see NavigationBar ctor, here we just want to know its height
     ,aStatusBarHeight(VclPtr<MeasureStatusBar>::Create(this))
-    ,m_nCornerSize(0)
+    ,m_nCornerHeight(0)
+    ,m_nCornerWidth(0)
     ,m_nActualCornerWidth(0)
 {
     ConstructImpl( nMode );
