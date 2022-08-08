@@ -84,7 +84,8 @@ public:
     double getTextWidth(const OUString& rText, sal_uInt32 nIndex, sal_uInt32 nLength) const;
 
     void getTextOutlines(basegfx::B2DPolyPolygonVector&, const OUString& rText, sal_uInt32 nIndex,
-                         sal_uInt32 nLength, const ::std::vector<double>& rDXArray) const;
+                         sal_uInt32 nLength, const ::std::vector<double>& rDXArray,
+                         const ::std::vector<sal_Bool>& rKashidaArray) const;
 
     basegfx::B2DRange getTextBoundRect(const OUString& rText, sal_uInt32 nIndex,
                                        sal_uInt32 nLength) const;
