@@ -16,6 +16,24 @@
       "message": "The question is whether the test is written poorly and should accept both \"A\" and \"a\" here, or whether the Calc operations performed by the test are intended to produce deterministic results?",
       "revId": "731652168df31d53033025841d844170c520834c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce49f439_277390a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2022-08-08T22:27:18Z",
+      "side": 1,
+      "message": "Both Calc and Excel *appear* to use whichever one comes first in the column i.e. if \u0027A\u0027 happens first before \u0027a\u0027, that becomes the dominant value of the two.  Now, I would think that this is a \"sort of\" expected behavior since it appears to consistently work that way across the board, again both in Calc and Excel.",
+      "parentUuid": "e600da83_60912080",
+      "revId": "731652168df31d53033025841d844170c520834c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
