@@ -22,7 +22,7 @@
 #include <vcl/tabpage.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/scrbar.hxx>
+#include <vcl/toolkit/scrbar.hxx>
 #include <svdata.hxx>
 
 void TabPage::ImplInit( vcl::Window* pParent, WinBits nStyle )

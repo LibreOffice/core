@@ -31,7 +31,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/window.hxx>
 #include <vcl/scrollable.hxx>
-#include <vcl/scrbar.hxx>
+#include <vcl/toolkit/scrbar.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builder.hxx>

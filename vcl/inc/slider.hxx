@@ -22,7 +22,7 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
-#include <vcl/scrbar.hxx>
+#include <vcl/toolkit/scrbar.hxx>
 
 class Slider final : public Control
 {
