@@ -175,6 +175,7 @@ task copyAssets(type: Copy) {
                 '**/hfmenubutton.ui',
                 '**/inforeadonlydialog.ui',
                 '**/pbmenubutton.ui',
+                '**/scrollbars.ui',
                 '**/tabbuttons.ui', '**/tabviewbar.ui'
     }
 }
