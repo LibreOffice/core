@@ -1309,7 +1309,11 @@ SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl(SfxHelpWindow_Impl* _pParent, w
     OString sPageId("index");
     SvtViewOptions aViewOpt( EViewType::TabDialog, CONFIGNAME_INDEXWIN );
     if ( aViewOpt.Exists() )
-        sPageId = aViewOpt.GetPageID();
+    {
+        OString sSavedPageId = aViewOpt.GetPageID();
+        if (m_xTabCtrl->get_page_index(sSavedPageId) != -1)
+            sPageId = sSavedPageId;
+    }
     m_xTabCtrl->set_current_page(sPageId);
     ActivatePageHdl(sPageId);
     m_xActiveLB->connect_changed(LINK(this, SfxHelpIndexWindow_Impl, SelectHdl));
