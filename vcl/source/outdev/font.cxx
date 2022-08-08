@@ -999,10 +999,10 @@ bool OutputDevice::ImplNewFont() const
 
 bool OutputDevice::AttemptOLEFontScaleFix(vcl::Font& rFont, tools::Long nHeight) const
 {
-    const float fDenominator = static_cast<float>(maMapMetrics.mnMapScNumY) * maMapMetrics.mnMapScDenomX;
+    const float fDenominator = static_cast<float>(maGeometry.GetMapScalingYNumerator()) * maGeometry.GetMapScalingXDenominator();
     if (fDenominator == 0.0)
         return false;
-    const float fNumerator = static_cast<float>(maMapMetrics.mnMapScNumX) * maMapMetrics.mnMapScDenomY;
+    const float fNumerator = static_cast<float>(maGeometry.GetMapScalingXNumerator()) * maGeometry.GetMapScalingYDenominator();
     float fStretch = fNumerator / fDenominator;
     int nOrigWidth = mpFontInstance->mxFontMetric->GetWidth();
     int nNewWidth = static_cast<int>(nOrigWidth * fStretch + 0.5);

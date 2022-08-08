@@ -87,4 +87,49 @@ sal_Int32 Geometry::GetDPIScalePercentage() const { return mnDPIScalePercentage;
 
 void Geometry::SetDPIScalePercentage(sal_Int32 nPercentage) { mnDPIScalePercentage = nPercentage; }
 
+MappingMetrics Geometry::GetMapMetrics() const { return maMapMetrics; }
+
+Point Geometry::GetMappingOffset() const
+{
+    return Point(maMapMetrics.mnMappingXOffset, maMapMetrics.mnMappingYOffset);
+}
+
+void Geometry::SetMappingXOffset(tools::Long nX) { maMapMetrics.mnMappingXOffset = nX; }
+
+void Geometry::SetMappingYOffset(tools::Long nY) { maMapMetrics.mnMappingYOffset = nY; }
+
+tools::Long Geometry::GetMapScalingXNumerator() const
+{
+    return maMapMetrics.mnMapScalingXNumerator;
+}
+
+tools::Long Geometry::GetMapScalingXDenominator() const
+{
+    return maMapMetrics.mnMapScalingXDenominator;
+}
+
+tools::Long Geometry::GetMapScalingYNumerator() const
+{
+    return maMapMetrics.mnMapScalingYNumerator;
+}
+
+tools::Long Geometry::GetMapScalingYDenominator() const
+{
+    return maMapMetrics.mnMapScalingYDenominator;
+}
+
+void Geometry::SetMapScalingXNumerator(tools::Long nX) { maMapMetrics.mnMapScalingXNumerator = nX; }
+
+void Geometry::SetMapScalingXDenominator(tools::Long nX)
+{
+    maMapMetrics.mnMapScalingXDenominator = nX;
+}
+
+void Geometry::SetMapScalingYNumerator(tools::Long nY) { maMapMetrics.mnMapScalingYNumerator = nY; }
+
+void Geometry::SetMapScalingYDenominator(tools::Long nY)
+{
+    maMapMetrics.mnMapScalingYDenominator = nY;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
