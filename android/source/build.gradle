@@ -40,7 +40,6 @@ android {
         main.res.srcDirs = ['res', 'res_generated']
         main.java.srcDirs = ['../Bootstrap/src', 'src/java']
         main.jniLibs.srcDirs = ["${liboJniLibsdir}"]
-        main.jni.srcDirs = [] // don't attempt to build native-lib via gradle
         // the configuration data that might be stripped or not
         fullUI.assets.srcDirs 'assets_fullUI'
         strippedUI.assets.srcDirs 'assets_strippedUI'
