@@ -145,6 +145,7 @@
 #include <sfx2/event.hxx>
 #include <memory>
 
+#include "../../core/crsr/callnk.hxx"
 #include <IDocumentOutlineNodes.hxx>
 #include <ndtxt.hxx>
 #include <cntfrm.hxx>
@@ -6643,13 +6644,15 @@ Selection SwEditWin::GetSurroundingTextSelection() const
         // around the visible cursor.
         TextFrameIndex const nPos(rSh.GetCursorPointAsViewIndex());
 
+        // store shell state *before* Push
+        ::std::unique_ptr<SwCallLink> pLink(::std::make_unique<SwCallLink>(rSh));
         rSh.Push();
 
         rSh.HideCursor();
         rSh.GoStartSentence();
         TextFrameIndex const nStartPos(rSh.GetCursorPointAsViewIndex());
 
-        rSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
+        rSh.Pop(SwCursorShell::PopMode::DeleteCurrent, ::std::move(pLink));
         rSh.ShowCursor();
 
         if (bUnLockView)

@@ -108,6 +108,7 @@
 #include <svl/zformat.hxx>
 #include <memory>
 
+#include "../../core/crsr/callnk.hxx"
 #include <frmtool.hxx>
 #include <viewopt.hxx>
 
@@ -2013,7 +2014,13 @@ SwWrtShell::~SwWrtShell()
 
 bool SwWrtShell::Pop(SwCursorShell::PopMode const eDelete)
 {
-    bool bRet = SwCursorShell::Pop(eDelete);
+    ::std::unique_ptr<SwCallLink> pLink(::std::make_unique<SwCallLink>(*this));
+    return Pop(eDelete, ::std::move(pLink));
+}
+
+bool SwWrtShell::Pop(SwCursorShell::PopMode const eDelete, ::std::unique_ptr<SwCallLink> pLink)
+{
+    bool bRet = SwCursorShell::Pop(eDelete, ::std::move(pLink));
     if( bRet && IsSelection() )
     {
         if (!IsAddMode())
