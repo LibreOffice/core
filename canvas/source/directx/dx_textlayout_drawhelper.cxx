@@ -215,6 +215,7 @@ namespace dxcanvas
                 xVirtualDevice->DrawTextArray( aEmptyPoint,
                                               aText,
                                               DXArray,
+                                              {},
                                               rText.StartPosition,
                                               rText.Length,
                                               bIsRTL ? SalLayoutFlags::BiDiRtl : SalLayoutFlags::NONE);
