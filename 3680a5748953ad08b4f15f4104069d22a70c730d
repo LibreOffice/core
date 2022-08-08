@@ -125,6 +125,42 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5cf8ef6_47bba990",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003627
+      },
+      "writtenOn": "2022-08-08T13:06:02Z",
+      "side": 1,
+      "message": "Done, I have finished sending",
+      "parentUuid": "039ed786_ff2d969b",
+      "revId": "3680a5748953ad08b4f15f4104069d22a70c730d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57a1f6e8_89cdc459",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003627
+      },
+      "writtenOn": "2022-08-08T13:06:02Z",
+      "side": 1,
+      "message": "I have modified the commit message, Now the code is being rebuild, after that, please code-review. About code reusing, as you said, the difference asm and abi is the most important, macOS aarch64 reusing because they have the same instruction set. So I think loongarch64 needs its own directory structure to show that it is new instruction set. \" easily identifiable identifiers\" is say that users may search for files or directories with the loongarch64 keyword before compiling libreoffice on a loongarch64 machine. This loongarch64 directory structure can also show that libreoffice has completed the migration on the different underlying architectures. I understand that maintenance work is increased, but it is beneficial for users, thanks",
+      "parentUuid": "4eca61ca_3d8d65ad",
+      "revId": "3680a5748953ad08b4f15f4104069d22a70c730d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2a6813ae_7a10fe93",
