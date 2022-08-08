@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict
+from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 from uitest.uihelper.common import change_measurement_unit
 from libreoffice.uno.propertyvalue import mkPropertyValues
 #uitest sw / Columns dialog
@@ -42,6 +42,32 @@ class columns(UITestCase):
                 self.assertEqual(get_state_as_dict(colsnf)["Text"], "2")
                 self.assertEqual(get_state_as_dict(spacing1mf)["Text"], "1.00 cm")
                 self.assertEqual(get_state_as_dict(autowidth)["Selected"], "false")
+
+    def test_tdf150293_separator_width_unit_conversion(self):
+        with self.ui_test.load_file(get_url_for_data_file("section-columns-separator.fodt")):
+
+            #dialog Columns
+            with self.ui_test.execute_dialog_through_command(".uno:FormatColumns") as xDialog:
+                linewidthmf = xDialog.getChild("linewidthmf")
+
+                # Without the fix in place, this test would have failed with
+                # AssertionError: '0.45 pt' != '0.25 pt'
+                self.assertEqual(get_state_as_dict(linewidthmf)["Text"], "0.25 pt")
+
+                # Set it to 0.5 pt
+                linewidthmf.executeAction("UP", tuple())
+                self.assertEqual(get_state_as_dict(linewidthmf)["Text"], "0.50 pt")
+
+            # save and reload: the new value of line width must roundtrip unchanged
+            self.xUITest.executeCommand('.uno:Save')
+            self.xUITest.executeCommand('.uno:Reload')
+
+            with self.ui_test.execute_dialog_through_command(".uno:FormatColumns", close_button="cancel") as xDialog:
+                linewidthmf = xDialog.getChild("linewidthmf")
+
+                # Without the fix in place, this test would have failed with
+                # AssertionError: '0.55 pt' != '0.50 pt'
+                self.assertEqual(get_state_as_dict(linewidthmf)["Text"], "0.50 pt")
 
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
