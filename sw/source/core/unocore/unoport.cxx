@@ -100,25 +100,28 @@ SwXTextPortion::SwXTextPortion(
     : m_pPropSet(aSwMapProvider.GetPropertySet(
                     PROPERTY_MAP_TEXTPORTION_EXTENSIONS))
     , m_xParentText(std::move(xParent))
-    , m_pRubyText   ( bIsEnd ? nullptr : new uno::Any )
-    , m_pRubyStyle  ( bIsEnd ? nullptr : new uno::Any )
-    , m_pRubyAdjust ( bIsEnd ? nullptr : new uno::Any )
-    , m_pRubyIsAbove( bIsEnd ? nullptr : new uno::Any )
-    , m_pRubyPosition( bIsEnd ? nullptr : new uno::Any )
     , m_pFrameFormat(nullptr)
     , m_ePortionType( bIsEnd ? PORTION_RUBY_END : PORTION_RUBY_START )
     , m_bIsCollapsed(false)
 {
+    if (!bIsEnd)
+    {
+        m_oRubyText.emplace();
+        m_oRubyStyle.emplace();
+        m_oRubyAdjust.emplace();
+        m_oRubyIsAbove.emplace();
+        m_oRubyPosition.emplace();
+    }
     init( pPortionCursor);
 
     if (!bIsEnd)
     {
         const SfxPoolItem& rItem = rAttr.GetAttr();
-        rItem.QueryValue(*m_pRubyText);
-        rItem.QueryValue(*m_pRubyStyle, MID_RUBY_CHARSTYLE);
-        rItem.QueryValue(*m_pRubyAdjust, MID_RUBY_ADJUST);
-        rItem.QueryValue(*m_pRubyIsAbove, MID_RUBY_ABOVE);
-        rItem.QueryValue(*m_pRubyPosition, MID_RUBY_POSITION);
+        rItem.QueryValue(*m_oRubyText);
+        rItem.QueryValue(*m_oRubyStyle, MID_RUBY_CHARSTYLE);
+        rItem.QueryValue(*m_oRubyAdjust, MID_RUBY_ADJUST);
+        rItem.QueryValue(*m_oRubyIsAbove, MID_RUBY_ABOVE);
+        rItem.QueryValue(*m_oRubyPosition, MID_RUBY_POSITION);
     }
 }
 
@@ -357,17 +360,17 @@ void SwXTextPortion::GetPropertyValue(
         break;
         case RES_TXTATR_CJK_RUBY:
         {
-            const uno::Any* pToSet = nullptr;
+            const std::optional<uno::Any>* pToSet = nullptr;
             switch(rEntry.nMemberId)
             {
-                case MID_RUBY_TEXT :    pToSet = m_pRubyText.get();   break;
-                case MID_RUBY_ADJUST :  pToSet = m_pRubyAdjust.get(); break;
-                case MID_RUBY_CHARSTYLE:pToSet = m_pRubyStyle.get();  break;
-                case MID_RUBY_ABOVE :   pToSet = m_pRubyIsAbove.get();break;
-                case MID_RUBY_POSITION: pToSet = m_pRubyPosition.get();break;
+                case MID_RUBY_TEXT :    pToSet = &m_oRubyText;   break;
+                case MID_RUBY_ADJUST :  pToSet = &m_oRubyAdjust; break;
+                case MID_RUBY_CHARSTYLE:pToSet = &m_oRubyStyle;  break;
+                case MID_RUBY_ABOVE :   pToSet = &m_oRubyIsAbove;break;
+                case MID_RUBY_POSITION: pToSet = &m_oRubyPosition;break;
             }
             if(pToSet)
-                rVal = *pToSet;
+                rVal = **pToSet;
         }
         break;
         default:

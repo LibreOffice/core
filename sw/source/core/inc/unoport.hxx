@@ -111,11 +111,11 @@ private:
         m_xMeta;
     css::uno::Reference<css::text::XTextContent> m_xLineBreak;
     css::uno::Reference<css::text::XTextContent> m_xContentControl;
-    std::unique_ptr< css::uno::Any > m_pRubyText;
-    std::unique_ptr< css::uno::Any > m_pRubyStyle;
-    std::unique_ptr< css::uno::Any > m_pRubyAdjust;
-    std::unique_ptr< css::uno::Any > m_pRubyIsAbove;
-    std::unique_ptr< css::uno::Any > m_pRubyPosition;
+    std::optional< css::uno::Any > m_oRubyText;
+    std::optional< css::uno::Any > m_oRubyStyle;
+    std::optional< css::uno::Any > m_oRubyAdjust;
+    std::optional< css::uno::Any > m_oRubyIsAbove;
+    std::optional< css::uno::Any > m_oRubyPosition;
     sw::UnoCursorPointer m_pUnoCursor;
 
     SwFrameFormat*                  m_pFrameFormat;
