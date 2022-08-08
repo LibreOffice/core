@@ -63,6 +63,7 @@ namespace drawinglayer::primitive2d
                 sal_Int32 nTextPosition,
                 sal_Int32 nTextLength,
                 const ::std::vector< double >& rDXArray,
+                const ::std::vector< sal_Bool >& rKashidaArray,
                 const attribute::FontAttribute& rFontAttribute) const;
 
             /// local decomposition.
@@ -77,6 +78,7 @@ namespace drawinglayer::primitive2d
                 sal_Int32 nTextPosition,
                 sal_Int32 nTextLength,
                 std::vector< double >&& rDXArray,
+                std::vector< sal_Bool >&& rKashidaArray,
                 const attribute::FontAttribute& rFontAttribute,
                 const css::lang::Locale& rLocale,
                 const basegfx::BColor& rFontColor,

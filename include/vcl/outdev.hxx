@@ -963,6 +963,7 @@ public:
     bool                        GetTextBoundRect( tools::Rectangle& rRect,
                                                   const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
                                                   sal_uLong nLayoutWidth = 0, o3tl::span<const sal_Int32> pDXArray = {},
+                                                  o3tl::span<const sal_Bool> pKashidaArray = {},
                                                   const SalLayoutGlyphs* pGlyphs = nullptr ) const;
 
     tools::Rectangle            ImplGetTextBoundRect( const SalLayout& ) const;
@@ -973,12 +974,14 @@ public:
     bool                        GetTextOutlines( PolyPolyVector&,
                                                  const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0,
                                                  sal_Int32 nLen = -1,
-                                                 sal_uLong nLayoutWidth = 0, o3tl::span<const sal_Int32> pDXArray = {} ) const;
+                                                 sal_uLong nLayoutWidth = 0, o3tl::span<const sal_Int32> pDXArray = {},
+                                                 o3tl::span<const sal_Bool> pKashidaArray = {} ) const;
 
     bool                        GetTextOutlines( basegfx::B2DPolyPolygonVector &rVector,
                                                  const OUString& rStr, sal_Int32 nBase, sal_Int32 nIndex = 0,
                                                  sal_Int32 nLen = -1,
-                                                 sal_uLong nLayoutWidth = 0, o3tl::span<const sal_Int32> pDXArray = {} ) const;
+                                                 sal_uLong nLayoutWidth = 0, o3tl::span<const sal_Int32> pDXArray = {},
+                                                 o3tl::span<const sal_Bool> pKashidaArray = {} ) const;
 
 
     OUString                    GetEllipsisString( const OUString& rStr, tools::Long nMaxWidth,
@@ -1044,6 +1047,7 @@ public:
 
     void                        DrawTextArray( const Point& rStartPt, const OUString& rStr,
                                                o3tl::span<const sal_Int32> pDXAry,
+                                               o3tl::span<const sal_Bool> pKashidaAry={},
                                                sal_Int32 nIndex = 0,
                                                sal_Int32 nLen = -1,
                                                SalLayoutFlags flags = SalLayoutFlags::NONE,
@@ -1236,7 +1240,9 @@ public:
     std::unique_ptr<SalLayout>
                                 ImplLayout( const OUString&, sal_Int32 nIndex, sal_Int32 nLen,
                                             const Point& rLogicPos = Point(0,0), tools::Long nLogicWidth=0,
-                                            o3tl::span<const sal_Int32> pLogicDXArray={}, SalLayoutFlags flags = SalLayoutFlags::NONE,
+                                            o3tl::span<const sal_Int32> pLogicDXArray={},
+                                            o3tl::span<const sal_Bool> pKashidaArray={},
+                                            SalLayoutFlags flags = SalLayoutFlags::NONE,
                                             vcl::text::TextLayoutCache const* = nullptr,
                                             const SalLayoutGlyphs* pGlyphs = nullptr) const;
 

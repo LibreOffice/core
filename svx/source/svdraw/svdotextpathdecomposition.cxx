@@ -58,6 +58,7 @@ namespace
         sal_Int32                                   mnParagraph;
         SvxFont                                     maFont;
         ::std::vector< double >                     maDblDXArray;   // double DXArray, font size independent -> unit coordinate system
+        ::std::vector< sal_Bool >                   maKashidaArray;
         lang::Locale                           maLocale;
 
         bool                                        mbRTL : 1;
@@ -70,6 +71,7 @@ namespace
             mnTextLength(rInfo.mnTextLen),
             mnParagraph(rInfo.mnPara),
             maFont(rInfo.mrFont),
+            maKashidaArray(rInfo.mpKashidaArray.begin(), rInfo.mpKashidaArray.end()),
             maLocale(rInfo.mpLocale ? *rInfo.mpLocale : lang::Locale()),
             mbRTL(!rInfo.mrFont.IsVertical() && rInfo.IsRTL())
         {
@@ -107,6 +109,7 @@ namespace
         const SvxFont& getFont() const { return maFont; }
         bool isRTL() const { return mbRTL; }
         const ::std::vector< double >& getDoubleDXArray() const { return maDblDXArray; }
+        const ::std::vector< sal_Bool >& getKashidaArray() const { return maKashidaArray; }
         const lang::Locale& getLocale() const { return maLocale; }
 
         sal_Int32 getPortionIndex(sal_Int32 nIndex, sal_Int32 nLength) const
@@ -497,6 +500,7 @@ namespace
                                         nPortionIndex,
                                         nNextGlyphLen,
                                         std::vector(aNewDXArray),
+                                        std::vector(pCandidate->getKashidaArray()),
                                         aCandidateFontAttribute,
                                         pCandidate->getLocale(),
                                         aRGBShadowColor) );
@@ -514,6 +518,7 @@ namespace
                                         nPortionIndex,
                                         nNextGlyphLen,
                                         std::move(aNewDXArray),
+                                        std::vector(pCandidate->getKashidaArray()),
                                         aCandidateFontAttribute,
                                         pCandidate->getLocale(),
                                         aRGBColor) );

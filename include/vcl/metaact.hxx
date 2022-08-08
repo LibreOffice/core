@@ -507,6 +507,7 @@ private:
     Point       maStartPt;
     OUString    maStr;
     std::vector<sal_Int32> maDXAry;
+    std::vector<sal_Bool> maKashidaAry;
     sal_Int32   mnIndex;
     sal_Int32   mnLen;
 
@@ -516,10 +517,14 @@ public:
                         MetaTextArrayAction();
                         MetaTextArrayAction( const MetaTextArrayAction& rAction );
     MetaTextArrayAction( const Point& rStartPt, OUString aStr,
-                         std::vector<sal_Int32>  rDXAry, sal_Int32 nIndex,
+                         std::vector<sal_Int32> rDXAry,
+                         std::vector<sal_Bool> pKashidaAry,
+                         sal_Int32 nIndex,
                          sal_Int32 nLen );
     MetaTextArrayAction( const Point& rStartPt, OUString aStr,
-                         o3tl::span<const sal_Int32> pDXAry, sal_Int32 nIndex,
+                         o3tl::span<const sal_Int32> pDXAry,
+                         o3tl::span<const sal_Bool> pKashidaAry,
+                         sal_Int32 nIndex,
                          sal_Int32 nLen );
 
     virtual void        Execute( OutputDevice* pOut ) override;
@@ -534,11 +539,13 @@ public:
     sal_Int32       GetIndex() const { return mnIndex; }
     sal_Int32       GetLen() const { return mnLen; }
     const std::vector<sal_Int32> & GetDXArray() const { return maDXAry; }
+    const std::vector<sal_Bool> & GetKashidaArray() const { return maKashidaAry; }
     void            SetPoint(const Point& rPt) { maStartPt = rPt; }
     void            SetText(const OUString& rStr) { maStr = rStr; }
     void            SetIndex(sal_Int32 rIndex) { mnIndex = rIndex; }
     void            SetLen(sal_Int32 rLen) { mnLen = rLen; }
     void            SetDXArray(std::vector<sal_Int32> aArray);
+    void            SetKashidaArray(std::vector<sal_Bool> aArray);
 };
 
 class SAL_DLLPUBLIC_RTTI MetaStretchTextAction final : public MetaAction
