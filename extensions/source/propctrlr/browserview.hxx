@@ -48,7 +48,7 @@ namespace pcr
         css::awt::Size getMinimumSize() const;
 
     private:
-        DECL_LINK(OnPageActivation, LinkParamNone*, void);
+        DECL_LINK(OnPageActivation, const OString&, void);
     };
 
 } // namespace pcr

@@ -57,7 +57,7 @@ namespace pcr
         IPropertyLineListener*      m_pListener;
         IPropertyControlObserver*   m_pObserver;
         sal_uInt16                  m_nNextId;
-        Link<LinkParamNone*,void>   m_aPageActivationHandler;
+        Link<const OString&,void>   m_aPageActivationHandler;
         bool                        m_bHasHelpSection;
 
         MapStringToPageId           m_aPropertyPageIds;
@@ -95,7 +95,7 @@ namespace pcr
         void                        RemoveEntry( const OUString& _rName );
         void                        ChangeEntry( const OLineDescriptor& );
 
-        void                        setPageActivationHandler(const Link<LinkParamNone*,void>& _rHdl) { m_aPageActivationHandler = _rHdl; }
+        void                        setPageActivationHandler(const Link<const OString&,void>& _rHdl) { m_aPageActivationHandler = _rHdl; }
 
         Size                        get_preferred_size() const;
 
