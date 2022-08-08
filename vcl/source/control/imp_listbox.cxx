@@ -22,10 +22,10 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/event.hxx>
-#include <vcl/scrbar.hxx>
-#include <vcl/toolkit/lstbox.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/naturalsort.hxx>
+#include <vcl/toolkit/lstbox.hxx>
+#include <vcl/toolkit/scrbar.hxx>
 
 #include <listbox.hxx>
 #include <svdata.hxx>
