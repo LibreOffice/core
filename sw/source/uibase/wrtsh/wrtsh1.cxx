@@ -2269,8 +2269,8 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
                 }
                 else if (pFormat && pFormat->GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_CHAR)
                 {
-                    aData.m_pAnnotationRange.reset(new SwPaM(*GetCurrentShellCursor().Start(),
-                                                             *GetCurrentShellCursor().End()));
+                    aData.m_oAnnotationRange.emplace(*GetCurrentShellCursor().Start(),
+                                                     *GetCurrentShellCursor().End());
                 }
             }
         }

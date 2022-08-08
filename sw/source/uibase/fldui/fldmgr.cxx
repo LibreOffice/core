@@ -893,7 +893,7 @@ SwFieldTypesEnum SwFieldMgr::GetCurTypeId() const
 
 // Over string  insert field or update
 bool SwFieldMgr::InsertField(
-    const SwInsertField_Data& rData)
+    SwInsertField_Data& rData)
 {
     std::unique_ptr<SwField> pField;
     bool bExp = false;
@@ -1487,7 +1487,7 @@ bool SwFieldMgr::InsertField(
     // insert
     pCurShell->StartAllAction();
 
-    bool const isSuccess = pCurShell->InsertField2(*pField, rData.m_pAnnotationRange.get());
+    bool const isSuccess = pCurShell->InsertField2(*pField, rData.m_oAnnotationRange ? &*rData.m_oAnnotationRange : nullptr);
 
     if (isSuccess)
     {
