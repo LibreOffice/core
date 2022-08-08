@@ -16,6 +16,23 @@
       "message": "Hi Caolán,\nI\u0027d appreciate if you could review this patch",
       "revId": "2f5366f05bed04d805cfe469b2ea58b029167095",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd84fac9_074f877c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-08-08T14:49:50Z",
+      "side": 1,
+      "message": "seems reasonable to me",
+      "revId": "2f5366f05bed04d805cfe469b2ea58b029167095",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
