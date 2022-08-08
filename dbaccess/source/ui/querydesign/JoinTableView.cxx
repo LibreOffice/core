@@ -68,11 +68,12 @@ using namespace ::com::sun::star::lang;
 OScrollWindowHelper::OScrollWindowHelper( vcl::Window* pParent) : Window( pParent)
     ,m_aHScrollBar( VclPtr<ScrollAdaptor>::Create(this, true) )
     ,m_aVScrollBar( VclPtr<ScrollAdaptor>::Create(this, false) )
-    ,m_pCornerWindow(VclPtr<ScrollBarBox>::Create(this, WB_3DLOOK))
     ,m_pTableView(nullptr)
 {
-    // ScrollBars
+    StyleSettings aSystemStyle = Application::GetSettings().GetStyleSettings();
+    SetBackground(aSystemStyle.GetFaceColor());
 
+    // ScrollBars
     GetHScrollBar().SetRange( Range(0, 1000) );
     GetVScrollBar().SetRange( Range(0, 1000) );
 
@@ -81,7 +82,6 @@ OScrollWindowHelper::OScrollWindowHelper( vcl::Window* pParent) : Window( pParen
 
     GetHScrollBar().Show();
     GetVScrollBar().Show();
-    m_pCornerWindow->Show();
 
     // normally we should be SCROLL_PANE
     SetAccessibleRole(AccessibleRole::SCROLL_PANE);
@@ -96,7 +96,6 @@ void OScrollWindowHelper::dispose()
 {
     m_aHScrollBar.disposeAndClear();
     m_aVScrollBar.disposeAndClear();
-    m_pCornerWindow.disposeAndClear();
     m_pTableView.clear();
     vcl::Window::dispose();
 }
@@ -132,11 +131,6 @@ void OScrollWindowHelper::Resize()
     GetVScrollBar().SetPosSizePixel(
         Point( aTotalOutputSize.Width()-nVScrollWidth, 0 ),
         Size( nVScrollWidth, aTotalOutputSize.Height()-nHScrollHeight )
-        );
-
-    m_pCornerWindow->SetPosSizePixel(
-        Point( aTotalOutputSize.Width() - nVScrollWidth, aTotalOutputSize.Height() - nHScrollHeight),
-        Size( nVScrollWidth, nHScrollHeight )
         );
 
     GetHScrollBar().SetPageSize( aTotalOutputSize.Width() );

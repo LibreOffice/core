@@ -22,7 +22,6 @@
 #include <vcl/window.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
-#include <vcl/scrbar.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/transfer.hxx>
 
@@ -53,7 +52,6 @@ namespace dbaui
     {
         VclPtr<ScrollAdaptor>      m_aHScrollBar;
         VclPtr<ScrollAdaptor>      m_aVScrollBar;
-        VclPtr<vcl::Window>        m_pCornerWindow;
         VclPtr<OJoinTableView>     m_pTableView;
 
     protected:

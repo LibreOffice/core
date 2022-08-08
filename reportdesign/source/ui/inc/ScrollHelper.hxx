@@ -20,7 +20,6 @@
 #pragma once
 
 #include <svtools/scrolladaptor.hxx>
-#include <vcl/scrbar.hxx>
 #include <com/sun/star/report/XSection.hpp>
 #include <comphelper/propmultiplex.hxx>
 #include "ReportDefines.hxx"
@@ -47,7 +46,6 @@ namespace rptui
     private:
         VclPtr<ScrollAdaptor>       m_aHScroll;
         VclPtr<ScrollAdaptor>       m_aVScroll;
-        VclPtr<ScrollBarBox>        m_aCornerWin;       // window in the bottom right corner
         Size                        m_aTotalPixelSize;
         VclPtr<ODesignView>         m_pParent;
         VclPtr<OReportWindow>       m_aReportWindow;
