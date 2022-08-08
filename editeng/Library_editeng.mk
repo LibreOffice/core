@@ -44,12 +44,12 @@ $(eval $(call gb_Library_add_exception_objects,editeng,\
     editeng/source/accessibility/AccessibleImageBullet \
     editeng/source/accessibility/AccessibleParaManager \
     editeng/source/accessibility/AccessibleSelectionBase \
-    editeng/source/accessibility/AccessibleStaticTextBase \
     editeng/source/accessibility/AccessibleStringWrap \
 ))
 endif
 
 $(eval $(call gb_Library_add_exception_objects,editeng,\
+    editeng/source/accessibility/AccessibleStaticTextBase \
     editeng/source/editeng/editattr \
     editeng/source/editeng/editdata \
     editeng/source/editeng/editdbg \
