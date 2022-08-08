@@ -58,6 +58,7 @@ namespace drawinglayer::primitive2d
             // prepare values for new portion
             basegfx::B2DHomMatrix aNewTransform;
             std::vector< double > aNewDXArray;
+            std::vector< sal_Bool > aNewKashidaArray;
             const bool bNewStartIsNotOldStart(nIndex > mrSource.getTextPosition());
 
             if(!mbNoDXArray)
@@ -66,6 +67,10 @@ namespace drawinglayer::primitive2d
                 aNewDXArray = std::vector< double >(
                     mrSource.getDXArray().begin() + (nIndex - mrSource.getTextPosition()),
                     mrSource.getDXArray().begin() + ((nIndex + nLength) - mrSource.getTextPosition()));
+
+                aNewKashidaArray = std::vector< sal_Bool >(
+                    mrSource.getKashidaArray().begin() + (nIndex - mrSource.getTextPosition()),
+                    mrSource.getKashidaArray().begin() + ((nIndex + nLength) - mrSource.getTextPosition()));
             }
 
             if(bNewStartIsNotOldStart)
@@ -137,6 +142,7 @@ namespace drawinglayer::primitive2d
                         nIndex,
                         nLength,
                         std::move(aNewDXArray),
+                        std::move(aNewKashidaArray),
                         mrSource.getFontAttribute(),
                         mrSource.getLocale(),
                         mrSource.getFontColor(),
@@ -168,6 +174,7 @@ namespace drawinglayer::primitive2d
                         nIndex,
                         nLength,
                         std::move(aNewDXArray),
+                        std::move(aNewKashidaArray),
                         mrSource.getFontAttribute(),
                         mrSource.getLocale(),
                         mrSource.getFontColor()));

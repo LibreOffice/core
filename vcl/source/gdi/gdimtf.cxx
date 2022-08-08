@@ -978,7 +978,7 @@ void GDIMetaFile::Rotate( Degree10 nAngle10 )
             {
                 MetaTextArrayAction* pAct = static_cast<MetaTextArrayAction*>(pAction);
                 aMtf.AddAction( new MetaTextArrayAction( ImplGetRotatedPoint( pAct->GetPoint(), aRotAnchor, aRotOffset, fSin, fCos ),
-                                                                              pAct->GetText(), pAct->GetDXArray(), pAct->GetIndex(), pAct->GetLen() ) );
+                                                                              pAct->GetText(), pAct->GetDXArray(), pAct->GetKashidaArray(), pAct->GetIndex(), pAct->GetLen() ) );
             }
             break;
 
@@ -1452,7 +1452,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference ) const
             tools::Rectangle aRect;
             // hdu said base = index
             aMapVDev->GetTextBoundRect( aRect, pAct->GetText(), pAct->GetIndex(), pAct->GetIndex(), pAct->GetLen(),
-                                       0, pAct->GetDXArray() );
+                                       0, pAct->GetDXArray(), pAct->GetKashidaArray() );
             Point aPt( pAct->GetPoint() );
             aRect.Move( aPt.X(), aPt.Y() );
             ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack );

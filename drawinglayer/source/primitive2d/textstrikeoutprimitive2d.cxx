@@ -97,6 +97,7 @@ namespace drawinglayer::primitive2d
                     0,
                     len,
                     std::move(aDXArray),
+                    {},
                     getFontAttribute(),
                     getLocale(),
                     getFontColor()));
