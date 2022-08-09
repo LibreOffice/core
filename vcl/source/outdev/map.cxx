@@ -1386,39 +1386,6 @@ basegfx::B2DPolyPolygon OutputDevice::PixelToLogic(const basegfx::B2DPolyPolygon
     return aTransformedPoly;
 }
 
-#define ENTER1(rSource, pMapModeSource, pMapModeDest)                                              \
-    if (!pMapModeSource)                                                                           \
-        pMapModeSource = &maMapMode;                                                               \
-    if (!pMapModeDest)                                                                             \
-        pMapModeDest = &maMapMode;                                                                 \
-    if (*pMapModeSource == *pMapModeDest)                                                          \
-        return rSource;                                                                            \
-                                                                                                   \
-    MappingMetrics aMapMetricsSource;                                                              \
-    MappingMetrics aMapMetricsDest;                                                                \
-                                                                                                   \
-    if (!IsMapModeEnabled() || pMapModeSource != &maMapMode)                                       \
-    {                                                                                              \
-        if (pMapModeSource->GetMapUnit() == MapUnit::MapRelative)                                  \
-            aMapMetricsSource = maGeometry.GetMapMetrics();                                        \
-        aMapMetricsSource.CalculateMappingResolution(*pMapModeSource, GetDPIX(), GetDPIY());       \
-    }                                                                                              \
-    else                                                                                           \
-    {                                                                                              \
-        aMapMetricsSource = maGeometry.GetMapMetrics();                                            \
-    }                                                                                              \
-                                                                                                   \
-    if (!IsMapModeEnabled() || pMapModeDest != &maMapMode)                                         \
-    {                                                                                              \
-        if (pMapModeDest->GetMapUnit() == MapUnit::MapRelative)                                    \
-            aMapMetricsSource = maGeometry.GetMapMetrics();                                        \
-        aMapMetricsDest.CalculateMappingResolution(*pMapModeDest, GetDPIX(), GetDPIY());           \
-    }                                                                                              \
-    else                                                                                           \
-    {                                                                                              \
-        aMapMetricsDest = maGeometry.GetMapMetrics();                                              \
-    }
-
 static void verifyUnitSourceDest(MapUnit eUnitSource, MapUnit eUnitDest)
 {
     DBG_ASSERT(eUnitSource != MapUnit::MapSysFont && eUnitSource != MapUnit::MapAppFont
@@ -1449,19 +1416,13 @@ auto getCorrectedUnit(MapUnit eMapSrc, MapUnit eMapDst)
 }
 }
 
-#define ENTER4(rMapModeSource, rMapModeDest)                                                       \
-    MappingMetrics aMapMetricsSource;                                                              \
-    MappingMetrics aMapMetricsDest;                                                                \
-                                                                                                   \
-    aMapMetricsSource.CalculateMappingResolution(rMapModeSource, 72, 72);                          \
-    aMapMetricsDest.CalculateMappingResolution(rMapModeDest, 72, 72)
-
 // return (n1 * n2 * n3) / (n4 * n5)
 static tools::Long fn5(const tools::Long n1, const tools::Long n2, const tools::Long n3,
                        const tools::Long n4, const tools::Long n5)
 {
     if (n1 == 0 || n2 == 0 || n3 == 0 || n4 == 0 || n5 == 0)
         return 0;
+
     if (std::numeric_limits<tools::Long>::max() / std::abs(n2) < std::abs(n3))
     {
         // a6 is skipped
@@ -1598,7 +1559,41 @@ static tools::Long fn3(const tools::Long n1, const o3tl::Length eFrom, const o3t
 Point OutputDevice::LogicToLogic(const Point& rPtSource, const MapMode* pMapModeSource,
                                  const MapMode* pMapModeDest) const
 {
-    ENTER1(rPtSource, pMapModeSource, pMapModeDest);
+    if (!pMapModeSource)
+        pMapModeSource = &maMapMode;
+
+    if (!pMapModeDest)
+        pMapModeDest = &maMapMode;
+
+    if (*pMapModeSource == *pMapModeDest)
+        return rPtSource;
+
+    MappingMetrics aMapMetricsSource;
+    MappingMetrics aMapMetricsDest;
+
+    if (!IsMapModeEnabled() || pMapModeSource != &maMapMode)
+    {
+        if (pMapModeSource->GetMapUnit() == MapUnit::MapRelative)
+            aMapMetricsSource = maGeometry.GetMapMetrics();
+
+        aMapMetricsSource.CalculateMappingResolution(*pMapModeSource, GetDPIX(), GetDPIY());
+    }
+    else
+    {
+        aMapMetricsSource = maGeometry.GetMapMetrics();
+    }
+
+    if (!IsMapModeEnabled() || pMapModeDest != &maMapMode)
+    {
+        if (pMapModeDest->GetMapUnit() == MapUnit::MapRelative)
+            aMapMetricsSource = maGeometry.GetMapMetrics();
+
+        aMapMetricsDest.CalculateMappingResolution(*pMapModeDest, GetDPIX(), GetDPIY());
+    }
+    else
+    {
+        aMapMetricsDest = maGeometry.GetMapMetrics();
+    }
 
     return Point(
         fn5(rPtSource.X() + aMapMetricsSource.mnMappingXOffset,
@@ -1614,7 +1609,41 @@ Point OutputDevice::LogicToLogic(const Point& rPtSource, const MapMode* pMapMode
 Size OutputDevice::LogicToLogic(const Size& rSzSource, const MapMode* pMapModeSource,
                                 const MapMode* pMapModeDest) const
 {
-    ENTER1(rSzSource, pMapModeSource, pMapModeDest);
+    if (!pMapModeSource)
+        pMapModeSource = &maMapMode;
+
+    if (!pMapModeDest)
+        pMapModeDest = &maMapMode;
+
+    if (*pMapModeSource == *pMapModeDest)
+        return rSzSource;
+
+    MappingMetrics aMapMetricsSource;
+    MappingMetrics aMapMetricsDest;
+
+    if (!IsMapModeEnabled() || pMapModeSource != &maMapMode)
+    {
+        if (pMapModeSource->GetMapUnit() == MapUnit::MapRelative)
+            aMapMetricsSource = maGeometry.GetMapMetrics();
+
+        aMapMetricsSource.CalculateMappingResolution(*pMapModeSource, GetDPIX(), GetDPIY());
+    }
+    else
+    {
+        aMapMetricsSource = maGeometry.GetMapMetrics();
+    }
+
+    if (!IsMapModeEnabled() || pMapModeDest != &maMapMode)
+    {
+        if (pMapModeDest->GetMapUnit() == MapUnit::MapRelative)
+            aMapMetricsSource = maGeometry.GetMapMetrics();
+
+        aMapMetricsDest.CalculateMappingResolution(*pMapModeDest, GetDPIX(), GetDPIY());
+    }
+    else
+    {
+        aMapMetricsDest = maGeometry.GetMapMetrics();
+    }
 
     return Size(
         fn5(rSzSource.Width(), aMapMetricsSource.mnMapScalingXNumerator,
@@ -1629,7 +1658,41 @@ tools::Rectangle OutputDevice::LogicToLogic(const tools::Rectangle& rRectSource,
                                             const MapMode* pMapModeSource,
                                             const MapMode* pMapModeDest) const
 {
-    ENTER1(rRectSource, pMapModeSource, pMapModeDest);
+    if (!pMapModeSource)
+        pMapModeSource = &maMapMode;
+
+    if (!pMapModeDest)
+        pMapModeDest = &maMapMode;
+
+    if (*pMapModeSource == *pMapModeDest)
+        return rRectSource;
+
+    MappingMetrics aMapMetricsSource;
+    MappingMetrics aMapMetricsDest;
+
+    if (!IsMapModeEnabled() || pMapModeSource != &maMapMode)
+    {
+        if (pMapModeSource->GetMapUnit() == MapUnit::MapRelative)
+            aMapMetricsSource = maGeometry.GetMapMetrics();
+
+        aMapMetricsSource.CalculateMappingResolution(*pMapModeSource, GetDPIX(), GetDPIY());
+    }
+    else
+    {
+        aMapMetricsSource = maGeometry.GetMapMetrics();
+    }
+
+    if (!IsMapModeEnabled() || pMapModeDest != &maMapMode)
+    {
+        if (pMapModeDest->GetMapUnit() == MapUnit::MapRelative)
+            aMapMetricsSource = maGeometry.GetMapMetrics();
+
+        aMapMetricsDest.CalculateMappingResolution(*pMapModeDest, GetDPIX(), GetDPIY());
+    }
+    else
+    {
+        aMapMetricsDest = maGeometry.GetMapMetrics();
+    }
 
     return tools::Rectangle(
         fn5(rRectSource.Left() + aMapMetricsSource.mnMappingXOffset,
@@ -1667,7 +1730,11 @@ Point OutputDevice::LogicToLogic(const Point& rPtSource, const MapMode& rMapMode
     }
     else
     {
-        ENTER4(rMapModeSource, rMapModeDest);
+        MappingMetrics aMapMetricsSource;
+        MappingMetrics aMapMetricsDest;
+
+        aMapMetricsSource.CalculateMappingResolution(rMapModeSource, 72, 72);
+        aMapMetricsDest.CalculateMappingResolution(rMapModeDest, 72, 72);
 
         return Point(
             fn5(rPtSource.X() + aMapMetricsSource.mnMappingXOffset,
@@ -1698,7 +1765,11 @@ Size OutputDevice::LogicToLogic(const Size& rSzSource, const MapMode& rMapModeSo
     }
     else
     {
-        ENTER4(rMapModeSource, rMapModeDest);
+        MappingMetrics aMapMetricsSource;
+        MappingMetrics aMapMetricsDest;
+
+        aMapMetricsSource.CalculateMappingResolution(rMapModeSource, 72, 72);
+        aMapMetricsDest.CalculateMappingResolution(rMapModeDest, 72, 72);
 
         return Size(fn5(rSzSource.Width(), aMapMetricsSource.mnMapScalingXNumerator,
                         aMapMetricsDest.mnMapScalingXDenominator,
@@ -1752,7 +1823,11 @@ basegfx::B2DHomMatrix OutputDevice::LogicToLogic(const MapMode& rMapModeSource,
     }
     else
     {
-        ENTER4(rMapModeSource, rMapModeDest);
+        MappingMetrics aMapMetricsSource;
+        MappingMetrics aMapMetricsDest;
+
+        aMapMetricsSource.CalculateMappingResolution(rMapModeSource, 72, 72);
+        aMapMetricsDest.CalculateMappingResolution(rMapModeDest, 72, 72);
 
         const double fScaleFactorX((double(aMapMetricsSource.mnMapScalingXNumerator)
                                     * double(aMapMetricsDest.mnMapScalingXDenominator))
@@ -1804,7 +1879,11 @@ tools::Rectangle OutputDevice::LogicToLogic(const tools::Rectangle& rRectSource,
     }
     else
     {
-        ENTER4(rMapModeSource, rMapModeDest);
+        MappingMetrics aMapMetricsSource;
+        MappingMetrics aMapMetricsDest;
+
+        aMapMetricsSource.CalculateMappingResolution(rMapModeSource, 72, 72);
+        aMapMetricsDest.CalculateMappingResolution(rMapModeDest, 72, 72);
 
         auto left = fn5(rRectSource.Left() + aMapMetricsSource.mnMappingXOffset,
                         aMapMetricsSource.mnMapScalingXNumerator,
