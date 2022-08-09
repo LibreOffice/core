@@ -242,7 +242,7 @@ SwUndoInsTable::SwUndoInsTable( const SwPosition& rPos, sal_uInt16 nCl, sal_uInt
 {
     if( pColArr )
     {
-        m_pColumnWidth.reset( new std::vector<sal_uInt16>(*pColArr) );
+        m_oColumnWidth.emplace( *pColArr );
     }
     if( pTAFormat )
         m_pAutoFormat.reset( new SwTableAutoFormat( *pTAFormat ) );
@@ -261,7 +261,7 @@ SwUndoInsTable::SwUndoInsTable( const SwPosition& rPos, sal_uInt16 nCl, sal_uInt
 SwUndoInsTable::~SwUndoInsTable()
 {
     m_pDDEFieldType.reset();
-    m_pColumnWidth.reset();
+    m_oColumnWidth.reset();
     m_pRedlineData.reset();
     m_pAutoFormat.reset();
 }
@@ -315,7 +315,8 @@ void SwUndoInsTable::RedoImpl(::sw::UndoRedoContext & rContext)
     SwPosition const aPos(rDoc.GetNodes(), m_nStartNode);
     const SwTable* pTable = rDoc.InsertTable( m_aInsTableOptions, aPos, m_nRows, m_nColumns,
                                             m_nAdjust,
-                                            m_pAutoFormat.get(), m_pColumnWidth.get() );
+                                            m_pAutoFormat.get(),
+                                            m_oColumnWidth ? &*m_oColumnWidth : nullptr );
     rDoc.GetEditShell()->MoveTable( GotoPrevTable, fnTableStart );
     static_cast<SwFrameFormat*>(pTable->GetFrameFormat())->SetFormatName( m_sTableName );
     SwTableNode* pTableNode = rDoc.GetNodes()[m_nStartNode]->GetTableNode();
@@ -355,7 +356,8 @@ void SwUndoInsTable::RepeatImpl(::sw::RepeatContext & rContext)
 {
     rContext.GetDoc().InsertTable(
             m_aInsTableOptions, *rContext.GetRepeatPaM().GetPoint(),
-            m_nRows, m_nColumns, m_nAdjust, m_pAutoFormat.get(), m_pColumnWidth.get() );
+            m_nRows, m_nColumns, m_nAdjust, m_pAutoFormat.get(),
+            m_oColumnWidth ? &*m_oColumnWidth : nullptr );
 }
 
 SwRewriter SwUndoInsTable::GetRewriter() const
