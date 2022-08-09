@@ -2859,7 +2859,7 @@ bool DocumentContentOperationsManager::InsertString( const SwPaM &rRg, const OUS
         if (bDoesUndo)
         {
             m_rDoc.GetIDocumentUndoRedo().AppendUndo(
-                std::make_unique<SwUndoInsert>(rPos.nNode,
+                std::make_unique<SwUndoInsert>(rPos.GetNode(),
                         rPos.GetContentIndex(), ins.getLength(), nInsertMode));
         }
     }
@@ -2884,7 +2884,7 @@ bool DocumentContentOperationsManager::InsertString( const SwPaM &rRg, const OUS
 
         if (!pUndo)
         {
-            pUndo = new SwUndoInsert( rPos.nNode, nInsPos, 0, nInsertMode,
+            pUndo = new SwUndoInsert( rPos.GetNode(), nInsPos, 0, nInsertMode,
                             !rCC.isLetterNumeric( rStr, 0 ) );
             m_rDoc.GetIDocumentUndoRedo().AppendUndo( std::unique_ptr<SwUndo>(pUndo) );
         }
@@ -2897,7 +2897,7 @@ bool DocumentContentOperationsManager::InsertString( const SwPaM &rRg, const OUS
             // if CanGrouping() returns true, everything has already been done
             if (!pUndo->CanGrouping(ins[i]))
             {
-                pUndo = new SwUndoInsert(rPos.nNode, nInsPos, 1, nInsertMode,
+                pUndo = new SwUndoInsert(rPos.GetNode(), nInsPos, 1, nInsertMode,
                             !rCC.isLetterNumeric(ins, i));
                 m_rDoc.GetIDocumentUndoRedo().AppendUndo( std::unique_ptr<SwUndo>(pUndo) );
             }
@@ -3433,7 +3433,7 @@ bool DocumentContentOperationsManager::AppendTextNode( SwPosition& rPos )
 
     if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
-        m_rDoc.GetIDocumentUndoRedo().AppendUndo( std::make_unique<SwUndoInsert>( rPos.nNode ) );
+        m_rDoc.GetIDocumentUndoRedo().AppendUndo( std::make_unique<SwUndoInsert>( rPos.GetNode() ) );
     }
 
     // To-Do - add 'SwExtraRedlineTable' also ?
