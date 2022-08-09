@@ -107,7 +107,7 @@ class SW_DLLPUBLIC SwNodes final
            *m_pEndOfAutotext, *m_pEndOfRedlines;
     std::unique_ptr<SwNode> m_pEndOfContent;
 
-    mutable std::unique_ptr<SwOutlineNodes> m_pOutlineNodes;        ///< Array of all outline nodes.
+    mutable SwOutlineNodes m_aOutlineNodes;        ///< Array of all outline nodes.
 
     bool m_bInNodesDel : 1;           /**< In Case of recursive calling.
                                            Do not update Num/Outline. */
@@ -234,7 +234,7 @@ public:
                             SwAttrSet const * pAutoAttr ); ///< in ndole.cxx
 
     /// Array of all OutlineNodes.
-    const SwOutlineNodes& GetOutLineNds() const { return *m_pOutlineNodes;}
+    const SwOutlineNodes& GetOutLineNds() const { return m_aOutlineNodes;}
 
     /// Update all Nodes - Rule/Format-Change.
     void UpdateOutlineNode(SwNode & rNd);
