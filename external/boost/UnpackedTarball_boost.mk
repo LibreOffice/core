@@ -33,6 +33,8 @@ boost_patches += msvc2017.patch.0
 
 boost_patches += libc++.patch.0
 
+# <https://github.com/boostorg/numeric_conversion/pull/25> "Fix ill-formed constant expression
+# errors":
 boost_patches += constexpr.patch.0
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,boost))
