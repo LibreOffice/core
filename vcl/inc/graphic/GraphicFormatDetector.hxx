@@ -157,7 +157,8 @@ public:
 
     bool checkMET();
     bool checkBMP();
-    bool checkWMForEMF();
+    bool checkWMF();
+    bool checkEMF();
     bool checkPCX();
     bool checkTIF();
     bool checkGIF();
