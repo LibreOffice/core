@@ -16,6 +16,23 @@
       "message": "I learned a lot working on this bug. But there is still a ton about this that I don\u0027t know. I expect you\u0027ve seen something like this in other places. Is this the way to handle this - or should vcl/unx/gtk3/gtkinst.cxx sooner return the switched page as the current page? Messing with extensions is certainly safer...",
       "revId": "8cabae6f218ca597e71c7ec817d3228daa683300",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e49630cc_ea82cacc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-08-09T02:27:20Z",
+      "side": 1,
+      "message": "The commit message could use a bit more detail. In the prior patch I said \"gtk3 needs an additional fix so it doesn\u0027t follow the second-last-used-tab instead.\"\n\nPrior to this patch, reloading the document would save the second-last-used tab from the form control properties. With this patch it will properly save the last-used-tab.",
+      "revId": "8cabae6f218ca597e71c7ec817d3228daa683300",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
