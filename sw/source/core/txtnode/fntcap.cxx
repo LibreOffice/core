@@ -517,9 +517,9 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
         rDo.SetCapInf( aCapInf );
 
     SwFntObj *pOldLast = pLastFont;
-    std::unique_ptr<SwFntAccess> pBigFontAccess;
+    std::optional<SwFntAccess> oBigFontAccess;
     SwFntObj *pBigFont;
-    std::unique_ptr<SwFntAccess> pSpaceFontAccess;
+    std::optional<SwFntAccess> oSpaceFontAccess;
     SwFntObj *pSpaceFont = nullptr;
 
     const void* nFontCacheId2 = nullptr;
@@ -539,9 +539,9 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
         if ( bWordWise )
         {
             aFont.SetWordLineMode( false );
-            pSpaceFontAccess.reset(new SwFntAccess( nFontCacheId2, nIndex2, &aFont,
-                                                rDo.GetInf().GetShell() ));
-            pSpaceFont = pSpaceFontAccess->Get();
+            oSpaceFontAccess.emplace( nFontCacheId2, nIndex2, &aFont,
+                                                rDo.GetInf().GetShell() );
+            pSpaceFont = oSpaceFontAccess->Get();
         }
         else
             pSpaceFont = pLastFont;
@@ -552,9 +552,9 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
         aFont.SetStrikeout( STRIKEOUT_NONE );
         nFontCacheId2 = nullptr;
         nIndex2 = 0;
-        pBigFontAccess.reset(new SwFntAccess( nFontCacheId2, nIndex2, &aFont,
-                                          rDo.GetInf().GetShell() ));
-        pBigFont = pBigFontAccess->Get();
+        oBigFontAccess.emplace( nFontCacheId2, nIndex2, &aFont,
+                                          rDo.GetInf().GetShell() );
+        pBigFont = oBigFontAccess->Get();
     }
     else
         pBigFont = pLastFont;
@@ -568,9 +568,9 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
     aFont.SetProportion( (aFont.GetPropr() * smallCapsPercentage ) / 100 );
     nFontCacheId2 = nullptr;
     nIndex2 = 0;
-    std::unique_ptr<SwFntAccess> pSmallFontAccess( new SwFntAccess( nFontCacheId2, nIndex2, &aFont,
-                                                     rDo.GetInf().GetShell() ));
-    SwFntObj *pSmallFont = pSmallFontAccess->Get();
+    std::optional<SwFntAccess> oSmallFontAccess( std::in_place, nFontCacheId2, nIndex2, &aFont,
+                                                     rDo.GetInf().GetShell() );
+    SwFntObj *pSmallFont = oSmallFontAccess->Get();
 
     rDo.Init( pBigFont, pSmallFont );
     OutputDevice* pOutSize = pSmallFont->GetPrt();
@@ -758,7 +758,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
 
     // clean up:
     if( pBigFont != pOldLast )
-        pBigFontAccess.reset();
+        oBigFontAccess.reset();
 
     if( bTextLines )
     {
@@ -769,12 +769,12 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
             static_cast<SwDoDrawCapital&>( rDo ).DrawSpace( aStartPos );
         }
         if ( bWordWise )
-            pSpaceFontAccess.reset();
+            oSpaceFontAccess.reset();
     }
     pLastFont = pOldLast;
     pLastFont->SetDevFont( rDo.GetInf().GetShell(), rDo.GetOut() );
 
-    pSmallFontAccess.reset();
+    oSmallFontAccess.reset();
     rDo.GetInf().SetText(oldText);
     rDo.GetInf().SetKanaDiff( nKana );
 }
