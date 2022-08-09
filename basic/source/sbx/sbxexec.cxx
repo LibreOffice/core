@@ -323,7 +323,7 @@ static SbxVariableRef Element
             }
         }
         else
-            SbxBase::SetError( ERRCODE_BASIC_NO_METHOD );
+            SbxBase::SetError( ERRCODE_BASIC_NO_METHOD, aSym );
     }
     *ppBuf = p;
     return refVar;
