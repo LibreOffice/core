@@ -84,10 +84,10 @@ std::optional<OUString> SwUndoInsert::GetTextFromDoc() const
     return aResult;
 }
 
-void SwUndoInsert::Init(const SwNodeIndex & rNd)
+void SwUndoInsert::Init(const SwNode & rNd)
 {
     // consider Redline
-    m_pDoc = &rNd.GetNode().GetDoc();
+    m_pDoc = const_cast<SwDoc*>(&rNd.GetDoc());
     if( m_pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
     {
         m_pRedlData.reset( new SwRedlineData( RedlineType::Insert,
@@ -100,11 +100,11 @@ void SwUndoInsert::Init(const SwNodeIndex & rNd)
     m_bCacheComment = false;
 }
 
-SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd, sal_Int32 nCnt,
+SwUndoInsert::SwUndoInsert( const SwNode& rNd, sal_Int32 nCnt,
             sal_Int32 nL,
             const SwInsertFlags nInsertFlags,
             bool bWDelim )
-    : SwUndo(SwUndoId::TYPING, &rNd.GetNode().GetDoc()),
+    : SwUndo(SwUndoId::TYPING, &rNd.GetDoc()),
         m_nNode( rNd.GetIndex() ), m_nContent(nCnt), m_nLen(nL),
         m_bIsWordDelim( bWDelim ), m_bIsAppend( false )
     , m_bWithRsid(false)
@@ -113,8 +113,8 @@ SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd, sal_Int32 nCnt,
     Init(rNd);
 }
 
-SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd )
-    : SwUndo(SwUndoId::SPLITNODE, &rNd.GetNode().GetDoc()),
+SwUndoInsert::SwUndoInsert( const SwNode& rNd )
+    : SwUndo(SwUndoId::SPLITNODE, &rNd.GetDoc()),
         m_nNode( rNd.GetIndex() ), m_nContent(0), m_nLen(1),
         m_bIsWordDelim( false ), m_bIsAppend( true )
     , m_bWithRsid(false)

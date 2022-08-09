@@ -60,14 +60,14 @@ class SwUndoInsert final : public SwUndo, private SwUndoSaveContent
 
     SwDoc * m_pDoc;
 
-    void Init(const SwNodeIndex & rNode);
+    void Init(const SwNode & rNode);
     std::optional<OUString> GetTextFromDoc() const;
 
 public:
-    SwUndoInsert( const SwNodeIndex& rNode, sal_Int32 nContent, sal_Int32 nLen,
+    SwUndoInsert( const SwNode& rNode, sal_Int32 nContent, sal_Int32 nLen,
                   const SwInsertFlags nInsertFlags,
                   bool bWDelim = true );
-    SwUndoInsert( const SwNodeIndex& rNode );
+    SwUndoInsert( const SwNode& rNode );
     virtual ~SwUndoInsert() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
