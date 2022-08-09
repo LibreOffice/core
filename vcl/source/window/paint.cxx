@@ -495,7 +495,7 @@ void Window::PushPaintHelper(PaintHelper *pHelper, vcl::RenderContext& rRenderCo
         rRenderContext.ReMirror(aPaintRect);
         rRenderContext.ReMirror(rPaintRegion);
     }
-    aPaintRect = GetOutDev()->ImplDevicePixelToLogic(aPaintRect);
+    aPaintRect = GetOutDev()->GetGeometry().DevicePixelToLogic(aPaintRect);
     mpWindowImpl->mpPaintRegion = &rPaintRegion;
     mpWindowImpl->maInvalidateRegion.SetEmpty();
 
@@ -1162,7 +1162,7 @@ void Window::Invalidate( const tools::Rectangle& rRect, InvalidateFlags nFlags )
     }
 
     OutputDevice *pOutDev = GetOutDev();
-    tools::Rectangle aRect = pOutDev->ImplLogicToDevicePixel( rRect );
+    tools::Rectangle aRect = pOutDev->GetGeometry().LogicToDevicePixel( rRect );
     if ( !aRect.IsEmpty() )
     {
         vcl::Region aRegion( aRect );
@@ -1187,7 +1187,7 @@ void Window::Invalidate( const vcl::Region& rRegion, InvalidateFlags nFlags )
     }
     else
     {
-        vcl::Region aRegion = GetOutDev()->ImplPixelToDevicePixel( LogicToPixel( rRegion ) );
+        vcl::Region aRegion = GetOutDev()->GetGeometry().PixelToDevicePixel( LogicToPixel( rRegion ) );
         if ( !aRegion.IsEmpty() )
         {
             ImplInvalidate( &aRegion, nFlags );
@@ -1201,7 +1201,7 @@ void Window::LogicInvalidate(const tools::Rectangle* pRectangle)
 {
     if(pRectangle)
     {
-        tools::Rectangle aRect = GetOutDev()->ImplLogicToDevicePixel( *pRectangle );
+        tools::Rectangle aRect = GetOutDev()->GetGeometry().LogicToDevicePixel( *pRectangle );
         PixelInvalidate(&aRect);
     }
     else
@@ -1652,8 +1652,8 @@ void Window::ImplScroll( const tools::Rectangle& rRect,
     if ( !GetOutDev()->IsDeviceOutputNecessary() )
         return;
 
-    nHorzScroll = GetOutDev()->ImplLogicWidthToDevicePixel( nHorzScroll );
-    nVertScroll = GetOutDev()->ImplLogicHeightToDevicePixel( nVertScroll );
+    nHorzScroll = GetOutDev()->maGeometry.LogicWidthToDevicePixel( nHorzScroll );
+    nVertScroll = GetOutDev()->maGeometry.LogicHeightToDevicePixel( nVertScroll );
 
     if ( !nHorzScroll && !nVertScroll )
         return;
@@ -1719,7 +1719,7 @@ void Window::ImplScroll( const tools::Rectangle& rRect,
     if ( nFlags & ScrollFlags::Clip )
         aRegion.Intersect( rRect );
     if ( mpWindowImpl->mbWinRegion )
-        aRegion.Intersect( GetOutDev()->ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
+        aRegion.Intersect( GetOutDev()->GetGeometry().PixelToDevicePixel( mpWindowImpl->maWinRegion ) );
 
     aRegion.Exclude( aInvalidateRegion );
 

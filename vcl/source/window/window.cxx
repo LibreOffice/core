@@ -1495,7 +1495,7 @@ void Window::ImplPosSizeWindow( tools::Long nX, tools::Long nY,
                                Size( nOldOutWidth, nOldOutHeight ) );
         pOldRegion.reset( new vcl::Region( aOldWinRect ) );
         if ( mpWindowImpl->mbWinRegion )
-            pOldRegion->Intersect( GetOutDev()->ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
+            pOldRegion->Intersect( GetOutDev()->GetGeometry().PixelToDevicePixel( mpWindowImpl->maWinRegion ) );
 
         if ( GetOutDev()->GetWidth() && GetOutDev()->GetHeight() && !mpWindowImpl->mbPaintTransparent &&
              !mpWindowImpl->mbInitWinClipRegion && !mpWindowImpl->maWinClipRegion.IsEmpty() &&
@@ -1678,7 +1678,7 @@ void Window::ImplPosSizeWindow( tools::Long nX, tools::Long nY,
                 {
                     vcl::Region aRegion( GetFrameRect() );
                     if ( mpWindowImpl->mbWinRegion )
-                        aRegion.Intersect( GetOutDev()->ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
+                        aRegion.Intersect( GetOutDev()->GetGeometry().PixelToDevicePixel( mpWindowImpl->maWinRegion ) );
                     ImplClipBoundaries( aRegion, false, true );
                     if ( !pOverlapRegion->IsEmpty() )
                     {
@@ -1729,7 +1729,7 @@ void Window::ImplPosSizeWindow( tools::Long nX, tools::Long nY,
                 vcl::Region aRegion( GetFrameRect() );
                 aRegion.Exclude( *pOldRegion );
                 if ( mpWindowImpl->mbWinRegion )
-                    aRegion.Intersect( GetOutDev()->ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
+                    aRegion.Intersect( GetOutDev()->GetGeometry().PixelToDevicePixel( mpWindowImpl->maWinRegion ) );
                 ImplClipBoundaries( aRegion, false, true );
                 if ( !aRegion.IsEmpty() )
                     ImplInvalidateFrameRegion( &aRegion, InvalidateFlags::Children );
@@ -1780,7 +1780,7 @@ void Window::ImplNewInputContext()
     if (!rFontName.isEmpty())
     {
         OutputDevice *pFocusWinOutDev = pFocusWin->GetOutDev();
-        Size aSize = pFocusWinOutDev->ImplLogicToDevicePixel( rFont.GetFontSize() );
+        Size aSize = pFocusWinOutDev->GetGeometry().LogicToDevicePixel( rFont.GetFontSize() );
         if ( !aSize.Height() )
         {
             // only set default sizes if the font height in logical
@@ -2976,7 +2976,7 @@ void Window::Scroll( tools::Long nHorzScroll, tools::Long nVertScroll,
                      const tools::Rectangle& rRect, ScrollFlags nFlags )
 {
     OutputDevice *pOutDev = GetOutDev();
-    tools::Rectangle aRect = pOutDev->ImplLogicToDevicePixel( rRect );
+    tools::Rectangle aRect = pOutDev->GetGeometry().LogicToDevicePixel( rRect );
     aRect.Intersection( GetFrameRect() );
     if ( !aRect.IsEmpty() )
         ImplScroll( aRect, nHorzScroll, nVertScroll, nFlags );

@@ -177,9 +177,9 @@ void OutputDevice::DrawDeviceBitmapEx( const Point& rDestPt, const Size& rDestSi
     else if (!rBitmapEx.IsEmpty())
     {
         SalTwoRect aPosAry(rSrcPtPixel.X(), rSrcPtPixel.Y(), rSrcSizePixel.Width(), rSrcSizePixel.Height(),
-                           ImplLogicXToDevicePixel(rDestPt.X()), ImplLogicYToDevicePixel(rDestPt.Y()),
-                           ImplLogicWidthToDevicePixel(rDestSize.Width()),
-                           ImplLogicHeightToDevicePixel(rDestSize.Height()));
+                           maGeometry.LogicXToDevicePixel(rDestPt.X()), maGeometry.LogicYToDevicePixel(rDestPt.Y()),
+                           maGeometry.LogicWidthToDevicePixel(rDestSize.Width()),
+                           maGeometry.LogicHeightToDevicePixel(rDestSize.Height()));
 
         const BmpMirrorFlags nMirrFlags = AdjustTwoRect(aPosAry, rBitmapEx.GetSizePixel());
 
@@ -218,10 +218,10 @@ void OutputDevice::DrawDeviceBitmapEx( const Point& rDestPt, const Size& rDestSi
                     // bitmap, if aPosAry contains the whole bitmap (and
                     // it's _not_ to blame for that).
 
-                    // Note the call to ImplPixelToDevicePixel(), since
+                    // Note the call to maGeometry.PixelToDevicePixel(), since
                     // aPosAry already contains the mnOutOff-offsets, they
                     // also have to be applied to the region
-                    tools::Rectangle aClipRegionBounds( ImplPixelToDevicePixel(maRegion).GetBoundRect() );
+                    tools::Rectangle aClipRegionBounds( maGeometry.PixelToDevicePixel(maRegion).GetBoundRect() );
 
                     // TODO: Also respect scaling (that's a bit tricky,
                     // since the source points have to move fractional

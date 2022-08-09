@@ -1465,13 +1465,13 @@ static void ImplHandleExtTextInputPos( vcl::Window* pWindow,
         ImplCallCommand( pChild, CommandEventId::CursorPos );
         const tools::Rectangle* pRect = pChild->GetCursorRect();
         if ( pRect )
-            rRect = pChildOutDev->ImplLogicToDevicePixel( *pRect );
+            rRect = pChildOutDev->GetGeometry().LogicToDevicePixel( *pRect );
         else
         {
             vcl::Cursor* pCursor = pChild->GetCursor();
             if ( pCursor )
             {
-                Point aPos = pChildOutDev->ImplLogicToDevicePixel( pCursor->GetPos() );
+                Point aPos = pChildOutDev->GetGeometry().LogicToDevicePixel( pCursor->GetPos() );
                 Size aSize = pChild->LogicToPixel( pCursor->GetSize() );
                 if ( !aSize.Width() )
                     aSize.setWidth( pChild->GetSettings().GetStyleSettings().GetCursorSize() );
@@ -1480,7 +1480,7 @@ static void ImplHandleExtTextInputPos( vcl::Window* pWindow,
             else
                 rRect = tools::Rectangle( Point( pChild->GetFrameOffset().X(), pChild->GetFrameOffset().Y() ), Size() );
         }
-        rInputWidth = pChild->GetOutDev()->ImplLogicWidthToDevicePixel( pChild->GetCursorExtTextInputWidth() );
+        rInputWidth = pChild->GetOutDev()->GetGeometry().LogicWidthToDevicePixel( pChild->GetCursorExtTextInputWidth() );
         if ( !rInputWidth )
             rInputWidth = rRect.GetWidth();
     }
@@ -2640,7 +2640,7 @@ static void ImplHandleSalQueryCharPosition( vcl::Window *pWindow,
 
     const OutputDevice *pChildOutDev = pChild->GetOutDev();
     const tools::Rectangle& aRect = pWinData->mpCompositionCharRects[ pEvt->mnCharPos ];
-    tools::Rectangle aDeviceRect = pChildOutDev->ImplLogicToDevicePixel( aRect );
+    tools::Rectangle aDeviceRect = pChildOutDev->GetGeometry().LogicToDevicePixel( aRect );
     Point aAbsScreenPos = pChild->OutputToAbsoluteScreenPixel( pChild->ScreenToOutputPixel(aDeviceRect.TopLeft()) );
     pEvt->mnCursorBoundX = aAbsScreenPos.X();
     pEvt->mnCursorBoundY = aAbsScreenPos.Y();

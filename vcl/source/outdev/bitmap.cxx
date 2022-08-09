@@ -139,9 +139,9 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
     if( !aBmp.IsEmpty() )
     {
         SalTwoRect aPosAry(rSrcPtPixel.X(), rSrcPtPixel.Y(), rSrcSizePixel.Width(), rSrcSizePixel.Height(),
-                           ImplLogicXToDevicePixel(rDestPt.X()), ImplLogicYToDevicePixel(rDestPt.Y()),
-                           ImplLogicWidthToDevicePixel(rDestSize.Width()),
-                           ImplLogicHeightToDevicePixel(rDestSize.Height()));
+                           maGeometry.LogicXToDevicePixel(rDestPt.X()), maGeometry.LogicYToDevicePixel(rDestPt.Y()),
+                           maGeometry.LogicWidthToDevicePixel(rDestSize.Width()),
+                           maGeometry.LogicHeightToDevicePixel(rDestSize.Height()));
 
         if ( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
         {
@@ -181,10 +181,10 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
 Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
 {
     Bitmap  aBmp;
-    tools::Long    nX = ImplLogicXToDevicePixel( rSrcPt.X() );
-    tools::Long    nY = ImplLogicYToDevicePixel( rSrcPt.Y() );
-    tools::Long    nWidth = ImplLogicWidthToDevicePixel( rSize.Width() );
-    tools::Long    nHeight = ImplLogicHeightToDevicePixel( rSize.Height() );
+    tools::Long    nX = maGeometry.LogicXToDevicePixel( rSrcPt.X() );
+    tools::Long    nY = maGeometry.LogicYToDevicePixel( rSrcPt.Y() );
+    tools::Long    nWidth = maGeometry.LogicWidthToDevicePixel( rSize.Width() );
+    tools::Long    nHeight = maGeometry.LogicHeightToDevicePixel( rSize.Height() );
 
     if ( mpGraphics || AcquireGraphics() )
     {
