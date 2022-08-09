@@ -51,6 +51,23 @@
       "message": "oh, Deja Vu... the problem is that somehow the \"Change-Id:\" line got lost when you created the new patch, and a new Change-Id was generated; then gerrit won\u0027t know it\u0027s a new version of the same change... i\u0027ll just abandon this one.",
       "revId": "389f96c64baf9ae3e5ba7f4f1dd20fe0df96b15e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e8b988e_be810da5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-08-09T10:18:23Z",
+      "side": 1,
+      "message": "Just looking into my crystal ball, maybe you committed with\n\ngit commit -m message --amend\n\nwhich unfortunately does NOT preserve the Change-Id line. Take care in the future to not use -m when amending.",
+      "revId": "389f96c64baf9ae3e5ba7f4f1dd20fe0df96b15e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ],
   "submitRequirementResults": []
