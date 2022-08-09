@@ -149,7 +149,7 @@ def parse_details_and_get_info(url, gitRepo):
                     lines = f.readlines()
                     for index, line in enumerate(lines):
                         if index + 1 == int(codeNumber):
-                            codeLine += line.strip() + "\n"
+                            codeLine += line.strip().replace("\"", "'") + "\n"
             except FileNotFoundError:
                 codeLine += "\n"
                 continue
