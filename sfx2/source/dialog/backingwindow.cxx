@@ -69,7 +69,7 @@ private:
     Size m_BmpSize;
 
 public:
-    Size getSize() { return m_BmpSize; }
+    const Size & getSize() { return m_BmpSize; }
 
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override
     {

@@ -796,7 +796,7 @@ void SwSelPaintRects::HighlightContentControl()
     }
 }
 
-VclPtr<SwContentControlButton> SwSelPaintRects::GetContentControlButton() const
+const VclPtr<SwContentControlButton>& SwSelPaintRects::GetContentControlButton() const
 {
     return m_pContentControlButton;
 }

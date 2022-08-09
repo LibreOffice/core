@@ -78,7 +78,6 @@ public:
      */
     void NotifyChangeTextNode(SwTextNode* pTextNode);
     static SwFormatContentControl* CreatePoolDefault(sal_uInt16 nWhich);
-    std::shared_ptr<SwContentControl> GetContentControl() { return m_pContentControl; }
     const std::shared_ptr<SwContentControl>& GetContentControl() const { return m_pContentControl; }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
@@ -95,7 +94,7 @@ public:
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
-    OUString ToString() const;
+    const OUString& ToString() const;
 
     bool operator==(const SwContentControlListItem& rOther) const;
 
@@ -216,13 +215,13 @@ public:
 
     void SetCheckedState(const OUString& rCheckedState) { m_aCheckedState = rCheckedState; }
 
-    OUString GetCheckedState() const { return m_aCheckedState; }
+    const OUString& GetCheckedState() const { return m_aCheckedState; }
 
     void SetUncheckedState(const OUString& rUncheckedState) { m_aUncheckedState = rUncheckedState; }
 
-    OUString GetUncheckedState() const { return m_aUncheckedState; }
+    const OUString& GetUncheckedState() const { return m_aUncheckedState; }
 
-    std::vector<SwContentControlListItem> GetListItems() const { return m_aListItems; }
+    const std::vector<SwContentControlListItem>& GetListItems() const { return m_aListItems; }
 
     bool HasListItems() const { return !m_aListItems.empty(); }
 
@@ -241,15 +240,15 @@ public:
 
     void SetDateFormat(const OUString& rDateFormat) { m_aDateFormat = rDateFormat; }
 
-    OUString GetDateFormat() const { return m_aDateFormat; }
+    const OUString& GetDateFormat() const { return m_aDateFormat; }
 
     void SetDateLanguage(const OUString& rDateLanguage) { m_aDateLanguage = rDateLanguage; }
 
-    OUString GetDateLanguage() const { return m_aDateLanguage; }
+    const OUString& GetDateLanguage() const { return m_aDateLanguage; }
 
     void SetCurrentDate(const OUString& rCurrentDate) { m_aCurrentDate = rCurrentDate; }
 
-    OUString GetCurrentDate() const { return m_aCurrentDate; }
+    const OUString& GetCurrentDate() const { return m_aCurrentDate; }
 
     /// Formats fCurrentDate and sets it.
     void SetCurrentDateValue(double fCurrentDate);
@@ -269,18 +268,18 @@ public:
         m_aPlaceholderDocPart = rPlaceholderDocPart;
     }
 
-    OUString GetPlaceholderDocPart() const { return m_aPlaceholderDocPart; }
+    const OUString& GetPlaceholderDocPart() const { return m_aPlaceholderDocPart; }
 
     void SetSelectedListItem(std::optional<size_t> oSelectedListItem)
     {
         m_oSelectedListItem = oSelectedListItem;
     }
 
-    std::optional<size_t> GetSelectedListItem() const { return m_oSelectedListItem; }
+    const std::optional<size_t>& GetSelectedListItem() const { return m_oSelectedListItem; }
 
     void SetSelectedDate(std::optional<double> oSelectedDate) { m_oSelectedDate = oSelectedDate; }
 
-    std::optional<double> GetSelectedDate() const { return m_oSelectedDate; }
+    const std::optional<double>& GetSelectedDate() const { return m_oSelectedDate; }
 
     /// Should this character (during key input) interact with the content control?
     bool IsInteractingCharacter(sal_Unicode cCh);
@@ -295,25 +294,25 @@ public:
         m_aDataBindingPrefixMappings = rDataBindingPrefixMappings;
     }
 
-    OUString GetDataBindingPrefixMappings() const { return m_aDataBindingPrefixMappings; }
+    const OUString& GetDataBindingPrefixMappings() const { return m_aDataBindingPrefixMappings; }
 
     void SetDataBindingXpath(const OUString& rDataBindingXpath)
     {
         m_aDataBindingXpath = rDataBindingXpath;
     }
 
-    OUString GetDataBindingXpath() const { return m_aDataBindingXpath; }
+    const OUString& GetDataBindingXpath() const { return m_aDataBindingXpath; }
 
     void SetDataBindingStoreItemID(const OUString& rDataBindingStoreItemID)
     {
         m_aDataBindingStoreItemID = rDataBindingStoreItemID;
     }
 
-    OUString GetDataBindingStoreItemID() const { return m_aDataBindingStoreItemID; }
+    const OUString& GetDataBindingStoreItemID() const { return m_aDataBindingStoreItemID; }
 
     void SetColor(const OUString& rColor) { m_aColor = rColor; }
 
-    OUString GetColor() const { return m_aColor; }
+    const OUString& GetColor() const { return m_aColor; }
 
     void SetReadWrite(bool bReadWrite) { m_bReadWrite = bReadWrite; }
 

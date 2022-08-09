@@ -885,7 +885,7 @@ public:
     void ForceMetricToItemPoolMetric(basegfx::B2DPolyPolygon& rPolyPolygon) const noexcept;
 
 protected:
-    tools::Rectangle getOutRectangle() const;
+    const tools::Rectangle& getOutRectangle() const;
     void setOutRectangleConst(tools::Rectangle const& rRectangle) const; // need to do something about this
     void setOutRectangle(tools::Rectangle const& rRectangle);
     void resetOutRectangle();

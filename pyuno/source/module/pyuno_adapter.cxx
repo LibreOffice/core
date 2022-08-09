@@ -65,7 +65,7 @@ Adapter::~Adapter()
     mWrappedObject.scratch();
 }
 
-Sequence<sal_Int8> Adapter::getUnoTunnelId()
+const Sequence<sal_Int8> & Adapter::getUnoTunnelId()
 {
     static const comphelper::UnoIdInit g_id;
     return g_id.getSeq();

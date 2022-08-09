@@ -395,7 +395,7 @@ void SwContentControlListItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterEndElement(pWriter);
 }
 
-OUString SwContentControlListItem::ToString() const
+const OUString& SwContentControlListItem::ToString() const
 {
     if (!m_aDisplayText.isEmpty())
     {
