@@ -37,6 +37,7 @@
 
 SbxAppData::SbxAppData()
     : eErrCode(ERRCODE_NONE)
+    , aErrorMsg(OUString())
     , eBasicFormaterLangType(LANGUAGE_DONTKNOW)
 {
 }
@@ -96,6 +97,21 @@ ErrCode const & SbxBase::GetError()
     return GetSbxData_Impl().eErrCode;
 }
 
+OUString const & SbxBase::GetErrorMsg()
+{
+    return GetSbxData_Impl().aErrorMsg;
+}
+
+void SbxBase::SetError(ErrCode e, const OUString& rMsg)
+{
+    SbxAppData& r = GetSbxData_Impl();
+    if (e && r.eErrCode == ERRCODE_NONE)
+    {
+        r.eErrCode = e;
+        r.aErrorMsg = rMsg;
+    }
+}
+
 void SbxBase::SetError( ErrCode e )
 {
     SbxAppData& r = GetSbxData_Impl();
@@ -111,6 +127,7 @@ bool SbxBase::IsError()
 void SbxBase::ResetError()
 {
     GetSbxData_Impl().eErrCode = ERRCODE_NONE;
+    GetSbxData_Impl().aErrorMsg = OUString();
 }
 
 void SbxBase::AddFactory( SbxFactory* pFac )
