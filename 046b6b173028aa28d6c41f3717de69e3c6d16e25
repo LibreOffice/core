@@ -16,6 +16,24 @@
       "message": "hi Niko,\n\ncould you please send a license email to the mailing list as described in https://wiki.documentfoundation.org/Development/Developers#Example_Code_Contributor_Statement",
       "revId": "046b6b173028aa28d6c41f3717de69e3c6d16e25",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb12e596_44453747",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-08-09T09:55:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cc8b844b_ff398d6b",
+      "revId": "046b6b173028aa28d6c41f3717de69e3c6d16e25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
