@@ -31,11 +31,6 @@
 #include "graphicfilter_internal.hxx"
 
 #define DATA_SIZE           640
-constexpr sal_uInt32 EMF_CHECK_SIZE      = 44;
-constexpr sal_uInt32 WMF_CHECK_SIZE      = 32;
-constexpr sal_uInt32 EMR_HEADER          = 0x00000001;
-constexpr sal_uInt32 ENHMETA_SIGNATURE   = 0x464d4520;
-constexpr sal_uInt32 PLACEABLE_SIGNATURE = 0x9ac6cdd7;
 namespace
 {
 enum class MetafileType : sal_uInt16
@@ -1071,110 +1066,27 @@ bool GraphicDescriptor::ImpDetectSVM( SvStream& rStm, bool bExtendedInfo )
     return bRet;
 }
 
-bool GraphicDescriptor::ImpDetectWMF(SvStream& rStm, bool)
+bool GraphicDescriptor::ImpDetectWMF(SvStream& rStm, bool /*bExtendedInfo*/)
 {
-    bool bRet = false;
-    SvStream* aNewStream = &rStm;
-    SvMemoryStream aMemStream;
-    sal_uInt8 aUncompressedBuffer[WMF_CHECK_SIZE];
-    if (ZCodec::IsZCompressed(rStm))
-    {
-        ZCodec aCodec;
-        aCodec.BeginCompression(ZCODEC_DEFAULT_COMPRESSION, /*gzLib*/ true);
-        auto nDecompressLength = aCodec.Read(rStm, aUncompressedBuffer, WMF_CHECK_SIZE);
-        aCodec.EndCompression();
-        if (nDecompressLength != WMF_CHECK_SIZE)
-            return false;
-        aMemStream.SetBuffer(aUncompressedBuffer, WMF_CHECK_SIZE, WMF_CHECK_SIZE);
-        aNewStream = &aMemStream;
-    }
-    sal_uInt32 nKey = 0;
     sal_Int32 nStmPos = rStm.Tell();
-    aNewStream->SetEndian(SvStreamEndian::LITTLE);
-    aNewStream->ReadUInt32(nKey);
-    // Check if file is placeable WMF
-    if (nKey == PLACEABLE_SIGNATURE)
-    {
-        aMetadata.mnFormat = GraphicFileFormat::WMF;
-        bRet = true;
-    }
-    else
-    {
-        sal_uInt16 nKeyLSW = nKey & 0xFFFF;
-        sal_uInt16 nVersion = 0;
-        aNewStream->ReadUInt16(nVersion);
-        if ((nKeyLSW == static_cast<sal_uInt16>(MetafileType::Memory)
-            || nKeyLSW == static_cast<sal_uInt16>(MetafileType::Disk))
-            && (nVersion == static_cast<sal_uInt16>(MetafileVersion::Version100)
-            || nVersion == static_cast<sal_uInt16>(MetafileVersion::Version300)))
-        {
-            aMetadata.mnFormat = GraphicFileFormat::WMF;
-            bRet = true;
-        }
-    }
-
-    rStm.Seek(nStmPos);
+    vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /*bExtendedInfo*/ );
+    bool bRet = aDetector.detect();
+    bRet &= aDetector.checkWMF();
+    if ( bRet )
+        aMetadata = aDetector.getMetadata();
+    rStm.Seek( nStmPos );
     return bRet;
 }
 
 bool GraphicDescriptor::ImpDetectEMF(SvStream& rStm, bool bExtendedInfo)
 {
-    SvStream* aNewStream = &rStm;
-    SvMemoryStream aMemStream;
-    sal_uInt8 aUncompressedBuffer[EMF_CHECK_SIZE];
-    if (ZCodec::IsZCompressed(rStm))
-    {
-        ZCodec aCodec;
-        aCodec.BeginCompression(ZCODEC_DEFAULT_COMPRESSION, /*gzLib*/ true);
-        auto nDecompressLength = aCodec.Read(rStm, aUncompressedBuffer, EMF_CHECK_SIZE);
-        aCodec.EndCompression();
-        if (nDecompressLength != EMF_CHECK_SIZE)
-            return false;
-        aMemStream.SetBuffer(aUncompressedBuffer, EMF_CHECK_SIZE, EMF_CHECK_SIZE);
-        aNewStream = &aMemStream;
-    }
-
-    sal_uInt32 nRecordType = 0;
-    bool bRet = false;
-    sal_Int32 nStmPos = aNewStream->Tell();
-    aNewStream->SetEndian(SvStreamEndian::LITTLE);
-    aNewStream->ReadUInt32(nRecordType);
-    if (nRecordType == EMR_HEADER)
-    {
-        sal_Int32 nBoundLeft = 0, nBoundTop = 0, nBoundRight = 0, nBoundBottom = 0;
-        sal_Int32 nFrameLeft = 0, nFrameTop = 0, nFrameRight = 0, nFrameBottom = 0;
-        sal_uInt32 nSignature = 0;
-
-        aNewStream->SeekRel(4);
-        aNewStream->ReadInt32(nBoundLeft);
-        aNewStream->ReadInt32(nBoundTop);
-        aNewStream->ReadInt32(nBoundRight);
-        aNewStream->ReadInt32(nBoundBottom);
-        aNewStream->ReadInt32(nFrameLeft);
-        aNewStream->ReadInt32(nFrameTop);
-        aNewStream->ReadInt32(nFrameRight);
-        aNewStream->ReadInt32(nFrameBottom);
-        aNewStream->ReadUInt32(nSignature);
-
-        if (nSignature == ENHMETA_SIGNATURE)
-        {
-            aMetadata.mnFormat = GraphicFileFormat::EMF;
-            bRet = true;
-
-            if (bExtendedInfo)
-            {
-                // size in pixels
-                aMetadata.maPixSize.setWidth(nBoundRight - nBoundLeft + 1);
-                aMetadata.maPixSize.setHeight(nBoundBottom - nBoundTop + 1);
-
-                // size in 0.01mm units
-                aMetadata.maLogSize.setWidth(nFrameRight - nFrameLeft + 1);
-                aMetadata.maLogSize.setHeight(nFrameBottom - nFrameTop + 1);
-            }
-        }
-    }
-
-    rStm.Seek(nStmPos);
+    sal_Int32 nStmPos = rStm.Tell();
+    vcl::GraphicFormatDetector aDetector( rStm, aPathExt, bExtendedInfo );
+    bool bRet = aDetector.detect();
+    bRet &= aDetector.checkEMF();
+    if ( bRet )
+        aMetadata = aDetector.getMetadata();
+    rStm.Seek( nStmPos );
     return bRet;
 }
 
