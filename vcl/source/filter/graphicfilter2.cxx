@@ -773,12 +773,15 @@ bool GraphicDescriptor::ImpDetectXBM( SvStream& rStm, bool )
     return bRet;
 }
 
-bool GraphicDescriptor::ImpDetectXPM( SvStream&, bool )
+bool GraphicDescriptor::ImpDetectXPM( SvStream& rStm, bool )
 {
-    bool bRet = aPathExt.startsWith( "xpm" );
-    if (bRet)
-        aMetadata.mnFormat = GraphicFileFormat::XPM;
-
+    sal_Int32 nStmPos = rStm.Tell();
+    vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /* bExtendedInfo */ );
+    bool bRet = aDetector.detect();
+    bRet &= aDetector.checkXPM();
+    if ( bRet )
+        aMetadata = aDetector.getMetadata();
+    rStm.Seek( nStmPos );
     return bRet;
 }
 
