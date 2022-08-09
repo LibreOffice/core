@@ -192,7 +192,7 @@ oslFileError SAL_CALL osl_createTempFile(
 
     if (tmp_name)
     {
-        osl_createTempFile_impl_(
+        osl_error = osl_createTempFile_impl_(
             base_directory,
             tmp_name,
             b_delete_on_close,
