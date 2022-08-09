@@ -184,7 +184,7 @@ void QtWidget::handleMouseButtonEvent(const QtFrame& rFrame, const QMouseEvent* 
     }
 
     SalEvent nEventType;
-    if (pEvent->type() == QEvent::MouseButtonPress)
+    if (pEvent->type() == QEvent::MouseButtonPress || pEvent->type() == QEvent::MouseButtonDblClick)
         nEventType = SalEvent::MouseButtonDown;
     else
         nEventType = SalEvent::MouseButtonUp;
