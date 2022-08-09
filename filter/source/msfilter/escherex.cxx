@@ -1633,7 +1633,9 @@ bool EscherPropertyContainer::CreateGraphicProperties(const uno::Reference<beans
                   nFormat != GraphicFileFormat::TIF &&
                   nFormat != GraphicFileFormat::PCT &&
                   nFormat != GraphicFileFormat::WMF &&
-                  nFormat != GraphicFileFormat::EMF) )
+                  nFormat != GraphicFileFormat::WMZ &&
+                  nFormat != GraphicFileFormat::EMF &&
+                  nFormat != GraphicFileFormat::EMZ) )
             {
                 std::unique_ptr<SvStream> pIn(::utl::UcbStreamHelper::CreateStream(
                     aTmp.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ ));

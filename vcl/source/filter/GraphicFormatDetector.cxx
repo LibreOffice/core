@@ -74,7 +74,7 @@ bool peekGraphicFormat(SvStream& rStream, OUString& rFormatExtension, bool bTest
         || rFormatExtension.startsWith("EMF") || rFormatExtension.startsWith("EMZ"))
     {
         bSomethingTested = true;
-        if (aDetector.checkWMForEMF())
+        if (aDetector.checkWMF() || aDetector.checkEMF())
         {
             rFormatExtension = getImportFormatShortName(aDetector.getMetadata().mnFormat);
             return true;
@@ -457,14 +457,14 @@ bool GraphicFormatDetector::checkBMP()
     return false;
 }
 
-bool GraphicFormatDetector::checkWMForEMF()
+bool GraphicFormatDetector::checkWMF()
 {
     sal_uInt64 nCheckSize = std::min<sal_uInt64>(mnStreamLength, 256);
     sal_uInt8 sExtendedOrDecompressedFirstBytes[WMF_EMF_CHECK_SIZE];
     sal_uInt64 nDecompressedSize = nCheckSize;
-    // check if it is gzipped -> wmz/emz
-    sal_uInt8* pCheckArray = checkAndUncompressBuffer(sExtendedOrDecompressedFirstBytes,
-                                                      WMF_EMF_CHECK_SIZE, nDecompressedSize);
+    // check if it is gzipped -> wmz
+    checkAndUncompressBuffer(sExtendedOrDecompressedFirstBytes, WMF_EMF_CHECK_SIZE,
+                             nDecompressedSize);
     if (mnFirstLong == 0xd7cdc69a || mnFirstLong == 0x01000900)
     {
         if (mbWasCompressed)
@@ -473,13 +473,51 @@ bool GraphicFormatDetector::checkWMForEMF()
             maMetadata.mnFormat = GraphicFileFormat::WMF;
         return true;
     }
-    else if (mnFirstLong == 0x01000000 && pCheckArray[40] == 0x20 && pCheckArray[41] == 0x45
-             && pCheckArray[42] == 0x4d && pCheckArray[43] == 0x46)
+    return false;
+}
+
+bool GraphicFormatDetector::checkEMF()
+{
+    sal_uInt64 nCheckSize = std::min<sal_uInt64>(mnStreamLength, 256);
+    sal_uInt8 sExtendedOrDecompressedFirstBytes[WMF_EMF_CHECK_SIZE];
+    sal_uInt64 nDecompressedSize = nCheckSize;
+    // check if it is gzipped -> emz
+    sal_uInt8* pCheckArray = checkAndUncompressBuffer(sExtendedOrDecompressedFirstBytes,
+                                                      WMF_EMF_CHECK_SIZE, nDecompressedSize);
+    if (mnFirstLong == 0x01000000 && pCheckArray[40] == 0x20 && pCheckArray[41] == 0x45
+        && pCheckArray[42] == 0x4d && pCheckArray[43] == 0x46)
     {
         if (mbWasCompressed)
             maMetadata.mnFormat = GraphicFileFormat::EMZ;
         else
             maMetadata.mnFormat = GraphicFileFormat::EMF;
+        if (mbExtendedInfo)
+        {
+            sal_Int32 nBoundLeft = 0, nBoundTop = 0, nBoundRight = 0, nBoundBottom = 0;
+            sal_Int32 nFrameLeft = 0, nFrameTop = 0, nFrameRight = 0, nFrameBottom = 0;
+            nBoundLeft = pCheckArray[8] | (pCheckArray[9] << 8) | (pCheckArray[10] << 16)
+                         | (pCheckArray[11] << 24);
+            nBoundTop = pCheckArray[12] | (pCheckArray[13] << 8) | (pCheckArray[14] << 16)
+                        | (pCheckArray[15] << 24);
+            nBoundRight = pCheckArray[16] | (pCheckArray[17] << 8) | (pCheckArray[18] << 16)
+                          | (pCheckArray[19] << 24);
+            nBoundBottom = pCheckArray[20] | (pCheckArray[21] << 8) | (pCheckArray[22] << 16)
+                           | (pCheckArray[23] << 24);
+            nFrameLeft = pCheckArray[24] | (pCheckArray[25] << 8) | (pCheckArray[26] << 16)
+                         | (pCheckArray[27] << 24);
+            nFrameTop = pCheckArray[28] | (pCheckArray[29] << 8) | (pCheckArray[30] << 16)
+                        | (pCheckArray[31] << 24);
+            nFrameRight = pCheckArray[32] | (pCheckArray[33] << 8) | (pCheckArray[34] << 16)
+                          | (pCheckArray[35] << 24);
+            nFrameBottom = pCheckArray[36] | (pCheckArray[37] << 8) | (pCheckArray[38] << 16)
+                           | (pCheckArray[39] << 24);
+            // size in pixels
+            maMetadata.maPixSize.setWidth(nBoundRight - nBoundLeft + 1);
+            maMetadata.maPixSize.setHeight(nBoundBottom - nBoundTop + 1);
+            // size in 0.01mm units
+            maMetadata.maLogSize.setWidth(nFrameRight - nFrameLeft + 1);
+            maMetadata.maLogSize.setHeight(nFrameBottom - nFrameTop + 1);
+        }
         return true;
     }
     return false;

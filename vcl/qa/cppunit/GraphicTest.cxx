@@ -512,7 +512,7 @@ void GraphicTest::testEmfToWmfConversion()
     aGraphicStream.Seek(0);
     vcl::GraphicFormatDetector aDetector(aGraphicStream, OUString());
     CPPUNIT_ASSERT(aDetector.detect());
-    CPPUNIT_ASSERT(aDetector.checkWMForEMF());
+    CPPUNIT_ASSERT(aDetector.checkWMF());
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: WMF
