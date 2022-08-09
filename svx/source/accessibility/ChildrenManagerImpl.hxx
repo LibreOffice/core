@@ -119,7 +119,7 @@ public:
 
     /// @throws css::uno::RuntimeException
     /// @throws css::lang::IndexOutOfBoundsException
-    css::uno::Reference<css::drawing::XShape> GetChildShape(tools::Long nIndex);
+    const css::uno::Reference<css::drawing::XShape>& GetChildShape(tools::Long nIndex);
     /** Return the requested accessible child or throw and
         IndexOutOfBoundsException if the given index is invalid.
         @param nIndex

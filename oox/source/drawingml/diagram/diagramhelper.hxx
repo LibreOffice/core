@@ -83,7 +83,7 @@ public:
     virtual void applyDiagramDataState(const std::shared_ptr< svx::diagram::DiagramDataState >& rState) override;
 
     void doAnchor(SdrObjGroup& rTarget, ::oox::drawingml::Shape& rRootShape);
-    std::shared_ptr< ::oox::drawingml::Theme > getOrCreateThemePtr(
+    const std::shared_ptr< ::oox::drawingml::Theme >& getOrCreateThemePtr(
         rtl::Reference< oox::shape::ShapeFilterBase>& rxFilter ) const;
 };
 

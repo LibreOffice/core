@@ -114,7 +114,7 @@ tools::Long ChildrenManagerImpl::GetChildCount() const noexcept
 }
 
 
-css::uno::Reference<css::drawing::XShape> ChildrenManagerImpl::GetChildShape(tools::Long nIndex)
+const css::uno::Reference<css::drawing::XShape>& ChildrenManagerImpl::GetChildShape(tools::Long nIndex)
 {
     // Check whether the given index is valid.
     if (nIndex < 0 || o3tl::make_unsigned(nIndex) >= maVisibleChildren.size())

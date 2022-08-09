@@ -84,7 +84,7 @@ public:
     OUString const & GetSavedValue() const;
     void        StopEditing( bool bCancel );
     void        Hide();
-    VclPtr<Edit> GetEditWidget() const { return pEdit; };
+    const VclPtr<Edit> & GetEditWidget() const { return pEdit; };
 };
 
 // ***************************************************************

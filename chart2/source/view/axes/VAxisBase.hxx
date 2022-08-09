@@ -67,7 +67,7 @@ public:
                                      css::uno::Reference<css::util::XNumberFormatsSupplier> const& xNumberFormatsSupplier,
                                      rtl::Reference<::chart::ChartModel> const& xChartDoc);
 
-    std::shared_ptr<DataTableView> getDataTableView() { return m_pDataTableView; }
+    const std::shared_ptr<DataTableView>& getDataTableView() { return m_pDataTableView; }
 
 protected: //methods
     static size_t getIndexOfLongestLabel( const css::uno::Sequence<OUString>& rLabels );

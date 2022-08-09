@@ -430,14 +430,14 @@ bool SdtHelper::GetChecked() const { return m_bChecked; }
 
 void SdtHelper::SetCheckedState(const OUString& rCheckedState) { m_aCheckedState = rCheckedState; }
 
-OUString SdtHelper::GetCheckedState() const { return m_aCheckedState; }
+const OUString& SdtHelper::GetCheckedState() const { return m_aCheckedState; }
 
 void SdtHelper::SetUncheckedState(const OUString& rUncheckedState)
 {
     m_aUncheckedState = rUncheckedState;
 }
 
-OUString SdtHelper::GetUncheckedState() const { return m_aUncheckedState; }
+const OUString& SdtHelper::GetUncheckedState() const { return m_aUncheckedState; }
 
 void SdtHelper::clear()
 {
@@ -460,11 +460,11 @@ void SdtHelper::SetPlaceholderDocPart(const OUString& rPlaceholderDocPart)
     m_aPlaceholderDocPart = rPlaceholderDocPart;
 }
 
-OUString SdtHelper::GetPlaceholderDocPart() const { return m_aPlaceholderDocPart; }
+const OUString& SdtHelper::GetPlaceholderDocPart() const { return m_aPlaceholderDocPart; }
 
 void SdtHelper::SetColor(const OUString& rColor) { m_aColor = rColor; }
 
-OUString SdtHelper::GetColor() const { return m_aColor; }
+const OUString& SdtHelper::GetColor() const { return m_aColor; }
 
 } // namespace writerfilter::dmapper
 

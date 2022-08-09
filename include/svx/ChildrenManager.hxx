@@ -137,7 +137,7 @@ public:
     css::uno::Reference<css::accessibility::XAccessible> GetChild(tools::Long nIndex);
     /// @throws css::lang::IndexOutOfBoundsException
     /// @throws css::uno::RuntimeException
-    css::uno::Reference<css::drawing::XShape> GetChildShape(tools::Long nIndex);
+    const css::uno::Reference<css::drawing::XShape>& GetChildShape(tools::Long nIndex);
 
     /** Update the child manager.  Take care of a modified set of children
         and modified visible area.  This method can optimize the update

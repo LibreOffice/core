@@ -280,7 +280,9 @@ void PassStuffByRef::checkReturnValue(const FunctionDecl * functionDecl, const C
     if (dc.Function("convertItems").Class("ValueParser").Namespace("configmgr").GlobalNamespace()
         || dc.Function("parseListValue").AnonymousNamespace().Namespace("configmgr").GlobalNamespace()
         || dc.Function("parseSingleValue").AnonymousNamespace().Namespace("configmgr").GlobalNamespace()
-        || dc.Function("Create").Class("HandlerComponentBase").Namespace("pcr").GlobalNamespace()) {
+        || dc.Function("Create").Class("HandlerComponentBase").Namespace("pcr").GlobalNamespace()
+        || dc.Function("toAny").Struct("Convert").Namespace("detail").Namespace("comphelper").GlobalNamespace()
+        || dc.Function("makeAny").Namespace("utl").GlobalNamespace()) {
         return;
     }
     if (startswith(type.getAsString(), "struct o3tl::strong_int")) {
@@ -297,6 +299,9 @@ void PassStuffByRef::checkReturnValue(const FunctionDecl * functionDecl, const C
     }
     // extremely simple class, might as well pass by value
     if (tc.Struct("TranslateId")) {
+        return;
+    }
+    if (tc.Class("span").Namespace("o3tl")) {
         return;
     }
 
@@ -332,7 +337,7 @@ bool PassStuffByRef::VisitReturnStmt(const ReturnStmt * returnStmt)
 {
     if (!mbInsideFunctionDecl)
         return true;
-    const Expr* expr = dyn_cast<Expr>(*returnStmt->child_begin())->IgnoreParenCasts();
+    const Expr* expr = dyn_cast<Expr>(*returnStmt->child_begin())->IgnoreParenImpCasts();
 
     if (isReturnExprDisqualified(expr))
         mbFoundReturnValueDisqualifier = true;
@@ -348,6 +353,7 @@ bool PassStuffByRef::isReturnExprDisqualified(const Expr* expr)
     while (true)
     {
         expr = expr->IgnoreParens();
+//        expr->dump();
         if (auto implicitCast = dyn_cast<ImplicitCastExpr>(expr)) {
             expr = implicitCast->getSubExpr();
             continue;
@@ -427,6 +433,9 @@ bool PassStuffByRef::isReturnExprDisqualified(const Expr* expr)
                     return true;
                 // otherwise fall through to the checking below
             }
+            if (Opc == OO_Arrow)
+                if (isReturnExprDisqualified(operatorCallExpr->getArg(0)))
+                    return true;
         }
         if (auto memberCallExpr = dyn_cast<CXXMemberCallExpr>(expr)) {
             if (isReturnExprDisqualified(memberCallExpr->getImplicitObjectArgument()))
@@ -455,21 +464,19 @@ bool PassStuffByRef::isReturnExprDisqualified(const Expr* expr)
 
 bool PassStuffByRef::VisitVarDecl(const VarDecl * varDecl)
 {
-    if (!mbInsideFunctionDecl)
+    if (!mbInsideFunctionDecl || mbFoundReturnValueDisqualifier)
         return true;
     // things guarded by locking are probably best left alone
     loplugin::TypeCheck dc(varDecl->getType());
-    if (dc.Class("Guard").Namespace("osl").GlobalNamespace())
-        mbFoundReturnValueDisqualifier = true;
-    if (dc.Class("ClearableGuard").Namespace("osl").GlobalNamespace())
-        mbFoundReturnValueDisqualifier = true;
-    if (dc.Class("ResettableGuard").Namespace("osl").GlobalNamespace())
-        mbFoundReturnValueDisqualifier = true;
-    else if (dc.Class("SolarMutexGuard").GlobalNamespace())
-        mbFoundReturnValueDisqualifier = true;
-    else if (dc.Class("SfxModelGuard").GlobalNamespace())
-        mbFoundReturnValueDisqualifier = true;
-    else if (dc.Class("ReadWriteGuard").Namespace("utl").GlobalNamespace())
+    if (dc.Class("Guard").Namespace("osl").GlobalNamespace() ||
+        dc.Class("ClearableGuard").Namespace("osl").GlobalNamespace() ||
+        dc.Class("ResettableGuard").Namespace("osl").GlobalNamespace() ||
+        dc.Class("SolarMutexGuard").GlobalNamespace() ||
+        dc.Class("SfxModelGuard").GlobalNamespace() ||
+        dc.Class("ReadWriteGuard").Namespace("utl").GlobalNamespace() ||
+        dc.Class("unique_lock").StdNamespace() ||
+        dc.Class("lock_guard").StdNamespace() ||
+        dc.Class("scoped_lock").StdNamespace())
         mbFoundReturnValueDisqualifier = true;
     return true;
 }
