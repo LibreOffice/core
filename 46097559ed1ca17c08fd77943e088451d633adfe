@@ -52,6 +52,24 @@
       "parentUuid": "de2cff5a_9f6f6476",
       "revId": "46097559ed1ca17c08fd77943e088451d633adfe",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60ee7204_f284558a",
+        "filename": "include/o3tl/lru_map.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-09T09:38:07Z",
+      "side": 1,
+      "message": "Oh - I am sorry, it looks like I\u0027ve lost the document. So please ignore me, there\u0027s no repro anymore \u003d\u003e nothing to fix. :-( I need to be more careful next time, keeping notes for such incidents.",
+      "parentUuid": "a79e23e9_512665d5",
+      "revId": "46097559ed1ca17c08fd77943e088451d633adfe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
