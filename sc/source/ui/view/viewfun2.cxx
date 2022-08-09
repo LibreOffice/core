@@ -1874,6 +1874,8 @@ void ScViewFunc::ConvertFormulaToValue()
 
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     pDocSh->GetDocFunc().ConvertFormulaToValue(aRange, true);
+    // tdf#131326 - invalidate cell slots and update input line with new content
+    CellContentChanged();
     pDocSh->PostPaint(aRange, PaintPartFlags::Grid);
 }
 
