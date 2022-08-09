@@ -16,6 +16,23 @@
       "message": "Stephan, noticed this - is this reasonable?",
       "revId": "7ce4f3eb318a7d704610189a7e505c2320e4e77d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21af957b_ea351ab3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-08-09T13:28:26Z",
+      "side": 1,
+      "message": "Presumably some unnecessary copy/paste when Noel created it in \u003chttps://git.libreoffice.org/core/+/c8bed6445b244a5d9021dbd9a2ff19d80c03917b%5E!/\u003e \"new json writer for LOK\".",
+      "revId": "7ce4f3eb318a7d704610189a7e505c2320e4e77d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
