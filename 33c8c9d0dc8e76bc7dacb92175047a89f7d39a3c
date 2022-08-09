@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3098b32_d4b0bc96",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-09T08:42:20Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be guarded by the mutex, too? Or is it guaranteed to only happen when no use of ScCompiler::GetCharClassEnglish can happen?",
+      "revId": "33c8c9d0dc8e76bc7dacb92175047a89f7d39a3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
