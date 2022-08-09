@@ -37,6 +37,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
+#include <comphelper/lok.hxx>
 
 #include <memory>
 
@@ -77,6 +78,7 @@
 #include "securitypage.hxx"
 
 #include <algorithm>
+#include <vcl/jsdialog/executor.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -705,6 +707,8 @@ SfxDocumentPage::SfxDocumentPage(weld::Container* pPage, weld::DialogController*
     ImplCheckPasswordState();
     m_xChangePassBtn->connect_clicked( LINK( this, SfxDocumentPage, ChangePassHdl ) );
     m_xSignatureBtn->connect_clicked( LINK( this, SfxDocumentPage, SignatureHdl ) );
+    if (comphelper::LibreOfficeKit::isActive())
+        m_xSignatureBtn->hide();
     m_xDeleteBtn->connect_clicked( LINK( this, SfxDocumentPage, DeleteHdl ) );
     m_xImagePreferredDpiCheckButton->connect_toggled(LINK(this, SfxDocumentPage, ImagePreferredDPICheckBoxClicked));
 
@@ -1160,11 +1164,17 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog(weld::Window* pParent, const SfxIte
     AddTabPage("general", SfxDocumentPage::Create, nullptr);
     AddTabPage("description", SfxDocumentDescPage::Create, nullptr);
     AddTabPage("customprops", SfxCustomPropertiesPage::Create, nullptr);
+    // Disable security page for online as not fully asynced yet
+
+    if (!comphelper::LibreOfficeKit::isActive())
+        AddTabPage("security", SfxSecurityPage::Create, nullptr);
+    else
+        RemoveTabPage("security");
+
     if (rInfoItem.isCmisDocument())
         AddTabPage("cmisprops", SfxCmisPropertiesPage::Create, nullptr);
     else
         RemoveTabPage("cmisprops");
-    AddTabPage("security", SfxSecurityPage::Create, nullptr);
 }
 
 void SfxDocumentInfoDialog::PageCreated(const OString& rId, SfxTabPage &rPage)
@@ -1194,25 +1204,6 @@ CustomPropertiesYesNoButton::~CustomPropertiesYesNoButton()
 {
 }
 
-namespace {
-
-class DurationDialog_Impl : public weld::GenericDialogController
-{
-    std::unique_ptr<weld::CheckButton> m_xNegativeCB;
-    std::unique_ptr<weld::SpinButton> m_xYearNF;
-    std::unique_ptr<weld::SpinButton> m_xMonthNF;
-    std::unique_ptr<weld::SpinButton> m_xDayNF;
-    std::unique_ptr<weld::SpinButton> m_xHourNF;
-    std::unique_ptr<weld::SpinButton> m_xMinuteNF;
-    std::unique_ptr<weld::SpinButton> m_xSecondNF;
-    std::unique_ptr<weld::SpinButton> m_xMSecondNF;
-
-public:
-    DurationDialog_Impl(weld::Widget* pParent, const util::Duration& rDuration);
-    util::Duration  GetDuration() const;
-};
-
-}
 
 DurationDialog_Impl::DurationDialog_Impl(weld::Widget* pParent, const util::Duration& rDuration)
     : GenericDialogController(pParent, "sfx/ui/editdurationdialog.ui", "EditDurationDialog")
@@ -1280,9 +1271,20 @@ void CustomPropertiesDurationField::SetDuration( const util::Duration& rDuration
 
 IMPL_LINK(CustomPropertiesDurationField, ClickHdl, weld::Button&, rButton, void)
 {
-    DurationDialog_Impl aDurationDlg(&rButton, GetDuration());
-    if (aDurationDlg.run() == RET_OK)
-        SetDuration(aDurationDlg.GetDuration());
+    m_xDurationDialog = std::make_shared<DurationDialog_Impl>(&rButton, GetDuration());
+    m_xDurationDialog->runAsync(m_xDurationDialog, [&](sal_Int32 response)
+    {
+        if (response == RET_OK)
+        {
+            SetDuration(m_xDurationDialog->GetDuration());
+        }
+    });
+}
+
+CustomPropertiesDurationField::~CustomPropertiesDurationField()
+{
+    if (m_xDurationDialog)
+        m_xDurationDialog->response(RET_CANCEL);
 }
 
 namespace
@@ -1297,11 +1299,30 @@ namespace
 
     void fillTypeBox(weld::ComboBox& rTypeBox)
     {
-        for (size_t i = 0; i < SAL_N_ELEMENTS(SFX_LB_PROPERTY_STRINGARRAY); ++i)
+        // Only enable working types for online
+        if (comphelper::LibreOfficeKit::isActive())
         {
-            OUString sId(OUString::number(SFX_LB_PROPERTY_STRINGARRAY[i].second));
-            rTypeBox.append(sId, SfxResId(SFX_LB_PROPERTY_STRINGARRAY[i].first));
+            // Text
+            OUString sId(OUString::number(SFX_LB_PROPERTY_STRINGARRAY[0].second));
+            rTypeBox.append(sId, SfxResId(SFX_LB_PROPERTY_STRINGARRAY[0].first));
+
+            // Duration
+            sId = OUString::number(SFX_LB_PROPERTY_STRINGARRAY[3].second);
+            rTypeBox.append(sId, SfxResId(SFX_LB_PROPERTY_STRINGARRAY[3].first));
+
+            // Yes or no
+            sId = OUString::number(SFX_LB_PROPERTY_STRINGARRAY[5].second);
+            rTypeBox.append(sId, SfxResId(SFX_LB_PROPERTY_STRINGARRAY[5].first));
         }
+        else
+        {
+            for (size_t i = 0; i < SAL_N_ELEMENTS(SFX_LB_PROPERTY_STRINGARRAY); ++i)
+            {
+                OUString sId(OUString::number(SFX_LB_PROPERTY_STRINGARRAY[i].second));
+                rTypeBox.append(sId, SfxResId(SFX_LB_PROPERTY_STRINGARRAY[i].first));
+            }
+        }
+
         rTypeBox.set_active(0);
         Size aSize(rTypeBox.get_preferred_size());
         rTypeBox.set_size_request(aSize.Width(), aSize.Height());
@@ -1389,6 +1410,11 @@ void CustomPropertyLine::DoTypeHdl(const weld::ComboBox& rBox)
     m_xDurationBox->set_visible( Custom_Type_Duration == nType );
     m_xDurationField->set_visible( Custom_Type_Duration == nType );
     m_xYesNoButton->set_visible( Custom_Type_Boolean == nType );
+    // update online
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        jsdialog::SendFullUpdate(m_xLine.get());
+    }
 }
 
 IMPL_LINK(CustomPropertyLine, TypeHdl, weld::ComboBox&, rBox, void)
@@ -1527,16 +1553,19 @@ void CustomPropertiesWindow::CreateNewLine()
 
     m_aCustomPropertiesLines.emplace_back( pNewLine );
 
-    // for ui-testing. Distinguish the elements in the lines
-    sal_uInt16 nSize = m_aCustomPropertiesLines.size();
-    pNewLine->m_xNameBox->set_buildable_name(
-        pNewLine->m_xNameBox->get_buildable_name() + OString::number(nSize));
-    pNewLine->m_xTypeBox->set_buildable_name(
-        pNewLine->m_xTypeBox->get_buildable_name() + OString::number(nSize));
-    pNewLine->m_xValueEdit->set_buildable_name(
-        pNewLine->m_xValueEdit->get_buildable_name() + OString::number(nSize));
-    pNewLine->m_xRemoveButton->set_buildable_name(
-        pNewLine->m_xRemoveButton->get_buildable_name() + OString::number(nSize));
+    // this breaks online's jsdialogbuilder
+    if (!comphelper::LibreOfficeKit::isActive()){
+        // for ui-testing. Distinguish the elements in the lines
+        sal_uInt16 nSize = m_aCustomPropertiesLines.size();
+        pNewLine->m_xNameBox->set_buildable_name(
+            pNewLine->m_xNameBox->get_buildable_name() + OString::number(nSize));
+        pNewLine->m_xTypeBox->set_buildable_name(
+            pNewLine->m_xTypeBox->get_buildable_name() + OString::number(nSize));
+        pNewLine->m_xValueEdit->set_buildable_name(
+            pNewLine->m_xValueEdit->get_buildable_name() + OString::number(nSize));
+        pNewLine->m_xRemoveButton->set_buildable_name(
+            pNewLine->m_xRemoveButton->get_buildable_name() + OString::number(nSize));
+    }
 
     pNewLine->DoTypeHdl(*pNewLine->m_xTypeBox);
 }
@@ -1808,8 +1837,8 @@ void CustomPropertiesWindow::ReloadLinesContent()
                 else
                     pLine->m_xYesNoButton->CheckNo();
             }
-            pLine->m_xTypeBox->set_active_id(OUString::number(nType));
         }
+        pLine->m_xTypeBox->set_active_id(OUString::number(nType));
 
         pLine->DoTypeHdl(*pLine->m_xTypeBox);
     }
@@ -1924,6 +1953,10 @@ void CustomPropertiesControl::AddLine( Any const & rAny )
     {
         m_xVertScroll->vadjustment_set_value(nLineCount + 1);
         ScrollHdl(*m_xVertScroll);
+    }
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        jsdialog::SendFullUpdate(m_xBody.get());
     }
 }
 

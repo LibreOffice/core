@@ -2184,9 +2184,9 @@ void TabControl::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 
     {
         auto childrenNode = rJsonWriter.startArray("children");
-        for (int i = 0; i < GetChildCount(); i++)
+        for (auto id : GetPageIDs())
         {
-            vcl::Window* pChild = GetChild(i);
+            TabPage* pChild = GetTabPage(id);
 
             if (pChild)
             {
