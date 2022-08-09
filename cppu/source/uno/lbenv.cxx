@@ -850,10 +850,10 @@ static void unoenv_computeObjectIdentifier(
     (*pUnoI->release)( pUnoI );
     OUString aStr(
         // interface
-        OUString::number( reinterpret_cast< sal_Int64 >(pUnoI), 16 ) + ";"
+        OUString::number( reinterpret_cast< sal_IntPtr >(pUnoI), 16 ) + ";"
         // environment[context]
         + OUString::unacquired(&pEnv->aBase.pTypeName) + "["
-        + OUString::number( reinterpret_cast< sal_Int64 >(
+        + OUString::number( reinterpret_cast< sal_IntPtr >(
                     reinterpret_cast<
                     uno_Environment * >(pEnv)->pContext ), 16 )
         // process;good guid

@@ -34,7 +34,7 @@ namespace slideshow::internal
         {
             return OUString::number(lcl_nOffset) +
                 " - 0x" +
-                OUString::number(reinterpret_cast<sal_Int64>(pNode), 16);
+                OUString::number(reinterpret_cast<sal_IntPtr>(pNode), 16);
         }
 
         void debugNodesShowTree( const BaseNode* pNode )
