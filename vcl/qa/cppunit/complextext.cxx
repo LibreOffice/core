@@ -226,8 +226,10 @@ static void testCachedGlyphsSubstring( const OUString& aText, const OUString& aF
     vcl::Font aFont( aFontName, Size(0, 12));
     pOutputDevice->SetFont( aFont );
     SalLayoutGlyphsCache::self()->clear();
+    std::shared_ptr<const vcl::text::TextLayoutCache> layoutCache = OutputDevice::CreateTextLayoutCache(aText);
     // Get the glyphs for the entire text once, to ensure the cache can built subsets from it.
-    pOutputDevice->ImplLayout( aText, 0, aText.getLength(), Point(0, 0), 0, {}, SalLayoutFlags::GlyphItemsOnly);
+    pOutputDevice->ImplLayout( aText, 0, aText.getLength(), Point(0, 0), 0, {}, SalLayoutFlags::GlyphItemsOnly,
+        layoutCache.get());
     // Now check for all subsets. Some of them possibly do not make sense in practice, but the code
     // should cope with them.
     for( sal_Int32 len = 1; len <= aText.getLength(); ++len )
@@ -235,10 +237,10 @@ static void testCachedGlyphsSubstring( const OUString& aText, const OUString& aF
         {
             std::string message = prefix + " (" + std::to_string(pos) + "/" + std::to_string(len) + ")";
             std::unique_ptr<SalLayout> pLayout1 = pOutputDevice->ImplLayout(
-                aText, pos, len, Point(0, 0), 0, {}, SalLayoutFlags::GlyphItemsOnly);
+                aText, pos, len, Point(0, 0), 0, {}, SalLayoutFlags::GlyphItemsOnly, layoutCache.get());
             SalLayoutGlyphs aGlyphs1 = pLayout1->GetGlyphs();
             const SalLayoutGlyphs* aGlyphs2 = SalLayoutGlyphsCache::self()->GetLayoutGlyphs(
-                pOutputDevice, aText, pos, len, 0);
+                pOutputDevice, aText, pos, len, 0, layoutCache.get());
             CPPUNIT_ASSERT_MESSAGE(message, aGlyphs2 != nullptr);
             checkCompareGlyphs(aGlyphs1, *aGlyphs2, message);
         }
