@@ -37,6 +37,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
+#include <comphelper/lok.hxx>
 
 #include <memory>
 
@@ -1160,11 +1161,17 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog(weld::Window* pParent, const SfxIte
     AddTabPage("general", SfxDocumentPage::Create, nullptr);
     AddTabPage("description", SfxDocumentDescPage::Create, nullptr);
     AddTabPage("customprops", SfxCustomPropertiesPage::Create, nullptr);
+    // Disable security page for online as not fully asynced yet
+
+    if (!comphelper::LibreOfficeKit::isActive())
+        AddTabPage("security", SfxSecurityPage::Create, nullptr);
+    else
+        RemoveTabPage("security");
+
     if (rInfoItem.isCmisDocument())
         AddTabPage("cmisprops", SfxCmisPropertiesPage::Create, nullptr);
     else
         RemoveTabPage("cmisprops");
-    AddTabPage("security", SfxSecurityPage::Create, nullptr);
 }
 
 void SfxDocumentInfoDialog::PageCreated(const OString& rId, SfxTabPage &rPage)
