@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdb20d7e_52f9eab8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-08-09T10:50:50Z",
+      "side": 1,
+      "message": "I guess I\u0027m comfortable having this one backported this far, but not to 7.3 please. I really don\u0027t want the other half of this fix backported at all..., at least not with my name attached to it :-)",
+      "revId": "ae4a4a59882ae28e2a840e5c12843c40d147cef4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
