@@ -16,6 +16,24 @@
       "message": "wasn\u0027t that a false positive of Coverity rather than a regression, though?",
       "revId": "cc8106f66ea26c0ae2874a5c1168f43a6263a564",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed0c6de0_adcaebbe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-08-09T07:21:13Z",
+      "side": 1,
+      "message": "we have\n\n   const css::uno::Reference\u003c css::ucb::XCommandEnvironment\u003e\u0026 m_xEnv;\n\n(notice the rather unusual \"\u0026\" here)\n\nwhich means we are binding a \"\u0026\" to a local\n\nIt is quite possible the pre-existing code (i.e. before commit b4b4c129e9f00189978cd7b71fd74d0dca4c9ebc) is wrong, or at the very least, rather dodgy.",
+      "parentUuid": "46ba83b2_a35d9bf9",
+      "revId": "cc8106f66ea26c0ae2874a5c1168f43a6263a564",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
