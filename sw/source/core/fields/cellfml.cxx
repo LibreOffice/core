@@ -471,7 +471,7 @@ void SwTableFormula::RelBoxNmsToPtr( const SwTable& rTable, OUStringBuffer& rNew
     {
         const SwTableBox *pRelLastBox = lcl_RelToBox( rTable, pBox, *pLastBox );
         if ( pRelLastBox )
-            rNewStr.append(reinterpret_cast<sal_PtrDiff>(pRelLastBox));
+            rNewStr.append(reinterpret_cast<sal_IntPtr>(pRelLastBox));
         else
             rNewStr.append("0");
         rNewStr.append(":");
@@ -480,7 +480,7 @@ void SwTableFormula::RelBoxNmsToPtr( const SwTable& rTable, OUStringBuffer& rNew
 
     const SwTableBox *pRelFirstBox = lcl_RelToBox( rTable, pBox, rFirstBox );
     if ( pRelFirstBox )
-        rNewStr.append(reinterpret_cast<sal_PtrDiff>(pRelFirstBox));
+        rNewStr.append(reinterpret_cast<sal_IntPtr>(pRelFirstBox));
     else
         rNewStr.append("0");
 
@@ -565,13 +565,13 @@ void SwTableFormula::BoxNmsToPtr( const SwTable& rTable, OUStringBuffer& rNewStr
     if( pLastBox )
     {
         pBox = rTable.GetTableBox( *pLastBox );
-        rNewStr.append(OUString::number(reinterpret_cast<sal_PtrDiff>(pBox)) +
+        rNewStr.append(OUString::number(reinterpret_cast<sal_IntPtr>(pBox)) +
                     ":");
         rFirstBox = rFirstBox.copy( pLastBox->getLength()+1 );
     }
 
     pBox = rTable.GetTableBox( rFirstBox );
-    rNewStr.append(reinterpret_cast<sal_PtrDiff>(pBox))
+    rNewStr.append(reinterpret_cast<sal_IntPtr>(pBox))
             .append(rFirstBox[ rFirstBox.getLength()-1 ]); // get label for the box
 }
 
@@ -1230,9 +1230,9 @@ void SwTableFormula::SplitMergeBoxNm_( const SwTable& rTable, OUStringBuffer& rN
     }
 
     if( pLastBox )
-        rNewStr.append(OUString::number(reinterpret_cast<sal_PtrDiff>(pEndBox)) + ":");
+        rNewStr.append(OUString::number(reinterpret_cast<sal_IntPtr>(pEndBox)) + ":");
 
-    rNewStr.append(reinterpret_cast<sal_PtrDiff>(pSttBox))
+    rNewStr.append(reinterpret_cast<sal_IntPtr>(pSttBox))
             .append(rFirstBox[ rFirstBox.getLength()-1] );
 }
 

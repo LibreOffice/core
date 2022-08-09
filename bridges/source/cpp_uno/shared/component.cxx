@@ -88,12 +88,12 @@ static void s_stub_computeObjectIdentifier(va_list * pParam)
         {
             // interface
             OUString aRet =
-                OUString::number( reinterpret_cast< sal_Int64 >(xHome.get()), 16 ) +
+                OUString::number( reinterpret_cast< sal_IntPtr >(xHome.get()), 16 ) +
                 ";" +
                 // ;environment[context]
                 OUString::unacquired(&pEnv->aBase.pTypeName) +
                 "[" +
-                OUString::number( reinterpret_cast< sal_Int64 >(pEnv->aBase.pContext), 16 ) +
+                OUString::number( reinterpret_cast< sal_IntPtr >(pEnv->aBase.pContext), 16 ) +
                 // ];good guid
                 cppu_cppenv_getStaticOIdPart();
             *ppOId = aRet.pData;
