@@ -81,7 +81,7 @@ SwNodes::SwNodes( SwDoc& rDocument )
     pTmp->m_pStartOfSection = pSttNd;
     m_pEndOfContent.reset(new SwEndNode( *this, nPos++, *pTmp ));
 
-    m_pOutlineNodes.reset(new SwOutlineNodes);
+    m_aOutlineNodes.clear();
 }
 
 /** Destructor
@@ -92,7 +92,7 @@ SwNodes::SwNodes( SwDoc& rDocument )
  */
 SwNodes::~SwNodes()
 {
-    m_pOutlineNodes.reset();
+    m_aOutlineNodes.clear();
 
     {
         SwNodeIndex aNdIdx( *this );
@@ -162,7 +162,7 @@ void SwNodes::ChgNode( SwNodeIndex const & rDelPos, SwNodeOffset nSz,
                 if (pTextNode->IsOutline())
                 {
                     SwNode* pSrch = &rNd;
-                    m_pOutlineNodes->erase( pSrch );
+                    m_aOutlineNodes.erase( pSrch );
                 }
             }
 
@@ -177,7 +177,7 @@ void SwNodes::ChgNode( SwNodeIndex const & rDelPos, SwNodeOffset nSz,
                 if (bInsOutlineIdx && rTextNd.IsOutline())
                 {
                     SwNode* pSrch = &rNd;
-                    m_pOutlineNodes->insert( pSrch );
+                    m_aOutlineNodes.insert( pSrch );
                 }
                 rTextNd.InvalidateNumRule();
 
@@ -219,7 +219,7 @@ void SwNodes::ChgNode( SwNodeIndex const & rDelPos, SwNodeOffset nSz,
                 // remove outline index from old nodes array
                 if (pTextNd->IsOutline())
                 {
-                    m_pOutlineNodes->erase( pNd );
+                    m_aOutlineNodes.erase( pNd );
                 }
 
                 // copy rules if needed
@@ -261,7 +261,7 @@ void SwNodes::ChgNode( SwNodeIndex const & rDelPos, SwNodeOffset nSz,
                     // OutlineNodes set the new nodes in the array
                     if (bInsOutlineIdx && pTextNd->IsOutline())
                     {
-                        rNds.m_pOutlineNodes->insert( pTextNd );
+                        rNds.m_aOutlineNodes.insert( pTextNd );
                     }
 
                     pTextNd->AddToList();
@@ -517,7 +517,7 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                                 // remove outline index from old nodes array
                                 if (pCNd->IsTextNode() && pCNd->GetTextNode()->IsOutline())
                                 {
-                                    m_pOutlineNodes->erase( pCNd );
+                                    m_aOutlineNodes.erase( pCNd );
                                 }
                                 else
                                     pCNd = nullptr;
@@ -526,7 +526,7 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                             BigPtrArray::Move( sal_Int32(aMvIdx.GetIndex()), sal_Int32(aIdx.GetIndex()) );
 
                             if( bInsOutlineIdx && pCNd )
-                                m_pOutlineNodes->insert( pCNd );
+                                m_aOutlineNodes.insert( pCNd );
                             if( pTmpNd->IsTextNode() )
                                 static_cast<SwTextNode*>(pTmpNd)->AddToList();
                         }
@@ -550,7 +550,7 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                             const bool bOutlNd = pNd->IsTextNode() && pNd->GetTextNode()->IsOutline();
                             // delete outline indices from old node array
                             if( bOutlNd )
-                                m_pOutlineNodes->erase( pNd );
+                                m_aOutlineNodes.erase( pNd );
 
                             RemoveNode( aMvIdx.GetIndex(), SwNodeOffset(1), false );
                             pNd->m_pStartOfSection = pSttNode;
@@ -559,7 +559,7 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                             // set correct indices in Start/EndNodes
                             if( bInsOutlineIdx && bOutlNd )
                                 // and put them into the new node array
-                                rNodes.m_pOutlineNodes->insert( pNd );
+                                rNodes.m_aOutlineNodes.insert( pNd );
                             else if( pNd->IsStartNode() )
                                 pSttNode = static_cast<SwStartNode*>(pNd);
                             else if( pNd->IsEndNode() )
@@ -1141,10 +1141,10 @@ void SwNodes::Delete(const SwNodeIndex &rIndex, SwNodeOffset nNodes)
                     {
                         SwTextNode *const pTextNode(pNd->GetTextNode());
                         if (pTextNode->IsOutline() &&
-                                m_pOutlineNodes->Seek_Entry( pNd, &nIdxPos ))
+                                m_aOutlineNodes.Seek_Entry( pNd, &nIdxPos ))
                         {
                             // remove outline indices
-                            m_pOutlineNodes->erase_at(nIdxPos);
+                            m_aOutlineNodes.erase_at(nIdxPos);
                             bUpdateOutline = true;
                         }
                         pTextNode->InvalidateNumRule();
@@ -1207,7 +1207,7 @@ void SwNodes::Delete(const SwNodeIndex &rIndex, SwNodeOffset nNodes)
                 if( pTextNd->IsOutline())
                 {
                     // delete outline indices
-                    m_pOutlineNodes->erase( pTextNd );
+                    m_aOutlineNodes.erase( pTextNd );
                     bUpdateOutline = true;
                 }
                 if (sw::HasNumberingWhichNeedsLayoutUpdate(*pTextNd))
@@ -1406,7 +1406,7 @@ void SwNodes::DelNodes( const SwNodeIndex & rStart, SwNodeOffset nCnt )
             if (pNd->IsTextNode() && pNd->GetTextNode()->IsOutline())
             {
                 // remove the outline indices
-                if (m_pOutlineNodes->erase(pNd))
+                if (m_aOutlineNodes.erase(pNd))
                     bUpdateNum = 1;
             }
             if( pNd->IsContentNode() )

@@ -45,7 +45,7 @@ void SwNodes::UpdateOutlineNode(SwNode & rNd)
     if (!pTextNd || !pTextNd->IsOutlineStateChanged())
         return;
 
-    bool bFound = m_pOutlineNodes->find(pTextNd) != m_pOutlineNodes->end();
+    bool bFound = m_aOutlineNodes.find(pTextNd) != m_aOutlineNodes.end();
 
     if (pTextNd->IsOutline())
     {
@@ -54,7 +54,7 @@ void SwNodes::UpdateOutlineNode(SwNode & rNd)
             // assure that text is in the correct nodes array
             if ( &(pTextNd->GetNodes()) == this )
             {
-                m_pOutlineNodes->insert(pTextNd);
+                m_aOutlineNodes.insert(pTextNd);
             }
             else
             {
@@ -65,7 +65,7 @@ void SwNodes::UpdateOutlineNode(SwNode & rNd)
     else
     {
         if (bFound)
-            m_pOutlineNodes->erase(pTextNd);
+            m_aOutlineNodes.erase(pTextNd);
     }
 
     pTextNd->UpdateOutlineState();
@@ -76,22 +76,22 @@ void SwNodes::UpdateOutlineNode(SwNode & rNd)
 
 void SwNodes::UpdateOutlineIdx( const SwNode& rNd )
 {
-    if( m_pOutlineNodes->empty() )     // no OutlineNodes present ?
+    if( m_aOutlineNodes.empty() )     // no OutlineNodes present ?
         return;
 
     SwNode* const pSrch = const_cast<SwNode*>(&rNd);
 
     SwOutlineNodes::size_type nPos;
-    if (!m_pOutlineNodes->Seek_Entry(pSrch, &nPos))
+    if (!m_aOutlineNodes.Seek_Entry(pSrch, &nPos))
         return;
-    if( nPos == m_pOutlineNodes->size() )      // none present for updating ?
+    if( nPos == m_aOutlineNodes.size() )      // none present for updating ?
         return;
 
     if( nPos )
         --nPos;
 
     if( !GetDoc().IsInDtor() && IsDocNodes() )
-        UpdateOutlineNode( *(*m_pOutlineNodes)[ nPos ]);
+        UpdateOutlineNode( *m_aOutlineNodes[ nPos ]);
 }
 
 

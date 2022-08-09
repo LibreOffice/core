@@ -448,9 +448,9 @@ SwDoc::~SwDoc()
 
     // The ChapterNumbers/Numbers need to be deleted before the styles
     // or we update all the time!
-    m_pNodes->m_pOutlineNodes->clear();
+    m_pNodes->m_aOutlineNodes.clear();
     SwNodes & rUndoNodes( GetUndoManager().GetUndoNodes() );
-    rUndoNodes.m_pOutlineNodes->clear();
+    rUndoNodes.m_aOutlineNodes.clear();
 
     mpFootnoteIdxs->clear();
 
