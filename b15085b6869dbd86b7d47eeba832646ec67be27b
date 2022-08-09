@@ -36,6 +36,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4bc9155_98bae72a",
+        "filename": "sw/source/uibase/docvw/edtwin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-08-09T06:42:54Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "18a10974_c28d8485",
+      "revId": "b15085b6869dbd86b7d47eeba832646ec67be27b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7ac2366d_779344bf",
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "no, because it needs its destructor to be called at the end of Pop.\n\noptional\u003cSwCallLink\u003e would work i guess, but needs SwCallLink to be defined?\n\nperhaps the Push should return optional\u003cSwCallLink\u003e and then it should be required a rg to Pop?\n\nbut i don\u0027t have time to adapt dozens of callers of these functions, some of which  are guaranteed to do odd things.",
       "parentUuid": "7ac2366d_779344bf",
+      "revId": "b15085b6869dbd86b7d47eeba832646ec67be27b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4dce3082_c9f39660",
+        "filename": "sw/source/uibase/inc/wrtsh.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-08-09T06:42:54Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "da20b6fb_79c7afda",
       "revId": "b15085b6869dbd86b7d47eeba832646ec67be27b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
