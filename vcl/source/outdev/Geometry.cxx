@@ -144,6 +144,7 @@ tools::Long Geometry::LogicToPixel(tools::Long n, tools::Long nDPI, tools::Long 
 {
     assert(nDPI > 0);
     assert(nMapDenom != 0);
+
     if constexpr (sizeof(tools::Long) >= 8)
     {
         assert(nMapNum >= 0);
@@ -151,18 +152,24 @@ tools::Long Geometry::LogicToPixel(tools::Long n, tools::Long nDPI, tools::Long 
         assert(nMapNum == 0
                || std::abs(n) < std::numeric_limits<tools::Long>::max() / nMapNum / nDPI);
     }
+
     sal_Int64 n64 = n;
     n64 *= nMapNum;
     n64 *= nDPI;
+
     if (nMapDenom == 1)
+    {
         n = static_cast<tools::Long>(n64);
+    }
     else
     {
         n64 = 2 * n64 / nMapDenom;
+
         if (n64 < 0)
             --n64;
         else
             ++n64;
+
         n = static_cast<tools::Long>(n64 / 2);
     }
     return n;
@@ -180,22 +187,29 @@ tools::Long Geometry::PixelToLogic(tools::Long n, tools::Long nDPI, tools::Long 
                                    tools::Long nMapDenom)
 {
     assert(nDPI > 0);
+
     if (nMapNum == 0)
         return 0;
+
     sal_Int64 nDenom = nDPI;
     nDenom *= nMapNum;
 
     sal_Int64 n64 = n;
     n64 *= nMapDenom;
+
     if (nDenom == 1)
+    {
         n = static_cast<tools::Long>(n64);
+    }
     else
     {
         n64 = 2 * n64 / nDenom;
+
         if (n64 < 0)
             --n64;
         else
             ++n64;
+
         n = static_cast<tools::Long>(n64 / 2);
     }
     return n;
@@ -340,7 +354,6 @@ tools::Polygon Geometry::LogicToDevicePixel(tools::Polygon const& rLogicPoly) co
     if (!IsMapModeEnabled() && !GetXFrameOffset() && !GetYFrameOffset())
         return rLogicPoly;
 
-    sal_uInt16 i;
     sal_uInt16 nPoints = rLogicPoly.GetSize();
     tools::Polygon aPoly(rLogicPoly);
 
@@ -349,7 +362,7 @@ tools::Polygon Geometry::LogicToDevicePixel(tools::Polygon const& rLogicPoly) co
 
     if (IsMapModeEnabled())
     {
-        for (i = 0; i < nPoints; i++)
+        for (sal_uInt16 i = 0; i < nPoints; i++)
         {
             const Point& rPt = pPointAry[i];
             Point aPt(LogicToPixel(rPt.X() + GetMappingOffset().X(), GetDPIX(),
@@ -363,7 +376,7 @@ tools::Polygon Geometry::LogicToDevicePixel(tools::Polygon const& rLogicPoly) co
     }
     else
     {
-        for (i = 0; i < nPoints; i++)
+        for (sal_uInt16 i = 0; i < nPoints; i++)
         {
             Point aPt = pPointAry[i];
             aPt.AdjustX(GetXFrameOffset());
@@ -481,11 +494,13 @@ tools::PolyPolygon Geometry::LogicToDevicePixel(tools::PolyPolygon const& rLogic
 
     tools::PolyPolygon aPolyPoly(rLogicPolyPoly);
     sal_uInt16 nPoly = aPolyPoly.Count();
+
     for (sal_uInt16 i = 0; i < nPoly; i++)
     {
         tools::Polygon& rPoly = aPolyPoly[i];
         rPoly = LogicToDevicePixel(rPoly);
     }
+
     return aPolyPoly;
 }
 
