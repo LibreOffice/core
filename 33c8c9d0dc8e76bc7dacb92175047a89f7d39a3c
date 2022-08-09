@@ -16,6 +16,24 @@
       "message": "Shouldn\u0027t this be guarded by the mutex, too? Or is it guaranteed to only happen when no use of ScCompiler::GetCharClassEnglish can happen?",
       "revId": "33c8c9d0dc8e76bc7dacb92175047a89f7d39a3c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99e3929d_fc8d30fa",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-08-09T10:07:04Z",
+      "side": 1,
+      "message": "Destruction in DeInit() happens only in ScGlobal::Clear() from ScModule::~ScModule(), there should be only one and nothing left.. ;)\n\nBut ScCompiler::GetCharClassLocalized() might benefit from a mutex as well in case we\u0027d have some threaded import using localized formulas, ad-hoc none comes to mind. Won\u0027t hurt though..",
+      "parentUuid": "e3098b32_d4b0bc96",
+      "revId": "33c8c9d0dc8e76bc7dacb92175047a89f7d39a3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
