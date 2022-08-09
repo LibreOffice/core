@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0db06b6b_ba633298",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-08-09T07:56:29Z",
+      "side": 1,
+      "message": "I\u0027m not really an a11y expert, but this looks like an improvement by optionally bringing back the dialogs. Still, having something that doesn\u0027t require any specific distinction between a11y/non-a11y use and \"just works\" by default without having to set any option manually would IMHO be even better, if reasonably doable.\n\nDid you consider the approach mentioned in comments 12 and 13 in tdf#117173 (and referenced tickets)?\nIt sounds good to me, and IIUC, that would be similar to what e.g. https://www.w3.org/WAI/tutorials/forms/validation/ does (for input validation in the browser). Both, Orca and NVDA speak the \"Please fill out this field\" alert when pressing the \"Submit\" button for the first sample form field without typed  added anything in the name forme field.",
+      "revId": "a4339e8dc32da4ecf77d560c3b933a3c174c239e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
