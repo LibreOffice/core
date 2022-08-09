@@ -63,7 +63,6 @@ use installer::windows::media;
 use installer::windows::mergemodule;
 use installer::windows::msiglobal;
 use installer::windows::msishortcutproperty;
-use installer::windows::msp;
 use installer::windows::property;
 use installer::windows::removefile;
 use installer::windows::registry;
@@ -1630,21 +1629,6 @@ sub run {
             my $finalinstalldir = "";
             installer::worker::clean_output_tree(); # removing directories created in the output tree
             ($is_success, $finalinstalldir) = installer::worker::analyze_and_save_logfile($loggingdir, $installdir, $installlogdir, $allsettingsarrayref, $languagestringref, $current_install_number);
-
-            #######################################################
-            # Creating Windows msp patches
-            #######################################################
-
-            if (( $is_success ) && ( $installer::globals::updatedatabase ) && ( $allvariableshashref->{'CREATE_MSP_INSTALLSET'} ))
-            {
-                # Required:
-                # Temp path for administrative installations: $installer::globals::temppath
-                # Path of new installation set: $finalinstalldir
-                # Path of old installation set: $installer::globals::updatedatabasepath
-                my $mspdir = installer::windows::msp::create_msp_patch($finalinstalldir, $includepatharrayref, $allvariableshashref, $languagestringref, $languagesarrayref, $filesinproductlanguageresolvedarrayref);
-                ($is_success, $finalinstalldir) = installer::worker::analyze_and_save_logfile($loggingdir, $mspdir, $installlogdir, $allsettingsarrayref, $languagestringref, $current_install_number);
-                installer::worker::clean_output_tree(); # removing directories created in the output tree
-            }
 
             #######################################################
             # Creating download installation set
