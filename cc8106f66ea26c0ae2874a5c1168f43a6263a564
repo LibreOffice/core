@@ -34,6 +34,24 @@
       "parentUuid": "46ba83b2_a35d9bf9",
       "revId": "cc8106f66ea26c0ae2874a5c1168f43a6263a564",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "abf3b011_583b6b17",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-08-09T07:35:41Z",
+      "side": 1,
+      "message": "Ah, thanks.  So rather a case of poor modernize-pass-by-value suggesting such a bogus change in the first place.",
+      "parentUuid": "ed0c6de0_adcaebbe",
+      "revId": "cc8106f66ea26c0ae2874a5c1168f43a6263a564",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
