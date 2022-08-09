@@ -275,11 +275,28 @@ public:
     ~CustomPropertiesTimeField();
 };
 
+class DurationDialog_Impl : public weld::GenericDialogController
+{
+    std::unique_ptr<weld::CheckButton> m_xNegativeCB;
+    std::unique_ptr<weld::SpinButton> m_xYearNF;
+    std::unique_ptr<weld::SpinButton> m_xMonthNF;
+    std::unique_ptr<weld::SpinButton> m_xDayNF;
+    std::unique_ptr<weld::SpinButton> m_xHourNF;
+    std::unique_ptr<weld::SpinButton> m_xMinuteNF;
+    std::unique_ptr<weld::SpinButton> m_xSecondNF;
+    std::unique_ptr<weld::SpinButton> m_xMSecondNF;
+
+public:
+    DurationDialog_Impl(weld::Widget* pParent, const css::util::Duration& rDuration);
+    css::util::Duration  GetDuration() const;
+};
+
 class CustomPropertiesDurationField
 {
     css::util::Duration             m_aDuration;
     std::unique_ptr<weld::Entry>    m_xEntry;
     std::unique_ptr<weld::Button>   m_xEditButton;
+    std::shared_ptr<DurationDialog_Impl> m_xDurationDialog;
 
     DECL_LINK(ClickHdl, weld::Button&, void);
 public:
@@ -290,6 +307,8 @@ public:
     const css::util::Duration& GetDuration() const { return m_aDuration; }
 
     void set_visible(bool bVisible);
+
+    ~CustomPropertiesDurationField();
 };
 
 class CustomPropertiesYesNoButton

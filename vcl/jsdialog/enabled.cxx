@@ -62,7 +62,14 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"modules/swriter/ui/contentcontroldlg.ui"
         || rUIFile == u"modules/swriter/ui/contentcontrollistitemdlg.ui"
         || rUIFile == u"modules/swriter/ui/splittable.ui"
-        || rUIFile == u"cui/ui/splitcellsdialog.ui")
+        || rUIFile == u"cui/ui/splitcellsdialog.ui"
+        || rUIFile == u"sfx/ui/documentpropertiesdialog.ui"
+        || rUIFile == u"sfx/ui/custominfopage.ui"
+        || rUIFile == u"sfx/ui/cmisinfopage.ui"
+        || rUIFile == u"sfx/ui/descriptioninfopage.ui"
+        || rUIFile == u"sfx/ui/documentinfopage.ui"
+        || rUIFile == u"sfx/ui/linefragment.ui"
+        || rUIFile == u"sfx/ui/editdurationdialog.ui")
     {
         return true;
     }
