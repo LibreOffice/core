@@ -16,13 +16,6 @@ from uitest.uihelper.common import select_pos
 
 class ConfigureDialog(UITestCase):
 
-    def test_open_ConfigureDialog_writer(self):
-
-        with self.ui_test.create_doc_in_start_center("writer"):
-            with self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog", close_button="cancel"):
-                pass
-
-
     def test_search_filter(self):
         with self.ui_test.create_doc_in_start_center("writer"):
             with self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog", close_button="cancel") as xDialog:
@@ -57,9 +50,6 @@ class ConfigureDialog(UITestCase):
 
                 self.assertEqual(initialEntryCount, finalEntryCount)
 
-
-
-
     def test_category_listbox(self):
         with self.ui_test.create_doc_in_start_center("writer"):
             with self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog", close_button="cancel") as xDialog:
@@ -78,8 +68,6 @@ class ConfigureDialog(UITestCase):
                 finalEntryCount = get_state_as_dict(xFunc)["Children"]
                 self.assertEqual(initialEntryCount, finalEntryCount)
 
-
-
     def test_tdf133862(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
@@ -90,7 +78,6 @@ class ConfigureDialog(UITestCase):
             with self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog", close_button="cancel"):
                 pass
 
-
     def test_gear_button_menu(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
@@ -98,18 +85,13 @@ class ConfigureDialog(UITestCase):
 
                 # Open the New Menu Dialog with id = 0
                 xmenugearbtn=xDialog.getChild("menugearbtn")
-                def show_dialog0():
-                    xmenugearbtn.executeAction("OPENFROMLIST", mkPropertyValues({"POS": "0" }))
-                with self.ui_test.execute_blocking_action( action=show_dialog0, close_button="cancel"):
+                with self.ui_test.execute_blocking_action(
+                        xmenugearbtn.executeAction, args=("OPENFROMLIST", mkPropertyValues({"POS": "0"})), close_button="cancel"):
                     pass
 
                 # Open the Rename Menu Dialog with id = 2
-                xmenugearbtn=xDialog.getChild("menugearbtn")
-                def show_dialog2():
-                    xmenugearbtn.executeAction("OPENFROMLIST", mkPropertyValues({"POS": "2"}))
-                with self.ui_test.execute_blocking_action( action=show_dialog2, close_button="cancel"):
+                with self.ui_test.execute_blocking_action(
+                        xmenugearbtn.executeAction, args=("OPENFROMLIST", mkPropertyValues({"POS": "2"})), close_button="cancel"):
                     pass
-
-
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
