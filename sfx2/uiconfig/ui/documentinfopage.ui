@@ -261,6 +261,7 @@
         <property name="halign">end</property>
         <property name="label" translatable="yes" context="documentinfopage|label8">_Location:</property>
         <property name="use-underline">True</property>
+        <property name="mnemonic-widget">showlocation</property>
       </object>
       <packing>
         <property name="left-attach">0</property>
