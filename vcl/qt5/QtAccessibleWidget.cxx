@@ -872,8 +872,11 @@ QString QtAccessibleWidget::attributes(int offset, int* startOffset, int* endOff
         if (!sAttribute.isEmpty() && !sValue.isEmpty())
             aRet += sAttribute + ":" + sValue + ";";
     }
-    *startOffset = offset;
-    *endOffset = offset + 1;
+
+    accessibility::TextSegment aAttributeRun
+        = xText->getTextAtIndex(offset, accessibility::AccessibleTextType::ATTRIBUTE_RUN);
+    *startOffset = aAttributeRun.SegmentStart;
+    *endOffset = aAttributeRun.SegmentEnd;
     return toQString(aRet);
 }
 
