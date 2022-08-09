@@ -163,6 +163,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "77c67dc5_028b62a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-08-09T06:46:03Z",
+      "side": 1,
+      "message": "\u003e Done, I have finished sending\n\nI don\u0027t see any such mail from you at \u003chttps://lists.freedesktop.org/archives/libreoffice/2022-August/date.html\u003e.  Can you please resend?  (And let me know in case you get a response that your mail is held for moderation.  Ideally, you would subscribe to that mailing list prior to sending your license statement.)  Sorry for the trouble.",
+      "parentUuid": "e5cf8ef6_47bba990",
+      "revId": "3680a5748953ad08b4f15f4104069d22a70c730d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2a6813ae_7a10fe93",
         "filename": "bridges/source/cpp_uno/gcc3_linux_loongarch64/call.hxx",
         "patchSetId": 1
