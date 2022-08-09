@@ -117,6 +117,12 @@ DECLARE_RTFEXPORT_TEST(test148518, "FORMDROPDOWN.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), result);
 }
 
+DECLARE_RTFEXPORT_TEST(test150269, "hidden-linebreaks.rtf")
+{
+    uno::Reference<text::XTextRange> xRun = getRun(getParagraph(1), 1, u"\n\n\n");
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xRun, "CharHidden"));
+}
+
 DECLARE_RTFEXPORT_TEST(testAnchoredAtSamePosition, "anchor.fodt")
 {
     SwXTextDocument* const pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
