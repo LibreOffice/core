@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2a1b0e3_db7e19ba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-08-09T16:02:15Z",
+      "side": 1,
+      "message": "failure in gerrit_mac is not related to this patch, since this is only executed on linux. Pushing",
+      "revId": "85bc48d6daa550a33f99386af16a45af6cd3997d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
