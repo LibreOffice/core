@@ -94,4 +94,36 @@ class ConfigureDialog(UITestCase):
                         xmenugearbtn.executeAction, args=("OPENFROMLIST", mkPropertyValues({"POS": "2"})), close_button="cancel"):
                     pass
 
+    def test_add_remove_items(self):
+        with self.ui_test.create_doc_in_start_center("writer"):
+
+            with self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog") as xDialog:
+                xTab = xDialog.getChild("tabcontrol")
+                select_pos(xTab, "0")
+
+                xFunctions = xDialog.getChild("functions")
+                xMenuContents = xDialog.getChild("menucontents")
+                xAddBtn = xDialog.getChild("add")
+                xRemoveBtn = xDialog.getChild("remove")
+
+                self.assertEqual("1", get_state_as_dict(xFunctions)['SelectionCount'])
+                sSelectEntryText = get_state_as_dict(xFunctions)['SelectEntryText']
+                nChildrenCount = int(get_state_as_dict(xMenuContents)['Children'])
+
+                self.assertEqual('true',get_state_as_dict(xAddBtn)['Enabled'])
+                self.assertEqual('false',get_state_as_dict(xRemoveBtn)['Enabled'])
+
+                xAddBtn.executeAction("CLICK", tuple())
+
+                self.assertEqual(nChildrenCount + 1, int(get_state_as_dict(xMenuContents)['Children']))
+                self.assertEqual(sSelectEntryText, get_state_as_dict(xMenuContents)['SelectEntryText'])
+
+                self.assertEqual('false',get_state_as_dict(xAddBtn)['Enabled'])
+                self.assertEqual('true',get_state_as_dict(xRemoveBtn)['Enabled'])
+
+                xRemoveBtn.executeAction("CLICK", tuple())
+
+                self.assertEqual(nChildrenCount, int(get_state_as_dict(xMenuContents)['Children']))
+
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
