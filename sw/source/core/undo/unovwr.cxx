@@ -327,7 +327,7 @@ struct UndoTransliterate_Data
 {
     OUString        sText;
     std::unique_ptr<SwHistory> pHistory;
-    std::unique_ptr<Sequence< sal_Int32 >> pOffsets;
+    std::optional<Sequence< sal_Int32 >> oOffsets;
     SwNodeOffset   nNdIdx;
     sal_Int32      nStart, nLen;
 
@@ -399,8 +399,8 @@ void SwUndoTransliterate::AddChanges( SwTextNode& rTNd,
     if( *p != ( nStart + n ))
     {
         // create the Offset array
-        pNew->pOffsets.reset( new Sequence <sal_Int32> ( nLen ) );
-        sal_Int32* pIdx = pNew->pOffsets->getArray();
+        pNew->oOffsets.emplace( nLen );
+        sal_Int32* pIdx = pNew->oOffsets->getArray();
         p = pOffsets;
         tools::Long nMyOff, nNewVal = nStart;
         for( n = 0, nMyOff = nStart; n < nOffsLen; ++p, ++n, ++nMyOff )
@@ -453,9 +453,9 @@ void UndoTransliterate_Data::SetChangeAtNode( SwDoc& rDoc )
     if( !pTNd )
         return;
 
-    Sequence <sal_Int32> aOffsets( pOffsets ? pOffsets->getLength() : nLen );
-    if( pOffsets )
-        aOffsets = *pOffsets;
+    Sequence <sal_Int32> aOffsets( oOffsets ? oOffsets->getLength() : nLen );
+    if( oOffsets )
+        aOffsets = *oOffsets;
     else
     {
         sal_Int32* p = aOffsets.getArray();
