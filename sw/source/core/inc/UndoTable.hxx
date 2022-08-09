@@ -58,7 +58,7 @@ class SwUndoInsTable final : public SwUndo
     OUString m_sTableName;
     SwInsertTableOptions m_aInsTableOptions;
     std::unique_ptr<SwDDEFieldType> m_pDDEFieldType;
-    std::unique_ptr<std::vector<sal_uInt16>> m_pColumnWidth;
+    std::optional<std::vector<sal_uInt16>> m_oColumnWidth;
     std::unique_ptr<SwRedlineData>  m_pRedlineData;
     std::unique_ptr<SwTableAutoFormat> m_pAutoFormat;
     SwNodeOffset m_nStartNode;
