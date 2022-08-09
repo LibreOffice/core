@@ -2679,6 +2679,18 @@ CPPUNIT_TEST_FIXTURE(Test, testTableStyles5)
 
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf145226)
+{
+    loadAndReload("tdf145226.fodt");
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+
+    assertXPathNoAttribute(pXmlDoc, "/office:document-content/office:body/office:text/table:table/table:table-row[1]", "style-name");
+    assertXPathNoAttribute(pXmlDoc, "/office:document-content/office:body/office:text/table:table/table:table-row[2]", "style-name");
+    assertXPathNoAttribute(pXmlDoc, "/office:document-content/office:body/office:text/table:table/table:table-row[3]", "style-name");
+    assertXPathNoAttribute(pXmlDoc, "/office:document-content/office:body/office:text/table:table/table:table-row[4]", "style-name");
+}
+
 DECLARE_ODFEXPORT_TEST(testTdf101710, "tdf101710.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
