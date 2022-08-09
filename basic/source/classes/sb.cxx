@@ -1325,11 +1325,11 @@ bool StarBASIC::Call( const OUString& rName, SbxArray* pParam )
     if( !bRes )
     {
         ErrCode eErr = SbxBase::GetError();
-        SbxBase::ResetError();
         if( eErr != ERRCODE_NONE )
         {
-            RTError( eErr, OUString(), 0, 0, 0 );
+            RTError(eErr, SbxBase::GetErrorMsg(), 0, 0, 0);
         }
+        SbxBase::ResetError();
     }
     return bRes;
 }
