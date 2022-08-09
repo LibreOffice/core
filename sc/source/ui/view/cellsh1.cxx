@@ -1968,6 +1968,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_CONVERT_FORMULA_TO_VALUE:
         {
             pTabViewShell->ConvertFormulaToValue();
+            // tdf#131326 - invalidate cell slots and update input line with new content
+            pTabViewShell->CellContentChanged();
         }
         break;
         case SID_THESAURUS:
