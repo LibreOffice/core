@@ -41,6 +41,12 @@ void SendFullUpdate(const std::string& nWindowId, const OString& rWidget)
         pJSWidget->sendFullUpdate();
 }
 
+void SendFullUpdate(weld::Widget* rWidget)
+{
+    if (auto pJSWidget = dynamic_cast<BaseJSWidget*>(rWidget))
+        pJSWidget->sendFullUpdate();
+}
+
 void SendAction(const std::string& nWindowId, const OString& rWidget,
                 std::unique_ptr<ActionDataMap> pData)
 {

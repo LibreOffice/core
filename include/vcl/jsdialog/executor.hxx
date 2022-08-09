@@ -84,6 +84,7 @@ VCL_DLLPUBLIC bool ExecuteAction(const std::string& nWindowId, const OString& rW
                                  StringMap& rData);
 /// send full update message to the client
 VCL_DLLPUBLIC void SendFullUpdate(const std::string& nWindowId, const OString& rWidget);
+VCL_DLLPUBLIC void SendFullUpdate(weld::Widget* rWidget);
 /// send action message to the client
 VCL_DLLPUBLIC void SendAction(const std::string& nWindowId, const OString& rWidget,
                               std::unique_ptr<ActionDataMap> pData);
