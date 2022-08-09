@@ -16,6 +16,23 @@
       "message": "I guess I\u0027m comfortable having this one backported this far, but not to 7.3 please. I really don\u0027t want the other half of this fix backported at all..., at least not with my name attached to it :-)",
       "revId": "ae4a4a59882ae28e2a840e5c12843c40d147cef4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ed5adf8_6a251dc4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-08-09T11:05:38Z",
+      "side": 1,
+      "message": ":-), that\u0027s fair enough. This bit looks good to me for 7-4 at least.",
+      "revId": "ae4a4a59882ae28e2a840e5c12843c40d147cef4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
