@@ -85,7 +85,9 @@ public:
     virtual bool    LoadCompleted();
 
     static ErrCode const & GetError();
+    static OUString const& GetErrorMsg();
     static void SetError( ErrCode );
+    static void SetError(ErrCode, const OUString&);
     static bool IsError();
     static void ResetError();
 

@@ -109,6 +109,7 @@ bool MacroSnippet::Compile()
 bool MacroSnippet::HasError() const { return mbError; }
 
 const ErrCode& MacroSnippet::getError() const { return maErrCode; }
+const OUString& MacroSnippet::getErrorText() const { return maErrorMsg; }
 
 IMPL_LINK( MacroSnippet, BasicErrorHdl, StarBASIC *, /*pBasic*/, bool)
 {
@@ -117,6 +118,7 @@ IMPL_LINK( MacroSnippet, BasicErrorHdl, StarBASIC *, /*pBasic*/, bool)
     fprintf(stderr,"Basic error: %s\n", OUStringToOString( StarBASIC::GetErrorText(), RTL_TEXTENCODING_UTF8 ).getStr() );
     mbError = true;
     maErrCode = StarBASIC::GetErrorCode();
+    maErrorMsg = StarBASIC::GetErrorText();
     return false;
 }
 
