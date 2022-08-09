@@ -39,6 +39,8 @@
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 
+#include <unotools/mediadescriptor.hxx>
+
 namespace oox::drawingml::chart {
 
 using namespace ::com::sun::star::chart2;
@@ -829,13 +831,18 @@ LineFormatter::LineFormatter( ObjectFormatterData& rData, const AutoFormatEntry*
     if( const Theme* pTheme = mrData.mrFilter.getCurrentTheme() )
         if( const LineProperties* pLineProps = pTheme->getLineStyle( pAutoFormatEntry->mnThemedIdx ) )
             *mxAutoLine = *pLineProps;
-    // set automatic border property for chartarea, because of tdf#81437 and tdf#82217, except for pptx (tdf#150176)
-    if ( eObjType == OBJECTTYPE_CHARTSPACE && !rData.mrFilter.getFileUrl().endsWithIgnoreAsciiCase(".pptx") )
+    // set automatic border property for chartarea, because of tdf#81437 and tdf#82217, except for Impress (tdf#150176)
+    if ( eObjType == OBJECTTYPE_CHARTSPACE )
     {
-        mxAutoLine->maLineFill.moFillType = oox::GraphicHelper::getDefaultChartAreaLineStyle();
-        mxAutoLine->moLineWidth = oox::GraphicHelper::getDefaultChartAreaLineWidth();
-        // this value is what MSO 2016 use as a default color for chartspace border
-        mxAutoLine->maLineFill.maFillColor.setSrgbClr( 0xD9D9D9 );
+        OUString aFilterName;
+        rData.mrFilter.getMediaDescriptor()[utl::MediaDescriptor::PROP_FILTERNAME] >>= aFilterName;
+        if (!aFilterName.startsWithIgnoreAsciiCase("Impress"))
+        {
+            mxAutoLine->maLineFill.moFillType = oox::GraphicHelper::getDefaultChartAreaLineStyle();
+            mxAutoLine->moLineWidth = oox::GraphicHelper::getDefaultChartAreaLineWidth();
+            // this value is what MSO 2016 use as a default color for chartspace border
+            mxAutoLine->maLineFill.maFillColor.setSrgbClr(0xD9D9D9);
+        }
     }
     // change line width according to chart auto style
     if( mxAutoLine->moLineWidth.has_value() )
