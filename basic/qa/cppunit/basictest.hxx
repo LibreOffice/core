@@ -24,6 +24,7 @@ class MacroSnippet
 private:
     bool mbError;
     ErrCode maErrCode;
+    OUString maErrorMsg;
     BasicDLL maDll; // we need a dll instance for resource manager etc.
     SbModuleRef mpMod;
     StarBASICRef mpBasic;
@@ -47,6 +48,7 @@ public:
 
     bool HasError() const;
     const ErrCode& getError() const;
+    const OUString& getErrorText() const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

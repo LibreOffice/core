@@ -33,6 +33,18 @@ CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testDoubleArgument)
     CPPUNIT_ASSERT_EQUAL(ERRCODE_BASIC_VAR_DEFINED, aMacro.getError().StripDynamic());
 }
 
+CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testTdf150139_error_message)
+{
+    MacroSnippet aMacro("Sub doUnitTest\n"
+                        "  x = CreateUnoListener(\"Impl_\", \"com.sun.star.io.XInputStream\")\n"
+                        "  x.available()\n"
+                        "End Sub\n");
+    aMacro.Run();
+    CPPUNIT_ASSERT(aMacro.HasError());
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_BASIC_NO_METHOD, aMacro.getError().StripDynamic());
+    CPPUNIT_ASSERT_EQUAL(OUString("Property or method not found: Impl_available."), aMacro.getErrorText());
+}
+
 CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testTdf149157)
 {
     MacroSnippet aMacro("Function extentComment() As Integer\n"
