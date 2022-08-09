@@ -614,7 +614,7 @@ void ToolBarManager::Init()
     sal_Int32 idx = m_aResourceName.lastIndexOf('/');
     idx++; // will become 0 if '/' not found: use full string
     std::u16string_view aToolbarName = m_aResourceName.subView( idx );
-    OString aHelpIdAsString = ".HelpId" + OUStringToOString( aToolbarName, RTL_TEXTENCODING_UTF8 );
+    OString aHelpIdAsString = ".HelpId:" + OUStringToOString( aToolbarName, RTL_TEXTENCODING_UTF8 );
     m_pImpl->SetHelpId( aHelpIdAsString );
 
     m_aAsyncUpdateControllersTimer.SetTimeout( 50 );
