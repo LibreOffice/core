@@ -16,6 +16,23 @@
       "message": "Unit test is still missing.",
       "revId": "fa2d790d9e76291b4daa542d6615f08a02236a06",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5b63e2e_e3313774",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-08-09T17:22:41Z",
+      "side": 1,
+      "message": "Hi Mike! Do you have an idea how to test this issue? I have no possibility to get the error message in Basic 😞",
+      "revId": "fa2d790d9e76291b4daa542d6615f08a02236a06",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
