@@ -37,6 +37,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
+#include <comphelper/lok.hxx>
 
 #include <memory>
 
@@ -68,6 +69,7 @@
 #include <helper.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/viewsh.hxx>
 
 #include <documentfontsdialog.hxx>
 #include <dinfdlg.hrc>
@@ -77,6 +79,7 @@
 #include "securitypage.hxx"
 
 #include <algorithm>
+#include <vcl/jsdialog/executor.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -705,6 +708,8 @@ SfxDocumentPage::SfxDocumentPage(weld::Container* pPage, weld::DialogController*
     ImplCheckPasswordState();
     m_xChangePassBtn->connect_clicked( LINK( this, SfxDocumentPage, ChangePassHdl ) );
     m_xSignatureBtn->connect_clicked( LINK( this, SfxDocumentPage, SignatureHdl ) );
+    if (comphelper::LibreOfficeKit::isActive())
+        m_xSignatureBtn->hide();
     m_xDeleteBtn->connect_clicked( LINK( this, SfxDocumentPage, DeleteHdl ) );
     m_xImagePreferredDpiCheckButton->connect_toggled(LINK(this, SfxDocumentPage, ImagePreferredDPICheckBoxClicked));
 
@@ -1160,11 +1165,17 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog(weld::Window* pParent, const SfxIte
     AddTabPage("general", SfxDocumentPage::Create, nullptr);
     AddTabPage("description", SfxDocumentDescPage::Create, nullptr);
     AddTabPage("customprops", SfxCustomPropertiesPage::Create, nullptr);
+    // Disable security page for online as not fully asynced yet
+
+    if (!comphelper::LibreOfficeKit::isActive())
+        AddTabPage("security", SfxSecurityPage::Create, nullptr);
+    else
+        RemoveTabPage("security");
+
     if (rInfoItem.isCmisDocument())
         AddTabPage("cmisprops", SfxCmisPropertiesPage::Create, nullptr);
     else
         RemoveTabPage("cmisprops");
-    AddTabPage("security", SfxSecurityPage::Create, nullptr);
 }
 
 void SfxDocumentInfoDialog::PageCreated(const OString& rId, SfxTabPage &rPage)
@@ -1297,11 +1308,30 @@ namespace
 
     void fillTypeBox(weld::ComboBox& rTypeBox)
     {
-        for (size_t i = 0; i < SAL_N_ELEMENTS(SFX_LB_PROPERTY_STRINGARRAY); ++i)
+        // Only enable working types for online
+        if (comphelper::LibreOfficeKit::isActive())
         {
-            OUString sId(OUString::number(SFX_LB_PROPERTY_STRINGARRAY[i].second));
-            rTypeBox.append(sId, SfxResId(SFX_LB_PROPERTY_STRINGARRAY[i].first));
+            // Text
+            OUString sId(OUString::number(SFX_LB_PROPERTY_STRINGARRAY[0].second));
+            rTypeBox.append(sId, SfxResId(SFX_LB_PROPERTY_STRINGARRAY[0].first));
+
+            // Duration
+            sId = OUString::number(SFX_LB_PROPERTY_STRINGARRAY[3].second);
+            rTypeBox.append(sId, SfxResId(SFX_LB_PROPERTY_STRINGARRAY[3].first));
+
+            // Yes or no
+            sId = OUString::number(SFX_LB_PROPERTY_STRINGARRAY[5].second);
+            rTypeBox.append(sId, SfxResId(SFX_LB_PROPERTY_STRINGARRAY[5].first));
         }
+        else
+        {
+            for (size_t i = 0; i < SAL_N_ELEMENTS(SFX_LB_PROPERTY_STRINGARRAY); ++i)
+            {
+                OUString sId(OUString::number(SFX_LB_PROPERTY_STRINGARRAY[i].second));
+                rTypeBox.append(sId, SfxResId(SFX_LB_PROPERTY_STRINGARRAY[i].first));
+            }
+        }
+
         rTypeBox.set_active(0);
         Size aSize(rTypeBox.get_preferred_size());
         rTypeBox.set_size_request(aSize.Width(), aSize.Height());
@@ -1527,16 +1557,19 @@ void CustomPropertiesWindow::CreateNewLine()
 
     m_aCustomPropertiesLines.emplace_back( pNewLine );
 
-    // for ui-testing. Distinguish the elements in the lines
-    sal_uInt16 nSize = m_aCustomPropertiesLines.size();
-    pNewLine->m_xNameBox->set_buildable_name(
-        pNewLine->m_xNameBox->get_buildable_name() + OString::number(nSize));
-    pNewLine->m_xTypeBox->set_buildable_name(
-        pNewLine->m_xTypeBox->get_buildable_name() + OString::number(nSize));
-    pNewLine->m_xValueEdit->set_buildable_name(
-        pNewLine->m_xValueEdit->get_buildable_name() + OString::number(nSize));
-    pNewLine->m_xRemoveButton->set_buildable_name(
-        pNewLine->m_xRemoveButton->get_buildable_name() + OString::number(nSize));
+    // this breaks online's jsdialogbuilder
+    if (!comphelper::LibreOfficeKit::isActive()){
+        // for ui-testing. Distinguish the elements in the lines
+        sal_uInt16 nSize = m_aCustomPropertiesLines.size();
+        pNewLine->m_xNameBox->set_buildable_name(
+            pNewLine->m_xNameBox->get_buildable_name() + OString::number(nSize));
+        pNewLine->m_xTypeBox->set_buildable_name(
+            pNewLine->m_xTypeBox->get_buildable_name() + OString::number(nSize));
+        pNewLine->m_xValueEdit->set_buildable_name(
+            pNewLine->m_xValueEdit->get_buildable_name() + OString::number(nSize));
+        pNewLine->m_xRemoveButton->set_buildable_name(
+            pNewLine->m_xRemoveButton->get_buildable_name() + OString::number(nSize));
+    }
 
     pNewLine->DoTypeHdl(*pNewLine->m_xTypeBox);
 }

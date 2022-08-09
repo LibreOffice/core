@@ -111,6 +111,8 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
                         int pos = std::atoi(posString.getStr());
                         pCombobox->set_active(pos);
                         LOKTrigger::trigger_changed(*pCombobox);
+                        // todo: refactor to not use (often unneccesary) expensive call
+                        SendFullUpdate(nWindowId, "tabcontrol");
                         return true;
                     }
                 }
@@ -135,6 +137,8 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
                 if (sAction == "click")
                 {
                     pButton->clicked();
+                    // todo: refactor to not use (often unneccesary) expensive call
+                    SendFullUpdate(nWindowId, "tabcontrol");
                     return true;
                 }
             }
