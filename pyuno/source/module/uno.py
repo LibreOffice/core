@@ -365,6 +365,8 @@ def _uno_import(name, *optargs, **kwargs):
         else:
             # How to create a module ??
             mod = pyuno.__class__(module)
+        if mod is None:
+            raise py_import_exc
 
         d = mod.__dict__
 
