@@ -901,7 +901,7 @@ tools::Long OutputDevice::GetTextHeight() const
     tools::Long nHeight = mpFontInstance->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
 
     if (IsMapModeEnabled())
-        nHeight = ImplDevicePixelToLogicHeight( nHeight );
+        nHeight = maGeometry.DevicePixelToLogicHeight( nHeight );
 
     return nHeight;
 }
@@ -1009,10 +1009,10 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<sal_In
         {
             for( int i = 0; i < nLen; ++i )
             {
-                (*pDXPixelArray)[i] = ImplDevicePixelToLogicWidth((*pDXPixelArray)[i]);
+                (*pDXPixelArray)[i] = maGeometry.DevicePixelToLogicWidth((*pDXPixelArray)[i]);
             }
         }
-        nWidth = ImplDevicePixelToLogicWidth( nWidth );
+        nWidth = maGeometry.DevicePixelToLogicWidth( nWidth );
     }
     if( nWidthFactor > 1 )
     {
@@ -1050,8 +1050,8 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<sal_In
     {
         if( pDXAry )
             for( int i = 0; i < nLen; ++i )
-                (*pDXAry)[i] = ImplDevicePixelToLogicWidth( (*pDXAry)[i] );
-        nWidth = ImplDevicePixelToLogicWidth( nWidth );
+                (*pDXAry)[i] = maGeometry.DevicePixelToLogicWidth( (*pDXAry)[i] );
+        nWidth = maGeometry.DevicePixelToLogicWidth( nWidth );
     }
 
     if( nWidthFactor > 1 )
@@ -1113,7 +1113,7 @@ void OutputDevice::GetCaretPositions( const OUString& rStr, sal_Int32* pCaretXAr
     if (IsMapModeEnabled())
     {
         for( i = 0; i < 2*nLen; ++i )
-            pCaretXArray[i] = ImplDevicePixelToLogicWidth( pCaretXArray[i] );
+            pCaretXArray[i] = maGeometry.DevicePixelToLogicWidth( pCaretXArray[i] );
     }
 
     if( nWidthFactor != 1 )
@@ -1364,7 +1364,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
     DeviceCoordinate nPixelWidth = static_cast<DeviceCoordinate>(nLogicalWidth);
     if (nLogicalWidth && IsMapModeEnabled())
     {
-        nPixelWidth = LogicWidthToDeviceCoordinate( nLogicalWidth );
+        nPixelWidth = maGeometry.LogicWidthToDeviceCoordinate( nLogicalWidth );
     }
 
     vcl::text::ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs( aStr, nMinIndex, nLen,
@@ -1387,7 +1387,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
                 xNaturalDXPixelArray.reset(new double[nLen]);
 
                 for (int i = 0; i < nLen; ++i)
-                    xNaturalDXPixelArray[i] = ImplLogicWidthToDeviceFontWidth(pDXArray[i]);
+                    xNaturalDXPixelArray[i] = maGeometry.LogicWidthToDeviceFontWidth(pDXArray[i]);
 
                 aLayoutArgs.SetAltNaturalDXArray(xNaturalDXPixelArray.get());
                 nEndGlyphCoord = std::lround(xNaturalDXPixelArray[nLen - 1]);
@@ -1398,10 +1398,10 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
                 xDXPixelArray.reset(new DeviceCoordinate[nLen]);
                 pDXPixelArray = xDXPixelArray.get();
                 // using base position for better rounding a.k.a. "dancing characters"
-                DeviceCoordinate nPixelXOfs2 = LogicWidthToDeviceCoordinate(rLogicalPos.X() * 2);
+                DeviceCoordinate nPixelXOfs2 = maGeometry.LogicWidthToDeviceCoordinate(rLogicalPos.X() * 2);
                 for( int i = 0; i < nLen; ++i )
                 {
-                    pDXPixelArray[i] = (LogicWidthToDeviceCoordinate((rLogicalPos.X() + pDXArray[i]) * 2) - nPixelXOfs2) / 2;
+                    pDXPixelArray[i] = (maGeometry.LogicWidthToDeviceCoordinate((rLogicalPos.X() + pDXArray[i]) * 2) - nPixelXOfs2) / 2;
                 }
 
                 aLayoutArgs.SetDXArray(pDXPixelArray);
@@ -1455,10 +1455,10 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
     pSalLayout->AdjustLayout( aLayoutArgs );
 
     if (bTextRenderModeForResolutionIndependentLayout)
-        pSalLayout->DrawBase() = ImplLogicToDeviceFontCoordinate(rLogicalPos);
+        pSalLayout->DrawBase() = maGeometry.LogicToDeviceFontCoordinate(rLogicalPos);
     else
     {
-        Point aDevicePos = ImplLogicToDevicePixel(rLogicalPos);
+        Point aDevicePos = maGeometry.LogicToDevicePixel(rLogicalPos);
         pSalLayout->DrawBase() = DevicePoint(aDevicePos.X(), aDevicePos.Y());
     }
 
@@ -1516,12 +1516,12 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, tools::Long nTextWid
         tools::Long nWidthFactor = pSalLayout->GetUnitsPerPixel();
         tools::Long nSubPixelFactor = (nWidthFactor < 64 ) ? 64 : 1;
         nTextWidth *= nWidthFactor * nSubPixelFactor;
-        DeviceCoordinate nTextPixelWidth = LogicWidthToDeviceCoordinate( nTextWidth );
+        DeviceCoordinate nTextPixelWidth = maGeometry.LogicWidthToDeviceCoordinate( nTextWidth );
         DeviceCoordinate nExtraPixelWidth = 0;
         if( nCharExtra != 0 )
         {
             nCharExtra *= nWidthFactor * nSubPixelFactor;
-            nExtraPixelWidth = LogicWidthToDeviceCoordinate( nCharExtra );
+            nExtraPixelWidth = maGeometry.LogicWidthToDeviceCoordinate( nCharExtra );
         }
         nRetVal = pSalLayout->GetTextBreak( nTextPixelWidth, nExtraPixelWidth, nSubPixelFactor );
     }
@@ -1551,12 +1551,12 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, tools::Long nTextWid
         tools::Long nSubPixelFactor = (nWidthFactor < 64 ) ? 64 : 1;
 
         nTextWidth *= nWidthFactor * nSubPixelFactor;
-        DeviceCoordinate nTextPixelWidth = LogicWidthToDeviceCoordinate( nTextWidth );
+        DeviceCoordinate nTextPixelWidth = maGeometry.LogicWidthToDeviceCoordinate( nTextWidth );
         DeviceCoordinate nExtraPixelWidth = 0;
         if( nCharExtra != 0 )
         {
             nCharExtra *= nWidthFactor * nSubPixelFactor;
-            nExtraPixelWidth = LogicWidthToDeviceCoordinate( nCharExtra );
+            nExtraPixelWidth = maGeometry.LogicWidthToDeviceCoordinate( nCharExtra );
         }
 
         // calculate un-hyphenated break position
@@ -1749,11 +1749,11 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
                                                 nIndex, nLineLen );
                         sal_Int32 lc_x1 = pCaretXArray[2*(nMnemonicPos - nIndex)];
                         sal_Int32 lc_x2 = pCaretXArray[2*(nMnemonicPos - nIndex)+1];
-                        nMnemonicWidth = rTargetDevice.LogicWidthToDeviceCoordinate( std::abs(lc_x1 - lc_x2) );
+                        nMnemonicWidth = rTargetDevice.GetGeometry().LogicWidthToDeviceCoordinate( std::abs(lc_x1 - lc_x2) );
 
                         Point       aTempPos = rTargetDevice.LogicToPixel( aPos );
-                        nMnemonicX = rTargetDevice.GetFrameOffset().X() + aTempPos.X() + rTargetDevice.ImplLogicWidthToDevicePixel( std::min( lc_x1, lc_x2 ) );
-                        nMnemonicY = rTargetDevice.GetFrameOffset().Y() + aTempPos.Y() + rTargetDevice.ImplLogicWidthToDevicePixel( rTargetDevice.GetFontMetric().GetAscent() );
+                        nMnemonicX = rTargetDevice.GetFrameOffset().X() + aTempPos.X() + rTargetDevice.maGeometry.LogicWidthToDevicePixel( std::min( lc_x1, lc_x2 ) );
+                        nMnemonicY = rTargetDevice.GetFrameOffset().Y() + aTempPos.Y() + rTargetDevice.maGeometry.LogicWidthToDevicePixel( rTargetDevice.GetFontMetric().GetAscent() );
                         rTargetDevice.ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
                     }
                 }
@@ -1817,11 +1817,11 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
             /*sal_Bool bRet =*/ _rLayout.GetCaretPositions( aStr, pCaretXArray.get(), 0, aStr.getLength() );
             sal_Int32 lc_x1 = pCaretXArray[2*nMnemonicPos];
             sal_Int32 lc_x2 = pCaretXArray[2*nMnemonicPos+1];
-            nMnemonicWidth = rTargetDevice.LogicWidthToDeviceCoordinate( std::abs(lc_x1 - lc_x2) );
+            nMnemonicWidth = rTargetDevice.GetGeometry().LogicWidthToDeviceCoordinate( std::abs(lc_x1 - lc_x2) );
 
             Point aTempPos = rTargetDevice.LogicToPixel( aPos );
-            nMnemonicX = rTargetDevice.GetFrameOffset().X() + aTempPos.X() + rTargetDevice.ImplLogicWidthToDevicePixel( std::min(lc_x1, lc_x2) );
-            nMnemonicY = rTargetDevice.GetFrameOffset().Y() + aTempPos.Y() + rTargetDevice.ImplLogicWidthToDevicePixel( rTargetDevice.GetFontMetric().GetAscent() );
+            nMnemonicX = rTargetDevice.GetFrameOffset().X() + aTempPos.X() + rTargetDevice.maGeometry.LogicWidthToDevicePixel( std::min(lc_x1, lc_x2) );
+            nMnemonicY = rTargetDevice.GetFrameOffset().Y() + aTempPos.Y() + rTargetDevice.maGeometry.LogicWidthToDevicePixel( rTargetDevice.GetFontMetric().GetAscent() );
         }
 
         if ( nStyle & DrawTextFlags::Clip )

@@ -57,482 +57,6 @@ void OutputDevice::ImplInvalidateViewTransform()
     }
 }
 
-static tools::Long ImplLogicToPixel(tools::Long n, tools::Long nDPI, tools::Long nMapNum,
-                                    tools::Long nMapDenom)
-{
-    assert(nDPI > 0);
-    assert(nMapDenom != 0);
-    if constexpr (sizeof(tools::Long) >= 8)
-    {
-        assert(nMapNum >= 0);
-        //detect overflows
-        assert(nMapNum == 0
-               || std::abs(n) < std::numeric_limits<tools::Long>::max() / nMapNum / nDPI);
-    }
-    sal_Int64 n64 = n;
-    n64 *= nMapNum;
-    n64 *= nDPI;
-    if (nMapDenom == 1)
-        n = static_cast<tools::Long>(n64);
-    else
-    {
-        n64 = 2 * n64 / nMapDenom;
-        if (n64 < 0)
-            --n64;
-        else
-            ++n64;
-        n = static_cast<tools::Long>(n64 / 2);
-    }
-    return n;
-}
-
-static double ImplLogicToPixel(double n, tools::Long nDPI, tools::Long nMapNum,
-                               tools::Long nMapDenom)
-{
-    assert(nDPI > 0);
-    assert(nMapDenom != 0);
-    return n * nMapNum * nDPI / nMapDenom;
-}
-
-static tools::Long ImplPixelToLogic(tools::Long n, tools::Long nDPI, tools::Long nMapNum,
-                                    tools::Long nMapDenom)
-{
-    assert(nDPI > 0);
-    if (nMapNum == 0)
-        return 0;
-    sal_Int64 nDenom = nDPI;
-    nDenom *= nMapNum;
-
-    sal_Int64 n64 = n;
-    n64 *= nMapDenom;
-    if (nDenom == 1)
-        n = static_cast<tools::Long>(n64);
-    else
-    {
-        n64 = 2 * n64 / nDenom;
-        if (n64 < 0)
-            --n64;
-        else
-            ++n64;
-        n = static_cast<tools::Long>(n64 / 2);
-    }
-    return n;
-}
-
-tools::Long OutputDevice::ImplLogicXToDevicePixel(tools::Long nX) const
-{
-    if (!IsMapModeEnabled())
-        return nX + maGeometry.GetXFrameOffset();
-
-    return ImplLogicToPixel(nX + maGeometry.GetMappingOffset().X(), GetDPIX(),
-                            maGeometry.GetMapScalingXNumerator(),
-                            maGeometry.GetMapScalingXDenominator())
-           + maGeometry.GetXFrameOffset() + maGeometry.GetXOffsetFromOriginInPixels();
-}
-
-tools::Long OutputDevice::ImplLogicYToDevicePixel(tools::Long nY) const
-{
-    if (!IsMapModeEnabled())
-        return nY + maGeometry.GetYFrameOffset();
-
-    return ImplLogicToPixel(nY + maGeometry.GetMappingOffset().Y(), GetDPIY(),
-                            maGeometry.GetMapScalingYNumerator(),
-                            maGeometry.GetMapScalingYDenominator())
-           + maGeometry.GetYFrameOffset() + maGeometry.GetYOffsetFromOriginInPixels();
-}
-
-tools::Long OutputDevice::ImplLogicWidthToDevicePixel(tools::Long nWidth) const
-{
-    if (!IsMapModeEnabled())
-        return nWidth;
-
-    return ImplLogicToPixel(nWidth, GetDPIX(), maGeometry.GetMapScalingXNumerator(),
-                            maGeometry.GetMapScalingXDenominator());
-}
-
-tools::Long OutputDevice::ImplLogicHeightToDevicePixel(tools::Long nHeight) const
-{
-    if (!IsMapModeEnabled())
-        return nHeight;
-
-    return ImplLogicToPixel(nHeight, GetDPIY(), maGeometry.GetMapScalingYNumerator(),
-                            maGeometry.GetMapScalingYDenominator());
-}
-
-float OutputDevice::ImplFloatLogicHeightToDevicePixel(float fLogicHeight) const
-{
-    if (!IsMapModeEnabled())
-        return fLogicHeight;
-    float fPixelHeight = (fLogicHeight * GetDPIY() * maGeometry.GetMapScalingYNumerator())
-                         / maGeometry.GetMapScalingYDenominator();
-    return fPixelHeight;
-}
-
-tools::Long OutputDevice::ImplDevicePixelToLogicWidth(tools::Long nWidth) const
-{
-    if (!IsMapModeEnabled())
-        return nWidth;
-
-    return ImplPixelToLogic(nWidth, GetDPIX(), maGeometry.GetMapScalingXNumerator(),
-                            maGeometry.GetMapScalingXDenominator());
-}
-
-tools::Long OutputDevice::ImplDevicePixelToLogicHeight(tools::Long nHeight) const
-{
-    if (!IsMapModeEnabled())
-        return nHeight;
-
-    return ImplPixelToLogic(nHeight, GetDPIY(), maGeometry.GetMapScalingYNumerator(),
-                            maGeometry.GetMapScalingYDenominator());
-}
-
-Point OutputDevice::ImplLogicToDevicePixel(const Point& rLogicPt) const
-{
-    if (!IsMapModeEnabled())
-        return Point(rLogicPt.X() + maGeometry.GetXFrameOffset(),
-                     rLogicPt.Y() + maGeometry.GetYFrameOffset());
-
-    return Point(ImplLogicToPixel(rLogicPt.X() + maGeometry.GetMappingOffset().X(), GetDPIX(),
-                                  maGeometry.GetMapScalingXNumerator(),
-                                  maGeometry.GetMapScalingXDenominator())
-                     + maGeometry.GetXFrameOffset() + maGeometry.GetXOffsetFromOriginInPixels(),
-                 ImplLogicToPixel(rLogicPt.Y() + maGeometry.GetMappingOffset().Y(), GetDPIY(),
-                                  maGeometry.GetMapScalingYNumerator(),
-                                  maGeometry.GetMapScalingYDenominator())
-                     + maGeometry.GetYFrameOffset() + maGeometry.GetYOffsetFromOriginInPixels());
-}
-
-Size OutputDevice::ImplLogicToDevicePixel(const Size& rLogicSize) const
-{
-    if (!IsMapModeEnabled())
-        return rLogicSize;
-
-    return Size(
-        ImplLogicToPixel(rLogicSize.Width(), GetDPIX(), maGeometry.GetMapScalingXNumerator(),
-                         maGeometry.GetMapScalingXDenominator()),
-        ImplLogicToPixel(rLogicSize.Height(), GetDPIY(), maGeometry.GetMapScalingYNumerator(),
-                         maGeometry.GetMapScalingYDenominator()));
-}
-
-tools::Rectangle OutputDevice::ImplLogicToDevicePixel(const tools::Rectangle& rLogicRect) const
-{
-    // tdf#141761 IsEmpty() removed
-    // Even if rLogicRect.IsEmpty(), transform of the Position contained
-    // in the Rectangle is necessary. Due to Rectangle::Right() returning
-    // Left() when IsEmpty(), the code *could* stay unchanged (same for Bottom),
-    // but:
-    // The Rectangle constructor used with the four tools::Long values does not
-    // check for IsEmpty(), so to keep that state correct there are two possibilities:
-    // (1) Add a test to the Rectangle constructor in question
-    // (2) Do it handish here
-    // I have tried (1) first, but test Test::test_rectangle() claims that for
-    //  tools::Rectangle aRect(1, 1, 1, 1);
-    //    tools::Long(1) == aRect.GetWidth()
-    //    tools::Long(0) == aRect.getWidth()
-    // (remember: this means Left == Right == 1 -> GetWidth => 1, getWidth == 0)
-    // so indeed the 1's have to go uncommented/unchecked into the data body
-    // of rectangle. Switching to (2) *is* needed, doing so
-    tools::Rectangle aRetval;
-
-    if (!IsMapModeEnabled())
-    {
-        aRetval = tools::Rectangle(
-            rLogicRect.Left() + maGeometry.GetXFrameOffset(),
-            rLogicRect.Top() + maGeometry.GetYFrameOffset(),
-            rLogicRect.IsWidthEmpty() ? 0 : rLogicRect.Right() + maGeometry.GetXFrameOffset(),
-            rLogicRect.IsHeightEmpty() ? 0 : rLogicRect.Bottom() + maGeometry.GetYFrameOffset());
-    }
-    else
-    {
-        aRetval = tools::Rectangle(
-            ImplLogicToPixel(rLogicRect.Left() + maGeometry.GetMappingOffset().X(), GetDPIX(),
-                             maGeometry.GetMapScalingXNumerator(),
-                             maGeometry.GetMapScalingXDenominator())
-                + maGeometry.GetXFrameOffset() + maGeometry.GetXOffsetFromOriginInPixels(),
-            ImplLogicToPixel(rLogicRect.Top() + maGeometry.GetMappingOffset().Y(), GetDPIY(),
-                             maGeometry.GetMapScalingYNumerator(),
-                             maGeometry.GetMapScalingYDenominator())
-                + maGeometry.GetYFrameOffset() + maGeometry.GetYOffsetFromOriginInPixels(),
-            rLogicRect.IsWidthEmpty()
-                ? 0
-                : ImplLogicToPixel(rLogicRect.Right() + maGeometry.GetMappingOffset().X(),
-                                   GetDPIX(), maGeometry.GetMapScalingXNumerator(),
-                                   maGeometry.GetMapScalingXDenominator())
-                      + maGeometry.GetXFrameOffset() + maGeometry.GetXOffsetFromOriginInPixels(),
-            rLogicRect.IsHeightEmpty()
-                ? 0
-                : ImplLogicToPixel(rLogicRect.Bottom() + maGeometry.GetMappingOffset().Y(),
-                                   GetDPIY(), maGeometry.GetMapScalingYNumerator(),
-                                   maGeometry.GetMapScalingYDenominator())
-                      + maGeometry.GetYFrameOffset() + maGeometry.GetYOffsetFromOriginInPixels());
-    }
-
-    if (rLogicRect.IsWidthEmpty())
-        aRetval.SetWidthEmpty();
-
-    if (rLogicRect.IsHeightEmpty())
-        aRetval.SetHeightEmpty();
-
-    return aRetval;
-}
-
-tools::Polygon OutputDevice::ImplLogicToDevicePixel(const tools::Polygon& rLogicPoly) const
-{
-    if (!IsMapModeEnabled() && !maGeometry.GetXFrameOffset() && !maGeometry.GetYFrameOffset())
-        return rLogicPoly;
-
-    sal_uInt16 i;
-    sal_uInt16 nPoints = rLogicPoly.GetSize();
-    tools::Polygon aPoly(rLogicPoly);
-
-    // get pointer to Point-array (copy data)
-    const Point* pPointAry = aPoly.GetConstPointAry();
-
-    if (IsMapModeEnabled())
-    {
-        for (i = 0; i < nPoints; i++)
-        {
-            const Point& rPt = pPointAry[i];
-            Point aPt(
-                ImplLogicToPixel(rPt.X() + maGeometry.GetMappingOffset().X(), GetDPIX(),
-                                 maGeometry.GetMapScalingXNumerator(),
-                                 maGeometry.GetMapScalingXDenominator())
-                    + maGeometry.GetXFrameOffset() + maGeometry.GetXOffsetFromOriginInPixels(),
-                ImplLogicToPixel(rPt.Y() + maGeometry.GetMappingOffset().Y(), GetDPIY(),
-                                 maGeometry.GetMapScalingYNumerator(),
-                                 maGeometry.GetMapScalingYDenominator())
-                    + maGeometry.GetYFrameOffset() + maGeometry.GetYOffsetFromOriginInPixels());
-            aPoly[i] = aPt;
-        }
-    }
-    else
-    {
-        for (i = 0; i < nPoints; i++)
-        {
-            Point aPt = pPointAry[i];
-            aPt.AdjustX(maGeometry.GetXFrameOffset());
-            aPt.AdjustY(maGeometry.GetYFrameOffset());
-            aPoly[i] = aPt;
-        }
-    }
-
-    return aPoly;
-}
-
-basegfx::B2DPolygon
-OutputDevice::ImplLogicToDevicePixel(const basegfx::B2DPolygon& rLogicPoly) const
-{
-    if (!IsMapModeEnabled() && !maGeometry.GetXFrameOffset() && !maGeometry.GetYFrameOffset())
-        return rLogicPoly;
-
-    sal_uInt32 nPoints = rLogicPoly.count();
-    basegfx::B2DPolygon aPoly(rLogicPoly);
-
-    basegfx::B2DPoint aC1;
-    basegfx::B2DPoint aC2;
-
-    if (IsMapModeEnabled())
-    {
-        for (sal_uInt32 i = 0; i < nPoints; ++i)
-        {
-            const basegfx::B2DPoint& rPt = aPoly.getB2DPoint(i);
-            basegfx::B2DPoint aPt(
-                ImplLogicToPixel(rPt.getX() + maGeometry.GetMappingOffset().X(), GetDPIX(),
-                                 maGeometry.GetMapScalingXNumerator(),
-                                 maGeometry.GetMapScalingXDenominator())
-                    + maGeometry.GetXFrameOffset() + maGeometry.GetXOffsetFromOriginInPixels(),
-                ImplLogicToPixel(rPt.getY() + maGeometry.GetMappingOffset().Y(), GetDPIY(),
-                                 maGeometry.GetMapScalingYNumerator(),
-                                 maGeometry.GetMapScalingYDenominator())
-                    + maGeometry.GetYFrameOffset() + maGeometry.GetYOffsetFromOriginInPixels());
-
-            const bool bC1 = aPoly.isPrevControlPointUsed(i);
-            if (bC1)
-            {
-                const basegfx::B2DPoint aB2DC1(aPoly.getPrevControlPoint(i));
-
-                aC1 = basegfx::B2DPoint(
-                    ImplLogicToPixel(aB2DC1.getX() + maGeometry.GetMappingOffset().X(), GetDPIX(),
-                                     maGeometry.GetMapScalingXNumerator(),
-                                     maGeometry.GetMapScalingXDenominator())
-                        + maGeometry.GetXFrameOffset() + maGeometry.GetXOffsetFromOriginInPixels(),
-                    ImplLogicToPixel(aB2DC1.getY() + maGeometry.GetMappingOffset().Y(), GetDPIY(),
-                                     maGeometry.GetMapScalingYNumerator(),
-                                     maGeometry.GetMapScalingYDenominator())
-                        + maGeometry.GetYFrameOffset() + maGeometry.GetYOffsetFromOriginInPixels());
-            }
-
-            const bool bC2 = aPoly.isNextControlPointUsed(i);
-            if (bC2)
-            {
-                const basegfx::B2DPoint aB2DC2(aPoly.getNextControlPoint(i));
-
-                aC2 = basegfx::B2DPoint(
-                    ImplLogicToPixel(aB2DC2.getX() + maGeometry.GetMappingOffset().X(), GetDPIX(),
-                                     maGeometry.GetMapScalingXNumerator(),
-                                     maGeometry.GetMapScalingXDenominator())
-                        + maGeometry.GetXFrameOffset() + maGeometry.GetXOffsetFromOriginInPixels(),
-                    ImplLogicToPixel(aB2DC2.getY() + maGeometry.GetMappingOffset().Y(), GetDPIY(),
-                                     maGeometry.GetMapScalingYNumerator(),
-                                     maGeometry.GetMapScalingYDenominator())
-                        + maGeometry.GetYFrameOffset() + maGeometry.GetYOffsetFromOriginInPixels());
-            }
-
-            aPoly.setB2DPoint(i, aPt);
-
-            if (bC1)
-                aPoly.setPrevControlPoint(i, aC1);
-
-            if (bC2)
-                aPoly.setNextControlPoint(i, aC2);
-        }
-    }
-    else
-    {
-        for (sal_uInt32 i = 0; i < nPoints; ++i)
-        {
-            const basegfx::B2DPoint& rPt = aPoly.getB2DPoint(i);
-            basegfx::B2DPoint aPt(rPt.getX() + maGeometry.GetXFrameOffset(),
-                                  rPt.getY() + maGeometry.GetYFrameOffset());
-
-            const bool bC1 = aPoly.isPrevControlPointUsed(i);
-            if (bC1)
-            {
-                const basegfx::B2DPoint aB2DC1(aPoly.getPrevControlPoint(i));
-
-                aC1 = basegfx::B2DPoint(aB2DC1.getX() + maGeometry.GetXFrameOffset(),
-                                        aB2DC1.getY() + maGeometry.GetYFrameOffset());
-            }
-
-            const bool bC2 = aPoly.isNextControlPointUsed(i);
-            if (bC2)
-            {
-                const basegfx::B2DPoint aB2DC2(aPoly.getNextControlPoint(i));
-
-                aC1 = basegfx::B2DPoint(aB2DC2.getX() + maGeometry.GetXFrameOffset(),
-                                        aB2DC2.getY() + maGeometry.GetYFrameOffset());
-            }
-
-            aPoly.setB2DPoint(i, aPt);
-
-            if (bC1)
-                aPoly.setPrevControlPoint(i, aC1);
-
-            if (bC2)
-                aPoly.setNextControlPoint(i, aC2);
-        }
-    }
-
-    return aPoly;
-}
-
-tools::PolyPolygon
-OutputDevice::ImplLogicToDevicePixel(const tools::PolyPolygon& rLogicPolyPoly) const
-{
-    if (!IsMapModeEnabled() && !maGeometry.GetXFrameOffset() && !maGeometry.GetYFrameOffset())
-        return rLogicPolyPoly;
-
-    tools::PolyPolygon aPolyPoly(rLogicPolyPoly);
-    sal_uInt16 nPoly = aPolyPoly.Count();
-    for (sal_uInt16 i = 0; i < nPoly; i++)
-    {
-        tools::Polygon& rPoly = aPolyPoly[i];
-        rPoly = ImplLogicToDevicePixel(rPoly);
-    }
-    return aPolyPoly;
-}
-
-LineInfo OutputDevice::ImplLogicToDevicePixel(const LineInfo& rLineInfo) const
-{
-    LineInfo aInfo(rLineInfo);
-
-    if (aInfo.GetStyle() == LineStyle::Dash)
-    {
-        if (aInfo.GetDotCount() && aInfo.GetDotLen())
-            aInfo.SetDotLen(
-                std::max(ImplLogicWidthToDevicePixel(aInfo.GetDotLen()), tools::Long(1)));
-        else
-            aInfo.SetDotCount(0);
-
-        if (aInfo.GetDashCount() && aInfo.GetDashLen())
-            aInfo.SetDashLen(
-                std::max(ImplLogicWidthToDevicePixel(aInfo.GetDashLen()), tools::Long(1)));
-        else
-            aInfo.SetDashCount(0);
-
-        aInfo.SetDistance(ImplLogicWidthToDevicePixel(aInfo.GetDistance()));
-
-        if ((!aInfo.GetDashCount() && !aInfo.GetDotCount()) || !aInfo.GetDistance())
-            aInfo.SetStyle(LineStyle::Solid);
-    }
-
-    aInfo.SetWidth(ImplLogicWidthToDevicePixel(aInfo.GetWidth()));
-
-    return aInfo;
-}
-
-tools::Rectangle OutputDevice::ImplDevicePixelToLogic(const tools::Rectangle& rPixelRect) const
-{
-    // tdf#141761 see comments above, IsEmpty() removed
-    tools::Rectangle aRetval;
-
-    if (!IsMapModeEnabled())
-    {
-        aRetval = tools::Rectangle(
-            rPixelRect.Left() - maGeometry.GetXFrameOffset(),
-            rPixelRect.Top() - maGeometry.GetYFrameOffset(),
-            rPixelRect.IsWidthEmpty() ? 0 : rPixelRect.Right() - maGeometry.GetXFrameOffset(),
-            rPixelRect.IsHeightEmpty() ? 0 : rPixelRect.Bottom() - maGeometry.GetYFrameOffset());
-    }
-    else
-    {
-        aRetval = tools::Rectangle(
-            ImplPixelToLogic(rPixelRect.Left() - maGeometry.GetXFrameOffset()
-                                 - maGeometry.GetXOffsetFromOriginInPixels(),
-                             GetDPIX(), maGeometry.GetMapScalingXNumerator(),
-                             maGeometry.GetMapScalingXDenominator())
-                - maGeometry.GetMappingOffset().X(),
-            ImplPixelToLogic(rPixelRect.Top() - maGeometry.GetYFrameOffset()
-                                 - maGeometry.GetYOffsetFromOriginInPixels(),
-                             GetDPIY(), maGeometry.GetMapScalingYNumerator(),
-                             maGeometry.GetMapScalingYDenominator())
-                - maGeometry.GetMappingOffset().Y(),
-            rPixelRect.IsWidthEmpty()
-                ? 0
-                : ImplPixelToLogic(rPixelRect.Right() - maGeometry.GetXFrameOffset()
-                                       - maGeometry.GetXOffsetFromOriginInPixels(),
-                                   GetDPIX(), maGeometry.GetMapScalingXNumerator(),
-                                   maGeometry.GetMapScalingXDenominator())
-                      - maGeometry.GetMappingOffset().X(),
-            rPixelRect.IsHeightEmpty()
-                ? 0
-                : ImplPixelToLogic(rPixelRect.Bottom() - maGeometry.GetYFrameOffset()
-                                       - maGeometry.GetYOffsetFromOriginInPixels(),
-                                   GetDPIY(), maGeometry.GetMapScalingYNumerator(),
-                                   maGeometry.GetMapScalingYDenominator())
-                      - maGeometry.GetMappingOffset().Y());
-    }
-
-    if (rPixelRect.IsWidthEmpty())
-        aRetval.SetWidthEmpty();
-
-    if (rPixelRect.IsHeightEmpty())
-        aRetval.SetHeightEmpty();
-
-    return aRetval;
-}
-
-vcl::Region OutputDevice::ImplPixelToDevicePixel(const vcl::Region& rRegion) const
-{
-    if (!maGeometry.GetXFrameOffset() && !maGeometry.GetYFrameOffset())
-        return rRegion;
-
-    vcl::Region aRegion(rRegion);
-    aRegion.Move(maGeometry.GetXFrameOffset() + maGeometry.GetXOffsetFromOriginInPixels(),
-                 maGeometry.GetYFrameOffset() + maGeometry.GetYOffsetFromOriginInPixels());
-    return aRegion;
-}
-
 void OutputDevice::EnableMapMode(bool bEnable)
 {
     maGeometry.EnableMapMode(bEnable);
@@ -645,10 +169,10 @@ void OutputDevice::SetMapMode(const MapMode& rNewMapMode)
     ImplInitMapModeObjects();
 
     // #106426# Adapt logical offset when changing mapmode
-    maGeometry.SetXOffsetFromOriginInLogicalUnits(ImplPixelToLogic(
+    maGeometry.SetXOffsetFromOriginInLogicalUnits(Geometry::PixelToLogic(
         maGeometry.GetXOffsetFromOriginInPixels(), GetDPIX(), maGeometry.GetMapScalingXNumerator(),
         maGeometry.GetMapScalingXDenominator()));
-    maGeometry.SetXOffsetFromOriginInLogicalUnits(ImplPixelToLogic(
+    maGeometry.SetXOffsetFromOriginInLogicalUnits(Geometry::PixelToLogic(
         maGeometry.GetYOffsetFromOriginInPixels(), GetDPIY(), maGeometry.GetMapScalingYNumerator(),
         maGeometry.GetMapScalingYDenominator()));
 
@@ -726,10 +250,10 @@ void OutputDevice::SetRelativeMapMode(const MapMode& rNewMapMode)
         maMapMode = rNewMapMode;
 
     // #106426# Adapt logical offset when changing MapMode
-    maGeometry.SetXOffsetFromOriginInLogicalUnits(ImplPixelToLogic(
+    maGeometry.SetXOffsetFromOriginInLogicalUnits(Geometry::PixelToLogic(
         maGeometry.GetXOffsetFromOriginInPixels(), GetDPIX(), maGeometry.GetMapScalingXNumerator(),
         maGeometry.GetMapScalingXDenominator()));
-    maGeometry.SetYOffsetFromOriginInLogicalUnits(ImplPixelToLogic(
+    maGeometry.SetYOffsetFromOriginInLogicalUnits(Geometry::PixelToLogic(
         maGeometry.GetYOffsetFromOriginInPixels(), GetDPIY(), maGeometry.GetMapScalingYNumerator(),
         maGeometry.GetMapScalingYDenominator()));
 
@@ -846,13 +370,13 @@ Point OutputDevice::LogicToPixel(const Point& rLogicPt) const
     if (!IsMapModeEnabled())
         return rLogicPt;
 
-    return Point(ImplLogicToPixel(rLogicPt.X() + maGeometry.GetMappingOffset().X(), GetDPIX(),
-                                  maGeometry.GetMapScalingXNumerator(),
-                                  maGeometry.GetMapScalingXDenominator())
+    return Point(Geometry::LogicToPixel(rLogicPt.X() + maGeometry.GetMappingOffset().X(), GetDPIX(),
+                                        maGeometry.GetMapScalingXNumerator(),
+                                        maGeometry.GetMapScalingXDenominator())
                      + maGeometry.GetXOffsetFromOriginInPixels(),
-                 ImplLogicToPixel(rLogicPt.Y() + maGeometry.GetMappingOffset().Y(), GetDPIY(),
-                                  maGeometry.GetMapScalingYNumerator(),
-                                  maGeometry.GetMapScalingYDenominator())
+                 Geometry::LogicToPixel(rLogicPt.Y() + maGeometry.GetMappingOffset().Y(), GetDPIY(),
+                                        maGeometry.GetMapScalingYNumerator(),
+                                        maGeometry.GetMapScalingYDenominator())
                      + maGeometry.GetYOffsetFromOriginInPixels());
 }
 
@@ -862,10 +386,10 @@ Size OutputDevice::LogicToPixel(const Size& rLogicSize) const
         return rLogicSize;
 
     return Size(
-        ImplLogicToPixel(rLogicSize.Width(), GetDPIX(), maGeometry.GetMapScalingXNumerator(),
-                         maGeometry.GetMapScalingXDenominator()),
-        ImplLogicToPixel(rLogicSize.Height(), GetDPIY(), maGeometry.GetMapScalingYNumerator(),
-                         maGeometry.GetMapScalingYDenominator()));
+        Geometry::LogicToPixel(rLogicSize.Width(), GetDPIX(), maGeometry.GetMapScalingXNumerator(),
+                               maGeometry.GetMapScalingXDenominator()),
+        Geometry::LogicToPixel(rLogicSize.Height(), GetDPIY(), maGeometry.GetMapScalingYNumerator(),
+                               maGeometry.GetMapScalingYDenominator()));
 }
 
 tools::Rectangle OutputDevice::LogicToPixel(const tools::Rectangle& rLogicRect) const
@@ -875,25 +399,25 @@ tools::Rectangle OutputDevice::LogicToPixel(const tools::Rectangle& rLogicRect) 
         return rLogicRect;
 
     tools::Rectangle aRetval(
-        ImplLogicToPixel(rLogicRect.Left() + maGeometry.GetMappingOffset().X(), GetDPIX(),
-                         maGeometry.GetMapScalingXNumerator(),
-                         maGeometry.GetMapScalingXDenominator())
+        Geometry::LogicToPixel(rLogicRect.Left() + maGeometry.GetMappingOffset().X(), GetDPIX(),
+                               maGeometry.GetMapScalingXNumerator(),
+                               maGeometry.GetMapScalingXDenominator())
             + maGeometry.GetXOffsetFromOriginInPixels(),
-        ImplLogicToPixel(rLogicRect.Top() + maGeometry.GetMappingOffset().Y(), GetDPIY(),
-                         maGeometry.GetMapScalingYNumerator(),
-                         maGeometry.GetMapScalingYDenominator())
+        Geometry::LogicToPixel(rLogicRect.Top() + maGeometry.GetMappingOffset().Y(), GetDPIY(),
+                               maGeometry.GetMapScalingYNumerator(),
+                               maGeometry.GetMapScalingYDenominator())
             + maGeometry.GetYOffsetFromOriginInPixels(),
         rLogicRect.IsWidthEmpty()
             ? 0
-            : ImplLogicToPixel(rLogicRect.Right() + maGeometry.GetMappingOffset().X(), GetDPIX(),
-                               maGeometry.GetMapScalingXNumerator(),
-                               maGeometry.GetMapScalingXDenominator())
+            : Geometry::LogicToPixel(rLogicRect.Right() + maGeometry.GetMappingOffset().X(),
+                                     GetDPIX(), maGeometry.GetMapScalingXNumerator(),
+                                     maGeometry.GetMapScalingXDenominator())
                   + maGeometry.GetXOffsetFromOriginInPixels(),
         rLogicRect.IsHeightEmpty()
             ? 0
-            : ImplLogicToPixel(rLogicRect.Bottom() + maGeometry.GetMappingOffset().Y(), GetDPIY(),
-                               maGeometry.GetMapScalingYNumerator(),
-                               maGeometry.GetMapScalingYDenominator())
+            : Geometry::LogicToPixel(rLogicRect.Bottom() + maGeometry.GetMappingOffset().Y(),
+                                     GetDPIY(), maGeometry.GetMapScalingYNumerator(),
+                                     maGeometry.GetMapScalingYDenominator())
                   + maGeometry.GetYOffsetFromOriginInPixels());
 
     if (rLogicRect.IsWidthEmpty())
@@ -921,13 +445,13 @@ tools::Polygon OutputDevice::LogicToPixel(const tools::Polygon& rLogicPoly) cons
     {
         const Point* pPt = &(pPointAry[i]);
         Point aPt;
-        aPt.setX(ImplLogicToPixel(pPt->X() + maGeometry.GetMappingOffset().X(), GetDPIX(),
-                                  maGeometry.GetMapScalingXNumerator(),
-                                  maGeometry.GetMapScalingXDenominator())
+        aPt.setX(Geometry::LogicToPixel(pPt->X() + maGeometry.GetMappingOffset().X(), GetDPIX(),
+                                        maGeometry.GetMapScalingXNumerator(),
+                                        maGeometry.GetMapScalingXDenominator())
                  + maGeometry.GetXOffsetFromOriginInPixels());
-        aPt.setY(ImplLogicToPixel(pPt->Y() + maGeometry.GetMappingOffset().Y(), GetDPIY(),
-                                  maGeometry.GetMapScalingYNumerator(),
-                                  maGeometry.GetMapScalingYDenominator())
+        aPt.setY(Geometry::LogicToPixel(pPt->Y() + maGeometry.GetMappingOffset().Y(), GetDPIY(),
+                                        maGeometry.GetMapScalingYNumerator(),
+                                        maGeometry.GetMapScalingYDenominator())
                  + maGeometry.GetYOffsetFromOriginInPixels());
         aPoly[i] = aPt;
     }
@@ -1002,13 +526,14 @@ Point OutputDevice::LogicToPixel(const Point& rLogicPt, const MapMode& rMapMode)
     MappingMetrics aMapMetrics;
     aMapMetrics.CalculateMappingResolution(rMapMode, GetDPIX(), GetDPIY());
 
-    return Point(
-        ImplLogicToPixel(rLogicPt.X() + aMapMetrics.mnMappingXOffset, GetDPIX(),
-                         aMapMetrics.mnMapScalingXNumerator, aMapMetrics.mnMapScalingXDenominator)
-            + maGeometry.GetXOffsetFromOriginInPixels(),
-        ImplLogicToPixel(rLogicPt.Y() + aMapMetrics.mnMappingYOffset, GetDPIY(),
-                         aMapMetrics.mnMapScalingYNumerator, aMapMetrics.mnMapScalingYDenominator)
-            + maGeometry.GetYOffsetFromOriginInPixels());
+    return Point(Geometry::LogicToPixel(rLogicPt.X() + aMapMetrics.mnMappingXOffset, GetDPIX(),
+                                        aMapMetrics.mnMapScalingXNumerator,
+                                        aMapMetrics.mnMapScalingXDenominator)
+                     + maGeometry.GetXOffsetFromOriginInPixels(),
+                 Geometry::LogicToPixel(rLogicPt.Y() + aMapMetrics.mnMappingYOffset, GetDPIY(),
+                                        aMapMetrics.mnMapScalingYNumerator,
+                                        aMapMetrics.mnMapScalingYDenominator)
+                     + maGeometry.GetYOffsetFromOriginInPixels());
 }
 
 Size OutputDevice::LogicToPixel(const Size& rLogicSize, const MapMode& rMapMode) const
@@ -1020,10 +545,11 @@ Size OutputDevice::LogicToPixel(const Size& rLogicSize, const MapMode& rMapMode)
     MappingMetrics aMapMetrics;
     aMapMetrics.CalculateMappingResolution(rMapMode, GetDPIX(), GetDPIY());
 
-    return Size(ImplLogicToPixel(rLogicSize.Width(), GetDPIX(), aMapMetrics.mnMapScalingXNumerator,
-                                 aMapMetrics.mnMapScalingXDenominator),
-                ImplLogicToPixel(rLogicSize.Height(), GetDPIY(), aMapMetrics.mnMapScalingYNumerator,
-                                 aMapMetrics.mnMapScalingYDenominator));
+    return Size(
+        Geometry::LogicToPixel(rLogicSize.Width(), GetDPIX(), aMapMetrics.mnMapScalingXNumerator,
+                               aMapMetrics.mnMapScalingXDenominator),
+        Geometry::LogicToPixel(rLogicSize.Height(), GetDPIY(), aMapMetrics.mnMapScalingYNumerator,
+                               aMapMetrics.mnMapScalingYDenominator));
 }
 
 tools::Rectangle OutputDevice::LogicToPixel(const tools::Rectangle& rLogicRect,
@@ -1038,23 +564,25 @@ tools::Rectangle OutputDevice::LogicToPixel(const tools::Rectangle& rLogicRect,
     aMapMetrics.CalculateMappingResolution(rMapMode, GetDPIX(), GetDPIY());
 
     tools::Rectangle aRetval(
-        ImplLogicToPixel(rLogicRect.Left() + aMapMetrics.mnMappingXOffset, GetDPIX(),
-                         aMapMetrics.mnMapScalingXNumerator, aMapMetrics.mnMapScalingXDenominator)
+        Geometry::LogicToPixel(rLogicRect.Left() + aMapMetrics.mnMappingXOffset, GetDPIX(),
+                               aMapMetrics.mnMapScalingXNumerator,
+                               aMapMetrics.mnMapScalingXDenominator)
             + maGeometry.GetXOffsetFromOriginInPixels(),
-        ImplLogicToPixel(rLogicRect.Top() + aMapMetrics.mnMappingYOffset, GetDPIY(),
-                         aMapMetrics.mnMapScalingYNumerator, aMapMetrics.mnMapScalingYDenominator)
+        Geometry::LogicToPixel(rLogicRect.Top() + aMapMetrics.mnMappingYOffset, GetDPIY(),
+                               aMapMetrics.mnMapScalingYNumerator,
+                               aMapMetrics.mnMapScalingYDenominator)
             + maGeometry.GetYOffsetFromOriginInPixels(),
         rLogicRect.IsWidthEmpty()
             ? 0
-            : ImplLogicToPixel(rLogicRect.Right() + aMapMetrics.mnMappingXOffset, GetDPIX(),
-                               aMapMetrics.mnMapScalingXNumerator,
-                               aMapMetrics.mnMapScalingXDenominator)
+            : Geometry::LogicToPixel(rLogicRect.Right() + aMapMetrics.mnMappingXOffset, GetDPIX(),
+                                     aMapMetrics.mnMapScalingXNumerator,
+                                     aMapMetrics.mnMapScalingXDenominator)
                   + maGeometry.GetXOffsetFromOriginInPixels(),
         rLogicRect.IsHeightEmpty()
             ? 0
-            : ImplLogicToPixel(rLogicRect.Bottom() + aMapMetrics.mnMappingYOffset, GetDPIY(),
-                               aMapMetrics.mnMapScalingYNumerator,
-                               aMapMetrics.mnMapScalingYDenominator)
+            : Geometry::LogicToPixel(rLogicRect.Bottom() + aMapMetrics.mnMappingYOffset, GetDPIY(),
+                                     aMapMetrics.mnMapScalingYNumerator,
+                                     aMapMetrics.mnMapScalingYDenominator)
                   + maGeometry.GetYOffsetFromOriginInPixels());
 
     if (rLogicRect.IsWidthEmpty())
@@ -1087,13 +615,13 @@ tools::Polygon OutputDevice::LogicToPixel(const tools::Polygon& rLogicPoly,
     {
         const Point* pPt = &(pPointAry[i]);
         Point aPt;
-        aPt.setX(ImplLogicToPixel(pPt->X() + aMapMetrics.mnMappingXOffset, GetDPIX(),
-                                  aMapMetrics.mnMapScalingXNumerator,
-                                  aMapMetrics.mnMapScalingXDenominator)
+        aPt.setX(Geometry::LogicToPixel(pPt->X() + aMapMetrics.mnMappingXOffset, GetDPIX(),
+                                        aMapMetrics.mnMapScalingXNumerator,
+                                        aMapMetrics.mnMapScalingXDenominator)
                  + maGeometry.GetXOffsetFromOriginInPixels());
-        aPt.setY(ImplLogicToPixel(pPt->Y() + aMapMetrics.mnMappingYOffset, GetDPIY(),
-                                  aMapMetrics.mnMapScalingYNumerator,
-                                  aMapMetrics.mnMapScalingYDenominator)
+        aPt.setY(Geometry::LogicToPixel(pPt->Y() + aMapMetrics.mnMappingYOffset, GetDPIY(),
+                                        aMapMetrics.mnMapScalingYNumerator,
+                                        aMapMetrics.mnMapScalingYDenominator)
                  + maGeometry.GetYOffsetFromOriginInPixels());
         aPoly[i] = aPt;
     }
@@ -1116,11 +644,11 @@ Point OutputDevice::PixelToLogic(const Point& rDevicePt) const
         return rDevicePt;
 
     return Point(
-        ImplPixelToLogic(rDevicePt.X(), GetDPIX(), maGeometry.GetMapScalingXNumerator(),
-                         maGeometry.GetMapScalingXDenominator())
+        Geometry::PixelToLogic(rDevicePt.X(), GetDPIX(), maGeometry.GetMapScalingXNumerator(),
+                               maGeometry.GetMapScalingXDenominator())
             - maGeometry.GetMappingOffset().X() - maGeometry.GetXOffsetFromOriginInLogicalUnits(),
-        ImplPixelToLogic(rDevicePt.Y(), GetDPIY(), maGeometry.GetMapScalingYNumerator(),
-                         maGeometry.GetMapScalingYDenominator())
+        Geometry::PixelToLogic(rDevicePt.Y(), GetDPIY(), maGeometry.GetMapScalingYNumerator(),
+                               maGeometry.GetMapScalingYDenominator())
             - maGeometry.GetMappingOffset().Y() - maGeometry.GetYOffsetFromOriginInLogicalUnits());
 }
 
@@ -1129,11 +657,12 @@ Size OutputDevice::PixelToLogic(const Size& rDeviceSize) const
     if (!IsMapModeEnabled())
         return rDeviceSize;
 
-    return Size(
-        ImplPixelToLogic(rDeviceSize.Width(), GetDPIX(), maGeometry.GetMapScalingXNumerator(),
-                         maGeometry.GetMapScalingXDenominator()),
-        ImplPixelToLogic(rDeviceSize.Height(), GetDPIY(), maGeometry.GetMapScalingYNumerator(),
-                         maGeometry.GetMapScalingYDenominator()));
+    return Size(Geometry::PixelToLogic(rDeviceSize.Width(), GetDPIX(),
+                                       maGeometry.GetMapScalingXNumerator(),
+                                       maGeometry.GetMapScalingXDenominator()),
+                Geometry::PixelToLogic(rDeviceSize.Height(), GetDPIY(),
+                                       maGeometry.GetMapScalingYNumerator(),
+                                       maGeometry.GetMapScalingYDenominator()));
 }
 
 tools::Rectangle OutputDevice::PixelToLogic(const tools::Rectangle& rDeviceRect) const
@@ -1143,22 +672,22 @@ tools::Rectangle OutputDevice::PixelToLogic(const tools::Rectangle& rDeviceRect)
         return rDeviceRect;
 
     tools::Rectangle aRetval(
-        ImplPixelToLogic(rDeviceRect.Left(), GetDPIX(), maGeometry.GetMapScalingXNumerator(),
-                         maGeometry.GetMapScalingXDenominator())
-            - maGeometry.GetMappingOffset().X() - maGeometry.GetXOffsetFromOriginInLogicalUnits(),
-        ImplPixelToLogic(rDeviceRect.Top(), GetDPIY(), maGeometry.GetMapScalingYNumerator(),
-                         maGeometry.GetMapScalingYDenominator())
-            - maGeometry.GetMappingOffset().Y() - maGeometry.GetYOffsetFromOriginInLogicalUnits(),
-        rDeviceRect.IsWidthEmpty()
-            ? 0
-            : ImplPixelToLogic(rDeviceRect.Right(), GetDPIX(), maGeometry.GetMapScalingXNumerator(),
+        Geometry::PixelToLogic(rDeviceRect.Left(), GetDPIX(), maGeometry.GetMapScalingXNumerator(),
                                maGeometry.GetMapScalingXDenominator())
-                  - maGeometry.GetMappingOffset().X()
-                  - maGeometry.GetXOffsetFromOriginInLogicalUnits(),
+            - maGeometry.GetMappingOffset().X() - maGeometry.GetXOffsetFromOriginInLogicalUnits(),
+        Geometry::PixelToLogic(rDeviceRect.Top(), GetDPIY(), maGeometry.GetMapScalingYNumerator(),
+                               maGeometry.GetMapScalingYDenominator())
+            - maGeometry.GetMappingOffset().Y() - maGeometry.GetYOffsetFromOriginInLogicalUnits(),
+        rDeviceRect.IsWidthEmpty() ? 0
+                                   : Geometry::PixelToLogic(rDeviceRect.Right(), GetDPIX(),
+                                                            maGeometry.GetMapScalingXNumerator(),
+                                                            maGeometry.GetMapScalingXDenominator())
+                                         - maGeometry.GetMappingOffset().X()
+                                         - maGeometry.GetXOffsetFromOriginInLogicalUnits(),
         rDeviceRect.IsHeightEmpty() ? 0
-                                    : ImplPixelToLogic(rDeviceRect.Bottom(), GetDPIY(),
-                                                       maGeometry.GetMapScalingYNumerator(),
-                                                       maGeometry.GetMapScalingYDenominator())
+                                    : Geometry::PixelToLogic(rDeviceRect.Bottom(), GetDPIY(),
+                                                             maGeometry.GetMapScalingYNumerator(),
+                                                             maGeometry.GetMapScalingYDenominator())
                                           - maGeometry.GetMappingOffset().Y()
                                           - maGeometry.GetYOffsetFromOriginInLogicalUnits());
 
@@ -1187,12 +716,12 @@ tools::Polygon OutputDevice::PixelToLogic(const tools::Polygon& rDevicePoly) con
     {
         const Point* pPt = &(pPointAry[i]);
         Point aPt;
-        aPt.setX(ImplPixelToLogic(pPt->X(), GetDPIX(), maGeometry.GetMapScalingXNumerator(),
-                                  maGeometry.GetMapScalingXDenominator())
+        aPt.setX(Geometry::PixelToLogic(pPt->X(), GetDPIX(), maGeometry.GetMapScalingXNumerator(),
+                                        maGeometry.GetMapScalingXDenominator())
                  - maGeometry.GetMappingOffset().X()
                  - maGeometry.GetXOffsetFromOriginInLogicalUnits());
-        aPt.setY(ImplPixelToLogic(pPt->Y(), GetDPIY(), maGeometry.GetMapScalingYNumerator(),
-                                  maGeometry.GetMapScalingYDenominator())
+        aPt.setY(Geometry::PixelToLogic(pPt->Y(), GetDPIY(), maGeometry.GetMapScalingYNumerator(),
+                                        maGeometry.GetMapScalingYDenominator())
                  - maGeometry.GetMappingOffset().Y()
                  - maGeometry.GetYOffsetFromOriginInLogicalUnits());
         aPoly[i] = aPt;
@@ -1270,11 +799,11 @@ Point OutputDevice::PixelToLogic(const Point& rDevicePt, const MapMode& rMapMode
     aMapMetrics.CalculateMappingResolution(rMapMode, GetDPIX(), GetDPIY());
 
     return Point(
-        ImplPixelToLogic(rDevicePt.X(), GetDPIX(), aMapMetrics.mnMapScalingXNumerator,
-                         aMapMetrics.mnMapScalingXDenominator)
+        Geometry::PixelToLogic(rDevicePt.X(), GetDPIX(), aMapMetrics.mnMapScalingXNumerator,
+                               aMapMetrics.mnMapScalingXDenominator)
             - aMapMetrics.mnMappingXOffset - maGeometry.GetXOffsetFromOriginInLogicalUnits(),
-        ImplPixelToLogic(rDevicePt.Y(), GetDPIY(), aMapMetrics.mnMapScalingYNumerator,
-                         aMapMetrics.mnMapScalingYDenominator)
+        Geometry::PixelToLogic(rDevicePt.Y(), GetDPIY(), aMapMetrics.mnMapScalingYNumerator,
+                               aMapMetrics.mnMapScalingYDenominator)
             - aMapMetrics.mnMappingYOffset - maGeometry.GetYOffsetFromOriginInLogicalUnits());
 }
 
@@ -1288,11 +817,11 @@ Size OutputDevice::PixelToLogic(const Size& rDeviceSize, const MapMode& rMapMode
     MappingMetrics aMapMetrics;
     aMapMetrics.CalculateMappingResolution(rMapMode, GetDPIX(), GetDPIY());
 
-    return Size(ImplPixelToLogic(rDeviceSize.Width(), GetDPIX(), aMapMetrics.mnMapScalingXNumerator,
-                                 aMapMetrics.mnMapScalingXDenominator),
-                ImplPixelToLogic(rDeviceSize.Height(), GetDPIY(),
-                                 aMapMetrics.mnMapScalingYNumerator,
-                                 aMapMetrics.mnMapScalingYDenominator));
+    return Size(
+        Geometry::PixelToLogic(rDeviceSize.Width(), GetDPIX(), aMapMetrics.mnMapScalingXNumerator,
+                               aMapMetrics.mnMapScalingXDenominator),
+        Geometry::PixelToLogic(rDeviceSize.Height(), GetDPIY(), aMapMetrics.mnMapScalingYNumerator,
+                               aMapMetrics.mnMapScalingYDenominator));
 }
 
 tools::Rectangle OutputDevice::PixelToLogic(const tools::Rectangle& rDeviceRect,
@@ -1308,21 +837,23 @@ tools::Rectangle OutputDevice::PixelToLogic(const tools::Rectangle& rDeviceRect,
     aMapMetrics.CalculateMappingResolution(rMapMode, GetDPIX(), GetDPIY());
 
     tools::Rectangle aRetval(
-        ImplPixelToLogic(rDeviceRect.Left(), GetDPIX(), aMapMetrics.mnMapScalingXNumerator,
-                         aMapMetrics.mnMapScalingXDenominator)
+        Geometry::PixelToLogic(rDeviceRect.Left(), GetDPIX(), aMapMetrics.mnMapScalingXNumerator,
+                               aMapMetrics.mnMapScalingXDenominator)
             - aMapMetrics.mnMappingXOffset - maGeometry.GetXOffsetFromOriginInLogicalUnits(),
-        ImplPixelToLogic(rDeviceRect.Top(), GetDPIY(), aMapMetrics.mnMapScalingYNumerator,
-                         aMapMetrics.mnMapScalingYDenominator)
+        Geometry::PixelToLogic(rDeviceRect.Top(), GetDPIY(), aMapMetrics.mnMapScalingYNumerator,
+                               aMapMetrics.mnMapScalingYDenominator)
             - aMapMetrics.mnMappingYOffset - maGeometry.GetYOffsetFromOriginInLogicalUnits(),
         rDeviceRect.IsWidthEmpty()
             ? 0
-            : ImplPixelToLogic(rDeviceRect.Right(), GetDPIX(), aMapMetrics.mnMapScalingXNumerator,
-                               aMapMetrics.mnMapScalingXDenominator)
+            : Geometry::PixelToLogic(rDeviceRect.Right(), GetDPIX(),
+                                     aMapMetrics.mnMapScalingXNumerator,
+                                     aMapMetrics.mnMapScalingXDenominator)
                   - aMapMetrics.mnMappingXOffset - maGeometry.GetXOffsetFromOriginInLogicalUnits(),
         rDeviceRect.IsHeightEmpty()
             ? 0
-            : ImplPixelToLogic(rDeviceRect.Bottom(), GetDPIY(), aMapMetrics.mnMapScalingYNumerator,
-                               aMapMetrics.mnMapScalingYDenominator)
+            : Geometry::PixelToLogic(rDeviceRect.Bottom(), GetDPIY(),
+                                     aMapMetrics.mnMapScalingYNumerator,
+                                     aMapMetrics.mnMapScalingYDenominator)
                   - aMapMetrics.mnMappingYOffset - maGeometry.GetYOffsetFromOriginInLogicalUnits());
 
     if (rDeviceRect.IsWidthEmpty())
@@ -1356,11 +887,11 @@ tools::Polygon OutputDevice::PixelToLogic(const tools::Polygon& rDevicePoly,
     {
         const Point* pPt = &(pPointAry[i]);
         Point aPt;
-        aPt.setX(ImplPixelToLogic(pPt->X(), GetDPIX(), aMapMetrics.mnMapScalingXNumerator,
-                                  aMapMetrics.mnMapScalingXDenominator)
+        aPt.setX(Geometry::PixelToLogic(pPt->X(), GetDPIX(), aMapMetrics.mnMapScalingXNumerator,
+                                        aMapMetrics.mnMapScalingXDenominator)
                  - aMapMetrics.mnMappingXOffset - maGeometry.GetXOffsetFromOriginInLogicalUnits());
-        aPt.setY(ImplPixelToLogic(pPt->Y(), GetDPIY(), aMapMetrics.mnMapScalingYNumerator,
-                                  aMapMetrics.mnMapScalingYDenominator)
+        aPt.setY(Geometry::PixelToLogic(pPt->Y(), GetDPIY(), aMapMetrics.mnMapScalingYNumerator,
+                                        aMapMetrics.mnMapScalingYDenominator)
                  - aMapMetrics.mnMappingYOffset - maGeometry.GetYOffsetFromOriginInLogicalUnits());
         aPoly[i] = aPt;
     }
@@ -1944,57 +1475,15 @@ void OutputDevice::SetPixelOffset(const Size& rOffset)
     maGeometry.SetXOffsetFromOriginInPixels(rOffset.Width());
     maGeometry.SetYOffsetFromOriginInPixels(rOffset.Height());
 
-    maGeometry.SetXOffsetFromOriginInLogicalUnits(ImplPixelToLogic(
+    maGeometry.SetXOffsetFromOriginInLogicalUnits(Geometry::PixelToLogic(
         maGeometry.GetXOffsetFromOriginInPixels(), GetDPIX(), maGeometry.GetMapScalingXNumerator(),
         maGeometry.GetMapScalingXDenominator()));
-    maGeometry.SetYOffsetFromOriginInLogicalUnits(ImplPixelToLogic(
+    maGeometry.SetYOffsetFromOriginInLogicalUnits(Geometry::PixelToLogic(
         maGeometry.GetYOffsetFromOriginInPixels(), GetDPIY(), maGeometry.GetMapScalingYNumerator(),
         maGeometry.GetMapScalingYDenominator()));
 
     if (mpAlphaVDev)
         mpAlphaVDev->SetPixelOffset(rOffset);
-}
-
-DeviceCoordinate OutputDevice::LogicWidthToDeviceCoordinate(tools::Long nWidth) const
-{
-    if (!IsMapModeEnabled())
-        return static_cast<DeviceCoordinate>(nWidth);
-
-#if VCL_FLOAT_DEVICE_PIXEL
-    return ImplLogicToPixel(static_cast<double>(nWidth), GetDPIX(),
-                            maGeometry.GetMapScalingXNumerator(),
-                            maGeometry.GetMapScalingXDenominator());
-#else
-    return ImplLogicToPixel(nWidth, GetDPIX(), maGeometry.GetMapScalingXNumerator(),
-                            maGeometry.GetMapScalingXDenominator());
-#endif
-}
-
-double OutputDevice::ImplLogicWidthToDeviceFontWidth(tools::Long nWidth) const
-{
-    if (!IsMapModeEnabled())
-        return nWidth;
-
-    return ImplLogicToPixel(static_cast<double>(nWidth), GetDPIX(),
-                            maGeometry.GetMapScalingXNumerator(),
-                            maGeometry.GetMapScalingXDenominator());
-}
-
-DevicePoint OutputDevice::ImplLogicToDeviceFontCoordinate(const Point& rPoint) const
-{
-    if (!IsMapModeEnabled())
-        return DevicePoint(rPoint.X() + maGeometry.GetXFrameOffset(),
-                           rPoint.Y() + maGeometry.GetYFrameOffset());
-
-    return DevicePoint(
-        ImplLogicToPixel(static_cast<double>(rPoint.X() + maGeometry.GetMappingOffset().X()),
-                         GetDPIX(), maGeometry.GetMapScalingXNumerator(),
-                         maGeometry.GetMapScalingXDenominator())
-            + maGeometry.GetXFrameOffset() + maGeometry.GetXOffsetFromOriginInPixels(),
-        ImplLogicToPixel(static_cast<double>(rPoint.Y() + maGeometry.GetMappingOffset().Y()),
-                         GetDPIY(), maGeometry.GetMapScalingYNumerator(),
-                         maGeometry.GetMapScalingYDenominator())
-            + maGeometry.GetYFrameOffset() + maGeometry.GetYOffsetFromOriginInPixels());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

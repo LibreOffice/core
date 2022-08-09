@@ -6133,7 +6133,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
 
     // transform font height back to current units
     // note: the layout calculates in outdevs device pixel !!
-    sal_Int32 nFontHeight = ImplDevicePixelToLogicHeight( nPixelFontHeight );
+    sal_Int32 nFontHeight = maGeometry.DevicePixelToLogicHeight( nPixelFontHeight );
     if( m_aCurrentPDFState.m_aFont.GetAverageFontWidth() )
     {
         Font aFont( m_aCurrentPDFState.m_aFont );
@@ -6345,7 +6345,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         // This is the top left of the text without ascent / descent.
         DevicePoint aDrawPosition(rLayout.GetDrawPosition());
         tools::Rectangle aRectangle(PixelToLogic(Point(aDrawPosition.getX(), aDrawPosition.getY())),
-                                    Size(ImplDevicePixelToLogicWidth(rLayout.GetTextWidth()), 0));
+                                    Size(maGeometry.DevicePixelToLogicWidth(rLayout.GetTextWidth()), 0));
         aRectangle.AdjustTop(-aRefDevFontMetric.GetAscent());
         // This includes ascent / descent.
         aRectangle.setHeight(aRefDevFontMetric.GetLineHeight());
@@ -6459,7 +6459,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
                 else if( nWidth > 0 )
                 {
                     drawTextLine( PixelToLogic( aStartPt ),
-                                  ImplDevicePixelToLogicWidth( nWidth ),
+                                  maGeometry.DevicePixelToLogicWidth( nWidth ),
                                   eStrikeout, eUnderline, eOverline, bUnderlineAbove );
                     nWidth = 0;
                 }
@@ -6468,7 +6468,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
             if( nWidth > 0 )
             {
                 drawTextLine( PixelToLogic( aStartPt ),
-                              ImplDevicePixelToLogicWidth( nWidth ),
+                              maGeometry.DevicePixelToLogicWidth( nWidth ),
                               eStrikeout, eUnderline, eOverline, bUnderlineAbove );
             }
         }
@@ -6477,7 +6477,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
             DevicePoint aStartPt = rLayout.GetDrawPosition();
             int nWidth = rLayout.GetTextWidth() / rLayout.GetUnitsPerPixel();
             drawTextLine( PixelToLogic(Point(aStartPt.getX(), aStartPt.getY()) ),
-                          ImplDevicePixelToLogicWidth( nWidth ),
+                          maGeometry.DevicePixelToLogicWidth( nWidth ),
                           eStrikeout, eUnderline, eOverline, bUnderlineAbove );
         }
     }
@@ -6512,7 +6512,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
                                              nEmphYOff,
                                              nEmphWidth,
                                              nEmphMark,
-                                             ImplDevicePixelToLogicWidth(nEmphHeight) );
+                                             maGeometry.DevicePixelToLogicWidth(nEmphHeight) );
     if ( bEmphPolyLine )
     {
         setLineColor( m_aCurrentPDFState.m_aFont.GetColor() );
@@ -6843,7 +6843,7 @@ void PDFWriterImpl::drawLine( const Point& rStart, const Point& rStop, const Lin
     }
 }
 
-#define HCONV( x ) ImplDevicePixelToLogicHeight( x )
+#define HCONV( x ) maGeometry.DevicePixelToLogicHeight( x )
 
 void PDFWriterImpl::drawWaveTextLine( OStringBuffer& aLine, tools::Long nWidth, FontLineStyle eTextLine, Color aColor, bool bIsAbove )
 {

@@ -58,7 +58,7 @@ void OutputDevice::DrawRect( const tools::Rectangle& rRect )
     if ( !IsDeviceOutputNecessary() || (!mbLineColor && !mbFillColor) || ImplIsRecordLayout() )
         return;
 
-    tools::Rectangle aRect( ImplLogicToDevicePixel( rRect ) );
+    tools::Rectangle aRect( maGeometry.LogicToDevicePixel( rRect ) );
 
     if ( aRect.IsEmpty() )
         return;
@@ -98,13 +98,13 @@ void OutputDevice::DrawRect( const tools::Rectangle& rRect,
     if ( !IsDeviceOutputNecessary() || (!mbLineColor && !mbFillColor) || ImplIsRecordLayout() )
         return;
 
-    const tools::Rectangle aRect( ImplLogicToDevicePixel( rRect ) );
+    const tools::Rectangle aRect( maGeometry.LogicToDevicePixel( rRect ) );
 
     if ( aRect.IsEmpty() )
         return;
 
-    nHorzRound = ImplLogicWidthToDevicePixel( nHorzRound );
-    nVertRound = ImplLogicHeightToDevicePixel( nVertRound );
+    nHorzRound = maGeometry.LogicWidthToDevicePixel( nHorzRound );
+    nVertRound = maGeometry.LogicHeightToDevicePixel( nVertRound );
 
     // we need a graphics
     if ( !mpGraphics && !AcquireGraphics() )
@@ -152,7 +152,7 @@ void OutputDevice::Invert( const tools::Rectangle& rRect, InvertFlags nFlags )
     if ( !IsDeviceOutputNecessary() )
         return;
 
-    tools::Rectangle aRect( ImplLogicToDevicePixel( rRect ) );
+    tools::Rectangle aRect( maGeometry.LogicToDevicePixel( rRect ) );
 
     if ( aRect.IsEmpty() )
         return;
@@ -188,7 +188,7 @@ void OutputDevice::Invert( const tools::Polygon& rPoly, InvertFlags nFlags )
     if ( nPoints < 2 )
         return;
 
-    tools::Polygon aPoly( ImplLogicToDevicePixel( rPoly ) );
+    tools::Polygon aPoly( maGeometry.LogicToDevicePixel( rPoly ) );
 
     // we need a graphics
     if ( !mpGraphics && !AcquireGraphics() )
@@ -262,10 +262,10 @@ void OutputDevice::DrawGrid( const tools::Rectangle& rRect, const Size& rDist, D
     tools::Long nY = ( rRect.Top() >= aDstRect.Top() ) ? rRect.Top() : ( rRect.Top() + ( ( aDstRect.Top() - rRect.Top() ) / nDistY ) * nDistY );
     const tools::Long nRight = aDstRect.Right();
     const tools::Long nBottom = aDstRect.Bottom();
-    const tools::Long nStartX = ImplLogicXToDevicePixel( nX );
-    const tools::Long nEndX = ImplLogicXToDevicePixel( nRight );
-    const tools::Long nStartY = ImplLogicYToDevicePixel( nY );
-    const tools::Long nEndY = ImplLogicYToDevicePixel( nBottom );
+    const tools::Long nStartX = maGeometry.LogicXToDevicePixel( nX );
+    const tools::Long nEndX = maGeometry.LogicXToDevicePixel( nRight );
+    const tools::Long nStartY = maGeometry.LogicYToDevicePixel( nY );
+    const tools::Long nEndY = maGeometry.LogicYToDevicePixel( nBottom );
     tools::Long nHorzCount = 0;
     tools::Long nVertCount = 0;
 
@@ -278,7 +278,7 @@ void OutputDevice::DrawGrid( const tools::Rectangle& rRect, const Size& rDist, D
         aVertBuf[ nVertCount++ ] = nStartY;
         while( ( nY += nDistY ) <= nBottom )
         {
-            aVertBuf[ nVertCount++ ] = ImplLogicYToDevicePixel( nY );
+            aVertBuf[ nVertCount++ ] = maGeometry.LogicYToDevicePixel( nY );
         }
     }
 
@@ -288,7 +288,7 @@ void OutputDevice::DrawGrid( const tools::Rectangle& rRect, const Size& rDist, D
         aHorzBuf[ nHorzCount++ ] = nStartX;
         while( ( nX += nDistX ) <= nRight )
         {
-            aHorzBuf[ nHorzCount++ ] = ImplLogicXToDevicePixel( nX );
+            aHorzBuf[ nHorzCount++ ] = maGeometry.LogicXToDevicePixel( nX );
         }
     }
 

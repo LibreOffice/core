@@ -82,7 +82,7 @@ void OutputDevice::DrawPolyLine( const tools::Polygon& rPoly )
 
     if(!bDrawn)
     {
-        tools::Polygon aPoly = ImplLogicToDevicePixel( rPoly );
+        tools::Polygon aPoly = maGeometry.LogicToDevicePixel( rPoly );
         Point* pPtAry = aPoly.GetPointAry();
 
         // #100127# Forward beziers to sal, if any
@@ -276,18 +276,18 @@ void OutputDevice::drawPolyLine(const tools::Polygon& rPoly, const LineInfo& rLi
     if ( mbInitLineColor )
         InitLineColor();
 
-    const LineInfo aInfo( ImplLogicToDevicePixel( rLineInfo ) );
+    const LineInfo aInfo( maGeometry.LogicToDevicePixel( rLineInfo ) );
     const bool bDashUsed(LineStyle::Dash == aInfo.GetStyle());
     const bool bLineWidthUsed(aInfo.GetWidth() > 1);
 
     if (bDashUsed || bLineWidthUsed)
     {
-        basegfx::B2DPolygon aPoly = ImplLogicToDevicePixel(rPoly.getB2DPolygon());
+        basegfx::B2DPolygon aPoly = maGeometry.LogicToDevicePixel(rPoly.getB2DPolygon());
         drawLine(basegfx::B2DPolyPolygon(aPoly), aInfo);
     }
     else
     {
-        tools::Polygon aPoly = ImplLogicToDevicePixel(rPoly);
+        tools::Polygon aPoly = maGeometry.LogicToDevicePixel(rPoly);
 
         // #100127# the subdivision HAS to be done here since only a pointer
         // to an array of points is given to the DrawPolyLine method, there is

@@ -132,9 +132,9 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
     if ( mbOutputClipped )
         return;
 
-    const Point aStartPt( ImplLogicToDevicePixel( rStartPt ) );
-    const Point aEndPt( ImplLogicToDevicePixel( rEndPt ) );
-    const LineInfo aInfo( ImplLogicToDevicePixel( rLineInfo ) );
+    const Point aStartPt( maGeometry.LogicToDevicePixel( rStartPt ) );
+    const Point aEndPt( maGeometry.LogicToDevicePixel( rEndPt ) );
+    const LineInfo aInfo( maGeometry.LogicToDevicePixel( rLineInfo ) );
     const bool bDashUsed(LineStyle::Dash == aInfo.GetStyle());
     const bool bLineWidthUsed(aInfo.GetWidth() > 1);
 
@@ -213,8 +213,8 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
     }
     if(!bDrawn)
     {
-        const Point aStartPt(ImplLogicToDevicePixel(rStartPt));
-        const Point aEndPt(ImplLogicToDevicePixel(rEndPt));
+        const Point aStartPt(maGeometry.LogicToDevicePixel(rStartPt));
+        const Point aEndPt(maGeometry.LogicToDevicePixel(rEndPt));
         mpGraphics->DrawLine( aStartPt.X(), aStartPt.Y(), aEndPt.X(), aEndPt.Y(), *this );
     }
 

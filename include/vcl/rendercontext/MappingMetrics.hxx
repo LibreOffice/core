@@ -28,7 +28,6 @@ class MapMode;
 struct MappingMetrics
 {
     MappingMetrics() = default;
-    MappingMetrics& operator=(MappingMetrics const& rMetrics) = default;
 
     void CalculateScale(const o3tl::Length eUnit);
     void CalculateMappingResolution(MapMode const& rMapMode, tools::Long nDPIX, tools::Long nDPIY);

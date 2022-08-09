@@ -134,8 +134,8 @@ void OutputDevice::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
     {
         // #100127# moved real tools::PolyPolygon draw to separate method,
         // have to call recursively, avoiding duplicate
-        // ImplLogicToDevicePixel calls
-        ImplDrawPolyPolygon( nPoly, ImplLogicToDevicePixel( rPolyPoly ) );
+        // maGeometry.LogicToDevicePixel calls
+        ImplDrawPolyPolygon( nPoly, maGeometry.LogicToDevicePixel( rPolyPoly ) );
     }
     if( mpAlphaVDev )
         mpAlphaVDev->DrawPolyPolygon( rPolyPoly );
@@ -231,7 +231,7 @@ void OutputDevice::DrawPolygon( const tools::Polygon& rPoly )
         }
     }
 
-    tools::Polygon aPoly = ImplLogicToDevicePixel( rPoly );
+    tools::Polygon aPoly = maGeometry.LogicToDevicePixel( rPoly );
     const Point* pPtAry = aPoly.GetConstPointAry();
 
     // #100127# Forward beziers to sal, if any
@@ -343,7 +343,7 @@ void OutputDevice::ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyP
     {
         // fallback to old polygon drawing if needed
         const tools::PolyPolygon aToolsPolyPolygon(rB2DPolyPoly);
-        const tools::PolyPolygon aPixelPolyPolygon = ImplLogicToDevicePixel(aToolsPolyPolygon);
+        const tools::PolyPolygon aPixelPolyPolygon = maGeometry.LogicToDevicePixel(aToolsPolyPolygon);
         ImplDrawPolyPolygon(aPixelPolyPolygon.Count(), aPixelPolyPolygon);
     }
 
