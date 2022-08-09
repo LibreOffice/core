@@ -3222,7 +3222,7 @@ void SdrObject::ForceMetricToItemPoolMetric(basegfx::B2DPolyPolygon& rPolyPolygo
     }
 }
 
-tools::Rectangle SdrObject::getOutRectangle() const
+const tools::Rectangle& SdrObject::getOutRectangle() const
 {
     return m_aOutRect;
 }

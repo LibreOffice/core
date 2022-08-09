@@ -115,7 +115,7 @@ public:
 
     void SetShowContentControlOverlay(const bool bShow) { m_bShowContentControlOverlay = bShow; }
 
-    VclPtr<SwContentControlButton> GetContentControlButton() const;
+    const VclPtr<SwContentControlButton>& GetContentControlButton() const;
 
     const SwCursorShell* GetShell() const { return m_pCursorShell; }
     // check current MapMode of the shell and set possibly the static members.

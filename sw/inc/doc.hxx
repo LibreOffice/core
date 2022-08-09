@@ -1624,7 +1624,7 @@ public:
     void SetDefaultPageMode(bool bSquaredPageMode);
     bool IsSquaredPageMode() const;
 
-    css::uno::Reference< ooo::vba::word::XFind > getVbaFind() const { return mxVbaFind; }
+    const css::uno::Reference< ooo::vba::word::XFind >& getVbaFind() const { return mxVbaFind; }
     void setVbaFind( const css::uno::Reference< ooo::vba::word::XFind > &xFind) { mxVbaFind = xFind; }
     css::uno::Reference< css::script::vba::XVBAEventProcessor > const & GetVbaEventProcessor();
     void SetVBATemplateToProjectCache( css::uno::Reference< css::container::XNameContainer > const & xCache ) { m_xTemplateToProjectCache = xCache; };

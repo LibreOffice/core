@@ -143,13 +143,13 @@ public:
     {
         m_sDataBindingPrefixMapping = sValue;
     }
-    OUString GetDataBindingPrefixMapping() const { return m_sDataBindingPrefixMapping; }
+    const OUString& GetDataBindingPrefixMapping() const { return m_sDataBindingPrefixMapping; }
 
     void setDataBindingXPath(const OUString& sValue) { m_sDataBindingXPath = sValue; }
-    OUString GetDataBindingXPath() const { return m_sDataBindingXPath; }
+    const OUString& GetDataBindingXPath() const { return m_sDataBindingXPath; }
 
     void setDataBindingStoreItemID(const OUString& sValue) { m_sDataBindingStoreItemID = sValue; }
-    OUString GetDataBindingStoreItemID() const { return m_sDataBindingStoreItemID; }
+    const OUString& GetDataBindingStoreItemID() const { return m_sDataBindingStoreItemID; }
 
     void setDateFieldStartRange(const css::uno::Reference<css::text::XTextRange>& xStartRange)
     {
@@ -192,18 +192,18 @@ public:
     void SetChecked();
     bool GetChecked() const;
     void SetCheckedState(const OUString& rCheckedState);
-    OUString GetCheckedState() const;
+    const OUString& GetCheckedState() const;
     void SetUncheckedState(const OUString& rUncheckedState);
-    OUString GetUncheckedState() const;
+    const OUString& GetUncheckedState() const;
 
     /// Clear all collected attributes for further reuse
     void clear();
 
     void SetPlaceholderDocPart(const OUString& rPlaceholderDocPart);
-    OUString GetPlaceholderDocPart() const;
+    const OUString& GetPlaceholderDocPart() const;
 
     void SetColor(const OUString& rColor);
-    OUString GetColor() const;
+    const OUString& GetColor() const;
 };
 
 } // namespace writerfilter::dmapper

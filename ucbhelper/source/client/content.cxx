@@ -164,7 +164,7 @@ friend ContentEventListener_Impl;
 private:
     void reinit( const Reference< XContent >& xContent );
     void disposing(const EventObject& Source);
-    Reference< XContent > getContent_NoLock();
+    const Reference< XContent > & getContent_NoLock();
     const OUString& getURL_NoLock() const;
 
 public:
@@ -1205,7 +1205,7 @@ Reference< XContent > Content_Impl::getContent()
     return m_xContent;
 }
 
-Reference< XContent > Content_Impl::getContent_NoLock()
+const Reference< XContent > & Content_Impl::getContent_NoLock()
 {
     if ( !m_xContent.is() && !m_aURL.isEmpty() )
     {

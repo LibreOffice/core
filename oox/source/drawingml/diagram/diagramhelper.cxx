@@ -236,7 +236,7 @@ void AdvancedDiagramHelper::doAnchor(SdrObjGroup& rTarget, ::oox::drawingml::Sha
     anchorToSdrObjGroup(rTarget);
 }
 
-std::shared_ptr< ::oox::drawingml::Theme > AdvancedDiagramHelper::getOrCreateThemePtr(
+const std::shared_ptr< ::oox::drawingml::Theme >& AdvancedDiagramHelper::getOrCreateThemePtr(
     rtl::Reference< oox::shape::ShapeFilterBase >& rxFilter) const
 {
     // (Re-)Use already existing Theme if existing/imported if possible.
