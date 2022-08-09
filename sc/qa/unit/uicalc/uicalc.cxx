@@ -1945,6 +1945,29 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf108654)
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(1), pDoc->GetTableCount());
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf150219)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    insertNewSheet(*pDoc);
+
+    insertStringToCell(*pModelObj, "A1", "=$Sheet1.A1");
+    goToCell("A1");
+
+    CPPUNIT_ASSERT_EQUAL(OUString("0"), pDoc->GetString(ScAddress(0, 0, 1)));
+
+    dispatchCommand(mxComponent, ".uno:ShowPrecedents", {});
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+
+    CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 0, 1)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf133326)
 {
     ScModelObj* pModelObj = createDoc("tdf133326.ods");
