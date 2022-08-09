@@ -16,6 +16,23 @@
       "message": "Nice! Please send your license statement to the mailing list, as explained at\n\nhttps://wiki.documentfoundation.org/Development/Developers#License_Statements",
       "revId": "7429b6ea0d988928ae08556df8413d74b8867620",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a5f7a7b_91dec931",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-09T05:51:23Z",
+      "side": 1,
+      "message": "FTR: license statement is at https://lists.freedesktop.org/archives/libreoffice/2022-August/089222.html t hank you!",
+      "revId": "7429b6ea0d988928ae08556df8413d74b8867620",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
