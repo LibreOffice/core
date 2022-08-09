@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fba7db7b_c1c7b0f0",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1972,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-09T19:33:43Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be part of pTabViewShell-\u003eConvertFormulaToValue maybe? ScViewFunc::ConvertFormulaToValue even contains a call to ScDocShell::PostPaint, so adding a call to CellContentChanged before that looks reasonable.\n\nPlus, this seems to be the only place where that function is ever called 😊",
+      "revId": "bf5f8eb39c3ff5069177eb84ec17d3fb5627a33c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
