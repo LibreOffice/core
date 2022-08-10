@@ -1562,8 +1562,6 @@ public:
      */
     bool                        IsNativeControlSupported( ControlType nType, ControlPart nPart ) const;
 
-    static OUString             GetNonMnemonicString(const OUString& rStr) { return OutputDevice::GetNonMnemonicString(rStr); }
-
     /** Query the native control's actual drawing region (including adornment)
      */
     bool                        GetNativeControlRegion(

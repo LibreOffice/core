@@ -34,6 +34,7 @@
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/mnemonic.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/texteng.hxx>
 
@@ -212,7 +213,7 @@ void ThumbnailViewItem::addTextPrimitives (const OUString& rText, const Thumbnai
     aPos.setY(aPos.getY() + aTextDev.getTextHeight());
 
     sal_Int32 nMnemonicPos = -1;
-    OUString aOrigText(mrParent.isDrawMnemonic() ? OutputDevice::GetNonMnemonicString(rText, nMnemonicPos) : rText);
+    OUString aOrigText(mrParent.isDrawMnemonic() ? removeMnemonicFromString(rText, nMnemonicPos) : rText);
 
     TextEngine aTextEngine;
     aTextEngine.SetFont(getVclFontFromFontAttribute(pAttrs->aFontAttr,

@@ -31,6 +31,7 @@
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <UITools.hxx>
 #include <utility>
+#include <vcl/mnemonic.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/weld.hxx>
@@ -156,7 +157,7 @@ namespace dbaui
                     {
                         OUString sMessage( DBA_RES( STR_WARNINGS_DURING_CONNECT ) );
                         sMessage = sMessage.replaceFirst( "$buttontext$", GetStandardText( StandardButtonType::More ) );
-                        sMessage = OutputDevice::GetNonMnemonicString( sMessage );
+                        sMessage = removeMnemonicFromString( sMessage );
 
                         SQLWarning aContext;
                         aContext.Message = sMessage;

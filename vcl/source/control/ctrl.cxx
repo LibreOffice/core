@@ -22,6 +22,7 @@
 #include <vcl/event.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/decoview.hxx>
+#include <vcl/mnemonic.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <sal/log.hxx>
@@ -435,7 +436,7 @@ tools::Rectangle Control::DrawControlText( OutputDevice& _rTargetDevice, const t
 
     if (autoacc && !mbShowAccelerator)
     {
-        rPStr = GetNonMnemonicString( _rStr );
+        rPStr = removeMnemonicFromString( _rStr );
         nPStyle &= ~DrawTextFlags::HideMnemonic;
     }
 
@@ -460,7 +461,7 @@ tools::Rectangle Control::GetControlTextRect( OutputDevice& _rTargetDevice, cons
 
     if (autoacc && !mbShowAccelerator)
     {
-        rPStr = GetNonMnemonicString( _rStr );
+        rPStr = removeMnemonicFromString( _rStr );
         nPStyle &= ~DrawTextFlags::HideMnemonic;
     }
 

@@ -31,6 +31,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/menu.hxx>
+#include <vcl/mnemonic.hxx>
 #include <vcl/settings.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
@@ -179,7 +180,7 @@ OUString OAccessibleMenuItemComponent::GetAccessibleName()
         sName = m_pParent->GetAccessibleName( nItemId );
         if ( sName.isEmpty() )
             sName = m_pParent->GetItemText( nItemId );
-        sName = OutputDevice::GetNonMnemonicString( sName );
+        sName = removeMnemonicFromString( sName );
 #if defined(_WIN32)
         if ( m_pParent->GetAccelKey( nItemId ).GetName().getLength() )
             sName += "\t" + m_pParent->GetAccelKey(nItemId).GetName();
@@ -205,7 +206,7 @@ OUString OAccessibleMenuItemComponent::GetItemText()
 {
     OUString sText;
     if ( m_pParent )
-        sText = OutputDevice::GetNonMnemonicString( m_pParent->GetItemText( m_pParent->GetItemId( m_nItemPos ) ) );
+        sText = removeMnemonicFromString( m_pParent->GetItemText( m_pParent->GetItemId( m_nItemPos ) ) );
 
     return sText;
 }

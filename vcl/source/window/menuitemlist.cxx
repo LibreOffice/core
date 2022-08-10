@@ -23,7 +23,9 @@
 #include <salinst.hxx>
 #include <salmenu.hxx>
 #include <svdata.hxx>
+
 #include <vcl/i18nhelp.hxx>
+#include <vcl/mnemonic.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/vcllayout.hxx>
 #include <vcl/window.hxx>
@@ -45,7 +47,7 @@ SalLayoutGlyphs* MenuItemData::GetTextGlyphs(const OutputDevice* pOutputDevice)
         // Use pre-calculated result.
         return &aTextGlyphs;
 
-    OUString aNonMnemonicString = OutputDevice::GetNonMnemonicString(aText);
+    OUString aNonMnemonicString = removeMnemonicFromString(aText);
     std::unique_ptr<SalLayout> pLayout
         = pOutputDevice->ImplLayout(aNonMnemonicString, 0, aNonMnemonicString.getLength(),
                                     Point(0, 0), 0, {}, {}, SalLayoutFlags::GlyphItemsOnly);
