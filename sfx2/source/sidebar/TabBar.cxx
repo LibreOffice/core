@@ -53,9 +53,6 @@ TabBar::TabBar(vcl::Window* pParentWindow,
     , mxAuxBuilder(Application::CreateBuilder(m_xContainer.get(), "sfx/ui/tabbarcontents.ui"))
     , mxTempToplevel(mxAuxBuilder->weld_box("toplevel"))
     , mxContents(mxAuxBuilder->weld_widget("TabBarContents"))
-    , mxMenuButton(mxAuxBuilder->weld_menu_button("menubutton"))
-    , mxMainMenu(mxAuxBuilder->weld_menu("mainmenu"))
-    , mxSubMenu(mxAuxBuilder->weld_menu("submenu"))
     , mxMeasureBox(mxAuxBuilder->weld_widget("measure"))
     , maDeckActivationFunctor(std::move(aDeckActivationFunctor))
     , maPopupMenuProvider(std::move(aPopupMenuProvider))
@@ -64,6 +61,13 @@ TabBar::TabBar(vcl::Window* pParentWindow,
     InitControlBase(mxMenuButton.get());
 
     mxTempToplevel->move(mxContents.get(), m_xContainer.get());
+
+    // For Gtk4 defer menu_button until after the contents have been
+    // transferred to its final home (where the old parent is a GtkWindow to
+    // support loading the accelerators in the menu for Gtk3)
+    mxMenuButton = mxAuxBuilder->weld_menu_button("menubutton");
+    mxMainMenu = mxAuxBuilder->weld_menu("mainmenu");
+    mxSubMenu = mxAuxBuilder->weld_menu("submenu");
 
     gDefaultWidth = m_xContainer->get_preferred_size().Width();
 
