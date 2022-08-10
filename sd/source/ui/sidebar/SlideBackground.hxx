@@ -52,7 +52,7 @@ public:
     SlideBackground(
         weld::Widget* pParent,
         ViewShellBase& rBase,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        css::uno::Reference<css::frame::XFrame> xFrame,
         SfxBindings* pBindings );
     virtual ~SlideBackground() override;
     SfxBindings* GetBindings() { return mpBindings; }

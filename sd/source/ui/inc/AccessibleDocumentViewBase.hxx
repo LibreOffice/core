@@ -106,7 +106,7 @@ public:
     AccessibleDocumentViewBase (
         ::sd::Window* pSdWindow,
         ::sd::ViewShell* pViewShell,
-        const css::uno::Reference<css::frame::XController>& rxController,
+        css::uno::Reference<css::frame::XController> xController,
         const css::uno::Reference<css::accessibility::XAccessible>& rxParent);
 
     virtual ~AccessibleDocumentViewBase() override;

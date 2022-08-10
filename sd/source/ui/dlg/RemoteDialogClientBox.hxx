@@ -54,7 +54,7 @@ struct ClientBoxEntry
     DECL_LINK(DeauthoriseHdl, weld::Button&, void);
     DECL_LINK(FocusHdl, weld::Widget&, void);
 
-    ClientBoxEntry(ClientBox* pClientBox, const std::shared_ptr<ClientInfo>& pClientInfo);
+    ClientBoxEntry(ClientBox* pClientBox, std::shared_ptr<ClientInfo> pClientInfo);
     ~ClientBoxEntry();
 };
 

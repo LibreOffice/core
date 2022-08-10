@@ -28,6 +28,7 @@
 #include <model/SlideSorterModel.hxx>
 #include <model/SlsPageDescriptor.hxx>
 #include <model/SlsPageEnumerationProvider.hxx>
+#include <utility>
 #include <view/SlideSorterView.hxx>
 #include <controller/SlideSorterController.hxx>
 #include <controller/SlsInsertionIndicatorHandler.hxx>
@@ -102,9 +103,9 @@ class Clipboard::UndoContext
 public:
     UndoContext (
         SdDrawDocument* pDocument,
-        const std::shared_ptr<ViewShell>& rpMainViewShell)
+        std::shared_ptr<ViewShell> pMainViewShell)
         : mpDocument(pDocument),
-          mpMainViewShell(rpMainViewShell)
+          mpMainViewShell(std::move(pMainViewShell))
     {
         if (mpDocument!=nullptr && mpDocument->IsUndoEnabled())
         {

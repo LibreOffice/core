@@ -24,6 +24,7 @@
 
 #include <sal/types.h>
 #include <memory>
+#include <utility>
 
 class SdrView;
 namespace sd { class ViewShell; }
@@ -245,8 +246,8 @@ public:
         bar operations are made in a row.
     */
     class UpdateLock { public:
-        UpdateLock(const std::shared_ptr<ToolBarManager>& rpManager)
-            : mpManager(rpManager) { mpManager->LockUpdate(); }
+        UpdateLock(std::shared_ptr<ToolBarManager> pManager)
+            : mpManager(std::move(pManager)) { mpManager->LockUpdate(); }
         ~UpdateLock() COVERITY_NOEXCEPT_FALSE { mpManager->UnlockUpdate(); }
     private:
         std::shared_ptr<ToolBarManager> mpManager;

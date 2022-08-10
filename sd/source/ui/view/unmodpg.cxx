@@ -34,6 +34,7 @@
 #include <sdresid.hxx>
 #include <unokywds.hxx>
 #include <drawdoc.hxx>
+#include <utility>
 
 
 ModifyPageUndoAction::ModifyPageUndoAction(
@@ -170,11 +171,11 @@ ModifyPageUndoAction::~ModifyPageUndoAction()
 
 RenameLayoutTemplateUndoAction::RenameLayoutTemplateUndoAction(
     SdDrawDocument* pDocument,
-    const OUString& rOldLayoutName,
-    const OUString& rNewLayoutName)
+    OUString aOldLayoutName,
+    OUString aNewLayoutName)
     : SdUndoAction(pDocument)
-    , maOldName(rOldLayoutName)
-    , maNewName(rNewLayoutName)
+    , maOldName(std::move(aOldLayoutName))
+    , maNewName(std::move(aNewLayoutName))
     , maComment(SdResId(STR_TITLE_RENAMESLIDE))
 {
     sal_Int32 nPos = maOldName.indexOf(SD_LT_SEPARATOR);

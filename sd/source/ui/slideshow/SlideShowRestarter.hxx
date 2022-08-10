@@ -55,8 +55,7 @@ public:
         @param pViewShellBase
             Used to get access to a slot dispatcher.
     */
-    SlideShowRestarter(const ::rtl::Reference<SlideShow>& rpSlideShow,
-                       ViewShellBase* pViewShellBase);
+    SlideShowRestarter(::rtl::Reference<SlideShow> pSlideShow, ViewShellBase* pViewShellBase);
     virtual ~SlideShowRestarter();
 
     /** Restarting the slide show is an asynchronous multi step process

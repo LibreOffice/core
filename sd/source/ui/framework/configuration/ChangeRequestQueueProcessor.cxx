@@ -23,6 +23,7 @@
 
 #include "ConfigurationUpdater.hxx"
 
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/container/XNamed.hpp>
@@ -50,9 +51,9 @@ void TraceRequest (const Reference<XConfigurationChangeRequest>& rxRequest)
 namespace sd::framework {
 
 ChangeRequestQueueProcessor::ChangeRequestQueueProcessor (
-    const std::shared_ptr<ConfigurationUpdater>& rpConfigurationUpdater)
+    std::shared_ptr<ConfigurationUpdater> pConfigurationUpdater)
     : mnUserEventId(nullptr),
-      mpConfigurationUpdater(rpConfigurationUpdater)
+      mpConfigurationUpdater(std::move(pConfigurationUpdater))
 {
 }
 

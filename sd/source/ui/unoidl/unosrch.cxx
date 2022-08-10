@@ -23,6 +23,7 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <utility>
 #include <vcl/svapp.hxx>
 
 #include <svx/svdobj.hxx>
@@ -60,8 +61,8 @@ class SearchContext_impl
     sal_Int32 mnIndex;
 
 public:
-    SearchContext_impl(uno::Reference<drawing::XShapes> const& xShapes)
-        : mxShapes( xShapes ), mnIndex( -1 ) {}
+    SearchContext_impl(uno::Reference<drawing::XShapes> xShapes)
+        : mxShapes(std::move( xShapes )), mnIndex( -1 ) {}
 
     uno::Reference< drawing::XShape > firstShape()
     {

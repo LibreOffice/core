@@ -36,6 +36,7 @@
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <svx/gallery.hxx>
+#include <utility>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -253,8 +254,8 @@ void lcl_CreateUndoForPages(
 
 struct lcl_EqualsSoundFileName
 {
-    explicit lcl_EqualsSoundFileName( const OUString & rStr ) :
-            maStr( rStr )
+    explicit lcl_EqualsSoundFileName( OUString aStr ) :
+            maStr(std::move( aStr ))
     {}
 
     bool operator() ( const OUString & rStr ) const

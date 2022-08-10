@@ -48,6 +48,7 @@
 #include <sdpage.hxx>
 #include <DrawViewShell.hxx>
 #include <PresentationViewShell.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -59,13 +60,13 @@ namespace accessibility {
 AccessibleDocumentViewBase::AccessibleDocumentViewBase (
     ::sd::Window* pSdWindow,
     ::sd::ViewShell* pViewShell,
-    const uno::Reference<frame::XController>& rxController,
+    uno::Reference<frame::XController> xController,
     const uno::Reference<XAccessible>& rxParent)
     : AccessibleContextBase (rxParent,
                              pViewShell->GetDoc()->GetDocumentType() == DocumentType::Impress ?
                                      AccessibleRole::DOCUMENT_PRESENTATION :
                                      AccessibleRole::DOCUMENT),
-      mxController (rxController),
+      mxController (std::move(xController)),
       maViewForwarder (
         static_cast<SdrPaintView*>(pViewShell->GetView()),
         *pSdWindow->GetOutDev())

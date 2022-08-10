@@ -24,23 +24,24 @@
 #include <DrawViewShell.hxx>
 #include <strings.hrc>
 #include <sdresid.hxx>
+#include <utility>
 
 
 SdLayerModifyUndoAction::SdLayerModifyUndoAction(
     SdDrawDocument* _pDoc, SdrLayer* pLayer,
-    const OUString& rOldLayerName, const OUString& rOldLayerTitle, const OUString& rOldLayerDesc, bool bOldIsVisible, bool bOldIsLocked, bool bOldIsPrintable,
-    const OUString& rNewLayerName, const OUString& rNewLayerTitle, const OUString& rNewLayerDesc, bool bNewIsVisible, bool bNewIsLocked, bool bNewIsPrintable )
+    OUString aOldLayerName, OUString aOldLayerTitle, OUString aOldLayerDesc, bool bOldIsVisible, bool bOldIsLocked, bool bOldIsPrintable,
+    OUString aNewLayerName, OUString aNewLayerTitle, OUString aNewLayerDesc, bool bNewIsVisible, bool bNewIsLocked, bool bNewIsPrintable )
 :   SdUndoAction( _pDoc ),
     mpLayer( pLayer ),
-    maOldLayerName( rOldLayerName ),
-    maOldLayerTitle( rOldLayerTitle ),
-    maOldLayerDesc( rOldLayerDesc ),
+    maOldLayerName(std::move( aOldLayerName )),
+    maOldLayerTitle(std::move( aOldLayerTitle )),
+    maOldLayerDesc(std::move( aOldLayerDesc )),
     mbOldIsVisible( bOldIsVisible ),
     mbOldIsLocked( bOldIsLocked ),
     mbOldIsPrintable( bOldIsPrintable ),
-    maNewLayerName( rNewLayerName ),
-    maNewLayerTitle( rNewLayerTitle ),
-    maNewLayerDesc( rNewLayerDesc ),
+    maNewLayerName(std::move( aNewLayerName )),
+    maNewLayerTitle(std::move( aNewLayerTitle )),
+    maNewLayerDesc(std::move( aNewLayerDesc )),
     mbNewIsVisible( bNewIsVisible ),
     mbNewIsLocked( bNewIsLocked ),
     mbNewIsPrintable( bNewIsPrintable )
