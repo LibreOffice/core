@@ -2088,7 +2088,7 @@ void DocumentContentOperationsManager::DeleteSection( SwNode *pNode )
     SwNodeIndex aSttIdx( *pSttNd ), aEndIdx( *pNode->EndOfSectionNode() );
 
     // delete all Flys, Bookmarks, ...
-    DelFlyInRange( aSttIdx, aEndIdx );
+    DelFlyInRange( aSttIdx.GetNode(), aEndIdx.GetNode() );
     m_rDoc.getIDocumentRedlineAccess().DeleteRedline( *pSttNd, true, RedlineType::Any );
     DelBookmarks(aSttIdx, aEndIdx);
 
@@ -4341,7 +4341,7 @@ bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam, SwDelet
     // Delete and move all "Flys at the paragraph", which are within the Selection
     if (!(flags & SwDeleteFlags::ArtificialSelection))
     {
-        DelFlyInRange(rPam.GetMark()->nNode, rPam.GetPoint()->nNode,
+        DelFlyInRange(rPam.GetMark()->GetNode(), rPam.GetPoint()->GetNode(),
             &rPam.GetMark()->nContent, &rPam.GetPoint()->nContent);
     }
     DelBookmarks(

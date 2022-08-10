@@ -122,8 +122,8 @@ void SaveFlyInRange( const SwNodeRange& rRg, SaveFlyArr& rArr );
 void SaveFlyInRange( const SwPaM& rPam, const SwPosition& rInsPos,
         SaveFlyArr& rArr, bool bMoveAllFlys, SwHistory * pHistory = nullptr);
 
-void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
-                    const SwNodeIndex& rPtNdIdx,
+void DelFlyInRange( SwNode& rMkNd,
+                    SwNode& rPtNd,
                     SwContentIndex const* pMkIdx = nullptr,
                     SwContentIndex const* pPtIdx = nullptr);
 

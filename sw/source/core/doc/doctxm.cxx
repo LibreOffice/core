@@ -1029,7 +1029,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
             // delete flys in whole range including start node which requires
             // giving the node before start node as Mark parameter, hence -1.
             // (flys must be deleted because the anchor nodes are removed)
-            DelFlyInRange( SwNodeIndex(aSttIdx, -1), aEndIdx );
+            DelFlyInRange( SwNodeIndex(aSttIdx, -1).GetNode(), aEndIdx.GetNode() );
 
             rDoc.GetNodes().Delete( aSttIdx, aEndIdx.GetIndex() - aSttIdx.GetIndex() );
         }
