@@ -1229,7 +1229,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
         }
         break;
         case SID_ATTR_CHAR_COLOR_BACKGROUND:
-        case SID_ATTR_CHAR_COLOR_BACKGROUND_EXT:
         case SID_ATTR_CHAR_COLOR_EXT:
         {
             Color aSet;
@@ -1274,14 +1273,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 else
                     rWrtSh.SetAttrItem(
                         SvxColorItem(aSet, RES_CHRATR_COLOR) );
-            }
-            else if (nSlot == SID_ATTR_CHAR_COLOR_BACKGROUND)
-            {
-                if (!pApply || pApply->nColor != SID_ATTR_CHAR_COLOR_BACKGROUND_EXT)
-                {
-                    aTempl.nColor = SID_ATTR_CHAR_COLOR_BACKGROUND_EXT;
-                    rEdtWin.SetApplyTemplate(aTempl);
-                }
             }
             else
             {
@@ -1847,6 +1838,12 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             }
             break;
         case SID_ATTR_CHAR_COLOR_BACKGROUND_EXT:
+            {
+                SwEditWin& rEdtWin = GetView().GetEditWin();
+                SwApplyTemplate* pApply = rEdtWin.GetApplyTemplate();
+                rSet.Put(SfxBoolItem(nWhich, pApply && pApply->nColor == SID_ATTR_CHAR_COLOR_BACKGROUND));
+            }
+            break;
         case SID_ATTR_CHAR_COLOR_EXT:
             {
                 SwEditWin& rEdtWin = GetView().GetEditWin();
