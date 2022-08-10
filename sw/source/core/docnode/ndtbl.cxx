@@ -3508,8 +3508,7 @@ bool SwDoc::MergeTable( const SwPosition& rPos, bool bWithPrev, sal_uInt16 nMode
     getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
 
     // The actual merge
-    SwNodeIndex aIdx( bWithPrev ? *pTableNd : *pDelTableNd );
-    bool bRet = rNds.MergeTable( aIdx, !bWithPrev, nMode );
+    bool bRet = rNds.MergeTable( bWithPrev ? *pTableNd : *pDelTableNd, !bWithPrev, nMode );
 
     if( pHistory )
     {
@@ -3527,10 +3526,9 @@ bool SwDoc::MergeTable( const SwPosition& rPos, bool bWithPrev, sal_uInt16 nMode
     return bRet;
 }
 
-bool SwNodes::MergeTable( const SwNodeIndex& rPos, bool bWithPrev,
-                            sal_uInt16 nMode )
+bool SwNodes::MergeTable( SwNode& rPos, bool bWithPrev, sal_uInt16 nMode )
 {
-    SwTableNode* pDelTableNd = rPos.GetNode().GetTableNode();
+    SwTableNode* pDelTableNd = rPos.GetTableNode();
     OSL_ENSURE( pDelTableNd, "Where did the TableNode go?" );
 
     SwTableNode* pTableNd = (*this)[ rPos.GetIndex() - 1]->FindTableNode();

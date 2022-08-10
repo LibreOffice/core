@@ -293,7 +293,7 @@ public:
     SwTableNode* SplitTable( const SwNodeIndex& rPos, bool bAfter = true,
                                 bool bCalcNewSize = false );
     /// Two Tables that are following one another are merged.
-    bool MergeTable( const SwNodeIndex& rPos, bool bWithPrev = true,
+    bool MergeTable( SwNode& rPos, bool bWithPrev = true,
                     sal_uInt16 nMode = 0 );
 
     /// Insert a new SwSection.

@@ -2893,7 +2893,7 @@ void SwUndoSplitTable::UndoImpl(::sw::UndoRedoContext & rContext)
     default: break;
     }
 
-    pDoc->GetNodes().MergeTable( rIdx );
+    pDoc->GetNodes().MergeTable( rIdx.GetNode() );
 
     if( m_pHistory )
     {
