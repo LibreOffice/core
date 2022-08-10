@@ -70,6 +70,8 @@ CPPUNIT_TEST_FIXTURE(Test, testChartExportToPdf)
 
     // Then make sure we get a valid, non-empty PDF:
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+        return;
     SvMemoryStream aMemory;
     aMemory.WriteStream(*aTempFile.GetStream(StreamMode::READ));
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
