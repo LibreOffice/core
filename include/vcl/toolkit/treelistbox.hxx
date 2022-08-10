@@ -198,7 +198,7 @@ class VCL_DLLPUBLIC SvTreeListBox
     Link<SvTreeListBox*,void>  aSelectHdl;
     Link<SvTreeListBox*,void>  aDeselectHdl;
     Link<const CommandEvent&, bool> aPopupMenuHdl;
-    Link<const HelpEvent&, bool> aTooltipHdl;
+    Link<SvTreeListEntry*, OUString> aTooltipHdl;
     Link<svtree_render_args, void> aCustomRenderHdl;
     Link<svtree_measure_args, Size> aCustomMeasureHdl;
 
@@ -395,6 +395,8 @@ public:
     SvViewDataItem*  GetViewDataItem(SvTreeListEntry const *, SvLBoxItem const *);
     const SvViewDataItem*  GetViewDataItem(const SvTreeListEntry*, const SvLBoxItem*) const;
 
+    OUString GetEntryTooltip(SvTreeListEntry* pEntry) const { return aTooltipHdl.Call(pEntry); }
+
     bool IsInplaceEditingEnabled() const { return bool(nImpFlags & SvTreeListBoxFlags::EDT_ENABLED); }
     bool IsEditingActive() const { return bool(nImpFlags & SvTreeListBoxFlags::IN_EDT); }
     void EndEditing( bool bCancel = false );
@@ -409,7 +411,7 @@ public:
     void            SetExpandingHdl(const Link<SvTreeListBox*,bool>& rNewHdl){aExpandingHdl=rNewHdl;}
     void            SetExpandedHdl(const Link<SvTreeListBox*,void>& rNewHdl){aExpandedHdl=rNewHdl;}
     void SetPopupMenuHdl(const Link<const CommandEvent&, bool>& rLink) { aPopupMenuHdl = rLink; }
-    void SetTooltipHdl(const Link<const HelpEvent&, bool>& rLink) { aTooltipHdl = rLink; }
+    void SetTooltipHdl(const Link<SvTreeListEntry*, OUString>& rLink) { aTooltipHdl = rLink; }
     void SetCustomRenderHdl(const Link<svtree_render_args, void>& rLink) { aCustomRenderHdl = rLink; }
     void SetCustomMeasureHdl(const Link<svtree_measure_args, Size>& rLink) { aCustomMeasureHdl = rLink; }
 

@@ -294,6 +294,9 @@ static void lcl_DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter, SvTreeListE
                 rJsonWriter.put("image", extractPngString(pBmpItem));
         }
 
+        if (const OUString tooltip = pTabListBox->GetEntryTooltip(pEntry); !tooltip.isEmpty())
+            rJsonWriter.put("alt", tooltip);
+
         if (pTabListBox->IsSelected(pEntry))
             rJsonWriter.put("selected", "true");
 
