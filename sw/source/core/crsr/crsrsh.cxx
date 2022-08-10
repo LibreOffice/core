@@ -2268,14 +2268,16 @@ void SwCursorShell::Push()
 */
 bool SwCursorShell::Pop(PopMode const eDelete)
 {
-    ::std::unique_ptr<SwCallLink> pLink(::std::make_unique<SwCallLink>(*this)); // watch Cursor-Moves; call Link if needed
-    return Pop(eDelete, ::std::move(pLink));
+    std::optional<SwCallLink> aLink(std::in_place, *this); // watch Cursor-Moves; call Link if needed
+    return Pop(eDelete, aLink);
 }
 
 bool SwCursorShell::Pop(PopMode const eDelete,
-        [[maybe_unused]] ::std::unique_ptr<SwCallLink> const pLink)
+        [[maybe_unused]] std::optional<SwCallLink>& roLink)
 {
-    assert(pLink); // parameter exists only to be deleted before return
+    // parameter exists only to be deleted before return
+    assert(roLink);
+    comphelper::ScopeGuard aGuard( [&]() { roLink.reset(); } );
 
     // are there any left?
     if (nullptr == m_pStackCursor)
