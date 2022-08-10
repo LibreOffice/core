@@ -2358,7 +2358,13 @@ tools::Long OutputDevice::GetCtrlTextWidth( const OUString& rStr, const SalLayou
     return GetTextWidth( aStr, nIndex, nLen, nullptr, pGlyphs );
 }
 
-OUString OutputDevice::GetNonMnemonicString( const OUString& rStr, sal_Int32& rMnemonicPos )
+OUString GetNonMnemonicString(OUString const& rStr)
+{
+    sal_Int32 nDummy;
+    return GetNonMnemonicString(rStr, nDummy);
+}
+
+OUString GetNonMnemonicString( const OUString& rStr, sal_Int32& rMnemonicPos )
 {
     OUString   aStr    = rStr;
     sal_Int32  nLen    = aStr.getLength();

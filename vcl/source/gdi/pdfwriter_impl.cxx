@@ -6687,7 +6687,7 @@ void PDFWriterImpl::drawText( const tools::Rectangle& rRect, const OUString& rOr
 
     OUString aStr = rOrigStr;
     if ( nStyle & DrawTextFlags::Mnemonic )
-        aStr = OutputDevice::GetNonMnemonicString( aStr, nMnemonicPos );
+        aStr = GetNonMnemonicString( aStr, nMnemonicPos );
 
     // multiline text
     if ( nStyle & DrawTextFlags::MultiLine )

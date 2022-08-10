@@ -14905,6 +14905,7 @@ vcl/source/outdev/mask.cxx
 vcl/source/outdev/nativecontrols.cxx
 vcl/source/outdev/outdev.cxx
 vcl/source/outdev/stack.cxx
+vcl/source/outdev/string.cxx
 vcl/source/outdev/pixel.cxx
 vcl/source/outdev/polygon.cxx
 vcl/source/outdev/polyline.cxx

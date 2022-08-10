@@ -151,6 +151,9 @@ typedef tools::SvRef<FontCharMap> FontCharMapRef;
 BmpMirrorFlags AdjustTwoRect( SalTwoRect& rTwoRect, const Size& rSizePix );
 void AdjustTwoRect( SalTwoRect& rTwoRect, const tools::Rectangle& rValidSrcRect );
 
+OUString VCL_DLLPUBLIC GetNonMnemonicString(OUString const& rStr, sal_Int32& rMnemonicPos);
+OUString VCL_DLLPUBLIC GetNonMnemonicString(OUString const& rStr);
+
 class OutputDevice;
 
 namespace vcl {
@@ -986,11 +989,6 @@ public:
 
     tools::Long                        GetCtrlTextWidth( const OUString& rStr,
                                                   const SalLayoutGlyphs* pLayoutCache = nullptr ) const;
-
-    static OUString             GetNonMnemonicString( const OUString& rStr, sal_Int32& rMnemonicPos );
-
-    static OUString             GetNonMnemonicString( const OUString& rStr )
-                                            { sal_Int32 nDummy; return GetNonMnemonicString( rStr, nDummy ); }
 
     /** Generate MetaTextActions for the text rect
 
