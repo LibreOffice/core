@@ -71,6 +71,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8bd50644_7f7daeb2",
+        "filename": "include/vcl/rendercontext/SalLayoutFlags.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-08-10T06:26:18Z",
+      "side": 1,
+      "message": "you can if you want to, but it\u0027s not strictly necesssary (and if you do renumber them, you have to be careful to check that they are not being serialised to disk anywhere)",
+      "parentUuid": "0ddc8cdf_7c33304f",
+      "revId": "63c32b923f4828435b23b7808906bfcfd520b09b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8051441b_66081a8a",
