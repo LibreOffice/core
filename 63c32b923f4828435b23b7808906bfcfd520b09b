@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "688f5e00_add779d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-08-10T06:14:56Z",
+      "side": 1,
+      "message": "also, unless we\u0027re going via UNO, we normally use \"bool\" instead of \"sal_Bool\" these days.\nBut possibly you are going to add some UNO API?",
+      "revId": "63c32b923f4828435b23b7808906bfcfd520b09b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd1fc610_ecece5ba",
+        "filename": "include/vcl/rendercontext/SalLayoutFlags.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-08-10T06:14:56Z",
+      "side": 1,
+      "message": "this constant needs to be updated - should now be 0x6077",
+      "revId": "63c32b923f4828435b23b7808906bfcfd520b09b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8051441b_66081a8a",
+        "filename": "vcl/inc/impglyphitem.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-08-10T06:14:56Z",
+      "side": 1,
+      "message": "and here: should now be 0x3df",
+      "revId": "63c32b923f4828435b23b7808906bfcfd520b09b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
