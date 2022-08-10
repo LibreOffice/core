@@ -1544,6 +1544,8 @@ void ScTiledRenderingTest::testDisableUndoRepair()
     int nView2 = SfxLokHelper::getView();
     SfxViewShell* pView2 = SfxViewShell::Current();
     CPPUNIT_ASSERT(pView1 != pView2);
+
+    // both views have UNDO disabled
     {
         SfxItemSet aSet1(pView1->GetPool(), svl::Items<SID_UNDO, SID_UNDO>);
         SfxItemSet aSet2(pView2->GetPool(), svl::Items<SID_UNDO, SID_UNDO>);
@@ -1560,6 +1562,7 @@ void ScTiledRenderingTest::testDisableUndoRepair()
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
+    // view1 has UNDO enabled, view2 is in UNDO-repair
     {
         SfxItemSet aSet1(pView1->GetPool(), svl::Items<SID_UNDO, SID_UNDO>);
         SfxItemSet aSet2(pView2->GetPool(), svl::Items<SID_UNDO, SID_UNDO>);
@@ -1581,6 +1584,7 @@ void ScTiledRenderingTest::testDisableUndoRepair()
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'c', 0);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    // both views have UNDO enabled
     Scheduler::ProcessEventsToIdle();
     {
         SfxItemSet aSet1(pView1->GetPool(), svl::Items<SID_UNDO, SID_UNDO>);
@@ -1588,9 +1592,7 @@ void ScTiledRenderingTest::testDisableUndoRepair()
         pView1->GetSlotState(SID_UNDO, nullptr, &aSet1);
         pView2->GetSlotState(SID_UNDO, nullptr, &aSet2);
         CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aSet1.GetItemState(SID_UNDO));
-        const SfxUInt32Item* pUInt32Item = dynamic_cast<const SfxUInt32Item*>(aSet1.GetItem(SID_UNDO));
-        CPPUNIT_ASSERT(pUInt32Item);
-        CPPUNIT_ASSERT_EQUAL(static_cast< sal_uInt32 >(SID_REPAIRPACKAGE), pUInt32Item->GetValue());
+        CPPUNIT_ASSERT(dynamic_cast< const SfxStringItem* >(aSet1.GetItem(SID_UNDO)));
         CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aSet2.GetItemState(SID_UNDO));
         CPPUNIT_ASSERT(dynamic_cast< const SfxStringItem* >(aSet2.GetItem(SID_UNDO)));
     }
@@ -3063,11 +3065,13 @@ void ScTiledRenderingTest::testUndoReorderingRedo()
 
     // view #1
     int nView1 = SfxLokHelper::getView();
+    SfxViewShell* pView1 = SfxViewShell::Current();
     ViewCallback aView1;
 
     // view #2
     SfxLokHelper::createView();
     int nView2 = SfxLokHelper::getView();
+    SfxViewShell* pView2 = SfxViewShell::Current();
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     ViewCallback aView2;
 
@@ -3097,8 +3101,8 @@ void ScTiledRenderingTest::testUndoReorderingRedo()
 
     // text edit a different cell in view #2
     SfxLokHelper::setView(nView2);
-    ScTabViewShell* pView2 = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
-    pView2->SetCursor(0, 2);
+    ScTabViewShell* pViewShell2 = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    pViewShell2->SetCursor(0, 2);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'C', 0);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'C', 0);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'C', 0);
@@ -3119,6 +3123,18 @@ void ScTiledRenderingTest::testUndoReorderingRedo()
     CPPUNIT_ASSERT_EQUAL(OUString("xx"), pDoc->GetString(ScAddress(0, 0, 0)));
     CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 1, 0)));
     CPPUNIT_ASSERT_EQUAL(OUString("CC"), pDoc->GetString(ScAddress(0, 2, 0)));
+
+    // Verify that the UNDO buttons/actions are still enabled
+    {
+        SfxItemSet aSet1(pView1->GetPool(), svl::Items<SID_UNDO, SID_UNDO>);
+        SfxItemSet aSet2(pView2->GetPool(), svl::Items<SID_UNDO, SID_UNDO>);
+        pView1->GetSlotState(SID_UNDO, nullptr, &aSet1);
+        pView2->GetSlotState(SID_UNDO, nullptr, &aSet2);
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aSet1.GetItemState(SID_UNDO));
+        CPPUNIT_ASSERT(dynamic_cast< const SfxStringItem* >(aSet1.GetItem(SID_UNDO)));
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aSet2.GetItemState(SID_UNDO));
+        CPPUNIT_ASSERT(dynamic_cast< const SfxStringItem* >(aSet2.GetItem(SID_UNDO)));
+    }
 
     // View 1 presses undo again, and the first cell is erased
     dispatchCommand(mxComponent, ".uno:Undo", {});
