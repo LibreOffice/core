@@ -697,6 +697,8 @@ void DesktopLOKTest::testSaveAsJsonOptions()
     SvMemoryStream aMemory;
     aMemory.WriteStream(aFile);
     std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+        return;
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
         = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize(), OString());
     CPPUNIT_ASSERT(pPdfDocument);

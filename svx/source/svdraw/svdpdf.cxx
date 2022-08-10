@@ -115,7 +115,7 @@ ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools:
     auto const& rVectorGraphicData = rGraphic.getVectorGraphicData();
     auto* pData = rVectorGraphicData->getBinaryDataContainer().getData();
     sal_Int32 nSize = rVectorGraphicData->getBinaryDataContainer().getSize();
-    mpPdfDocument = mpPDFium->openDocument(pData, nSize, OString());
+    mpPdfDocument = mpPDFium ? mpPDFium->openDocument(pData, nSize, OString()) : nullptr;
     if (!mpPdfDocument)
         return;
 
