@@ -31,6 +31,7 @@
 #include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
+#include <vcl/mnemonic.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/toolkit/edit.hxx>
 #include <vcl/toolkit/vclmedit.hxx>
@@ -127,7 +128,7 @@ OUString VCLXAccessibleEdit::implGetText()
     VclPtr< Edit > pEdit = GetAs< Edit >();
     if ( pEdit )
     {
-        aText = OutputDevice::GetNonMnemonicString( pEdit->GetText() );
+        aText = removeMnemonicFromString( pEdit->GetText() );
 
         if ( implGetAccessibleRole() == AccessibleRole::PASSWORD_TEXT )
         {

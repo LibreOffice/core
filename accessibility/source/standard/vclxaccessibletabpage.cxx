@@ -29,6 +29,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
+#include <vcl/mnemonic.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp2.hxx>
 #include <vcl/tabctrl.hxx>
@@ -132,7 +133,7 @@ OUString VCLXAccessibleTabPage::GetPageText()
 {
     OUString sText;
     if ( m_pTabControl )
-        sText = OutputDevice::GetNonMnemonicString( m_pTabControl->GetPageText( m_nPageId ) );
+        sText = removeMnemonicFromString( m_pTabControl->GetPageText( m_nPageId ) );
 
     return sText;
 }

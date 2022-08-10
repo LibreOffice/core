@@ -30,6 +30,7 @@
 #include <vcl/tabctrl.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/mnemonic.hxx>
 #include <vcl/toolkit/lstbox.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/uitest/uiobject.hxx>
@@ -1980,7 +1981,7 @@ OUString TabControl::GetAccessibleName( sal_uInt16 nPageId ) const
     assert( pItem );
     if (!pItem->maAccessibleName.isEmpty())
         return pItem->maAccessibleName;
-    return OutputDevice::GetNonMnemonicString(pItem->maText);
+    return removeMnemonicFromString(pItem->maText);
 }
 
 void TabControl::SetAccessibleDescription(sal_uInt16 nPageId, const OUString& rDesc)

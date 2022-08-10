@@ -30,6 +30,7 @@
 #include <vcl/toolkit/floatwin.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/menu.hxx>
+#include <vcl/mnemonic.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandinfoprovider.hxx>
@@ -1648,7 +1649,7 @@ static void ImplPaintCheckBackground(vcl::RenderContext & rRenderContext, vcl::W
 static OUString getShortenedString( const OUString& i_rLong, vcl::RenderContext const & rRenderContext, tools::Long i_nMaxWidth )
 {
     sal_Int32 nPos = -1;
-    OUString aNonMnem(OutputDevice::GetNonMnemonicString(i_rLong, nPos));
+    OUString aNonMnem(removeMnemonicFromString(i_rLong, nPos));
     aNonMnem = rRenderContext.GetEllipsisString( aNonMnem, i_nMaxWidth, DrawTextFlags::CenterEllipsis);
     // re-insert mnemonic
     if (nPos != -1)

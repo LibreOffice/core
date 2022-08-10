@@ -21,6 +21,7 @@
 #include <vcl/toolkit/fixed.hxx>
 #include <vcl/window.hxx>
 #include <vcl/menu.hxx>
+#include <vcl/mnemonic.hxx>
 #include <vcl/wrkwin.hxx>
 
 #include <window.h>
@@ -438,7 +439,7 @@ OUString Window::getDefaultAccessibleName() const
             break;
     }
 
-    return OutputDevice::GetNonMnemonicString( aAccessibleName );
+    return removeMnemonicFromString( aAccessibleName );
 }
 
 void Window::SetAccessibleDescription( const OUString& rDescription )
