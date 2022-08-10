@@ -139,6 +139,7 @@ void GraphicDescriptor::implCreate( SvStream& rIStm, const OUString* pURL )
         case GraphicFileFormat::EMF: pMimeType = MIMETYPE_EMF; cType = graphic::GraphicType::VECTOR; break;
         case GraphicFileFormat::EMZ: pMimeType = MIMETYPE_EMF; cType = graphic::GraphicType::VECTOR; break;
         case GraphicFileFormat::SVG: pMimeType = MIMETYPE_SVG; cType = graphic::GraphicType::VECTOR; break;
+        case GraphicFileFormat::SVGZ: pMimeType = MIMETYPE_SVG; cType = graphic::GraphicType::VECTOR; break;
 
         default:
         break;

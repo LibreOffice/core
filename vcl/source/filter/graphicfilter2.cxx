@@ -1096,12 +1096,15 @@ bool GraphicDescriptor::ImpDetectEMF(SvStream& rStm, bool bExtendedInfo)
     return bRet;
 }
 
-bool GraphicDescriptor::ImpDetectSVG( SvStream& /*rStm*/, bool /*bExtendedInfo*/ )
+bool GraphicDescriptor::ImpDetectSVG( SvStream& rStm, bool /*bExtendedInfo*/ )
 {
-    bool bRet = aPathExt.startsWith( "svg" );
-    if (bRet)
-        aMetadata.mnFormat = GraphicFileFormat::SVG;
-
+    sal_Int32 nStmPos = rStm.Tell();
+    vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /*bExtendedInfo*/ );
+    bool bRet = aDetector.detect();
+    bRet &= aDetector.checkSVG();
+    if ( bRet )
+        aMetadata = aDetector.getMetadata();
+    rStm.Seek( nStmPos );
     return bRet;
 }
 
