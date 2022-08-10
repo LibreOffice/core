@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03408561_cf72fb0e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-08-10T09:40:09Z",
+      "side": 1,
+      "message": "in case you make use of it, feel free to keep (but then you might want to adjust for https://gerrit.libreoffice.org/c/core/+/137815",
+      "revId": "b02dd234f52fa5ba84e63ceaadf9792071c4b0de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
