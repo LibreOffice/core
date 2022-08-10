@@ -3749,10 +3749,6 @@ void SvxColorToolBoxControl::execute(sal_Int16 /*nSelectModifier*/)
         case SID_ATTR_CHAR_COLOR2 :
             aCommand    = ".uno:CharColorExt";
             break;
-
-        case SID_ATTR_CHAR_COLOR_BACKGROUND :
-            aCommand    = ".uno:CharBackgroundExt";
-            break;
     }
 
     auto aArgs( comphelper::InitPropertySequence( {
