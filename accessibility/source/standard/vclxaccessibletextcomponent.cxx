@@ -26,6 +26,7 @@
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <vcl/window.hxx>
+#include <vcl/mnemonic.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp2.hxx>
 #include <vcl/ctrl.hxx>
@@ -47,7 +48,7 @@ VCLXAccessibleTextComponent::VCLXAccessibleTextComponent( VCLXWindow* pVCLXWindo
 {
     VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
-        m_sText = OutputDevice::GetNonMnemonicString( pWindow->GetText() );
+        m_sText = removeMnemonicFromString( pWindow->GetText() );
 }
 
 
@@ -86,7 +87,7 @@ OUString VCLXAccessibleTextComponent::implGetText()
     OUString aText;
     VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
-        aText = OutputDevice::GetNonMnemonicString( pWindow->GetText() );
+        aText = removeMnemonicFromString( pWindow->GetText() );
 
     return aText;
 }

@@ -37,6 +37,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/metric.hxx>
+#include <vcl/mnemonic.hxx>
 #include <vcl/textrectinfo.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/sysdata.hxx>
@@ -1642,7 +1643,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
 
     OUString aStr = rOrigStr;
     if ( nStyle & DrawTextFlags::Mnemonic )
-        aStr = GetNonMnemonicString( aStr, nMnemonicPos );
+        aStr = removeMnemonicFromString( aStr, nMnemonicPos );
 
     const bool bDrawMnemonics = !(rTargetDevice.GetSettings().GetStyleSettings().GetOptions() & StyleSettingsOptions::NoMnemonics) && !pVector;
 
@@ -1932,7 +1933,7 @@ tools::Rectangle OutputDevice::GetTextRect( const tools::Rectangle& rRect,
 
     OUString aStr = rStr;
     if ( nStyle & DrawTextFlags::Mnemonic )
-        aStr = GetNonMnemonicString( aStr );
+        aStr = removeMnemonicFromString( aStr );
 
     if ( nStyle & DrawTextFlags::MultiLine )
     {
@@ -2226,7 +2227,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
     tools::Long        nMnemonicWidth = 0;
     if ( (nStyle & DrawTextFlags::Mnemonic) && nLen > 1 )
     {
-        aStr = GetNonMnemonicString( aStr, nMnemonicPos );
+        aStr = removeMnemonicFromString( aStr, nMnemonicPos );
         if ( nMnemonicPos != -1 )
         {
             if( nMnemonicPos < nIndex )
@@ -2335,8 +2336,8 @@ tools::Long OutputDevice::GetCtrlTextWidth( const OUString& rStr, const SalLayou
     sal_Int32 nLen = rStr.getLength();
     sal_Int32 nIndex = 0;
 
-    sal_Int32  nMnemonicPos;
-    OUString   aStr = GetNonMnemonicString( rStr, nMnemonicPos );
+    sal_Int32 nMnemonicPos;
+    OUString aStr = removeMnemonicFromString( rStr, nMnemonicPos );
     if ( nMnemonicPos != -1 )
     {
         if ( nMnemonicPos < nIndex )
@@ -2345,41 +2346,6 @@ tools::Long OutputDevice::GetCtrlTextWidth( const OUString& rStr, const SalLayou
             nLen--;
     }
     return GetTextWidth( aStr, nIndex, nLen, nullptr, pGlyphs );
-}
-
-OUString OutputDevice::GetNonMnemonicString( const OUString& rStr, sal_Int32& rMnemonicPos )
-{
-    OUString   aStr    = rStr;
-    sal_Int32  nLen    = aStr.getLength();
-    sal_Int32  i       = 0;
-
-    rMnemonicPos = -1;
-    while ( i < nLen )
-    {
-        if ( aStr[ i ] == '~' )
-        {
-            if ( nLen <= i+1 )
-                break;
-
-            if ( aStr[ i+1 ] != '~' )
-            {
-                if ( rMnemonicPos == -1 )
-                    rMnemonicPos = i;
-                aStr = aStr.replaceAt( i, 1, u"" );
-                nLen--;
-            }
-            else
-            {
-                aStr = aStr.replaceAt( i, 1, u"" );
-                nLen--;
-                i++;
-            }
-        }
-        else
-            i++;
-    }
-
-    return aStr;
 }
 
 bool OutputDevice::GetTextBoundRect( tools::Rectangle& rRect,

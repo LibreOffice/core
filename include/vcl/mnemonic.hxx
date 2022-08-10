@@ -48,6 +48,8 @@ namespace com::sun::star::i18n { class XCharacterClassification; }
 #define MNEMONIC_CHAR               u'~'
 #define MNEMONIC_INDEX_NOTFOUND     (sal_uInt16(0xFFFF))
 
+VCL_DLLPUBLIC OUString removeMnemonicFromString(OUString const& rStr, sal_Int32& rMnemonicPos);
+VCL_DLLPUBLIC OUString removeMnemonicFromString(OUString const& rStr);
 
 class VCL_DLLPUBLIC MnemonicGenerator
 {

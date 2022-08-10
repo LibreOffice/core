@@ -66,6 +66,7 @@
 #include <vcl/glyphitemcache.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/metric.hxx>
+#include <vcl/mnemonic.hxx>
 #include <vcl/settings.hxx>
 #include <strhelper.hxx>
 #include <vcl/svapp.hxx>
@@ -6684,7 +6685,7 @@ void PDFWriterImpl::drawText( const tools::Rectangle& rRect, const OUString& rOr
 
     OUString aStr = rOrigStr;
     if ( nStyle & DrawTextFlags::Mnemonic )
-        aStr = OutputDevice::GetNonMnemonicString( aStr, nMnemonicPos );
+        aStr = removeMnemonicFromString( aStr, nMnemonicPos );
 
     // multiline text
     if ( nStyle & DrawTextFlags::MultiLine )

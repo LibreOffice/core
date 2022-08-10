@@ -990,11 +990,6 @@ public:
     tools::Long                        GetCtrlTextWidth( const OUString& rStr,
                                                   const SalLayoutGlyphs* pLayoutCache = nullptr ) const;
 
-    static OUString             GetNonMnemonicString( const OUString& rStr, sal_Int32& rMnemonicPos );
-
-    static OUString             GetNonMnemonicString( const OUString& rStr )
-                                            { sal_Int32 nDummy; return GetNonMnemonicString( rStr, nDummy ); }
-
     /** Generate MetaTextActions for the text rect
 
         This method splits up the text rect into multiple
