@@ -114,7 +114,7 @@ SwCallLink::~SwCallLink() COVERITY_NOEXCEPT_FALSE
     // If travelling over Nodes check formats and register them anew at the
     // new Node.
     SwPaM* pCurrentCursor = m_rShell.IsTableMode() ? m_rShell.GetTableCrs() : m_rShell.GetCursor();
-    SwContentNode * pCNd = pCurrentCursor->GetContentNode();
+    SwContentNode * pCNd = pCurrentCursor->GetPointContentNode();
     if( !pCNd )
         return;
 

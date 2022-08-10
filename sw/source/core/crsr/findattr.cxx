@@ -109,7 +109,7 @@ static void lcl_SetAttrPam( SwPaM& rPam, sal_Int32 nStart, const sal_Int32* pEnd
         nContentPos = rPam.GetPoint()->GetContentIndex();
     bool bTstEnd = rPam.GetPoint()->nNode == rPam.GetMark()->nNode;
 
-    SwContentNode* pCNd = rPam.GetContentNode();
+    SwContentNode* pCNd = rPam.GetPointContentNode();
     rPam.GetPoint()->nContent.Assign( pCNd, nStart );
     rPam.SetMark(); // Point == GetMark
 
@@ -927,14 +927,14 @@ bool FindAttrImpl(SwPaM & rSearchPam,
 
     // if at beginning/end then move it out of the node
     if( bSrchForward
-        ? pPam->GetPoint()->GetContentIndex() == pPam->GetContentNode()->Len()
+        ? pPam->GetPoint()->GetContentIndex() == pPam->GetPointContentNode()->Len()
         : !pPam->GetPoint()->GetContentIndex() )
     {
         if( !(*fnMove.fnNds)( &pPam->GetPoint()->nNode, false ))
         {
             return false;
         }
-        SwContentNode *pNd = pPam->GetContentNode();
+        SwContentNode *pNd = pPam->GetPointContentNode();
         pPam->GetPoint()->nContent.Assign( pNd, bSrchForward ? 0 : pNd->Len() );
     }
 
@@ -1064,14 +1064,14 @@ static bool FindAttrsImpl(SwPaM & rSearchPam,
     // if at beginning/end then move it out of the node
     if( bMoveFirst &&
         ( bSrchForward
-        ? pPam->GetPoint()->GetContentIndex() == pPam->GetContentNode()->Len()
+        ? pPam->GetPoint()->GetContentIndex() == pPam->GetPointContentNode()->Len()
         : !pPam->GetPoint()->GetContentIndex() ) )
     {
         if( !(*fnMove.fnNds)( &pPam->GetPoint()->nNode, false ))
         {
             return false;
         }
-        SwContentNode *pNd = pPam->GetContentNode();
+        SwContentNode *pNd = pPam->GetPointContentNode();
         pPam->GetPoint()->nContent.Assign( pNd, bSrchForward ? 0 : pNd->Len() );
     }
 

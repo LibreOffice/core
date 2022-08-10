@@ -727,7 +727,7 @@ void SwXMLImport::endDocument()
                      ( pPrev->IsEndNode() &&
                       pPrev->StartOfSectionNode()->IsSectionNode() ) )
                 {
-                    SwContentNode* pCNd = pPaM->GetContentNode();
+                    SwContentNode* pCNd = pPaM->GetPointContentNode();
                     if( pCNd && pCNd->StartOfSectionIndex()+2 <
                         pCNd->EndOfSectionIndex() )
                     {

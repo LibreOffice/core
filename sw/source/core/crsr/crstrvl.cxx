@@ -89,7 +89,7 @@ void SwCursorShell::MoveCursorToNum()
     // SRectangle's height
     Point aPt( m_pCurrentCursor->GetPtPos() );
     std::pair<Point, bool> const tmp(aPt, true);
-    SwContentFrame * pFrame = m_pCurrentCursor->GetContentNode()->getLayoutFrame(
+    SwContentFrame * pFrame = m_pCurrentCursor->GetPointContentNode()->getLayoutFrame(
                 GetLayout(), m_pCurrentCursor->GetPoint(), &tmp);
     pFrame->GetCharRect( m_aCharRect, *m_pCurrentCursor->GetPoint() );
     pFrame->Calc(GetOut());
@@ -2037,7 +2037,7 @@ bool SwContentAtPos::IsInRTLText()const
             SwStartNode* pSttNd = pTextFootnote->GetStartNode()->GetNode().GetStartNode();
             SwPaM aTemp( *pSttNd );
             aTemp.Move(fnMoveForward, GoInNode);
-            SwContentNode* pContentNode = aTemp.GetContentNode();
+            SwContentNode* pContentNode = aTemp.GetPointContentNode();
             if(pContentNode && pContentNode->IsTextNode())
                 pNd = pContentNode->GetTextNode();
         }

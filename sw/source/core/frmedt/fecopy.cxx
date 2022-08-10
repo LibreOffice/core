@@ -921,7 +921,7 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
                     aInsertion.first->GetPoint()->nNode = aIdx;
                 else
                     aInsertion.first->GetPoint()->nContent =
-                        aInsertion.first->GetContentNode()->Len();
+                        aInsertion.first->GetPointContentNode()->Len();
                 aCopyVector.push_back( aInsertion );
             }
             // If there are no text portions left but there are some more

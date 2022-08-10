@@ -825,8 +825,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf131912)
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
 
     pCursor->SetMark();
-    pCursor->GetMark()->nContent.Assign(pCursor->GetContentNode(), 0);
-    pCursor->GetPoint()->nContent.Assign(pCursor->GetContentNode(), 3);
+    pCursor->GetMark()->nContent.Assign(pCursor->GetPointContentNode(), 0);
+    pCursor->GetPoint()->nContent.Assign(pCursor->GetPointContentNode(), 3);
 
     // replace with more text
     pDoc->getIDocumentContentOperations().ReplaceRange(*pCursor, "blahblah", false);
@@ -846,8 +846,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf131912)
 
     rUndoManager.Undo();
 
-    pCursor->GetMark()->nContent.Assign(pCursor->GetContentNode(), 0);
-    pCursor->GetPoint()->nContent.Assign(pCursor->GetContentNode(), 3);
+    pCursor->GetMark()->nContent.Assign(pCursor->GetPointContentNode(), 0);
+    pCursor->GetPoint()->nContent.Assign(pCursor->GetPointContentNode(), 3);
 
     // replace with less text
     pDoc->getIDocumentContentOperations().ReplaceRange(*pCursor, "x", false);
@@ -867,8 +867,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf131912)
 
     rUndoManager.Undo();
 
-    pCursor->GetMark()->nContent.Assign(pCursor->GetContentNode(), 0);
-    pCursor->GetPoint()->nContent.Assign(pCursor->GetContentNode(), 3);
+    pCursor->GetMark()->nContent.Assign(pCursor->GetPointContentNode(), 0);
+    pCursor->GetPoint()->nContent.Assign(pCursor->GetPointContentNode(), 3);
 
     // regex replace with paragraph breaks
     pDoc->getIDocumentContentOperations().ReplaceRange(*pCursor, "xyz\\n\\nquux\\n", true);

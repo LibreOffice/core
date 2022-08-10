@@ -1673,7 +1673,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
                 & pTmp->GetPoint()->GetNode())
             {
                 --pTmp->GetPoint()->nNode;
-                SwContentNode *const pContentNode( pTmp->GetContentNode() );
+                SwContentNode *const pContentNode( pTmp->GetPointContentNode() );
                 pTmp->GetPoint()->nContent.Assign( pContentNode,
                         pContentNode ? pContentNode->Len() : 0 );
                 // tdf#106218 try to avoid losing a paragraph break here:
@@ -1716,7 +1716,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
             & pTmp->GetPoint()->GetNode())
         {
             --pTmp->GetPoint()->nNode;
-            SwContentNode *const pContentNode( pTmp->GetContentNode() );
+            SwContentNode *const pContentNode( pTmp->GetPointContentNode() );
             pTmp->GetPoint()->nContent.Assign( pContentNode,
                     pContentNode ? pContentNode->Len() : 0 );
             // tdf#106218 try to avoid losing a paragraph break here:
@@ -1931,7 +1931,7 @@ SaveMergeRedline::SaveMergeRedline( const SwNode& rDstNd,
     pDestRedl->SetMark();
     pDestRedl->GetPoint()->nNode += pEnd->GetNodeIndex() -
                                     pStt->GetNodeIndex();
-    pDestRedl->GetPoint()->nContent.Assign( pDestRedl->GetContentNode(),
+    pDestRedl->GetPoint()->nContent.Assign( pDestRedl->GetPointContentNode(),
                                             pEnd->GetContentIndex() );
 }
 

@@ -312,10 +312,10 @@ static SwTextNode* getModelToViewTestDocument(SwDoc *pDoc)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>((4*5) + 5 + 2), pTextNode->GetText().getLength());
 
     //set start of selection to first B
-    aPaM.GetPoint()->nContent.Assign(aPaM.GetContentNode(), 6);
+    aPaM.GetPoint()->nContent.Assign(aPaM.GetPointContentNode(), 6);
     aPaM.SetMark();
     //set end of selection to last C
-    aPaM.GetPoint()->nContent.Assign(aPaM.GetContentNode(), 14);
+    aPaM.GetPoint()->nContent.Assign(aPaM.GetPointContentNode(), 14);
     //set character attribute hidden on range
     SvxCharHiddenItem aHidden(true, RES_CHRATR_HIDDEN);
     pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, aHidden );
@@ -327,10 +327,10 @@ static SwTextNode* getModelToViewTestDocument(SwDoc *pDoc)
     CPPUNIT_ASSERT_MESSAGE("redlines should be visible", IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
 
     //set start of selection to last A
-    aPaM.GetPoint()->nContent.Assign(aPaM.GetContentNode(), 4);
+    aPaM.GetPoint()->nContent.Assign(aPaM.GetPointContentNode(), 4);
     aPaM.SetMark();
     //set end of selection to second last B
-    aPaM.GetPoint()->nContent.Assign(aPaM.GetContentNode(), 9);
+    aPaM.GetPoint()->nContent.Assign(aPaM.GetPointContentNode(), 9);
     pDoc->getIDocumentContentOperations().DeleteAndJoin(aPaM);    //redline-aware deletion api
     aPaM.DeleteMark();
 
@@ -759,7 +759,7 @@ void SwDocTest::testSwScanner()
 
         //delete everything except the first word
         aPaM.SetMark(); //set start of selection to current pos
-        aPaM.GetPoint()->nContent.Assign(aPaM.GetContentNode(), 5);   //set end of selection to fifth char of current node
+        aPaM.GetPoint()->nContent.Assign(aPaM.GetPointContentNode(), 5);   //set end of selection to fifth char of current node
         m_pDoc->getIDocumentContentOperations().DeleteAndJoin(aPaM);    //redline-aware deletion api
         //"real underlying text should be the same"
         CPPUNIT_ASSERT_EQUAL(pTextNode->GetText(), OUString(aString));
@@ -806,7 +806,7 @@ void SwDocTest::testSwScanner()
         // redline *added* text though
         m_pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete|RedlineFlags::ShowInsert);
         aPaM.DeleteMark();
-        aPaM.GetPoint()->nContent.Assign(aPaM.GetContentNode(), 0);
+        aPaM.GetPoint()->nContent.Assign(aPaM.GetPointContentNode(), 0);
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "redline-new-text ");
         aDocStat.Reset();
         pTextNode = aPaM.GetPointNode().GetTextNode();
@@ -977,7 +977,7 @@ void SwDocTest::testGraphicAnchorDeletion()
     m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "Paragraph 3");
 
     aPaM.GetPoint()->nNode = nPara2;
-    aPaM.GetPoint()->nContent.Assign(aPaM.GetContentNode(), RTL_CONSTASCII_LENGTH("graphic anchor>>"));
+    aPaM.GetPoint()->nContent.Assign(aPaM.GetPointContentNode(), RTL_CONSTASCII_LENGTH("graphic anchor>>"));
 
     //Insert a graphic at X of >>X<< in paragraph 2
     SfxItemSet aFlySet(m_pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1>);
@@ -991,11 +991,11 @@ void SwDocTest::testGraphicAnchorDeletion()
 
     //Delete >X<
     aPaM.GetPoint()->nNode = nPara2;
-    aPaM.GetPoint()->nContent.Assign(aPaM.GetContentNode(),
+    aPaM.GetPoint()->nContent.Assign(aPaM.GetPointContentNode(),
         RTL_CONSTASCII_LENGTH("graphic anchor>><")+1);
     aPaM.SetMark();
     aPaM.GetPoint()->nNode = nPara2;
-    aPaM.GetPoint()->nContent.Assign(aPaM.GetContentNode(), RTL_CONSTASCII_LENGTH("graphic anchor>"));
+    aPaM.GetPoint()->nContent.Assign(aPaM.GetPointContentNode(), RTL_CONSTASCII_LENGTH("graphic anchor>"));
     m_pDoc->getIDocumentContentOperations().DeleteRange(aPaM);
 
 #ifdef DEBUG_AS_HTML

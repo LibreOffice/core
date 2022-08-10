@@ -651,13 +651,13 @@ bool SwView::ExecSpellPopup(const Point& rPt)
                 !pCursor->HasMark() && !pCursor->IsMultiSelection())
             {
                 std::pair<Point, bool> const tmp(rPt, false);
-                SwContentFrame *const pContentFrame = pCursor->GetContentNode()->getLayoutFrame(
+                SwContentFrame *const pContentFrame = pCursor->GetPointContentNode()->getLayoutFrame(
                                         pCursorShell->GetLayout(),
                                         &aPoint, &tmp);
                 if (pContentFrame)
                 {
                     SwRect aRepaint(static_cast<SwTextFrame*>(pContentFrame)->AutoSpell_(
-                        *pCursor->GetContentNode()->GetTextNode(), 0));
+                        *pCursor->GetPointContentNode()->GetTextNode(), 0));
                     if (aRepaint.HasArea())
                         m_pWrtShell->InvalidateWindows(aRepaint);
                 }

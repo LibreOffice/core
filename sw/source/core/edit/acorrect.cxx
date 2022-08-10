@@ -477,7 +477,7 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
 
                 // then until the end of the Nodes Array
                 aCpyPam.GetPoint()->nNode.Assign( pAutoDoc->GetNodes().GetEndOfContent(), -1 );
-                pContentNd = aCpyPam.GetContentNode();
+                pContentNd = aCpyPam.GetPointContentNode();
                 aCpyPam.GetPoint()->nContent.Assign(
                        pContentNd, pContentNd ? pContentNd->Len() : 0);
 

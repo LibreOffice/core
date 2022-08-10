@@ -1417,7 +1417,7 @@ void SwHTMLParser::StripTrailingPara()
 {
     bool bSetSmallFont = false;
 
-    SwContentNode* pCNd = m_pPam->GetContentNode();
+    SwContentNode* pCNd = m_pPam->GetPointContentNode();
     SwNodeOffset nNodeIdx = m_pPam->GetPoint()->GetNodeIndex();
     if( !m_pPam->GetPoint()->GetContentIndex() )
     {

@@ -56,9 +56,9 @@ constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/uiwriter/data/";
 
 void lcl_selectCharacters(SwPaM& rPaM, sal_Int32 first, sal_Int32 end)
 {
-    rPaM.GetPoint()->nContent.Assign(rPaM.GetContentNode(), first);
+    rPaM.GetPoint()->nContent.Assign(rPaM.GetPointContentNode(), first);
     rPaM.SetMark();
-    rPaM.GetPoint()->nContent.Assign(rPaM.GetContentNode(), end);
+    rPaM.GetPoint()->nContent.Assign(rPaM.GetPointContentNode(), end);
 }
 } //namespace
 

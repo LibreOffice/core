@@ -137,13 +137,13 @@ bool SwUnoCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
 
             if( bValidPos )
             {
-                SwContentNode* pCNd = GetContentNode();
+                SwContentNode* pCNd = GetPointContentNode();
                 GetPoint()->nContent.Assign( pCNd, (pCNd && !bMoveDown) ? pCNd->Len() : 0);
             }
             else
             {
                 rPtIdx = GetSavePos()->nNode;
-                GetPoint()->nContent.Assign( GetContentNode(), GetSavePos()->nContent );
+                GetPoint()->nContent.Assign( GetPointContentNode(), GetSavePos()->nContent );
                 return true;
             }
         }
@@ -184,8 +184,8 @@ void SwUnoTableCursor::MakeBoxSels()
     const SwContentNode* pCNd;
     bool bMakeTableCursors = true;
     if( GetPoint()->GetNodeIndex() && GetMark()->GetNodeIndex() &&
-            nullptr != ( pCNd = GetContentNode() ) && pCNd->getLayoutFrame( pCNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout() ) &&
-            nullptr != ( pCNd = GetContentNode(false) ) && pCNd->getLayoutFrame( pCNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout() ) )
+            nullptr != ( pCNd = GetPointContentNode() ) && pCNd->getLayoutFrame( pCNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout() ) &&
+            nullptr != ( pCNd = GetMarkContentNode() ) && pCNd->getLayoutFrame( pCNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout() ) )
         bMakeTableCursors = GetDoc().getIDocumentLayoutAccess().GetCurrentLayout()->MakeTableCursors( *this );
 
     if ( !bMakeTableCursors )

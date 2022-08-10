@@ -90,18 +90,18 @@ using namespace ::com::sun::star::lang;
 
 static void lcl_EnsureValidPam( SwPaM& rPam )
 {
-    if( rPam.GetContentNode() != nullptr )
+    if( rPam.GetPointContentNode() != nullptr )
     {
         // set proper point content
-        if( rPam.GetContentNode() != rPam.GetPoint()->GetContentNode() )
+        if( rPam.GetPointContentNode() != rPam.GetPoint()->GetContentNode() )
         {
-            rPam.GetPoint()->nContent.Assign( rPam.GetContentNode(), 0 );
+            rPam.GetPoint()->nContent.Assign( rPam.GetPointContentNode(), 0 );
         }
         // else: point was already valid
 
         // if mark is invalid, we delete it
-        if( ( rPam.GetContentNode( false ) == nullptr ) ||
-            ( rPam.GetContentNode( false ) != rPam.GetMark()->GetContentNode() ) )
+        if( ( rPam.GetMarkContentNode() == nullptr ) ||
+            ( rPam.GetMarkContentNode() != rPam.GetMark()->GetContentNode() ) )
         {
             rPam.DeleteMark();
         }

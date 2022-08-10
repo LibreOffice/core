@@ -205,7 +205,7 @@ bool SwTableCursor::IsSelOvrCheck(SwCursorSelOverFlags eFlags)
         if( !CheckNodesRange( aOldPos.GetNode(), GetPoint()->GetNode(), true ))
         {
             GetPoint()->nNode = aOldPos;
-            GetPoint()->nContent.Assign( GetContentNode(), GetSavePos()->nContent );
+            GetPoint()->nContent.Assign( GetPointContentNode(), GetSavePos()->nContent );
             return true;
         }
     }
@@ -567,7 +567,7 @@ bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
 
 bool SwCursor::IsInProtectTable( bool bMove, bool bChgCursor )
 {
-    SwContentNode* pCNd = GetContentNode();
+    SwContentNode* pCNd = GetPointContentNode();
     if( !pCNd )
         return false;
 
@@ -637,7 +637,7 @@ SetNextCursor:
         if( !bProt ) // found free cell
         {
             GetPoint()->nNode = aCellStt;
-            SwContentNode* pTmpCNd = GetContentNode();
+            SwContentNode* pTmpCNd = GetPointContentNode();
             if( pTmpCNd )
             {
                 GetPoint()->nContent.Assign( pTmpCNd, 0 );
@@ -689,7 +689,7 @@ SetPrevCursor:
         if( !bProt ) // found free cell
         {
             GetPoint()->nNode = aCellStt;
-            SwContentNode* pTmpCNd = GetContentNode();
+            SwContentNode* pTmpCNd = GetPointContentNode();
             if( pTmpCNd )
             {
                 GetPoint()->nContent.Assign( pTmpCNd, 0 );
@@ -1280,7 +1280,7 @@ bool SwCursor::IsInWordWT(sal_Int16 nWordType, SwRootFrame const*const pLayout) 
 bool SwCursor::IsStartEndSentence(bool bEnd, SwRootFrame const*const pLayout) const
 {
     bool bRet = bEnd ?
-                    GetContentNode() && GetPoint()->nContent == GetContentNode()->Len() :
+                    GetPointContentNode() && GetPoint()->nContent == GetPointContentNode()->Len() :
                     GetPoint()->GetContentIndex() == 0;
 
     if ((pLayout != nullptr && pLayout->HasMergedParas()) || !bRet)
@@ -1889,7 +1889,7 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, SwCursorSkipMode nMode,
                     rPtIdx = aNewIdx;
 
                     GetDoc().GetNodes().GoNextSection( &rPtIdx, false, false );
-                    SwContentNode* pContentNode = GetContentNode();
+                    SwContentNode* pContentNode = GetPointContentNode();
                     if ( pContentNode )
                     {
                         GetPoint()->nContent.Assign( pContentNode, bLeft ? pContentNode->Len() : 0 );
@@ -1922,7 +1922,7 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, SwCursorSkipMode nMode,
                 rPtIdx = aNewIdx;
 
                 GetDoc().GetNodes().GoNextSection( &rPtIdx, false, false );
-                SwContentNode* pContentNode = GetContentNode();
+                SwContentNode* pContentNode = GetPointContentNode();
                 if ( pContentNode )
                 {
                     GetPoint()->nContent.Assign( pContentNode, bLeft ? pContentNode->Len() : 0 );
@@ -2015,7 +2015,7 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
     if( pPt )
         aPt = *pPt;
     std::pair<Point, bool> const temp(aPt, true);
-    SwContentFrame* pFrame = GetContentNode()->getLayoutFrame(&rLayout, GetPoint(), &temp);
+    SwContentFrame* pFrame = GetPointContentNode()->getLayoutFrame(&rLayout, GetPoint(), &temp);
 
     if( pFrame )
     {
@@ -2052,7 +2052,7 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
                 GetPoint()->nNode = *pEndNd;
                 pTableCursor->Move( fnMoveBackward, GoInNode );
                 std::pair<Point, bool> const tmp(aPt, true);
-                pFrame = GetContentNode()->getLayoutFrame(&rLayout, GetPoint(), &tmp);
+                pFrame = GetPointContentNode()->getLayoutFrame(&rLayout, GetPoint(), &tmp);
             }
         }
 
@@ -2062,7 +2062,7 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
                 CheckNodesRange( aOldPos.GetNode(), GetPoint()->GetNode(), bChkRange ))
         {
             std::pair<Point, bool> const tmp(aPt, true);
-            pFrame = GetContentNode()->getLayoutFrame(&rLayout, GetPoint(), &tmp);
+            pFrame = GetPointContentNode()->getLayoutFrame(&rLayout, GetPoint(), &tmp);
             --nCnt;
         }
 
@@ -2075,7 +2075,7 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
                 // try to position the cursor at half of the char-rect's height
                 DisableCallbackAction a(rLayout);
                 std::pair<Point, bool> const tmp(aPt, true);
-                pFrame = GetContentNode()->getLayoutFrame(&rLayout, GetPoint(), &tmp);
+                pFrame = GetPointContentNode()->getLayoutFrame(&rLayout, GetPoint(), &tmp);
                 SwCursorMoveState eTmpState( CursorMoveState::UpDown );
                 eTmpState.m_bSetInReadOnly = bInReadOnly;
                 SwRect aTmpRect;
@@ -2107,7 +2107,7 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
                 if (pTextNd)
                     nOffset = pTextNd->GetText().getLength();
             }
-            const SwPosition aPos(*GetContentNode(), nOffset);
+            const SwPosition aPos(*GetPointContentNode(), nOffset);
 
             //if cursor has already been at start or end of file,
             //Update cursor to change nUpDownX.
@@ -2132,7 +2132,7 @@ bool SwCursor::LeftRightMargin(SwRootFrame const& rLayout, bool bLeft, bool bAPI
 {
     Point aPt;
     std::pair<Point, bool> const tmp(aPt, true);
-    SwContentFrame const*const pFrame = GetContentNode()->getLayoutFrame(
+    SwContentFrame const*const pFrame = GetPointContentNode()->getLayoutFrame(
         &rLayout, GetPoint(), &tmp);
 
     // calculate cursor bidi level
@@ -2150,7 +2150,7 @@ bool SwCursor::IsAtLeftRightMargin(SwRootFrame const& rLayout, bool bLeft, bool 
     bool bRet = false;
     Point aPt;
     std::pair<Point, bool> const tmp(aPt, true);
-    SwContentFrame const*const pFrame = GetContentNode()->getLayoutFrame(
+    SwContentFrame const*const pFrame = GetPointContentNode()->getLayoutFrame(
         &rLayout, GetPoint(), &tmp);
     if( pFrame )
     {
@@ -2241,7 +2241,7 @@ bool SwCursor::GoPrevNextCell( bool bNext, sal_uInt16 nCnt )
     ++rPtIdx;
     if( !rPtIdx.GetNode().IsContentNode() )
         GetDoc().GetNodes().GoNextSection( &rPtIdx, true, false );
-    GetPoint()->nContent.Assign( GetContentNode(), 0 );
+    GetPoint()->nContent.Assign( GetPointContentNode(), 0 );
 
     return !IsInProtectTable( true );
 }
@@ -2354,17 +2354,17 @@ void SwCursor::RestoreSavePos()
     GetPoint()->nNode = m_vSavePos.back().nNode;
 
     sal_Int32 nIdx = 0;
-    if ( GetContentNode() )
+    if ( GetPointContentNode() )
     {
-        if (m_vSavePos.back().nContent <= GetContentNode()->Len())
+        if (m_vSavePos.back().nContent <= GetPointContentNode()->Len())
             nIdx = m_vSavePos.back().nContent;
         else
         {
-            nIdx = GetContentNode()->Len();
+            nIdx = GetPointContentNode()->Len();
             OSL_FAIL("SwCursor::RestoreSavePos: invalid content index");
         }
     }
-    GetPoint()->nContent.Assign( GetContentNode(), nIdx );
+    GetPoint()->nContent.Assign( GetPointContentNode(), nIdx );
 }
 
 SwTableCursor::SwTableCursor( const SwPosition &rPos )

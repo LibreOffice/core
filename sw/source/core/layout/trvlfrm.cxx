@@ -1870,7 +1870,7 @@ sal_uInt16 SwFrame::GetVirtPageNum() const
 bool SwRootFrame::MakeTableCursors( SwTableCursor& rTableCursor )
 {
     //Find Union-Rects and tables (Follows) of the selection.
-    OSL_ENSURE( rTableCursor.GetContentNode() && rTableCursor.GetContentNode( false ),
+    OSL_ENSURE( rTableCursor.GetPointContentNode() && rTableCursor.GetMarkContentNode(),
             "Tabselection not on Cnt." );
 
     bool bRet = false;
@@ -1891,8 +1891,8 @@ bool SwRootFrame::MakeTableCursors( SwTableCursor& rTableCursor )
     }
 
     // #151012# Made code robust here
-    const SwContentNode* pTmpStartNode = rTableCursor.GetContentNode();
-    const SwContentNode* pTmpEndNode   = rTableCursor.GetContentNode(false);
+    const SwContentNode* pTmpStartNode = rTableCursor.GetPointContentNode();
+    const SwContentNode* pTmpEndNode   = rTableCursor.GetMarkContentNode();
 
     std::pair<Point, bool> tmp(aPtPt, false);
     const SwFrame *const pTmpStartFrame = pTmpStartNode ? pTmpStartNode->getLayoutFrame(this, nullptr, &tmp) : nullptr;

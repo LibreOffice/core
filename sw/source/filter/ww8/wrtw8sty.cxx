@@ -990,7 +990,7 @@ MSWordSections::MSWordSections( MSWordExportBase& rExport )
     const SwSectionFormat *pFormat = nullptr;
     rExport.m_pCurrentPageDesc = &rExport.m_rDoc.GetPageDesc( 0 );
 
-    const SwNode* pNd = rExport.m_pCurPam->GetContentNode();
+    const SwNode* pNd = rExport.m_pCurPam->GetPointContentNode();
     const SfxItemSet* pSet = pNd ? &static_cast<const SwContentNode*>(pNd)->GetSwAttrSet() : nullptr;
 
     sal_uLong nRstLnNum =  pSet ? pSet->Get( RES_LINENUMBER ).GetStartValue() : 0;
