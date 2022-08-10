@@ -205,21 +205,21 @@ void SaveFlyInRange( const SwPaM& rPam, const SwPosition& rInsPos,
 
 /// Delete and move all Flys at the paragraph, that are within the selection.
 /// If there is a Fly at the SPoint, it is moved onto the Mark.
-void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
-                    const SwNodeIndex& rPtNdIdx,
+void DelFlyInRange( SwNode& rMkNd,
+                    SwNode& rPtNd,
                     SwContentIndex const*const pMkIdx, SwContentIndex const*const pPtIdx)
 {
     assert((pMkIdx == nullptr) == (pPtIdx == nullptr));
     SwPosition const point(pPtIdx
-                            ? SwPosition(rPtNdIdx, *pPtIdx)
-                            : SwPosition(rPtNdIdx));
+                            ? SwPosition(rPtNd, *pPtIdx)
+                            : SwPosition(rPtNd));
     SwPosition const mark(pPtIdx
-                            ? SwPosition(rMkNdIdx, *pMkIdx)
-                            : SwPosition(rMkNdIdx));
+                            ? SwPosition(rMkNd, *pMkIdx)
+                            : SwPosition(rMkNd));
     SwPosition const& rStart = mark <= point ? mark : point;
     SwPosition const& rEnd   = mark <= point ? point : mark;
 
-    SwDoc& rDoc = rMkNdIdx.GetNode().GetDoc();
+    SwDoc& rDoc = rMkNd.GetDoc();
     SwFrameFormats& rTable = *rDoc.GetSpzFrameFormats();
     for ( auto i = rTable.size(); i; )
     {
@@ -241,9 +241,9 @@ void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
             // But only fly formats own their content, not draw formats.
             if (rContent.GetContentIdx() && pFormat->Which() == RES_FLYFRMFMT)
             {
-                DelFlyInRange( *rContent.GetContentIdx(),
-                                SwNodeIndex( *rContent.GetContentIdx()->
-                                        GetNode().EndOfSectionNode() ));
+                DelFlyInRange( rContent.GetContentIdx()->GetNode(),
+                               *rContent.GetContentIdx()->
+                                        GetNode().EndOfSectionNode() );
                 // Position could have been moved!
                 if (i > rTable.size())
                     i = rTable.size();
