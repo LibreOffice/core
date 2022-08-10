@@ -6645,14 +6645,14 @@ Selection SwEditWin::GetSurroundingTextSelection() const
         TextFrameIndex const nPos(rSh.GetCursorPointAsViewIndex());
 
         // store shell state *before* Push
-        ::std::unique_ptr<SwCallLink> pLink(::std::make_unique<SwCallLink>(rSh));
+        ::std::optional<SwCallLink> aLink(std::in_place, rSh);
         rSh.Push();
 
         rSh.HideCursor();
         rSh.GoStartSentence();
         TextFrameIndex const nStartPos(rSh.GetCursorPointAsViewIndex());
 
-        rSh.Pop(SwCursorShell::PopMode::DeleteCurrent, ::std::move(pLink));
+        rSh.Pop(SwCursorShell::PopMode::DeleteCurrent, aLink);
         rSh.ShowCursor();
 
         if (bUnLockView)
