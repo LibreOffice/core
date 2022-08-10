@@ -57,7 +57,7 @@ public:
         ConfigurationController so that its UpdateConfiguration() method can
         be called when the queue becomes empty.
     */
-    explicit ChangeRequestQueueProcessor(const std::shared_ptr<ConfigurationUpdater>& rpUpdater);
+    explicit ChangeRequestQueueProcessor(std::shared_ptr<ConfigurationUpdater> pUpdater);
     ~ChangeRequestQueueProcessor();
 
     /** Sets the configuration who will be changed by subsequent change

@@ -223,7 +223,7 @@ class HtmlExport final
                     SdrOutliner* pOutliner, const Color& rBackgroundColor);
 
  public:
-    HtmlExport(const OUString& aPath,
+    HtmlExport(OUString aPath,
                const css::uno::Sequence<css::beans::PropertyValue>& rParams,
                SdDrawDocument* pExpDoc,
                sd::DrawDocShell* pDocShell);

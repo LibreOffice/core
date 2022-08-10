@@ -25,13 +25,14 @@
 #include <ucbhelper/content.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <utility>
 
 namespace ppt
 {
 
-ExSoundEntry::ExSoundEntry(const OUString& rString)
+ExSoundEntry::ExSoundEntry(OUString aString)
     : nFileSize(0)
-    , aSoundURL(rString)
+    , aSoundURL(std::move(aString))
 {
     try
     {

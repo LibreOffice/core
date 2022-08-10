@@ -36,7 +36,7 @@ class PageEnumerationImpl
 public:
     PageEnumerationImpl (
         const SlideSorterModel& rModel,
-        const PageEnumeration::PagePredicate& rPredicate);
+        PageEnumeration::PagePredicate aPredicate);
     PageEnumerationImpl(const PageEnumerationImpl&) = delete;
     PageEnumerationImpl& operator=(const PageEnumerationImpl&) = delete;
     /** Create a copy of the called enumeration object.
@@ -58,7 +58,7 @@ private:
     */
     PageEnumerationImpl (
         const SlideSorterModel& rModel,
-        const PageEnumeration::PagePredicate& rPredicate,
+        PageEnumeration::PagePredicate aPredicate,
         int nIndex);
 
     /** Skip all elements that do not fulfill Predicate starting with the
@@ -129,9 +129,9 @@ namespace {
 
 PageEnumerationImpl::PageEnumerationImpl (
     const SlideSorterModel& rModel,
-    const PageEnumeration::PagePredicate& rPredicate)
+    PageEnumeration::PagePredicate aPredicate)
     : mrModel(rModel),
-      maPredicate(rPredicate),
+      maPredicate(std::move(aPredicate)),
       mnIndex(0)
 {
     Rewind();
@@ -139,10 +139,10 @@ PageEnumerationImpl::PageEnumerationImpl (
 
 PageEnumerationImpl::PageEnumerationImpl (
     const SlideSorterModel& rModel,
-    const PageEnumeration::PagePredicate& rPredicate,
+    PageEnumeration::PagePredicate aPredicate,
     int nIndex)
     : mrModel(rModel),
-      maPredicate(rPredicate),
+      maPredicate(std::move(aPredicate)),
       mnIndex(nIndex)
 {
 }

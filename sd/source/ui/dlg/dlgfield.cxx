@@ -31,13 +31,14 @@
 #include <sdmod.hxx>
 #include <dlgfield.hxx>
 #include <DrawDocShell.hxx>
+#include <utility>
 
 /**
  * dialog to edit field commands
  */
-SdModifyFieldDlg::SdModifyFieldDlg(weld::Window* pWindow, const SvxFieldData* pInField, const SfxItemSet& rSet)
+SdModifyFieldDlg::SdModifyFieldDlg(weld::Window* pWindow, const SvxFieldData* pInField, SfxItemSet aSet)
     : GenericDialogController(pWindow, "modules/simpress/ui/dlgfield.ui", "EditFieldsDialog")
-    , m_aInputSet(rSet)
+    , m_aInputSet(std::move(aSet))
     , m_pField(pInField)
     , m_xRbtFix(m_xBuilder->weld_radio_button("fixedRB"))
     , m_xRbtVar(m_xBuilder->weld_radio_button("varRB"))

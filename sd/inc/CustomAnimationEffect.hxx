@@ -265,7 +265,7 @@ friend class MainSequence;
 
 public:
     SAL_DLLPRIVATE EffectSequenceHelper();
-    SAL_DLLPRIVATE EffectSequenceHelper( const css::uno::Reference< css::animations::XTimeContainer >& xSequenceRoot );
+    SAL_DLLPRIVATE EffectSequenceHelper( css::uno::Reference< css::animations::XTimeContainer > xSequenceRoot );
     SAL_DLLPRIVATE virtual ~EffectSequenceHelper();
 
     SAL_DLLPRIVATE virtual css::uno::Reference< css::animations::XAnimationNode > getRootNode();
@@ -442,7 +442,7 @@ typedef std::shared_ptr< MainSequence > MainSequencePtr;
 class MainSequenceRebuildGuard
 {
 public:
-    MainSequenceRebuildGuard( const MainSequencePtr& pMainSequence );
+    MainSequenceRebuildGuard( MainSequencePtr pMainSequence );
     ~MainSequenceRebuildGuard();
 
 private:

@@ -23,6 +23,7 @@
 #include <tools/IdleDetection.hxx>
 
 #include <set>
+#include <utility>
 
 namespace sd::sidebar {
 
@@ -37,8 +38,8 @@ sal_uInt32 MasterPageContainerQueue::snWaitForMoreRequestsCount(15);
 class MasterPageContainerQueue::PreviewCreationRequest
 {
 public:
-    PreviewCreationRequest (const SharedMasterPageDescriptor& rpDescriptor, int nPriority)
-        : mpDescriptor(rpDescriptor),
+    PreviewCreationRequest (SharedMasterPageDescriptor pDescriptor, int nPriority)
+        : mpDescriptor(std::move(pDescriptor)),
           mnPriority(nPriority)
     {}
     SharedMasterPageDescriptor mpDescriptor;
@@ -91,8 +92,8 @@ MasterPageContainerQueue* MasterPageContainerQueue::Create (
 }
 
 MasterPageContainerQueue::MasterPageContainerQueue (
-    const std::weak_ptr<ContainerAdapter>& rpContainer)
-    : mpWeakContainer(rpContainer),
+    std::weak_ptr<ContainerAdapter> pContainer)
+    : mpWeakContainer(std::move(pContainer)),
       mpRequestQueue(new RequestQueue()),
       maDelayedPreviewCreationTimer("sd MasterPageContainerQueue maDelayedPreviewCreationTimer"),
       mnRequestsServedCount(0)

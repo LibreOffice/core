@@ -34,7 +34,7 @@ namespace sd::slidesorter::cache
 class RequestQueue : public sdr::PageUser
 {
 public:
-    explicit RequestQueue(const SharedCacheContext& rpCacheContext);
+    explicit RequestQueue(SharedCacheContext pCacheContext);
     virtual ~RequestQueue();
 
     /** Insert a request with highest or lowest priority in its priority

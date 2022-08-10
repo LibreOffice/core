@@ -27,6 +27,7 @@
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 #include <algorithm>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -37,11 +38,11 @@ namespace sd::framework {
 //===== ConfigurationControllerResourceManager ================================
 
 ConfigurationControllerResourceManager::ConfigurationControllerResourceManager (
-    const std::shared_ptr<ResourceFactoryManager>& rpResourceFactoryContainer,
-    const std::shared_ptr<ConfigurationControllerBroadcaster>& rpBroadcaster)
+    std::shared_ptr<ResourceFactoryManager> pResourceFactoryContainer,
+    std::shared_ptr<ConfigurationControllerBroadcaster>  pBroadcaster)
     : maResourceMap(ResourceComparator()),
-      mpResourceFactoryContainer(rpResourceFactoryContainer),
-      mpBroadcaster(rpBroadcaster)
+      mpResourceFactoryContainer(std::move(pResourceFactoryContainer)),
+      mpBroadcaster(std::move(pBroadcaster))
 {
 }
 

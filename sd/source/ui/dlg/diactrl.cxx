@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <comphelper/propertyvalue.hxx>
+#include <utility>
 #include <vcl/fieldvalues.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -51,10 +52,10 @@ namespace
 
 // SdPagesField
 SdPagesField::SdPagesField( vcl::Window* pParent,
-                            const uno::Reference< frame::XFrame >& rFrame )
+                            uno::Reference< frame::XFrame > xFrame )
     : InterimItemWindow(pParent, "modules/simpress/ui/pagesfieldbox.ui", "PagesFieldBox")
     , m_xWidget(m_xBuilder->weld_spin_button("pagesfield"))
-    , m_xFrame(rFrame)
+    , m_xFrame(std::move(xFrame))
 {
     InitControlBase(m_xWidget.get());
 

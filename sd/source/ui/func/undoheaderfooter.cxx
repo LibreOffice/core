@@ -22,13 +22,14 @@
 
 #include <app.hrc>
 #include <undoheaderfooter.hxx>
+#include <utility>
 
 
-SdHeaderFooterUndoAction::SdHeaderFooterUndoAction( SdDrawDocument* pDoc, SdPage* pPage, const sd::HeaderFooterSettings& rNewSettings )
+SdHeaderFooterUndoAction::SdHeaderFooterUndoAction( SdDrawDocument* pDoc, SdPage* pPage, sd::HeaderFooterSettings aNewSettings )
 :   SdUndoAction(pDoc),
     mpPage(pPage),
     maOldSettings(pPage->getHeaderFooterSettings()),
-    maNewSettings(rNewSettings)
+    maNewSettings(std::move(aNewSettings))
 {
 }
 

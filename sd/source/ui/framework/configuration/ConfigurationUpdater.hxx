@@ -60,10 +60,9 @@ public:
         changes and the start and end of updates via the given broadcaster.
     */
     ConfigurationUpdater(
-        const std::shared_ptr<ConfigurationControllerBroadcaster>& rpBroadcaster,
-        const std::shared_ptr<ConfigurationControllerResourceManager>& rpResourceManager,
-        const css::uno::Reference<css::drawing::framework::XControllerManager>&
-            rxControllerManager);
+        std::shared_ptr<ConfigurationControllerBroadcaster> pBroadcaster,
+        std::shared_ptr<ConfigurationControllerResourceManager> pResourceManager,
+        const css::uno::Reference<css::drawing::framework::XControllerManager>& xControllerManager);
     ~ConfigurationUpdater();
 
     /** Request an update of the current configuration so that it looks like

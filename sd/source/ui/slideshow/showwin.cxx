@@ -35,6 +35,7 @@
 #include <strings.hrc>
 
 #include <sal/log.hxx>
+#include <utility>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
 
@@ -45,7 +46,7 @@ namespace sd {
 const sal_uInt64 HIDE_MOUSE_TIMEOUT = 10000;
 const sal_uInt64 SHOW_MOUSE_TIMEOUT = 1000;
 
-ShowWindow::ShowWindow( const ::rtl::Reference< SlideshowImpl >& xController, vcl::Window* pParent )
+ShowWindow::ShowWindow( ::rtl::Reference< SlideshowImpl > xController, vcl::Window* pParent )
 : ::sd::Window( pParent )
 , maPauseTimer("sd ShowWindow maPauseTimer")
 , maMouseTimer("sd ShowWindow maMouseTimer")
@@ -56,7 +57,7 @@ ShowWindow::ShowWindow( const ::rtl::Reference< SlideshowImpl >& xController, vc
 , mbMouseAutoHide(true)
 , mbMouseCursorHidden(false)
 , mnFirstMouseMove(0)
-, mxController( xController )
+, mxController(std::move( xController ))
 {
     GetOutDev()->SetOutDevViewType( OutDevViewType::SlideShow );
 

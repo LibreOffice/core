@@ -49,7 +49,7 @@ public:
             would not keep a strong reference to the new object.
     */
     AccessiblePageShape (
-        const css::uno::Reference<css::drawing::XDrawPage>& rxPage,
+        css::uno::Reference<css::drawing::XDrawPage> xPage,
         const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
         const AccessibleShapeTreeInfo& rShapeTreeInfo);
 

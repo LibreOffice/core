@@ -9,6 +9,7 @@
 #pragma once
 
 #include <memory>
+#include <utility>
 #include <vector>
 
 #include <osl/socket_decl.hxx>
@@ -36,9 +37,9 @@ namespace sd
 
         bool mbIsAlreadyAuthorised;
 
-        ClientInfo( const OUString& rName,
+        ClientInfo( OUString aName,
                     const bool bIsAlreadyAuthorised ) :
-            mName( rName ),
+            mName(std::move( aName )),
             mbIsAlreadyAuthorised( bIsAlreadyAuthorised ) {}
 
         virtual ~ClientInfo() {};

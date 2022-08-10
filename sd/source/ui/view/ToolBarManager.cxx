@@ -40,6 +40,7 @@
 #include <svx/fontworkbar.hxx>
 #include <tools/debug.hxx>
 #include <tools/link.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <osl/diagnose.h>
 
@@ -186,8 +187,8 @@ class ToolBarRules
 {
 public:
     ToolBarRules (
-        const std::shared_ptr<ToolBarManager>& rpToolBarManager,
-        const std::shared_ptr<ViewShellManager>& rpViewShellManager);
+        std::shared_ptr<ToolBarManager> pToolBarManager,
+        std::shared_ptr<ViewShellManager> pViewShellManager);
 
     /** This method calls MainViewShellChanged() and SelectionHasChanged()
         for the current main view shell and its view.
@@ -245,7 +246,7 @@ public:
     */
     Implementation (
         ViewShellBase& rBase,
-        const std::shared_ptr<sd::tools::EventMultiplexer>& rpMultiplexer,
+        std::shared_ptr<sd::tools::EventMultiplexer> pMultiplexer,
         const std::shared_ptr<ViewShellManager>& rpViewShellManager,
         const std::shared_ptr<ToolBarManager>& rpToolBarManager);
     ~Implementation();
@@ -496,11 +497,11 @@ void ToolBarManager::ToolBarsDestroyed()
 
 ToolBarManager::Implementation::Implementation (
     ViewShellBase& rBase,
-    const std::shared_ptr<sd::tools::EventMultiplexer>& rpMultiplexer,
+    std::shared_ptr<sd::tools::EventMultiplexer> pMultiplexer,
     const std::shared_ptr<ViewShellManager>& rpViewShellManager,
     const std::shared_ptr<ToolBarManager>& rpToolBarManager)
     : mrBase(rBase),
-      mpEventMultiplexer(rpMultiplexer),
+      mpEventMultiplexer(std::move(pMultiplexer)),
       mbIsValid(false),
       mnLockCount(0),
       mbPreUpdatePending(false),
@@ -916,10 +917,10 @@ LayouterLock::~LayouterLock()
 //===== ToolBarRules ==========================================================
 
 ToolBarRules::ToolBarRules (
-    const std::shared_ptr<sd::ToolBarManager>& rpToolBarManager,
-    const std::shared_ptr<sd::ViewShellManager>& rpViewShellManager)
-    : mpToolBarManager(rpToolBarManager),
-      mpViewShellManager(rpViewShellManager)
+    std::shared_ptr<sd::ToolBarManager> pToolBarManager,
+    std::shared_ptr<sd::ViewShellManager> pViewShellManager)
+    : mpToolBarManager(std::move(pToolBarManager)),
+      mpViewShellManager(std::move(pViewShellManager))
 {
 }
 

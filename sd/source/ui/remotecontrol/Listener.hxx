@@ -28,7 +28,7 @@ class Listener
     : public comphelper::WeakComponentImplHelper< css::presentation::XSlideShowListener >
 {
 public:
-    Listener( const ::rtl::Reference<Communicator>& rServer, sd::Transmitter *aTransmitter );
+    Listener( ::rtl::Reference<Communicator> xServer, sd::Transmitter *aTransmitter );
     virtual ~Listener() override;
     void init( const css::uno::Reference< css::presentation::XSlideShowController >& aController );
 
