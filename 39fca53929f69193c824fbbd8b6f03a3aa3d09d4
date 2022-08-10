@@ -16,6 +16,24 @@
       "message": "std::vector\u003cbool\u003e specialization is a total pain of course, but Kashida-wise this looks very encouraging to me.\n\nas an aside, in https://bugs.documentfoundation.org/show_bug.cgi?id\u003d140767 I was unable to figure out what the Syriac kashida rules should look like.",
       "revId": "39fca53929f69193c824fbbd8b6f03a3aa3d09d4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8fa893b3_0db966c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003606
+      },
+      "writtenOn": "2022-08-10T19:33:33Z",
+      "side": 1,
+      "message": "I asked around already but I couldn’t find any useful information about Kashida justification in Syriac. I’m not even sure if any current software implements it.",
+      "parentUuid": "4ac0fb9f_e8239659",
+      "revId": "39fca53929f69193c824fbbd8b6f03a3aa3d09d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
