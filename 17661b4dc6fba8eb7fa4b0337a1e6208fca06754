@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2066f6f6_c7f54462",
+        "filename": "include/vcl/graphic/GraphicMetadata.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-08-10T05:43:57Z",
+      "side": 1,
+      "message": "you can just use #pragma once here - maybe change in a follow up commit",
+      "range": {
+        "startLine": 8,
+        "startChar": 3,
+        "endLine": 10,
+        "endChar": 48
+      },
+      "revId": "17661b4dc6fba8eb7fa4b0337a1e6208fca06754",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
