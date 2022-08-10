@@ -1139,7 +1139,7 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
 
         // Delete everything succeeding it
         --aIdx;
-        DelFlyInRange( aIdx, aEndIdx );
+        DelFlyInRange( aIdx.GetNode(), aEndIdx.GetNode() );
         DelBookmarks(aIdx, aEndIdx);
         ++aIdx;
 
