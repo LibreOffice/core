@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d90930e_0534ef3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-08-10T08:51:00Z",
+      "side": 1,
+      "message": "Isha: I see in the relation chain that you have based this patch on an unmerged patch of your own. In the future, it is a better idea to checkout your new local branches from the master branch instead.",
+      "revId": "4274fc108eb0b11d8e868fbeb59851903b228ef5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
