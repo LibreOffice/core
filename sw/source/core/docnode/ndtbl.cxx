@@ -3154,7 +3154,7 @@ void SwDoc::SplitTable( const SwPosition& rPos, SplitTable_HeadlineOption eHdlnM
     aFndBox.SetTableLines( rTable );
     aFndBox.DelFrames( rTable );
 
-    SwTableNode* pNew = GetNodes().SplitTable( rPos.nNode, false, bCalcNewSize );
+    SwTableNode* pNew = GetNodes().SplitTable( rPos.GetNode(), false, bCalcNewSize );
 
     if( pNew )
     {
@@ -3348,10 +3348,10 @@ static void lcl_SplitTable_CpyBox( SwTableBox* pBox, SplitTable_Para* pPara )
             lcl_SplitTable_CpyLine( pLine, pPara );
 }
 
-SwTableNode* SwNodes::SplitTable( const SwNodeIndex& rPos, bool bAfter,
+SwTableNode* SwNodes::SplitTable( SwNode& rPos, bool bAfter,
                                     bool bCalcNewSize )
 {
-    SwNode* pNd = &rPos.GetNode();
+    SwNode* pNd = &rPos;
     SwTableNode* pTNd = pNd->FindTableNode();
     if( !pTNd || pNd->IsTableNode() )
         return nullptr;
