@@ -784,7 +784,7 @@ SwUnoCursor* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor >
                 pUnoCursor->DeleteMark();
             }
         }
-        const SwNode& rRangeNode = pUnoCursor->GetNode();
+        const SwNode& rRangeNode = pUnoCursor->GetPointNode();
         bParentInExtra = rRangeNode.FindFlyStartNode() ||
                             rRangeNode.FindFootnoteStartNode() ||
                             rRangeNode.FindHeaderStartNode() ||

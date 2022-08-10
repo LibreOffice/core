@@ -2537,7 +2537,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf143904)
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
-    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetPointNode().GetIndex();
 
     dispatchCommand(mxComponent, ".uno:InsertRowsAfter", {});
     pWrtShell->Down(false);
@@ -2545,7 +2545,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf143904)
 
     SwTextNode* pTextNodeA1 = static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex]);
     CPPUNIT_ASSERT(pTextNodeA1->GetText().startsWith("Insert"));
-    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    nIndex = pWrtShell->GetCursor()->GetPointNode().GetIndex();
     SwTextNode* pTextNodeA2 = static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex]);
     CPPUNIT_ASSERT_EQUAL(OUString("foo"), pTextNodeA2->GetText());
     CPPUNIT_ASSERT_EQUAL(false, pTextNodeA2->GetSwAttrSet().HasItem(RES_CHRATR_FONT));
@@ -2560,7 +2560,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf90069)
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
-    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetPointNode().GetIndex();
 
     dispatchCommand(mxComponent, ".uno:InsertRowsAfter", {});
     pWrtShell->Down(false);
@@ -2568,7 +2568,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf90069)
 
     SwTextNode* pTextNodeA1 = static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex]);
     CPPUNIT_ASSERT(pTextNodeA1->GetText().startsWith("Insert"));
-    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    nIndex = pWrtShell->GetCursor()->GetPointNode().GetIndex();
     SwTextNode* pTextNodeA2 = static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex]);
     CPPUNIT_ASSERT_EQUAL(OUString("foo"), pTextNodeA2->GetText());
     CPPUNIT_ASSERT_EQUAL(true, pTextNodeA2->GetSwAttrSet().HasItem(RES_CHRATR_FONT));
@@ -2583,7 +2583,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf109266)
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
-    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetPointNode().GetIndex();
     SwTextNode* pTextNode = static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex]);
 
     CPPUNIT_ASSERT_EQUAL(OUString("Lorem ipsum..."), pTextNode->GetText());

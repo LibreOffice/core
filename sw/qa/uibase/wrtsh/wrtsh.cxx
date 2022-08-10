@@ -76,7 +76,7 @@ CPPUNIT_TEST_FIXTURE(Test, testGotoContentControl)
 
     // When going to that content control in placeholder mode:
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetPointNode().GetIndex();
     SwTextNode* pTextNode = pDoc->GetNodes()[nIndex]->GetTextNode();
     SwTextAttr* pAttr = pTextNode->GetTextAttrForCharAt(0, RES_TXTATR_CONTENTCONTROL);
     auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
@@ -115,7 +115,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTickCheckboxContentControl)
 
     // When clicking on that content control:
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetNode().GetTextNode();
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
     SwTextAttr* pAttr = pTextNode->GetTextAttrForCharAt(0, RES_TXTATR_CONTENTCONTROL);
     auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
     auto& rFormatContentControl
@@ -140,7 +140,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertContentControl)
     pWrtShell->InsertContentControl(SwContentControlType::RICH_TEXT);
 
     // Then make sure that the matching text attribute is added to the document model:
-    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetNode().GetTextNode();
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
     // Without the accompanying fix in place, this test would have failed, nothing happened on
     // InsertContentControl().
     CPPUNIT_ASSERT(pTextNode->GetTextAttrForCharAt(0, RES_TXTATR_CONTENTCONTROL));
@@ -156,7 +156,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertCheckboxContentControl)
     pWrtShell->InsertContentControl(SwContentControlType::CHECKBOX);
 
     // Then make sure that the matching text attribute is added to the document model:
-    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetNode().GetTextNode();
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
     SwTextAttr* pAttr = pTextNode->GetTextAttrForCharAt(0, RES_TXTATR_CONTENTCONTROL);
     auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
     auto& rFormatContentControl
@@ -202,7 +202,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSelectDropdownContentControl)
 
     // When clicking on that content control:
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetNode().GetTextNode();
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
     SwTextAttr* pAttr = pTextNode->GetTextAttrForCharAt(0, RES_TXTATR_CONTENTCONTROL);
     auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
     auto& rFormatContentControl
@@ -228,7 +228,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertDropdownContentControl)
     pWrtShell->InsertContentControl(SwContentControlType::DROP_DOWN_LIST);
 
     // Then make sure that the matching text attribute is added to the document model:
-    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetNode().GetTextNode();
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
     SwTextAttr* pAttr = pTextNode->GetTextAttrForCharAt(0, RES_TXTATR_CONTENTCONTROL);
     auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
     auto& rFormatContentControl
@@ -296,7 +296,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertPictureContentControl)
     pWrtShell->InsertContentControl(SwContentControlType::PICTURE);
 
     // Then make sure that the matching text attribute is added to the document model:
-    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetNode().GetTextNode();
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
     SwTextAttr* pAttr = pTextNode->GetTextAttrForCharAt(0, RES_TXTATR_CONTENTCONTROL);
     auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
     auto& rFormatContentControl
@@ -329,7 +329,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSelectDateContentControl)
 
     // When clicking on that content control:
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetNode().GetTextNode();
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
     SwTextAttr* pAttr = pTextNode->GetTextAttrForCharAt(0, RES_TXTATR_CONTENTCONTROL);
     auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
     auto& rFormatContentControl
@@ -357,7 +357,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertDateContentControl)
     pWrtShell->InsertContentControl(SwContentControlType::DATE);
 
     // Then make sure that the matching text attribute is added to the document model:
-    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetNode().GetTextNode();
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
     SwTextAttr* pAttr = pTextNode->GetTextAttrForCharAt(0, RES_TXTATR_CONTENTCONTROL);
     auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
     auto& rFormatContentControl
@@ -378,7 +378,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertPlainTextContentControl)
     pWrtShell->InsertContentControl(SwContentControlType::PLAIN_TEXT);
 
     // Then make sure that the matching text attribute is added to the document model:
-    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetNode().GetTextNode();
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
     SwTextAttr* pAttr = pTextNode->GetTextAttrForCharAt(0, RES_TXTATR_CONTENTCONTROL);
     auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
     auto& rFormatContentControl

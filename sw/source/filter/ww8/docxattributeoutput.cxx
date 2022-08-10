@@ -390,10 +390,10 @@ static void checkAndWriteFloatingTables(DocxAttributeOutput& rDocxAttributeOutpu
         const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
         const SwPosition* pPosition = rAnchor.GetContentAnchor();
 
-        if (!pPosition || ! rExport.m_pCurPam->GetNode().GetTextNode())
+        if (!pPosition || ! rExport.m_pCurPam->GetPointNode().GetTextNode())
             continue;
 
-        if (pPosition->nNode != rExport.m_pCurPam->GetNode().GetTextNode()->GetIndex())
+        if (pPosition->nNode != rExport.m_pCurPam->GetPointNode().GetTextNode()->GetIndex())
             continue;
 
         const SwNodeIndex* pStartNode = pFrameFormat->GetContent().GetContentIdx();
@@ -502,7 +502,7 @@ sal_Int32 DocxAttributeOutput::StartParagraph(ww8::WW8TableNodeInfo::Pointer_t p
     bool bEndParaSdt = false;
     if (m_aParagraphSdt.m_bStartedSdt)
     {
-        SwTextNode* pTextNode = m_rExport.m_pCurPam->GetNode().GetTextNode();
+        SwTextNode* pTextNode = m_rExport.m_pCurPam->GetPointNode().GetTextNode();
         if (pTextNode && pTextNode->GetpSwAttrSet())
         {
             const SfxItemSet* pSet = pTextNode->GetpSwAttrSet();
@@ -1501,7 +1501,7 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
     m_pSerializer->endElementNS( XML_w, XML_pPr );
 
     // RDF metadata for this text node.
-    SwTextNode* pTextNode = m_rExport.m_pCurPam->GetNode().GetTextNode();
+    SwTextNode* pTextNode = m_rExport.m_pCurPam->GetPointNode().GetTextNode();
     std::map<OUString, OUString> aStatements;
     if (pTextNode)
         aStatements = SwRDFHelper::getTextNodeStatements("urn:bails", *pTextNode);
@@ -7152,7 +7152,7 @@ void DocxAttributeOutput::SectionBreak( sal_uInt8 nC, bool bBreakAfter, const WW
                 // Detect when the current node is the last node in the
                 // document: the last section is written explicitly in
                 // DocxExport::WriteMainText(), don't duplicate that here.
-                SwNodeIndex aCurrentNode(m_rExport.m_pCurPam->GetNode());
+                SwNodeIndex aCurrentNode(m_rExport.m_pCurPam->GetPointNode());
                 SwNodeIndex aLastNode(m_rExport.m_rDoc.GetNodes().GetEndOfContent(), -1);
                 bool bEmit = aCurrentNode != aLastNode;
 

@@ -208,7 +208,7 @@ SwUndoRedlineDelete::SwUndoRedlineDelete(
     SetRedlineText(rRange.GetText());
     if( SwUndoId::DELETE == mnUserId &&
         m_nSttNode == m_nEndNode && m_nSttContent + 1 == m_nEndContent &&
-        nullptr != (pTNd = rRange.GetNode().GetTextNode()) )
+        nullptr != (pTNd = rRange.GetPointNode().GetTextNode()) )
     {
         sal_Unicode const cCh = pTNd->GetText()[m_nSttContent];
         if( CH_TXTATR_BREAKWORD != cCh && CH_TXTATR_INWORD != cCh )
@@ -525,7 +525,7 @@ void SwUndoCompDoc::UndoImpl(::sw::UndoRedoContext & rContext)
         if( pCSttNd && !pCEndNd)
         {
             // #112139# Do not step behind the end of content.
-            SwNode & rTmp = rPam.GetNode();
+            SwNode & rTmp = rPam.GetPointNode();
             SwNode * pEnd = rDoc.GetNodes().DocumentSectionEndNode(&rTmp);
 
             if (&rTmp != pEnd)

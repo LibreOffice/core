@@ -348,7 +348,7 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
                 const SwTextNode * pTmpNode = pNode;
 
                 if (!pTmpNode)
-                    pTmpNode = rPam.GetNode().GetTextNode();
+                    pTmpNode = rPam.GetPointNode().GetTextNode();
 
                 bool bRet = false;
 
@@ -368,7 +368,7 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
                 const SwTextNode * pTmpNode = pNode;
 
                 if (!pTmpNode)
-                    pTmpNode = rPam.GetNode().GetTextNode();
+                    pTmpNode = rPam.GetPointNode().GetTextNode();
 
                 OUString sRet;
                 if ( pTmpNode && pTmpNode->GetNum() )
@@ -385,7 +385,7 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
                 const SwTextNode * pTmpNode = pNode;
 
                 if (!pTmpNode)
-                    pTmpNode = rPam.GetNode().GetTextNode();
+                    pTmpNode = rPam.GetPointNode().GetTextNode();
 
                 sal_Int16 nRet = -1;
                 if ( pTmpNode )
@@ -448,7 +448,7 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
                 break;
             }
             // a multi selection is not considered
-            const SwTextNode* pTextNd = rPam.GetNode().GetTextNode();
+            const SwTextNode* pTextNd = rPam.GetPointNode().GetTextNode();
             if ( pTextNd && pTextNd->IsInList() )
             {
                 switch (rEntry.nWID)
@@ -534,9 +534,9 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
         case FN_UNO_DOCUMENT_INDEX_MARK:
         {
             std::vector<SwTextAttr *> marks;
-            if (rPam.GetNode().IsTextNode())
+            if (rPam.GetPointNode().IsTextNode())
             {
-                marks = rPam.GetNode().GetTextNode()->GetTextAttrsAt(
+                marks = rPam.GetPointNode().GetTextNode()->GetTextAttrsAt(
                     rPam.GetPoint()->GetContentIndex(), RES_TXTATR_TOXMARK);
             }
             if (!marks.empty())
@@ -599,7 +599,7 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
         case FN_UNO_TEXT_TABLE:
         case FN_UNO_CELL:
         {
-            SwStartNode* pSttNode = rPam.GetNode().StartOfSectionNode();
+            SwStartNode* pSttNode = rPam.GetPointNode().StartOfSectionNode();
             SwStartNodeType eType = pSttNode->GetStartNodeType();
             if(SwTableBoxStartNode == eType)
             {
@@ -627,14 +627,14 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
         break;
         case FN_UNO_TEXT_FRAME:
         {
-            SwStartNode* pSttNode = rPam.GetNode().StartOfSectionNode();
+            SwStartNode* pSttNode = rPam.GetPointNode().StartOfSectionNode();
             SwStartNodeType eType = pSttNode->GetStartNodeType();
 
             SwFrameFormat* pFormat;
             if(eType == SwFlyStartNode && nullptr != (pFormat = pSttNode->GetFlyFormat()))
             {
                 // Create a wrapper only for text frames, not for graphic or OLE nodes.
-                if (pAny && !rPam.GetNode().IsNoTextNode())
+                if (pAny && !rPam.GetPointNode().IsNoTextNode())
                 {
                     uno::Reference<XTextFrame> const xFrame(
                         SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat));
@@ -678,8 +678,8 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
         case FN_UNO_ENDNOTE:
         case FN_UNO_FOOTNOTE:
         {
-            SwTextAttr *const pTextAttr = rPam.GetNode().IsTextNode() ?
-                rPam.GetNode().GetTextNode()->GetTextAttrForCharAt(
+            SwTextAttr *const pTextAttr = rPam.GetPointNode().IsTextNode() ?
+                rPam.GetPointNode().GetTextNode()->GetTextAttrForCharAt(
                     rPam.GetPoint()->GetContentIndex(), RES_TXTATR_FTN) : nullptr;
             if(pTextAttr)
             {
@@ -704,9 +704,9 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
         case FN_UNO_REFERENCE_MARK:
         {
             std::vector<SwTextAttr *> marks;
-            if (rPam.GetNode().IsTextNode())
+            if (rPam.GetPointNode().IsTextNode())
             {
-                marks = rPam.GetNode().GetTextNode()->GetTextAttrsAt(
+                marks = rPam.GetPointNode().GetTextNode()->GetTextAttrsAt(
                             rPam.GetPoint()->GetContentIndex(), RES_TXTATR_REFMARK);
             }
             if (!marks.empty())
@@ -726,8 +726,8 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
         break;
         case FN_UNO_NESTED_TEXT_CONTENT:
         {
-            uno::Reference<XTextContent> const xRet(rPam.GetNode().IsTextNode()
-                ? GetNestedTextContent(*rPam.GetNode().GetTextNode(),
+            uno::Reference<XTextContent> const xRet(rPam.GetPointNode().IsTextNode()
+                ? GetNestedTextContent(*rPam.GetPointNode().GetTextNode(),
                     rPam.GetPoint()->GetContentIndex(), false)
                 : nullptr);
             if (xRet.is())
@@ -746,8 +746,8 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
         case FN_UNO_CHARFMT_SEQUENCE:
         {
 
-            SwTextNode *const pTextNode = rPam.GetNode().GetTextNode();
-            if (&rPam.GetNode() == &rPam.GetNode(false)
+            SwTextNode *const pTextNode = rPam.GetPointNode().GetTextNode();
+            if (&rPam.GetPointNode() == &rPam.GetMarkNode()
                 && pTextNode && pTextNode->GetpSwpHints())
             {
                 sal_Int32 nPaMStart = rPam.Start()->GetContentIndex();
@@ -809,7 +809,7 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
 
 sal_Int16 IsNodeNumStart(SwPaM const & rPam, PropertyState& eState)
 {
-    const SwTextNode* pTextNd = rPam.GetNode().GetTextNode();
+    const SwTextNode* pTextNd = rPam.GetPointNode().GetTextNode();
     // correction: check, if restart value is set at the text node and use
     // new method <SwTextNode::GetAttrListRestartValue()> to retrieve the value
     if ( pTextNd && pTextNd->GetNumRule() && pTextNd->IsListRestart() &&

@@ -49,7 +49,7 @@ bool SwCursorShell::GoNextCell( bool bAppendLine )
 
         // Check if we have to move the cursor to a covered cell before
         // proceeding:
-        const SwNode* pTableBoxStartNode = pCursor->GetNode().FindTableBoxStartNode();
+        const SwNode* pTableBoxStartNode = pCursor->GetPointNode().FindTableBoxStartNode();
         const SwTableBox* pTableBox = nullptr;
 
         if ( pCursor->GetCursorRowSpanOffset() )

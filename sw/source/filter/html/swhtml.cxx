@@ -1778,10 +1778,10 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
             if( m_nOpenParaToken != HtmlTokenId::NONE )
                 EndPara();
             OSL_ENSURE(!m_xTable, "table in table not allowed here");
-            if( !m_xTable && (IsNewDoc() || !m_pPam->GetNode().FindTableNode()) &&
+            if( !m_xTable && (IsNewDoc() || !m_pPam->GetPointNode().FindTableNode()) &&
                 (m_pPam->GetPoint()->GetNodeIndex() >
                             m_xDoc->GetNodes().GetEndOfExtras().GetIndex() ||
-                !m_pPam->GetNode().FindFootnoteStartNode() ) )
+                !m_pPam->GetPointNode().FindFootnoteStartNode() ) )
             {
                 if ( m_nParaCnt < 5 )
                     Show();     // show what we have up to here
@@ -2361,7 +2361,7 @@ bool SwHTMLParser::AppendTextNode( SwHTMLAppendMode eMode, bool bUpdateNum )
             SetNodeNum( nLvl );
         }
         else
-            m_pPam->GetNode().GetTextNode()->ResetAttr( RES_PARATR_NUMRULE );
+            m_pPam->GetPointNode().GetTextNode()->ResetAttr( RES_PARATR_NUMRULE );
     }
 
     // We must set the attribute of the paragraph before now (because of JavaScript)
@@ -4026,7 +4026,7 @@ void SwHTMLParser::EndPara( bool bReal )
     if (HtmlTokenId::LI_ON==m_nOpenParaToken && m_xTable)
     {
 #if OSL_DEBUG_LEVEL > 0
-        const SwNumRule *pNumRule = m_pPam->GetNode().GetTextNode()->GetNumRule();
+        const SwNumRule *pNumRule = m_pPam->GetPointNode().GetTextNode()->GetNumRule();
         OSL_ENSURE( pNumRule, "Where is the NumRule" );
 #endif
     }
@@ -5183,7 +5183,7 @@ void SwHTMLParser::InsertLineBreak()
         else
         {
             // <BR CLEAR=xxx> is mapped an SwFormatLineBreak.
-            SwTextNode* pTextNode = m_pPam->GetNode().GetTextNode();
+            SwTextNode* pTextNode = m_pPam->GetPointNode().GetTextNode();
             if (pTextNode)
             {
                 SwFormatLineBreak aLineBreak(eClear);

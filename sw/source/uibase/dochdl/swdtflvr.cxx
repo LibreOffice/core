@@ -1340,7 +1340,7 @@ SwPasteContext::~SwPasteContext()
 
                 // Restore point.
                 ++m_oPaM->GetPoint()->nNode;
-                SwNode& rNode = m_oPaM->GetNode();
+                SwNode& rNode = m_oPaM->GetPointNode();
                 if (!rNode.IsTextNode())
                     // Starting point is no longer text.
                     return;
@@ -1521,7 +1521,7 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
 
         // convert the worksheet to a temporary native table using HTML format, and copy that into the original native table
         if (!bSingleCellTable && rData.HasFormat( SotClipboardFormatId::HTML ) &&
-                        SwDoc::IsInTable(rSh.GetCursor()->GetNode()) != nullptr && rSh.DoesUndo())
+                        SwDoc::IsInTable(rSh.GetCursor()->GetPointNode()) != nullptr && rSh.DoesUndo())
         {
             SfxDispatcher* pDispatch = rSh.GetView().GetViewFrame()->GetDispatcher();
             sal_uInt32 nLevel = 0;
@@ -1534,13 +1534,13 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
                 pDispatch->Execute(FN_INSERT_NNBSP, SfxCallMode::SYNCHRON);
                 pDispatch->Execute(FN_TABLE_DELETE_TABLE, SfxCallMode::SYNCHRON);
                 nLevel++;
-            } while (SwDoc::IsInTable(rSh.GetCursor()->GetNode()) != nullptr);
+            } while (SwDoc::IsInTable(rSh.GetCursor()->GetPointNode()) != nullptr);
             if ( SwTransferable::PasteData( rData, rSh, EXCHG_OUT_ACTION_INSERT_STRING, nActionFlags, SotClipboardFormatId::HTML,
                                         nDestination, false, false, nullptr, 0, false, nAnchorType, bIgnoreComments, &aPasteContext, ePasteTable) )
             {
                 bool bFoundTemporaryTable = false;
                 pDispatch->Execute(FN_LINE_UP, SfxCallMode::SYNCHRON);
-                if (SwDoc::IsInTable(rSh.GetCursor()->GetNode()) != nullptr)
+                if (SwDoc::IsInTable(rSh.GetCursor()->GetPointNode()) != nullptr)
                 {
                     bFoundTemporaryTable = true;
                     pDispatch->Execute(FN_TABLE_SELECT_ALL, SfxCallMode::SYNCHRON);
@@ -1570,7 +1570,7 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
     // insert clipboard content as new table rows/columns before the actual row/column instead of overwriting it
     else if ( (rSh.GetTableInsertMode() != SwTable::SEARCH_NONE || ePasteTable == PasteTableType::PASTE_ROW || ePasteTable == PasteTableType::PASTE_COLUMN) &&
         rData.HasFormat( SotClipboardFormatId::HTML ) &&
-        SwDoc::IsInTable(rSh.GetCursor()->GetNode()) != nullptr )
+        SwDoc::IsInTable(rSh.GetCursor()->GetPointNode()) != nullptr )
     {
         OUString aExpand;
         sal_Int32 nIdx;
@@ -1603,7 +1603,7 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
             // are we at the beginning of the cell?
             bool bStartTableBoxNode =
                 // first paragraph of the cell?
-                rSh.GetCursor()->GetNode().GetIndex() == rSh.GetCursor()->GetNode().FindTableBoxStartNode()->GetIndex()+1 &&
+                rSh.GetCursor()->GetPointNode().GetIndex() == rSh.GetCursor()->GetPointNode().FindTableBoxStartNode()->GetIndex()+1 &&
                 // beginning of the paragraph?
                 !rSh.GetCursor()->GetPoint()->GetContentIndex();
             SfxDispatcher* pDispatch = rSh.GetView().GetViewFrame()->GetDispatcher();
@@ -3970,7 +3970,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
                 : pTableNd->GetTable().GetTabLines().GetPos( rBoxes.back()->GetUpper() ) -
                   pTableNd->GetTable().GetTabLines().GetPos( rBoxes.front()->GetUpper() ) + 1;
             bool bSelUpToDown = rBoxes.back() && rBoxes.back()->GetUpper() ==
-                           rSh.GetCursor()->GetNode().GetTableBox()->GetUpper();
+                           rSh.GetCursor()->GetPointNode().GetTableBox()->GetUpper();
 
             SwUndoId eUndoId = bMove ? SwUndoId::UI_DRAG_AND_MOVE : SwUndoId::UI_DRAG_AND_COPY;
 
@@ -3992,7 +3992,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
             rSh.EnterStdMode();
             rSh.SwCursorShell::SetCursor(rDragPt, false);
 
-            bool bPasteIntoTable = rSh.GetCursor()->GetNode().GetTableBox() != nullptr;
+            bool bPasteIntoTable = rSh.GetCursor()->GetPointNode().GetTableBox() != nullptr;
 
             // store cursor
             ::sw::mark::IMark* pMark = rSh.SetBookmark(
@@ -4022,7 +4022,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
             }
             else
             {
-                const SwTableBox* pBoxStt = rSh.GetCursor()->GetNode().GetTableBox();
+                const SwTableBox* pBoxStt = rSh.GetCursor()->GetPointNode().GetTableBox();
                 SwTableLine* pLine = pBoxStt ? const_cast<SwTableLine*>( pBoxStt->GetUpper()): nullptr;
 
                 for (sal_Int32 nDeleted = 0; bNeedTrack && nDeleted < nSelRows;)
@@ -4031,7 +4031,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
                     if ( !rSh.Up(false) )
                         break;
 
-                    const SwTableBox* pBox = rSh.GetCursor()->GetNode().GetTableBox();
+                    const SwTableBox* pBox = rSh.GetCursor()->GetPointNode().GetTableBox();
 
                     if ( !pBox )
                         break;
@@ -4066,7 +4066,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
 
                         for (sal_Int32 nDeleted = 0; nDeleted < nSelRows - int(!bNeedTrack);)
                         {
-                            const SwTableBox* pBox = rSh.GetCursor()->GetNode().GetTableBox();
+                            const SwTableBox* pBox = rSh.GetCursor()->GetPointNode().GetTableBox();
 
                             if ( !pBox )
                                 break;

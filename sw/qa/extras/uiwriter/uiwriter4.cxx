@@ -116,7 +116,7 @@ static OUString lcl_translitTest(SwDoc& rDoc, const SwPaM& rPaM, Transliteration
     utl::TransliterationWrapper aTrans(::comphelper::getProcessComponentContext(), nType);
     rDoc.getIDocumentContentOperations().TransliterateText(rPaM, aTrans);
     //SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    return rPaM.GetNode(false).GetTextNode()->GetText();
+    return rPaM.GetMarkNode().GetTextNode()->GetText();
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf146449)
@@ -1195,7 +1195,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRedlineCopyPaste)
     SwPaM aPaM(aIdx);
 
     pDoc->getIDocumentContentOperations().InsertString(aPaM, "abzdezgh");
-    SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
+    SwTextNode* pTextNode = aPaM.GetPointNode().GetTextNode();
 
     // Turn on track changes, make changes, turn off track changes
     uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);

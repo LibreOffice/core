@@ -1665,7 +1665,7 @@ bool SwWW8ImplReader::SetTextFormatCollAndListLevel(const SwPaM& rRg,
     if( rStyleInfo.m_pFormat && rStyleInfo.m_bColl )
     {
         bRes = m_rDoc.SetTextFormatColl(rRg, static_cast<SwTextFormatColl*>(rStyleInfo.m_pFormat));
-        SwTextNode* pTextNode = m_pPaM->GetNode().GetTextNode();
+        SwTextNode* pTextNode = m_pPaM->GetPointNode().GetTextNode();
         OSL_ENSURE( pTextNode, "No Text-Node at PaM-Position" );
         if ( !pTextNode )
         {
@@ -1809,7 +1809,7 @@ void SwWW8ImplReader::RegisterNumFormatOnTextNode(sal_uInt16 nCurrentLFO,
     if (!m_xLstManager) // are all list declarations read?
         return;
 
-    SwTextNode* pTextNd = m_pPaM->GetNode().GetTextNode();
+    SwTextNode* pTextNd = m_pPaM->GetPointNode().GetTextNode();
     OSL_ENSURE(pTextNd, "No Text-Node at PaM-Position");
     if (!pTextNd)
         return;
@@ -2010,7 +2010,7 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
                 // So instead use USHRT_MAX-1 for indicating an explicit "cancel numbering".
                 RegisterNumFormat(USHRT_MAX-1, MAXLEVEL);
             }
-            else if (SwTextNode* pTextNode = m_pPaM->GetNode().GetTextNode())
+            else if (SwTextNode* pTextNode = m_pPaM->GetPointNode().GetTextNode())
             {
                 // here a paragraph is being directly formatted
 

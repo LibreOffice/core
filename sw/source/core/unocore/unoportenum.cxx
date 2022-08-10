@@ -1394,7 +1394,7 @@ static void lcl_CreatePortions(
             pUnoCursor->DeleteMark();
         }
 
-        SwTextNode * const pTextNode = pUnoCursor->GetNode().GetTextNode();
+        SwTextNode * const pTextNode = pUnoCursor->GetPointNode().GetTextNode();
         if (!pTextNode)
         {
             OSL_FAIL("lcl_CreatePortions: no TextNode - what now ?");

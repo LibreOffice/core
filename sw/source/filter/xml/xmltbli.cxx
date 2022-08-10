@@ -2681,7 +2681,7 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
     if( m_bFirstSection )
     {
         // The Cursor already is in the first section
-        pStNd = pTextCursor->GetPaM()->GetNode().FindTableBoxStartNode();
+        pStNd = pTextCursor->GetPaM()->GetPointNode().FindTableBoxStartNode();
         m_bFirstSection = false;
         GetImport().GetTextImport()->SetStyleAndAttrs( GetImport(),
             GetImport().GetTextImport()->GetCursor(), "Standard", true );

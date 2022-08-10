@@ -739,7 +739,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSelectionInTableEnum)
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->EndPara(/*bSelect=*/true);
     CPPUNIT_ASSERT_EQUAL(OUString("A1"),
-                         pWrtShell->GetCursor()->GetNode().GetTextNode()->GetText());
+                         pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());
 
     // Access the selection.
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);

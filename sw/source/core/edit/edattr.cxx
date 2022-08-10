@@ -395,7 +395,7 @@ bool SwEditShell::GetCurFootnote( SwFormatFootnote* pFillFootnote )
 {
     // The cursor must be positioned on the current footnotes anchor:
     SwPaM* pCursor = GetCursor();
-    SwTextNode* pTextNd = pCursor->GetNode().GetTextNode();
+    SwTextNode* pTextNd = pCursor->GetPointNode().GetTextNode();
     if( !pTextNd )
         return false;
 

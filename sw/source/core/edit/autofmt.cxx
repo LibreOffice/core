@@ -1247,7 +1247,7 @@ void SwAutoFormat::DelEmptyLine( bool bTstNextPara )
     m_aDelPam.SetMark();
 
     m_aDelPam.GetMark()->nNode = m_pCurTextFrame->GetTextNodeFirst()->GetIndex() - 1;
-    SwTextNode* pTNd = m_aDelPam.GetNode( false ).GetTextNode();
+    SwTextNode* pTNd = m_aDelPam.GetMarkNode().GetTextNode();
     if( pTNd )
         // first use the previous text node
         m_aDelPam.GetMark()->nContent.Assign(pTNd, pTNd->GetText().getLength());
@@ -1258,7 +1258,7 @@ void SwAutoFormat::DelEmptyLine( bool bTstNextPara )
                     ? m_pCurTextFrame->GetMergedPara()->pLastNode
                     : m_pCurTextNd
                 )->GetIndex() + 1;
-        pTNd = m_aDelPam.GetNode( false ).GetTextNode();
+        pTNd = m_aDelPam.GetMarkNode().GetTextNode();
         if( pTNd )
         {
             m_aDelPam.GetMark()->nContent.Assign( pTNd, 0 );
@@ -1270,10 +1270,10 @@ void SwAutoFormat::DelEmptyLine( bool bTstNextPara )
     {   // join with previous or next paragraph
         DeleteSel(m_aDelPam);
     }
-    assert(m_aDelPam.GetNode().IsTextNode());
+    assert(m_aDelPam.GetPointNode().IsTextNode());
     assert(!m_aDelPam.HasMark());
     m_aDelPam.SetMark(); // mark remains at join position
-    m_pCurTextFrame = GetFrame(*m_aDelPam.GetNode().GetTextNode());
+    m_pCurTextFrame = GetFrame(*m_aDelPam.GetPointNode().GetTextNode());
     // replace until the end of the merged paragraph
     *m_aDelPam.GetPoint() = m_pCurTextFrame->MapViewToModelPos(
         TextFrameIndex(m_pCurTextFrame->GetText().getLength()));
@@ -1333,7 +1333,7 @@ void SwAutoFormat::JoinPrevPara()
     m_aDelPam.SetMark();
 
     --m_aDelPam.GetPoint()->nNode;
-    SwTextNode* pTNd = m_aDelPam.GetNode().GetTextNode();
+    SwTextNode* pTNd = m_aDelPam.GetPointNode().GetTextNode();
     if( pTNd )
     {
         // use the previous text node first
@@ -1695,7 +1695,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                 SwTextFrame const*const pNextFrame = GetNextNode(false);
                 assert(pNextFrame);
                 m_aDelPam.GetMark()->nNode = *pNextFrame->GetTextNodeForParaProps();
-                m_aDelPam.GetNode(false).GetTextNode()->SetAttrListLevel( nLvl );
+                m_aDelPam.GetMarkNode().GetTextNode()->SetAttrListLevel( nLvl );
             }
 
             const_cast<SwTextNode*>(m_pCurTextFrame->GetTextNodeForParaProps())->SetAttrListLevel(nLvl);

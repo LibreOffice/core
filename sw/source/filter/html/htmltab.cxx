@@ -5149,7 +5149,7 @@ std::shared_ptr<HTMLTable> SwHTMLParser::BuildTable(SvxAdjust eParentAdjust,
                     SwStartNode *pTableStNd = pTCntxt->GetTableNode();
 
                     OSL_ENSURE( pTableStNd, "Where is the table node" );
-                    OSL_ENSURE( pTableStNd==m_pPam->GetNode().FindTableNode(),
+                    OSL_ENSURE( pTableStNd == m_pPam->GetPointNode().FindTableNode(),
                             "Are we in the wrong table?" );
 
                     SwNode* pNd;

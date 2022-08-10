@@ -2497,7 +2497,7 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo, const WW8_TablePos *p
         {
             // ofz#34749 we shouldn't anchor anything into an 'extra' paragraph scheduled for
             // removal at end of import, but check if that scenario is happening
-            m_aExtraneousParas.remove_if_present(m_pPaM->GetNode().GetTextNode());
+            m_aExtraneousParas.remove_if_present(m_pPaM->GetPointNode().GetTextNode());
             m_xSFlyPara->SetFlyFormat(m_rDoc.MakeFlySection(WW8SwFlyPara::eAnchor,
                                                             m_pPaM->GetPoint(), &aFlySet));
             OSL_ENSURE(m_xSFlyPara->GetFlyFormat()->GetAnchor().GetAnchorId() ==
@@ -4229,7 +4229,7 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
     // for list levels of mode LABEL_ALIGNMENT.(see ww8par3.cxx
     // W8ImplReader::RegisterNumFormatOnTextNode).
     // Need to apply the list format to the paragraph here.
-    SwTextNode* pTextNode = m_pPaM->GetNode().GetTextNode();
+    SwTextNode* pTextNode = m_pPaM->GetPointNode().GetTextNode();
     if( pTextNode && pTextNode->AreListLevelIndentsApplicable() )
     {
         SwNumRule * pNumRule = pTextNode->GetNumRule();
@@ -4319,7 +4319,7 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
 
             if (!m_pCurrentColl)
             {
-                if (const SwTextNode* pNode = m_pPaM->GetNode().GetTextNode())
+                if (const SwTextNode* pNode = m_pPaM->GetPointNode().GetTextNode())
                 {
                     if ( const SwNumFormat *pNumFormat = GetNumFormatFromTextNode(*pNode) )
                     {
@@ -4543,7 +4543,7 @@ void SwWW8ImplReader::Read_LineBreakClear(sal_uInt16 /*nId*/, const sal_uInt8* p
 {
     if (nLen == -1 && m_oLineBreakClear.has_value())
     {
-        SwTextNode* pText = m_pPaM->GetNode().GetTextNode();
+        SwTextNode* pText = m_pPaM->GetPointNode().GetTextNode();
         sal_Int32 nPos = m_pPaM->GetPoint()->GetContentIndex();
         if (!pText || !nPos)
         {

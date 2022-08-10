@@ -611,7 +611,7 @@ void SwHTMLParser::InsertComment( const OUString& rComment, const char *pTag )
     // will insert before the space. Then there are less problems
     // during formatting. (bug #40483#)
     const sal_Int32 nPos = m_pPam->GetPoint()->GetContentIndex();
-    SwTextNode *pTextNd = m_pPam->GetNode().GetTextNode();
+    SwTextNode *pTextNd = m_pPam->GetPointNode().GetTextNode();
     bool bMoveFwd = false;
     if (nPos>0 && pTextNd && (' ' == pTextNd->GetText()[nPos-1]))
     {

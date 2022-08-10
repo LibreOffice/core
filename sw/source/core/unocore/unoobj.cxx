@@ -472,7 +472,7 @@ SwUnoCursorHelper::SetCursorPropertyValue(
         case FN_UNO_PARA_NUM_AUTO_FORMAT:
         {
             // multi selection is not considered
-            SwTextNode *const pTextNd = rPam.GetNode().GetTextNode();
+            SwTextNode *const pTextNd = rPam.GetPointNode().GetTextNode();
             if (!pTextNd)
             {
                 throw lang::IllegalArgumentException();
@@ -990,7 +990,7 @@ SwXTextCursor::gotoStart(sal_Bool Expand)
     {
         rUnoCursor.Move( fnMoveBackward, GoInDoc );
         //check, that the cursor is not in a table
-        SwTableNode * pTableNode = rUnoCursor.GetNode().FindTableNode();
+        SwTableNode * pTableNode = rUnoCursor.GetPointNode().FindTableNode();
         while (pTableNode)
         {
             rUnoCursor.GetPoint()->nNode = *pTableNode->EndOfSectionNode();
@@ -998,7 +998,7 @@ SwXTextCursor::gotoStart(sal_Bool Expand)
             pTableNode = pCNode ? pCNode->FindTableNode() : nullptr;
         }
         SwStartNode const*const pTmp =
-            rUnoCursor.GetNode().StartOfSectionNode();
+            rUnoCursor.GetPointNode().StartOfSectionNode();
         if (pTmp->IsSectionNode())
         {
             SwSectionNode const*const pSectionStartNode =
@@ -1109,7 +1109,7 @@ SwXTextCursor::gotoRange(
             ;
         }
 
-        const SwStartNode* pOwnStartNode = rOwnCursor.GetNode().FindSttNodeByType(eSearchNodeType);
+        const SwStartNode* pOwnStartNode = rOwnCursor.GetPointNode().FindSttNodeByType(eSearchNodeType);
         while ( pOwnStartNode != nullptr
                 && pOwnStartNode->IsSectionNode())
         {
@@ -1117,7 +1117,7 @@ SwXTextCursor::gotoRange(
         }
 
         const SwStartNode* pTmp =
-            pPam->GetNode().FindSttNodeByType(eSearchNodeType);
+            pPam->GetPointNode().FindSttNodeByType(eSearchNodeType);
         while ( pTmp != nullptr
                 && pTmp->IsSectionNode() )
         {
@@ -2112,7 +2112,7 @@ SwXTextCursor::setPropertyValue(
     }
     else if (rPropertyName == UNO_NAME_RESET_PARAGRAPH_LIST_ATTRIBUTES)
     {
-        SwTextNode* pTextNode= GetPaM()->GetNode().GetTextNode();
+        SwTextNode* pTextNode= GetPaM()->GetPointNode().GetTextNode();
 
         if(pTextNode)
         {
@@ -2460,7 +2460,7 @@ void SAL_CALL SwXTextCursor::invalidateMarkings(::sal_Int32 nType)
 
     SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
-    SwNode& node = rUnoCursor.GetNode();
+    SwNode& node = rUnoCursor.GetPointNode();
 
     SwTextNode* txtNode = node.GetTextNode();
 

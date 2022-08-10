@@ -1989,7 +1989,7 @@ OUString SwRangeRedline::GetDescr(bool bSimplified)
     }
 
     OUString sDescr = DenoteSpecialCharacters(pPaM->GetText().replace('\n', ' '), /*bQuoted=*/!bSimplified);
-    if (const SwTextNode *pTextNode = pPaM->GetNode().GetTextNode())
+    if (const SwTextNode *pTextNode = pPaM->GetPointNode().GetTextNode())
     {
         if (const SwTextAttr* pTextAttr = pTextNode->GetFieldTextAttrAt(pPaM->GetPoint()->GetContentIndex() - 1, true ))
         {
