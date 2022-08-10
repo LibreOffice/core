@@ -212,7 +212,7 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
 
         if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ))
         {
-            pPam->GetPoint()->nContent.Assign( pPam->GetContentNode(), 0 );
+            pPam->GetPoint()->nContent.Assign( pPam->GetPointContentNode(), 0 );
             pPam->SetMark();
             pPam->Move( fnMoveBackward );
             pPam->Exchange();
@@ -220,7 +220,7 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
         }
         pPam->DeleteMark();
         pTmpDoc->getIDocumentContentOperations().DelFullPara( *pPam );
-        pPam->GetPoint()->nContent.Assign( pPam->GetContentNode(), 0 );
+        pPam->GetPoint()->nContent.Assign( pPam->GetPointContentNode(), 0 );
     }
     else
     {
@@ -382,7 +382,7 @@ void SwUndoInsert::RepeatImpl(::sw::RepeatContext & rContext)
         SwPaM aPaM( *pCNd, m_nContent );
         aPaM.SetMark();
         aPaM.Move(fnMoveBackward);
-        pCNd = aPaM.GetContentNode();
+        pCNd = aPaM.GetPointContentNode();
     }
 
 // What happens with the possible selected range ???
@@ -663,7 +663,7 @@ void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
         rPam.GetPoint()->Assign(*pNd, m_nSttCnt );
         rPam.SetMark();
         rPam.GetPoint()->nNode = m_nSttNd - m_nOffset;
-        rPam.GetPoint()->nContent.Assign(rPam.GetContentNode(), m_nSttNd == m_nEndNd ? m_nEndCnt : pNd->Len());
+        rPam.GetPoint()->nContent.Assign(rPam.GetPointContentNode(), m_nSttNd == m_nEndNd ? m_nEndCnt : pNd->Len());
 
         // replace only in start node, without regex
         bool const ret = pDoc->getIDocumentContentOperations().ReplaceRange(rPam, m_sOld, false);

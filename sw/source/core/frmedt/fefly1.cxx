@@ -972,7 +972,7 @@ void SwFEShell::InsertDrawObj( SdrObject& rDrawObj,
         SwCursorMoveState aState( CursorMoveState::SetOnlyText );
         Point aTmpPt( rInsertPosition );
         GetLayout()->GetModelPositionForViewPoint( aPam.GetPoint(), aTmpPt, &aState );
-        const SwFrame* pFrame = aPam.GetContentNode()->getLayoutFrame(GetLayout(), nullptr, nullptr);
+        const SwFrame* pFrame = aPam.GetPointContentNode()->getLayoutFrame(GetLayout(), nullptr, nullptr);
         const Point aRelPos( rInsertPosition.X() - pFrame->getFrameArea().Left(),
                              rInsertPosition.Y() - pFrame->getFrameArea().Top() );
         rDrawObj.SetRelativePos( aRelPos );

@@ -1856,7 +1856,7 @@ void SaveBookmark::SetInDoc(
         if(pIdx && !m_nNode2)
             aPam.GetMark()->nContent += m_nContent2;
         else
-            aPam.GetMark()->nContent.Assign(aPam.GetContentNode(false), m_nContent2);
+            aPam.GetMark()->nContent.Assign(aPam.GetMarkContentNode(), m_nContent2);
     }
 
     aPam.GetPoint()->nNode += m_nNode1;
@@ -1864,7 +1864,7 @@ void SaveBookmark::SetInDoc(
     if(pIdx && !m_nNode1)
         aPam.GetPoint()->nContent += m_nContent1;
     else
-        aPam.GetPoint()->nContent.Assign(aPam.GetContentNode(), m_nContent1);
+        aPam.GetPoint()->nContent.Assign(aPam.GetPointContentNode(), m_nContent1);
 
     if(aPam.HasMark()
         && !CheckNodesRange(aPam.GetPoint()->GetNode(), aPam.GetMark()->GetNode(), true))

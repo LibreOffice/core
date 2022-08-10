@@ -880,7 +880,7 @@ void SwEditShell::HandleCorrectionError(const OUString& aText, SwPosition aPos, 
     SwRect aStartRect;
     SwCursorMoveState aState;
     aState.m_bRealWidth = true;
-    SwContentNode* pContentNode = pCursor->GetContentNode();
+    SwContentNode* pContentNode = pCursor->GetPointContentNode();
     std::pair<Point, bool> tmp;
     if (pPt)
     {

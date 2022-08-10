@@ -1115,8 +1115,8 @@ std::optional<OUString> ReplaceBackReferences(const i18nutil::SearchOptions2& rS
     if( pPam && pPam->HasMark() &&
         SearchAlgorithms2::REGEXP == rSearchOpt.AlgorithmType2 )
     {
-        SwContentNode const*const pTextNode = pPam->GetContentNode();
-        SwContentNode const*const pMarkTextNode = pPam->GetContentNode(false);
+        SwContentNode const*const pTextNode = pPam->GetPointContentNode();
+        SwContentNode const*const pMarkTextNode = pPam->GetMarkContentNode();
         if (!pTextNode || !pTextNode->IsTextNode()
             || !pMarkTextNode || !pMarkTextNode->IsTextNode())
         {

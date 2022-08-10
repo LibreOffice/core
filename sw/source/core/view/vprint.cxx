@@ -368,7 +368,9 @@ void SwViewShell::FillPrtDoc( SwDoc& rPrtDoc, const SfxPrinter* pPrt)
         SwNodeIndex aNodeIdx( *rPrtDoc.GetNodes().GetEndOfContent().StartOfSectionNode() );
         SwTextNode* pTextNd = rPrtDoc.GetNodes().GoNext( &aNodeIdx )->GetTextNode();
         SwContentNode *pLastNd =
-            pActCursor->GetContentNode( (*pActCursor->GetMark()) <= (*pActCursor->GetPoint()) );
+            (*pActCursor->GetMark()) <= (*pActCursor->GetPoint())
+            ? pActCursor->GetPointContentNode()
+            : pActCursor->GetMarkContentNode();
         // copy the paragraph attributes of the first paragraph
         if( pLastNd && pLastNd->IsTextNode() )
             static_cast<SwTextNode*>(pLastNd)->CopyCollFormat( *pTextNd );
@@ -396,7 +398,9 @@ void SwViewShell::FillPrtDoc( SwDoc& rPrtDoc, const SfxPrinter* pPrt)
                 if( pTextNd )
                 {
                     SwContentNode *pFirstNd =
-                        pFirstCursor->GetContentNode( (*pFirstCursor->GetMark()) > (*pFirstCursor->GetPoint()) );
+                        (*pFirstCursor->GetMark()) > (*pFirstCursor->GetPoint())
+                        ? pFirstCursor->GetPointContentNode()
+                        : pFirstCursor->GetMarkContentNode();
                     // copy paragraph attributes of the first paragraph
                     if( pFirstNd && pFirstNd->IsTextNode() )
                         static_cast<SwTextNode*>(pFirstNd)->CopyCollFormat( *pTextNd );

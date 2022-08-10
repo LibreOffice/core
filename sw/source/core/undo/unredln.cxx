@@ -368,7 +368,7 @@ void SwUndoRedlineSort::UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
     pPam->SetMark();
 
     pPam->GetPoint()->nNode += nOffsetTemp;
-    SwContentNode* pCNd = pPam->GetContentNode();
+    SwContentNode* pCNd = pPam->GetPointContentNode();
     pPam->GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
 
     SetValues( *pPam );
@@ -389,7 +389,7 @@ void SwUndoRedlineSort::RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
 
     pPam->DeleteMark();
     pPam->GetPoint()->Assign( aPrevIdx.GetNode(), SwNodeOffset(+1) );
-    SwContentNode* pCNd = pPam->GetContentNode();
+    SwContentNode* pCNd = pPam->GetPointContentNode();
     sal_Int32 nLen = pCNd->Len();
     if( nLen > nCntStt )
         nLen = nCntStt;
@@ -397,7 +397,7 @@ void SwUndoRedlineSort::RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
     pPam->SetMark();
 
     pPam->GetPoint()->nNode += nOffsetTemp;
-    pCNd = pPam->GetContentNode();
+    pCNd = pPam->GetPointContentNode();
     pPam->GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
 
     SetValues( rPam );
@@ -504,8 +504,8 @@ void SwUndoCompDoc::UndoImpl(::sw::UndoRedoContext & rContext)
         rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
 
         // per definition Point is end (in SwUndRng!)
-        SwContentNode* pCSttNd = rPam.GetContentNode(false);
-        SwContentNode* pCEndNd = rPam.GetContentNode();
+        SwContentNode* pCSttNd = rPam.GetMarkContentNode();
+        SwContentNode* pCEndNd = rPam.GetPointContentNode();
 
         // if start- and end-content is zero, then the doc-compare moves
         // complete nodes into the current doc. And then the selection

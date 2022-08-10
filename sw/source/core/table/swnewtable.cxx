@@ -887,7 +887,7 @@ bool SwTable::PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
                     SwNodeIndex& rInsPosNd = aInsPos.nNode;
                     SwPaM aPam( aInsPos );
                     aPam.GetPoint()->nNode.Assign( *pBox->GetSttNd()->EndOfSectionNode(), -1 );
-                    SwContentNode* pCNd = aPam.GetContentNode();
+                    SwContentNode* pCNd = aPam.GetPointContentNode();
                     aPam.GetPoint()->nContent.Assign( pCNd, pCNd ? pCNd->Len() : 0 );
                     SwNodeIndex aSttNdIdx( *pBox->GetSttNd(), 1 );
                     bool const bUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();

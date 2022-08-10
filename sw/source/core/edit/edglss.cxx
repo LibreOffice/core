@@ -111,7 +111,7 @@ sal_uInt16 SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
 
         // then until the end of the Node array
         pCursor->GetPoint()->nNode = pMyDoc->GetNodes().GetEndOfContent().GetIndex()-1;
-        pContentNd = pCursor->GetContentNode();
+        pContentNd = pCursor->GetPointContentNode();
         if( pContentNd )
             pCursor->GetPoint()->nContent.Assign( pContentNd, pContentNd->Len() );
 
@@ -134,7 +134,7 @@ sal_uInt16 SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
 
             // then until the end of the nodes array
             aCpyPam.GetPoint()->nNode = pMyDoc->GetNodes().GetEndOfContent().GetIndex()-1;
-            pContentNd = aCpyPam.GetContentNode();
+            pContentNd = aCpyPam.GetPointContentNode();
             aCpyPam.GetPoint()->nContent.Assign(
                    pContentNd, pContentNd ? pContentNd->Len() : 0);
 
@@ -205,7 +205,7 @@ bool SwEditShell::CopySelToDoc( SwDoc& rInsDoc )
             {
                 if( !rPaM.HasMark() )
                 {
-                    SwContentNode *const pNd = rPaM.GetContentNode();
+                    SwContentNode *const pNd = rPaM.GetPointContentNode();
                     if (nullptr != pNd &&
                         ( bColSel || !pNd->GetTextNode() ) )
                     {

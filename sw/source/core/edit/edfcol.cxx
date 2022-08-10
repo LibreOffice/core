@@ -2273,7 +2273,7 @@ SwTextFormatColl* SwEditShell::MakeTextFormatColl(const OUString& rFormatCollNam
 void SwEditShell::FillByEx(SwTextFormatColl* pColl)
 {
     SwPaM * pCursor = GetCursor();
-    SwContentNode * pCnt = pCursor->GetContentNode();
+    SwContentNode * pCnt = pCursor->GetPointContentNode();
     if (pCnt->IsTextNode()) // uhm... what nonsense would happen if not?
     {   // only need properties-node because BREAK/PAGEDESC filtered anyway!
         pCnt = sw::GetParaPropsNode(*GetLayout(), pCursor->GetPoint()->GetNode());

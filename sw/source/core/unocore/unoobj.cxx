@@ -1236,8 +1236,8 @@ SwXTextCursor::gotoNextWord(sal_Bool Expand)
 
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
     // end of paragraph
-    if (rUnoCursor.GetContentNode() &&
-            (pPoint->nContent == rUnoCursor.GetContentNode()->Len()))
+    if (rUnoCursor.GetPointContentNode() &&
+            (pPoint->nContent == rUnoCursor.GetPointContentNode()->Len()))
     {
         rUnoCursor.Right(1);
     }
@@ -1406,8 +1406,8 @@ SwXTextCursor::isEndOfSentence()
     SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
     // end of paragraph?
-    bool bRet = rUnoCursor.GetContentNode() &&
-        (rUnoCursor.GetPoint()->nContent == rUnoCursor.GetContentNode()->Len());
+    bool bRet = rUnoCursor.GetPointContentNode() &&
+        (rUnoCursor.GetPoint()->nContent == rUnoCursor.GetPointContentNode()->Len());
     // with mark->no sentence end
     // (check if cursor is no selection, i.e. it does not have
     // a mark or else point and mark are identical)
@@ -2851,7 +2851,7 @@ SwXTextCursor::sort(const uno::Sequence< beans::PropertyValue >& rDescriptor)
     // update selection
     rUnoCursor.DeleteMark();
     rUnoCursor.GetPoint()->nNode.Assign( aPrevIdx.GetNode(), +1 );
-    SwContentNode *const pCNd = rUnoCursor.GetContentNode();
+    SwContentNode *const pCNd = rUnoCursor.GetPointContentNode();
     sal_Int32 nLen = pCNd->Len();
     if (nLen > nCntStt)
     {
@@ -2861,7 +2861,7 @@ SwXTextCursor::sort(const uno::Sequence< beans::PropertyValue >& rDescriptor)
     rUnoCursor.SetMark();
 
     rUnoCursor.GetPoint()->nNode += nOffset;
-    SwContentNode *const pCNd2 = rUnoCursor.GetContentNode();
+    SwContentNode *const pCNd2 = rUnoCursor.GetPointContentNode();
     rUnoCursor.GetPoint()->nContent.Assign( pCNd2, pCNd2->Len() );
 
 }

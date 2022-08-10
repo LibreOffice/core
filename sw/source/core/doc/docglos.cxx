@@ -165,7 +165,7 @@ bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const OUString& rEntry,
 
             // till the nodes array's end
             aCpyPam.GetPoint()->nNode = pGDoc->GetNodes().GetEndOfContent().GetIndex()-SwNodeOffset(1);
-            pContentNd = aCpyPam.GetContentNode();
+            pContentNd = aCpyPam.GetPointContentNode();
             aCpyPam.GetPoint()->nContent.Assign(
                     pContentNd, pContentNd ? pContentNd->Len() : 0 );
 

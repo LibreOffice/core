@@ -3235,7 +3235,7 @@ void SwXTextDocument::getTrackedChanges(tools::JsonWriter& rJson)
             rRedlineTable[i]->GetRedlineData().GetTimeStamp().GetUNODateTime());
         rJson.put("dateTime", sDateTime);
 
-        SwContentNode* pContentNd = rRedlineTable[i]->GetContentNode();
+        SwContentNode* pContentNd = rRedlineTable[i]->GetPointContentNode();
         SwView* pView = dynamic_cast<SwView*>(SfxViewShell::Current());
         if (pView && pContentNd)
         {

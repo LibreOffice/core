@@ -51,7 +51,7 @@ SwCharFormat* SwEditShell::GetCurCharFormat() const
 void SwEditShell::FillByEx(SwCharFormat* pCharFormat)
 {
     SwPaM* pPam = GetCursor();
-    const SwContentNode* pCNd = pPam->GetContentNode();
+    const SwContentNode* pCNd = pPam->GetPointContentNode();
     if( pCNd->IsTextNode() )
     {
         SwTextNode const*const pTextNode(pCNd->GetTextNode());

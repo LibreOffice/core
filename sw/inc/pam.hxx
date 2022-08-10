@@ -280,10 +280,8 @@ public:
     SwNode& GetMarkNode() const { return m_pMark->nNode.GetNode(); }
 
     /// @return current ContentNode at Point/Mark
-    SwContentNode* GetContentNode( bool bPoint = true ) const
-    {
-        return (bPoint ? m_pPoint->nNode : m_pMark->nNode).GetNode().GetContentNode();
-    }
+    SwContentNode* GetPointContentNode() const { return m_pPoint->nNode.GetNode().GetContentNode(); }
+    SwContentNode* GetMarkContentNode() const { return m_pMark->nNode.GetNode().GetContentNode(); }
 
     /**
        Normalizes PaM, i.e. sort point and mark.

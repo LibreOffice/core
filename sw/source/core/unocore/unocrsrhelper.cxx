@@ -964,12 +964,12 @@ void  getNumberingProperty(SwPaM& rPam, PropertyState& eState, Any * pAny )
 
 void GetCurPageStyle(SwPaM const & rPaM, OUString &rString)
 {
-    if (!rPaM.GetContentNode())
+    if (!rPaM.GetPointContentNode())
         return; // TODO: is there an easy way to get it for tables/sections?
     SwRootFrame* pLayout = rPaM.GetDoc().getIDocumentLayoutAccess().GetCurrentLayout();
     // Consider the position inside the content node, since the node may span over multiple pages
     // with different page styles.
-    SwContentFrame* pFrame = rPaM.GetContentNode()->getLayoutFrame(pLayout, rPaM.GetPoint());
+    SwContentFrame* pFrame = rPaM.GetPointContentNode()->getLayoutFrame(pLayout, rPaM.GetPoint());
     if(pFrame)
     {
         const SwPageFrame* pPage = pFrame->FindPageFrame();
@@ -1452,7 +1452,7 @@ void makeTableRowRedline( SwTableLine& rTableLine,
             pDoc->getIDocumentContentOperations().InsertString( aPaM,
                     OUStringChar(CH_TXT_TRACKED_DUMMY_CHAR) );
             aPaM.SetMark();
-            aPaM.GetMark()->nContent.Assign(aPaM.GetContentNode(), 0);
+            aPaM.GetMark()->nContent.Assign(aPaM.GetPointContentNode(), 0);
             makeRedline(aPaM, RedlineType::TableRowInsert == eType
                     ? u"Insert"
                     : u"Delete", rRedlineProperties);
