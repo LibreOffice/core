@@ -515,7 +515,7 @@ namespace SwLangHelper
         // string for guessing language
         OUString aText;
         SwPaM *pCursor = rSh.GetCursor();
-        SwTextNode *pNode = pCursor->GetNode().GetTextNode();
+        SwTextNode *pNode = pCursor->GetPointNode().GetTextNode();
         if (pNode)
         {
             aText = pNode->GetText();

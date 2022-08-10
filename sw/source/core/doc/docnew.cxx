@@ -1154,11 +1154,11 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
     SwPaM aInsertPam( GetNodes().GetEndOfContent() );
 
 #ifdef DBG_UTIL
-    SAL_INFO( "sw.docappend", "Pam-Nd: " << aCpyPam.GetNode().GetIndex() - aCpyPam.GetNode( false ).GetIndex() + 1
-                              << " (0x" << std::hex << static_cast<int>(aCpyPam.GetNode( false ).GetNodeType()) << std::dec
-                              << " " << aCpyPam.GetNode( false ).GetIndex()
-                              << " - 0x" << std::hex << static_cast<int>(aCpyPam.GetNode().GetNodeType()) << std::dec
-                              << " " << aCpyPam.GetNode().GetIndex() << ")" );
+    SAL_INFO( "sw.docappend", "Pam-Nd: " << aCpyPam.GetPointNode().GetIndex() - aCpyPam.GetMarkNode().GetIndex() + 1
+                              << " (0x" << std::hex << static_cast<int>(aCpyPam.GetMarkNode().GetNodeType()) << std::dec
+                              << " " << aCpyPam.GetMarkNode().GetIndex()
+                              << " - 0x" << std::hex << static_cast<int>(aCpyPam.GetPointNode().GetNodeType()) << std::dec
+                              << " " << aCpyPam.GetPointNode().GetIndex() << ")" );
 #endif
 
     GetIDocumentUndoRedo().StartUndo( SwUndoId::INSGLOSSARY, nullptr );

@@ -74,7 +74,7 @@ WriterInspectorTextPanel::WriterInspectorTextPanel(weld::Widget* pParent)
 
     // Update panel on start
     std::vector<svx::sidebar::TreeNode> aStore;
-    if (pDocSh && pDocSh->GetDoc()->GetEditShell()->GetCursor()->GetNode().GetTextNode())
+    if (pDocSh && pDocSh->GetDoc()->GetEditShell()->GetCursor()->GetPointNode().GetTextNode())
         UpdateTree(pDocSh, aStore, m_nParIdx);
     updateEntries(aStore, m_nParIdx);
 }
@@ -735,7 +735,7 @@ IMPL_LINK(WriterInspectorTextPanel, AttrChangedNotify, LinkParamNone*, pLink, vo
     SwDocShell* pDocSh = m_pShell->GetDoc()->GetDocShell();
     std::vector<svx::sidebar::TreeNode> aStore;
 
-    if (pDocSh && pDocSh->GetDoc()->GetEditShell()->GetCursor()->GetNode().GetTextNode())
+    if (pDocSh && pDocSh->GetDoc()->GetEditShell()->GetCursor()->GetPointNode().GetTextNode())
         UpdateTree(pDocSh, aStore, m_nParIdx);
 
     updateEntries(aStore, m_nParIdx);

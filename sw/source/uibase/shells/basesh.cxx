@@ -208,7 +208,7 @@ void SwBaseShell::ExecDelete(SfxRequest &rReq)
                 // is an outline node with folded content.
                 if (rSh.IsEndPara())
                 {
-                    SwNodeIndex aIdx(rSh.GetCursor()->GetNode());
+                    SwNodeIndex aIdx(rSh.GetCursor()->GetPointNode());
                     if (aIdx.GetNode().IsTextNode())
                     {
                         bool bVisible = true;
@@ -237,7 +237,7 @@ void SwBaseShell::ExecDelete(SfxRequest &rReq)
                 // node is a content node without a layout frame.
                 if (rSh.IsSttPara())
                 {
-                    SwNodeIndex aIdx(rSh.GetCursor()->GetNode());
+                    SwNodeIndex aIdx(rSh.GetCursor()->GetPointNode());
                     if (aIdx.GetNode().IsTextNode())
                     {
                         bool bVisible = true;

@@ -995,7 +995,7 @@ MSWordSections::MSWordSections( MSWordExportBase& rExport )
 
     sal_uLong nRstLnNum =  pSet ? pSet->Get( RES_LINENUMBER ).GetStartValue() : 0;
 
-    const SwTableNode* pTableNd = rExport.m_pCurPam->GetNode().FindTableNode();
+    const SwTableNode* pTableNd = rExport.m_pCurPam->GetPointNode().FindTableNode();
     const SwSectionNode* pSectNd = nullptr;
     if ( pTableNd )
     {
@@ -1570,12 +1570,12 @@ bool UsePrevSectionNextStyle(sal_uInt8 nBreakCode, const SwPageDesc* pPd,
 
     SwPaM aPaM(*pSectionStart);
     aPaM.Move(fnMoveBackward);
-    if (!aPaM.GetNode().IsTextNode())
+    if (!aPaM.GetPointNode().IsTextNode())
     {
         return false;
     }
 
-    SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
+    SwTextNode* pTextNode = aPaM.GetPointNode().GetTextNode();
     const SwAttrSet* pParaProps = &pTextNode->GetSwAttrSet();
     sal_uInt32 nCharHeight = pParaProps->GetSize().GetHeight();
     if (nCharHeight > 20)
@@ -1584,12 +1584,12 @@ bool UsePrevSectionNextStyle(sal_uInt8 nBreakCode, const SwPageDesc* pPd,
     }
 
     aPaM.Move(fnMoveBackward);
-    if (!aPaM.GetNode().IsTextNode())
+    if (!aPaM.GetPointNode().IsTextNode())
     {
         return false;
     }
 
-    pTextNode = aPaM.GetNode().GetTextNode();
+    pTextNode = aPaM.GetPointNode().GetTextNode();
     pParaProps = &pTextNode->GetSwAttrSet();
     return pParaProps->HasItem(RES_PAGEDESC);
 }

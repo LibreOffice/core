@@ -901,7 +901,7 @@ inline bool SwCursorShell::IsMultiSelection() const
 
 inline const SwTableNode* SwCursorShell::IsCursorInTable() const
 {
-    return m_pCurrentCursor->GetNode().FindTableNode();
+    return m_pCurrentCursor->GetPointNode().FindTableNode();
 }
 
 inline bool SwCursorShell::IsCursorPtAtEnd() const

@@ -140,7 +140,7 @@ bool SwCursorShell::GotoFootnoteText()
 bool SwCursor::GotoFootnoteAnchor()
 {
     // jump from footnote to anchor
-    const SwNode* pSttNd = GetNode().FindFootnoteStartNode();
+    const SwNode* pSttNd = GetPointNode().FindFootnoteStartNode();
     if( pSttNd )
     {
         // search in all footnotes in document for this StartIndex

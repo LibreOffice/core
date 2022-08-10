@@ -513,7 +513,7 @@ bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
                 nSttEndTable = rNds[ nSEIdx ]->StartOfSectionIndex() - 1;
 
             GetPoint()->nNode = nSttEndTable;
-            const SwNode* pMyNd = &(GetNode());
+            const SwNode* pMyNd = &(GetPointNode());
 
             if( pMyNd->IsSectionNode() || ( pMyNd->IsEndNode() &&
                 pMyNd->StartOfSectionNode()->IsSectionNode() ) )
@@ -617,7 +617,7 @@ bool SwCursor::IsInProtectTable( bool bMove, bool bChgCursor )
         // search next valid box
         // if there is another StartNode after the EndNode of a cell then
         // there is another cell
-        SwNodeIndex aCellStt( *GetNode().FindTableBoxStartNode()->EndOfSectionNode(), 1 );
+        SwNodeIndex aCellStt( *GetPointNode().FindTableBoxStartNode()->EndOfSectionNode(), 1 );
         bool bProt = true;
 GoNextCell:
         for (;;) {
@@ -667,7 +667,7 @@ SetNextCursor:
     {
         // if there is another EndNode in front of the StartNode than there
         // exists a previous cell
-        SwNodeIndex aCellStt( *GetNode().FindTableBoxStartNode(), -1 );
+        SwNodeIndex aCellStt( *GetPointNode().FindTableBoxStartNode(), -1 );
         SwNode* pNd;
         bool bProt = true;
 GoPrevCell:
@@ -1212,7 +1212,7 @@ bool SwCursor::SelectWord( SwViewShell const * pViewShell, const Point* pPt )
 bool SwCursor::IsStartWordWT(sal_Int16 nWordType, SwRootFrame const*const pLayout) const
 {
     bool bRet = false;
-    SwTextNode* pTextNd = GetNode().GetTextNode();
+    SwTextNode* pTextNd = GetPointNode().GetTextNode();
     if (pTextNd)
     {
         sal_Int32 nPtPos = GetPoint()->GetContentIndex();
@@ -1230,7 +1230,7 @@ bool SwCursor::IsStartWordWT(sal_Int16 nWordType, SwRootFrame const*const pLayou
 bool SwCursor::IsEndWordWT(sal_Int16 nWordType, SwRootFrame const*const pLayout) const
 {
     bool bRet = false;
-    SwTextNode* pTextNd = GetNode().GetTextNode();
+    SwTextNode* pTextNd = GetPointNode().GetTextNode();
     if (pTextNd)
     {
         sal_Int32 nPtPos = GetPoint()->GetContentIndex();
@@ -1249,7 +1249,7 @@ bool SwCursor::IsEndWordWT(sal_Int16 nWordType, SwRootFrame const*const pLayout)
 bool SwCursor::IsInWordWT(sal_Int16 nWordType, SwRootFrame const*const pLayout) const
 {
     bool bRet = false;
-    SwTextNode* pTextNd = GetNode().GetTextNode();
+    SwTextNode* pTextNd = GetPointNode().GetTextNode();
     if (pTextNd)
     {
         sal_Int32 nPtPos = GetPoint()->GetContentIndex();
@@ -1296,7 +1296,7 @@ bool SwCursor::IsStartEndSentence(bool bEnd, SwRootFrame const*const pLayout) co
 bool SwCursor::GoStartWordWT(sal_Int16 nWordType, SwRootFrame const*const pLayout)
 {
     bool bRet = false;
-    SwTextNode* pTextNd = GetNode().GetTextNode();
+    SwTextNode* pTextNd = GetPointNode().GetTextNode();
     if (pTextNd)
     {
         SwCursorSaveState aSave( *this );
@@ -1325,7 +1325,7 @@ bool SwCursor::GoStartWordWT(sal_Int16 nWordType, SwRootFrame const*const pLayou
 bool SwCursor::GoEndWordWT(sal_Int16 nWordType, SwRootFrame const*const pLayout)
 {
     bool bRet = false;
-    SwTextNode* pTextNd = GetNode().GetTextNode();
+    SwTextNode* pTextNd = GetPointNode().GetTextNode();
     if (pTextNd)
     {
         SwCursorSaveState aSave( *this );
@@ -1355,7 +1355,7 @@ bool SwCursor::GoEndWordWT(sal_Int16 nWordType, SwRootFrame const*const pLayout)
 bool SwCursor::GoNextWordWT(sal_Int16 nWordType, SwRootFrame const*const pLayout)
 {
     bool bRet = false;
-    SwTextNode* pTextNd = GetNode().GetTextNode();
+    SwTextNode* pTextNd = GetPointNode().GetTextNode();
     if (pTextNd)
     {
         SwCursorSaveState aSave( *this );
@@ -1383,7 +1383,7 @@ bool SwCursor::GoNextWordWT(sal_Int16 nWordType, SwRootFrame const*const pLayout
 bool SwCursor::GoPrevWordWT(sal_Int16 nWordType, SwRootFrame const*const pLayout)
 {
     bool bRet = false;
-    SwTextNode* pTextNd = GetNode().GetTextNode();
+    SwTextNode* pTextNd = GetPointNode().GetTextNode();
     if (pTextNd)
     {
         SwCursorSaveState aSave( *this );
@@ -1429,7 +1429,7 @@ bool SwCursor::SelectWordWT( SwViewShell const * pViewShell, sal_Int16 nWordType
         pLayout->GetModelPositionForViewPoint( GetPoint(), aPt );
     }
 
-    SwTextNode* pTextNd = GetNode().GetTextNode();
+    SwTextNode* pTextNd = GetPointNode().GetTextNode();
     if (pTextNd)
     {
         // Should we select the whole fieldmark?
@@ -1557,7 +1557,7 @@ static OUString lcl_MaskDeletedRedlines( const SwTextNode* pTextNd )
 bool SwCursor::GoSentence(SentenceMoveType eMoveType, SwRootFrame const*const pLayout)
 {
     bool bRet = false;
-    SwTextNode* pTextNd = GetNode().GetTextNode();
+    SwTextNode* pTextNd = GetPointNode().GetTextNode();
     if (pTextNd)
     {
         OUString const sNodeText(lcl_MaskDeletedRedlines(pTextNd));
@@ -2002,8 +2002,8 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
 
     // If the point/mark of the table cursor in the same box then set cursor to
     // beginning of the box
-    if( pTableCursor && GetNode().StartOfSectionNode() ==
-                    GetNode( false ).StartOfSectionNode() )
+    if( pTableCursor && GetPointNode().StartOfSectionNode() ==
+                    GetMarkNode().StartOfSectionNode() )
     {
         if ( End() != GetPoint() )
             Exchange();
@@ -2043,7 +2043,7 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
             // than one paragraph. If we want to go down, we have to set the
             // point to the last frame in the table box. This is only necessary
             // if we do not already have a table selection
-            const SwStartNode* pTableNd = GetNode().FindTableBoxStartNode();
+            const SwStartNode* pTableNd = GetPointNode().FindTableBoxStartNode();
             OSL_ENSURE( pTableNd, "pTableCursor without SwTableNode?" );
 
             if ( pTableNd ) // safety first
@@ -2528,8 +2528,8 @@ void SwTableCursor::DeleteBox(size_t const nPos)
 bool SwTableCursor::NewTableSelection()
 {
     bool bRet = false;
-    const SwNode *pStart = GetNode().FindTableBoxStartNode();
-    const SwNode *pEnd = GetNode(false).FindTableBoxStartNode();
+    const SwNode *pStart = GetPointNode().FindTableBoxStartNode();
+    const SwNode *pEnd = GetMarkNode().FindTableBoxStartNode();
     if( pStart && pEnd )
     {
         const SwTableNode *pTableNode = pStart->FindTableNode();

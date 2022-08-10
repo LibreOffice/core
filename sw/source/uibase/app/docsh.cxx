@@ -1135,7 +1135,7 @@ IMPL_LINK( SwDocShell, Ole2ModifiedHdl, bool, bNewStatus, void )
         SwOLENode* pOLENode = nullptr;
         if (!m_pWrtShell->IsTableMode())
         {
-            pOLENode = m_pWrtShell->GetCursor()->GetNode().GetOLENode();
+            pOLENode = m_pWrtShell->GetCursor()->GetPointNode().GetOLENode();
         }
         if (pOLENode)
         {

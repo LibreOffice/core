@@ -793,7 +793,7 @@ namespace
 
     void lcl_SaveRedlines(const SwPaM& aPam, SaveRedlines_t& rArr)
     {
-        SwDoc& rDoc = aPam.GetNode().GetDoc();
+        SwDoc& rDoc = aPam.GetPointNode().GetDoc();
 
         auto [pStart, pEnd] = aPam.StartEnd(); // SwPosition*
 
@@ -2496,7 +2496,7 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
     *aSavePam.GetMark() = rPos;
 
     rPaM.SetMark();         // create a Sel. around the new range
-    pTNd = aSavePam.GetNode().GetTextNode();
+    pTNd = aSavePam.GetPointNode().GetTextNode();
     assert(!m_rDoc.GetIDocumentUndoRedo().DoesUndo());
     bool bRemove = true;
     // Do two Nodes have to be joined at the SavePam?
@@ -3205,7 +3205,7 @@ SwDrawFrameFormat* DocumentContentOperationsManager::InsertDrawObj(
         eAnchorId = aAnch.GetAnchorId();
         if ( eAnchorId == RndStdIds::FLY_AT_FLY )
         {
-            const SwStartNode* pStartNode = rRg.GetNode().FindFlyStartNode();
+            const SwStartNode* pStartNode = rRg.GetPointNode().FindFlyStartNode();
             assert(pStartNode);
             SwPosition aPos(*pStartNode);
             aAnch.SetAnchor( &aPos );

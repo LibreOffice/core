@@ -348,11 +348,11 @@ bool SwFEShell::CopyDrawSel( SwFEShell& rDestShell, const Point& rSttPt,
                 else
                 {
                     SwPaM *pCursor = rDestShell.GetCursor();
-                    if( pCursor->GetNode().IsNoTextNode() )
+                    if( pCursor->GetPointNode().IsNoTextNode() )
                         bRet = false;
                     else
                         bRet = ::lcl_SetAnchor( *pCursor->GetPoint(),
-                                                pCursor->GetNode(), nullptr, rInsPt,
+                                                pCursor->GetPointNode(), nullptr, rInsPt,
                                                 rDestShell, aAnchor,
                                                 aNewAnch, false );
                 }
@@ -507,10 +507,10 @@ bool SwFEShell::Copy( SwFEShell& rDestShell, const Point& rSttPt,
             else
             {
                 const SwPaM *pCursor = rDestShell.GetCursor();
-                if( pCursor->GetNode().IsNoTextNode() )
+                if( pCursor->GetPointNode().IsNoTextNode() )
                     bRet = false;
                 else
-                    bRet = ::lcl_SetAnchor( *pCursor->GetPoint(), pCursor->GetNode(),
+                    bRet = ::lcl_SetAnchor( *pCursor->GetPoint(), pCursor->GetPointNode(),
                                             pFly, rInsPt, rDestShell, aAnchor,
                                     aNewAnch, GetDoc() == rDestShell.GetDoc());
             }
@@ -588,7 +588,7 @@ bool SwFEShell::Copy( SwFEShell& rDestShell, const Point& rSttPt,
                 if( !oDstPos->GetNode().IsNoTextNode() )
                     bRet = true;
             }
-            else if( !rDestShell.GetCursor()->GetNode().IsNoTextNode() )
+            else if( !rDestShell.GetCursor()->GetPointNode().IsNoTextNode() )
             {
                 oDstPos.emplace( *rDestShell.GetCursor()->GetPoint() );
                 bRet = true;
@@ -631,7 +631,7 @@ bool SwFEShell::Copy( SwFEShell& rDestShell, const Point& rSttPt,
             GetLayout()->GetModelPositionForViewPoint( &aPos, aPt );
             bRet = !aPos.GetNode().IsNoTextNode();
         }
-        else if( rDestShell.GetCursor()->GetNode().IsNoTextNode() )
+        else if( rDestShell.GetCursor()->GetPointNode().IsNoTextNode() )
             bRet = false;
 
         if( bRet )
@@ -787,7 +787,7 @@ namespace {
         else if(RndStdIds::FLY_AT_FLY == aAnchor.GetAnchorId())
         {
             Point aPt;
-            (void)lcl_SetAnchor(*rPaM.GetPoint(), rPaM.GetNode(), nullptr, aPt, rSh, aAnchor, aPt, false);
+            (void)lcl_SetAnchor(*rPaM.GetPoint(), rPaM.GetPointNode(), nullptr, aPt, rSh, aAnchor, aPt, false);
         }
 
         SwFrameFormat* pNew = rDoc.getIDocumentLayoutAccess().CopyLayoutFormat(*pCpyFormat, aAnchor, true, true);
@@ -836,7 +836,7 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
     SwNodeIndex aIdx( rClpDoc.GetNodes().GetEndOfExtras(), 2 );
     // select content section, whatever it may contain
     SwPaM aCpyPam(aIdx, SwNodeIndex(rClpDoc.GetNodes().GetEndOfContent(), -1));
-    if (SwContentNode *const pAtEnd = aCpyPam.GetNode(true).GetContentNode())
+    if (SwContentNode *const pAtEnd = aCpyPam.GetPointNode().GetContentNode())
     {
         aCpyPam.GetPoint()->AssignEndIndex(*pAtEnd);
     }
@@ -846,7 +846,7 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
     // (individual boxes in the area are retrieved via the layout)
     SwFieldType* pTableFieldTyp = GetDoc()->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::Table );
 
-    SwTableNode *const pSrcNd = aCpyPam.GetNode(false).GetTableNode();
+    SwTableNode *const pSrcNd = aCpyPam.GetMarkNode().GetTableNode();
 
     bool bRet = true;
     StartAllAction();
@@ -978,12 +978,12 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
                 // (else insert a nested table later, i.e. if nothing selected and
                 // the cursor is not in the first paragraph, or the selected text
                 // doesn't contain the first paragraph of the cell)
-                rPaM.GetNode().GetIndex() == rPaM.GetNode().FindTableBoxStartNode()->GetIndex() + 1)
+                rPaM.GetPointNode().GetIndex() == rPaM.GetPointNode().FindTableBoxStartNode()->GetIndex() + 1)
             {
                 SwPosition aDestPos( *rPaM.GetPoint() );
 
                 bool bParkTableCursor = false;
-                const SwStartNode* pSttNd =  rPaM.GetNode().FindTableBoxStartNode();
+                const SwStartNode* pSttNd =  rPaM.GetPointNode().FindTableBoxStartNode();
 
                 // TABLE IN TABLE: copy table in table
                 // search boxes via the layout
@@ -1159,7 +1159,7 @@ void SwFEShell::PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt1
         return;
     }
     //if the page starts with a table a paragraph has to be inserted before
-    SwNode *const pTableNode = oSourcePam->GetNode().FindTableNode();
+    SwNode *const pTableNode = oSourcePam->GetPointNode().FindTableNode();
     if(pTableNode)
     {
         //insert a paragraph

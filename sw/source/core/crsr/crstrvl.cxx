@@ -1092,7 +1092,7 @@ bool SwCursorShell::GotoNextOutline()
     }
 
     SwCursor* pCursor = getShellCursor( true );
-    SwNode* pNd = &(pCursor->GetNode());
+    SwNode* pNd = &(pCursor->GetPointNode());
     SwOutlineNodes::size_type nPos;
     bool bUseFirst = !rNds.GetOutLineNds().Seek_Entry( pNd, &nPos );
     SwOutlineNodes::size_type const nStartPos(nPos);
@@ -1157,7 +1157,7 @@ bool SwCursorShell::GotoPrevOutline()
     }
 
     SwCursor* pCursor = getShellCursor( true );
-    SwNode* pNd = &(pCursor->GetNode());
+    SwNode* pNd = &(pCursor->GetPointNode());
     SwOutlineNodes::size_type nPos;
     bool bRet = false;
     (void)rNds.GetOutLineNds().Seek_Entry(pNd, &nPos);
@@ -1215,7 +1215,7 @@ SwOutlineNodes::size_type SwCursorShell::GetOutlinePos(sal_uInt8 nLevel, SwPaM* 
     SwPaM* pCursor = pPaM ? pPaM : getShellCursor(true);
     const SwNodes& rNds = GetDoc()->GetNodes();
 
-    SwNode* pNd = &(pCursor->GetNode());
+    SwNode* pNd = &(pCursor->GetPointNode());
     SwOutlineNodes::size_type nPos;
     if( rNds.GetOutLineNds().Seek_Entry( pNd, &nPos ))
         nPos++; // is at correct position; take next for while
@@ -1228,7 +1228,7 @@ SwOutlineNodes::size_type SwCursorShell::GetOutlinePos(sal_uInt8 nLevel, SwPaM* 
             && pNd->GetTextNode()->GetAttrOutlineLevel()-1 <= nLevel)
         {
             if (pNd->GetIndex() < rNds.GetEndOfExtras().GetIndex()
-                    && pCursor->GetNode().GetIndex() > rNds.GetEndOfExtras().GetIndex())
+                    && pCursor->GetPointNode().GetIndex() > rNds.GetEndOfExtras().GetIndex())
             {
                 // node found in extras but cursor position is not in extras
                 return SwOutlineNodes::npos;

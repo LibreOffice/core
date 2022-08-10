@@ -143,7 +143,7 @@ void SwAutoCorrDoc::DeleteSelImpl(SwPaM & rDelPam)
 
 bool SwAutoCorrDoc::Delete( sal_Int32 nStt, sal_Int32 nEnd )
 {
-    SwTextNode const*const pTextNd = m_rCursor.GetNode().GetTextNode();
+    SwTextNode const*const pTextNd = m_rCursor.GetPointNode().GetTextNode();
     SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(
                 pTextNd->getLayoutFrame(m_rEditSh.GetLayout())));
     assert(pFrame);
@@ -158,7 +158,7 @@ bool SwAutoCorrDoc::Delete( sal_Int32 nStt, sal_Int32 nEnd )
 
 bool SwAutoCorrDoc::Insert( sal_Int32 nPos, const OUString& rText )
 {
-    SwTextNode const*const pTextNd = m_rCursor.GetNode().GetTextNode();
+    SwTextNode const*const pTextNd = m_rCursor.GetPointNode().GetTextNode();
     SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(
                 pTextNd->getLayoutFrame(m_rEditSh.GetLayout())));
     assert(pFrame);
@@ -193,7 +193,7 @@ bool SwAutoCorrDoc::ReplaceRange( sal_Int32 nPos, sal_Int32 nSourceLength, const
     //        for (ranges.begin() + 1; ranges.end(); )
     //            DeleteImpl(*it)
 
-    SwTextNode * const pNd = m_rCursor.GetNode().GetTextNode();
+    SwTextNode * const pNd = m_rCursor.GetPointNode().GetTextNode();
     if ( !pNd )
     {
         return false;
@@ -287,7 +287,7 @@ bool SwAutoCorrDoc::ReplaceRange( sal_Int32 nPos, sal_Int32 nSourceLength, const
 void SwAutoCorrDoc::SetAttr( sal_Int32 nStt, sal_Int32 nEnd, sal_uInt16 nSlotId,
                                         SfxPoolItem& rItem )
 {
-    SwTextNode const*const pTextNd = m_rCursor.GetNode().GetTextNode();
+    SwTextNode const*const pTextNd = m_rCursor.GetPointNode().GetTextNode();
     SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(
                 pTextNd->getLayoutFrame(m_rEditSh.GetLayout())));
     assert(pFrame);
@@ -312,7 +312,7 @@ void SwAutoCorrDoc::SetAttr( sal_Int32 nStt, sal_Int32 nEnd, sal_uInt16 nSlotId,
 
 bool SwAutoCorrDoc::SetINetAttr( sal_Int32 nStt, sal_Int32 nEnd, const OUString& rURL )
 {
-    SwTextNode const*const pTextNd = m_rCursor.GetNode().GetTextNode();
+    SwTextNode const*const pTextNd = m_rCursor.GetPointNode().GetTextNode();
     SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(
                 pTextNd->getLayoutFrame(m_rEditSh.GetLayout())));
     assert(pFrame);
@@ -377,7 +377,7 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
 
     // Found a beginning of a paragraph or a Blank,
     // search for the word Kuerzel (Shortcut) in the Auto
-    SwTextNode* pTextNd = m_rCursor.GetNode().GetTextNode();
+    SwTextNode* pTextNd = m_rCursor.GetPointNode().GetTextNode();
     OSL_ENSURE( pTextNd, "where is the TextNode?" );
 
     bool bRet = false;
@@ -444,7 +444,7 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
                 // pTextNd may become invalid when change tracking is on and Edit -> Track Changes -> Show == OFF.
                 // ReplaceRange shows changes, this moves deleted nodes from special section to document.
                 // Then Show mode is disabled again. As a result pTextNd may be invalidated.
-                pTextNd = m_rCursor.GetNode().GetTextNode();
+                pTextNd = m_rCursor.GetPointNode().GetTextNode();
             }
         }
         else
@@ -514,7 +514,7 @@ bool SwAutoCorrDoc::TransliterateRTLWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
     if( m_bUndoIdInitialized )
         m_bUndoIdInitialized = true;
 
-    SwTextNode* pTextNd = m_rCursor.GetNode().GetTextNode();
+    SwTextNode* pTextNd = m_rCursor.GetPointNode().GetTextNode();
     OSL_ENSURE( pTextNd, "where is the TextNode?" );
 
     bool bRet = false;

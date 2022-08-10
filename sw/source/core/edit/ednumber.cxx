@@ -444,11 +444,11 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
             }
             else             // move down
             {
-                assert(!aCursor.GetNode().IsTextNode()
-                    || sw::IsParaPropsNode(*GetLayout(), *aCursor.GetNode().GetTextNode()));
-                const SwNumRule* pOrig = sw::GetParaPropsNode(*GetLayout(), *aCursor.GetNode(false).GetTextNode())->GetNumRule();
-                if( aCursor.GetNode().IsTextNode() &&
-                    pOrig == aCursor.GetNode().GetTextNode()->GetNumRule() )
+                assert(!aCursor.GetPointNode().IsTextNode()
+                    || sw::IsParaPropsNode(*GetLayout(), *aCursor.GetPointNode().GetTextNode()));
+                const SwNumRule* pOrig = sw::GetParaPropsNode(*GetLayout(), *aCursor.GetMarkNode().GetTextNode())->GetNumRule();
+                if( aCursor.GetPointNode().IsTextNode() &&
+                    pOrig == aCursor.GetPointNode().GetTextNode()->GetNumRule() )
                 {
                     SwNodeOffset nStt = aCursor.GetPoint()->GetNodeIndex(), nIdx = nStt+1;
                     if (SwTextNode const*const pStt = aCursor.GetPoint()->GetNode().GetTextNode())

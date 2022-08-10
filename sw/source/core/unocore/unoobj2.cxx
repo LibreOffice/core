@@ -223,7 +223,7 @@ UnoActionRemoveContext::UnoActionRemoveContext(SwDoc *const pDoc)
 
 static SwDoc * lcl_IsNewStyleTable(SwUnoTableCursor const& rCursor)
 {
-    SwTableNode *const pTableNode = rCursor.GetNode().FindTableNode();
+    SwTableNode *const pTableNode = rCursor.GetPointNode().FindTableNode();
     return (pTableNode && !pTableNode->GetTable().IsNewModel())
         ? &rCursor.GetDoc()
         : nullptr;
@@ -283,7 +283,7 @@ void SwUnoCursorHelper::SetCursorAttr(SwPaM & rPam,
 
     if( rSet.GetItemState( RES_PARATR_OUTLINELEVEL, false ) >= SfxItemState::DEFAULT )
     {
-        SwTextNode * pTmpNode = rPam.GetNode().GetTextNode();
+        SwTextNode * pTmpNode = rPam.GetPointNode().GetTextNode();
         if ( pTmpNode )
         {
             rPam.GetDoc().GetNodes().UpdateOutlineNode( *pTmpNode );
@@ -556,7 +556,7 @@ SwXParagraphEnumerationImpl::NextElement_Impl()
 
         // os 2005-01-14: This part is only necessary to detect movements out
         // of a selection; if there is no selection we don't have to care
-        SwTableNode *const pTableNode = aNewCursor->GetNode().FindTableNode();
+        SwTableNode *const pTableNode = aNewCursor->GetPointNode().FindTableNode();
         bool bMovedFromTable = false;
         if (CursorType::SelectionInTable != m_eCursorType && pTableNode)
         {
@@ -584,7 +584,7 @@ SwXParagraphEnumerationImpl::NextElement_Impl()
     {
         rUnoCursor.SetRemainInSection( false );
         // what to do if already in a table?
-        SwTableNode * pTableNode = rUnoCursor.GetNode().FindTableNode();
+        SwTableNode * pTableNode = rUnoCursor.GetPointNode().FindTableNode();
         pTableNode = lcl_FindTopLevelTable( pTableNode, m_pOwnTable );
         if (pTableNode && (&pTableNode->GetTable() != m_pOwnTable))
         {
@@ -621,7 +621,7 @@ SwXParagraphEnumerationImpl::NextElement_Impl()
             (m_nEndIndex == pStart->GetNodeIndex()) ? m_nLastParaEnd : -1;
 
         // position in a table, or in a simple paragraph?
-        SwTableNode * pTableNode = rUnoCursor.GetNode().FindTableNode();
+        SwTableNode * pTableNode = rUnoCursor.GetPointNode().FindTableNode();
         pTableNode = lcl_FindTopLevelTable( pTableNode, m_pOwnTable );
         if (/*CursorType::TableText != eCursorType && CursorType::SelectionInTable != eCursorType && */
             pTableNode && (&pTableNode->GetTable() != m_pOwnTable))
@@ -1765,10 +1765,10 @@ SwXParaFrameEnumerationImpl::SwXParaFrameEnumerationImpl(
 // into the array
 void SwXParaFrameEnumerationImpl::FillFrame()
 {
-    if(!m_pUnoCursor->GetNode().IsTextNode())
+    if(!m_pUnoCursor->GetPointNode().IsTextNode())
         return;
     // search for objects at the cursor - anchored at/as char
-    const auto pTextAttr = m_pUnoCursor->GetNode().GetTextNode()->GetTextAttrForCharAt(
+    const auto pTextAttr = m_pUnoCursor->GetPointNode().GetTextNode()->GetTextAttrForCharAt(
             m_pUnoCursor->GetPoint()->GetContentIndex(), RES_TXTATR_FLYCNT);
     if(!pTextAttr)
         return;

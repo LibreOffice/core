@@ -181,7 +181,7 @@ bool GotoNextRegion( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosRegi
 bool GotoCurrRegionAndSkip( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosRegion,
                                 bool bInReadOnly )
 {
-    SwNode& rCurrNd = rCurrentCursor.GetNode();
+    SwNode& rCurrNd = rCurrentCursor.GetPointNode();
     SwSectionNode* pNd = rCurrNd.FindSectionNode();
     if( !pNd )
         return false;

@@ -226,7 +226,7 @@ ErrCode SwReader::Read( const Reader& rOptions )
         {
             *pUndoPam->GetMark() = *pPam->GetPoint();
             ++pUndoPam->GetPoint()->nNode;
-            SwNode& rNd = pUndoPam->GetNode();
+            SwNode& rNd = pUndoPam->GetPointNode();
             if( rNd.IsContentNode() )
                 pUndoPam->GetPoint()->nContent.Assign(
                                     static_cast<SwContentNode*>(&rNd), nSttContent );

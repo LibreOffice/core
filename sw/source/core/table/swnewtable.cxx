@@ -949,13 +949,13 @@ bool SwTable::PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
                     {
                         SwPaM aPam( *pBox->GetSttNd(), 0 );
                         aPam.GetPoint()->nNode++;
-                        SwTextNode* pNd = aPam.GetNode().GetTextNode();
+                        SwTextNode* pNd = aPam.GetPointNode().GetTextNode();
                         while( pNd )
                         {
                             pNd->SetCountedInList( false );
 
                             aPam.GetPoint()->nNode++;
-                            pNd = aPam.GetNode().GetTextNode();
+                            pNd = aPam.GetPointNode().GetTextNode();
                         }
                     }
                 }

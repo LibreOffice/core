@@ -168,7 +168,7 @@ OUString SwXTextPortion::getString()
     SwUnoCursor& rUnoCursor = GetCursor();
 
     // TextPortions are always within a paragraph
-    SwTextNode* pTextNd = rUnoCursor.GetNode().GetTextNode();
+    SwTextNode* pTextNd = rUnoCursor.GetPointNode().GetTextNode();
     if ( pTextNd )
     {
         const sal_Int32 nStt = rUnoCursor.Start()->GetContentIndex();

@@ -162,7 +162,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testLinesMoveBackwardsInSectionInTable)
 
     // Remove paragraph "4".
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    while (pWrtShell->GetCursor()->GetNode().GetIndex() < nPara4Node)
+    while (pWrtShell->GetCursor()->GetPointNode().GetIndex() < nPara4Node)
         pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->EndPara();
     pWrtShell->Up(/*bSelect=*/true);
@@ -469,7 +469,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf112160)
 
     // Append a new paragraph to the end of the A2 cell.
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    while (pWrtShell->GetCursor()->GetNode().GetIndex() < nA2CellNode)
+    while (pWrtShell->GetCursor()->GetPointNode().GetIndex() < nA2CellNode)
         pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->EndPara();
     pWrtShell->SplitNode();
@@ -525,7 +525,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf99689TableOfContents)
     const SwTOXBase* pTOXBase = pWrtShell->GetCurTOX();
     pWrtShell->UpdateTableOf(*pTOXBase);
     SwCursorShell* pShell(pDoc->GetEditShell());
-    SwTextNode* pTitleNode = pShell->GetCursor()->GetNode().GetTextNode();
+    SwTextNode* pTitleNode = pShell->GetCursor()->GetPointNode().GetTextNode();
     SwNodeIndex aIdx(*pTitleNode);
     // skip the title
     pDoc->GetNodes().GoNext(&aIdx);
@@ -552,7 +552,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf99689TableOfFigures)
     const SwTOXBase* pTOXBase = pWrtShell->GetCurTOX();
     pWrtShell->UpdateTableOf(*pTOXBase);
     SwCursorShell* pShell(pDoc->GetEditShell());
-    SwTextNode* pTitleNode = pShell->GetCursor()->GetNode().GetTextNode();
+    SwTextNode* pTitleNode = pShell->GetCursor()->GetPointNode().GetTextNode();
     SwNodeIndex aIdx(*pTitleNode);
 
     // skip the title
@@ -577,7 +577,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf99689TableOfTables)
     const SwTOXBase* pTOXBase = pWrtShell->GetCurTOX();
     pWrtShell->UpdateTableOf(*pTOXBase);
     SwCursorShell* pShell(pDoc->GetEditShell());
-    SwTextNode* pTitleNode = pShell->GetCursor()->GetNode().GetTextNode();
+    SwTextNode* pTitleNode = pShell->GetCursor()->GetPointNode().GetTextNode();
     SwNodeIndex aIdx(*pTitleNode);
 
     // skip the title
@@ -943,11 +943,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf115132)
         pWrtShell->GotoTable(rTableName);
         do
         {
-            const SwStartNode* pNd = pWrtShell->GetCursor()->GetNode().FindTableBoxStartNode();
+            const SwStartNode* pNd = pWrtShell->GetCursor()->GetPointNode().FindTableBoxStartNode();
             pWrtShell->DelRight();
-            CPPUNIT_ASSERT_EQUAL(pNd, pWrtShell->GetCursor()->GetNode().FindTableBoxStartNode());
+            CPPUNIT_ASSERT_EQUAL(pNd,
+                                 pWrtShell->GetCursor()->GetPointNode().FindTableBoxStartNode());
             pWrtShell->DelLeft();
-            CPPUNIT_ASSERT_EQUAL(pNd, pWrtShell->GetCursor()->GetNode().FindTableBoxStartNode());
+            CPPUNIT_ASSERT_EQUAL(pNd,
+                                 pWrtShell->GetCursor()->GetPointNode().FindTableBoxStartNode());
         } while (pWrtShell->GoNextCell(false));
     }
 }
@@ -1056,7 +1058,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf51223)
     SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
-    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetPointNode().GetIndex();
     pWrtShell->Insert("i");
     pWrtShell->SplitNode(true);
     CPPUNIT_ASSERT_EQUAL(OUString("I"),

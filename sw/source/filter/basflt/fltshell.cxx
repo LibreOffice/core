@@ -632,9 +632,9 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
             if (MakeBookRegionOrPoint(rEntry, m_rDoc, aRegion))
             {
                 SwFltRDFMark* pMark = static_cast<SwFltRDFMark*>(rEntry.m_pAttr.get());
-                if (aRegion.GetNode().IsTextNode())
+                if (aRegion.GetPointNode().IsTextNode())
                 {
-                    SwTextNode& rTextNode = *aRegion.GetNode().GetTextNode();
+                    SwTextNode& rTextNode = *aRegion.GetPointNode().GetTextNode();
 
                     for (const std::pair<OUString, OUString>& rAttribute : pMark->GetAttributes())
                     {

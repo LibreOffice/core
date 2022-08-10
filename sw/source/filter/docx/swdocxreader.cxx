@@ -169,7 +169,7 @@ bool SwDOCXReader::MakeEntries( SwDoc *pD, SwTextBlocks &rBlocks )
                 SwPaM aPam( aStart );
                 SwNodeIndex& rIdx = aPam.GetPoint()->nNode;
                 ++rIdx;
-                aLNm = aPam.GetNode().GetTextNode()->GetText();
+                aLNm = aPam.GetPointNode().GetTextNode()->GetText();
 
                 // is AutoText?
                 bIsAutoText = aLNm.startsWith(AUTOTEXT_GALLERY);

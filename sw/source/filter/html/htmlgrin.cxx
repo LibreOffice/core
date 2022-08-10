@@ -261,7 +261,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
     if( bMoveBackward )
         m_pPam->Move( fnMoveBackward );
 
-    if (aAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR && !m_pPam->GetNode().GetTextNode())
+    if (aAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR && !m_pPam->GetPointNode().GetTextNode())
     {
         eState = SvParserState::Error;
         return;
@@ -467,7 +467,7 @@ IMAGE_SETEVENT:
         !m_aBulletGrfs[GetNumInfo().GetDepth()-1].isEmpty() &&
         m_aBulletGrfs[GetNumInfo().GetDepth()-1]==sGrfNm )
     {
-        SwTextNode* pTextNode = m_pPam->GetNode().GetTextNode();
+        SwTextNode* pTextNode = m_pPam->GetPointNode().GetTextNode();
 
         if( pTextNode && ! pTextNode->IsCountedInList())
         {
@@ -785,7 +785,7 @@ IMAGE_SETEVENT:
     aFrameSize.SetHeightPercent( nPercentHeight );
     aFrameSet.Put( aFrameSize );
 
-    const SwNodeType eNodeType = m_pPam->GetNode().GetNodeType();
+    const SwNodeType eNodeType = m_pPam->GetPointNode().GetNodeType();
     if (eNodeType != SwNodeType::Text && eNodeType != SwNodeType::Table)
         return;
 

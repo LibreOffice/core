@@ -201,7 +201,7 @@ void SwHTMLParser::FinishFootEndNote()
 
     m_xDoc->getIDocumentContentOperations().InsertPoolItem( *m_pPam, aFootnote );
     SwTextFootnote * const pTextFootnote = static_cast<SwTextFootnote *>(
-        m_pPam->GetNode().GetTextNode()->GetTextAttrForCharAt(
+        m_pPam->GetPointNode().GetTextNode()->GetTextAttrForCharAt(
             m_pPam->GetPoint()->GetContentIndex() - 1, RES_TXTATR_FTN ) );
     // In header and footer no footnotes can be inserted.
     if (pTextFootnote)

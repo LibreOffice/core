@@ -1076,20 +1076,20 @@ void SwXTextViewCursor::gotoRange(
     else if(nFrameType & FrameTypeFlags::FOOTNOTE)
         eSearchNodeType = SwFootnoteStartNode;
 
-    const SwStartNode* pOwnStartNode = aOwnPaM.GetNode().
+    const SwStartNode* pOwnStartNode = aOwnPaM.GetPointNode().
                                             FindSttNodeByType(eSearchNodeType);
 
     const SwNode* pSrcNode = nullptr;
     if(pCursor && pCursor->GetPaM())
     {
-        pSrcNode = &pCursor->GetPaM()->GetNode();
+        pSrcNode = &pCursor->GetPaM()->GetPointNode();
     }
     else if (pRange)
     {
         SwPaM aPam(pRange->GetDoc().GetNodes());
         if (pRange->GetPositions(aPam))
         {
-            pSrcNode = &aPam.GetNode();
+            pSrcNode = &aPam.GetPointNode();
         }
     }
     else if (pPara && pPara->GetTextNode())
@@ -1458,7 +1458,7 @@ void  SwXTextViewCursor::setPropertyValue( const OUString& rPropertyName, const 
 
     SwWrtShell& rSh = m_pView->GetWrtShell();
     SwPaM* pShellCursor = rSh.GetCursor();
-    SwNode& rNode = pShellCursor->GetNode();
+    SwNode& rNode = pShellCursor->GetPointNode();
     if (!rNode.IsTextNode())
         throw RuntimeException();
 

@@ -1818,7 +1818,7 @@ void SwDoc::DeleteRow( const SwCursor& rCursor )
     //  - when there's another Line, we place it in that one
     //  - when a Line precedes it, we place it in that one
     {
-        SwTableNode* pTableNd = rCursor.GetNode().FindTableNode();
+        SwTableNode* pTableNd = rCursor.GetPointNode().FindTableNode();
 
         if(dynamic_cast<const SwDDETable*>( & pTableNd->GetTable()) !=  nullptr)
             return;
@@ -1919,7 +1919,7 @@ void SwDoc::DeleteCol( const SwCursor& rCursor )
     SwEditShell* pESh = GetEditShell();
     if( pESh )
     {
-        const SwNode* pNd = rCursor.GetNode().FindTableBoxStartNode();
+        const SwNode* pNd = rCursor.GetPointNode().FindTableBoxStartNode();
         pESh->ParkCursor( *pNd );
     }
 
@@ -2210,7 +2210,7 @@ bool SwDoc::SplitTable( const SwSelBoxes& rBoxes, bool bVert, sal_uInt16 nCnt,
 TableMergeErr SwDoc::MergeTable( SwPaM& rPam )
 {
     // Check if the current cursor's Point/Mark are inside a Table
-    SwTableNode* pTableNd = rPam.GetNode().FindTableNode();
+    SwTableNode* pTableNd = rPam.GetPointNode().FindTableNode();
     if( !pTableNd )
         return TableMergeErr::NoSelection;
     SwTable& rTable = pTableNd->GetTable();

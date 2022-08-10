@@ -484,7 +484,7 @@ ErrCode SwHTMLWriter::WriteStream()
 
     // respect table and section at document beginning
     {
-        SwTableNode * pTNd = m_pCurrentPam->GetNode().FindTableNode();
+        SwTableNode * pTNd = m_pCurrentPam->GetPointNode().FindTableNode();
         if( pTNd && m_bWriteAll )
         {
             // start with table node !!
@@ -497,7 +497,7 @@ ErrCode SwHTMLWriter::WriteStream()
         // first node (with can contain a page break)
         m_pStartNdIdx = new SwNodeIndex( m_pCurrentPam->GetPoint()->GetNode() );
 
-        SwSectionNode * pSNd = m_pCurrentPam->GetNode().FindSectionNode();
+        SwSectionNode * pSNd = m_pCurrentPam->GetPointNode().FindSectionNode();
         while( pSNd )
         {
             if( m_bWriteAll )
@@ -907,7 +907,7 @@ void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
               (m_pCurrentPam->GetPoint()->GetNodeIndex() == m_pCurrentPam->GetMark()->GetNodeIndex() &&
                m_pCurrentPam->GetPoint()->GetContentIndex() <= m_pCurrentPam->GetMark()->GetContentIndex()) )
         {
-            SwNode&  rNd = m_pCurrentPam->GetNode();
+            SwNode&  rNd = m_pCurrentPam->GetPointNode();
 
             OSL_ENSURE( !(rNd.IsGrfNode() || rNd.IsOLENode()),
                     "Unexpected Grf- or OLE-Node here" );

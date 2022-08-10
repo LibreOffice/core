@@ -1193,14 +1193,14 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoReordering)
     pWrtShell2->SplitNode();
     SfxLokHelper::setView(nView1);
     pWrtShell1->SttEndDoc(/*bStt=*/true);
-    SwTextNode* pTextNode1 = pWrtShell1->GetCursor()->GetNode().GetTextNode();
+    SwTextNode* pTextNode1 = pWrtShell1->GetCursor()->GetPointNode().GetTextNode();
     // View 1 types into the first paragraph.
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'a', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'a', 0);
     Scheduler::ProcessEventsToIdle();
     SfxLokHelper::setView(nView2);
     pWrtShell2->SttEndDoc(/*bStt=*/false);
-    SwTextNode* pTextNode2 = pWrtShell2->GetCursor()->GetNode().GetTextNode();
+    SwTextNode* pTextNode2 = pWrtShell2->GetCursor()->GetPointNode().GetTextNode();
     // View 2 types into the second paragraph.
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'z', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'z', 0);
@@ -1238,7 +1238,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoReorderingRedo)
     pWrtShell2->SplitNode();
     SfxLokHelper::setView(nView1);
     pWrtShell1->SttEndDoc(/*bStt=*/true);
-    SwTextNode* pTextNode1 = pWrtShell1->GetCursor()->GetNode().GetTextNode();
+    SwTextNode* pTextNode1 = pWrtShell1->GetCursor()->GetPointNode().GetTextNode();
     // View 1 types into the first paragraph, twice.
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'f', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'f', 0);
@@ -1250,7 +1250,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoReorderingRedo)
     Scheduler::ProcessEventsToIdle();
     SfxLokHelper::setView(nView2);
     pWrtShell2->SttEndDoc(/*bStt=*/false);
-    SwTextNode* pTextNode2 = pWrtShell2->GetCursor()->GetNode().GetTextNode();
+    SwTextNode* pTextNode2 = pWrtShell2->GetCursor()->GetPointNode().GetTextNode();
     // View 2 types into the second paragraph.
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'z', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'z', 0);
@@ -1292,14 +1292,14 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoReorderingMulti)
     pWrtShell2->SplitNode();
     SfxLokHelper::setView(nView1);
     pWrtShell1->SttEndDoc(/*bStt=*/true);
-    SwTextNode* pTextNode1 = pWrtShell1->GetCursor()->GetNode().GetTextNode();
+    SwTextNode* pTextNode1 = pWrtShell1->GetCursor()->GetPointNode().GetTextNode();
     // View 1 types into the first paragraph.
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'a', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'a', 0);
     Scheduler::ProcessEventsToIdle();
     SfxLokHelper::setView(nView2);
     pWrtShell2->SttEndDoc(/*bStt=*/false);
-    SwTextNode* pTextNode2 = pWrtShell2->GetCursor()->GetNode().GetTextNode();
+    SwTextNode* pTextNode2 = pWrtShell2->GetCursor()->GetPointNode().GetTextNode();
     // View 2 types into the second paragraph, twice.
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
@@ -3582,7 +3582,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownContentControl)
     pXTextDocument->executeContentControlEvent(aArguments);
 
     // Then make sure that the document is updated accordingly:
-    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetNode().GetTextNode();
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: green
     // - Actual  : choose an item
@@ -3703,7 +3703,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDateContentControl)
     pXTextDocument->executeContentControlEvent(aArguments);
 
     // Then make sure that the document is updated accordingly:
-    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetNode().GetTextNode();
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 2022-05-30
     // - Actual  : choose a date
