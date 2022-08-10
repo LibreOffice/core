@@ -260,6 +260,8 @@ Diagram::Diagram( const Diagram & rOther ) :
     m_xTitle.set( CloneHelper::CreateRefClone< chart2::XTitle >()( rOther.m_xTitle ));
     if (rOther.m_xLegend)
         m_xLegend = new Legend(*rOther.m_xLegend);
+    if (rOther.m_xDataTable)
+        m_xDataTable = new DataTable(*rOther.m_xDataTable);
 
     if ( m_xWall )
         m_xWall->addModifyListener( m_xModifyEventForwarder );
