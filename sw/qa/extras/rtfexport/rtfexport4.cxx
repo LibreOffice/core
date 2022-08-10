@@ -123,6 +123,57 @@ DECLARE_RTFEXPORT_TEST(test150269, "hidden-linebreaks.rtf")
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xRun, "CharHidden"));
 }
 
+DECLARE_RTFEXPORT_TEST(test129758, "tdf129631_lostBorders3.rtf")
+{
+    uno::Reference<container::XNameAccess> xStyles(getStyles("ParagraphStyles"));
+    uno::Reference<beans::XPropertySet> xStyle(xStyles->getByName("Border"), uno::UNO_QUERY);
+    // style has borders
+    table::BorderLine2 border;
+    border = getProperty<table::BorderLine2>(xStyle, "RightBorder");
+    CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::SOLID, border.LineStyle);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(88), border.LineWidth);
+    border = getProperty<table::BorderLine2>(xStyle, "LeftBorder");
+    CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::SOLID, border.LineStyle);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(88), border.LineWidth);
+    border = getProperty<table::BorderLine2>(xStyle, "TopBorder");
+    CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::SOLID, border.LineStyle);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(88), border.LineWidth);
+    border = getProperty<table::BorderLine2>(xStyle, "BottomBorder");
+    CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::SOLID, border.LineStyle);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(88), border.LineWidth);
+    // style applied
+    uno::Reference<beans::XPropertySet> xPara2(getParagraph(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Border"), getProperty<OUString>(xPara2, "ParaStyleName"));
+    // but no borders
+    border = getProperty<table::BorderLine2>(xPara2, "RightBorder");
+    CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::NONE, border.LineStyle);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), border.LineWidth);
+    border = getProperty<table::BorderLine2>(xPara2, "LeftBorder");
+    CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::NONE, border.LineStyle);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), border.LineWidth);
+    border = getProperty<table::BorderLine2>(xPara2, "TopBorder");
+    CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::NONE, border.LineStyle);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), border.LineWidth);
+    border = getProperty<table::BorderLine2>(xPara2, "BottomBorder");
+    CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::NONE, border.LineStyle);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), border.LineWidth);
+    // last paragraph: style applied, no override
+    uno::Reference<beans::XPropertySet> xPara4(getParagraph(4), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Border"), getProperty<OUString>(xPara4, "ParaStyleName"));
+    border = getProperty<table::BorderLine2>(xPara4, "RightBorder");
+    CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::SOLID, border.LineStyle);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(88), border.LineWidth);
+    border = getProperty<table::BorderLine2>(xPara4, "LeftBorder");
+    CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::SOLID, border.LineStyle);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(88), border.LineWidth);
+    border = getProperty<table::BorderLine2>(xPara4, "TopBorder");
+    CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::SOLID, border.LineStyle);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(88), border.LineWidth);
+    border = getProperty<table::BorderLine2>(xPara4, "BottomBorder");
+    CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::SOLID, border.LineStyle);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(88), border.LineWidth);
+}
+
 DECLARE_RTFEXPORT_TEST(testAnchoredAtSamePosition, "anchor.fodt")
 {
     SwXTextDocument* const pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
