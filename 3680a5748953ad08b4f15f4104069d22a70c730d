@@ -217,6 +217,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9c02bff5_a363c694",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2022-08-10T16:03:52Z",
+      "side": 1,
+      "message": "I see the license email. It was sent by wujiahuan161 at gmail.com, to libreoffice@lists.freedesktop.org, entitled \"wjh-la license statement\".",
+      "parentUuid": "0489351d_b019237d",
+      "revId": "3680a5748953ad08b4f15f4104069d22a70c730d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2a6813ae_7a10fe93",
         "filename": "bridges/source/cpp_uno/gcc3_linux_loongarch64/call.hxx",
         "patchSetId": 1
