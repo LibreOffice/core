@@ -445,6 +445,7 @@ class SFServices(object):
     flgArrayRet = 1024  # Invoked service method can return a 2D array (standard modules) or any array (class modules)
     flgUno = 256  # Invoked service method/property can return a UNO object
     flgObject = 2048  # 1st argument may be a Basic object
+    flgHardCode = 4096  # Force hardcoded call to method, avoid CallByName()
     # Basic class type
     moduleClass, moduleStandard = 2, 1
     #
@@ -1652,16 +1653,16 @@ class SFDialogs:
             return container, library, dialogname, ScriptForge.componentcontext
 
         def Activate(self):
-            return self.ExecMethod(self.vbMethod, 'Activate')
+            return self.ExecMethod(self.vbMethod + self.flgHardCode, 'Activate')
 
         def Controls(self, controlname = ''):
-            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Controls', controlname)
+            return self.ExecMethod(self.vbMethod + self.flgArrayRet + self.flgHardCode, 'Controls', controlname)
 
         def EndExecute(self, returnvalue):
-            return self.ExecMethod(self.vbMethod, 'EndExecute', returnvalue)
+            return self.ExecMethod(self.vbMethod + self.flgHardCode, 'EndExecute', returnvalue)
 
         def Execute(self, modal = True):
-            return self.ExecMethod(self.vbMethod, 'Execute', modal)
+            return self.ExecMethod(self.vbMethod + self.flgHardCode, 'Execute', modal)
 
         def GetTextsFromL10N(self, l10n):
             l10nobj = l10n.objectreference if isinstance(l10n, SFScriptForge.SF_L10N) else l10n
