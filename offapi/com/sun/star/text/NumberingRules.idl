@@ -31,7 +31,7 @@ published service NumberingRules
 
                 <p>The numbering rules are levels of property values. Each
                 level contains equal properties.</p>
-                @see NumberingLevel;@see NumberingLevel;
+                @see NumberingLevel
      */
         interface com::sun::star::container::XIndexReplace;
 
