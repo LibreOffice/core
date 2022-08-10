@@ -264,10 +264,14 @@ Diagram::Diagram( const Diagram & rOther ) :
     m_xTitle.set( CloneHelper::CreateRefClone< chart2::XTitle >()( rOther.m_xTitle ));
     m_xLegend.set( CloneHelper::CreateRefClone< chart2::XLegend >()( rOther.m_xLegend ));
 
+    if (rOther.m_xDataTable.is())
+        m_xDataTable.set(new DataTable(*rOther.m_xDataTable));
+
     ModifyListenerHelper::addListener( m_xWall, m_xModifyEventForwarder );
     ModifyListenerHelper::addListener( m_xFloor, m_xModifyEventForwarder );
     ModifyListenerHelper::addListener( m_xTitle, m_xModifyEventForwarder );
     ModifyListenerHelper::addListener( m_xLegend, m_xModifyEventForwarder );
+    ModifyListenerHelper::addListener(uno::Reference<chart2::XDataTable>(m_xDataTable), m_xModifyEventForwarder );
 }
 
 Diagram::~Diagram()
@@ -280,6 +284,7 @@ Diagram::~Diagram()
         ModifyListenerHelper::removeListener( m_xFloor, m_xModifyEventForwarder );
         ModifyListenerHelper::removeListener( m_xTitle, m_xModifyEventForwarder );
         ModifyListenerHelper::removeListener( m_xLegend, m_xModifyEventForwarder );
+        ModifyListenerHelper::removeListener( uno::Reference<chart2::XDataTable>(m_xDataTable), m_xModifyEventForwarder );
     }
     catch( const uno::Exception & )
     {
