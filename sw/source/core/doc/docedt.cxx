@@ -51,7 +51,7 @@ using namespace ::com::sun::star::i18n;
 
 
 void RestFlyInRange( SaveFlyArr & rArr, const SwPosition& rStartPos,
-                      const SwNodeIndex* pInsertPos, bool const isForceToStartPos)
+                      const SwNode* pInsertPos, bool const isForceToStartPos)
 {
     SwPosition aPos(rStartPos);
     for(const SaveFly & rSave : rArr)
@@ -66,8 +66,8 @@ void RestFlyInRange( SaveFlyArr & rArr, const SwPosition& rStartPos,
             {
                 if (aAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA)
                 {
-                    assert(pInsertPos->GetNode().GetContentNode());
-                    aPos.Assign( *pInsertPos->GetNode().GetContentNode(),
+                    assert(pInsertPos->GetContentNode());
+                    aPos.Assign( *pInsertPos->GetContentNode(),
                         rSave.nContentIndex);
                 }
                 else
