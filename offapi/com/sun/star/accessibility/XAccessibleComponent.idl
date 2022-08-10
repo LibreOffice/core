@@ -70,7 +70,7 @@ interface XAccessibleComponent : ::com::sun::star::uno::XInterface
 
         <p>The test point's coordinates are defined relative to the
         coordinate system of the object.  That means that when the object is
-        an opaque rectangle then both the points (0,0) and (with-1,height-1)
+        an opaque rectangle then both the points (0,0) and (width-1,height-1)
         would yield a `TRUE` value.</p>
 
         @param Point
@@ -90,8 +90,8 @@ interface XAccessibleComponent : ::com::sun::star::uno::XInterface
 
         <p>The test point's coordinates are defined relative to the
         coordinate system of the object.  That means that when the object is
-        an opaque rectangle then both the points (0,0) and (with-1,height-1)
-        would yield a `TRUE` value.</p>
+        an opaque rectangle then both the points (0,0) and (width-1,height-1)
+        are points inside of the object.
 
         @param Point
             Coordinates of the test point for which to find the Accessible
