@@ -1586,12 +1586,12 @@ bool SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
         return false;
 
     // If the Table was alone in a Section, create the Frames via the Table's Upper
-    SwNode2LayoutSaveUpperFrames * pNode2Layout = nullptr;
+    std::optional<SwNode2LayoutSaveUpperFrames> oNode2Layout;
     SwNodeIndex aFrameIdx( rRange.aStart );
     SwNode* pFrameNd = FindPrvNxtFrameNode( aFrameIdx, &rRange.aEnd.GetNode() );
     if( !pFrameNd )
         // Collect all Uppers
-        pNode2Layout = new SwNode2LayoutSaveUpperFrames(*pTableNd);
+        oNode2Layout.emplace(*pTableNd);
 
     // Delete the Frames
     pTableNd->DelFrames();
@@ -1630,9 +1630,9 @@ bool SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
     SwNodeOffset nStt = aDelRg.aStart.GetIndex(), nEnd = aDelRg.aEnd.GetIndex();
     if( !pFrameNd )
     {
-        pNode2Layout->RestoreUpperFrames( *this,
+        oNode2Layout->RestoreUpperFrames( *this,
                         aDelRg.aStart.GetIndex(), aDelRg.aEnd.GetIndex() );
-        delete pNode2Layout;
+        oNode2Layout.reset();
     }
     else
     {
