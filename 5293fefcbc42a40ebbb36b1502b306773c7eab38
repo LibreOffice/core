@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7c7223d_221d2b96",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2022-08-10T17:51:09Z",
+      "side": 1,
+      "message": "I have attached an example to the bugreport and commented there. Please have a look.",
+      "revId": "5293fefcbc42a40ebbb36b1502b306773c7eab38",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
