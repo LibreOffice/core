@@ -162,6 +162,9 @@ void ChartController::executeDispatch_InsertGrid()
 void ChartController::executeDispatch_OpenInsertDataTableDialog()
 {
     SolarMutexGuard aGuard;
+    auto aUndoDescription = ActionDescriptionProvider::createDescription(ActionDescriptionProvider::ActionType::Insert, SchResId(STR_OBJECT_DATA_TABLE));
+    UndoGuard aUndoGuard(aUndoDescription, m_xUndoManager);
+
     uno::Reference<chart2::XDiagram> xDiagram = ChartModelHelper::findDiagram(getModel());
 
     InsertDataTableDialog aDialog(GetChartFrame());
@@ -196,12 +199,14 @@ void ChartController::executeDispatch_OpenInsertDataTableDialog()
     // show the dialog
     if (aDialog.run() == RET_OK)
     {
-        auto& rDialogData = aDialog.getDataTableDialogData();
+        bool bChanged = false;
 
+        auto& rDialogData = aDialog.getDataTableDialogData();
         auto xDataTable = xDiagram->getDataTable();
         if (!rDialogData.mbShow && xDataTable.is())
         {
             xDiagram->setDataTable(uno::Reference<chart2::XDataTable>());
+            bChanged = true;
         }
         else if (rDialogData.mbShow && !xDataTable.is())
         {
@@ -209,6 +214,7 @@ void ChartController::executeDispatch_OpenInsertDataTableDialog()
             if (xNewDataTable.is())
             {
                 xDiagram->setDataTable(xNewDataTable);
+                bChanged = true;
             }
         }
 
@@ -221,13 +227,20 @@ void ChartController::executeDispatch_OpenInsertDataTableDialog()
             xProperties->setPropertyValue("VBorder" , uno::Any(rDialogData.mbVerticalBorders));
             xProperties->setPropertyValue("Outline" , uno::Any(rDialogData.mbOutline));
             xProperties->setPropertyValue("Keys" , uno::Any(rDialogData.mbKeys));
+            bChanged = true;
         }
+
+        if (bChanged)
+            aUndoGuard.commit();
     }
 }
 
 void ChartController::executeDispatch_InsertDataTable()
 {
     SolarMutexGuard aGuard;
+    auto aUndoDescription = ActionDescriptionProvider::createDescription(ActionDescriptionProvider::ActionType::Insert, SchResId(STR_OBJECT_DATA_TABLE));
+    UndoGuard aUndoGuard(aUndoDescription, m_xUndoManager);
+
     uno::Reference<chart2::XDiagram> xDiagram = ChartModelHelper::findDiagram(getModel());
     auto xDataTable = xDiagram->getDataTable();
     if (!xDataTable.is())
@@ -236,6 +249,7 @@ void ChartController::executeDispatch_InsertDataTable()
         if (xNewDataTable.is())
         {
             xDiagram->setDataTable(xNewDataTable);
+            aUndoGuard.commit();
         }
     }
 }
@@ -243,11 +257,14 @@ void ChartController::executeDispatch_InsertDataTable()
 void ChartController::executeDispatch_DeleteDataTable()
 {
     SolarMutexGuard aGuard;
+    auto aUndoDescription = ActionDescriptionProvider::createDescription(ActionDescriptionProvider::ActionType::Delete, SchResId(STR_OBJECT_DATA_TABLE));
+    UndoGuard aUndoGuard(aUndoDescription, m_xUndoManager);
     uno::Reference<chart2::XDiagram> xDiagram = ChartModelHelper::findDiagram(getModel());
     auto xDataTable = xDiagram->getDataTable();
     if (xDataTable.is())
     {
         xDiagram->setDataTable(uno::Reference<chart2::XDataTable>());
+        aUndoGuard.commit();
     }
 }
 
