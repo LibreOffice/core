@@ -122,6 +122,24 @@
       "message": "and here: should now be 0x3df",
       "revId": "63c32b923f4828435b23b7808906bfcfd520b09b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3141d862_97d77939",
+        "filename": "vcl/inc/impglyphitem.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1003606
+      },
+      "writtenOn": "2022-08-10T07:59:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8051441b_66081a8a",
+      "revId": "63c32b923f4828435b23b7808906bfcfd520b09b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
