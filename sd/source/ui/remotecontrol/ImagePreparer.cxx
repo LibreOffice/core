@@ -33,6 +33,7 @@
 #include <com/sun/star/presentation/XSlideShowController.hpp>
 #include <com/sun/star/presentation/XPresentationPage.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <utility>
 
 using namespace ::sd;
 using namespace ::osl;
@@ -40,10 +41,10 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 ImagePreparer::ImagePreparer(
-    const uno::Reference<presentation::XSlideShowController>& rxController,
+    uno::Reference<presentation::XSlideShowController> _xController,
     Transmitter *aTransmitter )
  :  Timer("sd ImagePreparer"),
-    xController( rxController ),
+    xController(std::move( _xController )),
     pTransmitter( aTransmitter )
 {
     SAL_INFO( "sdremote", "ImagePreparer - start" );

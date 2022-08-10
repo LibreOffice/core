@@ -28,6 +28,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/svxids.hrc>
+#include <utility>
 #include <vcl/svapp.hxx>
 
 #include <functional>
@@ -39,10 +40,10 @@ using ::sd::framework::FrameworkHelper;
 namespace sd {
 
 SlideShowRestarter::SlideShowRestarter (
-    const ::rtl::Reference<SlideShow>& rpSlideShow,
+    ::rtl::Reference<SlideShow> pSlideShow,
     ViewShellBase* pViewShellBase)
     : mnEventId(nullptr),
-      mpSlideShow(rpSlideShow),
+      mpSlideShow(std::move(pSlideShow)),
       mpViewShellBase(pViewShellBase),
       mnDisplayCount(Application::GetScreenCount()),
       mpDispatcher(pViewShellBase->GetViewFrame()->GetDispatcher()),

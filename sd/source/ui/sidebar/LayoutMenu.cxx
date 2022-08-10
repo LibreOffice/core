@@ -49,6 +49,7 @@
 #include <svl/cjkoptions.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
+#include <utility>
 #include <vcl/commandevent.hxx>
 #include <vcl/image.hxx>
 #include <xmloff/autolayout.hxx>
@@ -157,13 +158,13 @@ public:
 LayoutMenu::LayoutMenu (
     weld::Widget* pParent,
     ViewShellBase& rViewShellBase,
-    const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
+    css::uno::Reference<css::ui::XSidebar> xSidebar)
     : PanelLayout( pParent, "LayoutPanel", "modules/simpress/ui/layoutpanel.ui" ),
       mrBase(rViewShellBase),
       mxLayoutValueSet(new LayoutValueSet(*this)),
       mxLayoutValueSetWin(new weld::CustomWeld(*m_xBuilder, "layoutvalueset", *mxLayoutValueSet)),
       mbIsMainViewChangePending(false),
-      mxSidebar(rxSidebar),
+      mxSidebar(std::move(xSidebar)),
       mbIsDisposed(false)
 {
     implConstruct( *mrBase.GetDocument()->GetDocSh() );

@@ -117,7 +117,7 @@ private:
 class TemplatePageObjectProvider : public PageObjectProvider
 {
 public:
-    explicit TemplatePageObjectProvider(const OUString& rsURL);
+    explicit TemplatePageObjectProvider(OUString sURL);
     virtual ~TemplatePageObjectProvider(){};
     virtual SdPage* operator()(SdDrawDocument* pDocument) override;
     virtual int GetCostIndex() override;
@@ -134,7 +134,7 @@ private:
 class TemplatePreviewProvider : public PreviewProvider
 {
 public:
-    explicit TemplatePreviewProvider(const OUString& rsURL);
+    explicit TemplatePreviewProvider(OUString sURL);
     virtual ~TemplatePreviewProvider(){};
     virtual Image operator()(int nWidth, SdPage* pPage, ::sd::PreviewRenderer& rRenderer) override;
     virtual int GetCostIndex() override;

@@ -57,8 +57,8 @@ class RenameLayoutTemplateUndoAction final : public SdUndoAction
 public:
     RenameLayoutTemplateUndoAction(
         SdDrawDocument* pDocument,
-        const OUString& rOldLayoutName,
-        const OUString& rNewLayoutName);
+        OUString aOldLayoutName,
+        OUString aNewLayoutName);
 
     virtual void Undo() override;
     virtual void Redo() override;

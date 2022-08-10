@@ -22,6 +22,7 @@
 
 #include <rtl/ustrbuf.hxx>
 
+#include <utility>
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -96,7 +97,7 @@ namespace {
 class AnnotationDragMove : public SdrDragMove
 {
 public:
-    AnnotationDragMove(SdrDragView& rNewView, const rtl::Reference <AnnotationTag >& xTag);
+    AnnotationDragMove(SdrDragView& rNewView, rtl::Reference <AnnotationTag > xTag);
     virtual bool BeginSdrDrag() override;
     virtual bool EndSdrDrag(bool bCopy) override;
     virtual void MoveSdrDrag(const Point& rNoSnapPnt) override;
@@ -109,9 +110,9 @@ private:
 
 }
 
-AnnotationDragMove::AnnotationDragMove(SdrDragView& rNewView, const rtl::Reference <AnnotationTag >& xTag)
+AnnotationDragMove::AnnotationDragMove(SdrDragView& rNewView, rtl::Reference <AnnotationTag > xTag)
 : SdrDragMove(rNewView)
-, mxTag( xTag )
+, mxTag(std::move( xTag ))
 {
 }
 

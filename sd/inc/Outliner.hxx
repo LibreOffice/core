@@ -24,6 +24,7 @@
 #include "OutlinerIterator.hxx"
 #include <editeng/SpellPortions.hxx>
 #include <memory>
+#include <utility>
 
 class SdrObject;
 class SdrTextObj;
@@ -52,9 +53,9 @@ struct SearchSelection
      */
     OString m_aRectangles;
 
-    SearchSelection(int nPage, const OString& rRectangles)
+    SearchSelection(int nPage, OString aRectangles)
         : m_nPage(nPage)
-        , m_aRectangles(rRectangles)
+        , m_aRectangles(std::move(aRectangles))
     {
     }
 

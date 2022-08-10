@@ -44,7 +44,7 @@ class ExSoundEntry
         bool                IsSameURL(std::u16string_view rURL) const;
         sal_uInt32          GetFileSize( ) const { return nFileSize; };
 
-                            ExSoundEntry(const OUString& rSoundURL);
+                            ExSoundEntry(OUString aSoundURL);
 
         /// @return size of a complete SoundContainer.
         sal_uInt32          GetSize( sal_uInt32 nId ) const;

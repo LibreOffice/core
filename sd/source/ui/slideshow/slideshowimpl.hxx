@@ -84,7 +84,7 @@ class SlideShowListenerProxy : private ::cppu::BaseMutex,
         public ::cppu::WeakImplHelper< css::presentation::XSlideShowListener, css::presentation::XShapeEventListener >
 {
 public:
-    SlideShowListenerProxy( const rtl::Reference< SlideshowImpl >& xController, const css::uno::Reference< css::presentation::XSlideShow >& xSlideShow );
+    SlideShowListenerProxy( rtl::Reference< SlideshowImpl > xController, css::uno::Reference< css::presentation::XSlideShow > xSlideShow );
     virtual ~SlideShowListenerProxy() override;
 
     void addAsSlideShowListener();

@@ -54,17 +54,17 @@ MasterPagesSelector::MasterPagesSelector (
     weld::Widget* pParent,
     SdDrawDocument& rDocument,
     ViewShellBase& rBase,
-    const std::shared_ptr<MasterPageContainer>& rpContainer,
-    const css::uno::Reference<css::ui::XSidebar>& rxSidebar,
+    std::shared_ptr<MasterPageContainer> pContainer,
+    css::uno::Reference<css::ui::XSidebar> xSidebar,
     const OUString& rUIFileName,
     const OString& rValueSetName)
     : PanelLayout( pParent, "MasterPagePanel", rUIFileName ),
-      mpContainer(rpContainer),
+      mpContainer(std::move(pContainer)),
       mxPreviewValueSet(new PreviewValueSet),
       mxPreviewValueSetWin(new weld::CustomWeld(*m_xBuilder, rValueSetName, *mxPreviewValueSet)),
       mrDocument(rDocument),
       mrBase(rBase),
-      mxSidebar(rxSidebar)
+      mxSidebar(std::move(xSidebar))
 {
     mxPreviewValueSet->SetSelectHdl (
         LINK(this, MasterPagesSelector, ClickHandler));

@@ -53,6 +53,7 @@
 #include <svx/xlnclit.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <utility>
 #include <vcl/print.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -687,7 +688,7 @@ namespace {
             const PageKind ePageKind,
             const MapMode& rMapMode,
             const bool bPrintMarkedOnly,
-            const OUString& rsPageString,
+            OUString sPageString,
             const Point& rPageStringOffset,
             const DrawModeFlags nDrawMode,
             const Orientation eOrientation,
@@ -695,7 +696,7 @@ namespace {
             : mePageKind(ePageKind),
               maMap(rMapMode),
               mbPrintMarkedOnly(bPrintMarkedOnly),
-              msPageString(rsPageString),
+              msPageString(std::move(sPageString)),
               maPageStringOffset(rPageStringOffset),
               mnDrawMode(nDrawMode),
               meOrientation(eOrientation),

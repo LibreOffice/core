@@ -37,6 +37,7 @@
 
 #include <sfx2/request.hxx>
 
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <osl/doublecheckedlocking.h>
 #include <osl/getglobalmutex.hxx>
@@ -86,9 +87,9 @@ public:
     */
     CallbackCaller (
         const ::sd::ViewShellBase& rBase,
-        const OUString& rsEventType,
-        const ::sd::framework::FrameworkHelper::ConfigurationChangeEventFilter& rFilter,
-        const ::sd::framework::FrameworkHelper::Callback& rCallback);
+        OUString sEventType,
+        ::sd::framework::FrameworkHelper::ConfigurationChangeEventFilter aFilter,
+        ::sd::framework::FrameworkHelper::Callback aCallback);
 
     virtual void disposing(std::unique_lock<std::mutex>&) override;
     // XEventListener
@@ -255,7 +256,7 @@ class FrameworkHelper::DisposeListener
     : public FrameworkHelperDisposeListenerInterfaceBase
 {
 public:
-    explicit DisposeListener (const ::std::shared_ptr<FrameworkHelper>& rpHelper);
+    explicit DisposeListener (::std::shared_ptr<FrameworkHelper> pHelper);
 
     virtual void disposing(std::unique_lock<std::mutex>&) override;
 
@@ -760,8 +761,8 @@ Reference<XResourceId> FrameworkHelper::CreateResourceId (
 //----- FrameworkHelper::DisposeListener --------------------------------------
 
 FrameworkHelper::DisposeListener::DisposeListener (
-    const ::std::shared_ptr<FrameworkHelper>& rpHelper)
-    : mpHelper(rpHelper)
+    ::std::shared_ptr<FrameworkHelper> pHelper)
+    : mpHelper(std::move(pHelper))
 {
     Reference<XComponent> xComponent (mpHelper->mxConfigurationController, UNO_QUERY);
     if (xComponent.is())
@@ -799,12 +800,12 @@ namespace {
 
 CallbackCaller::CallbackCaller (
     const ::sd::ViewShellBase& rBase,
-    const OUString& rsEventType,
-    const ::sd::framework::FrameworkHelper::ConfigurationChangeEventFilter& rFilter,
-    const ::sd::framework::FrameworkHelper::Callback& rCallback)
-    : msEventType(rsEventType),
-      maFilter(rFilter),
-      maCallback(rCallback)
+    OUString  rsEventType,
+    ::sd::framework::FrameworkHelper::ConfigurationChangeEventFilter aFilter,
+    ::sd::framework::FrameworkHelper::Callback aCallback)
+    : msEventType(std::move(rsEventType)),
+      maFilter(std::move(aFilter)),
+      maCallback(std::move(aCallback))
 {
     try
     {

@@ -51,6 +51,7 @@
 #include <oox/export/utils.hxx>
 #include <oox/ole/olehelper.hxx>
 #include <memory>
+#include <utility>
 
 class SfxObjectShell;
     // complete SfxObjectShell for SaveVBA under -fsanitize=function
@@ -63,7 +64,7 @@ using ::com::sun::star::beans::XPropertySet;
 
 //============================ PPTWriter ==================================
 
-PPTWriter::PPTWriter( tools::SvRef<SotStorage> const & rSvStorage,
+PPTWriter::PPTWriter( tools::SvRef<SotStorage> xSvStorage,
             css::uno::Reference< css::frame::XModel > const & rXModel,
             css::uno::Reference< css::task::XStatusIndicator > const & rXStatInd,
             SvMemoryStream* pVBA, sal_uInt32 nCnvrtFlags ) :
@@ -75,7 +76,7 @@ PPTWriter::PPTWriter( tools::SvRef<SotStorage> const & rSvStorage,
     mnTextStyle( 0 ),
     mbFontIndependentLineSpacing( false ),
     mnTextSize( 0 ),
-    mrStg                   ( rSvStorage ),
+    mrStg                   (std::move( xSvStorage )),
     mnVBAOleOfs             ( 0 ),
     mpVBA                   ( pVBA ),
     mnExEmbed               ( 0 ),

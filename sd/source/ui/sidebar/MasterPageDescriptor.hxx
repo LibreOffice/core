@@ -43,11 +43,11 @@ public:
         MasterPageContainer::Origin eOrigin,
         const sal_Int32 nTemplateIndex,
         std::u16string_view rURL,
-        const OUString& rPageName,
-        const OUString& rStyleName,
+        OUString sPageName,
+        OUString sStyleName,
         const bool bIsPrecious,
-        const std::shared_ptr<PageObjectProvider>& rpPageObjectProvider,
-        const std::shared_ptr<PreviewProvider>& rpPreviewProvider);
+        std::shared_ptr<PageObjectProvider> pPageObjectProvider,
+        std::shared_ptr<PreviewProvider> pPreviewProvider);
 
     void SetToken (MasterPageContainer::Token aToken);
 
@@ -204,12 +204,12 @@ public:
 
     class URLComparator { public:
         OUString msURL;
-        explicit URLComparator (const OUString& sURL);
+        explicit URLComparator (OUString sURL);
         bool operator() (const SharedMasterPageDescriptor& rDescriptor);
     };
     class StyleNameComparator { public:
         OUString msStyleName;
-        explicit StyleNameComparator (const OUString& sStyleName);
+        explicit StyleNameComparator (OUString sStyleName);
         bool operator() (const SharedMasterPageDescriptor& rDescriptor);
     };
     class PageObjectComparator { public:
@@ -218,7 +218,7 @@ public:
         bool operator() (const SharedMasterPageDescriptor& rDescriptor);
     };
     class AllComparator { public:
-        explicit AllComparator(const SharedMasterPageDescriptor& rDescriptor);
+        explicit AllComparator(SharedMasterPageDescriptor aDescriptor);
         bool operator() (const SharedMasterPageDescriptor& rDescriptor);
     private:
         SharedMasterPageDescriptor mpDescriptor;

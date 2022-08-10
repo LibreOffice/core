@@ -28,6 +28,7 @@
 #include <com/sun/star/uno/Reference.h>
 
 #include <memory>
+#include <utility>
 #include <vector>
 
 namespace com::sun::star::animations { class XAnimate; }
@@ -48,9 +49,9 @@ namespace ppt
         css::uno::Reference< css::animations::XAnimationNode > mxNode;
         css::uno::Reference< css::animations::XAnimationNode > mxMaster;
 
-        AfterEffectNode( const css::uno::Reference< css::animations::XAnimationNode >& xNode,
-                         const css::uno::Reference< css::animations::XAnimationNode >& xMaster )
-                         : mxNode( xNode ), mxMaster( xMaster ) {}
+        AfterEffectNode( css::uno::Reference< css::animations::XAnimationNode > xNode,
+                         css::uno::Reference< css::animations::XAnimationNode > xMaster )
+                         : mxNode(std::move( xNode )), mxMaster(std::move( xMaster )) {}
     };
 
     typedef std::shared_ptr< AfterEffectNode > AfterEffectNodePtr;

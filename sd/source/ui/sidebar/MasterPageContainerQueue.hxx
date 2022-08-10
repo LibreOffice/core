@@ -115,7 +115,7 @@ private:
     */
     static sal_uInt32 snWaitForMoreRequestsCount;
 
-    explicit MasterPageContainerQueue (const std::weak_ptr<ContainerAdapter>& rpContainer);
+    explicit MasterPageContainerQueue (std::weak_ptr<ContainerAdapter> pContainer);
     void LateInit();
 
     /** Calculate the priority that defines the order in which requests
