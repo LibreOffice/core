@@ -336,7 +336,7 @@ void SwUndoInsTable::RedoImpl(::sw::UndoRedoContext & rContext)
         return;
 
     SwPaM aPam( *pTableNode->EndOfSectionNode(), *pTableNode, SwNodeOffset(1) );
-    SwContentNode* pCNd = aPam.GetContentNode( false );
+    SwContentNode* pCNd = aPam.GetMarkContentNode();
     if( pCNd )
         aPam.GetMark()->nContent.Assign( pCNd, 0 );
 

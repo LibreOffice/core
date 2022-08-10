@@ -5837,7 +5837,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                     rSh.GetCursor()->GetPoint()->Assign(nPosNodeIdx, nPosIdx);
                     rSh.GetCursor()->GetMark()->nNode = nPosNodeIdx;
                     rSh.GetCursor()->GetMark()->nContent =
-                        rSh.GetCursor()->GetContentNode()->Len();
+                        rSh.GetCursor()->GetPointContentNode()->Len();
                 }
                 else if( nPosNodeIdx == nMarkNodeIdx )
                 {
@@ -5849,7 +5849,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                     rSh.GetCursor()->GetMark()->Assign(nMarkNodeIdx, nMarkIdx);
                     rSh.GetCursor()->GetPoint()->nNode = nMarkNodeIdx;
                     rSh.GetCursor()->GetPoint()->nContent =
-                        rSh.GetCursor()->GetContentNode( false )->Len();
+                        rSh.GetCursor()->GetMarkContentNode()->Len();
                 }
 
                 rSh.EndCursorMove( true );

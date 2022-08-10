@@ -185,7 +185,7 @@ bool SwEditShell::TableToText( sal_Unicode cCh )
     //End  for bug #i119954#
     pCursor->GetPoint()->nNode = aTabIdx;
 
-    SwContentNode* pCNd = pCursor->GetContentNode();
+    SwContentNode* pCNd = pCursor->GetPointContentNode();
     if( !pCNd )
         pCursor->Move( fnMoveForward, GoInContent );
     else

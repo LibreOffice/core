@@ -160,7 +160,7 @@ void GetTableSel( const SwCursor& rCursor, SwSelBoxes& rBoxes,
                 const SwTableSearchType eSearchType )
 {
     // get start and end cell
-    OSL_ENSURE( rCursor.GetContentNode() && rCursor.GetContentNode( false ),
+    OSL_ENSURE( rCursor.GetPointContentNode() && rCursor.GetMarkContentNode(),
             "Tabselection not on Cnt." );
 
     // Row-selection:
@@ -231,11 +231,11 @@ void GetTableSel( const SwCursor& rCursor, SwSelBoxes& rBoxes,
             aPtPos = pShCursor->GetPtPos();
             aMkPos = pShCursor->GetMkPos();
         }
-        const SwContentNode *pCntNd = rCursor.GetContentNode();
+        const SwContentNode *pCntNd = rCursor.GetPointContentNode();
         std::pair<Point, bool> tmp(aPtPos, true);
         const SwLayoutFrame *pStart = pCntNd ?
             pCntNd->getLayoutFrame(pCntNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp)->GetUpper() : nullptr;
-        pCntNd = rCursor.GetContentNode(false);
+        pCntNd = rCursor.GetMarkContentNode();
         tmp.first = aMkPos;
         const SwLayoutFrame *pEnd = pCntNd ?
             pCntNd->getLayoutFrame(pCntNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp)->GetUpper() : nullptr;
@@ -697,10 +697,10 @@ bool GetAutoSumSel( const SwCursorShell& rShell, SwCellFrames& rBoxes )
         pCursor = rShell.m_pTableCursor;
 
     std::pair<Point, bool> tmp(pCursor->GetPtPos(), true);
-    const SwLayoutFrame *const pStart = pCursor->GetContentNode()->getLayoutFrame(
+    const SwLayoutFrame *const pStart = pCursor->GetPointContentNode()->getLayoutFrame(
             rShell.GetLayout(), nullptr, &tmp)->GetUpper();
     tmp.first = pCursor->GetMkPos();
-    const SwLayoutFrame *const pEnd = pCursor->GetContentNode(false)->getLayoutFrame(
+    const SwLayoutFrame *const pEnd = pCursor->GetMarkContentNode()->getLayoutFrame(
             rShell.GetLayout(), nullptr, &tmp)->GetUpper();
 
     const SwLayoutFrame* pSttCell = pStart;
@@ -931,7 +931,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 {
     rBoxes.clear();
 
-    OSL_ENSURE( rPam.GetContentNode() && rPam.GetContentNode( false ),
+    OSL_ENSURE( rPam.GetPointContentNode() && rPam.GetMarkContentNode(),
             "Tabselection not on Cnt." );
 
 //JP 24.09.96:  Merge with repeating TableHeadLines does not work properly.
@@ -939,12 +939,12 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 //              headline is contained.
     Point aPt( 0, 0 );
 
-    const SwContentNode* pCntNd = rPam.GetContentNode();
+    const SwContentNode* pCntNd = rPam.GetPointContentNode();
     std::pair<Point, bool> const tmp(aPt, true);
     const SwLayoutFrame *const pStart = pCntNd->getLayoutFrame(
             pCntNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(),
             nullptr, &tmp)->GetUpper();
-    pCntNd = rPam.GetContentNode(false);
+    pCntNd = rPam.GetMarkContentNode();
     const SwLayoutFrame *const pEnd = pCntNd->getLayoutFrame(
             pCntNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(),
             nullptr, &tmp)->GetUpper();
@@ -1359,7 +1359,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
         {
             aPam.GetPoint()->Assign( *rPt.pSelBox->GetSttNd()->
                                             EndOfSectionNode(), SwNodeOffset(-1) );
-            SwContentNode* pCNd = aPam.GetContentNode();
+            SwContentNode* pCNd = aPam.GetPointContentNode();
             aPam.GetPoint()->nContent.Assign( pCNd, pCNd ? pCNd->Len() : 0 );
 
             SwNodeIndex aSttNdIdx( *rPt.pSelBox->GetSttNd(), 1 );
@@ -1454,12 +1454,12 @@ TableMergeErr CheckMergeSel( const SwPaM& rPam )
 //              headline is contained.
 
     Point aPt;
-    const SwContentNode* pCntNd = rPam.GetContentNode();
+    const SwContentNode* pCntNd = rPam.GetPointContentNode();
     std::pair<Point, bool> tmp(aPt, true);
     const SwLayoutFrame *const pStart = pCntNd->getLayoutFrame(
             pCntNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(),
             nullptr, &tmp)->GetUpper();
-    pCntNd = rPam.GetContentNode(false);
+    pCntNd = rPam.GetMarkContentNode();
     const SwLayoutFrame *const pEnd = pCntNd->getLayoutFrame(
             pCntNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(),
             nullptr, &tmp)->GetUpper();
@@ -1983,12 +1983,12 @@ bool CheckSplitCells( const SwCursor& rCursor, sal_uInt16 nDiv,
         aMkPos = pShCursor->GetMkPos();
     }
 
-    const SwContentNode* pCntNd = rCursor.GetContentNode();
+    const SwContentNode* pCntNd = rCursor.GetPointContentNode();
     std::pair<Point, bool> tmp(aPtPos, true);
     const SwLayoutFrame *const pStart = pCntNd->getLayoutFrame(
             pCntNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(),
             nullptr, &tmp)->GetUpper();
-    pCntNd = rCursor.GetContentNode(false);
+    pCntNd = rCursor.GetMarkContentNode();
     tmp.first = aMkPos;
     const SwLayoutFrame *const pEnd = pCntNd->getLayoutFrame(
             pCntNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(),

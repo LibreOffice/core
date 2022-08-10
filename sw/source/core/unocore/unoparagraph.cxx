@@ -85,7 +85,7 @@ SwParaSelection::SwParaSelection(SwCursor & rCursor)
         m_rCursor.MovePara(GoCurrPara, fnParaStart);
     }
     // or at the end already?
-    if (m_rCursor.GetPoint()->nContent != m_rCursor.GetContentNode()->Len())
+    if (m_rCursor.GetPoint()->nContent != m_rCursor.GetPointContentNode()->Len())
     {
         m_rCursor.SetMark();
         m_rCursor.MovePara(GoCurrPara, fnParaEnd);

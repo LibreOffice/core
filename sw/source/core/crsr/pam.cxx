@@ -963,7 +963,7 @@ SwContentNode* GetNode( SwPaM & rPam, bool& rbFirst, SwMoveFnCollection const & 
         if( rbFirst )
         {
             rbFirst = false;
-            pNd = rPam.GetContentNode();
+            pNd = rPam.GetPointContentNode();
             if( pNd )
             {
                 SwContentFrame const*const pFrame(pNd->getLayoutFrame(pLayout));

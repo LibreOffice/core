@@ -88,8 +88,8 @@ namespace SwUnoCursorHelper
     inline bool             IsStartOfPara(SwPaM& rUnoCursor)
                                         { return rUnoCursor.GetPoint()->nContent == 0;}
     inline bool             IsEndOfPara(SwPaM& rUnoCursor)
-                                        { return rUnoCursor.GetContentNode() &&
-                                            rUnoCursor.GetPoint()->nContent == rUnoCursor.GetContentNode()->Len();}
+                                        { return rUnoCursor.GetPointContentNode() &&
+                                            rUnoCursor.GetPoint()->nContent == rUnoCursor.GetPointContentNode()->Len();}
 
     void                        resetCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry, SwPaM& rPam);
     /// @throws css::lang::IllegalArgumentException

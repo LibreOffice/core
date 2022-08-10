@@ -2503,9 +2503,9 @@ bool SwWW8ImplReader::SetSpacing(SwPaM &rMyPam, int nSpace, bool bIsUpper )
                 aUL.SetLower( static_cast< sal_uInt16 >(nSpace) );
 
             const sal_Int32 nEnd = pSpacingPos->GetContentIndex();
-            rMyPam.GetPoint()->nContent.Assign(rMyPam.GetContentNode(), 0);
+            rMyPam.GetPoint()->nContent.Assign(rMyPam.GetPointContentNode(), 0);
             m_xCtrlStck->NewAttr(*pSpacingPos, aUL);
-            rMyPam.GetPoint()->nContent.Assign(rMyPam.GetContentNode(), nEnd);
+            rMyPam.GetPoint()->nContent.Assign(rMyPam.GetPointContentNode(), nEnd);
             m_xCtrlStck->SetAttr(*pSpacingPos, RES_UL_SPACE);
             bRet = true;
         }
@@ -3317,7 +3317,7 @@ void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const OUString& rAddString
     sal_Int32 nLen = rAddString.getLength();
 
     OUString sParagraphText;
-    const SwContentNode *pCntNd = m_pPaM->GetContentNode();
+    const SwContentNode *pCntNd = m_pPaM->GetPointContentNode();
     const SwTextNode* pNd = pCntNd ? pCntNd->GetTextNode() : nullptr;
     if (pNd)
         sParagraphText = pNd->GetText();
@@ -3462,7 +3462,7 @@ void SwWW8ImplReader::simpleAddTextToParagraph(const OUString& rAddString)
     if (addString.isEmpty())
         return;
 
-    const SwContentNode *pCntNd = m_pPaM->GetContentNode();
+    const SwContentNode *pCntNd = m_pPaM->GetPointContentNode();
     const SwTextNode* pNd = pCntNd ? pCntNd->GetTextNode() : nullptr;
 
     OSL_ENSURE(pNd, "What the hell, where's my text node");
@@ -3628,7 +3628,7 @@ bool SwWW8ImplReader::ReadChar(tools::Long nPosCp, tools::Long nCpOfs)
             else if (!m_nInTable)
             {
                 // Always insert a txtnode for a column break, e.g. ##
-                SwContentNode *pCntNd=m_pPaM->GetContentNode();
+                SwContentNode *pCntNd=m_pPaM->GetPointContentNode();
                 if (pCntNd!=nullptr && pCntNd->Len()>0) // if par is empty not break is needed
                     AppendTextNode(*m_pPaM->GetPoint());
                 m_rDoc.getIDocumentContentOperations().InsertPoolItem(*m_pPaM, SvxFormatBreakItem(SvxBreak::ColumnBefore, RES_BREAK));
@@ -4620,7 +4620,7 @@ void wwSectionManager::InsertSegments()
 
                 aSectPaM.GetPoint()->Assign(*pTextNd);
                 aSectPaM.GetPoint()->nContent.Assign(
-                    aSectPaM.GetContentNode(), 0);
+                    aSectPaM.GetPointContentNode(), 0);
             }
 
             aSectPaM.SetMark();

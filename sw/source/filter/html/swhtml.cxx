@@ -813,7 +813,7 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
             {
                 if (!m_pPam->GetPoint()->GetContentIndex() && CanRemoveNode(nNodeIdx))
                 {
-                    SwContentNode* pCNd = m_pPam->GetContentNode();
+                    SwContentNode* pCNd = m_pPam->GetPointContentNode();
                     if( pCNd && pCNd->StartOfSectionIndex()+2 <
                         pCNd->EndOfSectionIndex() && !bHasFlysOrMarks )
                     {
@@ -3032,7 +3032,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
         {
             pFrameFormat->DelFrames();
             *aAttrPam.GetPoint() = *pFlyPos;
-            aAttrPam.GetPoint()->nContent.Assign( aAttrPam.GetContentNode(),
+            aAttrPam.GetPoint()->nContent.Assign( aAttrPam.GetPointContentNode(),
                                                    m_aMoveFlyCnts[n] );
             SwFormatAnchor aAnchor( rAnchor );
             aAnchor.SetType( RndStdIds::FLY_AT_CHAR );
@@ -4612,7 +4612,7 @@ bool SwHTMLParser::HasCurrentParaFlys( bool bNoSurroundOnly,
 
 const SwFormatColl *SwHTMLParser::GetCurrFormatColl() const
 {
-    const SwContentNode* pCNd = m_pPam->GetContentNode();
+    const SwContentNode* pCNd = m_pPam->GetPointContentNode();
     return pCNd ? &pCNd->GetAnyFormatColl() : nullptr;
 }
 

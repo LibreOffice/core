@@ -1071,7 +1071,7 @@ static void lcl_MoveCursor( SwUnoCursor * const pUnoCursor,
     const sal_Int32 nNextMarkIndex,
     const sal_Int32 nEndPos )
 {
-    sal_Int32 nMovePos = pUnoCursor->GetContentNode()->Len();
+    sal_Int32 nMovePos = pUnoCursor->GetPointContentNode()->Len();
 
     if ((nEndPos >= 0) && (nEndPos < nMovePos))
     {

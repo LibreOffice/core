@@ -4202,7 +4202,7 @@ void SwDoc::ClearLineNumAttrs( SwPosition const & rPos )
 {
     SwPaM aPam(rPos);
     aPam.Move(fnMoveBackward);
-    SwContentNode *pNode = aPam.GetContentNode();
+    SwContentNode *pNode = aPam.GetPointContentNode();
     if ( nullptr == pNode )
         return ;
     if( !pNode->IsTextNode() )

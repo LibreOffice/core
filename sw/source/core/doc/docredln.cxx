@@ -357,7 +357,7 @@ void SwRedlineTable::LOKRedlineNotification(RedlineNotification nType, SwRangeRe
     aRedline.put("dateTime", sDateTime.toUtf8().getStr());
 
     auto [pStartPos, pEndPos] = pRedline->StartEnd(); // SwPosition*
-    SwContentNode* pContentNd = pRedline->GetContentNode();
+    SwContentNode* pContentNd = pRedline->GetPointContentNode();
     SwView* pView = dynamic_cast<SwView*>(SfxViewShell::Current());
     if (pView && pContentNd)
     {
@@ -1775,7 +1775,7 @@ void SwRangeRedline::MoveFromSection(size_t nMyPos)
             SwPaM aPam( m_oContentSect->GetNode(),
                         *m_oContentSect->GetNode().EndOfSectionNode(), SwNodeOffset(1),
                         SwNodeOffset( m_bDelLastPara ? -2 : -1 ) );
-            SwContentNode* pCNd = aPam.GetContentNode();
+            SwContentNode* pCNd = aPam.GetPointContentNode();
             if( pCNd )
                 aPam.GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
             else
@@ -1810,12 +1810,12 @@ void SwRangeRedline::MoveFromSection(size_t nMyPos)
             if( m_bDelLastPara )
             {
                 ++GetPoint()->nNode;
-                pCNd = GetContentNode();
+                pCNd = GetPointContentNode();
                 GetPoint()->nContent.Assign( pCNd, 0 );
                 m_bDelLastPara = false;
             }
             else if( pColl )
-                pCNd = GetContentNode();
+                pCNd = GetPointContentNode();
 
             if( pColl && pCNd )
                 pCNd->ChgFormatColl( pColl );

@@ -2742,7 +2742,7 @@ void WW8TabDesc::ParkPaM()
         }
         while (m_pIo->m_pPaM->GetPointNode().GetNodeType() != SwNodeType::Text && ++nSttNd < nEndNd);
 
-        m_pIo->m_pPaM->GetPoint()->nContent.Assign(m_pIo->m_pPaM->GetContentNode(), 0);
+        m_pIo->m_pPaM->GetPoint()->nContent.Assign(m_pIo->m_pPaM->GetPointContentNode(), 0);
         m_pIo->m_rDoc.SetTextFormatColl(*m_pIo->m_pPaM, const_cast<SwTextFormatColl*>(m_pIo->m_pDfltTextFormatColl));
     }
 }
@@ -2984,7 +2984,7 @@ void WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
             m_pIo->m_pPaM->GetPoint()->nNode = nSttNd;
         }
         while (m_pIo->m_pPaM->GetPointNode().GetNodeType() != SwNodeType::Text && ++nSttNd < nEndNd);
-        m_pIo->m_pPaM->GetPoint()->nContent.Assign(m_pIo->m_pPaM->GetContentNode(), 0);
+        m_pIo->m_pPaM->GetPoint()->nContent.Assign(m_pIo->m_pPaM->GetPointContentNode(), 0);
         // Precautionally set now, otherwise the style is not set for cells
         // that are inserted for margin balancing.
         m_pIo->m_rDoc.SetTextFormatColl(*m_pIo->m_pPaM, const_cast<SwTextFormatColl*>(m_pIo->m_pDfltTextFormatColl));
@@ -3009,9 +3009,9 @@ void WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
     SwPosition* pGridPos = m_pIo->m_pPaM->GetPoint();
 
     const sal_Int32 nEnd = pGridPos->GetContentIndex();
-    pGridPos->nContent.Assign(m_pIo->m_pPaM->GetContentNode(), 0);
+    pGridPos->nContent.Assign(m_pIo->m_pPaM->GetPointContentNode(), 0);
     m_pIo->m_xCtrlStck->NewAttr(*pGridPos, aGridItem);
-    pGridPos->nContent.Assign(m_pIo->m_pPaM->GetContentNode(), nEnd);
+    pGridPos->nContent.Assign(m_pIo->m_pPaM->GetPointContentNode(), nEnd);
     m_pIo->m_xCtrlStck->SetAttr(*pGridPos, RES_PARATR_SNAPTOGRID);
 }
 

@@ -193,14 +193,14 @@ const SwPageDesc* SwFEShell::GetSelectedPageDescs() const
     for(const SwPaM& rPaM : GetCursor()->GetRingContainer())
     {
 
-        if( nullptr != (pCNd = rPaM.GetContentNode() ) &&
+        if( nullptr != (pCNd = rPaM.GetPointContentNode() ) &&
             nullptr != (pPtFrame = pCNd->getLayoutFrame(GetLayout(), nullptr, &tmp)))
             pPtFrame = pPtFrame->FindPageFrame();
         else
             pPtFrame = nullptr;
 
         if( rPaM.HasMark() &&
-            nullptr != (pCNd = rPaM.GetContentNode( false ) ) &&
+            nullptr != (pCNd = rPaM.GetMarkContentNode() ) &&
             nullptr != (pMkFrame = pCNd->getLayoutFrame(GetLayout(), nullptr, &tmp)))
             pMkFrame = pMkFrame->FindPageFrame();
         else

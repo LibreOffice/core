@@ -183,7 +183,7 @@ ErrCode SwReader::Read( const Reader& rOptions )
         const sal_Int32 nSttContent = pPam->GetPoint()->GetContentIndex();
 
         // make sure the End position is correct for all Readers
-        SwContentNode* pCNd = pPam->GetContentNode();
+        SwContentNode* pCNd = pPam->GetPointContentNode();
         sal_Int32 nEndContent = pCNd ? pCNd->Len() - nSttContent : 0;
         SwNodeIndex aEndPos( pPam->GetPoint()->GetNode(), 1 );
 

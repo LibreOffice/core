@@ -288,9 +288,9 @@ bool SwEditShell::Copy( SwEditShell& rDestShell )
         for(SwPaM& rCmp : rDestShell.GetCursor()->GetRingContainer())
         {
             OSL_ENSURE( rCmp.GetPoint()->GetContentNode()
-                        == rCmp.GetContentNode(), "Point in wrong Node" );
+                        == rCmp.GetPointContentNode(), "Point in wrong Node" );
             OSL_ENSURE( rCmp.GetMark()->GetContentNode()
-                        == rCmp.GetContentNode(false), "Mark in wrong Node" );
+                        == rCmp.GetMarkContentNode(), "Mark in wrong Node" );
         }
     }
 #endif

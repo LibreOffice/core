@@ -843,7 +843,7 @@ void SwUndoSaveContent::MovePtForward( SwPaM& rPam, bool bMvBkwrd )
     else
     {
         rPam.GetPoint()->Adjust(SwNodeOffset(1));
-        SwContentNode* pCNd = rPam.GetContentNode();
+        SwContentNode* pCNd = rPam.GetPointContentNode();
         if( !pCNd )
             rPam.Move( fnMoveForward );
     }
@@ -1263,10 +1263,10 @@ void SwUndoSaveSection::SaveSection(
         ++aPam.GetMark()->nNode;
     }
 
-    SwContentNode* pCNd = aPam.GetContentNode( false );
+    SwContentNode* pCNd = aPam.GetMarkContentNode();
     if( pCNd )
         aPam.GetMark()->nContent.Assign( pCNd, 0 );
-    pCNd = aPam.GetContentNode();
+    pCNd = aPam.GetPointContentNode();
     if( nullptr != pCNd )
         aPam.GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
 
