@@ -18,6 +18,7 @@
  */
 
 #include <controller/SlsAnimator.hxx>
+#include <utility>
 #include <view/SlideSorterView.hxx>
 #include <osl/diagnose.h>
 
@@ -30,12 +31,12 @@ class Animator::Animation
 {
 public:
     Animation (
-        const Animator::AnimationFunctor& rAnimation,
+        Animator::AnimationFunctor aAnimation,
         const double nStartOffset,
         const double nDuration,
         const double nGlobalTime,
         const Animator::AnimationId nAnimationId,
-        const Animator::FinishFunctor& rFinishFunctor);
+        Animator::FinishFunctor aFinishFunctor);
     /** Run next animation step.  If animation has reached its end it is
         expired.
     */
@@ -222,14 +223,14 @@ IMPL_LINK_NOARG(Animator, TimeoutHandler, Timer *, void)
 //===== Animator::Animation ===================================================
 
 Animator::Animation::Animation (
-    const Animator::AnimationFunctor& rAnimation,
+    Animator::AnimationFunctor aAnimation,
     const double nStartOffset,
     const double nDuration,
     const double nGlobalTime,
     const Animator::AnimationId nId,
-    const Animator::FinishFunctor& rFinishFunctor)
-    : maAnimation(rAnimation),
-      maFinishFunctor(rFinishFunctor),
+    Animator::FinishFunctor aFinishFunctor)
+    : maAnimation(std::move(aAnimation)),
+      maFinishFunctor(std::move(aFinishFunctor)),
       mnAnimationId(nId),
       mnDuration(nDuration),
       mnEnd(nGlobalTime + nDuration + nStartOffset),

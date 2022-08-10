@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <utility>
 #include <view/SlsPageObjectLayouter.hxx>
 #include <view/SlsTheme.hxx>
 #include <view/SlsLayouter.hxx>
@@ -202,7 +203,7 @@ public:
 protected:
     Implementation (
         sd::Window *pWindow,
-        const std::shared_ptr<view::Theme>& rpTheme);
+        std::shared_ptr<view::Theme> pTheme);
     explicit Implementation (const Implementation& rImplementation);
 
     virtual void CalculateRowAndColumnCount (const Size& rWindowSize) = 0;
@@ -428,7 +429,7 @@ Layouter::Implementation* Layouter::Implementation::Create (
 
 Layouter::Implementation::Implementation (
     sd::Window *pWindow,
-    const std::shared_ptr<view::Theme>& rpTheme)
+    std::shared_ptr<view::Theme> pTheme)
     : mpWindow(pWindow),
       mnLeftBorder(5),
       mnRightBorder(5),
@@ -445,7 +446,7 @@ Layouter::Implementation::Implementation (
       mnMaxColumnCount(0),
       mnMaxRowCount(0),
       maPageObjectSize(1,1),
-      mpTheme(rpTheme)
+      mpTheme(std::move(pTheme))
 {
 }
 

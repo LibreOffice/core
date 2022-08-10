@@ -27,6 +27,7 @@
 #include <drawdoc.hxx>
 #include <DrawViewShell.hxx>
 #include <sdpage.hxx>
+#include <utility>
 
 namespace sd::outliner {
 
@@ -359,10 +360,10 @@ IteratorImplBase::IteratorImplBase(SdDrawDocument* pDocument,
 }
 
 IteratorImplBase::IteratorImplBase( SdDrawDocument* pDocument,
-    const std::weak_ptr<ViewShell>& rpViewShellWeak,
+    std::weak_ptr<ViewShell> pViewShellWeak,
     bool bDirectionIsForward, PageKind ePageKind, EditMode eEditMode)
 : mpDocument (pDocument)
-, mpViewShellWeak (rpViewShellWeak)
+, mpViewShellWeak (std::move(pViewShellWeak))
 , mbDirectionIsForward (bDirectionIsForward)
 {
     maPosition.mePageKind = ePageKind;

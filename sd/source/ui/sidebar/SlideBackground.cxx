@@ -57,6 +57,7 @@
 #include <sfx2/sidebar/Panel.hxx>
 #include <EventMultiplexer.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <utility>
 #include <vcl/EnumContext.hxx>
 #include <vcl/svapp.hxx>
 
@@ -88,7 +89,7 @@ enum eFillStyle
 SlideBackground::SlideBackground(
     weld::Widget* pParent,
     ViewShellBase& rBase,
-    const css::uno::Reference<css::frame::XFrame>& rxFrame,
+    css::uno::Reference<css::frame::XFrame> xFrame,
     SfxBindings* pBindings) :
     PanelLayout( pParent, "SlideBackgroundPanel", "modules/simpress/ui/sidebarslidebackground.ui" ),
     mrBase( rBase ),
@@ -127,7 +128,7 @@ SlideBackground::SlideBackground(
     mpPageItem( new SvxPageItem(SID_ATTR_PAGE) ),
     mbSwitchModeToNormal(false),
     mbSwitchModeToMaster(false),
-    mxFrame(rxFrame),
+    mxFrame(std::move(xFrame)),
     maDrawOtherContext(vcl::EnumContext::Application::Draw, vcl::EnumContext::Context::DrawPage),
     maDrawMasterContext(vcl::EnumContext::Application::Draw, vcl::EnumContext::Context::MasterPage),
     maImpressOtherContext(vcl::EnumContext::Application::Impress, vcl::EnumContext::Context::DrawPage),

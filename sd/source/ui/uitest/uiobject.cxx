@@ -18,13 +18,14 @@
 #include <sfx2/sfxsids.hrc>
 #include <svx/uiobject.hxx>
 #include <tools/debug.hxx>
+#include <utility>
 
 namespace
 {
 class ImpressSdrObject : public SdrUIObject
 {
 public:
-    ImpressSdrObject(const VclPtr<sd::Window>& xImpressWin, const OUString& rName);
+    ImpressSdrObject(const VclPtr<sd::Window>& xImpressWin, OUString aName);
 
     SdrObject* get_object() override;
 
@@ -69,9 +70,9 @@ SdrObject* getObject(const VclPtr<sd::Window>& xWindow, std::u16string_view rNam
 }
 }
 
-ImpressSdrObject::ImpressSdrObject(const VclPtr<sd::Window>& xImpressWin, const OUString& rName)
+ImpressSdrObject::ImpressSdrObject(const VclPtr<sd::Window>& xImpressWin, OUString aName)
     : mxWindow(xImpressWin)
-    , maName(rName)
+    , maName(std::move(aName))
 {
 }
 

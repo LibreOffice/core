@@ -20,6 +20,7 @@
 #include "SlsLayeredDevice.hxx"
 #include <Window.hxx>
 
+#include <utility>
 #include <vcl/virdev.hxx>
 #include <sal/log.hxx>
 #include <o3tl/safeint.hxx>
@@ -39,10 +40,10 @@ class LayerInvalidator : public ILayerInvalidator
 {
 public:
     LayerInvalidator (
-        const std::shared_ptr<LayeredDevice>& rpLayeredDevice,
+        std::shared_ptr<LayeredDevice> pLayeredDevice,
         sd::Window *pTargetWindow,
         const int nLayer)
-        : mpLayeredDevice(rpLayeredDevice),
+        : mpLayeredDevice(std::move(pLayeredDevice)),
           mpTargetWindow(pTargetWindow),
           mnLayer(nLayer)
     {

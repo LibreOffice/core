@@ -18,6 +18,7 @@
  */
 
 #include <controller/SlsInsertionIndicatorHandler.hxx>
+#include <utility>
 #include <view/SlideSorterView.hxx>
 #include <view/SlsLayouter.hxx>
 #include <view/SlsInsertAnimator.hxx>
@@ -227,8 +228,8 @@ bool InsertionIndicatorHandler::IsInsertionTrivial (const sal_Int8 nDndAction)
 //===== InsertionIndicatorHandler::ForceShowContext ===========================
 
 InsertionIndicatorHandler::ForceShowContext::ForceShowContext (
-    const std::shared_ptr<InsertionIndicatorHandler>& rpHandler)
-    : mpHandler(rpHandler)
+    std::shared_ptr<InsertionIndicatorHandler> pHandler)
+    : mpHandler(std::move(pHandler))
 {
     mpHandler->ForceShow();
 }

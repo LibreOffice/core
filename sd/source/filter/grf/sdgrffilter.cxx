@@ -19,6 +19,7 @@
 
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 
+#include <utility>
 #include <vcl/errinf.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/sfxsids.hrc>
@@ -68,8 +69,8 @@ class SdGRFFilter_ImplInteractionHdl : public ::cppu::WeakImplHelper< css::task:
 
     public:
 
-    explicit SdGRFFilter_ImplInteractionHdl( css::uno::Reference< css::task::XInteractionHandler > const & xInteraction ) :
-        m_xInter( xInteraction ),
+    explicit SdGRFFilter_ImplInteractionHdl( css::uno::Reference< css::task::XInteractionHandler > xInteraction ) :
+        m_xInter(std::move( xInteraction )),
         nFilterError( ERRCODE_NONE )
         {}
 

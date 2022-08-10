@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <utility>
 #include <vector>
 
 #include "RemoteDialogClientBox.hxx"
@@ -29,14 +30,14 @@ namespace sd {
 //                          struct ClientBoxEntry
 
 ClientBoxEntry::ClientBoxEntry(ClientBox* pClientBox,
-                               const std::shared_ptr<ClientInfo>& pClientInfo)
+                               std::shared_ptr<ClientInfo> pClientInfo)
     : m_xBuilder(Application::CreateBuilder(pClientBox->GetContainer(), "modules/simpress/ui/clientboxfragment.ui"))
     , m_xContainer(m_xBuilder->weld_container("ClientboxFragment"))
     , m_xDeviceName(m_xBuilder->weld_label("name"))
     , m_xPinLabel(m_xBuilder->weld_label("pinlabel"))
     , m_xPinBox(m_xBuilder->weld_entry("pin"))
     , m_xDeauthoriseButton(m_xBuilder->weld_button("button"))
-    , m_xClientInfo(pClientInfo)
+    , m_xClientInfo(std::move(pClientInfo))
     , m_pClientBox(pClientBox)
 {
     m_xDeviceName->set_label(m_xClientInfo->mName);

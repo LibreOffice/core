@@ -8,6 +8,7 @@
  */
 
 #include <sal/log.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 
 #include "Communicator.hxx"
@@ -20,9 +21,9 @@
 using namespace sd;
 using namespace ::com::sun::star::presentation;
 
-Listener::Listener( const ::rtl::Reference<Communicator>& rCommunicator,
+Listener::Listener( ::rtl::Reference<Communicator> xCommunicator,
                     sd::Transmitter *aTransmitter  ):
-      mCommunicator( rCommunicator ),
+      mCommunicator(std::move( xCommunicator )),
       pTransmitter( nullptr )
 {
     pTransmitter = aTransmitter;

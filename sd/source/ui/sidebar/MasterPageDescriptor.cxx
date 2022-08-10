@@ -26,6 +26,7 @@
 #include <sdpage.hxx>
 #include <tools/urlobj.hxx>
 #include <sal/log.hxx>
+#include <utility>
 
 namespace sd::sidebar {
 
@@ -35,21 +36,21 @@ MasterPageDescriptor::MasterPageDescriptor (
     MasterPageContainer::Origin eOrigin,
     const sal_Int32 nTemplateIndex,
     std::u16string_view rsURL,
-    const OUString& rsPageName,
-    const OUString& rsStyleName,
+    OUString sPageName,
+    OUString sStyleName,
     const bool bIsPrecious,
-    const std::shared_ptr<PageObjectProvider>& rpPageObjectProvider,
-    const std::shared_ptr<PreviewProvider>& rpPreviewProvider)
+    std::shared_ptr<PageObjectProvider> pPageObjectProvider,
+    std::shared_ptr<PreviewProvider> pPreviewProvider)
     : maToken(MasterPageContainer::NIL_TOKEN),
       meOrigin(eOrigin),
       msURL(INetURLObject(rsURL).GetMainURL(INetURLObject::DecodeMechanism::Unambiguous)),
-      msPageName(rsPageName),
-      msStyleName(rsStyleName),
+      msPageName(std::move(sPageName)),
+      msStyleName(std::move(sStyleName)),
       mbIsPrecious(bIsPrecious),
       mpMasterPage(nullptr),
       mpSlide(nullptr),
-      mpPreviewProvider(rpPreviewProvider),
-      mpPageObjectProvider(rpPageObjectProvider),
+      mpPreviewProvider(std::move(pPreviewProvider)),
+      mpPageObjectProvider(std::move(pPageObjectProvider)),
       mnTemplateIndex(nTemplateIndex),
       meURLClassification(URLCLASS_UNDETERMINED),
       mnUseCount(0)
@@ -258,8 +259,8 @@ MasterPageDescriptor::URLClassification MasterPageDescriptor::GetURLClassificati
 
 //===== URLComparator =========================================================
 
-MasterPageDescriptor::URLComparator::URLComparator (const OUString& sURL)
-    : msURL(sURL)
+MasterPageDescriptor::URLComparator::URLComparator (OUString sURL)
+    : msURL(std::move(sURL))
 {
 }
 
@@ -274,8 +275,8 @@ bool MasterPageDescriptor::URLComparator::operator() (
 
 // ===== StyleNameComparator ==================================================
 
-MasterPageDescriptor::StyleNameComparator::StyleNameComparator (const OUString& sStyleName)
-    : msStyleName(sStyleName)
+MasterPageDescriptor::StyleNameComparator::StyleNameComparator (OUString sStyleName)
+    : msStyleName(std::move(sStyleName))
 {
 }
 
@@ -306,8 +307,8 @@ bool MasterPageDescriptor::PageObjectComparator::operator() (
 
 //===== AllComparator =========================================================
 
-MasterPageDescriptor::AllComparator::AllComparator(const SharedMasterPageDescriptor& rDescriptor)
-    : mpDescriptor(rDescriptor)
+MasterPageDescriptor::AllComparator::AllComparator(SharedMasterPageDescriptor aDescriptor)
+    : mpDescriptor(std::move(aDescriptor))
 {
 }
 

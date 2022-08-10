@@ -19,6 +19,7 @@
 
 #pragma once
 #include <memory>
+#include <utility>
 #include <vector>
 #include "escherex.hxx"
 #include <sal/types.h>
@@ -69,8 +70,8 @@ struct EPPTHyperlink
                             // bit 8-23: index
                             // bit 31  : hyperlink is attached to a shape
 
-    EPPTHyperlink( const OUString& rURL, sal_uInt32 nT ) :
-        aURL        ( rURL ),
+    EPPTHyperlink( OUString _aURL, sal_uInt32 nT ) :
+        aURL        (std::move( _aURL )),
         nType       ( nT ){};
 };
 
@@ -216,7 +217,7 @@ class PPTWriter final : public PPTWriterBase, public PPTExBulletProvider
         virtual void        ImplWriteSlideMaster( sal_uInt32 nPageNum, css::uno::Reference< css::beans::XPropertySet > const & aXBackgroundPropSet ) override;
 
     public:
-                                PPTWriter( tools::SvRef<SotStorage> const & rSvStorage,
+                                PPTWriter( tools::SvRef<SotStorage> xSvStorage,
                                             css::uno::Reference< css::frame::XModel > const & rModel,
                                             css::uno::Reference< css::task::XStatusIndicator > const & rStatInd,
                                             SvMemoryStream* pVBA, sal_uInt32 nCnvrtFlags );

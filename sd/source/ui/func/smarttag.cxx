@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <utility>
 #include <vcl/commandevent.hxx>
 
 #include <ViewShell.hxx>
@@ -315,16 +316,16 @@ void SmartTagSet::CheckPossibilities()
         mxSelectedTag->CheckPossibilities();
 }
 
-SmartHdl::SmartHdl( const SmartTagReference& xTag, SdrObject* pObject, const Point& rPnt, SdrHdlKind eNewKind /*=SdrHdlKind::Move*/ )
+SmartHdl::SmartHdl( SmartTagReference xTag, SdrObject* pObject, const Point& rPnt, SdrHdlKind eNewKind /*=SdrHdlKind::Move*/ )
 : SdrHdl( rPnt, eNewKind )
-, mxSmartTag( xTag )
+, mxSmartTag(std::move( xTag ))
 {
     SetObj( pObject );
 }
 
-SmartHdl::SmartHdl( const SmartTagReference& xTag, const Point& rPnt, SdrHdlKind eNewKind /*=SdrHdlKind::Move*/ )
+SmartHdl::SmartHdl( SmartTagReference xTag, const Point& rPnt, SdrHdlKind eNewKind /*=SdrHdlKind::Move*/ )
 : SdrHdl( rPnt, eNewKind )
-, mxSmartTag( xTag )
+, mxSmartTag(std::move( xTag ))
 {
 }
 
