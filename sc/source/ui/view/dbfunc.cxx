@@ -275,11 +275,11 @@ void ScDBFunc::Query( const ScQueryParam& rQueryParam, const ScRange* pAdvSource
 
 void ScDBFunc::ToggleAutoFilter()
 {
-    ScDocShell* pDocSh = GetViewData().GetDocShell();
-    ScDocShellModificator aModificator( *pDocSh );
+    ScViewData* pViewData = &GetViewData();
+    ScDocShell* pDocSh = pViewData->GetDocShell();
 
     ScQueryParam    aParam;
-    ScDocument&     rDoc    = GetViewData().GetDocument();
+    ScDocument&     rDoc    = pViewData->GetDocument();
     ScDBData*       pDBData = GetDBData(false, SC_DB_AUTOFILTER, ScGetDBSelection::RowDown);
 
     pDBData->SetByRow( true );              //! undo, retrieve beforehand ??
@@ -287,11 +287,10 @@ void ScDBFunc::ToggleAutoFilter()
 
     SCCOL  nCol;
     SCROW  nRow = aParam.nRow1;
-    SCTAB  nTab = GetViewData().GetTabNo();
+    SCTAB  nTab = pViewData->GetTabNo();
     ScMF   nFlag;
     bool   bHasAuto = true;
     bool   bHeader  = pDBData->HasHeader();
-    bool   bPaint   = false;
 
     //!     instead retrieve from DB-range?
 
@@ -316,7 +315,7 @@ void ScDBFunc::ToggleAutoFilter()
         // use a list action for the AutoFilter buttons (ScUndoAutoFilter) and the filter operation
 
         OUString aUndo = ScResId( STR_UNDO_QUERY );
-        pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, GetViewData().GetViewShell()->GetViewShellId() );
+        pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, pViewData->GetViewShell()->GetViewShellId() );
 
         ScRange aRange;
         pDBData->GetArea( aRange );
@@ -335,7 +334,7 @@ void ScDBFunc::ToggleAutoFilter()
 
         pDocSh->GetUndoManager()->LeaveListAction();
 
-        bPaint = true;
+        ScDBFunc::ModifiedAutoFilter(pDocSh);
     }
     else                                    // show filter buttons
     {
@@ -344,50 +343,70 @@ void ScDBFunc::ToggleAutoFilter()
         {
             if (!bHeader)
             {
-                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetViewData().GetDialogParent(),
+                std::shared_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pViewData->GetDialogParent(),
                                                           VclMessageType::Question,
                                                           VclButtonsType::YesNo, ScResId(STR_MSSG_MAKEAUTOFILTER_0))); // header from first row?
                 xBox->set_title(ScResId(STR_MSSG_DOSUBTOTALS_0)); // "StarCalc"
                 xBox->set_default_response(RET_YES);
-                if (xBox->run() == RET_YES)
-                {
-                    pDBData->SetHeader( true );     //! Undo ??
-                }
+                xBox->SetInstallLOKNotifierHdl(LINK(this, ScDBFunc, InstallLOKNotifierHdl));
+                xBox->runAsync(xBox, [pDocSh, pViewData, pDBData, nCol, nRow, nTab, aParam] (sal_Int32 nResult) {
+                    if (nResult == RET_YES)
+                    {
+                        pDBData->SetHeader( true );     //! Undo ??
+                    }
+
+                    ApplyAutoFilter(pDocSh, pViewData, pDBData, nCol, nRow, nTab, aParam);
+                });
             }
-
-            ScRange aRange;
-            pDBData->GetArea( aRange );
-            pDocSh->GetUndoManager()->AddUndoAction(
-                std::make_unique<ScUndoAutoFilter>( pDocSh, aRange, pDBData->GetName(), true ) );
-
-            pDBData->SetAutoFilter(true);
-
-            for (nCol=aParam.nCol1; nCol<=aParam.nCol2; nCol++)
-            {
-                nFlag = rDoc.GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG )->GetValue();
-                rDoc.ApplyAttr( nCol, nRow, nTab, ScMergeFlagAttr( nFlag | ScMF::Auto ) );
-            }
-            pDocSh->PostPaint(ScRange(aParam.nCol1, nRow, nTab, aParam.nCol2, nRow, nTab),
-                              PaintPartFlags::Grid);
-            bPaint = true;
+            else
+                ApplyAutoFilter(pDocSh, pViewData, pDBData, nCol, nRow, nTab, aParam);
         }
         else
         {
-            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetViewData().GetDialogParent(),
+            std::shared_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pViewData->GetDialogParent(),
                                                            VclMessageType::Warning, VclButtonsType::Ok,
                                                            ScResId(STR_ERR_AUTOFILTER)));
-            xErrorBox->run();
+            xErrorBox->SetInstallLOKNotifierHdl(LINK(this, ScDBFunc, InstallLOKNotifierHdl));
+            xErrorBox->runAsync(xErrorBox, [] (sal_Int32) {});
         }
     }
+}
 
-    if ( bPaint )
+IMPL_STATIC_LINK_NOARG(ScDBFunc, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*)
+{
+    return GetpApp();
+}
+
+void ScDBFunc::ApplyAutoFilter(ScDocShell* pDocSh, ScViewData* pViewData, ScDBData* pDBData,
+                               SCCOL nCol, SCROW nRow, SCTAB nTab, ScQueryParam aParam)
+{
+    ScDocument& rDoc = pViewData->GetDocument();
+    ScRange aRange;
+    pDBData->GetArea(aRange);
+    pDocSh->GetUndoManager()->AddUndoAction(
+        std::make_unique<ScUndoAutoFilter>(pDocSh, aRange, pDBData->GetName(), true));
+
+    pDBData->SetAutoFilter(true);
+
+    for (nCol=aParam.nCol1; nCol<=aParam.nCol2; nCol++)
     {
-        aModificator.SetDocumentModified();
-
-        SfxBindings& rBindings = GetViewData().GetBindings();
-        rBindings.Invalidate( SID_AUTO_FILTER );
-        rBindings.Invalidate( SID_AUTOFILTER_HIDE );
+        ScMF nFlag = rDoc.GetAttr(nCol, nRow, nTab, ATTR_MERGE_FLAG)->GetValue();
+        rDoc.ApplyAttr(nCol, nRow, nTab, ScMergeFlagAttr(nFlag | ScMF::Auto));
     }
+    pDocSh->PostPaint(ScRange(aParam.nCol1, nRow, nTab, aParam.nCol2, nRow, nTab),
+                        PaintPartFlags::Grid);
+
+    ScDBFunc::ModifiedAutoFilter(pDocSh);
+}
+
+void ScDBFunc::ModifiedAutoFilter(ScDocShell* pDocSh)
+{
+    ScDocShellModificator aModificator(*pDocSh);
+    aModificator.SetDocumentModified();
+
+    SfxBindings* pBindings = pDocSh->GetViewBindings();
+    pBindings->Invalidate(SID_AUTO_FILTER);
+    pBindings->Invalidate(SID_AUTOFILTER_HIDE);
 }
 
 //      just hide, no data change
