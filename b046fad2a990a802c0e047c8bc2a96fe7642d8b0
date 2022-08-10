@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81ed6bf5_04c0c7e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-08-10T05:07:12Z",
+      "side": 1,
+      "message": "You forgot to remove the #endif + blank line at the end of the file",
+      "revId": "b046fad2a990a802c0e047c8bc2a96fe7642d8b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
