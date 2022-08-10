@@ -165,7 +165,7 @@ MenuEntry ConvertMenu(css::uno::Reference<css::xml::dom::XNode>& xMenuSection,
 
         auto xNextChild = xChild->getNextSibling();
 
-        auto xCurrentMenuSection = xMenuSection;
+        auto xSavedMenuSection = xMenuSection;
 
         if (xChild->getNodeName() == "object")
         {
@@ -188,7 +188,7 @@ MenuEntry ConvertMenu(css::uno::Reference<css::xml::dom::XNode>& xMenuSection,
                     = xDoc->createElement("section");
                 xMenuSection->getParentNode()->appendChild(xSection);
                 xMenuSection = xSection;
-                xCurrentMenuSection = xMenuSection;
+                xSavedMenuSection = xMenuSection;
             }
             else if (sClass == "GtkMenu")
             {
@@ -209,7 +209,8 @@ MenuEntry ConvertMenu(css::uno::Reference<css::xml::dom::XNode>& xMenuSection,
                     = xDoc->createElement("section");
                 xSubMenu->appendChild(xSection);
 
-                xMenuSection = xSubMenu;
+                xMenuSection = xSection;
+                xSavedMenuSection = xMenuSection;
             }
         }
 
@@ -224,7 +225,7 @@ MenuEntry ConvertMenu(css::uno::Reference<css::xml::dom::XNode>& xMenuSection,
 
         if (xChild->getNodeName() == "object")
         {
-            xMenuSection = xCurrentMenuSection;
+            xMenuSection = xSavedMenuSection;
 
             auto xDoc = xChild->getOwnerDocument();
 
