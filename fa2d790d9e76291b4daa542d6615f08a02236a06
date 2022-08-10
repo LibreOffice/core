@@ -33,6 +33,58 @@
       "message": "Hi Mike! Do you have an idea how to test this issue? I have no possibility to get the error message in Basic 😞",
       "revId": "fa2d790d9e76291b4daa542d6615f08a02236a06",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7b413c3_88fd3a4a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-10T05:45:21Z",
+      "side": 1,
+      "message": "Maybe https://gerrit.libreoffice.org/c/core/+/84682 could help - it checks the error; the message could possibly be added there?",
+      "parentUuid": "e5b63e2e_e3313774",
+      "revId": "fa2d790d9e76291b4daa542d6615f08a02236a06",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3eb1bd1e_033916b0",
+        "filename": "basic/source/sbx/sbxbase.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-10T05:45:21Z",
+      "side": 1,
+      "message": "This is not needed: OUString is a class with a reasonable default ctor, which is called by default when creating members of this class.",
+      "revId": "fa2d790d9e76291b4daa542d6615f08a02236a06",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63187a1e_94a0d50e",
+        "filename": "basic/source/sbx/sbxbase.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-10T05:45:21Z",
+      "side": 1,
+      "message": "Better use\n\n    GetSbxData_Impl().aErrorMsg.clear();",
+      "revId": "fa2d790d9e76291b4daa542d6615f08a02236a06",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
