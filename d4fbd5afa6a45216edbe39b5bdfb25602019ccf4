@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21a73308_fd79fc6e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003606
+      },
+      "writtenOn": "2022-08-10T22:05:27Z",
+      "side": 1,
+      "message": "Looks like I missed Kashida insertion in editeng (didn’t even know it does Kashida at all). More code to change...",
+      "revId": "d4fbd5afa6a45216edbe39b5bdfb25602019ccf4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
