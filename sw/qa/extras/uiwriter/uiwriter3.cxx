@@ -769,7 +769,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf61154)
     const SwTOXBase* pTOXBase = pWrtShell->GetCurTOX();
     pWrtShell->UpdateTableOf(*pTOXBase);
     SwCursorShell* pShell(pDoc->GetEditShell());
-    SwTextNode* pTitleNode = pShell->GetCursor()->GetNode().GetTextNode();
+    SwTextNode* pTitleNode = pShell->GetCursor()->GetPointNode().GetTextNode();
     SwNodeIndex aIdx(*pTitleNode);
 
     // table of contents node shouldn't contain tracked deletion
@@ -818,7 +818,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf100691)
     const SwTOXBase* pTOXBase = pWrtShell->GetCurTOX();
     pWrtShell->UpdateTableOf(*pTOXBase);
     SwCursorShell* pShell(pDoc->GetEditShell());
-    SwTextNode* pTitleNode = pShell->GetCursor()->GetNode().GetTextNode();
+    SwTextNode* pTitleNode = pShell->GetCursor()->GetPointNode().GetTextNode();
     SwNodeIndex aIdx(*pTitleNode);
 
     // table of contents node shouldn't contain invisible text
@@ -1394,7 +1394,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testToxmarkLinks)
         CPPUNIT_ASSERT_EQUAL(OUString("#1%19the%20tocmark%19C%7Ctoxmark"), url);
         rView.JumpToSwMark(url.subView(1)); // SfxApplication::OpenDocExec_Impl eats the "#"
         CPPUNIT_ASSERT_EQUAL(OUString(OUStringChar(CH_TXTATR_INWORD) + "tocmark"),
-                             pWrtShell->GetCursor()->GetNode().GetTextNode()->GetText());
+                             pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());
         pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
     }
 
@@ -1409,7 +1409,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testToxmarkLinks)
         CPPUNIT_ASSERT_EQUAL(OUString("#__RefHeading___Toc105_706348105"), url);
         rView.JumpToSwMark(url.subView(1));
         CPPUNIT_ASSERT_EQUAL(OUString("foo"),
-                             pWrtShell->GetCursor()->GetNode().GetTextNode()->GetText());
+                             pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());
         pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
     }
 
@@ -1429,7 +1429,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testToxmarkLinks)
         CPPUNIT_ASSERT_EQUAL(OUString("#1%19the%20udmark%19UUser-Defined%7Ctoxmark"), url);
         rView.JumpToSwMark(url.subView(1));
         CPPUNIT_ASSERT_EQUAL(OUString(OUStringChar(CH_TXTATR_INWORD) + "udmark the first"),
-                             pWrtShell->GetCursor()->GetNode().GetTextNode()->GetText());
+                             pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());
         pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
     }
 
@@ -1444,7 +1444,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testToxmarkLinks)
         CPPUNIT_ASSERT_EQUAL(OUString("#2%19the%20udmark%19UUser-Defined%7Ctoxmark"), url);
         rView.JumpToSwMark(url.subView(1));
         CPPUNIT_ASSERT_EQUAL(OUString(OUStringChar(CH_TXTATR_INWORD) + "udmark the 2nd"),
-                             pWrtShell->GetCursor()->GetNode().GetTextNode()->GetText());
+                             pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());
         pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
     }
 
@@ -1459,7 +1459,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testToxmarkLinks)
         CPPUNIT_ASSERT_EQUAL(OUString("#__RefHeading___Toc105_706348105"), url);
         rView.JumpToSwMark(url.subView(1));
         CPPUNIT_ASSERT_EQUAL(OUString("foo"),
-                             pWrtShell->GetCursor()->GetNode().GetTextNode()->GetText());
+                             pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());
         pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
     }
 
@@ -1479,7 +1479,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testToxmarkLinks)
         CPPUNIT_ASSERT_EQUAL(OUString("#1%19the%20udmark%19UNewUD!%7C%7Ctoxmark"), url);
         rView.JumpToSwMark(url.subView(1));
         CPPUNIT_ASSERT_EQUAL(OUString("the udmark"),
-                             pWrtShell->GetCursor()->GetNode().GetTextNode()->GetText());
+                             pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());
         pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
     }
 }

@@ -513,7 +513,7 @@ TableMergeErr SwFEShell::MergeTab()
     if( IsTableMode() )
     {
         SwShellTableCursor* pTableCursor = GetTableCursor();
-        const SwTableNode* pTableNd = pTableCursor->GetNode().FindTableNode();
+        const SwTableNode* pTableNd = pTableCursor->GetPointNode().FindTableNode();
         if( dynamic_cast< const SwDDETable* >(&pTableNd->GetTable()) != nullptr )
         {
             ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR, GetFrameWeld(GetDoc()->GetDocShell()),
@@ -949,7 +949,7 @@ bool SwFEShell::HasBoxSelection() const
     }
     SwNode* pNd;
     if( pPam->GetPoint()->GetNodeIndex() -1 ==
-        ( pNd = &pPam->GetNode())->StartOfSectionIndex() &&
+        ( pNd = &pPam->GetPointNode())->StartOfSectionIndex() &&
         !pPam->GetPoint()->GetContentIndex() &&
         pPam->GetMark()->GetNodeIndex() + 1 ==
         pNd->EndOfSectionIndex())

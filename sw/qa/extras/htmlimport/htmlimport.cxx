@@ -206,7 +206,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testImageWidthAuto)
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwTextAttr const*const pAttr(pTextDoc->GetDocShell()->GetDoc()->GetEditShell()->
-        GetCursor()->GetNode().GetTextNode()->GetTextAttrForCharAt(0, RES_TXTATR_FLYCNT));
+        GetCursor()->GetPointNode().GetTextNode()->GetTextAttrForCharAt(0, RES_TXTATR_FLYCNT));
     CPPUNIT_ASSERT(pAttr);
     SwFrameFormat const*const pFmt(pAttr->GetFlyCnt().GetFrameFormat());
     SwFormatFrameSize const& rSize(pFmt->GetFormatAttr(RES_FRM_SIZE));

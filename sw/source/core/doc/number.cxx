@@ -1518,7 +1518,7 @@ namespace numfunc
             return true;
         }
 
-        SwTextNode* pTextNode = pCursor->GetNode().GetTextNode();
+        SwTextNode* pTextNode = pCursor->GetPointNode().GetTextNode();
         if (!pTextNode)
         {
             return true;

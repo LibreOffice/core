@@ -546,7 +546,7 @@ bool SwCursorShell::LRMargin( bool bLeft, bool bAPI)
 
     if ( bLeft && !bTableMode && bRet && bWasAtLM && !GetCursor_()->HasMark() )
     {
-        const SwTextNode * pTextNd = GetCursor_()->GetNode().GetTextNode();
+        const SwTextNode * pTextNd = GetCursor_()->GetPointNode().GetTextNode();
         assert(sw::GetParaPropsNode(*GetLayout(), GetCursor_()->GetPoint()->GetNode()) == pTextNd);
         if ( pTextNd && pTextNd->HasVisibleNumberingOrBullet() )
             SetInFrontOfLabel( true );
@@ -1149,7 +1149,7 @@ bool SwCursorShell::IsEndOfTable() const
 
 bool SwCursorShell::IsCursorInFootnote() const
 {
-    SwStartNodeType aStartNodeType = m_pCurrentCursor->GetNode().StartOfSectionNode()->GetStartNodeType();
+    SwStartNodeType aStartNodeType = m_pCurrentCursor->GetPointNode().StartOfSectionNode()->GetStartNodeType();
     return aStartNodeType == SwStartNodeType::SwFootnoteStartNode;
 }
 
@@ -1603,8 +1603,8 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
     if( pTstCursor->HasMark() && !m_pBlockCursor &&
         SwDoc::IsIdxInTable( pTstCursor->GetPoint()->nNode ) &&
           ( m_pTableCursor ||
-            pTstCursor->GetNode().StartOfSectionNode() !=
-            pTstCursor->GetNode( false ).StartOfSectionNode() ) && !mbSelectAll)
+            pTstCursor->GetPointNode().StartOfSectionNode() !=
+            pTstCursor->GetMarkNode().StartOfSectionNode() ) && !mbSelectAll)
     {
         SwShellCursor* pITmpCursor = getShellCursor( true );
         Point aTmpPt( pITmpCursor->GetPtPos() );
@@ -1777,7 +1777,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
     {
         SwShellCursor* pShellCursor = getShellCursor( true );
         bool bChgState = true;
-        const SwSectionNode* pSectNd = pShellCursor->GetNode().FindSectionNode();
+        const SwSectionNode* pSectNd = pShellCursor->GetPointNode().FindSectionNode();
         if( pSectNd && ( pSectNd->GetSection().IsHiddenFlag() ||
             ( !IsReadOnlyAvailable() &&
               pSectNd->GetSection().IsProtectFlag() &&
@@ -2597,7 +2597,7 @@ OUString SwCursorShell::GetSelText() const
     else if( m_pCurrentCursor->GetPoint()->GetNodeIndex() ==
         m_pCurrentCursor->GetMark()->GetNodeIndex() )
     {
-        SwTextNode* pTextNd = m_pCurrentCursor->GetNode().GetTextNode();
+        SwTextNode* pTextNd = m_pCurrentCursor->GetPointNode().GetTextNode();
         if( pTextNd )
         {
             const sal_Int32 nStt = m_pCurrentCursor->Start()->GetContentIndex();
@@ -3190,22 +3190,22 @@ bool SwCursorShell::FindValidContentNode( bool bOnlyText )
 
         // move forward into non-protected area.
         SwPaM aPam( rNdIdx.GetNode(), 0 );
-        while( aPam.GetNode().IsProtect() &&
+        while( aPam.GetPointNode().IsProtect() &&
                aPam.Move( fnMoveForward, GoInContent ) )
             ; // nothing to do in the loop; the aPam.Move does the moving!
 
         // didn't work? then go backwards!
-        if( aPam.GetNode().IsProtect() )
+        if( aPam.GetPointNode().IsProtect() )
         {
             SwPaM aTmpPaM( rNdIdx.GetNode(), 0 );
             aPam = aTmpPaM;
-            while( aPam.GetNode().IsProtect() &&
+            while( aPam.GetPointNode().IsProtect() &&
                    aPam.Move( fnMoveBackward, GoInContent ) )
                 ; // nothing to do in the loop; the aPam.Move does the moving!
         }
 
         // if we're successful, set the new position
-        if( ! aPam.GetNode().IsProtect() )
+        if( ! aPam.GetPointNode().IsProtect() )
         {
             *m_pCurrentCursor->GetPoint() = *aPam.GetPoint();
         }

@@ -282,7 +282,7 @@ bool SwEditShell::GetGrfSize(Size& rSz) const
     SwPaM* pCurrentCursor = GetCursor();
     if( ( !pCurrentCursor->HasMark()
          || pCurrentCursor->GetPoint()->nNode == pCurrentCursor->GetMark()->nNode )
-         && nullptr != ( pNoTextNd = pCurrentCursor->GetNode().GetNoTextNode() ) )
+         && nullptr != ( pNoTextNd = pCurrentCursor->GetPointNode().GetNoTextNode() ) )
     {
         rSz = pNoTextNd->GetTwipSize();
         return true;
@@ -318,13 +318,13 @@ void SwEditShell::GetGrfNms( OUString* pGrfName, OUString* pFltName,
 
 const tools::PolyPolygon *SwEditShell::GetGraphicPolygon() const
 {
-    SwNoTextNode *pNd = GetCursor()->GetNode().GetNoTextNode();
+    SwNoTextNode *pNd = GetCursor()->GetPointNode().GetNoTextNode();
     return pNd->HasContour();
 }
 
 void SwEditShell::SetGraphicPolygon( const tools::PolyPolygon *pPoly )
 {
-    SwNoTextNode *pNd = GetCursor()->GetNode().GetNoTextNode();
+    SwNoTextNode *pNd = GetCursor()->GetPointNode().GetNoTextNode();
     StartAllAction();
     pNd->SetContour( pPoly );
     SwFlyFrame *pFly = static_cast<SwFlyFrame*>(pNd->getLayoutFrame(GetLayout())->GetUpper());
@@ -336,7 +336,7 @@ void SwEditShell::SetGraphicPolygon( const tools::PolyPolygon *pPoly )
 
 void SwEditShell::ClearAutomaticContour()
 {
-    SwNoTextNode *pNd = GetCursor()->GetNode().GetNoTextNode();
+    SwNoTextNode *pNd = GetCursor()->GetPointNode().GetNoTextNode();
     OSL_ENSURE( pNd, "is no NoTextNode!" );
     if( pNd->HasAutomaticContour() )
     {
@@ -364,7 +364,7 @@ svt::EmbeddedObjectRef& SwEditShell::GetOLEObject() const
                 GetCursor()->GetPoint()->nNode == GetCursor()->GetMark()->nNode),
             "GetOLEObj: no OLENode." );
 
-    SwOLENode *pOLENode = GetCursor()->GetNode().GetOLENode();
+    SwOLENode *pOLENode = GetCursor()->GetPointNode().GetOLENode();
     OSL_ENSURE( pOLENode, "GetOLEObj: no OLENode." );
     SwOLEObj& rOObj = pOLENode->GetOLEObj();
     return rOObj.GetObject();
@@ -390,7 +390,7 @@ bool SwEditShell::HasOLEObj( std::u16string_view rName ) const
 
 void SwEditShell::SetChartName( const OUString &rName )
 {
-    SwOLENode *pONd = GetCursor()->GetNode().GetOLENode();
+    SwOLENode *pONd = GetCursor()->GetPointNode().GetOLENode();
     OSL_ENSURE( pONd, "ChartNode not found" );
     pONd->SetChartTableName( rName );
 }
@@ -410,7 +410,7 @@ void SwEditShell::SetTableName( SwFrameFormat& rTableFormat, const OUString &rNe
 OUString SwEditShell::GetCurWord() const
 {
     const SwPaM& rPaM = *GetCursor();
-    const SwTextNode* pNd = rPaM.GetNode().GetTextNode();
+    const SwTextNode* pNd = rPaM.GetPointNode().GetTextNode();
     if (!pNd)
     {
         return OUString();
@@ -485,7 +485,7 @@ OUString SwEditShell::GetDropText( const sal_Int32 nChars ) const
         }
     }
 
-    SwTextNode const*const pTextNd = pCursor->GetNode(false).GetTextNode();
+    SwTextNode const*const pTextNd = pCursor->GetMarkNode().GetTextNode();
     if( pTextNd )
     {
         SwTextFrame const*const pTextFrame(static_cast<SwTextFrame const*>(
@@ -505,7 +505,7 @@ void SwEditShell::ReplaceDropText( const OUString &rStr, SwPaM* pPaM )
 {
     SwPaM* pCursor = pPaM ? pPaM : GetCursor();
     if( !(pCursor->GetPoint()->nNode == pCursor->GetMark()->nNode &&
-        pCursor->GetNode().GetTextNode()->IsTextNode()) )
+        pCursor->GetPointNode().GetTextNode()->IsTextNode()) )
         return;
 
     StartAllAction();
@@ -536,7 +536,7 @@ OUString SwEditShell::Calculate()
 
     for(SwPaM& rCurrentPaM : GetCursor()->GetNext()->GetRingContainer())
     {
-        SwTextNode* pTextNd = rCurrentPaM.GetNode().GetTextNode();
+        SwTextNode* pTextNd = rCurrentPaM.GetPointNode().GetTextNode();
         if(pTextNd)
         {
             const SwPosition *pStart = rCurrentPaM.Start(), *pEnd = rCurrentPaM.End();
@@ -598,7 +598,7 @@ sfx2::LinkManager& SwEditShell::GetLinkManager()
 void *SwEditShell::GetIMapInventor() const
 {
     // The node on which the cursor points should be sufficient as a unique identifier
-    return static_cast<void*>(&(GetCursor()->GetNode()));
+    return static_cast<void*>(&(GetCursor()->GetPointNode()));
 }
 
 // #i73788#
@@ -610,7 +610,7 @@ Graphic SwEditShell::GetIMapGraphic() const
     SwPaM* pCursor = GetCursor();
     if ( !pCursor->HasMark() )
     {
-        SwNode& rNd =pCursor->GetNode();
+        SwNode& rNd =pCursor->GetPointNode();
         if( rNd.IsGrfNode() )
         {
             SwGrfNode & rGrfNode(static_cast<SwGrfNode&>(rNd));

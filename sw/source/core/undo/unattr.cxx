@@ -282,7 +282,7 @@ void SwUndoFormatAttr::RepeatImpl(::sw::RepeatContext & rContext)
     switch ( m_nFormatWhich ) {
     case RES_GRFFMTCOLL: {
         SwNoTextNode *const pNd =
-            rContext.GetRepeatPaM().GetNode().GetNoTextNode();
+            rContext.GetRepeatPaM().GetPointNode().GetNoTextNode();
         if( pNd ) {
             rDoc.SetAttr( pFormat->GetAttrSet(), *pNd->GetFormatColl() );
         }
@@ -293,7 +293,7 @@ void SwUndoFormatAttr::RepeatImpl(::sw::RepeatContext & rContext)
     case RES_CONDTXTFMTCOLL:
     {
         SwTextNode *const pNd =
-            rContext.GetRepeatPaM().GetNode().GetTextNode();
+            rContext.GetRepeatPaM().GetPointNode().GetTextNode();
         if( pNd ) {
             rDoc.SetAttr( pFormat->GetAttrSet(), *pNd->GetFormatColl() );
         }
@@ -305,7 +305,7 @@ void SwUndoFormatAttr::RepeatImpl(::sw::RepeatContext & rContext)
         // Steps: search in all FlyFrameFormats for the FlyContent attribute
         // and validate if the cursor is in the respective section
         SwFrameFormat *const pFly =
-            rContext.GetRepeatPaM().GetNode().GetFlyFormat();
+            rContext.GetRepeatPaM().GetPointNode().GetFlyFormat();
         if( pFly ) {
             // Bug 43672: do not set all attributes!
             if (SfxItemState::SET ==

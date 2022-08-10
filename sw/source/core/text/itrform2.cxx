@@ -980,7 +980,7 @@ SwTextPortion *SwTextFormatter::WhichTextPor( SwTextFormatInfo &rInf ) const
             SwPaM aPam(aPosition);
             uno::Reference<text::XTextContent> const xRet(
                 SwUnoCursorHelper::GetNestedTextContent(
-                    *aPam.GetNode().GetTextNode(), aPosition.GetContentIndex(), false) );
+                    *aPam.GetPointNode().GetTextNode(), aPosition.GetContentIndex(), false) );
             if (xRet.is())
             {
                 const SwDoc & rDoc = rInf.GetTextFrame()->GetDoc();

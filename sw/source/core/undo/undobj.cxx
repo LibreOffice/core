@@ -81,7 +81,7 @@ void SwUndRng::SetPaM( SwPaM & rPam, bool bCorrToContent ) const
 {
     rPam.DeleteMark();
     rPam.GetPoint()->nNode = m_nSttNode;
-    SwNode& rNd = rPam.GetNode();
+    SwNode& rNd = rPam.GetPointNode();
     if( rNd.IsContentNode() )
         rPam.GetPoint()->nContent.Assign( rNd.GetContentNode(), m_nSttContent );
     else if( bCorrToContent )
@@ -97,8 +97,8 @@ void SwUndRng::SetPaM( SwPaM & rPam, bool bCorrToContent ) const
         return;                             // nothing left to do
 
     rPam.GetPoint()->nNode = m_nEndNode;
-    if( rPam.GetNode().IsContentNode() )
-        rPam.GetPoint()->nContent.Assign( rPam.GetNode().GetContentNode(), m_nEndContent );
+    if( rPam.GetPointNode().IsContentNode() )
+        rPam.GetPoint()->nContent.Assign( rPam.GetPointNode().GetContentNode(), m_nEndContent );
     else if( bCorrToContent )
         rPam.Move( fnMoveBackward, GoInContent );
     else
@@ -733,7 +733,7 @@ void SwUndoSaveContent::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
     SwDoc& rDoc = rPaM.GetDoc();
     ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
 
-    SwNoTextNode* pCpyNd = rPaM.GetNode().GetNoTextNode();
+    SwNoTextNode* pCpyNd = rPaM.GetPointNode().GetNoTextNode();
 
     // here comes the actual delete (move)
     SwNodes & rNds = rDoc.GetUndoManager().GetUndoNodes();
@@ -784,7 +784,7 @@ void SwUndoSaveContent::MoveFromUndoNds( SwDoc& rDoc, SwNodeOffset nNodeIdx,
         GoInContent( aPaM, fnMoveBackward );
     }
 
-    SwTextNode* pTextNd = aPaM.GetNode().GetTextNode();
+    SwTextNode* pTextNd = aPaM.GetPointNode().GetTextNode();
     if (!pEndNdIdx && pTextNd)
     {
         aPaM.SetMark();

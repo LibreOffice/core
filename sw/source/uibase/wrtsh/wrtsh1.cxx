@@ -141,7 +141,7 @@ static bool lcl_IsAllowed(const SwWrtShell* rSh)
 {
     if (rSh->GetViewOptions()->IsShowOutlineContentVisibilityButton() && rSh->IsEndPara())
     {
-        SwTextNode* pTextNode = rSh->GetCursor()->GetNode().GetTextNode();
+        SwTextNode* pTextNode = rSh->GetCursor()->GetPointNode().GetTextNode();
         if (pTextNode && pTextNode->IsOutline())
         {
             // disallow if this is an outline node having folded content
@@ -1175,7 +1175,7 @@ void SwWrtShell::InsertFootnote(const OUString &rStr, bool bEndNote, bool bEdit 
 // tdf#141634
 static bool lcl_FoldedOutlineNodeEndOfParaSplit(SwWrtShell *pThis)
 {
-    SwTextNode* pTextNode = pThis->GetCursor()->GetNode().GetTextNode();
+    SwTextNode* pTextNode = pThis->GetCursor()->GetPointNode().GetTextNode();
     if (pTextNode && pTextNode->IsOutline())
     {
         bool bVisible = true;

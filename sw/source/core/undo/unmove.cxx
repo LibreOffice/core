@@ -199,8 +199,8 @@ void SwUndoMove::UndoImpl(::sw::UndoRedoContext & rContext)
 
             aPam.Exchange();
             aPam.DeleteMark();
-            if( aPam.GetNode().IsContentNode() )
-                aPam.GetNode().GetContentNode()->ResetAllAttr();
+            if( aPam.GetPointNode().IsContentNode() )
+                aPam.GetPointNode().GetContentNode()->ResetAllAttr();
             // the Pam will be dropped now
         }
 

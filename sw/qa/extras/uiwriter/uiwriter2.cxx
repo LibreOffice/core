@@ -832,17 +832,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf131912)
     pDoc->getIDocumentContentOperations().ReplaceRange(*pCursor, "blahblah", false);
 
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
-    CPPUNIT_ASSERT_EQUAL(OUString("blahblah"), pCursor->GetNode().GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("blahblah"), pCursor->GetPointNode().GetTextNode()->GetText());
 
     rUndoManager.Undo();
 
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
-    CPPUNIT_ASSERT_EQUAL(OUString("foo"), pCursor->GetNode().GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("foo"), pCursor->GetPointNode().GetTextNode()->GetText());
 
     rUndoManager.Redo();
 
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
-    CPPUNIT_ASSERT_EQUAL(OUString("blahblah"), pCursor->GetNode().GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("blahblah"), pCursor->GetPointNode().GetTextNode()->GetText());
 
     rUndoManager.Undo();
 
@@ -853,17 +853,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf131912)
     pDoc->getIDocumentContentOperations().ReplaceRange(*pCursor, "x", false);
 
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
-    CPPUNIT_ASSERT_EQUAL(OUString("x"), pCursor->GetNode().GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("x"), pCursor->GetPointNode().GetTextNode()->GetText());
 
     rUndoManager.Undo();
 
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
-    CPPUNIT_ASSERT_EQUAL(OUString("foo"), pCursor->GetNode().GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("foo"), pCursor->GetPointNode().GetTextNode()->GetText());
 
     rUndoManager.Redo();
 
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
-    CPPUNIT_ASSERT_EQUAL(OUString("x"), pCursor->GetNode().GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("x"), pCursor->GetPointNode().GetTextNode()->GetText());
 
     rUndoManager.Undo();
 
@@ -876,14 +876,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf131912)
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
     pWrtShell->StartOfSection(false);
     CPPUNIT_ASSERT_EQUAL(OUString("xyz"),
-                         pWrtShell->GetCursor()->GetNode().GetTextNode()->GetText());
+                         pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());
     pWrtShell->EndOfSection(true);
     CPPUNIT_ASSERT_EQUAL(OUString("xyz\n\nquux\n"), pWrtShell->GetCursor()->GetText());
 
     rUndoManager.Undo();
 
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
-    CPPUNIT_ASSERT_EQUAL(OUString("foo"), pCursor->GetNode().GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("foo"), pCursor->GetPointNode().GetTextNode()->GetText());
     pWrtShell->StartOfSection(false);
     pWrtShell->EndOfSection(true);
     CPPUNIT_ASSERT_EQUAL(OUString("foo"), pWrtShell->GetCursor()->GetText());
@@ -893,7 +893,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf131912)
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
     pWrtShell->StartOfSection(false);
     CPPUNIT_ASSERT_EQUAL(OUString("xyz"),
-                         pWrtShell->GetCursor()->GetNode().GetTextNode()->GetText());
+                         pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());
     pWrtShell->EndOfSection(true);
     CPPUNIT_ASSERT_EQUAL(OUString("xyz\n\nquux\n"), pWrtShell->GetCursor()->GetText());
 
@@ -905,7 +905,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf131912)
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
     pWrtShell->StartOfSection(false);
     CPPUNIT_ASSERT_EQUAL(OUString("bar"),
-                         pWrtShell->GetCursor()->GetNode().GetTextNode()->GetText());
+                         pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());
     pWrtShell->EndOfSection(true);
     CPPUNIT_ASSERT_EQUAL(OUString("bar\nquux\n"), pWrtShell->GetCursor()->GetText());
 
@@ -914,7 +914,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf131912)
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
     pWrtShell->StartOfSection(false);
     CPPUNIT_ASSERT_EQUAL(OUString("xyz"),
-                         pWrtShell->GetCursor()->GetNode().GetTextNode()->GetText());
+                         pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());
     pWrtShell->EndOfSection(true);
     CPPUNIT_ASSERT_EQUAL(OUString("xyz\n\nquux\n"), pWrtShell->GetCursor()->GetText());
 
@@ -923,7 +923,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf131912)
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
     pWrtShell->StartOfSection(false);
     CPPUNIT_ASSERT_EQUAL(OUString("bar"),
-                         pWrtShell->GetCursor()->GetNode().GetTextNode()->GetText());
+                         pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());
     pWrtShell->EndOfSection(true);
     CPPUNIT_ASSERT_EQUAL(OUString("bar\nquux\n"), pWrtShell->GetCursor()->GetText());
 
@@ -932,14 +932,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf131912)
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
     pWrtShell->StartOfSection(false);
     CPPUNIT_ASSERT_EQUAL(OUString("xyz"),
-                         pWrtShell->GetCursor()->GetNode().GetTextNode()->GetText());
+                         pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());
     pWrtShell->EndOfSection(true);
     CPPUNIT_ASSERT_EQUAL(OUString("xyz\n\nquux\n"), pWrtShell->GetCursor()->GetText());
 
     rUndoManager.Undo();
 
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
-    CPPUNIT_ASSERT_EQUAL(OUString("foo"), pCursor->GetNode().GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("foo"), pCursor->GetPointNode().GetTextNode()->GetText());
     pWrtShell->StartOfSection(false);
     pWrtShell->EndOfSection(true);
     CPPUNIT_ASSERT_EQUAL(OUString("foo"), pWrtShell->GetCursor()->GetText());
@@ -1952,7 +1952,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf108687_tabstop)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf108687_tabstop.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    SwNodeOffset nStartIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    SwNodeOffset nStartIndex = pWrtShell->GetCursor()->GetPointNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(SwNodeOffset(9), nStartIndex);
 
     // Now pressing 'tab' should jump to the radio buttons.

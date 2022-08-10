@@ -238,7 +238,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testLineBreakInsert)
 
     // Then make sure that both the line break and its matching text attribute is inserted:
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetPointNode().GetIndex();
     SwTextNode* pTextNode = pDoc->GetNodes()[nIndex]->GetTextNode();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: "\n" (newline)
@@ -333,7 +333,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlInsert)
 
     // Then make sure that the text attribute is inserted:
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetPointNode().GetIndex();
     SwTextNode* pTextNode = pDoc->GetNodes()[nIndex]->GetTextNode();
     SwTextAttr* pAttr = pTextNode->GetTextAttrForCharAt(0, RES_TXTATR_CONTENTCONTROL);
     // Without the accompanying fix in place, this test would have failed, as the
@@ -421,7 +421,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlTextPortionEnum)
     // Also test the doc model, make sure that there is a dummy character at the start and end, so
     // the user can explicitly decide if they want to expand the content control or not:
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    OUString aText = pWrtShell->GetCursor()->GetNode().GetTextNode()->GetText();
+    OUString aText = pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: ^Atest^A
     // - Actual  : ^Atest
@@ -455,7 +455,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlCheckbox)
 
     // Then make sure that the specified properties are set:
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetNode().GetTextNode();
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
     SwTextAttr* pAttr = pTextNode->GetTextAttrForCharAt(0, RES_TXTATR_CONTENTCONTROL);
     auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
     auto& rFormatContentControl
@@ -506,7 +506,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlDropdown)
 
     // Then make sure that the specified properties are set:
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetNode().GetTextNode();
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
     SwTextAttr* pAttr = pTextNode->GetTextAttrForCharAt(0, RES_TXTATR_CONTENTCONTROL);
     auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
     auto& rFormatContentControl
@@ -572,7 +572,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlPicture)
 
     // Then make sure that the specified properties are set:
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetNode().GetTextNode();
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
     SwTextAttr* pAttr = pTextNode->GetTextAttrForCharAt(0, RES_TXTATR_CONTENTCONTROL);
     auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
     auto& rFormatContentControl
@@ -619,7 +619,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlDate)
 
     // Then make sure that the specified properties are set:
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetNode().GetTextNode();
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
     SwTextAttr* pAttr = pTextNode->GetTextAttrForCharAt(0, RES_TXTATR_CONTENTCONTROL);
     auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
     auto& rFormatContentControl
@@ -701,7 +701,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlPlainText)
 
     // Then make sure that the text attribute is inserted:
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetPointNode().GetIndex();
     SwTextNode* pTextNode = pDoc->GetNodes()[nIndex]->GetTextNode();
     SwTextAttr* pAttr = pTextNode->GetTextAttrForCharAt(0, RES_TXTATR_CONTENTCONTROL);
     CPPUNIT_ASSERT(pAttr);

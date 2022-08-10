@@ -1140,8 +1140,8 @@ SwXTextSection::Impl::GetPropertyValues_Impl(
                     pFormat->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
                 for (SwRangeRedline* pRedline : rRedTable)
                 {
-                    const SwNode& rRedPointNode = pRedline->GetNode();
-                    const SwNode& rRedMarkNode = pRedline->GetNode(false);
+                    const SwNode& rRedPointNode = pRedline->GetPointNode();
+                    const SwNode& rRedMarkNode = pRedline->GetMarkNode();
                     if ((&rRedPointNode == pSectNode) ||
                         (&rRedMarkNode == pSectNode))
                     {
