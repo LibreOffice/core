@@ -16,6 +16,24 @@
       "message": "Checked this works now with the original file saved as potx (template), potm (template with macro), ppsx (autostarting Show), pptm (slideshow with macro), ppsm (autostarting Show with macro) formats as well.",
       "revId": "f21dd2d0c37148b418fcb6ca92317fcf52f63e71",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d51aa1e_0e2a4c89",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2022-08-10T06:47:20Z",
+      "side": 1,
+      "message": "Thanks for the feedback, Gábor.",
+      "parentUuid": "4469c107_66cfbbaf",
+      "revId": "f21dd2d0c37148b418fcb6ca92317fcf52f63e71",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
