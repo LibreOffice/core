@@ -380,7 +380,7 @@ void SwUndoDelSection::UndoImpl(::sw::UndoRedoContext & rContext)
         /// OD 04.10.2002 #102894#
         /// remember inserted section node for further calculations
         SwSectionNode* pInsertedSectNd = rDoc.GetNodes().InsertTextSection(
-                aStt, *pFormat, *m_pSectionData, nullptr, & aEnd);
+                aStt.GetNode(), *pFormat, *m_pSectionData, nullptr, & aEnd);
 
         if( SfxItemState::SET == pFormat->GetItemState( RES_FTN_AT_TXTEND ) ||
             SfxItemState::SET == pFormat->GetItemState( RES_END_AT_TXTEND ))

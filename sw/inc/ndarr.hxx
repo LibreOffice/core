@@ -297,7 +297,7 @@ public:
                     sal_uInt16 nMode = 0 );
 
     /// Insert a new SwSection.
-    SwSectionNode* InsertTextSection(SwNodeIndex const& rNdIdx,
+    SwSectionNode* InsertTextSection(SwNode& rNd,
                                 SwSectionFormat& rSectionFormat,
                                 SwSectionData const&,
                                 SwTOXBase const*const pTOXBase,

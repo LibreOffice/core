@@ -462,12 +462,12 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
 
                         if (aEndIdx >= aStartIdx)
                         {
-                            pSectNd = GetNodes().InsertTextSection(aStartIdx,
+                            pSectNd = GetNodes().InsertTextSection(aStartIdx.GetNode(),
                                 *pFormat, aSectData, nullptr, &aEndIdx, false);
                         }
                         else
                         {
-                            pSectNd = GetNodes().InsertTextSection(aEndIdx,
+                            pSectNd = GetNodes().InsertTextSection(aEndIdx.GetNode(),
                                 *pFormat, aSectData, nullptr, &aStartIdx, false);
                         }
                         // <- #i26762#
