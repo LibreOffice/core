@@ -698,13 +698,12 @@ namespace {
 
 class SwHyphArgs : public SwInterHyphInfo
 {
+    SwNodeIndex m_aNodeIdx;
     const SwNode *m_pStart;
     const SwNode *m_pEnd;
-          SwNode *m_pNode;
     sal_uInt16 *m_pPageCnt;
     sal_uInt16 *m_pPageSt;
 
-    SwNodeOffset m_nNode;
     sal_Int32 m_nPamStart;
     sal_Int32 m_nPamLen;
 
@@ -712,9 +711,9 @@ public:
     SwHyphArgs( const SwPaM *pPam, const Point &rPoint,
                 sal_uInt16* pPageCount, sal_uInt16* pPageStart );
     void SetPam( SwPaM *pPam ) const;
-    void SetNode( SwNode *pNew ) { m_pNode = pNew; }
+    void SetNode( SwNode& rNew ) { m_aNodeIdx.Assign(rNew); }
     inline void SetRange( const SwNode *pNew );
-    void NextNode() { ++m_nNode; }
+    void NextNode() { ++m_aNodeIdx; }
     sal_uInt16 *GetPageCnt() { return m_pPageCnt; }
     sal_uInt16 *GetPageSt() { return m_pPageSt; }
 };
@@ -723,7 +722,7 @@ public:
 
 SwHyphArgs::SwHyphArgs( const SwPaM *pPam, const Point &rCursorPos,
                          sal_uInt16* pPageCount, sal_uInt16* pPageStart )
-     : SwInterHyphInfo( rCursorPos ), m_pNode(nullptr),
+     : SwInterHyphInfo( rCursorPos ), m_aNodeIdx(pPam->GetPoint()->GetNode()),
      m_pPageCnt( pPageCount ), m_pPageSt( pPageStart )
 {
     // The following constraints have to be met:
@@ -734,7 +733,6 @@ SwHyphArgs::SwHyphArgs( const SwPaM *pPam, const Point &rCursorPos,
             "SwDoc::Hyphenate: New York, New York");
 
     const SwPosition *pPoint = pPam->GetPoint();
-    m_nNode = pPoint->GetNodeIndex();
 
     // Set start
     m_pStart = pPoint->GetNode().GetTextNode();
@@ -756,18 +754,8 @@ inline void SwHyphArgs::SetRange( const SwNode *pNew )
 
 void SwHyphArgs::SetPam( SwPaM *pPam ) const
 {
-    if( !m_pNode )
-        *pPam->GetPoint() = *pPam->GetMark();
-    else
-    {
-        pPam->GetPoint()->nNode = m_nNode;
-        pPam->GetPoint()->nContent.Assign( m_pNode->GetContentNode(), m_nWordStart );
-        pPam->GetMark()->nNode = m_nNode;
-        pPam->GetMark()->nContent.Assign( m_pNode->GetContentNode(),
-                                          m_nWordStart + m_nWordLen );
-        OSL_ENSURE( m_nNode == m_pNode->GetIndex(),
-                "SwHyphArgs::SetPam: Pam disaster" );
-    }
+    pPam->GetPoint()->Assign( m_aNodeIdx, m_nWordStart );
+    pPam->GetMark()->Assign( m_aNodeIdx, m_nWordStart + m_nWordLen );
 }
 
 // Returns true if we can proceed.
@@ -801,7 +789,7 @@ static bool lcl_HyphenateNode( SwNode* pNd, void* pArgs )
             pHyphArgs->SetRange( pNd );
             if( pNode->Hyphenate( *pHyphArgs ) )
             {
-                pHyphArgs->SetNode( pNd );
+                pHyphArgs->SetNode( *pNd );
                 return false;
             }
         }
