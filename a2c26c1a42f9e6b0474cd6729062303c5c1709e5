@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c39c616c_c38d7bb9",
+        "filename": "sc/qa/uitest/inputLine/tdf131326.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-08-10T07:21:18Z",
+      "side": 1,
+      "message": "Was in hurry yesterday, sry, thank you for your hints!",
+      "parentUuid": "d7ff903f_cd651c13",
+      "revId": "a2c26c1a42f9e6b0474cd6729062303c5c1709e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "21d3fcea_07875649",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-08-10T05:37:28Z",
       "side": 1,
       "message": "\u0027document\u0027 is unused",
+      "range": {
+        "startLine": 18,
+        "startChar": 64,
+        "endLine": 18,
+        "endChar": 72
+      },
+      "revId": "a2c26c1a42f9e6b0474cd6729062303c5c1709e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7bd9090d_d003be58",
+        "filename": "sc/qa/uitest/inputLine/tdf131326.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-08-10T07:21:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "21d3fcea_07875649",
       "range": {
         "startLine": 18,
         "startChar": 64,
