@@ -5214,29 +5214,17 @@ SalInstanceTreeView::~SalInstanceTreeView()
     m_xTreeView->SetSelectHdl(Link<SvTreeListBox*, void>());
     m_xTreeView->SetDeselectHdl(Link<SvTreeListBox*, void>());
     m_xTreeView->SetScrolledHdl(Link<SvTreeListBox*, void>());
-    m_xTreeView->SetTooltipHdl(Link<const HelpEvent&, bool>());
+    m_xTreeView->SetTooltipHdl({});
     m_xTreeView->SetCustomRenderHdl(Link<svtree_render_args, void>());
     m_xTreeView->SetCustomMeasureHdl(Link<svtree_measure_args, Size>());
 }
 
-IMPL_LINK(SalInstanceTreeView, TooltipHdl, const HelpEvent&, rHEvt, bool)
+IMPL_LINK(SalInstanceTreeView, TooltipHdl, SvTreeListEntry*, pEntry, OUString)
 {
-    if (notify_events_disabled())
-        return false;
-    Point aPos(m_xTreeView->ScreenToOutputPixel(rHEvt.GetMousePosPixel()));
-    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(aPos);
-    if (pEntry)
-    {
-        SalInstanceTreeIter aIter(pEntry);
-        OUString aTooltip = signal_query_tooltip(aIter);
-        if (aTooltip.isEmpty())
-            return false;
-        Size aSize(m_xTreeView->GetOutputSizePixel().Width(), m_xTreeView->GetEntryHeight());
-        tools::Rectangle aScreenRect(
-            m_xTreeView->OutputToScreenPixel(m_xTreeView->GetEntryPosition(pEntry)), aSize);
-        Help::ShowQuickHelp(m_xTreeView, aScreenRect, aTooltip);
-    }
-    return true;
+    if (pEntry && !notify_events_disabled())
+        return signal_query_tooltip(SalInstanceTreeIter(pEntry));
+
+    return {};
 }
 
 IMPL_LINK(SalInstanceTreeView, CustomRenderHdl, svtree_render_args, payload, void)
@@ -5590,24 +5578,12 @@ void SalInstanceIconView::insert_separator(int pos, const OUString* /* pId */)
     pViewData->SetSelectable(false);
 }
 
-IMPL_LINK(SalInstanceIconView, TooltipHdl, const HelpEvent&, rHEvt, bool)
+IMPL_LINK(SalInstanceIconView, TooltipHdl, SvTreeListEntry*, pEntry, OUString)
 {
-    if (notify_events_disabled())
-        return false;
-    Point aPos(m_xIconView->ScreenToOutputPixel(rHEvt.GetMousePosPixel()));
-    SvTreeListEntry* pEntry = m_xIconView->GetEntry(aPos);
-    if (pEntry)
-    {
-        SalInstanceTreeIter aIter(pEntry);
-        OUString aTooltip = signal_query_tooltip(aIter);
-        if (aTooltip.isEmpty())
-            return false;
-        Size aSize(m_xIconView->GetOutputSizePixel().Width(), m_xIconView->GetEntryHeight());
-        tools::Rectangle aScreenRect(
-            m_xIconView->OutputToScreenPixel(m_xIconView->GetEntryPosition(pEntry)), aSize);
-        Help::ShowQuickHelp(m_xIconView, aScreenRect, aTooltip);
-    }
-    return true;
+    if (pEntry && !notify_events_disabled())
+        return signal_query_tooltip(SalInstanceTreeIter(pEntry));
+
+    return {};
 }
 
 IMPL_LINK(SalInstanceIconView, EntryAccessibleDescriptionHdl, SvTreeListEntry*, pEntry, OUString)
