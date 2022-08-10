@@ -59,6 +59,10 @@ constexpr OUStringLiteral DATA_DIRECTORY = u"/filter/qa/data/";
 
 CPPUNIT_TEST_FIXTURE(Test, testSignCertificateSubjectName)
 {
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+        return;
+
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer
         = xml::crypto::SEInitializer::create(mxComponentContext);
     uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext
@@ -98,7 +102,6 @@ CPPUNIT_TEST_FIXTURE(Test, testSignCertificateSubjectName)
     xFilter->filter(aDescriptor);
 
     // Then make sure the resulting PDF has a signature:
-    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
         = pPDFium->openDocument(aStream.GetData(), aStream.GetSize(), OString());
     // Without the accompanying fix in place, this test would have failed, as signing was enabled
@@ -109,6 +112,10 @@ CPPUNIT_TEST_FIXTURE(Test, testSignCertificateSubjectName)
 
 CPPUNIT_TEST_FIXTURE(Test, testPdfDecompositionSize)
 {
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+        return;
+
     // Given an empty Writer document:
     getComponent().set(
         loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument"));
