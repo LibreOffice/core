@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "725ec90c_40029fa2",
+        "filename": "sw/source/core/undo/docundo.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-08-10T07:41:27Z",
+      "side": 1,
+      "message": "possibly this change should be repeated in the GetFirstRedoInfo method below?",
+      "revId": "c88c2d40d1a4aebc46b25368b80c02bc2f136658",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
