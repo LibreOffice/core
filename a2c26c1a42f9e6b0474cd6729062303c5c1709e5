@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7ff903f_cd651c13",
+        "filename": "sc/qa/uitest/inputLine/tdf131326.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-10T05:37:28Z",
+      "side": 1,
+      "message": "This is unused",
+      "revId": "a2c26c1a42f9e6b0474cd6729062303c5c1709e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21d3fcea_07875649",
+        "filename": "sc/qa/uitest/inputLine/tdf131326.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-10T05:37:28Z",
+      "side": 1,
+      "message": "\u0027document\u0027 is unused",
+      "range": {
+        "startLine": 18,
+        "startChar": 64,
+        "endLine": 18,
+        "endChar": 72
+      },
+      "revId": "a2c26c1a42f9e6b0474cd6729062303c5c1709e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
