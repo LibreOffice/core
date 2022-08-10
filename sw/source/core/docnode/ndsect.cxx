@@ -222,7 +222,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
 
             --aEnd; // End is inclusive in the InsertSection
             pNewSectNode = GetNodes().InsertTextSection(
-                        aStt, *pFormat, rNewData, pTOXBase, & aEnd);
+                        aStt.GetNode(), *pFormat, rNewData, pTOXBase, & aEnd);
         }
         else
         {
@@ -291,7 +291,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
                 }
             }
             pNewSectNode = GetNodes().InsertTextSection(
-                pSttPos->nNode, *pFormat, rNewData, pTOXBase, &pEndPos->nNode);
+                pSttPos->GetNode(), *pFormat, rNewData, pTOXBase, &pEndPos->nNode);
         }
     }
     else
@@ -301,12 +301,12 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
         if( !pPos->GetContentIndex() )
         {
             pNewSectNode = GetNodes().InsertTextSection(
-                pPos->nNode, *pFormat, rNewData, pTOXBase, nullptr);
+                pPos->GetNode(), *pFormat, rNewData, pTOXBase, nullptr);
         }
         else if( pPos->GetContentIndex() == pCNd->Len() )
         {
             pNewSectNode = GetNodes().InsertTextSection(
-                pPos->nNode, *pFormat, rNewData, pTOXBase, nullptr, false);
+                pPos->GetNode(), *pFormat, rNewData, pTOXBase, nullptr, false);
         }
         else
         {
@@ -316,7 +316,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
             }
             getIDocumentContentOperations().SplitNode( *pPos, false );
             pNewSectNode = GetNodes().InsertTextSection(
-                pPos->nNode, *pFormat, rNewData, pTOXBase, nullptr);
+                pPos->GetNode(), *pFormat, rNewData, pTOXBase, nullptr);
         }
     }
 
@@ -779,18 +779,18 @@ static bool lcl_IsTOXSection(SwSectionData const& rSectionData)
         || (SectionType::ToxHeader  == rSectionData.GetType());
 }
 
-SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
+SwSectionNode* SwNodes::InsertTextSection(SwNode& rNd,
                                 SwSectionFormat& rSectionFormat,
                                 SwSectionData const& rSectionData,
                                 SwTOXBase const*const pTOXBase,
                                 SwNodeIndex const*const pEnd,
                                 bool const bInsAtStart, bool const bCreateFrames)
 {
-    SwNodeIndex aInsPos( rNdIdx );
+    SwNodeIndex aInsPos( rNd );
     if( !pEnd ) // No Area, thus create a new Section before/after it
     {
         // #i26762#
-        OSL_ENSURE(!pEnd || rNdIdx <= *pEnd,
+        OSL_ENSURE(!pEnd || rNd.GetIndex() <= pEnd->GetIndex(),
                "Section start and end in wrong order!");
 
         if( bInsAtStart )
@@ -877,7 +877,7 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
     }
     else
     {
-        SwTextNode* pCpyTNd = rNdIdx.GetNode().GetTextNode();
+        SwTextNode* pCpyTNd = rNd.GetTextNode();
         if( pCpyTNd )
         {
             SwTextNode* pTNd = new SwTextNode( aInsPos, pCpyTNd->GetTextColl() );
