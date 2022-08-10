@@ -42,6 +42,7 @@
 #include "node.hxx"
 #include "fldbas.hxx"
 #include "IDocumentMarkAccess.hxx"
+#include <optional>
 
 class SfxItemSet;
 class SfxPoolItem;
@@ -437,7 +438,7 @@ public:
      *      stack
      *  @return <true> if there was one on the stack, <false> otherwise
      */
-    bool Pop(PopMode, ::std::unique_ptr<SwCallLink> pLink);
+    bool Pop(PopMode, ::std::optional<SwCallLink>& roLink);
     bool Pop(PopMode);
     /*
      * Combine 2 Cursors.
