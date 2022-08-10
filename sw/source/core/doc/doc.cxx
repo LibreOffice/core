@@ -1737,9 +1737,9 @@ void SwDoc::ChangeTOX(SwTOXBase & rTOX, const SwTOXBase & rNew)
 
 OUString SwDoc::GetPaMDescr(const SwPaM & rPam)
 {
-    if (&rPam.GetNode() == &rPam.GetNode(false))
+    if (&rPam.GetPointNode() == &rPam.GetMarkNode())
     {
-        SwTextNode * pTextNode = rPam.GetNode().GetTextNode();
+        SwTextNode * pTextNode = rPam.GetPointNode().GetTextNode();
 
         if (nullptr != pTextNode)
         {

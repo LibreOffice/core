@@ -183,7 +183,7 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
 
     rCurrentPam.DeleteMark();
     rCurrentPam.GetPoint()->nNode = m_nStartNode;
-    SwTextNode* pTextNd = rCurrentPam.GetNode().GetTextNode();
+    SwTextNode* pTextNd = rCurrentPam.GetPointNode().GetTextNode();
     assert(pTextNd);
     SwContentIndex& rIdx = rCurrentPam.GetPoint()->nContent;
     rIdx.Assign( pTextNd, m_nStartContent );
@@ -265,7 +265,7 @@ void SwUndoOverwrite::RedoImpl(::sw::UndoRedoContext & rContext)
 
     rCurrentPam.DeleteMark();
     rCurrentPam.GetPoint()->nNode = m_nStartNode;
-    SwTextNode* pTextNd = rCurrentPam.GetNode().GetTextNode();
+    SwTextNode* pTextNd = rCurrentPam.GetPointNode().GetTextNode();
     assert(pTextNd);
     SwContentIndex& rIdx = rCurrentPam.GetPoint()->nContent;
 

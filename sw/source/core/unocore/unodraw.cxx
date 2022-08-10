@@ -665,7 +665,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
             throw uno::RuntimeException();
 
         if(RndStdIds::FLY_AT_FLY == aAnchor.GetAnchorId() &&
-                            !pInternalPam->GetNode().FindFlyStartNode())
+                            !pInternalPam->GetPointNode().FindFlyStartNode())
         {
                     aAnchor.SetType(RndStdIds::FLY_AS_CHAR);
         }
@@ -1147,7 +1147,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                     //The connection is removed now the attribute can be deleted.
                     pTextNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIdx );
                     //create a new one
-                    SwTextNode *pNd = pInternalPam->GetNode().GetTextNode();
+                    SwTextNode *pNd = pInternalPam->GetPointNode().GetTextNode();
                     SAL_WARN_IF( !pNd, "sw.uno", "Cursor not at TextNode." );
                     SwFormatFlyCnt aFormat( pFormat );
                     pNd->InsertItem(aFormat, pInternalPam->GetPoint()
@@ -1341,7 +1341,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                             aPam.Move( fnMoveBackward, GoInDoc );
                         }
                         //the RES_TXTATR_FLYCNT needs to be added now
-                        SwTextNode *pNd = aPam.GetNode().GetTextNode();
+                        SwTextNode *pNd = aPam.GetPointNode().GetTextNode();
                         SAL_WARN_IF( !pNd, "sw.uno", "Cursor is not in a TextNode." );
                         SwFormatFlyCnt aFormat( pFlyFormat );
                         pNd->InsertItem(aFormat,

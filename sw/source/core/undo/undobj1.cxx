@@ -348,7 +348,7 @@ void SwUndoInsLayFormat::RepeatImpl(::sw::RepeatContext & rContext)
     else if( RndStdIds::FLY_AT_FLY == aAnchor.GetAnchorId() )
     {
         SwStartNode const*const pSttNd =
-            rContext.GetRepeatPaM().GetNode().FindFlyStartNode();
+            rContext.GetRepeatPaM().GetPointNode().FindFlyStartNode();
         if( pSttNd )
         {
             SwPosition aPos( *pSttNd );

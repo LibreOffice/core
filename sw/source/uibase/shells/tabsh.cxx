@@ -455,7 +455,7 @@ static bool lcl_BoxesInDeletedRows(SwWrtShell &rSh, const SwSelBoxes& rBoxes)
     bool bRet = true;
     SwRedlineTable::size_type nRedlinePos = 0;
     if ( rBoxes.empty() )
-        bRet = rSh.GetCursor()->GetNode().GetTableBox()->GetUpper()->IsDeleted(nRedlinePos);
+        bRet = rSh.GetCursor()->GetPointNode().GetTableBox()->GetUpper()->IsDeleted(nRedlinePos);
     else
     {
         tools::Long nBoxes = rBoxes.size();

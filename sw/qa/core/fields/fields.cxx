@@ -57,7 +57,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAuthorityTooltip)
     auto pField = dynamic_cast<SwAuthorityField*>(
         SwCursorShell::GetFieldAtCursor(pCursor, /*bIncludeInputFieldAtStart=*/true));
     CPPUNIT_ASSERT(pField);
-    SwTextNode* pTextNode = pCursor->GetNode().GetTextNode();
+    SwTextNode* pTextNode = pCursor->GetPointNode().GetTextNode();
     const SwTextAttr* pTextAttr = pTextNode->GetSwpHints().Get(0);
     const SwRootFrame* pLayout = pWrtShell->GetLayout();
     OUString aTooltip = pField->GetAuthority(pTextAttr, pLayout);

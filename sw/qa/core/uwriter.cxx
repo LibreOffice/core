@@ -302,7 +302,7 @@ static SwTextNode* getModelToViewTestDocument(SwDoc *pDoc)
 
     pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
     pDoc->getIDocumentContentOperations().InsertString(aPaM, "AAAAA BBBBB ");
-    SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
+    SwTextNode* pTextNode = aPaM.GetPointNode().GetTextNode();
     sal_Int32 nPos = aPaM.GetPoint()->GetContentIndex();
     pTextNode->InsertItem(aFootnote, nPos, nPos);
     pDoc->getIDocumentContentOperations().InsertString(aPaM, " CCCCC ");
@@ -354,7 +354,7 @@ static SwTextNode* getModelToViewTestDocument2(SwDoc *pDoc)
     (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_LISTENTRY] <<= vListEntries;
     (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_RESULT] <<= sal_Int32(0);
     pDoc->getIDocumentContentOperations().InsertString(aPaM, "CCCCC");
-    SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
+    SwTextNode* pTextNode = aPaM.GetPointNode().GetTextNode();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(11),
             pTextNode->GetText().getLength());
 
@@ -581,7 +581,7 @@ void SwDocTest::testSwScanner()
     SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
 
-    SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
+    SwTextNode* pTextNode = aPaM.GetPointNode().GetTextNode();
 
     CPPUNIT_ASSERT_MESSAGE("Has Text Node", pTextNode);
 
@@ -618,7 +618,7 @@ void SwDocTest::testSwScanner()
         m_pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, aWestLangItem );
 
         SwDocStat aDocStat;
-        pTextNode = aPaM.GetNode().GetTextNode();
+        pTextNode = aPaM.GetPointNode().GetTextNode();
         pTextNode->CountWords(aDocStat, 0, IDEOGRAPHICFULLSTOP_D.getLength());
 
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(2), aDocStat.nChar);
@@ -651,7 +651,7 @@ void SwDocTest::testSwScanner()
         m_pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, aWestLangItem );
 
         SwDocStat aDocStat;
-        pTextNode = aPaM.GetNode().GetTextNode();
+        pTextNode = aPaM.GetPointNode().GetTextNode();
         pTextNode->CountWords(aDocStat, 0, test.getLength());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("words", static_cast<sal_uLong>(58), aDocStat.nWord);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Asian characters and Korean syllables", static_cast<sal_uLong>(43), aDocStat.nAsianWord);
@@ -671,7 +671,7 @@ void SwDocTest::testSwScanner()
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, aShouldBeThree);
-        pTextNode = aPaM.GetNode().GetTextNode();
+        pTextNode = aPaM.GetPointNode().GetTextNode();
         pTextNode->CountWords(aDocStat, 0, aShouldBeThree.getLength());
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(3), aDocStat.nWord);
 
@@ -686,7 +686,7 @@ void SwDocTest::testSwScanner()
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, aShouldBeFive);
-        pTextNode = aPaM.GetNode().GetTextNode();
+        pTextNode = aPaM.GetPointNode().GetTextNode();
         aDocStat.Reset();
         pTextNode->CountWords(aDocStat, 0, aShouldBeFive.getLength());
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(5), aDocStat.nWord);
@@ -698,7 +698,7 @@ void SwDocTest::testSwScanner()
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "Apple");
-        pTextNode = aPaM.GetNode().GetTextNode();
+        pTextNode = aPaM.GetPointNode().GetTextNode();
         sal_Int32 nPos = aPaM.GetPoint()->GetContentIndex();
         SwFormatFootnote aFootnote;
         aFootnote.SetNumStr("banana");
@@ -731,7 +731,7 @@ void SwDocTest::testSwScanner()
         m_pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, SwFormatField(aPostIt));
 
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "Apple");
-        pTextNode = aPaM.GetNode().GetTextNode();
+        pTextNode = aPaM.GetPointNode().GetTextNode();
         aDocStat.Reset();
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(1), aDocStat.nWord);
@@ -748,7 +748,7 @@ void SwDocTest::testSwScanner()
         static constexpr OUStringLiteral aString = u"Lorem ipsum";
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, aString);
-        pTextNode = aPaM.GetNode().GetTextNode();
+        pTextNode = aPaM.GetPointNode().GetTextNode();
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(2), aDocStat.nWord);
 
@@ -809,7 +809,7 @@ void SwDocTest::testSwScanner()
         aPaM.GetPoint()->nContent.Assign(aPaM.GetContentNode(), 0);
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "redline-new-text ");
         aDocStat.Reset();
-        pTextNode = aPaM.GetNode().GetTextNode();
+        pTextNode = aPaM.GetPointNode().GetTextNode();
         pTextNode->SetWordCountDirty(true);
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(2), aDocStat.nWord);
@@ -829,7 +829,7 @@ void SwDocTest::testSwScanner()
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replace('X', ' '));
-        pTextNode = aPaM.GetNode().GetTextNode();
+        pTextNode = aPaM.GetPointNode().GetTextNode();
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
         CPPUNIT_ASSERT_EQUAL(sal_uLong(4), aDocStat.nWord);
         CPPUNIT_ASSERT_EQUAL(sal_uLong(12), aDocStat.nCharExcludingSpaces);
@@ -838,7 +838,7 @@ void SwDocTest::testSwScanner()
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replaceAll("X", " = "));
-        pTextNode = aPaM.GetNode().GetTextNode();
+        pTextNode = aPaM.GetPointNode().GetTextNode();
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
         CPPUNIT_ASSERT_EQUAL(sal_uLong(5), aDocStat.nWord);
         CPPUNIT_ASSERT_EQUAL(sal_uLong(13), aDocStat.nCharExcludingSpaces);
@@ -847,7 +847,7 @@ void SwDocTest::testSwScanner()
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replaceAll("X", " _ "));
-        pTextNode = aPaM.GetNode().GetTextNode();
+        pTextNode = aPaM.GetPointNode().GetTextNode();
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
         CPPUNIT_ASSERT_EQUAL(sal_uLong(5), aDocStat.nWord);
         CPPUNIT_ASSERT_EQUAL(sal_uLong(13), aDocStat.nCharExcludingSpaces);
@@ -856,7 +856,7 @@ void SwDocTest::testSwScanner()
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replaceAll("X", " -- "));
-        pTextNode = aPaM.GetNode().GetTextNode();
+        pTextNode = aPaM.GetPointNode().GetTextNode();
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
         CPPUNIT_ASSERT_EQUAL(sal_uLong(5), aDocStat.nWord);
         CPPUNIT_ASSERT_EQUAL(sal_uLong(14), aDocStat.nCharExcludingSpaces);
@@ -865,7 +865,7 @@ void SwDocTest::testSwScanner()
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replace('X', '_'));
-        pTextNode = aPaM.GetNode().GetTextNode();
+        pTextNode = aPaM.GetPointNode().GetTextNode();
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
         CPPUNIT_ASSERT_EQUAL(sal_uLong(3), aDocStat.nWord);
         CPPUNIT_ASSERT_EQUAL(sal_uLong(13), aDocStat.nCharExcludingSpaces);
@@ -874,7 +874,7 @@ void SwDocTest::testSwScanner()
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replace('X', '-'));
-        pTextNode = aPaM.GetNode().GetTextNode();
+        pTextNode = aPaM.GetPointNode().GetTextNode();
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
         CPPUNIT_ASSERT_EQUAL(sal_uLong(3), aDocStat.nWord);
         CPPUNIT_ASSERT_EQUAL(sal_uLong(13), aDocStat.nCharExcludingSpaces);
@@ -883,7 +883,7 @@ void SwDocTest::testSwScanner()
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replace('X', 0x2012));
-        pTextNode = aPaM.GetNode().GetTextNode();
+        pTextNode = aPaM.GetPointNode().GetTextNode();
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
         CPPUNIT_ASSERT_EQUAL(sal_uLong(3), aDocStat.nWord);
         CPPUNIT_ASSERT_EQUAL(sal_uLong(13), aDocStat.nCharExcludingSpaces);
@@ -892,7 +892,7 @@ void SwDocTest::testSwScanner()
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replace('X', 0x2015));
-        pTextNode = aPaM.GetNode().GetTextNode();
+        pTextNode = aPaM.GetPointNode().GetTextNode();
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
         CPPUNIT_ASSERT_EQUAL(sal_uLong(3), aDocStat.nWord);
         CPPUNIT_ASSERT_EQUAL(sal_uLong(13), aDocStat.nCharExcludingSpaces);
@@ -903,7 +903,7 @@ void SwDocTest::testSwScanner()
         //and endash as word separators for word-counting
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replace('X', 0x2013));
-        pTextNode = aPaM.GetNode().GetTextNode();
+        pTextNode = aPaM.GetPointNode().GetTextNode();
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
         CPPUNIT_ASSERT_EQUAL(sal_uLong(4), aDocStat.nWord);
         CPPUNIT_ASSERT_EQUAL(sal_uLong(13), aDocStat.nCharExcludingSpaces);
@@ -912,7 +912,7 @@ void SwDocTest::testSwScanner()
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replace('X', 0x2014));
-        pTextNode = aPaM.GetNode().GetTextNode();
+        pTextNode = aPaM.GetPointNode().GetTextNode();
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
         CPPUNIT_ASSERT_EQUAL(sal_uLong(4), aDocStat.nWord);
         CPPUNIT_ASSERT_EQUAL(sal_uLong(13), aDocStat.nCharExcludingSpaces);
@@ -922,7 +922,7 @@ void SwDocTest::testSwScanner()
         static constexpr OUStringLiteral sChunk = u" \u2013 ";
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replaceAll("X", sChunk));
-        pTextNode = aPaM.GetNode().GetTextNode();
+        pTextNode = aPaM.GetPointNode().GetTextNode();
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
         CPPUNIT_ASSERT_EQUAL(sal_uLong(4), aDocStat.nWord);
         CPPUNIT_ASSERT_EQUAL(sal_uLong(13), aDocStat.nCharExcludingSpaces);

@@ -2787,7 +2787,7 @@ void MSWordExportBase::WriteText()
     TrackContentToExport aContentTracking(m_pCurPam.get(), m_nCurStart, m_nCurEnd);
     while (aContentTracking.contentRemainsToExport(m_pTableInfo.get()))
     {
-        SwNode& rNd = m_pCurPam->GetNode();
+        SwNode& rNd = m_pCurPam->GetPointNode();
 
         // no section breaks exported for Endnotes
         if ( rNd.IsTextNode() && m_nTextTyp != TXT_EDN && m_nTextTyp != TXT_FTN )
@@ -2962,7 +2962,7 @@ bool MSWordExportBase::IsInTable() const
 
     if (m_pCurPam != nullptr)
     {
-        SwNode& rNode = m_pCurPam->GetNode();
+        SwNode& rNode = m_pCurPam->GetPointNode();
 
         if (m_pTableInfo)
         {
@@ -3815,7 +3815,7 @@ ErrCode SwWW8Writer::WriteStorageImpl()
 
     // Respect table at the beginning of the document
     {
-        SwTableNode* pTNd = m_pCurrentPam->GetNode().FindTableNode();
+        SwTableNode* pTNd = m_pCurrentPam->GetPointNode().FindTableNode();
         if( pTNd && m_bWriteAll )
             // start with the table node !!
             m_pCurrentPam->GetPoint()->nNode = *pTNd;

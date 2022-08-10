@@ -337,7 +337,7 @@ void SwHTMLParser::EndNumberBulletList( HtmlTokenId nToken )
     bool bAppend = m_pPam->GetPoint()->GetContentIndex() > 0;
     if( !bAppend )
     {
-        SwTextNode* pTextNode = m_pPam->GetNode().GetTextNode();
+        SwTextNode* pTextNode = m_pPam->GetPointNode().GetTextNode();
 
         bAppend = (pTextNode && ! pTextNode->IsOutline() && pTextNode->IsCountedInList()) ||
 
@@ -395,7 +395,7 @@ void SwHTMLParser::EndNumberBulletList( HtmlTokenId nToken )
 
             // On the last append, the NumRule item and NodeNum object were copied.
             // Now we need to delete them. ResetAttr deletes the NodeNum object as well
-            if (SwTextNode *pTextNode = m_pPam->GetNode().GetTextNode())
+            if (SwTextNode *pTextNode = m_pPam->GetPointNode().GetTextNode())
                 pTextNode->ResetAttr(RES_PARATR_NUMRULE);
 
             rInfo.Clear();
@@ -467,7 +467,7 @@ void SwHTMLParser::NewNumberBulletListItem( HtmlTokenId nToken )
         AppendTextNode( AM_NOSPACE, false );
     m_bNoParSpace = false;    // no space in <LI>!
 
-    SwTextNode* pTextNode = m_pPam->GetNode().GetTextNode();
+    SwTextNode* pTextNode = m_pPam->GetPointNode().GetTextNode();
     if (!pTextNode)
     {
         SAL_WARN("sw.html", "No Text-Node at PaM-Position");
@@ -601,7 +601,7 @@ void SwHTMLParser::EndNumberBulletListItem( HtmlTokenId nToken, bool bSetColl )
 
 void SwHTMLParser::SetNodeNum( sal_uInt8 nLevel )
 {
-    SwTextNode* pTextNode = m_pPam->GetNode().GetTextNode();
+    SwTextNode* pTextNode = m_pPam->GetPointNode().GetTextNode();
     if (!pTextNode)
     {
         SAL_WARN("sw.html", "No Text-Node at PaM-Position");

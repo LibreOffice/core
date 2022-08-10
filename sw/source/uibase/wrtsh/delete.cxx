@@ -199,7 +199,7 @@ bool SwWrtShell::DelLeft()
         // #i4032# Don't actually call a 'delete' if we
         // changed the table cell, compare DelRight().
         const SwStartNode * pSNdOld = pWasInTableNd ?
-                                      GetCursor()->GetNode().FindTableBoxStartNode() :
+                                      GetCursor()->GetPointNode().FindTableBoxStartNode() :
                                       nullptr;
 
         // If the cursor is at the beginning of a paragraph, try to step
@@ -215,7 +215,7 @@ bool SwWrtShell::DelLeft()
             if (bDoSomething)
             {
                 const SwStartNode* pSNdNew = pIsInTableNd ?
-                    GetCursor()->GetNode().FindTableBoxStartNode() :
+                    GetCursor()->GetPointNode().FindTableBoxStartNode() :
                     nullptr;
 
                 // #i4032# Don't actually call a 'delete' if we
@@ -344,7 +344,7 @@ bool SwWrtShell::DelRight(bool const isReplaceHeuristic)
             const SwTableNode* pWasInTableNd = IsCursorInTable();
             // #108049# Save the startnode of the current cell
             const SwStartNode* pSNdOld = pWasInTableNd ?
-                GetCursor()->GetNode().FindTableBoxStartNode() : nullptr;
+                GetCursor()->GetPointNode().FindTableBoxStartNode() : nullptr;
             bool bCheckDelFull = SelectionType::Text & nSelection && SwCursorShell::IsSttPara();
             bool bDelFull = false;
             bool bDoNothing = false;
@@ -365,7 +365,7 @@ bool SwWrtShell::DelRight(bool const isReplaceHeuristic)
                     // #108049# Save the startnode of the current cell.
                     // May be different to pSNdOld as we have moved.
                     const SwStartNode* pSNdNew = pCurrTableNd ?
-                        GetCursor()->GetNode().FindTableBoxStartNode() : nullptr;
+                        GetCursor()->GetPointNode().FindTableBoxStartNode() : nullptr;
 
                     // tdf#115132 Only keep cursor position instead of deleting
                     // if we have moved to a different cell

@@ -181,7 +181,7 @@ bool SwOleClient::IsProtected() const
         return false;
     }
 
-    SwOLENode* pOLENode = rWrtSh.GetCursor()->GetNode().GetOLENode();
+    SwOLENode* pOLENode = rWrtSh.GetCursor()->GetPointNode().GetOLENode();
     if (!pOLENode)
     {
         return false;

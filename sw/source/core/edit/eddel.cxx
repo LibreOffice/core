@@ -47,9 +47,9 @@ void SwEditShell::DeleteSel(SwPaM& rPam, bool const isArtificialSelection, bool 
     // 1. Point and Mark are in one box, delete selection as usual
     // 2. Point and Mark are in different boxes, search all selected boxes and delete content
     // 3. Point and Mark are at the document start and end, Point is in a table: delete selection as usual
-    if( rPam.GetNode().FindTableNode() &&
-        rPam.GetNode().StartOfSectionNode() !=
-        rPam.GetNode(false).StartOfSectionNode() && !bSelectAll )
+    if( rPam.GetPointNode().FindTableNode() &&
+        rPam.GetPointNode().StartOfSectionNode() !=
+        rPam.GetMarkNode().StartOfSectionNode() && !bSelectAll )
     {
         // group the Undo in the table
         if( pUndo && !*pUndo )
@@ -61,7 +61,7 @@ void SwEditShell::DeleteSel(SwPaM& rPam, bool const isArtificialSelection, bool 
         const SwPosition* pEndSelPos = rPam.End();
         do {
             aDelPam.SetMark();
-            SwNode& rNd = aDelPam.GetNode();
+            SwNode& rNd = aDelPam.GetPointNode();
             const SwNode& rEndNd = *rNd.EndOfSectionNode();
             if( pEndSelPos->GetNodeIndex() <= rEndNd.GetIndex() )
             {

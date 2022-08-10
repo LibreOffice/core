@@ -286,9 +286,9 @@ Writer& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
             sal_uInt16 nStartVal = rNumFormat.GetStart();
             if( bStartValue && 1 == nStartVal && i == rInfo.GetDepth()-1 )
             {
-                if ( rWrt.m_pCurrentPam->GetNode().GetTextNode()->GetNum() )
+                if ( rWrt.m_pCurrentPam->GetPointNode().GetTextNode()->GetNum() )
                 {
-                    nStartVal = static_cast< sal_uInt16 >( rWrt.m_pCurrentPam->GetNode()
+                    nStartVal = static_cast< sal_uInt16 >( rWrt.m_pCurrentPam->GetPointNode()
                                 .GetTextNode()->GetNumberVector()[i] );
                 }
                 else

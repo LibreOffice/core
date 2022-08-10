@@ -219,7 +219,7 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
         // delete indices
         aIdxList.clear();
         SetPaM(rPam, true);
-        SwTextNode const*const pTNd = rPam.GetNode().GetTextNode();
+        SwTextNode const*const pTNd = rPam.GetPointNode().GetTextNode();
         if( pTNd )
         {
             rPam.GetPoint()->nContent = pTNd->GetText().getLength();

@@ -615,7 +615,7 @@ bool SwFlyFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
 /** Layout dependent cursor travelling */
 bool SwNoTextFrame::LeftMargin(SwPaM *pPam) const
 {
-    if( &pPam->GetNode() != GetNode() )
+    if( &pPam->GetPointNode() != GetNode() )
         return false;
     pPam->GetPoint()->AssignStartIndex(*GetNode());
     return true;
@@ -623,7 +623,7 @@ bool SwNoTextFrame::LeftMargin(SwPaM *pPam) const
 
 bool SwNoTextFrame::RightMargin(SwPaM *pPam, bool) const
 {
-    if( &pPam->GetNode() != GetNode() )
+    if( &pPam->GetPointNode() != GetNode() )
         return false;
     pPam->GetPoint()->AssignEndIndex(*GetNode());
     return true;
@@ -688,7 +688,7 @@ static const SwContentFrame * lcl_MissProtectedFrames( const SwContentFrame *pCn
 static bool lcl_UpDown( SwPaM *pPam, const SwContentFrame *pStart,
                     GetNxtPrvCnt fnNxtPrv, bool bInReadOnly )
 {
-    OSL_ENSURE( FrameContainsNode(*pStart, pPam->GetNode().GetIndex()),
+    OSL_ENSURE( FrameContainsNode(*pStart, pPam->GetPointNode().GetIndex()),
             "lcl_UpDown doesn't work for others." );
 
     const SwContentFrame *pCnt = nullptr;
@@ -698,8 +698,8 @@ static bool lcl_UpDown( SwPaM *pPam, const SwContentFrame *pStart,
     //going down.
     bool bTableSel = false;
     if ( pStart->IsInTab() &&
-        pPam->GetNode().StartOfSectionNode() !=
-        pPam->GetNode( false ).StartOfSectionNode() )
+        pPam->GetPointNode().StartOfSectionNode() !=
+        pPam->GetMarkNode().StartOfSectionNode() )
     {
         bTableSel = true;
         const SwLayoutFrame  *pCell = pStart->GetUpper();

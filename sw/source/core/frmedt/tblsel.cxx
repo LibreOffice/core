@@ -166,7 +166,7 @@ void GetTableSel( const SwCursor& rCursor, SwSelBoxes& rBoxes,
     // Row-selection:
     // Check for complex tables. If Yes, search selected boxes via
     // the layout. Otherwise via the table structure (for macros !!)
-    const SwContentNode* pContentNd = rCursor.GetNode().GetContentNode();
+    const SwContentNode* pContentNd = rCursor.GetPointNode().GetContentNode();
     const SwTableNode* pTableNd = pContentNd ? pContentNd->FindTableNode() : nullptr;
     if( pTableNd && pTableNd->GetTable().IsNewModel() )
     {
@@ -187,7 +187,7 @@ void GetTableSel( const SwCursor& rCursor, SwSelBoxes& rBoxes,
         const SwTable& rTable = pTableNd->GetTable();
         const SwTableLines& rLines = rTable.GetTabLines();
 
-        const SwNode& rMarkNode = rCursor.GetNode( false );
+        const SwNode& rMarkNode = rCursor.GetMarkNode();
         const SwNodeOffset nMarkSectionStart = rMarkNode.StartOfSectionIndex();
         const SwTableBox* pMarkBox = rTable.GetTableBox( nMarkSectionStart );
 
@@ -196,7 +196,7 @@ void GetTableSel( const SwCursor& rCursor, SwSelBoxes& rBoxes,
         const SwTableLine* pLine = pMarkBox ? pMarkBox->GetUpper() : nullptr;
         sal_uInt16 nSttPos = rLines.GetPos( pLine );
         OSL_ENSURE( USHRT_MAX != nSttPos, "Where is my row in the table?" );
-        pLine = rTable.GetTableBox( rCursor.GetNode().StartOfSectionIndex() )->GetUpper();
+        pLine = rTable.GetTableBox( rCursor.GetPointNode().StartOfSectionIndex() )->GetUpper();
         sal_uInt16 nEndPos = rLines.GetPos( pLine );
         OSL_ENSURE( USHRT_MAX != nEndPos, "Where is my row in the table?" );
         // pb: #i20193# if tableintable then nSttPos == nEndPos == USHRT_MAX

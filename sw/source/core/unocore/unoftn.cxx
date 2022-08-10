@@ -327,7 +327,7 @@ SwXFootnote::attach(const uno::Reference< text::XTextRange > & xTextRange)
     pNewDoc->getIDocumentContentOperations().InsertPoolItem(aPam, aFootNote, nInsertFlags);
 
     SwTextFootnote *const pTextAttr = static_cast<SwTextFootnote*>(
-        aPam.GetNode().GetTextNode()->GetTextAttrForCharAt(
+        aPam.GetPointNode().GetTextNode()->GetTextAttrForCharAt(
                 aPam.GetPoint()->GetContentIndex()-1, RES_TXTATR_FTN ));
 
     if (pTextAttr)
@@ -442,7 +442,7 @@ SwXFootnote::createTextCursorByRange(
     SwTextFootnote const*const pTextFootnote = rFormat.GetTextFootnote();
     SwNode const*const pFootnoteStartNode = &pTextFootnote->GetStartNode()->GetNode();
 
-    const SwNode* pStart = aPam.GetNode().FindFootnoteStartNode();
+    const SwNode* pStart = aPam.GetPointNode().FindFootnoteStartNode();
     if (pStart != pFootnoteStartNode)
     {
         throw uno::RuntimeException();
