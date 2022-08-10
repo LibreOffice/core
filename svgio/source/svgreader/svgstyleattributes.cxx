@@ -1149,7 +1149,8 @@ namespace svgio::svgreader
             // Svg supports markers for path, polygon, polyline and line
             if(SVGToken::Path == mrOwner.getType() ||         // path
                 SVGToken::Polygon == mrOwner.getType() ||     // polygon, polyline
-                SVGToken::Line == mrOwner.getType())          // line
+                SVGToken::Line == mrOwner.getType() ||        // line
+                getCssStyleParent())
             {
                 // try to add markers
                 add_markers(rPath, rTarget, pHelpPointIndices);
