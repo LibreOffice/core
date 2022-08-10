@@ -290,7 +290,7 @@ public:
        tables is calculated from the Maximum of the boxes, provided
        SSize is set "absolute" (LONG_MAX).
        (Momentarily this is needed only for the RTF-parser.) */
-    SwTableNode* SplitTable( const SwNodeIndex& rPos, bool bAfter = true,
+    SwTableNode* SplitTable( SwNode& rPos, bool bAfter = true,
                                 bool bCalcNewSize = false );
     /// Two Tables that are following one another are merged.
     bool MergeTable( SwNode& rPos, bool bWithPrev = true,
