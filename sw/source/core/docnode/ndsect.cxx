@@ -916,13 +916,13 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
     // but by simply rewiring them
     bool bInsFrame = bCreateFrames && !pSectNd->GetSection().IsHiddenFlag() &&
                    GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell();
-    SwNode2LayoutSaveUpperFrames *pNode2Layout = nullptr;
+    std::optional<SwNode2LayoutSaveUpperFrames> oNode2Layout;
     if( bInsFrame )
     {
         SwNodeIndex aTmp( *pSectNd );
         if( !pSectNd->GetNodes().FindPrvNxtFrameNode( aTmp, pSectNd->EndOfSectionNode() ) )
             // Collect all Uppers
-            pNode2Layout = new SwNode2LayoutSaveUpperFrames(*pSectNd);
+            oNode2Layout.emplace(*pSectNd);
     }
 
     // Set the right StartNode for all in this Area
@@ -966,11 +966,11 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
 
     if( bInsFrame )
     {
-        if( pNode2Layout )
+        if( oNode2Layout )
         {
             SwNodeOffset nIdx = pSectNd->GetIndex();
-            pNode2Layout->RestoreUpperFrames( pSectNd->GetNodes(), nIdx, nIdx + 1 );
-            delete pNode2Layout;
+            oNode2Layout->RestoreUpperFrames( pSectNd->GetNodes(), nIdx, nIdx + 1 );
+            oNode2Layout.reset();
         }
         else
             pSectNd->MakeOwnFrames(&aInsPos);
