@@ -33,6 +33,7 @@
 #include <doc.hxx>
 #include <docsh.hxx>
 #include <viewopt.hxx>
+#include <optional>
 
 namespace vcl { class Window; }
 class SbxArray;
@@ -146,7 +147,7 @@ public:
         // is there a text- or frameselection?
     bool    HasSelection() const { return SwCursorShell::HasSelection() ||
                                         IsMultiSelection() || IsSelFrameMode() || IsObjSelected(); }
-    bool    Pop(SwCursorShell::PopMode, ::std::unique_ptr<SwCallLink> const pLink);
+    bool    Pop(SwCursorShell::PopMode, ::std::optional<SwCallLink>& roLink);
     bool    Pop(SwCursorShell::PopMode = SwCursorShell::PopMode::DeleteStack);
 
     void    EnterStdMode();

@@ -2014,13 +2014,13 @@ SwWrtShell::~SwWrtShell()
 
 bool SwWrtShell::Pop(SwCursorShell::PopMode const eDelete)
 {
-    ::std::unique_ptr<SwCallLink> pLink(::std::make_unique<SwCallLink>(*this));
-    return Pop(eDelete, ::std::move(pLink));
+    ::std::optional<SwCallLink> aLink(std::in_place, *this);
+    return Pop(eDelete, aLink);
 }
 
-bool SwWrtShell::Pop(SwCursorShell::PopMode const eDelete, ::std::unique_ptr<SwCallLink> pLink)
+bool SwWrtShell::Pop(SwCursorShell::PopMode const eDelete, ::std::optional<SwCallLink>& roLink)
 {
-    bool bRet = SwCursorShell::Pop(eDelete, ::std::move(pLink));
+    bool bRet = SwCursorShell::Pop(eDelete, roLink);
     if( bRet && IsSelection() )
     {
         if (!IsAddMode())
