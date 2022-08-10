@@ -23008,15 +23008,43 @@ bool IsAllowedBuiltInIcon(std::u16string_view iconName)
 
 namespace {
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
+void silence_gwarning(const gchar* /*log_domain*/,
+                      GLogLevelFlags /*log_level*/,
+                      const gchar* /*message*/,
+                      gpointer /*user_data*/)
+{
+}
+#endif
+
 void load_ui_file(GtkBuilder* pBuilder, const OUString& rUri)
 {
 #if GTK_CHECK_VERSION(4, 0, 0)
     builder_add_from_gtk3_file(pBuilder, rUri);
 #else
+    guint nLogHandlerId = 0;
+    GLogLevelFlags nFatalMask(static_cast<GLogLevelFlags>(G_LOG_FLAG_RECURSION|G_LOG_LEVEL_ERROR));
+    if (rUri.endsWith("sfx/ui/tabbarcontents.ui"))
+    {
+        // gtk unhelpfully has a bogus warning for the accelerator in this .ui because it assumes menus with accelerators
+        // if attached to something are attached to a MenuShell, but it's a MenuButton in this case. Turn off warnings, and
+        // in the case of fatal-warnings temp disable fatal warnings, for this case.
+        nLogHandlerId = g_log_set_handler("GLib-GObject",
+                                          static_cast<GLogLevelFlags>(G_LOG_LEVEL_MASK | G_LOG_FLAG_FATAL | G_LOG_FLAG_RECURSION),
+                                          silence_gwarning, nullptr);
+        nFatalMask = g_log_set_always_fatal(nFatalMask);
+    }
+
     OUString aPath;
     osl::FileBase::getSystemPathFromFileURL(rUri, aPath);
     GError *err = nullptr;
     auto rc = gtk_builder_add_from_file(pBuilder, OUStringToOString(aPath, RTL_TEXTENCODING_UTF8).getStr(), &err);
+
+    if (nLogHandlerId)
+    {
+        g_log_remove_handler("GLib-GObject", nLogHandlerId);
+        g_log_set_always_fatal(nFatalMask);
+    }
 
     if (!rc)
     {
