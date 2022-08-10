@@ -199,6 +199,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0489351d_b019237d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003627
+      },
+      "writtenOn": "2022-08-10T08:40:33Z",
+      "side": 1,
+      "message": "I tried to use the company mail severak times to send, but there was an error: \"Can not connect to recipient\u0027s server because of unstable network or firewall filter.\" Is there a white list restriction? How to solve this problem? Or can I use other mail to send this license mail?",
+      "parentUuid": "1d40a0f9_27fe3dd8",
+      "revId": "3680a5748953ad08b4f15f4104069d22a70c730d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2a6813ae_7a10fe93",
         "filename": "bridges/source/cpp_uno/gcc3_linux_loongarch64/call.hxx",
         "patchSetId": 1
