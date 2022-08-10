@@ -30,6 +30,7 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 
 #include <set>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -43,10 +44,10 @@ class FolderDescriptor
 public:
     FolderDescriptor (
         int nPriority,
-        const OUString& rsContentIdentifier,
+        OUString sContentIdentifier,
         const Reference<css::ucb::XCommandEnvironment>& rxFolderEnvironment)
         : mnPriority(nPriority),
-          msContentIdentifier(rsContentIdentifier),
+          msContentIdentifier(std::move(sContentIdentifier)),
           mxFolderEnvironment(rxFolderEnvironment)
     { }
     int mnPriority;

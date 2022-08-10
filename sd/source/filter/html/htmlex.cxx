@@ -34,6 +34,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <sfx2/frmhtmlw.hxx>
 #include <sfx2/progress.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svx/svditer.hxx>
@@ -342,11 +343,11 @@ constexpr OUStringLiteral gaHTMLExtension = u"" STR_HTMLEXP_DEFAULT_EXTENSION;
 
 // constructor for the html export helper classes
 HtmlExport::HtmlExport(
-    const OUString& aPath,
+    OUString aPath,
     const Sequence< PropertyValue >& rParams,
     SdDrawDocument* pExpDoc,
     sd::DrawDocShell* pDocShell )
-    :   maPath( aPath ),
+    :   maPath(std::move( aPath )),
         mpDoc(pExpDoc),
         mpDocSh( pDocShell ),
         meMode( PUBLISH_SINGLE_DOCUMENT ),

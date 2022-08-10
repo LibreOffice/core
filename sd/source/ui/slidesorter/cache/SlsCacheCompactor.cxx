@@ -27,6 +27,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/uno/Any.hxx>
+#include <utility>
 
 using namespace ::com::sun::star::uno;
 
@@ -65,7 +66,7 @@ public:
     CacheCompactionByCompression (
         ::sd::slidesorter::cache::BitmapCache& rCache,
         sal_Int32 nMaximalCacheSize,
-        const std::shared_ptr< ::sd::slidesorter::cache::BitmapCompressor>& rpCompressor);
+        std::shared_ptr< ::sd::slidesorter::cache::BitmapCompressor> pCompressor);
 
 protected:
     virtual void Run() override;
@@ -156,9 +157,9 @@ namespace {
 CacheCompactionByCompression::CacheCompactionByCompression (
     ::sd::slidesorter::cache::BitmapCache& rCache,
     sal_Int32 nMaximalCacheSize,
-    const std::shared_ptr< ::sd::slidesorter::cache::BitmapCompressor>& rpCompressor)
+    std::shared_ptr< ::sd::slidesorter::cache::BitmapCompressor> pCompressor)
     : CacheCompactor(rCache,nMaximalCacheSize),
-      mpCompressor(rpCompressor)
+      mpCompressor(std::move(pCompressor))
 {
 }
 

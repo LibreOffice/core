@@ -54,7 +54,7 @@ public:
         const std::weak_ptr<ViewShell>& rpViewShellWeak,
         bool bDirectionIsForward);
     IteratorImplBase (SdDrawDocument* pDocument,
-        const std::weak_ptr<ViewShell>& rpViewShellWeak,
+        std::weak_ptr<ViewShell> pViewShellWeak,
         bool bDirectionIsForward, PageKind ePageKind, EditMode eEditMode);
     virtual ~IteratorImplBase();
 

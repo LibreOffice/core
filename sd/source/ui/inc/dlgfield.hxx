@@ -46,7 +46,7 @@ private:
     DECL_LINK(LanguageChangeHdl, weld::ComboBox&, void);
 
 public:
-    SdModifyFieldDlg(weld::Window* pWindow, const SvxFieldData* pInField, const SfxItemSet& rSet);
+    SdModifyFieldDlg(weld::Window* pWindow, const SvxFieldData* pInField, SfxItemSet aSet);
     virtual ~SdModifyFieldDlg() override;
 
     SvxFieldData*       GetField();

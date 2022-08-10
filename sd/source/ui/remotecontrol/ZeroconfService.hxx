@@ -10,6 +10,7 @@
 #define ZEROCONF_SERVICE
 
 #include <string>
+#include <utility>
 
 /**
 * The port used by LO's custom remote server discovery protocol.
@@ -32,8 +33,8 @@ namespace sd{
         uint port;
 
     public:
-        explicit ZeroconfService(const std::string& aname, uint aport)
-            :name(aname), port(aport){}
+        explicit ZeroconfService(std::string aname, uint aport)
+            :name(std::move(aname)), port(aport){}
         virtual ~ZeroconfService(){}
 
         const std::string& getName() const {return name;}

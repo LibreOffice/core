@@ -22,6 +22,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
+#include <utility>
 #include <vcl/svapp.hxx>
 
 #include <svl/style.hxx>
@@ -95,9 +96,9 @@ PresStyleMap& SdStyleFamilyImpl::getStyleSheets()
     return maStyleSheets;
 }
 
-SdStyleFamily::SdStyleFamily( const rtl::Reference< SfxStyleSheetPool >& xPool, SfxStyleFamily nFamily )
+SdStyleFamily::SdStyleFamily( rtl::Reference< SfxStyleSheetPool > xPool, SfxStyleFamily nFamily )
 : mnFamily( nFamily )
-, mxPool( xPool )
+, mxPool(std::move( xPool ))
 {
 }
 

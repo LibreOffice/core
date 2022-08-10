@@ -22,6 +22,7 @@
 #include "ShellFactory.hxx"
 #include <o3tl/deleter.hxx>
 #include <memory>
+#include <utility>
 
 class FmFormShell;
 class SfxShell;
@@ -167,8 +168,8 @@ public:
     class UpdateLock
     {
     public:
-        UpdateLock(const std::shared_ptr<ViewShellManager>& rpManager)
-            : mpManager(rpManager)
+        UpdateLock(std::shared_ptr<ViewShellManager> pManager)
+            : mpManager(std::move(pManager))
         {
             mpManager->LockUpdate();
         }

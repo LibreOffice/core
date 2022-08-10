@@ -22,6 +22,7 @@
 #include <tools/time.hxx>
 #include <sal/log.hxx>
 #include <memory>
+#include <utility>
 
 namespace sd::tools {
 
@@ -80,10 +81,10 @@ void TimerBasedTaskExecution::ReleaseTask (
 }
 
 TimerBasedTaskExecution::TimerBasedTaskExecution (
-    const std::shared_ptr<AsynchronousTask>& rpTask,
+    std::shared_ptr<AsynchronousTask> pTask,
     sal_uInt32 nMillisecondsBetweenSteps,
     sal_uInt32 nMaxTimePerStep)
-    : mpTask(rpTask),
+    : mpTask(std::move(pTask)),
       maTimer("sd TimerBasedTaskExecution maTimer"),
       mnMaxTimePerStep(nMaxTimePerStep)
 {

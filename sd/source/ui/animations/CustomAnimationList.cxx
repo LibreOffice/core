@@ -31,6 +31,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <CustomAnimationList.hxx>
 #include <CustomAnimationPreset.hxx>
+#include <utility>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/image.hxx>
@@ -227,8 +228,8 @@ static OUString getDescription( const Any& rTarget, bool bWithText )
 class CustomAnimationListEntryItem
 {
 public:
-    CustomAnimationListEntryItem(const OUString& aDescription,
-                                 const CustomAnimationEffectPtr& pEffect);
+    CustomAnimationListEntryItem(OUString aDescription,
+                                 CustomAnimationEffectPtr pEffect);
     const CustomAnimationEffectPtr& getEffect() const { return mpEffect; }
 
     Size GetSize(const vcl::RenderContext& rRenderContext);
@@ -246,9 +247,9 @@ public:
     static const ::tools::Long nItemMinHeight = 38;
 };
 
-CustomAnimationListEntryItem::CustomAnimationListEntryItem(const OUString& aDescription, const CustomAnimationEffectPtr& pEffect)
-    : msDescription(aDescription)
-    , mpEffect(pEffect)
+CustomAnimationListEntryItem::CustomAnimationListEntryItem(OUString aDescription, CustomAnimationEffectPtr pEffect)
+    : msDescription(std::move(aDescription))
+    , mpEffect(std::move(pEffect))
 {
     if (!mpEffect)
         return;

@@ -21,6 +21,7 @@
 
 #include <tools/SdGlobalResourceContainer.hxx>
 #include <tools/link.hxx>
+#include <utility>
 #include <vector>
 
 #include "MasterPageContainer.hxx"
@@ -55,9 +56,9 @@ private:
         OUString msName;
         ::sd::sidebar::MasterPageContainer::Token maToken;
         Descriptor (::sd::sidebar::MasterPageContainer::Token aToken,
-                    const OUString& rsURL, const OUString& rsName)
-            : msURL(rsURL),
-              msName(rsName),
+                    OUString sURL, OUString sName)
+            : msURL(std::move(sURL)),
+              msName(std::move(sName)),
               maToken(aToken)
         {}
 

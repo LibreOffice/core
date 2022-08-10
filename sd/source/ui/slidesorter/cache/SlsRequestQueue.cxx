@@ -24,6 +24,7 @@
 #include <svx/svdpage.hxx>
 
 #include <set>
+#include <utility>
 
 namespace sd::slidesorter::cache {
 
@@ -91,9 +92,9 @@ class RequestQueue::Container
 
 //=====  GenericRequestQueue  =================================================
 
-RequestQueue::RequestQueue (const SharedCacheContext& rpCacheContext)
+RequestQueue::RequestQueue (SharedCacheContext pCacheContext)
     : mpRequestQueue(new Container),
-      mpCacheContext(rpCacheContext),
+      mpCacheContext(std::move(pCacheContext)),
       mnMinimumPriority(0),
       mnMaximumPriority(1)
 {

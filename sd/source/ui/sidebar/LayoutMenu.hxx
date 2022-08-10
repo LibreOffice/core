@@ -62,7 +62,7 @@ public:
             the view shell of the task pane.
     */
     LayoutMenu(weld::Widget* pParent, ViewShellBase& rViewShellBase,
-               const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
+               css::uno::Reference<css::ui::XSidebar> xSidebar);
     virtual ~LayoutMenu() override;
 
     void Dispose();

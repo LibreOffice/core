@@ -25,6 +25,7 @@
 #include <map>
 #include <memory>
 #include <unordered_map>
+#include <utility>
 
 namespace {
 
@@ -37,9 +38,9 @@ public:
     Size maPreviewSize;
 
     CacheDescriptor(
-        ::sd::slidesorter::cache::PageCacheManager::DocumentKey const & pDocument,
+        ::sd::slidesorter::cache::PageCacheManager::DocumentKey pDocument,
         const Size& rPreviewSize)
-        :mpDocument(pDocument),maPreviewSize(rPreviewSize)
+        :mpDocument(std::move(pDocument)),maPreviewSize(rPreviewSize)
     {}
     /// Test for equality with respect to all members.
     class Equal {public: bool operator() (
@@ -64,8 +65,8 @@ public:
 
     RecentlyUsedCacheDescriptor(
         const Size& rPreviewSize,
-        const std::shared_ptr< ::sd::slidesorter::cache::BitmapCache>& rpCache)
-        :maPreviewSize(rPreviewSize),mpCache(rpCache)
+        std::shared_ptr< ::sd::slidesorter::cache::BitmapCache> pCache)
+        :maPreviewSize(rPreviewSize),mpCache(std::move(pCache))
     {}
 };
 
@@ -120,8 +121,8 @@ public:
         address only.
     */
     class CompareWithCache { public:
-        explicit CompareWithCache(const std::shared_ptr<BitmapCache>& rpCache)
-            : mpCache(rpCache) {}
+        explicit CompareWithCache(std::shared_ptr<BitmapCache> pCache)
+            : mpCache(std::move(pCache)) {}
         bool operator () (const PageCacheContainer::value_type& rValue) const
         { return rValue.second == mpCache; }
     private:

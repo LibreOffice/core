@@ -25,6 +25,7 @@
 #include <DrawController.hxx>
 
 #include <Client.hxx>
+#include <utility>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
@@ -510,10 +511,10 @@ void ViewTabBar::UpdateTabBarButtons()
 
 TabBarControl::TabBarControl (
     vcl::Window* pParentWindow,
-    const ::rtl::Reference<ViewTabBar>& rpViewTabBar)
+    ::rtl::Reference<ViewTabBar> pViewTabBar)
     : InterimItemWindow(pParentWindow, "modules/simpress/ui/tabviewbar.ui", "TabViewBar")
     , mxTabControl(m_xBuilder->weld_notebook("tabcontrol"))
-    , mpViewTabBar(rpViewTabBar)
+    , mpViewTabBar(std::move(pViewTabBar))
     , mnAllocatedWidth(0)
 {
     // Because the actual window background is transparent--to avoid

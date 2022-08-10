@@ -21,6 +21,7 @@
 
 #include <map>
 #include <com/sun/star/uno/Any.hxx>
+#include <utility>
 
 namespace sd
 {
@@ -39,7 +40,7 @@ struct STLPropertyMapEntry
     STLPropertyMapEntry()
         : mnState( STLPropertyState::Ambiguous ) {}
     explicit STLPropertyMapEntry(css::uno::Any aValue)
-        : maValue( aValue ), mnState( STLPropertyState::Default ) {}
+        : maValue(std::move( aValue )), mnState( STLPropertyState::Default ) {}
 
 };
 
