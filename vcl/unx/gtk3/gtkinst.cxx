@@ -10860,6 +10860,7 @@ public:
     {
 #if GTK_CHECK_VERSION(4, 0, 0)
         g_signal_handler_disconnect(m_pMenuButtonToggleButton, m_nToggledSignalId);
+        gtk_widget_insert_action_group(GTK_WIDGET(m_pMenuButton), "menu", nullptr);
 #else
         if (m_pMenuHack)
         {
