@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0876fc7_f92f2998",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-08-10T15:55:57Z",
+      "side": 1,
+      "message": "All Jenkins ok except Windows which seems to have some unrelated pb, let\u0027s push this one.",
+      "revId": "2af5240940a52720e5ce8323438879006de0ea89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
