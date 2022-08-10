@@ -90,12 +90,14 @@ TabBar::~TabBar()
 
 void TabBar::dispose()
 {
-    m_xContainer->move(mxContents.get(), mxTempToplevel.get());
     maItems.clear();
     mxMeasureBox.reset();
     mxSubMenu.reset();
     mxMainMenu.reset();
     mxMenuButton.reset();
+    m_xContainer->move(mxContents.get(), mxTempToplevel.get());
+    mxContents.reset();
+    mxTempToplevel.reset();
     mxAuxBuilder.reset();
     InterimItemWindow::dispose();
 }
