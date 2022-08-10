@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<svg width="500" height="500" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<marker style="overflow:visible;" id="bip" refX="0" refY="0" orient="auto">
+	<path style="stroke: green" d="M 0,-3 v 6" />
+</marker>
+</defs>
+
+<style>
+path.boundary {stroke: red; fill: #ccc; stroke-width: 3; marker-mid: url(#bip); marker-end: url(#bip)}
+</style>
+
+<path class="boundary" d="m 20,20 v 90 90 90 90 90 h 90 90 90 90 90 v -90 -90 -90 -90 -90 h -90 -90 -90 -90 z" />
+</svg>
