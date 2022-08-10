@@ -614,6 +614,7 @@ Const cstArgArray = 512		&apos;	Any argument can be a 2D array
 Const cstRetArray = 1024	&apos;	Return value can be an array
 Const cstUno = 256			&apos;	Return value can be a UNO object
 Const cstObject = 2048		&apos;	1st argument is a Basic object when numeric
+Const cstHardCode = 4096	&apos;	Method must not be executed with CallByName()
 &apos;	Object nature in returned array
 Const objMODULE = 1, objCLASS = 2, objUNO = 3
 
@@ -792,6 +793,17 @@ Try:
 						If Script = &quot;Controls&quot; Then		vReturn = vBasicObject.Controls(vArgs(0))
 				End Select
 			
+			&apos;	Methods in class modules may better not be executed with CallByName()
+			ElseIf bBasicClass And ((CallType And vbMethod) + (CallType And cstHardCode)) = vbMethod + cstHardCode Then
+				Select Case sServiceName
+					Case &quot;SFDialogs.Dialog&quot;
+						Select Case Script
+							Case &quot;Activate&quot;			:	vReturn = vBasicObject.Activate()
+							Case &quot;EndExecute&quot;		:	vReturn = vBasicObject.EndExecute(vArgs(0))
+							Case &quot;Execute&quot;			:	vReturn = vBasicObject.Execute(vArgs(0))
+						End Select
+				End Select
+
 			&apos;	Methods in class modules are invoked with CallByName
 			ElseIf bBasicClass And ((CallType And vbMethod) = vbMethod) Then
 				Select Case UBound(vArgs)
