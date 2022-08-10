@@ -127,7 +127,7 @@ OUString VCLXAccessibleEdit::implGetText()
     VclPtr< Edit > pEdit = GetAs< Edit >();
     if ( pEdit )
     {
-        aText = OutputDevice::GetNonMnemonicString( pEdit->GetText() );
+        aText = GetNonMnemonicString( pEdit->GetText() );
 
         if ( implGetAccessibleRole() == AccessibleRole::PASSWORD_TEXT )
         {

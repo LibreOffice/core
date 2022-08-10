@@ -156,7 +156,7 @@ namespace dbaui
                     {
                         OUString sMessage( DBA_RES( STR_WARNINGS_DURING_CONNECT ) );
                         sMessage = sMessage.replaceFirst( "$buttontext$", GetStandardText( StandardButtonType::More ) );
-                        sMessage = OutputDevice::GetNonMnemonicString( sMessage );
+                        sMessage = GetNonMnemonicString( sMessage );
 
                         SQLWarning aContext;
                         aContext.Message = sMessage;

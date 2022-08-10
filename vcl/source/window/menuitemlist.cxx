@@ -45,7 +45,7 @@ SalLayoutGlyphs* MenuItemData::GetTextGlyphs(const OutputDevice* pOutputDevice)
         // Use pre-calculated result.
         return &aTextGlyphs;
 
-    OUString aNonMnemonicString = OutputDevice::GetNonMnemonicString(aText);
+    OUString aNonMnemonicString = GetNonMnemonicString(aText);
     std::unique_ptr<SalLayout> pLayout
         = pOutputDevice->ImplLayout(aNonMnemonicString, 0, aNonMnemonicString.getLength(),
                                     Point(0, 0), 0, {}, {}, SalLayoutFlags::GlyphItemsOnly);

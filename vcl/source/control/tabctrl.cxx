@@ -1980,7 +1980,7 @@ OUString TabControl::GetAccessibleName( sal_uInt16 nPageId ) const
     assert( pItem );
     if (!pItem->maAccessibleName.isEmpty())
         return pItem->maAccessibleName;
-    return OutputDevice::GetNonMnemonicString(pItem->maText);
+    return GetNonMnemonicString(pItem->maText);
 }
 
 void TabControl::SetAccessibleDescription(sal_uInt16 nPageId, const OUString& rDesc)

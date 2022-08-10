@@ -47,7 +47,7 @@ VCLXAccessibleTextComponent::VCLXAccessibleTextComponent( VCLXWindow* pVCLXWindo
 {
     VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
-        m_sText = OutputDevice::GetNonMnemonicString( pWindow->GetText() );
+        m_sText = GetNonMnemonicString( pWindow->GetText() );
 }
 
 
@@ -86,7 +86,7 @@ OUString VCLXAccessibleTextComponent::implGetText()
     OUString aText;
     VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
-        aText = OutputDevice::GetNonMnemonicString( pWindow->GetText() );
+        aText = GetNonMnemonicString( pWindow->GetText() );
 
     return aText;
 }

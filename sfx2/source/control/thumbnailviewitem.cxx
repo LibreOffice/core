@@ -212,7 +212,7 @@ void ThumbnailViewItem::addTextPrimitives (const OUString& rText, const Thumbnai
     aPos.setY(aPos.getY() + aTextDev.getTextHeight());
 
     sal_Int32 nMnemonicPos = -1;
-    OUString aOrigText(mrParent.isDrawMnemonic() ? OutputDevice::GetNonMnemonicString(rText, nMnemonicPos) : rText);
+    OUString aOrigText(mrParent.isDrawMnemonic() ? GetNonMnemonicString(rText, nMnemonicPos) : rText);
 
     TextEngine aTextEngine;
     aTextEngine.SetFont(getVclFontFromFontAttribute(pAttrs->aFontAttr,
