@@ -45,6 +45,7 @@
 #include <svl/stritem.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/whiter.hxx>
+#include <svtools/strings.hrc>
 #include <unotools/moduleoptions.hxx>
 #include <sot/exchange.hxx>
 #include <tools/diagnose_ex.h>
@@ -62,6 +63,7 @@
 #include <undomanager.hxx>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <svx/svdpagv.hxx>
+#include <o3tl/temporary.hxx>
 
 #include <comphelper/lok.hxx>
 
@@ -810,7 +812,7 @@ void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
 void ScTabViewShell::GetUndoState(SfxItemSet &rSet)
 {
     SfxShell* pSh = GetViewData().GetDispatcher().GetShell(0);
-    SfxUndoManager* pUndoManager = pSh->GetUndoManager();
+    ScUndoManager* pUndoManager = static_cast<ScUndoManager*>(pSh->GetUndoManager());
 
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
@@ -836,6 +838,46 @@ void ScTabViewShell::GetUndoState(SfxItemSet &rSet)
                     rSet.Put( aStrLst );
                 }
                 break;
+
+            case SID_UNDO:
+            {
+                if (pUndoManager->GetUndoActionCount())
+                {
+                    const SfxUndoAction* pAction = pUndoManager->GetUndoAction();
+                    SfxViewShell *pViewSh = GetViewShell();
+                    if (pViewSh && pAction->GetViewShellId() != pViewSh->GetViewShellId()
+                        && !pUndoManager->IsViewUndoActionIndependent(this, o3tl::temporary(sal_uInt16())))
+                    {
+                        rSet.Put(SfxUInt32Item(SID_UNDO, static_cast<sal_uInt32>(SID_REPAIRPACKAGE)));
+                    }
+                    else
+                    {
+                        rSet.Put( SfxStringItem( SID_UNDO, SvtResId(STR_UNDO)+pUndoManager->GetUndoActionComment() ) );
+                    }
+                }
+                else
+                    rSet.DisableItem( SID_UNDO );
+                break;
+            }
+            case SID_REDO:
+            {
+                if (pUndoManager->GetRedoActionCount())
+                {
+                    const SfxUndoAction* pAction = pUndoManager->GetRedoAction();
+                    SfxViewShell *pViewSh = GetViewShell();
+                    if (pViewSh && pAction->GetViewShellId() != pViewSh->GetViewShellId())
+                    {
+                        rSet.Put(SfxUInt32Item(SID_REDO, static_cast<sal_uInt32>(SID_REPAIRPACKAGE)));
+                    }
+                    else
+                    {
+                        rSet.Put(SfxStringItem(SID_REDO, SvtResId(STR_REDO) + pUndoManager->GetRedoActionComment()));
+                    }
+                }
+                else
+                    rSet.DisableItem( SID_REDO );
+                break;
+            }
             default:
                 // get state from sfx view frame
                 GetViewFrame()->GetSlotState( nWhich, nullptr, &rSet );
