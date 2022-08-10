@@ -141,7 +141,7 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, SdrObject* pObject, bool bCo
     if (sw::XTextRangeToSwPaM(aInternalPaM, xTextBox))
     {
         SwAttrSet aSet(pShape->GetAttrSet());
-        SwFormatContent aContent(aInternalPaM.GetNode().StartOfSectionNode());
+        SwFormatContent aContent(aInternalPaM.GetPointNode().StartOfSectionNode());
         aSet.Put(aContent);
         pShape->SetFormatAttr(aSet);
     }

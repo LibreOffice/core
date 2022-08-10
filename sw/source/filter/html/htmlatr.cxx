@@ -447,7 +447,7 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     sal_uInt8 nBulletGrfLvl = 255;  // The bullet graphic we want to output
 
     // Are we in a bulleted or numbered list?
-    const SwTextNode* pTextNd = rWrt.m_pCurrentPam->GetNode().GetTextNode();
+    const SwTextNode* pTextNd = rWrt.m_pCurrentPam->GetPointNode().GetTextNode();
 
     SwHTMLNumRuleInfo aNumInfo;
     if( rHWrt.GetNextNumInfo() )

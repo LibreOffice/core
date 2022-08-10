@@ -152,7 +152,7 @@ static bool lcl_GetBoxSel( const SwCursor& rCursor, SwSelBoxes& rBoxes,
     {
         const SwPaM *pCurPam = &rCursor, *pSttPam = pCurPam;
         do {
-            const SwNode* pNd = pCurPam->GetNode().FindTableBoxStartNode();
+            const SwNode* pNd = pCurPam->GetPointNode().FindTableBoxStartNode();
             if( pNd )
             {
                 SwTableBox* pBox = const_cast<SwTableBox*>(pNd->FindTableNode()->GetTable().

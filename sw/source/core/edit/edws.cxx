@@ -129,7 +129,7 @@ sal_uInt16 SwEditShell::GetCntType() const
     if( IsTableMode() )
         nRet = CNT_TXT;
     else
-        switch( GetCursor()->GetNode().GetNodeType() )
+        switch( GetCursor()->GetPointNode().GetNodeType() )
         {
         case SwNodeType::Text:   nRet = CNT_TXT; break;
         case SwNodeType::Grf:    nRet = CNT_GRF; break;
@@ -260,7 +260,7 @@ void SwEditShell::AutoCorrect( SvxAutoCorrect& rACorr, bool bInsert,
     StartAllAction();
 
     SwPaM* pCursor = getShellCursor( true );
-    SwTextNode* pTNd = pCursor->GetNode().GetTextNode();
+    SwTextNode* pTNd = pCursor->GetPointNode().GetTextNode();
 
     SwAutoCorrDoc aSwAutoCorrDoc( *this, *pCursor, cChar );
     // FIXME: this _must_ be called with reference to the actual node text!
@@ -292,7 +292,7 @@ OUString SwEditShell::GetPrevAutoCorrWord(SvxAutoCorrect& rACorr)
 
     OUString sRet;
     SwPaM* pCursor = getShellCursor( true );
-    SwTextNode* pTNd = pCursor->GetNode().GetTextNode();
+    SwTextNode* pTNd = pCursor->GetPointNode().GetTextNode();
     if (pTNd)
     {
         SwAutoCorrDoc aSwAutoCorrDoc( *this, *pCursor, 0 );
@@ -309,7 +309,7 @@ std::vector<OUString> SwEditShell::GetChunkForAutoText()
 
     std::vector<OUString> aRet;
     SwPaM* pCursor = getShellCursor(true);
-    SwTextNode* pTNd = pCursor->GetNode().GetTextNode();
+    SwTextNode* pTNd = pCursor->GetPointNode().GetTextNode();
     if (pTNd)
     {
         const auto pFrame = static_cast<SwTextFrame const*>(pTNd->getLayoutFrame(GetLayout()));

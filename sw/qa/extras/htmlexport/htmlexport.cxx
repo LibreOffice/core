@@ -2183,7 +2183,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTrailingLineBreak)
     CPPUNIT_ASSERT(pTextDoc);
     pDoc = pTextDoc->GetDocShell()->GetDoc();
     pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    OUString aActual = pWrtShell->GetCursor()->GetNode().GetTextNode()->GetText();
+    OUString aActual = pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText();
     // Without the accompanying fix in place, this test would have failed, as the trailing
     // line-break was lost.
     CPPUNIT_ASSERT_EQUAL(OUString("test\n"), aActual);

@@ -147,7 +147,7 @@ void SwUndoSplitNode::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SwCursor & rPam( rContext.GetCursorSupplier().CreateNewShellCursor() );
     rPam.GetPoint()->nNode = m_nNode;
-    SwTextNode * pTNd = rPam.GetNode().GetTextNode();
+    SwTextNode * pTNd = rPam.GetPointNode().GetTextNode();
     OSL_ENSURE(pTNd, "SwUndoSplitNode::RedoImpl(): SwTextNode expected");
     if (!pTNd)
         return;

@@ -440,7 +440,7 @@ OUString SwEditShell::GetTableBoxText() const
 void SwEditShell::SplitTable( SplitTable_HeadlineOption eMode )
 {
     SwPaM *pCursor = GetCursor();
-    if( pCursor->GetNode().FindTableNode() )
+    if( pCursor->GetPointNode().FindTableNode() )
     {
         StartAllAction();
         GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
@@ -457,7 +457,7 @@ bool SwEditShell::MergeTable( bool bWithPrev )
 {
     bool bRet = false;
     SwPaM *pCursor = GetCursor();
-    if( pCursor->GetNode().FindTableNode() )
+    if( pCursor->GetPointNode().FindTableNode() )
     {
         StartAllAction();
         GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
@@ -475,7 +475,7 @@ bool SwEditShell::CanMergeTable( bool bWithPrev, bool* pChkNxtPrv ) const
 {
     bool bRet = false;
     const SwPaM *pCursor = GetCursor();
-    const SwTableNode* pTableNd = pCursor->GetNode().FindTableNode();
+    const SwTableNode* pTableNd = pCursor->GetPointNode().FindTableNode();
     if( pTableNd && dynamic_cast< const SwDDETable* >(&pTableNd->GetTable()) ==  nullptr)
     {
         bool bNew = pTableNd->GetTable().IsNewModel();

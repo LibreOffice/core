@@ -496,7 +496,7 @@ void RtfExport::WriteMainText()
         Strm().WriteChar('}'); // background
     }
 
-    SwTableNode* pTableNode = m_pCurPam->GetNode().FindTableNode();
+    SwTableNode* pTableNode = m_pCurPam->GetPointNode().FindTableNode();
     if (m_pWriter && m_pWriter->m_bWriteOnlyFirstTable && pTableNode != nullptr)
     {
         m_pCurPam->GetPoint()->nNode = *pTableNode;

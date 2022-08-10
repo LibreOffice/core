@@ -671,7 +671,7 @@ bool SwTextFrame::GetModelPositionForViewPoint(SwPosition* pPos, Point& rPoint,
 
 bool SwTextFrame::LeftMargin(SwPaM *pPam) const
 {
-    assert(GetMergedPara() || &pPam->GetNode() == static_cast<SwContentNode const*>(GetDep()));
+    assert(GetMergedPara() || &pPam->GetPointNode() == static_cast<SwContentNode const*>(GetDep()));
 
     SwTextFrame *pFrame = GetAdjFrameAtPos( const_cast<SwTextFrame*>(this), *pPam->GetPoint(),
                                      SwTextCursor::IsRightMargin() );
@@ -705,7 +705,7 @@ bool SwTextFrame::LeftMargin(SwPaM *pPam) const
 
 bool SwTextFrame::RightMargin(SwPaM *pPam, bool bAPI) const
 {
-    assert(GetMergedPara() || &pPam->GetNode() == static_cast<SwContentNode const*>(GetDep()));
+    assert(GetMergedPara() || &pPam->GetPointNode() == static_cast<SwContentNode const*>(GetDep()));
 
     SwTextFrame *pFrame = GetAdjFrameAtPos( const_cast<SwTextFrame*>(this), *pPam->GetPoint(),
                                      SwTextCursor::IsRightMargin() );
@@ -764,8 +764,8 @@ bool SwTextFrame::UnitUp_( SwPaM *pPam, const SwTwips nOffset,
     SwSetToRightMargin aSet;
 
     if( IsInTab() &&
-        pPam->GetNode().StartOfSectionNode() !=
-        pPam->GetNode( false ).StartOfSectionNode() )
+        pPam->GetPointNode().StartOfSectionNode() !=
+        pPam->GetMarkNode().StartOfSectionNode() )
     {
         // If the PaM is located within different boxes, we have a table selection,
         // which is handled by the base class.
@@ -1151,8 +1151,8 @@ bool SwTextFrame::UnitDown_(SwPaM *pPam, const SwTwips nOffset,
 {
 
     if ( IsInTab() &&
-        pPam->GetNode().StartOfSectionNode() !=
-        pPam->GetNode( false ).StartOfSectionNode() )
+        pPam->GetPointNode().StartOfSectionNode() !=
+        pPam->GetMarkNode().StartOfSectionNode() )
     {
         // If the PaM is located within different boxes, we have a table selection,
         // which is handled by the base class.

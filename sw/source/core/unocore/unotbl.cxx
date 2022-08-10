@@ -319,8 +319,8 @@ static uno::Any lcl_GetSpecialProperty(SwFrameFormat* pFormat, const SfxItemProp
                 pTableNode = pTableNode->EndOfSectionNode();
             for(const SwRangeRedline* pRedline : pFormat->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable())
             {
-                const SwNode& rRedPointNode = pRedline->GetNode();
-                const SwNode& rRedMarkNode = pRedline->GetNode(false);
+                const SwNode& rRedPointNode = pRedline->GetPointNode();
+                const SwNode& rRedMarkNode = pRedline->GetMarkNode();
                 if(&rRedPointNode == pTableNode || &rRedMarkNode == pTableNode)
                 {
                     const SwNode& rStartOfRedline = SwNodeIndex(rRedPointNode) <= SwNodeIndex(rRedMarkNode) ?
@@ -935,7 +935,7 @@ uno::Reference<text::XTextCursor> SwXCell::createTextCursorByRange(const uno::Re
         throw uno::RuntimeException();
     const SwStartNode* pSttNd = m_pStartNode ? m_pStartNode : m_pBox->GetSttNd();
     // skip sections
-    SwStartNode* p1 = aPam.GetNode().StartOfSectionNode();
+    SwStartNode* p1 = aPam.GetPointNode().StartOfSectionNode();
     while(p1->IsSectionNode())
         p1 = p1->StartOfSectionNode();
     if( p1 != pSttNd )
@@ -1626,7 +1626,7 @@ void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName, const u
     if(pEntry->nFlags & beans::PropertyAttribute::READONLY)
         throw beans::PropertyVetoException("Property is read-only: " + rPropertyName, static_cast<cppu::OWeakObject*>(this));
     {
-        auto pSttNode = rUnoCursor.GetNode().StartOfSectionNode();
+        auto pSttNode = rUnoCursor.GetPointNode().StartOfSectionNode();
         const SwTableNode* pTableNode = pSttNode->FindTableNode();
         lcl_FormatTable(pTableNode->GetTable().GetFrameFormat());
     }
@@ -1676,7 +1676,7 @@ uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
     SolarMutexGuard aGuard;
     SwUnoCursor& rUnoCursor = GetCursor();
     {
-        auto pSttNode = rUnoCursor.GetNode().StartOfSectionNode();
+        auto pSttNode = rUnoCursor.GetPointNode().StartOfSectionNode();
         const SwTableNode* pTableNode = pSttNode->FindTableNode();
         lcl_FormatTable(pTableNode->GetTable().GetFrameFormat());
     }

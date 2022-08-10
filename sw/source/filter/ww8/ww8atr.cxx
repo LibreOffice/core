@@ -3293,7 +3293,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
             const SwTextNode *pTextNd = GetExport().GetHdFtPageRoot();
             if (!pTextNd)
             {
-                pTextNd = GetExport().m_pCurPam->GetNode().GetTextNode();
+                pTextNd = GetExport().m_pCurPam->GetPointNode().GetTextNode();
             }
 
             if (pTextNd)

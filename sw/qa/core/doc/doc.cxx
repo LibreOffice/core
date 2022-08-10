@@ -90,7 +90,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testNumDownIndent)
     SwEditWin& rEditWin = pDocShell->GetView()->GetEditWin();
     KeyEvent aKeyEvent(0, KEY_TAB);
     rEditWin.KeyInput(aKeyEvent);
-    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetNode().GetTextNode();
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: \tB
@@ -187,7 +187,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testIMEGrouping)
 
     // Then make sure that gets grouped together to a single undo action:
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
-    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetNode().GetTextNode();
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
     CPPUNIT_ASSERT_EQUAL(OUString("ab"), pTextNode->GetText());
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1

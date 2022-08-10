@@ -148,7 +148,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testReplaceForward)
 
     pDoc->getIDocumentContentOperations().InsertString(aPaM, ORIGINAL_REPLACE_CONTENT);
 
-    SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
+    SwTextNode* pTextNode = aPaM.GetPointNode().GetTextNode();
     lcl_selectCharacters(aPaM, 5, 9);
     pDoc->getIDocumentContentOperations().ReplaceRange(aPaM, "toto", false);
 
@@ -503,7 +503,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testReplaceBackward)
     SwPaM aPaM(aIdx);
 
     pDoc->getIDocumentContentOperations().InsertString(aPaM, "toto titi tutu");
-    SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
+    SwTextNode* pTextNode = aPaM.GetPointNode().GetTextNode();
     lcl_selectCharacters(aPaM, 9, 5);
 
     pDoc->getIDocumentContentOperations().ReplaceRange(aPaM, "toto", false);
@@ -573,7 +573,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testImportRTF)
     CPPUNIT_ASSERT(pRTFReader != nullptr);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, aReader.Read(*pRTFReader));
 
-    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetPointNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(OUString("fooHello world!"), pDoc->GetNodes()[nIndex - 1]->GetTextNode()->GetText());
     CPPUNIT_ASSERT_EQUAL(OUString("bar"), pDoc->GetNodes()[nIndex]->GetTextNode()->GetText());
 }
@@ -1055,7 +1055,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testChineseConversionBlank)
     aWrap.Convert();
 
     // Then
-    SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
+    SwTextNode* pTextNode = aPaM.GetPointNode().GetTextNode();
     CPPUNIT_ASSERT_EQUAL(OUString(), pTextNode->GetText());
 
 }
@@ -1079,7 +1079,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testChineseConversionNonChineseText)
     aWrap.Convert();
 
     // Then
-    SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
+    SwTextNode* pTextNode = aPaM.GetPointNode().GetTextNode();
     CPPUNIT_ASSERT_EQUAL(OUString(NON_CHINESE_CONTENT), pTextNode->GetText());
 
 }
@@ -1103,7 +1103,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testChineseConversionTraditionalToSimplifie
     aWrap.Convert();
 
     // Then
-    SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
+    SwTextNode* pTextNode = aPaM.GetPointNode().GetTextNode();
     CPPUNIT_ASSERT_EQUAL(OUString(CHINESE_SIMPLIFIED_CONTENT), pTextNode->GetText());
 
 }
@@ -1127,7 +1127,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testChineseConversionSimplifiedToTraditiona
     aWrap.Convert();
 
     // Then
-    SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
+    SwTextNode* pTextNode = aPaM.GetPointNode().GetTextNode();
     CPPUNIT_ASSERT_EQUAL(OUString(CHINESE_TRADITIONAL_CONTENT), pTextNode->GetText());
 
 }
@@ -1429,7 +1429,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf68183)
 
     SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
-    SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
+    SwTextNode* pTextNode = aPaM.GetPointNode().GetTextNode();
     CPPUNIT_ASSERT_EQUAL(false, pTextNode->GetSwAttrSet().HasItem(RES_PARATR_RSID));
 
     // Then enable storing of RSID and make sure that the attribute is inserted.

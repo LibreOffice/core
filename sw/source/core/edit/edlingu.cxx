@@ -920,7 +920,7 @@ uno::Reference< XSpellAlternatives >
     if (pPt && GetLayout()->GetModelPositionForViewPoint( &aPos, *const_cast<Point*>(pPt), &eTmpState ))
         pNode = aPos.GetNode().GetTextNode();
     if (nullptr == pNode)
-        pNode = pCursor->GetNode().GetTextNode();
+        pNode = pCursor->GetPointNode().GetTextNode();
     if (nullptr != pNode)
         pWrong = pNode->GetWrong();
     if (nullptr != pWrong && !pNode->IsInProtectSect())
@@ -991,7 +991,7 @@ bool SwEditShell::GetGrammarCorrection(
     if (pPt && GetLayout()->GetModelPositionForViewPoint( &aPos, *const_cast<Point*>(pPt), &eTmpState ))
         pNode = aPos.GetNode().GetTextNode();
     if (nullptr == pNode)
-        pNode = pCursor->GetNode().GetTextNode();
+        pNode = pCursor->GetPointNode().GetTextNode();
     if (nullptr != pNode)
         pWrong = pNode->GetGrammarCheck();
     if (nullptr != pWrong && !pNode->IsInProtectSect())
@@ -1248,7 +1248,7 @@ static SpellContentPositions lcl_CollectDeletedRedlines(SwEditShell const * pSh)
     {
         SwPaM *pCursor = pSh->GetCursor();
         const SwPosition* pStartPos = pCursor->Start();
-        const SwTextNode* pTextNode = pCursor->GetNode().GetTextNode();
+        const SwTextNode* pTextNode = pCursor->GetPointNode().GetTextNode();
 
         SwRedlineTable::size_type nAct = pDoc->getIDocumentRedlineAccess().GetRedlinePos( *pTextNode, RedlineType::Any );
         const sal_Int32 nStartIndex = pStartPos->GetContentIndex();
@@ -1408,7 +1408,7 @@ bool SwSpellIter::SpellSentence(svx::SpellPortions& rPortions, bool bIsGrammarCh
         pMySh->GoEndSentence();
         if( bGrammarErrorFound )
         {
-            const ModelToViewHelper aConversionMap(static_cast<SwTextNode&>(pCursor->GetNode()), pMySh->GetLayout());
+            const ModelToViewHelper aConversionMap(static_cast<SwTextNode&>(pCursor->GetPointNode()), pMySh->GetLayout());
             const OUString& aExpandText = aConversionMap.getViewText();
             sal_Int32 nSentenceEnd =
                 aConversionMap.ConvertToViewPosition( aGrammarResult.nBehindEndOfSentencePosition );
@@ -1597,7 +1597,7 @@ void    SwSpellIter::AddPortion(uno::Reference< XSpellAlternatives > const & xAl
         // iterate over the text to find changes in language
         // set the mark equal to the point
         *pCursor->GetMark() = aStart;
-        SwTextNode* pTextNode = pCursor->GetNode().GetTextNode();
+        SwTextNode* pTextNode = pCursor->GetPointNode().GetTextNode();
         LanguageType eStartLanguage = lcl_GetLanguage(*GetSh());
         SpellContentPosition  aNextRedline = lcl_FindNextDeletedRedline(
                     rDeletedRedlines, aStart.GetContentIndex() );

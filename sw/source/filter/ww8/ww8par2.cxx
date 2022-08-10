@@ -188,7 +188,7 @@ sal_uInt16 SwWW8ImplReader::End_Footnote()
 
     //Get the footnote character and remove it from the txtnode. We'll
     //replace it with the footnote
-    SwTextNode* pText = m_pPaM->GetNode().GetTextNode();
+    SwTextNode* pText = m_pPaM->GetPointNode().GetTextNode();
     sal_Int32 nPos = m_pPaM->GetPoint()->GetContentIndex();
 
     OUString sChar;
@@ -1039,7 +1039,7 @@ void SwWW8ImplReader::NextAnlLine(const sal_uInt8* pSprm13)
     else
         m_nSwNumLevel = 0xff;                 // no number
 
-    SwTextNode* pNd = m_pPaM->GetNode().GetTextNode();
+    SwTextNode* pNd = m_pPaM->GetPointNode().GetTextNode();
     if (!pNd)
         return;
 
@@ -2648,13 +2648,13 @@ void WW8TabDesc::MergeCells()
                     {
                         SwPaM aPam( *m_pTabBox->GetSttNd(), 0 );
                         aPam.GetPoint()->nNode++;
-                        SwTextNode* pNd = aPam.GetNode().GetTextNode();
+                        SwTextNode* pNd = aPam.GetPointNode().GetTextNode();
                         while( pNd )
                         {
                             pNd->SetCountedInList( false );
 
                             aPam.GetPoint()->nNode++;
-                            pNd = aPam.GetNode().GetTextNode();
+                            pNd = aPam.GetPointNode().GetTextNode();
                         }
                     }
 
@@ -2740,7 +2740,7 @@ void WW8TabDesc::ParkPaM()
         {
             m_pIo->m_pPaM->GetPoint()->nNode = nSttNd;
         }
-        while (m_pIo->m_pPaM->GetNode().GetNodeType() != SwNodeType::Text && ++nSttNd < nEndNd);
+        while (m_pIo->m_pPaM->GetPointNode().GetNodeType() != SwNodeType::Text && ++nSttNd < nEndNd);
 
         m_pIo->m_pPaM->GetPoint()->nContent.Assign(m_pIo->m_pPaM->GetContentNode(), 0);
         m_pIo->m_rDoc.SetTextFormatColl(*m_pIo->m_pPaM, const_cast<SwTextFormatColl*>(m_pIo->m_pDfltTextFormatColl));
@@ -2983,7 +2983,7 @@ void WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
         {
             m_pIo->m_pPaM->GetPoint()->nNode = nSttNd;
         }
-        while (m_pIo->m_pPaM->GetNode().GetNodeType() != SwNodeType::Text && ++nSttNd < nEndNd);
+        while (m_pIo->m_pPaM->GetPointNode().GetNodeType() != SwNodeType::Text && ++nSttNd < nEndNd);
         m_pIo->m_pPaM->GetPoint()->nContent.Assign(m_pIo->m_pPaM->GetContentNode(), 0);
         // Precautionally set now, otherwise the style is not set for cells
         // that are inserted for margin balancing.
@@ -2993,7 +2993,7 @@ void WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
     }
 
     // Better to turn Snap to Grid off for all paragraphs in tables
-    SwTextNode *pNd = m_pIo->m_pPaM->GetNode().GetTextNode();
+    SwTextNode *pNd = m_pIo->m_pPaM->GetPointNode().GetTextNode();
     if(!pNd)
         return;
 
