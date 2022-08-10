@@ -1111,7 +1111,7 @@ DECLARE_ODFEXPORT_TEST(testCharacterBorder, "charborder.odt")
             table::BorderLine2(0xFF3333,0,37,0,14,37),     // Top (fine dashed line)
             table::BorderLine2(0x99FF66,26,26,53,11,106),  // Bottom
             table::BorderLine2(0x6666FF,9,26,9,12,71),     // Left
-            table::BorderLine2(0,0,0,0,0,0)                // Right
+            table::BorderLine2(0,0,0,0,table::BorderLineStyle::NONE,0) // Right
         };
 
         sal_Int32 aDistances[4] = { 400 /*Top*/, 300 /*Bottom*/, 250 /*Left*/, 0 /*Right*/ };

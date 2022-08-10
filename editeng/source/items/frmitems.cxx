@@ -1387,7 +1387,10 @@ table::BorderLine2 SvxBoxItem::SvxLineToLine(const SvxBorderLine* pLine, bool bC
         aLine.LineWidth      = sal_uInt32( bConvert ? convertTwipToMm100( pLine->GetWidth( ) ) : pLine->GetWidth( ) );
     }
     else
+    {
         aLine.Color          = aLine.InnerLineWidth = aLine.OuterLineWidth = aLine.LineDistance  = 0;
+        aLine.LineStyle = table::BorderLineStyle::NONE; // 0 is SOLID!
+    }
     return aLine;
 }
 
