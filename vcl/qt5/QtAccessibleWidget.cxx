@@ -711,8 +711,11 @@ QAccessibleInterface* QtAccessibleWidget::childAt(int x, int y) const
         return nullptr;
 
     Reference<XAccessibleComponent> xAccessibleComponent(xAc, UNO_QUERY);
+    // convert from screen to local coordinates
+    QPoint aLocalCoords = QPoint(x, y) - rect().topLeft();
     return QAccessible::queryAccessibleInterface(
-        new QtXAccessible(xAccessibleComponent->getAccessibleAtPoint(awt::Point(x, y))));
+        new QtXAccessible(xAccessibleComponent->getAccessibleAtPoint(
+            awt::Point(aLocalCoords.x(), aLocalCoords.y()))));
 }
 
 QAccessibleInterface* QtAccessibleWidget::customFactory(const QString& classname, QObject* object)
