@@ -186,6 +186,21 @@ void putBorderProperty(RTFStack& aStates, Id nId, const RTFValue::Pointer_t& pVa
     else if (aStates.top().getBorderState() == RTFBorderState::PAGE)
         pAttributes = &getLastAttributes(aStates.top().getSectionSprms(),
                                          NS_ooxml::LN_EG_SectPrContents_pgBorders);
+    else if (aStates.top().getBorderState() == RTFBorderState::NONE)
+    {
+        // this is invalid, but Word apparently clears or overrides all paragraph borders now
+        for (int i = 0; i < 4; ++i)
+        {
+            auto const nBorder = getParagraphBorder(i);
+            RTFSprms aAttributes;
+            RTFSprms aSprms;
+            aAttributes.set(NS_ooxml::LN_CT_Border_val,
+                            new RTFValue(NS_ooxml::LN_Value_ST_Border_none));
+            putNestedSprm(aStates.top().getParagraphSprms(), NS_ooxml::LN_CT_PrBase_pBdr, nBorder,
+                          new RTFValue(aAttributes, aSprms), RTFOverwrite::YES);
+        }
+    }
+
     if (pAttributes)
         pAttributes->set(nId, pValue);
 }

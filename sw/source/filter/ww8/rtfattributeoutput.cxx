@@ -188,6 +188,11 @@ static OString OutTBLBorderLine(RtfExport const& rExport, const editeng::SvxBord
         aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRCF);
         aRet.append(static_cast<sal_Int32>(rExport.GetColor(pLine->GetColor())));
     }
+    else // tdf#129758 "no border" may be needed to override style
+    {
+        aRet.append(pStr);
+        aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRNONE);
+    }
     return aRet.makeStringAndClear();
 }
 
@@ -197,8 +202,11 @@ static OString OutBorderLine(RtfExport const& rExport, const editeng::SvxBorderL
 {
     OStringBuffer aRet;
     aRet.append(OutTBLBorderLine(rExport, pLine, pStr));
-    aRet.append(OOO_STRING_SVTOOLS_RTF_BRSP);
-    aRet.append(static_cast<sal_Int32>(nDist));
+    if (pLine)
+    {
+        aRet.append(OOO_STRING_SVTOOLS_RTF_BRSP);
+        aRet.append(static_cast<sal_Int32>(nDist));
+    }
     if (eShadowLocation == SvxShadowLocation::BottomRight)
         aRet.append(LO_STRING_SVTOOLS_RTF_BRDRSH);
     return aRet.makeStringAndClear();
@@ -3673,11 +3681,9 @@ void RtfAttributeOutput::FormatBox(const SvxBoxItem& rBox)
         const char** pBrdNms = aBorderNames;
         for (int i = 0; i < 4; ++i, ++pBrd, ++pBrdNms)
         {
-            if (const editeng::SvxBorderLine* pLn = rBox.GetLine(*pBrd))
-            {
-                m_aSectionBreaks.append(OutBorderLine(m_rExport, pLn, *pBrdNms,
-                                                      rBox.GetDistance(*pBrd), eShadowLocation));
-            }
+            editeng::SvxBorderLine const* const pLn = rBox.GetLine(*pBrd);
+            m_aSectionBreaks.append(
+                OutBorderLine(m_rExport, pLn, *pBrdNms, rBox.GetDistance(*pBrd), eShadowLocation));
         }
     }
 
