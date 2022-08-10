@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6226642c_acade958",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003606
+      },
+      "writtenOn": "2022-08-10T15:32:10Z",
+      "side": 1,
+      "message": "Alternatively I can just use std::vector\u003cbool\u003e all the way, no o3tl::span or raw pointers. I don’t quite understand why o3tl::span was used for DX array, and I used it to remain close to it.",
+      "parentUuid": "6a821e2c_f56644bb",
+      "revId": "63c32b923f4828435b23b7808906bfcfd520b09b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dd1fc610_ecece5ba",
         "filename": "include/vcl/rendercontext/SalLayoutFlags.hxx",
         "patchSetId": 5
