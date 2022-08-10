@@ -844,7 +844,10 @@ QString QtAccessibleWidget::attributes(int offset, int* startOffset, int* endOff
         offset = nTextLength - 1;
 
     if (offset < 0 || offset > nTextLength)
+    {
+        SAL_WARN("vcl.qt", "QtAccessibleWidget::attributes called with invalid offset: " << offset);
         return QString();
+    }
 
     const Sequence<PropertyValue> attribs
         = xText->getCharacterAttributes(offset, Sequence<OUString>());
@@ -887,6 +890,7 @@ int QtAccessibleWidget::characterCount() const
         return xText->getCharacterCount();
     return 0;
 }
+
 QRect QtAccessibleWidget::characterRect(int nOffset) const
 {
     Reference<XAccessibleText> xText(getAccessibleContextImpl(), UNO_QUERY);
@@ -931,11 +935,21 @@ void QtAccessibleWidget::removeSelection(int /* selectionIndex */)
 {
     SAL_INFO("vcl.qt", "Unsupported QAccessibleTextInterface::removeSelection");
 }
+
 void QtAccessibleWidget::scrollToSubstring(int startIndex, int endIndex)
 {
     Reference<XAccessibleText> xText(getAccessibleContextImpl(), UNO_QUERY);
-    if (xText.is())
-        xText->scrollSubstringTo(startIndex, endIndex, AccessibleScrollType_SCROLL_ANYWHERE);
+    if (!xText.is())
+        return;
+
+    sal_Int32 nTextLength = xText->getCharacterCount();
+    if (startIndex < 0 || startIndex > nTextLength || endIndex < 0 || endIndex > nTextLength)
+    {
+        SAL_WARN("vcl.qt", "QtAccessibleWidget::scrollToSubstring called with invalid offset.");
+        return;
+    }
+
+    xText->scrollSubstringTo(startIndex, endIndex, AccessibleScrollType_SCROLL_ANYWHERE);
 }
 
 void QtAccessibleWidget::selection(int selectionIndex, int* startOffset, int* endOffset) const
@@ -960,25 +974,55 @@ int QtAccessibleWidget::selectionCount() const
         return 1; // Only 1 selection supported atm
     return 0;
 }
+
 void QtAccessibleWidget::setCursorPosition(int position)
 {
     Reference<XAccessibleText> xText(getAccessibleContextImpl(), UNO_QUERY);
-    if (xText.is())
-        xText->setCaretPosition(position);
+    if (!xText.is())
+        return;
+
+    if (position < 0 || position > xText->getCharacterCount())
+    {
+        SAL_WARN("vcl.qt",
+                 "QtAccessibleWidget::setCursorPosition called with invalid offset: " << position);
+        return;
+    }
+
+    xText->setCaretPosition(position);
 }
+
 void QtAccessibleWidget::setSelection(int /* selectionIndex */, int startOffset, int endOffset)
 {
     Reference<XAccessibleText> xText(getAccessibleContextImpl(), UNO_QUERY);
-    if (xText.is())
-        xText->setSelection(startOffset, endOffset);
+    if (!xText.is())
+        return;
+
+    sal_Int32 nTextLength = xText->getCharacterCount();
+    if (startOffset < 0 || startOffset > nTextLength || endOffset < 0 || endOffset > nTextLength)
+    {
+        SAL_WARN("vcl.qt", "QtAccessibleWidget::setSelection called with invalid offset.");
+        return;
+    }
+
+    xText->setSelection(startOffset, endOffset);
 }
+
 QString QtAccessibleWidget::text(int startOffset, int endOffset) const
 {
     Reference<XAccessibleText> xText(getAccessibleContextImpl(), UNO_QUERY);
-    if (xText.is())
-        return toQString(xText->getTextRange(startOffset, endOffset));
-    return QString();
+    if (!xText.is())
+        return QString();
+
+    sal_Int32 nTextLength = xText->getCharacterCount();
+    if (startOffset < 0 || startOffset > nTextLength || endOffset < 0 || endOffset > nTextLength)
+    {
+        SAL_WARN("vcl.qt", "QtAccessibleWidget::text called with invalid offset.");
+        return QString();
+    }
+
+    return toQString(xText->getTextRange(startOffset, endOffset));
 }
+
 QString QtAccessibleWidget::textAfterOffset(int /* offset */,
                                             QAccessible::TextBoundaryType /* boundaryType */,
                                             int* /* startOffset */, int* /* endOffset */) const
@@ -993,9 +1037,9 @@ QString QtAccessibleWidget::textAtOffset(int offset, QAccessible::TextBoundaryTy
     if (startOffset == nullptr || endOffset == nullptr)
         return QString();
 
+    const int nCharCount = characterCount();
     if (boundaryType == QAccessible::NoBoundary)
     {
-        const int nCharCount = characterCount();
         *startOffset = 0;
         *endOffset = nCharCount;
         return text(0, nCharCount);
@@ -1010,7 +1054,14 @@ QString QtAccessibleWidget::textAtOffset(int offset, QAccessible::TextBoundaryTy
 
     // special value of -1 for offset means text length
     if (offset == -1)
-        offset = xText->getCharacterCount();
+        offset = nCharCount;
+
+    if (offset < 0 || offset > nCharCount)
+    {
+        SAL_WARN("vcl.qt",
+                 "QtAccessibleWidget::textAtOffset called with invalid offset: " << offset);
+        return QString();
+    }
 
     const TextSegment segment = xText->getTextAtIndex(offset, nUnoBoundaryType);
     *startOffset = segment.SegmentStart;
@@ -1037,6 +1088,14 @@ void QtAccessibleWidget::deleteText(int startOffset, int endOffset)
     Reference<XAccessibleEditableText> xEditableText(xAc, UNO_QUERY);
     if (!xEditableText.is())
         return;
+
+    sal_Int32 nTextLength = xEditableText->getCharacterCount();
+    if (startOffset < 0 || startOffset > nTextLength || endOffset < 0 || endOffset > nTextLength)
+    {
+        SAL_WARN("vcl.qt", "QtAccessibleWidget::deleteText called with invalid offset.");
+        return;
+    }
+
     xEditableText->deleteText(startOffset, endOffset);
 }
 
@@ -1049,6 +1108,13 @@ void QtAccessibleWidget::insertText(int offset, const QString& text)
     Reference<XAccessibleEditableText> xEditableText(xAc, UNO_QUERY);
     if (!xEditableText.is())
         return;
+
+    if (offset < 0 || offset > xEditableText->getCharacterCount())
+    {
+        SAL_WARN("vcl.qt", "QtAccessibleWidget::insertText called with invalid offset: " << offset);
+        return;
+    }
+
     xEditableText->insertText(toOUString(text), offset);
 }
 
@@ -1061,6 +1127,14 @@ void QtAccessibleWidget::replaceText(int startOffset, int endOffset, const QStri
     Reference<XAccessibleEditableText> xEditableText(xAc, UNO_QUERY);
     if (!xEditableText.is())
         return;
+
+    sal_Int32 nTextLength = xEditableText->getCharacterCount();
+    if (startOffset < 0 || startOffset > nTextLength || endOffset < 0 || endOffset > nTextLength)
+    {
+        SAL_WARN("vcl.qt", "QtAccessibleWidget::replaceText called with invalid offset.");
+        return;
+    }
+
     xEditableText->replaceText(startOffset, endOffset, toOUString(text));
 }
 
