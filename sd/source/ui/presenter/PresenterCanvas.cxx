@@ -30,6 +30,7 @@
 #include <comphelper/compbase.hxx>
 #include <rtl/ref.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <utility>
 #include <vcl/window.hxx>
 
 using namespace ::com::sun::star;
@@ -51,7 +52,7 @@ class PresenterCustomSprite final
 {
 public:
     PresenterCustomSprite (
-        const rtl::Reference<PresenterCanvas>& rpCanvas,
+        rtl::Reference<PresenterCanvas> pCanvas,
         const Reference<rendering::XCustomSprite>& rxSprite,
         const Reference<awt::XWindow>& rxBaseWindow);
     PresenterCustomSprite(const PresenterCustomSprite&) = delete;
@@ -690,10 +691,10 @@ void PresenterCanvas::ThrowIfDisposed()
 //===== PresenterCustomSprite =================================================
 
 PresenterCustomSprite::PresenterCustomSprite (
-    const rtl::Reference<PresenterCanvas>& rpCanvas,
+    rtl::Reference<PresenterCanvas> pCanvas,
     const Reference<rendering::XCustomSprite>& rxSprite,
     const Reference<awt::XWindow>& rxBaseWindow)
-    : mpCanvas(rpCanvas),
+    : mpCanvas(std::move(pCanvas)),
       mxSprite(rxSprite),
       mxBaseWindow(rxBaseWindow),
       maPosition(0,0)

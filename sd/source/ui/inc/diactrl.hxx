@@ -42,7 +42,7 @@ private:
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 
 public:
-    SdPagesField(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rFrame);
+    SdPagesField(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame> xFrame);
     virtual void dispose() override;
     void set_sensitive(bool bSensitive);
     virtual ~SdPagesField() override;

@@ -60,7 +60,7 @@ public:
     class ForceShowContext
     {
     public:
-        ForceShowContext (const std::shared_ptr<InsertionIndicatorHandler>& rpHandler);
+        ForceShowContext (std::shared_ptr<InsertionIndicatorHandler> pHandler);
         ~ForceShowContext() COVERITY_NOEXCEPT_FALSE;
     private:
         const std::shared_ptr<InsertionIndicatorHandler> mpHandler;

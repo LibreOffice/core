@@ -22,6 +22,7 @@
 #include "sddllapi.h"
 
 #include <com/sun/star/uno/Reference.hxx>
+#include <utility>
 
 namespace com::sun::star::animations { class XAnimationNode; }
 
@@ -37,8 +38,8 @@ struct AfterEffectNode
     css::uno::Reference< css::animations::XAnimationNode > mxMaster;
     bool mbOnNextEffect;
 
-    AfterEffectNode( const css::uno::Reference< css::animations::XAnimationNode >& xNode, const css::uno::Reference< css::animations::XAnimationNode >& xMaster, bool bOnNextEffect )
-        : mxNode( xNode ), mxMaster( xMaster ), mbOnNextEffect( bOnNextEffect ) {}
+    AfterEffectNode( css::uno::Reference< css::animations::XAnimationNode > xNode, css::uno::Reference< css::animations::XAnimationNode > xMaster, bool bOnNextEffect )
+        : mxNode(std::move( xNode )), mxMaster(std::move( xMaster )), mbOnNextEffect( bOnNextEffect ) {}
 };
 
 /** inserts the animation node in the given AfterEffectNode at the correct position

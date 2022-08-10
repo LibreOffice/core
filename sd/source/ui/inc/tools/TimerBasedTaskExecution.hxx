@@ -73,7 +73,7 @@ private:
     sal_uInt32 mnMaxTimePerStep;
 
     TimerBasedTaskExecution (
-        const std::shared_ptr<AsynchronousTask>& rpTask,
+        std::shared_ptr<AsynchronousTask> pTask,
         sal_uInt32 nMillisecondsBetweenSteps,
         sal_uInt32 nMaxTimePerStep);
     ~TimerBasedTaskExecution();

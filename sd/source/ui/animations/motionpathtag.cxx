@@ -53,6 +53,7 @@
 
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx>
+#include <utility>
 
 using sdr::PolyPolygonEditor;
 using namespace ::com::sun::star;
@@ -79,17 +80,17 @@ protected:
 
 public:
     PathDragMove(SdrDragView& rNewView,
-        const rtl::Reference <MotionPathTag >& xTag,
-        const basegfx::B2DPolyPolygon& rPathPolyPolygon)
+        rtl::Reference <MotionPathTag > xTag,
+        basegfx::B2DPolyPolygon aPathPolyPolygon)
     :   SdrDragMove(rNewView),
-        maPathPolyPolygon(rPathPolyPolygon),
-        mxTag( xTag )
+        maPathPolyPolygon(std::move(aPathPolyPolygon)),
+        mxTag(std::move( xTag ))
     {}
 
     PathDragMove(SdrDragView& rNewView,
-        const rtl::Reference <MotionPathTag >& xTag)
+        rtl::Reference <MotionPathTag > xTag)
     :   SdrDragMove(rNewView),
-        mxTag( xTag )
+        mxTag(std::move( xTag ))
     {}
 
     virtual bool BeginSdrDrag() override;
@@ -145,17 +146,17 @@ protected:
 
 public:
     PathDragResize(SdrDragView& rNewView,
-        const rtl::Reference <MotionPathTag >& xTag,
-        const basegfx::B2DPolyPolygon& rPathPolyPolygon)
+        rtl::Reference <MotionPathTag > xTag,
+        basegfx::B2DPolyPolygon aPathPolyPolygon)
     :   SdrDragResize(rNewView),
-        maPathPolyPolygon(rPathPolyPolygon),
-        mxTag( xTag )
+        maPathPolyPolygon(std::move(aPathPolyPolygon)),
+        mxTag(std::move( xTag ))
     {}
 
     PathDragResize(SdrDragView& rNewView,
-        const rtl::Reference <MotionPathTag >& xTag)
+        rtl::Reference <MotionPathTag > xTag)
     :   SdrDragResize(rNewView),
-        mxTag( xTag )
+        mxTag(std::move( xTag ))
     {}
 
     virtual bool EndSdrDrag(bool bCopy) override;
@@ -207,9 +208,9 @@ protected:
 
 public:
     PathDragObjOwn(SdrDragView& rNewView,
-        const basegfx::B2DPolyPolygon& rPathPolyPolygon)
+        basegfx::B2DPolyPolygon aPathPolyPolygon)
     :   SdrDragObjOwn(rNewView),
-        maPathPolyPolygon(rPathPolyPolygon)
+        maPathPolyPolygon(std::move(aPathPolyPolygon))
     {}
 
     explicit PathDragObjOwn(SdrDragView& rNewView)

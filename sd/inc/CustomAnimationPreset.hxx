@@ -21,6 +21,7 @@
 
 #include <sal/config.h>
 
+#include <utility>
 #include <vector>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -75,8 +76,8 @@ struct PresetCategory
     OUString maLabel;
     EffectDescriptorList maEffects;
 
-    PresetCategory( const OUString& rLabel, EffectDescriptorList&& rEffects )
-        : maLabel( rLabel ), maEffects( std::move(rEffects) ) {}
+    PresetCategory( OUString aLabel, EffectDescriptorList&& rEffects )
+        : maLabel(std::move( aLabel )), maEffects( std::move(rEffects) ) {}
 };
 typedef std::shared_ptr< PresetCategory > PresetCategoryPtr;
 typedef std::vector< PresetCategoryPtr > PresetCategoryList;

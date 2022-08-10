@@ -24,6 +24,7 @@
 #include <com/sun/star/uno/Reference.h>
 
 #include <memory>
+#include <utility>
 #include <vector>
 
 namespace com::sun::star::ucb
@@ -44,9 +45,9 @@ namespace sd
 class TemplateEntry
 {
 public:
-    TemplateEntry(const OUString& rsTitle, const OUString& rsPath)
-        : msTitle(rsTitle)
-        , msPath(rsPath)
+    TemplateEntry(OUString sTitle, OUString sPath)
+        : msTitle(std::move(sTitle))
+        , msPath(std::move(sPath))
     {
     }
 

@@ -27,6 +27,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -38,11 +39,11 @@ namespace accessibility {
 //=====  internal  ============================================================
 
 AccessiblePageShape::AccessiblePageShape (
-    const uno::Reference<drawing::XDrawPage>& rxPage,
+    uno::Reference<drawing::XDrawPage> xPage,
     const uno::Reference<XAccessible>& rxParent,
     const AccessibleShapeTreeInfo& rShapeTreeInfo)
     : AccessibleShape (AccessibleShapeInfo (nullptr, rxParent), rShapeTreeInfo),
-      mxPage (rxPage)
+      mxPage (std::move(xPage))
 {
     // The main part of the initialization is done in the init method which
     // has to be called from this constructor's caller.

@@ -77,6 +77,7 @@
 #include <CustomAnimationEffect.hxx>
 #include <CustomAnimationPreset.hxx>
 #include <animations.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1636,8 +1637,8 @@ EffectSequenceHelper::EffectSequenceHelper()
 {
 }
 
-EffectSequenceHelper::EffectSequenceHelper( const css::uno::Reference< css::animations::XTimeContainer >& xSequenceRoot )
-: mxSequenceRoot( xSequenceRoot ), mnSequenceType( EffectNodeType::DEFAULT )
+EffectSequenceHelper::EffectSequenceHelper( css::uno::Reference< css::animations::XTimeContainer > xSequenceRoot )
+: mxSequenceRoot(std::move( xSequenceRoot )), mnSequenceType( EffectNodeType::DEFAULT )
 {
     Reference< XAnimationNode > xNode( mxSequenceRoot, UNO_QUERY_THROW );
     create( xNode );
@@ -3539,8 +3540,8 @@ void InteractiveSequence::implRebuild()
     EffectSequenceHelper::implRebuild();
 }
 
-MainSequenceRebuildGuard::MainSequenceRebuildGuard( const MainSequencePtr& pMainSequence )
-: mpMainSequence( pMainSequence )
+MainSequenceRebuildGuard::MainSequenceRebuildGuard( MainSequencePtr pMainSequence )
+: mpMainSequence(std::move( pMainSequence ))
 {
     if( mpMainSequence )
         mpMainSequence->lockRebuilds();

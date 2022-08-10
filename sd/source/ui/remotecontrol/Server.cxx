@@ -8,6 +8,7 @@
  */
 
 #include <algorithm>
+#include <utility>
 #include <vector>
 
 #include <officecfg/Office/Impress.hxx>
@@ -55,10 +56,10 @@ namespace sd {
 
         ClientInfoInternal( const OUString& rName,
                             BufferedStreamSocket *pSocket,
-                            const OUString& rPin ):
+                            OUString aPin ):
                 ClientInfo( rName, false ),
                 mpStreamSocket( pSocket ),
-                mPin( rPin ) {}
+                mPin(std::move( aPin )) {}
     };
 }
 

@@ -20,6 +20,7 @@
 #include <sal/log.hxx>
 #include <sal/types.h>
 #include <sot/formats.hxx>
+#include <utility>
 #include <vcl/weld.hxx>
 #include <svx/svditer.hxx>
 #include <sfx2/docfile.hxx>
@@ -65,11 +66,11 @@ bool SdPageObjsTLV::IsInDrag()
 SotClipboardFormatId SdPageObjsTLV::SdPageObjsTransferable::mnListBoxDropFormatId = static_cast<SotClipboardFormatId>(SAL_MAX_UINT32);
 
 SdPageObjsTLV::SdPageObjsTransferable::SdPageObjsTransferable(
-        const INetBookmark& rBookmark,
+        INetBookmark aBookmark,
     ::sd::DrawDocShell& rDocShell,
     NavigatorDragType eDragType)
     : SdTransferable(rDocShell.GetDoc(), nullptr, true),
-      maBookmark( rBookmark ),
+      maBookmark(std::move( aBookmark )),
       mrDocShell( rDocShell ),
       meDragType( eDragType )
 {

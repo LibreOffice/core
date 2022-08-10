@@ -21,9 +21,8 @@ class ImagePreparer : private Timer
 {
     sal_uInt32 mnSendingSlide;
 public:
-    ImagePreparer( const
-        css::uno::Reference<css::presentation::XSlideShowController>&
-        rxController, sd::Transmitter *aTransmitter );
+    ImagePreparer( css::uno::Reference<css::presentation::XSlideShowController> xController,
+                   sd::Transmitter *aTransmitter );
     virtual ~ImagePreparer() override;
 
 private:
