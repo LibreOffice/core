@@ -26,6 +26,7 @@
 #include <vcl/toolkit/treelistbox.hxx>
 #include <vcl/accessiblefactory.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/toolkit/edit.hxx>
@@ -3318,8 +3319,21 @@ void SvTreeListBox::GetLastTab( SvLBoxTabFlags nFlagMask, sal_uInt16& rTabPos )
 
 void SvTreeListBox::RequestHelp( const HelpEvent& rHEvt )
 {
-    if (aTooltipHdl.IsSet() && aTooltipHdl.Call(rHEvt))
-        return;
+    if (aTooltipHdl.IsSet())
+    {
+        const Point pos(ScreenToOutputPixel(rHEvt.GetMousePosPixel()));
+        if (SvTreeListEntry* entry = GetEntry(pos))
+        {
+            const OUString tooltip = aTooltipHdl.Call(entry);
+            if (!tooltip.isEmpty())
+            {
+                const Size size(GetOutputSizePixel().Width(), GetEntryHeight());
+                tools::Rectangle screenRect(OutputToScreenPixel(GetEntryPosition(entry)), size);
+                Help::ShowQuickHelp(this, screenRect, tooltip);
+                return;
+            }
+        }
+    }
 
     if( !pImpl->RequestHelp( rHEvt ) )
         Control::RequestHelp( rHEvt );
