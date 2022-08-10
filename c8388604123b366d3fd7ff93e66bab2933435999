@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d864e4d6_98de9aa4",
+        "filename": "cui/uiconfig/ui/optlanguagespage.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-10T14:27:44Z",
+      "side": 1,
+      "message": "Now this dialog element must also change its ID - e.g., to \"useinputlanguage\", aligned with the name change of respective variable in the CXX.",
+      "range": {
+        "startLine": 328,
+        "startChar": 49,
+        "endLine": 328,
+        "endChar": 69
+      },
+      "revId": "c8388604123b366d3fd7ff93e66bab2933435999",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "baf8e751_6d5c34b5",
+        "filename": "officecfg/registry/schema/org/openoffice/Setup.xcs",
+        "patchSetId": 5
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-10T14:27:44Z",
+      "side": 1,
+      "message": "Thank you for removing the change of the default value. But you forgot to also remove the change of the wording here.\n\nThe registry setting does not change here; its meaning is still \"ignore system input language\". Please do not change this file in this patch.",
+      "revId": "c8388604123b366d3fd7ff93e66bab2933435999",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

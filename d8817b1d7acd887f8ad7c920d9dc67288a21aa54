@@ -24,6 +24,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d1febb2_8581cab2",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1197,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-10T14:27:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d7ac29e_cea824db",
+      "range": {
+        "startLine": 1197,
+        "startChar": 4,
+        "endLine": 1197,
+        "endChar": 29
+      },
+      "revId": "d8817b1d7acd887f8ad7c920d9dc67288a21aa54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a2599901_30f3c9ea",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-08-04T07:38:47Z",
       "side": 1,
       "message": "Not \"system language\", but \"system input language\". The former is completely misleading - \"system language\" might refer to UI language of the system.",
+      "range": {
+        "startLine": 335,
+        "startChar": 125,
+        "endLine": 335,
+        "endChar": 140
+      },
+      "revId": "d8817b1d7acd887f8ad7c920d9dc67288a21aa54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "812ebdcb_af2adf53",
+        "filename": "cui/uiconfig/ui/optlanguagespage.ui",
+        "patchSetId": 4
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-10T14:27:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a2599901_30f3c9ea",
       "range": {
         "startLine": 335,
         "startChar": 125,
@@ -96,6 +144,24 @@
       "side": 1,
       "message": "Of course no: we changed the wording in the dialog, and the checkbox will now use the *opposite* values (see the `!` introduced in the cui/source/options/optgdlg.cxx); so for the *same* stored value, we will show the *opposite* checked state.",
       "parentUuid": "c1f6ea10_525de8d2",
+      "revId": "d8817b1d7acd887f8ad7c920d9dc67288a21aa54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "637eb0fa_7aafa02f",
+        "filename": "officecfg/registry/schema/org/openoffice/Setup.xcs",
+        "patchSetId": 4
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-10T14:27:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0358a767_f5923285",
       "revId": "d8817b1d7acd887f8ad7c920d9dc67288a21aa54",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
