@@ -70,6 +70,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef149e98_03ca0c67",
+        "filename": "basic/source/sbx/sbxbase.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-08-10T07:19:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3eb1bd1e_033916b0",
+      "revId": "fa2d790d9e76291b4daa542d6615f08a02236a06",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "63187a1e_94a0d50e",
@@ -83,6 +101,24 @@
       "writtenOn": "2022-08-10T05:45:21Z",
       "side": 1,
       "message": "Better use\n\n    GetSbxData_Impl().aErrorMsg.clear();",
+      "revId": "fa2d790d9e76291b4daa542d6615f08a02236a06",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1214e39_1bcc89e6",
+        "filename": "basic/source/sbx/sbxbase.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-08-10T07:19:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "63187a1e_94a0d50e",
       "revId": "fa2d790d9e76291b4daa542d6615f08a02236a06",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
