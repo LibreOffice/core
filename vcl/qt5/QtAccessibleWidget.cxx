@@ -1023,12 +1023,46 @@ QString QtAccessibleWidget::text(int startOffset, int endOffset) const
     return toQString(xText->getTextRange(startOffset, endOffset));
 }
 
-QString QtAccessibleWidget::textAfterOffset(int /* offset */,
-                                            QAccessible::TextBoundaryType /* boundaryType */,
-                                            int* /* startOffset */, int* /* endOffset */) const
+QString QtAccessibleWidget::textAfterOffset(int nOffset,
+                                            QAccessible::TextBoundaryType eBoundaryType,
+                                            int* pStartOffset, int* pEndOffset) const
 {
-    SAL_INFO("vcl.qt", "Unsupported QAccessibleTextInterface::textAfterOffset");
-    return QString();
+    if (pStartOffset == nullptr || pEndOffset == nullptr)
+        return QString();
+
+    *pStartOffset = -1;
+    *pEndOffset = -1;
+
+    Reference<XAccessibleText> xText(getAccessibleContextImpl(), UNO_QUERY);
+    if (!xText.is())
+        return QString();
+
+    const int nCharCount = characterCount();
+    // -1 is special value for text length
+    if (nOffset == -1)
+        nOffset = nCharCount;
+    else if (nOffset < -1 || nOffset > nCharCount)
+    {
+        SAL_WARN("vcl.qt",
+                 "QtAccessibleWidget::textAfterOffset called with invalid offset: " << nOffset);
+        return QString();
+    }
+
+    if (eBoundaryType == QAccessible::NoBoundary)
+    {
+        if (nOffset == nCharCount)
+            return QString();
+        *pStartOffset = nOffset + 1;
+        *pEndOffset = nCharCount;
+        return text(nOffset + 1, nCharCount);
+    }
+
+    sal_Int16 nUnoBoundaryType = lcl_matchQtTextBoundaryType(eBoundaryType);
+    assert(nUnoBoundaryType > 0);
+    const TextSegment aSegment = xText->getTextBehindIndex(nOffset, nUnoBoundaryType);
+    *pStartOffset = aSegment.SegmentStart;
+    *pEndOffset = aSegment.SegmentEnd;
+    return toQString(aSegment.SegmentText);
 }
 
 QString QtAccessibleWidget::textAtOffset(int offset, QAccessible::TextBoundaryType boundaryType,
@@ -1069,12 +1103,44 @@ QString QtAccessibleWidget::textAtOffset(int offset, QAccessible::TextBoundaryTy
     return toQString(segment.SegmentText);
 }
 
-QString QtAccessibleWidget::textBeforeOffset(int /* offset */,
-                                             QAccessible::TextBoundaryType /* boundaryType */,
-                                             int* /* startOffset */, int* /* endOffset */) const
+QString QtAccessibleWidget::textBeforeOffset(int nOffset,
+                                             QAccessible::TextBoundaryType eBoundaryType,
+                                             int* pStartOffset, int* pEndOffset) const
 {
-    SAL_INFO("vcl.qt", "Unsupported QAccessibleTextInterface::textBeforeOffset");
-    return QString();
+    if (pStartOffset == nullptr || pEndOffset == nullptr)
+        return QString();
+
+    *pStartOffset = -1;
+    *pEndOffset = -1;
+
+    Reference<XAccessibleText> xText(getAccessibleContextImpl(), UNO_QUERY);
+    if (!xText.is())
+        return QString();
+
+    const int nCharCount = characterCount();
+    // -1 is special value for text length
+    if (nOffset == -1)
+        nOffset = nCharCount;
+    else if (nOffset < -1 || nOffset > nCharCount)
+    {
+        SAL_WARN("vcl.qt",
+                 "QtAccessibleWidget::textBeforeOffset called with invalid offset: " << nOffset);
+        return QString();
+    }
+
+    if (eBoundaryType == QAccessible::NoBoundary)
+    {
+        *pStartOffset = 0;
+        *pEndOffset = nOffset;
+        return text(0, nOffset);
+    }
+
+    sal_Int16 nUnoBoundaryType = lcl_matchQtTextBoundaryType(eBoundaryType);
+    assert(nUnoBoundaryType > 0);
+    const TextSegment aSegment = xText->getTextBeforeIndex(nOffset, nUnoBoundaryType);
+    *pStartOffset = aSegment.SegmentStart;
+    *pEndOffset = aSegment.SegmentEnd;
+    return toQString(aSegment.SegmentText);
 }
 
 // QAccessibleEditableTextInterface
