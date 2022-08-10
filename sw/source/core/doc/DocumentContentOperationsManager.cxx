@@ -2532,7 +2532,7 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
     // note: rPos is at the end here; can't really tell flys that used to be
     // at the start of rPam from flys that used to be at the end of rPam
     // unfortunately, so some of them are going to end up with wrong anchor...
-    RestFlyInRange( aSaveFlyArr, *rPaM.Start(), &(rPos.nNode) );
+    RestFlyInRange( aSaveFlyArr, *rPaM.Start(), &rPos.GetNode() );
 
     // restore redlines (if DOC_MOVEREDLINES is used)
     if( !aSaveRedl.empty() )
@@ -4593,7 +4593,7 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
             pCursor->SetMark();
             *pCursor->GetPoint() = *aDelPam.GetPoint();
             m_rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( RedlineType::Delete, aDelPam ), true);
-            RestFlyInRange(flys, *aDelPam.End(), &aDelPam.End()->nNode, true);
+            RestFlyInRange(flys, *aDelPam.End(), &aDelPam.End()->GetNode(), true);
             sw::UpdateFramesForAddDeleteRedline(m_rDoc, *pCursor);
 
             *rPam.GetMark() = *aDelPam.GetMark();

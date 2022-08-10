@@ -117,7 +117,7 @@ struct SaveFly
 typedef std::deque< SaveFly > SaveFlyArr;
 
 void RestFlyInRange( SaveFlyArr& rArr, const SwPosition& rSttIdx,
-                     const SwNodeIndex* pInsPos, bool isForceToStartPos = false);
+                     const SwNode* pInsPos, bool isForceToStartPos = false);
 void SaveFlyInRange( const SwNodeRange& rRg, SaveFlyArr& rArr );
 void SaveFlyInRange( const SwPaM& rPam, const SwPosition& rInsPos,
         SaveFlyArr& rArr, bool bMoveAllFlys, SwHistory * pHistory = nullptr);

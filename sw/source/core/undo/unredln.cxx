@@ -234,7 +234,7 @@ void SwUndoRedlineDelete::InitHistory(SwPaM const& rRedline)
     // backspacing/deleting consecutive characters
     SaveFlyArr flys;
     SaveFlyInRange(rRedline, *rRedline.GetMark(), flys, false, m_pHistory.get());
-    RestFlyInRange(flys, *rRedline.GetPoint(), &rRedline.GetPoint()->nNode, true);
+    RestFlyInRange(flys, *rRedline.GetPoint(), &rRedline.GetPoint()->GetNode(), true);
     if (m_pHistory->Count())
     {
         m_bCanGroup = false; // how to group history?
