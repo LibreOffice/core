@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6771bd86_25c37c80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003606
+      },
+      "writtenOn": "2022-08-11T21:00:36Z",
+      "side": 1,
+      "message": "I think this is now ready. Almost all open kashida justification bugs are fixed with this and the two other changes.",
+      "revId": "2f88cfa6368db2673c41d6cb009ddca5e7c7a070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
