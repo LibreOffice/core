@@ -14,6 +14,7 @@
 #include <sfx2/lokhelper.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/ui/ContextChangeEventObject.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <rtl/strbuf.hxx>
@@ -608,15 +609,19 @@ void SfxLokHelper::notifyAllViews(int nType, const OString& rPayload)
     }
 }
 
-void SfxLokHelper::notifyContextChange(SfxViewShell const* pViewShell, const OUString& aApplication, const OUString& aContext)
+void SfxLokHelper::notifyContextChange(const css::ui::ContextChangeEventObject& rEvent)
 {
     if (DisableCallbacks::disabled())
         return;
 
+    SfxViewShell* pViewShell = SfxViewShell::Get({ rEvent.Source, css::uno::UNO_QUERY });
+    if (!pViewShell)
+        return;
+
     OString aBuffer =
-        OUStringToOString(aApplication.replace(' ', '_'), RTL_TEXTENCODING_UTF8) +
+        OUStringToOString(rEvent.ApplicationName.replace(' ', '_'), RTL_TEXTENCODING_UTF8) +
         " " +
-        OUStringToOString(aContext.replace(' ', '_'), RTL_TEXTENCODING_UTF8);
+        OUStringToOString(rEvent.ContextName.replace(' ', '_'), RTL_TEXTENCODING_UTF8);
     pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CONTEXT_CHANGED, aBuffer.getStr());
 }
 

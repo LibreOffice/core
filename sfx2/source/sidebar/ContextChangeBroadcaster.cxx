@@ -86,17 +86,16 @@ void ContextChangeBroadcaster::BroadcastContextChange (
         return;
     }
 
-    // notify the LOK too
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        if (SfxViewShell* pViewShell = SfxViewShell::Get(rxFrame->getController()))
-            SfxLokHelper::notifyContextChange(pViewShell, rsModuleName, rsContextName);
-    }
-
     const css::ui::ContextChangeEventObject aEvent(
         rxFrame->getController(),
         rsModuleName,
         rsContextName);
+
+    // notify the LOK too
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        SfxLokHelper::notifyContextChange(aEvent);
+    }
 
     css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
         css::ui::ContextChangeEventMultiplexer::get(
