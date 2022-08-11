@@ -1419,7 +1419,6 @@ interface BaseText
     ]
     SID_ATTR_CHAR_COLOR_BACKGROUND_EXT // status()
     [
-        ExecMethod = Execute ;
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]

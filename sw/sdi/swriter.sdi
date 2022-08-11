@@ -556,7 +556,7 @@ SfxVoidItem ChapterNumberingDialog FN_NUMBERING_OUTLINE_DLG
 ]
 
 SfxBoolItem CharBackgroundExt SID_ATTR_CHAR_COLOR_BACKGROUND_EXT
-(SvxColorItem BackColor SID_ATTR_CHAR_COLOR_BACKGROUND_EXT)
+()
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,

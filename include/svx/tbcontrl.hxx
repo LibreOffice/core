@@ -57,7 +57,6 @@
 
         for character background color (writer)
         Execute-Id      SID_ATTR_CHAR_COLOR_BACKGROUND
-                    and SID_ATTR_CHAR_COLOR_BACKGROUND_EXT
 
         for paragraph background color (writer)
         and cell background color (calc)
