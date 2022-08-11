@@ -51,12 +51,8 @@ ScFormulaResult::ScFormulaResult( const ScFormulaResult & r ) :
             const ScMatrixFormulaCellToken* pMatFormula =
                 r.GetMatrixFormulaCellToken();
             if (pMatFormula)
-            {
                 mpToken = new ScMatrixFormulaCellToken( *pMatFormula);
-                mpToken->IncRef();
-            }
-            else
-                IncrementTokenRef( mpToken);
+            mpToken->IncRef();
         }
     }
     else
@@ -180,7 +176,8 @@ void ScFormulaResult::Assign( const ScFormulaResult & r )
 void ScFormulaResult::SetToken( const formula::FormulaToken* p )
 {
     ResetToDefaults();
-    IncrementTokenRef( p);
+    if (p)
+        p->IncRef();
     // Handle a result obtained from the interpreter to be assigned to a matrix
     // formula cell's ScMatrixFormulaCellToken.
     ScMatrixFormulaCellToken* pMatFormula = GetMatrixFormulaCellTokenNonConst();
