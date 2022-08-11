@@ -1301,7 +1301,10 @@ void WinSalFrame::SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth
     nWidth  = aWinRect.right - aWinRect.left + 1;
     nHeight = aWinRect.bottom - aWinRect.top + 1;
 
-    if ( !(nPosSize & SWP_NOMOVE) && ::GetParent( mhWnd ) )
+    // GetParent returns nonsense when window is not visible
+    bool bHasParent = bVisible && ::GetParent( mhWnd );
+
+    if ( !(nPosSize & SWP_NOMOVE) && bHasParent )
     {
             RECT aParentRect;
             GetClientRect( ImplGetParentHwnd( mhWnd ), &aParentRect );
