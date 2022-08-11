@@ -53,8 +53,7 @@ void ContextChangeEventMultiplexer::NotifyContextChange (
     // notify the LOK too after all the change have taken effect.
     if (comphelper::LibreOfficeKit::isActive())
     {
-        if (SfxViewShell* pViewShell = SfxViewShell::Get(rxController))
-            SfxLokHelper::notifyContextChange(pViewShell, GetModuleName(rxController->getFrame()), vcl::EnumContext::GetContextName(eContext));
+        SfxLokHelper::notifyContextChange(aEvent);
     }
 }
 

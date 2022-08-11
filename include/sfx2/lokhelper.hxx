@@ -44,6 +44,8 @@ struct SFX2_DLLPUBLIC LokMouseEventData
 
 #include <boost/property_tree/ptree_fwd.hpp>
 
+namespace com::sun::star::ui { struct ContextChangeEventObject; };
+
 class SFX2_DLLPUBLIC SfxLokHelper
 {
 public:
@@ -115,7 +117,7 @@ public:
     static void notifyAllViews(int nType, const OString& rPayload);
 
     /// Notify about the editing context change.
-    static void notifyContextChange(SfxViewShell const* pViewShell, const OUString& aApplication, const OUString& aContext);
+    static void notifyContextChange(const css::ui::ContextChangeEventObject& rEvent);
 
     // Notify about the given type needing an update.
     static void notifyUpdate(SfxViewShell const* pViewShell, int nType);
