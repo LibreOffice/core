@@ -105,6 +105,7 @@ protected:
     sal_uInt32 mnStartTime;
     utl::TempFile maTempFile;
     bool mbExported; ///< Does maTempFile already contain something useful?
+    bool mbFontNameWYSIWYG;
 
 protected:
 

@@ -21,6 +21,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sfx2/app.hxx>
 #include <unotools/mediadescriptor.hxx>
@@ -58,6 +59,7 @@ SwModelTestBase::SwModelTestBase(const OUString& pTestDocumentPath, const char* 
     , mpFilter(pFilter)
     , mnStartTime(0)
     , mbExported(false)
+    , mbFontNameWYSIWYG(officecfg::Office::Common::Font::View::ShowFontBoxWYSIWYG::get())
 {
     maTempFile.EnableKillingFile();
 }
@@ -68,13 +70,20 @@ void SwModelTestBase::setUp()
     mxDesktop.set(
         css::frame::Desktop::create(comphelper::getComponentContext(getMultiServiceFactory())));
     SfxApplication::GetOrCreate();
+    std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Font::View::ShowFontBoxWYSIWYG::set(false, xChanges);
+    xChanges->commit();
 }
 
 void SwModelTestBase::tearDown()
 {
     if (mxComponent.is())
         mxComponent->dispose();
-
+    std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Font::View::ShowFontBoxWYSIWYG::set(mbFontNameWYSIWYG, xChanges);
+    xChanges->commit();
     test::BootstrapFixture::tearDown();
 }
 
