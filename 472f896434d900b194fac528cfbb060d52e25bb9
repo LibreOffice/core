@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eea1c1a4_b28f11d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-08-11T21:38:21Z",
+      "side": 1,
+      "message": "It doesn\u0027t seem to break anything but I git grepped GraphicFileFormat usage in other files and added WMZ/EMZ formats and SVGZ formats to the other patch",
+      "revId": "472f896434d900b194fac528cfbb060d52e25bb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
