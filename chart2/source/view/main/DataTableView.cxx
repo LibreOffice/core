@@ -288,17 +288,23 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
     }
 
     // ROW HEADER
-    // Prepare keys
+    // Prepare keys (symbols)
+    sal_Int32 nMaxSymbolWidth = 0;
     if (bKeys)
     {
-        awt::Size aMaxSymbolExtent(300, 300);
+        uno::Reference<lang::XMultiServiceFactory> xFactory(m_xChartModel, uno::UNO_QUERY);
         for (VSeriesPlotter* pSeriesPlotter : m_pSeriesPlotterList)
         {
             if (pSeriesPlotter)
             {
-                uno::Reference<lang::XMultiServiceFactory> xFactory(m_xChartModel, uno::UNO_QUERY);
+                sal_Int32 nSymbolWidth = 300;
+                if (pSeriesPlotter->getLegendSymbolStyle() == LegendSymbolStyle::Line)
+                    nSymbolWidth = 600;
+
+                nMaxSymbolWidth = std::max(nSymbolWidth, nMaxSymbolWidth);
+
                 std::vector<ViewLegendSymbol> aNewEntries = pSeriesPlotter->createSymbols(
-                    aMaxSymbolExtent, m_xTarget, xFactory, m_xComponentContext);
+                    { nSymbolWidth, 300 }, m_xTarget, xFactory, m_xComponentContext);
                 aSymbols.insert(aSymbols.end(), aNewEntries.begin(), aNewEntries.end());
             }
         }
@@ -329,7 +335,10 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
 
             xCellPropertySet->setPropertyValue("ParaAdjust", uno::Any(style::ParagraphAdjust_LEFT));
             if (bKeys)
-                xCellPropertySet->setPropertyValue("ParaLeftMargin", uno::Any(sal_Int32(500)));
+            {
+                xCellPropertySet->setPropertyValue("ParaLeftMargin",
+                                                   uno::Any(nMaxSymbolWidth + sal_Int32(200)));
+            }
         }
         nRow++;
     }
@@ -378,6 +387,7 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
     pTableObject->DistributeColumns(0, nColumnCount - 1, true, true);
     pTableObject->DistributeRows(0, nRowCount - 1, true, true);
 
+    xBroadcaster->lockBroadcasts();
     uno::Reference<beans::XPropertySet> xPropertySet(xTableColumns->getByIndex(0), uno::UNO_QUERY);
     sal_Int32 nWidth = 0;
     xPropertySet->getPropertyValue("Width") >>= nWidth;
@@ -408,6 +418,7 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
             nTotalHeight += nHeight;
         }
     }
+    xBroadcaster->unlockBroadcasts();
 }
 
 void DataTableView::initializeShapes(const css::uno::Reference<css::drawing::XShapes>& xTarget)
