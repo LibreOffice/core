@@ -23,6 +23,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/frame/Frame.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -43,8 +44,8 @@ private:
     }
 
 public:
-    DBTablePreviewFrame(const css::uno::Reference<css::frame::XFrame2>& rFrame)
-        : m_xFrame(rFrame)
+    DBTablePreviewFrame(css::uno::Reference<css::frame::XFrame2> xFrame)
+        : m_xFrame(std::move(xFrame))
     {
     }
 

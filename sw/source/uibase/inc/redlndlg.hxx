@@ -105,7 +105,7 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg final
     SwRedlineAcceptDlg& operator=(SwRedlineAcceptDlg const&) = delete;
 
 public:
-    SwRedlineAcceptDlg(const std::shared_ptr<weld::Window>& rParent, weld::Builder *pBuilder, weld::Container *pContentArea, bool bAutoFormat = false);
+    SwRedlineAcceptDlg(std::shared_ptr<weld::Window> xParent, weld::Builder *pBuilder, weld::Container *pContentArea, bool bAutoFormat = false);
     ~SwRedlineAcceptDlg();
 
     DECL_LINK( FilterChangedHdl, SvxTPFilter*, void );

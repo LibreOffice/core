@@ -22,6 +22,7 @@
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <utility>
 
 #include <limits.h>
 
@@ -76,7 +77,7 @@ void SwCache::Check()
 
 SwCache::SwCache( const sal_uInt16 nInitSize
 #ifdef DBG_UTIL
-    , const OString &rNm
+    , OString aNm
 #endif
     ) :
     m_pRealFirst( nullptr ),
@@ -84,7 +85,7 @@ SwCache::SwCache( const sal_uInt16 nInitSize
     m_pLast( nullptr ),
     m_nCurMax( nInitSize )
 #ifdef DBG_UTIL
-    , m_aName( rNm )
+    , m_aName(std::move( aNm ))
     , m_nAppend( 0 )
     , m_nInsertFree( 0 )
     , m_nReplace( 0 )

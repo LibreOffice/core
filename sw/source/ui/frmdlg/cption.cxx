@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <utility>
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <cption.hxx>
@@ -59,7 +60,7 @@ class SwSequenceOptionDialog : public weld::GenericDialogController
     std::unique_ptr<weld::ComboBox> m_xLbCaptionOrder;
 
 public:
-    SwSequenceOptionDialog(weld::Window *pParent, SwView &rV, const OUString& rSeqFieldType);
+    SwSequenceOptionDialog(weld::Window *pParent, SwView &rV, OUString aSeqFieldType);
     void Apply();
 
     bool IsApplyBorderAndShadow() const { return m_xApplyBorderAndShadowCB->get_active(); }
@@ -440,10 +441,10 @@ SwCaptionDialog::~SwCaptionDialog()
 {
 }
 
-SwSequenceOptionDialog::SwSequenceOptionDialog(weld::Window *pParent, SwView &rV, const OUString& rSeqFieldType )
+SwSequenceOptionDialog::SwSequenceOptionDialog(weld::Window *pParent, SwView &rV, OUString aSeqFieldType )
     : GenericDialogController(pParent, "modules/swriter/ui/captionoptions.ui", "CaptionOptionsDialog")
     , m_rView(rV)
-    , m_aFieldTypeName(rSeqFieldType)
+    , m_aFieldTypeName(std::move(aSeqFieldType))
     , m_xLbLevel(m_xBuilder->weld_combo_box("level"))
     , m_xEdDelim(m_xBuilder->weld_entry("separator"))
     , m_xLbCharStyle(m_xBuilder->weld_combo_box("style"))

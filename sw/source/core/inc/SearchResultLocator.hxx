@@ -13,6 +13,7 @@
 #include <swdllapi.h>
 #include <doc.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <utility>
 
 namespace sw::search
 {
@@ -31,11 +32,10 @@ struct SearchIndexData
 
     SearchIndexData() {}
 
-    SearchIndexData(NodeType eType, SwNodeOffset nNodeIndex,
-                    OUString const& aObjectName = OUString())
+    SearchIndexData(NodeType eType, SwNodeOffset nNodeIndex, OUString aObjectName = OUString())
         : meType(eType)
         , mnNodeIndex(nNodeIndex)
-        , maObjectName(aObjectName)
+        , maObjectName(std::move(aObjectName))
     {
     }
 };

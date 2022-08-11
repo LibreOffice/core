@@ -29,8 +29,8 @@ class SwUndoFlyStrAttr final : public SwUndo
     public:
         SwUndoFlyStrAttr( SwFlyFrameFormat& rFlyFrameFormat,
                           const SwUndoId eUndoId,
-                          const OUString& sOldStr,
-                          const OUString& sNewStr );
+                          OUString sOldStr,
+                          OUString sNewStr );
         virtual ~SwUndoFlyStrAttr() override;
 
         virtual void UndoImpl( ::sw::UndoRedoContext & ) override;

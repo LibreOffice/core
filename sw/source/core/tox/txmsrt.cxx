@@ -47,6 +47,7 @@
 #include <strings.hrc>
 #include <reffld.hxx>
 #include <docsh.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -55,9 +56,9 @@ using namespace ::com::sun::star::uno;
 SwTOIOptions SwTOXSortTabBase::nOpt = SwTOIOptions::NONE;
 
 SwTOXInternational::SwTOXInternational( LanguageType nLang, SwTOIOptions nOpt,
-                                        const OUString& rSortAlgorithm ) :
+                                        OUString aSortAlgorithm ) :
     m_eLang( nLang ),
-    m_sSortAlgorithm(rSortAlgorithm),
+    m_sSortAlgorithm(std::move(aSortAlgorithm)),
     m_nOptions( nOpt )
 {
     Init();
@@ -441,12 +442,12 @@ sal_uInt16 SwTOXIndex::GetLevel() const
 }
 
 // Key and separator
-SwTOXCustom::SwTOXCustom(const TextAndReading& rKey,
+SwTOXCustom::SwTOXCustom(TextAndReading aKey,
                          sal_uInt16 nLevel,
                          const SwTOXInternational& rIntl,
                          const lang::Locale& rLocale )
     : SwTOXSortTabBase( TOX_SORT_CUSTOM, nullptr, nullptr, &rIntl, &rLocale ),
-    m_aKey(rKey), nLev(nLevel)
+    m_aKey(std::move(aKey)), nLev(nLevel)
 {
 }
 
@@ -530,13 +531,13 @@ sal_uInt16 SwTOXContent::GetLevel() const
 // TOX assembled from paragraphs
 // Watch out for OLE/graphics when sorting!
 // The position must not come from the document, but from the "anchor"!
-SwTOXPara::SwTOXPara(SwContentNode& rNd, SwTOXElement eT, sal_uInt16 nLevel, const OUString& sSeqName)
+SwTOXPara::SwTOXPara(SwContentNode& rNd, SwTOXElement eT, sal_uInt16 nLevel, OUString sSeqName)
     : SwTOXSortTabBase( TOX_SORT_PARA, &rNd, nullptr, nullptr ),
     eType( eT ),
     m_nLevel(nLevel),
     nStartIndex(0),
     nEndIndex(-1),
-    m_sSequenceName( sSeqName )
+    m_sSequenceName(std::move( sSeqName ))
 {
     // tdf#123313 create any missing bookmarks *before* generating ToX nodes!
     switch (eType)

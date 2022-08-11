@@ -20,6 +20,7 @@
 #include <memory>
 #include <hintids.hxx>
 
+#include <utility>
 #include <vcl/font.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/numitem.hxx>

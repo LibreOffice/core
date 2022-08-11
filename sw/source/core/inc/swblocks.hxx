@@ -43,7 +43,7 @@ public:
     bool m_bIsOnlyText : 1;           /// Unformatted text
 
     SwBlockName( const OUString& rShort, const OUString& rLong );
-    SwBlockName( const OUString& rShort, const OUString& rLong, const OUString& rPackageName );
+    SwBlockName( const OUString& rShort, const OUString& rLong, OUString aPackageName );
 
     /// For sorting in the array
     bool operator< ( const SwBlockName& r ) const { return m_aShort <  r.m_aShort; }

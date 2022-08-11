@@ -31,6 +31,7 @@
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <swtypes.hxx>
 #include <fldbas.hxx>
+#include <utility>
 
 class Point;
 class SvxCaseMapItem;
@@ -652,8 +653,8 @@ protected:
     virtual void SectionRtlGutter(const SfxBoolItem& rRtlGutter) = 0;
 
 public:
-    AttributeOutputBase(const OUString& sBaseURL)
-        : m_sBaseURL(sBaseURL)
+    AttributeOutputBase(OUString sBaseURL)
+        : m_sBaseURL(std::move(sBaseURL))
     {
     }
     virtual ~AttributeOutputBase() {}

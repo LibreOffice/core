@@ -87,8 +87,8 @@ protected:
     SwDoc& m_rDoc;
 
 public:
-    SwUndoRenameFormat(SwUndoId nUndoId, const OUString & sOldName,
-                    const OUString & sNewName,
+    SwUndoRenameFormat(SwUndoId nUndoId, OUString sOldName,
+                    OUString  sNewName,
                     SwDoc& rDoc);
     virtual ~SwUndoRenameFormat() override;
 
@@ -243,7 +243,7 @@ class SwUndoNumruleRename final : public SwUndo
     SwDoc& m_rDoc;
 
  public:
-    SwUndoNumruleRename(const OUString & aOldName, const OUString & aNewName,
+    SwUndoNumruleRename(OUString aOldName, OUString aNewName,
                         SwDoc& rDoc);
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;

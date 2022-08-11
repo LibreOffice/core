@@ -47,6 +47,7 @@
 #include <bookmark.hxx>
 #include <fltshell.hxx>
 #include <rdfhelper.hxx>
+#include <utility>
 
 using namespace com::sun::star;
 
@@ -924,12 +925,12 @@ SwFltRedline* SwFltRedline::Clone( SfxItemPool* ) const
 }
 
 // methods of SwFltBookmark follow
-SwFltBookmark::SwFltBookmark( const OUString& rNa, const OUString& rVa,
+SwFltBookmark::SwFltBookmark( const OUString& rNa, OUString aVa,
                               tools::Long nHand, const bool bIsTOCBookmark )
     : SfxPoolItem( RES_FLTR_BOOKMARK )
     , mnHandle( nHand )
     , maName( rNa )
-    , maVal( rVa )
+    , maVal(std::move( aVa ))
     , mbIsTOCBookmark( bIsTOCBookmark )
 {
     // eSrc: CHARSET_DONTKNOW for no transform at operator <<

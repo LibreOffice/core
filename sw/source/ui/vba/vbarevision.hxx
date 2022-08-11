@@ -36,7 +36,7 @@ private:
 
 public:
     /// @throws css::uno::RuntimeException
-    SwVbaRevision( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::beans::XPropertySet >& xRedlineProps );
+    SwVbaRevision( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, css::uno::Reference< css::frame::XModel >  xModel, css::uno::Reference< css::beans::XPropertySet >  xRedlineProps );
     virtual ~SwVbaRevision() override;
 
     // Methods

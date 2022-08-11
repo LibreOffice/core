@@ -23,6 +23,7 @@
 #include <tools/urlobj.hxx>
 #include <rtl/character.hxx>
 #include <osl/file.hxx>
+#include <utility>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -44,8 +45,8 @@ static OUString lcl_CheckGroupName( const OUString& rGroupName )
     return sRet.makeStringAndClear();
 }
 
-SwVbaTemplate::SwVbaTemplate( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const OUString& rFullUrl )
-    : SwVbaTemplate_BASE( rParent, rContext ), msFullUrl( rFullUrl )
+SwVbaTemplate::SwVbaTemplate( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, OUString aFullUrl )
+    : SwVbaTemplate_BASE( rParent, rContext ), msFullUrl(std::move( aFullUrl ))
 {
 }
 

@@ -30,6 +30,7 @@
 #include "wordvbahelper.hxx"
 #include <fesh.hxx>
 #include <docsh.hxx>
+#include <utility>
 using namespace ::ooo::vba;
 using namespace css;
 
@@ -69,7 +70,7 @@ protected:
     uno::Reference< frame::XModel > m_xModel;
     uno::Reference<document::XDocumentProperties> m_xDocProps;
 public:
-    explicit PropertGetSetHelper( const uno::Reference< frame::XModel >& xModel ):m_xModel( xModel )
+    explicit PropertGetSetHelper( uno::Reference< frame::XModel >  xModel ):m_xModel(std::move( xModel ))
     {
         uno::Reference<document::XDocumentPropertiesSupplier> const
             xDocPropSupp(m_xModel, uno::UNO_QUERY_THROW);
@@ -451,7 +452,7 @@ class SwVbaBuiltInDocumentProperty : public SwVbaDocumentProperty_BASE
 protected:
     DocPropInfo mPropInfo;
 public:
-    SwVbaBuiltInDocumentProperty(  const uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const DocPropInfo& rInfo );
+    SwVbaBuiltInDocumentProperty(  const uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, DocPropInfo  rInfo );
     // XDocumentProperty
     virtual void SAL_CALL Delete(  ) override;
     virtual OUString SAL_CALL getName(  ) override;
@@ -542,7 +543,7 @@ SwVbaCustomDocumentProperty::Delete(  )
     xContainer->removeProperty( getName() );
 }
 
-SwVbaBuiltInDocumentProperty::SwVbaBuiltInDocumentProperty( const uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const DocPropInfo& rInfo ) : SwVbaDocumentProperty_BASE( xParent, xContext ), mPropInfo( rInfo )
+SwVbaBuiltInDocumentProperty::SwVbaBuiltInDocumentProperty( const uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, DocPropInfo  rInfo ) : SwVbaDocumentProperty_BASE( xParent, xContext ), mPropInfo(std::move( rInfo ))
 {
 }
 
@@ -680,7 +681,7 @@ protected:
     DocPropsByName mNamedDocProps;
 
     public:
-    BuiltInPropertiesImpl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel ) : m_xModel( xModel )
+    BuiltInPropertiesImpl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, uno::Reference< frame::XModel >  xModel ) : m_xModel(std::move( xModel ))
     {
         BuiltInIndexHelper builtIns( m_xModel );
         for ( sal_Int32 index = word::WdBuiltInProperty::wdPropertyTitle; index <= word::WdBuiltInProperty::wdPropertyCharsWSpaces; ++index )
@@ -805,7 +806,7 @@ class CustomPropertiesImpl : public PropertiesImpl_BASE
     uno::Reference< beans::XPropertySet > mxUserDefinedProp;
     std::shared_ptr< PropertGetSetHelper > mpPropGetSetHelper;
 public:
-    CustomPropertiesImpl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel ) : m_xParent( xParent ), m_xContext( xContext ), m_xModel( xModel )
+    CustomPropertiesImpl( uno::Reference< XHelperInterface >  xParent, uno::Reference< uno::XComponentContext > xContext, uno::Reference< frame::XModel >  xModel ) : m_xParent(std::move( xParent )), m_xContext(std::move( xContext )), m_xModel(std::move( xModel ))
     {
         // suck in the document( custom ) properties
         mpPropGetSetHelper = std::make_shared<CustomPropertyGetSetHelper>( m_xModel );

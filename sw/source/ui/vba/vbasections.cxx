@@ -23,6 +23,7 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include "wordvbahelper.hxx"
 #include <cppuhelper/implbase.hxx>
+#include <utility>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -63,7 +64,7 @@ private:
 
 public:
     /// @throws uno::RuntimeException
-    SectionCollectionHelper( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel ) : mxParent( xParent ), mxContext( xContext ), mxModel( xModel )
+    SectionCollectionHelper( uno::Reference< XHelperInterface >  xParent, uno::Reference< uno::XComponentContext > xContext, uno::Reference< frame::XModel >  xModel ) : mxParent(std::move( xParent )), mxContext(std::move( xContext )), mxModel(std::move( xModel ))
     {
         uno::Reference< style::XStyleFamiliesSupplier > xSytleFamSupp( mxModel, uno::UNO_QUERY_THROW );
         uno::Reference< container::XNameAccess > xSytleFamNames( xSytleFamSupp->getStyleFamilies(), uno::UNO_SET_THROW );
@@ -82,7 +83,7 @@ public:
     }
 
     /// @throws uno::RuntimeException
-    SectionCollectionHelper( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel, const uno::Reference< text::XTextRange >& xTextRange ) : mxParent( xParent ), mxContext( xContext ), mxModel( xModel )
+    SectionCollectionHelper( uno::Reference< XHelperInterface >  xParent, uno::Reference< uno::XComponentContext > xContext, uno::Reference< frame::XModel >  xModel, const uno::Reference< text::XTextRange >& xTextRange ) : mxParent(std::move( xParent )), mxContext(std::move( xContext )), mxModel(std::move( xModel ))
     {
         // Hacky implementation of Range.Sections, only support 1 section
         uno::Reference< beans::XPropertySet > xRangeProps( xTextRange, uno::UNO_QUERY_THROW );
@@ -124,7 +125,7 @@ class SectionsEnumWrapper : public EnumerationHelperImpl
     uno::Reference< frame::XModel > mxModel;
 public:
     /// @throws uno::RuntimeException
-    SectionsEnumWrapper( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration,  const uno::Reference< frame::XModel >& xModel  ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ), mxModel( xModel ){}
+    SectionsEnumWrapper( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration,  uno::Reference< frame::XModel >  xModel  ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ), mxModel(std::move( xModel )){}
 
     virtual uno::Any SAL_CALL nextElement(  ) override
     {

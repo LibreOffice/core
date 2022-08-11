@@ -103,7 +103,7 @@ class NavElementBox_Base
 {
 public:
     NavElementBox_Base(std::unique_ptr<weld::ComboBox> xComboBox,
-                       const uno::Reference<frame::XFrame>& xFrame);
+                       uno::Reference<frame::XFrame> xFrame);
 
     virtual ~NavElementBox_Base() {}
 

@@ -19,16 +19,17 @@
 
 #include <undoflystrattr.hxx>
 #include <frmfmt.hxx>
+#include <utility>
 
 
 SwUndoFlyStrAttr::SwUndoFlyStrAttr( SwFlyFrameFormat& rFlyFrameFormat,
                                     const SwUndoId eUndoId,
-                                    const OUString& sOldStr,
-                                    const OUString& sNewStr )
+                                    OUString sOldStr,
+                                    OUString sNewStr )
     : SwUndo( eUndoId, rFlyFrameFormat.GetDoc() ),
       mrFlyFrameFormat( rFlyFrameFormat ),
-      msOldStr( sOldStr ),
-      msNewStr( sNewStr )
+      msOldStr(std::move( sOldStr )),
+      msNewStr(std::move( sNewStr ))
 {
     assert(eUndoId == SwUndoId::FLYFRMFMT_TITLE
         || eUndoId == SwUndoId::FLYFRMFMT_DESCRIPTION);

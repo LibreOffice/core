@@ -222,7 +222,7 @@ private:
 
 public:
     SwFltBookmark( const OUString& rNa,
-                   const OUString& rVa,
+                   OUString aVa,
                    tools::Long nHand,
                    const bool bIsTOCBookmark = false );
 

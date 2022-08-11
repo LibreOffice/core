@@ -87,7 +87,7 @@ public:
 
 // Only add sal_uInt8!!!
 #ifdef DBG_UTIL
-    SwCache( const sal_uInt16 nInitSize, const OString &rNm );
+    SwCache( const sal_uInt16 nInitSize, OString aNm );
 #else
     SwCache( const sal_uInt16 nInitSize );
 #endif

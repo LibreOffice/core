@@ -22,25 +22,26 @@
 #include <SwGrammarMarkUp.hxx>
 #include <ndtxt.hxx>
 #include <txtfrm.hxx>
+#include <utility>
 
 #include <osl/diagnose.h>
 
-SwWrongArea::SwWrongArea( const OUString& rType, WrongListType listType,
+SwWrongArea::SwWrongArea( OUString aType, WrongListType listType,
         css::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag,
         sal_Int32 nPos,
         sal_Int32 nLen)
-: maType(rType), mxPropertyBag(xPropertyBag), mnPos(nPos), mnLen(nLen), mpSubList(nullptr)
+: maType(std::move(aType)), mxPropertyBag(xPropertyBag), mnPos(nPos), mnLen(nLen), mpSubList(nullptr)
 {
     mColor =  getWrongAreaColor(listType, xPropertyBag);
     mLineType = getWrongAreaLineType(listType, xPropertyBag);
 }
 
-SwWrongArea::SwWrongArea( const OUString& rType,
+SwWrongArea::SwWrongArea( OUString aType,
         css::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag,
         sal_Int32 nPos,
         sal_Int32 nLen,
         SwWrongList* pSubList)
-: maType(rType), mxPropertyBag(xPropertyBag), mnPos(nPos), mnLen(nLen), mpSubList(pSubList), mLineType(WRONGAREA_NONE)
+: maType(std::move(aType)), mxPropertyBag(xPropertyBag), mnPos(nPos), mnLen(nLen), mpSubList(pSubList), mLineType(WRONGAREA_NONE)
 {
     if (pSubList != nullptr)
     {

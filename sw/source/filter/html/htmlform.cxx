@@ -24,6 +24,7 @@
 #include <hintids.hxx>
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/string.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <tools/UnitConversion.hxx>
 
@@ -382,7 +383,7 @@ class SwHTMLImageWatcher :
     void clear();
 
 public:
-    SwHTMLImageWatcher( const uno::Reference< drawing::XShape > & rShape,
+    SwHTMLImageWatcher( uno::Reference< drawing::XShape > xShape,
                         bool bWidth, bool bHeight );
 
     // startProduction can not be called in the constructor because it can
@@ -416,9 +417,9 @@ public:
 }
 
 SwHTMLImageWatcher::SwHTMLImageWatcher(
-        const uno::Reference< drawing::XShape >& rShape,
+        uno::Reference< drawing::XShape > xShape,
         bool bWidth, bool bHeight ) :
-    m_xShape( rShape ),
+    m_xShape(std::move( xShape )),
     m_bSetWidth( bWidth ), m_bSetHeight( bHeight )
 {
     // Remember the source of the image

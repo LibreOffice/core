@@ -29,6 +29,7 @@
 #include <rtl/ustring.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <mutex>
+#include <utility>
 
 /** thread to cancel a give list of cancellable jobs
 
@@ -145,10 +146,10 @@ class TerminateOfficeThread : public osl::Thread
 {
     public:
         TerminateOfficeThread( CancelJobsThread const & rCancelJobsThread,
-                               css::uno::Reference< css::uno::XComponentContext > const & xContext )
+                               css::uno::Reference< css::uno::XComponentContext >  xContext )
             : mrCancelJobsThread( rCancelJobsThread ),
               mbStopOfficeTermination( false ),
-              mxContext( xContext )
+              mxContext(std::move( xContext ))
         {
         }
 

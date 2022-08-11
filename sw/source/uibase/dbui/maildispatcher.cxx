@@ -23,6 +23,7 @@
 #include <algorithm>
 
 #include <com/sun/star/mail/MailException.hpp>
+#include <utility>
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
@@ -34,8 +35,8 @@ namespace /* private */
     class MailDeliveryNotifier
     {
     public:
-        MailDeliveryNotifier(uno::Reference<mail::XMailMessage> const & message) :
-            message_(message)
+        MailDeliveryNotifier(uno::Reference<mail::XMailMessage> message) :
+            message_(std::move(message))
         {}
 
         void operator() (::rtl::Reference<IMailDispatcherListener> const & listener) const
@@ -49,12 +50,12 @@ namespace /* private */
     {
     public:
         MailDeliveryErrorNotifier(
-            ::rtl::Reference<MailDispatcher> const & xMailDispatcher,
-            uno::Reference<mail::XMailMessage> const & message,
-            const OUString& error_message) :
-            m_mail_dispatcher(xMailDispatcher),
-            m_message(message),
-            m_error_message(error_message)
+            ::rtl::Reference<MailDispatcher> xMailDispatcher,
+            uno::Reference<mail::XMailMessage> message,
+            OUString error_message) :
+            m_mail_dispatcher(std::move(xMailDispatcher)),
+            m_message(std::move(message)),
+            m_error_message(std::move(error_message))
         {}
 
         void operator() (::rtl::Reference<IMailDispatcherListener> const & listener) const
@@ -68,8 +69,8 @@ namespace /* private */
 
 } // namespace private
 
-MailDispatcher::MailDispatcher(uno::Reference<mail::XSmtpService> const & mailserver) :
-    m_xMailserver( mailserver ),
+MailDispatcher::MailDispatcher(uno::Reference<mail::XSmtpService> mailserver) :
+    m_xMailserver(std::move( mailserver )),
     m_bActive( false ),
     m_bShutdownRequested( false )
 {

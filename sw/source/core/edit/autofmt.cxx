@@ -64,6 +64,7 @@
 #include <itabenum.hxx>
 
 #include <memory>
+#include <utility>
 
 using namespace ::com::sun::star;
 
@@ -218,7 +219,7 @@ class SwAutoFormat
     }
 
 public:
-    SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags const & rFlags,
+    SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags aFlags,
                 SwNodeIndex const * pSttNd = nullptr, SwNodeIndex const * pEndNd = nullptr );
 };
 
@@ -2227,9 +2228,9 @@ void SwAutoFormat::AutoCorrect(TextFrameIndex nPos)
     ClearRedlineText();
 }
 
-SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags const & rFlags,
+SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags aFlags,
                             SwNodeIndex const * pSttNd, SwNodeIndex const * pEndNd )
-    : m_aFlags( rFlags ),
+    : m_aFlags(std::move( aFlags )),
     m_aDelPam( pEdShell->GetDoc()->GetNodes().GetEndOfExtras() ),
     m_aNdIdx( pEdShell->GetDoc()->GetNodes().GetEndOfExtras(), SwNodeOffset(+1) ),
     m_aEndNdIdx( pEdShell->GetDoc()->GetNodes().GetEndOfContent() ),

@@ -47,6 +47,7 @@
 #include <IMark.hxx>
 #include <crossrefbookmark.hxx>
 #include <ftnidx.hxx>
+#include <utility>
 #include <viewsh.hxx>
 #include <unofldmid.h>
 #include <SwStyleNameMapper.hxx>
@@ -1307,7 +1308,7 @@ private:
     static sal_uInt16 GetFirstUnusedId( std::set<sal_uInt16> &rIds );
 
 public:
-    explicit RefIdsMap( const OUString& rName ) : aName( rName ), bInit( false ) {}
+    explicit RefIdsMap( OUString _aName ) : aName(std::move( _aName )), bInit( false ) {}
 
     void Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rField, bool bField );
 

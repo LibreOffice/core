@@ -31,6 +31,7 @@
 #include <hintids.hxx>
 #include <o3tl/any.hxx>
 #include <rtl/math.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <svl/macitem.hxx>
 #include <svtools/htmlout.hxx>
@@ -1343,9 +1344,9 @@ void SwHTMLWriter::GetControls()
 }
 
 HTMLControl::HTMLControl(
-        const uno::Reference< container::XIndexContainer > & rFormComps,
+        uno::Reference< container::XIndexContainer > _xFormComps,
         SwNodeOffset nIdx ) :
-    xFormComps( rFormComps ), nNdIdx( nIdx ), nCount( 1 )
+    xFormComps(std::move( _xFormComps )), nNdIdx( nIdx ), nCount( 1 )
 {}
 
 HTMLControl::~HTMLControl()

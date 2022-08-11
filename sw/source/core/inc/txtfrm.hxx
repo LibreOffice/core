@@ -25,6 +25,7 @@
 #include <nodeoffset.hxx>
 
 #include <set>
+#include <utility>
 
 namespace com::sun::star::linguistic2 { class XHyphenatedWord; }
 
@@ -972,10 +973,10 @@ struct MergedPara
     /// mainly for sanity checks
     SwTextNode const* pLastNode;
     MergedPara(SwTextFrame & rFrame, std::vector<Extent>&& rExtents,
-            OUString const& rText,
+            OUString aText,
             SwTextNode *const pProps, SwTextNode *const pFirst,
             SwTextNode const*const pLast)
-        : listener(rFrame), extents(std::move(rExtents)), mergedText(rText)
+        : listener(rFrame), extents(std::move(rExtents)), mergedText(std::move(aText))
         , pParaPropsNode(pProps), pFirstNode(pFirst), pLastNode(pLast)
     {
         assert(pParaPropsNode);

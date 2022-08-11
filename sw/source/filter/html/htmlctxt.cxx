@@ -40,6 +40,7 @@
 #include "swhtml.hxx"
 
 #include <memory>
+#include <utility>
 
 using namespace ::com::sun::star;
 
@@ -116,9 +117,9 @@ HTMLAttrContext_SaveDoc *HTMLAttrContext::GetSaveDocContext( bool bCreate )
     return m_pSaveDocContext.get();
 }
 
-HTMLAttrContext::HTMLAttrContext( HtmlTokenId nTokn, sal_uInt16 nPoolId, const OUString& rClass,
+HTMLAttrContext::HTMLAttrContext( HtmlTokenId nTokn, sal_uInt16 nPoolId, OUString aClass,
                   bool bDfltColl ) :
-    m_aClass( rClass ),
+    m_aClass(std::move( aClass )),
     m_nToken( nTokn ),
     m_nTextFormatColl( nPoolId ),
     m_nLeftMargin( 0 ),

@@ -31,6 +31,7 @@
 #include <tools/globname.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <unotools/configitem.hxx>
+#include <utility>
 #include <vcl/outdev.hxx>
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>
@@ -695,8 +696,8 @@ private:
     std::shared_ptr<comphelper::ThreadTaskTag>          mpTag;
 
 public:
-    explicit DeflateData(const uno::Reference< frame::XModel >& rXModel)
-    :   maXModel(rXModel),
+    explicit DeflateData(uno::Reference< frame::XModel > xXModel)
+    :   maXModel(std::move(xXModel)),
         mbKilled(false),
         mpTag( comphelper::ThreadPool::createThreadTaskTag() )
     {

@@ -47,7 +47,7 @@ class SwUndoAttr final : public SwUndo, private SwUndRng
     void RemoveIdx( SwDoc& rDoc );
 
 public:
-    SwUndoAttr( const SwPaM&, const SfxItemSet &, const SetAttrMode nFlags );
+    SwUndoAttr( const SwPaM&, SfxItemSet, const SetAttrMode nFlags );
     SwUndoAttr( const SwPaM&, const SfxPoolItem&, const SetAttrMode nFlags );
 
     virtual ~SwUndoAttr() override;
@@ -216,7 +216,7 @@ class SwUndoChangeFootNote final : public SwUndo, private SwUndRng
     const bool m_bEndNote;
 
 public:
-    SwUndoChangeFootNote( const SwPaM& rRange, const OUString& rText,
+    SwUndoChangeFootNote( const SwPaM& rRange, OUString aText,
                           bool bIsEndNote );
     virtual ~SwUndoChangeFootNote() override;
 

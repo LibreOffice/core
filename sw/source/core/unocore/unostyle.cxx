@@ -23,6 +23,7 @@
 #include <o3tl/string_view.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <hintids.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <svl/hint.hxx>
 #include <svtools/ctrltool.hxx>
@@ -145,16 +146,16 @@ class SwStyleProperties_Impl;
         GetCountOrName_t m_fGetCountOrName;
         CreateStyle_t m_fCreateStyle;
         TranslateIndex_t m_fTranslateIndex;
-        StyleFamilyEntry(SfxStyleFamily eFamily, sal_uInt16 nPropMapType, SwGetPoolIdFromName aPoolId, OUString const& sName, TranslateId pResId, GetCountOrName_t const & fGetCountOrName, CreateStyle_t const & fCreateStyle, TranslateIndex_t const & fTranslateIndex)
+        StyleFamilyEntry(SfxStyleFamily eFamily, sal_uInt16 nPropMapType, SwGetPoolIdFromName aPoolId, OUString  sName, TranslateId pResId, GetCountOrName_t  fGetCountOrName, CreateStyle_t  fCreateStyle, TranslateIndex_t  fTranslateIndex)
                 : m_eFamily(eFamily)
                 , m_nPropMapType(nPropMapType)
                 , m_xPSInfo(aSwMapProvider.GetPropertySet(nPropMapType)->getPropertySetInfo())
                 , m_aPoolId(aPoolId)
-                , m_sName(sName)
+                , m_sName(std::move(sName))
                 , m_pResId(pResId)
-                , m_fGetCountOrName(fGetCountOrName)
-                , m_fCreateStyle(fCreateStyle)
-                , m_fTranslateIndex(fTranslateIndex)
+                , m_fGetCountOrName(std::move(fGetCountOrName))
+                , m_fCreateStyle(std::move(fCreateStyle))
+                , m_fTranslateIndex(std::move(fTranslateIndex))
             { }
     };
     const std::vector<StyleFamilyEntry>* our_pStyleFamilyEntries;
@@ -1485,11 +1486,11 @@ private:
     OUString m_rStyleName;
     const SwAttrSet* m_pParentStyle;
 public:
-    SwStyleBase_Impl(SwDoc& rSwDoc, const OUString& rName, const SwAttrSet* pParentStyle)
+    SwStyleBase_Impl(SwDoc& rSwDoc, OUString aName, const SwAttrSet* pParentStyle)
         : m_rDoc(rSwDoc)
         , m_pOldPageDesc(nullptr)
         , m_pItemSet(nullptr)
-        , m_rStyleName(rName)
+        , m_rStyleName(std::move(aName))
         , m_pParentStyle(pParentStyle)
     { }
 

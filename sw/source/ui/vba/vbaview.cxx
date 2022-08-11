@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "vbaview.hxx"
+#include <utility>
 #include <vbahelper/vbahelper.hxx>
 #include <basic/sberrors.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -44,8 +45,8 @@ using namespace ::com::sun::star;
 const sal_Int32 DEFAULT_BODY_DISTANCE = 500;
 
 SwVbaView::SwVbaView( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext,
-    const uno::Reference< frame::XModel >& rModel ) :
-    SwVbaView_BASE( rParent, rContext ), mxModel( rModel )
+    uno::Reference< frame::XModel > xModel ) :
+    SwVbaView_BASE( rParent, rContext ), mxModel(std::move( xModel ))
 {
     uno::Reference< frame::XController > xController = mxModel->getCurrentController();
 

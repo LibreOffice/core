@@ -71,7 +71,7 @@ public:
     SwFlyFrameAttrMgr( bool bNew, SwWrtShell* pSh, Frmmgr_Type nType, const SvGlobalName* pName );
 
     //CopyCtor for dialogs to check the metrics
-    SwFlyFrameAttrMgr( bool bNew, SwWrtShell *pSh, const SfxItemSet &rSet );
+    SwFlyFrameAttrMgr( bool bNew, SwWrtShell *pSh, SfxItemSet aSet );
 
     void                SetAnchor(RndStdIds eId);
     inline RndStdIds    GetAnchor()  const;

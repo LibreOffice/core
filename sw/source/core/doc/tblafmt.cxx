@@ -64,6 +64,7 @@
 #include <legacyitem.hxx>
 
 #include <memory>
+#include <utility>
 #include <vector>
 
 /*

@@ -68,7 +68,7 @@ class SwCreateAddressListDialog : public SfxDialogController
     void UpdateButtons();
 
 public:
-    SwCreateAddressListDialog(weld::Window* pParent, const OUString& rURL, SwMailMergeConfigItem const & rConfig);
+    SwCreateAddressListDialog(weld::Window* pParent, OUString aURL, SwMailMergeConfigItem const & rConfig);
     virtual ~SwCreateAddressListDialog() override;
 
     const OUString&         GetURL() const { return m_sURL; }

@@ -22,6 +22,7 @@
 #include <strings.hrc>
 #include <o3tl/any.hxx>
 #include <swtypes.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 

@@ -40,6 +40,7 @@
 #include <svl/numformat.hxx>
 #include <svl/stritem.hxx>
 #include <tools/diagnose_ex.h>
+#include <utility>
 #include <vcl/mnemonic.hxx>
 #include <svl/style.hxx>
 #include <svl/zformat.hxx>
@@ -172,10 +173,10 @@ bool SwInsDBColumn::operator<( const SwInsDBColumn& rCmp ) const
 SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
         Reference<XDataSource> const & xDataSource,
         Reference<sdbcx::XColumnsSupplier> const & xColSupp,
-        const SwDBData& rData )
+        SwDBData aData )
     : SfxDialogController(rView.GetWindow()->GetFrameWeld(), "modules/swriter/ui/insertdbcolumnsdialog.ui", "InsertDbColumnsDialog")
     , ConfigItem("Office.Writer/InsertData/DataSet", ConfigItemMode::NONE)
-    , aDBData(rData)
+    , aDBData(std::move(aData))
     , sNoTmpl(SwResId(SW_STR_NONE))
     , pView(&rView)
     , m_xRbAsTable(m_xBuilder->weld_radio_button("astable"))

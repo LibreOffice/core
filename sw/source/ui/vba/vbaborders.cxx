@@ -24,6 +24,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
+#include <utility>
 #include "vbapalette.hxx"
 
 using namespace ::com::sun::star;
@@ -244,7 +245,7 @@ private:
         return getCount(); // error condition
     }
 public:
-    RangeBorders(  const uno::Reference< table::XCellRange >& xRange,  const uno::Reference< uno::XComponentContext > & xContext, VbaPalette const & rPalette ) : m_xRange( xRange ), m_xContext( xContext ), m_Palette( rPalette )
+    RangeBorders(  uno::Reference< table::XCellRange > xRange,  uno::Reference< uno::XComponentContext > xContext, VbaPalette aPalette ) : m_xRange(std::move( xRange )), m_xContext(std::move( xContext )), m_Palette(std::move( aPalette ))
     {
     }
     // XIndexAccess
@@ -288,7 +289,7 @@ class RangeBorderEnumWrapper : public EnumerationHelper_BASE
     uno::Reference<container::XIndexAccess > m_xIndexAccess;
     sal_Int32 nIndex;
 public:
-    explicit RangeBorderEnumWrapper( const uno::Reference< container::XIndexAccess >& xIndexAccess ) : m_xIndexAccess( xIndexAccess ), nIndex( 0 ) {}
+    explicit RangeBorderEnumWrapper( uno::Reference< container::XIndexAccess > xIndexAccess ) : m_xIndexAccess(std::move( xIndexAccess )), nIndex( 0 ) {}
     virtual sal_Bool SAL_CALL hasMoreElements(  ) override
     {
         return ( nIndex < m_xIndexAccess->getCount() );

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "vbalisthelper.hxx"
+#include <utility>
 #include <vbahelper/vbahelper.hxx>
 #include <sal/log.hxx>
 #include <ooo/vba/word/WdListGalleryType.hpp>
@@ -47,7 +48,7 @@ constexpr OUStringLiteral CHAR_DIAMOND = u"\u2726";
 constexpr OUStringLiteral CHAR_ARROW = u"\u27A2";
 constexpr OUStringLiteral CHAR_CHECK_MARK = u"\u2713";
 
-SwVbaListHelper::SwVbaListHelper( const css::uno::Reference< css::text::XTextDocument >& xTextDoc, sal_Int32 nGalleryType, sal_Int32 nTemplateType ) : mxTextDocument( xTextDoc ), mnGalleryType( nGalleryType ), mnTemplateType( nTemplateType )
+SwVbaListHelper::SwVbaListHelper( css::uno::Reference< css::text::XTextDocument > xTextDoc, sal_Int32 nGalleryType, sal_Int32 nTemplateType ) : mxTextDocument(std::move( xTextDoc )), mnGalleryType( nGalleryType ), mnTemplateType( nTemplateType )
 {
     Init();
 }

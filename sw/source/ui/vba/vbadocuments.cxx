@@ -27,6 +27,7 @@
 #include "vbadocuments.hxx"
 
 #include <osl/file.hxx>
+#include <utility>
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
@@ -48,7 +49,7 @@ class DocumentEnumImpl : public EnumerationHelperImpl
     uno::Any m_aApplication;
 public:
     /// @throws uno::RuntimeException
-    DocumentEnumImpl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration, const uno::Any& aApplication ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ), m_aApplication( aApplication ) {}
+    DocumentEnumImpl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration, uno::Any  aApplication ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ), m_aApplication(std::move( aApplication )) {}
 
     virtual uno::Any SAL_CALL nextElement(  ) override
     {

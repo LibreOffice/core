@@ -19,12 +19,13 @@
 #include "vbaframe.hxx"
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <utility>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaFrame::SwVbaFrame( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const css::uno::Reference< frame::XModel >& rModel, const css::uno::Reference< text::XTextFrame >& xTextFrame ) :
-    SwVbaFrame_BASE( rParent, rContext ), mxModel( rModel ), mxTextFrame( xTextFrame )
+SwVbaFrame::SwVbaFrame( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, css::uno::Reference< frame::XModel > xModel, css::uno::Reference< text::XTextFrame >  xTextFrame ) :
+    SwVbaFrame_BASE( rParent, rContext ), mxModel(std::move( xModel )), mxTextFrame(std::move( xTextFrame ))
 {
 }
 

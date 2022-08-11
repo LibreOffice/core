@@ -47,6 +47,7 @@
 #include <hints.hxx>
 #include <pamtyp.hxx>
 #include <poolfmt.hxx>
+#include <utility>
 #include <view.hxx>
 #include <viewopt.hxx>
 #include <usrpref.hxx>

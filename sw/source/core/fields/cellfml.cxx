@@ -48,6 +48,7 @@
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <svl/numformat.hxx>
+#include <utility>
 
 namespace
 {

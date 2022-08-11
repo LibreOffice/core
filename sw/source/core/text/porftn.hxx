@@ -68,7 +68,7 @@ class SwQuoVadisPortion : public SwFieldPortion
 {
     OUString   m_aErgo;
 public:
-    SwQuoVadisPortion( const OUString &rExp, const OUString& rStr );
+    SwQuoVadisPortion( const OUString &rExp, OUString aStr );
     virtual bool Format( SwTextFormatInfo &rInf ) override;
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;

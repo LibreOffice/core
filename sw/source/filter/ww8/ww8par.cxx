@@ -96,6 +96,7 @@
 #include <../../core/inc/DocumentRedlineManager.hxx>
 #include <docufld.hxx>
 #include <swfltopt.hxx>
+#include <utility>
 #include <viewsh.hxx>
 #include <shellres.hxx>
 #include <swerror.h>
@@ -4231,7 +4232,7 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
 }
 
 SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
-    SvStream* pSt, SwDoc& rD, const OUString& rBaseURL, bool bNewDoc, bool bSkipImages, SwPosition const &rPos)
+    SvStream* pSt, SwDoc& rD, OUString aBaseURL, bool bNewDoc, bool bSkipImages, SwPosition const &rPos)
     : m_pDocShell(rD.GetDocShell())
     , m_pStg(pStorage)
     , m_pStrm(pSt)
@@ -4255,7 +4256,7 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_pDrawModel(nullptr)
     , m_pDrawPg(nullptr)
     , m_pNumFieldType(nullptr)
-    , m_sBaseURL(rBaseURL)
+    , m_sBaseURL(std::move(aBaseURL))
     , m_nIniFlags(0)
     , m_nIniFlags1(0)
     , m_nFieldFlags(0)
