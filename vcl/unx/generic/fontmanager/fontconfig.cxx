@@ -1185,6 +1185,8 @@ void PrintFontManager::Substitute(vcl::font::FontSelectPattern &rPattern, OUStri
             // ImplFontMetricData::ImplInitTextLineSize
             return;
         }
+        if (rPattern.maTargetName == "Linux Libertine G" && rPattern.maSearchName == "Linux Libertine O")
+            return;
         SAL_WARN("vcl.fonts", "PrintFontManager::Substitute: missing font: '" << rPattern.maTargetName <<
                               "' try: " << rPattern.maSearchName << " instead");
         std::abort();
