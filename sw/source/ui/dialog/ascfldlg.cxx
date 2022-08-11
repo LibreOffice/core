@@ -418,7 +418,7 @@ IMPL_LINK_NOARG(SwAsciiFilterDlg, CharSetSelHdl, weld::ComboBox&, void)
     }
 
     m_bSaveLineStatus = false;
-    if( eEnd != LineEnd(-1) )       // changed?
+    if( static_cast<int>(eEnd) != -1 )       // changed?
     {
         if( eOldEnd != eEnd )
             SetCRLF( eEnd );
