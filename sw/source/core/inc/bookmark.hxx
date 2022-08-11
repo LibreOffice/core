@@ -110,7 +110,7 @@ namespace sw::mark {
             // SwClient
             virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
-            MarkBase(const SwPaM& rPaM, const OUString& rName);
+            MarkBase(const SwPaM& rPaM, OUString aName);
             std::optional<SwPosition> m_oPos1;
             std::optional<SwPosition> m_oPos2;
             OUString m_aName;

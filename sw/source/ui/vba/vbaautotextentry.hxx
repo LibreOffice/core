@@ -35,7 +35,7 @@ private:
 
 public:
     /// @throws css::uno::RuntimeException
-    SwVbaAutoTextEntry( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XAutoTextEntry >& xEntry );
+    SwVbaAutoTextEntry( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, css::uno::Reference< css::text::XAutoTextEntry > xEntry );
     virtual ~SwVbaAutoTextEntry() override;
 
     // XAutoTextEntry

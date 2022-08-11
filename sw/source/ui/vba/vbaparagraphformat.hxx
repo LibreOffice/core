@@ -42,7 +42,7 @@ private:
     static sal_Int32 getMSWordAlignment( css::style::ParagraphAdjust _alignment );
 
 public:
-    SwVbaParagraphFormat( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::beans::XPropertySet >& rParaProps );
+    SwVbaParagraphFormat( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, css::uno::Reference< css::beans::XPropertySet > xParaProps );
     virtual ~SwVbaParagraphFormat() override;
 
     // Attributes

@@ -20,6 +20,7 @@
 #include "vbaframe.hxx"
 #include <com/sun/star/frame/XModel.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <utility>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -36,7 +37,7 @@ private:
     sal_Int32 nCurrentPos;
 public:
     /// @throws uno::RuntimeException
-    FramesEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XIndexAccess >& xIndexAccess,  const uno::Reference< frame::XModel >& xModel  ) : mxParent( xParent ), mxContext( xContext), mxIndexAccess( xIndexAccess ), mxModel( xModel ), nCurrentPos(0)
+    FramesEnumeration( uno::Reference< XHelperInterface > xParent, uno::Reference< uno::XComponentContext >  xContext, uno::Reference< container::XIndexAccess >  xIndexAccess,  uno::Reference< frame::XModel >  xModel  ) : mxParent(std::move( xParent )), mxContext(std::move( xContext)), mxIndexAccess(std::move( xIndexAccess )), mxModel(std::move( xModel )), nCurrentPos(0)
     {
     }
     virtual sal_Bool SAL_CALL hasMoreElements(  ) override
@@ -56,7 +57,7 @@ public:
 
 }
 
-SwVbaFrames::SwVbaFrames( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< container::XIndexAccess >& xFrames, const uno::Reference< frame::XModel >& xModel ): SwVbaFrames_BASE( xParent, xContext, xFrames ), mxModel( xModel )
+SwVbaFrames::SwVbaFrames( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< container::XIndexAccess >& xFrames, uno::Reference< frame::XModel >  xModel ): SwVbaFrames_BASE( xParent, xContext, xFrames ), mxModel(std::move( xModel ))
 {
     mxFramesSupplier.set( mxModel, uno::UNO_QUERY_THROW );
 }

@@ -22,6 +22,7 @@
 #include <numrule.hxx>
 #include <ndarr.hxx>
 #include <node.hxx>
+#include <utility>
 
 SwList::SwList( OUString sListId,
                         SwNumRule& rDefaultListStyle,

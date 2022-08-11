@@ -34,7 +34,7 @@ private:
 
 public:
     /// @throws css::uno::RuntimeException
-    SwVbaCell( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextTable >& xTextTable, sal_Int32 nColumn, sal_Int32 nRow );
+    SwVbaCell( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, css::uno::Reference< css::text::XTextTable >  xTextTable, sal_Int32 nColumn, sal_Int32 nRow );
     virtual ~SwVbaCell() override;
 
     // Attributes

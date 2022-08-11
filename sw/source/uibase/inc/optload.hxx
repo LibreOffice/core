@@ -23,6 +23,7 @@
 #include <tools/solar.h>
 #include <sfx2/tabdlg.hxx>
 
+#include <utility>
 #include <vcl/customweld.hxx>
 #include <vcl/textfilter.hxx>
 #include <vcl/weld.hxx>
@@ -47,8 +48,8 @@ private:
     OUString m_sLastGoodText;
     OUString m_sNone;
 public:
-    TextFilterAutoConvert(const OUString &rNone)
-        : m_sNone(rNone)
+    TextFilterAutoConvert(OUString aNone)
+        : m_sNone(std::move(aNone))
     {
     }
     virtual OUString filter(const OUString &rText) override;

@@ -33,7 +33,7 @@ class SwSelectDBTableDialog : public SfxDialogController
     DECL_LINK(PreviewHdl, weld::Button&, void);
 public:
     SwSelectDBTableDialog(weld::Window* pParent,
-        const css::uno::Reference<css::sdbc::XConnection>& xConnection);
+        css::uno::Reference<css::sdbc::XConnection> xConnection);
     virtual ~SwSelectDBTableDialog() override;
 
     OUString    GetSelectedTable(bool& bIsTable);

@@ -20,6 +20,7 @@
 #include <config_wasm_strip.h>
 
 #include <hintids.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/languageoptions.hxx>

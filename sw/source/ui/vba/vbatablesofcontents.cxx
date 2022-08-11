@@ -23,6 +23,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <utility>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -35,7 +36,7 @@ class TablesOfContentsEnumWrapper : public EnumerationHelper_BASE
     sal_Int32 nIndex;
 
 public:
-    explicit TablesOfContentsEnumWrapper( const uno::Reference< container::XIndexAccess >& xIndexAccess ) : mxIndexAccess( xIndexAccess ), nIndex( 0 )
+    explicit TablesOfContentsEnumWrapper( uno::Reference< container::XIndexAccess > xIndexAccess ) : mxIndexAccess(std::move( xIndexAccess )), nIndex( 0 )
     {
     }
     virtual sal_Bool SAL_CALL hasMoreElements(  ) override
@@ -64,7 +65,7 @@ private:
 
 public:
     /// @throws uno::RuntimeException
-    TableOfContentsCollectionHelper( const uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< text::XTextDocument >& xDoc ): mxParent( xParent ), mxContext( xContext ), mxTextDocument( xDoc )
+    TableOfContentsCollectionHelper( uno::Reference< ov::XHelperInterface > xParent, uno::Reference< uno::XComponentContext > xContext, uno::Reference< text::XTextDocument >  xDoc ): mxParent(std::move( xParent )), mxContext(std::move( xContext )), mxTextDocument(std::move( xDoc ))
     {
         uno::Reference< text::XDocumentIndexesSupplier > xDocIndexSupp( mxTextDocument, uno::UNO_QUERY_THROW );
         uno::Reference< container::XIndexAccess > xDocIndexes = xDocIndexSupp->getDocumentIndexes();

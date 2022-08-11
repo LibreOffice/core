@@ -167,7 +167,7 @@ class SvxCSS1MapEntry
     SvxCSS1PropertyInfo m_aPropInfo;
 
 public:
-    SvxCSS1MapEntry( const SfxItemSet& rItemSet,
+    SvxCSS1MapEntry( SfxItemSet aItemSet,
                      const SvxCSS1PropertyInfo& rProp );
 
     const SfxItemSet& GetItemSet() const { return m_aItemSet; }
@@ -239,7 +239,7 @@ protected:
 public:
 
     SvxCSS1Parser( SfxItemPool& rPool,
-                    const OUString& rBaseURL,
+                    OUString aBaseURL,
                    sal_uInt16 const *pWhichIds, sal_uInt16 nWhichIds );
     virtual ~SvxCSS1Parser() override;
 

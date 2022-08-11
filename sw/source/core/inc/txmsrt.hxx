@@ -24,6 +24,7 @@
 #include <tox.hxx>
 
 #include <com/sun/star/lang/Locale.hpp>
+#include <utility>
 
 class CharClass;
 class SwContentNode;
@@ -63,9 +64,9 @@ struct TextAndReading
 
     TextAndReading() {}
 
-    TextAndReading(const OUString& rText, const OUString& rReading)
-    : sText(rText)
-    , sReading(rReading)
+    TextAndReading(OUString aText, OUString aReading)
+    : sText(std::move(aText))
+    , sReading(std::move(aReading))
     {}
 };
 
@@ -81,7 +82,7 @@ class SwTOXInternational
 
 public:
     SwTOXInternational( LanguageType nLang, SwTOIOptions nOptions,
-                        const OUString& rSortAlgorithm );
+                        OUString aSortAlgorithm );
     SwTOXInternational( const SwTOXInternational& );
     ~SwTOXInternational();
 
@@ -208,7 +209,7 @@ private:
 
 struct SwTOXCustom final : public SwTOXSortTabBase
 {
-    SwTOXCustom( const TextAndReading& rKey, sal_uInt16 nLevel,
+    SwTOXCustom( TextAndReading aKey, sal_uInt16 nLevel,
                  const SwTOXInternational& rIntl,
                  const css::lang::Locale& rLocale );
 
@@ -243,7 +244,7 @@ struct SwTOXPara final : public SwTOXSortTabBase
 {
     SwTOXPara(SwContentNode&, SwTOXElement,
               sal_uInt16 nLevel = FORM_ALPHA_DELIMITER,
-              const OUString& sSeqName = OUString());
+              OUString sSeqName = OUString());
 
     void    SetStartIndex(sal_Int32 nSet)    { nStartIndex = nSet; }
     void    SetEndIndex(sal_Int32 nSet)      { nEndIndex = nSet; }

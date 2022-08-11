@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <utility>
 #include <vcl/errinf.hxx>
 #include <vcl/weld.hxx>
 #include <svl/macitem.hxx>
@@ -58,8 +59,8 @@ struct TextBlockInfo_Impl
     OUString sTitle;
     OUString sLongName;
     OUString sGroupName;
-    TextBlockInfo_Impl(OUString const& rTitle, OUString const& rLongName, OUString const& rGroupName)
-        : sTitle(rTitle), sLongName(rLongName), sGroupName(rGroupName) {}
+    TextBlockInfo_Impl(OUString aTitle, OUString aLongName, OUString aGroupName)
+        : sTitle(std::move(aTitle)), sLongName(std::move(aLongName)), sGroupName(std::move(aGroupName)) {}
 };
 
 }

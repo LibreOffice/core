@@ -49,7 +49,7 @@ class SwXFlatParagraph final
     :   public SwXFlatParagraph_Base
 {
 public:
-    SwXFlatParagraph( SwTextNode& rTextNode, const OUString& aExpandText, const ModelToViewHelper& rConversionMap );
+    SwXFlatParagraph( SwTextNode& rTextNode, OUString aExpandText, const ModelToViewHelper& rConversionMap );
     virtual ~SwXFlatParagraph() override;
 
     // XPropertySet

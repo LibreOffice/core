@@ -41,7 +41,7 @@ private:
 public:
     /// @throws css::uno::RuntimeException
     SwVbaView( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext,
-        const css::uno::Reference< css::frame::XModel >& rModel );
+        css::uno::Reference< css::frame::XModel > xModel );
     virtual ~SwVbaView() override;
 
    // XView

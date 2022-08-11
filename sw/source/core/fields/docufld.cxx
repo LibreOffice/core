@@ -69,6 +69,7 @@
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>
 #include <pam.hxx>
+#include <utility>
 #include <viewsh.hxx>
 #include <dbmgr.hxx>
 #include <shellres.hxx>

@@ -23,6 +23,7 @@
 
 #include <ndarr.hxx>
 #include <tools/long.hxx>
+#include <utility>
 
 class SwWrtShell;
 class SwContentArr;
@@ -78,10 +79,10 @@ class SwURLFieldContent final : public SwContent
 public:
     SwURLFieldContent(  const SwContentType* pCnt,
                             const OUString& rName,
-                            const OUString& rURL,
+                            OUString aURL,
                             const SwTextINetFormat* pAttr,
                             tools::Long nYPos )
-        : SwContent( pCnt, rName, nYPos ), m_sURL( rURL ), m_pINetAttr( pAttr )
+        : SwContent( pCnt, rName, nYPos ), m_sURL(std::move( aURL )), m_pINetAttr( pAttr )
     {}
 
     virtual bool        IsProtect() const override;
@@ -140,8 +141,8 @@ class SwGraphicContent final : public SwContent
 {
     OUString      m_sLink;
 public:
-    SwGraphicContent(const SwContentType* pCnt, const OUString& rName, const OUString& rLink, tools::Long nYPos)
-        : SwContent( pCnt, rName, nYPos ), m_sLink( rLink )
+    SwGraphicContent(const SwContentType* pCnt, const OUString& rName, OUString aLink, tools::Long nYPos)
+        : SwContent( pCnt, rName, nYPos ), m_sLink(std::move( aLink ))
         {}
     virtual ~SwGraphicContent() override;
 

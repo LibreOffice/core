@@ -33,6 +33,7 @@
 #include <rootfrm.hxx>
 #include <flyfrm.hxx>
 #include <poolfmt.hxx>
+#include <utility>
 #include <viewsh.hxx>
 #include <tabfrm.hxx>
 #include <viewopt.hxx>

@@ -35,6 +35,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <memory>
+#include <utility>
 #include <vector>
 #include <deque>
 #include <stack>
@@ -143,10 +144,10 @@ class HTMLAttr
     HTMLAttr **m_ppHead; // list head
 
     HTMLAttr( const SwPosition& rPos, const SfxPoolItem& rItem,
-               HTMLAttr **pHd, const std::shared_ptr<HTMLAttrTable>& rAttrTab );
+               HTMLAttr **pHd, std::shared_ptr<HTMLAttrTable> xAttrTab );
 
     HTMLAttr( const HTMLAttr &rAttr, const SwNodeIndex &rEndPara,
-               sal_Int32 nEndCnt, HTMLAttr **pHd, const std::shared_ptr<HTMLAttrTable>& rAttrTab );
+               sal_Int32 nEndCnt, HTMLAttr **pHd, std::shared_ptr<HTMLAttrTable> xAttrTab );
 
 public:
 
@@ -240,7 +241,7 @@ class HTMLAttrContext
 public:
     void ClearSaveDocContext();
 
-    HTMLAttrContext( HtmlTokenId nTokn, sal_uInt16 nPoolId, const OUString& rClass,
+    HTMLAttrContext( HtmlTokenId nTokn, sal_uInt16 nPoolId, OUString aClass,
                       bool bDfltColl=false );
     explicit HTMLAttrContext( HtmlTokenId nTokn );
     ~HTMLAttrContext();
@@ -916,8 +917,8 @@ protected:
 public:
 
     SwHTMLParser( SwDoc* pD, SwPaM & rCursor, SvStream& rIn,
-                    const OUString& rFileName,
-                    const OUString& rBaseURL,
+                    OUString aFileName,
+                    OUString aBaseURL,
                     bool bReadNewDoc,
                     SfxMedium* pMed, bool bReadUTF8,
                     bool bIgnoreHTMLComments,
@@ -1030,8 +1031,8 @@ struct SwHTMLTextFootnote
 {
     OUString sName;
     SwTextFootnote* pTextFootnote;
-    SwHTMLTextFootnote(const OUString &rName, SwTextFootnote* pInTextFootnote)
-        : sName(rName)
+    SwHTMLTextFootnote(OUString rName, SwTextFootnote* pInTextFootnote)
+        : sName(std::move(rName))
         , pTextFootnote(pInTextFootnote)
     {
     }

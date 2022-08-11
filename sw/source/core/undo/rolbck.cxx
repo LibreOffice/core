@@ -58,6 +58,7 @@
 #include <bookmark.hxx>
 #include <frameformats.hxx>
 #include <memory>
+#include <utility>
 
 OUString SwHistoryHint::GetDescription() const
 {
@@ -1003,10 +1004,10 @@ void SwHistoryChangeFlyChain::SetInDoc( SwDoc* pDoc, bool )
 }
 
 // -> #i27615#
-SwHistoryChangeCharFormat::SwHistoryChangeCharFormat(const SfxItemSet & rSet,
-                                     const OUString & sFormat)
+SwHistoryChangeCharFormat::SwHistoryChangeCharFormat(SfxItemSet aSet,
+                                     OUString sFormat)
     : SwHistoryHint(HSTRY_CHGCHARFMT)
-    , m_OldSet(rSet), m_Format(sFormat)
+    , m_OldSet(std::move(aSet)), m_Format(std::move(sFormat))
 {
 }
 

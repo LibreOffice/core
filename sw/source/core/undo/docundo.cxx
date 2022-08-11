@@ -23,6 +23,7 @@
 
 #include <doc.hxx>
 #include <docsh.hxx>
+#include <utility>
 #include <view.hxx>
 #include <drawdoc.hxx>
 #include <ndarr.hxx>
@@ -51,14 +52,14 @@ using namespace ::com::sun::star;
 
 namespace sw {
 
-UndoManager::UndoManager(std::shared_ptr<SwNodes> const & xUndoNodes,
+UndoManager::UndoManager(std::shared_ptr<SwNodes> xUndoNodes,
             IDocumentDrawModelAccess & rDrawModelAccess,
             IDocumentRedlineAccess & rRedlineAccess,
             IDocumentState & rState)
     :   m_rDrawModelAccess(rDrawModelAccess)
     ,   m_rRedlineAccess(rRedlineAccess)
     ,   m_rState(rState)
-    ,   m_xUndoNodes(xUndoNodes)
+    ,   m_xUndoNodes(std::move(xUndoNodes))
     ,   m_bGroupUndo(true)
     ,   m_bDrawUndo(true)
     ,   m_bRepair(false)

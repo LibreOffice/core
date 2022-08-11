@@ -40,7 +40,7 @@ private:
 
 public:
     /// @throws css::uno::RuntimeException
-    explicit SwVbaTableHelper( const css::uno::Reference< css::text::XTextTable >& xTextTable );
+    explicit SwVbaTableHelper( css::uno::Reference< css::text::XTextTable > xTextTable );
     /// @throws css::uno::RuntimeException
     sal_Int32 getTabColumnsCount( sal_Int32 nRowIndex );
     /// @throws css::uno::RuntimeException

@@ -31,6 +31,7 @@
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <i18nutil/searchopt.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/dispatch.hxx>
@@ -127,9 +128,9 @@ OUString MergeUrlAndPage(const OUString& rUrl, const std::unique_ptr<weld::SpinB
 }
 
 // dialog to insert a directory selection
-SwIndexMarkPane::SwIndexMarkPane(const std::shared_ptr<weld::Dialog>& rDialog, weld::Builder& rBuilder, bool bNewDlg,
+SwIndexMarkPane::SwIndexMarkPane(std::shared_ptr<weld::Dialog> xDialog, weld::Builder& rBuilder, bool bNewDlg,
     SwWrtShell* pWrtShell)
-    : m_xDialog(rDialog)
+    : m_xDialog(std::move(xDialog))
     , m_bDel(false)
     , m_bNewMark(bNewDlg)
     , m_bSelected(false)

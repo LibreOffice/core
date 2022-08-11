@@ -21,6 +21,7 @@
 #include <SidebarWindowsConsts.hxx>
 
 #include <swrect.hxx>
+#include <utility>
 #include <view.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/svdview.hxx>
@@ -59,16 +60,16 @@ protected:
         const drawinglayer::geometry::ViewInformation2D& rViewInformation) const override;
 
 public:
-    AnchorPrimitive( const basegfx::B2DPolygon& rTriangle,
-                     const basegfx::B2DPolygon& rLine,
-                     const basegfx::B2DPolygon& rLineTop,
+    AnchorPrimitive( basegfx::B2DPolygon aTriangle,
+                     basegfx::B2DPolygon aLine,
+                     basegfx::B2DPolygon aLineTop,
                      AnchorState aAnchorState,
                      const basegfx::BColor& rColor,
                      double fDiscreteLineWidth,
                      bool bLineSolid )
-    :   maTriangle(rTriangle),
-        maLine(rLine),
-        maLineTop(rLineTop),
+    :   maTriangle(std::move(aTriangle)),
+        maLine(std::move(aLine)),
+        maLineTop(std::move(aLineTop)),
         maAnchorState(aAnchorState),
         maColor(rColor),
         mfDiscreteLineWidth(fDiscreteLineWidth),

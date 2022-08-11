@@ -31,6 +31,7 @@
 #include <com/sun/star/sdbc/XDataSource.hpp>
 
 #include <strings.hrc>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::sdbcx;
@@ -41,9 +42,9 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 
 SwSelectDBTableDialog::SwSelectDBTableDialog(weld::Window* pParent,
-                                             const uno::Reference<sdbc::XConnection>& rConnection)
+                                             uno::Reference<sdbc::XConnection> xConnection)
     : SfxDialogController(pParent, "modules/swriter/ui/selecttabledialog.ui", "SelectTableDialog")
-    , m_xConnection(rConnection)
+    , m_xConnection(std::move(xConnection))
     , m_xTable(m_xBuilder->weld_tree_view("table"))
     , m_xPreviewPB(m_xBuilder->weld_button("preview"))
 {

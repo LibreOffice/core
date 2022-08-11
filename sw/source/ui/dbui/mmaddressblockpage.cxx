@@ -25,6 +25,7 @@
 #include <o3tl/safeint.hxx>
 #include <svl/grabbagitem.hxx>
 #include <svl/itemset.hxx>
+#include <utility>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -966,11 +967,11 @@ IMPL_LINK(SwAssignFieldsControl, GotFocusHdl_Impl, weld::Widget&, rBox, void)
 
 SwAssignFieldsDialog::SwAssignFieldsDialog(
         weld::Window* pParent, SwMailMergeConfigItem& rConfigItem,
-        const OUString& rPreview,
+        OUString aPreview,
         bool bIsAddressBlock)
     : SfxDialogController(pParent, "modules/swriter/ui/assignfieldsdialog.ui", "AssignFieldsDialog")
     , m_sNone(SwResId(SW_STR_NONE))
-    , m_rPreviewString(rPreview)
+    , m_rPreviewString(std::move(aPreview))
     , m_rConfigItem(rConfigItem)
     , m_xPreview(new SwAddressPreview(m_xBuilder->weld_scrolled_window("previewwin", true)))
     , m_xMatchingFI(m_xBuilder->weld_label("MATCHING_LABEL"))
@@ -1536,7 +1537,7 @@ namespace
     public:
         DropTargetListener(css::uno::Reference<css::datatransfer::dnd::XDropTarget> xRealDropTarget,
                            SwCustomizeAddressBlockDialog* pParentDialog)
-            : m_xRealDropTarget(xRealDropTarget)
+            : m_xRealDropTarget(std::move(xRealDropTarget))
             , m_pParentDialog(pParentDialog)
         {
         }

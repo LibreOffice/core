@@ -19,6 +19,7 @@
 #include "vbaheadersfooters.hxx"
 #include "vbaheaderfooter.hxx"
 #include <cppuhelper/implbase.hxx>
+#include <utility>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -36,7 +37,7 @@ private:
     bool mbHeader;
 
 public:
-    HeadersFootersIndexAccess( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel, const uno::Reference< beans::XPropertySet >& xPageStyleProps, bool bHeader ) : mxParent( xParent ), mxContext( xContext ), mxModel( xModel ), mxPageStyleProps( xPageStyleProps ), mbHeader( bHeader ) {}
+    HeadersFootersIndexAccess( uno::Reference< XHelperInterface > xParent, uno::Reference< uno::XComponentContext >  xContext, uno::Reference< frame::XModel >  xModel, uno::Reference< beans::XPropertySet >  xPageStyleProps, bool bHeader ) : mxParent(std::move( xParent )), mxContext(std::move( xContext )), mxModel(std::move( xModel )), mxPageStyleProps(std::move( xPageStyleProps )), mbHeader( bHeader ) {}
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(  ) override

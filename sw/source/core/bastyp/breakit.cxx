@@ -27,6 +27,7 @@
 #include <unicode/uchar.h>
 #include <unotools/localedatawrapper.hxx>
 #include <algorithm>
+#include <utility>
 
 using namespace com::sun::star;
 

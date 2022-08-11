@@ -111,7 +111,7 @@ class SW_DLLPUBLIC SwSpellPopup
 
 public:
     SwSpellPopup( SwWrtShell *pWrtSh,
-            const css::uno::Reference< css::linguistic2::XSpellAlternatives >  &xAlt,
+            css::uno::Reference< css::linguistic2::XSpellAlternatives > xAlt,
             const OUString & rParaText );
 
     SwSpellPopup( SwWrtShell *pWrtSh,

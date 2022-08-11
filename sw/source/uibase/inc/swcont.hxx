@@ -81,7 +81,7 @@ class SwContent : public SwTypeNumber
         // the index in its subtree
     bool                    m_bInvisible;
 public:
-        SwContent(const SwContentType* pCnt, const OUString& rName, double nYPos);
+        SwContent(const SwContentType* pCnt, OUString aName, double nYPos);
 
     virtual bool            IsProtect() const;
     const SwContentType*    GetParent() const {return m_pParent;}

@@ -672,10 +672,10 @@ SwUndoAttr::SwUndoAttr( const SwPaM& rRange, const SfxPoolItem& rAttr,
     }
 }
 
-SwUndoAttr::SwUndoAttr( const SwPaM& rRange, const SfxItemSet& rSet,
+SwUndoAttr::SwUndoAttr( const SwPaM& rRange, SfxItemSet aSet,
                         const SetAttrMode nFlags )
     : SwUndo( SwUndoId::INSATTR, &rRange.GetDoc() ), SwUndRng( rRange )
-    , m_AttrSet( rSet )
+    , m_AttrSet(std::move( aSet ))
     , m_pHistory( new SwHistory )
     , m_nNodeIndex( NODE_OFFSET_MAX )
     , m_nInsertFlags( nFlags )
@@ -935,11 +935,11 @@ void SwUndoMoveLeftMargin::RepeatImpl(::sw::RepeatContext & rContext)
 }
 
 SwUndoChangeFootNote::SwUndoChangeFootNote(
-    const SwPaM& rRange, const OUString& rText,
+    const SwPaM& rRange, OUString aText,
         bool const bIsEndNote)
     : SwUndo( SwUndoId::CHGFTN, &rRange.GetDoc() ), SwUndRng( rRange )
     , m_pHistory( new SwHistory() )
-    , m_Text( rText )
+    , m_Text(std::move( aText ))
     , m_bEndNote( bIsEndNote )
 {
 }

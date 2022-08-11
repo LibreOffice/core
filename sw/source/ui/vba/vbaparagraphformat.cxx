@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "vbaparagraphformat.hxx"
+#include <utility>
 #include <vbahelper/vbahelper.hxx>
 #include <basic/sberrors.hxx>
 #include <com/sun/star/style/LineSpacingMode.hpp>
@@ -37,7 +38,7 @@ const sal_Int16 PERCENT100 = 100;
 const sal_Int16 PERCENT150 = 150;
 const sal_Int16 PERCENT200 = 200;
 
-SwVbaParagraphFormat::SwVbaParagraphFormat( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< beans::XPropertySet >& rParaProps ) : SwVbaParagraphFormat_BASE( rParent, rContext ), mxParaProps( rParaProps )
+SwVbaParagraphFormat::SwVbaParagraphFormat( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, uno::Reference< beans::XPropertySet > xParaProps ) : SwVbaParagraphFormat_BASE( rParent, rContext ), mxParaProps(std::move( xParaProps ))
 {
 }
 
