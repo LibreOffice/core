@@ -219,6 +219,8 @@ class JSInstanceBuilder final : public SalInstanceBuilder, public JSDialogSender
     /// When LOKNotifier is set by jsdialogs code we need to release it
     VclPtr<vcl::Window> m_aWindowToRelease;
 
+    friend class JSMessageDialog; // static message boxes have to be registered outside
+
     friend VCL_DLLPUBLIC bool jsdialog::ExecuteAction(const std::string& nWindowId,
                                                       const OString& rWidget, StringMap& rData);
     friend VCL_DLLPUBLIC void jsdialog::SendFullUpdate(const std::string& nWindowId,
@@ -421,8 +423,7 @@ public:
     virtual void grab_focus() override
     {
         BaseInstanceClass::grab_focus();
-        std::unique_ptr<jsdialog::ActionDataMap> pMap
-                = std::make_unique<jsdialog::ActionDataMap>();
+        std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
         (*pMap)[ACTION_TYPE] = "grab_focus";
         sendAction(std::move(pMap));
     }
@@ -567,6 +568,8 @@ class JSMessageDialog final : public JSWidget<SalInstanceMessageDialog, ::Messag
     DECL_LINK(OKHdl, weld::Button&, void);
     DECL_LINK(CancelHdl, weld::Button&, void);
 
+    void RememberMessageDialog();
+
 public:
     JSMessageDialog(JSDialogSender* pSender, ::MessageDialog* pDialog, SalInstanceBuilder* pBuilder,
                     bool bTakeOwnership);
@@ -578,6 +581,13 @@ public:
     virtual void set_secondary_text(const OUString& rText) override;
 
     virtual void response(int response) override;
+
+    // TODO: move to dialog class so we will not send json when built but on run
+    bool runAsync(std::shared_ptr<weld::DialogController> aOwner,
+                  const std::function<void(sal_Int32)>& rEndDialogFn) override;
+
+    bool runAsync(std::shared_ptr<Dialog> const& rxSelf,
+                  const std::function<void(sal_Int32)>& rEndDialogFn) override;
 };
 
 class JSCheckButton final : public JSWidget<SalInstanceCheckButton, ::CheckBox>
