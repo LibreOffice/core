@@ -33,6 +33,24 @@
       "message": "I dunno, its a divide by zero so it must be that m_nTimeOut is 0 at line 300 here (because it can\u0027t be the divide by nTimeOutCorrection on line 299 which is 10 or 20).\n\nIf m_nALiveCount was 0, and was set to 1 on line 297 the 1/10 or 1/20 on line 299 gives a m_nTimeOut of 0 and this would still div-by-zero at line 300",
       "revId": "ad1f0fa11fa8fb90783be2aa54d3a90f05f72ff5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "705d47c5_12bf9275",
+        "filename": "connectivity/source/cpool/ZConnectionPool.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-08-11T11:34:30Z",
+      "side": 1,
+      "message": "meh, you are right. stupid mistake",
+      "parentUuid": "f12f4f5e_ae49d2a3",
+      "revId": "ad1f0fa11fa8fb90783be2aa54d3a90f05f72ff5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
