@@ -4924,7 +4924,12 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
                 xNameAccess = xBkms->getBookmarks();
             }
             else
-                nSlot = FN_INSERT_BOOKMARK;
+            {
+                SfxStringItem const name(FN_EDIT_BOOKMARK, pCnt->GetName());
+                SfxPoolItem const* args[2] = { &name, nullptr };
+                m_pActiveShell->GetView().GetViewFrame()->
+                    GetDispatcher()->Execute(FN_EDIT_BOOKMARK, SfxCallMode::SYNCHRON, args);
+            }
         break;
 
         case ContentTypeId::REGION    :
