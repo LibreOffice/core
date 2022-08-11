@@ -516,7 +516,6 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
     if (bTabControl && ! bHScroll )
     {
         nBarY = aHScrollLeft->GetSizePixel().Height();
-        nBarX = aVScrollBottom->GetSizePixel().Width();
 
         tools::Long nSize1 = nSizeX;
 
