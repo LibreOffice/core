@@ -265,6 +265,8 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
     sal_Int32 nColumn;
     sal_Int32 nRow;
 
+    // COLUMN HEADER
+
     nColumn = 1;
     for (auto const& rString : m_aXValues)
     {
@@ -274,13 +276,19 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
         if (xCellTextRange.is())
         {
             xCellTextRange->setString(rString);
-            bool bLeft = bOutline || (bVBorder && nColumn > 1);
-            setCellProperties(xPropertySet, bLeft, bOutline, bOutline, bOutline);
+
+            bool bLeft
+                = (bOutline && nColumn == 1) || (bVBorder && nColumn > 1 && nColumn < nColumnCount);
+            bool bRight = (bOutline && nColumn == nColumnCount)
+                          || (bVBorder && nColumn > 1 && nColumn < nColumnCount);
+            setCellProperties(xPropertySet, bLeft, bOutline, bRight, bOutline);
             setCellCharAndParagraphProperties(xPropertySet);
         }
         nColumn++;
     }
 
+    // ROW HEADER
+    // Prepare keys
     if (bKeys)
     {
         awt::Size aMaxSymbolExtent(300, 300);
@@ -304,8 +312,10 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
         uno::Reference<text::XTextRange> xCellTextRange(xCell, uno::UNO_QUERY);
         if (xCellTextRange.is())
         {
-            bool bTop = bOutline || (bHBorder && nRow > 1);
-            setCellProperties(xCellPropertySet, bOutline, bTop, bOutline, bOutline);
+            bool bTop = (bOutline && nRow == 1) || (bHBorder && nRow > 1 && nRow < nRowCount);
+            bool bBottom
+                = (bOutline && nRow == nRowCount) || (bHBorder && nRow > 1 && nRow < nRowCount);
+            setCellProperties(xCellPropertySet, bOutline, bTop, bOutline, bBottom);
 
             auto xText = xCellTextRange->getText();
             xText->insertString(xText->getStart(), rSeriesName, false);
@@ -319,11 +329,12 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
 
             xCellPropertySet->setPropertyValue("ParaAdjust", uno::Any(style::ParagraphAdjust_LEFT));
             if (bKeys)
-                xCellPropertySet->setPropertyValue("ParaLeftMargin", uno::Any(500));
+                xCellPropertySet->setPropertyValue("ParaLeftMargin", uno::Any(sal_Int32(500)));
         }
         nRow++;
     }
 
+    // TABLE
     nRow = 1;
     for (auto const& rSeries : m_pDataSeriesValues)
     {
