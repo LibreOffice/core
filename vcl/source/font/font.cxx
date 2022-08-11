@@ -24,6 +24,7 @@
 #include <unotools/fontcfg.hxx>
 #include <unotools/fontdefs.hxx>
 #include <o3tl/hash_combine.hxx>
+#include <i18nlangtag/mslangid.hxx>
 
 #include <vcl/font.hxx>
 #include <vcl/svapp.hxx>
@@ -322,6 +323,35 @@ Font& Font::operator=( vcl::Font&& rFont ) noexcept
 {
     mpImplFont = std::move(rFont.mpImplFont);
     return *this;
+}
+
+FontEmphasisMark Font::GetEmphasisMarkStyle() const
+{
+    FontEmphasisMark nEmphasisMark = GetEmphasisMark();
+
+    // If no Position is set, then calculate the default position, which
+    // depends on the language
+    if (!(nEmphasisMark & (FontEmphasisMark::PosAbove | FontEmphasisMark::PosBelow)))
+    {
+        LanguageType eLang = GetLanguage();
+        // In Chinese Simplified the EmphasisMarks are below/left
+        if (MsLangId::isSimplifiedChinese(eLang))
+        {
+            nEmphasisMark |= FontEmphasisMark::PosBelow;
+        }
+        else
+        {
+            eLang = GetCJKContextLanguage();
+
+            // In Chinese Simplified the EmphasisMarks are below/left
+            if (MsLangId::isSimplifiedChinese(eLang))
+                nEmphasisMark |= FontEmphasisMark::PosBelow;
+            else
+                nEmphasisMark |= FontEmphasisMark::PosAbove;
+        }
+    }
+
+    return nEmphasisMark;
 }
 
 bool Font::operator==( const vcl::Font& rFont ) const
