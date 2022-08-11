@@ -1670,20 +1670,20 @@ void RTFDocumentImpl::sendProperties(
     tableBreak();
 }
 
-void RTFDocumentImpl::replayRowBuffer(RTFBuffer_t& rBuffer, ::std::deque<RTFSprms>& rCellsSrpms,
+void RTFDocumentImpl::replayRowBuffer(RTFBuffer_t& rBuffer, ::std::deque<RTFSprms>& rCellsSprms,
                                       ::std::deque<RTFSprms>& rCellsAttributes, int const nCells)
 {
     for (int i = 0; i < nCells; ++i)
     {
-        replayBuffer(rBuffer, &rCellsSrpms.front(), &rCellsAttributes.front());
-        rCellsSrpms.pop_front();
+        replayBuffer(rBuffer, &rCellsSprms.front(), &rCellsAttributes.front());
+        rCellsSprms.pop_front();
         rCellsAttributes.pop_front();
     }
     for (Buf_t& i : rBuffer)
     {
         SAL_WARN_IF(BUFFER_CELLEND == std::get<0>(i), "writerfilter.rtf", "dropping table cell!");
     }
-    assert(rCellsSrpms.empty());
+    assert(rCellsSprms.empty());
     assert(rCellsAttributes.empty());
 }
 
