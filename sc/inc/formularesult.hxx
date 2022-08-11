@@ -55,20 +55,6 @@ class ScFormulaResult
     static const Multiline MULTILINE_FALSE   = 1;
     static const Multiline MULTILINE_TRUE    = 2;
 
-    // Clone token if the 16-bit only reference counter is nearing it's
-    // capacity during fill or copy&paste, leaving 4k for temporary passing
-    // around. (That should be enough for all times (TM) ;-)
-    static const sal_uInt16 MAX_TOKENREF_COUNT = 0xf000;
-    static void IncrementTokenRef( const formula::FormulaToken* & rp )
-    {
-        if (rp)
-        {
-            if (rp->GetRef() >= MAX_TOKENREF_COUNT)
-                rp = rp->Clone();
-            rp->IncRef();
-        }
-    }
-
     union
     {
         double          mfValue;    // double result direct for performance and memory consumption
