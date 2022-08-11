@@ -294,7 +294,7 @@ void OConnectionPool::calculateTimeOuts()
         nTimeOutCorrection = 20;
 
     m_nTimeOut      = m_nALiveCount / nTimeOutCorrection;
-    m_nALiveCount   = m_nALiveCount / m_nTimeOut;
+    m_nALiveCount   = m_nTimeOut == 0 ? nTimeOutCorrection : m_nALiveCount / m_nTimeOut;
 }
 
 
