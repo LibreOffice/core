@@ -2322,10 +2322,9 @@ void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, sal_Int32 nStart, sal_I
         // restore selection for proper iteration at the end of the function
         aWordSel.Max().SetIndex( nSavPos );
 
-        sal_Int32 nIdx = 0;
+        sal_Int32 nIdx = 0, nPrevIdx = 0;
         sal_Int32 nKashidaPos = -1;
-        sal_Unicode cCh;
-        sal_Unicode cPrevCh = 0;
+        sal_Unicode cCh, cPrevCh = 0;
 
         int nPriorityLevel = 7;    // 0..6 = level found
                                    // 7 not found
@@ -2373,7 +2372,7 @@ void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, sal_Int32 nStart, sal_I
                     // check if character is connectable to previous character,
                     if ( lcl_ConnectToPrev( cCh, cPrevCh ) )
                     {
-                        nKashidaPos = aWordSel.Min().GetIndex() + nIdx - 1;
+                        nKashidaPos = aWordSel.Min().GetIndex() + nPrevIdx;
                         nPriorityLevel = 2;
                     }
                 }
@@ -2394,7 +2393,7 @@ void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, sal_Int32 nStart, sal_I
                     // check if character is connectable to previous character,
                     if ( lcl_ConnectToPrev( cCh, cPrevCh ) )
                     {
-                        nKashidaPos = aWordSel.Min().GetIndex() + nIdx - 1;
+                        nKashidaPos = aWordSel.Min().GetIndex() + nPrevIdx;
                         nPriorityLevel = 3;
                     }
                 }
@@ -2414,7 +2413,7 @@ void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, sal_Int32 nStart, sal_I
                         // check if character is connectable to previous character,
                         if ( lcl_ConnectToPrev( cCh, cPrevCh ) )
                         {
-                            nKashidaPos = aWordSel.Min().GetIndex() + nIdx - 1;
+                            nKashidaPos = aWordSel.Min().GetIndex() + nPrevIdx;
                             nPriorityLevel = 4;
                         }
                     }
@@ -2436,7 +2435,7 @@ void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, sal_Int32 nStart, sal_I
                     // check if character is connectable to previous character,
                     if ( lcl_ConnectToPrev( cCh, cPrevCh ) )
                     {
-                        nKashidaPos = aWordSel.Min().GetIndex() + nIdx - 1;
+                        nKashidaPos = aWordSel.Min().GetIndex() + nPrevIdx;
                         nPriorityLevel = 5;
                     }
                 }
@@ -2452,7 +2451,7 @@ void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, sal_Int32 nStart, sal_I
                     // check if character is connectable to previous character,
                     if ( lcl_ConnectToPrev( cCh, cPrevCh ) )
                     {
-                        nKashidaPos = aWordSel.Min().GetIndex() + nIdx - 1;
+                        nKashidaPos = aWordSel.Min().GetIndex() + nPrevIdx;
                         nPriorityLevel = 6;
                     }
                 }
@@ -2461,7 +2460,10 @@ void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, sal_Int32 nStart, sal_I
             // Do not consider vowel marks when checking if a character
             // can be connected to previous character.
             if ( !isTransparentChar ( cCh) )
+            {
                 cPrevCh = cCh;
+                nPrevIdx = nIdx;
+            }
 
             ++nIdx;
         } // end of current word
