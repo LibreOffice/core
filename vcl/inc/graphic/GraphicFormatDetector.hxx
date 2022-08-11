@@ -193,8 +193,8 @@ private:
     sal_uInt8* checkAndUncompressBuffer(sal_uInt8* aUncompressedBuffer, sal_uInt32 nSize,
                                         sal_uInt64& nDecompressedSize);
     bool mbExtendedInfo;
-    GraphicMetadata maMetadata;
     bool mbWasCompressed;
+    GraphicMetadata maMetadata;
 };
 }
 
