@@ -23,7 +23,7 @@
         <value>com.sun.star.comp.sdbc.flat.ODriver</value>
       </prop>
       <prop oor:name="DriverTypeDisplayName" oor:type="xs:string">
-        <value xml:lang="en-US">Text</value>
+        <value xml:lang="en-US">Text/CSV</value>
       </prop>
       <node oor:name="Properties">
         <node oor:name="CharSet" oor:op="replace">
