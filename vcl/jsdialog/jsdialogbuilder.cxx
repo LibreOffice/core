@@ -1172,18 +1172,14 @@ weld::MessageDialog* JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParen
         aJsonWriter.put("jsontype", "dialog");
         std::unique_ptr<char[], o3tl::free_delete> message(aJsonWriter.extractData());
         pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message.get());
+
+        std::string sWindowId = std::to_string(xMessageDialog->GetLOKWindowId());
+        InsertWindowToMap(sWindowId);
     }
 
     xMessageDialog->SetLOKTunnelingState(false);
-    std::string sWindowId = std::to_string(xMessageDialog->GetLOKWindowId());
-    InsertWindowToMap(sWindowId);
 
-    weld::MessageDialog* pRet = new JSMessageDialog(xMessageDialog, nullptr, true);
-
-    if (pRet)
-        RememberWidget(sWindowId, "__DIALOG__", pRet);
-
-    return pRet;
+    return new JSMessageDialog(xMessageDialog, nullptr, true);
 }
 
 JSDialog::JSDialog(JSDialogSender* pSender, ::Dialog* pDialog, SalInstanceBuilder* pBuilder,
@@ -1417,6 +1413,39 @@ JSMessageDialog::~JSMessageDialog()
 {
     if (m_pOK || m_pCancel)
         JSInstanceBuilder::RemoveWindowWidget(m_sWindowId);
+}
+
+void JSMessageDialog::RememberMessageDialog()
+{
+    static OStringLiteral sWidgetName = "__DIALOG__";
+    std::string sWindowId = std::to_string(m_xMessageDialog->GetLOKWindowId());
+    if (JSInstanceBuilder::FindWeldWidgetsMap(sWindowId, sWidgetName) != nullptr)
+        return;
+
+    JSInstanceBuilder::InsertWindowToMap(sWindowId);
+    JSInstanceBuilder::RememberWidget(sWindowId, sWidgetName, this);
+}
+
+bool JSMessageDialog::runAsync(std::shared_ptr<weld::DialogController> aOwner,
+                               const std::function<void(sal_Int32)>& rEndDialogFn)
+{
+    bool bRet = SalInstanceMessageDialog::runAsync(aOwner, rEndDialogFn);
+
+    RememberMessageDialog();
+    sendFullUpdate();
+
+    return bRet;
+}
+
+bool JSMessageDialog::runAsync(std::shared_ptr<Dialog> const& rxSelf,
+                               const std::function<void(sal_Int32)>& rEndDialogFn)
+{
+    bool bRet = SalInstanceMessageDialog::runAsync(rxSelf, rEndDialogFn);
+
+    RememberMessageDialog();
+    sendFullUpdate();
+
+    return bRet;
 }
 
 IMPL_LINK_NOARG(JSMessageDialog, OKHdl, weld::Button&, void) { response(RET_OK); }
