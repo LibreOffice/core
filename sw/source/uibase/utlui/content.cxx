@@ -19,6 +19,7 @@
 
 #include <comphelper/string.hxx>
 #include <svl/urlbmk.hxx>
+#include <svl/stritem.hxx>
 #include <osl/thread.h>
 #include <sal/log.hxx>
 #include <tools/urlobj.hxx>
@@ -3547,7 +3548,12 @@ void SwContentTree::EditEntry(SvTreeListEntry const * pEntry, EditEntryMode nMod
                 xNameAccess = xBkms->getBookmarks();
             }
             else
-                nSlot = FN_INSERT_BOOKMARK;
+            {
+                SfxStringItem const name(FN_EDIT_BOOKMARK, pCnt->GetName());
+                SfxPoolItem const* args[2] = { &name, nullptr };
+                m_pActiveShell->GetView().GetViewFrame()->
+                    GetDispatcher()->Execute(FN_EDIT_BOOKMARK, SfxCallMode::SYNCHRON, args);
+            }
         break;
 
         case ContentTypeId::REGION    :

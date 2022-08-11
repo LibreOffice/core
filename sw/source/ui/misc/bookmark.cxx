@@ -153,6 +153,11 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, SelectionChangedHdl, weld::TreeView&, void)
     if (!m_xBookmarksBox->has_focus())
         return;
 
+    SelectionChanged();
+}
+
+void SwInsertBookmarkDlg::SelectionChanged()
+{
     OUStringBuffer sEditBoxText;
     int nSelectedRows = 0;
     m_xBookmarksBox->selected_foreach([this, &sEditBoxText, &nSelectedRows](weld::TreeIter& rEntry){
@@ -354,7 +359,8 @@ void SwInsertBookmarkDlg::PopulateTable()
     m_nLastBookmarksCount = pMarkAccess->getBookmarksCount();
 }
 
-SwInsertBookmarkDlg::SwInsertBookmarkDlg(weld::Window* pParent, SwWrtShell& rS, SfxRequest& rRequest)
+SwInsertBookmarkDlg::SwInsertBookmarkDlg(weld::Window* pParent, SwWrtShell& rS, SfxRequest& rRequest,
+                                         OUString const* const pSelected)
     : SfxDialogController(pParent, "modules/swriter/ui/insertbookmark.ui", "InsertBookmarkDialog")
     , rSh(rS)
     , rReq(rRequest)
@@ -415,6 +421,18 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg(weld::Window* pParent, SwWrtShell& rS, 
     // disabled until "Hide" flag is not checked
     m_xConditionED->set_sensitive(false);
     m_xConditionFT->set_sensitive(false);
+
+    if (pSelected)
+    {
+        if (m_xBookmarksBox->SelectByName(*pSelected))
+        {
+            SelectionChanged();
+            // which is better, focus on a button or focus on the table row?
+            // as long as editing doesn't work via the TreeView with VCL
+            // widgets, better on button.
+            m_xEditTextBtn->grab_focus();
+        }
+    }
 }
 
 IMPL_LINK(SwInsertBookmarkDlg, HeaderBarClick, int, nColumn, void)
@@ -532,12 +550,13 @@ sw::mark::IMark* BookmarkTable::GetBookmarkByName(const OUString& sName)
     return reinterpret_cast<sw::mark::IMark*>(m_xControl->get_id(*xEntry).toInt64());
 }
 
-void BookmarkTable::SelectByName(const OUString& sName)
+bool BookmarkTable::SelectByName(const OUString& sName)
 {
     auto xEntry = GetRowByBookmarkName(sName);
     if (!xEntry)
-        return;
+        return false;
     select(*xEntry);
+    return true;
 }
 
 OUString BookmarkTable::GetNameProposal() const
