@@ -788,7 +788,7 @@ private:
     void sendProperties(writerfilter::Reference<Properties>::Pointer_t const& pParagraphProperties,
                         writerfilter::Reference<Properties>::Pointer_t const& pFrameProperties,
                         writerfilter::Reference<Properties>::Pointer_t const& pTableRowProperties);
-    void replayRowBuffer(RTFBuffer_t& rBuffer, ::std::deque<RTFSprms>& rCellsSrpms,
+    void replayRowBuffer(RTFBuffer_t& rBuffer, ::std::deque<RTFSprms>& rCellsSprms,
                          ::std::deque<RTFSprms>& rCellsAttributes, int nCells);
     void replayBuffer(RTFBuffer_t& rBuffer, RTFSprms* pSprms, RTFSprms const* pAttributes);
     /// If we have some unicode or hex characters to send.
