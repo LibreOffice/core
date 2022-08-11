@@ -51,6 +51,24 @@
       "parentUuid": "7f4ea1fe_94f083d3",
       "revId": "11b7c19159b8baebdaf509715f05ba42536de69d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b3a257a_54961de2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2022-08-11T22:40:10Z",
+      "side": 1,
+      "message": "Let\u0027s take the \"Box List Blue\" style as an example. It has different formatting for a header row, a sum row, odd and even rows. The issue is that inserting a row will inevitably change the role of other rows as well. For example, if you insert a row in the middle of the table, then rows below it that used to be odd rows, now becoming even, and vice versa. Or if you insert a row at the bottom of the table, then the row above it is no longer a sum row. The purpose of a table style is to keep the formatting of a table consistent, by following cell role changes.",
+      "parentUuid": "d6c06a34_1e6bf868",
+      "revId": "11b7c19159b8baebdaf509715f05ba42536de69d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
