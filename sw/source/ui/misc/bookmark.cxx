@@ -151,6 +151,11 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, SelectionChangedHdl, weld::TreeView&, void)
     if (!m_xBookmarksBox->has_focus())
         return;
 
+    SelectionChanged();
+}
+
+void SwInsertBookmarkDlg::SelectionChanged()
+{
     OUStringBuffer sEditBoxText;
     int nSelectedRows = 0;
     m_xBookmarksBox->selected_foreach(
@@ -355,7 +360,8 @@ void SwInsertBookmarkDlg::PopulateTable()
     m_nLastBookmarksCount = pMarkAccess->getBookmarksCount();
 }
 
-SwInsertBookmarkDlg::SwInsertBookmarkDlg(weld::Window* pParent, SwWrtShell& rS)
+SwInsertBookmarkDlg::SwInsertBookmarkDlg(weld::Window* pParent, SwWrtShell& rS,
+                                         OUString const* const pSelected)
     : SfxDialogController(pParent, "modules/swriter/ui/insertbookmark.ui", "InsertBookmarkDialog")
     , rSh(rS)
     , m_nLastBookmarksCount(0)
@@ -419,6 +425,18 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg(weld::Window* pParent, SwWrtShell& rS)
     SvtViewOptions aDlgOpt(EViewType::Dialog, "BookmarkDialog");
     if (aDlgOpt.Exists())
         m_xDialog->set_window_state(aDlgOpt.GetWindowState().toUtf8());
+
+    if (pSelected)
+    {
+        if (m_xBookmarksBox->SelectByName(*pSelected))
+        {
+            SelectionChanged();
+            // which is better, focus on a button or focus on the table row?
+            // as long as editing doesn't work via the TreeView with VCL
+            // widgets, better on button.
+            m_xEditTextBtn->grab_focus();
+        }
+    }
 }
 
 SwInsertBookmarkDlg::~SwInsertBookmarkDlg()
@@ -535,12 +553,13 @@ sw::mark::IMark* BookmarkTable::GetBookmarkByName(const OUString& sName)
     return weld::fromId<sw::mark::IMark*>(m_xControl->get_id(*xEntry));
 }
 
-void BookmarkTable::SelectByName(const OUString& sName)
+bool BookmarkTable::SelectByName(const OUString& sName)
 {
     auto xEntry = GetRowByBookmarkName(sName);
     if (!xEntry)
-        return;
+        return false;
     select(*xEntry);
+    return true;
 }
 
 OUString BookmarkTable::GetNameProposal() const

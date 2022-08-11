@@ -689,11 +689,20 @@ void SwTextShell::Execute(SfxRequest &rReq)
             {
                 OUString sName = static_cast<const SfxStringItem*>(pItem)->GetValue();
                 rWrtSh.SetBookmark( vcl::KeyCode(), sName );
+                break;
             }
-            else
+            [[fallthrough]];
+        }
+        case FN_EDIT_BOOKMARK:
+        {
+            ::std::optional<OUString> oName;
+            if (pItem)
+            {
+                oName.emplace(static_cast<const SfxStringItem*>(pItem)->GetValue());
+            }
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSwInsertBookmarkDlg(GetView().GetFrameWeld(), rWrtSh));
+                ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSwInsertBookmarkDlg(GetView().GetFrameWeld(), rWrtSh, oName ? &*oName : nullptr));
                 VclAbstractDialog::AsyncContext aContext;
                 aContext.maEndDialogFn = [](sal_Int32){};
                 pDlg->StartExecuteAsync(aContext);
