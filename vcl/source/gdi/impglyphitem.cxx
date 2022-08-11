@@ -191,10 +191,6 @@ bool SalLayoutGlyphsImpl::isSafeToBreak(const_iterator pos, bool rtl) const
         if (pos == begin())
             return true;
         --pos;
-        while (pos >= begin() && (pos->IsInCluster() && !pos->IsClusterStart()))
-            --pos;
-        if (pos < begin())
-            return true;
     }
     // Don't create a subset if it's not safe to break at the beginning or end of the sequence
     // (https://harfbuzz.github.io/harfbuzz-hb-buffer.html#hb-glyph-flags-t).
