@@ -1099,6 +1099,17 @@ DECLARE_WW8EXPORT_TEST(testTdf142840, "tdf142840.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("#Chapter_1"), getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkURL"));
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf148360, "tdf148360.doc")
+{
+    const auto& pLayout = parseLayoutDump();
+
+    // Ensure first element is a tab
+    assertXPath(pLayout, "/root/page[1]/body/txt[1]/Text[1]", "nType", "PortionType::TabLeft");
+    // and only then goes content
+    assertXPath(pLayout, "/root/page[1]/body/txt[1]/Text[2]", "nType", "PortionType::Text");
+}
+
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
