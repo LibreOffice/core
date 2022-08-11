@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0da34810_57e5a5d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-08-11T07:34:49Z",
+      "side": 1,
+      "message": "I need to check that introducing GraphicFileFormat::W/EMZ didn\u0027t break anything",
+      "revId": "031b0681312c73ae126498be59ee6cbf2d2fc562",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
