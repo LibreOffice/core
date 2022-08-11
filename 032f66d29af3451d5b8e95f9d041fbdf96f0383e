@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a6ddc69_1658f1ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-08-11T15:49:02Z",
+      "side": 1,
+      "message": "some notes, I will try to investigate how to get updates out-of-the-box",
+      "revId": "032f66d29af3451d5b8e95f9d041fbdf96f0383e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce55ec4e_57fa0811",
+        "filename": "sfx2/source/dialog/dinfdlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1167,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-08-11T15:49:02Z",
+      "side": 1,
+      "message": "can it be at the same place, after cmisprops? (jsdialog enabling shoudn\u0027t change any logic)",
+      "revId": "032f66d29af3451d5b8e95f9d041fbdf96f0383e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b8727cf_c2bb19af",
+        "filename": "sfx2/source/dialog/dinfdlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1306,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-08-11T15:49:02Z",
+      "side": 1,
+      "message": "can we use already defined enum here?\nhttps://opengrok.libreoffice.org/xref/core/sfx2/inc/dinfdlg.hrc?r\u003d48646ab6#61",
+      "revId": "032f66d29af3451d5b8e95f9d041fbdf96f0383e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb4065ce_05d9071b",
+        "filename": "sfx2/source/dialog/dinfdlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1416,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-08-11T15:49:02Z",
+      "side": 1,
+      "message": "this shouldn\u0027t be used (it exists only for some sidebar cases where it was required due to some limitations, but will be deleted in the future)\n\nif you don\u0027t get updates -\u003e it means some method in JSWidgets has to be overrriden because currently is not and doesn\u0027t send update\n\nin vcl/jsdialog/jsdialogbuilder.cxx",
+      "revId": "032f66d29af3451d5b8e95f9d041fbdf96f0383e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "842eccc9_d4d5f425",
+        "filename": "sfx2/source/dialog/dinfdlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1841,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-08-11T15:49:02Z",
+      "side": 1,
+      "message": "please do not change logic, it should work exactly like on desktop",
+      "revId": "032f66d29af3451d5b8e95f9d041fbdf96f0383e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a642edb_d2c91aa5",
+        "filename": "sfx2/source/dialog/dinfdlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1959,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-08-11T15:49:02Z",
+      "side": 1,
+      "message": "this also shouldn\u0027t be needed, somehow it should be triggered when adding new line",
+      "revId": "032f66d29af3451d5b8e95f9d041fbdf96f0383e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27be4a0c_649ceafc",
+        "filename": "vcl/source/control/tabctrl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2187,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-08-11T15:49:02Z",
+      "side": 1,
+      "message": "why it was needed? this way we get only tabs and before we got some \"trash\" also?",
+      "revId": "032f66d29af3451d5b8e95f9d041fbdf96f0383e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
