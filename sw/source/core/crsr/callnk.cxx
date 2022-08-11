@@ -106,7 +106,7 @@ void NotifyTableCollapsedParagraph(const SwContentNode *const pNode, SwCursorShe
 
 } // namespace sw
 
-SwCallLink::~SwCallLink() COVERITY_NOEXCEPT_FALSE
+void SwCallLink::ImplDestroy()
 {
     if( m_nNodeType == SwNodeType::NONE || !m_rShell.m_bCallChgLnk ) // see ctor
         return ;
@@ -237,6 +237,11 @@ SwCallLink::~SwCallLink() COVERITY_NOEXCEPT_FALSE
     if( rStNd.EndOfSectionNode()->StartOfSectionIndex() > m_nNode ||
         m_nNode > rStNd.EndOfSectionIndex() )
         m_rShell.GetFlyMacroLnk().Call( pFlyFrame->GetFormat() );
+}
+
+SwCallLink::~SwCallLink()
+{
+    suppress_fun_call_w_exception(ImplDestroy());
 }
 
 tools::Long SwCallLink::getLayoutFrame(const SwRootFrame* pRoot,
