@@ -1308,8 +1308,9 @@ void WinSalFrame::SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth
             if( AllSettings::GetLayoutRTL() )
                 nX = (aParentRect.right - aParentRect.left) - nWidth-1 - nX;
 
-            //#110386#, do not transform coordinates for system child windows
-            if( !(GetWindowStyle( mhWnd ) & WS_CHILD) )
+            //#110386#, do not transform coordinates for system child windows and dialogs
+            if( !(GetWindowStyle( mhWnd ) & WS_CHILD) &&
+                !(GetWindowStyle( mhWnd ) & WS_DLGFRAME) )
             {
                 POINT aPt;
                 aPt.x = nX;
