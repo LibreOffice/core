@@ -70,6 +70,7 @@ public:
     FontWidth           GetWidthType() const;
     TextAlign           GetAlignment() const;
     rtl_TextEncoding    GetCharSet() const;
+    SAL_DLLPRIVATE FontEmphasisMark GetEmphasisMarkStyle() const;
 
     bool                IsSymbolFont() const;
 
