@@ -70,6 +70,7 @@ public:
     FontWidth           GetWidthType() const;
     TextAlign           GetAlignment() const;
     rtl_TextEncoding    GetCharSet() const;
+    FontEmphasisMark    GetEmphasisMarkStyle() const;
 
     bool                IsSymbolFont() const;
 
