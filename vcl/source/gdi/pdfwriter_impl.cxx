@@ -6500,7 +6500,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     aLine.setLength( 0 );
     aLine.append( "q\n" );
 
-    nEmphMark = OutputDevice::ImplGetEmphasisMarkStyle( m_aCurrentPDFState.m_aFont );
+    nEmphMark = m_aCurrentPDFState.m_aFont.GetEmphasisMarkStyle();
     if ( nEmphMark & FontEmphasisMark::PosBelow )
         nEmphHeight = GetEmphasisDescent();
     else
