@@ -16,6 +16,23 @@
       "message": "All that table styles do is to keep the table formatted after cell insertion (mostly important for styles with banded rows). If you disable this, then table styles become useless (compared to a one-time AutoFormat). My understanding is that we do want the formatting on insertion, we just don\u0027t want it to override manual formatting.",
       "revId": "11b7c19159b8baebdaf509715f05ba42536de69d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d28e0ca3_2147f9d6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-08-11T08:48:32Z",
+      "side": 1,
+      "message": "yes, what Maxim said.\n\nthe problem is that table styles aren\u0027t really styles, they are templates that need re-applying on structural changes to the table.",
+      "revId": "11b7c19159b8baebdaf509715f05ba42536de69d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
