@@ -694,20 +694,17 @@ void DialogWindow::SaveDialog()
                 Sequence< OUString > aContentSeq = xSFI->getFolderContents( aURL, false );
 
                 OUString aDialogName_ = aDialogName + "_" ;
-                sal_Int32 nCount = aContentSeq.getLength();
-                const OUString* pFiles = aContentSeq.getConstArray();
-                for( int i = 0 ; i < nCount ; i++ )
+                for( const OUString& rCompleteName : aContentSeq )
                 {
-                    OUString aCompleteName = pFiles[i];
                     OUString aPureName;
                     OUString aExtension;
-                    sal_Int32 iDot = aCompleteName.lastIndexOf( '.' );
-                    sal_Int32 iSlash = aCompleteName.lastIndexOf( '/' );
+                    sal_Int32 iDot = rCompleteName.lastIndexOf( '.' );
+                    sal_Int32 iSlash = rCompleteName.lastIndexOf( '/' );
                     if( iDot != -1 )
                     {
                         sal_Int32 iCopyFrom = (iSlash != -1) ? iSlash + 1 : 0;
-                        aPureName = aCompleteName.copy( iCopyFrom, iDot-iCopyFrom );
-                        aExtension = aCompleteName.copy( iDot + 1 );
+                        aPureName = rCompleteName.copy( iCopyFrom, iDot-iCopyFrom );
+                        aExtension = rCompleteName.copy( iDot + 1 );
                     }
 
                     if( aExtension == "properties" || aExtension == "default" )
@@ -716,7 +713,7 @@ void DialogWindow::SaveDialog()
                         {
                             try
                             {
-                                xSFI->kill( aCompleteName );
+                                xSFI->kill( rCompleteName );
                             }
                             catch(const uno::Exception& )
                             {}
@@ -731,11 +728,8 @@ void DialogWindow::SaveDialog()
 
             // Add locales
             Sequence< lang::Locale > aLocaleSeq = xStringResourceResolver->getLocales();
-            const lang::Locale* pLocales = aLocaleSeq.getConstArray();
-            sal_Int32 nLocaleCount = aLocaleSeq.getLength();
-            for( sal_Int32 iLocale = 0 ; iLocale < nLocaleCount ; iLocale++ )
+            for( const lang::Locale& rLocale : aLocaleSeq )
             {
-                const lang::Locale& rLocale = pLocales[ iLocale ];
                 xStringResourceWithLocation->newLocale( rLocale );
             }
 
@@ -758,32 +752,15 @@ static std::vector< lang::Locale > implGetLanguagesOnlyContainedInFirstSeq
 {
     std::vector< lang::Locale > avRet;
 
-    const lang::Locale* pFirst = aFirstSeq.getConstArray();
-    const lang::Locale* pSecond = aSecondSeq.getConstArray();
-    sal_Int32 nFirstCount = aFirstSeq.getLength();
-    sal_Int32 nSecondCount = aSecondSeq.getLength();
-
-    for( sal_Int32 iFirst = 0 ; iFirst < nFirstCount ; iFirst++ )
-    {
-        const lang::Locale& rFirstLocale = pFirst[ iFirst ];
-
-        bool bAlsoContainedInSecondSeq = false;
-        for( sal_Int32 iSecond = 0 ; iSecond < nSecondCount ; iSecond++ )
-        {
-            const lang::Locale& rSecondLocale = pSecond[ iSecond ];
-
-            bool bMatch = localesAreEqual( rFirstLocale, rSecondLocale );
-            if( bMatch )
-            {
-                bAlsoContainedInSecondSeq = true;
-                break;
-            }
-        }
-
-        if( !bAlsoContainedInSecondSeq )
-            avRet.push_back( rFirstLocale );
-    }
-
+    std::copy_if(aFirstSeq.begin(), aFirstSeq.end(),
+                std::back_inserter(avRet),
+                [&aSecondSeq](const lang::Locale& rFirstLocale) {
+                    return std::none_of(
+                        aSecondSeq.begin(), aSecondSeq.end(),
+                        [&rFirstLocale](const lang::Locale& rSecondLocale) {
+                            return localesAreEqual(rFirstLocale, rSecondLocale);
+                        });
+                });
     return avRet;
 }
 
@@ -991,15 +968,13 @@ bool implImportDialog(weld::Window* pWin, const ScriptDocument& rDocument, const
                     {
                         // Check if import default belongs to only import languages and use it then
                         lang::Locale aImportDefaultLocale = xImportStringResource->getDefaultLocale();
-                        lang::Locale aTmpLocale;
-                        for( int i = 0 ; i < nOnlyInImportLanguageCount ; ++i )
+
+                        if (std::any_of(aOnlyInImportLanguages.begin(), aOnlyInImportLanguages.end(),
+                                        [&aImportDefaultLocale](const lang::Locale& aTmpLocale) {
+                                            return localesAreEqual(aImportDefaultLocale, aTmpLocale);
+                                        }))
                         {
-                            aTmpLocale = aOnlyInImportLanguages[i];
-                            if( localesAreEqual( aImportDefaultLocale, aTmpLocale ) )
-                            {
-                                aFirstLocale = aImportDefaultLocale;
-                                break;
-                            }
+                            aFirstLocale = aImportDefaultLocale;
                         }
                     }
 
@@ -1009,13 +984,11 @@ bool implImportDialog(weld::Window* pWin, const ScriptDocument& rDocument, const
                     {
                         Sequence< lang::Locale > aRemainingLocaleSeq( nOnlyInImportLanguageCount - 1 );
                         auto pRemainingLocaleSeq = aRemainingLocaleSeq.getArray();
-                        lang::Locale aTmpLocale;
                         int iSeq = 0;
-                        for( int i = 0 ; i < nOnlyInImportLanguageCount ; ++i )
+                        for( const lang::Locale& rLocale : aOnlyInImportLanguages )
                         {
-                            aTmpLocale = aOnlyInImportLanguages[i];
-                            if( !localesAreEqual( aFirstLocale, aTmpLocale ) )
-                                pRemainingLocaleSeq[iSeq++] = aTmpLocale;
+                            if( !localesAreEqual( aFirstLocale, rLocale ) )
+                                pRemainingLocaleSeq[iSeq++] = rLocale;
                         }
                         pCurMgr->handleAddLocales( aRemainingLocaleSeq );
                     }
