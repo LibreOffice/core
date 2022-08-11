@@ -33,7 +33,6 @@
 #include <doc.hxx>
 #include <docsh.hxx>
 #include <viewopt.hxx>
-#include <optional>
 
 namespace vcl { class Window; }
 class SbxArray;
