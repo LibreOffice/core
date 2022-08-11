@@ -45,7 +45,6 @@
 #include <osl/diagnose.h>
 
 #include <map>
-#include <utility>
 #include <memory>
 #include <string_view>
 #include <vector>
