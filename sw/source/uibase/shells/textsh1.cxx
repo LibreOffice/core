@@ -1229,7 +1229,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
         }
         break;
         case SID_ATTR_CHAR_COLOR_BACKGROUND:
-        case SID_ATTR_CHAR_COLOR_BACKGROUND_EXT:
         case SID_ATTR_CHAR_COLOR_EXT:
         {
             Color aSet;
