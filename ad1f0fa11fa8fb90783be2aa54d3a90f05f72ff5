@@ -51,6 +51,24 @@
       "parentUuid": "f12f4f5e_ae49d2a3",
       "revId": "ad1f0fa11fa8fb90783be2aa54d3a90f05f72ff5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f45614d_bc300d3b",
+        "filename": "connectivity/source/cpool/ZConnectionPool.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-08-11T12:25:06Z",
+      "side": 1,
+      "message": "To reproduce this, blow away your config and start writer, visit tools, options, base, connections and enable connection pooling enabled, find com.sun.star.sdbcx.comp.hdqldb.Driver and \"enable pooling for this driver\" and \"apply\" with the default 120 seconds, ok and exit\n\nthen open a database (based on hsqldb) and click on \"tables\" (to start a connection)\nthat default 120 seconds is the input for calculateTimeOuts (this becomes a final m_nALiveCount of 10 by the divide by 20), now visit the options again and change the 120 to something else and ok and the input for calculateTimeOuts is the old \"10\" calculated before and not the new expected value.\n\nThe reason appears to be in OConnectionPool::propertyChange, it expects to get the new value of the property from evt.NewValue but it gets an empty Any so the m_nALiveCount is not actually changed, so the assumption it was set and will be \u003e\u003d 20 and sanely divisible by 20 doesn\u0027t hold.\n\ncaolan-\u003esberg: should the new value of this property have arrived in ::propertyChange or did this never work as the original author expected.",
+      "parentUuid": "705d47c5_12bf9275",
+      "revId": "ad1f0fa11fa8fb90783be2aa54d3a90f05f72ff5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
