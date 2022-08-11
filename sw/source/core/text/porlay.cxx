@@ -1505,10 +1505,9 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
             {
                 const OUString& rWord = aScanner.GetWord();
 
-                sal_Int32 nIdx = 0;
+                sal_Int32 nIdx = 0, nPrevIdx = 0;
                 sal_Int32 nKashidaPos = -1;
-                sal_Unicode cCh;
-                sal_Unicode cPrevCh = 0;
+                sal_Unicode cCh, cPrevCh = 0;
 
                 int nPriorityLevel = 7;    // 0..6 = level found
                                            // 7 not found
@@ -1556,7 +1555,7 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
                             // check if character is connectable to previous character,
                             if ( lcl_ConnectToPrev( cCh, cPrevCh ) )
                             {
-                                nKashidaPos = aScanner.GetBegin() + nIdx - 1;
+                                nKashidaPos = aScanner.GetBegin() + nPrevIdx;
                                 nPriorityLevel = 2;
                             }
                         }
@@ -1577,7 +1576,7 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
                             // check if character is connectable to previous character,
                             if ( lcl_ConnectToPrev( cCh, cPrevCh ) )
                             {
-                                nKashidaPos = aScanner.GetBegin() + nIdx - 1;
+                                nKashidaPos = aScanner.GetBegin() + nPrevIdx;
                                 nPriorityLevel = 3;
                             }
                         }
@@ -1597,7 +1596,7 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
                                 // check if character is connectable to previous character,
                                 if ( lcl_ConnectToPrev( cCh, cPrevCh ) )
                                 {
-                                    nKashidaPos = aScanner.GetBegin() + nIdx - 1;
+                                    nKashidaPos = aScanner.GetBegin() + nPrevIdx;
                                     nPriorityLevel = 4;
                                 }
                             }
@@ -1619,7 +1618,7 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
                             // check if character is connectable to previous character,
                             if ( lcl_ConnectToPrev( cCh, cPrevCh ) )
                             {
-                                nKashidaPos = aScanner.GetBegin() + nIdx - 1;
+                                nKashidaPos = aScanner.GetBegin() + nPrevIdx;
                                 nPriorityLevel = 5;
                             }
                         }
@@ -1635,7 +1634,7 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
                             // check if character is connectable to previous character,
                             if ( lcl_ConnectToPrev( cCh, cPrevCh ) )
                             {
-                                nKashidaPos = aScanner.GetBegin() + nIdx - 1;
+                                nKashidaPos = aScanner.GetBegin() + nPrevIdx;
                                 nPriorityLevel = 6;
                             }
                         }
@@ -1644,7 +1643,10 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
                     // Do not consider vowel marks when checking if a character
                     // can be connected to previous character.
                     if ( !isTransparentChar ( cCh) )
+                    {
                         cPrevCh = cCh;
+                        nPrevIdx = nIdx;
+                    }
 
                     ++nIdx;
                 } // end of current word
