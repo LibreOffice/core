@@ -39,9 +39,11 @@ public:
     bool m_bHasSelection;
 
     explicit SwCallLink( SwCursorShell & rSh );
-    ~SwCallLink() COVERITY_NOEXCEPT_FALSE;
+    ~SwCallLink();
 
     static tools::Long getLayoutFrame( const SwRootFrame*, SwTextNode const & rNd, sal_Int32 nCntPos, bool bCalcFrame );
+private:
+    void ImplDestroy();
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_CRSR_CALLNK_HXX
