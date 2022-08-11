@@ -169,11 +169,11 @@ void SdModifyFieldDlg::FillFormatList()
         m_xLbFormat->append_text( aDateField.GetFormatted( *pNumberFormatter, eLangType ) );
         aDateField.SetFormat( SvxDateFormat::C );    // 13.Feb 1996
         m_xLbFormat->append_text( aDateField.GetFormatted( *pNumberFormatter, eLangType ) );
-        aDateField.SetFormat( SvxDateFormat::D );    // 13.Februar 1996
+        aDateField.SetFormat( SvxDateFormat::D );    // 13.February 1996
         m_xLbFormat->append_text( aDateField.GetFormatted( *pNumberFormatter, eLangType ) );
-        aDateField.SetFormat( SvxDateFormat::E );    // Die, 13.Februar 1996
+        aDateField.SetFormat( SvxDateFormat::E );    // Tue, 13.February 1996
         m_xLbFormat->append_text( aDateField.GetFormatted( *pNumberFormatter, eLangType ) );
-        aDateField.SetFormat( SvxDateFormat::F );    // Dienstag, 13.Februar 1996
+        aDateField.SetFormat( SvxDateFormat::F );    // Tuesday, 13.February 1996
         m_xLbFormat->append_text( aDateField.GetFormatted( *pNumberFormatter, eLangType ) );
 
         m_xLbFormat->set_active( static_cast<sal_uInt16>(pDateField->GetFormat()) - 2 );
