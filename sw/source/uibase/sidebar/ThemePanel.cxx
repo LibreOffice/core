@@ -17,6 +17,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include <editeng/fontitem.hxx>
+#include <utility>
 #include <vcl/bitmapex.hxx>
 #include <vcl/image.hxx>
 #include <vcl/settings.hxx>
@@ -66,8 +67,8 @@ public:
     OUString maElementName;
 
 public:
-    explicit StyleRedefinition(const OUString& aElementName)
-        : maElementName(aElementName)
+    explicit StyleRedefinition(OUString aElementName)
+        : maElementName(std::move(aElementName))
     {}
 
     void setColorVariable(ColorVariable aVariable)

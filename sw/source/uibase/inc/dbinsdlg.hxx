@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_DBINSDLG_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_DBINSDLG_HXX
 
+#include <utility>
 #include <vcl/weld.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <unotools/configitem.hxx>
@@ -60,8 +61,8 @@ struct SwInsDBColumn
     bool bHasFormat : 1;
     bool bIsDBFormat : 1;
 
-    SwInsDBColumn( const OUString& rStr )
-        : sColumn( rStr ),
+    SwInsDBColumn( OUString aStr )
+        : sColumn(std::move( aStr )),
         nDBNumFormat( 0 ),
         nUsrNumFormat( 0 ),
         eUsrNumFormatLng( LANGUAGE_SYSTEM ),
@@ -145,7 +146,7 @@ public:
     SwInsertDBColAutoPilot( SwView& rView,
         css::uno::Reference< css::sdbc::XDataSource> const & rxSource,
         css::uno::Reference<css::sdbcx::XColumnsSupplier> const & xColSupp,
-        const SwDBData& rData  );
+        SwDBData aData  );
 
     virtual ~SwInsertDBColAutoPilot() override;
 

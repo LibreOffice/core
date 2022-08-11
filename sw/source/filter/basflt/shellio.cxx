@@ -63,6 +63,7 @@
 #include <swerror.h>
 #include <pausethreadstarting.hxx>
 #include <frameformats.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 

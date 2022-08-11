@@ -25,6 +25,7 @@
 #include <ooo/vba/word/WdTabAlignment.hpp>
 #include <basic/sberrors.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <utility>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -51,7 +52,7 @@ class TabStopsEnumWrapper : public EnumerationHelper_BASE
     sal_Int32 nIndex;
 
 public:
-    explicit TabStopsEnumWrapper( const uno::Reference< container::XIndexAccess >& xIndexAccess ) : mxIndexAccess( xIndexAccess ), nIndex( 0 )
+    explicit TabStopsEnumWrapper( uno::Reference< container::XIndexAccess > xIndexAccess ) : mxIndexAccess(std::move( xIndexAccess )), nIndex( 0 )
     {
     }
     virtual sal_Bool SAL_CALL hasMoreElements(  ) override
@@ -79,7 +80,7 @@ private:
 
 public:
     /// @throws css::uno::RuntimeException
-    TabStopCollectionHelper( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::beans::XPropertySet >& xParaProps ): mxParent( xParent ), mxContext( xContext ), mnTabStops(lcl_getTabStops( xParaProps ).getLength())
+    TabStopCollectionHelper( css::uno::Reference< ov::XHelperInterface > xParent, css::uno::Reference< css::uno::XComponentContext > xContext, const css::uno::Reference< css::beans::XPropertySet >& xParaProps ): mxParent(std::move( xParent )), mxContext(std::move( xContext )), mnTabStops(lcl_getTabStops( xParaProps ).getLength())
     {
     }
 

@@ -20,12 +20,13 @@
 #include "vbarange.hxx"
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <utility>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaParagraph::SwVbaParagraph( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< text::XTextDocument >& xDocument, const uno::Reference< text::XTextRange >& xTextRange ) :
-    SwVbaParagraph_BASE( rParent, rContext ), mxTextDocument( xDocument ), mxTextRange( xTextRange )
+SwVbaParagraph::SwVbaParagraph( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, uno::Reference< text::XTextDocument >  xDocument, uno::Reference< text::XTextRange >  xTextRange ) :
+    SwVbaParagraph_BASE( rParent, rContext ), mxTextDocument(std::move( xDocument )), mxTextRange(std::move( xTextRange ))
 {
 }
 
@@ -86,7 +87,7 @@ private:
 
 public:
     /// @throws uno::RuntimeException
-    explicit ParagraphCollectionHelper( const uno::Reference< text::XTextDocument >& xDocument ): mxTextDocument( xDocument )
+    explicit ParagraphCollectionHelper( uno::Reference< text::XTextDocument > xDocument ): mxTextDocument(std::move( xDocument ))
     {
     }
     // XElementAccess

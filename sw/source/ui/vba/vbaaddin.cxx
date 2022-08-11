@@ -19,12 +19,13 @@
 #include "vbaaddin.hxx"
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
+#include <utility>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaAddin::SwVbaAddin( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const OUString& rFileURL ) :
-    SwVbaAddin_BASE( rParent, rContext ), msFileURL( rFileURL ), mbInstalled( true )
+SwVbaAddin::SwVbaAddin( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, OUString aFileURL ) :
+    SwVbaAddin_BASE( rParent, rContext ), msFileURL(std::move( aFileURL )), mbInstalled( true )
 {
 }
 

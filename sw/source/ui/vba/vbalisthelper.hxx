@@ -57,7 +57,7 @@ private:
 
 public:
     /// @throws css::uno::RuntimeException
-    SwVbaListHelper( const css::uno::Reference< css::text::XTextDocument >& xTextDoc, sal_Int32 nGalleryType, sal_Int32 nTemplateType );
+    SwVbaListHelper( css::uno::Reference< css::text::XTextDocument > xTextDoc, sal_Int32 nGalleryType, sal_Int32 nTemplateType );
 
     sal_Int32 getGalleryType() const { return mnGalleryType; }
     const css::uno::Reference< css::container::XIndexReplace >& getNumberingRules() const { return mxNumberingRules; }

@@ -26,6 +26,7 @@
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <rtl/character.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <svtools/unoevent.hxx>
 #include <sfx2/event.hxx>
@@ -666,11 +667,11 @@ sal_Int64 SAL_CALL SwXAutoTextEntry::getSomething( const uno::Sequence< sal_Int8
     return comphelper::getSomethingImpl(rId, this);
 }
 
-SwXAutoTextEntry::SwXAutoTextEntry(SwGlossaries* pGlss, const OUString& rGroupName,
-                                            const OUString& rEntryName) :
+SwXAutoTextEntry::SwXAutoTextEntry(SwGlossaries* pGlss, OUString aGroupName,
+                                            OUString aEntryName) :
     m_pGlossaries(pGlss),
-    m_sGroupName(rGroupName),
-    m_sEntryName(rEntryName)
+    m_sGroupName(std::move(aGroupName)),
+    m_sEntryName(std::move(aEntryName))
 {
 }
 

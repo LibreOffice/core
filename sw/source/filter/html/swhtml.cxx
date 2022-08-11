@@ -36,6 +36,7 @@
 #endif
 #include <hintids.hxx>
 
+#include <utility>
 #include <vcl/errinf.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/imap.hxx>
@@ -252,15 +253,15 @@ ErrCode HTMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, co
 }
 
 SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
-                            const OUString& rPath,
-                            const OUString& rBaseURL,
+                            OUString aPath,
+                            OUString aBaseURL,
                             bool bReadNewDoc,
                             SfxMedium* pMed, bool bReadUTF8,
                             bool bNoHTMLComments,
                             const OUString& rNamespace )
     : SfxHTMLParser( rIn, bReadNewDoc, pMed ),
-    m_aPathToFile( rPath ),
-    m_sBaseURL( rBaseURL ),
+    m_aPathToFile(std::move( aPath )),
+    m_sBaseURL(std::move( aBaseURL )),
     m_xAttrTab(std::make_shared<HTMLAttrTable>()),
     m_pNumRuleInfo( new SwHTMLNumRuleInfo ),
     m_xDoc( pD ),
@@ -5441,7 +5442,7 @@ void SwHTMLParser::ParseMoreMetaOptions()
 }
 
 HTMLAttr::HTMLAttr( const SwPosition& rPos, const SfxPoolItem& rItem,
-                      HTMLAttr **ppHd, const std::shared_ptr<HTMLAttrTable>& rAttrTab ) :
+                      HTMLAttr **ppHd, std::shared_ptr<HTMLAttrTable> xAttrTab ) :
     m_nStartPara( rPos.nNode ),
     m_nEndPara( rPos.nNode ),
     m_nStartContent( rPos.GetContentIndex() ),
@@ -5450,7 +5451,7 @@ HTMLAttr::HTMLAttr( const SwPosition& rPos, const SfxPoolItem& rItem,
     m_bLikePara( false ),
     m_bValid( true ),
     m_pItem( rItem.Clone() ),
-    m_xAttrTab( rAttrTab ),
+    m_xAttrTab(std::move( xAttrTab )),
     m_pNext( nullptr ),
     m_pPrev( nullptr ),
     m_ppHead( ppHd )
@@ -5458,7 +5459,7 @@ HTMLAttr::HTMLAttr( const SwPosition& rPos, const SfxPoolItem& rItem,
 }
 
 HTMLAttr::HTMLAttr( const HTMLAttr &rAttr, const SwNodeIndex &rEndPara,
-                      sal_Int32 nEndCnt, HTMLAttr **ppHd, const std::shared_ptr<HTMLAttrTable>& rAttrTab ) :
+                      sal_Int32 nEndCnt, HTMLAttr **ppHd, std::shared_ptr<HTMLAttrTable> xAttrTab ) :
     m_nStartPara( rAttr.m_nStartPara ),
     m_nEndPara( rEndPara ),
     m_nStartContent( rAttr.m_nStartContent ),
@@ -5467,7 +5468,7 @@ HTMLAttr::HTMLAttr( const HTMLAttr &rAttr, const SwNodeIndex &rEndPara,
     m_bLikePara( rAttr.m_bLikePara ),
     m_bValid( rAttr.m_bValid ),
     m_pItem( rAttr.m_pItem->Clone() ),
-    m_xAttrTab( rAttrTab ),
+    m_xAttrTab(std::move( xAttrTab )),
     m_pNext( nullptr ),
     m_pPrev( nullptr ),
     m_ppHead( ppHd )

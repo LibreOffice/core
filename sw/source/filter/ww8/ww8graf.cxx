@@ -101,6 +101,7 @@
 #include <memory>
 #include <optional>
 #include <filter/msfilter/escherex.hxx>
+#include <utility>
 #include "sprmids.hxx"
 
 using ::editeng::SvxBorderLine;
@@ -566,8 +567,8 @@ private:
     tools::Long mnStartPos; // 0x13
     tools::Long mnEndPos;   // 0x15
 public:
-    explicit Chunk(tools::Long nStart, const OUString &rURL)
-        : msURL(rURL), mnStartPos(nStart), mnEndPos(0)  {}
+    explicit Chunk(tools::Long nStart, OUString aURL)
+        : msURL(std::move(aURL)), mnStartPos(nStart), mnEndPos(0)  {}
 
     void SetEndPos(tools::Long nEnd) { mnEndPos = nEnd; }
     tools::Long GetStartPos() const {return mnStartPos;}

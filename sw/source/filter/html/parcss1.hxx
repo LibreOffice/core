@@ -24,6 +24,7 @@
 #include <tools/color.hxx>
 
 #include <memory>
+#include <utility>
 
 // tokens of the CSS1 parser
 enum CSS1Token
@@ -95,8 +96,8 @@ class CSS1Selector
     CSS1Selector *m_pNext;    // the following component
 
 public:
-    CSS1Selector( CSS1SelectorType eTyp, const OUString &rSel )
-        : m_eType(eTyp), m_aSelector( rSel ), m_pNext( nullptr )
+    CSS1Selector( CSS1SelectorType eTyp, OUString aSel )
+        : m_eType(eTyp), m_aSelector(std::move( aSel )), m_pNext( nullptr )
     {}
 
     ~CSS1Selector();
@@ -124,9 +125,9 @@ struct CSS1Expression
     CSS1Expression *pNext; // the following component
 
 public:
-    CSS1Expression( CSS1Token eTyp, const OUString &rVal,
+    CSS1Expression( CSS1Token eTyp, OUString aVal,
                     double nVal, sal_Unicode cO = 0 )
-        : cOp(cO), eType(eTyp), aValue(rVal), nValue(nVal), pNext(nullptr)
+        : cOp(cO), eType(eTyp), aValue(std::move(aVal)), nValue(nVal), pNext(nullptr)
     {}
 
     ~CSS1Expression();

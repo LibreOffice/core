@@ -194,7 +194,7 @@ struct HTMLControl
     SwNodeOffset nNdIdx;           // the node in which it's anchored
     sal_Int32 nCount;              // how many controls are on the node
 
-    HTMLControl( const css::uno::Reference<css::container::XIndexContainer>& rForm, SwNodeOffset nIdx );
+    HTMLControl( css::uno::Reference<css::container::XIndexContainer> xForm, SwNodeOffset nIdx );
     ~HTMLControl();
 
     // operators for the sort array

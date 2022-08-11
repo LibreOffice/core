@@ -45,6 +45,7 @@
 #include <hints.hxx>
 #include <txatbase.hxx>
 #include <osl/diagnose.h>
+#include <utility>
 #include <xmloff/odffields.hxx>
 #include <rtl/ustrbuf.hxx>
 

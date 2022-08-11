@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "vbalistformat.hxx"
+#include <utility>
 #include <vbahelper/vbahelper.hxx>
 #include <ooo/vba/word/WdListApplyTo.hpp>
 #include <ooo/vba/word/WdDefaultListBehavior.hpp>
@@ -41,7 +42,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaListFormat::SwVbaListFormat( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< text::XTextRange >& xTextRange ) : SwVbaListFormat_BASE( rParent, rContext ), mxTextRange( xTextRange )
+SwVbaListFormat::SwVbaListFormat( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, uno::Reference< text::XTextRange >  xTextRange ) : SwVbaListFormat_BASE( rParent, rContext ), mxTextRange(std::move( xTextRange ))
 {
 }
 

@@ -124,7 +124,7 @@ class SwIndexMarkPane
 
 public:
 
-    SwIndexMarkPane(const std::shared_ptr<weld::Dialog>& rDialog, weld::Builder& rBuilder,
+    SwIndexMarkPane(std::shared_ptr<weld::Dialog> xDialog, weld::Builder& rBuilder,
                     bool bNewDlg, SwWrtShell* pWrtShell);
 
     ~SwIndexMarkPane();

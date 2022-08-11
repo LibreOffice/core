@@ -18,6 +18,7 @@
  */
 
 #include <comphelper/servicehelper.hxx>
+#include <utility>
 #include <vbahelper/vbahelper.hxx>
 #include "vbatablehelper.hxx"
 #include <swtable.hxx>
@@ -28,7 +29,7 @@ using namespace ::ooo::vba;
 
 #define UNO_TABLE_COLUMN_SUM    10000
 
-SwVbaTableHelper::SwVbaTableHelper( const uno::Reference< text::XTextTable >& xTextTable ) : mxTextTable( xTextTable )
+SwVbaTableHelper::SwVbaTableHelper( uno::Reference< text::XTextTable > xTextTable ) : mxTextTable(std::move( xTextTable ))
 {
     pTable = GetSwTable( mxTextTable );
 }

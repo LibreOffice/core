@@ -38,7 +38,7 @@ private:
     void removeBookmarkByName( const OUString& rName );
 
 public:
-    SwVbaBookmarks( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xBookmarks, const css::uno::Reference< css::frame::XModel >& xModel );
+    SwVbaBookmarks( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xBookmarks, css::uno::Reference< css::frame::XModel > xModel );
 
     /// @throws css::uno::RuntimeException
     static void addBookmarkByName( const css::uno::Reference< css::frame::XModel >& xModel, const OUString& rName, const css::uno::Reference< css::text::XTextRange >& rTextRange );

@@ -25,6 +25,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svx/ctredlin.hxx>
 #include <svx/postattr.hxx>
+#include <utility>
 #include <vcl/commandevent.hxx>
 #include <swtypes.hxx>
 #include <wrtsh.hxx>
@@ -137,9 +138,9 @@ SwModelessRedlineAcceptDlg::~SwModelessRedlineAcceptDlg()
 {
 }
 
-SwRedlineAcceptDlg::SwRedlineAcceptDlg(const std::shared_ptr<weld::Window>& rParent, weld::Builder *pBuilder,
+SwRedlineAcceptDlg::SwRedlineAcceptDlg(std::shared_ptr<weld::Window> xParent, weld::Builder *pBuilder,
                                        weld::Container *pContentArea, bool bAutoFormat)
-    : m_xParentDlg(rParent)
+    : m_xParentDlg(std::move(xParent))
     , m_aSelectTimer("SwRedlineAcceptDlg m_aSelectTimer")
     , m_sInserted(SwResId(STR_REDLINE_INSERTED))
     , m_sDeleted(SwResId(STR_REDLINE_DELETED))

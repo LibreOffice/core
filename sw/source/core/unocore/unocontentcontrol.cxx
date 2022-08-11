@@ -37,6 +37,7 @@
 #include <unoport.hxx>
 #include <unomap.hxx>
 #include <unoprnms.hxx>
+#include <utility>
 
 using namespace com::sun::star;
 
@@ -174,12 +175,11 @@ public:
     OUString m_aColor;
 
     Impl(SwXContentControl& rThis, SwDoc& rDoc, SwContentControl* pContentControl,
-         const uno::Reference<text::XText>& xParentText,
-         std::unique_ptr<const TextRangeList_t> pPortions)
+         uno::Reference<text::XText> xParentText, std::unique_ptr<const TextRangeList_t> pPortions)
         : m_pTextPortions(std::move(pPortions))
         , m_bIsDisposed(false)
         , m_bIsDescriptor(pContentControl == nullptr)
-        , m_xParentText(xParentText)
+        , m_xParentText(std::move(xParentText))
         , m_xText(new SwXContentControlText(rDoc, rThis))
         , m_pContentControl(pContentControl)
         , m_bShowingPlaceHolder(false)

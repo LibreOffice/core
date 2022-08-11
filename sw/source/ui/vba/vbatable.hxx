@@ -33,7 +33,7 @@ class SwVbaTable : public SwVbaTable_BASE
     css::uno::Reference< css::text::XTextTable > mxTextTable;
 public:
     /// @throws css::uno::RuntimeException
-    SwVbaTable( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextDocument >& rDocument, const css::uno::Reference< css::text::XTextTable >& xTextTable);
+    SwVbaTable( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, css::uno::Reference< css::text::XTextDocument > xDocument, const css::uno::Reference< css::text::XTextTable >& xTextTable);
     virtual css::uno::Reference< ::ooo::vba::word::XRange > SAL_CALL Range(  ) override;
     virtual void SAL_CALL Select(  ) override;
     virtual void SAL_CALL Delete(  ) override;

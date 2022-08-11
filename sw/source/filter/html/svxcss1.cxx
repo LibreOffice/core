@@ -52,6 +52,7 @@
 #include <editeng/widwitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/orphitem.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
@@ -661,9 +662,9 @@ void SvxCSS1PropertyInfo::SetBoxItem( SfxItemSet& rItemSet,
     DestroyBorderInfos();
 }
 
-SvxCSS1MapEntry::SvxCSS1MapEntry( const SfxItemSet& rItemSet,
+SvxCSS1MapEntry::SvxCSS1MapEntry( SfxItemSet aItemSet,
                                   const SvxCSS1PropertyInfo& rProp ) :
-    m_aItemSet( rItemSet ),
+    m_aItemSet(std::move( aItemSet )),
     m_aPropInfo( rProp )
 {}
 
@@ -694,9 +695,9 @@ void SvxCSS1Parser::SelectorParsed( std::unique_ptr<CSS1Selector> pSelector, boo
     m_Selectors.push_back(std::move(pSelector));
 }
 
-SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, const OUString& rBaseURL,
+SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, OUString aBaseURL,
                               sal_uInt16 const *pWhichIds, sal_uInt16 nWhichIds ) :
-    m_sBaseURL( rBaseURL ),
+    m_sBaseURL(std::move( aBaseURL )),
     m_pItemSet(nullptr),
     m_pPropInfo( nullptr ),
     m_eDefaultEnc( RTL_TEXTENCODING_DONTKNOW ),

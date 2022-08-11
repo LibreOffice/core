@@ -50,6 +50,7 @@
 #include <numrule.hxx>
 #include <swundo.hxx>
 #include <svx/drawitem.hxx>
+#include <utility>
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <docsh.hxx>
@@ -540,16 +541,16 @@ class ApplyStyle
 {
 public:
     ApplyStyle(SwDocShell &rDocSh, bool bNew,
-        rtl::Reference< SwDocStyleSheet > const & xTmp,
+        rtl::Reference< SwDocStyleSheet > xTmp,
         SfxStyleFamily nFamily, SfxAbstractApplyTabDialog *pDlg,
-        rtl::Reference< SfxStyleSheetBasePool > const & xBasePool,
+        rtl::Reference< SfxStyleSheetBasePool > xBasePool,
         bool bModified)
         : m_pDlg(pDlg)
         , m_rDocSh(rDocSh)
         , m_bNew(bNew)
-        , m_xTmp(xTmp)
+        , m_xTmp(std::move(xTmp))
         , m_nFamily(nFamily)
-        , m_xBasePool(xBasePool)
+        , m_xBasePool(std::move(xBasePool))
         , m_bModified(bModified)
     {
     }

@@ -41,7 +41,7 @@ public:
     /// @throws css::uno::RuntimeException
     SwVbaBookmark(const css::uno::Reference<ooo::vba::XHelperInterface>& rParent,
                   const css::uno::Reference<css::uno::XComponentContext>& rContext,
-                  const css::uno::Reference<css::frame::XModel>& rModel, const OUString& rName);
+                  css::uno::Reference<css::frame::XModel> xModel, OUString aName);
     virtual ~SwVbaBookmark() override;
 
     // Methods

@@ -16,13 +16,15 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#include <utility>
+
 #include "vbareplacement.hxx"
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaReplacement::SwVbaReplacement( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< util::XPropertyReplace >& xPropertyReplace ) :
-    SwVbaReplacement_BASE( rParent, rContext ), mxPropertyReplace( xPropertyReplace )
+SwVbaReplacement::SwVbaReplacement( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, uno::Reference< util::XPropertyReplace >  xPropertyReplace ) :
+    SwVbaReplacement_BASE( rParent, rContext ), mxPropertyReplace(std::move( xPropertyReplace ))
 {
 }
 

@@ -26,6 +26,7 @@
 #include <mmconfigitem.hxx>
 #include <swabstdlg.hxx>
 #include <strings.hrc>
+#include <utility>
 #include <view.hxx>
 
 #include <helpids.h>
@@ -33,11 +34,11 @@
 using namespace svt;
 using namespace ::com::sun::star;
 
-SwMailMergeWizard::SwMailMergeWizard(SwView& rView, std::shared_ptr<SwMailMergeConfigItem> const & rItem)
+SwMailMergeWizard::SwMailMergeWizard(SwView& rView, std::shared_ptr<SwMailMergeConfigItem> xItem)
     : RoadmapWizardMachine(rView.GetFrameWeld())
     , m_pSwView(&rView)
     , m_bDocumentLoad(false)
-    , m_xConfigItem(rItem)
+    , m_xConfigItem(std::move(xItem))
     , m_sStarting(SwResId(ST_STARTING))
     , m_sDocumentType(SwResId(ST_DOCUMENTTYPE))
     , m_sAddressBlock(SwResId(ST_ADDRESSBLOCK))

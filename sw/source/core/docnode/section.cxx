@@ -61,6 +61,7 @@
 #include <calbck.hxx>
 #include <fmtclds.hxx>
 #include <algorithm>
+#include <utility>
 #include "ndsect.hxx"
 
 using namespace ::com::sun::star;

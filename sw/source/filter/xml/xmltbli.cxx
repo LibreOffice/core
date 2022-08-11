@@ -33,6 +33,7 @@
 #include <svl/zformat.hxx>
 #include <sax/tools/converter.hxx>
 #include <unotools/configmgr.hxx>
+#include <utility>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/namespacemap.hxx>
 
@@ -207,7 +208,7 @@ class SwXMLTableRow_Impl
 
 public:
 
-    SwXMLTableRow_Impl( const OUString& rStyleName, sal_uInt32 nCells,
+    SwXMLTableRow_Impl( OUString aStyleName, sal_uInt32 nCells,
                         const OUString *pDfltCellStyleName = nullptr );
 
     inline SwXMLTableCell_Impl *GetCell( sal_uInt32 nCol );
@@ -226,10 +227,10 @@ public:
     void Dispose();
 };
 
-SwXMLTableRow_Impl::SwXMLTableRow_Impl( const OUString& rStyleName,
+SwXMLTableRow_Impl::SwXMLTableRow_Impl( OUString aStyleName,
                                         sal_uInt32 nCells,
                                         const OUString *pDfltCellStyleName ) :
-    m_aStyleName( rStyleName ),
+    m_aStyleName(std::move( aStyleName )),
     m_bSplitable( false )
 {
     if( pDfltCellStyleName  )
@@ -1078,9 +1079,9 @@ public:
     sal_Int32 mnWidth;
     bool mbProtected;
 
-    TableBoxIndex( const OUString& rName, sal_Int32 nWidth,
+    TableBoxIndex( OUString aName, sal_Int32 nWidth,
                    bool bProtected ) :
-        msName( rName ),
+        msName(std::move( aName )),
         mnWidth( nWidth ),
         mbProtected( bProtected )
     { }

@@ -37,6 +37,7 @@
 #include <unocrsrhelper.hxx>
 #include <doc.hxx>
 #include <ndtxt.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <docsh.hxx>
 #include <swunohelper.hxx>
@@ -125,14 +126,14 @@ public:
     SwTextNode* m_pTextNode;
 
     Impl(SwXParagraph& rThis,
-            SwTextNode* const pTextNode = nullptr, uno::Reference<text::XText> const& xParent = nullptr,
+            SwTextNode* const pTextNode = nullptr, uno::Reference<text::XText> xParent = nullptr,
             const sal_Int32 nSelStart = -1, const sal_Int32 nSelEnd = -1)
         : m_rThis(rThis)
         , m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_PARAGRAPH))
         , m_bIsDescriptor(nullptr == pTextNode)
         , m_nSelectionStartPos(nSelStart)
         , m_nSelectionEndPos(nSelEnd)
-        , m_xParentText(xParent)
+        , m_xParentText(std::move(xParent))
         , m_pTextNode(pTextNode)
     {
         m_pTextNode && StartListening(m_pTextNode->GetNotifier());

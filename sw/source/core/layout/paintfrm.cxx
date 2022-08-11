@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <utility>
 #include <vcl/lazydelete.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
@@ -4689,7 +4690,7 @@ namespace drawinglayer::primitive2d
         public:
             /// constructor
             SwBorderRectanglePrimitive2D(
-                const basegfx::B2DHomMatrix& rB2DHomMatrix,
+                basegfx::B2DHomMatrix aB2DHomMatrix,
                 const svx::frame::Style& rStyleTop,
                 const svx::frame::Style& rStyleRight,
                 const svx::frame::Style& rStyleBottom,
@@ -4866,12 +4867,12 @@ namespace drawinglayer::primitive2d
         }
 
         SwBorderRectanglePrimitive2D::SwBorderRectanglePrimitive2D(
-            const basegfx::B2DHomMatrix& rB2DHomMatrix,
+            basegfx::B2DHomMatrix aB2DHomMatrix,
             const svx::frame::Style& rStyleTop,
             const svx::frame::Style& rStyleRight,
             const svx::frame::Style& rStyleBottom,
             const svx::frame::Style& rStyleLeft)
-        :   maB2DHomMatrix(rB2DHomMatrix),
+        :   maB2DHomMatrix(std::move(aB2DHomMatrix)),
             maStyleTop(rStyleTop),
             maStyleRight(rStyleRight),
             maStyleBottom(rStyleBottom),

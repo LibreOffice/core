@@ -33,6 +33,7 @@
 #include <rolbck.hxx>
 
 #include <SwRewriter.hxx>
+#include <utility>
 
 SwUndoBookmark::SwUndoBookmark( SwUndoId nUndoId,
             const ::sw::mark::IMark& rBkmk )
@@ -104,10 +105,10 @@ void SwUndoDeleteBookmark::RedoImpl(::sw::UndoRedoContext & rContext)
     ResetInDoc( rContext.GetDoc() );
 }
 
-SwUndoRenameBookmark::SwUndoRenameBookmark( const OUString& rOldName, const OUString& rNewName, const SwDoc& rDoc )
+SwUndoRenameBookmark::SwUndoRenameBookmark( OUString aOldName, OUString aNewName, const SwDoc& rDoc )
     : SwUndo( SwUndoId::BOOKMARK_RENAME, &rDoc )
-    , m_sOldName( rOldName )
-    , m_sNewName( rNewName )
+    , m_sOldName(std::move( aOldName ))
+    , m_sNewName(std::move( aNewName ))
 {
 }
 

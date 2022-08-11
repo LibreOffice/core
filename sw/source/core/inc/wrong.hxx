@@ -74,13 +74,13 @@ public:
     Color mColor;
     WrongAreaLineType mLineType;
 
-    SwWrongArea( const OUString& rType,
+    SwWrongArea( OUString aType,
                  WrongListType listType,
                  css::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag,
                  sal_Int32 nPos,
                  sal_Int32 nLen);
 
-    SwWrongArea( const OUString& rType,
+    SwWrongArea( OUString aType,
                  css::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag,
                  sal_Int32 nPos,
                  sal_Int32 nLen,

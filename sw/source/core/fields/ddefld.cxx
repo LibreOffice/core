@@ -36,6 +36,7 @@
 #include <swbaslnk.hxx>
 #include <unofldmid.h>
 #include <hints.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 

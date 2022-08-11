@@ -185,12 +185,12 @@ class SwUndoInsertLabel final : public SwUndo
     bool m_bCopyBorder        :1;
 
 public:
-    SwUndoInsertLabel( const SwLabelType eTyp, const OUString &rText,
+    SwUndoInsertLabel( const SwLabelType eTyp, OUString rText,
     // #i39983# the separator is drawn with a character style
-                        const OUString& rSeparator,
-                        const OUString& rNumberSeparator, //#i61007# order of captions
+                        OUString aSeparator,
+                        OUString aNumberSeparator, //#i61007# order of captions
                         const bool bBefore, const sal_uInt16 nId,
-                        const OUString& rCharacterStyle,
+                        OUString aCharacterStyle,
                         const bool bCpyBrd,
                         const SwDoc* pDoc );
     virtual ~SwUndoInsertLabel() override;

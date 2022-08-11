@@ -29,6 +29,7 @@
 #include <shellio.hxx>
 #include <swblocks.hxx>
 #include <SwXMLTextBlocks.hxx>
+#include <utility>
 
 #include <swerror.h>
 
@@ -55,8 +56,8 @@ SwBlockName::SwBlockName( const OUString& rShort, const OUString& rLong )
     m_nHashL = SwImpBlocks::Hash( rLong );
 }
 
-SwBlockName::SwBlockName( const OUString& rShort, const OUString& rLong, const OUString& rPackageName)
-    : m_aShort( rShort ), m_aLong( rLong ), m_aPackageName (rPackageName),
+SwBlockName::SwBlockName( const OUString& rShort, const OUString& rLong, OUString aPackageName)
+    : m_aShort( rShort ), m_aLong( rLong ), m_aPackageName (std::move(aPackageName)),
     m_bIsOnlyTextFlagInit( false ), m_bIsOnlyText( false )
 {
     m_nHashS = SwImpBlocks::Hash( rShort );

@@ -59,7 +59,7 @@ class SwMailMergeWizard final : public ::vcl::RoadmapWizardMachine
     virtual OUString                getStateDisplayName( WizardState _nState ) const override;
 
 public:
-    SwMailMergeWizard(SwView& rView, std::shared_ptr<SwMailMergeConfigItem> const & rConfigItem);
+    SwMailMergeWizard(SwView& rView, std::shared_ptr<SwMailMergeConfigItem> xConfigItem);
     virtual ~SwMailMergeWizard() override;
 
     SwView*                     GetSwView() {return m_pSwView;}

@@ -24,6 +24,7 @@
 #include <o3tl/safeint.hxx>
 #include <svl/listener.hxx>
 #include <svx/svdobj.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 
 #include <anchoredobject.hxx>
@@ -376,11 +377,11 @@ struct SwXParagraphEnumerationImpl final : public SwXParagraphEnumeration
     sw::UnoCursorPointer m_pCursor;
 
     SwXParagraphEnumerationImpl(
-            uno::Reference< text::XText > const& xParent,
+            uno::Reference< text::XText > xParent,
             const std::shared_ptr<SwUnoCursor>& pCursor,
             const CursorType eType,
             SwStartNode const*const pStartNode, SwTable const*const pTable)
-        : m_xParentText( xParent )
+        : m_xParentText(std::move( xParent ))
         , m_eCursorType( eType )
         // remember table and start node for later travelling
         // (used in export of tables in tables)
@@ -674,11 +675,11 @@ public:
 
     Impl(SwDoc& rDoc, const enum RangePosition eRange,
             SwFrameFormat* const pTableOrSectionFormat,
-            const uno::Reference<text::XText>& xParent = nullptr)
+            uno::Reference<text::XText> xParent = nullptr)
         : m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR))
         , m_eRangePosition(eRange)
         , m_rDoc(rDoc)
-        , m_xParentText(xParent)
+        , m_xParentText(std::move(xParent))
         , m_pTableOrSectionFormat(pTableOrSectionFormat)
         , m_pMark(nullptr)
     {

@@ -32,6 +32,7 @@
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
 #include <svx/unobrushitemhelper.hxx>
 #include <svx/xdef.hxx>
+#include <utility>
 
 using namespace com::sun::star;
 

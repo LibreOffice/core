@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "vbalistlevel.hxx"
+#include <utility>
 #include <vbahelper/vbahelper.hxx>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <ooo/vba/word/WdListNumberStyle.hpp>
@@ -26,7 +27,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaListLevel::SwVbaListLevel( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, SwVbaListHelperRef const & pHelper, sal_Int32 nLevel ) : SwVbaListLevel_BASE( rParent, rContext ), pListHelper( pHelper ), mnLevel( nLevel )
+SwVbaListLevel::SwVbaListLevel( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, SwVbaListHelperRef  pHelper, sal_Int32 nLevel ) : SwVbaListLevel_BASE( rParent, rContext ), pListHelper(std::move( pHelper )), mnLevel( nLevel )
 {
 }
 

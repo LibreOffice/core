@@ -45,6 +45,7 @@
 #include <tools/urlobj.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/securityoptions.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 
@@ -57,8 +58,8 @@ namespace
         SwTableNode* pTableNd;
         SwSectionNode* pSectNd;
 
-        explicit FindItem(const OUString& rS)
-            : m_Item(rS), pTableNd(nullptr), pSectNd(nullptr)
+        explicit FindItem(OUString aS)
+            : m_Item(std::move(aS)), pTableNd(nullptr), pSectNd(nullptr)
         {}
      };
 

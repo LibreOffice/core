@@ -15,6 +15,7 @@
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <svtools/valueset.hxx>
+#include <utility>
 
 namespace sw::sidebar {
 
@@ -39,8 +40,8 @@ public:
 private:
     struct TemplateEntry
     {
-        explicit TemplateEntry(const OUString& rURL)
-            : maURL(rURL)
+        explicit TemplateEntry(OUString aURL)
+            : maURL(std::move(aURL))
         {}
 
         OUString maURL;

@@ -20,8 +20,7 @@ class SwContentControl;
 class SwContentControlButton : public Control
 {
 public:
-    SwContentControlButton(SwEditWin* pEditWin,
-                           const std::shared_ptr<SwContentControl>& pContentControl);
+    SwContentControlButton(SwEditWin* pEditWin, std::shared_ptr<SwContentControl> pContentControl);
     virtual ~SwContentControlButton() override;
     virtual void dispose() override;
 

@@ -21,6 +21,7 @@
 
 #include <string_view>
 
+#include <utility>
 #include <viewsh.hxx>
 #include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
@@ -1442,8 +1443,8 @@ SwFieldPortion *SwQuoVadisPortion::Clone( const OUString &rExpand ) const
     return new SwQuoVadisPortion( rExpand, m_aErgo );
 }
 
-SwQuoVadisPortion::SwQuoVadisPortion( const OUString &rExp, const OUString& rStr )
-    : SwFieldPortion( rExp ), m_aErgo(rStr)
+SwQuoVadisPortion::SwQuoVadisPortion( const OUString &rExp, OUString aStr )
+    : SwFieldPortion( rExp ), m_aErgo(std::move(aStr))
 {
     SetLen(TextFrameIndex(0));
     SetWhichPor( PortionType::QuoVadis );

@@ -31,6 +31,7 @@
 #include <comphelper/classids.hxx>
 #include <osl/diagnose.h>
 #include <fmtclds.hxx>
+#include <utility>
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <viewopt.hxx>
@@ -117,8 +118,8 @@ SwFlyFrameAttrMgr::SwFlyFrameAttrMgr( bool bNew, SwWrtShell* pSh, Frmmgr_Type nT
     ::PrepareBoxInfo( m_aSet, *m_pOwnSh );
 }
 
-SwFlyFrameAttrMgr::SwFlyFrameAttrMgr( bool bNew, SwWrtShell* pSh, const SfxItemSet &rSet ) :
-    m_aSet( rSet ),
+SwFlyFrameAttrMgr::SwFlyFrameAttrMgr( bool bNew, SwWrtShell* pSh, SfxItemSet aSet ) :
+    m_aSet(std::move( aSet )),
     m_pOwnSh( pSh ),
     m_bAbsPos( false ),
     m_bNewFrame( bNew ),

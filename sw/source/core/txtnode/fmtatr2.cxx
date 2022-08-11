@@ -50,6 +50,7 @@
 #include <osl/diagnose.h>
 
 #include <algorithm>
+#include <utility>
 
 using namespace ::com::sun::star;
 

@@ -29,6 +29,7 @@
 
 #include <svx/svdobj.hxx>
 
+#include <utility>
 #include <vector>
 #include <stack>
 #include <string_view>
@@ -648,11 +649,11 @@ protected:
     WW8FormulaControl& operator=(WW8FormulaControl const&) = delete;
 
 public:
-    WW8FormulaControl(const OUString& rN, SwWW8ImplReader &rRdr)
+    WW8FormulaControl(OUString aN, SwWW8ImplReader &rRdr)
         : mrRdr(rRdr), mfUnknown(0), mfDropdownIndex(0),
         mfToolTip(0), mfNoMark(0), mfType(0),
         mfUnused(0), mhpsCheckBox(20), mnChecked(0), mnMaxLen(0),
-        mbHelp(false), msName( rN )
+        mbHelp(false), msName(std::move( aN ))
     {
     }
     sal_uInt8 mfUnknown:2;
@@ -971,8 +972,8 @@ private:
 
 public:
     void SetUniqueGraphName(SwFrameFormat *pFrameFormat, std::u16string_view rFixedPart);
-    wwFrameNamer(bool bIsDisabled, const OUString &rSeed)
-        : msSeed(rSeed), mnImportedGraphicsCount(0), mbIsDisabled(bIsDisabled)
+    wwFrameNamer(bool bIsDisabled, OUString aSeed)
+        : msSeed(std::move(aSeed)), mnImportedGraphicsCount(0), mbIsDisabled(bIsDisabled)
     {
     }
 };
@@ -987,8 +988,8 @@ private:
     wwSectionNamer& operator=(const wwSectionNamer&) = delete;
 public:
     OUString UniqueName();
-    wwSectionNamer(const SwDoc &rDoc, const OUString &rSeed)
-        : mrDoc(rDoc), msFileLinkSeed(rSeed), mnFileSectionNo(0)
+    wwSectionNamer(const SwDoc &rDoc, OUString aSeed)
+        : mrDoc(rDoc), msFileLinkSeed(std::move(aSeed)), mnFileSectionNo(0)
         { }
 };
 
@@ -1930,7 +1931,7 @@ public:     // really private, but can only be done public
     static Color GetCol(sal_uInt8 nIco);
 
     SwWW8ImplReader( sal_uInt8 nVersionPara, SotStorage* pStorage, SvStream* pSt,
-        SwDoc& rD, const OUString& rBaseURL, bool bNewDoc, bool bSkipImages, SwPosition const &rPos );
+        SwDoc& rD, OUString aBaseURL, bool bNewDoc, bool bSkipImages, SwPosition const &rPos );
 
     const OUString& GetBaseURL() const { return m_sBaseURL; }
     // load a complete doc file

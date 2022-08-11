@@ -26,6 +26,7 @@
 #include <editeng/svxacorr.hxx>
 #include <nodeoffset.hxx>
 #include <ndindex.hxx>
+#include <utility>
 
 class SwEditShell;
 class SwPaM;
@@ -104,9 +105,9 @@ class SwAutoCorrExceptWord
 
 public:
     SwAutoCorrExceptWord(ACFlags nAFlags, SwNodeOffset nNd, sal_Int32 nContent,
-                         const OUString& rWord, sal_Unicode cChr,
+                         OUString aWord, sal_Unicode cChr,
                          LanguageType eLang)
-        : m_sWord(rWord), m_nNode(nNd), m_nFlags(nAFlags), m_nContent(nContent),
+        : m_sWord(std::move(aWord)), m_nNode(nNd), m_nFlags(nAFlags), m_nContent(nContent),
           m_cChar(cChr), m_eLanguage(eLang), m_bDeleted(false)
     {}
 

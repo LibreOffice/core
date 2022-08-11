@@ -58,7 +58,7 @@ private:
 
 public:
     /// @throws css::uno::RuntimeException
-    SwVbaSelection( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::frame::XModel >& rModel );
+    SwVbaSelection( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, css::uno::Reference< css::frame::XModel > xModel );
     virtual ~SwVbaSelection() override;
 
     // Attribute

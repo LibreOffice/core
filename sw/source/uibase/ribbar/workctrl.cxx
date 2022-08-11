@@ -23,6 +23,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
 #include <swmodule.hxx>
+#include <utility>
 #include <view.hxx>
 #include <initui.hxx>
 #include <docsh.hxx>
@@ -583,9 +584,9 @@ VclPtr<InterimItemWindow> SwJumpToSpecificPageControl::CreateItemWindow( vcl::Wi
 }
 
 NavElementBox_Base::NavElementBox_Base(std::unique_ptr<weld::ComboBox> xComboBox,
-                                       const uno::Reference<frame::XFrame>& xFrame)
+                                       uno::Reference<frame::XFrame> xFrame)
     : m_xComboBox(std::move(xComboBox))
-    ,m_xFrame(xFrame)
+    ,m_xFrame(std::move(xFrame))
     ,m_bRelease(true)
 {
     m_xComboBox->set_size_request(150, -1);

@@ -28,6 +28,7 @@
 #include <fmtfld.hxx>
 #include <docsh.hxx>
 #include <pam.hxx>
+#include <utility>
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star::uno;

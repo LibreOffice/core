@@ -51,6 +51,7 @@
 #include <swuicnttab.hxx>
 #include <swuiidxmrk.hxx>
 #include <tautofmt.hxx>
+#include <utility>
 #include <wordcountdialog.hxx>
 #include <itabenum.hxx>
 #include <optional>
@@ -493,7 +494,7 @@ protected:
     std::shared_ptr<weld::DialogController> m_xDlg;
 public:
     explicit AbstractInsTableDlg_Impl(std::shared_ptr<weld::DialogController> p)
-        : m_xDlg(p)
+        : m_xDlg(std::move(p))
     {
     }
     virtual void  GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rCol,
