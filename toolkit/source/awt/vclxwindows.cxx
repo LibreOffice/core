@@ -4809,7 +4809,7 @@ void VCLXDateField::setProperty( const OUString& PropertyName, const css::uno::A
             else
             {
                 util::Date d;
-                if ( Value >>= d )
+                if ((Value >>= d) && d.Year != 0)
                      setDate( d );
             }
         }
@@ -4817,14 +4817,14 @@ void VCLXDateField::setProperty( const OUString& PropertyName, const css::uno::A
         case BASEPROPERTY_DATEMIN:
         {
             util::Date d;
-            if ( Value >>= d )
+            if ((Value >>= d) && d.Year != 0)
                  setMin( d );
         }
         break;
         case BASEPROPERTY_DATEMAX:
         {
             util::Date d;
-            if ( Value >>= d )
+            if ((Value >>= d) && d.Year != 0)
                  setMax( d );
         }
         break;
