@@ -1,4 +1,22 @@
 {
-  "comments": [],
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54641e7b_d8c87bb0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-08-11T17:58:16Z",
+      "side": 1,
+      "message": "I saw your name removed from assignee, so I jumped at the easy win :-)",
+      "revId": "093252761b0ae199dd106fe40dc867ef3e784ef0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ],
   "submitRequirementResults": []
 }
