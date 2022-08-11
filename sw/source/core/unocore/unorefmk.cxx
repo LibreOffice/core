@@ -618,12 +618,12 @@ public:
 
     Impl(SwXMeta& rThis, SwDoc& rDoc,
             ::sw::Meta* const pMeta,
-            uno::Reference<text::XText> const& xParentText,
+            uno::Reference<text::XText> xParentText,
             std::unique_ptr<TextRangeList_t const> pPortions)
         : m_pTextPortions(std::move(pPortions))
         , m_bIsDisposed(false)
         , m_bIsDescriptor(nullptr == pMeta)
-        , m_xParentText(xParentText)
+        , m_xParentText(std::move(xParentText))
         , m_xText(new SwXMetaText(rDoc, rThis))
         , m_pMeta(pMeta)
     {

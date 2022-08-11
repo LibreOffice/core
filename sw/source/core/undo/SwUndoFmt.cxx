@@ -27,6 +27,7 @@
 #include <fmtcol.hxx>
 #include <doc.hxx>
 #include <strings.hrc>
+#include <utility>
 
 SwUndoFormatCreate::SwUndoFormatCreate
 (SwUndoId nUndoId, SwFormat * _pNew, SwFormat const * _pDerivedFrom, SwDoc& rDoc)
@@ -144,11 +145,11 @@ SwRewriter SwUndoFormatDelete::GetRewriter() const
 }
 
 SwUndoRenameFormat::SwUndoRenameFormat(SwUndoId nUndoId,
-                                 const OUString & _sOldName,
-                                 const OUString & _sNewName,
+                                 OUString _sOldName,
+                                 OUString _sNewName,
                                  SwDoc& rDoc)
-    : SwUndo(nUndoId, &rDoc), m_sOldName(_sOldName),
-      m_sNewName(_sNewName), m_rDoc(rDoc)
+    : SwUndo(nUndoId, &rDoc), m_sOldName(std::move(_sOldName)),
+      m_sNewName(std::move(_sNewName)), m_rDoc(rDoc)
 {
 }
 
@@ -434,10 +435,10 @@ SwRewriter SwUndoNumruleDelete::GetRewriter() const
     return aResult;
 }
 
-SwUndoNumruleRename::SwUndoNumruleRename(const OUString & _aOldName,
-                                         const OUString & _aNewName,
+SwUndoNumruleRename::SwUndoNumruleRename(OUString _aOldName,
+                                         OUString _aNewName,
                                          SwDoc& rDoc)
-    : SwUndo(SwUndoId::NUMRULE_RENAME, &rDoc), m_aOldName(_aOldName), m_aNewName(_aNewName),
+    : SwUndo(SwUndoId::NUMRULE_RENAME, &rDoc), m_aOldName(std::move(_aOldName)), m_aNewName(std::move(_aNewName)),
       m_rDoc(rDoc)
 {
 }

@@ -23,12 +23,13 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include "vbarange.hxx"
+#include <utility>
 #include <vbahelper/vbashapes.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaHeaderFooter::SwVbaHeaderFooter( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< frame::XModel >& xModel, const uno::Reference< beans::XPropertySet >& rProps, bool isHeader, sal_Int32 index ) : SwVbaHeaderFooter_BASE( rParent, rContext ), mxModel( xModel ), mxPageStyleProps( rProps ), mbHeader( isHeader ), mnIndex( index )
+SwVbaHeaderFooter::SwVbaHeaderFooter( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, uno::Reference< frame::XModel >  xModel, uno::Reference< beans::XPropertySet > xProps, bool isHeader, sal_Int32 index ) : SwVbaHeaderFooter_BASE( rParent, rContext ), mxModel(std::move( xModel )), mxPageStyleProps(std::move( xProps )), mbHeader( isHeader ), mnIndex( index )
 {
 }
 

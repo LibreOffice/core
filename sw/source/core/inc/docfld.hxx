@@ -121,7 +121,7 @@ class SetGetExpFields : public o3tl::sorted_vector<std::unique_ptr<SetGetExpFiel
 struct HashStr final : public SwHash
 {
     OUString aSetStr;
-    HashStr( const OUString& rName, const OUString& rText, HashStr* );
+    HashStr( const OUString& rName, OUString aText, HashStr* );
 };
 
 struct SwCalcFieldType final : public SwHash

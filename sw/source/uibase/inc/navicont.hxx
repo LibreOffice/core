@@ -41,7 +41,7 @@ class NaviContentBookmark
 
 public:
     NaviContentBookmark();
-    NaviContentBookmark( const OUString &rUrl, const OUString& rDesc,
+    NaviContentBookmark( OUString aUrl, OUString aDesc,
                             RegionMode nDragType, const SwDocShell* );
 
     const OUString& GetURL() const              { return m_aUrl; }

@@ -32,6 +32,7 @@
 #include "AnchorOverlayObject.hxx"
 #include "ShadowOverlayObject.hxx"
 
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
@@ -1356,8 +1357,8 @@ class IsPostitFieldWithAuthorOf : public FilterFunctor
 {
     OUString m_sAuthor;
 public:
-    explicit IsPostitFieldWithAuthorOf(const OUString &rAuthor)
-        : m_sAuthor(rAuthor)
+    explicit IsPostitFieldWithAuthorOf(OUString aAuthor)
+        : m_sAuthor(std::move(aAuthor))
     {
     }
     bool operator()(const SwFormatField* pField) const override

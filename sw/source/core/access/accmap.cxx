@@ -19,6 +19,7 @@
 
 #include <rtl/ref.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <utility>
 #include <vcl/window.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/unomod.hxx>
@@ -379,17 +380,17 @@ public:
 public:
     SwAccessibleEvent_Impl( EventType eT,
                             SwAccessibleContext *pA,
-                            const SwAccessibleChild& rFrameOrObj )
+                            SwAccessibleChild aFrameOrObj )
         : mxAcc( pA ),
-          maFrameOrObj( rFrameOrObj ),
+          maFrameOrObj(std::move( aFrameOrObj )),
           meType( eT ),
           mnStates( AccessibleStates::NONE ),
           mpParentFrame( nullptr )
     {}
 
     SwAccessibleEvent_Impl( EventType eT,
-                            const SwAccessibleChild& rFrameOrObj )
-        : maFrameOrObj( rFrameOrObj ),
+                            SwAccessibleChild aFrameOrObj )
+        : maFrameOrObj(std::move( aFrameOrObj )),
           meType( eT ),
           mnStates( AccessibleStates::NONE ),
           mpParentFrame( nullptr )
@@ -409,11 +410,11 @@ public:
 
     SwAccessibleEvent_Impl( EventType eT,
                             SwAccessibleContext *pA,
-                            const SwAccessibleChild& rFrameOrObj,
+                            SwAccessibleChild aFrameOrObj,
                             const SwRect& rR )
         : maOldBox( rR ),
           mxAcc( pA ),
-          maFrameOrObj( rFrameOrObj ),
+          maFrameOrObj(std::move( aFrameOrObj )),
           meType( eT ),
           mnStates( AccessibleStates::NONE ),
           mpParentFrame( nullptr )
@@ -425,10 +426,10 @@ public:
 
     SwAccessibleEvent_Impl( EventType eT,
                             SwAccessibleContext *pA,
-                            const SwAccessibleChild& rFrameOrObj,
+                            SwAccessibleChild aFrameOrObj,
                             const AccessibleStates _nStates )
         : mxAcc( pA ),
-          maFrameOrObj( rFrameOrObj ),
+          maFrameOrObj(std::move( aFrameOrObj )),
           meType( eT ),
           mnStates( _nStates ),
           mpParentFrame( nullptr )
@@ -438,9 +439,9 @@ public:
     }
 
     SwAccessibleEvent_Impl( EventType eT, const SwFrame *pParentFrame,
-                const SwAccessibleChild& rFrameOrObj, const SwRect& rR ) :
+                SwAccessibleChild aFrameOrObj, const SwRect& rR ) :
         maOldBox( rR ),
-        maFrameOrObj( rFrameOrObj ),
+        maFrameOrObj(std::move( aFrameOrObj )),
         meType( eT ),
         mnStates( AccessibleStates::NONE ),
         mpParentFrame( pParentFrame )

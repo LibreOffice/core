@@ -33,7 +33,7 @@ private:
 
 public:
     /// @throws css::uno::RuntimeException
-    SwVbaListGallery( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextDocument >& xTextDoc, sal_Int32 nType );
+    SwVbaListGallery( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, css::uno::Reference< css::text::XTextDocument >  xTextDoc, sal_Int32 nType );
     virtual ~SwVbaListGallery() override;
 
     // Methods

@@ -18,6 +18,7 @@
  */
 
 #include <comphelper/servicehelper.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <svl/itemprop.hxx>
@@ -190,7 +191,7 @@ namespace
 
     public:
         DelayedFileDeletion( const Reference< XModel >& _rxModel,
-                             const OUString& _rTemporaryFile );
+                             OUString _aTemporaryFile );
 
     protected:
         virtual ~DelayedFileDeletion( ) override;
@@ -207,11 +208,11 @@ namespace
         DECL_LINK( OnTryDeleteFile, Timer*, void );
     };
 
-    DelayedFileDeletion::DelayedFileDeletion( const Reference< XModel >& _rxModel, const OUString& _rTemporaryFile )
+    DelayedFileDeletion::DelayedFileDeletion( const Reference< XModel >& _rxModel, OUString  _aTemporaryFile )
         :
         m_xDocument( _rxModel, UNO_QUERY )
         ,m_aDeleteTimer("sw DelayedFileDeletion m_aDeleteTimer")
-        ,m_sTemporaryFile( _rTemporaryFile )
+        ,m_sTemporaryFile(std::move( _aTemporaryFile ))
         ,m_nPendingDeleteAttempts( 0 )
     {
         osl_atomic_increment( &m_refCount );

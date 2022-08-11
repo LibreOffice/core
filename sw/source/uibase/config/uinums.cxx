@@ -26,6 +26,7 @@
 #include <svl/itemiter.hxx>
 
 #include <swtypes.hxx>
+#include <utility>
 #include <wrtsh.hxx>
 #include <poolfmt.hxx>
 #include <charfmt.hxx>
@@ -104,8 +105,8 @@ void SwChapterNumRules::ApplyNumRules(const SwNumRulesWithName &rCopy, sal_uInt1
 }
 
 SwNumRulesWithName::SwNumRulesWithName( const SwNumRule &rCopy,
-                                        const OUString &rName )
-    : maName(rName)
+                                        OUString aName )
+    : maName(std::move(aName))
 {
     for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
     {

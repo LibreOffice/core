@@ -21,6 +21,7 @@
 
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <utility>
 #include <vcl/graph.hxx>
 #include <editeng/brushitem.hxx>
 #include <vcl/metric.hxx>
@@ -72,8 +73,8 @@ void SwFieldPortion::TakeNextOffset( const SwFieldPortion* pField )
     m_bFollow = true;
 }
 
-SwFieldPortion::SwFieldPortion(const OUString &rExpand, std::unique_ptr<SwFont> pFont, bool bPlaceHold, TextFrameIndex const nFieldLen)
-    : m_aExpand(rExpand), m_pFont(std::move(pFont)), m_nNextOffset(0)
+SwFieldPortion::SwFieldPortion(OUString aExpand, std::unique_ptr<SwFont> pFont, bool bPlaceHold, TextFrameIndex const nFieldLen)
+    : m_aExpand(std::move(aExpand)), m_pFont(std::move(pFont)), m_nNextOffset(0)
     , m_nNextScriptChg(COMPLETE_STRING), m_nFieldLen(nFieldLen), m_nViewWidth(0)
     , m_bFollow( false ), m_bLeft( false), m_bHide( false)
     , m_bCenter (false), m_bHasFollow( false )

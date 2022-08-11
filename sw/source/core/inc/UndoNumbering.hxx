@@ -39,7 +39,7 @@ public:
     SwUndoInsNum( const SwNumRule& rOldRule, const SwNumRule& rNewRule,
                   const SwDoc& rDoc, SwUndoId nUndoId = SwUndoId::INSFMTATTR );
     SwUndoInsNum( const SwPosition& rPos, const SwNumRule& rRule,
-                            const OUString& rReplaceRule );
+                            OUString aReplaceRule );
 
     virtual ~SwUndoInsNum() override;
 

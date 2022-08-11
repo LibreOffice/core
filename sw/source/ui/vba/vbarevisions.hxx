@@ -33,7 +33,7 @@ private:
 public:
     SwVbaRevisions( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::text::XTextRange >& xTextRange );
 
-    SwVbaRevisions( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess );
+    SwVbaRevisions( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, css::uno::Reference< css::frame::XModel >  xModel, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess );
 
     // Methods
     virtual void SAL_CALL AcceptAll(  ) override;

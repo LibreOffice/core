@@ -100,8 +100,8 @@ namespace ww8
         bool mbForBullet:1;
         Graphic maGrf;
     public:
-        Frame(const SwFrameFormat &rFlyFrame, const SwPosition &rPos);
-        Frame(const Graphic&, const SwPosition &);
+        Frame(const SwFrameFormat &rFlyFrame, SwPosition aPos);
+        Frame(const Graphic&, SwPosition );
 
         /** Get the writer SwFrameFormat that this object describes
 

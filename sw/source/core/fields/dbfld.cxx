@@ -33,6 +33,7 @@
 #include <dbmgr.hxx>
 #include <unofldmid.h>
 #include <o3tl/string_view.hxx>
+#include <utility>
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star;

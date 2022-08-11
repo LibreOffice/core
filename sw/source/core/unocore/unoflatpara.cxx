@@ -22,6 +22,7 @@
 #include <unoflatpara.hxx>
 
 #include <o3tl/safeint.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/text/TextMarkupType.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -64,9 +65,9 @@ CreateFlatParagraphIterator(SwDoc & rDoc, sal_Int32 const nTextMarkupType,
 
 }
 
-SwXFlatParagraph::SwXFlatParagraph( SwTextNode& rTextNode, const OUString& aExpandText, const ModelToViewHelper& rMap )
+SwXFlatParagraph::SwXFlatParagraph( SwTextNode& rTextNode, OUString aExpandText, const ModelToViewHelper& rMap )
     : SwXFlatParagraph_Base(& rTextNode, rMap)
-    , maExpandText(aExpandText)
+    , maExpandText(std::move(aExpandText))
 {
 }
 

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "vbaselection.hxx"
+#include <utility>
 #include <vbahelper/vbahelper.hxx>
 #include "vbarange.hxx"
 #include "vbafind.hxx"
@@ -66,7 +67,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaSelection::SwVbaSelection( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< frame::XModel >& rModel ) : SwVbaSelection_BASE( rParent, rContext ), mxModel( rModel )
+SwVbaSelection::SwVbaSelection( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, uno::Reference< frame::XModel > xModel ) : SwVbaSelection_BASE( rParent, rContext ), mxModel(std::move( xModel ))
 {
     mxTextViewCursor = word::getXTextViewCursor( mxModel );
 }

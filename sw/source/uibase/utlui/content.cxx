@@ -29,6 +29,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <o3tl/enumrange.hxx>
 #include <o3tl/sorted_vector.hxx>
+#include <utility>
 #include <vcl/commandevent.hxx>
 #include <vcl/weldutils.hxx>
 #include <sot/formats.hxx>
@@ -185,10 +186,10 @@ namespace
 
 // Content, contains names and reference at the content type.
 
-SwContent::SwContent(const SwContentType* pCnt, const OUString& rName, double nYPos) :
+SwContent::SwContent(const SwContentType* pCnt, OUString aName, double nYPos) :
     SwTypeNumber(CTYPE_CNT),
     m_pParent(pCnt),
-    m_sContentName(rName),
+    m_sContentName(std::move(aName)),
     m_nYPosition(nYPos),
     m_bInvisible(false)
 {
@@ -5236,12 +5237,12 @@ NaviContentBookmark::NaviContentBookmark()
 {
 }
 
-NaviContentBookmark::NaviContentBookmark( const OUString &rUrl,
-                    const OUString& rDesc,
+NaviContentBookmark::NaviContentBookmark( OUString aUrl,
+                    OUString aDesc,
                     RegionMode nDragType,
                     const SwDocShell* pDocSh ) :
-    m_aUrl( rUrl ),
-    m_aDescription(rDesc),
+    m_aUrl(std::move( aUrl )),
+    m_aDescription(std::move(aDesc)),
     m_nDocSh(reinterpret_cast<sal_IntPtr>(pDocSh)),
     m_nDefaultDrag( nDragType )
 {

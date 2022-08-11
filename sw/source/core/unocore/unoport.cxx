@@ -21,6 +21,7 @@
 
 #include <cmdid.h>
 #include <cppuhelper/exc_hlp.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <svl/itemprop.hxx>
 #include <tools/diagnose_ex.h>
@@ -61,14 +62,14 @@ void SwXTextPortion::init(const SwUnoCursor* pPortionCursor)
 
 SwXTextPortion::SwXTextPortion(
     const SwUnoCursor* pPortionCursor,
-        uno::Reference< text::XText > const& rParent,
+        uno::Reference< text::XText > xParent,
         SwTextPortionType eType)
     : m_pPropSet(aSwMapProvider.GetPropertySet(
         (PORTION_REDLINE_START == eType ||
          PORTION_REDLINE_END   == eType)
             ?  PROPERTY_MAP_REDLINE_PORTION
             :  PROPERTY_MAP_TEXTPORTION_EXTENSIONS))
-    , m_xParentText(rParent)
+    , m_xParentText(std::move(xParent))
     , m_pFrameFormat(nullptr)
     , m_ePortionType(eType)
     , m_bIsCollapsed(false)
@@ -78,11 +79,11 @@ SwXTextPortion::SwXTextPortion(
 
 SwXTextPortion::SwXTextPortion(
     const SwUnoCursor* pPortionCursor,
-    uno::Reference< text::XText > const& rParent,
+    uno::Reference< text::XText > xParent,
     SwFrameFormat& rFormat )
     : m_pPropSet(aSwMapProvider.GetPropertySet(
                     PROPERTY_MAP_TEXTPORTION_EXTENSIONS))
-    , m_xParentText(rParent)
+    , m_xParentText(std::move(xParent))
     , m_pFrameFormat(&rFormat)
     , m_ePortionType(PORTION_FRAME)
     , m_bIsCollapsed(false)
@@ -94,11 +95,11 @@ SwXTextPortion::SwXTextPortion(
 SwXTextPortion::SwXTextPortion(
     const SwUnoCursor* pPortionCursor,
     SwTextRuby const& rAttr,
-    uno::Reference< text::XText > const& xParent,
+    uno::Reference< text::XText >  xParent,
     bool bIsEnd )
     : m_pPropSet(aSwMapProvider.GetPropertySet(
                     PROPERTY_MAP_TEXTPORTION_EXTENSIONS))
-    , m_xParentText(xParent)
+    , m_xParentText(std::move(xParent))
     , m_pRubyText   ( bIsEnd ? nullptr : new uno::Any )
     , m_pRubyStyle  ( bIsEnd ? nullptr : new uno::Any )
     , m_pRubyAdjust ( bIsEnd ? nullptr : new uno::Any )

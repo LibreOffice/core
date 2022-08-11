@@ -34,6 +34,7 @@
 #include <acorrect.hxx>
 #include <docary.hxx>
 #include <strings.hrc>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
@@ -330,8 +331,8 @@ struct UndoTransliterate_Data
     SwNodeOffset   nNdIdx;
     sal_Int32      nStart, nLen;
 
-    UndoTransliterate_Data( SwNodeOffset nNd, sal_Int32 nStt, sal_Int32 nStrLen, const OUString& rText )
-        : sText( rText ),
+    UndoTransliterate_Data( SwNodeOffset nNd, sal_Int32 nStt, sal_Int32 nStrLen, OUString aText )
+        : sText(std::move( aText )),
         nNdIdx( nNd ), nStart( nStt ), nLen( nStrLen )
     {}
 

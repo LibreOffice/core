@@ -23,6 +23,7 @@
 #include <unotools/mediadescriptor.hxx>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <utility>
 
 /* class for a thread to retrieve an input stream given by a URL
 
@@ -39,11 +40,11 @@
 
 SwAsyncRetrieveInputStreamThread::SwAsyncRetrieveInputStreamThread(
                             const SwRetrievedInputStreamDataManager::tDataKey nDataKey,
-                            const OUString& rLinkedURL,
-                            const OUString& rReferer )
+                            OUString aLinkedURL,
+                            OUString aReferer )
     : mnDataKey( nDataKey ),
-      mrLinkedURL( rLinkedURL ),
-      mrReferer( rReferer )
+      mrLinkedURL(std::move( aLinkedURL )),
+      mrReferer(std::move( aReferer ))
 {
 }
 

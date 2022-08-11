@@ -385,7 +385,7 @@ class SwUndoTableStyleMake final : public SwUndo
     OUString m_sName;
     std::unique_ptr<SwTableAutoFormat> m_pAutoFormat;
 public:
-    SwUndoTableStyleMake(const OUString& rName, const SwDoc& rDoc);
+    SwUndoTableStyleMake(OUString aName, const SwDoc& rDoc);
 
     virtual ~SwUndoTableStyleMake() override;
 

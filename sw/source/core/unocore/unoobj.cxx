@@ -57,6 +57,7 @@
 #include <unocontentcontrol.hxx>
 #include <unotext.hxx>
 #include <com/sun/star/text/TextMarkupType.hpp>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <unotools/syslocale.hxx>
 #include <i18nlangtag/languagetag.hxx>

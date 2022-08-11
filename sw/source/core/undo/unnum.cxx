@@ -24,6 +24,7 @@
 #include <ndtxt.hxx>
 #include <UndoCore.hxx>
 #include <rolbck.hxx>
+#include <utility>
 #include <osl/diagnose.h>
 
 SwUndoInsNum::SwUndoInsNum( const SwNumRule& rOldRule,
@@ -44,10 +45,10 @@ SwUndoInsNum::SwUndoInsNum( const SwPaM& rPam, const SwNumRule& rRule )
 }
 
 SwUndoInsNum::SwUndoInsNum( const SwPosition& rPos, const SwNumRule& rRule,
-                            const OUString& rReplaceRule )
+                            OUString aReplaceRule )
     : SwUndo( SwUndoId::INSNUM, &rPos.GetNode().GetDoc() ),
     m_aNumRule( rRule ),
-    m_sReplaceRule( rReplaceRule ), m_nLRSavePos( 0 )
+    m_sReplaceRule(std::move( aReplaceRule )), m_nLRSavePos( 0 )
 {
     // No selection!
     m_nEndNode = SwNodeOffset(0);

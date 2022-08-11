@@ -88,7 +88,7 @@ class SwUndoRenameBookmark final : public SwUndo
     const OUString m_sNewName;
 
 public:
-    SwUndoRenameBookmark(const OUString& rOldName, const OUString& rNewName, const SwDoc& rDoc);
+    SwUndoRenameBookmark(OUString aOldName, OUString aNewName, const SwDoc& rDoc);
     virtual ~SwUndoRenameBookmark() override;
 
 private:

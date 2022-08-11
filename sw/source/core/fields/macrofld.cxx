@@ -23,6 +23,7 @@
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <comphelper/processfactory.hxx>
+#include <utility>
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star;

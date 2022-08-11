@@ -29,6 +29,7 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <utility>
 
 using namespace ::ooo::vba;
 using namespace css;
@@ -142,7 +143,7 @@ class TableEnumerationImpl : public ::cppu::WeakImplHelper< css::container::XEnu
     uno::Reference< container::XIndexAccess > mxIndexAccess;
     sal_Int32 mnCurIndex;
 public:
-    TableEnumerationImpl(  const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< frame::XModel >& xDocument, const uno::Reference< container::XIndexAccess >& xIndexAccess ) : mxParent( xParent ), mxContext( xContext ), mxDocument( xDocument ), mxIndexAccess( xIndexAccess ), mnCurIndex(0)
+    TableEnumerationImpl(  uno::Reference< XHelperInterface > xParent, uno::Reference< uno::XComponentContext > xContext, uno::Reference< frame::XModel >  xDocument, uno::Reference< container::XIndexAccess >  xIndexAccess ) : mxParent(std::move( xParent )), mxContext(std::move( xContext )), mxDocument(std::move( xDocument )), mxIndexAccess(std::move( xIndexAccess )), mnCurIndex(0)
     {
     }
     virtual sal_Bool SAL_CALL hasMoreElements(  ) override

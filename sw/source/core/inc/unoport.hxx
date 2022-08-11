@@ -152,13 +152,13 @@ protected:
     virtual void Notify(const SfxHint& rHint) override;
 
 public:
-    SwXTextPortion(const SwUnoCursor* pPortionCursor, css::uno::Reference< css::text::XText > const& rParent, SwTextPortionType   eType   );
-    SwXTextPortion(const SwUnoCursor* pPortionCursor, css::uno::Reference< css::text::XText > const& rParent, SwFrameFormat& rFormat );
+    SwXTextPortion(const SwUnoCursor* pPortionCursor, css::uno::Reference< css::text::XText > xParent, SwTextPortionType   eType   );
+    SwXTextPortion(const SwUnoCursor* pPortionCursor, css::uno::Reference< css::text::XText > xParent, SwFrameFormat& rFormat );
 
     // for Ruby
     SwXTextPortion(const SwUnoCursor* pPortionCursor,
         SwTextRuby const& rAttr,
-        css::uno::Reference< css::text::XText > const& xParent,
+        css::uno::Reference< css::text::XText > xParent,
         bool bIsEnd );
 
     //XTextRange

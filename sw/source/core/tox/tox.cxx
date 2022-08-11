@@ -41,6 +41,7 @@
 
 #include <algorithm>
 #include <string_view>
+#include <utility>
 
 
 const sal_Unicode C_NUM_REPL      = '@';

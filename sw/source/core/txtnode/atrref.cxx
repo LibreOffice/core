@@ -23,6 +23,7 @@
 #include <hints.hxx>
 #include <txtrfmrk.hxx>
 #include <unorefmark.hxx>
+#include <utility>
 
 SwFormatRefMark::~SwFormatRefMark( )
 {

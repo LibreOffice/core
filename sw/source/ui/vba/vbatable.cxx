@@ -27,6 +27,7 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/table/TableBorderDistances.hpp>
+#include <utility>
 #include "vbaborders.hxx"
 #include "vbapalette.hxx"
 #include "vbarows.hxx"
@@ -40,7 +41,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaTable::SwVbaTable(  const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< text::XTextDocument >& rDocument, const  uno::Reference< text::XTextTable >& xTextTable) : SwVbaTable_BASE( rParent, rContext ), mxTextDocument( rDocument )
+SwVbaTable::SwVbaTable(  const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, uno::Reference< text::XTextDocument > xDocument, const  uno::Reference< text::XTextTable >& xTextTable) : SwVbaTable_BASE( rParent, rContext ), mxTextDocument(std::move( xDocument ))
 {
     mxTextTable.set( xTextTable, uno::UNO_SET_THROW );
 }

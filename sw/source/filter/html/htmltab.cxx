@@ -20,6 +20,7 @@
 #include <memory>
 #include <hintids.hxx>
 #include <comphelper/flagguard.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
@@ -191,7 +192,7 @@ class HTMLTableCnts
 public:
 
     explicit HTMLTableCnts(const SwStartNode* pStNd);
-    explicit HTMLTableCnts(const std::shared_ptr<HTMLTable>& rTab);
+    explicit HTMLTableCnts(std::shared_ptr<HTMLTable> xTab);
 
     ~HTMLTableCnts();                   // only allowed in ~HTMLTableCell
 
@@ -649,9 +650,9 @@ HTMLTableCnts::HTMLTableCnts(const SwStartNode* pStNd)
     InitCtor();
 }
 
-HTMLTableCnts::HTMLTableCnts(const std::shared_ptr<HTMLTable>& rTab)
+HTMLTableCnts::HTMLTableCnts(std::shared_ptr<HTMLTable> xTab)
     : m_pStartNode(nullptr)
-    , m_xTable(rTab)
+    , m_xTable(std::move(xTab))
 {
     InitCtor();
 }
@@ -4480,8 +4481,8 @@ public:
 
     std::shared_ptr<HTMLAttrTable> m_xAttrTab;        // attributes
 
-    CaptionSaveStruct( SwHTMLParser& rParser, const SwPosition& rPos ) :
-        SectionSaveStruct( rParser ), m_aSavePos( rPos ),
+    CaptionSaveStruct( SwHTMLParser& rParser, SwPosition aPos ) :
+        SectionSaveStruct( rParser ), m_aSavePos(std::move( aPos )),
         m_xAttrTab(std::make_shared<HTMLAttrTable>())
     {
         rParser.SaveAttrTab(m_xAttrTab);
@@ -4693,8 +4694,8 @@ class TableSaveStruct : public SwPendingData
 public:
     std::shared_ptr<HTMLTable> m_xCurrentTable;
 
-    explicit TableSaveStruct(const std::shared_ptr<HTMLTable>& rCurTable)
-        : m_xCurrentTable(rCurTable)
+    explicit TableSaveStruct(std::shared_ptr<HTMLTable> xCurTable)
+        : m_xCurrentTable(std::move(xCurTable))
     {
     }
 

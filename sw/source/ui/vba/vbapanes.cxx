@@ -19,6 +19,7 @@
 #include "vbapanes.hxx"
 #include "vbapane.hxx"
 #include <cppuhelper/implbase.hxx>
+#include <utility>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -34,7 +35,7 @@ private:
     uno::Reference< frame::XModel > mxModel;
 
 public:
-    PanesIndexAccess( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel ) : mxParent( xParent ), mxContext( xContext ), mxModel( xModel ) {}
+    PanesIndexAccess( uno::Reference< XHelperInterface > xParent, uno::Reference< uno::XComponentContext > xContext, uno::Reference< frame::XModel >  xModel ) : mxParent(std::move( xParent )), mxContext(std::move( xContext )), mxModel(std::move( xModel )) {}
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(  ) override
@@ -62,7 +63,7 @@ class PanesEnumWrapper : public EnumerationHelper_BASE
     uno::Reference<container::XIndexAccess > m_xIndexAccess;
     sal_Int32 nIndex;
 public:
-    explicit PanesEnumWrapper( const uno::Reference< container::XIndexAccess >& xIndexAccess ) : m_xIndexAccess( xIndexAccess ), nIndex( 0 ) {}
+    explicit PanesEnumWrapper( uno::Reference< container::XIndexAccess > xIndexAccess ) : m_xIndexAccess(std::move( xIndexAccess )), nIndex( 0 ) {}
     virtual sal_Bool SAL_CALL hasMoreElements(  ) override
     {
         return ( nIndex < m_xIndexAccess->getCount() );

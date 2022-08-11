@@ -26,6 +26,7 @@
 #include "createaddresslistdialog.hxx"
 #include "customizeaddresslistdialog.hxx"
 #include <mmconfigitem.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/docfile.hxx>
@@ -211,10 +212,10 @@ void SwAddressControl_Impl::SetCursorTo(std::size_t nElement)
 }
 
 SwCreateAddressListDialog::SwCreateAddressListDialog(
-        weld::Window* pParent, const OUString& rURL, SwMailMergeConfigItem const & rConfig)
+        weld::Window* pParent, OUString aURL, SwMailMergeConfigItem const & rConfig)
     : SfxDialogController(pParent, "modules/swriter/ui/createaddresslist.ui", "CreateAddressList")
     , m_sAddressListFilterName(SwResId(ST_FILTERNAME))
-    , m_sURL(rURL)
+    , m_sURL(std::move(aURL))
     , m_pCSVData(new SwCSVData)
     , m_xAddressControl(new SwAddressControl_Impl(*m_xBuilder))
     , m_xNewPB(m_xBuilder->weld_button("NEW"))

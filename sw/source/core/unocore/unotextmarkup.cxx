@@ -23,6 +23,7 @@
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <svl/listener.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <SwSmartTagMgr.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
@@ -52,9 +53,9 @@ struct SwXTextMarkup::Impl
     SwTextNode* m_pTextNode;
     ModelToViewHelper const m_ConversionMap;
 
-    Impl(SwTextNode* const pTextNode, const ModelToViewHelper& rMap)
+    Impl(SwTextNode* const pTextNode, ModelToViewHelper aMap)
         : m_pTextNode(pTextNode)
-        , m_ConversionMap(rMap)
+        , m_ConversionMap(std::move(aMap))
     {
         if(m_pTextNode)
             StartListening(pTextNode->GetNotifier());

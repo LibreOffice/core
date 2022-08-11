@@ -16,6 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#include <utility>
+
 #include "vbacell.hxx"
 #include "vbatablehelper.hxx"
 #include "vbarow.hxx"
@@ -23,8 +25,8 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaCell::SwVbaCell( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< text::XTextTable >& xTextTable, sal_Int32 nColumn, sal_Int32 nRow ) :
-    SwVbaCell_BASE( rParent, rContext ), mxTextTable( xTextTable ), mnColumn( nColumn ), mnRow( nRow )
+SwVbaCell::SwVbaCell( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, uno::Reference< text::XTextTable >  xTextTable, sal_Int32 nColumn, sal_Int32 nRow ) :
+    SwVbaCell_BASE( rParent, rContext ), mxTextTable(std::move( xTextTable )), mnColumn( nColumn ), mnRow( nRow )
 {
 }
 
