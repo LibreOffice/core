@@ -347,6 +347,7 @@ GraphicFormatDetector::GraphicFormatDetector(SvStream& rStream, OUString aFormat
     , mnStreamPosition(0)
     , mnStreamLength(0)
     , mbExtendedInfo(bExtendedInfo)
+    , mbWasCompressed(false)
     , maMetadata()
 {
 }
