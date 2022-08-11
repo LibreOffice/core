@@ -33,6 +33,24 @@
       "message": "yes, what Maxim said.\n\nthe problem is that table styles aren\u0027t really styles, they are templates that need re-applying on structural changes to the table.",
       "revId": "11b7c19159b8baebdaf509715f05ba42536de69d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6c06a34_1e6bf868",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2022-08-11T19:58:08Z",
+      "side": 1,
+      "message": "I don\u0027t understand, can you provide an example with repro steps that would not work after this change?",
+      "parentUuid": "7f4ea1fe_94f083d3",
+      "revId": "11b7c19159b8baebdaf509715f05ba42536de69d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
