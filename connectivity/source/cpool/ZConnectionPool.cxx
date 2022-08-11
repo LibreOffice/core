@@ -282,7 +282,7 @@ void SAL_CALL OConnectionPool::propertyChange( const PropertyChangeEvent& evt )
 {
     if(TIMEOUT_NODENAME == evt.PropertyName)
     {
-        evt.NewValue >>= m_nALiveCount;
+        OPoolCollection::getNodeValue(TIMEOUT_NODENAME, m_xDriverNode) >>= m_nALiveCount;
         calculateTimeOuts();
     }
 }
