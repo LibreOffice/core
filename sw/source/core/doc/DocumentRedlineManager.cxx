@@ -1147,6 +1147,8 @@ void DocumentRedlineManager::SetRedlineFlags( RedlineFlags eMode )
             {
                 SwRangeRedline *const pRedline = maRedlineTable[i];
                 (pRedline->*pFnc)(nLoop, i, false);
+                if (maRedlineTable.empty())
+                    break;
                 while (maRedlineTable.size() <= i
                     || maRedlineTable[i] != pRedline)
                 {        // ensure current position

@@ -1829,11 +1829,10 @@ void SwRangeRedline::MoveFromSection(size_t nMyPos)
         // by comparing it with the "indexed" <SwNode> instance copied before
         // perform the intrinsic move.
         // Note: Such condition is e.g. a "delete" change tracking only containing a table.
-        if ( &m_oContentSect->GetNode() == pKeptContentSectNode )
-        {
-            rDoc.getIDocumentContentOperations().DeleteSection( &m_oContentSect->GetNode() );
-        }
+        SwNode& rSectionNode = m_oContentSect->GetNode();
         m_oContentSect.reset();
+        if (&rSectionNode == pKeptContentSectNode)
+            rDoc.getIDocumentContentOperations().DeleteSection(&rSectionNode);
 
         // adjustment of redline table positions must take start and
         // end into account, not point and mark.
