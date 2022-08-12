@@ -250,7 +250,7 @@ void FormulaGroupAreaListener::collectFormulaCells(
         // http://bugs.documentfoundation.org/attachment.cgi?id=114042
         // Apparently this was fixed in the meantime, let's assume and get the
         // assert bat out to hit us if it wasn't.
-        assert(!"something is still messing up the formula goup and block size length");
+        assert(!"something is still messing up the formula group and block size length");
     }
 
     ScFormulaCell* const * ppEnd = pp + mnGroupLen;
