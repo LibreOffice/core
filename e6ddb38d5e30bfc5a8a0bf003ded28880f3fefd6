@@ -33,6 +33,24 @@
       "message": "when using clang compiler we have some plugins with additional warnings, here it shows:\n\n/media/dev/co2205/sfx2/source/dialog/dinfdlg.cxx:1287:5: warning: accessing static class member through class member access syntax, use a qualified name like \u0027weld::DialogController::runAsync\u0027 instead [loplugin:staticaccess]\n    m_xDurationDialog-\u003erunAsync(m_xDurationDialog, [\u0026](sal_Int32 response)\n\nso please use: weld::DialogController::runAsync",
       "revId": "e6ddb38d5e30bfc5a8a0bf003ded28880f3fefd6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "316a3fab_c16ef748",
+        "filename": "sfx2/source/dialog/dinfdlg.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1287,
+      "author": {
+        "id": 1003543
+      },
+      "writtenOn": "2022-08-12T10:55:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "60461793_a0982453",
+      "revId": "e6ddb38d5e30bfc5a8a0bf003ded28880f3fefd6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
