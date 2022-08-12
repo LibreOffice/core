@@ -34,6 +34,24 @@
       "parentUuid": "fadf4b3c_b55bdea2",
       "revId": "64283750d17a9beaae2cc1f05cda04223bf931f8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "491470de_a474ba8a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2022-08-12T14:05:11Z",
+      "side": 1,
+      "message": "Hi Michael, I submitted the PR:\nhttps://github.com/LinuxA11y/IAccessible2/pull/21",
+      "parentUuid": "521d2a81_c779fd5d",
+      "revId": "64283750d17a9beaae2cc1f05cda04223bf931f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
