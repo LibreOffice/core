@@ -145,6 +145,30 @@
       },
       "revId": "3ec72a66ef808f28a0e1eb90d70fbbd7de8a0bb2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fd37682_82453c74",
+        "filename": "sfx2/source/doc/templatedlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2022-08-12T18:20:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b0fb97b_3c0003fd",
+      "range": {
+        "startLine": 251,
+        "startChar": 19,
+        "endLine": 251,
+        "endChar": 35
+      },
+      "revId": "3ec72a66ef808f28a0e1eb90d70fbbd7de8a0bb2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
