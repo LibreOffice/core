@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fadf4b3c_b55bdea2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-08-12T11:13:46Z",
+      "side": 1,
+      "message": "Thanks, the typo fix itself looks good to me.\n\nAs I understand it, the upstream project for this is https://github.com/LinuxA11y/IAccessible2 and we\u0027re currently having an internal copy in our git repo.\nI think that at some point it might be ideal to drop our internal copy and include the upstream version as an external instead, which will allow updating to newer versions more easily etc.\n\n@Andrea: Would you be interested in also suggesting your typo fixes to the upstream project, so we don\u0027t use the typo fixes in case we ever switch to that?",
+      "revId": "64283750d17a9beaae2cc1f05cda04223bf931f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
