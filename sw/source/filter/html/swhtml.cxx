@@ -858,7 +858,7 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
             if( pPos->GetContentIndex() )                 // then there was no <p> at the end
                 m_pPam->Move( fnMoveForward, GoInNode );    // therefore to the next
             SwTextNode* pTextNode = pPos->GetNode().GetTextNode();
-            SwNodeIndex aPrvIdx( pPos->nNode );
+            SwNodeIndex aPrvIdx( pPos->GetNode() );
             if( pTextNode && pTextNode->CanJoinPrev( &aPrvIdx ) &&
                 *m_pSttNdIdx <= aPrvIdx )
             {

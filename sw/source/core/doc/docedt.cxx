@@ -357,7 +357,7 @@ void sw_GetJoinFlags( SwPaM& rPam, bool& rJoinText, bool& rJoinPrev )
 
 bool sw_JoinText( SwPaM& rPam, bool bJoinPrev )
 {
-    SwNodeIndex aIdx( rPam.GetPoint()->nNode );
+    SwNodeIndex aIdx( rPam.GetPoint()->GetNode() );
     SwTextNode *pTextNd = aIdx.GetNode().GetTextNode();
     SwNodeIndex aOldIdx( aIdx );
     SwTextNode *pOldTextNd = pTextNd;
@@ -808,7 +808,7 @@ uno::Reference< XHyphenatedWord >  SwDoc::Hyphenate(
         pPam->Exchange();
 
     SwHyphArgs aHyphArg( pPam, rCursorPos, pPageCnt, pPageSt );
-    SwNodeIndex aTmpIdx( pPam->GetMark()->nNode, 1 );
+    SwNodeIndex aTmpIdx( pPam->GetMark()->GetNode(), 1 );
     GetNodes().ForEach( pPam->GetPoint()->nNode, aTmpIdx,
                     lcl_HyphenateNode, &aHyphArg );
     aHyphArg.SetPam( pPam );
@@ -846,7 +846,7 @@ void SwDoc::CountWords( const SwPaM& rPaM, SwDocStat& rStat )
 
     if( nSttNd != nEndNd )
     {
-        SwNodeIndex aIdx( pStt->nNode );
+        SwNodeIndex aIdx( pStt->GetNode() );
         if( nSttCnt )
         {
             ++aIdx;

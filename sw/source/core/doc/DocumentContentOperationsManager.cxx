@@ -475,7 +475,7 @@ namespace
              pEndTextNd && pEndTextNd->IsInList() )
         {
             bRet = true;
-            SwNodeIndex aIdx(rPam.Start()->nNode);
+            SwNodeIndex aIdx(rPam.Start()->GetNode());
 
             do
             {
@@ -1305,8 +1305,8 @@ namespace //local functions originally from docfmt.cxx
         SwDoc& rDoc,
         const SwPaM &rRg)
     {
-        SwNodeIndex aIdx( rRg.Start()->nNode );
-        const SwNodeIndex aEndNd( rRg.End()->nNode );
+        SwNodeIndex aIdx( rRg.Start()->GetNode() );
+        const SwNodeIndex aEndNd( rRg.End()->GetNode() );
         while( aIdx <= aEndNd )
         {
             SwTextNode *pNode = aIdx.GetNode().GetTextNode();
@@ -2689,7 +2689,7 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
 
 void DocumentContentOperationsManager::MoveAndJoin( SwPaM& rPaM, SwPosition& rPos )
 {
-    SwNodeIndex aIdx( rPaM.Start()->nNode );
+    SwNodeIndex aIdx( rPaM.Start()->GetNode() );
     bool bJoinText = aIdx.GetNode().IsTextNode();
     bool bOneNode = rPaM.GetPoint()->nNode == rPaM.GetMark()->nNode;
     aIdx--;             // in front of the move area!
@@ -2990,7 +2990,7 @@ void DocumentContentOperationsManager::TransliterateText(
         const bool bIsTitleCase = rTrans.getType() == TransliterationFlags::TITLE_CASE;
         sal_uLong nAffectedNodes = 0;
         sal_uLong nAffectedChars = nEndCnt;
-        SwNodeIndex aIdx( pStt->nNode );
+        SwNodeIndex aIdx( pStt->GetNode() );
         for( ; aIdx.GetIndex() <= nEndNd; ++aIdx )
         {
             SwTextNode* pAffectedNode = aIdx.GetNode().GetTextNode();
@@ -3024,7 +3024,7 @@ void DocumentContentOperationsManager::TransliterateText(
         // iterate over all affected text nodes, the first and the last one
         // may be incomplete because the selection starts and/or ends there
 
-        SwNodeIndex aIdx( pStt->nNode );
+        SwNodeIndex aIdx( pStt->GetNode() );
         if( nSttCnt )
         {
             ++aIdx;
@@ -3421,7 +3421,7 @@ bool DocumentContentOperationsManager::AppendTextNode( SwPosition& rPos )
     if( !pCurNode )
     {
         // so then one can be created!
-        SwNodeIndex aIdx( rPos.nNode, 1 );
+        SwNodeIndex aIdx( rPos.GetNode(), 1 );
         pCurNode = m_rDoc.GetNodes().MakeTextNode( aIdx.GetNode(),
                         m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD ));
     }
@@ -4351,7 +4351,7 @@ bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam, SwDelet
         &pStt->nContent,
         &pEnd->nContent);
 
-    SwNodeIndex aSttIdx( pStt->nNode );
+    SwNodeIndex aSttIdx( pStt->GetNode() );
     SwContentNode * pCNd = aSttIdx.GetNode().GetContentNode();
 
     do {        // middle checked loop!
@@ -4537,7 +4537,7 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
                     aDelPam.Exchange();
 
                 // Remember the End
-                SwNodeIndex aPtNd( aDelPam.GetPoint()->nNode, -1 );
+                SwNodeIndex aPtNd( aDelPam.GetPoint()->GetNode(), -1 );
                 const sal_Int32 nPtCnt = aDelPam.GetPoint()->GetContentIndex();
 
                 bool bFirst = true;
@@ -4547,7 +4547,7 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
                     InsertString( aDelPam, sIns );
                     if( bFirst )
                     {
-                        SwNodeIndex aMkNd( aDelPam.GetMark()->nNode, -1 );
+                        SwNodeIndex aMkNd( aDelPam.GetMark()->GetNode(), -1 );
                         const sal_Int32 nMkCnt = aDelPam.GetMark()->GetContentIndex();
 
                         SplitNode( *aDelPam.GetPoint(), false );
@@ -4645,7 +4645,7 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
             if( aDelPam.GetPoint() != pStt )
                 aDelPam.Exchange();
 
-            SwNodeIndex aPtNd( pStt->nNode, -1 );
+            SwNodeIndex aPtNd( pStt->GetNode(), -1 );
             const sal_Int32 nPtCnt = pStt->GetContentIndex();
 
             // Set the values again, if Frames or footnotes on the Text have been removed.

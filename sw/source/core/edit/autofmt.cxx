@@ -675,7 +675,7 @@ bool SwAutoFormat::DoTable()
         // then create a table that matches the character
         DelEmptyLine();
         // WARNING: rTmp may be deleted now, m_pCurTextFrame may be nullptr
-        SwNodeIndex aIdx( m_aDelPam.GetPoint()->nNode );
+        SwNodeIndex aIdx( m_aDelPam.GetPoint()->GetNode() );
         m_aDelPam.Move( fnMoveForward );
         m_pDoc->InsertTable( SwInsertTableOptions( SwInsertTableFlags::All , 1 ),
                            *m_aDelPam.GetPoint(), 1, nColCnt, eHori,
@@ -2753,7 +2753,7 @@ void SwEditShell::AutoFormatBySplitNode()
     else
     {
         // then go one node backwards
-        SwNodeIndex aNdIdx(pCursor->GetMark()->nNode);
+        SwNodeIndex aNdIdx(pCursor->GetMark()->GetNode());
         sw::GotoPrevLayoutTextFrame(aNdIdx, GetLayout());
         SwTextNode* pTextNd = aNdIdx.GetNode().GetTextNode();
         if (pTextNd && !pTextNd->GetText().isEmpty())

@@ -185,7 +185,7 @@ ErrCode SwReader::Read( const Reader& rOptions )
         // make sure the End position is correct for all Readers
         SwContentNode* pCNd = pPam->GetContentNode();
         sal_Int32 nEndContent = pCNd ? pCNd->Len() - nSttContent : 0;
-        SwNodeIndex aEndPos( pPam->GetPoint()->nNode, 1 );
+        SwNodeIndex aEndPos( pPam->GetPoint()->GetNode(), 1 );
 
         mxDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
 

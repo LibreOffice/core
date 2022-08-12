@@ -1198,7 +1198,7 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
             {
                 rSection.SetConnectFlag();
 
-                SwNodeIndex aSave( pPam->GetPoint()->nNode, -1 );
+                SwNodeIndex aSave( pPam->GetPoint()->GetNode(), -1 );
                 std::optional<SwNodeRange> oCpyRg;
 
                 if( xDocSh->GetMedium() &&

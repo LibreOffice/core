@@ -3472,7 +3472,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
 
                 if( bForceFrame )
                 {
-                    SwNodeIndex aDstIdx( m_pPam->GetPoint()->nNode );
+                    SwNodeIndex aDstIdx( m_pPam->GetPoint()->GetNode() );
                     m_pPam->Move( fnMoveBackward );
                     m_xDoc->GetNodes().Delete( aDstIdx );
                 }

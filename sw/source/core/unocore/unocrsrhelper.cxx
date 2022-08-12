@@ -1145,7 +1145,7 @@ void InsertFile(SwUnoCursor* pUnoCursor, const OUString& rURL,
     if(pUnoCursor->HasMark())
         rDoc.getIDocumentContentOperations().DeleteAndJoin(*pUnoCursor);
 
-    SwNodeIndex aSave(  pUnoCursor->GetPoint()->nNode, -1 );
+    SwNodeIndex aSave(  pUnoCursor->GetPoint()->GetNode(), -1 );
     sal_Int32 nContent = pUnoCursor->GetPoint()->GetContentIndex();
 
     ErrCode nErrno = pRdr->Read( *pRead );   // and paste the document

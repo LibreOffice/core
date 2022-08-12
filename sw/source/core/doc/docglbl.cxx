@@ -353,8 +353,8 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                         if( nNodeDiff )
                         {
                             SwPaM aTmp( *pStartNd, aEndIdx.GetNode(), SwNodeOffset(1), SwNodeOffset(-1) );
-                            SwNodeIndex aSIdx( aTmp.GetMark()->nNode );
-                            SwNodeIndex aEIdx( aTmp.GetPoint()->nNode );
+                            SwNodeIndex aSIdx( aTmp.GetMark()->GetNode() );
+                            SwNodeIndex aEIdx( aTmp.GetPoint()->GetNode() );
 
                             // Try to move past the end
                             if( !aTmp.Move( fnMoveForward, GoInNode ) )

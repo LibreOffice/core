@@ -4601,7 +4601,7 @@ void wwSectionManager::InsertSegments()
         {
             // Start getting the bounds of this section
             SwPaM aSectPaM(*mrReader.m_pPaM, mrReader.m_pPaM);
-            SwNodeIndex aAnchor(aSectPaM.GetPoint()->nNode);
+            SwNodeIndex aAnchor(aSectPaM.GetPoint()->GetNode());
             if (aNext != aEnd)
             {
                 aAnchor = aNext->maStart;

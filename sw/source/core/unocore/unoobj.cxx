@@ -2842,7 +2842,7 @@ SwXTextCursor::sort(const uno::Sequence< beans::PropertyValue >& rDescriptor)
     SwPosition & rStart = *rUnoCursor.Start();
     SwPosition & rEnd   = *rUnoCursor.End();
 
-    SwNodeIndex aPrevIdx( rStart.nNode, -1 );
+    SwNodeIndex aPrevIdx( rStart.GetNode(), -1 );
     const SwNodeOffset nOffset = rEnd.GetNodeIndex() - rStart.GetNodeIndex();
     const sal_Int32 nCntStt  = rStart.GetContentIndex();
 

@@ -1478,8 +1478,8 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
     if( this == &rNodes && *pStt <= rPos && rPos < *pEnd )
         return;
 
-    SwNodeIndex aEndIdx( pEnd->nNode );
-    SwNodeIndex aSttIdx( pStt->nNode );
+    SwNodeIndex aEndIdx( pEnd->GetNode() );
+    SwNodeIndex aSttIdx( pStt->GetNode() );
     SwTextNode *const pSrcNd = aSttIdx.GetNode().GetTextNode();
     SwTextNode * pDestNd = rPos.GetNode().GetTextNode();
     bool bSplitDestNd = true;

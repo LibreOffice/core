@@ -1365,8 +1365,8 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
         {
             if( rTmpCursor.HasMark() )
             {
-                SwNodeIndex nStartIndex( rTmpCursor.Start()->nNode );
-                SwNodeIndex nEndIndex( rTmpCursor.End()->nNode );
+                SwNodeIndex nStartIndex( rTmpCursor.Start()->GetNode() );
+                SwNodeIndex nEndIndex( rTmpCursor.End()->GetNode() );
                 for (; nStartIndex <= nEndIndex; ++nStartIndex)
                 {
                     SwFrame *pFrame = nullptr;
@@ -3280,7 +3280,7 @@ std::unique_ptr<SwAccessibleSelectedParas_Impl> SwAccessibleMap::BuildSelectedPa
         {
             auto [pStartPos, pEndPos] = pCursor->StartEnd(); // SwPosition*
             // loop on all text nodes inside the selection
-            SwNodeIndex aIdx( pStartPos->nNode );
+            SwNodeIndex aIdx( pStartPos->GetNode() );
             for ( ; aIdx.GetIndex() <= pEndPos->GetNodeIndex(); ++aIdx )
             {
                 SwTextNode* pTextNode( aIdx.GetNode().GetTextNode() );

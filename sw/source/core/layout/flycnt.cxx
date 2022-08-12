@@ -110,7 +110,7 @@ void SwFlyAtContentFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rH
 
     // Search the new anchor using the NodeIdx; the relation between old
     // and new NodeIdx determines the search direction
-    const SwNodeIndex aNewIdx(pAnch->GetContentAnchor()->nNode);
+    const SwNodeIndex aNewIdx(pAnch->GetContentAnchor()->GetNode());
     SwNodeIndex aOldIdx(pContent->IsTextFrame()
             // sw_redlinehide: can pick any node here, the compare with
             // FrameContainsNode should catch it

@@ -195,8 +195,8 @@ void SwEditShell::SetSectionAttr( const SfxItemSet& rSet,
 
                 if( pSttSectNd && pEndSectNd )
                 {
-                    SwNodeIndex aSIdx( pStt->nNode );
-                    SwNodeIndex aEIdx( pEnd->nNode );
+                    SwNodeIndex aSIdx( pStt->GetNode() );
+                    SwNodeIndex aEIdx( pEnd->GetNode() );
                     if( pSttSectNd->EndOfSectionIndex() <
                         pEndSectNd->GetIndex() )
                     {
@@ -266,7 +266,7 @@ sal_uInt16 SwEditShell::GetFullSelectedSectionCount() const
 // What about only a table inside the section ?
 //      There is only a table selection possible!
 
-        SwNodeIndex aSIdx( pStt->nNode, -1 ), aEIdx( pEnd->nNode, +1 );
+        SwNodeIndex aSIdx( pStt->GetNode(), -1 ), aEIdx( pEnd->GetNode(), +1 );
         if( !aSIdx.GetNode().IsSectionNode() ||
             !aEIdx.GetNode().IsEndNode() ||
             !aEIdx.GetNode().StartOfSectionNode()->IsSectionNode() )
@@ -344,7 +344,7 @@ static const SwNode* lcl_SpecialInsertNode(const SwPosition* pCurrentPos)
         // we found a start if
         // - we're at or just before a start node
         // - there are only start nodes between the current and pInnermostNode
-        SwNodeIndex aBegin( pCurrentPos->nNode );
+        SwNodeIndex aBegin( pCurrentPos->GetNode() );
         if( rCurrentNode.IsContentNode() &&
             (pCurrentPos->GetContentIndex() == 0))
             --aBegin;
@@ -357,7 +357,7 @@ static const SwNode* lcl_SpecialInsertNode(const SwPosition* pCurrentPos)
         // - we're at or just before an end node
         // - there are only end nodes between the current node and
         //   pInnermostNode's end node
-        SwNodeIndex aEnd( pCurrentPos->nNode );
+        SwNodeIndex aEnd( pCurrentPos->GetNode() );
         if( rCurrentNode.IsContentNode() &&
             ( pCurrentPos->GetContentIndex() ==
               rCurrentNode.GetContentNode()->Len() ) )

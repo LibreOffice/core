@@ -2552,7 +2552,7 @@ bool SwWW8ImplReader::JoinNode(SwPaM &rPam, bool bStealAttr)
     bool bRet = false;
     rPam.GetPoint()->nContent = 0; // go to start of paragraph
 
-    SwNodeIndex aPref(rPam.GetPoint()->nNode, -1);
+    SwNodeIndex aPref(rPam.GetPoint()->GetNode(), -1);
 
     if (SwTextNode* pNode = aPref.GetNode().GetTextNode())
     {
@@ -2574,7 +2574,7 @@ bool SwWW8ImplReader::JoinNode(SwPaM &rPam, bool bStealAttr)
                 //cannot be a page break at this point so we can
                 //safely reset m_pLastAnchorPos to avoid any dangling
                 //SwContentIndex's pointing into the deleted paragraph
-                SwNodeIndex aLastAnchorPos(m_oLastAnchorPos->nNode);
+                SwNodeIndex aLastAnchorPos(m_oLastAnchorPos->GetNode());
                 if (aLastAnchorPos == aToBeJoined)
                     m_oLastAnchorPos.reset();
             }
@@ -2591,7 +2591,7 @@ bool SwWW8ImplReader::JoinNode(SwPaM &rPam, bool bStealAttr)
             {
                 // If an open apo pos is here, then clear it before
                 // JoinNext destroys it
-                SwNodeIndex aOpenApoPos(m_xSFlyPara->xMainTextPos->GetPoint()->nNode);
+                SwNodeIndex aOpenApoPos(m_xSFlyPara->xMainTextPos->GetPoint()->GetNode());
                 if (aOpenApoPos == aToBeJoined)
                     m_xSFlyPara->xMainTextPos.reset();
             }
@@ -2663,7 +2663,7 @@ void SwWW8ImplReader::StopApo()
         that comes with the frame by default so that as normal we don't end up
         with one more paragraph than we wanted.
         */
-        SwNodeIndex aPref(m_pPaM->GetPoint()->nNode, -1);
+        SwNodeIndex aPref(m_pPaM->GetPoint()->GetNode(), -1);
 
         SwTwips nNewWidth =
             MoveOutsideFly(m_xSFlyPara->GetFlyFormat(), *m_xSFlyPara->xMainTextPos->GetPoint());
@@ -2696,7 +2696,7 @@ void SwWW8ImplReader::StopApo()
                 //cannot be a page break at this point so we can
                 //safely reset m_pLastAnchorPos to avoid any dangling
                 //SwContentIndex's pointing into the deleted paragraph
-                SwNodeIndex aLastAnchorPos(m_oLastAnchorPos->nNode);
+                SwNodeIndex aLastAnchorPos(m_oLastAnchorPos->GetNode());
                 SwNodeIndex aToBeJoined(aPref, 1);
                 if (aLastAnchorPos == aToBeJoined)
                     m_oLastAnchorPos.reset();
@@ -3431,9 +3431,9 @@ SwFrameFormat *SwWW8ImplReader::ContainsSingleInlineGraphic(const SwPaM &rRegion
     RndStdIds::FLY_AS_CHAR and then we can change its anchoring to centered in the line.
     */
     SwFrameFormat *pRet=nullptr;
-    SwNodeIndex aBegin(rRegion.Start()->nNode);
+    SwNodeIndex aBegin(rRegion.Start()->GetNode());
     const sal_Int32 nBegin(rRegion.Start()->GetContentIndex());
-    SwNodeIndex aEnd(rRegion.End()->nNode);
+    SwNodeIndex aEnd(rRegion.End()->GetNode());
     const sal_Int32 nEnd(rRegion.End()->GetContentIndex());
     const SwTextNode* pTNd;
     const SwTextAttr* pTFlyAttr;

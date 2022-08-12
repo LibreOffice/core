@@ -1083,7 +1083,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
                     nChPos = 0;
 
                     // Set the TableNode as StartNode for all TextNodes in the Table
-                    const SwNodeIndex aTmpIdx( aCntPos.nNode, -1 );
+                    const SwNodeIndex aTmpIdx( aCntPos.GetNode(), -1 );
                     pSttNd = new SwStartNode( aTmpIdx.GetNode(), SwNodeType::Start,
                                                 SwTableBoxStartNode );
                     new SwEndNode( aCntPos.GetNode(), *pSttNd );
@@ -1105,7 +1105,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
             pContentStore->Restore( *pTextNd, pTextNd->GetText().getLength(), pTextNd->GetText().getLength()+1 );
 
         pSttNd = new SwStartNode( aCntPos.GetNode(), SwNodeType::Start, SwTableBoxStartNode );
-        const SwNodeIndex aTmpIdx( aCntPos.nNode, 1 );
+        const SwNodeIndex aTmpIdx( aCntPos.GetNode(), 1 );
         new SwEndNode( aTmpIdx.GetNode(), *pSttNd  );
         pTextNd->m_pStartOfSection = pSttNd;
 

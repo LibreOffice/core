@@ -495,7 +495,7 @@ ErrCode SwHTMLWriter::WriteStream()
         }
 
         // first node (with can contain a page break)
-        m_pStartNdIdx = new SwNodeIndex( m_pCurrentPam->GetPoint()->nNode );
+        m_pStartNdIdx = new SwNodeIndex( m_pCurrentPam->GetPoint()->GetNode() );
 
         SwSectionNode * pSNd = m_pCurrentPam->GetNode().FindSectionNode();
         while( pSNd )
