@@ -483,7 +483,7 @@ bool GotoPrevTable( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosTable
 {
     SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
 
-    SwNodeIndex aIdx( rCurrentCursor.GetPoint()->nNode );
+    SwNodeIndex aIdx( rCurrentCursor.GetPoint()->GetNode() );
 
     SwTableNode* pTableNd = aIdx.GetNode().FindTableNode();
     if( pTableNd )
@@ -562,7 +562,7 @@ bool GotoNextTable( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosTable
 {
     SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
 
-    SwNodeIndex aIdx( rCurrentCursor.GetPoint()->nNode );
+    SwNodeIndex aIdx( rCurrentCursor.GetPoint()->GetNode() );
     SwTableNode* pTableNd = aIdx.GetNode().FindTableNode();
 
     if( pTableNd )

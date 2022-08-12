@@ -3061,7 +3061,7 @@ SwTextNode* SwTextNode::MakeNewTextNode( const SwNodeIndex& rPos, bool bNext,
 SwContentNode* SwTextNode::AppendNode( const SwPosition & rPos )
 {
     // position behind which it will be inserted
-    SwNodeIndex aIdx( rPos.nNode, 1 );
+    SwNodeIndex aIdx( rPos.GetNode(), 1 );
     SwTextNode* pNew = MakeNewTextNode( aIdx );
 
     // reset list attributes at appended text node

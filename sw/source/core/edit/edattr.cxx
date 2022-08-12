@@ -705,7 +705,7 @@ SvtScriptType SwEditShell::GetScriptType() const
             else
             {
                 SwNodeOffset nEndIdx = pEnd->GetNodeIndex();
-                SwNodeIndex aIdx( pStt->nNode );
+                SwNodeIndex aIdx( pStt->GetNode() );
                 for( ; aIdx.GetIndex() <= nEndIdx; ++aIdx )
                     if( aIdx.GetNode().IsTextNode() )
                     {

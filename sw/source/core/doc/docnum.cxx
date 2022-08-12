@@ -457,7 +457,7 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam, SwOutlineNodes::difference_type 
     }
 
     SwOutlineNodes::size_type nCurrentPos = 0;
-    SwNodeIndex aSttRg( rStt.nNode ), aEndRg( rEnd.nNode );
+    SwNodeIndex aSttRg( rStt.GetNode() ), aEndRg( rEnd.GetNode() );
 
     int nOutLineLevel = MAXLEVEL;
     SwNode* pSrch = &aSttRg.GetNode();
@@ -1506,7 +1506,7 @@ static bool lcl_GotoNextPrevNum( SwPosition& rPos, bool bNext,
 
     sal_uInt8 nSrchNum = static_cast<sal_uInt8>(pNd->GetActualListLevel());
 
-    SwNodeIndex aIdx( rPos.nNode );
+    SwNodeIndex aIdx( rPos.GetNode() );
     if( ! pNd->IsCountedInList() )
     {
         bool bError = false;
@@ -1630,7 +1630,7 @@ const SwNumRule *  SwDoc::SearchNumRule(const SwPosition & rPos,
 
     if (pTextNd)
     {
-        SwNodeIndex aIdx(rPos.nNode);
+        SwNodeIndex aIdx(rPos.GetNode());
 
         // - the start node has also been investigated, if requested.
         const SwNode * pNode = nullptr;
@@ -2286,7 +2286,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
                 {
                     pOwnRedl = rTable[nRedlPosWithEmpty];
                     SwPosition *pRPos = nOffset < SwNodeOffset(0) ? pOwnRedl->End() : pOwnRedl->Start();
-                    SwNodeIndex aIdx2 ( pRPos->nNode );
+                    SwNodeIndex aIdx2 ( pRPos->GetNode() );
                     SwTextNode const*const pEmptyNode0(aIdx2.GetNode().GetTextNode());
                     if ( nOffset < SwNodeOffset(0) )
                     {

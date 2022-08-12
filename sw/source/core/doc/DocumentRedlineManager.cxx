@@ -3137,7 +3137,7 @@ const SwRangeRedline* DocumentRedlineManager::SelNextRedline( SwPaM& rPam ) cons
         const SwPosition* pEnd = pFnd->End();
         if( !pEnd->GetNode().IsContentNode() )
         {
-            SwNodeIndex aTmp( pEnd->nNode );
+            SwNodeIndex aTmp( pEnd->GetNode() );
             SwContentNode* pCNd = SwNodes::GoPrevSection( &aTmp );
             if( !pCNd || ( aTmp == rSttPos.nNode &&
                 pCNd->Len() == rSttPos.GetContentIndex() ))
@@ -3263,7 +3263,7 @@ const SwRangeRedline* DocumentRedlineManager::SelPrevRedline( SwPaM& rPam ) cons
         const SwPosition* pStt = pFnd->Start();
         if( !pStt->GetNode().IsContentNode() )
         {
-            SwNodeIndex aTmp( pStt->nNode );
+            SwNodeIndex aTmp( pStt->GetNode() );
             SwContentNode* pCNd = m_rDoc.GetNodes().GoNextSection( &aTmp );
             if( !pCNd || ( aTmp == rSttPos.nNode &&
                 !rSttPos.GetContentIndex() ))

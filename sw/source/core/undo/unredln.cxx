@@ -335,7 +335,7 @@ void SwUndoRedlineSort::UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
 
     auto [pStart, pEnd] = rPam.StartEnd(); // SwPosition*
 
-    SwNodeIndex aPrevIdx( pStart->nNode, -1 );
+    SwNodeIndex aPrevIdx( pStart->GetNode(), -1 );
     SwNodeOffset nOffsetTemp = pEnd->GetNodeIndex() - pStart->GetNodeIndex();
 
     if( !( RedlineFlags::ShowDelete & rDoc.getIDocumentRedlineAccess().GetRedlineFlags()) )
@@ -381,7 +381,7 @@ void SwUndoRedlineSort::RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
     SwPaM* pPam = &rPam;
     auto [pStart, pEnd] = pPam->StartEnd(); // SwPosition*
 
-    SwNodeIndex aPrevIdx( pStart->nNode, -1 );
+    SwNodeIndex aPrevIdx( pStart->GetNode(), -1 );
     SwNodeOffset nOffsetTemp = pEnd->GetNodeIndex() - pStart->GetNodeIndex();
     const sal_Int32 nCntStt  = pStart->GetContentIndex();
 

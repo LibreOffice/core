@@ -532,7 +532,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
             {
                 if (rEntry.MakeRegion(m_rDoc, aRegion, SwFltStackEntry::RegionMode::CheckNodes))
                 {
-                    SwNodeIndex aTmpStart( aRegion.Start()->nNode );
+                    SwNodeIndex aTmpStart( aRegion.Start()->GetNode() );
                     SwNodeIndex aTmpEnd( aTmpStart );
                     SwNodeIndex& rRegEndNd = aRegion.End()->nNode;
                     while( IterateNumrulePiece( rRegEndNd,
@@ -770,9 +770,9 @@ void SwFltControlStack::Delete(const SwPaM &rPam)
     if( !rPam.HasMark() || *pStt >= *pEnd )
         return;
 
-    SwNodeIndex aStartNode(pStt->nNode, -1);
+    SwNodeIndex aStartNode(pStt->GetNode(), -1);
     const sal_Int32 nStartIdx = pStt->GetContentIndex();
-    SwNodeIndex aEndNode(pEnd->nNode, -1);
+    SwNodeIndex aEndNode(pEnd->GetNode(), -1);
     const sal_Int32 nEndIdx = pEnd->GetContentIndex();
 
     // We don't support deleting content that is over one node, or removing a node.

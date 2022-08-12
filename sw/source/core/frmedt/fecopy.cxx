@@ -946,7 +946,7 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
                 GetDoc()->ClearBoxNumAttrs( rInsPos.nNode );
             }
             {
-                SwNodeIndex aIndexBefore(rInsPos.nNode);
+                SwNodeIndex aIndexBefore(rInsPos.GetNode());
                 --aIndexBefore;
                 rClpDoc.getIDocumentContentOperations().CopyRange(rCopy, rInsPos, SwCopyFlags::CheckPosInFly);
                 {
@@ -1085,7 +1085,7 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
                 // ** Update SwDoc::Append, if you change the following code **
                 // **
                 {
-                    SwNodeIndex aIndexBefore(rInsPos.nNode);
+                    SwNodeIndex aIndexBefore(rInsPos.GetNode());
 
                     --aIndexBefore;
 

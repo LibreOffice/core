@@ -366,7 +366,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
         }
     }
 
-    SwNodeIndex aStart(pStart->nNode);
+    SwNodeIndex aStart(pStart->GetNode());
     SwSortElement::Init( this, rOpt );
     std::multiset<SwSortTextElement> aSortSet;
     while( aStart <= pEnd->nNode )
@@ -439,7 +439,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
 
         if( pRedlUndo )
         {
-            SwNodeIndex aInsEndIdx( pRedlPam->GetMark()->nNode, -1 );
+            SwNodeIndex aInsEndIdx( pRedlPam->GetMark()->GetNode(), -1 );
             pRedlPam->GetMark()->nNode = aInsEndIdx;
             SwContentNode *const pPrevNode =
                 pRedlPam->GetMark()->GetNode().GetContentNode();

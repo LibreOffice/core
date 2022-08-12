@@ -1530,7 +1530,7 @@ static bool lcl_CheckHiddenSection( SwNodeIndex& rIdx )
 /// Try to set the cursor to the next visible content node.
 static void lcl_CheckHiddenPara( SwPosition& rPos )
 {
-    SwNodeIndex aTmp( rPos.nNode );
+    SwNodeIndex aTmp( rPos.GetNode() );
     SwTextNode* pTextNd = aTmp.GetNode().GetTextNode();
     while( pTextNd && pTextNd->HasHiddenCharAttribute( true ) )
     {
@@ -3643,7 +3643,7 @@ void SwCursorShell::ClearUpCursors()
     {
         SwNodes & aNodes = GetDoc()->GetNodes();
         const SwNode* pStart = lcl_NodeContext( pStartCursor->GetPoint()->GetNode() );
-        SwNodeIndex aIdx( pStartCursor->GetPoint()->nNode );
+        SwNodeIndex aIdx( pStartCursor->GetPoint()->GetNode() );
         SwNode * pNode = SwNodes::GoPrevious(&aIdx);
         if( pNode == nullptr || lcl_NodeContext( *pNode ) != pStart )
             aNodes.GoNext( &aIdx );
