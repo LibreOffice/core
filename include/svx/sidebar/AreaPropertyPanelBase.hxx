@@ -149,7 +149,6 @@ protected:
     OUString  maImgLinear;
 
     std::unique_ptr< XFillFloatTransparenceItem >   mpFloatTransparenceItem;
-    std::unique_ptr< XFillUseSlideBackgroundItem > mpUseSlideBackgroundItem;
     std::unique_ptr< SfxUInt16Item >                mpTransparenceItem;
 
     DECL_DLLPRIVATE_LINK(SelectFillTypeHdl, weld::ComboBox&, void );

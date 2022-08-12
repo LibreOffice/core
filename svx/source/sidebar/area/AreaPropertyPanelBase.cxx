@@ -1007,10 +1007,7 @@ void AreaPropertyPanelBase::updateFillBitmap(bool bDisabled, bool bDefaultOrSet,
 void AreaPropertyPanelBase::updateFillUseBackground(bool bDisabled, bool bDefaultOrSet, const SfxPoolItem* pState)
 {
     if (bDisabled)
-    {
-        mpUseSlideBackgroundItem.reset();
         return;
-    }
 
     if (bDefaultOrSet)
     {
@@ -1020,17 +1017,8 @@ void AreaPropertyPanelBase::updateFillUseBackground(bool bDisabled, bool bDefaul
             // When XFillUseSlideBackgroundItem is true, select "Use Background Fill". When false, select "None"
             int nPos = pItem->GetValue() ? USE_BACKGROUND : NONE;
             mxLbFillType->set_active(nPos);
-            mpUseSlideBackgroundItem.reset(pItem->Clone());
             FillStyleChanged(false);
         }
-        else
-        {
-            mpUseSlideBackgroundItem.reset();
-        }
-    }
-    else
-    {
-        mpUseSlideBackgroundItem.reset();
     }
 }
 
