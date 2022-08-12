@@ -290,13 +290,9 @@ wrapper::ItemConverter* createItemConverter(
                     break;
             case OBJECTTYPE_DATA_TABLE:
             {
-                std::unique_ptr<awt::Size> pRefSize;
-                if (pRefSizeProvider)
-                    pRefSize.reset(new awt::Size(pRefSizeProvider->getPageSize()));
-
                 pItemConverter =  new wrapper::DataTableItemConverter(
                                         xObjectProperties, rDrawModel.GetItemPool(),
-                                        rDrawModel, xChartModel, pRefSize.get());
+                                        rDrawModel, xChartModel);
             }
             break;
             default: //OBJECTTYPE_UNKNOWN
