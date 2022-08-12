@@ -169,7 +169,7 @@ public:
      *          path relative to xCFG parameter.
      *
      *  @param  sSetNode
-     *          the set node, which should be checked if its exists ...
+     *          the set node, which should be checked if it exists...
      *          or which should be created with default values.
      *
      *  @return A reference to the found (or new created) set node.
