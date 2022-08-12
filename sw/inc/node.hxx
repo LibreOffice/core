@@ -117,7 +117,7 @@ protected:
     /// only used by SwContentNodeTmp in SwTextNode::Update
     SwNode();
 
-    SwNode( const SwNodeIndex &rWhere, const SwNodeType nNodeId );
+    SwNode( const SwNode& rWhere, const SwNodeType nNodeId );
 
     /// for the initial StartNode
     SwNode( SwNodes& rNodes, SwNodeOffset nPos, const SwNodeType nNodeId );
@@ -327,7 +327,7 @@ class SAL_DLLPUBLIC_RTTI SwStartNode: public SwNode
     SwStartNode( SwNodes& rNodes, SwNodeOffset nPos );
 
 protected:
-    SwStartNode( const SwNodeIndex &rWhere,
+    SwStartNode( const SwNode& rWhere,
                  const SwNodeType nNodeType = SwNodeType::Start,
                  SwStartNodeType = SwNormalStartNode );
 public:
@@ -353,7 +353,7 @@ class SwEndNode final : public SwNode
     /// for the initial StartNode
     SwEndNode( SwNodes& rNodes, SwNodeOffset nPos, SwStartNode& rSttNd );
 
-    SwEndNode( const SwNodeIndex &rWhere, SwStartNode& rSttNd );
+    SwEndNode( const SwNode& rWhere, SwStartNode& rSttNd );
 
     SwEndNode( const SwEndNode & rNode ) = delete;
     SwEndNode & operator= ( const SwEndNode & rNode ) = delete;
@@ -372,7 +372,7 @@ protected:
     /// only used by SwContentNodeTmp in SwTextNode::Update
     SwContentNode();
 
-    SwContentNode( const SwNodeIndex &rWhere, const SwNodeType nNodeType,
+    SwContentNode( const SwNode& rWhere, const SwNodeType nNodeType,
                 SwFormatColl *pFormatColl );
     /** the = 0 forces the class to be an abstract base class, but the dtor can be still called
        from subclasses */
@@ -432,7 +432,7 @@ public:
        There are differences between text node and formula node. */
     virtual sal_Int32 Len() const;
 
-    virtual SwContentNode* MakeCopy(SwDoc&, const SwNodeIndex&, bool bNewFrames) const = 0;
+    virtual SwContentNode* MakeCopy(SwDoc&, SwNode& rWhere, bool bNewFrames) const = 0;
 
     /// Get information from Client.
     virtual bool GetInfo( SfxPoolItem& ) const override;
@@ -508,7 +508,7 @@ class SW_DLLPUBLIC SwTableNode final : public SwStartNode, public sw::Broadcasti
     virtual ~SwTableNode() override;
 
 public:
-    SwTableNode( const SwNodeIndex & );
+    SwTableNode( const SwNode& );
 
     const SwTable& GetTable() const { return *m_pTable; }
     SwTable& GetTable() { return *m_pTable; }
@@ -552,7 +552,7 @@ private:
     virtual ~SwSectionNode() override;
 
 public:
-    SwSectionNode(SwNodeIndex const&,
+    SwSectionNode(const SwNode& rWhere,
         SwSectionFormat & rFormat, SwTOXBase const*const pTOXBase);
 
     const SwSection& GetSection() const { return *m_pSection; }
@@ -596,7 +596,7 @@ class SwPlaceholderNode final : private SwNode
 {
 private:
     friend class SwNodes;
-    SwPlaceholderNode(const SwNodeIndex &rWhere);
+    SwPlaceholderNode(const SwNode& rWhere);
 };
 
 inline       SwEndNode   *SwNode::GetEndNode()
@@ -743,7 +743,7 @@ inline const SfxPoolItem& SwContentNode::GetAttr( sal_uInt16 nWhich,
     return GetSwAttrSet().Get( nWhich, bInParents );
 }
 
-inline SwPlaceholderNode::SwPlaceholderNode(const SwNodeIndex &rWhere)
+inline SwPlaceholderNode::SwPlaceholderNode(const SwNode& rWhere)
     : SwNode(rWhere, SwNodeType::PlaceHolder)
 {
 }

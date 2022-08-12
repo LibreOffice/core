@@ -389,7 +389,7 @@ SwTOXBaseSection* SwDoc::InsertTableOf( const SwPaM& aPam,
             // then insert the headline section
             SwNodeIndex aIdx( *pSectNd, +1 );
 
-            SwTextNode* pHeadNd = GetNodes().MakeTextNode( aIdx,
+            SwTextNode* pHeadNd = GetNodes().MakeTextNode( aIdx.GetNode(),
                             getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD ) );
 
             SwSectionData headerData( SectionType::ToxHeader, pNewSection->GetTOXName()+"_Head" );
@@ -992,7 +992,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
 
         SwNodeIndex aSttIdx( *pSectNd, +1 );
         SwNodeIndex aEndIdx( *pSectNd->EndOfSectionNode() );
-        pFirstEmptyNd = rDoc.GetNodes().MakeTextNode( aEndIdx,
+        pFirstEmptyNd = rDoc.GetNodes().MakeTextNode( aEndIdx.GetNode(),
                         rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TEXT ) );
 
         {
@@ -1041,7 +1041,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         // then insert the headline section
         SwNodeIndex aIdx( *pSectNd, +1 );
 
-        SwTextNode* pHeadNd = rDoc.GetNodes().MakeTextNode( aIdx,
+        SwTextNode* pHeadNd = rDoc.GetNodes().MakeTextNode( aIdx.GetNode(),
                                 GetTextFormatColl( FORM_TITLE ) );
         pHeadNd->InsertText( GetTitle(), SwContentIndex( pHeadNd ) );
 
@@ -1076,7 +1076,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         }
 
         // Generate: Set dynamic TabStops
-        SwTextNode* pTOXNd = rDoc.GetNodes().MakeTextNode( aInsPos , pColl );
+        SwTextNode* pTOXNd = rDoc.GetNodes().MakeTextNode( aInsPos.GetNode() , pColl );
         m_aSortArr[ nCnt ]->pTOXNd = pTOXNd;
 
         // Generate: Evaluate Form and insert the place holder for the

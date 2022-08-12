@@ -606,7 +606,7 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                         if( !pSttNd->IsSectionNode() )
                         {
                             // create StartNode and EndNode at InsertPos
-                            SwStartNode* pTmp = new SwStartNode( aIdx,
+                            SwStartNode* pTmp = new SwStartNode( aIdx.GetNode(),
                                                     SwNodeType::Start,
 /*?? NodeType ??*/                                  SwNormalStartNode );
 
@@ -614,13 +614,13 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                             aSttNdStack.insert( aSttNdStack.begin() + nLevel, pTmp );
 
                             // create EndNode
-                            new SwEndNode( aIdx, *pTmp );
+                            new SwEndNode( aIdx.GetNode(), *pTmp );
                         }
                         else if (GetDoc().GetIDocumentUndoRedo().IsUndoNodes(
                                     rNodes))
                         {
                             // use placeholder in UndoNodes array
-                            new SwPlaceholderNode(aIdx);
+                            new SwPlaceholderNode(aIdx.GetNode());
                         }
                         else
                         {
@@ -701,7 +701,7 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                     aIdx -= nInsPos;
                     nInsPos = SwNodeOffset(0);
                 }
-                new SwPlaceholderNode(aIdx);
+                new SwPlaceholderNode(aIdx.GetNode());
                 --aRg.aEnd;
                 --aIdx;
                 break;
@@ -722,14 +722,14 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                 {
                     // create decrease
                     SwNodeIndex aTmpSIdx( aOrigInsPos.aStart, 1 );
-                    SwStartNode* pTmpStt = new SwStartNode( aTmpSIdx,
+                    SwStartNode* pTmpStt = new SwStartNode( aTmpSIdx.GetNode(),
                                 SwNodeType::Start,
                                 static_cast<SwStartNode*>(pCurrentNode)->GetStartNodeType() );
 
                     --aTmpSIdx;
 
                     SwNodeIndex aTmpEIdx( aOrigInsPos.aEnd );
-                    new SwEndNode( aTmpEIdx, *pTmpStt );
+                    new SwEndNode( aTmpEIdx.GetNode(), *pTmpStt );
                     --aTmpEIdx;
                     ++aTmpSIdx;
 
@@ -929,7 +929,7 @@ void SwNodes::SectionDown(SwNodeRange *pRange, SwStartNodeType eSttNdTyp )
     else
     {
         // insert a new StartNode
-        SwNode* pSttNd = new SwStartNode( pRange->aStart, SwNodeType::Start, eSttNdTyp );
+        SwNode* pSttNd = new SwStartNode( pRange->aStart.GetNode(), SwNodeType::Start, eSttNdTyp );
         pRange->aStart = *pSttNd;
         aTmpIdx = pRange->aStart;
     }
@@ -944,7 +944,7 @@ void SwNodes::SectionDown(SwNodeRange *pRange, SwStartNodeType eSttNdTyp )
     {
         ++pRange->aEnd;
         // insert a new EndNode
-        new SwEndNode( pRange->aEnd, *pRange->aStart.GetNode().GetStartNode() );
+        new SwEndNode( pRange->aEnd.GetNode(), *pRange->aStart.GetNode().GetStartNode() );
     }
     --pRange->aEnd;
 
@@ -1005,7 +1005,7 @@ void SwNodes::SectionUp(SwNodeRange *pRange)
     else if( aIdx == pRange->aStart.GetIndex()-1 ) // before StartNode
         DelNodes( aIdx );
     else
-        new SwEndNode( pRange->aStart, *aIdx.GetNode().GetStartNode() );
+        new SwEndNode( pRange->aStart.GetNode(), *aIdx.GetNode().GetStartNode() );
 
     // If the end of a range is before or at a StartNode, so delete it,
     // otherwise empty S/E or E/S nodes would be created.
@@ -1015,7 +1015,7 @@ void SwNodes::SectionUp(SwNodeRange *pRange)
         DelNodes( pRange->aEnd );
     else
     {
-        new SwStartNode( pRange->aEnd );
+        new SwStartNode( pRange->aEnd.GetNode() );
 /*?? which NodeType ??*/
         aTmpIdx = *pRange->aEnd.GetNode().EndOfSectionNode();
         --pRange->aEnd;
@@ -1489,7 +1489,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
         // be also a TextNode in the NodesArray to store the content
         if( !pDestNd )
         {
-            pDestNd = rNodes.MakeTextNode( rPos.nNode, pSrcNd->GetTextColl() );
+            pDestNd = rNodes.MakeTextNode( rPos.GetNode(), pSrcNd->GetTextColl() );
             --rPos.nNode;
             rPos.nContent.Assign( pDestNd, 0 );
             bCopyCollFormat = true;
@@ -1622,7 +1622,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
             }
 
             pDestNd =
-                rNodes.MakeTextNode( rPos.nNode, pEndSrcNd->GetTextColl() );
+                rNodes.MakeTextNode( rPos.GetNode(), pEndSrcNd->GetTextColl() );
             --rPos.nNode;
             rPos.nContent.Assign( pDestNd, 0 );
         }
@@ -1773,7 +1773,7 @@ void SwNodes::CopyNodes( const SwNodeRange& rRange,
 
                 // insert a DummyNode for a TableNode
                 if( bTableInsDummyNode )
-                    new SwPlaceholderNode(aInsPos);
+                    new SwPlaceholderNode(aInsPos.GetNode());
 
                 // copy all of the table's nodes into the current cell
                 for( ++aRg.aStart; aRg.aStart.GetIndex() <
@@ -1782,7 +1782,7 @@ void SwNodes::CopyNodes( const SwNodeRange& rRange,
                 {
                     // insert a DummyNode for the box-StartNode?
                     if( bTableInsDummyNode )
-                        new SwPlaceholderNode(aInsPos);
+                        new SwPlaceholderNode(aInsPos.GetNode());
 
                     SwStartNode* pSttNd = aRg.aStart.GetNode().GetStartNode();
                     CopyNodes( SwNodeRange( *pSttNd, SwNodeOffset(+ 1),
@@ -1791,12 +1791,12 @@ void SwNodes::CopyNodes( const SwNodeRange& rRange,
 
                     // insert a DummyNode for the box-EndNode?
                     if( bTableInsDummyNode )
-                        new SwPlaceholderNode(aInsPos);
+                        new SwPlaceholderNode(aInsPos.GetNode());
                     aRg.aStart = *pSttNd->EndOfSectionNode();
                 }
                 // insert a DummyNode for the table-EndNode
                 if( bTableInsDummyNode )
-                    new SwPlaceholderNode(aInsPos);
+                    new SwPlaceholderNode(aInsPos.GetNode());
                 aRg.aStart = *pCurrentNode->EndOfSectionNode();
             }
             else
@@ -1847,9 +1847,9 @@ void SwNodes::CopyNodes( const SwNodeRange& rRange,
 
         case SwNodeType::Start:
             {
-                SwStartNode* pTmp = new SwStartNode( aInsPos, SwNodeType::Start,
+                SwStartNode* pTmp = new SwStartNode( aInsPos.GetNode(), SwNodeType::Start,
                             static_cast<SwStartNode*>(pCurrentNode)->GetStartNodeType() );
-                new SwEndNode( aInsPos, *pTmp );
+                new SwEndNode( aInsPos.GetNode(), *pTmp );
                 --aInsPos;
                 nLevel++;
             }
@@ -1878,7 +1878,7 @@ void SwNodes::CopyNodes( const SwNodeRange& rRange,
         case SwNodeType::Ole:
             {
                  static_cast<SwContentNode*>(pCurrentNode)->MakeCopy(
-                                            rDoc, aInsPos, bNewFrames);
+                                            rDoc, aInsPos.GetNode(), bNewFrames);
             }
             break;
 
@@ -1919,8 +1919,8 @@ void SwNodes::DelDummyNodes( const SwNodeRange& rRg )
 SwStartNode* SwNodes::MakeEmptySection( const SwNodeIndex& rIdx,
                                         SwStartNodeType eSttNdTyp )
 {
-    SwStartNode* pSttNd = new SwStartNode( rIdx, SwNodeType::Start, eSttNdTyp );
-    new SwEndNode( rIdx, *pSttNd );
+    SwStartNode* pSttNd = new SwStartNode( rIdx.GetNode(), SwNodeType::Start, eSttNdTyp );
+    new SwEndNode( rIdx.GetNode(), *pSttNd );
     return pSttNd;
 }
 
@@ -1928,9 +1928,9 @@ SwStartNode* SwNodes::MakeTextSection( const SwNode & rWhere,
                                         SwStartNodeType eSttNdTyp,
                                         SwTextFormatColl *pColl )
 {
-    SwStartNode* pSttNd = new SwStartNode( SwNodeIndex(rWhere), SwNodeType::Start, eSttNdTyp );
-    new SwEndNode( SwNodeIndex(rWhere), *pSttNd );
-    MakeTextNode( SwNodeIndex( rWhere, - 1 ), pColl );
+    SwStartNode* pSttNd = new SwStartNode( rWhere, SwNodeType::Start, eSttNdTyp );
+    new SwEndNode( rWhere, *pSttNd );
+    MakeTextNode( SwNodeIndex( rWhere, - 1 ).GetNode(), pColl );
     return pSttNd;
 }
 

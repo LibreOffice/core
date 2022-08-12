@@ -820,7 +820,7 @@ SwSectionNode* SwNodes::InsertTextSection(SwNode& rNd,
     }
 
     SwSectionNode *const pSectNd =
-            new SwSectionNode(aInsPos, rSectionFormat, pTOXBase);
+            new SwSectionNode(aInsPos.GetNode(), rSectionFormat, pTOXBase);
 
     if (lcl_IsTOXSection(rSectionData))
     {
@@ -880,7 +880,7 @@ SwSectionNode* SwNodes::InsertTextSection(SwNode& rNd,
         SwTextNode* pCpyTNd = rNd.GetTextNode();
         if( pCpyTNd )
         {
-            SwTextNode* pTNd = new SwTextNode( aInsPos, pCpyTNd->GetTextColl() );
+            SwTextNode* pTNd = new SwTextNode( aInsPos.GetNode(), pCpyTNd->GetTextColl() );
             if( pCpyTNd->HasSwAttrSet() )
             {
                 // Move PageDesc/Break to the first Node of the section
@@ -905,9 +905,9 @@ SwSectionNode* SwNodes::InsertTextSection(SwNode& rNd,
             pCpyTNd->MakeFramesForAdjacentContentNode(*pTNd);
         }
         else
-            new SwTextNode( aInsPos, GetDoc().GetDfltTextFormatColl() );
+            new SwTextNode( aInsPos.GetNode(), GetDoc().GetDfltTextFormatColl() );
     }
-    new SwEndNode( aInsPos, *pSectNd );
+    new SwEndNode( aInsPos.GetNode(), *pSectNd );
 
     pSectNd->GetSection().SetSectionData(rSectionData);
     SwSectionFormat* pSectFormat = pSectNd->GetSection().GetFormat();
@@ -1005,9 +1005,9 @@ lcl_initParent(SwSectionNode & rThis, SwSectionFormat & rFormat)
     return rFormat;
 }
 
-SwSectionNode::SwSectionNode(SwNodeIndex const& rIdx,
+SwSectionNode::SwSectionNode(const SwNode& rWhere,
         SwSectionFormat & rFormat, SwTOXBase const*const pTOXBase)
-    : SwStartNode( rIdx, SwNodeType::Section )
+    : SwStartNode( rWhere, SwNodeType::Section )
     , m_pSection( pTOXBase
         ? new SwTOXBaseSection(*pTOXBase, lcl_initParent(*this, rFormat))
         : new SwSection( SectionType::Content, rFormat.GetName(),
@@ -1243,8 +1243,8 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc& rDoc, const SwNodeIndex& rIdx ) c
     }
 
     SwSectionNode *const pSectNd =
-        new SwSectionNode(rIdx, *pSectFormat, pTOXBase.get());
-    SwEndNode* pEndNd = new SwEndNode( rIdx, *pSectNd );
+        new SwSectionNode(rIdx.GetNode(), *pSectFormat, pTOXBase.get());
+    SwEndNode* pEndNd = new SwEndNode( rIdx.GetNode(), *pSectNd );
     SwNodeIndex aInsPos( *pEndNd );
 
     // Take over values

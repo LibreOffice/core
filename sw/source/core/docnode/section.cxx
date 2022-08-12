@@ -1124,7 +1124,7 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
         // Insert an empty TextNode at the Section's start
         SwNodeIndex aIdx( *pSectNd, +1 );
         SwNodeIndex aEndIdx( *pSectNd->EndOfSectionNode() );
-        pDoc->GetNodes().MakeTextNode( aIdx,
+        pDoc->GetNodes().MakeTextNode( aIdx.GetNode(),
                         pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TEXT ) );
 
         if( pESh )

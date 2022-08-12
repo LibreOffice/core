@@ -187,7 +187,7 @@ bool SwDOCXReader::MakeEntries( SwDoc *pD, SwTextBlocks &rBlocks )
                 pCNd = rIdx.GetNode().GetTextNode();
                 if( nullptr == pCNd )
                 {
-                    pCNd = pD->GetNodes().MakeTextNode( rIdx, pColl );
+                    pCNd = pD->GetNodes().MakeTextNode( rIdx.GetNode(), pColl );
                     rIdx = *pCNd;
                 }
             }
@@ -205,7 +205,7 @@ bool SwDOCXReader::MakeEntries( SwDoc *pD, SwTextBlocks &rBlocks )
                 if( nullptr == pCNd )
                 {
                     ++rIdx;
-                    pCNd = pD->GetNodes().MakeTextNode( rIdx, pColl );
+                    pCNd = pD->GetNodes().MakeTextNode( rIdx.GetNode(), pColl );
                     rIdx = *pCNd;
                 }
             }

@@ -51,17 +51,17 @@ class SW_DLLPUBLIC SwGrfNode final: public SwNoTextNode
     css::uno::Reference<css::io::XInputStream> mxInputStream;
     bool mbIsStreamReadOnly;
 
-    SwGrfNode( const SwNodeIndex& rWhere,
+    SwGrfNode( SwNode& rWhere,
                const OUString& rGrfName, const OUString& rFltName,
                const Graphic* pGraphic,
                SwGrfFormatColl* pGrfColl,
                SwAttrSet const * pAutoAttr );
     ///< Ctor for reading (SW/G) without graphics.
-    SwGrfNode( const SwNodeIndex& rWhere,
+    SwGrfNode( SwNode& rWhere,
                std::u16string_view rGrfName, const OUString& rFltName,
                SwGrfFormatColl* pGrfColl,
                SwAttrSet const * pAutoAttr );
-    SwGrfNode( const SwNodeIndex& rWhere,
+    SwGrfNode( SwNode& rWhere,
                const GraphicObject& rGrfObj,
                SwGrfFormatColl* pGrfColl,
                SwAttrSet const * pAutoAttr );
@@ -107,7 +107,7 @@ public:
     void SetScaleImageMap( bool b )      { mbScaleImageMap = b; }
 
     /// in ndcopy.cxx
-    virtual SwContentNode* MakeCopy(SwDoc&, const SwNodeIndex&, bool bNewFrames) const override;
+    virtual SwContentNode* MakeCopy(SwDoc&, SwNode&, bool bNewFrames) const override;
 
     /** Re-read in case graphic was not OK. The current one
        gets replaced by the new one. */

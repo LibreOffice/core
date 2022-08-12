@@ -212,7 +212,7 @@ void SwEmbedObjectLink::Closed()
     SvBaseLink::Closed();
 }
 
-SwOLENode::SwOLENode( const SwNodeIndex &rWhere,
+SwOLENode::SwOLENode( SwNode& rWhere,
                     const svt::EmbeddedObjectRef& xObj,
                     SwGrfFormatColl *pGrfColl,
                     SwAttrSet const * pAutoAttr ) :
@@ -224,7 +224,7 @@ SwOLENode::SwOLENode( const SwNodeIndex &rWhere,
     maOLEObj.SetNode( this );
 }
 
-SwOLENode::SwOLENode( const SwNodeIndex &rWhere,
+SwOLENode::SwOLENode( SwNode& rWhere,
                     const OUString &rString,
                     sal_Int64 nAspect,
                     SwGrfFormatColl *pGrfColl,
@@ -378,7 +378,7 @@ bool SwOLENode::SavePersistentData()
     return true;
 }
 
-SwOLENode * SwNodes::MakeOLENode( const SwNodeIndex & rWhere,
+SwOLENode * SwNodes::MakeOLENode( SwNode& rWhere,
                     const svt::EmbeddedObjectRef& xObj,
                                     SwGrfFormatColl* pGrfColl )
 {
@@ -400,7 +400,7 @@ SwOLENode * SwNodes::MakeOLENode( const SwNodeIndex & rWhere,
     return pNode;
 }
 
-SwOLENode * SwNodes::MakeOLENode( const SwNodeIndex & rWhere,
+SwOLENode * SwNodes::MakeOLENode( SwNode& rWhere,
     const OUString &rName, sal_Int64 nAspect, SwGrfFormatColl* pGrfColl, SwAttrSet const * pAutoAttr )
 {
     OSL_ENSURE( pGrfColl,"SwNodes::MakeOLENode: Formatpointer is 0." );
@@ -427,7 +427,7 @@ Size SwOLENode::GetTwipSize() const
     return const_cast<SwOLENode*>(this)->maOLEObj.GetObject().GetSize( &aMapMode );
 }
 
-SwContentNode* SwOLENode::MakeCopy( SwDoc& rDoc, const SwNodeIndex& rIdx, bool) const
+SwContentNode* SwOLENode::MakeCopy( SwDoc& rDoc, SwNode& rIdx, bool) const
 {
     // If there's already a SvPersist instance, we use it
     SfxObjectShell* pPersistShell = rDoc.GetPersist();

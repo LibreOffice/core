@@ -4609,7 +4609,7 @@ void wwSectionManager::InsertSegments()
             if (pTableNd)
             {
                 pTextNd =
-                    mrReader.m_rDoc.GetNodes().MakeTextNode(aAnchor,
+                    mrReader.m_rDoc.GetNodes().MakeTextNode(aAnchor.GetNode(),
                     mrReader.m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TEXT ));
 
                 aSectPaM.GetPoint()->Assign(*pTextNd);

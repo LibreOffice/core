@@ -206,28 +206,28 @@ public:
                                     SwStartNodeType = SwNormalStartNode );
 
     /// Implementations of "Make...Node" are in the given .cxx-files.
-    SwTextNode *MakeTextNode( const SwNodeIndex & rWhere,
+    SwTextNode *MakeTextNode( SwNode& rWhere,
                             SwTextFormatColl *pColl,
                             bool bNewFrames = true); ///< in ndtxt.cxx
     SwStartNode* MakeTextSection( const SwNode & rWhere,
                             SwStartNodeType eSttNdTyp,
                             SwTextFormatColl *pColl );
 
-    static SwGrfNode *MakeGrfNode( const SwNodeIndex & rWhere,
+    static SwGrfNode *MakeGrfNode( SwNode& rWhere,
                             const OUString& rGrfName,
                             const OUString& rFltName,
                             const Graphic* pGraphic,
                             SwGrfFormatColl *pColl,
                             SwAttrSet const * pAutoAttr = nullptr );    ///< in ndgrf.cxx
 
-    static SwGrfNode *MakeGrfNode( const SwNodeIndex & rWhere,
+    static SwGrfNode *MakeGrfNode( SwNode & rWhere,
                             const GraphicObject& rGrfObj,
                             SwGrfFormatColl *pColl ); ///< in ndgrf.cxx
 
-    SwOLENode *MakeOLENode( const SwNodeIndex & rWhere,
+    SwOLENode *MakeOLENode( SwNode& rWhere,
                             const svt::EmbeddedObjectRef&,
                             SwGrfFormatColl *pColl ); ///< in ndole.cxx
-    SwOLENode *MakeOLENode( const SwNodeIndex & rWhere,
+    SwOLENode *MakeOLENode( SwNode& rWhere,
                             const OUString &rName,
                             sal_Int64 nAspect,
                             SwGrfFormatColl *pColl,

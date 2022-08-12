@@ -315,7 +315,7 @@ SwFlyFrameFormat* SwDoc::MakeFlySection( RndStdIds eAnchorType,
         /* If there is no adjust item in the paragraph style for the content node of the new fly section
            propagate an existing adjust item at the anchor to the new content node. */
         SwContentNode * pNewTextNd = GetNodes().MakeTextNode
-            (SwNodeIndex( GetNodes().GetEndOfAutotext()),
+            ( GetNodes().GetEndOfAutotext(),
              getIDocumentStylePoolAccess().GetTextCollFromPool( nCollId ));
         SwContentNode * pAnchorNode = pAnchorPos->GetNode().GetContentNode();
         // pAnchorNode from cursor must be valid, unless a whole table is selected (in which
@@ -386,7 +386,7 @@ SwFlyFrameFormat* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rS
                     // FlyFrame, the we create a TextNode after it.
                     // So that this FlyFrame is preserved.
                     if( aRg.aEnd.GetNode().IsEndNode() )
-                        GetNodes().MakeTextNode( aRg.aStart,
+                        GetNodes().MakeTextNode( aRg.aStart.GetNode(),
                                     GetDfltTextFormatColl() );
 
                     getIDocumentContentOperations().MoveNodeRange( aRg, aPos.nNode, SwMoveFlags::DEFAULT );
@@ -692,7 +692,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
 
                 // Create Node for labeling paragraph.
                 SwNodeIndex aIdx( rDoc.GetNodes(), nNode );
-                pNew = rDoc.GetNodes().MakeTextNode( aIdx, pColl );
+                pNew = rDoc.GetNodes().MakeTextNode( aIdx.GetNode(), pColl );
             }
             break;
 

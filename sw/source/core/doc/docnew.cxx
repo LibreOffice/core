@@ -327,9 +327,9 @@ SwDoc::SwDoc()
     mpOutlineRule->SetCountPhantoms( !GetDocumentSettingManager().get(DocumentSettingId::OLD_NUMBERING) );
 
     new SwTextNode(
-            SwNodeIndex(GetUndoManager().GetUndoNodes().GetEndOfContent()),
+            GetUndoManager().GetUndoNodes().GetEndOfContent(),
             mpDfltTextFormatColl.get() );
-    new SwTextNode( SwNodeIndex( GetNodes().GetEndOfContent() ),
+    new SwTextNode( GetNodes().GetEndOfContent(),
                     getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD ));
 
     maOLEModifiedIdle.SetPriority( TaskPriority::LOWEST );
@@ -677,7 +677,7 @@ void SwDoc::ClearDoc()
 
     SwNodeIndex aSttIdx( *GetNodes().GetEndOfContent().StartOfSectionNode(), 1 );
     // create the first one over and over again (without attributes/style etc.
-    SwTextNode* pFirstNd = GetNodes().MakeTextNode( aSttIdx, mpDfltTextFormatColl.get() );
+    SwTextNode* pFirstNd = GetNodes().MakeTextNode( aSttIdx.GetNode(), mpDfltTextFormatColl.get() );
 
     if( getIDocumentLayoutAccess().GetCurrentViewShell() )
     {

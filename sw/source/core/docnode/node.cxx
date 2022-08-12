@@ -297,7 +297,7 @@ SwNode::SwNode()
     , m_pStartOfSection( nullptr )
 {}
 
-SwNode::SwNode( const SwNodeIndex &rWhere, const SwNodeType nNdType )
+SwNode::SwNode( const SwNode& rWhere, const SwNodeType nNdType )
     : m_nNodeType( nNdType )
     , m_nAFormatNumLvl( 0 )
     , m_bIgnoreDontExpand( false)
@@ -312,7 +312,7 @@ SwNode::SwNode( const SwNodeIndex &rWhere, const SwNodeType nNdType )
 
     SwNodes& rNodes = const_cast<SwNodes&> (rWhere.GetNodes());
     SwNode* pNd = rNodes[ rWhere.GetIndex() -1 ];
-    rNodes.InsertNode( this, rWhere );
+    rNodes.InsertNode( this, rWhere.GetIndex() );
     m_pStartOfSection = pNd->GetStartNode();
     if( nullptr == m_pStartOfSection )
     {
@@ -958,14 +958,14 @@ void SwNode::dumpAsXml(xmlTextWriterPtr pWriter) const
         (void)xmlTextWriterEndElement(pWriter); // end start node
 }
 
-SwStartNode::SwStartNode( const SwNodeIndex &rWhere, const SwNodeType nNdType,
+SwStartNode::SwStartNode( const SwNode& rWhere, const SwNodeType nNdType,
                             SwStartNodeType eSttNd )
     : SwNode( rWhere, nNdType ), m_eStartNodeType( eSttNd )
 {
     if( !rWhere.GetIndex() )
     {
         SwNodes& rNodes = const_cast<SwNodes&> (rWhere.GetNodes());
-        rNodes.InsertNode( this, rWhere );
+        rNodes.InsertNode( this, rWhere.GetIndex() );
         m_pStartOfSection = this;
     }
     // Just do this temporarily until the EndNode is inserted
@@ -1058,7 +1058,7 @@ void SwStartNode::dumpAsXml(xmlTextWriterPtr pWriter) const
  * @param rSttNd the start note of the section
  */
 
-SwEndNode::SwEndNode( const SwNodeIndex &rWhere, SwStartNode& rSttNd )
+SwEndNode::SwEndNode( const SwNode& rWhere, SwStartNode& rSttNd )
     : SwNode( rWhere, SwNodeType::End )
 {
     m_pStartOfSection = &rSttNd;
@@ -1080,7 +1080,7 @@ SwContentNode::SwContentNode()
     , mbSetModifyAtAttr( false )
 {}
 
-SwContentNode::SwContentNode( const SwNodeIndex &rWhere, const SwNodeType nNdType,
+SwContentNode::SwContentNode( const SwNode& rWhere, const SwNodeType nNdType,
                             SwFormatColl *pColl )
     : SwNode( rWhere, nNdType )
     , m_aCondCollListener( *this )

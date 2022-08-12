@@ -87,7 +87,7 @@ void SwFEShell::Copy( SwDoc& rClpDoc, const OUString* pNewClpText )
     {
         rClpDoc.GetNodes().Delete( aSttIdx,
             rClpDoc.GetNodes().GetEndOfContent().GetIndex() - aSttIdx.GetIndex() );
-        pTextNd = rClpDoc.GetNodes().MakeTextNode( aSttIdx,
+        pTextNd = rClpDoc.GetNodes().MakeTextNode( aSttIdx.GetNode(),
                             rClpDoc.GetDfltTextFormatColl() );
         --aSttIdx;
     }
