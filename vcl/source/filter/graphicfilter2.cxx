@@ -853,12 +853,15 @@ bool GraphicDescriptor::ImpDetectRAS( SvStream& rStm, bool )
     return bRet;
 }
 
-bool GraphicDescriptor::ImpDetectTGA( SvStream&, bool )
+bool GraphicDescriptor::ImpDetectTGA( SvStream& rStm, bool )
 {
-    bool bRet = aPathExt.startsWith( "tga" );
-    if (bRet)
-        aMetadata.mnFormat = GraphicFileFormat::TGA;
-
+    sal_Int32 nStmPos = rStm.Tell();
+    vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /* bExtendedInfo */ );
+    bool bRet = aDetector.detect();
+    bRet &= aDetector.checkTGA();
+    if ( bRet )
+        aMetadata = aDetector.getMetadata();
+    rStm.Seek( nStmPos );
     return bRet;
 }
 
