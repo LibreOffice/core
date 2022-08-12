@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24820b76_9ae16259",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-08-12T14:51:54Z",
+      "side": 1,
+      "message": "I bisected a cluster of sax_fastparser::lcl_DebugMergeAppend asserts in crashtesting to this commit. To reproduce one:\n\nwget https://bugs.documentfoundation.org/attachment.cgi?id\u003d164060 -O ~/tdf135569-1.docx\n./instdir/program/soffice --headless --convert-to docx ~/tdf135569-1.docx",
+      "revId": "9700c1b2170ad04453a361ed5647937833ac3c18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
