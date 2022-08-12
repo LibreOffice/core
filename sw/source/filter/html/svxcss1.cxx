@@ -61,8 +61,6 @@
 #include "svxcss1.hxx"
 #include "htmlnum.hxx"
 
-#include <utility>
-
 using namespace ::com::sun::star;
 
 /// type of functions to parse CSS1 properties

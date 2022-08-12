@@ -35,7 +35,6 @@
 #include <string_view>
 #include <deque>
 #include <map>
-#include <utility>
 #include <memory>
 
 #include "ww8struc.hxx"
