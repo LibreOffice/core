@@ -1151,7 +1151,7 @@ IA2_STATE_STALE =                   0x4000,
 /** Indicates that the object implements autocompletion.
 
  This state indicates that a text control will respond to the input of
- one ore more characters and cause a sub-item to become selected.  The
+ one or more characters and cause a sub-item to become selected.  The
  selection may also result in events fired on the parent object.
 */
 IA2_STATE_SUPPORTS_AUTOCOMPLETION = 0x8000,
