@@ -1799,17 +1799,14 @@ void CustomPropertiesWindow::ReloadLinesContent()
             pLine->m_xDurationField->SetDuration(aTmpDuration);
         }
 
-        if (nType != Custom_Type_Duration)
+        if (Custom_Type_Boolean == nType)
         {
-            if (Custom_Type_Boolean == nType)
-            {
-                if (bTmpValue)
-                    pLine->m_xYesNoButton->CheckYes();
-                else
-                    pLine->m_xYesNoButton->CheckNo();
-            }
-            pLine->m_xTypeBox->set_active_id(OUString::number(nType));
+            if (bTmpValue)
+                pLine->m_xYesNoButton->CheckYes();
+            else
+                pLine->m_xYesNoButton->CheckNo();
         }
+        pLine->m_xTypeBox->set_active_id(OUString::number(nType));
 
         pLine->DoTypeHdl(*pLine->m_xTypeBox);
     }
