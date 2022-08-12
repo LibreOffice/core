@@ -507,7 +507,7 @@ void AnimationWindow::UpdateControl(bool const bDisableCtrls)
     // tdf#95298 check m_nCurrentFrame for EMPTY_FRAMELIST to avoid out-of-bound array access
     if (!m_FrameList.empty() && EMPTY_FRAMELIST != m_nCurrentFrame)
     {
-        BitmapEx & rBmp(m_FrameList[m_nCurrentFrame].first);
+        BitmapEx aBmp(m_FrameList[m_nCurrentFrame].first);
 
         SdPage* pPage = pMyDoc->GetSdPage(0, PageKind::Standard);
         SdrObject *const pObject = pPage->GetObj(m_nCurrentFrame);
@@ -529,10 +529,10 @@ void AnimationWindow::UpdateControl(bool const bDisableCtrls)
                 : sd::OUTPUT_DRAWMODE_COLOR );
             pVD->Erase();
             pObject->SingleObjectPainter( *pVD );
-            rBmp = pVD->GetBitmapEx( aObjRect.TopLeft(), aObjSize );
+            aBmp = pVD->GetBitmapEx( aObjRect.TopLeft(), aObjSize );
         }
 
-        m_xCtlDisplay->SetBitmapEx(&rBmp);
+        m_xCtlDisplay->SetBitmapEx(&aBmp);
     }
     else
     {
