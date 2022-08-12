@@ -153,7 +153,7 @@ public class ConfigHelper
      * to create a new group. This group is specific to its set and
      * creates defined entries.
      * @return The [inserted] group of the set
-     * @param groupName The name of the goup which should be returned
+     * @param groupName The name of the group which should be returned
      * @param setName The name of the set
      * @throws com.sun.star.uno.Exception throws
      *         <CODE>com.sun.star.uno.Exception</CODE> on any error.
