@@ -73,7 +73,7 @@ int LogicalFontInstance::GetKashidaWidth() const
     {
         double nXScale = 0;
         GetScale(&nXScale, nullptr);
-        nWidth = hb_font_get_glyph_h_advance(pHbFont, nIndex) * nXScale;
+        nWidth = std::ceil(hb_font_get_glyph_h_advance(pHbFont, nIndex) * nXScale);
     }
 
     return nWidth;

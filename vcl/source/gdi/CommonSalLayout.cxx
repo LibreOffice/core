@@ -761,7 +761,7 @@ void GenericSalLayout::ApplyDXArray(const DC* pDXArray, const sal_Bool* pKashida
 
     if (nKashidaWidth <= 0)
     {
-        SAL_WARN("vcl.gdi", "Asked to insert Kashidas in a font with zero-width Kashida");
+        SAL_WARN("vcl.gdi", "Asked to insert Kashidas in a font with bogus Kashida width");
         return;
     }
 
