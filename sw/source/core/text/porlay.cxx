@@ -1033,6 +1033,10 @@ static void InitBookmarks(
                 break;
             }
         }
+        if (iter == end)
+        {
+            break; // remaining marks are hidden
+        }
     }
 }
 
