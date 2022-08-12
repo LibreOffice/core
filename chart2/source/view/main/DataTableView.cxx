@@ -140,6 +140,9 @@ void DataTableView::setCellCharAndParagraphProperties(
     copyProperty(xPropertySet, xDataTableProperties, "CharWeightComplex");
     copyProperty(xPropertySet, xDataTableProperties, "CharWordMode");
 
+    xPropertySet->setPropertyValue("CharBackColor",
+                                   xDataTableProperties->getPropertyValue("FillColor"));
+
     xPropertySet->setPropertyValue("ParaAdjust", uno::makeAny(style::ParagraphAdjust_CENTER));
 }
 
