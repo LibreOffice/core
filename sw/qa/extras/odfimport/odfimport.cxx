@@ -60,10 +60,12 @@
 typedef std::map<OUString, css::uno::Sequence< css::table::BorderLine> > AllBordersMap;
 typedef std::pair<OUString, css::uno::Sequence< css::table::BorderLine> > StringSequencePair;
 
+constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/odfimport/data/";
+
 class Test : public SwModelTestBase
 {
     public:
-        Test() : SwModelTestBase("/sw/qa/extras/odfimport/data/", "writer8") {}
+        Test() : SwModelTestBase(DATA_DIRECTORY, "writer8") {}
 };
 
 CPPUNIT_TEST_FIXTURE(Test, testEmptySvgFamilyName)
@@ -1339,6 +1341,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146597)
 CPPUNIT_TEST_FIXTURE(Test, testForcepoint101)
 {
     load(mpTestDocumentPath, "forcepoint101.fodt");
+}
+
+// just care that it doesn't crash/assert
+CPPUNIT_TEST_FIXTURE(Test, testForcepoint108)
+{
+    //load would assert because it fails to load entirely, like testMathMalformedXml
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "forcepoint108.fodt";
+    mxComponent = mxDesktop->loadComponentFromURL(aURL, "_default", 0, {});
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
