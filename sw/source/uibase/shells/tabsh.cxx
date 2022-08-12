@@ -84,6 +84,8 @@
 
 #include <memory>
 
+#include "../../ui/dialog/swdlgfact.hxx"
+
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
@@ -720,32 +722,37 @@ void SwTableShell::Execute(SfxRequest &rReq)
                                         RES_BOXATR_VALUE).GetValue(),
                                     sCurText, SID_ATTR_NUMBERFORMAT_INFO ));
 
+                SwWrtShell* pSh = &rSh;
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateNumFormatDialog(GetView().GetFrameWeld(), aCoreSet));
+                VclPtr<SfxAbstractDialog> pDlg(pFact->CreateNumFormatDialog(GetView().GetFrameWeld(), aCoreSet));
 
-                if (RET_OK == pDlg->Execute())
-                {
-                    const SvxNumberInfoItem* pNumberFormatItem
-                        = GetView().GetDocShell()->GetItem( SID_ATTR_NUMBERFORMAT_INFO );
-
-                    if( pNumberFormatItem )
+                pDlg->StartExecuteAsync([pDlg, &aCoreSet, pSh](sal_uInt32 nResult){
+                    if (RET_OK == nResult)
                     {
-                        for ( sal_uInt32 key : pNumberFormatItem->GetDelFormats() )
-                            pNumberFormatItem->GetNumberFormatter()->DeleteEntry( key );
+                        const SvxNumberInfoItem* pNumberFormatItem
+                            = pSh->GetView().GetDocShell()->GetItem( SID_ATTR_NUMBERFORMAT_INFO );
+
+                        if( pNumberFormatItem )
+                        {
+                            for ( sal_uInt32 key : pNumberFormatItem->GetDelFormats() )
+                                pNumberFormatItem->GetNumberFormatter()->DeleteEntry( key );
+                        }
+
+                        const SfxPoolItem* pNumberFormatValueItem = nullptr;
+                        if( SfxItemState::SET == pDlg->GetOutputItemSet()->GetItemState(
+                            SID_ATTR_NUMBERFORMAT_VALUE, false, &pNumberFormatValueItem ))
+                        {
+                            SfxItemSetFixed<RES_BOXATR_FORMAT, RES_BOXATR_FORMAT>
+                                    aBoxFormatSet( *aCoreSet.GetPool() );
+                            aBoxFormatSet.Put( SwTableBoxNumFormat(
+                                    static_cast<const SfxUInt32Item*>(pNumberFormatValueItem)->GetValue() ));
+                            pSh->SetTableBoxFormulaAttrs( aBoxFormatSet );
+
+                        }
                     }
 
-                    const SfxPoolItem* pNumberFormatValueItem = nullptr;
-                    if( SfxItemState::SET == pDlg->GetOutputItemSet()->GetItemState(
-                        SID_ATTR_NUMBERFORMAT_VALUE, false, &pNumberFormatValueItem ))
-                    {
-                        SfxItemSetFixed<RES_BOXATR_FORMAT, RES_BOXATR_FORMAT>
-                                aBoxFormatSet( *aCoreSet.GetPool() );
-                        aBoxFormatSet.Put( SwTableBoxNumFormat(
-                                static_cast<const SfxUInt32Item*>(pNumberFormatValueItem)->GetValue() ));
-                        rSh.SetTableBoxFormulaAttrs( aBoxFormatSet );
-
-                    }
-                }
+                    pDlg->disposeOnce();
+                });
             }
             break;
         }
