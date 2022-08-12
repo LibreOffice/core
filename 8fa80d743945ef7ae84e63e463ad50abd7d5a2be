@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a19842a_b87d2050",
+        "filename": "sw/source/core/inc/pamtyp.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-08-12T18:04:18Z",
+      "side": 1,
+      "message": "Is it necessary to change the return value to a parameter? I\u0027d expect return value optimizations to handle return value the same, without the clunkiness.",
+      "revId": "8fa80d743945ef7ae84e63e463ad50abd7d5a2be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
