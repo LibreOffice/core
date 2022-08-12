@@ -125,6 +125,20 @@ public:
     virtual void SetText(const OUString& rStr) override;
 };
 
+class AbstractNumFormatDlg_Impl : public SfxAbstractDialog
+{
+    std::shared_ptr<SfxSingleTabDialogController> m_xDlg;
+public:
+    explicit AbstractNumFormatDlg_Impl(std::shared_ptr<SfxSingleTabDialogController> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
+    virtual bool StartExecuteAsync(AsyncContext &rCtx) override;
+    virtual const SfxItemSet* GetOutputItemSet() const override;
+    virtual void SetText(const OUString& rStr) override;
+};
+
 class AbstractSwAsciiFilterDlg_Impl : public AbstractSwAsciiFilterDlg
 {
     std::unique_ptr<SwAsciiFilterDlg> m_xDlg;
