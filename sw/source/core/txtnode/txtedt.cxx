@@ -75,7 +75,6 @@
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 
 #include <vector>
-#include <utility>
 
 #include <unotextrange.hxx>
 
