@@ -1199,7 +1199,7 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
                 rSection.SetConnectFlag();
 
                 SwNodeIndex aSave( pPam->GetPoint()->nNode, -1 );
-                std::unique_ptr<SwNodeRange> pCpyRg;
+                std::optional<SwNodeRange> oCpyRg;
 
                 if( xDocSh->GetMedium() &&
                     rSection.GetLinkFilePassword().isEmpty() )
@@ -1230,7 +1230,7 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
 
                     SwPaM* pCpyPam = nullptr;
                     if( !bRecursion &&
-                        pSrcDoc->GetDocumentLinksAdministrationManager().SelectServerObj( sRange, pCpyPam, pCpyRg )
+                        pSrcDoc->GetDocumentLinksAdministrationManager().SelectServerObj( sRange, pCpyPam, oCpyRg )
                         && pCpyPam )
                     {
                         if( pSrcDoc != pDoc ||
@@ -1241,15 +1241,15 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
                         }
                         delete pCpyPam;
                     }
-                    if( pCpyRg && pSrcDoc == pDoc &&
-                        pCpyRg->aStart < rInsPos && rInsPos < pCpyRg->aEnd )
+                    if( oCpyRg && pSrcDoc == pDoc &&
+                        oCpyRg->aStart < rInsPos && rInsPos < oCpyRg->aEnd )
                     {
-                        pCpyRg.reset();
+                        oCpyRg.reset();
                     }
                 }
                 else if( pSrcDoc != pDoc )
-                    pCpyRg.reset(new SwNodeRange( pSrcDoc->GetNodes().GetEndOfExtras(), SwNodeOffset(2),
-                                          pSrcDoc->GetNodes().GetEndOfContent() ));
+                    oCpyRg.emplace( pSrcDoc->GetNodes().GetEndOfExtras(), SwNodeOffset(2),
+                                          pSrcDoc->GetNodes().GetEndOfContent() );
 
                 // #i81653#
                 // Update links of extern linked document or extern linked
@@ -1260,7 +1260,7 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
                     pSrcDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks( false, false, nullptr );
                 }
 
-                if( pCpyRg )
+                if( oCpyRg )
                 {
                     SwNodeIndex& rInsPos = pPam->GetPoint()->nNode;
                     bool bCreateFrame = rInsPos.GetIndex() <=
@@ -1269,7 +1269,7 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
 
                     SwTableNumFormatMerge aTNFM( *pSrcDoc, *pDoc );
 
-                    pSrcDoc->GetDocumentContentOperationsManager().CopyWithFlyInFly(*pCpyRg, rInsPos, nullptr, bCreateFrame);
+                    pSrcDoc->GetDocumentContentOperationsManager().CopyWithFlyInFly(*oCpyRg, rInsPos, nullptr, bCreateFrame);
                     ++aSave;
 
                     if( !bCreateFrame )
@@ -1286,7 +1286,7 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
                         pDoc->CorrAbs( aSave, *pPam->GetPoint(), 0, true );
                         pDoc->GetNodes().Delete( aSave );
                     }
-                    pCpyRg.reset();
+                    oCpyRg.reset();
                 }
 
                 lcl_BreakSectionLinksInSect( *pSectNd );
