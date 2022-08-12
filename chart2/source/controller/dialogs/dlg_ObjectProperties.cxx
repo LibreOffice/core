@@ -459,6 +459,7 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
             AddTabPage("border", SchResId(STR_PAGE_LINE), RID_SVXPAGE_LINE);
             AddTabPage("area", SchResId(STR_PAGE_AREA), RID_SVXPAGE_AREA);
             AddTabPage("fontname", SchResId(STR_PAGE_FONT), RID_SVXPAGE_CHAR_NAME);
+            AddTabPage("effects", SchResId(STR_PAGE_FONT_EFFECTS), RID_SVXPAGE_CHAR_EFFECTS);
             break;
         case OBJECTTYPE_DATA_CURVE_EQUATION:
             AddTabPage("border", SchResId(STR_PAGE_BORDER), RID_SVXPAGE_LINE);
