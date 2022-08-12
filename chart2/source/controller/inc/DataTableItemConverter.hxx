@@ -35,8 +35,7 @@ class DataTableItemConverter final : public ItemConverter
 public:
     DataTableItemConverter(const css::uno::Reference<css::beans::XPropertySet>& rPropertySet,
                            SfxItemPool& rItemPool, SdrModel& rDrawModel,
-                           const rtl::Reference<::chart::ChartModel>& xChartDoc,
-                           const css::awt::Size* pRefSize);
+                           const rtl::Reference<::chart::ChartModel>& xChartDoc);
 
     virtual ~DataTableItemConverter() override;
 
