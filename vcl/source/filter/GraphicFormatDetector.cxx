@@ -25,6 +25,7 @@
 #include <graphic/DetectorTools.hxx>
 #include <tools/solar.h>
 #include <tools/zcodec.hxx>
+#include <filter/WebpReader.hxx>
 #include <utility>
 
 constexpr sal_uInt32 SVG_CHECK_SIZE = 2048;
@@ -884,6 +885,13 @@ bool GraphicFormatDetector::checkWEBP()
         && maFirstBytes[10] == 'B' && maFirstBytes[11] == 'P')
     {
         maMetadata.mnFormat = GraphicFileFormat::WEBP;
+        if (mbExtendedInfo)
+        {
+            mrStream.Seek(mnStreamPosition);
+            ReadWebpInfo(mrStream, maMetadata.maPixSize, maMetadata.mnBitsPerPixel,
+                         maMetadata.mbIsAlpha);
+            maMetadata.mbIsTransparent = maMetadata.mbIsAlpha;
+        }
         return true;
     }
     return false;
