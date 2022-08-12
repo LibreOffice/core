@@ -918,24 +918,12 @@ bool GraphicDescriptor::ImpDetectPSD( SvStream& rStm, bool bExtendedInfo )
 
 bool GraphicDescriptor::ImpDetectEPS( SvStream& rStm, bool )
 {
-    // check the EPS preview and the file extension
-    sal_uInt32  nFirstLong = 0;
-    sal_uInt8   nFirstBytes[20] = {};
-    bool        bRet = false;
-
     sal_Int32 nStmPos = rStm.Tell();
-    rStm.SetEndian( SvStreamEndian::BIG );
-    rStm.ReadUInt32( nFirstLong );
-    rStm.SeekRel( -4 );
-    rStm.ReadBytes( &nFirstBytes, 20 );
-
-    if ( ( nFirstLong == 0xC5D0D3C6 ) || aPathExt.startsWith( "eps" ) ||
-        ( ImplSearchEntry( nFirstBytes, reinterpret_cast<sal_uInt8 const *>("%!PS-Adobe"), 10, 10 )
-            && ImplSearchEntry( &nFirstBytes[15], reinterpret_cast<sal_uInt8 const *>("EPS"), 3, 3 ) ) )
-    {
-        aMetadata.mnFormat = GraphicFileFormat::EPS;
-        bRet = true;
-    }
+    vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /*bExtendedInfo*/ );
+    bool bRet = aDetector.detect();
+    bRet &= aDetector.checkEPS();
+    if ( bRet )
+        aMetadata = aDetector.getMetadata();
     rStm.Seek( nStmPos );
     return bRet;
 }
