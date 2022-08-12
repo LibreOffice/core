@@ -770,7 +770,7 @@ void EmbeddedObjectRef::DrawPaintReplacement( const tools::Rectangle &rRect, con
         pOut->DrawBitmapEx(aP, Size( nWidth, nHeight ), aBmp);
     }
 
-    pOut->IntersectClipRegion( rRect );
+    pOut->IntersectClipRegion(pOut->LogicToPixel(rRect));
     aPt += rRect.TopLeft();
     pOut->DrawText( aPt, rText );
     pOut->Pop();

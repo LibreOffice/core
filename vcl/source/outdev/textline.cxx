@@ -728,7 +728,7 @@ void OutputDevice::ImplDrawStrikeoutChar( tools::Long nBaseX, tools::Long nBaseY
     }
 
     Push( vcl::PushFlags::CLIPREGION );
-    IntersectClipRegion( PixelToLogic(aPixelRect) );
+    IntersectClipRegion(aPixelRect);
     if( mbInitClipRegion )
         InitClipRegion();
 

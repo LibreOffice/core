@@ -1686,7 +1686,7 @@ static void lcl_DrawGraphic( const SvxBrushItem& rBrush, vcl::RenderContext &rOu
     if ( bNotInside )
     {
         rOutDev.Push( vcl::PushFlags::CLIPREGION );
-        rOutDev.IntersectClipRegion( rOut.SVRect() );
+        rOutDev.IntersectClipRegion(rOutDev.LogicToPixel(rOut.SVRect()));
     }
 
     GraphicObject *pGrf = const_cast<GraphicObject*>(rBrush.GetGraphicObject());
@@ -1929,7 +1929,7 @@ void DrawGraphic(
             aGrf.Pos() = rOrg.Pos();
             // setup clipping at output device
             rOutDev.Push( vcl::PushFlags::CLIPREGION );
-            rOutDev.IntersectClipRegion( rOut.SVRect() );
+            rOutDev.IntersectClipRegion(rOutDev.LogicToPixel(rOut.SVRect()));
             // use new method <GraphicObject::DrawTiled(::)>
             {
                 // calculate paint offset

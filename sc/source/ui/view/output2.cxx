@@ -1992,7 +1992,7 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                             if (bMetaFile)
                             {
                                 mpDev->Push();
-                                mpDev->IntersectClipRegion( aAreaParam.maClipRect );
+                                mpDev->IntersectClipRegion(mpDev->LogicToPixel(aAreaParam.maClipRect));
                             }
                             else
                                 mpDev->SetClipRegion( mpDev->LogicToPixel( vcl::Region( aAreaParam.maClipRect ) ) );
@@ -2790,7 +2790,7 @@ public:
             if (mbMetaFile)
             {
                 mpDev->Push();
-                mpDev->IntersectClipRegion(maRect);
+                mpDev->IntersectClipRegion(mpDev->LogicToPixel(maRect));
             }
             else
                 mpDev->SetClipRegion(mpDev->LogicToPixel(vcl::Region(maRect)));
@@ -4940,7 +4940,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                 if (bMetaFile)
                                 {
                                     mpDev->Push();
-                                    mpDev->IntersectClipRegion( aAreaParam.maClipRect );
+                                    mpDev->IntersectClipRegion(mpDev->LogicToPixel(aAreaParam.maClipRect));
                                 }
                                 else
                                     mpDev->SetClipRegion( mpDev->LogicToPixel( vcl::Region( aAreaParam.maClipRect ) ) );

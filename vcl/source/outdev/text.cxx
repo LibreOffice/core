@@ -1692,7 +1692,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
             if ( nStyle & DrawTextFlags::Clip )
             {
                 rTargetDevice.Push( vcl::PushFlags::CLIPREGION );
-                rTargetDevice.IntersectClipRegion( rRect );
+                rTargetDevice.IntersectClipRegion(rTargetDevice.LogicToPixel(rRect));
             }
 
             // Vertical alignment
@@ -1815,7 +1815,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
         if ( nStyle & DrawTextFlags::Clip )
         {
             rTargetDevice.Push( vcl::PushFlags::CLIPREGION );
-            rTargetDevice.IntersectClipRegion( rRect );
+            rTargetDevice.IntersectClipRegion(rTargetDevice.LogicToPixel(rRect));
             _rLayout.DrawText( aPos, aStr, 0, aStr.getLength(), pVector, pDisplayText );
             if ( bDrawMnemonics && nMnemonicPos != -1 )
                 rTargetDevice.ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );

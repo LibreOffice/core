@@ -280,7 +280,7 @@ void EditEngine::Draw( OutputDevice& rOutDev, const tools::Rectangle& rOutRect, 
                 aClipRect.AdjustRight(aPixSz.Width() );
                 aClipRect.AdjustBottom(aPixSz.Width() );
             }
-            rOutDev.IntersectClipRegion( aClipRect );
+            rOutDev.IntersectClipRegion(rOutDev.LogicToPixel(aClipRect));
         }
     }
 

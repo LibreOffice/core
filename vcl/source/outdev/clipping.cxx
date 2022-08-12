@@ -103,34 +103,32 @@ void OutputDevice::MoveClipRegion( tools::Long nHorzMove, tools::Long nVertMove 
 void OutputDevice::IntersectClipRegion( const tools::Rectangle& rRect )
 {
 
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaISectRectClipRegionAction( rRect ) );
+    if (mpMetaFile)
+        mpMetaFile->AddAction(new MetaISectRectClipRegionAction(PixelToLogic(rRect)));
 
-    tools::Rectangle aRect = LogicToPixel( rRect );
-    maRegion.Intersect( aRect );
-    mbClipRegion        = true;
-    mbInitClipRegion    = true;
+    maRegion.Intersect(rRect);
+    mbClipRegion = true;
+    mbInitClipRegion = true;
 
-    if( mpAlphaVDev )
-        mpAlphaVDev->IntersectClipRegion( rRect );
+    if (mpAlphaVDev)
+        mpAlphaVDev->IntersectClipRegion(rRect);
 }
 
 void OutputDevice::IntersectClipRegion( const vcl::Region& rRegion )
 {
 
-    if(!rRegion.IsNull())
+    if (!rRegion.IsNull())
     {
-        if ( mpMetaFile )
-            mpMetaFile->AddAction( new MetaISectRegionClipRegionAction( rRegion ) );
+        if (mpMetaFile)
+            mpMetaFile->AddAction(new MetaISectRegionClipRegionAction(PixelToLogic(rRegion)));
 
-        vcl::Region aRegion = LogicToPixel( rRegion );
-        maRegion.Intersect( aRegion );
-        mbClipRegion        = true;
-        mbInitClipRegion    = true;
+        maRegion.Intersect(rRegion);
+        mbClipRegion = true;
+        mbInitClipRegion = true;
     }
 
-    if( mpAlphaVDev )
-        mpAlphaVDev->IntersectClipRegion( rRegion );
+    if (mpAlphaVDev)
+        mpAlphaVDev->IntersectClipRegion(rRegion);
 }
 
 void OutputDevice::InitClipRegion()

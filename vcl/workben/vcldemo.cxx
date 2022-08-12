@@ -1985,7 +1985,7 @@ public:
         Wallpaper aWallpaper(COL_GREEN);
 
         rRenderContext.Push(vcl::PushFlags::CLIPREGION);
-        rRenderContext.IntersectClipRegion(aClip);
+        rRenderContext.IntersectClipRegion(rRenderContext.LogicToPixel(aClip));
         rRenderContext.DrawWallpaper(aWholeSize, aWallpaper);
         rRenderContext.Pop();
 

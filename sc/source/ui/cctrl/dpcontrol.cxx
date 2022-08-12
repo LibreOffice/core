@@ -134,7 +134,7 @@ void ScDPFieldButton::draw()
         aTextPos.setY(maPos.getY() + (maSize.Height()-nTHeight)/2);
 
         mpOutDev->Push(vcl::PushFlags::CLIPREGION);
-        mpOutDev->IntersectClipRegion(aRect);
+        mpOutDev->IntersectClipRegion(mpOutDev->LogicToPixel(aRect));
         mpOutDev->DrawText(aTextPos, maText);
         mpOutDev->Pop();
     }

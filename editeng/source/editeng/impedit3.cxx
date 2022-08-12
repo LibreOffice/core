@@ -4079,7 +4079,7 @@ void ImpEditEngine::Paint( ImpEditView* pView, const tools::Rectangle& rRect, Ou
 
     bool bClipRegion = rTarget.IsClipRegion();
     vcl::Region aOldRegion = rTarget.PixelToLogic(rTarget.GetClipRegion());
-    rTarget.IntersectClipRegion( aClipRect );
+    rTarget.IntersectClipRegion(rTarget.LogicToPixel(aClipRect));
 
     Paint(rTarget, aClipRect, aStartPos);
 

@@ -307,7 +307,7 @@ void SwNoTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect cons
         aPaintArea.Intersection_( aNormal );
 
         if ( bClip )
-            rRenderContext.IntersectClipRegion( aPaintArea.SVRect() );
+            rRenderContext.IntersectClipRegion(rRenderContext.LogicToPixel(aPaintArea.SVRect()));
         /// delete unused 3rd parameter
         PaintPicture( &rRenderContext, aGrfArea );
     }

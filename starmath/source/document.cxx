@@ -1139,7 +1139,7 @@ void SmDocShell::Draw(OutputDevice *pDevice,
                       const JobSetup &,
                       sal_uInt16 /*nAspect*/)
 {
-    pDevice->IntersectClipRegion(GetVisArea());
+    pDevice->IntersectClipRegion(pDevice->LogicToPixel(GetVisArea()));
     Point atmppoint;
     DrawFormula(*pDevice, atmppoint);
 }

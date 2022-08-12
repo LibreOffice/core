@@ -737,7 +737,7 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
                 aVDev->Push();
                 aVMap.SetOrigin( Point( -aNewOrg.X(), -aNewOrg.Y() ) );
                 aVDev->SetRelativeMapMode( aVMap );
-                aVDev->IntersectClipRegion( aClipRect );
+                aVDev->IntersectClipRegion(aVDev->LogicToPixel(aClipRect));
 
                 // Use new StandardCheckVisisbilityRedirector
                 ImplExportCheckVisisbilityRedirector aRedirector( mpCurrentPage );

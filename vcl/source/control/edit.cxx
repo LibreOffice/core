@@ -1816,7 +1816,7 @@ void Edit::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFl
         tools::Rectangle aClip( aPos, aSize );
         if ( nTextHeight > aSize.Height() )
             aClip.AdjustBottom(nTextHeight-aSize.Height()+1 );  // prevent HP printers from 'optimizing'
-        pDev->IntersectClipRegion( aClip );
+        pDev->IntersectClipRegion(pDev->LogicToPixel(aClip));
     }
 
     pDev->DrawText( aTextRect, aText, nTextStyle );

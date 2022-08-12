@@ -488,7 +488,7 @@ void ToolBox::ImplDrawBackground(vcl::RenderContext& rRenderContext, const tools
         aPaintRegion.Intersect(GetOutDev()->GetActiveClipRegion());
 
     rRenderContext.Push(vcl::PushFlags::CLIPREGION);
-    rRenderContext.IntersectClipRegion( aPaintRegion );
+    rRenderContext.IntersectClipRegion(rRenderContext.LogicToPixel(aPaintRegion));
 
     if (!pWrapper)
     {

@@ -1374,9 +1374,9 @@ MetaISectRectClipRegionAction::MetaISectRectClipRegionAction( const tools::Recta
     maRect      ( rRect )
 {}
 
-void MetaISectRectClipRegionAction::Execute( OutputDevice* pOut )
+void MetaISectRectClipRegionAction::Execute(OutputDevice* pOut)
 {
-    pOut->IntersectClipRegion( maRect );
+    pOut->IntersectClipRegion(pOut->LogicToPixel(maRect));
 }
 
 rtl::Reference<MetaAction> MetaISectRectClipRegionAction::Clone() const
@@ -1407,9 +1407,9 @@ MetaISectRegionClipRegionAction::MetaISectRegionClipRegionAction( vcl::Region aR
 {
 }
 
-void MetaISectRegionClipRegionAction::Execute( OutputDevice* pOut )
+void MetaISectRegionClipRegionAction::Execute(OutputDevice* pOut)
 {
-    pOut->IntersectClipRegion( maRegion );
+    pOut->IntersectClipRegion(pOut->LogicToPixel(maRegion));
 }
 
 rtl::Reference<MetaAction> MetaISectRegionClipRegionAction::Clone() const

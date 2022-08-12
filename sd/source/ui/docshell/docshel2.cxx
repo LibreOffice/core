@@ -90,7 +90,7 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect)
     }
 
     ::tools::Rectangle aVisArea = GetVisArea(nAspect);
-    pOut->IntersectClipRegion(aVisArea);
+    pOut->IntersectClipRegion(pOut->LogicToPixel(aVisArea));
     pView->ShowSdrPage(pSelectedPage);
 
     if (pOut->GetOutDevType() == OUTDEV_WINDOW)

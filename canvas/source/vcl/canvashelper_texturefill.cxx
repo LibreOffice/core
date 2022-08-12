@@ -539,7 +539,7 @@ namespace vclcanvas
                 // twice for XOR
 
                 rOutDev.Push( vcl::PushFlags::CLIPREGION );
-                rOutDev.IntersectClipRegion( aPolygonDeviceRectOrig );
+                rOutDev.IntersectClipRegion(rOutDev.LogicToPixel(aPolygonDeviceRectOrig));
                 doGradientFill( rOutDev,
                                 rValues,
                                 rColors,
@@ -563,7 +563,7 @@ namespace vclcanvas
                 const vcl::Region aPolyClipRegion( rPoly );
 
                 rOutDev.Push( vcl::PushFlags::CLIPREGION );
-                rOutDev.IntersectClipRegion( aPolyClipRegion );
+                rOutDev.IntersectClipRegion(rOutDev.LogicToPixel(aPolyClipRegion));
 
                 doGradientFill( rOutDev,
                                 rValues,
@@ -958,7 +958,7 @@ namespace vclcanvas
                                     ::basegfx::fround( 255.0 * textures[0].Alpha ) ) );
                         }
 
-                        rOutDev.IntersectClipRegion( aPolygonDeviceRect );
+                        rOutDev.IntersectClipRegion(rOutDev.LogicToPixel(aPolygonDeviceRect));
                         textureFill( rOutDev,
                                      *pGrfObj,
                                      aPt,
@@ -972,7 +972,7 @@ namespace vclcanvas
                         if( mp2ndOutDevProvider )
                         {
                             OutputDevice& r2ndOutDev( mp2ndOutDevProvider->getOutDev() );
-                            r2ndOutDev.IntersectClipRegion( aPolygonDeviceRect );
+                            r2ndOutDev.IntersectClipRegion(r2ndOutDev.LogicToPixel(aPolygonDeviceRect));
                             textureFill( r2ndOutDev,
                                          *pGrfObj,
                                          aPt,
@@ -1043,7 +1043,7 @@ namespace vclcanvas
                             const vcl::Region aPolyClipRegion( aPolyPoly );
 
                             rOutDev.Push( vcl::PushFlags::CLIPREGION );
-                            rOutDev.IntersectClipRegion( aPolyClipRegion );
+                            rOutDev.IntersectClipRegion(rOutDev.LogicToPixel(aPolyClipRegion));
 
                             textureFill( rOutDev,
                                          *pGrfObj,
@@ -1061,7 +1061,7 @@ namespace vclcanvas
                                 OutputDevice& r2ndOutDev( mp2ndOutDevProvider->getOutDev() );
                                 r2ndOutDev.Push( vcl::PushFlags::CLIPREGION );
 
-                                r2ndOutDev.IntersectClipRegion( aPolyClipRegion );
+                                r2ndOutDev.IntersectClipRegion(rOutDev.LogicToPixel(aPolyClipRegion));
                                 textureFill( r2ndOutDev,
                                              *pGrfObj,
                                              aPt,

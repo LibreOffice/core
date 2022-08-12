@@ -509,7 +509,7 @@ void DrawProgress(vcl::Window* pWindow, vcl::RenderContext& rRenderContext, cons
                 pEraseWindow->PaintImmediately();
             }
             rRenderContext.Push(vcl::PushFlags::CLIPREGION);
-            rRenderContext.IntersectClipRegion(rFramePosSize);
+            rRenderContext.IntersectClipRegion(rRenderContext.LogicToPixel(rFramePosSize));
         }
 
         bool bNativeOK = rRenderContext.DrawNativeControl(ControlType::Progress, ControlPart::Entire, aControlRegion,

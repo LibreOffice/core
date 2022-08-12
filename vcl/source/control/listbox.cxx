@@ -394,7 +394,7 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags 
             tools::Rectangle aClip( aPos, aSize );
             if ( nTextHeight > aSize.Height() )
                 aClip.AdjustBottom(nTextHeight-aSize.Height()+1 );  // So that HP Printers don't optimize this away
-            pDev->IntersectClipRegion( aClip );
+            pDev->IntersectClipRegion(pDev->LogicToPixel(aClip));
         }
 
         pDev->DrawText( aTextRect, aText, nTextStyle );
@@ -405,7 +405,7 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags 
         sal_uInt16  nLines = ( nTextHeight > 0 ) ? static_cast<sal_uInt16>(aSize.Height() / nTextHeight) : 1;
         tools::Rectangle   aClip( aPos, aSize );
 
-        pDev->IntersectClipRegion( aClip );
+        pDev->IntersectClipRegion(pDev->LogicToPixel(aClip));
 
         if ( !nLines )
             nLines = 1;

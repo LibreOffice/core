@@ -420,7 +420,7 @@ void Layer::ValidateRectangle (const ::tools::Rectangle& rBox)
     if ( ! mpLayerDevice)
         return;
     const vcl::Region aSavedClipRegion (mpLayerDevice->PixelToLogic(mpLayerDevice->GetClipRegion()));
-    mpLayerDevice->IntersectClipRegion(rBox);
+    mpLayerDevice->IntersectClipRegion(mpLayerDevice->LogicToPixel(rBox));
 
     for (const auto& rxPainter : maPainters)
     {

@@ -1915,7 +1915,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
     aView.SetGlueVisible( false );
 
     pOut->SetMapMode(MapMode(MapUnit::Map100thMM));
-    pOut->IntersectClipRegion( aVisArea );
+    pOut->IntersectClipRegion(pOut->LogicToPixel(aVisArea));
 
     uno::Reference< frame::XModel > xModel;
     rSelection >>= xModel;

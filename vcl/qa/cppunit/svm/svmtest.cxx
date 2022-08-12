@@ -1614,7 +1614,7 @@ void SvmTest::testIntersectRectClipRegion()
 
     vcl::Region aRegion(aRectangle);
 
-    pVirtualDev->IntersectClipRegion(aRegion);
+    pVirtualDev->IntersectClipRegion(pVirtualDev->LogicToPixel(aRegion));
     checkIntersectRectClipRegion(writeAndReadStream(aGDIMetaFile));
     checkIntersectRectClipRegion(readFile(u"intersectrectclipregion.svm"));
 }
@@ -1657,7 +1657,7 @@ void SvmTest::testIntersectRegionClipRegion()
     aPolygon.SetPoint(Point(5, 6), 2);
 
     vcl::Region aRegion(aPolygon);
-    pVirtualDev->IntersectClipRegion(aRegion);
+    pVirtualDev->IntersectClipRegion(pVirtualDev->LogicToPixel(aRegion));
 
     tools::Polygon aPolygon1(2);
     aPolygon1.SetPoint(Point(5, 6), 0);
@@ -1668,7 +1668,7 @@ void SvmTest::testIntersectRegionClipRegion()
     aPolyPolygon.Insert(aPolygon1);
 
     vcl::Region aRegion1(aPolyPolygon);
-    pVirtualDev->IntersectClipRegion(aRegion1);
+    pVirtualDev->IntersectClipRegion(pVirtualDev->LogicToPixel(aRegion1));
 
     basegfx::B2DPolygon aB2DPolygon;
     aB2DPolygon.append(basegfx::B2DPoint(0.0, 3.3));
@@ -1678,7 +1678,7 @@ void SvmTest::testIntersectRegionClipRegion()
     basegfx::B2DPolyPolygon aB2DPolyPolygon(aB2DPolygon);
 
     vcl::Region aRegion2(aB2DPolyPolygon);
-    pVirtualDev->IntersectClipRegion(aRegion2);
+    pVirtualDev->IntersectClipRegion(pVirtualDev->LogicToPixel(aRegion2));
 
     checkIntersectRegionClipRegion(writeAndReadStream(aGDIMetaFile));
     checkIntersectRegionClipRegion(readFile(u"intersectregionclipregion.svm"));

@@ -266,7 +266,7 @@ void Printer::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
     }
 
     Push( vcl::PushFlags::CLIPREGION | vcl::PushFlags::LINECOLOR );
-    IntersectClipRegion(vcl::Region(rPolyPoly));
+    IntersectClipRegion(LogicToPixel(vcl::Region(rPolyPoly)));
     SetLineColor( GetFillColor() );
     const bool bOldMap = IsMapModeEnabled();
     EnableMapMode( false );
@@ -1635,7 +1635,7 @@ void Printer::ClipAndDrawGradientMetafile ( const Gradient &rGradient, const too
     const tools::Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
 
     Push( vcl::PushFlags::CLIPREGION );
-    IntersectClipRegion(vcl::Region(rPolyPoly));
+    IntersectClipRegion(LogicToPixel(vcl::Region(rPolyPoly)));
     DrawGradient( aBoundRect, rGradient );
     Pop();
 }

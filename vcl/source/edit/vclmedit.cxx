@@ -1310,7 +1310,7 @@ void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, SystemTextCo
         tools::Rectangle aClip( aPos, aSize );
         if ( aTextSz.Height() > aSize.Height() )
             aClip.AdjustBottom(aTextSz.Height() - aSize.Height() + 1 );  // so that HP-printer does not 'optimize-away'
-        pDev->IntersectClipRegion( aClip );
+        pDev->IntersectClipRegion(pDev->LogicToPixel(aClip));
     }
 
     ExtTextEngine aTE;

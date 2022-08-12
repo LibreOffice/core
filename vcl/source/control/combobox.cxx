@@ -1221,7 +1221,7 @@ void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags
         }
 
         tools::Rectangle aClip( aPos, aSize );
-        pDev->IntersectClipRegion( aClip );
+        pDev->IntersectClipRegion(pDev->LogicToPixel(aClip));
         sal_Int32 nLines = static_cast<sal_Int32>( nTextHeight > 0 ? (aSize.Height()-nEditHeight)/nTextHeight : 1 );
         if ( !nLines )
             nLines = 1;

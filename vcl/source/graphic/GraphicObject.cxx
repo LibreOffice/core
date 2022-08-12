@@ -501,11 +501,11 @@ bool GraphicObject::Draw(OutputDevice& rOut, const Point& rPt, const Size& rSz,
                 // #i29534# Store crop rect for later forwarding to
                 // PDF writer
                 tools::Rectangle aCropRect = aClipPolyPoly.GetBoundRect();
-                rOut.IntersectClipRegion(aCropRect);
+                rOut.IntersectClipRegion(rOut.LogicToPixel(aCropRect));
             }
             else
             {
-                rOut.IntersectClipRegion(vcl::Region(aClipPolyPoly));
+                rOut.IntersectClipRegion(rOut.LogicToPixel(vcl::Region(aClipPolyPoly)));
             }
         }
     }
@@ -568,9 +568,9 @@ bool GraphicObject::StartAnimation(OutputDevice& rOut, const Point& rPt, const S
             if( bCrop )
             {
                 if( bRectClip )
-                    rOut.IntersectClipRegion(aClipPolyPoly.GetBoundRect());
+                    rOut.IntersectClipRegion(rOut.LogicToPixel(aClipPolyPoly.GetBoundRect()));
                 else
-                    rOut.IntersectClipRegion(vcl::Region(aClipPolyPoly));
+                    rOut.IntersectClipRegion(rOut.LogicToPixel(vcl::Region(aClipPolyPoly)));
             }
         }
 

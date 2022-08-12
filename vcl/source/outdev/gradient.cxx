@@ -98,7 +98,7 @@ void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
 
                 // secure clip region
                 Push( vcl::PushFlags::CLIPREGION );
-                IntersectClipRegion( aBoundRect );
+                IntersectClipRegion(LogicToPixel(aBoundRect));
 
                 if (mbInitClipRegion)
                     InitClipRegion();

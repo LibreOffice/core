@@ -152,7 +152,7 @@ namespace sdr::contact
             {
                 bClipRegionPushed = true;
                 pOutDev->Push(vcl::PushFlags::CLIPREGION);
-                pOutDev->IntersectClipRegion(rRedrawArea);
+                pOutDev->IntersectClipRegion(pOutDev->LogicToPixel(rRedrawArea));
             }
 
             // Get start node and process DrawPage contents

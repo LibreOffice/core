@@ -163,7 +163,7 @@ void ImageControl::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorF
     {
         ImplDrawFrame( pDev, aRect );
     }
-    pDev->IntersectClipRegion( aRect );
+    pDev->IntersectClipRegion(pDev->LogicToPixel(aRect));
     ImplDraw( *pDev, aRect.TopLeft(), aRect.GetSize() );
 
     pDev->Pop();

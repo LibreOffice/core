@@ -295,7 +295,9 @@ void VCLXGraphics::draw( const uno::Reference< awt::XDisplayBitmap >& rxBitmapHa
     }
 
     if(nSourceX || nSourceY || aSz.Width() != nSourceWidth || aSz.Height() != nSourceHeight)
-        mpOutputDevice->IntersectClipRegion(vcl::Region(tools::Rectangle(nDestX, nDestY, nDestX + nDestWidth - 1, nDestY + nDestHeight - 1)));
+        mpOutputDevice->IntersectClipRegion(
+                mpOutputDevice->LogicToPixel(
+                    vcl::Region(tools::Rectangle(nDestX, nDestY, nDestX + nDestWidth - 1, nDestY + nDestHeight - 1))));
 
     mpOutputDevice->DrawBitmapEx( aPos, aSz, aBmpEx );
 }

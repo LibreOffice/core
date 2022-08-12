@@ -606,7 +606,7 @@ void SwViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintD
         // formatting of the document.
 
         rRenderContext.Push( vcl::PushFlags::CLIPREGION );
-        rRenderContext.IntersectClipRegion( aSwRect.SVRect() );
+        rRenderContext.IntersectClipRegion(rRenderContext.LogicToPixel(aSwRect.SVRect()));
         pSh->GetLayout()->PaintSwFrame( rRenderContext, aSwRect );
 
         rRenderContext.Pop();

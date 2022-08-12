@@ -1268,7 +1268,7 @@ void VclPixelProcessor2D::processFillGradientPrimitive2D(
         std::ceil(aFullRange.getMaxX()), std::ceil(aFullRange.getMaxY()));
 
     mpOutputDevice->Push(vcl::PushFlags::CLIPREGION);
-    mpOutputDevice->IntersectClipRegion(aOutputRectangle);
+    mpOutputDevice->IntersectClipRegion(mpOutputDevice->LogicToPixel(aOutputRectangle));
     mpOutputDevice->DrawGradient(aFullRectangle, aGradient);
     mpOutputDevice->Pop();
 }
@@ -1299,7 +1299,7 @@ void VclPixelProcessor2D::processPatternFillPrimitive2D(
     if (basegfx::utils::isRectangle(aMask) || !SvtOptionsDrawinglayer::IsAntiAliasing())
     {
         mpOutputDevice->Push(vcl::PushFlags::CLIPREGION);
-        mpOutputDevice->IntersectClipRegion(vcl::Region(aMask));
+        mpOutputDevice->IntersectClipRegion(mpOutputDevice->LogicToPixel(vcl::Region(aMask)));
         Wallpaper aWallpaper(aTileImage);
         aWallpaper.SetColor(COL_TRANSPARENT);
         mpOutputDevice->DrawWallpaper(aMaskRect, aWallpaper);

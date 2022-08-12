@@ -186,7 +186,7 @@ Point InsertionIndicatorOverlay::PaintRepresentatives (
         if (rRepresentatives[nIndex].mbIsExcluded)
         {
             const vcl::Region aSavedClipRegion (rContent.PixelToLogic(rContent.GetClipRegion()));
-            rContent.IntersectClipRegion(::tools::Rectangle(aPageOffset, rPreviewSize));
+            rContent.IntersectClipRegion(rContent.LogicToPixel(::tools::Rectangle(aPageOffset, rPreviewSize)));
             // Paint bitmap tiled over the preview to mark it as excluded.
             const sal_Int32 nIconWidth (aExclusionOverlay.GetSizePixel().Width());
             const sal_Int32 nIconHeight (aExclusionOverlay.GetSizePixel().Height());

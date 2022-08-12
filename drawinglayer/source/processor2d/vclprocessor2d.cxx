@@ -801,7 +801,7 @@ void VclProcessor2D::RenderMaskPrimitive2DPixel(const primitive2d::MaskPrimitive
     if (basegfx::utils::isRectangle(aMask) || !SvtOptionsDrawinglayer::IsAntiAliasing())
     {
         mpOutputDevice->Push(vcl::PushFlags::CLIPREGION);
-        mpOutputDevice->IntersectClipRegion(vcl::Region(aMask));
+        mpOutputDevice->IntersectClipRegion(mpOutputDevice->LogicToPixel(vcl::Region(aMask)));
         process(rMaskCandidate.getChildren());
         mpOutputDevice->Pop();
         return;

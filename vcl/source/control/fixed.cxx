@@ -748,7 +748,7 @@ void FixedBitmap::Draw( OutputDevice* pDev, const Point& rPos,
         DecorationView aDecoView( pDev );
         aRect = aDecoView.DrawFrame( aRect, DrawFrameStyle::DoubleIn );
     }
-    pDev->IntersectClipRegion( aRect );
+    pDev->IntersectClipRegion(pDev->LogicToPixel(aRect));
     ImplDraw( pDev, aRect.TopLeft(), aRect.GetSize() );
 
     pDev->Pop();
@@ -894,7 +894,7 @@ void FixedImage::Draw( OutputDevice* pDev, const Point& rPos,
     {
         ImplDrawFrame( pDev, aRect );
     }
-    pDev->IntersectClipRegion( aRect );
+    pDev->IntersectClipRegion(pDev->LogicToPixel(aRect));
     ImplDraw( pDev, aRect.TopLeft(), aRect.GetSize() );
 
     pDev->Pop();
