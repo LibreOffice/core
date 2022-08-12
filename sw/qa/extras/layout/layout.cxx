@@ -3486,6 +3486,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint103)
     createSwWebDoc(DATA_DIRECTORY, "forcepoint103.html");
 }
 
+//just care it doesn't crash/assert
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint109)
+{
+    createSwDoc(DATA_DIRECTORY, "forcepoint109.rtf");
+}
+
 // FIXME: The font substitution of the bugdoc causes crash in Linux builds,
 // in addition this example file originally was a docx so check system type
 // until that issue is not fixed:
