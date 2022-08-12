@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42259da7_5e0a3e79",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-08-12T16:45:22Z",
+      "side": 1,
+      "message": "this time Mac failed in configure but that succeeded the 1st build so we can assume every platform built it successfuly",
+      "revId": "ee053911ecf9ed444a7c9bad8e0ffa923d77da36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
