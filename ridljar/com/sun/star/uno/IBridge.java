@@ -24,7 +24,7 @@ import java.io.IOException;
  * This is abstract interface for bridges.
  *
  * <p>Bridges are able to map one object from one UNO environment to another and
- * vice versa.<p>
+ * vice versa.</p>
  *
  * @see com.sun.star.uno.IBridge
  * @see com.sun.star.uno.IQueryInterface
