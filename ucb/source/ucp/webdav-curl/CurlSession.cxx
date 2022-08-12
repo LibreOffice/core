@@ -679,8 +679,17 @@ CurlSession::CurlSession(uno::Reference<uno::XComponentContext> const& xContext,
     rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_READFUNCTION, &read_callback);
     assert(rc == CURLE_OK);
     rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_HEADERFUNCTION, &header_callback);
-    // set this initially, may be overwritten during authentication
     assert(rc == CURLE_OK);
+    // tdf#149921 by default, with schannel (WNT) connection fails if revocation
+    // lists cannot be checked; try to limit the checking to when revocation
+    // lists can actually be retrieved (usually not the case for self-signed CA)
+#if CURL_AT_LEAST_VERSION(7, 70, 0)
+    rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_SSL_OPTIONS, CURLSSLOPT_REVOKE_BEST_EFFORT);
+    assert(rc == CURLE_OK);
+    rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_PROXY_SSL_OPTIONS, CURLSSLOPT_REVOKE_BEST_EFFORT);
+    assert(rc == CURLE_OK);
+#endif
+    // set this initially, may be overwritten during authentication
     rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_HTTPAUTH, CURLAUTH_ANY);
     assert(rc == CURLE_OK); // ANY is always available
     // always set CURLOPT_PROXY to suppress proxy detection in libcurl
