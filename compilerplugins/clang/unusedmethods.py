@@ -25,9 +25,14 @@ usedReturnSet = set() # set of tuple(return_type, name_and_params)
 
 # clang does not always use exactly the same numbers in the type-parameter vars it generates
 # so I need to substitute them to ensure we can match correctly.
-normalizeTypeParamsRegex = re.compile(r"type-parameter-\d+-\d+")
+normalizeTypeParamsRegex1 = re.compile(r"type-parameter-\d+-\d+")
+# clang sometimes generates a type name as either "class Foo" or "Foo"
+# so I need to substitute them to ensure we can match correctly.
+normalizeTypeParamsRegex2 = re.compile(r"class ")
 def normalizeTypeParams( line ):
-    return normalizeTypeParamsRegex.sub("type-parameter-?-?", line)
+    line = normalizeTypeParamsRegex1.sub("type-parameter-?-?", line)
+    line = normalizeTypeParamsRegex2.sub("", line)
+    return line
 
 # --------------------------------------------------------------------------------------------
 # primary input loop

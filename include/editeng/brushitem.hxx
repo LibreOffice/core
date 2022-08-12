@@ -92,7 +92,6 @@ public:
     void            SetColor( const Color& rCol)    { aColor = rCol; }
 
     const Color&    GetFiltColor() const             { return aFilterColor; }
-    Color&          GetFiltColor()                   { return aFilterColor; }
     void            SetFiltColor( const Color& rCol) { aFilterColor = rCol; }
 
     SvxGraphicPosition  GetGraphicPos() const       { return eGraphicPos; }

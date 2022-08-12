@@ -324,25 +324,6 @@ sal_Int32 GraphicZOrderHelper::findZOrder( sal_Int32 relativeHeight, bool bOldSt
     return 0; // this should not(?) happen
 }
 
-GraphicNamingHelper::GraphicNamingHelper()
-    : m_nCounter(0)
-{
-}
-
-OUString GraphicNamingHelper::NameGraphic(const OUString& rTemplate)
-{
-    OUString aRet = rTemplate;
-
-    if (aRet.isEmpty())
-    {
-        // Empty template: then auto-generate a unique name.
-        OUString aPrefix(SvxResId(STR_ObjNameSingulGRAF));
-        aRet += aPrefix + OUString::number(++m_nCounter);
-    }
-
-    return aRet;
-}
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
