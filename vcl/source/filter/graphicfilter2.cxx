@@ -417,27 +417,12 @@ bool GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  bool bExtendedInfo )
 
 bool GraphicDescriptor::ImpDetectPCD( SvStream& rStm, bool )
 {
-    bool    bRet = false;
-
     sal_Int32 nStmPos = rStm.Tell();
-    rStm.SetEndian( SvStreamEndian::LITTLE );
-
-    sal_uInt32  nTemp32 = 0;
-    sal_uInt16  nTemp16 = 0;
-    sal_uInt8   cByte = 0;
-
-    rStm.SeekRel( 2048 );
-    rStm.ReadUInt32( nTemp32 );
-    rStm.ReadUInt16( nTemp16 );
-    rStm.ReadUChar( cByte );
-
-    if ( ( nTemp32 == 0x5f444350 ) &&
-         ( nTemp16 == 0x5049 ) &&
-         ( cByte == 0x49 ) )
-    {
-        aMetadata.mnFormat = GraphicFileFormat::PCD;
-        bRet = true;
-    }
+    vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /*bExtendedInfo*/ );
+    bool bRet = aDetector.detect();
+    bRet &= aDetector.checkPCD();
+    if ( bRet )
+        aMetadata = aDetector.getMetadata();
     rStm.Seek( nStmPos );
     return bRet;
 }
