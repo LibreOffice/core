@@ -121,90 +121,12 @@ void GraphicDescriptor::ImpConstruct()
 
 bool GraphicDescriptor::ImpDetectBMP( SvStream& rStm, bool bExtendedInfo )
 {
-    sal_uInt16  nTemp16 = 0;
-    bool    bRet = false;
     sal_Int32 nStmPos = rStm.Tell();
-
-    rStm.SetEndian( SvStreamEndian::LITTLE );
-    rStm.ReadUInt16( nTemp16 );
-
-    // OS/2-BitmapArray
-    if ( nTemp16 == 0x4142 )
-    {
-        rStm.SeekRel( 0x0c );
-        rStm.ReadUInt16( nTemp16 );
-    }
-
-    // Bitmap
-    if ( nTemp16 == 0x4d42 )
-    {
-        aMetadata.mnFormat = GraphicFileFormat::BMP;
-        bRet = true;
-
-        if ( bExtendedInfo )
-        {
-            sal_uInt32  nTemp32;
-            sal_uInt32  nCompression;
-
-            // up to first info
-            rStm.SeekRel( 0x10 );
-
-            // Pixel width
-            rStm.ReadUInt32( nTemp32 );
-            aMetadata.maPixSize.setWidth( nTemp32 );
-
-            // Pixel height
-            rStm.ReadUInt32( nTemp32 );
-            aMetadata.maPixSize.setHeight( nTemp32 );
-
-            // Planes
-            rStm.ReadUInt16( nTemp16 );
-            aMetadata.mnPlanes = nTemp16;
-
-            // BitCount
-            rStm.ReadUInt16( nTemp16 );
-            aMetadata.mnBitsPerPixel = nTemp16;
-
-            // Compression
-            rStm.ReadUInt32( nTemp32 );
-            nCompression = nTemp32;
-
-            // logical width
-            rStm.SeekRel( 4 );
-            rStm.ReadUInt32( nTemp32 );
-            sal_uInt32 nXPelsPerMeter = 0;
-            if ( nTemp32 )
-            {
-                aMetadata.maLogSize.setWidth( ( aMetadata.maPixSize.Width() * 100000 ) / nTemp32 );
-                nXPelsPerMeter = nTemp32;
-            }
-
-            // logical height
-            rStm.ReadUInt32( nTemp32 );
-            sal_uInt32 nYPelsPerMeter = 0;
-            if ( nTemp32 )
-            {
-                aMetadata.maLogSize.setHeight( ( aMetadata.maPixSize.Height() * 100000 ) / nTemp32 );
-                nYPelsPerMeter = nTemp32;
-            }
-
-            // further validation, check for rational values
-            if ( ( aMetadata.mnBitsPerPixel > 24 ) || ( nCompression > 3 ) )
-            {
-                aMetadata.mnFormat = GraphicFileFormat::NOT;
-                bRet = false;
-            }
-
-            if (bRet && nXPelsPerMeter && nYPelsPerMeter)
-            {
-                aMetadata.maPreferredMapMode
-                    = MapMode(MapUnit::MapMM, Point(), Fraction(1000, nXPelsPerMeter),
-                              Fraction(1000, nYPelsPerMeter));
-
-                aMetadata.maPreferredLogSize = Size(aMetadata.maPixSize.getWidth(), aMetadata.maPixSize.getHeight());
-            }
-        }
-    }
+    vcl::GraphicFormatDetector aDetector( rStm, aPathExt, bExtendedInfo );
+    bool bRet = aDetector.detect();
+    bRet &= aDetector.checkBMP();
+    if ( bRet )
+        aMetadata = aDetector.getMetadata();
     rStm.Seek( nStmPos );
     return bRet;
 }

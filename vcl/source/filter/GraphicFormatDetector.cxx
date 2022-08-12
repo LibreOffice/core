@@ -25,6 +25,7 @@
 #include <graphic/DetectorTools.hxx>
 #include <tools/solar.h>
 #include <tools/zcodec.hxx>
+#include <tools/fract.hxx>
 #include <filter/WebpReader.hxx>
 #include <utility>
 
@@ -431,6 +432,7 @@ bool GraphicFormatDetector::checkMET()
 
 bool GraphicFormatDetector::checkBMP()
 {
+    bool bRet = false;
     sal_uInt8 nOffset;
 
     // We're possibly also able to read an OS/2 bitmap array
@@ -452,10 +454,80 @@ bool GraphicFormatDetector::checkBMP()
             || maFirstBytes[14 + nOffset] == 0x28 || maFirstBytes[14 + nOffset] == 0x0c)
         {
             maMetadata.mnFormat = GraphicFileFormat::BMP;
-            return true;
+            bRet = true;
+            if (mbExtendedInfo)
+            {
+                sal_uInt32 nTemp32;
+                sal_uInt16 nTemp16;
+                sal_uInt32 nCompression;
+
+                mrStream.SetEndian(SvStreamEndian::LITTLE);
+                mrStream.Seek(mnStreamPosition + nOffset + 2);
+
+                // up to first info
+                mrStream.SeekRel(0x10);
+
+                // Pixel width
+                mrStream.ReadUInt32(nTemp32);
+                maMetadata.maPixSize.setWidth(nTemp32);
+
+                // Pixel height
+                mrStream.ReadUInt32(nTemp32);
+                maMetadata.maPixSize.setHeight(nTemp32);
+
+                // Planes
+                mrStream.ReadUInt16(nTemp16);
+                maMetadata.mnPlanes = nTemp16;
+
+                // BitCount
+                mrStream.ReadUInt16(nTemp16);
+                maMetadata.mnBitsPerPixel = nTemp16;
+
+                // Compression
+                mrStream.ReadUInt32(nTemp32);
+                nCompression = nTemp32;
+
+                // logical width
+                mrStream.SeekRel(4);
+                mrStream.ReadUInt32(nTemp32);
+                sal_uInt32 nXPelsPerMeter = 0;
+                if (nTemp32)
+                {
+                    maMetadata.maLogSize.setWidth((maMetadata.maPixSize.Width() * 100000)
+                                                  / nTemp32);
+                    nXPelsPerMeter = nTemp32;
+                }
+
+                // logical height
+                mrStream.ReadUInt32(nTemp32);
+                sal_uInt32 nYPelsPerMeter = 0;
+                if (nTemp32)
+                {
+                    maMetadata.maLogSize.setHeight((maMetadata.maPixSize.Height() * 100000)
+                                                   / nTemp32);
+                    nYPelsPerMeter = nTemp32;
+                }
+
+                // further validation, check for rational values
+                if ((maMetadata.mnBitsPerPixel > 24) || (nCompression > 3))
+                {
+                    maMetadata.mnFormat = GraphicFileFormat::NOT;
+                    bRet = false;
+                }
+
+                if (bRet && nXPelsPerMeter && nYPelsPerMeter)
+                {
+                    maMetadata.maPreferredMapMode
+                        = MapMode(MapUnit::MapMM, Point(), Fraction(1000, nXPelsPerMeter),
+                                  Fraction(1000, nYPelsPerMeter));
+
+                    maMetadata.maPreferredLogSize
+                        = Size(maMetadata.maPixSize.getWidth(), maMetadata.maPixSize.getHeight());
+                }
+            }
         }
     }
-    return false;
+    return bRet;
 }
 
 bool GraphicFormatDetector::checkWMF()
