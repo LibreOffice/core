@@ -37,8 +37,7 @@ public:
     DataTableItemConverter(
         const css::uno::Reference<css::beans::XPropertySet>& rPropertySet, SfxItemPool& rItemPool,
         SdrModel& rDrawModel,
-        css::uno::Reference<css::lang::XMultiServiceFactory> const& xNamedPropertyContainerFactory,
-        const css::awt::Size* pRefSize);
+        css::uno::Reference<css::lang::XMultiServiceFactory> const& xNamedPropertyContainerFactory);
 
     virtual ~DataTableItemConverter() override;
 

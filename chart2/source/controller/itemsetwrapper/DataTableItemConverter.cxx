@@ -50,14 +50,12 @@ ItemPropertyMapType& lclDataTablePropertyMap()
 
 DataTableItemConverter::DataTableItemConverter(
     const uno::Reference<beans::XPropertySet>& rPropertySet, SfxItemPool& rItemPool,
-    SdrModel& rDrawModel, uno::Reference<lang::XMultiServiceFactory> const& xFactory,
-    const awt::Size* pRefSize)
+    SdrModel& rDrawModel, uno::Reference<lang::XMultiServiceFactory> const& xFactory)
     : ItemConverter(rPropertySet, rItemPool)
 {
     m_aConverters.emplace_back(new GraphicPropertyItemConverter(
         rPropertySet, rItemPool, rDrawModel, xFactory, GraphicObjectType::LineProperties));
-    m_aConverters.emplace_back(
-        new CharacterPropertyItemConverter(rPropertySet, rItemPool, pRefSize, "ReferencePageSize"));
+    m_aConverters.emplace_back(new CharacterPropertyItemConverter(rPropertySet, rItemPool));
 }
 
 DataTableItemConverter::~DataTableItemConverter() = default;
