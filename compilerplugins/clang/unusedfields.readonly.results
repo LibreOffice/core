@@ -1,5 +1,5 @@
 basegfx/source/polygon/b2dtrapezoid.cxx:205
-    basegfx::trapezoidhelper::(anonymous namespace)::PointBlockAllocator maFirstStackBlock class basegfx::B2DPoint[32]
+    basegfx::trapezoidhelper::(anonymous namespace)::PointBlockAllocator maFirstStackBlock B2DPoint[32]
 basic/source/inc/expr.hxx:92
     SbiExprNode::(anonymous) nTypeStrId sal_uInt16
 bridges/source/cpp_uno/gcc3_linux_x86-64/callvirtualmethod.cxx:63
@@ -17,7 +17,7 @@ bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:130
 bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:131
     __cxxabiv1::__cxa_exception terminateHandler std::terminate_handler
 bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:132
-    __cxxabiv1::__cxa_exception nextException struct __cxxabiv1::__cxa_exception *
+    __cxxabiv1::__cxa_exception nextException __cxa_exception *
 bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:133
     __cxxabiv1::__cxa_exception handlerCount int
 bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:134
@@ -33,7 +33,7 @@ bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:138
 bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:139
     __cxxabiv1::__cxa_exception unwindHeader _Unwind_Exception
 bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:148
-    __cxxabiv1::__cxa_eh_globals caughtExceptions struct __cxxabiv1::__cxa_exception *
+    __cxxabiv1::__cxa_eh_globals caughtExceptions __cxa_exception *
 bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:149
     __cxxabiv1::__cxa_eh_globals uncaughtExceptions unsigned int
 bridges/source/jni_uno/jni_info.h:67
@@ -56,7 +56,7 @@ connectivity/inc/sdbcx/VCatalog.hxx:66
     connectivity::sdbcx::OCatalog m_pGroups std::unique_ptr<OCollection>
 connectivity/inc/sdbcx/VGroup.hxx:52
     connectivity::sdbcx::OGroup m_pUsers std::unique_ptr<OUsers>
-connectivity/inc/sdbcx/VKey.hxx:69
+connectivity/inc/sdbcx/VKey.hxx:70
     connectivity::sdbcx::OKey m_pColumns std::unique_ptr<OCollection>
 connectivity/inc/sdbcx/VUser.hxx:52
     connectivity::sdbcx::OUser m_pGroups std::unique_ptr<OGroups>
@@ -79,24 +79,24 @@ connectivity/source/inc/dbase/DIndexIter.hxx:33
 connectivity/source/inc/dbase/DIndexIter.hxx:34
     connectivity::dbase::OIndexIterator m_pOperand const file::OOperand *
 connectivity/source/inc/FDatabaseMetaDataResultSet.hxx:109
-    connectivity::ODatabaseMetaDataResultSet m_aEmptyValue class connectivity::ORowSetValue
-connectivity/source/inc/OColumn.hxx:40
-    connectivity::OColumn m_AutoIncrement _Bool
+    connectivity::ODatabaseMetaDataResultSet m_aEmptyValue ORowSetValue
 connectivity/source/inc/OColumn.hxx:41
+    connectivity::OColumn m_AutoIncrement _Bool
+connectivity/source/inc/OColumn.hxx:42
     connectivity::OColumn m_CaseSensitive _Bool
-connectivity/source/inc/OColumn.hxx:43
-    connectivity::OColumn m_Currency _Bool
 connectivity/source/inc/OColumn.hxx:44
+    connectivity::OColumn m_Currency _Bool
+connectivity/source/inc/OColumn.hxx:45
     connectivity::OColumn m_Signed _Bool
-connectivity/source/inc/OColumn.hxx:46
-    connectivity::OColumn m_Writable _Bool
 connectivity/source/inc/OColumn.hxx:47
+    connectivity::OColumn m_Writable _Bool
+connectivity/source/inc/OColumn.hxx:48
     connectivity::OColumn m_DefinitelyWritable _Bool
 connectivity/source/inc/TConnection.hxx:54
-    connectivity::OMetaConnection m_aResources class connectivity::SharedResources
+    connectivity::OMetaConnection m_aResources SharedResources
 connectivity/source/inc/writer/WTable.hxx:43
     connectivity::writer::OWriterTable m_nStartCol sal_Int32
-cppcanvas/source/mtfrenderer/textaction.cxx:1635
+cppcanvas/source/mtfrenderer/textaction.cxx:1636
     cppcanvas::internal::(anonymous namespace)::OutlineAction maTextFillColor const ::Color
 cppu/source/helper/purpenv/helper_purpenv_Mapping.cxx:36
     (anonymous namespace)::Mapping m_from uno::Environment
@@ -106,59 +106,83 @@ cppu/source/helper/purpenv/Proxy.hxx:35
     Proxy m_from css::uno::Environment
 cppu/source/helper/purpenv/Proxy.hxx:36
     Proxy m_to css::uno::Environment
-cppu/source/uno/cascade_mapping.cxx:42
-    (anonymous namespace)::MediatorMapping m_from uno::Environment
 cppu/source/uno/cascade_mapping.cxx:43
-    (anonymous namespace)::MediatorMapping m_interm uno::Environment
+    (anonymous namespace)::MediatorMapping m_from uno::Environment
 cppu/source/uno/cascade_mapping.cxx:44
+    (anonymous namespace)::MediatorMapping m_interm uno::Environment
+cppu/source/uno/cascade_mapping.cxx:45
     (anonymous namespace)::MediatorMapping m_to uno::Environment
 cppu/source/uno/check.cxx:38
     (anonymous namespace)::C1 n1 sal_Int16
+cppu/source/uno/check.cxx:42
+    (anonymous namespace)::C2 n2 sal_Int32
+cppu/source/uno/check.cxx:46
+    (anonymous namespace)::C3 d3 double
+cppu/source/uno/check.cxx:47
+    (anonymous namespace)::C3 n3 sal_Int32
+cppu/source/uno/check.cxx:51
+    (anonymous namespace)::C4 n4 sal_Int32
+cppu/source/uno/check.cxx:52
+    (anonymous namespace)::C4 d4 double
+cppu/source/uno/check.cxx:56
+    (anonymous namespace)::C5 n5 sal_Int64
+cppu/source/uno/check.cxx:57
+    (anonymous namespace)::C5 b5 sal_Bool
+cppu/source/uno/check.cxx:61
+    (anonymous namespace)::C6 c6 C5
+cppu/source/uno/check.cxx:62
+    (anonymous namespace)::C6 b6 sal_Bool
 cppu/source/uno/check.cxx:67
     (anonymous namespace)::D d sal_Int16
 cppu/source/uno/check.cxx:68
     (anonymous namespace)::D e sal_Int32
-cppu/source/uno/check.cxx:72
-    (anonymous namespace)::E a sal_Bool
 cppu/source/uno/check.cxx:73
-    (anonymous namespace)::E b sal_Bool
-cppu/source/uno/check.cxx:74
-    (anonymous namespace)::E c sal_Bool
+    (anonymous namespace)::E a sal_Bool
 cppu/source/uno/check.cxx:75
+    (anonymous namespace)::E b sal_Bool
+cppu/source/uno/check.cxx:77
+    (anonymous namespace)::E c sal_Bool
+cppu/source/uno/check.cxx:78
     (anonymous namespace)::E d sal_Int16
-cppu/source/uno/check.cxx:76
+cppu/source/uno/check.cxx:79
     (anonymous namespace)::E e sal_Int32
-cppu/source/uno/check.cxx:81
+cppu/source/uno/check.cxx:84
     (anonymous namespace)::M n sal_Int32
-cppu/source/uno/check.cxx:82
+cppu/source/uno/check.cxx:85
     (anonymous namespace)::M o sal_Int16
-cppu/source/uno/check.cxx:91
-    (anonymous namespace)::N2 m struct (anonymous namespace)::M
-cppu/source/uno/check.cxx:92
+cppu/source/uno/check.cxx:90
+    (anonymous namespace)::N p sal_Int16
+cppu/source/uno/check.cxx:94
+    (anonymous namespace)::N2 m M
+cppu/source/uno/check.cxx:95
     (anonymous namespace)::N2 p sal_Int16
-cppu/source/uno/check.cxx:97
+cppu/source/uno/check.cxx:100
     (anonymous namespace)::O p double
-cppu/source/uno/check.cxx:98
+cppu/source/uno/check.cxx:101
     (anonymous namespace)::O q sal_Int16
-cppu/source/uno/check.cxx:107
+cppu/source/uno/check.cxx:105
+    (anonymous namespace)::O2 p2 sal_Int16
+cppu/source/uno/check.cxx:110
     (anonymous namespace)::P p2 double
-cppu/source/uno/check.cxx:115
+cppu/source/uno/check.cxx:118
     (anonymous namespace)::second a int
-cppu/source/uno/check.cxx:126
+cppu/source/uno/check.cxx:129
     (anonymous namespace)::Char1 c1 char
-cppu/source/uno/check.cxx:130
+cppu/source/uno/check.cxx:133
     (anonymous namespace)::Char2 c2 char
-cppu/source/uno/check.cxx:134
+cppu/source/uno/check.cxx:137
     (anonymous namespace)::Char3 c3 char
-cppu/source/uno/check.cxx:258
-    (anonymous namespace)::Char4 chars struct (anonymous namespace)::Char3
+cppu/source/uno/check.cxx:267
+    (anonymous namespace)::Char4 chars Char3
+cppu/source/uno/check.cxx:271
+    (anonymous namespace)::Char4 c char
 cui/source/options/optcolor.cxx:259
-    (anonymous namespace)::ColorConfigWindow_Impl aModuleOptions class SvtModuleOptions
+    (anonymous namespace)::ColorConfigWindow_Impl aModuleOptions SvtModuleOptions
 dbaccess/source/core/api/RowSetBase.hxx:84
     dbaccess::ORowSetBase m_aEmptyValue connectivity::ORowSetValue
 dbaccess/source/core/api/RowSetBase.hxx:95
     dbaccess::ORowSetBase m_aErrors ::connectivity::SQLError
-dbaccess/source/core/dataaccess/documentcontainer.cxx:67
+dbaccess/source/core/dataaccess/documentcontainer.cxx:68
     dbaccess::(anonymous namespace)::LocalNameApproval m_aErrors ::connectivity::SQLError
 dbaccess/source/core/inc/ContentHelper.hxx:103
     dbaccess::OContentHelper m_aErrorHelper const ::connectivity::SQLError
@@ -167,15 +191,15 @@ dbaccess/source/filter/hsqldb/parseschema.hxx:34
 dbaccess/source/ui/control/tabletree.cxx:127
     dbaui::(anonymous namespace)::OViewSetter m_aEqualFunctor ::comphelper::UStringMixEqual
 dbaccess/source/ui/inc/charsetlistbox.hxx:43
-    dbaui::CharSetListBox m_aCharSets class dbaui::OCharsetDisplay
+    dbaui::CharSetListBox m_aCharSets OCharsetDisplay
 dbaccess/source/ui/inc/sqledit.hxx:41
     dbaui::SQLEditView m_aColorConfig const svtools::ColorConfig
 dbaccess/source/ui/inc/WCopyTable.hxx:258
     dbaui::OCopyTableWizard m_aLocale css::lang::Locale
-editeng/source/editeng/impedit.hxx:516
+editeng/source/editeng/impedit.hxx:515
     ImpEditEngine maColorConfig svtools::ColorConfig
-embeddedobj/source/inc/commonembobj.hxx:110
-    OCommonEmbeddedObject m_aClassName rtl::OUString
+embeddedobj/source/inc/commonembobj.hxx:113
+    OCommonEmbeddedObject m_aClassName OUString
 embeddedobj/source/inc/oleembobj.hxx:125
     OleEmbeddedObject m_pOleComponent rtl::Reference<OleComponent>
 embeddedobj/source/inc/oleembobj.hxx:145
@@ -193,15 +217,15 @@ embeddedobj/source/inc/oleembobj.hxx:175
 embeddedobj/source/inc/oleembobj.hxx:176
     OleEmbeddedObject m_nStatusAspect sal_Int64
 embeddedobj/source/inc/oleembobj.hxx:184
-    OleEmbeddedObject m_aLinkURL rtl::OUString
+    OleEmbeddedObject m_aLinkURL OUString
 embeddedobj/source/inc/oleembobj.hxx:190
     OleEmbeddedObject m_bFromClipboard _Bool
 embeddedobj/source/msole/olecomponent.hxx:73
     OleComponent m_bWorkaroundActive _Bool
 extensions/source/propctrlr/eformshelper.hxx:60
-    pcr::EFormsHelper m_aSubmissionUINames pcr::MapStringToPropertySet
+    pcr::EFormsHelper m_aSubmissionUINames MapStringToPropertySet
 extensions/source/propctrlr/eformshelper.hxx:62
-    pcr::EFormsHelper m_aBindingUINames pcr::MapStringToPropertySet
+    pcr::EFormsHelper m_aBindingUINames MapStringToPropertySet
 filter/source/graphicfilter/icgm/chart.hxx:48
     DataNode nBoxX1 sal_Int16
 filter/source/graphicfilter/icgm/chart.hxx:49
@@ -211,17 +235,17 @@ filter/source/graphicfilter/icgm/chart.hxx:50
 filter/source/graphicfilter/icgm/chart.hxx:51
     DataNode nBoxY2 sal_Int16
 filter/source/xsltdialog/xmlfiltersettingsdialog.hxx:85
-    XMLFilterSettingsDialog maModuleOpt class SvtModuleOptions
+    XMLFilterSettingsDialog maModuleOpt SvtModuleOptions
 framework/inc/dispatch/dispatchprovider.hxx:76
-    framework::DispatchProvider m_aProtocolHandlerCache class framework::HandlerCache
+    framework::DispatchProvider m_aProtocolHandlerCache HandlerCache
 framework/inc/helper/uiconfigelementwrapperbase.hxx:128
     framework::UIConfigElementWrapperBase m_bConfigListening _Bool
 framework/inc/xml/menudocumenthandler.hxx:186
     framework::OReadMenuPopupHandler m_bMenuMode _Bool
 framework/source/fwe/classes/addonsoptions.cxx:349
-    framework::AddonsOptions_Impl m_aEmptyAddonToolBar Sequence<Sequence<struct com::sun::star::beans::PropertyValue> >
+    framework::AddonsOptions_Impl m_aEmptyAddonToolBar Sequence<Sequence<PropertyValue> >
 framework/source/fwe/classes/addonsoptions.cxx:350
-    framework::AddonsOptions_Impl m_aEmptyAddonNotebookBar Sequence<Sequence<struct com::sun::star::beans::PropertyValue> >
+    framework::AddonsOptions_Impl m_aEmptyAddonNotebookBar Sequence<Sequence<PropertyValue> >
 i18npool/inc/textconversion.hxx:78
     i18npool::(anonymous) code sal_Unicode
 i18npool/inc/textconversion.hxx:79
@@ -229,9 +253,9 @@ i18npool/inc/textconversion.hxx:79
 i18npool/inc/textconversion.hxx:80
     i18npool::(anonymous) count sal_Int16
 include/basic/sbstar.hxx:50
-    StarBASIC aErrorHdl Link<class StarBASIC *, _Bool>
+    StarBASIC aErrorHdl Link<StarBASIC *, _Bool>
 include/basic/sbstar.hxx:51
-    StarBASIC aBreakHdl Link<class StarBASIC *, enum BasicDebugFlags>
+    StarBASIC aBreakHdl Link<StarBASIC *, BasicDebugFlags>
 include/comphelper/guarding.hxx:40
     comphelper::ORelease m_rMutex MUTEX &
 include/comphelper/parallelsort.hxx:164
@@ -242,10 +266,10 @@ include/comphelper/servicedecl.hxx:131
     comphelper::service_decl::ServiceDecl m_pImplName const char *const
 include/comphelper/servicedecl.hxx:132
     comphelper::service_decl::ServiceDecl m_pServiceNames const char *const
-include/comphelper/stl_types.hxx:113
-    comphelper::mem_fun1_t M_f const comphelper::mem_fun1_t::_fun_type
+include/comphelper/stl_types.hxx:114
+    comphelper::mem_fun1_t M_f const _fun_type
 include/connectivity/DriversConfig.hxx:76
-    connectivity::DriversConfig m_aNode connectivity::DriversConfig::OSharedConfigNode
+    connectivity::DriversConfig m_aNode OSharedConfigNode
 include/connectivity/sdbcx/VDescriptor.hxx:51
     connectivity::sdbcx::ODescriptor m_aCase comphelper::UStringMixEqual
 include/connectivity/sdbcx/VTable.hxx:77
@@ -255,7 +279,7 @@ include/connectivity/sdbcx/VTable.hxx:78
 include/connectivity/sqlparse.hxx:104
     connectivity::OSQLParser_Data aErrors ::connectivity::SQLError
 include/filter/msfilter/svdfppt.hxx:718
-    PPTExtParaSheet aExtParaLevel struct PPTExtParaLevel[10]
+    PPTExtParaSheet aExtParaLevel PPTExtParaLevel[10]
 include/filter/msfilter/svdfppt.hxx:889
     ImplPPTParaPropSet nDontKnow1 sal_uInt32
 include/filter/msfilter/svdfppt.hxx:890
@@ -265,20 +289,10 @@ include/filter/msfilter/svdfppt.hxx:891
 include/oox/core/contexthandler2.hxx:231
     oox::core::ContextHandler2Helper mnRootStackSize size_t
 include/oox/helper/containerhelper.hxx:130
-    oox::Matrix maData oox::Matrix::container_type
+    oox::Matrix maData container_type
 include/oox/ole/axbinarywriter.hxx:150
-    oox::ole::AxBinaryPropertyWriter maStreamProps oox::ole::AxBinaryPropertyWriter::ComplexPropVector
-include/registry/refltype.hxx:65
-    RTUik m_Data1 sal_uInt32
-include/registry/refltype.hxx:66
-    RTUik m_Data2 sal_uInt16
-include/registry/refltype.hxx:67
-    RTUik m_Data3 sal_uInt16
-include/registry/refltype.hxx:68
-    RTUik m_Data4 sal_uInt32
-include/registry/refltype.hxx:69
-    RTUik m_Data5 sal_uInt32
-include/sfx2/lokhelper.hxx:32
+    oox::ole::AxBinaryPropertyWriter maStreamProps ComplexPropVector
+include/sfx2/lokhelper.hxx:33
     LokMouseEventData maLogicPosition std::optional<Point>
 include/sfx2/msg.hxx:95
     SfxTypeAttrib nAID sal_uInt16
@@ -291,79 +305,77 @@ include/sfx2/msg.hxx:106
 include/sfx2/msg.hxx:107
     SfxType nAttribs sal_uInt16
 include/sfx2/msg.hxx:108
-    SfxType aAttrib struct SfxTypeAttrib[1]
+    SfxType aAttrib SfxTypeAttrib[1]
 include/sfx2/msg.hxx:118
     SfxType0 pType const std::type_info *
 include/svl/ondemand.hxx:55
-    OnDemandLocaleDataWrapper aSysLocale class SvtSysLocale
+    OnDemandLocaleDataWrapper aSysLocale SvtSysLocale
+include/svx/diagram/IDiagramHelper.hxx:72
+    svx::diagram::IDiagramHelper mbUseDiagramThemeData _Bool
+include/svx/diagram/IDiagramHelper.hxx:81
+    svx::diagram::IDiagramHelper mbForceThemePtrRecreation _Bool
 include/svx/graphctl.hxx:52
-    GraphCtrl xVD ScopedVclPtrInstance<class VirtualDevice>
+    GraphCtrl xVD ScopedVclPtrInstance<VirtualDevice>
 include/svx/sdr/overlay/overlayanimatedbitmapex.hxx:49
     sdr::overlay::OverlayAnimatedBitmapEx mbOverlayState _Bool
 include/svx/svdmark.hxx:141
-    SdrMarkList maPointName rtl::OUString
+    SdrMarkList maPointName OUString
 include/svx/svdmark.hxx:142
-    SdrMarkList maGluePointName rtl::OUString
+    SdrMarkList maGluePointName OUString
 include/svx/svdoedge.hxx:160
     SdrEdgeObj mbBoundRectCalculationRunning _Bool
-include/unoidl/unoidl.hxx:444
-    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /home/noel/libo2/include/unoidl/unoidl.hxx:444:5)
 include/unoidl/unoidl.hxx:445
-    unoidl::ConstantValue::(anonymous) booleanValue _Bool
+    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /home/noel/libo2/include/unoidl/unoidl.hxx:445:5)
 include/unoidl/unoidl.hxx:446
-    unoidl::ConstantValue::(anonymous) byteValue sal_Int8
+    unoidl::ConstantValue::(anonymous) booleanValue _Bool
 include/unoidl/unoidl.hxx:447
-    unoidl::ConstantValue::(anonymous) shortValue sal_Int16
+    unoidl::ConstantValue::(anonymous) byteValue sal_Int8
 include/unoidl/unoidl.hxx:448
-    unoidl::ConstantValue::(anonymous) unsignedShortValue sal_uInt16
+    unoidl::ConstantValue::(anonymous) shortValue sal_Int16
 include/unoidl/unoidl.hxx:449
-    unoidl::ConstantValue::(anonymous) longValue sal_Int32
+    unoidl::ConstantValue::(anonymous) unsignedShortValue sal_uInt16
 include/unoidl/unoidl.hxx:450
-    unoidl::ConstantValue::(anonymous) unsignedLongValue sal_uInt32
+    unoidl::ConstantValue::(anonymous) longValue sal_Int32
 include/unoidl/unoidl.hxx:451
-    unoidl::ConstantValue::(anonymous) hyperValue sal_Int64
+    unoidl::ConstantValue::(anonymous) unsignedLongValue sal_uInt32
 include/unoidl/unoidl.hxx:452
-    unoidl::ConstantValue::(anonymous) unsignedHyperValue sal_uInt64
+    unoidl::ConstantValue::(anonymous) hyperValue sal_Int64
 include/unoidl/unoidl.hxx:453
-    unoidl::ConstantValue::(anonymous) floatValue float
+    unoidl::ConstantValue::(anonymous) unsignedHyperValue sal_uInt64
 include/unoidl/unoidl.hxx:454
+    unoidl::ConstantValue::(anonymous) floatValue float
+include/unoidl/unoidl.hxx:455
     unoidl::ConstantValue::(anonymous) doubleValue double
 include/unotest/bootstrapfixturebase.hxx:52
-    test::BootstrapFixtureBase m_directories class test::Directories
+    test::BootstrapFixtureBase m_directories Directories
 include/vcl/formatter.hxx:127
-    Formatter m_aStaticFormatter class Formatter::StaticFormatter
+    Formatter m_aStaticFormatter StaticFormatter
 include/vcl/toolkit/field.hxx:399
     DateFormatter maStaticFormatter class Formatter::StaticFormatter
-io/source/stm/odata.cxx:559
+io/source/stm/odata.cxx:558
     io_stm::(anonymous namespace)::ODataOutputStream::writeDouble(double)::(anonymous union)::(anonymous) n1 sal_uInt32
-io/source/stm/odata.cxx:559
+io/source/stm/odata.cxx:558
     io_stm::(anonymous namespace)::ODataOutputStream::writeDouble(double)::(anonymous union)::(anonymous) n2 sal_uInt32
 libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:48
     (anonymous namespace)::GtvLokDialogPrivate m_nChildKeyModifier guint32
-libreofficekit/source/gtk/lokdocview.cxx:85
+libreofficekit/source/gtk/lokdocview.cxx:86
     (anonymous namespace)::LOKDocViewPrivateImpl m_bIsLoading _Bool
 lingucomponent/source/languageguessing/simpleguesser.cxx:72
     (anonymous namespace)::textcat_t fprint void **
 lingucomponent/source/languageguessing/simpleguesser.cxx:74
     (anonymous namespace)::textcat_t size uint4
 linguistic/source/dlistimp.hxx:56
-    DicList aOpt class LinguOptions
+    DicList aOpt LinguOptions
 oox/inc/drawingml/table/tablecell.hxx:85
     oox::drawingml::table::TableCell maLinePropertiesInsideH oox::drawingml::LineProperties
 oox/inc/drawingml/table/tablecell.hxx:86
     oox::drawingml::table::TableCell maLinePropertiesInsideV oox::drawingml::LineProperties
 oox/qa/token/tokenmap-test.cxx:33
-    oox::TokenmapTest tokenMap class oox::TokenMap
+    oox::TokenmapTest tokenMap TokenMap
 oox/qa/unit/vba_compression.cxx:70
     TestVbaCompression m_directories test::Directories
-oox/source/drawingml/chart/objectformatter.cxx:717
-    oox::drawingml::chart::ObjectFormatterData maFromLocale struct com::sun::star::lang::Locale
-registry/source/reflwrit.cxx:140
-    writeDouble(sal_uInt8 *, double)::(anonymous union)::(anonymous) b1 sal_uInt32
-registry/source/reflwrit.cxx:141
-    writeDouble(sal_uInt8 *, double)::(anonymous union)::(anonymous) b2 sal_uInt32
-registry/source/reflwrit.cxx:181
-    (anonymous namespace)::CPInfo::(anonymous) aUik struct RTUik *
+oox/source/drawingml/chart/objectformatter.cxx:722
+    oox::drawingml::chart::ObjectFormatterData maFromLocale Locale
 reportdesign/source/ui/inc/ColorListener.hxx:35
     rptui::OColorListener m_aColorConfig svtools::ColorConfig
 sal/osl/unx/process.cxx:827
@@ -375,9 +387,9 @@ sal/osl/unx/process.cxx:829
 sal/osl/unx/process.cxx:830
     (anonymous namespace)::osl_procStat sigcatch char[24]
 sal/qa/OStringBuffer/rtl_OStringBuffer.cxx:1675
-    rtl_OStringBuffer::append_001 empty rtl::OString
+    rtl_OStringBuffer::append_001 empty OString
 sal/rtl/alloc_arena.hxx:100
-    rtl_arena_st m_hash_table_0 struct rtl_arena_segment_type *[64]
+    rtl_arena_st m_hash_table_0 rtl_arena_segment_type *[64]
 sal/rtl/digest.cxx:188
     (anonymous namespace)::DigestContextMD2 m_state sal_uInt32[16]
 sal/rtl/digest.cxx:189
@@ -388,58 +400,62 @@ sal/rtl/uuid.cxx:67
     (anonymous namespace)::UUID node sal_uInt8[6]
 sc/inc/attarray.hxx:69
     ScMergePatternState pItemSet std::optional<SfxItemSet>
+sc/inc/cellvalue.hxx:113
+    ScRefCellValue::(anonymous) mpString const svl::SharedString *
+sc/inc/cellvalue.hxx:114
+    ScRefCellValue::(anonymous) mpEditText const EditTextObject *
 sc/inc/compiler.hxx:132
     ScRawToken::(anonymous union)::(anonymous) eItem class ScTableRefToken::Item
 sc/inc/compiler.hxx:133
     ScRawToken::(anonymous) table struct (unnamed struct at /home/noel/libo2/sc/inc/compiler.hxx:130:9)
 sc/inc/compiler.hxx:138
-    ScRawToken::(anonymous) pMat class ScMatrix *
+    ScRawToken::(anonymous) pMat ScMatrix *
 sc/inc/formulagroup.hxx:38
-    sc::FormulaGroupEntry::(anonymous) mpCells class ScFormulaCell **
+    sc::FormulaGroupEntry::(anonymous) mpCells ScFormulaCell **
 sc/inc/reordermap.hxx:20
-    sc::ColRowReorderMapType maData sc::ColRowReorderMapType::DataType
+    sc::ColRowReorderMapType maData DataType
 sc/source/core/inc/adiasync.hxx:41
-    ScAddInAsync::(anonymous) pStr rtl::OUString *
+    ScAddInAsync::(anonymous) pStr OUString *
 sc/source/core/inc/interpre.hxx:99
     ScTokenStack pPointer const formula::FormulaToken *[512]
-sc/source/filter/excel/xltoolbar.cxx:30
-    (anonymous namespace)::MSOExcelCommandConvertor msoToOOcmd IdToString
 sc/source/filter/excel/xltoolbar.cxx:31
+    (anonymous namespace)::MSOExcelCommandConvertor msoToOOcmd IdToString
+sc/source/filter/excel/xltoolbar.cxx:32
     (anonymous namespace)::MSOExcelCommandConvertor tcidToOOcmd IdToString
 sc/source/filter/inc/commentsbuffer.hxx:40
     oox::xls::CommentModel maAnchor css::awt::Rectangle
 sc/source/filter/inc/htmlexp.hxx:117
-    ScHTMLExport pFileNameMap ScHTMLExport::FileNameMapPtr
-sc/source/filter/inc/htmlpars.hxx:57
-    ScHTMLStyles maEmpty const rtl::OUString
-sc/source/filter/inc/namebuff.hxx:79
+    ScHTMLExport pFileNameMap FileNameMapPtr
+sc/source/filter/inc/htmlpars.hxx:58
+    ScHTMLStyles maEmpty const OUString
+sc/source/filter/inc/namebuff.hxx:80
     RangeNameBufferWK3::Entry nAbsInd sal_uInt16
 sc/source/filter/inc/qproform.hxx:54
-    QProToSc mnAddToken struct TokenId
-sc/source/filter/inc/stylesbuffer.hxx:674
-    oox::xls::Dxf mxAlignment std::shared_ptr<Alignment>
+    QProToSc mnAddToken TokenId
 sc/source/filter/inc/stylesbuffer.hxx:676
+    oox::xls::Dxf mxAlignment std::shared_ptr<Alignment>
+sc/source/filter/inc/stylesbuffer.hxx:678
     oox::xls::Dxf mxProtection std::shared_ptr<Protection>
-sc/source/filter/inc/stylesbuffer.hxx:765
-    oox::xls::CellStyleBuffer maBuiltinStyles oox::xls::CellStyleBuffer::CellStyleVector
-sc/source/filter/inc/stylesbuffer.hxx:766
-    oox::xls::CellStyleBuffer maUserStyles oox::xls::CellStyleBuffer::CellStyleVector
+sc/source/filter/inc/stylesbuffer.hxx:767
+    oox::xls::CellStyleBuffer maBuiltinStyles CellStyleVector
+sc/source/filter/inc/stylesbuffer.hxx:768
+    oox::xls::CellStyleBuffer maUserStyles CellStyleVector
 sc/source/filter/inc/XclExpChangeTrack.hxx:347
     XclExpChTrAction pAddAction std::unique_ptr<XclExpChTrAction>
 sc/source/filter/inc/xepage.hxx:121
-    XclExpChartPageSettings maData struct XclPageData
+    XclExpChartPageSettings maData XclPageData
 sc/source/filter/inc/xistyle.hxx:517
-    XclImpXFBuffer maBuiltinStyles XclImpXFBuffer::XclImpStyleList
+    XclImpXFBuffer maBuiltinStyles XclImpStyleList
 sc/source/filter/inc/xistyle.hxx:518
-    XclImpXFBuffer maUserStyles XclImpXFBuffer::XclImpStyleList
+    XclImpXFBuffer maUserStyles XclImpStyleList
 sc/source/filter/inc/xltracer.hxx:81
     XclTracer mbEnabled _Bool
 sc/source/filter/xml/xmlcelli.hxx:94
     ScXMLTableRowCellContext mbEditEngineHasText _Bool
 sc/source/ui/inc/csvruler.hxx:37
-    ScCsvRuler maBackgrDev ScopedVclPtrInstance<class VirtualDevice>
+    ScCsvRuler maBackgrDev ScopedVclPtrInstance<VirtualDevice>
 sc/source/ui/inc/csvruler.hxx:38
-    ScCsvRuler maRulerDev ScopedVclPtrInstance<class VirtualDevice>
+    ScCsvRuler maRulerDev ScopedVclPtrInstance<VirtualDevice>
 sc/source/ui/inc/inputhdl.hxx:66
     ScInputHandler pColumnData std::unique_ptr<ScTypedCaseStrSet>
 sc/source/ui/inc/inputhdl.hxx:67
@@ -458,11 +474,11 @@ sc/source/ui/vba/vbaformatconditions.hxx:39
     ScVbaFormatConditions mxParentRangePropertySet css::uno::Reference<css::beans::XPropertySet>
 sc/source/ui/vba/vbaworksheet.hxx:49
     ScVbaWorksheet mxButtons ::rtl::Reference<ScVbaSheetObjectsBase>[2]
-sd/inc/Outliner.hxx:288
-    SdOutliner mpFirstObj class SdrObject *
-sd/inc/sdmod.hxx:120
+sd/inc/Outliner.hxx:289
+    SdOutliner mpFirstObj SdrObject *
+sd/inc/sdmod.hxx:131
     SdModule gImplImpressPropertySetInfoCache SdExtPropertySetInfoCache
-sd/inc/sdmod.hxx:121
+sd/inc/sdmod.hxx:132
     SdModule gImplDrawPropertySetInfoCache SdExtPropertySetInfoCache
 sd/source/core/CustomAnimationCloner.cxx:70
     sd::(anonymous namespace)::CustomAnimationClonerImpl maSourceNodeVector std::vector<Reference<XAnimationNode> >
@@ -473,43 +489,45 @@ sd/source/ui/inc/unopage.hxx:164
 sd/source/ui/inc/unopage.hxx:224
     SdMasterPage maTypeSequence css::uno::Sequence<css::uno::Type>
 sd/source/ui/sidebar/MasterPageContainer.cxx:141
-    sd::sidebar::MasterPageContainer::Implementation maLargePreviewBeingCreated class Image
+    sd::sidebar::MasterPageContainer::Implementation maLargePreviewBeingCreated Image
 sd/source/ui/sidebar/MasterPageContainer.cxx:142
-    sd::sidebar::MasterPageContainer::Implementation maSmallPreviewBeingCreated class Image
+    sd::sidebar::MasterPageContainer::Implementation maSmallPreviewBeingCreated Image
 sd/source/ui/sidebar/MasterPageContainer.cxx:147
-    sd::sidebar::MasterPageContainer::Implementation maLargePreviewNotAvailable class Image
+    sd::sidebar::MasterPageContainer::Implementation maLargePreviewNotAvailable Image
 sd/source/ui/sidebar/MasterPageContainer.cxx:148
-    sd::sidebar::MasterPageContainer::Implementation maSmallPreviewNotAvailable class Image
+    sd::sidebar::MasterPageContainer::Implementation maSmallPreviewNotAvailable Image
 sd/source/ui/slideshow/showwindow.hxx:98
     sd::ShowWindow mbMouseCursorHidden _Bool
-sd/source/ui/slidesorter/cache/SlsPageCacheManager.cxx:141
+sd/source/ui/slidesorter/cache/SlsPageCacheManager.cxx:142
     sd::slidesorter::cache::PageCacheManager::RecentlyUsedPageCaches maMap std::map<key_type, mapped_type>
 sd/source/ui/slidesorter/inc/controller/SlsAnimator.hxx:96
     sd::slidesorter::controller::Animator maElapsedTime ::canvas::tools::ElapsedTime
-sdext/source/pdfimport/inc/pdfihelper.hxx:100
+sdext/source/pdfimport/inc/pdfihelper.hxx:103
     pdfi::GraphicsContext BlendMode sal_Int8
 sdext/source/pdfimport/tree/style.hxx:44
-    pdfi::StyleContainer::Style Contents rtl::OUString
+    pdfi::StyleContainer::Style Contents OUString
 sfx2/source/appl/lnkbase2.cxx:81
-    sfx2::(anonymous namespace)::ImplDdeItem pLink class sfx2::SvBaseLink *
-slideshow/source/engine/slideshowimpl.cxx:139
+    sfx2::(anonymous namespace)::ImplDdeItem pLink SvBaseLink *
+slideshow/source/engine/slideshowimpl.cxx:140
     (anonymous namespace)::FrameSynchronization maTimer canvas::tools::ElapsedTime
-sot/source/sdstor/ucbstorage.cxx:406
-    UCBStorageStream_Impl m_aKey rtl::OString
-store/source/storbios.cxx:59
-    (anonymous namespace)::OStoreSuperBlock m_aMarked (anonymous namespace)::OStoreSuperBlock::L
-svl/source/crypto/cryptosign.cxx:267
+sot/source/sdstor/ucbstorage.cxx:408
+    UCBStorageStream_Impl m_aKey OString
+starmath/inc/ElementsDockingWindow.hxx:42
+    SmElementsControl maFormat SmFormat
+store/source/storbios.cxx:52
+    (anonymous namespace)::OStoreSuperBlock m_aMarked L
+svl/source/crypto/cryptosign.cxx:269
     (anonymous namespace)::PKIStatusInfo status SECItem
-svl/source/crypto/cryptosign.cxx:287
-    (anonymous namespace)::TimeStampResp status struct (anonymous namespace)::PKIStatusInfo
-svl/source/crypto/cryptosign.cxx:288
+svl/source/crypto/cryptosign.cxx:289
+    (anonymous namespace)::TimeStampResp status PKIStatusInfo
+svl/source/crypto/cryptosign.cxx:290
     (anonymous namespace)::TimeStampResp timeStampToken SECItem
-svl/source/misc/strmadpt.cxx:51
+svl/source/misc/strmadpt.cxx:52
     SvDataPipe_Impl::Page m_aBuffer sal_Int8[1]
 svl/source/uno/pathservice.cxx:37
-    (anonymous namespace)::PathService m_aOptions class SvtPathOptions
+    (anonymous namespace)::PathService m_aOptions SvtPathOptions
 svtools/source/control/tabbar.cxx:209
-    ImplTabBarItem maHelpId rtl::OString
+    ImplTabBarItem maHelpId OString
 svtools/source/dialogs/insdlg.cxx:54
     (anonymous namespace)::OleObjectDescriptor cbSize sal_uInt32
 svtools/source/dialogs/insdlg.cxx:55
@@ -526,40 +544,34 @@ svtools/source/dialogs/insdlg.cxx:60
     (anonymous namespace)::OleObjectDescriptor dwFullUserTypeName sal_uInt32
 svtools/source/dialogs/insdlg.cxx:61
     (anonymous namespace)::OleObjectDescriptor dwSrcOfCopy sal_uInt32
-svtools/source/table/gridtablerenderer.cxx:71
-    svt::table::(anonymous namespace)::CachedSortIndicator m_sortAscending class BitmapEx
-svtools/source/table/gridtablerenderer.cxx:72
-    svt::table::(anonymous namespace)::CachedSortIndicator m_sortDescending class BitmapEx
 svx/inc/sdr/overlay/overlayrectangle.hxx:41
     sdr::overlay::OverlayRectangle mbOverlayState _Bool
 svx/source/inc/datanavi.hxx:182
-    svxform::XFormsPage m_aMethodString class svxform::MethodString
+    svxform::XFormsPage m_aMethodString MethodString
 svx/source/inc/datanavi.hxx:183
-    svxform::XFormsPage m_aReplaceString class svxform::ReplaceString
+    svxform::XFormsPage m_aReplaceString ReplaceString
 svx/source/inc/datanavi.hxx:488
-    svxform::AddSubmissionDialog m_aMethodString class svxform::MethodString
+    svxform::AddSubmissionDialog m_aMethodString MethodString
 svx/source/inc/datanavi.hxx:489
-    svxform::AddSubmissionDialog m_aReplaceString class svxform::ReplaceString
+    svxform::AddSubmissionDialog m_aReplaceString ReplaceString
 svx/source/inc/gridcell.hxx:514
     DbPatternField m_pValueFormatter ::std::unique_ptr< ::dbtools::FormattedColumnValue>
 svx/source/inc/gridcell.hxx:515
     DbPatternField m_pPaintFormatter ::std::unique_ptr< ::dbtools::FormattedColumnValue>
-svx/source/inc/StylesPreviewWindow.hxx:63
-    StyleItemController m_GlyphsCache class SalLayoutGlyphsCache
 svx/source/inc/svdpdf.hxx:61
-    ImpSdrPdfImport maDash class XDash
+    ImpSdrPdfImport maDash XDash
 sw/inc/acmplwrd.hxx:42
     SwAutoCompleteWord m_LookupTree editeng::Trie
 sw/inc/breakit.hxx:38
     SwBreakIt m_xLanguageTag std::unique_ptr<LanguageTag>
 sw/inc/dpage.hxx:35
     SwDPage m_pGridLst std::unique_ptr<SdrPageGridFrameList>
-sw/inc/hints.hxx:290
+sw/inc/hints.hxx:293
     SwAttrSetChg m_bDelSet _Bool
 sw/inc/shellio.hxx:152
     SwReader mpStg tools::SvRef<SotStorage>
 sw/inc/swevent.hxx:71
-    SwCallMouseEvent::(anonymous union)::(anonymous) pFormat const class SwFrameFormat *
+    SwCallMouseEvent::(anonymous union)::(anonymous) pFormat const SwFrameFormat *
 sw/source/core/access/accfrmobjmap.hxx:100
     SwAccessibleChildMap maMap std::map<key_type, mapped_type, key_compare>
 sw/source/core/access/acchypertextdata.hxx:40
@@ -573,24 +585,24 @@ sw/source/core/access/accmap.cxx:619
 sw/source/core/access/accmap.cxx:663
     SwAccessibleSelectedParas_Impl maMap std::map<key_type, mapped_type, key_compare>
 sw/source/core/doc/swstylemanager.cxx:60
-    (anonymous namespace)::SwStyleManager m_aAutoCharPool class StylePool
+    (anonymous namespace)::SwStyleManager m_aAutoCharPool StylePool
 sw/source/core/doc/swstylemanager.cxx:61
-    (anonymous namespace)::SwStyleManager m_aAutoParaPool class StylePool
+    (anonymous namespace)::SwStyleManager m_aAutoParaPool StylePool
 sw/source/core/inc/swblocks.hxx:69
     SwImpBlocks m_bInPutMuchBlocks _Bool
 sw/source/core/text/atrhndl.hxx:47
     SwAttrHandler m_oFnt std::optional<SwFont>
-sw/source/core/text/inftxt.cxx:533
-    (anonymous namespace)::SwTransparentTextGuard m_aContentVDev ScopedVclPtrInstance<class VirtualDevice>
+sw/source/core/text/inftxt.cxx:532
+    (anonymous namespace)::SwTransparentTextGuard m_aContentVDev ScopedVclPtrInstance<VirtualDevice>
 sw/source/core/text/redlnitr.hxx:75
     SwRedlineItr m_pSet std::unique_ptr<SfxItemSet>
-sw/source/filter/html/htmltab.cxx:2839
+sw/source/filter/html/htmltab.cxx:2837
     CellSaveStruct m_xCnts std::shared_ptr<HTMLTableCnts>
 sw/source/filter/inc/rtf.hxx:33
     RTFSurround::(anonymous) nVal sal_uInt8
-sw/source/ui/dbui/dbinsdlg.cxx:103
-    DB_Column::(anonymous) pText rtl::OUString *
-sw/source/ui/dbui/dbinsdlg.cxx:105
+sw/source/ui/dbui/dbinsdlg.cxx:104
+    DB_Column::(anonymous) pText OUString *
+sw/source/ui/dbui/dbinsdlg.cxx:106
     DB_Column::(anonymous) nFormat sal_uInt32
 sw/source/uibase/dbui/mmconfigitem.cxx:113
     SwMailMergeConfigItem_Impl m_aFemaleGreetingLines std::vector<OUString>
@@ -598,10 +610,14 @@ sw/source/uibase/dbui/mmconfigitem.cxx:115
     SwMailMergeConfigItem_Impl m_aMaleGreetingLines std::vector<OUString>
 sw/source/uibase/dbui/mmconfigitem.cxx:117
     SwMailMergeConfigItem_Impl m_aNeutralGreetingLines std::vector<OUString>
-sw/source/uibase/inc/fldmgr.hxx:78
+sw/source/uibase/inc/fldmgr.hxx:80
     SwInsertField_Data m_aDBDataSource css::uno::Any
-toolkit/source/awt/vclxtoolkit.cxx:438
+toolkit/source/awt/vclxtoolkit.cxx:435
     (anonymous namespace)::VCLXToolkit mxSelection css::uno::Reference<css::datatransfer::clipboard::XClipboard>
+toolkit/source/controls/table/gridtablerenderer.cxx:71
+    svt::table::(anonymous namespace)::CachedSortIndicator m_sortAscending BitmapEx
+toolkit/source/controls/table/gridtablerenderer.cxx:72
+    svt::table::(anonymous namespace)::CachedSortIndicator m_sortDescending BitmapEx
 ucb/source/ucp/gio/gio_mount.hxx:73
     OOoMountOperationClass parent_class GMountOperationClass
 ucb/source/ucp/gio/gio_mount.hxx:76
@@ -612,124 +628,106 @@ ucb/source/ucp/gio/gio_mount.hxx:78
     OOoMountOperationClass _gtk_reserved3 void (*)(void)
 ucb/source/ucp/gio/gio_mount.hxx:79
     OOoMountOperationClass _gtk_reserved4 void (*)(void)
-ucb/source/ucp/package/pkgprovider.hxx:50
+ucb/source/ucp/package/pkgprovider.hxx:48
     package_ucp::ContentProvider m_pPackages std::unique_ptr<Packages>
-ucb/source/ucp/webdav-curl/CurlSession.cxx:127
+ucb/source/ucp/webdav-curl/CurlSession.cxx:129
     (anonymous namespace)::CurlOption::(anonymous) pValue const void *const
-ucbhelper/source/client/proxydecider.cxx:131
-    ucbhelper::proxydecider_impl::InternetProxyDecider_Impl m_aEmptyProxy const struct ucbhelper::InternetProxyServer
-ucbhelper/source/provider/propertyvalueset.cxx:88
-    ucbhelper_impl::PropertyValue aString rtl::OUString
-ucbhelper/source/provider/propertyvalueset.cxx:89
+ucbhelper/source/client/proxydecider.cxx:132
+    ucbhelper::proxydecider_impl::InternetProxyDecider_Impl m_aEmptyProxy const InternetProxyServer
+ucbhelper/source/provider/propertyvalueset.cxx:86
+    ucbhelper_impl::PropertyValue aString OUString
+ucbhelper/source/provider/propertyvalueset.cxx:87
     ucbhelper_impl::PropertyValue bBoolean _Bool
-ucbhelper/source/provider/propertyvalueset.cxx:90
+ucbhelper/source/provider/propertyvalueset.cxx:88
     ucbhelper_impl::PropertyValue nByte sal_Int8
-ucbhelper/source/provider/propertyvalueset.cxx:91
+ucbhelper/source/provider/propertyvalueset.cxx:89
     ucbhelper_impl::PropertyValue nShort sal_Int16
-ucbhelper/source/provider/propertyvalueset.cxx:92
+ucbhelper/source/provider/propertyvalueset.cxx:90
     ucbhelper_impl::PropertyValue nInt sal_Int32
-ucbhelper/source/provider/propertyvalueset.cxx:93
+ucbhelper/source/provider/propertyvalueset.cxx:91
     ucbhelper_impl::PropertyValue nLong sal_Int64
-ucbhelper/source/provider/propertyvalueset.cxx:97
+ucbhelper/source/provider/propertyvalueset.cxx:95
     ucbhelper_impl::PropertyValue aBytes Sequence<sal_Int8>
+ucbhelper/source/provider/propertyvalueset.cxx:96
+    ucbhelper_impl::PropertyValue aDate Date
+ucbhelper/source/provider/propertyvalueset.cxx:97
+    ucbhelper_impl::PropertyValue aTime Time
 ucbhelper/source/provider/propertyvalueset.cxx:98
-    ucbhelper_impl::PropertyValue aDate struct com::sun::star::util::Date
+    ucbhelper_impl::PropertyValue aTimestamp DateTime
 ucbhelper/source/provider/propertyvalueset.cxx:99
-    ucbhelper_impl::PropertyValue aTime struct com::sun::star::util::Time
+    ucbhelper_impl::PropertyValue xBinaryStream Reference<XInputStream>
 ucbhelper/source/provider/propertyvalueset.cxx:100
-    ucbhelper_impl::PropertyValue aTimestamp struct com::sun::star::util::DateTime
+    ucbhelper_impl::PropertyValue xCharacterStream Reference<XInputStream>
 ucbhelper/source/provider/propertyvalueset.cxx:101
-    ucbhelper_impl::PropertyValue xBinaryStream Reference<class com::sun::star::io::XInputStream>
+    ucbhelper_impl::PropertyValue xRef Reference<XRef>
 ucbhelper/source/provider/propertyvalueset.cxx:102
-    ucbhelper_impl::PropertyValue xCharacterStream Reference<class com::sun::star::io::XInputStream>
+    ucbhelper_impl::PropertyValue xBlob Reference<XBlob>
 ucbhelper/source/provider/propertyvalueset.cxx:103
-    ucbhelper_impl::PropertyValue xRef Reference<class com::sun::star::sdbc::XRef>
+    ucbhelper_impl::PropertyValue xClob Reference<XClob>
 ucbhelper/source/provider/propertyvalueset.cxx:104
-    ucbhelper_impl::PropertyValue xBlob Reference<class com::sun::star::sdbc::XBlob>
-ucbhelper/source/provider/propertyvalueset.cxx:105
-    ucbhelper_impl::PropertyValue xClob Reference<class com::sun::star::sdbc::XClob>
-ucbhelper/source/provider/propertyvalueset.cxx:106
-    ucbhelper_impl::PropertyValue xArray Reference<class com::sun::star::sdbc::XArray>
-unoidl/source/sourceprovider-scanner.hxx:146
-    unoidl::detail::SourceProviderInterfaceTypeEntityPad directMandatoryBases std::vector<DirectBase>
+    ucbhelper_impl::PropertyValue xArray Reference<XArray>
 unoidl/source/sourceprovider-scanner.hxx:147
+    unoidl::detail::SourceProviderInterfaceTypeEntityPad directMandatoryBases std::vector<DirectBase>
+unoidl/source/sourceprovider-scanner.hxx:148
     unoidl::detail::SourceProviderInterfaceTypeEntityPad directOptionalBases std::vector<DirectBase>
-unoidl/source/unoidl-read.cxx:148
+unoidl/source/unoidl-read.cxx:152
     (anonymous namespace)::Entity dependencies std::set<OUString>
-unoidl/source/unoidl-read.cxx:149
+unoidl/source/unoidl-read.cxx:153
     (anonymous namespace)::Entity interfaceDependencies std::set<OUString>
-unoidl/source/unoidlprovider.cxx:87
+unoidl/source/unoidlprovider.cxx:89
     unoidl::detail::(anonymous namespace)::Memory16 byte unsigned char[2]
-unoidl/source/unoidlprovider.cxx:97
+unoidl/source/unoidlprovider.cxx:99
     unoidl::detail::(anonymous namespace)::Memory32 byte unsigned char[4]
-unoidl/source/unoidlprovider.cxx:128
+unoidl/source/unoidlprovider.cxx:130
     unoidl::detail::(anonymous namespace)::Memory64 byte unsigned char[8]
-unoidl/source/unoidlprovider.cxx:456
-    unoidl::detail::MapEntry name struct unoidl::detail::(anonymous namespace)::Memory32
-unoidl/source/unoidlprovider.cxx:457
-    unoidl::detail::MapEntry data struct unoidl::detail::(anonymous namespace)::Memory32
+unoidl/source/unoidlprovider.cxx:458
+    unoidl::detail::MapEntry name Memory32
+unoidl/source/unoidlprovider.cxx:459
+    unoidl::detail::MapEntry data Memory32
 unotools/source/config/pathoptions.cxx:84
-    SvtPathOptions_Impl m_aEmptyString rtl::OUString
+    SvtPathOptions_Impl m_aEmptyString OUString
 vcl/inc/bitmap/BitmapFastScaleFilter.hxx:31
-    BitmapFastScaleFilter maSize class Size
-vcl/inc/ppdparser.hxx:131
-    psp::PPDParser::PPDConstraint m_pKey1 const class psp::PPDKey *
+    BitmapFastScaleFilter maSize Size
+vcl/inc/ppdparser.hxx:132
+    psp::PPDParser::PPDConstraint m_pKey1 const PPDKey *
 vcl/inc/printerinfomanager.hxx:75
-    psp::PrinterInfoManager::SystemPrintQueue m_aComment rtl::OUString
-vcl/inc/qt5/QtFrame.hxx:73
-    QtFrame m_pQWidget class QWidget *
-vcl/inc/qt5/QtFrame.hxx:74
-    QtFrame m_pTopLevel class QtMainWindow *
-vcl/inc/qt5/QtFrame.hxx:78
-    QtFrame m_pQtGraphics std::unique_ptr<QtGraphics>
-vcl/inc/qt5/QtFrame.hxx:80
-    QtFrame m_pSvpGraphics std::unique_ptr<QtSvpGraphics>
-vcl/inc/qt5/QtFrame.hxx:82
-    QtFrame m_aRegion class QRegion
-vcl/inc/qt5/QtFrame.hxx:86
-    QtFrame m_nStyle enum SalFrameStyleFlags
-vcl/inc/qt5/QtMenu.hxx:42
-    QtMenu maItems std::vector<QtMenuItem *>
-vcl/inc/qt5/QtObject.hxx:38
-    QtObject m_pQWidget class QWidget *
-vcl/inc/qt5/QtObject.hxx:39
-    QtObject m_pQWindow class QWindow *
-vcl/inc/qt5/QtTimer.hxx:29
-    QtTimer m_aTimer class QTimer
+    psp::PrinterInfoManager::SystemPrintQueue m_aComment OUString
 vcl/inc/salinst.hxx:83
     SalInstance m_bSupportsBitmap32 _Bool
-vcl/inc/salwtype.hxx:164
+vcl/inc/salwtype.hxx:167
     SalWheelMouseEvent mbDeltaIsPixel _Bool
-vcl/inc/salwtype.hxx:217
+vcl/inc/salwtype.hxx:220
     SalQueryCharPositionEvent mnCharPos sal_uLong
 vcl/inc/svdata.hxx:323
     ImplSVNWFData mbMenuBarDockingAreaCommonBG _Bool
-vcl/inc/toolbox.h:108
+vcl/inc/svdata.hxx:330
+    ImplSVNWFData mbNoFrameJunctionForPopups _Bool
+vcl/inc/toolbox.h:109
     vcl::ToolBoxLayoutData m_aLineItemIds std::vector<ToolBoxItemId>
 vcl/inc/unx/saldisp.hxx:282
-    SalDisplay m_aInvalidScreenData struct SalDisplay::ScreenData
-vcl/inc/widgetdraw/WidgetDefinition.hxx:226
-    vcl::WidgetDefinitionStyle maDefaultButtonTextColor class Color
+    SalDisplay m_aInvalidScreenData ScreenData
+vcl/inc/widgetdraw/WidgetDefinition.hxx:225
+    vcl::WidgetDefinitionStyle maDefaultButtonTextColor Color
+vcl/inc/widgetdraw/WidgetDefinition.hxx:229
+    vcl::WidgetDefinitionStyle maFlatButtonTextColor Color
 vcl/inc/widgetdraw/WidgetDefinition.hxx:230
-    vcl::WidgetDefinitionStyle maFlatButtonTextColor class Color
-vcl/inc/widgetdraw/WidgetDefinition.hxx:231
-    vcl::WidgetDefinitionStyle maDefaultButtonRolloverTextColor class Color
-vcl/inc/widgetdraw/WidgetDefinition.hxx:233
-    vcl::WidgetDefinitionStyle maDefaultActionButtonRolloverTextColor class Color
+    vcl::WidgetDefinitionStyle maDefaultButtonRolloverTextColor Color
+vcl/inc/widgetdraw/WidgetDefinition.hxx:232
+    vcl::WidgetDefinitionStyle maDefaultActionButtonRolloverTextColor Color
+vcl/inc/widgetdraw/WidgetDefinition.hxx:234
+    vcl::WidgetDefinitionStyle maFlatButtonRolloverTextColor Color
 vcl/inc/widgetdraw/WidgetDefinition.hxx:235
-    vcl::WidgetDefinitionStyle maFlatButtonRolloverTextColor class Color
+    vcl::WidgetDefinitionStyle maDefaultButtonPressedRolloverTextColor Color
 vcl/inc/widgetdraw/WidgetDefinition.hxx:236
-    vcl::WidgetDefinitionStyle maDefaultButtonPressedRolloverTextColor class Color
+    vcl::WidgetDefinitionStyle maButtonPressedRolloverTextColor Color
 vcl/inc/widgetdraw/WidgetDefinition.hxx:237
-    vcl::WidgetDefinitionStyle maButtonPressedRolloverTextColor class Color
+    vcl::WidgetDefinitionStyle maDefaultActionButtonPressedRolloverTextColor Color
 vcl/inc/widgetdraw/WidgetDefinition.hxx:238
-    vcl::WidgetDefinitionStyle maDefaultActionButtonPressedRolloverTextColor class Color
+    vcl::WidgetDefinitionStyle maActionButtonPressedRolloverTextColor Color
 vcl/inc/widgetdraw/WidgetDefinition.hxx:239
-    vcl::WidgetDefinitionStyle maActionButtonPressedRolloverTextColor class Color
-vcl/inc/widgetdraw/WidgetDefinition.hxx:240
-    vcl::WidgetDefinitionStyle maFlatButtonPressedRolloverTextColor class Color
-vcl/source/app/settings.cxx:195
-    ImplStyleData maDialogStyle struct DialogStyle
+    vcl::WidgetDefinitionStyle maFlatButtonPressedRolloverTextColor Color
+vcl/source/app/settings.cxx:200
+    ImplStyleData maDialogStyle DialogStyle
 vcl/source/bitmap/dibtools.cxx:52
     (anonymous namespace)::CIEXYZ aXyzX FXPT2DOT30
 vcl/source/bitmap/dibtools.cxx:53
@@ -737,15 +735,15 @@ vcl/source/bitmap/dibtools.cxx:53
 vcl/source/bitmap/dibtools.cxx:54
     (anonymous namespace)::CIEXYZ aXyzZ FXPT2DOT30
 vcl/source/bitmap/dibtools.cxx:65
-    (anonymous namespace)::CIEXYZTriple aXyzRed struct (anonymous namespace)::CIEXYZ
+    (anonymous namespace)::CIEXYZTriple aXyzRed CIEXYZ
 vcl/source/bitmap/dibtools.cxx:66
-    (anonymous namespace)::CIEXYZTriple aXyzGreen struct (anonymous namespace)::CIEXYZ
+    (anonymous namespace)::CIEXYZTriple aXyzGreen CIEXYZ
 vcl/source/bitmap/dibtools.cxx:67
-    (anonymous namespace)::CIEXYZTriple aXyzBlue struct (anonymous namespace)::CIEXYZ
+    (anonymous namespace)::CIEXYZTriple aXyzBlue CIEXYZ
 vcl/source/bitmap/dibtools.cxx:107
     (anonymous namespace)::DIBV5Header nV5AlphaMask sal_uInt32
 vcl/source/bitmap/dibtools.cxx:109
-    (anonymous namespace)::DIBV5Header aV5Endpoints struct (anonymous namespace)::CIEXYZTriple
+    (anonymous namespace)::DIBV5Header aV5Endpoints CIEXYZTriple
 vcl/source/bitmap/dibtools.cxx:110
     (anonymous namespace)::DIBV5Header nV5GammaRed sal_uInt32
 vcl/source/bitmap/dibtools.cxx:111
@@ -759,15 +757,15 @@ vcl/source/bitmap/dibtools.cxx:115
 vcl/source/bitmap/dibtools.cxx:116
     (anonymous namespace)::DIBV5Header nV5Reserved sal_uInt32
 vcl/source/control/roadmapwizard.cxx:63
-    vcl::RoadmapWizardImpl aStateDescriptors vcl::(anonymous namespace)::StateDescriptions
+    vcl::RoadmapWizardImpl aStateDescriptors StateDescriptions
 vcl/source/control/tabctrl.cxx:81
     ImplTabCtrlData maLayoutPageIdToLine std::unordered_map<int, int>
-vcl/source/filter/eps/eps.cxx:115
-    (anonymous namespace)::PSWriter pVDev ScopedVclPtrInstance<class VirtualDevice>
+vcl/source/filter/eps/eps.cxx:116
+    (anonymous namespace)::PSWriter pVDev ScopedVclPtrInstance<VirtualDevice>
 vcl/source/filter/idxf/dxf2mtf.hxx:54
-    DXF2GDIMetaFile aDefaultLineInfo const class LineInfo
+    DXF2GDIMetaFile aDefaultLineInfo const LineInfo
 vcl/source/filter/idxf/dxfreprd.hxx:75
-    DXFRepresentation aPalette class DXFPalette
+    DXFRepresentation aPalette DXFPalette
 vcl/source/filter/iras/iras.cxx:56
     (anonymous namespace)::RASReader mnRepCount sal_uInt8
 vcl/source/filter/itga/itga.cxx:55
@@ -791,25 +789,25 @@ vcl/source/filter/jpeg/transupp.h:148
 vcl/source/filter/jpeg/transupp.h:150
     (anonymous) crop_yoffset_set JCROP_CODE
 vcl/source/treelist/headbar.cxx:41
-    ImplHeadItem maHelpId rtl::OString
+    ImplHeadItem maHelpId OString
 vcl/source/treelist/headbar.cxx:42
-    ImplHeadItem maImage class Image
+    ImplHeadItem maImage Image
 vcl/unx/gtk3/a11y/atkwrapper.hxx:50
     AtkObjectWrapper aParent AtkObject
 vcl/unx/gtk3/a11y/atkwrapper.hxx:79
     AtkObjectWrapperClass aParentClass GtkWidgetAccessibleClass
-vcl/unx/gtk3/glomenu.cxx:14
+vcl/unx/gtk3/glomenu.cxx:16
     GLOMenu parent_instance const GMenuModel
 writerfilter/source/ooxml/OOXMLFactory.hxx:57
-    writerfilter::ooxml::AttributeInfo m_nToken writerfilter::Token_t
+    writerfilter::ooxml::AttributeInfo m_nToken Token_t
 writerfilter/source/ooxml/OOXMLFactory.hxx:58
-    writerfilter::ooxml::AttributeInfo m_nResource enum writerfilter::ooxml::ResourceType
+    writerfilter::ooxml::AttributeInfo m_nResource ResourceType
 writerfilter/source/ooxml/OOXMLFactory.hxx:59
     writerfilter::ooxml::AttributeInfo m_nRef Id
 xmloff/inc/MultiPropertySetHelper.hxx:85
     MultiPropertySetHelper aEmptyAny css::uno::Any
-xmloff/source/chart/SchXMLChartContext.cxx:443
-    (anonymous namespace)::NewDonutSeries msStyleName rtl::OUString
+xmloff/source/chart/SchXMLChartContext.cxx:446
+    (anonymous namespace)::NewDonutSeries msStyleName OUString
 xmloff/source/chart/SchXMLChartContext.hxx:51
     SeriesDefaultsAndStyles maErrorIndicatorDefault css::uno::Any
 xmloff/source/chart/SchXMLChartContext.hxx:52
