@@ -1081,30 +1081,12 @@ bool GraphicDescriptor::ImpDetectSVG( SvStream& rStm, bool /*bExtendedInfo*/ )
 
 bool GraphicDescriptor::ImpDetectWEBP( SvStream& rStm, bool bExtendedInfo )
 {
-    sal_uInt32  nTemp32 = 0;
-    bool    bRet = false;
-
     sal_Int32 nStmPos = rStm.Tell();
-    rStm.SetEndian( SvStreamEndian::BIG );
-    rStm.ReadUInt32( nTemp32 );
-
-    if ( nTemp32 == 0x52494646 )
-    {
-        rStm.ReadUInt32( nTemp32 ); // skip
-        rStm.ReadUInt32( nTemp32 );
-        if ( nTemp32 == 0x57454250 )
-        {
-            aMetadata.mnFormat = GraphicFileFormat::WEBP;
-            bRet = true;
-
-            if ( bExtendedInfo )
-            {
-                rStm.Seek(nStmPos);
-                ReadWebpInfo(rStm, aMetadata.maPixSize, aMetadata.mnBitsPerPixel, aMetadata.mbIsAlpha );
-                aMetadata.mbIsTransparent = aMetadata.mbIsAlpha;
-            }
-        }
-    }
+    vcl::GraphicFormatDetector aDetector( rStm, aPathExt, bExtendedInfo );
+    bool bRet = aDetector.detect();
+    bRet &= aDetector.checkWEBP();
+    if ( bRet )
+        aMetadata = aDetector.getMetadata();
     rStm.Seek( nStmPos );
     return bRet;
 }
