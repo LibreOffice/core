@@ -2941,29 +2941,29 @@ SwTextNode* SwTextNode::MakeNewTextNode( const SwNodeIndex& rPos, bool bNext,
                                        bool bChgFollow )
 {
     // ignore hard PageBreak/PageDesc/ColumnBreak from Auto-Set
-    std::unique_ptr<SwAttrSet> pNewAttrSet;
+    std::optional<SwAttrSet> oNewAttrSet;
     // #i75353#
     bool bClearHardSetNumRuleWhenFormatCollChanges( false );
     if( HasSwAttrSet() )
     {
-        pNewAttrSet.reset(new SwAttrSet( *GetpSwAttrSet() ));
+        oNewAttrSet.emplace( *GetpSwAttrSet() );
         const SfxItemSet* pTmpSet = GetpSwAttrSet();
 
         if (bNext)     // successor doesn't inherit breaks!
-            pTmpSet = pNewAttrSet.get();
+            pTmpSet = &*oNewAttrSet;
 
         // !bNext: remove PageBreaks/PageDesc/ColBreak from this
         bool bRemoveFromCache = false;
         std::vector<sal_uInt16> aClearWhichIds;
         if ( bNext )
-            bRemoveFromCache = ( 0 != pNewAttrSet->ClearItem( RES_PAGEDESC ) );
+            bRemoveFromCache = ( 0 != oNewAttrSet->ClearItem( RES_PAGEDESC ) );
         else
             aClearWhichIds.push_back( RES_PAGEDESC );
 
         if( SfxItemState::SET == pTmpSet->GetItemState( RES_BREAK, false ) )
         {
             if ( bNext )
-                pNewAttrSet->ClearItem( RES_BREAK );
+                oNewAttrSet->ClearItem( RES_BREAK );
             else
                 aClearWhichIds.push_back( RES_BREAK );
             bRemoveFromCache = true;
@@ -2971,7 +2971,7 @@ SwTextNode* SwTextNode::MakeNewTextNode( const SwNodeIndex& rPos, bool bNext,
         if( SfxItemState::SET == pTmpSet->GetItemState( RES_KEEP, false ) )
         {
             if ( bNext )
-                pNewAttrSet->ClearItem( RES_KEEP );
+                oNewAttrSet->ClearItem( RES_KEEP );
             else
                 aClearWhichIds.push_back( RES_KEEP );
             bRemoveFromCache = true;
@@ -2979,7 +2979,7 @@ SwTextNode* SwTextNode::MakeNewTextNode( const SwNodeIndex& rPos, bool bNext,
         if( SfxItemState::SET == pTmpSet->GetItemState( RES_PARATR_SPLIT, false ) )
         {
             if ( bNext )
-                pNewAttrSet->ClearItem( RES_PARATR_SPLIT );
+                oNewAttrSet->ClearItem( RES_PARATR_SPLIT );
             else
                 aClearWhichIds.push_back( RES_PARATR_SPLIT );
             bRemoveFromCache = true;
@@ -2991,7 +2991,7 @@ SwTextNode* SwTextNode::MakeNewTextNode( const SwNodeIndex& rPos, bool bNext,
             if (pRule && IsOutline())
             {
                 if ( bNext )
-                    pNewAttrSet->ClearItem(RES_PARATR_NUMRULE);
+                    oNewAttrSet->ClearItem(RES_PARATR_NUMRULE);
                 else
                 {
                     // #i75353#
@@ -3015,9 +3015,9 @@ SwTextNode* SwTextNode::MakeNewTextNode( const SwNodeIndex& rPos, bool bNext,
 
     SwTextFormatColl* pColl = GetTextColl();
 
-    SwTextNode *pNode = new SwTextNode( rPos, pColl, pNewAttrSet.get() );
+    SwTextNode *pNode = new SwTextNode( rPos, pColl, oNewAttrSet ? &*oNewAttrSet : nullptr );
 
-    pNewAttrSet.reset();
+    oNewAttrSet.reset();
 
     const SwNumRule* pRule = GetNumRule();
     if( pRule && pRule == pNode->GetNumRule() && rNds.IsDocNodes() )
