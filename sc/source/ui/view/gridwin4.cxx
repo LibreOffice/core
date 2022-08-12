@@ -167,8 +167,8 @@ static void lcl_DrawOneFrame( vcl::RenderContext* pDev, const tools::Rectangle& 
         }
         tools::Long nClipStartX = bLayoutRTL ? aOuter.Left() + nBWidth : aInner.Left();
         tools::Long nClipEndX = bLayoutRTL ? aInner.Right() : aOuter.Right() - nBWidth;
-        pDev->SetClipRegion( vcl::Region(tools::Rectangle( nClipStartX, nButtonY + nVer/2,
-                            nClipEndX, nButtonY + nVer/2 + aTextSize.Height())) );
+        pDev->SetClipRegion( pDev->LogicToPixel( vcl::Region(tools::Rectangle( nClipStartX, nButtonY + nVer/2,
+                            nClipEndX, nButtonY + nVer/2 + aTextSize.Height())) ) );
     }
 
     pDev->DrawText( Point( nTextStart, nButtonY + nVer/2 ), rTitle );
@@ -176,7 +176,7 @@ static void lcl_DrawOneFrame( vcl::RenderContext* pDev, const tools::Rectangle& 
     if ( bClip )
     {
         if ( bWasClip )
-            pDev->SetClipRegion(aOldClip);
+            pDev->SetClipRegion(pDev->LogicToPixel(aOldClip));
         else
             pDev->SetClipRegion();
     }
@@ -2157,7 +2157,7 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
             tools::Rectangle aRect = GetListValButtonRect( aListValPos );
             aComboButton.SetPosPixel( aRect.TopLeft() );
             aComboButton.SetSizePixel( aRect.GetSize() );
-            pContentDev->SetClipRegion(vcl::Region(aRect));
+            pContentDev->SetClipRegion(pContentDev->LogicToPixel(vcl::Region(aRect)));
             aComboButton.Draw();
             pContentDev->SetClipRegion();           // always called from Draw() without clip region
             aComboButton.SetPosPixel( aOldPos );    // restore old state

@@ -185,7 +185,7 @@ namespace svx
         // case the original background of the device is shown
         vcl::Region aRegion(tools::Rectangle(Point(0, 0), maBmpSize));
         aRegion.Exclude(maUpdRect);
-        pVirDev->SetClipRegion(aRegion);
+        pVirDev->SetClipRegion(pVirDev->LogicToPixel(aRegion));
 
         pVirDev->DrawImage(Point(0, 0), aImage);
 

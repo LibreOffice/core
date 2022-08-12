@@ -1032,7 +1032,7 @@ void DataBrowser::PaintCell(
     // clipping
     if( aPos.X() < rRect.Right() || aPos.X() + TxtSize.Width() > rRect.Right() ||
         aPos.Y() < rRect.Top() || aPos.Y() + TxtSize.Height() > rRect.Bottom())
-        rDev.SetClipRegion(vcl::Region(rRect));
+        rDev.SetClipRegion(rDev.LogicToPixel(vcl::Region(rRect)));
 
     // allow for a disabled control ...
     bool bEnabled = IsEnabled();

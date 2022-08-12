@@ -1719,7 +1719,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             pOS2MET->ReadUInt32( nID );
             if (nID==0) p=nullptr;
             while (p!=nullptr && p->nID!=nID) p=p->pSucc;
-            if (p!=nullptr) pVirDev->SetClipRegion(vcl::Region(p->aPPoly));
+            if (p!=nullptr) pVirDev->SetClipRegion(pVirDev->LogicToPixel(vcl::Region(p->aPPoly)));
             else pVirDev->SetClipRegion();
             break;
         }

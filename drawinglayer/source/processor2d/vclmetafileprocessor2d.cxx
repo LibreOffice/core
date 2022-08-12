@@ -2072,7 +2072,8 @@ void VclMetafileProcessor2D::processMaskPrimitive2D(
             // Removed subdivision and fixed in vcl::Region::ImplPolyPolyRegionToBandRegionFunc() in VCL where
             // the ClipRegion is built from the Polygon. An AdaptiveSubdivide on the source polygon was missing there
             mpOutputDevice->Push(vcl::PushFlags::CLIPREGION);
-            mpOutputDevice->SetClipRegion(vcl::Region(maClipPolyPolygon));
+            mpOutputDevice->SetClipRegion(
+                mpOutputDevice->LogicToPixel(vcl::Region(maClipPolyPolygon)));
 
             // recursively paint content
             // #i121267# Only need to process sub-content when clip polygon is *not* empty.

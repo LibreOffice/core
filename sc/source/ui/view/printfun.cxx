@@ -1665,8 +1665,8 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
     if( aTableParam.bCellContent )
         aOutputData.DrawBackground(*pDev);
 
-    pDev->SetClipRegion(vcl::Region(tools::Rectangle(
-                aPos, Size(aOutputData.GetScrW(), aOutputData.GetScrH()))));
+    pDev->SetClipRegion(pDev->LogicToPixel(vcl::Region(tools::Rectangle(
+                aPos, Size(aOutputData.GetScrW(), aOutputData.GetScrH())))));
     pDev->SetClipRegion();
 
     if( aTableParam.bCellContent )
@@ -1843,7 +1843,7 @@ void ScPrintFunc::PrintHF( tools::Long nPageNo, bool bHeader, tools::Long nStart
 
         //  Clipping for Text
 
-        pDev->SetClipRegion(vcl::Region(tools::Rectangle(aStart, aPaperSize)));
+        pDev->SetClipRegion(pDev->LogicToPixel(vcl::Region(tools::Rectangle(aStart, aPaperSize))));
 
         //  left
 

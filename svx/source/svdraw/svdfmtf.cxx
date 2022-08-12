@@ -884,7 +884,8 @@ void ImpSdrGDIMetaFileImport::checkClip()
     if(!mpVD->IsClipRegion())
         return;
 
-    maClip = mpVD->GetClipRegion().GetAsB2DPolyPolygon();
+    vcl::Region aRegion(mpVD->PixelToLogic(mpVD->GetClipRegion()));
+    maClip = aRegion.GetAsB2DPolyPolygon();
 
     if(isClip())
     {

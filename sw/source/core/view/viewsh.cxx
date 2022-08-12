@@ -200,7 +200,7 @@ void SwViewShell::DLPrePaint2(const vcl::Region& rRegion)
         }
         else if (isOutputToWindow())
             // In case mpOut is used without buffering and we're not printing, need to set clipping.
-            mpOut->SetClipRegion(rRegion);
+            mpOut->SetClipRegion(mpOut->LogicToPixel(rRegion));
 
         // remember original paint MapMode for wrapped FlyFrame paints
         maPrePostMapMode = mpOut->GetMapMode();

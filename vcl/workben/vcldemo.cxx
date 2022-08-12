@@ -386,7 +386,7 @@ public:
 
         static void drawText (OutputDevice &rDev, tools::Rectangle r, bool bClip, bool bArabicText, bool bRotate)
         {
-            rDev.SetClipRegion( vcl::Region(r) );
+            rDev.SetClipRegion(rDev.LogicToPixel(vcl::Region(r)));
 
             const unsigned char pTextUTF8[] = {
                 0xd9, 0x88, 0xd8, 0xa7, 0xd8, 0xad, 0xd9, 0x90,
@@ -430,7 +430,7 @@ public:
             {
                 // only show the first quarter of the text
                 tools::Rectangle aRect( r.TopLeft(), Size( r.GetWidth()/2, r.GetHeight()/2 ) );
-                rDev.SetClipRegion( vcl::Region( aRect ) );
+                rDev.SetClipRegion(rDev.LogicToPixel(vcl::Region(aRect)));
             }
 
             for (int i = 1; i < nPrintNumCopies+1; i++)
@@ -474,10 +474,12 @@ public:
                     if (bClip)
                     {
                         tools::Rectangle aClipRect( Point( r.Left(), r.Top() + ( r.GetHeight()/2 ) ) , Size( r.GetWidth()/2, r.GetHeight()/2 ) );
-                        rDev.SetClipRegion( vcl::Region( aClipRect ) );
+                        rDev.SetClipRegion(rDev.LogicToPixel(vcl::Region( aClipRect)));
                     }
                     else
-                        rDev.SetClipRegion( vcl::Region(r) );
+                    {
+                        rDev.SetClipRegion(rDev.LogicToPixel(vcl::Region(r)));
+                    }
                 }
                 else
                 {
@@ -545,7 +547,7 @@ public:
 
             // Nice clean white background
             rDev.DrawWallpaper(r, Wallpaper(COL_WHITE));
-            rDev.SetClipRegion(vcl::Region(r));
+            rDev.SetClipRegion(rDev.LogicToPixel(vcl::Region(r)));
 
             Point aPos(r.Left(), r.Top()+20);
 
@@ -703,7 +705,7 @@ public:
                         break;
                     }
                     } // switch
-                    rDev.SetClipRegion(aRegion);
+                    rDev.SetClipRegion(rDev.LogicToPixel(aRegion));
                     rDev.DrawCheckered(aSub.TopLeft(), aSub.GetSize());
                     rDev.SetClipRegion();
                 }
@@ -988,7 +990,7 @@ public:
                 while (aInner.GetWidth() > nLimits[i] && aInner.GetHeight() > nLimits[i])
                 {
                     aInner.expand(-1);
-                    rDev.SetClipRegion(vcl::Region(aInner));
+                    rDev.SetClipRegion(rDev.LogicToPixel(vcl::Region(aInner)));
                     rDev.SetFillColor(Color::HSBtoRGB(nHue, 75, 100));
                     nHue = (nHue + 97) % 360;
                     rDev.DrawRect(aOuter);
@@ -1012,7 +1014,7 @@ public:
                         aClipRegion.Union(aPieces[i]);
                     }
                     assert (aClipRegion.getRegionBand());
-                    rDev.SetClipRegion(aClipRegion);
+                    rDev.SetClipRegion(rDev.LogicToPixel(aClipRegion));
                     rDev.SetFillColor(Color::HSBtoRGB(nHue, 75, 75));
                     nHue = (nHue + 97) % 360;
                     rDev.DrawRect(aOuter);
@@ -1063,7 +1065,7 @@ public:
                         {
                             assert (!aClipRegion.getRegionBand());
 
-                            rDev.SetClipRegion(aClipRegion);
+                            rDev.SetClipRegion(rDev.LogicToPixel(aClipRegion));
                             rDev.SetFillColor(Color::HSBtoRGB(nHue, 50, 75));
                             nHue = (nHue + 97) % 360;
                             rDev.DrawRect(aOuter);
@@ -1448,7 +1450,7 @@ public:
         {
             RegionRenderer * r = maRenderers[i];
 
-            rDev.SetClipRegion( vcl::Region( aRegions[i] ) );
+            rDev.SetClipRegion(rDev.LogicToPixel(vcl::Region( aRegions[i])));
 
             // profiling?
             if (getIterCount() > 0)

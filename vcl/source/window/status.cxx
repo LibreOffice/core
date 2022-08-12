@@ -396,7 +396,7 @@ void StatusBar::ImplDrawItem(vcl::RenderContext& rRenderContext, bool bOffScreen
     else
     {
         vcl::Region aRegion(aTextRect);
-        rRenderContext.SetClipRegion(aRegion);
+        rRenderContext.SetClipRegion(rRenderContext.LogicToPixel(aRegion));
     }
 
     // if the framework code is drawing status, let it do all the work

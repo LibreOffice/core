@@ -512,9 +512,9 @@ void ScOutlineWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
 void ScOutlineWindow::SetEntryAreaClipRegion()
 {
-    GetOutDev()->SetClipRegion( vcl::Region(tools::Rectangle(
+    GetOutDev()->SetClipRegion( GetOutDev()->LogicToPixel( vcl::Region(tools::Rectangle(
         GetPoint( 0, mnMainFirstPos ),
-        GetPoint( GetOutputSizeLevel() - 1, mnMainLastPos ))));
+        GetPoint( GetOutputSizeLevel() - 1, mnMainLastPos )))) );
 }
 
 void ScOutlineWindow::DrawLineRel(

@@ -18,7 +18,7 @@ Bitmap OutputDeviceTestClip::setupClipRectangle()
 
     tools::Rectangle rectangle = maVDRectangle;
     rectangle.shrink(2);
-    mpVirtualDevice->SetClipRegion(vcl::Region(rectangle));
+    mpVirtualDevice->SetClipRegion(mpVirtualDevice->LogicToPixel(vcl::Region(rectangle)));
     mpVirtualDevice->SetBackground(constFillColor);
     mpVirtualDevice->Erase(maVDRectangle);
 
@@ -31,7 +31,7 @@ Bitmap OutputDeviceTestClip::setupClipPolygon()
 
     tools::Rectangle rectangle = maVDRectangle;
     rectangle.shrink(2);
-    mpVirtualDevice->SetClipRegion(vcl::Region(tools::Polygon(rectangle)));
+    mpVirtualDevice->SetClipRegion(mpVirtualDevice->LogicToPixel(vcl::Region(rectangle)));
     mpVirtualDevice->SetBackground(constFillColor);
     mpVirtualDevice->Erase(maVDRectangle);
 
@@ -44,7 +44,8 @@ Bitmap OutputDeviceTestClip::setupClipPolyPolygon()
 
     tools::Rectangle rectangle = maVDRectangle;
     rectangle.shrink(2);
-    mpVirtualDevice->SetClipRegion(vcl::Region(tools::PolyPolygon(rectangle)));
+    mpVirtualDevice->SetClipRegion(
+        mpVirtualDevice->LogicToPixel(vcl::Region(tools::PolyPolygon(rectangle))));
     mpVirtualDevice->SetBackground(constFillColor);
     mpVirtualDevice->Erase(maVDRectangle);
 
@@ -57,12 +58,13 @@ Bitmap OutputDeviceTestClip::setupClipB2DPolyPolygon()
 
     tools::Rectangle rectangle = maVDRectangle;
     rectangle.shrink(2);
-    mpVirtualDevice->SetClipRegion(vcl::Region(basegfx::B2DPolyPolygon(basegfx::B2DPolygon{
-        basegfx::B2DPoint(rectangle.Left(), rectangle.Top()),
-        basegfx::B2DPoint(rectangle.Left(), rectangle.Bottom()),
-        basegfx::B2DPoint(rectangle.Right(), rectangle.Bottom()),
-        basegfx::B2DPoint(rectangle.Right(), rectangle.Top()),
-    })));
+    mpVirtualDevice->SetClipRegion(
+        mpVirtualDevice->LogicToPixel(vcl::Region(basegfx::B2DPolyPolygon(basegfx::B2DPolygon{
+            basegfx::B2DPoint(rectangle.Left(), rectangle.Top()),
+            basegfx::B2DPoint(rectangle.Left(), rectangle.Bottom()),
+            basegfx::B2DPoint(rectangle.Right(), rectangle.Bottom()),
+            basegfx::B2DPoint(rectangle.Right(), rectangle.Top()),
+        }))));
     mpVirtualDevice->SetBackground(constFillColor);
     mpVirtualDevice->Erase(maVDRectangle);
 

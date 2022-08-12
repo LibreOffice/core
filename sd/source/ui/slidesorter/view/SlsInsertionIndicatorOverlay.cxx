@@ -185,7 +185,7 @@ Point InsertionIndicatorOverlay::PaintRepresentatives (
         // paint an overlay that visualizes this.
         if (rRepresentatives[nIndex].mbIsExcluded)
         {
-            const vcl::Region aSavedClipRegion (rContent.GetClipRegion());
+            const vcl::Region aSavedClipRegion (rContent.PixelToLogic(rContent.GetClipRegion()));
             rContent.IntersectClipRegion(::tools::Rectangle(aPageOffset, rPreviewSize));
             // Paint bitmap tiled over the preview to mark it as excluded.
             const sal_Int32 nIconWidth (aExclusionOverlay.GetSizePixel().Width());
@@ -196,7 +196,7 @@ Point InsertionIndicatorOverlay::PaintRepresentatives (
                     for (::tools::Long nY=0; nY<rPreviewSize.Height(); nY+=nIconHeight)
                         rContent.DrawBitmapEx(Point(nX,nY)+aPageOffset, aExclusionOverlay);
             }
-            rContent.SetClipRegion(aSavedClipRegion);
+            rContent.SetClipRegion(rContent.LogicToPixel(aSavedClipRegion));
         }
 
         // Tone down the bitmap.  The further back the darker it becomes.

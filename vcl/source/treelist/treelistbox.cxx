@@ -2569,7 +2569,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
     // Did we turn on the scrollbar within PreparePaints? If yes, we have to set
     // the ClipRegion anew.
     if (!bHorSBar && pImpl->HasHorScrollBar())
-        rRenderContext.SetClipRegion(vcl::Region(pImpl->GetClipRegionRect()));
+        rRenderContext.SetClipRegion(rRenderContext.LogicToPixel(vcl::Region(pImpl->GetClipRegionRect())));
 
     Point aEntryPos(rRenderContext.GetMapMode().GetOrigin());
     aEntryPos.setX( aEntryPos.X() * -1 ); // conversion document coordinates

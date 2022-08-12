@@ -276,9 +276,10 @@ void SwDropCapsPict::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
     Size aOutputSizePixel(GetSize());
 
     rRenderContext.DrawRect(tools::Rectangle(Point(0, 0), aOutputSizePixel));
-    rRenderContext.SetClipRegion(vcl::Region(tools::Rectangle(Point(BORDER, BORDER),
-                                                       Size(aOutputSizePixel.Width () - 2 * BORDER,
-                                                            aOutputSizePixel.Height() - 2 * BORDER))));
+    rRenderContext.SetClipRegion(rRenderContext.LogicToPixel(
+                                                vcl::Region(tools::Rectangle(Point(BORDER, BORDER),
+                                                            Size(aOutputSizePixel.Width () - 2 * BORDER,
+                                                            aOutputSizePixel.Height() - 2 * BORDER)))));
 
     OSL_ENSURE(mnLineH > 0, "We cannot make it that small");
     tools::Long nY0 = (aOutputSizePixel.Height() - (LINES * mnTotLineH)) / 2;

@@ -1126,7 +1126,7 @@ void TabBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& r
     ImplGetColors(rStyleSettings, aFaceColor, aFaceTextColor, aSelectColor, aSelectTextColor);
 
     rRenderContext.Push(vcl::PushFlags::FONT | vcl::PushFlags::CLIPREGION);
-    rRenderContext.SetClipRegion(vcl::Region(GetPageArea()));
+    rRenderContext.SetClipRegion(rRenderContext.LogicToPixel(vcl::Region(GetPageArea())));
 
     // select font
     vcl::Font aFont = rRenderContext.GetFont();
@@ -2403,7 +2403,7 @@ void TabBar::HideDropPos()
         // immediately call Paint, as it is not possible during drag and drop
         tools::Rectangle aRect( nX-1, nY1, nX+3, nY2 );
         vcl::Region aRegion( aRect );
-        GetOutDev()->SetClipRegion( aRegion );
+        GetOutDev()->SetClipRegion(GetOutDev()->LogicToPixel(aRegion));
         Invalidate(aRect);
         GetOutDev()->SetClipRegion();
     }
@@ -2414,7 +2414,7 @@ void TabBar::HideDropPos()
         // immediately call Paint, as it is not possible during drag and drop
         tools::Rectangle aRect(nX - 2, nY1, nX + 1, nY2);
         vcl::Region aRegion(aRect);
-        GetOutDev()->SetClipRegion(aRegion);
+        GetOutDev()->SetClipRegion(GetOutDev()->LogicToPixel(aRegion));
         Invalidate(aRect);
         GetOutDev()->SetClipRegion();
     }

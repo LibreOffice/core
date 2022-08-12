@@ -1007,7 +1007,7 @@ namespace vclcanvas
 
                             const vcl::Region aPolyClipRegion( aPolyPoly );
 
-                            pVDev->SetClipRegion( aPolyClipRegion );
+                            pVDev->SetClipRegion(pVDev->LogicToPixel(aPolyClipRegion));
                             textureFill( *pVDev,
                                          *pGrfObj,
                                          aOutPos,

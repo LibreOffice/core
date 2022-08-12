@@ -542,7 +542,7 @@ void SvxIconChoiceCtrl_Impl::Paint(vcl::RenderContext& rRenderContext, const too
         return;
 
     rRenderContext.Push(vcl::PushFlags::CLIPREGION);
-    rRenderContext.SetClipRegion(vcl::Region(rRect));
+    rRenderContext.SetClipRegion(rRenderContext.LogicToPixel(vcl::Region(rRect)));
 
     std::vector< SvxIconChoiceCtrlEntry* > aNewZOrderList;
     std::vector< SvxIconChoiceCtrlEntry* > aPaintedEntries;
@@ -1436,7 +1436,7 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
         tools::Rectangle aOutputArea(GetOutputRect());
         if (aOutputArea.Overlaps(aTextRect) || aOutputArea.Overlaps(aBmpRect))
         {
-            rRenderContext.SetClipRegion(vcl::Region(aOutputArea));
+            rRenderContext.SetClipRegion(rRenderContext.LogicToPixel(vcl::Region(aOutputArea)));
             bResetClipRegion = true;
         }
     }
@@ -2259,7 +2259,7 @@ void SvxIconChoiceCtrl_Impl::SelectRect( const tools::Rectangle& rRect, bool bAd
     if( !pView->GetOutDev()->IsClipRegion() )
     {
         bResetClipRegion = true;
-        pView->GetOutDev()->SetClipRegion(vcl::Region(GetOutputRect()));
+        pView->GetOutDev()->SetClipRegion(pView->GetOutDev()->LogicToPixel(vcl::Region(GetOutputRect())));
     }
 
     for( size_t nPos = 0; nPos < nCount; nPos++ )

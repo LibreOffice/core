@@ -1360,7 +1360,7 @@ void ImplStdBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, con
     aFrameColor.DecreaseContrast(sal_uInt8(0.5 * 255));
 
     // Draw Frame
-    vcl::Region oldClipRgn(rRenderContext.GetClipRegion());
+    vcl::Region oldClipRgn(rRenderContext.PixelToLogic(rRenderContext.GetClipRegion()));
 
     // for popups, don't draw part of the frame
     const bool bShowJunctionToLauncher = !(pData->mnTitleType & (BorderWindowTitleType::Normal | BorderWindowTitleType::Small));
@@ -1375,7 +1375,7 @@ void ImplStdBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, con
             {
                 aItemClipRect.SetPos(pData->mpBorderWindow->AbsoluteScreenToOutputPixel(aItemClipRect.TopLeft()));
                 aClipRgn.Exclude(aItemClipRect);
-                rRenderContext.SetClipRegion(aClipRgn);
+                rRenderContext.SetClipRegion(rRenderContext.LogicToPixel(aClipRgn));
             }
         }
     }
@@ -1391,7 +1391,7 @@ void ImplStdBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, con
 
     // restore
     if (!(pData->mnTitleType & (BorderWindowTitleType::Normal | BorderWindowTitleType::Small)))
-        rRenderContext.SetClipRegion(oldClipRgn);
+        rRenderContext.SetClipRegion(rRenderContext.LogicToPixel(oldClipRgn));
 
     // Draw Border
     rRenderContext.SetLineColor();

@@ -1415,7 +1415,7 @@ void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSe
         tools::Long nTxtWidth = rRenderContext.GetTextWidth(pItem->maText);
         if ((aTxtPos.X() + nTxtWidth) > aRect.Right())
         {
-            maVirDev->SetClipRegion(vcl::Region(aRect));
+            maVirDev->SetClipRegion(maVirDev->LogicToPixel(vcl::Region(aRect)));
             maVirDev->DrawText(aTxtPos, pItem->maText);
             maVirDev->SetClipRegion();
         }
@@ -1461,7 +1461,7 @@ void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSe
             if (aImageSize.Width()  > aRectSize.Width() ||
                 aImageSize.Height() > aRectSize.Height())
             {
-                maVirDev->SetClipRegion(vcl::Region(aRect));
+                maVirDev->SetClipRegion(maVirDev->LogicToPixel(vcl::Region(aRect)));
                 maVirDev->DrawImage(aPos, pItem->maImage, nImageStyle);
                 maVirDev->SetClipRegion();
             }
@@ -1477,7 +1477,7 @@ void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSe
                 tools::Long nTxtWidth = maVirDev->GetTextWidth(pItem->maText);
 
                 if (nTxtWidth > aRect.GetWidth())
-                    maVirDev->SetClipRegion(vcl::Region(aRect));
+                    maVirDev->SetClipRegion(maVirDev->LogicToPixel(vcl::Region(aRect)));
 
                 maVirDev->DrawText(Point(aRect.Left() +
                                          (aRect.GetWidth() - nTxtWidth) / 2,

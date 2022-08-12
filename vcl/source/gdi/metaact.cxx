@@ -1342,7 +1342,7 @@ MetaClipRegionAction::MetaClipRegionAction( vcl::Region aRegion, bool bClip ) :
 void MetaClipRegionAction::Execute( OutputDevice* pOut )
 {
     if( mbClip )
-        pOut->SetClipRegion( maRegion );
+        pOut->SetClipRegion(pOut->LogicToPixel(maRegion));
     else
         pOut->SetClipRegion();
 }

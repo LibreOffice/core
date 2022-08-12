@@ -4202,7 +4202,7 @@ void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
 
                     if ( !rRenderContext.GetConnectMetaFile() || !pSh || !pSh->GetWin() )
                     {
-                        rRenderContext.SetClipRegion(vcl::Region(aPoly));
+                        rRenderContext.SetClipRegion(rRenderContext.LogicToPixel(vcl::Region(aPoly)));
                     }
 
                     for ( size_t i = 0; i < aRegion.size(); ++i )

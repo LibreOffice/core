@@ -447,15 +447,15 @@ bool SpinButton::PreNotify( NotifyEvent& rNEvt )
                     vcl::Region aRgn(GetOutDev()->GetActiveClipRegion());
                     if (pLastRect)
                     {
-                        GetOutDev()->SetClipRegion(vcl::Region(*pLastRect));
+                        GetOutDev()->SetClipRegion(GetOutDev()->LogicToPixel(vcl::Region(*pLastRect)));
                         Invalidate(*pLastRect);
-                        GetOutDev()->SetClipRegion( aRgn );
+                        GetOutDev()->SetClipRegion(GetOutDev()->LogicToPixel(aRgn));
                     }
                     if (pRect)
                     {
-                        GetOutDev()->SetClipRegion(vcl::Region(*pRect));
+                        GetOutDev()->SetClipRegion(GetOutDev()->LogicToPixel(vcl::Region(*pRect)));
                         Invalidate(*pRect);
-                        GetOutDev()->SetClipRegion(aRgn);
+                        GetOutDev()->SetClipRegion(GetOutDev()->LogicToPixel(aRgn));
                     }
                 }
             }

@@ -1339,7 +1339,7 @@ sal_uInt64 PictReader::ReadData(sal_uInt16 nOpcode)
         //   but this can be discussable...
         aRect.setWidth(aRect.getOpenWidth()+1);
         aRect.setHeight(aRect.getOpenHeight()+1);
-        pVirDev->SetClipRegion( vcl::Region( aRect ) );
+        pVirDev->SetClipRegion(pVirDev->LogicToPixel(vcl::Region(aRect)));
         break;
     }
     case 0x0002:   // BkPat

@@ -498,7 +498,7 @@ public:
         comphelper::ScopeGuard aPushPopGuard([&rRenderContext]() { rRenderContext.Pop(); });
 
         rRenderContext.SetAntialiasing(AntialiasingFlags::Enable);
-        rRenderContext.SetClipRegion(vcl::Region(rRectangle));
+        rRenderContext.SetClipRegion(rRenderContext.LogicToPixel(vcl::Region(rRectangle)));
 
         tools::Rectangle aOutputRectangle(rRectangle);
         aOutputRectangle.shrink(6); // provide border

@@ -1995,7 +1995,7 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                                 mpDev->IntersectClipRegion( aAreaParam.maClipRect );
                             }
                             else
-                                mpDev->SetClipRegion( vcl::Region( aAreaParam.maClipRect ) );
+                                mpDev->SetClipRegion( mpDev->LogicToPixel( vcl::Region( aAreaParam.maClipRect ) ) );
                         }
 
                         Point aURLStart( nJustPosX, nJustPosY );    // copy before modifying for orientation
@@ -2793,7 +2793,7 @@ public:
                 mpDev->IntersectClipRegion(maRect);
             }
             else
-                mpDev->SetClipRegion(vcl::Region(maRect));
+                mpDev->SetClipRegion(mpDev->LogicToPixel(vcl::Region(maRect)));
         }
     }
 
@@ -4943,7 +4943,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                     mpDev->IntersectClipRegion( aAreaParam.maClipRect );
                                 }
                                 else
-                                    mpDev->SetClipRegion( vcl::Region( aAreaParam.maClipRect ) );
+                                    mpDev->SetClipRegion( mpDev->LogicToPixel( vcl::Region( aAreaParam.maClipRect ) ) );
 
                                 Point aLogicStart;
                                 if (bPixelToLogic)

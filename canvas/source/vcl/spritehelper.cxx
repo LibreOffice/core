@@ -171,7 +171,7 @@ namespace vclcanvas
                 }
 
                 vcl::Region aClipRegion( aClipPoly );
-                rTargetSurface.SetClipRegion( aClipRegion );
+                rTargetSurface.SetClipRegion(rTargetSurface.LogicToPixel(aClipRegion));
             }
         }
 

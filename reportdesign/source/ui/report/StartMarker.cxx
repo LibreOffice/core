@@ -110,8 +110,9 @@ void OStartMarker::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
         const tools::Long nVRulerWidth = m_aVRuler->GetSizePixel().Width();
         tools::Long nSize = aSize.Width() - nVRulerWidth;
         aSize.AdjustWidth(nCornerWidth );
-        rRenderContext.SetClipRegion(vcl::Region(rRenderContext.PixelToLogic(tools::Rectangle(Point(),
-                                                                             Size(nSize, aSize.Height())))));
+        rRenderContext.SetClipRegion(rRenderContext.LogicToPixel(
+                    vcl::Region(rRenderContext.PixelToLogic(tools::Rectangle(Point(),
+                                Size(nSize, aSize.Height()))))));
     }
 
     tools::Rectangle aWholeRect(Point(), aSize);

@@ -483,7 +483,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
 
     OutputDevice& rTarget = pTargetDevice ? *pTargetDevice : GetOutputDevice();
     bool bClipRegion = rTarget.IsClipRegion();
-    vcl::Region aOldRegion = rTarget.GetClipRegion();
+    vcl::Region aOldRegion = rTarget.PixelToLogic(rTarget.GetClipRegion());
 
     std::optional<tools::PolyPolygon> pPolyPoly;
 
@@ -650,7 +650,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
             pOutWin->GetCursor()->Show();
 
         if (bClipRegion)
-            rTarget.SetClipRegion(aOldRegion);
+            rTarget.SetClipRegion(rTarget.LogicToPixel(aOldRegion));
         else
             rTarget.SetClipRegion();
     }

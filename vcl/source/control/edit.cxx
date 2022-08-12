@@ -569,7 +569,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangl
         }
         // draw normal text
         Color aNormalTextColor = rRenderContext.GetTextColor();
-        rRenderContext.SetClipRegion(aNormalClipRegion);
+        rRenderContext.SetClipRegion(rRenderContext.LogicToPixel(aNormalClipRegion));
 
         if (IsPaintTransparent())
             rRenderContext.SetTextFillColor();
@@ -591,7 +591,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangl
         rRenderContext.DrawText(aPos, aText, 0, nLen);
 
         // draw highlighted text
-        rRenderContext.SetClipRegion(aHighlightClipRegion);
+        rRenderContext.SetClipRegion(rRenderContext.LogicToPixel(aHighlightClipRegion));
         rRenderContext.SetTextColor(rStyleSettings.GetHighlightTextColor());
         rRenderContext.SetTextFillColor(rStyleSettings.GetHighlightColor());
         rRenderContext.DrawText(aPos, aText, 0, nLen);
@@ -657,7 +657,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangl
                         else if (nAttr & ExtTextInputAttr::HalfToneText)
                             rRenderContext.SetTextColor(COL_LIGHTGRAY);
 
-                        rRenderContext.SetClipRegion(aClip);
+                        rRenderContext.SetClipRegion(rRenderContext.LogicToPixel(aClip));
                         rRenderContext.DrawText(aPos, aText, 0, nLen);
                     }
                 }
@@ -1047,12 +1047,12 @@ void Edit::ImplPaintBorder(vcl::RenderContext const & rRenderContext)
             aClipRgn.Move(aBorderOffs.X(), aBorderOffs.Y());
         }
 
-        vcl::Region oldRgn(pBorder->GetOutDev()->GetClipRegion());
-        pBorder->GetOutDev()->SetClipRegion(aClipRgn);
+        vcl::Region oldRgn(pBorder->GetOutDev()->PixelToLogic(pBorder->GetOutDev()->GetClipRegion()));
+        pBorder->GetOutDev()->SetClipRegion(pBorder->GetOutDev()->LogicToPixel(aClipRgn));
 
         pBorder->Paint(*pBorder->GetOutDev(), tools::Rectangle());
 
-        pBorder->GetOutDev()->SetClipRegion(oldRgn);
+        pBorder->GetOutDev()->SetClipRegion(pBorder->GetOutDev()->LogicToPixel(oldRgn));
     }
     else
     {

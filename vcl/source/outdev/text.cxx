@@ -1733,10 +1733,16 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
                         sal_Int32 lc_x2 = pCaretXArray[2*(nMnemonicPos - nIndex)+1];
                         nMnemonicWidth = rTargetDevice.GetGeometry().LogicWidthToDeviceCoordinate( std::abs(lc_x1 - lc_x2) );
 
-                        Point       aTempPos = rTargetDevice.LogicToPixel( aPos );
-                        nMnemonicX = rTargetDevice.GetFrameOffset().X() + aTempPos.X() + rTargetDevice.maGeometry.LogicWidthToDevicePixel( std::min( lc_x1, lc_x2 ) );
-                        nMnemonicY = rTargetDevice.GetFrameOffset().Y() + aTempPos.Y() + rTargetDevice.maGeometry.LogicWidthToDevicePixel( rTargetDevice.GetFontMetric().GetAscent() );
-                        rTargetDevice.ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
+                        Point aTempPos = rTargetDevice.LogicToPixel(aPos);
+
+                        nMnemonicX = rTargetDevice.GetFrameOffset().X()
+                            + aTempPos.X()
+                            + rTargetDevice.maGeometry.LogicWidthToDevicePixel(std::min(lc_x1, lc_x2));
+                        nMnemonicY = rTargetDevice.GetFrameOffset().Y()
+                            + aTempPos.Y()
+                            + rTargetDevice.maGeometry.LogicWidthToDevicePixel(rTargetDevice.GetFontMetric().GetAscent());
+
+                        rTargetDevice.ImplDrawMnemonicLine(nMnemonicX, nMnemonicY, nMnemonicWidth);
                     }
                 }
                 aPos.AdjustY(nTextHeight );

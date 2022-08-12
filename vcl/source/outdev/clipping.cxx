@@ -36,8 +36,7 @@ void OutputDevice::SaveBackground(VirtualDevice& rSaveDevice,
 
 vcl::Region OutputDevice::GetClipRegion() const
 {
-
-    return PixelToLogic( maRegion );
+    return maRegion;
 }
 
 void OutputDevice::SetClipRegion()
@@ -52,24 +51,19 @@ void OutputDevice::SetClipRegion()
         mpAlphaVDev->SetClipRegion();
 }
 
-void OutputDevice::SetClipRegion( const vcl::Region& rRegion )
+void OutputDevice::SetClipRegion(vcl::Region const& rRegion )
 {
 
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaClipRegionAction( rRegion, true ) );
+    if (mpMetaFile)
+        mpMetaFile->AddAction(new MetaClipRegionAction(PixelToLogic(rRegion), true));
 
-    if ( rRegion.IsNull() )
-    {
-        SetDeviceClipRegion( nullptr );
-    }
+    if (rRegion.IsNull())
+        SetDeviceClipRegion(nullptr);
     else
-    {
-        vcl::Region aRegion = LogicToPixel( rRegion );
-        SetDeviceClipRegion( &aRegion );
-    }
+        SetDeviceClipRegion(&rRegion);
 
     if( mpAlphaVDev )
-        mpAlphaVDev->SetClipRegion( rRegion );
+        mpAlphaVDev->SetClipRegion(rRegion);
 }
 
 bool OutputDevice::SelectClipRegion( const vcl::Region& rRegion, SalGraphics* pGraphics )

@@ -503,10 +503,10 @@ void Window::PushPaintHelper(PaintHelper *pHelper, vcl::RenderContext& rRenderCo
     {
         if (rRenderContext.IsClipRegion())
         {
-            vcl::Region aOldRegion = rRenderContext.GetClipRegion();
+            vcl::Region aOldRegion(PixelToLogic(rRenderContext.GetClipRegion()));
             rRenderContext.SetClipRegion();
             Erase(rRenderContext);
-            rRenderContext.SetClipRegion(aOldRegion);
+            rRenderContext.SetClipRegion(rRenderContext.LogicToPixel(aOldRegion));
         }
         else
             Erase(rRenderContext);
@@ -1406,10 +1406,10 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
 
         tools::Rectangle aPaintRect(Point(), GetSize());
 
-        vcl::Region aClipRegion(GetOutDev()->GetClipRegion());
+        vcl::Region aClipRegion(PixelToLogic(GetOutDev()->GetClipRegion()));
         pDevice->SetClipRegion();
         aClipRegion.Intersect(aPaintRect);
-        pDevice->SetClipRegion(aClipRegion);
+        pDevice->SetClipRegion(LogicToPixel(aClipRegion));
 
         if (!IsPaintTransparent() && IsBackground() && ! (GetParentClipMode() & ParentClipMode::NoClip))
             Erase(*pDevice);
@@ -1465,7 +1465,7 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
 
     // preserve graphicsstate
     GetOutDev()->Push();
-    vcl::Region aClipRegion( GetOutDev()->GetClipRegion() );
+    vcl::Region aClipRegion(PixelToLogic(GetOutDev()->GetClipRegion()));
     GetOutDev()->SetClipRegion();
 
     GDIMetaFile* pOldMtf = GetOutDev()->GetConnectMetaFile();
@@ -1512,9 +1512,9 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     GetOutDev()->SetLayoutMode( GetOutDev()->GetLayoutMode() );
 
     GetOutDev()->SetDigitLanguage( GetOutDev()->GetDigitLanguage() );
-    tools::Rectangle aPaintRect(Point(0, 0), GetSize());
+    tools::Rectangle aPaintRect(PixelToLogic(tools::Rectangle(Point(0, 0), GetSize())));
     aClipRegion.Intersect( aPaintRect );
-    GetOutDev()->SetClipRegion( aClipRegion );
+    GetOutDev()->SetClipRegion(LogicToPixel(aClipRegion));
 
     // do the actual paint
 

@@ -206,7 +206,8 @@ void SwLabPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
         rRenderContext.DrawLine(Point(lX0, lY0 + lOutlineH - 1), Point(lX0 + lOutlineW - 1, lY0 + lOutlineH - 1)); // Down
 
     // Labels
-    rRenderContext.SetClipRegion(vcl::Region(tools::Rectangle(Point(lX0, lY0), Size(lOutlineW, lOutlineH))));
+    rRenderContext.SetClipRegion(rRenderContext.LogicToPixel(
+                vcl::Region(tools::Rectangle(Point(lX0, lY0), Size(lOutlineW, lOutlineH)))));
     rRenderContext.SetFillColor(COL_LIGHTGRAYBLUE);
     const sal_Int32 nRows = std::min<sal_Int32>(2, m_aItem.m_nRows);
     const sal_Int32 nCols = std::min<sal_Int32>(2, m_aItem.m_nCols);

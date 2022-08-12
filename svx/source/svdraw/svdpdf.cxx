@@ -637,7 +637,8 @@ void ImpSdrPdfImport::checkClip()
 {
     if (mpVD->IsClipRegion())
     {
-        maClip = mpVD->GetClipRegion().GetAsB2DPolyPolygon();
+        vcl::Region aRegion(mpVD->PixelToLogic(mpVD->GetClipRegion()));
+        maClip = aRegion.GetAsB2DPolyPolygon();
 
         if (isClip())
         {

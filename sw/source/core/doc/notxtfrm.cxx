@@ -258,7 +258,7 @@ void SwNoTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect cons
          FindFlyFrame()->GetContour( aPoly, true )
        )
     {
-        rRenderContext.SetClipRegion(vcl::Region(aPoly));
+        rRenderContext.SetClipRegion(rRenderContext.LogicToPixel(vcl::Region(aPoly)));
         bClip = false;
     }
 
@@ -960,7 +960,8 @@ void paintGraphicUsingPrimitivesHelper(
     // RegionBand-based implementation, so cannot use it here.
     if(rOutputDevice.IsClipRegion())
     {
-        basegfx::B2DPolyPolygon aClip(rOutputDevice.GetClipRegion().GetAsB2DPolyPolygon());
+        basegfx::B2DPolyPolygon aClip(rOutputDevice.PixelToLogic(
+                    rOutputDevice.GetClipRegion().GetAsB2DPolyPolygon()));
 
         if(0 != aClip.count())
         {

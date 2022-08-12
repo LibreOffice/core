@@ -29,7 +29,7 @@ namespace vcl {
 
 vcl::Region WindowOutputDevice::GetOutputBoundsClipRegion() const
 {
-    vcl::Region aClip(GetClipRegion());
+    vcl::Region aClip(PixelToLogic(GetClipRegion()));
     aClip.Intersect(tools::Rectangle(Point(), GetOutputSize()));
 
     return aClip;
@@ -681,8 +681,8 @@ void WindowOutputDevice::SaveBackground(VirtualDevice& rSaveDevice, const Point&
 
         if ( !aClip.IsEmpty() )
         {
-            const vcl::Region    aOldClip( rSaveDevice.GetClipRegion() );
-            const Point     aPixOffset( rSaveDevice.LogicToPixel( Point() ) );
+            const vcl::Region aOldClip(PixelToLogic(rSaveDevice.GetClipRegion()));
+            const Point aPixOffset(rSaveDevice.LogicToPixel(Point()));
             const bool      bMap = rSaveDevice.IsMapModeEnabled();
 
             // move clip region to have the same distance to DestOffset
@@ -690,10 +690,10 @@ void WindowOutputDevice::SaveBackground(VirtualDevice& rSaveDevice, const Point&
 
             // set pixel clip region
             rSaveDevice.EnableMapMode( false );
-            rSaveDevice.SetClipRegion( aClip );
+            rSaveDevice.SetClipRegion(rSaveDevice.LogicToPixel(aClip));
             rSaveDevice.EnableMapMode( bMap );
             rSaveDevice.DrawOutDev( Point(), rSize, rPos, rSize, *this );
-            rSaveDevice.SetClipRegion( aOldClip );
+            rSaveDevice.SetClipRegion(rSaveDevice.LogicToPixel(aOldClip));
         }
     }
     else

@@ -1286,10 +1286,10 @@ namespace canvas::tools
             }
             else
             {
-                rOutDev.SetClipRegion( aClipRegion );
+                rOutDev.SetClipRegion(rOutDev.LogicToPixel(aClipRegion));
 
                 if( p2ndOutDev )
-                    p2ndOutDev->SetClipRegion( aClipRegion );
+                    p2ndOutDev->SetClipRegion(rOutDev.LogicToPixel(aClipRegion));
             }
         }
 

@@ -105,8 +105,8 @@ bool ImplDrawNativeSpinfield(vcl::RenderContext& rRenderContext, vcl::Window con
                 // convert from screen space to borderwin space
                 aClipRect.SetPos(pBorder->ScreenToOutputPixel(pWin->OutputToScreenPixel(aClipRect.TopLeft())));
 
-                oldRgn = pBorder->GetOutDev()->GetClipRegion();
-                pBorder->GetOutDev()->SetClipRegion(vcl::Region(aClipRect));
+                oldRgn = pBorder->GetOutDev()->PixelToLogic(pBorder->GetOutDev()->GetClipRegion());
+                pBorder->GetOutDev()->SetClipRegion(pBorder->GetOutDev()->LogicToPixel(vcl::Region(aClipRect)));
 
                 pContext = pBorder->GetOutDev();
             }
@@ -131,7 +131,7 @@ bool ImplDrawNativeSpinfield(vcl::RenderContext& rRenderContext, vcl::Window con
                                                    ControlState::ENABLED, rSpinbuttonValue, OUString());
 
             if (!pWin->SupportsDoubleBuffering())
-                pBorder->GetOutDev()->SetClipRegion(oldRgn);
+                pBorder->GetOutDev()->SetClipRegion(pBorder->GetOutDev()->LogicToPixel(oldRgn));
         }
     }
     return bNativeOK;
@@ -883,15 +883,15 @@ bool SpinField::PreNotify(NotifyEvent& rNEvt)
                         vcl::Region aRgn( GetOutDev()->GetActiveClipRegion() );
                         if (pLastRect)
                         {
-                            GetOutDev()->SetClipRegion(vcl::Region(*pLastRect));
+                            GetOutDev()->SetClipRegion(GetOutDev()->LogicToPixel(vcl::Region(*pLastRect)));
                             Invalidate(*pLastRect);
-                            GetOutDev()->SetClipRegion( aRgn );
+                            GetOutDev()->SetClipRegion(GetOutDev()->LogicToPixel(aRgn));
                         }
                         if (pRect)
                         {
-                            GetOutDev()->SetClipRegion(vcl::Region(*pRect));
+                            GetOutDev()->SetClipRegion(GetOutDev()->LogicToPixel(vcl::Region(*pRect)));
                             Invalidate(*pRect);
-                            GetOutDev()->SetClipRegion( aRgn );
+                            GetOutDev()->SetClipRegion(GetOutDev()->LogicToPixel(aRgn));
                         }
                     }
                 }

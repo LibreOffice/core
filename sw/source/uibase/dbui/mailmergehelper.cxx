@@ -495,7 +495,8 @@ bool SwAddressPreview::KeyInput( const KeyEvent& rKEvt )
 void SwAddressPreview::DrawText_Impl(vcl::RenderContext& rRenderContext, std::u16string_view rAddress,
                                      const Point& rTopLeft, const Size& rSize, bool bIsSelected)
 {
-    rRenderContext.SetClipRegion(vcl::Region(tools::Rectangle(rTopLeft, rSize)));
+    rRenderContext.SetClipRegion(rRenderContext.LogicToPixel(
+                vcl::Region(tools::Rectangle(rTopLeft, rSize))));
     if (bIsSelected)
     {
         //selection rectangle

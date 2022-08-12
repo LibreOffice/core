@@ -1091,9 +1091,9 @@ EditEngine* ScCsvGrid::GetEditEngine()
 
 void ScCsvGrid::ImplSetColumnClipRegion( OutputDevice& rOutDev, sal_uInt32 nColIndex )
 {
-    rOutDev.SetClipRegion( vcl::Region( tools::Rectangle(
+    rOutDev.SetClipRegion( rOutDev.LogicToPixel( vcl::Region( tools::Rectangle(
         std::max( GetColumnX( nColIndex ), GetFirstX() ) + 1, 0,
-        std::min( GetColumnX( nColIndex + 1 ), GetLastX() ), GetHeight() - 1 ) ) );
+        std::min( GetColumnX( nColIndex + 1 ), GetLastX() ), GetHeight() - 1 ) ) ) );
 }
 
 void ScCsvGrid::ImplDrawColumnHeader( OutputDevice& rOutDev, sal_uInt32 nColIndex, Color aFillColor )
@@ -1359,10 +1359,10 @@ void ScCsvGrid::ImplDrawHorzScrolled( sal_Int32 nOldPos )
     ImplInvertCursor( GetRulerCursorPos() + (nPos - nOldPos) );
     tools::Rectangle aRectangle( GetFirstX(), 0, GetLastX(), GetHeight() - 1 );
     vcl::Region aClipReg( aRectangle );
-    mpBackgrDev->SetClipRegion( aClipReg );
+    mpBackgrDev->SetClipRegion( mpBackgrDev->LogicToPixel( aClipReg ) );
     mpBackgrDev->CopyArea( aDest, aSrc, maWinSize );
     mpBackgrDev->SetClipRegion();
-    mpGridDev->SetClipRegion( aClipReg );
+    mpGridDev->SetClipRegion( mpGridDev->LogicToPixel( aClipReg ) );
     mpGridDev->CopyArea( aDest, aSrc, maWinSize );
     mpGridDev->SetClipRegion();
     ImplInvertCursor( GetRulerCursorPos() );

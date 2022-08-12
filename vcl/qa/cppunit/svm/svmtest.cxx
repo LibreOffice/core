@@ -1556,7 +1556,7 @@ void SvmTest::testClipRegion()
 
     vcl::Region aRegion(tools::Rectangle(Point(2, 2), Size(4, 4)));
 
-    pVirtualDev->SetClipRegion(aRegion);
+    pVirtualDev->SetClipRegion(pVirtualDev->LogicToPixel(aRegion));
 
     tools::Polygon aPolygon(3);
     aPolygon.SetPoint(Point(1, 8), 0);
@@ -1564,7 +1564,7 @@ void SvmTest::testClipRegion()
     aPolygon.SetPoint(Point(3, 6), 2);
 
     vcl::Region aRegion2(aPolygon);
-    pVirtualDev->SetClipRegion(aRegion2);
+    pVirtualDev->SetClipRegion(pVirtualDev->LogicToPixel(aRegion2));
 
     tools::Polygon aPolygon1(3);
     aPolygon1.SetPoint(Point(4, 9), 0);
@@ -1576,7 +1576,7 @@ void SvmTest::testClipRegion()
     aPolyPolygon.Insert(aPolygon1);
 
     vcl::Region aRegion3(aPolyPolygon);
-    pVirtualDev->SetClipRegion(aRegion3);
+    pVirtualDev->SetClipRegion(pVirtualDev->LogicToPixel(aRegion3));
 
     basegfx::B2DPolygon aB2DPolygon;
     aB2DPolygon.append(basegfx::B2DPoint(0.0, 1.1));
@@ -1586,7 +1586,7 @@ void SvmTest::testClipRegion()
     basegfx::B2DPolyPolygon aB2DPolyPolygon(aB2DPolygon);
 
     vcl::Region aRegion4(aB2DPolyPolygon);
-    pVirtualDev->SetClipRegion(aRegion4);
+    pVirtualDev->SetClipRegion(pVirtualDev->LogicToPixel(aRegion4));
 
     checkClipRegion(writeAndReadStream(aGDIMetaFile));
     checkClipRegion(readFile(u"clipregion.svm"));
@@ -1709,7 +1709,7 @@ void SvmTest::testMoveClipRegion()
 
     vcl::Region aRegion(aRectangle);
     aRegion.Move(2, 2);
-    pVirtualDev->SetClipRegion(aRegion);
+    pVirtualDev->SetClipRegion(pVirtualDev->LogicToPixel(aRegion));
 
     pVirtualDev->MoveClipRegion(1, 2);
     pVirtualDev->MoveClipRegion(-3, -4);

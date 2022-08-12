@@ -936,7 +936,7 @@ void drawIconSets(vcl::RenderContext& rRenderContext, const ScIconSetInfo* pOldI
     tools::Long aWidth = fRatio * aHeight;
 
     rRenderContext.Push();
-    rRenderContext.SetClipRegion(vcl::Region(rRect));
+    rRenderContext.SetClipRegion(rRenderContext.LogicToPixel(vcl::Region(rRect)));
     rRenderContext.DrawBitmapEx(Point(rRect.Left() + 2 * nOneX, rRect.Bottom() - 2 * nOneY - aHeight), Size(aWidth, aHeight), rIcon);
     rRenderContext.Pop();
 }
@@ -1538,7 +1538,7 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext)
         rRenderContext.IntersectClipRegion( aClipRect );
     }
     else
-        rRenderContext.SetClipRegion( vcl::Region( aClipRect ) );
+        rRenderContext.SetClipRegion( rRenderContext.LogicToPixel( vcl::Region( aClipRect ) ) );
 
     std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(CreateProcessor2D( ));
     tools::Long nPosY = nScrY;
@@ -1808,7 +1808,7 @@ bool ScOutputData::SetChangedClip()
 
     bool bRet = (aPoly.Count() != 0);
     if (bRet)
-        mpDev->SetClipRegion(vcl::Region(aPoly));
+        mpDev->SetClipRegion(mpDev->LogicToPixel(vcl::Region(aPoly)));
     return bRet;
 }
 

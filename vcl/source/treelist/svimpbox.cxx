@@ -565,11 +565,11 @@ void SvImpLBox::RecalcFocusRect()
         m_pView->HideFocus();
         tools::Long nY = GetEntryLine( m_pCursor );
         tools::Rectangle aRect = m_pView->GetFocusRect( m_pCursor, nY );
-        vcl::Region aOldClip( m_pView->GetOutDev()->GetClipRegion());
+        vcl::Region aOldClip(m_pView->GetOutDev()->PixelToLogic(m_pView->GetOutDev()->GetClipRegion()));
         vcl::Region aClipRegion( GetClipRegionRect() );
-        m_pView->GetOutDev()->SetClipRegion( aClipRegion );
+        m_pView->GetOutDev()->SetClipRegion(m_pView->GetOutDev()->LogicToPixel(aClipRegion));
         m_pView->ShowFocus( aRect );
-        m_pView->GetOutDev()->SetClipRegion( aOldClip );
+        m_pView->GetOutDev()->SetClipRegion(m_pView->GetOutDev()->LogicToPixel(aOldClip));
     }
 }
 
@@ -648,21 +648,21 @@ void SvImpLBox::ShowCursor( bool bShow )
 {
     if( !bShow || !m_pCursor || !m_pView->HasFocus() )
     {
-        vcl::Region aOldClip( m_pView->GetOutDev()->GetClipRegion());
-        vcl::Region aClipRegion( GetClipRegionRect() );
-        m_pView->GetOutDev()->SetClipRegion( aClipRegion );
+        vcl::Region aOldClip(m_pView->GetOutDev()->PixelToLogic(m_pView->GetOutDev()->GetClipRegion()));
+        vcl::Region aClipRegion(GetClipRegionRect());
+        m_pView->GetOutDev()->SetClipRegion(m_pView->GetOutDev()->LogicToPixel(aClipRegion));
         m_pView->HideFocus();
-        m_pView->GetOutDev()->SetClipRegion( aOldClip );
+        m_pView->GetOutDev()->SetClipRegion(m_pView->GetOutDev()->LogicToPixel(aOldClip));
     }
     else
     {
         tools::Long nY = GetEntryLine( m_pCursor );
         tools::Rectangle aRect = m_pView->GetFocusRect( m_pCursor, nY );
-        vcl::Region aOldClip( m_pView->GetOutDev()->GetClipRegion());
-        vcl::Region aClipRegion( GetClipRegionRect() );
-        m_pView->GetOutDev()->SetClipRegion( aClipRegion );
+        vcl::Region aOldClip(m_pView->GetOutDev()->PixelToLogic(m_pView->GetOutDev()->GetClipRegion()));
+        vcl::Region aClipRegion(GetClipRegionRect());
+        m_pView->GetOutDev()->SetClipRegion(m_pView->GetOutDev()->LogicToPixel(aClipRegion));
         m_pView->ShowFocus( aRect );
-        m_pView->GetOutDev()->SetClipRegion( aOldClip );
+        m_pView->GetOutDev()->SetClipRegion(m_pView->GetOutDev()->LogicToPixel(aOldClip));
     }
 }
 

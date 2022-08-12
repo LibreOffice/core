@@ -340,7 +340,7 @@ namespace dbaui
         if( aPos.X() < rRect.Left() || aPos.X() + aTextSize.Width() > rRect.Right() ||
             aPos.Y() < rRect.Top() || aPos.Y() + aTextSize.Height() > rRect.Bottom() )
         {
-            rDev.SetClipRegion(vcl::Region(rRect));
+            rDev.SetClipRegion(rDev.LogicToPixel(vcl::Region(rRect)));
         }
 
         rDev.DrawText( aPos, aText );

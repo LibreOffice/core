@@ -920,7 +920,7 @@ void HeaderBar::Draw( OutputDevice* pDev, const Point& rPos,
         if ( aItemRect.Right() > 16000 )
             aItemRect.SetRight( 16000 );
         vcl::Region aRegion( aRect );
-        pDev->SetClipRegion( aRegion );
+        pDev->SetClipRegion(pDev->LogicToPixel(aRegion));
         ImplDrawItem(*pDev, i, false, aItemRect, &aRect );
         pDev->SetClipRegion();
     }

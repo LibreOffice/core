@@ -1277,10 +1277,10 @@ bool ScrollBar::PreNotify( NotifyEvent& rNEvt )
                         aClipRegion.Union( maBtn2Rect );
                     }
 
-                    GetOutDev()->SetClipRegion( aClipRegion );
+                    GetOutDev()->SetClipRegion(GetOutDev()->LogicToPixel(aClipRegion));
                     Invalidate(aClipRegion.GetBoundRect());
 
-                    GetOutDev()->SetClipRegion( aRgn );
+                    GetOutDev()->SetClipRegion(GetOutDev()->LogicToPixel(aRgn));
                 }
             }
         }

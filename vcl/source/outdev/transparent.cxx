@@ -1243,9 +1243,13 @@ tools::Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
     if( !aActionBounds.IsEmpty() )
     {
         // fdo#40421 limit current action's output to clipped area
-        if( rOut.IsClipRegion() )
+        if (rOut.IsClipRegion())
+        {
+            vcl::Region aClipRegion(rOut.PixelToLogic(rOut.GetClipRegion()));
+
             return rOut.LogicToPixel(
-                rOut.GetClipRegion().GetBoundRect().Intersection( aActionBounds ) );
+                aClipRegion.GetBoundRect().Intersection(aActionBounds));
+        }
         else
             return rOut.LogicToPixel( aActionBounds );
     }

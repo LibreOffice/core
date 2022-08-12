@@ -761,7 +761,7 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlag
 
     // draw our own content (with clipping)
     vcl::Region aRegion(tools::Rectangle(aRealPos, aRealSize));
-    pDev->SetClipRegion( pDev->PixelToLogic( aRegion ) );
+    pDev->SetClipRegion(pDev->LogicToPixel(aRegion));
 
     // do we have to paint the background
     bool bBackground = pDataWin->IsControlBackground();
@@ -921,7 +921,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
                     }
 
                     vcl::Region aClipToField(tools::Rectangle(aPos, aFieldSize));
-                    _rOut.SetClipRegion(aClipToField);
+                    _rOut.SetClipRegion(_rOut.LogicToPixel(aClipToField));
                 }
                 pCol->Draw( *this, _rOut, aPos );
                 if (_bForeignDevice)

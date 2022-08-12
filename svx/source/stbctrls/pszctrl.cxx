@@ -415,10 +415,10 @@ void SvxPosSizeStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
             GetMetricStr_Impl( pImpl->aPos.Y());
         tools::Rectangle aRect(aPnt, Point(nSizePosX, rRect.Bottom()));
         pDev->DrawRect(aRect);
-        vcl::Region aOrigRegion(pDev->GetClipRegion());
-        pDev->SetClipRegion(vcl::Region(aRect));
+        vcl::Region aOrigRegion(pDev->PixelToLogic(pDev->GetClipRegion()));
+        pDev->SetClipRegion(pDev->LogicToPixel(vcl::Region(aRect)));
         pDev->DrawText(aPnt, aStr);
-        pDev->SetClipRegion(aOrigRegion);
+        pDev->SetClipRegion(pDev->LogicToPixel(aOrigRegion));
 
         // draw the size, when available
         aPnt.setX( nSizePosX );
@@ -433,10 +433,10 @@ void SvxPosSizeStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
                 GetMetricStr_Impl( pImpl->aSize.Height() );
             aRect = tools::Rectangle(aDrwPnt, rRect.BottomRight());
             pDev->DrawRect(aRect);
-            aOrigRegion = pDev->GetClipRegion();
-            pDev->SetClipRegion(vcl::Region(aRect));
+            aOrigRegion = pDev->PixelToLogic(pDev->GetClipRegion());
+            pDev->SetClipRegion(pDev->LogicToPixel(vcl::Region(aRect)));
             pDev->DrawText(aPnt, aStr);
-            pDev->SetClipRegion(aOrigRegion);
+            pDev->SetClipRegion(pDev->LogicToPixel(aOrigRegion));
         }
         else
             pDev->DrawRect( tools::Rectangle( aPnt, rRect.BottomRight() ) );

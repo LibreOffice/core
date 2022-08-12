@@ -801,7 +801,7 @@ void SwTextPaintInfo::CalcRect( const SwLinePortion& rPor,
 
         if ( GetOut()->IsClipRegion() )
         {
-            SwRect aClip( GetOut()->GetClipRegion().GetBoundRect() );
+            SwRect aClip( GetOut()->PixelToLogic( GetOut()->GetClipRegion().GetBoundRect() ) );
             aRect.Intersection( aClip );
         }
 

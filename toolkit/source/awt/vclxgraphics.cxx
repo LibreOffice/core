@@ -117,7 +117,7 @@ void VCLXGraphics::InitOutputDevice( InitOutDevFlags nFlags )
     mpOutputDevice->SetRasterOp( meRasterOp );
 
     if( mpClipRegion )
-        mpOutputDevice->SetClipRegion( *mpClipRegion );
+        mpOutputDevice->SetClipRegion(mpOutputDevice->LogicToPixel(*mpClipRegion));
     else
         mpOutputDevice->SetClipRegion();
 }

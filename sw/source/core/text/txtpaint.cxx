@@ -33,7 +33,7 @@ SwSaveClip::~SwSaveClip()
     else
     {
         if( m_bOn )
-            m_pOut->SetClipRegion( m_aClip );
+            m_pOut->SetClipRegion( m_pOut->LogicToPixel( m_aClip ) );
         else
             m_pOut->SetClipRegion();
     }
@@ -65,7 +65,7 @@ void SwSaveClip::ChgClip_( const SwRect &rRect, const SwTextFrame* pFrame,
         if ( m_pOut->GetConnectMetaFile() )
             m_pOut->Push();
         else if ( m_bOn )
-            m_aClip = m_pOut->GetClipRegion();
+            m_aClip = m_pOut->PixelToLogic(m_pOut->GetClipRegion());
     }
 
     if ( !rRect.HasArea() )
@@ -90,7 +90,9 @@ void SwSaveClip::ChgClip_( const SwRect &rRect, const SwTextFrame* pFrame,
         // If the ClipRect is identical, nothing will happen
         if( m_pOut->IsClipRegion() ) // no && because of Mac
         {
-            if ( aRect == m_pOut->GetClipRegion().GetBoundRect() )
+            vcl::Region aRegion(m_pOut->PixelToLogic(m_pOut->GetClipRegion()));
+
+            if ( aRect == aRegion.GetBoundRect() )
             {
                 const_cast<SwRect&>(rRect) = aOldRect;
                 return;
@@ -102,7 +104,7 @@ void SwSaveClip::ChgClip_( const SwRect &rRect, const SwTextFrame* pFrame,
         else
         {
             const vcl::Region aClipRegion( aRect );
-            m_pOut->SetClipRegion( aClipRegion );
+            m_pOut->SetClipRegion( m_pOut->LogicToPixel( aClipRegion ) );
         }
     }
     m_bChg = true;

@@ -40,7 +40,7 @@ Bitmap OutputDeviceTestAnotherOutDev::setupDrawOutDevScaledClipped()
 
     tools::Rectangle rectangle = maVDRectangle;
     rectangle.SetLeft(rectangle.GetWidth() / 2);
-    mpVirtualDevice->SetClipRegion(vcl::Region(rectangle));
+    mpVirtualDevice->SetClipRegion(mpVirtualDevice->LogicToPixel(vcl::Region(rectangle)));
 
     mpVirtualDevice->DrawOutDev(Point(2, 2), aSourceSize / 2, Point(), aSourceSize, *pSourceDev);
 

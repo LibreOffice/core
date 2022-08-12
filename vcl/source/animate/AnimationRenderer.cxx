@@ -85,7 +85,7 @@ AnimationRenderer::AnimationRenderer( Animation* pParent, OutputDevice* pOut,
     if( pFirstFrameOutDev )
     {
         mpRenderContext = pOut;
-        maClip = mpRenderContext->GetClipRegion();
+        maClip = mpRenderContext->PixelToLogic(mpRenderContext->GetClipRegion());
     }
 }
 

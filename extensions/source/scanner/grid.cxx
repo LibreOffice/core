@@ -492,7 +492,7 @@ void GridWindow::drawNew(vcl::RenderContext& rRenderContext)
 {
     if (m_nValues && m_pXValues && m_pNewYValues)
     {
-        rRenderContext.SetClipRegion(vcl::Region(m_aGridArea));
+        rRenderContext.SetClipRegion(rRenderContext.LogicToPixel(vcl::Region(m_aGridArea)));
         rRenderContext.SetLineColor(COL_YELLOW);
         for (int i = 0; i < m_nValues - 1; i++)
         {

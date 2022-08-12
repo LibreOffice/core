@@ -255,7 +255,7 @@ void EditEngine::Draw( OutputDevice& rOutDev, const tools::Rectangle& rOutRect, 
 
     bool bClipRegion = rOutDev.IsClipRegion();
     bool bMetafile = rOutDev.GetConnectMetaFile();
-    vcl::Region aOldRegion = rOutDev.GetClipRegion();
+    vcl::Region aOldRegion = rOutDev.PixelToLogic(rOutDev.GetClipRegion());
 
     // If one existed => intersection!
     // Use Push/pop for creating the Meta file
@@ -289,7 +289,7 @@ void EditEngine::Draw( OutputDevice& rOutDev, const tools::Rectangle& rOutRect, 
     if ( bMetafile )
         rOutDev.Pop();
     else if ( bClipRegion )
-        rOutDev.SetClipRegion( aOldRegion );
+        rOutDev.SetClipRegion( rOutDev.LogicToPixel( aOldRegion ) );
     else
         rOutDev.SetClipRegion();
 }

@@ -88,7 +88,7 @@ namespace vclcanvas
             // scrolled sprite content outside this area)
             rOutDev.EnableMapMode( false );
             rOutDev.SetAntialiasing( AntialiasingFlags::Enable );
-            rOutDev.SetClipRegion(vcl::Region(rRequestedArea));
+            rOutDev.SetClipRegion(rOutDev.LogicToPixel(vcl::Region(rRequestedArea)));
 
             // repaint affected sprite directly to output device (at
             // the actual screen output position)
