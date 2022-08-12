@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e1f51bc_f5f0de94",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-08-12T19:34:21Z",
+      "side": 1,
+      "message": "I see some asserts in crashtesting since this commit:\nsw/source/filter/xml/xmltble.cxx:1163: void SwXMLExport::ExportTable(const SwTableNode \u0026): Assertion `it !\u003d rFormats.end()\u0027 failed.\nTo reproduce one...\n\nwget https://bugs.documentfoundation.org/attachment.cgi?id\u003d57860 -O ~/fdo46822-1.docx\n./instdir/program/soffice.bin --headless --convert-to odt ~/fdo46822-1.docx\n",
+      "revId": "5a9fe1d80ea977c439dd10ee2056abe6b0cb4d07",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
