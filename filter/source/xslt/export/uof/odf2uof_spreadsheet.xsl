@@ -3700,7 +3700,7 @@
                         <xsl:attribute name="uof:attrList">标识符 名称 类型 别名 基式样引用</xsl:attribute>
                         <xsl:attribute name="字:标识符"><xsl:value-of select="@style:name"/></xsl:attribute>
                         <xsl:attribute name="字:名称"><xsl:value-of select="@style:name"/></xsl:attribute>
-                        <xsl:attribute name="字:类型">custum</xsl:attribute>
+                        <xsl:attribute name="字:类型">custom</xsl:attribute>
                         <xsl:attribute name="字:基式样引用"><xsl:value-of select="@style:parent-style-name"/></xsl:attribute>
                         <xsl:call-template name="字:字体"/>
                     </xsl:element>
