@@ -295,7 +295,7 @@ static void lcl_DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter, SvTreeListE
         }
 
         if (const OUString tooltip = pTabListBox->GetEntryTooltip(pEntry); !tooltip.isEmpty())
-            rJsonWriter.put("alt", tooltip);
+            rJsonWriter.put("tooltip", tooltip);
 
         if (pTabListBox->IsSelected(pEntry))
             rJsonWriter.put("selected", "true");
