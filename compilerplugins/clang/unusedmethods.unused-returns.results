@@ -1,11 +1,11 @@
 connectivity/source/inc/java/lang/Object.hxx:109
     int connectivity::java_lang_Object::callIntMethodWithIntArg_ThrowRuntime(const char *,struct _jmethodID *&,int) const
 connectivity/source/inc/odbc/OConnection.hxx:74
-    short connectivity::odbc::OConnection::Construct(const class rtl::OUString &,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &)
+    short connectivity::odbc::OConnection::Construct(const rtl::OUString &,const com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &)
 connectivity/source/inc/odbc/OStatement.hxx:113
-    _Bool connectivity::odbc::OStatement_Base::lockIfNecessary(const class rtl::OUString &)
-cui/source/inc/iconcdlg.hxx:70
-    _Bool IconChoicePage::FillItemSet(class SfxItemSet *)
+    _Bool connectivity::odbc::OStatement_Base::lockIfNecessary(const rtl::OUString &)
+cui/source/inc/iconcdlg.hxx:71
+    _Bool IconChoicePage::FillItemSet(SfxItemSet *)
 dbaccess/source/ui/app/AppSwapWindow.hxx:84
     _Bool dbaui::OApplicationSwapWindow::onContainerSelected(enum dbaui::ElementType)
 extensions/source/scanner/sane.hxx:105
@@ -21,31 +21,23 @@ extensions/source/scanner/sanedlg.hxx:87
 extensions/source/scanner/sanedlg.hxx:101
     _Bool SaneDlg::SetAdjustedNumericalValue(const char *,double,int)
 framework/source/fwe/classes/addonsoptions.cxx:282
-    _Bool framework::AddonsOptions_Impl::ReadToolBarItemSet(const class rtl::OUString &,class com::sun::star::uno::Sequence<class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> > &)
+    _Bool framework::AddonsOptions_Impl::ReadToolBarItemSet(const rtl::OUString &,com::sun::star::uno::Sequence<com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> > &)
 framework/source/fwe/classes/addonsoptions.cxx:284
-    _Bool framework::AddonsOptions_Impl::ReadNotebookBarItemSet(const class rtl::OUString &,class com::sun::star::uno::Sequence<class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> > &)
+    _Bool framework::AddonsOptions_Impl::ReadNotebookBarItemSet(const rtl::OUString &,com::sun::star::uno::Sequence<com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> > &)
 i18nlangtag/source/languagetag/languagetag.cxx:298
-    const class rtl::OUString & LanguageTagImpl::getBcp47() const
-idlc/inc/aststack.hxx:38
-    class AstStack * AstStack::push(class AstScope *)
+    const rtl::OUString & LanguageTagImpl::getBcp47() const
 include/basegfx/range/b2dconnectedranges.hxx:215
     type-parameter-?-? basegfx::B2DConnectedRanges::forEachAggregate(type-parameter-?-?) const
-include/basegfx/vector/b2dvector.hxx:113
-    class basegfx::B2DVector & basegfx::B2DVector::setLength(double)
-include/basegfx/vector/b2ivector.hxx:98
-    class basegfx::B2IVector & basegfx::B2IVector::setLength(double)
 include/basegfx/vector/b3dvector.hxx:144
-    class basegfx::B3DVector & basegfx::B3DVector::setLength(double)
+    basegfx::B3DVector & basegfx::B3DVector::setLength(double)
 include/basegfx/vector/b3dvector.hxx:169
-    class basegfx::B3DVector & basegfx::B3DVector::normalize()
+    basegfx::B3DVector & basegfx::B3DVector::normalize()
 include/comphelper/backupfilehelper.hxx:205
-    _Bool comphelper::BackupFileHelper::tryPush_extensionInfo(class std::basic_string_view<char16_t>)
-include/comphelper/multiinterfacecontainer4.hxx:94
-    int comphelper::OMultiTypeInterfaceContainerHelperVar4::addInterface(const type-parameter-?-? &,const Reference<type-parameter-?-?> &)
-include/editeng/editview.hxx:264
-    class ErrCode EditView::Read(class SvStream &,enum EETextFormat,class SvKeyValueIterator *)
+    _Bool comphelper::BackupFileHelper::tryPush_extensionInfo(std::basic_string_view<char16_t>)
+include/editeng/editview.hxx:263
+    ErrCode EditView::Read(SvStream &,enum EETextFormat,SvKeyValueIterator *)
 include/editeng/outliner.hxx:279
-    _Bool OutlinerView::Command(const class CommandEvent &)
+    _Bool OutlinerView::Command(const CommandEvent &)
 include/oox/crypto/AgileEngine.hxx:120
     _Bool oox::crypto::AgileEngine::decryptHmacKey()
 include/oox/crypto/AgileEngine.hxx:121
@@ -53,336 +45,346 @@ include/oox/crypto/AgileEngine.hxx:121
 include/oox/crypto/AgileEngine.hxx:136
     _Bool oox::crypto::AgileEngine::encryptHmacValue()
 include/oox/crypto/CryptoEngine.hxx:46
-    _Bool oox::crypto::CryptoEngine::decrypt(class oox::BinaryXInputStream &,class oox::BinaryXOutputStream &)
+    _Bool oox::crypto::CryptoEngine::decrypt(oox::BinaryXInputStream &,oox::BinaryXOutputStream &)
 include/oox/crypto/CryptTools.hxx:111
-    _Bool oox::crypto::CryptoHash::update(class std::vector<unsigned char> &,unsigned int)
+    _Bool oox::crypto::CryptoHash::update(std::vector<unsigned char> &,unsigned int)
 include/oox/dump/dumperbase.hxx:640
     long oox::dump::FlagsList::getIgnoreFlags() const
 include/oox/dump/dumperbase.hxx:1410
-    type-parameter-?-? oox::dump::InputObjectBase::dumpName(const class oox::dump::String &,const class oox::dump::NameListWrapper &)
+    type-parameter-?-? oox::dump::InputObjectBase::dumpName(const oox::dump::String &,const oox::dump::NameListWrapper &)
 include/oox/dump/dumperbase.hxx:1416
-    type-parameter-?-? oox::dump::InputObjectBase::dumpBin(const class oox::dump::String &,const class oox::dump::NameListWrapper &)
+    type-parameter-?-? oox::dump::InputObjectBase::dumpBin(const oox::dump::String &,const oox::dump::NameListWrapper &)
 include/oox/dump/dumperbase.hxx:1418
-    type-parameter-?-? oox::dump::InputObjectBase::dumpFix(const class oox::dump::String &,const class oox::dump::NameListWrapper &)
+    type-parameter-?-? oox::dump::InputObjectBase::dumpFix(const oox::dump::String &,const oox::dump::NameListWrapper &)
 include/oox/dump/dumperbase.hxx:1422
     type-parameter-?-? oox::dump::InputObjectBase::dumpValue(const struct oox::dump::ItemFormat &)
 include/oox/dump/dumperbase.hxx:1425
-    type-parameter-?-? oox::dump::InputObjectBase::dumpName(_Bool,const class oox::dump::String &,const class oox::dump::NameListWrapper &)
+    type-parameter-?-? oox::dump::InputObjectBase::dumpName(_Bool,const oox::dump::String &,const oox::dump::NameListWrapper &)
 include/oox/dump/dumperbase.hxx:1427
-    type-parameter-?-? oox::dump::InputObjectBase::dumpDec(_Bool,const class oox::dump::String &,const class oox::dump::NameListWrapper &)
+    type-parameter-?-? oox::dump::InputObjectBase::dumpDec(_Bool,const oox::dump::String &,const oox::dump::NameListWrapper &)
 include/oox/dump/dumperbase.hxx:1431
-    type-parameter-?-? oox::dump::InputObjectBase::dumpBin(_Bool,const class oox::dump::String &,const class oox::dump::NameListWrapper &)
+    type-parameter-?-? oox::dump::InputObjectBase::dumpBin(_Bool,const oox::dump::String &,const oox::dump::NameListWrapper &)
 include/oox/dump/dumperbase.hxx:1433
-    type-parameter-?-? oox::dump::InputObjectBase::dumpFix(_Bool,const class oox::dump::String &,const class oox::dump::NameListWrapper &)
+    type-parameter-?-? oox::dump::InputObjectBase::dumpFix(_Bool,const oox::dump::String &,const oox::dump::NameListWrapper &)
 include/oox/dump/dumperbase.hxx:1435
-    type-parameter-?-? oox::dump::InputObjectBase::dumpBool(_Bool,const class oox::dump::String &,const class oox::dump::NameListWrapper &)
+    type-parameter-?-? oox::dump::InputObjectBase::dumpBool(_Bool,const oox::dump::String &,const oox::dump::NameListWrapper &)
 include/oox/dump/dumperbase.hxx:1437
     type-parameter-?-? oox::dump::InputObjectBase::dumpValue(_Bool,const struct oox::dump::ItemFormat &)
-include/oox/dump/oledumper.hxx:310
-    _Bool oox::dump::AxPropertyObjectBase::dumpBoolProperty()
 include/oox/dump/oledumper.hxx:311
-    int oox::dump::AxPropertyObjectBase::dumpHmmProperty()
+    _Bool oox::dump::AxPropertyObjectBase::dumpBoolProperty()
 include/oox/dump/oledumper.hxx:312
+    int oox::dump::AxPropertyObjectBase::dumpHmmProperty()
+include/oox/dump/oledumper.hxx:313
     unsigned char oox::dump::AxPropertyObjectBase::dumpMousePtrProperty()
-include/oox/dump/oledumper.hxx:314
+include/oox/dump/oledumper.hxx:315
     type-parameter-?-? oox::dump::AxPropertyObjectBase::dumpBorderStyleProperty(type-parameter-?-?)
-include/oox/dump/oledumper.hxx:316
-    type-parameter-?-? oox::dump::AxPropertyObjectBase::dumpSpecialEffectProperty(type-parameter-?-?)
 include/oox/dump/oledumper.hxx:317
-    unsigned int oox::dump::AxPropertyObjectBase::dumpEnabledProperty()
+    type-parameter-?-? oox::dump::AxPropertyObjectBase::dumpSpecialEffectProperty(type-parameter-?-?)
 include/oox/dump/oledumper.hxx:318
-    int oox::dump::AxPropertyObjectBase::dumpOrientationProperty()
+    unsigned int oox::dump::AxPropertyObjectBase::dumpEnabledProperty()
 include/oox/dump/oledumper.hxx:319
-    int oox::dump::AxPropertyObjectBase::dumpDelayProperty()
+    int oox::dump::AxPropertyObjectBase::dumpOrientationProperty()
 include/oox/dump/oledumper.hxx:320
-    unsigned int oox::dump::AxPropertyObjectBase::dumpImagePosProperty()
+    int oox::dump::AxPropertyObjectBase::dumpDelayProperty()
 include/oox/dump/oledumper.hxx:321
-    unsigned char oox::dump::AxPropertyObjectBase::dumpImageSizeModeProperty()
+    unsigned int oox::dump::AxPropertyObjectBase::dumpImagePosProperty()
 include/oox/dump/oledumper.hxx:322
+    unsigned char oox::dump::AxPropertyObjectBase::dumpImageSizeModeProperty()
+include/oox/dump/oledumper.hxx:323
     unsigned char oox::dump::AxPropertyObjectBase::dumpImageAlignProperty()
-include/oox/dump/oledumper.hxx:325
-    unsigned int oox::dump::AxPropertyObjectBase::dumpColorProperty(unsigned int)
 include/oox/dump/oledumper.hxx:326
+    unsigned int oox::dump::AxPropertyObjectBase::dumpColorProperty(unsigned int)
+include/oox/dump/oledumper.hxx:327
     char16_t oox::dump::AxPropertyObjectBase::dumpUnicodeProperty()
 include/oox/export/shapes.hxx:137
-    class oox::drawingml::ShapeExport & oox::drawingml::ShapeExport::WriteNonVisualDrawingProperties(const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &,const char *)
+    oox::drawingml::ShapeExport & oox::drawingml::ShapeExport::WriteNonVisualDrawingProperties(const com::sun::star::uno::Reference<com::sun::star::drawing::XShape> &,const char *)
 include/oox/export/shapes.hxx:185
-    class oox::drawingml::ShapeExport & oox::drawingml::ShapeExport::WriteTextBox(const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &,int,_Bool)
+    oox::drawingml::ShapeExport & oox::drawingml::ShapeExport::WriteTextBox(const com::sun::star::uno::Reference<com::sun::star::uno::XInterface> &,int,_Bool)
 include/oox/helper/binaryoutputstream.hxx:78
-    class oox::BinaryOutputStream & oox::BinaryOutputStream::WriteInt16(short)
+    oox::BinaryOutputStream & oox::BinaryOutputStream::WriteInt16(short)
 include/oox/helper/binaryoutputstream.hxx:79
-    class oox::BinaryOutputStream & oox::BinaryOutputStream::WriteUInt16(unsigned short)
+    oox::BinaryOutputStream & oox::BinaryOutputStream::WriteUInt16(unsigned short)
 include/oox/helper/propertyset.hxx:110
-    _Bool oox::PropertySet::setProperty(int,class Color)
+    _Bool oox::PropertySet::setProperty(int,Color)
 include/oox/ole/axbinarywriter.hxx:115
-    _Bool oox::ole::AxBinaryPropertyWriter::ComplexProperty::writeProperty(class oox::ole::AxAlignedOutputStream &)
+    _Bool oox::ole::AxBinaryPropertyWriter::ComplexProperty::writeProperty(oox::ole::AxAlignedOutputStream &)
 include/oox/ole/olehelper.hxx:176
-    _Bool oox::ole::MSConvertOCXControls::importControlFromStream(class oox::BinaryInputStream &,class com::sun::star::uno::Reference<class com::sun::star::form::XFormComponent> &,const class rtl::OUString &)
+    _Bool oox::ole::MSConvertOCXControls::importControlFromStream(oox::BinaryInputStream &,com::sun::star::uno::Reference<com::sun::star::form::XFormComponent> &,std::basic_string_view<char16_t>)
 include/oox/ole/olehelper.hxx:187
-    _Bool oox::ole::MSConvertOCXControls::ReadOCXCtlsStream(const class tools::SvRef<class SotStorageStream> &,class com::sun::star::uno::Reference<class com::sun::star::form::XFormComponent> &,int,int)
+    _Bool oox::ole::MSConvertOCXControls::ReadOCXCtlsStream(const tools::SvRef<SotStorageStream> &,com::sun::star::uno::Reference<com::sun::star::form::XFormComponent> &,int,int)
 include/sax/fshelper.hxx:136
-    class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(int)
+    sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(int)
 include/sax/fshelper.hxx:137
-    class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(long)
+    sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(long)
 include/sax/fshelper.hxx:138
-    class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(double)
+    sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(double)
 include/sax/fshelper.hxx:140
-    class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::writeEscaped(const char *)
+    sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::writeEscaped(const char *)
 include/sfx2/linkmgr.hxx:65
-    _Bool sfx2::LinkManager::InsertLink(class sfx2::SvBaseLink *,enum sfx2::SvBaseLinkObjectType,enum SfxLinkUpdateMode,const class rtl::OUString *)
+    _Bool sfx2::LinkManager::InsertLink(sfx2::SvBaseLink *,enum sfx2::SvBaseLinkObjectType,enum SfxLinkUpdateMode,const rtl::OUString *)
 include/sfx2/lnkbase.hxx:112
-    class sfx2::SvLinkSource * sfx2::SvBaseLink::GetRealObject()
-include/svl/macitem.hxx:88
-    class SvStream & SvxMacroTableDtor::Write(class SvStream &) const
-include/svtools/ctrlbox.hxx:377
+    sfx2::SvLinkSource * sfx2::SvBaseLink::GetRealObject()
+include/svl/macitem.hxx:89
+    SvStream & SvxMacroTableDtor::Write(SvStream &) const
+include/svtools/ctrlbox.hxx:378
     _Bool FontNameBox::get_entry_selection_bounds(int &,int &)
 include/svx/autoformathelper.hxx:212
-    _Bool AutoFormatBase::LoadBlockA(class SvStream &,const struct AutoFormatVersions &,unsigned short)
+    _Bool AutoFormatBase::LoadBlockA(SvStream &,const struct AutoFormatVersions &,unsigned short)
 include/svx/autoformathelper.hxx:213
-    _Bool AutoFormatBase::LoadBlockB(class SvStream &,const struct AutoFormatVersions &,unsigned short)
+    _Bool AutoFormatBase::LoadBlockB(SvStream &,const struct AutoFormatVersions &,unsigned short)
 include/svx/autoformathelper.hxx:215
-    _Bool AutoFormatBase::SaveBlockA(class SvStream &,unsigned short) const
+    _Bool AutoFormatBase::SaveBlockA(SvStream &,unsigned short) const
 include/svx/autoformathelper.hxx:216
-    _Bool AutoFormatBase::SaveBlockB(class SvStream &,unsigned short) const
+    _Bool AutoFormatBase::SaveBlockB(SvStream &,unsigned short) const
 include/svx/dlgctrl.hxx:101
-    class Point SvxRectCtl::SetActualRPWithoutInvalidate(enum RectPoint)
+    Point SvxRectCtl::SetActualRPWithoutInvalidate(enum RectPoint)
 include/svx/framelink.hxx:159
-    class svx::frame::Style & svx::frame::Style::MirrorSelf()
+    svx::frame::Style & svx::frame::Style::MirrorSelf()
 include/svx/gallerybinaryengine.hxx:105
-    class SvStream & GalleryBinaryEngine::writeGalleryTheme(class SvStream &,const class GalleryTheme &,const class GalleryThemeEntry *)
+    SvStream & GalleryBinaryEngine::writeGalleryTheme(SvStream &,const GalleryTheme &,const GalleryThemeEntry *)
 include/svx/gallerybinaryengineentry.hxx:57
-    class std::unique_ptr<class GalleryTheme> & GalleryBinaryEngineEntry::getCachedTheme(class std::unique_ptr<class GalleryTheme> &)
+    std::unique_ptr<GalleryTheme> & GalleryBinaryEngineEntry::getCachedTheme(std::unique_ptr<GalleryTheme> &)
+include/test/a11y/AccessibilityTools.hxx:62
+    rtl::OUString AccessibilityTools::getStateName(const short)
 include/test/helper/shape.hxx:41
-    class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> apitest::helper::shape::createEllipse(const class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> &,const int,const int,const int,const int)
+    com::sun::star::uno::Reference<com::sun::star::drawing::XShape> apitest::helper::shape::createEllipse(const com::sun::star::uno::Reference<com::sun::star::lang::XComponent> &,const int,const int,const int,const int)
 include/test/sheet/xdocumentauditing.hxx:28
-    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> apitest::XDocumentAuditing::getXMSF()
+    com::sun::star::uno::Reference<com::sun::star::uno::XInterface> apitest::XDocumentAuditing::getXMSF()
 include/test/sheet/xnamedrange.hxx:22
-    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> apitest::XNamedRange::init()
+    com::sun::star::uno::Reference<com::sun::star::uno::XInterface> apitest::XNamedRange::init()
 include/test/sheet/xspreadsheets2.hxx:41
-    class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> apitest::XSpreadsheets2::getComponent()
+    com::sun::star::uno::Reference<com::sun::star::lang::XComponent> apitest::XSpreadsheets2::getComponent()
 include/tools/config.hxx:38
     _Bool Config::ImplUpdateConfig() const
-include/tools/multisel.hxx:93
+include/tools/multisel.hxx:94
     _Bool StringRangeEnumerator::insertRange(int,int,_Bool)
-include/tools/urlobj.hxx:739
-    _Bool INetURLObject::SetParam(class std::basic_string_view<char16_t>,enum INetURLObject::EncodeMechanism,unsigned short)
+include/tools/urlobj.hxx:738
+    _Bool INetURLObject::SetParam(std::basic_string_view<char16_t>,enum INetURLObject::EncodeMechanism,unsigned short)
 include/unotools/localedatawrapper.hxx:159
-    const class com::sun::star::uno::Sequence<struct com::sun::star::lang::Locale> & LocaleDataWrapper::getAllInstalledLocaleNames() const
+    const com::sun::star::uno::Sequence<struct com::sun::star::lang::Locale> & LocaleDataWrapper::getAllInstalledLocaleNames() const
 include/vcl/bitmapex.hxx:226
-    _Bool BitmapEx::Rotate(struct o3tl::strong_int<short, struct FractionTag<10> >,const class Color &)
-include/vcl/filter/PngImageReader.hxx:42
-    _Bool vcl::PngImageReader::read(class BitmapEx &)
+    _Bool BitmapEx::Rotate(struct o3tl::strong_int<short, struct FractionTag<10> >,const Color &)
 include/vcl/filter/SvmReader.hxx:36
-    class SvStream & SvmReader::Read(class GDIMetaFile &,struct ImplMetaReadData *)
+    SvStream & SvmReader::Read(GDIMetaFile &,struct ImplMetaReadData *)
 include/vcl/filter/SvmWriter.hxx:37
-    class SvStream & SvmWriter::Write(const class GDIMetaFile &)
+    SvStream & SvmWriter::Write(const GDIMetaFile &)
 include/vcl/formatter.hxx:218
-    _Bool Formatter::SetFormat(const class rtl::OUString &,struct o3tl::strong_int<unsigned short, struct LanguageTypeTag>)
-include/vcl/graphicfilter.hxx:290
-    class ErrCode GraphicFilter::ExportGraphic(const class Graphic &,const class INetURLObject &,unsigned short,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> *)
-include/vcl/GraphicNativeMetadata.hxx:35
-    _Bool GraphicNativeMetadata::read(class SvStream &)
+    _Bool Formatter::SetFormat(const rtl::OUString &,struct o3tl::strong_int<unsigned short, struct LanguageTypeTag>)
+include/vcl/graphicfilter.hxx:256
+    ErrCode GraphicFilter::ExportGraphic(const Graphic &,const INetURLObject &,unsigned short,const com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> *)
+include/vcl/GraphicNativeMetadata.hxx:34
+    _Bool GraphicNativeMetadata::read(SvStream &)
 include/vcl/GraphicNativeTransform.hxx:33
     _Bool GraphicNativeTransform::rotateBitmapOnly(struct o3tl::strong_int<short, struct FractionTag<10> >)
 include/vcl/GraphicNativeTransform.hxx:35
-    _Bool GraphicNativeTransform::rotateGeneric(struct o3tl::strong_int<short, struct FractionTag<10> >,class std::basic_string_view<char16_t>)
-include/vcl/menu.hxx:385
-    _Bool Menu::HandleMenuActivateEvent(class Menu *) const
-include/vcl/menu.hxx:386
-    _Bool Menu::HandleMenuDeActivateEvent(class Menu *) const
+    _Bool GraphicNativeTransform::rotateGeneric(struct o3tl::strong_int<short, struct FractionTag<10> >,std::basic_string_view<char16_t>)
+include/vcl/menu.hxx:387
+    _Bool Menu::HandleMenuActivateEvent(Menu *) const
+include/vcl/menu.hxx:388
+    _Bool Menu::HandleMenuDeActivateEvent(Menu *) const
 include/vcl/texteng.hxx:271
-    _Bool TextEngine::Read(class SvStream &,const class TextSelection *)
-include/vcl/window.hxx:1398
-    _Bool vcl::Window::set_font_attribute(const class rtl::OString &,const class rtl::OUString &)
+    _Bool TextEngine::Read(SvStream &,const TextSelection *)
+include/vcl/window.hxx:1401
+    _Bool vcl::Window::set_font_attribute(const rtl::OString &,std::basic_string_view<char16_t>)
 include/xmloff/unointerfacetouniqueidentifiermapper.hxx:65
-    _Bool comphelper::UnoInterfaceToUniqueIdentifierMapper::registerReservedReference(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &)
-include/xmloff/xmluconv.hxx:281
-    _Bool SvXMLUnitConverter::convertNumFormat(short &,const class rtl::OUString &,class std::basic_string_view<char16_t>,_Bool) const
-linguistic/source/lngsvcmgr.hxx:118
-    _Bool LngSvcMgr::SaveCfgSvcs(class std::basic_string_view<char16_t>)
+    _Bool comphelper::UnoInterfaceToUniqueIdentifierMapper::registerReservedReference(const rtl::OUString &,const com::sun::star::uno::Reference<com::sun::star::uno::XInterface> &)
+include/xmloff/xmluconv.hxx:279
+    _Bool SvXMLUnitConverter::convertNumFormat(short &,const rtl::OUString &,std::basic_string_view<char16_t>,_Bool) const
+linguistic/source/lngsvcmgr.hxx:117
+    _Bool LngSvcMgr::SaveCfgSvcs(std::basic_string_view<char16_t>)
 lotuswordpro/inc/lwpsvstream.hxx:80
-    class LwpSvStream & LwpSvStream::ReadUInt8(unsigned char &)
+    LwpSvStream & LwpSvStream::ReadUInt8(unsigned char &)
 lotuswordpro/inc/lwpsvstream.hxx:81
-    class LwpSvStream & LwpSvStream::ReadUInt16(unsigned short &)
+    LwpSvStream & LwpSvStream::ReadUInt16(unsigned short &)
 lotuswordpro/inc/lwpsvstream.hxx:82
-    class LwpSvStream & LwpSvStream::ReadUInt32(unsigned int &)
+    LwpSvStream & LwpSvStream::ReadUInt32(unsigned int &)
+sc/inc/column.hxx:677
+    _Bool ScColumn::DeleteSparkline(int)
 sc/inc/orcusfilters.hxx:44
-    _Bool ScOrcusFilters::importODS_Styles(class ScDocument &,class rtl::OUString &) const
-sc/inc/scabstdlg.hxx:56
+    _Bool ScOrcusFilters::importODS_Styles(ScDocument &,rtl::OUString &) const
+sc/inc/scabstdlg.hxx:55
     _Bool ScAsyncTabController::StartExecuteAsync(struct VclAbstractDialog::AsyncContext &)
-sc/source/core/opencl/formulagroupcl.cxx:1095
-    unsigned long sc::opencl::(anonymous namespace)::DynamicKernelSlidingArgument::GenReductionLoopHeader(class std::basic_stringstream<char> &,_Bool &)
-sc/source/core/opencl/formulagroupcl.cxx:1366
-    unsigned long sc::opencl::(anonymous namespace)::ParallelReductionVectorRef::GenReductionLoopHeader(class std::basic_stringstream<char> &,int,_Bool &)
+sc/source/core/opencl/formulagroupcl.cxx:1096
+    unsigned long sc::opencl::(anonymous namespace)::DynamicKernelSlidingArgument::GenReductionLoopHeader(std::basic_stringstream<char> &,_Bool &)
+sc/source/core/opencl/formulagroupcl.cxx:1367
+    unsigned long sc::opencl::(anonymous namespace)::ParallelReductionVectorRef::GenReductionLoopHeader(std::basic_stringstream<char> &,int,_Bool &)
 sc/source/filter/inc/workbookhelper.hxx:262
-    _Bool oox::xls::WorkbookHelper::importOoxFragment(const class rtl::Reference<class oox::core::FragmentHandler> &,class oox::core::FastParser &)
+    _Bool oox::xls::WorkbookHelper::importOoxFragment(const rtl::Reference<oox::core::FragmentHandler> &,oox::core::FastParser &)
 sc/source/filter/xml/XMLStylesExportHelper.hxx:174
-    _Bool ScFormatRangeStyles::AddStyleName(const class rtl::OUString &,int &,const _Bool)
+    _Bool ScFormatRangeStyles::AddStyleName(const rtl::OUString &,int &,const _Bool)
 sc/source/ui/inc/anyrefdg.hxx:95
     _Bool ScRefHandler::DoClose(unsigned short)
-sc/source/ui/inc/docfunc.hxx:113
-    _Bool ScDocFunc::SetFormulaCells(const class ScAddress &,class std::vector<class ScFormulaCell *> &,_Bool)
-sc/source/ui/inc/docfunc.hxx:161
-    _Bool ScDocFunc::Protect(short,const class rtl::OUString &)
+sc/source/ui/inc/docfunc.hxx:117
+    _Bool ScDocFunc::SetFormulaCells(const ScAddress &,std::vector<ScFormulaCell *> &,_Bool)
+sc/source/ui/inc/docfunc.hxx:165
+    _Bool ScDocFunc::Protect(short,const rtl::OUString &)
+sc/source/ui/inc/docfunc.hxx:246
+    _Bool ScDocFunc::ChangeSparklineGroupAttributes(const std::shared_ptr<sc::SparklineGroup> &,const sc::SparklineAttributes &)
 sc/source/ui/inc/drawview.hxx:159
-    _Bool ScDrawView::calculateGridOffsetForSdrObject(class SdrObject &,class basegfx::B2DVector &) const
+    _Bool ScDrawView::calculateGridOffsetForSdrObject(SdrObject &,basegfx::B2DVector &) const
 sc/source/ui/inc/drawview.hxx:162
-    _Bool ScDrawView::calculateGridOffsetForB2DRange(const class basegfx::B2DRange &,class basegfx::B2DVector &) const
+    _Bool ScDrawView::calculateGridOffsetForB2DRange(const basegfx::B2DRange &,basegfx::B2DVector &) const
 sc/source/ui/inc/select.hxx:71
     _Bool ScViewFunctionSet::SetCursorAtCell(short,int,_Bool)
 sc/source/ui/vba/vbaformat.hxx:69
-    class com::sun::star::uno::Any ScVbaFormat::getAddIndent()
+    com::sun::star::uno::Any ScVbaFormat::getAddIndent()
 sc/source/ui/vba/vbaformat.hxx:73
-    class com::sun::star::uno::Any ScVbaFormat::Borders(const class com::sun::star::uno::Any &)
+    com::sun::star::uno::Any ScVbaFormat::Borders(const com::sun::star::uno::Any &)
 sc/source/ui/vba/vbaformat.hxx:76
-    class com::sun::star::uno::Reference<class ooo::vba::excel::XFont> ScVbaFormat::Font()
+    com::sun::star::uno::Reference<ooo::vba::excel::XFont> ScVbaFormat::Font()
 sc/source/ui/vba/vbaformat.hxx:79
-    class com::sun::star::uno::Reference<class ooo::vba::excel::XInterior> ScVbaFormat::Interior()
+    com::sun::star::uno::Reference<ooo::vba::excel::XInterior> ScVbaFormat::Interior()
 sc/source/ui/vba/vbaformat.hxx:85
-    class com::sun::star::uno::Any ScVbaFormat::getNumberFormat()
+    com::sun::star::uno::Any ScVbaFormat::getNumberFormat()
 sc/source/ui/vba/vbaformat.hxx:91
-    class com::sun::star::uno::Any ScVbaFormat::getNumberFormatLocal()
+    com::sun::star::uno::Any ScVbaFormat::getNumberFormatLocal()
 sc/source/ui/vba/vbaformat.hxx:97
-    class com::sun::star::uno::Any ScVbaFormat::getIndentLevel()
+    com::sun::star::uno::Any ScVbaFormat::getIndentLevel()
 sc/source/ui/vba/vbaformat.hxx:103
-    class com::sun::star::uno::Any ScVbaFormat::getHorizontalAlignment()
+    com::sun::star::uno::Any ScVbaFormat::getHorizontalAlignment()
 sc/source/ui/vba/vbaformat.hxx:109
-    class com::sun::star::uno::Any ScVbaFormat::getVerticalAlignment()
+    com::sun::star::uno::Any ScVbaFormat::getVerticalAlignment()
 sc/source/ui/vba/vbaformat.hxx:115
-    class com::sun::star::uno::Any ScVbaFormat::getOrientation()
+    com::sun::star::uno::Any ScVbaFormat::getOrientation()
 sc/source/ui/vba/vbaformat.hxx:121
-    class com::sun::star::uno::Any ScVbaFormat::getShrinkToFit()
+    com::sun::star::uno::Any ScVbaFormat::getShrinkToFit()
 sc/source/ui/vba/vbaformat.hxx:127
-    class com::sun::star::uno::Any ScVbaFormat::getWrapText()
+    com::sun::star::uno::Any ScVbaFormat::getWrapText()
 sc/source/ui/vba/vbaformat.hxx:133
-    class com::sun::star::uno::Any ScVbaFormat::getLocked()
+    com::sun::star::uno::Any ScVbaFormat::getLocked()
 sc/source/ui/vba/vbaformat.hxx:139
-    class com::sun::star::uno::Any ScVbaFormat::getFormulaHidden()
+    com::sun::star::uno::Any ScVbaFormat::getFormulaHidden()
 sc/source/ui/vba/vbaformat.hxx:145
-    class com::sun::star::uno::Any ScVbaFormat::getMergeCells()
+    com::sun::star::uno::Any ScVbaFormat::getMergeCells()
 sc/source/ui/vba/vbaformat.hxx:151
-    class com::sun::star::uno::Any ScVbaFormat::getReadingOrder()
+    com::sun::star::uno::Any ScVbaFormat::getReadingOrder()
 sd/source/filter/eppt/pptx-epptooxml.cxx:132
-    class oox::drawingml::ShapeExport & oox::core::PowerPointShapeExport::WritePageShape(const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &,enum PageType,_Bool)
+    oox::drawingml::ShapeExport & oox::core::PowerPointShapeExport::WritePageShape(const com::sun::star::uno::Reference<com::sun::star::drawing::XShape> &,enum PageType,_Bool)
 sd/source/ui/inc/DrawViewShell.hxx:252
     _Bool sd::DrawViewShell::SelectPage(unsigned short,unsigned short)
 sd/source/ui/inc/navigatr.hxx:120
-    _Bool SdNavigatorWin::InsertFile(const class rtl::OUString &)
+    _Bool SdNavigatorWin::InsertFile(const rtl::OUString &)
 sd/source/ui/inc/OutlineViewShell.hxx:114
-    class ErrCode sd::OutlineViewShell::ReadRtf(class SvStream &)
+    ErrCode sd::OutlineViewShell::ReadRtf(SvStream &)
 sd/source/ui/remotecontrol/IBluetoothSocket.hxx:36
     int sd::IBluetoothSocket::write(const void *,unsigned int)
 sdext/source/pdfimport/tree/style.hxx:155
-    int pdfi::StyleContainer::getStandardStyleId(class std::basic_string_view<char>)
-sfx2/inc/autoredactdialog.hxx:135
-    _Bool SfxAutoRedactDialog::getTargets(class std::vector<struct std::pair<struct RedactionTarget, class rtl::OUString> > &)
+    int pdfi::StyleContainer::getStandardStyleId(std::basic_string_view<char>)
+sfx2/inc/autoredactdialog.hxx:140
+    _Bool SfxAutoRedactDialog::getTargets(std::vector<struct std::pair<struct RedactionTarget, rtl::OUString> > &)
 slideshow/source/engine/animationnodes/animationbasenode.hxx:62
     _Bool slideshow::internal::AnimationBaseNode::enqueueActivity() const
-sw/inc/calc.hxx:122
-    class SwSbxValue & SwSbxValue::MakeDouble()
-sw/inc/docary.hxx:265
-    _Bool SwRedlineTable::isMoved(unsigned long) const
+sw/inc/calc.hxx:124
+    SwSbxValue & SwSbxValue::MakeDouble()
+sw/inc/docary.hxx:299
+    _Bool SwExtraRedlineTable::DeleteAllTableRedlines(SwDoc &,const SwTable &,_Bool,enum RedlineType)
 sw/inc/docary.hxx:300
-    _Bool SwExtraRedlineTable::DeleteAllTableRedlines(class SwDoc &,const class SwTable &,_Bool,enum RedlineType)
+    _Bool SwExtraRedlineTable::DeleteTableRowRedline(SwDoc *,const SwTableLine &,_Bool,enum RedlineType)
 sw/inc/docary.hxx:301
-    _Bool SwExtraRedlineTable::DeleteTableRowRedline(class SwDoc *,const class SwTableLine &,_Bool,enum RedlineType)
-sw/inc/docary.hxx:302
-    _Bool SwExtraRedlineTable::DeleteTableCellRedline(class SwDoc *,const class SwTableBox &,_Bool,enum RedlineType)
-sw/inc/editsh.hxx:634
-    const class GraphicAttr * SwEditShell::GetGraphicAttr(class GraphicAttr &) const
+    _Bool SwExtraRedlineTable::DeleteTableCellRedline(SwDoc *,const SwTableBox &,_Bool,enum RedlineType)
+sw/inc/editsh.hxx:635
+    const GraphicAttr * SwEditShell::GetGraphicAttr(GraphicAttr &) const
+sw/inc/editsh.hxx:648
+    _Bool SwEditShell::GetGrfSize(Size &) const
+sw/inc/editsh.hxx:813
+    unsigned short SwEditShell::GetRefMarks(std::vector<rtl::OUString> *) const
 sw/inc/IDocumentUndoRedo.hxx:100
     _Bool IDocumentUndoRedo::Undo()
 sw/inc/IDocumentUndoRedo.hxx:181
-    _Bool IDocumentUndoRedo::Repeat(class sw::RepeatContext &,const unsigned short)
-sw/inc/tblafmt.hxx:269
-    _Bool SwTableAutoFormatTable::Load(class SvStream &)
+    _Bool IDocumentUndoRedo::Repeat(sw::RepeatContext &,const unsigned short)
+sw/inc/tblafmt.hxx:267
+    _Bool SwTableAutoFormatTable::Load(SvStream &)
+sw/qa/inc/swmodeltestbase.hxx:386
+    SwDoc * SwModelTestBase::createSwWebDoc(std::basic_string_view<char16_t>,const char *)
 sw/source/core/inc/laycache.hxx:64
-    _Bool SwLayoutCache::CompareLayout(const class SwDoc &) const
+    _Bool SwLayoutCache::CompareLayout(const SwDoc &) const
 sw/source/core/inc/scriptinfo.hxx:237
     _Bool SwScriptInfo::GetBoundsOfHiddenRange(struct o3tl::strong_int<int, struct Tag_TextFrameIndex>,struct o3tl::strong_int<int, struct Tag_TextFrameIndex> &,struct o3tl::strong_int<int, struct Tag_TextFrameIndex> &) const
 sw/source/filter/ww8/ww8toolbar.hxx:337
-    _Bool Tcg::ImportCustomToolBar(class SfxObjectShell &)
+    _Bool Tcg::ImportCustomToolBar(SfxObjectShell &)
 sw/source/uibase/inc/drawbase.hxx:54
-    _Bool SwDrawBase::MouseMove(const class MouseEvent &)
-sw/source/uibase/inc/fldmgr.hxx:116
-    const class com::sun::star::uno::Reference<class com::sun::star::text::XNumberingTypeInfo> & SwFieldMgr::GetNumberingInfo() const
+    _Bool SwDrawBase::MouseMove(const MouseEvent &)
+sw/source/uibase/inc/fldmgr.hxx:118
+    const com::sun::star::uno::Reference<com::sun::star::text::XNumberingTypeInfo> & SwFieldMgr::GetNumberingInfo() const
 sw/source/uibase/inc/mailmergewizard.hxx:79
     _Bool SwMailMergeWizard::skipUntil(unsigned short)
 sw/source/uibase/inc/numpara.hxx:61
-    _Bool SwParagraphNumTabPage::ExecuteEditNumStyle_Impl(unsigned short,const class rtl::OUString &,enum SfxStyleFamily)
-ucb/source/ucp/webdav-curl/ContentProperties.hxx:159
-    _Bool http_dav_ucp::CachableContentProperties::containsAllNames(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,class std::vector<class rtl::OUString> &) const
+    _Bool SwParagraphNumTabPage::ExecuteEditNumStyle_Impl(unsigned short,const rtl::OUString &,enum SfxStyleFamily)
+sw/source/uibase/inc/wrtsh.hxx:431
+    _Bool SwWrtShell::GotoContentControl(const SwFormatContentControl &)
+ucb/source/ucp/webdav-curl/ContentProperties.hxx:160
+    _Bool http_dav_ucp::CachableContentProperties::containsAllNames(const com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,std::vector<rtl::OUString> &) const
 vcl/inc/font/FeatureCollector.hxx:45
     _Bool vcl::font::FeatureCollector::collect()
 vcl/inc/impgraph.hxx:186
-    _Bool ImpGraphic::swapOutGraphic(class SvStream &)
-vcl/inc/pdf/pdfwriter_impl.hxx:1253
+    _Bool ImpGraphic::swapOutGraphic(SvStream &)
+vcl/inc/pdf/pdfwriter_impl.hxx:1265
     _Bool vcl::PDFWriterImpl::setCurrentStructureElement(int)
-vcl/inc/pdf/pdfwriter_impl.hxx:1254
+vcl/inc/pdf/pdfwriter_impl.hxx:1266
     _Bool vcl::PDFWriterImpl::setStructureAttribute(enum vcl::PDFWriter::StructAttribute,enum vcl::PDFWriter::StructAttributeValue)
-vcl/inc/pdf/pdfwriter_impl.hxx:1255
+vcl/inc/pdf/pdfwriter_impl.hxx:1267
     _Bool vcl::PDFWriterImpl::setStructureAttributeNumerical(enum vcl::PDFWriter::StructAttribute,int)
 vcl/inc/qt5/QtAccessibleWidget.hxx:48
-    class QString QtAccessibleWidget::tr(const char *,const char *,int)
+    QString QtAccessibleWidget::tr(const char *,const char *,int)
 vcl/inc/qt5/QtAccessibleWidget.hxx:48
-    class QString QtAccessibleWidget::trUtf8(const char *,const char *,int)
+    QString QtAccessibleWidget::trUtf8(const char *,const char *,int)
 vcl/inc/qt5/QtClipboard.hxx:36
-    class QString QtClipboard::tr(const char *,const char *,int)
+    QString QtClipboard::tr(const char *,const char *,int)
 vcl/inc/qt5/QtClipboard.hxx:36
-    class QString QtClipboard::trUtf8(const char *,const char *,int)
+    QString QtClipboard::trUtf8(const char *,const char *,int)
 vcl/inc/qt5/QtFilePicker.hxx:60
-    class QString QtFilePicker::tr(const char *,const char *,int)
+    QString QtFilePicker::tr(const char *,const char *,int)
 vcl/inc/qt5/QtFilePicker.hxx:60
-    class QString QtFilePicker::trUtf8(const char *,const char *,int)
-vcl/inc/qt5/QtFrame.hxx:69
-    class QString QtFrame::tr(const char *,const char *,int)
-vcl/inc/qt5/QtFrame.hxx:69
-    class QString QtFrame::trUtf8(const char *,const char *,int)
-vcl/inc/qt5/QtInstance.hxx:54
-    class QString QtInstance::tr(const char *,const char *,int)
-vcl/inc/qt5/QtInstance.hxx:54
-    class QString QtInstance::trUtf8(const char *,const char *,int)
+    QString QtFilePicker::trUtf8(const char *,const char *,int)
+vcl/inc/qt5/QtFrame.hxx:70
+    QString QtFrame::tr(const char *,const char *,int)
+vcl/inc/qt5/QtFrame.hxx:70
+    QString QtFrame::trUtf8(const char *,const char *,int)
+vcl/inc/qt5/QtInstance.hxx:55
+    QString QtInstance::tr(const char *,const char *,int)
+vcl/inc/qt5/QtInstance.hxx:55
+    QString QtInstance::trUtf8(const char *,const char *,int)
 vcl/inc/qt5/QtMainWindow.hxx:29
-    class QString QtMainWindow::tr(const char *,const char *,int)
+    QString QtMainWindow::tr(const char *,const char *,int)
 vcl/inc/qt5/QtMainWindow.hxx:29
-    class QString QtMainWindow::trUtf8(const char *,const char *,int)
-vcl/inc/qt5/QtMenu.hxx:40
-    class QString QtMenu::tr(const char *,const char *,int)
-vcl/inc/qt5/QtMenu.hxx:40
-    class QString QtMenu::trUtf8(const char *,const char *,int)
-vcl/inc/qt5/QtObject.hxx:34
-    class QString QtObject::tr(const char *,const char *,int)
-vcl/inc/qt5/QtObject.hxx:34
-    class QString QtObject::trUtf8(const char *,const char *,int)
+    QString QtMainWindow::trUtf8(const char *,const char *,int)
+vcl/inc/qt5/QtMenu.hxx:42
+    QString QtMenu::tr(const char *,const char *,int)
+vcl/inc/qt5/QtMenu.hxx:42
+    QString QtMenu::trUtf8(const char *,const char *,int)
+vcl/inc/qt5/QtObject.hxx:35
+    QString QtObject::tr(const char *,const char *,int)
+vcl/inc/qt5/QtObject.hxx:35
+    QString QtObject::trUtf8(const char *,const char *,int)
 vcl/inc/qt5/QtTimer.hxx:27
-    class QString QtTimer::tr(const char *,const char *,int)
+    QString QtTimer::tr(const char *,const char *,int)
 vcl/inc/qt5/QtTimer.hxx:27
-    class QString QtTimer::trUtf8(const char *,const char *,int)
-vcl/inc/qt5/QtWidget.hxx:35
-    class QString QtWidget::tr(const char *,const char *,int)
-vcl/inc/qt5/QtWidget.hxx:35
-    class QString QtWidget::trUtf8(const char *,const char *,int)
-vcl/inc/qt5/QtXAccessible.hxx:27
-    class QString QtXAccessible::tr(const char *,const char *,int)
-vcl/inc/qt5/QtXAccessible.hxx:27
-    class QString QtXAccessible::trUtf8(const char *,const char *,int)
-vcl/inc/salgdi.hxx:404
-    _Bool SalGraphics::UpdateSettings(class AllSettings &)
-vcl/inc/salgdi.hxx:406
-    _Bool SalGraphics::BlendBitmap(const struct SalTwoRect &,const class SalBitmap &,const class OutputDevice &)
-vcl/inc/salgdi.hxx:515
-    _Bool SalGraphics::implDrawGradient(const class basegfx::B2DPolyPolygon &,const struct SalGradient &)
-vcl/inc/salinst.hxx:176
+    QString QtTimer::trUtf8(const char *,const char *,int)
+vcl/inc/salgdi.hxx:414
+    _Bool SalGraphics::UpdateSettings(AllSettings &)
+vcl/inc/salgdi.hxx:416
+    _Bool SalGraphics::BlendBitmap(const struct SalTwoRect &,const SalBitmap &,const OutputDevice &)
+vcl/inc/salgdi.hxx:525
+    _Bool SalGraphics::implDrawGradient(const basegfx::B2DPolyPolygon &,const struct SalGradient &)
+vcl/inc/salinst.hxx:177
     _Bool SalInstance::CallEventCallback(const void *,int)
 vcl/inc/salprn.hxx:113
     _Bool SalPrinter::EndJob()
-vcl/inc/salvtables.hxx:1603
-    _Bool SalInstanceTreeView::get_iter_abs_pos(class weld::TreeIter &,int) const
+vcl/inc/salvtables.hxx:1621
+    _Bool SalInstanceTreeView::get_iter_abs_pos(weld::TreeIter &,int) const
 vcl/inc/unx/gtk/gtkdata.hxx:335
-    int GtkSalDisplay::CaptureMouse(class SalFrame *)
-vcl/inc/unx/salframe.h:167
+    int GtkSalDisplay::CaptureMouse(SalFrame *)
+vcl/inc/unx/salframe.h:168
     _Bool X11SalFrame::Dispatch(union _XEvent *)
-vcl/unx/kf5/KF5FilePicker.hxx:29
-    class QString KF5FilePicker::tr(const char *,const char *,int)
-vcl/unx/kf5/KF5FilePicker.hxx:29
-    class QString KF5FilePicker::trUtf8(const char *,const char *,int)
+workdir/../vcl/inc/qt5/QtWidget.hxx:36
+    QString QtWidget::tr(const char *,const char *,int)
+workdir/../vcl/inc/qt5/QtWidget.hxx:36
+    QString QtWidget::trUtf8(const char *,const char *,int)
+workdir/../vcl/inc/qt5/QtXAccessible.hxx:27
+    QString QtXAccessible::tr(const char *,const char *,int)
+workdir/../vcl/inc/qt5/QtXAccessible.hxx:27
+    QString QtXAccessible::trUtf8(const char *,const char *,int)
+workdir/../vcl/unx/kf5/KF5FilePicker.hxx:29
+    QString KF5FilePicker::tr(const char *,const char *,int)
+workdir/../vcl/unx/kf5/KF5FilePicker.hxx:29
+    QString KF5FilePicker::trUtf8(const char *,const char *,int)

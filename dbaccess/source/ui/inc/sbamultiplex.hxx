@@ -276,9 +276,6 @@ namespace dbaui
 
         sal_Int32 getOverallLen() const;
 
-        ::comphelper::OInterfaceContainerHelper3<css::beans::XVetoableChangeListener>* getContainer(const OUString& rName)
-            { return m_aListeners.getContainer(rName); }
-
     private:
         void Notify(::comphelper::OInterfaceContainerHelper3<css::beans::XVetoableChangeListener>& rListeners, const css::beans::PropertyChangeEvent& e);
     };
