@@ -754,7 +754,7 @@ void GenericSalLayout::ApplyDXArray(const DC* pDXArray, const sal_Bool* pKashida
         return;
 
     // Find Kashida glyph width and index.
-    DeviceCoordinate nKashidaWidth = 0;
+    double nKashidaWidth = 0;
     hb_codepoint_t nKashidaIndex = 0;
     if (hb_font_get_glyph(GetFont().GetHbFont(), 0x0640, 0, &nKashidaIndex))
         nKashidaWidth = GetFont().GetKashidaWidth();
@@ -771,7 +771,7 @@ void GenericSalLayout::ApplyDXArray(const DC* pDXArray, const sal_Bool* pKashida
         auto pGlyphIter = m_GlyphItems.begin() + nInserted + pKashida.first;
 
         // The total Kashida width.
-        DeviceCoordinate nTotalWidth = pKashida.second;
+        double nTotalWidth = pKashida.second;
 
         // Number of times to repeat each Kashida.
         int nCopies = 1;
@@ -780,12 +780,12 @@ void GenericSalLayout::ApplyDXArray(const DC* pDXArray, const sal_Bool* pKashida
 
         // See if we can improve the fit by adding an extra Kashidas and
         // squeezing them together a bit.
-        DeviceCoordinate nOverlap = 0;
-        DeviceCoordinate nShortfall = nTotalWidth - nKashidaWidth * nCopies;
+        double nOverlap = 0;
+        double nShortfall = nTotalWidth - nKashidaWidth * nCopies;
         if (nShortfall > 0)
         {
             ++nCopies;
-            DeviceCoordinate nExcess = nCopies * nKashidaWidth - nTotalWidth;
+            double nExcess = nCopies * nKashidaWidth - nTotalWidth;
             if (nExcess > 0)
                 nOverlap = nExcess / (nCopies - 1);
         }
