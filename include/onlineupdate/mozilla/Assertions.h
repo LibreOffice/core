@@ -268,7 +268,7 @@ __declspec(noreturn) __inline void MOZ_NoReturn() {}
  * including the expression and the explanation-string (if provided) is printed,
  * an attempt is made to invoke any existing debugger, and execution halts.
  * MOZ_ASSERT is fatal: no recovery is possible.  Do not assert a condition
- * which can correctly be falsy.
+ * which can correctly be false.
  *
  * The optional explanation-string, if provided, must be a string literal
  * explaining the assertion.  It is intended for use with assertions whose
