@@ -302,10 +302,10 @@ bool SwNodes::InsBoxen( SwTableNode* pTableNd,
     SwNodeIndex aEndIdx( *this, nIdxPos );
     for( sal_uInt16 n = 0; n < nCnt; ++n )
     {
-        SwStartNode* pSttNd = new SwStartNode( aEndIdx, SwNodeType::Start,
+        SwStartNode* pSttNd = new SwStartNode( aEndIdx.GetNode(), SwNodeType::Start,
                                                 SwTableBoxStartNode );
         pSttNd->m_pStartOfSection = pTableNd;
-        new SwEndNode( aEndIdx, *pSttNd );
+        new SwEndNode( aEndIdx.GetNode(), *pSttNd );
 
         pPrvBox = new SwTableBox( pBoxFormat, *pSttNd, pLine );
 
@@ -321,13 +321,12 @@ bool SwNodes::InsBoxen( SwTableNode* pTableNd,
             && RES_CONDTXTFMTCOLL != pTextColl->Which()
 //FEATURE::CONDCOLL
         )
-            new SwTextNode( SwNodeIndex( *pSttNd->EndOfSectionNode() ),
-                                pTextColl, pAutoAttr );
+            new SwTextNode( *pSttNd->EndOfSectionNode(), pTextColl, pAutoAttr );
         else
         {
             // Handle Outline numbering correctly!
             SwTextNode* pTNd = new SwTextNode(
-                            SwNodeIndex( *pSttNd->EndOfSectionNode() ),
+                            *pSttNd->EndOfSectionNode(),
                             GetDoc().GetDfltTextFormatColl(),
                             pAutoAttr );
             pTNd->ChgFormatColl( pTextColl );
@@ -576,23 +575,22 @@ SwTableNode* SwNodes::InsertTable( const SwNodeIndex& rNdIdx,
     if( !pHeadlineTextColl || !nLines )
         pHeadlineTextColl = pContentTextColl;
 
-    SwTableNode * pTableNd = new SwTableNode( rNdIdx );
-    SwEndNode* pEndNd = new SwEndNode( rNdIdx, *pTableNd );
+    SwTableNode * pTableNd = new SwTableNode( rNdIdx.GetNode() );
+    SwEndNode* pEndNd = new SwEndNode( rNdIdx.GetNode(), *pTableNd );
 
     if( !nLines ) // For the for loop
         ++nLines;
 
-    SwNodeIndex aIdx( *pEndNd );
     SwTextFormatColl* pTextColl = pHeadlineTextColl;
     for( sal_uInt16 nL = 0; nL < nLines; ++nL )
     {
         for( sal_uInt16 nB = 0; nB < nBoxes; ++nB )
         {
-            SwStartNode* pSttNd = new SwStartNode( aIdx, SwNodeType::Start,
+            SwStartNode* pSttNd = new SwStartNode( *pEndNd, SwNodeType::Start,
                                                     SwTableBoxStartNode );
             pSttNd->m_pStartOfSection = pTableNd;
 
-            SwTextNode * pTmpNd = new SwTextNode( aIdx, pTextColl );
+            SwTextNode * pTmpNd = new SwTextNode( *pEndNd, pTextColl );
 
             // #i60422# Propagate some more attributes.
             const SfxPoolItem* pItem = nullptr;
@@ -614,7 +612,7 @@ SwTableNode* SwNodes::InsertTable( const SwNodeIndex& rNdIdx,
                 }
             }
 
-            new SwEndNode( aIdx, *pSttNd );
+            new SwEndNode( *pEndNd, *pSttNd );
         }
         if ( nL + 1 >= nRepeat )
             pTextColl = pContentTextColl;
@@ -1002,8 +1000,8 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
     if( rRange.aStart >= rRange.aEnd )
         return nullptr;
 
-    SwTableNode * pTableNd = new SwTableNode( rRange.aStart );
-    new SwEndNode( rRange.aEnd, *pTableNd );
+    SwTableNode * pTableNd = new SwTableNode( rRange.aStart.GetNode() );
+    new SwEndNode( rRange.aEnd.GetNode(), *pTableNd );
 
     SwDoc& rDoc = GetDoc();
     std::vector<sal_uInt16> aPosArr;
@@ -1086,9 +1084,9 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
 
                     // Set the TableNode as StartNode for all TextNodes in the Table
                     const SwNodeIndex aTmpIdx( aCntPos.nNode, -1 );
-                    pSttNd = new SwStartNode( aTmpIdx, SwNodeType::Start,
+                    pSttNd = new SwStartNode( aTmpIdx.GetNode(), SwNodeType::Start,
                                                 SwTableBoxStartNode );
-                    new SwEndNode( aCntPos.nNode, *pSttNd );
+                    new SwEndNode( aCntPos.GetNode(), *pSttNd );
                     pNewNd->m_pStartOfSection = pSttNd;
 
                     // Assign Section to the Box
@@ -1106,9 +1104,9 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
         if( !pContentStore->Empty())
             pContentStore->Restore( *pTextNd, pTextNd->GetText().getLength(), pTextNd->GetText().getLength()+1 );
 
-        pSttNd = new SwStartNode( aCntPos.nNode, SwNodeType::Start, SwTableBoxStartNode );
+        pSttNd = new SwStartNode( aCntPos.GetNode(), SwNodeType::Start, SwTableBoxStartNode );
         const SwNodeIndex aTmpIdx( aCntPos.nNode, 1 );
-        new SwEndNode( aTmpIdx, *pSttNd  );
+        new SwEndNode( aTmpIdx.GetNode(), *pSttNd  );
         pTextNd->m_pStartOfSection = pSttNd;
 
         pBox = new SwTableBox( pBoxFormat, *pSttNd, pLine );
@@ -1362,14 +1360,14 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
     if( rTableNodes.empty() )
         return nullptr;
 
-    SwTableNode * pTableNd = new SwTableNode( rTableNodes.begin()->begin()->aStart );
+    SwTableNode * pTableNd = new SwTableNode( rTableNodes.begin()->begin()->aStart.GetNode() );
     //insert the end node after the last text node
     SwNodeIndex aInsertIndex( rTableNodes.rbegin()->rbegin()->aEnd );
     ++aInsertIndex;
 
     //!! ownership will be transferred in c-tor to SwNodes array.
     //!! Thus no real problem here...
-    new SwEndNode( aInsertIndex, *pTableNd );
+    new SwEndNode( aInsertIndex.GetNode(), *pTableNd );
 
     SwDoc& rDoc = GetDoc();
     SwTable& rTable = pTableNd->GetTable();
@@ -1397,17 +1395,15 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
 
         for( const auto& rCell : rRow )
         {
-            const SwNodeIndex aTmpIdx( rCell.aStart,0 );
-
             SwNodeIndex aCellEndIdx(rCell.aEnd);
             ++aCellEndIdx;
-            SwStartNode* pSttNd = new SwStartNode( aTmpIdx, SwNodeType::Start,
+            SwStartNode* pSttNd = new SwStartNode( rCell.aStart.GetNode(), SwNodeType::Start,
                                         SwTableBoxStartNode );
 
             // Quotation of http://nabble.documentfoundation.org/Some-strange-lines-by-taking-a-look-at-the-bt-of-fdo-51916-tp3994561p3994639.html
             // SwNode's constructor adds itself to the same SwNodes array as the other node (pSttNd).
             // So this statement is only executed for the side-effect.
-            new SwEndNode( aCellEndIdx, *pSttNd );
+            new SwEndNode( aCellEndIdx.GetNode(), *pSttNd );
 
             //set the start node on all node of the current cell
             SwNodeIndex aCellNodeIdx = rCell.aStart;
@@ -2008,7 +2004,7 @@ bool SwDoc::DeleteRowCol(const SwSelBoxes& rBoxes, RowColMode const eMode)
             if( bNewTextNd )
             {
                 const SwNodeIndex aTmpIdx( *pTableNd->EndOfSectionNode(), 1 );
-                GetNodes().MakeTextNode( aTmpIdx,
+                GetNodes().MakeTextNode( aTmpIdx.GetNode(),
                             getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD ) );
             }
 
@@ -2058,7 +2054,7 @@ bool SwDoc::DeleteRowCol(const SwSelBoxes& rBoxes, RowColMode const eMode)
             if( bNewTextNd )
             {
                 const SwNodeIndex aTmpIdx( *pTableNd->EndOfSectionNode(), 1 );
-                GetNodes().MakeTextNode( aTmpIdx,
+                GetNodes().MakeTextNode( aTmpIdx.GetNode(),
                             getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD ) );
             }
 
@@ -2324,8 +2320,8 @@ TableMergeErr SwDoc::MergeTable( SwPaM& rPam )
     return nRet;
 }
 
-SwTableNode::SwTableNode( const SwNodeIndex& rIdx )
-    : SwStartNode( rIdx, SwNodeType::Table )
+SwTableNode::SwTableNode( const SwNode& rWhere )
+    : SwStartNode( rWhere, SwNodeType::Table )
 {
     m_pTable.reset(new SwTable);
 }
@@ -3229,7 +3225,7 @@ void SwDoc::SplitTable( const SwPosition& rPos, SplitTable_HeadlineOption eHdlnM
         pNew->MakeOwnFrames( &aNdIdx );
 
         // Insert a paragraph between the Table
-        GetNodes().MakeTextNode( SwNodeIndex( *pNew ),
+        GetNodes().MakeTextNode( *pNew,
                                 getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TEXT ) );
     }
 
@@ -3386,15 +3382,14 @@ SwTableNode* SwNodes::SplitTable( SwNode& rPos, bool bAfter,
         SwEndNode* pOldTableEndNd = pTNd->EndOfSectionNode()->GetEndNode();
         assert(pOldTableEndNd && "Where is the EndNode?");
 
-        SwNodeIndex aIdx( *pBox->GetSttNd() );
-        new SwEndNode( aIdx, *pTNd );
-        pNewTableNd = new SwTableNode( aIdx );
+        new SwEndNode( *pBox->GetSttNd(), *pTNd );
+        pNewTableNd = new SwTableNode( *pBox->GetSttNd() );
         pNewTableNd->GetTable().SetTableModel( rTable.IsNewModel() );
 
         pOldTableEndNd->m_pStartOfSection = pNewTableNd;
         pNewTableNd->m_pEndOfSection = pOldTableEndNd;
 
-        SwNode* pBoxNd = aIdx.GetNode().GetStartNode();
+        SwNode* pBoxNd = const_cast<SwStartNode*>(pBox->GetSttNd()->GetStartNode());
         do {
             OSL_ENSURE( pBoxNd->IsStartNode(), "This needs to be a StartNode!" );
             pBoxNd->m_pStartOfSection = pNewTableNd;

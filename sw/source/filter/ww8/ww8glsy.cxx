@@ -120,7 +120,7 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
                 pCNd = rIdx.GetNode().GetTextNode();
                 if( nullptr == pCNd )
                 {
-                    pCNd = pD->GetNodes().MakeTextNode( rIdx, pColl );
+                    pCNd = pD->GetNodes().MakeTextNode( rIdx.GetNode(), pColl );
                     rIdx = *pCNd;
                 }
             }
@@ -133,7 +133,7 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
                         || HasBareGraphicEnd(pD,rIdx))
                 {
                     ++rIdx;
-                    pCNd = pD->GetNodes().MakeTextNode( rIdx, pColl );
+                    pCNd = pD->GetNodes().MakeTextNode( rIdx.GetNode(), pColl );
                     rIdx = *pCNd;
                 }
             }

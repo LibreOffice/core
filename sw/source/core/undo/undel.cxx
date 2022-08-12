@@ -865,7 +865,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
             assert(!m_bTableDelLastNd || pInsNd->IsTextNode());
             if( pInsNd->IsTableNode() )
             {
-                pInsNd = rDoc.GetNodes().MakeTextNode( aIdx,
+                pInsNd = rDoc.GetNodes().MakeTextNode( aIdx.GetNode(),
                         rDoc.GetDfltTextFormatColl() );
                 --aIdx;
                 aPos.nNode = aIdx;
@@ -1250,7 +1250,7 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
             {
                 // than add again a Node at the end
                 const SwNodeIndex aTmpIdx( *pTableNd->EndOfSectionNode(), 1 );
-                rDoc.GetNodes().MakeTextNode( aTmpIdx,
+                rDoc.GetNodes().MakeTextNode( aTmpIdx.GetNode(),
                         rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD ) );
             }
 

@@ -58,7 +58,7 @@
 using namespace com::sun::star;
 
 SwGrfNode::SwGrfNode(
-        const SwNodeIndex & rWhere,
+        SwNode & rWhere,
         const OUString& rGrfName,
         const OUString& rFltName,
         const Graphic* pGraphic,
@@ -76,7 +76,7 @@ SwGrfNode::SwGrfNode(
     ReRead(rGrfName, rFltName, pGraphic, false);
 }
 
-SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
+SwGrfNode::SwGrfNode( SwNode& rWhere,
                       const GraphicObject& rGrfObj,
                       SwGrfFormatColl *pGrfColl,
                       SwAttrSet const * pAutoAttr ) :
@@ -97,7 +97,7 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
  *
  * @note Does not read/open the image itself!
  */
-SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
+SwGrfNode::SwGrfNode( SwNode& rWhere,
                       std::u16string_view rGrfName,
                       const OUString& rFltName,
                       SwGrfFormatColl *pGrfColl,
@@ -402,7 +402,7 @@ const GraphicObject* SwGrfNode::GetReplacementGrfObj() const
     return mpReplacementGraphic.get();
 }
 
-SwGrfNode * SwNodes::MakeGrfNode( const SwNodeIndex & rWhere,
+SwGrfNode * SwNodes::MakeGrfNode( SwNode & rWhere,
                                 const OUString& rGrfName,
                                 const OUString& rFltName,
                                 const Graphic* pGraphic,
@@ -421,7 +421,7 @@ SwGrfNode * SwNodes::MakeGrfNode( const SwNodeIndex & rWhere,
     return pNode;
 }
 
-SwGrfNode * SwNodes::MakeGrfNode( const SwNodeIndex & rWhere,
+SwGrfNode * SwNodes::MakeGrfNode( SwNode & rWhere,
                                 const GraphicObject& rGrfObj,
                                 SwGrfFormatColl* pGrfColl )
 {
@@ -702,7 +702,7 @@ void SwGrfNode::ScaleImageMap()
     }
 }
 
-SwContentNode* SwGrfNode::MakeCopy(SwDoc& rDoc, const SwNodeIndex& rIdx, bool) const
+SwContentNode* SwGrfNode::MakeCopy(SwDoc& rDoc, SwNode& rIdx, bool) const
 {
     // copy formats into the other document
     SwGrfFormatColl* pColl = rDoc.CopyGrfColl( *GetGrfColl() );

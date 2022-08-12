@@ -57,7 +57,7 @@ struct MapTableFrameFormat
 
 typedef std::vector<MapTableFrameFormat> MapTableFrameFormats;
 
-SwContentNode* SwTextNode::MakeCopy(SwDoc& rDoc, const SwNodeIndex& rIdx, bool const bNewFrames) const
+SwContentNode* SwTextNode::MakeCopy(SwDoc& rDoc, SwNode& rIdx, bool const bNewFrames) const
 {
     // the Copy-Textnode is the Node with the Text, the Copy-Attrnode is the
     // node with the collection and hard attributes. Normally is the same
@@ -267,8 +267,8 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc& rDoc, const SwNodeIndex& rIdx ) const
 
     SwFrameFormat* pTableFormat = rDoc.MakeTableFrameFormat( sTableName, rDoc.GetDfltFrameFormat() );
     pTableFormat->CopyAttrs( *GetTable().GetFrameFormat() );
-    SwTableNode* pTableNd = new SwTableNode( rIdx );
-    SwEndNode* pEndNd = new SwEndNode( rIdx, *pTableNd );
+    SwTableNode* pTableNd = new SwTableNode( rIdx.GetNode() );
+    SwEndNode* pEndNd = new SwEndNode( rIdx.GetNode(), *pTableNd );
     SwNodeIndex aInsPos( *pEndNd );
 
     SwTable& rTable = pTableNd->GetTable();

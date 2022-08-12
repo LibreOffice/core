@@ -34,7 +34,7 @@
 
 #include <frmfmt.hxx>
 
-SwNoTextNode::SwNoTextNode( const SwNodeIndex & rWhere,
+SwNoTextNode::SwNoTextNode( SwNode& rWhere,
                   const SwNodeType nNdType,
                   SwGrfFormatColl *pGrfColl,
                   SwAttrSet const * pAutoAttr ) :

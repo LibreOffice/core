@@ -3073,7 +3073,7 @@ SwFlyFrameFormat* DocumentContentOperationsManager::InsertGraphic(
     if( !pFrameFormat )
         pFrameFormat = m_rDoc.getIDocumentStylePoolAccess().GetFrameFormatFromPool( RES_POOLFRM_GRAPHIC );
     SwGrfNode* pSwGrfNode = SwNodes::MakeGrfNode(
-                            SwNodeIndex( m_rDoc.GetNodes().GetEndOfAutotext() ),
+                            m_rDoc.GetNodes().GetEndOfAutotext(),
                             rGrfName, rFltName, pGraphic,
                             m_rDoc.GetDfltGrfFormatColl() );
     SwFlyFrameFormat* pSwFlyFrameFormat = InsNoTextNode( *rRg.GetPoint(), pSwGrfNode,
@@ -3088,7 +3088,7 @@ SwFlyFrameFormat* DocumentContentOperationsManager::InsertGraphicObject(
 {
     SwFrameFormat* pFrameFormat = m_rDoc.getIDocumentStylePoolAccess().GetFrameFormatFromPool( RES_POOLFRM_GRAPHIC );
     SwGrfNode* pSwGrfNode = SwNodes::MakeGrfNode(
-                            SwNodeIndex( m_rDoc.GetNodes().GetEndOfAutotext() ),
+                            m_rDoc.GetNodes().GetEndOfAutotext(),
                             rGrfObj, m_rDoc.GetDfltGrfFormatColl() );
     SwFlyFrameFormat* pSwFlyFrameFormat = InsNoTextNode( *rRg.GetPoint(), pSwGrfNode,
                             pFlyAttrSet, pGrfAttrSet, pFrameFormat );
@@ -3112,7 +3112,7 @@ SwFlyFrameFormat* DocumentContentOperationsManager::InsertEmbObject(
     SwFrameFormat* pFrameFormat = m_rDoc.getIDocumentStylePoolAccess().GetFrameFormatFromPool( nId );
 
     return InsNoTextNode( *rRg.GetPoint(), m_rDoc.GetNodes().MakeOLENode(
-                            SwNodeIndex( m_rDoc.GetNodes().GetEndOfAutotext() ),
+                            m_rDoc.GetNodes().GetEndOfAutotext(),
                             xObj,
                             m_rDoc.GetDfltGrfFormatColl() ),
                             pFlyAttrSet, nullptr,
@@ -3128,7 +3128,7 @@ SwFlyFrameFormat* DocumentContentOperationsManager::InsertOLE(const SwPaM &rRg, 
 
     return InsNoTextNode( *rRg.GetPoint(),
                             m_rDoc.GetNodes().MakeOLENode(
-                                SwNodeIndex( m_rDoc.GetNodes().GetEndOfAutotext() ),
+                                m_rDoc.GetNodes().GetEndOfAutotext(),
                                 rObjName,
                                 nAspect,
                                 m_rDoc.GetDfltGrfFormatColl(),
@@ -3311,7 +3311,7 @@ bool DocumentContentOperationsManager::SplitNode( const SwPosition &rPos, bool b
     if( bChkTableStart && !rPos.GetContentIndex() && pNode->IsTextNode() )
     {
         SwNodeOffset nPrevPos = rPos.GetNodeIndex() - 1;
-        const SwTableNode* pTableNd;
+        SwTableNode* pTableNd;
         const SwNode* pNd = m_rDoc.GetNodes()[ nPrevPos ];
         if( pNd->IsStartNode() &&
             SwTableBoxStartNode == static_cast<const SwStartNode*>(pNd)->GetStartNodeType() &&
@@ -3341,7 +3341,7 @@ bool DocumentContentOperationsManager::SplitNode( const SwPosition &rPos, bool b
             if( pNd )
             {
                 SwTextNode* pTextNd = m_rDoc.GetNodes().MakeTextNode(
-                                        SwNodeIndex( *pTableNd ),
+                                        *pTableNd,
                                         m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TEXT ));
                 if( pTextNd )
                 {
@@ -3422,7 +3422,7 @@ bool DocumentContentOperationsManager::AppendTextNode( SwPosition& rPos )
     {
         // so then one can be created!
         SwNodeIndex aIdx( rPos.nNode, 1 );
-        pCurNode = m_rDoc.GetNodes().MakeTextNode( aIdx,
+        pCurNode = m_rDoc.GetNodes().MakeTextNode( aIdx.GetNode(),
                         m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD ));
     }
     else
@@ -4980,11 +4980,11 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
                 if( !pDestTextNd )
                 {
                     if( pStt->GetContentIndex() || bOneNode )
-                        pDestTextNd = rDoc.GetNodes().MakeTextNode( aInsPos,
+                        pDestTextNd = rDoc.GetNodes().MakeTextNode( aInsPos.GetNode(),
                             rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD));
                     else
                     {
-                        pDestTextNd = pSttTextNd->MakeCopy(rDoc, aInsPos, true)->GetTextNode();
+                        pDestTextNd = pSttTextNd->MakeCopy(rDoc, aInsPos.GetNode(), true)->GetTextNode();
                         bCopyOk = true;
                     }
                     aDestIdx.Assign( pDestTextNd, 0 );
@@ -5128,7 +5128,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
             SwContentIndex aDestIdx( rPos.nContent );
             if( !pDestTextNd )
             {
-                pDestTextNd = rDoc.GetNodes().MakeTextNode( aInsPos,
+                pDestTextNd = rDoc.GetNodes().MakeTextNode( aInsPos.GetNode(),
                             rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD));
                 aDestIdx.Assign( pDestTextNd, 0  );
                 aInsPos--;

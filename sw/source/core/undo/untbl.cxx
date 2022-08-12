@@ -534,8 +534,8 @@ SwTableNode* SwNodes::UndoTableToText( SwNodeOffset nSttNd, SwNodeOffset nEndNd,
     SwNodeIndex aSttIdx( *this, nSttNd );
     SwNodeIndex aEndIdx( *this, nEndNd+1 );
 
-    SwTableNode * pTableNd = new SwTableNode( aSttIdx );
-    SwEndNode* pEndNd = new SwEndNode( aEndIdx, *pTableNd  );
+    SwTableNode * pTableNd = new SwTableNode( aSttIdx.GetNode() );
+    SwEndNode* pEndNd = new SwEndNode( aEndIdx.GetNode(), *pTableNd  );
 
     aEndIdx = *pEndNd;
 
@@ -626,10 +626,10 @@ SwTableNode* SwNodes::UndoTableToText( SwNodeOffset nSttNd, SwNodeOffset nEndNd,
         }
 
         aEndIdx = pSave->m_nEndNd;
-        SwStartNode* pSttNd = new SwStartNode( aSttIdx, SwNodeType::Start,
+        SwStartNode* pSttNd = new SwStartNode( aSttIdx.GetNode(), SwNodeType::Start,
                                                 SwTableBoxStartNode );
         pSttNd->m_pStartOfSection = pTableNd;
-        new SwEndNode( aEndIdx, *pSttNd );
+        new SwEndNode( aEndIdx.GetNode(), *pSttNd );
 
         for( SwNodeOffset i = aSttIdx.GetIndex(); i < aEndIdx.GetIndex()-1; ++i )
         {
@@ -1912,8 +1912,8 @@ void SwUndoTableMerge::UndoImpl(::sw::UndoRedoContext & rContext)
             OSL_ENSURE( pBox, "Where is my TableBox?" );
 
             if( !m_pSaveTable->IsNewModel() )
-                rDoc.GetNodes().MakeTextNode( SwNodeIndex(
-                    *pBox->GetSttNd()->EndOfSectionNode() ), pColl );
+                rDoc.GetNodes().MakeTextNode(
+                    const_cast<SwEndNode&>(*pBox->GetSttNd()->EndOfSectionNode()), pColl );
 
             // this was the separator -> restore moved ones
             for (size_t i = m_vMoves.size(); i; )
@@ -2394,7 +2394,7 @@ void SwUndoTableCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
         SwTableBox& rBox = *pBox;
 
         SwNodeIndex aInsIdx( *rBox.GetSttNd(), 1 );
-        rDoc.GetNodes().MakeTextNode( aInsIdx, rDoc.GetDfltTextFormatColl() );
+        rDoc.GetNodes().MakeTextNode( aInsIdx.GetNode(), rDoc.GetDfltTextFormatColl() );
 
         // b62341295: Redline for copying tables
         const SwNode *pEndNode = rBox.GetSttNd()->EndOfSectionNode();
@@ -2530,7 +2530,7 @@ void SwUndoTableCpyTable::RedoImpl(::sw::UndoRedoContext & rContext)
         SwNodeIndex aInsIdx( *rBox.GetSttNd(), 1 );
 
         // b62341295: Redline for copying tables - Start.
-        rDoc.GetNodes().MakeTextNode( aInsIdx, rDoc.GetDfltTextFormatColl() );
+        rDoc.GetNodes().MakeTextNode( aInsIdx.GetNode(), rDoc.GetDfltTextFormatColl() );
         SwPaM aPam( aInsIdx.GetNode(), *rBox.GetSttNd()->EndOfSectionNode());
         std::unique_ptr<SwUndo> pUndo(IDocumentRedlineAccess::IsRedlineOn(GetRedlineFlags())
             ? nullptr
@@ -2607,7 +2607,7 @@ void SwUndoTableCpyTable::AddBoxBefore( const SwTableBox& rBox, bool bDelContent
     if( bDelContent )
     {
         SwNodeIndex aInsIdx( *rBox.GetSttNd(), 1 );
-        pDoc->GetNodes().MakeTextNode( aInsIdx, pDoc->GetDfltTextFormatColl() );
+        pDoc->GetNodes().MakeTextNode( aInsIdx.GetNode(), pDoc->GetDfltTextFormatColl() );
         SwPaM aPam( aInsIdx.GetNode(), *rBox.GetSttNd()->EndOfSectionNode() );
 
         if( !pDoc->getIDocumentRedlineAccess().IsRedlineOn() )

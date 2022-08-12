@@ -2197,7 +2197,7 @@ void SwTable::ConvertSubtableBox(sal_uInt16 const nRow, sal_uInt16 const nBox)
                         pSourceBox, j+k, 1);
                     // insert dummy text node...
                     pDoc->GetNodes().MakeTextNode(
-                            SwNodeIndex(*pSourceBox->GetSttNd(), +1),
+                            SwNodeIndex(*pSourceBox->GetSttNd(), +1).GetNode(),
                             pDoc->GetDfltTextFormatColl());
                     SwNodeRange content(*pSourceBox->GetSttNd(), SwNodeOffset(+2),
                             *pSourceBox->GetSttNd()->EndOfSectionNode());

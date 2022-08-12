@@ -194,7 +194,7 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
             // and hide the original header/footers content by putting it into a hidden
             // document-level section
             SwNodeIndex aSttIdx( rContentStIdx, 1 );
-            m_xDoc->GetNodes().MakeTextNode( aSttIdx,
+            m_xDoc->GetNodes().MakeTextNode( aSttIdx.GetNode(),
                             m_pCSS1Parser->GetTextCollFromPool(RES_POOLCOLL_TEXT));
 
             // delete the current content of the section

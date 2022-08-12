@@ -96,12 +96,12 @@ class SW_DLLPUBLIC SwOLENode final: public SwNoTextNode
     SwEmbedObjectLink*  mpObjectLink;
     OUString maLinkURL;
 
-    SwOLENode(  const SwNodeIndex &rWhere,
+    SwOLENode(  SwNode& rWhere,
                 const svt::EmbeddedObjectRef&,
                 SwGrfFormatColl *pGrfColl,
                 SwAttrSet const * pAutoAttr );
 
-    SwOLENode(  const SwNodeIndex &rWhere,
+    SwOLENode(  SwNode& rWhere,
                 const OUString &rName,
                 sal_Int64 nAspect,
                 SwGrfFormatColl *pGrfColl,
@@ -117,7 +117,7 @@ public:
     virtual ~SwOLENode() override;
 
     /// Is in ndcopy.cxx.
-    virtual SwContentNode* MakeCopy(SwDoc&, const SwNodeIndex&, bool bNewFrames) const override;
+    virtual SwContentNode* MakeCopy(SwDoc&, SwNode& rWhere, bool bNewFrames) const override;
 
     virtual Size GetTwipSize() const override;
 

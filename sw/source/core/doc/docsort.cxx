@@ -694,7 +694,7 @@ void MoveCell(SwDoc* pDoc, const SwTableBox* pSource, const SwTableBox* pTar,
     // -> insert an empty Node and move the rest or the Mark
     // points to the first ContentNode
     if( pNd->StartOfSectionNode() == pSource->GetSttNd() )
-        pNd = pDoc->GetNodes().MakeTextNode( aRg.aStart,
+        pNd = pDoc->GetNodes().MakeTextNode( aRg.aStart.GetNode(),
                 pDoc->GetDfltTextFormatColl() );
     aRg.aEnd = *pNd->EndOfSectionNode();
 

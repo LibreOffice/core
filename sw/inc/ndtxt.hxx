@@ -131,7 +131,7 @@ class SW_DLLPUBLIC SwTextNode final
     // DrawingLayer FillAttributes in a preprocessed form for primitive usage
     drawinglayer::attribute::SdrAllFillAttributesHelperPtr  maFillAttributes;
 
-    SAL_DLLPRIVATE SwTextNode( const SwNodeIndex &rWhere, SwTextFormatColl *pTextColl,
+    SAL_DLLPRIVATE SwTextNode( SwNode& rWhere, SwTextFormatColl *pTextColl,
                              const SfxItemSet* pAutoAttr = nullptr );
     virtual void SwClientNotify( const SwModify&, const SfxHint& ) override;
     /// Copies the attributes at nStart to pDest.
@@ -694,7 +694,7 @@ public:
 
     /// in ndcopy.cxx
     bool IsSymbolAt(sal_Int32 nBegin) const; // In itratr.cxx.
-    virtual SwContentNode* MakeCopy(SwDoc&, const SwNodeIndex&, bool bNewFrames) const override;
+    virtual SwContentNode* MakeCopy(SwDoc&, SwNode& rWhere, bool bNewFrames) const override;
 
     /// Interactive hyphenation: we find TextFrame and call its CalcHyph.
     bool Hyphenate( SwInterHyphInfo &rHyphInf );

@@ -1261,7 +1261,7 @@ static bool lcl_FoldedOutlineNodeEndOfParaSplit(SwWrtShell *pThis)
             // insert at end of tablebox doesn't work correct without
             MakeAllOutlineContentTemporarilyVisible a(pDoc);
 
-            SwTextNode* pNd = pDoc->GetNodes().MakeTextNode(SwNodeIndex(*pEndNd), pTextNode->GetTextColl(), true);
+            SwTextNode* pNd = pDoc->GetNodes().MakeTextNode(*pEndNd, pTextNode->GetTextColl(), true);
 
             (void) rOutlineNodes.Seek_Entry(pNd, &nPos);
             pThis->GotoOutline(nPos);
