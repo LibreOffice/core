@@ -978,21 +978,13 @@ bool GraphicDescriptor::ImpDetectMET( SvStream&, bool )
 
 bool GraphicDescriptor::ImpDetectPCT( SvStream& rStm, bool )
 {
-    bool bRet = aPathExt.startsWith( "pct" );
-    if (bRet)
-        aMetadata.mnFormat = GraphicFileFormat::PCT;
-    else
-    {
-        sal_uInt64 const nStreamPos = rStm.Tell();
-        sal_uInt64 const nStreamLen = rStm.remainingSize();
-        if (isPCT(rStm, nStreamPos, nStreamLen))
-        {
-            bRet = true;
-            aMetadata.mnFormat = GraphicFileFormat::PCT;
-        }
-        rStm.Seek(nStreamPos);
-    }
-
+    sal_Int32 nStmPos = rStm.Tell();
+    vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /*bExtendedInfo*/ );
+    bool bRet = aDetector.detect();
+    bRet &= aDetector.checkPCT();
+    if ( bRet )
+        aMetadata = aDetector.getMetadata();
+    rStm.Seek( nStmPos );
     return bRet;
 }
 
