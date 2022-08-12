@@ -762,8 +762,6 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
     EditLine aSaveLine( *pLine );
     SvxFont aTmpFont( pNode->GetCharAttribs().GetDefFont() );
 
-    ImplInitLayoutMode(*GetRefDevice(), nPara, nIndex);
-
     std::vector<sal_Int32> aBuf( pNode->Len() );
 
     bool bSameLineAgain = false;    // For TextRanger, if the height changes.
