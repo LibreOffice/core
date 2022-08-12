@@ -62,7 +62,6 @@ class DomainMapper_Impl;
 class ListsManager;
 class StyleSheetTable;
 class GraphicZOrderHelper;
-class GraphicNamingHelper;
 
 typedef tools::SvRef<StyleSheetTable> StyleSheetTablePtr;
 
@@ -108,7 +107,6 @@ public:
     StyleSheetTablePtr const & GetStyleSheetTable( );
     SettingsTablePtr const & GetSettingsTable();
     GraphicZOrderHelper* graphicZOrderHelper();
-    GraphicNamingHelper& GetGraphicNamingHelper();
 
     /// Return the first from the pending (not inserted to the document) shapes, if there are any.
     css::uno::Reference<css::drawing::XShape> PopPendingShape();
@@ -185,7 +183,6 @@ private:
     bool mbHasControls;
     bool mbWasShapeInPara;
     std::unique_ptr< GraphicZOrderHelper > zOrderHelper;
-    std::unique_ptr<GraphicNamingHelper> m_pGraphicNamingHelper;
     OUString m_sGlossaryEntryName;
 };
 
