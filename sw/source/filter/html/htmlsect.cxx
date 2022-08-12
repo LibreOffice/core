@@ -259,7 +259,7 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
         // Therefore we have to add a node and delete it again!
         if( !bAppended )
         {
-            SwNodeIndex aPrvNdIdx( m_pPam->GetPoint()->nNode, -1 );
+            SwNodeIndex aPrvNdIdx( m_pPam->GetPoint()->GetNode(), -1 );
             if (aPrvNdIdx.GetNode().IsSectionNode())
             {
                 AppendTextNode();
@@ -675,7 +675,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
             // If the pam is at the start of a section, an additional text
             // node must be inserted. Otherwise, the new section will be
             // inserted in front of the old one.
-            SwNodeIndex aPrvNdIdx( m_pPam->GetPoint()->nNode, -1 );
+            SwNodeIndex aPrvNdIdx( m_pPam->GetPoint()->GetNode(), -1 );
             if (aPrvNdIdx.GetNode().IsSectionNode())
             {
                 AppendTextNode();

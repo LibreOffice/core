@@ -1389,7 +1389,7 @@ SwXText::insertTextPortion(
 
     if (!rText.isEmpty())
     {
-        SwNodeIndex const nodeIndex(rCursor.GetPoint()->nNode, -1);
+        SwNodeIndex const nodeIndex(rCursor.GetPoint()->GetNode(), -1);
         const sal_Int32 nContentPos = rCursor.GetPoint()->GetContentIndex();
         SwUnoCursorHelper::DocInsertStringSplitCR(
             *m_pImpl->m_pDoc, rCursor, rText, false);

@@ -1566,7 +1566,7 @@ void CompareData::ShowDelete(
         SwPaM* pCorr = m_pInsertRing->GetPrev();
         if( *pCorr->GetPoint() == *pTmp->GetPoint() )
         {
-            SwNodeIndex aTmpPos( pTmp->GetMark()->nNode, -1 );
+            SwNodeIndex aTmpPos( pTmp->GetMark()->GetNode(), -1 );
             *pCorr->GetPoint() = SwPosition( aTmpPos );
         }
     }
@@ -1679,7 +1679,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
                 // tdf#106218 try to avoid losing a paragraph break here:
                 if (pTmp->GetMark()->nContent == 0)
                 {
-                    SwNodeIndex const prev(pTmp->GetMark()->nNode, -1);
+                    SwNodeIndex const prev(pTmp->GetMark()->GetNode(), -1);
                     if (prev.GetNode().IsTextNode())
                     {
                         *pTmp->GetMark() = SwPosition(
@@ -1722,7 +1722,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
             // tdf#106218 try to avoid losing a paragraph break here:
             if (pTmp->GetMark()->nContent == 0)
             {
-                SwNodeIndex const prev(pTmp->GetMark()->nNode, -1);
+                SwNodeIndex const prev(pTmp->GetMark()->GetNode(), -1);
                 if (prev.GetNode().IsTextNode())
                 {
                     *pTmp->GetMark() = SwPosition(
@@ -1945,7 +1945,7 @@ sal_uInt16 SaveMergeRedline::InsertRedline(SwPaM* pLastDestRedline)
         // the part was inserted so copy it from the SourceDoc
         ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
 
-        SwNodeIndex aSaveNd( pDestRedl->GetPoint()->nNode, -1 );
+        SwNodeIndex aSaveNd( pDestRedl->GetPoint()->GetNode(), -1 );
         const sal_Int32 nSaveCnt = pDestRedl->GetPoint()->GetContentIndex();
 
         RedlineFlags eOld = rDoc.getIDocumentRedlineAccess().GetRedlineFlags();

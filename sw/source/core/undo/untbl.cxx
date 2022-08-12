@@ -652,7 +652,7 @@ void SwUndoTableToText::RedoImpl(::sw::UndoRedoContext & rContext)
 
     pPam->GetPoint()->nNode = m_nStartNode;
     pPam->GetPoint()->nContent.Assign( nullptr, 0 );
-    SwNodeIndex aSaveIdx( pPam->GetPoint()->nNode, -1 );
+    SwNodeIndex aSaveIdx( pPam->GetPoint()->GetNode(), -1 );
 
     pPam->SetMark();            // log off all indices
     pPam->DeleteMark();

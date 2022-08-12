@@ -1785,7 +1785,7 @@ void SwRangeRedline::MoveFromSection(size_t nMyPos)
                                         aPam.GetMark()->nNode
                                 ? pCNd->GetFormatColl() : nullptr;
 
-            SwNodeIndex aNdIdx( GetPoint()->nNode, -1 );
+            SwNodeIndex aNdIdx( GetPoint()->GetNode(), -1 );
             const sal_Int32 nPos = GetPoint()->GetContentIndex();
 
             SwPosition aPos( *GetPoint() );

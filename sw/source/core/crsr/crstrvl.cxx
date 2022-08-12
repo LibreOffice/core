@@ -2241,7 +2241,7 @@ bool SwCursorShell::SetShadowCursorPos( const Point& rPt, SwFillMode eFillMode )
             const SwSectionNode* pSectNd = pCNd ? pCNd->FindSectionNode() : nullptr;
             if( pSectNd && aFPos.nParaCnt )
             {
-                SwNodeIndex aEnd( aPos.nNode, 1 );
+                SwNodeIndex aEnd( aPos.GetNode(), 1 );
                 while( aEnd.GetNode().IsEndNode() &&
                         &aEnd.GetNode() !=
                         pSectNd->EndOfSectionNode() )

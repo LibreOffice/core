@@ -1769,7 +1769,7 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, SwCursorSkipMode nMode,
 
     while( nCnt )
     {
-        SwNodeIndex aOldNodeIdx( GetPoint()->nNode );
+        SwNodeIndex aOldNodeIdx( GetPoint()->GetNode() );
 
         TextFrameIndex beforeIndex(-1);
         if (pFrame)

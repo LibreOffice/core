@@ -2960,7 +2960,7 @@ void SwFlyFrameFormat::MakeFrames()
             //possible, that no Frame exists for this content.
             //In such a situation we also need to search from StartNode to
             //FrameFormat.
-            SwNodeIndex aIdx( aAnchorAttr.GetContentAnchor()->nNode );
+            SwNodeIndex aIdx( aAnchorAttr.GetContentAnchor()->GetNode() );
             SwContentNode *pCNd = GetDoc()->GetNodes().GoNext( &aIdx );
             // #i105535#
             if ( pCNd == nullptr )

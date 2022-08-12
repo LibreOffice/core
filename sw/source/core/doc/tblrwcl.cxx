@@ -2085,7 +2085,7 @@ bool SwTable::MakeCopy( SwDoc& rInsDoc, const SwPosition& rPos,
     if( !pNewTable )
         return false;
 
-    SwNodeIndex aIdx( rPos.nNode, -1 );
+    SwNodeIndex aIdx( rPos.GetNode(), -1 );
     SwTableNode* pTableNd = aIdx.GetNode().FindTableNode();
     ++aIdx;
     OSL_ENSURE( pTableNd, "Where is the TableNode now?" );

@@ -235,7 +235,7 @@ SwUndoDelete::SwUndoDelete(
         ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
         if (m_nEndNode - m_nSttNode > SwNodeOffset(1)) // check for fully selected nodes
         {
-            SwNodeIndex const start(pStt->nNode, +1);
+            SwNodeIndex const start(pStt->GetNode(), +1);
             DelBookmarks(start, pEnd->nNode);
         }
     }
@@ -970,7 +970,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         if( bNodeMove )
         {
             SwNodeRange aRange( *m_oMvStt, SwNodeOffset(0), *m_oMvStt, m_nNode );
-            SwNodeIndex aCopyIndex( aPos.nNode, -1 );
+            SwNodeIndex aCopyIndex( aPos.GetNode(), -1 );
             rDoc.GetUndoManager().GetUndoNodes().Copy_(aRange, aPos.GetNode(),
                     // sw_redlinehide: delay creating frames: the flags on the
                     // nodes aren't necessarily up-to-date, and the redlines

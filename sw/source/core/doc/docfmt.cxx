@@ -335,8 +335,8 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
         aPara.pDelSet = &aDelSet;
 
     bool bAdd = true;
-    SwNodeIndex aTmpStt( pStt->nNode );
-    SwNodeIndex aTmpEnd( pEnd->nNode );
+    SwNodeIndex aTmpStt( pStt->GetNode() );
+    SwNodeIndex aTmpEnd( pEnd->GetNode() );
     if( pStt->GetContentIndex() )     // just one part
     {
         // set up a later, and all CharFormatAttr -> TextFormatAttr

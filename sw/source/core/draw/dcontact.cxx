@@ -1873,7 +1873,7 @@ void SwDrawContact::ConnectToLayout( const SwFormatAnchor* pAnch )
                 {
                     if ( pAnch->GetAnchorId() == RndStdIds::FLY_AT_FLY )
                     {
-                        SwNodeIndex aIdx( pAnch->GetContentAnchor()->nNode );
+                        SwNodeIndex aIdx( pAnch->GetContentAnchor()->GetNode() );
                         SwContentNode* pCNd = pDrawFrameFormat->GetDoc()->GetNodes().GoNext( &aIdx );
                         if (SwIterator<SwFrame, SwContentNode, sw::IteratorMode::UnwrapMulti>(*pCNd).First())
                             pModify = pCNd;

@@ -131,8 +131,8 @@ void SwUndo::RemoveIdxFromRange( SwPaM& rPam, bool bMoveNext )
         if( pEnd != rPam.GetPoint() )
             rPam.Exchange();
 
-        SwNodeIndex aStt( rPam.GetMark()->nNode );
-        SwNodeIndex aEnd( rPam.GetPoint()->nNode );
+        SwNodeIndex aStt( rPam.GetMark()->GetNode() );
+        SwNodeIndex aEnd( rPam.GetPoint()->GetNode() );
 
         if( !rPam.Move( fnMoveForward ) )
         {

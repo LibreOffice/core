@@ -214,7 +214,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
         if( pPrvNd && 3 == nRegionRet )
         {
             OSL_ENSURE( pPrvNd, "The SectionNode is missing" );
-            SwNodeIndex aStt( pSttPos->nNode ), aEnd( pEndPos->nNode, +1 );
+            SwNodeIndex aStt( pSttPos->GetNode() ), aEnd( pEndPos->GetNode(), +1 );
             while( pPrvNd != aStt.GetNode().StartOfSectionNode() )
                 --aStt;
             while( pPrvNd != aEnd.GetNode().StartOfSectionNode() )
@@ -409,7 +409,7 @@ sal_uInt16 SwDoc::IsInsRegionAvailable( const SwPaM& rRange,
                 && pSectNd->GetIndex() == pStt->GetNodeIndex() - 1
                 && pEnd->GetContentIndex() == pCNd->Len() )
             {
-                SwNodeIndex aIdx( pStt->nNode, -1 );
+                SwNodeIndex aIdx( pStt->GetNode(), -1 );
                 SwNodeOffset nCmp = pEnd->GetNodeIndex();
                 const SwStartNode* pPrvNd;
                 const SwEndNode* pNxtNd;
@@ -451,7 +451,7 @@ sal_uInt16 SwDoc::IsInsRegionAvailable( const SwPaM& rRange,
             nRet = 0;
             if( pEnd->GetContentIndex() == pCNd->Len() )
             {
-                SwNodeIndex aIdx( pEnd->nNode, 1 );
+                SwNodeIndex aIdx( pEnd->GetNode(), 1 );
                 if( aIdx.GetNode().IsEndNode() &&
                         nullptr != aIdx.GetNode().FindSectionNode() )
                 {
@@ -477,7 +477,7 @@ sal_uInt16 SwDoc::IsInsRegionAvailable( const SwPaM& rRange,
             nRet = 0;
             if( !pStt->GetContentIndex() )
             {
-                SwNodeIndex aIdx( pStt->nNode, -1 );
+                SwNodeIndex aIdx( pStt->GetNode(), -1 );
                 if( aIdx.GetNode().IsSectionNode() )
                 {
                     do {

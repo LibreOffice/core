@@ -1465,7 +1465,7 @@ void SwHTMLParser::StripTrailingPara()
                 SwNodeOffset nBookNdIdx = pMark->GetMarkPos().GetNodeIndex();
                 if(nBookNdIdx==nNodeIdx)
                 {
-                    SwNodeIndex nNewNdIdx(m_pPam->GetPoint()->nNode);
+                    SwNodeIndex nNewNdIdx(m_pPam->GetPoint()->GetNode());
                     SwContentNode* pNd = SwNodes::GoPrevious(&nNewNdIdx);
                     if(!pNd)
                     {

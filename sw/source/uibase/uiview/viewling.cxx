@@ -169,7 +169,7 @@ void SwView::ExecLingu(SfxRequest &rReq)
                             // remember cursor position data for later restoration of the cursor
                             const SwPosition *pPoint = m_pWrtShell->GetCursor()->GetPoint();
                             bool bRestoreCursor = pPoint->GetNode().IsTextNode();
-                            const SwNodeIndex aPointNodeIndex( pPoint->nNode );
+                            const SwNodeIndex aPointNodeIndex( pPoint->GetNode() );
                             sal_Int32 nPointIndex = pPoint->GetContentIndex();
 
                             // since this conversion is not interactive the whole converted
