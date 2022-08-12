@@ -116,7 +116,7 @@
         <info>
           <desc>If true then this Node shall be displayed independent of the 
 	    Module for which the options dialog is displayed -  that is, always. 
-	    In this case it must not be assigned directly to one ore more 
+	    In this case it must not be assigned directly to one or more 
 	    Module|s. That is, it must not exist as member in Module/Nodes of no
 	    existing Module. 
 	    This is an optimization so that an extension need not provide 
