@@ -100,7 +100,7 @@ typedef std::vector<SwTextAttr*> SwpHts;
 #define CHECK_SWPHINTS_IF_FRM(pNd)
 #endif
 
-SwTextNode *SwNodes::MakeTextNode( const SwNodeIndex & rWhere,
+SwTextNode *SwNodes::MakeTextNode( SwNode& rWhere,
                                  SwTextFormatColl *pColl, bool const bNewFrames)
 {
     OSL_ENSURE( pColl, "Collection pointer is 0." );
@@ -174,7 +174,7 @@ SwTextNode *SwNodes::MakeTextNode( const SwNodeIndex & rWhere,
             }
             [[fallthrough]];
         default:
-            if( rWhere == aTmp )
+            if( &rWhere == &aTmp.GetNode() )
                 aTmp -= SwNodeOffset(2);
             else
                 return pNode;
@@ -183,7 +183,7 @@ SwTextNode *SwNodes::MakeTextNode( const SwNodeIndex & rWhere,
     } while( true );
 }
 
-SwTextNode::SwTextNode( const SwNodeIndex &rWhere, SwTextFormatColl *pTextColl, const SfxItemSet* pAutoAttr )
+SwTextNode::SwTextNode( SwNode& rWhere, SwTextFormatColl *pTextColl, const SfxItemSet* pAutoAttr )
 :   SwContentNode( rWhere, SwNodeType::Text, pTextColl ),
     m_pParaIdleData_Impl(nullptr),
     m_bContainsHiddenChars(false),
@@ -1219,7 +1219,7 @@ public:
     SwContentNodeTmp() : SwContentNode() {}
     virtual void NewAttrSet(SwAttrPool&) override {}
     virtual SwContentFrame *MakeFrame(SwFrame*) override { return nullptr; }
-    virtual SwContentNode* MakeCopy(SwDoc&, const SwNodeIndex&, bool /*bNewFrames*/) const override { return nullptr; };
+    virtual SwContentNode* MakeCopy(SwDoc&, SwNode&, bool /*bNewFrames*/) const override { return nullptr; };
 };
 };
 
@@ -3015,7 +3015,7 @@ SwTextNode* SwTextNode::MakeNewTextNode( const SwNodeIndex& rPos, bool bNext,
 
     SwTextFormatColl* pColl = GetTextColl();
 
-    SwTextNode *pNode = new SwTextNode( rPos, pColl, oNewAttrSet ? &*oNewAttrSet : nullptr );
+    SwTextNode *pNode = new SwTextNode( rPos.GetNode(), pColl, oNewAttrSet ? &*oNewAttrSet : nullptr );
 
     oNewAttrSet.reset();
 
