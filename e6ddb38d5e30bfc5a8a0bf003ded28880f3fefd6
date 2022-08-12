@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "908b3271_cf6fa5e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003543
+      },
+      "writtenOn": "2022-08-12T10:08:33Z",
+      "side": 1,
+      "message": "Disabled custom properties for now and fixed location label",
+      "revId": "e6ddb38d5e30bfc5a8a0bf003ded28880f3fefd6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

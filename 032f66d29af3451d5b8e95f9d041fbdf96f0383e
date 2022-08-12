@@ -35,6 +35,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8f990b6_e5b6a624",
+        "filename": "sfx2/source/dialog/dinfdlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1167,
+      "author": {
+        "id": 1003543
+      },
+      "writtenOn": "2022-08-12T10:08:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce55ec4e_57fa0811",
+      "revId": "032f66d29af3451d5b8e95f9d041fbdf96f0383e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0b8727cf_c2bb19af",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-08-11T15:49:02Z",
       "side": 1,
       "message": "can we use already defined enum here?\nhttps://opengrok.libreoffice.org/xref/core/sfx2/inc/dinfdlg.hrc?r\u003d48646ab6#61",
+      "revId": "032f66d29af3451d5b8e95f9d041fbdf96f0383e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2efeaaa9_74e38023",
+        "filename": "sfx2/source/dialog/dinfdlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1306,
+      "author": {
+        "id": 1003543
+      },
+      "writtenOn": "2022-08-12T10:08:33Z",
+      "side": 1,
+      "message": "Removed for this patch",
+      "parentUuid": "0b8727cf_c2bb19af",
       "revId": "032f66d29af3451d5b8e95f9d041fbdf96f0383e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -69,6 +105,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "98732ab4_51e25dfb",
+        "filename": "sfx2/source/dialog/dinfdlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1416,
+      "author": {
+        "id": 1003543
+      },
+      "writtenOn": "2022-08-12T10:08:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cb4065ce_05d9071b",
+      "revId": "032f66d29af3451d5b8e95f9d041fbdf96f0383e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "842eccc9_d4d5f425",
@@ -82,6 +136,24 @@
       "writtenOn": "2022-08-11T15:49:02Z",
       "side": 1,
       "message": "please do not change logic, it should work exactly like on desktop",
+      "revId": "032f66d29af3451d5b8e95f9d041fbdf96f0383e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd0b3b8d_12a0e69e",
+        "filename": "sfx2/source/dialog/dinfdlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1841,
+      "author": {
+        "id": 1003543
+      },
+      "writtenOn": "2022-08-12T10:08:33Z",
+      "side": 1,
+      "message": "Was bug core side, new pr: https://gerrit.libreoffice.org/c/core/+/138180",
+      "parentUuid": "842eccc9_d4d5f425",
       "revId": "032f66d29af3451d5b8e95f9d041fbdf96f0383e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -103,6 +175,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f47331d_7fa3c49c",
+        "filename": "sfx2/source/dialog/dinfdlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1959,
+      "author": {
+        "id": 1003543
+      },
+      "writtenOn": "2022-08-12T10:08:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a642edb_d2c91aa5",
+      "revId": "032f66d29af3451d5b8e95f9d041fbdf96f0383e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "27be4a0c_649ceafc",
@@ -116,6 +206,24 @@
       "writtenOn": "2022-08-11T15:49:02Z",
       "side": 1,
       "message": "why it was needed? this way we get only tabs and before we got some \"trash\" also?",
+      "revId": "032f66d29af3451d5b8e95f9d041fbdf96f0383e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "812bd486_3e6f7bb9",
+        "filename": "vcl/source/control/tabctrl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2187,
+      "author": {
+        "id": 1003543
+      },
+      "writtenOn": "2022-08-12T10:08:33Z",
+      "side": 1,
+      "message": "Previously this sent empty/shell tab pages when a tab page was removed, online would then render an empty tab. Moved to other pr: https://gerrit.libreoffice.org/c/core/+/138181",
+      "parentUuid": "27be4a0c_649ceafc",
       "revId": "032f66d29af3451d5b8e95f9d041fbdf96f0383e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
