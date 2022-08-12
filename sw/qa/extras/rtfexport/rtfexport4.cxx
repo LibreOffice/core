@@ -174,6 +174,68 @@ DECLARE_RTFEXPORT_TEST(test129758, "tdf129631_lostBorders3.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(88), border.LineWidth);
 }
 
+DECLARE_RTFEXPORT_TEST(test150382, "para-border.rtf")
+{
+    uno::Reference<container::XNameAccess> xStyles(getStyles("ParagraphStyles"));
+    uno::Reference<beans::XPropertySet> xStyle(xStyles->getByName("Normal,Bordered"),
+                                               uno::UNO_QUERY);
+    // style has borders
+    table::BorderLine2 border;
+    border = getProperty<table::BorderLine2>(xStyle, "RightBorder");
+    CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::SOLID, border.LineStyle);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(35), border.LineWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7384391), border.Color);
+    border = getProperty<table::BorderLine2>(xStyle, "LeftBorder");
+    CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::SOLID, border.LineStyle);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(35), border.LineWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7384391), border.Color);
+    border = getProperty<table::BorderLine2>(xStyle, "TopBorder");
+    CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::SOLID, border.LineStyle);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(35), border.LineWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7384391), border.Color);
+    border = getProperty<table::BorderLine2>(xStyle, "BottomBorder");
+    CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::SOLID, border.LineStyle);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(35), border.LineWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7384391), border.Color);
+    // first paragraph: style applied, no override
+    uno::Reference<beans::XPropertySet> xPara1(getParagraph(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Normal,Bordered"),
+                         getProperty<OUString>(xPara1, "ParaStyleName"));
+    border = getProperty<table::BorderLine2>(xPara1, "RightBorder");
+    CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::SOLID, border.LineStyle);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(35), border.LineWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7384391), border.Color);
+    border = getProperty<table::BorderLine2>(xPara1, "LeftBorder");
+    CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::SOLID, border.LineStyle);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(35), border.LineWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7384391), border.Color);
+    border = getProperty<table::BorderLine2>(xPara1, "TopBorder");
+    CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::SOLID, border.LineStyle);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(35), border.LineWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7384391), border.Color);
+    border = getProperty<table::BorderLine2>(xPara1, "BottomBorder");
+    CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::SOLID, border.LineStyle);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(35), border.LineWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7384391), border.Color);
+    // second paragraph: style applied
+    uno::Reference<beans::XPropertySet> xPara2(getParagraph(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Normal,Bordered"),
+                         getProperty<OUString>(xPara2, "ParaStyleName"));
+    // but no borders
+    border = getProperty<table::BorderLine2>(xPara2, "RightBorder");
+    CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::NONE, border.LineStyle);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), border.LineWidth);
+    border = getProperty<table::BorderLine2>(xPara2, "LeftBorder");
+    CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::NONE, border.LineStyle);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), border.LineWidth);
+    border = getProperty<table::BorderLine2>(xPara2, "TopBorder");
+    CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::NONE, border.LineStyle);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), border.LineWidth);
+    border = getProperty<table::BorderLine2>(xPara2, "BottomBorder");
+    CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::NONE, border.LineStyle);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), border.LineWidth);
+}
+
 DECLARE_RTFEXPORT_TEST(testAnchoredAtSamePosition, "anchor.fodt")
 {
     SwXTextDocument* const pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
