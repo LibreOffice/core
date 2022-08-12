@@ -1186,10 +1186,10 @@ bool MultiSalLayout::GetOutline(basegfx::B2DPolyPolygonVector& rPPV) const
     return bRet;
 }
 
-bool MultiSalLayout::IsKashidaPosValid(int nCharPos) const
+bool MultiSalLayout::IsKashidaPosValid(int nCharPos, int nNextCharPos) const
 {
     // Check the base layout
-    bool bValid = mpLayouts[0]->IsKashidaPosValid(nCharPos);
+    bool bValid = mpLayouts[0]->IsKashidaPosValid(nCharPos, nNextCharPos);
 
     // If base layout returned false, it might be because the character was not
     // supported there, so we check fallback layouts.
@@ -1198,9 +1198,10 @@ bool MultiSalLayout::IsKashidaPosValid(int nCharPos) const
         for (int i = 1; i < mnLevel; ++i)
         {
             // - 1 because there is no fallback run for the base layout, IIUC.
-            if (maFallbackRuns[i - 1].PosIsInAnyRun(nCharPos))
+            if (maFallbackRuns[i - 1].PosIsInAnyRun(nCharPos) &&
+                maFallbackRuns[i - 1].PosIsInAnyRun(nNextCharPos))
             {
-                bValid = mpLayouts[i]->IsKashidaPosValid(nCharPos);
+                bValid = mpLayouts[i]->IsKashidaPosValid(nCharPos, nNextCharPos);
                 break;
             }
         }

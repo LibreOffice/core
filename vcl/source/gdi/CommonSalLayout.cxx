@@ -719,22 +719,19 @@ void GenericSalLayout::ApplyDXArray(const DC* pDXArray, const sal_Bool* pKashida
             m_GlyphItems[i].addNewWidth(nDiff);
             m_GlyphItems[i].adjustLinearPosX(nDelta + nDiff);
 
-            // Adjust the X position of the rest of the glyphs in the cluster.
             size_t j = i;
             while (j > 0)
             {
                 --j;
-                if (!m_GlyphItems[j].IsInCluster())
+                if (!(m_GlyphItems[j].IsDiacritic() || m_GlyphItems[j].IsInCluster()))
                     break;
-                m_GlyphItems[j].adjustLinearPosX(nDelta + nDiff);
-            }
 
-            // Move any non-spacing marks to keep attached to this cluster.
-            while (j > 0)
-            {
-                if (!m_GlyphItems[j].IsDiacritic())
-                    break;
-                m_GlyphItems[j--].adjustLinearPosX(nDiff);
+                if (m_GlyphItems[j].IsInCluster())
+                    // Adjust X position of the remainder of the cluster.
+                    m_GlyphItems[j].adjustLinearPosX(nDelta + nDiff);
+                else
+                    // Move non-spacing marks to keep attached to this cluster.
+                    m_GlyphItems[j].adjustLinearPosX(nDiff);
             }
 
             // This is a Kashida insertion position, mark it. Kashida glyphs
@@ -807,56 +804,27 @@ void GenericSalLayout::ApplyDXArray(const DC* pDXArray, const sal_Bool* pKashida
     }
 }
 
-bool GenericSalLayout::IsKashidaPosValid(int nCharPos) const
+// Kashida will be inserted between nCharPos and nNextCharPos.
+bool GenericSalLayout::IsKashidaPosValid(int nCharPos, int nNextCharPos) const
 {
-    for (auto pIter = m_GlyphItems.begin(); pIter != m_GlyphItems.end(); ++pIter)
-    {
-        if (pIter->charPos() == nCharPos)
-        {
-            // The position is the first glyph, this would happen if we
-            // changed the text styling in the middle of a word. Since we don’t
-            // do ligatures across layout engine instances, this can’t be a
-            // ligature so it should be fine.
-            if (pIter == m_GlyphItems.begin())
-                return true;
+    // Search for glyph items corresponding to nCharPos and nNextCharPos.
+    auto const& rGlyph = std::find_if(m_GlyphItems.begin(), m_GlyphItems.end(),
+                                      [&](const GlyphItem& g) { return g.charPos() == nCharPos; });
+    auto const& rNextGlyph = std::find_if(m_GlyphItems.begin(), m_GlyphItems.end(),
+                                          [&](const GlyphItem& g) { return g.charPos() == nNextCharPos; });
 
-            // If the character is not supported by this layout, return false
-            // so that fallback layouts would be checked for it.
-            if (pIter->glyphId() == 0)
-                break;
+    // If either is not found then a ligature is created at this position, we
+    // can’t insert Kashida here.
+    if (rGlyph == m_GlyphItems.end() || rNextGlyph == m_GlyphItems.end())
+        return false;
 
-            int nClusterEndPos = nCharPos;
-            // Search backwards for previous glyph belonging to a different
-            // character. We are looking backwards because we are dealing with
-            // RTL glyphs, which will be in visual order.
-            for (auto pPrev = pIter - 1; pPrev != m_GlyphItems.begin(); --pPrev)
-            {
-#if HB_VERSION_ATLEAST(5, 1, 0)
-                // This is a combining mark, keep moving until we find a base,
-                // since HarfBuzz will tell as we can’t insert kashida after a
-                // mark, but we know know enough to move the marks when
-                // inserting kashida.
-                if (pPrev->IsDiacritic())
-                {
-                    nClusterEndPos = pPrev->charPos();
-                    continue;
-                }
-#endif
-                if (pPrev->charPos() > nClusterEndPos)
-                {
-                    // Check if the found glyph belongs to the next character,
-                    // and return if it is safe to insert kashida before it,
-                    // otherwise the current glyph will be a ligature which is
-                    // invalid kashida position.
-                    if (pPrev->charPos() == (nClusterEndPos + 1))
-                        return pPrev->IsSafeToInsertKashida();
-                    break;
-                }
-            }
-        }
-    }
+    // If the either character is not supported by this layout, return false so
+    // that fallback layouts would be checked for it.
+    if (rGlyph->glyphId() == 0 || rNextGlyph->glyphId() == 0)
+        return false;
 
-    return false;
+    // Lastly check if this position is kashida-safe.
+    return rNextGlyph->IsSafeToInsertKashida();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -48,6 +48,8 @@
 #include <salgdi.hxx>
 #include <svdata.hxx>
 
+#include <unicode/uchar.h>
+
 #include <strings.hrc>
 
 void OutputDevice::SetFont( const vcl::Font& rNewFont )
@@ -1311,14 +1313,28 @@ sal_Int32 OutputDevice::ValidateKashidas ( const OUString& rTxt,
     std::unique_ptr<SalLayout> pSalLayout = ImplLayout( rTxt, nIdx, nLen );
     if( !pSalLayout )
         return 0;
+
+    auto nEnd = nIdx + nLen - 1;
     sal_Int32 nDropped = 0;
     for( int i = 0; i < nKashCount; ++i )
     {
-        if( !pSalLayout->IsKashidaPosValid( pKashidaPos[ i ] ))
-        {
-            pKashidaPosDropped[ nDropped ] = pKashidaPos [ i ];
-            ++nDropped;
-        }
+        auto nPos = pKashidaPos[i];
+        auto nNextPos = nPos + 1;
+
+        // Skip combining marks to find the next character after this position.
+        while (nNextPos <= nEnd &&
+               u_getIntPropertyValue(rTxt[nNextPos], UCHAR_JOINING_TYPE) == U_JT_TRANSPARENT)
+            nNextPos++;
+
+        // This is the start or end of the layout, it would happen if we
+        // changed the text styling in the middle of a word. Since we don’t do
+        // apply OpenType features across different layouts, this can’t be an
+        // invalid place to insert Kashida.
+        if (nPos == nIdx || nNextPos >= nEnd)
+            continue;
+
+        if (!pSalLayout->IsKashidaPosValid(nPos, nNextPos))
+            pKashidaPosDropped[nDropped++] = nPos;
     }
     return nDropped;
 }
