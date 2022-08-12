@@ -838,16 +838,12 @@ bool GraphicDescriptor::ImpDetectPPM( SvStream& rStm, bool )
 
 bool GraphicDescriptor::ImpDetectRAS( SvStream& rStm, bool )
 {
-    sal_uInt32 nMagicNumber = 0;
-    bool bRet = false;
     sal_Int32 nStmPos = rStm.Tell();
-    rStm.SetEndian( SvStreamEndian::BIG );
-    rStm.ReadUInt32( nMagicNumber );
-    if ( nMagicNumber == 0x59a66a95 )
-    {
-        aMetadata.mnFormat = GraphicFileFormat::RAS;
-        bRet = true;
-    }
+    vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /* bExtendedInfo */ );
+    bool bRet = aDetector.detect();
+    bRet &= aDetector.checkRAS();
+    if ( bRet )
+        aMetadata = aDetector.getMetadata();
     rStm.Seek( nStmPos );
     return bRet;
 }
