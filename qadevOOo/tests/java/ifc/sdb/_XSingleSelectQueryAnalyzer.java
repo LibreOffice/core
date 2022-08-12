@@ -167,7 +167,7 @@ public class _XSingleSelectQueryAnalyzer extends MultiMethodTest {
     }
 
     /**
-    * Object relation <code>xComposer</code> set a goup. This group
+    * Object relation <code>xComposer</code> set a group. This group
     * must returned while calling <code>getGroup</code>
     */
     public void _getGroup() {
