@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5b98633_b81c0870",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2022-08-12T10:57:40Z",
+      "side": 1,
+      "message": "Hm. I thought I already covered this situation. But I\u0027m wrong. No objections.",
+      "revId": "c482c1ce03d718f16d44e1861a8596a3e4002f23",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
