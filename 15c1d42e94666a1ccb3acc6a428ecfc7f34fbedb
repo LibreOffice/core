@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8dfa4b71_0c33c49a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-08-12T14:25:51Z",
+      "side": 1,
+      "message": "Szymon, can you critically review this set of patches? This is rather new territory for me. I saw you did work on CharColorExt 3 years ago, and you are always doing UI stuff for Collabora.\n\nI\u0027m sure this is verified. I\u0027ll rebase it if you say there are no changes necessary.",
+      "revId": "15c1d42e94666a1ccb3acc6a428ecfc7f34fbedb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9888e785_97f5ec72",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3340,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-08-12T14:25:51Z",
+      "side": 1,
+      "message": "I don\u0027t know what this really does. I commented this out, and everything still worked. (The watering can was still enabled/disabled, and the background highlighting still happened. It just didn\u0027t call the GetState functions constantly for this slot.)\n\nCan you suggest what would break if this was removed? (The question really applies to the follow-up patch - wondering whether even more can be cleared out.) I was really surprised when I could even remove all of the related code from _text.sdi and nothing broke. So I\u0027m not sure where I should be looking to find the purpose for its existence. (This isn\u0027t something I think should ultimately be removed, so I\u0027m just asking to gain insight into this UI stuff.)",
+      "range": {
+        "startLine": 3340,
+        "startChar": 11,
+        "endLine": 3340,
+        "endChar": 57
+      },
+      "revId": "15c1d42e94666a1ccb3acc6a428ecfc7f34fbedb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
