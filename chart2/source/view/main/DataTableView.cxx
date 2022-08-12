@@ -57,6 +57,29 @@ void copyProperty(uno::Reference<beans::XPropertySet>& xOut,
 {
     xOut->setPropertyValue(sPropertyName, xIn->getPropertyValue(sPropertyName));
 }
+
+uno::Reference<text::XTextRange> getFirstParagraph(uno::Reference<text::XText> const& xText)
+{
+    uno::Reference<text::XTextRange> xParagraph;
+    uno::Reference<container::XEnumerationAccess> xEnumAccess(xText, uno::UNO_QUERY);
+    if (!xEnumAccess.is())
+        return xParagraph;
+    uno::Reference<container::XEnumeration> xEnumeration(xEnumAccess->createEnumeration());
+    xParagraph.set(xEnumeration->nextElement(), uno::UNO_QUERY);
+    return xParagraph;
+}
+
+uno::Reference<beans::XPropertySet>
+getFirstParagraphProperties(uno::Reference<text::XText> const& xText)
+{
+    uno::Reference<beans::XPropertySet> xPropertySet;
+    auto xParagraph = getFirstParagraph(xText);
+    if (!xParagraph.is())
+        return xPropertySet;
+    xPropertySet.set(xParagraph, uno::UNO_QUERY);
+    return xPropertySet;
+}
+
 } // end anonymous namespace
 
 DataTableView::DataTableView(
@@ -67,8 +90,8 @@ DataTableView::DataTableView(
     , m_xDataTableModel(rDataTableModel)
     , m_xComponentContext(rComponentContext)
 {
-    uno::Reference<beans::XPropertySet> xProp(m_xDataTableModel);
-    m_aLineProperties.initFromPropertySet(xProp);
+    uno::Reference<beans::XPropertySet> xPropertySet(m_xDataTableModel);
+    m_aLineProperties.initFromPropertySet(xPropertySet);
 }
 
 void DataTableView::setCellCharAndParagraphProperties(
@@ -274,14 +297,18 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
         uno::Reference<text::XTextRange> xCellTextRange(xCell, uno::UNO_QUERY);
         if (xCellTextRange.is())
         {
-            xCellTextRange->setString(rString);
+            auto xText = xCellTextRange->getText();
+            xText->insertString(xText->getStart(), rString, false);
+            auto xTextPropertySet = getFirstParagraphProperties(xText);
+            if (!xTextPropertySet.is())
+                continue;
 
             bool bLeft
                 = (bOutline && nColumn == 1) || (bVBorder && nColumn > 1 && nColumn < nColumnCount);
             bool bRight = (bOutline && nColumn == nColumnCount)
                           || (bVBorder && nColumn > 1 && nColumn < nColumnCount);
+            setCellCharAndParagraphProperties(xTextPropertySet);
             setCellProperties(xPropertySet, bLeft, bOutline, bRight, bOutline);
-            setCellCharAndParagraphProperties(xPropertySet);
         }
         nColumn++;
     }
@@ -319,17 +346,14 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
             bool bTop = (bOutline && nRow == 1) || (bHBorder && nRow > 1 && nRow < nRowCount);
             bool bBottom
                 = (bOutline && nRow == nRowCount) || (bHBorder && nRow > 1 && nRow < nRowCount);
-            setCellProperties(xCellPropertySet, bOutline, bTop, bOutline, bBottom);
 
             auto xText = xCellTextRange->getText();
             xText->insertString(xText->getStart(), rSeriesName, false);
-            uno::Reference<container::XEnumerationAccess> xEnumAccess(xText, uno::UNO_QUERY);
-            uno::Reference<container::XEnumeration> xEnumeration(xEnumAccess->createEnumeration());
-            uno::Reference<text::XTextRange> xParagraph(xEnumeration->nextElement(),
-                                                        uno::UNO_QUERY);
-            uno::Reference<beans::XPropertySet> xTextPropertySet(xParagraph, uno::UNO_QUERY);
-
+            auto xTextPropertySet = getFirstParagraphProperties(xText);
+            if (!xTextPropertySet.is())
+                continue;
             setCellCharAndParagraphProperties(xTextPropertySet);
+            setCellProperties(xCellPropertySet, bOutline, bTop, bOutline, bBottom);
 
             xCellPropertySet->setPropertyValue("ParaAdjust", uno::Any(style::ParagraphAdjust_LEFT));
             if (bKeys)
@@ -349,11 +373,15 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
         for (auto const& rValue : rSeries)
         {
             uno::Reference<table::XCell> xCell = xTable->getCellByPosition(nColumn, nRow);
-            uno::Reference<beans::XPropertySet> xPropertySet(xCell, uno::UNO_QUERY);
+            uno::Reference<beans::XPropertySet> xCellPropertySet(xCell, uno::UNO_QUERY);
             uno::Reference<text::XTextRange> xCellTextRange(xCell, uno::UNO_QUERY);
             if (xCellTextRange.is())
             {
-                xCellTextRange->setString(rValue);
+                auto xText = xCellTextRange->getText();
+                xText->insertString(xText->getStart(), rValue, false);
+                auto xTextPropertySet = getFirstParagraphProperties(xText);
+                if (!xTextPropertySet.is())
+                    continue;
 
                 bool bLeft = false;
                 bool bTop = false;
@@ -372,8 +400,8 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
                 if (nColumn == nColumnCount && bOutline)
                     bRight = true;
 
-                setCellProperties(xPropertySet, bLeft, bTop, bRight, bBottom);
-                setCellCharAndParagraphProperties(xPropertySet);
+                setCellCharAndParagraphProperties(xTextPropertySet);
+                setCellProperties(xCellPropertySet, bLeft, bTop, bRight, bBottom);
             }
             nColumn++;
         }
