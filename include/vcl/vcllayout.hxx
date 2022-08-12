@@ -92,7 +92,7 @@ public:
     virtual DeviceCoordinate FillDXArray( std::vector<DeviceCoordinate>* pDXArray ) const = 0;
     virtual DeviceCoordinate GetTextWidth() const { return FillDXArray( nullptr ); }
     virtual void    GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const = 0;
-    virtual bool    IsKashidaPosValid ( int /*nCharPos*/ ) const { return true; } // i60594
+    virtual bool    IsKashidaPosValid ( int /*nCharPos*/, int /*nNextCharPos*/ ) const = 0; // i60594
 
     // methods using glyph indexing
     virtual bool    GetNextGlyph(const GlyphItem** pGlyph, DevicePoint& rPos, int& nStart,

@@ -68,7 +68,7 @@ public:
                                  const LogicalFontInstance** ppGlyphFont = nullptr,
                                  const vcl::font::PhysicalFontFace** pFallbackFont = nullptr) const override;
     bool            GetOutline(basegfx::B2DPolyPolygonVector&) const override;
-    bool            IsKashidaPosValid(int nCharPos) const override;
+    bool            IsKashidaPosValid(int nCharPos, int nNextCharPos) const override;
     SalLayoutGlyphs GetGlyphs() const final override;
 
     // used only by OutputDevice::ImplLayout, TODO: make friend
@@ -115,7 +115,7 @@ public:
     void            DrawText(SalGraphics&) const final override;
     SalLayoutGlyphs GetGlyphs() const final override;
 
-    bool            IsKashidaPosValid(int nCharPos) const final override;
+    bool            IsKashidaPosValid(int nCharPos, int nNextCharPos) const final override;
 
     // used by upper layers
     DeviceCoordinate GetTextWidth() const final override;
