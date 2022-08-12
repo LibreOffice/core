@@ -60,8 +60,7 @@ DataTableItemConverter::DataTableItemConverter(
 {
     m_aConverters.emplace_back(new GraphicPropertyItemConverter(
         rPropertySet, rItemPool, rDrawModel, xChartDoc, GraphicObjectType::LineProperties));
-    m_aConverters.emplace_back(
-        new CharacterPropertyItemConverter(rPropertySet, rItemPool, pRefSize, "ReferencePageSize"));
+    m_aConverters.emplace_back(new CharacterPropertyItemConverter(rPropertySet, rItemPool));
 }
 
 DataTableItemConverter::~DataTableItemConverter() = default;
