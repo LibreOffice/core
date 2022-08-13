@@ -1659,28 +1659,34 @@ private:
 };
 }
 
+static bool lcl_BailOnNegativeRect(tools::Rectangle const& rRect, const DrawTextFlags nStyle)
+{
+    if (rRect.GetWidth() <= 0 || rRect.GetHeight() <= 0)
+    {
+        if (nStyle & DrawTextFlags::Clip)
+            return true;
+
+        static bool bFuzzing = utl::ConfigManager::IsFuzzing();
+        SAL_WARN_IF(bFuzzing, "vcl", "skipping negative rectangle of: "
+                              << rRect.GetWidth() << " x " << rRect.GetHeight());
+        if (bFuzzing)
+            return true;
+    }
+
+    return false;
+}
+
 void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Rectangle& rRect,
                                  const OUString& rOrigStr, DrawTextFlags nStyle,
                                  std::vector< tools::Rectangle >* pVector, OUString* pDisplayText,
                                  vcl::ITextLayout& _rLayout )
 {
+    if (lcl_BailOnNegativeRect(rRect, nStyle))
+        return;
+
     TextColorGuard aTextColorGuard(rTargetDevice, nStyle, pVector);
 
-    tools::Long        nWidth          = rRect.GetWidth();
-    tools::Long        nHeight         = rRect.GetHeight();
-
-    if (nWidth <= 0 || nHeight <= 0)
-    {
-        if (nStyle & DrawTextFlags::Clip)
-            return;
-        static bool bFuzzing = utl::ConfigManager::IsFuzzing();
-        SAL_WARN_IF(bFuzzing, "vcl", "skipping negative rectangle of: " << nWidth << " x " << nHeight);
-        if (bFuzzing)
-            return;
-    }
-
     Point       aPos            = rRect.TopLeft();
-
     tools::Long        nTextHeight     = rTargetDevice.GetTextHeight();
     TextAlign   eAlign          = rTargetDevice.GetTextAlign();
     sal_Int32   nMnemonicPos    = -1;
@@ -1701,8 +1707,9 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
 
         if ( nTextHeight )
         {
-            tools::Long nMaxTextWidth = ImplGetTextLines( rRect, nTextHeight, aMultiLineInfo, nWidth, aStr, nStyle, _rLayout );
-            sal_Int32 nLines = static_cast<sal_Int32>(nHeight/nTextHeight);
+            tools::Long nMaxTextWidth = ImplGetTextLines(rRect, nTextHeight, aMultiLineInfo,
+                                                         rRect.GetWidth(), aStr, nStyle, _rLayout);
+            sal_Int32 nLines = static_cast<sal_Int32>(rRect.GetHeight() / nTextHeight);
             OUString aLastLine;
             nFormatLines = aMultiLineInfo.Count();
             if (nLines <= 0)
@@ -1725,19 +1732,19 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
                             aLastLineBuffer[ i ] = ' ';
                     }
                     aLastLine = aLastLineBuffer.makeStringAndClear();
-                    aLastLine = ImplGetEllipsisString( rTargetDevice, aLastLine, nWidth, nStyle, _rLayout );
+                    aLastLine = ImplGetEllipsisString( rTargetDevice, aLastLine, rRect.GetWidth(), nStyle, _rLayout );
                     nStyle &= ~DrawTextFlags(DrawTextFlags::VCenter | DrawTextFlags::Bottom);
                     nStyle |= DrawTextFlags::Top;
                 }
             }
             else
             {
-                if ( nMaxTextWidth <= nWidth )
+                if (nMaxTextWidth <= rRect.GetWidth())
                     nStyle &= ~DrawTextFlags::Clip;
             }
 
             // Do we need to clip the height?
-            if ( nFormatLines*nTextHeight > nHeight )
+            if ((nFormatLines * nTextHeight) > rRect.GetHeight())
                 nStyle |= DrawTextFlags::Clip;
 
             // Set clipping
@@ -1748,10 +1755,10 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
             }
 
             // Vertical alignment
-            if ( nStyle & DrawTextFlags::Bottom )
-                aPos.AdjustY(nHeight-(nFormatLines*nTextHeight) );
-            else if ( nStyle & DrawTextFlags::VCenter )
-                aPos.AdjustY((nHeight-(nFormatLines*nTextHeight))/2 );
+            if (nStyle & DrawTextFlags::Bottom)
+                aPos.AdjustY(rRect.GetHeight() - (nFormatLines * nTextHeight));
+            else if (nStyle & DrawTextFlags::VCenter)
+                aPos.AdjustY((rRect.GetHeight() - (nFormatLines * nTextHeight)) / 2);
 
             // Font alignment
             if ( eAlign == ALIGN_BOTTOM )
@@ -1763,10 +1770,12 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
             for ( i = 0; i < nFormatLines; i++ )
             {
                 ImplTextLineInfo& rLineInfo = aMultiLineInfo.GetLine( i );
-                if ( nStyle & DrawTextFlags::Right )
-                    aPos.AdjustX(nWidth-rLineInfo.GetWidth() );
-                else if ( nStyle & DrawTextFlags::Center )
-                    aPos.AdjustX((nWidth-rLineInfo.GetWidth())/2 );
+
+                if (nStyle & DrawTextFlags::Right)
+                    aPos.AdjustX(rRect.GetWidth() - rLineInfo.GetWidth());
+                else if (nStyle & DrawTextFlags::Center)
+                    aPos.AdjustX((rRect.GetWidth() - rLineInfo.GetWidth())/2 );
+
                 sal_Int32 nIndex   = rLineInfo.GetIndex();
                 sal_Int32 nLineLen = rLineInfo.GetLen();
                 _rLayout.DrawText( aPos, aStr, nIndex, nLineLen, pVector, pDisplayText );
@@ -1809,27 +1818,27 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
         tools::Long nTextWidth = _rLayout.GetTextWidth( aStr, 0, -1 );
 
         // Clip text if needed
-        if ( nTextWidth > nWidth )
+        if (nTextWidth > rRect.GetWidth())
         {
-            if ( nStyle & TEXT_DRAW_ELLIPSIS )
+            if (nStyle & TEXT_DRAW_ELLIPSIS)
             {
-                aStr = ImplGetEllipsisString( rTargetDevice, aStr, nWidth, nStyle, _rLayout );
+                aStr = ImplGetEllipsisString(rTargetDevice, aStr, rRect.GetWidth(), nStyle, _rLayout);
                 nStyle &= ~DrawTextFlags(DrawTextFlags::Center | DrawTextFlags::Right);
                 nStyle |= DrawTextFlags::Left;
-                nTextWidth = _rLayout.GetTextWidth( aStr, 0, aStr.getLength() );
+                nTextWidth = _rLayout.GetTextWidth(aStr, 0, aStr.getLength());
             }
         }
         else
         {
-            if ( nTextHeight <= nHeight )
+            if (nTextHeight <= rRect.GetHeight())
                 nStyle &= ~DrawTextFlags::Clip;
         }
 
         // horizontal text alignment
-        if ( nStyle & DrawTextFlags::Right )
-            aPos.AdjustX(nWidth-nTextWidth );
-        else if ( nStyle & DrawTextFlags::Center )
-            aPos.AdjustX((nWidth-nTextWidth)/2 );
+        if (nStyle & DrawTextFlags::Right)
+            aPos.AdjustX(rRect.GetWidth() - nTextWidth);
+        else if (nStyle & DrawTextFlags::Center)
+            aPos.AdjustX((rRect.GetWidth() - nTextWidth) / 2);
 
         // vertical font alignment
         if ( eAlign == ALIGN_BOTTOM )
@@ -1837,10 +1846,10 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
         else if ( eAlign == ALIGN_BASELINE )
             aPos.AdjustY(rTargetDevice.GetFontMetric().GetAscent() );
 
-        if ( nStyle & DrawTextFlags::Bottom )
-            aPos.AdjustY(nHeight-nTextHeight );
-        else if ( nStyle & DrawTextFlags::VCenter )
-            aPos.AdjustY((nHeight-nTextHeight)/2 );
+        if (nStyle & DrawTextFlags::Bottom)
+            aPos.AdjustY(rRect.GetHeight() - nTextHeight);
+        else if (nStyle & DrawTextFlags::VCenter)
+            aPos.AdjustY((rRect.GetHeight() - nTextHeight) / 2);
 
         tools::Long nMnemonicX = 0;
         tools::Long nMnemonicY = 0;
