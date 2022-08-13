@@ -13,6 +13,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 
 #include <comphelper/sequenceashashmap.hxx>
@@ -48,6 +49,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148360)
     assertXPath(pLayout, "/root/page[1]/body/txt[1]/Text[2]", "nType", "PortionType::Text");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf77964)
+{
+    loadAndReload("tdf77964.doc");
+    // both images were loading as AT_PARA instead of AS_CHAR. Image2 visually had text wrapping.
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER, getProperty<text::TextContentAnchorType>(getShapeByName(u"Image2"), "AnchorType"));
+}
 
 
 CPPUNIT_PLUGIN_IMPLEMENT();
