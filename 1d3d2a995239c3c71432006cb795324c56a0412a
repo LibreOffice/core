@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34f33d40_8b70a084",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 30
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-08-13T09:55:39Z",
+      "side": 1,
+      "message": "crashtesting shows some asserts which I\u0027ve bisected to this commit. To reproduce:\n\nwget https://bugs.documentfoundation.org/attachment.cgi?id\u003d56101 -O ~/fdo45193-1.docx\n./instdir/program/soffice --headless --convert-to pdf ~/fdo45193-1.docx\n\nsomewhere a sorted list becomes unsorted and so a --enable-dbgutil version asserts o discovering the inconsistency\n\n/usr/bin/../lib/gcc/x86_64-redhat-linux/12/../../../../include/c++/12/bits/stl_algo.h:2002:\nIn function:\n    _ForwardIterator std::lower_bound(_ForwardIterator, _ForwardIterator, \n    const _Tp \u0026, _Compare) [_ForwardIterator \u003d gnu_debug::_Safe_iterator\u003c\n    gnu_cxx::normal_iterator\u003cSwAnchoredObject **, std::\n    vector\u003cSwAnchoredObject *\u003e\u003e, std::vector\u003cSwAnchoredObject *\u003e, \n    std::random_access_iterator_tag\u003e, _Tp \u003d SwAnchoredObject *, _Compare \u003d \n    (anonymous namespace)::ObjAnchorOrder]\n\nError: elements in iterator range [first, last) are not partitioned by the \npredicate __comp and value __val.\n\nObjects involved in the operation:\n    iterator \"first\" @ 0x7fff8f1ab488 {\n      type \u003d gnu_cxx::normal_iterator\u003cSwAnchoredObject**, std::vector\u003cSwAnchoredObject*, std::allocator\u003cSwAnchoredObject*\u003e \u003e \u003e (mutable iterator);\n      state \u003d dereferenceable (start-of-sequence);\n      references sequence with type \u0027std::debug::vector\u003cSwAnchoredObject*, std::allocator\u003cSwAnchoredObject*\u003e \u003e\u0027 @ 0x5202db0\n    }\n    iterator \"last\" @ 0x7fff8f1ab460 {\n      type \u003d gnu_cxx::normal_iterator\u003cSwAnchoredObject**, std::vector\u003cSwAnchoredObject*, std::allocator\u003cSwAnchoredObject*\u003e \u003e \u003e (mutable iterator);\n      state \u003d past-the-end;\n      references sequence with type \u0027std::debug::vector\u003cSwAnchoredObject*, std::allocator\u003cSwAnchoredObject*\u003e \u003e\u0027 @ 0x5202db0\n    }\nUnspecified Application Error\n\n\nFatal exception: Signal 6\n\n",
+      "revId": "1d3d2a995239c3c71432006cb795324c56a0412a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
