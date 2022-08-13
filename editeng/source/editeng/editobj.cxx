@@ -150,12 +150,12 @@ void ContentInfo::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterWriteString(pWriter, BAD_CAST(aText.replaceAll("\x01", "&#1;").toUtf8().getStr()));
     (void)xmlTextWriterEndElement(pWriter);
     aParaAttribs.dumpAsXml(pWriter);
-    for (size_t i=0; i<maCharAttribs.size(); ++i)
+    for (auto const& rCharAttribs : maCharAttribs)
     {
         (void)xmlTextWriterStartElement(pWriter, BAD_CAST("attribs"));
-        (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("start"), "%" SAL_PRIdINT32, maCharAttribs[i].GetStart());
-        (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("end"), "%" SAL_PRIdINT32, maCharAttribs[i].GetEnd());
-        maCharAttribs[i].GetItem()->dumpAsXml(pWriter);
+        (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("start"), "%" SAL_PRIdINT32, rCharAttribs.GetStart());
+        (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("end"), "%" SAL_PRIdINT32, rCharAttribs.GetEnd());
+        rCharAttribs.GetItem()->dumpAsXml(pWriter);
         (void)xmlTextWriterEndElement(pWriter);
     }
     (void)xmlTextWriterEndElement(pWriter);
