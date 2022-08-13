@@ -156,6 +156,8 @@ private: //methods
 
     ::basegfx::B2DVector getScreenPosition( double fLogicX, double fLogicY, double fLogicZ ) const;
     ScreenPosAndLogicPos getScreenPosAndLogicPos( double fLogicX, double fLogicY, double fLogicZ ) const;
+
+    void createDataTableShape(std::unique_ptr<TickFactory2D> const& rTickFactory2D);
 };
 
 } //namespace chart

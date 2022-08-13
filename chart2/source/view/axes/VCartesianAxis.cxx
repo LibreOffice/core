@@ -1664,6 +1664,35 @@ void VCartesianAxis::doStaggeringOfLabels( const AxisLabelProperties& rAxisLabel
     }
 }
 
+void VCartesianAxis::createDataTableShape(std::unique_ptr<TickFactory2D> const& rpTickFactory2D)
+{
+    // Check if we can create the data table shape
+    // Data table view and m_bDisplayDataTable must be true
+    if (!m_pDataTableView || !m_aAxisProperties.m_bDisplayDataTable)
+        return;
+
+    m_pDataTableView->initializeShapes(m_xDataTableTarget);
+    basegfx::B2DVector aStart = rpTickFactory2D->getXaxisStartPos();
+    basegfx::B2DVector aEnd = rpTickFactory2D->getXaxisEndPos();
+
+    rpTickFactory2D->updateScreenValues(m_aAllTickInfos);
+
+    sal_Int32 nDistance = -1;
+
+    std::unique_ptr<TickIter> apTickIter(createLabelTickIterator(0));
+    if (apTickIter)
+    {
+        nDistance = TickFactory2D::getTickScreenDistance(*apTickIter);
+        if (getTextLevelCount() > 1)
+            nDistance *= 2;
+    }
+
+    if (nDistance > 0)
+    {
+        m_pDataTableView->createShapes(aStart, aEnd, nDistance);
+    }
+}
+
 void VCartesianAxis::createLabels()
 {
     if( !prepareShapeCreation() )
@@ -1671,28 +1700,7 @@ void VCartesianAxis::createLabels()
 
     std::unique_ptr<TickFactory2D> apTickFactory2D(createTickFactory2D()); // throws on failure
 
-    if (m_pDataTableView && m_aAxisProperties.m_bDisplayDataTable)
-    {
-        m_pDataTableView->initializeShapes(m_xDataTableTarget);
-        basegfx::B2DVector aStart = apTickFactory2D->getXaxisStartPos();
-        basegfx::B2DVector aEnd = apTickFactory2D->getXaxisEndPos();
-
-        apTickFactory2D->updateScreenValues(m_aAllTickInfos);
-
-        sal_Int32 nDistance = -1;
-
-        std::unique_ptr<TickIter> apTickIter(createLabelTickIterator(0));
-        if (apTickIter)
-        {
-            nDistance = TickFactory2D::getTickScreenDistance(*apTickIter);
-            if (getTextLevelCount() > 1)
-                nDistance *= 2;
-        }
-
-        if (nDistance > 0)
-            m_pDataTableView->createShapes(aStart, aEnd, nDistance);
-        return;
-    }
+    createDataTableShape(apTickFactory2D);
 
     //create labels
     if (!m_aAxisProperties.m_bDisplayLabels)
@@ -1744,6 +1752,14 @@ void VCartesianAxis::createLabels()
         }
     }
     doStaggeringOfLabels( m_aAxisLabelProperties, pTickFactory2D );
+
+    if (m_pDataTableView)
+    {
+        sal_Int32 x = m_xTextTarget->getPosition().X;
+        sal_Int32 y = m_xTextTarget->getPosition().Y;
+        sal_Int32 height = m_xTextTarget->getSize().Height;
+        m_pDataTableView->changePosition(x, y + height);
+    }
 }
 
 void VCartesianAxis::createMaximumLabels()
@@ -1998,12 +2014,12 @@ void VCartesianAxis::createDataTableView(std::vector<std::unique_ptr<VSeriesPlot
                                          rtl::Reference<::chart::ChartModel> const& xChartDoc,
                                          css::uno::Reference<css::uno::XComponentContext> const& rComponentContext)
 {
-    if (m_aAxisProperties.m_bDisplayDataTable)
-    {
-        m_pDataTableView.reset(new DataTableView(xChartDoc, m_aAxisProperties.m_xDataTableModel, rComponentContext));
-        m_pDataTableView->initializeValues(rSeriesPlotterList);
-        m_xNumberFormatsSupplier = xNumberFormatsSupplier;
-    }
+    if (!m_aAxisProperties.m_bDisplayDataTable)
+        return;
+
+    m_pDataTableView.reset(new DataTableView(xChartDoc, m_aAxisProperties.m_xDataTableModel, rComponentContext, m_aAxisProperties.m_bDataTableAlignAxisValuesWithColumns));
+    m_pDataTableView->initializeValues(rSeriesPlotterList);
+    m_xNumberFormatsSupplier = xNumberFormatsSupplier;
 }
 
 
