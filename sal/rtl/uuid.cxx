@@ -25,14 +25,6 @@
 #include <rtl/uuid.h>
 #include <rtl/digest.h>
 
-#define SWAP_INT32_TO_NETWORK(x)\
-               { sal_uInt32 y = x;\
-                 sal_uInt8 *p = reinterpret_cast<sal_uInt8 *>(&(x)); \
-                 p[0] = static_cast<sal_uInt8>( ( y >> 24 ) & 0xff );\
-                 p[1] = static_cast<sal_uInt8>( ( y >> 16 ) & 0xff );\
-                 p[2] = static_cast<sal_uInt8>( ( y >> 8 )  & 0xff );\
-                 p[3] = static_cast<sal_uInt8>( ( y ) & 0xff);\
-               }
 #define SWAP_INT16_TO_NETWORK(x)\
                { sal_uInt16 y = x;\
                  sal_uInt8 *p = reinterpret_cast<sal_uInt8 *>(&(x)); \
@@ -75,8 +67,6 @@ static void write_v3( sal_uInt8 *pUuid  )
     // copy to avoid alignment problems
     memcpy(&uuid, pUuid, 16);
 
-    SWAP_NETWORK_TO_INT32(uuid.time_low);
-    SWAP_NETWORK_TO_INT16(uuid.time_mid);
     SWAP_NETWORK_TO_INT16(uuid.time_hi_and_version);
 
     /* put in the variant and version bits */
@@ -85,8 +75,6 @@ static void write_v3( sal_uInt8 *pUuid  )
     uuid.clock_seq_hi_and_reserved &= 0x3F;
     uuid.clock_seq_hi_and_reserved |= 0x80;
 
-    SWAP_INT32_TO_NETWORK(uuid.time_low);
-    SWAP_INT16_TO_NETWORK(uuid.time_mid);
     SWAP_INT16_TO_NETWORK(uuid.time_hi_and_version);
 
     memcpy(pUuid, &uuid, 16);
