@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "374b0757_a81d434c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-13T18:37:47Z",
+      "side": 1,
+      "message": "Thanks, looks good in general - please see a naming nitpick.",
+      "revId": "bb156d53084cf3653bed250b413f30e8d091b74b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74b139e5_0b0f858d",
+        "filename": "editeng/source/editeng/editobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-13T18:37:47Z",
+      "side": 1,
+      "message": "maCharAttribs name means:\n\nm \u003d member (of a class);\na \u003d anything except numbers, pointers, or interfaces;\nCharAttribs (in plural) - a collection of attributes.\n\nThe element that you get in the variable that you called rMaCharAttribs represents a reference (r) to a *single* attribute. Additionally, it is not a member. A good name, therefore, would look like\n\n  rCharAttrib",
+      "range": {
+        "startLine": 153,
+        "startChar": 21,
+        "endLine": 153,
+        "endChar": 36
+      },
+      "revId": "bb156d53084cf3653bed250b413f30e8d091b74b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
