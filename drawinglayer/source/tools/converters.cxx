@@ -76,7 +76,11 @@ namespace drawinglayer
             ScopedVclPtrInstance< VirtualDevice > pContent;
 
             // prepare vdev
-            pContent->SetOutputSizePixel(aSizePixel, false);
+            if (!pContent->SetOutputSizePixel(aSizePixel, false))
+            {
+                SAL_WARN("vcl", "Cannot set VirtualDevice to size : " << aSizePixel.Width() << "x" << aSizePixel.Height());
+                return aRetval;
+            }
             pContent->SetMapMode(aMapModePixel);
 
             // set to all white
