@@ -166,7 +166,7 @@ public:
        Implementation in doc.hxx (because one needs to know Doc for it) ! */
     bool IsDocNodes() const;
 
-    static sal_uInt16 GetSectionLevel(const SwNodeIndex &rIndex);
+    static sal_uInt16 GetSectionLevel(const SwNode &rIndex);
     void Delete(const SwNodeIndex &rPos, SwNodeOffset nNodes = SwNodeOffset(1));
 
     bool MoveNodes( const SwNodeRange&, SwNodes& rNodes, const SwNodeIndex&,

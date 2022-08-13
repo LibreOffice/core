@@ -1265,12 +1265,12 @@ void SwNodes::Delete(const SwNodeIndex &rIndex, SwNodeOffset nNodes)
  * @param rIdx position of the node
  * @return section level at the given position
  */
-sal_uInt16 SwNodes::GetSectionLevel(const SwNodeIndex &rIdx)
+sal_uInt16 SwNodes::GetSectionLevel(const SwNode &rIdx)
 {
     // special treatment for 1st Node
-    if(rIdx == SwNodeOffset(0)) return 1;
+    if(rIdx.GetIndex() == SwNodeOffset(0)) return 1;
     // no recursion! This calls a SwNode::GetSectionLevel (missing "s")
-    return rIdx.GetNode().GetSectionLevel();
+    return rIdx.GetSectionLevel();
 }
 
 void SwNodes::GoStartOfSection(SwNodeIndex *pIdx)
@@ -1454,7 +1454,7 @@ static bool lcl_HighestLevel( SwNode* pNode, void * pPara )
  */
 sal_uInt16 HighestLevel( SwNodes & rNodes, const SwNodeRange & rRange )
 {
-    HighLevel aPara( SwNodes::GetSectionLevel( rRange.aStart ));
+    HighLevel aPara( SwNodes::GetSectionLevel( rRange.aStart.GetNode() ));
     rNodes.ForEach( rRange.aStart, rRange.aEnd, lcl_HighestLevel, &aPara );
     return aPara.nTop;
 
