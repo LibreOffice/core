@@ -707,6 +707,27 @@ rtl::Reference<MetaAction> SvmReader::TextArrayHandler(const ImplMetaReadData* p
     if (!aArray.empty())
         pAction->SetDXArray(std::move(aArray));
 
+    if (aCompat.GetVersion() >= 3) // Version 3
+    {
+        sal_Int32 nKashidaAryLen(0);
+        mrStream.ReadInt32(nKashidaAryLen);
+        nTmpLen = std::min(nKashidaAryLen, sal_Int32(aArray.size()));
+        if (nTmpLen)
+        {
+            // aKashidaArray, if not empty, must be the same size as aArray
+            std::vector<sal_Bool> aKashidaArray(aArray.size(), 0);
+
+            // [-loplugin:fakebool] false positive:
+            sal_Bool val(sal_False);
+            for (sal_Int32 i = 0; i < nTmpLen; i++)
+            {
+                mrStream.ReadUChar(val);
+                aKashidaArray[i] = val;
+            }
+            pAction->SetKashidaArray(std::move(aKashidaArray));
+        }
+    }
+
     return pAction;
 }
 
