@@ -1133,8 +1133,6 @@ public:
 
     bool GetFontFeatures(std::vector<vcl::font::Feature>& rFontFeatures) const;
 
-    SAL_DLLPRIVATE void         ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPolyLine, tools::Rectangle& rRect1, tools::Rectangle& rRect2,
-                                                     tools::Long& rYOff, tools::Long& rWidth, FontEmphasisMark eEmphasis, tools::Long nHeight );
     bool                        GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex,
                                                     int nLen, std::vector< tools::Rectangle >& rVector ) const;
 
