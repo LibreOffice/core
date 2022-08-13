@@ -22,6 +22,7 @@
 
 #include <cmath>
 #include <limits>
+#include <numeric>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -32,14 +33,16 @@ using namespace com::sun::star;
 namespace chart
 {
 
-static double lcl_GetDotProduct(std::vector<double>& aVec1, std::vector<double>& aVec2)
-{
-    double fResult = 0.0;
-    assert(aVec1.size() == aVec2.size());
-    for (size_t i = 0; i < aVec1.size(); ++i)
-        fResult += aVec1[i] * aVec2[i];
-    return fResult;
-}
+// static double lcl_GetDotProduct(
+//     const std::vector<double>& aVec1,
+//     const std::vector<double>& aVec2 )
+// {
+//     double fResult = 0.0;
+//     assert(aVec1.size() == aVec2.size());
+//     for (size_t i = 0; i < aVec1.size(); ++i)
+//         fResult += aVec1[i] * aVec2[i];
+//     return fResult;
+// }
 
 PolynomialRegressionCurveCalculator::PolynomialRegressionCurveCalculator()
 {}
@@ -148,8 +151,9 @@ void SAL_CALL PolynomialRegressionCurveCalculator::recalculateRegression(
                 yVector[i] -= yAverage;
             }
         }
-        double fSumXY = lcl_GetDotProduct(xVector, yVector);
-        double fSumX2 = lcl_GetDotProduct(xVector, xVector);
+        assert(xVector.size() == yVector.size());
+        double fSumXY = std::inner_product(xVector.begin(), xVector.end(), yVector.begin(), 0.0);
+        double fSumX2 = std::inner_product(xVector.begin(), xVector.end(), xVector.begin(), 0.0);
 
         double fSlope = fSumXY / fSumX2;
 
