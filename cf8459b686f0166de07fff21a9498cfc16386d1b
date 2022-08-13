@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "69024b41_7e14a91b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-13T18:43:45Z",
+      "side": 1,
+      "message": "Reading the commit message, I get a feeling that the change clears unavailable files from menu and start center (I basically repeat the message, you see) - while IIUC, it does not do that, but instead *introduces a command and a respective menu item*, which would remove the mentioned items from the list.",
+      "revId": "cf8459b686f0166de07fff21a9498cfc16386d1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "8329f0e6_21eba9bb",
