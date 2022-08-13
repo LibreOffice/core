@@ -25,10 +25,15 @@ $(eval $(call gb_Module_add_targets,lingucomponent,\
 ))
 endif
 
+ifneq ($(ENABLE_WASM_STRIP_LANGUAGETOOL),TRUE)
+$(eval $(call gb_Module_add_targets,lingucomponent,\
+	Library_LanguageTool \
+))
+endif
+
 $(eval $(call gb_Module_add_targets,lingucomponent,\
 	$(if $(filter iOS MACOSX,$(OS)),Library_MacOSXSpell) \
 	Library_numbertext \
-	Library_LanguageTool \
 ))
 
 # vim: set noet sw=4 ts=4:
