@@ -1437,11 +1437,13 @@ static bool lcl_HighestLevel( SwNode* pNode, void * pPara )
 {
     HighLevel * pHL = static_cast<HighLevel*>(pPara);
     if( pNode->GetStartNode() )
+    {
         pHL->nLevel++;
+        if( pHL->nTop > pHL->nLevel )
+            pHL->nTop = pHL->nLevel;
+    }
     else if( pNode->GetEndNode() )
         pHL->nLevel--;
-    if( pHL->nTop > pHL->nLevel )
-        pHL->nTop = pHL->nLevel;
     return true;
 
 }
