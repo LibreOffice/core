@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "924771fa_0315d8b4",
+        "filename": "vcl/source/filter/svm/SvmConverter.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-08-13T18:55:08Z",
+      "side": 1,
+      "message": "We stream the MetaTextArrayAction to/from the svm file format. Will an old TextArrayAction stored in a file before this change set work differently than it used to if loaded again? This is possibly ok if the old way of doing things was basically rubbish anyway.\n\nShould we do a version bump in \"SvmWriter::TextArrayHandler\" from 2 to 3 and stream out the new kasdida information there, and read it in at SvmReader::TextArrayHandler ?",
+      "revId": "ffd10750f8e5345122773f6494cf1d572981e77f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
