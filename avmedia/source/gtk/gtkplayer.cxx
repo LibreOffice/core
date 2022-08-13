@@ -68,7 +68,7 @@ void GtkPlayer::cleanup()
         uninstallNotify();
 
         // shouldn't have to attempt this unref on idle, but with gtk4-4.4.1 I get
-        // intermittent "instance of invalid non-instantiatable type '(null)'"
+        // intermittent "instance of invalid non-instantiable type '(null)'"
         // on some mysterious gst dbus callback
         if (g_main_context_default())
             g_idle_add_full(G_PRIORITY_DEFAULT_IDLE, gtk_media_stream_unref, m_pStream, nullptr);
