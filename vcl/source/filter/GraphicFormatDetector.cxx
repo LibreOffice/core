@@ -792,12 +792,48 @@ bool GraphicFormatDetector::checkPCD()
 
 bool GraphicFormatDetector::checkPSD()
 {
+    bool bRet = false;
     if ((mnFirstLong == 0x38425053) && ((mnSecondLong >> 16) == 1))
     {
         maMetadata.mnFormat = GraphicFileFormat::PSD;
-        return true;
+        bRet = true;
+        if (mbExtendedInfo)
+        {
+            sal_uInt16 nChannels = 0;
+            sal_uInt32 nRows = 0;
+            sal_uInt32 nColumns = 0;
+            sal_uInt16 nDepth = 0;
+            sal_uInt16 nMode = 0;
+            mrStream.Seek(mnStreamPosition + 6);
+            mrStream.SeekRel(6); // Pad
+            mrStream.ReadUInt16(nChannels)
+                .ReadUInt32(nRows)
+                .ReadUInt32(nColumns)
+                .ReadUInt16(nDepth)
+                .ReadUInt16(nMode);
+            if ((nDepth == 1) || (nDepth == 8) || (nDepth == 16))
+            {
+                maMetadata.mnBitsPerPixel = (nDepth == 16) ? 8 : nDepth;
+                switch (nChannels)
+                {
+                    case 4:
+                    case 3:
+                        maMetadata.mnBitsPerPixel = 24;
+                        [[fallthrough]];
+                    case 2:
+                    case 1:
+                        maMetadata.maPixSize.setWidth(nColumns);
+                        maMetadata.maPixSize.setHeight(nRows);
+                        break;
+                    default:
+                        bRet = false;
+                }
+            }
+            else
+                bRet = false;
+        }
     }
-    return false;
+    return bRet;
 }
 
 bool GraphicFormatDetector::checkEPS()
