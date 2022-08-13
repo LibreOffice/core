@@ -39,7 +39,6 @@
 #include <calbck.hxx>
 #include <IDocumentRedlineAccess.hxx>
 
-#include <utility>
 #include <vcl/graph.hxx>
 
 #include <optional>
@@ -351,9 +350,9 @@ public:
     unsigned int mnHdFtIndex;   // 0 for main text, +1 for each subsequent
                                 // msword hd/ft
 
-    DrawObj(ww8::Frame rContent, WW8_CP nCp, Point aParentPos, SvxFrameDirection nDir,
+    DrawObj(const ww8::Frame &rContent, WW8_CP nCp, Point aParentPos, SvxFrameDirection nDir,
             unsigned int nHdFtIndex)
-        : mnCp(nCp), mnShapeId(0), maContent(std::move(rContent)), maParentPos(aParentPos),
+        : mnCp(nCp), mnShapeId(0), maContent(rContent), maParentPos(aParentPos),
         mnThick(0), mnDirection(nDir), mnHdFtIndex(nHdFtIndex) {}
     void SetShapeDetails(sal_uInt32 nId, sal_Int32 nThick);
 };
@@ -1393,8 +1392,8 @@ public:
     sal_uInt16 mnWid;               // Width of the graphics
     sal_uInt16 mnHei;               // Height of the graphics
 
-    GraphicDetails(ww8::Frame aFly, sal_uInt16 nWid, sal_uInt16 nHei)
-        : maFly(std::move(aFly)), mnPos(0), mnWid(nWid), mnHei(nHei)
+    GraphicDetails(const ww8::Frame &rFly, sal_uInt16 nWid, sal_uInt16 nHei)
+        : maFly(rFly), mnPos(0), mnWid(nWid), mnHei(nHei)
     {}
 
     bool operator==(const GraphicDetails& rIn) const
