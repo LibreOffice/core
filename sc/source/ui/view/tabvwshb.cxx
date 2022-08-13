@@ -812,7 +812,8 @@ void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
 void ScTabViewShell::GetUndoState(SfxItemSet &rSet)
 {
     SfxShell* pSh = GetViewData().GetDispatcher().GetShell(0);
-    ScUndoManager* pUndoManager = static_cast<ScUndoManager*>(pSh->GetUndoManager());
+    SfxUndoManager* pUndoManager = pSh->GetUndoManager();
+    ScUndoManager* pScUndoManager = dynamic_cast<ScUndoManager*>(pUndoManager);
 
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
@@ -841,41 +842,53 @@ void ScTabViewShell::GetUndoState(SfxItemSet &rSet)
 
             case SID_UNDO:
             {
-                if (pUndoManager->GetUndoActionCount())
+                if (pScUndoManager)
                 {
-                    const SfxUndoAction* pAction = pUndoManager->GetUndoAction();
-                    SfxViewShell *pViewSh = GetViewShell();
-                    if (pViewSh && pAction->GetViewShellId() != pViewSh->GetViewShellId()
-                        && !pUndoManager->IsViewUndoActionIndependent(this, o3tl::temporary(sal_uInt16())))
+                    if (pScUndoManager->GetUndoActionCount())
                     {
-                        rSet.Put(SfxUInt32Item(SID_UNDO, static_cast<sal_uInt32>(SID_REPAIRPACKAGE)));
+                        const SfxUndoAction* pAction = pScUndoManager->GetUndoAction();
+                        SfxViewShell *pViewSh = GetViewShell();
+                        if (pViewSh && pAction->GetViewShellId() != pViewSh->GetViewShellId()
+                            && !pScUndoManager->IsViewUndoActionIndependent(this, o3tl::temporary(sal_uInt16())))
+                        {
+                            rSet.Put(SfxUInt32Item(SID_UNDO, static_cast<sal_uInt32>(SID_REPAIRPACKAGE)));
+                        }
+                        else
+                        {
+                            rSet.Put( SfxStringItem( SID_UNDO, SvtResId(STR_UNDO)+pScUndoManager->GetUndoActionComment() ) );
+                        }
                     }
                     else
-                    {
-                        rSet.Put( SfxStringItem( SID_UNDO, SvtResId(STR_UNDO)+pUndoManager->GetUndoActionComment() ) );
-                    }
+                        rSet.DisableItem( SID_UNDO );
                 }
                 else
-                    rSet.DisableItem( SID_UNDO );
+                    // get state from sfx view frame
+                    GetViewFrame()->GetSlotState( nWhich, nullptr, &rSet );
                 break;
             }
             case SID_REDO:
             {
-                if (pUndoManager->GetRedoActionCount())
+                if (pScUndoManager)
                 {
-                    const SfxUndoAction* pAction = pUndoManager->GetRedoAction();
-                    SfxViewShell *pViewSh = GetViewShell();
-                    if (pViewSh && pAction->GetViewShellId() != pViewSh->GetViewShellId())
+                    if (pScUndoManager->GetRedoActionCount())
                     {
-                        rSet.Put(SfxUInt32Item(SID_REDO, static_cast<sal_uInt32>(SID_REPAIRPACKAGE)));
+                        const SfxUndoAction* pAction = pScUndoManager->GetRedoAction();
+                        SfxViewShell *pViewSh = GetViewShell();
+                        if (pViewSh && pAction->GetViewShellId() != pViewSh->GetViewShellId())
+                        {
+                            rSet.Put(SfxUInt32Item(SID_REDO, static_cast<sal_uInt32>(SID_REPAIRPACKAGE)));
+                        }
+                        else
+                        {
+                            rSet.Put(SfxStringItem(SID_REDO, SvtResId(STR_REDO) + pScUndoManager->GetRedoActionComment()));
+                        }
                     }
                     else
-                    {
-                        rSet.Put(SfxStringItem(SID_REDO, SvtResId(STR_REDO) + pUndoManager->GetRedoActionComment()));
-                    }
+                        rSet.DisableItem( SID_REDO );
                 }
                 else
-                    rSet.DisableItem( SID_REDO );
+                    // get state from sfx view frame
+                    GetViewFrame()->GetSlotState( nWhich, nullptr, &rSet );
                 break;
             }
             default:
