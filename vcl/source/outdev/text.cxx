@@ -1675,10 +1675,10 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
 
     TextColorGuard aTextColorGuard(rTargetDevice, nStyle, pVector);
 
-    Point       aPos            = rRect.TopLeft();
-    tools::Long        nTextHeight     = rTargetDevice.GetTextHeight();
-    TextAlign   eAlign          = rTargetDevice.GetTextAlign();
-    sal_Int32   nMnemonicPos    = -1;
+    Point aPos(rRect.TopLeft());
+    const tools::Long nTextHeight = rTargetDevice.GetTextHeight();
+    const TextAlign eAlign = rTargetDevice.GetTextAlign();
+    sal_Int32 nMnemonicPos = -1;
 
     OUString aStr = rOrigStr;
     if ( nStyle & DrawTextFlags::Mnemonic )
@@ -1694,7 +1694,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
         sal_Int32               i;
         sal_Int32               nFormatLines;
 
-        if ( nTextHeight )
+        if (nTextHeight)
         {
             tools::Long nMaxTextWidth = ImplGetTextLines(rRect, nTextHeight, aMultiLineInfo,
                                                          rRect.GetWidth(), aStr, nStyle, _rLayout);
