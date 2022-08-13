@@ -52,6 +52,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "da4532fb_f6966150",
+        "filename": "tools/source/generic/poly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-08-13T10:05:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f177034_d87747a2",
+      "revId": "161eaa054300c547a39345d3069fd652a94858b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "140a0eff_a2236bc8",
@@ -65,6 +83,24 @@
       "writtenOn": "2022-05-31T10:35:39Z",
       "side": 1,
       "message": "Please remove parentheses, also here.",
+      "revId": "161eaa054300c547a39345d3069fd652a94858b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4cd9ea79_6a9fbf0c",
+        "filename": "tools/source/generic/poly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-08-13T10:05:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "140a0eff_a2236bc8",
       "revId": "161eaa054300c547a39345d3069fd652a94858b5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
