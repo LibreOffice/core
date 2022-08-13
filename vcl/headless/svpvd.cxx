@@ -69,7 +69,7 @@ bool SvpSalVirtualDevice::SetSize( tools::Long nNewDX, tools::Long nNewDY )
     return SetSizeUsingBuffer(nNewDX, nNewDY, nullptr);
 }
 
-void SvpSalVirtualDevice::CreateSurface(tools::Long nNewDX, tools::Long nNewDY, sal_uInt8 *const pBuffer)
+bool SvpSalVirtualDevice::CreateSurface(tools::Long nNewDX, tools::Long nNewDY, sal_uInt8 *const pBuffer)
 {
     if (m_pSurface)
     {
@@ -111,11 +111,14 @@ void SvpSalVirtualDevice::CreateSurface(tools::Long nNewDX, tools::Long nNewDY, 
     }
 
     SAL_WARN_IF(cairo_surface_status(m_pSurface) != CAIRO_STATUS_SUCCESS, "vcl", "surface of size " << nNewDX << " by " << nNewDY << " creation failed with status of: " << cairo_status_to_string(cairo_surface_status(m_pSurface)));
+    return cairo_surface_status(m_pSurface) == CAIRO_STATUS_SUCCESS;
 }
 
 bool SvpSalVirtualDevice::SetSizeUsingBuffer( tools::Long nNewDX, tools::Long nNewDY,
         sal_uInt8 *const pBuffer)
 {
+    bool bSuccess = true;
+
     if (nNewDX == 0)
         nNewDX = 1;
     if (nNewDY == 0)
@@ -127,7 +130,7 @@ bool SvpSalVirtualDevice::SetSizeUsingBuffer( tools::Long nNewDX, tools::Long nN
         m_aFrameSize = basegfx::B2IVector(nNewDX, nNewDY);
 
         if (m_bOwnsSurface)
-            CreateSurface(nNewDX, nNewDY, pBuffer);
+            bSuccess = CreateSurface(nNewDX, nNewDY, pBuffer);
 
         assert(m_pSurface);
 
@@ -135,7 +138,8 @@ bool SvpSalVirtualDevice::SetSizeUsingBuffer( tools::Long nNewDX, tools::Long nN
         for (auto const& graphic : m_aGraphics)
             graphic->setSurface(m_pSurface, m_aFrameSize);
     }
-    return true;
+
+    return bSuccess;
 }
 
 tools::Long SvpSalVirtualDevice::GetWidth() const
