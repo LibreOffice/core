@@ -148,6 +148,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0cb8751a_a3ab2c95",
+        "filename": "sfx2/source/doc/templatedlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-08-13T14:23:24Z",
+      "side": 1,
+      "message": "An argument to keep it resizable might be that template names may become long and reading it requires to resize the dialog. And of course we can change the HIG and say \"All dialogs that have resizable content, such as lists, should be resizable.\". I\u0027m somewhat undecided myself ;-).",
+      "parentUuid": "15048296_04942d40",
+      "range": {
+        "startLine": 207,
+        "startChar": 21,
+        "endLine": 207,
+        "endChar": 37
+      },
+      "revId": "3ec72a66ef808f28a0e1eb90d70fbbd7de8a0bb2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "40816752_5b620127",
