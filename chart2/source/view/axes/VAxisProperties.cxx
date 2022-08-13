@@ -258,7 +258,7 @@ void AxisProperties::init( bool bCartesian )
 
     if( bCartesian )
     {
-        if (m_nDimensionIndex == 0)
+        if ((!m_bSwapXAndY && m_nDimensionIndex == 0) || (m_bSwapXAndY && m_nDimensionIndex == 1))
         {
             m_bDisplayDataTable = m_xDataTableModel.is();
         }
@@ -332,6 +332,17 @@ void AxisProperties::init( bool bCartesian )
     catch( const uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
+    }
+
+    if (m_bDisplayDataTable)
+    {
+        m_bDataTableAlignAxisValuesWithColumns = (m_nDimensionIndex == 0);
+
+        if (m_nDimensionIndex == 0)
+        {
+            m_bDisplayLabels = false;
+        }
+
     }
 }
 
