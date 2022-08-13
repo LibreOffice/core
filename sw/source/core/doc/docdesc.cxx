@@ -295,12 +295,11 @@ void SwDoc::CopyMasterHeader(const SwPageDesc &rChged, const SwFormatHeader &rHe
                     // The section which the right header attribute is pointing
                     // is copied, and the Index to the StartNode is set to
                     // the left or first header attribute.
-                    SwNodeIndex aTmp( GetNodes().GetEndOfAutotext() );
-                    SwStartNode* pSttNd = SwNodes::MakeEmptySection( aTmp, SwHeaderStartNode );
+                    SwStartNode* pSttNd = SwNodes::MakeEmptySection( GetNodes().GetEndOfAutotext(), SwHeaderStartNode );
                     SwNodeRange aRange( aRCnt.GetContentIdx()->GetNode(), SwNodeOffset(0),
                                 *aRCnt.GetContentIdx()->GetNode().EndOfSectionNode() );
                     GetNodes().Copy_( aRange, *pSttNd->EndOfSectionNode(), false );
-                    aTmp = *pSttNd;
+                    SwNodeIndex aTmp( *pSttNd );
                     GetDocumentContentOperationsManager().CopyFlyInFlyImpl(aRange, nullptr, aTmp);
                     SwPaM const source(aRange.aStart, aRange.aEnd);
                     SwPosition dest(aTmp);
@@ -374,12 +373,11 @@ void SwDoc::CopyMasterFooter(const SwPageDesc &rChged, const SwFormatFooter &rFo
                     // The section to which the right footer attribute is pointing
                     // is copied, and the Index to the StartNode is set to
                     // the left footer attribute.
-                    SwNodeIndex aTmp( GetNodes().GetEndOfAutotext() );
-                    SwStartNode* pSttNd = SwNodes::MakeEmptySection( aTmp, SwFooterStartNode );
+                    SwStartNode* pSttNd = SwNodes::MakeEmptySection( GetNodes().GetEndOfAutotext(), SwFooterStartNode );
                     SwNodeRange aRange( aRCnt.GetContentIdx()->GetNode(), SwNodeOffset(0),
                                 *aRCnt.GetContentIdx()->GetNode().EndOfSectionNode() );
                     GetNodes().Copy_( aRange, *pSttNd->EndOfSectionNode(), false );
-                    aTmp = *pSttNd;
+                    SwNodeIndex aTmp( *pSttNd );
                     GetDocumentContentOperationsManager().CopyFlyInFlyImpl(aRange, nullptr, aTmp);
                     SwPaM const source(aRange.aStart, aRange.aEnd);
                     SwPosition dest(aTmp);

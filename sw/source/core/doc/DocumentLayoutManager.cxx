@@ -382,12 +382,11 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
         const SwNode& rCSttNd = rSource.GetContent().GetContentIdx()->GetNode();
         SwNodeRange aRg( rCSttNd, SwNodeOffset(1), *rCSttNd.EndOfSectionNode() );
 
-        SwNodeIndex aIdx( m_rDoc.GetNodes().GetEndOfAutotext() );
-        SwStartNode* pSttNd = SwNodes::MakeEmptySection( aIdx, SwFlyStartNode );
+        SwStartNode* pSttNd = SwNodes::MakeEmptySection( m_rDoc.GetNodes().GetEndOfAutotext(), SwFlyStartNode );
 
         // Set the Anchor/ContentIndex first.
         // Within the copying part, we can access the values (DrawFormat in Headers and Footers)
-        aIdx = *pSttNd;
+        SwNodeIndex aIdx( *pSttNd );
         SwFormatContent aAttr( rSource.GetContent() );
         aAttr.SetNewContentIdx( &aIdx );
         pDest->SetFormatAttr( aAttr );

@@ -1916,11 +1916,11 @@ void SwNodes::DelDummyNodes( const SwNodeRange& rRg )
     }
 }
 
-SwStartNode* SwNodes::MakeEmptySection( const SwNodeIndex& rIdx,
+SwStartNode* SwNodes::MakeEmptySection( SwNode& rWhere,
                                         SwStartNodeType eSttNdTyp )
 {
-    SwStartNode* pSttNd = new SwStartNode( rIdx.GetNode(), SwNodeType::Start, eSttNdTyp );
-    new SwEndNode( rIdx.GetNode(), *pSttNd );
+    SwStartNode* pSttNd = new SwStartNode( rWhere, SwNodeType::Start, eSttNdTyp );
+    new SwEndNode( rWhere, *pSttNd );
     return pSttNd;
 }
 
