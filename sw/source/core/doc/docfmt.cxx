@@ -1402,11 +1402,10 @@ void SwDoc::CopyPageDescHeaderFooterImpl( bool bCpyHeader,
             const SwNode& rCSttNd = pContent->GetContentIdx()->GetNode();
             SwNodeRange aRg( rCSttNd, SwNodeOffset(0), *rCSttNd.EndOfSectionNode() );
             rSrcNds.Copy_( aRg, *pSttNd->EndOfSectionNode() );
-            SwNodeIndex aTmpIdx( *pSttNd );
-            rSrcFormat.GetDoc()->GetDocumentContentOperationsManager().CopyFlyInFlyImpl(aRg, nullptr, aTmpIdx);
+            rSrcFormat.GetDoc()->GetDocumentContentOperationsManager().CopyFlyInFlyImpl(aRg, nullptr, *pSttNd);
             // TODO: investigate calling CopyWithFlyInFly?
             SwPaM const source(aRg.aStart, aRg.aEnd);
-            SwPosition dest(aTmpIdx);
+            SwPosition dest(*pSttNd);
             sw::CopyBookmarks(source, dest);
             pNewFormat->SetFormatAttr( SwFormatContent( pSttNd ));
         }
