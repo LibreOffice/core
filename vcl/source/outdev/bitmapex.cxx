@@ -172,7 +172,8 @@ void OutputDevice::DrawDeviceBitmapEx( const Point& rDestPt, const Size& rDestSi
 
     if (rBitmapEx.IsAlpha())
     {
-        DrawDeviceAlphaBitmap(rBitmapEx.GetBitmap(), rBitmapEx.GetAlpha(), rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel);
+        DrawDeviceAlphaBitmap(rBitmapEx.GetBitmap(), rBitmapEx.GetAlpha(),
+                LogicToPixel(rDestPt), LogicToPixel(rDestSize), rSrcPtPixel, rSrcSizePixel);
     }
     else if (!rBitmapEx.IsEmpty())
     {

@@ -279,14 +279,14 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
 {
     assert(!is_double_buffered_window());
 
-    Point     aOutPt(LogicToPixel(rDestPt));
-    Size      aOutSz(LogicToPixel(rDestSize));
-    tools::Rectangle aDstRect(Point(), GetSize());
-
+    Size aOutSz(rDestSize);
     const bool bHMirr = aOutSz.Width() < 0;
     const bool bVMirr = aOutSz.Height() < 0;
 
+    tools::Rectangle aDstRect(Point(), GetSize());
     ClipToPaintRegion(aDstRect);
+
+    Point aOutPt(rDestPt);
 
     BmpMirrorFlags mirrorFlags = BmpMirrorFlags::NONE;
     if (bHMirr)
@@ -354,8 +354,8 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
     if (aBmpRect.Intersection(tools::Rectangle(rSrcPtPixel, rSrcSizePixel)).IsEmpty())
         return;
 
-    Point     auxOutPt(LogicToPixel(rDestPt));
-    Size      auxOutSz(LogicToPixel(rDestSize));
+    Point auxOutPt(rDestPt);
+    Size auxOutSz(rDestSize);
 
     // HACK: The function is broken with alpha vdev and mirroring, mirror here.
     Bitmap bitmap(rBmp);
@@ -367,6 +367,7 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
         auxOutPt = aOutPt;
         auxOutSz = aOutSz;
     }
+
     DrawDeviceAlphaBitmapSlowPath(bitmap, alpha, aDstRect, aBmpRect, auxOutSz, auxOutPt);
 }
 
