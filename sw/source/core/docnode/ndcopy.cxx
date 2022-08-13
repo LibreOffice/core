@@ -305,7 +305,7 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc& rDoc, const SwNodeIndex& rIdx ) const
     // We have to make sure that the table node of the SwTable is accessible, even
     // without any content in m_TabSortContentBoxes. #i26629#
     pTableNd->GetTable().SetTableNode( pTableNd );
-    rNds.Copy_( aRg, aInsPos, false );
+    rNds.Copy_( aRg, aInsPos.GetNode(), false );
     pTableNd->GetTable().SetTableNode( nullptr );
 
     // Special case for a single box

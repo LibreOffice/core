@@ -334,7 +334,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
             // First copy the range
             SwNodeIndex aEndIdx( pEnd->nNode, 1 );
             SwNodeRange aRg( pStart->nNode, aEndIdx );
-            GetNodes().Copy_( aRg, aEndIdx );
+            GetNodes().Copy_( aRg, aEndIdx.GetNode() );
 
             // range is new from pEnd->nNode+1 to aEndIdx
             getIDocumentRedlineAccess().DeleteRedline( *pRedlPam, true, RedlineType::Any );
