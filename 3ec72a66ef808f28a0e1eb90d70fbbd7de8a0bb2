@@ -124,6 +124,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "15048296_04942d40",
+        "filename": "sfx2/source/doc/templatedlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2022-08-13T12:38:38Z",
+      "side": 1,
+      "message": "You have a valid point... indeed almost all dialogs are not resizable. Maybe we should make this one non-resizable too.\n\nI\u0027ll tinker with it today and submit a new patch later.",
+      "parentUuid": "a02c850b_95315e95",
+      "range": {
+        "startLine": 207,
+        "startChar": 21,
+        "endLine": 207,
+        "endChar": 37
+      },
+      "revId": "3ec72a66ef808f28a0e1eb90d70fbbd7de8a0bb2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "40816752_5b620127",
