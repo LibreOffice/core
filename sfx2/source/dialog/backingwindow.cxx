@@ -603,6 +603,9 @@ IMPL_LINK (BackingWindow, MenuSelectHdl, const OString&, rId, void)
         mxAllRecentThumbnails->Reload();
         return;
     }
+    else if(rId == "clear_unavailable"){
+        mxAllRecentThumbnails->clearUnavailableFiles();
+    }
     else if (!rId.isEmpty())
     {
         initializeLocalView();

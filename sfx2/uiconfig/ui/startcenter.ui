@@ -17,6 +17,13 @@
         <property name="label" translatable="yes" context="startcenter|clear_all">Clear Recent Documents</property>
       </object>
     </child>
+    <child>
+      <object class="GtkMenuItem" id="clear_unavailable">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="startcenter|clear_unavailable">Clear Unavailable Files</property>
+      </object>
+    </child>
   </object>
   <object class="GtkImage" id="database_all_image">
     <property name="visible">True</property>
