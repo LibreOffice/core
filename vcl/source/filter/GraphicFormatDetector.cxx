@@ -645,6 +645,102 @@ bool GraphicFormatDetector::checkPNG()
     if (mnFirstLong == 0x89504e47 && mnSecondLong == 0x0d0a1a0a)
     {
         maMetadata.mnFormat = GraphicFileFormat::PNG;
+        if (mbExtendedInfo)
+        {
+            sal_uInt32 nTemp32;
+            mrStream.Seek(mnStreamPosition + 8);
+            do
+            {
+                sal_uInt8 cByte = 0;
+
+                // IHDR-Chunk
+                mrStream.SeekRel(8);
+
+                // width
+                mrStream.ReadUInt32(nTemp32);
+                if (!mrStream.good())
+                    break;
+                maMetadata.maPixSize.setWidth(nTemp32);
+
+                // height
+                mrStream.ReadUInt32(nTemp32);
+                if (!mrStream.good())
+                    break;
+                maMetadata.maPixSize.setHeight(nTemp32);
+
+                // Bits/Pixel
+                mrStream.ReadUChar(cByte);
+                if (!mrStream.good())
+                    break;
+                maMetadata.mnBitsPerPixel = cByte;
+
+                // Colour type - check whether it supports alpha values
+                sal_uInt8 cColType = 0;
+                mrStream.ReadUChar(cColType);
+                if (!mrStream.good())
+                    break;
+                maMetadata.mbIsAlpha = maMetadata.mbIsTransparent
+                    = (cColType == 4 || cColType == 6);
+
+                // Planes always 1;
+                // compression always
+                maMetadata.mnPlanes = 1;
+
+                sal_uInt32 nLen32 = 0;
+                nTemp32 = 0;
+
+                mrStream.SeekRel(7);
+
+                // read up to the start of the image
+                mrStream.ReadUInt32(nLen32);
+                mrStream.ReadUInt32(nTemp32);
+                while (mrStream.good() && nTemp32 != 0x49444154)
+                {
+                    if (nTemp32 == 0x70485973) // physical pixel dimensions
+                    {
+                        sal_uLong nXRes;
+                        sal_uLong nYRes;
+
+                        // horizontal resolution
+                        nTemp32 = 0;
+                        mrStream.ReadUInt32(nTemp32);
+                        nXRes = nTemp32;
+
+                        // vertical resolution
+                        nTemp32 = 0;
+                        mrStream.ReadUInt32(nTemp32);
+                        nYRes = nTemp32;
+
+                        // unit
+                        cByte = 0;
+                        mrStream.ReadUChar(cByte);
+
+                        if (cByte)
+                        {
+                            if (nXRes)
+                                maMetadata.maLogSize.setWidth(
+                                    (maMetadata.maPixSize.Width() * 100000) / nXRes);
+
+                            if (nYRes)
+                                maMetadata.maLogSize.setHeight(
+                                    (maMetadata.maPixSize.Height() * 100000) / nYRes);
+                        }
+
+                        nLen32 -= 9;
+                    }
+                    else if (nTemp32 == 0x74524e53) // transparency
+                    {
+                        maMetadata.mbIsTransparent = true;
+                        maMetadata.mbIsAlpha = (cColType != 0 && cColType != 2);
+                    }
+
+                    // skip forward to next chunk
+                    mrStream.SeekRel(4 + nLen32);
+                    mrStream.ReadUInt32(nLen32);
+                    mrStream.ReadUInt32(nTemp32);
+                }
+            } while (false);
+        }
         return true;
     }
     return false;
