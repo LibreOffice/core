@@ -16,11 +16,12 @@
 
 #include <svx/svdotable.hxx>
 
-#include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
 #include <com/sun/star/table/BorderLineStyle.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
@@ -85,10 +86,12 @@ getFirstParagraphProperties(uno::Reference<text::XText> const& xText)
 DataTableView::DataTableView(
     rtl::Reference<::chart::ChartModel> const& xChartModel,
     rtl::Reference<DataTable> const& rDataTableModel,
-    css::uno::Reference<css::uno::XComponentContext> const& rComponentContext)
+    css::uno::Reference<css::uno::XComponentContext> const& rComponentContext,
+    bool bAlignAxisValuesWithColumns)
     : m_xChartModel(xChartModel)
     , m_xDataTableModel(rDataTableModel)
     , m_xComponentContext(rComponentContext)
+    , m_bAlignAxisValuesWithColumns(bAlignAxisValuesWithColumns)
 {
     uno::Reference<beans::XPropertySet> xPropertySet(m_xDataTableModel);
     m_aLineProperties.initFromPropertySet(xPropertySet);
@@ -224,7 +227,7 @@ void DataTableView::setCellProperties(css::uno::Reference<beans::XPropertySet>& 
 }
 
 void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DVector const& rEnd,
-                                 sal_Int32 nColumnWidth)
+                                 sal_Int32 nAxisStepWidth)
 {
     if (!m_xTarget.is())
         return;
@@ -234,22 +237,23 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
     auto sCID = ObjectIdentifier::createClassifiedIdentifierForParticle(sParticle);
     m_xTableShape = ShapeFactory::createTable(m_xTarget, sCID);
 
-    uno::Reference<table::XTable> xTable;
+    auto rDelta = rEnd - rStart;
+    sal_Int32 nTableSize = basegfx::fround(rDelta.getX());
+    m_xTableShape->setSize({ nTableSize, 0 });
+
     try
     {
-        auto rDelta = rEnd - rStart;
-        m_xTableShape->setSize({ basegfx::fround(rDelta.getX()), 0 });
-        m_xTableShape->getPropertyValue("Model") >>= xTable;
+        m_xTableShape->getPropertyValue("Model") >>= m_xTable;
     }
     catch (const uno::Exception&)
     {
         return;
     }
 
-    if (!xTable.is())
+    if (!m_xTable.is())
         return;
 
-    uno::Reference<util::XBroadcaster> xBroadcaster(xTable, uno::UNO_QUERY);
+    uno::Reference<util::XBroadcaster> xBroadcaster(m_xTable, uno::UNO_QUERY);
 
     if (!xBroadcaster.is())
         return;
@@ -271,15 +275,24 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
     m_xDataTableModel->getPropertyValue("Keys") >>= bKeys;
 
     sal_Int32 nColumnCount = m_aXValues.size();
-    uno::Reference<table::XTableColumns> xTableColumns = xTable->getColumns();
+    uno::Reference<table::XTableColumns> xTableColumns = m_xTable->getColumns();
     xTableColumns->insertByIndex(0, nColumnCount);
 
     sal_Int32 nRowCount = m_aDataSeriesNames.size();
-    uno::Reference<table::XTableRows> xTableRows = xTable->getRows();
+    uno::Reference<table::XTableRows> xTableRows = m_xTable->getRows();
     xTableRows->insertByIndex(0, nRowCount);
 
+    sal_Int32 nColumnWidth = 0.0;
+
+    // If we don't align, we have to calculate the column width ourselves
+    if (m_bAlignAxisValuesWithColumns)
+        nColumnWidth = nAxisStepWidth;
+    else
+        nColumnWidth = double(nTableSize) / nColumnCount;
+
+    // Setup empty top-left cell
     {
-        uno::Reference<table::XCell> xCell = xTable->getCellByPosition(0, 0);
+        uno::Reference<table::XCell> xCell = m_xTable->getCellByPosition(0, 0);
         uno::Reference<beans::XPropertySet> xPropertySet(xCell, uno::UNO_QUERY);
         if (xPropertySet.is())
         {
@@ -295,7 +308,7 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
     nColumn = 1;
     for (auto const& rString : m_aXValues)
     {
-        uno::Reference<table::XCell> xCell = xTable->getCellByPosition(nColumn, 0);
+        uno::Reference<table::XCell> xCell = m_xTable->getCellByPosition(nColumn, 0);
         uno::Reference<beans::XPropertySet> xPropertySet(xCell, uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xCellTextRange(xCell, uno::UNO_QUERY);
         if (xCellTextRange.is())
@@ -341,7 +354,7 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
     nRow = 1;
     for (auto const& rSeriesName : m_aDataSeriesNames)
     {
-        uno::Reference<table::XCell> xCell = xTable->getCellByPosition(0, nRow);
+        uno::Reference<table::XCell> xCell = m_xTable->getCellByPosition(0, nRow);
         uno::Reference<beans::XPropertySet> xCellPropertySet(xCell, uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xCellTextRange(xCell, uno::UNO_QUERY);
         if (xCellTextRange.is())
@@ -375,7 +388,7 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
         nColumn = 1;
         for (auto const& rValue : rSeries)
         {
-            uno::Reference<table::XCell> xCell = xTable->getCellByPosition(nColumn, nRow);
+            uno::Reference<table::XCell> xCell = m_xTable->getCellByPosition(nColumn, nRow);
             uno::Reference<beans::XPropertySet> xCellPropertySet(xCell, uno::UNO_QUERY);
             uno::Reference<text::XTextRange> xCellTextRange(xCell, uno::UNO_QUERY);
             if (xCellTextRange.is())
@@ -417,13 +430,13 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
     pTableObject->DistributeRows(0, nRowCount - 1, true, true);
 
     xBroadcaster->lockBroadcasts();
-    uno::Reference<beans::XPropertySet> xPropertySet(xTableColumns->getByIndex(0), uno::UNO_QUERY);
-    sal_Int32 nWidth = 0;
-    xPropertySet->getPropertyValue("Width") >>= nWidth;
 
-    sal_Int32 nTableX = basegfx::fround(rStart.getX() - nWidth);
-    sal_Int32 nTableY = basegfx::fround(rStart.getY());
-    m_xTableShape->setPosition({ nTableX, nTableY });
+    changePosition(basegfx::fround(rStart.getX()), basegfx::fround(rStart.getY()));
+
+    sal_Int32 nTableX = m_xTableShape->getPosition().X;
+    sal_Int32 nTableY = m_xTableShape->getPosition().Y;
+
+    uno::Reference<beans::XPropertySet> xPropertySet(xTableColumns->getByIndex(0), uno::UNO_QUERY);
 
     for (sal_Int32 i = 1; i < xTableColumns->getCount(); ++i)
     {
@@ -448,6 +461,20 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
         }
     }
     xBroadcaster->unlockBroadcasts();
+}
+
+void DataTableView::changePosition(sal_Int32 x, sal_Int32 y)
+{
+    if (!m_xTable.is())
+        return;
+
+    uno::Reference<table::XTableColumns> xTableColumns = m_xTable->getColumns();
+    uno::Reference<beans::XPropertySet> xPropertySet(xTableColumns->getByIndex(0), uno::UNO_QUERY);
+
+    sal_Int32 nWidth = 0;
+    xPropertySet->getPropertyValue("Width") >>= nWidth;
+
+    m_xTarget->setPosition({ x - nWidth, y });
 }
 
 void DataTableView::initializeShapes(const rtl::Reference<SvxShapeGroupAnyD>& xTarget)
