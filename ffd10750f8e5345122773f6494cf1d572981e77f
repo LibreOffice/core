@@ -88,6 +88,24 @@
       "parentUuid": "604b6dba_28814887",
       "revId": "ffd10750f8e5345122773f6494cf1d572981e77f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9992e23_31e26c2d",
+        "filename": "vcl/source/filter/svm/SvmConverter.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1003606
+      },
+      "writtenOn": "2022-08-13T21:14:25Z",
+      "side": 1,
+      "message": "I managed to find a way to test it (create a text box in Draw and convert it to Metafile) and indeed the Kashida gets lost (blanks in their place). I have a fix, but I guess new commit should be good.\n\nI think you will have to merge it, as I seem to have lost this ability with the old account that I can’t recover.",
+      "parentUuid": "12e0b386_7af79df0",
+      "revId": "ffd10750f8e5345122773f6494cf1d572981e77f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
