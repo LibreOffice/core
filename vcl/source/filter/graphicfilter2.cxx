@@ -427,113 +427,12 @@ bool GraphicDescriptor::ImpDetectPCX( SvStream& rStm )
 
 bool GraphicDescriptor::ImpDetectPNG( SvStream& rStm, bool bExtendedInfo )
 {
-    sal_uInt32  nTemp32 = 0;
-    bool    bRet = false;
-
     sal_Int32 nStmPos = rStm.Tell();
-    rStm.SetEndian( SvStreamEndian::BIG );
-    rStm.ReadUInt32( nTemp32 );
-
-    if ( nTemp32 == 0x89504e47 )
-    {
-        rStm.ReadUInt32( nTemp32 );
-        if ( nTemp32 == 0x0d0a1a0a )
-        {
-            aMetadata.mnFormat = GraphicFileFormat::PNG;
-            bRet = true;
-
-            if ( bExtendedInfo )
-            {
-                do {
-                    sal_uInt8 cByte = 0;
-
-                    // IHDR-Chunk
-                    rStm.SeekRel( 8 );
-
-                    // width
-                    rStm.ReadUInt32( nTemp32 );
-                    if (!rStm.good())
-                        break;
-                    aMetadata.maPixSize.setWidth( nTemp32 );
-
-                    // height
-                    rStm.ReadUInt32( nTemp32 );
-                    if (!rStm.good())
-                        break;
-                    aMetadata.maPixSize.setHeight( nTemp32 );
-
-                    // Bits/Pixel
-                    rStm.ReadUChar( cByte );
-                    if (!rStm.good())
-                        break;
-                    aMetadata.mnBitsPerPixel = cByte;
-
-                    // Colour type - check whether it supports alpha values
-                    sal_uInt8 cColType = 0;
-                    rStm.ReadUChar( cColType );
-                    if (!rStm.good())
-                         break;
-                    aMetadata.mbIsAlpha = aMetadata.mbIsTransparent = ( cColType == 4 || cColType == 6 );
-
-                    // Planes always 1;
-                    // compression always
-                    aMetadata.mnPlanes = 1;
-
-                    sal_uInt32  nLen32 = 0;
-                    nTemp32 = 0;
-
-                    rStm.SeekRel( 7 );
-
-                    // read up to the start of the image
-                    rStm.ReadUInt32( nLen32 );
-                    rStm.ReadUInt32( nTemp32 );
-                    while (rStm.good() && nTemp32 != 0x49444154)
-                    {
-                        if ( nTemp32 == 0x70485973 ) // physical pixel dimensions
-                        {
-                            sal_uLong   nXRes;
-                            sal_uLong   nYRes;
-
-                            // horizontal resolution
-                            nTemp32 = 0;
-                            rStm.ReadUInt32( nTemp32 );
-                            nXRes = nTemp32;
-
-                            // vertical resolution
-                            nTemp32 = 0;
-                            rStm.ReadUInt32( nTemp32 );
-                            nYRes = nTemp32;
-
-                            // unit
-                            cByte = 0;
-                            rStm.ReadUChar( cByte );
-
-                            if ( cByte )
-                            {
-                                if ( nXRes )
-                                    aMetadata.maLogSize.setWidth( (aMetadata.maPixSize.Width() * 100000) / nXRes );
-
-                                if ( nYRes )
-                                    aMetadata.maLogSize.setHeight( (aMetadata.maPixSize.Height() * 100000) / nYRes );
-                            }
-
-                            nLen32 -= 9;
-                        }
-                        else if ( nTemp32 == 0x74524e53 ) // transparency
-                        {
-                            aMetadata.mbIsTransparent = true;
-                            aMetadata.mbIsAlpha = ( cColType != 0 && cColType != 2 );
-                        }
-
-                        // skip forward to next chunk
-                        rStm.SeekRel( 4 + nLen32 );
-                        rStm.ReadUInt32( nLen32 );
-                        rStm.ReadUInt32( nTemp32 );
-                    }
-                } while (false);
-            }
-        }
-    }
+    vcl::GraphicFormatDetector aDetector( rStm, aPathExt, bExtendedInfo );
+    bool bRet = aDetector.detect();
+    bRet &= aDetector.checkPNG();
+    if ( bRet )
+        aMetadata = aDetector.getMetadata();
     rStm.Seek( nStmPos );
     return bRet;
 }
