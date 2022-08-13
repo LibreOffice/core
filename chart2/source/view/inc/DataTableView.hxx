@@ -15,6 +15,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <DataTable.hxx>
@@ -33,12 +34,14 @@ private:
     rtl::Reference<DataTable> m_xDataTableModel;
     css::uno::Reference<css::lang::XMultiServiceFactory> m_xShapeFactory;
     css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
+    css::uno::Reference<css::table::XTable> m_xTable;
     VLineProperties m_aLineProperties;
     std::vector<VSeriesPlotter*> m_pSeriesPlotterList;
 
     std::vector<OUString> m_aDataSeriesNames;
     std::vector<OUString> m_aXValues;
     std::vector<std::vector<OUString>> m_pDataSeriesValues;
+    bool m_bAlignAxisValuesWithColumns;
 
     void
     setCellCharAndParagraphProperties(css::uno::Reference<css::beans::XPropertySet>& xPropertySet);
@@ -49,11 +52,13 @@ private:
 public:
     DataTableView(css::uno::Reference<css::chart2::XChartDocument> const& xChartDoc,
                   rtl::Reference<DataTable> const& rDataTableModel,
-                  css::uno::Reference<css::uno::XComponentContext> const& rComponentContext);
+                  css::uno::Reference<css::uno::XComponentContext> const& rComponentContext,
+                  bool bAlignAxisValuesWithColumns);
     void initializeShapes(const css::uno::Reference<css::drawing::XShapes>& xTarget);
     void initializeValues(std::vector<std::unique_ptr<VSeriesPlotter>>& rSeriesPlotterList);
     void createShapes(basegfx::B2DVector const& rStart, basegfx::B2DVector const& rEnd,
-                      sal_Int32 nColumnWidth);
+                      sal_Int32 nAxisStepWidth);
+    void changePosition(sal_Int32 x, sal_Int32 y);
 };
 
 } //namespace chart
