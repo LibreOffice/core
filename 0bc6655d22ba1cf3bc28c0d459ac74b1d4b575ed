@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e3378a9_04456226",
+        "filename": "chart2/source/tools/PolynomialRegressionCurveCalculator.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-08-13T09:36:30Z",
+      "side": 1,
+      "message": "It\u0027s even better to replace this function with std::inner_product.",
+      "revId": "0bc6655d22ba1cf3bc28c0d459ac74b1d4b575ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
