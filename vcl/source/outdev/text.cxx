@@ -1574,52 +1574,86 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, tools::Long nTextWid
     return nRetVal;
 }
 
+namespace
+{
+class TextColorGuard
+{
+public:
+    TextColorGuard(OutputDevice& rTargetDevice,
+                   const DrawTextFlags nStyle,
+                   std::vector<tools::Rectangle> const* const pVector)
+        : bRestoreTextColor((nStyle & DrawTextFlags::Disable) && !pVector)
+        , bRestoreTextFillColor((nStyle & DrawTextFlags::Disable) && !pVector && rTargetDevice.IsTextFillColor())
+        , maOldTextColor(rTargetDevice.GetTextColor())
+        , maOldTextFillColor(rTargetDevice.GetTextFillColor())
+        , mrTargetDevice(rTargetDevice)
+    {
+        if ((nStyle & DrawTextFlags::Disable) && !pVector)
+        {
+            bool bHighContrastBlack = false;
+            bool bHighContrastWhite = false;
+            StyleSettings const& rStyleSettings(rTargetDevice.GetSettings().GetStyleSettings());
+
+            if( rStyleSettings.GetHighContrastMode() )
+            {
+                Color aCol;
+                if (rTargetDevice.IsBackground())
+                {
+                    aCol = rTargetDevice.GetBackground().GetColor();
+                }
+                else
+                {
+                    // best guess is the face color here
+                    // but it may be totally wrong. the background color
+                    // was typically already reset
+                    aCol = rStyleSettings.GetFaceColor();
+                }
+
+                bHighContrastBlack = aCol.IsDark();
+                bHighContrastWhite = aCol.IsBright();
+            }
+
+            if (bHighContrastBlack)
+            {
+                rTargetDevice.SetTextColor( COL_GREEN );
+            }
+            else if (bHighContrastWhite)
+            {
+                rTargetDevice.SetTextColor( COL_LIGHTGREEN );
+            }
+            else
+            {
+                // draw disabled text always without shadow
+                // as it fits better with native look
+                rTargetDevice.SetTextColor(rTargetDevice.GetSettings().GetStyleSettings().GetDisableColor());
+            }
+        }
+    }
+
+    ~TextColorGuard()
+    {
+        if (bRestoreTextColor)
+            mrTargetDevice.SetTextColor(maOldTextColor);
+
+        if (bRestoreTextFillColor)
+            mrTargetDevice.SetTextFillColor(maOldTextFillColor);
+    }
+
+private:
+    bool bRestoreTextColor;
+    bool bRestoreTextFillColor;
+    Color maOldTextColor;
+    Color maOldTextFillColor;
+    OutputDevice& mrTargetDevice;
+};
+}
+
 void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Rectangle& rRect,
                                  const OUString& rOrigStr, DrawTextFlags nStyle,
                                  std::vector< tools::Rectangle >* pVector, OUString* pDisplayText,
                                  vcl::ITextLayout& _rLayout )
 {
-
-    Color aOldTextColor;
-    Color aOldTextFillColor;
-    bool  bRestoreFillColor = false;
-    if ( (nStyle & DrawTextFlags::Disable) && ! pVector )
-    {
-        bool  bHighContrastBlack = false;
-        bool  bHighContrastWhite = false;
-        const StyleSettings& rStyleSettings( rTargetDevice.GetSettings().GetStyleSettings() );
-        if( rStyleSettings.GetHighContrastMode() )
-        {
-            Color aCol;
-            if( rTargetDevice.IsBackground() )
-                aCol = rTargetDevice.GetBackground().GetColor();
-            else
-                // best guess is the face color here
-                // but it may be totally wrong. the background color
-                // was typically already reset
-                aCol = rStyleSettings.GetFaceColor();
-
-            bHighContrastBlack = aCol.IsDark();
-            bHighContrastWhite = aCol.IsBright();
-        }
-
-        aOldTextColor = rTargetDevice.GetTextColor();
-        if ( rTargetDevice.IsTextFillColor() )
-        {
-            bRestoreFillColor = true;
-            aOldTextFillColor = rTargetDevice.GetTextFillColor();
-        }
-        if( bHighContrastBlack )
-            rTargetDevice.SetTextColor( COL_GREEN );
-        else if( bHighContrastWhite )
-            rTargetDevice.SetTextColor( COL_LIGHTGREEN );
-        else
-        {
-            // draw disabled text always without shadow
-            // as it fits better with native look
-            rTargetDevice.SetTextColor( rTargetDevice.GetSettings().GetStyleSettings().GetDisableColor() );
-        }
-    }
+    TextColorGuard aTextColorGuard(rTargetDevice, nStyle, pVector);
 
     tools::Long        nWidth          = rRect.GetWidth();
     tools::Long        nHeight         = rRect.GetHeight();
@@ -1828,13 +1862,6 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
             if ( bDrawMnemonics && nMnemonicPos != -1 )
                 rTargetDevice.ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
         }
-    }
-
-    if ( nStyle & DrawTextFlags::Disable && !pVector )
-    {
-        rTargetDevice.SetTextColor( aOldTextColor );
-        if ( bRestoreFillColor )
-            rTargetDevice.SetTextFillColor( aOldTextFillColor );
     }
 }
 
@@ -2271,38 +2298,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
 
     if ( nStyle & DrawTextFlags::Disable && ! pVector )
     {
-        Color aOldTextColor;
-        Color aOldTextFillColor;
-        bool  bRestoreFillColor;
-        bool  bHighContrastBlack = false;
-        bool  bHighContrastWhite = false;
-        const StyleSettings& rStyleSettings( GetSettings().GetStyleSettings() );
-        if( rStyleSettings.GetHighContrastMode() )
-        {
-            if( IsBackground() )
-            {
-                Wallpaper aWall = GetBackground();
-                Color aCol = aWall.GetColor();
-                bHighContrastBlack = aCol.IsDark();
-                bHighContrastWhite = aCol.IsBright();
-            }
-        }
-
-        aOldTextColor = GetTextColor();
-        if ( IsTextFillColor() )
-        {
-            bRestoreFillColor = true;
-            aOldTextFillColor = GetTextFillColor();
-        }
-        else
-            bRestoreFillColor = false;
-
-        if( bHighContrastBlack )
-            SetTextColor( COL_GREEN );
-        else if( bHighContrastWhite )
-            SetTextColor( COL_LIGHTGREEN );
-        else
-            SetTextColor( GetSettings().GetStyleSettings().GetDisableColor() );
+        TextColorGuard aTextColorGuard(*this, nStyle, pVector);
 
         DrawText( rPos, aStr, nIndex, nLen, pVector, pDisplayText );
         if (!(GetSettings().GetStyleSettings().GetOptions() & StyleSettingsOptions::NoMnemonics)
@@ -2311,9 +2307,6 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
             if ( nMnemonicPos != -1 )
                 ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
         }
-        SetTextColor( aOldTextColor );
-        if ( bRestoreFillColor )
-            SetTextFillColor( aOldTextFillColor );
     }
     else
     {
