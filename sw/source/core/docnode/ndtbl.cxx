@@ -393,7 +393,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
         SwNodes::InsertTable to propagate an adjust item if
         necessary. */
     SwTableNode *pTableNd = SwNodes::InsertTable(
-        rPos.nNode,
+        rPos.GetNode(),
         nCols,
         pBodyColl,
         nRows,
@@ -560,7 +560,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
     return &rNdTable;
 }
 
-SwTableNode* SwNodes::InsertTable( const SwNodeIndex& rNdIdx,
+SwTableNode* SwNodes::InsertTable( SwNode& rNd,
                                    sal_uInt16 nBoxes,
                                    SwTextFormatColl* pContentTextColl,
                                    sal_uInt16 nLines,
@@ -575,8 +575,8 @@ SwTableNode* SwNodes::InsertTable( const SwNodeIndex& rNdIdx,
     if( !pHeadlineTextColl || !nLines )
         pHeadlineTextColl = pContentTextColl;
 
-    SwTableNode * pTableNd = new SwTableNode( rNdIdx.GetNode() );
-    SwEndNode* pEndNd = new SwEndNode( rNdIdx.GetNode(), *pTableNd );
+    SwTableNode * pTableNd = new SwTableNode( rNd );
+    SwEndNode* pEndNd = new SwEndNode( rNd, *pTableNd );
 
     if( !nLines ) // For the for loop
         ++nLines;

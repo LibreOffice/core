@@ -247,7 +247,7 @@ public:
        adjust in pContentTextColl or pHeadlineTextColl this adjust item
        overrides the item in pAttrSet. */
 
-    static SwTableNode* InsertTable( const SwNodeIndex& rNdIdx,
+    static SwTableNode* InsertTable( SwNode& rNd,
                         sal_uInt16 nBoxes, SwTextFormatColl* pContentTextColl,
                         sal_uInt16 nLines, sal_uInt16 nRepeat,
                         SwTextFormatColl* pHeadlineTextColl,
