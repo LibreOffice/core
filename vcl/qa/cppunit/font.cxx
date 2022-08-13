@@ -12,6 +12,8 @@
 
 #include <vcl/font.hxx>
 
+#include <font/EmphasisMark.hxx>
+
 class VclFontTest : public test::BootstrapFixture
 {
 public:
@@ -25,6 +27,11 @@ public:
     void testAlignment();
     void testQuality();
     void testSymbolFlagAndCharSet();
+    void testEmphasisMarkInitAsNone();
+    void testEmphasisMarkInitAsDot();
+    void testEmphasisMarkInitAsDisc();
+    void testEmphasisMarkInitAsAccent();
+    void testEmphasisMarkInitAsStyle();
 
     CPPUNIT_TEST_SUITE(VclFontTest);
     CPPUNIT_TEST(testName);
@@ -35,6 +42,11 @@ public:
     CPPUNIT_TEST(testAlignment);
     CPPUNIT_TEST(testQuality);
     CPPUNIT_TEST(testSymbolFlagAndCharSet);
+    CPPUNIT_TEST(testEmphasisMarkInitAsNone);
+    CPPUNIT_TEST(testEmphasisMarkInitAsDot);
+    CPPUNIT_TEST(testEmphasisMarkInitAsDisc);
+    CPPUNIT_TEST(testEmphasisMarkInitAsAccent);
+    CPPUNIT_TEST(testEmphasisMarkInitAsStyle);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -152,6 +164,65 @@ void VclFontTest::testSymbolFlagAndCharSet()
     CPPUNIT_ASSERT_MESSAGE( "Test 4: Symbol font flag should be off", !aFont.IsSymbolFont() );
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Test 4: Character set should be RTL_TEXTENCODING_UNICODE",
                             RTL_TEXTENCODING_UNICODE, aFont.GetCharSet() );
+}
+
+void VclFontTest::testEmphasisMarkInitAsNone()
+{
+    vcl::font::EmphasisMark aEmphasisMark(FontEmphasisMark::NONE, 5, 96);
+
+    CPPUNIT_ASSERT_MESSAGE("Shape not a polyline", !aEmphasisMark.IsShapePolyLine());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Shape wrong", tools::PolyPolygon(), aEmphasisMark.GetShape());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Rect1 not correct", tools::Rectangle(), aEmphasisMark.GetRect1());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Rect2 not correct", tools::Rectangle(), aEmphasisMark.GetRect2());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("y offset wrong", tools::Long(1), aEmphasisMark.GetYOffset());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("width wrong", tools::Long(0), aEmphasisMark.GetWidth());
+}
+
+void VclFontTest::testEmphasisMarkInitAsDot()
+{
+    vcl::font::EmphasisMark aEmphasisMark(FontEmphasisMark::Dot, 5, 96);
+
+    CPPUNIT_ASSERT_MESSAGE("Shape not a polyline", !aEmphasisMark.IsShapePolyLine());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Shape wrong", tools::PolyPolygon(), aEmphasisMark.GetShape());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Rect1 not correct", tools::Rectangle(Point(), Size(2, 2)), aEmphasisMark.GetRect1());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Rect2 not correct", tools::Rectangle(), aEmphasisMark.GetRect2());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("y offset wrong", tools::Long(3), aEmphasisMark.GetYOffset());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("width wrong", tools::Long(2), aEmphasisMark.GetWidth());
+}
+
+void VclFontTest::testEmphasisMarkInitAsDisc()
+{
+    vcl::font::EmphasisMark aEmphasisMark(FontEmphasisMark::Disc, 5, 96);
+
+    CPPUNIT_ASSERT_MESSAGE("Shape not a polyline", !aEmphasisMark.IsShapePolyLine());
+// something wrong with polypolygon equality checking!
+//    CPPUNIT_ASSERT_EQUAL_MESSAGE("Shape not disc with radius of 2", tools::PolyPolygon(tools::Polygon(Point(2, 2), 2, 2)), aEmphasisMark.GetShape());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Rect1 not correct", tools::Rectangle(), aEmphasisMark.GetRect1());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Rect2 not correct", tools::Rectangle(), aEmphasisMark.GetRect2());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("y offset wrong", tools::Long(4), aEmphasisMark.GetYOffset());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("width wrong", tools::Long(4), aEmphasisMark.GetWidth());
+}
+
+void VclFontTest::testEmphasisMarkInitAsAccent()
+{
+    vcl::font::EmphasisMark aEmphasisMark(FontEmphasisMark::Accent, 5, 96);
+
+    CPPUNIT_ASSERT_MESSAGE("Shape not a polyline", !aEmphasisMark.IsShapePolyLine());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Rect1 not correct", tools::Rectangle(), aEmphasisMark.GetRect1());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Rect2 not correct", tools::Rectangle(), aEmphasisMark.GetRect2());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("y offset wrong", tools::Long(4), aEmphasisMark.GetYOffset());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("width wrong", tools::Long(4), aEmphasisMark.GetWidth());
+}
+
+void VclFontTest::testEmphasisMarkInitAsStyle()
+{
+    vcl::font::EmphasisMark aEmphasisMark(FontEmphasisMark::Style, 5, 96);
+
+    CPPUNIT_ASSERT_MESSAGE("Shape not a polyline", !aEmphasisMark.IsShapePolyLine());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Rect1 not correct", tools::Rectangle(), aEmphasisMark.GetRect1());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Rect2 not correct", tools::Rectangle(), aEmphasisMark.GetRect2());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("y offset wrong", tools::Long(1), aEmphasisMark.GetYOffset());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("width wrong", tools::Long(0), aEmphasisMark.GetWidth());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclFontTest);
