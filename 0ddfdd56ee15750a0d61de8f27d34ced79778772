@@ -16,6 +16,23 @@
       "message": "You are editing a file that is fixed before. Please choose another header file, fix it. Remember to keep the Change-Id the same as here.",
       "revId": "0ddfdd56ee15750a0d61de8f27d34ced79778772",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4267ac85_627ffbfc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-08-13T10:11:36Z",
+      "side": 1,
+      "message": "This file is changed before. You should find another unchanged header.",
+      "revId": "0ddfdd56ee15750a0d61de8f27d34ced79778772",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
