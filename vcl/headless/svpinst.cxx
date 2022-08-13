@@ -260,9 +260,10 @@ std::unique_ptr<SalVirtualDevice> SvpSalInstance::CreateVirtualDevice(SalGraphic
     (void)pGd;
     cairo_surface_t* pPreExistingTarget = nullptr;
 #endif
-    std::unique_ptr<SalVirtualDevice> pNew(new SvpSalVirtualDevice(pSvpSalGraphics->getSurface(), pPreExistingTarget));
-    pNew->SetSize( nDX, nDY );
-    return pNew;
+    std::unique_ptr<SalVirtualDevice> xNew(new SvpSalVirtualDevice(pSvpSalGraphics->getSurface(), pPreExistingTarget));
+    if (!xNew->SetSize(nDX, nDY))
+        xNew.reset();
+    return xNew;
 }
 
 cairo_surface_t* get_underlying_cairo_surface(const VirtualDevice& rDevice)

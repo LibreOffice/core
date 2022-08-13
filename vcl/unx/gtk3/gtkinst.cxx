@@ -383,9 +383,10 @@ std::unique_ptr<SalVirtualDevice> GtkInstance::CreateVirtualDevice( SalGraphics 
     assert(pSvpSalGraphics);
     // tdf#127529 see SvpSalInstance::CreateVirtualDevice for the rare case of a non-null pPreExistingTarget
     cairo_surface_t* pPreExistingTarget = pGd ? static_cast<cairo_surface_t*>(pGd->pSurface) : nullptr;
-    std::unique_ptr<SalVirtualDevice> pNew(new SvpSalVirtualDevice(pSvpSalGraphics->getSurface(), pPreExistingTarget));
-    pNew->SetSize( nDX, nDY );
-    return pNew;
+    std::unique_ptr<SalVirtualDevice> xNew(new SvpSalVirtualDevice(pSvpSalGraphics->getSurface(), pPreExistingTarget));
+    if (!xNew->SetSize(nDX, nDY))
+        xNew.reset();
+    return xNew;
 }
 
 std::shared_ptr<SalBitmap> GtkInstance::CreateSalBitmap()
