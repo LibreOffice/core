@@ -1692,13 +1692,13 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
 
 ///@see SwNodes::MoveNodes (TODO: seems to be C&P programming here)
 void SwNodes::CopyNodes( const SwNodeRange& rRange,
-            const SwNodeIndex& rIndex, bool bNewFrames, bool bTableInsDummyNode ) const
+            SwNode& rPos, bool bNewFrames, bool bTableInsDummyNode ) const
 {
-    SwDoc& rDoc = rIndex.GetNode().GetDoc();
+    SwDoc& rDoc = rPos.GetDoc();
 
     SwNode * pCurrentNode;
-    if( rIndex == SwNodeOffset(0) ||
-        ( (pCurrentNode = &rIndex.GetNode())->GetStartNode() &&
+    if( rPos.GetIndex() == SwNodeOffset(0) ||
+        ( (pCurrentNode = &rPos)->GetStartNode() &&
           !pCurrentNode->StartOfSectionIndex() ))
         return;
 
@@ -1742,13 +1742,13 @@ void SwNodes::CopyNodes( const SwNodeRange& rRange,
                 "aRg should use this node array" );
     OSL_ENSURE( &aRg.aStart.GetNodes() == &aRg.aEnd.GetNodes(),
                "Range across different nodes arrays? You deserve punishment!");
-    if( &rIndex.GetNodes() == &aRg.aStart.GetNodes() &&
-        rIndex.GetIndex() >= aRg.aStart.GetIndex() &&
-        rIndex.GetIndex() < aRg.aEnd.GetIndex() )
+    if( &rPos.GetNodes() == &aRg.aStart.GetNodes() &&
+        rPos.GetIndex() >= aRg.aStart.GetIndex() &&
+        rPos.GetIndex() < aRg.aEnd.GetIndex() )
             return;
 
-    SwNodeIndex aInsPos( rIndex );
-    SwNodeIndex aOrigInsPos( rIndex, -1 ); // original insertion position
+    SwNodeIndex aInsPos( rPos );
+    SwNodeIndex aOrigInsPos( rPos, -1 ); // original insertion position
     int nLevel = 0;                        // level counter
 
     for( SwNodeOffset nNodeCnt = aRg.aEnd.GetIndex() - aRg.aStart.GetIndex();
@@ -1787,7 +1787,7 @@ void SwNodes::CopyNodes( const SwNodeRange& rRange,
                     SwStartNode* pSttNd = aRg.aStart.GetNode().GetStartNode();
                     CopyNodes( SwNodeRange( *pSttNd, SwNodeOffset(+ 1),
                                             *pSttNd->EndOfSectionNode() ),
-                                aInsPos, bNewFrames );
+                                aInsPos.GetNode(), bNewFrames );
 
                     // insert a DummyNode for the box-EndNode?
                     if( bTableInsDummyNode )

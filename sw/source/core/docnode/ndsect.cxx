@@ -1277,7 +1277,7 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc& rDoc, const SwNodeIndex& rIdx ) c
         pNewSect->SetEditInReadonly();
 
     SwNodeRange aRg( *this, SwNodeOffset(+1), *EndOfSectionNode() ); // Where am I?
-    rNds.Copy_( aRg, aInsPos, false );
+    rNds.Copy_( aRg, aInsPos.GetNode(), false );
 
     // Delete all Frames from the copied Area. They are created when creating
     // the SectionFrames.

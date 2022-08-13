@@ -3641,7 +3641,7 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
         SaveRedlEndPosForRestore aRedlRest( rInsPos, 0 );
 
         // insert behind the already copied start node
-        m_rDoc.GetNodes().CopyNodes( rRg, rInsPos, false, true );
+        m_rDoc.GetNodes().CopyNodes( rRg, rInsPos.GetNode(), false, true );
         aRedlRest.Restore();
 
         if (bEndIsEqualEndPos)

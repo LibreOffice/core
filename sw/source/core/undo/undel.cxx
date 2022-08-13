@@ -971,7 +971,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         {
             SwNodeRange aRange( *m_oMvStt, SwNodeOffset(0), *m_oMvStt, m_nNode );
             SwNodeIndex aCopyIndex( aPos.nNode, -1 );
-            rDoc.GetUndoManager().GetUndoNodes().Copy_(aRange, aPos.nNode,
+            rDoc.GetUndoManager().GetUndoNodes().Copy_(aRange, aPos.GetNode(),
                     // sw_redlinehide: delay creating frames: the flags on the
                     // nodes aren't necessarily up-to-date, and the redlines
                     // from m_pRedlSaveData aren't applied yet...

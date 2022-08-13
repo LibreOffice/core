@@ -122,7 +122,7 @@ class SW_DLLPUBLIC SwNodes final
 
     void UpdateOutlineIdx( const SwNode& );   ///< Update all OutlineNodes starting from Node.
 
-    void CopyNodes( const SwNodeRange&, const SwNodeIndex&,
+    void CopyNodes( const SwNodeRange&, SwNode& rPos,
                     bool bNewFrames, bool bTableInsDummyNode = false ) const;
     void DelDummyNodes( const SwNodeRange& rRg );
 
@@ -173,7 +173,7 @@ public:
                 bool bNewFrames = true );
     void MoveRange( SwPaM&, SwPosition&, SwNodes& rNodes );
 
-    void Copy_( const SwNodeRange& rRg, const SwNodeIndex& rInsPos,
+    void Copy_( const SwNodeRange& rRg, SwNode& rInsPos,
                 bool bNewFrames = true ) const
         {   CopyNodes( rRg, rInsPos, bNewFrames ); }
 

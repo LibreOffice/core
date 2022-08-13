@@ -1248,7 +1248,7 @@ void SwDoc::Summary(SwDoc& rExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bImp
         }
 
         SwNodeRange aRange( *rOutNds[ i ], SwNodeOffset(0), *rOutNds[ i ], nEndOfs );
-        GetNodes().Copy_( aRange, aEndOfDoc );
+        GetNodes().Copy_( aRange, aEndOfDoc.GetNode() );
     }
     const SwTextFormatColls *pColl = rExtDoc.GetTextFormatColls();
     for( SwTextFormatColls::size_type i = 0; i < pColl->size(); ++i )
