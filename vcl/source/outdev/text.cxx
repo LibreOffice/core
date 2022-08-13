@@ -1691,9 +1691,9 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
     const TextAlign eAlign = rTargetDevice.GetTextAlign();
     sal_Int32 nMnemonicPos = -1;
 
-    OUString aStr = rOrigStr;
-    if ( nStyle & DrawTextFlags::Mnemonic )
-        aStr = GetNonMnemonicString( aStr, nMnemonicPos );
+    OUString aStr;
+    if (nStyle & DrawTextFlags::Mnemonic)
+        aStr = GetNonMnemonicString(rOrigStr, nMnemonicPos);
 
     const bool bDrawMnemonics = !(rTargetDevice.GetSettings().GetStyleSettings().GetOptions() & StyleSettingsOptions::NoMnemonics) && !pVector;
 
