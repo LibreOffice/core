@@ -3727,7 +3727,13 @@ bool SwWW8ImplReader::ReadChar(tools::Long nPosCp, tools::Long nCpOfs)
                     if (m_bObj)
                         pResult = ImportOle();
                     else if (m_bSpec)
-                        pResult = ImportGraf();
+                    {
+                        SwFrameFormat* pAsCharFlyFormat = m_rDoc.GetDfltFrameFormat();
+                        SwFormatAnchor aAnchor(RndStdIds::FLY_AS_CHAR);
+                        pAsCharFlyFormat->SetFormatAttr(aAnchor);
+                        pResult = ImportGraf(nullptr, pAsCharFlyFormat);
+                    }
+
 
                     // If we have a bad 0x1 insert a space instead.
                     if (!pResult)
