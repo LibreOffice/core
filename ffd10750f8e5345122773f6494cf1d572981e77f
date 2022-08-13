@@ -52,6 +52,24 @@
       "parentUuid": "1569e5a7_8a70b4c8",
       "revId": "ffd10750f8e5345122773f6494cf1d572981e77f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "604b6dba_28814887",
+        "filename": "vcl/source/filter/svm/SvmConverter.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1003606
+      },
+      "writtenOn": "2022-08-13T19:42:44Z",
+      "side": 1,
+      "message": "\u003e Should we do a version bump in \"SvmWriter::TextArrayHandler\" from 2 to 3 and stream out the new kasdida information there, and read it in at SvmReader::TextArrayHandler ?\n\nProbably yes. We currently are not serializing the Kashida array at all, so if it really gets used with SVM files, we will have to do that.",
+      "parentUuid": "90639bcd_242779a0",
+      "revId": "ffd10750f8e5345122773f6494cf1d572981e77f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
