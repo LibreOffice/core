@@ -16,6 +16,24 @@
       "message": "We stream the MetaTextArrayAction to/from the svm file format. Will an old TextArrayAction stored in a file before this change set work differently than it used to if loaded again? This is possibly ok if the old way of doing things was basically rubbish anyway.\n\nShould we do a version bump in \"SvmWriter::TextArrayHandler\" from 2 to 3 and stream out the new kasdida information there, and read it in at SvmReader::TextArrayHandler ?",
       "revId": "ffd10750f8e5345122773f6494cf1d572981e77f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1569e5a7_8a70b4c8",
+        "filename": "vcl/source/filter/svm/SvmConverter.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1003606
+      },
+      "writtenOn": "2022-08-13T19:17:55Z",
+      "side": 1,
+      "message": "I‘m not entirely sure if Kashida justification was ever used here, I modified this code because it seemed to be called from OutputDevice code that can potentially have Kashida justification. How can I test this functionality to see if it can get Kashida justification or not?",
+      "parentUuid": "924771fa_0315d8b4",
+      "revId": "ffd10750f8e5345122773f6494cf1d572981e77f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
