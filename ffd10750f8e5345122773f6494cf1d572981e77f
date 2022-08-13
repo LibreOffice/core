@@ -34,6 +34,24 @@
       "parentUuid": "924771fa_0315d8b4",
       "revId": "ffd10750f8e5345122773f6494cf1d572981e77f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90639bcd_242779a0",
+        "filename": "vcl/source/filter/svm/SvmConverter.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1003606
+      },
+      "writtenOn": "2022-08-13T19:22:59Z",
+      "side": 1,
+      "message": "This particular code is not doing any justification obviously, so if Kashida was applied before it was by mistake (the very reason we are making Kashida insertion explicit).\n\nOutputDevice::DrawTextArray() has:\n    if ( mpMetaFile )\n        mpMetaFile-\u003eAddAction( new MetaTextArrayAction( rStartPt, rStr, pDXAry, pKashidaAry, nIndex, nLen ) );\n        \nwhich is why I’m adding Kashida array to  MetaTextArrayAction, but I don’t know if mpMetaFile and pKashidaAry can both be used at the same time.",
+      "parentUuid": "1569e5a7_8a70b4c8",
+      "revId": "ffd10750f8e5345122773f6494cf1d572981e77f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
