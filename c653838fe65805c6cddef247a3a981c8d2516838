@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af3fe458_65490000",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-08-13T20:38:04Z",
+      "side": 1,
+      "message": "How about this as a workaround for this crash? Or is there better ideas.",
+      "revId": "c653838fe65805c6cddef247a3a981c8d2516838",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
