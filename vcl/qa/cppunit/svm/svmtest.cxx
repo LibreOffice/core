@@ -1435,7 +1435,7 @@ void SvmTest::testHatch()
 
     Hatch aHatch(HatchStyle::Single, COL_YELLOW, 15, 900_deg10);
 
-    pVirtualDev->DrawHatch(aPolyPolygon, aHatch);
+    pVirtualDev->DrawHatch(pVirtualDev->LogicToPixel(aPolyPolygon), aHatch);
 
     checkHatch(writeAndReadStream(aGDIMetaFile));
     checkHatch(readFile(u"hatch.svm"));

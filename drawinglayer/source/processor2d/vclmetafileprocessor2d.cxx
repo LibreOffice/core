@@ -1905,7 +1905,7 @@ void VclMetafileProcessor2D::processPolyPolygonHatchPrimitive2D(
                                                                               : HatchStyle::Triple);
 
     mpOutputDevice->DrawHatch(
-        aToolsPolyPolygon,
+        mpOutputDevice->LogicToPixel(aToolsPolyPolygon),
         Hatch(aHatchStyle,
               Color(maBColorModifierStack.getModifiedColor(rFillHatchAttribute.getColor())),
               basegfx::fround(rFillHatchAttribute.getDistance()),

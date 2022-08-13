@@ -78,7 +78,7 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
 
     if( rPolyPoly.Count() )
     {
-        tools::PolyPolygon     aPolyPoly( LogicToPixel( rPolyPoly ) );
+        tools::PolyPolygon aPolyPoly(rPolyPoly);
         GDIMetaFile*    pOldMetaFile = mpMetaFile;
         bool            bOldMap = IsMapModeEnabled();
 
@@ -90,7 +90,7 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
         Push( vcl::PushFlags::LINECOLOR );
         SetLineColor( aHatch.GetColor() );
         InitLineColor();
-        DrawHatch( aPolyPoly, aHatch, false );
+        DrawHatch(PixelToLogic(aPolyPoly), aHatch, false);
         Pop();
         EnableMapMode( bOldMap );
         mpMetaFile = pOldMetaFile;

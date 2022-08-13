@@ -857,7 +857,9 @@ void VclPixelProcessor2D::processFillHatchPrimitive2D(
                           Degree10(nAngle10));
 
         // draw hatch using VCL
-        mpOutputDevice->DrawHatch(::tools::PolyPolygon(::tools::Polygon(aHatchPolygon)), aVCLHatch);
+        mpOutputDevice->DrawHatch(
+            mpOutputDevice->LogicToPixel(::tools::PolyPolygon(::tools::Polygon(aHatchPolygon))),
+            aVCLHatch);
     }
 }
 

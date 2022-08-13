@@ -1272,7 +1272,7 @@ MetaHatchAction::MetaHatchAction( tools::PolyPolygon aPolyPoly, const Hatch& rHa
 
 void MetaHatchAction::Execute( OutputDevice* pOut )
 {
-    pOut->DrawHatch( maPolyPoly, maHatch );
+    pOut->DrawHatch(pOut->LogicToPixel(maPolyPoly), maHatch);
 }
 
 rtl::Reference<MetaAction> MetaHatchAction::Clone() const
