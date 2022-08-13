@@ -111,7 +111,10 @@ struct AxisProperties final
 
     AxisLabelAlignment maLabelAlignment;
 
+    // Data table
     bool m_bDisplayDataTable;
+    bool m_bDataTableAlignAxisValuesWithColumns;
+
     bool m_bDisplayLabels;
 
     // Compatibility option: starting from LibreOffice 5.1 the rotated
