@@ -704,6 +704,19 @@ rtl::Reference<MetaAction> SvmReader::TextArrayHandler(const ImplMetaReadData* p
         }
     }
 
+    if (aCompat.GetVersion() >= 3) // Version 3
+    {
+        std::vector<sal_Bool> aKashidaArray(aArray.size());
+        bool val(false);
+        for (size_t i = 0; i < aKashidaArray.size(); i++)
+        {
+            mrStream.ReadCharAsBool(val);
+            aKashidaArray[i] = sal_Bool(val);
+        }
+        if (!aKashidaArray.empty())
+            pAction->SetKashidaArray(std::move(aKashidaArray));
+    }
+
     if (!aArray.empty())
         pAction->SetDXArray(std::move(aArray));
 
