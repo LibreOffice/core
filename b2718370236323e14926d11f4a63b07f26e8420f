@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c874d614_243d0bf9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 54
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-08-13T08:23:03Z",
+      "side": 1,
+      "message": "Hey Tomaz, this one has been in the queue for a long time. ",
+      "revId": "b2718370236323e14926d11f4a63b07f26e8420f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
