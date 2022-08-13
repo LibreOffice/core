@@ -111,7 +111,7 @@ public:
                             SwCopyFlags flags = SwCopyFlags::Default) const;
     void CopyFlyInFlyImpl(  const SwNodeRange& rRg,
                             SwPaM const*const pCopiedPaM,
-                            const SwNodeIndex& rStartIdx,
+                            SwNode& rStartIdx,
                             const bool bCopyFlyAtFly = false,
                             SwCopyFlags flags = SwCopyFlags::Default) const;
 

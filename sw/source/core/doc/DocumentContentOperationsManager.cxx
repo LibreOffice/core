@@ -3763,8 +3763,8 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
         CopyFlyInFlyImpl(rRg, pCopiedPaM ? &pCopiedPaM->first : nullptr,
             // see comment below regarding use of pCopiedPaM->second
             (pCopiedPaM && rRg.aStart != pCopiedPaM->first.Start()->nNode)
-                ? pCopiedPaM->second.nNode
-                : aSavePos,
+                ? pCopiedPaM->second.GetNode()
+                : aSavePos.GetNode(),
             bCopyFlyAtFly,
             flags);
     }
@@ -3782,7 +3782,7 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
 void DocumentContentOperationsManager::CopyFlyInFlyImpl(
     const SwNodeRange& rRg,
     SwPaM const*const pCopiedPaM,
-    const SwNodeIndex& rStartIdx,
+    SwNode& rStartIdx,
     const bool bCopyFlyAtFly,
     SwCopyFlags const flags) const
 {
@@ -3791,7 +3791,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
     // First collect all Flys, sort them according to their ordering number,
     // and then only copy them. This maintains the ordering numbers (which are only
     // managed in the DrawModel).
-    SwDoc& rDest = rStartIdx.GetNode().GetDoc();
+    SwDoc& rDest = rStartIdx.GetDoc();
     std::set< ZSortFly > aSet;
     const size_t nArrLen = m_rDoc.GetSpzFrameFormats()->size();
 
@@ -5059,11 +5059,11 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
                         POP_NUMRULE_STATE
                     }
 
-                    // copy at-char flys in rPam
-                    SwNodeIndex temp(*pDestTextNd); // update to new (start) node for flys
-                    // tdf#126626 prevent duplicate Undos
+                    // Copy at-char flys in rPam.
+                    // Update to new (start) node for flys.
+                    // tdf#126626 prevent duplicate Undos.
                     ::sw::UndoGuard const ug(rDoc.GetIDocumentUndoRedo());
-                    CopyFlyInFlyImpl(aRg, &rPam, temp, false);
+                    CopyFlyInFlyImpl(aRg, &rPam, *pDestTextNd, false);
 
                     break;
                 }
