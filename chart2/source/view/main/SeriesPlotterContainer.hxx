@@ -151,6 +151,7 @@ private:
     sal_Int32 m_nMaxAxisIndex;
 
     bool m_bChartTypeUsesShiftedCategoryPositionPerDefault;
+    bool m_bForceShiftPosition = false;
     sal_Int32 m_nDefaultDateNumberFormat;
 };
 

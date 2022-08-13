@@ -170,6 +170,9 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(ChartModel& rChart
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
 
+    if (xDiagram->getDataTable().is())
+        m_bForceShiftPosition = true;
+
     //prepare for autoscaling and shape creation
     // - create plotter for charttypes (for each first scale group at each plotter, as they are independent)
     // - add series to plotter (thus each charttype can provide minimum and maximum values for autoscaling)
@@ -335,6 +338,9 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(ChartModel& rChart
 bool SeriesPlotterContainer::isCategoryPositionShifted(const chart2::ScaleData& rSourceScale,
                                                        bool bHasComplexCategories)
 {
+    if (m_bForceShiftPosition)
+        return true;
+
     if (rSourceScale.AxisType == AxisType::CATEGORY)
         return bHasComplexCategories || rSourceScale.ShiftedCategoryPosition
                || m_bChartTypeUsesShiftedCategoryPositionPerDefault;
