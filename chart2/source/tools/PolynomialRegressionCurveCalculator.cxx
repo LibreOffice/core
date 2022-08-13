@@ -32,7 +32,9 @@ using namespace com::sun::star;
 namespace chart
 {
 
-static double lcl_GetDotProduct(std::vector<double>& aVec1, std::vector<double>& aVec2)
+static double lcl_GetDotProduct(
+    const std::vector<double>& aVec1,
+    const std::vector<double>& aVec2 )
 {
     double fResult = 0.0;
     assert(aVec1.size() == aVec2.size());
