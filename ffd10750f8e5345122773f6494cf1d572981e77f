@@ -70,6 +70,24 @@
       "parentUuid": "90639bcd_242779a0",
       "revId": "ffd10750f8e5345122773f6494cf1d572981e77f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12e0b386_7af79df0",
+        "filename": "vcl/source/filter/svm/SvmConverter.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-08-13T20:33:07Z",
+      "side": 1,
+      "message": "I think this particular line in SvmConverter.cxx is for a super old type of metafile so it probably doesn\u0027t matter to much.\n\nThe SvmReader.cxx/SvmWriter.cxx stuff for contemporary svm\u0027s probably does matter. We definitely use them to temporarily record and play back things. I think for stuff like print preview in the print dialog, and other places where we record to a metafile and scale it and/or transport metafiles around to replay them.\n\nAdding that can be done in some follow up commit I guess, so I guess lets not make the perfect the enemy of the good and you should go ahead and merge this IMO",
+      "parentUuid": "604b6dba_28814887",
+      "revId": "ffd10750f8e5345122773f6494cf1d572981e77f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
