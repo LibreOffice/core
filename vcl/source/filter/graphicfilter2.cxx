@@ -683,54 +683,12 @@ bool GraphicDescriptor::ImpDetectTGA( SvStream& rStm, bool )
 
 bool GraphicDescriptor::ImpDetectPSD( SvStream& rStm, bool bExtendedInfo )
 {
-    bool bRet = false;
-
-    sal_uInt32  nMagicNumber = 0;
     sal_Int32 nStmPos = rStm.Tell();
-    rStm.SetEndian( SvStreamEndian::BIG );
-    rStm.ReadUInt32( nMagicNumber );
-    if ( nMagicNumber == 0x38425053 )
-    {
-        sal_uInt16 nVersion = 0;
-        rStm.ReadUInt16( nVersion );
-        if ( nVersion == 1 )
-        {
-            bRet = true;
-            if ( bExtendedInfo )
-            {
-                sal_uInt16 nChannels = 0;
-                sal_uInt32 nRows = 0;
-                sal_uInt32 nColumns = 0;
-                sal_uInt16 nDepth = 0;
-                sal_uInt16 nMode = 0;
-                rStm.SeekRel( 6 );  // Pad
-                rStm.ReadUInt16( nChannels ).ReadUInt32( nRows ).ReadUInt32( nColumns ).ReadUInt16( nDepth ).ReadUInt16( nMode );
-                if ( ( nDepth == 1 ) || ( nDepth == 8 ) || ( nDepth == 16 ) )
-                {
-                    aMetadata.mnBitsPerPixel = ( nDepth == 16 ) ? 8 : nDepth;
-                    switch ( nChannels )
-                    {
-                        case 4 :
-                        case 3 :
-                            aMetadata.mnBitsPerPixel = 24;
-                            [[fallthrough]];
-                        case 2 :
-                        case 1 :
-                            aMetadata.maPixSize.setWidth( nColumns );
-                            aMetadata.maPixSize.setHeight( nRows );
-                        break;
-                        default:
-                            bRet = false;
-                    }
-                }
-                else
-                    bRet = false;
-            }
-        }
-    }
-
+    vcl::GraphicFormatDetector aDetector( rStm, aPathExt, bExtendedInfo );
+    bool bRet = aDetector.detect();
+    bRet &= aDetector.checkPSD();
     if ( bRet )
-        aMetadata.mnFormat = GraphicFileFormat::PSD;
+        aMetadata = aDetector.getMetadata();
     rStm.Seek( nStmPos );
     return bRet;
 }
