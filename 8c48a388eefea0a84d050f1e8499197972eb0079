@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a61fd52c_53b32121",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-08-13T03:36:16Z",
+      "side": 1,
+      "message": "Please test your patches locally with `make` and `make check` before submitting them.",
+      "revId": "8c48a388eefea0a84d050f1e8499197972eb0079",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "434851a0_8cb392d9",
+        "filename": "basctl/source/basicide/baside3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 699,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-08-13T03:36:16Z",
+      "side": 1,
+      "message": "The variable `nCount` is unused. Please remove it.",
+      "revId": "8c48a388eefea0a84d050f1e8499197972eb0079",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86ef4c19_d69efcf0",
+        "filename": "basctl/source/basicide/baside3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 703,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-08-13T03:36:16Z",
+      "side": 1,
+      "message": "The `pFiles[i]` statement is no longer valid. Please fix it.",
+      "revId": "8c48a388eefea0a84d050f1e8499197972eb0079",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9e5c170_8d247f87",
+        "filename": "basctl/source/basicide/baside3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-08-13T03:36:16Z",
+      "side": 1,
+      "message": "The variable `nLocaleCount` is also unused. Please remove it.",
+      "revId": "8c48a388eefea0a84d050f1e8499197972eb0079",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
