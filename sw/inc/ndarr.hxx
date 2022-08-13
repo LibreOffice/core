@@ -202,7 +202,7 @@ public:
     /** Create an empty section of Start- and EndNote. It may be called
        only if a new section with content is to be created,
        e.g. at filters/Undo/... */
-    static SwStartNode* MakeEmptySection( const SwNodeIndex& rIdx,
+    static SwStartNode* MakeEmptySection( SwNode& rWhere,
                                     SwStartNodeType = SwNormalStartNode );
 
     /// Implementations of "Make...Node" are in the given .cxx-files.
