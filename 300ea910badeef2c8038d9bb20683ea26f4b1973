@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21c09780_a7b5f067",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-08-14T16:51:27Z",
+      "side": 1,
+      "message": "Instead of creating 2 vars with the same string would it be possible to merge them to not add extra translation for translation teams?\n(eg: STR_DATA_TABLE)",
+      "revId": "300ea910badeef2c8038d9bb20683ea26f4b1973",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
