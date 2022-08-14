@@ -853,11 +853,7 @@ void DecorationView::DrawHighlightFrame( const tools::Rectangle& rRect,
     }
 
     if ( nStyle == DrawHighlightFrameStyle::In )
-    {
-        Color aTempColor = aLightColor;
-        aLightColor = aShadowColor;
-        aShadowColor = aTempColor;
-    }
+        std::swap( aLightColor, aShadowColor );
 
     DrawFrame( rRect, aLightColor, aShadowColor );
 }

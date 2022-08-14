@@ -741,11 +741,7 @@ void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
 
     sal_Int16 nRubyPos = m_pParentDlg->m_xPositionLB->get_active();
     if (nRubyPos == 1) // BOTTOM
-    {
-        tools::Long nTmp = nYRuby;
-        nYRuby = nYBase;
-        nYBase = nTmp;
-    }
+        std::swap(nYRuby, nYBase);
     else if (nRubyPos == 2) // RIGHT ( vertically )
     {
         // Align the ruby text and base text to the vertical center.

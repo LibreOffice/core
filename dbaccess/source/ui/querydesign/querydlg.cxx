@@ -170,9 +170,7 @@ IMPL_LINK_NOARG( DlgQryJoin, LBChangeHdl, weld::ComboBox&, void )
             {
                 pResId = STR_QUERY_LEFTRIGHT_JOIN;
                 eJoinType = RIGHT_JOIN;
-                OUString sTemp = sFirstWinName;
-                sFirstWinName = sSecondWinName;
-                sSecondWinName = sTemp;
+                std::swap( sFirstWinName, sSecondWinName );
             }
             break;
         case ID_FULL_JOIN:

@@ -2536,11 +2536,7 @@ void ScOutputData::DrawEditParam::getEngineSize(ScFieldEditEngine* pEngine, tool
     tools::Long nEngineHeight = pEngine->GetTextHeight();
 
     if (isVerticallyOriented())
-    {
-        tools::Long nTemp = nEngineWidth;
-        nEngineWidth = nEngineHeight;
-        nEngineHeight = nTemp;
-    }
+        std::swap( nEngineWidth, nEngineHeight );
 
     if (meOrient == SvxCellOrientation::Stacked)
         nEngineWidth = nEngineWidth * 11 / 10;

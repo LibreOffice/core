@@ -418,11 +418,7 @@ double PolarPlottingPositionHelper::getWidthAngleDegree( double& fStartLogicValu
 {
     const ExplicitScaleData& rAngleScale = m_bSwapXAndY ? m_aScales[1] : m_aScales[0];
     if( rAngleScale.Orientation != AxisOrientation_MATHEMATICAL )
-    {
-        double fHelp = fEndLogicValueOnAngleAxis;
-        fEndLogicValueOnAngleAxis = fStartLogicValueOnAngleAxis;
-        fStartLogicValueOnAngleAxis = fHelp;
-    }
+        std::swap( fStartLogicValueOnAngleAxis, fEndLogicValueOnAngleAxis );
 
     double fStartAngleDegree = transformToAngleDegree( fStartLogicValueOnAngleAxis );
     double fEndAngleDegree   = transformToAngleDegree( fEndLogicValueOnAngleAxis );

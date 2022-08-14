@@ -200,9 +200,7 @@ void ScGridMerger::Flush()
                 //  (nVarStart / nVarDiff can be modified, aren't used after Flush)
 
                 nVarDiff = -nVarDiff;
-                tools::Long nTemp = nVarStart;
-                nVarStart = nVarEnd;
-                nVarEnd = nTemp;
+                std::swap( nVarStart, nVarEnd );
             }
             pDev->DrawGrid( tools::Rectangle( nVarStart, nFixStart, nVarEnd, nFixEnd ),
                             Size( nVarDiff, nFixEnd - nFixStart ),

@@ -2335,9 +2335,7 @@ void SplitWindow::SplitItem( sal_uInt16 nId, tools::Long nNewSize,
     {
         nPos--;
         nDelta *= -1;
-        bool bTemp = bPropSmall;
-        bPropSmall = bPropGreat;
-        bPropGreat = bTemp;
+        std::swap( bPropSmall, bPropGreat );
     }
 
     sal_uInt16          n;

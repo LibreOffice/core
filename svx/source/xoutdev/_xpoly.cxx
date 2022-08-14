@@ -617,11 +617,7 @@ void XPolygon::CalcSmoothJoin(sal_uInt16 nCenter, sal_uInt16 nDrag, sal_uInt16 n
     // If nPoint is no control point, i.e. cannot be moved, then
     // move nDrag instead on the line between nCenter and nPnt
     if ( !IsControl(nPnt) )
-    {
-        sal_uInt16 nTmp = nDrag;
-        nDrag = nPnt;
-        nPnt = nTmp;
-    }
+        std::swap( nDrag, nPnt );
     Point*  pPoints = pImpXPolygon->pPointAry.get();
     Point   aDiff   = pPoints[nDrag] - pPoints[nCenter];
     double  fDiv    = CalcDistance(nCenter, nDrag);
