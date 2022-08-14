@@ -1418,7 +1418,7 @@ WW8_CP WW8_WrPct::Fc2Cp( sal_uLong nFc ) const
 void WW8Export::AppendBookmarks( const SwTextNode& rNd, sal_Int32 nCurrentPos, sal_Int32 nLen, const SwRedlineData* /*pRedlineData*/ )
 {
     std::vector< const ::sw::mark::IMark* > aArr;
-    sal_uInt16 nContent;
+    sal_Int32 nContent;
     const sal_Int32 nCurrentEnd = nCurrentPos + nLen;
     if( !GetWriter().GetBookmarks( rNd, nCurrentPos, nCurrentEnd, aArr ))
         return;
