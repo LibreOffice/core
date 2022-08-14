@@ -796,11 +796,7 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
             SwNodeOffset nSttIdx = GetMark()->GetNodeIndex(),
                     nEndIdx = GetPoint()->GetNodeIndex();
             if( nEndIdx <= nSttIdx )
-            {
-                SwNodeOffset nTmp = nSttIdx;
-                nSttIdx = nEndIdx;
-                nEndIdx = nTmp;
-            }
+                std::swap( nSttIdx, nEndIdx );
 
             // If a protected section should be between nodes, then the
             // selection needs to contain already x nodes.

@@ -112,9 +112,7 @@ void ORelationTableConnectionData::ChangeOrientation()
     }
 
     // adapt member
-    TTableWindowData::value_type pTemp = m_pReferencingTable;
-    m_pReferencingTable = m_pReferencedTable;
-    m_pReferencedTable = pTemp;
+    std::swap( m_pReferencingTable, m_pReferencedTable );
 }
 
 void ORelationTableConnectionData::SetCardinality()

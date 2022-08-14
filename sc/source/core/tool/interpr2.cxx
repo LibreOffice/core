@@ -535,11 +535,7 @@ void ScInterpreter::ScNetWorkdays( bool bOOXML_Version )
         size_t nRef = 0;
         bool bReverse = ( nDate1 > nDate2 );
         if ( bReverse )
-        {
-            sal_uInt32 nTemp = nDate1;
-            nDate1 = nDate2;
-            nDate2 = nTemp;
-        }
+            std::swap( nDate1, nDate2 );
         size_t nMax = nSortArray.size();
         while ( nDate1 <= nDate2 )
         {

@@ -2921,9 +2921,7 @@ void DffPropertyReader::ImportGradientColor( SfxItemSet& aSet, sal_uInt32 eMSO_F
         aCol1 = aCol2;
         aCol2 = aZwi;
         //Swap two colors' transparency
-        double dTemp = dTrans;
-        dTrans = dBackTrans;
-        dBackTrans = dTemp;
+        std::swap( dTrans, dBackTrans );
     }
 
     //Construct gradient item

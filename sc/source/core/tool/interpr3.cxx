@@ -4445,11 +4445,7 @@ void ScInterpreter::ScProbability()
     else
         fLo = fUp;
     if (fLo > fUp)
-    {
-        double fTemp = fLo;
-        fLo = fUp;
-        fUp = fTemp;
-    }
+        std::swap( fLo, fUp );
     ScMatrixRef pMatP = GetMatrix();
     ScMatrixRef pMatW = GetMatrix();
     if (!pMatP || !pMatW)
