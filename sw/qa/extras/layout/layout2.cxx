@@ -2131,6 +2131,14 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf124261)
 #endif
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf135991)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf135991.odt");
+    auto pDump = parseLayoutDump();
+    // There used to be negative values that made the column frames invisible.
+    assertXPath(pDump, "//bounds[@top<0]", 0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
