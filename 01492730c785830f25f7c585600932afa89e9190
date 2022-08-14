@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0e30aab_8417beb1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-14T07:22:21Z",
+      "side": 1,
+      "message": "By the way: there are other comments by others - please review them and mark as Done if they are addressed.",
+      "revId": "01492730c785830f25f7c585600932afa89e9190",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "176d02d9_1b6a1d21",
+        "filename": "cui/uiconfig/ui/optlanguagespage.ui",
+        "patchSetId": 6
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-14T07:22:21Z",
+      "side": 1,
+      "message": "Please note - here *and below* - that you didn\u0027t address my previous comment in all places, only in the single place where I mentioned it. I expect developer to consider the comments with some common sense, not expecting others to do the whole work for them and point every single place and how to change that.",
+      "range": {
+        "startLine": 329,
+        "startChar": 84,
+        "endLine": 329,
+        "endChar": 104
+      },
+      "revId": "01492730c785830f25f7c585600932afa89e9190",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
