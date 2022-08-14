@@ -16,6 +16,24 @@
       "message": "Is it necessary to change the return value to a parameter? I\u0027d expect return value optimizations to handle return value the same, without the clunkiness.",
       "revId": "8fa80d743945ef7ae84e63e463ad50abd7d5a2be",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6cf7e74_183ceef9",
+        "filename": "sw/source/core/inc/pamtyp.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-08-14T10:22:32Z",
+      "side": 1,
+      "message": "The SwPaM copy constructor is marked as deleted, so it is not possible to return by value.\n(probably because SwPaM attaches itself to the multiple sw::Rings and also to multiple SwNode and SwNodes, so copy it is non-trivial)",
+      "parentUuid": "8a19842a_b87d2050",
+      "revId": "8fa80d743945ef7ae84e63e463ad50abd7d5a2be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
