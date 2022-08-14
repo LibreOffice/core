@@ -1861,7 +1861,6 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
     {
 
         ImplMultiTextLineInfo   aMultiLineInfo;
-        sal_Int32               i;
         sal_Int32               nFormatLines;
 
         if (nTextHeight)
@@ -1925,7 +1924,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
                 aPos.AdjustY(rTargetDevice.GetFontMetric().GetAscent() );
 
             // Output all lines except for the last one
-            for ( i = 0; i < nFormatLines; i++ )
+            for (sal_Int32 i = 0; i < nFormatLines; i++)
             {
                 ImplTextLineInfo& rLineInfo = aMultiLineInfo.GetLine( i );
 
