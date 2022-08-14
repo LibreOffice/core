@@ -133,9 +133,7 @@ class SwAccessibleParagraph :
     static void OrderRange(sal_Int32& nBegin, sal_Int32& nEnd)
     {
         if( nBegin > nEnd )
-        {
-            sal_Int32 nTmp = nBegin; nBegin = nEnd; nEnd = nTmp;
-        }
+            std::swap( nBegin, nEnd );
     }
 
     const SwRangeRedline* GetRedlineAtIndex();

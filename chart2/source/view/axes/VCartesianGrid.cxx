@@ -74,23 +74,11 @@ GridLinePoints::GridLinePoints( const PlottingPositionHelper* pPosHelper, sal_In
     pPosHelper->doLogicScaling( &MaxX,&MaxY,&MaxZ );
 
     if(!pPosHelper->isMathematicalOrientationX())
-    {
-        double fHelp = MinX;
-        MinX = MaxX;
-        MaxX = fHelp;
-    }
+        std::swap( MinX, MaxX );
     if(!pPosHelper->isMathematicalOrientationY())
-    {
-        double fHelp = MinY;
-        MinY = MaxY;
-        MaxY = fHelp;
-    }
+        std::swap( MinY, MaxY );
     if(pPosHelper->isMathematicalOrientationZ())//z axis in draw is reverse to mathematical
-    {
-        double fHelp = MinZ;
-        MinZ = MaxZ;
-        MaxZ = fHelp;
-    }
+        std::swap( MinZ, MaxZ );
     bool bSwapXY = pPosHelper->isSwapXAndY();
 
     //P0: point on 'back' wall, not on 'left' wall

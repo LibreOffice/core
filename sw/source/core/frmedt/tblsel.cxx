@@ -203,9 +203,7 @@ void GetTableSel( const SwCursor& rCursor, SwSelBoxes& rBoxes,
         if ( nSttPos != USHRT_MAX && nEndPos != USHRT_MAX )
         {
             if( nEndPos < nSttPos )     // exchange
-            {
-                sal_uInt16 nTmp = nSttPos; nSttPos = nEndPos; nEndPos = nTmp;
-            }
+                std::swap( nSttPos, nEndPos );
 
             bool bChkProtected( SwTableSearchType::Protect & eSearchType );
             for( ; nSttPos <= nEndPos; ++nSttPos )
@@ -1857,17 +1855,9 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrame *pStart,
             nEd2 = aRectFnSet.GetBottom(pTable->getFrameArea());
         Point aSt, aEd;
         if( nSt1 > nEd1 )
-        {
-            tools::Long nTmp = nSt1;
-            nSt1 = nEd1;
-            nEd1 = nTmp;
-        }
+            std::swap( nSt1, nEd1 );
         if( nSt2 > nEd2 )
-        {
-            tools::Long nTmp = nSt2;
-            nSt2 = nEd2;
-            nEd2 = nTmp;
-        }
+            std::swap( nSt2, nEd2 );
         if( aRectFnSet.IsVert() )
         {
             aSt = Point( nSt2, nSt1 );

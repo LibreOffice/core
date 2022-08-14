@@ -1076,92 +1076,60 @@ void SAL_CALL OComponent::in_methodAll(
 // INOUT -----------------------------------------------------------------------------------
 void SAL_CALL OComponent::testinout_methodByte(sal_Int8& rOut) throw( RuntimeException )
 {
-    sal_Int8 tmp = rOut;
-    rOut = m_int8;
-    m_int8 = tmp;
+    std::swap( m_int8, rOut );
 }
 void SAL_CALL OComponent::testinout_methodFloat(float& rOut) throw( RuntimeException )
 {
-    float tmp = rOut;
-    rOut = m_float;
-    m_float = tmp;
+    std::swap( m_float, rOut );
 }
-
 void SAL_CALL OComponent::testinout_methodDouble(double& rOut) throw( RuntimeException )
 {
-    double tmp = rOut;
-    rOut = m_double;
-    m_double = tmp;
+    std::swap( m_double, rOut );
 }
 void SAL_CALL OComponent::testinout_methodBool(sal_Bool& rOut) throw( RuntimeException )
 {
-    sal_Bool tmp = rOut;
-    rOut = m_bool;
-    m_bool = tmp;
+    std::swap( m_bool, rOut );
 }
 void SAL_CALL OComponent::testinout_methodShort(sal_Int16& rOut) throw( RuntimeException )
 {
-    sal_Int16 tmp= rOut;
-    rOut = m_int16;
-    m_int16 = tmp;
+    std::swap( m_int16, rOut );
 }
 void SAL_CALL OComponent::testinout_methodUShort(sal_uInt16& rOut) throw( RuntimeException )
 {
-    sal_uInt16 tmp = rOut;
-    rOut = m_uint16;
-    m_uint16 = tmp;
+    std::swap( m_uint16, rOut );
 }
 void SAL_CALL OComponent::testinout_methodLong(sal_Int32& rOut) throw( RuntimeException )
 {
-    sal_Int32 tmp = rOut;
-    rOut = m_int32;
-    m_int32 = tmp;
+    std::swap( m_int32, rOut );
 }
 void SAL_CALL OComponent::testinout_methodULong(sal_uInt32& rOut) throw( RuntimeException )
 {
-    sal_uInt32 tmp = rOut;
-    rOut = m_uint32;
-    m_uint32 = tmp;
+    std::swap( m_uint32, rOut );
 }
 void SAL_CALL OComponent::testinout_methodHyper(sal_Int64& rOut) throw( RuntimeException )
 {
-    sal_Int64 tmp = rOut;
-    rOut = m_int64;
-    m_int64 = tmp;
+    std::swap( m_int64, rOut );
 }
-
 void SAL_CALL OComponent::testinout_methodUHyper(sal_uInt64& rOut) throw( RuntimeException )
 {
-    sal_uInt64 tmp = rOut;
-    rOut = m_uint64;
-    m_uint64 = tmp;
+    std::swap( m_uint64, rOut );
 }
-
 void SAL_CALL OComponent::testinout_methodString(OUString& rOut) throw( RuntimeException )
 {
-    OUString tmp = rOut;
-    rOut = m_string;
-    m_string = tmp;
+    std::swap( m_string, rOut );
 }
 void SAL_CALL OComponent::testinout_methodChar(sal_Unicode& rOut) throw( RuntimeException)
 {
-    sal_Unicode tmp = rOut;
-    rOut = m_char;
-    m_char = tmp;
+    std::swap( m_char, rOut );
 }
 void SAL_CALL OComponent::testinout_methodAny(Any& rOut) throw( RuntimeException)
 {
-    Any tmp = rOut;
-    rOut = m_any;
-    m_any = tmp;
+    std::swap( m_any, rOut );
 }
 void SAL_CALL OComponent::testinout_methodType(Type& rOut) throw( RuntimeException)
 {
-    Type tmp = rOut;
-    rOut = m_type;
-    m_type = tmp;
+    std::swap( m_type, rOut );
 }
-
 
 void SAL_CALL OComponent::testinout_methodSequence(Sequence< sal_Int32 >& rOut) throw( RuntimeException)
 {

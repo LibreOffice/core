@@ -3420,11 +3420,7 @@ bool SwCursorShell::IsSelFullPara() const
         sal_Int32 nStt = m_pCurrentCursor->GetPoint()->GetContentIndex();
         sal_Int32 nEnd = m_pCurrentCursor->GetMark()->GetContentIndex();
         if( nStt > nEnd )
-        {
-            sal_Int32 nTmp = nStt;
-            nStt = nEnd;
-            nEnd = nTmp;
-        }
+            std::swap( nStt, nEnd );
         const SwContentNode* pCNd = m_pCurrentCursor->GetPointContentNode();
         bRet = pCNd && !nStt && nEnd == pCNd->Len();
     }

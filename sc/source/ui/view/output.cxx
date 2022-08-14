@@ -1935,11 +1935,7 @@ ReferenceMark ScOutputData::FillReferenceMark( SCCOL nRefStartX, SCROW nRefStart
         tools::Long nMaxX = nScrX + nScrW - 1;
         tools::Long nMaxY = nScrY + nScrH - 1;
         if ( bLayoutRTL )
-        {
-            tools::Long nTemp = nMinX;
-            nMinX = nMaxX;
-            nMaxX = nTemp;
-        }
+            std::swap( nMinX, nMaxX );
         tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
 
         bool bTop    = false;
@@ -2027,11 +2023,7 @@ void ScOutputData::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
     tools::Long nMaxX = nScrX + nScrW - 1;
     tools::Long nMaxY = nScrY + nScrH - 1;
     if ( bLayoutRTL )
-    {
-        tools::Long nTemp = nMinX;
-        nMinX = nMaxX;
-        nMaxX = nTemp;
-    }
+        std::swap( nMinX, nMaxX );
     tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
 
     bool bTop    = false;
@@ -2154,11 +2146,7 @@ void ScOutputData::DrawOneChange( SCCOL nRefStartX, SCROW nRefStartY,
     tools::Long nMaxX = nScrX+nScrW-1;
     tools::Long nMaxY = nScrY+nScrH-1;
     if ( bLayoutRTL )
-    {
-        tools::Long nTemp = nMinX;
-        nMinX = nMaxX;
-        nMaxX = nTemp;
-    }
+        std::swap( nMinX, nMaxX );
     tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
 
     bool bTop    = false;

@@ -754,11 +754,7 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
             }
 
             if ( bRTL )
-            {
-                bool bTmp = bRightOver;
-                bRightOver = bLeftOver;
-                bLeftOver = bTmp;
-            }
+                std::swap( bLeftOver, bRightOver );
 
             // Do not set anything by default in HeadlineRepeats
             if ( pTab->IsFollow() &&
@@ -1082,11 +1078,7 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet )
             }
 
             if ( bRTL )
-            {
-                bool bTmp = bRightOver;
-                bRightOver = bLeftOver;
-                bLeftOver = bTmp;
-            }
+                std::swap( bLeftOver, bRightOver );
 
             const SwFrameFormat  *pFormat  = pCell->GetFormat();
             const SvxBoxItem  &rBox  = pFormat->GetBox();
