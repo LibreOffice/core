@@ -119,6 +119,131 @@ void OutputDevice::ImplInitTextColor()
     }
 }
 
+static OUString lcl_GetEllipsisString(OUString const& rOrigStr, tools::Long nMaxWidth,
+                                      DrawTextFlags nStyle, vcl::ITextLayout const& _rLayout )
+{
+    OUString aStr = rOrigStr;
+    sal_Int32 nIndex = _rLayout.GetTextBreak( aStr, nMaxWidth, 0, aStr.getLength() );
+
+    if ( nIndex != -1 )
+    {
+        if( (nStyle & DrawTextFlags::CenterEllipsis) == DrawTextFlags::CenterEllipsis )
+        {
+            OUStringBuffer aTmpStr( aStr );
+            // speed it up by removing all but 1.33x as many as the break pos.
+            sal_Int32 nEraseChars = std::max<sal_Int32>(4, aStr.getLength() - (nIndex*4)/3);
+            while( nEraseChars < aStr.getLength() && _rLayout.GetTextWidth( aTmpStr.toString(), 0, aTmpStr.getLength() ) > nMaxWidth )
+            {
+                aTmpStr = aStr;
+                sal_Int32 i = (aTmpStr.getLength() - nEraseChars)/2;
+                aTmpStr.remove(i, nEraseChars++);
+                aTmpStr.insert(i, "...");
+            }
+            aStr = aTmpStr.makeStringAndClear();
+        }
+        else if ( nStyle & DrawTextFlags::EndEllipsis )
+        {
+            aStr = aStr.copy(0, nIndex);
+            if ( nIndex > 1 )
+            {
+                aStr += "...";
+                while ( !aStr.isEmpty() && (_rLayout.GetTextWidth( aStr, 0, aStr.getLength() ) > nMaxWidth) )
+                {
+                    if ( (nIndex > 1) || (nIndex == aStr.getLength()) )
+                        nIndex--;
+                    aStr = aStr.replaceAt( nIndex, 1, u"");
+                }
+            }
+
+            if ( aStr.isEmpty() && (nStyle & DrawTextFlags::Clip) )
+                aStr += OUStringChar(rOrigStr[ 0 ]);
+        }
+        else if ( nStyle & DrawTextFlags::PathEllipsis )
+        {
+            OUString aPath( rOrigStr );
+            OUString aAbbreviatedPath;
+            osl_abbreviateSystemPath( aPath.pData, &aAbbreviatedPath.pData, nIndex, nullptr );
+            aStr = aAbbreviatedPath;
+        }
+        else if ( nStyle & DrawTextFlags::NewsEllipsis )
+        {
+            static char const   pSepChars[] = ".";
+            // Determine last section
+            sal_Int32 nLastContent = aStr.getLength();
+            while ( nLastContent )
+            {
+                nLastContent--;
+                if ( lcl_IsCharIn( aStr[ nLastContent ], pSepChars ) )
+                    break;
+            }
+            while ( nLastContent &&
+                    lcl_IsCharIn( aStr[ nLastContent-1 ], pSepChars ) )
+                nLastContent--;
+
+            OUString aLastStr = aStr.copy(nLastContent);
+            OUString aTempLastStr1 = "..." + aLastStr;
+            if ( _rLayout.GetTextWidth( aTempLastStr1, 0, aTempLastStr1.getLength() ) > nMaxWidth )
+                aStr = lcl_GetEllipsisString(aStr, nMaxWidth, nStyle | DrawTextFlags::EndEllipsis, _rLayout);
+            else
+            {
+                sal_Int32 nFirstContent = 0;
+                while ( nFirstContent < nLastContent )
+                {
+                    nFirstContent++;
+                    if ( lcl_IsCharIn( aStr[ nFirstContent ], pSepChars ) )
+                        break;
+                }
+                while ( (nFirstContent < nLastContent) &&
+                        lcl_IsCharIn( aStr[ nFirstContent ], pSepChars ) )
+                    nFirstContent++;
+                // MEM continue here
+                if ( nFirstContent >= nLastContent )
+                    aStr = lcl_GetEllipsisString(aStr, nMaxWidth, nStyle | DrawTextFlags::EndEllipsis, _rLayout);
+                else
+                {
+                    if ( nFirstContent > 4 )
+                        nFirstContent = 4;
+                    OUString aFirstStr = OUString::Concat(aStr.subView( 0, nFirstContent )) + "...";
+                    OUString aTempStr = aFirstStr + aLastStr;
+                    if ( _rLayout.GetTextWidth( aTempStr, 0, aTempStr.getLength() ) > nMaxWidth )
+                        aStr = lcl_GetEllipsisString(aStr, nMaxWidth, nStyle | DrawTextFlags::EndEllipsis, _rLayout);
+                    else
+                    {
+                        do
+                        {
+                            aStr = aTempStr;
+                            if( nLastContent > aStr.getLength() )
+                                nLastContent = aStr.getLength();
+                            while ( nFirstContent < nLastContent )
+                            {
+                                nLastContent--;
+                                if ( lcl_IsCharIn( aStr[ nLastContent ], pSepChars ) )
+                                    break;
+
+                            }
+                            while ( (nFirstContent < nLastContent) &&
+                                    lcl_IsCharIn( aStr[ nLastContent-1 ], pSepChars ) )
+                                nLastContent--;
+
+                            if ( nFirstContent < nLastContent )
+                            {
+                                std::u16string_view aTempLastStr = aStr.subView( nLastContent );
+                                aTempStr = aFirstStr + aTempLastStr;
+
+                                if ( _rLayout.GetTextWidth( aTempStr, 0, aTempStr.getLength() ) > nMaxWidth )
+                                    break;
+                            }
+                        }
+                        while ( nFirstContent < nLastContent );
+                    }
+                }
+            }
+        }
+    }
+
+    return aStr;
+}
+
 void OutputDevice::ImplDrawTextRect( tools::Long nBaseX, tools::Long nBaseY,
                                      tools::Long nDistX, tools::Long nDistY, tools::Long nWidth, tools::Long nHeight )
 {
@@ -1737,7 +1862,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
                             aLastLineBuffer[ i ] = ' ';
                     }
                     aLastLine = aLastLineBuffer.makeStringAndClear();
-                    aLastLine = ImplGetEllipsisString( rTargetDevice, aLastLine, rRect.GetWidth(), nStyle, _rLayout );
+                    aLastLine = lcl_GetEllipsisString(aLastLine, rRect.GetWidth(), nStyle, _rLayout);
                     nStyle &= ~DrawTextFlags(DrawTextFlags::VCenter | DrawTextFlags::Bottom);
                     nStyle |= DrawTextFlags::Top;
                 }
@@ -1828,7 +1953,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
         {
             if (nStyle & TEXT_DRAW_ELLIPSIS)
             {
-                aStr = ImplGetEllipsisString(rTargetDevice, aStr, rRect.GetWidth(), nStyle, _rLayout);
+                aStr = lcl_GetEllipsisString(aStr, rRect.GetWidth(), nStyle, _rLayout);
                 nStyle &= ~DrawTextFlags(DrawTextFlags::Center | DrawTextFlags::Right);
                 nStyle |= DrawTextFlags::Left;
                 nTextWidth = _rLayout.GetTextWidth(aStr, 0, aStr.getLength());
@@ -2099,132 +2224,7 @@ OUString OutputDevice::GetEllipsisString( const OUString& rOrigStr, tools::Long 
                                         DrawTextFlags nStyle ) const
 {
     vcl::DefaultTextLayout aTextLayout( *const_cast< OutputDevice* >( this ) );
-    return ImplGetEllipsisString( *this, rOrigStr, nMaxWidth, nStyle, aTextLayout );
-}
-
-OUString OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice, const OUString& rOrigStr, tools::Long nMaxWidth,
-                                               DrawTextFlags nStyle, const vcl::ITextLayout& _rLayout )
-{
-    OUString aStr = rOrigStr;
-    sal_Int32 nIndex = _rLayout.GetTextBreak( aStr, nMaxWidth, 0, aStr.getLength() );
-
-    if ( nIndex != -1 )
-    {
-        if( (nStyle & DrawTextFlags::CenterEllipsis) == DrawTextFlags::CenterEllipsis )
-        {
-            OUStringBuffer aTmpStr( aStr );
-            // speed it up by removing all but 1.33x as many as the break pos.
-            sal_Int32 nEraseChars = std::max<sal_Int32>(4, aStr.getLength() - (nIndex*4)/3);
-            while( nEraseChars < aStr.getLength() && _rLayout.GetTextWidth( aTmpStr.toString(), 0, aTmpStr.getLength() ) > nMaxWidth )
-            {
-                aTmpStr = aStr;
-                sal_Int32 i = (aTmpStr.getLength() - nEraseChars)/2;
-                aTmpStr.remove(i, nEraseChars++);
-                aTmpStr.insert(i, "...");
-            }
-            aStr = aTmpStr.makeStringAndClear();
-        }
-        else if ( nStyle & DrawTextFlags::EndEllipsis )
-        {
-            aStr = aStr.copy(0, nIndex);
-            if ( nIndex > 1 )
-            {
-                aStr += "...";
-                while ( !aStr.isEmpty() && (_rLayout.GetTextWidth( aStr, 0, aStr.getLength() ) > nMaxWidth) )
-                {
-                    if ( (nIndex > 1) || (nIndex == aStr.getLength()) )
-                        nIndex--;
-                    aStr = aStr.replaceAt( nIndex, 1, u"");
-                }
-            }
-
-            if ( aStr.isEmpty() && (nStyle & DrawTextFlags::Clip) )
-                aStr += OUStringChar(rOrigStr[ 0 ]);
-        }
-        else if ( nStyle & DrawTextFlags::PathEllipsis )
-        {
-            OUString aPath( rOrigStr );
-            OUString aAbbreviatedPath;
-            osl_abbreviateSystemPath( aPath.pData, &aAbbreviatedPath.pData, nIndex, nullptr );
-            aStr = aAbbreviatedPath;
-        }
-        else if ( nStyle & DrawTextFlags::NewsEllipsis )
-        {
-            static char const   pSepChars[] = ".";
-            // Determine last section
-            sal_Int32 nLastContent = aStr.getLength();
-            while ( nLastContent )
-            {
-                nLastContent--;
-                if ( lcl_IsCharIn( aStr[ nLastContent ], pSepChars ) )
-                    break;
-            }
-            while ( nLastContent &&
-                    lcl_IsCharIn( aStr[ nLastContent-1 ], pSepChars ) )
-                nLastContent--;
-
-            OUString aLastStr = aStr.copy(nLastContent);
-            OUString aTempLastStr1 = "..." + aLastStr;
-            if ( _rLayout.GetTextWidth( aTempLastStr1, 0, aTempLastStr1.getLength() ) > nMaxWidth )
-                aStr = OutputDevice::ImplGetEllipsisString( rTargetDevice, aStr, nMaxWidth, nStyle | DrawTextFlags::EndEllipsis, _rLayout );
-            else
-            {
-                sal_Int32 nFirstContent = 0;
-                while ( nFirstContent < nLastContent )
-                {
-                    nFirstContent++;
-                    if ( lcl_IsCharIn( aStr[ nFirstContent ], pSepChars ) )
-                        break;
-                }
-                while ( (nFirstContent < nLastContent) &&
-                        lcl_IsCharIn( aStr[ nFirstContent ], pSepChars ) )
-                    nFirstContent++;
-                // MEM continue here
-                if ( nFirstContent >= nLastContent )
-                    aStr = OutputDevice::ImplGetEllipsisString( rTargetDevice, aStr, nMaxWidth, nStyle | DrawTextFlags::EndEllipsis, _rLayout );
-                else
-                {
-                    if ( nFirstContent > 4 )
-                        nFirstContent = 4;
-                    OUString aFirstStr = OUString::Concat(aStr.subView( 0, nFirstContent )) + "...";
-                    OUString aTempStr = aFirstStr + aLastStr;
-                    if ( _rLayout.GetTextWidth( aTempStr, 0, aTempStr.getLength() ) > nMaxWidth )
-                        aStr = OutputDevice::ImplGetEllipsisString( rTargetDevice, aStr, nMaxWidth, nStyle | DrawTextFlags::EndEllipsis, _rLayout );
-                    else
-                    {
-                        do
-                        {
-                            aStr = aTempStr;
-                            if( nLastContent > aStr.getLength() )
-                                nLastContent = aStr.getLength();
-                            while ( nFirstContent < nLastContent )
-                            {
-                                nLastContent--;
-                                if ( lcl_IsCharIn( aStr[ nLastContent ], pSepChars ) )
-                                    break;
-
-                            }
-                            while ( (nFirstContent < nLastContent) &&
-                                    lcl_IsCharIn( aStr[ nLastContent-1 ], pSepChars ) )
-                                nLastContent--;
-
-                            if ( nFirstContent < nLastContent )
-                            {
-                                std::u16string_view aTempLastStr = aStr.subView( nLastContent );
-                                aTempStr = aFirstStr + aTempLastStr;
-
-                                if ( _rLayout.GetTextWidth( aTempStr, 0, aTempStr.getLength() ) > nMaxWidth )
-                                    break;
-                            }
-                        }
-                        while ( nFirstContent < nLastContent );
-                    }
-                }
-            }
-        }
-    }
-
-    return aStr;
+    return lcl_GetEllipsisString(rOrigStr, nMaxWidth, nStyle, aTextLayout);
 }
 
 void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
