@@ -1853,6 +1853,8 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
 
         if (nTextHeight)
         {
+            // note: nMaxTextWidth must be set here because ImplGetTextLines *also* populates
+            // aMultiLineInfo... do not move this closer to first use of nMaxTextWidth!
             tools::Long nMaxTextWidth = ImplGetTextLines(rRect, nTextHeight, aMultiLineInfo,
                                                          rRect.GetWidth(), aStr, nStyle, _rLayout);
             sal_Int32 nLines = static_cast<sal_Int32>(rRect.GetHeight() / nTextHeight);
