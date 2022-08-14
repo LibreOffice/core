@@ -269,15 +269,9 @@ void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
     // gradient style axial has exchanged start and end colors
     if ( !bLinear)
     {
-        tools::Long nTempColor = nStartRed;
-        nStartRed = nEndRed;
-        nEndRed = nTempColor;
-        nTempColor = nStartGreen;
-        nStartGreen = nEndGreen;
-        nEndGreen = nTempColor;
-        nTempColor = nStartBlue;
-        nStartBlue = nEndBlue;
-        nEndBlue = nTempColor;
+        std::swap( nStartRed, nEndRed );
+        std::swap( nStartGreen, nEndGreen );
+        std::swap( nStartBlue, nEndBlue );
     }
 
     sal_uInt8   nRed;

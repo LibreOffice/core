@@ -4152,11 +4152,8 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, const Picture* hbox)
                                 start_angle = atan2(pal.pt[0].y - pal.pt[1].y,pal.pt[1].x - pal.pt[0].x );
                                 end_angle = atan2(pal.pt[2].y - pal.pt[1].y, pal.pt[1].x - pal.pt[2].x);
 
-                                if( ( start_angle > end_angle ) && (start_angle - end_angle < M_PI )){
-                                    double tmp_angle = start_angle;
-                                    start_angle = end_angle;
-                                    end_angle = tmp_angle;
-                                }
+                                if( ( start_angle > end_angle ) && (start_angle - end_angle < M_PI ))
+                                    std::swap( start_angle, end_angle );
                                 mxList->addAttribute("draw:start-angle", sXML_CDATA, OUString::number(basegfx::rad2deg(start_angle)));
                                 mxList->addAttribute("draw:end-angle", sXML_CDATA, OUString::number(basegfx::rad2deg(end_angle)));
 

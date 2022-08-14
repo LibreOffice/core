@@ -943,15 +943,11 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                                     if (wraparound > 0) {
                                         if (eOper == ScConditionMode::Between) {
                                             eOper = ScConditionMode::NotBetween;
-                                            OUString tmp = aExpr1;
-                                            aExpr1 = aExpr2;
-                                            aExpr2 = tmp;
+                                            std::swap( aExpr1, aExpr2 );
                                         }
                                         else if (eOper == ScConditionMode::NotBetween) {
                                             eOper = ScConditionMode::Between;
-                                            OUString tmp = aExpr1;
-                                            aExpr1 = aExpr2;
-                                            aExpr2 = tmp;
+                                            std::swap( aExpr1, aExpr2 );
                                         }
                                     }
                                 }

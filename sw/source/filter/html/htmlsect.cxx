@@ -281,11 +281,7 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
             {
                 nPos2 = aHRef.lastIndexOf( cDelim, nPos );
                 if( nPos2 != -1 )
-                {
-                    sal_Int32 nTmp = nPos;
-                    nPos = nPos2;
-                    nPos2 = nTmp;
-                }
+                    std::swap( nPos, nPos2 );
             }
             OUString aURL;
             if( nPos == -1 )

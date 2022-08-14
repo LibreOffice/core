@@ -400,11 +400,7 @@ inline bool PlottingPositionHelper::clipYRange( double& rMin, double& rMax ) con
 {
     //returns true if something remains
     if( rMin > rMax )
-    {
-        double fHelp = rMin;
-        rMin = rMax;
-        rMax = fHelp;
-    }
+        std::swap( rMin, rMax );
     if( rMin > getLogicMaxY() )
         return false;
     if( rMax < getLogicMinY() )

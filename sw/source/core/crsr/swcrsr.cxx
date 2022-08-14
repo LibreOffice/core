@@ -76,9 +76,7 @@ struct PercentHdl
     {
         bBack = (nStt > nEnd);
         if( bBack )
-        {
-            sal_uLong n = nStt; nStt = nEnd; nEnd = n;
-        }
+            std::swap( nStt, nEnd );
         ::StartProgress( STR_STATSTR_SEARCH, nStt, nEnd );
     }
 
@@ -101,9 +99,7 @@ struct PercentHdl
         nActPos = nStt;
         bBack = (nStt > nEnd );
         if( bBack )
-        {
-            sal_uLong n = nStt; nStt = nEnd; nEnd = n;
-        }
+            std::swap( nStt, nEnd );
         ::StartProgress( STR_STATSTR_SEARCH, nStt, nEnd, pDSh );
     }
 
@@ -304,11 +300,7 @@ bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
             SwNodeOffset nSttIdx = GetMark()->GetNodeIndex(),
                 nEndIdx = GetPoint()->GetNodeIndex();
             if( nEndIdx <= nSttIdx )
-            {
-                SwNodeOffset nTmp = nSttIdx;
-                nSttIdx = nEndIdx;
-                nEndIdx = nTmp;
-            }
+                std::swap( nSttIdx, nEndIdx );
 
             const SwSectionFormats& rFormats = rDoc.GetSections();
             for( SwSectionFormats::size_type n = 0; n < rFormats.size(); ++n )

@@ -345,11 +345,7 @@ sal_Int32 GetDiffDate( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEnd
     bool    bNeg = nStartDate > nEndDate;
 
     if( bNeg )
-    {
-        sal_Int32   n = nEndDate;
-        nEndDate = nStartDate;
-        nStartDate = n;
-    }
+        std::swap( nStartDate, nEndDate );
 
     sal_Int32       nRet;
 
@@ -456,11 +452,7 @@ double GetYearFrac( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDat
         return 0.0;     // nothing to do...
 
     if( nStartDate > nEndDate )
-    {
-        sal_Int32   n = nEndDate;
-        nEndDate = nStartDate;
-        nStartDate = n;
-    }
+        std::swap( nStartDate, nEndDate );
 
     sal_Int32 nDate1 = nStartDate + nNullDate;
     sal_Int32 nDate2 = nEndDate + nNullDate;
