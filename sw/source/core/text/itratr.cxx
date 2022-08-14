@@ -461,7 +461,7 @@ static bool CanSkipOverRedline(
     size_t nEndIndex(rEndIndex);
     SwPosition const*const pRLEnd(rRedline.End());
     if (!pRLEnd->GetNode().IsTextNode() // if fully deleted...
-        || pRLEnd->nContent == pRLEnd->GetNode().GetTextNode()->Len())
+        || pRLEnd->GetContentIndex() == pRLEnd->GetNode().GetTextNode()->Len())
     {
         // shortcut: nothing follows redline
         // current state is end state

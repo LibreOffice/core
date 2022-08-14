@@ -86,10 +86,10 @@ namespace SwUnoCursorHelper
     void                    GetCurPageStyle(SwPaM const & rPaM, OUString &rString);
 
     inline bool             IsStartOfPara(SwPaM& rUnoCursor)
-                                        { return rUnoCursor.GetPoint()->nContent == 0;}
+                                        { return rUnoCursor.GetPoint()->GetContentIndex() == 0;}
     inline bool             IsEndOfPara(SwPaM& rUnoCursor)
                                         { return rUnoCursor.GetPointContentNode() &&
-                                            rUnoCursor.GetPoint()->nContent == rUnoCursor.GetPointContentNode()->Len();}
+                                            rUnoCursor.GetPoint()->GetContentIndex() == rUnoCursor.GetPointContentNode()->Len();}
 
     void                        resetCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry, SwPaM& rPam);
     /// @throws css::lang::IllegalArgumentException

@@ -1237,7 +1237,7 @@ SwXTextCursor::gotoNextWord(sal_Bool Expand)
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
     // end of paragraph
     if (rUnoCursor.GetPointContentNode() &&
-            (pPoint->nContent == rUnoCursor.GetPointContentNode()->Len()))
+            (pPoint->GetContentIndex() == rUnoCursor.GetPointContentNode()->Len()))
     {
         rUnoCursor.Right(1);
     }
@@ -1280,14 +1280,14 @@ SwXTextCursor::gotoPreviousWord(sal_Bool Expand)
 
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
     // start of paragraph?
-    if (pPoint->nContent == 0)
+    if (pPoint->GetContentIndex() == 0)
     {
         rUnoCursor.Left(1);
     }
     else
     {
         rUnoCursor.GoPrevWordWT( i18n::WordType::DICTIONARY_WORD );
-        if (pPoint->nContent == 0)
+        if (pPoint->GetContentIndex() == 0)
         {
             rUnoCursor.Left(1);
         }
@@ -1383,7 +1383,7 @@ SwXTextCursor::isStartOfSentence()
     SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
     // start of paragraph?
-    bool bRet = rUnoCursor.GetPoint()->nContent == 0;
+    bool bRet = rUnoCursor.GetPoint()->GetContentIndex() == 0;
     // with mark ->no sentence start
     // (check if cursor is no selection, i.e. it does not have
     // a mark or else point and mark are identical)
@@ -1407,7 +1407,7 @@ SwXTextCursor::isEndOfSentence()
 
     // end of paragraph?
     bool bRet = rUnoCursor.GetPointContentNode() &&
-        (rUnoCursor.GetPoint()->nContent == rUnoCursor.GetPointContentNode()->Len());
+        (rUnoCursor.GetPoint()->GetContentIndex() == rUnoCursor.GetPointContentNode()->Len());
     // with mark->no sentence end
     // (check if cursor is no selection, i.e. it does not have
     // a mark or else point and mark are identical)

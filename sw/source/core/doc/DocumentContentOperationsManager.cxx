@@ -2452,7 +2452,7 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
     // tdf#99692 don't Move() back if that would end up in another node
     // because moving backward is not necessarily the inverse of forward then.
     // (but do Move() back if we have split the node)
-    const bool bNullContent = !bSplit && aSavePam.GetPoint()->nContent == 0;
+    const bool bNullContent = !bSplit && aSavePam.GetPoint()->GetContentIndex() == 0;
     if( bNullContent )
     {
         aSavePam.GetPoint()->Adjust(SwNodeOffset(-1));

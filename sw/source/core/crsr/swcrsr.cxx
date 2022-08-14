@@ -1280,7 +1280,7 @@ bool SwCursor::IsInWordWT(sal_Int16 nWordType, SwRootFrame const*const pLayout) 
 bool SwCursor::IsStartEndSentence(bool bEnd, SwRootFrame const*const pLayout) const
 {
     bool bRet = bEnd ?
-                    GetPointContentNode() && GetPoint()->nContent == GetPointContentNode()->Len() :
+                    GetPointContentNode() && GetPoint()->GetContentIndex() == GetPointContentNode()->Len() :
                     GetPoint()->GetContentIndex() == 0;
 
     if ((pLayout != nullptr && pLayout->HasMergedParas()) || !bRet)

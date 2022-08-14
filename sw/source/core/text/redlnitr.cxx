@@ -227,7 +227,7 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
         SwPosition const*const pEnd(iter.GetEndPos());
         bHaveRedlines = true;
         assert(pNode != &rTextNode || &pStart->GetNode() == &rTextNode); // detect calls with wrong start node
-        if (pStart->nContent != nLastEnd) // not 0 so we eliminate adjacent deletes
+        if (pStart->GetContentIndex() != nLastEnd) // not 0 so we eliminate adjacent deletes
         {
             extents.emplace_back(pNode, nLastEnd, pStart->GetContentIndex());
             mergedText.append(pNode->GetText().subView(nLastEnd, pStart->GetContentIndex() - nLastEnd));

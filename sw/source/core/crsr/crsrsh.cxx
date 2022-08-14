@@ -1107,7 +1107,7 @@ bool SwCursorShell::IsSttPara() const
             }
         }
     }
-    return m_pCurrentCursor->GetPoint()->nContent == 0;
+    return m_pCurrentCursor->GetPoint()->GetContentIndex() == 0;
 }
 
 bool SwCursorShell::IsEndPara() const
@@ -1126,7 +1126,7 @@ bool SwCursorShell::IsEndPara() const
             }
         }
     }
-    return m_pCurrentCursor->GetPoint()->nContent == m_pCurrentCursor->GetPointContentNode()->Len();
+    return m_pCurrentCursor->GetPoint()->GetContentIndex() == m_pCurrentCursor->GetPointContentNode()->Len();
 }
 
 bool SwCursorShell::IsEndOfTable() const

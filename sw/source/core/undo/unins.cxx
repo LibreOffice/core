@@ -166,9 +166,9 @@ bool SwUndoInsert::CanGrouping( const SwPosition& rPos )
                 const SwContentNode* pIReg = rPos.GetContentNode();
                 for(SwRangeRedline* pRedl : rTable)
                 {
-                    SwContentIndex* pIdx = &pRedl->End()->nContent;
-                    if( pIReg == pIdx->GetContentNode() &&
-                        m_nContent == pIdx->GetIndex() )
+                    const SwPosition& rIdx = *pRedl->End();
+                    if( pIReg == rIdx.GetContentNode() &&
+                        m_nContent == rIdx.GetContentIndex() )
                     {
                         if( !pRedl->HasMark() || !m_pRedlData ||
                             *pRedl != *m_pRedlData || *pRedl != aRData )
@@ -670,7 +670,7 @@ void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
         assert(ret); (void)ret;
         if (m_nSttNd != m_nEndNd)
         {   // in case of regex inserting paragraph breaks, join nodes...
-            assert(rPam.GetMark()->nContent == rPam.GetMark()->GetNode().GetTextNode()->Len());
+            assert(rPam.GetMark()->GetContentIndex() == rPam.GetMark()->GetNode().GetTextNode()->Len());
             rPam.GetPoint()->Assign( m_nEndNd - m_nOffset, m_nEndCnt );
             pDoc->getIDocumentContentOperations().DeleteAndJoin(rPam);
         }

@@ -1663,7 +1663,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
                                     OUString(), nullptr );
         do {
             // #i65201#: Expand again, see comment above.
-            if( pTmp->GetPoint()->nContent == 0 )
+            if( pTmp->GetPoint()->GetContentIndex() == 0 )
             {
                 pTmp->GetPoint()->Adjust(SwNodeOffset(1));
             }
@@ -1677,7 +1677,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
                 pTmp->GetPoint()->nContent.Assign( pContentNode,
                         pContentNode ? pContentNode->Len() : 0 );
                 // tdf#106218 try to avoid losing a paragraph break here:
-                if (pTmp->GetMark()->nContent == 0)
+                if (pTmp->GetMark()->GetContentIndex() == 0)
                 {
                     SwNodeIndex const prev(pTmp->GetMark()->GetNode(), -1);
                     if (prev.GetNode().IsTextNode())
@@ -1706,7 +1706,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
         return;
 
     do {
-        if( pTmp->GetPoint()->nContent == 0 )
+        if( pTmp->GetPoint()->GetContentIndex() == 0 )
         {
             pTmp->GetPoint()->Adjust(SwNodeOffset(1));
         }
@@ -1720,7 +1720,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
             pTmp->GetPoint()->nContent.Assign( pContentNode,
                     pContentNode ? pContentNode->Len() : 0 );
             // tdf#106218 try to avoid losing a paragraph break here:
-            if (pTmp->GetMark()->nContent == 0)
+            if (pTmp->GetMark()->GetContentIndex() == 0)
             {
                 SwNodeIndex const prev(pTmp->GetMark()->GetNode(), -1);
                 if (prev.GetNode().IsTextNode())

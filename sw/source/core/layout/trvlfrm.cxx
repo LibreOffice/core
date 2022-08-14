@@ -298,7 +298,7 @@ bool SwPageFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
                     SwRect aTextRect;
                     pTextFrame->GetCharRect(aTextRect, prevTextPos);
 
-                    if (prevTextPos.nContent < pContentNode->Len())
+                    if (prevTextPos.GetContentIndex() < pContentNode->Len())
                     {
                         // aRextRect is just a line on the left edge of the
                         // previous character; to get a better measure from

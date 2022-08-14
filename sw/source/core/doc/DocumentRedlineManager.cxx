@@ -59,11 +59,11 @@ using namespace com::sun::star;
             SwTextNode* pTextNode = pPos->GetNode().GetTextNode();
             if( pTextNode == nullptr )
             {
-                assert(pPos->nContent == 0);
+                assert(pPos->GetContentIndex() == 0);
             }
             else
             {
-                assert(pPos->nContent >= 0 && pPos->nContent <= pTextNode->Len());
+                assert(pPos->GetContentIndex() >= 0 && pPos->GetContentIndex() <= pTextNode->Len());
             }
         }
 
@@ -643,7 +643,7 @@ namespace
                     pREnd = pRedl->End();
 
                     // keep style of the empty paragraph after deletion of wholly paragraphs
-                    if( pCSttNd && pCEndNd && pRStt && pREnd && pRStt->nContent == 0 )
+                    if( pCSttNd && pCEndNd && pRStt && pREnd && pRStt->GetContentIndex() == 0 )
                         lcl_CopyStyle(*pREnd, *pRStt);
 
                     if( bDelRedl )
@@ -1295,7 +1295,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
         SwTextNode* pTextNode = pStt->GetNode().GetTextNode();
         if( pTextNode == nullptr )
         {
-            if( pStt->nContent > 0 )
+            if( pStt->GetContentIndex() > 0 )
             {
                 OSL_ENSURE( false, "Redline start: non-text-node with content" );
                 pStt->nContent = 0;
@@ -1756,7 +1756,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                             // For this case, we completely delete the
                             // paragraphs (if, of course, we also start on
                             // a paragraph boundary).
-                            if( (pStt->nContent == 0) &&
+                            if( (pStt->GetContentIndex() == 0) &&
                                 pEnd->GetNode().IsEndNode() )
                             {
                                 pEnd->Adjust(SwNodeOffset(-1));

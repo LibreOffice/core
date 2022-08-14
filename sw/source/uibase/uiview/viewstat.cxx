@@ -403,7 +403,7 @@ void SwView::GetState(SfxItemSet &rSet)
                             oSelectionEnd.emplace(*pEndNode);
                         }
                         else
-                            oSelectionEnd.emplace(pCursor->End()->nNode, pCursor->End()->nContent);
+                            oSelectionEnd.emplace(*pCursor->End());
 
                         for(; index < table.size(); ++index )
                         {
