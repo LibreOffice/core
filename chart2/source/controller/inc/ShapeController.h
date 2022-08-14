@@ -19,19 +19,22 @@
 #ifndef CHART_SHAPECONTROLLER_H
 #define CHART_SHAPECONTROLLER_H
 
-//Command Ids:
-#define COMMAND_ID_FORMAT_LINE                  1
-#define COMMAND_ID_FORMAT_AREA                  2
-#define COMMAND_ID_TEXT_ATTRIBUTES              3
-#define COMMAND_ID_TRANSFORM_DIALOG             4
-#define COMMAND_ID_OBJECT_TITLE_DESCRIPTION     5
-#define COMMAND_ID_RENAME_OBJECT                6
-#define COMMAND_ID_BRING_TO_FRONT               8
-#define COMMAND_ID_FORWARD                      9
-#define COMMAND_ID_BACKWARD                    10
-#define COMMAND_ID_SEND_TO_BACK                11
-#define COMMAND_ID_FONT_DIALOG                 15
-#define COMMAND_ID_PARAGRAPH_DIALOG            16
+//Shape Controller Command Ids:
+enum ShapeControllerCommandID
+{
+    COMMAND_ID_FORMAT_LINE              =  1,
+    COMMAND_ID_FORMAT_AREA              =  2,
+    COMMAND_ID_TEXT_ATTRIBUTES          =  3,
+    COMMAND_ID_TRANSFORM_DIALOG         =  4,
+    COMMAND_ID_OBJECT_TITLE_DESCRIPTION =  5,
+    COMMAND_ID_RENAME_OBJECT            =  6,
+    COMMAND_ID_BRING_TO_FRONT           =  8,
+    COMMAND_ID_FORWARD                  =  9,
+    COMMAND_ID_BACKWARD                 = 10,
+    COMMAND_ID_SEND_TO_BACK             = 11,
+    COMMAND_ID_FONT_DIALOG              = 15,
+    COMMAND_ID_PARAGRAPH_DIALOG         = 16
+};
 
 #endif
 
