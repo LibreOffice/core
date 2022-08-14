@@ -756,11 +756,7 @@ bool ScTable::SearchAllStyle(
             if (bFound)
             {
                 if (nEndRow<nRow)
-                {
-                    SCROW nTemp = nRow;
-                    nRow = nEndRow;
-                    nEndRow = nTemp;
-                }
+                    std::swap( nRow, nEndRow );
                 rMatchedRanges.Join(ScRange(i, nRow, nTab, i, nEndRow, nTab));
                 nRow = nEndRow + 1;
                 bEverFound = true;

@@ -3471,11 +3471,7 @@ bool SwAccessibleParagraph::GetSelectionAtIndex(
     {
         sal_Int32 nCaretPos = GetCaretPos();
         if( nStart == nCaretPos )
-        {
-            sal_Int32 tmp = nStart;
-            nStart = nEnd;
-            nEnd = tmp;
-        }
+            std::swap( nStart, nEnd );
     }
     return bRet;
 }

@@ -988,10 +988,8 @@ bool ScConditionEntry::IsValid( double nArg, const ScAddress& rPos ) const
 
     if ( eOp == ScConditionMode::Between || eOp == ScConditionMode::NotBetween )
         if ( nComp1 > nComp2 )
-        {
             // Right order for value range
-            double nTemp = nComp1; nComp1 = nComp2; nComp2 = nTemp;
-        }
+            std::swap( nComp1, nComp2 );
 
     // All corner cases need to be tested with ::rtl::math::approxEqual!
     bool bValid = false;
