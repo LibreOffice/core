@@ -78,6 +78,18 @@ void OutputDevice::SetDigitLanguage( LanguageType eTextLanguage )
         mpAlphaVDev->SetDigitLanguage( eTextLanguage );
 }
 
+static bool lcl_IsCharIn( sal_Unicode c, const char* pStr )
+{
+    while ( *pStr )
+    {
+        if ( *pStr == c )
+            return true;
+        pStr++;
+    }
+
+    return false;
+}
+
 ImplMultiTextLineInfo::ImplMultiTextLineInfo()
 {
 }
@@ -2083,18 +2095,6 @@ tools::Rectangle OutputDevice::GetTextRect( const tools::Rectangle& rRect,
     return aRect;
 }
 
-static bool ImplIsCharIn( sal_Unicode c, const char* pStr )
-{
-    while ( *pStr )
-    {
-        if ( *pStr == c )
-            return true;
-        pStr++;
-    }
-
-    return false;
-}
-
 OUString OutputDevice::GetEllipsisString( const OUString& rOrigStr, tools::Long nMaxWidth,
                                         DrawTextFlags nStyle ) const
 {
@@ -2156,11 +2156,11 @@ OUString OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice,
             while ( nLastContent )
             {
                 nLastContent--;
-                if ( ImplIsCharIn( aStr[ nLastContent ], pSepChars ) )
+                if ( lcl_IsCharIn( aStr[ nLastContent ], pSepChars ) )
                     break;
             }
             while ( nLastContent &&
-                    ImplIsCharIn( aStr[ nLastContent-1 ], pSepChars ) )
+                    lcl_IsCharIn( aStr[ nLastContent-1 ], pSepChars ) )
                 nLastContent--;
 
             OUString aLastStr = aStr.copy(nLastContent);
@@ -2173,11 +2173,11 @@ OUString OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice,
                 while ( nFirstContent < nLastContent )
                 {
                     nFirstContent++;
-                    if ( ImplIsCharIn( aStr[ nFirstContent ], pSepChars ) )
+                    if ( lcl_IsCharIn( aStr[ nFirstContent ], pSepChars ) )
                         break;
                 }
                 while ( (nFirstContent < nLastContent) &&
-                        ImplIsCharIn( aStr[ nFirstContent ], pSepChars ) )
+                        lcl_IsCharIn( aStr[ nFirstContent ], pSepChars ) )
                     nFirstContent++;
                 // MEM continue here
                 if ( nFirstContent >= nLastContent )
@@ -2200,12 +2200,12 @@ OUString OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice,
                             while ( nFirstContent < nLastContent )
                             {
                                 nLastContent--;
-                                if ( ImplIsCharIn( aStr[ nLastContent ], pSepChars ) )
+                                if ( lcl_IsCharIn( aStr[ nLastContent ], pSepChars ) )
                                     break;
 
                             }
                             while ( (nFirstContent < nLastContent) &&
-                                    ImplIsCharIn( aStr[ nLastContent-1 ], pSepChars ) )
+                                    lcl_IsCharIn( aStr[ nLastContent-1 ], pSepChars ) )
                                 nLastContent--;
 
                             if ( nFirstContent < nLastContent )
