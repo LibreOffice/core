@@ -549,6 +549,9 @@ SdrObjKind E3dCompoundObject::GetObjIdentifier() const
 
 void E3dCompoundObject::RecalcSnapRect()
 {
+    if (utl::ConfigManager::IsFuzzing()) // skip slow path for fuzzing
+        return;
+
     const uno::Sequence< beans::PropertyValue > aEmptyParameters;
     drawinglayer::geometry::ViewInformation3D aViewInfo3D(aEmptyParameters);
     E3dScene* pRootScene = fillViewInformation3DForCompoundObject(aViewInfo3D, *this);
