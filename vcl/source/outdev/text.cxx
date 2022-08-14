@@ -1941,20 +1941,27 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
                 {
                     if ( (nMnemonicPos >= nIndex) && (nMnemonicPos < nIndex+nLineLen) )
                     {
-                        tools::Long        nMnemonicX;
-                        tools::Long        nMnemonicY;
-                        DeviceCoordinate nMnemonicWidth;
-
                         std::unique_ptr<sal_Int32[]> const pCaretXArray(new sal_Int32[2 * nLineLen]);
                         /*sal_Bool bRet =*/ _rLayout.GetCaretPositions( aStr, pCaretXArray.get(),
                                                 nIndex, nLineLen );
+
                         sal_Int32 lc_x1 = pCaretXArray[2*(nMnemonicPos - nIndex)];
                         sal_Int32 lc_x2 = pCaretXArray[2*(nMnemonicPos - nIndex)+1];
-                        nMnemonicWidth = rTargetDevice.LogicWidthToDeviceCoordinate( std::abs(lc_x1 - lc_x2) );
 
-                        Point       aTempPos = rTargetDevice.LogicToPixel( aPos );
-                        nMnemonicX = rTargetDevice.GetOutOffXPixel() + aTempPos.X() + rTargetDevice.ImplLogicWidthToDevicePixel( std::min( lc_x1, lc_x2 ) );
-                        nMnemonicY = rTargetDevice.GetOutOffYPixel() + aTempPos.Y() + rTargetDevice.ImplLogicWidthToDevicePixel( rTargetDevice.GetFontMetric().GetAscent() );
+                        DeviceCoordinate nMnemonicWidth =
+                            rTargetDevice.LogicWidthToDeviceCoordinate(std::abs(lc_x1 - lc_x2));
+
+                        Point aTempPos = rTargetDevice.LogicToPixel( aPos );
+
+                        tools::Long nMnemonicX = rTargetDevice.GetOutOffXPixel()
+                                                 + aTempPos.X()
+                                                 + rTargetDevice.ImplLogicWidthToDevicePixel(std::min(lc_x1, lc_x2));
+
+                        tools::Long nMnemonicY = rTargetDevice.GetOutOffYPixel()
+                                                 + aTempPos.Y()
+                                                 + rTargetDevice.ImplLogicWidthToDevicePixel(
+                                                         rTargetDevice.GetFontMetric().GetAscent());
+
                         rTargetDevice.ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
                     }
                 }
