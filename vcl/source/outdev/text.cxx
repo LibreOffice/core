@@ -1859,9 +1859,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
     // We treat multiline text differently
     if ( nStyle & DrawTextFlags::MultiLine )
     {
-
-        ImplMultiTextLineInfo   aMultiLineInfo;
-        sal_Int32               nFormatLines;
+        ImplMultiTextLineInfo aMultiLineInfo;
 
         if (nTextHeight)
         {
@@ -1870,10 +1868,12 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
             tools::Long nMaxTextWidth = ImplGetTextLines(rRect, nTextHeight, aMultiLineInfo,
                                                          rRect.GetWidth(), aStr, nStyle, _rLayout);
             sal_Int32 nLines = static_cast<sal_Int32>(rRect.GetHeight() / nTextHeight);
-            OUString aLastLine;
-            nFormatLines = aMultiLineInfo.Count();
+            sal_Int32 nFormatLines = aMultiLineInfo.Count();
+
             if (nLines <= 0)
                 nLines = 1;
+
+            OUString aLastLine;
 
             if ((nFormatLines > nLines) && (nStyle & DrawTextFlags::EndEllipsis))
             {
