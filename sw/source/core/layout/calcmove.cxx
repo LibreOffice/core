@@ -949,7 +949,7 @@ void SwLayoutFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     const SwLayNotify aNotify( this );
     bool bVert = IsVertical();
 
-    SwRectFn fnRect = ( IsNeighbourFrame() == bVert )? fnRectHori : ( IsVertLR() ? (IsVertLRBT() ? fnRectVertL2RB2T : fnRectVertL2R) : fnRectVert );
+    SwRectFn fnRect = bVert ? ( IsVertLR() ? (IsVertLRBT() ? fnRectVertL2RB2T : fnRectVertL2R) : fnRectVert ) : fnRectHori;
 
     std::optional<SwBorderAttrAccess> oAccess;
     const SwBorderAttrs*pAttrs = nullptr;
@@ -975,32 +975,36 @@ void SwLayoutFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
                 {
                     // Set FixSize; VarSize is set by Format() after calculating the PrtArea
                     setFramePrintAreaValid(false);
-
-                    SwTwips nPrtWidth = (GetUpper()->getFramePrintArea().*fnRect->fnGetWidth)();
-                    if( bVert && ( IsBodyFrame() || IsFootnoteContFrame() ) )
-                    {
-                        SwFrame* pNxt = GetPrev();
-                        while( pNxt && !pNxt->IsHeaderFrame() )
-                            pNxt = pNxt->GetPrev();
-                        if( pNxt )
-                            nPrtWidth -= pNxt->getFrameArea().Height();
-                        pNxt = GetNext();
-                        while( pNxt && !pNxt->IsFooterFrame() )
-                            pNxt = pNxt->GetNext();
-                        if( pNxt )
-                            nPrtWidth -= pNxt->getFrameArea().Height();
-                    }
-
-                    const tools::Long nDiff = nPrtWidth - (getFrameArea().*fnRect->fnGetWidth)();
                     SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
 
-                    if( IsNeighbourFrame() && IsRightToLeft() )
+                    if (IsNeighbourFrame())
                     {
-                        (aFrm.*fnRect->fnSubLeft)( nDiff );
+                        SwTwips nPrtHeight = (GetUpper()->getFramePrintArea().*fnRect->fnGetHeight)();
+                        const tools::Long nDiff = nPrtHeight - (getFrameArea().*fnRect->fnGetHeight)();
+                        (aFrm.*fnRect->fnAddBottom)( nDiff );
                     }
                     else
                     {
-                        (aFrm.*fnRect->fnAddRight)( nDiff );
+                        SwTwips nPrtWidth = (GetUpper()->getFramePrintArea().*fnRect->fnGetWidth)();
+                        if( bVert && ( IsBodyFrame() || IsFootnoteContFrame() ) )
+                        {
+                            SwFrame* pNxt = GetPrev();
+                            while( pNxt && !pNxt->IsHeaderFrame() )
+                                pNxt = pNxt->GetPrev();
+                            if( pNxt )
+                                nPrtWidth -= pNxt->getFrameArea().Height();
+                            pNxt = GetNext();
+                            while( pNxt && !pNxt->IsFooterFrame() )
+                                pNxt = pNxt->GetNext();
+                            if( pNxt )
+                                nPrtWidth -= pNxt->getFrameArea().Height();
+                        }
+
+                        const tools::Long nDiff = nPrtWidth - (getFrameArea().*fnRect->fnGetWidth)();
+                        if(IsRightToLeft() )
+                            (aFrm.*fnRect->fnSubLeft)( nDiff );
+                        else
+                            (aFrm.*fnRect->fnAddRight)( nDiff );
                     }
                 }
                 else
