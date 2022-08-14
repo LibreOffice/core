@@ -69,6 +69,30 @@
       },
       "revId": "2431db6d8a0c312166675348091d48dcbc5fc53b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df92a52e_4de246ac",
+        "filename": "vcl/source/filter/svm/SvmWriter.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 992,
+      "author": {
+        "id": 1003606
+      },
+      "writtenOn": "2022-08-14T04:19:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e52edef_d887e213",
+      "range": {
+        "startLine": 992,
+        "startChar": 4,
+        "endLine": 992,
+        "endChar": 22
+      },
+      "revId": "2431db6d8a0c312166675348091d48dcbc5fc53b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
