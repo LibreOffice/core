@@ -1873,18 +1873,22 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
             nFormatLines = aMultiLineInfo.Count();
             if (nLines <= 0)
                 nLines = 1;
-            if ( nFormatLines > nLines )
+
+            if ((nFormatLines > nLines) && (nStyle & DrawTextFlags::EndEllipsis))
             {
-                if ( nStyle & DrawTextFlags::EndEllipsis )
+                // Create last line and shorten it
+                nFormatLines = nLines-1;
+                aLastLine = convertLineEnd(
+                        aStr.copy(aMultiLineInfo.GetLine(nFormatLines).GetIndex()), LINEEND_LF);
+
+                aLastLine = lcl_ShortenLastLineWithEndEllipsis(rTargetDevice, rRect, aLastLine, nStyle,
+                                                                _rLayout);
+            }
+
+            if (nFormatLines > nLines)
+            {
+                if (nStyle & DrawTextFlags::EndEllipsis)
                 {
-                    // Create last line and shorten it
-                    nFormatLines = nLines-1;
-                    aLastLine = convertLineEnd(
-                            aStr.copy(aMultiLineInfo.GetLine(nFormatLines).GetIndex()), LINEEND_LF);
-
-                    aLastLine = lcl_ShortenLastLineWithEndEllipsis(rTargetDevice, rRect, aLastLine, nStyle,
-                                                                    _rLayout);
-
                     nStyle &= ~DrawTextFlags(DrawTextFlags::VCenter | DrawTextFlags::Bottom);
                     nStyle |= DrawTextFlags::Top;
                 }
