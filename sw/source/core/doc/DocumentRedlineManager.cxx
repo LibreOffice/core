@@ -2714,7 +2714,8 @@ SwRedlineTable::size_type DocumentRedlineManager::GetRedlinePos( const SwNode& r
             const SwRangeRedline* pTmp = maRedlineTable[ n ];
             SwNodeOffset nPt = pTmp->GetPoint()->GetNodeIndex(),
                   nMk = pTmp->GetMark()->GetNodeIndex();
-            if( nPt < nMk ) { SwNodeOffset nTmp = nMk; nMk = nPt; nPt = nTmp; }
+            if( nPt < nMk )
+                std::swap( nMk, nPt );
 
             if( ( RedlineType::Any == nType || nType == pTmp->GetType()) &&
                 nMk <= nNdIdx && nNdIdx <= nPt )
@@ -2956,7 +2957,8 @@ void DocumentRedlineManager::AcceptRedlineParagraphFormatting( const SwPaM &rPam
         const SwRangeRedline* pTmp = maRedlineTable[ n ];
         SwNodeOffset nPt = pTmp->GetPoint()->GetNodeIndex(),
               nMk = pTmp->GetMark()->GetNodeIndex();
-        if( nPt < nMk ) { SwNodeOffset nTmp = nMk; nMk = nPt; nPt = nTmp; }
+        if( nPt < nMk )
+            std::swap( nMk, nPt );
 
         if( RedlineType::ParagraphFormat == pTmp->GetType() &&
             ( (nSttIdx <= nMk && nMk <= nEndIdx) || (nSttIdx <= nPt && nPt <= nEndIdx) ) )
