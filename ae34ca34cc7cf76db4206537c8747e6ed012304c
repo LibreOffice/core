@@ -51,6 +51,23 @@
       "message": "Yeap, I confirm here it passed make check on my laptop.",
       "revId": "ae34ca34cc7cf76db4206537c8747e6ed012304c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "252422e6_2b5b18b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-08-14T17:17:10Z",
+      "side": 1,
+      "message": "Let\u0027s try, at worst it can be reverted.",
+      "revId": "ae34ca34cc7cf76db4206537c8747e6ed012304c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
