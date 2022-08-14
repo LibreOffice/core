@@ -1857,12 +1857,12 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
         aStr = GetNonMnemonicString(rOrigStr, nMnemonicPos);
 
     // We treat multiline text differently
-    if ( nStyle & DrawTextFlags::MultiLine )
+    if (nStyle & DrawTextFlags::MultiLine)
     {
-        ImplMultiTextLineInfo aMultiLineInfo;
-
         if (nTextHeight)
         {
+            ImplMultiTextLineInfo aMultiLineInfo;
+
             // note: nMaxTextWidth must be set here because ImplGetTextLines *also* populates
             // aMultiLineInfo... do not move this closer to first use of nMaxTextWidth!
             tools::Long nMaxTextWidth = ImplGetTextLines(rRect, nTextHeight, aMultiLineInfo,
