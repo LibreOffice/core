@@ -3809,11 +3809,10 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         // position or on position after field depending on which
                         // half of the field was clicked on.
                         SwTextAttr const*const pTextField(aFieldAtPos.pFndTextAttr);
-                        if (pTextField && rSh.GetCurrentShellCursor().GetPoint()->nContent
-                                .GetIndex() != pTextField->GetStart())
+                        if (pTextField &&
+                            rSh.GetCurrentShellCursor().GetPoint()->GetContentIndex() != pTextField->GetStart())
                         {
-                            assert(rSh.GetCurrentShellCursor().GetPoint()->nContent
-                                    .GetIndex() == (pTextField->GetStart() + 1));
+                            assert(rSh.GetCurrentShellCursor().GetPoint()->GetContentIndex() == (pTextField->GetStart() + 1));
                             rSh.Left( SwCursorSkipMode::Chars, false, 1, false );
                         }
                         // don't go into the !bOverSelect block below - it moves

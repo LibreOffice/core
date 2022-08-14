@@ -961,7 +961,7 @@ bool SwFEShell::HasBoxSelection() const
                 pCNd = SwNodes::GoPrevious( &aIdx );
                 OSL_ENSURE( pCNd, "no ContentNode in box ??" );
             }
-            if( pPam->GetMark()->nContent == pCNd->Len() )
+            if( pPam->GetMark()->GetContentIndex() == pCNd->Len() )
             {
                 if( bChg )
                     pPam->Exchange();

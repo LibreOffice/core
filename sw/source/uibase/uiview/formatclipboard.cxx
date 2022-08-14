@@ -319,7 +319,7 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
             // revert left and right
             if ( rightToLeft )
             {
-                if (pCursor->GetPoint()->nContent == 0)
+                if (pCursor->GetPoint()->GetContentIndex() == 0)
                     dontMove = true;
                 else
                     bForwardSelection = !bForwardSelection;

@@ -1340,7 +1340,7 @@ bool IsAnchoredObjShown(SwTextFrame const& rFrame, SwFormatAnchor const& rAnchor
                         || pAnchor->nContent == 0))
                 || (&pAnchor->GetNode() == pMergedPara->pLastNode
                     && (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA
-                        || pAnchor->nContent == pMergedPara->pLastNode->Len()));
+                        || pAnchor->GetContentIndex() == pMergedPara->pLastNode->Len()));
         }
         auto iter(iterFirst);
         SwTextNode const* pNode(pMergedPara->pFirstNode);

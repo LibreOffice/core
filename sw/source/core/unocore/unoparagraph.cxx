@@ -80,12 +80,12 @@ SwParaSelection::SwParaSelection(SwCursor & rCursor)
         m_rCursor.DeleteMark();
     }
     // is it at the start?
-    if (m_rCursor.GetPoint()->nContent != 0)
+    if (m_rCursor.GetPoint()->GetContentIndex() != 0)
     {
         m_rCursor.MovePara(GoCurrPara, fnParaStart);
     }
     // or at the end already?
-    if (m_rCursor.GetPoint()->nContent != m_rCursor.GetPointContentNode()->Len())
+    if (m_rCursor.GetPoint()->GetContentIndex() != m_rCursor.GetPointContentNode()->Len())
     {
         m_rCursor.SetMark();
         m_rCursor.MovePara(GoCurrPara, fnParaEnd);
@@ -94,7 +94,7 @@ SwParaSelection::SwParaSelection(SwCursor & rCursor)
 
 SwParaSelection::~SwParaSelection()
 {
-    if (m_rCursor.GetPoint()->nContent != 0)
+    if (m_rCursor.GetPoint()->GetContentIndex() != 0)
     {
         m_rCursor.DeleteMark();
         m_rCursor.MovePara(GoCurrPara, fnParaStart);

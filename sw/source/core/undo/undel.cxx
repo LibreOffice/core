@@ -538,12 +538,12 @@ bool SwUndoDelete::CanGrouping( SwDoc& rDoc, const SwPaM& rDelPam )
 
     // Distinguish between BackSpace and Delete because the Undo array needs to
     // be constructed differently!
-    if( pEnd->nContent == m_nSttContent )
+    if( pEnd->GetContentIndex() == m_nSttContent )
     {
         if( m_bGroup && !m_bBackSp ) return false;
         m_bBackSp = true;
     }
-    else if( pStt->nContent == m_nSttContent )
+    else if( pStt->GetContentIndex() == m_nSttContent )
     {
         if( m_bGroup && m_bBackSp ) return false;
         m_bBackSp = false;
