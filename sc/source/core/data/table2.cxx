@@ -2908,6 +2908,20 @@ void ScTable::ApplyPatternArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol,
         CreateColumnIfNotExists(i).ApplyPatternArea(nStartRow, nEndRow, rAttr, pDataArray, pIsChanged);
 }
 
+namespace
+{
+    std::vector<ScAttrEntry> duplicateScAttrEntries(ScDocument& rDocument, const std::vector<ScAttrEntry>& rOrigData)
+    {
+        std::vector<ScAttrEntry> aData(rOrigData);
+        for (size_t nIdx = 0; nIdx < aData.size(); ++nIdx)
+        {
+            ScPatternAttr aNewPattern(*aData[nIdx].pPattern);
+            aData[nIdx].pPattern = &rDocument.GetPool()->Put(aNewPattern);
+        }
+        return aData;
+    }
+}
+
 void ScTable::SetAttrEntries( SCCOL nStartCol, SCCOL nEndCol, std::vector<ScAttrEntry> && vNewData)
 {
     if (!ValidCol(nStartCol) || !ValidCol(nEndCol))
@@ -2919,7 +2933,7 @@ void ScTable::SetAttrEntries( SCCOL nStartCol, SCCOL nEndCol, std::vector<ScAttr
             // If we would like set all columns to same attrs, then change only attrs for not existing columns
             nEndCol = aCol.size() - 1;
             for (SCCOL i = nStartCol; i <= nEndCol; i++)
-                aCol[i].SetAttrEntries( std::vector<ScAttrEntry>(vNewData));
+                aCol[i].SetAttrEntries(duplicateScAttrEntries(rDocument, vNewData));
             aDefaultColData.SetAttrEntries(std::move(vNewData));
         }
         else
@@ -2932,7 +2946,7 @@ void ScTable::SetAttrEntries( SCCOL nStartCol, SCCOL nEndCol, std::vector<ScAttr
     {
         CreateColumnIfNotExists( nEndCol );
         for (SCCOL i = nStartCol; i < nEndCol; i++) // all but last need a copy
-            aCol[i].SetAttrEntries( std::vector<ScAttrEntry>(vNewData));
+            aCol[i].SetAttrEntries(duplicateScAttrEntries(rDocument, vNewData));
         aCol[nEndCol].SetAttrEntries( std::move(vNewData));
     }
 }
