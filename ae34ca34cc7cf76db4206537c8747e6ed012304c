@@ -34,6 +34,23 @@
       "parentUuid": "9626a272_210597bd",
       "revId": "ae34ca34cc7cf76db4206537c8747e6ed012304c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14db27d5_b0d7899e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2022-08-14T10:17:20Z",
+      "side": 1,
+      "message": "Yeap, I confirm here it passed make check on my laptop.",
+      "revId": "ae34ca34cc7cf76db4206537c8747e6ed012304c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
