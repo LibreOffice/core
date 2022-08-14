@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "156f6be2_931560bb",
+        "filename": "vcl/source/filter/svm/SvmReader.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 710,
+      "author": {
+        "id": 1003606
+      },
+      "writtenOn": "2022-08-14T03:40:09Z",
+      "side": 1,
+      "message": "This plugin really don’t want me to use sal_Bool, but I don’t have an alternative if we were to keep using std::vector (short of using uint8_t, but this obscures things, perhaps it isn’t that bad).",
+      "range": {
+        "startLine": 710,
+        "startChar": 22,
+        "endLine": 710,
+        "endChar": 30
+      },
+      "revId": "2431db6d8a0c312166675348091d48dcbc5fc53b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "311006f9_2b188129",
+        "filename": "vcl/source/filter/svm/SvmWriter.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 992,
+      "author": {
+        "id": 1003606
+      },
+      "writtenOn": "2022-08-14T03:40:09Z",
+      "side": 1,
+      "message": "I *think* I should unconditionally set the version to 3 here, but if I do this `CppunitTest_sw_fodfexport` would fail: https://ci.libreoffice.org/job/gerrit_linux_gcc_release/123809/consoleFull#-1660926647d893063f-7f3d-4b7e-b56f-4e0f225817cd, the mime-type gets missing and I don’t understand why. Probably I need to additionally change something?",
+      "range": {
+        "startLine": 992,
+        "startChar": 4,
+        "endLine": 992,
+        "endChar": 22
+      },
+      "revId": "2431db6d8a0c312166675348091d48dcbc5fc53b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
