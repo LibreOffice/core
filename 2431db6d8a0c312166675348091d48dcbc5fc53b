@@ -24,6 +24,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa03c11c_35671c41",
+        "filename": "vcl/source/filter/svm/SvmReader.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 710,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-08-14T20:01:15Z",
+      "side": 1,
+      "message": "It\u0027s likely sberg will have some thoughts on what the right thing to do is, but the core of what we want to do here looks good to me.",
+      "parentUuid": "156f6be2_931560bb",
+      "range": {
+        "startLine": 710,
+        "startChar": 22,
+        "endLine": 710,
+        "endChar": 30
+      },
+      "revId": "2431db6d8a0c312166675348091d48dcbc5fc53b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "311006f9_2b188129",
