@@ -1808,6 +1808,23 @@ static constexpr bool lcl_ShouldDrawMnemonics(OutputDevice const& rTargetDevice,
         && !pVector;
 }
 
+static OUString lcl_ShortenLastLineWithEndEllipsis(tools::Rectangle const& rRect,
+                                                   std::u16string_view rLastLine, DrawTextFlags nStyle,
+                                                   vcl::ITextLayout const& rTextLayout)
+{
+    // Replace all LineFeeds with Spaces
+    OUStringBuffer aLastLineBuffer(rLastLine);
+    sal_Int32 nLastLineLen = aLastLineBuffer.getLength();
+
+    for (sal_Int32 i = 0; i < nLastLineLen; i++)
+    {
+        if (aLastLineBuffer[i] == '\n')
+            aLastLineBuffer[i] = ' ';
+    }
+
+    return lcl_GetEllipsisString(aLastLineBuffer.makeStringAndClear(), rRect.GetWidth(), nStyle, rTextLayout);
+}
+
 void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Rectangle& rRect,
                                  const OUString& rOrigStr, DrawTextFlags nStyle,
                                  std::vector< tools::Rectangle >* pVector, OUString* pDisplayText,
@@ -1830,7 +1847,6 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
     // We treat multiline text differently
     if ( nStyle & DrawTextFlags::MultiLine )
     {
-
         ImplMultiTextLineInfo   aMultiLineInfo;
         sal_Int32               i;
         sal_Int32               nFormatLines;
@@ -1844,25 +1860,22 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
             nFormatLines = aMultiLineInfo.Count();
             if (nLines <= 0)
                 nLines = 1;
-            if ( nFormatLines > nLines )
-            {
-                if ( nStyle & DrawTextFlags::EndEllipsis )
-                {
-                    // Create last line and shorten it
-                    nFormatLines = nLines-1;
 
-                    ImplTextLineInfo& rLineInfo = aMultiLineInfo.GetLine( nFormatLines );
-                    aLastLine = convertLineEnd(aStr.copy(rLineInfo.GetIndex()), LINEEND_LF);
-                    // Replace all LineFeeds with Spaces
-                    OUStringBuffer aLastLineBuffer(aLastLine);
-                    sal_Int32 nLastLineLen = aLastLineBuffer.getLength();
-                    for ( i = 0; i < nLastLineLen; i++ )
-                    {
-                        if ( aLastLineBuffer[ i ] == '\n' )
-                            aLastLineBuffer[ i ] = ' ';
-                    }
-                    aLastLine = aLastLineBuffer.makeStringAndClear();
-                    aLastLine = lcl_GetEllipsisString(aLastLine, rRect.GetWidth(), nStyle, _rLayout);
+            if ((nFormatLines > nLines) && (nStyle & DrawTextFlags::EndEllipsis))
+            {
+                // Create last line and shorten it
+                nFormatLines = nLines-1;
+                aLastLine = convertLineEnd(
+                        aStr.copy(aMultiLineInfo.GetLine(nFormatLines).GetIndex()), LINEEND_LF);
+
+                aLastLine = lcl_ShortenLastLineWithEndEllipsis(rRect, aLastLine, nStyle,
+                                                                _rLayout);
+            }
+
+            if (nFormatLines > nLines)
+            {
+                if (nStyle & DrawTextFlags::EndEllipsis)
+                {
                     nStyle &= ~DrawTextFlags(DrawTextFlags::VCenter | DrawTextFlags::Bottom);
                     nStyle |= DrawTextFlags::Top;
                 }
