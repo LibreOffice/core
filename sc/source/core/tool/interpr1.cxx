@@ -1912,7 +1912,7 @@ void ScInterpreter::ScCotHyp()
 
 void ScInterpreter::ScArcSinHyp()
 {
-    PushDouble( ::rtl::math::asinh( GetDouble()));
+    PushDouble( std::asinh( GetDouble()));
 }
 
 void ScInterpreter::ScArcCosHyp()
@@ -1921,7 +1921,7 @@ void ScInterpreter::ScArcCosHyp()
     if (fVal < 1.0)
         PushIllegalArgument();
     else
-        PushDouble( ::rtl::math::acosh( fVal));
+        PushDouble( std::acosh( fVal));
 }
 
 void ScInterpreter::ScArcTanHyp()
