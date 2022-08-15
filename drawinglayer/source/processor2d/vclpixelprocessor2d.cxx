@@ -75,12 +75,9 @@ namespace drawinglayer::processor2d
 struct VclPixelProcessor2D::Impl
 {
     AntialiasingFlags m_nOrigAntiAliasing;
-    bool m_bOrigTextRenderModeForResolutionIndependentLayout;
 
     explicit Impl(OutputDevice const& rOutDev)
         : m_nOrigAntiAliasing(rOutDev.GetAntialiasing())
-        , m_bOrigTextRenderModeForResolutionIndependentLayout(
-              rOutDev.GetTextRenderModeForResolutionIndependentLayout())
     {
     }
 };
@@ -107,9 +104,6 @@ VclPixelProcessor2D::VclPixelProcessor2D(const geometry::ViewInformation2D& rVie
     {
         mpOutputDevice->SetAntialiasing(m_pImpl->m_nOrigAntiAliasing & ~AntialiasingFlags::Enable);
     }
-
-    // tdf#150462 set text render mode to suit use of resolution independent text layout
-    mpOutputDevice->SetTextRenderModeForResolutionIndependentLayout(true);
 }
 
 VclPixelProcessor2D::~VclPixelProcessor2D()
@@ -119,9 +113,6 @@ VclPixelProcessor2D::~VclPixelProcessor2D()
 
     // restore AntiAliasing
     mpOutputDevice->SetAntialiasing(m_pImpl->m_nOrigAntiAliasing);
-
-    mpOutputDevice->SetTextRenderModeForResolutionIndependentLayout(
-        m_pImpl->m_bOrigTextRenderModeForResolutionIndependentLayout);
 }
 
 void VclPixelProcessor2D::tryDrawPolyPolygonColorPrimitive2DDirect(

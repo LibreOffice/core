@@ -1182,10 +1182,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
     else
     {
-        const bool bOrigTextRenderModeForResolutionIndependentLayout(rInf.GetOut().GetTextRenderModeForResolutionIndependentLayout());
-        // set text render mode to suit use of resolution independent text layout
-        rInf.GetOut().SetTextRenderModeForResolutionIndependentLayout(true);
-
         const OUString* pStr = &rInf.GetText();
 
         OUString aStr;
@@ -1523,8 +1519,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 }
             }
         }
-
-        rInf.GetOut().SetTextRenderModeForResolutionIndependentLayout(bOrigTextRenderModeForResolutionIndependentLayout);
     }
 }
 

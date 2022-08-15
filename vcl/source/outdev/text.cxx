@@ -1377,7 +1377,10 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
     vcl::text::ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs( aStr, nMinIndex, nLen,
             nPixelWidth, flags, pLayoutCache);
 
-    bool bTextRenderModeForResolutionIndependentLayout(false);
+    // default to on for pdf export which uses SubPixelToLogic to convert back to
+    // the logical coord space, default off for everything else for now unless
+    // a dxarray is provided which has to be scaled
+    bool bTextRenderModeForResolutionIndependentLayout(meOutDevType == OUTDEV_PDF);
     DeviceCoordinate nEndGlyphCoord(0);
     std::unique_ptr<double[]> xNaturalDXPixelArray;
     if( !pDXArray.empty() )
@@ -1386,23 +1389,11 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
 
         if (mbMap)
         {
-            // convert from logical units to font units
-            if (GetTextRenderModeForResolutionIndependentLayout())
-            {
-                // without rounding, keeping accuracy for lower levels
-                bTextRenderModeForResolutionIndependentLayout = true;
-                for (int i = 0; i < nLen; ++i)
-                    xNaturalDXPixelArray[i] = ImplLogicWidthToDeviceSubPixel(pDXArray[i]);
-
-            }
-            else
-            {
-                // with rounding
-                // using base position for better rounding a.k.a. "dancing characters"
-                DeviceCoordinate nPixelXOfs2 = LogicWidthToDeviceCoordinate(rLogicalPos.X() * 2);
-                for (int i = 0; i < nLen; ++i)
-                    xNaturalDXPixelArray[i] = (LogicWidthToDeviceCoordinate((rLogicalPos.X() + pDXArray[i]) * 2) - nPixelXOfs2) / 2;
-            }
+            // convert from logical units to font units without rounding,
+            // keeping accuracy for lower levels
+            bTextRenderModeForResolutionIndependentLayout = true;
+            for (int i = 0; i < nLen; ++i)
+                xNaturalDXPixelArray[i] = ImplLogicWidthToDeviceSubPixel(pDXArray[i]);
         }
         else
         {
