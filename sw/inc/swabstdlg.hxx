@@ -250,6 +250,14 @@ public:
     virtual SplitTable_HeadlineOption GetSplitMode() = 0;
 };
 
+class AbstractSwInsertCaptionDlg :  public VclAbstractDialog
+{
+protected:
+    virtual ~AbstractSwInsertCaptionDlg() override = default;
+public:
+    virtual void Apply() = 0;
+};
+
 class AbstractSwConvertTableDlg :  public VclAbstractDialog
 {
 protected:
@@ -402,7 +410,7 @@ public:
     virtual VclPtr<SfxAbstractTabDialog>  CreateSwCharDlg(weld::Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet,
         SwCharDlgMode nDialogMode, const OUString* pFormatStr = nullptr) = 0;
     virtual VclPtr<AbstractSwConvertTableDlg> CreateSwConvertTableDlg(SwView& rView, bool bToTable) = 0;
-    virtual VclPtr<VclAbstractDialog> CreateSwCaptionDialog(weld::Window *pParent, SwView &rV) = 0;
+    virtual VclPtr<AbstractSwInsertCaptionDlg> CreateSwCaptionDialog(weld::Window *pParent, SwView &rV) = 0;
 
     virtual VclPtr<AbstractSwInsertDBColAutoPilot> CreateSwInsertDBColAutoPilot(SwView& rView,
         css::uno::Reference< css::sdbc::XDataSource> rxSource,

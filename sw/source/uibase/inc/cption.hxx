@@ -65,8 +65,6 @@ class SwCaptionDialog final : public SfxDialogController
     DECL_LINK(OptionHdl, weld::Button&, void);
     DECL_LINK(CaptionHdl, weld::Button&, void);
 
-    void Apply();
-
     void ModifyHdl();
     void DrawSample();
     void ApplyCaptionOrder(); //#i61007# order of captions
@@ -75,6 +73,7 @@ class SwCaptionDialog final : public SfxDialogController
 public:
     SwCaptionDialog(weld::Window* pParent, SwView& rV);
     virtual short run() override;
+    void Apply();
     virtual ~SwCaptionDialog() override;
 };
 
