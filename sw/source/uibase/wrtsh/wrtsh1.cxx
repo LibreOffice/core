@@ -2315,7 +2315,7 @@ bool SwWrtShell::IsOutlineContentVisible(const size_t nPos)
 
     // try the next node to determine if this outline node has visible content
     SwNodeIndex aIdx(*pOutlineNode, +1);
-    if (&aIdx.GetNode() == &aIdx.GetNodes().GetEndOfContent()) // end of regular content
+    if (aIdx.GetNode() == aIdx.GetNodes().GetEndOfContent()) // end of regular content
         return false;
 
     if (aIdx.GetNode().IsTextNode() || aIdx.GetNode().IsTableNode() ||

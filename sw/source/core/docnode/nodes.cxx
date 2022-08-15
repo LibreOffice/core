@@ -1676,7 +1676,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
 
     // if the StartNode was moved to whom the cursor pointed, so
     // the content must be registered in the current content!
-    if ( &pStt->GetNode() == &GetEndOfContent() )
+    if ( pStt->GetNode() == GetEndOfContent() )
     {
         const bool bSuccess = GoPrevious( &pStt->nNode );
         OSL_ENSURE( bSuccess, "Move() - no ContentNode here" );

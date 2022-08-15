@@ -471,14 +471,14 @@ static bool CanSkipOverRedline(
     // can't compare the SwFont that's stored somewhere, it doesn't have compare
     // operator, so try to recreate the situation with some temp arrays here
     SfxPoolItem const* activeCharAttrsStart[RES_CHRATR_END - RES_CHRATR_BEGIN + 1] = { nullptr, };
-    if (&rStartNode != &pRLEnd->GetNode())
+    if (rStartNode != pRLEnd->GetNode())
     {   // nodes' attributes are only needed if there are different nodes
         InsertCharAttrs(activeCharAttrsStart, rStartNode.GetSwAttrSet());
     }
     if (SwpHints const*const pStartHints = rStartNode.GetpSwpHints())
     {
         // check hint ends of hints that start before and end within
-        sal_Int32 const nRedlineEnd(&rStartNode == &pRLEnd->GetNode()
+        sal_Int32 const nRedlineEnd(rStartNode == pRLEnd->GetNode()
                 ? pRLEnd->GetContentIndex()
                 : rStartNode.Len());
         for ( ; nEndIndex < pStartHints->Count(); ++nEndIndex)
@@ -544,7 +544,7 @@ static bool CanSkipOverRedline(
             pRLEnd->GetContentIndex() < pStartHints->GetSortedByEnd(nEndIndex)->GetAnyEnd());
     }
 
-    if (&rStartNode != &pRLEnd->GetNode())
+    if (rStartNode != pRLEnd->GetNode())
     {
         nStartIndex = 0;
         nEndIndex = 0;
@@ -556,7 +556,7 @@ static bool CanSkipOverRedline(
         // ... and the charfmt must be *nominally* the same
 
     SfxPoolItem const* activeCharAttrsEnd[RES_CHRATR_END - RES_CHRATR_BEGIN + 1] = { nullptr, };
-    if (&rStartNode != &pRLEnd->GetNode())
+    if (rStartNode != pRLEnd->GetNode())
     {   // nodes' attributes are only needed if there are different nodes
         InsertCharAttrs(activeCharAttrsEnd,
                 pRLEnd->GetNode().GetTextNode()->GetSwAttrSet());
@@ -566,7 +566,7 @@ static bool CanSkipOverRedline(
     {
         // check hint starts of hints that start within and end after
 #ifndef NDEBUG
-        sal_Int32 const nRedlineStart(&rStartNode == &pRLEnd->GetNode()
+        sal_Int32 const nRedlineStart(rStartNode == pRLEnd->GetNode()
                 ? nStartRedline
                 : 0);
 #endif
@@ -632,7 +632,7 @@ static bool CanSkipOverRedline(
                 default: assert(false);
             }
         }
-        if (&rStartNode != &pRLEnd->GetNode())
+        if (rStartNode != pRLEnd->GetNode())
         {
             // need to iterate the nEndIndex forward too so the loop in the
             // caller can look for the right ends in the next iteration
