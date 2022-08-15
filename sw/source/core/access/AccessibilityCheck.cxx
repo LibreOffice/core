@@ -836,7 +836,7 @@ public:
         const uno::Reference<document::XDocumentProperties> xDocumentProperties(
             xDPS->getDocumentProperties());
         OUString sTitle = xDocumentProperties->getTitle();
-        if (sTitle.isEmpty())
+        if (sTitle.trim().isEmpty())
         {
             lclAddIssue(m_rIssueCollection, SwResId(STR_DOCUMENT_TITLE),
                         sfx::AccessibilityIssueID::DOCUMENT_TITLE);
