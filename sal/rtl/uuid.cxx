@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <mutex>
 #include <string.h>
 #include <stdlib.h>
 
-#include <osl/mutex.hxx>
 #include <rtl/random.h>
 #include <rtl/uuid.h>
 #include <rtl/digest.h>
@@ -108,7 +108,9 @@ extern "C" void SAL_CALL rtl_createUuid(sal_uInt8 *pTargetUUID ,
             return aPool;
         }();
 
-        osl::MutexGuard g(osl::Mutex::getGlobalMutex());
+        static std::mutex aMutex;
+
+        std::scoped_lock g(aMutex);
         if (rtl_random_getBytes(pool, pTargetUUID, 16) != rtl_Random_E_None)
         {
             abort();
