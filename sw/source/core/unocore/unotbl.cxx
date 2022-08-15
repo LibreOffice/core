@@ -321,7 +321,7 @@ static uno::Any lcl_GetSpecialProperty(SwFrameFormat* pFormat, const SfxItemProp
             {
                 const SwNode& rRedPointNode = pRedline->GetPointNode();
                 const SwNode& rRedMarkNode = pRedline->GetMarkNode();
-                if(&rRedPointNode == pTableNode || &rRedMarkNode == pTableNode)
+                if(rRedPointNode == *pTableNode || rRedMarkNode == *pTableNode)
                 {
                     const SwNode& rStartOfRedline = SwNodeIndex(rRedPointNode) <= SwNodeIndex(rRedMarkNode) ?
                         rRedPointNode : rRedMarkNode;
