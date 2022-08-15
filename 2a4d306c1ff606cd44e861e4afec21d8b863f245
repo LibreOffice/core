@@ -22,6 +22,30 @@
       },
       "revId": "2a4d306c1ff606cd44e861e4afec21d8b863f245",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "162057d4_213995d4",
+        "filename": "vcl/qa/cppunit/pdfexport/pdfexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1285,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-08-15T15:56:47Z",
+      "side": 1,
+      "message": "unfortunately, it\u0027s not possible to do something like\n\nCPPUNIT_ASSERT_EQUAL(OUString(\"My name is ﻱﻮﺴﻓ\\nHe is ﺎﻠﻟﺓ\\nﻱﻮﺴﻓ My name is\\nﺎﻠﻟﺓ He is ﺎﻠﻟﺓ\"), aActualText);\n\nOtherwise, it fails with\n\ncppunittester: /home/xisco/libreoffice/sal/rtl/strtmpl.hxx:137: rtl::str::Copy(sal_Unicode*, const char*, sal_Int32)::\u003clambda(char)\u003e: Assertion `rtl::isAscii(static_cast\u003cunsigned char\u003e(c))\u0027 failed.",
+      "parentUuid": "c215aca4_71758b8a",
+      "range": {
+        "startLine": 1285,
+        "startChar": 8,
+        "endLine": 1285,
+        "endChar": 16
+      },
+      "revId": "2a4d306c1ff606cd44e861e4afec21d8b863f245",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
