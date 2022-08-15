@@ -27,6 +27,7 @@
 #include <pagefrm.hxx>
 #include <tgrditem.hxx>
 #include "porfld.hxx"
+#include "porrst.hxx"
 
 #include "itrtxt.hxx"
 #include <txtfrm.hxx>
@@ -283,7 +284,41 @@ SwTwips SwTextCursor::AdjustBaseLine( const SwLineLayout& rLine,
                     if (GetInfo().GetTextFrame()->IsVertLR() && !GetInfo().GetTextFrame()->IsVertLRBT())
                             nOfst += rLine.Height() - ( rLine.Height() - nPorHeight ) / 2 - nPorAscent;
                     else
-                            nOfst += ( rLine.Height() - nPorHeight ) / 2 + nPorAscent;
+                    {
+                        SwTwips nLineHeight = 0;
+                        bool bHadClearingBreak = false;
+                        if (GetInfo().GetTextFrame()->IsVertical())
+                        {
+                            // Ignore the height of clearing break portions in the automatic
+                            // alignment case.
+                            const SwLinePortion* pLinePor = rLine.GetFirstPortion();
+                            while (pLinePor)
+                            {
+                                bool bClearingBreak = false;
+                                if (pLinePor->IsBreakPortion())
+                                {
+                                    auto pBreakPortion = static_cast<const SwBreakPortion*>(pLinePor);
+                                    bClearingBreak = pBreakPortion->GetClear() != SwLineBreakClear::NONE;
+                                    if (bClearingBreak)
+                                    {
+                                        bHadClearingBreak = true;
+                                    }
+                                }
+                                if (!bClearingBreak && pLinePor->Height() > nLineHeight)
+                                {
+                                    nLineHeight = pLinePor->Height();
+                                }
+                                pLinePor = pLinePor->GetNextPortion();
+                            }
+                        }
+
+                        if (!bHadClearingBreak)
+                        {
+                            nLineHeight = rLine.Height();
+                        }
+
+                        nOfst += ( nLineHeight - nPorHeight ) / 2 + nPorAscent;
+                    }
                     break;
                 }
                 [[fallthrough]];
