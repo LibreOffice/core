@@ -423,7 +423,7 @@ static OUString lcl_AnchoredFrames(const SwNode & rNode)
             const SwFormatAnchor & rAnchor = (*i)->GetAnchor();
             const SwPosition * pPos = rAnchor.GetContentAnchor();
 
-            if (pPos && &pPos->GetNode() == &rNode)
+            if (pPos && pPos->GetNode() == rNode)
             {
                 if (! bFirst)
                     aResult.append(", ");
