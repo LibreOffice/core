@@ -1397,7 +1397,7 @@ sal_Int32 SwFramePage::FillPosLB(const FrameMap* _pMap,
     if (_rLB.get_active() == -1)
         _rLB.set_active_text(sOldEntry);
 
-    if (_rLB.get_active() == -1)
+    if (_rLB.get_active() == -1 && _rLB.get_count())
         _rLB.set_active(0);
 
     PosHdl(_rLB);
