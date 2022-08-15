@@ -124,8 +124,8 @@ void SaveFlyInRange( const SwPaM& rPam, const SwPosition& rInsPos,
 
 void DelFlyInRange( SwNode& rMkNd,
                     SwNode& rPtNd,
-                    SwContentIndex const* pMkIdx = nullptr,
-                    SwContentIndex const* pPtIdx = nullptr);
+                    std::optional<sal_Int32> nMkContentIdx = std::nullopt,
+                    std::optional<sal_Int32> pPtContentIdx = std::nullopt);
 
 class SwDataChanged
 {
