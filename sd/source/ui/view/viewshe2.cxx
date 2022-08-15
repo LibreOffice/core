@@ -771,6 +771,11 @@ bool ViewShell::ActivateObject(SdrOle2Obj* pObj, sal_Int32 nVerb)
         }
 
         pSdClient->DoVerb(nVerb);   // if necessary, ErrCode is outputted by Sfx
+
+        if (comphelper::LibreOfficeKit::isActive())
+            if (auto innerVS = pSdClient->GetViewShell())
+                innerVS->setLibreOfficeKitViewCallback(pViewShell->getLibreOfficeKitViewCallback());
+
         pViewShell->GetViewFrame()->GetBindings().Invalidate(
             SID_NAVIGATOR_STATE, true);
     }

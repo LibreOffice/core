@@ -1435,6 +1435,11 @@ void SfxViewShell::setLibreOfficeKitViewCallback(SfxLokCallbackInterface* pCallb
     }
 }
 
+SfxLokCallbackInterface* SfxViewShell::getLibreOfficeKitViewCallback() const
+{
+    return pImpl->m_pLibreOfficeKitViewCallback;
+}
+
 void SfxViewShell::dumpLibreOfficeKitViewState(rtl::OStringBuffer &rState)
 {
     if (pImpl->m_pLibreOfficeKitViewCallback)
