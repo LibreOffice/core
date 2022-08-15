@@ -225,7 +225,7 @@ SwUndoDelete::SwUndoDelete(
                         DelContentType(DelContentType::AllMask | DelContentType::CheckNoCntnt) );
 
         ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
-        DelBookmarks(pStt->nNode, pEnd->nNode);
+        DelBookmarks(pStt->GetNode(), pEnd->GetNode());
     }
     else
     {
@@ -236,7 +236,7 @@ SwUndoDelete::SwUndoDelete(
         if (m_nEndNode - m_nSttNode > SwNodeOffset(1)) // check for fully selected nodes
         {
             SwNodeIndex const start(pStt->GetNode(), +1);
-            DelBookmarks(start, pEnd->nNode);
+            DelBookmarks(start.GetNode(), pEnd->GetNode());
         }
     }
 
@@ -1202,7 +1202,7 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
             DelContentIndex( *rPam.GetMark(), *rPam.GetPoint(),
                             DelContentType(DelContentType::AllMask | DelContentType::CheckNoCntnt) );
 
-            DelBookmarks(rPam.GetMark()->nNode, rPam.GetPoint()->nNode);
+            DelBookmarks(rPam.GetMark()->GetNode(), rPam.GetPoint()->GetNode());
         }
         else
         {
@@ -1222,7 +1222,7 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
             DelContentIndex( *rPam.GetMark(), *rPam.GetPoint(),
                             DelContentType(DelContentType::AllMask | DelContentType::CheckNoCntnt) );
 
-            DelBookmarks( rPam.GetMark()->nNode, rPam.GetPoint()->nNode );
+            DelBookmarks( rPam.GetMark()->GetNode(), rPam.GetPoint()->GetNode() );
         }
         else
         {

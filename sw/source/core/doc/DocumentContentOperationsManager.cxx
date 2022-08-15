@@ -2090,7 +2090,7 @@ void DocumentContentOperationsManager::DeleteSection( SwNode *pNode )
     // delete all Flys, Bookmarks, ...
     DelFlyInRange( aSttIdx.GetNode(), aEndIdx.GetNode() );
     m_rDoc.getIDocumentRedlineAccess().DeleteRedline( *pSttNd, true, RedlineType::Any );
-    DelBookmarks(aSttIdx, aEndIdx);
+    DelBookmarks(aSttIdx.GetNode(), aEndIdx.GetNode());
 
     {
         // move all Cursor/StackCursor/UnoCursor out of the to-be-deleted area
@@ -2356,11 +2356,11 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
         //          here without undo.
         ::sw::UndoGuard const undoGuard(m_rDoc.GetIDocumentUndoRedo());
         DelBookmarks(
-            pStt->nNode,
-            pEnd->nNode,
+            pStt->GetNode(),
+            pEnd->GetNode(),
             nullptr,
-            &pStt->nContent,
-            &pEnd->nContent);
+            pStt->GetContentIndex(),
+            pEnd->GetContentIndex());
     }
 
     bool bUpdateFootnote = false;
@@ -2468,11 +2468,11 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
     // that saves the position as an offset.
     std::vector< ::sw::mark::SaveBookmark> aSaveBkmks;
     DelBookmarks(
-        pStt->nNode,
-        pEnd->nNode,
+        pStt->GetNode(),
+        pEnd->GetNode(),
         &aSaveBkmks,
-        &pStt->nContent,
-        &pEnd->nContent);
+        pStt->GetContentIndex(),
+        pEnd->GetContentIndex());
 
     // If there is no range anymore due to the above deletions (e.g. the
     // footnotes got deleted), it's still a valid Move!
@@ -2608,7 +2608,7 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
     // that stores all references to positions as an offset.
     // The final mapping happens after the Move.
     std::vector< ::sw::mark::SaveBookmark> aSaveBkmks;
-    DelBookmarks(rRange.aStart, rRange.aEnd, &aSaveBkmks);
+    DelBookmarks(rRange.aStart.GetNode(), rRange.aEnd.GetNode(), &aSaveBkmks);
 
     // Save the paragraph-bound Flys, so that they can be moved.
     SaveFlyArr aSaveFlyArr;
@@ -4345,11 +4345,11 @@ bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam, SwDelet
             &rPam.GetMark()->nContent, &rPam.GetPoint()->nContent);
     }
     DelBookmarks(
-        pStt->nNode,
-        pEnd->nNode,
+        pStt->GetNode(),
+        pEnd->GetNode(),
         nullptr,
-        &pStt->nContent,
-        &pEnd->nContent);
+        pStt->GetContentIndex(),
+        pEnd->GetContentIndex());
 
     SwNodeIndex aSttIdx( pStt->GetNode() );
     SwContentNode * pCNd = aSttIdx.GetNode().GetContentNode();

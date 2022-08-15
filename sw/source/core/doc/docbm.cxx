@@ -194,14 +194,6 @@ namespace
                : rPos.nNode >= rNdIdx;
     }
 
-    bool lcl_Lower( const SwPosition& rPos, const SwNodeIndex& rNdIdx, const SwContentIndex* pIdx )
-    {
-        return rPos.nNode < rNdIdx
-               || ( pIdx != nullptr
-                    && rPos.nNode == rNdIdx
-                    && rPos.nContent < pIdx->GetIndex() );
-    }
-
     bool lcl_Lower( const SwPosition& rPos, const SwNode& rNdIdx, std::optional<sal_Int32> oContentIdx )
     {
         return rPos.nNode < rNdIdx
@@ -1788,9 +1780,9 @@ void MarkManager::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 namespace
 {
-    bool lcl_Greater( const SwPosition& rPos, const SwNodeIndex& rNdIdx, const SwContentIndex* pIdx )
+    bool lcl_Greater( const SwPosition& rPos, const SwNode& rNdIdx, std::optional<sal_Int32> oContentIdx )
     {
-        return rPos.nNode > rNdIdx || ( pIdx && rPos.nNode == rNdIdx && rPos.nContent > pIdx->GetIndex() );
+        return rPos.nNode > rNdIdx || ( oContentIdx && rPos.nNode == rNdIdx && rPos.nContent > *oContentIdx );
     }
 }
 
@@ -1904,21 +1896,21 @@ void SaveBookmark::SetInDoc(
 // DelBookmarks
 
 void DelBookmarks(
-    const SwNodeIndex& rStt,
-    const SwNodeIndex& rEnd,
+    SwNode& rStt,
+    const SwNode& rEnd,
     std::vector<SaveBookmark> * pSaveBkmk,
-    const SwContentIndex* pSttIdx,
-    const SwContentIndex* pEndIdx)
+    std::optional<sal_Int32> oStartContentIdx,
+    std::optional<sal_Int32> oEndContentIdx)
 {
     // illegal range ??
     if(rStt.GetIndex() > rEnd.GetIndex()
-        || (rStt == rEnd && (!pSttIdx || !pEndIdx || pSttIdx->GetIndex() >= pEndIdx->GetIndex())))
+        || (&rStt == &rEnd && (!oStartContentIdx || !oEndContentIdx || *oStartContentIdx >= *oEndContentIdx)))
         return;
-    SwDoc& rDoc = rStt.GetNode().GetDoc();
+    SwDoc& rDoc = rStt.GetDoc();
 
-    rDoc.getIDocumentMarkAccess()->deleteMarks(rStt.GetNode(), rEnd.GetNode(), pSaveBkmk,
-        pSttIdx ? std::optional{pSttIdx->GetIndex()} : std::nullopt,
-        pEndIdx ? std::optional{pEndIdx->GetIndex()} : std::nullopt);
+    rDoc.getIDocumentMarkAccess()->deleteMarks(rStt, rEnd, pSaveBkmk,
+        oStartContentIdx,
+        oEndContentIdx);
 
     // Copy all Redlines which are in the move area into an array
     // which holds all position information as offset.
@@ -1929,11 +1921,11 @@ void DelBookmarks(
         // Is at position?
         auto [pRStt, pREnd] = pRedl->StartEnd();
 
-        if( lcl_Greater( *pRStt, rStt, pSttIdx ) && lcl_Lower( *pRStt, rEnd, pEndIdx ))
+        if( lcl_Greater( *pRStt, rStt, oStartContentIdx ) && lcl_Lower( *pRStt, rEnd, oEndContentIdx ))
         {
             pRStt->nNode = rEnd;
-            if( pEndIdx )
-                pRStt->nContent = *pEndIdx;
+            if( oEndContentIdx )
+                pRStt->nContent = *oEndContentIdx;
             else
             {
                 bool bStt = true;
@@ -1955,11 +1947,11 @@ void DelBookmarks(
                     pRStt->AssignEndIndex( *pCNd );
             }
         }
-        if( lcl_Greater( *pREnd, rStt, pSttIdx ) && lcl_Lower( *pREnd, rEnd, pEndIdx ))
+        if( lcl_Greater( *pREnd, rStt, oStartContentIdx ) && lcl_Lower( *pREnd, rEnd, oEndContentIdx ))
         {
             pREnd->nNode = rStt;
-            if( pSttIdx )
-                pREnd->nContent = *pSttIdx;
+            if( oStartContentIdx )
+                pREnd->nContent = *oStartContentIdx;
             else
             {
                 bool bStt = false;
