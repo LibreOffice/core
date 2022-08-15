@@ -1096,8 +1096,12 @@ void SmViewShell::InnerResizePixel(const Point &rOfs, const Size &rSize, bool)
     if ( !aObjSize.IsEmpty() )
     {
         Size aProvidedSize = GetWindow()->PixelToLogic(rSize, MapMode(MapUnit::Map100thMM));
-        SfxViewShell::SetZoomFactor( Fraction( aProvidedSize.Width(), aObjSize.Width() ),
-                        Fraction( aProvidedSize.Height(), aObjSize.Height() ) );
+        Fraction aZoomX(aProvidedSize.Width(), aObjSize.Width());
+        Fraction aZoomY(aProvidedSize.Height(), aObjSize.Height());
+        MapMode aMap(mxGraphicWindow->GetGraphicMapMode());
+        aMap.SetScaleX(aZoomX);
+        aMap.SetScaleY(aZoomY);
+        mxGraphicWindow->SetGraphicMapMode(aMap);
     }
 
     SetBorderPixel( SvBorder() );
