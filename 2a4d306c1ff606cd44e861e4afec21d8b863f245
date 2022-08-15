@@ -46,6 +46,30 @@
       },
       "revId": "2a4d306c1ff606cd44e861e4afec21d8b863f245",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f76a6db_a4cb4db3",
+        "filename": "vcl/qa/cppunit/pdfexport/pdfexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1285,
+      "author": {
+        "id": 1003606
+      },
+      "writtenOn": "2022-08-15T18:51:13Z",
+      "side": 1,
+      "message": "You need to prefix the string with `u` like I did in my diff above (I did test it locally and it builds and passes).",
+      "parentUuid": "162057d4_213995d4",
+      "range": {
+        "startLine": 1285,
+        "startChar": 8,
+        "endLine": 1285,
+        "endChar": 16
+      },
+      "revId": "2a4d306c1ff606cd44e861e4afec21d8b863f245",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
