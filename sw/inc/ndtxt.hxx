@@ -366,7 +366,7 @@ public:
     SwContentNode *AppendNode( const SwPosition & );
 
     /// When appropriate set DontExpand-flag at INet or character styles respectively.
-    bool DontExpandFormat( const SwContentIndex& rIdx, bool bFlag = true,
+    bool DontExpandFormat( sal_Int32 nContentIdx, bool bFlag = true,
                         bool bFormatToTextAttributes = true );
 
     enum GetTextAttrMode {

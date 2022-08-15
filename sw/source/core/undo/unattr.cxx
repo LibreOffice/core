@@ -570,10 +570,8 @@ void SwUndoResetAttr::UndoImpl(::sw::UndoRedoContext & rContext)
     if ((RES_CONDTXTFMTCOLL == m_nFormatId) &&
         (m_nSttNode == m_nEndNode) && (m_nSttContent == m_nEndContent)) {
         SwTextNode* pTNd = rDoc.GetNodes()[ m_nSttNode ]->GetTextNode();
-        if( pTNd ) {
-            SwContentIndex aIdx( pTNd, m_nSttContent );
-            pTNd->DontExpandFormat( aIdx, false );
-        }
+        if( pTNd )
+            pTNd->DontExpandFormat( m_nSttContent, false );
     }
 
     AddUndoRedoPaM(rContext);
