@@ -672,6 +672,11 @@ void SwWrtShell::LaunchOLEObj(sal_Int32 nVerb)
     CalcAndSetScale( xRef );
     pCli->DoVerb( nVerb );
 
+    if (comphelper::LibreOfficeKit::isActive())
+        if (auto innerVS = pCli->GetViewShell())
+            if (auto outerVS = GetSfxViewShell())
+                innerVS->setLibreOfficeKitViewCallback(outerVS->getLibreOfficeKitViewCallback());
+
     static_cast<SwOleClient*>(pCli)->SetInDoVerb( false );
     CalcAndSetScale( xRef );
 }

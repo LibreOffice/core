@@ -227,6 +227,10 @@ void ScTabViewShell::ActivateObject(SdrOle2Obj* pObj, sal_Int32 nVerb)
             bErrorShown = true;
             // SfxViewShell::DoVerb shows its error messages
 
+            if (comphelper::LibreOfficeKit::isActive())
+                if (auto innerVS = pClient->GetViewShell())
+                    innerVS->setLibreOfficeKitViewCallback(getLibreOfficeKitViewCallback());
+
             // attach listener to selection changes in chart that affect cell
             // ranges, so those can be highlighted
             // note: do that after DoVerb, so that the chart controller exists
