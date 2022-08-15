@@ -87,6 +87,11 @@ public:
         mbTextRenderModeForResolutionIndependentLayout = bTextRenderModeForResolutionIndependentLayout;
     }
 
+    bool            GetTextRenderModeForResolutionIndependentLayout() const
+    {
+        return mbTextRenderModeForResolutionIndependentLayout;
+    }
+
     // methods using string indexing
     virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const = 0;
     virtual DeviceCoordinate FillDXArray( std::vector<DeviceCoordinate>* pDXArray ) const = 0;
