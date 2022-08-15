@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c215aca4_71758b8a",
+        "filename": "vcl/qa/cppunit/pdfexport/pdfexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1285,
+      "author": {
+        "id": 1003606
+      },
+      "writtenOn": "2022-08-15T15:30:22Z",
+      "side": 1,
+      "message": "The encoding of the expected text seems to be busted. Anyway, I prefer of the actual string was use instead of escape sequences. Also, the test as stands does not depend on `HAVE_MORE_FONTS` as the bug doc uses Tahoma, so either remove the `#if` or make it use a bundled font (I suggest a simple one, e.g. Kacst One)\n\n```\ndiff --git a/vcl/qa/cppunit/pdfexport/pdfexport.cxx b/vcl/qa/cppunit/pdfexport/pdfexport.cxx\nindex c6b009f22d4a..77f224ca911b 100644\n--- a/vcl/qa/cppunit/pdfexport/pdfexport.cxx\n+++ b/vcl/qa/cppunit/pdfexport/pdfexport.cxx\n@@ -1253,7 +1253,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115117_2a)\n\n CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf103492)\n {\n-#if HAVE_MORE_FONTS\n     // Import the bugdoc and export as PDF.\n     aMediaDescriptor[\"FilterName\"] \u003c\u003c\u003d OUString(\"writer_pdf_Export\");\n     saveAsPDF(u\"tdf103492.odt\");\n@@ -1282,13 +1281,11 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf103492)\n         aChars[i] \u003d pPdfTextPage-\u003egetUnicode(i);\n     OUString aActualText(aChars.data(), aChars.size());\n     CPPUNIT_ASSERT_EQUAL(\n-        OUString(u\"\\u1610\\u1608\\u1587\\u1601\\u0032\\u0077\\u0121\\u0032\\u0110\\u0097\\u0109\\u0101\\u0032\"\n-                 u\"\\u0105\\u0115\\u0013\\u0010\\u1575\\u1604\\u1604\\u1577\\u0032\\u0072\\u0101\\u0032\\u0105\"\n-                 u\"\\u0115\\u0013\\u0010\\u0077\\u0121\\u0032\\u0110\\u0097\\u0109\\u0101\\u0032\\u0105\\u0115\"\n-                 u\"\\u0032\\u1610\\u1608\\u1587\\u1601\\u0013\\u0010\\u1575\\u1604\\u1604\\u1577\\u0032\\u0105\"\n-                 u\"\\u0115\\u0032\\u0072\\u0101\\u0032\\u1575\\u1604\\u1604\\u1577\"),\n+        OUString(u\"يوسف My name is\\n\"\n+                 u\"اللة He is\\n\"\n+                 u\"My name is يوسف\\n\"\n+                 u\"اللة is He اللة\"),\n         aActualText);\n-#endif\n }\n\n CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf145274)\n ```",
+      "range": {
+        "startLine": 1285,
+        "startChar": 8,
+        "endLine": 1285,
+        "endChar": 16
+      },
+      "revId": "2a4d306c1ff606cd44e861e4afec21d8b863f245",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
