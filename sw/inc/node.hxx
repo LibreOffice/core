@@ -308,6 +308,13 @@ public:
      */
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
+    bool operator==(const SwNode& rOther) const { return this == &rOther; }
+    bool operator!=(const SwNode& rOther) const { return this != &rOther; }
+    bool operator<(const SwNode& rOther) const { return GetIndex() < rOther.GetIndex(); }
+    bool operator<=(const SwNode& rOther) const { return GetIndex() <= rOther.GetIndex(); }
+    bool operator>(const SwNode& rOther) const { return GetIndex() > rOther.GetIndex(); }
+    bool operator>=(const SwNode& rOther) const { return GetIndex() >= rOther.GetIndex(); }
+
 private:
     SwNode( const SwNode & rNodes ) = delete;
     SwNode & operator= ( const SwNode & rNodes ) = delete;

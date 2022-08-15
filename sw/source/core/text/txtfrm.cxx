@@ -815,9 +815,9 @@ void RemoveFootnotesForNode(
     rFootnoteIdxs.SeekEntry( rTextNode, &nPos );
     if (nPos < rFootnoteIdxs.size())
     {
-        while (nPos && &rTextNode == &(rFootnoteIdxs[ nPos ]->GetTextNode()))
+        while (nPos && rTextNode == (rFootnoteIdxs[ nPos ]->GetTextNode()))
             --nPos;
-        if (nPos || &rTextNode != &(rFootnoteIdxs[ nPos ]->GetTextNode()))
+        if (nPos || rTextNode != (rFootnoteIdxs[ nPos ]->GetTextNode()))
             ++nPos;
     }
     size_t iter(0);
@@ -2334,7 +2334,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
             {   // the hint may be sent from the anchor node, or from a
                 // node in the footnote; the anchor index is only valid in the
                 // anchor node!
-                assert(&rNode == &static_cast<const SwFormatFootnote*>(pNew)->GetTextFootnote()->GetTextNode());
+                assert(rNode == static_cast<const SwFormatFootnote*>(pNew)->GetTextFootnote()->GetTextNode());
                 nPos = MapModelToView(&rNode,
                     static_cast<const SwFormatFootnote*>(pNew)->GetTextFootnote()->GetStart());
             }
