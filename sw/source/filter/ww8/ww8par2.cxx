@@ -2389,7 +2389,7 @@ void WW8TabDesc::CreateSwTable()
     {
         const SwPosition* pAPos =
             pFormat->GetAnchor().GetContentAnchor();
-        if (pAPos && &pAPos->GetNode() == &pPoint->GetNode())
+        if (pAPos && pAPos->GetNode() == pPoint->GetNode())
         {
             bInsNode = true;
             bSetMinHeight = true;
