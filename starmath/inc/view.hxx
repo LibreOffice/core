@@ -289,6 +289,7 @@ class SmViewShell final : public SfxViewShell
     virtual void OuterResizePixel(const Point &rOfs, const Size  &rSize) override;
     virtual void QueryObjAreaPixel( tools::Rectangle& rRect ) const override;
     virtual void SetZoomFactor( const Fraction &rX, const Fraction &rY ) override;
+    virtual OString getLOKPayload(int nType, int nViewId, bool* ignore) const override;
 
 public:
 
