@@ -32,6 +32,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
 #include <i18nutil/unicode.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <officecfg/Office/Common.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
@@ -2121,6 +2122,16 @@ public:
     {
         SfxBaseController::attachFrame(xFrame);
 
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            SfxLokCallbackInterface* pCallback = nullptr;
+            if (xFrame)
+                if (auto xCreator = xFrame->getCreator())
+                    if (auto parentVS = SfxViewShell::Get(xCreator->getController()))
+                        pCallback = parentVS->getLibreOfficeKitViewCallback();
+            GetViewShell_Impl()->setLibreOfficeKitViewCallback(pCallback);
+        }
+
         // No need to call mpSelectionChangeHandler->Connect() unless SmController implements XSelectionSupplier
         mpSelectionChangeHandler->selectionChanged({}); // Installs the correct context
     }
@@ -2269,6 +2280,23 @@ void SmViewShell::ZoomByItemSet(const SfxItemSet *pSet)
         default:
             break;
     }
+}
+
+OString SmViewShell::getLOKPayload(int nType, int nViewId, bool* ignore) const
+{
+    switch (nType)
+    {
+        case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
+        case LOK_CALLBACK_INVALIDATE_VIEW_CURSOR:
+        case LOK_CALLBACK_TEXT_SELECTION:
+        case LOK_CALLBACK_TEXT_SELECTION_START:
+        case LOK_CALLBACK_TEXT_SELECTION_END:
+        case LOK_CALLBACK_TEXT_VIEW_SELECTION:
+            if (ignore)
+                *ignore = true;
+            return {};
+    }
+    return SfxViewShell::getLOKPayload(nType, nViewId, ignore); // aborts
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
