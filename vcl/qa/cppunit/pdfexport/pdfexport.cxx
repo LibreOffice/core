@@ -1251,6 +1251,54 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115117_2a)
 #endif
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf103492)
+{
+    // Import the bugdoc and export as PDF.
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    saveAsPDF(u"tdf103492.odt");
+
+    // Parse the export result with pdfium.
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
+    CPPUNIT_ASSERT(pPdfDocument);
+
+    // The document has two page.
+    CPPUNIT_ASSERT_EQUAL(2, pPdfDocument->getPageCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage1 = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(pPdfPage1);
+
+    std::unique_ptr<vcl::pdf::PDFiumTextPage> pPdfTextPage1 = pPdfPage1->getTextPage();
+    CPPUNIT_ASSERT(pPdfTextPage1);
+
+    int nChars1 = pPdfTextPage1->countChars();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 15
+    // - Actual  : 18
+    CPPUNIT_ASSERT_EQUAL(15, nChars1);
+
+    std::vector<sal_uInt32> aChars1(nChars1);
+    for (int i = 0; i < nChars1; i++)
+        aChars1[i] = pPdfTextPage1->getUnicode(i);
+    OUString aActualText1(aChars1.data(), aChars1.size());
+    CPPUNIT_ASSERT_EQUAL(OUString(u"يوسف My name is"), aActualText1);
+
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage2 = pPdfDocument->openPage(/*nIndex=*/1);
+    CPPUNIT_ASSERT(pPdfPage2);
+
+    std::unique_ptr<vcl::pdf::PDFiumTextPage> pPdfTextPage2 = pPdfPage2->getTextPage();
+    CPPUNIT_ASSERT(pPdfTextPage2);
+
+    int nChars2 = pPdfTextPage2->countChars();
+
+    CPPUNIT_ASSERT_EQUAL(15, nChars2);
+
+    std::vector<sal_uInt32> aChars2(nChars2);
+    for (int i = 0; i < nChars2; i++)
+        aChars2[i] = pPdfTextPage2->getUnicode(i);
+    OUString aActualText2(aChars2.data(), aChars2.size());
+    CPPUNIT_ASSERT_EQUAL(OUString(u"My name is يوسف"), aActualText2);
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf145274)
 {
     // Import the bugdoc and export as PDF.
