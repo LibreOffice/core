@@ -16,6 +16,24 @@
       "message": "possibly this change should be repeated in the GetFirstRedoInfo method below?",
       "revId": "c88c2d40d1a4aebc46b25368b80c02bc2f136658",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76444920_a2a22c33",
+        "filename": "sw/source/core/undo/docundo.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-08-15T06:34:09Z",
+      "side": 1,
+      "message": "We currently allow out of order \"undo\", but not out of order \"redo\". Till out of order redo is not implemented, I think this is correct the way it is currently. To recap, out of order undo redo has these exceptions in Writer:\n\n1) allow undo if the top undo action is not ours, but top-1 is ours and the top is independent from us\n\n2) then relax this and allow items on the redo list as well, but again only in case they are independent from us\n\n3) relax 1) and allow that the top N actions are owned by somebody else but are independent from us\n\nEverything else stays the same, so out of order redo is still rejected to be on the safe side. Does this help?",
+      "parentUuid": "725ec90c_40029fa2",
+      "revId": "c88c2d40d1a4aebc46b25368b80c02bc2f136658",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
