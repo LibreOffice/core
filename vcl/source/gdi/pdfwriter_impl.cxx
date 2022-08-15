@@ -5945,7 +5945,7 @@ void PDFWriterImpl::drawVerticalGlyphs(
         sal_Int32 nFontHeight )
 {
     tools::Long nXOffset = 0;
-    Point aCurPos(SubPixelToLogic(rGlyphs[0].m_aPos));
+    Point aCurPos(SubPixelToLogic(rGlyphs[0].m_aPos, fAngle == 0.0));
     aCurPos += rAlignOffset;
     for( size_t i = 0; i < rGlyphs.size(); i++ )
     {
@@ -6035,7 +6035,7 @@ void PDFWriterImpl::drawHorizontalGlyphs(
     for( size_t nRun = 0; nRun < aRunEnds.size(); nRun++ )
     {
         // setup text matrix back transformed to current coordinate system
-        Point aCurPos(SubPixelToLogic(rGlyphs[nBeginRun].m_aPos));
+        Point aCurPos(SubPixelToLogic(rGlyphs[nBeginRun].m_aPos, fAngle == 0.0));
         aCurPos += rAlignOffset;
         // the first run can be set with "Td" operator
         // subsequent use of that operator would move
@@ -6342,7 +6342,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         // ascent / descent to match the on-screen rendering.
         // This is the top left of the text without ascent / descent.
         DevicePoint aDrawPosition(rLayout.GetDrawPosition());
-        tools::Rectangle aRectangle(SubPixelToLogic(aDrawPosition),
+        tools::Rectangle aRectangle(SubPixelToLogic(aDrawPosition, true),
                                     Size(ImplDevicePixelToLogicWidth(rLayout.GetTextWidth()), 0));
         aRectangle.AdjustTop(-aRefDevFontMetric.GetAscent());
         // This includes ascent / descent.
@@ -6353,7 +6353,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         {
             // Adapt rectangle for rotated text.
             tools::Polygon aPolygon(aRectangle);
-            aPolygon.Rotate(SubPixelToLogic(aDrawPosition), pFontInstance->mnOrientation);
+            aPolygon.Rotate(SubPixelToLogic(aDrawPosition, true), pFontInstance->mnOrientation);
             drawPolygon(aPolygon);
         }
         else
@@ -6474,7 +6474,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         {
             DevicePoint aStartPt = rLayout.GetDrawPosition();
             int nWidth = rLayout.GetTextWidth() / rLayout.GetUnitsPerPixel();
-            drawTextLine( SubPixelToLogic(aStartPt),
+            drawTextLine( SubPixelToLogic(aStartPt, true),
                           ImplDevicePixelToLogicWidth( nWidth ),
                           eStrikeout, eUnderline, eOverline, bUnderlineAbove );
         }

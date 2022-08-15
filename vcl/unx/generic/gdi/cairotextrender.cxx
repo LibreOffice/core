@@ -228,7 +228,7 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     const bool bDisableAA = !rStyleSettings.GetUseFontAAFromSystem() && !rGraphics.getAntiAlias();
-    const bool bResolutionIndependentLayoutEnabled = rGraphics.getTextRenderModeForResolutionIndependentLayoutEnabled();
+    const bool bResolutionIndependentLayoutEnabled = rLayout.GetTextRenderModeForResolutionIndependentLayout();
 
     const cairo_font_options_t* pFontOptions = GetSalInstance()->GetCairoFontOptions();
     if (pFontOptions || bDisableAA || bResolutionIndependentLayoutEnabled)

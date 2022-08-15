@@ -1377,7 +1377,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
     vcl::text::ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs( aStr, nMinIndex, nLen,
             nPixelWidth, flags, pLayoutCache);
 
-    bool bTextRenderModeForResolutionIndependentLayout(false);
+    bool bHasScaledDXArray(false);
     DeviceCoordinate nEndGlyphCoord(0);
     std::unique_ptr<double[]> xNaturalDXPixelArray;
     if( !pDXArray.empty() )
@@ -1386,23 +1386,11 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
 
         if (mbMap)
         {
-            // convert from logical units to font units
-            if (GetTextRenderModeForResolutionIndependentLayout())
-            {
-                // without rounding, keeping accuracy for lower levels
-                bTextRenderModeForResolutionIndependentLayout = true;
-                for (int i = 0; i < nLen; ++i)
-                    xNaturalDXPixelArray[i] = ImplLogicWidthToDeviceSubPixel(pDXArray[i]);
-
-            }
-            else
-            {
-                // with rounding
-                // using base position for better rounding a.k.a. "dancing characters"
-                DeviceCoordinate nPixelXOfs2 = LogicWidthToDeviceCoordinate(rLogicalPos.X() * 2);
-                for (int i = 0; i < nLen; ++i)
-                    xNaturalDXPixelArray[i] = (LogicWidthToDeviceCoordinate((rLogicalPos.X() + pDXArray[i]) * 2) - nPixelXOfs2) / 2;
-            }
+            // convert from logical units to font units without rounding,
+            // keeping accuracy for lower levels
+            bHasScaledDXArray = true;
+            for (int i = 0; i < nLen; ++i)
+                xNaturalDXPixelArray[i] = ImplLogicWidthToDeviceSubPixel(pDXArray[i]);
         }
         else
         {
@@ -1429,7 +1417,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
     if( !pSalLayout )
         return nullptr;
 
-    pSalLayout->SetTextRenderModeForResolutionIndependentLayout(bTextRenderModeForResolutionIndependentLayout);
+    pSalLayout->SetTextRenderModeForResolutionIndependentLayout(bHasScaledDXArray);
 
     // do glyph fallback if needed
     // #105768# avoid fallback for very small font sizes
@@ -1444,7 +1432,10 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
     // position, justify, etc. the layout
     pSalLayout->AdjustLayout( aLayoutArgs );
 
-    if (bTextRenderModeForResolutionIndependentLayout)
+    // default to on for pdf export which uses SubPixelToLogic to convert back to
+    // the logical coord space, default off for everything else for now unless
+    // a dxarray is provided which has to be scaled
+    if (bHasScaledDXArray || meOutDevType == OUTDEV_PDF)
         pSalLayout->DrawBase() = ImplLogicToDeviceSubPixel(rLogicalPos);
     else
     {
