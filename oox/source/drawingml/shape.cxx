@@ -1800,6 +1800,17 @@ Reference< XShape > const & Shape::createAndInsert(
                             aPropertySet.setAnyProperty(PROP_ParaAdjust, uno::Any(eAdjust));
                         }
                     }
+
+                    // tdf#144092 For empty textboxes push character styles &
+                    // endParaRPr into the Shape's properties
+                    if (rParagraphs.size() == 1 && pParagraph->getRuns().empty())
+                    {
+                        TextCharacterProperties aTextCharacterProps{ pParagraph->getCharacterStyle(
+                            aCharStyleProperties, *mpMasterTextListStyle,
+                            getTextBody()->getTextListStyle()) };
+                        aTextCharacterProps.assignUsed(pParagraph->getEndProperties());
+                        aTextCharacterProps.pushToPropSet(aPropertySet, rFilterBase);
+                    }
                 }
             }
         }

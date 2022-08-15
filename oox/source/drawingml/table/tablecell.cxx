@@ -22,6 +22,8 @@
 #include <basegfx/color/bcolor.hxx>
 #include <oox/drawingml/shapepropertymap.hxx>
 #include <drawingml/textbody.hxx>
+#include <drawingml/textcharacterproperties.hxx>
+#include <drawingml/textparagraph.hxx>
 #include <oox/drawingml/theme.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/helper/propertyset.hxx>
@@ -542,7 +544,8 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
 
     // TODO: phClr?
     aFillProperties.pushToPropMap( aPropMap, rFilterBase.getGraphicHelper() );
-    PropertySet( xPropSet ).setProperties( aPropMap );
+    PropertySet aPropSet{xPropSet};
+    aPropSet.setProperties( aPropMap );
 
     if ( getVertToken() == XML_eaVert )
     {
@@ -550,6 +553,20 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
     }
 
     getTextBody()->insertAt( rFilterBase, xText, xAt, aTextStyleProps, pMasterTextListStyle );
+
+    // tdf#144092 For empty cells push character styles & endParaRPr to the Cell's properties
+    const TextParagraphVector& rParagraphs = getTextBody()->getParagraphs();
+    if (rParagraphs.size() == 1)
+    {
+        const auto pFirstParagraph = rParagraphs.at(0);
+        if (pFirstParagraph->getRuns().empty())
+        {
+            TextCharacterProperties aTextCharacterProps{ pFirstParagraph->getCharacterStyle(
+                aTextStyleProps, *pMasterTextListStyle, getTextBody()->getTextListStyle()) };
+            aTextCharacterProps.assignUsed(pFirstParagraph->getEndProperties());
+            aTextCharacterProps.pushToPropSet(aPropSet, rFilterBase);
+        }
+    }
 
     if (getVertToken() == XML_vert)
         xPropSet->setPropertyValue("RotateAngle", Any(short(27000)));
