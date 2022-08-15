@@ -468,7 +468,7 @@ namespace {
 struct PostItField_ : public SetGetExpField
 {
     PostItField_( const SwNode& rNd, const SwTextField* pField )
-        : SetGetExpField( rNd, pField, nullptr ) {}
+        : SetGetExpField( rNd, pField, std::nullopt ) {}
 
     sal_uInt16 GetPageNo( const StringRangeEnumerator &rRangeEnum,
             const o3tl::sorted_vector< sal_Int32 > &rPossiblePages,

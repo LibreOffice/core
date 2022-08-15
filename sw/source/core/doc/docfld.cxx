@@ -67,15 +67,15 @@ using namespace ::com::sun::star::uno;
 SetGetExpField::SetGetExpField(
     const SwNode& rNdIdx,
     const SwTextField* pField,
-    const SwContentIndex* pIdx,
+    std::optional<sal_Int32> oContentIdx,
     sal_uInt16 const nPageNumber)
     : m_nPageNumber(nPageNumber)
 {
     m_eSetGetExpFieldType = TEXTFIELD;
     m_CNTNT.pTextField = pField;
     m_nNode = rNdIdx.GetIndex();
-    if( pIdx )
-        m_nContent = pIdx->GetIndex();
+    if( oContentIdx )
+        m_nContent = *oContentIdx;
     else if( pField )
         m_nContent = pField->GetStart();
     else
@@ -1090,7 +1090,7 @@ void SwDocUpdateField::GetBodyNode( const SwTextField& rTField, SwFieldIds nFiel
         }
         if( (pFrame != nullptr) || bIsInBody )
         {
-            pNew.reset(new SetGetExpField(rTextNd, &rTField, nullptr,
+            pNew.reset(new SetGetExpField(rTextNd, &rTField, std::nullopt,
                 pFrame ? pFrame->GetPhyPageNum() : 0));
         }
     }
@@ -1100,7 +1100,7 @@ void SwDocUpdateField::GetBodyNode( const SwTextField& rTField, SwFieldIds nFiel
         SwPosition aPos( rDoc.GetNodes().GetEndOfPostIts() );
         bool const bResult = GetBodyTextNode( rDoc, aPos, *pFrame );
         OSL_ENSURE(bResult, "where is the Field");
-        pNew.reset(new SetGetExpField(aPos.GetNode(), &rTField, &aPos.nContent,
+        pNew.reset(new SetGetExpField(aPos.GetNode(), &rTField, aPos.GetContentIndex(),
             pFrame->GetPhyPageNum()));
     }
 
