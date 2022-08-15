@@ -257,7 +257,12 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
 
             // don't hyphenate the last word of the paragraph
             if ( bHyphenationNoLastWord && sal_Int32(m_nCutPos) > nLastWord &&
-                            TextFrameIndex(COMPLETE_STRING) != m_nCutPos )
+                            TextFrameIndex(COMPLETE_STRING) != m_nCutPos &&
+                            // if the last word is multiple line long, e.g. an URL,
+                            // apply this only if the space before the word is there
+                            // in the actual line, i.e. start the long word in a new
+                            // line, but still allows to break its last parts
+                            sal_Int32(rInf.GetIdx()) < nLastWord )
             {
                 m_nCutPos = TextFrameIndex(nLastWord);
             }
