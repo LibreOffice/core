@@ -278,9 +278,9 @@ IMPL_LINK(SwContentOptPage, ShowOutlineContentVisibilityButtonHdl, weld::Togglea
 SwAddPrinterTabPage::SwAddPrinterTabPage(weld::Container* pPage, weld::DialogController* pController,
     const SfxItemSet& rCoreSet)
     : SfxTabPage(pPage, pController, "modules/swriter/ui/printoptionspage.ui", "PrintOptionsPage", &rCoreSet)
-    , sNone(SwResId(SW_STR_NONE))
-    , bAttrModified(false)
-    , bPreview(false)
+    , m_sNone(SwResId(SW_STR_NONE))
+    , m_bAttrModified(false)
+    , m_bPreview(false)
     , m_xGrfCB(m_xBuilder->weld_check_button("graphics"))
     , m_xCtrlFieldCB(m_xBuilder->weld_check_button("formcontrols"))
     , m_xBackgroundCB(m_xBuilder->weld_check_button("background"))
@@ -342,9 +342,9 @@ SwAddPrinterTabPage::~SwAddPrinterTabPage()
 
 void SwAddPrinterTabPage::SetPreview(bool bPrev)
 {
-    bPreview = bPrev;
-    m_xCommentsFrame->set_sensitive(!bPreview);
-    m_xPagesFrame->set_sensitive(!bPreview);
+    m_bPreview = bPrev;
+    m_xCommentsFrame->set_sensitive(!m_bPreview);
+    m_xPagesFrame->set_sensitive(!m_bPreview);
 }
 
 std::unique_ptr<SfxTabPage> SwAddPrinterTabPage::Create( weld::Container* pPage, weld::DialogController* pController,
@@ -355,7 +355,7 @@ std::unique_ptr<SfxTabPage> SwAddPrinterTabPage::Create( weld::Container* pPage,
 
 bool    SwAddPrinterTabPage::FillItemSet( SfxItemSet* rCoreSet )
 {
-    if ( bAttrModified )
+    if ( m_bAttrModified )
     {
         SwAddPrinterItem aAddPrinterAttr;
         aAddPrinterAttr.m_bPrintGraphic   = m_xGrfCB->get_active();
@@ -388,10 +388,10 @@ bool    SwAddPrinterTabPage::FillItemSet( SfxItemSet* rCoreSet )
                                                         SwPostItMode::InMargins;
 
         const OUString sFax = m_xFaxLB->get_active_text();
-        aAddPrinterAttr.m_sFaxName = sNone == sFax ? OUString() : sFax;
+        aAddPrinterAttr.m_sFaxName = m_sNone == sFax ? OUString() : sFax;
         rCoreSet->Put(aAddPrinterAttr);
     }
-    return bAttrModified;
+    return m_bAttrModified;
 }
 
 void    SwAddPrinterTabPage::Reset( const SfxItemSet*  )
@@ -438,7 +438,7 @@ void    SwAddPrinterTabPage::Reset( const SfxItemSet*  )
 
 IMPL_LINK_NOARG(SwAddPrinterTabPage, AutoClickHdl, weld::Toggleable&, void)
 {
-    bAttrModified = true;
+    m_bAttrModified = true;
     bool bIsProspect = m_xProspectCB->get_active();
     if (!bIsProspect)
         m_xProspectCB_RTL->set_active( false );
@@ -452,7 +452,7 @@ IMPL_LINK_NOARG(SwAddPrinterTabPage, AutoClickHdl, weld::Toggleable&, void)
 
 void  SwAddPrinterTabPage::SetFax( const std::vector<OUString>& rFaxLst )
 {
-    m_xFaxLB->append_text(sNone);
+    m_xFaxLB->append_text(m_sNone);
     for(const auto & i : rFaxLst)
     {
         m_xFaxLB->append_text(i);
@@ -462,7 +462,7 @@ void  SwAddPrinterTabPage::SetFax( const std::vector<OUString>& rFaxLst )
 
 IMPL_LINK_NOARG(SwAddPrinterTabPage, SelectHdl, weld::ComboBox&, void)
 {
-    bAttrModified=true;
+    m_bAttrModified=true;
 }
 
 void SwAddPrinterTabPage::PageCreated( const SfxAllItemSet& aSet)
@@ -1373,7 +1373,7 @@ static sal_uInt16 aChangedAttrMap[] = { 0, 1, 2, 3, 4, 6, 7, 8, 9, 10 };
 SwMarkPreview::SwMarkPreview()
     : m_aTransCol(COL_TRANSPARENT)
     , m_aMarkCol(COL_LIGHTRED)
-    , nMarkPos(0)
+    , m_nMarkPos(0)
 
 {
     InitColors();
@@ -1402,10 +1402,10 @@ void SwMarkPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
     const Size aSz(GetOutputSizePixel());
 
     // Page
-    aPage.SetSize(Size(aSz.Width() - 3, aSz.Height() - 3));
+    m_aPage.SetSize(Size(aSz.Width() - 3, aSz.Height() - 3));
 
-    const tools::Long nOutWPix = aPage.GetWidth();
-    const tools::Long nOutHPix = aPage.GetHeight();
+    const tools::Long nOutWPix = m_aPage.GetWidth();
+    const tools::Long nOutHPix = m_aPage.GetHeight();
 
     // PrintArea
     const tools::Long nLBorder = 8;
@@ -1413,50 +1413,50 @@ void SwMarkPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
     const tools::Long nTBorder = 4;
     const tools::Long nBBorder = 4;
 
-    aLeftPagePrtArea = tools::Rectangle(Point(nLBorder, nTBorder), Point((nOutWPix - 1) - nRBorder, (nOutHPix - 1) - nBBorder));
-    const tools::Long nWidth = aLeftPagePrtArea.GetWidth();
+    m_aLeftPagePrtArea = tools::Rectangle(Point(nLBorder, nTBorder), Point((nOutWPix - 1) - nRBorder, (nOutHPix - 1) - nBBorder));
+    const tools::Long nWidth = m_aLeftPagePrtArea.GetWidth();
     const tools::Long nCorr = (nWidth & 1) != 0 ? 0 : 1;
-    aLeftPagePrtArea.SetSize(Size(nWidth / 2 - (nLBorder + nRBorder) / 2 + nCorr, aLeftPagePrtArea.GetHeight()));
+    m_aLeftPagePrtArea.SetSize(Size(nWidth / 2 - (nLBorder + nRBorder) / 2 + nCorr, m_aLeftPagePrtArea.GetHeight()));
 
-    aRightPagePrtArea = aLeftPagePrtArea;
-    aRightPagePrtArea.Move(aLeftPagePrtArea.GetWidth() + nLBorder + nRBorder + 1, 0);
+    m_aRightPagePrtArea = m_aLeftPagePrtArea;
+    m_aRightPagePrtArea.Move(m_aLeftPagePrtArea.GetWidth() + nLBorder + nRBorder + 1, 0);
 
     // draw shadow
-    tools::Rectangle aShadow(aPage);
+    tools::Rectangle aShadow(m_aPage);
     aShadow += Point(3, 3);
     drawRect(rRenderContext, aShadow, m_aShadowCol, m_aTransCol);
 
     // draw page
-    drawRect(rRenderContext, aPage, m_aBgCol, m_aLineCol);
+    drawRect(rRenderContext, m_aPage, m_aBgCol, m_aLineCol);
 
     // draw separator
-    tools::Rectangle aPageSeparator(aPage);
+    tools::Rectangle aPageSeparator(m_aPage);
     aPageSeparator.SetSize(Size(2, aPageSeparator.GetHeight()));
-    aPageSeparator.Move(aPage.GetWidth() / 2 - 1, 0);
+    aPageSeparator.Move(m_aPage.GetWidth() / 2 - 1, 0);
     drawRect(rRenderContext, aPageSeparator, m_aLineCol, m_aTransCol);
 
-    PaintPage(rRenderContext, aLeftPagePrtArea);
-    PaintPage(rRenderContext, aRightPagePrtArea);
+    PaintPage(rRenderContext, m_aLeftPagePrtArea);
+    PaintPage(rRenderContext, m_aRightPagePrtArea);
 
-    tools::Rectangle aLeftMark(Point(aPage.Left() + 2, aLeftPagePrtArea.Top() + 4), Size(aLeftPagePrtArea.Left() - 4, 2));
-    tools::Rectangle aRightMark(Point(aRightPagePrtArea.Right() + 2, aRightPagePrtArea.Bottom() - 6), Size(aLeftPagePrtArea.Left() - 4, 2));
+    tools::Rectangle aLeftMark(Point(m_aPage.Left() + 2, m_aLeftPagePrtArea.Top() + 4), Size(m_aLeftPagePrtArea.Left() - 4, 2));
+    tools::Rectangle aRightMark(Point(m_aRightPagePrtArea.Right() + 2, m_aRightPagePrtArea.Bottom() - 6), Size(m_aLeftPagePrtArea.Left() - 4, 2));
 
-    switch (nMarkPos)
+    switch (m_nMarkPos)
     {
         case 1:     // left
-            aRightMark.SetPos(Point(aRightPagePrtArea.Left() - 2 - aRightMark.GetWidth(), aRightMark.Top()));
+            aRightMark.SetPos(Point(m_aRightPagePrtArea.Left() - 2 - aRightMark.GetWidth(), aRightMark.Top()));
             break;
 
         case 2:     // right
-            aLeftMark.SetPos(Point(aLeftPagePrtArea.Right() + 2, aLeftMark.Top()));
+            aLeftMark.SetPos(Point(m_aLeftPagePrtArea.Right() + 2, aLeftMark.Top()));
             break;
 
         case 3:     // outside
             break;
 
         case 4:     // inside
-            aLeftMark.SetPos(Point(aLeftPagePrtArea.Right() + 2, aLeftMark.Top()));
-            aRightMark.SetPos(Point(aRightPagePrtArea.Left() - 2 - aRightMark.GetWidth(), aRightMark.Top()));
+            aLeftMark.SetPos(Point(m_aLeftPagePrtArea.Right() + 2, aLeftMark.Top()));
+            aRightMark.SetPos(Point(m_aRightPagePrtArea.Left() - 2 - aRightMark.GetWidth(), aRightMark.Top()));
             break;
 
         case 0:     // none
@@ -1489,7 +1489,7 @@ void SwMarkPreview::PaintPage(vcl::RenderContext& rRenderContext, const tools::R
         if (i == (nLines - 1))
             aTextLine.SetSize(Size(aTextLine.GetWidth() / 2, aTextLine.GetHeight()));
 
-        if (aPage.Contains(aTextLine))
+        if (m_aPage.Contains(aTextLine))
             drawRect(rRenderContext, aTextLine, m_aTextCol, m_aTransCol);
 
         aTextLine.Move(0, nStep);

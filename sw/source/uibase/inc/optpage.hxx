@@ -76,9 +76,9 @@ public:
 // TabPage printer settings additions
 class SwAddPrinterTabPage final : public SfxTabPage
 {
-    OUString sNone;
-    bool bAttrModified;
-    bool bPreview;
+    OUString m_sNone;
+    bool m_bAttrModified;
+    bool m_bPreview;
 
     std::unique_ptr<weld::CheckButton>  m_xGrfCB;
     std::unique_ptr<weld::CheckButton>  m_xCtrlFieldCB;
@@ -268,11 +268,11 @@ class SwMarkPreview final : public weld::CustomWidgetController
     Color m_aTextCol;    // text
     Color m_aPrintAreaCol; // frame for print area
 
-    tools::Rectangle aPage;
-    tools::Rectangle aLeftPagePrtArea;
-    tools::Rectangle aRightPagePrtArea;
+    tools::Rectangle m_aPage;
+    tools::Rectangle m_aLeftPagePrtArea;
+    tools::Rectangle m_aRightPagePrtArea;
 
-    sal_uInt16 nMarkPos;
+    sal_uInt16 m_nMarkPos;
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
     void PaintPage(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect);
@@ -284,7 +284,7 @@ public:
     virtual ~SwMarkPreview() override;
 
     void SetColor(const Color& rCol) { m_aMarkCol = rCol; }
-    void SetMarkPos(sal_uInt16 nPos) { nMarkPos = nPos; }
+    void SetMarkPos(sal_uInt16 nPos) { m_nMarkPos = nPos; }
 };
 
 // redlining options

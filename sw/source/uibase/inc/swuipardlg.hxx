@@ -25,8 +25,8 @@
 
 class SwParaDlg final : public SfxTabDialogController
 {
-    SwView& rView;
-    bool bDrawParaDlg;
+    SwView& m_rView;
+    bool m_bDrawParaDlg;
 
     void PageCreated(const OString& rId, SfxTabPage& rPage) override;
 

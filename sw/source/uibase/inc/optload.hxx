@@ -136,8 +136,8 @@ private:
 
     int m_nPrevSelectedEntry;
 
-    std::unique_ptr<SwFieldMgr> pMgr;
-    bool bHTMLMode;
+    std::unique_ptr<SwFieldMgr> m_pMgr;
+    bool m_bHTMLMode;
 
     TextFilterAutoConvert m_aTextFilter;
 
