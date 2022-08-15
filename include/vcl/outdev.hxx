@@ -236,7 +236,6 @@ private:
     Point                           maRefPoint;
     AntialiasingFlags               mnAntialiasing;
     LanguageType                    meTextLanguage;
-    bool mbTextRenderModeForResolutionIndependentLayout;
 
     mutable bool                    mbMap : 1;
     mutable bool                    mbClipRegion : 1;
@@ -483,10 +482,6 @@ public:
 
     void                        SetAntialiasing( AntialiasingFlags nMode );
     AntialiasingFlags           GetAntialiasing() const { return mnAntialiasing; }
-
-    // Render glyphs with a mode suitable for rendering of resolution-independent layout positions.
-    void                        SetTextRenderModeForResolutionIndependentLayout(bool bMode);
-    bool                        GetTextRenderModeForResolutionIndependentLayout() const { return mbTextRenderModeForResolutionIndependentLayout; }
 
     void                        SetDrawMode( DrawModeFlags nDrawMode );
     DrawModeFlags               GetDrawMode() const { return mnDrawMode; }

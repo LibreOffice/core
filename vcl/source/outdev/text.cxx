@@ -1375,42 +1375,25 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
 
     bool bTextRenderModeForResolutionIndependentLayout(false);
     DeviceCoordinate nEndGlyphCoord(0);
+#if VCL_FLOAT_DEVICE_PIXEL
     std::unique_ptr<DeviceCoordinate[]> xDXPixelArray;
+#endif
     std::unique_ptr<double[]> xNaturalDXPixelArray;
     if( !pDXArray.empty() )
     {
         DeviceCoordinate* pDXPixelArray(nullptr);
         if (mbMap)
         {
-            if (GetTextRenderModeForResolutionIndependentLayout())
-            {
-                bTextRenderModeForResolutionIndependentLayout = true;
+            bTextRenderModeForResolutionIndependentLayout = true;
 
-                // convert from logical units to font units using a temporary array
-                xNaturalDXPixelArray.reset(new double[nLen]);
+            // convert from logical units to font units using a temporary array
+            xNaturalDXPixelArray.reset(new double[nLen]);
 
-                for (int i = 0; i < nLen; ++i)
-                    xNaturalDXPixelArray[i] = ImplLogicWidthToDeviceFontWidth(pDXArray[i]);
+            for (int i = 0; i < nLen; ++i)
+                xNaturalDXPixelArray[i] = ImplLogicWidthToDeviceFontWidth(pDXArray[i]);
 
-                aLayoutArgs.SetAltNaturalDXArray(xNaturalDXPixelArray.get());
-                nEndGlyphCoord = std::lround(xNaturalDXPixelArray[nLen - 1]);
-            }
-            else
-            {
-                // convert from logical units to font units using a temporary array
-                xDXPixelArray.reset(new DeviceCoordinate[nLen]);
-                pDXPixelArray = xDXPixelArray.get();
-                // using base position for better rounding a.k.a. "dancing characters"
-                DeviceCoordinate nPixelXOfs2 = LogicWidthToDeviceCoordinate(rLogicalPos.X() * 2);
-                for( int i = 0; i < nLen; ++i )
-                {
-                    pDXPixelArray[i] = (LogicWidthToDeviceCoordinate((rLogicalPos.X() + pDXArray[i]) * 2) - nPixelXOfs2) / 2;
-                }
-
-                aLayoutArgs.SetDXArray(pDXPixelArray);
-                nEndGlyphCoord = pDXPixelArray[nLen - 1];
-            }
-
+            aLayoutArgs.SetAltNaturalDXArray(xNaturalDXPixelArray.get());
+            nEndGlyphCoord = std::lround(xNaturalDXPixelArray[nLen - 1]);
         }
         else
         {
