@@ -1871,7 +1871,7 @@ void ScInterpreter::ScPDuration()
         if ( fFuture <= 0.0 || fPresent <= 0.0 || fRate <= 0.0 )
             PushIllegalArgument();
         else
-            PushDouble( std::log( fFuture / fPresent ) / rtl::math::log1p( fRate ) );
+            PushDouble( std::log( fFuture / fPresent ) / std::log1p( fRate ) );
     }
 }
 
@@ -1896,11 +1896,11 @@ double ScInterpreter::ScGetPMT(double fRate, double fNper, double fPv,
     else
     {
         if (bPayInAdvance) // payment in advance
-            fPayment = (fFv + fPv * exp( fNper * ::rtl::math::log1p(fRate) ) ) * fRate /
-                (std::expm1( (fNper + 1) * ::rtl::math::log1p(fRate) ) - fRate);
+            fPayment = (fFv + fPv * exp( fNper * ::std::log1p(fRate) ) ) * fRate /
+                (std::expm1( (fNper + 1) * ::std::log1p(fRate) ) - fRate);
         else  // payment in arrear
-            fPayment = (fFv + fPv * exp(fNper * ::rtl::math::log1p(fRate) ) ) * fRate /
-                std::expm1( fNper * ::rtl::math::log1p(fRate) );
+            fPayment = (fFv + fPv * exp(fNper * ::std::log1p(fRate) ) ) * fRate /
+                std::expm1( fNper * ::std::log1p(fRate) );
     }
     return -fPayment;
 }
@@ -1983,9 +1983,9 @@ void ScInterpreter::ScNper()
         PushDouble(-(fPV + fFV)/fPmt);
     else if (bPayInAdvance)
         PushDouble(log(-(fRate*fFV-fPmt*(1.0+fRate))/(fRate*fPV+fPmt*(1.0+fRate)))
-                  / rtl::math::log1p(fRate));
+                  / std::log1p(fRate));
     else
-        PushDouble(log(-(fRate*fFV-fPmt)/(fRate*fPV+fPmt)) / rtl::math::log1p(fRate));
+        PushDouble(log(-(fRate*fFV-fPmt)/(fRate*fPV+fPmt)) / std::log1p(fRate));
 }
 
 bool ScInterpreter::RateIteration( double fNper, double fPayment, double fPv,
