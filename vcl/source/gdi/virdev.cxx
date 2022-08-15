@@ -383,8 +383,6 @@ bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
             mpAlphaVDev->SetMapMode( GetMapMode() );
 
             mpAlphaVDev->SetAntialiasing( GetAntialiasing() );
-
-            mpAlphaVDev->SetTextRenderModeForResolutionIndependentLayout(GetTextRenderModeForResolutionIndependentLayout());
         }
 
         return true;
