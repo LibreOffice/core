@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "395c4dec_70e9374a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-08-15T22:00:03Z",
+      "side": 1,
+      "message": "So it seems we hit an accuracy problem in replacing rtl::math:asinh() with std::asinh() (I\u0027d guess acosh() as well but that\u0027s where the test failed first). I tend to not fiddle with these (asinh(), acosh()) at all, unless the std:: functions are proven to deliver better results in all cases, which so far I doubt. Also it\u0027s not given that the function deliver the same results across all platforms, compilers and libraries, varying between those is even worse than having our own quite accurate implementation, IMHO.\n\nAdding Regina to Cc as the original author who implemented the rtl::math:: equivalents, whether she has a founded opinion on those std:: functions. The history in full glory including rationales is available at https://bz.apache.org/ooo/show_bug.cgi?id\u003d97605 (the i97605 in the comments).\n",
+      "revId": "9598e61508c73fae8b2840b578df3b8ecc45a115",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
