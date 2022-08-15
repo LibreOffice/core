@@ -3922,7 +3922,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
             const SwNode& aEndOfContentNd =
                                     aIdx.GetNode().GetNodes().GetEndOfContent();
             while ( nAnchorTextNdNumInRange > 0 &&
-                    &(aIdx.GetNode()) != &aEndOfContentNd )
+                    aIdx.GetNode() != aEndOfContentNd )
             {
                 if ( aIdx.GetNode().IsTextNode() )
                 {

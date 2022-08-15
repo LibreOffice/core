@@ -848,7 +848,7 @@ SwSectionNode* SwNodes::InsertTextSection(SwNode& rNd,
     if( pEnd )
     {
         // Special case for the Reader/Writer
-        if( &pEnd->GetNode() != &GetEndOfContent() )
+        if( pEnd->GetNode() != GetEndOfContent() )
             aInsPos = pEnd->GetIndex()+1;
         // #i58710: We created a RTF document with a section break inside a table cell
         // We are not able to handle a section start inside a table and the section end outside.

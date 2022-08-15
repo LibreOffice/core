@@ -1427,7 +1427,7 @@ void SwTextNode::Update(
             if ( pRedl->HasMark() )
             {
                 SwPosition* const pEnd = pRedl->End();
-                if ( this == &pEnd->GetNode() &&
+                if ( *this == pEnd->GetNode() &&
                      *pRedl->GetPoint() != *pRedl->GetMark() )
                 {
                     SwContentIndex & rIdx = pEnd->nContent;
@@ -1472,7 +1472,7 @@ void SwTextNode::Update(
                     continue;
                 const SwPosition* pEnd = &pMark->GetMarkEnd();
                 SwContentIndex & rEndIdx = const_cast<SwContentIndex&>(pEnd->nContent);
-                if( this == &pEnd->GetNode() &&
+                if( *this == pEnd->GetNode() &&
                     rPos.GetIndex() == rEndIdx.GetIndex() )
                 {
                     if (&rEndIdx == next) // nasty corner case:
@@ -1514,7 +1514,7 @@ void SwTextNode::Update(
                 {
                     // The fly is at-char anchored and has an anchor position.
                     SwContentIndex& rEndIdx = const_cast<SwContentIndex&>(pContentAnchor->nContent);
-                    if (&pContentAnchor->GetNode() == this && rEndIdx.GetIndex() == rPos.GetIndex())
+                    if (pContentAnchor->GetNode() == *this && rEndIdx.GetIndex() == rPos.GetIndex())
                     {
                         // The anchor position is exactly our insert position.
                         rEndIdx.Assign(&aTmpIdxReg, rEndIdx.GetIndex());
@@ -1539,7 +1539,7 @@ void SwTextNode::Update(
                         continue;
 
                     SwContentIndex& rIndex = pCursor->Start()->nContent;
-                    if (&pCursor->Start()->GetNode() == this && rIndex.GetIndex() == rPos.GetIndex())
+                    if (pCursor->Start()->GetNode() == *this && rIndex.GetIndex() == rPos.GetIndex())
                     {
                         // The cursor position of this other shell is exactly our insert position.
                         rIndex.Assign(&aTmpIdxReg, rIndex.GetIndex());
@@ -1592,7 +1592,7 @@ void SwTextNode::Update(
         SwRangeRedline* pRedln = rTable[nRedlnPos];
         if (pRedln->HasMark())
         {
-            if (this == &pRedln->End()->GetNode() && *pRedln->GetPoint() != *pRedln->GetMark())
+            if (*this == pRedln->End()->GetNode() && *pRedln->GetPoint() != *pRedln->GetMark())
             {
                 // Redline is changed only when some change occurs before it
                 if (nChangePos <= pRedln->Start()->GetContentIndex())
