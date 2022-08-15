@@ -412,6 +412,49 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakLeftRTL)
     assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout[1]", "height", "276");
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakVertical)
+{
+    // Given a document with an anchored object in a vertical page and a clearing break (type=all):
+    loadURL("private:factory/swriter", nullptr);
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    uno::Reference<beans::XPropertySet> xStandard(getStyles("PageStyles")->getByName("Standard"),
+                                                  uno::UNO_QUERY);
+    xStandard->setPropertyValue("WritingMode", uno::Any(text::WritingMode2::TB_RL));
+    {
+        uno::Reference<drawing::XShape> xShape(
+            xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+        xShape->setSize(awt::Size(5000, 5000));
+        uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+        xShapeProps->setPropertyValue("AnchorType",
+                                      uno::Any(text::TextContentAnchorType_AT_CHARACTER));
+        uno::Reference<text::XTextContent> xShapeContent(xShape, uno::UNO_QUERY);
+        xText->insertTextContent(xCursor, xShapeContent, /*bAbsorb=*/false);
+    }
+    uno::Reference<text::XTextContent> xLineBreak(
+        xFactory->createInstance("com.sun.star.text.LineBreak"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xLineBreakProps(xLineBreak, uno::UNO_QUERY);
+    auto eClear = static_cast<sal_Int16>(SwLineBreakClear::ALL);
+    xLineBreakProps->setPropertyValue("Clear", uno::Any(eClear));
+    xText->insertString(xCursor, "foo", /*bAbsorb=*/false);
+    xText->insertTextContent(xCursor, xLineBreak, /*bAbsorb=*/false);
+    xText->insertString(xCursor, "bar", /*bAbsorb=*/false);
+
+    // When laying out that document:
+    calcLayout();
+
+    // Then make sure the "bar" does jump (logic) down the correct amount:
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2837
+    // - Actual  : 7135
+    // i.e. the expected break height is the twips value of the 5cm rectangle size, it was much
+    // more.
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout[1]/SwBreakPortion", "height", "2837");
+}
+
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakHeader)
 {
     // Given a document with a shape in the header and a clearing break in the body text:
