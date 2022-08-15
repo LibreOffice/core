@@ -58,7 +58,7 @@ void SkiaTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalGr
     if (rFont.NeedsArtificialBold())
         font.setEmbolden(true);
 
-    bool bSubpixelPositioning = rGraphics.getTextRenderModeForResolutionIndependentLayoutEnabled();
+    bool bSubpixelPositioning = rLayout.GetTextRenderModeForResolutionIndependentLayout();
     SkFont::Edging ePreferredAliasing
         = bSubpixelPositioning ? SkFont::Edging::kSubpixelAntiAlias : SkFont::Edging::kAntiAlias;
     if (bSubpixelPositioning)

@@ -818,36 +818,36 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf108963)
                 = pPdfPageObject->getPathSegment(0);
             CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFSegmentType::Moveto, pSegment->getType());
             basegfx::B2DPoint aPoint = pSegment->getPoint();
-            CPPUNIT_ASSERT_DOUBLES_EQUAL(245.395, aPoint.getX(), 0.0005);
-            CPPUNIT_ASSERT_DOUBLES_EQUAL(244.261, aPoint.getY(), 0.0005);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(245.367, aPoint.getX(), 0.0005);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(244.232, aPoint.getY(), 0.0005);
             CPPUNIT_ASSERT(!pSegment->isClosed());
 
             pSegment = pPdfPageObject->getPathSegment(1);
             CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFSegmentType::Lineto, pSegment->getType());
             aPoint = pSegment->getPoint();
-            CPPUNIT_ASSERT_DOUBLES_EQUAL(275.102, aPoint.getX(), 0.0005);
-            CPPUNIT_ASSERT_DOUBLES_EQUAL(267.618, aPoint.getY(), 0.0005);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(275.074, aPoint.getX(), 0.0005);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(267.590, aPoint.getY(), 0.0005);
             CPPUNIT_ASSERT(!pSegment->isClosed());
 
             pSegment = pPdfPageObject->getPathSegment(2);
             CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFSegmentType::Lineto, pSegment->getType());
             aPoint = pSegment->getPoint();
-            CPPUNIT_ASSERT_DOUBLES_EQUAL(287.518, aPoint.getX(), 0.0005);
-            CPPUNIT_ASSERT_DOUBLES_EQUAL(251.829, aPoint.getY(), 0.0005);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(287.490, aPoint.getX(), 0.0005);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(251.801, aPoint.getY(), 0.0005);
             CPPUNIT_ASSERT(!pSegment->isClosed());
 
             pSegment = pPdfPageObject->getPathSegment(3);
             CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFSegmentType::Lineto, pSegment->getType());
             aPoint = pSegment->getPoint();
-            CPPUNIT_ASSERT_DOUBLES_EQUAL(257.839, aPoint.getX(), 0.0005);
-            CPPUNIT_ASSERT_DOUBLES_EQUAL(228.472, aPoint.getY(), 0.0005);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(257.811, aPoint.getX(), 0.0005);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(228.443, aPoint.getY(), 0.0005);
             CPPUNIT_ASSERT(!pSegment->isClosed());
 
             pSegment = pPdfPageObject->getPathSegment(4);
             CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFSegmentType::Lineto, pSegment->getType());
             aPoint = pSegment->getPoint();
-            CPPUNIT_ASSERT_DOUBLES_EQUAL(245.395, aPoint.getX(), 0.0005);
-            CPPUNIT_ASSERT_DOUBLES_EQUAL(244.261, aPoint.getY(), 0.0005);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(245.367, aPoint.getX(), 0.0005);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(244.232, aPoint.getY(), 0.0005);
             CPPUNIT_ASSERT(pSegment->isClosed());
         }
     }

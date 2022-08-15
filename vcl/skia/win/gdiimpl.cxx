@@ -267,7 +267,7 @@ bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
 
     SkFont font(typeface);
 
-    bool bSubpixelPositioning = mWinParent.getTextRenderModeForResolutionIndependentLayoutEnabled();
+    bool bSubpixelPositioning = rLayout.GetTextRenderModeForResolutionIndependentLayout();
     SkFont::Edging ePreferredAliasing
         = bSubpixelPositioning ? SkFont::Edging::kSubpixelAntiAlias : fontEdging;
     if (bSubpixelPositioning)
