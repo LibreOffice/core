@@ -50,6 +50,13 @@ TextParagraph& TextBody::addParagraph()
     return *xPara;
 }
 
+TextParagraph& TextBody::addParagraph( sal_Int32 nIndex )
+{
+    auto xPara = std::make_shared<TextParagraph>();
+    maParagraphs.insert(maParagraphs.begin() + nIndex, xPara);
+    return *xPara;
+}
+
 void TextBody::insertAt(
         const ::oox::core::XmlFilterBase& rFilterBase,
         const Reference < XText > & xText,

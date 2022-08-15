@@ -1742,6 +1742,36 @@ Reference< XShape > const & Shape::createAndInsert(
                     const OUString sPresetType = mpTextBody->getTextProperties().msPrst;
                     sClass = PresetGeometryTypeNames::GetFontworkType( sPresetType );
 
+                    // Linebreaks are ignoring in represantation of the fontwork.
+                    // Here we are handling linebreaks as new paragraph.
+                    if(sPresetType == "textArchDown" || sPresetType == "textArchUp"
+                       || sPresetType == "textCircle" || sPresetType == "textButton")
+                    {
+                        for(sal_uInt64 nPara = 0; nPara < mpTextBody->getParagraphs().size(); nPara++)
+                        {
+                            sal_Int32 nLinebreakCount = 0;
+                            for(sal_uInt64 nRun = 0; nRun < mpTextBody->getParagraphs()[nPara]->getRuns().size(); nRun++)
+                            {
+                                TextRun& rTextRun = *mpTextBody->getParagraphs()[nPara]->getRuns()[nRun];
+
+                                if(rTextRun.isLineBreak())
+                                {
+                                    nLinebreakCount++;
+                                    rTextRun.setLineBreak(false);
+                                    continue;
+                                }
+
+                                if(nLinebreakCount > 0)
+                                {
+                                    TextRunPtr pRun = std::make_shared<TextRun>();
+                                    pRun->getText() = rTextRun.getText();
+                                    mpTextBody->addParagraph(nPara + nLinebreakCount).addRun(pRun);
+
+                                    rTextRun.getText() = "";
+                                }
+                            }
+                        }
+                    }
                     lcl_createPresetShape( mxShape, sClass, sPresetType, mpCustomShapePropertiesPtr, mpTextBody, rGraphicHelper );
                 }
             }

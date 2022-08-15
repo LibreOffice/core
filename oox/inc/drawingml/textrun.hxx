@@ -40,7 +40,7 @@ public:
     TextCharacterProperties&         getTextCharacterProperties() { return maTextCharacterProperties; }
     const TextCharacterProperties&   getTextCharacterProperties() const { return maTextCharacterProperties; }
 
-    void                 setLineBreak() { mbIsLineBreak = true; }
+    void setLineBreak( bool bIsLineBreak = true ) { mbIsLineBreak = bIsLineBreak; }
     bool isLineBreak() const { return mbIsLineBreak; }
 
     /** Returns whether the textrun had properties that alter it visually in its rPr tag
