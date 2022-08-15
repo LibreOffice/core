@@ -769,6 +769,16 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo37606Copy)
 }
 #endif
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf150138)
+{
+    // Without the fix in place, this test would have crashed
+    load(mpTestDocumentPath, "tdf150138.odt");
+    CPPUNIT_ASSERT_EQUAL(18, getPages());
+
+    uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1),1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("arabicTest"), getProperty<OUString>(xRun, "CharFontNameComplex"));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testFdo69862)
 {
     load(mpTestDocumentPath, "fdo69862.odt");
