@@ -11,4 +11,10 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,lxml))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,lxml,$(LXML_TARBALL)))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,lxml,0))
+
+$(eval $(call gb_UnpackedTarball_add_patches,lxml, \
+    external/lxml/Wincompatible-function-pointer-types.patch \
+))
+
 # vim: set noet sw=4 ts=4:
