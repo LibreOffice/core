@@ -498,7 +498,7 @@ void NumberTransformation::Transform(ScDocument& rDoc) const
                         double nVal = rDoc.GetValue(rCol, nRow, 0);
                         if (nVal > 0)
                         {
-                            rDoc.SetValue(rCol, nRow, 0, rtl::math::log1p(nVal-1));
+                            rDoc.SetValue(rCol, nRow, 0, std::log1p(nVal-1));
                         }
                         else
                         {
