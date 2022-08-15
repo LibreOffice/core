@@ -1021,6 +1021,18 @@ void SfxBaseController::ReleaseShell_Impl()
     attachFrame( aXFrame );
 }
 
+void SfxBaseController::CopyLokViewCallbackFromFrameCreator()
+{
+    if (!m_pData->m_pViewShell)
+        return;
+    SfxLokCallbackInterface* pCallback = nullptr;
+    if (m_pData->m_xFrame)
+        if (auto xCreator = m_pData->m_xFrame->getCreator())
+            if (auto parentVS = SfxViewShell::Get(xCreator->getController()))
+                pCallback = parentVS->getLibreOfficeKitViewCallback();
+    m_pData->m_pViewShell->setLibreOfficeKitViewCallback(pCallback);
+}
+
 SfxViewShell* SfxBaseController::GetViewShell_Impl() const
 {
     return m_pData->m_pViewShell;
