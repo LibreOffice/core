@@ -1382,23 +1382,11 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
 
         if (mbMap)
         {
-            // convert from logical units to font units
-            if (GetTextRenderModeForResolutionIndependentLayout())
-            {
-                // without rounding, keeping accuracy for lower levels
-                bTextRenderModeForResolutionIndependentLayout = true;
-                for (int i = 0; i < nLen; ++i)
-                    xNaturalDXPixelArray[i] = ImplLogicWidthToDeviceFontWidth(pDXArray[i]);
-
-            }
-            else
-            {
-                // with rounding
-                // using base position for better rounding a.k.a. "dancing characters"
-                DeviceCoordinate nPixelXOfs2 = LogicWidthToDeviceCoordinate(rLogicalPos.X() * 2);
-                for (int i = 0; i < nLen; ++i)
-                    xNaturalDXPixelArray[i] = (LogicWidthToDeviceCoordinate((rLogicalPos.X() + pDXArray[i]) * 2) - nPixelXOfs2) / 2;
-            }
+            // convert from logical units to font units without rounding,
+            // keeping accuracy for lower levels
+            bTextRenderModeForResolutionIndependentLayout = true;
+            for (int i = 0; i < nLen; ++i)
+                xNaturalDXPixelArray[i] = ImplLogicWidthToDeviceFontWidth(pDXArray[i]);
         }
         else
         {

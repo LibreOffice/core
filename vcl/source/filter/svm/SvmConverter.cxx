@@ -1275,7 +1275,6 @@ bool TestImportSVM(SvStream& rStream)
     SvmReader aReader(rStream);
     aReader.Read(aGDIMetaFile);
     ScopedVclPtrInstance<VirtualDevice> aVDev;
-    aVDev->SetTextRenderModeForResolutionIndependentLayout(true);
     try
     {
         aGDIMetaFile.Play(*aVDev);
