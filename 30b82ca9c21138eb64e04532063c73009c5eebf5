@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfaeaa5a_d240ac2f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-08-15T18:43:59Z",
+      "side": 1,
+      "message": "this redline is an abomination, it should not be added to the document model.\n\n│      683              SwNodeOffset nPoint \u003d aPaM.GetPoint()-\u003eGetNodeIndex();                                                                           │\n│      684              if( nPoint \u003c pRedlineInfo-\u003epContentIndex-\u003eGetIndex() ||                                                                          │\n│      685                  nPoint \u003e pRedlineInfo-\u003epContentIndex-\u003eGetNode().EndOfSectionIndex() )                                                        │\n│  \u003e   686                  pRedline-\u003eSetContentIdx(pRedlineInfo-\u003epContentIndex);                                                                        │\n│      687              else                                                                                                                             │\n│      688                  SAL_WARN(\"sw\", \"Recursive change tracking\");    \n\nthis already checks that the anchor is not directly inside the deleted range, but it\u0027s missing a check for indirection via flys (and footnotes, probably).",
+      "revId": "30b82ca9c21138eb64e04532063c73009c5eebf5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
