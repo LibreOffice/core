@@ -70,6 +70,30 @@
       },
       "revId": "2a4d306c1ff606cd44e861e4afec21d8b863f245",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd25e9b6_c6246cba",
+        "filename": "vcl/qa/cppunit/pdfexport/pdfexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1285,
+      "author": {
+        "id": 1003606
+      },
+      "writtenOn": "2022-08-15T19:02:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7f76a6db_a4cb4db3",
+      "range": {
+        "startLine": 1285,
+        "startChar": 8,
+        "endLine": 1285,
+        "endChar": 16
+      },
+      "revId": "2a4d306c1ff606cd44e861e4afec21d8b863f245",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
