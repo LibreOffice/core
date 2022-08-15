@@ -284,6 +284,7 @@ static tools::Long ImplSubPixelToLogic(double n, tools::Long nDPI, tools::Long n
     assert(nDPI > 0);
     assert(nMapNum != 0);
     double nRet = n * nMapDenom / nMapNum / nDPI;
+    assert(floor(nRet) == nRet);
     return nRet;
 }
 
@@ -1177,7 +1178,10 @@ Point OutputDevice::PixelToLogic( const Point& rDevicePt ) const
 Point OutputDevice::SubPixelToLogic(const DevicePoint& rDevicePt) const
 {
     if (!mbMap)
+    {
+        assert(floor(rDevicePt.getX() == rDevicePt.getX()) && floor(rDevicePt.getY() == rDevicePt.getY()));
         return Point(rDevicePt.getX(), rDevicePt.getY());
+    }
 
     return Point(ImplSubPixelToLogic(rDevicePt.getX(), mnDPIX,
                                      maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX) - maMapRes.mnMapOfsX - mnOutOffLogicX,
