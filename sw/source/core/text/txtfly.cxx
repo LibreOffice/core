@@ -998,16 +998,17 @@ SwTwips SwTextFly::CalcMinBottom() const
 
 SwTwips SwTextFly::GetMaxBottom(const SwBreakPortion& rPortion, const SwTextFormatInfo& rInfo) const
 {
+    // Note that m_pCurrFrame is already swapped at this stage, so it's correct to bypass
+    // SwRectFnSet here.
     SwTwips nRet = 0;
     size_t nCount(m_bOn ? GetAnchoredObjList()->size() : 0);
-    SwRectFnSet aRectFnSet(m_pCurrFrame);
 
     // Get the horizontal position of the break portion in absolute twips. The frame area is in
     // absolute twips, the frame's print area is relative to the frame area. Finally the portion's
     // position is relative to the frame's print area.
     SwTwips nX = rInfo.X();
-    nX += aRectFnSet.GetLeft(m_pCurrFrame->getFrameArea());
-    nX += aRectFnSet.GetLeft(m_pCurrFrame->getFramePrintArea());
+    nX += m_pCurrFrame->getFrameArea().Left();
+    nX += m_pCurrFrame->getFramePrintArea().Left();
 
     for (size_t i = 0; i < nCount; ++i)
     {
@@ -1020,9 +1021,15 @@ SwTwips SwTextFly::GetMaxBottom(const SwBreakPortion& rPortion, const SwTextForm
         }
 
         SwRect aRect(pAnchoredObj->GetObjRectWithSpaces());
+
+        if (m_pCurrFrame->IsVertical())
+        {
+            m_pCurrFrame->SwitchVerticalToHorizontal(aRect);
+        }
+
         if (rPortion.GetClear() == SwLineBreakClear::LEFT)
         {
-            if (nX < aRectFnSet.GetLeft(aRect))
+            if (nX < aRect.Left())
             {
                 // Want to jump down to the first line that's unblocked on the left. This object is
                 // on the right of the break, ignore it.
@@ -1031,14 +1038,14 @@ SwTwips SwTextFly::GetMaxBottom(const SwBreakPortion& rPortion, const SwTextForm
         }
         if (rPortion.GetClear() == SwLineBreakClear::RIGHT)
         {
-            if (nX > aRectFnSet.GetRight(aRect))
+            if (nX > aRect.Right())
             {
                 // Want to jump down to the first line that's unblocked on the right. This object is
                 // on the left of the break, ignore it.
                 continue;
             }
         }
-        SwTwips nBottom = aRectFnSet.GetBottom(aRect);
+        SwTwips nBottom = aRect.Top() + aRect.Height();
         if (nBottom > nRet)
         {
             nRet = nBottom;
