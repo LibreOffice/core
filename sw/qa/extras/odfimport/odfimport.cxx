@@ -34,10 +34,12 @@
 typedef std::map<OUString, css::uno::Sequence< css::table::BorderLine> > AllBordersMap;
 typedef std::pair<OUString, css::uno::Sequence< css::table::BorderLine> > StringSequencePair;
 
+char const DATA_DIRECTORY[] = "/sw/qa/extras/odfimport/data/";
+
 class Test : public SwModelTestBase
 {
     public:
-        Test() : SwModelTestBase("/sw/qa/extras/odfimport/data/", "writer8") {}
+        Test() : SwModelTestBase(DATA_DIRECTORY, "writer8") {}
 };
 
 DECLARE_ODFIMPORT_TEST(testEmptySvgFamilyName, "empty-svg-family-name.odt")
@@ -924,6 +926,22 @@ DECLARE_ODFIMPORT_TEST(testTdf123829, "tdf123829.odt")
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "Compatibility: collapse cell paras should not be set", false,
         pDoc->getIDocumentSettingAccess().get(DocumentSettingId::COLLAPSE_EMPTY_CELL_PARA));
+}
+
+class testForcepoint108 : public Test
+{
+    CPPUNIT_TEST_SUITE(testForcepoint108);
+    CPPUNIT_TEST(test);
+    CPPUNIT_TEST_SUITE_END();
+    void test();
+    CPPUNIT_TEST_SUITE_REGISTRATION(testForcepoint108);
+};
+// just care that it doesn't crash/assert
+void testForcepoint108::test()
+{
+    //load would assert because it fails to load entirely, like testMathMalformedXml
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "forcepoint108.fodt";
+    mxComponent = mxDesktop->loadComponentFromURL(aURL, "_default", 0, {});
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
