@@ -54,9 +54,6 @@ private:
 
     DECL_LINK(ScrollHdl, weld::ScrolledWindow&, void);
 
-    void SetGraphicMapMode(const MapMode& rNewMapMode);
-    MapMode GetGraphicMapMode() const;
-
 public:
     explicit SmGraphicWindow(SmViewShell& rShell);
     virtual void dispose() override;
@@ -74,6 +71,9 @@ public:
 
     virtual void Resize() override;
     void ShowContextMenu(const CommandEvent& rCEvt);
+
+    void SetGraphicMapMode(const MapMode& rNewMapMode);
+    MapMode GetGraphicMapMode() const;
 
     SmGraphicWidget& GetGraphicWidget()
     {
