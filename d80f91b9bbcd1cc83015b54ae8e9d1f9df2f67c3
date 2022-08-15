@@ -16,6 +16,41 @@
       "message": "Could you please send your license statement, as described here?\nhttps://wiki.documentfoundation.org/Development/GetInvolved#License_statement",
       "revId": "d80f91b9bbcd1cc83015b54ae8e9d1f9df2f67c3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e52cfa8_ed5bffd3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-08-15T12:27:36Z",
+      "side": 1,
+      "message": "Done\nhttps://lists.freedesktop.org/archives/libreoffice/2022-August/089253.html",
+      "parentUuid": "74b142df_675c4f12",
+      "revId": "d80f91b9bbcd1cc83015b54ae8e9d1f9df2f67c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa09d6d6_2318ea64",
+        "filename": "chart2/source/controller/inc/ShapeController.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-08-15T12:27:36Z",
+      "side": 1,
+      "message": "Could you please rename this to `ShapeControllerCommandID`?",
+      "revId": "d80f91b9bbcd1cc83015b54ae8e9d1f9df2f67c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
