@@ -44,8 +44,8 @@ struct SAL_WARN_UNUSED SW_DLLPUBLIC SwPosition
     explicit SwPosition( const SwNodeIndex &rNode, SwNodeOffset nDiff = SwNodeOffset(0) );
     explicit SwPosition( const SwNode& rNode, SwNodeOffset nDiff = SwNodeOffset(0) );
     explicit SwPosition( const SwContentNode& rNode, sal_Int32 nContentOffset = 0 );
-    SwPosition( const SwNodeIndex &rNode, const SwContentNode*, const sal_Int32 nContentOffset );
-    SwPosition( const SwNode &rNode, const SwContentNode*, const sal_Int32 nContentOffset );
+    SwPosition( const SwNodeIndex &rNode, const SwContentNode*, sal_Int32 nContentOffset );
+    SwPosition( const SwNode &rNode, const SwContentNode*, sal_Int32 nContentOffset );
     SwPosition( const SwNodeIndex &rNode, SwNodeOffset nDiff, const SwContentNode*, sal_Int32 nContentOffset );
     SwPosition( const SwNode &rNode, SwNodeOffset nDiff, const SwContentNode*, sal_Int32 nContentOffset );
     SwPosition( const SwContentIndex &, short nDiff );
