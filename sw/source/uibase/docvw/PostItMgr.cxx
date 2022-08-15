@@ -255,6 +255,13 @@ bool SwPostItMgr::CheckForRemovedPostIts()
             if (GetActiveSidebarWin() == p->mpPostIt)
                 SetActiveSidebarWin(nullptr);
             p->mpPostIt.disposeAndClear();
+
+            if (comphelper::LibreOfficeKit::isActive() && !comphelper::LibreOfficeKit::isTiledAnnotations())
+            {
+                const SwPostItField* pPostItField = static_cast<const SwPostItField*>(p->GetFormatField().GetField());
+                lcl_CommentNotification(mpView, CommentNotificationType::Remove, nullptr, pPostItField->GetPostItId());
+            }
+
             bRemoved = true;
         }
         else
