@@ -46,6 +46,7 @@ public:
 
     const TextParagraphVector&          getParagraphs() const { return maParagraphs; }
     TextParagraph&                      addParagraph();
+    TextParagraph&                      addParagraph(sal_Int32 nIndex);
 
     const TextListStyle&                getTextListStyle() const { return maTextListStyle; }
     TextListStyle&                      getTextListStyle() { return maTextListStyle; }
