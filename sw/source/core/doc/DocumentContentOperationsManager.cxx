@@ -2524,8 +2524,8 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
     for(auto& rBkmk : aSaveBkmks)
         rBkmk.SetInDoc(
             &m_rDoc,
-            rPaM.GetMark()->nNode,
-            &rPaM.GetMark()->nContent);
+            rPaM.GetMark()->GetNode(),
+            rPaM.GetMark()->GetContentIndex());
     *rPaM.GetPoint() = *aSavePam.End();
 
     // Move the Flys to the new position.
@@ -2645,7 +2645,7 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
 
     // Add the Bookmarks back to the Document
     for(auto& rBkmk : aSaveBkmks)
-        rBkmk.SetInDoc(&m_rDoc, aIdx);
+        rBkmk.SetInDoc(&m_rDoc, aIdx.GetNode());
 
     if( !aSavRedlInsPosArr.empty() )
     {
