@@ -342,6 +342,7 @@ public:
 
     /// Set up a more efficient internal callback instead of LibreOfficeKitCallback.
     void setLibreOfficeKitViewCallback(SfxLokCallbackInterface* pCallback);
+    SfxLokCallbackInterface* getLibreOfficeKitViewCallback() const;
     /// dump view state for diagnostics
     void dumpLibreOfficeKitViewState(rtl::OStringBuffer &rState);
     /// Invokes the registered callback, if there are any.

@@ -2121,6 +2121,15 @@ public:
     {
         SfxBaseController::attachFrame(xFrame);
 
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            SfxLokCallbackInterface* pCallback = nullptr;
+            if (auto xCreator = xFrame->getCreator())
+                if (auto parentVS = SfxViewShell::Get(xCreator->getController()))
+                    pCallback = parentVS->getLibreOfficeKitViewCallback();
+            GetViewShell_Impl()->setLibreOfficeKitViewCallback(pCallback);
+        }
+
         // No need to call mpSelectionChangeHandler->Connect() unless SmController implements XSelectionSupplier
         mpSelectionChangeHandler->selectionChanged({}); // Installs the correct context
     }
