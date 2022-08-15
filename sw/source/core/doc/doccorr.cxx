@@ -212,10 +212,10 @@ void SwDoc::CorrAbs(
     const SwPosition& rNewPos,
     bool bMoveCursor )
 {
-    SwPosition aStart(*rRange.Start());
-    SwPosition aEnd(*rRange.End());
+    const SwPosition& aStart(*rRange.Start());
+    const SwPosition& aEnd(*rRange.End());
 
-    DelBookmarks( aStart.nNode, aEnd.nNode, nullptr, &aStart.nContent, &aEnd.nContent );
+    DelBookmarks( aStart.GetNode(), aEnd.GetNode(), nullptr, aStart.GetContentIndex(), aEnd.GetContentIndex() );
 
     if(bMoveCursor)
         ::PaMCorrAbs(rRange, rNewPos);
@@ -227,7 +227,7 @@ void SwDoc::CorrAbs(
     const SwPosition& rNewPos,
     bool bMoveCursor )
 {
-    DelBookmarks( rStartNode, rEndNode );
+    DelBookmarks( rStartNode.GetNode(), rEndNode.GetNode() );
 
     if(bMoveCursor)
     {

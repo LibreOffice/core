@@ -91,11 +91,11 @@ namespace o3tl {
     template<> struct typed_flags<sw::mark::RestoreMode> : is_typed_flags<sw::mark::RestoreMode, 3> {};
 }
 
-void DelBookmarks(const SwNodeIndex& rStt,
-    const SwNodeIndex& rEnd,
+void DelBookmarks(SwNode& rStt,
+    const SwNode& rEnd,
     std::vector< ::sw::mark::SaveBookmark> * SaveBkmk =nullptr,
-    const SwContentIndex* pSttIdx =nullptr,
-    const SwContentIndex* pEndIdx =nullptr);
+    std::optional<sal_Int32> oStartContentIdx = std::nullopt,
+    std::optional<sal_Int32> oEndContentIdx = std::nullopt);
 
 /** data structure to temporarily hold fly anchor positions relative to some
  *  location. */
