@@ -34,6 +34,23 @@
       "parentUuid": "419c3a05_7ada2d83",
       "revId": "00118c11b9c06c4b03ca2cecc144361b10986d67",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02fcfaf6_1ce5c2fa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-08-15T06:39:29Z",
+      "side": 1,
+      "message": "No pb :-)\n\nLet\u0027s abandon this one then.",
+      "revId": "00118c11b9c06c4b03ca2cecc144361b10986d67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
