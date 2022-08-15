@@ -1251,6 +1251,46 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115117_2a)
 #endif
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf103492)
+{
+#if HAVE_MORE_FONTS
+    // Import the bugdoc and export as PDF.
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    saveAsPDF(u"tdf103492.odt");
+
+    // Parse the export result with pdfium.
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
+    CPPUNIT_ASSERT(pPdfDocument);
+
+    // The document has one page.
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(pPdfPage);
+
+    std::unique_ptr<vcl::pdf::PDFiumTextPage> pPdfTextPage = pPdfPage->getTextPage();
+    CPPUNIT_ASSERT(pPdfTextPage);
+
+    int nChars = pPdfTextPage->countChars();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 61
+    // - Actual  : 65
+    CPPUNIT_ASSERT_EQUAL(61, nChars);
+
+    std::vector<sal_uInt32> aChars(nChars);
+    for (int i = 0; i < nChars; i++)
+        aChars[i] = pPdfTextPage->getUnicode(i);
+    OUString aActualText(aChars.data(), aChars.size());
+    CPPUNIT_ASSERT_EQUAL(
+        OUString(u"\u1610\u1608\u1587\u1601\u0032\u0077\u0121\u0032\u0110\u0097\u0109\u0101\u0032"
+                 u"\u0105\u0115\u0013\u0010\u1575\u1604\u1604\u1577\u0032\u0072\u0101\u0032\u0105"
+                 u"\u0115\u0013\u0010\u0077\u0121\u0032\u0110\u0097\u0109\u0101\u0032\u0105\u0115"
+                 u"\u0032\u1610\u1608\u1587\u1601\u0013\u0010\u1575\u1604\u1604\u1577\u0032\u0105"
+                 u"\u0115\u0032\u0072\u0101\u0032\u1575\u1604\u1604\u1577"),
+        aActualText);
+#endif
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf145274)
 {
     // Import the bugdoc and export as PDF.
