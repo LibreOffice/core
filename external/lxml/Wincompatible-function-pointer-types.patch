@@ -1,0 +1,20 @@
+--- src/lxml/etree.c
++++ src/lxml/etree.c
+@@ -6810,7 +6810,7 @@
+ static void __pyx_f_4lxml_5etree__xpath_function_call(xmlXPathParserContext *, int); /*proto*/
+ static int __pyx_f_4lxml_5etree__register_xpath_function(void *, PyObject *, PyObject *); /*proto*/
+ static int __pyx_f_4lxml_5etree__unregister_xpath_function(void *, PyObject *, PyObject *); /*proto*/
+-static void __pyx_f_4lxml_5etree__registerExsltFunctionsForNamespaces(void *, void *, xmlChar *); /*proto*/
++static void __pyx_f_4lxml_5etree__registerExsltFunctionsForNamespaces(void *, void *, xmlChar const *); /*proto*/
+ static PyObject *__pyx_f_4lxml_5etree__initXSLTResolverContext(struct __pyx_obj_4lxml_5etree__XSLTResolverContext *, struct __pyx_obj_4lxml_5etree__BaseParser *); /*proto*/
+ static xmlDoc *__pyx_f_4lxml_5etree__xslt_resolve_from_python(const xmlChar *, void *, int, int *); /*proto*/
+ static void __pyx_f_4lxml_5etree__xslt_store_resolver_exception(const xmlChar *, void *, xsltLoadType); /*proto*/
+@@ -175892,7 +175892,7 @@
+  *     c_href = <const_xmlChar*> _c_href
+  */
+ 
+-static void __pyx_f_4lxml_5etree__registerExsltFunctionsForNamespaces(void *__pyx_v__c_href, void *__pyx_v__ctxt, xmlChar *__pyx_v_c_prefix) {
++static void __pyx_f_4lxml_5etree__registerExsltFunctionsForNamespaces(void *__pyx_v__c_href, void *__pyx_v__ctxt, xmlChar const *__pyx_v_c_prefix) {
+   const xmlChar *__pyx_v_c_href;
+   xmlXPathContext *__pyx_v_ctxt;
+   __Pyx_RefNannyDeclarations
