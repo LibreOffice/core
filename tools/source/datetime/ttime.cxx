@@ -412,17 +412,17 @@ Time tools::Time::GetUTCOffset()
     {
         nTime = time( nullptr );
         localtime_r( &nTime, &aTM );
-        sal_Int32 nLocalTime = mktime( &aTM );
+        auto nLocalTime = mktime( &aTM );
 #if defined(__sun)
         // Solaris gmtime_r() seems not to handle daylight saving time
         // flags correctly
-        nUTC = nLocalTime + ( aTM.tm_isdst == 0 ? timezone : altzone );
+        auto nUTC = nLocalTime + ( aTM.tm_isdst == 0 ? timezone : altzone );
 #elif defined( LINUX )
         // Linux mktime() seems not to handle tm_isdst correctly
-        sal_Int32 nUTC = nLocalTime - aTM.tm_gmtoff;
+        auto nUTC = nLocalTime - aTM.tm_gmtoff;
 #else
         gmtime_r( &nTime, &aTM );
-        sal_Int32 nUTC = mktime( &aTM );
+        auto nUTC = mktime( &aTM );
 #endif
         nCacheTicks = nTicks;
         nCacheSecOffset = (nLocalTime-nUTC) / 60;
