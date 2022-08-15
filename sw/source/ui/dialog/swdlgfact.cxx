@@ -115,6 +115,16 @@ short AbstractSwAsciiFilterDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
+short AbstractSwInsertCaptionDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
+bool AbstractSwInsertCaptionDlg_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return weld::GenericDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 short AbstractSplitTableDialog_Impl::Execute()
 {
     return m_xDlg->run();
@@ -887,9 +897,9 @@ VclPtr<AbstractSwConvertTableDlg> SwAbstractDialogFactory_Impl::CreateSwConvertT
     return VclPtr<AbstractSwConvertTableDlg_Impl>::Create(std::make_unique<SwConvertTableDlg>(rView, bToTable));
 }
 
-VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwCaptionDialog(weld::Window *pParent, SwView &rV)
+VclPtr<AbstractSwInsertCaptionDlg> SwAbstractDialogFactory_Impl::CreateSwCaptionDialog(weld::Window *pParent, SwView &rV)
 {
-    return VclPtr<AbstractGenericDialog_Impl>::Create(std::make_shared<SwCaptionDialog>(pParent, rV));
+    return VclPtr<AbstractSwInsertCaptionDlg_Impl>::Create(std::make_shared<SwCaptionDialog>(pParent, rV));
 }
 
 VclPtr<AbstractSwInsertDBColAutoPilot> SwAbstractDialogFactory_Impl::CreateSwInsertDBColAutoPilot( SwView& rView,
