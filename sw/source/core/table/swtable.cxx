@@ -2218,7 +2218,7 @@ void ChgTextToNum( SwTableBox& rBox, const OUString& rText, const Color* pCol,
         // Reset DontExpand-Flags before exchange, to retrigger expansion
         {
             SwContentIndex aResetIdx( aIdx, n );
-            pTNd->DontExpandFormat( aResetIdx, false, false );
+            pTNd->DontExpandFormat( aResetIdx.GetIndex(), false, false );
         }
 
         if( !pDoc->getIDocumentRedlineAccess().IsIgnoreRedline() && !pDoc->getIDocumentRedlineAccess().GetRedlineTable().empty() )
@@ -2284,10 +2284,9 @@ static void ChgNumToText( SwTableBox& rBox, sal_uLong nFormat )
         if( sText != sTmp )
         {
             // exchange text
-            SwContentIndex aIdx( pTNd, sText.getLength() );
             // Reset DontExpand-Flags before exchange, to retrigger expansion
-            pTNd->DontExpandFormat( aIdx, false, false );
-            aIdx = 0;
+            pTNd->DontExpandFormat( sText.getLength(), false, false );
+            SwContentIndex aIdx( pTNd, 0 );
             pTNd->EraseText( aIdx, SAL_MAX_INT32, SwInsertFlags::EMPTYEXPAND );
             pTNd->InsertText( sTmp, aIdx, SwInsertFlags::EMPTYEXPAND );
         }

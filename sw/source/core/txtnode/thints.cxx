@@ -1985,7 +1985,7 @@ bool SwTextNode::SetAttr(
                 {
                     SwContentIndex aIndex( this, nStt );
                     RstTextAttr( aIndex, nEnd - nStt, RES_TXTATR_CHARFMT );
-                    DontExpandFormat( aIndex );
+                    DontExpandFormat( aIndex.GetIndex() );
                 }
                 else
                 {

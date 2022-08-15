@@ -1640,10 +1640,9 @@ void SwTextNode::ChgTextCollUpdateNum( const SwTextFormatColl *pOldColl,
 
 // If positioned exactly at the end of a CharStyle or Hyperlink,
 // set its DontExpand flag.
-bool SwTextNode::DontExpandFormat( const SwContentIndex& rIdx, bool bFlag,
+bool SwTextNode::DontExpandFormat( sal_Int32 nIdx, bool bFlag,
                                 bool bFormatToTextAttributes )
 {
-    const sal_Int32 nIdx = rIdx.GetIndex();
     if (bFormatToTextAttributes && nIdx == m_Text.getLength())
     {
         FormatToTextAttr( this );
