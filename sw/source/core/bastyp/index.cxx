@@ -243,15 +243,12 @@ void SwContentIndexReg::Update(
     const sal_Int32 nNewVal = rIdx.m_nIndex;
     if (eMode & UpdateMode::Negative)
     {
-        const sal_Int32 nLast = rIdx.GetIndex() + nDiff;
-        while (pStt && pStt->m_nIndex == nNewVal)
-        {
-            pStt->m_nIndex = nNewVal;
-            pStt = pStt->m_pPrev;
-        }
+        const sal_Int32 nLast = rIdx.m_nIndex + nDiff;
         pStt = rIdx.m_pNext;
-        while (pStt && pStt->m_nIndex >= nNewVal
-                    && pStt->m_nIndex <= nLast)
+        // skip over the ones that already have the right value
+        while (pStt && pStt->m_nIndex == nNewVal)
+            pStt = pStt->m_pNext;
+        while (pStt && pStt->m_nIndex <= nLast)
         {
             pStt->m_nIndex = nNewVal;
             pStt = pStt->m_pNext;
