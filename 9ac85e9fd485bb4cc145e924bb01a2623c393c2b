@@ -68,6 +68,23 @@
       "message": "Thanks for your submission.\n\nAs you can see in the related blog post:\n\nUse atan2 function instead of atan – EasyHack\nhttps://dev.blog.documentfoundation.org/2021/11/17/use-atan2-function-instead-of-atan-easyhack/\n\nthis EasyHack is not about simply changing atan to atan2, no matter what the conditions are! You also have to make sure that the new computation is compatible with the previous calculations or what was intended. As you may know, atan2 is a piecewise function, that works differently according to the range in which the input values fall inside. Taking care of the output range and removing the extra conditions are also parts of this task.\n\nPlease read this section carefully:\nhttps://en.wikipedia.org/wiki/Atan2#Definition_and_computation\n\nI suggest you to keep only one instance of this change (for example, hwpfilter/source/hwpreader.cxx), and forget about others. Then, make sure that the atan2 is used properly.",
       "revId": "9ac85e9fd485bb4cc145e924bb01a2623c393c2b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a04da701_1af68c8e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003628
+      },
+      "writtenOn": "2022-08-15T11:11:22Z",
+      "side": 1,
+      "message": "\u003e Patch Set 1:\n\u003e \n\u003e A polite ping, still working on this patch? Do not forget to rebase it first. See https://wiki.documentfoundation.org/Development/Review_bot\n\nhi, working on it. Perhaps WIP flag would be appropriate",
+      "revId": "9ac85e9fd485bb4cc145e924bb01a2623c393c2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
