@@ -288,7 +288,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
             {
                 nPtPos = nMkPos = rSt.GetIndex();
                 if( bTextAttr )
-                    pTextNd->DontExpandFormat( rSt );
+                    pTextNd->DontExpandFormat( nPtPos );
             }
         }
 
@@ -1702,7 +1702,7 @@ bool SwDoc::DontExpandFormat( const SwPosition& rPos, bool bFlag )
     SwTextNode* pTextNd = rPos.GetNode().GetTextNode();
     if( pTextNd )
     {
-        bRet = pTextNd->DontExpandFormat( rPos.nContent, bFlag );
+        bRet = pTextNd->DontExpandFormat( rPos.GetContentIndex(), bFlag );
         if( bRet && GetIDocumentUndoRedo().DoesUndo() )
         {
             GetIDocumentUndoRedo().AppendUndo( std::make_unique<SwUndoDontExpandFormat>(rPos) );
