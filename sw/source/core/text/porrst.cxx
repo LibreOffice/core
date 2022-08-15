@@ -130,9 +130,23 @@ void SwBreakPortion::Paint( const SwTextPaintInfo &rInf ) const
     // Reduce height to text height for the duration of the print, so the vertical height will look
     // correct for the line break character, even for clearing breaks.
     SwTwips nHeight = Height();
+    SwTwips nVertPosOffset = (nHeight - m_nTextHeight) / 2;
     auto pPortion = const_cast<SwBreakPortion*>(this);
     pPortion->Height(m_nTextHeight, false);
-    comphelper::ScopeGuard g([pPortion, nHeight] { pPortion->Height(nHeight, false); });
+    if (rInf.GetTextFrame()->IsVertical())
+    {
+        // Compensate for the offset done in SwTextCursor::AdjustBaseLine() for the vertical case.
+        const_cast<SwTextPaintInfo&>(rInf).Y(rInf.Y() + nVertPosOffset);
+    }
+    comphelper::ScopeGuard g(
+        [pPortion, nHeight, &rInf, nVertPosOffset]
+        {
+            if (rInf.GetTextFrame()->IsVertical())
+            {
+                const_cast<SwTextPaintInfo&>(rInf).Y(rInf.Y() - nVertPosOffset);
+            }
+            pPortion->Height(nHeight, false);
+        });
 
     rInf.DrawLineBreak( *this );
 
