@@ -275,15 +275,20 @@ static double ImplLogicToSubPixel(tools::Long n, tools::Long nDPI, tools::Long n
 {
     assert(nDPI > 0);
     assert(nMapDenom != 0);
-    return static_cast<double>(n) * nMapNum * nDPI / nMapDenom;
+    double nRet = static_cast<double>(n) * nMapNum * nDPI / nMapDenom;
+    return nRet;
 }
 
-static tools::Long ImplSubPixelToLogic(double n, tools::Long nDPI, tools::Long nMapNum,
+static tools::Long ImplSubPixelToLogic(bool bCheck, double n, tools::Long nDPI, tools::Long nMapNum,
                                        tools::Long nMapDenom)
 {
     assert(nDPI > 0);
     assert(nMapNum != 0);
-    return std::round(n * nMapDenom / nMapNum / nDPI);
+
+    double nRes = n * nMapDenom / nMapNum / nDPI;
+    tools::Long nRet(std::round(nRes));
+    assert(!bCheck || n == static_cast<double>(nRet) * nMapNum * nDPI / nMapDenom); (void)bCheck;
+    return nRet;
 }
 
 static tools::Long ImplPixelToLogic(tools::Long n, tools::Long nDPI, tools::Long nMapNum,
@@ -1173,14 +1178,17 @@ Point OutputDevice::PixelToLogic( const Point& rDevicePt ) const
                                     maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY ) - maMapRes.mnMapOfsY - mnOutOffLogicY );
 }
 
-Point OutputDevice::SubPixelToLogic(const DevicePoint& rDevicePt) const
+Point OutputDevice::SubPixelToLogic(const DevicePoint& rDevicePt, bool bCheck) const
 {
     if (!mbMap)
+    {
+        assert(floor(rDevicePt.getX() == rDevicePt.getX()) && floor(rDevicePt.getY() == rDevicePt.getY()));
         return Point(rDevicePt.getX(), rDevicePt.getY());
+    }
 
-    return Point(ImplSubPixelToLogic(rDevicePt.getX(), mnDPIX,
+    return Point(ImplSubPixelToLogic(bCheck, rDevicePt.getX(), mnDPIX,
                                      maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX) - maMapRes.mnMapOfsX - mnOutOffLogicX,
-                 ImplSubPixelToLogic(rDevicePt.getY(), mnDPIY,
+                 ImplSubPixelToLogic(bCheck, rDevicePt.getY(), mnDPIY,
                                      maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY) - maMapRes.mnMapOfsY - mnOutOffLogicY);
 }
 
