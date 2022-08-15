@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60fa0d71_e04e058d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-08-15T13:49:00Z",
+      "side": 1,
+      "message": "Replacing rtl::math::sin(), cos() and tan() is not a good idea. Note that the rtl implementations check the argument with isValidArcArg(), see that comment in include/rtl/math.hxx, and if it\u0027s out of range set a NaN at the double, which callers rely on (if aware).",
+      "revId": "7a038f02652eefeb63c81b531525e1650c4aa47b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
