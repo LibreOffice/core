@@ -50,8 +50,8 @@ SwParaDlg::SwParaDlg(weld::Window *pParent,
                  "modules/swriter/ui/paradialog.ui",
                  "ParagraphPropertiesDialog",
                  &rCoreSet,  nullptr != pTitle)
-    , rView(rVw)
-    , bDrawParaDlg(bDraw)
+    , m_rView(rVw)
+    , m_bDrawParaDlg(bDraw)
 {
     sal_uInt16 nHtmlMode = ::GetHtmlMode(rVw.GetDocShell());
     bool bHtmlMode = (nHtmlMode & HTMLMODE_ON) == HTMLMODE_ON;
@@ -73,7 +73,7 @@ SwParaDlg::SwParaDlg(weld::Window *pParent,
     AddTabPage("labelTP_PARA_ALIGN", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_ALIGN_PARAGRAPH),
                                       pFact->GetTabPageRangesFunc(RID_SVXPAGE_ALIGN_PARAGRAPH));
 
-    if (!bDrawParaDlg && (!bHtmlMode || SvxHtmlOptions::IsPrintLayoutExtension()))
+    if (!m_bDrawParaDlg && (!bHtmlMode || SvxHtmlOptions::IsPrintLayoutExtension()))
     {
         OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_EXT_PARAGRAPH), "GetTabPageCreatorFunc fail!");
         OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_EXT_PARAGRAPH), "GetTabPageRangesFunc fail!");
@@ -104,7 +104,7 @@ SwParaDlg::SwParaDlg(weld::Window *pParent,
     }
 
     // remove unwanted tabs for draw text box paragraph properties
-    if (bDrawParaDlg)
+    if (m_bDrawParaDlg)
     {
         RemoveTabPage("labelTP_NUMPARA");
         RemoveTabPage("labelTP_DROPCAPS");
@@ -148,7 +148,7 @@ SwParaDlg::~SwParaDlg()
 
 void SwParaDlg::PageCreated(const OString& rId, SfxTabPage& rPage)
 {
-    SwWrtShell& rSh = rView.GetWrtShell();
+    SwWrtShell& rSh = m_rView.GetWrtShell();
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
 
     // Table borders cannot get any shade in Writer
@@ -162,7 +162,7 @@ void SwParaDlg::PageCreated(const OString& rId, SfxTabPage& rPage)
         aSet.Put(SfxUInt16Item(SID_SVXSTDPARAGRAPHTABPAGE_PAGEWIDTH,
                             static_cast< sal_uInt16 >(rSh.GetAnyCurRect(CurRectType::PagePrt).Width()) ));
 
-        if (!bDrawParaDlg)
+        if (!m_bDrawParaDlg)
         {
             // See SvxStdParagraphTabPage::PageCreated: enable RegisterMode, AutoFirstLine, NegativeMode, ContextualMode
             constexpr tools::Long constTwips_0_5mm = o3tl::toTwips(5, o3tl::Length::mm10);
@@ -174,7 +174,7 @@ void SwParaDlg::PageCreated(const OString& rId, SfxTabPage& rPage)
     }
     else if (rId == "labelTP_PARA_ALIGN")
     {
-        if (!bDrawParaDlg)
+        if (!m_bDrawParaDlg)
         {
             aSet.Put(SfxBoolItem(SID_SVXPARAALIGNTABPAGE_ENABLEJUSTIFYEXT,true));
             rPage.PageCreated(aSet);
@@ -205,7 +205,7 @@ void SwParaDlg::PageCreated(const OString& rId, SfxTabPage& rPage)
 
         static_cast<SwParagraphNumTabPage&>(rPage).EnableNewStart();
         weld::ComboBox& rBox = static_cast<SwParagraphNumTabPage&>(rPage).GetStyleBox();
-        SfxStyleSheetBasePool* pPool = rView.GetDocShell()->GetStyleSheetPool();
+        SfxStyleSheetBasePool* pPool = m_rView.GetDocShell()->GetStyleSheetPool();
         const SfxStyleSheetBase* pBase = pPool->First(SfxStyleFamily::Pseudo);
         std::set<OUString> aNames;
         while(pBase)
