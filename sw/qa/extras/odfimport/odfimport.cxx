@@ -39,10 +39,12 @@
 typedef std::map<OUString, css::uno::Sequence< css::table::BorderLine> > AllBordersMap;
 typedef std::pair<OUString, css::uno::Sequence< css::table::BorderLine> > StringSequencePair;
 
+char const DATA_DIRECTORY[] = "/sw/qa/extras/odfimport/data/";
+
 class Test : public SwModelTestBase
 {
     public:
-        Test() : SwModelTestBase("/sw/qa/extras/odfimport/data/", "writer8") {}
+        Test() : SwModelTestBase(DATA_DIRECTORY, "writer8") {}
 };
 
 DECLARE_ODFIMPORT_TEST(testEmptySvgFamilyName, "empty-svg-family-name.odt")
@@ -998,6 +1000,14 @@ DECLARE_ODFIMPORT_TEST(testTdf133459, "tdf133459.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("ru"), aLocale.Language);
     CPPUNIT_ASSERT_EQUAL(OUString("RU"), aLocale.Country);
     CPPUNIT_ASSERT_EQUAL(OUString("QQ YYYY"), getProperty<OUString>(xFormat, "FormatString"));
+}
+
+// just care that it doesn't crash/assert
+CPPUNIT_TEST_FIXTURE(Test, testForcepoint108)
+{
+    //load would assert because it fails to load entirely, like testMathMalformedXml
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "forcepoint108.fodt";
+    mxComponent = mxDesktop->loadComponentFromURL(aURL, "_default", 0, {});
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
