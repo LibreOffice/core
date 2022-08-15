@@ -705,7 +705,7 @@ atk_object_wrapper_get_type()
         reinterpret_cast<GInstanceInitFunc>(atk_object_wrapper_init),
         nullptr
       } ;
-      type = g_type_register_static (ATK_TYPE_OBJECT,
+      type = g_type_register_static (GTK_TYPE_WIDGET_ACCESSIBLE,
                                      "OOoAtkObj",
                                      &typeInfo, GTypeFlags(0)) ;
   }
