@@ -55,6 +55,7 @@
 #include <itabenum.hxx>
 #include <optional>
 #include <o3tl/deleter.hxx>
+#include <cption.hxx>
 
 
 class SwInsertAbstractDlg;
@@ -263,6 +264,19 @@ public:
 private:
     Link<LinkParamNone*,void> m_aHandler;
     virtual void                SetApplyHdl( const Link<LinkParamNone*,void>& rLink ) override;
+};
+
+class AbstractSwInsertCaptionDlg_Impl :  public AbstractSwInsertCaptionDlg
+{
+    std::shared_ptr<SwCaptionDialog> m_xDlg;
+public:
+    explicit AbstractSwInsertCaptionDlg_Impl(std::shared_ptr<SwCaptionDialog> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
+    virtual bool StartExecuteAsync(AsyncContext &rCtx) override;
+    virtual void Apply() override;
 };
 
 class AbstractSwConvertTableDlg_Impl :  public AbstractSwConvertTableDlg
@@ -689,7 +703,7 @@ public:
     virtual VclPtr<SfxAbstractTabDialog>  CreateSwCharDlg(weld::Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet,
         SwCharDlgMode nDialogMode, const OUString* pFormatStr = nullptr) override;
     virtual VclPtr<AbstractSwConvertTableDlg> CreateSwConvertTableDlg(SwView& rView, bool bToTable) override;
-    virtual VclPtr<VclAbstractDialog> CreateSwCaptionDialog(weld::Window *pParent, SwView &rV) override;
+    virtual VclPtr<AbstractSwInsertCaptionDlg> CreateSwCaptionDialog(weld::Window *pParent, SwView &rV) override;
     virtual VclPtr<AbstractSwInsertDBColAutoPilot> CreateSwInsertDBColAutoPilot(SwView& rView,
         css::uno::Reference< css::sdbc::XDataSource> rxSource,
         css::uno::Reference<css::sdbcx::XColumnsSupplier> xColSupp,
