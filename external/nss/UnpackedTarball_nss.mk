@@ -24,6 +24,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
     external/nss/nss.vs2015.pdb.patch \
     $(if $(filter iOS,$(OS)), \
         external/nss/nss-ios.patch) \
+    external/nss/Wincompatible-function-pointer-types.patch.0 \
     $(if $(filter MSC-INTEL,$(COM)-$(CPUNAME)), \
         external/nss/nss.cygwin64.in32bit.patch) \
     $(if $(findstring 120_70,$(VCVER)_$(WINDOWS_SDK_VERSION)), \
