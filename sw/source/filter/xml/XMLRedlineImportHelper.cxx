@@ -33,6 +33,9 @@
 #include <IDocumentStylePoolAccess.hxx>
 #include <tools/datetime.hxx>
 #include <poolfmt.hxx>
+#include <fmtanchr.hxx>
+#include <ftnidx.hxx>
+#include <txtftn.hxx>
 #include <unoredline.hxx>
 #include <DocumentRedlineManager.hxx>
 #include "xmlimp.hxx"
@@ -564,6 +567,67 @@ inline bool XMLRedlineImportHelper::IsReady(const RedlineInfo* pRedline)
              !pRedline->bNeedsAdjustment );
 }
 
+/// recursively check if rPos or its anchor (if in fly or footnote) is in rPam
+static auto RecursiveContains(SwStartNode const& rRedlineSection, SwNode const& rPos) -> bool
+{
+    if (rRedlineSection.GetIndex() <= rPos.GetIndex()
+        && rPos.GetIndex() <= rRedlineSection.EndOfSectionIndex())
+    {
+        return true;
+    }
+    // loop to iterate "up" in the node tree and find an anchored XText
+    for (SwStartNode const* pStartNode = rPos.StartOfSectionNode();
+        pStartNode != nullptr && pStartNode->GetIndex() != SwNodeOffset(0);
+        pStartNode = pStartNode->StartOfSectionNode())
+    {
+        switch (pStartNode->GetStartNodeType())
+        {
+            case SwNormalStartNode:
+            case SwTableBoxStartNode:
+                continue;
+            break;
+            case SwFlyStartNode:
+            {
+                SwFrameFormat const*const pFormat(pStartNode->GetFlyFormat());
+                assert(pFormat);
+                SwFormatAnchor const& rAnchor(pFormat->GetAnchor());
+                if (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PAGE)
+                {
+                    return false;
+                }
+                else if (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_FLY)
+                {   // anchor is on a start node - loop! recursion will take *its* start node and skip it.
+                    pStartNode = rAnchor.GetContentAnchor()->GetNode().GetStartNode();
+                    assert(pStartNode);
+                    continue;
+                }
+                else
+                {
+                    return RecursiveContains(rRedlineSection, rAnchor.GetContentAnchor()->GetNode());
+                }
+            }
+            break;
+            case SwFootnoteStartNode:
+            {   // sigh ... need to search
+                for (SwTextFootnote const*const pFootnote : rRedlineSection.GetDoc().GetFootnoteIdxs())
+                {
+                    if (pStartNode == pFootnote->GetStartNode()->GetNode().GetStartNode())
+                    {
+                        return RecursiveContains(rRedlineSection, pFootnote->GetTextNode());
+                    }
+                }
+                assert(false);
+            }
+            break;
+            case SwHeaderStartNode:
+            case SwFooterStartNode:
+                return false; // headers aren't anchored
+            break;
+        }
+    }
+    return false;
+}
+
 void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
 {
     OSL_ENSURE(nullptr != pRedlineInfo, "need redline info");
@@ -640,6 +704,12 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
                 }
             }
         }
+    }
+    else if (pRedlineInfo->pContentIndex != nullptr
+        // should be enough to check 1 position of aPaM bc CheckNodesRange() above
+        && RecursiveContains(*pRedlineInfo->pContentIndex->GetNode().GetStartNode(), aPaM.GetPoint()->GetNode()))
+    {
+        SAL_WARN("sw", "Recursive change tracking, ignoring");
     }
     else
     {
