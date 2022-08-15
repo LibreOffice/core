@@ -679,7 +679,7 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                 TBL_CALC != static_cast<SwTableFormulaUpdate*>(pHt)->m_eFlags ))
         return ;
 
-    std::unique_ptr<SwCalc, o3tl::default_delete<SwCalc>> pCalc;
+    std::optional<SwCalc> oCalc;
 
     if( pFieldType )
     {
@@ -709,8 +709,8 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                                             static_cast<SwTableFormulaUpdate*>(pHt)->m_pTable )
                         continue;
 
-                    if( !pCalc )
-                        pCalc.reset(new SwCalc( m_rDoc ));
+                    if( !oCalc )
+                        oCalc.emplace( m_rDoc );
 
                     // get the values of all SetExpression fields that are valid
                     // until the table
@@ -726,7 +726,7 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                             SwPosition aPos( *pTableNd );
                             if( GetBodyTextNode( m_rDoc, aPos, *pFrame ) )
                             {
-                                FieldsToCalc( *pCalc, SetGetExpField(
+                                FieldsToCalc( *oCalc, SetGetExpField(
                                         aPos.GetNode(), pFormatField->GetTextField(),
                                         aPos.GetContentIndex(), pFrame->GetPhyPageNum()),
                                     pLayout);
@@ -739,14 +739,14 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                     {
                         // create index to determine the TextNode
                         SwFrame const*const pFrame2 = ::sw::FindNeighbourFrameForNode(rTextNd);
-                        FieldsToCalc( *pCalc,
+                        FieldsToCalc( *oCalc,
                             SetGetExpField(rTextNd, pFormatField->GetTextField(),
                                 std::nullopt,
                                 pFrame2 ? pFrame2->GetPhyPageNum() : 0),
                             pLayout);
                     }
 
-                    SwTableCalcPara aPara(*pCalc, pTableNd->GetTable(), pLayout);
+                    SwTableCalcPara aPara(*oCalc, pTableNd->GetTable(), pLayout);
                     pField->CalcField( aPara );
                     if( aPara.IsStackOverflow() )
                     {
@@ -758,7 +758,7 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                         OSL_ENSURE(bResult,
                                 "the chained formula could no be calculated");
                     }
-                    pCalc->SetCalcError( SwCalcError::NONE );
+                    oCalc->SetCalcError( SwCalcError::NONE );
                 }
                 pFormatField->UpdateTextNode(nullptr, pHt);
         }
@@ -779,8 +779,8 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                                             static_cast<SwTableFormulaUpdate*>(pHt)->m_pTable )
                 {
                     double nValue;
-                    if( !pCalc )
-                        pCalc.reset(new SwCalc( m_rDoc ));
+                    if( !oCalc )
+                        oCalc.emplace( m_rDoc );
 
                     // get the values of all SetExpression fields that are valid
                     // until the table
@@ -803,7 +803,7 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                                 SwPosition aPos( *pCNd );
                                 if( GetBodyTextNode( m_rDoc, aPos, *pFrame ) )
                                 {
-                                    FieldsToCalc(*pCalc, SetGetExpField(aPos.GetNode(),
+                                    FieldsToCalc(*oCalc, SetGetExpField(aPos.GetNode(),
                                             nullptr, std::nullopt, pFrame->GetPhyPageNum()),
                                         pLayout);
                                 }
@@ -816,12 +816,12 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                     {
                         // create index to determine the TextNode
                         SwFrame const*const pFrame2 = ::sw::FindNeighbourFrameForNode(*pTableNd);
-                        FieldsToCalc(*pCalc, SetGetExpField(*pTableNd, nullptr, std::nullopt,
+                        FieldsToCalc(*oCalc, SetGetExpField(*pTableNd, nullptr, std::nullopt,
                                 pFrame2 ? pFrame2->GetPhyPageNum() : 0),
                             pLayout);
                     }
 
-                    SwTableCalcPara aPara(*pCalc, pTableNd->GetTable(), pLayout);
+                    SwTableCalcPara aPara(*oCalc, pTableNd->GetTable(), pLayout);
                     pFormula->Calc( aPara, nValue );
 
                     if( aPara.IsStackOverflow() )
@@ -838,14 +838,14 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                     SwFrameFormat* pFormat = pBox->ClaimFrameFormat();
                     SfxItemSetFixed<RES_BOXATR_BEGIN,RES_BOXATR_END-1> aTmp( m_rDoc.GetAttrPool() );
 
-                    if( pCalc->IsCalcError() )
+                    if( oCalc->IsCalcError() )
                         nValue = DBL_MAX;
                     aTmp.Put( SwTableBoxValue( nValue ));
                     if( SfxItemState::SET != pFormat->GetItemState( RES_BOXATR_FORMAT ))
                         aTmp.Put( SwTableBoxNumFormat( 0 ));
                     pFormat->SetFormatAttr( aTmp );
 
-                    pCalc->SetCalcError( SwCalcError::NONE );
+                    oCalc->SetCalcError( SwCalcError::NONE );
                 }
             }
         }
