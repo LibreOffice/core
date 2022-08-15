@@ -4913,7 +4913,7 @@ void SwHTMLParser::ClearFootnotesMarksInRange(const SwNodeIndex& rMkNdIdx, const
 
     //ofz#9733 drop bookmarks in this range
     IDocumentMarkAccess* const pMarkAccess = rDoc.getIDocumentMarkAccess();
-    pMarkAccess->deleteMarks(rMkNdIdx, SwNodeIndex(rPtNdIdx, 1), nullptr, nullptr, nullptr);
+    pMarkAccess->deleteMarks(rMkNdIdx.GetNode(), SwNodeIndex(rPtNdIdx, 1).GetNode(), nullptr, std::nullopt, std::nullopt);
 
     SwFrameFormats& rTable = *rDoc.GetSpzFrameFormats();
     for ( auto i = rTable.size(); i; )

@@ -50,11 +50,11 @@ namespace sw::mark
     public:
             SaveBookmark(
                 const ::sw::mark::IMark& rBkmk,
-                const SwNodeIndex& rMvPos,
-                const SwContentIndex* pIdx);
+                const SwNode& rMvPos,
+                std::optional<sal_Int32> oContentIdx);
             void SetInDoc(SwDoc* pDoc,
-                const SwNodeIndex&,
-                const SwContentIndex* pIdx =nullptr);
+                const SwNode&,
+                std::optional<sal_Int32> oContentIdx = std::nullopt);
 
     private:
             OUString m_aName;

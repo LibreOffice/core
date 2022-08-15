@@ -225,11 +225,11 @@ class IDocumentMarkAccess
 
         */
         virtual void deleteMarks(
-            const SwNodeIndex& rStt,
-            const SwNodeIndex& rEnd,
+            const SwNode& rStt,
+            const SwNode& rEnd,
             std::vector< ::sw::mark::SaveBookmark>* pSaveBkmk, // Ugly: SaveBookmark is core-internal
-            const SwContentIndex* pSttIdx,
-            const SwContentIndex* pEndIdx) =0;
+            std::optional<sal_Int32> oStartContentIdx,
+            std::optional<sal_Int32> oEndContentIdx) =0;
 
         /** Deletes a mark.
 
