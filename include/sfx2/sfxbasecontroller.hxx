@@ -196,6 +196,10 @@ public:
     SAL_DLLPRIVATE bool HasMouseClickListeners_Impl() const;
     SAL_DLLPRIVATE void SetCreationArguments_Impl( const css::uno::Sequence< css::beans::PropertyValue >& i_rCreationArgs );
     SAL_DLLPRIVATE css::uno::Reference< css::frame::XTitle > impl_getTitleHelper ();
+
+protected:
+    void CopyLokViewCallbackFromFrameCreator();
+
 private:
     enum ConnectSfxFrame
     {
