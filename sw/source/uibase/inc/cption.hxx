@@ -64,8 +64,7 @@ class SwCaptionDialog final : public SfxDialogController
     DECL_LINK(ModifyComboHdl, weld::ComboBox&, void);
     DECL_LINK(OptionHdl, weld::Button&, void);
     DECL_LINK(CaptionHdl, weld::Button&, void);
-
-    void Apply();
+    DECL_LINK(OKHdl, weld::Button&, void);
 
     void ModifyHdl();
     void DrawSample();
@@ -75,6 +74,7 @@ class SwCaptionDialog final : public SfxDialogController
 public:
     SwCaptionDialog(weld::Window* pParent, SwView& rV);
     virtual short run() override;
+    void Apply();
     virtual ~SwCaptionDialog() override;
 };
 
