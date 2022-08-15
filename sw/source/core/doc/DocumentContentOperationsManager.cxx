@@ -4342,7 +4342,7 @@ bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam, SwDelet
     if (!(flags & SwDeleteFlags::ArtificialSelection))
     {
         DelFlyInRange(rPam.GetMark()->GetNode(), rPam.GetPoint()->GetNode(),
-            &rPam.GetMark()->nContent, &rPam.GetPoint()->nContent);
+            rPam.GetMark()->GetContentIndex(), rPam.GetPoint()->GetContentIndex());
     }
     DelBookmarks(
         pStt->GetNode(),

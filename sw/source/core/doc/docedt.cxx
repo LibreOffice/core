@@ -207,14 +207,16 @@ void SaveFlyInRange( const SwPaM& rPam, const SwPosition& rInsPos,
 /// If there is a Fly at the SPoint, it is moved onto the Mark.
 void DelFlyInRange( SwNode& rMkNd,
                     SwNode& rPtNd,
-                    SwContentIndex const*const pMkIdx, SwContentIndex const*const pPtIdx)
+                    std::optional<sal_Int32> oMkContentIdx, std::optional<sal_Int32> oPtContentIdx)
 {
-    assert((pMkIdx == nullptr) == (pPtIdx == nullptr));
-    SwPosition const point(pPtIdx
-                            ? SwPosition(rPtNd, *pPtIdx)
+    assert(oMkContentIdx.has_value() == oPtContentIdx.has_value());
+    assert(!oMkContentIdx.has_value() || rMkNd.GetContentNode());
+    assert(!oPtContentIdx.has_value() || rPtNd.GetContentNode());
+    SwPosition const point(oPtContentIdx
+                            ? SwPosition(*rPtNd.GetContentNode(), *oPtContentIdx)
                             : SwPosition(rPtNd));
-    SwPosition const mark(pPtIdx
-                            ? SwPosition(rMkNd, *pMkIdx)
+    SwPosition const mark(oPtContentIdx
+                            ? SwPosition(*rMkNd.GetContentNode(), *oMkContentIdx)
                             : SwPosition(rMkNd));
     SwPosition const& rStart = mark <= point ? mark : point;
     SwPosition const& rEnd   = mark <= point ? point : mark;
@@ -228,11 +230,11 @@ void DelFlyInRange( SwNode& rMkNd,
         SwPosition const*const pAPos = rAnch.GetContentAnchor();
         if (pAPos &&
             (((rAnch.GetAnchorId() == RndStdIds::FLY_AT_PARA)
-                && IsSelectFrameAnchoredAtPara(*pAPos, rStart, rEnd, pPtIdx
+                && IsSelectFrameAnchoredAtPara(*pAPos, rStart, rEnd, oPtContentIdx
                     ? DelContentType::AllMask|DelContentType::WriterfilterHack
                     : DelContentType::AllMask|DelContentType::WriterfilterHack|DelContentType::CheckNoCntnt))
             || ((rAnch.GetAnchorId() == RndStdIds::FLY_AT_CHAR)
-                && IsDestroyFrameAnchoredAtChar(*pAPos, rStart, rEnd, pPtIdx
+                && IsDestroyFrameAnchoredAtChar(*pAPos, rStart, rEnd, oPtContentIdx
                     ? DelContentType::AllMask|DelContentType::WriterfilterHack
                     : DelContentType::AllMask|DelContentType::WriterfilterHack|DelContentType::CheckNoCntnt))))
         {
