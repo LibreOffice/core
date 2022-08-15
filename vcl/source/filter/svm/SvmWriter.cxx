@@ -1003,7 +1003,7 @@ void SvmWriter::TextArrayHandler(const MetaTextArrayAction* pAction, const ImplM
 
     // Version 3
     const auto& rKashidaArray = pAction->GetKashidaArray();
-    mrStream.WriteInt32(sal_Int32(rKashidaArray.size()));
+    mrStream.WriteUInt32(rKashidaArray.size());
     for (const auto& val : rKashidaArray)
         mrStream.WriteUChar(val);
 }
