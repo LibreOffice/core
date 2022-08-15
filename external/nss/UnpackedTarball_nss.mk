@@ -26,6 +26,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
 	external/nss/nss-bz1646594.patch.1 \
     external/nss/macos-dlopen.patch.0 \
     external/nss/nss-restore-manual-pre-dependencies.patch.1 \
+    external/nss/Wincompatible-function-pointer-types.patch.0 \
     $(if $(filter iOS,$(OS)), \
         external/nss/nss-ios.patch) \
     $(if $(filter ANDROID,$(OS)), \
