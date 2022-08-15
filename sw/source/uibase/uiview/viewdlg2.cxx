@@ -32,6 +32,7 @@
 #include <wrtsh.hxx>
 #include <cmdid.h>
 #include <caption.hxx>
+#include <cption.hxx>
 #include <poolfmt.hxx>
 #include <edtwin.hxx>
 #include <SwStyleNameMapper.hxx>
@@ -53,8 +54,13 @@ void SwView::ExecDlgExt(SfxRequest const &rReq)
         case FN_INSERT_CAPTION:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            ScopedVclPtr<VclAbstractDialog> pDialog(pFact->CreateSwCaptionDialog(GetFrameWeld(), *this ));
-            pDialog->Execute();
+            VclPtr<AbstractSwInsertCaptionDlg> pDialog(pFact->CreateSwCaptionDialog(GetFrameWeld(), *this ));
+            pDialog->StartExecuteAsync([pDialog](sal_Int32 nResult){
+                std::cout << "NRESULT: " << nResult;
+                if (nResult == RET_OK) {
+                    // pDialog->Apply();
+                }
+            });
             break;
         }
         case SID_INSERT_SIGNATURELINE:
