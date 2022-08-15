@@ -1,12 +1,32 @@
-diff -ur pdfium.org/third_party/libopenjpeg/ht_dec.c pdfium/third_party/libopenjpeg/ht_dec.c
---- pdfium.org/third_party/libopenjpeg/ht_dec.c	2022-07-28 15:19:17.366247900 +0200
-+++ pdfium/third_party/libopenjpeg/ht_dec.c	2022-07-28 15:23:25.641843900 +0200
-@@ -69,7 +69,7 @@
+From 51115e5055ff32bfb4447ad15f68f536480429df Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <miklos.vajna@collabora.com>
+Subject: [PATCH] libopenjpeg: fix Windows arm64 build
+
+Windows 64bit arm has no __popcnt(), see
+<https://docs.microsoft.com/en-us/cpp/intrinsics/arm64-intrinsics>.
+Falling back to the generic code seems to be good enough for our
+purposes.
+
+Change-Id: I61510569793a3df24734c58ffaa3ffc0c2451477
+Reviewed-on: https://pdfium-review.googlesource.com/c/pdfium/+/96010
+Reviewed-by: Lei Zhang <thestig@chromium.org>
+Commit-Queue: Lei Zhang <thestig@chromium.org>
+---
+ third_party/libopenjpeg/ht_dec.c              |  2 +-
+
+diff --git a/third_party/libopenjpeg/ht_dec.c b/third_party/libopenjpeg/ht_dec.c
+index 1eb4d525f..e2f3afd6a 100644
+--- a/third_party/libopenjpeg/ht_dec.c
++++ b/third_party/libopenjpeg/ht_dec.c
+@@ -69,7 +69,7 @@ static OPJ_BOOL only_cleanup_pass_is_decoded = OPJ_FALSE;
  static INLINE
  OPJ_UINT32 population_count(OPJ_UINT32 val)
  {
 -#ifdef OPJ_COMPILER_MSVC
-+#if defined(OPJ_COMPILER_MSVC) && !defined(_ARM64_)
++#if defined(OPJ_COMPILER_MSVC) && (defined(_M_IX86) || defined(_M_AMD64))
      return (OPJ_UINT32)__popcnt(val);
  #elif (defined OPJ_COMPILER_GNUC)
      return (OPJ_UINT32)__builtin_popcount(val);
+-- 
+2.35.3
+
