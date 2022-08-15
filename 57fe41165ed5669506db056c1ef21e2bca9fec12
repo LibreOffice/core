@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0699b0ec_d12fe29e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2022-08-15T09:36:45Z",
+      "side": 1,
+      "message": "It will be great if someone familiar with layout code can review this patch. Thank you!",
+      "revId": "57fe41165ed5669506db056c1ef21e2bca9fec12",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
