@@ -16,6 +16,24 @@
       "message": "causes\n  /sc/source/ui/view/tabvwshb.cxx:815:35: runtime error: downcast of address 0x6030007d32f0 which does not point to an object of type \u0027ScUndoManager\u0027\n  0x6030007d32f0: note: object is of type \u0027EditUndoManager\u0027\n   00 00 00 00  30 3a 60 97 ea 7f 00 00  70 dc 11 00 f0 60 00 00  c0 85 b7 00 c0 60 00 00  00 00 00 00\n                ^~~~~~~~~~~~~~~~~~~~~~~\n                vptr for \u0027EditUndoManager\u0027\n      #0 0x7fea0a26fe65 in ScTabViewShell::GetUndoState(SfxItemSet\u0026) /sc/source/ui/view/tabvwshb.cxx:815:35\n      #1 0x7fea0a1a4046 in SfxStubScTabViewShellGetUndoState(SfxShell*, SfxItemSet\u0026) /workdir/SdiTarget/sc/sdi/scslots.hxx:1456:1\n      #2 0x7fea89105674 in SfxDispatcher::FillState_(SfxSlotServer const\u0026, SfxItemSet\u0026, SfxSlot const*) /sfx2/source/control/dispatch.cxx:1658:9\n      #3 0x7fea8905ea22 in SfxBindings::Update_Impl(SfxStateCache\u0026) /sfx2/source/control/bindings.cxx:260:22\n      #4 0x7fea8906a3e9 in SfxBindings::NextJob_Impl(Timer const*) /sfx2/source/control/bindings.cxx:1275:17\n      #5 0x7fea89085f28 in SfxBindings::NextJob(Timer*) /sfx2/source/control/bindings.cxx:1220:5\n      #6 0x7fea89054cb8 in SfxBindings::LinkStubNextJob(void*, Timer*) /sfx2/source/control/bindings.cxx:1218:1\n      #7 0x7fea652ddf0d in Link\u003cTimer*, void\u003e::Call(Timer*) const /include/tools/link.hxx:111:45\n      #8 0x7fea652dd4bc in Timer::Invoke() /vcl/source/app/timer.cxx:75:21\n      #9 0x7fea6513fd4f in Scheduler::CallbackTaskScheduling() /vcl/source/app/scheduler.cxx:472:16\n      #10 0x7fea6628b893 in SalTimer::CallCallback() /vcl/inc/saltimer.hxx:54:13\n      #11 0x7fea6627f433 in SvpSalInstance::CheckTimeout(bool) /vcl/headless/svpinst.cxx:212:53\n      #12 0x7fea66285cce in SvpSalInstance::ImplYield(bool, bool) /vcl/headless/svpinst.cxx:452:17\n      #13 0x7fea66288330 in SvpSalInstance::DoYield(bool, bool) /vcl/headless/svpinst.cxx:524:21\n      #14 0x7fea6522d0f4 in ImplYield(bool, bool) /vcl/source/app/svapp.cxx:475:48\n      #15 0x7fea6522c1bd in Application::Reschedule(bool) /vcl/source/app/svapp.cxx:494:12\n      #16 0x7fea65d04256 in (anonymous namespace)::ExecuteWrapper::ExecuteActionHdl(Timer*) /vcl/source/uitest/uno/uiobject_uno.cxx:109:13\n      #17 0x7fea65d00a48 in (anonymous namespace)::ExecuteWrapper::LinkStubExecuteActionHdl(void*, Timer*) /vcl/source/uitest/uno/uiobject_uno.cxx:97:1\n      #18 0x7fea652ddf0d in Link\u003cTimer*, void\u003e::Call(Timer*) const /include/tools/link.hxx:111:45\n      #19 0x7fea652dd4bc in Timer::Invoke() /vcl/source/app/timer.cxx:75:21\n      #20 0x7fea6513fd4f in Scheduler::CallbackTaskScheduling() /vcl/source/app/scheduler.cxx:472:16\n      #21 0x7fea6628b893 in SalTimer::CallCallback() /vcl/inc/saltimer.hxx:54:13\n      #22 0x7fea6627f433 in SvpSalInstance::CheckTimeout(bool) /vcl/headless/svpinst.cxx:212:53\n      #23 0x7fea66285cce in SvpSalInstance::ImplYield(bool, bool) /vcl/headless/svpinst.cxx:452:17\n      #24 0x7fea66288330 in SvpSalInstance::DoYield(bool, bool) /vcl/headless/svpinst.cxx:524:21\n      #25 0x7fea6522d0f4 in ImplYield(bool, bool) /vcl/source/app/svapp.cxx:475:48\n      #26 0x7fea6522b7a8 in Application::Yield() /vcl/source/app/svapp.cxx:559:5\n      #27 0x7fea6522af4c in Application::Execute() /vcl/source/app/svapp.cxx:453:13\n      #28 0x7feaa1c7d5d0 in desktop::Desktop::Main() /desktop/source/app/app.cxx:1604:13\n      #29 0x7fea652c7eaf in ImplSVMain() /vcl/source/app/svmain.cxx:203:35\n      #30 0x7fea652d07c0 in SVMain() /vcl/source/app/svmain.cxx:235:12\n      #31 0x7feaa1e5e090 in soffice_main /desktop/source/app/sofficemain.cxx:94:12\n      #32 0x50136c in sal_main /desktop/source/app/main.c:51:15\n      #33 0x501346 in main /desktop/source/app/main.c:49:1\n      #34 0x7feaa05aa554 in __libc_start_main /usr/src/debug/glibc-2.17-c758a686/csu/../csu/libc-start.c:266\n      #35 0x425b94 in _start (/instdir/program/soffice.bin+0x425b94)\nduring UITest_calc_tests (\u003chttps://ci.libreoffice.org/job/lo_ubsan/2491/\u003e)",
       "revId": "30efbe72f6b3a025ef12695b23821a77e1b1a887",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e77eb2c7_9f4866d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-08-15T05:59:00Z",
+      "side": 1,
+      "message": "apparently addressed with \u003chttps://git.libreoffice.org/core/+/89581c26be049b5af5bda96f21e908df81a1a194%5E%21\u003e \"fix UBSAN downcast...does not point to an object of type \u0027ScUndoManager\u0027\"",
+      "parentUuid": "ba46b77a_e3d5e59e",
+      "revId": "30efbe72f6b3a025ef12695b23821a77e1b1a887",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
