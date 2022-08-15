@@ -1852,22 +1852,22 @@ void ScInterpreter::ScRad()
 
 void ScInterpreter::ScSin()
 {
-    PushDouble(::rtl::math::sin(GetDouble()));
+    PushDouble(std::sin(GetDouble()));
 }
 
 void ScInterpreter::ScCos()
 {
-    PushDouble(::rtl::math::cos(GetDouble()));
+    PushDouble(std::cos(GetDouble()));
 }
 
 void ScInterpreter::ScTan()
 {
-    PushDouble(::rtl::math::tan(GetDouble()));
+    PushDouble(std::tan(GetDouble()));
 }
 
 void ScInterpreter::ScCot()
 {
-    PushDouble(1.0 / ::rtl::math::tan(GetDouble()));
+    PushDouble(1.0 / std::tan(GetDouble()));
 }
 
 void ScInterpreter::ScArcSin()
@@ -1912,7 +1912,7 @@ void ScInterpreter::ScCotHyp()
 
 void ScInterpreter::ScArcSinHyp()
 {
-    PushDouble( ::rtl::math::asinh( GetDouble()));
+    PushDouble( std::asinh( GetDouble()));
 }
 
 void ScInterpreter::ScArcCosHyp()
@@ -1921,7 +1921,7 @@ void ScInterpreter::ScArcCosHyp()
     if (fVal < 1.0)
         PushIllegalArgument();
     else
-        PushDouble( ::rtl::math::acosh( fVal));
+        PushDouble( std::acosh( fVal));
 }
 
 void ScInterpreter::ScArcTanHyp()
@@ -1944,12 +1944,12 @@ void ScInterpreter::ScArcCotHyp()
 
 void ScInterpreter::ScCosecant()
 {
-    PushDouble(1.0 / ::rtl::math::sin(GetDouble()));
+    PushDouble(1.0 / std::sin(GetDouble()));
 }
 
 void ScInterpreter::ScSecant()
 {
-    PushDouble(1.0 / ::rtl::math::cos(GetDouble()));
+    PushDouble(1.0 / std::cos(GetDouble()));
 }
 
 void ScInterpreter::ScCosecantHyp()

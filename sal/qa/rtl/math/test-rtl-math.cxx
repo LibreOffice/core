@@ -505,151 +505,151 @@ public:
     void test_erf() {
         double x, res;
         x =  0.0;
-        res = rtl::math::erf(x);
+        res = std::erf(x);
         CPPUNIT_ASSERT_EQUAL(0.0,res);
         rtl::math::setInf( &x, false);
-        res = rtl::math::erf(x);
+        res = std::erf(x);
         CPPUNIT_ASSERT_EQUAL(1.0,res);
         rtl::math::setInf( &x, true);
-        res = rtl::math::erf(x);
+        res = std::erf(x);
         CPPUNIT_ASSERT_EQUAL(-1.0,res);
         rtl::math::setNan( &x);
-        res = rtl::math::erf(x);
+        res = std::erf(x);
         CPPUNIT_ASSERT(std::isnan(res));
         x = 3.0;
-        res = rtl::math::erf(-x);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL( -rtl::math::erf(x), res, 1E-12);
+        res = std::erf(-x);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL( -std::erf(x), res, 1E-12);
     }
 
     void test_erfc() {
         double x, res;
         x =  0.0;
-        res = rtl::math::erfc(x);
+        res = std::erfc(x);
         CPPUNIT_ASSERT_EQUAL(1.0,res);
         rtl::math::setInf( &x, false);
-        res = rtl::math::erfc(x);
+        res = std::erfc(x);
         CPPUNIT_ASSERT_EQUAL(0.0,res);
         rtl::math::setInf( &x, true);
-        res = rtl::math::erfc(x);
+        res = std::erfc(x);
         CPPUNIT_ASSERT_EQUAL(2.0,res);
         rtl::math::setNan( &x);
-        res = rtl::math::erfc(x);
+        res = std::erfc(x);
         CPPUNIT_ASSERT(std::isnan(res));
         x = 3.0;
-        res = rtl::math::erfc(-x);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL( 2.0 - rtl::math::erfc(x), res, 1E-12);
+        res = std::erfc(-x);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL( 2.0 - std::erfc(x), res, 1E-12);
     }
 
     void test_expm1() {
         double x, res;
         x =  0.0;
-        res = rtl::math::expm1(x);
+        res = std::expm1(x);
         CPPUNIT_ASSERT_EQUAL(0.0,res);
         x = -0.0;
-        res = rtl::math::expm1(x);
+        res = std::expm1(x);
         CPPUNIT_ASSERT_EQUAL(-0.0,res);
         CPPUNIT_ASSERT(std::signbit(res));
         rtl::math::setInf( &x, false);
-        res = rtl::math::expm1(x);
+        res = std::expm1(x);
         CPPUNIT_ASSERT_EQUAL(true, std::isinf(res) && !std::signbit(res));
         rtl::math::setInf( &x, true);
-        res = rtl::math::expm1(x);
+        res = std::expm1(x);
         CPPUNIT_ASSERT_EQUAL(-1.0,res);
         rtl::math::setNan( &x);
-        res = rtl::math::expm1(x);
+        res = std::expm1(x);
         CPPUNIT_ASSERT(std::isnan(res));
     }
 
     void test_log1p() {
         double x, res;
         x =  0.0;
-        res = rtl::math::log1p(x);
+        res = std::log1p(x);
         CPPUNIT_ASSERT_EQUAL(0.0,res);
         x = -0.0;
-        res = rtl::math::log1p(x);
+        res = std::log1p(x);
         CPPUNIT_ASSERT_EQUAL(-0.0,res);
         CPPUNIT_ASSERT(std::signbit(res));
         rtl::math::setInf( &x, false);
-        res = rtl::math::log1p(x);
+        res = std::log1p(x);
         CPPUNIT_ASSERT_EQUAL(true, std::isinf(res) && !std::signbit(res));
         x = -1.0;
-        res = rtl::math::log1p(x);
+        res = std::log1p(x);
         CPPUNIT_ASSERT_EQUAL(true, std::isinf(res) && std::signbit(res));
         x = -1.1;
-        res = rtl::math::log1p(x);
+        res = std::log1p(x);
         CPPUNIT_ASSERT(std::isnan(res));
         rtl::math::setInf( &x, true);
-        res = rtl::math::log1p(x);
+        res = std::log1p(x);
         CPPUNIT_ASSERT(std::isnan(res));
         rtl::math::setNan( &x);
-        res = rtl::math::log1p(x);
+        res = std::log1p(x);
         CPPUNIT_ASSERT(std::isnan(res));
     }
 
     void test_acosh() {
         double res;
 
-        res = rtl::math::acosh(-1.0); // NaN
+        res = std::acosh(-1.0); // NaN
         CPPUNIT_ASSERT(std::isnan(res));
 
-        res = rtl::math::acosh(0.0); // NaN
+        res = std::acosh(0.0); // NaN
         CPPUNIT_ASSERT(std::isnan(res));
 
-        res = rtl::math::acosh(0.5); // NaN
+        res = std::acosh(0.5); // NaN
         CPPUNIT_ASSERT(std::isnan(res));
 
-        CPPUNIT_ASSERT_EQUAL(0.0, rtl::math::acosh(1.0));
+        CPPUNIT_ASSERT_EQUAL(0.0, std::acosh(1.0));
 
-        res = rtl::math::acosh(std::numeric_limits<double>::infinity()); // +Inf
+        res = std::acosh(std::numeric_limits<double>::infinity()); // +Inf
         CPPUNIT_ASSERT(!std::signbit(res));
         CPPUNIT_ASSERT(std::isinf(res));
 
         // #i97605
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(692.56728736744176, rtl::math::acosh(3e+300), 1e-15);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.014142017775252324, rtl::math::acosh(1.0001), 1e-15);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(692.56728736744176, std::acosh(3e+300), 1e-15);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.014142017775252324, std::acosh(1.0001), 1e-15);
     }
 
     void test_asinh() {
         double res;
 
-        res = rtl::math::asinh(-std::numeric_limits<double>::infinity()); // -Inf
+        res = std::asinh(-std::numeric_limits<double>::infinity()); // -Inf
         CPPUNIT_ASSERT(std::signbit(res));
         CPPUNIT_ASSERT(std::isinf(res));
 
-        CPPUNIT_ASSERT_EQUAL(0.0, rtl::math::asinh(0.0));
+        CPPUNIT_ASSERT_EQUAL(0.0, std::asinh(0.0));
 
-        res = rtl::math::asinh(std::numeric_limits<double>::infinity()); // +Inf
+        res = std::asinh(std::numeric_limits<double>::infinity()); // +Inf
         CPPUNIT_ASSERT(!std::signbit(res));
         CPPUNIT_ASSERT(std::isinf(res));
 
         // #i97605
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(691.67568924815798, rtl::math::asinh(1.23e+300), 1e-15);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0350378961923076, rtl::math::asinh(1.23), 1e-16);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(1.23e-300, rtl::math::asinh(1.23e-300), 1e-303);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(691.67568924815798, std::asinh(1.23e+300), 1e-15);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0350378961923076, std::asinh(1.23), 1e-16);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1.23e-300, std::asinh(1.23e-300), 1e-303);
 
         // asinh is an odd function
-        CPPUNIT_ASSERT_EQUAL(-rtl::math::asinh(1.23e+300), rtl::math::asinh(-1.23e+300));
-        CPPUNIT_ASSERT_EQUAL(-rtl::math::asinh(1.23), rtl::math::asinh(-1.23));
-        CPPUNIT_ASSERT_EQUAL(-rtl::math::asinh(1.23e-300), rtl::math::asinh(-1.23e-300));
+        CPPUNIT_ASSERT_EQUAL(-std::asinh(1.23e+300), std::asinh(-1.23e+300));
+        CPPUNIT_ASSERT_EQUAL(-std::asinh(1.23), std::asinh(-1.23));
+        CPPUNIT_ASSERT_EQUAL(-std::asinh(1.23e-300), std::asinh(-1.23e-300));
     }
 
     void test_atanh() {
         double res;
 
-        res = rtl::math::atanh(-2.0); // NaN
+        res = std::atanh(-2.0); // NaN
         CPPUNIT_ASSERT(std::isnan(res));
 
-        res = rtl::math::atanh(-1.0); // -Inf
+        res = std::atanh(-1.0); // -Inf
         CPPUNIT_ASSERT(std::signbit(res));
         CPPUNIT_ASSERT(std::isinf(res));
 
-        CPPUNIT_ASSERT_EQUAL(0.0, rtl::math::atanh(0.0));
+        CPPUNIT_ASSERT_EQUAL(0.0, std::atanh(0.0));
 
-        res = rtl::math::atanh(1.0); // +Inf
+        res = std::atanh(1.0); // +Inf
         CPPUNIT_ASSERT(!std::signbit(res));
         CPPUNIT_ASSERT(std::isinf(res));
 
-        res = rtl::math::atanh(2.0); // NaN
+        res = std::atanh(2.0); // NaN
         CPPUNIT_ASSERT(std::isnan(res));
     }
 
