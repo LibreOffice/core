@@ -3728,10 +3728,12 @@ bool SwWW8ImplReader::ReadChar(tools::Long nPosCp, tools::Long nCpOfs)
                         pResult = ImportOle();
                     else if (m_bSpec)
                     {
-                        SwFrameFormat* pAsCharFlyFormat = m_rDoc.GetDfltFrameFormat();
+                        SwFrameFormat* pAsCharFlyFormat =
+                            m_rDoc.MakeFrameFormat(OUString(), m_rDoc.GetDfltFrameFormat());
                         SwFormatAnchor aAnchor(RndStdIds::FLY_AS_CHAR);
                         pAsCharFlyFormat->SetFormatAttr(aAnchor);
                         pResult = ImportGraf(nullptr, pAsCharFlyFormat);
+                        m_rDoc.DelFrameFormat(pAsCharFlyFormat);
                     }
 
 
