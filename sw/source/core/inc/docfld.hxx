@@ -26,6 +26,7 @@
 #include <IMark.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <memory>
+#include <optional>
 
 class SwTextField;
 class SwContentIndex;
@@ -66,7 +67,7 @@ class SetGetExpField
 
 public:
     SetGetExpField( const SwNode& rNd, const SwTextField* pField = nullptr,
-                    const SwContentIndex* pIdx = nullptr,
+                    std::optional<sal_Int32> oContentIdx = std::nullopt,
                     sal_uInt16 nPageNumber = 0);
 
     SetGetExpField( const SwNode& rNd, const SwTextINetFormat& rINet );

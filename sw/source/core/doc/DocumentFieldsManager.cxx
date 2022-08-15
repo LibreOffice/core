@@ -728,7 +728,7 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                             {
                                 FieldsToCalc( *pCalc, SetGetExpField(
                                         aPos.GetNode(), pFormatField->GetTextField(),
-                                        &aPos.nContent, pFrame->GetPhyPageNum()),
+                                        aPos.GetContentIndex(), pFrame->GetPhyPageNum()),
                                     pLayout);
                             }
                             else
@@ -741,7 +741,7 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                         SwFrame const*const pFrame2 = ::sw::FindNeighbourFrameForNode(rTextNd);
                         FieldsToCalc( *pCalc,
                             SetGetExpField(rTextNd, pFormatField->GetTextField(),
-                                nullptr,
+                                std::nullopt,
                                 pFrame2 ? pFrame2->GetPhyPageNum() : 0),
                             pLayout);
                     }
@@ -804,7 +804,7 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                                 if( GetBodyTextNode( m_rDoc, aPos, *pFrame ) )
                                 {
                                     FieldsToCalc(*pCalc, SetGetExpField(aPos.GetNode(),
-                                            nullptr, nullptr, pFrame->GetPhyPageNum()),
+                                            nullptr, std::nullopt, pFrame->GetPhyPageNum()),
                                         pLayout);
                                 }
                                 else
@@ -816,7 +816,7 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                     {
                         // create index to determine the TextNode
                         SwFrame const*const pFrame2 = ::sw::FindNeighbourFrameForNode(*pTableNd);
-                        FieldsToCalc(*pCalc, SetGetExpField(*pTableNd, nullptr, nullptr,
+                        FieldsToCalc(*pCalc, SetGetExpField(*pTableNd, nullptr, std::nullopt,
                                 pFrame2 ? pFrame2->GetPhyPageNum() : 0),
                             pLayout);
                     }

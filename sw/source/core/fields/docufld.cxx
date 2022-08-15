@@ -2260,7 +2260,7 @@ bool SwRefPageGetFieldType::MakeSetList(SetGetExpFields& rTmpLst,
                 bool const bResult = GetBodyTextNode( m_rDoc, aPos, *pFrame );
                 OSL_ENSURE(bResult, "where is the Field?");
                 pNew.reset( new SetGetExpField( aPos.GetNode(), pTField,
-                                            &aPos.nContent ) );
+                                            aPos.GetContentIndex() ) );
             }
 
             rTmpLst.insert( std::move(pNew) );
@@ -2388,7 +2388,7 @@ void SwRefPageGetField::ChangeExpansion(const SwFrame& rFrame,
     if(!pTextNode)
         return;
 
-    SetGetExpField aEndField( aPos.GetNode(), pField, &aPos.nContent );
+    SetGetExpField aEndField( aPos.GetNode(), pField, aPos.GetContentIndex() );
 
     SetGetExpFields::const_iterator itLast = aTmpLst.lower_bound( &aEndField );
 

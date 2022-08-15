@@ -662,15 +662,13 @@ lcl_FindField(bool & o_rFound, SetGetExpFields const& rSrtLst,
         sal_Int32 const nContentOffset)
 {
     std::optional<SetGetExpField> oSrch;
-    std::optional<SwContentIndex> oIndex;
     if (-1 == nContentOffset)
     {
-        oSrch.emplace(rPos.GetNode(), pTextField, &rPos.nContent);
+        oSrch.emplace(rPos.GetNode(), pTextField, rPos.GetContentIndex());
     }
     else
     {
-        oIndex.emplace(rPos.GetNode().GetContentNode(), nContentOffset);
-        oSrch.emplace(rPos.GetNode(), pTextField, &*oIndex);
+        oSrch.emplace(rPos.GetNode(), pTextField, nContentOffset);
     }
 
     if (rPos.GetNodeIndex() < pTextNode->GetNodes().GetEndOfExtras().GetIndex())
