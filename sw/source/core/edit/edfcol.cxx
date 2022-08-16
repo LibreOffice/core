@@ -2234,7 +2234,7 @@ void SwEditShell::SetTextFormatColl(SwTextFormatColl *pFormat,
                 // haven't supported by AppendRedline(), yet
                 // TODO handle multi-paragraph selections, too,
                 // e.g. by breaking them to single paragraphs
-                aPaM.Start()->nNode == aPaM.End()->nNode )
+                aPaM.Start()->GetNode() == aPaM.End()->GetNode() )
             {
                 SwRangeRedline * pRedline = new SwRangeRedline( RedlineType::ParagraphFormat, aPaM );
                 auto const result(GetDoc()->getIDocumentRedlineAccess().AppendRedline( pRedline, true));

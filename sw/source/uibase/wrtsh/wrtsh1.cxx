@@ -253,7 +253,7 @@ void SwWrtShell::Insert( const OUString &rStr )
         bStarted = true;
         Push();
         // let's interpret a selection within the same node as "replace"
-        bDeleted = DelRight(GetCursor()->GetPoint()->nNode == GetCursor()->GetMark()->nNode);
+        bDeleted = DelRight(GetCursor()->GetPoint()->GetNode() == GetCursor()->GetMark()->GetNode());
         Pop(SwCursorShell::PopMode::DeleteCurrent); // Restore selection (if tracking changes)
         NormalizePam(false); // tdf#127635 put point at the end of deletion
         ClearMark();

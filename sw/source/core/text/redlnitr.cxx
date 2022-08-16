@@ -118,7 +118,7 @@ public:
                 }
                 if (pStart->GetNode().IsTableNode())
                 {
-                    assert(pEnd->nNode == m_Start.nNode && pEnd->GetContentIndex() == 0);
+                    assert(pEnd->GetNode() == m_Start.GetNode() && pEnd->GetContentIndex() == 0);
                     continue; // known pathology, ignore it
                 }
                 if (*m_pEndPos <= *pStart)

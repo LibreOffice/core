@@ -320,7 +320,7 @@ void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
             }
 
             // no nodes can be unmerged by this - skip MakeFrames() etc.
-            if (rPam.GetPoint()->nNode == rPam.GetMark()->nNode)
+            if (rPam.GetPoint()->GetNode() == rPam.GetMark()->GetNode())
             {
                 break; // continue with AppendAllObjs()
             }

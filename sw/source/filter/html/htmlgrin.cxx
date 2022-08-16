@@ -1434,7 +1434,7 @@ void SwHTMLParser::StripTrailingPara()
                 if (pAPos &&
                     ((RndStdIds::FLY_AT_PARA == pAnchor->GetAnchorId()) ||
                      (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
-                    pAPos->nNode == nNodeIdx )
+                    pAPos->GetNodeIndex() == nNodeIdx )
 
                     return;     // we can't delete the node
             }

@@ -557,7 +557,7 @@ void SwHyphIter::InsertSoftHyph( const sal_Int32 nHyphPos )
 
     if( pSttPos->nNode != pEndPos->nNode || !nLastHyphLen )
     {
-        OSL_ENSURE( pSttPos->nNode == pEndPos->nNode,
+        OSL_ENSURE( pSttPos->GetNode() == pEndPos->GetNode(),
                 "SwHyphIter::InsertSoftHyph: node warp during hyphenation" );
         OSL_ENSURE(nLastHyphLen, "SwHyphIter::InsertSoftHyph: missing HyphContinue()");
         *pSttPos = *pEndPos;

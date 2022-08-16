@@ -308,7 +308,7 @@ void lcl_LOKInvalidateStartEndFrames(SwShellCursor& rCursor)
     if (!(rCursor.HasMark() &&
         rCursor.GetPoint()->GetNode().IsContentNode() &&
         rCursor.GetPoint()->GetNode().GetContentNode()->getLayoutFrame(rCursor.GetShell()->GetLayout()) &&
-        (rCursor.GetMark()->nNode == rCursor.GetPoint()->nNode ||
+        (rCursor.GetMark()->GetNode() == rCursor.GetPoint()->GetNode() ||
         (rCursor.GetMark()->GetNode().IsContentNode() &&
          rCursor.GetMark()->GetNode().GetContentNode()->getLayoutFrame(rCursor.GetShell()->GetLayout())))))
     {
@@ -543,7 +543,7 @@ std::vector<SwRangeRedline*> GetAllValidRanges(std::unique_ptr<SwRangeRedline> p
                         ++aNewStt.nNode;
                     } while( aNewStt.GetNodeIndex() < pEnd->GetNodeIndex() );
 
-                if( aNewStt.nNode == pEnd->nNode )
+                if( aNewStt.GetNode() == pEnd->GetNode() )
                     aNewStt.nContent = pEnd->nContent;
                 else if( pC )
                 {
@@ -1424,14 +1424,14 @@ void SwRangeRedline::InvalidateRange(Invalidation const eWhy)
 void SwRangeRedline::CalcStartEnd( SwNodeOffset nNdIdx, sal_Int32& rStart, sal_Int32& rEnd ) const
 {
     auto [pRStt, pREnd] = StartEnd(); // SwPosition*
-    if( pRStt->nNode < nNdIdx )
+    if( pRStt->GetNodeIndex() < nNdIdx )
     {
-        if( pREnd->nNode > nNdIdx )
+        if( pREnd->GetNodeIndex() > nNdIdx )
         {
             rStart = 0;             // Paragraph is completely enclosed
             rEnd = COMPLETE_STRING;
         }
-        else if (pREnd->nNode == nNdIdx)
+        else if (pREnd->GetNodeIndex() == nNdIdx)
         {
             rStart = 0;             // Paragraph is overlapped in the beginning
             rEnd = pREnd->GetContentIndex();
@@ -1442,10 +1442,10 @@ void SwRangeRedline::CalcStartEnd( SwNodeOffset nNdIdx, sal_Int32& rStart, sal_I
             rEnd = COMPLETE_STRING;
         }
     }
-    else if( pRStt->nNode == nNdIdx )
+    else if( pRStt->GetNodeIndex() == nNdIdx )
     {
         rStart = pRStt->GetContentIndex();
-        if( pREnd->nNode == nNdIdx )
+        if( pREnd->GetNodeIndex() == nNdIdx )
             rEnd = pREnd->GetContentIndex(); // Within the Paragraph
         else
             rEnd = COMPLETE_STRING;      // Paragraph is overlapped in the end

@@ -656,7 +656,7 @@ void SwXMLImport::endDocument()
             {
                 // If the PaM points to the first new node, move the PaM to the
                 // end of the previous node.
-                if( pPaM->GetPoint()->nNode == aNxtIdx )
+                if( pPaM->GetPoint()->GetNode() == aNxtIdx.GetNode() )
                 {
                     pPaM->GetPoint()->Assign( *pTextNode,
                                             pTextNode->GetText().getLength());
