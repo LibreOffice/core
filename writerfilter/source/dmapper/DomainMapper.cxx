@@ -3813,7 +3813,8 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
         else
         {
             uno::Sequence<beans::PropertyValue> aGrabBag = m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear();
-            if (m_pImpl->GetSdtStarts().empty() || m_pImpl->m_pSdtHelper->getControlType() != SdtControlType::dropDown)
+            if (m_pImpl->GetSdtStarts().empty()
+                || (m_pImpl->m_pSdtHelper->getControlType() != SdtControlType::dropDown && m_pImpl->m_pSdtHelper->getControlType() != SdtControlType::richText))
             {
                 m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH)->Insert(PROP_SDTPR,
                         uno::Any(aGrabBag), true, PARA_GRAB_BAG);
