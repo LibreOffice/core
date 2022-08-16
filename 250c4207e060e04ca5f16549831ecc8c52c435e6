@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98ce5595_78a2e1af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003606
+      },
+      "writtenOn": "2022-08-16T09:08:57Z",
+      "side": 1,
+      "message": "I have not tested this change in isolation, so I don’t know if it will improve things or make it worse without the other changes (the others that was merged with this, and the HarfBuzz-based Kashida validation that was merged earlier).",
+      "revId": "250c4207e060e04ca5f16549831ecc8c52c435e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
