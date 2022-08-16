@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b181eb98_b69656b8",
+        "filename": "vcl/qa/cppunit/pdfexport/pdfexport.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 3492,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-08-16T08:18:44Z",
+      "side": 1,
+      "message": "this should be writer_pdf_Export",
+      "revId": "f1c85e91ad6b05b5d8952e57c73fb3c32165fe61",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3dcb9861_efe05117",
+        "filename": "vcl/qa/cppunit/pdfexport/pdfexport.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 3542,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-08-16T08:18:44Z",
+      "side": 1,
+      "message": "What is the point of adding this comment ?",
+      "revId": "f1c85e91ad6b05b5d8952e57c73fb3c32165fe61",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
