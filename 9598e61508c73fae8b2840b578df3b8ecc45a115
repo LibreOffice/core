@@ -33,6 +33,23 @@
       "message": "Darn Jenkins lost added reviewer when cancelling one, Regina please see previous comment, thanks.",
       "revId": "9598e61508c73fae8b2840b578df3b8ecc45a115",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e72095f_ca6cb240",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2022-08-16T12:58:11Z",
+      "side": 1,
+      "message": "I have tested MS VC2019: Our own version is slightly better for asinh(x) with x near 0 and for acosh(x) with x near 1. There is no difference for large arguments.\nI have no environment for other compilers. A manually comparison is possible with the files attached to https://bz.apache.org/ooo/show_bug.cgi?id\u003d97605, the column \"MuPad\" is exact in those files. Alternatively use Wolfram Alpha to get exact values.",
+      "revId": "9598e61508c73fae8b2840b578df3b8ecc45a115",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
