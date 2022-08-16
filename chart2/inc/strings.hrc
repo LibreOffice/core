@@ -48,7 +48,6 @@
 #define STR_PAGE_APPEARANCE                         NC_("STR_PAGE_APPEARANCE", "Appearance")
 #define STR_PAGE_ILLUMINATION                       NC_("STR_PAGE_ILLUMINATION", "Illumination")
 #define STR_PAGE_ASIAN                              NC_("STR_PAGE_ASIAN", "Asian Typography")
-#define STR_PAGE_DATA_TABLE                         NC_("STR_PAGE_DATA_TABLE", "Data Table")
 #define STR_OBJECT_AVERAGE_LINE_WITH_PARAMETERS     NC_("STR_OBJECT_AVERAGE_LINE_WITH_PARAMETERS", "Mean value line with value %AVERAGE_VALUE and standard deviation %STD_DEVIATION")
 #define STR_OBJECT_AXIS                             NC_("STR_OBJECT_AXIS", "Axis")
 #define STR_OBJECT_AXIS_X                           NC_("STR_OBJECT_AXIS_X", "X Axis")
@@ -98,7 +97,6 @@
 #define STR_OBJECT_DIAGRAM_WALL                     NC_("STR_OBJECT_DIAGRAM_WALL", "Chart Wall")
 #define STR_OBJECT_DIAGRAM_FLOOR                    NC_("STR_OBJECT_DIAGRAM_FLOOR", "Chart Floor")
 #define STR_OBJECT_SHAPE                            NC_("STR_OBJECT_SHAPE", "Drawing Object")
-#define STR_OBJECT_DATA_TABLE                       NC_("STR_OBJECT_DATA_TABLE", "Data Table")
 #define STR_TIP_DATASERIES                          NC_("STR_TIP_DATASERIES", "Data Series '%SERIESNAME'")
 #define STR_TIP_DATAPOINT_INDEX                     NC_("STR_TIP_DATAPOINT_INDEX", "Data Point %POINTNUMBER")
 #define STR_TIP_DATAPOINT_VALUES                    NC_("STR_TIP_DATAPOINT_VALUES", "Values: %POINTVALUES")
@@ -147,6 +145,7 @@
 #define STR_TEXT_DIRECTION_SUPER                    NC_("STR_TEXT_DIRECTION_SUPER", "Use superordinate object settings")
 #define STR_PROPERTY_ROLE_FILLCOLOR                 NC_("STR_PROPERTY_ROLE_FILLCOLOR", "Fill Color")
 #define STR_PROPERTY_ROLE_BORDERCOLOR               NC_("STR_PROPERTY_ROLE_BORDERCOLOR", "Border Color")
+#define STR_DATA_TABLE                              NC_("STR_DATA_TABLE", "Data Table")
 
 #define STR_CONTROLTEXT_ERROR_BARS_FROM_DATA        NC_("STR_CONTROLTEXT_ERROR_BARS_FROM_DATA", "From Data Table")
 #define STR_REGRESSION_LINEAR                       NC_("STR_REGRESSION_LINEAR", "Linear")
