@@ -25,6 +25,7 @@
 #include <comphelper/string.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <tools/debug.hxx>
+#include <tools/fract.hxx>
 #include <utility>
 #include <vcl/graph.hxx>
 #include <vcl/outdev.hxx>
@@ -108,29 +109,40 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
     basegfx::B2DVector aFontScaling, aTranslate;
     double fRotate, fShearX;
     aLocalTransform.decompose(aFontScaling, aTranslate, fRotate, fShearX);
+
     bool bPrimitiveAccepted(false);
 
     // tdf#95581: Assume tiny shears are rounding artefacts or whatever and can be ignored,
     // especially if the effect is less than a pixel.
     if (std::abs(aFontScaling.getY() * fShearX) < 1)
     {
-        if (basegfx::fTools::less(aFontScaling.getX(), 0.0)
-            && basegfx::fTools::less(aFontScaling.getY(), 0.0))
+        double fIgnoreRotate, fIgnoreShearX;
+
+        basegfx::B2DVector aCurrentScaling, aCurrentTranslate;
+        maCurrentTransformation.decompose(aCurrentScaling, aCurrentTranslate, fIgnoreRotate,
+                                          fIgnoreShearX);
+
+        basegfx::B2DVector aFontSize, aTextTranslate;
+        rTextCandidate.getTextTransform().decompose(aFontSize, aTextTranslate, fIgnoreRotate,
+                                                    fIgnoreShearX);
+
+        if (basegfx::fTools::less(aFontSize.getX(), 0.0)
+            && basegfx::fTools::less(aFontSize.getY(), 0.0))
         {
             // handle special case: If scale is negative in (x,y) (3rd quadrant), it can
             // be expressed as rotation by PI. Use this since the Font rendering will not
             // apply the negative scales in any form
-            aFontScaling = basegfx::absolute(aFontScaling);
+            aFontSize = basegfx::absolute(aFontSize);
             fRotate += M_PI;
         }
 
-        if (basegfx::fTools::more(aFontScaling.getX(), 0.0)
-            && basegfx::fTools::more(aFontScaling.getY(), 0.0))
+        if (basegfx::fTools::more(aFontSize.getX(), 0.0)
+            && basegfx::fTools::more(aFontSize.getY(), 0.0))
         {
-            // Get the VCL font (use FontHeight as FontWidth)
+            // Get the VCL font
             vcl::Font aFont(primitive2d::getVclFontFromFontAttribute(
-                rTextCandidate.getFontAttribute(), aFontScaling.getX(), aFontScaling.getY(),
-                fRotate, rTextCandidate.getLocale()));
+                rTextCandidate.getFontAttribute(), aFontSize.getX(), aFontSize.getY(), fRotate,
+                rTextCandidate.getLocale()));
 
             // Don't draw fonts without height
             if (aFont.GetFontHeight() <= 0)
@@ -249,27 +261,20 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
                     aFont.SetShadow(true);
             }
 
-            // create transformed integer DXArray in view coordinate system
-            std::vector<sal_Int32> aTransformedDXArray;
+            // create integer DXArray
+            std::vector<sal_Int32> aDXArray;
 
             if (!rTextCandidate.getDXArray().empty())
             {
-                aTransformedDXArray.reserve(rTextCandidate.getDXArray().size());
-                const basegfx::B2DVector aPixelVector(maCurrentTransformation
-                                                      * basegfx::B2DVector(1.0, 0.0));
-                const double fPixelVectorFactor(aPixelVector.getLength());
-
+                aDXArray.reserve(rTextCandidate.getDXArray().size());
                 for (auto const& elem : rTextCandidate.getDXArray())
-                {
-                    aTransformedDXArray.push_back(basegfx::fround(elem * fPixelVectorFactor));
-                }
+                    aDXArray.push_back(basegfx::fround(elem));
             }
 
             // set parameters and paint text snippet
             const basegfx::BColor aRGBFontColor(
                 maBColorModifierStack.getModifiedColor(rTextCandidate.getFontColor()));
-            const basegfx::B2DPoint aPoint(aLocalTransform * basegfx::B2DPoint(0.0, 0.0));
-            const Point aStartPoint(basegfx::fround(aPoint.getX()), basegfx::fround(aPoint.getY()));
+            const Point aStartPoint(aTextTranslate.getX(), aTextTranslate.getY());
             const vcl::text::ComplexTextLayoutFlags nOldLayoutMode(mpOutputDevice->GetLayoutMode());
 
             if (rTextCandidate.getFontAttribute().getRTL())
@@ -288,18 +293,14 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
             sal_Int32 nPos = rTextCandidate.getTextPosition();
             sal_Int32 nLen = rTextCandidate.getTextLength();
 
+            // this contraption is used in editeng, with format paragraph used to
+            // set a tab with a tab-fill character
             if (rTextCandidate.isFilled())
             {
-                basegfx::B2DVector aOldFontScaling, aOldTranslate;
-                double fOldRotate, fOldShearX;
-                rTextCandidate.getTextTransform().decompose(aOldFontScaling, aOldTranslate,
-                                                            fOldRotate, fOldShearX);
+                tools::Long nWidthToFill = rTextCandidate.getWidthToFill();
 
-                tools::Long nWidthToFill = static_cast<tools::Long>(
-                    rTextCandidate.getWidthToFill() * aFontScaling.getX() / aOldFontScaling.getX());
-
-                tools::Long nWidth = mpOutputDevice->GetTextArray(rTextCandidate.getText(),
-                                                                  &aTransformedDXArray, 0, 1);
+                tools::Long nWidth
+                    = mpOutputDevice->GetTextArray(rTextCandidate.getText(), &aDXArray, 0, 1);
                 sal_Int32 nChars = 2;
                 if (nWidth)
                     nChars = nWidthToFill / nWidth;
@@ -310,18 +311,25 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
                 nPos = 0;
                 nLen = nChars;
 
-                if (!aTransformedDXArray.empty())
+                if (!aDXArray.empty())
                 {
-                    sal_Int32 nDX = aTransformedDXArray[0];
-                    aTransformedDXArray.resize(nLen);
+                    sal_Int32 nDX = aDXArray[0];
+                    aDXArray.resize(nLen);
                     for (sal_Int32 i = 1; i < nLen; ++i)
-                        aTransformedDXArray[i] = aTransformedDXArray[i - 1] + nDX;
+                        aDXArray[i] = aDXArray[i - 1] + nDX;
                 }
             }
 
-            if (!aTransformedDXArray.empty())
+            mpOutputDevice->Push(vcl::PushFlags::MAPMODE);
+            const Point aOrigin(basegfx::fround(aCurrentTranslate.getX() / aCurrentScaling.getX()),
+                                basegfx::fround(aCurrentTranslate.getY() / aCurrentScaling.getY()));
+            MapMode aMapMode(MapUnit::MapPixel, aOrigin, Fraction(aCurrentScaling.getX()),
+                             Fraction(aCurrentScaling.getY()));
+            mpOutputDevice->SetMapMode(aMapMode);
+
+            if (!aDXArray.empty())
             {
-                mpOutputDevice->DrawTextArray(aStartPoint, aText, aTransformedDXArray,
+                mpOutputDevice->DrawTextArray(aStartPoint, aText, aDXArray,
                                               rTextCandidate.getKashidaArray(), nPos, nLen);
             }
             else
@@ -333,6 +341,8 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
             {
                 mpOutputDevice->SetLayoutMode(nOldLayoutMode);
             }
+
+            mpOutputDevice->Pop();
 
             bPrimitiveAccepted = true;
         }
