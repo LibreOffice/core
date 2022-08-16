@@ -166,7 +166,7 @@ namespace x11 {
             Atom                            m_aProperty;
             Atom                            m_aTarget;
             int                             m_nFormat;
-            int                             m_nTransferStartTime;
+            time_t                          m_nTransferStartTime;
         };
         int m_nIncrementalThreshold;
 
@@ -190,7 +190,7 @@ namespace x11 {
             // m_aNativeTypes contains the corresponding original atom
             Atom                        m_aRequestedType;
             // m_aRequestedType is only valid while WaitingForResponse and WaitingFotData
-            int                         m_nLastTimestamp;
+            time_t                      m_nLastTimestamp;
             bool                        m_bHaveUTF16;
             Atom                        m_aUTF8Type;
             bool                        m_bHaveCompound;
