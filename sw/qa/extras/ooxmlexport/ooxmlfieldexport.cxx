@@ -869,6 +869,18 @@ DECLARE_OOXMLEXPORT_TEST( testSdtDatePicker, "test_sdt_datepicker.docx" )
     CPPUNIT_ASSERT_EQUAL(OUString("008000"), sColor);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testContentControlGrabBag)
+{
+    // Given a document with a <w:sdt> tag:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "content-control-grab-bag.docx";
+    loadURL(aURL, nullptr);
+
+    // When exporting that document back to DOCX:
+    // Then make sure that completes without an assertion failure, which would mean not-well-formed
+    // output was produced:
+    save("Office Open XML Text", maTempFile);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf104823)
 {
     // Test how we can roundtrip sdt plain text with databindings support
