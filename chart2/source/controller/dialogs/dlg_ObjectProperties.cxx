@@ -460,7 +460,7 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
             // nothing
             break;
         case OBJECTTYPE_DATA_TABLE:
-            AddTabPage("datatable", SchResId(STR_PAGE_DATA_TABLE), DataTableTabPage::Create);
+            AddTabPage("datatable", SchResId(STR_DATA_TABLE), DataTableTabPage::Create);
             AddTabPage("border", SchResId(STR_PAGE_LINE), RID_SVXPAGE_LINE);
             AddTabPage("area", SchResId(STR_PAGE_AREA), RID_SVXPAGE_AREA);
             AddTabPage("fontname", SchResId(STR_PAGE_FONT), RID_SVXPAGE_CHAR_NAME);
