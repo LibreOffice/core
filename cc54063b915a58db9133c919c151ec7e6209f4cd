@@ -52,6 +52,24 @@
       "parentUuid": "2d56cc4c_8fea4175",
       "revId": "cc54063b915a58db9133c919c151ec7e6209f4cd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17e650fc_0d617a74",
+        "filename": "vcl/qa/cppunit/complextext.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1003606
+      },
+      "writtenOn": "2022-08-16T09:04:57Z",
+      "side": 0,
+      "message": "The more tests the better of course, but this particular test was testing for a problem that no longer exists.",
+      "parentUuid": "4b9fa1d7_7772e79e",
+      "revId": "cc54063b915a58db9133c919c151ec7e6209f4cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
