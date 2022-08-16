@@ -530,7 +530,7 @@ OUString ODbDataSourceAdministrationHelper::getConnectionURL() const
     }
     if ( !sNewUrl.isEmpty() )
         sNewUrl = pCollection->getPrefix(eType) + sNewUrl;
-    else
+    else if (pUrlItem)
         sNewUrl = pUrlItem->GetValue();
 
     return sNewUrl;
