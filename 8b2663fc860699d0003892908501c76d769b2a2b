@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40a28e54_9045b03d",
+        "filename": "vcl/qa/cppunit/pdfexport/pdfexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3504,
+      "author": {
+        "id": 1003606
+      },
+      "writtenOn": "2022-08-16T02:50:29Z",
+      "side": 1,
+      "message": "On my system this assertion fails:\nTest name: testTdf139627::TestBody\nequality assertion failed\n- Expected: 8\n- Actual  : 7\n\nIf I uninstall Tahoma, the test passes.\n\nSo I think the current test results depend on the fallback font used and this can be unpredictable. I suggest changing the document to use on of the bundled fonts and adjusting the results.",
+      "range": {
+        "startLine": 3504,
+        "startChar": 4,
+        "endLine": 3504,
+        "endChar": 24
+      },
+      "revId": "8b2663fc860699d0003892908501c76d769b2a2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
