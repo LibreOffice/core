@@ -2709,7 +2709,7 @@ void SvxRuler::CalcMinMax()
                     nMaxLeft = lNullPix;
                 else
                     nMaxLeft = mpBorders[nIdx - 1].nPos + mpBorders[nIdx - 1].nWidth + lNullPix;
-                if(nIdx == mxColumnItem->GetActColumn())
+                if (mxColumnItem && nIdx == mxColumnItem->GetActColumn())
                 {
                     if(bRTL)
                     {
