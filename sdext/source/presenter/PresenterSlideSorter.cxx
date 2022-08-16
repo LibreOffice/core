@@ -1819,7 +1819,7 @@ void PresenterSlideSorter::CurrentSlideFrameRenderer::PaintCurrentSlideFrame (
             rxCanvas,
             xClip,
             rSlideBoundingBox.X + rSlideBoundingBox.Width,
-            rSlideBoundingBox.Y - mpTopLeft->mnHeight);
+            rSlideBoundingBox.Y - mpTopRight->mnHeight);
     }
     if (mpBottomLeft)
     {
