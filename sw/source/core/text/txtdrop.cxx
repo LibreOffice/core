@@ -36,6 +36,7 @@
 #include <editeng/fhgtitem.hxx>
 #include <calbck.hxx>
 #include <doc.hxx>
+#include <IDocumentSettingAccess.hxx>
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star;
@@ -797,6 +798,11 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
         else
             pWin = Application::GetDefaultDevice();
 
+        // adjust punctuation?
+        bool bKeepBaseline = rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess()
+            .get(DocumentSettingId::DROP_CAP_PUNCTUATION) &&
+            !rInf.GetDropFormat()->GetWholeWord(); // && rInf.GetDropFormat()->GetChars() == 1;
+
         while( bGrow )
         {
             // reset pCurrPart to first part
@@ -853,6 +859,14 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
                         // give us glyph boundaries.
                         aRect = tools::Rectangle( Point( 0, 0 ), Size( 0, nAscent ) );
                     }
+                }
+
+                // extend rectangle to the baseline to avoid of giant dashes,
+                // quotation marks, bullet, asterisks etc.
+                if ( bKeepBaseline && aRect.Top() < 0 )
+                {
+                    aRect.SetBottom(0);
+                    aRect.SetTop(aRect.Top() - nAscent/60);
                 }
 
                 // Now we (hopefully) have a bounding rectangle for the
