@@ -2713,8 +2713,13 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 aFrameSet.Put( SwFormatAnchor( RndStdIds::FLY_AT_PAGE, 1 ));
             }
 
-            aPam.DeleteMark(); // mark position node will be deleted!
-            aIntPam.DeleteMark(); // mark position node will be deleted!
+            // park these no longer needed PaMs somewhere safe so MakeFlyAndMove
+            // can delete what it likes without any assert these are pointing to
+            // that content
+            aPam.DeleteMark();
+            aIntPam.DeleteMark();
+            *aPam.GetPoint() = *aIntPam.GetPoint() = SwPosition(pDoc->GetNodes());
+
             pFormat = pDoc->MakeFlyAndMove( *m_pCopySource, aFrameSet,
                            nullptr,
                            pParentFrameFormat );
