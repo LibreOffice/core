@@ -124,8 +124,8 @@ SwAccessibleFrameBase::SwAccessibleFrameBase(
     m_bIsSelected( false )
 {
     const SwFrameFormat* pFrameFormat = pFlyFrame->GetFormat();
-    if(pFrameFormat)
-        StartListening(const_cast<SwFrameFormat*>(pFrameFormat)->GetNotifier());
+
+    StartListening(const_cast<SwFrameFormat*>(pFrameFormat)->GetNotifier());
 
     SetName( pFrameFormat->GetName() );
 
