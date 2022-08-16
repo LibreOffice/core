@@ -35,10 +35,8 @@ using namespace css::accessibility;
 using namespace css::lang;
 using namespace css::uno;
 
-QtAccessibleEventListener::QtAccessibleEventListener(const Reference<XAccessible> xAccessible,
-                                                     QtAccessibleWidget* pAccessibleWidget)
-    : m_xAccessible(xAccessible)
-    , m_pAccessibleWidget(pAccessibleWidget)
+QtAccessibleEventListener::QtAccessibleEventListener(QtAccessibleWidget* pAccessibleWidget)
+    : m_pAccessibleWidget(pAccessibleWidget)
 {
 }
 

@@ -21,9 +21,7 @@ class QtAccessibleEventListener final
     : public cppu::WeakImplHelper<css::accessibility::XAccessibleEventListener>
 {
 public:
-    QtAccessibleEventListener(
-        const css::uno::Reference<css::accessibility::XAccessible> xAccessible,
-        QtAccessibleWidget* pAccessibleWidget);
+    explicit QtAccessibleEventListener(QtAccessibleWidget* pAccessibleWidget);
 
     virtual void SAL_CALL
     notifyEvent(const css::accessibility::AccessibleEventObject& aEvent) override;
@@ -31,7 +29,6 @@ public:
     virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
 
 private:
-    css::uno::Reference<css::accessibility::XAccessible> m_xAccessible;
     QtAccessibleWidget* m_pAccessibleWidget;
 
     static void HandleStateChangedEvent(QAccessibleInterface* pQAccessibleInterface,
