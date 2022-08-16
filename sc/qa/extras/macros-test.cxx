@@ -75,6 +75,7 @@ public:
     void testTdf107572();
     void testShapeLayerId();
     void testFunctionAccessIndirect();
+    void testTdf148645();
 
     CPPUNIT_TEST_SUITE(ScMacrosTest);
     CPPUNIT_TEST(testStarBasic);
@@ -109,6 +110,7 @@ public:
     CPPUNIT_TEST(testTdf107572);
     CPPUNIT_TEST(testShapeLayerId);
     CPPUNIT_TEST(testFunctionAccessIndirect);
+    CPPUNIT_TEST(testTdf148645);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1268,6 +1270,12 @@ void ScMacrosTest::testFunctionAccessIndirect()
     // because of disallowed external link update (needed to obtain the cell value).
     css::uno::Any aResult = xFunc->callFunction("INDIRECT", {css::uno::Any(aReference)});
     CPPUNIT_ASSERT_EQUAL(css::uno::Any(OUString("a1")), aResult);
+}
+
+void ScMacrosTest::testTdf148645()
+{
+    // auto oService = createUNOService("com.sun.star.sheet.addin.Analysis");
+    CPPUNIT_ASSERT(false);
 }
 
 ScMacrosTest::ScMacrosTest()
