@@ -204,8 +204,11 @@ PageMarginControl::PageMarginControl(PageMarginPopup* pControl, weld::Widget* pP
     SetMetricValue( *m_xBottomMarginEdit, m_nPageBottomMargin, m_eUnit );
     SetFieldUnit( *m_xBottomMarginEdit, lcl_GetFieldUnit() );
 
-    m_aPageSize = pSize->GetSize();
-    SetMetricFieldMaxValues( m_aPageSize );
+    if (pSize)
+    {
+        m_aPageSize = pSize->GetSize();
+        SetMetricFieldMaxValues( m_aPageSize );
+    }
 
     if ( m_bMirrored )
     {
