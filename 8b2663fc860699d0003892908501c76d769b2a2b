@@ -93,6 +93,24 @@
       "parentUuid": "1468bda3_72bb7d40",
       "revId": "8b2663fc860699d0003892908501c76d769b2a2b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "025a0330_1da94496",
+        "filename": "vcl/qa/cppunit/pdfexport/pdfexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3553,
+      "author": {
+        "id": 1003606
+      },
+      "writtenOn": "2022-08-16T13:32:53Z",
+      "side": 1,
+      "message": "That is the point of using a known font, and not relying on font fallback.",
+      "parentUuid": "830dcbed_d52444a5",
+      "revId": "8b2663fc860699d0003892908501c76d769b2a2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
