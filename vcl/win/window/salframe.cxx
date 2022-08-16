@@ -256,9 +256,6 @@ void ImplSalGetWorkArea( HWND hWnd, RECT *pRect, const RECT *pParentRect )
 
 static void UpdateDarkMode(HWND hWnd)
 {
-    static bool bExperimental = officecfg::Office::Common::Misc::ExperimentalMode::get();
-    if (!bExperimental)
-        return;
     static bool bOSSupportsDarkMode = OSSupportsDarkMode();
     if (!bOSSupportsDarkMode)
         return;
