@@ -253,11 +253,9 @@ std::type_info * RTTI::getRTTI(typelib_TypeDescription const & pTypeDescr)
         assert(false); // cannot happen
     }
     rtti = newRtti->get();
-    if (newRtti) {
-        auto insertion (
-            m_generatedRttis.emplace(unoName, std::move(newRtti)));
-        SAL_WARN_IF( !insertion.second, "bridges", "key " << unoName << " already in generated rtti map" );
-    }
+
+    auto insertion(m_generatedRttis.emplace(unoName, std::move(newRtti)));
+    SAL_WARN_IF( !insertion.second, "bridges", "key " << unoName << " already in generated rtti map" );
 
     return rtti;
 }
