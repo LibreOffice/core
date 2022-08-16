@@ -50,6 +50,11 @@ void SdScaleControl::StateChangedAtStatusBarControl(sal_uInt16 /*nSID*/, SfxItem
     if (eState != SfxItemState::DEFAULT || pState->IsVoidItem())
         return;
     auto pStringItem = dynamic_cast<const SfxStringItem*>(pState);
+    if (!pStringItem)
+    {
+        SAL_WARN("sd", "Item wasn't a SfxStringItem");
+        return;
+    }
     GetStatusBar().SetItemText(GetId(), pStringItem->GetValue());
 }
 
