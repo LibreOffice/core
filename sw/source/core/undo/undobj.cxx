@@ -747,7 +747,7 @@ void SwUndoSaveContent::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
     if( pCpyNd || pEndNdIdx )
     {
         SwNodeRange aRg( pStt->nNode, SwNodeOffset(0), pEnd->nNode, SwNodeOffset(1) );
-        rDoc.GetNodes().MoveNodes( aRg, rNds, aPos.nNode, true );
+        rDoc.GetNodes().MoveNodes( aRg, rNds, aPos.GetNode(), true );
         aPos.nContent = 0;
         --aPos.nNode;
     }
@@ -813,7 +813,7 @@ void SwUndoSaveContent::MoveFromUndoNds( SwDoc& rDoc, SwNodeOffset nNodeIdx,
         SwNodeRange aRg( rNds, nNodeIdx, (pEndNdIdx
                         ? ((*pEndNdIdx) + 1)
                         : rNds.GetEndOfExtras().GetIndex() ) );
-        rNds.MoveNodes(aRg, rDoc.GetNodes(), rInsPos.nNode, nullptr == pEndNdIdx || bForceCreateFrames);
+        rNds.MoveNodes(aRg, rDoc.GetNodes(), rInsPos.GetNode(), nullptr == pEndNdIdx || bForceCreateFrames);
 
     }
 }

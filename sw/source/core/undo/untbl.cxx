@@ -1733,7 +1733,7 @@ void SwUndoTableNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
                 // first delete box
                 delete pBox;
                 // than move nodes
-                rDoc.GetNodes().MoveNodes( aRg, rDoc.GetNodes(), aInsPos, false );
+                rDoc.GetNodes().MoveNodes( aRg, rDoc.GetNodes(), aInsPos.GetNode(), false );
             }
             else
             {

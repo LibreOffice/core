@@ -435,7 +435,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                             {
                                 SwNodeRange aRg( *pStartNd, *pSectEnd );
                                 SwNodeIndex aIdx( *pSectEnd, 1 );
-                                GetNodes().MoveNodes( aRg, GetNodes(), aIdx );
+                                GetNodes().MoveNodes( aRg, GetNodes(), aIdx.GetNode() );
                             }
                             pSectNd = pStartNd->FindSectionNode();
                         }
@@ -449,8 +449,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                             if( aEndIdx < pSectNd->EndOfSectionIndex() )
                             {
                                 SwNodeRange aRg( *pSectNd, SwNodeOffset(1), aEndIdx.GetNode(), SwNodeOffset(1) );
-                                SwNodeIndex aIdx( *pSectNd );
-                                GetNodes().MoveNodes( aRg, GetNodes(), aIdx );
+                                GetNodes().MoveNodes( aRg, GetNodes(), *pSectNd );
                             }
 
                             pSectNd = pStartNd->FindSectionNode();

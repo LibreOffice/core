@@ -339,7 +339,7 @@ SwUndoDelete::SwUndoDelete(
                     SwPosition aSplitPos( *pEndTextNd );
                     ::sw::UndoGuard const ug(rDoc.GetIDocumentUndoRedo());
                     rDoc.getIDocumentContentOperations().SplitNode( aSplitPos, false );
-                    rDocNds.MoveNodes( aMvRg, rDocNds, aRg.aEnd );
+                    rDocNds.MoveNodes( aMvRg, rDocNds, aRg.aEnd.GetNode() );
                     --aRg.aEnd;
                 }
                 else
@@ -363,7 +363,7 @@ SwUndoDelete::SwUndoDelete(
                     SwPosition aSplitPos( *pSttTextNd );
                     ::sw::UndoGuard const ug(rDoc.GetIDocumentUndoRedo());
                     rDoc.getIDocumentContentOperations().SplitNode( aSplitPos, false );
-                    rDocNds.MoveNodes( aMvRg, rDocNds, aRg.aStart );
+                    rDocNds.MoveNodes( aMvRg, rDocNds, aRg.aStart.GetNode() );
                     --aRg.aStart;
                 }
             }
@@ -384,7 +384,7 @@ SwUndoDelete::SwUndoDelete(
 
         // Step 3: Moving into UndoArray...
         m_nNode = rNds.GetEndOfContent().GetIndex();
-        rDocNds.MoveNodes( aRg, rNds, SwNodeIndex( rNds.GetEndOfContent() ));
+        rDocNds.MoveNodes( aRg, rNds, rNds.GetEndOfContent() );
         m_oMvStt.emplace( rNds, m_nNode );
         // remember difference!
         m_nNode = rNds.GetEndOfContent().GetIndex() - m_nNode;
@@ -401,12 +401,12 @@ SwUndoDelete::SwUndoDelete(
                 if( m_bJoinNext )
                 {
                     SwNodeRange aMvRg( *pEndTextNd, SwNodeOffset(0), *pEndTextNd, SwNodeOffset(1) );
-                    rDocNds.MoveNodes( aMvRg, rDocNds, aRg.aStart );
+                    rDocNds.MoveNodes( aMvRg, rDocNds, aRg.aStart.GetNode() );
                 }
                 else
                 {
                     SwNodeRange aMvRg( *pSttTextNd, SwNodeOffset(0), *pSttTextNd, SwNodeOffset(1) );
-                    rDocNds.MoveNodes( aMvRg, rDocNds, aRg.aEnd );
+                    rDocNds.MoveNodes( aMvRg, rDocNds, aRg.aEnd.GetNode() );
                 }
             }
         }
@@ -963,7 +963,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
             --aPos.nNode;
             if( !m_bJoinNext )
                 pMovedNode = &aPos.GetNode();
-            rDoc.GetNodes().MoveNodes(aRg, rDoc.GetNodes(), aMvIdx);
+            rDoc.GetNodes().MoveNodes(aRg, rDoc.GetNodes(), aMvIdx.GetNode());
             ++aPos.nNode;
         }
 
@@ -994,7 +994,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                 SwNodeRange aRg( aPos.nNode, SwNodeOffset(0), aPos.nNode, SwNodeOffset(1) );
                 pMovedNode = &aPos.GetNode();
                 // tdf#131684 without deleting frames
-                rDoc.GetNodes().MoveNodes(aRg, rDoc.GetNodes(), aMvIdx, false);
+                rDoc.GetNodes().MoveNodes(aRg, rDoc.GetNodes(), aMvIdx.GetNode(), false);
                 rDoc.GetNodes().Delete( aMvIdx);
             }
         }

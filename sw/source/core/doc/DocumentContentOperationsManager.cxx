@@ -2624,7 +2624,7 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
 
     // move the Nodes
     bool bNoDelFrames = bool(SwMoveFlags::NO_DELFRMS & eMvFlags);
-    if( m_rDoc.GetNodes().MoveNodes( rRange, m_rDoc.GetNodes(), rPos, !bNoDelFrames ) )
+    if( m_rDoc.GetNodes().MoveNodes( rRange, m_rDoc.GetNodes(), rPos.GetNode(), !bNoDelFrames ) )
     {
         ++aIdx;     // again back to old position
         if( oSaveInsPos )
