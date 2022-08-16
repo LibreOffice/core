@@ -3531,7 +3531,7 @@ static void lcl_SelectByContentTypeAndName(SwContentTree* pThis, weld::TreeView&
             std::unique_ptr<weld::TreeIter> xFirstSelected(rContentTree.make_iterator());
             if (!rContentTree.get_selected(xFirstSelected.get()))
                 xFirstSelected.reset();
-            if (rContentTree.count_selected_rows() != 1 ||
+            if (rContentTree.count_selected_rows() != 1 || !xFirstSelected ||
                     rContentTree.iter_compare(*xIter, *xFirstSelected) != 0)
             {
                 // unselect all entries and make passed entry visible and selected
@@ -3888,7 +3888,7 @@ void SwContentTree::UpdateTracking()
                     if (!m_xTreeView->get_selected(xFirstSelected.get()))
                         xFirstSelected.reset();
                     // only select if not already selected or tree has multiple entries selected
-                    if (m_xTreeView->count_selected_rows() != 1 ||
+                    if (m_xTreeView->count_selected_rows() != 1 || !xFirstSelected ||
                             m_xTreeView->iter_compare(rEntry, *xFirstSelected) != 0)
                     {
                         if (m_nOutlineTracking == 2) // focused outline tracking
