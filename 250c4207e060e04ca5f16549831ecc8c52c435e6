@@ -16,6 +16,24 @@
       "message": "I have not tested this change in isolation, so I don’t know if it will improve things or make it worse without the other changes (the others that was merged with this, and the HarfBuzz-based Kashida validation that was merged earlier).",
       "revId": "250c4207e060e04ca5f16549831ecc8c52c435e6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8493fedd_14f45562",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-08-16T09:17:15Z",
+      "side": 1,
+      "message": "hi Khaled,\nYep, I\u0027m trying to create a unittest for this issue, so I cherry-picked this commit particular commit alone and it seems to fix the issue",
+      "parentUuid": "98ce5595_78a2e1af",
+      "revId": "250c4207e060e04ca5f16549831ecc8c52c435e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
