@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce0b56fd_017763fa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003606
+      },
+      "writtenOn": "2022-08-16T21:42:01Z",
+      "side": 1,
+      "message": "FWIW, I used `sal_Int32` because that what was used for the DX array.",
+      "revId": "034e8a14f6b6c12b870a71cb808fcfdc41221714",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
