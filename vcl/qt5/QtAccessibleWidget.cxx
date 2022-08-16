@@ -73,6 +73,8 @@ QtAccessibleWidget::QtAccessibleWidget(const Reference<XAccessible> xAccessible,
     }
 }
 
+void QtAccessibleWidget::invalidate() { m_xAccessible.clear(); }
+
 Reference<XAccessibleContext> QtAccessibleWidget::getAccessibleContextImpl() const
 {
     Reference<XAccessibleContext> xAc;

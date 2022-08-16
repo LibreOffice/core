@@ -353,6 +353,10 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
     }
 }
 
-void QtAccessibleEventListener::disposing(const EventObject& /* Source */) {}
+void QtAccessibleEventListener::disposing(const EventObject& /* Source */)
+{
+    assert(m_pAccessibleWidget);
+    m_pAccessibleWidget->invalidate();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
