@@ -341,9 +341,14 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Nativ
 #endif
 
     std::shared_ptr<StreamHelper> pHelper = StorageContainer::getRegisteredStream(env,name,key);
-    Reference< XSeekable> xSeek = pHelper ? pHelper->getSeek() : Reference< XSeekable>();
 
-    OSL_ENSURE(xSeek.is(),"No Seekable stream!");
+    OSL_ENSURE(pHelper, "No StreamHelper!");
+    if (!pHelper)
+        return;
+
+    Reference< XSeekable> xSeek = pHelper->getSeek();
+
+    OSL_ENSURE(xSeek.is(), "No Seekable stream!");
     if (!xSeek)
         return;
 
