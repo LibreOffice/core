@@ -850,21 +850,15 @@ static oslFileError oslDoCopy(const char* pszSourceFileName, const char* pszDest
         }
     }
 
-    /* mfe: should be S_ISREG */
     if ( !S_ISLNK(nMode) )
     {
         /* copy SourceFile to DestFile */
         nRet = oslDoCopyFile(pszSourceFileName,pszDestFileName,nSourceSize, nMode);
     }
-    /* mfe: OK redundant at the moment */
-    else if ( S_ISLNK(nMode) )
-    {
-        nRet = oslDoCopyLink(pszSourceFileName,pszDestFileName);
-    }
     else
     {
-        /* mfe: what to do here? */
-        nRet=ENOSYS;
+        assert(S_ISLNK(nMode));
+        nRet = oslDoCopyLink(pszSourceFileName,pszDestFileName);
     }
 
     if ( nRet > 0 && DestFileExists )
