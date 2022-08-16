@@ -36,7 +36,6 @@
 #include <osl/diagnose.h>
 #include <osl/module.h>
 #include <o3tl/char16_t2wchar_t.hxx>
-#include <officecfg/Office/Common.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -400,10 +399,6 @@ static bool implDrawNativeMenuMark(HDC hDC, HTHEME hTheme, RECT rc, ControlPart 
 
 bool UseDarkMode()
 {
-    static bool bExperimental = officecfg::Office::Common::Misc::ExperimentalMode::get();
-    if (!bExperimental)
-        return false;
-
     HINSTANCE hUxthemeLib = LoadLibraryExW(L"uxtheme.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
     if (!hUxthemeLib)
         return false;
