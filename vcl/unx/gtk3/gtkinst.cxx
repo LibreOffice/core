@@ -8761,6 +8761,7 @@ private:
     {
         disable_notify_events();
         int nPageNumber = get_page_number(pNotebook, ident);
+        assert(nPageNumber != -1 && "asked to remove page that doesn't exist");
         gtk_notebook_remove_page(pNotebook, nPageNumber);
         enable_notify_events();
         return nPageNumber;
