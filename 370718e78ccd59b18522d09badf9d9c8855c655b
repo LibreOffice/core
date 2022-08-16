@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77e4ced2_ac57cee9",
+        "filename": "vcl/qa/cppunit/pdfexport/pdfexport.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 3504,
+      "author": {
+        "id": 1003606
+      },
+      "writtenOn": "2022-08-16T09:02:32Z",
+      "side": 1,
+      "message": "See my first comment on the use of Tahoma.",
+      "range": {
+        "startLine": 3504,
+        "startChar": 4,
+        "endLine": 3504,
+        "endChar": 31
+      },
+      "revId": "370718e78ccd59b18522d09badf9d9c8855c655b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
