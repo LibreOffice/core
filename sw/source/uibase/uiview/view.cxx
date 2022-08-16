@@ -1052,7 +1052,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     if( !m_pVScrollbar->IsScrollbarVisible(true) )
         ShowVScrollbar( false );
 
-    if (m_pWrtShell && m_pWrtShell->GetViewOptions()->IsShowOutlineContentVisibilityButton())
+    if (m_pWrtShell->GetViewOptions()->IsShowOutlineContentVisibilityButton())
         m_pWrtShell->InvalidateOutlineContentVisibility();
 
     GetViewFrame()->GetWindow().AddChildEventListener( LINK( this, SwView, WindowChildEventListener ) );
@@ -1098,7 +1098,7 @@ SwView::~SwView()
         GetViewFrame()->GetBindings().LEAVEREGISTRATIONS();
 
     // the last view must end the text edit
-    SdrView *pSdrView = m_pWrtShell ? m_pWrtShell->GetDrawView() : nullptr;
+    SdrView *pSdrView = m_pWrtShell->GetDrawView();
     if( pSdrView && pSdrView->IsTextEdit() )
         pSdrView->SdrEndTextEdit( true );
     else if (pSdrView)
