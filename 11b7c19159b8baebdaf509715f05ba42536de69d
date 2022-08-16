@@ -69,6 +69,24 @@
       "parentUuid": "d6c06a34_1e6bf868",
       "revId": "11b7c19159b8baebdaf509715f05ba42536de69d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f952a4ec_e330d2dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2022-08-16T03:58:13Z",
+      "side": 1,
+      "message": "OK, but that behavior seems directly contradictory to the requested behavior.  Do you have any suggestions on what needs to be changed?  Perhaps we could add a new UI button for \"Insert row/col without styles applied\"?  Is it easy to detect when manual formatting is applied?",
+      "parentUuid": "5b3a257a_54961de2",
+      "revId": "11b7c19159b8baebdaf509715f05ba42536de69d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
