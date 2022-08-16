@@ -748,7 +748,7 @@ QAccessibleInterface* QtAccessibleWidget::customFactory(const QString& classname
     if (classname == QLatin1String("QtXAccessible") && object)
     {
         QtXAccessible* pXAccessible = static_cast<QtXAccessible*>(object);
-        if (pXAccessible && pXAccessible->m_xAccessible.is())
+        if (pXAccessible->m_xAccessible.is())
         {
             QtAccessibleWidget* pRet = new QtAccessibleWidget(pXAccessible->m_xAccessible, object);
             // clear the reference in the QtXAccessible, no longer needed now that the QtAccessibleWidget holds one
