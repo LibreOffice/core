@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <optional>
 #include <utility>
 
 #include <hintids.hxx>
@@ -364,7 +365,8 @@ void SwAsciiFilterDlg::UpdateIncludeBOMSensitiveState()
 
 IMPL_LINK_NOARG(SwAsciiFilterDlg, CharSetSelHdl, weld::ComboBox&, void)
 {
-    LineEnd eOldEnd = GetCRLF(), eEnd = LineEnd(-1);
+    LineEnd eOldEnd = GetCRLF();
+    std::optional<LineEnd> eEnd;
     LanguageType nLng = m_xFontLB->get_visible()
                     ? m_xLanguageLB->get_active_id()
                     : LANGUAGE_SYSTEM,
@@ -418,10 +420,10 @@ IMPL_LINK_NOARG(SwAsciiFilterDlg, CharSetSelHdl, weld::ComboBox&, void)
     }
 
     m_bSaveLineStatus = false;
-    if( static_cast<int>(eEnd) != -1 )       // changed?
+    if( eEnd )       // changed?
     {
-        if( eOldEnd != eEnd )
-            SetCRLF( eEnd );
+        if( eOldEnd != *eEnd )
+            SetCRLF( *eEnd );
     }
     else
     {
