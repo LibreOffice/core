@@ -428,11 +428,14 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
         return aRet;
 
     const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
-    if ( rMrkList.GetMarkCount() != 1 ||
-         !GetUserCall(rMrkList.GetMark( 0 )->GetMarkedSdrObj()) )
+    if (rMrkList.GetMarkCount() != 1)
         return aRet;
 
-    SdrObject* pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
+    SdrObject* pObj = rMrkList.GetMark(0)->GetMarkedSdrObj();
+
+    if (!GetUserCall(pObj))
+        return aRet;
+
     // #i28701#
     SwAnchoredObject* pAnchoredObj = ::GetUserCall( pObj )->GetAnchoredObj( pObj );
     SwFrameFormat& rFormat = pAnchoredObj->GetFrameFormat();
