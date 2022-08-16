@@ -1245,7 +1245,7 @@ SwTextNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark
                             *pEnd = pTextNd->Len();
                         }
                     }
-                    else if(pBkmk->GetOtherMarkPos().nNode == pBkmk->GetMarkPos().nNode)
+                    else if(pBkmk->GetOtherMarkPos().GetNode() == pBkmk->GetMarkPos().GetNode())
                         *pEnd = pBkmk->GetMarkEnd().GetContentIndex();
                     else
                         *pEnd = -1;

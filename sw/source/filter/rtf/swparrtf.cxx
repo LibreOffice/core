@@ -124,7 +124,7 @@ ErrCode SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& rPam
         {
             // If the PaM points to the first new node, move the PaM to the
             // end of the previous node.
-            if (aPam.GetPoint()->nNode == aNxtIdx)
+            if (aPam.GetPoint()->GetNode() == aNxtIdx.GetNode())
             {
                 aPam.GetPoint()->Assign(*pTextNode, pTextNode->GetText().getLength());
             }

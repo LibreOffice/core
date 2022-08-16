@@ -107,7 +107,7 @@ static void lcl_SetAttrPam( SwPaM& rPam, sal_Int32 nStart, const sal_Int32* pEnd
         nContentPos = rPam.GetMark()->GetContentIndex();
     else
         nContentPos = rPam.GetPoint()->GetContentIndex();
-    bool bTstEnd = rPam.GetPoint()->nNode == rPam.GetMark()->nNode;
+    bool bTstEnd = rPam.GetPoint()->GetNode() == rPam.GetMark()->GetNode();
 
     SwContentNode* pCNd = rPam.GetPointContentNode();
     rPam.GetPoint()->nContent.Assign( pCNd, nStart );
@@ -248,14 +248,14 @@ void SwAttrCheckArr::SetNewSet( const SwTextNode& rTextNd, const SwPaM& rPam )
     if( m_bForward )
     {
         m_nNodeStart = rPam.GetPoint()->GetContentIndex();
-        m_nNodeEnd = rPam.GetPoint()->nNode == rPam.GetMark()->nNode
+        m_nNodeEnd = rPam.GetPoint()->GetNode() == rPam.GetMark()->GetNode()
                 ? rPam.GetMark()->GetContentIndex()
                 : rTextNd.GetText().getLength();
     }
     else
     {
         m_nNodeEnd = rPam.GetPoint()->GetContentIndex();
-        m_nNodeStart = rPam.GetPoint()->nNode == rPam.GetMark()->nNode
+        m_nNodeStart = rPam.GetPoint()->GetNode() == rPam.GetMark()->GetNode()
                 ? rPam.GetMark()->GetContentIndex()
                 : 0;
     }

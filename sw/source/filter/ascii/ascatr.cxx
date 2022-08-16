@@ -245,11 +245,11 @@ static Writer& OutASC_SwTextNode( Writer& rWrt, SwContentNode& rNode )
     sal_Int32 nStrPos = rWrt.m_pCurrentPam->GetPoint()->GetContentIndex();
     const sal_Int32 nNodeEnd = rNd.Len();
     sal_Int32 nEnd = nNodeEnd;
-    bool bLastNd =  rWrt.m_pCurrentPam->GetPoint()->nNode == rWrt.m_pCurrentPam->GetMark()->nNode;
+    bool bLastNd =  rWrt.m_pCurrentPam->GetPoint()->GetNode() == rWrt.m_pCurrentPam->GetMark()->GetNode();
     if( bLastNd )
         nEnd = rWrt.m_pCurrentPam->GetMark()->GetContentIndex();
 
-    bool bIsOneParagraph = rWrt.m_pOrigPam->Start()->nNode == rWrt.m_pOrigPam->End()->nNode && !getenv("SW_ASCII_COPY_NUMBERING");
+    bool bIsOneParagraph = rWrt.m_pOrigPam->Start()->GetNode() == rWrt.m_pOrigPam->End()->GetNode() && !getenv("SW_ASCII_COPY_NUMBERING");
 
     SwASC_AttrIter aAttrIter( static_cast<SwASCWriter&>(rWrt), rNd, nStrPos );
     SwASC_RedlineIter redlineIter(static_cast<SwASCWriter&>(rWrt), rNd);

@@ -61,7 +61,7 @@ void SwEditShell::FillByEx(SwCharFormat* pCharFormat)
         {
             const SwPosition* pPtPos = pPam->GetPoint();
             const SwPosition* pMkPos = pPam->GetMark();
-            if( pPtPos->nNode == pMkPos->nNode )        // in the same node?
+            if( pPtPos->GetNode() == pMkPos->GetNode() )        // in the same node?
             {
                 nStt = pPtPos->GetContentIndex();
                 if( nStt < pMkPos->GetContentIndex() )

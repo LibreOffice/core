@@ -175,7 +175,7 @@ void SaveFlyInRange( const SwPaM& rPam, const SwPosition& rInsPos,
                                 ? DelContentType::CheckNoCntnt|DelContentType::AllMask
                                 : DelContentType::AllMask))
                     || (RndStdIds::FLY_AT_PARA == pAnchor->GetAnchorId()
-                            && (bInsPos = (rInsPos.nNode == pAPos->nNode)))
+                            && (bInsPos = (rInsPos.GetNode() == pAPos->GetNode())))
                     || (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId()
                             && (bInsPos = (rInsPos == *pAPos))))
             {
@@ -185,7 +185,7 @@ void SaveFlyInRange( const SwPaM& rPam, const SwPosition& rInsPos,
                 }
                 SaveFly aSave( pAPos->GetNodeIndex() - rSttNdIdx.GetIndex(),
                     (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId())
-                        ? (pAPos->nNode == rSttNdIdx)
+                        ? (pAPos->GetNode() == rSttNdIdx.GetNode())
                             ? pAPos->GetContentIndex() - rPam.Start()->GetContentIndex()
                             : pAPos->GetContentIndex()
                         : 0,
@@ -328,7 +328,7 @@ void sw_GetJoinFlags( SwPaM& rPam, bool& rJoinText, bool& rJoinPrev )
 {
     rJoinText = false;
     rJoinPrev = false;
-    if( rPam.GetPoint()->nNode == rPam.GetMark()->nNode )
+    if( rPam.GetPoint()->GetNode() == rPam.GetMark()->GetNode() )
         return;
 
     auto [pStt, pEnd] = rPam.StartEnd(); // SwPosition*
@@ -742,7 +742,7 @@ SwHyphArgs::SwHyphArgs( const SwPaM *pPam, const Point &rCursorPos,
     const SwPosition *pMark = pPam->GetMark();
     m_pEnd = pMark->GetNode().GetTextNode();
     m_nPamLen = pMark->GetContentIndex();
-    if( pPoint->nNode == pMark->nNode )
+    if( pPoint->GetNode() == pMark->GetNode() )
         m_nPamLen = m_nPamLen - pPoint->GetContentIndex();
 }
 

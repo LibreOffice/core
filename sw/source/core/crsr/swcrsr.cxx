@@ -86,7 +86,7 @@ struct PercentHdl
         : pDSh( rPam.GetDoc().GetDocShell() )
     {
         sal_Int32 nStt, nEnd;
-        if( rPam.GetPoint()->nNode == rPam.GetMark()->nNode )
+        if( rPam.GetPoint()->GetNode() == rPam.GetMark()->GetNode() )
         {
             bNodeIdx = false;
             nStt = rPam.GetMark()->GetContentIndex();
@@ -1499,9 +1499,9 @@ bool SwCursor::SelectWordWT( SwViewShell const * pViewShell, sal_Int16 nWordType
                         // An annotation mark covers the selected word. Check
                         // if it covers only the word: in that case we select
                         // the comment anchor as well.
-                        bool bStartMatch = GetMark()->nNode == pAnnotationMark->GetMarkStart().nNode &&
+                        bool bStartMatch = GetMark()->GetNode() == pAnnotationMark->GetMarkStart().GetNode() &&
                             GetMark()->nContent == pAnnotationMark->GetMarkStart().nContent;
-                        bool bEndMatch = GetPoint()->nNode == pAnnotationMark->GetMarkEnd().nNode &&
+                        bool bEndMatch = GetPoint()->GetNode() == pAnnotationMark->GetMarkEnd().GetNode() &&
                             GetPoint()->GetContentIndex() + 1 == pAnnotationMark->GetMarkEnd().GetContentIndex();
                         if (bStartMatch && bEndMatch)
                             ++GetPoint()->nContent;

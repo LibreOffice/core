@@ -26,6 +26,7 @@
 #include <unobaseclass.hxx>
 
 
+class SwNode;
 class SwNodeIndex;
 class SwPaM;
 class SwFrameFormat;
@@ -55,7 +56,7 @@ typedef std::deque< std::shared_ptr<sw::FrameClient> >
     FrameClientList_t;
 
 // #i28701# - adjust 4th parameter
-void CollectFrameAtNode( const SwNodeIndex& rIdx,
+void CollectFrameAtNode( const SwNode& rNd,
                          FrameClientSortList_t& rFrames,
                          const bool bAtCharAnchoredObjs );
 

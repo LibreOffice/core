@@ -189,7 +189,7 @@ namespace
     {
         return oContentIdx.has_value()
                ? ( rPos.nNode > rNdIdx
-                   || ( rPos.nNode == rNdIdx
+                   || ( rPos.GetNode() == rNdIdx
                         && rPos.nContent >= *oContentIdx ) )
                : rPos.nNode >= rNdIdx;
     }
@@ -198,7 +198,7 @@ namespace
     {
         return rPos.nNode < rNdIdx
                || ( oContentIdx.has_value()
-                    && rPos.nNode == rNdIdx
+                    && rPos.GetNode() == rNdIdx
                     && rPos.nContent < *oContentIdx );
     }
 
@@ -517,7 +517,7 @@ bool IDocumentMarkAccess::IsLegalPaMForCrossRefHeadingBookmark( const SwPaM& rPa
     return rPaM.Start()->GetNode().IsTextNode() &&
            rPaM.Start()->GetContentIndex() == 0 &&
            ( !rPaM.HasMark() ||
-             ( rPaM.GetMark()->nNode == rPaM.GetPoint()->nNode &&
+             ( rPaM.GetMark()->GetNode() == rPaM.GetPoint()->GetNode() &&
                rPaM.End()->GetContentIndex() == rPaM.End()->GetNode().GetTextNode()->Len() ) );
 }
 
@@ -997,11 +997,11 @@ namespace sw::mark
         // special case: completely in range, touching the end?
         if ( oEndContentIdx.has_value()
              && ( ( rbIsOtherPosInRange
-                    && pMark->GetMarkPos().nNode == rEnd
+                    && pMark->GetMarkPos().GetNode() == rEnd
                     && pMark->GetMarkPos().nContent == *oEndContentIdx )
                   || ( rbIsPosInRange
                        && pMark->IsExpanded()
-                       && pMark->GetOtherMarkPos().nNode == rEnd
+                       && pMark->GetOtherMarkPos().GetNode() == rEnd
                        && pMark->GetOtherMarkPos().nContent == *oEndContentIdx ) ) )
         {
             rbIsPosInRange = true;
@@ -1386,7 +1386,7 @@ namespace sw::mark
                     return pMark->GetMarkStart() == rPos
                             // end position includes the CH_TXT_ATR_FIELDEND
                         || (pMark->GetMarkEnd().GetContentIndex() == rPos.GetContentIndex() + 1
-                            && pMark->GetMarkEnd().nNode == rPos.nNode);
+                            && pMark->GetMarkEnd().GetNode() == rPos.GetNode());
                 } );
         return (pFieldmark == m_vFieldmarks.end())
             ? nullptr
@@ -1782,7 +1782,7 @@ namespace
 {
     bool lcl_Greater( const SwPosition& rPos, const SwNode& rNdIdx, std::optional<sal_Int32> oContentIdx )
     {
-        return rPos.nNode > rNdIdx || ( oContentIdx && rPos.nNode == rNdIdx && rPos.nContent > *oContentIdx );
+        return rPos.nNode > rNdIdx || ( oContentIdx && rPos.GetNode() == rNdIdx && rPos.nContent > *oContentIdx );
     }
 }
 

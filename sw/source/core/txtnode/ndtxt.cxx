@@ -3673,23 +3673,23 @@ OUString SwTextNode::GetRedlineText() const
             if( RedlineType::Delete == pTmp->GetType() )
             {
                 const SwPosition *pRStt = pTmp->Start(), *pREnd = pTmp->End();
-                if( pRStt->nNode < nNdIdx )
+                if( pRStt->GetNodeIndex() < nNdIdx )
                 {
-                    if( pREnd->nNode > nNdIdx )
+                    if( pREnd->GetNodeIndex() > nNdIdx )
                         // paragraph is fully deleted
                         return OUString();
-                    else if( pREnd->nNode == nNdIdx )
+                    else if( pREnd->GetNodeIndex() == nNdIdx )
                     {
                         // deleted from 0 to nContent
                         aRedlArr.push_back( 0 );
                         aRedlArr.push_back( pREnd->GetContentIndex() );
                     }
                 }
-                else if( pRStt->nNode == nNdIdx )
+                else if( pRStt->GetNodeIndex() == nNdIdx )
                 {
                     //aRedlArr.Insert( pRStt->GetContentIndex(), aRedlArr.Count() );
                     aRedlArr.push_back( pRStt->GetContentIndex() );
-                    if( pREnd->nNode == nNdIdx )
+                    if( pREnd->GetNodeIndex() == nNdIdx )
                         aRedlArr.push_back( pREnd->GetContentIndex() );
                     else
                     {
