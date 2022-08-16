@@ -36,6 +36,7 @@
 #include <editeng/fhgtitem.hxx>
 #include <calbck.hxx>
 #include <doc.hxx>
+#include <IDocumentSettingAccess.hxx>
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star;
@@ -60,6 +61,11 @@ static bool lcl_IsDropFlyInter( const SwTextFormatInfo &rInf,
     }
 
     return false;
+}
+
+static bool IsDashChar( const sal_Unicode c )
+{
+    return '-' == c || ( 0x2012 <= c && c <= 0x2014 );
 }
 
 namespace {
@@ -480,7 +486,7 @@ TextFrameIndex SwDropPortion::GetModelPositionForViewPoint(const sal_uInt16) con
     return TextFrameIndex(0);
 }
 
-void SwTextFormatter::CalcDropHeight( const sal_uInt16 nLines )
+void SwTextFormatter::CalcDropHeight( const sal_uInt16 nLines, bool bSingleChar )
 {
     const SwLinePortion *const pOldCurr = GetCurr();
     sal_uInt16 nDropHght = 0;
@@ -521,6 +527,16 @@ void SwTextFormatter::CalcDropHeight( const sal_uInt16 nLines )
         // We hit the line ascent when reaching the last line!
         nDropHght = nDropHght - nHeight;
         nDropHght = nDropHght + nAscent;
+
+        // tdf#150200 fix typesetting of dash, en-dash and em-dash
+        if ( bSingleChar && m_pFrame->GetDoc().getIDocumentSettingAccess()
+                .get(DocumentSettingId::DROP_CAP_PUNCTUATION) &&
+                IsDashChar( m_pFrame->GetText()[0] ) )
+        {
+            // set smaller height
+            nDropHght = nDropHght / 4;
+        }
+
         Top();
     }
     m_bRegisterOn = bRegisterOld;
@@ -576,7 +592,8 @@ SwDropPortion *SwTextFormatter::NewDropPortion( SwTextFormatInfo &rInf )
     if ( !( GetDropHeight() || IsOnceMore() ) )
     {
         if ( GetNext() )
-            CalcDropHeight( m_pDropFormat->GetLines() );
+            CalcDropHeight( m_pDropFormat->GetLines(),
+                !m_pDropFormat->GetWholeWord() && m_pDropFormat->GetChars() == 1 );
         else
             GuessDropHeight( m_pDropFormat->GetLines() );
     }
@@ -797,6 +814,12 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
         else
             pWin = Application::GetDefaultDevice();
 
+        // adjust punctuation?
+        bool bPunctuation = rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess()
+            .get(DocumentSettingId::DROP_CAP_PUNCTUATION) &&
+            !rInf.GetDropFormat()->GetWholeWord() && rInf.GetDropFormat()->GetChars() == 1 &&
+            IsDashChar(rInf.GetText()[0]);
+
         while( bGrow )
         {
             // reset pCurrPart to first part
@@ -824,7 +847,10 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
                 nAscent = rFnt.GetAscent( rInf.GetVsh(), *pOut );
 
                 // we get the rectangle that covers all chars
-                bool bHaveGlyphRect = pOut->GetTextBoundRect( aRect, rInf.GetText(), 0,
+                bool bHaveGlyphRect = pOut->GetTextBoundRect( aRect,
+                            // set the same font size for the thinner figure dash,
+                            // en-dash and em-dash as for the plain dash
+                            bPunctuation ? OUString("-") : rInf.GetText(), 0,
                             sal_Int32(nIdx), sal_Int32(pCurrPart->GetLen()))
                     && ! aRect.IsEmpty();
 
@@ -884,6 +910,10 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
                 {
                     aRect.setHeight(aRect.GetHeight() + rFnt.GetBottomBorderSpace());
                 }
+
+                // adjust punctuation to the first line better
+                if ( bPunctuation )
+                    aRect.SetPosY(aRect.Top() - nAscent/50);
 
                 if ( bFirstGlyphRect )
                 {

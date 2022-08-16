@@ -2072,7 +2072,8 @@ bool SwTextFormatter::CalcOnceMore()
     if( m_pDropFormat )
     {
         const sal_uInt16 nOldDrop = GetDropHeight();
-        CalcDropHeight( m_pDropFormat->GetLines() );
+        CalcDropHeight( m_pDropFormat->GetLines(),
+            !m_pDropFormat->GetWholeWord() && m_pDropFormat->GetChars() == 1 );
         m_bOnceMore = nOldDrop != GetDropHeight();
     }
     else

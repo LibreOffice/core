@@ -153,7 +153,8 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_IMAGE_PREFERRED_DPI,
     HANDLE_AUTO_FIRST_LINE_INDENT_DISREGARD_LINE_SPACE,
     HANDLE_WORD_LIKE_WRAP_FOR_AS_CHAR_FLYS,
-    HANDLE_NO_NUMBERING_SHOW_FOLLOWBY
+    HANDLE_NO_NUMBERING_SHOW_FOLLOWBY,
+    HANDLE_DROP_CAP_PUNCTUATION
 };
 
 }
@@ -254,6 +255,7 @@ static rtl::Reference<MasterPropertySetInfo> lcl_createSettingsInfo()
         { OUString("AutoFirstLineIndentDisregardLineSpace"), HANDLE_AUTO_FIRST_LINE_INDENT_DISREGARD_LINE_SPACE, cppu::UnoType<bool>::get(), 0 },
         { OUString("WordLikeWrapForAsCharFlys"), HANDLE_WORD_LIKE_WRAP_FOR_AS_CHAR_FLYS, cppu::UnoType<bool>::get(), 0 },
         { OUString("NoNumberingShowFollowBy"), HANDLE_NO_NUMBERING_SHOW_FOLLOWBY, cppu::UnoType<bool>::get(), 0 },
+        { OUString("DropCapPunctuation"), HANDLE_DROP_CAP_PUNCTUATION, cppu::UnoType<bool>::get(), 0 },
 
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
@@ -1057,18 +1059,26 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_WORD_LIKE_WRAP_FOR_AS_CHAR_FLYS:
         {
-            bool bValue = false;
-            if (rValue >>= bValue)
+            bool bTmp;
+            if (rValue >>= bTmp)
                 mpDoc->getIDocumentSettingAccess().set(
-                    DocumentSettingId::WRAP_AS_CHAR_FLYS_LIKE_IN_OOXML, bValue);
+                    DocumentSettingId::WRAP_AS_CHAR_FLYS_LIKE_IN_OOXML, bTmp);
         }
         break;
         case HANDLE_NO_NUMBERING_SHOW_FOLLOWBY:
         {
-            bool bValue = false;
-            if (rValue >>= bValue)
+            bool bTmp;
+            if (rValue >>= bTmp)
                 mpDoc->getIDocumentSettingAccess().set(
-                    DocumentSettingId::NO_NUMBERING_SHOW_FOLLOWBY, bValue);
+                    DocumentSettingId::NO_NUMBERING_SHOW_FOLLOWBY, bTmp);
+        }
+        break;
+        case HANDLE_DROP_CAP_PUNCTUATION:
+        {
+            bool bTmp;
+            if (rValue >>= bTmp)
+                mpDoc->getIDocumentSettingAccess().set(
+                    DocumentSettingId::DROP_CAP_PUNCTUATION, bTmp);
         }
         break;
         default:
@@ -1604,6 +1614,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get(
                 DocumentSettingId::NO_NUMBERING_SHOW_FOLLOWBY);
+        }
+        break;
+        case HANDLE_DROP_CAP_PUNCTUATION:
+        {
+            rValue <<= mpDoc->getIDocumentSettingAccess().get(
+                DocumentSettingId::DROP_CAP_PUNCTUATION);
         }
         break;
         default:

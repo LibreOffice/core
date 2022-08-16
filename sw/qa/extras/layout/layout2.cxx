@@ -2009,6 +2009,50 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf118672)
                 "setetur");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf150200)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf150200.odt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // dash
+    OUString sFirstLine = parseDump("/root/page/body/txt[1]/LineBreak[1]/@Line");
+    CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"-(dash)"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(93), sFirstLine.getLength());
+    // en-dash
+    sFirstLine = parseDump("/root/page/body/txt[2]/LineBreak[1]/@Line");
+    CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"–(en-dash)"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(88), sFirstLine.getLength());
+    // em-dash
+    sFirstLine = parseDump("/root/page/body/txt[3]/LineBreak[1]/@Line");
+    CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"—(em-dash)"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(77), sFirstLine.getLength());
+    // figure dash
+    sFirstLine = parseDump("/root/page/body/txt[4]/LineBreak[1]/@Line");
+    CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"‒(figure dash)"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(87), sFirstLine.getLength());
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf150200_DOCX)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf150200.docx");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // dash
+    OUString sFirstLine = parseDump("/root/page/body/txt[1]/LineBreak[1]/@Line");
+    CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"-(dash)"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(93), sFirstLine.getLength());
+    // en-dash
+    sFirstLine = parseDump("/root/page/body/txt[2]/LineBreak[1]/@Line");
+    CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"–(en-dash)"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(88), sFirstLine.getLength());
+    // em-dash
+    sFirstLine = parseDump("/root/page/body/txt[3]/LineBreak[1]/@Line");
+    CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"—(em-dash)"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(77), sFirstLine.getLength());
+    // figure dash
+    sFirstLine = parseDump("/root/page/body/txt[4]/LineBreak[1]/@Line");
+    CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"‒(figure dash)"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(87), sFirstLine.getLength());
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf117923)
 {
     createSwDoc(DATA_DIRECTORY, "tdf117923.doc");

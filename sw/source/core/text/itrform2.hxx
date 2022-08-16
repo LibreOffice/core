@@ -136,7 +136,7 @@ class SwTextFormatter : public SwTextPainter
 
 public:
     // Calculate the height for the DropPortion
-    void CalcDropHeight( const sal_uInt16 nLines );
+    void CalcDropHeight( const sal_uInt16 nLines, bool bSingleChar );
 
     // Calculates the paragraphs bottom, takes anchored objects within it into
     // account which have a wrap setting of "wrap at 1st paragraph"

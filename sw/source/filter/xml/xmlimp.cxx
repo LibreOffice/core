@@ -1300,6 +1300,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     bool bEmptyDbFieldHidesPara = false;
     bool bCollapseEmptyCellPara = false;
     bool bAutoFirstLineIndentDisregardLineSpace = false;
+    bool bDropCapPunctuation = false;
 
     const PropertyValue* currentDatabaseDataSource = nullptr;
     const PropertyValue* currentDatabaseCommand = nullptr;
@@ -1393,6 +1394,8 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                     bCollapseEmptyCellPara = true;
                 else if (rValue.Name == "AutoFirstLineIndentDisregardLineSpace")
                     bAutoFirstLineIndentDisregardLineSpace = true;
+                else if ( rValue.Name == "DropCapPunctuation" )
+                    bDropCapPunctuation = true;
             }
             catch( Exception& )
             {
@@ -1554,6 +1557,15 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
 
     if (!bAutoFirstLineIndentDisregardLineSpace)
         xProps->setPropertyValue("AutoFirstLineIndentDisregardLineSpace", Any(false));
+
+    // LO 7.4 and previous versions had different drop cap punctuation: very long dashes.
+    // In order to keep backwards compatibility, DropCapPunctuation option is written to .odt
+    // files, and the default for new documents is 'true'. Files without this option
+    // are considered to be old files, so set the compatibility option too.
+    if ( !bDropCapPunctuation )
+    {
+        xProps->setPropertyValue( "DropCapPunctuation", Any( false ) );
+    }
 
     SwDoc *pDoc = getDoc();
     SfxPrinter *pPrinter = pDoc->getIDocumentDeviceAccess().getPrinter( false );

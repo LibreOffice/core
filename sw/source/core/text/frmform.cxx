@@ -1718,7 +1718,7 @@ void SwTextFrame::FormatOnceMore( SwTextFormatter &rLine, SwTextFormatInfo &rInf
                 rInf.CtorInitTextFormatInfo( getRootFrame()->GetCurrShell()->GetOut(), this );
                 rLine.CtorInitTextFormatter( this, &rInf );
                 rLine.SetDropLines( 1 );
-                rLine.CalcDropHeight( 1 );
+                rLine.CalcDropHeight( 1, false );
                 SwCharRange aTmpRange(TextFrameIndex(0), TextFrameIndex(rInf.GetText().getLength()));
                 pPara->GetReformat() = aTmpRange;
                 Format_( rLine, rInf, true );
