@@ -28,6 +28,11 @@ class QtXAccessible : public QObject
 
 public:
     QtXAccessible(css::uno::Reference<css::accessibility::XAccessible> xAccessible);
+
+    /** Reference to the XAccessible.
+      * This is cleared once it has been passed to the QtAccessibleWidget,
+      * which then keeps an own reference and takes care of all required
+      * access to the XAccessible for the Qt a11y bridge. */
     css::uno::Reference<css::accessibility::XAccessible> m_xAccessible;
 };
 
