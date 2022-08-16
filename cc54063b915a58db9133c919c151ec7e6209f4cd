@@ -16,6 +16,24 @@
       "message": "Hi Khaled,\nWhy was this test removed ?",
       "revId": "cc54063b915a58db9133c919c151ec7e6209f4cd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d56cc4c_8fea4175",
+        "filename": "vcl/qa/cppunit/complextext.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1003606
+      },
+      "writtenOn": "2022-08-16T08:45:41Z",
+      "side": 0,
+      "message": "It was testing the preservation of `SalLayoutFlags::KashidaJustification` when using cached glyphs, but the flag has been removed as it is no longer needed.",
+      "parentUuid": "9af6290e_939675b6",
+      "revId": "cc54063b915a58db9133c919c151ec7e6209f4cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
