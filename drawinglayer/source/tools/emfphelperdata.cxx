@@ -923,6 +923,8 @@ namespace emfplushelper
         mnMmY(0),
         mbMultipart(false),
         mMFlags(0),
+        mdExtractedXScale(1.0),
+        mdExtractedYScale(1.0),
         mrTargetHolders(rTargetHolders),
         mrPropertyHolders(rPropertyHolders),
         bIsGetDCProcessing(false)
