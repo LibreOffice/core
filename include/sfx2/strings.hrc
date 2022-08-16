@@ -212,7 +212,7 @@
 #define STR_SFX_EXPLORERFILE_BUTTONINSERT       NC_("STR_SFX_EXPLORERFILE_BUTTONINSERT", "~Insert")
 #define STR_SFX_IMPORT_ALL_IMAGES               NC_("STR_SFX_IMPORT_ALL_IMAGES", "<All images>")
 #define STR_PB_SAVEACOPY                        NC_("STR_PB_SAVEACOPY", "Save a Copy")
-#define STR_PB_COMPAREDOC                       NC_("STR_PB_COMPAREDOC", "Compare to original document")
+#define STR_PB_COMPAREDOC                       NC_("STR_PB_COMPAREDOC", "Compare to Original Document")
 #define STR_PB_MERGEDOC                         NC_("STR_PB_MERGEDOC", "Merge with")
 
 #define STR_SFX_NEWOFFICEDOC                    NC_("STR_SFX_NEWOFFICEDOC", "%PRODUCTNAME document")
