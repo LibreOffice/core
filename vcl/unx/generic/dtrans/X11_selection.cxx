@@ -1948,7 +1948,7 @@ bool SelectionManager::handleSendPropertyNotify( XPropertyEvent const & rNotify 
         if( it != m_aIncrementals.end() )
         {
             bHandled = true;
-            int nCurrentTime = time( nullptr );
+            time_t nCurrentTime = time( nullptr );
             // throw out aborted transfers
             std::vector< Atom > aTimeouts;
             for (auto const& incrementalTransfer : it->second)
