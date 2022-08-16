@@ -705,7 +705,7 @@ WW8TableInfo::processTableBoxLines(const SwTableBox * pBox,
 
             pNodeInfo = insertTableNodeInfo(&rNode, pTable, pBoxToSet, nRow, nCell, nDepth);
 
-            if (aPaM.GetPoint()->nNode == aEndPaM.GetPoint()->nNode)
+            if (aPaM.GetPoint()->GetNode() == aEndPaM.GetPoint()->GetNode())
                 bDone = true;
             else
                 aPaM.GetPoint()->nNode++;

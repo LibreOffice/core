@@ -989,7 +989,7 @@ static void InitBookmarks(
                                     && ((iter != end && &rEnd.GetNode() == iter->pNode && rEnd.GetContentIndex() == iter->nStart)
                                         ? (*oPrevIter)->nEnd < rStart.GetContentIndex()
                                         : (*oPrevIter)->nEnd <= rStart.GetContentIndex())))
-                            : rStart.nNode == rEnd.nNode)
+                            : rStart.GetNode() == rEnd.GetNode())
                         {
                             break; // deleted - skip it
                         }

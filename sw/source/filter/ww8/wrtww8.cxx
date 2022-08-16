@@ -1435,7 +1435,7 @@ void WW8Export::AppendBookmarks( const SwTextNode& rNd, sal_Int32 nCurrentPos, s
         const SwPosition* pOPos = nullptr;
         if(rBkmk.IsExpanded())
             pOPos = &rBkmk.GetOtherMarkPos();
-        if( pOPos && pOPos->nNode == pPos->nNode &&
+        if( pOPos && pOPos->GetNode() == pPos->GetNode() &&
             pOPos->nContent < pPos->nContent )
         {
             pPos = pOPos;
@@ -2754,7 +2754,7 @@ public:
     bool contentRemainsToExport(ww8::WW8TableInfo *pTableInfo)
     {
         bool bSimpleContentRemains = m_pCurPam->GetPoint()->nNode < m_pCurPam->GetMark()->nNode ||
-            (m_pCurPam->GetPoint()->nNode == m_pCurPam->GetMark()->nNode &&
+            (m_pCurPam->GetPoint()->GetNode() == m_pCurPam->GetMark()->GetNode() &&
               m_pCurPam->GetPoint()->GetContentIndex() <= m_pCurPam->GetMark()->GetContentIndex());
         if (bSimpleContentRemains)
             return true;

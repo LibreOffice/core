@@ -935,7 +935,7 @@ SwTextField* SwCursorShell::GetTextFieldAtCursor(
 
     SwTextField* pTextField = GetTextFieldAtPos( pCursor->Start(), bIncludeInputFieldAtStart );
     if ( pTextField != nullptr
-        && pCursor->Start()->nNode == pCursor->End()->nNode )
+        && pCursor->Start()->GetNode() == pCursor->End()->GetNode() )
     {
         const sal_Int32 nTextFieldLength =
             pTextField->End() != nullptr

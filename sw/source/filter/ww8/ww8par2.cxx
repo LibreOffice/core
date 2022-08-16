@@ -2905,7 +2905,7 @@ bool WW8TabDesc::InFirstParaInCell() const
     if (!IsValidCell(GetCurrentCol()))
         return false;
 
-    return m_pIo->m_pPaM->GetPoint()->nNode == m_pTabBox->GetSttIdx() + 1;
+    return m_pIo->m_pPaM->GetPoint()->GetNodeIndex() == m_pTabBox->GetSttIdx() + 1;
 }
 
 void WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)

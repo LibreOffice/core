@@ -228,7 +228,7 @@ SwGrfNode * SwEditShell::GetGrfNode_() const
     SwGrfNode *pGrfNode = nullptr;
     SwPaM* pCursor = GetCursor();
     if( !pCursor->HasMark() ||
-        pCursor->GetPoint()->nNode == pCursor->GetMark()->nNode )
+        pCursor->GetPoint()->GetNode() == pCursor->GetMark()->GetNode() )
         pGrfNode = pCursor->GetPoint()->GetNode().GetGrfNode();
 
     return pGrfNode;
@@ -281,7 +281,7 @@ bool SwEditShell::GetGrfSize(Size& rSz) const
     SwNoTextNode* pNoTextNd;
     SwPaM* pCurrentCursor = GetCursor();
     if( ( !pCurrentCursor->HasMark()
-         || pCurrentCursor->GetPoint()->nNode == pCurrentCursor->GetMark()->nNode )
+         || pCurrentCursor->GetPoint()->GetNode() == pCurrentCursor->GetMark()->GetNode() )
          && nullptr != ( pNoTextNd = pCurrentCursor->GetPointNode().GetNoTextNode() ) )
     {
         rSz = pNoTextNd->GetTwipSize();
@@ -361,7 +361,7 @@ svt::EmbeddedObjectRef& SwEditShell::GetOLEObject() const
     OSL_ENSURE(  CNT_OLE == GetCntType(), "GetOLEObj: no OLENode." );
     OSL_ENSURE( !GetCursor()->HasMark() ||
             (GetCursor()->HasMark() &&
-                GetCursor()->GetPoint()->nNode == GetCursor()->GetMark()->nNode),
+                GetCursor()->GetPoint()->GetNode() == GetCursor()->GetMark()->GetNode()),
             "GetOLEObj: no OLENode." );
 
     SwOLENode *pOLENode = GetCursor()->GetPointNode().GetOLENode();
@@ -504,7 +504,7 @@ OUString SwEditShell::GetDropText( const sal_Int32 nChars ) const
 void SwEditShell::ReplaceDropText( const OUString &rStr, SwPaM* pPaM )
 {
     SwPaM* pCursor = pPaM ? pPaM : GetCursor();
-    if( !(pCursor->GetPoint()->nNode == pCursor->GetMark()->nNode &&
+    if( !(pCursor->GetPoint()->GetNode() == pCursor->GetMark()->GetNode() &&
         pCursor->GetPointNode().GetTextNode()->IsTextNode()) )
         return;
 

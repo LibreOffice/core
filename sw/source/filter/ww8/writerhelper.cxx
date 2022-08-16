@@ -130,16 +130,16 @@ namespace
         return aRet;
     }
 
-    //Utility to test if a frame is anchored at a given node index
+    //Utility to test if a frame is anchored at a given node
     class anchoredto
     {
     private:
-        SwNodeOffset mnNode;
+        const SwNode& mrNode;
     public:
-        explicit anchoredto(SwNodeOffset nNode) : mnNode(nNode) {}
+        explicit anchoredto(const SwNode& rNode) : mrNode(rNode) {}
         bool operator()(const ww8::Frame &rFrame) const
         {
-            return (mnNode == rFrame.GetPosition().GetNode().GetIndex());
+            return (mrNode == rFrame.GetPosition().GetNode());
         }
     };
 }
@@ -506,7 +506,7 @@ namespace sw
         {
             ww8::Frames aRet;
             std::copy_if(rFrames.begin(), rFrames.end(),
-                std::back_inserter(aRet), anchoredto(rNode.GetIndex()));
+                std::back_inserter(aRet), anchoredto(rNode));
             return aRet;
         }
 

@@ -1078,7 +1078,7 @@ bool SwCursorShell::IsSelOnePara() const
     {
         return false;
     }
-    if (m_pCurrentCursor->GetPoint()->nNode == m_pCurrentCursor->GetMark()->nNode)
+    if (m_pCurrentCursor->GetPoint()->GetNode() == m_pCurrentCursor->GetMark()->GetNode())
     {
         return true;
     }
