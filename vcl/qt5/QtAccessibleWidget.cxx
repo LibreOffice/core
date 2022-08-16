@@ -68,8 +68,7 @@ QtAccessibleWidget::QtAccessibleWidget(const Reference<XAccessible> xAccessible,
     Reference<XAccessibleEventBroadcaster> xBroadcaster(xContext, UNO_QUERY);
     if (xBroadcaster.is())
     {
-        Reference<XAccessibleEventListener> xListener(
-            new QtAccessibleEventListener(xAccessible, this));
+        Reference<XAccessibleEventListener> xListener(new QtAccessibleEventListener(this));
         xBroadcaster->addAccessibleEventListener(xListener);
     }
 }
