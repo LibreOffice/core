@@ -22,6 +22,23 @@
       },
       "revId": "8b2663fc860699d0003892908501c76d769b2a2b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d77c4f8_c2339494",
+        "filename": "vcl/qa/cppunit/pdfexport/pdfexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3553,
+      "author": {
+        "id": 1003606
+      },
+      "writtenOn": "2022-08-16T02:52:39Z",
+      "side": 1,
+      "message": "I don’t understand the “bad rendering” bit, is this what happens if the fix is reverted?",
+      "revId": "8b2663fc860699d0003892908501c76d769b2a2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
