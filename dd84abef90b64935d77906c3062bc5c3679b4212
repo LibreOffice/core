@@ -16,6 +16,24 @@
       "message": "The fix itself is lost when going from patch set 8-\u003e9. Please add it again.\nIt also shows that the test is not enough to capture the problem because it does not fail without the fix in place.",
       "revId": "dd84abef90b64935d77906c3062bc5c3679b4212",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29dad22e_ab6ad09a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003025
+      },
+      "writtenOn": "2022-08-16T13:30:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "853fda45_2e230988",
+      "revId": "dd84abef90b64935d77906c3062bc5c3679b4212",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

@@ -16,6 +16,24 @@
       "message": "The new patch set is much better.\nPlease take a look at the below link, and format your code according to the suggestions:\n\nhttps://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/102560/consoleFull#-1552396567994c00c3-9477-47e5-bdab-2d42e4953984\n\nIf you go some lines up, you see the reported formatting problems.",
       "revId": "79a35c7d481267fdd413ddc0f9f27fd729f91a43",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e7c2db3_5105a7c6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003025
+      },
+      "writtenOn": "2022-08-16T13:30:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38223751_5faf4bfd",
+      "revId": "79a35c7d481267fdd413ddc0f9f27fd729f91a43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

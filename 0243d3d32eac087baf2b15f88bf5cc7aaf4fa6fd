@@ -35,6 +35,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c8550d3_1a72b761",
+        "filename": "sw/qa/extras/txtimport/data/longtext.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1003025
+      },
+      "writtenOn": "2022-08-16T13:30:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "796323ad_f4e65bcf",
+      "revId": "0243d3d32eac087baf2b15f88bf5cc7aaf4fa6fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c975c1f3_d2366793",
