@@ -763,7 +763,7 @@ void SwGlossaryDlg::Init()
         if (!xSelEntry)
         {
             xSelEntry = std::move(xSearch);
-            if (!m_xCategoryBox->get_iter_first(*xSelEntry))
+            if (!xSelEntry || !m_xCategoryBox->get_iter_first(*xSelEntry))
                 xSelEntry.reset();
         }
     }
