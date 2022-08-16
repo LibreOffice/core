@@ -353,8 +353,7 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
                     convertTextProperty( aPropertySet, getFormatter(), mrModel.mxText->mxTextBody );
                     pRun->getTextCharacterProperties().pushToPropSet( aPropertySet, getFilter() );
 
-                    TextField* pField = nullptr;
-                    if( ( pField = dynamic_cast< TextField* >( pRun.get() ) ) )
+                    if (TextField* pField = dynamic_cast<TextField*>(pRun.get()))
                     {
                         DataPointCustomLabelFieldType eType = lcl_ConvertFieldNameToFieldEnum( pField->getType() );
 
@@ -370,7 +369,7 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
                         xCustomLabel->setFieldType( eType );
                         xCustomLabel->setGuid( pField->getUuid() );
                     }
-                    else if( pRun )
+                    else
                     {
                         xCustomLabel->setString( pRun->getText() );
                         xCustomLabel->setFieldType( DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT );
