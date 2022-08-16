@@ -39,6 +39,24 @@
       "message": "I don’t understand the “bad rendering” bit, is this what happens if the fix is reverted?",
       "revId": "8b2663fc860699d0003892908501c76d769b2a2b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e21a82f6_d2edd40c",
+        "filename": "vcl/qa/cppunit/pdfexport/pdfexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3553,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-08-16T07:13:40Z",
+      "side": 1,
+      "message": "From bad rendering, I meant the bad positioning of the kashida.\nAnd yes, this is what happens in this situation, but:\n\n1) That\u0027s only part of the problem.\n2) I wasn\u0027t sure that this happens everywhere, so I tried to check all the other problems, including the gap and big overlap. I had to check and find out which part is kasra, and which part is tatweel.\n\nBtw, I didn\u0027t revert the exact commit, but I\u0027ve built one commit before the first patch in your set of patches.",
+      "parentUuid": "1d77c4f8_c2339494",
+      "revId": "8b2663fc860699d0003892908501c76d769b2a2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
