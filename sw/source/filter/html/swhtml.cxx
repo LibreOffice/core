@@ -754,7 +754,7 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
             {
                 const sal_Int32 nStt = pTextNode->GetText().getLength();
                 // when the cursor is still in the node, then set him at the end
-                if( m_pPam->GetPoint()->nNode == aNxtIdx )
+                if( m_pPam->GetPoint()->GetNode() == aNxtIdx.GetNode() )
                 {
                     m_pPam->GetPoint()->Assign( *pTextNode, nStt );
                 }
@@ -4547,7 +4547,7 @@ void SwHTMLParser::EndDefListItem( HtmlTokenId nToken )
 bool SwHTMLParser::HasCurrentParaFlys( bool bNoSurroundOnly,
                                        bool bSurroundOnly ) const
 {
-    SwNodeIndex& rNodeIdx = m_pPam->GetPoint()->nNode;
+    SwNode& rNode = m_pPam->GetPoint()->GetNode();
 
     const SwFrameFormats& rFrameFormatTable = *m_xDoc->GetSpzFrameFormats();
 
@@ -4566,7 +4566,7 @@ bool SwHTMLParser::HasCurrentParaFlys( bool bNoSurroundOnly,
         if (pAPos &&
             ((RndStdIds::FLY_AT_PARA == pAnchor->GetAnchorId()) ||
              (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
-            pAPos->nNode == rNodeIdx )
+            pAPos->GetNode() == rNode )
         {
             if( !(bNoSurroundOnly || bSurroundOnly) )
             {

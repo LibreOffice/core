@@ -1055,7 +1055,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                 case RndStdIds::FLY_AT_FLY:
 
                     if( nullptr != (pAPos = pAnchor->GetContentAnchor() ) &&
-                        pStt->nNode == pAPos->nNode )
+                        pStt->GetNode() == pAPos->GetNode() )
                     {
                         if( !m_pHistory )
                             m_pHistory.reset( new SwHistory );
@@ -1106,7 +1106,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
         {
             // #i92125#
             // keep cross-reference bookmarks, if content inside one paragraph is deleted.
-            if ( rMark.nNode == rPoint.nNode
+            if ( rMark.GetNode() == rPoint.GetNode()
                 && (   type == IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK
                     || type == IDocumentMarkAccess::MarkType::CROSSREF_NUMITEM_BOOKMARK))
             {
@@ -1157,7 +1157,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                 {
                     // delete cross-reference bookmark at <pStt>, if only part of
                     // <pEnd> text node content is deleted.
-                    if( pStt->nNode == pBkmk->GetMarkPos().nNode
+                    if( pStt->GetNode() == pBkmk->GetMarkPos().GetNode()
                         && pEnd->GetContentIndex() != pEnd->GetNode().GetTextNode()->Len() )
                     {
                         bSavePos = true;
@@ -1165,7 +1165,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                     }
                     // delete cross-reference bookmark at <pEnd>, if only part of
                     // <pStt> text node content is deleted.
-                    else if( pEnd->nNode == pBkmk->GetMarkPos().nNode &&
+                    else if( pEnd->GetNode() == pBkmk->GetMarkPos().GetNode() &&
                         pStt->GetContentIndex() != 0 )
                     {
                         bSavePos = true;
@@ -1670,7 +1670,7 @@ bool IsSelectFrameAnchoredAtPara(SwPosition const & rAnchorPos,
 
     // in general, exclude the start and end position
     return ((rStart.nNode < rAnchorPos.nNode)
-            || (rStart.nNode == rAnchorPos.nNode
+            || (rStart.GetNode() == rAnchorPos.GetNode()
                 && !(nDelContentType & DelContentType::ExcludeFlyAtStartEnd)
                 // special case: fully deleted node
                 && ((rStart.nNode != rEnd.nNode && rStart.GetContentIndex() == 0
@@ -1678,7 +1678,7 @@ bool IsSelectFrameAnchoredAtPara(SwPosition const & rAnchorPos,
                         && IsNotBackspaceHeuristic(rStart, rEnd))
                     || (IsAtStartOfSection2(rStart) && IsAtEndOfSection2(rEnd)))))
         && ((rAnchorPos.nNode < rEnd.nNode)
-            || (rAnchorPos.nNode == rEnd.nNode
+            || (rAnchorPos.GetNode() == rEnd.GetNode()
                 && !(nDelContentType & DelContentType::ExcludeFlyAtStartEnd)
                 // special case: fully deleted node
                 && ((rEnd.nNode != rStart.nNode && rEnd.GetContentIndex() == rEnd.GetNode().GetTextNode()->Len()

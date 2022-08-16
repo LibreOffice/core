@@ -135,7 +135,7 @@ struct FrameClientSortListLess
 }
 
 
-void CollectFrameAtNode( const SwNodeIndex& rIdx,
+void CollectFrameAtNode( const SwNode& rNd,
                          FrameClientSortList_t& rFrames,
                          const bool bAtCharAnchoredObjs )
 {
@@ -144,13 +144,13 @@ void CollectFrameAtNode( const SwNodeIndex& rIdx,
     // <false>: at-paragraph anchored objects are collected
 
     // search all borders, images, and OLEs that are connected to the paragraph
-    SwDoc& rDoc = rIdx.GetNode().GetDoc();
+    const SwDoc& rDoc = rNd.GetDoc();
 
     const auto nChkType = bAtCharAnchoredObjs ? RndStdIds::FLY_AT_CHAR : RndStdIds::FLY_AT_PARA;
     const SwContentFrame* pCFrame;
     const SwContentNode* pCNd;
     if( rDoc.getIDocumentLayoutAccess().GetCurrentViewShell() &&
-        nullptr != (pCNd = rIdx.GetNode().GetContentNode()) &&
+        nullptr != (pCNd = rNd.GetContentNode()) &&
         nullptr != (pCFrame = pCNd->getLayoutFrame( rDoc.getIDocumentLayoutAccess().GetCurrentLayout())) )
     {
         lcl_CollectFrameAtNodeWithLayout(pCFrame, rFrames, nChkType);
@@ -166,7 +166,7 @@ void CollectFrameAtNode( const SwNodeIndex& rIdx,
             const SwPosition* pAnchorPos;
             if( rAnchor.GetAnchorId() == nChkType &&
                 nullptr != (pAnchorPos = rAnchor.GetContentAnchor()) &&
-                    pAnchorPos->nNode == rIdx )
+                    pAnchorPos->GetNode() == rNd )
             {
 
                 // OD 2004-05-07 #i28701# - determine insert position for
@@ -1736,7 +1736,7 @@ SwXParaFrameEnumerationImpl::SwXParaFrameEnumerationImpl(
     if (PARAFRAME_PORTION_PARAGRAPH == eParaFrameMode)
     {
         FrameClientSortList_t vFrames;
-        ::CollectFrameAtNode(rPaM.GetPoint()->nNode, vFrames, false);
+        ::CollectFrameAtNode(rPaM.GetPoint()->GetNode(), vFrames, false);
         std::transform(vFrames.begin(), vFrames.end(),
             std::back_inserter(m_vFrames),
             [] (const FrameClientSortListEntry& rEntry) { return rEntry.pFrameClient; });

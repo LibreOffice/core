@@ -909,7 +909,7 @@ void SwShellCursor::FillRects()
     if( HasMark() &&
         GetPoint()->GetNode().IsContentNode() &&
         GetPoint()->GetNode().GetContentNode()->getLayoutFrame( GetShell()->GetLayout() ) &&
-        (GetMark()->nNode == GetPoint()->nNode ||
+        (GetMark()->GetNode() == GetPoint()->GetNode() ||
         (GetMark()->GetNode().IsContentNode() &&
          GetMark()->GetNode().GetContentNode()->getLayoutFrame( GetShell()->GetLayout() ) )   ))
         GetShell()->GetLayout()->CalcFrameRects( *this );

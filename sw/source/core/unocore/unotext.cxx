@@ -1690,8 +1690,8 @@ SwXText::convertToTextFrame(
     // If there is no content in the frame the shape is in
     // it gets deleted in the DelFullPara call below,
     // In this case insert a tmp text node ( we delete it later )
-    if (pStartPam->Start()->nNode == pEndPam->Start()->nNode
-        && pStartPam->End()->nNode == pEndPam->End()->nNode)
+    if (pStartPam->Start()->GetNode() == pEndPam->Start()->GetNode()
+        && pStartPam->End()->GetNode() == pEndPam->End()->GetNode())
     {
         SwPosition aEnd(*pStartPam->End());
         bParaAfterInserted = GetDoc()->getIDocumentContentOperations().AppendTextNode( aEnd );

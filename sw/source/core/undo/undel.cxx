@@ -1298,7 +1298,7 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
         // The Pam was incremented by one at Point (== end) to provide space
         // for UNDO. This now needs to be reverted!
         --rPam.End()->nNode;
-        if( rPam.GetPoint()->nNode == rPam.GetMark()->nNode )
+        if( rPam.GetPoint()->GetNode() == rPam.GetMark()->GetNode() )
             *rPam.GetMark() = *rPam.GetPoint();
         rDoc.getIDocumentContentOperations().DelFullPara( rPam );
     }

@@ -2092,9 +2092,9 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
             // Is completely in the range and is the own Redline too?
             if( aTmpRedl.IsOwnRedline( *pTmp ) &&
                 (pRStt->nNode < pStt->nNode ||
-                (pRStt->nNode == pStt->nNode && !pRStt->GetContentIndex()) ) &&
+                (pRStt->GetNode() == pStt->GetNode() && !pRStt->GetContentIndex()) ) &&
                 (pEnd->nNode < pREnd->nNode ||
-                (pEnd->nNode == pREnd->nNode &&
+                (pEnd->GetNode() == pREnd->GetNode() &&
                  pCEndNd ? pREnd->GetContentIndex() == pCEndNd->Len()
                          : !pREnd->GetContentIndex() )) )
             {
@@ -2111,7 +2111,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
                     ( pRStt->nNode > aIdx || aIdx > pREnd->nNode ||
                     // pOwnRedl doesn't start at the beginning of a node, so it's not
                     // possible to resize it to contain the line moved before it
-                    ( pRStt->nNode == aIdx && pRStt->GetContentIndex() > 0 ) ) )
+                    ( pRStt->GetNode() == aIdx.GetNode() && pRStt->GetContentIndex() > 0 ) ) )
                 {
                     // it's not in itself, so don't move it
                     pOwnRedl = nullptr;
@@ -2223,12 +2223,12 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
                 for(SwRangeRedline* pTmp : getIDocumentRedlineAccess().GetRedlineTable())
                 {
                     SwPosition* pPos = &pTmp->GetBound();
-                    if( pPos->nNode == aIdx )
+                    if( pPos->GetNode() == aIdx.GetNode() )
                     {
                         pPos->Adjust(SwNodeOffset(1));
                     }
                     pPos = &pTmp->GetBound(false);
-                    if( pPos->nNode == aIdx )
+                    if( pPos->GetNode() == aIdx.GetNode() )
                     {
                         pPos->Adjust(SwNodeOffset(1));
                     }

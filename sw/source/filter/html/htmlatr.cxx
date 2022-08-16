@@ -2182,7 +2182,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
         bFlysLeft = rHTMLWrt.OutFlyFrame( rNode.GetIndex(), 0, HtmlPosition::Before );
     }
 
-    if( rHTMLWrt.m_pCurrentPam->GetPoint()->nNode == rHTMLWrt.m_pCurrentPam->GetMark()->nNode )
+    if( rHTMLWrt.m_pCurrentPam->GetPoint()->GetNode() == rHTMLWrt.m_pCurrentPam->GetMark()->GetNode() )
     {
         nEnd = rHTMLWrt.m_pCurrentPam->GetMark()->GetContentIndex();
     }

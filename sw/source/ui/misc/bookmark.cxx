@@ -256,7 +256,7 @@ IMPL_LINK(SwInsertBookmarkDlg, EditingHdl, weld::TreeIter const&, rIter, bool)
         weld::fromId<sw::mark::IMark*>(m_xBookmarksBox->get_id(rIter)));
     assert(pBookmark);
     return pBookmark->IsExpanded()
-           && pBookmark->GetMarkPos().nNode == pBookmark->GetOtherMarkPos().nNode
+           && pBookmark->GetMarkPos().GetNode() == pBookmark->GetOtherMarkPos().GetNode()
            && !m_xBookmarksBox->get_text(rIter).endsWith(u"…");
 }
 
