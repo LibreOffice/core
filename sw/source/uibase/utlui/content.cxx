@@ -3491,7 +3491,7 @@ static void lcl_SelectByContentTypeAndAddress(SwContentTree* pThis, weld::TreeVi
             std::unique_ptr<weld::TreeIter> xFirstSelected(rContentTree.make_iterator());
             if (!rContentTree.get_selected(xFirstSelected.get()))
                 xFirstSelected.reset();
-            if (rContentTree.count_selected_rows() != 1 ||
+            if (rContentTree.count_selected_rows() != 1 || !xFirstSelected ||
                     rContentTree.iter_compare(*xIter, *xFirstSelected) != 0)
             {
                 // unselect all entries and make passed entry visible and selected
