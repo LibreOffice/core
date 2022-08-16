@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc5ccfb4_952a978e",
+        "filename": "sal/osl/unx/file_misc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 853,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-08-16T10:24:45Z",
+      "side": 1,
+      "message": "I wonder why mfe didn\u0027t use S_ISREG here in the first place (but the reason for which appears lost to history).  It IMO doesn\u0027t make much sense to call oslDoCopyFile on special files, which should then either fail or do nonsensical things like try to read from a socket (and e.g. hang).  I think I\u0027d rather do that change.",
+      "range": {
+        "startLine": 853,
+        "startChar": 9,
+        "endLine": 853,
+        "endChar": 17
+      },
+      "revId": "66bc2f7ed43c711beb4cca4f7f3322126b69aaf0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
