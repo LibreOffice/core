@@ -45,6 +45,7 @@ Option Explicit
 &apos;&apos;&apos;			&apos; The substring &quot;SFDocuments.&quot; in the service name is optional
 &apos;&apos;&apos;
 &apos;&apos;&apos;		Definitions:
+&apos;&apos;&apos;
 &apos;&apos;&apos;			Many methods require a &quot;Sheet&quot; or a &quot;Range&quot; as argument. (NB: a single cell is considered as a special case of a Range)
 &apos;&apos;&apos;			Usually, within a specific Calc instance, sheets and ranges are given as a string: &quot;SheetX&quot; and &quot;D2:F6&quot;
 &apos;&apos;&apos;			Multiple ranges are not supported in this context.
@@ -70,6 +71,21 @@ Option Explicit
 &apos;&apos;&apos;					~.yourRange, SheetX.someRange	A range name at sheet level
 &apos;&apos;&apos;					myDoc.Range(&quot;SheetX.D2:F6&quot;)
 &apos;&apos;&apos;											A range within the sheet SheetX in file associated with the myDoc Calc instance
+&apos;&apos;&apos;
+&apos;&apos;&apos;			Several methods may receive a &quot;FilterFormula&quot; as argument.
+&apos;&apos;&apos;			A FilterFormula may be associated with a FilterScope: &quot;row&quot;, &quot;column&quot; or &quot;cell&quot;.
+&apos;&apos;&apos;			These arguments determines on which rows/columns/cells of a range the method should be applied
+&apos;&apos;&apos;			Examples:
+&apos;&apos;&apos;				oDoc.ClearAll(&quot;A1:J10&quot;, FilterFormula := &quot;=(A1&lt;=0)&quot;, FilterScope := &quot;CELL&quot;)		&apos;	Clear all negative values
+&apos;&apos;&apos;				oDoc.ClearAll(&quot;A2:J10&quot;, FilterFormula := &quot;=(A2&lt;&gt;A1)&quot;, FilterScope := &quot;COLUMN&quot;)	&apos;	Clear when identical to above cell
+&apos;&apos;&apos;
+&apos;&apos;&apos;				FilterFormula:	a Calc formula that returns TRUE or FALSE
+&apos;&apos;&apos;								the formula is expressed in terms of
+&apos;&apos;&apos;									- the top-left cell of the range when FilterScope = &quot;CELL&quot;
+&apos;&apos;&apos;									- the topmost row of the range when FilterScope = &quot;ROW&quot;
+&apos;&apos;&apos;									- the leftmost column of the range when FilterScope = &quot;COLUMN&quot;
+&apos;&apos;&apos;								relative and absolute references will be interpreted correctly
+&apos;&apos;&apos;				FilterScope:	the way the formula is applied, once by row, by column, or by individual cell
 &apos;&apos;&apos;
 &apos;&apos;&apos;		Detailed user documentation:
 &apos;&apos;&apos;			https://help.libreoffice.org/latest/en-US/text/sbasic/shared/03/sf_calc.html?DbPAR=BASIC
@@ -544,7 +560,7 @@ Const cstSubArgs = &quot;Range&quot;
 Check:
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
 		If Not _IsStillAlive() Then GoTo Finally
-		If Not ScriptForge.SF_Utils._Validate(Range, &quot;Range&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Range, &quot;Range&quot;, Array(V_STRING, ScriptForge.V_OBJECT)) Then GoTo Finally
 	End If
 
 Try:
@@ -560,7 +576,7 @@ Try:
 					+ .OBJECTS _
 					+ .EDITATTR _
 					+ .FORMATTED
-		Set oRange = _ParseAddress(Range)
+		If VarType(Range) = V_STRING Then Set oRange = _ParseAddress(Range) Else Set oRange = Range
 		oRange.XCellRange.clearContents(lClear)
 	End With
 
@@ -663,9 +679,9 @@ Public Function CompactLeft(Optional ByVal Range As Variant _
 &apos;&apos;&apos;		WholeColumn: when True (default = False), erase whole columns
 &apos;&apos;&apos;		FilterFormula: the formula to be applied on each column.
 &apos;&apos;&apos;			The column is erased when the formula results in True,
-&apos;&apos;&apos;			The formula shall probably involve one or more cells of the first column of the range..
+&apos;&apos;&apos;			The formula shall probably involve one or more cells of the first column of the range.
 &apos;&apos;&apos;			By default, a column is erased when all the cells of the column are empty,
-&apos;&apos;&apos;			i.e. suppose the range is &quot;A1:J200&quot; (height = 0) the default value becomes
+&apos;&apos;&apos;			i.e. suppose the range is &quot;A1:J200&quot; (height = 200) the default value becomes
 &apos;&apos;&apos;				&quot;=(COUNTBLANK(A1:A200)=200)&quot;
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		A string representing the location of the initial range after compaction,
@@ -676,13 +692,12 @@ Public Function CompactLeft(Optional ByVal Range As Variant _
 &apos;&apos;&apos;			&apos;	The columns having a &quot;X&quot; in row 7 are completely suppressed
 
 Dim sCompact As String			&apos;	Return value
-Dim oSourceAddress As Object	&apos;	Alias of Range as _Address
-Dim lLastRow As Long			&apos;	Last used row number in the sheet containing Range
-Dim sFormulaRange As String		&apos;	Range, as a string, where the FilterFormula must be stored
-Dim vCompact As Variant			&apos;	Array of Boolean values indicating which columns should be erased
+Dim oCompact As Object			&apos;	Return value as an _Address type
 Dim lCountDeleted As Long		&apos;	Count the deleted columns
-Dim lCountToDelete As Long		&apos;	Count contiguous columns to be deleted at once
-Dim sPartialRange As String		&apos;	Contiguous columns to be deleted
+Dim vCompactRanges As Variant	&apos;	Array of ranges to be compacted based on the formula
+Dim oSourceAddress As Object	&apos;	Alias of Range as _Address
+Dim oPartialRange As Object		&apos;	Contiguous columns to be deleted
+Dim sShiftRange As String		&apos;	Contiguous columns to be shifted
 Dim i As Long
 
 Const cstThisSub = &quot;SFDocuments.Calc.CompactLeft&quot;
@@ -703,48 +718,34 @@ Check:
 
 Try:
 	Set oSourceAddress = _ParseAddress(Range)
+	lCountDeleted = 0
 
 	With oSourceAddress
 
 		&apos;	Set the default formula =&gt; all cells are blank
 		If FilterFormula = &quot;&quot; Then FilterFormula = Printf(&quot;=(COUNTBLANK(%C1%R1:%C1%R2)-&quot; &amp; .Height &amp; &quot;=0)&quot;, Range)
-		&apos;	Compute the range where to apply the formula
-		lLastRow = LastRow(.SheetName)
-		sFormulaRange = Offset(Range, lLastRow - .XCellRange.RangeAddress.StartColumn + 1, , 1)
-		SetFormula(sFormulaRange, FilterFormula)
-		&apos;	Get the columns to compact: 0 = False, 1 = True
-		vCompact = GetValue(sFormulaRange)
-		If Not IsArray(vCompact) Then vCompact = Array(vCompact)
-		ClearAll(sFormulaRange)
 
-		&apos;	Iterates from the last to the first column of the range and remove the columns that match the filter
-		&apos;	by groups of contiguous columns
-		lCountDeleted = 0
-		lCountToDelete = 0
-		For i = UBound(vCompact) To 0 Step -1
-			If vCompact(i) = 1 Then lCountToDelete = lCountToDelete + 1
-			If i &gt; 0 And vCompact(i) = 1 Then
-				&apos;	Do nothing
-			ElseIf lCountToDelete &gt; 0 Then		&apos;	The current column must be kept but columns at the left must be removed
-				&apos;	Do not forget when the 1st column must be removed
-				sPartialRange = Offset(Range, , Iif(i = 0 And vCompact(i) = 1, 0, i + 1), , lCountToDelete)
-				ShiftLeft(sPartialRange, WholeColumn)
-				lCountDeleted = lCountDeleted + lCountToDelete
-				lCountToDelete = 0
-			End If
+		&apos;	Identify the ranges to compact based on the given formula
+		vCompactRanges = _ComputeFilter(oSourceAddress, FilterFormula, &quot;COLUMN&quot;)
+
+		&apos;	Iterate through the ranges from bottom to top and shift them up
+		For i = UBound(vCompactRanges) To 0 Step -1
+			Set oPartialRange = vCompactRanges(i)
+			ShiftLeft(oPartialRange.RangeName, WholeColumn)
+			lCountDeleted = lCountDeleted + oPartialRange.Width
 		Next i
-
+	
 		&apos;	Compute the final range position
-		If lCountDeleted &lt; .Width Then sCompact = Offset(Range, 0, 0, , .Width - lCountDeleted)
+		If lCountDeleted &lt; .Width Then sCompact = Offset(Range, 0, 0, 0, .Width - lCountDeleted)
 
-		&apos;	Push rightwards the cells that migrated leftwards irrelevantly
+		&apos;	Push to the right the cells that migrated leftwards irrelevantly
 		If Not WholeColumn Then
 			If Len(sCompact) &gt; 0 Then
-				sPartialRange = Offset(sCompact, 0, .Width - lCountDeleted, , lCountDeleted)
+				sShiftRange = Offset(sCompact, 0, .Width - lCountDeleted, , lCountDeleted)
 			Else
-				sPartialRange = .RangeName
+				sShiftRange = .RangeName
 			End If
-			ShiftRight(sPartialRange, WholeColumn := False)
+			ShiftRight(sShiftRange, WholeColumn := False)
 		End If
 
 	End With
@@ -773,7 +774,7 @@ Public Function CompactUp(Optional ByVal Range As Variant _
 &apos;&apos;&apos;		WholeRow: when True (default = False), erase whole rows
 &apos;&apos;&apos;		FilterFormula: the formula to be applied on each row.
 &apos;&apos;&apos;			The row is erased when the formula results in True,
-&apos;&apos;&apos;			The formula shall probably involve one or more cells of the first row of the range..
+&apos;&apos;&apos;			The formula shall probably involve one or more cells of the first row of the range.
 &apos;&apos;&apos;			By default, a row is erased when all the cells of the row are empty,
 &apos;&apos;&apos;			i.e. suppose the range is &quot;A1:J200&quot; (width = 10) the default value becomes
 &apos;&apos;&apos;				&quot;=(COUNTBLANK(A1:J1)=10)&quot;
@@ -786,13 +787,12 @@ Public Function CompactUp(Optional ByVal Range As Variant _
 &apos;&apos;&apos;			&apos;	The rows having a &quot;X&quot; in column G are completely suppressed
 
 Dim sCompact As String			&apos;	Return value
-Dim oSourceAddress As Object	&apos;	Alias of Range as _Address
-Dim lLastCol As Long			&apos;	Last used column number in the sheet containing Range
-Dim sFormulaRange As String		&apos;	Range, as a string, where the FilterFormula must be stored
-Dim vCompact As Variant			&apos;	Array of Boolean values indicating which rows should be erased
+Dim oCompact As Object			&apos;	Return value as an _Address type
 Dim lCountDeleted As Long		&apos;	Count the deleted rows
-Dim lCountToDelete As Long		&apos;	Count contiguous rows to be deleted at once
-Dim sPartialRange As String		&apos;	Contiguous rows to be deleted
+Dim vCompactRanges As Variant	&apos;	Array of ranges to be compacted based on the formula
+Dim oSourceAddress As Object	&apos;	Alias of Range as _Address
+Dim oPartialRange As Object		&apos;	Contiguous rows to be deleted
+Dim sShiftRange As String		&apos;	Contiguous rows to be shifted
 Dim i As Long
 
 Const cstThisSub = &quot;SFDocuments.Calc.CompactUp&quot;
@@ -813,48 +813,34 @@ Check:
 
 Try:
 	Set oSourceAddress = _ParseAddress(Range)
+	lCountDeleted = 0
 
 	With oSourceAddress
 
 		&apos;	Set the default formula =&gt; all cells are blank
 		If FilterFormula = &quot;&quot; Then FilterFormula = Printf(&quot;=(COUNTBLANK(%C1%R1:%C2%R1)-&quot; &amp; .Width &amp; &quot;=0)&quot;, Range)
-		&apos;	Compute the range where to apply the formula
-		lLastCol = LastColumn(.SheetName)
-		sFormulaRange = Offset(Range, , lLastCol - .XCellRange.RangeAddress.StartRow + 1, , 1)
-		SetFormula(sFormulaRange, FilterFormula)
-		&apos;	Get the rows to compact: 0 = False, 1 = True
-		vCompact = GetValue(sFormulaRange)
-		If Not IsArray(vCompact) Then vCompact = Array(vCompact)
-		ClearAll(sFormulaRange)
 
-		&apos;	Iterates from the last to the first row of the range and remove the rows that match the filter
-		&apos;	by groups of contiguous rows
-		lCountDeleted = 0
-		lCountToDelete = 0
-		For i = UBound(vCompact) To 0 Step -1
-			If vCompact(i) = 1 Then lCountToDelete = lCountToDelete + 1
-			If i &gt; 0 And vCompact(i) = 1 Then
-				&apos;	Do nothing
-			ElseIf lCountToDelete &gt; 0 Then		&apos;	The current row must be kept but rows below must be removed
-				&apos;	Do not forget when the 1st row must be removed
-				sPartialRange = Offset(Range, Iif(i = 0 And vCompact(i) = 1, 0, i + 1), , lCountToDelete)
-				ShiftUp(sPartialRange, WholeRow)
-				lCountDeleted = lCountDeleted + lCountToDelete
-				lCountToDelete = 0
-			End If
+		&apos;	Identify the ranges to compact based on the given formula
+		vCompactRanges = _ComputeFilter(oSourceAddress, FilterFormula, &quot;ROW&quot;)
+
+		&apos;	Iterate through the ranges from bottom to top and shift them up
+		For i = UBound(vCompactRanges) To 0 Step -1
+			Set oPartialRange = vCompactRanges(i)
+			ShiftUp(oPartialRange.RangeName, WholeRow)
+			lCountDeleted = lCountDeleted + oPartialRange.Height
 		Next i
-
+	
 		&apos;	Compute the final range position
-		If lCountDeleted &lt; .Height Then sCompact = Offset(Range, 0, 0, .Height - lCountDeleted)
+		If lCountDeleted &lt; .Height Then sCompact = Offset(Range, 0, 0, .Height - lCountDeleted, 0)
 
 		&apos;	Push downwards the cells that migrated upwards irrelevantly
 		If Not WholeRow Then
 			If Len(sCompact) &gt; 0 Then
-				sPartialRange = Offset(sCompact, .Height - lCountDeleted, 0, lCountDeleted)
+				sShiftRange = Offset(sCompact, .Height - lCountDeleted, 0, lCountDeleted)
 			Else
-				sPartialRange = .RangeName
+				sShiftRange = .RangeName
 			End If
-			ShiftDown(sPartialRange, WholeRow := False)
+			ShiftDown(sShiftRange, WholeRow := False)
 		End If
 
 	End With
@@ -2874,7 +2860,7 @@ Const cstSubArgs = &quot;TargetRange, Formula&quot;
 Check:
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
 		If Not _IsStillAlive() Then GoTo Finally
-		If Not ScriptForge.SF_Utils._Validate(TargetRange, &quot;TargetRange&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(TargetRange, &quot;TargetRange&quot;, Array(V_STRING, ScriptForge.V_OBJECT)) Then GoTo Finally
 		If IsArray(Formula) Then
 			If Not ScriptForge.SF_Utils._ValidateArray(Formula, &quot;Formula&quot;, 0, V_STRING) Then GoTo Finally
 		Else
@@ -2883,7 +2869,7 @@ Check:
 	End If
 
 Try:
-	Set oAddress = _ParseAddress(TargetRange)
+	If VarType(TargetRange) = V_STRING Then Set oAddress = _ParseAddress(TargetRange) Else Set oAddress = TargetRange
 	With oAddress
 		If IsArray(Formula) Then
 			&apos;	Convert to data array and limit its size to the size of the initial range
@@ -3662,6 +3648,122 @@ Public Function SetPrinter(Optional ByVal Printer As Variant _
 End Function	&apos;   SFDocuments.SF_Calc.SetPrinter
 
 REM =========================================================== PRIVATE FUNCTIONS
+
+REM -----------------------------------------------------------------------------
+Public Function _ComputeFilter(ByVal poRange As Object _
+								, ByVal psFilterFormula As String _
+								, ByVal psFilterScope As String _
+								) As Variant
+&apos;&apos;&apos;	Compute in the given range the cells, rows or columns for which
+&apos;&apos;&apos;	the given formula refurns TRUE
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		poRange: the range on which to compute the filter as an _Address type
+&apos;&apos;&apos;		psFilterFormula: the formula to be applied on each row, column or cell
+&apos;&apos;&apos;		psFilterSCope: &quot;ROW&quot;, &quot;COLUMN&quot; or &quot;CELL&quot;
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		An array of ranges as objects of type _Address
+
+Dim vRanges As Variant			&apos;	Return value
+Dim oRange As Object			&apos;	A single vRanges() item
+Dim lLast As Long				&apos;	Last used row or column number in the sheet containing Range
+Dim oFormulaRange As _Address	&apos;	Range where the FilterFormula must be stored
+Dim sFormulaDirection As String	&apos;	Either V(ertical), H(orizontal) or B(oth)
+Dim vDataArray As Variant		&apos;	DataArray compatible with .DataArray UNO property
+Dim vFilter As Variant			&apos;	Array of Boolean values indicating which rows should be erased
+Dim bFilter As Boolean			&apos;	A single item in vFilter
+Dim iDims As Integer			&apos;	Number of dimensions of vFilter()
+Dim lLower As Long				&apos;	Lower level of contiguous True filter values
+Dim lUpper As Long				&apos;	Upper level of contiguous True filter values
+Dim i As Long, j As Long
+
+Check:
+	&apos;	Error handling is determined by the calling method
+	vRanges = Array()
+
+Try:
+	With poRange
+
+		&apos;	Compute the range where to apply the formula
+		&apos;	Determine the direction of the range containing the formula vertical, horizontal or both
+		Select Case psFilterScope
+			Case &quot;ROW&quot;
+				lLast = LastColumn(.SheetName)
+				&apos;	Put formulas as a single column in the unused area at the right of the range to filter
+				Set oFormulaRange = _Offset(poRange, 0, lLast - .XCellRange.RangeAddress.StartColumn + 1, 0, 1)
+				sFormulaDirection = &quot;V&quot;
+			Case &quot;COLUMN&quot;
+				lLast = LastRow(.SheetName)
+				&apos;	Put formulas as a single row in the unused area at the bottom of the range to filter
+				Set oFormulaRange = _Offset(poRange, lLast - .XCellRange.RangeAddress.StartRow + 1, 0, 1, 0)
+				sFormulaDirection = &quot;H&quot;
+			Case &quot;CELL&quot;
+				lLast = LastRow(.SheetName)
+				&apos;	Put formulas as a matrix in the unused area at the bottom of the range to filter
+				Set oFormulaRange = _Offset(poRange, lLast - .XCellRange.RangeAddress.StartRow + 1, 0, 0, 0)
+				sFormulaDirection = &quot;B&quot;
+				If oFormulaRange.Width = 1 Then
+					sFormulaDirection = &quot;V&quot;
+				ElseIf oFormulaRange.Height = 1 Then
+					sFormulaDirection = &quot;H&quot;
+				End If
+		End Select
+
+		&apos;	Apply the formula and get the result as an array of Boolean values. Clean up
+		SetFormula(oFormulaRange, psFilterFormula)
+		vDataArray = oFormulaRange.XCellRange.getDataArray()
+		vFilter = _ConvertFromDataArray(vDataArray)
+		iDims = ScriptForge.SF_Array.CountDims(vFilter)
+		ClearAll(oFormulaRange)
+
+		&apos;	Convert the filter values (0 = False, 1 = True) to a set of ranges
+		Select Case iDims
+			Case -1			&apos;	Scalar
+				If vFilter = 1 Then vRanges = ScriptForge.SF_Array.Append(vRanges, poRange)
+			Case 0			&apos;	Empty array
+				&apos;	Nothing to do
+			Case 1, 2		&apos;	Vector or Array
+				&apos;	Strategy: group contiguous applicable rows/columns to optimize heavy operations like CompactUp, CompactLeft
+				&apos;	Stack the contiguous ranges of True values in vRanges()
+
+				&apos;	To manage vector and array with same code, setup a single fictitious loop when vector, otherwise scan array by row
+				For i = 0 To Iif(iDims = 1, 0, UBound(vFilter, 1))
+					lLower = -1		:	lUpper = -1
+
+					For j = 0 To UBound(vFilter, iDims)
+						If iDims = 1 Then bFilter = CBool(vFilter(j)) Else bFilter = CBool(vFilter(i, j))
+						If j = UBound(vFilter, iDims) And bFilter Then	&apos;	Don&apos;t forget the last item
+							If lLower &lt; 0 Then lLower = j
+							lUpper = j
+						ElseIf Not bFilter Then
+							If lLower &gt;= 0 Then lUpper = j - 1
+						ElseIf bFilter Then
+							If lLower &lt; 0 Then lLower = j
+						End If
+						&apos;	Determine the next applicable range when one found and limit reached
+						If lUpper &gt; -1 Then
+							If sFormulaDirection = &quot;V&quot; Then			&apos;	ROW
+								Set oRange = _Offset(poRange, lLower, 0, lUpper - lLower + 1, 0)
+							ElseIf sFormulaDirection = &quot;H&quot; Then		&apos;	COLUMN
+								Set oRange = _Offset(poRange, 0, lLower, 0, lUpper - lLower + 1)
+							Else									&apos;	CELL
+								Set oRange = _Offset(poRange, i, lLower, 1, lUpper - lLower + 1)
+							End If
+							If Not IsNull(oRange) Then vRanges = ScriptForge.SF_Array.Append(vRanges, oRange)
+							lLower = -1		:	lUpper = -1
+						End If
+					Next j
+
+				Next i
+			Case Else
+				&apos;	Should not happen
+		End Select
+
+	End With
+
+Finally:
+	_ComputeFilter = vRanges()
+	Exit Function
+End Function    &apos;   SFDocuments.SF_Calc._ComputeFilter
 
 REM -----------------------------------------------------------------------------
 Public Function _ConvertFromDataArray(ByRef pvDataArray As Variant) As Variant
