@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9af6290e_939675b6",
+        "filename": "vcl/qa/cppunit/complextext.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-08-16T08:25:13Z",
+      "side": 0,
+      "message": "Hi Khaled,\nWhy was this test removed ?",
+      "revId": "cc54063b915a58db9133c919c151ec7e6209f4cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
