@@ -1533,30 +1533,33 @@ SwTwips SwTableLine::GetTableLineHeight( bool& bLayoutAvailable ) const
     const SwTabFrame* pChain = nullptr; // My chain
     for( SwRowFrame* pLast = aIter.First(); pLast; pLast = aIter.Next() )
     {
-        if( pLast->GetTabLine() == this )
-        {
-            const SwTabFrame* pTab = pLast->FindTabFrame();
-            bLayoutAvailable = ( pTab && pTab->IsVertical() ) ?
-                               ( 0 < pTab->getFrameArea().Height() ) :
-                               ( 0 < pTab->getFrameArea().Width() );
+        if (pLast->GetTabLine() != this)
+            continue;
 
-            // The first one defines the chain, if a chain is defined, only members of the chain
-            // will be added.
-            if (pTab && (!pChain || pChain->IsAnFollow( pTab ) || pTab->IsAnFollow(pChain)))
-            {
-                pChain = pTab; // defines my chain (even it is already)
-                if( pTab->IsVertical() )
-                    nRet += pLast->getFrameArea().Width();
-                else
-                    nRet += pLast->getFrameArea().Height();
-                // Optimization, if there are no master/follows in my chain, nothing more to add
-                if( !pTab->HasFollow() && !pTab->IsFollow() )
-                    break;
-                // This is not an optimization, this is necessary to avoid double additions of
-                // repeating rows
-                if( pTab->IsInHeadline(*pLast) )
-                    break;
-            }
+        const SwTabFrame* pTab = pLast->FindTabFrame();
+        if (!pTab)
+            continue;
+
+        bLayoutAvailable = ( pTab->IsVertical() ) ?
+                           ( 0 < pTab->getFrameArea().Height() ) :
+                           ( 0 < pTab->getFrameArea().Width() );
+
+        // The first one defines the chain, if a chain is defined, only members of the chain
+        // will be added.
+        if (!pChain || pChain->IsAnFollow( pTab ) || pTab->IsAnFollow(pChain))
+        {
+            pChain = pTab; // defines my chain (even it is already)
+            if( pTab->IsVertical() )
+                nRet += pLast->getFrameArea().Width();
+            else
+                nRet += pLast->getFrameArea().Height();
+            // Optimization, if there are no master/follows in my chain, nothing more to add
+            if( !pTab->HasFollow() && !pTab->IsFollow() )
+                break;
+            // This is not an optimization, this is necessary to avoid double additions of
+            // repeating rows
+            if( pTab->IsInHeadline(*pLast) )
+                break;
         }
     }
     return nRet;
