@@ -51,6 +51,24 @@
       "message": "with the patch ( top ) vs without the patch ( bottom ) -\u003e https://imgur.com/a/oCirneJ",
       "revId": "250c4207e060e04ca5f16549831ecc8c52c435e6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8be03a1_8adf2354",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003606
+      },
+      "writtenOn": "2022-08-16T10:11:31Z",
+      "side": 1,
+      "message": "That looks like an improvement indeed, but I’m still uncomfortable introducing such a change late in 7.4 release cycle. But I don’t remember exactly what are the norms of back-porting from master, so I’ll defer to the opinion of more seasoned LO developers.",
+      "parentUuid": "7233eb7e_1b846896",
+      "revId": "250c4207e060e04ca5f16549831ecc8c52c435e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
