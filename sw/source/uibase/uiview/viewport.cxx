@@ -303,7 +303,7 @@ void SwView::SetVisArea( const Point &rPt, bool bUpdateScrollbar )
     if ( aPt == m_aVisArea.TopLeft() )
         return;
 
-    if (m_pWrtShell && m_pWrtShell->GetViewOptions()->IsShowOutlineContentVisibilityButton())
+    if (GetWrtShell().GetViewOptions()->IsShowOutlineContentVisibilityButton())
         GetEditWin().GetFrameControlsManager().HideControls(FrameControlType::Outline);
 
     const tools::Long lXDiff = m_aVisArea.Left() - aPt.X();
