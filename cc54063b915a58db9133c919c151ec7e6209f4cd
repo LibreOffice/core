@@ -34,6 +34,24 @@
       "parentUuid": "9af6290e_939675b6",
       "revId": "cc54063b915a58db9133c919c151ec7e6209f4cd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b9fa1d7_7772e79e",
+        "filename": "vcl/qa/cppunit/complextext.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-08-16T08:54:18Z",
+      "side": 0,
+      "message": "ok, should a new test be added instead ?",
+      "parentUuid": "2d56cc4c_8fea4175",
+      "revId": "cc54063b915a58db9133c919c151ec7e6209f4cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
