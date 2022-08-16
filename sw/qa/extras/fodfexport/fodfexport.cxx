@@ -17,15 +17,6 @@ public:
         : SwModelTestBase("/sw/qa/extras/fodfexport/data/", "OpenDocument Text Flat XML")
     {
     }
-
-    /**
-     * Denylist handling
-     */
-    bool mustTestImportOf(const char* filename) const override
-    {
-        // Only test import of .fodt document
-        return o3tl::ends_with(filename, ".odt") || o3tl::ends_with(filename, ".fodt");
-    }
 };
 
 DECLARE_FODFEXPORT_TEST(testTdf113696, "tdf113696.odt")
@@ -59,4 +50,5 @@ DECLARE_FODFEXPORT_TEST(testTdf113696WriterImage, "tdf113696-writerimage.odt")
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
