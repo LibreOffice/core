@@ -35,6 +35,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9afe4bb_849331a3",
+        "filename": "basctl/source/basicide/baside3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 699,
+      "author": {
+        "id": 1003025
+      },
+      "writtenOn": "2022-08-16T18:05:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "434851a0_8cb392d9",
+      "revId": "8c48a388eefea0a84d050f1e8499197972eb0079",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "86ef4c19_d69efcf0",
@@ -54,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1ea0c87c_b762a027",
+        "filename": "basctl/source/basicide/baside3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 703,
+      "author": {
+        "id": 1003025
+      },
+      "writtenOn": "2022-08-16T18:05:59Z",
+      "side": 1,
+      "message": "I\u0027ve tried to fix it with only loop const i.e., \"i\", but then it is giving me variable unused error for \"pFiles\" array.",
+      "parentUuid": "86ef4c19_d69efcf0",
+      "revId": "8c48a388eefea0a84d050f1e8499197972eb0079",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e9e5c170_8d247f87",
         "filename": "basctl/source/basicide/baside3.cxx",
         "patchSetId": 2
@@ -65,6 +101,24 @@
       "writtenOn": "2022-08-13T03:36:16Z",
       "side": 1,
       "message": "The variable `nLocaleCount` is also unused. Please remove it.",
+      "revId": "8c48a388eefea0a84d050f1e8499197972eb0079",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2651bdaf_02caf968",
+        "filename": "basctl/source/basicide/baside3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1003025
+      },
+      "writtenOn": "2022-08-16T18:05:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e9e5c170_8d247f87",
       "revId": "8c48a388eefea0a84d050f1e8499197972eb0079",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
