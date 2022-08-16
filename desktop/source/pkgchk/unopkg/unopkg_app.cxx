@@ -24,6 +24,8 @@
 #include <dp_identifier.hxx>
 #include <tools/extendapplicationenvironment.hxx>
 #include <rtl/bootstrap.hxx>
+#include <rtl/textenc.h>
+#include <rtl/ustring.hxx>
 #include <osl/process.h>
 #include <osl/conditn.hxx>
 #include <unotools/tempfile.hxx>
@@ -48,6 +50,7 @@
 #if defined(UNX)
   #include <unistd.h>
 #endif
+#include <iostream>
 #include <utility>
 #include <vector>
 
@@ -124,6 +127,21 @@ const OptionInfo s_option_infos [] = {
 
     { nullptr, 0, '\0', false }
 };
+
+void logFatal(
+    comphelper::EventLogger const * logger, sal_Int32 level, OUString const & message,
+    OUString const & argument)
+{
+    if (logger == nullptr) {
+        // Best effort; potentially loses data due to conversion failures (stray surrogate halves)
+        // and embedded null characters:
+        std::cerr
+            << OUStringToOString(message.replaceFirst("$1$", argument), RTL_TEXTENCODING_UTF8)
+            << '\n';
+    } else {
+        logger->log(level, message, argument);
+    }
+}
 
 class DialogClosedListenerImpl :
     public ::cppu::WeakImplHelper< ui::dialogs::XDialogClosedListener >
@@ -598,17 +616,18 @@ extern "C" int unopkg_main()
     }
     catch (const ucb::CommandFailedException &e)
     {
-        logger->log(LogLevel::SEVERE, "Exception occurred: $1$", e.Message);
+        logFatal(logger.get(), LogLevel::SEVERE, "Exception occurred: $1$", e.Message);
     }
     catch (const ucb::CommandAbortedException &)
     {
-        logger->log(LogLevel::SEVERE, "$1$ aborted.", APP_NAME);
+        logFatal(logger.get(), LogLevel::SEVERE, "$1$ aborted.", APP_NAME);
         bShowFailedMsg = false;
     }
     catch (const deployment::DeploymentException & exc)
     {
-        logger->log(LogLevel::SEVERE, "Exception occurred: $1$", exc.Message);
-        logger->log(LogLevel::INFO, "    Cause: $1$", comphelper::anyToString(exc.Cause));
+        logFatal(logger.get(), LogLevel::SEVERE, "Exception occurred: $1$", exc.Message);
+        logFatal(
+            logger.get(), LogLevel::INFO, "    Cause: $1$", comphelper::anyToString(exc.Cause));
     }
     catch (const LockFileException & e)
     {
@@ -619,11 +638,11 @@ extern "C" int unopkg_main()
     catch (const css::uno::Exception & e ) {
         Any exc( ::cppu::getCaughtException() );
 
-        logger->log(LogLevel::SEVERE, "Exception occurred: $1$", e.Message);
-        logger->log(LogLevel::INFO, "    Cause: $1$", comphelper::anyToString(exc));
+        logFatal(logger.get(), LogLevel::SEVERE, "Exception occurred: $1$", e.Message);
+        logFatal(logger.get(), LogLevel::INFO, "    Cause: $1$", comphelper::anyToString(exc));
     }
     if (bShowFailedMsg)
-        logger->log(LogLevel::SEVERE, "$1$ failed.", APP_NAME);
+        logFatal(logger.get(), LogLevel::SEVERE, "$1$ failed.", APP_NAME);
     dp_misc::disposeBridges(xLocalComponentContext);
     if (xLocalComponentContext.is()) {
         css::uno::Reference<css::lang::XComponent>(
