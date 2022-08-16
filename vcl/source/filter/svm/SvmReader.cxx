@@ -711,11 +711,11 @@ rtl::Reference<MetaAction> SvmReader::TextArrayHandler(const ImplMetaReadData* p
     {
         sal_uInt32 nKashidaAryLen(0);
         mrStream.ReadUInt32(nKashidaAryLen);
-        nTmpLen = std::min(nKashidaAryLen, static_cast<sal_uInt32>(aArray.size()));
+        nTmpLen = std::min(nKashidaAryLen, static_cast<sal_uInt32>(pAction->GetDXArray().size()));
         if (nTmpLen)
         {
             // aKashidaArray, if not empty, must be the same size as aArray
-            std::vector<sal_Bool> aKashidaArray(aArray.size(), 0);
+            std::vector<sal_Bool> aKashidaArray(pAction->GetDXArray().size(), 0);
 
             // [-loplugin:fakebool] false positive:
             sal_Bool val(sal_False);
