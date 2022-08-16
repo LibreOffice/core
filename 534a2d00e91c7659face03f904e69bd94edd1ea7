@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8319397e_b1b37541",
+        "filename": "sw/qa/extras/txtimport/txtimport.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1003025
+      },
+      "writtenOn": "2022-08-16T13:07:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc166bc8_ea53102d",
+      "revId": "534a2d00e91c7659face03f904e69bd94edd1ea7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "35af4043_5c22bdb5",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-12-03T14:57:01Z",
       "side": 1,
       "message": "It should be rtl::OUStringBuffer and it should be with previous line written in one line.",
+      "revId": "534a2d00e91c7659face03f904e69bd94edd1ea7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e87cc63_145da57e",
+        "filename": "sw/qa/extras/txtimport/txtimport.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1003025
+      },
+      "writtenOn": "2022-08-16T13:07:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "35af4043_5c22bdb5",
       "revId": "534a2d00e91c7659face03f904e69bd94edd1ea7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -52,6 +88,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fef5a822_1ba661ad",
+        "filename": "sw/qa/extras/txtimport/txtimport.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1003025
+      },
+      "writtenOn": "2022-08-16T13:07:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "efd99445_b024b3dc",
+      "revId": "534a2d00e91c7659face03f904e69bd94edd1ea7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fba2e8dd_a4d9d691",
@@ -69,6 +123,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3eb44719_f0583a47",
+        "filename": "sw/qa/extras/txtimport/txtimport.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1003025
+      },
+      "writtenOn": "2022-08-16T13:07:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fba2e8dd_a4d9d691",
+      "revId": "534a2d00e91c7659face03f904e69bd94edd1ea7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "69d1aeb2_0f0f2773",
@@ -82,6 +154,24 @@
       "writtenOn": "2021-12-03T14:57:01Z",
       "side": 1,
       "message": "You have defined the size variable. Please use that instead of 30000.",
+      "revId": "534a2d00e91c7659face03f904e69bd94edd1ea7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04e23dc4_9e0b2772",
+        "filename": "sw/qa/extras/txtimport/txtimport.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1003025
+      },
+      "writtenOn": "2022-08-16T13:07:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "69d1aeb2_0f0f2773",
       "revId": "534a2d00e91c7659face03f904e69bd94edd1ea7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }

@@ -52,6 +52,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9965461_2a342e87",
+        "filename": "sw/qa/extras/txtimport/txtimport.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1003025
+      },
+      "writtenOn": "2022-08-16T13:07:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c975c1f3_d2366793",
+      "revId": "0243d3d32eac087baf2b15f88bf5cc7aaf4fa6fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2d2ffcc1_322e324c",
@@ -65,6 +83,24 @@
       "writtenOn": "2021-11-17T19:53:26Z",
       "side": 1,
       "message": "Take a look at what others did in this .cxx file for similar situations.",
+      "revId": "0243d3d32eac087baf2b15f88bf5cc7aaf4fa6fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67039441_d8a8aab3",
+        "filename": "sw/qa/extras/txtimport/txtimport.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1003025
+      },
+      "writtenOn": "2022-08-16T13:07:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2d2ffcc1_322e324c",
       "revId": "0243d3d32eac087baf2b15f88bf5cc7aaf4fa6fd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -86,6 +122,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ae25d8a_7c975286",
+        "filename": "sw/qa/extras/txtimport/txtimport.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1003025
+      },
+      "writtenOn": "2022-08-16T13:07:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b47d031d_e8cec717",
+      "revId": "0243d3d32eac087baf2b15f88bf5cc7aaf4fa6fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d2d68e00_4f204d54",
@@ -99,6 +153,24 @@
       "writtenOn": "2021-11-17T19:53:26Z",
       "side": 1,
       "message": "You should insert an OUString.",
+      "revId": "0243d3d32eac087baf2b15f88bf5cc7aaf4fa6fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dcb56f56_da9c2b7e",
+        "filename": "sw/qa/extras/txtimport/txtimport.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1003025
+      },
+      "writtenOn": "2022-08-16T13:07:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d2d68e00_4f204d54",
       "revId": "0243d3d32eac087baf2b15f88bf5cc7aaf4fa6fd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }

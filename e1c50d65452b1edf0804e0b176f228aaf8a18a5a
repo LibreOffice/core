@@ -41,6 +41,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "043f5dd2_49b6ac86",
+        "filename": "sw/qa/extras/txtimport/txtimport.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1003025
+      },
+      "writtenOn": "2022-08-16T13:07:12Z",
+      "side": 1,
+      "message": "Yes! This has been resolved in the latest patchset",
+      "parentUuid": "bea85107_122a3fd1",
+      "range": {
+        "startLine": 182,
+        "startChar": 4,
+        "endLine": 185,
+        "endChar": 25
+      },
+      "revId": "e1c50d65452b1edf0804e0b176f228aaf8a18a5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c492e27c_2ac5f590",
@@ -54,6 +78,24 @@
       "writtenOn": "2021-09-27T06:40:38Z",
       "side": 1,
       "message": "Just to be sure, could you please increase the file size to, say, 30000 characters? And maybe better just generate the input file dynamically, to avoid being limited to what we may reasonably store in the source tree, and be able to test with arbitrarily long data, even say 10 M?",
+      "revId": "e1c50d65452b1edf0804e0b176f228aaf8a18a5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b2f43c1_edaa61d7",
+        "filename": "sw/qa/extras/txtimport/txtimport.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1003025
+      },
+      "writtenOn": "2022-08-16T13:07:12Z",
+      "side": 1,
+      "message": "It has been updated now!",
+      "parentUuid": "c492e27c_2ac5f590",
       "revId": "e1c50d65452b1edf0804e0b176f228aaf8a18a5a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
