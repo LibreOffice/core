@@ -401,17 +401,14 @@ void SwNodes::ChgNode( SwNodeIndex const & rDelPos, SwNodeOffset nSz,
  * position, nothing happens.
  *
  * @param aRange range to move (excluding end node)
- * @param rNodes
- * @param aIndex
- * @param bNewFrames
  * @return
  */
 bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
-                    const SwNodeIndex& aIndex, bool bNewFrames )
+                    SwNode& rPos, bool bNewFrames )
 {
     SwNode * pCurrentNode;
-    if( aIndex == SwNodeOffset(0) ||
-        ( (pCurrentNode = &aIndex.GetNode())->GetStartNode() &&
+    if( rPos.GetIndex() == SwNodeOffset(0) ||
+        ( (pCurrentNode = &rPos)->GetStartNode() &&
           !pCurrentNode->StartOfSectionIndex() ))
         return false;
 
@@ -439,9 +436,9 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
 
     if( this == &rNodes )
     {
-        if( ( aIndex.GetIndex()-SwNodeOffset(1) >= aRg.aStart.GetIndex() &&
-              aIndex.GetIndex()-SwNodeOffset(1) < aRg.aEnd.GetIndex()) ||
-            ( aIndex.GetIndex()-SwNodeOffset(1) == aRg.aEnd.GetIndex() ) )
+        if( ( rPos.GetIndex()-SwNodeOffset(1) >= aRg.aStart.GetIndex() &&
+              rPos.GetIndex()-SwNodeOffset(1) < aRg.aEnd.GetIndex()) ||
+            ( rPos.GetIndex()-SwNodeOffset(1) == aRg.aEnd.GetIndex() ) )
             return false;
     }
 
@@ -452,7 +449,7 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
     SwStartNodePointers::size_type nLevel = 0; // level counter
 
     // set start index
-    SwNodeIndex  aIdx( aIndex );
+    SwNodeIndex  aIdx( rPos );
 
     SwStartNode* pStartNode = aIdx.GetNode().m_pStartOfSection;
     aSttNdStack.insert( aSttNdStack.begin(), pStartNode );
@@ -1665,7 +1662,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
         // move the nodes into the NodesArray
         const SwNodeOffset nSttDiff = aSttIdx.GetIndex() - pStt->GetNodeIndex();
         SwNodeRange aRg( aSttIdx, aEndIdx );
-        MoveNodes( aRg, rNodes, rPos.nNode );
+        MoveNodes( aRg, rNodes, rPos.GetNode() );
 
         // if in the same node array, all indices are now at new positions (so correct them)
         if( &rNodes == this )

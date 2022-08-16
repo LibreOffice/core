@@ -1140,7 +1140,7 @@ bool SwTable::OldSplitRow( SwDoc& rDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
                         SwNodeRange aRg( *pLastBox->GetSttNd(), SwNodeOffset(+2), *pEndNd );
                         pLastBox = pNewLine->GetTabBoxes()[0];  // reset
                         SwNodeIndex aInsPos( *pLastBox->GetSttNd(), 1 );
-                        rDoc.GetNodes().MoveNodes(aRg, rDoc.GetNodes(), aInsPos, false);
+                        rDoc.GetNodes().MoveNodes(aRg, rDoc.GetNodes(), aInsPos.GetNode(), false);
                         rDoc.GetNodes().Delete( aInsPos ); // delete the empty one
                     }
                 }
