@@ -3487,6 +3487,92 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testBitmapScaledown)
 }
 } // end anonymous namespace
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf139627)
+{
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    saveAsPDF(u"justified-arabic-kashida.odt");
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
+    CPPUNIT_ASSERT(pPdfDocument);
+
+    // The document has one page.
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(pPdfPage);
+
+    // 7 or 8 objects, 4 text, others are path
+    int nPageObjectCount = pPdfPage->getObjectCount();
+    CPPUNIT_ASSERT_GREATEREQUAL(7, nPageObjectCount);
+
+    // 4 text objects, "رم" (reh+mim), then "ِ" (kasreh), tatweel, and "ج" (jeh)
+    OUString sText[4];
+
+    /* With Tahoma font, these are the X ranges on Linux:
+        0: ( 58.29 - 271.97)
+        1: (477.79 - 523.15)
+        2: (266.85 - 447.16)
+        3: (441.75 - 548.34)
+    */
+    basegfx::B2DRectangle aRect[4];
+
+    std::unique_ptr<vcl::pdf::PDFiumTextPage> pTextPage = pPdfPage->getTextPage();
+    std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject;
+
+    int nTextObjectCount = 0;
+    for (int i = 0; i < nPageObjectCount; ++i)
+    {
+        pPageObject = pPdfPage->getObject(i);
+        CPPUNIT_ASSERT_MESSAGE("no object", pPageObject != nullptr);
+        if (pPageObject->getType() == vcl::pdf::PDFPageObjectType::Text)
+        {
+            sText[nTextObjectCount] = pPageObject->getText(pTextPage);
+            aRect[nTextObjectCount] = pPageObject->getBounds();
+            ++nTextObjectCount;
+        }
+    }
+    CPPUNIT_ASSERT_EQUAL(4, nTextObjectCount);
+
+    // Text: جِـرم (which means "mass" in Persian)
+    // Rendered as (left to right): "reh + mim" - "tahtweel" - "kasreh" - "jeh"
+    int rehmim = 0, kasreh = 1, tatweel = 2, jeh = 3;
+
+    // Bad rendering can cause tatweel enumerated before kasreh
+    // This can be the end of journey, but let's accept this for now
+    if (sText[2].equals(u"ِ"))
+    {
+        tatweel = 1;
+        kasreh = 2;
+    }
+
+    CPPUNIT_ASSERT_EQUAL(OUString(u"رم"), sText[rehmim].trim());
+    CPPUNIT_ASSERT_EQUAL(OUString(u"ِ"), sText[kasreh].trim());
+    CPPUNIT_ASSERT_EQUAL(OUString(u""), sText[tatweel].trim());
+    CPPUNIT_ASSERT_EQUAL(OUString(u"ج"), sText[jeh].trim());
+
+    // "Kasreh" should be within "jeh" character
+    CPPUNIT_ASSERT_GREATER(aRect[jeh].getMinX(), aRect[kasreh].getMinX());
+    CPPUNIT_ASSERT_LESS(aRect[jeh].getMaxX(), aRect[kasreh].getMaxX());
+
+    // "Tatweel" should cover "jeh" and "reh"+"mim" to avoid gap
+    // Checking right gap
+    CPPUNIT_ASSERT_GREATER(aRect[jeh].getMinX(), aRect[tatweel].getMaxX());
+    // Checking left gap
+    // Kashida fails to reach to rehmim before the series of patches starting
+    // with 3901e029bd39575f700e69a73818565d62226a23. The visible sypotom is
+    // a gap in the left of Kashida.
+    // CPPUNIT_ASSERT_LESS(aRect[rehmim].getMaxX(), aRect[tatweel].getMinX());
+
+    // Overlappings of Kashida and surrounding characters is ~5% of the width
+    // of the "jeh" character, while using this example and Tahoma font.
+    // We set the hard limit of 7.5% here.
+    //
+    // Fails before Kashida patches ~33.8%
+    CPPUNIT_ASSERT_LESS(0.075, fabs(aRect[jeh].getMinX() - aRect[tatweel].getMaxX())
+                                   / aRect[jeh].getWidth());
+    // Fails before Kashida patches ~23.9%
+    CPPUNIT_ASSERT_LESS(0.075, fabs(aRect[rehmim].getMaxX() - aRect[tatweel].getMinX())
+                                   / aRect[jeh].getWidth());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
