@@ -34,6 +34,24 @@
       "parentUuid": "a785ad30_6ab6b6fd",
       "revId": "ab2901c28a86ec58ca4e6ef8939772a4cc13f7c5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ca9fe7d_7d57bf7a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-08-16T13:23:52Z",
+      "side": 1,
+      "message": "But I still see 4 unresolved comments on the top. Click on it, and you will see the list of unresolved comments.",
+      "parentUuid": "e9ac09d2_45651b0f",
+      "revId": "ab2901c28a86ec58ca4e6ef8939772a4cc13f7c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
