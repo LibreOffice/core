@@ -16,6 +16,24 @@
       "message": "@Radhey: You have several unresolved comments here. Please check them one by one, and click \"Done\" if they are done. Please make sure that you have done the requested changes, and mark the comments as \"Resolved\".",
       "revId": "ab2901c28a86ec58ca4e6ef8939772a4cc13f7c5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9ac09d2_45651b0f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003025
+      },
+      "writtenOn": "2022-08-16T13:08:55Z",
+      "side": 1,
+      "message": "All comments are resolved now. Kindly check",
+      "parentUuid": "a785ad30_6ab6b6fd",
+      "revId": "ab2901c28a86ec58ca4e6ef8939772a4cc13f7c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
