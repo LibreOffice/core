@@ -185,7 +185,7 @@ bool SwDoc::SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry )
     if( bHasMark )
     {
         // in the same node?
-        if( rPam.GetMark()->nNode == pPos->nNode )
+        if( rPam.GetMark()->GetNode() == pPos->GetNode() )
         {
             // then use that end
             const sal_Int32 nTEnd = rPam.GetMark()->GetContentIndex();

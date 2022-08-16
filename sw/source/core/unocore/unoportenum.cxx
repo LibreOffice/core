@@ -128,13 +128,13 @@ namespace
     };
     typedef std::multiset < SwXBookmarkPortion_ImplSharedPtr, BookmarkCompareStruct > SwXBookmarkPortion_ImplList;
 
-    /// Inserts pBkmk to rBkmArr in case it starts or ends at nOwnNode
-    void lcl_FillBookmark(sw::mark::IMark* const pBkmk, const SwNodeIndex& nOwnNode, SwDoc& rDoc, SwXBookmarkPortion_ImplList& rBkmArr)
+    /// Inserts pBkmk to rBkmArr in case it starts or ends at rOwnNode
+    void lcl_FillBookmark(sw::mark::IMark* const pBkmk, const SwNode& rOwnNode, SwDoc& rDoc, SwXBookmarkPortion_ImplList& rBkmArr)
     {
         bool const hasOther = pBkmk->IsExpanded();
 
         const SwPosition& rStartPos = pBkmk->GetMarkStart();
-        if(rStartPos.nNode == nOwnNode)
+        if(rStartPos.GetNode() == rOwnNode)
         {
             // #i109272#: cross reference marks: need special handling!
             ::sw::mark::CrossRefBookmark *const pCrossRefMark(dynamic_cast< ::sw::mark::CrossRefBookmark*>(pBkmk));
@@ -146,7 +146,7 @@ namespace
         }
 
         const SwPosition& rEndPos = pBkmk->GetMarkEnd();
-        if(rEndPos.nNode != nOwnNode)
+        if(rEndPos.GetNode() != rOwnNode)
             return;
 
         std::optional<SwPosition> oCrossRefEndPos;
@@ -177,8 +177,7 @@ namespace
         if(!pMarkAccess->getBookmarksCount())
             return;
 
-        const SwNodeIndex nOwnNode = rUnoCursor.GetPoint()->nNode;
-        SwTextNode* pTextNode = nOwnNode.GetNode().GetTextNode();
+        SwTextNode* pTextNode = rUnoCursor.GetPoint()->GetNode().GetTextNode();
         assert(pTextNode);
         // A text node already knows its marks via its SwIndexes.
         o3tl::sorted_vector<const sw::mark::IMark*> aSeenMarks;
@@ -196,7 +195,7 @@ namespace
             // Only handle bookmarks once, if they start and end at this node as well.
             if (!aSeenMarks.insert(pBkmk).second)
                 continue;
-            lcl_FillBookmark(pBkmk, nOwnNode, rDoc, rBkmArr);
+            lcl_FillBookmark(pBkmk, *pTextNode, rDoc, rBkmArr);
         }
     }
 
@@ -323,7 +322,7 @@ SwXTextPortionEnumeration::SwXTextPortionEnumeration(
 
     // find all frames, graphics and OLEs that are bound AT character in para
     FrameClientSortList_t frames;
-    ::CollectFrameAtNode(m_pUnoCursor->GetPoint()->nNode, frames, true);
+    ::CollectFrameAtNode(m_pUnoCursor->GetPoint()->GetNode(), frames, true);
     lcl_CreatePortions(m_Portions, xParentText, &*m_pUnoCursor, frames, nStart, nEnd, bOnlyTextFields);
 }
 
@@ -1116,18 +1115,17 @@ static void lcl_FillRedlineArray(
         return;
 
     const SwPosition* pStart = rUnoCursor.GetPoint();
-    const SwNodeIndex nOwnNode = pStart->nNode;
+    const SwNode& rOwnNode = pStart->GetNode();
 
-    SwRedlineTable::size_type nRed = rDoc.getIDocumentRedlineAccess().GetRedlinePos(nOwnNode.GetNode(), RedlineType::Any);
+    SwRedlineTable::size_type nRed = rDoc.getIDocumentRedlineAccess().GetRedlinePos(rOwnNode, RedlineType::Any);
     for(; nRed < nRedTableCount; ++nRed)
     {
         const SwRangeRedline* pRedline = rRedTable[nRed];
         auto [pRedStart, pRedEnd]= pRedline->StartEnd();
-        const SwNodeIndex nRedNode = pRedStart->nNode;
-        if ( nOwnNode == nRedNode )
+        if ( rOwnNode == pRedStart->GetNode() )
             rRedArr.insert( std::make_shared<SwXRedlinePortion_Impl>(
                 pRedline, true ) );
-        if( pRedline->HasMark() && pRedEnd->nNode == nOwnNode )
+        if( pRedline->HasMark() && pRedEnd->GetNode() == rOwnNode )
             rRedArr.insert( std::make_shared<SwXRedlinePortion_Impl>(
                 pRedline, false ) );
     }

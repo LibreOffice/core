@@ -1062,7 +1062,7 @@ bool ReplaceImpl(
     else
     {
         assert(!ranges.empty());
-        assert(ranges.front()->GetPoint()->nNode == ranges.front()->GetMark()->nNode);
+        assert(ranges.front()->GetPoint()->GetNode() == ranges.front()->GetMark()->GetNode());
         bReplaced = rIDCO.ReplaceRange(*ranges.front(), rReplacement, bRegExp);
         for (auto it = ranges.begin() + 1; it != ranges.end(); ++it)
         {

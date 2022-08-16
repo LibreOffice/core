@@ -905,7 +905,7 @@ namespace
                     pTmpPos = pTmp->End();
                     pTmpPos->Assign(rRg.aEnd);
                 }
-                else if( pREnd->nNode == rRg.aStart )
+                else if( pREnd->GetNode() == rRg.aStart.GetNode() )
                 {
                     SwPosition* pTmpPos = pTmp->End();
                     pTmpPos->Assign(rRg.aEnd);
@@ -915,7 +915,7 @@ namespace
             {
                 rRedlTable.Remove( nRedlPos-- );
                 if( pREnd->nNode < rRg.aEnd ||
-                    ( pREnd->nNode == rRg.aEnd && !pREnd->GetContentIndex()) )
+                    ( pREnd->GetNode() == rRg.aEnd.GetNode() && !pREnd->GetContentIndex()) )
                 {
                     // move everything
                     rArr.emplace_back( pTmp, rRg.aStart );
@@ -1564,7 +1564,7 @@ namespace //local functions originally from docfmt.cxx
                 if( aTextSet.Count() )
                 {
                     const sal_Int32 nInsCnt = rSt.GetIndex();
-                    const sal_Int32 nEnd = pStt->nNode == pEnd->nNode
+                    const sal_Int32 nEnd = pStt->GetNode() == pEnd->GetNode()
                                     ? pEnd->GetContentIndex()
                                     : pNode->Len();
                     SwRegHistory history( pNode, *pNode, pHistory );
@@ -1834,7 +1834,7 @@ namespace //local functions originally from docfmt.cxx
                 }
 
                 // Only selection in a Node.
-                if( pStt->nNode == pEnd->nNode )
+                if( pStt->GetNode() == pEnd->GetNode() )
                 {
                     DELETECHARSETS
                     return bRet;
@@ -2408,7 +2408,7 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
         assert(*aSavePam.GetPoint() == *aSavePam.GetMark() &&
                *aSavePam.GetPoint() == rPos);
         assert(aSavePam.GetPoint()->GetContentNode() == pOrigNode);
-        assert(aSavePam.GetPoint()->nNode == rPos.GetNodeIndex());
+        assert(aSavePam.GetPoint()->GetNode() == rPos.GetNode());
         assert(rPos.GetNodeIndex() == pOrigNode->GetIndex());
 
         std::function<void (SwTextNode *, sw::mark::RestoreMode, bool)> restoreFunc(
@@ -2434,13 +2434,13 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
         assert(*aSavePam.GetPoint() == *aSavePam.GetMark() &&
                *aSavePam.GetPoint() == rPos);
         assert(aSavePam.GetPoint()->GetContentNode() == pOrigNode);
-        assert(aSavePam.GetPoint()->nNode == rPos.GetNodeIndex());
+        assert(aSavePam.GetPoint()->GetNode() == rPos.GetNode());
         assert(rPos.GetNodeIndex() == pOrigNode->GetIndex());
         aSavePam.GetPoint()->nContent.Assign(pOrigNode, 0);
         rPos = *aSavePam.GetMark() = *aSavePam.GetPoint();
 
         // correct the PaM!
-        if( rPos.nNode == rPaM.GetMark()->nNode )
+        if( rPos.GetNode() == rPaM.GetMark()->GetNode() )
         {
             rPaM.GetMark()->nNode = rPos.GetNodeIndex()-SwNodeOffset(1);
             rPaM.GetMark()->nContent.Assign( pTNd, nMkContent );
@@ -2596,7 +2596,7 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
                 SwRangeRedline* pTmp = m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ nRedlPos ];
                 pRStt = pTmp->Start();
                 pREnd = pTmp->End();
-                if( pREnd->nNode == rPos && pRStt->nNode < rPos )
+                if( pREnd->GetNode() == rPos.GetNode() && pRStt->nNode < rPos )
                 {
                     aSavRedlInsPosArr.push_back( pTmp );
                 }
@@ -2691,7 +2691,7 @@ void DocumentContentOperationsManager::MoveAndJoin( SwPaM& rPaM, SwPosition& rPo
 {
     SwNodeIndex aIdx( rPaM.Start()->GetNode() );
     bool bJoinText = aIdx.GetNode().IsTextNode();
-    bool bOneNode = rPaM.GetPoint()->nNode == rPaM.GetMark()->nNode;
+    bool bOneNode = rPaM.GetPoint()->GetNode() == rPaM.GetMark()->GetNode();
     aIdx--;             // in front of the move area!
 
     bool bRet = MoveRange( rPaM, rPos, SwMoveFlags::DEFAULT );
@@ -3466,7 +3466,7 @@ bool DocumentContentOperationsManager::ReplaceRange( SwPaM& rPam, const OUString
     {
         aPam.Move(fnMoveBackward);
     }
-    OSL_ENSURE((aPam.GetPoint()->nNode == aPam.GetMark()->nNode), "invalid pam?");
+    OSL_ENSURE((aPam.GetPoint()->GetNode() == aPam.GetMark()->GetNode()), "invalid pam?");
 
     sw::CalcBreaks(Breaks, aPam);
 
@@ -3628,7 +3628,7 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
     const bool bCopyFlyAtFly,
     SwCopyFlags const flags) const
 {
-    assert(!pCopiedPaM || pCopiedPaM->first.End()->nNode == rRg.aEnd);
+    assert(!pCopiedPaM || pCopiedPaM->first.End()->GetNode() == rRg.aEnd.GetNode());
     assert(!pCopiedPaM || pCopiedPaM->second.nNode <= rInsPos);
 
     SwDoc& rDest = rInsPos.GetNode().GetDoc();
@@ -3786,7 +3786,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
     const bool bCopyFlyAtFly,
     SwCopyFlags const flags) const
 {
-    assert(!pCopiedPaM || pCopiedPaM->End()->nNode == rRg.aEnd);
+    assert(!pCopiedPaM || pCopiedPaM->End()->GetNode() == rRg.aEnd.GetNode());
 
     // First collect all Flys, sort them according to their ordering number,
     // and then only copy them. This maintains the ordering numbers (which are only
@@ -3901,7 +3901,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
                 if ( aIdx.GetNode().IsTextNode() )
                 {
                     ++nAnchorTextNdNumInRange;
-                    bAnchorTextNdFound = aAnchor.GetContentAnchor()->nNode == aIdx;
+                    bAnchorTextNdFound = aAnchor.GetContentAnchor()->GetNode() == aIdx.GetNode();
                 }
 
                 ++aIdx;
@@ -3957,7 +3957,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
              newPos.GetNode().IsTextNode() )
         {
             // only if pCopiedPaM: care about partially selected start node
-            sal_Int32 const nContent = pCopiedPaM && pCopiedPaM->Start()->nNode == aAnchor.GetContentAnchor()->nNode
+            sal_Int32 const nContent = pCopiedPaM && pCopiedPaM->Start()->GetNode() == aAnchor.GetContentAnchor()->GetNode()
                 ? newPos.GetContentIndex() - pCopiedPaM->Start()->GetContentIndex()
                 : newPos.GetContentIndex();
             newPos.nContent.Assign(newPos.GetNode().GetTextNode(), nContent);
@@ -4361,7 +4361,7 @@ bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam, SwDelet
             if ( pStartTextNode )
             {
                 // now move the Content to the new Node
-                bool bOneNd = pStt->nNode == pEnd->nNode;
+                bool bOneNd = pStt->GetNode() == pEnd->GetNode();
                 const sal_Int32 nLen = ( bOneNd ? pEnd->GetContentIndex()
                                            : pCNd->Len() )
                                         - pStt->GetContentIndex();
@@ -4479,7 +4479,7 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
         ::PaMCorrAbs( aDelPam, *aDelPam.GetPoint() );
 
         auto [pStt, pEnd] = aDelPam.StartEnd(); // SwPosition*
-        bool bOneNode = pStt->nNode == pEnd->nNode;
+        bool bOneNode = pStt->GetNode() == pEnd->GetNode();
 
         // Own Undo?
         OUString sRepl( rStr );
@@ -4625,7 +4625,7 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
         }
         else
         {
-            assert((pStt->nNode == pEnd->nNode ||
+            assert((pStt->GetNode() == pEnd->GetNode() ||
                     ( pStt->GetNodeIndex() + 1 == pEnd->GetNodeIndex() &&
                         !pEnd->GetContentIndex() )) &&
                     "invalid range: Point and Mark on different nodes" );
@@ -4925,7 +4925,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
 
     SwNodeRange aRg( pStt->nNode, pEnd->nNode );
     SwNodeIndex aInsPos( rPos.nNode );
-    const bool bOneNode = pStt->nNode == pEnd->nNode;
+    const bool bOneNode = pStt->GetNode() == pEnd->GetNode();
     SwTextNode* pSttTextNd = pStt->GetNode().GetTextNode();
     SwTextNode* pEndTextNd = pEnd->GetNode().GetTextNode();
     SwTextNode* pDestTextNd = aInsPos.GetNode().GetTextNode();

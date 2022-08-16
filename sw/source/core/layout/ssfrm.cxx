@@ -462,8 +462,8 @@ void SwTextFrame::RegisterToNode(SwTextNode & rNode, bool const isForceNodeAsFir
             rNode.GetDoc().getIDocumentMarkAccess()->getFieldmarksBegin(),
             rNode.GetDoc().getIDocumentMarkAccess()->getFieldmarksEnd(),
             [this](::sw::mark::IMark const*const pMark) {
-                return pMark->GetMarkStart().nNode == *m_pMergedPara->pFirstNode
-                    && pMark->GetMarkEnd().nNode != *m_pMergedPara->pFirstNode;
+                return pMark->GetMarkStart().GetNode() == *m_pMergedPara->pFirstNode
+                    && pMark->GetMarkEnd().GetNode() != *m_pMergedPara->pFirstNode;
             }) == rNode.GetDoc().getIDocumentMarkAccess()->getFieldmarksEnd());
     }
     assert(&rNode != GetDep());

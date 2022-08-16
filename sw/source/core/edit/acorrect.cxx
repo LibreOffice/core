@@ -132,7 +132,7 @@ void SwAutoCorrDoc::DeleteSelImpl(SwPaM & rDelPam)
         // Shell-Cursr-Ring !!
         // ??? is that really necessary - this should never join nodes, so Update should be enough?
 //        PaMIntoCursorShellRing aTmp( rEditSh, rCursor, rDelPam );
-        assert(rDelPam.GetPoint()->nNode == rDelPam.GetMark()->nNode);
+        assert(rDelPam.GetPoint()->GetNode() == rDelPam.GetMark()->GetNode());
         pDoc->getIDocumentContentOperations().DeleteAndJoin( rDelPam );
     }
     else
@@ -430,7 +430,7 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
                 }
                 else if (!ranges.empty())
                 {
-                    assert(ranges.front()->GetPoint()->nNode == ranges.front()->GetMark()->nNode);
+                    assert(ranges.front()->GetPoint()->GetNode() == ranges.front()->GetMark()->GetNode());
                     pDoc->getIDocumentContentOperations().ReplaceRange(
                             *ranges.front(), pFnd->GetLong(), false);
                     for (auto it = ranges.begin() + 1; it != ranges.end(); ++it)

@@ -462,15 +462,15 @@ bool Writer::GetBookmarks(const SwContentNode& rNd, sal_Int32 nStt,
             {
                 const ::sw::mark::IMark& rBkmk = *(it->second);
                 sal_Int32 nContent;
-                if( rBkmk.GetMarkPos().nNode == nNd &&
+                if( rBkmk.GetMarkPos().GetNode() == rNd &&
                     (nContent = rBkmk.GetMarkPos().GetContentIndex() ) >= nStt &&
                     nContent < nEnd )
                 {
                     rArr.push_back( &rBkmk );
                 }
-                else if( rBkmk.IsExpanded() && nNd ==
-                        rBkmk.GetOtherMarkPos().GetNodeIndex() && (nContent =
-                        rBkmk.GetOtherMarkPos().GetContentIndex() ) >= nStt &&
+                else if( rBkmk.IsExpanded() &&
+                        (rNd == rBkmk.GetOtherMarkPos().GetNode()) &&
+                        (nContent = rBkmk.GetOtherMarkPos().GetContentIndex()) >= nStt &&
                         nContent < nEnd )
                 {
                     rArr.push_back( &rBkmk );

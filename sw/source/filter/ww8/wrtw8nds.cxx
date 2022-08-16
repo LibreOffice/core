@@ -287,7 +287,7 @@ sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
     if( m_pCurRedline )
     {
         const SwPosition* pEnd = m_pCurRedline->End();
-        if (pEnd->nNode == m_rNode)
+        if (pEnd->GetNode() == m_rNode)
         {
             const sal_Int32 i = pEnd->GetContentIndex();
             if ( i >= nStartPos && i < nMinPos )
@@ -310,7 +310,7 @@ sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
 
             auto [pStt, pEnd] = pRedl->StartEnd(); // SwPosition*
 
-            if( pStt->nNode == m_rNode )
+            if( pStt->GetNode() == m_rNode )
             {
                 const sal_Int32 i = pStt->GetContentIndex();
                 if( i >= nStartPos && i < nMinPos )
@@ -319,7 +319,7 @@ sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
             else
                 break;
 
-            if( pEnd->nNode == m_rNode )
+            if( pEnd->GetNode() == m_rNode )
             {
                 const sal_Int32 i = pEnd->GetContentIndex();
                 if( i >= nStartPos && i < nMinPos )
@@ -1498,7 +1498,7 @@ bool SwWW8AttrIter::IncludeEndOfParaCRInRedlineProperties( sal_Int32 nEnd ) cons
         // Here we find out if the para end marker we will emit is affected by
         // redlining, in which case it must be included by the range of character
         // attributes that contains the redlining information.
-        if (pEnd->nNode == m_rNode)
+        if (pEnd->GetNode() == m_rNode)
         {
             if (pEnd->GetContentIndex() == nEnd)
             {
@@ -1510,7 +1510,7 @@ bool SwWW8AttrIter::IncludeEndOfParaCRInRedlineProperties( sal_Int32 nEnd ) cons
             }
             bBreak = false;
         }
-        if (pStart->nNode == m_rNode)
+        if (pStart->GetNode() == m_rNode)
         {
             if (pStart->GetContentIndex() == nEnd)
             {
@@ -1549,7 +1549,7 @@ const SwRedlineData* SwWW8AttrIter::GetParagraphLevelRedline( )
     {
         const SwPosition* pCheckedStt = pRedl->Start();
 
-        if( pCheckedStt->nNode == m_rNode )
+        if( pCheckedStt->GetNode() == m_rNode )
         {
             // Maybe add here a check that also the start & end of the redline is the entire paragraph
 
@@ -1596,7 +1596,7 @@ const SwRedlineData* SwWW8AttrIter::GetRunLevelRedline( sal_Int32 nPos )
 
         auto [pStt, pEnd] = pRedl->StartEnd(); // SwPosition*
 
-        if( pStt->nNode == m_rNode )
+        if( pStt->GetNode() == m_rNode )
         {
             if( pStt->GetContentIndex() >= nPos )
             {
@@ -1622,7 +1622,7 @@ const SwRedlineData* SwWW8AttrIter::GetRunLevelRedline( sal_Int32 nPos )
             break;
         }
 
-        if( pEnd->nNode == m_rNode &&
+        if( pEnd->GetNode() == m_rNode &&
             pEnd->GetContentIndex() < nPos )
         {
             m_pCurRedline = pRedl;
@@ -1853,7 +1853,7 @@ static SwTextFormatColl& lcl_getFormatCollection( MSWordExportBase& rExport, con
         auto [pStt, pEnd] = pRedl->StartEnd(); // SwPosition*
         // Looking for deletions, which ends in current pTextNode
         if( RedlineType::Delete == pRedl->GetRedlineData().GetType() &&
-            pEnd->nNode == *pTextNode && pStt->nNode != *pTextNode &&
+            pEnd->GetNode() == *pTextNode && pStt->GetNode() != *pTextNode &&
             pStt->GetNode().IsTextNode() )
         {
             pTextNode = pStt->GetNode().GetTextNode();
@@ -1961,7 +1961,6 @@ bool MSWordExportBase::GetBookmarks( const SwTextNode& rNd, sal_Int32 nStt,
                     sal_Int32 nEnd, IMarkVector& rArr )
 {
     IDocumentMarkAccess* const pMarkAccess = m_rDoc.getIDocumentMarkAccess();
-    SwNodeOffset nNd = rNd.GetIndex( );
 
     const sal_Int32 nMarks = pMarkAccess->getAllMarksCount();
     for ( sal_Int32 i = 0; i < nMarks; i++ )
@@ -1986,15 +1985,15 @@ bool MSWordExportBase::GetBookmarks( const SwTextNode& rNd, sal_Int32 nStt,
         }
 
         // Only keep the bookmarks starting or ending in this node
-        if ( pMark->GetMarkStart().nNode == nNd ||
-             pMark->GetMarkEnd().nNode == nNd )
+        if ( pMark->GetMarkStart().GetNode() == rNd ||
+             pMark->GetMarkEnd().GetNode() == rNd )
         {
             const sal_Int32 nBStart = pMark->GetMarkStart().GetContentIndex();
             const sal_Int32 nBEnd = pMark->GetMarkEnd().GetContentIndex();
 
             // Keep only the bookmarks starting or ending in the snippet
-            bool bIsStartOk = ( pMark->GetMarkStart().nNode == nNd ) && ( nBStart >= nStt ) && ( nBStart <= nEnd );
-            bool bIsEndOk = ( pMark->GetMarkEnd().nNode == nNd ) && ( nBEnd >= nStt ) && ( nBEnd <= nEnd );
+            bool bIsStartOk = ( pMark->GetMarkStart().GetNode() == rNd ) && ( nBStart >= nStt ) && ( nBStart <= nEnd );
+            bool bIsEndOk = ( pMark->GetMarkEnd().GetNode() == rNd ) && ( nBEnd >= nStt ) && ( nBEnd <= nEnd );
 
             if ( bIsStartOk || bIsEndOk )
             {
@@ -2009,7 +2008,7 @@ bool MSWordExportBase::GetAnnotationMarks( const SwWW8AttrIter& rAttrs, sal_Int3
                     sal_Int32 nEnd, IMarkVector& rArr )
 {
     IDocumentMarkAccess* const pMarkAccess = m_rDoc.getIDocumentMarkAccess();
-    SwNodeOffset nNd = rAttrs.GetNode().GetIndex();
+    const SwNode& rNd = rAttrs.GetNode();
 
     const sal_Int32 nMarks = pMarkAccess->getAnnotationMarksCount();
     for ( sal_Int32 i = 0; i < nMarks; i++ )
@@ -2017,20 +2016,20 @@ bool MSWordExportBase::GetAnnotationMarks( const SwWW8AttrIter& rAttrs, sal_Int3
         IMark* pMark = pMarkAccess->getAnnotationMarksBegin()[i];
 
         // Only keep the bookmarks starting or ending in this node
-        if ( pMark->GetMarkStart().nNode == nNd ||
-             pMark->GetMarkEnd().nNode == nNd )
+        if ( pMark->GetMarkStart().GetNode() == rNd ||
+             pMark->GetMarkEnd().GetNode() == rNd )
         {
             const sal_Int32 nBStart = pMark->GetMarkStart().GetContentIndex();
             const sal_Int32 nBEnd = pMark->GetMarkEnd().GetContentIndex();
 
             // Keep only the bookmarks starting or ending in the snippet
-            bool bIsStartOk = ( pMark->GetMarkStart().nNode == nNd ) && ( nBStart >= nStt ) && ( nBStart <= nEnd );
-            bool bIsEndOk = ( pMark->GetMarkEnd().nNode == nNd ) && ( nBEnd >= nStt ) && ( nBEnd <= nEnd );
+            bool bIsStartOk = ( pMark->GetMarkStart().GetNode() == rNd ) && ( nBStart >= nStt ) && ( nBStart <= nEnd );
+            bool bIsEndOk = ( pMark->GetMarkEnd().GetNode() == rNd ) && ( nBEnd >= nStt ) && ( nBEnd <= nEnd );
 
             // Annotation marks always have at least one character: the anchor
             // point of the comment field. In this case Word wants only the
             // comment field, so ignore the annotation mark itself.
-            bool bSingleChar = pMark->GetMarkStart().nNode == pMark->GetMarkEnd().nNode && nBStart + 1 == nBEnd;
+            bool bSingleChar = pMark->GetMarkStart().GetNode() == pMark->GetMarkEnd().GetNode() && nBStart + 1 == nBEnd;
 
             if (bSingleChar)
             {
@@ -2142,10 +2141,10 @@ void MSWordExportBase::GetSortedAnnotationMarks( const SwWW8AttrIter& rAttrs, sa
             const sal_Int32 nEnd = pMark->GetMarkEnd().GetContentIndex();
 
             const SwTextNode& rNode = rAttrs.GetNode();
-            if ( nStart > nCurrentPos && ( pMark->GetMarkStart().nNode == rNode.GetIndex()) )
+            if ( nStart > nCurrentPos && ( pMark->GetMarkStart().GetNode() == rNode) )
                 aSortedStart.push_back( pMark );
 
-            if ( nEnd > nCurrentPos && nEnd <= ( nCurrentPos + nLen ) && (pMark->GetMarkEnd().nNode == rNode.GetIndex()) )
+            if ( nEnd > nCurrentPos && nEnd <= ( nCurrentPos + nLen ) && (pMark->GetMarkEnd().GetNode() == rNode) )
                 aSortedEnd.push_back( pMark );
         }
 
@@ -2175,10 +2174,10 @@ void MSWordExportBase::GetSortedBookmarks( const SwTextNode& rNode, sal_Int32 nC
             const sal_Int32 nStart = pMark->GetMarkStart().GetContentIndex();
             const sal_Int32 nEnd = pMark->GetMarkEnd().GetContentIndex();
 
-            if ( nStart > nCurrentPos && ( pMark->GetMarkStart().nNode == rNode.GetIndex()) )
+            if ( nStart > nCurrentPos && (pMark->GetMarkStart().GetNode() == rNode) )
                 aSortedStart.push_back( pMark );
 
-            if ( nEnd > nCurrentPos && nEnd <= ( nCurrentPos + nLen ) && (pMark->GetMarkEnd().nNode == rNode.GetIndex()) )
+            if ( nEnd > nCurrentPos && nEnd <= ( nCurrentPos + nLen ) && (pMark->GetMarkEnd().GetNode() == rNode) )
                 aSortedEnd.push_back( pMark );
         }
 
