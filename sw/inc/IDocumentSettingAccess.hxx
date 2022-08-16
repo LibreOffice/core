@@ -123,7 +123,10 @@ enum class DocumentSettingId
     // docx enable this flag. For details see ticket tdf#100680.
     WRAP_AS_CHAR_FLYS_LIKE_IN_OOXML,
     // Should we display follow by symbol for numbered paragraph if numbering exists, but "None"?
-    NO_NUMBERING_SHOW_FOLLOWBY
+    NO_NUMBERING_SHOW_FOLLOWBY,
+    // drop cap punctuation: smaller dashes, bullet, asterisks, quotation marks etc.
+    // by extending the rounding box of the glyph to the baseline
+    DROP_CAP_PUNCTUATION
 };
 
 /** Provides access to settings of a document

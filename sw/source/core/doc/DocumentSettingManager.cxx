@@ -107,7 +107,9 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mnImagePreferredDPI(0),
     mbAutoFirstLineIndentDisregardLineSpace(true),
     mbWrapAsCharFlysLikeInOOXML(false),
-    mbNoNumberingShowFollowBy(false)
+    mbNoNumberingShowFollowBy(false),
+    mbDropCapPunctuation(true)
+
     // COMPATIBILITY FLAGS END
 {
     // COMPATIBILITY FLAGS START
@@ -247,6 +249,7 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
             return mbAutoFirstLineIndentDisregardLineSpace;
         case DocumentSettingId::WRAP_AS_CHAR_FLYS_LIKE_IN_OOXML: return mbWrapAsCharFlysLikeInOOXML;
         case DocumentSettingId::NO_NUMBERING_SHOW_FOLLOWBY: return mbNoNumberingShowFollowBy;
+        case DocumentSettingId::DROP_CAP_PUNCTUATION: return mbDropCapPunctuation;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -431,6 +434,10 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
 
         case DocumentSettingId::NO_NUMBERING_SHOW_FOLLOWBY:
             mbNoNumberingShowFollowBy = value;
+            break;
+
+        case DocumentSettingId::DROP_CAP_PUNCTUATION:
+            mbDropCapPunctuation = value;
             break;
 
         // COMPATIBILITY FLAGS END
@@ -704,6 +711,7 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     mbHeaderSpacingBelowLastPara = rSource.mbHeaderSpacingBelowLastPara;
     mbFrameAutowidthWithMorePara = rSource.mbFrameAutowidthWithMorePara;
     mbFootnoteInColumnToPageEnd = rSource.mbFootnoteInColumnToPageEnd;
+    mbDropCapPunctuation = rSource.mbDropCapPunctuation;
 }
 
 sal_uInt32 sw::DocumentSettingManager::Getn32DummyCompatibilityOptions1() const
