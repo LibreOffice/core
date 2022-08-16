@@ -50,6 +50,10 @@ class QtAccessibleWidget final : public QObject,
 public:
     QtAccessibleWidget(const css::uno::Reference<css::accessibility::XAccessible> xAccessible,
                        QObject* pObject);
+
+    void invalidate();
+
+    // QAccessibleInterface
     QWindow* window() const override;
     int childCount() const override;
     int indexOfChild(const QAccessibleInterface* child) const override;
