@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da85d02b_89314d72",
+        "filename": "sw/inc/node.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-08-16T10:21:03Z",
+      "side": 1,
+      "message": "would it be possible to add an assert that they have the same GetNodes()? otherwise it doesnt make sense to compare",
+      "revId": "966d34ae7a33c82b6b90ffd7bc98c97a22b0e637",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
