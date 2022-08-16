@@ -1020,7 +1020,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             {
                 if (comphelper::LibreOfficeKit::isActive())
                     sendErrorToLOK(lErr);
-                else
+                else if (!(lErr == ERRCODE_IO_GENERAL && bIsPDFExport))
                 {
                     SfxErrorContext aEc(ERRCTX_SFX_SAVEASDOC,GetTitle());
                     ErrorHandler::HandleError(lErr, pDialogParent);
