@@ -2227,7 +2227,7 @@ SwBorderAttrs::SwBorderAttrs(const sw::BorderCacheOwner* pOwner, const SwFrame* 
     , m_rUL(m_rAttrSet.GetULSpace())
     // #i96772#
     // LRSpaceItem is copied due to the possibility that it is adjusted - see below
-    , m_rLR(m_rAttrSet.GetLRSpace().Clone())
+    , m_xLR(m_rAttrSet.GetLRSpace().Clone())
     , m_rBox(m_rAttrSet.GetBox())
     , m_rShadow(m_rAttrSet.GetShadow())
     , m_aFrameSize(m_rAttrSet.GetFrameSize().GetSize())
@@ -2248,12 +2248,14 @@ SwBorderAttrs::SwBorderAttrs(const sw::BorderCacheOwner* pOwner, const SwFrame* 
     const SwTextFrame* pTextFrame = pConstructor->DynCastTextFrame();
     if ( pTextFrame )
     {
-        pTextFrame->GetTextNodeForParaProps()->ClearLRSpaceItemDueToListLevelIndents( m_rLR );
+        pTextFrame->GetTextNodeForParaProps()->ClearLRSpaceItemDueToListLevelIndents( m_xLR );
     }
     else if ( pConstructor->IsNoTextFrame() )
     {
-        m_rLR = std::make_shared<SvxLRSpaceItem>(RES_LR_SPACE);
+        m_xLR = std::make_shared<SvxLRSpaceItem>(RES_LR_SPACE);
     }
+
+    assert(m_xLR && "always exists");
 
     // Caution: The USHORTs for the cached values are not initialized by intention!
 
@@ -2285,15 +2287,12 @@ void SwBorderAttrs::CalcTop_()
 {
     m_nTop = CalcTopLine() + m_rUL.GetUpper();
 
-    if (m_rLR)
+    bool bGutterAtTop = m_rAttrSet.GetDoc()->getIDocumentSettingAccess().get(
+        DocumentSettingId::GUTTER_AT_TOP);
+    if (bGutterAtTop)
     {
-        bool bGutterAtTop = m_rAttrSet.GetDoc()->getIDocumentSettingAccess().get(
-            DocumentSettingId::GUTTER_AT_TOP);
-        if (bGutterAtTop)
-        {
-            // Decrease the print area: the top space is the sum of top and gutter margins.
-            m_nTop += m_rLR->GetGutterMargin();
-        }
+        // Decrease the print area: the top space is the sum of top and gutter margins.
+        m_nTop += m_xLR->GetGutterMargin();
     }
 
     m_bTop = false;
@@ -2320,9 +2319,9 @@ tools::Long SwBorderAttrs::CalcRight( const SwFrame* pCaller ) const
     }
     // for paragraphs, "left" is "before text" and "right" is "after text"
     if ( pCaller->IsTextFrame() && pCaller->IsRightToLeft() )
-        nRight += m_rLR->GetLeft();
+        nRight += m_xLR->GetLeft();
     else
-        nRight += m_rLR->GetRight();
+        nRight += m_xLR->GetRight();
 
     // correction: retrieve left margin for numbering in R2L-layout
     if ( pCaller->IsTextFrame() && pCaller->IsRightToLeft() )
@@ -2330,7 +2329,7 @@ tools::Long SwBorderAttrs::CalcRight( const SwFrame* pCaller ) const
         nRight += static_cast<const SwTextFrame*>(pCaller)->GetTextNodeForParaProps()->GetLeftMarginWithNum();
     }
 
-    if (pCaller->IsPageFrame() && m_rLR)
+    if (pCaller->IsPageFrame())
     {
         const auto pPageFrame = static_cast<const SwPageFrame*>(pCaller);
         bool bGutterAtTop = pPageFrame->GetFormat()->getIDocumentSettingAccess().get(
@@ -2338,7 +2337,7 @@ tools::Long SwBorderAttrs::CalcRight( const SwFrame* pCaller ) const
         if (!bGutterAtTop)
         {
             bool bRtlGutter = pPageFrame->GetAttrSet()->GetItem<SfxBoolItem>(RES_RTL_GUTTER)->GetValue();
-            tools::Long nGutterMargin = bRtlGutter ? m_rLR->GetGutterMargin() : m_rLR->GetRightGutterMargin();
+            tools::Long nGutterMargin = bRtlGutter ? m_xLR->GetGutterMargin() : m_xLR->GetRightGutterMargin();
             // Decrease the print area: the right space is the sum of right and right gutter
             // margins.
             nRight += nGutterMargin;
@@ -2383,7 +2382,7 @@ tools::Long SwBorderAttrs::CalcLeft( const SwFrame *pCaller ) const
 
     // for paragraphs, "left" is "before text" and "right" is "after text"
     if ( pCaller->IsTextFrame() && pCaller->IsRightToLeft() )
-        nLeft += m_rLR->GetRight();
+        nLeft += m_xLR->GetRight();
     else
     {
         bool bIgnoreMargin = false;
@@ -2401,7 +2400,7 @@ tools::Long SwBorderAttrs::CalcLeft( const SwFrame *pCaller ) const
             }
         }
         if (!bIgnoreMargin)
-            nLeft += m_rLR->GetLeft();
+            nLeft += m_xLR->GetLeft();
     }
 
     // correction: do not retrieve left margin for numbering in R2L-layout
@@ -2410,7 +2409,7 @@ tools::Long SwBorderAttrs::CalcLeft( const SwFrame *pCaller ) const
         nLeft += static_cast<const SwTextFrame*>(pCaller)->GetTextNodeForParaProps()->GetLeftMarginWithNum();
     }
 
-    if (pCaller->IsPageFrame() && m_rLR)
+    if (pCaller->IsPageFrame())
     {
         const auto pPageFrame = static_cast<const SwPageFrame*>(pCaller);
         bool bGutterAtTop = pPageFrame->GetFormat()->getIDocumentSettingAccess().get(
@@ -2418,7 +2417,7 @@ tools::Long SwBorderAttrs::CalcLeft( const SwFrame *pCaller ) const
         if (!bGutterAtTop)
         {
             bool bRtlGutter = pPageFrame->GetAttrSet()->GetItem<SfxBoolItem>(RES_RTL_GUTTER)->GetValue();
-            tools::Long nGutterMargin = bRtlGutter ? m_rLR->GetRightGutterMargin() : m_rLR->GetGutterMargin();
+            tools::Long nGutterMargin = bRtlGutter ? m_xLR->GetRightGutterMargin() : m_xLR->GetGutterMargin();
             // Decrease the print area: the left space is the sum of left and gutter margins.
             nLeft += nGutterMargin;
         }
