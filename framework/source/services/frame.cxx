@@ -798,8 +798,7 @@ void SAL_CALL XFrameImpl::initialize( const css::uno::Reference< css::awt::XWind
         lcl_enableLayoutManager(xLayoutManager, this);
 
     // create progress helper
-    css::uno::Reference< css::frame::XFrame > xThis (static_cast< css::frame::XFrame* >(this),
-                                                     css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::frame::XFrame > xThis (this);
     css::uno::Reference< css::task::XStatusIndicatorFactory > xIndicatorFactory =
         css::task::StatusIndicatorFactory::createWithFrame(m_xContext, xThis,
                                                            false/*DisableReschedule*/, true/*AllowParentShow*/ );
