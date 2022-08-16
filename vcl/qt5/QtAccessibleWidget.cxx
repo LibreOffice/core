@@ -145,7 +145,23 @@ int QtAccessibleWidget::childCount() const
     return xAc->getAccessibleChildCount();
 }
 
-int QtAccessibleWidget::indexOfChild(const QAccessibleInterface* /* child */) const { return 0; }
+int QtAccessibleWidget::indexOfChild(const QAccessibleInterface* pChild) const
+{
+    const QtAccessibleWidget* pAccessibleWidget = dynamic_cast<const QtAccessibleWidget*>(pChild);
+    if (!pAccessibleWidget)
+    {
+        SAL_WARN(
+            "vcl.qt",
+            "QtAccessibleWidget::indexOfChild called with child that is no QtAccessibleWidget");
+        return -1;
+    }
+
+    Reference<XAccessibleContext> xContext = pAccessibleWidget->getAccessibleContextImpl();
+    if (!xContext.is())
+        return -1;
+
+    return xContext->getAccessibleIndexInParent();
+}
 
 namespace
 {
