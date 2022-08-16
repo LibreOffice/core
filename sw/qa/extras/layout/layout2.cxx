@@ -903,10 +903,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf114163)
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPathContent(
-        pXmlDoc,
-        "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/textarray[12]/text",
-        "Data3");
+    assertXPathContent(pXmlDoc, "(//textarray)[12]/text", "Data3");
     // This failed, if the legend first label is not "Data3". The legend position is right.
 }
 
@@ -956,10 +953,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf125335)
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPathContent(
-        pXmlDoc,
-        "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/textarray[12]/text",
-        "Data3");
+    assertXPathContent(pXmlDoc, "(//textarray)[12]/text", "Data3");
     // This failed, if the legend first label is not "Data3". The legend position is bottom.
 }
 
@@ -974,9 +968,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134247)
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPathContent(pXmlDoc,
-                       "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray[14]/text",
-                       "1. adatsor");
+    assertXPathContent(pXmlDoc, "(//textarray)[14]/text", "1. adatsor");
     // This failed, if the legend first label is not "1. adatsor".
 }
 
@@ -991,14 +983,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf75659)
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPathContent(
-        pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray[17]/text", "Series1");
-
-    assertXPathContent(
-        pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray[18]/text", "Series2");
-
-    assertXPathContent(
-        pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray[19]/text", "Series3");
+    assertXPathContent(pXmlDoc, "(//textarray)[17]/text", "Series1");
+    assertXPathContent(pXmlDoc, "(//textarray)[18]/text", "Series2");
+    assertXPathContent(pXmlDoc, "(//textarray)[19]/text", "Series3");
     // These failed, if the legend names are empty strings.
 }
 
@@ -1061,11 +1048,11 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf123268)
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
     // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 41
+    // - Expected: 53
     // - Actual  : 0
     // i.e. the chart lost.
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/push",
-                41);
+                53);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf133005)
@@ -1130,10 +1117,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf108021)
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPath(
-        pXmlDoc,
-        "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/textarray[@length='22']",
-        8);
+    assertXPath(pXmlDoc, "//textarray[@length='22']", 8);
     // This failed, if the textarray length of the first axis label not 22.
 }
 
@@ -1148,10 +1132,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf125334)
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPath(
-        pXmlDoc,
-        "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/textarray[@length='17']",
-        4);
+    assertXPath(pXmlDoc, "//textarray[@length='17']", 4);
     // This failed, if the textarray length of the category axis label not 17.
 }
 
@@ -1166,10 +1147,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf122800)
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPath(
-        pXmlDoc,
-        "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/textarray[@length='22']",
-        9);
+    assertXPath(pXmlDoc, "//textarray[@length='22']", 9);
     // This failed, if the textarray length of the first axis label not 22.
 }
 
@@ -1185,16 +1163,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTruncatedAxisLabel)
     CPPUNIT_ASSERT(pXmlDoc);
 
     // test the X axis label visibility
-    assertXPathContent(
-        pXmlDoc,
-        "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/textarray[1]/text",
-        "Long axis label truncated 1");
+    assertXPathContent(pXmlDoc, "(//textarray)[1]/text", "Long axis label truncated 1");
 
     // test the Y axis label visibility
-    assertXPathContent(
-        pXmlDoc,
-        "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/textarray[3]/text",
-        "-5.00");
+    assertXPathContent(pXmlDoc, "(//textarray)[3]/text", "-5.00");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf128996)
@@ -1208,9 +1180,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf128996)
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPathContent(pXmlDoc,
-                       "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray[1]/text",
-                       "A very long category name 1");
+    assertXPathContent(pXmlDoc, "(//textarray)[1]/text", "A very long category name 1");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf126244)
@@ -1277,10 +1247,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testHorizontal_multilevel)
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
     // Test the Y position of horizontal category axis label.
-    sal_Int32 nYposition
-        = getXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/textarray[7]", "y")
-              .toInt32();
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(8057, nYposition, 20);
+    sal_Int32 nYposition = getXPath(pXmlDoc, "(//textarray)[7]", "y").toInt32();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(11248, nYposition, 20);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf69648)
@@ -1432,16 +1400,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf124796)
     CPPUNIT_ASSERT(pXmlDoc);
 
     // This failed, if the minimum value of Y axis is not -10.
-    assertXPathContent(
-        pXmlDoc,
-        "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/textarray[5]/text",
-        "-10");
+    assertXPathContent(pXmlDoc, "(//textarray)[5]/text", "-10");
 
     // This failed, if the maximum value of Y axis is not 15.
-    assertXPathContent(
-        pXmlDoc,
-        "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/textarray[10]/text",
-        "15");
+    assertXPathContent(pXmlDoc, "(//textarray)[10]/text", "15");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf72727)
@@ -1458,12 +1420,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf72727)
     // Without the fix in place, this test would have failed with
     // - Expected: 1
     // - Actual  : Series1
-    assertXPathContent(pXmlDoc, "/metafile/push/push/push/push[3]/push/push/push/textarray[1]/text",
-                       "1");
-    assertXPathContent(pXmlDoc, "/metafile/push/push/push/push[3]/push/push/push/textarray[2]/text",
-                       "2");
-    assertXPathContent(pXmlDoc, "/metafile/push/push/push/push[3]/push/push/push/textarray[3]/text",
-                       "3");
+    assertXPathContent(pXmlDoc, "(//textarray)[1]/text", "1");
+    assertXPathContent(pXmlDoc, "(//textarray)[2]/text", "2");
+    assertXPathContent(pXmlDoc, "(//textarray)[3]/text", "3");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf130969)
@@ -1478,8 +1437,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf130969)
     CPPUNIT_ASSERT(pXmlDoc);
 
     // This failed, if the minimum value of Y axis is not 0.35781
-    assertXPathContent(
-        pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray[5]/text", "0.35781");
+    assertXPathContent(pXmlDoc, "(//textarray)[5]/text", "0.35781");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf40260)
@@ -1495,9 +1453,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf40260)
     // Without the fix in place, this test would have failed with
     // - Expected: f(x) = 1.26510397865547E-06 x − 5.95245604996327E-12
     // - Actual  : f(x) = 0 x − 0
-    assertXPathContent(
-        pXmlDoc, "/metafile/push/push/push/push[3]/push/push/push/textarray[19]/text",
-        "f(x) = 1.26510397865547E-06 x " + OUStringChar(u'\x2212') + " 5.95245604996327E-12");
+    assertXPathContent(pXmlDoc, "(//textarray)[19]/text",
+                       "f(x) = 1.26510397865547E-06 x " + OUStringChar(u'\x2212')
+                           + " 5.95245604996327E-12");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf129054)
@@ -1538,8 +1496,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf129173)
     CPPUNIT_ASSERT(pXmlDoc);
 
     // Check the first data label of area chart.
-    assertXPathContent(
-        pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray[22]/text", "56");
+    assertXPathContent(pXmlDoc, "(//textarray)[22]/text", "56");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134866)
@@ -1554,8 +1511,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134866)
     CPPUNIT_ASSERT(pXmlDoc);
 
     // Check the data label of pie chart.
-    assertXPathContent(
-        pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray[2]/text", "100%");
+    assertXPathContent(pXmlDoc, "(//textarray)[2]/text", "100%");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf137116)
@@ -1568,14 +1524,14 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf137116)
     MetafileXmlDump dumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
-    sal_Int32 nX2 = getXPath(pXmlDoc, "//textarray[2]", "x").toInt32(); // second data label
-    sal_Int32 nX4 = getXPath(pXmlDoc, "//textarray[4]", "x").toInt32(); // fourth data label
+    sal_Int32 nX2 = getXPath(pXmlDoc, "(//textarray)[2]", "x").toInt32(); // second data label
+    sal_Int32 nX4 = getXPath(pXmlDoc, "(//textarray)[4]", "x").toInt32(); // fourth data label
     // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 694
+    // - Expected: 1229
     // - Actual  : -225
     // - Delta   : 100
     // i.e. the second data label appeared inside the pie slice.
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(694, nX2 - nX4, 100);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1229, nX2 - nX4, 100);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf137154)
@@ -1588,8 +1544,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf137154)
     MetafileXmlDump dumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
-    sal_Int32 nX1 = getXPath(pXmlDoc, "//textarray[1]", "x").toInt32(); // first data label
-    sal_Int32 nX4 = getXPath(pXmlDoc, "//textarray[4]", "x").toInt32(); // fourth data label
+    sal_Int32 nX1 = getXPath(pXmlDoc, "(//textarray)[1]", "x").toInt32(); // first data label
+    sal_Int32 nX4 = getXPath(pXmlDoc, "(//textarray)[4]", "x").toInt32(); // fourth data label
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 10865
     // - Actual  : 10252
@@ -1626,13 +1582,13 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf130031)
     MetafileXmlDump dumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
-    sal_Int32 nY = getXPath(pXmlDoc, "//textarray[11]", "y").toInt32();
+    sal_Int32 nY = getXPath(pXmlDoc, "(//textarray)[11]", "y").toInt32();
     // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 4339
+    // - Expected: 4653
     // - Actual  : 2182
     // - Delta   : 50
     // i.e. the data label appeared above the data point.
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(4339, nY, 50);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(4653, nY, 50);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf130242)
@@ -1645,21 +1601,21 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf130242)
     MetafileXmlDump dumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
-    sal_Int32 nY = getXPath(pXmlDoc, "//textarray[11]", "y").toInt32();
+    sal_Int32 nY = getXPath(pXmlDoc, "(//textarray)[11]", "y").toInt32();
     // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 4958
+    // - Expected: 5758
     // - Actual  : 3352
     // - Delta   : 50
     // i.e. the data label appeared above the data point.
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(4958, nY, 50);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(5758, nY, 50);
 
-    nY = getXPath(pXmlDoc, "//textarray[13]", "y").toInt32();
+    nY = getXPath(pXmlDoc, "(//textarray)[13]", "y").toInt32();
     // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 3018
+    // - Expected: 2335
     // - Actual  : 2343
     // - Delta   : 50
     // i.e. the data label appeared above the data point.
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(3018, nY, 50);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2335, nY, 50);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134121)
@@ -1729,8 +1685,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf129095)
     CPPUNIT_ASSERT(pXmlDoc);
 
     // check the inner chart area (relative size) visibility with testing the X axis label
-    assertXPathContent(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray/text",
-                       "Category 1");
+    assertXPathContent(pXmlDoc, "//textarray/text", "Category 1");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf132956)
@@ -1745,8 +1700,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf132956)
     CPPUNIT_ASSERT(pXmlDoc);
 
     // check the inner chart area (default size) visibility with testing the X axis label
-    assertXPathContent(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray/text",
-                       "Category 1");
+    assertXPathContent(pXmlDoc, "//textarray/text", "Category 1");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf137819)
@@ -1784,8 +1738,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf122014)
     CPPUNIT_ASSERT(pXmlDoc);
 
     // This failed, if the chart title is aligned to left.
-    sal_Int32 nX1 = getXPath(pXmlDoc, "//textarray[13]", "x").toInt32();
-    sal_Int32 nX2 = getXPath(pXmlDoc, "//textarray[14]", "x").toInt32();
+    sal_Int32 nX1 = getXPath(pXmlDoc, "(//textarray)[13]", "x").toInt32();
+    sal_Int32 nX2 = getXPath(pXmlDoc, "(//textarray)[14]", "x").toInt32();
     CPPUNIT_ASSERT_GREATER(nX1 + 100, nX2);
 }
 
@@ -1801,8 +1755,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134659)
     CPPUNIT_ASSERT(pXmlDoc);
 
     // This failed, if the axis label is aligned to left.
-    sal_Int32 nX1 = getXPath(pXmlDoc, "//textarray[1]", "x").toInt32();
-    sal_Int32 nX2 = getXPath(pXmlDoc, "//textarray[2]", "x").toInt32();
+    sal_Int32 nX1 = getXPath(pXmlDoc, "(//textarray)[1]", "x").toInt32();
+    sal_Int32 nX2 = getXPath(pXmlDoc, "(//textarray)[2]", "x").toInt32();
     CPPUNIT_ASSERT_GREATER(nX1 + 250, nX2);
 }
 
@@ -1870,7 +1824,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf136061)
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
     // This failed, if the custom text of data label is missing.
-    assertXPathContent(pXmlDoc, "//textarray[16]/text", "Customlabel");
+    assertXPathContent(pXmlDoc, "(//textarray)[16]/text", "Customlabel");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf116925)
