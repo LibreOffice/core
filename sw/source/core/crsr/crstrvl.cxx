@@ -464,8 +464,7 @@ bool SwCursorShell::GotoNxtPrvTableFormula( bool bNext, bool bOnlyErrors )
                 {
                     if( bNext )
                     {
-                        rPos.nNode = SwNodeOffset(0);
-                        rPos.nContent = 0;
+                        rPos.Assign(SwNodeOffset(0), 0);
                         aCurGEF = SetGetExpField( rPos );
                         SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::EndWrapped );
                     }
@@ -565,8 +564,7 @@ bool SwCursorShell::GotoNxtPrvTOXMark( bool bNext )
                 {
                     if ( bNext )
                     {
-                        rPos.nNode = SwNodeOffset(0);
-                        rPos.nContent = 0;
+                        rPos.Assign(SwNodeOffset(0), 0);
                         aCurGEF = SetGetExpField( rPos );
                         SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::EndWrapped );
                     }
