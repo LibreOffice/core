@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1894ebfa_0ba7e3de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-16T10:04:26Z",
+      "side": 1,
+      "message": "This is the correct function to change. See inline comment.\n\nNote also that the unit test is missing.",
+      "revId": "2f20afe66416f78095774d9f899eea8482f04a48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71b5292b_53b7bd00",
+        "filename": "scaddins/source/analysis/analysishelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2746,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-16T10:04:26Z",
+      "side": 1,
+      "message": "This would only cover bytes passed here. But this would fail for 16/32-bit values. These are unlikely to arrive from Basic (which takes care to use smallest integer UNO type when marshalling its integers to UNO), but may fail for Python/C#/C++/Java/whatever else, if they pass a different integer types.\n\nMy suggestion is to drop separate double case, and instead, try extracting the value from Any to double in the default case (which would do checks in the respective operator \u003e\u003e). In case of failure there, throw as is done currently.\n\nDoes this make sense?",
+      "revId": "2f20afe66416f78095774d9f899eea8482f04a48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
