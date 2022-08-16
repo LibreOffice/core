@@ -346,6 +346,7 @@ void CrashReporter::writeSystemInfo()
 #elif defined _WIN32
 void CrashReporter::writeSystemInfo()
 {
+#if !defined(_ARM64_)
     // Get CPU model name and flags.
     // See https://docs.microsoft.com/en-us/cpp/intrinsics/cpuid-cpuidex
     // and https://en.wikipedia.org/wiki/CPUID .
@@ -456,6 +457,7 @@ void CrashReporter::writeSystemInfo()
     }
     if( !flags.isEmpty())
         addKeyValue( "CPUFlags", flags.makeStringAndClear(), AddItem );
+#endif
     // Get total memory.
     MEMORYSTATUSEX memoryStatus;
     memoryStatus.dwLength = sizeof( memoryStatus );
