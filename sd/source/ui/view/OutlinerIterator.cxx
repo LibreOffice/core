@@ -675,6 +675,7 @@ void ViewIteratorImpl::Reverse()
 
     // Move iterator to the current object.
     ::tools::WeakReference<SdrObject> xObject = std::move(maPosition.mxObject);
+    maPosition.mxObject.reset(nullptr);
 
     if (!mpObjectIterator)
         return;
