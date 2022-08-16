@@ -765,15 +765,14 @@ void SAL_CALL XFrameImpl::initialize( const css::uno::Reference< css::awt::XWind
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     SolarMutexResettableGuard aWriteLock;
 
+    // This must be the first call of this method!
+    // We should initialize our object and open it for working.
     if ( m_xContainerWindow.is() )
         throw css::uno::RuntimeException(
                 "XFrameImpl::initialized() is called more than once, which is not useful nor allowed.",
                 static_cast< css::frame::XFrame* >(this));
 
-    // This must be the first call of this method!
-    // We should initialize our object and open it for working.
     // Set the new window.
-    SAL_WARN_IF( m_xContainerWindow.is(), "fwk.frame", "XFrameImpl::initialize(): Leak detected! This state should never occur ..." );
     m_xContainerWindow = xWindow;
 
     // if window is initially visible, we will never get a windowShowing event
