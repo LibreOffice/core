@@ -5488,7 +5488,7 @@
         <info>
           <desc>Whether the user can open a file for editing although it has been locked by another user.</desc>
         </info>
-        <value>true</value>
+        <value>false</value>
       </prop>
       <prop oor:name="ShowLinkWarningDialog" oor:type="xs:boolean" oor:nillable="false">
         <info>
@@ -5806,7 +5806,7 @@
         <info>
           <desc>Allow the user to edit read-only docs (via menu or Infobar)</desc>
         </info>
-        <value>true</value>
+        <value>false</value>
       </prop>
     </group>
     <group oor:name="Forms">
