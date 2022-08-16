@@ -75,6 +75,24 @@
       "parentUuid": "e21a82f6_d2edd40c",
       "revId": "8b2663fc860699d0003892908501c76d769b2a2b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "830dcbed_d52444a5",
+        "filename": "vcl/qa/cppunit/pdfexport/pdfexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3553,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-08-16T09:29:38Z",
+      "side": 1,
+      "message": "I am not sure that this will always happen.",
+      "parentUuid": "1468bda3_72bb7d40",
+      "revId": "8b2663fc860699d0003892908501c76d769b2a2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

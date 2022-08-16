@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec7ff4ce_a36b6ab8",
+        "filename": "vcl/qa/cppunit/pdfexport/pdfexport.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 3492,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-08-16T09:29:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b181eb98_b69656b8",
+      "revId": "f1c85e91ad6b05b5d8952e57c73fb3c32165fe61",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3dcb9861_efe05117",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-08-16T08:18:44Z",
       "side": 1,
       "message": "What is the point of adding this comment ?",
+      "revId": "f1c85e91ad6b05b5d8952e57c73fb3c32165fe61",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea2ccc97_a764ca06",
+        "filename": "vcl/qa/cppunit/pdfexport/pdfexport.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 3542,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-08-16T09:29:38Z",
+      "side": 1,
+      "message": "To show the shape of correctly rendered text.\nI removed it anyway.",
+      "parentUuid": "3dcb9861_efe05117",
       "revId": "f1c85e91ad6b05b5d8952e57c73fb3c32165fe61",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
