@@ -1,4 +1,22 @@
 {
-  "comments": [],
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa0f0ef9_adc946e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003648
+      },
+      "writtenOn": "2022-08-16T13:11:49Z",
+      "side": 1,
+      "message": "Superseded by https://gerrit.libreoffice.org/c/core/+/138270",
+      "revId": "46e4fca9e86d38ce0c63e251e3be7c1b716f86f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ],
   "submitRequirementResults": []
 }
