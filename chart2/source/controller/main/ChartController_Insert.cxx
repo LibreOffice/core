@@ -162,7 +162,7 @@ void ChartController::executeDispatch_OpenInsertDataTableDialog()
 {
     SolarMutexGuard aGuard;
 
-    auto aUndoDescription = ActionDescriptionProvider::createDescription(ActionDescriptionProvider::ActionType::Insert, SchResId(STR_OBJECT_DATA_TABLE));
+    auto aUndoDescription = ActionDescriptionProvider::createDescription(ActionDescriptionProvider::ActionType::Insert, SchResId(STR_DATA_TABLE));
     UndoGuard aUndoGuard(aUndoDescription, m_xUndoManager);
 
     rtl::Reference<Diagram> xDiagram = getFirstDiagram();
@@ -237,7 +237,7 @@ void ChartController::executeDispatch_OpenInsertDataTableDialog()
 
 void ChartController::executeDispatch_InsertDataTable()
 {
-    auto aUndoDescription = ActionDescriptionProvider::createDescription(ActionDescriptionProvider::ActionType::Insert, SchResId(STR_OBJECT_DATA_TABLE));
+    auto aUndoDescription = ActionDescriptionProvider::createDescription(ActionDescriptionProvider::ActionType::Insert, SchResId(STR_DATA_TABLE));
     UndoGuard aUndoGuard(aUndoDescription, m_xUndoManager);
 
 
@@ -256,7 +256,7 @@ void ChartController::executeDispatch_InsertDataTable()
 
 void ChartController::executeDispatch_DeleteDataTable()
 {
-    auto aUndoDescription = ActionDescriptionProvider::createDescription(ActionDescriptionProvider::ActionType::Delete, SchResId(STR_OBJECT_DATA_TABLE));
+    auto aUndoDescription = ActionDescriptionProvider::createDescription(ActionDescriptionProvider::ActionType::Delete, SchResId(STR_DATA_TABLE));
     UndoGuard aUndoGuard(aUndoDescription, m_xUndoManager);
 
 
