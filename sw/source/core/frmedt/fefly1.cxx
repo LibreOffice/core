@@ -476,7 +476,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
     {
         auto pFlyFormat
             = dynamic_cast<const SwFlyFrameFormat*>(SwTextBoxHelper::getOtherTextBoxFormat(
-                &rFormat, RES_DRAWFRMFMT, pObj ? pObj : rFormat.FindRealSdrObject()));
+                &rFormat, RES_DRAWFRMFMT, pObj));
         if (pFlyFormat)
         {
             pFly = pFlyFormat->GetFrame();
@@ -617,7 +617,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
                         }
                         rFormat.GetDoc()->SetAttr( aAnch, rFormat );
                         if (SwTextBoxHelper::getOtherTextBoxFormat(&rFormat, RES_DRAWFRMFMT,
-                            pObj ? pObj : rFormat.FindRealSdrObject()))
+                            pObj))
                         {
                             if (pObj->getChildrenOfSdrObject())
                             {
@@ -628,8 +628,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
                             }
                             else
                                 SwTextBoxHelper::syncFlyFrameAttr(
-                                    rFormat, rFormat.GetAttrSet(),
-                                    pObj ? pObj : rFormat.FindRealSdrObject());
+                                    rFormat, rFormat.GetAttrSet(), pObj);
                         }
                     }
                     // #i28701# - no call of method
