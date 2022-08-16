@@ -657,7 +657,7 @@ bool ZipPackageStream::saveChild(
 
             ZipOutputStream::setEntry(pTempEntry);
             rZipOut.writeLOC(pTempEntry);
-            // the entry is provided to the ZipOutputStream that will delete it
+            // coverity[leaked_storage] - the entry is provided to the ZipOutputStream that will delete it
             pAutoTempEntry.release();
 
             uno::Sequence < sal_Int8 > aSeq ( n_ConstBufferSize );
