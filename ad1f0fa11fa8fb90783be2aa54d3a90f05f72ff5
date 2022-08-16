@@ -69,6 +69,24 @@
       "parentUuid": "705d47c5_12bf9275",
       "revId": "ad1f0fa11fa8fb90783be2aa54d3a90f05f72ff5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb95a43a_796e9af0",
+        "filename": "connectivity/source/cpool/ZConnectionPool.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-08-16T14:02:50Z",
+      "side": 1,
+      "message": "\u003e caolan-\u003esberg: should the new value of this property have arrived in ::propertyChange or did this never work as the original author expected.\n\nThe css.beans.PropertyChangeEvent OldValue and NewValue members have always been broken by design, as such event notifications need to be sent among UNO objects with no mutexes locked, so they can seemingly arrive out of order, so the receiver could never know from the OldValue and NewValue data what the last-set value is anyway.  (I remember doing a lengthy write-up about that sometime in the early 2000s, with a proof based on some domino tiling analogy, but which is unfortunately lost to history...)  PropertyChangeEvent has always allowed that \"Void values may be provided for the old and new values if their true values are not known\", so when I reimplemented configmgr around 2009 I happily left those useless members void in configmgr/source/acces.cxx.  They likely had non-void values in the old configmgr implementation, and the code relying on non-void values here dates back to \u003chttps://git.libreoffice.org/core/+/278c3b2660b2cd11f446312b82dbd370088b81bb%5E!/\u003e \"#87724# driver pooling enabled\" from 2001, so it likely originally happened to work as expected and only silently broke with the new configmgr implementation around 2009.",
+      "parentUuid": "7f45614d_bc300d3b",
+      "revId": "ad1f0fa11fa8fb90783be2aa54d3a90f05f72ff5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
