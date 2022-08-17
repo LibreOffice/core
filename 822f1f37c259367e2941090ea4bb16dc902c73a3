@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "de9acd0d_c509c8b4",
+        "filename": "sfx2/source/view/sfxbasecontroller.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1032,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-17T06:45:49Z",
+      "side": 1,
+      "message": "No, I explicitly want to set it to nullptr when attachFrame is called with an empty frame.",
+      "parentUuid": "12bc760d_528b60b8",
+      "revId": "822f1f37c259367e2941090ea4bb16dc902c73a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5d517e18_4f13bc86",
         "filename": "starmath/source/view.cxx",
         "patchSetId": 1
@@ -48,6 +66,24 @@
       "writtenOn": "2022-08-17T06:15:20Z",
       "side": 1,
       "message": "I don\u0027t understand this comment. Is this a WIP patch?",
+      "revId": "822f1f37c259367e2941090ea4bb16dc902c73a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1bcbe6a2_f71cf356",
+        "filename": "starmath/source/view.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2288,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-17T06:45:49Z",
+      "side": 1,
+      "message": "This calls the ingerited implementation; and that implementation explicitly aborts. This follows the logic, e.g., of SwWrtShell::getLOKPayload, but not by calling abort directly. I feel calling parent and doing whatever is considered good on the unexpected input (including warning) is a cleaner approach.",
+      "parentUuid": "5d517e18_4f13bc86",
       "revId": "822f1f37c259367e2941090ea4bb16dc902c73a3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
