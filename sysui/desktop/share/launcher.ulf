@@ -16,24 +16,68 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-[writer]
+[writer_Comment]
 en-US = "Create and edit text and images in letters, reports, documents and Web pages by using Writer."
 
-[impress]
+[impress_Comment]
 en-US = "Create and edit presentations for slideshows, meeting and Web pages by using Impress."
 
-[draw]
+[draw_Comment]
 en-US = "Create and edit drawings, flow charts, and logos by using Draw."
 
-[calc]
+[calc_Comment]
 en-US = "Perform calculations, analyze information and manage lists in spreadsheets by using Calc."
 
-[math]
+[math_Comment]
 en-US = "Create and edit scientific formulas and equations by using Math."
 
-[base]
+[base_Comment]
 en-US = "Manage databases, create queries and reports to track and manage your information by using Base."
 
-[startcenter]
+[startcenter_Comment]
 en-US = "The office productivity suite compatible to the open and standardized ODF document format. Supported by The Document Foundation."
 
+[writer_GenericName]
+en-US = "Word Processor"
+
+[impress_GenericName]
+en-US = "Presentation"
+
+[calc_GenericName]
+en-US = "Spreadsheet"
+
+[base_GenericName]
+en-US = "Database Development"
+
+[math_GenericName]
+en-US = "Formula Editor"
+
+[draw_GenericName]
+en-US = "Drawing Program"
+
+[startcenter_GenericName]
+en-US = "Office"
+
+[xsltfilter_GenericName]
+en-US = "XSLT based filters"
+
+[startcenter_ProductName]
+en-US = "%PRODUCTNAME Start Center"
+
+[writer_UnityQuickList]
+en-US = "New Document"
+
+[impress_UnityQuickList]
+en-US = "New Presentation"
+
+[calc_UnityQuickList]
+en-US = "New Spreadsheet"
+
+[base_UnityQuickList]
+en-US = "New Database"
+
+[math_UnityQuickList]
+en-US = "New Formula"
+
+[draw_UnityQuickList]
+en-US = "New Drawing"

@@ -54,7 +54,6 @@ def encode_desktop_string(s_value):
 parser = argparse.ArgumentParser()
 parser.add_argument("-p", dest="productname", default="LibreOffice")
 parser.add_argument("-d", dest="workdir", default=".")
-parser.add_argument("--key", dest="key")
 parser.add_argument("--prefix", dest="prefix", default="")
 parser.add_argument("--ext", dest="ext")
 parser.add_argument("--template-dir", dest="template_dir", default=None)
@@ -67,13 +66,6 @@ if o.template_dir is None:
 else:
     template_dir = o.template_dir
 
-# hack for unity section
-if o.key == "UnityQuickList":
-    OUTKEY = "Name"
-else:
-    OUTKEY = o.key
-
-
 templates = {}
 
 # open input file
@@ -85,14 +77,18 @@ template = None
 for line in source:
     if line.strip() == "":
         continue
+    # the headings in the ulf files for .desktop files are in the form [filename_Key]
     if line[0] == "[":
-        template = line.split("]", 1)[0][1:]
+        heading = line.split("]", 1)[0][1:]
+        template = heading.split("_", 1)[0]
+        key = heading.split("_", 1)[1]
         entry = {}
         # For every section in the specified ulf file there should exist
         # a template file in $workdir ..
         entry["outfile"] = f"{template_dir}{template}.{o.ext}"
         entry["translations"] = {}
-        templates[template] = entry
+        entry["key"] = key
+        templates[heading] = entry
     else:
         # split locale = "value" into 2 strings
         if " = " not in line:
@@ -116,7 +112,7 @@ for line in source:
 
             locale = locale.replace("-", "_")
 
-            templates[template]["translations"][locale] = value
+            templates[heading]["translations"][locale] = value
 
 source.close()
 
@@ -145,15 +141,18 @@ for template, entries in templates.items():
     # emit the template to the output file
     for line in template_file:
         keyline = line
-        if keyline.startswith(o.key):
-            keyline = OUTKEY + keyline[len(o.key) :]
+        if keyline.startswith(entries["key"]):
+            # hack for Unity and Start Center name sections
+            if entries["key"] == "UnityQuickList" or entries["key"] == "ProductName":
+                OUTKEY = "Name"
+            else:
+                OUTKEY = entries["key"]
+            keyline = OUTKEY + keyline[len(entries["key"]) :]
         outfile.write(keyline)
-        if o.key in line:
+        if entries["key"] in line:
             translations = entries["translations"]
             for locale in sorted(translations.keys()):
                 value = translations.get(locale, None)
-                # print "locale is $locale\n";
-                # print "value is $value\n";
                 if value:
                     if o.ext in ("desktop", "str"):
                         if o.ext == "desktop":

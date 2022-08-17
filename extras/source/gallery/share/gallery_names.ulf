@@ -7,34 +7,34 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-[arrows]
+[arrows_name]
 en-US = "Arrows"
 
-[backgrounds]
+[backgrounds_name]
 en-US = "Backgrounds"
 
-[bullets]
+[bullets_name]
 en-US= "Bullets"
 
-[bpmn]
+[bpmn_name]
 en-US = "BPMN"
 
-[diagrams]
+[diagrams_name]
 en-US = "Diagrams"
 
-[flowchart]
+[flowchart_name]
 en-US = "Flow chart"
 
-[icons]
+[icons_name]
 en-US = "Icons"
 
-[network]
+[network_name]
 en-US = "Network"
 
-[shapes]
+[shapes_name]
 en-US = "Shapes"
 
-[sounds]
+[sounds_name]
 en-US = "Sounds"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

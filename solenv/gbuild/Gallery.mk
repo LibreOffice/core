@@ -37,7 +37,7 @@ define gb_Gallery__command_str
 cp -f $(GALLERY_STRFILE) $@ && \
 $(call gb_ExternalExecutable_get_command,python) \
 		$(gb_Gallery_TRANSLATE) \
-		--ext "str" --key "name" \
+		--ext "str" \
 		-d $(GALLERY_WORKDIR) \
 		$(GALLERY_ULFFILE)
 endef
