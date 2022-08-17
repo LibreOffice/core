@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "807127aa_dc4fdf0d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-08-17T19:34:09Z",
+      "side": 1,
+      "message": "This doesn\u0027t yet handle all of the situations, but they are all in this area so far...",
+      "revId": "33e03fff866af20f748a7c4d49c8313eb5cb463e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
