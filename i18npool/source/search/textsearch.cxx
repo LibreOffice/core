@@ -216,9 +216,9 @@ void TextSearch::setOptions2( const SearchOptions2& rOptions )
 
     // When start or end of search string is a complex script type, we need to
     // make sure the result boundary is not located in the middle of cell.
-    checkCTLStart = (xBreak.is() && (xBreak->getScriptType(sSrchStr, 0) ==
+    checkCTLStart = false && (xBreak.is() && (xBreak->getScriptType(sSrchStr, 0) ==
                 ScriptType::COMPLEX));
-    checkCTLEnd = (xBreak.is() && (xBreak->getScriptType(sSrchStr,
+    checkCTLEnd = false && (xBreak.is() && (xBreak->getScriptType(sSrchStr,
                     sSrchStr.getLength()-1) == ScriptType::COMPLEX));
 
     if ( bReplaceApostrophe )
