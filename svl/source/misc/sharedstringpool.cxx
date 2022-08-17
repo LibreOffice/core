@@ -49,7 +49,16 @@ struct HashFunction
 {
     size_t operator()(rtl_uString* const key) const
     {
-        return rtl_ustr_hashCode_WithLength(key->buffer, key->length);
+        const sal_Unicode* pStr = key->buffer;
+        sal_Int32 nLen = key->length;
+        size_t h = 0;
+        while (nLen > 0)
+        {
+            h = (h * 31) + (*pStr);
+            pStr++;
+            nLen--;
+        }
+        return h;
     }
 };
 
