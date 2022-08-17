@@ -27,6 +27,7 @@
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/util/XBroadcaster.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -143,8 +144,14 @@ void DataTableView::setCellCharAndParagraphProperties(
     copyProperty(xPropertySet, xDataTableProperties, "CharWeightComplex");
     copyProperty(xPropertySet, xDataTableProperties, "CharWordMode");
 
-    xPropertySet->setPropertyValue("CharBackColor",
-                                   xDataTableProperties->getPropertyValue("FillColor"));
+    drawing::FillStyle eFillStyle = drawing::FillStyle_NONE;
+    xDataTableProperties->getPropertyValue("FillStyle") >>= eFillStyle;
+    if (eFillStyle == drawing::FillStyle_SOLID)
+    {
+        sal_Int32 aColor = 0;
+        if (xDataTableProperties->getPropertyValue("FillColor") >>= aColor)
+            xPropertySet->setPropertyValue("CharBackColor", uno::Any(aColor));
+    }
 
     xPropertySet->setPropertyValue("ParaAdjust", uno::Any(style::ParagraphAdjust_CENTER));
 }
