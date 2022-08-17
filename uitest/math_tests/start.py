@@ -34,7 +34,7 @@ class SimpleMathTest(UITestCase):
 
             xMathDoc = self.xUITest.getTopFocusWindow()
 
-            xList = xMathDoc.getChild("listbox")
+            xList = xMathDoc.getChild("categorylist")
             state = get_state_as_dict(xList)
             self.assertEqual(state["SelectEntryText"], "Unary/Binary Operators")
             select_pos(xList, "1")
