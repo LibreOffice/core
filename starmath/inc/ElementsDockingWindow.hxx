@@ -78,41 +78,4 @@ public:
     static Color GetControlBackground();
 };
 
-class SmElementsDockingWindow final : public SfxDockingWindow
-{
-    std::unique_ptr<SmElementsControl> mxElementsControl;
-    std::unique_ptr<weld::ComboBox> mxElementListBox;
-
-    virtual void Resize() override;
-    SmViewShell* GetView();
-
-    DECL_LINK(SelectClickHandler, OUString, void);
-    DECL_LINK(ElementSelectedHandle, weld::ComboBox&, void);
-
-public:
-
-    SmElementsDockingWindow( SfxBindings* pBindings,
-                             SfxChildWindow* pChildWindow,
-                             vcl::Window* pParent );
-    virtual ~SmElementsDockingWindow() override;
-    virtual void dispose() override;
-
-    virtual void EndDocking( const tools::Rectangle& rReactangle, bool bFloatMode) override;
-    virtual void ToggleFloatingMode() override;
-    virtual void GetFocus() override;
-
-    void setSmSyntaxVersion(sal_uInt16 nSmSyntaxVersion);
-};
-
-class SmElementsDockingWindowWrapper final : public SfxChildWindow
-{
-    SFX_DECL_CHILDWINDOW_WITHID(SmElementsDockingWindowWrapper);
-
-    SmElementsDockingWindowWrapper( vcl::Window* pParentWindow,
-                                    sal_uInt16 nId,
-                                    SfxBindings* pBindings,
-                                    SfxChildWinInfo* pInfo );
-    virtual ~SmElementsDockingWindowWrapper() override;
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

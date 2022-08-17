@@ -43,7 +43,7 @@ SidebarChildWindow::SidebarChildWindow(vcl::Window* pParentWindow, sal_uInt16 nI
     pDockWin->SetOutputSizePixel(Size(GetDefaultWidth(pDockWin), 450));
 
     if (pInfo && pInfo->aExtraString.isEmpty() && pInfo->aModule != "sdraw"
-        && pInfo->aModule != "simpress")
+        && pInfo->aModule != "simpress" && pInfo->aModule != "smath")
     {
         // When this is the first start (never had the sidebar open yet),
         // default to non-expanded sidebars in Writer and Calc.
