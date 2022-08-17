@@ -111,4 +111,8 @@ $(eval $(call gb_CppunitTest_use_components,dbaccess_tdf126268,\
 
 $(eval $(call gb_CppunitTest_use_configuration,dbaccess_tdf126268))
 
+$(eval $(call gb_CppunitTest_use_uiconfigs,dbaccess_tdf126268, \
+    dbaccess \
+))
+
 # vim: set noet sw=4 ts=4:
