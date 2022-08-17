@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "deccdf2e_50f38c6f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-08-17T10:18:03Z",
+      "side": 1,
+      "message": "Typo in commit message: \"addictions\". Maybe not related to crack smoking in this case :)",
+      "revId": "e6a4562aafd8159d3c91ac7cc855e36c3e6d1a29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
