@@ -505,7 +505,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     void InvalidateOutlineContentVisibility();
     bool GetAttrOutlineContentVisible(const size_t nPos);
 
-    OString getLOKPayload(int nType, int nViewId, bool* ignore) const;
+    std::optional<OString> getLOKPayload(int nType, int nViewId) const;
 
 private:
 
