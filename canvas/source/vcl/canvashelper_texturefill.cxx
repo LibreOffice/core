@@ -34,7 +34,7 @@
 #include <basegfx/utils/tools.hxx>
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <rtl/math.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <tools/poly.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/canvastools.hxx>

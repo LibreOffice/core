@@ -37,7 +37,7 @@
 #include <comphelper/enumhelper.hxx>
 #include <rtl/ref.hxx>
 #include <sfx2/app.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <unotools/eventcfg.hxx>
 #include <eventsupplier.hxx>
 

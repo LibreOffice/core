@@ -22,7 +22,7 @@
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/RepaintResult.hpp>
 #include <utility>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include "cairo_cachedbitmap.hxx"
 #include "cairo_repainttarget.hxx"

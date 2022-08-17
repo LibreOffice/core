@@ -31,7 +31,7 @@
 #include <o3tl/any.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/datetime.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
 #include <ucbhelper/contentidentifier.hxx>

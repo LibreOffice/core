@@ -47,7 +47,7 @@
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <tools/ref.hxx>
 #include <tools/debug.hxx>
 #include <unotools/streamwrap.hxx>

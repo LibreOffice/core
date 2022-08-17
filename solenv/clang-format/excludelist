@@ -1388,6 +1388,7 @@ comphelper/source/misc/base64.cxx
 comphelper/source/misc/componentbase.cxx
 comphelper/source/misc/configuration.cxx
 comphelper/source/misc/configurationhelper.cxx
+comphelper/source/misc/diagnose_ex.cxx
 comphelper/source/misc/dispatchcommand.cxx
 comphelper/source/misc/docpasswordhelper.cxx
 comphelper/source/misc/docpasswordrequest.cxx
@@ -4899,6 +4900,7 @@ include/comphelper/configurationhelper.hxx
 include/comphelper/configurationlistener.hxx
 include/comphelper/container.hxx
 include/comphelper/containermultiplexer.hxx
+include/comphelper/diagnose_ex.hxx
 include/comphelper/dispatchcommand.hxx
 include/comphelper/docpasswordhelper.hxx
 include/comphelper/docpasswordrequest.hxx
@@ -6154,7 +6156,6 @@ include/tools/cpuid.hxx
 include/tools/date.hxx
 include/tools/datetime.hxx
 include/tools/debug.hxx
-include/tools/diagnose_ex.h
 include/tools/fontenum.hxx
 include/tools/fract.hxx
 include/tools/gen.hxx

@@ -21,7 +21,7 @@
 
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <unotools/resmgr.hxx>
 #include <sal/log.hxx>
 

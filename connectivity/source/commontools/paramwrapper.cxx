@@ -29,7 +29,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 
 #include <o3tl/safeint.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <comphelper/enumhelper.hxx>
 
 #define PROPERTY_ID_VALUE   1000

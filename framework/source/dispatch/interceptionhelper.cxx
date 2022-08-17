@@ -24,7 +24,7 @@
 #include <osl/diagnose.h>
 #include <utility>
 #include <vcl/svapp.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 using namespace com::sun::star;
 

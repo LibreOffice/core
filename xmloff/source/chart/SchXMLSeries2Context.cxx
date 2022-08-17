@@ -54,7 +54,7 @@
 #include <xmloff/SchXMLSeriesHelper.hxx>
 #include <SchXMLImport.hxx>
 #include <xmloff/prstylei.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <algorithm> // std::find_if
 

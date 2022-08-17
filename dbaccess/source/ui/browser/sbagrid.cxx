@@ -33,7 +33,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <svl/numuno.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

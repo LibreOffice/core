@@ -42,7 +42,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <xmlscript/xmldlg_imexp.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 

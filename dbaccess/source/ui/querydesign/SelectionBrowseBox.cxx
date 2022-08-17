@@ -48,7 +48,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <o3tl/string_view.hxx>
 
 using namespace ::svt;

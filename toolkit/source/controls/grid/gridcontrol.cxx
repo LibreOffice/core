@@ -31,7 +31,7 @@
 #include <com/sun/star/awt/grid/SortableGridDataModel.hpp>
 #include <com/sun/star/awt/grid/DefaultGridColumnModel.hpp>
 #include <toolkit/helper/property.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <toolkit/controls/unocontrolbase.hxx>
 #include <toolkit/controls/unocontrolmodel.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>

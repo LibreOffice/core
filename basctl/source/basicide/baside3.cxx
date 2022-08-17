@@ -50,7 +50,7 @@
 #include <svl/whiter.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svxids.hrc>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/weld.hxx>

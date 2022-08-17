@@ -35,7 +35,7 @@
 #include <svx/dbaexchange.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <sal/log.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/tempfile.hxx>

@@ -26,7 +26,7 @@
 #include <vcl/virdev.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <chrono>
 #include <iostream>

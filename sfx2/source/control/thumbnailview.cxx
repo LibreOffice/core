@@ -26,7 +26,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

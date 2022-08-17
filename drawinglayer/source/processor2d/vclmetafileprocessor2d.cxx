@@ -24,7 +24,7 @@
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 #include <tools/stream.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <config_global.h>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>

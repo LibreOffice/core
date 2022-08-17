@@ -12,10 +12,10 @@ $(eval $(call gb_Library_Library,cmdmail))
 $(eval $(call gb_Library_use_sdk_api,cmdmail))
 
 $(eval $(call gb_Library_use_libraries,cmdmail,\
+	comphelper \
 	cppu \
 	cppuhelper \
 	sal \
-	tl \
 ))
 
 $(eval $(call gb_Library_set_componentfile,cmdmail,shell/source/cmdmail/cmdmail,services))

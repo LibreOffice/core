@@ -42,7 +42,7 @@
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <unotools/tempfile.hxx>
 #include <optional>
 #include <utility>

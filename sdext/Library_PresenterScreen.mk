@@ -20,10 +20,10 @@ $(eval $(call gb_Library_use_externals,PresenterScreen,\
 $(eval $(call gb_Library_use_sdk_api,PresenterScreen))
 
 $(eval $(call gb_Library_use_libraries,PresenterScreen,\
+    comphelper \
     cppu \
     cppuhelper \
     sal \
-    tl \
     vcl \
 ))
 

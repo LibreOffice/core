@@ -19,7 +19,7 @@
 #include <memory>
 #include <sal/config.h>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <svx/rubydialog.hxx>
 #include <sfx2/dispatch.hxx>

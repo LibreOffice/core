@@ -57,7 +57,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <epoxy/gl.h>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
 #include <canvas/canvastools.hxx>

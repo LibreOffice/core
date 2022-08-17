@@ -29,7 +29,7 @@
 #include <sot/stg.hxx>
 #include <sfx2/docfile.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <o3tl/string_view.hxx>
 

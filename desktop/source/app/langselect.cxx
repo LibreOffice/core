@@ -36,7 +36,7 @@
 #include <rtl/ustring.hxx>
 #include <svl/languageoptions.hxx>
 #include <svtools/langhelp.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <app.hxx>
 

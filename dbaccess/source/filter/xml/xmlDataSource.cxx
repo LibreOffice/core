@@ -27,7 +27,7 @@
 #include <xmloff/ProgressBarHelper.hxx>
 #include "xmlEnums.hxx"
 #include <strings.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include "xmlConnectionData.hxx"
 
 namespace dbaxml

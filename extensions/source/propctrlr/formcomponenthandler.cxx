@@ -100,7 +100,7 @@
 #include <svx/svxids.hrc>
 #include <vcl/graph.hxx>
 #include <vcl/unohelp.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <sal/macros.h>
 #include <sal/log.hxx>
 

@@ -18,7 +18,7 @@
  */
 
 #include <svx/svdmark.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <editsh.hxx>
 #include <fesh.hxx>

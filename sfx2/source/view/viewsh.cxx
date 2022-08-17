@@ -48,7 +48,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/implbase.hxx>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
 #include <svtools/soerr.hxx>

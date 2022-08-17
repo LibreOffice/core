@@ -24,7 +24,7 @@
 #include <sdpage.hxx>
 #include <comphelper/profilezone.hxx>
 #include <utility>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 namespace sd::slidesorter::cache {
 

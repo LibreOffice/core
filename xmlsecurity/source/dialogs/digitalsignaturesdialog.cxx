@@ -26,7 +26,7 @@
 #include <certificateviewer.hxx>
 #include <biginteger.hxx>
 #include <sax/tools/converter.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>

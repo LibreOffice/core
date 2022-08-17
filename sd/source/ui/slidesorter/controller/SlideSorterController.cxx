@@ -43,7 +43,7 @@
 #include <view/SlsToolTip.hxx>
 #include <cache/SlsPageCache.hxx>
 #include <cache/SlsPageCacheManager.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <drawdoc.hxx>
 #include <ViewShellBase.hxx>

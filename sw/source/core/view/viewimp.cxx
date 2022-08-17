@@ -32,7 +32,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <pagepreviewlayout.hxx>
 #include <comphelper/lok.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <drawdoc.hxx>

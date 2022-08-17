@@ -37,7 +37,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <salhelper/thread.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <o3tl/string_view.hxx>
 
 #include <queue>

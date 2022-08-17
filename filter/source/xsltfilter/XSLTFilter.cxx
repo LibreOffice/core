@@ -28,7 +28,7 @@
 #include <osl/time.h>
 #include <osl/conditn.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <sal/log.hxx>
 #include <rtl/ref.hxx>
 

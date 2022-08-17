@@ -21,7 +21,7 @@
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <comphelper/processfactory.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 using namespace css;
 using namespace ::com::sun::star::beans;

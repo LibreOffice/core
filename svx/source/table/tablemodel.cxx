@@ -28,7 +28,7 @@
 #include <osl/mutex.hxx>
 #include <libxml/xmlwriter.h>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <cell.hxx>
 #include "cellcursor.hxx"

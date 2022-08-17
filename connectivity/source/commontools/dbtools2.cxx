@@ -45,7 +45,7 @@
 #include <com/sun/star/container/XChild.hpp>
 
 #include <comphelper/types.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <algorithm>
 #include <string_view>

@@ -38,7 +38,7 @@
 #include <osl/diagnose.h>
 #include <comphelper/sequence.hxx>
 #include <comphelper/solarmutex.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 using namespace utl;
 using namespace com::sun::star::uno;

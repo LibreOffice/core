@@ -25,7 +25,7 @@
 
 #include <sal/log.hxx>
 #include <tools/color.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <oox/helper/propertymap.hxx>
 #include <oox/token/namespaces.hxx>

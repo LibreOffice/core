@@ -44,7 +44,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/property.hxx>
 #include <svx/svdundo.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <PropertyForward.hxx>
 #include <UndoEnv.hxx>
 #include <utility>

@@ -33,7 +33,7 @@
 #include <toolkit/controls/unocontrolmodel.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <tools/debug.hxx>
 #include <tools/long.hxx>
 #include <toolkit/helper/property.hxx>

@@ -36,7 +36,7 @@
 #if ENABLE_CAIRO_CANVAS
 #include <cairo.h>
 #endif
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
 #include <bitmap/BitmapWriteAccess.hxx>

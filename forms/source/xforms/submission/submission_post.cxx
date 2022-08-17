@@ -26,7 +26,7 @@
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/activedatasink.hxx>
 #include <com/sun/star/ucb/PostCommandArgument2.hpp>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 using namespace css::uno;
 using namespace css::ucb;

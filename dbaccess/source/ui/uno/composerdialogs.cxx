@@ -26,7 +26,7 @@
 #include <queryorder.hxx>
 #include <strings.hxx>
 #include <connectivity/dbtools.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
 

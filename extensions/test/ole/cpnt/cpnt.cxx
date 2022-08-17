@@ -25,7 +25,7 @@
 #include <stdio.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <uno/environment.h>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>

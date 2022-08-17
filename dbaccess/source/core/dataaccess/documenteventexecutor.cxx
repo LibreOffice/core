@@ -27,7 +27,7 @@
 
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <vcl/svapp.hxx>
 
 namespace dbaccess

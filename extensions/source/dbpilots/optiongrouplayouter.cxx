@@ -28,7 +28,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include "groupboxwiz.hxx"
 #include "dbptools.hxx"
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 
 namespace dbp

@@ -23,7 +23,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 namespace framework
 {

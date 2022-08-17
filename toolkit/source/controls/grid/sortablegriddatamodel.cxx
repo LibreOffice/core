@@ -36,7 +36,7 @@
 #include <comphelper/anycompare.hxx>
 #include <comphelper/componentguard.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/safeint.hxx>
 #include <vcl/svapp.hxx>

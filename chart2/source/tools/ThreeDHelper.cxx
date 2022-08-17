@@ -30,7 +30,7 @@
 #include <editeng/unoprnms.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <tools/helpers.hxx>
 #include <rtl/math.hxx>
 

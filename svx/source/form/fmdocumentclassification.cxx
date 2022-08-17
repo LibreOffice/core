@@ -26,7 +26,7 @@
 #include <com/sun/star/frame/XModule.hpp>
 
 #include <o3tl/string_view.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 
 namespace svxform

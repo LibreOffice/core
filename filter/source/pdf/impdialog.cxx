@@ -25,7 +25,7 @@
 #include <vcl/weld.hxx>
 #include <sfx2/passwd.hxx>
 #include <unotools/resmgr.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <sfx2/objsh.hxx>
 #include <svx/AccessibilityCheckDialog.hxx>
 

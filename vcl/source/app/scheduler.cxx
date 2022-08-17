@@ -30,7 +30,7 @@
 #include <svdata.hxx>
 #include <tools/time.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <unotools/configmgr.hxx>
 #include <vcl/TaskStopwatch.hxx>
 #include <vcl/scheduler.hxx>

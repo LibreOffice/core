@@ -26,7 +26,7 @@
 
 #include <comphelper/propertyvalue.hxx>
 #include <svl/documentlockfile.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <com/sun/star/table/XCell2.hpp>
 #include <com/sun/star/sheet/XCalculatable.hpp>

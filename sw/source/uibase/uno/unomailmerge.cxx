@@ -27,7 +27,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/docfilt.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/string.hxx>

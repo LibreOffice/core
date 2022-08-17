@@ -28,7 +28,7 @@
 #include <com/sun/star/beans/NotRemoveableException.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <comphelper/sequence.hxx>
 

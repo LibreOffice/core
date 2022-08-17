@@ -20,7 +20,7 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <sfx2/objsh.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdobj.hxx>

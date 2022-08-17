@@ -36,7 +36,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/txtattr.hxx>
 #include <vcl/window.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <comphelper/sequence.hxx>
 

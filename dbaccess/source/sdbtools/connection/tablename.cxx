@@ -26,7 +26,7 @@
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 
 #include <connectivity/dbtools.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 namespace sdbtools
 {

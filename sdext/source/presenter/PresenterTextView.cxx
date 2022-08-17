@@ -37,7 +37,7 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <o3tl/safeint.hxx>
 #include <utility>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;

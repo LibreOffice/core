@@ -76,7 +76,7 @@
 #include <filter/msfilter/escherex.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdoole2.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <oox/export/chartexport.hxx>
 #include <oox/mathml/export.hxx>
 #include <basegfx/numeric/ftools.hxx>

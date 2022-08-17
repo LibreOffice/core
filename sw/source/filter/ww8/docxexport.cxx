@@ -92,7 +92,7 @@
 #include <o3tl/any.hxx>
 #include <sal/log.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 using namespace sax_fastparser;
 using namespace ::comphelper;

@@ -40,7 +40,7 @@
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/syslocale.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <tools/resary.hxx>
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/form/inspection/FormComponentPropertyHandler.hpp>

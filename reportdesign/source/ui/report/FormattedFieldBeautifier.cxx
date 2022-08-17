@@ -34,7 +34,7 @@
 #include <svtools/extcolorcfg.hxx>
 
 // DBG_UNHANDLED_EXCEPTION
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 namespace rptui
 {

@@ -27,7 +27,7 @@
 
 #include <com/sun/star/uno/Exception.hpp>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <sal/log.hxx>
 #include <sal/types.h>
 #include <svdata.hxx>

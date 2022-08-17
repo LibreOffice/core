@@ -45,7 +45,7 @@
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <svl/filenotation.hxx>
 #include <unotools/pathoptions.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <connectivity/DriversConfig.hxx>
 #include <connectivity/dbtools.hxx>
 

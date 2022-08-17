@@ -19,7 +19,7 @@
 
 
 #include <osl/diagnose.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <cppcanvas/basegfxfactory.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>

@@ -50,7 +50,7 @@
 #include <vcl/event.hxx>
 #include <vcl/toolkit/floatwin.hxx>
 #include <window.h>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>

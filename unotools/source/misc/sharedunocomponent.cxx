@@ -26,7 +26,7 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 namespace utl
 {

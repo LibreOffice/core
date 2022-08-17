@@ -152,7 +152,7 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/abstdlg.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/jsdialog/executor.hxx>
 

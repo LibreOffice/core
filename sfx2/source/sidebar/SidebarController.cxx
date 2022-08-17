@@ -40,7 +40,7 @@
 #include <vcl/uitest/eventdescription.hxx>
 #include <vcl/svapp.hxx>
 #include <splitwin.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <tools/json_writer.hxx>
 #include <tools/link.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

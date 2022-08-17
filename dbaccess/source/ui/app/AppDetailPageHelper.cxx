@@ -18,7 +18,7 @@
  */
 
 #include "AppDetailPageHelper.hxx"
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <tabletree.hxx>
 #include <dbtreelistbox.hxx>
 #include <com/sun/star/awt/PopupMenu.hpp>

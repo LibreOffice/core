@@ -28,7 +28,7 @@
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <objectnamecheck.hxx>
 #include <utility>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 using namespace dbaui;
 using namespace dbtools;

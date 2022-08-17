@@ -32,7 +32,7 @@
 #include <unonames.hxx>
 
 #include <svtools/valueset.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 using namespace css;
 using namespace css::uno;

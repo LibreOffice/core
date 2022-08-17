@@ -44,7 +44,7 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/syslocale.hxx>
 #include <tools/gen.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <connectivity/dbtools.hxx>
 #include <i18nlangtag/languagetag.hxx>
 

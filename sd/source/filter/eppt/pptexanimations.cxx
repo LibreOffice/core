@@ -58,7 +58,7 @@
 #include <filter/msfilter/escherex.hxx>
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <o3tl/string_view.hxx>
 
 #include <algorithm>

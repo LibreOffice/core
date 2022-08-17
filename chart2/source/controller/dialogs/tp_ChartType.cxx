@@ -34,7 +34,7 @@
 #include <utility>
 #include <vcl/weld.hxx>
 #include <vcl/outdev.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 namespace chart
 {

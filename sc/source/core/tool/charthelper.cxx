@@ -29,7 +29,7 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
 #include <svtools/embedhlp.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>

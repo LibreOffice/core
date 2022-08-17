@@ -61,7 +61,7 @@
 #include <libxml/xpathInternals.h>
 #include <o3tl/safeint.hxx>
 #include <sax/fastattribs.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <ucbhelper/content.hxx>
 #include <xmloff/xmlimp.hxx>

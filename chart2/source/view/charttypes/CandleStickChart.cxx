@@ -26,7 +26,7 @@
 #include "BarPositionHelper.hxx"
 #include <DateHelper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <osl/diagnose.h>
 
 namespace chart

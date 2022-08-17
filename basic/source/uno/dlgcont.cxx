@@ -33,7 +33,7 @@
 #include <dlgcont.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

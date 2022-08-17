@@ -44,7 +44,7 @@
 #include <math.h>
 #include <svl/grabbagitem.hxx>
 #include <tools/bigint.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <tools/helpers.hxx>
 #include <unotools/configmgr.hxx>
 #include <vcl/canvastools.hxx>

@@ -122,7 +122,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <sfx2/digitalsignatures.hxx>
 #include <sfx2/viewfrm.hxx>

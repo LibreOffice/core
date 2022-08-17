@@ -27,6 +27,7 @@ $(eval $(call gb_Library_use_sdk_api,xmlfd))
 
 $(eval $(call gb_Library_use_libraries,xmlfd,\
 	ucbhelper \
+	comphelper \
 	cppuhelper \
 	cppu \
 	sal \

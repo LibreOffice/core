@@ -18,7 +18,7 @@
  */
 
 #include <TokenWriter.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <tools/stream.hxx>
 #include <osl/diagnose.h>
 #include <rtl/tencinfo.h>

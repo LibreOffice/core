@@ -34,7 +34,7 @@
 #include <comphelper/flagguard.hxx>
 #include <comphelper/asyncnotification.hxx>
 #include <svl/undo.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <osl/conditn.hxx>
 
 #include <functional>

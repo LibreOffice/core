@@ -27,7 +27,7 @@
 #include <xmloff/xmlimppr.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include "XMLChartPropertyContext.hxx"
 

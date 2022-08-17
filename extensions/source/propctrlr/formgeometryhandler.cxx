@@ -45,7 +45,7 @@
 #include <comphelper/componentbase.hxx>
 #include <rtl/ref.hxx>
 #include <utility>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 namespace pcr
 {

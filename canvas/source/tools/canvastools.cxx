@@ -53,7 +53,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <sal/log.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/window.hxx>
 

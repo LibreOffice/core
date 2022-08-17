@@ -26,7 +26,7 @@
 #include <Diagram.hxx>
 #include <Axis.hxx>
 #include <AxisHelper.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <vector>
 

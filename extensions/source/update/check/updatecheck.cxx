@@ -42,7 +42,7 @@
 #include <osl/file.hxx>
 #include <sal/macros.h>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #ifdef _WIN32
 #include <o3tl/safeCoInitUninit.hxx>

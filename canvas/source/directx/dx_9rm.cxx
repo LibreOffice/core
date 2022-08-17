@@ -31,7 +31,7 @@
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <osl/thread.hxx>
 #include <osl/time.h>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/window.hxx>

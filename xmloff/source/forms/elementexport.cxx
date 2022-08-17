@@ -57,7 +57,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/maptype.hxx>
 #include <tools/time.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <comphelper/extract.hxx>
 #include <sal/macros.h>
 #include <sal/log.hxx>

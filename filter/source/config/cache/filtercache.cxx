@@ -19,7 +19,7 @@
 
 
 #include <memory>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include "filtercache.hxx"
 #include "constant.hxx"
 #include "cacheupdatelistener.hxx"

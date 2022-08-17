@@ -19,7 +19,7 @@
 
 #include <QueryTableView.hxx>
 #include <TableFieldDescription.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <osl/diagnose.h>
 #include <helpids.h>
 #include "QTableWindow.hxx"

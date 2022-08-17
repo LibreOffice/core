@@ -30,7 +30,7 @@
 #include <com/sun/star/script/browse/BrowseNodeFactoryViewTypes.hpp>
 #include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include "BrowseNodeFactoryImpl.hxx"
 #include <util/MiscUtils.hxx>

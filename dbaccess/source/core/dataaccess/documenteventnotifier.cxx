@@ -24,7 +24,7 @@
 #include <comphelper/asyncnotification.hxx>
 #include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/weak.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <vcl/svapp.hxx>
 
 namespace dbaccess

@@ -30,7 +30,7 @@
 #include <FillProperties.hxx>
 #include <UserDefinedProperties.hxx>
 #include <utility>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;

@@ -83,7 +83,7 @@
 #include <dlgsize.hxx>
 #include <svtools/editbrowsebox.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <svl/numuno.hxx>
 #include <svl/filenotation.hxx>
 #include <connectivity/FValue.hxx>
