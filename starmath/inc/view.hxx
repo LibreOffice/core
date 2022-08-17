@@ -36,7 +36,6 @@ class SmViewShell;
 class SmPrintUIOptions;
 class SmGraphicAccessible;
 class SmGraphicWidget;
-class SmElementsDockingWindow;
 
 class SmGraphicWindow final : public InterimItemWindow
 {
@@ -316,8 +315,6 @@ public:
     {
         return *mxGraphicWindow;
     }
-
-    SmElementsDockingWindow* GetDockingWindow();
 
     void        SetStatusText(const OUString& rText);
 
