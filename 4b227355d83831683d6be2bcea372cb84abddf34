@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21c61b64_b8cb009d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-08-17T14:41:38Z",
+      "side": 1,
+      "message": "nice, it doesn\u0027t trigger duplicated messages",
+      "revId": "4b227355d83831683d6be2bcea372cb84abddf34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
