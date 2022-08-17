@@ -74,7 +74,7 @@ ColumnSpanSet::ColumnType& ColumnSpanSet::getColumn(const ScDocument& rDoc, SCTA
         rTab.resize(nCol+1);
 
     if (!rTab[nCol])
-        rTab[nCol].emplace(0, rDoc.MaxRow(), /*bInit*/false);
+        rTab[nCol].reset(new ColumnType(0, rDoc.MaxRow(), /*bInit*/false));
 
     return *rTab[nCol];
 }
@@ -156,7 +156,7 @@ void ColumnSpanSet::executeAction(Action& ac) const
                 continue;
 
             ac.startColumn(nTab, nCol);
-            const ColumnType& rCol = *rTab[nCol];
+            ColumnType& rCol = *rTab[nCol];
             ColumnSpansType::const_iterator it = rCol.maSpans.begin(), itEnd = rCol.maSpans.end();
             SCROW nRow1, nRow2;
             nRow1 = it->first;
@@ -199,7 +199,7 @@ void ColumnSpanSet::executeColumnAction(ScDocument& rDoc, ColumnAction& ac) cons
 
             ScColumn& rColumn = pTab->aCol[nCol];
             ac.startColumn(&rColumn);
-            const ColumnType& rCol = *rTab[nCol];
+            ColumnType& rCol = *rTab[nCol];
             ColumnSpansType::const_iterator it = rCol.maSpans.begin(), itEnd = rCol.maSpans.end();
             SCROW nRow1, nRow2;
             nRow1 = it->first;
