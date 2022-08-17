@@ -175,6 +175,7 @@ public:
     void testTdf112209();
     void testDefaultTabStop();
     void testCropToZero();
+    void testTdf144092TableHeight();
 
     CPPUNIT_TEST_SUITE(SdImportTest2);
 
@@ -242,6 +243,7 @@ public:
     CPPUNIT_TEST(testTdf112209);
     CPPUNIT_TEST(testDefaultTabStop);
     CPPUNIT_TEST(testCropToZero);
+    CPPUNIT_TEST(testTdf144092TableHeight);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1998,6 +2000,21 @@ void SdImportTest2::testCropToZero()
     // Must not crash because of division by zero
     // Also must not fail assertions because of passing negative value to CropQuotientsFromSrcRect
     loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/croppedTo0.pptx"), PPTX);
+}
+
+void SdImportTest2::testTdf144092TableHeight()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf144092-tableHeight.pptx"), PPTX);
+
+    uno::Reference<drawing::XShape> xTableShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 7208
+    // - Actual  : 4595
+    // i.e. the table height wasn't corrected by expanding less than minimum sized rows.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7208), xTableShape->getSize().Height);
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest2);
