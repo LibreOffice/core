@@ -682,13 +682,6 @@
                     "type": "file",
                     "dest": "external/tarballs",
                     "dest-filename": "@OPENSYMBOL_TTF@"
-                },
-                {
-                    "url": "https://dev-www.libreoffice.org/src/@CUCKOO_TARBALL@",
-                    "sha256": "@CUCKOO_SHA256SUM@",
-                    "type": "file",
-                    "dest": "external/tarballs",
-                    "dest-filename": "@CUCKOO_TARBALL@"
                 }
             ],
             "buildsystem": "simple",
