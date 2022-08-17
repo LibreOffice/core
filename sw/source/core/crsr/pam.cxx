@@ -1059,7 +1059,7 @@ void GoStartSection( SwPosition * pPos )
     // jump to section's beginning
     SwNodes& rNodes = pPos->GetNodes();
     sal_uInt16 nLevel = SwNodes::GetSectionLevel( pPos->GetNode() );
-    if( pPos->nNode < rNodes.GetEndOfContent().StartOfSectionIndex() )
+    if( pPos->GetNode() < *rNodes.GetEndOfContent().StartOfSectionNode() )
         nLevel--;
     do { SwNodes::GoStartOfSection( &pPos->nNode ); } while( nLevel-- );
 
@@ -1080,7 +1080,7 @@ void GoEndSection( SwPosition * pPos )
     // jump to section's beginning/end
     SwNodes& rNodes = pPos->GetNodes();
     sal_uInt16 nLevel = SwNodes::GetSectionLevel( pPos->GetNode() );
-    if( pPos->nNode < rNodes.GetEndOfContent().StartOfSectionIndex() )
+    if( pPos->GetNode() < *rNodes.GetEndOfContent().StartOfSectionNode() )
         nLevel--;
     do { SwNodes::GoEndOfSection( &pPos->nNode ); } while( nLevel-- );
 

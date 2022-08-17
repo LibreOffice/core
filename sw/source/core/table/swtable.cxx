@@ -1703,7 +1703,7 @@ SwRedlineTable::size_type SwTableLine::UpdateTextChangesOnly(
 
             // there is text content outside of redlines: not a deletion
             if ( !bInsertion && ( !bHasRedlineInBox || ( pPreviousDeleteRedline &&
-                 ( pPreviousDeleteRedline->End()->nNode < aCellEnd.nNode ||
+                 ( pPreviousDeleteRedline->End()->GetNode() < aCellEnd.GetNode() ||
                    pPreviousDeleteRedline->End()->GetContentIndex() <
                            aCellEnd.GetNode().GetContentNode()->Len() ) ) ) )
             {

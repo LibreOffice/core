@@ -292,7 +292,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
         SwPosition const*const pAPos = pAnchor->GetContentAnchor();
 
         if (pAPos && (RndStdIds::FLY_AT_PARA == pAnchor->GetAnchorId()) &&
-            pStart->nNode <= pAPos->nNode && pAPos->nNode <= pEnd->nNode )
+            pStart->GetNode() <= pAPos->GetNode() && pAPos->GetNode() <= pEnd->GetNode() )
             return false;
     }
 

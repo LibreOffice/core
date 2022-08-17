@@ -127,7 +127,7 @@ struct ObjAnchorOrder
         if ( pContentAnchorListed && pContentAnchorNew &&
              pContentAnchorListed->nNode != pContentAnchorNew->nNode )
         {
-            return pContentAnchorListed->nNode < pContentAnchorNew->nNode;
+            return pContentAnchorListed->GetNode() < pContentAnchorNew->GetNode();
         }
 
         // objects anchored at the same content.

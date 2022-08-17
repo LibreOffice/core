@@ -911,10 +911,10 @@ namespace
                     pTmpPos->Assign(rRg.aEnd);
                 }
             }
-            else if( pRStt->nNode < rRg.aEnd )
+            else if( pRStt->GetNode() < rRg.aEnd.GetNode() )
             {
                 rRedlTable.Remove( nRedlPos-- );
-                if( pREnd->nNode < rRg.aEnd ||
+                if( pREnd->GetNode() < rRg.aEnd.GetNode() ||
                     ( pREnd->GetNode() == rRg.aEnd.GetNode() && !pREnd->GetContentIndex()) )
                 {
                     // move everything
@@ -1854,7 +1854,7 @@ namespace //local functions originally from docfmt.cxx
         /*
          * The selection spans more than one Node.
          */
-        if( pStt->nNode < pEnd->nNode )
+        if( pStt->GetNode() < pEnd->GetNode() )
         {
             pNode = pEnd->GetNode().GetContentNode();
             if(pNode)
@@ -2300,7 +2300,7 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
                     // note: here use <= not < like in
                     // IsDestroyFrameAnchoredAtChar() because of the increment
                     // of rPam in the bDoesUndo path above!
-                    aRg.aStart <= pAPos->nNode && pAPos->nNode <= aRg.aEnd )
+                    aRg.aStart <= pAPos->GetNode() && pAPos->GetNode() <= aRg.aEnd.GetNode() )
                 {
                     m_rDoc.getIDocumentLayoutAccess().DelLayoutFormat( pFly );
                     --n;
@@ -2596,11 +2596,11 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
                 SwRangeRedline* pTmp = m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ nRedlPos ];
                 pRStt = pTmp->Start();
                 pREnd = pTmp->End();
-                if( pREnd->GetNode() == rPos.GetNode() && pRStt->nNode < rPos )
+                if( pREnd->GetNode() == rPos.GetNode() && pRStt->GetNode() < rPos.GetNode() )
                 {
                     aSavRedlInsPosArr.push_back( pTmp );
                 }
-            } while( pRStt->nNode < rPos && ++nRedlPos < m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().size());
+            } while( pRStt->GetNode() < rPos.GetNode() && ++nRedlPos < m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().size());
         }
     }
 
@@ -3629,7 +3629,7 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
     SwCopyFlags const flags) const
 {
     assert(!pCopiedPaM || pCopiedPaM->first.End()->GetNode() == rRg.aEnd.GetNode());
-    assert(!pCopiedPaM || pCopiedPaM->second.nNode <= rInsPos);
+    assert(!pCopiedPaM || pCopiedPaM->second.GetNode() <= rInsPos.GetNode());
 
     SwDoc& rDest = rInsPos.GetNode().GetDoc();
     SwNodeIndex aSavePos( rInsPos );
@@ -3850,7 +3850,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
             //  or a text frame then they have to be copied
             //- if the content index in this node is > 0 then paragraph and frame bound objects are copied
             //- to-character bound objects are copied if their index is <= nEndContentIndex
-            if (pAPos->nNode < rRg.aEnd)
+            if (pAPos->GetNode() < rRg.aEnd.GetNode())
                 bAdd = true;
             if (!bAdd && !m_rDoc.getIDocumentRedlineAccess().IsRedlineMove()) // fdo#40599: not for redline move
             {

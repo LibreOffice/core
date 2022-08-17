@@ -196,7 +196,7 @@ namespace
 
     bool lcl_Lower( const SwPosition& rPos, const SwNode& rNdIdx, std::optional<sal_Int32> oContentIdx )
     {
-        return rPos.nNode < rNdIdx
+        return rPos.GetNode() < rNdIdx
                || ( oContentIdx.has_value()
                     && rPos.GetNode() == rNdIdx
                     && rPos.nContent < *oContentIdx );
@@ -209,7 +209,7 @@ namespace
         auto const& rSecondStart(pSecond->GetMarkStart());
         if (rFirstStart.nNode != rSecondStart.nNode)
         {
-            return rFirstStart.nNode < rSecondStart.nNode;
+            return rFirstStart.GetNode() < rSecondStart.GetNode();
         }
         const sal_Int32 nFirstContent = rFirstStart.GetContentIndex();
         const sal_Int32 nSecondContent = rSecondStart.GetContentIndex();

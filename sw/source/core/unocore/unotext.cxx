@@ -1947,7 +1947,7 @@ void SwXText::Impl::ConvertCell(
     /** check the nodes between start and end
         it is allowed to have pairs of StartNode/EndNodes
      */
-    if (aStartCellPam.Start()->nNode < aEndCellPam.End()->nNode)
+    if (aStartCellPam.Start()->GetNode() < aEndCellPam.End()->GetNode())
     {
         // increment on each StartNode and decrement on each EndNode
         // we must reach zero at the end and must not go below zero

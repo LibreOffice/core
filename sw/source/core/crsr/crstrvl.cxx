@@ -412,7 +412,7 @@ bool SwCursorShell::GotoNxtPrvTableFormula( bool bNext, bool bOnlyErrors )
         }
     }
 
-    if( rPos.nNode < GetDoc()->GetNodes().GetEndOfExtras() )
+    if( rPos.GetNode() < GetDoc()->GetNodes().GetEndOfExtras() )
     {
         // also at collection use only the first frame
         std::pair<Point, bool> const tmp(aPt, false);

@@ -138,17 +138,17 @@ ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode,
             assert(pFieldMark->GetMarkStart().GetNode().GetTextNode()->GetText()[pFieldMark->GetMarkStart().GetContentIndex()] != CH_TXT_ATR_FORMELEMENT);
             // getFieldmarkFor may also return one that starts at rNode,0 -
             // skip it, must be handled in loop below
-            if (pFieldMark->GetMarkStart().nNode < rNode)
+            if (pFieldMark->GetMarkStart().GetNode() < rNode)
             {
                 // this can be a nested field's end - skip over those!
-                if (pFieldMark->GetMarkEnd().nNode < rNode)
+                if (pFieldMark->GetMarkEnd().GetNode() < rNode)
                 {
                     assert(cursor.GetPoint()->GetNode().GetTextNode()->GetText()[cursor.GetPoint()->GetContentIndex()] == CH_TXT_ATR_FIELDEND);
                 }
                 else
                 {
                     SwPosition const sepPos(::sw::mark::FindFieldSep(*pFieldMark));
-                    startedFields.emplace_front(pFieldMark, sepPos.nNode < rNode);
+                    startedFields.emplace_front(pFieldMark, sepPos.GetNode() < rNode);
                 }
                 *cursor.GetPoint() = pFieldMark->GetMarkStart();
             }

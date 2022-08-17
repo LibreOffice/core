@@ -964,8 +964,8 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                 case RndStdIds::FLY_AS_CHAR:
                     if( nullptr != (pAPos = pAnchor->GetContentAnchor() ) &&
                         (( DelContentType::CheckNoCntnt & nDelContentType )
-                        ? ( pStt->nNode <= pAPos->nNode &&
-                            pAPos->nNode < pEnd->nNode )
+                        ? ( pStt->GetNode() <= pAPos->GetNode() &&
+                            pAPos->GetNode() < pEnd->GetNode() )
                         : ( *pStt <= *pAPos && *pAPos < *pEnd )) )
                     {
                         if( !m_pHistory )
@@ -984,7 +984,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                     {
                         pAPos =  pAnchor->GetContentAnchor();
                         if (pAPos &&
-                            pStt->nNode <= pAPos->nNode && pAPos->nNode <= pEnd->nNode)
+                            pStt->GetNode() <= pAPos->GetNode() && pAPos->GetNode() <= pEnd->GetNode())
                         {
                             if (!m_pHistory)
                                 m_pHistory.reset( new SwHistory );
@@ -1021,7 +1021,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                     break;
                 case RndStdIds::FLY_AT_CHAR:
                     if( nullptr != (pAPos = pAnchor->GetContentAnchor() ) &&
-                        ( pStt->nNode <= pAPos->nNode && pAPos->nNode <= pEnd->nNode ) )
+                        ( pStt->GetNode() <= pAPos->GetNode() && pAPos->GetNode() <= pEnd->GetNode() ) )
                     {
                         if( !m_pHistory )
                             m_pHistory.reset( new SwHistory );
@@ -1090,14 +1090,14 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
 
         if( DelContentType::CheckNoCntnt & nDelContentType )
         {
-            if ( pStt->nNode <= pBkmk->GetMarkPos().nNode
-                 && pBkmk->GetMarkPos().nNode < pEnd->nNode )
+            if ( pStt->GetNode() <= pBkmk->GetMarkPos().GetNode()
+                 && pBkmk->GetMarkPos().GetNode() < pEnd->GetNode() )
             {
                 bSavePos = true;
             }
             if ( pBkmk->IsExpanded()
-                 && pStt->nNode <= pBkmk->GetOtherMarkPos().nNode
-                 && pBkmk->GetOtherMarkPos().nNode < pEnd->nNode )
+                 && pStt->GetNode() <= pBkmk->GetOtherMarkPos().GetNode()
+                 && pBkmk->GetOtherMarkPos().GetNode() < pEnd->GetNode() )
             {
                 bSaveOtherPos = true;
             }
@@ -1559,7 +1559,7 @@ static bool IsAtEndOfSection(SwPosition const& rAnchorPos)
     SwNodeIndex node(*rAnchorPos.GetNode().EndOfSectionNode());
     SwContentNode *const pNode(SwNodes::GoPrevious(&node));
     assert(pNode);
-    assert(rAnchorPos.nNode <= node); // last valid anchor pos is last content
+    assert(rAnchorPos.GetNode() <= node.GetNode()); // last valid anchor pos is last content
     return node == rAnchorPos.nNode
         // at-para fly has no SwContentIndex!
         && (rAnchorPos.GetContentIndex() == pNode->Len() || rAnchorPos.GetContentNode() == nullptr);
@@ -1572,7 +1572,7 @@ static bool IsAtStartOfSection(SwPosition const& rAnchorPos)
     SwContentNode *const pNode(rNodes.GoNext(&node));
     assert(pNode);
     (void) pNode;
-    assert(node <= rAnchorPos.nNode);
+    assert(node <= rAnchorPos.GetNode());
     return node == rAnchorPos.nNode && rAnchorPos.GetContentIndex() == 0;
 }
 
@@ -1612,8 +1612,8 @@ bool IsDestroyFrameAnchoredAtChar(SwPosition const & rAnchorPos,
     // CheckNoCntnt means DelFullPara which is obvious to handle
     if (DelContentType::CheckNoCntnt & nDelContentType)
     {   // exclude selection end node because it won't be deleted
-        return (rAnchorPos.nNode < rEnd.nNode)
-            && (rStart.nNode <= rAnchorPos.nNode);
+        return (rAnchorPos.GetNode() < rEnd.GetNode())
+            && (rStart.GetNode() <= rAnchorPos.GetNode());
     }
 
     if ((nDelContentType & DelContentType::WriterfilterHack)
@@ -1624,8 +1624,8 @@ bool IsDestroyFrameAnchoredAtChar(SwPosition const & rAnchorPos,
 
     if (nDelContentType & DelContentType::ExcludeFlyAtStartEnd)
     {   // exclude selection start and end node
-        return (rAnchorPos.nNode < rEnd.nNode)
-            && (rStart.nNode < rAnchorPos.nNode);
+        return (rAnchorPos.GetNode() < rEnd.GetNode())
+            && (rStart.GetNode() < rAnchorPos.GetNode());
     }
 
     // in general, exclude the start and end position
@@ -1653,8 +1653,8 @@ bool IsSelectFrameAnchoredAtPara(SwPosition const & rAnchorPos,
     // CheckNoCntnt means DelFullPara which is obvious to handle
     if (DelContentType::CheckNoCntnt & nDelContentType)
     {   // exclude selection end node because it won't be deleted
-        return (rAnchorPos.nNode < rEnd.nNode)
-            && (rStart.nNode <= rAnchorPos.nNode);
+        return (rAnchorPos.GetNode() < rEnd.GetNode())
+            && (rStart.GetNode() <= rAnchorPos.GetNode());
     }
 
     if ((nDelContentType & DelContentType::WriterfilterHack)
@@ -1665,11 +1665,11 @@ bool IsSelectFrameAnchoredAtPara(SwPosition const & rAnchorPos,
         // stupid code temp. overrides it - instead rely on setting the ALLFLYS
         // flag in MoveFromSection() and converting that to CheckNoCntnt with
         // adjusted cursor!
-        return (rStart.nNode < rAnchorPos.nNode) && (rAnchorPos.nNode < rEnd.nNode);
+        return (rStart.GetNode() < rAnchorPos.GetNode()) && (rAnchorPos.nNode < rEnd.GetNode());
     }
 
     // in general, exclude the start and end position
-    return ((rStart.nNode < rAnchorPos.nNode)
+    return ((rStart.GetNode() < rAnchorPos.GetNode())
             || (rStart.GetNode() == rAnchorPos.GetNode()
                 && !(nDelContentType & DelContentType::ExcludeFlyAtStartEnd)
                 // special case: fully deleted node
@@ -1677,7 +1677,7 @@ bool IsSelectFrameAnchoredAtPara(SwPosition const & rAnchorPos,
                         // but not if the selection is backspace/delete!
                         && IsNotBackspaceHeuristic(rStart, rEnd))
                     || (IsAtStartOfSection2(rStart) && IsAtEndOfSection2(rEnd)))))
-        && ((rAnchorPos.nNode < rEnd.nNode)
+        && ((rAnchorPos.GetNode() < rEnd.GetNode())
             || (rAnchorPos.GetNode() == rEnd.GetNode()
                 && !(nDelContentType & DelContentType::ExcludeFlyAtStartEnd)
                 // special case: fully deleted node

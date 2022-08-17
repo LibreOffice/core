@@ -100,7 +100,7 @@ void SwFEShell::Copy( SwDoc& rClpDoc, const OUString* pNewClpText )
         if (pAPos &&
             ((RndStdIds::FLY_AT_PARA == pAnchor->GetAnchorId()) ||
              (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
-            aSttIdx <= pAPos->nNode && pAPos->nNode <= aEndNdIdx )
+            aSttIdx <= pAPos->GetNode() && pAPos->GetNode() <= aEndNdIdx.GetNode() )
         {
             rClpDoc.getIDocumentLayoutAccess().DelLayoutFormat( pFly );
         }
