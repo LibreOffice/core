@@ -60,14 +60,14 @@ office_root=${office_prefix}/${PREFIX}
 #this symlink is needed to have the API boostrap functions running right
 ln -sf "${office_root}/program/soffice" "${DESTDIR}/${PREFIXDIR}/bin/${PREFIX}"
 
-if test "${PREFIX}" != libreofficepoweredbycib${PRODUCTVERSION} -a "${PREFIX}" != libreofficepoweredbycibdev${PRODUCTVERSION}  ; then
+if test "${PREFIX}" != ciboffice${PRODUCTVERSION} -a "${PREFIX}" != cibofficedev${PRODUCTVERSION}  ; then
     # compat symlinks
     mkdir -p "${DESTDIR}${office_prefix}"
-    ln -sf libreofficepoweredbycib${PRODUCTVERSION} "${DESTDIR}${office_root}"
-    ln -sf /${PREFIXDIR}/bin/${PREFIX} "${DESTDIR}/${PREFIXDIR}/bin/libreofficepoweredbycib${PRODUCTVERSION}"
+    ln -sf ciboffice${PRODUCTVERSION} "${DESTDIR}${office_root}"
+    ln -sf /${PREFIXDIR}/bin/${PREFIX} "${DESTDIR}/${PREFIXDIR}/bin/ciboffice${PRODUCTVERSION}"
 fi
 
-test "${PREFIX}" = libreofficepoweredbycibdev${PRODUCTVERSION} && mime_def_file="libreofficepoweredbycibdev${PRODUCTVERSION}.xml" || mime_def_file="libreofficepoweredbycib${PRODUCTVERSION}.xml"
+test "${PREFIX}" = cibofficedev${PRODUCTVERSION} && mime_def_file="cibofficedev${PRODUCTVERSION}.xml" || mime_def_file="ciboffice${PRODUCTVERSION}.xml"
 mkdir -p "${DESTDIR}/${PREFIXDIR}/share/mime/packages"
 cp openoffice.org.xml "${DESTDIR}/${PREFIXDIR}/share/mime/packages/$mime_def_file"
 chmod 0644 "${DESTDIR}/${PREFIXDIR}/share/mime/packages/$mime_def_file"

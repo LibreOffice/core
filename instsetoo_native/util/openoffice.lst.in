@@ -8,12 +8,12 @@ Globals
             UREPACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
             URELAYERVERSION 1
             REFERENCEOOOMAJORMINOR 4.1
-            WINDOWSBASISROOTNAME LibreOffice powered by CIB
-            UNIXBASISROOTNAME libreofficepoweredbycib@LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
+            WINDOWSBASISROOTNAME CIB Office
+            UNIXBASISROOTNAME ciboffice@LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             HIDELICENSEDIALOG 1
             PACKAGEPREFIX
-            BASISPACKAGEPREFIX libreofficepoweredbycibbasis
-            UREPACKAGEPREFIX libreofficepoweredbycib
+            BASISPACKAGEPREFIX cibofficebasis
+            UREPACKAGEPREFIX ciboffice
             SOLSUREPACKAGEPREFIX libreoffice
             PROGRESSBARCOLOR 255,255,255
             PROGRESSSIZE 460,6
@@ -41,13 +41,13 @@ Globals
     }
 }
 
-LibreOfficePoweredByCIB
+CIBOffice
 {
     Settings
     {
         variables
         {
-            PRODUCTNAME LibreOffice powered by CIB
+            PRODUCTNAME CIB Office
             PRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             PRODUCTEXTENSION -@LIBO_VERSION_PATCH@
             POSTVERSIONEXTENSION
@@ -79,24 +79,24 @@ LibreOfficePoweredByCIB
         active                 1
         compression            5
         script                 setup_osl
-        downloadname           LibreOfficePoweredByCIB_{productversion}_{os}_install_{languages}
-        langpackdownloadname   LibreOfficePoweredByCIB_{productversion}_languagepack_{os}_install_{languages}
-        helppackdownloadname   LibreOfficePoweredByCIB_{productversion}_helppack_{os}_install_{languages}
+        downloadname           CIBOffice_{productversion}_{os}_install_{languages}
+        langpackdownloadname   CIBOffice_{productversion}_languagepack_{os}_install_{languages}
+        helppackdownloadname   CIBOffice_{productversion}_helppack_{os}_install_{languages}
         include         {installscriptdir},{customtargetpath}/readlicense_oo/readme,{customtargetpath}/sysui/{pkgtype},{customtargetpath}/setup_native,{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{filelistpath}/ExtensionPackage,{filelistpath}/CustomTarget/helpcontent2/help3xsl/filelists,{extensionsdir},{licensepath},{packinfopath}
     }
 }
 
-LibreOfficePoweredByCIBDev
+CIBOfficeDev
 {
     Settings
     {
         variables
         {
-            PRODUCTNAME LibreOffice Powered By CIB Dev
+            PRODUCTNAME CIB Office Dev
             PRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             PRODUCTEXTENSION .@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
-            WINDOWSBASISROOTNAME LibreOfficeDev @LIBO_VERSION_MAJOR@
-            UNIXBASISROOTNAME libreofficedev@LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
+            WINDOWSBASISROOTNAME CIBOfficeDev @LIBO_VERSION_MAJOR@
+            UNIXBASISROOTNAME cibofficedev@LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             POSTVERSIONEXTENSION
             BUNDLEIDENTIFIER @MACOSX_BUNDLE_IDENTIFIER@
             BRANDPACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
@@ -105,9 +105,9 @@ LibreOfficePoweredByCIBDev
             ABOUTBOXPRODUCTVERSIONSUFFIX @LIBO_VERSION_SUFFIX_SUFFIX@
             BASEPRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             DEVELOPMENTPRODUCT 1
-            BASISPACKAGEPREFIX libreofficepoweredbycibdevbasis
-            UREPACKAGEPREFIX libreofficepoweredbycibdev
-            SOLSUREPACKAGEPREFIX libreofficepoweredbycibdev
+            BASISPACKAGEPREFIX cibofficedevbasis
+            UREPACKAGEPREFIX cibofficedev
+            SOLSUREPACKAGEPREFIX cibofficedev
             REGISTRYLAYERNAME LayerDev
             UPDATEURL https://update.libreoffice.org/check.php
             ADD_INCLUDE_FILES cli_ure/version/version.txt,unoil/climaker/version.txt
@@ -131,21 +131,21 @@ LibreOfficePoweredByCIBDev
         active          1
         compression     5
         script          setup_osl
-        downloadname    LibreOfficePoweredByCIBDev_{productversion}_{os}_install_{languages}
-        langpackdownloadname    LibreOfficePoweredByCIBDev_{productversion}_languagepack_{os}_install_{languages}
-        helppackdownloadname    LibreOfficePoweredByCIBDev_{productversion}_helppack_{os}_install_{languages}
+        downloadname    CIBOfficeDev_{productversion}_{os}_install_{languages}
+        langpackdownloadname    CIBOfficeDev_{productversion}_languagepack_{os}_install_{languages}
+        helppackdownloadname    CIBOfficeDev_{productversion}_helppack_{os}_install_{languages}
         include         {installscriptdir},{customtargetpath}/readlicense_oo/readme,{customtargetpath}/sysui/{pkgtype},{customtargetpath}/setup_native,{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{filelistpath}/ExtensionPackage,{filelistpath}/CustomTarget/helpcontent2/help3xsl/filelists,{extensionsdir},{licensepath},{packinfopath}
     }
 }
 
-LibreOfficePoweredByCIB_SDK
+CIBOffice_SDK
 {
     Settings
     {
-        downloadname LibreOfficePoweredByCIB-SDK_{packageversion}_{os}_install_{languages}
+        downloadname CIBOffice-SDK_{packageversion}_{os}_install_{languages}
         variables
         {
-            PRODUCTNAME LibreOffice Powered By CIB
+            PRODUCTNAME CIB Office
             PRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             PRODUCTEXTENSION .@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
             POSTVERSIONEXTENSION SDK
@@ -176,26 +176,26 @@ LibreOfficePoweredByCIB_SDK
     }
 }
 
-LibreOfficePoweredByCIBDev_SDK
+CIBOfficeDev_SDK
 {
     Settings
     {
-        downloadname LibreOfficePoweredByCIBDev-SDK_{packageversion}_{os}_install_{languages}
+        downloadname CIBOfficeDev-SDK_{packageversion}_{os}_install_{languages}
         variables
         {
-            PRODUCTNAME LibreOfficePoweredByCIBDev
+            PRODUCTNAME CIBOfficeDev
             PRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             PRODUCTEXTENSION .@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
-            WINDOWSBASISROOTNAME LibreOfficeDev @LIBO_VERSION_MAJOR@
-            UNIXBASISROOTNAME libreofficedev@LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
+            WINDOWSBASISROOTNAME CIBOfficeDev @LIBO_VERSION_MAJOR@
+            UNIXBASISROOTNAME cibofficedev@LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             POSTVERSIONEXTENSION SDK
             BUNDLEIDENTIFIER @MACOSX_BUNDLE_IDENTIFIER@.SDK
             BRANDPACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             PACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
             PACKAGEREVISION {buildid}
             BASISPACKAGEPREFIX lodevbasis
-            UREPACKAGEPREFIX libreofficedev
-            SOLSUREPACKAGEPREFIX libreofficedev
+            UREPACKAGEPREFIX cibofficedev
+            SOLSUREPACKAGEPREFIX cibofficedev
             REGISTRYLAYERNAME LayerDev
             DEVELOPMENTPRODUCT 1
             PACK_INSTALLED 1
