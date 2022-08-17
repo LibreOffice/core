@@ -13659,6 +13659,9 @@ dnl ===================================================================
 dnl Test for the presence of Ant and that it works
 dnl ===================================================================
 
+# java takes the encoding from LC_ALL, and since autoconf forces it to C it
+# breaks filename decoding, so for the ant section, set it to LANG
+LC_ALL=$LANG
 if test "$ENABLE_JAVA" != "" -a "$NEED_ANT" = "TRUE" -a "$cross_compiling" != "yes"; then
     ANT_HOME=; export ANT_HOME
     WITH_ANT_HOME=; export WITH_ANT_HOME
@@ -13877,7 +13880,8 @@ if test "$ENABLE_JAVA" != "" -a "$with_junit" != "no" -a "$cross_compiling" != "
 fi
 AC_SUBST(OOO_JUNIT_JAR)
 AC_SUBST(HAMCREST_JAR)
-
+# set back LC_ALL to C after the java related tests...
+LC_ALL=C
 
 AC_SUBST(SCPDEFS)
 
