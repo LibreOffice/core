@@ -35,6 +35,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "750bad0d_7ede8bfb",
+        "filename": "sw/source/uibase/shells/tabsh.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1003648
+      },
+      "writtenOn": "2022-08-17T11:28:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ee6342a6_75863fc2",
+      "revId": "c2a981813afe4bb04cd435f26b02ed6ccb2c1d6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ce4424fc_5761532c",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-08-17T09:00:12Z",
       "side": 1,
       "message": "duplicated `cui/ui/splitcellsdialog.ui`",
+      "revId": "c2a981813afe4bb04cd435f26b02ed6ccb2c1d6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a00af446_6dcc2cfc",
+        "filename": "vcl/jsdialog/enabled.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1003648
+      },
+      "writtenOn": "2022-08-17T11:28:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce4424fc_5761532c",
       "revId": "c2a981813afe4bb04cd435f26b02ed6ccb2c1d6b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
