@@ -890,9 +890,9 @@ namespace
 
             auto [pRStt, pREnd] = pTmp->StartEnd(); // SwPosition*
 
-            if( pRStt->nNode < rRg.aStart )
+            if( pRStt->GetNode() < rRg.aStart.GetNode() )
             {
-                if( pREnd->nNode > rRg.aStart && pREnd->nNode < rRg.aEnd )
+                if( pREnd->GetNode() > rRg.aStart.GetNode() && pREnd->GetNode() < rRg.aEnd.GetNode() )
                 {
                     // Create a copy and set the end of the original to the end of the MoveArea.
                     // The copy is moved too.
@@ -3843,7 +3843,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
         {
             if (nStart > nSkipAfter)
                 continue;
-            if (pAPos->nNode > rRg.aEnd)
+            if (pAPos->GetNode() > rRg.aEnd.GetNode())
                 continue;
             //frames at the last source node are not always copied:
             //- if the node is empty and is the last node of the document or a table cell

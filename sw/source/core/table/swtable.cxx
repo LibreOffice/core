@@ -1643,7 +1643,7 @@ SwRedlineTable::size_type SwTableLine::UpdateTextChangesOnly(
             {
                 const SwRangeRedline* pRedline = aRedlineTable[ rRedlinePos ];
 
-                if ( pRedline->Start()->nNode > pEndNodeIndex )
+                if ( pRedline->Start()->GetNodeIndex() > pEndNodeIndex.GetIndex() )
                 {
                     // no more redlines in the actual cell,
                     // check the next ones

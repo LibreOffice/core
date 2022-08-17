@@ -1536,7 +1536,7 @@ static OUString lcl_MaskDeletedRedlines( const SwTextNode* pTextNd )
             for ( ; nAct < rDoc.getIDocumentRedlineAccess().GetRedlineTable().size(); nAct++ )
             {
                 const SwRangeRedline* pRed = rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ nAct ];
-                if ( pRed->Start()->nNode > pTextNd->GetIndex() )
+                if ( pRed->Start()->GetNode() > *pTextNd )
                     break;
 
                 if( RedlineType::Delete == pRed->GetType() )
