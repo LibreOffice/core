@@ -494,6 +494,16 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf69635)
     assertXPath(pXmlSettings, "/w:settings/w:evenAndOddHeaders", 0);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf148671, "tdf148671.docx")
+{
+    // Don't assert with 'pFieldMark' failed when document is opened
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexes(xTextFieldsSupplier->getTextFields(),
+                                                     uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(9), xIndexes->getCount());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf140668, "tdf140668.docx")
 {
     // Don't crash when document is opened
