@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af9a435f_666760de",
+        "filename": "sw/source/uibase/uiview/viewdlg2.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-08-17T15:06:40Z",
+      "side": 1,
+      "message": "I think this logic should be hidden in the dialog itself.\n(Before conversion it wasn\u0027t needed here). The we will not need custom AbstractSwInsertCaptionDlg class but some generic one.\n\nIn sync run it wos like that:\nhttps://git.libreoffice.org/core/+/9232c4a5ee685768457a8e7825b84b07f8bfe5cf/sw/source/ui/frmdlg/cption.cxx#75\n\ncan we do something similar for async method (Apply() after callback is called)",
+      "revId": "9232c4a5ee685768457a8e7825b84b07f8bfe5cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
