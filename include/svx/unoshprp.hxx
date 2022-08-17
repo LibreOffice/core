@@ -365,7 +365,8 @@
     /* #i68101# */ \
     { UNO_NAME_MISC_OBJ_TITLE,        OWN_ATTR_MISC_OBJ_TITLE         , ::cppu::UnoType<OUString>::get(),    0,  0}, \
     { UNO_NAME_MISC_OBJ_DESCRIPTION,  OWN_ATTR_MISC_OBJ_DESCRIPTION   , ::cppu::UnoType<OUString>::get(),    0,  0}, \
-    { UNO_NAME_HYPERLINK, OWN_ATTR_HYPERLINK, ::cppu::UnoType<OUString>::get(), 0,  0},
+    { UNO_NAME_HYPERLINK, OWN_ATTR_HYPERLINK, ::cppu::UnoType<OUString>::get(), 0,  0}, \
+    { u"WritingMode", SDRATTR_WRITINGMODE2, ::cppu::UnoType<sal_Int16>::get(), 0,  0},
 
 #define LINKTARGET_PROPERTIES \
     { UNO_NAME_LINKDISPLAYNAME,   OWN_ATTR_LDNAME             , ::cppu::UnoType<OUString>::get(),    css::beans::PropertyAttribute::READONLY, 0}, \

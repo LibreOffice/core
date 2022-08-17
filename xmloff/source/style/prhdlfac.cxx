@@ -99,6 +99,9 @@ SvXMLEnumMapEntry<sal_uInt16> const aXML_WritingDirection_Enum[] =
     { XML_RL,       text::WritingMode2::RL_TB },
     { XML_TB,       text::WritingMode2::TB_RL },
 
+    // vertical as clockwise 90deg rotation, for OOXML vert="vert"
+    { XML_TB_RL90,     text::WritingMode2::TB_RL90 },
+
     { XML_TOKEN_INVALID, 0 }
 };
 

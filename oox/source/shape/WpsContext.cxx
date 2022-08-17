@@ -21,6 +21,7 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 #include <svx/svdtrans.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
@@ -69,18 +70,25 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                 uno::Reference<lang::XServiceInfo> xServiceInfo(mxShape, uno::UNO_QUERY);
                 uno::Reference<beans::XPropertySet> xPropertySet(mxShape, uno::UNO_QUERY);
                 sal_Int32 nVert = rAttribs.getToken(XML_vert, XML_horz);
-                if (nVert == XML_eaVert)
+                // Values 'wordArtVert' and 'wordArtVertRtl' are not implemented.
+                // Map them to other vert values.
+                if (nVert == XML_eaVert || nVert == XML_wordArtVertRtl)
                 {
                     xPropertySet->setPropertyValue("TextWritingMode",
                                                    uno::Any(text::WritingMode_TB_RL));
+                    xPropertySet->setPropertyValue("WritingMode",
+                                                   uno::Any(text::WritingMode2::TB_RL));
                 }
-                else if (nVert != XML_horz)
+                else if (nVert == XML_mongolianVert || nVert == XML_wordArtVert)
                 {
-                    // The UI of Word has only 'vert' and 'vert270'. Further values would be
-                    // 'mongolianVert', 'wordArtVert' and 'wordArtVertRtl'.
+                    xPropertySet->setPropertyValue("WritingMode",
+                                                   uno::Any(text::WritingMode2::TB_LR));
+                }
+                else if (nVert != XML_horz) // XML_vert and XML_vert270
+                {
                     const sal_Int32 nRotation = nVert == XML_vert270 ? -270 : -90;
 
-                    // Workaround for tdf#87924, produces bug tdf#149809 as of 2022-07
+                    // ToDo: Workaround for tdf#87924, produces bug tdf#149809 as of 2022-07
                     // If the text is not rotated the way the shape wants it already, set the angle.
                     // Get the existing rotation of the shape.
                     drawing::HomogenMatrix3 aMatrix;
@@ -111,6 +119,12 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                             "CustomShapeGeometry",
                             uno::Any(aCustomShapeGeometry.getAsConstPropertyValueList()));
                     }
+                    if (nVert == XML_vert)
+                        xPropertySet->setPropertyValue("WritingMode",
+                                                       uno::Any(text::WritingMode2::TB_RL90));
+                    else // nVert == XML_vert270
+                        xPropertySet->setPropertyValue("WritingMode",
+                                                       uno::Any(text::WritingMode2::BT_LR));
                 }
 
                 if (bool bUpright = rAttribs.getBool(XML_upright, false))
