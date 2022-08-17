@@ -75,6 +75,7 @@ public:
 
     //ods, xls, xlsx filter tests
     void testCondFormatOperatorsSameRangeXLSX();
+    void testTdf150452();
     void testTdf119292();
     void testTdf48731();
     void testCondFormatFormulaIsXLSX();
@@ -182,6 +183,7 @@ public:
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testCondFormatOperatorsSameRangeXLSX);
+    CPPUNIT_TEST(testTdf150452);
     CPPUNIT_TEST(testTdf119292);
     CPPUNIT_TEST(testTdf48731);
     CPPUNIT_TEST(testCondFormatFormulaIsXLSX);
@@ -382,6 +384,19 @@ void ScFiltersTest::testTdf119292()
     CPPUNIT_ASSERT_EQUAL(Point(108,54),aPoly270Pos1);
     CPPUNIT_ASSERT_EQUAL(Point(111,57),aPoly270Pos2);
     CPPUNIT_ASSERT_EQUAL(Point(114,54),aPoly270Pos3);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf150452()
+{
+    // Without the fix in place, this test would have crashed
+    ScDocShellRef xDocSh = loadDoc(u"tdf150452.", FORMAT_CSV);
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("1-GDUSF"), rDoc.GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("1-GE41L"), rDoc.GetString(0, 3998, 0));
 
     xDocSh->DoClose();
 }
