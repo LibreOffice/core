@@ -559,7 +559,7 @@ const ObjectTypeFormatEntry spObjTypeFormatEntries[] =
     TYPEFORMAT_LINE(  OBJECTTYPE_HILOLINE,       saLinearPropInfo, nullptr,                 spOtherLines ),
     TYPEFORMAT_FRAME( OBJECTTYPE_UPBAR,          saCommonPropInfo, nullptr,                 spUpDownBarLines,    spUpBarFills ),
     TYPEFORMAT_FRAME( OBJECTTYPE_DOWNBAR,        saCommonPropInfo, nullptr,                 spUpDownBarLines,    spDownBarFills ),
-    TYPEFORMAT_LINE(  OBJECTTYPE_DATATABLE,      saCommonPropInfo, spOtherTexts,      spDataTableLines )
+    TYPEFORMAT_FRAME( OBJECTTYPE_DATATABLE,      saCommonPropInfo, spOtherTexts,      spDataTableLines, nullptr )
 };
 
 #undef TYPEFORMAT_FRAME
