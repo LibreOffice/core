@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "acd8a884_a3e8087b",
+        "filename": "sw/source/filter/ww8/wrtw8num.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-08-17T08:56:28Z",
+      "side": 1,
+      "message": "FWIW there are dozens of hits on this assert it the most recent crashtesting results, to reproduce one:\n\nwget https://bugs.documentfoundation.org/attachment.cgi?id\u003d72626 -O ~/fdo59106-1.doc\n./instdir/program/soffice --headless --convert-to doc ~/fdo59106-1.doc",
+      "revId": "727c5ed30f68abc28bb04531b25a1df30810760f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
