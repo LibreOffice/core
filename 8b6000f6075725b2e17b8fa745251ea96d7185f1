@@ -231,6 +231,23 @@
       "parentUuid": "49a53361_36bbc94f",
       "revId": "8b6000f6075725b2e17b8fa745251ea96d7185f1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6842d7cd_c3a6d3da",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-08-17T14:50:01Z",
+      "side": 1,
+      "message": "Hi Mike, Jan-Marek, Stephan, Miklos, *,\nThis patch seems to fix tdf#150236 in master.\nI would like to backport it to libreoffice-7-4 but according to the discussion, it caused some problems when it was submitted. Are these problems still happening? Otherwise, do I need to backport other patches along with this one?\nThanks in advance!",
+      "revId": "8b6000f6075725b2e17b8fa745251ea96d7185f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
