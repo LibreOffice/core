@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d93ae49c_fc6ad95a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-08-17T13:23:09Z",
+      "side": 1,
+      "message": "LGTM\n100% https://imgur.com/LHFVATe\n200% https://imgur.com/DA3XtS5\n250% https://imgur.com/6Eho5TK",
+      "revId": "065413ff0fb701125c32aeb0dddf4ffb3018a70c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
