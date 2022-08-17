@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "422e9964_63b0fc53",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-08-17T06:31:39Z",
+      "side": 1,
+      "message": "Oh, now I see this is a backport. :-) So this is fine, you may want to address my nits in a follow-up change on master.",
+      "revId": "822f1f37c259367e2941090ea4bb16dc902c73a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "12bc760d_528b60b8",
