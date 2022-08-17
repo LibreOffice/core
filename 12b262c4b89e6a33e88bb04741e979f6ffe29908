@@ -103,6 +103,23 @@
       "message": "\u003e Patch Set 4:\n\u003e \n\u003e A polite ping, still working on this patch? Do not forget to rebase it first.\n\nYes",
       "revId": "12b262c4b89e6a33e88bb04741e979f6ffe29908",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5cfce9b5_df2eb8fe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-08-17T15:38:44Z",
+      "side": 1,
+      "message": "Please note this crosses https://gerrit.libreoffice.org/c/core/+/138294 with a discussion about what to do about differences between a) our and std implementation and b) various platform std implementations, regarding accuracy and i97605.",
+      "revId": "12b262c4b89e6a33e88bb04741e979f6ffe29908",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ],
   "submitRequirementResults": []
