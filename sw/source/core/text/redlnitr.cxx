@@ -425,7 +425,7 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
         }
         for (auto const pSectionNode : sections)
         {
-            pSectionNode->DelFrames(rFrame.getRootFrame());
+            pSectionNode->GetSection().GetFormat()->DelFrames(/*rFrame.getRootFrame()*/);
         }
     }
     auto pRet(std::make_unique<sw::MergedPara>(rFrame, std::move(extents),
