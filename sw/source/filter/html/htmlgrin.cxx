@@ -871,6 +871,7 @@ IMAGE_SETEVENT:
         // image.
         SwFormatURL aURL(pFlyFormat->GetURL());
         aURL.SetURL(m_aEmbedURL, bIsMap);
+        m_aEmbedURL.clear();
         pFlyFormat->SetFormatAttr(aURL);
     }
 
