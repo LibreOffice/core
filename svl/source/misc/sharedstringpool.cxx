@@ -15,64 +15,50 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#ifdef __GNUC__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wshadow"
-#endif
-#if defined __clang__
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-parameter"
-#endif
-#if defined _MSC_VER
-#pragma warning(push)
-#pragma warning(disable : 4324) // structure was padded due to alignment specifier
-#endif
-#include <libcuckoo/cuckoohash_map.hh>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
-#if defined __clang__
-#pragma clang diagnostic pop
-#endif
-#ifdef __GNUC__
-#pragma GCC diagnostic pop
-#endif
+/** create a key class that caches the hashcode */
+namespace
+{
+struct StringWithHash
+{
+    OUString str;
+    sal_Int32 hashCode;
+    StringWithHash(OUString s)
+        : str(s)
+        , hashCode(s.hashCode())
+    {
+    }
+
+    bool operator==(StringWithHash const& rhs) const
+    {
+        if (hashCode != rhs.hashCode)
+            return false;
+        return str == rhs.str;
+    }
+};
+}
+
+namespace std
+{
+template <> struct hash<StringWithHash>
+{
+    std::size_t operator()(const StringWithHash& k) const { return k.hashCode; }
+};
+}
 
 namespace svl
 {
 namespace
 {
 sal_Int32 getRefCount(const rtl_uString* p) { return (p->refCount & 0x3FFFFFFF); }
-
-// we store the key twice, because the concurrent hashtable we are using does not provide any way to return the key in use
-typedef std::pair<OUString, OUString> Mapped;
-
-struct HashFunction
-{
-    size_t operator()(rtl_uString* const key) const
-    {
-        return rtl_ustr_hashCode_WithLength(key->buffer, key->length);
-    }
-};
-
-struct EqualsFunction
-{
-    bool operator()(rtl_uString* const lhs, rtl_uString* const rhs) const
-    {
-        return OUString::unacquired(&lhs) == OUString::unacquired(&rhs);
-    }
-};
 }
 
 struct SharedStringPool::Impl
 {
+    mutable std::mutex maMutex;
     // We use this map for two purposes - to store lower->upper case mappings
-    // and to store an upper->upper mapping.
-    // The second mapping is used so that we can
-    // share the same rtl_uString object between different keys which map to the same uppercase string to save memory.
-    //
-    // Docs for this concurrent hashtable here: http://efficient.github.io/libcuckoo/classlibcuckoo_1_1cuckoohash__map.html
-    libcuckoo::cuckoohash_map<rtl_uString*, Mapped, HashFunction, EqualsFunction> maStrMap;
+    // and to retrieve a shared uppercase object, so the management logic
+    // is quite complex.
+    std::unordered_map<StringWithHash, OUString> maStrMap;
     const CharClass& mrCharClass;
 
     explicit Impl(const CharClass& rCharClass)
@@ -90,50 +76,43 @@ SharedStringPool::~SharedStringPool() {}
 
 SharedString SharedStringPool::intern(const OUString& rStr)
 {
-    auto& rMap = mpImpl->maStrMap;
+    StringWithHash aStrWithHash(rStr);
+    std::scoped_lock<std::mutex> aGuard(mpImpl->maMutex);
 
-    rtl_uString *pResultLower = {}, *pResultUpper = {}; // bogus GCC 12 -Werror=maybe-uninitialized
-    if (rMap.find_fn(rStr.pData, [&](const Mapped& rMapped) {
-            pResultLower = rMapped.first.pData;
-            pResultUpper = rMapped.second.pData;
-        }))
+    auto[mapIt, bInserted] = mpImpl->maStrMap.emplace(aStrWithHash, rStr);
+    if (!bInserted)
         // there is already a mapping
-        return SharedString(pResultLower, pResultUpper);
+        return SharedString(mapIt->first.str.pData, mapIt->second.pData);
 
     // This is a new string insertion. Establish mapping to upper-case variant.
     OUString aUpper = mpImpl->mrCharClass.uppercase(rStr);
-
-    // either insert a new upper->upper mapping, or write the existing mapping into aUpper
-    mpImpl->maStrMap.uprase_fn(aUpper.pData,
-                               [&](Mapped& mapped) -> bool {
-                                   aUpper = mapped.second;
-                                   return false;
-                               },
-                               aUpper, aUpper);
-
     if (aUpper == rStr)
-        // no need to do anything more, because the key is already uppercase
-        return SharedString(aUpper.pData, aUpper.pData);
+        // no need to do anything more, because we inserted an upper->upper mapping
+        return SharedString(mapIt->first.str.pData, mapIt->second.pData);
 
-    // either insert a new lower->upper mapping, or write the existing mapping into aLower
-    if (mpImpl->maStrMap.uprase_fn(rStr.pData,
-                                   [&](Mapped& mapped) -> bool {
-                                       pResultLower = mapped.first.pData;
-                                       pResultUpper = mapped.second.pData;
-                                       return false;
-                                   },
-                                   rStr, aUpper))
+    // We need to insert a lower->upper mapping, so also insert
+    // an upper->upper mapping, which we can use both for when an upper string
+    // is interned, and to look up a shared upper string.
+    StringWithHash aUpperWithHash(aUpper);
+    auto mapIt2 = mpImpl->maStrMap.find(aUpperWithHash);
+    if (mapIt2 != mpImpl->maStrMap.end())
     {
-        pResultLower = rStr.pData;
-        pResultUpper = aUpper.pData;
+        // there is an already existing upper string
+        mapIt->second = mapIt2->first.str;
+        return SharedString(mapIt->first.str.pData, mapIt->second.pData);
     }
 
-    return SharedString(pResultLower, pResultUpper);
+    // There is no already existing upper string.
+    // First, update using the iterator, can't do this later because
+    // the iterator will be invalid.
+    mapIt->second = aUpper;
+    mpImpl->maStrMap.emplace_hint(mapIt2, aUpperWithHash, aUpper);
+    return SharedString(rStr.pData, aUpper.pData);
 }
 
 void SharedStringPool::purge()
 {
-    auto locked_table = mpImpl->maStrMap.lock_table();
+    std::scoped_lock<std::mutex> aGuard(mpImpl->maMutex);
 
     // Because we can have an uppercase entry mapped to itself,
     // and then a bunch of lowercase entries mapped to that same
@@ -141,12 +120,12 @@ void SharedStringPool::purge()
     // time to remove lowercase entries, and then only can we
     // check for unused uppercase entries.
 
-    auto it = locked_table.begin();
-    auto itEnd = locked_table.end();
+    auto it = mpImpl->maStrMap.begin();
+    auto itEnd = mpImpl->maStrMap.end();
     while (it != itEnd)
     {
-        rtl_uString* p1 = it->second.first.pData;
-        rtl_uString* p2 = it->second.second.pData;
+        rtl_uString* p1 = it->first.str.pData;
+        rtl_uString* p2 = it->second.pData;
         if (p1 != p2)
         {
             // normal case - lowercase mapped to uppercase, which
@@ -154,19 +133,19 @@ void SharedStringPool::purge()
             // entry as the key in the map
             if (getRefCount(p1) == 1)
             {
-                it = locked_table.erase(it);
+                it = mpImpl->maStrMap.erase(it);
                 continue;
             }
         }
         ++it;
     }
 
-    it = locked_table.begin();
-    itEnd = locked_table.end();
+    it = mpImpl->maStrMap.begin();
+    itEnd = mpImpl->maStrMap.end();
     while (it != itEnd)
     {
-        rtl_uString* p1 = it->second.first.pData;
-        rtl_uString* p2 = it->second.second.pData;
+        rtl_uString* p1 = it->first.str.pData;
+        rtl_uString* p2 = it->second.pData;
         if (p1 == p2)
         {
             // uppercase which is mapped to itself, which means
@@ -174,7 +153,7 @@ void SharedStringPool::purge()
             // one ref-counted entry in the value in the map
             if (getRefCount(p1) == 2)
             {
-                it = locked_table.erase(it);
+                it = mpImpl->maStrMap.erase(it);
                 continue;
             }
         }
@@ -182,15 +161,19 @@ void SharedStringPool::purge()
     }
 }
 
-size_t SharedStringPool::getCount() const { return mpImpl->maStrMap.size(); }
+size_t SharedStringPool::getCount() const
+{
+    std::scoped_lock<std::mutex> aGuard(mpImpl->maMutex);
+    return mpImpl->maStrMap.size();
+}
 
 size_t SharedStringPool::getCountIgnoreCase() const
 {
+    std::scoped_lock<std::mutex> aGuard(mpImpl->maMutex);
     // this is only called from unit tests, so no need to be efficient
     std::unordered_set<OUString> aUpperSet;
-    auto locked_table = mpImpl->maStrMap.lock_table();
-    for (auto const& pair : locked_table)
-        aUpperSet.insert(pair.second.second);
+    for (auto const& pair : mpImpl->maStrMap)
+        aUpperSet.insert(pair.second);
     return aUpperSet.size();
 }
 }

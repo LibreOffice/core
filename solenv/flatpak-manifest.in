@@ -682,13 +682,6 @@
                     "type": "file",
                     "dest": "external/tarballs",
                     "dest-filename": "@OPENSYMBOL_TTF@"
-                },
-                {
-                    "url": "https://dev-www.libreoffice.org/src/@CUCKOO_TARBALL@",
-                    "sha256": "@CUCKOO_SHA256SUM@",
-                    "type": "file",
-                    "dest": "external/tarballs",
-                    "dest-filename": "@CUCKOO_TARBALL@"
                 }
                 {
                     "url": "https://github.com/antijingoist/opendyslexic/releases/download/v0.9.10/opendyslexic-0.9.10-beta-2019.09.16.zip",
