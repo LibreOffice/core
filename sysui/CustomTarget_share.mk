@@ -110,9 +110,7 @@ share_ICONS := $(foreach size,16x16 32x32 48x48,\
 
 MIMEDESKTOPS := $(foreach mime,$(MIMELIST),$(share_SRCDIR)/mimetypes/$(mime).desktop)
 ULFS := documents.ulf \
-	launcher_comment.ulf \
-	launcher_genericname.ulf \
-	launcher_unityquicklist.ulf
+	launcher.ulf
 
 $(eval $(call gb_CustomTarget_CustomTarget,sysui/share))
 
@@ -211,11 +209,7 @@ $(share_WORKDIR)/%/build.flag: $(share_SRCDIR)/share/brand.pl $(LAUNCHERS) \
 		$(brand_URIPARAM) \
 		--iconprefix '$${UNIXBASISROOTNAME}-' $(LAUNCHERS) $(share_WORKDIR)/$*
 	$(call gb_ExternalExecutable_get_command,python) $(share_TRANSLATE) -p $(PRODUCTNAME.$*)$(PRODUCTVERSION) -d $(share_WORKDIR)/$* \
-		--ext "desktop" --key "Comment" $(share_WORKDIR)/launcher_comment.ulf
-	$(call gb_ExternalExecutable_get_command,python) $(share_TRANSLATE) -p $(PRODUCTNAME.$*)$(PRODUCTVERSION) -d $(share_WORKDIR)/$* \
-		--ext "desktop" --key "GenericName" $(share_WORKDIR)/launcher_genericname.ulf
-	$(call gb_ExternalExecutable_get_command,python) $(share_TRANSLATE) -p $(PRODUCTNAME.$*)$(PRODUCTVERSION) -d $(share_WORKDIR)/$* \
-		--ext "desktop" --key "UnityQuickList" $(share_WORKDIR)/launcher_unityquicklist.ulf
+		--ext "desktop" $(share_WORKDIR)/launcher.ulf
 	touch $@
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PRL)
 
