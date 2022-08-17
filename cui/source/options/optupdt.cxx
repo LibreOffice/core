@@ -42,7 +42,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <osl/file.hxx>
 #include <osl/security.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <unotools/configmgr.hxx>
 
 using namespace ::css;

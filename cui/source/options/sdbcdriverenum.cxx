@@ -20,7 +20,7 @@
 #include "sdbcdriverenum.hxx"
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sdbc/DriverManager.hpp>
 

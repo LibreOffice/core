@@ -33,7 +33,7 @@
 #include <vcl/ptrstyle.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/weldutils.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>

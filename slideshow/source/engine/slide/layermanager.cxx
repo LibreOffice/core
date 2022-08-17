@@ -18,7 +18,7 @@
  */
 
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <basegfx/range/b1drange.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <cppcanvas/canvas.hxx>

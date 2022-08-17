@@ -62,7 +62,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <svl/undo.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <osl/diagnose.h>
 #include <utility>
 #include <vcl/stdtext.hxx>

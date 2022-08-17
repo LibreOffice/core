@@ -34,7 +34,7 @@
 #include <svtools/htmlout.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmltokn.h>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <IDocumentContentOperations.hxx>
 #include <SwAppletImpl.hxx>
 #include <fmtornt.hxx>

@@ -19,7 +19,7 @@
 
 
 // must be first
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <shapeattributelayer.hxx>
 
 #include <com/sun/star/awt/FontUnderline.hpp>

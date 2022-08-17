@@ -34,7 +34,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/weld.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <strings.hrc>
 #include <strings.hxx>

@@ -25,7 +25,7 @@
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <ooo/vba/word/WdBuiltInProperty.hpp>
 #include <ooo/vba/office/MsoDocProperties.hpp>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <memory>
 #include "wordvbahelper.hxx"
 #include <fesh.hxx>

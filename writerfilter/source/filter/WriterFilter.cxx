@@ -43,7 +43,7 @@
 #include <unotools/mediadescriptor.hxx>
 #include <rtl/ref.hxx>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <comphelper/scopeguard.hxx>
 
 using namespace ::com::sun::star;

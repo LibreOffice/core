@@ -25,7 +25,7 @@
 #include <com/sun/star/rendering/ColorSpaceType.hpp>
 #include <com/sun/star/rendering/RenderingIntent.hpp>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <canvasbitmap.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/BitmapReadAccess.hxx>

@@ -107,7 +107,7 @@
 #include <svx/svxdllapi.h>
 #include <tools/UnitConversion.hxx>
 #include <tools/color.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/gen.hxx>
 #include <tools/long.hxx>
 #include <tools/ref.hxx>

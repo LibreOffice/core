@@ -35,7 +35,7 @@
 #include <sfx2/fcontnr.hxx>
 #include <sot/formats.hxx>
 #include <sot/storage.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>

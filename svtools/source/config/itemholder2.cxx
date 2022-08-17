@@ -29,7 +29,7 @@
 #include <svtools/colorcfg.hxx>
 #include <unotools/options.hxx>
 #include <svtools/miscopt.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <rtl/ref.hxx>
 
 namespace svtools {

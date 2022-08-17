@@ -45,7 +45,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/EnumContext.hxx>
 #include <svx/sidebar/ContextChangeEventMultiplexer.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <memory>
 

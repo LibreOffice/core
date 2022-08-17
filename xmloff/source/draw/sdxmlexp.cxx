@@ -51,7 +51,7 @@
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/gen.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmlaustp.hxx>

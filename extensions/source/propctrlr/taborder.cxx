@@ -29,7 +29,7 @@
 #include <com/sun/star/form/runtime/FormController.hpp>
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 namespace pcr
 {

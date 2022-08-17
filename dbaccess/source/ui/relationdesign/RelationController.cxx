@@ -44,7 +44,7 @@
 #include <RTableConnectionData.hxx>
 #include <RelationTableView.hxx>
 #include <RelationDesignView.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <osl/thread.hxx>
 #include <osl/mutex.hxx>
 

@@ -61,7 +61,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <svx/ActionDescriptionProvider.hxx>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;

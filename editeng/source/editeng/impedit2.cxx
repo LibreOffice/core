@@ -59,7 +59,7 @@
 #include <sot/formats.hxx>
 #include <svl/asiancfg.hxx>
 #include <i18nutil/unicode.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <comphelper/flagguard.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>

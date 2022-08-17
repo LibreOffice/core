@@ -30,7 +30,7 @@
 #include <drawingfragment.hxx>
 #include <svx/sdtaitm.hxx>
 #include <svx/svdocapt.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <document.hxx>
 #include <drwlayer.hxx>
 #include <cellsuno.hxx>

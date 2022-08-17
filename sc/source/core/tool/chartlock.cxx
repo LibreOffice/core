@@ -20,7 +20,7 @@
 #include <svx/svditer.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <chartlock.hxx>
 #include <document.hxx>

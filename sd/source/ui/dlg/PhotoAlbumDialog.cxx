@@ -25,7 +25,7 @@
 #include <svx/xfillit0.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/xflclit.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <xmloff/autolayout.hxx>
 
 #include "PhotoAlbumDialog.hxx"

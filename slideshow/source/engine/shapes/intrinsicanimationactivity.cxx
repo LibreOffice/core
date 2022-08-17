@@ -18,7 +18,7 @@
  */
 
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <subsettableshapemanager.hxx>
 #include <eventqueue.hxx>

@@ -49,7 +49,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <dialmgr.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/help.hxx>

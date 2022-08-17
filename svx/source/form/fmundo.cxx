@@ -44,7 +44,7 @@
 
 #include <svx/fmtools.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/event.hxx>
 #include <osl/mutex.hxx>

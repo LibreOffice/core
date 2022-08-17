@@ -26,7 +26,7 @@
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <svx/unoshape.hxx>
 
 namespace chart

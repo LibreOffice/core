@@ -27,7 +27,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 

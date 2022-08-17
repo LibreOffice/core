@@ -26,7 +26,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/vclevent.hxx>
 

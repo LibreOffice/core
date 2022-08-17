@@ -52,7 +52,7 @@
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdopath.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/helpers.hxx>
 #include <tools/UnitConversion.hxx>
 #include <sal/log.hxx>

@@ -38,7 +38,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <unotools/configitem.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <mailmergehelper.hxx>
 #include <swunohelper.hxx>
 #include <dbmgr.hxx>

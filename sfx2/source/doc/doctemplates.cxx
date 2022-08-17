@@ -18,7 +18,7 @@
  */
 
 #include <osl/mutex.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>

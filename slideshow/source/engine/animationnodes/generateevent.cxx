@@ -18,7 +18,7 @@
  */
 
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/animations/XAnimationNode.hpp>

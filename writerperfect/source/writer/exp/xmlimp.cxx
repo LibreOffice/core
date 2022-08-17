@@ -27,7 +27,7 @@
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/streamwrap.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include "xmlfmt.hxx"
 #include "xmlictxt.hxx"

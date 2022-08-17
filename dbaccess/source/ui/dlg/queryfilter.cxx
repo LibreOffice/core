@@ -25,7 +25,7 @@
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <comphelper/string.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <osl/diagnose.h>
 #include <connectivity/dbtools.hxx>
 #include <strings.hxx>

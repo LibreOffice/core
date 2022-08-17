@@ -50,7 +50,7 @@
 #include <svx/lathe3d.hxx>
 #include <svx/scene3d.hxx>
 #include <vcl/svapp.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/globname.hxx>
 #include <sal/log.hxx>
 

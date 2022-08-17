@@ -43,7 +43,7 @@
 #include <comphelper/interaction.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/weld.hxx>

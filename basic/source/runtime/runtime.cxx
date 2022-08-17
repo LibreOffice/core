@@ -36,7 +36,7 @@
 #include <sal/log.hxx>
 
 #include <tools/wldcrd.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <utility>
 #include <vcl/svapp.hxx>

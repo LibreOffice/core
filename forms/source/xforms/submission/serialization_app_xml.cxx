@@ -30,7 +30,7 @@
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <comphelper/processfactory.hxx>
 
 using ::com::sun::star::uno::Reference;

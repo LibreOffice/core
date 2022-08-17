@@ -47,7 +47,7 @@
 #include <UndoEnv.hxx>
 #include <RptModel.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #define DEFAUL_MOVE_SIZE    100
 namespace rptui

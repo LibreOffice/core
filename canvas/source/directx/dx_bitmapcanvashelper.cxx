@@ -31,7 +31,7 @@
 #include <com/sun/star/rendering/RepaintResult.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <rtl/math.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <canvas/canvastools.hxx>
 

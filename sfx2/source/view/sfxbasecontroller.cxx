@@ -59,7 +59,7 @@
 #include <sfx2/infobar.hxx>
 
 #include <osl/mutex.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/sequence.hxx>
 #include <toolkit/helper/convert.hxx>

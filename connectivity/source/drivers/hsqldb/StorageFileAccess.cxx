@@ -24,7 +24,7 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <hsqldb/HStorageMap.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::uno;

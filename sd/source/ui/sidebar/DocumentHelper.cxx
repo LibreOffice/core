@@ -34,7 +34,7 @@
 #include <stlpool.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/svdundo.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <xmloff/autolayout.hxx>
 #include <sal/log.hxx>
 

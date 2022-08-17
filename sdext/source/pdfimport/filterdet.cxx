@@ -35,7 +35,7 @@
 #include <comphelper/fileurl.hxx>
 #include <comphelper/hash.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <memory>
 #include <utility>
 #include <string.h>

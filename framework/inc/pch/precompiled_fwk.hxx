@@ -267,7 +267,7 @@
 #include <tools/color.hxx>
 #include <tools/date.hxx>
 #include <tools/degree.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>

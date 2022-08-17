@@ -23,7 +23,7 @@
 #include <sfx2/dialoghelper.hxx>
 #include <svl/sharecontrolfile.hxx>
 #include <unotools/useroptions.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <o3tl/string_view.hxx>
 
 #include <docsh.hxx>

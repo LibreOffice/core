@@ -23,7 +23,7 @@
 #include <vcl/weld.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <dbaccess/dataview.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <osl/diagnose.h>
 #include <vcl/stdtext.hxx>
 #include <framework/titlehelper.hxx>

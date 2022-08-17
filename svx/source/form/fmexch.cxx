@@ -21,7 +21,7 @@
 
 #include <sot/formats.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 namespace svxform
 {

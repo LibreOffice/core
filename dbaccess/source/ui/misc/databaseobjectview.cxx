@@ -31,7 +31,7 @@
 #include <connectivity/dbtools.hxx>
 #include <osl/diagnose.h>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <utility>
 #include <vcl/window.hxx>
 

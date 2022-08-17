@@ -43,7 +43,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <metadata.hxx>
 #include <osl/mutex.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <core_resource.hxx>
 #include <helpids.h>
 #include <strings.hrc>

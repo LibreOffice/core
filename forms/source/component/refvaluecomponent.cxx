@@ -22,7 +22,7 @@
 
 #include <comphelper/property.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 

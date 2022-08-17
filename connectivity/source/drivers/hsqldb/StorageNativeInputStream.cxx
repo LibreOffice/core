@@ -27,7 +27,7 @@
 #include <hsqldb/HStorageMap.hxx>
 
 #include <osl/diagnose.h>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include "accesslog.hxx"
 
 #include <limits>

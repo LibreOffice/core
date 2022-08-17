@@ -29,7 +29,7 @@
 #include <tools/UnitConversion.hxx>
 
 #include <o3tl/string_view.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <vcl/unohelp.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmltokn.h>

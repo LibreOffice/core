@@ -37,7 +37,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <vcl/font.hxx>
 #include <vcl/settings.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <editeng/editstat.hxx>
 #include <scitems.hxx>

@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/drawing/framework/XConfiguration.hpp>
 #include <com/sun/star/drawing/framework/XResourceFactory.hpp>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <sal/log.hxx>
 #include <algorithm>
 #include <utility>

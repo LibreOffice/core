@@ -31,7 +31,7 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 
 #include <unotools/sharedunocomponent.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <comphelper/property.hxx>
 
 

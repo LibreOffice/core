@@ -13,7 +13,7 @@
 #include <sal/main.h>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/degree.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>

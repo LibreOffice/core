@@ -29,7 +29,7 @@
 #include <model/SlsPageEnumerationProvider.hxx>
 #include <model/SlsPageDescriptor.hxx>
 #include <view/SlideSorterView.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
 #include <drawview.hxx>

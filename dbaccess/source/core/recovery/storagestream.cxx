@@ -21,7 +21,7 @@
 
 #include <com/sun/star/embed/ElementModes.hpp>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 namespace dbaccess
 {

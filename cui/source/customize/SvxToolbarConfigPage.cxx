@@ -27,7 +27,7 @@
 
 #include <sfx2/sfxsids.hrc>
 #include <svl/stritem.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <algorithm>
 #include <helpids.h>

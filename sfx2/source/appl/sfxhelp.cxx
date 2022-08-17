@@ -77,7 +77,7 @@
 #include <vcl/svapp.hxx>
 #include <rtl/string.hxx>
 #include <svtools/langtab.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;

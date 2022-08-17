@@ -34,7 +34,7 @@
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <tools/datetime.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <unotools/datetime.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

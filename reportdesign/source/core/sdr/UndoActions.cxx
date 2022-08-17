@@ -26,7 +26,7 @@
 #include <com/sun/star/container/XChild.hpp>
 
 #include <comphelper/types.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <utility>
 #include <dbaccess/dbsubcomponentcontroller.hxx>
 #include <svx/unoshape.hxx>

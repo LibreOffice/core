@@ -28,7 +28,7 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/types.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include "datacolumn.hxx"
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>

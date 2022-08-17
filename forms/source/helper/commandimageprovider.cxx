@@ -26,7 +26,7 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/ui/ImageType.hpp>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 
 namespace frm

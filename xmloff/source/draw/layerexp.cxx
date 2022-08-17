@@ -26,7 +26,7 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmlexp.hxx>
 #include "layerexp.hxx"
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 using ::com::sun::star::uno::Reference;
 

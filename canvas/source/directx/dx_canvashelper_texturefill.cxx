@@ -35,7 +35,7 @@
 #include <basegfx/utils/tools.hxx>
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <rtl/math.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <parametricpolypolygon.hxx>
 

@@ -26,7 +26,7 @@
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/io/Pipe.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 using namespace css::uno;
 using namespace css::ucb;

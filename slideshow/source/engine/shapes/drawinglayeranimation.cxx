@@ -18,7 +18,7 @@
  */
 
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/gen.hxx>
 #include <tools/helpers.hxx>
 #include <canvas/elapsedtime.hxx>

@@ -18,7 +18,7 @@
  */
 
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <shapesubset.hxx>
 #include <utility>

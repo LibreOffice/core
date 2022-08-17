@@ -25,7 +25,7 @@
 #include <bitmaps.hlst>
 #include <iderid.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <svtools/imagemgr.hxx>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>

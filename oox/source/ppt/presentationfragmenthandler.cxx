@@ -23,7 +23,7 @@
 #include <o3tl/string_view.hxx>
 #include <sal/log.hxx>
 #include <tools/multisel.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>

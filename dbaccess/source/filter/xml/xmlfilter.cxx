@@ -51,7 +51,7 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <svtools/sfxecode.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>

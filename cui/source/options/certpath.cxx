@@ -11,7 +11,7 @@
 #include <osl/file.hxx>
 #include <osl/security.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include "certpath.hxx"
 
 #include <com/sun/star/xml/crypto/NSSInitializer.hpp>

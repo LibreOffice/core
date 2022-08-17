@@ -74,7 +74,7 @@
 #include <dinfdlg.hrc>
 #include <sfx2/strings.hrc>
 #include <strings.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include "securitypage.hxx"
 
 #include <algorithm>

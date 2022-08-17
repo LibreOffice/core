@@ -31,7 +31,7 @@
 #include <toolkit/helper/convert.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>

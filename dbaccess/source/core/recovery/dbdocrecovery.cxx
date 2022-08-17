@@ -30,7 +30,7 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 namespace dbaccess
 {

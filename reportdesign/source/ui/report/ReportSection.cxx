@@ -43,7 +43,7 @@
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <comphelper/propertyvalue.hxx>
 #include <toolkit/helper/convert.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <RptDef.hxx>
 #include <SectionWindow.hxx>
 #include <helpids.h>

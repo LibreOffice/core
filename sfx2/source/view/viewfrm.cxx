@@ -54,7 +54,7 @@
 #include <unotools/VersionConfig.hxx>
 #endif
 #include <svtools/miscopt.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>

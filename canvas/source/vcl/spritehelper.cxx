@@ -26,7 +26,7 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <rtl/math.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/canvastools.hxx>

@@ -26,7 +26,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <drawinglayer/converters.hxx>
 

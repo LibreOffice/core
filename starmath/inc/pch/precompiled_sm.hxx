@@ -142,7 +142,7 @@
 #include <svx/svxdllapi.h>
 #include <tools/color.hxx>
 #include <tools/degree.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/gen.hxx>
 #include <tools/lineend.hxx>
 #include <tools/link.hxx>

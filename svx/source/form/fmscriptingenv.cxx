@@ -29,7 +29,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/script/XScriptListener.hpp>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/debug.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <utility>

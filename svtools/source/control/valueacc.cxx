@@ -21,7 +21,7 @@
 #include <vcl/settings.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <svtools/valueset.hxx>
 #include "valueimp.hxx"
 #include <comphelper/servicehelper.hxx>

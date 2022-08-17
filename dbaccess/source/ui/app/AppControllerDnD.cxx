@@ -52,7 +52,7 @@
 #include <com/sun/star/sdb/XReportDocumentsSupplier.hpp>
 #include <com/sun/star/sdb/XFormDocumentsSupplier.hpp>
 #include <svtools/querydelete.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <osl/diagnose.h>
 #include <defaultobjectnamecheck.hxx>
 #include <osl/mutex.hxx>

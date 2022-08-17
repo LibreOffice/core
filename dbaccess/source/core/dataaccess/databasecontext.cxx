@@ -58,7 +58,7 @@
 #include <rtl/uri.hxx>
 #include <sal/log.hxx>
 #include <svl/filenotation.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
 #include <rtl/ref.hxx>

@@ -36,7 +36,7 @@
 #include <com/sun/star/report/XShape.hpp>
 #include <com/sun/star/report/XFixedLine.hpp>
 #include <osl/diagnose.h>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <numeric>
 

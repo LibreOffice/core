@@ -18,7 +18,7 @@
  */
 
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <com/sun/star/animations/AnimationCalcMode.hpp>
 #include <comphelper/sequence.hxx>

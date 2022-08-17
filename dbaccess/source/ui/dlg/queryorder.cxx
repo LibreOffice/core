@@ -27,7 +27,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <connectivity/dbtools.hxx>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 using namespace dbaui;
 using namespace connectivity;

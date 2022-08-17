@@ -63,7 +63,7 @@
 #include <oox/ole/axbinarywriter.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <o3tl/string_view.hxx>
 
 namespace oox::ole {

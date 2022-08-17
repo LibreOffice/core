@@ -22,7 +22,7 @@
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <vcl/outdev.hxx>
 
 #include "canvascustomsprite.hxx"

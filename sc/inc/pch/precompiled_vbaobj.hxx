@@ -298,7 +298,7 @@
 #include <svl/itemset.hxx>
 #include <svl/srchitem.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/eventcfg.hxx>
 #include <vbahelper/vbaaccesshelper.hxx>

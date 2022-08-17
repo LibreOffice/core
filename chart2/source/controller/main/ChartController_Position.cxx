@@ -35,7 +35,7 @@
 #include <svx/rectenum.hxx>
 #include <svl/intitem.hxx>
 #include <svx/svxdlg.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <vcl/svapp.hxx>
 #include <memory>
 

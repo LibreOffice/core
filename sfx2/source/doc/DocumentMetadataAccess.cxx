@@ -51,7 +51,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/XmlIdRegistry.hxx>
 #include <sfx2/objsh.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <libxml/tree.h>
 

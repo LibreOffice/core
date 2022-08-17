@@ -40,7 +40,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <utility>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 using namespace ::com::sun::star;
 

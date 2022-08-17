@@ -27,7 +27,7 @@
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 

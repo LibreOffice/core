@@ -39,7 +39,7 @@
 #include <sfx2/objitem.hxx>
 #include <sfx2/frame.hxx>
 #include <svx/dataaccessdescriptor.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tabwin.hrc>
 #include <utility>
 

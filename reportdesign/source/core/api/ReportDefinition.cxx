@@ -110,7 +110,7 @@
 #include <svx/unofill.hxx>
 #include <svx/xmleohlp.hxx>
 #include <svx/xmlgrhlp.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <vcl/svapp.hxx>
 
 //  page styles

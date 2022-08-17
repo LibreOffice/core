@@ -86,7 +86,7 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <tools/color.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/link.hxx>
 #include <tools/toolsdllapi.h>
 #include <unotools/options.hxx>

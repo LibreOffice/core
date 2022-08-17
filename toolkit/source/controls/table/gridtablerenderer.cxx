@@ -25,7 +25,7 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <vcl/window.hxx>
 #include <vcl/image.hxx>
 #include <vcl/virdev.hxx>

@@ -60,7 +60,7 @@
 
 #include <sax/tools/converter.hxx>
 #include <comphelper/sequence.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <xmloff/families.hxx>
 #include<xmloff/xmlnamespace.hxx>

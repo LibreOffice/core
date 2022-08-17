@@ -23,7 +23,7 @@
 #include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/stream.hxx>
 #include <svtools/rtfkeywd.hxx>
 #include <svtools/rtfout.hxx>

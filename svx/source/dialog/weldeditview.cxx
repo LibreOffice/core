@@ -47,7 +47,7 @@
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svx/AccessibleTextHelper.hxx>
 #include <svx/weldeditview.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/event.hxx>

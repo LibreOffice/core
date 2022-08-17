@@ -41,7 +41,7 @@
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/zcodec.hxx>
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>

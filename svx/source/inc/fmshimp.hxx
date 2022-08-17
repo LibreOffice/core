@@ -34,7 +34,7 @@
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/form/runtime/FeatureState.hpp>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <vcl/timer.hxx>
 #include <sfx2/shell.hxx>
 #include <svx/svdmark.hxx>

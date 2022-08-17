@@ -27,7 +27,7 @@
 #include "xmlSection.hxx"
 #include "xmlEnums.hxx"
 #include "xmlFunction.hxx"
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include "xmlMasterFields.hxx"

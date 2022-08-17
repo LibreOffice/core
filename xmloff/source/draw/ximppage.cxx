@@ -39,7 +39,7 @@
 #include <xmloff/prstylei.hxx>
 #include <PropertySetMerger.hxx>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <xmloff/xmluconv.hxx>

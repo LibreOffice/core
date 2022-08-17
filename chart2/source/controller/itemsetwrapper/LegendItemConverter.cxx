@@ -27,7 +27,7 @@
 
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <memory>
 

@@ -45,7 +45,7 @@
 #include "OOo2Oasis.hxx"
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 using namespace ::xmloff::token;
 using namespace ::com::sun::star::uno;

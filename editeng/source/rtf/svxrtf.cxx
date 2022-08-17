@@ -19,7 +19,7 @@
 
 #include <memory>
 #include <queue>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <rtl/tencinfo.h>
 #include <svl/itemiter.hxx>
 #include <svl/whiter.hxx>

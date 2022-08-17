@@ -23,7 +23,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <dbaccess/IController.hxx>
 #include <svtools/acceleratorexecute.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 

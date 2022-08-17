@@ -22,7 +22,7 @@
 
 #include <comphelper/namedvaluecollection.hxx>
 #include <utility>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 
 namespace svx

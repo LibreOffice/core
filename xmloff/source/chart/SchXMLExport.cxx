@@ -101,7 +101,7 @@
 #include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/container/XChild.hpp>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include "MultiPropertySetHandler.hxx"
 #include "PropertyMap.hxx"
 

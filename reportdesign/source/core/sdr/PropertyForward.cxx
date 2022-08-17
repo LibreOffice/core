@@ -19,7 +19,7 @@
 #include <PropertyForward.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <comphelper/property.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <strings.hxx>
 
 namespace rptui

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_TOOLS_DIAGNOSE_EX_H
-#define INCLUDED_TOOLS_DIAGNOSE_EX_H
+#ifndef INCLUDED_COMPHELPER_DIAGNOSE_HXX
+#define INCLUDED_COMPHELPER_DIAGNOSE_HXX
 
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
@@ -26,10 +26,10 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include <sal/log.hxx>
-#include <tools/toolsdllapi.h>
+#include <comphelper/comphelperdllapi.h>
 #include <cppuhelper/exc_hlp.hxx>
 
-TOOLS_DLLPUBLIC void DbgUnhandledException(const css::uno::Any& caughtException,
+COMPHELPER_DLLPUBLIC void DbgUnhandledException(const css::uno::Any& caughtException,
         const char* currentFunction, const char* fileAndLineNo,
         const char* area, const char* explanatory = nullptr);
 
@@ -136,7 +136,7 @@ inline css::uno::Any DbgGetCaughtException()
 
 /** Convert a caught exception to a string suitable for logging.
 */
-TOOLS_DLLPUBLIC OString exceptionToString(css::uno::Any const & caughtEx);
+COMPHELPER_DLLPUBLIC OString exceptionToString(css::uno::Any const & caughtEx);
 
 /**
    Logs an message along with a nicely formatted version of the current exception.

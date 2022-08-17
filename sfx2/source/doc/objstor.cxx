@@ -72,7 +72,7 @@
 #include <unotools/useroptions.hxx>
 #include <unotools/securityoptions.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/docinfohelper.hxx>

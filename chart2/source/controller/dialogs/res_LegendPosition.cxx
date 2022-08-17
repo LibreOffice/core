@@ -31,7 +31,7 @@
 #include <chartview/ChartSfxItemIds.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <utility>
 #include <vcl/weld.hxx>
 

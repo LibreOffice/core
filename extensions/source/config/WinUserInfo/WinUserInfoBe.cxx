@@ -15,7 +15,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <map>
 #include <o3tl/char16_t2wchar_t.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <officecfg/UserProfile.hxx>
 
 #include <Iads.h>

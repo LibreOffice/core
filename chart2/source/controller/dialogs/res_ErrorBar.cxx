@@ -26,7 +26,7 @@
 #include <ChartModel.hxx>
 
 #include <rtl/math.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <osl/diagnose.h>
 #include <svl/stritem.hxx>
 

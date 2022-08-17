@@ -135,7 +135,7 @@
 #endif
 #include <awt/vclxspinbutton.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/profilezone.hxx>

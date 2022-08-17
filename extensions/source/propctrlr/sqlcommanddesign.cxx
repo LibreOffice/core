@@ -39,7 +39,7 @@
 
 #include <comphelper/propertyvalue.hxx>
 #include <utility>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <osl/diagnose.h>
 
 

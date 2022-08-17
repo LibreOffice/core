@@ -36,7 +36,7 @@
 
 #if defined(_WIN32)
 #include "olecomponent.hxx"
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #endif
 
 using namespace ::com::sun::star;

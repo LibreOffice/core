@@ -167,7 +167,7 @@
 #include <sdbcx/VIndexColumn.hxx>
 #include <sdbcx/VKey.hxx>
 #include <sdbcx/VKeyColumn.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/toolsdllapi.h>
 #include <unotools/resmgr.hxx>
 #include <unotools/sharedunocomponent.hxx>

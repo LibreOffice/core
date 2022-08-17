@@ -30,7 +30,7 @@
 #include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 using namespace com::sun::star;
 

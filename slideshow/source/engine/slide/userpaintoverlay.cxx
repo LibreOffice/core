@@ -25,7 +25,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <cppcanvas/basegfxfactory.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <slideshowcontext.hxx>
 #include "userpaintoverlay.hxx"

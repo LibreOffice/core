@@ -65,7 +65,7 @@
 #include <sfx2/app.hxx>
 #include <vcl/svapp.hxx>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <basic/sbx.hxx>
 #include <basic/sbstar.hxx>

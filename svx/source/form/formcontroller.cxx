@@ -78,7 +78,7 @@
 #include <toolkit/controls/unocontrol.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

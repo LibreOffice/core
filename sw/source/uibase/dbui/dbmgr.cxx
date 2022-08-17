@@ -98,7 +98,7 @@
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <unotools/charclass.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <unomailmerge.hxx>
 #include <sfx2/event.hxx>

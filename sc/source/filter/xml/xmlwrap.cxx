@@ -60,7 +60,7 @@
 #include <xmloff/shapeexport.hxx>
 #include <svx/xmleohlp.hxx>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <document.hxx>
 #include <xmlwrap.hxx>

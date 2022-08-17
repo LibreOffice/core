@@ -26,7 +26,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 namespace chart
 {

@@ -31,7 +31,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <xmloff/xmlmetae.hxx>
 #include <comphelper/processfactory.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <unotools/streamwrap.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <editeng/unoedsrc.hxx>

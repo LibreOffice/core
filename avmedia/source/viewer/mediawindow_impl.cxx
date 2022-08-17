@@ -29,7 +29,7 @@
 
 #include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/securityoptions.hxx>
 #include <vcl/bitmapex.hxx>

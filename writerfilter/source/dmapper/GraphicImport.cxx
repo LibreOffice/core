@@ -52,7 +52,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <rtl/math.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/sequenceashashmap.hxx>

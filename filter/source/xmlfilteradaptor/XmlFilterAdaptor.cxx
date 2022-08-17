@@ -20,7 +20,7 @@
 #include <iostream>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/urlobj.hxx>
 #include "XmlFilterAdaptor.hxx"
 #include <com/sun/star/io/XActiveDataSource.hpp>

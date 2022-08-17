@@ -22,7 +22,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/types.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 constexpr OUStringLiteral CUIFM_PROP_HIDDEN = u"Hidden";
 constexpr OUStringLiteral CUIFM_PROP_LABEL = u"Label";

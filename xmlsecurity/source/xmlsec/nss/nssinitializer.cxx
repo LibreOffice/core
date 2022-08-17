@@ -31,7 +31,7 @@
 #include <osl/file.hxx>
 #include <osl/thread.h>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <unotools/tempfile.hxx>
 #include <salhelper/singletonref.hxx>
 #include <comphelper/sequence.hxx>

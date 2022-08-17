@@ -53,7 +53,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <sax/tools/converter.hxx>
 #include <tools/UnitConversion.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
 #include <xmloff/attrlist.hxx>

@@ -21,7 +21,7 @@
 
 #include <o3tl/safeint.hxx>
 #include <utility>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <formula/funcvarargs.h>
 
 

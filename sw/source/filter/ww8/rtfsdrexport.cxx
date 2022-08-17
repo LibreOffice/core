@@ -32,7 +32,7 @@
 #include <vcl/cvtgrf.hxx>
 #include <textboxhelper.hxx>
 #include <dcontact.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <sal/log.hxx>
 #include <algorithm>
 #include "rtfexport.hxx"

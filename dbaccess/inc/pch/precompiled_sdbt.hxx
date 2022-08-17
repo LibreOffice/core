@@ -39,7 +39,7 @@
 #include <connectivity/sqlerror.hxx>
 #include <connectivity/statementcomposer.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
 #include <connectiontools.hxx>

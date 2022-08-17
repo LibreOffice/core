@@ -58,7 +58,7 @@
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>

@@ -19,7 +19,7 @@
 #include <canvas/canvastools.hxx>
 #include <o3tl/safeint.hxx>
 #include <verifyinput.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include "ogl_canvascustomsprite.hxx"
 #include "ogl_canvastools.hxx"

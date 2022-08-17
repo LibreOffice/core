@@ -27,7 +27,7 @@
 #include <com/sun/star/text/ReferenceFieldSource.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/view/XFormLayerAccess.hpp>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 namespace writerfilter::dmapper {
 

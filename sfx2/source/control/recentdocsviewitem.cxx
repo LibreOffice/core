@@ -21,7 +21,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <recentdocsview.hxx>
 #include <sfx2/templatelocalview.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/historyoptions.hxx>

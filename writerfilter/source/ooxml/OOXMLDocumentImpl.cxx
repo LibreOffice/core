@@ -33,7 +33,7 @@
 #include "OOXMLPropertySet.hxx"
 
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <comphelper/sequence.hxx>

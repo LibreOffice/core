@@ -46,7 +46,7 @@
 #include <ucbhelper/content.hxx>
 #include "finteraction.hxx"
 #include <tools/urlobj.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #if defined _WIN32
 #include <rtl/process.h>

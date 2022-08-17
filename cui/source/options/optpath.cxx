@@ -40,7 +40,7 @@
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/util/thePathSettings.hpp>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <sal/log.hxx>
 #include <o3tl/string_view.hxx>
 

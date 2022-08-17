@@ -51,7 +51,7 @@
 
 #include <i18nlangtag/languagetag.hxx>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/debug.hxx>
 
 #include <comphelper/documentinfo.hxx>

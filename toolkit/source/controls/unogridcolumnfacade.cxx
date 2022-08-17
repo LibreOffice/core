@@ -24,7 +24,7 @@
 #include <com/sun/star/awt/grid/XGridColumnListener.hpp>
 
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/implbase.hxx>
 

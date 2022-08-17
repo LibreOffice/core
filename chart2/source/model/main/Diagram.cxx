@@ -42,7 +42,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/supportsservice.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <algorithm>
 #include <utility>

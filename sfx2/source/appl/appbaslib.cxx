@@ -24,7 +24,7 @@
 #include <sfx2/app.hxx>
 
 #include <basic/basmgr.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 using namespace ::com::sun::star::uno;

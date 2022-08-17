@@ -18,7 +18,7 @@
  */
 
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include "clippingfunctor.hxx"
 
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>

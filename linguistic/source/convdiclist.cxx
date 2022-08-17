@@ -38,7 +38,7 @@
 #include <ucbhelper/content.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/lingucfg.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include "convdic.hxx"
 #include "convdiclist.hxx"

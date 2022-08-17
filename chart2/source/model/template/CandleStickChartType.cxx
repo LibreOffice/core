@@ -24,7 +24,7 @@
 #include <servicenames_charttypes.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <cppuhelper/supportsservice.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 namespace com::sun::star::uno { class XComponentContext; }
 

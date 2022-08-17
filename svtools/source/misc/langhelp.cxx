@@ -19,7 +19,7 @@
 #include <org/freedesktop/PackageKit/SyncDbusSessionHelper.hpp>
 #include <rtl/ustring.hxx>
 #include <svtools/langhelp.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

@@ -29,7 +29,7 @@
 #include <sfx2/thumbnailview.hxx>
 #include <utility>
 #include <vcl/image.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star;

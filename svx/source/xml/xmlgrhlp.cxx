@@ -44,7 +44,7 @@
 #include <vcl/gfxlink.hxx>
 #include <vcl/metaact.hxx>
 #include <tools/zcodec.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <vcl/GraphicObject.hxx>
 #include <vcl/graphicfilter.hxx>

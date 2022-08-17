@@ -65,7 +65,7 @@
 #include <map>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <o3tl/string_view.hxx>
 #include <utility>
 

@@ -31,7 +31,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>

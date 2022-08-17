@@ -50,7 +50,7 @@
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbmetadata.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <o3tl/string_view.hxx>

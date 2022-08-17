@@ -30,7 +30,7 @@
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <cppuhelper/supportsservice.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;

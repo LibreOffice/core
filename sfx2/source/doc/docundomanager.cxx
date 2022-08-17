@@ -28,7 +28,7 @@
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/lang/NotInitializedException.hpp>
 #include <svl/undo.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <framework/undomanagerhelper.hxx>
 #include <framework/imutex.hxx>
 

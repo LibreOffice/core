@@ -28,7 +28,7 @@
 #include <comphelper/string.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <tools/UnitConversion.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <cnttab.hxx>

@@ -23,7 +23,7 @@
 
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <o3tl/string_view.hxx>
 
 #include <comphelper/processfactory.hxx>

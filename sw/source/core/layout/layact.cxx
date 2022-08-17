@@ -67,7 +67,7 @@
 #include <fmtanchr.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <vector>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 void SwLayAction::CheckWaitCursor()
 {

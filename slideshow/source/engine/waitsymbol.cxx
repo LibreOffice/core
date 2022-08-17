@@ -27,7 +27,7 @@
 
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/presentation/XSlideShowView.hpp>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include "waitsymbol.hxx"
 #include <eventmultiplexer.hxx>

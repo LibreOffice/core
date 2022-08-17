@@ -22,7 +22,7 @@
 #include <comphelper/sequence.hxx>
 #include <o3tl/safeint.hxx>
 #include <sfx2/objsh.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <unotools/configmgr.hxx>
 #include <rtl/ref.hxx>
 #include <map>

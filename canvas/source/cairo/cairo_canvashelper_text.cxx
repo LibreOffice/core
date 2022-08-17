@@ -23,7 +23,7 @@
 
 #include <rtl/math.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/virdev.hxx>

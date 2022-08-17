@@ -26,7 +26,7 @@
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <rtl/ref.hxx>
 #include <svl/ctloptions.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <unotools/options.hxx>
 
 ItemHolder2::ItemHolder2()

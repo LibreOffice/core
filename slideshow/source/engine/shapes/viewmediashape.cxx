@@ -19,7 +19,7 @@
 
 #include <config_features.h>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <sal/log.hxx>
 #include <utility>

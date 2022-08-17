@@ -20,7 +20,7 @@
 #include <config_features.h>
 
 #include <tools/inetmsg.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>

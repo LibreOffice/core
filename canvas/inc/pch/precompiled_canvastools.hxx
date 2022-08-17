@@ -95,7 +95,7 @@
 #include <rendering/isurfaceproxy.hxx>
 #include <rendering/isurfaceproxymanager.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/time.hxx>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4

@@ -21,7 +21,7 @@
 #include "wizardshell.hxx"
 #include "wizardpagecontroller.hxx"
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <com/sun/star/ui/dialogs/WizardTravelType.hpp>
 

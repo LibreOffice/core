@@ -79,7 +79,7 @@
 #include <istyleaccess.hxx>
 
 #include <sfx2/DocumentMetadataAccess.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

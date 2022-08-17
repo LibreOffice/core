@@ -25,7 +25,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <TConnection.hxx>
 #include <utility>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 using namespace ::connectivity;
 using namespace ::dbtools;

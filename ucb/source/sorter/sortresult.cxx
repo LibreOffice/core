@@ -26,7 +26,7 @@
 #include <com/sun/star/ucb/XAnyCompare.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <memory>
 
 using namespace com::sun::star::beans;

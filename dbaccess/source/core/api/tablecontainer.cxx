@@ -40,7 +40,7 @@
 #include <sdbcoretools.hxx>
 #include <ContainerMediator.hxx>
 #include <objectnameapproval.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 using namespace dbaccess;
 using namespace dbtools;

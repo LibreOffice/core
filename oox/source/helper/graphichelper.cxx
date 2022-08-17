@@ -33,7 +33,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <tools/gen.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <oox/helper/containerhelper.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/token/properties.hxx>

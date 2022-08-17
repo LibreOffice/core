@@ -24,7 +24,7 @@
 
 #include <cppuhelper/exc_hlp.hxx>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
 using namespace ::com::sun::star;

@@ -39,7 +39,7 @@
 #include <svl/numuno.hxx>
 #include <svl/numformat.hxx>
 #include <svl/stritem.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <utility>
 #include <vcl/mnemonic.hxx>
 #include <svl/style.hxx>

@@ -46,7 +46,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include "identify.hxx"
 #include "ucbcmds.hxx"
 

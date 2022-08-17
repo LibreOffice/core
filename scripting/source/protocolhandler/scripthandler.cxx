@@ -37,7 +37,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/sfxdlg.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>

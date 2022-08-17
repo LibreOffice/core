@@ -48,7 +48,7 @@
 #include <comphelper/processfactory.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/signaturestate.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <osl/file.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>

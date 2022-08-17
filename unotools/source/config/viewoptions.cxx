@@ -28,7 +28,7 @@
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <utility>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 constexpr OUStringLiteral PACKAGE_VIEWS = u"org.openoffice.Office.Views";
 constexpr OUStringLiteral PROPERTY_WINDOWSTATE = u"WindowState";

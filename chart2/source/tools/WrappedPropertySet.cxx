@@ -20,7 +20,7 @@
 #include <WrappedPropertySet.hxx>
 #include <cppuhelper/propshlp.hxx>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <sal/log.hxx>
 
 namespace chart

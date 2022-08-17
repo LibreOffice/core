@@ -26,7 +26,7 @@
 #include <memory>
 
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase.hxx>

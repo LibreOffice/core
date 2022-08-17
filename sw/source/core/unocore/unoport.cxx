@@ -24,7 +24,7 @@
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <svl/itemprop.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <unocrsrhelper.hxx>
 #include <unoparaframeenum.hxx>

@@ -20,7 +20,7 @@
 #include <AccessiblePageShape.hxx>
 #include <svx/AccessibleShapeInfo.hxx>
 #include <svx/IAccessibleViewForwarder.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/gen.hxx>
 #include <sal/log.hxx>
 

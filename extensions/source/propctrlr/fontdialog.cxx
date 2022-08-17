@@ -49,7 +49,7 @@
 #include <editeng/shdditem.hxx>
 #include <editeng/flstitem.hxx>
 #include <svtools/ctrltool.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <svx/svxids.hrc>
 #include <svx/svxdlg.hxx>

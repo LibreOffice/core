@@ -41,7 +41,7 @@
 #include <svx/ImageMapInfo.hxx>
 #include <sot/formats.hxx>
 #include <svl/urlbmk.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

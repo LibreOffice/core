@@ -33,7 +33,7 @@
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;

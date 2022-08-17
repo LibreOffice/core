@@ -25,7 +25,7 @@
 #include <sfx2/docfile.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <sot/storage.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include "eqnolefilehdr.hxx"
 

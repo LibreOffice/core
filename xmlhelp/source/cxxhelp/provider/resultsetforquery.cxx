@@ -26,7 +26,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 
 #include <helpcompiler/HelpSearch.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #if defined(__GNUC__)
 #  pragma GCC visibility push (default)

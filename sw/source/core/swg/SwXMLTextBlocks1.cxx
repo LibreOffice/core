@@ -23,7 +23,7 @@
 #include <svl/macitem.hxx>
 #include <svtools/unoevent.hxx>
 #include <sfx2/docfile.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>

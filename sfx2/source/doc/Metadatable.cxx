@@ -29,7 +29,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <comphelper/random.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <algorithm>
 #include <memory>

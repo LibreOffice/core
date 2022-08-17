@@ -19,7 +19,7 @@
 
 
 #include <rtl/ref.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/namedvaluecollection.hxx>

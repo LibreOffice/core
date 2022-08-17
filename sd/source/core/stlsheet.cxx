@@ -52,7 +52,7 @@
 #include <svx/sdtaiitm.hxx>
 #include <svx/xit.hxx>
 #include <svx/xflclit.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <stlsheet.hxx>
 #include <sdresid.hxx>
 #include <sdpage.hxx>

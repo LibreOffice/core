@@ -114,7 +114,7 @@ bool StringConcatLiterals::VisitCallExpr(CallExpr const * expr) {
                         compiler.getSourceManager().getImmediateMacroCallerLoc(
                             compiler.getSourceManager().getImmediateMacroCallerLoc(
                                 expr->getBeginLoc()))))),
-            SRCDIR "/include/tools/diagnose_ex.h"))
+            SRCDIR "/include/comphelper/diagnose.hxx"))
         return true;
 
     StringRef name {

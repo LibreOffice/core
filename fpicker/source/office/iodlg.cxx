@@ -27,7 +27,7 @@
 #include "PlacesListBox.hxx"
 #include <fpicker/fpsofficeResMgr.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/errinf.hxx>

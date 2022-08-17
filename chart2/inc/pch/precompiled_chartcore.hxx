@@ -249,7 +249,7 @@
 #include <tools/color.hxx>
 #include <tools/date.hxx>
 #include <tools/degree.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/gen.hxx>
 #include <tools/helpers.hxx>
 #include <tools/lineend.hxx>

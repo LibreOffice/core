@@ -19,7 +19,7 @@
 
 #include <WTypeSelect.hxx>
 #include <bitmaps.hlst>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <osl/diagnose.h>
 #include <FieldDescriptions.hxx>
 #include <WCopyTable.hxx>

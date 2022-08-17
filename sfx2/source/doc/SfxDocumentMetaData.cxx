@@ -63,7 +63,7 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <tools/datetime.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/fileformat.h>
 #include <cppuhelper/basemutex.hxx>

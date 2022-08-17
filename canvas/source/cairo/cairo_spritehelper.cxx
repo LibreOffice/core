@@ -25,7 +25,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <rtl/math.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <cairo.h>
 #include <pixman.h>

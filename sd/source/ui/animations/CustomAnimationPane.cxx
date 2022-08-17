@@ -51,7 +51,7 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/sequence.hxx>
 #include <sfx2/frame.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <svx/svxids.hrc>
 #include <DrawDocShell.hxx>

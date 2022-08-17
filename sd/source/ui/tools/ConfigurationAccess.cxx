@@ -25,7 +25,7 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star;

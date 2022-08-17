@@ -36,7 +36,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <connectivity/dbtools.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <sal/log.hxx>
 #include <xmloff/XMLSettingsExportContext.hxx>
 #include <xmloff/SettingsExportHelper.hxx>

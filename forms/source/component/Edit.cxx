@@ -38,7 +38,7 @@
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <sal/log.hxx>
 
 using namespace dbtools;

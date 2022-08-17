@@ -36,7 +36,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <ucbhelper/content.hxx>
 
 #include <dp_dependencies.hxx>

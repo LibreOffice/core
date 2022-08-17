@@ -29,7 +29,7 @@
 #include <xmloff/xmlprmap.hxx>
 #include <sax/tools/converter.hxx>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>

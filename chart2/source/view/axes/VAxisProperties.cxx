@@ -28,7 +28,7 @@
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <rtl/math.hxx>
 #include <utility>
 

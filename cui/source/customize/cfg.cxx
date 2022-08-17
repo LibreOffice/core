@@ -43,7 +43,7 @@
 #include <svl/stritem.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <algorithm>

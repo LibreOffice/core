@@ -30,7 +30,7 @@
 #include <com/sun/star/awt/PosSize.hpp>
 #include <vcl/bitmapex.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>

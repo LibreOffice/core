@@ -19,7 +19,7 @@
 
 #include "AppView.hxx"
 #include <strings.hrc>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <vcl/event.hxx>
 #include <vcl/weld.hxx>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>

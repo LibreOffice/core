@@ -57,7 +57,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
 #include <svtools/soerr.hxx>

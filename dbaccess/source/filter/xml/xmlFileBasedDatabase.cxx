@@ -22,7 +22,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <strings.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <svl/filenotation.hxx>
 #include <unotools/pathoptions.hxx>
 #include <dsntypes.hxx>

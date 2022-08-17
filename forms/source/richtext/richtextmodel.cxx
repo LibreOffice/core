@@ -35,7 +35,7 @@
 #include <toolkit/awt/vclxdevice.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <editeng/editstat.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>

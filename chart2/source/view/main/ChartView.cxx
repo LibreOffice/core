@@ -105,7 +105,7 @@
 
 #include <rtl/ustring.hxx>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/stream.hxx>
 
 #include <memory>

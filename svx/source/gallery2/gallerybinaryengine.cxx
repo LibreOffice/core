@@ -39,7 +39,7 @@
 #include <comphelper/graphicmimetype.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/datetime.hxx>
 #include <unotools/datetime.hxx>
 #include <unotools/ucbstreamhelper.hxx>

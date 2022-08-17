@@ -20,7 +20,7 @@
 #include <core_resource.hxx>
 #include <FieldDescControl.hxx>
 #include <FieldControls.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <TableDesignHelpBar.hxx>
 #include <vcl/svapp.hxx>
 #include <FieldDescriptions.hxx>

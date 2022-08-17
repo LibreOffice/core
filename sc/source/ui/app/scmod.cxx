@@ -46,7 +46,7 @@
 #include <svl/inethist.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/svxerr.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <editeng/unolingu.hxx>
 #include <unotools/lingucfg.hxx>

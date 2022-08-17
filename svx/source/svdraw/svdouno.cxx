@@ -34,7 +34,7 @@
 #include <svx/svdviter.hxx>
 #include <rtl/ref.hxx>
 #include <svx/sdrpagewindow.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/debug.hxx>
 #include <o3tl/sorted_vector.hxx>
 

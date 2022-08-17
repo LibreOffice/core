@@ -31,7 +31,7 @@
 #include <connectivity/dbtools.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 namespace dbaui
 {

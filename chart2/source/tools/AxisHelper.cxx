@@ -49,7 +49,7 @@
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/sequence.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <cstddef>
 #include <map>

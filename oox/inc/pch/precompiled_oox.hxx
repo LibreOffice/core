@@ -214,7 +214,7 @@
 #include <svx/svxdllapi.h>
 #include <tools/color.hxx>
 #include <tools/degree.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/fract.hxx>

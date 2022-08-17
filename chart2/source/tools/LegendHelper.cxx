@@ -25,7 +25,7 @@
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;

@@ -11,7 +11,7 @@
 #include <sal/log.hxx>
 #include <utility>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include "ogl_textlayout.hxx"
 

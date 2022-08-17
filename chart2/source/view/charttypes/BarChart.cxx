@@ -35,7 +35,7 @@
 
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <rtl/math.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 namespace chart
 {

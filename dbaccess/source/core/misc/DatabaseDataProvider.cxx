@@ -24,7 +24,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <connectivity/FValue.hxx>
 #include <sal/macros.h>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>

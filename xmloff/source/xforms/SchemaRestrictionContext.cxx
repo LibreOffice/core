@@ -41,7 +41,7 @@
 
 #include <o3tl/string_view.hxx>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 
 using com::sun::star::uno::Reference;

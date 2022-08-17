@@ -68,7 +68,7 @@
 
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <editeng/editview.hxx>

@@ -42,7 +42,7 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/math.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/canvastools.hxx>

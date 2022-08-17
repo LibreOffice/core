@@ -71,7 +71,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/syswin.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/UnitConversion.hxx>
 #include <vbahelper/vbahelper.hxx>
 

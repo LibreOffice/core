@@ -25,7 +25,7 @@
 #include <sal/log.hxx>
 
 #include <unotools/charclass.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include "funcpage.hxx"
 #include <formula/formula.hxx>

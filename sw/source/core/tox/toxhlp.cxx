@@ -20,7 +20,7 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/i18n/IndexEntrySupplier.hpp>
 #include <toxwrap.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 using namespace ::com::sun::star;
 

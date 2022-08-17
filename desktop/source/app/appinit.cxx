@@ -34,7 +34,7 @@
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <unotools/ucbhelper.hxx>

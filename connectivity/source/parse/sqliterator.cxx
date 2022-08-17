@@ -32,7 +32,7 @@
 #include <iostream>
 #endif
 #include <connectivity/PColumn.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <TConnection.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbmetadata.hxx>

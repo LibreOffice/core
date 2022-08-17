@@ -20,7 +20,7 @@
 #include <config_features.h>
 #include <config_fuzzers.h>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/fmtools.hxx>
 #include <fmservs.hxx>

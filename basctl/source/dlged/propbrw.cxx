@@ -37,7 +37,7 @@
 #include <svx/svditer.hxx>
 #include <svx/svdview.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/weld.hxx>

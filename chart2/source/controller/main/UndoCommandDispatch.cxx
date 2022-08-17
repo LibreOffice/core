@@ -25,7 +25,7 @@
 
 #include <utility>
 #include <vcl/svapp.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>

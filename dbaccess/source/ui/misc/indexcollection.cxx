@@ -18,7 +18,7 @@
  */
 
 #include <indexcollection.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbcx/XAppend.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

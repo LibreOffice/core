@@ -33,7 +33,7 @@
 #include <map>
 
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <animations/animationnodehelper.hxx>
 
 #include <svx/svditer.hxx>

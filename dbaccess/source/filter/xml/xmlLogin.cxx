@@ -21,7 +21,7 @@
 #include "xmlfilter.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <strings.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 
 namespace dbaxml

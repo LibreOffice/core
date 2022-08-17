@@ -24,7 +24,7 @@
 #include "StockDataInterpreter.hxx"
 #include "StockChartTypeTemplate.hxx"
 #include <DataSeries.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;

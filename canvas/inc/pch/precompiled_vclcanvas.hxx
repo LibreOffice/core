@@ -80,7 +80,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/long.hxx>
 #include <tools/poly.hxx>
 #include <tools/stream.hxx>

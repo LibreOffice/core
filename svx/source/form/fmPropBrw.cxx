@@ -57,7 +57,7 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/objitem.hxx>
 #include <sfx2/objsh.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <unotools/confignode.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>

@@ -22,7 +22,7 @@
 
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #define IMPL_IMPLEMENTATION_ID( ClassName ) \
 css::uno::Sequence< sal_Int8 > ClassName::getImplementationId() \

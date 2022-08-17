@@ -30,7 +30,7 @@
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>

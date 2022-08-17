@@ -47,7 +47,7 @@
 #include <sal/log.hxx>
 #include <tools/datetime.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/ucbhelper.hxx>

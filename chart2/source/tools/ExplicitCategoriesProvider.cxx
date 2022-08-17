@@ -34,7 +34,7 @@
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <o3tl/safeint.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <limits>
 

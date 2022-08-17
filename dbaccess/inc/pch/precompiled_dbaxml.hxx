@@ -89,7 +89,7 @@
 #include <sax/tools/converter.hxx>
 #include <sfx2/docfile.hxx>
 #include <svl/filenotation.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <unotools/pathoptions.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include <xmloff/dllapi.h>

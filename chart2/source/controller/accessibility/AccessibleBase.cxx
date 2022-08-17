@@ -42,7 +42,7 @@
 #include <vcl/settings.hxx>
 #include <o3tl/functional.hxx>
 #include <o3tl/safeint.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <algorithm>
 #include <iterator>

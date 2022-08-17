@@ -45,7 +45,7 @@
 #include <svl/zformat.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <float.h>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/UnitConversion.hxx>
 
 #include <com/sun/star/awt/XBitmap.hpp>

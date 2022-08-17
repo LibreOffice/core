@@ -35,7 +35,7 @@
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
 
 #include <comphelper/property.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 namespace chart
 {

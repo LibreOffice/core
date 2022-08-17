@@ -24,7 +24,7 @@
 
  *************************************************************************/
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <com/sun/star/embed/InvalidStorageException.hpp>
 #include <com/sun/star/embed/StorageWrappedTargetException.hpp>

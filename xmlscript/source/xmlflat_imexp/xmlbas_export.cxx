@@ -30,7 +30,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <cppuhelper/supportsservice.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <rtl/ref.hxx>
 
 using namespace ::com::sun::star;

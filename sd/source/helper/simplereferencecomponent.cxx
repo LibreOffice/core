@@ -21,7 +21,7 @@
 
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <osl/diagnose.h>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 using com::sun::star::uno::RuntimeException;
 using sd::SimpleReferenceComponent;

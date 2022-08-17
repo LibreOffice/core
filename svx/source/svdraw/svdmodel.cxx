@@ -69,7 +69,7 @@
 #include <libxml/xmlwriter.h>
 #include <sfx2/viewsh.hxx>
 #include <o3tl/enumrange.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/UnitConversion.hxx>
 #include <svx/ColorSets.hxx>
 

@@ -71,7 +71,7 @@
 #include <o3tl/safeint.hxx>
 #include <sal/macros.h>
 #include <svl/numformat.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <svl/zforlist.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>

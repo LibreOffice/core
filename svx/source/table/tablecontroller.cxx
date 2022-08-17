@@ -73,7 +73,7 @@
 #include <sfx2/viewsh.hxx>
 #include <editeng/editview.hxx>
 #include <tools/UnitConversion.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace sdr::table;

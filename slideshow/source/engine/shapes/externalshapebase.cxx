@@ -19,7 +19,7 @@
 
 
 // must be first
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include "externalshapebase.hxx"
 #include <eventmultiplexer.hxx>

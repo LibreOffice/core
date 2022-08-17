@@ -30,7 +30,7 @@
 #include <com/sun/star/report/KeepTogether.hpp>
 #include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 namespace rptxml
 {

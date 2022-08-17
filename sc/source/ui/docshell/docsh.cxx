@@ -68,7 +68,7 @@
 #include <com/sun/star/util/VetoException.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <ooo/vba/excel/XWorkbook.hpp>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <config_folders.h>
 

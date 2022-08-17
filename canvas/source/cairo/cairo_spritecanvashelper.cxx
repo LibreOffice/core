@@ -23,7 +23,7 @@
 #include <boost/cast.hpp>
 
 #include <basegfx/range/b2irange.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <canvas/canvastools.hxx>
 

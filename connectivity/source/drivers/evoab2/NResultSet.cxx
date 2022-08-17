@@ -36,7 +36,7 @@
 #include <connectivity/sqlerror.hxx>
 #include <rtl/string.hxx>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <unotools/collatorwrapper.hxx>

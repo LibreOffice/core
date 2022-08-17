@@ -29,7 +29,7 @@
 #include <rtl/bootstrap.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>

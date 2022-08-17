@@ -35,7 +35,7 @@
 #include <svx/svdopath.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <editeng/editview.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/dialoghelper.hxx>

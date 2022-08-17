@@ -9,7 +9,7 @@
 
 #include <svx/FileExportedDialog.hxx>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <comphelper/backupfilehelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/system/XSystemShellExecute.hpp>

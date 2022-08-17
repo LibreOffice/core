@@ -30,7 +30,7 @@
 #include <sal/log.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/long.hxx>
 #include <unotools/syslocale.hxx>
 #include <i18nlangtag/languagetag.hxx>

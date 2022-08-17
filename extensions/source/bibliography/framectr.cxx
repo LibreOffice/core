@@ -44,7 +44,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <vcl/weld.hxx>
 #include <osl/mutex.hxx>
 

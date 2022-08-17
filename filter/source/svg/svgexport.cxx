@@ -62,7 +62,7 @@
 #include <svx/svdmodel.hxx>
 #include <svx/svdxcgv.hxx>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/zcodec.hxx>
 #include <rtl/crc.h>
 

@@ -249,7 +249,7 @@ excludelist:
     include/tools/debug.hxx:
     # Used behind #ifndef
     - tools/toolsdllapi.h
-    include/tools/diagnose_ex.h:
+    include/comphelper/diagnose.hxx:
     # Needed for macros
     - com/sun/star/lang/IllegalArgumentException.hpp
     - com/sun/star/uno/RuntimeException.hpp
@@ -405,7 +405,7 @@ excludelist:
     include/toolkit/helper/macros.hxx:
     # Needed for macros
     - comphelper/servicehelper.hxx
-    - tools/diagnose_ex.h
+    - comphelper/diagnose.hxx
     include/xmloff/attrlist.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XUnoTunnel.hpp

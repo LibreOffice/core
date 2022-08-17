@@ -33,7 +33,7 @@
 #include <fmobj.hxx>
 #include <o3tl/safeint.hxx>
 #include <sfx2/objsh.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <com/sun/star/container/XContainer.hpp>
 #include <comphelper/types.hxx>
 

@@ -25,7 +25,7 @@
 #include <com/sun/star/sdb/application/DatabaseObject.hpp>
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 namespace dbaui
 {

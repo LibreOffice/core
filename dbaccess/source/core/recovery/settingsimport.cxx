@@ -19,7 +19,7 @@
 
 #include "settingsimport.hxx"
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <sal/log.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmltoken.hxx>

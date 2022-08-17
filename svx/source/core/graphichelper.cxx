@@ -24,7 +24,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/graphichelper.hxx>
 #include <svx/strings.hrc>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 

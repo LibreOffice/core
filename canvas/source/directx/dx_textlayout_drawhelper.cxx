@@ -31,7 +31,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <rtl/math.hxx>
 #include <tools/color.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/poly.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/metric.hxx>

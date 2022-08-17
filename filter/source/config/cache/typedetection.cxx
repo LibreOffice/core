@@ -32,7 +32,7 @@
 #include <tools/wldcrd.hxx>
 #include <sal/log.hxx>
 #include <framework/interaction.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/fileurl.hxx>
 #include <comphelper/sequence.hxx>

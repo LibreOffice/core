@@ -47,7 +47,7 @@
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/document/GraphicStorageHandler.hpp>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star;

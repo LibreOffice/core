@@ -49,7 +49,7 @@
 #include <sal/log.hxx>
 
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 
 // service names

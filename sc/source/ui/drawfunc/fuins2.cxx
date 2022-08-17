@@ -41,7 +41,7 @@
 #include <sfx2/msg.hxx>
 #include <scmod.hxx>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <comphelper/lok.hxx>
 #include <comphelper/storagehelper.hxx>

@@ -43,7 +43,7 @@
 #include <comphelper/processfactory.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/diagnose.h>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 namespace utl {
 

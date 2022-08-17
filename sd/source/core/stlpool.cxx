@@ -46,7 +46,7 @@
 #include <editeng/emphasismarkitem.hxx>
 #include <svx/sdr/table/tabledesign.hxx>
 #include <editeng/autokernitem.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/UnitConversion.hxx>
 
 #include <editeng/lrspitem.hxx>

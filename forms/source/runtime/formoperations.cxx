@@ -52,7 +52,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/weld.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <comphelper/container.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/namedvaluecollection.hxx>

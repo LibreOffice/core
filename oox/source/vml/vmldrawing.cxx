@@ -36,7 +36,7 @@
 #include <oox/ole/axcontrol.hxx>
 #include <oox/vml/vmlshape.hxx>
 #include <oox/vml/vmlshapecontainer.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/gen.hxx>
 #include <o3tl/string_view.hxx>
 

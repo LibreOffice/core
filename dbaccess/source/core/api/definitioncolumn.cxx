@@ -31,7 +31,7 @@
 #include <connectivity/dbtools.hxx>
 #include <sal/log.hxx>
 #include <utility>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;

@@ -21,7 +21,7 @@
 
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <com/sun/star/animations/AnimationTransformType.hpp>
 #include <com/sun/star/animations/AnimationCalcMode.hpp>

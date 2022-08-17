@@ -34,7 +34,7 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <officecfg/Office/Compatibility.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <rtl/math.hxx>
 

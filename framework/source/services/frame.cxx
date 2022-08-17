@@ -78,7 +78,7 @@
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <vcl/threadex.hxx>
 #include <mutex>

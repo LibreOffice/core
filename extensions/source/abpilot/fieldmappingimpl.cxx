@@ -24,7 +24,7 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <vcl/weld.hxx>
 #include <com/sun/star/util/AliasProgrammaticPair.hpp>
 #include <strings.hrc>

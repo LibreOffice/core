@@ -29,7 +29,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 #include <sfx2/objsh.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
 

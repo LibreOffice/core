@@ -28,7 +28,7 @@
 #include <ReferenceSizeProvider.hxx>
 #include <com/sun/star/chart2/FormattedString.hpp>
 #include <rtl/ustrbuf.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <sal/log.hxx>
 
 namespace chart

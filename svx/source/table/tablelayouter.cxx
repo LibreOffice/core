@@ -21,7 +21,7 @@
 #include <com/sun/star/table/XMergeableCell.hpp>
 
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/gen.hxx>
 #include <libxml/xmlwriter.h>
 

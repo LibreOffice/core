@@ -35,7 +35,7 @@
 
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <unotools/pathoptions.hxx>
 #include <vcl/svapp.hxx>
 

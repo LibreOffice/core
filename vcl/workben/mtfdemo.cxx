@@ -20,7 +20,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/wmf.hxx>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>

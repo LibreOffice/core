@@ -43,7 +43,7 @@
 #include <svx/fmtools.hxx>
 #include <svx/svxids.hrc>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <utility>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>

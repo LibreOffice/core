@@ -36,7 +36,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <resource/sharedresources.hxx>
 #include <strings.hrc>

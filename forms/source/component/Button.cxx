@@ -30,7 +30,7 @@
 #include <comphelper/basicio.hxx>
 #include <comphelper/property.hxx>
 #include <o3tl/any.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>

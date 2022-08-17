@@ -25,7 +25,7 @@
 #include <rtl/ref.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <comphelper/base64.hxx>
 #include <comphelper/extract.hxx>
 

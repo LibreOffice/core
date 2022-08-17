@@ -45,7 +45,7 @@
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <o3tl/safeint.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <comphelper/property.hxx>
 
 using namespace ::com::sun::star;

@@ -32,7 +32,7 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/urlobj.hxx>
 
 namespace svt

@@ -25,7 +25,7 @@
 #include <sal/log.hxx>
 #include <cppuhelper/implbase.hxx>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <comphelper/lok.hxx>

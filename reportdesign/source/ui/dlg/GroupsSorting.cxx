@@ -39,7 +39,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <algorithm>
 

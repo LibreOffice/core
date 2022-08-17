@@ -54,7 +54,7 @@
 #include <svx/unoapi.hxx>
 #include <svx/svdomeas.hxx>
 #include <svx/svdpool.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/stream.hxx>
 #include <tools/gen.hxx>
 #include <tools/UnitConversion.hxx>

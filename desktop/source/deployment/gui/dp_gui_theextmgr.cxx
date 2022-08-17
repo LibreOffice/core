@@ -32,7 +32,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <osl/diagnose.h>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include "dp_gui_dialog2.hxx"
 #include "dp_gui_extensioncmdqueue.hxx"

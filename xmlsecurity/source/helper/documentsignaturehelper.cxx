@@ -40,7 +40,7 @@
 #include <rtl/uri.hxx>
 #include <sal/log.hxx>
 #include <svx/xoutbmp.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <xmloff/attrlist.hxx>
 #include <o3tl/string_view.hxx>
 

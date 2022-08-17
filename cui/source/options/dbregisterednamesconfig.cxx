@@ -23,7 +23,7 @@
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <comphelper/processfactory.hxx>
 #include <svl/itemset.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 
 namespace svx

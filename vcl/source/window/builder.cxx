@@ -78,7 +78,7 @@
 #include <salinst.hxx>
 #include <strings.hrc>
 #include <treeglue.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <verticaltabctrl.hxx>
 #include <wizdlg.hxx>
 #include <tools/svlibrary.h>

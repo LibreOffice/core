@@ -28,7 +28,7 @@
 #include <string.h>
 
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <svtools/colorcfg.hxx>
 #include <svx/svdetc.hxx>

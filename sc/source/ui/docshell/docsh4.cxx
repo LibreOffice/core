@@ -57,7 +57,7 @@ using namespace ::com::sun::star;
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sal/log.hxx>
 #include <unotools/charclass.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <o3tl/string_view.hxx>
 
 #include <comphelper/lok.hxx>

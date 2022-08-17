@@ -32,7 +32,7 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/textsearch.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <mutex>
 
 using namespace ::com::sun::star::util;

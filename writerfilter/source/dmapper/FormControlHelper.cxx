@@ -40,7 +40,7 @@
 #include <utility>
 #include <xmloff/odffields.hxx>
 #include <comphelper/sequence.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 namespace writerfilter::dmapper {
 

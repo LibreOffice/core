@@ -19,7 +19,7 @@
 
 #include "CommandDispatch.hxx"
 #include <com/sun/star/util/URLTransformer.hpp>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 using namespace ::com::sun::star;
 

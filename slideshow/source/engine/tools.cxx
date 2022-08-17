@@ -18,7 +18,7 @@
  */
 
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <canvas/canvastools.hxx>
 
 #include <math.h>

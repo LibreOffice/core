@@ -260,7 +260,7 @@
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/degree.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>

@@ -34,7 +34,7 @@
 #include <comphelper/sequence.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <rtl/math.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <canvas/canvastools.hxx>
 

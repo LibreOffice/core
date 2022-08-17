@@ -42,7 +42,7 @@
 #include <comphelper/types.hxx>
 #include <resource/sharedresources.hxx>
 #include <strings.hrc>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 using namespace ::comphelper;
 using namespace connectivity;

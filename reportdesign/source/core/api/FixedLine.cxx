@@ -21,7 +21,7 @@
 #include <strings.hrc>
 #include <core_resource.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <Tools.hxx>
 #include <FormatCondition.hxx>
 #include <ReportHelperImpl.hxx>

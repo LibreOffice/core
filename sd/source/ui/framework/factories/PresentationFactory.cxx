@@ -24,7 +24,7 @@
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/compbase.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <slideshow.hxx>
 
 namespace com::sun::star::uno { class XComponentContext; }

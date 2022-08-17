@@ -36,7 +36,7 @@
 #include <svl/ctloptions.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/accessibilityoptions.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <unotools/useroptions.hxx>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <sfx2/docfile.hxx>

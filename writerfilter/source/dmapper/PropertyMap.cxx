@@ -60,7 +60,7 @@
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <comphelper/sequence.hxx>
 #include <comphelper/propertyvalue.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include "PropertyMapHelper.hxx"
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/unit_conversion.hxx>

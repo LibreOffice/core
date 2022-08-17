@@ -90,7 +90,7 @@
 #include <sfx2/strings.hrc>
 #include <sal/log.hxx>
 #include <comphelper/sequence.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <o3tl/string_view.hxx>
 #include <officecfg/Office/Common.hxx>
 

@@ -29,7 +29,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svl/intitem.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <unotools/resmgr.hxx>
 #include <sal/log.hxx>
 

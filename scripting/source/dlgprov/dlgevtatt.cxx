@@ -26,7 +26,7 @@
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>

@@ -21,7 +21,7 @@
 #include <map>
 #include <optasian.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <o3tl/any.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <svl/asiancfg.hxx>

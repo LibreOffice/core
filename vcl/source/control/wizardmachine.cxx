@@ -21,7 +21,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <vcl/event.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <strings.hrc>
 #include <svdata.hxx>
 #include <wizdlg.hxx>

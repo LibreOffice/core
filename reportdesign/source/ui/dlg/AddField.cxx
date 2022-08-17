@@ -24,7 +24,7 @@
 #include <utility>
 #include <vcl/svapp.hxx>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <connectivity/dbtools.hxx>
 #include <core_resource.hxx>

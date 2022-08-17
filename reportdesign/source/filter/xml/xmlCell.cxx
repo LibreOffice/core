@@ -31,7 +31,7 @@
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <strings.hxx>
 #include "xmlTable.hxx"
 #include "xmlFormattedField.hxx"

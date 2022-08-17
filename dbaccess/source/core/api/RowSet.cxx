@@ -70,7 +70,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/safeint.hxx>
 #include <unotools/syslocale.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 using namespace utl;
 using namespace dbaccess;

@@ -50,7 +50,7 @@
 #include <o3tl/safeint.hxx>
 #include <swunohelper.hxx>
 #include <unotools/pathoptions.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <svl/urihelper.hxx>
 #include <strings.hrc>
 #include <view.hxx>

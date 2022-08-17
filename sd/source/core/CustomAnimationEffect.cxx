@@ -18,7 +18,7 @@
  */
 
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/animations/AnimationNodeType.hpp>
 #include <com/sun/star/animations/AnimateColor.hpp>

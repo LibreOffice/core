@@ -64,7 +64,7 @@
 #include <svtools/sfxecode.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>

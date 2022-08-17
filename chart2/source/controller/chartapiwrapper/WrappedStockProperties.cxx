@@ -25,7 +25,7 @@
 #include <ControllerLockGuard.hxx>
 #include <WrappedProperty.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <ChartTypeManager.hxx>
 #include <ChartTypeTemplate.hxx>
 #include <utility>

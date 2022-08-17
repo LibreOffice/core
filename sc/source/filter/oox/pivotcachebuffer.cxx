@@ -38,7 +38,7 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <defnamesbuffer.hxx>
 #include <pivotcachefragment.hxx>
 #include <sheetdatabuffer.hxx>

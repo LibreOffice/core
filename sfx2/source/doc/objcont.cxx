@@ -33,7 +33,7 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/securityoptions.hxx>
 #include <tools/datetime.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/helpers.hxx>
 #include <rtl/uri.hxx>
 

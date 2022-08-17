@@ -18,7 +18,7 @@
  */
 
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <cppcanvas/basegfxfactory.hxx>
 #include <cppcanvas/customsprite.hxx>

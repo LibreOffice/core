@@ -28,7 +28,7 @@
 #include <xmloff/controlpropertyhdl.hxx>
 #include <xmloff/maptype.hxx>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include "controlpropertymap.hxx"
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/form/XFormsSupplier2.hpp>

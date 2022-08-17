@@ -43,7 +43,7 @@
 
 #include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/toolkit/unowrap.hxx>

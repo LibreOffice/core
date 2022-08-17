@@ -62,7 +62,7 @@
 #include <strings.hrc>
 #include <unotools/resmgr.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 constexpr OUStringLiteral COMMAND_CLOSE = u"close";
 

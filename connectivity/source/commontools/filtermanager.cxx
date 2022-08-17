@@ -22,7 +22,7 @@
 #include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
 #include <TConnection.hxx>
 #include <osl/diagnose.h>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <rtl/ustrbuf.hxx>
 
 

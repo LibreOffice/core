@@ -28,7 +28,7 @@
 #include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #define EXPAND_PROTOCOL "vnd.sun.star.expand"
 

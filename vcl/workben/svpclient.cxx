@@ -35,7 +35,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/graph.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/extendapplicationenvironment.hxx>
 #include <tools/stream.hxx>
 

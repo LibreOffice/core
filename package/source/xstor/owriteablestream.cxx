@@ -51,7 +51,7 @@
 #include <comphelper/refcountedmutex.hxx>
 #include <comphelper/sequence.hxx>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <PackageConstants.hxx>
 #include <utility>

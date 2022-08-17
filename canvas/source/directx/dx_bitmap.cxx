@@ -23,7 +23,7 @@
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b2irange.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include "dx_bitmap.hxx"
 #include "dx_graphicsprovider.hxx"

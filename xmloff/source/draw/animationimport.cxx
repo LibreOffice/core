@@ -52,7 +52,7 @@
 
 #include <rtl/math.h>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <o3tl/string_view.hxx>
 #include <sax/tools/converter.hxx>
 

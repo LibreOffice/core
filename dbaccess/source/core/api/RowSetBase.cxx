@@ -34,7 +34,7 @@
 #include <comphelper/seqstream.hxx>
 #include <connectivity/dbexception.hxx>
 #include <o3tl/safeint.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 using namespace dbaccess;
 using namespace connectivity;

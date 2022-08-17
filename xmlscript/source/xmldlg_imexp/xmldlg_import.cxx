@@ -41,7 +41,7 @@
 #include <com/sun/star/util/Time.hpp>
 #include <sal/log.hxx>
 #include <tools/date.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/time.hxx>
 #include <osl/diagnose.h>
 

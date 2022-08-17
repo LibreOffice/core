@@ -20,7 +20,7 @@
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <rtl/crc.h>
 #include <rtl/math.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <vcl/font.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/virdev.hxx>

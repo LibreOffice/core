@@ -95,7 +95,7 @@
 #include <svx/pageitem.hxx>
 #include <svx/txencbox.hxx>
 #include <tools/color.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/lineend.hxx>
 #include <unicode/ucsdet.h>

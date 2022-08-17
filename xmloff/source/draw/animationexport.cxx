@@ -55,7 +55,7 @@
 #include <o3tl/any.hxx>
 #include <sax/tools/converter.hxx>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include "sdpropls.hxx"

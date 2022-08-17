@@ -23,7 +23,7 @@
 
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #define TEXTTYPE_SINGLELINE     0
 #define TEXTTYPE_MULTILINE      1

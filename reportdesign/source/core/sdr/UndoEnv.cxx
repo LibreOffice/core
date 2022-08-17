@@ -33,7 +33,7 @@
 
 #include <svl/hint.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <vcl/svapp.hxx>
 #include <dbaccess/dbsubcomponentcontroller.hxx>
 #include <osl/mutex.hxx>

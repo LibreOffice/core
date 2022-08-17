@@ -21,7 +21,7 @@
 #include <sal/log.hxx>
 
 #include <canvas/canvastools.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/canvastools.hxx>

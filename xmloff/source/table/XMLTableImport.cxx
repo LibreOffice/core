@@ -31,7 +31,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <comphelper/sequence.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <utility>
 #include <xmloff/table/XMLTableImport.hxx>

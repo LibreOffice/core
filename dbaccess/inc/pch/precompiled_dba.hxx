@@ -245,7 +245,7 @@
 #include <svl/svldllapi.h>
 #include <tools/color.hxx>
 #include <tools/degree.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <tools/long.hxx>

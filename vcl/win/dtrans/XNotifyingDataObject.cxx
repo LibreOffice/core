@@ -18,7 +18,7 @@
  */
 
 #include <osl/diagnose.h>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include "XNotifyingDataObject.hxx"
 #include "WinClipboard.hxx"
 

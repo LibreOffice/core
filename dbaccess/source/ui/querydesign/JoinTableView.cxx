@@ -46,7 +46,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <cppuhelper/exc_hlp.hxx>
 #include <connectivity/dbtools.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <algorithm>
 #include <functional>
 

@@ -19,7 +19,7 @@
 
 #include <config_options.h>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <basic/basmgr.hxx>
 #include <svx/svxids.hrc>
 #include <iderid.hxx>

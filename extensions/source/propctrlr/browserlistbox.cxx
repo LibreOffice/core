@@ -29,7 +29,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/inspection/PropertyControlType.hpp>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <comphelper/asyncnotification.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <vcl/svapp.hxx>

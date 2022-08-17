@@ -32,7 +32,7 @@
 #include <vcl/GraphicLoader.hxx>
 
 #include <vcl/graph.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Any;

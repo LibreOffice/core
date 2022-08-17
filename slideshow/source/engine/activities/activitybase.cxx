@@ -21,7 +21,7 @@
 
 #include <algorithm>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include "activitybase.hxx"
 

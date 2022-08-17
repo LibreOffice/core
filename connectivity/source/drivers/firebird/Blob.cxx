@@ -19,7 +19,7 @@
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 using namespace ::connectivity::firebird;
 

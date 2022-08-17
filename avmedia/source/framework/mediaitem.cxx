@@ -39,7 +39,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <mediamisc.hxx>
 #include <osl/file.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <vcl/graph.hxx>
 
 using namespace ::com::sun::star;

@@ -30,7 +30,7 @@
 #include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <tools/stream.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <unotools/streamwrap.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <utility>

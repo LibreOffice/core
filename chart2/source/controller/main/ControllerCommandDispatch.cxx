@@ -39,7 +39,7 @@
 
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <comphelper/lok.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>

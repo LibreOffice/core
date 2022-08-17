@@ -22,7 +22,7 @@
 #include <com/sun/star/ucb/Command.hpp>
 #include <com/sun/star/frame/XController2.hpp>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 namespace dbaccess
 {

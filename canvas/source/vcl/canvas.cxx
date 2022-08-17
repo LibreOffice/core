@@ -23,7 +23,7 @@
 
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <vcl/outdev.hxx>
 
 #include "outdevholder.hxx"

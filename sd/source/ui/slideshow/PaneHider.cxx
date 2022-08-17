@@ -30,7 +30,7 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;

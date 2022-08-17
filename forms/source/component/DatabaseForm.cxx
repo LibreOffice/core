@@ -69,7 +69,7 @@
 #include <svl/inettype.hxx>
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/inetmsg.hxx>
 #include <tools/inetstrm.hxx>
 #include <tools/urlobj.hxx>

@@ -28,7 +28,7 @@
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <svgdocumenthandler.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <rtl/ref.hxx>
 
 #include <svgvisitor.hxx>

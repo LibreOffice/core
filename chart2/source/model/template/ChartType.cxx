@@ -28,7 +28,7 @@
 #include <vcl/svapp.hxx>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 using namespace ::com::sun::star;
 

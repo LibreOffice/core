@@ -29,7 +29,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <sal/log.hxx>
 
 namespace framework{

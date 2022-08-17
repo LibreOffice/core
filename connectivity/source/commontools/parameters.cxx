@@ -33,7 +33,7 @@
 #include <connectivity/filtermanager.hxx>
 #include <TConnection.hxx>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <ParameterCont.hxx>
 #include <o3tl/safeint.hxx>

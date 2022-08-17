@@ -35,7 +35,7 @@
 #include <vcl/ptrstyle.hxx>
 #include <salhelper/thread.hxx>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
 #include <vcl/svapp.hxx>

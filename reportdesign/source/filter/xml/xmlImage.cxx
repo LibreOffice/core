@@ -25,7 +25,7 @@
 #include <unotools/pathoptions.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 
 #include <com/sun/star/awt/ImageScaleMode.hpp>
 

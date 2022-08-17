@@ -26,7 +26,7 @@
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 #include <tools/wldcrd.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose.hxx>
 #include <optional>
 #include <sal/log.hxx>
 
