@@ -2299,6 +2299,7 @@ namespace xmloff::token {
         TOKEN( "lr",                              XML_LR ),
         TOKEN( "rl",                              XML_RL ),
         TOKEN( "tb",                              XML_TB ),
+        TOKEN( "tb-rl90",                         XML_TB_RL90 ),
 
         TOKEN( "layout-grid-color",               XML_LAYOUT_GRID_COLOR ),
         TOKEN( "layout-grid-lines",               XML_LAYOUT_GRID_LINES ),

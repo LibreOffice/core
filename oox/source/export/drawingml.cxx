@@ -3335,6 +3335,33 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
             bVertical = true;
         }
     }
+    if (GetProperty(rXPropSet, "WritingMode"))
+    {
+        sal_Int16 nWritingMode;
+        if (mAny >>= nWritingMode)
+        {
+            if (nWritingMode == text::WritingMode2::TB_RL)
+            {
+                sWritingMode = "eaVert";
+                bVertical = true;
+            }
+            else if (nWritingMode == text::WritingMode2::BT_LR)
+            {
+                sWritingMode = "vert270";
+                bVertical = true;
+            }
+            else if (nWritingMode == text::WritingMode2::TB_RL90)
+            {
+                sWritingMode = "vert";
+                bVertical = true;
+            }
+            else if (nWritingMode == text::WritingMode2::TB_LR)
+            {
+                sWritingMode = "mongolianVert";
+                bVertical = true;
+            }
+        }
+    }
 
     // read values from CustomShapeGeometry
     Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentSeq;
@@ -3395,13 +3422,20 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
                         switch (nWritingMode)
                         {
                         case WritingMode2::TB_RL:
-                            sWritingMode = "vert";
+                            sWritingMode = "eaVert";
                             bVertical = true;
                             break;
                         case WritingMode2::BT_LR:
                             sWritingMode = "vert270";
                             bVertical = true;
                             break;
+                        case WritingMode2::TB_RL90:
+                            sWritingMode = "vert";
+                            bVertical = true;
+                            break;
+                        case WritingMode2::TB_LR:
+                            sWritingMode = "mongolianVert";
+                            bVertical = true;
                         default:
                             break;
                         }

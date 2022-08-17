@@ -15240,6 +15240,7 @@ module com {
      [property, optional] boolean TreatSubOutlineLevelsAsContent;
     };
     published constants WritingMode2 {
+     const short TB_RL90 = 6;
      const short BT_LR = 5;
      const short CONTEXT = 4;
      const short LR_TB = 0;

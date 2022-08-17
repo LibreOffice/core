@@ -51,8 +51,11 @@ enum class SvxFrameDirection
     /** Use the value from the environment, can only be used in frames. */
     Environment = css::text::WritingMode2::CONTEXT,
 
-    /** Vertical, from bottom to top, from left to right. */
+    /** Vertical, from bottom to top, from left to right (vert="vert270"). */
     Vertical_LR_BT = css::text::WritingMode2::BT_LR,
+
+    /** Vertical, from top to bottom, from right to left (vert="vert"). */
+    Vertical_RL_TB90 = css::text::WritingMode2::TB_RL90,
 };
 
 TranslateId getFrmDirResId(size_t nIndex);
