@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "faabf2ab_06c1602f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-08-17T14:58:59Z",
+      "side": 1,
+      "message": "hi, I cannot find how to execute that dialog :) could you point me where I can open it?",
+      "revId": "addf50b737f1a82ae289aaa0e57192d9b51a8621",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
