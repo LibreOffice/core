@@ -2091,9 +2091,9 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
             const SwContentNode* pCEndNd = pEnd->GetNode().GetContentNode();
             // Is completely in the range and is the own Redline too?
             if( aTmpRedl.IsOwnRedline( *pTmp ) &&
-                (pRStt->nNode < pStt->nNode ||
+                (pRStt->GetNode() < pStt->GetNode() ||
                 (pRStt->GetNode() == pStt->GetNode() && !pRStt->GetContentIndex()) ) &&
-                (pEnd->nNode < pREnd->nNode ||
+                (pEnd->GetNode() < pREnd->GetNode() ||
                 (pEnd->GetNode() == pREnd->GetNode() &&
                  pCEndNd ? pREnd->GetContentIndex() == pCEndNd->Len()
                          : !pREnd->GetContentIndex() )) )
@@ -2108,7 +2108,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
                 }
 
                 if( pOwnRedl &&
-                    ( pRStt->nNode > aIdx || aIdx > pREnd->nNode ||
+                    ( pRStt->GetNode() > aIdx.GetNode() || aIdx > pREnd->GetNode() ||
                     // pOwnRedl doesn't start at the beginning of a node, so it's not
                     // possible to resize it to contain the line moved before it
                     ( pRStt->GetNode() == aIdx.GetNode() && pRStt->GetContentIndex() > 0 ) ) )

@@ -2734,14 +2734,14 @@ bool DocumentRedlineManager::HasRedline( const SwPaM& rPam, RedlineType nType, b
 {
     SwPosition currentStart(*rPam.Start());
     SwPosition currentEnd(*rPam.End());
-    SwNodeIndex pEndNodeIndex(currentEnd.GetNode());
+    const SwNode& rEndNode(currentEnd.GetNode());
 
     for( SwRedlineTable::size_type n = GetRedlinePos( rPam.Start()->GetNode(), nType );
                     n < maRedlineTable.size(); ++n )
     {
         const SwRangeRedline* pTmp = maRedlineTable[ n ];
 
-        if ( pTmp->Start()->nNode > pEndNodeIndex )
+        if ( pTmp->Start()->GetNode() > rEndNode )
             break;
 
         if( RedlineType::Any != nType && nType != pTmp->GetType() )

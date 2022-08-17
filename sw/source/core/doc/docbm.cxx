@@ -188,10 +188,10 @@ namespace
     bool lcl_GreaterThan( const SwPosition& rPos, const SwNode& rNdIdx, std::optional<sal_Int32> oContentIdx )
     {
         return oContentIdx.has_value()
-               ? ( rPos.nNode > rNdIdx
+               ? ( rPos.GetNode() > rNdIdx
                    || ( rPos.GetNode() == rNdIdx
                         && rPos.nContent >= *oContentIdx ) )
-               : rPos.nNode >= rNdIdx;
+               : rPos.GetNode() >= rNdIdx;
     }
 
     bool lcl_Lower( const SwPosition& rPos, const SwNode& rNdIdx, std::optional<sal_Int32> oContentIdx )
@@ -1782,7 +1782,7 @@ namespace
 {
     bool lcl_Greater( const SwPosition& rPos, const SwNode& rNdIdx, std::optional<sal_Int32> oContentIdx )
     {
-        return rPos.nNode > rNdIdx || ( oContentIdx && rPos.GetNode() == rNdIdx && rPos.nContent > *oContentIdx );
+        return rPos.GetNode() > rNdIdx || ( oContentIdx && rPos.GetNode() == rNdIdx && rPos.nContent > *oContentIdx );
     }
 }
 

@@ -909,13 +909,13 @@ void SwRedlineExtraData_FormatColl::Reject( SwPaM& rPam ) const
     if ( !m_bFormatAll || pEnd->GetContentIndex() == 0 )
     {
         // don't reject the format of the next paragraph (that is handled by the next redline)
-        if (aPam.GetPoint()->nNode > aPam.GetMark()->nNode)
+        if (aPam.GetPoint()->GetNode() > aPam.GetMark()->GetNode())
         {
             aPam.GetPoint()->nNode--;
             SwContentNode* pNode = aPam.GetPoint()->GetNode().GetContentNode();
             aPam.GetPoint()->nContent.Assign( pNode, pNode->Len() );
         }
-        else if (aPam.GetPoint()->nNode < aPam.GetMark()->nNode)
+        else if (aPam.GetPoint()->GetNode() < aPam.GetMark()->GetNode())
         {
             aPam.GetMark()->nNode--;
             SwContentNode* pNode = aPam.GetMark()->GetNode().GetContentNode();

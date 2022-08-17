@@ -162,8 +162,8 @@ void SaveFlyInRange( const SwPaM& rPam, const SwPosition& rInsPos,
              (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
             // do not move if the InsPos is in the ContentArea of the Fly
             ( nullptr == ( pContentIdx = pFormat->GetContent().GetContentIdx() ) ||
-              (*pContentIdx >= rInsPos.nNode ||
-                rInsPos.nNode >= pContentIdx->GetNode().EndOfSectionIndex())))
+              (*pContentIdx >= rInsPos.GetNode() ||
+                rInsPos.GetNode() >= *pContentIdx->GetNode().EndOfSectionNode())))
         {
             bool bInsPos = false;
 
@@ -350,8 +350,8 @@ void sw_GetJoinFlags( SwPaM& rPam, bool& rJoinText, bool& rJoinPrev )
     rJoinPrev = rPam.GetPoint() == pStt;
     OSL_ENSURE( !pStt->GetContentIndex() &&
         pEndNd->GetText().getLength() != pEnd->GetContentIndex()
-        ? (rPam.GetPoint()->nNode < rPam.GetMark()->nNode)
-        : (rPam.GetPoint()->nNode > rPam.GetMark()->nNode),
+        ? (rPam.GetPoint()->GetNode() < rPam.GetMark()->GetNode())
+        : (rPam.GetPoint()->GetNode() > rPam.GetMark()->GetNode()),
         "sw_GetJoinFlags");
 }
 
