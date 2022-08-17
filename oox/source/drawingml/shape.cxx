@@ -1447,7 +1447,8 @@ Reference< XShape > const & Shape::createAndInsert(
             }
             else if (mbTextBox)
             {
-                // ToDo: TextBox has no rotated text, so introduce it only if really needed. tdf#82627
+                // This introduces a TextBox in a shape in Writer. ToDo: Can we restrict it to cases
+                // where the TextBox edit engine is really needed? tdf#82627
                 aShapeProps.setProperty(PROP_TextBox, true);
             }
 
@@ -1714,10 +1715,10 @@ Reference< XShape > const & Shape::createAndInsert(
                 sal_Int32 nTextCameraZRotation = getTextBody()->get3DProperties().maCameraRotation.mnRevolution.value_or(0);
                 mpCustomShapePropertiesPtr->setTextCameraZRotateAngle( nTextCameraZRotation / 60000 );
 
-                // TextPreRotateAngle. Text rotates inside the text area.
+                // TextPreRotateAngle. Text rotates inside the text area. Might be used for diagram layout 'upr' and 'grav'.
                 sal_Int32 nTextPreRotateAngle = static_cast< sal_Int32 >( getTextBody()->getTextProperties().moTextPreRotation.value_or( 0 ) );
 
-                nTextPreRotateAngle -= mnDiagramRotation;
+                nTextPreRotateAngle -= mnDiagramRotation; // Use of mnDiagramRotation is unclear. It seems to be always 0 here.
 
                 // TextRotateAngle. The text area rotates.
                 sal_Int32 nTextAreaRotateAngle = getTextBody()->getTextProperties().moTextAreaRotation.value_or(0);
@@ -1740,7 +1741,7 @@ Reference< XShape > const & Shape::createAndInsert(
                 }
                 /* OOX measures text rotation clockwise in 1/60000th degrees,
                    relative to the containing shape. set*Angle wants degrees counter-clockwise. */
-                mpCustomShapePropertiesPtr->setTextRotateAngle(-nTextPreRotateAngle / 60000);
+                mpCustomShapePropertiesPtr->setTextPreRotateAngle(-nTextPreRotateAngle / 60000);
                 if (nTextAreaRotateAngle != 0)
                     mpCustomShapePropertiesPtr->setTextAreaRotateAngle(-nTextAreaRotateAngle / 60000);
 

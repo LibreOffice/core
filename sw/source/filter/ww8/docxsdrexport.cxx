@@ -1965,7 +1965,10 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, int nAncho
             m_pImpl->getBodyPrAttrList()->add(XML_vert, "eaVert");
         else if (rDirection.GetValue() == SvxFrameDirection::Vertical_LR_BT)
             m_pImpl->getBodyPrAttrList()->add(XML_vert, "vert270");
-
+        else if (rDirection.GetValue() == SvxFrameDirection::Vertical_LR_TB)
+            m_pImpl->getBodyPrAttrList()->add(XML_vert, "mongolianVert");
+        else if (rDirection.GetValue() == SvxFrameDirection::Vertical_RL_TB90)
+            m_pImpl->getBodyPrAttrList()->add(XML_vert, "vert");
         {
             ::comphelper::FlagRestorationGuard const g(m_pImpl->m_bFlyFrameGraphic, true);
             comphelper::ValueRestorationGuard vg(m_pImpl->getExport().m_nTextTyp, TXT_TXTBOX);

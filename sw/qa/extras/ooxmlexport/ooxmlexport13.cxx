@@ -312,11 +312,11 @@ DECLARE_OOXMLEXPORT_TEST(testendingSectionProps, "endingSectionProps.docx")
 DECLARE_OOXMLEXPORT_TEST(testTbrlTextbox, "tbrl-textbox.docx")
 {
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
-    comphelper::SequenceAsHashMap aGeometry(xPropertySet->getPropertyValue("CustomShapeGeometry"));
     // Without the accompanying fix in place, this test would have failed with 'Expected: -90;
     // Actual: 0', i.e. tbRl writing direction was imported as lrTb.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-90),
-                         aGeometry["TextPreRotateAngle"].get<sal_Int32>());
+    // Note: Implementation was changed to use WritingMode property instead of TextPreRotateAngle.
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::TB_RL90,
+                         getProperty<sal_Int16>(xPropertySet, "WritingMode"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testBtlrShape, "btlr-textbox.docx")
@@ -949,11 +949,11 @@ CPPUNIT_TEST_FIXTURE(Test, testBtlrFrame)
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
-    comphelper::SequenceAsHashMap aGeometry(xPropertySet->getPropertyValue("CustomShapeGeometry"));
     // Without the accompanying fix in place, this test would have failed with 'Expected:
     // -270; Actual: 0', i.e. the writing direction of the frame was lost.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-270),
-                         aGeometry["TextPreRotateAngle"].get<sal_Int32>());
+    // Note: Implementation was changed to use WritingMode property instead of TextPreRotateAngle.
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::BT_LR,
+                         getProperty<sal_Int16>(xPropertySet, "WritingMode"));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf125518)

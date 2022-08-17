@@ -20,9 +20,11 @@
 #include <drawingml/textbodypropertiescontext.hxx>
 
 #include <com/sun/star/text/WritingMode.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
+
 #include <drawingml/textbodyproperties.hxx>
 #include <drawingml/textbody.hxx>
 #include <drawingml/customshapegeometry.hxx>
@@ -119,15 +121,29 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper cons
         mrTextBodyProp.moVert = rAttribs.getToken( XML_vert );
         sal_Int32 tVert = mrTextBodyProp.moVert.value_or( XML_horz );
         if (tVert == XML_eaVert)
+        {
             mrTextBodyProp.maPropertyMap.setProperty(PROP_TextWritingMode, WritingMode_TB_RL);
-        else if (tVert == XML_vert || tVert == XML_mongolianVert)
-            mrTextBodyProp.moTextPreRotation = 5400000;
+            mrTextBodyProp.maPropertyMap.setProperty(PROP_WritingMode, text::WritingMode2::TB_RL);
+        }
+        else if (tVert == XML_vert)
+        {
+            mrTextBodyProp.maPropertyMap.setProperty(PROP_WritingMode, text::WritingMode2::TB_RL90);
+        }
+        else if (tVert == XML_mongolianVert)
+        {
+            // rendering not yet implemented for shape text, only for frames
+            mrTextBodyProp.maPropertyMap.setProperty(PROP_WritingMode, text::WritingMode2::TB_LR);
+        }
         else if (tVert == XML_vert270)
-            mrTextBodyProp.moTextPreRotation = 5400000 * 3;
+        {
+            mrTextBodyProp.maPropertyMap.setProperty(PROP_WritingMode, text::WritingMode2::BT_LR);
+        }
         else {
             bool bRtl = rAttribs.getBool( XML_rtl, false );
             mrTextBodyProp.maPropertyMap.setProperty( PROP_TextWritingMode,
                 ( bRtl ? WritingMode_RL_TB : WritingMode_LR_TB ));
+            mrTextBodyProp.maPropertyMap.setProperty(PROP_WritingMode,
+                ( bRtl ? text::WritingMode2::RL_TB : text::WritingMode2::LR_TB));
         }
     }
 

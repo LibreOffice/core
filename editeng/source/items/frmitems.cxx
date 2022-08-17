@@ -3411,7 +3411,8 @@ TranslateId getFrmDirResId(size_t nIndex)
         RID_SVXITEMS_FRMDIR_VERT_TOP_RIGHT,
         RID_SVXITEMS_FRMDIR_VERT_TOP_LEFT,
         RID_SVXITEMS_FRMDIR_ENVIRONMENT,
-        RID_SVXITEMS_FRMDIR_VERT_BOT_LEFT
+        RID_SVXITEMS_FRMDIR_VERT_BOT_LEFT,
+        RID_SVXITEMS_FRMDIR_VERT_TOP_RIGHT90
     };
     return RID_SVXITEMS_FRMDIR[nIndex];
 }
@@ -3451,6 +3452,9 @@ bool SvxFrameDirectionItem::PutValue( const css::uno::Any& rVal,
             case text::WritingMode2::BT_LR:
                 SetValue( SvxFrameDirection::Vertical_LR_BT );
                 break;
+            case text::WritingMode2::TB_RL90:
+                SetValue(SvxFrameDirection::Vertical_RL_TB90);
+                break;
             case text::WritingMode2::PAGE:
                 SetValue( SvxFrameDirection::Environment );
                 break;
@@ -3486,6 +3490,9 @@ bool SvxFrameDirectionItem::QueryValue( css::uno::Any& rVal,
             break;
         case SvxFrameDirection::Vertical_LR_BT:
             nVal = text::WritingMode2::BT_LR;
+            break;
+        case SvxFrameDirection::Vertical_RL_TB90:
+            nVal = text::WritingMode2::TB_RL90;
             break;
         case SvxFrameDirection::Environment:
             nVal = text::WritingMode2::PAGE;

@@ -375,6 +375,12 @@ void SwFrame::CheckDir( SvxFrameDirection nDir, bool bVert, bool bOnlyBiDi, bool
                 mbVertLR = true;
                 mbVertLRBT = true;
             }
+            else if (nDir == SvxFrameDirection::Vertical_RL_TB90)
+            {
+                // not yet implemented, render as RL_TB
+                mbVertLR = false;
+                mbVertLRBT = false;
+            }
         }
     }
     else

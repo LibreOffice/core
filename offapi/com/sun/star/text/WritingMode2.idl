@@ -81,6 +81,16 @@ published constants WritingMode2
         @since LibreOffice 6.3
      */
     const short BT_LR = 5;
+
+    /** text within a line is written top-to-bottom so as if a horizontal
+        left-to-right line is clockwise rotated by 90deg. Lines and blocks
+        are placed right-to-left. This corresponds to OOXML attribute
+        vert="vert" for shapes and ECMA w:val="tbRl" attribute in
+        <w:textDirection> element.
+
+        @since LibreOffice 7.5
+    */
+    const short TB_RL90 = 6;
 };
 
 

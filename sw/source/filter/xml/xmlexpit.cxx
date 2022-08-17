@@ -194,7 +194,7 @@ void SvXMLExportItemMapper::exportXML(const SvXMLExport&,
         {
             case RES_FRAMEDIR:
             {
-                // Write bt-lr to the extension namespace, handle other values
+                // Write bt-lr and tb-rl90 to the extension namespace, handle other values
                 // below.
                 auto pDirection = static_cast<const SvxFrameDirectionItem*>(&rItem);
                 if (rEntry.nNameSpace == XML_NAMESPACE_LO_EXT
@@ -206,6 +206,17 @@ void SvXMLExportItemMapper::exportXML(const SvXMLExport&,
                 }
                 if (rEntry.nNameSpace == XML_NAMESPACE_LO_EXT
                     || pDirection->GetValue() == SvxFrameDirection::Vertical_LR_BT)
+                    bDone = true;
+
+                if (rEntry.nNameSpace == XML_NAMESPACE_LO_EXT
+                    && pDirection->GetValue() == SvxFrameDirection::Vertical_RL_TB90)
+                {
+                    const OUString sName(rNamespaceMap.GetQNameByKey(
+                        XML_NAMESPACE_LO_EXT, GetXMLToken(XML_WRITING_MODE)));
+                    rAttrList.AddAttribute(sName, GetXMLToken(XML_TB_RL90));
+                }
+                if (rEntry.nNameSpace == XML_NAMESPACE_LO_EXT
+                    || pDirection->GetValue() == SvxFrameDirection::Vertical_RL_TB90)
                     bDone = true;
                 break;
             }

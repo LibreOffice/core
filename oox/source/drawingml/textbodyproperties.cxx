@@ -87,8 +87,10 @@ void TextBodyProperties::pushTextDistances(Size const& rTextAreaSize)
         default: break;
     }
 
-    if (moVert && moVert.value() == XML_eaVert)
+    if (moVert && (moVert.value() == XML_eaVert || moVert.value() == XML_vert))
         nOff = (nOff + 3) % aProps.size();
+    else if (moVert && moVert.value() == XML_vert270)
+        nOff = (nOff + 1) % aProps.size();
 
     for (size_t i = 0; i < aProps.size(); i++)
     {

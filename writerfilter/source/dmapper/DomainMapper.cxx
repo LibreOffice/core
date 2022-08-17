@@ -1618,28 +1618,35 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         {
             switch (nIntValue)
             {
-                case NS_ooxml::LN_Value_ST_TextDirection_tbRl:
+                case NS_ooxml::LN_Value_ST_TextDirection_tbRl: // ~ vert="eaVert"
                 {
                     m_pImpl->SetFrameDirection(text::WritingMode2::TB_RL);
                     break;
                 }
-                case NS_ooxml::LN_Value_ST_TextDirection_btLr:
+                case NS_ooxml::LN_Value_ST_TextDirection_btLr: // ~ vert="vert270"
                 {
                     m_pImpl->SetFrameDirection(text::WritingMode2::BT_LR);
                     break;
                 }
                 case NS_ooxml::LN_Value_ST_TextDirection_lrTbV:
                 {
+                    // East Asian character rotation is not implemented in LO, use ordinary LR_TB instead.
                     m_pImpl->SetFrameDirection(text::WritingMode2::LR_TB);
                     break;
                 }
-                case NS_ooxml::LN_Value_ST_TextDirection_tbRlV:
+                case NS_ooxml::LN_Value_ST_TextDirection_tbRlV: // ~ vert="vert"
                 {
-                    m_pImpl->SetFrameDirection(text::WritingMode2::TB_RL);
+                    m_pImpl->SetFrameDirection(text::WritingMode2::TB_RL90);
                     break;
                 }
                 case NS_ooxml::LN_Value_ST_TextDirection_lrTb:
-                case NS_ooxml::LN_Value_ST_TextDirection_tbLrV:
+                    // default in LO. Do not overwrite RL_TB set by bidi.
+                    break;
+                case NS_ooxml::LN_Value_ST_TextDirection_tbLrV: // ~ vert="mongolianVert"
+                {
+                    m_pImpl->SetFrameDirection(text::WritingMode2::TB_LR);
+                    break;
+                }
                 default:
                     SAL_WARN("writerfilter", "DomainMapper::sprmWithProps: unhandled textDirection");
             }
@@ -2038,19 +2045,27 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     break;
     case NS_ooxml::LN_EG_SectPrContents_textDirection:
     {
-        /* 0 HoriLR 1 Vert TR 2 Vert TR 3 Vert TT 4 HoriLT
-            only 0 and 1 can be imported correctly
-          */
-        text::WritingMode nDirection = text::WritingMode_LR_TB;
+        sal_Int16 nDirection = text::WritingMode2::LR_TB;
         switch( nIntValue )
         {
+            // East Asian 270deg rotation in lrTbV is not implemented in LO
             case NS_ooxml::LN_Value_ST_TextDirection_lrTb:
             case NS_ooxml::LN_Value_ST_TextDirection_lrTbV:
-                nDirection = text::WritingMode_LR_TB;
+                nDirection = text::WritingMode2::LR_TB; // =0
             break;
             case NS_ooxml::LN_Value_ST_TextDirection_tbRl:
+               nDirection = text::WritingMode2::TB_RL; // =2
+            break;
+            // Word does not write btLr in sections, but LO would be able to use it.
             case NS_ooxml::LN_Value_ST_TextDirection_btLr:
-                nDirection = text::WritingMode_TB_RL;
+                nDirection = text::WritingMode2::BT_LR; // =5
+            break;
+            // Word maps mongolian direction to tbRlV in sections in file save, as of Aug 2022.
+            // From point of OOXML standard it would be tbLrV. Since tbRlV is currently not
+            // implemented in LO for text direction in page styles, we follow Word here.
+            case NS_ooxml::LN_Value_ST_TextDirection_tbRlV:
+            case NS_ooxml::LN_Value_ST_TextDirection_tbLrV:
+                nDirection = text::WritingMode2::TB_LR; // =3
             break;
             default:;
         }

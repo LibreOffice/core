@@ -115,7 +115,7 @@ public:
     std::vector< css::drawing::EnhancedCustomShapeSegment >& getSegments(){ return maSegments; };
     void                                setMirroredX( bool bMirroredX ) { mbMirroredX = bMirroredX; };
     void                                setMirroredY( bool bMirroredY ) { mbMirroredY = bMirroredY; };
-    void                                setTextRotateAngle( sal_Int32 nAngle ) { mnTextRotateAngle = nAngle; };
+    void                                setTextPreRotateAngle( sal_Int32 nAngle ) { mnTextPreRotateAngle = nAngle; };
     void                                setTextCameraZRotateAngle( sal_Int32 nAngle ) { mnTextCameraZRotateAngle = nAngle; };
     void                                setTextAreaRotateAngle(sal_Int32 nAngle) { moTextAreaRotateAngle = nAngle; };
 
@@ -145,7 +145,7 @@ private:
                                     maSegments;
     bool                            mbMirroredX;
     bool                            mbMirroredY;
-    sal_Int32                       mnTextRotateAngle; // TextPreRotateAngle
+    sal_Int32                       mnTextPreRotateAngle; // TextPreRotateAngle
     sal_Int32                       mnTextCameraZRotateAngle;
     std::optional< sal_Int32 >      moTextAreaRotateAngle; // TextRotateAngle
 

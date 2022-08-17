@@ -54,6 +54,7 @@
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 
 #include <comphelper/scopeguard.hxx>
 #include <tools/UnitConversion.hxx>
@@ -2582,7 +2583,8 @@ void ScFiltersTest2::testTextBoxBodyUpright()
     }
     CPPUNIT_ASSERT_EQUAL(true, isUpright);
 
-    // Check the new textRotateAngle.
+    // Check the TextPreRotateAngle has the compensation for the additional 90deg area rotation,
+    // which is added in Shape::createAndInsert to get the same rendering as in MS Office.
     sal_Int32 nAngle;
     uno::Any aGeom = xShapeProperties->getPropertyValue("CustomShapeGeometry");
     auto aGeomSeq = aGeom.get<Sequence<beans::PropertyValue>>();
@@ -2607,19 +2609,11 @@ void ScFiltersTest2::testTextBoxBodyRotateAngle()
     uno::Reference<drawing::XShape> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY_THROW);
 
-    // Check the new textRotateAngle.
-    sal_Int32 nAngle;
-    uno::Any aGeom = xShapeProperties->getPropertyValue("CustomShapeGeometry");
-    auto aGeomSeq = aGeom.get<Sequence<beans::PropertyValue>>();
-    for (const auto& aProp : std::as_const(aGeomSeq))
-    {
-        if (aProp.Name == "TextPreRotateAngle")
-        {
-            aProp.Value >>= nAngle;
-            break;
-        }
-    }
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-270), nAngle);
+    // Check the text direction.
+    sal_Int16 eWritingMode = text::WritingMode2::LR_TB;
+    if (xShapeProperties->getPropertySetInfo()->hasPropertyByName("WritingMode"))
+        xShapeProperties->getPropertyValue("WritingMode") >>= eWritingMode;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(text::WritingMode2::BT_LR), eWritingMode);
 }
 
 void ScFiltersTest2::testTextLengthDataValidityXLSX()

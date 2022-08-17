@@ -90,6 +90,7 @@
 #include <svx/svdopath.hxx>
 #include <svx/SvxXTextColumns.hxx>
 #include <svx/xflclit.hxx>
+#include <editeng/frmdiritem.hxx>
 
 #include <memory>
 #include <optional>
@@ -2461,6 +2462,15 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
             pSdrObject->setHyperlink(sHyperlink);
             return true;
         }
+        break;
+    }
+
+    case SDRATTR_WRITINGMODE2:
+    {
+        SvxFrameDirectionItem aItem(SvxFrameDirection::Environment, SDRATTR_WRITINGMODE2);
+        aItem.PutValue(rValue, 0);
+        GetSdrObject()->SetMergedItem(aItem);
+        return true;
         break;
     }
 

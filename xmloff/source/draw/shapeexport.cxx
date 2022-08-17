@@ -80,6 +80,7 @@
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XText.hpp>
 
 #include <comphelper/classids.hxx>
@@ -4313,7 +4314,8 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
 
     OUString       aStr;
     OUStringBuffer aStrBuffer;
-    double fTextRotateAngle(0.0); // sum TextRotateAngle and TextPreRotateAngle
+    double fTextRotateAngle(0.0);
+    double fTextPreRotateAngle(0.0); // will be consolidated with fTextRotateAngle at the end
     SvXMLUnitConverter& rUnitConverter = rExport.GetMM100UnitConverter();
 
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
@@ -4366,11 +4368,13 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                     }
                     break;
                     case EAS_TextPreRotateAngle :
+                    {
+                            rGeoProp.Value >>= fTextPreRotateAngle;
+                    }
+                    break;
                     case EAS_TextRotateAngle :
                     {
-                        double fAngle = 0.0;
-                        rGeoProp.Value >>= fAngle;
-                        fTextRotateAngle += fAngle;
+                        rGeoProp.Value >>= fTextRotateAngle;
                     }
                     break;
                     case EAS_Extrusion :
@@ -4947,12 +4951,30 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                         break;
                 }
             }   // for
+
+            // ToDo: Where is TextPreRotateAngle still used? We cannot save it in ODF.
+            fTextRotateAngle += fTextPreRotateAngle;
+            // Workaround for writing-mode bt-lr and tb-rl90 in ODF strict,
+            // otherwise loext:writing-mode is used in style export.
+            if (!(rExport.getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED))
+            {
+                if (xPropSetInfo->hasPropertyByName(u"WritingMode"))
+                {
+                    sal_Int16 nDirection;
+                    xPropSet->getPropertyValue(u"WritingMode") >>= nDirection;
+                    if (nDirection == text::WritingMode2::TB_RL90)
+                        fTextRotateAngle -= 90;
+                    else if (nDirection == text::WritingMode2::BT_LR)
+                        fTextRotateAngle -= 270;
+                }
+            }
             if (fTextRotateAngle != 0)
             {
                 ::sax::Converter::convertDouble( aStrBuffer, fTextRotateAngle );
                 aStr = aStrBuffer.makeStringAndClear();
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_TEXT_ROTATE_ANGLE, aStr );
             }
+
             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_TYPE, aCustomShapeType );
 
             // adjustments

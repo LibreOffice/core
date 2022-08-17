@@ -197,7 +197,7 @@
     </Path>
    </PropertyValue>
    <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="TextPreRotateAngle" value="-90" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-roundRect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
     <ViewBox x="0" y="0" width="0" height="0"/>
@@ -299,7 +299,7 @@
     </Path>
    </PropertyValue>
    <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="TextPreRotateAngle" value="-270" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Type" value="ooxml-roundRect" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
     <ViewBox x="0" y="0" width="0" height="0"/>

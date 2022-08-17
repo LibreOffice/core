@@ -317,6 +317,9 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     // misc object properties
     GMAP( "MoveProtect",                    XML_NAMESPACE_STYLE, XML_PROTECT,               XML_SD_TYPE_MOVE_PROTECT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, CTF_SD_MOVE_PROTECT ),
     GMAP( "SizeProtect",                    XML_NAMESPACE_STYLE, XML_PROTECT,               XML_SD_TYPE_SIZE_PROTECT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, CTF_SD_SIZE_PROTECT ),
+    GMAP( "WritingMode",                XML_NAMESPACE_STYLE, XML_WRITING_MODE,              XML_SD_TYPE_WRITINGMODE2, CTF_WRITINGMODE2 ),
+    {"WritingMode", XML_NAMESPACE_LO_EXT, XML_WRITING_MODE, XML_SD_TYPE_WRITINGMODE2|XML_TYPE_PROP_GRAPHIC, 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED, true},
+
 
     MAP_END()
 };
@@ -587,6 +590,18 @@ SvXMLEnumMapEntry<text::WritingMode> const aXML_WritingMode_EnumMap[] =
     { XML_TB_RL,        text::WritingMode_TB_RL },
     { XML_LR_TB,        text::WritingMode_LR_TB },
     { XML_TOKEN_INVALID, text::WritingMode(0) }
+};
+
+SvXMLEnumMapEntry<sal_Int16> const aXML_WritingMode2_EnumMap[] =
+{
+    { XML_LR_TB,    text::WritingMode2::LR_TB },
+    { XML_RL_TB,    text::WritingMode2::RL_TB },
+    { XML_TB_RL,    text::WritingMode2::TB_RL },
+    { XML_TB_LR,    text::WritingMode2::TB_LR },
+    { XML_PAGE,     text::WritingMode2::CONTEXT },
+    { XML_BT_LR,    text::WritingMode2::BT_LR },
+    { XML_TB_RL90,  text::WritingMode2::TB_RL90 },
+    { XML_TOKEN_INVALID, text::WritingMode2::LR_TB }
 };
 
 SvXMLEnumMapEntry<drawing::TextAnimationKind> const pXML_TextAnimation_Enum[] =
@@ -1061,6 +1076,11 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 pHdl = new XMLEnumPropertyHdl( aXML_WritingMode_EnumMap );
                 break;
             }
+            case XML_SD_TYPE_WRITINGMODE2 :
+            {
+                pHdl = new XMLConstantsPropertyHandler ( aXML_WritingMode2_EnumMap, XML_LR_TB );
+                break;
+            }
             case XML_SD_TYPE_PRESPAGE_VISIBILITY :
             {
                 pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken(XML_VISIBLE), GetXMLToken(XML_HIDDEN) );
@@ -1360,6 +1380,7 @@ void XMLShapeExportPropertyMapper::ContextFilter(
     XMLPropertyState* pClip11State = nullptr;
     XMLPropertyState* pClipState = nullptr;
 
+    XMLPropertyState* pGraphicWritingMode2 = nullptr;
     XMLPropertyState* pShapeWritingMode = nullptr;
     XMLPropertyState* pTextWritingMode = nullptr;
     XMLPropertyState* pControlWritingMode = nullptr;
@@ -1390,6 +1411,9 @@ void XMLShapeExportPropertyMapper::ContextFilter(
                     if( !mbIsInAutoStyles )
                         property->mnIndex = -1;
                 }
+                break;
+            case CTF_WRITINGMODE2:
+                pGraphicWritingMode2 = property;
                 break;
             case CTF_WRITINGMODE:
                 pShapeWritingMode = property;
@@ -1482,6 +1506,19 @@ void XMLShapeExportPropertyMapper::ContextFilter(
             case CTF_TEXT_CLIP11:           pClip11State = property; break;
             case CTF_TEXT_CLIP:             pClipState = property; break;
         }
+    }
+
+    if (pGraphicWritingMode2)
+    {
+        // A style:writing-mode attribute G in graphic-properties is only evaluated if there is no
+        // style:writing-mode attribute P in the paragraph-properties of the same graphic style.
+        // Otherwise the value of P is used. For values lr-tb, rl-tb and tb-rl the values G and P
+        // should be the same. But other values in G cannot be expressed in P and would produce default
+        // 0 value in P, preventing evaluation of G.
+        sal_Int16 eGraphicWritingMode;
+        if ((pGraphicWritingMode2->maValue >>= eGraphicWritingMode)
+            && eGraphicWritingMode >= text::WritingMode2::TB_LR && pShapeWritingMode)
+            pShapeWritingMode->mnIndex = -1;
     }
 
     // check for duplicate writing mode

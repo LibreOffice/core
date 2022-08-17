@@ -10182,9 +10182,17 @@ void DocxAttributeOutput::FormatFrameDirection( const SvxFrameDirectionItem& rDi
             sTextFlow = OString( "lrTb" );
             bBiDi = true;
             break;
-        case SvxFrameDirection::Vertical_LR_TB: // many things but not this one
-        case SvxFrameDirection::Vertical_RL_TB:
+        case SvxFrameDirection::Vertical_LR_TB: // ~ vert="mongolianVert"
+            sTextFlow = OString("tbLrV");
+            break;
+        case SvxFrameDirection::Vertical_RL_TB: // ~ vert="eaVert"
             sTextFlow = OString( "tbRl" );
+            break;
+        case SvxFrameDirection::Vertical_LR_BT: // ~ vert="vert270"
+            sTextFlow = OString("btLr");
+            break;
+        case SvxFrameDirection::Vertical_RL_TB90: // ~ vert="vert"
+            sTextFlow = OString("tbRlV");
             break;
     }
 

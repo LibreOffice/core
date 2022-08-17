@@ -1440,14 +1440,10 @@ void VMLExport::EndShape( sal_Int32 nShapeElement )
         if (xPropertySetInfo->hasPropertyByName("CustomShapeGeometry"))
         {
             // In this case a DrawingML DOCX was imported.
-            comphelper::SequenceAsHashMap aCustomShapeProperties(
-                xPropertySet->getPropertyValue("CustomShapeGeometry"));
-            if (aCustomShapeProperties.find("TextPreRotateAngle") != aCustomShapeProperties.end())
-            {
-                sal_Int32 nTextRotateAngle = aCustomShapeProperties["TextPreRotateAngle"].get<sal_Int32>();
-                if (nTextRotateAngle == -270)
-                    bBottomToTop = true;
-            }
+            auto aAny = xPropertySet->getPropertyValue("WritingMode");
+            sal_Int16 nWritingMode;
+            if ((aAny >>= nWritingMode) && nWritingMode == text::WritingMode2::BT_LR)
+                bBottomToTop = true;
         }
         else
         {

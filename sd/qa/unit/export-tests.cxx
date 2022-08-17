@@ -1096,24 +1096,63 @@ void SdExportTest::testPageWithTransparentBackground()
 
 void SdExportTest::testTextRotation()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/shape-text-rotate.pptx"), PPTX);
-    utl::TempFile tempFile;
-    xDocShRef = saveAndReload(xDocShRef.get(), ODP, &tempFile);
+    // Save behavior depends on whether ODF strict or extended is used.
+    Resetter _([]() {
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Save::ODF::DefaultVersion::set(3, pBatch);
+        return pBatch->commit();
+    });
 
-    uno::Reference<drawing::XDrawPage> xPage(getPage(0, xDocShRef));
-    uno::Reference<beans::XPropertySet> xPropSet(getShape(0, xPage));
+    // The contained shape has a text rotation vert="vert" which corresponds to
+    // loext:writing-mode="tb-rl90" in the graphic-properties of the style of the shape in ODF 1.3
+    // extended.
+    // Save to ODF 1.3 extended. Adapt 3 (=ODFVER_LATEST) to a to be ODFVER_013_EXTENDED when
+    // attribute value "tb-rl90" is included in ODF strict.
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Save::ODF::DefaultVersion::set(3, pBatch);
+        pBatch->commit();
 
-    CPPUNIT_ASSERT(xPropSet.is());
+        ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/shape-text-rotate.pptx"), PPTX);
+        utl::TempFile tempFile;
+        xDocShRef = saveAndReload(xDocShRef.get(), ODP, &tempFile);
 
-    auto aGeomPropSeq = xPropSet->getPropertyValue("CustomShapeGeometry").get<uno::Sequence<beans::PropertyValue>>();
-    comphelper::SequenceAsHashMap aCustomShapeGeometry(aGeomPropSeq);
+        uno::Reference<drawing::XDrawPage> xPage(getPage(0, xDocShRef));
+        uno::Reference<beans::XPropertySet> xPropSet(getShape(0, xPage));
+        CPPUNIT_ASSERT(xPropSet.is());
 
-    auto it = aCustomShapeGeometry.find("TextRotateAngle");
-    CPPUNIT_ASSERT(it != aCustomShapeGeometry.end());
+        auto aWritingMode = xPropSet->getPropertyValue("WritingMode").get<sal_Int16>();
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(text::WritingMode2::TB_RL90), aWritingMode);
 
-    CPPUNIT_ASSERT_EQUAL(double(-90), aCustomShapeGeometry["TextRotateAngle"].get<double>());
+        xDocShRef->DoClose();
+    }
+    // In ODF 1.3 strict the workaround to use the TextRotateAngle is used instead.
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Save::ODF::DefaultVersion::set(10, pBatch);
+        pBatch->commit();
 
-    xDocShRef->DoClose();
+        ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/shape-text-rotate.pptx"), PPTX);
+        utl::TempFile tempFile;
+        xDocShRef = saveAndReload(xDocShRef.get(), ODP, &tempFile);
+
+        uno::Reference<drawing::XDrawPage> xPage(getPage(0, xDocShRef));
+        uno::Reference<beans::XPropertySet> xPropSet(getShape(0, xPage));
+
+        CPPUNIT_ASSERT(xPropSet.is());
+        auto aGeomPropSeq = xPropSet->getPropertyValue("CustomShapeGeometry").get<uno::Sequence<beans::PropertyValue>>();
+        comphelper::SequenceAsHashMap aCustomShapeGeometry(aGeomPropSeq);
+
+        auto it = aCustomShapeGeometry.find("TextRotateAngle");
+        CPPUNIT_ASSERT(it != aCustomShapeGeometry.end());
+
+        CPPUNIT_ASSERT_EQUAL(double(-90), aCustomShapeGeometry["TextRotateAngle"].get<double>());
+
+        xDocShRef->DoClose();
+    }
 }
 
 void SdExportTest::testTdf115394PPT()

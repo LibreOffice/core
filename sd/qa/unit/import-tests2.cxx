@@ -50,6 +50,7 @@
 #include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 
@@ -1843,21 +1844,18 @@ void SdImportTest2::testTdf128684()
     CPPUNIT_ASSERT(xDoc.is());
     uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xPage.is());
-    uno::Reference<beans::XPropertySet> xShape(getShape(0, xPage));
-    CPPUNIT_ASSERT(xShape.is());
-    uno::Any aAny = xShape->getPropertyValue("CustomShapeGeometry");
-    CPPUNIT_ASSERT(aAny.hasValue());
-    uno::Sequence<beans::PropertyValue> aProps;
-    CPPUNIT_ASSERT(aAny >>= aProps);
+    uno::Reference<beans::XPropertySet> xShapeProperties(getShape(0, xPage));
+    CPPUNIT_ASSERT(xShapeProperties.is());
+    // Check text direction.
+    sal_Int16 eWritingMode(text::WritingMode2::LR_TB);
+    if (xShapeProperties->getPropertySetInfo()->hasPropertyByName("WritingMode"))
+        xShapeProperties->getPropertyValue("WritingMode") >>= eWritingMode;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(text::WritingMode2::TB_RL90), eWritingMode);
+    // Check shape rotation
     sal_Int32 nRotateAngle = 0;
-    for (const auto& rProp : std::as_const(aProps))
-    {
-        if (rProp.Name == "TextPreRotateAngle")
-        {
-            rProp.Value >>= nRotateAngle;
-        }
-    }
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-90), nRotateAngle);
+    if (xShapeProperties->getPropertySetInfo()->hasPropertyByName("RotateAngle"))
+        xShapeProperties->getPropertyValue("RotateAngle") >>= nRotateAngle;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(9000), nRotateAngle);
 }
 
 void SdImportTest2::testTdf113198()

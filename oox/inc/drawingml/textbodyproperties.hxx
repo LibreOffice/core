@@ -34,7 +34,7 @@ namespace oox::drawingml {
 struct TextBodyProperties
 {
     PropertyMap                                     maPropertyMap;
-    // TextPreRotateAngle. Used for simulating writing modes.
+    // TextPreRotateAngle. Used in diagram (SmartArt) import.
     std::optional< sal_Int32 >                      moTextPreRotation;
     // TextRotateAngle. ODF draw:text-rotate-angle, OOXML 'rot' attribute in <bodyPr> element
     std::optional< sal_Int32 >                      moTextAreaRotation;

@@ -605,6 +605,9 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, std::u16string_view rP
         if (!pFormat)
             return;
 
+        // Older documents or documents in ODF strict do not have WritingMode, but have used the
+        // TextRotateAngle values -90 and -270 to emulate these text directions of frames.
+        // ToDo: Is TextPreRotateAngle needed for diagrams or can it be removed?
         comphelper::SequenceAsHashMap aCustomShapeGeometry(rValue);
         auto it = aCustomShapeGeometry.find("TextPreRotateAngle");
         if (it == aCustomShapeGeometry.end())
@@ -624,7 +627,7 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, std::u16string_view rP
             switch (nAngle)
             {
                 case -90:
-                    nDirection = text::WritingMode2::TB_RL;
+                    nDirection = text::WritingMode2::TB_RL90;
                     break;
                 case -270:
                     nDirection = text::WritingMode2::BT_LR;
@@ -661,6 +664,12 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, std::u16string_view rP
         if (rValue >>= eMode)
             syncProperty(pShape, RES_FRAMEDIR, 0, uno::Any(sal_Int16(eMode)), pObj);
         else if (rValue >>= eMode2)
+            syncProperty(pShape, RES_FRAMEDIR, 0, uno::Any(eMode2), pObj);
+    }
+    else if (rPropertyName == u"WritingMode")
+    {
+        sal_Int16 eMode2;
+        if (rValue >>= eMode2)
             syncProperty(pShape, RES_FRAMEDIR, 0, uno::Any(eMode2), pObj);
     }
     else

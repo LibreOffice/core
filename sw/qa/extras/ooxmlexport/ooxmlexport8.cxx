@@ -1207,9 +1207,9 @@ DECLARE_OOXMLEXPORT_TEST(testVmlTextVerticalAdjust, "vml-text-vertical-adjust.do
 DECLARE_OOXMLEXPORT_TEST(testFdo69636, "fdo69636.docx")
 {
     // The problem was that the mso-layout-flow-alt:bottom-to-top VML shape property wasn't handled for sw text frames.
+    // Note: VML is no longer used on import. OOXML import uses WritingMode2::BT_LR now.
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
-    comphelper::SequenceAsHashMap aCustomShapeGeometry(xPropertySet->getPropertyValue("CustomShapeGeometry"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-270), aCustomShapeGeometry["TextPreRotateAngle"].get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(text::WritingMode2::BT_LR), getProperty<sal_Int16>(xPropertySet, "WritingMode"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testChartProp, "chart-prop.docx")

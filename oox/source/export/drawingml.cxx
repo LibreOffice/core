@@ -3335,6 +3335,33 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
             bVertical = true;
         }
     }
+    if (GetProperty(rXPropSet, "WritingMode"))
+    {
+        sal_Int16 nWritingMode;
+        if (mAny >>= nWritingMode)
+        {
+            if (nWritingMode == text::WritingMode2::TB_RL)
+            {
+                sWritingMode = "eaVert";
+                bVertical = true;
+            }
+            else if (nWritingMode == text::WritingMode2::BT_LR)
+            {
+                sWritingMode = "vert270";
+                bVertical = true;
+            }
+            else if (nWritingMode == text::WritingMode2::TB_RL90)
+            {
+                sWritingMode = "vert";
+                bVertical = true;
+            }
+            else if (nWritingMode == text::WritingMode2::TB_LR)
+            {
+                sWritingMode = "mongolianVert";
+                bVertical = true;
+            }
+        }
+    }
 
     // read values from CustomShapeGeometry
     Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentSeq;
@@ -3395,11 +3422,19 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
                         switch (nWritingMode)
                         {
                         case WritingMode2::TB_RL:
-                            sWritingMode = "vert";
+                            sWritingMode = "eaVert";
                             bVertical = true;
                             break;
                         case WritingMode2::BT_LR:
                             sWritingMode = "vert270";
+                            bVertical = true;
+                            break;
+                        case WritingMode2::TB_RL90:
+                            sWritingMode = "vert";
+                            bVertical = true;
+                            break;
+                        case WritingMode2::TB_LR:
+                            sWritingMode = "mongolianVert";
                             bVertical = true;
                             break;
                         default:
@@ -3489,30 +3524,19 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
         }
     }
 
-    // Evaluate "TextPreRotateAngle". It is used to simulate not yet implemented writing modes.
+    // ToDo: Unsure about this. Need to investigate shapes from diagram import, especially digrams
+    // with vertical text directions.
     if (nTextPreRotateAngle != 0 && !sWritingMode)
     {
         if (nTextPreRotateAngle == -90 || nTextPreRotateAngle == 270)
         {
             sWritingMode = "vert";
             bVertical = true;
-            // Our TextPreRotation includes padding, MSO vert does not include padding. Therefore set
-            // padding so, that is looks the same in MSO as in LO.
-            sal_Int32 nHelp = nLeft;
-            nLeft = nBottom;
-            nBottom = nRight;
-            nRight = nTop;
-            nTop = nHelp;
         }
         else if (nTextPreRotateAngle == -270 || nTextPreRotateAngle == 90)
         {
             sWritingMode = "vert270";
             bVertical = true;
-            sal_Int32 nHelp = nLeft;
-            nLeft = nTop;
-            nTop = nRight;
-            nRight = nBottom;
-            nBottom = nHelp;
         }
         else if (nTextPreRotateAngle == -180 || nTextPreRotateAngle == 180)
         {
@@ -3525,18 +3549,10 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
 #if defined __GNUC__ && !defined __clang__ && __GNUC__ == 12
 #pragma GCC diagnostic pop
 #endif
-            // ToDo: Examine insets. They might need rotation too.
+            // ToDo: Examine insets. They might need rotation too. Check diagrams (SmartArt).
         }
         else
             SAL_WARN("oox", "unsuitable value for TextPreRotateAngle:" << nTextPreRotateAngle);
-    }
-    else if (nTextPreRotateAngle == 0 && sWritingMode && sWritingMode.value() == "eaVert")
-    {
-        sal_Int32 nHelp = nLeft;
-        nLeft = nBottom;
-        nBottom = nRight;
-        nRight = nTop;
-        nTop = nHelp;
     }
     else if (nTextPreRotateAngle != 0 && sWritingMode && sWritingMode.value() == "eaVert")
     {
@@ -3544,6 +3560,33 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
         // plus attribute 'normalEastAsianFlow="1"' on the <wps:wsp> element.
     }
     // else nothing to do
+
+    // Our WritingMode introduces text pre rotation which includes padding, MSO vert does not include
+    // padding. Therefore set padding so, that is looks the same in MSO as in LO.
+    if (sWritingMode)
+    {
+        if (sWritingMode.value() == "vert" || sWritingMode.value() == "eaVert")
+        {
+            sal_Int32 nHelp = nLeft;
+            nLeft = nBottom;
+            nBottom = nRight;
+            nRight = nTop;
+            nTop = nHelp;
+        }
+        else if (sWritingMode.value() == "vert270")
+        {
+            sal_Int32 nHelp = nLeft;
+            nLeft = nTop;
+            nTop = nRight;
+            nRight = nBottom;
+            nBottom = nHelp;
+        }
+        else if (sWritingMode.value() == "mongolianVert")
+        {
+            // ToDo: Examine padding
+        }
+    }
+
 
     std::optional<OString> sTextRotateAngleMSUnit;
     if (nTextRotateAngleDeg100.has_value())

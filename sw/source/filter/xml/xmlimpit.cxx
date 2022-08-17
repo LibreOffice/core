@@ -997,6 +997,13 @@ bool SvXMLImportItemMapper::PutXMLValue(
                 aAny <<= static_cast<sal_uInt16>(SvxFrameDirection::Vertical_LR_BT);
                 bOk = rItem.PutValue(aAny, 0);
             }
+            else if (IsXMLToken(rValue, XML_TB_RL90))
+            {
+                // Read tb-rl90 from the extension namespace.
+                Any aAny;
+                aAny <<= static_cast<sal_uInt16>(SvxFrameDirection::Vertical_RL_TB90);
+                bOk = rItem.PutValue(aAny, 0);
+            }
             else
             {
                 std::unique_ptr<XMLPropertyHandler> pWritingModeHandler =

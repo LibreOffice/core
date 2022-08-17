@@ -48,7 +48,7 @@ CustomShapeProperties::CustomShapeProperties()
 , mbShapeTypeOverride(false)
 , mbMirroredX   ( false )
 , mbMirroredY   ( false )
-, mnTextRotateAngle ( 0 )
+, mnTextPreRotateAngle ( 0 )
 , mnTextCameraZRotateAngle ( 0 )
 , mnArcNum ( 0 )
 {
@@ -125,7 +125,7 @@ void CustomShapeProperties::pushToPropSet(
 
         aPropertyMap.setProperty( PROP_MirroredX, mbMirroredX );
         aPropertyMap.setProperty( PROP_MirroredY, mbMirroredY );
-        aPropertyMap.setProperty( PROP_TextPreRotateAngle, mnTextRotateAngle );
+        aPropertyMap.setProperty( PROP_TextPreRotateAngle, mnTextPreRotateAngle );
         aPropertyMap.setProperty( PROP_TextCameraZRotateAngle, mnTextCameraZRotateAngle );
         if (moTextAreaRotateAngle.has_value())
             aPropertyMap.setProperty(PROP_TextRotateAngle, moTextAreaRotateAngle.value());
@@ -189,8 +189,8 @@ void CustomShapeProperties::pushToPropSet(
         aPropertyMap.setProperty( PROP_Type, OUString( "ooxml-non-primitive" ));
         aPropertyMap.setProperty( PROP_MirroredX, mbMirroredX );
         aPropertyMap.setProperty( PROP_MirroredY, mbMirroredY );
-        if( mnTextRotateAngle )
-            aPropertyMap.setProperty( PROP_TextPreRotateAngle, mnTextRotateAngle );
+        if( mnTextPreRotateAngle )
+            aPropertyMap.setProperty( PROP_TextPreRotateAngle, mnTextPreRotateAngle );
         if (moTextAreaRotateAngle.has_value())
             aPropertyMap.setProperty(PROP_TextRotateAngle, moTextAreaRotateAngle.value());
         // Note 1: If Equations are defined - they are processed using internal div by 360 coordinates

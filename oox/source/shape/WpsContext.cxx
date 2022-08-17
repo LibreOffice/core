@@ -21,6 +21,7 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 #include <svx/svdtrans.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
@@ -69,20 +70,27 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                 uno::Reference<lang::XServiceInfo> xServiceInfo(mxShape, uno::UNO_QUERY);
                 uno::Reference<beans::XPropertySet> xPropertySet(mxShape, uno::UNO_QUERY);
                 sal_Int32 nVert = rAttribs.getToken(XML_vert, XML_horz);
-                if (nVert == XML_eaVert)
+                // Values 'wordArtVert' and 'wordArtVertRtl' are not implemented.
+                // Map them to other vert values.
+                if (nVert == XML_eaVert || nVert == XML_wordArtVertRtl)
                 {
                     xPropertySet->setPropertyValue("TextWritingMode",
                                                    uno::Any(text::WritingMode_TB_RL));
+                    xPropertySet->setPropertyValue("WritingMode",
+                                                   uno::Any(text::WritingMode2::TB_RL));
                 }
-                else if (nVert != XML_horz)
+                else if (nVert == XML_mongolianVert || nVert == XML_wordArtVert)
                 {
-                    // The UI of Word has only 'vert' and 'vert270'. Further values would be
-                    // 'mongolianVert', 'wordArtVert' and 'wordArtVertRtl'.
-                    const sal_Int32 nRotation = nVert == XML_vert270 ? -270 : -90;
+                    xPropertySet->setPropertyValue("WritingMode",
+                                                   uno::Any(text::WritingMode2::TB_LR));
+                }
+                else if (nVert != XML_horz) // cases XML_vert and XML_vert270
+                {
+                    // Hack to get same rendering as after the fix for tdf#87924. If shape rotation
+                    // plus text direction results in upright text, use horizontal text direction.
+                    // Remove hack when frame is able to rotate.
 
-                    // Workaround for tdf#87924, produces bug tdf#149809 as of 2022-07
-                    // If the text is not rotated the way the shape wants it already, set the angle.
-                    // Get the existing rotation of the shape.
+                    // Need transformation matrix since RotateAngle does not contain flip.
                     drawing::HomogenMatrix3 aMatrix;
                     xPropertySet->getPropertyValue("Transformation") >>= aMatrix;
                     basegfx::B2DHomMatrix aTransformation;
@@ -100,17 +108,20 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                     double fRotate = 0;
                     double fShearX = 0;
                     aTransformation.decompose(aScale, aTranslate, fRotate, fShearX);
-
-                    if (static_cast<sal_Int32>(basegfx::rad2deg(fRotate))
-                        != NormAngle36000(Degree100(nRotation * 100)).get() / 100)
+                    auto nRotate(static_cast<sal_uInt16>(NormAngle360(basegfx::rad2deg(fRotate))));
+                    if ((nVert == XML_vert && nRotate == 270)
+                        || (nVert == XML_vert270 && nRotate == 90))
                     {
-                        comphelper::SequenceAsHashMap aCustomShapeGeometry(
-                            xPropertySet->getPropertyValue("CustomShapeGeometry"));
-                        aCustomShapeGeometry["TextPreRotateAngle"] <<= nRotation;
-                        xPropertySet->setPropertyValue(
-                            "CustomShapeGeometry",
-                            uno::Any(aCustomShapeGeometry.getAsConstPropertyValueList()));
+                        xPropertySet->setPropertyValue("WritingMode",
+                                                       uno::Any(text::WritingMode2::LR_TB));
+                        // ToDo: Rembember original vert value and remove hack on export.
                     }
+                    else if (nVert == XML_vert)
+                        xPropertySet->setPropertyValue("WritingMode",
+                                                       uno::Any(text::WritingMode2::TB_RL90));
+                    else // nVert == XML_vert270
+                        xPropertySet->setPropertyValue("WritingMode",
+                                                       uno::Any(text::WritingMode2::BT_LR));
                 }
 
                 if (bool bUpright = rAttribs.getBool(XML_upright, false))
