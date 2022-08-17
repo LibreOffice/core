@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5b2d03a_962e66d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-08-17T06:04:16Z",
+      "side": 1,
+      "message": "Looks reasonable to me, thanks. Did you consider covering this with a test from sw/qa/extras/tiledrendering/tiledrendering.cxx? You can assert there if a certain callback was invoked or not.",
+      "revId": "e08975f1a36680ed85507d8cbba818555c7e50d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
