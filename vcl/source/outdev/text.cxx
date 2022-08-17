@@ -1837,6 +1837,28 @@ static OUString lcl_ShortenLastLineWithEndEllipsis(OutputDevice const& rTargetDe
             aLastLineBuffer.makeStringAndClear(), rRect.GetWidth(), nStyle, rTextLayout);
 }
 
+static std::tuple<sal_Int32, sal_Int32, DeviceCoordinate>
+lcl_GetMnemonicPos(OutputDevice const& rTargetDevice, sal_Int32* const pCaretXArray,
+                   Point const& rPos, const sal_Int32 nMnemonicIndex, const sal_Int32 nIndex)
+{
+    sal_Int32 lc_x1 = pCaretXArray[2 * (nMnemonicIndex - nIndex)];
+    sal_Int32 lc_x2 = pCaretXArray[2 * (nMnemonicIndex - nIndex) + 1];
+
+    DeviceCoordinate nMnemonicWidth
+        = rTargetDevice.LogicWidthToDeviceCoordinate(std::abs(lc_x1 - lc_x2));
+
+    Point aTempPos = rTargetDevice.LogicToPixel(rPos);
+
+    tools::Long nMnemonicX = rTargetDevice.GetOutOffXPixel() + aTempPos.X()
+                             + rTargetDevice.ImplLogicWidthToDevicePixel(std::min(lc_x1, lc_x2));
+
+    tools::Long nMnemonicY
+        = rTargetDevice.GetOutOffYPixel() + aTempPos.Y()
+          + rTargetDevice.ImplLogicWidthToDevicePixel(rTargetDevice.GetFontMetric().GetAscent());
+
+    return std::make_tuple(nMnemonicX, nMnemonicY, nMnemonicWidth);
+}
+
 void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Rectangle& rRect,
                                  const OUString& rOrigStr, DrawTextFlags nStyle,
                                  std::vector< tools::Rectangle >* pVector, OUString* pDisplayText,
@@ -1850,11 +1872,11 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
     Point aPos(rRect.TopLeft());
     const tools::Long nTextHeight = rTargetDevice.GetTextHeight();
     const TextAlign eAlign = rTargetDevice.GetTextAlign();
-    sal_Int32 nMnemonicPos = -1;
+    sal_Int32 nMnemonicIndex = -1;
 
     OUString aStr;
     if (nStyle & DrawTextFlags::Mnemonic)
-        aStr = GetNonMnemonicString(rOrigStr, nMnemonicPos);
+        aStr = GetNonMnemonicString(rOrigStr, nMnemonicIndex);
 
     // We treat multiline text differently
     if (nStyle & DrawTextFlags::MultiLine)
@@ -1938,28 +1960,14 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
                 _rLayout.DrawText( aPos, aStr, nIndex, nLineLen, pVector, pDisplayText );
 
                 if (lcl_ShouldDrawMnemonics(rTargetDevice, pVector)
-                    && (nMnemonicPos >= nIndex) && (nMnemonicPos < nIndex+nLineLen))
+                    && (nMnemonicIndex >= nIndex) && (nMnemonicIndex < nIndex+nLineLen))
                 {
                     std::unique_ptr<sal_Int32[]> const pCaretXArray(new sal_Int32[2 * nLineLen]);
                     /*sal_Bool bRet =*/ _rLayout.GetCaretPositions( aStr, pCaretXArray.get(),
                                             nIndex, nLineLen );
 
-                    sal_Int32 lc_x1 = pCaretXArray[2*(nMnemonicPos - nIndex)];
-                    sal_Int32 lc_x2 = pCaretXArray[2*(nMnemonicPos - nIndex)+1];
-
-                    DeviceCoordinate nMnemonicWidth =
-                        rTargetDevice.LogicWidthToDeviceCoordinate(std::abs(lc_x1 - lc_x2));
-
-                    Point aTempPos = rTargetDevice.LogicToPixel( aPos );
-
-                    tools::Long nMnemonicX = rTargetDevice.GetOutOffXPixel()
-                                             + aTempPos.X()
-                                             + rTargetDevice.ImplLogicWidthToDevicePixel(std::min(lc_x1, lc_x2));
-
-                    tools::Long nMnemonicY = rTargetDevice.GetOutOffYPixel()
-                                             + aTempPos.Y()
-                                             + rTargetDevice.ImplLogicWidthToDevicePixel(
-                                                     rTargetDevice.GetFontMetric().GetAscent());
+                    auto [ nMnemonicX, nMnemonicY, nMnemonicWidth ]
+                        = lcl_GetMnemonicPos(rTargetDevice, pCaretXArray.get(), aPos, nMnemonicIndex, nIndex);
 
                     rTargetDevice.ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
                 }
@@ -2018,17 +2026,14 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
         tools::Long nMnemonicX = 0;
         tools::Long nMnemonicY = 0;
         DeviceCoordinate nMnemonicWidth = 0;
-        if (nMnemonicPos != -1 && nMnemonicPos < aStr.getLength())
+
+        if (nMnemonicIndex != -1 && nMnemonicIndex < aStr.getLength())
         {
             std::unique_ptr<sal_Int32[]> const pCaretXArray(new sal_Int32[2 * aStr.getLength()]);
             /*sal_Bool bRet =*/ _rLayout.GetCaretPositions( aStr, pCaretXArray.get(), 0, aStr.getLength() );
-            sal_Int32 lc_x1 = pCaretXArray[2*nMnemonicPos];
-            sal_Int32 lc_x2 = pCaretXArray[2*nMnemonicPos+1];
-            nMnemonicWidth = rTargetDevice.LogicWidthToDeviceCoordinate( std::abs(lc_x1 - lc_x2) );
 
-            Point aTempPos = rTargetDevice.LogicToPixel( aPos );
-            nMnemonicX = rTargetDevice.GetOutOffXPixel() + aTempPos.X() + rTargetDevice.ImplLogicWidthToDevicePixel( std::min(lc_x1, lc_x2) );
-            nMnemonicY = rTargetDevice.GetOutOffYPixel() + aTempPos.Y() + rTargetDevice.ImplLogicWidthToDevicePixel( rTargetDevice.GetFontMetric().GetAscent() );
+            std::tie(nMnemonicX, nMnemonicY, nMnemonicWidth)
+                = lcl_GetMnemonicPos(rTargetDevice, pCaretXArray.get(), aPos, nMnemonicIndex, aStr.getLength());
         }
 
         if ( nStyle & DrawTextFlags::Clip )
@@ -2036,14 +2041,14 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
             rTargetDevice.Push( vcl::PushFlags::CLIPREGION );
             rTargetDevice.IntersectClipRegion( rRect );
             _rLayout.DrawText( aPos, aStr, 0, aStr.getLength(), pVector, pDisplayText );
-            if (lcl_ShouldDrawMnemonics(rTargetDevice, pVector) && nMnemonicPos != -1 )
+            if (lcl_ShouldDrawMnemonics(rTargetDevice, pVector) && nMnemonicIndex != -1 )
                 rTargetDevice.ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
             rTargetDevice.Pop();
         }
         else
         {
             _rLayout.DrawText( aPos, aStr, 0, aStr.getLength(), pVector, pDisplayText );
-            if (lcl_ShouldDrawMnemonics(rTargetDevice, pVector) && nMnemonicPos != -1)
+            if (lcl_ShouldDrawMnemonics(rTargetDevice, pVector) && nMnemonicIndex != -1)
                 rTargetDevice.ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
         }
     }
@@ -2293,41 +2298,41 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
         nLen = rStr.getLength() - nIndex;
     }
     OUString   aStr = rStr;
-    sal_Int32  nMnemonicPos = -1;
+    sal_Int32  nMnemonicIndex = -1;
 
     tools::Long        nMnemonicX = 0;
     tools::Long        nMnemonicY = 0;
     tools::Long        nMnemonicWidth = 0;
     if ( (nStyle & DrawTextFlags::Mnemonic) && nLen > 1 )
     {
-        aStr = GetNonMnemonicString( aStr, nMnemonicPos );
-        if ( nMnemonicPos != -1 )
+        aStr = GetNonMnemonicString( aStr, nMnemonicIndex );
+        if ( nMnemonicIndex != -1 )
         {
-            if( nMnemonicPos < nIndex )
+            if( nMnemonicIndex < nIndex )
             {
                 --nIndex;
             }
             else
             {
-                if( nMnemonicPos < (nIndex+nLen) )
+                if( nMnemonicIndex < (nIndex+nLen) )
                     --nLen;
-                SAL_WARN_IF( nMnemonicPos >= (nIndex+nLen), "vcl", "Mnemonic underline marker after last character" );
+                SAL_WARN_IF( nMnemonicIndex >= (nIndex+nLen), "vcl", "Mnemonic underline marker after last character" );
             }
             bool bInvalidPos = false;
 
-            if( nMnemonicPos >= nLen )
+            if( nMnemonicIndex >= nLen )
             {
                 // may occur in BiDi-Strings: the '~' is sometimes found behind the last char
                 // due to some strange BiDi text editors
                 // -> place the underline behind the string to indicate a failure
                 bInvalidPos = true;
-                nMnemonicPos = nLen-1;
+                nMnemonicIndex = nLen-1;
             }
 
             std::unique_ptr<sal_Int32[]> const pCaretXArray(new sal_Int32[2 * nLen]);
             /*sal_Bool bRet =*/ GetCaretPositions( aStr, pCaretXArray.get(), nIndex, nLen, pGlyphs );
-            sal_Int32 lc_x1 = pCaretXArray[ 2*(nMnemonicPos - nIndex) ];
-            sal_Int32 lc_x2 = pCaretXArray[ 2*(nMnemonicPos - nIndex)+1 ];
+            sal_Int32 lc_x1 = pCaretXArray[ 2*(nMnemonicIndex - nIndex) ];
+            sal_Int32 lc_x2 = pCaretXArray[ 2*(nMnemonicIndex - nIndex)+1 ];
             nMnemonicWidth = ::abs(static_cast<int>(lc_x1 - lc_x2));
 
             Point aTempPos( std::min(lc_x1,lc_x2), GetFontMetric().GetAscent() );
@@ -2351,7 +2356,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
         if (!(GetSettings().GetStyleSettings().GetOptions() & StyleSettingsOptions::NoMnemonics)
             && (!autoacc || !(nStyle & DrawTextFlags::HideMnemonic)) )
         {
-            if ( nMnemonicPos != -1 )
+            if ( nMnemonicIndex != -1 )
                 ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
         }
     }
@@ -2361,7 +2366,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
         if ( !(GetSettings().GetStyleSettings().GetOptions() & StyleSettingsOptions::NoMnemonics) && !pVector
             && (!autoacc || !(nStyle & DrawTextFlags::HideMnemonic)) )
         {
-            if ( nMnemonicPos != -1 )
+            if ( nMnemonicIndex != -1 )
                 ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
         }
     }
@@ -2375,13 +2380,13 @@ tools::Long OutputDevice::GetCtrlTextWidth( const OUString& rStr, const SalLayou
     sal_Int32 nLen = rStr.getLength();
     sal_Int32 nIndex = 0;
 
-    sal_Int32  nMnemonicPos;
-    OUString   aStr = GetNonMnemonicString( rStr, nMnemonicPos );
-    if ( nMnemonicPos != -1 )
+    sal_Int32  nMnemonicIndex;
+    OUString   aStr = GetNonMnemonicString( rStr, nMnemonicIndex );
+    if ( nMnemonicIndex != -1 )
     {
-        if ( nMnemonicPos < nIndex )
+        if ( nMnemonicIndex < nIndex )
             nIndex--;
-        else if (static_cast<sal_uLong>(nMnemonicPos) < static_cast<sal_uLong>(nIndex+nLen))
+        else if (static_cast<sal_uLong>(nMnemonicIndex) < static_cast<sal_uLong>(nIndex+nLen))
             nLen--;
     }
     return GetTextWidth( aStr, nIndex, nLen, nullptr, pGlyphs );
