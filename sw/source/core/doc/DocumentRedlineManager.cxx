@@ -1679,8 +1679,13 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                         pNewRedl->SetEnd( *pRStt, pEnd );
                     break;
 
-                case SwComparePosition::CollideStart:
                 case SwComparePosition::CollideEnd:
+                    if (pRStt->nContent != 0)
+                    {   // tdf#147466 HACK: don't combine in this case to avoid the tdf#119571 code from *undeleting* section nodes
+                        break;
+                    }
+                    [[fallthrough]];
+                case SwComparePosition::CollideStart:
                     if( pRedl->IsOwnRedline( *pNewRedl ) &&
                         pRedl->CanCombine( *pNewRedl ) )
                     {
