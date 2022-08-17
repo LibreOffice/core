@@ -21,6 +21,7 @@
 
 #include <sal/config.h>
 #include <memory>
+#include <optional>
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
 #include <com/sun/star/uno/Reference.h>
@@ -352,7 +353,7 @@ public:
     // Returns current payload for nType, after libreOfficeKitViewUpdatedCallback() or
     // libreOfficeKitViewUpdatedCallbackPerViewId() were called. If no payload should
     // be generated, the ignore flag should be set.
-    virtual OString getLOKPayload(int nType, int nViewId, bool* ignore) const;
+    virtual std::optional<OString> getLOKPayload(int nType, int nViewId) const;
 
     /// Set if we are doing tiled searching.
     void setTiledSearching(bool bTiledSearching);

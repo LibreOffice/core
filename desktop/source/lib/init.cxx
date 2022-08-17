@@ -2123,11 +2123,10 @@ void CallbackFlushHandler::enqueueUpdatedTypes()
 
 void CallbackFlushHandler::enqueueUpdatedType( int type, const SfxViewShell* viewShell, int viewId )
 {
-    bool ignore = false;
-    OString payload = viewShell->getLOKPayload( type, viewId, &ignore );
-    if(ignore)
+    std::optional<OString> payload = viewShell->getLOKPayload( type, viewId );
+    if(!payload)
         return; // No actual payload to send.
-    CallbackData callbackData(payload.getStr(), viewId);
+    CallbackData callbackData(payload->getStr(), viewId);
     m_queue1.emplace_back(type);
     m_queue2.emplace_back(callbackData);
     SAL_INFO("lok", "Queued updated [" << type << "]: [" << callbackData.getPayload()
