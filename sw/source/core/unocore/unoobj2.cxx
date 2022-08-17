@@ -872,7 +872,7 @@ void SwXTextRange::DeleteAndInsert(
         // now there should be a text node at the start and end of it!
         *aCursor.GetPoint() = SwPosition(start);
         aCursor.Move( fnMoveForward, GoInContent );
-        assert(aCursor.GetPoint()->nNode <= end);
+        assert(aCursor.GetPoint()->GetNode() <= end.GetNode());
         aCursor.SetMark();
         *aCursor.GetPoint() = SwPosition(end);
         aCursor.Move( fnMoveBackward, GoInContent );
@@ -995,7 +995,7 @@ SwXTextRange::getStart()
         auto const pSectFormat(static_cast<SwSectionFormat const*>(m_pImpl->m_pTableOrSectionFormat));
         SwPaM aPaM(*pSectFormat->GetContent().GetContentIdx());
         aPaM.Move( fnMoveForward, GoInContent );
-        assert(aPaM.GetPoint()->nNode < *pSectFormat->GetContent().GetContentIdx()->GetNode().EndOfSectionNode());
+        assert(aPaM.GetPoint()->GetNode() < *pSectFormat->GetContent().GetContentIdx()->GetNode().EndOfSectionNode());
         xRet = new SwXTextRange(aPaM, m_pImpl->m_xParentText);
     }
     else

@@ -75,7 +75,7 @@ void SwEditShell::FillByEx(SwCharFormat* pCharFormat)
             else
             {
                 nStt = pMkPos->GetContentIndex();
-                if( pPtPos->nNode < pMkPos->nNode )
+                if( pPtPos->GetNode() < pMkPos->GetNode() )
                 {
                     nEnd = nStt;
                     nStt = 0;

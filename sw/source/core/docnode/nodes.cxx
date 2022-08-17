@@ -1615,7 +1615,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
         // at the end of this range a new TextNode will be created
         if( !bSplitDestNd )
         {
-            if( rPos.nNode < rNodes.GetEndOfContent().GetIndex() )
+            if( rPos.GetNode() < rNodes.GetEndOfContent() )
             {
                 ++rPos.nNode;
             }

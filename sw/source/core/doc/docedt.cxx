@@ -114,7 +114,7 @@ void SaveFlyInRange( const SwNodeRange& rRg, SaveFlyArr& rArr )
         if (pAPos &&
             ((RndStdIds::FLY_AT_PARA == pAnchor->GetAnchorId()) ||
              (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
-            rRg.aStart <= pAPos->nNode && pAPos->nNode < rRg.aEnd )
+            rRg.aStart <= pAPos->GetNode() && pAPos->GetNode() < rRg.aEnd.GetNode() )
         {
             SaveFly aSave( pAPos->GetNodeIndex() - rRg.aStart.GetIndex(),
                             (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId())

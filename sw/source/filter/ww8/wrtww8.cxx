@@ -2753,7 +2753,7 @@ public:
 
     bool contentRemainsToExport(ww8::WW8TableInfo *pTableInfo)
     {
-        bool bSimpleContentRemains = m_pCurPam->GetPoint()->nNode < m_pCurPam->GetMark()->nNode ||
+        bool bSimpleContentRemains = m_pCurPam->GetPoint()->GetNode() < m_pCurPam->GetMark()->GetNode() ||
             (m_pCurPam->GetPoint()->GetNode() == m_pCurPam->GetMark()->GetNode() &&
               m_pCurPam->GetPoint()->GetContentIndex() <= m_pCurPam->GetMark()->GetContentIndex());
         if (bSimpleContentRemains)

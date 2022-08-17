@@ -174,7 +174,7 @@ sal_uInt16 SwWW8ImplReader::End_Footnote()
     into field results and field commands.
     */
     if (m_bIgnoreText ||
-        m_pPaM->GetPoint()->nNode < m_rDoc.GetNodes().GetEndOfExtras().GetIndex())
+        m_pPaM->GetPoint()->GetNode() < m_rDoc.GetNodes().GetEndOfExtras())
     {
         return 0;
     }
@@ -302,7 +302,7 @@ tools::Long SwWW8ImplReader::Read_Footnote(WW8PLCFManResult* pRes)
     into field results and field commands.
     */
     if (m_bIgnoreText ||
-        m_pPaM->GetPoint()->nNode < m_rDoc.GetNodes().GetEndOfExtras().GetIndex())
+        m_pPaM->GetPoint()->GetNode() < m_rDoc.GetNodes().GetEndOfExtras())
     {
         return 0;
     }

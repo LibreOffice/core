@@ -4924,7 +4924,7 @@ void SwHTMLParser::ClearFootnotesMarksInRange(const SwNodeIndex& rMkNdIdx, const
         if (pAPos &&
             ((rAnch.GetAnchorId() == RndStdIds::FLY_AT_PARA) ||
              (rAnch.GetAnchorId() == RndStdIds::FLY_AT_CHAR)) &&
-            ( rMkNdIdx < pAPos->nNode && pAPos->nNode <= rPtNdIdx ))
+            ( rMkNdIdx < pAPos->GetNode() && pAPos->GetNode() <= rPtNdIdx.GetNode() ))
         {
             if( rPtNdIdx != pAPos->nNode )
             {

@@ -379,8 +379,8 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                                 if (pAPos &&
                                     ((RndStdIds::FLY_AT_PARA == pAnchor->GetAnchorId()) ||
                                      (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
-                                    aSIdx <= pAPos->nNode &&
-                                    pAPos->nNode < aEIdx )
+                                    aSIdx <= pAPos->GetNode() &&
+                                    pAPos->GetNode() < aEIdx.GetNode() )
                                 {
                                     getIDocumentLayoutAccess().DelLayoutFormat( pFly );
                                     --n;
