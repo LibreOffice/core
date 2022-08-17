@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "422cc088_28d11f57",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2022-08-17T11:54:52Z",
+      "side": 1,
+      "message": "Hi Heiko... I tried a different approach for the template dialog. Now it has 3 rows by 4 columns and the dialog is NOT resizable.\n\nThe reason I increased the dialog size is to better handle the list view.\n\nIn this new approach I removed all the code that saves and restores window state, since they\u0027re no longer needed.",
+      "revId": "1dd8bf905c053e8a651ddc89374f1621ca9e7168",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
