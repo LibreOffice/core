@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "72f7ea4e_063fddbc",
+        "filename": "scaddins/CppunitTest_scaddins_analysis.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-17T06:48:22Z",
+      "side": 1,
+      "message": "Note also that trailing whitespace is considered unwanted (unless it\u0027s required by the file format - e.g., in diffs or MSI tables).",
+      "revId": "c430bec5baef91497fc967dba41cd6d59d00f5ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8f8ee187_0954d6f8",
         "filename": "scaddins/qa/analysisTest.cxx",
         "patchSetId": 2
