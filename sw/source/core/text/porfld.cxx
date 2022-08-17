@@ -484,6 +484,8 @@ void SwFieldPortion::dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText,
 
     if (m_pFont)
     {
+        // do not use Color::AsRGBHexString() as that omits the transparency
+        (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("font-color"), "%08" SAL_PRIxUINT32, sal_uInt32(m_pFont->GetColor()));
         (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("font-height"), BAD_CAST(OString::number(m_pFont->GetSize(m_pFont->GetActual()).Height()).getStr()));
         (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("font-width"), BAD_CAST(OString::number(m_pFont->GetSize(m_pFont->GetActual()).Width()).getStr()));
     }

@@ -56,29 +56,29 @@ DECLARE_OOXMLEXPORT_TEST(testTdf131801, "tdf131801.docx")
 
     xmlDocUniquePtr pDump = parseLayoutDump();
     // "1." is red
-    CPPUNIT_ASSERT_EQUAL(OUString("1."), getXPath(pDump, "//page[1]/body/txt[1]/Special", "rText"));
-    CPPUNIT_ASSERT_EQUAL(OUString("00ff0000"), getXPath(pDump, "//page[1]/body/txt[1]/Special/SwFont", "color"));
+    CPPUNIT_ASSERT_EQUAL(OUString("1."), getXPath(pDump, "//page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand"));
+    CPPUNIT_ASSERT_EQUAL(OUString("00ff0000"), getXPath(pDump, "//page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion", "font-color"));
     // "2." is red
-    CPPUNIT_ASSERT_EQUAL(OUString("2."), getXPath(pDump, "//page[1]/body/txt[2]/Special", "rText"));
-    CPPUNIT_ASSERT_EQUAL(OUString("00ff0000"), getXPath(pDump, "//page[1]/body/txt[2]/Special/SwFont", "color"));
+    CPPUNIT_ASSERT_EQUAL(OUString("2."), getXPath(pDump, "//page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand"));
+    CPPUNIT_ASSERT_EQUAL(OUString("00ff0000"), getXPath(pDump, "//page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwFieldPortion", "font-color"));
     // "3." is black
-    CPPUNIT_ASSERT_EQUAL(OUString("3."), getXPath(pDump, "//page[1]/body/txt[3]/Special", "rText"));
-    CPPUNIT_ASSERT_EQUAL(OUString("ffffffff"), getXPath(pDump, "//page[1]/body/txt[3]/Special/SwFont", "color"));
+    CPPUNIT_ASSERT_EQUAL(OUString("3."), getXPath(pDump, "//page[1]/body/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand"));
+    CPPUNIT_ASSERT_EQUAL(OUString("ffffffff"), getXPath(pDump, "//page[1]/body/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion", "font-color"));
     // "4." is black
-    CPPUNIT_ASSERT_EQUAL(OUString("4."), getXPath(pDump, "//page[1]/body/txt[4]/Special", "rText"));
-    CPPUNIT_ASSERT_EQUAL(OUString("ffffffff"), getXPath(pDump, "//page[1]/body/txt[4]/Special/SwFont", "color"));
+    CPPUNIT_ASSERT_EQUAL(OUString("4."), getXPath(pDump, "//page[1]/body/txt[4]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand"));
+    CPPUNIT_ASSERT_EQUAL(OUString("ffffffff"), getXPath(pDump, "//page[1]/body/txt[4]/SwParaPortion/SwLineLayout/SwFieldPortion", "font-color"));
     // "5." is red
-    CPPUNIT_ASSERT_EQUAL(OUString("5."), getXPath(pDump, "//page[1]/body/txt[5]/Special", "rText"));
-    CPPUNIT_ASSERT_EQUAL(OUString("00ff0000"), getXPath(pDump, "//page[1]/body/txt[5]/Special/SwFont", "color"));
+    CPPUNIT_ASSERT_EQUAL(OUString("5."), getXPath(pDump, "//page[1]/body/txt[5]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand"));
+    CPPUNIT_ASSERT_EQUAL(OUString("00ff0000"), getXPath(pDump, "//page[1]/body/txt[5]/SwParaPortion/SwLineLayout/SwFieldPortion", "font-color"));
     // "6." is red
-    CPPUNIT_ASSERT_EQUAL(OUString("6."), getXPath(pDump, "//page[1]/body/txt[6]/Special", "rText"));
-    CPPUNIT_ASSERT_EQUAL(OUString("00ff0000"), getXPath(pDump, "//page[1]/body/txt[6]/Special/SwFont", "color"));
+    CPPUNIT_ASSERT_EQUAL(OUString("6."), getXPath(pDump, "//page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand"));
+    CPPUNIT_ASSERT_EQUAL(OUString("00ff0000"), getXPath(pDump, "//page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwFieldPortion", "font-color"));
     // "7." is black
-    CPPUNIT_ASSERT_EQUAL(OUString("7."), getXPath(pDump, "//page[1]/body/txt[7]/Special", "rText"));
-    CPPUNIT_ASSERT_EQUAL(OUString("ffffffff"), getXPath(pDump, "//page[1]/body/txt[7]/Special/SwFont", "color"));
+    CPPUNIT_ASSERT_EQUAL(OUString("7."), getXPath(pDump, "//page[1]/body/txt[7]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand"));
+    CPPUNIT_ASSERT_EQUAL(OUString("ffffffff"), getXPath(pDump, "//page[1]/body/txt[7]/SwParaPortion/SwLineLayout/SwFieldPortion", "font-color"));
     // "8." is black
-    CPPUNIT_ASSERT_EQUAL(OUString("8."), getXPath(pDump, "//page[1]/body/txt[8]/Special[1]", "rText"));
-    CPPUNIT_ASSERT_EQUAL(OUString("ffffffff"), getXPath(pDump, "//page[1]/body/txt[8]/Special[1]/SwFont", "color"));
+    CPPUNIT_ASSERT_EQUAL(OUString("8."), getXPath(pDump, "//page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwFieldPortion[1]", "expand"));
+    CPPUNIT_ASSERT_EQUAL(OUString("ffffffff"), getXPath(pDump, "//page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwFieldPortion[1]", "font-color"));
 
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
     if (!pXmlDocument)
@@ -686,7 +686,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132149_pgBreak)
 
     //Page style change here must not be lost. This SHOULD be on page 4, but sadly it is not.
     assertXPathContent(pDump, "//page[6]/header/txt", "First Page Style");
-    CPPUNIT_ASSERT(getXPath(pDump, "//page[6]/body/txt[1]/Text[1]", "Portion").startsWith("Lorem ipsum"));
+    CPPUNIT_ASSERT(getXPath(pDump, "//page[6]/body/txt[1]/SwParaPortion[1]", "portion").startsWith("Lorem ipsum"));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf132149_pgBreakB)
@@ -697,7 +697,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132149_pgBreakB)
     xmlDocUniquePtr pDump = parseLayoutDump();
 
     //Sanity check to ensure the correct page is being tested. This SHOULD be on page 3, but sadly it is not.
-    CPPUNIT_ASSERT(getXPath(pDump, "//page[5]/body/txt[1]/Text[1]", "Portion").startsWith("Lorem ipsum"));
+    CPPUNIT_ASSERT(getXPath(pDump, "//page[5]/body/txt[1]/SwParaPortion[1]", "portion").startsWith("Lorem ipsum"));
     //Prior to this fix, the original alternation between portrait and landscape was completely lost.
     assertXPath(pDump, "//page[5]/infos/bounds", "width", "8391");  //landscape
 }
@@ -726,7 +726,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf136952_pgBreak3B)
 
     //page::breakAfter must not be lost.
     //Prior to this bug fix, the Lorem ipsum paragraph was in the middle of a portrait page, with no switch to landscape occurring.
-    CPPUNIT_ASSERT(getXPath(pDump, "//page[3]/body/txt[1]/Text[1]", "Portion").startsWith("Lorem ipsum"));
+    CPPUNIT_ASSERT(getXPath(pDump, "//page[3]/body/txt[1]/SwParaPortion[1]", "portion").startsWith("Lorem ipsum"));
     assertXPath(pDump, "//page[3]/infos/bounds", "width", "8391");  //landscape
 }
 
@@ -896,9 +896,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf134063, "tdf134063.docx")
     xmlDocUniquePtr pDump = parseLayoutDump();
 
     // There are three tabs with default width
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(720), getXPath(pDump, "//page[1]/body/txt[1]/Text[1]", "nWidth").toInt32());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(720), getXPath(pDump, "//page[1]/body/txt[1]/Text[2]", "nWidth").toInt32());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(720), getXPath(pDump, "//page[1]/body/txt[1]/Text[3]", "nWidth").toInt32());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(720), getXPath(pDump, "//page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwFixPortion[1]", "width").toInt32());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(720), getXPath(pDump, "//page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwFixPortion[2]", "width").toInt32());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(720), getXPath(pDump, "//page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwFixPortion[3]", "width").toInt32());
 }
 
 DECLARE_OOXMLEXPORT_TEST(TestTdf135653, "tdf135653.docx")
