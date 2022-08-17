@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5946b52_f9cf1815",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-17T06:41:26Z",
+      "side": 1,
+      "message": "I realize that this is a WIP, so just a couple of nitpicks inline.\n\nAlso - maybe better just put your test in the existing sc/qa/extras/macros-test.cxx, instead of creating full machinery anew?",
+      "revId": "c430bec5baef91497fc967dba41cd6d59d00f5ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f8ee187_0954d6f8",
+        "filename": "scaddins/qa/analysisTest.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-17T06:41:26Z",
+      "side": 1,
+      "message": "Please use the correct, up-to-date header/footer from /TEMPLATE.SOURCECODE.HEADER for all new files - it\u0027s incorrect to simply copy it from existing files.",
+      "revId": "c430bec5baef91497fc967dba41cd6d59d00f5ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87802947_d7000c8c",
+        "filename": "scaddins/qa/analysisTest.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-17T06:41:26Z",
+      "side": 1,
+      "message": "Just mentioning that this needs to be adjusted",
+      "range": {
+        "startLine": 25,
+        "startChar": 20,
+        "endLine": 25,
+        "endChar": 27
+      },
+      "revId": "c430bec5baef91497fc967dba41cd6d59d00f5ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bff7da26_f87ee19c",
+        "filename": "scaddins/qa/analysisTest.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-17T06:41:26Z",
+      "side": 1,
+      "message": "To actually test if it executes or not, maybe it\u0027s better to set it to false initially, and see actual failures (everything will pass if the test is unexpectedly not executed at all).",
+      "revId": "c430bec5baef91497fc967dba41cd6d59d00f5ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
