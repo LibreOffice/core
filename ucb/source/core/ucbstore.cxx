@@ -27,7 +27,7 @@
 #include <optional>
 #include <unordered_map>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ref.hxx>
 #include <comphelper/interfacecontainer2.hxx>

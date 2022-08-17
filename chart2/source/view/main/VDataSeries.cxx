@@ -37,7 +37,7 @@
 
 #include <osl/diagnose.h>
 #include <tools/color.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 

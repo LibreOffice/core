@@ -32,7 +32,7 @@
 #include <sal/log.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <iostream>
 

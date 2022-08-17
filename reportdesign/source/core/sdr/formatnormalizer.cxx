@@ -30,7 +30,7 @@
 #include <unotools/syslocale.hxx>
 #include <connectivity/statementcomposer.hxx>
 #include <connectivity/dbtools.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
 

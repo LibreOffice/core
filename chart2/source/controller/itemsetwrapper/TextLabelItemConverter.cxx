@@ -39,7 +39,7 @@
 #include <svl/stritem.hxx>
 #include <svx/tabline.hxx>
 #include <svx/sdangitm.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <vcl/graph.hxx>
 #include <rtl/math.hxx>
 

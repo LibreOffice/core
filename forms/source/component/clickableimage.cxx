@@ -33,7 +33,7 @@
 #include <com/sun/star/util/VetoException.hpp>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/docfile.hxx>

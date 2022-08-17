@@ -24,7 +24,7 @@
 #include <svx/fmtools.hxx>
 #include <svx/fmsrccfg.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <tools/wldcrd.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/textsearch.hxx>

@@ -37,7 +37,7 @@
 #include <unotools/streamwrap.hxx>
 #include <unotools/tempfile.hxx>
 #include <svl/urihelper.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 

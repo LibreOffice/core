@@ -36,7 +36,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlnamespace.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <rtl/ref.hxx>
 
 #include "xmlHelper.hxx"

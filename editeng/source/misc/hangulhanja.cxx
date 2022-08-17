@@ -36,7 +36,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <editeng/edtdlg.hxx>
 

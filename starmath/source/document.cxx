@@ -74,7 +74,7 @@
 #include <mathmlexport.hxx>
 #include <svx/svxids.hrc>
 #include <cursor.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <visitors.hxx>
 #include "accessibility.hxx"
 #include <cfgitem.hxx>

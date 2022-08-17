@@ -41,7 +41,7 @@
 #include <svx/fmpage.hxx>
 #include <svx/fmmodel.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <svx/dialmgr.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>

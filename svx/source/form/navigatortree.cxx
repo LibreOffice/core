@@ -51,7 +51,7 @@
 #include <svx/sdrpaintwindow.hxx>
 
 #include <svx/strings.hrc>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <svx/svxids.hrc>
 #include <bitmaps.hlst>
 #include <vcl/commandevent.hxx>

@@ -100,7 +100,7 @@
 #include <watchdog.hxx>
 
 #include <basegfx/utils/systemdependentdata.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #if OSL_DEBUG_LEVEL > 0
 #include <typeinfo>

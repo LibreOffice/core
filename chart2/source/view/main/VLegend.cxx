@@ -41,7 +41,7 @@
 #include <com/sun/star/chart2/data/PivotTableFieldEntry.hpp>
 #include <rtl/math.hxx>
 #include <svl/ctloptions.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <tools/UnitConversion.hxx>
 
 #include <utility>

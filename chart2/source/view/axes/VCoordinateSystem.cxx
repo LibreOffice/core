@@ -37,7 +37,7 @@
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <comphelper/sequence.hxx>
 #include <rtl/math.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <algorithm>
 #include <limits>

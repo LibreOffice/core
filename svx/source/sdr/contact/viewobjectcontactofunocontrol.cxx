@@ -51,7 +51,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <tools/debug.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>

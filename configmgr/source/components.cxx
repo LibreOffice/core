@@ -50,7 +50,7 @@
 #include <sal/log.hxx>
 #include <sal/types.h>
 #include <salhelper/thread.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <comphelper/backupfilehelper.hxx>
 #include <o3tl/string_view.hxx>
 

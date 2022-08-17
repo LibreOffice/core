@@ -34,7 +34,7 @@
 #include <vcl/svapp.hxx>
 #include <svl/itemset.hxx>
 #include <tools/datetime.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <unotools/localedatawrapper.hxx>
 
 #include <templwin.hrc>

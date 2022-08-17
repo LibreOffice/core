@@ -20,7 +20,7 @@
 
 #include <memory>
 #include <toolkit/helper/formpdfexport.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <tools/lineend.hxx>
 #include <unordered_map>
 #include <sal/log.hxx>

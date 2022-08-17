@@ -25,7 +25,7 @@
 #include <com/sun/star/document/XUndoManager.hpp>
 #include <utility>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 using namespace ::com::sun::star;
 

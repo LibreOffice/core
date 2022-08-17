@@ -54,7 +54,7 @@
 
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>

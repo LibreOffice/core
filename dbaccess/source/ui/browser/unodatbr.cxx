@@ -82,7 +82,7 @@
 #include <svx/dataaccessdescriptor.hxx>
 #include <svx/databaseregistrationui.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <tools/multisel.hxx>

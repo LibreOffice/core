@@ -111,7 +111,7 @@
 #include <rtl/ustring.hxx>
 
 #include <tools/color.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <rtl/math.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>

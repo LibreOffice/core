@@ -31,7 +31,7 @@
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <dbaccess/dataview.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>

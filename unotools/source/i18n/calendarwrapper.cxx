@@ -21,7 +21,7 @@
 #include <unotools/calendarwrapper.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <com/sun/star/i18n/LocaleCalendar2.hpp>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;

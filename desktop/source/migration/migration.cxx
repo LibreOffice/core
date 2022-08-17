@@ -34,7 +34,7 @@
 #include <unotools/bootstrap.hxx>
 #include <rtl/uri.hxx>
 #include <i18nlangtag/lang.h>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
 #include <osl/security.hxx>

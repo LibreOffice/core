@@ -85,7 +85,7 @@
 // object in the DTOR
 #include <svtools/acceleratorexecute.hxx>
 #include <svx/ActionDescriptionProvider.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 // enable the following define to let the controller listen to model changes and
 // react on this by rebuilding the view

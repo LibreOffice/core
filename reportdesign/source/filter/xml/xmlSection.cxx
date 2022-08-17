@@ -25,7 +25,7 @@
 #include "xmlHelper.hxx"
 #include <com/sun/star/report/ReportPrintOption.hpp>
 #include "xmlTable.hxx"
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 
 namespace rptxml

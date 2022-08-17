@@ -28,7 +28,7 @@
 #include <dbase/DConnection.hxx>
 #include <dbase/DColumns.hxx>
 #include <tools/config.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <dbase/DIndex.hxx>
 #include <dbase/DIndexes.hxx>
 #include <comphelper/processfactory.hxx>

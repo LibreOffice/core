@@ -34,7 +34,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/sequence.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <tools/color.hxx>
 
 using namespace ::com::sun::star;

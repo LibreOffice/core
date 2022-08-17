@@ -88,7 +88,7 @@
 #include <svx/xlnclit.hxx>
 #include <svx/xflgrit.hxx>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <tools/UnitConversion.hxx>
 
 #include <unotools/useroptions.hxx>

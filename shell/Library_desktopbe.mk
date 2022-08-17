@@ -14,10 +14,10 @@ $(eval $(call gb_Library_use_external,desktopbe1,boost_headers))
 $(eval $(call gb_Library_use_sdk_api,desktopbe1))
 
 $(eval $(call gb_Library_use_libraries,desktopbe1,\
+	comphelper \
 	cppu \
 	cppuhelper \
 	sal \
-	tl \
 	vcl \
 ))
 

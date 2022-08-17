@@ -40,7 +40,7 @@
 #include <TypeInfo.hxx>
 #include <FieldDescriptions.hxx>
 #include <UITools.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <WCopyTable.hxx>
 #include <unotools/syslocale.hxx>

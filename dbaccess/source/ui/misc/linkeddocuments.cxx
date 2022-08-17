@@ -20,7 +20,7 @@
 #include <core_resource.hxx>
 #include <linkeddocuments.hxx>
 #include <osl/diagnose.h>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <unotools/confignode.hxx>
 #include <comphelper/classids.hxx>
 #include <comphelper/namedvaluecollection.hxx>

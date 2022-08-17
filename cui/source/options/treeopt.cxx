@@ -95,7 +95,7 @@
 #include <svx/databaseregistrationui.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/optionsdlg.hxx>

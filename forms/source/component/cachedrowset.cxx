@@ -26,7 +26,7 @@
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 
 namespace frm

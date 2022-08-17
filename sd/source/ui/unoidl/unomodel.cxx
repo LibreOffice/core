@@ -124,7 +124,7 @@
 #include <sfx2/lokcomponenthelpers.hxx>
 #include <tools/gen.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <tools/json_writer.hxx>
 #include <tools/UnitConversion.hxx>
 #include <svx/ColorSets.hxx>

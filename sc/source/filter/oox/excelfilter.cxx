@@ -33,7 +33,7 @@
 #include <document.hxx>
 #include <docsh.hxx>
 #include <scerrors.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 namespace oox::xls {
 

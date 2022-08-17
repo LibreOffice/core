@@ -21,7 +21,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ref.hxx>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>

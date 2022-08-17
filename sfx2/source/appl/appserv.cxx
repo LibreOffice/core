@@ -53,7 +53,7 @@
 #include <svl/visitem.hxx>
 
 #include <unotools/configmgr.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <vcl/weld.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>

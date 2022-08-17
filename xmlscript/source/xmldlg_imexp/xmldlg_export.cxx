@@ -23,7 +23,7 @@
 
 #include <o3tl/any.hxx>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <com/sun/star/awt/CharSet.hpp>
 #include <com/sun/star/awt/FontFamily.hpp>

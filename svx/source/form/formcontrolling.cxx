@@ -31,7 +31,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <comphelper/anytostring.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>

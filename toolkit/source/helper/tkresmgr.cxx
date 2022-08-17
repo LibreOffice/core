@@ -21,7 +21,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <vcl/image.hxx>
 

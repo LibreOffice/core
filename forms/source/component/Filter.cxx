@@ -56,7 +56,7 @@
 #include <connectivity/predicateinput.hxx>
 #include <o3tl/safeint.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <tools/gen.hxx>
 
 

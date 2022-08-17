@@ -156,7 +156,7 @@ using namespace nsHdFtFlags;
 #include <oox/ole/olestorage.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <sfx2/DocumentMetadataAccess.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 static SwMacroInfo* GetMacroInfo( SdrObject* pObj )
 {

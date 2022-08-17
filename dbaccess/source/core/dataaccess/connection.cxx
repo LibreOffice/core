@@ -39,7 +39,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbmetadata.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>

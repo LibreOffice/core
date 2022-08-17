@@ -46,7 +46,7 @@
 #include <vcl/window.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <svx/svdview.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/sequence.hxx>
 #include "AccessibleEmptyEditSource.hxx"

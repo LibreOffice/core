@@ -98,7 +98,7 @@
 #include <unotextbodyhf.hxx>
 #include <unoport.hxx>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <IDocumentRedlineAccess.hxx>
 
 constexpr OUStringLiteral WATERMARK_NAME = u"PowerPlusWaterMarkObject";

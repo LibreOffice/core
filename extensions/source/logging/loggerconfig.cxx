@@ -34,7 +34,7 @@
 #include <com/sun/star/logging/XLogHandler.hpp>
 #include <com/sun/star/logging/XLogFormatter.hpp>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <osl/process.h>
 
 #include <cppuhelper/component_context.hxx>

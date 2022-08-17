@@ -26,7 +26,7 @@
 #include <sfx2/app.hxx>
 #include <svl/itemset.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <sfx2/fcontnr.hxx>
 #include <svl/style.hxx>

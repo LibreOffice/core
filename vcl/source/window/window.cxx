@@ -23,7 +23,7 @@
 #include <sal/log.hxx>
 
 #include <sal/types.h>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <vcl/salgtype.hxx>
 #include <vcl/event.hxx>
 #include <vcl/help.hxx>

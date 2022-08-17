@@ -21,7 +21,7 @@
 
 #include <com/sun/star/report/XFormatCondition.hpp>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 
 namespace rptui

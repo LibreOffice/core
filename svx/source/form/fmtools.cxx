@@ -41,7 +41,7 @@
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;

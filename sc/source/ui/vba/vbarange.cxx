@@ -25,7 +25,7 @@
 #include <o3tl/safeint.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <rtl/math.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <o3tl/string_view.hxx>
 
 #include <com/sun/star/script/ArrayWrapper.hpp>

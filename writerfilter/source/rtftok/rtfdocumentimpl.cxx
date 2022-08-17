@@ -24,7 +24,7 @@
 #include <filter/msfilter/util.hxx>
 #include <filter/msfilter/rtfutil.hxx>
 #include <comphelper/string.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <tools/globname.hxx>
 #include <tools/datetimeutils.hxx>
 #include <comphelper/classids.hxx>

@@ -18,7 +18,7 @@
  */
 
 #include <FieldDescriptions.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <strings.hxx>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <comphelper/types.hxx>

@@ -12,10 +12,10 @@ $(eval $(call gb_Library_Library,migrationoo3))
 $(eval $(call gb_Library_use_sdk_api,migrationoo3))
 
 $(eval $(call gb_Library_use_libraries,migrationoo3,\
+    comphelper \
     cppu \
     cppuhelper \
     sal \
-    tl \
     utl \
 ))
 

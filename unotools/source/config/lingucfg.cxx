@@ -26,7 +26,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/debug.hxx>

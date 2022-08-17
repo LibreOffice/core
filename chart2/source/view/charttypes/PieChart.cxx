@@ -33,7 +33,7 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <tools/helpers.hxx>
 
 #include <limits>

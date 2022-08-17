@@ -22,7 +22,7 @@
 
 #include <com/sun/star/awt/KeyFunction.hpp>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 
 namespace pcr

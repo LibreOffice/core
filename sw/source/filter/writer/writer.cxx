@@ -22,7 +22,7 @@
 
 #include <sot/storage.hxx>
 #include <sfx2/docfile.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <osl/diagnose.h>

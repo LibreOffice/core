@@ -36,7 +36,7 @@
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;

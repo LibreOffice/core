@@ -29,7 +29,7 @@
 #include <hsqldb/HColumns.hxx>
 #include <TConnection.hxx>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 
 using namespace ::comphelper;

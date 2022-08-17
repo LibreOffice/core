@@ -23,7 +23,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <cppuhelper/supportsservice.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <svl/inettype.hxx>

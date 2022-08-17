@@ -19,7 +19,7 @@
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <controls/animatedimages.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <vcl/toolkit/throbber.hxx>
 
 using namespace css;

@@ -35,7 +35,7 @@
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/types.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 namespace calc
 {

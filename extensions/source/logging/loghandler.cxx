@@ -25,7 +25,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/logging/PlainTextFormatter.hpp>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <rtl/tencinfo.h>
 
 

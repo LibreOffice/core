@@ -53,7 +53,7 @@
 #include <xmloff/DocumentSettingsContext.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlmetai.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <svtools/sfxecode.hxx>
 #include "xmlEnums.hxx"
 #include "xmlStyleImport.hxx"

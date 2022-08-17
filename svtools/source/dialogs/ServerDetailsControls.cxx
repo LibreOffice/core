@@ -19,7 +19,7 @@
 #include <rtl/uri.hxx>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <svtools/PlaceEditDialog.hxx>
 #include <utility>

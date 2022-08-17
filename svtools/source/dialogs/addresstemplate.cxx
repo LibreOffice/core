@@ -32,7 +32,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/util/AliasProgrammaticPair.hpp>
 #include <com/sun/star/ui/dialogs/AddressBookSourcePilot.hpp>

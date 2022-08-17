@@ -29,7 +29,7 @@
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 
 namespace pcr

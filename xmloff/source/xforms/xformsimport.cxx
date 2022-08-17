@@ -33,7 +33,7 @@
 #include <rtl/ustring.hxx>
 #include "xformsapi.hxx"
 #include <comphelper/namedvaluecollection.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 using std::pair;
 using com::sun::star::uno::Reference;

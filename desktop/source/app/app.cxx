@@ -117,7 +117,7 @@
 #include <basic/sbstar.hxx>
 #include <desktop/crashreport.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <svtools/fontsubstconfig.hxx>
 #include <svtools/accessibilityoptions.hxx>
 #include <svtools/apearcfg.hxx>

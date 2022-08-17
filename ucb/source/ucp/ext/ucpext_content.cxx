@@ -36,7 +36,7 @@
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/content.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/uri.hxx>
 #include <sal/macros.h>

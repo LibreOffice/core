@@ -37,7 +37,7 @@
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/weldutils.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <o3tl/string_view.hxx>
 
 #include <sfx2/passwd.hxx>

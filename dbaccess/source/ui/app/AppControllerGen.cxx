@@ -50,7 +50,7 @@
 #include <sfx2/mailmodelapi.hxx>
 #include <svx/dbaexchange.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <osl/diagnose.h>
 #include <vcl/mnemonic.hxx>
 #include <vcl/svapp.hxx>

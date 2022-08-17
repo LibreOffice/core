@@ -34,7 +34,7 @@
 #include <unotools/streamwrap.hxx>
 #include <unotextrange.hxx>
 #include <sfx2/docfile.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 constexpr OUStringLiteral AUTOTEXT_GALLERY = u"autoTxt";
 

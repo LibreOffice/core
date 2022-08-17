@@ -37,7 +37,7 @@
 #include <vcl/seleng.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/image.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <tools/debug.hxx>
 
 #include <cstdlib>

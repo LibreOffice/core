@@ -25,7 +25,7 @@
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <tools/urlobj.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include "typedetectionexport.hxx"
 #include "xmlfiltercommon.hxx"

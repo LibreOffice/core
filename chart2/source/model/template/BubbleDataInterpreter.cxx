@@ -26,7 +26,7 @@
 #include <DataSeriesHelper.hxx>
 #include <CommonConverters.hxx>
 #include <com/sun/star/util/XCloneable.hpp>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;

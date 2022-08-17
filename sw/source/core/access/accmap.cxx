@@ -76,7 +76,7 @@
 #include <prevwpage.hxx>
 #include <calbck.hxx>
 #include <undobj.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <tools/debug.hxx>
 
 using namespace ::com::sun::star;

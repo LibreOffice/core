@@ -51,7 +51,7 @@
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/propertysetinfo.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <sal/log.hxx>
 
 #include <stack>

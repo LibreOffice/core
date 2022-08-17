@@ -39,7 +39,7 @@
 #include <sfx2/app.hxx>
 #include <officecfg/Office/Common.hxx>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>

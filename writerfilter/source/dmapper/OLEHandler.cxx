@@ -25,7 +25,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>

@@ -30,7 +30,7 @@
 #include <connectivity/sqlnode.hxx>
 #include <connectivity/PColumn.hxx>
 #include <comphelper/numbers.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <memory>
 #include <string_view>

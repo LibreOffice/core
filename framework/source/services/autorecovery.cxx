@@ -85,7 +85,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
 #include <unotools/pathoptions.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <unotools/tempfile.hxx>
 #include <ucbhelper/content.hxx>
 #include <svtools/sfxecode.hxx>

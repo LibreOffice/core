@@ -27,7 +27,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <utility>
 #include <vcl/metric.hxx>
 #include <vcl/virdev.hxx>

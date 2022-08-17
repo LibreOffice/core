@@ -28,7 +28,7 @@
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/awt/XGraphics.hpp>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 namespace sd::colortoolpanel
 {

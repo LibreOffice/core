@@ -26,7 +26,7 @@
 #include <directsql.hxx>
 #include <datasourceconnector.hxx>
 #include <strings.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <vcl/svapp.hxx>
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

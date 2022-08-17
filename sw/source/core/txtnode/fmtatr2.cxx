@@ -40,7 +40,7 @@
 
 #include <com/sun/star/uno/Any.h>
 #include <SwStyleNameMapper.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <fmtmeta.hxx>
 #include <ndtxt.hxx>

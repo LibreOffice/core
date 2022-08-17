@@ -26,7 +26,7 @@
 #include <svx/svdmodel.hxx>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/svdpage.hxx>
 

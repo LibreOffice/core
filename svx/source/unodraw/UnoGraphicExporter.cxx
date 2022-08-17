@@ -34,7 +34,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/interaction.hxx>
 #include <framework/interaction.hxx>

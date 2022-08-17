@@ -25,7 +25,7 @@
 #include <com/sun/star/form/ListSourceType.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <connectivity/dbtools.hxx>
 #include <helpids.h>
 #include <osl/diagnose.h>

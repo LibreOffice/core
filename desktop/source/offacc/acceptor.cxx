@@ -25,7 +25,7 @@
 #include <com/sun/star/uno/XNamingService.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <o3tl/string_view.hxx>
 
 using namespace css::bridge;

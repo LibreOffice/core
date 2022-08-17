@@ -44,7 +44,7 @@
 
 #include <namecont.hxx>
 #include <basic/basicmanagerrepository.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/sfxecode.hxx>

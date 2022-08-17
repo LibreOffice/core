@@ -23,7 +23,7 @@
 #include <com/sun/star/awt/XWindowListener2.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 
 namespace frm

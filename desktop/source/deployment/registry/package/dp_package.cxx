@@ -68,7 +68,7 @@
 #include <com/sun/star/deployment/PlatformException.hpp>
 #include <com/sun/star/deployment/Prerequisites.hpp>
 #include <optional>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <algorithm>
 #include <memory>

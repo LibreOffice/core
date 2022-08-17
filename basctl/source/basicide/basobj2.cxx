@@ -34,7 +34,7 @@
 #include <comphelper/sequence.hxx>
 #include <framework/documentundoguard.hxx>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>

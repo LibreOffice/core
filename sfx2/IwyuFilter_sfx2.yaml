@@ -40,7 +40,7 @@ excludelist:
     - sfx2/linkmgr.hxx
     - tools/debug.hxx
     - tools/urlobj.hxx
-    - tools/diagnose_ex.h
+    - comphelper/diagnose_ex.hxx
     - unotools/pathoptions.hxx
     - vcl/svapp.hxx
     - sfx2/viewfrm.hxx

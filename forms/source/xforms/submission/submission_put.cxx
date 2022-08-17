@@ -24,7 +24,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <ucbhelper/content.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 using namespace css::uno;
 using namespace css::ucb;

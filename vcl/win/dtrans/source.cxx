@@ -23,7 +23,7 @@
 #include <com/sun/star/awt/MouseEvent.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/any.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <process.h>
 #include <memory>

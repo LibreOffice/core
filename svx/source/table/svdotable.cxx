@@ -52,7 +52,7 @@
 #include <editeng/frmdiritem.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <libxml/xmlwriter.h>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <boost/property_tree/ptree.hpp>
 

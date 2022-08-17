@@ -44,7 +44,7 @@
 
 #include <svx/svdobjkind.hxx>
 #include <svl/eitem.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/fmmodel.hxx>
 #include <fmshimp.hxx>

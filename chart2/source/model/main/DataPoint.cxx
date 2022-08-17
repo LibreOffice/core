@@ -26,7 +26,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <algorithm>
 

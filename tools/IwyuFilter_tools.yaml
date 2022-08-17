@@ -18,7 +18,7 @@ excludelist:
     - stdlib.h
     tools/source/debug/debug.cxx:
     # Needed for linker visibility
-    - tools/diagnose_ex.h
+    - comphelper/diagnose_ex.hxx
     # Keep for commented out "if defined __GLIBCXX__" path
     - cxxabi.h
     tools/source/misc/extendapplicationenvironment.cxx:

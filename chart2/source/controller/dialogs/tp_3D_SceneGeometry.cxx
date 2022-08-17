@@ -26,7 +26,7 @@
 #include <ThreeDHelper.hxx>
 #include <ControllerLockGuard.hxx>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <tools/helpers.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>

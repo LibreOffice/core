@@ -21,7 +21,7 @@
 #include <controls/table/tablecontrolinterface.hxx>
 #include <controls/table/tablesort.hxx>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <vcl/ptrstyle.hxx>
 
 namespace svt::table

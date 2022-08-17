@@ -32,7 +32,7 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <unotools/transliterationwrapper.hxx>
 #include <osl/diagnose.h>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include "formstrings.hxx"
 
 #include <algorithm>

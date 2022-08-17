@@ -21,7 +21,7 @@
 #include <RangeSelectionListener.hxx>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <ChartModel.hxx>
 #include <utility>
 
