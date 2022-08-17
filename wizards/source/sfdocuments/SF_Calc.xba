@@ -3655,7 +3655,7 @@ Public Function _ComputeFilter(ByVal poRange As Object _
 								, ByVal psFilterScope As String _
 								) As Variant
 &apos;&apos;&apos;	Compute in the given range the cells, rows or columns for which
-&apos;&apos;&apos;	the given formula refurns TRUE
+&apos;&apos;&apos;	the given formula returns TRUE
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		poRange: the range on which to compute the filter as an _Address type
 &apos;&apos;&apos;		psFilterFormula: the formula to be applied on each row, column or cell
