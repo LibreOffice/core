@@ -480,6 +480,11 @@ void ResourceManager::ReadLastActive()
         if (eApplication != vcl::EnumContext::Application::NONE)
             maLastActiveDecks.insert( std::make_pair(sApplicationName, sLastUsed ) );
     }
+
+    // Set up a default for Math - will do nothing if already set
+    maLastActiveDecks.emplace(
+        vcl::EnumContext::GetApplicationName(vcl::EnumContext::Application::Formula),
+        "ElementsDeck");
 }
 
 void ResourceManager::ReadContextList (

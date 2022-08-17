@@ -551,8 +551,6 @@ void SidebarController::UpdateConfigurations()
             (maCurrentContext.msApplication != maRequestedContext.msApplication))
     {
         OUString sLastActiveDeck = mpResourceManager->GetLastActiveDeck( maRequestedContext );
-        if (comphelper::LibreOfficeKit::isActive() && sLastActiveDeck == "PropertyDeck" && maRequestedContext.msApplication == "com.sun.star.formula.FormulaProperties")
-            sLastActiveDeck = "ElementsDeck"; // Manual override for lok
         if (!sLastActiveDeck.isEmpty())
             msCurrentDeckId = sLastActiveDeck;
     }
