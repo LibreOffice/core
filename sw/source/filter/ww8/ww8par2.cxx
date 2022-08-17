@@ -701,10 +701,9 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFormat &rNum, int nLevel, WW8_ANLV con
     {
         sSuffix = rNum.GetSuffix() + sText.subView( rAV.cbTextBefore, rAV.cbTextAfter);
     }
-    if (rAV.cbTextBefore || rAV.cbTextAfter)
-    {
-        rNum.SetListFormat(sPrefix, sSuffix, nLevel);
-    }
+
+    rNum.SetListFormat(sPrefix, sSuffix, nLevel);
+
 // The characters before and after multiple digits do not apply because
 // those are handled differently by the writer and the result is in most
 // cases worse than without.
@@ -724,6 +723,8 @@ void SwWW8ImplReader::SetAnld(SwNumRule* pNumR, WW8_ANLD const * pAD, sal_uInt8 
         SetBaseAnlv(aNF, rAV, nSwLevel);                    // set the base format
         SetAnlvStrings(aNF, nSwLevel, rAV, pAD->rgchAnld, 0, SAL_N_ELEMENTS(pAD->rgchAnld), bOutLine); // set the rest
     }
+    else
+        aNF.SetListFormat("", "", nSwLevel);
     pNumR->Set(nSwLevel, aNF);
 }
 
