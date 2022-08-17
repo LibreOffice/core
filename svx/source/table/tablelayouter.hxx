@@ -123,12 +123,12 @@ public:
                          const bool bMinimize );
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
+    void LayoutTableWidth(::tools::Rectangle& rArea, bool bFit);
+    void LayoutTableHeight(::tools::Rectangle& rArea, bool bFit);
+
 private:
     CellRef getCell( const CellPos& rPos ) const;
     basegfx::B2ITuple getCellSize( const CellRef& xCell, const CellPos& rPos ) const;
-
-    void LayoutTableWidth( ::tools::Rectangle& rArea, bool bFit );
-    void LayoutTableHeight( ::tools::Rectangle& rArea, bool bFit );
 
     bool isValidColumn( sal_Int32 nColumn ) const { return (nColumn >= 0) && (o3tl::make_unsigned(nColumn) < maColumns.size()); }
     bool isValidRow( sal_Int32 nRow ) const { return (nRow >= 0) && (o3tl::make_unsigned(nRow) < maRows.size()); }

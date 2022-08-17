@@ -2393,6 +2393,18 @@ void SdrTableObj::CropTableModelToSelection(const CellPos& rStart, const CellPos
     mpImpl->CropTableModelToSelection(rStart, rEnd);
 }
 
+sal_Int32 SdrTableObj::getHeightWithoutFitting()
+{
+    tools::Rectangle aRect{};
+    if( mpImpl.is() && mpImpl->mpLayouter)
+    {
+        mpImpl->mpLayouter->LayoutTableHeight(aRect, /*bFit=*/false);
+        return aRect.GetHeight();
+    }
+    else
+        return 0;
+}
+
 void SdrTableObj::DistributeColumns( sal_Int32 nFirstColumn, sal_Int32 nLastColumn, const bool bOptimize, const bool bMinimize )
 {
     if( mpImpl.is() && mpImpl->mpLayouter )

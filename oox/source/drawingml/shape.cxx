@@ -94,6 +94,7 @@
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <svx/svdobj.hxx>
+#include <svx/svdotable.hxx>
 #include <svx/svdtrans.hxx>
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
@@ -834,6 +835,8 @@ Reference< XShape > const & Shape::createAndInsert(
         maSize.Height = 0;
         for (auto const& elem : mpTablePropertiesPtr->getTableRows())
         {
+            // WARN: When less then minimum sized rows exist, calculated height here
+            // is corrected before layouting takes place
             maSize.Height = o3tl::saturating_add(maSize.Height, elem.getHeight());
         }
     }
@@ -1256,7 +1259,14 @@ Reference< XShape > const & Shape::createAndInsert(
             mpGraphicPropertiesPtr->pushToPropMap( aShapeProps, rGraphicHelper, mbFlipH, mbFlipV );
         }
         if ( mpTablePropertiesPtr && aServiceName == "com.sun.star.drawing.TableShape" )
+        {
             mpTablePropertiesPtr->pushToPropSet( rFilterBase, xSet, mpMasterTextListStyle );
+            if ( auto* pTableShape = dynamic_cast<sdr::table::SdrTableObj*>(SdrObject::getSdrObjectFromXShape(mxShape)) )
+            {
+                // Disable layouting until an attempt at correcting faulty table height is made
+                pTableShape->SetSkipChangeLayout(true);
+            }
+        }
 
         FillProperties aFillProperties = getActualFillProperties(pTheme, &rShapeOrParentShapeFillProps);
         if (getFillProperties().moFillType.has_value() && getFillProperties().moFillType.value() == XML_grpFill)
@@ -1488,6 +1498,21 @@ Reference< XShape > const & Shape::createAndInsert(
             }
 
             PropertySet( xSet ).setProperties( aShapeProps );
+
+            if (mpTablePropertiesPtr && aServiceName == "com.sun.star.drawing.TableShape")
+            {
+                // Powerpoint sometimes export row heights less than the minimum size,
+                // which during import expanded to the minimum
+                if (auto* pTableShape = dynamic_cast<sdr::table::SdrTableObj*>(SdrObject::getSdrObjectFromXShape(mxShape)))
+                {
+                    sal_Int32 nCorrectedHeight = pTableShape->getHeightWithoutFitting();
+                    const auto& aShapeSize = mxShape->getSize();
+                    if( nCorrectedHeight > aShapeSize.Height )
+                        mxShape->setSize( {aShapeSize.Width, nCorrectedHeight} );
+                    pTableShape->SetSkipChangeLayout(false);
+                }
+            }
+
             if (mbLockedCanvas)
             {
                 putPropertyToGrabBag( "LockedCanvas", Any( true ) );
