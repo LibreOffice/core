@@ -86,7 +86,7 @@ namespace {
               ++nActRedline)
         {
             const SwRangeRedline* pActRedline = rRedlineTable[ nActRedline ];
-            if ( pActRedline->Start()->nNode > rTextNode.GetIndex() )
+            if ( pActRedline->Start()->GetNode() > rTextNode )
             {
                 break;
             }

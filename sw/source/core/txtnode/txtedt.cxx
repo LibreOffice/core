@@ -157,7 +157,7 @@ lcl_MaskRedlines( const SwTextNode& rNode, OUStringBuffer& rText,
     {
         const SwRangeRedline* pRed = rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ nAct ];
 
-        if ( pRed->Start()->nNode > rNode.GetIndex() )
+        if ( pRed->Start()->GetNode() > rNode )
             break;
 
         if( RedlineType::Delete == pRed->GetType() )

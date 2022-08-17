@@ -1234,8 +1234,8 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
                         && pCpyPam )
                     {
                         if( pSrcDoc != pDoc ||
-                            pCpyPam->Start()->nNode > rInsPos ||
-                            rInsPos >= pCpyPam->End()->nNode )
+                            pCpyPam->Start()->GetNode() > rInsPos.GetNode() ||
+                            rInsPos >= pCpyPam->End()->GetNode() )
                         {
                             pSrcDoc->getIDocumentContentOperations().CopyRange(*pCpyPam, *pPam->GetPoint(), SwCopyFlags::CheckPosInFly);
                         }

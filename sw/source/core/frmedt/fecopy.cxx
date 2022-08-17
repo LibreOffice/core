@@ -494,8 +494,8 @@ bool SwFEShell::Copy( SwFEShell& rDestShell, const Point& rSttPt,
                 {
                     // do not copy in itself
                     const SwNodeIndex *pTmp = pFlyFormat->GetContent().GetContentIdx();
-                    if ( aPos.nNode > *pTmp && aPos.nNode <
-                        pTmp->GetNode().EndOfSectionIndex() )
+                    if ( aPos.GetNodeIndex() > pTmp->GetIndex() &&
+                         aPos.GetNodeIndex() < pTmp->GetNode().EndOfSectionIndex() )
                     {
                         bRet = false;
                     }

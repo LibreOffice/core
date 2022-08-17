@@ -328,8 +328,8 @@ bool SwCursorShell::GotoPrevTOXBase( const OUString* pName )
             SwSectionNode const*const pSectNd(
                     pSect->GetFormat()->GetSectionNode());
             if (   pSectNd
-                && m_pCurrentCursor->GetPoint()->nNode > pSectNd->EndOfSectionIndex()
-                && (!pFnd  || pFnd->GetIndex() < pSectNd->GetIndex())
+                && m_pCurrentCursor->GetPoint()->GetNode() > *pSectNd->EndOfSectionNode()
+                && (!pFnd  || *pFnd < *pSectNd)
                 && (!pName || *pName ==
                     static_cast<SwTOXBaseSection const*>(pSect)->GetTOXName()))
             {

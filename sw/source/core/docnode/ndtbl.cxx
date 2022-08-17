@@ -351,8 +351,8 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
 
     {
         // Do not copy into Footnotes!
-        if( rPos.nNode < GetNodes().GetEndOfInserts().GetIndex() &&
-            rPos.nNode >= GetNodes().GetEndOfInserts().StartOfSectionIndex() )
+        if( rPos.GetNode() < GetNodes().GetEndOfInserts() &&
+            rPos.GetNode().GetIndex() >= GetNodes().GetEndOfInserts().StartOfSectionIndex() )
             return nullptr;
 
         // If the ColumnArray has a wrong count, ignore it!
