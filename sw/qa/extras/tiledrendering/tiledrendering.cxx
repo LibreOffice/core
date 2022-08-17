@@ -3265,6 +3265,29 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTablePaintInvalidate)
     CPPUNIT_ASSERT_EQUAL(0, m_nInvalidations);
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTableCommentRemoveCallback)
+{
+    comphelper::LibreOfficeKit::setActive();
+    comphelper::LibreOfficeKit::setTiledAnnotations(false);
+
+    // Load a document with a comment in a table.
+    SwXTextDocument* pXTextDocument = createDoc("testTableCommentRemoveCallback.odt");
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
+    ViewCallback aView;
+
+    // delete all characters
+    comphelper::dispatchCommand(".uno:SelectAll", uno::Sequence<beans::PropertyValue>());
+    Scheduler::ProcessEventsToIdle();
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DELETE);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_DELETE);
+    Scheduler::ProcessEventsToIdle();
+
+    //check for comment remove callback
+    OString sAction(aView.m_aComment.get_child("action").get_value<std::string>().c_str());
+    CPPUNIT_ASSERT_EQUAL(OString("Remove"), sAction);
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSpellOnlineRenderParameter)
 {
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
