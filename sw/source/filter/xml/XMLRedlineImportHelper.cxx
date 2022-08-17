@@ -567,7 +567,7 @@ inline bool XMLRedlineImportHelper::IsReady(const RedlineInfo* pRedline)
              !pRedline->bNeedsAdjustment );
 }
 
-/// recursively check if rPos or its anchor (if in fly or footnote) is in rPam
+/// recursively check if rPos or its anchor (if in fly or footnote) is in redline section
 static auto RecursiveContains(SwStartNode const& rRedlineSection, SwNode const& rPos) -> bool
 {
     if (rRedlineSection.GetIndex() <= rPos.GetIndex()
@@ -596,10 +596,13 @@ static auto RecursiveContains(SwStartNode const& rRedlineSection, SwNode const& 
                     return false;
                 }
                 else if (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_FLY)
-                {   // anchor is on a start node - loop! recursion will take *its* start node and skip it.
+                {   // anchor is on a start node, avoid skipping it:
                     pStartNode = rAnchor.GetContentAnchor()->GetNode().GetStartNode();
                     assert(pStartNode);
-                    continue;
+                    // pass the next node to recursive call - it will call
+                    // call StartOfSectionNode on it and go back to pStartNode
+                    SwNodeIndex const next(*pStartNode, +1);
+                    return RecursiveContains(rRedlineSection, next.GetNode());
                 }
                 else
                 {
@@ -622,6 +625,9 @@ static auto RecursiveContains(SwStartNode const& rRedlineSection, SwNode const& 
             case SwHeaderStartNode:
             case SwFooterStartNode:
                 return false; // headers aren't anchored
+            break;
+            default:
+                assert(false);
             break;
         }
     }
@@ -709,7 +715,12 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
         // should be enough to check 1 position of aPaM bc CheckNodesRange() above
         && RecursiveContains(*pRedlineInfo->pContentIndex->GetNode().GetStartNode(), aPaM.GetPoint()->GetNode()))
     {
-        SAL_WARN("sw", "Recursive change tracking, ignoring");
+        SAL_WARN("sw.xml", "Recursive change tracking, removing");
+        // reuse aPaM to remove it from nodes that will be deleted
+        *aPaM.GetPoint() = SwPosition(pRedlineInfo->pContentIndex->GetNode());
+        aPaM.SetMark();
+        *aPaM.GetMark() = SwPosition(*pRedlineInfo->pContentIndex->GetNode().EndOfSectionNode());
+        pDoc->getIDocumentContentOperations().DeleteRange(aPaM);
     }
     else
     {
