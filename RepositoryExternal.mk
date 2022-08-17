@@ -4279,36 +4279,4 @@ endif # ENABLE_ZXING
 
 endif # SYSTEM_ZXING
 
-
-
-ifneq ($(SYSTEM_CUCKOO),)
-
-gb_ExternalProject__use_cuckoo_headers :=
-
-define gb_LinkTarget__use_cuckoo_headers
-$(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-)
-
-endef
-
-else # !SYSTEM_CUCKOO
-
-define gb_ExternalProject__use_cuckoo_headers
-$(call gb_ExternalProject_use_unpacked,$(1),cuckoo)
-
-endef
-
-define gb_LinkTarget__use_cuckoo_headers
-$(call gb_LinkTarget_use_unpacked,$(1),cuckoo)
-$(call gb_LinkTarget_set_include,$(1),\
-	-I$(call gb_UnpackedTarball_get_dir,cuckoo) \
-	$$(INCLUDE) \
-)
-
-endef
-
-endif # SYSTEM_CUCKOO
-
-
 # vim: set noet sw=4 ts=4:
