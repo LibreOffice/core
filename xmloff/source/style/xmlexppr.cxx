@@ -938,7 +938,8 @@ namespace
 sal_Int8 CheckExtendedNamespace(std::u16string_view sXMLAttributeName, std::u16string_view sValue,
                                 const SvtSaveOptions::ODFSaneDefaultVersion nODFVersion)
 {
-    if (IsXMLToken(sXMLAttributeName, XML_WRITING_MODE) && IsXMLToken(sValue, XML_BT_LR))
+    if (IsXMLToken(sXMLAttributeName, XML_WRITING_MODE)
+        && (IsXMLToken(sValue, XML_BT_LR) || IsXMLToken(sValue, XML_TB_RL90)))
         return nODFVersion & SvtSaveOptions::ODFSVER_EXTENDED ? 1 : -1;
     else if (IsXMLToken(sXMLAttributeName, XML_VERTICAL_REL)
              && (IsXMLToken(sValue, XML_PAGE_CONTENT_BOTTOM)
@@ -1083,7 +1084,9 @@ void SvXMLExportPropertyMapper::_exportXML(
                 return;
             if (nExtendedStatus == 1)
                 sName = rNamespaceMap.GetQNameByKey(
-                    XML_NAMESPACE_LO_EXT, mpImpl->mxPropMapper->GetEntryXMLName(rProperty.mnIndex));
+                                XML_NAMESPACE_LO_EXT,
+                                mpImpl->mxPropMapper->GetEntryXMLName(rProperty.mnIndex));
+
             rAttrList.AddAttribute( sName, aValue );
         }
     }

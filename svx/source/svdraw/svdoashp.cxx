@@ -86,6 +86,7 @@
 #include <sal/log.hxx>
 #include <o3tl/string_view.hxx>
 #include "presetooxhandleadjustmentrelations.hxx"
+#include <editeng/frmdiritem.hxx>
 
 using namespace ::com::sun::star;
 
@@ -503,12 +504,31 @@ void SdrObjCustomShape::SetMirroredY( const bool bMirrorY )
 
 double SdrObjCustomShape::GetExtraTextRotation( const bool bPreRotation ) const
 {
-    const uno::Any* pAny;
-    const SdrCustomShapeGeometryItem& rGeometryItem = GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
-    pAny = rGeometryItem.GetPropertyValueByName( bPreRotation ? OUString( "TextPreRotateAngle" ) : OUString( "TextRotateAngle" ) );
     double fExtraTextRotateAngle = 0.0;
-    if ( pAny )
-        *pAny >>= fExtraTextRotateAngle;
+    if (bPreRotation)
+    {
+        const SvxFrameDirectionItem& rDirectionItem = GetMergedItem(SDRATTR_WRITINGMODE2);
+        if (rDirectionItem.GetValue() == SvxFrameDirection::Vertical_RL_TB90)
+            fExtraTextRotateAngle = -90;
+        else if (rDirectionItem.GetValue() == SvxFrameDirection::Vertical_LR_BT)
+            fExtraTextRotateAngle = -270;
+        else
+        { // Use TextPreRotateAngle, might be set by macro
+            const uno::Any* pAny;
+            const SdrCustomShapeGeometryItem& rGeometryItem = GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
+            pAny = rGeometryItem.GetPropertyValueByName(u"TextPreRotateAngle");
+            if ( pAny )
+                *pAny >>= fExtraTextRotateAngle;
+        }
+    }
+    else
+    {
+        const uno::Any* pAny;
+        const SdrCustomShapeGeometryItem& rGeometryItem = GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
+        pAny = rGeometryItem.GetPropertyValueByName(u"TextRotateAngle");
+        if ( pAny )
+            *pAny >>= fExtraTextRotateAngle;
+    }
     return fExtraTextRotateAngle;
 }
 

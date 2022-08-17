@@ -104,6 +104,7 @@
 #include <sxsiitm.hxx>
 #include <sxsoitm.hxx>
 #include <sxtraitm.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <libxml/xmlwriter.h>
 
 using namespace ::com::sun::star;
@@ -335,6 +336,8 @@ SdrItemPool::SdrItemPool(
     rPoolDefaults[SDRATTR_TEXTCOLUMNS_NUMBER - SDRATTR_START] = new SfxInt16Item(SDRATTR_TEXTCOLUMNS_NUMBER, 1);
     rPoolDefaults[SDRATTR_TEXTCOLUMNS_SPACING - SDRATTR_START] = new SdrMetricItem(SDRATTR_TEXTCOLUMNS_SPACING, 0);
 
+    rPoolDefaults[SDRATTR_WRITINGMODE2 - SDRATTR_START] = new SvxFrameDirectionItem(SvxFrameDirection::Horizontal_LR_TB, SDRATTR_WRITINGMODE2);
+
     // set own ItemInfos
     mpLocalItemInfos[SDRATTR_SHADOW-SDRATTR_START]._nSID=SID_ATTR_FILL_SHADOW;
     mpLocalItemInfos[SDRATTR_SHADOWCOLOR-SDRATTR_START]._nSID=SID_ATTR_SHADOW_COLOR;
@@ -358,6 +361,8 @@ SdrItemPool::SdrItemPool(
 
     mpLocalItemInfos[SDRATTR_TEXTCOLUMNS_NUMBER - SDRATTR_START]._nSID = 0 /*TODO*/;
     mpLocalItemInfos[SDRATTR_TEXTCOLUMNS_SPACING - SDRATTR_START]._nSID = 0 /*TODO*/;
+
+    mpLocalItemInfos[SDRATTR_WRITINGMODE2 - SDRATTR_START]._nSID = 0 /*TODO*/;
 
     // it's my own creation level, set Defaults and ItemInfos
     SetDefaults(mpLocalPoolDefaults);

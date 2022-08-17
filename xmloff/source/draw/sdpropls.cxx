@@ -317,6 +317,8 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     // misc object properties
     GMAP( "MoveProtect",                    XML_NAMESPACE_STYLE, XML_PROTECT,               XML_SD_TYPE_MOVE_PROTECT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, CTF_SD_MOVE_PROTECT ),
     GMAP( "SizeProtect",                    XML_NAMESPACE_STYLE, XML_PROTECT,               XML_SD_TYPE_SIZE_PROTECT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, CTF_SD_SIZE_PROTECT ),
+    GMAP( "WritingMode",                XML_NAMESPACE_STYLE, XML_WRITING_MODE,              XML_SD_TYPE_WRITINGMODE2, 0 ),
+    GMAPV( "WritingMode",               XML_NAMESPACE_LO_EXT, XML_WRITING_MODE,             XML_SD_TYPE_WRITINGMODE2|MID_FLAG_NO_PROPERTY_EXPORT, 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
 
     MAP_END()
 };
@@ -587,6 +589,18 @@ SvXMLEnumMapEntry<text::WritingMode> const aXML_WritingMode_EnumMap[] =
     { XML_TB_RL,        text::WritingMode_TB_RL },
     { XML_LR_TB,        text::WritingMode_LR_TB },
     { XML_TOKEN_INVALID, text::WritingMode(0) }
+};
+
+SvXMLEnumMapEntry<sal_Int16> const aXML_WritingMode2_EnumMap[] =
+{
+    { XML_LR_TB,    text::WritingMode2::LR_TB },
+    { XML_RL_TB,    text::WritingMode2::RL_TB },
+    { XML_TB_RL,    text::WritingMode2::TB_RL },
+    { XML_TB_LR,    text::WritingMode2::TB_LR },
+    { XML_PAGE,     text::WritingMode2::CONTEXT },
+    { XML_BT_LR,    text::WritingMode2::BT_LR },
+    { XML_TB_RL90,  text::WritingMode2::TB_RL90 },
+    { XML_TOKEN_INVALID, text::WritingMode2::LR_TB }
 };
 
 SvXMLEnumMapEntry<drawing::TextAnimationKind> const pXML_TextAnimation_Enum[] =
@@ -1059,6 +1073,11 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
             case XML_SD_TYPE_WRITINGMODE :
             {
                 pHdl = new XMLEnumPropertyHdl( aXML_WritingMode_EnumMap );
+                break;
+            }
+            case XML_SD_TYPE_WRITINGMODE2 :
+            {
+                pHdl = new XMLEnumPropertyHdl ( aXML_WritingMode2_EnumMap );
                 break;
             }
             case XML_SD_TYPE_PRESPAGE_VISIBILITY :
