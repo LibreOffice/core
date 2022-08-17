@@ -311,21 +311,25 @@ IMPL_LINK_NOARG(SwCaptionDialog, OptionHdl, weld::Button&, void)
     OUString sFieldTypeName = m_xCategoryBox->get_active_text();
     if(sFieldTypeName == m_sNone)
         sFieldTypeName.clear();
-    SwSequenceOptionDialog aDlg(m_xDialog.get(), rView, sFieldTypeName);
-    aDlg.SetApplyBorderAndShadow(bCopyAttributes);
-    aDlg.SetCharacterStyle( sCharacterStyle );
-    aDlg.SetOrderNumberingFirst( bOrderNumberingFirst );
-    aDlg.run();
-    bCopyAttributes = aDlg.IsApplyBorderAndShadow();
-    sCharacterStyle = aDlg.GetCharacterStyle();
-    //#i61007# order of captions
-    if( bOrderNumberingFirst != aDlg.IsOrderNumberingFirst() )
-    {
-        bOrderNumberingFirst = aDlg.IsOrderNumberingFirst();
-        SW_MOD()->GetModuleConfig()->SetCaptionOrderNumberingFirst(bOrderNumberingFirst);
-        ApplyCaptionOrder();
-    }
-    DrawSample();
+    auto pDlg = std::make_shared<SwSequenceOptionDialog>(m_xDialog.get(), rView, sFieldTypeName);
+    pDlg->SetApplyBorderAndShadow(bCopyAttributes);
+    pDlg->SetCharacterStyle( sCharacterStyle );
+    pDlg->SetOrderNumberingFirst( bOrderNumberingFirst );
+
+    GenericDialogController::runAsync(pDlg, [pDlg, this](sal_Int32 nResult){
+        if (nResult == RET_OK) {
+            bCopyAttributes = pDlg->IsApplyBorderAndShadow();
+            sCharacterStyle = pDlg->GetCharacterStyle();
+            //#i61007# order of captions
+            if( bOrderNumberingFirst != pDlg->IsOrderNumberingFirst() )
+            {
+                bOrderNumberingFirst = pDlg->IsOrderNumberingFirst();
+                SW_MOD()->GetModuleConfig()->SetCaptionOrderNumberingFirst(bOrderNumberingFirst);
+                ApplyCaptionOrder();
+            }
+            DrawSample();
+        }
+    });
 }
 
 IMPL_LINK_NOARG(SwCaptionDialog, SelectListBoxHdl, weld::ComboBox&, void)
