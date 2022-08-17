@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12bc760d_528b60b8",
+        "filename": "sfx2/source/view/sfxbasecontroller.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1032,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-08-17T06:15:20Z",
+      "side": 1,
+      "message": "Nit: this is a bit messy; there is some value in being consistent. Either return early in all cases or have if conditions, but not a mix?",
+      "revId": "822f1f37c259367e2941090ea4bb16dc902c73a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d517e18_4f13bc86",
+        "filename": "starmath/source/view.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2288,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-08-17T06:15:20Z",
+      "side": 1,
+      "message": "I don\u0027t understand this comment. Is this a WIP patch?",
+      "revId": "822f1f37c259367e2941090ea4bb16dc902c73a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
