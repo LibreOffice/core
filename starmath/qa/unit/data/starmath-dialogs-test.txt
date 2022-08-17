@@ -44,4 +44,3 @@ modules/smath/ui/alignmentdialog.ui
 modules/smath/ui/catalogdialog.ui
 modules/smath/ui/symdefinedialog.ui
 modules/smath/ui/savedefaultsdialog.ui
-modules/smath/ui/dockingelements.ui
