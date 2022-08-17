@@ -1,0 +1,26 @@
+--- src/gen_dispatch.py
++++ src/gen_dispatch.py
+@@ -123,20 +123,16 @@
+         #
+         # We retain those aliases.  In the x86_64 ABI, the first 6
+         # args are stored in 64-bit registers, so the calls end up
+-        # being the same despite the different types.  We just need to
+-        # add a cast to uintptr_t to shut up the compiler.
++        # being the same despite the different types.
+         if arg_type == 'GLhandleARB':
+             assert len(self.args) < 6
+-            arg_list_name = '(uintptr_t)' + arg_name
+-        else:
+-            arg_list_name = arg_name
+ 
+         self.args.append((arg_type, arg_name))
+         if self.args_decl == 'void':
+-            self.args_list = arg_list_name
++            self.args_list = arg_name
+             self.args_decl = arg_type + ' ' + arg_name
+         else:
+-            self.args_list += ', ' + arg_list_name
++            self.args_list += ', ' + arg_name
+             self.args_decl += ', ' + arg_type + ' ' + arg_name
+ 
+     def add_provider(self, condition, loader, condition_name):

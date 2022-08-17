@@ -16,7 +16,7 @@ $(call gb_UnpackedTarball_get_target,epoxy) :| $(call gb_ExternalExecutable_get_
 epoxy_PYTHON := $(call gb_ExternalExecutable_get_command,python)
 
 # previous versions of epoxy bundled the output, but now it has to be generated
-$(eval $(call gb_UnpackedTarball_set_pre_action,epoxy,\
+$(eval $(call gb_UnpackedTarball_set_post_action,epoxy,\
 	$(epoxy_PYTHON) ./src/gen_dispatch.py --srcdir src --includedir include/epoxy registry/gl.xml && \
 	$(epoxy_PYTHON) ./src/gen_dispatch.py --srcdir src --includedir include/epoxy registry/glx.xml && \
 	$(epoxy_PYTHON) ./src/gen_dispatch.py --srcdir src --includedir include/epoxy registry/egl.xml && \
@@ -33,6 +33,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,epoxy, \
     external/epoxy/epoxy.noegl.by.default.patch \
     external/epoxy/clang-cl.patch \
     external/epoxy/epoxy.android.patch \
+    external/epoxy/Wint-conversion.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
