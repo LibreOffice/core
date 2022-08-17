@@ -2275,7 +2275,7 @@ void SmViewShell::ZoomByItemSet(const SfxItemSet *pSet)
     }
 }
 
-OString SmViewShell::getLOKPayload(int nType, int nViewId, bool* ignore) const
+std::optional<OString> SmViewShell::getLOKPayload(int nType, int nViewId) const
 {
     switch (nType)
     {
@@ -2285,11 +2285,9 @@ OString SmViewShell::getLOKPayload(int nType, int nViewId, bool* ignore) const
         case LOK_CALLBACK_TEXT_SELECTION_START:
         case LOK_CALLBACK_TEXT_SELECTION_END:
         case LOK_CALLBACK_TEXT_VIEW_SELECTION:
-            if (ignore)
-                *ignore = true;
             return {};
     }
-    return SfxViewShell::getLOKPayload(nType, nViewId, ignore); // aborts
+    return SfxViewShell::getLOKPayload(nType, nViewId); // aborts
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

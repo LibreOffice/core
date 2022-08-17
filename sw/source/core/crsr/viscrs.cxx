@@ -271,7 +271,7 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
     m_aTextCursor.Show();
 }
 
-OString SwVisibleCursor::getLOKPayload(int nType, int nViewId, bool*) const
+std::optional<OString> SwVisibleCursor::getLOKPayload(int nType, int nViewId) const
 {
     assert(nType == LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR || nType == LOK_CALLBACK_INVALIDATE_VIEW_CURSOR);
     if (comphelper::LibreOfficeKit::isActive())
@@ -516,7 +516,7 @@ void SwSelPaintRects::Show(std::vector<OString>* pSelectionRectangles)
         pSelectionRectangles->push_back(sRect);
 }
 
-OString SwSelPaintRects::getLOKPayload( int nType, int nViewId, bool* ignore ) const
+std::optional<OString> SwSelPaintRects::getLOKPayload(int nType, int nViewId) const
 {
     switch( nType )
     {
@@ -534,24 +534,19 @@ OString SwSelPaintRects::getLOKPayload( int nType, int nViewId, bool* ignore ) c
 
             // no selection rect
             if (!size())
-            {
-                *ignore = true;
-                return OString();
-            }
+                return {};
 
             if( nType == LOK_CALLBACK_TEXT_SELECTION_START )
             {
                 if (aStartRect.HasArea())
                     return aStartRect.SVRect().toString();
-                *ignore = true;
-                return OString();
+                return {};
             }
             else // LOK_CALLBACK_TEXT_SELECTION_END
             {
                 if (aEndRect.HasArea())
                     return aEndRect.SVRect().toString();
-                *ignore = true;
-                return OString();
+                return {};
             }
         }
         break;

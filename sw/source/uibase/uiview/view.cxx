@@ -1916,11 +1916,11 @@ void SwView::flushPendingLOKInvalidateTiles()
     pSh->FlushPendingLOKInvalidateTiles();
 }
 
-OString SwView::getLOKPayload(int nType, int nViewId, bool* ignore) const
+std::optional<OString> SwView::getLOKPayload(int nType, int nViewId) const
 {
     SwWrtShell* pSh = GetWrtShellPtr();
     assert(pSh);
-    return pSh->getLOKPayload(nType, nViewId, ignore);
+    return pSh->getLOKPayload(nType, nViewId);
 }
 
 OUString SwView::GetDataSourceName() const
