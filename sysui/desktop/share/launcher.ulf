@@ -1,0 +1,83 @@
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+[writer_Comment]
+en-US = "Create and edit text and graphics in letters, reports, documents and Web pages"
+
+[impress_Comment]
+en-US = "Create and edit presentations for slideshows, meetings and Web pages"
+
+[draw_Comment]
+en-US = "Create and edit drawings, flow charts and logos"
+
+[calc_Comment]
+en-US = "Perform calculations, analyze information and manage lists in spreadsheets"
+
+[math_Comment]
+en-US = "Create and edit scientific formulas and equations"
+
+[base_Comment]
+en-US = "Manage databases, create queries and reports to track and manage your information"
+
+[startcenter_Comment]
+en-US = "Launch applications to create text documents, spreadsheets, presentations, drawings, formulas, and databases, or open recently used documents."
+
+[writer_GenericName]
+en-US = "Word Processor"
+
+[impress_GenericName]
+en-US = "Presentation"
+
+[calc_GenericName]
+en-US = "Spreadsheet"
+
+[base_GenericName]
+en-US = "Database Development"
+
+[math_GenericName]
+en-US = "Formula Editor"
+
+[draw_GenericName]
+en-US = "Drawing Program"
+
+[startcenter_GenericName]
+en-US = "Office"
+
+[xsltfilter_GenericName]
+en-US = "XSLT based filters"
+
+[startcenter_ProductName]
+en-US = "%PRODUCTNAME Start Center"
+
+[writer_UnityQuickList]
+en-US = "New Document"
+
+[impress_UnityQuickList]
+en-US = "New Presentation"
+
+[calc_UnityQuickList]
+en-US = "New Spreadsheet"
+
+[base_UnityQuickList]
+en-US = "New Database"
+
+[math_UnityQuickList]
+en-US = "New Formula"
+
+[draw_UnityQuickList]
+en-US = "New Drawing"
