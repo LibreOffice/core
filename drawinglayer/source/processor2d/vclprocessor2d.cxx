@@ -360,8 +360,16 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
 
             if (!aDXArray.empty())
             {
+                const bool bOrigTextRenderModeForResolutionIndependentLayout(
+                    mpOutputDevice->GetTextRenderModeForResolutionIndependentLayout());
+                // tdf#150462 set text render mode to suit use of resolution independent text layout
+                mpOutputDevice->SetTextRenderModeForResolutionIndependentLayout(true);
+
                 mpOutputDevice->DrawTextArray(aStartPoint, aText, aDXArray,
                                               rTextCandidate.getKashidaArray(), nPos, nLen);
+
+                mpOutputDevice->SetTextRenderModeForResolutionIndependentLayout(
+                    bOrigTextRenderModeForResolutionIndependentLayout);
             }
             else
             {
