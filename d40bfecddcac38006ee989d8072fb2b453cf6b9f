@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7853f2f_568ae239",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-08-17T09:35:41Z",
+      "side": 1,
+      "message": "But this is a real leak now when `new SvMemoryStream` throws an exception.",
+      "revId": "d40bfecddcac38006ee989d8072fb2b453cf6b9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
