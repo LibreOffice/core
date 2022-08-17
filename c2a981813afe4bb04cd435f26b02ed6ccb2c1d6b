@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55c04aa6_b4e16cf0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-08-17T09:00:12Z",
+      "side": 1,
+      "message": "hi, looks good in general, just 2 small comments:",
+      "revId": "c2a981813afe4bb04cd435f26b02ed6ccb2c1d6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee6342a6_75863fc2",
+        "filename": "sw/source/uibase/shells/tabsh.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-08-17T09:00:12Z",
+      "side": 1,
+      "message": "this is probably not needed",
+      "revId": "c2a981813afe4bb04cd435f26b02ed6ccb2c1d6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce4424fc_5761532c",
+        "filename": "vcl/jsdialog/enabled.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-08-17T09:00:12Z",
+      "side": 1,
+      "message": "duplicated `cui/ui/splitcellsdialog.ui`",
+      "revId": "c2a981813afe4bb04cd435f26b02ed6ccb2c1d6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
