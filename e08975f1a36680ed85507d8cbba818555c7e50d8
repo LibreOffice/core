@@ -16,6 +16,23 @@
       "message": "Looks reasonable to me, thanks. Did you consider covering this with a test from sw/qa/extras/tiledrendering/tiledrendering.cxx? You can assert there if a certain callback was invoked or not.",
       "revId": "e08975f1a36680ed85507d8cbba818555c7e50d8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c40723aa_e7919031",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-08-17T06:31:23Z",
+      "side": 1,
+      "message": "Is that function called only in these cases when message was missing?\nOr it is called always on delete? I\u0027m wondering if we don\u0027t get duplicated messages.",
+      "revId": "e08975f1a36680ed85507d8cbba818555c7e50d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
