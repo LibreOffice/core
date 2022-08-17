@@ -340,21 +340,40 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
     // ROW HEADER
     // Prepare keys (symbols)
     sal_Int32 nMaxSymbolWidth = 0;
+    constexpr const sal_Int32 constSymbolMargin = 100; // 1mm
     if (bKeys)
     {
         uno::Reference<lang::XMultiServiceFactory> xFactory(m_xChartModel, uno::UNO_QUERY);
+
+        uno::Reference<beans::XPropertySet> xDataTableProperties(m_xDataTableModel);
+        float fFontHeight = 0.0;
+        xDataTableProperties->getPropertyValue("CharHeight") >>= fFontHeight;
+        fFontHeight = o3tl::convert(fFontHeight, o3tl::Length::pt, o3tl::Length::mm100);
+
+        sal_Int32 nSymbolHeight = sal_Int32(fFontHeight * 0.6);
+        sal_Int32 nSymbolWidth = nSymbolHeight;
+
         for (VSeriesPlotter* pSeriesPlotter : m_pSeriesPlotterList)
         {
             if (pSeriesPlotter)
             {
-                sal_Int32 nSymbolWidth = 300;
-                if (pSeriesPlotter->getLegendSymbolStyle() == LegendSymbolStyle::Line)
-                    nSymbolWidth = 600;
+                awt::Size aCurrentRatio = pSeriesPlotter->getPreferredLegendKeyAspectRatio();
+                sal_Int32 nCurrentWidth = aCurrentRatio.Width;
+                if (aCurrentRatio.Height > 0)
+                    nCurrentWidth = nSymbolHeight * aCurrentRatio.Width / aCurrentRatio.Height;
+                nSymbolWidth = std::max(nSymbolWidth, nCurrentWidth);
+            }
+        }
+        nMaxSymbolWidth = nSymbolWidth;
 
-                nMaxSymbolWidth = std::max(nSymbolWidth, nMaxSymbolWidth);
-
+        for (VSeriesPlotter* pSeriesPlotter : m_pSeriesPlotterList)
+        {
+            if (pSeriesPlotter)
+            {
+                awt::Size aSize(nSymbolWidth, nSymbolHeight);
                 std::vector<ViewLegendSymbol> aNewEntries = pSeriesPlotter->createSymbols(
-                    { nSymbolWidth, 300 }, m_xTarget, xFactory, m_xComponentContext);
+                    aSize, m_xTarget, xFactory, m_xComponentContext);
+
                 aSymbols.insert(aSymbols.end(), aNewEntries.begin(), aNewEntries.end());
             }
         }
@@ -384,8 +403,8 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
                                                uno::makeAny(style::ParagraphAdjust_LEFT));
             if (bKeys)
             {
-                xCellPropertySet->setPropertyValue("ParaLeftMargin",
-                                                   uno::makeAny(nMaxSymbolWidth + sal_Int32(200)));
+                xCellPropertySet->setPropertyValue(
+                    "ParaLeftMargin", uno::makeAny(nMaxSymbolWidth + sal_Int32(2 * constSymbolMargin)));
             }
         }
         nRow++;
@@ -436,8 +455,8 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
 
     xBroadcaster->unlockBroadcasts();
 
-    pTableObject->DistributeColumns(0, nColumnCount - 1, true, true);
-    pTableObject->DistributeRows(0, nRowCount - 1, true, true);
+    pTableObject->DistributeColumns(0, nColumnCount, true, true);
+    pTableObject->DistributeRows(0, nRowCount, true, true);
 
     xBroadcaster->lockBroadcasts();
 
@@ -467,8 +486,12 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
             xPropertySet->getPropertyValue("Height") >>= nHeight;
             if (i > 0)
             {
-                aSymbols[nSymbolIndex].aSymbol->setPosition(
-                    { nTableX + 100, nTableY + nTotalHeight + 100 });
+                auto& rSymbol = aSymbols[nSymbolIndex].aSymbol;
+                sal_Int32 nSymbolHeight = rSymbol->getSize().Height;
+                sal_Int32 nSymbolY
+                    = basegfx::fround(double(nHeight) / 2.0 - double(nSymbolHeight) / 2.0);
+                rSymbol->setPosition(
+                    { nTableX + constSymbolMargin, nTableY + nTotalHeight + nSymbolY });
             }
             nTotalHeight += nHeight;
         }
