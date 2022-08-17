@@ -442,7 +442,7 @@ void SdOOXMLExportTest2::testTdf119015()
     sdr::table::SdrTableObj* pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
     CPPUNIT_ASSERT(pTableObj);
     // The position was previously not properly initialized: (0, 0, 100, 100)
-    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(6991, 6902), Size(14099, 1999)),
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(6991, 6902), Size(14099, 2000)),
                          pTableObj->GetLogicRect());
     uno::Reference<table::XTable> xTable(pTableObj->getTable());
 
