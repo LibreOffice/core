@@ -32,8 +32,6 @@
 #include <document.hxx>
 #include <view.hxx>
 
-#include <ElementsDockingWindow.hxx>
-
 #include <starmath.hrc>
 
 #include <svx/xmlsecctrl.hxx>
@@ -70,10 +68,9 @@ namespace
         SvxModifyControl::RegisterControl(SID_TEXTSTATUS, pModule);
         XmlSecStatusBarControl::RegisterControl(SID_SIGNATURE, pModule);
 
-        sfx2::sidebar::SidebarChildWindow::RegisterChildWindow(false, pModule);
+        sfx2::sidebar::SidebarChildWindow::RegisterChildWindow(true, pModule);
 
         SmCmdBoxWrapper::RegisterChildWindow(true);
-        SmElementsDockingWindowWrapper::RegisterChildWindow(true);
     }
 
     struct theSmDLLInstance : public rtl::Static<SmDLL, theSmDLLInstance> {};
