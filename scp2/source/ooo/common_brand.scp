@@ -334,7 +334,7 @@ ProfileItem gid_Brand_Profileitem_Bootstrap_Userinstall
     Order = 3;
     Key = "UserInstallation";
   #ifdef WNT
-    Value = "$SYSUSERCONFIG/%ONEWORDPRODUCTNAME/%USERDIRPRODUCTVERSION";
+    Value = "$SYSUSERCONFIG/LibreOfficepoweredbyCIB/%USERDIRPRODUCTVERSION";
   #elif defined MACOSX
     Value = "$SYSUSERCONFIG/%ONEWORDPRODUCTNAME/%USERDIRPRODUCTVERSION";
   #else
