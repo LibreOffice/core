@@ -112,6 +112,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1cff8b4d_48d4aaf2",
+        "filename": "sw/qa/extras/txtimport/txtimport.cxx",
+        "patchSetId": 23
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1003025
+      },
+      "writtenOn": "2022-08-17T18:36:23Z",
+      "side": 1,
+      "message": "Sure sir.",
+      "parentUuid": "bb21fa0f_44067263",
+      "range": {
+        "startLine": 210,
+        "startChar": 22,
+        "endLine": 210,
+        "endChar": 33
+      },
+      "revId": "ab2901c28a86ec58ca4e6ef8939772a4cc13f7c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "964d5682_c19b5c16",
@@ -135,6 +159,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9539cc1_83aee3d2",
+        "filename": "sw/qa/extras/txtimport/txtimport.cxx",
+        "patchSetId": 23
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1003025
+      },
+      "writtenOn": "2022-08-17T18:36:23Z",
+      "side": 1,
+      "message": "I thought it would split one para into 2 if limit exceeds than 1000 chars!",
+      "parentUuid": "964d5682_c19b5c16",
+      "range": {
+        "startLine": 217,
+        "startChar": 17,
+        "endLine": 217,
+        "endChar": 18
+      },
+      "revId": "ab2901c28a86ec58ca4e6ef8939772a4cc13f7c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "818978ca_fd1502fc",
@@ -148,6 +196,30 @@
       "writtenOn": "2022-08-17T07:55:16Z",
       "side": 1,
       "message": "Is this correct? Importing a text file would split paragraphs before your fix, so all paragraphs would be no larger than 10000.",
+      "range": {
+        "startLine": 225,
+        "startChar": 17,
+        "endLine": 225,
+        "endChar": 22
+      },
+      "revId": "ab2901c28a86ec58ca4e6ef8939772a4cc13f7c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a1e1cc1_9bbc3d34",
+        "filename": "sw/qa/extras/txtimport/txtimport.cxx",
+        "patchSetId": 23
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1003025
+      },
+      "writtenOn": "2022-08-17T18:36:23Z",
+      "side": 1,
+      "message": "While running the test without the fix, it gave this output",
+      "parentUuid": "818978ca_fd1502fc",
       "range": {
         "startLine": 225,
         "startChar": 17,
