@@ -104,13 +104,6 @@ $(eval $(call gb_Library_add_libs,skia,\
 ))
 endif
 
-# clang-16 complains about
-# /home/noel/libo4/workdir/UnpackedTarball/skia/include/private/SkTFitsIn.h:83:16: error: integer value 255 is outside the valid range of values [0, 3] for this enumeration type [-Wenum-constexpr-conversion]
-#        src <= (S)std::numeric_limits<typename sk_strip_enum<D>::type>::max() :
-$(eval $(call gb_Library_add_cxxflags,skia, \
-	-Wno-enum-constexpr-conversion \
-))
-
 $(eval $(call gb_Library_use_libraries,skia,\
     sal \
 ))
