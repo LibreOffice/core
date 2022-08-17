@@ -45,6 +45,7 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfxbasecontroller.hxx>
+#include <sfx2/sidebar/Sidebar.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
 #include <sfx2/viewfac.hxx>
@@ -1084,7 +1085,6 @@ void SmViewShell::InitInterface_Impl()
     //Dummy-Objectbar, to avoid quiver while activating
 
     GetStaticInterface()->RegisterChildWindow(SmCmdBoxWrapper::GetChildWindowId());
-    GetStaticInterface()->RegisterChildWindow(SmElementsDockingWindowWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(SfxInfoBarContainerChild::GetChildWindowId());
 
     GetStaticInterface()->RegisterChildWindow(::sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
@@ -1499,15 +1499,6 @@ SmEditWindow *SmViewShell::GetEditWindow()
     }
 
     return nullptr;
-}
-
-SmElementsDockingWindow* SmViewShell::GetDockingWindow()
-{
-    auto eldockwinwrap = GetViewFrame()->GetChildWindow(SmElementsDockingWindowWrapper::GetChildWindowId());
-    if(eldockwinwrap)
-        return dynamic_cast<SmElementsDockingWindow*>(eldockwinwrap->GetWindow());
-    else
-        return nullptr;
 }
 
 void SmViewShell::SetStatusText(const OUString& rText)
@@ -1942,7 +1933,11 @@ void SmViewShell::Execute(SfxRequest& rReq)
 
         case SID_ELEMENTSDOCKINGWINDOW:
         {
-            GetViewFrame()->ToggleChildWindow( SmElementsDockingWindowWrapper::GetChildWindowId() );
+            // First make sure that the sidebar is visible
+            GetViewFrame()->ShowChildWindow(SID_SIDEBAR);
+
+            sfx2::sidebar::Sidebar::TogglePanel(u"MathElementsPanel",
+                                                GetViewFrame()->GetFrame().GetFrameInterface());
             GetViewFrame()->GetBindings().Invalidate( SID_ELEMENTSDOCKINGWINDOW );
 
             rReq.Ignore ();
@@ -2090,11 +2085,8 @@ void SmViewShell::GetState(SfxItemSet &rSet)
             break;
         case SID_ELEMENTSDOCKINGWINDOW:
             {
-                bool bState = false;
-                SfxChildWindow *pChildWnd = GetViewFrame()->
-                        GetChildWindow( SmElementsDockingWindowWrapper::GetChildWindowId() );
-                if (pChildWnd  &&  pChildWnd->GetWindow()->IsVisible())
-                    bState = true;
+                const bool bState = sfx2::sidebar::Sidebar::IsPanelVisible(
+                    u"MathElementsPanel", GetViewFrame()->GetFrame().GetFrameInterface());
                 rSet.Put(SfxBoolItem(SID_ELEMENTSDOCKINGWINDOW, bState));
             }
             break;
