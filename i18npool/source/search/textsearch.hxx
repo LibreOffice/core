@@ -130,10 +130,6 @@ class TextSearch: public cppu::WeakImplHelper
 
     bool IsDelimiter( const OUString& rStr, sal_Int32 nPos ) const;
 
-    bool checkCTLStart, checkCTLEnd;
-    /// @throws css::uno::RuntimeException
-    bool isCellStart(const OUString& searchStr, sal_Int32 nPos);
-
 public:
     explicit TextSearch(
         const css::uno::Reference < css::uno::XComponentContext >& rxContext );
