@@ -2416,11 +2416,6 @@ AC_ARG_WITH(system-boost,
         [Use boost already on system.]),,
     [with_system_boost="$with_system_headers"])
 
-AC_ARG_WITH(system-cuckoo,
-    AS_HELP_STRING([--with-system-cuckoo],
-        [Use libcuckoo already on system.]),,
-    [with_system_cuckoo="$with_system_headers"])
-
 AC_ARG_WITH(system-dragonbox,
     AS_HELP_STRING([--with-system-dragonbox],
         [Use dragonbox already on system.]),,
@@ -5745,7 +5740,6 @@ if test "$cross_compiling" = "yes"; then
         BOOST
         CAIRO
         CLUCENE
-        CUCKOO
         CURL
         DBCONNECTIVITY
         DESKTOP
@@ -10546,24 +10540,6 @@ dnl Check for system mdds
 dnl ===================================================================
 MDDS_CFLAGS_internal="-I${WORKDIR}/UnpackedTarball/mdds/include"
 libo_CHECK_SYSTEM_MODULE([mdds],[MDDS],[mdds-2.0 >= 2.0.0])
-
-dnl ===================================================================
-dnl Check for system cuckoo
-dnl ===================================================================
-AC_MSG_CHECKING([which cuckoo to use])
-if test "$with_system_cuckoo" = "yes"; then
-    AC_MSG_RESULT([external])
-    SYSTEM_CUCKOO=TRUE
-    AC_LANG_PUSH([C++])
-    AC_CHECK_HEADER([libcuckoo/cuckoohash_map.hh], [],
-       [AC_MSG_ERROR([libcuckoo/cuckoohash_map.hh not found. install cuckoo])], [])
-    AC_LANG_POP([C++])
-else
-    AC_MSG_RESULT([internal])
-    BUILD_TYPE="$BUILD_TYPE CUCKOO"
-    SYSTEM_CUCKOO=
-fi
-AC_SUBST([SYSTEM_CUCKOO])
 
 dnl ===================================================================
 dnl Check for system dragonbox

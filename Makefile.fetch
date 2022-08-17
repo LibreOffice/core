@@ -115,7 +115,6 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 		$(call fetch_Optional,LIBCMIS,LIBCMIS_TARBALL) \
 		$(call fetch_Optional,COINMP,COINMP_TARBALL) \
 		$(call fetch_Optional,CPPUNIT,CPPUNIT_TARBALL) \
-		$(call fetch_Optional,CUCKOO,CUCKOO_TARBALL) \
 		$(call fetch_Optional,CURL,CURL_TARBALL) \
 		$(call fetch_Optional,EBOOK,EBOOK_TARBALL) \
 		$(call fetch_Optional,EPM,EPM_TARBALL) \
