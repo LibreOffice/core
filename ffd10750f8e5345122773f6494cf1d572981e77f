@@ -106,6 +106,24 @@
       "parentUuid": "12e0b386_7af79df0",
       "revId": "ffd10750f8e5345122773f6494cf1d572981e77f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da3902ff_0dc4f9b0",
+        "filename": "vcl/source/filter/svm/SvmConverter.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-08-17T11:19:47Z",
+      "side": 1,
+      "message": "\u003e I think you will have to merge it, as I seem to have lost this ability with the\n\u003e old account that I can’t recover.\n\nI asked on #tdf-infra about that and: \n\u003cguilhem\u003e added #1003606 to the committers group\nso I think you have merge privileges on your new account now.",
+      "parentUuid": "a9992e23_31e26c2d",
+      "revId": "ffd10750f8e5345122773f6494cf1d572981e77f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ],
   "submitRequirementResults": []
