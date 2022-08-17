@@ -102,15 +102,6 @@ void SmDocShell::SetSmSyntaxVersion(sal_uInt16 nSmSyntaxVersion)
 {
     mnSmSyntaxVersion = nSmSyntaxVersion;
     maParser.reset(starmathdatabase::GetVersionSmParser(mnSmSyntaxVersion));
-    SmViewShell* pViewSh = SmGetActiveView();
-    if (pViewSh)
-    {
-        SmElementsDockingWindow* dockingWindow = pViewSh->GetDockingWindow();
-        if(dockingWindow)
-        {
-            dockingWindow->setSmSyntaxVersion(nSmSyntaxVersion);
-        }
-    }
 }
 
 SFX_IMPL_OBJECTFACTORY(SmDocShell, SvGlobalName(SO3_SM_CLASSID), "smath" )
