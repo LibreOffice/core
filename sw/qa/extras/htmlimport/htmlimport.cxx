@@ -563,6 +563,31 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testOleData)
     CPPUNIT_ASSERT(getProperty<OUString>(xShape, "HyperLinkURL").endsWith("/data.ole"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwModelTestBase, testOleData2)
+{
+    // Given an XHTML with 2 objects: the first has a link, the second does not have:
+    uno::Sequence<beans::PropertyValue> aLoadProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
+    };
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "ole-data2.xhtml";
+
+    // When loading the document:
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument", aLoadProperties);
+
+    // Then make sure that the second image doesn't have a link set:
+    uno::Reference<text::XTextGraphicObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xObjects(xSupplier->getGraphicObjects(),
+                                                     uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xObjects->getCount());
+    uno::Reference<css::drawing::XShape> xShape = getShape(1);
+    CPPUNIT_ASSERT(getProperty<OUString>(xShape, "HyperLinkURL").endsWith("/data.ole"));
+    xShape = getShape(2);
+    // Without the accompanying fix in place, this test would have failed, the link from the 1st
+    // image leaked to the 2nd image.
+    CPPUNIT_ASSERT(getProperty<OUString>(xShape, "HyperLinkURL").isEmpty());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
