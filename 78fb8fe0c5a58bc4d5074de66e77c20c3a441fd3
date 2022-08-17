@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb5650c2_32626b17",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-17T07:26:49Z",
+      "side": 1,
+      "message": "Hmm, this looks like an overlook after changing the decision to use SwNode instead?",
+      "revId": "78fb8fe0c5a58bc4d5074de66e77c20c3a441fd3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
