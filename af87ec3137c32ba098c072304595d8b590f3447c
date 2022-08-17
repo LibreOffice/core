@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "459ad41e_2c0bd354",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-08-17T16:06:08Z",
+      "side": 1,
+      "message": "Too bad for the erased fixed typo in the comment whereas there wasn\u0027t any update in the content.",
+      "revId": "af87ec3137c32ba098c072304595d8b590f3447c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
