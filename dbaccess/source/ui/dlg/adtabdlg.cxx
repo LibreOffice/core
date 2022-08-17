@@ -18,7 +18,7 @@
  */
 
 #include <adtabdlg.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <core_resource.hxx>
 #include <strings.hrc>
 #include <connectivity/dbtools.hxx>

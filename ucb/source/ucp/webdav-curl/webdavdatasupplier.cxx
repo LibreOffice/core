@@ -32,7 +32,7 @@
 #include "CurlUri.hxx"
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <com/sun/star/ucb/ResultSetException.hpp>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 using namespace com::sun::star;
 using namespace http_dav_ucp;

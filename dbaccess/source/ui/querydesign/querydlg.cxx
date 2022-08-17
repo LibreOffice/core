@@ -21,7 +21,7 @@
 #include <JoinController.hxx>
 #include <JoinDesignView.hxx>
 #include <strings.hrc>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include "QTableConnectionData.hxx"
 #include <core_resource.hxx>
 #include <QueryTableView.hxx>

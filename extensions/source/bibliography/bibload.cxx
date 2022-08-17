@@ -18,7 +18,7 @@
  */
 
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <svl/itemprop.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

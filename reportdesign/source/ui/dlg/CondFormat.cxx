@@ -29,7 +29,7 @@
 #include <o3tl/safeint.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <comphelper/property.hxx>
 #include <comphelper/propertyvalue.hxx>

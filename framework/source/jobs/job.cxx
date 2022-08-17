@@ -31,7 +31,7 @@
 
 #include <comphelper/sequence.hxx>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
 

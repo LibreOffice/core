@@ -25,7 +25,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <vcl/svapp.hxx>
 
 #include <AccessibleTableShape.hxx>

@@ -36,7 +36,7 @@
 #include <svx/svdopage.hxx>
 #include <svx/fmshell.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <vcl/graphicfilter.hxx>
 
 #include <view/viewoverlaymanager.hxx>

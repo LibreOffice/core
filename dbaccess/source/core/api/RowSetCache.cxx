@@ -45,7 +45,7 @@
 #include <connectivity/sqlnode.hxx>
 #include <connectivity/sqlparse.hxx>
 #include <sqlbison.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 

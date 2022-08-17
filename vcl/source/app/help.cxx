@@ -20,7 +20,7 @@
 #include <comphelper/string.hxx>
 #include <sal/log.hxx>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <tools/time.hxx>
 
 #include <vcl/window.hxx>

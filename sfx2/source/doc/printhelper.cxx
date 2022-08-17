@@ -35,7 +35,7 @@
 #include <osl/file.hxx>
 #include <osl/thread.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <ucbhelper/content.hxx>
 #include <comphelper/interfacecontainer4.hxx>
 #include <cppuhelper/implbase.hxx>

@@ -52,7 +52,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <tools/debug.hxx>
 #include <tools/globname.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <comphelper/classids.hxx>
 #include <comphelper/propertyvalue.hxx>
 

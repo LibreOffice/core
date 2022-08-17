@@ -10,7 +10,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <svx/svxdlg.hxx>
 #include <comphelper/sequence.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include "tsaurls.hxx"
 

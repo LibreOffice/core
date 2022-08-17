@@ -24,7 +24,7 @@
 #include "DomainMapper_Impl.hxx"
 #include "util.hxx"
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 namespace writerfilter::dmapper
 {

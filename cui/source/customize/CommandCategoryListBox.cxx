@@ -35,7 +35,7 @@
 // include search util
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <unotools/textsearch.hxx>
 
 #include <dialmgr.hxx>

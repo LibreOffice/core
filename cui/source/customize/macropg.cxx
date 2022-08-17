@@ -20,7 +20,7 @@
 #include <macropg.hxx>
 #include <svl/eitem.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <bitmaps.hlst>
 #include <cfgutil.hxx>
 #include <dialmgr.hxx>

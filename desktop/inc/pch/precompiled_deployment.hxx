@@ -76,7 +76,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <svl/inettype.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <xmlscript/xml_helper.hxx>

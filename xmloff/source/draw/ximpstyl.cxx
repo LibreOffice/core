@@ -30,7 +30,7 @@
 #include <xmlsdtypes.hxx>
 #include <tools/debug.hxx>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>

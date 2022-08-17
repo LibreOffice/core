@@ -22,7 +22,7 @@
 #include "wizardshell.hxx"
 
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 
 namespace svt::uno

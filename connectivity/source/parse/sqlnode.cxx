@@ -50,7 +50,7 @@
 #include <comphelper/numbers.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbmetadata.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <string.h>
 #include <algorithm>
 #include <functional>

@@ -27,7 +27,7 @@
 
 #include <comphelper/propertyvalue.hxx>
 #include <o3tl/string_view.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/resmgr.hxx>

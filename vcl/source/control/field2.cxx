@@ -22,7 +22,7 @@
 #include <algorithm>
 #include <string_view>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <o3tl/string_view.hxx>

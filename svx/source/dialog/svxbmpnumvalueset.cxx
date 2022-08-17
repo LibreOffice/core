@@ -21,7 +21,7 @@
 
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <svtools/valueset.hxx>
 #include <editeng/numitem.hxx>

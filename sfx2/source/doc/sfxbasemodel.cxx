@@ -77,7 +77,7 @@
 #include <svl/grabbagitem.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <tools/svborder.hxx>
 #include <unotools/tempfile.hxx>
 #include <osl/mutex.hxx>

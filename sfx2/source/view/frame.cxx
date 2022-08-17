@@ -29,7 +29,7 @@
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <tools/svborder.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <appdata.hxx>
 #include <sfx2/app.hxx>

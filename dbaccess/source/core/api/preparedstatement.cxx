@@ -31,7 +31,7 @@
 #include <strings.hxx>
 #include "resultcolumn.hxx"
 #include "resultset.hxx"
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;

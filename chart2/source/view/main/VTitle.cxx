@@ -23,7 +23,7 @@
 #include <com/sun/star/chart2/XTitle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <utility>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 namespace chart
 {

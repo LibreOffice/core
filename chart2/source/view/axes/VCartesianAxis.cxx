@@ -31,7 +31,7 @@
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <o3tl/safeint.hxx>
 #include <rtl/math.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <tools/color.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/unoshtxt.hxx>

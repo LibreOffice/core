@@ -15,7 +15,7 @@
 #include <document.hxx>
 #include "mathtype.hxx"
 #include <unomodel.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 using namespace ::com::sun::star;
 

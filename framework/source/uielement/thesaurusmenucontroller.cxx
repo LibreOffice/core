@@ -23,7 +23,7 @@
 #include <sal/log.hxx>
 #include <svl/lngmisc.hxx>
 #include <svtools/popupmenucontrollerbase.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <unotools/lingucfg.hxx>
 #include <vcl/commandinfoprovider.hxx>
 

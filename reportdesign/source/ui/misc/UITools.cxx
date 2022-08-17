@@ -27,7 +27,7 @@
 #include <FunctionHelper.hxx>
 #include <reportformula.hxx>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <vcl/settings.hxx>
 #include <vcl/syswin.hxx>

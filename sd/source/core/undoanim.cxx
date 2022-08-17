@@ -27,7 +27,7 @@
 #include <sdresid.hxx>
 #include <CustomAnimationEffect.hxx>
 #include <drawdoc.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 namespace com::sun::star::animations { class XAnimationNode; }
 

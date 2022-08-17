@@ -28,7 +28,7 @@
 #include <cppcanvas/vclfactory.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <osl/diagnose.h>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/awt/MouseEvent.hpp>

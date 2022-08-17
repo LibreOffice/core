@@ -20,7 +20,7 @@
 
 #include "intercept.hxx"
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <memory>
 

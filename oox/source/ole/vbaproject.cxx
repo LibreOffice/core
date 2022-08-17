@@ -36,7 +36,7 @@
 #include <osl/diagnose.h>
 #include <rtl/tencinfo.h>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/helper/textinputstream.hxx>

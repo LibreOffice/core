@@ -25,7 +25,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <vector>
 

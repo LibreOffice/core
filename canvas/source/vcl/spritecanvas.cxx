@@ -23,7 +23,7 @@
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <cppuhelper/supportsservice.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include "spritecanvas.hxx"
 #include "outdevholder.hxx"

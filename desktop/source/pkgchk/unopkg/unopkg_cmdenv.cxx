@@ -29,7 +29,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/anytostring.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <unotools/configmgr.hxx>
 #include <com/sun/star/lang/WrappedTargetException.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>

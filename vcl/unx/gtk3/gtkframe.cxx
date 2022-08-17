@@ -29,7 +29,7 @@
 #include <unx/geninst.h>
 #include <headless/svpgdi.hxx>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <vcl/toolkit/floatwin.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>

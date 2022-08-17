@@ -22,7 +22,7 @@
 #endif
 
 #include <svtools/inettbc.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/beans/Property.hpp>

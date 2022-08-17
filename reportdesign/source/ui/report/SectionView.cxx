@@ -25,7 +25,7 @@
 #include <ReportSection.hxx>
 #include <ReportWindow.hxx>
 #include <strings.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 namespace rptui
 {

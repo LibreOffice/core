@@ -46,7 +46,7 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <sal/log.hxx>
 #include <o3tl/string_view.hxx>
 #include <algorithm>

@@ -38,7 +38,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/enumarray.hxx>
 #include <o3tl/string_view.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 using namespace utl;
 using namespace com::sun::star;

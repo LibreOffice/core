@@ -33,7 +33,7 @@
 #include <vector>
 #include <basic/sberrors.hxx>
 #include <comphelper/sequence.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;

@@ -22,7 +22,7 @@
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/poly.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <unotools/resmgr.hxx>
 #include <utility>
 #include <vcl/canvastools.hxx>

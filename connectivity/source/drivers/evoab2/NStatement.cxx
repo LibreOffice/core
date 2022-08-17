@@ -38,7 +38,7 @@
 #include <sqlbison.hxx>
 #include <strings.hrc>
 #include <connectivity/dbexception.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 namespace connectivity::evoab {
 

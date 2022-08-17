@@ -35,7 +35,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/image.hxx>
 #include <unotools/pathoptions.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <memory>
 

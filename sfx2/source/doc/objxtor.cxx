@@ -57,7 +57,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <unotools/ucbhelper.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <tools/globname.hxx>
 #include <tools/debug.hxx>
 

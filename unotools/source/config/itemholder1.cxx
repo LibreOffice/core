@@ -33,7 +33,7 @@
 #include <unotools/syslocaleoptions.hxx>
 #include <rtl/ref.hxx>
 #include <osl/diagnose.h>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 ItemHolder1::ItemHolder1()
 {

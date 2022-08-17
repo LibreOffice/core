@@ -29,7 +29,7 @@
 #include <file/FDateFunctions.hxx>
 #include <file/FNumericFunctions.hxx>
 #include <file/FConnection.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <sqlbison.hxx>
 #include <strings.hrc>
 

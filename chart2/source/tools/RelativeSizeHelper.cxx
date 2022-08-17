@@ -20,7 +20,7 @@
 #include <RelativeSizeHelper.hxx>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <svx/unoshape.hxx>
 #include <vector>
 #include <algorithm>

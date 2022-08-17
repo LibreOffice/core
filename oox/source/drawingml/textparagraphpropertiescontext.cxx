@@ -27,7 +27,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <tools/UnitConversion.hxx>
 
 #include <drawingml/colorchoicecontext.hxx>

@@ -36,7 +36,7 @@
 #include <o3tl/safeint.hxx>
 #include <rtl/ref.hxx>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <vector>
 

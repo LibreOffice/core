@@ -67,7 +67,7 @@
 #include <DrawDocShell.hxx>
 #include <sdabstdlg.hxx>
 #include <sfx2/ipclient.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <ViewShellBase.hxx>
 #include <FormShellManager.hxx>
 #include <LayerTabBar.hxx>

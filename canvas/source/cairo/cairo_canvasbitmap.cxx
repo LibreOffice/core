@@ -21,7 +21,7 @@
 #include <sal/log.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <utility>
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapTools.hxx>

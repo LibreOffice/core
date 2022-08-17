@@ -25,7 +25,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <o3tl/safeint.hxx>
 #include <utility>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include "element.hxx"
 #include "document.hxx"

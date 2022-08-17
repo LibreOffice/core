@@ -42,7 +42,7 @@
 #include <sfx2/msgpool.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <utility>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -25,7 +25,7 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <utility>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 namespace framework{
 

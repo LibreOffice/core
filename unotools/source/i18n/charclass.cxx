@@ -20,7 +20,7 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/charclass.hxx>
 #include <rtl/character.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <com/sun/star/i18n/CharacterClassification.hpp>
 #include <utility>

@@ -36,7 +36,7 @@
 #include <comphelper/property.hxx>
 #include <connectivity/dbtools.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <unotools/sharedunocomponent.hxx>
 
 #include <limits.h>

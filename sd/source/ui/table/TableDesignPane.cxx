@@ -35,7 +35,7 @@
 #include <vcl/virdev.hxx>
 
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <svl/style.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/bindings.hxx>

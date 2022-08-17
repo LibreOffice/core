@@ -23,7 +23,7 @@
 
 #include <basegfx/utils/canvastools.hxx>
 #include <com/sun/star/lang/NoSupportException.hpp>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/sysdata.hxx>

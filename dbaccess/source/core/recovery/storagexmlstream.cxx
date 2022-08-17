@@ -25,7 +25,7 @@
 #include <com/sun/star/xml/sax/Writer.hpp>
 
 #include <rtl/ref.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <xmloff/attrlist.hxx>
 
 #include <stack>

@@ -60,7 +60,7 @@
 
 #include <comphelper/interaction.hxx>
 #include <comphelper/namedvaluecollection.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <osl/diagnose.h>
 #include <connectivity/DriversConfig.hxx>
 #include <utility>

@@ -63,7 +63,7 @@
 #include <slideshow.hxx>
 #include <annotationmanager.hxx>
 #include <DrawController.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <LayerTabBar.hxx>
 
 #include <memory>

@@ -35,7 +35,7 @@
 #include <osl/file.hxx>
 #include <unotools/securityoptions.hxx>
 #include <svtools/sfxecode.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <tools/urlobj.hxx>
 
 

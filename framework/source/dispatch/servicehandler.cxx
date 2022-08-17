@@ -24,7 +24,7 @@
 #include <com/sun/star/task/XJobExecutor.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <utility>
 

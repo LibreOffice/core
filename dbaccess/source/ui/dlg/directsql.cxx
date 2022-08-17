@@ -25,7 +25,7 @@
 #include <comphelper/types.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <com/sun/star/sdbc/SQLException.hpp>

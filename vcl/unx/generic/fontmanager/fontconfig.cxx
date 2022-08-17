@@ -40,7 +40,7 @@
 #include <i18nutil/unicode.hxx>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <unicode/uchar.h>
 #include <unicode/uscript.h>
 #include <officecfg/Office/Common.hxx>

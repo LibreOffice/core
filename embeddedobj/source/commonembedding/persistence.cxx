@@ -56,7 +56,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <unotools/mediadescriptor.hxx>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <sal/log.hxx>
 #include <unotools/configmgr.hxx>
 #include "persistence.hxx"

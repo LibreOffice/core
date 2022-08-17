@@ -43,7 +43,7 @@
 #include <basic/sbstar.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <sfx2/infobar.hxx>
 #include <sfx2/dispatch.hxx>

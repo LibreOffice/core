@@ -26,7 +26,7 @@
 
 #include <sax/tools/converter.hxx>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <list>
 #include <comphelper/extract.hxx>

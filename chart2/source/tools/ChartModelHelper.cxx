@@ -34,7 +34,7 @@
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 namespace chart
 {

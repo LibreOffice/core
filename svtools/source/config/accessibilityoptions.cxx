@@ -30,7 +30,7 @@
 
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <mutex>
 
 #include "itemholder2.hxx"

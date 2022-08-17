@@ -36,7 +36,7 @@
 #include <oox/core/xmlfilterbase.hxx>
 #include <drawingml/textparagraphproperties.hxx>
 #include <drawingml/textcharacterproperties.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <editeng/flditem.hxx>
 
 using namespace ::com::sun::star;

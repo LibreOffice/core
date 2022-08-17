@@ -35,7 +35,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <svl/style.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <tablefunction.hxx>
 #include <DrawViewShell.hxx>

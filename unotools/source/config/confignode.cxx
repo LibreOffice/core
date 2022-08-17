@@ -19,7 +19,7 @@
 
 #include <unotools/confignode.hxx>
 #include <unotools/configpaths.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>

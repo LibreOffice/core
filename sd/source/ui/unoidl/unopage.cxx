@@ -38,7 +38,7 @@
 #include <vcl/filter/SvmWriter.hxx>
 #include <vcl/metaact.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <vcl/svapp.hxx>
 #include <AnnotationEnumeration.hxx>
 #include <createunopageimpl.hxx>

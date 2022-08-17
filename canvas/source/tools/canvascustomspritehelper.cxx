@@ -30,7 +30,7 @@
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 #include <rtl/math.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <base/canvascustomspritehelper.hxx>
 #include <canvas/canvastools.hxx>

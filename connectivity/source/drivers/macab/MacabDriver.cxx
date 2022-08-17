@@ -25,7 +25,7 @@
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <strings.hrc>
 #include <cppuhelper/supportsservice.hxx>
 

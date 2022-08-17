@@ -31,7 +31,7 @@
 #include <rtl/bootstrap.hxx>
 #endif
 #include <rtl/ustring.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <unotools/bootstrap.hxx>
 
 #include "userinstall.hxx"

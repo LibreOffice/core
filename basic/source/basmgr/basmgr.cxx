@@ -28,7 +28,7 @@
 #include <sot/storinfo.hxx>
 #include <unotools/pathoptions.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <basic/sbmod.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <sal/log.hxx>

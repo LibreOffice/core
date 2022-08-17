@@ -36,7 +36,7 @@
 #include <tools/time.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <unotools/pathoptions.hxx>
 
 #include <comphelper/processfactory.hxx>

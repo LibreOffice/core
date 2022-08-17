@@ -44,7 +44,7 @@
 #include <svtools/restartdialog.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/inputdlg.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>

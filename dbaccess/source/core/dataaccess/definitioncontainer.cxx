@@ -22,7 +22,7 @@
 #include <strings.hrc>
 #include <strings.hxx>
 
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/enumhelper.hxx>

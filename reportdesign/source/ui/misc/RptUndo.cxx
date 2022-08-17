@@ -33,7 +33,7 @@
 #include <comphelper/types.hxx>
 #include <svx/unoshape.hxx>
 #include <utility>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <functional>
 

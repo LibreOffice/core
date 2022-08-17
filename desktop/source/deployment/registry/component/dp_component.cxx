@@ -36,7 +36,7 @@
 #include <utility>
 #include <xmlscript/xml_helper.hxx>
 #include <svl/inettype.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <o3tl/string_view.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/deployment/DeploymentException.hpp>

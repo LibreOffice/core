@@ -27,7 +27,7 @@
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <osl/mutex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include "cairo_spritecanvas.hxx"

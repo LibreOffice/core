@@ -43,7 +43,7 @@
 
 #include <comphelper/classids.hxx>
 #include <servicenames_charttypes.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 namespace chart
 {

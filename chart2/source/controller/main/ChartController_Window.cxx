@@ -83,7 +83,7 @@
 #include <vcl/weld.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <svtools/acceleratorexecute.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <sal/log.hxx>
 #include <o3tl/string_view.hxx>

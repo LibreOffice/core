@@ -32,7 +32,7 @@
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <sdbcoretools.hxx>
 #include <stringconstants.hxx>
 #include <strings.hxx>

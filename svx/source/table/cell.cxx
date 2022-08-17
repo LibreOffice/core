@@ -58,7 +58,7 @@
 #include <svx/xflbmtit.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/xflclit.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 
 using ::editeng::SvxBorderLine;

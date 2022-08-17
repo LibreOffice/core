@@ -29,7 +29,7 @@
 
 #include <DrawDocShell.hxx>
 #include <editeng/eeitem.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <tools/UnitConversion.hxx>
 
 #include <vcl/idle.hxx>

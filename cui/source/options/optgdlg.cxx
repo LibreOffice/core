@@ -54,7 +54,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Setup.hxx>
 #include <comphelper/configuration.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #if HAVE_FEATURE_BREAKPAD
 #include <desktop/crashreport.hxx>
 #endif

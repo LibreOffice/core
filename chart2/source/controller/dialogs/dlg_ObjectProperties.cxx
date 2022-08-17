@@ -73,7 +73,7 @@
 
 #include <svl/cjkoptions.hxx>
 #include <utility>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 namespace com::sun::star::chart2 { class XChartType; }
 namespace com::sun::star::chart2 { class XDataSeries; }

@@ -32,7 +32,7 @@
 #include <sfx2/filedlghelper.hxx>
 #include <svl/filenotation.hxx>
 #include <svtools/inettbc.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <unotools/confignode.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <vcl/svapp.hxx>

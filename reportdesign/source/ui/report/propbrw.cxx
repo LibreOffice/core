@@ -23,7 +23,7 @@
 #include <cppuhelper/component_context.hxx>
 #include <strings.hrc>
 #include <rptui_slotid.hrc>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/Frame.hpp>

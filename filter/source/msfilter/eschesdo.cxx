@@ -23,7 +23,7 @@
 #include <svx/svdobj.hxx>
 #include <tools/poly.hxx>
 #include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <svx/fmdpage.hxx>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>

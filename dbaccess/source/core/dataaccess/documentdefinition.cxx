@@ -21,7 +21,7 @@
 #include <ModelImpl.hxx>
 #include <stringconstants.hxx>
 #include <sdbcoretools.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/sequence.hxx>
 #include <comphelper/namedvaluecollection.hxx>

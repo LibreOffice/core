@@ -27,7 +27,7 @@
 #include "outact.hxx"
 #include <memory>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 
 using namespace ::com::sun::star;
 

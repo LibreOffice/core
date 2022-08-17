@@ -43,7 +43,7 @@
 
 #include <comphelper/ofopxmlhelper.hxx>
 #include <comphelper/sequence.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 

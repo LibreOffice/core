@@ -27,7 +27,7 @@
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <rtl/math.hxx>
-#include <tools/diagnose_ex.h>
+#include <comphelper/diagnose_ex.hxx>
 #include <sal/log.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/canvastools.hxx>
