@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62a99910_7641f7d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001965
+      },
+      "writtenOn": "2022-08-18T20:49:04Z",
+      "side": 1,
+      "message": "Mike, sorry, but I disagree with your patch, because:\n\n1. There is tdf#125931 and I suggested there the idea about additional (!) Sidebar sections for Math options and Greek symbols. And I thought to have on the screen both panes Elements and Sidebar in the same time. It would be really useful for the workflow. It\u0027s the same situation that we have in Writer with Navigator: there is Navigator window and there is Sidebar\u0027s Navigator. So I can have Navigator in left side and (for example) Styles on the Sidebar in the same time, it\u0027s really comfortable, but other people can use only Sidebar\u0027s Navigator if they want...\n2. I didn\u0027t see any bug reports or enhancements or even just discussion about deleting the Element pane from Math\n\nHeiko, what do you think about this?",
+      "revId": "bacc90ae6e6fa2607a25a192dfd2ff97bb261a62",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
