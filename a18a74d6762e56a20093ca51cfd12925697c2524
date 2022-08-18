@@ -16,6 +16,24 @@
       "message": "Hi László,\nShould it be added to https://wiki.documentfoundation.org/ReleaseNotes/7.5 ?",
       "revId": "a18a74d6762e56a20093ca51cfd12925697c2524",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dfd08b42_6fc6861e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-08-18T10:52:33Z",
+      "side": 1,
+      "message": "Hi Xisco,\n\nIt\u0027s worth it, as a Writer improvement. Likely I\u0027ll check DOCX drop cap export, and write about it.\n\nThanks,\nLászló\n\nP. S. Thanks for handling the Jenkins problem with my other issue on Windows!",
+      "parentUuid": "53c1f16e_21a59b6d",
+      "revId": "a18a74d6762e56a20093ca51cfd12925697c2524",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
