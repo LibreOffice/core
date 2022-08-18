@@ -618,7 +618,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertApplet(
     SfxItemSetFixed<RES_FRMATR_BEGIN, RES_FRMATR_END> aItemSet( pDoc->GetAttrPool() );
     lcl_putHeightAndWidth( aItemSet, nHeight, nWidth);
 
-    SwApplet_Impl aAppletImpl ( aItemSet );
+    SwApplet_Impl aAppletImpl ( std::move(aItemSet) );
 
     OUString sCodeBase;
     if( !rHRef.isEmpty() )

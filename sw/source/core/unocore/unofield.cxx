@@ -791,7 +791,7 @@ SwFieldType* SwXFieldMaster::GetFieldType(bool const bDontCreate) const
         aData.sCommand = m_pImpl->m_sParam2;
         aData.nCommandType = m_pImpl->m_nParam2;
 
-        SwDBFieldType aType(m_pImpl->m_pDoc, m_pImpl->m_sParam3, aData);
+        SwDBFieldType aType(m_pImpl->m_pDoc, m_pImpl->m_sParam3, std::move(aData));
         SwFieldType *const pType = m_pImpl->m_pDoc->getIDocumentFieldsAccess().InsertFieldType(aType);
         m_pImpl->SetFieldType(pType);
     }

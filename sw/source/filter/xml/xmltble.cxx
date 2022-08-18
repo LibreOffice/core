@@ -648,7 +648,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
         SwFrameFormat *pFrameFormat = pLine->GetFrameFormat();
         if (auto oNew = rExpRows.AddRow(*pFrameFormat, rNamePrefix, nLine))
         {
-            ExportFormat(*pFrameFormat, XML_TABLE_ROW, oNew);
+            ExportFormat(*pFrameFormat, XML_TABLE_ROW, std::move(oNew));
         }
 
         const SwTableBoxes& rBoxes = pLine->GetTabBoxes();
@@ -679,7 +679,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
                 if (auto oNew = rExpCells.AddCell(*pFrameFormat2, rNamePrefix, nOldCol, nLine,
                                        bTop) )
                 {
-                    ExportFormat(*pFrameFormat2, XML_TABLE_CELL, oNew);
+                    ExportFormat(*pFrameFormat2, XML_TABLE_CELL, std::move(oNew));
                 }
 
                 Reference < XCell > xCell = SwXCell::CreateXCell(

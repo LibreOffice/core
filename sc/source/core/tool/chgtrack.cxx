@@ -4470,7 +4470,7 @@ ScChangeTrack* ScChangeTrack::Clone( ScDocument* pDocument ) const
                         pAction->GetUser(),
                         pAction->GetDateTimeUTC(),
                         pAction->GetComment(),
-                        aClonedOldCell,
+                        std::move(aClonedOldCell),
                         pDocument,
                         aOldValue );
 

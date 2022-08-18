@@ -523,7 +523,7 @@ bool MotionPathTag::MouseButtonDown( const MouseEvent& rMEvt, SmartHdl& rHdl )
 
                     // #i95646# add DragPoly as geometry to each local SdrDragMethod to be able
                     // to create the needed local SdrDragEntry for it in createSdrDragEntries()
-                    const basegfx::B2DPolyPolygon aDragPoly(mpPathObj->GetPathPoly());
+                    basegfx::B2DPolyPolygon aDragPoly(mpPathObj->GetPathPoly());
 
                     if( (pHdl->GetKind() == SdrHdlKind::Move) || (pHdl->GetKind() == SdrHdlKind::SmartTag) )
                     {
@@ -536,7 +536,7 @@ bool MotionPathTag::MouseButtonDown( const MouseEvent& rMEvt, SmartHdl& rHdl )
                     }
                     else
                     {
-                        pDragMethod = new PathDragResize( mrView, xTag, aDragPoly );
+                        pDragMethod = new PathDragResize( mrView, xTag, std::move(aDragPoly) );
                     }
 
                     mrView.BegDragObj(aMDPos, nullptr, pHdl, nDrgLog, pDragMethod );

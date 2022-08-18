@@ -2506,7 +2506,7 @@ formula::FormulaTokenRef ScTable::ResolveStaticReference( SCCOL nCol1, SCROW nRo
             return formula::FormulaTokenRef();
     }
 
-    return formula::FormulaTokenRef(new ScMatrixToken(pMat));
+    return formula::FormulaTokenRef(new ScMatrixToken(std::move(pMat)));
 }
 
 formula::VectorRefArray ScTable::FetchVectorRefArray( SCCOL nCol, SCROW nRow1, SCROW nRow2 )

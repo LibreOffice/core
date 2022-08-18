@@ -1500,7 +1500,7 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
                 [&rNode](sal_Int32 const nBegin, sal_uInt16 const script, bool const bNoChar)
                     { return rNode.GetLang(nBegin, bNoChar ? 0 : 1, script); });
             auto pGetLangOfChar(pMerged ? pGetLangOfCharM : pGetLangOfChar1);
-            SwScanner aScanner( pGetLangOfChar, rText, nullptr, ModelToViewHelper(),
+            SwScanner aScanner( std::move(pGetLangOfChar), rText, nullptr, ModelToViewHelper(),
                                 i18n::WordType::DICTIONARY_WORD,
                                 sal_Int32(nLastKashida), sal_Int32(nChg));
 

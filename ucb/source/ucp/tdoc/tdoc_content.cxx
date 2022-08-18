@@ -117,7 +117,7 @@ rtl::Reference<Content> Content::create(
                              aProps ) )
         return nullptr;
 
-    return new Content( rxContext, pProvider, Identifier, aProps );
+    return new Content( rxContext, pProvider, Identifier, std::move(aProps) );
 }
 
 

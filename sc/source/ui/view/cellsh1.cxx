@@ -1953,7 +1953,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                                     DefaultFontType::CJK_SPREADSHEET,
                                                     eTargetLang, GetDefaultFontFlags::OnlyOne );
                                 ScConversionParam aConvParam( SC_CONVERSION_CHINESE_TRANSL,
-                                    eSourceLang, eTargetLang, aTargetFont, nOptions, false );
+                                    eSourceLang, eTargetLang, std::move(aTargetFont), nOptions, false );
                                 pTabViewShell->DoSheetConversion( aConvParam );
                             }
                         }

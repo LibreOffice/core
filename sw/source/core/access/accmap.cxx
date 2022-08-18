@@ -2435,7 +2435,7 @@ void SwAccessibleMap::InvalidateContent( const SwFrame *pFrame )
     {
         SwAccessibleEvent_Impl aEvent(
             SwAccessibleEvent_Impl::INVALID_CONTENT, pAccImpl,
-            aFrameOrObj );
+            std::move(aFrameOrObj) );
         AppendEvent( aEvent );
     }
     else
@@ -2472,7 +2472,7 @@ void SwAccessibleMap::InvalidateAttr( const SwTextFrame& rTextFrame )
     if( GetShell()->ActionPend() )
     {
         SwAccessibleEvent_Impl aEvent( SwAccessibleEvent_Impl::INVALID_ATTR,
-                                       pAccImpl, aFrameOrObj );
+                                       pAccImpl, std::move(aFrameOrObj) );
         aEvent.SetStates( AccessibleStates::TEXT_ATTRIBUTE_CHANGED );
         AppendEvent( aEvent );
     }

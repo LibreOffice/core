@@ -58,7 +58,7 @@ bool ScTpDefaultsOptions::FillItemSet(SfxItemSet *rCoreSet)
 #if HAVE_FEATURE_JUMBO_SHEETS
         aOpt.SetInitJumboSheets( bJumboSheets );
 #endif
-        rCoreSet->Put( ScTpDefaultsItem( aOpt ) );
+        rCoreSet->Put( ScTpDefaultsItem( std::move(aOpt) ) );
         bRet = true;
     }
     return bRet;

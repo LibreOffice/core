@@ -3361,7 +3361,7 @@ void AttributeOutputBase::TextFlyContent( const SwFormatFlyCnt& rFlyContent )
         Point aLayPos = pTextNd->FindLayoutRect( false, &origin ).Pos();
 
         SwPosition aPos( *pTextNd );
-        ww8::Frame aFrame( *rFlyContent.GetFrameFormat(), aPos );
+        ww8::Frame aFrame( *rFlyContent.GetFrameFormat(), std::move(aPos) );
 
         OutputFlyFrame_Impl( aFrame, aLayPos );
     }

@@ -990,7 +990,7 @@ ScDBRangeBase* ScInterpreter::PopDBDoubleRef()
                 PopExternalDoubleRef(pMat);
             if (nGlobalError != FormulaError::NONE)
                 break;
-            return new ScDBExternalRange(&mrDoc, pMat);
+            return new ScDBExternalRange(&mrDoc, std::move(pMat));
         }
         default:
             SetError( FormulaError::IllegalParameter);
@@ -1528,7 +1528,7 @@ bool ScInterpreter::ConvertMatrixParameters()
                                 if ( nJumpRows < o3tl::make_unsigned(nRow2 - nRow1 + 1) )
                                     nJumpRows = static_cast<SCSIZE>(nRow2 - nRow1 + 1);
                             }
-                            formula::FormulaToken* pNew = new ScMatrixToken( pMat);
+                            formula::FormulaToken* pNew = new ScMatrixToken( std::move(pMat) );
                             pNew->IncRef();
                             pStack[ sp - i ] = pNew;
                             p->DecRef();    // p may be dead now!
@@ -1564,7 +1564,7 @@ bool ScInterpreter::ConvertMatrixParameters()
                                 if (nJumpRows < nR)
                                     nJumpRows = nR;
                             }
-                            formula::FormulaToken* pNew = new ScMatrixToken( pMat);
+                            formula::FormulaToken* pNew = new ScMatrixToken( std::move(pMat) );
                             pNew->IncRef();
                             pStack[ sp - i ] = pNew;
                             p->DecRef();    // p may be dead now!

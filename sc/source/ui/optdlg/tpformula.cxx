@@ -314,7 +314,7 @@ bool ScTpFormulaOptions::FillItemSet(SfxItemSet* rCoreSet)
         aOpt.SetODFRecalcOptions(eODFRecalc);
         aOpt.SetWriteCalcConfig( maCurrentDocOptions.IsWriteCalcConfig());
 
-        rCoreSet->Put( ScTpFormulaItem( aOpt ) );
+        rCoreSet->Put( ScTpFormulaItem( std::move(aOpt) ) );
         rCoreSet->Put( ScTpCalcItem( SID_SCDOCOPTIONS, maCurrentDocOptions ) );
 
         bRet = true;

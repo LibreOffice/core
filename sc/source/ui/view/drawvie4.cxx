@@ -92,7 +92,7 @@ void ScDrawView::BeginDrag( vcl::Window* pWindow, const Point& rStartPos )
     aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
     // maSize is set in ScDrawTransferObj ctor
 
-    rtl::Reference<ScDrawTransferObj> pTransferObj = new ScDrawTransferObj( std::move(pModel), pDocSh, aObjDesc );
+    rtl::Reference<ScDrawTransferObj> pTransferObj = new ScDrawTransferObj( std::move(pModel), pDocSh, std::move(aObjDesc) );
 
     pTransferObj->SetDrawPersist( aDragShellRef.get() );    // keep persist for ole objects alive
     pTransferObj->SetDragSource( this );               // copies selection
@@ -361,7 +361,7 @@ void ScDrawView::DoCopy()
     aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
     // maSize is set in ScDrawTransferObj ctor
 
-    rtl::Reference<ScDrawTransferObj> pTransferObj(new ScDrawTransferObj( std::move(pModel), pDocSh, aObjDesc ));
+    rtl::Reference<ScDrawTransferObj> pTransferObj(new ScDrawTransferObj( std::move(pModel), pDocSh, std::move(aObjDesc) ));
 
     if ( ScGlobal::xDrawClipDocShellRef.is() )
     {
@@ -395,7 +395,7 @@ uno::Reference<datatransfer::XTransferable> ScDrawView::CopyToTransferable()
     aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
     // maSize is set in ScDrawTransferObj ctor
 
-    rtl::Reference<ScDrawTransferObj> pTransferObj = new ScDrawTransferObj( std::move(pModel), pDocSh, aObjDesc );
+    rtl::Reference<ScDrawTransferObj> pTransferObj = new ScDrawTransferObj( std::move(pModel), pDocSh, std::move(aObjDesc) );
 
     if ( ScGlobal::xDrawClipDocShellRef.is() )
     {
