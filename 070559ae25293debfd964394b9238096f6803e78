@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46688351_0db6737a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2022-08-18T13:25:02Z",
+      "side": 1,
+      "message": "The changes look reasonable, but I can\u0027t be sure the interaction of \"pending invalidations\" with other changes will give the correct result. I\u0027d expect all invalidations to be immediate and synchronous. This delayed invalidation logic makes things async, which is very hard to understand and debug.\n\nI assume we have tests that reproduces this scenario we are fixing. If not, we really need to add one. Breaking communication assumptions is very easy and once broken, it\u0027s very hard to find out.",
+      "revId": "070559ae25293debfd964394b9238096f6803e78",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
