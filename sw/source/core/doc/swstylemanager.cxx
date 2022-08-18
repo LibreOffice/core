@@ -37,6 +37,7 @@ public:
         { mMap[ StylePool::nameOf(pStyle) ] = pStyle; }
     void addCompletePool( StylePool& rPool );
     std::shared_ptr<SfxItemSet> getByName( const OUString& rName ) { return mMap[rName]; }
+    void clear() { mMap.clear(); }
 };
 
 }
@@ -59,8 +60,8 @@ class SwStyleManager : public IStyleAccess
 {
     StylePool m_aAutoCharPool;
     StylePool m_aAutoParaPool;
-    std::unique_ptr<SwStyleCache> mpCharCache;
-    std::unique_ptr<SwStyleCache> mpParaCache;
+    SwStyleCache maCharCache;
+    SwStyleCache maParaCache;
 
 public:
     // accept empty item set for ignorable paragraph items.
@@ -88,8 +89,8 @@ std::unique_ptr<IStyleAccess> createStyleManager( SfxItemSet const * pIgnorableP
 
 void SwStyleManager::clearCaches()
 {
-    mpCharCache.reset();
-    mpParaCache.reset();
+    maCharCache.clear();
+    maParaCache.clear();
 }
 
 std::shared_ptr<SfxItemSet> SwStyleManager::getAutomaticStyle( const SfxItemSet& rSet,
@@ -109,15 +110,11 @@ std::shared_ptr<SfxItemSet> SwStyleManager::cacheAutomaticStyle( const SfxItemSe
     std::shared_ptr<SfxItemSet> pStyle = rAutoPool.insertItemSet( rSet );
     if (eFamily == IStyleAccess::AUTO_STYLE_CHAR)
     {
-        if (!mpCharCache)
-            mpCharCache.reset(new SwStyleCache());
-        mpCharCache->addStyleName( pStyle );
+        maCharCache.addStyleName( pStyle );
     }
     else
     {
-        if (!mpParaCache)
-            mpParaCache.reset(new SwStyleCache());
-        mpParaCache->addStyleName( pStyle );
+        maParaCache.addStyleName( pStyle );
     }
     return pStyle;
 }
@@ -127,17 +124,15 @@ std::shared_ptr<SfxItemSet> SwStyleManager::getByName( const OUString& rName,
 {
     StylePool& rAutoPool
         = eFamily == IStyleAccess::AUTO_STYLE_CHAR ? m_aAutoCharPool : m_aAutoParaPool;
-    std::unique_ptr<SwStyleCache> &rpCache = eFamily == IStyleAccess::AUTO_STYLE_CHAR ? mpCharCache : mpParaCache;
-    if( !rpCache )
-        rpCache.reset(new SwStyleCache());
-    std::shared_ptr<SfxItemSet> pStyle = rpCache->getByName( rName );
+    SwStyleCache &rCache = eFamily == IStyleAccess::AUTO_STYLE_CHAR ? maCharCache : maParaCache;
+    std::shared_ptr<SfxItemSet> pStyle = rCache.getByName( rName );
     if( !pStyle )
     {
         // Ok, ok, it's allowed to ask for uncached styles (from UNO) but it should not be done
         // during loading a document
         OSL_FAIL( "Don't ask for uncached styles" );
-        rpCache->addCompletePool( rAutoPool );
-        pStyle = rpCache->getByName( rName );
+        rCache.addCompletePool( rAutoPool );
+        pStyle = rCache.getByName( rName );
     }
     return pStyle;
 }
