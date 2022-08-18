@@ -898,10 +898,10 @@ static void DeleteDDEMarks(SwDoc & rDest)
 
 void SwTransferable::PrepareForCopyTextRange(SwPaM & rPaM)
 {
-    std::unique_ptr<SwWait> pWait;
+    std::optional<SwWait> oWait;
     if (m_pWrtShell->ShouldWait())
     {
-        pWait.reset(new SwWait( *m_pWrtShell->GetView().GetDocShell(), true ));
+        oWait.emplace( *m_pWrtShell->GetView().GetDocShell(), true );
     }
 
     m_pClpDocFac.reset(new SwDocFac);
@@ -1042,9 +1042,9 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
     else if ( m_pWrtShell->IsSelection() || m_pWrtShell->IsFrameSelected() ||
               m_pWrtShell->IsObjSelected() )
     {
-        std::unique_ptr<SwWait> pWait;
+        std::optional<SwWait> oWait;
         if( m_pWrtShell->ShouldWait() )
-            pWait.reset(new SwWait( *m_pWrtShell->GetView().GetDocShell(), true ));
+            oWait.emplace( *m_pWrtShell->GetView().GetDocShell(), true );
 
         m_pClpDocFac.reset(new SwDocFac);
 

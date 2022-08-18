@@ -492,7 +492,7 @@ bool SwView::SearchAndWrap(bool bApi)
     if (!s_pSrchItem->GetSelection())
         m_pWrtShell->KillSelection(nullptr, false);
 
-    std::unique_ptr<SwWait> pWait(new SwWait( *GetDocShell(), true ));
+    std::optional<SwWait> oWait( std::in_place, *GetDocShell(), true );
     if( FUNC_Search( aOpts ) )
     {
         s_bFound = true;
@@ -505,7 +505,7 @@ bool SwView::SearchAndWrap(bool bApi)
         m_pWrtShell->EndAllAction();
         return true;
     }
-    pWait.reset();
+    oWait.reset();
 
         // Search in the specialized areas when no search is present in selections.
         // When searching selections will already searched in these special areas.
@@ -545,7 +545,7 @@ bool SwView::SearchAndWrap(bool bApi)
 
     m_pWrtShell->StartAllAction();
     m_pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
-    pWait.reset(new SwWait( *GetDocShell(), true ));
+    oWait.emplace( *GetDocShell(), true );
 
     bool bSrchBkwrd = SwDocPositions::Start == aOpts.eEnd;
 
@@ -576,7 +576,7 @@ bool SwView::SearchAndWrap(bool bApi)
     }
 
     m_pWrtShell->EndAllAction();
-    pWait.reset();
+    oWait.reset();
 #if HAVE_FEATURE_DESKTOP
     if (s_bFound)
     {

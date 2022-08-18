@@ -64,11 +64,11 @@ void SwHyphWrapper::SpellStart( SvxSpellArea eSpell )
 void SwHyphWrapper::SpellContinue()
 {
     // for automatic separation, make actions visible only at the end
-    std::unique_ptr<SwWait> pWait;
+    std::optional<SwWait> oWait;
     if( m_bAutomatic )
     {
         PSH->StartAllAction();
-        pWait.reset(new SwWait( *m_pView->GetDocShell(), true ));
+        oWait.emplace( *m_pView->GetDocShell(), true );
     }
 
     uno::Reference< uno::XInterface >  xHyphWord = m_bInSelection ?
@@ -80,7 +80,7 @@ void SwHyphWrapper::SpellContinue()
     if( m_bAutomatic )
     {
         PSH->EndAllAction();
-        pWait.reset();
+        oWait.reset();
     }
 }
 

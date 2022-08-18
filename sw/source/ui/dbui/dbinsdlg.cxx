@@ -940,7 +940,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
     if( rSh.HasSelection() )
         rSh.DelRight();
 
-    std::unique_ptr<SwWait> pWait;
+    std::optional<SwWait> oWait;
 
     Reference< XColumnsSupplier > xColsSupp( xResultSet, UNO_QUERY );
     Reference <XNameAccess> xCols = xColsSupp->getColumns();
@@ -1123,7 +1123,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                 break;
 
             if( 10 == i )
-                pWait.reset(new SwWait( *pView->GetDocShell(), true ));
+                oWait.emplace( *pView->GetDocShell(), true );
         }
 
         rSh.MoveTable( GotoCurrTable, fnTableStart );
@@ -1347,7 +1347,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                     rSh.SwEditShell::SplitNode();
 
                 if( 10 == i )
-                    pWait.reset(new SwWait( *pView->GetDocShell(), true ));
+                    oWait.emplace( *pView->GetDocShell(), true );
             }
 
             if( !bSetCursor && pMark != nullptr)
