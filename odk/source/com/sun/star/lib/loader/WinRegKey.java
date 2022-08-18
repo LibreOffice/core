@@ -20,6 +20,7 @@
 package com.sun.star.lib.loader;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.regex.Matcher;
@@ -40,13 +41,23 @@ final class WinRegKey {
         m_keyName = keyName;
     }
 
+    private static void close(BufferedReader c) {
+        if (c == null) return;
+        try {
+            c.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Reads the default string value.
      */
     public String getStringValue() throws WinRegKeyException {
+        BufferedReader r = null;
         try {
             Process p = Runtime.getRuntime().exec(new String[]{"reg", "QUERY", m_keyName});
-            BufferedReader r = new BufferedReader(
+            r = new BufferedReader(
                 new InputStreamReader(p.getInputStream(), Charset.defaultCharset()));
             String v = null;
             Pattern pt = Pattern.compile("\\s+\\(Default\\)\\s+REG_SZ\\s+(.+)");
@@ -76,6 +87,9 @@ final class WinRegKey {
             throw e;
         } catch (Exception e) {
             throw new WinRegKeyException(e);
+        }
+        finally {
+            close(r);
         }
     }
 }
