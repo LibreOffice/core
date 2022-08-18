@@ -588,7 +588,7 @@ void SwDBManager::ImportFromConnection(  SwWrtShell* pSh )
     if( pSh->HasSelection() )
         pSh->DelRight();
 
-    std::unique_ptr<SwWait> pWait;
+    std::optional<SwWait> oWait;
 
     {
         sal_uLong i = 0;
@@ -596,7 +596,7 @@ void SwDBManager::ImportFromConnection(  SwWrtShell* pSh )
 
             ImportDBEntry(pSh);
             if( 10 == ++i )
-                pWait.reset(new SwWait( *pSh->GetView().GetDocShell(), true));
+                oWait.emplace( *pSh->GetView().GetDocShell(), true);
 
         } while(ToNextMergeRecord());
     }

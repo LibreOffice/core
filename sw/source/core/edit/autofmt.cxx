@@ -2696,7 +2696,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags aFlags,
 
 void SwEditShell::AutoFormat( const SvxSwAutoFormatFlags* pAFlags )
 {
-    std::unique_ptr<SwWait> pWait;
+    std::optional<SwWait> oWait;
 
     CurrShell aCurr( this );
     StartAllAction();
@@ -2707,7 +2707,7 @@ void SwEditShell::AutoFormat( const SvxSwAutoFormatFlags* pAFlags )
     {
         aAFFlags = *pAFlags;
         if( !aAFFlags.bAFormatByInput )
-            pWait.reset(new SwWait( *GetDoc()->GetDocShell(), true ));
+            oWait.emplace( *GetDoc()->GetDocShell(), true );
     }
 
     SwPaM* pCursor = GetCursor();

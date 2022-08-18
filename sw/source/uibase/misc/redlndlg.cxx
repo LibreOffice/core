@@ -209,7 +209,9 @@ SwRedlineAcceptDlg::~SwRedlineAcceptDlg()
 void SwRedlineAcceptDlg::Init(SwRedlineTable::size_type nStart)
 {
     SwView *pView = ::GetActiveView();
-    std::unique_ptr<SwWait> xWait(pView ? new SwWait(*pView->GetDocShell(), false) : nullptr);
+    std::optional<SwWait> oWait;
+    if (pView)
+        oWait.emplace(*pView->GetDocShell(), false);
     weld::TreeView& rTreeView = m_pTable->GetWidget();
     m_aUsedSeqNo.clear();
 

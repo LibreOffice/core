@@ -312,7 +312,7 @@ void DocumentDeviceManager::PrtDataChanged()
     OSL_ENSURE( m_rDoc.getIDocumentSettingAccess().get(DocumentSettingId::USE_VIRTUAL_DEVICE) ||
             nullptr != getPrinter( false ), "PrtDataChanged will be called recursively!" );
     SwRootFrame* pTmpRoot = m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout();
-    std::unique_ptr<SwWait> pWait;
+    std::optional<SwWait> oWait;
     bool bEndAction = false;
 
     if( m_rDoc.GetDocShell() )
@@ -327,7 +327,7 @@ void DocumentDeviceManager::PrtDataChanged()
              pSh->GetViewOptions()->IsPrtFormat()) )
         {
             if ( m_rDoc.GetDocShell() )
-                pWait.reset(new SwWait( *m_rDoc.GetDocShell(), true ));
+                oWait.emplace( *m_rDoc.GetDocShell(), true );
 
             pTmpRoot->StartAllAction();
             bEndAction = true;
