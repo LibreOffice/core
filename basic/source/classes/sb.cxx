@@ -756,8 +756,8 @@ SbClassModuleObject::~SbClassModuleObject()
                 if( !pDocBasicItem->isDocClosed() )
                     triggerTerminateEvent();
 
-    // prevent the base class destructor from deleting these because
-    // we do not actually own them
+    // prevent the base class destructor from deleting this because:
+    // coverity[leaked_storage] - we do not actually own it
     pImage.release();
     pBreaks = nullptr;
 }
