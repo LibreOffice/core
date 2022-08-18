@@ -1295,7 +1295,8 @@ std::unique_ptr<OSQLParseNode> OSQLParser::predicateTree(OUString& rErrorMessage
 
         // clear the garbage collector
         (*s_pGarbageCollector)->clearAndDelete();
-        m_pParseTree.release(); // because the garbage collector deleted it
+        // coverity[leaked_storage : FALSE] - because the garbage collector deleted it
+        m_pParseTree.release();
         return nullptr;
     }
     else
