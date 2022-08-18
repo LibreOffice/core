@@ -120,6 +120,7 @@ void LangSelectionStatusbarController::LangMenu(
         return;
 
     const Reference<XServiceInfo> xService(m_xFrame->getController()->getModel(), UNO_QUERY);
+    bool bCalc   = xService.is() && xService->supportsService("com.sun.star.sheet.SpreadsheetDocument");
     bool bWriter = xService.is() && xService->supportsService("com.sun.star.text.GenericTextDocument");
     //add context menu
     Reference< awt::XPopupMenu > xPopupMenu( awt::PopupMenu::create( m_xContext ) );
@@ -243,7 +244,10 @@ void LangSelectionStatusbarController::LangMenu(
     }
     else if (nId == MID_LANG_DEF_MORE)
     {
-        aBuff.append( ".uno:LanguageStatus?Language:string=*" );
+        if (bCalc)
+            aBuff.append( ".uno:FormatCellDialog" );
+        else
+            aBuff.append( ".uno:LanguageStatus?Language:string=*" );
     }
     else if (MID_LANG_PARA_1 <= nId && nId <= MID_LANG_PARA_9)
     {
