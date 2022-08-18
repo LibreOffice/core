@@ -34,6 +34,24 @@
       "parentUuid": "faabf2ab_06c1602f",
       "revId": "addf50b737f1a82ae289aaa0e57192d9b51a8621",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2498130_c9da5d74",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-08-18T06:47:06Z",
+      "side": 1,
+      "message": "thanks, works as expected.\n\nLast small thing to fix: buttons (help, ok, cancel were at the top, should be below dialog\u0027s content).\nThis is due to incorrect/not set order in .ui file (dialog-action_area1 probably)\ncould you look? (.ui is simple xml, you can compare with some working dialog)",
+      "parentUuid": "6321f22c_8e283af7",
+      "revId": "addf50b737f1a82ae289aaa0e57192d9b51a8621",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
