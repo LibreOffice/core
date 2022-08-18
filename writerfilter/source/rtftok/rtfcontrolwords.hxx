@@ -156,6 +156,7 @@ enum class Destination
     PROPNAME,
     STATICVAL,
     GENERATOR,
+    DOCVAR,
 };
 
 enum class RTFKeyword

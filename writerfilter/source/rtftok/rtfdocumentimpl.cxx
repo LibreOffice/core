@@ -1483,6 +1483,11 @@ void RTFDocumentImpl::text(OUString& rString)
             }
         }
         break;
+        case Destination::DOCVAR:
+        {
+            m_aStates.top().setDocVar(rString);
+        }
+        break;
         case Destination::FONTTABLE:
         case Destination::FONTENTRY:
         case Destination::LEVELTEXT:
@@ -3456,6 +3461,27 @@ void RTFDocumentImpl::afterPopState(RTFParserState& rState)
         case Destination::FIELD:
             if (rState.getFieldStatus() == RTFFieldStatus::INSTRUCTION)
                 singleChar(cFieldEnd);
+            break;
+        case Destination::DOCVAR:
+            if (!m_aStates.empty())
+            {
+                OUString docvar(rState.getDocVar());
+                if (m_aStates.top().getDocVarName().isEmpty())
+                {
+                    m_aStates.top().setDocVarName(docvar);
+                }
+                else
+                {
+                    uno::Reference<beans::XPropertySet> xMasterProperties(
+                        m_xModelFactory->createInstance("com.sun.star.text.FieldMaster.User"),
+                        uno::UNO_QUERY_THROW);
+                    xMasterProperties->setPropertyValue("Name",
+                                                        uno::Any(m_aStates.top().getDocVarName()));
+                    xMasterProperties->setPropertyValue("Value", uno::Any(docvar));
+
+                    m_aStates.top().clearDocVarName();
+                }
+            }
             break;
         case Destination::SHAPEPROPERTYVALUEPICT:
             if (!m_aStates.empty())

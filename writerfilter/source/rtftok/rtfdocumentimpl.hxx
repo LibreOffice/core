@@ -523,6 +523,11 @@ public:
     void setInternalState(RTFInternalState nInternalState) { m_nInternalState = nInternalState; }
     RTFInternalState getInternalState() const { return m_nInternalState; }
     RTFDocumentImpl* getDocumentImpl() { return m_pDocumentImpl; }
+    OUString getDocVar() { return m_aDocVar; }
+    void setDocVar(OUString& aDocVar) { m_aDocVar = aDocVar; };
+    OUString getDocVarName() { return m_aDocVarName; }
+    void setDocVarName(OUString& aDocVarName) { m_aDocVarName = aDocVarName; }
+    void clearDocVarName() { m_aDocVarName = ""; }
 
 private:
     RTFDocumentImpl* m_pDocumentImpl;
@@ -622,6 +627,10 @@ private:
 
     /// Width of invisible cell at the end of the row.
     int m_nTableRowWidthAfter;
+
+    /// For importing document variables which are not referenced in the document
+    OUString m_aDocVar;
+    OUString m_aDocVarName;
 };
 
 /// An RTF stack is similar to std::stack, except that it has an operator[].
