@@ -1267,11 +1267,9 @@ readDurationComponent(V rString,
     return true;
 }
 
-/** convert ISO8601 "duration" string to util::Duration */
-bool Converter::convertDuration(util::Duration& rDuration,
-                                std::u16string_view rString)
+template <typename V>
+static bool convertDurationHelper(util::Duration& rDuration, V string)
 {
-    std::u16string_view string = trim(rString);
     size_t nPos(0);
 
     bool bIsNegativeDuration(false);
@@ -1429,162 +1427,16 @@ bool Converter::convertDuration(util::Duration& rDuration,
 
 /** convert ISO8601 "duration" string to util::Duration */
 bool Converter::convertDuration(util::Duration& rDuration,
+                                std::u16string_view rString)
+{
+    return convertDurationHelper(rDuration, trim(rString));
+}
+
+/** convert ISO8601 "duration" string to util::Duration */
+bool Converter::convertDuration(util::Duration& rDuration,
                                 std::string_view rString)
 {
-    std::string_view string = trim(rString);
-    size_t nPos(0);
-
-    bool bIsNegativeDuration(false);
-    if (!string.empty() && ('-' == string[0]))
-    {
-        bIsNegativeDuration = true;
-        ++nPos;
-    }
-
-    if (nPos < string.size()
-        && string[nPos] != 'P' && string[nPos] != 'p') // duration must start with "P"
-    {
-        return false;
-    }
-
-    ++nPos;
-
-    /// last read number; -1 == no valid number! always reset after using!
-    sal_Int32 nTemp(-1);
-    bool bTimePart(false); // have we read 'T'?
-    bool bSuccess(false);
-    sal_Int32 nYears(0);
-    sal_Int32 nMonths(0);
-    sal_Int32 nDays(0);
-    sal_Int32 nHours(0);
-    sal_Int32 nMinutes(0);
-    sal_Int32 nSeconds(0);
-    sal_Int32 nNanoSeconds(0);
-
-    bTimePart = readDurationT(string, nPos);
-    bSuccess = (R_SUCCESS == readUnsignedNumber(string, nPos, nTemp));
-
-    if (!bTimePart && bSuccess)
-    {
-        bSuccess = readDurationComponent(string, nPos, nTemp, bTimePart,
-                     nYears, 'y', 'Y');
-    }
-
-    if (!bTimePart && bSuccess)
-    {
-        bSuccess = readDurationComponent(string, nPos, nTemp, bTimePart,
-                     nMonths, 'm', 'M');
-    }
-
-    if (!bTimePart && bSuccess)
-    {
-        bSuccess = readDurationComponent(string, nPos, nTemp, bTimePart,
-                     nDays, 'd', 'D');
-    }
-
-    if (bTimePart)
-    {
-        if (-1 == nTemp) // a 'T' must be followed by a component
-        {
-            bSuccess = false;
-        }
-
-        if (bSuccess)
-        {
-            bSuccess = readDurationComponent(string, nPos, nTemp, bTimePart,
-                         nHours, 'h', 'H');
-        }
-
-        if (bSuccess)
-        {
-            bSuccess = readDurationComponent(string, nPos, nTemp, bTimePart,
-                         nMinutes, 'm', 'M');
-        }
-
-        // eeek! seconds are icky.
-        if ((nPos < string.size()) && bSuccess)
-        {
-            if (string[nPos] == '.' ||
-                string[nPos] == ',')
-            {
-                ++nPos;
-                if (-1 != nTemp)
-                {
-                    nSeconds = nTemp;
-                    nTemp = -1;
-                    const sal_Int32 nStart(nPos);
-                    bSuccess = readUnsignedNumberMaxDigits(9, string, nPos, nTemp) == R_SUCCESS;
-                    if ((nPos < string.size()) && bSuccess)
-                    {
-                        if (-1 != nTemp)
-                        {
-                            nNanoSeconds = nTemp;
-                            sal_Int32 nDigits = nPos - nStart;
-                            assert(nDigits >= 0);
-                            for (; nDigits < 9; ++nDigits)
-                            {
-                                nNanoSeconds *= 10;
-                            }
-                            nTemp=-1;
-                            if ('S' == string[nPos] || 's' == string[nPos])
-                            {
-                                ++nPos;
-                            }
-                            else
-                            {
-                                bSuccess = false;
-                            }
-                        }
-                        else
-                        {
-                            bSuccess = false;
-                        }
-                    }
-                }
-                else
-                {
-                    bSuccess = false;
-                }
-            }
-            else if ('S' == string[nPos] || 's' == string[nPos])
-            {
-                ++nPos;
-                if (-1 != nTemp)
-                {
-                    nSeconds = nTemp;
-                    nTemp = -1;
-                }
-                else
-                {
-                    bSuccess = false;
-                }
-            }
-        }
-    }
-
-    if (nPos != string.size()) // string not processed completely?
-    {
-        bSuccess = false;
-    }
-
-    if (nTemp != -1) // unprocessed number?
-    {
-        bSuccess = false;
-    }
-
-    if (bSuccess)
-    {
-        rDuration.Negative      = bIsNegativeDuration;
-        rDuration.Years         = static_cast<sal_Int16>(nYears);
-        rDuration.Months        = static_cast<sal_Int16>(nMonths);
-        rDuration.Days          = static_cast<sal_Int16>(nDays);
-        rDuration.Hours         = static_cast<sal_Int16>(nHours);
-        rDuration.Minutes       = static_cast<sal_Int16>(nMinutes);
-        rDuration.Seconds       = static_cast<sal_Int16>(nSeconds);
-        rDuration.NanoSeconds   = nNanoSeconds;
-    }
-
-    return bSuccess;
+    return convertDurationHelper(rDuration, trim(rString));
 }
 
 static void
