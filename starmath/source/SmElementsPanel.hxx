@@ -40,14 +40,14 @@ public:
     ~SmElementsPanel();
 
 private:
-    DECL_LINK(CategorySelectedHandle, weld::TreeView&, void);
+    DECL_LINK(CategorySelectedHandle, weld::ComboBox&, void);
     DECL_LINK(ElementClickHandler, OUString, void);
 
     SmViewShell* GetView() const;
 
     const SfxBindings& mrBindings;
 
-    std::unique_ptr<weld::TreeView> mxCategoryList;
+    std::unique_ptr<weld::ComboBox> mxCategoryList;
     std::unique_ptr<SmElementsControl> mxElementsControl;
 };
 
