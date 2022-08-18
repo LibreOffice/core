@@ -3522,9 +3522,9 @@ uno::Any SAL_CALL SwXCellRange::getPropertyValue(const OUString& rPropertyName)
                             RES_UNKNOWNATR_CONTAINER>
                     aSet(m_pImpl->m_pTableCursor->GetDoc().GetAttrPool());
                 // first look at the attributes of the cursor
-                SwUnoTableCursor *const pCursor =
-                    dynamic_cast<SwUnoTableCursor*>(&(*m_pImpl->m_pTableCursor));
-                SwUnoCursorHelper::GetCursorAttr(pCursor->GetSelRing(), aSet);
+                SwUnoTableCursor& rCursor =
+                    dynamic_cast<SwUnoTableCursor&>(*m_pImpl->m_pTableCursor);
+                SwUnoCursorHelper::GetCursorAttr(rCursor.GetSelRing(), aSet);
                 m_pImpl->m_pPropSet->getPropertyValue(*pEntry, aSet, aRet);
             }
         }
