@@ -348,10 +348,15 @@ SwCalc::SwCalc( SwDoc& rD )
 
 } // SwCalc::SwCalc
 
-SwCalc::~SwCalc() COVERITY_NOEXCEPT_FALSE
+void SwCalc::ImplDestroy()
 {
     if( m_pCharClass != &GetAppCharClass() )
         delete m_pCharClass;
+}
+
+SwCalc::~SwCalc()
+{
+    suppress_fun_call_w_exception(ImplDestroy());
 }
 
 SwSbxValue SwCalc::Calculate( const OUString& rStr )

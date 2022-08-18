@@ -226,9 +226,11 @@ class SwCalc
     SwCalc( const SwCalc& ) = delete;
     SwCalc& operator=( const SwCalc& ) = delete;
 
+    void ImplDestroy();
+
 public:
     SwCalc(SwDoc& rD);
-    ~SwCalc() COVERITY_NOEXCEPT_FALSE;
+    ~SwCalc();
 
     SwSbxValue  Calculate( const OUString &rStr );
     OUString    GetStrResult( const SwSbxValue& rValue );
