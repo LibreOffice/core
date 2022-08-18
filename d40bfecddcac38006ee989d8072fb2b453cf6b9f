@@ -16,6 +16,24 @@
       "message": "But this is a real leak now when `new SvMemoryStream` throws an exception.",
       "revId": "d40bfecddcac38006ee989d8072fb2b453cf6b9f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4f0beb5_2e4b2e4d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-08-18T11:18:46Z",
+      "side": 1,
+      "message": "I\u0027ll silence it with an annotation in https://gerrit.libreoffice.org/c/core/+/138480 instead",
+      "parentUuid": "f7853f2f_568ae239",
+      "revId": "d40bfecddcac38006ee989d8072fb2b453cf6b9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
