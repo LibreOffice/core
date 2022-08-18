@@ -722,8 +722,7 @@ void ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
         SCTAB nTab = pTabView->GetViewData().GetTabNo();
         if( !rMEvt.IsShift() )
             pTabView->DoneRefMode( rMEvt.IsMod1() );
-        ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
-        ScDocument& rDoc = pViewSh->GetViewData().GetDocument();
+        ScDocument& rDoc = pTabView->GetViewData().GetDocument();
         if( !bVertical )
         {
             pTabView->InitRefMode( nHitNo, 0, nTab, SC_REFTYPE_REF );
@@ -872,8 +871,7 @@ void ScHeaderControl::MouseMove( const MouseEvent& rMEvt )
         bool bTmp;
         SCCOLROW nHitNo = GetMousePos(rMEvt.GetPosPixel(), bTmp);
         SCTAB nTab = pTabView->GetViewData().GetTabNo();
-        ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
-        ScDocument& rDoc = pViewSh->GetViewData().GetDocument();
+        ScDocument& rDoc = pTabView->GetViewData().GetDocument();
         if( !bVertical )
             pTabView->UpdateRef( nHitNo, rDoc.MaxRow(), nTab );
         else
