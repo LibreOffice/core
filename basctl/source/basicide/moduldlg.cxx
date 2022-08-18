@@ -397,7 +397,7 @@ private:
         // get source shell, library name and module/dialog name
         std::unique_ptr<weld::TreeIter> xSelected(m_rTreeView.make_iterator());
         if (!m_rTreeView.get_selected(xSelected.get()))
-            xSelected.reset();
+            return;
         EntryDescriptor aSourceDesc = m_rTreeView.GetEntryDescriptor(xSelected.get());
         const ScriptDocument& rSourceDoc( aSourceDesc.GetDocument() );
         const OUString& aSourceLibName( aSourceDesc.GetLibName() );
