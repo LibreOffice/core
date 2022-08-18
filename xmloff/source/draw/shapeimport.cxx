@@ -615,6 +615,7 @@ void ShapeGroupContext::popGroupAndPostProcess()
 
         // second add the already existing shapes in the unsorted list
         ZOrderHint aNewHint;
+        aNewHint.pShape = nullptr;
         do
         {
             nCount--;
