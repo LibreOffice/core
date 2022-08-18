@@ -90,10 +90,6 @@ public class DBTools {
     */
     public class DataSourceInfo {
         /**
-        * Representation of <code>'Name'</code> property.
-        */
-        public String Name = null ;
-        /**
         * Representation of <code>'URL'</code> property.
         */
         public String URL = null ;
@@ -127,7 +123,6 @@ public class DBTools {
             XPropertySet props = UnoRuntime.queryInterface
                 (XPropertySet.class, src) ;
 
-            if (Name != null) props.setPropertyValue("Name", Name) ;
             if (URL != null) props.setPropertyValue("URL", URL) ;
             if (Info != null) props.setPropertyValue("Info", Info) ;
             if (User != null) props.setPropertyValue("User", User) ;
