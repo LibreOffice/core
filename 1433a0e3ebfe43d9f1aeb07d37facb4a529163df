@@ -16,6 +16,23 @@
       "message": "Thanks for the review - I hope that my comments address the points you raised.",
       "revId": "1433a0e3ebfe43d9f1aeb07d37facb4a529163df",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae77f2d1_11dc6341",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-08-18T06:26:53Z",
+      "side": 1,
+      "message": "Thanks, both parts now make more sense to me. :-)",
+      "revId": "1433a0e3ebfe43d9f1aeb07d37facb4a529163df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
