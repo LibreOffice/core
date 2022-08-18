@@ -40,16 +40,16 @@ std::unique_ptr<PanelLayout> SmElementsPanel::Create(weld::Widget& rParent,
 SmElementsPanel::SmElementsPanel(weld::Widget& rParent, const SfxBindings& rBindings)
     : PanelLayout(&rParent, "MathElementsPanel", "modules/smath/ui/sidebarelements_math.ui")
     , mrBindings(rBindings)
-    , mxCategoryList(m_xBuilder->weld_tree_view("categorylist"))
+    , mxCategoryList(m_xBuilder->weld_combo_box("categorylist"))
     , mxElementsControl(std::make_unique<SmElementsControl>(m_xBuilder->weld_icon_view("elements")))
 {
     for (const auto& rCategoryId : SmElementsControl::categories())
         mxCategoryList->append_text(SmResId(rCategoryId));
 
-    mxCategoryList->set_size_request(-1, mxCategoryList->get_height_rows(6));
+    mxCategoryList->set_size_request(-1, -1);
 
     mxCategoryList->connect_changed(LINK(this, SmElementsPanel, CategorySelectedHandle));
-    mxCategoryList->select(0);
+    mxCategoryList->set_active(0);
 
     mxElementsControl->setElementSetIndex(0);
     mxElementsControl->SetSelectHdl(LINK(this, SmElementsPanel, ElementClickHandler));
@@ -61,9 +61,9 @@ SmElementsPanel::~SmElementsPanel()
     mxCategoryList.reset();
 }
 
-IMPL_LINK(SmElementsPanel, CategorySelectedHandle, weld::TreeView&, rList, void)
+IMPL_LINK(SmElementsPanel, CategorySelectedHandle, weld::ComboBox&, rList, void)
 {
-    const int nActive = rList.get_selected_index();
+    const int nActive = rList.get_active();
     if (nActive == -1)
         return;
     mxElementsControl->setElementSetIndex(nActive);
