@@ -1444,8 +1444,8 @@ sal_uInt64 ScCountIfCellIterator< ScQueryCellIteratorAccess::SortedCache >::GetC
     if( maParam.GetEntry(0).GetQueryItem().mbMatchEmpty
         && maParam.nCol2 >= rDoc.GetAllocatedColumnsCount( nTab ))
     {
-        count += (maParam.nCol2 - rDoc.GetAllocatedColumnsCount( nTab ))
-            * ( maParam.nRow2 - maParam.nRow1 + 1 );
+        const sal_uInt64 nRows = maParam.nRow2 - maParam.nRow1 + 1;
+        count += (maParam.nCol2 - rDoc.GetAllocatedColumnsCount(nTab)) * nRows;
     }
     return count;
 }
