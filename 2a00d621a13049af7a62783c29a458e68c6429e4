@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05bc1af4_e63f92da",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-08-18T12:10:13Z",
+      "side": 1,
+      "message": "Hi Szymon Kłos, Miklos,\nI would like you to review this patch which fixes a regression introduced by \"tdf#146728 lok: IME: preset formatting in the new paragraph\"\nI don\u0027t know much about this part of the code but it fixes the issue without reintroducing tdf#146728",
+      "revId": "2a00d621a13049af7a62783c29a458e68c6429e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
