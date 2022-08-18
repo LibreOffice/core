@@ -386,7 +386,7 @@ void SwRedlineTable::LOKRedlineNotification(RedlineNotification nType, SwRangeRe
         {
             pSh = rDoc.getIDocumentLayoutAccess().GetCurrentViewShell();
             if( pSh )
-                for(SwNodeIndex nIdx = pStartPos->nNode; nIdx <= pEndPos->nNode; ++nIdx)
+                for(SwNodeIndex nIdx(pStartPos->GetNode()); nIdx <= pEndPos->GetNode(); ++nIdx)
                 {
                     SwContentNode* pContentNode = nIdx.GetNode().GetContentNode();
                     if (pContentNode)

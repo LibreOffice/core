@@ -1665,7 +1665,7 @@ bool IsSelectFrameAnchoredAtPara(SwPosition const & rAnchorPos,
         // stupid code temp. overrides it - instead rely on setting the ALLFLYS
         // flag in MoveFromSection() and converting that to CheckNoCntnt with
         // adjusted cursor!
-        return (rStart.GetNode() < rAnchorPos.GetNode()) && (rAnchorPos.nNode < rEnd.GetNode());
+        return (rStart.GetNode() < rAnchorPos.GetNode()) && (rAnchorPos.GetNode() < rEnd.GetNode());
     }
 
     // in general, exclude the start and end position

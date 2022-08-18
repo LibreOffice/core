@@ -278,7 +278,7 @@ bool SwCursorShell::GotoNextTOXBase( const OUString* pName )
             SwSectionNode const*const pSectNd(
                     pSect->GetFormat()->GetSectionNode());
             if (   pSectNd
-                && m_pCurrentCursor->GetPoint()->nNode < pSectNd->GetIndex()
+                && m_pCurrentCursor->GetPoint()->GetNode() < *pSectNd
                 && (!pFnd  || pFnd->GetIndex() > pSectNd->GetIndex())
                 && (!pName || *pName ==
                     static_cast<SwTOXBaseSection const*>(pSect)->GetTOXName()))
@@ -2412,7 +2412,7 @@ const SwRangeRedline* SwCursorShell::GotoRedline_( SwRedlineTable::size_type nAr
                                     true, IsReadOnlyAvailable() );
             if( pCNd )
             {
-                if( *pIdx <= pFnd->End()->nNode )
+                if( *pIdx <= pFnd->End()->GetNode() )
                     m_pCurrentCursor->GetPoint()->nContent.Assign( pCNd, 0 );
                 else
                     pFnd = nullptr;

@@ -369,7 +369,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
     SwNodeIndex aStart(pStart->GetNode());
     SwSortElement::Init( this, rOpt );
     std::multiset<SwSortTextElement> aSortSet;
-    while( aStart <= pEnd->nNode )
+    while( aStart <= pEnd->GetNode() )
     {
         // Iterate over a selected range
         aSortSet.insert(SwSortTextElement(aStart));
