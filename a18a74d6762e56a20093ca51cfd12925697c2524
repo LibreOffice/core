@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53c1f16e_21a59b6d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-08-18T08:40:55Z",
+      "side": 1,
+      "message": "Hi László,\nShould it be added to https://wiki.documentfoundation.org/ReleaseNotes/7.5 ?",
+      "revId": "a18a74d6762e56a20093ca51cfd12925697c2524",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
