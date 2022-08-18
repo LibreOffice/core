@@ -616,8 +616,10 @@ std::unique_ptr<SvMemoryStream> memoryStream(
         new char[length]);
     memcpy(b.get(), data, length);
     std::unique_ptr<SvMemoryStream> s(
-        new SvMemoryStream(b.release(), length, StreamMode::READ));
+        new SvMemoryStream(b.get(), length, StreamMode::READ));
     s->ObjectOwnsMemory(true);
+    // coverity[leaked_storage : FALSE] - belongs to SvMemoryStream s at this point
+    b.release();
     return s;
 }
 
