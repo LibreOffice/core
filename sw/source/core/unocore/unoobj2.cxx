@@ -876,7 +876,7 @@ void SwXTextRange::DeleteAndInsert(
         aCursor.SetMark();
         *aCursor.GetPoint() = SwPosition(end);
         aCursor.Move( fnMoveBackward, GoInContent );
-        assert(start <= aCursor.GetPoint()->nNode);
+        assert(start <= aCursor.GetPoint()->GetNode());
     }
     else
     {
@@ -1032,7 +1032,7 @@ SwXTextRange::getEnd()
         auto const pSectFormat(static_cast<SwSectionFormat const*>(m_pImpl->m_pTableOrSectionFormat));
         SwPaM aPaM(*pSectFormat->GetContent().GetContentIdx()->GetNode().EndOfSectionNode());
         aPaM.Move( fnMoveBackward, GoInContent );
-        assert(*pSectFormat->GetContent().GetContentIdx() < aPaM.GetPoint()->nNode);
+        assert(*pSectFormat->GetContent().GetContentIdx() < aPaM.GetPoint()->GetNode());
         xRet = new SwXTextRange(aPaM, m_pImpl->m_xParentText);
     }
     else

@@ -5269,9 +5269,9 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
     rPos.nContent.Assign( rPos.GetNode().GetContentNode(),
                             rPos.GetContentIndex() );
 
-    if( rPos.nNode != aInsPos )
+    if( rPos.GetNode() != aInsPos.GetNode() )
     {
-        if (aInsPos < rPos.nNode)
+        if (aInsPos < rPos.GetNode())
         {   // tdf#134250 decremented in (pEndTextNd && !pDestTextNd) above
             pCopyPam->GetMark()->AssignEndIndex(*aInsPos.GetNode().GetContentNode());
         }

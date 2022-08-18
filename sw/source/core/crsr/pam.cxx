@@ -896,7 +896,7 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
     {
         SwPosition const& rStart(*Start());
         SwPosition const& rEnd(*End());
-        for (SwNodeIndex n = rStart.nNode; n <= rEnd.nNode; ++n)
+        for (SwNodeIndex n(rStart.GetNode()); n <= rEnd.GetNode(); ++n)
         {
             if (SwTextNode const*const pNode = n.GetNode().GetTextNode())
             {
@@ -905,11 +905,11 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
                     for (size_t i = 0; i < pHints->Count(); ++i)
                     {
                         SwTextAttr const*const pHint(pHints->Get(i));
-                        if (n == rStart.nNode && pHint->GetStart() < rStart.GetContentIndex())
+                        if (n == rStart.GetNode() && pHint->GetStart() < rStart.GetContentIndex())
                         {
                             continue; // before selection
                         }
-                        if (n == rEnd.nNode && rEnd.GetContentIndex() <= pHint->GetStart())
+                        if (n == rEnd.GetNode() && rEnd.GetContentIndex() <= pHint->GetStart())
                         {
                             break; // after selection
                         }
@@ -1278,7 +1278,7 @@ OUString SwPaM::GetText() const
 
 void SwPaM::InvalidatePaM()
 {
-    for (SwNodeIndex index = Start()->nNode; index <= End()->nNode; ++index)
+    for (SwNodeIndex index(Start()->GetNode()); index <= End()->GetNode(); ++index)
     {
         if (SwTextNode *const pTextNode = index.GetNode().GetTextNode())
         {

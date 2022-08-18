@@ -3202,7 +3202,7 @@ const SwRangeRedline* DocumentRedlineManager::SelNextRedline( SwPaM& rPam ) cons
                 pCNd = m_rDoc.GetNodes().GoNextSection( pIdx );
                 if( pCNd )
                 {
-                    if( *pIdx <= rPam.GetPoint()->nNode )
+                    if( *pIdx <= rPam.GetPoint()->GetNode() )
                         rPam.GetMark()->nContent.Assign( pCNd, 0 );
                     else
                         pFnd = nullptr;
@@ -3344,7 +3344,7 @@ const SwRangeRedline* DocumentRedlineManager::SelPrevRedline( SwPaM& rPam ) cons
                     pCNd = m_rDoc.GetNodes().GoNextSection( pIdx );
                     if( pCNd )
                     {
-                        if( *pIdx <= rPam.GetMark()->nNode )
+                        if( *pIdx <= rPam.GetMark()->GetNode() )
                             rPam.GetPoint()->nContent.Assign( pCNd, 0 );
                         else
                             pFnd = nullptr;
