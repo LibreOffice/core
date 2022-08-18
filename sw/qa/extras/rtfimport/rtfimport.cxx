@@ -33,6 +33,7 @@
 #include <com/sun/star/text/XDocumentIndexMark.hpp>
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
+#include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
@@ -1494,6 +1495,28 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf104016)
     // inheritance from numbering.
     CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DEFAULT_VALUE,
                          xParagraph->getPropertyState("ParaLeftMargin"));
+}
+
+/// Make sure that the document variable "Unused", which is not referenced in the document, is imported.
+CPPUNIT_TEST_FIXTURE(Test, testTdf150267)
+{
+    load(mpTestDocumentPath, "tdf150267.rtf");
+
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextFieldsSupplier> xSupplier(xModel, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xTextFieldMasters = xSupplier->getTextFieldMasters();
+    uno::Sequence<rtl::OUString> aMasterNames = xTextFieldMasters->getElementNames();
+    bool bHasUnusedField = false;
+    for (const auto& rMasterName : std::as_const(aMasterNames))
+    {
+        if (rMasterName == "com.sun.star.text.fieldmaster.User.Unused")
+        {
+            bHasUnusedField = true;
+            break;
+        }
+    }
+
+    CPPUNIT_ASSERT_EQUAL(true, bHasUnusedField);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf115242)
