@@ -51,8 +51,6 @@ friend class SfxAllItemSet;
 private:
     SVL_DLLPRIVATE void       RecreateRanges_Impl(const WhichRangesContainer& pNewRanges);
 
-    SfxItemSet( SfxItemPool & pool, const WhichRangesContainer& wids, std::size_t items );
-
 public:
     SfxPoolItem const**         GetItems_Impl() const { return m_ppItems; }
 
@@ -77,8 +75,7 @@ public:
     SfxItemSet( const SfxItemSet& );
     SfxItemSet( SfxItemSet&& ) noexcept;
     SfxItemSet( SfxItemPool& );
-    SfxItemSet( SfxItemPool&, const WhichRangesContainer& ranges );
-    SfxItemSet( SfxItemPool&, WhichRangesContainer&& ranges );
+    SfxItemSet( SfxItemPool&, WhichRangesContainer ranges );
 
     SfxItemSet( SfxItemPool& rPool, sal_uInt16 nWhichStart, sal_uInt16 nWhichEnd )
         : SfxItemSet(rPool, WhichRangesContainer(nWhichStart, nWhichEnd)) {}
