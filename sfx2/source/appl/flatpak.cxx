@@ -43,7 +43,7 @@ bool flatpak::createTemporaryHtmlDirectory(OUString ** url) {
     assert(url != nullptr);
     DBG_TESTSOLARMUTEX();
     if (!temporaryHtmlDirectoryStatus.created) {
-        // coverity[tainted_data] - we trust the contents of this variable
+        // coverity[tainted_return_value] - we trust the contents of this variable
         auto const env = std::getenv("XDG_CACHE_HOME");
         if (env == nullptr) {
             SAL_WARN("sfx.appl", "LIBO_FLATPAK mode but unset XDG_CACHE_HOME");
