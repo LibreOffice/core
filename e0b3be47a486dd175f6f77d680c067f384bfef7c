@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bd53c9f_11b12cb8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-08-18T06:52:29Z",
+      "side": 1,
+      "message": "I never know if we can change this kind of file or if it\u0027s a file retrieved from upstream.",
+      "revId": "e0b3be47a486dd175f6f77d680c067f384bfef7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
