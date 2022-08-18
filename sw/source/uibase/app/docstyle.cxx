@@ -386,7 +386,7 @@ void SwStyleSheetIterator::SwPoolFormatList::RemoveName(SfxStyleFamily eFam,
                                                      const OUString& rName)
 {
     sal_uInt32 nTmpPos = FindName( eFam, rName );
-    if( nTmpPos < maImpl.size() )
+    if (nTmpPos != SAL_MAX_UINT32)
         maImpl.erase(maImpl.begin() + nTmpPos);
 
     // assumption: this seldom occurs, the iterator is built, then emptied.
