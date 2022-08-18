@@ -65,6 +65,9 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 m_aStates.top().setDestination(Destination::FIELD);
                 m_aStates.top().setFieldLocked(false);
                 break;
+            case RTFKeyword::DOCVAR:
+                m_aStates.top().setDestination(Destination::DOCVAR);
+                break;
             case RTFKeyword::FLDINST:
             {
                 // Look for the field type
