@@ -203,7 +203,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(weld::Window *pParent)
 
     mxLocalView->ShowTooltips(true);
 
-    // Set width and height of the templates thumbnail viewer to acommodate 3 rows and 4 columns of items
+    // Set width and height of the templates thumbnail viewer to accommodate 3 rows and 4 columns of items
     mxLocalViewWeld->set_size_request(TEMPLATE_ITEM_MAX_WIDTH * 5, TEMPLATE_ITEM_MAX_HEIGHT_SUB * 3);
 
     mxOKButton->connect_clicked(LINK(this, SfxTemplateManagerDlg, OkClickHdl));
