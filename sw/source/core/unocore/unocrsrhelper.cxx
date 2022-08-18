@@ -1356,7 +1356,7 @@ void makeRedline( SwPaM const & rPaM,
             {
                 sal_uInt16 nStylePoolId = USHRT_MAX;
                 OUString sParaStyleName, sUIStyle;
-                SfxItemSet aItemSet(rDoc.GetAttrPool(), aWhichPairs);
+                SfxItemSet aItemSet(rDoc.GetAttrPool(), std::move(aWhichPairs));
 
                 for (size_t i = 0; i < aEntries.size(); ++i)
                 {
