@@ -23,8 +23,9 @@
 #include <svx/svdtypes.hxx>
 #include <swrect.hxx>
 #include <swregion.hxx>
-#include <vector>
 #include <memory>
+#include <optional>
+#include <vector>
 
 class OutputDevice;
 class SwViewShell;
@@ -64,7 +65,7 @@ class SwViewShellImp
     SdrPageView *m_pSdrPageView;  // Exactly one Page for our DrawView
 
     SwPageFrame     *m_pFirstVisiblePage; // Always points to the first visible Page
-    std::unique_ptr<SwRegionRects> m_pPaintRegion; // Collector of Paintrects from the LayAction
+    std::optional<SwRegionRects> m_oPaintRegion; // Collector of Paintrects from the LayAction
 
     std::vector<SwRect> m_pendingLOKInvalidations;
 
@@ -150,10 +151,10 @@ public:
     const SwPageFrame* GetLastVisPage(const OutputDevice* pRenderContext) const;
 
     bool AddPaintRect( const SwRect &rRect );
-    bool HasPaintRegion()      { return static_cast<bool>(m_pPaintRegion); }
-    std::unique_ptr<SwRegionRects> TakePaintRegion() { return std::move(m_pPaintRegion); }
-    const SwRegionRects* GetPaintRegion() { return m_pPaintRegion.get(); }
-    void DeletePaintRegion() { m_pPaintRegion.reset(); }
+    bool HasPaintRegion()      { return m_oPaintRegion.has_value(); }
+    std::optional<SwRegionRects> TakePaintRegion() { return std::move(m_oPaintRegion); }
+    const std::optional<SwRegionRects>& GetPaintRegion() { return m_oPaintRegion; }
+    void DeletePaintRegion() { m_oPaintRegion.reset(); }
 
     void AddPendingLOKInvalidation( const SwRect& rRect );
     std::vector<SwRect> TakePendingLOKInvalidations();

@@ -121,20 +121,20 @@ bool SwViewShellImp::AddPaintRect( const SwRect &rRect )
     // In case of tiled rendering the visual area is the last painted tile -> not interesting.
     if ( rRect.Overlaps( m_pShell->VisArea() ) || comphelper::LibreOfficeKit::isActive() )
     {
-        if ( !m_pPaintRegion )
+        if ( !m_oPaintRegion )
         {
             // In case of normal rendering, this makes sure only visible rectangles are painted.
             // Otherwise get the rectangle of the full document, so all paint rectangles are invalidated.
             const SwRect& rArea = comphelper::LibreOfficeKit::isActive() ? m_pShell->GetLayout()->getFrameArea() : m_pShell->VisArea();
-            m_pPaintRegion.reset(new SwRegionRects);
-            m_pPaintRegion->ChangeOrigin(rArea);
+            m_oPaintRegion.emplace();
+            m_oPaintRegion->ChangeOrigin(rArea);
         }
-        if(!m_pPaintRegion->empty())
+        if(!m_oPaintRegion->empty())
         {
             // This function often gets called with rectangles that line up vertically.
             // Try to extend the last one downwards to include the new one (use Union()
             // in case the new one is actually already contained in the last one).
-            SwRect& last = m_pPaintRegion->back();
+            SwRect& last = m_oPaintRegion->back();
             if(last.Left() == rRect.Left() && last.Width() == rRect.Width()
                 && last.Bottom() + 1 >= rRect.Top() && last.Bottom() <= rRect.Bottom())
             {
@@ -142,21 +142,21 @@ bool SwViewShellImp::AddPaintRect( const SwRect &rRect )
                 // And these rectangles lined up vertically often come up in groups
                 // that line up horizontally. Try to extend the previous rectangle
                 // to the right to include the last one.
-                if(m_pPaintRegion->size() > 1)
+                if(m_oPaintRegion->size() > 1)
                 {
-                    SwRect& last2 = (*m_pPaintRegion)[m_pPaintRegion->size() - 2];
+                    SwRect& last2 = (*m_oPaintRegion)[m_oPaintRegion->size() - 2];
                     if(last2.Top() == last.Top() && last2.Height() == last.Height()
                         && last2.Right() + 1 >= last.Left() && last2.Right() <= last2.Right())
                     {
                         last2.Union(last);
-                        m_pPaintRegion->pop_back();
+                        m_oPaintRegion->pop_back();
                         return true;
                     }
                 }
                 return true;
             }
         }
-        (*m_pPaintRegion) += rRect;
+        (*m_oPaintRegion) += rRect;
         return true;
     }
     return false;

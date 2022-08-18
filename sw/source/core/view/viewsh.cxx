@@ -319,29 +319,29 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
             }
             mbPaintWorks = true;
 
-            std::unique_ptr<SwRegionRects> pRegion = Imp()->TakePaintRegion();
+            std::optional<SwRegionRects> oRegion = Imp()->TakePaintRegion();
 
             //JP 27.11.97: what hid the selection, must also Show it,
             //             else we get Paint errors!
             // e.g. additional mode, page half visible vertically, in the
             // middle a selection and with another cursor jump to left
             // right border. Without ShowCursor the selection disappears.
-            bool bShowCursor = pRegion && dynamic_cast<const SwCursorShell*>(this) !=  nullptr;
+            bool bShowCursor = oRegion && dynamic_cast<const SwCursorShell*>(this) !=  nullptr;
             if( bShowCursor )
                 static_cast<SwCursorShell*>(this)->HideCursors();
 
-            if ( pRegion )
+            if ( oRegion )
             {
                 SwRootFrame* pCurrentLayout = GetLayout();
 
-                pRegion->LimitToOrigin();
-                pRegion->Compress( SwRegionRects::CompressFuzzy );
+                oRegion->LimitToOrigin();
+                oRegion->Compress( SwRegionRects::CompressFuzzy );
 
                 ScopedVclPtr<VirtualDevice> pVout;
-                while ( !pRegion->empty() )
+                while ( !oRegion->empty() )
                 {
-                    SwRect aRect( pRegion->back() );
-                    pRegion->pop_back();
+                    SwRect aRect( oRegion->back() );
+                    oRegion->pop_back();
 
                     bool bPaint = true;
                     if ( IsEndActionByVirDev() )
@@ -1749,32 +1749,32 @@ bool SwViewShell::CheckInvalidForPaint( const SwRect &rRect )
         aAction.Action(GetWin()->GetOutDev());
         --mnStartAction;
 
-        std::unique_ptr<SwRegionRects> pRegion = Imp()->TakePaintRegion();
-        if ( pRegion && aAction.IsBrowseActionStop() )
+        std::optional<SwRegionRects> oRegion = Imp()->TakePaintRegion();
+        if ( oRegion && aAction.IsBrowseActionStop() )
         {
             //only of interest when something has changed in the visible range
             bool bStop = true;
-            for ( size_t i = 0; i < pRegion->size(); ++i )
+            for ( size_t i = 0; i < oRegion->size(); ++i )
             {
-                const SwRect &rTmp = (*pRegion)[i];
+                const SwRect &rTmp = (*oRegion)[i];
                 bStop = rTmp.Overlaps( VisArea() );
                 if ( !bStop )
                     break;
             }
             if ( bStop )
-                pRegion.reset();
+                oRegion.reset();
         }
 
-        if ( pRegion )
+        if ( oRegion )
         {
-            pRegion->LimitToOrigin();
-            pRegion->Compress( SwRegionRects::CompressFuzzy );
+            oRegion->LimitToOrigin();
+            oRegion->Compress( SwRegionRects::CompressFuzzy );
             bRet = false;
-            if ( !pRegion->empty() )
+            if ( !oRegion->empty() )
             {
                 SwRegionRects aRegion( rRect );
-                for ( size_t i = 0; i < pRegion->size(); ++i )
-                {   const SwRect &rTmp = (*pRegion)[i];
+                for ( size_t i = 0; i < oRegion->size(); ++i )
+                {   const SwRect &rTmp = (*oRegion)[i];
                     if ( !rRect.Contains( rTmp ) )
                     {
                         InvalidateWindows( rTmp );
