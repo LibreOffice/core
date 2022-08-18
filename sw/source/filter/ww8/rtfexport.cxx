@@ -31,6 +31,7 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <docsh.hxx>
 #include <viewsh.hxx>
 #include <viewopt.hxx>
@@ -680,6 +681,57 @@ void RtfExport::WriteUserProps()
     Strm().WriteChar('}');
 }
 
+void RtfExport::WriteDocVars()
+{
+    SwDocShell* pDocShell(m_rDoc.GetDocShell());
+    if (!pDocShell)
+        return;
+
+    uno::Reference<text::XTextFieldsSupplier> xModel(pDocShell->GetModel(), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xTextFieldMasters = xModel->getTextFieldMasters();
+    uno::Sequence<rtl::OUString> aMasterNames = xTextFieldMasters->getElementNames();
+    if (!aMasterNames.hasElements())
+    {
+        return;
+    }
+
+    // Only write docVars if there will be at least a single docVar.
+    constexpr OUStringLiteral aPrefix(u"com.sun.star.text.fieldmaster.User.");
+    for (const auto& rMasterName : std::as_const(aMasterNames))
+    {
+        if (!rMasterName.startsWith(aPrefix))
+        {
+            // Not a user field.
+            continue;
+        }
+
+        uno::Reference<beans::XPropertySet> xField;
+        xTextFieldMasters->getByName(rMasterName) >>= xField;
+        if (!xField.is())
+        {
+            continue;
+        }
+
+        OUString aKey = rMasterName.copy(aPrefix.getLength());
+        OUString aValue;
+        xField->getPropertyValue("Content") >>= aValue;
+
+        Strm().WriteChar('{').WriteCharPtr(
+            OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_DOCVAR);
+        Strm().WriteChar(' ');
+
+        Strm().WriteChar('{');
+        Strm().WriteOString(msfilter::rtfutil::OutString(aKey, m_eDefaultEncoding));
+        Strm().WriteChar('}');
+
+        Strm().WriteChar('{');
+        Strm().WriteOString(msfilter::rtfutil::OutString(aValue, m_eDefaultEncoding));
+        Strm().WriteChar('}');
+
+        Strm().WriteChar('}');
+    }
+}
+
 void RtfExport::WritePageDescTable()
 {
     // Write page descriptions (page styles)
@@ -754,6 +806,8 @@ ErrCode RtfExport::ExportDocument_Impl()
 
     WriteInfo();
     WriteUserProps();
+    WriteDocVars();
+
     // Default TabSize
     Strm()
         .WriteOString(m_pAttrOutput->GetTabStop().makeStringAndClear())

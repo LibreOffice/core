@@ -833,6 +833,27 @@ DECLARE_RTFEXPORT_TEST(testTdf86814, "tdf86814.rtf")
                          getProperty<float>(getRun(getParagraph(1), 1), "CharWeight"));
 }
 
+/** Make sure that the document variable "Unused", which is not referenced in the document,
+    is imported and exported. */
+DECLARE_RTFEXPORT_TEST(testTdf150267, "tdf150267.rtf")
+{
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextFieldsSupplier> xSupplier(xModel, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xTextFieldMasters = xSupplier->getTextFieldMasters();
+    uno::Sequence<rtl::OUString> aMasterNames = xTextFieldMasters->getElementNames();
+    bool bHasUnusedField = false;
+    for (const auto& rMasterName : std::as_const(aMasterNames))
+    {
+        if (rMasterName == "com.sun.star.text.fieldmaster.User.Unused")
+        {
+            bHasUnusedField = true;
+            break;
+        }
+    }
+
+    CPPUNIT_ASSERT_EQUAL(true, bHasUnusedField);
+}
+
 DECLARE_RTFEXPORT_TEST(testTdf108416, "tdf108416.rtf")
 {
     uno::Reference<container::XNameAccess> xCharacterStyles(getStyles("CharacterStyles"));
