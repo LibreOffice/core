@@ -2055,7 +2055,7 @@ std::optional<SfxItemSet> ScModule::CreateItemSet( sal_uInt16 nId )
             aConfig.MergeDocumentSpecific( pDocSh->GetDocument().GetCalcConfig());
             aOptions.SetCalcConfig( aConfig);
         }
-        pRet->Put( ScTpFormulaItem( aOptions ) );
+        pRet->Put( ScTpFormulaItem( std::move(aOptions) ) );
     }
     return pRet;
 }

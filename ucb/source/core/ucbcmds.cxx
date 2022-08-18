@@ -1459,7 +1459,7 @@ void globalTransfer_(
                         rContext.xProcessor,
                         rContext.xEnv,
                         rContext.xOrigEnv,
-                        aTransArg );
+                        std::move(aTransArg) );
                 do
                 {
                     uno::Reference< ucb::XContent > xChild

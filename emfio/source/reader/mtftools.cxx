@@ -1401,7 +1401,7 @@ namespace emfio
             ImplSetNonPersistentLineColorTransparenz();
             mpGDIMetaFile->AddAction( new MetaEllipseAction( ImplMap( rRect ) ) );
             UpdateLineStyle();
-            mpGDIMetaFile->AddAction( new MetaPolyLineAction( tools::Polygon( aCenter, aRad.Width(), aRad.Height() ), maLineStyle.aLineInfo ) );
+            mpGDIMetaFile->AddAction( new MetaPolyLineAction( tools::Polygon( std::move(aCenter), aRad.Width(), aRad.Height() ), maLineStyle.aLineInfo ) );
         }
         else
         {
@@ -1427,7 +1427,7 @@ namespace emfio
                 Point aCenter( aRect.Center() );
                 Size  aRad( aRect.GetWidth() / 2, aRect.GetHeight() / 2 );
 
-                mpGDIMetaFile->AddAction( new MetaPolyLineAction( tools::Polygon( aCenter, aRad.Width(), aRad.Height() ), maLineStyle.aLineInfo ) );
+                mpGDIMetaFile->AddAction( new MetaPolyLineAction( tools::Polygon( std::move(aCenter), aRad.Width(), aRad.Height() ), maLineStyle.aLineInfo ) );
             }
             else
                 mpGDIMetaFile->AddAction( new MetaPolyLineAction( tools::Polygon( aRect, aStart, aEnd, PolyStyle::Arc ), maLineStyle.aLineInfo ) );

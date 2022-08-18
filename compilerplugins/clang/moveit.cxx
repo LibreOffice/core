@@ -42,9 +42,26 @@ public:
     {
         std::string fn(handler.getMainFileName());
         loplugin::normalizeDotDotInFilePath(fn);
-        //        // false +
-        //        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/basctl/source/basicide/moduldlg.cxx"))
-        //            return false;
+        // false +, needs to check if the moved-from var is outside a loop
+        if (loplugin::hasPathnamePrefix(
+                fn, SRCDIR "/drawinglayer/source/primitive3d/sdrdecompositiontools3d.cxx"))
+            return false;
+        if (loplugin::hasPathnamePrefix(
+                fn, SRCDIR "/drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx"))
+            return false;
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/drawinglayer/source/tools/emfphelperdata.cxx"))
+            return false;
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sc/source/core/tool/reftokenhelper.cxx"))
+            return false;
+        if (loplugin::hasPathnamePrefix(fn,
+                                        SRCDIR "/svx/source/svdraw/svdotextpathdecomposition.cxx"))
+            return false;
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/svx/source/svdraw/svdcrtv.cxx"))
+            return false;
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/svx/source/table/tablehandles.cxx"))
+            return false;
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/svx/source/xoutdev/xpool.cxx"))
+            return false;
         return true;
     }
 

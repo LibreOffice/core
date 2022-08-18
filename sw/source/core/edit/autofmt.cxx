@@ -2725,7 +2725,7 @@ void SwEditShell::AutoFormat( const SvxSwAutoFormatFlags* pAFlags )
     }
     else
     {
-        SwAutoFormat aFormat( this, aAFFlags );
+        SwAutoFormat aFormat( this, std::move(aAFFlags) );
     }
 
     EndUndo( SwUndoId::AUTOFORMAT );
@@ -2770,7 +2770,7 @@ void SwEditShell::AutoFormatBySplitNode()
 
         SvxSwAutoFormatFlags aAFFlags = *GetAutoFormatFlags(); // use default values so far
 
-        SwAutoFormat aFormat( this, aAFFlags, &pCursor->GetMark()->nNode,
+        SwAutoFormat aFormat( this, std::move(aAFFlags), &pCursor->GetMark()->nNode,
                                 &pCursor->GetPoint()->nNode );
         SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get().GetAutoCorrect();
         if( pACorr && !pACorr->IsAutoCorrFlag( ACFlags::CapitalStartSentence | ACFlags::CapitalStartWord |

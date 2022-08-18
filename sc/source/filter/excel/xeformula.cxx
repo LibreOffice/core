@@ -1398,7 +1398,7 @@ void XclExpFmlaCompImpl::ProcessFunction( const XclExpScToken& rTokData )
     else if( pFuncInfo->IsMacroFunc() )
         aExtFuncData.Set( pFuncInfo->GetMacroFuncName(), false, true );
 
-    XclExpFuncData aFuncData( rTokData, *pFuncInfo, aExtFuncData );
+    XclExpFuncData aFuncData( rTokData, *pFuncInfo, std::move(aExtFuncData) );
     XclExpScToken aTokData;
 
     // preparations for special functions, before function processing starts

@@ -293,7 +293,7 @@ bool ScViewFunc::CopyToClipSingleRange( ScDocument* pClipDoc, const ScRangeList&
         aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
         // maSize is set in ScTransferObj ctor
 
-        rtl::Reference<ScTransferObj> pTransferObj(new ScTransferObj( pSysClipDoc, aObjDesc ));
+        rtl::Reference<ScTransferObj> pTransferObj(new ScTransferObj( pSysClipDoc, std::move(aObjDesc) ));
         if ( ScGlobal::xDrawClipDocShellRef.is() )
         {
             SfxObjectShellRef aPersistRef( ScGlobal::xDrawClipDocShellRef.get() );
@@ -409,7 +409,7 @@ bool ScViewFunc::CopyToClipMultiRange( const ScDocument* pInputClipDoc, const Sc
         aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
         // maSize is set in ScTransferObj ctor
 
-        rtl::Reference<ScTransferObj> pTransferObj(new ScTransferObj( std::move(pDocClip), aObjDesc ));
+        rtl::Reference<ScTransferObj> pTransferObj(new ScTransferObj( std::move(pDocClip), std::move(aObjDesc) ));
         if ( ScGlobal::xDrawClipDocShellRef.is() )
         {
             SfxObjectShellRef aPersistRef( ScGlobal::xDrawClipDocShellRef.get() );
@@ -456,7 +456,7 @@ rtl::Reference<ScTransferObj> ScViewFunc::CopyToTransferable()
             TransferableObjectDescriptor aObjDesc;
             pDocSh->FillTransferableObjectDescriptor( aObjDesc );
             aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
-            return new ScTransferObj( std::move(pClipDoc), aObjDesc );
+            return new ScTransferObj( std::move(pClipDoc), std::move(aObjDesc) );
         }
     }
 

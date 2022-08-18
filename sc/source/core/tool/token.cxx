@@ -390,17 +390,17 @@ FormulaToken* ScRawToken::CreateToken(ScSheetLimits& rLimits) const
         case svExternalSingleRef:
             {
                 svl::SharedString aTabName(maExternalName);    // string not interned
-                return new ScExternalSingleRefToken(extref.nFileId, aTabName, extref.aRef.Ref1);
+                return new ScExternalSingleRefToken(extref.nFileId, std::move(aTabName), extref.aRef.Ref1);
             }
         case svExternalDoubleRef:
             {
                 svl::SharedString aTabName(maExternalName);    // string not interned
-                return new ScExternalDoubleRefToken(extref.nFileId, aTabName, extref.aRef);
+                return new ScExternalDoubleRefToken(extref.nFileId, std::move(aTabName), extref.aRef);
             }
         case svExternalName:
             {
                 svl::SharedString aName(maExternalName);         // string not interned
-                return new ScExternalNameToken( extname.nFileId, aName );
+                return new ScExternalNameToken( extname.nFileId, std::move(aName) );
             }
         case svJump :
             return new FormulaJumpToken( eOp, nJump );

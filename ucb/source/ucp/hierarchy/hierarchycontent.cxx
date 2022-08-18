@@ -91,7 +91,7 @@ rtl::Reference<HierarchyContent> HierarchyContent::create(
     if ( !loadData( rxContext, pProvider, Identifier, aProps ) )
         return nullptr;
 
-    return new HierarchyContent( rxContext, pProvider, Identifier, aProps );
+    return new HierarchyContent( rxContext, pProvider, Identifier, std::move(aProps) );
 }
 
 

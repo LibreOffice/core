@@ -1266,7 +1266,7 @@ ScPostIt* ScNoteUtil::CreateNoteFromObjectData(
 
     /*  Create the note and insert it into the document. If the note is
         visible, the caption object will be created automatically. */
-    ScPostIt* pNote = new ScPostIt( rDoc, rPos, aNoteData, /*bAlwaysCreateCaption*/false, 0/*nPostItId*/ );
+    ScPostIt* pNote = new ScPostIt( rDoc, rPos, std::move(aNoteData), /*bAlwaysCreateCaption*/false, 0/*nPostItId*/ );
     pNote->AutoStamp();
 
     rDoc.SetNote(rPos, std::unique_ptr<ScPostIt>(pNote));
@@ -1289,7 +1289,7 @@ ScPostIt* ScNoteUtil::CreateNoteFromString(
 
         /*  Create the note and insert it into the document. If the note is
             visible, the caption object will be created automatically. */
-        pNote = new ScPostIt( rDoc, rPos, aNoteData, bAlwaysCreateCaption, nPostItId );
+        pNote = new ScPostIt( rDoc, rPos, std::move(aNoteData), bAlwaysCreateCaption, nPostItId );
         pNote->AutoStamp();
         //insert takes ownership
         rDoc.SetNote(rPos, std::unique_ptr<ScPostIt>(pNote));

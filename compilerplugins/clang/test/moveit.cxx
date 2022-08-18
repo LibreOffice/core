@@ -18,6 +18,9 @@ struct Movable
     std::shared_ptr<int> x;
 
     void method1();
+
+    Movable();
+    Movable(int);
 };
 
 namespace test1a
@@ -81,6 +84,20 @@ struct F
         Movable m;
         F a(m);
         m.method1();
+    }
+};
+}
+
+// No error expected, because constructing temporary(i.e. rvalue) to pass to param
+namespace test4
+{
+struct F
+{
+    F(Movable);
+    void foo()
+    {
+        F a((Movable(5)));
+        (void)a;
     }
 };
 }

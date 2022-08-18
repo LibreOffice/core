@@ -712,7 +712,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
             if (!bFirstTab)
                 pArray->AddOpCode(ocSep);
 
-            ScMatrixToken aToken(xMat);
+            ScMatrixToken aToken(std::move(xMat));
             if (!pArray)
                 pArray = std::make_shared<ScTokenArray>(mrDoc);
             pArray->AddToken(aToken);
@@ -1645,7 +1645,7 @@ static std::unique_ptr<ScTokenArray> lcl_fillEmptyMatrix(const ScDocument& rDoc,
     SCSIZE nR = static_cast<SCSIZE>(rRange.aEnd.Row()-rRange.aStart.Row()+1);
     ScMatrixRef xMat = new ScMatrix(nC, nR);
 
-    ScMatrixToken aToken(xMat);
+    ScMatrixToken aToken(std::move(xMat));
     unique_ptr<ScTokenArray> pArray(new ScTokenArray(rDoc));
     pArray->AddToken(aToken);
     return pArray;
