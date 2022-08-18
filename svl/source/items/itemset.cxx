@@ -77,27 +77,9 @@ SfxItemSet::SfxItemSet( SfxItemPool& rPool, WhichRangesContainer&& ranges, SfxPo
     assert(svl::detail::validRanges2(m_pWhichRanges));
 }
 
-SfxItemSet::SfxItemSet(
-    SfxItemPool & pool,
-    const WhichRangesContainer& wids,
-    std::size_t items):
-    m_pPool(&pool), m_pParent(nullptr),
-    m_ppItems(new SfxPoolItem const *[items]{}),
-    m_pWhichRanges(wids),
-    m_nCount(0),
-    m_bItemsFixed(false)
-{
-    assert(wids.size() != 0);
-    assert(svl::detail::validRanges2(m_pWhichRanges));
-}
-
-SfxItemSet::SfxItemSet(SfxItemPool& pool, const WhichRangesContainer& wids)
-    : SfxItemSet(pool, wids, svl::detail::CountRanges(wids))
-{
-}
-
-SfxItemSet::SfxItemSet(SfxItemPool& pool, WhichRangesContainer&& wids)
-    : m_pPool(&pool), m_pParent(nullptr),
+SfxItemSet::SfxItemSet(SfxItemPool& pool, WhichRangesContainer wids)
+    : m_pPool(&pool),
+    m_pParent(nullptr),
     m_ppItems(new SfxPoolItem const *[svl::detail::CountRanges(wids)]{}),
     m_pWhichRanges(std::move(wids)),
     m_nCount(0),
