@@ -828,7 +828,11 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
                 else
                     nNewTableParent = i;
             }
+            else
+                nPrevRowChange = SwRedlineTable::npos;
         }
+        else
+            nPrevRowChange = SwRedlineTable::npos;
 
         bool bRowChange(SwRedlineTable::npos != nLastChangeInRow);
 
