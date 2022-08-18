@@ -115,9 +115,10 @@ SwExtTextInput::~SwExtTextInput()
         sal_Int32 nLenghtOfOldString = nEndCnt - nSttCnt;
 
         if( m_bInsText )
+        {
+            rIdx = nSttCnt;
             rDoc.getIDocumentContentOperations().InsertString( *this, sText, SwInsertFlags::EMPTYEXPAND );
-
-        rIdx = nEndCnt;
+        }
 
         pTNd->EraseText( rIdx, nLenghtOfOldString );
     }
