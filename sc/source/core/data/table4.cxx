@@ -1224,7 +1224,7 @@ void  ScTable::FillSparkline(bool bVertical, SCCOLROW nFixed,
     for (SCROW nCurrent = nStart; nCurrent <= nEnd; nCurrent++)
     {
         auto pSparkline = bVertical ? GetSparkline(nFixed, nCurrent) : GetSparkline(nCurrent, nFixed);
-        bHasSparklines = bHasSparklines || bool(pSparkline);
+        bHasSparklines = bHasSparklines || pSparkline;
         aSparklineSeries.push_back(pSparkline);
     }
 
