@@ -16,6 +16,41 @@
       "message": "Too bad for the erased fixed typo in the comment whereas there wasn\u0027t any update in the content.",
       "revId": "af87ec3137c32ba098c072304595d8b590f3447c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6183fdc_46ce538b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003656
+      },
+      "writtenOn": "2022-08-18T03:57:54Z",
+      "side": 1,
+      "message": "Sorry, the reason is when this change was first submitted to gerrit, It passed the Jenkins check, but It didn\u0027t set to Verified automatic on the dashboard. And I thought the reviewers maybe think it was unfinished, so I did some meaningless changes and resubmit it.\nI apologize if it looks ugly and annoying in the git history.",
+      "revId": "af87ec3137c32ba098c072304595d8b590f3447c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34232df9_671ef3f4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003656
+      },
+      "writtenOn": "2022-08-18T03:57:54Z",
+      "side": 1,
+      "message": "Sorry, the reason is when this change was first submitted to gerrit, It passed the Jenkins check, but It didn\u0027t set to Verified automatic on the dashboard. And I thought the reviewers maybe think it was unfinished, so I did some meaningless changes and resubmit it.\nI apologize if it looks ugly and annoying in the git history.",
+      "parentUuid": "459ad41e_2c0bd354",
+      "revId": "af87ec3137c32ba098c072304595d8b590f3447c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
