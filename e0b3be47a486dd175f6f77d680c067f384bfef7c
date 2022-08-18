@@ -16,6 +16,24 @@
       "message": "I never know if we can change this kind of file or if it\u0027s a file retrieved from upstream.",
       "revId": "e0b3be47a486dd175f6f77d680c067f384bfef7c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c310159_d0dc0ad8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-08-18T07:59:34Z",
+      "side": 1,
+      "message": "If it has LibreOffice extensions in, then it\u0027s fine to change I guess :)",
+      "parentUuid": "3bd53c9f_11b12cb8",
+      "revId": "e0b3be47a486dd175f6f77d680c067f384bfef7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
