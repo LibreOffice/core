@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6011b9c_ab41c062",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-08-18T11:27:20Z",
+      "side": 1,
+      "message": "@Tünde: very nice fix!\n\n@Samuel, Noel: thanks for your help!",
+      "revId": "987c7aa3b36bb775a31037278be20b1a2e158c84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
