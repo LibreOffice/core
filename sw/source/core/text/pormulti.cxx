@@ -1572,7 +1572,7 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
 
     SwSpaceManipulator aManip( GetInfo(), rMulti );
 
-    std::unique_ptr<SwFontSave> pFontSave;
+    std::optional<SwFontSave> oFontSave;
     std::unique_ptr<SwFont> pTmpFnt;
 
     if( rMulti.IsDouble() )
@@ -1583,11 +1583,10 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
             SetPropFont( 50 );
             pTmpFnt->SetProportion( GetPropFont() );
         }
-        pFontSave.reset(new SwFontSave( GetInfo(), pTmpFnt.get(), this ));
+        oFontSave.emplace( GetInfo(), pTmpFnt.get(), this );
     }
     else
     {
-        pFontSave = nullptr;
         pTmpFnt = nullptr;
     }
 
@@ -1843,7 +1842,7 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
     // Restore the saved values
     GetInfo().X( nOldX );
     GetInfo().SetLen( nOldLen );
-    pFontSave.reset();
+    oFontSave.reset();
     pTmpFnt.reset();
     SetPropFont( 0 );
 }
@@ -1913,7 +1912,7 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
     }
 
     SeekAndChg( rInf );
-    std::unique_ptr<SwFontSave> xFontSave;
+    std::optional<SwFontSave> oFontSave;
     std::unique_ptr<SwFont> xTmpFont;
     if( rMulti.IsDouble() )
     {
@@ -1923,7 +1922,7 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
             SetPropFont( 50 );
             xTmpFont->SetProportion( GetPropFont() );
         }
-        xFontSave.reset(new SwFontSave(rInf, xTmpFont.get(), this));
+        oFontSave.emplace(rInf, xTmpFont.get(), this);
     }
 
     SwLayoutModeModifier aLayoutModeModifier( *GetInfo().GetOut() );
@@ -2370,7 +2369,7 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
     SeekAndChg( rInf );
     delete pFirstRest;
     delete pSecondRest;
-    xFontSave.reset();
+    oFontSave.reset();
     return bRet;
 }
 

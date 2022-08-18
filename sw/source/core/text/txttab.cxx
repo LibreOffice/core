@@ -374,14 +374,14 @@ bool SwTabPortion::PreFormat( SwTextFormatInfo &rInf )
         // #i89179#
         // tab portion representing the list tab of a list label gets the
         // same font as the corresponding number portion
-        std::unique_ptr< SwFontSave > pSave;
+        std::optional< SwFontSave > oSave;
         if ( GetLen() == TextFrameIndex(0) &&
              rInf.GetLast() && rInf.GetLast()->InNumberGrp() &&
              static_cast<SwNumberPortion*>(rInf.GetLast())->HasFont() )
         {
             const SwFont* pNumberPortionFont =
                     static_cast<SwNumberPortion*>(rInf.GetLast())->GetFont();
-            pSave.reset( new SwFontSave( rInf, const_cast<SwFont*>(pNumberPortionFont) ) );
+            oSave.emplace( rInf, const_cast<SwFont*>(pNumberPortionFont) );
         }
         OUString aTmp( ' ' );
         SwTextSizeInfo aInf( rInf, &aTmp );
@@ -575,7 +575,7 @@ void SwTabPortion::Paint( const SwTextPaintInfo &rInf ) const
     // #i89179#
     // tab portion representing the list tab of a list label gets the
     // same font as the corresponding number portion
-    std::unique_ptr< SwFontSave > pSave;
+    std::optional< SwFontSave > oSave;
     bool bAfterNumbering = false;
     if (GetLen() == TextFrameIndex(0))
     {
@@ -587,7 +587,7 @@ void SwTabPortion::Paint( const SwTextPaintInfo &rInf ) const
         {
             const SwFont* pNumberPortionFont =
                     static_cast<const SwNumberPortion*>(pPrevPortion)->GetFont();
-            pSave.reset( new SwFontSave( rInf, const_cast<SwFont*>(pNumberPortionFont) ) );
+            oSave.emplace( rInf, const_cast<SwFont*>(pNumberPortionFont) );
             bAfterNumbering = true;
         }
     }
