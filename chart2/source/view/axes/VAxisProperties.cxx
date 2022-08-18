@@ -166,6 +166,7 @@ AxisProperties::AxisProperties(rtl::Reference<::chart::Axis> xAxisModel,
     , m_bCrossingAxisHasReverseDirection(false)
     , m_bCrossingAxisIsCategoryAxes(false)
     , m_bDisplayDataTable(false)
+    , m_bDataTableAlignAxisValuesWithColumns(false)
     , m_bDisplayLabels( true )
     , m_bTryStaggeringFirst( false )
     , m_nNumberFormatKey(0)
