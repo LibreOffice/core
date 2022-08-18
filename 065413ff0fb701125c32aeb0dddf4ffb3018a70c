@@ -33,6 +33,23 @@
       "message": "For some reason, Jenkins gave a +1 for the patch but the Submit button is not available. Should I rebase?",
       "revId": "065413ff0fb701125c32aeb0dddf4ffb3018a70c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fdf9f5b3_2bd31600",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-08-18T06:07:01Z",
+      "side": 1,
+      "message": "You can manually \"Verify +1\". Submit is available with +2 now.",
+      "revId": "065413ff0fb701125c32aeb0dddf4ffb3018a70c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
