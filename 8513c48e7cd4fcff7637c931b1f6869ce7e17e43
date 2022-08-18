@@ -16,6 +16,23 @@
       "message": "Thanks for the fast response",
       "revId": "8513c48e7cd4fcff7637c931b1f6869ce7e17e43",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "851615c8_3ba8ea62",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-08-18T11:28:44Z",
+      "side": 1,
+      "message": "see discussion in bugzilla.",
+      "revId": "8513c48e7cd4fcff7637c931b1f6869ce7e17e43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
