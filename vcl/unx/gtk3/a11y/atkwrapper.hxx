@@ -47,8 +47,7 @@ namespace com::sun::star::accessibility {
 
 struct AtkObjectWrapper
 {
-    GtkWidgetAccessible aParent;
-
+    AtkObject aParent;
     AtkObject* mpOrig;  //if we're a GtkDrawingArea acting as a custom LibreOffice widget, this is the toolkit default impl
     AtkObject* mpSysObjChild; //if we're a container for a sysobj, then this is the sysobj native gtk AtkObject
 
