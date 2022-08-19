@@ -16,6 +16,24 @@
       "message": "wee need some guard here, there was a crashreport for GetPostItField()",
       "revId": "d365da2c47a4a40e0b33a34f559046d1162ae1fb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fd59d5c_f18140f4",
+        "filename": "sw/source/uibase/docvw/PostItMgr.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1002266
+      },
+      "writtenOn": "2022-08-19T11:12:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe5451aa_b37c68ec",
+      "revId": "d365da2c47a4a40e0b33a34f559046d1162ae1fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
