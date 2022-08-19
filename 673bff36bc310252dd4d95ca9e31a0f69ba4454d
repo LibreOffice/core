@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22371371_c8f006bb",
+        "filename": "sc/inc/sc.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-19T09:38:57Z",
+      "side": 1,
+      "message": "Worth a comment here, based on your findings?",
+      "revId": "673bff36bc310252dd4d95ca9e31a0f69ba4454d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
