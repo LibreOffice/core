@@ -70,6 +70,24 @@
       "parentUuid": "d2498130_c9da5d74",
       "revId": "addf50b737f1a82ae289aaa0e57192d9b51a8621",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cae69066_445c8a16",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-08-19T09:49:10Z",
+      "side": 1,
+      "message": "This is jsdialog issue/limitation. If it receives wrong order in JSON -\u003e it will be like that. I will check what is wrong.",
+      "parentUuid": "e3a3f6a5_ad50303e",
+      "revId": "addf50b737f1a82ae289aaa0e57192d9b51a8621",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
