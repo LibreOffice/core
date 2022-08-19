@@ -87,6 +87,30 @@
       },
       "revId": "15c1d42e94666a1ccb3acc6a428ecfc7f34fbedb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd5f29b7_2b68b899",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3340,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-08-19T12:21:48Z",
+      "side": 1,
+      "message": "Ack.\nComfortable moving ahead and having this patch applied.",
+      "parentUuid": "808a301c_f1c9c733",
+      "range": {
+        "startLine": 3340,
+        "startChar": 11,
+        "endLine": 3340,
+        "endChar": 57
+      },
+      "revId": "15c1d42e94666a1ccb3acc6a428ecfc7f34fbedb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
