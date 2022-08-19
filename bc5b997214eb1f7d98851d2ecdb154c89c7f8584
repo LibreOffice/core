@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "845f5dc9_3c547bc2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-08-19T15:09:54Z",
+      "side": 1,
+      "message": "added missing disposeOnce call (it was crashing)",
+      "revId": "bc5b997214eb1f7d98851d2ecdb154c89c7f8584",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
