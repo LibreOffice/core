@@ -192,6 +192,23 @@ css::awt::Rectangle AccFrameSelector::implGetBounds()
     return aRet;
 }
 
+css::awt::Point AccFrameSelector::getLocationOnScreen()
+{
+    SolarMutexGuard aGuard;
+    IsValid();
+
+    css::awt::Point aScreenLoc(0, 0);
+
+    if (weld::DrawingArea* pDrawingArea = mpFrameSel->GetDrawingArea())
+    {
+        Point aPos = pDrawingArea->get_accessible_location_on_screen();
+        aScreenLoc.X = aPos.X();
+        aScreenLoc.Y = aPos.Y();
+    }
+
+    return aScreenLoc;
+}
+
 void AccFrameSelector::IsValid()
 {
     if(!mpFrameSel)
