@@ -16,6 +16,24 @@
       "message": "I think this logic should be hidden in the dialog itself.\n(Before conversion it wasn\u0027t needed here). The we will not need custom AbstractSwInsertCaptionDlg class but some generic one.\n\nIn sync run it wos like that:\nhttps://git.libreoffice.org/core/+/9232c4a5ee685768457a8e7825b84b07f8bfe5cf/sw/source/ui/frmdlg/cption.cxx#75\n\ncan we do something similar for async method (Apply() after callback is called)",
       "revId": "9232c4a5ee685768457a8e7825b84b07f8bfe5cf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "776112cc_2ca6527f",
+        "filename": "sw/source/uibase/uiview/viewdlg2.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1003648
+      },
+      "writtenOn": "2022-08-19T08:45:21Z",
+      "side": 1,
+      "message": "Good idea- I think the problem with just doing that on the genericdialogcontroller/similar is that it doesn\u0027t have an Apply method- perhaps changing AbstractSwInsertCaptionDialog into a generic async dialog controller (i.e. via renaming \u0026 perhaps providing a default StartExecuteAsync callback that runs Apply) would be a good way to do this? What do you think?",
+      "parentUuid": "af9a435f_666760de",
+      "revId": "9232c4a5ee685768457a8e7825b84b07f8bfe5cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
