@@ -1638,12 +1638,7 @@ bool SwTextBoxHelper::isAnchorSyncNeeded(const SwFrameFormat* pFirst, const SwFr
         {
             if (rShapeAnchor.GetContentAnchor() && rFrameAnchor.GetContentAnchor())
             {
-                if (rShapeAnchor.GetContentAnchor()->nContent
-                    != rFrameAnchor.GetContentAnchor()->nContent)
-                    return true;
-
-                if (rShapeAnchor.GetContentAnchor()->nNode
-                    != rFrameAnchor.GetContentAnchor()->nNode)
+                if (*rShapeAnchor.GetContentAnchor() != *rFrameAnchor.GetContentAnchor())
                     return true;
 
                 return false;
@@ -1666,12 +1661,7 @@ bool SwTextBoxHelper::isAnchorSyncNeeded(const SwFrameFormat* pFirst, const SwFr
         {
             if (rShapeAnchor.GetContentAnchor() && rFrameAnchor.GetContentAnchor())
             {
-                if (rShapeAnchor.GetContentAnchor()->nContent
-                    != rFrameAnchor.GetContentAnchor()->nContent)
-                    return true;
-
-                if (rShapeAnchor.GetContentAnchor()->nNode
-                    != rFrameAnchor.GetContentAnchor()->nNode)
+                if (*rShapeAnchor.GetContentAnchor() != *rFrameAnchor.GetContentAnchor())
                     return true;
 
                 return false;

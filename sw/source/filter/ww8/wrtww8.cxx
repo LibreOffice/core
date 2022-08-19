@@ -1436,7 +1436,7 @@ void WW8Export::AppendBookmarks( const SwTextNode& rNd, sal_Int32 nCurrentPos, s
         if(rBkmk.IsExpanded())
             pOPos = &rBkmk.GetOtherMarkPos();
         if( pOPos && pOPos->GetNode() == pPos->GetNode() &&
-            pOPos->nContent < pPos->nContent )
+            pOPos->GetContentIndex() < pPos->GetContentIndex() )
         {
             pPos = pOPos;
             pOPos = &rBkmk.GetMarkPos();

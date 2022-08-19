@@ -190,7 +190,7 @@ namespace
         return oContentIdx.has_value()
                ? ( rPos.GetNode() > rNdIdx
                    || ( rPos.GetNode() == rNdIdx
-                        && rPos.nContent >= *oContentIdx ) )
+                        && rPos.GetContentIndex() >= *oContentIdx ) )
                : rPos.GetNode() >= rNdIdx;
     }
 
@@ -199,7 +199,7 @@ namespace
         return rPos.GetNode() < rNdIdx
                || ( oContentIdx.has_value()
                     && rPos.GetNode() == rNdIdx
-                    && rPos.nContent < *oContentIdx );
+                    && rPos.GetContentIndex() < *oContentIdx );
     }
 
     bool lcl_MarkOrderingByStart(const ::sw::mark::MarkBase *const pFirst,
@@ -998,11 +998,11 @@ namespace sw::mark
         if ( oEndContentIdx.has_value()
              && ( ( rbIsOtherPosInRange
                     && pMark->GetMarkPos().GetNode() == rEnd
-                    && pMark->GetMarkPos().nContent == *oEndContentIdx )
+                    && pMark->GetMarkPos().GetContentIndex() == *oEndContentIdx )
                   || ( rbIsPosInRange
                        && pMark->IsExpanded()
                        && pMark->GetOtherMarkPos().GetNode() == rEnd
-                       && pMark->GetOtherMarkPos().nContent == *oEndContentIdx ) ) )
+                       && pMark->GetOtherMarkPos().GetContentIndex() == *oEndContentIdx ) ) )
         {
             rbIsPosInRange = true;
             rbIsOtherPosInRange = true;
@@ -1029,7 +1029,7 @@ namespace sw::mark
                                   || pMark->IsExpanded()
                                   || !oStartContentIdx.has_value()
                                   || pMark->GetMarkPos().nNode != rStt
-                                  || pMark->GetMarkPos().nContent != *oStartContentIdx;
+                                  || pMark->GetMarkPos().GetContentIndex() != *oStartContentIdx;
                     break;
                 default:
                     bDeleteMark = true;
@@ -1782,7 +1782,8 @@ namespace
 {
     bool lcl_Greater( const SwPosition& rPos, const SwNode& rNdIdx, std::optional<sal_Int32> oContentIdx )
     {
-        return rPos.GetNode() > rNdIdx || ( oContentIdx && rPos.GetNode() == rNdIdx && rPos.nContent > *oContentIdx );
+        return rPos.GetNode() > rNdIdx ||
+                ( oContentIdx && rPos.GetNode() == rNdIdx && rPos.GetContentIndex() > *oContentIdx );
     }
 }
 
