@@ -57,6 +57,7 @@ public:
     virtual OUString SAL_CALL getAccessibleName(  ) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) override;
     virtual sal_Int64 SAL_CALL getAccessibleStateSet(  ) override;
+    virtual css::awt::Point SAL_CALL getLocationOnScreen() override;
 
     //XAccessible
     virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;
