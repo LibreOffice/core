@@ -22,6 +22,7 @@
 
 #include <com/sun/star/logging/LoggerPool.hpp>
 
+#include <comphelper/diagnose_ex.hxx>
 #include <osl/diagnose.h>
 
 
@@ -60,7 +61,8 @@ namespace comphelper
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EventLogger_Impl::impl_createLogger_nothrow: caught an exception!" );
+            TOOLS_WARN_EXCEPTION(
+                "comphelper", "EventLogger_Impl::impl_createLogger_nothrow: caught an exception!" );
         }
     }
 
@@ -80,7 +82,7 @@ namespace comphelper
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EventLogger::isLoggable: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "comphelper", "EventLogger::isLoggable: caught an exception!" );
         }
 
         return false;
@@ -151,7 +153,7 @@ namespace comphelper
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "EventLogger::impl_log: caught an exception!" );
+            TOOLS_WARN_EXCEPTION( "comphelper", "EventLogger::impl_log: caught an exception!" );
         }
     }
 } // namespace comphelper
