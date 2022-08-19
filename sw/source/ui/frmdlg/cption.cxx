@@ -138,6 +138,7 @@ SwCaptionDialog::SwCaptionDialog(weld::Window *pParent, SwView &rV)
     m_xSepEdit->connect_changed(aLk);
 
     m_xFormatBox->connect_changed(LINK(this, SwCaptionDialog, SelectListBoxHdl));
+    m_xOKButton->connect_clicked(LINK(this, SwCaptionDialog, OKHdl));
     m_xOptionButton->connect_clicked(LINK(this, SwCaptionDialog, OptionHdl));
     m_xAutoCaptionButton->connect_clicked(LINK(this, SwCaptionDialog, CaptionHdl));
     m_xAutoCaptionButton->set_accessible_description(SwResId(STR_A11Y_DESC_AUTO));
@@ -265,6 +266,12 @@ SwCaptionDialog::SwCaptionDialog(weld::Window *pParent, SwView &rV)
     m_xSepEdit->set_text(s_aSepTextSave);
     m_xTextEdit->grab_focus();
     DrawSample();
+}
+
+IMPL_LINK_NOARG(SwCaptionDialog, OKHdl, weld::Button&, void)
+{
+    Apply();
+    m_xDialog->response(RET_OK);
 }
 
 void SwCaptionDialog::Apply()
