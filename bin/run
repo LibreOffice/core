@@ -26,7 +26,7 @@ print_usage()
 list_executables()
 {
     echo "Listing executables inside workdir/LinkTarget/Executable folder:"
-    find workdir/LinkTarget/Executable -executable -printf "%P\n"
+    find workdir/LinkTarget/Executable -executable -printf "%P\n" | grep -v batch | awk -F. {'print $1'} | sort -u
 }
 
 print_executable_name()
@@ -52,9 +52,9 @@ setdefaults()
 
 case "$1" in
     ""|"-h"|"-help"|"--help")
-        print_usage; return 1;;
+        print_usage; exit 1;;
     "-l"|"-list"|"--list")
-        list_executables; return 0;;
+        list_executables; exit 0;;
     *) print_executable_name $1;;
 esac
 
