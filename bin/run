@@ -26,7 +26,14 @@ print_usage()
 list_executables()
 {
     echo "Listing executables inside workdir/LinkTarget/Executable folder:"
-    find workdir/LinkTarget/Executable -executable -printf "%P\n" | grep -v batch | awk -F. {'print $1'} | sort -u
+    if uname | grep -i CYGWIN >/dev/null
+    then
+        echo
+        find workdir/LinkTarget/Executable -iname "*.bat" -printf "%P\n"
+        find workdir/LinkTarget/Executable -iname "*.exe" -printf "%P\n"
+    else
+        find workdir/LinkTarget/Executable -executable -printf "%P\n"
+    fi
 }
 
 print_executable_name()
