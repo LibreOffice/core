@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa26d7dc_01cb47e3",
+        "filename": "sw/source/filter/ww8/ww8par.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 3732,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-08-19T00:43:52Z",
+      "side": 1,
+      "message": "I looked at using CopyFrameFormat instead, but it actually makes a call to MakeFrameFormat_. I want something as minimal as possible - just to pass a FormatAttr.",
+      "range": {
+        "startLine": 3732,
+        "startChar": 35,
+        "endLine": 3732,
+        "endChar": 50
+      },
+      "revId": "612eb56ba26f281a74f58d4ecfd029c7272f968a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65d9f610_e0b34851",
+        "filename": "sw/source/filter/ww8/ww8par.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 3736,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-08-19T00:43:52Z",
+      "side": 1,
+      "message": "This is a lot of work just to pass FormatAttrs. I could extend the function instead. But this is RARELY called, so a simple coding approach seems reasonable. I\u0027m a bit worried how complicated this is, and how a unique_ptr didn\u0027t work, and there is no documentation saying how these need to be deleted. I\u0027m just guessing, since I get crashes if I don\u0027t delete using DelFrameFormat.",
+      "range": {
+        "startLine": 3736,
+        "startChar": 31,
+        "endLine": 3736,
+        "endChar": 45
+      },
+      "revId": "612eb56ba26f281a74f58d4ecfd029c7272f968a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
