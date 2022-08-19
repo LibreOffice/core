@@ -16,6 +16,23 @@
       "message": "nothing is actually checking the mnBitmapInserts field?",
       "revId": "1e4fa31a9fea446fd249d83468b644004747642e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "551775f9_65c87c82",
+        "filename": "filter/source/graphicfilter/icgm/bitmap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-08-19T18:36:58Z",
+      "side": 1,
+      "message": "its checked here",
+      "revId": "1e4fa31a9fea446fd249d83468b644004747642e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
