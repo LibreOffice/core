@@ -162,7 +162,7 @@ private:
     bool NewMerge( SwDoc*, const SwSelBoxes&, const SwSelBoxes& rMerged,
                    SwUndoTableMerge* );
     bool NewSplitRow( SwDoc&, const SwSelBoxes&, sal_uInt16, bool );
-    std::unique_ptr<SwBoxSelection> CollectBoxSelection( const SwPaM& rPam ) const;
+    std::optional<SwBoxSelection> CollectBoxSelection( const SwPaM& rPam ) const;
     void InsertSpannedRow( SwDoc& rDoc, sal_uInt16 nIdx, sal_uInt16 nCnt );
     bool InsertRow_( SwDoc*, const SwSelBoxes&, sal_uInt16 nCnt, bool bBehind );
     bool NewInsertCol( SwDoc&, const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool );

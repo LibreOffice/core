@@ -326,15 +326,15 @@ static void lcl_ChangeRowSpan( const SwTable& rTable, const tools::Long nDiff,
     and prepares the selected cells for merging
 */
 
-std::unique_ptr<SwBoxSelection> SwTable::CollectBoxSelection( const SwPaM& rPam ) const
+std::optional<SwBoxSelection> SwTable::CollectBoxSelection( const SwPaM& rPam ) const
 {
     OSL_ENSURE( m_bNewModel, "Don't call me for old tables" );
     if( m_aLines.empty() )
-        return nullptr;
+        return std::nullopt;
     const SwNode* pStartNd = rPam.Start()->GetNode().FindTableBoxStartNode();
     const SwNode* pEndNd = rPam.End()->GetNode().FindTableBoxStartNode();
     if( !pStartNd || !pEndNd || pStartNd == pEndNd )
-        return nullptr;
+        return std::nullopt;
 
     const size_t nLines = m_aLines.size();
     size_t nTop = 0;
@@ -369,12 +369,12 @@ std::unique_ptr<SwBoxSelection> SwTable::CollectBoxSelection( const SwPaM& rPam 
         }
     }
     if( nFound < 2 )
-        return nullptr;
+        return std::nullopt;
 
     bool bOkay = true;
     tools::Long nMid = ( nMin + nMax ) / 2;
 
-    auto pRet(std::make_unique<SwBoxSelection>());
+    std::optional<SwBoxSelection> pRet(std::in_place);
     std::vector< std::pair< SwTableBox*, tools::Long > > aNewWidthVector;
     size_t nCheckBottom = nBottom;
     tools::Long nLeftSpan = 0;
@@ -816,7 +816,7 @@ bool SwTable::PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
     }
     CHECK_TABLE( *this )
     // We have to assert a "rectangular" box selection before we start to merge
-    std::unique_ptr< SwBoxSelection > pSel( CollectBoxSelection( rPam ) );
+    std::optional< SwBoxSelection > pSel( CollectBoxSelection( rPam ) );
     if (!pSel || pSel->isEmpty())
         return false;
     // Now we should have a rectangle of boxes,
