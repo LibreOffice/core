@@ -865,6 +865,13 @@ OUString lcl_ConvertFontSlant(awt::FontSlant eFontSlant)
             return "";
     }
 }
+
+/** Converts Color to "rgb(r,g,b)" as specified in https://wiki.linuxfoundation.org/accessibility/iaccessible2/textattributes. */
+OUString lcl_ConvertColor(Color aColor)
+{
+    return u"rgb(" + OUString::number(aColor.GetRed()) + u"," + OUString::number(aColor.GetGreen())
+           + u"," + OUString::number(aColor.GetBlue()) + u")";
+}
 }
 
 // Text attributes are returned in format specified in IAccessible2 spec, since that
@@ -904,7 +911,17 @@ QString QtAccessibleWidget::attributes(int offset, int* startOffset, int* endOff
     {
         OUString sAttribute;
         OUString sValue;
-        if (prop.Name == "CharFontName")
+        if (prop.Name == "CharBackColor")
+        {
+            sAttribute = "background-color";
+            sValue = lcl_ConvertColor(*o3tl::doAccess<sal_Int32>(prop.Value));
+        }
+        else if (prop.Name == "CharColor")
+        {
+            sAttribute = "color";
+            sValue = lcl_ConvertColor(*o3tl::doAccess<sal_Int32>(prop.Value));
+        }
+        else if (prop.Name == "CharFontName")
         {
             sAttribute = "font-family";
             sValue = *o3tl::doAccess<OUString>(prop.Value);
