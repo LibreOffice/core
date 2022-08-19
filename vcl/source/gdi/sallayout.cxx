@@ -660,6 +660,7 @@ void MultiSalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
     SalLayout::AdjustLayout( rArgs );
     vcl::text::ImplLayoutArgs aMultiArgs = rArgs;
     std::vector<DeviceCoordinate> aJustificationArray;
+    std::vector<double> aNaturalJustificationArray;
 
     if( !rArgs.HasDXArray() && rArgs.mnLayoutWidth )
     {
@@ -721,21 +722,20 @@ void MultiSalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
                 }
             }
 
-            // change the mpDXArray temporarily (just for the justification)
-            aMultiArgs.mpDXArray = aJustificationArray.data();
+            aNaturalJustificationArray.reserve(aJustificationArray.size());
+            for (DeviceCoordinate a : aJustificationArray)
+                aNaturalJustificationArray.push_back(a);
+            // change the DXArray temporarily (just for the justification)
+            aMultiArgs.mpNaturalDXArray = aNaturalJustificationArray.data();
         }
     }
 
-    if (aMultiArgs.mpAltNaturalDXArray)
-        ImplAdjustMultiLayout(rArgs, aMultiArgs, aMultiArgs.mpAltNaturalDXArray);
-    else
-        ImplAdjustMultiLayout(rArgs, aMultiArgs, aMultiArgs.mpDXArray);
+    ImplAdjustMultiLayout(rArgs, aMultiArgs, aMultiArgs.mpNaturalDXArray);
 }
 
-template<typename DC>
 void MultiSalLayout::ImplAdjustMultiLayout(vcl::text::ImplLayoutArgs& rArgs,
                                            vcl::text::ImplLayoutArgs& rMultiArgs,
-                                           const DC* pMultiDXArray)
+                                           const double* pMultiDXArray)
 {
     // Compute rtl flags, since in some scripts glyphs/char order can be
     // reversed for a few character sequences e.g. Myanmar
@@ -865,7 +865,7 @@ void MultiSalLayout::ImplAdjustMultiLayout(vcl::text::ImplLayoutArgs& rArgs,
         }
 
         // skip to end of layout run and calculate its advance width
-        DC nRunAdvance = 0;
+        double nRunAdvance = 0;
         bool bKeepNotDef = (nFBLevel >= nLevel);
         for(;;)
         {
@@ -976,7 +976,7 @@ void MultiSalLayout::ImplAdjustMultiLayout(vcl::text::ImplLayoutArgs& rArgs,
             // the measured width is still in fallback font units
             // => convert it to base level font units
             if( n > 0 ) // optimization: because (fUnitMul==1.0) for (n==0)
-                nRunAdvance = static_cast<tools::Long>(nRunAdvance*fUnitMul + 0.5);
+                nRunAdvance = nRunAdvance * fUnitMul;
         }
 
         // calculate new x position (in base level units)

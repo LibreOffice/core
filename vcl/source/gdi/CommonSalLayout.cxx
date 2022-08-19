@@ -196,10 +196,8 @@ void GenericSalLayout::AdjustLayout(vcl::text::ImplLayoutArgs& rArgs)
 {
     SalLayout::AdjustLayout(rArgs);
 
-    if (rArgs.mpAltNaturalDXArray) // Used when "TextRenderModeForResolutionIndependentLayout" is set
-        ApplyDXArray(rArgs.mpAltNaturalDXArray, rArgs.mpKashidaArray);
-    else if (rArgs.mpDXArray)   // Normal case
-        ApplyDXArray(rArgs.mpDXArray, rArgs.mpKashidaArray);
+    if (rArgs.mpNaturalDXArray)
+        ApplyDXArray(rArgs.mpNaturalDXArray, rArgs.mpKashidaArray);
     else if (rArgs.mnLayoutWidth)
         Justify(rArgs.mnLayoutWidth);
     // apply asian kerning if the glyphs are not already formatted
@@ -653,12 +651,11 @@ void GenericSalLayout::GetCharWidths(std::vector<DeviceCoordinate>& rCharWidths)
 //   justification).
 // - pKashidaArray: is the places where kashidas are inserted (for Arabic
 //   justification). The number of kashidas is calculated from the pDXArray.
-template<typename DC>
-void GenericSalLayout::ApplyDXArray(const DC* pDXArray, const sal_Bool* pKashidaArray)
+void GenericSalLayout::ApplyDXArray(const double* pDXArray, const sal_Bool* pKashidaArray)
 {
     int nCharCount = mnEndCharPos - mnMinCharPos;
     std::vector<DeviceCoordinate> aOldCharWidths;
-    std::unique_ptr<DC[]> const pNewCharWidths(new DC[nCharCount]);
+    std::unique_ptr<double[]> const pNewCharWidths(new double[nCharCount]);
 
     // Get the natural character widths (i.e. before applying DX adjustments).
     GetCharWidths(aOldCharWidths);
@@ -677,7 +674,7 @@ void GenericSalLayout::ApplyDXArray(const DC* pDXArray, const sal_Bool* pKashida
     std::map<size_t, DeviceCoordinate> pKashidas;
 
     // The accumulated difference in X position.
-    DC nDelta = 0;
+    double nDelta = 0;
 
     // Apply the DX adjustments to glyph positions and widths.
     size_t i = 0;
@@ -686,7 +683,7 @@ void GenericSalLayout::ApplyDXArray(const DC* pDXArray, const sal_Bool* pKashida
         // Accumulate the width difference for all characters corresponding to
         // this glyph.
         int nCharPos = m_GlyphItems[i].charPos() - mnMinCharPos;
-        DC nDiff = 0;
+        double nDiff = 0;
         for (int j = 0; j < m_GlyphItems[i].charCount(); j++)
             nDiff += pNewCharWidths[nCharPos + j] - aOldCharWidths[nCharPos + j];
 
