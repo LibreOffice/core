@@ -733,7 +733,7 @@ void SwXMLImport::endDocument()
                     {
                         pPaM->GetBound().nContent.Assign( nullptr, 0 );
                         pPaM->GetBound(false).nContent.Assign( nullptr, 0 );
-                        pDoc->GetNodes().Delete( pPaM->GetPoint()->nNode );
+                        pDoc->GetNodes().Delete( pPaM->GetPoint()->GetNode() );
                     }
                 }
             }
@@ -771,7 +771,7 @@ void SwXMLImport::endDocument()
                 {
                     pPos->nContent.Assign( nullptr, 0 );
                     pPaM->SetMark(); pPaM->DeleteMark();
-                    pDoc->GetNodes().Delete( pPos->nNode );
+                    pDoc->GetNodes().Delete( pPos->GetNode() );
                     pPaM->Move( fnMoveBackward );
                 }
             }

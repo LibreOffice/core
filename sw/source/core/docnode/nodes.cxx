@@ -1070,6 +1070,11 @@ void SwNodes::SectionUpDown( const SwNodeIndex & aStart, const SwNodeIndex & aEn
     }
 }
 
+void SwNodes::Delete(const SwNodeIndex &rIndex, SwNodeOffset nNodes)
+{
+    Delete(rIndex.GetNode(), nNodes);
+}
+
 /** delete nodes
  *
  * This is a specific implementation of a delete function for a variable array.
@@ -1079,7 +1084,7 @@ void SwNodes::SectionUpDown( const SwNodeIndex & aStart, const SwNodeIndex & aEn
  * @param rIndex position to delete at (unchanged afterwards)
  * @param nNodes number of nodes to delete (default: 1)
  */
-void SwNodes::Delete(const SwNodeIndex &rIndex, SwNodeOffset nNodes)
+void SwNodes::Delete(const SwNode &rIndex, SwNodeOffset nNodes)
 {
     int nLevel = 0; // level counter
     SwNode * pCurrentNode;

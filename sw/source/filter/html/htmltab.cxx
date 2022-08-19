@@ -3843,7 +3843,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
         {
             HTMLTableContext* pTableContext = m_xTable ? m_xTable->GetContext() : nullptr;
             SwPosition* pSavedPos = pTableContext ? pTableContext->GetPos() : nullptr;
-            const bool bDeleteSafe = !pSavedPos || pSavedPos->nNode != m_pPam->GetPoint()->nNode;
+            const bool bDeleteSafe = !pSavedPos || pSavedPos->nNode != m_pPam->GetPoint()->GetNode();
             if (bDeleteSafe)
                 StripTrailingPara();
         }
