@@ -52,6 +52,24 @@
       "parentUuid": "6321f22c_8e283af7",
       "revId": "addf50b737f1a82ae289aaa0e57192d9b51a8621",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3a3f6a5_ad50303e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003648
+      },
+      "writtenOn": "2022-08-19T08:49:40Z",
+      "side": 1,
+      "message": "I took a look but I\u0027m not sure what I need to edit- I tried diffing with a working dialog (document properties) however the differences do not seem to be anything more than superficial WRT this issue (I certainly can\u0027t find any order/position in there)\n\nAdditionally, I reverted to tunneled dialog and everything renders fine- are we sure this isn\u0027t an issue with our jsdialog rendering? If so should I pursue searching for the issue in online-side where I believe our builders are?",
+      "parentUuid": "d2498130_c9da5d74",
+      "revId": "addf50b737f1a82ae289aaa0e57192d9b51a8621",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
