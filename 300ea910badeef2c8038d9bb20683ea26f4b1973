@@ -16,6 +16,24 @@
       "message": "Instead of creating 2 vars with the same string would it be possible to merge them to not add extra translation for translation teams?\n(eg: STR_DATA_TABLE)",
       "revId": "300ea910badeef2c8038d9bb20683ea26f4b1973",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9506b5c8_ef53bfe6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-08-19T08:15:28Z",
+      "side": 1,
+      "message": "OK - changed with https://gerrit.libreoffice.org/c/core/+/138369",
+      "parentUuid": "21c09780_a7b5f067",
+      "revId": "300ea910badeef2c8038d9bb20683ea26f4b1973",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
