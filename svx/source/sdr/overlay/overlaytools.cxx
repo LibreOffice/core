@@ -236,7 +236,7 @@ sal_uInt32 OverlayStaticRectanglePrimitive::getPrimitive2DID() const
 
             rContainer.push_back(
                 new PolygonMarkerPrimitive2D(
-                    std::move(aPolygon),
+                    aPolygon,
                     getRGBColorA(),
                     getRGBColorB(),
                     getDiscreteDashLength()));
