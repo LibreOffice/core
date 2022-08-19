@@ -1,6 +1,6 @@
 diff -ru boost.orig/boost/libs/locale/src/encoding/codepage.cpp boost/boost/libs/locale/src/encoding/codepage.cpp
 --- foo/misc/boost.orig/libs/locale/src/encoding/codepage.cpp
-+++ foo/misc/boost/libs/locale/src/encoding/codepage.cpp
++++ foo/misc/boost/libs/locale/src/boost/locale/encoding/codepage.cpp
 @@ -58,6 +58,9 @@
                          return cvt->convert(begin,end);
                      #endif

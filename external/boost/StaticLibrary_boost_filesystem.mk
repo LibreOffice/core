@@ -16,6 +16,7 @@ $(eval $(call gb_StaticLibrary_set_warnings_disabled,boost_filesystem))
 # disable "auto link" "feature" on MSVC
 $(eval $(call gb_StaticLibrary_add_defs,boost_filesystem,\
 	-DBOOST_ALL_NO_LIB \
+	$(if $(filter-out WNT,$(OS)),-DBOOST_FILESYSTEM_HAS_POSIX_AT_APIS) \
 ))
 
 # See workdir/UnpackedTarball/boost/libs/filesystem/build/Jamfile.v2:

@@ -1,5 +1,5 @@
 --- foo/misc/boost.orig/libs/locale/src/util/locale_data.cpp.new	2022-02-17 22:41:27.730549039 +0000
-+++ foo/misc/boost/libs/locale/src/util/locale_data.cpp
++++ foo/misc/boost/libs/locale/src/boost/locale/util/locale_data.cpp
 @@ -18,8 +18,8 @@
          language = "C";
          country.clear();
