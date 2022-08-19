@@ -34,13 +34,12 @@ Color BMCOL(sal_uInt32 _col) {
 
 }
 
-CGMBitmap::CGMBitmap( CGM& rCGM ) :
-    mpCGM                           ( &rCGM ),
-    pCGMBitmapDescriptor            ( new CGMBitmapDescriptor )
+CGMBitmap::CGMBitmap(CGM& rCGM)
+    : mpCGM(&rCGM)
+    , pCGMBitmapDescriptor(new CGMBitmapDescriptor)
 {
     ImplGetBitmap( *pCGMBitmapDescriptor );
 };
-
 
 CGMBitmap::~CGMBitmap()
 {
@@ -375,11 +374,22 @@ bool CGMBitmap::ImplGetDimensions( CGMBitmapDescriptor& rDesc )
 
 void CGMBitmap::ImplInsert( CGMBitmapDescriptor const & rSource, CGMBitmapDescriptor& rDest )
 {
-    if (utl::ConfigManager::IsFuzzing() && rDest.mxBitmap.GetSizePixel().Height() + rSource.mnY > SAL_MAX_UINT16)
+    ++mpCGM->mnBitmapInserts;
+    static const bool bFuzzing = utl::ConfigManager::IsFuzzing();
+    if (bFuzzing)
     {
-        SAL_WARN("filter.icgm", "bitmap would expand too much");
-        rDest.mbStatus = false;
-        return;
+        if (rDest.mxBitmap.GetSizePixel().Height() + rSource.mnY > SAL_MAX_UINT16)
+        {
+            SAL_WARN("filter.icgm", "bitmap would expand too much");
+            rDest.mbStatus = false;
+            return;
+        }
+        if (mpCGM->mnBitmapInserts > 1024)
+        {
+            SAL_WARN("filter.icgm", "too many inserts");
+            rDest.mbStatus = false;
+            return;
+        }
     }
     rDest.mxBitmap.Expand( 0, rSource.mnY );
     rDest.mxBitmap.CopyPixel( tools::Rectangle( Point( 0, rDest.mnY ), Size( rSource.mnX, rSource.mnY ) ),
