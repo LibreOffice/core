@@ -153,13 +153,9 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
         constexpr size_t nMaxPixelsAllowed = SAL_MAX_INT32/4;
         // two buffers currently required, so limit further
         bool bOk = !o3tl::checked_multiply(w, h, nPixelsRequired) && nPixelsRequired <= nMaxPixelsAllowed / 2;
-        if (!bOk)
-        {
-            SAL_WARN("filter.tiff", "skipping oversized tiff image " << w << " x " << h);
-            break;
-        }
+        SAL_WARN_IF(!bOk, "filter.tiff", "skipping oversized tiff image " << w << " x " << h);
 
-        if (bFuzzing)
+        if (bOk && bFuzzing)
         {
             const uint64_t MAX_SIZE = 200000000;
             if (TIFFTileSize64(tif) > MAX_SIZE || nPixelsRequired > MAX_SIZE)
@@ -167,7 +163,29 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
                 SAL_WARN("filter.tiff", "skipping large tiffs");
                 break;
             }
+
+            uint16_t PhotometricInterpretation;
+            if (TIFFGetField(tif, TIFFTAG_PHOTOMETRIC, &PhotometricInterpretation) == 1)
+            {
+                if (PhotometricInterpretation == PHOTOMETRIC_LOGL)
+                {
+                    if (TIFFIsTiled(tif))
+                    {
+                        uint32_t tw, th;
+                        if (TIFFGetField(tif, TIFFTAG_TILEWIDTH, &tw) == 1 &&
+                            TIFFGetField(tif, TIFFTAG_TILELENGTH, &th) == 1)
+                        {
+                            uint32_t nLogLBufferRequired;
+                            bOk = !o3tl::checked_multiply(tw, th, nLogLBufferRequired) && nLogLBufferRequired < MAX_SIZE;
+                            SAL_WARN_IF(!bOk, "filter.tiff", "skipping oversized tiff tile " << tw << " x " << th);
+                        }
+                    }
+                }
+            }
         }
+
+        if (!bOk)
+            break;
 
         std::vector<uint32_t> raster(nPixelsRequired);
         if (TIFFReadRGBAImageOriented(tif, w, h, raster.data(), ORIENTATION_TOPLEFT, 1))
