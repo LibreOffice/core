@@ -723,7 +723,6 @@ void SwXTextCursor::DeleteAndInsert(const OUString& rText,
         {
             rDoc.getIDocumentContentOperations().DeleteAndJoin(*pCurrent,
                 // is it "delete" or "replace"?
-                // FIXME still test failure because insertTextContent calls with empty string
                 (nTextLen != 0 || eMode & ::sw::DeleteAndInsertMode::ForceReplace) ? SwDeleteFlags::ArtificialSelection : SwDeleteFlags::Default);
         }
         if(nTextLen)
