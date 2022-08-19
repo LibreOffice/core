@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "effe2af2_bc07f5b9",
+        "filename": "sal/osl/unx/file_misc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 864,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-08-19T07:25:48Z",
+      "side": 1,
+      "message": "Why change this line?  nRet apparently needs to be an errno value here, it is passed into `oslTranslateFileError` a few lines further down.",
+      "revId": "be2ab9f0baf6d8ceb348842e6055316b0630e22e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
