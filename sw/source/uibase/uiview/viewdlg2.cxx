@@ -46,15 +46,18 @@
 
 using namespace css;
 
-void SwView::ExecDlgExt(SfxRequest const &rReq)
+void SwView::ExecDlgExt(SfxRequest const& rReq)
 {
-    switch ( rReq.GetSlot() )
+    switch (rReq.GetSlot())
     {
         case FN_INSERT_CAPTION:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            ScopedVclPtr<VclAbstractDialog> pDialog(pFact->CreateSwCaptionDialog(GetFrameWeld(), *this ));
-            pDialog->Execute();
+            VclPtr<VclAbstractDialog> pDialog(
+                pFact->CreateSwCaptionDialog(GetFrameWeld(), *this));
+            pDialog->StartExecuteAsync([pDialog](sal_Int32) {
+                pDialog->disposeOnce();
+            });
             break;
         }
         case SID_INSERT_SIGNATURELINE:

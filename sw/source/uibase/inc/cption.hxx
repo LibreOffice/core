@@ -64,6 +64,7 @@ class SwCaptionDialog final : public SfxDialogController
     DECL_LINK(ModifyComboHdl, weld::ComboBox&, void);
     DECL_LINK(OptionHdl, weld::Button&, void);
     DECL_LINK(CaptionHdl, weld::Button&, void);
+    DECL_LINK(OKHdl, weld::Button&, void);
 
     void Apply();
 
