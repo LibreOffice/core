@@ -168,6 +168,7 @@ public:
 
     static sal_uInt16 GetSectionLevel(const SwNode &rIndex);
     void Delete(const SwNodeIndex &rPos, SwNodeOffset nNodes = SwNodeOffset(1));
+    void Delete(const SwNode& rPos, SwNodeOffset nNodes = SwNodeOffset(1));
 
     bool MoveNodes( const SwNodeRange&, SwNodes& rNodes, SwNode& rPos,
                 bool bNewFrames = true );

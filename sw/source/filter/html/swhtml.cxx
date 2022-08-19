@@ -829,7 +829,7 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
                         }
                         m_pPam->GetBound().nContent.Assign( nullptr, 0 );
                         m_pPam->GetBound(false).nContent.Assign( nullptr, 0 );
-                        m_xDoc->GetNodes().Delete( m_pPam->GetPoint()->nNode );
+                        m_xDoc->GetNodes().Delete( m_pPam->GetPoint()->GetNode() );
                     }
                 }
             }
@@ -846,7 +846,7 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
                 {
                     pPos->nContent.Assign( nullptr, 0 );
                     m_pPam->SetMark(); m_pPam->DeleteMark();
-                    m_xDoc->GetNodes().Delete( pPos->nNode );
+                    m_xDoc->GetNodes().Delete( pPos->GetNode() );
                     m_pPam->Move( fnMoveBackward );
                 }
             }

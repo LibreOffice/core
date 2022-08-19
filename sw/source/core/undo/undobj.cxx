@@ -801,7 +801,7 @@ void SwUndoSaveContent::MoveFromUndoNds( SwDoc& rDoc, SwNodeOffset nNodeIdx,
         {
             aPaM.GetPoint()->nContent.Assign( nullptr, 0 );
             aPaM.SetMark();
-            rNds.Delete( aPaM.GetPoint()->nNode,
+            rNds.Delete( aPaM.GetPoint()->GetNode(),
                         rNds.GetEndOfExtras().GetIndex() -
                         aPaM.GetPoint()->GetNodeIndex() );
         }
