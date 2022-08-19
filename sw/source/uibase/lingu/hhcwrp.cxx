@@ -223,8 +223,7 @@ void SwHHCWrapper::ChangeText( const OUString &rNewText,
         // remember cursor start position for later setting of the cursor
         const SwPosition *pStart = pCursor->Start();
         const sal_Int32 nStartIndex = pStart->GetContentIndex();
-        const SwNodeIndex aStartNodeIndex  = pStart->nNode;
-        SwTextNode *pStartTextNode = aStartNodeIndex.GetNode().GetTextNode();
+        SwTextNode *pStartTextNode = pStart->GetNode().GetTextNode();
 
         const sal_Int32  nIndices = pOffsets->getLength();
         const sal_Int32 *pIndices = pOffsets->getConstArray();
