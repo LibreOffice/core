@@ -82,10 +82,9 @@ public:
 
     void SetIncomplete(bool bIncomplete);
 
-    template<typename DC>
     void            ImplAdjustMultiLayout(vcl::text::ImplLayoutArgs& rArgs,
                                           vcl::text::ImplLayoutArgs& rMultiArgs,
-                                          const DC* pMultiDXArray);
+                                          const double* pMultiDXArray);
 
     virtual         ~MultiSalLayout() override;
 
@@ -101,10 +100,10 @@ private:
 
 class VCL_DLLPUBLIC GenericSalLayout : public SalLayout
 {
-    template<typename DC> friend void MultiSalLayout::ImplAdjustMultiLayout(
+    friend void MultiSalLayout::ImplAdjustMultiLayout(
             vcl::text::ImplLayoutArgs& rArgs,
             vcl::text::ImplLayoutArgs& rMultiArgs,
-            const DC* pMultiDXArray);
+            const double* pMultiDXArray);
 
 public:
                     GenericSalLayout(LogicalFontInstance&);
@@ -142,8 +141,7 @@ private:
                     GenericSalLayout( const GenericSalLayout& ) = delete;
                     GenericSalLayout& operator=( const GenericSalLayout& ) = delete;
 
-    template<typename DC>
-    void            ApplyDXArray(const DC*, const sal_Bool*);
+    void            ApplyDXArray(const double*, const sal_Bool*);
     void            Justify(DeviceCoordinate nNewWidth);
     void            ApplyAsianKerning(const OUString& rStr);
 

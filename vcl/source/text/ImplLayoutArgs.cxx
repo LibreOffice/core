@@ -37,8 +37,7 @@ ImplLayoutArgs::ImplLayoutArgs(const OUString& rStr, int nMinCharPos, int nEndCh
     , mnMinCharPos(nMinCharPos)
     , mnEndCharPos(nEndCharPos)
     , m_pTextLayoutCache(pLayoutCache)
-    , mpDXArray(nullptr)
-    , mpAltNaturalDXArray(nullptr)
+    , mpNaturalDXArray(nullptr)
     , mpKashidaArray(nullptr)
     , mnLayoutWidth(0)
     , mnOrientation(0)
@@ -91,12 +90,7 @@ ImplLayoutArgs::ImplLayoutArgs(const OUString& rStr, int nMinCharPos, int nEndCh
 
 void ImplLayoutArgs::SetLayoutWidth(DeviceCoordinate nWidth) { mnLayoutWidth = nWidth; }
 
-void ImplLayoutArgs::SetDXArray(DeviceCoordinate const* pDXArray) { mpDXArray = pDXArray; }
-
-void ImplLayoutArgs::SetAltNaturalDXArray(double const* pDXArray)
-{
-    mpAltNaturalDXArray = pDXArray;
-}
+void ImplLayoutArgs::SetNaturalDXArray(double const* pDXArray) { mpNaturalDXArray = pDXArray; }
 
 void ImplLayoutArgs::SetKashidaArray(sal_Bool const* pKashidaArray)
 {
@@ -308,7 +302,7 @@ std::ostream& operator<<(std::ostream& s, vcl::text::ImplLayoutArgs const& rArgs
     s << "\"";
 
     s << ",DXArray=";
-    if (rArgs.mpDXArray || rArgs.mpAltNaturalDXArray)
+    if (rArgs.mpNaturalDXArray)
     {
         s << "[";
         int count = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
@@ -317,10 +311,7 @@ std::ostream& operator<<(std::ostream& s, vcl::text::ImplLayoutArgs const& rArgs
             lim = 7;
         for (int i = 0; i < lim; i++)
         {
-            if (rArgs.mpDXArray)
-                s << rArgs.mpDXArray[i];
-            else
-                s << rArgs.mpAltNaturalDXArray[i];
+            s << rArgs.mpNaturalDXArray[i];
             if (i < lim - 1)
                 s << ",";
         }
@@ -328,10 +319,7 @@ std::ostream& operator<<(std::ostream& s, vcl::text::ImplLayoutArgs const& rArgs
         {
             if (count > lim + 1)
                 s << "...";
-            if (rArgs.mpDXArray)
-                s << rArgs.mpDXArray[count - 1];
-            else
-                s << rArgs.mpAltNaturalDXArray[count - 1];
+            s << rArgs.mpNaturalDXArray[count - 1];
         }
         s << "]";
     }
