@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe5451aa_b37c68ec",
+        "filename": "sw/source/uibase/docvw/PostItMgr.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-08-19T04:19:00Z",
+      "side": 1,
+      "message": "wee need some guard here, there was a crashreport for GetPostItField()",
+      "revId": "d365da2c47a4a40e0b33a34f559046d1162ae1fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
