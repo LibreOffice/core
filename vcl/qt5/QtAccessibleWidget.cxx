@@ -47,6 +47,7 @@
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
+#include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -866,6 +867,88 @@ OUString lcl_ConvertFontSlant(awt::FontSlant eFontSlant)
     }
 }
 
+// s. https://wiki.linuxfoundation.org/accessibility/iaccessible2/textattributes
+// for values
+void lcl_ConvertFontUnderline(sal_Int16 nFontUnderline, OUString& rUnderlineStyle,
+                              OUString& rUnderlineType, OUString& rUnderlineWidth)
+{
+    rUnderlineStyle = u"";
+    rUnderlineType = u"single";
+    rUnderlineWidth = u"auto";
+
+    switch (nFontUnderline)
+    {
+        case awt::FontUnderline::BOLD:
+            rUnderlineWidth = u"bold";
+            return;
+        case awt::FontUnderline::BOLDDASH:
+            rUnderlineWidth = u"bold";
+            rUnderlineStyle = u"dash";
+            return;
+        case awt::FontUnderline::BOLDDASHDOT:
+            rUnderlineWidth = u"bold";
+            rUnderlineStyle = u"dot-dash";
+            return;
+        case awt::FontUnderline::BOLDDASHDOTDOT:
+            rUnderlineWidth = u"bold";
+            rUnderlineStyle = u"dot-dot-dash";
+            return;
+        case awt::FontUnderline::BOLDDOTTED:
+            rUnderlineWidth = u"bold";
+            rUnderlineStyle = u"dotted";
+            return;
+        case awt::FontUnderline::BOLDLONGDASH:
+            rUnderlineWidth = u"bold";
+            rUnderlineStyle = u"long-dash";
+            return;
+        case awt::FontUnderline::BOLDWAVE:
+            rUnderlineWidth = u"bold";
+            rUnderlineStyle = u"wave";
+            return;
+        case awt::FontUnderline::DASH:
+            rUnderlineStyle = u"dash";
+            return;
+        case awt::FontUnderline::DASHDOT:
+            rUnderlineStyle = u"dot-dash";
+            return;
+        case awt::FontUnderline::DASHDOTDOT:
+            rUnderlineStyle = u"dot-dot-dash";
+            return;
+        case awt::FontUnderline::DONTKNOW:
+            rUnderlineWidth = u"";
+            rUnderlineStyle = u"";
+            rUnderlineType = u"";
+            return;
+        case awt::FontUnderline::DOTTED:
+            rUnderlineStyle = u"dotted";
+            return;
+        case awt::FontUnderline::DOUBLE:
+            rUnderlineType = u"double";
+            return;
+        case awt::FontUnderline::DOUBLEWAVE:
+            rUnderlineStyle = u"wave";
+            rUnderlineType = u"double";
+            return;
+        case awt::FontUnderline::LONGDASH:
+            rUnderlineStyle = u"long-dash";
+            return;
+        case awt::FontUnderline::NONE:
+            rUnderlineWidth = u"none";
+            rUnderlineStyle = u"none";
+            rUnderlineType = u"none";
+            return;
+        case awt::FontUnderline::SINGLE:
+            rUnderlineType = u"single";
+            return;
+        case awt::FontUnderline::SMALLWAVE:
+        case awt::FontUnderline::WAVE:
+            rUnderlineStyle = u"wave";
+            return;
+        default:
+            assert(false && "Unhandled font underline type");
+    }
+}
+
 /** Converts Color to "rgb(r,g,b)" as specified in https://wiki.linuxfoundation.org/accessibility/iaccessible2/textattributes. */
 OUString lcl_ConvertColor(Color aColor)
 {
@@ -936,6 +1019,22 @@ QString QtAccessibleWidget::attributes(int offset, int* startOffset, int* endOff
             sAttribute = "font-style";
             const awt::FontSlant eFontSlant = *o3tl::doAccess<awt::FontSlant>(prop.Value);
             sValue = lcl_ConvertFontSlant(eFontSlant);
+        }
+        else if (prop.Name == "CharUnderline")
+        {
+            OUString sUnderlineStyle;
+            OUString sUnderlineType;
+            OUString sUnderlineWidth;
+            const sal_Int16 nUnderline = *o3tl::doAccess<sal_Int16>(prop.Value);
+            lcl_ConvertFontUnderline(nUnderline, sUnderlineStyle, sUnderlineType, sUnderlineWidth);
+
+            // leave 'sAttribute' and 'sName' empty, set all attributes here
+            if (!sUnderlineStyle.isEmpty())
+                aRet += u"text-underline-style:" + sUnderlineStyle + ";";
+            if (!sUnderlineType.isEmpty())
+                aRet += u"text-underline-type:" + sUnderlineType + ";";
+            if (!sUnderlineWidth.isEmpty())
+                aRet += u"text-underline-width:" + sUnderlineWidth + ";";
         }
         else if (prop.Name == "CharWeight")
         {
