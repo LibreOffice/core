@@ -250,7 +250,10 @@ bool SwPostItMgr::CheckForRemovedPostIts()
         if (!(*it)->UseElement(*mpWrtShell->GetLayout(), rIDRA))
         {
             EndListening(const_cast<SfxBroadcaster&>(*(*it)->GetBroadcaster()));
-            lcl_CommentNotification(mpView, CommentNotificationType::Remove, nullptr, (*it)->mpPostIt->GetPostItField()->GetPostItId());
+
+            if((*it)->mpPostIt && (*it)->mpPostIt->GetPostItField())
+                lcl_CommentNotification(mpView, CommentNotificationType::Remove, nullptr, (*it)->mpPostIt->GetPostItField()->GetPostItId());
+
             std::unique_ptr<SwSidebarItem> p = std::move(*it);
             it = mvPostItFields.erase(it);
             if (GetActiveSidebarWin() == p->mpPostIt)
