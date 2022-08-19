@@ -462,7 +462,11 @@ class SvxZoomSliderItem;
 #define SID_PREVIEW_CLOSE       (SID_PREVIEW_START+7)
 #define SID_PREVIEW_MARGIN      (SID_PREVIEW_START+8)
 #define SID_PREVIEW_SCALINGFACTOR   TypedWhichId<SvxZoomSliderItem>(SID_PREVIEW_START+9)
-#define SID_PREVIEW_END         (SID_PREVIEW_START+20)
+#define SID_PREVIEW_END         (SID_PREVIEW_START+10)
+
+// with SID_KEYFUNC_START defined in include/sfx2/sfxsids.hrc there is a risk of
+// adding entries that cause an overlap here
+static_assert(SID_PREVIEW_END < SID_KEYFUNC_START, "calc slots ids trampling info keyfunc slot range");
 
 //from sfx: #define SID_KEYFUNC_START       (SID_PREVIEW_END+5)
 // from SID_KEYFUNC_START + 0 to SID_KEYFUNC_START + 13 are defined in include/sfx2/sfxsids.hrc
