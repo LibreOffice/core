@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e6516be_19b3bf2f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-08-19T10:49:06Z",
+      "side": 1,
+      "message": "surprised i cant even find code to import these from DOCX",
+      "revId": "634bb0db617d02f1aeea89f4555a5e34baaa4e91",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
