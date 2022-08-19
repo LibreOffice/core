@@ -1303,7 +1303,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
         }
         else
         {
-            if( pStt->nContent > pTextNode->Len() )
+            if( pStt->GetContentIndex() > pTextNode->Len() )
             {
                 OSL_ENSURE( false, "Redline start: index after text" );
                 pStt->nContent = pTextNode->Len();
@@ -1312,7 +1312,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
         pTextNode = pEnd->GetNode().GetTextNode();
         if( pTextNode == nullptr )
         {
-            if( pEnd->nContent > 0 )
+            if( pEnd->GetContentIndex() > 0 )
             {
                 OSL_ENSURE( false, "Redline end: non-text-node with content" );
                 pEnd->nContent = 0;
@@ -1320,7 +1320,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
         }
         else
         {
-            if( pEnd->nContent > pTextNode->Len() )
+            if( pEnd->GetContentIndex() > pTextNode->Len() )
             {
                 OSL_ENSURE( false, "Redline end: index after text" );
                 pEnd->nContent = pTextNode->Len();
@@ -1678,7 +1678,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                     break;
 
                 case SwComparePosition::CollideEnd:
-                    if (pRStt->nContent != 0)
+                    if (pRStt->GetContentIndex() != 0)
                     {   // tdf#147466 HACK: don't combine in this case to avoid the tdf#119571 code from *undeleting* section nodes
                         break;
                     }
@@ -2230,7 +2230,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
         {
             if ( bCallDelete && RedlineType::Delete == pNewRedl->GetType() )
             {
-                if ( pStt->nContent != 0 )
+                if ( pStt->GetContentIndex() != 0 )
                 {
                     // tdf#119571 update the style of the joined paragraph
                     // after a partially deleted paragraph to show its correct style

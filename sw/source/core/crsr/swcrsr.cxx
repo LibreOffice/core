@@ -1500,7 +1500,7 @@ bool SwCursor::SelectWordWT( SwViewShell const * pViewShell, sal_Int16 nWordType
                         // if it covers only the word: in that case we select
                         // the comment anchor as well.
                         bool bStartMatch = GetMark()->GetNode() == pAnnotationMark->GetMarkStart().GetNode() &&
-                            GetMark()->nContent == pAnnotationMark->GetMarkStart().nContent;
+                            GetMark()->GetContentIndex() == pAnnotationMark->GetMarkStart().GetContentIndex();
                         bool bEndMatch = GetPoint()->GetNode() == pAnnotationMark->GetMarkEnd().GetNode() &&
                             GetPoint()->GetContentIndex() + 1 == pAnnotationMark->GetMarkEnd().GetContentIndex();
                         if (bStartMatch && bEndMatch)
