@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4dae2088_99b47682",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-08-19T10:22:20Z",
+      "side": 1,
+      "message": "[Just a drive-by observation that for plain data structs (i.e., public data members, no member functions) it typically reads better to not preifx the data members\u0027 names with \"m\".  And in such a case the \"m\" wouldn\u0027t help a human to tell members from local variables anyway, as all the uses of those member names will be in explicit class member access expressions.]",
+      "revId": "c61d9e70b1bf4948408392217b9fbed9a2dc5ab1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
