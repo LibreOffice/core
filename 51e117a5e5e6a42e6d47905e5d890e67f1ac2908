@@ -16,6 +16,24 @@
       "message": "what about `GetPostItField()` result?",
       "revId": "51e117a5e5e6a42e6d47905e5d890e67f1ac2908",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2225cc99_aae70c22",
+        "filename": "sw/source/uibase/docvw/PostItMgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1002266
+      },
+      "writtenOn": "2022-08-19T11:14:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9151b807_e84b9f58",
+      "revId": "51e117a5e5e6a42e6d47905e5d890e67f1ac2908",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
