@@ -229,8 +229,8 @@ void SwFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
 
-    std::unique_ptr<SwAttrSetChg> pOldClientChg, pNewClientChg;
-    auto pDependsHint = std::make_unique<sw::LegacyModifyHint>(pLegacy->m_pOld, pLegacy->m_pNew);
+    std::optional<SwAttrSetChg> oOldClientChg, oNewClientChg;
+    std::optional<sw::LegacyModifyHint> oDependsHint(std::in_place, pLegacy->m_pOld, pLegacy->m_pNew);
     const sal_uInt16 nWhich = pLegacy->GetWhich();
     InvalidateInSwCache(nWhich);
     switch(nWhich)
@@ -272,16 +272,16 @@ void SwFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
             if (pOldAttrSetChg && pNewAttrSetChg && pOldAttrSetChg->GetTheChgdSet() != &m_aSet)
             {
                 // pass only those that are not set...
-                pNewClientChg.reset(new SwAttrSetChg(*pNewAttrSetChg));
-                pNewClientChg->GetChgSet()->Differentiate(m_aSet);
-                if(pNewClientChg->Count()) // ... if any
+                oNewClientChg.emplace(*pNewAttrSetChg);
+                oNewClientChg->GetChgSet()->Differentiate(m_aSet);
+                if(oNewClientChg->Count()) // ... if any
                 {
-                    pOldClientChg.reset(new SwAttrSetChg(*pOldAttrSetChg));
-                    pOldClientChg->GetChgSet()->Differentiate(m_aSet);
-                    pDependsHint.reset(new sw::LegacyModifyHint(pOldClientChg.get(), pNewClientChg.get()));
+                    oOldClientChg.emplace(*pOldAttrSetChg);
+                    oOldClientChg->GetChgSet()->Differentiate(m_aSet);
+                    oDependsHint.emplace(&*oOldClientChg, &*oNewClientChg);
                 }
                 else
-                    pDependsHint.reset(nullptr);
+                    oDependsHint.reset();
             }
             break;
         }
@@ -307,13 +307,13 @@ void SwFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
             {
                 // DropCaps might come into this block
                 SAL_WARN_IF(RES_PARATR_DROP != nWhich, "sw.core", "Hint was sent without sender");
-                pDependsHint.reset(nullptr);
+                oDependsHint.reset();
             }
     }
-    if(pDependsHint)
+    if(oDependsHint)
     {
-        InvalidateInSwFntCache(pDependsHint->GetWhich());
-        SwModify::SwClientNotify(*this, *pDependsHint);
+        InvalidateInSwFntCache(oDependsHint->GetWhich());
+        SwModify::SwClientNotify(*this, *oDependsHint);
     }
 }
 
