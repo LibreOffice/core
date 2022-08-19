@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "817a4e6e_c264cbe7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-08-19T15:33:04Z",
+      "side": 1,
+      "message": "What\u0027s the motivation to stop checking rtl::math::* behavior in sal/qa/rtl/math/test-rtl-math.cxx and instead start checking std::math::* behavior there?",
+      "revId": "466f86abb7208e853ad48ae46e97a2455667fa42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
