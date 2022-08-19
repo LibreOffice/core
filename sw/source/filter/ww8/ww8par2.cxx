@@ -2734,7 +2734,7 @@ void WW8TabDesc::ParkPaM()
     SwNodeOffset nSttNd = pTabBox2->GetSttIdx() + 1,
               nEndNd = pTabBox2->GetSttNd()->EndOfSectionIndex();
 
-    if (m_pIo->m_pPaM->GetPoint()->nNode != nSttNd)
+    if (m_pIo->m_pPaM->GetPoint()->GetNodeIndex() != nSttNd)
     {
         do
         {
@@ -2977,7 +2977,7 @@ void WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
     //want to reset the fmt properties
     SwNodeOffset nSttNd = m_pTabBox->GetSttIdx() + 1,
               nEndNd = m_pTabBox->GetSttNd()->EndOfSectionIndex();
-    if (m_pIo->m_pPaM->GetPoint()->nNode != nSttNd)
+    if (m_pIo->m_pPaM->GetPoint()->GetNodeIndex() != nSttNd)
     {
         do
         {

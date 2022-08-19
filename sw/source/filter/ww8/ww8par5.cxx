@@ -3469,7 +3469,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
 
     //Will there be a new pagebreak at this position (don't know what type
     //until later)
-    if (m_aSectionManager.WillHavePageDescHere(pPos->nNode))
+    if (m_aSectionManager.WillHavePageDescHere(pPos->GetNode()))
         aFltTOX.SetHadPageDescItem(true);
 
     // Set start in stack
