@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bab6741_28460215",
+        "filename": "sw/inc/swabstdlg.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1003648
+      },
+      "writtenOn": "2022-08-19T11:38:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dfd2e74d_db65e08c",
+      "revId": "9232c4a5ee685768457a8e7825b84b07f8bfe5cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "af9a435f_666760de",
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "Simples solution: you can handle OK button callback and do just Apply() and response(RET_OK).\n\nhttps://git.libreoffice.org/core/+/9232c4a5ee685768457a8e7825b84b07f8bfe5cf/sw/source/ui/frmdlg/cption.cxx#269\n\nAnd then remove unnecesary overriden method:\nhttps://git.libreoffice.org/core/+/9232c4a5ee685768457a8e7825b84b07f8bfe5cf/sw/source/ui/frmdlg/cption.cxx#297",
       "parentUuid": "776112cc_2ca6527f",
+      "revId": "9232c4a5ee685768457a8e7825b84b07f8bfe5cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "782c38bb_b8ac6fb2",
+        "filename": "sw/source/uibase/uiview/viewdlg2.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1003648
+      },
+      "writtenOn": "2022-08-19T11:38:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4ce4590_0f7680bb",
       "revId": "9232c4a5ee685768457a8e7825b84b07f8bfe5cf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
