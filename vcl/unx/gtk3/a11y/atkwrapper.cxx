@@ -663,6 +663,13 @@ atk_object_wrapper_class_init (AtkObjectWrapperClass *klass)
   atk_class->get_index_in_parent = wrapper_get_index_in_parent;
   atk_class->ref_relation_set = wrapper_ref_relation_set;
   atk_class->ref_state_set = wrapper_ref_state_set;
+
+  AtkObjectClass* orig_atk_klass = static_cast<AtkObjectClass*>(g_type_class_ref(ATK_TYPE_OBJECT));
+  // tdf#150496 we want to inherit from GtkAccessible because gtk assumes it can cast to GtkAccessible
+  // but we want the original behaviour we got from atk_object_real_get_parent when we inherited
+  // from AtkObject
+  atk_class->get_parent = orig_atk_klass->get_parent;
+  g_type_class_unref(orig_atk_klass);
 }
 
 static void
