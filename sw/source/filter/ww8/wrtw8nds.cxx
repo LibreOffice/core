@@ -1570,7 +1570,7 @@ const SwRedlineData* SwWW8AttrIter::GetRunLevelRedline( sal_Int32 nPos )
     if( m_pCurRedline )
     {
         const SwPosition* pEnd = m_pCurRedline->End();
-        if (pEnd->nNode != m_rNode || pEnd->GetContentIndex() > nPos)
+        if (pEnd->GetNode() != m_rNode || pEnd->GetContentIndex() > nPos)
         {
             switch( m_pCurRedline->GetType() )
             {
@@ -2227,7 +2227,7 @@ bool MSWordExportBase::NeedTextNodeSplit( const SwTextNode& rNd, SwSoftPageBreak
             pos = it;
             while (auto const*const pMark = rIDMA.getFieldmarkFor(SwPosition(rNd, pos)))
             {
-                if (pMark->GetMarkEnd().nNode != rNd)
+                if (pMark->GetMarkEnd().GetNode() != rNd)
                 {
                     pos = rNd.Len(); // skip everything
                     break;

@@ -762,7 +762,7 @@ void SwXMLImport::endDocument()
                     // but only if one has been inserted and
                     // no endNode found to avoid removing section
                     if( pNextNd->CanJoinPrev(/* &pPos->nNode*/ ) && !endNodeFound &&
-                         *m_oSttNdIdx != pPos->nNode )
+                         *m_oSttNdIdx != pPos->GetNode() )
                     {
                         pNextNd->JoinPrev();
                     }

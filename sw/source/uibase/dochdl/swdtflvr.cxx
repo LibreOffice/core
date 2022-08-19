@@ -1292,8 +1292,8 @@ void SwPasteContext::remember()
         return;
 
     // Set point to the previous node, so it is not moved.
-    const SwNodeIndex& rNodeIndex = pCursor->GetPoint()->nNode;
-    m_oPaM.emplace(rNodeIndex, rNodeIndex, SwNodeOffset(0), SwNodeOffset(-1));
+    const SwNode& rNode = pCursor->GetPoint()->GetNode();
+    m_oPaM.emplace(rNode, rNode, SwNodeOffset(0), SwNodeOffset(-1));
     m_nStartContent = pCursor->GetPoint()->GetContentIndex();
 }
 

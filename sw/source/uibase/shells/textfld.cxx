@@ -697,8 +697,8 @@ FIELD_INSERT:
                 if(bSuccess)
                 {
                     IDocumentMarkAccess* pMarksAccess = rSh.GetDoc()->getIDocumentMarkAccess();
-                    SwPaM aFieldPam(pCursorPos->GetPoint()->nNode, pCursorPos->GetPoint()->GetContentIndex() - vEnSpaces.getLength(),
-                                    pCursorPos->GetPoint()->nNode, pCursorPos->GetPoint()->GetContentIndex());
+                    SwPaM aFieldPam(pCursorPos->GetPoint()->GetNode(), pCursorPos->GetPoint()->GetContentIndex() - vEnSpaces.getLength(),
+                                    pCursorPos->GetPoint()->GetNode(), pCursorPos->GetPoint()->GetContentIndex());
                     pMarksAccess->makeFieldBookmark(aFieldPam, OUString(), ODF_FORMTEXT,
                             aFieldPam.Start());
                 }
@@ -751,8 +751,8 @@ FIELD_INSERT:
             if(bSuccess)
             {
                 IDocumentMarkAccess* pMarksAccess = rSh.GetDoc()->getIDocumentMarkAccess();
-                SwPaM aFieldPam(pCursorPos->GetPoint()->nNode, pCursorPos->GetPoint()->GetContentIndex() - ODF_FORMFIELD_DEFAULT_LENGTH,
-                                pCursorPos->GetPoint()->nNode, pCursorPos->GetPoint()->GetContentIndex());
+                SwPaM aFieldPam(pCursorPos->GetPoint()->GetNode(), pCursorPos->GetPoint()->GetContentIndex() - ODF_FORMFIELD_DEFAULT_LENGTH,
+                                pCursorPos->GetPoint()->GetNode(), pCursorPos->GetPoint()->GetContentIndex());
                 sw::mark::IFieldmark* pFieldBM = pMarksAccess->makeFieldBookmark(aFieldPam, OUString(), ODF_FORMDATE,
                             aFieldPam.Start());
 

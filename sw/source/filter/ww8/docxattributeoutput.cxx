@@ -393,7 +393,7 @@ static void checkAndWriteFloatingTables(DocxAttributeOutput& rDocxAttributeOutpu
         if (!pPosition || ! rExport.m_pCurPam->GetPointNode().GetTextNode())
             continue;
 
-        if (pPosition->nNode != rExport.m_pCurPam->GetPointNode().GetTextNode()->GetIndex())
+        if (pPosition->GetNode() != *rExport.m_pCurPam->GetPointNode().GetTextNode())
             continue;
 
         const SwNodeIndex* pStartNode = pFrameFormat->GetContent().GetContentIdx();

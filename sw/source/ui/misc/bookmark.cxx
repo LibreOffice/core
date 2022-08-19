@@ -268,7 +268,7 @@ IMPL_LINK(SwInsertBookmarkDlg, EditedHdl, weld::TreeView::iter_string const&, rI
     bool bRet(false);
     if (pBookmark->GetMarkPos() != pBookmark->GetOtherMarkPos())
     {
-        if (pBookmark->GetMarkPos().nNode != pBookmark->GetOtherMarkPos().nNode)
+        if (pBookmark->GetMarkPos().GetNode() != pBookmark->GetOtherMarkPos().GetNode())
         {
             return false; // don't allow editing if it spans multiple nodes
         }
