@@ -31,8 +31,8 @@ class CGMBitmapDescriptor
         sal_uInt8*              mpBuf;
         sal_uInt8*              mpEndBuf;
         BitmapEx                mxBitmap;
-        bool                mbStatus;
-        bool                mbVMirror;
+        bool                    mbStatus;
+        bool                    mbVMirror;
         sal_uInt32              mnDstBitsPerPixel;
         sal_uInt32              mnScanSize;         // bytes per line
         FloatPoint              mnP, mnQ, mnR;
@@ -42,7 +42,7 @@ class CGMBitmapDescriptor
         double                  mnOrientation;
 
         sal_uInt32              mnX, mnY;
-        tools::Long                    mnLocalColorPrecision;
+        tools::Long             mnLocalColorPrecision;
         sal_uInt32              mnCompressionMode;
 
         CGMBitmapDescriptor()

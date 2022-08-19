@@ -61,6 +61,7 @@ class CGM
         bool                mbFirstOutPut;
         bool                mbInDefaultReplacement;
         sal_uInt32          mnAct4PostReset;
+        int                 mnBitmapInserts;
         std::unique_ptr<CGMBitmap> mpBitmapInUse;
         std::unique_ptr<CGMChart> mpChart;          // if sal_True->"SHWSLIDEREC"
                                                     //  otherwise "BEGINPIC" commands
