@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d195266f_87cf5c50",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-08-19T16:37:38Z",
+      "side": 1,
+      "message": "nothing is actually checking the mnBitmapInserts field?",
+      "revId": "1e4fa31a9fea446fd249d83468b644004747642e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
