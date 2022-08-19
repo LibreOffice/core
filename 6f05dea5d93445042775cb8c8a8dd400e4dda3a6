@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b32e7fa_5ee867d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-08-19T06:39:00Z",
+      "side": 1,
+      "message": "(patch set 2: only minimize test document)",
+      "revId": "6f05dea5d93445042775cb8c8a8dd400e4dda3a6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
