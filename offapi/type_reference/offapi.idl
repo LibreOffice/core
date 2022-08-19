@@ -2802,6 +2802,7 @@ module com {
      [property, optional] boolean FillBitmapStretch;
      [property, optional] boolean FillBitmapTile;
      [property, optional] ::com::sun::star::text::GraphicCrop GraphicCrop;
+     [property, optional] boolean FillUseSlideBackground;
     };
     published enum LineCap {
      BUTT = 0,
@@ -3633,6 +3634,9 @@ module com {
      [property, optional, readonly] boolean ContinueingPreviousSubTree;
      [property, optional, readonly] string ListLabelString;
      [property, optional] boolean ParaHyphenationNoCaps;
+     [property, optional] boolean ParaHyphenationNoLastWord;
+     [property, optional] short ParaHyphenationMinWordLength;
+     [property, optional] long ParaHyphenationZone;
     };
    };
    module util {
@@ -9761,6 +9765,7 @@ module com {
      [optional] interface ::com::sun::star::beans::XPropertySet;
      [property, optional, readonly] boolean IsFieldUsed;
      [property, optional, readonly] boolean IsFieldDisplayed;
+     [property, optional] string Title;
     };
    };
    module table {
@@ -12803,6 +12808,7 @@ module com {
      /** @deprecated */ [property] boolean HideSpellMarks;
      [property] short ZoomType;
      [property] short ZoomValue;
+     [property, optional] short FormulaBarHeight;
     };
     published interface XActivationEventListener;
     published interface XActivationBroadcaster {
@@ -13843,6 +13849,7 @@ module com {
      [property, optional] short RelativeWidthRelation;
      [property, optional] ::com::sun::star::graphic::XGraphic BackGraphic;
      [property, optional] boolean AllowOverlap;
+     [property, optional] string Tooltip;
     };
     published service BaseFrame {
      service ::com::sun::star::text::BaseFrameProperties;
