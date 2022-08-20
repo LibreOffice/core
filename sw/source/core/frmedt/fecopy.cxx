@@ -943,7 +943,7 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
             {
                 // if more than one node will be copied into a cell
                 // the box attributes have to be removed
-                GetDoc()->ClearBoxNumAttrs( rInsPos.nNode );
+                GetDoc()->ClearBoxNumAttrs( rInsPos.GetNode() );
             }
             {
                 SwNodeIndex aIndexBefore(rInsPos.GetNode());
@@ -1078,7 +1078,7 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
                 {
                     // Copy more than 1 node in the current box. But
                     // then the BoxAttribute should be removed
-                    GetDoc()->ClearBoxNumAttrs( rInsPos.nNode );
+                    GetDoc()->ClearBoxNumAttrs( rInsPos.GetNode() );
                 }
 
                 // **

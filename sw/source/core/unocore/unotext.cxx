@@ -429,12 +429,12 @@ SwXText::insertControlCharacter(
     {
         case text::ControlCharacter::PARAGRAPH_BREAK :
             // a table cell now becomes an ordinary text cell!
-            m_pImpl->m_pDoc->ClearBoxNumAttrs(aPam.GetPoint()->nNode);
+            m_pImpl->m_pDoc->ClearBoxNumAttrs(aPam.GetPoint()->GetNode());
             m_pImpl->m_pDoc->getIDocumentContentOperations().SplitNode(*aPam.GetPoint(), false);
             break;
         case text::ControlCharacter::APPEND_PARAGRAPH:
         {
-            m_pImpl->m_pDoc->ClearBoxNumAttrs(aPam.GetPoint()->nNode);
+            m_pImpl->m_pDoc->ClearBoxNumAttrs(aPam.GetPoint()->GetNode());
             m_pImpl->m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPam.GetPoint());
 
             const uno::Reference<lang::XUnoTunnel> xRangeTunnel(
