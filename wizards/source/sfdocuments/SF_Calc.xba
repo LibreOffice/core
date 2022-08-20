@@ -543,126 +543,63 @@ Catch:
 End Function    &apos;   SFDocuments.SF_Calc.Charts
 
 REM -----------------------------------------------------------------------------
-Public Sub ClearAll(Optional ByVal Range As Variant) As String
+Public Sub ClearAll(Optional ByVal Range As Variant _
+							, Optional FilterFormula As Variant _
+							, Optional FilterScope As Variant _
+							)
 &apos;&apos;&apos;	Clear entirely the given range
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		Range : the cell or the range as a string that should be cleared
+&apos;&apos;&apos;		FilterFormula: a Calc formula to select among the given Range
+&apos;&apos;&apos;			When left empty, all the cells of the range are cleared
+&apos;&apos;&apos;		FilterScope: &quot;CELL&quot; (default value), &quot;ROW&quot; or &quot;COLUMN&quot;
+&apos;&apos;&apos;			When FilterFormula is present, FilterScope is mandatory
 &apos;&apos;&apos;	Examples:
-&apos;&apos;&apos;		oDoc.ClearAll(&quot;SheetX&quot;)		&apos; Clears the used area of the sheet
+&apos;&apos;&apos;		oDoc.ClearAll(&quot;SheetX&quot;)						&apos; Clears the used area of the sheet
+&apos;&apos;&apos;		oDoc.ClearAll(&quot;A1:J20&quot;, &quot;=($A1=0)&quot;, &quot;ROW&quot;)	&apos; Clears all rows when 1st cell is zero
 
-Dim lClear As Long				&apos;	The elements to clear
-Dim oRange As Object			&apos;	Alias of Range
-Const cstThisSub = &quot;SFDocuments.Calc.ClearAll&quot;
-Const cstSubArgs = &quot;Range&quot;
+	_ClearRange(&quot;All&quot;, Range, FilterFormula, FilterScope)
 
-	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
-
-Check:
-	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not _IsStillAlive() Then GoTo Finally
-		If Not ScriptForge.SF_Utils._Validate(Range, &quot;Range&quot;, Array(V_STRING, ScriptForge.V_OBJECT)) Then GoTo Finally
-	End If
-
-Try:
-	With com.sun.star.sheet.CellFlags
-		lClear = 0 _
-					+ .VALUE _
-					+ .DATETIME _
-					+ .STRING _
-					+ .ANNOTATION _
-					+ .FORMULA _
-					+ .HARDATTR _
-					+ .STYLES _
-					+ .OBJECTS _
-					+ .EDITATTR _
-					+ .FORMATTED
-		If VarType(Range) = V_STRING Then Set oRange = _ParseAddress(Range) Else Set oRange = Range
-		oRange.XCellRange.clearContents(lClear)
-	End With
-
-Finally:
-	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
-	Exit Sub
-Catch:
-	GoTo Finally
 End Sub	&apos;	SF_Documents.SF_Calc.ClearAll
 
 REM -----------------------------------------------------------------------------
-Public Sub ClearFormats(Optional ByVal Range As Variant) As String
+Public Sub ClearFormats(Optional ByVal Range As Variant _
+							, Optional FilterFormula As Variant _
+							, Optional FilterScope As Variant _
+							)
 &apos;&apos;&apos;	Clear all the formatting elements of the given range
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		Range : the cell or the range as a string that should be cleared
+&apos;&apos;&apos;		FilterFormula: a Calc formula to select among the given Range
+&apos;&apos;&apos;			When left empty, all the cells of the range are cleared
+&apos;&apos;&apos;		FilterScope: &quot;CELL&quot; (default value), &quot;ROW&quot; or &quot;COLUMN&quot;
+&apos;&apos;&apos;			When FilterFormula is present, FilterScope is mandatory
 &apos;&apos;&apos;	Examples:
-&apos;&apos;&apos;		oDoc.ClearFormats(&quot;SheetX:A1:E100&quot;)		&apos; Clear the formats of the given range
+&apos;&apos;&apos;		oDoc.ClearFormats(&quot;SheetX.*&quot;)							&apos; Clears the used area of the sheet
+&apos;&apos;&apos;		oDoc.ClearFormats(&quot;A1:J20&quot;, &quot;=(MOD(A1;0)=0)&quot;, &quot;CELL&quot;)	&apos; Clears all even cells
 
-Dim lClear As Long				&apos;	The elements to clear
-Dim oRange As Object			&apos;	Alias of Range
-Const cstThisSub = &quot;SFDocuments.Calc.ClearFormats&quot;
-Const cstSubArgs = &quot;Range&quot;
+	_ClearRange(&quot;Formats&quot;, Range, FilterFormula, FilterScope)
 
-	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
-
-Check:
-	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not _IsStillAlive() Then GoTo Finally
-		If Not ScriptForge.SF_Utils._Validate(Range, &quot;Range&quot;, V_STRING) Then GoTo Finally
-	End If
-
-Try:
-	With com.sun.star.sheet.CellFlags
-		lClear = 0 _
-					+ .HARDATTR _
-					+ .STYLES _
-					+ .EDITATTR _
-					+ .FORMATTED
-		Set oRange = _ParseAddress(Range)
-		oRange.XCellRange.clearContents(lClear)
-	End With
-
-Finally:
-	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
-	Exit Sub
-Catch:
-	GoTo Finally
 End Sub	&apos;	SF_Documents.SF_Calc.ClearFormats
 
 REM -----------------------------------------------------------------------------
-Public Sub ClearValues(Optional ByVal Range As Variant) As String
+Public Sub ClearValues(Optional ByVal Range As Variant _
+							, Optional FilterFormula As Variant _
+							, Optional FilterScope As Variant _
+							)
 &apos;&apos;&apos;	Clear values and formulas in the given range
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		Range : the cell or the range as a string that should be cleared
+&apos;&apos;&apos;		FilterFormula: a Calc formula to select among the given Range
+&apos;&apos;&apos;			When left empty, all the cells of the range are cleared
+&apos;&apos;&apos;		FilterScope: &quot;CELL&quot; (default value), &quot;ROW&quot; or &quot;COLUMN&quot;
+&apos;&apos;&apos;			When FilterFormula is present, FilterScope is mandatory
 &apos;&apos;&apos;	Examples:
-&apos;&apos;&apos;		oDoc.ClearValues(&quot;SheetX:*&quot;)		&apos; Clears the used area of the sheet
+&apos;&apos;&apos;		oDoc.ClearValues(&quot;SheetX.*&quot;)					&apos; Clears the used area of the sheet
+&apos;&apos;&apos;		oDoc.ClearValues(&quot;A2:A20&quot;, &quot;=(A2=A1)&quot;, &quot;CELL&quot;)	&apos; Clears all duplicate cells
 
-Dim lClear As Long				&apos;	The elements to clear
-Dim oRange As Object			&apos;	Alias of Range
-Const cstThisSub = &quot;SFDocuments.Calc.ClearValues&quot;
-Const cstSubArgs = &quot;Range&quot;
+	_ClearRange(&quot;Values&quot;, Range, FilterFormula, FilterScope)
 
-	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
-
-Check:
-	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not _IsStillAlive() Then GoTo Finally
-		If Not ScriptForge.SF_Utils._Validate(Range, &quot;Range&quot;, V_STRING) Then GoTo Finally
-	End If
-
-Try:
-	With com.sun.star.sheet.CellFlags
-		lClear = 0 _
-					+ .VALUE _
-					+ .DATETIME _
-					+ .STRING _
-					+ .FORMULA
-		Set oRange = _ParseAddress(Range)
-		oRange.XCellRange.clearContents(lClear)
-	End With
-
-Finally:
-	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
-	Exit Sub
-Catch:
-	GoTo Finally
 End Sub	&apos;	SF_Documents.SF_Calc.ClearValues
 
 REM -----------------------------------------------------------------------------
@@ -2779,42 +2716,70 @@ End Function	&apos;	SF_Documents.SF_Calc.SetArray
 REM -----------------------------------------------------------------------------
 Public Function SetCellStyle(Optional ByVal TargetRange As Variant _
 								, Optional ByVal Style As Variant _
+								, Optional ByVal FilterFormula As Variant _
+								, Optional ByVal FilterScope As Variant _
 								) As String
 &apos;&apos;&apos;	Apply the given cell style in the given range
-&apos;&apos;&apos;	The full range is updated and the remainder of the sheet is left untouched
 &apos;&apos;&apos;	If the cell style does not exist, an error is raised
+&apos;&apos;&apos;	The range is updated and the remainder of the sheet is left untouched
+&apos;&apos;&apos;	Either the full range is updated or a selection based on a FilterFormula
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		TargetRange : the range as a string that should receive a new cell style
 &apos;&apos;&apos;		Style: the style name as a string
+&apos;&apos;&apos;		FilterFormula: a Calc formula to select among the given Range
+&apos;&apos;&apos;			When left empty, all the cells of the range are formatted with the new style
+&apos;&apos;&apos;		FilterScope: &quot;CELL&quot; (default value), &quot;ROW&quot; or &quot;COLUMN&quot;
+&apos;&apos;&apos;			When FilterFormula is present, FilterScope is mandatory
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		A string representing the updated range
 &apos;&apos;&apos;	Examples:
 &apos;&apos;&apos;		oDoc.SetCellStyle(&quot;A1:F1&quot;, &quot;Heading 2&quot;)
+&apos;&apos;&apos;		oDoc.SetCellStype(&quot;A1:J20&quot;, &quot;Wrong&quot;, &quot;=(A1&lt;0)&quot;, &quot;CELL&quot;)
 
 Dim sSet As String					&apos;	Return value
 Dim oAddress As _Address				&apos;	Alias of TargetRange
 Dim oStyleFamilies As Object		&apos;	com.sun.star.container.XNameAccess
 Dim vStyles As Variant				&apos;	Array of existing cell styles
+Dim vRanges() As Variant			&apos;	Array of filtered ranges
+Dim i As Long
+
 Const cstStyle = &quot;CellStyles&quot;
 Const cstThisSub = &quot;SFDocuments.Calc.SetCellStyle&quot;
-Const cstSubArgs = &quot;TargetRange, Style&quot;
+Const cstSubArgs = &quot;TargetRange, Style, [FilterFormula=&quot;&quot;], [FilterScope=&quot;&quot;CELL&quot;&quot;|&quot;&quot;ROW&quot;&quot;|&quot;&quot;COLUMN&quot;&quot;]&quot;
 
 	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
 	sSet = &quot;&quot;
 
 Check:
+	If IsMissing(FilterFormula) Or IsEmpty(FilterFormula) Then FilterFormula = &quot;&quot;
+	If IsMissing(FilterScope) Or IsEmpty(FilterScope) Then FilterScope = &quot;CELL&quot;
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
 		If Not _IsStillAlive() Then GoTo Finally
-		If Not ScriptForge.SF_Utils._Validate(TargetRange, &quot;TargetRange&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(TargetRange, &quot;TargetRange&quot;, Array(V_STRING, ScriptForge.V_OBJECT)) Then GoTo Finally
+		&apos;	Check that the given style really exists
 		Set oStyleFamilies = _Component.StyleFamilies
 		If oStyleFamilies.hasByName(cstStyle) Then vStyles = oStyleFamilies.getByName(cstStyle).getElementNames() Else vStyles = Array()
 		If Not ScriptForge.SF_Utils._Validate(Style, &quot;Style&quot;, V_STRING, vStyles) Then GoTo Finally
+		&apos;	Filter formula
+		If Not ScriptForge.SF_Utils._Validate(FilterFormula, &quot;FilterFormula&quot;, V_STRING) Then GoTo Finally
+		If Len(FilterFormula) &gt; 0 Then
+			If Not ScriptForge.SF_Utils._Validate(FilterScope, &quot;FilterScope&quot;, V_STRING, Array(&quot;CELL&quot;, &quot;ROW&quot;, &quot;COLUMN&quot;)) Then GoTo Finally
+		Else
+			If Not ScriptForge.SF_Utils._Validate(FilterScope, &quot;FilterScope&quot;, V_STRING) Then GoTo Finally
+		End If
 	End If
 
 Try:
-	Set oAddress = _ParseAddress(TargetRange)
+	If VarType(TargetRange) = V_STRING Then Set oAddress = _ParseAddress(TargetRange) Else Set oAddress = TargetRange
 	With oAddress
-		.XCellRange.CellStyle = Style
+		If Len(FilterFormula) = 0 Then			&apos;	When the full range should be updated
+			.XCellRange.CellStyle = Style
+		Else									&apos;	When the range has to be cut in subranges
+			vRanges() = _ComputeFilter(oAddress, FilterFormula, UCase(FilterScope))
+			For i = 0 To UBound(vRanges)
+				vRanges(i).XCellRange.CellStyle = Style
+			Next i
+		End If
 		sSet = .RangeName
 	End With
 
@@ -3650,7 +3615,80 @@ End Function	&apos;   SFDocuments.SF_Calc.SetPrinter
 REM =========================================================== PRIVATE FUNCTIONS
 
 REM -----------------------------------------------------------------------------
-Public Function _ComputeFilter(ByVal poRange As Object _
+Private Sub _ClearRange(ByVal psTarget As String _
+							, Optional ByVal Range As Variant _
+							, Optional FilterFormula As Variant _
+							, Optional FilterScope As Variant _
+							)
+&apos;&apos;&apos;	Clear the given range with the given options
+&apos;&apos;&apos;	The range may be filtered by a formula for a selective clearance
+&apos;&apos;&apos;	Arguments checking is done in this Sub, not in the calling one
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		psTarget: &quot;All&quot;, &quot;Formats&quot; or &quot;Values&quot;
+&apos;&apos;&apos;		Range: the range to clear as a string
+&apos;&apos;&apos;		FilterFormula: a selection of cells based on a Calc formula
+&apos;&apos;&apos;			When left empty, all the cells of the range are cleared
+&apos;&apos;&apos;		psFilterScope: &quot;CELL&quot;, &quot;ROW&quot; or &quot;COLUMN&quot;
+
+Dim lClear As Long				&apos;	A combination of com.sun.star.sheet.CellFlags
+Dim oRange As Object			&apos;	Alias of Range
+Dim vRanges() As Variant		&apos;	Array of subranges resulting from the application of the filter
+Dim i As Long
+
+Dim cstThisSub As String		:	cstThisSub = &quot;SFDocuments.Calc.Clear&quot; &amp; psTarget
+Const cstSubArgs = &quot;Range, [FilterFormula=&quot;&quot;], [FilterScope=&quot;&quot;CELL&quot;&quot;|&quot;&quot;ROW&quot;&quot;|&quot;&quot;COLUMN&quot;&quot;]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+
+Check:
+	If IsMissing(FilterFormula) Or IsEmpty(FilterFormula) Then FilterFormula = &quot;&quot;
+	If IsMissing(FilterScope) Or IsEmpty(FilterScope) Then FilterScope = &quot;CELL&quot;
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive() Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Range, &quot;Range&quot;, Array(V_STRING, ScriptForge.V_OBJECT)) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(FilterFormula, &quot;FilterFormula&quot;, V_STRING) Then GoTo Finally
+		If Len(FilterFormula) &gt; 0 Then
+			If Not ScriptForge.SF_Utils._Validate(FilterScope, &quot;FilterScope&quot;, V_STRING, Array(&quot;CELL&quot;, &quot;ROW&quot;, &quot;COLUMN&quot;)) Then GoTo Finally
+		Else
+			If Not ScriptForge.SF_Utils._Validate(FilterScope, &quot;FilterScope&quot;, V_STRING) Then GoTo Finally
+		End If
+	End If
+
+Try:
+	With com.sun.star.sheet.CellFlags
+		Select Case psTarget
+			Case &quot;All&quot;
+				lClear = .VALUE + .DATETIME + .STRING + .ANNOTATION + .FORMULA _
+						+ .HARDATTR + .STYLES + .OBJECTS + .EDITATTR + .FORMATTED
+			Case &quot;Formats&quot;
+				lClear = .HARDATTR + .STYLES + .EDITATTR + .FORMATTED
+			Case &quot;Values&quot;
+				lClear = .VALUE + .DATETIME + .STRING + .FORMULA
+		End Select
+	End With
+
+	If VarType(Range) = V_STRING Then Set oRange = _ParseAddress(Range) Else Set oRange = Range
+
+	&apos;	Without filter, the whole range is cleared
+	&apos;	Otherwise the filter cuts the range in subranges and clears them one by one
+	If Len(FilterFormula) = 0 Then
+		oRange.XCellRange.clearContents(lClear)
+	Else
+		vRanges() = _ComputeFilter(oRange, FilterFormula, UCase(FilterScope))
+		For i = 0 To UBound(vRanges)
+			vRanges(i).XCellRange.clearContents(lClear)
+		Next i
+	End If
+
+Finally:
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Sub
+Catch:
+	GoTo Finally
+End Sub	&apos;	SF_Documents.SF_Calc._ClearRange
+
+REM -----------------------------------------------------------------------------
+Private Function _ComputeFilter(ByRef poRange As Object _
 								, ByVal psFilterFormula As String _
 								, ByVal psFilterScope As String _
 								) As Variant

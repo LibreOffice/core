@@ -2082,14 +2082,14 @@ class SFDocuments:
         def Charts(self, sheetname, chartname = ''):
             return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Charts', sheetname, chartname)
 
-        def ClearAll(self, range):
-            return self.ExecMethod(self.vbMethod, 'ClearAll', range)
+        def ClearAll(self, range, filterformula = '', filterscope = ''):
+            return self.ExecMethod(self.vbMethod, 'ClearAll', range, filterformula, filterscope)
 
-        def ClearFormats(self, range):
-            return self.ExecMethod(self.vbMethod, 'ClearFormats', range)
+        def ClearFormats(self, range, filterformula = '', filterscope = ''):
+            return self.ExecMethod(self.vbMethod, 'ClearFormats', range, filterformula, filterscope)
 
-        def ClearValues(self, range):
-            return self.ExecMethod(self.vbMethod, 'ClearValues', range)
+        def ClearValues(self, range, filterformula = '', filterscope = ''):
+            return self.ExecMethod(self.vbMethod, 'ClearValues', range, filterformula, filterscope)
 
         def CompactLeft(self, range, wholecolumn = False, filterformula = ''):
             return self.ExecMethod(self.vbMethod, 'CompactLeft', range, wholecolumn, filterformula)
@@ -2194,8 +2194,8 @@ class SFDocuments:
         def SetArray(self, targetcell, value):
             return self.ExecMethod(self.vbMethod + self.flgArrayArg, 'SetArray', targetcell, value)
 
-        def SetCellStyle(self, targetrange, style):
-            return self.ExecMethod(self.vbMethod, 'SetCellStyle', targetrange, style)
+        def SetCellStyle(self, targetrange, style, filterformula = '', filterscope = ''):
+            return self.ExecMethod(self.vbMethod, 'SetCellStyle', targetrange, style, filterformula, filterscope)
 
         def SetFormula(self, targetrange, formula):
             return self.ExecMethod(self.vbMethod + self.flgArrayArg, 'SetFormula', targetrange, formula)
