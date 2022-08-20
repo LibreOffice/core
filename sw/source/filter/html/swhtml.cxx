@@ -2285,7 +2285,7 @@ bool SwHTMLParser::AppendTextNode( SwHTMLAppendMode eMode, bool bUpdateNum )
                                 if( nScriptItem == nScriptText )
                                 {
                                     HTMLAttr *pSetAttr =
-                                        pAttr->Clone( rEndIdx, nScriptEnd );
+                                        pAttr->Clone( rEndIdx.GetNode(), nScriptEnd );
                                     pSetAttr->m_nStartContent = nStt;
                                     pSetAttr->ClearPrev();
                                     if( !pNext || bWholePara )
@@ -2310,7 +2310,7 @@ bool SwHTMLParser::AppendTextNode( SwHTMLAppendMode eMode, bool bUpdateNum )
                     if( bInsert )
                     {
                         HTMLAttr *pSetAttr =
-                            pAttr->Clone( rEndIdx, nEndCnt );
+                            pAttr->Clone( rEndIdx.GetNode(), nEndCnt );
                         pSetAttr->m_nStartContent = nStt;
 
                         // When the attribute is for the whole paragraph, the outer
@@ -3175,7 +3175,7 @@ bool SwHTMLParser::EndAttr( HTMLAttr* pAttr, bool bChkEmpty )
         {
             if( nScriptItem == nScriptText )
             {
-                HTMLAttr *pSetAttr = pAttr->Clone( *pEndIdx, nScriptEnd );
+                HTMLAttr *pSetAttr = pAttr->Clone( pEndIdx->GetNode(), nScriptEnd );
                 pSetAttr->ClearPrev();
                 if( pNext )
                     pNext->InsertPrev( pSetAttr );
@@ -3396,7 +3396,7 @@ void SwHTMLParser::SplitAttrTab( std::shared_ptr<HTMLAttrTable> const & rNewAttr
                 // original and therefore we clone it, because pointer to the
                 // attribute exist in the other contexts. The Next-List is lost
                 // in doing so, but the Previous-List is preserved.
-                HTMLAttr *pSetAttr = pAttr->Clone( nEndIdx, nEndCnt );
+                HTMLAttr *pSetAttr = pAttr->Clone( nEndIdx.GetNode(), nEndCnt );
 
                 if( pNext )
                     pNext->InsertPrev( pSetAttr );
@@ -3424,7 +3424,7 @@ void SwHTMLParser::SplitAttrTab( std::shared_ptr<HTMLAttrTable> const & rNewAttr
             }
 
             // set the start of the attribute anew and break link
-            pAttr->Reset(nSttIdx, nSttCnt, pSaveAttributes, rNewAttrTab);
+            pAttr->Reset(nSttIdx.GetNode(), nSttCnt, pSaveAttributes, rNewAttrTab);
 
             if (*pSaveAttributes)
             {
@@ -5458,7 +5458,7 @@ HTMLAttr::HTMLAttr( const SwPosition& rPos, const SfxPoolItem& rItem,
 {
 }
 
-HTMLAttr::HTMLAttr( const HTMLAttr &rAttr, const SwNodeIndex &rEndPara,
+HTMLAttr::HTMLAttr( const HTMLAttr &rAttr, const SwNode &rEndPara,
                       sal_Int32 nEndCnt, HTMLAttr **ppHd, std::shared_ptr<HTMLAttrTable> xAttrTab ) :
     m_nStartPara( rAttr.m_nStartPara ),
     m_nEndPara( rEndPara ),
@@ -5479,7 +5479,7 @@ HTMLAttr::~HTMLAttr()
 {
 }
 
-HTMLAttr *HTMLAttr::Clone(const SwNodeIndex& rEndPara, sal_Int32 nEndCnt) const
+HTMLAttr *HTMLAttr::Clone(const SwNode& rEndPara, sal_Int32 nEndCnt) const
 {
     // create the attribute anew with old start position
     HTMLAttr *pNew = new HTMLAttr( *this, rEndPara, nEndCnt, m_ppHead, m_xAttrTab );
@@ -5490,7 +5490,7 @@ HTMLAttr *HTMLAttr::Clone(const SwNodeIndex& rEndPara, sal_Int32 nEndCnt) const
     return pNew;
 }
 
-void HTMLAttr::Reset(const SwNodeIndex& rSttPara, sal_Int32 nSttCnt,
+void HTMLAttr::Reset(const SwNode& rSttPara, sal_Int32 nSttCnt,
                      HTMLAttr **ppHd, const std::shared_ptr<HTMLAttrTable>& rAttrTab)
 {
     // reset the start (and the end)
