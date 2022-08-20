@@ -146,15 +146,15 @@ class HTMLAttr
     HTMLAttr( const SwPosition& rPos, const SfxPoolItem& rItem,
                HTMLAttr **pHd, std::shared_ptr<HTMLAttrTable> xAttrTab );
 
-    HTMLAttr( const HTMLAttr &rAttr, const SwNodeIndex &rEndPara,
+    HTMLAttr( const HTMLAttr &rAttr, const SwNode &rEndPara,
                sal_Int32 nEndCnt, HTMLAttr **pHd, std::shared_ptr<HTMLAttrTable> xAttrTab );
 
 public:
 
     ~HTMLAttr();
 
-    HTMLAttr *Clone( const SwNodeIndex& rEndPara, sal_Int32 nEndCnt ) const;
-    void Reset( const SwNodeIndex& rSttPara, sal_Int32 nSttCnt,
+    HTMLAttr *Clone( const SwNode& rEndPara, sal_Int32 nEndCnt ) const;
+    void Reset( const SwNode& rSttPara, sal_Int32 nSttCnt,
                 HTMLAttr **pHd, const std::shared_ptr<HTMLAttrTable>& rAttrTab );
     inline void SetStart( const SwPosition& rPos );
 

@@ -226,7 +226,7 @@ void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
                 // The attribute needs to be set. Because we still need the original, since
                 // pointers to the attribute still exists in the contexts, we need to clone it.
                 // The next-list gets lost but the previous-list is preserved
-                HTMLAttr *pSetAttr = pAttr->Clone( *pOldEndPara, nOldEndCnt );
+                HTMLAttr *pSetAttr = pAttr->Clone( pOldEndPara->GetNode(), nOldEndCnt );
 
                 if( pNext )
                     pNext->InsertPrev( pSetAttr );
