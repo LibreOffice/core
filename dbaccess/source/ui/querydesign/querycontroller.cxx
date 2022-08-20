@@ -480,6 +480,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                     std::unique_ptr<::connectivity::OSQLParseNode> pNode = m_aSqlParser.parseTree(aErrorMsg,m_sStatement,m_bGraphicalDesign);
                     if ( pNode )
                     {
+                        assert(m_pSqlIterator && "SqlIterator must exist");
                         delete m_pSqlIterator->getParseTree();
                         m_pSqlIterator->setParseTree(pNode.release());
                         m_pSqlIterator->traverseAll();
