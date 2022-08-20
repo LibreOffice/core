@@ -2614,6 +2614,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             if ( bHasMemo )
             {
                 const SfxStringItem* pNameItem = rMed.GetItemSet()->GetItem<SfxStringItem>( SID_FILE_NAME );
+                assert(pNameItem && "SID_FILE_NAME is required");
                 INetURLObject aDbtFile( pNameItem->GetValue(), INetProtocol::File );
                 aDbtFile.setExtension(u"dbt");
 
