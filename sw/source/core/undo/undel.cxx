@@ -531,7 +531,7 @@ bool SwUndoDelete::CanGrouping( SwDoc& rDoc, const SwPaM& rDelPam )
 
     auto [pStt, pEnd] = rDelPam.StartEnd(); // SwPosition*
 
-    if( pStt->nNode != pEnd->nNode ||
+    if( pStt->GetNode() != pEnd->GetNode() ||
         pStt->GetContentIndex()+1 != pEnd->GetContentIndex() ||
         pEnd->nNode != m_nSttNode )
         return false;
@@ -1240,10 +1240,10 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
             DelFullParaMoveFrames(rDoc, *this, *m_pRedlSaveData);
         }
 
-        SwNodeIndex aSttIdx = ( m_bDelFullPara || m_bJoinNext )
-                                    ? rPam.GetMark()->nNode
-                                    : rPam.GetPoint()->nNode;
-        SwTableNode* pTableNd = aSttIdx.GetNode().GetTableNode();
+        SwNode& rSttNd = ( m_bDelFullPara || m_bJoinNext )
+                                    ? rPam.GetMark()->GetNode()
+                                    : rPam.GetPoint()->GetNode();
+        SwTableNode* pTableNd = rSttNd.GetTableNode();
         if( pTableNd )
         {
             if( m_bTableDelLastNd )
@@ -1284,13 +1284,13 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
             *aTmp.GetPoint() = *rPam.Start();
             aTmp.Move(fnMoveBackward, GoInNode);
         }
-        assert(aTmp.GetPoint()->nNode != rPam.GetPoint()->nNode
-            && aTmp.GetPoint()->nNode != rPam.GetMark()->nNode);
+        assert(aTmp.GetPoint()->GetNode() != rPam.GetPoint()->GetNode()
+            && aTmp.GetPoint()->GetNode() != rPam.GetMark()->GetNode());
         ::PaMCorrAbs(rPam, *aTmp.GetPoint());
 
         rPam.DeleteMark();
 
-        rDoc.GetNodes().Delete( aSttIdx, m_nEndNode - m_nSttNode );
+        rDoc.GetNodes().Delete( rSttNd, m_nEndNode - m_nSttNode );
     }
     else if( m_bDelFullPara )
     {

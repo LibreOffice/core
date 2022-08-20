@@ -257,7 +257,7 @@ void SwUndoMove::RedoImpl(::sw::UndoRedoContext & rContext)
         DelFootnote( aPam );
         RemoveIdxFromRange( aPam, false );
 
-        aIdx = aPam.Start()->nNode;
+        aIdx = aPam.Start()->GetNode();
         bool bJoinText = aIdx.GetNode().IsTextNode();
 
         --aIdx;

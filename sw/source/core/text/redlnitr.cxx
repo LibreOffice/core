@@ -271,7 +271,7 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
             // and is likely a SwTableNode!
             if (!pEnd->GetNode().IsTextNode())
             {
-                assert(pEnd->nNode != pStart->nNode);
+                assert(pEnd->GetNode() != pStart->GetNode());
                 // must set pNode too because it will mark the last node
                 pNode = nodes.back();
                 assert(pNode == pNode->GetNodes()[pEnd->GetNodeIndex() - 1]);
