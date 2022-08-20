@@ -25,6 +25,7 @@
 #include <stdio.h>
 #include <setjmp.h>
 #include <jpeglib.h>
+#include <jerror.h>
 
 #include <com/sun/star/task/XStatusIndicator.hpp>
 
@@ -78,22 +79,26 @@ static void outputMessage (j_common_ptr cinfo)
 
 }
 
-static int GetWarningLimit()
-{
-    return utl::ConfigManager::IsFuzzing() ? 3 : 1000;
-}
-
 extern "C" {
 
 static void emitMessage (j_common_ptr cinfo, int msg_level)
 {
     if (msg_level < 0)
     {
-        // ofz#3002 try to retain some degree of recoverability up to some
-        // reasonable limit (initially using ImageMagick's current limit of
-        // 1000), then bail.
         // https://libjpeg-turbo.org/pmwiki/uploads/About/TwoIssueswiththeJPEGStandard.pdf
-        if (++cinfo->err->num_warnings > GetWarningLimit())
+        // try to retain some degree of recoverability up to some reasonable
+        // limit (initially using ImageMagick's current limit of 1000), then
+        // bail.
+        constexpr int WarningLimit = 1000;
+        static bool bFuzzing = utl::ConfigManager::IsFuzzing();
+        // ofz#50452 due to Timeouts, just abandon fuzzing on any
+        // JWRN_NOT_SEQUENTIAL
+        if (bFuzzing && cinfo->err->msg_code == JWRN_NOT_SEQUENTIAL)
+        {
+            cinfo->err->error_exit(cinfo);
+            return;
+        }
+        if (++cinfo->err->num_warnings > WarningLimit)
             cinfo->err->error_exit(cinfo);
         else
             cinfo->err->output_message(cinfo);
