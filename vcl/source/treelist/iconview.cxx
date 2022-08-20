@@ -300,6 +300,9 @@ static void lcl_DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter, SvTreeListE
         if (pTabListBox->IsSelected(pEntry))
             rJsonWriter.put("selected", "true");
 
+        if (pEntry->GetFlags() & SvTLEntryFlags::IS_SEPARATOR)
+            rJsonWriter.put("separator", "true");
+
         rJsonWriter.put("row",
                         OString::number(pTabListBox->GetModel()->GetAbsPos(pEntry)).getStr());
 
