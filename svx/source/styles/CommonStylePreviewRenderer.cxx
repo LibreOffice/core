@@ -14,6 +14,7 @@
 #include <sfx2/objsh.hxx>
 #include <svl/style.hxx>
 #include <svl/itemset.hxx>
+#include <svl/itempool.hxx>
 #include <vcl/outdev.hxx>
 
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -37,6 +38,9 @@
 
 #include <editeng/editids.hrc>
 
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/i18n/ScriptType.hpp>
+
 using namespace css;
 
 namespace svx
@@ -56,57 +60,141 @@ CommonStylePreviewRenderer::CommonStylePreviewRenderer(
 CommonStylePreviewRenderer::~CommonStylePreviewRenderer()
 {}
 
+static bool GetWhich(const SfxItemSet& rSet, sal_uInt16 nSlot, sal_uInt16& rWhich)
+{
+    rWhich = rSet.GetPool()->GetWhich(nSlot);
+    return rSet.GetItemState(rWhich) >= SfxItemState::DEFAULT;
+}
+
+static bool SetFont(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont)
+{
+    sal_uInt16 nWhich;
+    if (GetWhich(rSet, nSlot, nWhich))
+    {
+        const auto& rFontItem = static_cast<const SvxFontItem&>(rSet.Get(nWhich));
+        rFont.SetFamily(rFontItem.GetFamily());
+        rFont.SetFamilyName(rFontItem.GetFamilyName());
+        rFont.SetPitch(rFontItem.GetPitch());
+        rFont.SetCharSet(rFontItem.GetCharSet());
+        rFont.SetStyleName(rFontItem.GetStyleName());
+        return true;
+    }
+    return false;
+}
+
+bool CommonStylePreviewRenderer::SetFontSize(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont)
+{
+    sal_uInt16 nWhich;
+    if (GetWhich(rSet, nSlot, nWhich))
+    {
+        const auto& rFontHeightItem = static_cast<const SvxFontHeightItem&>(rSet.Get(nWhich));
+        Size aFontSize(0, rFontHeightItem.GetHeight());
+        maPixelSize = mrOutputDev.LogicToPixel(aFontSize, MapMode(mrShell.GetMapUnit()));
+        rFont.SetFontSize(maPixelSize);
+
+        vcl::Font aOldFont(mrOutputDev.GetFont());
+
+        mrOutputDev.SetFont(rFont);
+        tools::Rectangle aTextRect;
+        mrOutputDev.GetTextBoundRect(aTextRect, mpStyle->GetName());
+        if (aTextRect.Bottom() > mnMaxHeight)
+        {
+            double ratio = double(mnMaxHeight) / aTextRect.Bottom();
+            maPixelSize.setWidth( maPixelSize.Width() * ratio );
+            maPixelSize.setHeight( maPixelSize.Height() * ratio );
+            rFont.SetFontSize(maPixelSize);
+        }
+        mrOutputDev.SetFont(aOldFont);
+        return true;
+    }
+    return false;
+}
+
 bool CommonStylePreviewRenderer::recalculate()
 {
     m_oFont.reset();
+    m_CJKoFont.reset();
+    m_CTLoFont.reset();
 
     std::optional<SfxItemSet> pItemSet(mpStyle->GetItemSetForPreview());
 
     if (!pItemSet) return false;
 
     SvxFont aFont;
+    SvxFont aCJKFont;
+    SvxFont aCTLFont;
 
     const SfxPoolItem* pItem;
 
     if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_WEIGHT)) != nullptr)
-    {
         aFont.SetWeight(static_cast<const SvxWeightItem*>(pItem)->GetWeight());
-    }
+    if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_CJK_WEIGHT)) != nullptr)
+        aCJKFont.SetWeight(static_cast<const SvxWeightItem*>(pItem)->GetWeight());
+    if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_CTL_WEIGHT)) != nullptr)
+        aCTLFont.SetWeight(static_cast<const SvxWeightItem*>(pItem)->GetWeight());
+
     if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_POSTURE)) != nullptr)
-    {
         aFont.SetItalic(static_cast<const SvxPostureItem*>(pItem)->GetPosture());
-    }
+    if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_CJK_POSTURE)) != nullptr)
+        aCJKFont.SetItalic(static_cast<const SvxPostureItem*>(pItem)->GetPosture());
+    if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_CTL_POSTURE)) != nullptr)
+        aCTLFont.SetItalic(static_cast<const SvxPostureItem*>(pItem)->GetPosture());
+
     if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_CONTOUR)) != nullptr)
     {
-        aFont.SetOutline(static_cast< const SvxContourItem*>(pItem)->GetValue());
+        auto aVal = static_cast<const SvxContourItem*>(pItem)->GetValue();
+        aFont.SetOutline(aVal);
+        aCJKFont.SetOutline(aVal);
+        aCTLFont.SetOutline(aVal);
     }
     if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_SHADOWED)) != nullptr)
     {
-        aFont.SetShadow(static_cast<const SvxShadowedItem*>(pItem)->GetValue());
+        auto aVal = static_cast<const SvxShadowedItem*>(pItem)->GetValue();
+        aFont.SetShadow(aVal);
+        aCJKFont.SetShadow(aVal);
+        aCTLFont.SetShadow(aVal);
     }
     if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_RELIEF)) != nullptr)
     {
-        aFont.SetRelief(static_cast<const SvxCharReliefItem*>(pItem)->GetValue());
+        auto aVal = static_cast<const SvxCharReliefItem*>(pItem)->GetValue();
+        aFont.SetRelief(aVal);
+        aCJKFont.SetRelief(aVal);
+        aCTLFont.SetRelief(aVal);
     }
     if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_UNDERLINE)) != nullptr)
     {
-        aFont.SetUnderline(static_cast< const SvxUnderlineItem*>(pItem)->GetLineStyle());
+        auto aVal = static_cast<const SvxUnderlineItem*>(pItem)->GetLineStyle();
+        aFont.SetUnderline(aVal);
+        aCJKFont.SetUnderline(aVal);
+        aCTLFont.SetUnderline(aVal);
     }
     if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_OVERLINE)) != nullptr)
     {
-        aFont.SetOverline(static_cast<const SvxOverlineItem*>(pItem)->GetValue());
+        auto aVal = static_cast<const SvxOverlineItem*>(pItem)->GetValue();
+        aFont.SetOverline(aVal);
+        aCJKFont.SetOverline(aVal);
+        aCTLFont.SetOverline(aVal);
     }
     if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_STRIKEOUT)) != nullptr)
     {
-        aFont.SetStrikeout(static_cast<const SvxCrossedOutItem*>(pItem)->GetStrikeout());
+        auto aVal = static_cast<const SvxCrossedOutItem*>(pItem)->GetStrikeout();
+        aFont.SetStrikeout(aVal);
+        aCJKFont.SetStrikeout(aVal);
+        aCTLFont.SetStrikeout(aVal);
     }
     if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_CASEMAP)) != nullptr)
     {
-        aFont.SetCaseMap(static_cast<const SvxCaseMapItem*>(pItem)->GetCaseMap());
+        auto aVal = static_cast<const SvxCaseMapItem*>(pItem)->GetCaseMap();
+        aFont.SetCaseMap(aVal);
+        aCJKFont.SetCaseMap(aVal);
+        aCTLFont.SetCaseMap(aVal);
     }
     if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_EMPHASISMARK)) != nullptr)
     {
-        aFont.SetEmphasisMark(static_cast<const SvxEmphasisMarkItem*>(pItem)->GetEmphasisMark());
+        auto aVal = static_cast<const SvxEmphasisMarkItem*>(pItem)->GetEmphasisMark();
+        aFont.SetEmphasisMark(aVal);
+        aCJKFont.SetEmphasisMark(aVal);
+        aCTLFont.SetEmphasisMark(aVal);
     }
     if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_COLOR)) != nullptr)
     {
@@ -132,58 +220,81 @@ bool CommonStylePreviewRenderer::recalculate()
         }
     }
 
-    if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_FONT)) != nullptr)
-    {
-        const SvxFontItem* pFontItem = static_cast<const SvxFontItem*>(pItem);
-        if (IsStarSymbol(pFontItem->GetFamilyName()))
-            return false;
-        aFont.SetFamilyName(pFontItem->GetFamilyName());
-        aFont.SetStyleName(pFontItem->GetStyleName());
-    }
-    else
-    {
-        return false;
-    }
+    if (SetFont(*pItemSet, SID_ATTR_CHAR_FONT, aFont) &&
+        SetFontSize(*pItemSet, SID_ATTR_CHAR_FONTHEIGHT, aFont))
+        m_oFont = aFont;
 
-    if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_FONTHEIGHT)) != nullptr)
-    {
-        const SvxFontHeightItem* pFontHeightItem = static_cast<const SvxFontHeightItem*>(pItem);
-        Size aFontSize(0, pFontHeightItem->GetHeight());
-        maPixelSize = mrOutputDev.LogicToPixel(aFontSize, MapMode(mrShell.GetMapUnit()));
-        aFont.SetFontSize(maPixelSize);
+    if (SetFont(*pItemSet, SID_ATTR_CHAR_CJK_FONT, aCJKFont) &&
+        SetFontSize(*pItemSet, SID_ATTR_CHAR_CJK_FONTHEIGHT, aCJKFont))
+        m_oCJKFont = aCJKFont;
 
-        vcl::Font aOldFont(mrOutputDev.GetFont());
+    if (SetFont(*pItemSet, SID_ATTR_CHAR_CTL_FONT, aCTLFont) &&
+        SetFontSize(*pItemSet, SID_ATTR_CHAR_CTL_FONTHEIGHT, aCTLFont))
+        m_oCTLFont = aCTLFont;
 
-        mrOutputDev.SetFont(aFont);
-        tools::Rectangle aTextRect;
-        mrOutputDev.GetTextBoundRect(aTextRect, mpStyle->GetName());
-        if (aTextRect.Bottom() > mnMaxHeight)
-        {
-            double ratio = double(mnMaxHeight) / aTextRect.Bottom();
-            maPixelSize.setWidth( maPixelSize.Width() * ratio );
-            maPixelSize.setHeight( maPixelSize.Height() * ratio );
-            aFont.SetFontSize(maPixelSize);
-        }
-        mrOutputDev.SetFont(aOldFont);
-    }
-    else
-    {
-        return false;
-    }
-
-    m_oFont = aFont;
+    CheckScript();
     maPixelSize = getRenderSize();
     return true;
 }
 
-Size CommonStylePreviewRenderer::getRenderSize() const
+Size CommonStylePreviewRenderer::getRenderSize()
 {
-    assert(m_oFont);
-    Size aPixelSize = m_oFont->GetTextSize(mrOutputDev, maStyleName);
+    const OUString& rText = maStyleName;
 
-    if (aPixelSize.Height() > mnMaxHeight)
-        aPixelSize.setHeight( mnMaxHeight );
+    tools::Long nTextWidth = 0;
+    tools::Long nHeight = 0;
 
+    sal_uInt16 nScript;
+    sal_uInt16 nIdx = 0;
+    sal_Int32 nStart = 0;
+    sal_Int32 nEnd;
+    size_t nCnt = maScriptChanges.size();
+
+    if (nCnt)
+    {
+        nEnd = maScriptChanges[nIdx].changePos;
+        nScript = maScriptChanges[nIdx].scriptType;
+    }
+    else
+    {
+        nEnd = rText.getLength();
+        nScript = css::i18n::ScriptType::LATIN;
+    }
+
+    do
+    {
+        auto oFont = (nScript == css::i18n::ScriptType::ASIAN) ?
+                         m_oCJKFont :
+                         ((nScript == css::i18n::ScriptType::COMPLEX) ?
+                             m_oCTLFont :
+                             m_oFont);
+
+        Size aSize;
+        if (oFont)
+            aSize = oFont->GetTextSize(mrOutputDev, rText, nStart, nEnd - nStart);
+        else
+            aSize = Size(mrOutputDev.GetTextWidth(rText, nStart, nEnd - nStart), mrOutputDev.GetFont().GetFontHeight());
+
+        auto nWidth = aSize.Width();
+        nHeight = std::max(nHeight, aSize.Height());
+        if (nIdx >= maScriptChanges.size())
+            break;
+
+        maScriptChanges[nIdx++].textWidth = nWidth;
+        nTextWidth += nWidth;
+
+        if (nEnd < rText.getLength() && nIdx < nCnt)
+        {
+            nStart = nEnd;
+            nEnd = maScriptChanges[nIdx].changePos;
+            nScript = maScriptChanges[nIdx].scriptType;
+        }
+        else
+            break;
+    }
+    while(true);
+
+    Size aPixelSize(nTextWidth, std::min(nHeight, mnMaxHeight));
     return aPixelSize;
 }
 
@@ -200,32 +311,101 @@ bool CommonStylePreviewRenderer::render(const tools::Rectangle& aRectangle, Rend
         mrOutputDev.DrawRect(aRectangle);
     }
 
-    if (m_oFont)
-        mrOutputDev.SetFont(*m_oFont);
-
     if (maFontColor != COL_AUTO)
         mrOutputDev.SetTextColor(maFontColor);
 
     if (maHighlightColor != COL_AUTO)
         mrOutputDev.SetTextFillColor(maHighlightColor);
 
-    Size aPixelSize(m_oFont ? maPixelSize : mrOutputDev.GetFont().GetFontSize());
-
     Point aFontDrawPosition = aRectangle.TopLeft();
     if (eRenderAlign == RenderAlign::CENTER)
     {
-        if (aRectangle.GetHeight() > aPixelSize.Height())
-            aFontDrawPosition.AdjustY((aRectangle.GetHeight() - aPixelSize.Height()) / 2 );
+        if (aRectangle.GetHeight() > maPixelSize.Height())
+            aFontDrawPosition.AdjustY((aRectangle.GetHeight() - maPixelSize.Height()) / 2 );
     }
 
-    if (m_oFont)
-        m_oFont->QuickDrawText( &mrOutputDev, aFontDrawPosition, rText, 0, rText.getLength(), {} );
+    sal_uInt16 nScript;
+    sal_uInt16 nIdx = 0;
+    sal_Int32 nStart = 0;
+    sal_Int32 nEnd;
+    size_t nCnt = maScriptChanges.size();
+    if (nCnt)
+    {
+        nEnd = maScriptChanges[nIdx].changePos;
+        nScript = maScriptChanges[nIdx].scriptType;
+    }
     else
-        mrOutputDev.DrawText(aFontDrawPosition, rText);
+    {
+        nEnd = rText.getLength();
+        nScript = css::i18n::ScriptType::LATIN;
+    }
+
+    do
+    {
+        auto oFont = (nScript == css::i18n::ScriptType::ASIAN)
+                         ? m_oCJKFont
+                         : ((nScript == css::i18n::ScriptType::COMPLEX)
+                             ? m_oCTLFont
+                             : m_oFont);
+        if (oFont)
+        {
+            mrOutputDev.SetFont(*oFont);
+            oFont->QuickDrawText(&mrOutputDev, aFontDrawPosition, rText, nStart, nEnd - nStart, {});
+        }
+        else
+            mrOutputDev.DrawText(aFontDrawPosition, rText, nStart, nEnd - nStart);
+
+        aFontDrawPosition.AdjustX(maScriptChanges[nIdx++].textWidth);
+        if (nEnd < rText.getLength() && nIdx < nCnt)
+        {
+            nStart = nEnd;
+            nEnd = maScriptChanges[nIdx].changePos;
+            nScript = maScriptChanges[nIdx].scriptType;
+        }
+        else
+            break;
+    }
+    while(true);
 
     mrOutputDev.Pop();
 
     return true;
+}
+
+void CommonStylePreviewRenderer::CheckScript()
+{
+    assert(!maStyleName.isEmpty()); // must have a preview text here!
+    if (maStyleName == maScriptText)
+        return; // already initialized
+
+    maScriptText = maStyleName;
+    maScriptChanges.clear();
+
+    if (!mxBreak.is())
+    {
+        auto xContext = comphelper::getProcessComponentContext();
+        mxBreak = css::i18n::BreakIterator::create(xContext);
+    }
+
+    sal_Int16 nScript = mxBreak->getScriptType(maStyleName, 0);
+    sal_Int32 nChg = 0;
+    if (css::i18n::ScriptType::WEAK == nScript)
+    {
+        nChg = mxBreak->endOfScript(maStyleName, nChg, nScript);
+        if (nChg < maStyleName.getLength())
+            nScript = mxBreak->getScriptType(maStyleName, nChg);
+        else
+            nScript = css::i18n::ScriptType::LATIN;
+    }
+
+    while (true)
+    {
+        nChg = mxBreak->endOfScript(maStyleName, nChg, nScript);
+        maScriptChanges.emplace_back(nScript, nChg);
+        if (nChg >= maStyleName.getLength() || nChg < 0)
+            break;
+        nScript = mxBreak->getScriptType(maStyleName, nChg);
+    }
 }
 
 } // end svx namespace
