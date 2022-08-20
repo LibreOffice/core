@@ -268,7 +268,7 @@ void StgReader::SetFltName( const OUString& rFltNm )
         m_aFltName = rFltNm;
 }
 
-void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
+void CalculateFlySize(SfxItemSet& rFlySet, const SwNode& rAnchor,
         SwTwips nPageWidth)
 {
     const SwFormatFrameSize* pFrameSizeItem = rFlySet.GetItemIfSet( RES_FRM_SIZE );
@@ -281,7 +281,7 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
         SwTwips nWidth;
         // determine the width; if there is a table use the width of the table;
         // otherwise use the width of the page
-        const SwTableNode* pTableNd = rAnchor.GetNode().FindTableNode();
+        const SwTableNode* pTableNd = rAnchor.FindTableNode();
         if( pTableNd )
             nWidth = pTableNd->GetTable().GetFrameFormat()->GetFrameSize().GetWidth();
         else

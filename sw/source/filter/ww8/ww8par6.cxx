@@ -2745,7 +2745,7 @@ void SwWW8ImplReader::StopApo()
 
             if (!m_bFuzzing)
             {
-                CalculateFlySize(aFlySet, m_xSFlyPara->xMainTextPos->GetPoint()->nNode,
+                CalculateFlySize(aFlySet, m_xSFlyPara->xMainTextPos->GetPoint()->GetNode(),
                     m_xSFlyPara->nWidth);
             }
 
