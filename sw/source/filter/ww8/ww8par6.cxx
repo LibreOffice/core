@@ -2559,7 +2559,7 @@ bool SwWW8ImplReader::JoinNode(SwPaM &rPam, bool bStealAttr)
         m_aSectionManager.JoinNode(*rPam.GetPoint(), aPref.GetNode());
         rPam.GetPoint()->Assign(*pNode, pNode->GetText().getLength());
         if (bStealAttr)
-            m_xCtrlStck->StealAttr(rPam.GetPoint()->nNode);
+            m_xCtrlStck->StealAttr(rPam.GetPoint()->GetNode());
 
         if (m_oLastAnchorPos || m_xPreviousNode || (m_xSFlyPara && m_xSFlyPara->xMainTextPos))
         {
