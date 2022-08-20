@@ -188,7 +188,7 @@ void SwEditShell::SplitNode( bool bAutoFormat, bool bCheckTableStart )
     for(SwPaM& rPaM : GetCursor()->GetRingContainer())
     {
         // Here, a table cell becomes a normal text cell.
-        GetDoc()->ClearBoxNumAttrs( rPaM.GetPoint()->nNode );
+        GetDoc()->ClearBoxNumAttrs( rPaM.GetPoint()->GetNode() );
         GetDoc()->getIDocumentContentOperations().SplitNode( *rPaM.GetPoint(), bCheckTableStart );
     }
 
@@ -210,7 +210,7 @@ bool SwEditShell::AppendTextNode()
 
     for(SwPaM& rPaM : GetCursor()->GetRingContainer())
     {
-        GetDoc()->ClearBoxNumAttrs( rPaM.GetPoint()->nNode );
+        GetDoc()->ClearBoxNumAttrs( rPaM.GetPoint()->GetNode() );
         bRet = GetDoc()->getIDocumentContentOperations().AppendTextNode( *rPaM.GetPoint()) || bRet;
     }
 

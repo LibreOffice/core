@@ -4239,9 +4239,9 @@ void SwDoc::ClearLineNumAttrs( SwPosition const & rPos )
     pTextNode->SetAttr( rSet );
 }
 
-void SwDoc::ClearBoxNumAttrs( const SwNodeIndex& rNode )
+void SwDoc::ClearBoxNumAttrs( SwNode& rNode )
 {
-    SwStartNode* pSttNd = rNode.GetNode().FindSttNodeByType( SwTableBoxStartNode );
+    SwStartNode* pSttNd = rNode.FindSttNodeByType( SwTableBoxStartNode );
     if( nullptr == pSttNd ||
         SwNodeOffset(2) != pSttNd->EndOfSectionIndex() - pSttNd->GetIndex())
         return;

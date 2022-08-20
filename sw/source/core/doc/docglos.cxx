@@ -183,7 +183,7 @@ bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const OUString& rEntry,
                 {
                     // We copy more than one Node to the current Box.
                     // However, we have to remove the BoxAttributes then.
-                    ClearBoxNumAttrs( rInsPos.nNode );
+                    ClearBoxNumAttrs( rInsPos.GetNode() );
                 }
 
                 SwDontExpandItem aACD;

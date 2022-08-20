@@ -1267,7 +1267,7 @@ public:
     // Check if box has numerical value. Change format of box if required.
     void ChkBoxNumFormat( SwTableBox& rCurrentBox, bool bCallUpdate );
     void SetTableBoxFormulaAttrs( SwTableBox& rBox, const SfxItemSet& rSet );
-    void ClearBoxNumAttrs( const SwNodeIndex& rNode );
+    void ClearBoxNumAttrs( SwNode& rNode );
     void ClearLineNumAttrs( SwPosition const & rPos );
 
     bool InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
