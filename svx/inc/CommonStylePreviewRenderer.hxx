@@ -10,6 +10,7 @@
 #pragma once
 
 #include <optional>
+#include <vector>
 
 #include <editeng/svxfont.hxx>
 #include <sfx2/objsh.hxx>
@@ -18,21 +19,45 @@
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
 
+#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/i18n/BreakIterator.hpp>
+
 class OutputDevice;
 class SfxStyleSheetBase;
+
+using namespace css;
 
 namespace svx
 {
 class CommonStylePreviewRenderer final : public sfx2::StylePreviewRenderer
 {
     std::optional<SvxFont> m_oFont;
+    std::optional<SvxFont> m_oCJKFont;
+    std::optional<SvxFont> m_oCTLFont;
     Color maFontColor;
     Color maHighlightColor;
     Color maBackgroundColor;
-    Size maPixelSize;
+    tools::Long mnHeight;
     OUString maStyleName;
+    OUString maScriptText;
+    css::uno::Reference<css::i18n::XBreakIterator> mxBreak;
+    struct ScriptInfo
+    {
+        tools::Long textWidth;
+        sal_uInt16 scriptType;
+        sal_Int32 changePos;
+        ScriptInfo(sal_uInt16 scrptType, sal_Int32 position)
+            : textWidth(0)
+            , scriptType(scrptType)
+            , changePos(position)
+        {
+        }
+    };
+    std::vector<ScriptInfo> maScriptChanges;
 
-    Size getRenderSize() const;
+    bool SetFontSize(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont);
+    void CalcRenderSize();
+    void CheckScript();
 
 public:
     CommonStylePreviewRenderer(const SfxObjectShell& rShell, OutputDevice& rOutputDev,
