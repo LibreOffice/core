@@ -425,7 +425,7 @@ sal_Int16 SvtFilePicker::implExecutePicker( )
     // now we are ready to execute the dialog
     sal_Int16 nRet = m_xDlg->run();
 
-    // the execution of the dialog yields, so it is possible the at this point the window or the dialog is closed
+    // coverity[check_after_deref] - the execution of the dialog yields, so it is possible the at this point the window or the dialog is closed
     if (m_xDlg)
         m_xDlg->SetFileCallback( nullptr );
 
