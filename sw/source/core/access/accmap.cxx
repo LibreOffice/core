@@ -2773,14 +2773,14 @@ void SwAccessibleMap::InvalidateRelationSet_( const SwFrame* pFrame,
     {
         osl::MutexGuard aGuard( maMutex );
 
-        if( mpFrameMap )
+        if (!mpFrameMap)
+            return;
+
+        SwAccessibleContextMap_Impl::iterator aIter =
+                                mpFrameMap->find( aFrameOrObj.GetSwFrame() );
+        if( aIter != mpFrameMap->end() )
         {
-            SwAccessibleContextMap_Impl::iterator aIter =
-                                    mpFrameMap->find( aFrameOrObj.GetSwFrame() );
-            if( aIter != mpFrameMap->end() )
-            {
-                xAcc = (*aIter).second;
-            }
+            xAcc = (*aIter).second;
         }
     }
 
