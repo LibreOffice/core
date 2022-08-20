@@ -31,10 +31,15 @@
 SwPamRanges::SwPamRanges( const SwPaM& rRing )
 {
     for(SwPaM& rTmp : const_cast<SwPaM*>(&rRing)->GetRingContainer())
-        Insert( rTmp.GetMark()->nNode, rTmp.GetPoint()->nNode );
+        Insert( rTmp.GetMark()->GetNode(), rTmp.GetPoint()->GetNode() );
 }
 
 void SwPamRanges::Insert( const SwNodeIndex& rIdx1, const SwNodeIndex& rIdx2 )
+{
+    Insert(rIdx1.GetNode(), rIdx2.GetNode());
+}
+
+void SwPamRanges::Insert( const SwNode& rIdx1, const SwNode& rIdx2 )
 {
     SwPamRange aRg( rIdx1.GetIndex(), rIdx2.GetIndex() );
     if( aRg.nEnd < aRg.nStart )
@@ -704,9 +709,9 @@ const SwNumRule* SwEditShell::GetNumRuleAtCurrentSelection() const
     bool bDifferentNumRuleFound = false;
     for(const SwPaM& rCurrentCursor : GetCursor()->GetRingContainer())
     {
-        const SwNodeIndex aEndNode = rCurrentCursor.End()->nNode;
+        const SwNode& rEndNode(rCurrentCursor.End()->GetNode());
 
-        for ( SwNodeIndex aNode = rCurrentCursor.Start()->nNode; aNode <= aEndNode; ++aNode )
+        for ( SwNodeIndex aNode(rCurrentCursor.Start()->GetNode()); aNode <= rEndNode; ++aNode )
         {
             SwPosition pos(aNode);
             const SwNumRule* pNumRule = SwDoc::GetNumRuleAtPos(pos, GetLayout());
