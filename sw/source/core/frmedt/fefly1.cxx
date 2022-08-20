@@ -502,7 +502,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
         SwPosition aPos( GetDoc()->GetNodes().GetEndOfExtras() );
         Point aTmpPnt( rAbsPos );
         GetLayout()->GetModelPositionForViewPoint( &aPos, aTmpPnt, &aState );
-        if (aPos.nNode != GetDoc()->GetNodes().GetEndOfExtras().GetIndex()
+        if (aPos.GetNode() != GetDoc()->GetNodes().GetEndOfExtras()
             && (nAnchorId != RndStdIds::FLY_AT_CHAR || !PosInsideInputField(aPos)))
         {
             SwContentNode* pCNode = aPos.GetNode().GetContentNode();
@@ -1448,8 +1448,8 @@ SwFrameFormat* SwFEShell::WizardGetFly()
     SwFrameFormats& rSpzArr = *mxDoc->GetSpzFrameFormats();
     if( !rSpzArr.empty() )
     {
-        SwNodeIndex& rCursorNd = GetCursor()->GetPoint()->nNode;
-        if( rCursorNd.GetIndex() > mxDoc->GetNodes().GetEndOfExtras().GetIndex() )
+        SwNode& rCursorNd = GetCursor()->GetPoint()->GetNode();
+        if( rCursorNd > mxDoc->GetNodes().GetEndOfExtras() )
             // Cursor is in the body area!
             return nullptr;
 
@@ -1459,8 +1459,8 @@ SwFrameFormat* SwFEShell::WizardGetFly()
             SwStartNode* pSttNd;
             if( pIdx &&
                 nullptr != ( pSttNd = pIdx->GetNode().GetStartNode() ) &&
-                pSttNd->GetIndex() < rCursorNd.GetIndex() &&
-                rCursorNd.GetIndex() < pSttNd->EndOfSectionIndex() )
+                *pSttNd < rCursorNd &&
+                rCursorNd < *pSttNd->EndOfSectionNode() )
             {
                 // found: return immediately
                 return pFormat;

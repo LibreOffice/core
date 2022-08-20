@@ -125,7 +125,7 @@ struct ObjAnchorOrder
         const SwPosition* pContentAnchorListed = pAnchorListed->GetContentAnchor();
         const SwPosition* pContentAnchorNew = pAnchorNew->GetContentAnchor();
         if ( pContentAnchorListed && pContentAnchorNew &&
-             pContentAnchorListed->nNode != pContentAnchorNew->nNode )
+             pContentAnchorListed->GetNode() != pContentAnchorNew->GetNode() )
         {
             return pContentAnchorListed->GetNode() < pContentAnchorNew->GetNode();
         }

@@ -2977,13 +2977,13 @@ void SwFlyFrameFormat::MakeFrames()
             // #i105535#
             if ( pModify == nullptr )
             {
-                const SwNodeIndex &rIdx = aAnchorAttr.GetContentAnchor()->nNode;
+                const SwNode & rNd = aAnchorAttr.GetContentAnchor()->GetNode();
                 SwFrameFormats& rFormats = *GetDoc()->GetSpzFrameFormats();
                 for( size_t i = 0; i < rFormats.size(); ++i )
                 {
                     SwFrameFormat* pFlyFormat = rFormats[i];
                     if( pFlyFormat->GetContent().GetContentIdx() &&
-                        rIdx == *pFlyFormat->GetContent().GetContentIdx() )
+                        rNd == pFlyFormat->GetContent().GetContentIdx()->GetNode() )
                     {
                         pModify = pFlyFormat;
                         break;
@@ -3327,8 +3327,8 @@ SwHandleAnchorNodeChg::SwHandleAnchorNodeChg( SwFlyFrameFormat& _rFlyFrameFormat
         if ( aOldAnchorFormat.GetAnchorId() == nNewAnchorType &&
              aOldAnchorFormat.GetContentAnchor() &&
              aOldAnchorFormat.GetContentAnchor()->GetNode().GetContentNode() &&
-             aOldAnchorFormat.GetContentAnchor()->nNode !=
-                                    _rNewAnchorFormat.GetContentAnchor()->nNode )
+             aOldAnchorFormat.GetContentAnchor()->GetNode() !=
+                                    _rNewAnchorFormat.GetContentAnchor()->GetNode() )
         {
             // determine 'old' number of anchor frames
             sal_uInt32 nOldNumOfAnchFrame( 0 );
