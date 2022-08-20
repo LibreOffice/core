@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66143a06_b6aca81d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000521
+      },
+      "writtenOn": "2022-08-20T15:41:10Z",
+      "side": 1,
+      "message": "Build failure not related to this patch",
+      "revId": "d3623d8a296ab70487d1401f90c0f79bc509af94",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
