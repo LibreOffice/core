@@ -2031,7 +2031,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
                            getFrameArea() );
     if( !pStartPos->GetNode().IsContentNode() ||
         !pStartPos->GetNode().GetContentNode()->getLayoutFrame(this) ||
-        ( pStartPos->nNode != pEndPos->nNode &&
+        ( pStartPos->GetNode() != pEndPos->GetNode() &&
           ( !pEndPos->GetNode().IsContentNode() ||
             !pEndPos->GetNode().GetContentNode()->getLayoutFrame(this) ) ) )
     {
