@@ -47,6 +47,9 @@ SvxUnoTextContentEnumeration::SvxUnoTextContentEnumeration( const SvxUnoTextBase
         mpEditSource = rText.GetEditSource()->Clone();
     mnNextParagraph = 0;
 
+    if (!mpEditSource)
+        return;
+
     const SvxTextForwarder* pTextForwarder = rText.GetEditSource()->GetTextForwarder();
     const sal_Int32 maxParaIndex = std::min( rSel.nEndPara + 1, pTextForwarder->GetParagraphCount() );
 
