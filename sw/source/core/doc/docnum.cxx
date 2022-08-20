@@ -2387,10 +2387,10 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
     return true;
 }
 
-bool SwDoc::NumOrNoNum( const SwNodeIndex& rIdx, bool bDel )
+bool SwDoc::NumOrNoNum( SwNode& rIdx, bool bDel )
 {
     bool bResult = false;
-    SwTextNode * pTextNd = rIdx.GetNode().GetTextNode();
+    SwTextNode * pTextNd = rIdx.GetTextNode();
 
     if (pTextNd && pTextNd->GetNumRule() != nullptr &&
         (pTextNd->HasNumber() || pTextNd->HasBullet()))

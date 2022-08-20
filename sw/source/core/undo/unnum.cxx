@@ -279,9 +279,9 @@ void SwUndoNumUpDown::RepeatImpl(::sw::RepeatContext & rContext)
     rContext.GetDoc().NumUpDown(rContext.GetRepeatPaM(), 1 == m_nOffset);
 }
 
-SwUndoNumOrNoNum::SwUndoNumOrNoNum( const SwNodeIndex& rIdx, bool bOldNum,
+SwUndoNumOrNoNum::SwUndoNumOrNoNum( const SwNode& rIdx, bool bOldNum,
                                     bool bNewNum)
-    : SwUndo( SwUndoId::NUMORNONUM, &rIdx.GetNode().GetDoc() ),
+    : SwUndo( SwUndoId::NUMORNONUM, &rIdx.GetDoc() ),
       m_nIndex( rIdx.GetIndex() ), mbNewNum(bNewNum),
       mbOldNum(bOldNum)
 {
@@ -316,11 +316,11 @@ void SwUndoNumOrNoNum::RepeatImpl(::sw::RepeatContext & rContext)
     SwDoc & rDoc = rContext.GetDoc();
     if (mbOldNum && ! mbNewNum)
     {
-        rDoc.NumOrNoNum(rContext.GetRepeatPaM().GetPoint()->nNode);
+        rDoc.NumOrNoNum(rContext.GetRepeatPaM().GetPoint()->GetNode());
     }
     else if ( ! mbOldNum && mbNewNum )
     {
-        rDoc.NumOrNoNum(rContext.GetRepeatPaM().GetPoint()->nNode, true);
+        rDoc.NumOrNoNum(rContext.GetRepeatPaM().GetPoint()->GetNode(), true);
     }
 }
 

@@ -641,7 +641,7 @@ bool SwEditShell::NumOrNoNum(
     {
         StartAllAction();
         SwPosition const pos(sw::GetParaPropsPos(*GetLayout(), *GetCursor()->GetPoint()));
-        bRet = GetDoc()->NumOrNoNum(pos.nNode, !bNumOn);
+        bRet = GetDoc()->NumOrNoNum(pos.GetNode(), !bNumOn);
         EndAllAction();
     }
     return bRet;
