@@ -1859,6 +1859,50 @@ lcl_GetMnemonicPos(OutputDevice const& rTargetDevice, sal_Int32* const pCaretXAr
     return std::make_tuple(nMnemonicX, nMnemonicY, nMnemonicWidth);
 }
 
+static void
+lcl_DrawMnemonicLinesExceptLast(OutputDevice& rTargetDevice, tools::Rectangle const& rRect,
+                                ImplMultiTextLineInfo const& rMultiLineInfo,
+                                vcl::ITextLayout& rLayout, OUString const& rStr,
+                                OUString* const pDisplayText, const DrawTextFlags nStyle,
+                                std::vector<tools::Rectangle>* const pVector, Point const& rPos,
+                                const sal_Int32 nMnemonicIndex, const sal_Int32 nFormatLines)
+
+{
+    Point aPos(rPos);
+    const tools::Long nTextHeight = rTargetDevice.GetTextHeight();
+
+    // Output all lines except for the last one
+    for (sal_Int32 i = 0; i < nFormatLines; i++)
+    {
+        ImplTextLineInfo const& rLineInfo = rMultiLineInfo.GetLine(i);
+
+        if (nStyle & DrawTextFlags::Right)
+            aPos.AdjustX(rRect.GetWidth() - rLineInfo.GetWidth());
+        else if (nStyle & DrawTextFlags::Center)
+            aPos.AdjustX((rRect.GetWidth() - rLineInfo.GetWidth()) / 2);
+
+        sal_Int32 nIndex = rLineInfo.GetIndex();
+        sal_Int32 nLineLen = rLineInfo.GetLen();
+        rLayout.DrawText(aPos, rStr, nIndex, nLineLen, pVector, pDisplayText);
+
+        if (lcl_ShouldDrawMnemonics(rTargetDevice, pVector) && (nMnemonicIndex >= nIndex)
+            && (nMnemonicIndex < nIndex + nLineLen))
+        {
+            std::unique_ptr<sal_Int32[]> const pCaretXArray(new sal_Int32[2 * nLineLen]);
+            /*sal_Bool bRet =*/rLayout.GetCaretPositions(rStr, pCaretXArray.get(), nIndex,
+                                                         nLineLen);
+
+            auto[nMnemonicX, nMnemonicY, nMnemonicWidth] = lcl_GetMnemonicPos(
+                rTargetDevice, pCaretXArray.get(), aPos, nMnemonicIndex, nIndex);
+
+            rTargetDevice.DrawMnemonicLine(nMnemonicX, nMnemonicY, nMnemonicWidth);
+        }
+
+        aPos.AdjustY(nTextHeight);
+        aPos.setX(rRect.Left());
+    }
+}
+
 void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Rectangle& rRect,
                                  const OUString& rOrigStr, DrawTextFlags nStyle,
                                  std::vector< tools::Rectangle >* pVector, OUString* pDisplayText,
@@ -1945,36 +1989,8 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
             else if ( eAlign == ALIGN_BASELINE )
                 aPos.AdjustY(rTargetDevice.GetFontMetric().GetAscent() );
 
-            // Output all lines except for the last one
-            for (sal_Int32 i = 0; i < nFormatLines; i++)
-            {
-                ImplTextLineInfo& rLineInfo = aMultiLineInfo.GetLine( i );
-
-                if (nStyle & DrawTextFlags::Right)
-                    aPos.AdjustX(rRect.GetWidth() - rLineInfo.GetWidth());
-                else if (nStyle & DrawTextFlags::Center)
-                    aPos.AdjustX((rRect.GetWidth() - rLineInfo.GetWidth())/2 );
-
-                sal_Int32 nIndex   = rLineInfo.GetIndex();
-                sal_Int32 nLineLen = rLineInfo.GetLen();
-                _rLayout.DrawText( aPos, aStr, nIndex, nLineLen, pVector, pDisplayText );
-
-                if (lcl_ShouldDrawMnemonics(rTargetDevice, pVector)
-                    && (nMnemonicIndex >= nIndex) && (nMnemonicIndex < nIndex+nLineLen))
-                {
-                    std::unique_ptr<sal_Int32[]> const pCaretXArray(new sal_Int32[2 * nLineLen]);
-                    /*sal_Bool bRet =*/ _rLayout.GetCaretPositions( aStr, pCaretXArray.get(),
-                                            nIndex, nLineLen );
-
-                    auto [ nMnemonicX, nMnemonicY, nMnemonicWidth ]
-                        = lcl_GetMnemonicPos(rTargetDevice, pCaretXArray.get(), aPos, nMnemonicIndex, nIndex);
-
-                    rTargetDevice.ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
-                }
-
-                aPos.AdjustY(nTextHeight );
-                aPos.setX( rRect.Left() );
-            }
+            lcl_DrawMnemonicLinesExceptLast(rTargetDevice, rRect, aMultiLineInfo, _rLayout, aStr, pDisplayText,
+                                            nStyle, pVector, aPos, nMnemonicIndex, nFormatLines);
 
             // If there still is a last line, we output it left-aligned as the line would be clipped
             if ( !aLastLine.isEmpty() )
@@ -2042,14 +2058,14 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
             rTargetDevice.IntersectClipRegion( rRect );
             _rLayout.DrawText( aPos, aStr, 0, aStr.getLength(), pVector, pDisplayText );
             if (lcl_ShouldDrawMnemonics(rTargetDevice, pVector) && nMnemonicIndex != -1 )
-                rTargetDevice.ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
+                rTargetDevice.DrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
             rTargetDevice.Pop();
         }
         else
         {
             _rLayout.DrawText( aPos, aStr, 0, aStr.getLength(), pVector, pDisplayText );
             if (lcl_ShouldDrawMnemonics(rTargetDevice, pVector) && nMnemonicIndex != -1)
-                rTargetDevice.ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
+                rTargetDevice.DrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
         }
     }
 }
@@ -2280,7 +2296,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
     if ( !IsDeviceOutputNecessary() || (nIndex >= rStr.getLength()) )
         return;
 
-    // better get graphics here because ImplDrawMnemonicLine() will not
+    // better get graphics here because DrawMnemonicLine() will not
     // we need a graphics
     if( !mpGraphics && !AcquireGraphics() )
         return;
@@ -2357,7 +2373,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
             && (!autoacc || !(nStyle & DrawTextFlags::HideMnemonic)) )
         {
             if ( nMnemonicIndex != -1 )
-                ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
+                DrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
         }
     }
     else
@@ -2367,7 +2383,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
             && (!autoacc || !(nStyle & DrawTextFlags::HideMnemonic)) )
         {
             if ( nMnemonicIndex != -1 )
-                ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
+                DrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
         }
     }
 

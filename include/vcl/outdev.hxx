@@ -1052,6 +1052,7 @@ public:
                                               sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
                                               vcl::text::TextLayoutCache const* = nullptr,
                                               SalLayoutGlyphs const*const pLayoutCache = nullptr) const;
+    SAL_DLLPRIVATE void         DrawMnemonicLine(tools::Long nX, tools::Long nY, tools::Long nWidth);
 
     void                        GetCaretPositions( const OUString&, sal_Int32* pCaretXArray,
                                               sal_Int32 nIndex, sal_Int32 nLen,
@@ -1110,7 +1111,6 @@ private:
     SAL_DLLPRIVATE void         ImplDrawStraightTextLine( tools::Long nBaseX, tools::Long nBaseY, tools::Long nX, tools::Long nY, tools::Long nWidth, FontLineStyle eTextLine, Color aColor, bool bIsAbove );
     SAL_DLLPRIVATE void         ImplDrawStrikeoutLine( tools::Long nBaseX, tools::Long nBaseY, tools::Long nX, tools::Long nY, tools::Long nWidth, FontStrikeout eStrikeout, Color aColor );
     SAL_DLLPRIVATE void         ImplDrawStrikeoutChar( tools::Long nBaseX, tools::Long nBaseY, tools::Long nX, tools::Long nY, tools::Long nWidth, FontStrikeout eStrikeout, Color aColor );
-    SAL_DLLPRIVATE void         ImplDrawMnemonicLine( tools::Long nX, tools::Long nY, tools::Long nWidth );
 
     SAL_DLLPRIVATE bool         AttemptOLEFontScaleFix(vcl::Font& rFont, tools::Long nHeight) const;
 

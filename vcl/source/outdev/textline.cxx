@@ -866,7 +866,7 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout, FontStrikeout eStri
     }
 }
 
-void OutputDevice::ImplDrawMnemonicLine( tools::Long nX, tools::Long nY, tools::Long nWidth )
+void OutputDevice::DrawMnemonicLine(tools::Long nX, tools::Long nY, tools::Long nWidth)
 {
     tools::Long nBaseX = nX;
     if( /*HasMirroredGraphics() &&*/ IsRTLEnabled() )
