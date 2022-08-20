@@ -851,7 +851,7 @@ void MultiSalLayout::ImplAdjustMultiLayout(vcl::text::ImplLayoutArgs& rArgs,
         {
             // drop the NotDef glyphs in the base layout run if a fallback run exists
             while (
-                    (maFallbackRuns[n-1].PosIsInRun(pGlyphs[nFirstValid]->charPos())) &&
+                    (maFallbackRuns[n-1].PosIsInAnyRun(pGlyphs[nFirstValid]->charPos())) &&
                     (!maFallbackRuns[n].PosIsInAnyRun(pGlyphs[nFirstValid]->charPos()))
                   )
             {
