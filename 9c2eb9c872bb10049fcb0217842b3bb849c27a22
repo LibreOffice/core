@@ -16,6 +16,24 @@
       "message": "What is the correct bug ID for this?",
       "revId": "9c2eb9c872bb10049fcb0217842b3bb849c27a22",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9cbad32a_fccb3bf9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003606
+      },
+      "writtenOn": "2022-08-20T11:02:32Z",
+      "side": 1,
+      "message": "https://bugs.documentfoundation.org/show_bug.cgi?id\u003d73494",
+      "parentUuid": "5f019a44_2c88406a",
+      "revId": "9c2eb9c872bb10049fcb0217842b3bb849c27a22",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
