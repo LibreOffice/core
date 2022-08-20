@@ -851,7 +851,7 @@ IMAGE_SETEVENT:
 
         if ((RndStdIds::FLY_AS_CHAR == pFlyFormat->GetAnchor().GetAnchorId()) &&
             m_xAttrTab->pINetFormat->GetStartParagraph() ==
-                        m_pPam->GetPoint()->nNode &&
+                        m_pPam->GetPoint()->GetNode() &&
             m_xAttrTab->pINetFormat->GetStartContent() ==
                         m_pPam->GetPoint()->GetContentIndex() - 1 )
         {

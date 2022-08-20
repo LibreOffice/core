@@ -3159,7 +3159,7 @@ std::unique_ptr<HTMLTableCnts> SwHTMLParser::InsertTableContents(
     }
 
     // Reset attributation start
-    const SwNodeIndex& rSttPara = m_pPam->GetPoint()->nNode;
+    const SwNode& rSttPara = m_pPam->GetPoint()->GetNode();
     sal_Int32 nSttCnt = m_pPam->GetPoint()->GetContentIndex();
 
     HTMLAttr** pHTMLAttributes = reinterpret_cast<HTMLAttr**>(m_xAttrTab.get());
@@ -3843,7 +3843,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
         {
             HTMLTableContext* pTableContext = m_xTable ? m_xTable->GetContext() : nullptr;
             SwPosition* pSavedPos = pTableContext ? pTableContext->GetPos() : nullptr;
-            const bool bDeleteSafe = !pSavedPos || pSavedPos->nNode != m_pPam->GetPoint()->GetNode();
+            const bool bDeleteSafe = !pSavedPos || pSavedPos->GetNode() != m_pPam->GetPoint()->GetNode();
             if (bDeleteSafe)
                 StripTrailingPara();
         }
@@ -4926,7 +4926,7 @@ void SwHTMLParser::ClearFootnotesMarksInRange(const SwNodeIndex& rMkNdIdx, const
              (rAnch.GetAnchorId() == RndStdIds::FLY_AT_CHAR)) &&
             ( rMkNdIdx < pAPos->GetNode() && pAPos->GetNode() <= rPtNdIdx.GetNode() ))
         {
-            if( rPtNdIdx != pAPos->nNode )
+            if( rPtNdIdx != pAPos->GetNode() )
             {
                 // If the Fly is deleted, all Flys in its content have to be deleted too.
                 const SwFormatContent &rContent = pFormat->GetContent();

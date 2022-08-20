@@ -160,7 +160,7 @@ ErrCode SwASCIIParser::CallParser()
     sal_Int32 nSttContent = 0;
     if (!m_bNewDoc)
     {
-        const SwNodeIndex& rTmp = m_oPam->GetPoint()->nNode;
+        const SwNode& rTmp = m_oPam->GetPoint()->GetNode();
         pInsPam.emplace( rTmp, rTmp, SwNodeOffset(0), SwNodeOffset(-1) );
         nSttContent = m_oPam->GetPoint()->GetContentIndex();
     }

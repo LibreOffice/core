@@ -169,7 +169,7 @@ ErrCode SwReader::Read( const Reader& rOptions )
         if( bDocUndo || mpCursor )
         {
             // set Pam to the previous node, so that it is not also moved
-            const SwNodeIndex& rTmp = pPam->GetPoint()->nNode;
+            const SwNode& rTmp = pPam->GetPoint()->GetNode();
             pUndoPam.emplace( rTmp, rTmp, SwNodeOffset(0), SwNodeOffset(-1) );
         }
 

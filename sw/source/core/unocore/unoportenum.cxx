@@ -248,7 +248,7 @@ namespace
             pMarkAccess->findFirstAnnotationStartsAfter(aEndOfPara);
 
         // search for all annotation marks that have its start position in this paragraph
-        const SwNodeIndex nOwnNode = rUnoCursor.GetPoint()->nNode;
+        const SwNode& rOwnNode = rUnoCursor.GetPoint()->GetNode();
         for( IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getAnnotationMarksBegin();
              ppMark != pCandidatesEnd;
              ++ppMark )
@@ -260,7 +260,7 @@ namespace
                 continue;
 
             const SwPosition& rStartPos = pAnnotationMark->GetMarkStart();
-            if (rStartPos.nNode != nOwnNode)
+            if (rStartPos.GetNode() != rOwnNode)
                 continue;
 
             const SwFormatField* pAnnotationFormatField = pAnnotationMark->GetAnnotationFormatField();
