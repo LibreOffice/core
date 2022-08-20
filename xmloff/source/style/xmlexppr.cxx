@@ -929,6 +929,24 @@ void SvXMLExportPropertyMapper::_exportXML(
     }
 }
 
+namespace
+{
+// -1 = Attribute needs extended namespace, but current ODF version is strict.
+// 1 = Attribute needs extended namespace and current ODF version allows it.
+// 0 = Attribute does not need extended namespace
+sal_Int8 CheckExtendedNamespace(std::u16string_view sXMLAttributeName, std::u16string_view sValue,
+                                const SvtSaveOptions::ODFSaneDefaultVersion nODFVersion)
+{
+    if (IsXMLToken(sXMLAttributeName, XML_WRITING_MODE) && IsXMLToken(sValue, XML_BT_LR))
+        return nODFVersion & SvtSaveOptions::ODFSVER_EXTENDED ? 1 : -1;
+    else if (IsXMLToken(sXMLAttributeName, XML_VERTICAL_REL)
+             && (IsXMLToken(sValue, XML_PAGE_CONTENT_BOTTOM)
+                 || IsXMLToken(sValue, XML_PAGE_CONTENT_TOP)))
+        return nODFVersion & SvtSaveOptions::ODFSVER_EXTENDED ? 1 : -1;
+    return 0;
+}
+}
+
 void SvXMLExportPropertyMapper::_exportXML(
         SvXMLAttributeList& rAttrList,
         const XMLPropertyState& rProperty,
@@ -1057,31 +1075,14 @@ void SvXMLExportPropertyMapper::_exportXML(
 
             // We don't seem to have a generic mechanism to write an attribute in the extension
             // namespace in case of certain attribute values only, so do this manually.
-            if (IsXMLToken(mpImpl->mxPropMapper->GetEntryXMLName(rProperty.mnIndex), XML_WRITING_MODE))
-            {
-                if (IsXMLToken(aValue, XML_BT_LR))
-                {
-                    sName = rNamespaceMap.GetQNameByKey(
-                            XML_NAMESPACE_LO_EXT,
-                            mpImpl->mxPropMapper->GetEntryXMLName(rProperty.mnIndex));
-                }
-            }
-            else if (IsXMLToken(mpImpl->mxPropMapper->GetEntryXMLName(rProperty.mnIndex), XML_VERTICAL_REL))
-            {
-                if (IsXMLToken(aValue, XML_PAGE_CONTENT_BOTTOM))
-                {
-                    sName = rNamespaceMap.GetQNameByKey(
-                            XML_NAMESPACE_LO_EXT,
-                            mpImpl->mxPropMapper->GetEntryXMLName(rProperty.mnIndex));
-                }
-                if (IsXMLToken(aValue, XML_PAGE_CONTENT_TOP))
-                {
-                    sName = rNamespaceMap.GetQNameByKey(
-                            XML_NAMESPACE_LO_EXT,
-                            mpImpl->mxPropMapper->GetEntryXMLName(rProperty.mnIndex));
-                }
-            }
-
+            sal_Int8 nExtendedStatus
+                = CheckExtendedNamespace(mpImpl->mxPropMapper->GetEntryXMLName(rProperty.mnIndex),
+                                         aValue, rUnitConverter.getSaneDefaultVersion());
+            if (nExtendedStatus == -1)
+                return;
+            if (nExtendedStatus == 1)
+                sName = rNamespaceMap.GetQNameByKey(
+                    XML_NAMESPACE_LO_EXT, mpImpl->mxPropMapper->GetEntryXMLName(rProperty.mnIndex));
             rAttrList.AddAttribute( sName, aValue );
         }
     }
