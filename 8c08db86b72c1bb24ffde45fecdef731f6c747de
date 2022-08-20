@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "586d2f85_9aa2f212",
+        "filename": "vcl/source/outdev/text.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1389,
+      "author": {
+        "id": 1003606
+      },
+      "writtenOn": "2022-08-20T11:58:22Z",
+      "side": 1,
+      "message": "I’m wondering if we can move this down even further and keep using the logical units and convert to font units right when drawing to graphics implementation? Would this help much (I’m still not clear how this map mode works).",
+      "revId": "8c08db86b72c1bb24ffde45fecdef731f6c747de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
