@@ -2301,7 +2301,18 @@ template<>
 struct hash<::rtl::OString>
 {
     std::size_t operator()(::rtl::OString const & s) const
-    { return std::size_t(s.hashCode()); }
+    {
+        if constexpr (sizeof(std::size_t) == 8)
+        {
+            // return a hash that uses the full 64-bit range instead of a 32-bit value
+            size_t n = 0;
+            for (sal_Int32 i = 0, len = s.getLength(); i < len; ++i)
+                n = 31 * n + s[i];
+            return n;
+        }
+        else
+            return std::size_t(s.hashCode());
+    }
 };
 
 }
