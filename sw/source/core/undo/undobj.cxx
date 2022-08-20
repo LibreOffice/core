@@ -746,7 +746,7 @@ void SwUndoSaveContent::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
 
     if( pCpyNd || pEndNdIdx )
     {
-        SwNodeRange aRg( pStt->nNode, SwNodeOffset(0), pEnd->nNode, SwNodeOffset(1) );
+        SwNodeRange aRg( pStt->GetNode(), SwNodeOffset(0), pEnd->GetNode(), SwNodeOffset(1) );
         rDoc.GetNodes().MoveNodes( aRg, rNds, aPos.GetNode(), true );
         aPos.nContent = 0;
         --aPos.nNode;
@@ -1673,7 +1673,7 @@ bool IsSelectFrameAnchoredAtPara(SwPosition const & rAnchorPos,
             || (rStart.GetNode() == rAnchorPos.GetNode()
                 && !(nDelContentType & DelContentType::ExcludeFlyAtStartEnd)
                 // special case: fully deleted node
-                && ((rStart.nNode != rEnd.nNode && rStart.GetContentIndex() == 0
+                && ((rStart.GetNode() != rEnd.GetNode() && rStart.GetContentIndex() == 0
                         // but not if the selection is backspace/delete!
                         && IsNotBackspaceHeuristic(rStart, rEnd))
                     || (IsAtStartOfSection2(rStart) && IsAtEndOfSection2(rEnd)))))
@@ -1681,7 +1681,7 @@ bool IsSelectFrameAnchoredAtPara(SwPosition const & rAnchorPos,
             || (rAnchorPos.GetNode() == rEnd.GetNode()
                 && !(nDelContentType & DelContentType::ExcludeFlyAtStartEnd)
                 // special case: fully deleted node
-                && ((rEnd.nNode != rStart.nNode && rEnd.GetContentIndex() == rEnd.GetNode().GetTextNode()->Len()
+                && ((rEnd.GetNode() != rStart.GetNode() && rEnd.GetContentIndex() == rEnd.GetNode().GetTextNode()->Len()
                         && IsNotBackspaceHeuristic(rStart, rEnd))
                     || (IsAtEndOfSection2(rEnd) && IsAtStartOfSection2(rStart)))));
 }

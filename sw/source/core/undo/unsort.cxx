@@ -235,7 +235,7 @@ void SwUndoSort::RepeatImpl(::sw::RepeatContext & rContext)
         SwPaM *const pPam = & rContext.GetRepeatPaM();
         SwDoc& rDoc = pPam->GetDoc();
 
-        if( !SwDoc::IsIdxInTable( pPam->Start()->nNode ) )
+        if( !SwDoc::IsInTable( pPam->Start()->GetNode() ) )
             rDoc.SortText(*pPam, *m_pSortOptions);
     }
 }

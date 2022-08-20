@@ -321,14 +321,13 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
         }
     }
 
-    SwNodeIndex& rIdx = rPam.GetPoint()->nNode;
-    SwTextNode* pTextNode = rIdx.GetNode().GetTextNode();
+    SwTextNode* pTextNode = rPam.GetPoint()->GetNode().GetTextNode();
     if( !pTextNode )
         return;
 
     if( !m_pTextFormatColl ) // if 0 than it's no TextNode -> delete
     {
-        SwNodeIndex aDelIdx( rIdx );
+        SwNodeIndex aDelIdx( *pTextNode );
         assert(SwNodeOffset(0) < m_nDeleteTextNodes && m_nDeleteTextNodes < SwNodeOffset(3));
         for (SwNodeOffset i(0); i < m_nDeleteTextNodes; ++i)
         {
@@ -348,8 +347,8 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
         if( bJoinNext && pTextNode->CanJoinNext())
         {
             {
-                RemoveIdxRel( rIdx.GetIndex()+1,
-                    SwPosition( rIdx, pTextNode, pTextNode->GetText().getLength() ) );
+                RemoveIdxRel( pTextNode->GetIndex()+1,
+                    SwPosition( *pTextNode, pTextNode, pTextNode->GetText().getLength() ) );
             }
             pTextNode->JoinNext();
         }
@@ -429,7 +428,7 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
     m_pTextFormatColl = pSavTextFormatColl;
 
     if (m_pLastNodeColl && rDoc.GetTextFormatColls()->IsAlive(m_pLastNodeColl)
-        && rPam.GetPoint()->nNode != rPam.GetMark()->nNode)
+        && rPam.GetPoint()->GetNode() != rPam.GetMark()->GetNode())
     {
         SwTextNode* pTextNd = rPam.GetPoint()->GetNode().GetTextNode();
         if( pTextNd )
