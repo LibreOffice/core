@@ -379,7 +379,10 @@ void DocumentFieldsManager::RemoveFieldType(size_t nField)
         OSL_ENSURE( !pTmp->HasWriterListeners(), "Dependent fields present!" );
     }
     else
-        (*mpFieldTypes)[nField].release(); // DB fields are ref-counted and delete themselves
+    {
+        // coverity[leaked_storage] - at this point DB fields are ref-counted and delete themselves
+        (*mpFieldTypes)[nField].release();
+    }
 
     mpFieldTypes->erase( mpFieldTypes->begin() + nField );
     m_rDoc.getIDocumentState().SetModified();
