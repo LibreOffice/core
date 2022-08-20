@@ -939,7 +939,7 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
             SwPaM& rCopy = *item.first;
             const SwStartNode* pBoxNd = rInsPos.GetNode().FindTableBoxStartNode();
             if( pBoxNd && SwNodeOffset(2) == pBoxNd->EndOfSectionIndex() - pBoxNd->GetIndex() &&
-                rCopy.GetPoint()->nNode != rCopy.GetMark()->nNode )
+                rCopy.GetPoint()->GetNode() != rCopy.GetMark()->GetNode() )
             {
                 // if more than one node will be copied into a cell
                 // the box attributes have to be removed
@@ -966,7 +966,7 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
         for(SwPaM& rPaM : GetCursor()->GetRingContainer())
         {
 
-            SwTableNode *const pDestNd(SwDoc::IsIdxInTable(rPaM.GetPoint()->nNode));
+            SwTableNode *const pDestNd(SwDoc::IsInTable(rPaM.GetPoint()->GetNode()));
             if (pSrcNd && nullptr != pDestNd &&
                 // not a forced nested table insertion
                 !bNestedTable &&
@@ -1074,7 +1074,7 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
                                                     FindTableBoxStartNode();
                 if( pBoxNd && SwNodeOffset(2) == pBoxNd->EndOfSectionIndex() -
                                 pBoxNd->GetIndex() &&
-                    aCpyPam.GetPoint()->nNode != aCpyPam.GetMark()->nNode )
+                    aCpyPam.GetPoint()->GetNode() != aCpyPam.GetMark()->GetNode() )
                 {
                     // Copy more than 1 node in the current box. But
                     // then the BoxAttribute should be removed

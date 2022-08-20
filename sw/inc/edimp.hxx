@@ -45,6 +45,7 @@ public:
     SwPamRanges( const SwPaM& rRing );
 
     void Insert( const SwNodeIndex& rIdx1, const SwNodeIndex& rIdx2 );
+    void Insert( const SwNode& rIdx1, const SwNode& rIdx2 );
     SwPaM& SetPam( size_t nArrPos, SwPaM& rPam );
 
     size_t Count() const
