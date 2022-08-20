@@ -23,6 +23,9 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 
 #include <comphelper/propertysequence.hxx>
+#include <officecfg/Office/Common.hxx>
+#include <unotools/mediadescriptor.hxx>
+#include <unotools/saveopt.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <rtl/character.hxx>
@@ -45,6 +48,7 @@ public:
     void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override;
     uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
     void load(std::u16string_view rURL);
+    void save(const OUString& rFilterName, utl::TempFile& rTempFile);
 };
 
 void XmloffStyleTest::setUp()
@@ -71,6 +75,16 @@ void XmloffStyleTest::load(std::u16string_view rFileName)
 {
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + rFileName;
     mxComponent = loadFromDesktop(aURL);
+}
+
+void XmloffStyleTest::save(const OUString& rFilterName, utl::TempFile& rTempFile)
+{
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= rFilterName;
+    rTempFile.EnableKillingFile();
+    xStorable->storeToURL(rTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    validate(rTempFile.GetFileName(), test::ODF);
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testFillImageBase64)
@@ -195,6 +209,183 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testRtlGutter)
     // Without the accompanying fix in place, this test would have failed as
     // <style:page-layout-properties>'s style:writing-mode="..." did not affect RtlGutter.
     CPPUNIT_ASSERT(bRtlGutter);
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testWritingModeBTLR)
+{
+    // Load document. It has a frame style with writing-mode bt-lr.
+    // In ODF 1.3 extended it is written as loext:writing-mode="bt-lr".
+    // In ODF 1.3 strict, there must not be an attribute at all.
+    getComponent() = loadFromDesktop(m_directories.getURLFromSrc(DATA_DIRECTORY)
+                                         + "tdf150407_WritingModeBTLR_style.odt",
+                                     "com.sun.star.text.TextDocument");
+
+    Resetter _([]() {
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Save::ODF::DefaultVersion::set(3, pBatch);
+        return pBatch->commit();
+    });
+
+    // Save to ODF 1.3 extended. Adapt 3 (=ODFVER_LATEST) to a to be ODFVER_013_EXTENDED when
+    // attribute value "bt-lr" is included in ODF strict.
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Save::ODF::DefaultVersion::set(3, pBatch);
+        pBatch->commit();
+        utl::TempFile aTempFile;
+        save("writer8", aTempFile);
+
+        // With applied fix for tdf150407 still loext:writing-mode="bt-lr" has to be written.
+        std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "styles.xml");
+        xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+        assertXPath(pXmlDoc,
+                    "/office:document-styles/office:styles/style:style[@style:name='FrameBTLR']/"
+                    "style:graphic-properties[@loext:writing-mode]");
+        assertXPath(pXmlDoc,
+                    "/office:document-styles/office:styles/style:style[@style:name='FrameBTLR']/"
+                    "style:graphic-properties",
+                    "writing-mode", "bt-lr");
+    }
+    // Save to ODF 1.3 strict.
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Save::ODF::DefaultVersion::set(10, pBatch);
+        pBatch->commit();
+        utl::TempFile aTempFile;
+        save("writer8", aTempFile);
+
+        // Without the fix an faulty 'writing-mode="bt-lr"' attribute was written in productive build.
+        // A debug build fails assertion in SvXMLNamespaceMap::GetQNameByKey().
+        std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "styles.xml");
+        xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+        assertXPathNoAttribute(pXmlDoc,
+                               "/office:document-styles/office:styles/"
+                               "style:style[@style:name='FrameBTLR']/style:graphic-properties",
+                               "writing-mode");
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelBottomMargin)
+{
+    // Load document. It has a frame position with vertical position relative to bottom margin.
+    // In ODF 1.3 extended it is written as loext:vertical-rel="page-content-bottom".
+    // In ODF 1.3 strict, there must not be an attribute at all.
+    getComponent() = loadFromDesktop(m_directories.getURLFromSrc(DATA_DIRECTORY)
+                                         + "tdf150407_PosRelBottomMargin.docx",
+                                     "com.sun.star.text.TextDocument");
+
+    Resetter _([]() {
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Save::ODF::DefaultVersion::set(3, pBatch);
+        return pBatch->commit();
+    });
+
+    // Save to ODF 1.3 extended. Adapt 3 (=ODFVER_LATEST) to a to be ODFVER_013_EXTENDED when
+    // attribute value "page-content-bottom" is included in ODF strict.
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Save::ODF::DefaultVersion::set(3, pBatch);
+        pBatch->commit();
+        utl::TempFile aTempFile;
+        save("writer8", aTempFile);
+
+        // With applied fix for tdf150407 still loext:vertical-rel="page-content-bottom" has to be
+        // written.
+        std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "content.xml");
+        xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+        assertXPath(
+            pXmlDoc,
+            "/office:document-content/office:automatic-styles/style:style[@style:name='gr1']/"
+            "style:graphic-properties[@loext:vertical-rel]");
+        assertXPath(
+            pXmlDoc,
+            "/office:document-content/office:automatic-styles/style:style[@style:name='gr1']/"
+            "style:graphic-properties",
+            "vertical-rel", "page-content-bottom");
+    }
+    // Save to ODF 1.3 strict.
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Save::ODF::DefaultVersion::set(10, pBatch);
+        pBatch->commit();
+        utl::TempFile aTempFile;
+        save("writer8", aTempFile);
+
+        // Without the fix an faulty 'vertical-rel="page-content-bottom"' attribute was written in
+        // productive build. A debug build fails assertion in SvXMLNamespaceMap::GetQNameByKey().
+        std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "content.xml");
+        xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+        assertXPathNoAttribute(pXmlDoc,
+                               "/office:document-content/office:automatic-styles/"
+                               "style:style[@style:name='gr1']/style:graphic-properties",
+                               "vertical-rel");
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelTopMargin)
+{
+    // Load document. It has a frame position with vertical position relative to top margin.
+    // In ODF 1.3 extended it is written as loext:vertical-rel="page-content-top".
+    // In ODF 1.3 strict, there must not be an attribute at all.
+    getComponent() = loadFromDesktop(m_directories.getURLFromSrc(DATA_DIRECTORY)
+                                         + "tdf150407_PosRelTopMargin.docx",
+                                     "com.sun.star.text.TextDocument");
+
+    Resetter _([]() {
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Save::ODF::DefaultVersion::set(3, pBatch);
+        return pBatch->commit();
+    });
+
+    // Save to ODF 1.3 extended. Adapt 3 (=ODFVER_LATEST) to a to be ODFVER_013_EXTENDED when
+    // attribute value "page-content-top" is included in ODF strict.
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Save::ODF::DefaultVersion::set(3, pBatch);
+        pBatch->commit();
+        utl::TempFile aTempFile;
+        save("writer8", aTempFile);
+
+        // With applied fix for tdf150407 still loext:vertical-rel="page-content-top has to be
+        // written.
+        std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "content.xml");
+        xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+        assertXPath(
+            pXmlDoc,
+            "/office:document-content/office:automatic-styles/style:style[@style:name='gr1']/"
+            "style:graphic-properties[@loext:vertical-rel]");
+        assertXPath(
+            pXmlDoc,
+            "/office:document-content/office:automatic-styles/style:style[@style:name='gr1']/"
+            "style:graphic-properties",
+            "vertical-rel", "page-content-top");
+    }
+    // Save to ODF 1.3 strict.
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Save::ODF::DefaultVersion::set(10, pBatch);
+        pBatch->commit();
+        utl::TempFile aTempFile;
+        save("writer8", aTempFile);
+
+        // Without the fix an faulty 'vertical-rel="page-content-top"' attribute was written in
+        // productive build. A debug build fails assertion in SvXMLNamespaceMap::GetQNameByKey().
+        std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "content.xml");
+        xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+        assertXPathNoAttribute(pXmlDoc,
+                               "/office:document-content/office:automatic-styles/"
+                               "style:style[@style:name='gr1']/style:graphic-properties",
+                               "vertical-rel");
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
