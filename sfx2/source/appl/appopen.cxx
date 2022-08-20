@@ -778,6 +778,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     }
 
     const SfxStringItem* pFileName = rReq.GetArg<SfxStringItem>(SID_FILE_NAME);
+    assert(pFileName && "SID_FILE_NAME is required");
     OUString aFileName = pFileName->GetValue();
 
     OUString aReferer;
