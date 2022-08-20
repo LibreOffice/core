@@ -1540,7 +1540,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
                 pDestNd->SplitContentNode(rPos, nullptr);
             }
 
-            if( rPos.GetNodeIndex() == aEndIdx.GetIndex() )
+            if( rPos.GetNode() == aEndIdx.GetNode() )
             {
                 --aEndIdx;
             }

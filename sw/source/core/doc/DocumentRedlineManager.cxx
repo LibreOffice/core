@@ -2305,7 +2305,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                                 {
                                     SwTableNode* pTable = aIdx2.GetNode().GetTableNode();
                                     if( pTable &&
-                                        pTable->EndOfSectionNode()->GetIndex() == aIdx.GetIndex() )
+                                        *pTable->EndOfSectionNode() == aIdx.GetNode() )
                                     {
                                        aIdx = aIdx2;
                                        break;

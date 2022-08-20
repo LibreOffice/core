@@ -1718,8 +1718,8 @@ SwXText::convertToTextFrame(
         // added nodes
         if (!isGraphicNode(pFrameFormat)
             && (   (RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId()
-                    && (    oAnchorCheckPam->Start()->nNode.GetIndex() == rAnchor.GetContentAnchor()->nNode.GetIndex()
-                        ||  oAnchorCheckPam->End()->nNode.GetIndex() == rAnchor.GetContentAnchor()->nNode.GetIndex()))
+                    && (    oAnchorCheckPam->Start()->GetNode() == rAnchor.GetContentAnchor()->GetNode()
+                        ||  oAnchorCheckPam->End()->GetNode() == rAnchor.GetContentAnchor()->GetNode()))
                 || (RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId()
                     && (    *oAnchorCheckPam->Start() == *rAnchor.GetContentAnchor()
                         ||  *oAnchorCheckPam->End() == *rAnchor.GetContentAnchor()))))

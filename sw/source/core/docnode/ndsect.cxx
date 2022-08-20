@@ -273,7 +273,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
                     getIDocumentContentOperations().SplitNode( *pEndPos, false );
 
                     SwTextNode* pTNd;
-                    if( pEndPos->GetNodeIndex() == pSttPos->GetNodeIndex() )
+                    if( pEndPos->GetNode() == pSttPos->GetNode() )
                     {
                         --pSttPos->nNode;
                         --pEndPos->nNode;

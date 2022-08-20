@@ -65,7 +65,7 @@ SwHTMLPosFlyFrame::SwHTMLPosFlyFrame( const SwPosFlyFrame& rPosFly,
 
 bool SwHTMLPosFlyFrame::operator<( const SwHTMLPosFlyFrame& rFrame ) const
 {
-    if( m_aNodeIndex.GetIndex() == rFrame.m_aNodeIndex.GetIndex() )
+    if( m_aNodeIndex.GetNode() == rFrame.m_aNodeIndex.GetNode() )
     {
         if( m_nContentIndex == rFrame.m_nContentIndex )
         {

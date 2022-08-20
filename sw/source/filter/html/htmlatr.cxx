@@ -2133,7 +2133,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
     bool bPageBreakBehind = false;
     if( rHTMLWrt.m_bCfgFormFeed &&
         !(rHTMLWrt.m_bOutTable || rHTMLWrt.m_bOutFlyFrame) &&
-        rHTMLWrt.m_pStartNdIdx->GetIndex() != rHTMLWrt.m_pCurrentPam->GetPoint()->GetNodeIndex() )
+        rHTMLWrt.m_pStartNdIdx->GetNode() != rHTMLWrt.m_pCurrentPam->GetPoint()->GetNode() )
     {
         bool bPageBreakBefore = false;
         const SfxItemSet* pItemSet = pNd->GetpSwAttrSet();

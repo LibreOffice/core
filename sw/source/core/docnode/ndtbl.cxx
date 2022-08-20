@@ -681,7 +681,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
             ++aRg.aEnd;
     }
 
-    if( aRg.aEnd.GetIndex() == aRg.aStart.GetIndex() )
+    if( aRg.aEnd.GetNode() == aRg.aStart.GetNode() )
     {
         OSL_FAIL( "empty range" );
         ++aRg.aEnd;
@@ -1182,7 +1182,7 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
 
     assert(aRg.aEnd == pEnd->nNode);
     assert(aRg.aStart == pStt->nNode);
-    if( aRg.aEnd.GetIndex() == aRg.aStart.GetIndex() )
+    if( aRg.aEnd.GetNode() == aRg.aStart.GetNode() )
     {
         OSL_FAIL( "empty range" );
         ++aRg.aEnd;

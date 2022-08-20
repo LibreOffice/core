@@ -3142,7 +3142,7 @@ void DocumentContentOperationsManager::ReRead( SwPaM& rPam, const OUString& rGrf
 {
     SwGrfNode *pGrfNd;
     if( !(( !rPam.HasMark()
-         || rPam.GetPoint()->GetNodeIndex() == rPam.GetMark()->GetNodeIndex() )
+         || rPam.GetPoint()->GetNode() == rPam.GetMark()->GetNode() )
          && nullptr != ( pGrfNd = rPam.GetPoint()->GetNode().GetGrfNode() )) )
         return;
 

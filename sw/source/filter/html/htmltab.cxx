@@ -3118,7 +3118,7 @@ void CellSaveStruct::CheckNoBreak( const SwPosition& rPos )
         m_xCnts->SetNoBreak();
     }
     else if( m_oNoBreakEndNodeIndex &&
-             m_oNoBreakEndNodeIndex->GetIndex() == rPos.GetNodeIndex() )
+             m_oNoBreakEndNodeIndex->GetNode() == rPos.GetNode() )
     {
         if( m_nNoBreakEndContentPos == rPos.GetContentIndex() )
         {

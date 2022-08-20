@@ -2295,7 +2295,7 @@ bool WW8_WrPlcSubDoc::WriteGenericText( WW8Export& rWrt, sal_uInt8 nTTyp,
                                     aContentIdx = *(aContentIdx.GetNode().EndOfSectionNode());
                                     ++aContentIdx;
                                     if ( !aContentIdx.GetNode().IsTableNode() &&
-                                         aContentIdx.GetIndex() != pNdIdx->GetNode().EndOfSectionIndex() )
+                                         aContentIdx.GetNode() != *pNdIdx->GetNode().EndOfSectionNode() )
                                     {
                                         bContainsOnlyTables = false;
                                     }

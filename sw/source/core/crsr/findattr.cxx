@@ -962,7 +962,7 @@ bool FindAttrImpl(SwPaM & rSearchPam,
                     }
                     while (pAttr
                         && (pAttrNode->GetIndex() < oPam->GetPoint()->GetNodeIndex()
-                            || (pAttrNode->GetIndex() == oPam->GetPoint()->GetNodeIndex()
+                            || (*pAttrNode == oPam->GetPoint()->GetNode()
                                 && pAttr->GetStart() < oPam->GetPoint()->GetContentIndex())
                             || pAttr->Which() != nWhich));
                 }
@@ -975,7 +975,7 @@ bool FindAttrImpl(SwPaM & rSearchPam,
                     }
                     while (pAttr
                         && (oPam->GetPoint()->GetNodeIndex() < pAttrNode->GetIndex()
-                            || (oPam->GetPoint()->GetNodeIndex() == pAttrNode->GetIndex()
+                            || (oPam->GetPoint()->GetNode() == *pAttrNode
                                 && oPam->GetPoint()->GetContentIndex() <= pAttr->GetStart())
                             || pAttr->Which() != nWhich));
                 }

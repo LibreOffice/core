@@ -520,7 +520,7 @@ bool FindTextImpl(SwPaM & rSearchPam,
                         const SwPosition* pPosition = pFrameFormat->GetAnchor().GetContentAnchor();
                         if (!pPosition || (pLayout
                                 ? !FrameContainsNode(*pFrame, pPosition->GetNodeIndex())
-                                : pPosition->GetNodeIndex() != pNode->GetIndex()))
+                                : pPosition->GetNode() != *pNode))
                             pObject = nullptr;
                     }
                 }

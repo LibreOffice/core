@@ -904,7 +904,7 @@ void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
         // still missing:
 
         while( m_pCurrentPam->GetPoint()->GetNodeIndex() < m_pCurrentPam->GetMark()->GetNodeIndex() ||
-              (m_pCurrentPam->GetPoint()->GetNodeIndex() == m_pCurrentPam->GetMark()->GetNodeIndex() &&
+              (m_pCurrentPam->GetPoint()->GetNode() == m_pCurrentPam->GetMark()->GetNode() &&
                m_pCurrentPam->GetPoint()->GetContentIndex() <= m_pCurrentPam->GetMark()->GetContentIndex()) )
         {
             SwNode&  rNd = m_pCurrentPam->GetPointNode();

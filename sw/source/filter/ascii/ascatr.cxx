@@ -214,7 +214,7 @@ public:
             }
             if (nRedlineStart == COMPLETE_STRING)
             {
-                nRedlineStart = pStart->GetNodeIndex() == m_rNode.GetIndex()
+                nRedlineStart = pStart->GetNode() == m_rNode
                         ? pStart->GetContentIndex()
                         : 0;
             }
@@ -226,7 +226,7 @@ public:
                     break; // no increment, revisit it next call
                 }
             }
-            nRedlineEnd = pEnd->GetNodeIndex() == m_rNode.GetIndex()
+            nRedlineEnd = pEnd->GetNode() == m_rNode
                     ? pEnd->GetContentIndex()
                     : COMPLETE_STRING;
         }

@@ -539,13 +539,13 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
                     SwRedlineItr aRedln(rTextNode, *pFnt, aAttrHandler, nRedlPos, SwRedlineItr::Mode::Show);
                     const SwRangeRedline* pRedline = rIDRA.GetRedlineTable()[nRedlPos];
                     // show redlining only on the inserted/deleted empty paragraph, but not on the next one
-                    if ( rTextNode.GetIndex() != pRedline->End()->GetNodeIndex() )
+                    if ( rTextNode != pRedline->End()->GetNode() )
                         eRedline = pRedline->GetType();
                     // except if the next empty paragraph starts a new redline (e.g. deletion after insertion)
                     else if ( nRedlPos + 1 < rIDRA.GetRedlineTable().size() )
                     {
                         const SwRangeRedline* pNextRedline = rIDRA.GetRedlineTable()[nRedlPos + 1];
-                        if ( rTextNode.GetIndex() == pNextRedline->Start()->GetNodeIndex() )
+                        if ( rTextNode == pNextRedline->Start()->GetNode() )
                             eRedline = pNextRedline->GetType();
                     }
                 }

@@ -3065,7 +3065,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
         aAttrPam.GetPoint()->Assign( *pCNd, field->m_nStartContent );
 
         if( bBeforeTable &&
-            aAttrPam.GetPoint()->GetNodeIndex() == rEndIdx.GetIndex() )
+            aAttrPam.GetPoint()->GetNode() == rEndIdx.GetNode() )
         {
             OSL_ENSURE( !bBeforeTable, "Aha, the case does occur" );
             OSL_ENSURE( !aAttrPam.GetPoint()->GetContentIndex(),
