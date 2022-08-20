@@ -1326,11 +1326,11 @@ sal_Int32 OutputDevice::ValidateKashidas ( const OUString& rTxt,
                u_getIntPropertyValue(rTxt[nNextPos], UCHAR_JOINING_TYPE) == U_JT_TRANSPARENT)
             nNextPos++;
 
-        // This is the start or end of the layout, it would happen if we
+        // The next position is past end of the layout, it would happen if we
         // changed the text styling in the middle of a word. Since we don’t do
         // apply OpenType features across different layouts, this can’t be an
         // invalid place to insert Kashida.
-        if (nPos == nIdx || nNextPos >= nEnd)
+        if (nNextPos > nEnd)
             continue;
 
         if (!pSalLayout->IsKashidaPosValid(nPos, nNextPos))
