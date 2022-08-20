@@ -98,7 +98,7 @@ public:
     XTextRangeOrNodeIndexPosition();
 
     void Set( Reference<XTextRange> const & rRange );
-    void Set( SwNodeIndex const & rIndex );
+    void Set( SwNode const & rIndex );
     void SetAsNodeIndex( Reference<XTextRange> const & rRange );
 
     void CopyPositionInto(SwPosition& rPos, SwDoc & rDoc);
@@ -119,7 +119,7 @@ void XTextRangeOrNodeIndexPosition::Set( Reference<XTextRange> const & rRange )
     m_oIndex.reset();
 }
 
-void XTextRangeOrNodeIndexPosition::Set( SwNodeIndex const & rIndex )
+void XTextRangeOrNodeIndexPosition::Set( SwNode const & rIndex )
 {
     m_oIndex = rIndex;
     (*m_oIndex)-- ;   // previous node!!!
@@ -144,7 +144,7 @@ void XTextRangeOrNodeIndexPosition::SetAsNodeIndex(
     OSL_ENSURE(bSuccess, "illegal range");
 
     // PaM -> Index
-    Set(aPaM.GetPoint()->nNode);
+    Set(aPaM.GetPoint()->GetNode());
 }
 
 void
