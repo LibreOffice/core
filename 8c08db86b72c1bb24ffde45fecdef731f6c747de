@@ -16,6 +16,24 @@
       "message": "I’m wondering if we can move this down even further and keep using the logical units and convert to font units right when drawing to graphics implementation? Would this help much (I’m still not clear how this map mode works).",
       "revId": "8c08db86b72c1bb24ffde45fecdef731f6c747de",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c4ce709_d696a033",
+        "filename": "vcl/source/outdev/text.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1389,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-08-20T20:48:21Z",
+      "side": 1,
+      "message": "Maybe, I don\u0027t really know. Trying to do so would definitely be harder than doing this dxarray-as-doubles thing that seems to have been successful in writer (and recently the drawing layer) where I explicitly made those cases opt-in to use doubles down here and tweak the platform text rendering appropriately. So I\u0027m exploring here what would it look like to always enable that if we need to scale the input dxarray.",
+      "parentUuid": "586d2f85_9aa2f212",
+      "revId": "8c08db86b72c1bb24ffde45fecdef731f6c747de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
