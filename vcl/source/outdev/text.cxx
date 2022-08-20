@@ -120,10 +120,10 @@ void OutputDevice::ImplInitTextColor()
 }
 
 static OUString lcl_GetEllipsisString(OutputDevice const& rTargetDevice, OUString const& rOrigStr, tools::Long nMaxWidth,
-                                      DrawTextFlags nStyle, vcl::ITextLayout const& _rLayout )
+                                      DrawTextFlags nStyle, vcl::ITextLayout const& rLayout )
 {
     OUString aStr = rOrigStr;
-    sal_Int32 nIndex = _rLayout.GetTextBreak( aStr, nMaxWidth, 0, aStr.getLength() );
+    sal_Int32 nIndex = rLayout.GetTextBreak( aStr, nMaxWidth, 0, aStr.getLength() );
 
     if ( nIndex != -1 )
     {
@@ -132,7 +132,7 @@ static OUString lcl_GetEllipsisString(OutputDevice const& rTargetDevice, OUStrin
             OUStringBuffer aTmpStr( aStr );
             // speed it up by removing all but 1.33x as many as the break pos.
             sal_Int32 nEraseChars = std::max<sal_Int32>(4, aStr.getLength() - (nIndex*4)/3);
-            while( nEraseChars < aStr.getLength() && _rLayout.GetTextWidth( aTmpStr.toString(), 0, aTmpStr.getLength() ) > nMaxWidth )
+            while( nEraseChars < aStr.getLength() && rLayout.GetTextWidth( aTmpStr.toString(), 0, aTmpStr.getLength() ) > nMaxWidth )
             {
                 aTmpStr = aStr;
                 sal_Int32 i = (aTmpStr.getLength() - nEraseChars)/2;
@@ -147,7 +147,7 @@ static OUString lcl_GetEllipsisString(OutputDevice const& rTargetDevice, OUStrin
             if ( nIndex > 1 )
             {
                 aStr += "...";
-                while ( !aStr.isEmpty() && (_rLayout.GetTextWidth( aStr, 0, aStr.getLength() ) > nMaxWidth) )
+                while ( !aStr.isEmpty() && (rLayout.GetTextWidth( aStr, 0, aStr.getLength() ) > nMaxWidth) )
                 {
                     if ( (nIndex > 1) || (nIndex == aStr.getLength()) )
                         nIndex--;
@@ -182,8 +182,8 @@ static OUString lcl_GetEllipsisString(OutputDevice const& rTargetDevice, OUStrin
 
             OUString aLastStr = aStr.copy(nLastContent);
             OUString aTempLastStr1 = "..." + aLastStr;
-            if ( _rLayout.GetTextWidth( aTempLastStr1, 0, aTempLastStr1.getLength() ) > nMaxWidth )
-                aStr = lcl_GetEllipsisString( rTargetDevice, aStr, nMaxWidth, nStyle | DrawTextFlags::EndEllipsis, _rLayout );
+            if ( rLayout.GetTextWidth( aTempLastStr1, 0, aTempLastStr1.getLength() ) > nMaxWidth )
+                aStr = lcl_GetEllipsisString( rTargetDevice, aStr, nMaxWidth, nStyle | DrawTextFlags::EndEllipsis, rLayout );
             else
             {
                 sal_Int32 nFirstContent = 0;
@@ -198,15 +198,15 @@ static OUString lcl_GetEllipsisString(OutputDevice const& rTargetDevice, OUStrin
                     nFirstContent++;
                 // MEM continue here
                 if ( nFirstContent >= nLastContent )
-                    aStr = lcl_GetEllipsisString( rTargetDevice, aStr, nMaxWidth, nStyle | DrawTextFlags::EndEllipsis, _rLayout );
+                    aStr = lcl_GetEllipsisString( rTargetDevice, aStr, nMaxWidth, nStyle | DrawTextFlags::EndEllipsis, rLayout );
                 else
                 {
                     if ( nFirstContent > 4 )
                         nFirstContent = 4;
                     OUString aFirstStr = OUString::Concat(aStr.subView( 0, nFirstContent )) + "...";
                     OUString aTempStr = aFirstStr + aLastStr;
-                    if ( _rLayout.GetTextWidth( aTempStr, 0, aTempStr.getLength() ) > nMaxWidth )
-                        aStr = lcl_GetEllipsisString( rTargetDevice, aStr, nMaxWidth, nStyle | DrawTextFlags::EndEllipsis, _rLayout );
+                    if ( rLayout.GetTextWidth( aTempStr, 0, aTempStr.getLength() ) > nMaxWidth )
+                        aStr = lcl_GetEllipsisString( rTargetDevice, aStr, nMaxWidth, nStyle | DrawTextFlags::EndEllipsis, rLayout );
                     else
                     {
                         do
@@ -230,7 +230,7 @@ static OUString lcl_GetEllipsisString(OutputDevice const& rTargetDevice, OUStrin
                                 std::u16string_view aTempLastStr = aStr.subView( nLastContent );
                                 aTempStr = aFirstStr + aTempLastStr;
 
-                                if ( _rLayout.GetTextWidth( aTempStr, 0, aTempStr.getLength() ) > nMaxWidth )
+                                if ( rLayout.GetTextWidth( aTempStr, 0, aTempStr.getLength() ) > nMaxWidth )
                                     break;
                             }
                         }
@@ -621,7 +621,7 @@ void OutputDevice::ImplDrawText( SalLayout& rSalLayout )
 tools::Long OutputDevice::ImplGetTextLines( const tools::Rectangle& rRect, const tools::Long nTextHeight,
                                      ImplMultiTextLineInfo& rLineInfo,
                                      tools::Long nWidth, const OUString& rStr,
-                                     DrawTextFlags nStyle, const vcl::ITextLayout& _rLayout )
+                                     DrawTextFlags nStyle, const vcl::ITextLayout& rLayout )
 {
     SAL_WARN_IF( nWidth <= 0, "vcl", "ImplGetTextLines: nWidth <= 0!" );
 
@@ -656,7 +656,7 @@ tools::Long OutputDevice::ImplGetTextLines( const tools::Rectangle& rRect, const
         while ( ( nBreakPos < nLen ) && ( rStr[ nBreakPos ] != '\r' ) && ( rStr[ nBreakPos ] != '\n' ) )
             nBreakPos++;
 
-        tools::Long nLineWidth = _rLayout.GetTextWidth( rStr, nPos, nBreakPos-nPos );
+        tools::Long nLineWidth = rLayout.GetTextWidth( rStr, nPos, nBreakPos-nPos );
         if ( ( nLineWidth > nWidth ) && ( nStyle & DrawTextFlags::WordBreak ) )
         {
             if ( !xBI.is() )
@@ -664,12 +664,12 @@ tools::Long OutputDevice::ImplGetTextLines( const tools::Rectangle& rRect, const
 
             if ( xBI.is() )
             {
-                nBreakPos = ImplBreakLinesWithIterator(nWidth, rStr, _rLayout, xHyph, xBI, bHyphenate, nPos, nBreakPos);
-                nLineWidth = _rLayout.GetTextWidth(rStr, nPos, nBreakPos - nPos);
+                nBreakPos = ImplBreakLinesWithIterator(nWidth, rStr, rLayout, xHyph, xBI, bHyphenate, nPos, nBreakPos);
+                nLineWidth = rLayout.GetTextWidth(rStr, nPos, nBreakPos - nPos);
             }
             else
                 // fallback to something really simple
-                nBreakPos = ImplBreakLinesSimple(nWidth, rStr, _rLayout, nPos, nBreakPos, nLineWidth);
+                nBreakPos = ImplBreakLinesSimple(nWidth, rStr, rLayout, nPos, nBreakPos, nLineWidth);
         }
 
         if ( nLineWidth > nMaxLineWidth )
@@ -706,14 +706,14 @@ tools::Long OutputDevice::ImplGetTextLines( const tools::Rectangle& rRect, const
     return nMaxLineWidth;
 }
 
-sal_Int32 OutputDevice::ImplBreakLinesWithIterator(const tools::Long nWidth, const OUString& rStr, const vcl::ITextLayout& _rLayout,
+sal_Int32 OutputDevice::ImplBreakLinesWithIterator(const tools::Long nWidth, const OUString& rStr, const vcl::ITextLayout& rLayout,
                     const css::uno::Reference< css::linguistic2::XHyphenator >& xHyph,
                     const css::uno::Reference<css::i18n::XBreakIterator>& xBI,
                     const bool bHyphenate,
                     const sal_Int32 nPos, sal_Int32 nBreakPos)
 {
     const css::lang::Locale& rDefLocale(Application::GetSettings().GetUILanguageTag().getLocale());
-    sal_Int32 nSoftBreak = _rLayout.GetTextBreak( rStr, nWidth, nPos, nBreakPos - nPos );
+    sal_Int32 nSoftBreak = rLayout.GetTextBreak( rStr, nWidth, nPos, nBreakPos - nPos );
     if (nSoftBreak == -1)
     {
         nSoftBreak = nPos;
@@ -823,7 +823,7 @@ sal_Int32 OutputDevice::ImplBreakLinesWithIterator(const tools::Long nWidth, con
 }
 
 sal_Int32 OutputDevice::ImplBreakLinesSimple( const tools::Long nWidth, const OUString& rStr,
-                        const vcl::ITextLayout& _rLayout, const sal_Int32 nPos, sal_Int32 nBreakPos, tools::Long& nLineWidth )
+                        const vcl::ITextLayout& rLayout, const sal_Int32 nPos, sal_Int32 nBreakPos, tools::Long& nLineWidth )
 {
     sal_Int32 nSpacePos = rStr.getLength();
     tools::Long nW = 0;
@@ -834,14 +834,14 @@ sal_Int32 OutputDevice::ImplBreakLinesSimple( const tools::Long nWidth, const OU
         {
             if( nSpacePos > nPos )
                 nSpacePos--;
-            nW = _rLayout.GetTextWidth( rStr, nPos, nSpacePos-nPos );
+            nW = rLayout.GetTextWidth( rStr, nPos, nSpacePos-nPos );
         }
     } while( nW > nWidth );
 
     if( nSpacePos != -1 )
     {
         nBreakPos = nSpacePos;
-        nLineWidth = _rLayout.GetTextWidth( rStr, nPos, nBreakPos-nPos );
+        nLineWidth = rLayout.GetTextWidth( rStr, nPos, nBreakPos-nPos );
         if( nBreakPos < rStr.getLength()-1 )
             nBreakPos++;
     }
@@ -1906,7 +1906,7 @@ lcl_DrawMnemonicLinesExceptLast(OutputDevice& rTargetDevice, tools::Rectangle co
 void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Rectangle& rRect,
                                  const OUString& rOrigStr, DrawTextFlags nStyle,
                                  std::vector< tools::Rectangle >* pVector, OUString* pDisplayText,
-                                 vcl::ITextLayout& _rLayout )
+                                 vcl::ITextLayout& rLayout )
 {
     if (lcl_BailOnNegativeRect(rRect, nStyle))
         return;
@@ -1932,7 +1932,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
             // note: nMaxTextWidth must be set here because ImplGetTextLines *also* populates
             // aMultiLineInfo... do not move this closer to first use of nMaxTextWidth!
             tools::Long nMaxTextWidth = ImplGetTextLines(rRect, nTextHeight, aMultiLineInfo,
-                                                         rRect.GetWidth(), aStr, nStyle, _rLayout);
+                                                         rRect.GetWidth(), aStr, nStyle, rLayout);
             sal_Int32 nLines = static_cast<sal_Int32>(rRect.GetHeight() / nTextHeight);
             sal_Int32 nFormatLines = aMultiLineInfo.Count();
 
@@ -1949,7 +1949,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
                         aStr.copy(aMultiLineInfo.GetLine(nFormatLines).GetIndex()), LINEEND_LF);
 
                 aLastLine = lcl_ShortenLastLineWithEndEllipsis(rTargetDevice, rRect, aLastLine, nStyle,
-                                                                _rLayout);
+                                                                rLayout);
             }
 
             if (nFormatLines > nLines)
@@ -1989,12 +1989,12 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
             else if ( eAlign == ALIGN_BASELINE )
                 aPos.AdjustY(rTargetDevice.GetFontMetric().GetAscent() );
 
-            lcl_DrawMnemonicLinesExceptLast(rTargetDevice, rRect, aMultiLineInfo, _rLayout, aStr, pDisplayText,
+            lcl_DrawMnemonicLinesExceptLast(rTargetDevice, rRect, aMultiLineInfo, rLayout, aStr, pDisplayText,
                                             nStyle, pVector, aPos, nMnemonicIndex, nFormatLines);
 
             // If there still is a last line, we output it left-aligned as the line would be clipped
             if ( !aLastLine.isEmpty() )
-                _rLayout.DrawText( aPos, aLastLine, 0, aLastLine.getLength(), pVector, pDisplayText );
+                rLayout.DrawText( aPos, aLastLine, 0, aLastLine.getLength(), pVector, pDisplayText );
 
             // Reset clipping
             if ( nStyle & DrawTextFlags::Clip )
@@ -2003,17 +2003,17 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
     }
     else
     {
-        tools::Long nTextWidth = _rLayout.GetTextWidth( aStr, 0, -1 );
+        tools::Long nTextWidth = rLayout.GetTextWidth( aStr, 0, -1 );
 
         // Clip text if needed
         if (nTextWidth > rRect.GetWidth())
         {
             if (nStyle & TEXT_DRAW_ELLIPSIS)
             {
-                aStr = lcl_GetEllipsisString(rTargetDevice, aStr, rRect.GetWidth(), nStyle, _rLayout);
+                aStr = lcl_GetEllipsisString(rTargetDevice, aStr, rRect.GetWidth(), nStyle, rLayout);
                 nStyle &= ~DrawTextFlags(DrawTextFlags::Center | DrawTextFlags::Right);
                 nStyle |= DrawTextFlags::Left;
-                nTextWidth = _rLayout.GetTextWidth(aStr, 0, aStr.getLength());
+                nTextWidth = rLayout.GetTextWidth(aStr, 0, aStr.getLength());
             }
         }
         else
@@ -2046,7 +2046,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
         if (nMnemonicIndex != -1 && nMnemonicIndex < aStr.getLength())
         {
             std::unique_ptr<sal_Int32[]> const pCaretXArray(new sal_Int32[2 * aStr.getLength()]);
-            /*sal_Bool bRet =*/ _rLayout.GetCaretPositions( aStr, pCaretXArray.get(), 0, aStr.getLength() );
+            /*sal_Bool bRet =*/ rLayout.GetCaretPositions( aStr, pCaretXArray.get(), 0, aStr.getLength() );
 
             std::tie(nMnemonicX, nMnemonicY, nMnemonicWidth)
                 = lcl_GetMnemonicPos(rTargetDevice, pCaretXArray.get(), aPos, nMnemonicIndex, aStr.getLength());
@@ -2056,14 +2056,14 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
         {
             rTargetDevice.Push( vcl::PushFlags::CLIPREGION );
             rTargetDevice.IntersectClipRegion( rRect );
-            _rLayout.DrawText( aPos, aStr, 0, aStr.getLength(), pVector, pDisplayText );
+            rLayout.DrawText( aPos, aStr, 0, aStr.getLength(), pVector, pDisplayText );
             if (lcl_ShouldDrawMnemonics(rTargetDevice, pVector) && nMnemonicIndex != -1 )
                 rTargetDevice.DrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
             rTargetDevice.Pop();
         }
         else
         {
-            _rLayout.DrawText( aPos, aStr, 0, aStr.getLength(), pVector, pDisplayText );
+            rLayout.DrawText( aPos, aStr, 0, aStr.getLength(), pVector, pDisplayText );
             if (lcl_ShouldDrawMnemonics(rTargetDevice, pVector) && nMnemonicIndex != -1)
                 rTargetDevice.DrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
         }
