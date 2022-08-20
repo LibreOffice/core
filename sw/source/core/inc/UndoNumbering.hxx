@@ -113,7 +113,7 @@ class SwUndoNumOrNoNum final : public SwUndo
     bool mbNewNum, mbOldNum;
 
 public:
-    SwUndoNumOrNoNum( const SwNodeIndex& rIdx, bool mbOldNum,
+    SwUndoNumOrNoNum( const SwNode& rIdx, bool mbOldNum,
                       bool mbNewNum );
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;

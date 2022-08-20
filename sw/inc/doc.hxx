@@ -1151,7 +1151,7 @@ public:
     bool MoveParagraph(SwPaM&, SwNodeOffset nOffset, bool bIsOutlMv = false);
     bool MoveParagraphImpl(SwPaM&, SwNodeOffset nOffset, bool bIsOutlMv, SwRootFrame const*);
 
-    bool NumOrNoNum( const SwNodeIndex& rIdx, bool bDel = false);
+    bool NumOrNoNum( SwNode& rIdx, bool bDel = false);
 
     void StopNumRuleAnimations( const OutputDevice* );
 
