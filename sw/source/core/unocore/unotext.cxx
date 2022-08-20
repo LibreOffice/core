@@ -1160,13 +1160,13 @@ SwXText::getPropertyValue(
             if (nRedTableCount > 0)
             {
                 SwStartNode const*const pStartNode = GetStartNode();
-                const SwNodeOffset nOwnIndex = pStartNode->EndOfSectionIndex();
+                const SwNode& rOwnIndex = *pStartNode->EndOfSectionNode();
                 for (size_t nRed = 0; nRed < nRedTableCount; ++nRed)
                 {
                     SwRangeRedline const*const pRedline = rRedTable[nRed];
                     SwPosition const*const pRedStart = pRedline->Start();
-                    const SwNodeIndex nRedNode = pRedStart->nNode;
-                    if (nOwnIndex == nRedNode.GetIndex())
+                    const SwNode& rRedNode = pRedStart->GetNode();
+                    if (rOwnIndex == rRedNode)
                     {
                         aRet <<= SwXRedlinePortion::CreateRedlineProperties(
                                 *pRedline, true);
@@ -1718,8 +1718,8 @@ SwXText::convertToTextFrame(
         // added nodes
         if (!isGraphicNode(pFrameFormat)
             && (   (RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId()
-                    && (    oAnchorCheckPam->Start()->nNode.GetIndex() == rAnchor.GetContentAnchor()->nNode.GetIndex()
-                        ||  oAnchorCheckPam->End()->nNode.GetIndex() == rAnchor.GetContentAnchor()->nNode.GetIndex()))
+                    && (    oAnchorCheckPam->Start()->GetNode() == rAnchor.GetContentAnchor()->GetNode()
+                        ||  oAnchorCheckPam->End()->GetNode() == rAnchor.GetContentAnchor()->GetNode()))
                 || (RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId()
                     && (    *oAnchorCheckPam->Start() == *rAnchor.GetContentAnchor()
                         ||  *oAnchorCheckPam->End() == *rAnchor.GetContentAnchor()))))
@@ -1923,8 +1923,8 @@ void SwXText::Impl::ConvertCell(
                 uno::Reference< text::XTextCopy >( &m_rThis ), sal_Int16( 2 ) );
     }
 
-    SwNodeRange aTmpRange(aStartCellPam.Start()->nNode,
-                          aEndCellPam.End()->nNode);
+    SwNodeRange aTmpRange(aStartCellPam.Start()->GetNode(),
+                          aEndCellPam.End()->GetNode());
     std::optional<SwNodeRange> oCorrectedRange;
     m_pDoc->GetNodes().ExpandRangeForTableBox(aTmpRange, oCorrectedRange);
 
@@ -1952,7 +1952,7 @@ void SwXText::Impl::ConvertCell(
         // increment on each StartNode and decrement on each EndNode
         // we must reach zero at the end and must not go below zero
         tools::Long nOpenNodeBlock = 0;
-        SwNodeIndex aCellIndex = aStartCellPam.Start()->nNode;
+        SwNodeIndex aCellIndex(aStartCellPam.Start()->GetNode());
         while (aCellIndex < aEndCellPam.End()->GetNodeIndex())
         {
             if (aCellIndex.GetNode().IsStartNode())
@@ -2051,8 +2051,8 @@ void SwXText::Impl::ConvertCell(
 
     assert(aStartCellPam.Start()->GetContentIndex() == 0);
     assert(aEndCellPam.End()->GetContentIndex() == aEndCellPam.End()->GetNode().GetTextNode()->Len());
-    SwNodeRange aCellRange(aStartCellPam.Start()->nNode,
-            aEndCellPam.End()->nNode);
+    SwNodeRange aCellRange(aStartCellPam.Start()->GetNode(),
+            aEndCellPam.End()->GetNode());
     rRowNodes.push_back(aCellRange); // note: invalidates pLastCell!
 
     // tdf#149649 delete any fieldmarks overlapping the cell
