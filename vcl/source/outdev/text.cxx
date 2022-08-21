@@ -1640,7 +1640,6 @@ static void lcl_DrawMultilineText(OutputDevice& rTargetDevice, tools::Rectangle 
         return;
 
     Point aPos(rRect.TopLeft());
-    const TextAlign eAlign = rTargetDevice.GetTextAlign();
     sal_Int32 nMnemonicIndex = -1;
 
     OUString aStr;
@@ -1702,6 +1701,7 @@ static void lcl_DrawMultilineText(OutputDevice& rTargetDevice, tools::Rectangle 
         aPos.AdjustY((rRect.GetHeight() - (nFormatLines * nTextHeight)) / 2);
 
     // Font alignment
+    const TextAlign eAlign = rTargetDevice.GetTextAlign();
     if ( eAlign == ALIGN_BOTTOM )
         aPos.AdjustY(nTextHeight );
     else if ( eAlign == ALIGN_BASELINE )
