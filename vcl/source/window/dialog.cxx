@@ -1685,7 +1685,7 @@ void Dialog::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     if (vcl::Window* pActionArea = get_action_area())
     {
         if (!pActionArea->IsVisible())
-            rJsonWriter.put("collapsed", "true");
+            rJsonWriter.put("collapsed", true);
     }
 
     OUString sDialogId = OStringToOUString(GetHelpId(), RTL_TEXTENCODING_ASCII_US);

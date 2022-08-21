@@ -3274,7 +3274,7 @@ VclPtr<vcl::Window> Window::GetParentWithLOKNotifier()
 namespace
 {
 
-const char* windowTypeName(WindowType nWindowType)
+std::string_view windowTypeName(WindowType nWindowType)
 {
     switch (nWindowType)
     {
