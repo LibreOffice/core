@@ -1879,12 +1879,12 @@ void SwDrawContact::ConnectToLayout( const SwFormatAnchor* pAnch )
                             pModify = pCNd;
                         else
                         {
-                            const SwNodeIndex& rIdx = pAnch->GetContentAnchor()->nNode;
+                            const SwNode& rIdx = pAnch->GetContentAnchor()->GetNode();
                             SwFrameFormats& rFormats = *(pDrawFrameFormat->GetDoc()->GetSpzFrameFormats());
                             for( auto pFlyFormat : rFormats )
                             {
                                 if( pFlyFormat->GetContent().GetContentIdx() &&
-                                    rIdx == *(pFlyFormat->GetContent().GetContentIdx()) )
+                                    rIdx == pFlyFormat->GetContent().GetContentIdx()->GetNode() )
                                 {
                                     pModify = pFlyFormat;
                                     break;
