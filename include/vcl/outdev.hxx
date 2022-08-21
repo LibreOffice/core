@@ -869,10 +869,6 @@ public:
                                           std::vector< tools::Rectangle >* pVector = nullptr, OUString* pDisplayText = nullptr,
                                           vcl::ITextLayout* _pTextLayout = nullptr );
 
-    static void                 ImplDrawText( OutputDevice& rTargetDevice, const tools::Rectangle& rRect,
-                                              const OUString& rOrigStr, DrawTextFlags nStyle,
-                                              std::vector< tools::Rectangle >* pVector, OUString* pDisplayText, vcl::ITextLayout& _rLayout );
-
     void                        ImplDrawText( SalLayout& );
 
     void                        ImplDrawTextBackground( const SalLayout& );
