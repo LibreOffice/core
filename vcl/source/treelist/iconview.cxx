@@ -258,7 +258,7 @@ OUString IconView::GetEntryAccessibleDescription(SvTreeListEntry* pEntry) const
 
 FactoryFunction IconView::GetUITestFactory() const { return IconViewUIObject::create; }
 
-static OUString extractPngString(const SvLBoxContextBmp* pBmpItem)
+static OString extractPngString(const SvLBoxContextBmp* pBmpItem)
 {
     BitmapEx aImage = pBmpItem->GetBitmap1().GetBitmapEx();
     SvMemoryStream aOStm(65535, 65535);
@@ -266,7 +266,7 @@ static OUString extractPngString(const SvLBoxContextBmp* pBmpItem)
     {
         css::uno::Sequence<sal_Int8> aSeq(static_cast<sal_Int8 const*>(aOStm.GetData()),
                                           aOStm.Tell());
-        OUStringBuffer aBuffer("data:image/png;base64,");
+        OStringBuffer aBuffer("data:image/png;base64,");
         ::comphelper::Base64::encode(aBuffer, aSeq);
         return aBuffer.makeStringAndClear();
     }
@@ -298,13 +298,12 @@ static void lcl_DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter, SvTreeListE
             rJsonWriter.put("tooltip", tooltip);
 
         if (pTabListBox->IsSelected(pEntry))
-            rJsonWriter.put("selected", "true");
+            rJsonWriter.put("selected", true);
 
         if (pEntry->GetFlags() & SvTLEntryFlags::IS_SEPARATOR)
-            rJsonWriter.put("separator", "true");
+            rJsonWriter.put("separator", true);
 
-        rJsonWriter.put("row",
-                        OString::number(pTabListBox->GetModel()->GetAbsPos(pEntry)).getStr());
+        rJsonWriter.put("row", pTabListBox->GetModel()->GetAbsPos(pEntry));
 
         pEntry = pEntry->NextSibling();
     }
