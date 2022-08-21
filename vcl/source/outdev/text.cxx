@@ -1903,6 +1903,96 @@ lcl_DrawMnemonicLinesExceptLast(OutputDevice& rTargetDevice, tools::Rectangle co
     }
 }
 
+static void lcl_DrawMultilineText(OutputDevice& rTargetDevice, tools::Rectangle const& rRect,
+        OUString const& rOrigStr, DrawTextFlags nStyle,
+        std::vector<tools::Rectangle>* pVector, OUString* pDisplayText,
+        vcl::ITextLayout& rLayout)
+{
+
+    Point aPos(rRect.TopLeft());
+    const tools::Long nTextHeight = rTargetDevice.GetTextHeight();
+    const TextAlign eAlign = rTargetDevice.GetTextAlign();
+    sal_Int32 nMnemonicIndex = -1;
+
+    OUString aStr;
+    if (nStyle & DrawTextFlags::Mnemonic)
+        aStr = OutputDevice::GetNonMnemonicString(rOrigStr, nMnemonicIndex);
+
+    if (!nTextHeight)
+        return;
+
+    ImplMultiTextLineInfo aMultiLineInfo;
+
+    tools::Long nMaxTextWidth = aMultiLineInfo.PopulateTextLines(rRect, nTextHeight,
+                                                 rRect.GetWidth(), aStr, nStyle, rLayout);
+    sal_Int32 nLines = static_cast<sal_Int32>(rRect.GetHeight() / nTextHeight);
+    sal_Int32 nFormatLines = aMultiLineInfo.Count();
+
+    if (nLines <= 0)
+        nLines = 1;
+
+    OUString aLastLine;
+
+    if ((nFormatLines > nLines) && (nStyle & DrawTextFlags::EndEllipsis))
+    {
+        // Create last line and shorten it
+        nFormatLines = nLines-1;
+        aLastLine = convertLineEnd(
+                aStr.copy(aMultiLineInfo.GetLine(nFormatLines).GetIndex()), LINEEND_LF);
+
+        aLastLine = lcl_ShortenLastLineWithEndEllipsis(rTargetDevice, rRect, aLastLine, nStyle,
+                                                        rLayout);
+    }
+
+    if (nFormatLines > nLines)
+    {
+        if (nStyle & DrawTextFlags::EndEllipsis)
+        {
+            nStyle &= ~DrawTextFlags(DrawTextFlags::VCenter | DrawTextFlags::Bottom);
+            nStyle |= DrawTextFlags::Top;
+        }
+    }
+    else
+    {
+        if (nMaxTextWidth <= rRect.GetWidth())
+            nStyle &= ~DrawTextFlags::Clip;
+    }
+
+    // Do we need to clip the height?
+    if ((nFormatLines * nTextHeight) > rRect.GetHeight())
+        nStyle |= DrawTextFlags::Clip;
+
+    // Set clipping
+    if ( nStyle & DrawTextFlags::Clip )
+    {
+        rTargetDevice.Push( vcl::PushFlags::CLIPREGION );
+        rTargetDevice.IntersectClipRegion( rRect );
+    }
+
+    // Vertical alignment
+    if (nStyle & DrawTextFlags::Bottom)
+        aPos.AdjustY(rRect.GetHeight() - (nFormatLines * nTextHeight));
+    else if (nStyle & DrawTextFlags::VCenter)
+        aPos.AdjustY((rRect.GetHeight() - (nFormatLines * nTextHeight)) / 2);
+
+    // Font alignment
+    if ( eAlign == ALIGN_BOTTOM )
+        aPos.AdjustY(nTextHeight );
+    else if ( eAlign == ALIGN_BASELINE )
+        aPos.AdjustY(rTargetDevice.GetFontMetric().GetAscent() );
+
+    lcl_DrawMnemonicLinesExceptLast(rTargetDevice, rRect, aMultiLineInfo, rLayout, aStr, pDisplayText,
+                                    nStyle, pVector, aPos, nMnemonicIndex, nFormatLines);
+
+    // If there still is a last line, we output it left-aligned as the line would be clipped
+    if ( !aLastLine.isEmpty() )
+        rLayout.DrawText( aPos, aLastLine, 0, aLastLine.getLength(), pVector, pDisplayText );
+
+    // Reset clipping
+    if ( nStyle & DrawTextFlags::Clip )
+        rTargetDevice.Pop();
+}
+
 void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Rectangle& rRect,
                                  const OUString& rOrigStr, DrawTextFlags nStyle,
                                  std::vector< tools::Rectangle >* pVector, OUString* pDisplayText,
@@ -1913,94 +2003,22 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
 
     TextColorGuard aTextColorGuard(rTargetDevice, nStyle, pVector);
 
-    Point aPos(rRect.TopLeft());
-    const tools::Long nTextHeight = rTargetDevice.GetTextHeight();
-    const TextAlign eAlign = rTargetDevice.GetTextAlign();
-    sal_Int32 nMnemonicIndex = -1;
-
-    OUString aStr;
-    if (nStyle & DrawTextFlags::Mnemonic)
-        aStr = GetNonMnemonicString(rOrigStr, nMnemonicIndex);
-
     // We treat multiline text differently
     if (nStyle & DrawTextFlags::MultiLine)
     {
-        if (nTextHeight)
-        {
-            ImplMultiTextLineInfo aMultiLineInfo;
-
-            tools::Long nMaxTextWidth = aMultiLineInfo.PopulateTextLines(rRect, nTextHeight,
-                                                         rRect.GetWidth(), aStr, nStyle, rLayout);
-            sal_Int32 nLines = static_cast<sal_Int32>(rRect.GetHeight() / nTextHeight);
-            sal_Int32 nFormatLines = aMultiLineInfo.Count();
-
-            if (nLines <= 0)
-                nLines = 1;
-
-            OUString aLastLine;
-
-            if ((nFormatLines > nLines) && (nStyle & DrawTextFlags::EndEllipsis))
-            {
-                // Create last line and shorten it
-                nFormatLines = nLines-1;
-                aLastLine = convertLineEnd(
-                        aStr.copy(aMultiLineInfo.GetLine(nFormatLines).GetIndex()), LINEEND_LF);
-
-                aLastLine = lcl_ShortenLastLineWithEndEllipsis(rTargetDevice, rRect, aLastLine, nStyle,
-                                                                rLayout);
-            }
-
-            if (nFormatLines > nLines)
-            {
-                if (nStyle & DrawTextFlags::EndEllipsis)
-                {
-                    nStyle &= ~DrawTextFlags(DrawTextFlags::VCenter | DrawTextFlags::Bottom);
-                    nStyle |= DrawTextFlags::Top;
-                }
-            }
-            else
-            {
-                if (nMaxTextWidth <= rRect.GetWidth())
-                    nStyle &= ~DrawTextFlags::Clip;
-            }
-
-            // Do we need to clip the height?
-            if ((nFormatLines * nTextHeight) > rRect.GetHeight())
-                nStyle |= DrawTextFlags::Clip;
-
-            // Set clipping
-            if ( nStyle & DrawTextFlags::Clip )
-            {
-                rTargetDevice.Push( vcl::PushFlags::CLIPREGION );
-                rTargetDevice.IntersectClipRegion( rRect );
-            }
-
-            // Vertical alignment
-            if (nStyle & DrawTextFlags::Bottom)
-                aPos.AdjustY(rRect.GetHeight() - (nFormatLines * nTextHeight));
-            else if (nStyle & DrawTextFlags::VCenter)
-                aPos.AdjustY((rRect.GetHeight() - (nFormatLines * nTextHeight)) / 2);
-
-            // Font alignment
-            if ( eAlign == ALIGN_BOTTOM )
-                aPos.AdjustY(nTextHeight );
-            else if ( eAlign == ALIGN_BASELINE )
-                aPos.AdjustY(rTargetDevice.GetFontMetric().GetAscent() );
-
-            lcl_DrawMnemonicLinesExceptLast(rTargetDevice, rRect, aMultiLineInfo, rLayout, aStr, pDisplayText,
-                                            nStyle, pVector, aPos, nMnemonicIndex, nFormatLines);
-
-            // If there still is a last line, we output it left-aligned as the line would be clipped
-            if ( !aLastLine.isEmpty() )
-                rLayout.DrawText( aPos, aLastLine, 0, aLastLine.getLength(), pVector, pDisplayText );
-
-            // Reset clipping
-            if ( nStyle & DrawTextFlags::Clip )
-                rTargetDevice.Pop();
-        }
+        lcl_DrawMultilineText(rTargetDevice, rRect, rOrigStr, nStyle, pVector, pDisplayText, rLayout);
     }
     else
     {
+        Point aPos(rRect.TopLeft());
+        const tools::Long nTextHeight = rTargetDevice.GetTextHeight();
+        const TextAlign eAlign = rTargetDevice.GetTextAlign();
+        sal_Int32 nMnemonicIndex = -1;
+
+        OUString aStr;
+        if (nStyle & DrawTextFlags::Mnemonic)
+            aStr = GetNonMnemonicString(rOrigStr, nMnemonicIndex);
+
         tools::Long nTextWidth = rLayout.GetTextWidth( aStr, 0, -1 );
 
         // Clip text if needed
