@@ -125,6 +125,10 @@ public:
     {
         return mpObjectInfoPrimitive2D;
     }
+
+private:
+    bool RenderFillGraphicPrimitive2DImpl(
+        const primitive2d::FillGraphicPrimitive2D& rFillBitmapCandidate);
 };
 } // end of namespace drawinglayer::processor2d
 
