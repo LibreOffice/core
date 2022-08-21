@@ -145,8 +145,8 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc, SwNodeOffset nIndex,
                  SwFrame *pPrv = nullptr, sw::FrameMode eMode = sw::FrameMode::New);
 
 // Creation of frames for a specific section (uses InsertCnt_)
-void MakeFrames( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
-                            const SwNodeIndex &rEndIdx );
+void MakeFrames( SwDoc *pDoc, SwNode &rSttIdx,
+                            SwNode &rEndIdx );
 
 extern bool bObjsDirect;
 

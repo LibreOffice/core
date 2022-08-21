@@ -515,7 +515,7 @@ static void lcl_CpyBox( const SwTable& rCpyTable, const SwTableBox* pCpyBox,
 
     SwNodeIndex aSavePos( aInsIdx, -1 );
     if (pRg)
-        pCpyDoc->GetDocumentContentOperationsManager().CopyWithFlyInFly(*pRg, aInsIdx, nullptr, false);
+        pCpyDoc->GetDocumentContentOperationsManager().CopyWithFlyInFly(*pRg, aInsIdx.GetNode(), nullptr, false);
     else
         pDoc->GetNodes().MakeTextNode( aInsIdx.GetNode(), pDoc->GetDfltTextFormatColl() );
     ++aSavePos;

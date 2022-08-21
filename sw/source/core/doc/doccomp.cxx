@@ -1548,7 +1548,7 @@ void CompareData::ShowDelete(
     SwNodeIndex aInsPos( *pLineNd, nOffset );
     SwNodeIndex aSavePos( aInsPos, -1 );
 
-    rData.m_rDoc.GetDocumentContentOperationsManager().CopyWithFlyInFly(aRg, aInsPos);
+    rData.m_rDoc.GetDocumentContentOperationsManager().CopyWithFlyInFly(aRg, aInsPos.GetNode());
     m_rDoc.getIDocumentState().SetModified();
     ++aSavePos;
 

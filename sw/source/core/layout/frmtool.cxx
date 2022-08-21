@@ -2010,8 +2010,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
         pLayout->SetCallbackActionEnabled( bOldCallbackActionEnabled );
 }
 
-void MakeFrames( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
-               const SwNodeIndex &rEndIdx )
+void MakeFrames( SwDoc *pDoc, SwNode &rSttIdx, SwNode &rEndIdx )
 {
     bObjsDirect = false;
 
@@ -2161,7 +2160,7 @@ void MakeFrames( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                 bool bSplit;
                 SwFrame* pPrv = bApres ? pFrame : pFrame->GetPrev();
                 // If the section frame is inserted into another one, it must be split.
-                if( pSct && rSttIdx.GetNode().IsSectionNode() )
+                if( pSct && rSttIdx.IsSectionNode() )
                 {
                     bSplit = pSct->SplitSect( pFrame, bApres );
                     if( !bSplit && !bApres )
