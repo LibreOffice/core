@@ -555,7 +555,7 @@ void SwHyphIter::InsertSoftHyph( const sal_Int32 nHyphPos )
     const sal_Int32 nLastHyphLen = GetEnd()->GetContentIndex() -
                           pSttPos->GetContentIndex();
 
-    if( pSttPos->nNode != pEndPos->nNode || !nLastHyphLen )
+    if( pSttPos->GetNode() != pEndPos->GetNode() || !nLastHyphLen )
     {
         OSL_ENSURE( pSttPos->GetNode() == pEndPos->GetNode(),
                 "SwHyphIter::InsertSoftHyph: node warp during hyphenation" );
@@ -1702,8 +1702,8 @@ void SwEditShell::IgnoreGrammarErrorAt( SwPaM& rErrorPosition )
 {
     SwTextNode *pNode;
     SwWrongList *pWrong;
-    SwNodeIndex aIdx = rErrorPosition.Start()->nNode;
-    SwNodeIndex aEndIdx = rErrorPosition.Start()->nNode;
+    SwNodeIndex aIdx(rErrorPosition.Start()->GetNode());
+    SwNodeIndex aEndIdx(rErrorPosition.Start()->GetNode());
     sal_Int32 nStart = rErrorPosition.Start()->GetContentIndex();
     sal_Int32 nEnd = COMPLETE_STRING;
     while( aIdx <= aEndIdx )
