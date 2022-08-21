@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9de9d24_9425aa43",
+        "filename": "basic/qa/cppunit/basictest.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-08-21T17:55:53Z",
+      "side": 1,
+      "message": "Here I get more than one error message, so all the previous ones will be overwritten. Should I change the data structure to a vector or check how to avoid any additional run time errors?",
+      "revId": "495deb2b61d01d7fd5ec5a49119d5bf009129b47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
