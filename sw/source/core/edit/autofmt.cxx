@@ -220,7 +220,7 @@ class SwAutoFormat
 
 public:
     SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags aFlags,
-                SwNodeIndex const * pSttNd = nullptr, SwNodeIndex const * pEndNd = nullptr );
+                SwNode const * pSttNd = nullptr, SwNode const * pEndNd = nullptr );
 };
 
 static const sal_Unicode* StrChr( const sal_Unicode* pSrc, sal_Unicode c )
@@ -1194,7 +1194,7 @@ void SwAutoFormat::DeleteSelImpl(SwPaM & rDelPam, SwPaM & rPamToCorrect)
             p->MoveTo( &rPamToCorrect );
         } while( p != pPrev );
 
-        m_aNdIdx = aTmp.GetPoint()->nNode;
+        m_aNdIdx = aTmp.GetPoint()->GetNode();
         m_pCurTextNd = m_aNdIdx.GetNode().GetTextNode();
         m_pCurTextFrame = GetFrame(*m_pCurTextNd); // keep it up to date
     }
@@ -1978,7 +1978,7 @@ void SwAutoFormat::AutoCorrect(TextFrameIndex nPos)
 
                 if( m_aFlags.bWithRedlining )
                 {
-                    m_aNdIdx = m_aDelPam.GetPoint()->nNode;
+                    m_aNdIdx = m_aDelPam.GetPoint()->GetNode();
                     m_pCurTextNd = m_aNdIdx.GetNode().GetTextNode();
                     m_pCurTextFrame = GetFrame( *m_pCurTextNd );
                     pText = &m_pCurTextFrame->GetText();
@@ -2032,7 +2032,7 @@ void SwAutoFormat::AutoCorrect(TextFrameIndex nPos)
 
                         if( m_aFlags.bWithRedlining )
                         {
-                            m_aNdIdx = m_aDelPam.GetPoint()->nNode;
+                            m_aNdIdx = m_aDelPam.GetPoint()->GetNode();
                             m_pCurTextNd = m_aNdIdx.GetNode().GetTextNode();
                             m_pCurTextFrame = GetFrame( *m_pCurTextNd );
                             pText = &m_pCurTextFrame->GetText();
@@ -2074,7 +2074,7 @@ void SwAutoFormat::AutoCorrect(TextFrameIndex nPos)
                         {
                             if( m_aFlags.bWithRedlining )
                             {
-                                m_aNdIdx = m_aDelPam.GetPoint()->nNode;
+                                m_aNdIdx = m_aDelPam.GetPoint()->GetNode();
                                 m_pCurTextNd = m_aNdIdx.GetNode().GetTextNode();
                                 m_pCurTextFrame = GetFrame( *m_pCurTextNd );
                                 pText = &m_pCurTextFrame->GetText();
@@ -2147,7 +2147,7 @@ void SwAutoFormat::AutoCorrect(TextFrameIndex nPos)
 
                 if( m_aFlags.bWithRedlining )
                 {
-                    m_aNdIdx = m_aDelPam.GetPoint()->nNode;
+                    m_aNdIdx = m_aDelPam.GetPoint()->GetNode();
                     m_pCurTextNd = m_aNdIdx.GetNode().GetTextNode();
                     m_pCurTextFrame = GetFrame( *m_pCurTextNd );
                     pText = &m_pCurTextFrame->GetText();
@@ -2164,7 +2164,7 @@ void SwAutoFormat::AutoCorrect(TextFrameIndex nPos)
                 nPos = m_pCurTextFrame->MapModelToViewPos(*m_aDelPam.GetPoint());
                 if( m_aFlags.bWithRedlining )
                 {
-                    m_aNdIdx = m_aDelPam.GetPoint()->nNode;
+                    m_aNdIdx = m_aDelPam.GetPoint()->GetNode();
                     m_pCurTextNd = m_aNdIdx.GetNode().GetTextNode();
                     m_pCurTextFrame = GetFrame( *m_pCurTextNd );
                     pText = &m_pCurTextFrame->GetText();
@@ -2214,7 +2214,7 @@ void SwAutoFormat::AutoCorrect(TextFrameIndex nPos)
 
                 if( m_aFlags.bWithRedlining )
                 {
-                    m_aNdIdx = m_aDelPam.GetPoint()->nNode;
+                    m_aNdIdx = m_aDelPam.GetPoint()->GetNode();
                     m_pCurTextNd = m_aNdIdx.GetNode().GetTextNode();
                     m_pCurTextFrame = GetFrame( *m_pCurTextNd );
                     pText = &m_pCurTextFrame->GetText();
@@ -2229,7 +2229,7 @@ void SwAutoFormat::AutoCorrect(TextFrameIndex nPos)
 }
 
 SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags aFlags,
-                            SwNodeIndex const * pSttNd, SwNodeIndex const * pEndNd )
+                            SwNode const * pSttNd, SwNode const * pEndNd )
     : m_aFlags(std::move( aFlags )),
     m_aDelPam( pEdShell->GetDoc()->GetNodes().GetEndOfExtras() ),
     m_aNdIdx( pEdShell->GetDoc()->GetNodes().GetEndOfExtras(), SwNodeOffset(+1) ),
@@ -2718,8 +2718,8 @@ void SwEditShell::AutoFormat( const SvxSwAutoFormatFlags* pAFlags )
         {
             if( rPaM.HasMark() )
             {
-                SwAutoFormat aFormat( this, aAFFlags, &(rPaM.Start()->nNode),
-                                     &(rPaM.End()->nNode) );
+                SwAutoFormat aFormat( this, aAFFlags, &rPaM.Start()->GetNode(),
+                                     &rPaM.End()->GetNode() );
             }
         }
     }
@@ -2770,8 +2770,8 @@ void SwEditShell::AutoFormatBySplitNode()
 
         SvxSwAutoFormatFlags aAFFlags = *GetAutoFormatFlags(); // use default values so far
 
-        SwAutoFormat aFormat( this, std::move(aAFFlags), &pCursor->GetMark()->nNode,
-                                &pCursor->GetPoint()->nNode );
+        SwAutoFormat aFormat( this, std::move(aAFFlags), &pCursor->GetMark()->GetNode(),
+                                &pCursor->GetPoint()->GetNode() );
         SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get().GetAutoCorrect();
         if( pACorr && !pACorr->IsAutoCorrFlag( ACFlags::CapitalStartSentence | ACFlags::CapitalStartWord |
                                 ACFlags::AddNonBrkSpace | ACFlags::ChgOrdinalNumber | ACFlags::TransliterateRTL |

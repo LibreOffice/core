@@ -205,7 +205,7 @@ bool SwAutoCorrDoc::ReplaceRange( sal_Int32 nPos, sal_Int32 nSourceLength, const
     std::pair<SwTextNode *, sal_Int32> const pos(pFrame->MapViewToModel(TextFrameIndex(nPos)));
 
     SwPaM* pPam = &m_rCursor;
-    if (pPam->GetPoint()->nNode != *pos.first
+    if (pPam->GetPoint()->GetNode() != *pos.first
         || pPam->GetPoint()->nContent != pos.second)
     {
         pPam = new SwPaM(*pos.first, pos.second);
@@ -340,7 +340,7 @@ OUString const* SwAutoCorrDoc::GetPrevPara(bool const bAtNormalPos)
 
     if( bAtNormalPos || !m_oIndex )
     {
-        m_oIndex.emplace(m_rCursor.GetPoint()->nNode);
+        m_oIndex.emplace(m_rCursor.GetPoint()->GetNode());
     }
     sw::GotoPrevLayoutTextFrame(*m_oIndex, m_rEditSh.GetLayout());
 
@@ -459,7 +459,7 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
                 if( pPara )
                 {
                     OSL_ENSURE( !m_oIndex, "who has not deleted his Index?" );
-                    m_oIndex.emplace(m_rCursor.GetPoint()->nNode);
+                    m_oIndex.emplace(m_rCursor.GetPoint()->GetNode());
                     sw::GotoPrevLayoutTextFrame(*m_oIndex, m_rEditSh.GetLayout());
                 }
 
