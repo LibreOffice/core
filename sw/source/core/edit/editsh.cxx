@@ -510,10 +510,10 @@ void SwEditShell::ReplaceDropText( const OUString &rStr, SwPaM* pPaM )
 
     StartAllAction();
 
-    const SwNodeIndex& rNd = pCursor->GetPoint()->nNode;
+    const SwNode& rNd = pCursor->GetPoint()->GetNode();
     SwPaM aPam( rNd, rStr.getLength(), rNd, 0 );
     SwTextFrame const*const pTextFrame(static_cast<SwTextFrame const*>(
-        rNd.GetNode().GetTextNode()->getLayoutFrame(GetLayout())));
+        rNd.GetTextNode()->getLayoutFrame(GetLayout())));
     if (pTextFrame)
     {
         *aPam.GetPoint() = pTextFrame->MapViewToModelPos(TextFrameIndex(0));
@@ -858,8 +858,7 @@ sal_uInt16 SwEditShell::GetLineCount()
     sal_uInt16 nRet = 0;
     CalcLayout();
     SwPaM* pPam = GetCursor();
-    SwNodeIndex& rPtIdx = pPam->GetPoint()->nNode;
-    SwNodeIndex aStart( rPtIdx );
+    SwNodeIndex aStart( pPam->GetPoint()->GetNode() );
     SwContentNode* pCNd;
     SwContentFrame *pContentFrame = nullptr;
 

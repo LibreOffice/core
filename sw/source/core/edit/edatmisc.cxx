@@ -67,7 +67,7 @@ void SwEditShell::GCAttr()
         }
         else
         {
-            const SwNodeIndex& rEnd = rPaM.End()->nNode;
+            const SwNode& rEnd = rPaM.End()->GetNode();
             SwNodeIndex aIdx( rPaM.Start()->GetNode() );
             SwNode* pNd = &aIdx.GetNode();
             do {

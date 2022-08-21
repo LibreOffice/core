@@ -717,7 +717,7 @@ SvtScriptType SwEditShell::GetScriptType() const
                         const SwScriptInfo *const pScriptInfo =
                             SwScriptInfo::GetScriptInfo(*pTNd, &pFrame);
 
-                        sal_Int32 nChg = aIdx == pStt->nNode
+                        sal_Int32 nChg = aIdx == pStt->GetNode()
                                                 ? pStt->GetContentIndex()
                                                 : 0;
                         sal_Int32 nEndPos = aIdx == nEndIdx
