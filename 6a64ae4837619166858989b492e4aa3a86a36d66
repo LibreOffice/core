@@ -16,6 +16,24 @@
       "message": "LGTM.. but there are so many places using WordType::ANYWORD_IGNOREWHITESPACES that I really can\u0027t say what this would break or if it\u0027s a benefit for all.\n\nWhat probably needs to be adapted is in\ni18npool/source/breakiterator/breakiterator_unicode.cxx\n\nBreakIterator_Unicode::nextWord() line 382\n\n        if ( (rWordType \u003d\u003d WordType::ANYWORD_IGNOREWHITESPACES ||\n                    rWordType \u003d\u003d WordType::DICTIONARY_WORD ) \u0026\u0026\n                u_isWhitespace(Text.iterateCodePoints(\u0026rv.startPos, 0)) )\n\nBreakIterator_Unicode::previousWord() line 405\n\n        if ( (rWordType \u003d\u003d WordType::ANYWORD_IGNOREWHITESPACES ||\n                    rWordType \u003d\u003d WordType::DICTIONARY_WORD) \u0026\u0026\n                u_isWhitespace(Text.iterateCodePoints(\u0026rv.startPos, 0)) )\n\nas u_isWhitespace() is used for both that probably needs to be split and use u_isWhitespace() only for DICTIONARY_WORD and for ANYWORD_IGNOREWHITESPACES use u_isUWhitespace().\n",
       "revId": "6a64ae4837619166858989b492e4aa3a86a36d66",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1941f1d2_bb6b6e43",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-08-21T12:14:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0e3bf210_c4e321b9",
+      "revId": "6a64ae4837619166858989b492e4aa3a86a36d66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
