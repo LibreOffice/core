@@ -60,6 +60,10 @@ public:
                             { return mvLines[nLine]; }
     sal_Int32   Count() const { return mvLines.size(); }
 
+    tools::Long PopulateTextLines(tools::Rectangle const& rRect, const tools::Long nTextHeight,
+                                  tools::Long nWidth, OUString const& rStr,
+                                  DrawTextFlags nStyle, vcl::ITextLayout const& rLayout);
+
 private:
     ImplMultiTextLineInfo( const ImplMultiTextLineInfo& ) = delete;
     ImplMultiTextLineInfo& operator=( const ImplMultiTextLineInfo& ) = delete;
