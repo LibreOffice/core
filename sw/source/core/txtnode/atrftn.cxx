@@ -414,7 +414,7 @@ void SwTextFootnote::CopyFootnote(
         SwNodeIndex aEnd( *aStart.GetNode().EndOfSectionNode() );
         SwNodeOffset nDestLen = aEnd.GetIndex() - aStart.GetIndex() - 1;
 
-        m_pTextNode->GetDoc().GetDocumentContentOperationsManager().CopyWithFlyInFly(aRg, aEnd);
+        m_pTextNode->GetDoc().GetDocumentContentOperationsManager().CopyWithFlyInFly(aRg, aEnd.GetNode());
 
         // in case the destination section was not empty, delete the old nodes
         // before:   Src: SxxxE,  Dst: SnE
