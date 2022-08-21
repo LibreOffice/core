@@ -306,9 +306,8 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                         pDoc->SetOutlineNumRule( *mpOutlineRule );
 
                     SwNodeRange aRg( *pStartNd, SwNodeOffset(0), aEndIdx.GetNode() );
-                    SwNodeIndex aTmpIdx( pDoc->GetNodes().GetEndOfContent() );
                     GetDocumentContentOperationsManager().CopyWithFlyInFly(
-                            aRg, aTmpIdx, nullptr, false, false);
+                            aRg, pDoc->GetNodes().GetEndOfContent(), nullptr, false, false);
 
                     // Delete the initial TextNode
                     SwNodeIndex aIdx( pDoc->GetNodes().GetEndOfExtras(), 2 );

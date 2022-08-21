@@ -264,17 +264,16 @@ void DelFlyInRange( SwNode& rMkNd,
 // because of unnecessary expanded redlines
 // From now on this class saves the redline positions of all redlines which ends exact at the
 // insert position (node _and_ content index)
-SaveRedlEndPosForRestore::SaveRedlEndPosForRestore( const SwNodeIndex& rInsIdx, sal_Int32 nCnt )
+SaveRedlEndPosForRestore::SaveRedlEndPosForRestore( const SwNode& rInsIdx, sal_Int32 nCnt )
     : mnSaveContent( nCnt )
 {
-    SwNode& rNd = rInsIdx.GetNode();
-    SwDoc& rDest = rNd.GetDoc();
+    const SwDoc& rDest = rInsIdx.GetDoc();
     if( rDest.getIDocumentRedlineAccess().GetRedlineTable().empty() )
         return;
 
     SwRedlineTable::size_type nFndPos;
     const SwPosition* pEnd;
-    SwPosition aSrcPos( rInsIdx, rNd.GetContentNode(), nCnt );
+    SwPosition aSrcPos( rInsIdx, rInsIdx.GetContentNode(), nCnt );
     rDest.getIDocumentRedlineAccess().GetRedline( aSrcPos, &nFndPos );
     const SwRangeRedline* pRedl;
     while( nFndPos--

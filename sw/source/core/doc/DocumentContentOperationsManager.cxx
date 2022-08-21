@@ -3621,7 +3621,7 @@ void DocumentContentOperationsManager::RemoveLeadingWhiteSpace(const SwPosition 
 ///       pCopiedPaM *includes* a partially selected start text node
 void DocumentContentOperationsManager::CopyWithFlyInFly(
     const SwNodeRange& rRg,
-    const SwNodeIndex& rInsPos,
+    SwNode& rInsPos,
     const std::pair<const SwPaM&, const SwPosition&>* pCopiedPaM /*and real insert pos*/,
     const bool bMakeNewFrames,
     const bool bDelRedlines,
@@ -3629,19 +3629,19 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
     SwCopyFlags const flags) const
 {
     assert(!pCopiedPaM || pCopiedPaM->first.End()->GetNode() == rRg.aEnd.GetNode());
-    assert(!pCopiedPaM || pCopiedPaM->second.GetNode() <= rInsPos.GetNode());
+    assert(!pCopiedPaM || pCopiedPaM->second.GetNode() <= rInsPos);
 
-    SwDoc& rDest = rInsPos.GetNode().GetDoc();
+    SwDoc& rDest = rInsPos.GetDoc();
     SwNodeIndex aSavePos( rInsPos );
 
     if (rRg.aStart != rRg.aEnd)
     {
-        bool bEndIsEqualEndPos = rInsPos == rRg.aEnd;
+        bool bEndIsEqualEndPos = rInsPos == rRg.aEnd.GetNode();
         --aSavePos;
         SaveRedlEndPosForRestore aRedlRest( rInsPos, 0 );
 
         // insert behind the already copied start node
-        m_rDoc.GetNodes().CopyNodes( rRg, rInsPos.GetNode(), false, true );
+        m_rDoc.GetNodes().CopyNodes( rRg, rInsPos, false, true );
         aRedlRest.Restore();
 
         if (bEndIsEqualEndPos)
@@ -3679,7 +3679,7 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
         {   // recreate from previous node (could be merged now)
             o3tl::sorted_vector<SwTextFrame*> frames;
             SwTextNode * pNode = aSavePos.GetNode().GetTextNode();
-            SwTextNode *const pEndNode = rInsPos.GetNode().GetTextNode();
+            SwTextNode *const pEndNode = rInsPos.GetTextNode();
             if (pEndNode)
             {
                 SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pEndNode);
@@ -3733,7 +3733,7 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
             SwNodeIndex const end(rInsPos,
                     SwNodeOffset((!isRecreateEndNode || isAtStartOfSection)
                     ? 0 : +1));
-            ::MakeFrames(&rDest, aSavePos, end);
+            ::MakeFrames(&rDest, aSavePos.GetNode(), end.GetNode());
         }
     }
 
@@ -3769,7 +3769,7 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
             flags);
     }
 
-    SwNodeRange aCpyRange( aSavePos, rInsPos );
+    SwNodeRange aCpyRange( aSavePos.GetNode(), rInsPos );
 
     if( bDelRedlines && ( RedlineFlags::DeleteRedlines & rDest.getIDocumentRedlineAccess().GetRedlineFlags() ))
         lcl_DeleteRedlines( rRg, aCpyRange );
@@ -5191,12 +5191,12 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
                 SwNodeIndex aSaveIdx( aInsPos, -1 );
                 assert(pStt->nNode != pEnd->nNode);
                 pEnd->nContent = 0; // TODO why this?
-                CopyWithFlyInFly(aRg, aInsPos, &tmp, /*bMakeNewFrames*/true, false, /*bCopyFlyAtFly=*/false, flags);
+                CopyWithFlyInFly(aRg, aInsPos.GetNode(), &tmp, /*bMakeNewFrames*/true, false, /*bCopyFlyAtFly=*/false, flags);
                 ++aSaveIdx;
                 pEnd->Assign(aSaveIdx);
             }
             else
-                CopyWithFlyInFly(aRg, aInsPos, &tmp, /*bMakeNewFrames*/true, false, /*bCopyFlyAtFly=*/false, flags);
+                CopyWithFlyInFly(aRg, aInsPos.GetNode(), &tmp, /*bMakeNewFrames*/true, false, /*bCopyFlyAtFly=*/false, flags);
 
             bCopyBookmarks = false;
         }
