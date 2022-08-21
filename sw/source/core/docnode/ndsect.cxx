@@ -1179,11 +1179,10 @@ void SwSectionNode::MakeOwnFrames(SwNodeIndex* pIdxBehind, SwNodeIndex* pEndIdx)
 
     if( rNds.IsDocNodes() )
     {
-        SwNodeIndex *pEnd = pEndIdx ? pEndIdx :
-                            new SwNodeIndex( *EndOfSectionNode(), 1 );
-        ::MakeFrames( &rDoc, *pIdxBehind, *pEnd );
-        if( !pEndIdx )
-            delete pEnd;
+        if( pEndIdx )
+            ::MakeFrames( &rDoc, pIdxBehind->GetNode(), pEndIdx->GetNode() );
+        else
+            ::MakeFrames( &rDoc, pIdxBehind->GetNode(), SwNodeIndex( *EndOfSectionNode(), 1 ).GetNode() );
     }
 }
 

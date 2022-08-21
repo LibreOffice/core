@@ -1630,9 +1630,8 @@ void SwRangeRedline::CopyToSection()
         }
         else
         {
-            SwNodeIndex aInsPos( *pSttNd->EndOfSectionNode() );
             SwNodeRange aRg( pStt->nNode, SwNodeOffset(0), pEnd->nNode, SwNodeOffset(1) );
-            rDoc.GetDocumentContentOperationsManager().CopyWithFlyInFly(aRg, aInsPos);
+            rDoc.GetDocumentContentOperationsManager().CopyWithFlyInFly(aRg, *pSttNd->EndOfSectionNode());
         }
     }
     m_oContentSect.emplace( *pSttNd );
