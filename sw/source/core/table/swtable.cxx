@@ -74,11 +74,6 @@ using namespace com::sun::star;
 static void ChgTextToNum( SwTableBox& rBox, const OUString& rText, const Color* pCol,
                     bool bChgAlign, SwNodeOffset nNdPos );
 
-sal_Int32 SwTableBox::getRowSpan() const
-{
-    return mnRowSpan;
-}
-
 void SwTableBox::setRowSpan( sal_Int32 nNewRowSpan )
 {
     mnRowSpan = nNewRowSpan;

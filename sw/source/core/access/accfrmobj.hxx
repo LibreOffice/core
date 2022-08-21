@@ -51,7 +51,12 @@ class SwAccessibleChild
         SwAccessibleChild& operator=( const SwFrame* pFrame );
         SwAccessibleChild& operator=( vcl::Window* pWindow );
 
-        bool operator==( const SwAccessibleChild& r ) const;
+        bool operator==( const SwAccessibleChild& r ) const
+        {
+            return mpFrame == r.mpFrame &&
+                   mpDrawObj == r.mpDrawObj &&
+                   mpWindow == r.mpWindow;
+        }
 
         bool IsValid() const;
 

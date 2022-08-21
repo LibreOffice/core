@@ -185,13 +185,6 @@ SwAccessibleChild& SwAccessibleChild::operator=( vcl::Window* pWindow )
     return *this;
 }
 
-bool SwAccessibleChild::operator==( const SwAccessibleChild& r ) const
-{
-    return mpFrame == r.mpFrame &&
-           mpDrawObj == r.mpDrawObj &&
-           mpWindow == r.mpWindow;
-}
-
 bool SwAccessibleChild::IsValid() const
 {
     return mpFrame != nullptr ||
