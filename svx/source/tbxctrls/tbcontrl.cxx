@@ -26,6 +26,7 @@
 #include <svl/numformat.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/itemset.hxx>
+#include <svl/itempool.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/event.hxx>
 #include <vcl/toolbox.hxx>
@@ -103,6 +104,11 @@
 #include <comphelper/lok.hxx>
 #include <tools/json_writer.hxx>
 
+#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/i18n/BreakIterator.hpp>
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/i18n/ScriptType.hpp>
+
 #define MAX_MRU_FONTNAME_ENTRIES    5
 
 #define COMBO_WIDTH_IN_CHARS        18
@@ -117,6 +123,19 @@ using namespace ::com::sun::star::lang;
 
 namespace
 {
+struct ScriptInfo
+{
+    tools::Long textWidth;
+    sal_uInt16 scriptType;
+    sal_Int32 changePos;
+    ScriptInfo(sal_uInt16 scrptType, sal_Int32 position)
+        : textWidth(0)
+        , scriptType(scrptType)
+        , changePos(position)
+    {
+    }
+};
+
 class SvxStyleBox_Base
 {
 public:
@@ -186,6 +205,12 @@ public:
     virtual bool DoKeyInput(const KeyEvent& rKEvt);
 
 private:
+    std::optional<SvxFont> m_oFont;
+    std::optional<SvxFont> m_oCJKFont;
+    std::optional<SvxFont> m_oCTLFont;
+
+    css::uno::Reference<css::i18n::XBreakIterator> mxBreak;
+
     DECL_LINK(SelectHdl, weld::ComboBox&, void);
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
     DECL_LINK(ActivateHdl, weld::ComboBox&, bool);
@@ -198,6 +223,9 @@ private:
     void CalcOptimalExtraUserWidth(vcl::RenderContext& rRenderContext);
 
     void Select(bool bNonTravelSelect);
+
+    std::vector<ScriptInfo> CheckScript(const OUString &rStyleName);
+    tools::Rectangle CalcBoundRect(vcl::RenderContext& rRenderContext, const OUString &rStyleName, std::vector<ScriptInfo>& rScriptChanges, double fRatio = 1);
 
 protected:
     SvxStyleToolBoxControl& m_rCtrl;
@@ -220,9 +248,8 @@ protected:
 
     void            ReleaseFocus();
     static Color    TestColorsVisible(const Color &FontCol, const Color &BackCol);
-    static void     UserDrawEntry(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, const OUString &rStyleName);
+    void            UserDrawEntry(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, const tools::Rectangle& rTextRect, const OUString &rStyleName, const std::vector<ScriptInfo>& rScriptChanges);
     void            SetupEntry(vcl::RenderContext& rRenderContext, sal_Int32 nItem, const tools::Rectangle& rRect, std::u16string_view rStyleName, bool bIsNotSelected);
-    static bool     AdjustFontForItemHeight(OutputDevice& rDevice, tools::Rectangle const & rTextRect, tools::Long nHeight);
     DECL_LINK(MenuSelectHdl, const OString&, void);
     DECL_STATIC_LINK(SvxStyleBox_Base, ShowMoreHdl, void*, void);
 };
@@ -1088,23 +1115,6 @@ void SvxStyleBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
     InterimItemWindow::DataChanged( rDCEvt );
 }
 
-bool SvxStyleBox_Base::AdjustFontForItemHeight(OutputDevice& rDevice, tools::Rectangle const & rTextRect, tools::Long nHeight)
-{
-    if (rTextRect.Bottom() > nHeight)
-    {
-        // the text does not fit, adjust the font size
-        double ratio = static_cast< double >( nHeight ) / rTextRect.Bottom();
-        vcl::Font aFont(rDevice.GetFont());
-        Size aPixelSize(aFont.GetFontSize());
-        aPixelSize.setWidth( aPixelSize.Width() * ratio );
-        aPixelSize.setHeight( aPixelSize.Height() * ratio );
-        aFont.SetFontSize(aPixelSize);
-        rDevice.SetFont(aFont);
-        return true;
-    }
-    return false;
-}
-
 void SvxStyleBox_Impl::SetOptimalSize()
 {
     // set width in chars low so the size request will not be overridden
@@ -1116,23 +1126,232 @@ void SvxStyleBox_Impl::SetOptimalSize()
     SetSizePixel(get_preferred_size());
 }
 
-void SvxStyleBox_Base::UserDrawEntry(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, const OUString &rStyleName)
+std::vector<ScriptInfo> SvxStyleBox_Base::CheckScript(const OUString &rStyleName)
+{
+    assert(!rStyleName.isEmpty()); // must have a preview text here!
+
+    std::vector<ScriptInfo> aScriptChanges;
+
+    if (!mxBreak.is())
+    {
+        auto xContext = comphelper::getProcessComponentContext();
+        mxBreak = css::i18n::BreakIterator::create(xContext);
+    }
+
+    sal_Int16 nScript = mxBreak->getScriptType(rStyleName, 0);
+    sal_Int32 nChg = 0;
+    if (css::i18n::ScriptType::WEAK == nScript)
+    {
+        nChg = mxBreak->endOfScript(rStyleName, nChg, nScript);
+        if (nChg < rStyleName.getLength())
+            nScript = mxBreak->getScriptType(rStyleName, nChg);
+        else
+            nScript = css::i18n::ScriptType::LATIN;
+    }
+
+    while (true)
+    {
+        nChg = mxBreak->endOfScript(rStyleName, nChg, nScript);
+        aScriptChanges.emplace_back(nScript, nChg);
+        if (nChg >= rStyleName.getLength() || nChg < 0)
+            break;
+        nScript = mxBreak->getScriptType(rStyleName, nChg);
+    }
+
+    return aScriptChanges;
+}
+
+tools::Rectangle SvxStyleBox_Base::CalcBoundRect(vcl::RenderContext& rRenderContext, const OUString &rStyleName, std::vector<ScriptInfo>& rScriptChanges, double fRatio)
+{
+    tools::Rectangle aTextRect;
+
+    sal_uInt16 nScript;
+    sal_uInt16 nIdx = 0;
+    sal_Int32 nStart = 0;
+    sal_Int32 nEnd;
+    size_t nCnt = rScriptChanges.size();
+
+    if (nCnt)
+    {
+        nEnd = rScriptChanges[nIdx].changePos;
+        nScript = rScriptChanges[nIdx].scriptType;
+    }
+    else
+    {
+        nEnd = rStyleName.getLength();
+        nScript = css::i18n::ScriptType::LATIN;
+    }
+
+    do
+    {
+        auto oFont = (nScript == css::i18n::ScriptType::ASIAN) ?
+                         m_oCJKFont :
+                         ((nScript == css::i18n::ScriptType::COMPLEX) ?
+                             m_oCTLFont :
+                             m_oFont);
+
+        rRenderContext.Push(vcl::PushFlags::FONT);
+
+        if (oFont)
+            rRenderContext.SetFont(*oFont);
+
+        if (fRatio != 1)
+        {
+            vcl::Font aFont(rRenderContext.GetFont());
+            Size aPixelSize(aFont.GetFontSize());
+            aPixelSize.setWidth(aPixelSize.Width() * fRatio);
+            aPixelSize.setHeight(aPixelSize.Height() * fRatio);
+            aFont.SetFontSize(aPixelSize);
+            rRenderContext.SetFont(aFont);
+        }
+
+        tools::Rectangle aRect;
+        rRenderContext.GetTextBoundRect(aRect, rStyleName, nStart, nStart, nEnd - nStart);
+        aTextRect = aTextRect.Union(aRect);
+
+        tools::Long nWidth = rRenderContext.GetTextWidth(rStyleName, nStart, nEnd - nStart);
+
+        rRenderContext.Pop();
+
+        if (nIdx >= rScriptChanges.size())
+            break;
+
+        rScriptChanges[nIdx++].textWidth = nWidth;
+
+        if (nEnd < rStyleName.getLength() && nIdx < nCnt)
+        {
+            nStart = nEnd;
+            nEnd = rScriptChanges[nIdx].changePos;
+            nScript = rScriptChanges[nIdx].scriptType;
+        }
+        else
+            break;
+    }
+    while(true);
+
+    return aTextRect;
+}
+
+void SvxStyleBox_Base::UserDrawEntry(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, const tools::Rectangle& rTextRect, const OUString &rStyleName, const std::vector<ScriptInfo>& rScriptChanges)
 {
     // IMG_TXT_DISTANCE in ilstbox.hxx is 6, then 1 is added as
     // nBorder, and we are adding 1 in order to look better when
     // italics is present
     const int nLeftDistance = 8;
 
-    tools::Rectangle aTextRect;
-    rRenderContext.GetTextBoundRect(aTextRect, rStyleName);
-
     Point aPos(rRect.TopLeft());
     aPos.AdjustX(nLeftDistance );
 
-    if (!AdjustFontForItemHeight(rRenderContext, aTextRect, rRect.GetHeight()))
-        aPos.AdjustY((rRect.GetHeight() - aTextRect.Bottom() ) / 2);
+    double fRatio = 1;
+    if (rTextRect.Bottom() > rRect.GetHeight())
+        fRatio = static_cast<double>(rRect.GetHeight()) / rTextRect.Bottom();
+    else
+        aPos.AdjustY((rRect.GetHeight() - rTextRect.Bottom()) / 2);
 
-    rRenderContext.DrawText(aPos, rStyleName);
+    sal_uInt16 nScript;
+    sal_uInt16 nIdx = 0;
+    sal_Int32 nStart = 0;
+    sal_Int32 nEnd;
+    size_t nCnt = rScriptChanges.size();
+    if (nCnt)
+    {
+        nEnd = rScriptChanges[nIdx].changePos;
+        nScript = rScriptChanges[nIdx].scriptType;
+    }
+    else
+    {
+        nEnd = rStyleName.getLength();
+        nScript = css::i18n::ScriptType::LATIN;
+    }
+
+    do
+    {
+        auto oFont = (nScript == css::i18n::ScriptType::ASIAN)
+                         ? m_oCJKFont
+                         : ((nScript == css::i18n::ScriptType::COMPLEX)
+                             ? m_oCTLFont
+                             : m_oFont);
+
+        rRenderContext.Push(vcl::PushFlags::FONT);
+
+        if (oFont)
+            rRenderContext.SetFont(*oFont);
+
+        if (fRatio != 1)
+        {
+            vcl::Font aFont(rRenderContext.GetFont());
+            Size aPixelSize(aFont.GetFontSize());
+            aPixelSize.setWidth(aPixelSize.Width() * fRatio);
+            aPixelSize.setHeight(aPixelSize.Height() * fRatio);
+            aFont.SetFontSize(aPixelSize);
+            rRenderContext.SetFont(aFont);
+        }
+
+        rRenderContext.DrawText(aPos, rStyleName, nStart, nEnd - nStart);
+
+        rRenderContext.Pop();
+
+        aPos.AdjustX(rScriptChanges[nIdx++].textWidth * fRatio);
+        if (nEnd < rStyleName.getLength() && nIdx < nCnt)
+        {
+            nStart = nEnd;
+            nEnd = rScriptChanges[nIdx].changePos;
+            nScript = rScriptChanges[nIdx].scriptType;
+        }
+        else
+            break;
+    }
+    while(true);
+}
+
+static bool GetWhich(const SfxItemSet& rSet, sal_uInt16 nSlot, sal_uInt16& rWhich)
+{
+    rWhich = rSet.GetPool()->GetWhich(nSlot);
+    return rSet.GetItemState(rWhich) >= SfxItemState::DEFAULT;
+}
+
+static bool SetFont(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont)
+{
+    sal_uInt16 nWhich;
+    if (GetWhich(rSet, nSlot, nWhich))
+    {
+        const auto& rFontItem = static_cast<const SvxFontItem&>(rSet.Get(nWhich));
+        rFont.SetFamilyName(rFontItem.GetFamilyName());
+        rFont.SetStyleName(rFontItem.GetStyleName());
+        return true;
+    }
+    return false;
+}
+
+bool SetFontSize(vcl::RenderContext& rRenderContext, const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont)
+{
+    sal_uInt16 nWhich;
+    if (GetWhich(rSet, nSlot, nWhich))
+    {
+        const auto& rFontHeightItem = static_cast<const SvxFontHeightItem&>(rSet.Get(nWhich));
+        SfxObjectShell *pShell = SfxObjectShell::Current();
+        Size aFontSize(0, rFontHeightItem.GetHeight());
+        Size aPixelSize(rRenderContext.LogicToPixel(aFontSize, MapMode(pShell->GetMapUnit())));
+        rFont.SetFontSize(aPixelSize);
+        return true;
+    }
+    return false;
+}
+
+static void SetFontStyle(const SfxItemSet& rSet, sal_uInt16 nPosture, sal_uInt16 nWeight, SvxFont& rFont)
+{
+    sal_uInt16 nWhich;
+    if (GetWhich(rSet, nPosture, nWhich))
+    {
+        const auto& rItem = static_cast<const SvxPostureItem&>(rSet.Get(nWhich));
+        rFont.SetItalic(rItem.GetPosture());
+    }
+
+    if (GetWhich(rSet, nWeight, nWhich))
+    {
+        const auto& rItem = static_cast<const SvxWeightItem&>(rSet.Get(nWhich));
+        rFont.SetWeight(rItem.GetWeight());
+    }
 }
 
 void SvxStyleBox_Base::SetupEntry(vcl::RenderContext& rRenderContext, sal_Int32 nItem, const tools::Rectangle& rRect, std::u16string_view rStyleName, bool bIsNotSelected)
@@ -1175,67 +1394,88 @@ void SvxStyleBox_Base::SetupEntry(vcl::RenderContext& rRenderContext, sal_Int32 
     std::optional<SfxItemSet> const pItemSet(pStyle->GetItemSetForPreview());
     if (!pItemSet) return;
 
-    const SvxFontItem * const pFontItem =
-        pItemSet->GetItem<SvxFontItem>(SID_ATTR_CHAR_FONT);
-    const SvxFontHeightItem * const pFontHeightItem =
-        pItemSet->GetItem<SvxFontHeightItem>(SID_ATTR_CHAR_FONTHEIGHT);
-
-    if ( !(pFontItem && pFontHeightItem) )
-        return;
-
-    Size aFontSize( 0, pFontHeightItem->GetHeight() );
-    Size aPixelSize(rRenderContext.LogicToPixel(aFontSize, MapMode(pShell->GetMapUnit())));
-
-    // setup the font properties
     SvxFont aFont;
-    aFont.SetFamilyName(pFontItem->GetFamilyName());
-    aFont.SetStyleName(pFontItem->GetStyleName());
-    aFont.SetFontSize(aPixelSize);
+    SvxFont aCJKFont;
+    SvxFont aCTLFont;
 
-    const SfxPoolItem *pItem = pItemSet->GetItem( SID_ATTR_CHAR_WEIGHT );
-    if ( pItem )
-        aFont.SetWeight( static_cast< const SvxWeightItem* >( pItem )->GetWeight() );
+    SetFontStyle(*pItemSet, SID_ATTR_CHAR_POSTURE, SID_ATTR_CHAR_WEIGHT, aFont);
+    SetFontStyle(*pItemSet, SID_ATTR_CHAR_CJK_POSTURE, SID_ATTR_CHAR_CJK_WEIGHT, aCJKFont);
+    SetFontStyle(*pItemSet, SID_ATTR_CHAR_CTL_POSTURE, SID_ATTR_CHAR_CTL_WEIGHT, aCTLFont);
 
-    pItem = pItemSet->GetItem( SID_ATTR_CHAR_POSTURE );
+    const SfxPoolItem *pItem = pItemSet->GetItem( SID_ATTR_CHAR_CONTOUR );
     if ( pItem )
-        aFont.SetItalic( static_cast< const SvxPostureItem* >( pItem )->GetPosture() );
-
-    pItem = pItemSet->GetItem( SID_ATTR_CHAR_CONTOUR );
-    if ( pItem )
-        aFont.SetOutline( static_cast< const SvxContourItem* >( pItem )->GetValue() );
+    {
+        auto aVal = static_cast< const SvxContourItem* >( pItem )->GetValue();
+        aFont.SetOutline(aVal);
+        aCJKFont.SetOutline(aVal);
+        aCTLFont.SetOutline(aVal);
+    }
 
     pItem = pItemSet->GetItem( SID_ATTR_CHAR_SHADOWED );
     if ( pItem )
-        aFont.SetShadow( static_cast< const SvxShadowedItem* >( pItem )->GetValue() );
+    {
+        auto aVal = static_cast< const SvxShadowedItem* >( pItem )->GetValue();
+        aFont.SetShadow(aVal);
+        aCJKFont.SetShadow(aVal);
+        aCTLFont.SetShadow(aVal);
+    }
 
     pItem = pItemSet->GetItem( SID_ATTR_CHAR_RELIEF );
     if ( pItem )
-        aFont.SetRelief( static_cast< const SvxCharReliefItem* >( pItem )->GetValue() );
+    {
+        auto aVal = static_cast< const SvxCharReliefItem* >( pItem )->GetValue();
+        aFont.SetRelief(aVal);
+        aCJKFont.SetRelief(aVal);
+        aCTLFont.SetRelief(aVal);
+    }
 
     pItem = pItemSet->GetItem( SID_ATTR_CHAR_UNDERLINE );
     if ( pItem )
-        aFont.SetUnderline( static_cast< const SvxUnderlineItem* >( pItem )->GetLineStyle() );
+    {
+        auto aVal = static_cast<const SvxUnderlineItem*>(pItem)->GetLineStyle();
+        aFont.SetUnderline(aVal);
+        aCJKFont.SetUnderline(aVal);
+        aCTLFont.SetUnderline(aVal);
+    }
 
     pItem = pItemSet->GetItem( SID_ATTR_CHAR_OVERLINE );
     if ( pItem )
-        aFont.SetOverline( static_cast< const SvxOverlineItem* >( pItem )->GetValue() );
+    {
+        auto aVal = static_cast< const SvxOverlineItem* >( pItem )->GetValue();
+        aFont.SetOverline(aVal);
+        aCJKFont.SetOverline(aVal);
+        aCTLFont.SetOverline(aVal);
+    }
 
     pItem = pItemSet->GetItem( SID_ATTR_CHAR_STRIKEOUT );
     if ( pItem )
-        aFont.SetStrikeout( static_cast< const SvxCrossedOutItem* >( pItem )->GetStrikeout() );
+    {
+        auto aVal = static_cast< const SvxCrossedOutItem* >( pItem )->GetStrikeout();
+        aFont.SetStrikeout(aVal);
+        aCJKFont.SetStrikeout(aVal);
+        aCTLFont.SetStrikeout(aVal);
+    }
 
     pItem = pItemSet->GetItem( SID_ATTR_CHAR_CASEMAP );
     if ( pItem )
-        aFont.SetCaseMap(static_cast<const SvxCaseMapItem*>(pItem)->GetCaseMap());
+    {
+        auto aVal = static_cast<const SvxCaseMapItem*>(pItem)->GetCaseMap();
+        aFont.SetCaseMap(aVal);
+        aCJKFont.SetCaseMap(aVal);
+        aCTLFont.SetCaseMap(aVal);
+    }
 
     pItem = pItemSet->GetItem( SID_ATTR_CHAR_EMPHASISMARK );
     if ( pItem )
-        aFont.SetEmphasisMark( static_cast< const SvxEmphasisMarkItem* >( pItem )->GetEmphasisMark() );
+    {
+        auto aVal = static_cast< const SvxEmphasisMarkItem* >( pItem )->GetEmphasisMark();
+        aFont.SetEmphasisMark(aVal);
+        aCJKFont.SetEmphasisMark(aVal);
+        aCTLFont.SetEmphasisMark(aVal);
+    }
 
     // setup the device & draw
     Color aFontCol = COL_AUTO, aBackCol = COL_AUTO;
-
-    rRenderContext.SetFont(aFont);
 
     pItem = pItemSet->GetItem( SID_ATTR_CHAR_COLOR );
     // text color, when nothing is selected
@@ -1277,6 +1517,18 @@ void SvxStyleBox_Base::SetupEntry(vcl::RenderContext& rRenderContext, sal_Int32 
     // set text color
     if ( aFontCol != COL_AUTO )
         rRenderContext.SetTextColor(aFontCol);
+
+    if (SetFont(*pItemSet, SID_ATTR_CHAR_FONT, aFont) &&
+        SetFontSize(rRenderContext, *pItemSet, SID_ATTR_CHAR_FONTHEIGHT, aFont))
+        m_oFont = aFont;
+
+    if (SetFont(*pItemSet, SID_ATTR_CHAR_CJK_FONT, aCJKFont) &&
+        SetFontSize(rRenderContext, *pItemSet, SID_ATTR_CHAR_CJK_FONTHEIGHT, aCJKFont))
+        m_oCJKFont = aCJKFont;
+
+    if (SetFont(*pItemSet, SID_ATTR_CHAR_CTL_FONT, aCTLFont) &&
+        SetFontSize(rRenderContext, *pItemSet, SID_ATTR_CHAR_CTL_FONTHEIGHT, aCTLFont))
+        m_oCTLFont = aCTLFont;
 }
 
 IMPL_LINK(SvxStyleBox_Base, CustomRenderHdl, weld::ComboBox::render_args, aPayload, void)
@@ -1293,8 +1545,9 @@ IMPL_LINK(SvxStyleBox_Base, CustomRenderHdl, weld::ComboBox::render_args, aPaylo
     rRenderContext.Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::FONT | vcl::PushFlags::TEXTCOLOR);
 
     SetupEntry(rRenderContext, nIndex, rRect, aStyleName, !bSelected);
-
-    UserDrawEntry(rRenderContext, rRect, aStyleName);
+    auto aScriptChanges = CheckScript(aStyleName);
+    auto aTextRect = CalcBoundRect(rRenderContext, aStyleName, aScriptChanges);
+    UserDrawEntry(rRenderContext, rRect, aTextRect, aStyleName, aScriptChanges);
 
     rRenderContext.Pop();
 }
@@ -1324,12 +1577,13 @@ void SvxStyleBox_Base::CalcOptimalExtraUserWidth(vcl::RenderContext& rRenderCont
 
         rRenderContext.Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::FONT | vcl::PushFlags::TEXTCOLOR);
         SetupEntry(rRenderContext, i, tools::Rectangle(0, 0, RECT_MAX, ITEM_HEIGHT), sStyleName, true);
-        tools::Rectangle aTextRectForActualFont;
-        rRenderContext.GetTextBoundRect(aTextRectForActualFont, sStyleName);
-        if (AdjustFontForItemHeight(rRenderContext, aTextRectForActualFont, ITEM_HEIGHT))
+        auto aScriptChanges = CheckScript(sStyleName);
+        tools::Rectangle aTextRectForActualFont = CalcBoundRect(rRenderContext, sStyleName, aScriptChanges);
+        if (aTextRectForActualFont.Bottom() > ITEM_HEIGHT)
         {
-            //Font didn't fit, so it was changed, refetch with final font size
-            rRenderContext.GetTextBoundRect(aTextRectForActualFont, sStyleName);
+            //Font didn't fit, re-calculate with adjustment ratio.
+            double fRatio = static_cast<double>(ITEM_HEIGHT) / aTextRectForActualFont.Bottom();
+            aTextRectForActualFont = CalcBoundRect(rRenderContext, sStyleName, aScriptChanges, fRatio);
         }
         rRenderContext.Pop();
 
