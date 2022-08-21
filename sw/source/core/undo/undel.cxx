@@ -1126,24 +1126,24 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
             // tdf#134252 *first* create outer section frames
             // note: text node m_nSttNode currently has frame with an upper;
             // there's a hack in InsertCnt_() to move it below new section frame
-            SwNodeIndex const start(rDoc.GetNodes(), m_nSttNode - m_nReplaceDummy);
-            SwNodeIndex const end(rDoc.GetNodes(), m_nSttNode); // exclude m_nSttNode
+            SwNode& start(*rDoc.GetNodes()[m_nSttNode - m_nReplaceDummy]);
+            SwNode& end(*rDoc.GetNodes()[m_nSttNode]); // exclude m_nSttNode
             ::MakeFrames(&rDoc, start, end);
         }
         // tdf#121031 if the start node is a text node, it already has a frame;
         // if it's a table, it does not
         // tdf#109376 exception: end on non-text-node -> start node was inserted
         assert(!m_bDelFullPara || (m_nSectDiff == SwNodeOffset(0)));
-        SwNodeIndex const start(rDoc.GetNodes(), m_nSttNode +
+        SwNode& start(*rDoc.GetNodes()[m_nSttNode +
             ((m_bDelFullPara || !rDoc.GetNodes()[m_nSttNode]->IsTextNode() || pInsNd)
-                 ? 0 : 1));
+                 ? 0 : 1)]);
         // don't include end node in the range: it may have been merged already
         // by the start node, or it may be merged by one of the moved nodes,
         // but if it isn't merged, its current frame(s) should be good...
-        SwNodeIndex const end(rDoc.GetNodes(), m_bDelFullPara
+        SwNode& end(*rDoc.GetNodes()[ m_bDelFullPara
             ? delFullParaEndNode
             // tdf#147310 SwDoc::DeleteRowCol() may delete whole table - end must be node following table!
-            : (m_nEndNode + (rDoc.GetNodes()[m_nSttNode]->IsTableNode() && rDoc.GetNodes()[m_nEndNode]->IsEndNode() ? 1 : 0)));
+            : (m_nEndNode + (rDoc.GetNodes()[m_nSttNode]->IsTableNode() && rDoc.GetNodes()[m_nEndNode]->IsEndNode() ? 1 : 0))]);
         ::MakeFrames(&rDoc, start, end);
     }
 
