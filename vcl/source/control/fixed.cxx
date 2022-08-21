@@ -458,7 +458,7 @@ void SelectableFixedText::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
     Edit::DumpAsPropertyTree(rJsonWriter);
     rJsonWriter.put("type", "fixedtext");
-    rJsonWriter.put("selectable", "true");
+    rJsonWriter.put("selectable", true);
 }
 
 void FixedLine::ImplInit( vcl::Window* pParent, WinBits nStyle )
@@ -984,9 +984,9 @@ void FixedImage::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
         if(GraphicConverter::Export(aOStm, maImage.GetBitmapEx(), ConvertDataFormat::PNG) == ERRCODE_NONE)
         {
             css::uno::Sequence<sal_Int8> aSeq( static_cast<sal_Int8 const *>(aOStm.GetData()), aOStm.Tell());
-            OUStringBuffer aBuffer("data:image/png;base64,");
+            OStringBuffer aBuffer("data:image/png;base64,");
             ::comphelper::Base64::encode(aBuffer, aSeq);
-            rJsonWriter.put("image", aBuffer.makeStringAndClear());
+            rJsonWriter.put("image", aBuffer);
         }
     }
 }
