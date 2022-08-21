@@ -1866,7 +1866,7 @@ void OutputDevice::AddTextRectActions( const tools::Rectangle& rRect,
 
 void OutputDevice::DrawText( const tools::Rectangle& rRect, const OUString& rOrigStr, DrawTextFlags nStyle,
                              std::vector< tools::Rectangle >* pVector, OUString* pDisplayText,
-                             vcl::ITextLayout* _pTextLayout )
+                             vcl::ITextLayout* pTextLayout )
 {
     assert(!is_double_buffered_window());
 
@@ -1876,7 +1876,7 @@ void OutputDevice::DrawText( const tools::Rectangle& rRect, const OUString& rOri
         pDisplayText = &mpOutDevData->mpRecordLayout->m_aDisplayText;
     }
 
-    bool bDecomposeTextRectAction = ( _pTextLayout != nullptr ) && _pTextLayout->DecomposeTextRectAction();
+    bool bDecomposeTextRectAction = ( pTextLayout != nullptr ) && pTextLayout->DecomposeTextRectAction();
     if ( mpMetaFile && !bDecomposeTextRectAction )
         mpMetaFile->AddAction( new MetaTextRectAction( rRect, rOrigStr, nStyle ) );
 
@@ -1901,7 +1901,7 @@ void OutputDevice::DrawText( const tools::Rectangle& rRect, const OUString& rOri
     // #i47157# Factored out to ImplDrawText(), to be used also
     // from AddTextRectActions()
     vcl::DefaultTextLayout aLayout(*this);
-    lcl_DrawText(*this, rRect, rOrigStr, nStyle, _pTextLayout ? *_pTextLayout : aLayout, pVector, pDisplayText);
+    lcl_DrawText(*this, rRect, rOrigStr, nStyle, pTextLayout ? *pTextLayout : aLayout, pVector, pDisplayText);
 
     // and enable again
     mpMetaFile = pMtf;
@@ -1913,7 +1913,7 @@ void OutputDevice::DrawText( const tools::Rectangle& rRect, const OUString& rOri
 tools::Rectangle OutputDevice::GetTextRect( const tools::Rectangle& rRect,
                                      const OUString& rStr, DrawTextFlags nStyle,
                                      TextRectInfo* pInfo,
-                                     const vcl::ITextLayout* _pTextLayout ) const
+                                     const vcl::ITextLayout* pTextLayout ) const
 {
 
     tools::Rectangle           aRect = rRect;
@@ -1934,7 +1934,7 @@ tools::Rectangle OutputDevice::GetTextRect( const tools::Rectangle& rRect,
 
         nMaxWidth = 0;
         vcl::DefaultTextLayout aDefaultLayout( *const_cast< OutputDevice* >( this ) );
-        aMultiLineInfo.PopulateTextLines(rRect, nTextHeight, nWidth, aStr, nStyle, _pTextLayout ? *_pTextLayout : aDefaultLayout);
+        aMultiLineInfo.PopulateTextLines(rRect, nTextHeight, nWidth, aStr, nStyle, pTextLayout ? *pTextLayout : aDefaultLayout);
         nFormatLines = aMultiLineInfo.Count();
         if ( !nTextHeight )
             nTextHeight = 1;
@@ -1982,7 +1982,7 @@ tools::Rectangle OutputDevice::GetTextRect( const tools::Rectangle& rRect,
     else
     {
         nLines      = 1;
-        nMaxWidth   = _pTextLayout ? _pTextLayout->GetTextWidth( aStr, 0, aStr.getLength() ) : GetTextWidth( aStr );
+        nMaxWidth   = pTextLayout ? pTextLayout->GetTextWidth( aStr, 0, aStr.getLength() ) : GetTextWidth( aStr );
 
         if ( pInfo )
         {
