@@ -14916,6 +14916,7 @@ vcl/source/outdev/transparent.cxx
 vcl/source/outdev/vclreferencebase.cxx
 vcl/source/outdev/wallpaper.cxx
 vcl/source/text/ImplLayoutRuns.cxx
+vcl/source/text/ImplMultiTextLineInfo.cxx
 vcl/source/toolkit/group.cxx
 vcl/source/toolkit/morebtn.cxx
 vcl/source/treelist/headbar.cxx
