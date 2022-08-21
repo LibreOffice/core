@@ -2437,7 +2437,7 @@ void SwWrtShell::MakeOutlineContentVisible(const size_t nPos, bool bMakeVisible)
     {
         // reset the index marker and make frames
         aIdx.Assign(*pSttNd, +1);
-        MakeFrames(GetDoc(), aIdx, SwNodeIndex(*pEndNd));
+        MakeFrames(GetDoc(), aIdx.GetNode(), *pEndNd);
 
         pSttNd->GetTextNode()->SetAttrOutlineContentVisible(true);
 
