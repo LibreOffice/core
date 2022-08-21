@@ -160,6 +160,45 @@ void SvpGraphicsBackend::drawRect(tools::Long nX, tools::Long nY, tools::Long nW
 
 void SvpGraphicsBackend::implDrawRect(double nX, double nY, double nWidth, double nHeight)
 {
+    // fast path for the common case of simply creating a solid block of color
+    if (m_rCairoCommon.m_aFillColor != SALCOLOR_NONE && m_rCairoCommon.m_aLineColor != SALCOLOR_NONE
+        && m_rCairoCommon.m_aFillColor == m_rCairoCommon.m_aLineColor)
+    {
+        double fTransparency = 0;
+
+        // don't bother trying to draw stuff which is effectively invisible
+        if (nWidth < 0.1 || nHeight < 0.1)
+            return;
+
+        cairo_t* cr = m_rCairoCommon.getCairoContext(true, getAntiAlias());
+        m_rCairoCommon.clipRegion(cr);
+
+        // To make releaseCairoContext work, use empty extents
+        basegfx::B2DRange extents;
+
+        bool bPixelSnap = !getAntiAlias();
+        if (bPixelSnap)
+        {
+            // snap by rounding
+            nX = basegfx::fround(nX);
+            nY = basegfx::fround(nY);
+            nWidth = basegfx::fround(nWidth);
+            nHeight = basegfx::fround(nHeight);
+        }
+
+        cairo_rectangle(cr, nX, nY, nWidth, nHeight);
+
+        m_rCairoCommon.applyColor(cr, m_rCairoCommon.m_aFillColor, fTransparency);
+        // Get FillDamage (will be extended for LineDamage below)
+        extents = getClippedFillDamage(cr);
+
+        cairo_fill(cr);
+
+        m_rCairoCommon.releaseCairoContext(cr, true, extents);
+
+        return;
+    }
+
     // because of the -1 hack we have to do fill and draw separately
     Color aOrigFillColor = m_rCairoCommon.m_aFillColor;
     Color aOrigLineColor = m_rCairoCommon.m_aLineColor;
