@@ -511,7 +511,7 @@ public:
     void SetSaveUserColor(std::optional<Color> p ) { mxUserColor = p; }
     void SetSaveNumFormatColor( std::optional<Color> p ) { mxNumFormatColor = p; }
 
-    sal_Int32 getRowSpan() const;
+    sal_Int32 getRowSpan() const { return mnRowSpan; }
     void setRowSpan( sal_Int32 nNewRowSpan );
     bool getDummyFlag() const;
     void setDummyFlag( bool bDummy );
