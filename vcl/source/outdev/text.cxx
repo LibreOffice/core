@@ -1630,8 +1630,7 @@ lcl_DrawMnemonicLinesExceptLast(OutputDevice& rTargetDevice, tools::Rectangle co
             && (nMnemonicIndex < nIndex + nLineLen))
         {
             std::unique_ptr<sal_Int32[]> const pCaretXArray(new sal_Int32[2 * nLineLen]);
-            /*sal_Bool bRet =*/rLayout.GetCaretPositions(rStr, pCaretXArray.get(), nIndex,
-                                                         nLineLen);
+            rLayout.GetCaretPositions(rStr, pCaretXArray.get(), nIndex, nLineLen);
 
             auto[nMnemonicX, nMnemonicY, nMnemonicWidth] = lcl_GetMnemonicPos(
                 rTargetDevice, pCaretXArray.get(), aPos, nMnemonicIndex, nIndex);
@@ -1790,7 +1789,7 @@ static void lcl_DrawSinglelineText(OutputDevice& rTargetDevice, tools::Rectangle
     if (nMnemonicIndex != -1 && nMnemonicIndex < aStr.getLength())
     {
         std::unique_ptr<sal_Int32[]> const pCaretXArray(new sal_Int32[2 * aStr.getLength()]);
-        /*sal_Bool bRet =*/ rLayout.GetCaretPositions( aStr, pCaretXArray.get(), 0, aStr.getLength() );
+        rLayout.GetCaretPositions(aStr, pCaretXArray.get(), 0, aStr.getLength());
 
         std::tie(nMnemonicX, nMnemonicY, nMnemonicWidth)
             = lcl_GetMnemonicPos(rTargetDevice, pCaretXArray.get(), aPos, nMnemonicIndex, aStr.getLength());
@@ -2106,7 +2105,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
             }
 
             std::unique_ptr<sal_Int32[]> const pCaretXArray(new sal_Int32[2 * nLen]);
-            /*sal_Bool bRet =*/ GetCaretPositions( aStr, pCaretXArray.get(), nIndex, nLen, pGlyphs );
+            GetCaretPositions(aStr, pCaretXArray.get(), nIndex, nLen, pGlyphs);
             sal_Int32 lc_x1 = pCaretXArray[ 2*(nMnemonicIndex - nIndex) ];
             sal_Int32 lc_x2 = pCaretXArray[ 2*(nMnemonicIndex - nIndex)+1 ];
             nMnemonicWidth = ::abs(static_cast<int>(lc_x1 - lc_x2));
