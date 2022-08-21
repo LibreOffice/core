@@ -450,243 +450,228 @@ void VclProcessor2D::RenderBitmapPrimitive2D(const primitive2d::BitmapPrimitive2
 void VclProcessor2D::RenderFillGraphicPrimitive2D(
     const primitive2d::FillGraphicPrimitive2D& rFillBitmapCandidate)
 {
-    const attribute::FillGraphicAttribute& rFillGraphicAttribute(
-        rFillBitmapCandidate.getFillGraphic());
-    bool bPrimitiveAccepted(false);
-
-    // #121194# when tiling is used and content is bitmap-based, do direct tiling in the
-    // renderer on pixel base to ensure tight fitting. Do not do this when
-    // the fill is rotated or sheared.
-    if (rFillGraphicAttribute.getTiling())
-    {
-        // content is bitmap(ex)
-        //
-        // for Vector Graphic Data (SVG, EMF+) support, force decomposition when present. This will lead to use
-        // the primitive representation of the vector data directly.
-        //
-        // when graphic is animated, force decomposition to use the correct graphic, else
-        // fill style will not be animated
-        if (GraphicType::Bitmap == rFillGraphicAttribute.getGraphic().GetType()
-            && !rFillGraphicAttribute.getGraphic().getVectorGraphicData()
-            && !rFillGraphicAttribute.getGraphic().IsAnimated())
-        {
-            // decompose matrix to check for shear, rotate and mirroring
-            basegfx::B2DHomMatrix aLocalTransform(maCurrentTransformation
-                                                  * rFillBitmapCandidate.getTransformation());
-            basegfx::B2DVector aScale, aTranslate;
-            double fRotate, fShearX;
-            aLocalTransform.decompose(aScale, aTranslate, fRotate, fShearX);
-
-            // when nopt rotated/sheared
-            if (basegfx::fTools::equalZero(fRotate) && basegfx::fTools::equalZero(fShearX))
-            {
-                // no shear or rotate, draw direct in pixel coordinates
-                bPrimitiveAccepted = true;
-
-                // transform object range to device coordinates (pixels). Use
-                // the device transformation for better accuracy
-                basegfx::B2DRange aObjectRange(aTranslate, aTranslate + aScale);
-                aObjectRange.transform(mpOutputDevice->GetViewTransformation());
-
-                // extract discrete size of object
-                const sal_Int32 nOWidth(basegfx::fround(aObjectRange.getWidth()));
-                const sal_Int32 nOHeight(basegfx::fround(aObjectRange.getHeight()));
-
-                // only do something when object has a size in discrete units
-                if (nOWidth > 0 && nOHeight > 0)
-                {
-                    // transform graphic range to device coordinates (pixels). Use
-                    // the device transformation for better accuracy
-                    basegfx::B2DRange aGraphicRange(rFillGraphicAttribute.getGraphicRange());
-                    aGraphicRange.transform(mpOutputDevice->GetViewTransformation()
-                                            * aLocalTransform);
-
-                    // extract discrete size of graphic
-                    // caution: when getting to zero, nothing would be painted; thus, do not allow this
-                    const sal_Int32 nBWidth(
-                        std::max(sal_Int32(1), basegfx::fround(aGraphicRange.getWidth())));
-                    const sal_Int32 nBHeight(
-                        std::max(sal_Int32(1), basegfx::fround(aGraphicRange.getHeight())));
-
-                    // only do something when bitmap fill has a size in discrete units
-                    if (nBWidth > 0 && nBHeight > 0)
-                    {
-                        // nBWidth, nBHeight is the pixel size of the needed bitmap. To not need to scale it
-                        // in vcl many times, create a size-optimized version
-                        const Size aNeededBitmapSizePixel(nBWidth, nBHeight);
-                        BitmapEx aBitmapEx(rFillGraphicAttribute.getGraphic().GetBitmapEx());
-                        const bool bPreScaled(nBWidth * nBHeight < (250 * 250));
-
-                        // ... but only up to a maximum size, else it gets too expensive
-                        if (bPreScaled)
-                        {
-                            // if color depth is below 24bit, expand before scaling for better quality.
-                            // This is even needed for low colors, else the scale will produce
-                            // a bitmap in gray or Black/White (!)
-                            if (isPalettePixelFormat(aBitmapEx.getPixelFormat()))
-                            {
-                                aBitmapEx.Convert(BmpConversion::N24Bit);
-                            }
-
-                            aBitmapEx.Scale(aNeededBitmapSizePixel, BmpScaleFlag::Interpolate);
-                        }
-
-                        bool bPainted(false);
-
-                        if (maBColorModifierStack.count())
-                        {
-                            // when color modifier, apply to bitmap
-                            aBitmapEx = aBitmapEx.ModifyBitmapEx(maBColorModifierStack);
-
-                            // impModifyBitmapEx uses empty bitmap as sign to return that
-                            // the content will be completely replaced to mono color, use shortcut
-                            if (aBitmapEx.IsEmpty())
-                            {
-                                // color gets completely replaced, get it
-                                const basegfx::BColor aModifiedColor(
-                                    maBColorModifierStack.getModifiedColor(basegfx::BColor()));
-                                basegfx::B2DPolygon aPolygon(basegfx::utils::createUnitPolygon());
-                                aPolygon.transform(aLocalTransform);
-
-                                mpOutputDevice->SetFillColor(Color(aModifiedColor));
-                                mpOutputDevice->SetLineColor();
-                                mpOutputDevice->DrawPolygon(aPolygon);
-
-                                bPainted = true;
-                            }
-                        }
-
-                        if (!bPainted)
-                        {
-                            sal_Int32 nBLeft(basegfx::fround(aGraphicRange.getMinX()));
-                            sal_Int32 nBTop(basegfx::fround(aGraphicRange.getMinY()));
-                            const sal_Int32 nOLeft(basegfx::fround(aObjectRange.getMinX()));
-                            const sal_Int32 nOTop(basegfx::fround(aObjectRange.getMinY()));
-                            sal_Int32 nPosX(0);
-                            sal_Int32 nPosY(0);
-
-                            if (nBLeft > nOLeft)
-                            {
-                                const sal_Int32 nDiff((nBLeft / nBWidth) + 1);
-
-                                nPosX -= nDiff;
-                                nBLeft -= nDiff * nBWidth;
-                            }
-
-                            if (nBLeft + nBWidth <= nOLeft)
-                            {
-                                const sal_Int32 nDiff(-nBLeft / nBWidth);
-
-                                nPosX += nDiff;
-                                nBLeft += nDiff * nBWidth;
-                            }
-
-                            if (nBTop > nOTop)
-                            {
-                                const sal_Int32 nDiff((nBTop / nBHeight) + 1);
-
-                                nPosY -= nDiff;
-                                nBTop -= nDiff * nBHeight;
-                            }
-
-                            if (nBTop + nBHeight <= nOTop)
-                            {
-                                const sal_Int32 nDiff(-nBTop / nBHeight);
-
-                                nPosY += nDiff;
-                                nBTop += nDiff * nBHeight;
-                            }
-
-                            // prepare OutDev
-                            const Point aEmptyPoint(0, 0);
-                            const ::tools::Rectangle aVisiblePixel(
-                                aEmptyPoint, mpOutputDevice->GetOutputSizePixel());
-                            const bool bWasEnabled(mpOutputDevice->IsMapModeEnabled());
-                            mpOutputDevice->EnableMapMode(false);
-
-                            // check if offset is used
-                            const sal_Int32 nOffsetX(
-                                basegfx::fround(rFillGraphicAttribute.getOffsetX() * nBWidth));
-
-                            if (nOffsetX)
-                            {
-                                // offset in X, so iterate over Y first and draw lines
-                                for (sal_Int32 nYPos(nBTop); nYPos < nOTop + nOHeight;
-                                     nYPos += nBHeight, nPosY++)
-                                {
-                                    for (sal_Int32 nXPos((nPosY % 2) ? nBLeft - nBWidth + nOffsetX
-                                                                     : nBLeft);
-                                         nXPos < nOLeft + nOWidth; nXPos += nBWidth)
-                                    {
-                                        const ::tools::Rectangle aOutRectPixel(
-                                            Point(nXPos, nYPos), aNeededBitmapSizePixel);
-
-                                        if (aOutRectPixel.Overlaps(aVisiblePixel))
-                                        {
-                                            if (bPreScaled)
-                                            {
-                                                mpOutputDevice->DrawBitmapEx(
-                                                    aOutRectPixel.TopLeft(), aBitmapEx);
-                                            }
-                                            else
-                                            {
-                                                mpOutputDevice->DrawBitmapEx(
-                                                    aOutRectPixel.TopLeft(), aNeededBitmapSizePixel,
-                                                    aBitmapEx);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                // check if offset is used
-                                const sal_Int32 nOffsetY(
-                                    basegfx::fround(rFillGraphicAttribute.getOffsetY() * nBHeight));
-
-                                // possible offset in Y, so iterate over X first and draw columns
-                                for (sal_Int32 nXPos(nBLeft); nXPos < nOLeft + nOWidth;
-                                     nXPos += nBWidth, nPosX++)
-                                {
-                                    for (sal_Int32 nYPos((nPosX % 2) ? nBTop - nBHeight + nOffsetY
-                                                                     : nBTop);
-                                         nYPos < nOTop + nOHeight; nYPos += nBHeight)
-                                    {
-                                        const ::tools::Rectangle aOutRectPixel(
-                                            Point(nXPos, nYPos), aNeededBitmapSizePixel);
-
-                                        if (aOutRectPixel.Overlaps(aVisiblePixel))
-                                        {
-                                            if (bPreScaled)
-                                            {
-                                                mpOutputDevice->DrawBitmapEx(
-                                                    aOutRectPixel.TopLeft(), aBitmapEx);
-                                            }
-                                            else
-                                            {
-                                                mpOutputDevice->DrawBitmapEx(
-                                                    aOutRectPixel.TopLeft(), aNeededBitmapSizePixel,
-                                                    aBitmapEx);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                            // restore OutDev
-                            mpOutputDevice->EnableMapMode(bWasEnabled);
-                        }
-                    }
-                }
-            }
-        }
-    }
+    bool bPrimitiveAccepted = RenderFillGraphicPrimitive2DImpl(rFillBitmapCandidate);
 
     if (!bPrimitiveAccepted)
     {
         // do not accept, use decomposition
         process(rFillBitmapCandidate);
     }
+}
+
+bool VclProcessor2D::RenderFillGraphicPrimitive2DImpl(
+    const primitive2d::FillGraphicPrimitive2D& rFillBitmapCandidate)
+{
+    const attribute::FillGraphicAttribute& rFillGraphicAttribute(
+        rFillBitmapCandidate.getFillGraphic());
+
+    // #121194# when tiling is used and content is bitmap-based, do direct tiling in the
+    // renderer on pixel base to ensure tight fitting. Do not do this when
+    // the fill is rotated or sheared.
+    if (!rFillGraphicAttribute.getTiling())
+        return false;
+
+    // content is bitmap(ex)
+    //
+    // for Vector Graphic Data (SVG, EMF+) support, force decomposition when present. This will lead to use
+    // the primitive representation of the vector data directly.
+    //
+    // when graphic is animated, force decomposition to use the correct graphic, else
+    // fill style will not be animated
+    if (GraphicType::Bitmap != rFillGraphicAttribute.getGraphic().GetType()
+        || rFillGraphicAttribute.getGraphic().getVectorGraphicData()
+        || rFillGraphicAttribute.getGraphic().IsAnimated())
+        return false;
+
+    // decompose matrix to check for shear, rotate and mirroring
+    basegfx::B2DHomMatrix aLocalTransform(maCurrentTransformation
+                                          * rFillBitmapCandidate.getTransformation());
+    basegfx::B2DVector aScale, aTranslate;
+    double fRotate, fShearX;
+    aLocalTransform.decompose(aScale, aTranslate, fRotate, fShearX);
+
+    // when nopt rotated/sheared
+    if (!basegfx::fTools::equalZero(fRotate) || !basegfx::fTools::equalZero(fShearX))
+        return false;
+
+    // no shear or rotate, draw direct in pixel coordinates
+
+    // transform object range to device coordinates (pixels). Use
+    // the device transformation for better accuracy
+    basegfx::B2DRange aObjectRange(aTranslate, aTranslate + aScale);
+    aObjectRange.transform(mpOutputDevice->GetViewTransformation());
+
+    // extract discrete size of object
+    const sal_Int32 nOWidth(basegfx::fround(aObjectRange.getWidth()));
+    const sal_Int32 nOHeight(basegfx::fround(aObjectRange.getHeight()));
+
+    // only do something when object has a size in discrete units
+    if (nOWidth <= 0 || nOHeight <= 0)
+        return true;
+
+    // transform graphic range to device coordinates (pixels). Use
+    // the device transformation for better accuracy
+    basegfx::B2DRange aGraphicRange(rFillGraphicAttribute.getGraphicRange());
+    aGraphicRange.transform(mpOutputDevice->GetViewTransformation() * aLocalTransform);
+
+    // extract discrete size of graphic
+    // caution: when getting to zero, nothing would be painted; thus, do not allow this
+    const sal_Int32 nBWidth(std::max(sal_Int32(1), basegfx::fround(aGraphicRange.getWidth())));
+    const sal_Int32 nBHeight(std::max(sal_Int32(1), basegfx::fround(aGraphicRange.getHeight())));
+
+    // only do something when bitmap fill has a size in discrete units
+    if (nBWidth <= 0 || nBHeight <= 0)
+        return true;
+
+    // nBWidth, nBHeight is the pixel size of the needed bitmap. To not need to scale it
+    // in vcl many times, create a size-optimized version
+    const Size aNeededBitmapSizePixel(nBWidth, nBHeight);
+    BitmapEx aBitmapEx(rFillGraphicAttribute.getGraphic().GetBitmapEx());
+    const bool bPreScaled(nBWidth * nBHeight < (250 * 250));
+
+    // ... but only up to a maximum size, else it gets too expensive
+    if (bPreScaled)
+    {
+        // if color depth is below 24bit, expand before scaling for better quality.
+        // This is even needed for low colors, else the scale will produce
+        // a bitmap in gray or Black/White (!)
+        if (isPalettePixelFormat(aBitmapEx.getPixelFormat()))
+        {
+            aBitmapEx.Convert(BmpConversion::N24Bit);
+        }
+
+        aBitmapEx.Scale(aNeededBitmapSizePixel, BmpScaleFlag::Interpolate);
+    }
+
+    if (maBColorModifierStack.count())
+    {
+        // when color modifier, apply to bitmap
+        aBitmapEx = aBitmapEx.ModifyBitmapEx(maBColorModifierStack);
+
+        // ModifyBitmapEx uses empty bitmap as sign to return that
+        // the content will be completely replaced to mono color, use shortcut
+        if (aBitmapEx.IsEmpty())
+        {
+            // color gets completely replaced, get it
+            const basegfx::BColor aModifiedColor(
+                maBColorModifierStack.getModifiedColor(basegfx::BColor()));
+            basegfx::B2DPolygon aPolygon(basegfx::utils::createUnitPolygon());
+            aPolygon.transform(aLocalTransform);
+
+            mpOutputDevice->SetFillColor(Color(aModifiedColor));
+            mpOutputDevice->SetLineColor();
+            mpOutputDevice->DrawPolygon(aPolygon);
+
+            return true;
+        }
+    }
+
+    sal_Int32 nBLeft(basegfx::fround(aGraphicRange.getMinX()));
+    sal_Int32 nBTop(basegfx::fround(aGraphicRange.getMinY()));
+    const sal_Int32 nOLeft(basegfx::fround(aObjectRange.getMinX()));
+    const sal_Int32 nOTop(basegfx::fround(aObjectRange.getMinY()));
+    sal_Int32 nPosX(0);
+    sal_Int32 nPosY(0);
+
+    if (nBLeft > nOLeft)
+    {
+        const sal_Int32 nDiff((nBLeft / nBWidth) + 1);
+
+        nPosX -= nDiff;
+        nBLeft -= nDiff * nBWidth;
+    }
+
+    if (nBLeft + nBWidth <= nOLeft)
+    {
+        const sal_Int32 nDiff(-nBLeft / nBWidth);
+
+        nPosX += nDiff;
+        nBLeft += nDiff * nBWidth;
+    }
+
+    if (nBTop > nOTop)
+    {
+        const sal_Int32 nDiff((nBTop / nBHeight) + 1);
+
+        nPosY -= nDiff;
+        nBTop -= nDiff * nBHeight;
+    }
+
+    if (nBTop + nBHeight <= nOTop)
+    {
+        const sal_Int32 nDiff(-nBTop / nBHeight);
+
+        nPosY += nDiff;
+        nBTop += nDiff * nBHeight;
+    }
+
+    // prepare OutDev
+    const Point aEmptyPoint(0, 0);
+    // the visible rect, in pixels
+    const ::tools::Rectangle aVisiblePixel(aEmptyPoint, mpOutputDevice->GetOutputSizePixel());
+    const bool bWasEnabled(mpOutputDevice->IsMapModeEnabled());
+    mpOutputDevice->EnableMapMode(false);
+
+    // check if offset is used
+    const sal_Int32 nOffsetX(basegfx::fround(rFillGraphicAttribute.getOffsetX() * nBWidth));
+
+    if (nOffsetX)
+    {
+        // offset in X, so iterate over Y first and draw lines
+        for (sal_Int32 nYPos(nBTop); nYPos < nOTop + nOHeight; nYPos += nBHeight, nPosY++)
+        {
+            for (sal_Int32 nXPos((nPosY % 2) ? nBLeft - nBWidth + nOffsetX : nBLeft);
+                 nXPos < nOLeft + nOWidth; nXPos += nBWidth)
+            {
+                const ::tools::Rectangle aOutRectPixel(Point(nXPos, nYPos), aNeededBitmapSizePixel);
+
+                if (aOutRectPixel.Overlaps(aVisiblePixel))
+                {
+                    if (bPreScaled)
+                    {
+                        mpOutputDevice->DrawBitmapEx(aOutRectPixel.TopLeft(), aBitmapEx);
+                    }
+                    else
+                    {
+                        mpOutputDevice->DrawBitmapEx(aOutRectPixel.TopLeft(),
+                                                     aNeededBitmapSizePixel, aBitmapEx);
+                    }
+                }
+            }
+        }
+    }
+    else
+    {
+        // check if offset is used
+        const sal_Int32 nOffsetY(basegfx::fround(rFillGraphicAttribute.getOffsetY() * nBHeight));
+
+        // possible offset in Y, so iterate over X first and draw columns
+        for (sal_Int32 nXPos(nBLeft); nXPos < nOLeft + nOWidth; nXPos += nBWidth, nPosX++)
+        {
+            for (sal_Int32 nYPos((nPosX % 2) ? nBTop - nBHeight + nOffsetY : nBTop);
+                 nYPos < nOTop + nOHeight; nYPos += nBHeight)
+            {
+                const ::tools::Rectangle aOutRectPixel(Point(nXPos, nYPos), aNeededBitmapSizePixel);
+
+                if (aOutRectPixel.Overlaps(aVisiblePixel))
+                {
+                    if (bPreScaled)
+                    {
+                        mpOutputDevice->DrawBitmapEx(aOutRectPixel.TopLeft(), aBitmapEx);
+                    }
+                    else
+                    {
+                        mpOutputDevice->DrawBitmapEx(aOutRectPixel.TopLeft(),
+                                                     aNeededBitmapSizePixel, aBitmapEx);
+                    }
+                }
+            }
+        }
+    }
+
+    // restore OutDev
+    mpOutputDevice->EnableMapMode(bWasEnabled);
+    return true;
 }
 
 // direct draw of Graphic
