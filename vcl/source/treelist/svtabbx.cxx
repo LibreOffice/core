@@ -82,7 +82,7 @@ static void lcl_DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter,
             if (const SvLBoxItem* pChild = rChild->GetFirstItem(SvLBoxItemType::String))
             {
                 if (static_cast<const SvLBoxString*>(pChild)->GetText() == "<dummy>")
-                    rJsonWriter.put("ondemand", "true");
+                    rJsonWriter.put("ondemand", true);
             }
         }
 
@@ -90,15 +90,15 @@ static void lcl_DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter,
         {
             SvButtonState eCheckState = pTabListBox->GetCheckButtonState(pEntry);
             if (eCheckState == SvButtonState::Unchecked)
-                rJsonWriter.put("state", "false");
+                rJsonWriter.put("state", false);
             else if (eCheckState == SvButtonState::Checked)
-                rJsonWriter.put("state", "true");
+                rJsonWriter.put("state", true);
         }
 
         if (pTabListBox->IsSelected(pEntry))
-            rJsonWriter.put("selected", "true");
+            rJsonWriter.put("selected", true);
 
-        rJsonWriter.put("row", OString::number(pTabListBox->GetModel()->GetAbsPos(pEntry)).getStr());
+        rJsonWriter.put("row", pTabListBox->GetModel()->GetAbsPos(pEntry));
 
         SvTreeListEntry* pChild = pTabListBox->FirstChild(pEntry);
         if (pChild)
