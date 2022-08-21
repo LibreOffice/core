@@ -103,7 +103,7 @@ public:
     void DeleteDummyChar(SwPosition const& rPos, sal_Unicode cDummy);
 
     void CopyWithFlyInFly( const SwNodeRange& rRg,
-                            const SwNodeIndex& rInsPos,
+                            SwNode& rInsPos,
                             const std::pair<const SwPaM&, const SwPosition&> * pCopiedPaM = nullptr,
                             bool bMakeNewFrames = true,
                             bool bDelRedlines = true,

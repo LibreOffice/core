@@ -192,7 +192,7 @@ class SaveRedlEndPosForRestore
     sal_Int32 mnSaveContent;
 
 public:
-    SaveRedlEndPosForRestore( const SwNodeIndex& rInsIdx, sal_Int32 nContent );
+    SaveRedlEndPosForRestore( const SwNode& rInsIdx, sal_Int32 nContent );
     ~SaveRedlEndPosForRestore();
     void Restore();
 };
