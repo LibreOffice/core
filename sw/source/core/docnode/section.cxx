@@ -1262,10 +1262,9 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
 
                 if( oCpyRg )
                 {
-                    SwNodeIndex& rInsPos = pPam->GetPoint()->nNode;
-                    bool bCreateFrame = rInsPos.GetIndex() <=
-                                pDoc->GetNodes().GetEndOfExtras().GetIndex() ||
-                                rInsPos.GetNode().FindTableNode();
+                    SwNode& rInsPos = pPam->GetPoint()->GetNode();
+                    bool bCreateFrame = rInsPos <= pDoc->GetNodes().GetEndOfExtras() ||
+                                rInsPos.FindTableNode();
 
                     SwTableNumFormatMerge aTNFM( *pSrcDoc, *pDoc );
 
@@ -1273,7 +1272,7 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
                     ++aSave;
 
                     if( !bCreateFrame )
-                        ::MakeFrames( pDoc, aSave, rInsPos );
+                        ::MakeFrames( pDoc, aSave.GetNode(), rInsPos );
 
                     // Delete last Node, only if it was copied successfully
                     // (the Section contains more than one Node)

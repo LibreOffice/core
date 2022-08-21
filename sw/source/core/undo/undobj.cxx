@@ -790,7 +790,7 @@ void SwUndoSaveContent::MoveFromUndoNds( SwDoc& rDoc, SwNodeOffset nNodeIdx,
         aPaM.SetMark();
         aPaM.GetPoint()->Assign(nNodeIdx, 0);
 
-        SaveRedlEndPosForRestore aRedlRest( rInsPos.nNode, rInsPos.GetContentIndex() );
+        SaveRedlEndPosForRestore aRedlRest( rInsPos.GetNode(), rInsPos.GetContentIndex() );
 
         rNds.MoveRange( aPaM, rInsPos, rDoc.GetNodes() );
 

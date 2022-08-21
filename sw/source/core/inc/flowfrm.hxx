@@ -69,7 +69,7 @@ class SwFlowFrame
     // TableSel is allowed to reset the follow-bit
     friend inline void UnsetFollow( SwFlowFrame *pFlow );
 
-    friend void MakeFrames( SwDoc *, const SwNodeIndex &, const SwNodeIndex & );
+    friend void MakeFrames( SwDoc *, SwNode &, SwNode & );
 
     friend class SwNode2LayImpl;
 
