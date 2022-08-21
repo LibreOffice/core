@@ -16,6 +16,24 @@
       "message": "Here I get more than one error message, so all the previous ones will be overwritten. Should I change the data structure to a vector or check how to avoid any additional run time errors?",
       "revId": "495deb2b61d01d7fd5ec5a49119d5bf009129b47",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48421116_1f2af333",
+        "filename": "basic/qa/cppunit/basictest.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-21T20:48:45Z",
+      "side": 1,
+      "message": "It is possible to change this, maybe just ignore all the following errors... But maybe it\u0027s not worth it - the problem you are solving, IMO, doesn\u0027t require a unit test. I\u0027d feel it OK if you just fix it without any testing.",
+      "parentUuid": "e9de9d24_9425aa43",
+      "revId": "495deb2b61d01d7fd5ec5a49119d5bf009129b47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
