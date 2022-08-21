@@ -1815,8 +1815,8 @@ static void lcl_DrawSinglelineText(OutputDevice& rTargetDevice, tools::Rectangle
 
 static void lcl_DrawText(OutputDevice& rTargetDevice, tools::Rectangle const& rRect,
                          OUString const& rOrigStr, DrawTextFlags nStyle,
-                         std::vector<tools::Rectangle>* pVector, OUString* pDisplayText,
-                         vcl::ITextLayout& rLayout)
+                         vcl::ITextLayout& rLayout,
+                         std::vector<tools::Rectangle>* pVector = nullptr, OUString* pDisplayText = nullptr)
 {
     if (lcl_BailOnNegativeRect(rRect, nStyle))
         return;
@@ -1856,8 +1856,8 @@ void OutputDevice::AddTextRectActions( const tools::Rectangle& rRect,
 
     // #i47157# Factored out to ImplDrawTextRect(), to be shared
     // between us and DrawText()
-    vcl::DefaultTextLayout aLayout( *this );
-    lcl_DrawText(*this, rRect, rOrigStr, nStyle, nullptr, nullptr, aLayout);
+    vcl::DefaultTextLayout aLayout(*this);
+    lcl_DrawText(*this, rRect, rOrigStr, nStyle, aLayout);
 
     // and restore again
     EnableOutput( bOutputEnabled );
@@ -1900,8 +1900,8 @@ void OutputDevice::DrawText( const tools::Rectangle& rRect, const OUString& rOri
 
     // #i47157# Factored out to ImplDrawText(), to be used also
     // from AddTextRectActions()
-    vcl::DefaultTextLayout aDefaultLayout( *this );
-    lcl_DrawText(*this, rRect, rOrigStr, nStyle, pVector, pDisplayText, _pTextLayout ? *_pTextLayout : aDefaultLayout);
+    vcl::DefaultTextLayout aLayout(*this);
+    lcl_DrawText(*this, rRect, rOrigStr, nStyle, _pTextLayout ? *_pTextLayout : aLayout, pVector, pDisplayText);
 
     // and enable again
     mpMetaFile = pMtf;
