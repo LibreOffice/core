@@ -1649,18 +1649,17 @@ static void lcl_DrawMultilineText(OutputDevice& rTargetDevice, tools::Rectangle 
         std::vector<tools::Rectangle>* pVector, OUString* pDisplayText,
         vcl::ITextLayout& rLayout)
 {
+    const tools::Long nTextHeight = rTargetDevice.GetTextHeight();
+    if (!nTextHeight)
+        return;
 
     Point aPos(rRect.TopLeft());
-    const tools::Long nTextHeight = rTargetDevice.GetTextHeight();
     const TextAlign eAlign = rTargetDevice.GetTextAlign();
     sal_Int32 nMnemonicIndex = -1;
 
     OUString aStr;
     if (nStyle & DrawTextFlags::Mnemonic)
         aStr = OutputDevice::GetNonMnemonicString(rOrigStr, nMnemonicIndex);
-
-    if (!nTextHeight)
-        return;
 
     ImplMultiTextLineInfo aMultiLineInfo;
 
