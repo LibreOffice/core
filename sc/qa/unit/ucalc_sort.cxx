@@ -487,7 +487,7 @@ void TestSort::testSortWithFormulaRefs()
         m_pDoc->SetString( 0, i, 0, OUString::createFromAscii(aTextData[i-1]) );
 
     // Insert formulas in A1:A6 on the 2nd sheet.
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aFormulaData); ++i)
+    for (size_t i = 0; i < std::size(aFormulaData); ++i)
         m_pDoc->SetString( 0, i, 1, OUString::createFromAscii(aFormulaData[i]) );
 
     // Sort data in A2:A8 on the 1st sheet. No column header.
@@ -501,7 +501,7 @@ void TestSort::testSortWithFormulaRefs()
 
     m_pDoc->Sort(0, aSortData, false, true, nullptr, nullptr);
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aResults); ++i)
+    for (size_t i = 0; i < std::size(aResults); ++i)
     {
         OUString sResult = m_pDoc->GetString(0, i + 1, 0);
         CPPUNIT_ASSERT_EQUAL( OUString::createFromAscii( aResults[i] ), sResult );
@@ -602,7 +602,7 @@ void TestSort::testSortInFormulaGroup()
         104.0, 104.0
     };
 
-    for ( SCROW i = 0; i < SCROW(SAL_N_ELEMENTS( aEntries )); ++i )
+    for ( SCROW i = 0; i < SCROW(std::size( aEntries )); ++i )
     {
         double val = m_pDoc->GetValue( aEntries[i].nCol, aEntries[i].nRow, 0 );
         CPPUNIT_ASSERT_MESSAGE("Mis-matching value after sort.",
@@ -790,7 +790,7 @@ void TestSort::testSortRefUpdate()
     m_pDoc->SetString(ScAddress(0,0,0), "Header");
 
     double aValues[] = { 4.0, 36.0, 14.0, 29.0, 98.0, 78.0, 0.0, 99.0, 1.0 };
-    size_t nCount = SAL_N_ELEMENTS(aValues);
+    size_t nCount = std::size(aValues);
     for (size_t i = 0; i < nCount; ++i)
         m_pDoc->SetValue(ScAddress(0,i+1,0), aValues[i]);
 

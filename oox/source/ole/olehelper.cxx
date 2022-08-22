@@ -172,7 +172,7 @@ classIdToGUIDCNamePairMap::classIdToGUIDCNamePairMap()
              { AX_GUID_SCROLLBAR, "ScrollBar"},
         }
     };
-    int const length = SAL_N_ELEMENTS( initialCntrlData );
+    int const length = std::size( initialCntrlData );
     IdCntrlData const * pData = initialCntrlData;
     for ( int index = 0; index < length; ++index, ++pData )
         mnIdToGUIDCNamePairMap[ pData->nId ] = pData->aData;
