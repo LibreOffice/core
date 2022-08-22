@@ -585,7 +585,7 @@ const SwPageDesc* SwNode::FindPageDesc( SwNodeOffset* pPgDescNdIdx ) const
                                     break;
                                 }
 
-                                pFlyNd = pAnchor->GetContentAnchor()->nNode.
+                                pFlyNd = pAnchor->GetContentAnchor()->
                                         GetNode().FindFlyStartNode();
                                 break;
                             }

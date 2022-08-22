@@ -831,7 +831,7 @@ SwSectionNode* SwNodes::InsertTextSection(SwNode& rNd,
         {
             SwRangeRedline* pRedline = rRedlines[nIndex];
             if ( RedlineType::Delete != pRedline->GetType() ||
-                 !pRedline->HasMark() || pRedline->GetMark()->nNode != aInsPos )
+                 !pRedline->HasMark() || pRedline->GetMark()->GetNode() != aInsPos.GetNode() )
             {
                 continue;
             }
