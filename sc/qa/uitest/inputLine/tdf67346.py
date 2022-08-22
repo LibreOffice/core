@@ -26,6 +26,8 @@ class tdf67346(UITestCase):
             # Move focus to input window and copy the text from there
             gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+SHIFT+F2"}))
 
+            xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+            xToolkit.processEventsToIdle()
             xInputWin = xCalcDoc.getChild("sc_input_window")
             self.assertEqual('true', get_state_as_dict(xInputWin)["HasFocus"])
 
