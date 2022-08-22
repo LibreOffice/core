@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f65ffe1_46d58744",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-08-22T17:07:14Z",
+      "side": 1,
+      "message": "Hi Mike! Is there some faster way to insert alle the possible characters of the formulas? Thank you in advance!",
+      "revId": "4c3db88c08817dc43374de580e89c78f76f9613f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
