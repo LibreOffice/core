@@ -1370,7 +1370,11 @@ JSSpinButton::JSSpinButton(JSDialogSender* pSender, ::FormattedField* pSpin,
 void JSSpinButton::set_value(int value)
 {
     SalInstanceSpinButton::set_value(value);
-    sendUpdate(true); // if input is limited we can receive the same JSON
+
+    std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
+    (*pMap)[ACTION_TYPE] = "setText";
+    (*pMap)["text"] = OUString::number(value);
+    sendAction(std::move(pMap));
 }
 
 JSMessageDialog::JSMessageDialog(JSDialogSender* pSender, ::MessageDialog* pDialog,
