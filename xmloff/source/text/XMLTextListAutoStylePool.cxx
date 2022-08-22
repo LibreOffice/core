@@ -23,6 +23,8 @@
 #include <tools/solar.h>
 #include <o3tl/sorted_vector.hxx>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/style/XStyle.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
@@ -160,6 +162,24 @@ XMLTextListAutoStylePool::XMLTextListAutoStylePool( SvXMLExport& rExp ) :
     if( bStylesOnly )
         sPrefix = "ML";
 
+    Reference<XStyleFamiliesSupplier> xFamiliesSupp(rExport.GetModel(), UNO_QUERY);
+    SAL_WARN_IF(!xFamiliesSupp.is(), "xmloff", "getStyleFamilies() from XModel failed for export!");
+    Reference< XNameAccess > xFamilies;
+    if (xFamiliesSupp.is())
+        xFamilies = xFamiliesSupp->getStyleFamilies();
+
+    Reference<XIndexAccess> xStyles;
+    static const OUStringLiteral aNumberStyleName(u"NumberingStyles");
+    if (xFamilies.is() && xFamilies->hasByName(aNumberStyleName))
+        xFamilies->getByName(aNumberStyleName) >>= xStyles;
+
+    const sal_Int32 nStyles = xStyles.is() ? xStyles->getCount() : 0;
+    for (sal_Int32 i = 0; i < nStyles; i++)
+    {
+        Reference<XStyle> xStyle;
+        xStyles->getByIndex(i) >>= xStyle;
+        RegisterName(xStyle->getName());
+    }
 }
 
 XMLTextListAutoStylePool::~XMLTextListAutoStylePool()
