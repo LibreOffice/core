@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7acf4ba_6efc0f88",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-08-22T16:29:47Z",
+      "side": 1,
+      "message": "Looks good to me but don\u0027t have merge privileges so you\u0027re gonna have to find a different reviewer",
+      "revId": "ac55b28d4e59c066be6c85558f851f077d43e2ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
