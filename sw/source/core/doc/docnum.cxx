@@ -69,8 +69,8 @@ namespace {
         if ( rPam.HasMark() &&
              rPam.End()->GetNode().GetTextNode() )
         {
-            SwPaM aPam( rPam.Start()->nNode, 0,
-                        rPam.End()->nNode, rPam.End()->GetNode().GetTextNode()->Len() );
+            SwPaM aPam( rPam.Start()->GetNode(), 0,
+                        rPam.End()->GetNode(), rPam.End()->GetNode().GetTextNode()->Len() );
             pDoc->ResetAttrs( aPam, false, aResetAttrsArray, true, pLayout );
         }
         else
@@ -1297,8 +1297,7 @@ bool SwDoc::NoNum( const SwPaM& rPam )
     if( bRet )
     {
         // Set NoNum and Update
-        const SwNodeIndex& rIdx = rPam.GetPoint()->nNode;
-        SwTextNode* pNd = rIdx.GetNode().GetTextNode();
+        SwTextNode* pNd = rPam.GetPoint()->GetNode().GetTextNode();
         const SwNumRule* pRule = pNd->GetNumRule();
         if( pRule )
         {
@@ -2075,8 +2074,8 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
         SwDataChanged aTmp( rPam );
     }
 
-    SwNodeIndex aIdx( nOffset > SwNodeOffset(0) ? pEnd->nNode : pStt->nNode, nOffs );
-    SwNodeRange aMvRg( pStt->nNode, SwNodeOffset(0), pEnd->nNode, SwNodeOffset(+1) );
+    SwNodeIndex aIdx( nOffset > SwNodeOffset(0) ? pEnd->GetNode() : pStt->GetNode(), nOffs );
+    SwNodeRange aMvRg( pStt->GetNode(), SwNodeOffset(0), pEnd->GetNode(), SwNodeOffset(+1) );
 
     SwRangeRedline* pOwnRedl = nullptr;
     if( getIDocumentRedlineAccess().IsRedlineOn() )
@@ -2126,7 +2125,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
             // First the Insert, then the Delete
             SwPosition aInsPos( aIdx );
 
-            SwPaM aPam( pStt->nNode, 0, aMvRg.aEnd, 0 );
+            SwPaM aPam( pStt->GetNode(), 0, aMvRg.aEnd.GetNode(), 0 );
 
             SwPaM& rOrigPam(rPam);
             rOrigPam.DeleteMark();
