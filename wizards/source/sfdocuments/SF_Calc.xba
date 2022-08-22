@@ -134,7 +134,7 @@ REM ============================================================ MODULE CONSTANT
 Private Const cstSHEET			= 1
 Private Const cstRANGE			= 2
 
-Private Const MAXCOLS			= 2^10					&apos;	Max number of columns in a sheet
+Private Const MAXCOLS			= 2^14					&apos;	Max number of columns in a sheet
 Private Const MAXROWS			= 2^20					&apos;	Max number of rows in a sheet
 
 Private Const CALCREFERENCE		= &quot;SF_CalcReference&quot;	&apos;	Object type of _Address
@@ -4056,11 +4056,11 @@ End Function	&apos;	SFDocuments.SF_Calc._FileIdent
 
 REM -----------------------------------------------------------------------------
 Function _GetColumnName(ByVal plColumnNumber As Long) As String
-&apos;&apos;&apos;	Convert a column number (range 1, 2,..1024) into its letter counterpart (range &apos;A&apos;, &apos;B&apos;,..&apos;AMJ&apos;).
+&apos;&apos;&apos;	Convert a column number (range 1, 2,..16384) into its letter counterpart (range &apos;A&apos;, &apos;B&apos;,..&apos;XFD&apos;).
 &apos;&apos;&apos;	Args:
-&apos;&apos;&apos;		ColumnNumber: the column number, must be in the interval 1 ... 1024
+&apos;&apos;&apos;		ColumnNumber: the column number, must be in the interval 1 ... 16384
 &apos;&apos;&apos;	Returns:
-&apos;&apos;&apos;		a string representation of the column name, in range &apos;A&apos;..&apos;AMJ&apos;
+&apos;&apos;&apos;		a string representation of the column name, in range &apos;A&apos;..&apos;XFD&apos;
 &apos;&apos;&apos;	Adapted from a Python function by sundar nataraj
 &apos;&apos;&apos;	http://stackoverflow.com/questions/23861680/convert-spreadsheet-number-to-column-letter
 
@@ -4069,11 +4069,12 @@ Dim lDiv As Long			&apos;	Intermediate result
 Dim lMod As Long			&apos;	Result of modulo 26 operation
 
 Try:
+	sCol = &quot;&quot;
 	lDiv = plColumnNumber
 	Do While lDiv &gt; 0
 		lMod = (lDiv - 1) Mod 26
-		sCol = Chr(65 + lMod) + sCol
-		lDiv = Int((lDiv - lMod)/26)
+		sCol = Chr(65 + lMod) &amp; sCol
+		lDiv = (lDiv - lMod) \ 26
 	Loop
 
 Finally:
@@ -4172,8 +4173,8 @@ Try:
 		lRight = lLeft + Iif(plWidth = 0, .EndColumn - .StartColumn, plWidth - 1)
 		lBottom = lTop + Iif(plHeight = 0, .EndRow - .StartRow, plHeight - 1)
 		If lLeft &lt; 0 Or lRight &lt; 0 Or lTop &lt; 0 Or lBottom &lt; 0 _
-			Or lLeft &gt; MAXCOLS Or lRight &gt; MAXCOLS _
-			Or lTop &gt; MAXROWS Or lBottom &gt; MAXROWS _
+			Or lLeft &gt;= MAXCOLS Or lRight &gt;= MAXCOLS _
+			Or lTop &gt;= MAXROWS Or lBottom &gt;= MAXROWS _
 				Then GoTo CatchAddress
 		Set oNewRange = oSheet.getCellRangeByPosition(lLeft, lTop, lRight, lBottom)
 	End With
