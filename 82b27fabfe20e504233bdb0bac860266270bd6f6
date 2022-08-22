@@ -52,6 +52,24 @@
       "parentUuid": "f6799dca_bdd0eecd",
       "revId": "82b27fabfe20e504233bdb0bac860266270bd6f6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b045ce0d_196bb94c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-08-22T19:24:26Z",
+      "side": 1,
+      "message": "debugging what normally happens I see that the EditEngine belonging to this inputbar widget is thrown away by calc when the content of the cell changes and is only recreated on the next \"Paint\" of the inputbar which happens at Idle (I think) so it\u0027s plausible that throwing processEventsToIdle at the problem solves\nthis. lets see with https://gerrit.libreoffice.org/c/core/+/138708",
+      "parentUuid": "2e898624_ad3c7fb8",
+      "revId": "82b27fabfe20e504233bdb0bac860266270bd6f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
