@@ -29,6 +29,8 @@
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 #include <o3tl/string_view.hxx>
+#include <ooxresid.hxx>
+#include <strings.hrc>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
@@ -122,7 +124,7 @@ HyperLinkContext::HyperLinkContext( ContextHandler2Helper const & rParent,
                     {
                         const OUString aSlideType( sHref.copy( 0, nIndex2 ) );
                         if ( aSlideType.match( "slide" ) )
-                            sURL = "#Slide " + OUString::number( nPageNumber );
+                            sURL = "#" + URLResId(STR_SLIDE_NAME) + " " + OUString::number( nPageNumber );
                         else if ( aSlideType.match( "notesSlide" ) )
                             sURL = "#Notes " + OUString::number( nPageNumber );
 //                      else: todo for other types such as notesMaster or slideMaster as they can't be referenced easily

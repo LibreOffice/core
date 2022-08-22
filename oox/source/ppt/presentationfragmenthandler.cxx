@@ -108,110 +108,47 @@ PresentationFragmentHandler::~PresentationFragmentHandler() noexcept
 {
 }
 
-static void lcl_setBookmark(uno::Reference<drawing::XShape>& rShape,
-                            std::vector<SlidePersistPtr>& rSlidePersist)
+void PresentationFragmentHandler::importSlideNames(XmlFilterBase& rFilter, std::vector<SlidePersistPtr>& rSlidePersist)
 {
-    OUString aBookmark;
-    static const OUStringLiteral sSlideName = u"#page";
-    uno::Reference<beans::XPropertySet> xPropSet(rShape, uno::UNO_QUERY);
-    xPropSet->getPropertyValue("Bookmark") >>= aBookmark;
-    if (aBookmark.startsWith(sSlideName))
+    sal_Int32 nMaxPages = rSlidePersist.size();
+    for (sal_Int32 nPage = 0; nPage < nMaxPages; nPage++)
     {
-        sal_Int32 nPageNumber = o3tl::toInt32(aBookmark.subView(sSlideName.getLength()));
-        Reference<XDrawPage> xDrawPage(rSlidePersist[nPageNumber - 1]->getPage());
-        Reference<container::XNamed> xNamed(xDrawPage, UNO_QUERY_THROW);
-        aBookmark = xNamed->getName();
-        xPropSet->setPropertyValue("Bookmark", Any(aBookmark));
-    }
-}
-
-static void ResolveShapeBookmark(std::vector<SlidePersistPtr>& rSlidePersist)
-{
-    sal_Int32 nPageCount = rSlidePersist.size();
-    for (sal_Int32 nPage = 0; nPage < nPageCount; ++nPage)
-    {
-        if (!rSlidePersist[nPage]->getURLShapeId().empty())
+        auto aShapeMap = rSlidePersist[nPage]->getShapeMap();
+        for (auto element : aShapeMap)
         {
-            auto aShapeMap = rSlidePersist[nPage]->getShapeMap();
-            sal_Int32 nCount = rSlidePersist[nPage]->getURLShapeId().size();
-            for (sal_Int32 i = 0; i < nCount; i++)
+            auto pShapePtr = element.second;
+            if (pShapePtr && (pShapePtr->getSubType() == XML_title || pShapePtr->getSubType() == XML_ctrTitle))
             {
-                OUString sId = rSlidePersist[nPage]->getURLShapeId()[i];
-                uno::Reference<drawing::XShape> xShape(aShapeMap[sId]->getXShape(), uno::UNO_QUERY);
-                Reference<XShapes> xShapes(xShape, UNO_QUERY);
-                if (xShapes.is()) // group shape
+                sal_Int32 nCount = 1;
+                OUString aTitleText;
+                Reference<text::XTextRange> xText(pShapePtr->getXShape(), UNO_QUERY_THROW);
+                aTitleText = xText->getString();
+                // just a magic value but we don't want to drop out slide names which are too long
+                if (aTitleText.getLength() > 63)
+                    aTitleText = aTitleText.copy(0, 63);
+                bool bUseTitleAsSlideName = !aTitleText.isEmpty();
+                // check duplicated title name
+                if (bUseTitleAsSlideName)
                 {
-                    for (sal_Int32 j = 0; j < xShapes->getCount(); j++)
+                    Reference<XDrawPagesSupplier> xDPS(rFilter.getModel(), UNO_QUERY_THROW);
+                    Reference<XDrawPages> xDrawPages(xDPS->getDrawPages(), UNO_SET_THROW);
+                    for (sal_Int32 i = 0; i < nPage; ++i)
                     {
-                        uno::Reference<drawing::XShape> xGroupedShape(xShapes->getByIndex(j),
-                                                                      uno::UNO_QUERY);
-                        lcl_setBookmark(xGroupedShape, rSlidePersist);
+                        Reference<XDrawPage> xDrawPage(xDrawPages->getByIndex(i), UNO_QUERY);
+                        Reference<container::XNamed> xNamed(xDrawPage, UNO_QUERY_THROW);
+                        OUString sRest;
+                        if (xNamed->getName().startsWith(aTitleText, &sRest)
+                            && (sRest.isEmpty()
+                                || (sRest.startsWith(" (") && sRest.endsWith(")")
+                                    && o3tl::toInt32(sRest.subView(2, sRest.getLength() - 3)) > 0)))
+                            nCount++;
                     }
+                    Reference<container::XNamed> xName(rSlidePersist[nPage]->getPage(), UNO_QUERY_THROW);
+                    xName->setName(
+                        aTitleText
+                        + (nCount == 1 ? OUString("") : " (" + OUString::number(nCount) + ")"));
                 }
-                else
-                    lcl_setBookmark(xShape, rSlidePersist);
-            }
-        }
-    }
-}
-
-static void ResolveTextFields( XmlFilterBase const & rFilter )
-{
-    const oox::core::TextFieldStack& rTextFields = rFilter.getTextFieldStack();
-    if ( rTextFields.empty() )
-        return;
-
-    const Reference< frame::XModel >& xModel( rFilter.getModel() );
-    for (auto const& textField : rTextFields)
-    {
-        static const OUStringLiteral sURL = u"URL";
-        Reference< drawing::XDrawPagesSupplier > xDPS( xModel, uno::UNO_QUERY_THROW );
-        Reference< drawing::XDrawPages > xDrawPages( xDPS->getDrawPages(), uno::UNO_SET_THROW );
-
-        const oox::core::TextField& rTextField( textField );
-        Reference< XPropertySet > xPropSet( rTextField.xTextField, UNO_QUERY );
-        Reference< XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
-        if ( xPropSetInfo->hasPropertyByName( sURL ) )
-        {
-            OUString aURL;
-            if ( xPropSet->getPropertyValue( sURL ) >>= aURL )
-            {
-                static const OUStringLiteral sSlide = u"#Slide ";
-                static const OUStringLiteral sNotes = u"#Notes ";
-                bool bNotes = false;
-                sal_Int32 nPageNumber = 0;
-                if ( aURL.match( sSlide ) )
-                    nPageNumber = o3tl::toInt32(aURL.subView( sSlide.getLength() ));
-                else if ( aURL.match( sNotes ) )
-                {
-                    nPageNumber = o3tl::toInt32(aURL.subView( sNotes.getLength() ));
-                    bNotes = true;
-                }
-                if ( nPageNumber )
-                {
-                    try
-                    {
-                        Reference< XDrawPage > xDrawPage;
-                        xDrawPages->getByIndex( nPageNumber - 1 ) >>= xDrawPage;
-                        if ( bNotes )
-                        {
-                            Reference< css::presentation::XPresentationPage > xPresentationPage( xDrawPage, UNO_QUERY_THROW );
-                            xDrawPage = xPresentationPage->getNotesPage();
-                        }
-                        Reference< container::XNamed > xNamed( xDrawPage, UNO_QUERY_THROW );
-                        if (!xNamed->getName().startsWith("page"))
-                            aURL = "#" + xNamed->getName();
-                        else
-                            aURL = "#" + URLResId(STR_SLIDE_NAME) + " " + OUString::number(nPageNumber);
-                        xPropSet->setPropertyValue( sURL, Any( aURL ) );
-                        Reference< text::XTextContent > xContent( rTextField.xTextField);
-                        Reference< text::XTextRange > xTextRange = rTextField.xTextCursor;
-                        rTextField.xText->insertTextContent( xTextRange, xContent, true );
-                    }
-                    catch( uno::Exception& )
-                    {
-                    }
-                }
+                break;
             }
         }
     }
@@ -602,8 +539,7 @@ void PresentationFragmentHandler::finalizeImport()
                 importSlide(elem, !nPagesImported, bImportNotesPages);
                 nPagesImported++;
             }
-            ResolveTextFields( rFilter );
-            ResolveShapeBookmark(rFilter.getDrawPages());
+            importSlideNames( rFilter, rFilter.getDrawPages());
             if (!maCustomShowList.empty())
                 importCustomSlideShow(maCustomShowList);
         }

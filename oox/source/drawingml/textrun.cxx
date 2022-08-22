@@ -163,12 +163,6 @@ sal_Int32 TextRun::insertAt(
 
                 PropertySet aFieldTextPropSet( xTextFieldCursor );
                 aTextCharacterProps.pushToPropSet( aFieldTextPropSet, rFilterBase );
-
-                oox::core::TextField aTextField;
-                aTextField.xText = xText;
-                aTextField.xTextCursor = xTextFieldCursor;
-                aTextField.xTextField = xField;
-                rFilterBase.getTextFieldStack().push_back( aTextField );
             }
             else
             {

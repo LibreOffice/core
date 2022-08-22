@@ -447,47 +447,6 @@ void PPTShape::addShape(
                 setMasterTextListStyle( aMasterTextListStyle );
 
             Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, bClearText, bool(mpPlaceholder), aTransformation, getFillProperties() ) );
-            // if exists and not duplicated, try to use the title text as slide name to help its re-use on UI
-            if (!rSlidePersist.isMasterPage() && rSlidePersist.getPage().is() && (mnSubType == XML_title || mnSubType == XML_ctrTitle))
-            {
-                try
-                {
-                    sal_Int32 nCount = 1;
-                    OUString aTitleText;
-                    Reference<XTextRange> xText(xShape, UNO_QUERY_THROW);
-                    aTitleText = xText->getString();
-                    Reference<drawing::XDrawPagesSupplier> xDPS(rFilterBase.getModel(), uno::UNO_QUERY_THROW);
-                    Reference<drawing::XDrawPages> xDrawPages(xDPS->getDrawPages(), uno::UNO_SET_THROW);
-                    sal_uInt32 nMaxPages = xDrawPages->getCount();
-                    // just a magic value but we don't want to drop out slide names which are too long
-                    if (aTitleText.getLength() > 63)
-                        aTitleText = aTitleText.copy(0, 63);
-                    bool bUseTitleAsSlideName = !aTitleText.isEmpty();
-                    // check duplicated title name
-                    if (bUseTitleAsSlideName)
-                    {
-                        for (sal_uInt32 nPage = 0; nPage < nMaxPages; ++nPage)
-                        {
-                            Reference<XDrawPage> xDrawPage(xDrawPages->getByIndex(nPage), uno::UNO_QUERY);
-                            Reference<container::XNamed> xNamed(xDrawPage, UNO_QUERY_THROW);
-                            OUString sRest;
-                            if (xNamed->getName().startsWith(aTitleText, &sRest)
-                                && (sRest.isEmpty()
-                                    || (sRest.startsWith(" (") && sRest.endsWith(")")
-                                        && o3tl::toInt32(sRest.subView(2, sRest.getLength() - 3)) > 0)))
-                                nCount++;
-                        }
-                        Reference<container::XNamed> xName(rSlidePersist.getPage(), UNO_QUERY_THROW);
-                        xName->setName(
-                            aTitleText
-                            + (nCount == 1 ? OUString("") : " (" + OUString::number(nCount) + ")"));
-                    }
-                }
-                catch (uno::Exception&)
-                {
-
-                }
-            }
 
             // Apply text properties on placeholder text inside this placeholder shape
             if (meShapeLocation == Slide && mpPlaceholder && getTextBody() && getTextBody()->isEmpty())
@@ -613,15 +572,10 @@ void PPTShape::addShape(
                     // so check here if it's a bookmark or a document
                     if (meClickAction == ClickAction_BOOKMARK)
                     {
-                        sal_Int32 nSplitPos;
                         if (!sURL.startsWith("#"))
                             meClickAction = ClickAction_DOCUMENT;
-                        else if (-1 != (nSplitPos = sURL.indexOf( ' ' )))
-                        {
-                            setBookmark(true);
-                            // reuse slide number from '#Slide [Num]' or "#Notes [Num]"
-                            sURL = OUString::Concat("#page") + sURL.subView(nSplitPos);
-                        }
+                        else
+                            sURL = OUString::Concat("page") + sURL.subView(sURL.getLength() - 1);
                         nPropertyCount += 1;
                     }
 

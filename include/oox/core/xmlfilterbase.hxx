@@ -75,13 +75,6 @@ namespace oox::core {
 class FragmentHandler;
 class FastParser;
 
-struct TextField {
-    css::uno::Reference< css::text::XText >       xText;
-    css::uno::Reference< css::text::XTextCursor > xTextCursor;
-    css::uno::Reference< css::text::XTextField >  xTextField;
-};
-typedef std::vector< TextField > TextFieldStack;
-
 struct XmlFilterBaseImpl;
 
 using ShapePairs
@@ -182,9 +175,6 @@ public:
         @return  Added relation Id.
      */
     OUString     addRelation( const css::uno::Reference< css::io::XOutputStream >& rOutputStream, const OUString& rType, std::u16string_view rTarget, bool bExternal = false );
-
-    /** Returns a stack of used textfields, used by the pptx importer to replace links to slidepages with the real page name */
-    TextFieldStack& getTextFieldStack() const;
 
     /** Opens and returns the specified output stream from the base storage with specified media type.
 
