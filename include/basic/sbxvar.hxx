@@ -77,7 +77,7 @@ struct SbxValues
     SbxDataType  eType;
 
     SbxValues(): pData( nullptr ), eType(SbxEMPTY) {}
-    SbxValues( SbxDataType e ): eType(e) {}
+    SbxValues( SbxDataType e ): pData( nullptr ), eType(e) {}
     SbxValues( double _nDouble ): nDouble( _nDouble ), eType(SbxDOUBLE) {}
 
     void clear(SbxDataType type) {
