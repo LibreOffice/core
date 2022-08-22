@@ -1170,9 +1170,11 @@ void SwHTMLParser::InsertFloatingFrame()
 
 sal_uInt16 SwHTMLWriter::GuessOLENodeFrameType( const SwNode& rNode )
 {
-    SwOLEObj& rObj = const_cast<SwOLENode*>(rNode.GetOLENode())->GetOLEObj();
-
     SwHTMLFrameType eType = HTML_FRMTYPE_OLE;
+
+    SwOLENode* pOLENode = const_cast<SwOLENode*>(rNode.GetOLENode());
+    assert(pOLENode && "must exist");
+    SwOLEObj& rObj = pOLENode->GetOLEObj();
 
     uno::Reference < embed::XClassifiedObject > xClass = rObj.GetOleRef();
     SvGlobalName aClass( xClass->getClassID() );
