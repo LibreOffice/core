@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67ae5710_3d683cd7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-08-22T10:06:31Z",
+      "side": 1,
+      "message": "is 7.3 also affected?",
+      "revId": "1075959bc88e88fec787462cbebe84ddc1055fb7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2aa4f22e_53629749",
+        "filename": "xmloff/source/style/xmlexppr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 937,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-08-22T10:06:31Z",
+      "side": 1,
+      "message": "maybe an \"enum\" would be better and more self-documenting",
+      "range": {
+        "startLine": 937,
+        "startChar": 0,
+        "endLine": 937,
+        "endChar": 8
+      },
+      "revId": "1075959bc88e88fec787462cbebe84ddc1055fb7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
