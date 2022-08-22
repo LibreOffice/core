@@ -1550,19 +1550,13 @@ void LocaleDataWrapper::loadDateAcceptancePatterns(
         }
     }
 
-    // Never overwrite the locale's full date pattern! The first.
-    if (std::as_const(aDateAcceptancePatterns)[0] == rPatterns[0])
-        aDateAcceptancePatterns = comphelper::containerToSequence(rPatterns);    // sane
-    else
-    {
-        // Copy existing full date pattern and append the sequence passed.
-        /* TODO: could check for duplicates and shrink target sequence */
-        Sequence< OUString > aTmp( rPatterns.size() + 1 );
-        auto it = aTmp.getArray();
-        *it = std::as_const(aDateAcceptancePatterns)[0];
-        std::copy(rPatterns.begin(), rPatterns.end(), std::next(it));
-        aDateAcceptancePatterns = aTmp;
-    }
+    // Earlier versions checked for presence of the full date pattern with
+    // aDateAcceptancePatterns[0] == rPatterns[0] and prepended that if not.
+    // This lead to confusion if the patterns were intentionally specified
+    // without, giving entirely a different DMY order, see tdf#150288.
+    // Not checking this and accepting the given patterns as is may result in
+    // the user shooting themself in the foot, but we can't have both.
+    aDateAcceptancePatterns = comphelper::containerToSequence(rPatterns);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
