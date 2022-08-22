@@ -24,11 +24,14 @@
 namespace weld
 {
 class Window;
+class Container;
 }
 class SfxItemSet;
 
 class SwNumFormatDlg final : public SfxSingleTabDialogController
 {
+    std::unique_ptr<weld::Container> m_xContent;
+
 public:
     SwNumFormatDlg(weld::Widget* pParent, const SfxItemSet& rSet);
 };
