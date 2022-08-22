@@ -74,6 +74,7 @@ com::sun::star::uno::XInterface * CppInterfaceProxy::create(
         pProxy->vtables[i] = VtableFactory::mapBlockToVtable(
             rVtables.blocks[i].start);
     }
+    // coverity[leaked_storage : FALSE] - see freeCppInterfaceProxy
     return castProxyToInterface(pProxy);
 }
 
