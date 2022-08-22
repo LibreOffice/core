@@ -33,6 +33,40 @@
       "message": "I\u0027m happy with Paris\u0027s review, but now the patch has a merge conflict. So if you can rebase and fix the conflicts, I can merge it. https://opensource.com/article/20/4/git-merge-conflict",
       "revId": "ac55b28d4e59c066be6c85558f851f077d43e2ac",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "93c4d698_ef458fa5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002975
+      },
+      "writtenOn": "2022-08-22T18:55:59Z",
+      "side": 1,
+      "message": "I\u0027m not reviewing your entire patch, just making a single comment (see below) to think about.",
+      "revId": "ac55b28d4e59c066be6c85558f851f077d43e2ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18934d12_616b0e7b",
+        "filename": "chart2/source/view/inc/PlottingPositionHelper.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1002975
+      },
+      "writtenOn": "2022-08-22T18:55:59Z",
+      "side": 1,
+      "message": "In several places in this patch (or rather, the code you\u0027re patching), we see not just a swap, but the following logic: \"if the second element should come before the first element, then swap them\". I suggest you write a function to do just that. It\u0027s essentially sorting two elements, but you obviously don\u0027t want to invoke std::sort for two elements... so maybe a `sort_pair()` or whatever, which takes two lvalue references and a comparator defaulting to std::less?",
+      "revId": "ac55b28d4e59c066be6c85558f851f077d43e2ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
