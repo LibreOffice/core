@@ -319,7 +319,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
     // To-Do - add 'SwExtraRedlineTable' also ?
     if( getIDocumentRedlineAccess().IsRedlineOn() || (!getIDocumentRedlineAccess().IsIgnoreRedline() && !getIDocumentRedlineAccess().GetRedlineTable().empty() ))
     {
-        pRedlPam = new SwPaM( pStart->nNode, pEnd->nNode, SwNodeOffset(-1), SwNodeOffset(1) );
+        pRedlPam = new SwPaM( pStart->GetNode(), pEnd->GetNode(), SwNodeOffset(-1), SwNodeOffset(1) );
         SwContentNode* pCNd = pRedlPam->GetMarkContentNode();
         if( pCNd )
             pRedlPam->GetMark()->nContent = pCNd->Len();
@@ -332,8 +332,8 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
                 GetIDocumentUndoRedo().DoUndo(false);
             }
             // First copy the range
-            SwNodeIndex aEndIdx( pEnd->nNode, 1 );
-            SwNodeRange aRg( pStart->nNode, aEndIdx );
+            SwNodeIndex aEndIdx( pEnd->GetNode(), 1 );
+            SwNodeRange aRg( pStart->GetNode(), aEndIdx.GetNode() );
             GetNodes().Copy_( aRg, aEndIdx.GetNode() );
 
             // range is new from pEnd->nNode+1 to aEndIdx

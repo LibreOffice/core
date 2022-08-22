@@ -528,7 +528,7 @@ std::vector<SwRangeRedline*> GetAllValidRanges(std::unique_ptr<SwRangeRedline> p
             if( *pNew->GetPoint() > *pEnd )
             {
                 pC = nullptr;
-                if( aNewStt.nNode != pEnd->nNode )
+                if( aNewStt.GetNode() != pEnd->GetNode() )
                     do {
                         SwNode& rCurNd = aNewStt.GetNode();
                         if( rCurNd.IsStartNode() )
@@ -1630,7 +1630,7 @@ void SwRangeRedline::CopyToSection()
         }
         else
         {
-            SwNodeRange aRg( pStt->nNode, SwNodeOffset(0), pEnd->nNode, SwNodeOffset(1) );
+            SwNodeRange aRg( pStt->GetNode(), SwNodeOffset(0), pEnd->GetNode(), SwNodeOffset(1) );
             rDoc.GetDocumentContentOperationsManager().CopyWithFlyInFly(aRg, *pSttNd->EndOfSectionNode());
         }
     }
@@ -1780,8 +1780,8 @@ void SwRangeRedline::MoveFromSection(size_t nMyPos)
             else
                 ++aPam.GetPoint()->nNode;
 
-            SwFormatColl* pColl = pCNd && pCNd->Len() && aPam.GetPoint()->nNode !=
-                                        aPam.GetMark()->nNode
+            SwFormatColl* pColl = pCNd && pCNd->Len() && aPam.GetPoint()->GetNode() !=
+                                        aPam.GetMark()->GetNode()
                                 ? pCNd->GetFormatColl() : nullptr;
 
             SwNodeIndex aNdIdx( GetPoint()->GetNode(), -1 );
