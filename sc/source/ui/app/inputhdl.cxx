@@ -67,6 +67,7 @@
 #include <tabvwsh.hxx>
 #include <docsh.hxx>
 #include <scmod.hxx>
+#include <formulaopt.hxx>
 #include <uiitems.hxx>
 #include <global.hxx>
 #include <sc.hrc>
@@ -98,11 +99,6 @@
 using namespace formula;
 
 namespace {
-
-// Formula data replacement character for a pair of parentheses at end of
-// function name, to force sorting parentheses before all other characters.
-// Collation may treat parentheses differently.
-const sal_Unicode cParenthesesReplacement = 0x0001;
 
 ScTypedCaseStrSet::const_iterator findText(
     const ScTypedCaseStrSet& rDataSet, ScTypedCaseStrSet::const_iterator const & itPos,
@@ -1020,27 +1016,11 @@ void ScInputHandler::GetFormulaData()
 
     const OUString aParenthesesReplacement( cParenthesesReplacement);
     const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
-    sal_uInt32 nListCount = pFuncList->GetCount();
-    for(sal_uInt32 i=0;i<nListCount;i++)
-    {
-        const ScFuncDesc* pDesc = pFuncList->GetFunction( i );
-        if ( pDesc->mxFuncName )
-        {
-            const sal_Unicode* pName = pDesc->mxFuncName->getStr();
-            const sal_Int32 nLen = pDesc->mxFuncName->getLength();
-            // fdo#75264 fill maFormulaChar with all characters used in formula names
-            for ( sal_Int32 j = 0; j < nLen; j++ )
-            {
-                sal_Unicode c = pName[ j ];
-                maFormulaChar.insert( c );
-            }
-            OUString aFuncName = *pDesc->mxFuncName + aParenthesesReplacement;
-            pFormulaData->insert(ScTypedStrData(aFuncName, 0.0, 0.0, ScTypedStrData::Standard));
-            pDesc->initArgumentInfo();
-            OUString aEntry = pDesc->getSignature();
-            pFormulaDataPara->insert(ScTypedStrData(aEntry, 0.0, 0.0, ScTypedStrData::Standard));
-        }
-    }
+    const sal_uInt32 nListCount = pFuncList->GetCount();
+    const InputHandlerFunctionNames& rFunctionNames = ScGlobal::GetInputHandlerFunctionNames();
+    *pFormulaData     = rFunctionNames.maFunctionData;
+    *pFormulaDataPara = rFunctionNames.maFunctionDataPara;
+    maFormulaChar     = rFunctionNames.maFunctionChar;
 
     // Increase suggestion priority of MRU formulas
     const ScAppOptions& rOpt = SC_MOD()->GetAppOptions();
@@ -1065,8 +1045,19 @@ void ScInputHandler::GetFormulaData()
         }
     }
     miAutoPosFormula = pFormulaData->end();
-    rDoc.GetFormulaEntries( *pFormulaData );
-    rDoc.GetFormulaEntries( *pFormulaDataPara );
+
+    // tdf#142031 - collect all the characters for the formula suggestion auto input
+    ScTypedCaseStrSet aStrSet;
+    rDoc.GetFormulaEntries( aStrSet );
+    for (auto iter = aStrSet.begin(); iter != aStrSet.end(); ++iter)
+    {
+        const OUString aFuncName = ScGlobal::getCharClass().uppercase((*iter).GetString());
+        // fdo#75264 fill maFormulaChar with all characters used in formula names
+        for (sal_Int32 j = 0; j < aFuncName.getLength(); j++)
+            maFormulaChar.insert(aFuncName[j]);
+    }
+    pFormulaData->insert(aStrSet.begin(), aStrSet.end());
+    pFormulaDataPara->insert(aStrSet.begin(), aStrSet.end());
 }
 
 IMPL_LINK( ScInputHandler, ShowHideTipVisibleParentListener, VclWindowEvent&, rEvent, void )

@@ -242,8 +242,12 @@ const CharClass* ScCompiler::GetCharClassLocalized()
     {
         // Switching UI language requires restart; if not, we would have to
         // keep track of that.
-        pCharClassLocalized = new CharClass(
-                ::comphelper::getProcessComponentContext(), Application::GetSettings().GetUILanguageTag());
+        osl::MutexGuard aGuard(maMutex);
+        if (!pCharClassLocalized)
+        {
+            pCharClassLocalized = new CharClass( ::comphelper::getProcessComponentContext(),
+                    Application::GetSettings().GetUILanguageTag());
+        }
     }
     return pCharClassLocalized;
 }
