@@ -369,7 +369,6 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                         SfxStringItem aReferer(SID_REFERER, mpDocSh->GetMedium()->GetName());
                         SfxBoolItem aBrowseItem( SID_BROWSE, true );
                         SfxViewFrame* pFrame = mpViewShell->GetViewFrame();
-                        mpWindow->ReleaseMouse();
 
                         if (rMEvt.IsMod1())
                         {
