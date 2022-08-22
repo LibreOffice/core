@@ -1262,11 +1262,11 @@ CPPUNIT_TEST_FIXTURE(Test, tdf122201_editUnprotectedText)
 
     // check protected area
     SwPaM aPaMProtected(aDocStart);
-    CPPUNIT_ASSERT(aPaMProtected.HasReadonlySel(false));
+    CPPUNIT_ASSERT(aPaMProtected.HasReadonlySel(false, false));
 
     // check unprotected area
     SwPaM aPaMUnprotected(aDocEnd);
-    CPPUNIT_ASSERT(!aPaMUnprotected.HasReadonlySel(false));
+    CPPUNIT_ASSERT(!aPaMUnprotected.HasReadonlySel(false, false));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSectionHeader)

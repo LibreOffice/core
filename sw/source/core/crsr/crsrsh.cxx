@@ -2740,7 +2740,7 @@ bool SwCursorShell::IsOverReadOnlyPos( const Point& rPt ) const
     SwPaM aPam( *m_pCurrentCursor->GetPoint() );
     GetLayout()->GetModelPositionForViewPoint( aPam.GetPoint(), aPt );
     // form view
-    return aPam.HasReadonlySel( GetViewOptions()->IsFormView() );
+    return aPam.HasReadonlySel(GetViewOptions()->IsFormView(), false);
 }
 
 /** Get the number of elements in the ring of cursors
@@ -3355,7 +3355,7 @@ void SwCursorShell::SetReadOnlyAvailable( bool bFlag )
     }
 }
 
-bool SwCursorShell::HasReadonlySel() const
+bool SwCursorShell::HasReadonlySel(bool const isReplace) const
 {
     if (GetViewOptions()->IsShowOutlineContentVisibilityButton())
     {
@@ -3392,13 +3392,13 @@ bool SwCursorShell::HasReadonlySel() const
         if ( m_pTableCursor != nullptr )
         {
             bRet = m_pTableCursor->HasReadOnlyBoxSel()
-                   || m_pTableCursor->HasReadonlySel( GetViewOptions()->IsFormView() );
+                   || m_pTableCursor->HasReadonlySel(GetViewOptions()->IsFormView(), isReplace);
         }
         else
         {
             for(const SwPaM& rCursor : m_pCurrentCursor->GetRingContainer())
             {
-                if( rCursor.HasReadonlySel( GetViewOptions()->IsFormView() ) )
+                if (rCursor.HasReadonlySel(GetViewOptions()->IsFormView(), isReplace))
                 {
                     bRet = true;
                     break;
