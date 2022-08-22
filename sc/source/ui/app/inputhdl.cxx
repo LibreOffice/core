@@ -68,6 +68,7 @@
 #include <tabvwsh.hxx>
 #include <docsh.hxx>
 #include <scmod.hxx>
+#include <formulaopt.hxx>
 #include <uiitems.hxx>
 #include <global.hxx>
 #include <sc.hrc>
@@ -1019,6 +1020,10 @@ void ScInputHandler::GetFormulaData()
     else
         pFormulaDataPara.reset( new ScTypedCaseStrSet );
 
+    const CharClass* pCharClass = (SC_MOD()->GetFormulaOptions().GetUseEnglishFuncName()
+                                       ? ScCompiler::GetCharClassEnglish()
+                                       : ScCompiler::GetCharClassLocalized());
+
     const OUString aParenthesesReplacement( cParenthesesReplacement);
     const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
     sal_uInt32 nListCount = pFuncList->GetCount();
@@ -1027,16 +1032,13 @@ void ScInputHandler::GetFormulaData()
         const ScFuncDesc* pDesc = pFuncList->GetFunction( i );
         if ( pDesc->mxFuncName )
         {
-            const sal_Unicode* pName = pDesc->mxFuncName->getStr();
-            const sal_Int32 nLen = pDesc->mxFuncName->getLength();
+            OUString aFuncName(pDesc->mxFuncName->getStr());
+            aFuncName = pCharClass->uppercase(aFuncName);
             // fdo#75264 fill maFormulaChar with all characters used in formula names
-            for ( sal_Int32 j = 0; j < nLen; j++ )
-            {
-                sal_Unicode c = pName[ j ];
-                maFormulaChar.insert( c );
-            }
-            OUString aFuncName = *pDesc->mxFuncName + aParenthesesReplacement;
-            pFormulaData->insert(ScTypedStrData(aFuncName, 0.0, 0.0, ScTypedStrData::Standard));
+            for (sal_Int32 j = 0; j < aFuncName.getLength(); j++)
+                maFormulaChar.insert(aFuncName[j]);
+            pFormulaData->insert(ScTypedStrData(aFuncName + aParenthesesReplacement, 0.0, 0.0,
+                                                ScTypedStrData::Standard));
             pDesc->initArgumentInfo();
             OUString aEntry = pDesc->getSignature();
             pFormulaDataPara->insert(ScTypedStrData(aEntry, 0.0, 0.0, ScTypedStrData::Standard));
@@ -1066,8 +1068,20 @@ void ScInputHandler::GetFormulaData()
         }
     }
     miAutoPosFormula = pFormulaData->end();
-    rDoc.GetFormulaEntries( *pFormulaData );
-    rDoc.GetFormulaEntries( *pFormulaDataPara );
+
+    // tdf#142031 - collect all the characters for the formula suggestion auto input
+    std::unique_ptr<ScTypedCaseStrSet> paStrSet;
+    paStrSet.reset( new ScTypedCaseStrSet );
+    rDoc.GetFormulaEntries( *paStrSet );
+    for (auto iter = paStrSet->begin(); iter != std::next(paStrSet->end()); ++iter)
+    {
+        const OUString aFuncName = ScGlobal::getCharClass().uppercase((*iter).GetString());
+        // fdo#75264 fill maFormulaChar with all characters used in formula names
+        for (sal_Int32 j = 0; j < aFuncName.getLength(); j++)
+            maFormulaChar.insert(aFuncName[j]);
+    }
+    pFormulaData->insert(paStrSet->begin(), paStrSet->end());
+    pFormulaDataPara->insert(paStrSet->begin(), paStrSet->end());
 }
 
 IMPL_LINK( ScInputHandler, ShowHideTipVisibleParentListener, VclWindowEvent&, rEvent, void )
