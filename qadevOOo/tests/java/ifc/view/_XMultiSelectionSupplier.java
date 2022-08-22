@@ -318,21 +318,27 @@ public class _XMultiSelectionSupplier extends MultiMethodTest {
             Object shouldElement = selections[i];
             i++;
 
-            if (ObjCompare != null) {
-                compRes = ObjCompare.compare(shouldElement, nextElement) == 0;
-            } else {
-                compRes = util.ValueComparer.equalValue(shouldElement, nextElement);
-            }
-
-            log.println("nextElement()-object and expected object 'selections["+i+"]' are equal: "+compRes);
-
-            if (!compRes && (selections[i]) instanceof Object[]) {
-                if (((Object[])selections[i])[0] instanceof Integer) {
-                    log.println("Getting: "+((Integer) ((Object[])shouldElement)[0]).intValue());
-                    log.println("Expected: "+((Integer) ((Object[])selections[i])[0]).intValue());
+            if (nextElement != null)
+            {
+                if (ObjCompare != null) {
+                    compRes = ObjCompare.compare(shouldElement, nextElement) == 0;
+                } else {
+                    compRes = util.ValueComparer.equalValue(shouldElement, nextElement);
                 }
+
+                log.println("nextElement()-object and expected object 'selections["+i+"]' are equal: "+compRes);
+
+                if (!compRes && (selections[i]) instanceof Object[]) {
+                    if (((Object[])selections[i])[0] instanceof Integer) {
+                        log.println("Getting: "+((Integer) ((Object[])shouldElement)[0]).intValue());
+                        log.println("Expected: "+((Integer) ((Object[])selections[i])[0]).intValue());
+                    }
+                }
+                bOK &= compRes;
+
+            } else {
+                bOK = false;
             }
-            bOK &= compRes;
         }
 
         tRes.tested("createSelectionEnumeration()", bOK);
@@ -389,21 +395,27 @@ public class _XMultiSelectionSupplier extends MultiMethodTest {
             Object shouldElement = selections[i];
             i--;
 
-            if (ObjCompare != null) {
-                compRes = ObjCompare.compare(shouldElement, nextElement) == 0;
-            } else {
-                compRes = util.ValueComparer.equalValue(shouldElement, nextElement);
-            }
-
-            log.println("nextElement()-object and expected object 'selections["+i+"]' are equal: "+compRes);
-
-            if (!compRes && (selections[i]) instanceof Object[]){
-                if (((Object[])selections[i])[0] instanceof Integer) {
-                    log.println("Getting: "+((Integer) ((Object[])shouldElement)[0]).intValue());
-                    log.println("Expected: "+((Integer) ((Object[])selections[i])[0]).intValue());
+            if (nextElement != null) {
+                if (ObjCompare != null) {
+                    compRes = ObjCompare.compare(shouldElement, nextElement) == 0;
+                } else {
+                    compRes = util.ValueComparer.equalValue(shouldElement, nextElement);
                 }
+
+                log.println("nextElement()-object and expected object 'selections["+i+"]' are equal: "+compRes);
+
+                if (!compRes && (selections[i]) instanceof Object[]){
+                    if (((Object[])selections[i])[0] instanceof Integer) {
+                        log.println("Getting: "+((Integer) ((Object[])shouldElement)[0]).intValue());
+                        log.println("Expected: "+((Integer) ((Object[])selections[i])[0]).intValue());
+                    }
+                }
+                bOK &= compRes;
+
+            } else {
+                bOK = false;
             }
-            bOK &= compRes;
+
         }
 
         tRes.tested("createReverseSelectionEnumeration()", bOK);
