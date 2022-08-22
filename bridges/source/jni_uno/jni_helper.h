@@ -49,6 +49,7 @@ inline void jstring_to_ustring(
         ustr->refCount = 1;
         ustr->length = len;
         ustr->buffer[ len ] = '\0';
+        // coverity[leaked_storage : FALSE] - transfer ownership to *out_ustr
         mem.release();
         if (nullptr != *out_ustr)
             rtl_uString_release( *out_ustr );
