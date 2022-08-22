@@ -33,6 +33,24 @@
       "message": "To check if the behavior of the std math function is the same as the rtl?\nIt did find some asin precision problems.",
       "revId": "466f86abb7208e853ad48ae46e97a2455667fa42",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e182366f_90d566ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-08-22T05:58:57Z",
+      "side": 1,
+      "message": "\u003e To check if the behavior of the std math function is the same as the rtl?\n\nBut then why, at the same time, stop testing the rtl functions?  Those tests were apparently originally written to test the rtl functions.  Why would that no longer be necessary?\n\nAlso, it is far from obvious why some test in sal\u0027s sal/qa/rtl/math/test-rtl-math.cxx should test std functions (as if we assumed we knew better than standard library authors how those std functions should operate).  If these new tests are there to demonstrate that we can confidently replace certain uses of rtl functions with std functions across the LO code base, then there should IMO at least be some comment explaining that.",
+      "parentUuid": "7f22c6a4_bd22a060",
+      "revId": "466f86abb7208e853ad48ae46e97a2455667fa42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
