@@ -126,23 +126,22 @@ namespace
 
 IMPL_LINK(ScNavigatorDlg, ParseRowInputHdl, int*, result, bool)
 {
-    SCCOL nCol;
+    SCCOL nCol(0);
 
     OUString aStrCol = m_xEdCol->get_text();
 
     if (!aStrCol.isEmpty())
     {
-        //  nKeyGroup is no longer set at VCL, in cause of lack of keyinput
+        if (ScViewData* pData = GetViewData())
+        {
+            ScDocument& rDoc = pData->GetDocument();
 
-        ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current() );
-        auto& rDoc = pViewSh->GetViewData().GetDocument();
-        if ( CharClass::isAsciiNumeric(aStrCol) )
-            nCol = NumStrToAlpha( rDoc.GetSheetLimits(), aStrCol );
-        else
-            nCol = AlphaToNum( rDoc, aStrCol );
+            if ( CharClass::isAsciiNumeric(aStrCol) )
+                nCol = NumStrToAlpha( rDoc.GetSheetLimits(), aStrCol );
+            else
+                nCol = AlphaToNum( rDoc, aStrCol );
+        }
     }
-    else
-        nCol = 0;
 
     *result = nCol;
     return true;
