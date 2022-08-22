@@ -693,6 +693,7 @@ RegError ORegistry::openKey(RegKeyHandle hKey, std::u16string_view keyName,
 
         std::unique_ptr< ORegKey > p(new ORegKey(path, this));
         i = m_openKeyTable.insert(std::make_pair(path, p.get())).first;
+        // coverity[leaked_storage : FALSE] - ownership transferred to m_openKeyTable
         p.release();
     } else {
         i->second->acquire();
