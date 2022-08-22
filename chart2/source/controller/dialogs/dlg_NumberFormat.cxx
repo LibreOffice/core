@@ -31,12 +31,13 @@ using namespace ::com::sun::star;
 
 NumberFormatDialog::NumberFormatDialog(weld::Window* pParent, const SfxItemSet& rSet)
     : SfxSingleTabDialogController(pParent, &rSet, "cui/ui/formatnumberdialog.ui", "FormatNumberDialog")
+    , m_xContent( m_xBuilder->weld_container("content") )
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT );
     if (fnCreatePage)
     {
-        std::unique_ptr<SfxTabPage> xTabPage = (*fnCreatePage)(get_content_area(), this, &rSet);
+        std::unique_ptr<SfxTabPage> xTabPage = (*fnCreatePage)(m_xContent.get(), this, &rSet);
         xTabPage->PageCreated(rSet);
         SetTabPage(std::move(xTabPage));
     }
