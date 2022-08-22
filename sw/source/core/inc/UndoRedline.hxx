@@ -99,6 +99,7 @@ public:
     void SetSaveRange( const SwPaM& rRange );
 };
 
+/// Undo for Edit -> track changes -> accept.
 class SwUndoAcceptRedline final : public SwUndoRedline
 {
 private:
