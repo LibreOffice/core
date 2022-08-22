@@ -2053,6 +2053,7 @@ void FormulaCompiler::IntersectionLine()
                 FormulaTokenRef pIntersect( new FormulaByteToken( ocIntersect));
                 // Replace ocSpaces with ocIntersect so that when switching
                 // formula syntax the correct operator string is created.
+                // coverity[freed_arg : FALSE] - FormulaTokenRef has a ref so ReplaceToken won't delete pIntersect
                 pArr->ReplaceToken( nCodeIndex, pIntersect.get(), FormulaTokenArray::ReplaceMode::CODE_ONLY);
                 PutCode( pIntersect);
             }
