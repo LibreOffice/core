@@ -1284,6 +1284,7 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
             *aTmp.GetPoint() = *rPam.Start();
             aTmp.Move(fnMoveBackward, GoInNode);
         }
+        // coverity[copy_paste_error : FALSE] : GetNode() is intentional on both branches
         assert(aTmp.GetPoint()->GetNode() != rPam.GetPoint()->GetNode()
             && aTmp.GetPoint()->GetNode() != rPam.GetMark()->GetNode());
         ::PaMCorrAbs(rPam, *aTmp.GetPoint());
