@@ -4587,7 +4587,7 @@ static bool encodeImageAsHTML(
     // Encode in base64.
     auto aSeq = Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(aRet.getStr()),
                                    aRet.getLength());
-    OUStringBuffer aBase64Data;
+    OStringBuffer aBase64Data;
     comphelper::Base64::encode(aBase64Data, aSeq);
 
     // Embed in HTML.
@@ -4598,7 +4598,7 @@ static bool encodeImageAsHTML(
         + getGenerator().toUtf8()
         + "\"/>"
         "</head><body><img src=\"data:" + aMimeType + ";base64,"
-        + aBase64Data.makeStringAndClear().toUtf8() + "\"/></body></html>";
+        + aBase64Data + "\"/></body></html>";
 
     return true;
 }
