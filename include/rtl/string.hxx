@@ -697,8 +697,7 @@ public:
 
       The result is true if and only if second string
       represents the same sequence of characters as the first string.
-      The ASCII string must be NULL-terminated and must be greater or
-      equal as length.
+      The ASCII string must be greater or equal as length.
       This function can't be used for language specific comparison.
 
 
