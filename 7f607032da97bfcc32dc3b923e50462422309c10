@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "63a66622_21711224",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-08-22T09:54:36Z",
+      "side": 1,
+      "message": "Hi Hossein,\nIs it possible to have a unittest for this issue ?",
+      "revId": "7f607032da97bfcc32dc3b923e50462422309c10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
