@@ -16,6 +16,23 @@
       "message": "I\u0027m ok with going back to that",
       "revId": "553e8ee519d60ecc6c5c5dd6c0387fe701e7588b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26e3847e_72a34a3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-08-22T12:16:52Z",
+      "side": 1,
+      "message": "Hi Luboš,\nany objection if your patch gets reverted ?",
+      "revId": "553e8ee519d60ecc6c5c5dd6c0387fe701e7588b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
