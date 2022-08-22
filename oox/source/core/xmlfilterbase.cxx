@@ -175,7 +175,6 @@ struct XmlFilterBaseImpl
 
     FastParser                     maFastParser;
     RelationsMap                   maRelationsMap;
-    TextFieldStack                 maTextFieldStack;
     const NamespaceMap&            mrNamespaceMap;
     NamedShapePairs* mpDiagramFontHeights = nullptr;
 
@@ -505,11 +504,6 @@ FSHelperPtr XmlFilterBase::openFragmentStreamWithSerializer( const OUString& rSt
 {
     const bool bWriteHeader = rMediaType.indexOf( "vml" ) < 0 || rMediaType.indexOf( "+xml" ) >= 0;
     return std::make_shared<FastSerializerHelper>( openFragmentStream( rStreamName, rMediaType ), bWriteHeader );
-}
-
-TextFieldStack& XmlFilterBase::getTextFieldStack() const
-{
-    return mxImpl->maTextFieldStack;
 }
 
 namespace {
