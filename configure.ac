@@ -12539,10 +12539,6 @@ elif test \( \( "$_os" = "Linux" -o "$_os" = "Darwin" \) -a "$ENABLE_NSS" = TRUE
         # C++ library doesn't come with fancy gpgmepp-config, check for headers the old-fashioned way
         AC_CHECK_HEADER(gpgme++/gpgmepp_version.h, [ GPGMEPP_CFLAGS=-I/usr/include/gpgme++ ],
             [AC_MSG_ERROR([gpgmepp headers not found, install gpgmepp >= 1.14 development package])], [])
-        # progress_callback is the only func with plain C linkage
-        # checking for it also filters out older, KDE-dependent libgpgmepp versions
-        AC_CHECK_LIB(gpgmepp, progress_callback, [ GPGMEPP_LIBS=-lgpgmepp ],
-            [AC_MSG_ERROR(gpgmepp not found or not functional)], [])
         AC_CHECK_HEADER(gpgme.h, [],
             [AC_MSG_ERROR([gpgme headers not found, install gpgme development package])], [])
     else
