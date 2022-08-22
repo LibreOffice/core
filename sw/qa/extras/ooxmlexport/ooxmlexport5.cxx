@@ -1140,11 +1140,11 @@ DECLARE_OOXMLEXPORT_TEST(tdf122201_editUnprotectedText, "tdf122201_editUnprotect
 
     // check protected area
     SwPaM aPaMPortected(aDocStart);
-    CPPUNIT_ASSERT(aPaMPortected.HasReadonlySel(false));
+    CPPUNIT_ASSERT(aPaMPortected.HasReadonlySel(false, false));
 
     // check unprotected area
     SwPaM aPaMUnprotected(aDocEnd);
-    CPPUNIT_ASSERT(!aPaMUnprotected.HasReadonlySel(false));
+    CPPUNIT_ASSERT(!aPaMUnprotected.HasReadonlySel(false, false));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testSectionHeader, "sectionprot.odt")

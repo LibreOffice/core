@@ -573,7 +573,7 @@ static const SwFrame* lcl_FindEditInReadonlyFrame( const SwFrame& rFrame )
 }
 
 /// is in protected section or selection surrounds something protected
-bool SwPaM::HasReadonlySel( bool bFormView ) const
+bool SwPaM::HasReadonlySel(bool bFormView, bool const isReplace) const
 {
     bool bRet = false;
 
@@ -748,7 +748,7 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
     if (!bRet &&
         pDoc->getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_BOOKMARKS))
     {
-        if (pDoc->getIDocumentMarkAccess()->isBookmarkDeleted(*this))
+        if (pDoc->getIDocumentMarkAccess()->isBookmarkDeleted(*this, isReplace))
         {
             return true;
         }

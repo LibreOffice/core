@@ -326,7 +326,7 @@ bool SwEditShell::Replace( const OUString& rNewStr, bool bRegExpRplc )
     SET_CURR_SHELL( this );
 
     bool bRet = false;
-    if( !HasReadonlySel() )
+    if (!HasReadonlySel(true))
     {
         StartAllAction();
         GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);

@@ -963,6 +963,7 @@ namespace sw { namespace mark
 
     static bool isDeleteMark(
             ::sw::mark::MarkBase const*const pMark,
+            bool const isReplace,
             SwNodeIndex const& rStt,
             SwNodeIndex const& rEnd,
             SwIndex const*const pSttIdx,
@@ -986,6 +987,8 @@ namespace sw { namespace mark
                             && lcl_Lower(pMark->GetOtherMarkPos(), rEnd, pEndIdx);
         // special case: completely in range, touching the end?
         if ( pEndIdx != nullptr
+             && !(isReplace && IDocumentMarkAccess::GetType(*pMark)
+                                    == IDocumentMarkAccess::MarkType::BOOKMARK)
              && ( ( rbIsOtherPosInRange
                     && pMark->GetMarkPos().nNode == rEnd
                     && pMark->GetMarkPos().nContent == *pEndIdx )
@@ -1031,7 +1034,7 @@ namespace sw { namespace mark
         return false;
     }
 
-    bool MarkManager::isBookmarkDeleted(SwPaM const& rPaM) const
+    bool MarkManager::isBookmarkDeleted(SwPaM const& rPaM, bool const isReplace) const
     {
         SwPosition const& rStart(*rPaM.Start());
         SwPosition const& rEnd(*rPaM.End());
@@ -1046,7 +1049,7 @@ namespace sw { namespace mark
 
             bool bIsPosInRange(false);
             bool bIsOtherPosInRange(false);
-            bool const bDeleteMark = isDeleteMark(pMark,
+            bool const bDeleteMark = isDeleteMark(pMark, isReplace,
                 rStart.nNode, rEnd.nNode, &rStart.nContent, &rEnd.nContent,
                 bIsPosInRange, bIsOtherPosInRange);
             if (bDeleteMark
@@ -1086,7 +1089,7 @@ namespace sw { namespace mark
 
             bool bIsPosInRange(false);
             bool bIsOtherPosInRange(false);
-            bool const bDeleteMark = isDeleteMark(pMark, rStt, rEnd, pSttIdx, pEndIdx, bIsPosInRange, bIsOtherPosInRange);
+            bool const bDeleteMark = isDeleteMark(pMark, false, rStt, rEnd, pSttIdx, pEndIdx, bIsPosInRange, bIsOtherPosInRange);
 
             if ( bIsPosInRange
                  && ( bIsOtherPosInRange

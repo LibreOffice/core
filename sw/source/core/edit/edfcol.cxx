@@ -2202,8 +2202,7 @@ void SwEditShell::SetTextFormatColl(SwTextFormatColl *pFormat,
     GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::SETFMTCOLL, &aRewriter);
     for(SwPaM& rPaM : GetCursor()->GetRingContainer())
     {
-
-        if ( !rPaM.HasReadonlySel( GetViewOptions()->IsFormView() ) )
+        if (!rPaM.HasReadonlySel( GetViewOptions()->IsFormView(), true))
         {
             // tdf#105413 turn off ShowChanges mode for the next loops to apply styles permanently with redlining,
             // ie. in all directly preceding deleted paragraphs at the actual cursor positions
