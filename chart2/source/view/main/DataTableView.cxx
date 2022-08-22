@@ -475,19 +475,23 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
         sal_Int32 nTotalHeight = 0;
         for (sal_Int32 i = 0; i < xTableRows->getCount(); i++)
         {
-            xPropertySet.set(xTableRows->getByIndex(i), uno::UNO_QUERY);
-            sal_Int32 nHeight = 0;
-            xPropertySet->getPropertyValue("Height") >>= nHeight;
-            if (i > 0)
+            sal_Int32 nSymbolIndex = i - 1;
+            if (nSymbolIndex < sal_Int32(aSymbols.size()))
             {
-                auto& rSymbol = aSymbols[i - 1].xSymbol;
-                sal_Int32 nSymbolHeight = rSymbol->getSize().Height;
-                sal_Int32 nSymbolY
-                    = basegfx::fround(double(nHeight) / 2.0 - double(nSymbolHeight) / 2.0);
-                rSymbol->setPosition(
-                    { nTableX + constSymbolMargin, nTableY + nTotalHeight + nSymbolY });
+                xPropertySet.set(xTableRows->getByIndex(i), uno::UNO_QUERY);
+                sal_Int32 nHeight = 0;
+                xPropertySet->getPropertyValue("Height") >>= nHeight;
+                if (i > 0)
+                {
+                    auto& rSymbol = aSymbols[nSymbolIndex].xSymbol;
+                    sal_Int32 nSymbolHeight = rSymbol->getSize().Height;
+                    sal_Int32 nSymbolY
+                        = basegfx::fround(double(nHeight) / 2.0 - double(nSymbolHeight) / 2.0);
+                    rSymbol->setPosition(
+                        { nTableX + constSymbolMargin, nTableY + nTotalHeight + nSymbolY });
+                }
+                nTotalHeight += nHeight;
             }
-            nTotalHeight += nHeight;
         }
     }
     xBroadcaster->unlockBroadcasts();
