@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48eecfef_036ac353",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-08-22T19:26:52Z",
+      "side": 1,
+      "message": "Thank you very much! I thought something too, but it was more a shot in the dark",
+      "revId": "acf294fa874aa1dd9fc6b89c82ecde3528f1097f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
