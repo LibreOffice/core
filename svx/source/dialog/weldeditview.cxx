@@ -59,7 +59,10 @@
 
 void WeldEditView::SetText(const OUString& rStr) { GetEditEngine()->SetText(rStr); }
 
-OUString WeldEditView::GetText() const { return GetEditEngine()->GetText(); }
+OUString WeldEditView::GetText() const
+{
+    return m_xEditEngine ? m_xEditEngine->GetText() : OUString();
+}
 
 void WeldEditView::SetModifyHdl(const Link<LinkParamNone*, void>& rLink)
 {
