@@ -2103,7 +2103,7 @@ IMPL_LINK_NOARG(SwCompareOptionsTabPage, IgnoreHdl, weld::Toggleable&, void)
 
 SwTestTabPage::SwTestTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet)
     : SfxTabPage(pPage, pController, "modules/swriter/ui/opttestpage.ui", "OptTestPage", &rCoreSet)
-    , bAttrModified( false )
+    , m_bAttrModified( false )
     , m_xTest1CBox(m_xBuilder->weld_check_button("unused"))
     , m_xTest2CBox(m_xBuilder->weld_check_button("dynamic"))
     , m_xTest3CBox(m_xBuilder->weld_check_button("nocalm"))
@@ -2131,7 +2131,7 @@ std::unique_ptr<SfxTabPage> SwTestTabPage::Create( weld::Container* pPage, weld:
 bool    SwTestTabPage::FillItemSet( SfxItemSet* rCoreSet )
 {
 
-    if ( bAttrModified )
+    if ( m_bAttrModified )
     {
         SwTestItem aTestItem;
         aTestItem.m_bTest1=m_xTest1CBox->get_active();
@@ -2146,7 +2146,7 @@ bool    SwTestTabPage::FillItemSet( SfxItemSet* rCoreSet )
         aTestItem.m_bTest10=m_xTest10CBox->get_active();
         rCoreSet->Put(aTestItem);
     }
-    return bAttrModified;
+    return m_bAttrModified;
 }
 
 void SwTestTabPage::Reset( const SfxItemSet* )
@@ -2186,7 +2186,7 @@ void SwTestTabPage::Init()
 
 IMPL_LINK_NOARG(SwTestTabPage, AutoClickHdl, weld::Toggleable&, void)
 {
-    bAttrModified = true;
+    m_bAttrModified = true;
 }
 
 #endif

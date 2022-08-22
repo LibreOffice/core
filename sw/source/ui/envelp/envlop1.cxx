@@ -59,7 +59,7 @@ void SwEnvPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     rRenderContext.SetBackground(rRenderContext.GetSettings().GetStyleSettings().GetDialogColor());
     rRenderContext.Erase();
 
-    const SwEnvItem& rItem = m_pDialog->aEnvItem;
+    const SwEnvItem& rItem = m_pDialog->m_aEnvItem;
 
     const tools::Long nPageW = std::max(rItem.m_nWidth, rItem.m_nHeight);
     const tools::Long nPageH = std::min(rItem.m_nWidth, rItem.m_nHeight);
@@ -119,9 +119,9 @@ void SwEnvPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
 SwEnvDlg::SwEnvDlg(weld::Window* pParent, const SfxItemSet& rSet,
                     SwWrtShell* pWrtSh, Printer* pPrt, bool bInsert)
     : SfxTabDialogController(pParent, "modules/swriter/ui/envdialog.ui", "EnvDialog", &rSet)
-    , aEnvItem(static_cast<const SwEnvItem&>( rSet.Get(FN_ENVELOP)))
-    , pSh(pWrtSh)
-    , pPrinter(pPrt)
+    , m_aEnvItem(static_cast<const SwEnvItem&>( rSet.Get(FN_ENVELOP)))
+    , m_pSh(pWrtSh)
+    , m_pPrinter(pPrt)
     , m_xModify(m_xBuilder->weld_button("modify"))
 {
     if (!bInsert)
@@ -136,15 +136,15 @@ SwEnvDlg::SwEnvDlg(weld::Window* pParent, const SfxItemSet& rSet,
 
 SwEnvDlg::~SwEnvDlg()
 {
-    pAddresseeSet.reset();
-    pSenderSet.reset();
+    m_pAddresseeSet.reset();
+    m_pSenderSet.reset();
 }
 
 void SwEnvDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
 {
     if (rId == "printer")
     {
-        static_cast<SwEnvPrtPage*>(&rPage)->SetPrt(pPrinter);
+        static_cast<SwEnvPrtPage*>(&rPage)->SetPrt(m_pPrinter);
     }
     else if (rId == "envelope")
     {
@@ -162,15 +162,15 @@ short SwEnvDlg::Ok()
 
     if (nRet == RET_OK || nRet == RET_USER)
     {
-        if (pAddresseeSet)
+        if (m_pAddresseeSet)
         {
-            SwTextFormatColl* pColl = pSh->GetTextCollFromPool(RES_POOLCOLL_ENVELOPE_ADDRESS);
-            pColl->SetFormatAttr(*pAddresseeSet);
+            SwTextFormatColl* pColl = m_pSh->GetTextCollFromPool(RES_POOLCOLL_ENVELOPE_ADDRESS);
+            pColl->SetFormatAttr(*m_pAddresseeSet);
         }
-        if (pSenderSet)
+        if (m_pSenderSet)
         {
-            SwTextFormatColl* pColl = pSh->GetTextCollFromPool(RES_POOLCOLL_SEND_ADDRESS);
-            pColl->SetFormatAttr(*pSenderSet);
+            SwTextFormatColl* pColl = m_pSh->GetTextCollFromPool(RES_POOLCOLL_SEND_ADDRESS);
+            pColl->SetFormatAttr(*m_pSenderSet);
         }
     }
 
@@ -207,7 +207,7 @@ SwEnvPage::SwEnvPage(weld::Container* pPage, weld::DialogController* pController
 void SwEnvPage::Init(SwEnvDlg* pDialog)
 {
     m_pDialog = pDialog;
-    m_pSh = m_pDialog->pSh;
+    m_pSh = m_pDialog->m_pSh;
     m_aPreview.SetDialog(pDialog);
 
     // Install handlers
@@ -259,7 +259,7 @@ IMPL_LINK_NOARG(SwEnvPage, FieldHdl, weld::Button&, void)
 IMPL_LINK_NOARG(SwEnvPage, SenderHdl, weld::Toggleable&, void)
 {
     const bool bEnable = m_xSenderBox->get_active();
-    GetParentSwEnvDlg()->aEnvItem.m_bSend = bEnable;
+    GetParentSwEnvDlg()->m_aEnvItem.m_bSend = bEnable;
     m_xSenderEdit->set_sensitive(bEnable);
     if (bEnable)
     {
@@ -302,13 +302,13 @@ std::unique_ptr<SfxTabPage> SwEnvPage::Create(weld::Container* pPage, weld::Dial
 void SwEnvPage::ActivatePage(const SfxItemSet& rSet)
 {
     SfxItemSet aSet(rSet);
-    aSet.Put(GetParentSwEnvDlg()->aEnvItem);
+    aSet.Put(GetParentSwEnvDlg()->m_aEnvItem);
     Reset(&aSet);
 }
 
 DeactivateRC SwEnvPage::DeactivatePage(SfxItemSet* _pSet)
 {
-    FillItem(GetParentSwEnvDlg()->aEnvItem);
+    FillItem(GetParentSwEnvDlg()->m_aEnvItem);
     if( _pSet )
         FillItemSet(_pSet);
     return DeactivateRC::LeavePage;
@@ -323,8 +323,8 @@ void SwEnvPage::FillItem(SwEnvItem& rItem)
 
 bool SwEnvPage::FillItemSet(SfxItemSet* rSet)
 {
-    FillItem(GetParentSwEnvDlg()->aEnvItem);
-    rSet->Put(GetParentSwEnvDlg()->aEnvItem);
+    FillItem(GetParentSwEnvDlg()->m_aEnvItem);
+    rSet->Put(GetParentSwEnvDlg()->m_aEnvItem);
     return true;
 }
 

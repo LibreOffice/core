@@ -108,10 +108,10 @@ void SwDocStatPage::Update()
 
     SwWait aWait( *pSh->GetDoc()->GetDocShell(), true );
     pSh->StartAction();
-    aDocStat = pSh->GetDoc()->getIDocumentStatistics().GetUpdatedDocStat( false, true );
+    m_aDocStat = pSh->GetDoc()->getIDocumentStatistics().GetUpdatedDocStat( false, true );
     pSh->EndAction();
 
-    SetData(aDocStat);
+    SetData(m_aDocStat);
 }
 
 IMPL_LINK_NOARG(SwDocStatPage, UpdateHdl, weld::Button&, void)

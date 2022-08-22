@@ -63,11 +63,11 @@ class SwEnvDlg final : public SfxTabDialogController
     friend class SwEnvPrtPage;
     friend class SwEnvPreview;
 
-    SwEnvItem aEnvItem;
-    SwWrtShell* pSh;
-    VclPtr<Printer> pPrinter;
-    std::unique_ptr<SfxItemSet> pAddresseeSet;
-    std::unique_ptr<SfxItemSet> pSenderSet;
+    SwEnvItem m_aEnvItem;
+    SwWrtShell* m_pSh;
+    VclPtr<Printer> m_pPrinter;
+    std::unique_ptr<SfxItemSet> m_pAddresseeSet;
+    std::unique_ptr<SfxItemSet> m_pSenderSet;
 
     std::unique_ptr<weld::Button> m_xModify;
 
