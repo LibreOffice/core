@@ -365,25 +365,29 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                     {
                         // execute URL
                         mpWindow->ReleaseMouse();
-                        SfxStringItem aStrItem(SID_FILE_NAME, aVEvt.mpURLField->GetURL());
-                        SfxStringItem aReferer(SID_REFERER, mpDocSh->GetMedium()->GetName());
-                        SfxBoolItem aBrowseItem( SID_BROWSE, true );
-                        SfxViewFrame* pFrame = mpViewShell->GetViewFrame();
 
-                        if (rMEvt.IsMod1())
+                        if (aVEvt.mpURLField)
                         {
-                            // open in new frame
-                            pFrame->GetDispatcher()->ExecuteList(SID_OPENDOC,
-                                SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
-                                { &aStrItem, &aBrowseItem, &aReferer });
-                        }
-                        else
-                        {
-                            // open in current frame
-                            SfxFrameItem aFrameItem(SID_DOCFRAME, pFrame);
-                            pFrame->GetDispatcher()->ExecuteList(SID_OPENDOC,
-                                SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
-                                { &aStrItem, &aFrameItem, &aBrowseItem, &aReferer });
+                            SfxStringItem aStrItem(SID_FILE_NAME, aVEvt.mpURLField->GetURL());
+                            SfxStringItem aReferer(SID_REFERER, mpDocSh->GetMedium()->GetName());
+                            SfxBoolItem aBrowseItem( SID_BROWSE, true );
+                            SfxViewFrame* pFrame = mpViewShell->GetViewFrame();
+
+                            if (rMEvt.IsMod1())
+                            {
+                                // open in new frame
+                                pFrame->GetDispatcher()->ExecuteList(SID_OPENDOC,
+                                    SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
+                                    { &aStrItem, &aBrowseItem, &aReferer });
+                            }
+                            else
+                            {
+                                // open in current frame
+                                SfxFrameItem aFrameItem(SID_DOCFRAME, pFrame);
+                                pFrame->GetDispatcher()->ExecuteList(SID_OPENDOC,
+                                    SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
+                                    { &aStrItem, &aFrameItem, &aBrowseItem, &aReferer });
+                            }
                         }
                     }
                     else
