@@ -140,9 +140,6 @@ public:
     void                            setConnectorShape(bool bConnector) { mbConnector = bConnector; }
     bool                            isConnectorShape() const { return mbConnector; }
 
-    void                            setBookmark(bool bBookmark) { mbHasBookmark = bBookmark; }
-    bool                            hasBookmark() const { return mbHasBookmark; }
-
     Shape3DProperties&              get3DProperties() { return *mp3DPropertiesPtr; }
     const Shape3DProperties&        get3DProperties() const { return *mp3DPropertiesPtr; }
 
@@ -407,9 +404,6 @@ private:
 
     // Is this a connector shape?
     bool mbConnector = false;
-
-    // Is shape has bookmark?
-    bool mbHasBookmark = false;
 
     // temporary space for DiagramHelper in preparation for collecting data
     // Note: I tried to use a unique_ptr here, but existing constructor func does not allow that

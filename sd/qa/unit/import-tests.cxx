@@ -83,6 +83,7 @@ public:
     virtual void setUp() override;
 
     void testDocumentLayout();
+    void testTdf150719();
     void testTdf149314();
     void testTdf149124();
     void testTdf148965();
@@ -154,6 +155,7 @@ public:
     CPPUNIT_TEST_SUITE(SdImportTest);
 
     CPPUNIT_TEST(testDocumentLayout);
+    CPPUNIT_TEST(testTdf150719);
     CPPUNIT_TEST(testTdf149314);
     CPPUNIT_TEST(testTdf149124);
     CPPUNIT_TEST(testTdf148965);
@@ -301,6 +303,22 @@ void SdImportTest::testDocumentLayout()
                 OUStringConcatenation(m_directories.getPathFromSrc( u"/sd/qa/unit/data/" ) + aFilesToCompare[i].sDump),
                 i == nUpdateMe );
     }
+}
+
+void SdImportTest::testTdf150719()
+{
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf150719.pptx"), PPTX);
+
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef));
+    uno::Reference<text::XTextRange> const xParagraph(getParagraphFromShape(0, xShape));
+    uno::Reference<text::XTextRange> xRun(getRunFromParagraph(1, xParagraph));
+    uno::Reference<beans::XPropertySet> xPropSet1(xRun, uno::UNO_QUERY_THROW);
+    sal_Int16 nUnderline;
+    xPropSet1->getPropertyValue("CharUnderline") >>= nUnderline;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The underline is missing!", sal_Int16(1), nUnderline);
+
+    xDocShRef->DoClose();
 }
 
 void SdImportTest::testTdf149314()
