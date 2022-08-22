@@ -1575,6 +1575,9 @@ void SvxStyleBox_Base::CalcOptimalExtraUserWidth(vcl::RenderContext& rRenderCont
     {
         OUString sStyleName(get_text(i));
 
+        if (sStyleName.isEmpty())
+            continue;
+
         rRenderContext.Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::FONT | vcl::PushFlags::TEXTCOLOR);
         SetupEntry(rRenderContext, i, tools::Rectangle(0, 0, RECT_MAX, ITEM_HEIGHT), sStyleName, true);
         auto aScriptChanges = CheckScript(sStyleName);
