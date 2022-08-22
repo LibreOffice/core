@@ -883,6 +883,18 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlGrabBag)
     save("Office Open XML Text", maTempFile);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testContentControlShape)
+{
+    // Given a document with a <w:sdt> tag:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "content-control-shape.docx";
+    loadURL(aURL, nullptr);
+
+    // When exporting that document back to DOCX:
+    // Then make sure that completes without an assertion failure, which would mean not-well-formed
+    // output was produced, since the <w:sdt> was conditional but the </w:sdt> was unconditional:
+    save("Office Open XML Text", maTempFile);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf104823)
 {
     // Test how we can roundtrip sdt plain text with databindings support

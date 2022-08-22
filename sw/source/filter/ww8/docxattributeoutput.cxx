@@ -2346,11 +2346,6 @@ void DocxAttributeOutput::WriteContentControlStart()
         return;
     }
 
-    if (m_bAnchorLinkedToNode)
-    {
-        return;
-    }
-
     m_pSerializer->startElementNS(XML_w, XML_sdt);
     m_pSerializer->startElementNS(XML_w, XML_sdtPr);
     if (!m_pContentControl->GetPlaceholderDocPart().isEmpty())
