@@ -39,8 +39,8 @@ class tdf91762(UITestCase):
                 xEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
 
             # tdf#138011: Without the fix in place, this test would have failed with
-            # AssertionError: 5494 != 3559
-            self.assertEqual(5494, document.DrawPages[0].getByIndex(1).BoundRect.Height)
+            # AssertionError: 5504 != 3559
+            self.assertEqual(5504, document.DrawPages[0].getByIndex(1).BoundRect.Height)
 
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
