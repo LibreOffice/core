@@ -28,13 +28,14 @@
 
 SwNumFormatDlg::SwNumFormatDlg(weld::Widget* pParent, const SfxItemSet& rSet)
     : SfxSingleTabDialogController(pParent, &rSet, "cui/ui/formatnumberdialog.ui", "FormatNumberDialog")
+    , m_xContent( m_xBuilder->weld_container("content") )
 {
     // Create TabPage
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc(RID_SVXPAGE_NUMBERFORMAT);
     if ( fnCreatePage )
     {
-        std::unique_ptr<SfxTabPage> xNewPage = (*fnCreatePage)(get_content_area(), this, &rSet);
+        std::unique_ptr<SfxTabPage> xNewPage = (*fnCreatePage)(m_xContent.get(), this, &rSet);
         SfxAllItemSet aSet(*(rSet.GetPool()));
         aSet.Put(xNewPage->GetItemSet().Get( SID_ATTR_NUMBERFORMAT_INFO));
         xNewPage->PageCreated(aSet);

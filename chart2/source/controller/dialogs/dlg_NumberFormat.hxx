@@ -23,6 +23,7 @@
 namespace weld
 {
 class Window;
+class Container;
 }
 class SfxItemSet;
 class SfxItemPool;
@@ -31,6 +32,8 @@ namespace chart
 {
 class NumberFormatDialog : public SfxSingleTabDialogController
 {
+    std::unique_ptr<weld::Container> m_xContent;
+
 public:
     NumberFormatDialog(weld::Window* pParent, const SfxItemSet& rSet);
 
