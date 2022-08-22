@@ -2538,11 +2538,6 @@ std::vector<ViewLegendSymbol> VSeriesPlotter::createSymbols(const awt::Size& rEn
                     if (!pSeries)
                         continue;
 
-                    if (!pSeries->getPropertiesOfSeries()->getPropertyValue("ShowLegendEntry").get<sal_Bool>())
-                    {
-                        continue;
-                    }
-
                     std::vector<ViewLegendSymbol> aSeriesSymbols = createSymbolsForSeries(rEntryKeyAspectRatio, *pSeries, xTarget, xShapeFactory, xContext);
 
                     //add series entries to the result now
@@ -2924,77 +2919,15 @@ std::vector<ViewLegendSymbol> VSeriesPlotter::createSymbolsForSeries(
     try
     {
         ViewLegendSymbol aEntry;
-        bool bVaryColorsByPoint = rSeries.isVaryColorsByPoint();
-        bool bIsPie = m_xChartTypeModel->getChartType().equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_PIE);
-        try
+        // symbol
+        uno::Reference< drawing::XShapes > xSymbolGroup( ShapeFactory::getOrCreateShapeFactory(xShapeFactory)->createGroup2D(xTarget));
+
+        // create the symbol
+        Reference<drawing::XShape> xShape(createLegendSymbolForSeries(rEntryKeyAspectRatio, rSeries, xSymbolGroup, xShapeFactory));
+
+        if (xShape.is())
         {
-            if (bIsPie)
-            {
-                bool bDonut = false;
-                if ((m_xChartTypeModelProps->getPropertyValue("UseRings") >>= bDonut) && bDonut)
-                    bIsPie = false;
-            }
-        }
-        catch (const uno::Exception&)
-        {
-        }
-
-        if (bVaryColorsByPoint || bIsPie)
-        {
-            Sequence< OUString > aCategoryNames;
-            if (m_pExplicitCategoriesProvider)
-                aCategoryNames = m_pExplicitCategoriesProvider->getSimpleCategories();
-            Sequence<sal_Int32> deletedLegendEntries;
-            try
-            {
-                rSeries.getPropertiesOfSeries()->getPropertyValue("DeletedLegendEntries") >>= deletedLegendEntries;
-            }
-            catch (const uno::Exception&)
-            {
-            }
-
-            for (sal_Int32 nIdx=0; nIdx < aCategoryNames.getLength(); ++nIdx)
-            {
-                bool deletedLegendEntry = false;
-                for (const auto& deletedLegendEntryIdx : std::as_const(deletedLegendEntries))
-                {
-                    if (nIdx == deletedLegendEntryIdx)
-                    {
-                        deletedLegendEntry = true;
-                        break;
-                    }
-                }
-                if (deletedLegendEntry)
-                    continue;
-
-                // symbol
-                uno::Reference< drawing::XShapes > xSymbolGroup( ShapeFactory::getOrCreateShapeFactory(xShapeFactory)->createGroup2D( xTarget ));
-
-                // create the symbol
-                Reference< drawing::XShape > xShape( createLegendSymbolForSeries(
-                    rEntryKeyAspectRatio, rSeries, xSymbolGroup, xShapeFactory ) );
-
-                // set CID to symbol for selection
-                if( xShape.is())
-                {
-                    aEntry.aSymbol.set(xSymbolGroup, uno::UNO_QUERY);
-                }
-            }
-        }
-        else
-        {
-            // symbol
-            uno::Reference< drawing::XShapes > xSymbolGroup( ShapeFactory::getOrCreateShapeFactory(xShapeFactory)->createGroup2D(xTarget));
-
-            // create the symbol
-            Reference< drawing::XShape > xShape( createLegendSymbolForSeries(
-                rEntryKeyAspectRatio, rSeries, xSymbolGroup, xShapeFactory ) );
-
-            // set CID to symbol for selection
-            if( xShape.is())
-            {
-                aEntry.aSymbol.set( xSymbolGroup, uno::UNO_QUERY );
-            }
+            aEntry.aSymbol.set(xSymbolGroup, uno::UNO_QUERY);
         }
     }
     catch (const uno::Exception &)
