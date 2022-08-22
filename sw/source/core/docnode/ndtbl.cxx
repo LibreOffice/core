@@ -659,7 +659,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
     ::PaMCorrAbs( aOriginal, *pEnd );
 
     // Make sure that the range is on Node Edges
-    SwNodeRange aRg( pStt->nNode, pEnd->nNode );
+    SwNodeRange aRg( pStt->GetNode(), pEnd->GetNode() );
     if( pStt->GetContentIndex() )
         getIDocumentContentOperations().SplitNode( *pStt, false );
 
@@ -1158,7 +1158,7 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
     ::PaMCorrAbs( aOriginal, *pEnd );
 
     // make sure that the range is on Node Edges
-    SwNodeRange aRg( pStt->nNode, pEnd->nNode );
+    SwNodeRange aRg( pStt->GetNode(), pEnd->GetNode() );
     if( pStt->GetContentIndex() )
         getIDocumentContentOperations().SplitNode( *pStt, false );
 
@@ -1180,8 +1180,8 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
             ++aRg.aEnd;
     }
 
-    assert(aRg.aEnd == pEnd->nNode);
-    assert(aRg.aStart == pStt->nNode);
+    assert(aRg.aEnd.GetNode() == pEnd->GetNode());
+    assert(aRg.aStart.GetNode() == pStt->GetNode());
     if( aRg.aEnd.GetIndex() == aRg.aStart.GetIndex() )
     {
         OSL_FAIL( "empty range" );
