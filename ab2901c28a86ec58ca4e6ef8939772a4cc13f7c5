@@ -183,6 +183,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "939e1c00_186e00a8",
+        "filename": "sw/qa/extras/txtimport/txtimport.cxx",
+        "patchSetId": 23
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1003025
+      },
+      "writtenOn": "2022-08-22T16:55:51Z",
+      "side": 1,
+      "message": "Ohh...MY bad! I\u0027ve ran the test and the results was that it has splitted 3 paras. Will correct it.",
+      "parentUuid": "e9539cc1_83aee3d2",
+      "range": {
+        "startLine": 217,
+        "startChar": 17,
+        "endLine": 217,
+        "endChar": 18
+      },
+      "revId": "ab2901c28a86ec58ca4e6ef8939772a4cc13f7c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "818978ca_fd1502fc",
@@ -220,6 +244,30 @@
       "side": 1,
       "message": "While running the test without the fix, it gave this output",
       "parentUuid": "818978ca_fd1502fc",
+      "range": {
+        "startLine": 225,
+        "startChar": 17,
+        "endLine": 225,
+        "endChar": 22
+      },
+      "revId": "ab2901c28a86ec58ca4e6ef8939772a4cc13f7c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee52737e_8fab0e50",
+        "filename": "sw/qa/extras/txtimport/txtimport.cxx",
+        "patchSetId": 23
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1003025
+      },
+      "writtenOn": "2022-08-22T16:55:51Z",
+      "side": 1,
+      "message": "In this one also, it gave me 10000 without the fix. So, fixing this one too.",
+      "parentUuid": "2a1e1cc1_9bbc3d34",
       "range": {
         "startLine": 225,
         "startChar": 17,
