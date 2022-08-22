@@ -191,14 +191,15 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
         __lsan_disable();
 #endif
 
-    if (const cairo_font_options_t* pFontOptions = GetSalInstance()->GetCairoFontOptions())
-    {
-        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-        bool bDisableAA = !rStyleSettings.GetUseFontAAFromSystem() && !rGraphics.getAntiAlias();
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    const bool bDisableAA = !rStyleSettings.GetUseFontAAFromSystem() && !rGraphics.getAntiAlias();
+    const bool bResolutionIndependentLayoutEnabled = rGraphics.getTextRenderModeForResolutionIndependentLayoutEnabled();
 
-        const bool bResolutionIndependentLayoutEnabled = rGraphics.getTextRenderModeForResolutionIndependentLayoutEnabled();
-        cairo_hint_style_t eHintStyle = cairo_font_options_get_hint_style(pFontOptions);
-        cairo_hint_metrics_t eHintMetricsStyle = cairo_font_options_get_hint_metrics(pFontOptions);
+    const cairo_font_options_t* pFontOptions = GetSalInstance()->GetCairoFontOptions();
+    if (pFontOptions || bDisableAA || bResolutionIndependentLayoutEnabled)
+    {
+        cairo_hint_style_t eHintStyle = pFontOptions ? cairo_font_options_get_hint_style(pFontOptions) : CAIRO_HINT_STYLE_DEFAULT;
+        cairo_hint_metrics_t eHintMetricsStyle = pFontOptions ? cairo_font_options_get_hint_metrics(pFontOptions) : CAIRO_HINT_METRICS_DEFAULT;
         bool bAllowedHintStyle = !bResolutionIndependentLayoutEnabled || (eHintStyle == CAIRO_HINT_STYLE_NONE);
         bool bAllowedHintMetricStyle = !bResolutionIndependentLayoutEnabled || (eHintMetricsStyle == CAIRO_HINT_METRICS_OFF);
 
@@ -206,7 +207,7 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
         {
             // Disable font AA in case global AA setting is supposed to affect
             // font rendering (not the default) and AA is disabled.
-            cairo_font_options_t* pOptions = cairo_font_options_copy(pFontOptions);
+            cairo_font_options_t* pOptions = pFontOptions ? cairo_font_options_copy(pFontOptions) : cairo_font_options_create();
             if (bDisableAA)
                 cairo_font_options_set_antialias(pOptions, CAIRO_ANTIALIAS_NONE);
             if (!bAllowedHintMetricStyle)
@@ -216,7 +217,7 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
             cairo_set_font_options(cr, pOptions);
             cairo_font_options_destroy(pOptions);
         }
-        else
+        else if (pFontOptions)
             cairo_set_font_options(cr, pFontOptions);
     }
 
