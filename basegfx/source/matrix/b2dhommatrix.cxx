@@ -82,7 +82,7 @@ namespace basegfx
 
     bool B2DHomMatrix::isIdentity() const
     {
-        return mpImpl->isIdentity();
+        return mpImpl.same_object(DEFAULT) || mpImpl->isIdentity();
     }
 
     void B2DHomMatrix::identity()
