@@ -2199,7 +2199,7 @@ void SwEditShell::SetTextFormatColl(SwTextFormatColl *pFormat,
     GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::SETFMTCOLL, &aRewriter);
     for(SwPaM& rPaM : GetCursor()->GetRingContainer())
     {
-        if ( !rPaM.HasReadonlySel( GetViewOptions()->IsFormView() ) )
+        if (!rPaM.HasReadonlySel( GetViewOptions()->IsFormView(), true))
         {
             // store previous paragraph style for track changes
             OUString sParaStyleName;

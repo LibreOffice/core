@@ -973,6 +973,7 @@ namespace sw::mark
 
     static bool isDeleteMark(
             ::sw::mark::MarkBase const*const pMark,
+            bool const isReplace,
             SwNode const& rStt,
             SwNode const& rEnd,
             std::optional<sal_Int32> oStartContentIdx,
@@ -996,6 +997,8 @@ namespace sw::mark
                             && lcl_Lower(pMark->GetOtherMarkPos(), rEnd, oEndContentIdx);
         // special case: completely in range, touching the end?
         if ( oEndContentIdx.has_value()
+             && !(isReplace && IDocumentMarkAccess::GetType(*pMark)
+                                    == IDocumentMarkAccess::MarkType::BOOKMARK)
              && ( ( rbIsOtherPosInRange
                     && pMark->GetMarkPos().GetNode() == rEnd
                     && pMark->GetMarkPos().GetContentIndex() == *oEndContentIdx )
@@ -1041,7 +1044,7 @@ namespace sw::mark
         return false;
     }
 
-    bool MarkManager::isBookmarkDeleted(SwPaM const& rPaM) const
+    bool MarkManager::isBookmarkDeleted(SwPaM const& rPaM, bool const isReplace) const
     {
         SwPosition const& rStart(*rPaM.Start());
         SwPosition const& rEnd(*rPaM.End());
@@ -1051,7 +1054,7 @@ namespace sw::mark
         {
             bool bIsPosInRange(false);
             bool bIsOtherPosInRange(false);
-            bool const bDeleteMark = isDeleteMark(*ppMark,
+            bool const bDeleteMark = isDeleteMark(*ppMark, isReplace,
                 rStart.GetNode(), rEnd.GetNode(), rStart.GetContentIndex(), rEnd.GetContentIndex(),
                 bIsPosInRange, bIsOtherPosInRange);
             if (bDeleteMark
@@ -1087,7 +1090,7 @@ namespace sw::mark
             ::sw::mark::MarkBase *const pMark = *ppMark;
             bool bIsPosInRange(false);
             bool bIsOtherPosInRange(false);
-            bool const bDeleteMark = isDeleteMark(pMark, rStt, rEnd, oStartContentIdx, oEndContentIdx, bIsPosInRange, bIsOtherPosInRange);
+            bool const bDeleteMark = isDeleteMark(pMark, false, rStt, rEnd, oStartContentIdx, oEndContentIdx, bIsPosInRange, bIsOtherPosInRange);
 
             if ( bIsPosInRange
                  && ( bIsOtherPosInRange
