@@ -1035,7 +1035,6 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                     xPopupMenu->insertSeparator( -1 );
                 }
 
-                ObjectType eObjectType = ObjectIdentifier::getObjectType( m_aSelection.getSelectedCID() );
                 Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( getModel() );
 
                 OUString aFormatCommand( lcl_getFormatCommandForObjectCID( m_aSelection.getSelectedCID() ) );
