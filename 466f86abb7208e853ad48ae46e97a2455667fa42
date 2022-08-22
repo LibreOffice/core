@@ -51,6 +51,23 @@
       "parentUuid": "7f22c6a4_bd22a060",
       "revId": "466f86abb7208e853ad48ae46e97a2455667fa42",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5215fdbb_ab5e48ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003656
+      },
+      "writtenOn": "2022-08-22T10:17:26Z",
+      "side": 1,
+      "message": "These rtl math functions like erf are no longer used in the code base, all of them are replace by std.\nI admit it\u0027s a bit strange to replace these functions in unit test, the orginal idea of this bug report is simple, but this post https://bz.apache.org/ooo/show_bug.cgi?id\u003d97605 shows that rtl asinh and acosh functions is perform better than std functions in some cases, and replace rtl to std in unit test help us to find it (https://ci.libreoffice.org/job/gerrit_mac/125710/changes). \nI\u0027m not sure it\u0027s better in all cases, but at least it did help us to make sure the behavior of code is same as before this change.\nAlthough these unit testes only written to rtl, the behavior of math function is well defined and general, so I think it make sense in some way.\n\nWhat kind of comment you mean? A new patch add some explanation in git commit? ",
+      "revId": "466f86abb7208e853ad48ae46e97a2455667fa42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
