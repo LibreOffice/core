@@ -29,6 +29,8 @@ class tdf54197(UITestCase):
             # The same text as above is displayed at cell A2, BUT input line is still blank
             self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "t")
             self.assertEqual(get_cell_by_position(document, 0, 0, 1).getString(), "t")
+            xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+            xToolkit.processEventsToIdle()
             xInputWin = xCalcDoc.getChild("sc_input_window")
             self.assertEqual(get_state_as_dict(xInputWin)["Text"], "t")
 
