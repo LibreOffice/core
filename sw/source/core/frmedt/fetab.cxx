@@ -470,17 +470,11 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
             if( !pCNd )
                 pCNd = GetDoc()->GetNodes().GoNext( &aIdx );
 
-            if( pCNd )
-            {
-                SwPaM* pPam = GetCursor();
-                pPam->GetPoint()->Assign( *pCNd, 0 );
-                pPam->SetMark();            // both want something
-                pPam->DeleteMark();
-            }
-
             // remove row frames in Hide Changes mode (and table frames, if needed)
             if ( bRecordAndHideChanges )
             {
+                // remove all frames of the table, and make them again without the deleted ones
+                // TODO remove only the deleted frames
                 pTableNd->DelFrames();
                 if ( !pTableNd->GetTable().IsDeleted() )
                 {
@@ -489,8 +483,25 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
                 }
 
                 EndAllActionAndCall();
+
+                // put cursor
+                SwPaM* pPam = GetCursor();
+                pPam->GetPoint()->Assign( *pCNd, 0 );
+                pPam->SetMark();            // both want something
+                pPam->DeleteMark();
+                if ( SwWrtShell* pWrtShell = dynamic_cast<SwWrtShell*>(this) )
+                    pWrtShell->UpdateCursor();
+
                 EndUndo(bCompleteTable ? SwUndoId::UI_TABLE_DELETE : SwUndoId::ROW_DELETE);
                 return true;
+            }
+            else if( pCNd )
+            {
+                // put cursor
+                SwPaM* pPam = GetCursor();
+                pPam->GetPoint()->Assign( *pCNd, 0 );
+                pPam->SetMark();            // both want something
+                pPam->DeleteMark();
             }
         }
 

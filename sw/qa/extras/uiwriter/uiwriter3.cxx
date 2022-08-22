@@ -3627,6 +3627,40 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf146573)
     CPPUNIT_ASSERT_EQUAL(OUString("204"), xCellA4->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf148849)
+{
+    // load a document with a table and an empty paragraph before the table
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf148849.fodt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // record changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    // hide changes
+    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    CPPUNIT_ASSERT(pWrtShell->GetLayout()->IsHideRedlines());
+
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+
+    // put cursor in the first table row
+    pWrtShell->Down(/*bSelect=*/false, /*nCount=*/1);
+
+    // delete a table row
+    pWrtShell->DeleteRow();
+
+    // check cursor position
+
+    // This was "", because the text cursor jumped to the start of the document
+    // after deleting a table row instead of remaining in the next table row
+    SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->GetNode();
+    CPPUNIT_ASSERT_EQUAL(OUString("Row 2"), rNode.GetTextNode()->GetText());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132603)
 {
     createSwDoc();
