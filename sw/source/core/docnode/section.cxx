@@ -1226,7 +1226,7 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
                         }
                     }
 
-                    SwNodeIndex& rInsPos = pPam->GetPoint()->nNode;
+                    SwNode& rInsPos = pPam->GetPoint()->GetNode();
 
                     SwPaM* pCpyPam = nullptr;
                     if( !bRecursion &&
@@ -1234,7 +1234,7 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
                         && pCpyPam )
                     {
                         if( pSrcDoc != pDoc ||
-                            pCpyPam->Start()->GetNode() > rInsPos.GetNode() ||
+                            pCpyPam->Start()->GetNode() > rInsPos ||
                             rInsPos >= pCpyPam->End()->GetNode() )
                         {
                             pSrcDoc->getIDocumentContentOperations().CopyRange(*pCpyPam, *pPam->GetPoint(), SwCopyFlags::CheckPosInFly);
@@ -1242,7 +1242,7 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
                         delete pCpyPam;
                     }
                     if( oCpyRg && pSrcDoc == pDoc &&
-                        oCpyRg->aStart < rInsPos && rInsPos < oCpyRg->aEnd )
+                        oCpyRg->aStart < rInsPos && rInsPos < oCpyRg->aEnd.GetNode() )
                     {
                         oCpyRg.reset();
                     }
