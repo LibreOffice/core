@@ -49,7 +49,7 @@ private:
     std::unique_ptr<weld::Label> m_xLineNo;
     std::unique_ptr<weld::Button> m_xUpdatePB;
 
-    SwDocStat       aDocStat;
+    SwDocStat       m_aDocStat;
 
     void            Update();
 

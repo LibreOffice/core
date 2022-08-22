@@ -27,39 +27,39 @@ namespace rtl { class OUString; }
 
 class NumberingPreview final : public weld::CustomWidgetController
 {
-    const SwNumRule*    pActNum;
-    vcl::Font           aStdFont;
-    tools::Long                nPageWidth;
-    const OUString*     pOutlineNames;
-    bool                bPosition;
-    sal_uInt16          nActLevel;
+    const SwNumRule*    m_pActNum;
+    vcl::Font           m_aStdFont;
+    tools::Long                m_nPageWidth;
+    const OUString*     m_pOutlineNames;
+    bool                m_bPosition;
+    sal_uInt16          m_nActLevel;
 
 private:
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
 
 public:
     NumberingPreview()
-        : pActNum(nullptr)
-        , nPageWidth(0)
-        , pOutlineNames(nullptr)
-        , bPosition(false)
-        , nActLevel(USHRT_MAX)
+        : m_pActNum(nullptr)
+        , m_nPageWidth(0)
+        , m_pOutlineNames(nullptr)
+        , m_bPosition(false)
+        , m_nActLevel(USHRT_MAX)
     {
     }
 
     void    SetNumRule(const SwNumRule* pNum)
     {
-        pActNum = pNum;
+        m_pActNum = pNum;
         Invalidate();
     }
 
     void    SetPageWidth(tools::Long nPgWidth)
-                            {nPageWidth = nPgWidth;}
+                            {m_nPageWidth = nPgWidth;}
     void    SetOutlineNames(const OUString* pNames)
-                    {pOutlineNames = pNames;}
+                    {m_pOutlineNames = pNames;}
     void    SetPositionMode()
-                    { bPosition = true;}
-    void    SetLevel(sal_uInt16 nSet) {nActLevel = nSet;}
+                    { m_bPosition = true;}
+    void    SetLevel(sal_uInt16 nSet) {m_nActLevel = nSet;}
 };
 
 #endif

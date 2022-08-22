@@ -163,8 +163,8 @@ void SwEnvPrtPage::FillItem(SwEnvItem& rItem)
 
 bool SwEnvPrtPage::FillItemSet(SfxItemSet* rSet)
 {
-    FillItem(GetParentSwEnvDlg()->aEnvItem);
-    rSet->Put(GetParentSwEnvDlg()->aEnvItem);
+    FillItem(GetParentSwEnvDlg()->m_aEnvItem);
+    rSet->Put(GetParentSwEnvDlg()->m_aEnvItem);
     return true;
 }
 

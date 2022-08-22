@@ -344,7 +344,7 @@ public:
     virtual void Reset( const SfxItemSet* rSet ) override;
 
 private:
-    bool bAttrModified;
+    bool m_bAttrModified;
 
     std::unique_ptr<weld::CheckButton> m_xTest1CBox;
     std::unique_ptr<weld::CheckButton> m_xTest2CBox;
