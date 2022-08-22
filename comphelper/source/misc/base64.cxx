@@ -56,15 +56,11 @@ const
 //    p   q   r   s   t   u   v   w   x   y   z
 
 
-static void ThreeByteToFourByte(const sal_Int8* pBuffer, const sal_Int32 nStart, const sal_Int32 nFullLen, char* aCharBuffer)
+template <typename C>
+static void ThreeByteToFourByte(const sal_Int8* pBuffer, const sal_Int32 nStart, const sal_Int32 nFullLen, C* aCharBuffer)
 {
-    sal_Int32 nLen(nFullLen - nStart);
-    if (nLen > 3)
-        nLen = 3;
-    if (nLen == 0)
-    {
-        return;
-    }
+    const sal_Int32 nLen(std::min(nFullLen - nStart, sal_Int32(3)));
+    assert(nLen > 0); // We are never expected to leave the output buffer uninitialized
 
     sal_Int32 nBinaer;
     switch (nLen)
@@ -89,7 +85,7 @@ static void ThreeByteToFourByte(const sal_Int8* pBuffer, const sal_Int32 nStart,
         break;
     }
 
-    aCharBuffer[0] = aCharBuffer[1] = aCharBuffer[2] = aCharBuffer[3] = '=';
+    aCharBuffer[2] = aCharBuffer[3] = '=';
 
     sal_uInt8 nIndex (static_cast<sal_uInt8>((nBinaer & 0xFC0000) >> 18));
     aCharBuffer[0] = aBase64EncodeTable [nIndex];
@@ -108,32 +104,28 @@ static void ThreeByteToFourByte(const sal_Int8* pBuffer, const sal_Int32 nStart,
     }
 }
 
-void Base64::encode(OStringBuffer& aStrBuffer, const uno::Sequence<sal_Int8>& aPass)
+template <typename Buffer>
+static void base64encode(Buffer& aStrBuffer, const uno::Sequence<sal_Int8>& aPass)
 {
     sal_Int32 i(0);
     sal_Int32 nBufferLength(aPass.getLength());
+    aStrBuffer.ensureCapacity(aStrBuffer.getLength() + (nBufferLength * 4 + 2) / 3);
     const sal_Int8* pBuffer = aPass.getConstArray();
     while (i < nBufferLength)
     {
-        char aCharBuffer[4];
-        ThreeByteToFourByte(pBuffer, i, nBufferLength, aCharBuffer);
-        aStrBuffer.append(aCharBuffer, SAL_N_ELEMENTS(aCharBuffer));
+        ThreeByteToFourByte(pBuffer, i, nBufferLength, aStrBuffer.appendUninitialized(4));
         i += 3;
     }
 }
 
+void Base64::encode(OStringBuffer& aStrBuffer, const uno::Sequence<sal_Int8>& aPass)
+{
+    base64encode(aStrBuffer, aPass);
+}
+
 void Base64::encode(OUStringBuffer& aStrBuffer, const uno::Sequence<sal_Int8>& aPass)
 {
-    sal_Int32 i(0);
-    sal_Int32 nBufferLength(aPass.getLength());
-    const sal_Int8* pBuffer = aPass.getConstArray();
-    while (i < nBufferLength)
-    {
-        char aCharBuffer[4];
-        ThreeByteToFourByte(pBuffer, i, nBufferLength, aCharBuffer);
-        aStrBuffer.appendAscii(aCharBuffer, SAL_N_ELEMENTS(aCharBuffer));
-        i += 3;
-    }
+    base64encode(aStrBuffer, aPass);
 }
 
 void Base64::decode(uno::Sequence<sal_Int8>& aBuffer, const OUString& sBuffer)
