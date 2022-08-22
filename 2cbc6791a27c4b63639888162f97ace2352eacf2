@@ -16,6 +16,24 @@
       "message": "Wow - what happened to Coverity, if their analyzer needs this???",
       "revId": "2cbc6791a27c4b63639888162f97ace2352eacf2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b345a87a_f20cdbd3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-08-22T11:21:52Z",
+      "side": 1,
+      "message": "I am speculating a little that this will fix it, but I bet it will. It can see that mpFrameMap has a null check, but can\u0027t see that this means !xAcc.is() will be true and cause an early return, so assumes that mpFrameMap may be nullptr in the called FireEvents().",
+      "parentUuid": "dd8928eb_40efbd8e",
+      "revId": "2cbc6791a27c4b63639888162f97ace2352eacf2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
