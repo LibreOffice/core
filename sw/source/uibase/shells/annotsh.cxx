@@ -424,7 +424,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
             const SfxPoolItem* pItem = nullptr;
             if (pNewAttrs)
                 pNewAttrs->GetItemState(nSlot, false, &pItem );
-            if (pPostItMgr->GetActiveSidebarWin()->GetLayoutStatus()!=SwPostItHelper::DELETED)
+            if (pItem && pPostItMgr->GetActiveSidebarWin()->GetLayoutStatus()!=SwPostItHelper::DELETED)
                 pOLV->InsertText(static_cast<const SfxStringItem *>(pItem)->GetValue());
             break;
         }
