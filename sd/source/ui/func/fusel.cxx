@@ -273,6 +273,9 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
              {
                 mpWindow->ReleaseMouse();
 
+                if (!aVEvt.mpURLField)
+                    return true;
+
                 // If tiled rendering, let client handles URL execution and early returns.
                 if (comphelper::LibreOfficeKit::isActive())
                 {
