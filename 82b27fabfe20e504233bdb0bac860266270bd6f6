@@ -34,6 +34,24 @@
       "parentUuid": "4a895742_e2f0b9bf",
       "revId": "82b27fabfe20e504233bdb0bac860266270bd6f6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e898624_ad3c7fb8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-08-22T07:49:11Z",
+      "side": 1,
+      "message": "I can\u0027t see why it should fail to create the edit engine ... could there be some font error in WeldEditView::makeEditEngine? Should we revert this patch?",
+      "parentUuid": "f6799dca_bdd0eecd",
+      "revId": "82b27fabfe20e504233bdb0bac860266270bd6f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
