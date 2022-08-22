@@ -242,6 +242,10 @@ void lcl_appendRelation(QVector<QPair<QAccessibleInterface*, QAccessible::Relati
                         AccessibleRelation aRelation)
 {
     QAccessible::Relation aQRelation = lcl_matchUnoRelation(aRelation.RelationType);
+    // skip in case there's no matching Qt relation
+    if (!(aQRelation & QAccessible::AllRelations))
+        return;
+
     sal_uInt32 nTargetCount = aRelation.TargetSet.getLength();
 
     for (sal_uInt32 i = 0; i < nTargetCount; i++)
