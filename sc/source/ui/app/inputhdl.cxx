@@ -1027,14 +1027,6 @@ void ScInputHandler::GetFormulaData()
         const ScFuncDesc* pDesc = pFuncList->GetFunction( i );
         if ( pDesc->mxFuncName )
         {
-            const sal_Unicode* pName = pDesc->mxFuncName->getStr();
-            const sal_Int32 nLen = pDesc->mxFuncName->getLength();
-            // fdo#75264 fill maFormulaChar with all characters used in formula names
-            for ( sal_Int32 j = 0; j < nLen; j++ )
-            {
-                sal_Unicode c = pName[ j ];
-                maFormulaChar.insert( c );
-            }
             OUString aFuncName = *pDesc->mxFuncName + aParenthesesReplacement;
             pFormulaData->insert(ScTypedStrData(aFuncName, 0.0, 0.0, ScTypedStrData::Standard));
             pDesc->initArgumentInfo();
@@ -1068,6 +1060,15 @@ void ScInputHandler::GetFormulaData()
     miAutoPosFormula = pFormulaData->end();
     rDoc.GetFormulaEntries( *pFormulaData );
     rDoc.GetFormulaEntries( *pFormulaDataPara );
+
+    // tdf#142031 - collect all the characters for the formula auto input
+    for (auto iter = pFormulaData->begin(); iter != std::next(pFormulaData->end()); ++iter)
+    {
+        const OUString aFuncName = ScGlobal::getCharClass().uppercase((*iter).GetString());
+        // fdo#75264 fill maFormulaChar with all characters used in formula names
+        for (sal_Int32 j = 0; j < aFuncName.getLength(); j++)
+            maFormulaChar.insert(aFuncName[j]);
+    }
 }
 
 IMPL_LINK( ScInputHandler, ShowHideTipVisibleParentListener, VclWindowEvent&, rEvent, void )
