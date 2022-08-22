@@ -394,7 +394,7 @@ public:
 
         The capacity
         is the amount of storage available for newly inserted
-        characters. The real buffer size is 2 bytes longer, because
+        characters. The real buffer size is 1 byte longer, because
         all strings are 0 terminated.
 
         @return  the current capacity of this string buffer.

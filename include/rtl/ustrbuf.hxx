@@ -756,8 +756,7 @@ public:
         Since this method is optimized for performance. the ASCII
         character values are not converted in any way. The caller
         has to make sure that all ASCII characters are in the
-        allowed range between 0 and 127. The ASCII string must be
-        NULL-terminated.
+        allowed range between 0 and 127.
         <p>
         Characters of the character array <code>str</code> are appended,
         in order, to the contents of this string buffer. The length of this

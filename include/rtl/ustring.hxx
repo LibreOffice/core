@@ -1205,8 +1205,7 @@ public:
       Since this method is optimized for performance, the ASCII character
       values are not converted in any way. The caller has to make sure that
       all ASCII characters are in the allowed range between 0 and 127.
-      The ASCII string must be NULL-terminated and must be greater than
-      or equal to asciiStrLength.
+      The ASCII string must be greater than or equal to asciiStrLength.
       This function can't be used for language specific sorting.
 
       @param    asciiStr        the 8-Bit ASCII character string to be compared.
@@ -1250,8 +1249,7 @@ public:
       Since this method is optimized for performance, the ASCII character
       values are not converted in any way. The caller has to make sure that
       all ASCII characters are in the allowed range between 0 and 127.
-      The ASCII string must be NULL-terminated and must be greater than
-      or equal to asciiStrLength.
+      The ASCII string must be greater than or equal to asciiStrLength.
       This function can't be used for language specific comparison.
 
       @param    asciiStr         the 8-Bit ASCII character string to be compared.
@@ -1325,8 +1323,7 @@ public:
       Since this method is optimized for performance, the ASCII character
       values are not converted in any way. The caller has to make sure that
       all ASCII characters are in the allowed range between 0 and 127.
-      The ASCII string must be NULL-terminated and must be greater than
-      or equal to asciiStrLength.
+      The ASCII string must be greater than or equal to asciiStrLength.
       This function can't be used for language specific comparison.
 
       @param    asciiStr        the 8-Bit ASCII character string to be compared.
@@ -1350,8 +1347,7 @@ public:
       Since this method is optimized for performance, the ASCII character
       values are not converted in any way. The caller has to make sure that
       all ASCII characters are in the allowed range between 0 and 127.
-      The ASCII string must be NULL-terminated and must be greater than or
-      equal to asciiStrLength.
+      The ASCII string must be greater than or equal to asciiStrLength.
       This function can't be used for language specific comparison.
 
       @param    asciiStr    the object (substring) to be compared.
@@ -1388,8 +1384,7 @@ public:
       Since this method is optimized for performance, the ASCII character
       values are not converted in any way. The caller has to make sure that
       all ASCII characters are in the allowed range between 0 and 127.
-      The ASCII string must be NULL-terminated and must be greater than or
-      equal to asciiStrLength.
+      The ASCII string must be greater than or equal to asciiStrLength.
       This function can't be used for language specific comparison.
 
       @param    asciiStr        the 8-Bit ASCII character string to be compared.
