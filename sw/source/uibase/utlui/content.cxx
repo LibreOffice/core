@@ -1680,7 +1680,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
             const bool bProtectBM = (ContentTypeId::BOOKMARK == nContentType)
                     && m_pActiveShell->getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_BOOKMARKS);
             const bool bEditable = pType->IsEditable() &&
-                    ((bVisible && !bProtected && !bProtectBM) || ContentTypeId::REGION == nContentType);
+                    ((bVisible && !bProtected) || ContentTypeId::REGION == nContentType);
             const bool bDeletable = pType->IsDeletable() &&
                     ((bVisible && !bProtected && !bProtectBM) || ContentTypeId::REGION == nContentType);
             const bool bRenamable = bEditable && !bReadonly &&
@@ -4911,20 +4911,22 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
                 nSlot = FN_FORMAT_FRAME_DLG;
         break;
         case ContentTypeId::BOOKMARK  :
-            assert(!m_pActiveShell->getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_BOOKMARKS));
             if(nMode == EditEntryMode::DELETE)
             {
+                assert(!m_pActiveShell->getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_BOOKMARKS));
                 IDocumentMarkAccess* const pMarkAccess = m_pActiveShell->getIDocumentMarkAccess();
                 pMarkAccess->deleteMark(pMarkAccess->findMark(pCnt->GetName()), false);
             }
             else if(nMode == EditEntryMode::RENAME)
             {
+                assert(!m_pActiveShell->getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_BOOKMARKS));
                 uno::Reference< frame::XModel >  xModel = m_pActiveShell->GetView().GetDocShell()->GetBaseModel();
                 uno::Reference< text::XBookmarksSupplier >  xBkms(xModel, uno::UNO_QUERY);
                 xNameAccess = xBkms->getBookmarks();
             }
             else
             {
+                // allowed despite PROTECT_BOOKMARKS: the dialog itself enforces it
                 SfxStringItem const name(FN_EDIT_BOOKMARK, pCnt->GetName());
                 SfxPoolItem const* args[2] = { &name, nullptr };
                 m_pActiveShell->GetView().GetViewFrame()->
