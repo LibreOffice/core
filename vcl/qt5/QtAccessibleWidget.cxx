@@ -199,21 +199,28 @@ QAccessible::Relation lcl_matchUnoRelation(short relationType)
 {
     switch (relationType)
     {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+        case AccessibleRelationType::CONTENT_FLOWS_FROM:
+            return QAccessible::FlowsFrom;
+        case AccessibleRelationType::CONTENT_FLOWS_TO:
+            return QAccessible::FlowsTo;
+#endif
         case AccessibleRelationType::CONTROLLER_FOR:
             return QAccessible::Controller;
         case AccessibleRelationType::CONTROLLED_BY:
             return QAccessible::Controlled;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+        case AccessibleRelationType::DESCRIBED_BY:
+            return QAccessible::Described;
+#endif
         case AccessibleRelationType::LABEL_FOR:
             return QAccessible::Label;
         case AccessibleRelationType::LABELED_BY:
             return QAccessible::Labelled;
         case AccessibleRelationType::INVALID:
-        case AccessibleRelationType::CONTENT_FLOWS_FROM:
-        case AccessibleRelationType::CONTENT_FLOWS_TO:
         case AccessibleRelationType::MEMBER_OF:
         case AccessibleRelationType::SUB_WINDOW_OF:
         case AccessibleRelationType::NODE_CHILD_OF:
-        case AccessibleRelationType::DESCRIBED_BY:
         default:
             SAL_WARN("vcl.qt", "Unmatched relation: " << relationType);
             return {};
