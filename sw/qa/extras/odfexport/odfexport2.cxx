@@ -94,6 +94,37 @@ DECLARE_ODFEXPORT_TEST(testTdf143605, "tdf143605.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("."), getProperty<OUString>(getParagraph(1), "ListLabelString"));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf57317_autoListName)
+{
+    load(mpTestDocumentPath, "tdf57317_autoListName.odt");
+    // The list style (from styles.xml) overrides a duplicate named auto-style
+    //uno::Any aNumStyle = getStyles("NumberingStyles")->getByName("L1");
+    //CPPUNIT_ASSERT(aNumStyle.hasValue());
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(">1<"), getProperty<OUString>(xPara, "ListLabelString"));
+    CPPUNIT_ASSERT_EQUAL(OUString("L1"), getProperty<OUString>(xPara, "NumberingStyleName"));
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:DefaultBullet", {});
+
+    // This was failing with a duplicate auto numbering style name of L1 instead of a unique name,
+    // thus it was showing the same info as before the bullet modification.
+    reload(mpFilter, "");
+    xPara.set(getParagraph(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));
+
+    uno::Reference<container::XIndexAccess> xLevels(xPara->getPropertyValue("NumberingRules"),
+                                                    uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aProps;
+    xLevels->getByIndex(0) >>= aProps;
+    for (beans::PropertyValue const& rProp : std::as_const(aProps))
+    {
+        if (rProp.Name == "BulletChar")
+            return;
+    }
+    CPPUNIT_FAIL("no BulletChar property");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testListFormatDocx)
 {
     loadAndReload("listformat.docx");
