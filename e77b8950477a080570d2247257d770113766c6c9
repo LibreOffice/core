@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc037d4a_56bd16e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2022-08-23T13:17:52Z",
+      "side": 1,
+      "message": "Why can\u0027t the interceptor return an actual dispatch object, which will listen to selection changes and send appropriate enable/disable status updates? Invalidating all the ui (all toolbars, menubar, statusbar etc.) just because a different image was selected, sounds like an overkill.",
+      "revId": "e77b8950477a080570d2247257d770113766c6c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
