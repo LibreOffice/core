@@ -720,6 +720,10 @@ void* QtAccessibleWidget::interface_cast(QAccessible::InterfaceType t)
     }
     if (t == QAccessible::TableInterface && accessibleProvidesInterface<XAccessibleTable>())
         return static_cast<QAccessibleTableInterface*>(this);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+    if (t == QAccessible::SelectionInterface && accessibleProvidesInterface<XAccessibleSelection>())
+        return static_cast<QAccessibleSelectionInterface*>(this);
+#endif
     return nullptr;
 }
 
@@ -1838,5 +1842,148 @@ QAccessibleInterface* QtAccessibleWidget::table() const
 
     return QAccessible::queryAccessibleInterface(QtAccessibleRegistry::getQObject(xTableAcc));
 }
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+// QAccessibleSelectionInterface
+int QtAccessibleWidget::selectedItemCount()
+{
+    Reference<XAccessibleContext> xAcc = getAccessibleContextImpl();
+    if (!xAcc.is())
+        return 0;
+
+    Reference<XAccessibleSelection> xSelection(xAcc, UNO_QUERY);
+    if (!xSelection.is())
+        return 0;
+
+    return xSelection->getSelectedAccessibleChildCount();
+}
+
+QList<QAccessibleInterface*> QtAccessibleWidget::selectedItems() const
+{
+    Reference<XAccessibleContext> xAcc = getAccessibleContextImpl();
+    if (!xAcc.is())
+        return QList<QAccessibleInterface*>();
+
+    Reference<XAccessibleSelection> xSelection(xAcc, UNO_QUERY);
+    if (!xSelection.is())
+        return QList<QAccessibleInterface*>();
+
+    QList<QAccessibleInterface*> aSelectedItems;
+    const sal_Int32 nSelected = xSelection->getSelectedAccessibleChildCount();
+    for (int i = 0; i < nSelected; i++)
+    {
+        Reference<XAccessible> xChild = xSelection->getSelectedAccessibleChild(i);
+        QAccessibleInterface* pInterface
+            = QAccessible::queryAccessibleInterface(QtAccessibleRegistry::getQObject(xChild);
+        aSelectedItems.push_back(pInterface);
+    }
+    return aSelectedItems;
+}
+
+QAccessibleInterface* QtAccessibleWidget::selectedItem(int nSelectionIndex) const
+{
+    Reference<XAccessibleContext> xAcc = getAccessibleContextImpl();
+    if (!xAcc.is())
+        return nullptr;
+
+    Reference<XAccessibleSelection> xSelection(xAcc, UNO_QUERY);
+    if (!xSelection.is())
+        return nullptr;
+
+    if (nSelectionIndex < 0 || nSelectionIndex >= xSelection->getSelectedAccessibleChildCount())
+    {
+        SAL_WARN("vcl.qt",
+                 "QtAccessibleWidget::selectedItem called with invalid index: " << nSelectionIndex);
+        return nullptr;
+    }
+
+    Reference<XAccessible> xChild = xSelection->getSelectedAccessibleChild(nSelectionIndex);
+    if (!xChild)
+        return nullptr;
+
+    return QAccessible::queryAccessibleInterface(QtAccessibleRegistry::getQObject(xChild));
+}
+
+bool QtAccessibleWidget::isSelected(QAccessibleInterface* pItem) const
+{
+    Reference<XAccessibleContext> xAcc = getAccessibleContextImpl();
+    if (!xAcc.is())
+        return false;
+
+    Reference<XAccessibleSelection> xSelection(xAcc, UNO_QUERY);
+    if (!xSelection.is())
+        return false;
+
+    int nChildIndex = indexOfChild(pItem);
+    if (nChildIndex < 0)
+        return false;
+
+    return xSelection->isAccessibleChildSelected(nChildIndex);
+}
+
+bool QtAccessibleWidget::select(QAccessibleInterface* pItem)
+{
+    Reference<XAccessibleContext> xAcc = getAccessibleContextImpl();
+    if (!xAcc.is())
+        return false;
+
+    Reference<XAccessibleSelection> xSelection(xAcc, UNO_QUERY);
+    if (!xSelection.is())
+        return false;
+
+    int nChildIndex = indexOfChild(pItem);
+    if (nChildIndex < 0)
+        return false;
+
+    xSelection->selectAccessibleChild(nChildIndex);
+    return true;
+}
+
+bool QtAccessibleWidget::unselect(QAccessibleInterface* pItem)
+{
+    Reference<XAccessibleContext> xAcc = getAccessibleContextImpl();
+    if (!xAcc.is())
+        return false;
+
+    Reference<XAccessibleSelection> xSelection(xAcc, UNO_QUERY);
+    if (!xSelection.is())
+        return false;
+
+    int nChildIndex = indexOfChild(pItem);
+    if (nChildIndex < 0)
+        return false;
+
+    xSelection->deselectAccessibleChild(nChildIndex);
+    return true;
+}
+
+bool QtAccessibleWidget::selectAll()
+{
+    Reference<XAccessibleContext> xAcc = getAccessibleContextImpl();
+    if (!xAcc.is())
+        return false;
+
+    Reference<XAccessibleSelection> xSelection(xAcc, UNO_QUERY);
+    if (!xSelection.is())
+        return false;
+
+    xSelection->selectAllAccessibleChildren();
+    return true;
+}
+
+bool QtAccessibleWidget::unselectAll()
+{
+    Reference<XAccessibleContext> xAcc = getAccessibleContextImpl();
+    if (!xAcc.is())
+        return false;
+
+    Reference<XAccessibleSelection> xSelection(xAcc, UNO_QUERY);
+    if (!xSelection.is())
+        return false;
+
+    xSelection->clearAccessibleSelection();
+    return true;
+}
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
