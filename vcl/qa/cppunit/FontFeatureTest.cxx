@@ -54,20 +54,13 @@ void FontFeatureTest::testGetFontFeatures()
     std::vector<vcl::font::Feature> rFontFeatures;
     CPPUNIT_ASSERT(aVDev->GetFontFeatures(rFontFeatures));
 
-    // We're interested only in defaults here
-    std::vector<vcl::font::Feature> rDefaultFontFeatures;
     OUString aFeaturesString;
     for (vcl::font::Feature const& rFeature : rFontFeatures)
     {
-        if (rFeature.m_aID.m_aScriptCode == vcl::font::featureCode("DFLT")
-            && rFeature.m_aID.m_aLanguageCode == vcl::font::featureCode("dflt"))
-        {
-            rDefaultFontFeatures.push_back(rFeature);
-            aFeaturesString += vcl::font::featureCodeAsString(rFeature.m_aID.m_aFeatureCode) + " ";
-        }
+        aFeaturesString += vcl::font::featureCodeAsString(rFeature.m_nCode) + " ";
     }
 
-    CPPUNIT_ASSERT_EQUAL(size_t(53), rDefaultFontFeatures.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(53), rFontFeatures.size());
 
     CPPUNIT_ASSERT_EQUAL(OUString("c2sc case dlig fina frac hlig liga lnum "
                                   "locl onum pnum sa01 sa02 sa03 sa04 sa05 "
@@ -80,8 +73,8 @@ void FontFeatureTest::testGetFontFeatures()
 
     // Check C2SC feature
     {
-        vcl::font::Feature& rFeature = rDefaultFontFeatures[0];
-        CPPUNIT_ASSERT_EQUAL(vcl::font::featureCode("c2sc"), rFeature.m_aID.m_aFeatureCode);
+        vcl::font::Feature& rFeature = rFontFeatures[0];
+        CPPUNIT_ASSERT_EQUAL(vcl::font::featureCode("c2sc"), rFeature.m_nCode);
 
         vcl::font::FeatureDefinition& rFracFeatureDefinition = rFeature.m_aDefinition;
         CPPUNIT_ASSERT_EQUAL(vcl::font::featureCode("c2sc"), rFracFeatureDefinition.getCode());
@@ -94,8 +87,8 @@ void FontFeatureTest::testGetFontFeatures()
 
     // Check FRAC feature
     {
-        vcl::font::Feature& rFeature = rDefaultFontFeatures[4];
-        CPPUNIT_ASSERT_EQUAL(vcl::font::featureCode("frac"), rFeature.m_aID.m_aFeatureCode);
+        vcl::font::Feature& rFeature = rFontFeatures[4];
+        CPPUNIT_ASSERT_EQUAL(vcl::font::featureCode("frac"), rFeature.m_nCode);
 
         vcl::font::FeatureDefinition& rFracFeatureDefinition = rFeature.m_aDefinition;
         CPPUNIT_ASSERT_EQUAL(vcl::font::featureCode("frac"), rFracFeatureDefinition.getCode());
