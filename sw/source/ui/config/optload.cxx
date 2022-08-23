@@ -361,12 +361,12 @@ IMPL_LINK_NOARG(SwLoadOptPage, MetricHdl, weld::ComboBox&, void)
         m_xTabMF->save_value();
 }
 
-SwCaptionOptDlg::SwCaptionOptDlg(weld::Window* pParent, const SfxItemSet& rSet)
-    : SfxSingleTabDialogController(pParent, &rSet, "modules/swriter/ui/captiondialog.ui",
+SwCaptionOptDlg::SwCaptionOptDlg(weld::Window* pParent, const std::shared_ptr<SfxItemSet> pSet)
+    : SfxSingleTabDialogController(pParent, pSet.get(), "modules/swriter/ui/captiondialog.ui",
                                    "CaptionDialog")
 {
     // create TabPage
-    SetTabPage(SwCaptionOptPage::Create(get_content_area(), this, &rSet));
+    SetTabPage(SwCaptionOptPage::Create(get_content_area(), this, pSet.get()));
 }
 
 SwCaptionPreview::SwCaptionPreview()
