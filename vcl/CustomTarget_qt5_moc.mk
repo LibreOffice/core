@@ -10,7 +10,6 @@
 $(eval $(call gb_CustomTarget_CustomTarget,vcl/qt5))
 
 $(call gb_CustomTarget_get_target,vcl/qt5) : \
-	$(call gb_CustomTarget_get_workdir,vcl/qt5)/QtAccessibleWidget.moc \
 	$(call gb_CustomTarget_get_workdir,vcl/qt5)/QtClipboard.moc \
 	$(call gb_CustomTarget_get_workdir,vcl/qt5)/QtFilePicker.moc \
 	$(call gb_CustomTarget_get_workdir,vcl/qt5)/QtFrame.moc \
