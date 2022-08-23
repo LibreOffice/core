@@ -989,6 +989,8 @@ void PrintDialog::preparePreview( bool i_bMayUseCache )
             Point aOff( aPrt->PixelToLogic( aPrt->GetPageOffsetPixel(), aMapMode ) );
             aMtf.Move( aOff.X(), aOff.Y() );
         }
+        // tdf#150561: page size may have changed so sync mePaper with it
+        mePaper = aPrt->GetPaper();
     }
 
     mxPreview->setPreview( aMtf, aCurPageSize,
