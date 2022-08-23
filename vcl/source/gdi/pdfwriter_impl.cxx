@@ -6343,8 +6343,10 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         // The rectangle is the bounding box of the text, but also includes
         // ascent / descent to match the on-screen rendering.
         // This is the top left of the text without ascent / descent.
-        DevicePoint aDrawPosition(rLayout.GetDrawPosition());
-        tools::Rectangle aRectangle(PixelToLogic(Point(aDrawPosition.getX(), aDrawPosition.getY())),
+        DevicePoint aDrawDevicePosition(rLayout.GetDrawPosition());
+        Point aDrawPosition(std::round(aDrawDevicePosition.getX()),
+                            std::round(aDrawDevicePosition.getY()));
+        tools::Rectangle aRectangle(PixelToLogic(aDrawPosition),
                                     Size(ImplDevicePixelToLogicWidth(rLayout.GetTextWidth()), 0));
         aRectangle.AdjustTop(-aRefDevFontMetric.GetAscent());
         // This includes ascent / descent.
@@ -6355,7 +6357,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         {
             // Adapt rectangle for rotated text.
             tools::Polygon aPolygon(aRectangle);
-            aPolygon.Rotate(PixelToLogic(Point(aDrawPosition.getX(), aDrawPosition.getY())), pFontInstance->mnOrientation);
+            aPolygon.Rotate(PixelToLogic(aDrawPosition), pFontInstance->mnOrientation);
             drawPolygon(aPolygon);
         }
         else
@@ -6474,9 +6476,11 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         }
         else
         {
-            DevicePoint aStartPt = rLayout.GetDrawPosition();
+            DevicePoint aStartDevicePt = rLayout.GetDrawPosition();
+            Point aStartPt(std::round(aStartDevicePt.getX()),
+                           std::round(aStartDevicePt.getY()));
             int nWidth = rLayout.GetTextWidth() / rLayout.GetUnitsPerPixel();
-            drawTextLine( PixelToLogic(Point(aStartPt.getX(), aStartPt.getY()) ),
+            drawTextLine( PixelToLogic(aStartPt),
                           ImplDevicePixelToLogicWidth( nWidth ),
                           eStrikeout, eUnderline, eOverline, bUnderlineAbove );
         }
