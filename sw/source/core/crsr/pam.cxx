@@ -251,6 +251,11 @@ void SwPosition::Adjust( SwNodeOffset nDelta )
     nNode += nDelta;
     nContent.Assign(nNode.GetNode().GetContentNode(), 0);
 }
+void SwPosition::AdjustContent( sal_Int32 nDelta )
+{
+    assert(nNode.GetNode().GetContentNode() && "only valid to call this if we point to an SwContentNode");
+    nContent += nDelta;
+}
 void SwPosition::AssignStartIndex( const SwContentNode& rNd )
 {
     nNode = rNd;

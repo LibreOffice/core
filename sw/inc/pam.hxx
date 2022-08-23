@@ -97,6 +97,8 @@ struct SAL_WARN_UNUSED SW_DLLPUBLIC SwPosition
     void AssignEndIndex( const SwContentNode& rNd );
     /// Adjust node position, and resets content position to zero
     void Adjust( SwNodeOffset nDelta );
+    /// Adjust content index, only valid to call this if the position points to a SwContentNode subclass
+    void AdjustContent( sal_Int32 nDelta );
 };
 
 SW_DLLPUBLIC std::ostream &operator <<(std::ostream& s, const SwPosition& position);
