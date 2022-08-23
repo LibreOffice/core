@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "eb8c1acc_72195e29",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-08-23T09:35:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "93a7ffef_8c5bd841",
+      "range": {
+        "startLine": 7,
+        "startChar": 67,
+        "endLine": 7,
+        "endChar": 74
+      },
+      "revId": "4c3db88c08817dc43374de580e89c78f76f9613f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "7f65ffe1_46d58744",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -72,6 +96,30 @@
       "writtenOn": "2022-08-23T05:20:20Z",
       "side": 1,
       "message": "Same as above: that this function is called \"AutoInput\"",
+      "range": {
+        "startLine": 1064,
+        "startChar": 74,
+        "endLine": 1064,
+        "endChar": 81
+      },
+      "revId": "4c3db88c08817dc43374de580e89c78f76f9613f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f3cd487_4903606d",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1064,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-08-23T09:35:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "23ec4653_35fb879f",
       "range": {
         "startLine": 1064,
         "startChar": 74,
