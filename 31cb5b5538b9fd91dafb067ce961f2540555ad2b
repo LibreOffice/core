@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b3d7a04_4b8c6ddc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-08-23T14:39:24Z",
+      "side": 1,
+      "message": "I suggest to go with this for now, since the situation that you can end up with different toolbar states based on what image you select first is clearly buggy. But in case we can improve e.g. framework/source/dispatch/dispatchdisabler.cxx in the future to be more efficient and we can somehow make sure that nobody disables commands by returning empty dispatch references, I have no problem with dropping this. I hope that\u0027s an acceptable compromise. :-)",
+      "revId": "31cb5b5538b9fd91dafb067ce961f2540555ad2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
