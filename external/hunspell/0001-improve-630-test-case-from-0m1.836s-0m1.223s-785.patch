@@ -1,0 +1,52 @@
+From 75ebf084f941c0fe72904b6167079d9190f885e5 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolanm@redhat.com>
+Date: Tue, 23 Aug 2022 11:44:36 +0100
+Subject: [PATCH] improve #630 test case from 0m1.836s -> 0m1.223s (#785)
+
+---
+ src/hunspell/csutil.cxx | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
+
+diff --git a/src/hunspell/csutil.cxx b/src/hunspell/csutil.cxx
+index e9cce47..5caa771 100644
+--- a/src/hunspell/csutil.cxx
++++ b/src/hunspell/csutil.cxx
+@@ -171,8 +171,10 @@ std::string& u16_u8(std::string& dest, const std::vector<w_char>& src) {
+ }
+ 
+ int u8_u16(std::vector<w_char>& dest, const std::string& src) {
+-  dest.clear();
+-  dest.reserve(src.size());
++  // faster to oversize initially, assign to elements and resize to what's used
++  // than to reserve and push_back
++  dest.resize(src.size());
++  std::vector<w_char>::iterator u16 = dest.begin();
+   std::string::const_iterator u8 = src.begin();
+   std::string::const_iterator u8_max = src.end();
+ 
+@@ -254,16 +256,18 @@ int u8_u16(std::vector<w_char>& dest, const std::string& src) {
+                          src.c_str());
+         u2.h = 0xff;
+         u2.l = 0xfd;
+-        dest.push_back(u2);
++        *u16++ = u2;
++        dest.resize(u16 - dest.begin());
+         return -1;
+       }
+     }
+-    dest.push_back(u2);
++    *u16++ = u2;
+     ++u8;
+   }
+ 
+-  dest.shrink_to_fit();
+-  return dest.size();
++  int size = u16 - dest.begin();
++  dest.resize(size);
++  return size;
+ }
+ 
+ namespace {
+-- 
+2.37.2
+

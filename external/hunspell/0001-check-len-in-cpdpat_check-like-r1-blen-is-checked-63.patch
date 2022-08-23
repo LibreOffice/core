@@ -1,0 +1,27 @@
+From 56ad6310c95695d25f936d3f89f6ee3d787df274 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolanm@redhat.com>
+Date: Mon, 22 Aug 2022 21:21:36 +0100
+Subject: [PATCH] check 'len' in cpdpat_check like 'r1->blen' is checked (#633)
+ (#780)
+
+we should check len against pos like we do r1->blen in the line above
+---
+ src/hunspell/affixmgr.cxx | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/hunspell/affixmgr.cxx b/src/hunspell/affixmgr.cxx
+index 7ea1ea5..c2432c0 100644
+--- a/src/hunspell/affixmgr.cxx
++++ b/src/hunspell/affixmgr.cxx
+@@ -1330,7 +1330,7 @@ int AffixMgr::cpdpat_check(const char* word,
+          ((checkcpdtable[i].pattern[0] == '0' && r1->blen <= pos &&
+            strncmp(word + pos - r1->blen, r1->word, r1->blen) == 0) ||
+           (checkcpdtable[i].pattern[0] != '0' &&
+-           ((len = checkcpdtable[i].pattern.size()) != 0) &&
++           ((len = checkcpdtable[i].pattern.size()) != 0) && len <= pos &&
+            strncmp(word + pos - len, checkcpdtable[i].pattern.c_str(), len) == 0)))) {
+       return 1;
+     }
+-- 
+2.37.2
+
