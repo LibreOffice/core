@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01bb12dd_977330d1",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1073,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-08-23T17:46:09Z",
+      "side": 1,
+      "message": "Here I do something wrong that I could not figure out by myself. I don\u0027t know why the for loop nevers gets executed ...",
+      "revId": "82d516cb026db91ac09521343948f64c25806757",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
