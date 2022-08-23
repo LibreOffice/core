@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c59e2cf3_9361c605",
+        "filename": "dbaccess/source/ui/querydesign/querydlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-23T07:40:29Z",
+      "side": 1,
+      "message": "A nitpick (not necessary to fix this, just something to remember to look at):\n\nThis \u0027case\u0027 clause was put in braces to create a scope, which was required to introduce a local variable (sTemp). Your change eliminated the variable, so the braces could be also removed, and the block could be unindented to be formatted like most of the other blocks.",
+      "revId": "b5e034fa3714d285d58e7ee40bf1b6b3d530e141",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e3205d3_1078b108",
+        "filename": "sw/source/core/crsr/pam.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 804,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-23T07:40:29Z",
+      "side": 1,
+      "message": "(Unrelated) Fun that this executes also when they are equal...",
+      "revId": "b5e034fa3714d285d58e7ee40bf1b6b3d530e141",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
