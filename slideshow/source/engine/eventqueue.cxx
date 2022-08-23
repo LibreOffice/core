@@ -172,7 +172,7 @@ namespace slideshow::internal
                 && !bFireAllEvents
                 && (maEvents.empty() || maEvents.top().nTime > nCurrTime))
             {
-                const EventEntry aEvent (std::move(maNextNextEvents.top()));
+                const EventEntry aEvent (maNextNextEvents.top());
                 maNextNextEvents.pop();
                 maEvents.push(aEvent);
             }
@@ -184,7 +184,7 @@ namespace slideshow::internal
             while( !maEvents.empty() &&
                    (bFireAllEvents || maEvents.top().nTime <= nCurrTime) )
             {
-                EventEntry event( std::move(maEvents.top()) );
+                EventEntry event( maEvents.top() );
                 maEvents.pop();
 
                 // only process event, if it is still 'charged',
