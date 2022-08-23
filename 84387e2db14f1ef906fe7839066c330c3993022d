@@ -70,6 +70,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "df7546b5_9cd2cd25",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003640
+      },
+      "writtenOn": "2022-08-23T12:55:25Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "72c4dabe_3d540b79",
+      "revId": "84387e2db14f1ef906fe7839066c330c3993022d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "22e11a62_3663cc84",
@@ -100,6 +118,24 @@
       "writtenOn": "2022-08-23T06:44:15Z",
       "side": 1,
       "message": "You still change this file - was this an overlook?\n\n(And note that the mode of this file was changed incorrectly, too.)",
+      "parentUuid": "22e11a62_3663cc84",
+      "revId": "84387e2db14f1ef906fe7839066c330c3993022d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87d6e8f3_bd280a60",
+        "filename": "xmlsecurity/source/helper/xsecctl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1003640
+      },
+      "writtenOn": "2022-08-23T12:55:25Z",
+      "side": 1,
+      "message": "No, I have changed this patch set about a new file, extensions/source/ActiveX/SODispatchinterceptor.cxx. I did not changed xmlsecurity/source/helper/xsecctl.cxx.",
       "parentUuid": "22e11a62_3663cc84",
       "revId": "84387e2db14f1ef906fe7839066c330c3993022d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
