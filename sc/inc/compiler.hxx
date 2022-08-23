@@ -378,8 +378,8 @@ private:
 
     bool HasPossibleNamedRangeConflict(SCTAB nTab) const;
 
-    static const CharClass* GetCharClassLocalized();
 public:
+    static const CharClass* GetCharClassLocalized();
     static const CharClass* GetCharClassEnglish();
 
 public:
