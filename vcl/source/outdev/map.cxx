@@ -278,6 +278,16 @@ static double ImplLogicToSubPixel(tools::Long n, tools::Long nDPI, tools::Long n
     return static_cast<double>(n) * nMapNum * nDPI / nMapDenom;
 }
 
+static tools::Long ImplSubPixelToLogic(double n, tools::Long nDPI, tools::Long nMapNum,
+                                       tools::Long nMapDenom)
+{
+    assert(nDPI > 0);
+    assert(nMapNum != 0);
+    double nRet = n * nMapDenom / nMapNum / nDPI;
+    assert(floor(nRet) == nRet);
+    return nRet;
+}
+
 static tools::Long ImplPixelToLogic(tools::Long n, tools::Long nDPI, tools::Long nMapNum,
                                     tools::Long nMapDenom)
 {
@@ -1163,6 +1173,20 @@ Point OutputDevice::PixelToLogic( const Point& rDevicePt ) const
                                     maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX ) - maMapRes.mnMapOfsX - mnOutOffLogicX,
                   ImplPixelToLogic( rDevicePt.Y(), mnDPIY,
                                     maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY ) - maMapRes.mnMapOfsY - mnOutOffLogicY );
+}
+
+Point OutputDevice::SubPixelToLogic(const DevicePoint& rDevicePt) const
+{
+    if (!mbMap)
+    {
+        assert(floor(rDevicePt.getX() == rDevicePt.getX()) && floor(rDevicePt.getY() == rDevicePt.getY()));
+        return Point(rDevicePt.getX(), rDevicePt.getY());
+    }
+
+    return Point(ImplSubPixelToLogic(rDevicePt.getX(), mnDPIX,
+                                     maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX) - maMapRes.mnMapOfsX - mnOutOffLogicX,
+                 ImplSubPixelToLogic(rDevicePt.getY(), mnDPIY,
+                                     maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY) - maMapRes.mnMapOfsY - mnOutOffLogicY);
 }
 
 Size OutputDevice::PixelToLogic( const Size& rDeviceSize ) const
