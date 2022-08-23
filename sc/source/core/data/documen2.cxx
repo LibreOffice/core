@@ -89,6 +89,7 @@
 #include <datamapper.hxx>
 #include <drwlayer.hxx>
 #include <sharedstringpoolpurge.hxx>
+#include <dociter.hxx>
 #include <config_features.h>
 
 using namespace com::sun::star;
@@ -1216,6 +1217,11 @@ ScSortedRangeCache& ScDocument::GetSortedRangeCache( const ScRange & rRange, con
     // no cells are dirty.
     if(!IsThreadedGroupCalcInProgress())
         InterpretCellsIfNeeded(rRange);
+#ifdef DBG_UTIL
+    ScCellIterator it( *this, rRange );
+    for(bool has = it.first(); has; has = it.next())
+        assert(it.getType() != CELLTYPE_FORMULA || !it.getFormulaCell()->NeedsInterpret());
+#endif
     std::unique_lock guard(mScLookupMutex);
     auto [findIt, bInserted] = mxScSortedRangeCache->aCacheMap.emplace(key, nullptr);
     if (bInserted)
