@@ -261,6 +261,8 @@ public:
     void CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rProgress );        // compile temporary string tokens
     void CalcAfterLoad( sc::CompileFormulaContext& rCxt, bool bStartListening );
     bool            MarkUsedExternalReferences();
+    // Returns true if the cell was interpreted as part of the formula group.
+    // The parameters may limit which subset of the formula group should be interepreted, if possible.
     bool Interpret(SCROW nStartOffset = -1, SCROW nEndOffset = -1);
     bool IsIterCell() const { return bIsIterCell; }
     sal_uInt16 GetSeenInIteration() const { return nSeenInIteration; }
