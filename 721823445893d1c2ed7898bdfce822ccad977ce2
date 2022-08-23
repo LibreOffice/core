@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54209d4d_5b7fb27f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-08-23T06:53:07Z",
+      "side": 1,
+      "message": "“Start Center” is not the brand name of an application, it’s just a screen. It shouldn’t be present in the main launcher for the same reason we don’t add the word “Dialog” to every dialog.",
+      "revId": "721823445893d1c2ed7898bdfce822ccad977ce2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
