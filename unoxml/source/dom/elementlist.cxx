@@ -70,7 +70,7 @@ namespace DOM
     }
 
     CElementList::CElementList(::rtl::Reference<CElement> const& pElement,
-            ::osl::Mutex & rMutex,
+            std::mutex & rMutex,
             std::u16string_view rName, OUString const*const pURI)
         : m_xImpl(new CElementListImpl(pElement, rMutex, rName, pURI))
     {
@@ -80,7 +80,7 @@ namespace DOM
     }
 
     CElementListImpl::CElementListImpl(::rtl::Reference<CElement> pElement,
-            ::osl::Mutex & rMutex,
+            std::mutex & rMutex,
             std::u16string_view rName, OUString const*const pURI)
         : m_pElement(std::move(pElement))
         , m_rMutex(rMutex)
@@ -154,7 +154,7 @@ namespace DOM
     */
     sal_Int32 SAL_CALL CElementListImpl::getLength()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::scoped_lock g(m_rMutex);
 
         if (!m_pElement.is()) { return 0; }
 
@@ -169,7 +169,7 @@ namespace DOM
     {
         if (index < 0) throw RuntimeException();
 
-        ::osl::MutexGuard const g(m_rMutex);
+        std::scoped_lock g(m_rMutex);
 
         if (!m_pElement.is()) { return nullptr; }
 
@@ -183,7 +183,7 @@ namespace DOM
     // tree mutations can change the list
     void SAL_CALL CElementListImpl::handleEvent(Reference< XEvent > const&)
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::scoped_lock g(m_rMutex);
 
         m_bRebuild = true;
     }

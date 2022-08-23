@@ -39,11 +39,11 @@ namespace DOM
     {
     private:
         ::rtl::Reference<CNode> const m_pNode;
-        ::osl::Mutex & m_rMutex;
+        std::mutex & m_rMutex;
 
     public:
         CChildList(::rtl::Reference<CNode> pBase,
-                ::osl::Mutex & rMutex);
+                std::mutex & rMutex);
 
         /**
         The number of nodes in the list.

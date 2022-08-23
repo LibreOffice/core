@@ -20,6 +20,7 @@
 #pragma once
 
 #include <map>
+#include <mutex>
 
 #include <libxml/tree.h>
 
@@ -67,7 +68,7 @@ public:
 
     void dispatchEvent(
         DOM::CDocument & rDocument,
-        ::osl::Mutex & rMutex,
+        std::mutex & rMutex,
         xmlNodePtr const pNode,
         css::uno::Reference<css::xml::dom::XNode> const& xNode,
         css::uno::Reference< css::xml::dom::events::XEvent > const& xEvent) const;

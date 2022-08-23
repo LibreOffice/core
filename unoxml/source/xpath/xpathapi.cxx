@@ -112,7 +112,7 @@ namespace XPath
         DOM::CNode *const pCNode(comphelper::getFromUnoTunnel<DOM::CNode>(xNamespaceNode));
         if (!pCNode) { throw RuntimeException(); }
 
-        ::osl::MutexGuard const g(pCNode->GetOwnerDocument().GetMutex());
+        std::scoped_lock g(pCNode->GetOwnerDocument().GetMutex());
 
         xmlNodePtr pNode = pCNode->GetNodePtr();
         while (pNode != nullptr) {
@@ -298,7 +298,7 @@ namespace XPath
         DOM::CNode *const pCNode = comphelper::getFromUnoTunnel<DOM::CNode>(xContextNode);
         if (!pCNode) { throw RuntimeException(); }
 
-        ::osl::MutexGuard const g(pCDoc->GetMutex()); // lock the document!
+        std::scoped_lock g(pCDoc->GetMutex()); // lock the document!
 
         xmlNodePtr const pNode = pCNode->GetNodePtr();
         if (!pNode) { throw RuntimeException(); }

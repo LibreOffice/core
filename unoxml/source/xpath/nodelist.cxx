@@ -30,7 +30,7 @@ namespace XPath
 {
     CNodeList::CNodeList(
                 ::rtl::Reference<DOM::CDocument> pDocument,
-                ::osl::Mutex & rMutex,
+                std::mutex & rMutex,
                 std::shared_ptr<xmlXPathObject> const& rxpathObj)
         : m_pDocument(std::move(pDocument))
         , m_rMutex(rMutex)
@@ -48,7 +48,7 @@ namespace XPath
     */
     sal_Int32 SAL_CALL CNodeList::getLength()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::scoped_lock g(m_rMutex);
 
         sal_Int32 value = 0;
         if (m_pNodeSet != nullptr)
@@ -61,7 +61,7 @@ namespace XPath
     */
     Reference< XNode > SAL_CALL CNodeList::item(sal_Int32 index)
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::scoped_lock g(m_rMutex);
 
         if (nullptr == m_pNodeSet) {
             return nullptr;

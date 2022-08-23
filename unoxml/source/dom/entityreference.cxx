@@ -27,7 +27,7 @@ using namespace css::xml::dom;
 namespace DOM
 {
     CEntityReference::CEntityReference(
-            CDocument const& rDocument, ::osl::Mutex const& rMutex,
+            CDocument const& rDocument, std::mutex const& rMutex,
             xmlNodePtr const pNode)
         : CEntityReference_Base(rDocument, rMutex,
                 NodeType_ENTITY_REFERENCE_NODE, pNode)
@@ -51,7 +51,7 @@ namespace DOM
 
     OUString SAL_CALL CEntityReference::getNodeName()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::scoped_lock g(m_rMutex);
 
         OUString aName;
         if (m_aNodePtr != nullptr)

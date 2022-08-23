@@ -47,7 +47,7 @@ using namespace css::xml::sax;
 namespace DOM
 {
 
-    CElement::CElement(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+    CElement::CElement(CDocument const& rDocument, std::mutex const& rMutex,
             xmlNodePtr const pNode)
         : CElement_Base(rDocument, rMutex, NodeType_ELEMENT_NODE, pNode)
     {
@@ -231,7 +231,7 @@ namespace DOM
     */
     OUString SAL_CALL CElement::getAttribute(OUString const& name)
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::scoped_lock g(m_rMutex);
 
         if (nullptr == m_aNodePtr) {
             return OUString();
@@ -253,7 +253,7 @@ namespace DOM
     */
     Reference< XAttr > SAL_CALL CElement::getAttributeNode(OUString const& name)
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::scoped_lock g(m_rMutex);
 
         if (nullptr == m_aNodePtr) {
             return nullptr;
@@ -278,7 +278,7 @@ namespace DOM
     Reference< XAttr > SAL_CALL CElement::getAttributeNodeNS(
             const OUString& namespaceURI, const OUString& localName)
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::scoped_lock g(m_rMutex);
 
         if (nullptr == m_aNodePtr) {
             return nullptr;
@@ -308,7 +308,7 @@ namespace DOM
     CElement::getAttributeNS(
             OUString const& namespaceURI, OUString const& localName)
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::scoped_lock g(m_rMutex);
 
         if (nullptr == m_aNodePtr) {
             return OUString();
@@ -338,7 +338,7 @@ namespace DOM
     Reference< XNodeList > SAL_CALL
     CElement::getElementsByTagName(OUString const& rLocalName)
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::scoped_lock g(m_rMutex);
 
         Reference< XNodeList > const xList(
                 new CElementList(this, m_rMutex, rLocalName));
@@ -354,7 +354,7 @@ namespace DOM
     CElement::getElementsByTagNameNS(
             OUString const& rNamespaceURI, OUString const& rLocalName)
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::scoped_lock g(m_rMutex);
 
         Reference< XNodeList > const xList(
             new CElementList(this, m_rMutex, rLocalName, &rNamespaceURI));
@@ -366,7 +366,7 @@ namespace DOM
     */
     OUString SAL_CALL CElement::getTagName()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::scoped_lock g(m_rMutex);
 
         if (nullptr == m_aNodePtr) {
             return OUString();
@@ -383,7 +383,7 @@ namespace DOM
     */
     sal_Bool SAL_CALL CElement::hasAttribute(OUString const& name)
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::scoped_lock g(m_rMutex);
 
         OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
         xmlChar const *pName = reinterpret_cast<xmlChar const *>(o1.getStr());
@@ -397,7 +397,7 @@ namespace DOM
     sal_Bool SAL_CALL CElement::hasAttributeNS(
             OUString const& namespaceURI, OUString const& localName)
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::scoped_lock g(m_rMutex);
 
         OString o1 = OUStringToOString(localName, RTL_TEXTENCODING_UTF8);
         xmlChar const *pName = reinterpret_cast<xmlChar const *>(o1.getStr());
@@ -411,7 +411,7 @@ namespace DOM
     */
     void SAL_CALL CElement::removeAttribute(OUString const& name)
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::scoped_lock g(m_rMutex);
 
         if (nullptr == m_aNodePtr) {
             return;
@@ -435,7 +435,7 @@ namespace DOM
     void SAL_CALL CElement::removeAttributeNS(
             OUString const& namespaceURI, OUString const& localName)
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::scoped_lock g(m_rMutex);
 
         if (nullptr == m_aNodePtr) {
             return;
@@ -464,7 +464,7 @@ namespace DOM
     Reference< XAttr > SAL_CALL
     CElement::removeAttributeNode(Reference< XAttr > const& oldAttr)
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::scoped_lock g(m_rMutex);
 
         if (nullptr == m_aNodePtr) {
             return nullptr;
@@ -523,55 +523,57 @@ namespace DOM
             throw e;
         }
 
-        ::osl::ClearableMutexGuard guard(m_rMutex);
+        Reference< XAttr > xAttr;
+        Reference< XMutationEvent > event;
+        {
+            std::scoped_lock guard(m_rMutex);
 
-        if (nullptr == m_aNodePtr) {
-            throw RuntimeException();
+            if (nullptr == m_aNodePtr) {
+                throw RuntimeException();
+            }
+
+            // get the implementation
+            CAttr *const pCAttr = dynamic_cast<CAttr*>(
+                    comphelper::getFromUnoTunnel<CNode>(xNewAttr));
+            if (!pCAttr) { throw RuntimeException(); }
+            xmlAttrPtr const pAttr =
+                reinterpret_cast<xmlAttrPtr>(pCAttr->GetNodePtr());
+            if (!pAttr) { throw RuntimeException(); }
+
+            // check whether the attribute is not in use by another element
+            if (pAttr->parent) {
+                DOMException e;
+                e.Code = DOMExceptionType_INUSE_ATTRIBUTE_ERR;
+                throw e;
+            }
+
+            xmlAttrPtr res = nullptr;
+            xmlChar const*const pContent(
+                    (pAttr->children) ? pAttr->children->content : nullptr);
+
+            if (bNS) {
+                xmlNsPtr const pNs( pCAttr->GetNamespace(m_aNodePtr) );
+                res = xmlNewNsProp(m_aNodePtr, pNs, pAttr->name, pContent);
+            } else {
+                res = xmlNewProp(m_aNodePtr, pAttr->name, pContent);
+            }
+
+            // get the new attr node
+            xAttr = Reference< XAttr >(
+                static_cast< XNode* >(GetOwnerDocument().GetCNode(
+                        reinterpret_cast<xmlNodePtr>(res)).get()),
+                UNO_QUERY_THROW);
+
+            // attribute addition event
+            // dispatch DOMAttrModified event
+            Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
+            event = Reference< XMutationEvent >(docevent->createEvent(
+                "DOMAttrModified"), UNO_QUERY);
+            event->initMutationEvent("DOMAttrModified",
+                true, false, xAttr,
+                OUString(), xAttr->getValue(), xAttr->getName(),
+                AttrChangeType_ADDITION);
         }
-
-        // get the implementation
-        CAttr *const pCAttr = dynamic_cast<CAttr*>(
-                comphelper::getFromUnoTunnel<CNode>(xNewAttr));
-        if (!pCAttr) { throw RuntimeException(); }
-        xmlAttrPtr const pAttr =
-            reinterpret_cast<xmlAttrPtr>(pCAttr->GetNodePtr());
-        if (!pAttr) { throw RuntimeException(); }
-
-        // check whether the attribute is not in use by another element
-        if (pAttr->parent) {
-            DOMException e;
-            e.Code = DOMExceptionType_INUSE_ATTRIBUTE_ERR;
-            throw e;
-        }
-
-        xmlAttrPtr res = nullptr;
-        xmlChar const*const pContent(
-                (pAttr->children) ? pAttr->children->content : nullptr);
-
-        if (bNS) {
-            xmlNsPtr const pNs( pCAttr->GetNamespace(m_aNodePtr) );
-            res = xmlNewNsProp(m_aNodePtr, pNs, pAttr->name, pContent);
-        } else {
-            res = xmlNewProp(m_aNodePtr, pAttr->name, pContent);
-        }
-
-        // get the new attr node
-        Reference< XAttr > const xAttr(
-            static_cast< XNode* >(GetOwnerDocument().GetCNode(
-                    reinterpret_cast<xmlNodePtr>(res)).get()),
-            UNO_QUERY_THROW);
-
-        // attribute addition event
-        // dispatch DOMAttrModified event
-        Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
-        Reference< XMutationEvent > event(docevent->createEvent(
-            "DOMAttrModified"), UNO_QUERY);
-        event->initMutationEvent("DOMAttrModified",
-            true, false, xAttr,
-            OUString(), xAttr->getValue(), xAttr->getName(),
-            AttrChangeType_ADDITION);
-
-        guard.clear(); // release mutex before calling event handlers
 
         dispatchEvent(event);
         dispatchSubtreeModified();
@@ -600,7 +602,9 @@ namespace DOM
     void SAL_CALL
     CElement::setAttribute(OUString const& name, OUString const& value)
     {
-        ::osl::ClearableMutexGuard guard(m_rMutex);
+        Reference< XMutationEvent > event;
+        {
+            std::scoped_lock guard(m_rMutex);
 
         OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
         xmlChar const *pName = reinterpret_cast<xmlChar const *>(o1.getStr());
@@ -626,14 +630,13 @@ namespace DOM
 
         // dispatch DOMAttrModified event
         Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
-        Reference< XMutationEvent > event(docevent->createEvent(
+        event = Reference< XMutationEvent >(docevent->createEvent(
             "DOMAttrModified"), UNO_QUERY);
         event->initMutationEvent("DOMAttrModified",
             true, false,
             getAttributeNode(name),
             oldValue, value, name, aChangeType);
-
-        guard.clear(); // release mutex before calling event handlers
+        }
         dispatchEvent(event);
         dispatchSubtreeModified();
     }
@@ -647,7 +650,9 @@ namespace DOM
     {
         if (namespaceURI.isEmpty()) throw RuntimeException();
 
-        ::osl::ClearableMutexGuard guard(m_rMutex);
+        Reference< XMutationEvent > event;
+        {
+            std::scoped_lock guard(m_rMutex);
 
         OString o1, o2, o3, o4, o5;
         xmlChar const *pPrefix = nullptr;
@@ -707,14 +712,13 @@ namespace DOM
         }
         // dispatch DOMAttrModified event
         Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
-        Reference< XMutationEvent > event(docevent->createEvent(
+        event = Reference< XMutationEvent >(docevent->createEvent(
             "DOMAttrModified"), UNO_QUERY);
         event->initMutationEvent(
             "DOMAttrModified", true, false,
             getAttributeNodeNS(namespaceURI, OUString(reinterpret_cast<char const *>(pLName), strlen(reinterpret_cast<char const *>(pLName)), RTL_TEXTENCODING_UTF8)),
             oldValue, value, qualifiedName, aChangeType);
-
-        guard.clear(); // release mutex before calling event handlers
+        }
         dispatchEvent(event);
         dispatchSubtreeModified();
     }
@@ -722,7 +726,7 @@ namespace DOM
     Reference< XNamedNodeMap > SAL_CALL
     CElement::getAttributes()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::scoped_lock g(m_rMutex);
 
         Reference< XNamedNodeMap > const xMap(
                 new CAttributesMap(this, m_rMutex));
@@ -736,7 +740,7 @@ namespace DOM
 
     OUString SAL_CALL CElement::getLocalName()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::scoped_lock g(m_rMutex);
 
         OUString aName;
         if (m_aNodePtr != nullptr)

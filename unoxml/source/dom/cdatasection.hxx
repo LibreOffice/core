@@ -35,7 +35,7 @@ namespace DOM
     {
         friend class CDocument;
 
-        CCDATASection(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+        CCDATASection(CDocument const& rDocument, std::mutex const& rMutex,
                 xmlNodePtr const pNode);
 
     public:

@@ -35,6 +35,7 @@
 #include <com/sun/star/xml/dom/events/XEventListener.hpp>
 
 #include <cppuhelper/implbase.hxx>
+#include <mutex>
 
 namespace DOM
 {
@@ -51,7 +52,7 @@ namespace DOM
         css::uno::Reference< css::xml::dom::events::XEventListener > m_xEventListener;
 
         ::rtl::Reference<CElement> const m_pElement;
-        ::osl::Mutex & m_rMutex;
+        std::mutex & m_rMutex;
         ::std::unique_ptr<xmlChar[]> const m_pName;
         ::std::unique_ptr<xmlChar[]> const m_pURI;
         bool m_bRebuild;
@@ -61,7 +62,7 @@ namespace DOM
 
     public:
         CElementListImpl(::rtl::Reference<CElement> pElement,
-                ::osl::Mutex & rMutex,
+                std::mutex & rMutex,
                 std::u16string_view rName, OUString const*const pURI);
 
         void registerListener(CElement & rElement);
@@ -89,7 +90,7 @@ namespace DOM
         rtl::Reference<CElementListImpl> m_xImpl;
     public:
         CElementList(::rtl::Reference<CElement> const& pElement,
-                ::osl::Mutex & rMutex,
+                std::mutex & rMutex,
                 std::u16string_view rName, OUString const*const pURI = nullptr);
 
         /**

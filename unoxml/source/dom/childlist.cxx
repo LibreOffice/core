@@ -31,7 +31,7 @@ using namespace css::xml::dom;
 namespace DOM
 {
     CChildList::CChildList(::rtl::Reference<CNode> pBase,
-                ::osl::Mutex & rMutex)
+                std::mutex & rMutex)
         : m_pNode(std::move(pBase))
         , m_rMutex(rMutex)
     {
@@ -42,7 +42,7 @@ namespace DOM
     */
     sal_Int32 SAL_CALL CChildList::getLength()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::scoped_lock g(m_rMutex);
 
         sal_Int32 length = 0;
         if (m_pNode != nullptr)
@@ -65,7 +65,7 @@ namespace DOM
     */
     Reference< XNode > SAL_CALL CChildList::item(sal_Int32 index)
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::scoped_lock g(m_rMutex);
 
         if (m_pNode != nullptr)
         {

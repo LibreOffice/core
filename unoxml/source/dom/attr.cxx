@@ -36,7 +36,7 @@ using namespace css::xml::dom::events;
 
 namespace DOM
 {
-    CAttr::CAttr(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+    CAttr::CAttr(CDocument const& rDocument, std::mutex const& rMutex,
             xmlAttrPtr const pAttr)
         : CAttr_Base(rDocument, rMutex,
                 NodeType_ATTRIBUTE_NODE, reinterpret_cast<xmlNodePtr>(pAttr))
@@ -100,7 +100,7 @@ namespace DOM
     */
     OUString SAL_CALL CAttr::getName()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::scoped_lock g(m_rMutex);
 
         if ((nullptr == m_aNodePtr) || (nullptr == m_aAttrPtr)) {
             return OUString();
@@ -116,7 +116,7 @@ namespace DOM
     */
     Reference< XElement > SAL_CALL CAttr::getOwnerElement()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::scoped_lock g(m_rMutex);
 
         if ((nullptr == m_aNodePtr) || (nullptr == m_aAttrPtr)) {
             return nullptr;
@@ -147,7 +147,7 @@ namespace DOM
     */
     OUString SAL_CALL CAttr::getValue()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::scoped_lock g(m_rMutex);
 
         if ((nullptr == m_aNodePtr) || (nullptr == m_aAttrPtr)) {
             return OUString();
@@ -164,45 +164,46 @@ namespace DOM
     */
     void SAL_CALL CAttr::setValue(const OUString& value)
     {
-        ::osl::ClearableMutexGuard guard(m_rMutex);
+        Reference< XMutationEvent > event;
+        {
+            std::scoped_lock guard(m_rMutex);
 
-        if ((nullptr == m_aNodePtr) || (nullptr == m_aAttrPtr)) {
-            return;
+            if ((nullptr == m_aNodePtr) || (nullptr == m_aAttrPtr)) {
+                return;
+            }
+
+            // remember old value (for mutation event)
+            OUString sOldValue = getValue();
+
+            OString o1 = OUStringToOString(value, RTL_TEXTENCODING_UTF8);
+            xmlChar const * pValue = reinterpret_cast<xmlChar const *>(o1.getStr());
+            // this does not work if the attribute was created anew
+            // xmlNodePtr pNode = m_aAttrPtr->parent;
+            // xmlSetProp(pNode, m_aAttrPtr->name, pValue);
+            std::shared_ptr<xmlChar const> const buffer(
+                    xmlEncodeEntitiesReentrant(m_aAttrPtr->doc, pValue), xmlFree);
+            xmlFreeNodeList(m_aAttrPtr->children);
+            m_aAttrPtr->children =
+                xmlStringGetNodeList(m_aAttrPtr->doc, buffer.get());
+            xmlNodePtr tmp = m_aAttrPtr->children;
+            while (tmp != nullptr) {
+                tmp->parent = m_aNodePtr;
+                tmp->doc = m_aAttrPtr->doc;
+                if (tmp->next == nullptr)
+                    m_aNodePtr->last = tmp;
+                tmp = tmp->next;
+            }
+
+            // dispatch DOM events to signal change in attribute value
+            // dispatch DomAttrModified + DOMSubtreeModified
+            OUString sEventName( "DOMAttrModified" );
+            Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
+            event = Reference< XMutationEvent >(docevent->createEvent(sEventName),UNO_QUERY);
+            event->initMutationEvent(
+                    sEventName, true, false,
+                    Reference<XNode>( static_cast<XAttr*>( this ) ),
+                    sOldValue, value, getName(), AttrChangeType_MODIFICATION );
         }
-
-        // remember old value (for mutation event)
-        OUString sOldValue = getValue();
-
-        OString o1 = OUStringToOString(value, RTL_TEXTENCODING_UTF8);
-        xmlChar const * pValue = reinterpret_cast<xmlChar const *>(o1.getStr());
-        // this does not work if the attribute was created anew
-        // xmlNodePtr pNode = m_aAttrPtr->parent;
-        // xmlSetProp(pNode, m_aAttrPtr->name, pValue);
-        std::shared_ptr<xmlChar const> const buffer(
-                xmlEncodeEntitiesReentrant(m_aAttrPtr->doc, pValue), xmlFree);
-        xmlFreeNodeList(m_aAttrPtr->children);
-        m_aAttrPtr->children =
-            xmlStringGetNodeList(m_aAttrPtr->doc, buffer.get());
-        xmlNodePtr tmp = m_aAttrPtr->children;
-        while (tmp != nullptr) {
-            tmp->parent = m_aNodePtr;
-            tmp->doc = m_aAttrPtr->doc;
-            if (tmp->next == nullptr)
-                m_aNodePtr->last = tmp;
-            tmp = tmp->next;
-        }
-
-        // dispatch DOM events to signal change in attribute value
-        // dispatch DomAttrModified + DOMSubtreeModified
-        OUString sEventName( "DOMAttrModified" );
-        Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
-        Reference< XMutationEvent > event(docevent->createEvent(sEventName),UNO_QUERY);
-        event->initMutationEvent(
-                sEventName, true, false,
-                Reference<XNode>( static_cast<XAttr*>( this ) ),
-                sOldValue, value, getName(), AttrChangeType_MODIFICATION );
-
-        guard.clear(); // release mutex before calling event handlers
 
         dispatchEvent(event);
         dispatchSubtreeModified();
@@ -210,7 +211,7 @@ namespace DOM
 
     void SAL_CALL CAttr::setPrefix(const OUString& prefix)
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::scoped_lock g(m_rMutex);
 
         if (!m_aNodePtr) { return; }
 
@@ -228,7 +229,7 @@ namespace DOM
 
     OUString SAL_CALL CAttr::getPrefix()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::scoped_lock g(m_rMutex);
 
         if (!m_aNodePtr) { return OUString(); }
 
@@ -247,7 +248,7 @@ namespace DOM
 
     OUString SAL_CALL CAttr::getNamespaceURI()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::scoped_lock g(m_rMutex);
 
         if (!m_aNodePtr) { return OUString(); }
 

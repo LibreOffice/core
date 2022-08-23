@@ -36,7 +36,7 @@ namespace DOM
         friend class CDocument;
 
         CDocumentFragment(
-                CDocument const& rDocument, ::osl::Mutex const& rMutex,
+                CDocument const& rDocument, std::mutex const& rMutex,
                 xmlNodePtr const pNode);
 
     public:

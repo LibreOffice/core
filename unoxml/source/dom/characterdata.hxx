@@ -41,7 +41,7 @@ namespace DOM
     {
 
     protected:
-        CCharacterData(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+        CCharacterData(CDocument const& rDocument, std::mutex const& rMutex,
                 css::xml::dom::NodeType const& reNodeType, xmlNodePtr const& rpNode);
 
         void dispatchEvent_Impl(

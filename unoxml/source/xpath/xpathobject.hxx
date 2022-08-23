@@ -44,13 +44,13 @@ namespace XPath
     {
     private:
         ::rtl::Reference< DOM::CDocument > const m_pDocument;
-        ::osl::Mutex & m_rMutex;
+        std::mutex & m_rMutex;
         std::shared_ptr<xmlXPathObject> const m_pXPathObj;
         css::xml::xpath::XPathObjectType const m_XPathObjectType;
 
     public:
         CXPathObject( ::rtl::Reference<DOM::CDocument> pDocument,
-            ::osl::Mutex & rMutex,
+            std::mutex & rMutex,
             std::shared_ptr<xmlXPathObject> const& pXPathObj);
 
     /**

@@ -43,6 +43,7 @@
 #include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
 
 #include <unordered_map>
+#include <mutex>
 
 namespace DOM
 {
@@ -104,10 +105,10 @@ namespace DOM
         xmlNodePtr m_aNodePtr;
 
         ::rtl::Reference< CDocument > const m_xDocument;
-        ::osl::Mutex & m_rMutex;
+        std::mutex& m_rMutex;
 
         // for initialization by classes derived through ImplInheritanceHelper
-        CNode(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+        CNode(CDocument const& rDocument, std::mutex const& rMUtex,
                 css::xml::dom::NodeType const& reNodeType, xmlNodePtr const& rpNode);
         void invalidate();
 

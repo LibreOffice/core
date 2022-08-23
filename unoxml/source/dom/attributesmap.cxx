@@ -33,7 +33,7 @@ using namespace css::xml::dom;
 namespace DOM
 {
     CAttributesMap::CAttributesMap(::rtl::Reference<CElement> pElement,
-                ::osl::Mutex & rMutex)
+                std::mutex & rMutex)
         : m_pElement(std::move(pElement))
         , m_rMutex(rMutex)
     {
@@ -44,7 +44,7 @@ namespace DOM
     */
     sal_Int32 SAL_CALL CAttributesMap::getLength()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::scoped_lock g(m_rMutex);
 
         sal_Int32 count = 0;
         xmlNodePtr pNode = m_pElement->GetNodePtr();
@@ -66,7 +66,7 @@ namespace DOM
     Reference< XNode > SAL_CALL
     CAttributesMap::getNamedItem(OUString const& name)
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::scoped_lock g(m_rMutex);
 
         Reference< XNode > aNode;
         xmlNodePtr pNode = m_pElement->GetNodePtr();
@@ -96,7 +96,7 @@ namespace DOM
     CAttributesMap::getNamedItemNS(
             OUString const& namespaceURI, OUString const& localName)
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::scoped_lock g(m_rMutex);
 
         Reference< XNode > aNode;
         xmlNodePtr pNode = m_pElement->GetNodePtr();
@@ -130,7 +130,7 @@ namespace DOM
     Reference< XNode > SAL_CALL
     CAttributesMap::item(sal_Int32 index)
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::scoped_lock g(m_rMutex);
 
         Reference< XNode > aNode;
         xmlNodePtr pNode = m_pElement->GetNodePtr();

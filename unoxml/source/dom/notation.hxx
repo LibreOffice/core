@@ -37,7 +37,7 @@ namespace DOM
     private:
         friend class CDocument;
 
-        CNotation(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+        CNotation(CDocument const& rDocument, std::mutex const& rMutex,
                 xmlNotationPtr const pNotation);
 
         /**
