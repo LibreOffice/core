@@ -226,11 +226,6 @@ private:
         return filename != std::string_view("fdo62336.docx");
     }
 
-    bool mustTestImportOf(const char* filename) const override
-    {
-        return filename != std::string_view("fdo62336.docx");
-    }
-
     virtual std::unique_ptr<Resetter> preTest(const char* filename) override
     {
         if (getTestName().indexOf("SkipImages") != -1)
@@ -364,10 +359,11 @@ DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testFdo81276, "fdo81276.html")
     CPPUNIT_ASSERT(abs(sal_Int32(500) - getProperty<sal_Int32>(xStyle, "BottomMargin")) < 10);
 }
 
-DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testFdo62336, "fdo62336.docx")
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testFdo62336)
 {
     // The problem was essentially a crash during table export as docx/rtf/html
-    // If either of no-calc-layout or no-test-import is enabled, the crash does not occur
+    // If calc-layout is enabled, the crash does not occur
+    loadAndReload("fdo62336.docx");
 }
 
 DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testFdo86857, "fdo86857.html")
