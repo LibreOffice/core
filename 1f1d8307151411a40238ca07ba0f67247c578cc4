@@ -33,6 +33,24 @@
       "message": "Might be nice to cleanup the sdi files also:\n\n- In swriter.sdi, the now unused BackColor parameter.\n- In _textsh.sdi, ExecMethod line.",
       "revId": "1f1d8307151411a40238ca07ba0f67247c578cc4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4eb4023f_ccb14143",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-08-23T23:16:21Z",
+      "side": 1,
+      "message": "OK - I think I did your suggestions. (This UI stuff is just black magic as far as I am concerned.)",
+      "parentUuid": "316d714b_6854bfa0",
+      "revId": "1f1d8307151411a40238ca07ba0f67247c578cc4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
