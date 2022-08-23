@@ -133,6 +133,9 @@ public:
     void                SetKerning( FontKerning nKerning );
     FontKerning         GetKerning() const;
     bool                IsKerning() const;
+    void                SetFixKerning(const short nSpacing);
+    short               GetFixKerning() const;
+    bool                IsFixKerning() const;
 
     void                SetOutline( bool bOutline );
     bool                IsOutline() const;
