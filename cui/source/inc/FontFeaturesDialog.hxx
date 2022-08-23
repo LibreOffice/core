@@ -22,7 +22,7 @@ struct FontFeatureItem
 {
     FontFeatureItem(weld::Widget* pParent)
         : m_aFeatureCode(0)
-        , m_nDefault(0)
+        , m_nDefault(-1)
         , m_xBuilder(Application::CreateBuilder(pParent, "cui/ui/fontfragment.ui"))
         , m_xContainer(m_xBuilder->weld_widget("fontentry"))
         , m_xText(m_xBuilder->weld_label("label"))
@@ -32,7 +32,7 @@ struct FontFeatureItem
     }
 
     sal_uInt32 m_aFeatureCode;
-    sal_uInt32 m_nDefault;
+    sal_Int32 m_nDefault;
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Widget> m_xContainer;
     std::unique_ptr<weld::Label> m_xText;

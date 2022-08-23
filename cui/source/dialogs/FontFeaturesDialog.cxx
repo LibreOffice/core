@@ -100,7 +100,7 @@ int FontFeaturesDialog::fillGrid(std::vector<vcl::font::Feature> const& rFontFea
 
         m_aFeatureItems.emplace_back(m_xContentGrid.get());
 
-        uint32_t nValue = 0;
+        int32_t nValue = 0;
         if (aExistingFeatures.find(nFontFeatureCode) != aExistingFeatures.end())
             nValue = aExistingFeatures.at(nFontFeatureCode);
         else
@@ -133,7 +133,10 @@ int FontFeaturesDialog::fillGrid(std::vector<vcl::font::Feature> const& rFontFea
         }
         else
         {
-            aCurrentItem.m_xCheck->set_active(nValue > 0);
+            if (nValue < 0)
+                aCurrentItem.m_xCheck->set_state(TRISTATE_INDET);
+            else
+                aCurrentItem.m_xCheck->set_state(nValue > 0 ? TRISTATE_TRUE : TRISTATE_FALSE);
             aCurrentItem.m_xCheck->set_label(aDefinition.getDescription());
             aCurrentItem.m_xCheck->connect_toggled(aCheckBoxToggleHandler);
             aCurrentItem.m_xCheck->show();
@@ -183,7 +186,7 @@ OUString FontFeaturesDialog::createFontNameWithFeatures()
     {
         if (rItem.m_xCheck->get_visible())
         {
-            if (sal_uInt32(rItem.m_xCheck->get_active()) != rItem.m_nDefault)
+            if (rItem.m_xCheck->get_state() != TRISTATE_INDET)
             {
                 if (!bFirst)
                     sNameSuffix.append(vcl::font::FeatureSeparator);
@@ -191,7 +194,7 @@ OUString FontFeaturesDialog::createFontNameWithFeatures()
                     bFirst = false;
 
                 sNameSuffix.append(vcl::font::featureCodeAsString(rItem.m_aFeatureCode));
-                if (!rItem.m_xCheck->get_active())
+                if (rItem.m_xCheck->get_state() == TRISTATE_FALSE)
                     sNameSuffix.append("=0");
             }
         }
