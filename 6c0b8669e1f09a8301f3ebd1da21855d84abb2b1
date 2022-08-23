@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "663518c6_9cbc9057",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1037,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-08-23T14:01:30Z",
+      "side": 0,
+      "message": "Do not remove that here, but instead uppercase the function name with either the English or the UI language\u0027s CharClass to insert its characters to maFormulaChar. Using the current locale\u0027s CharClass for function names would be wrong, as function names can be either of the UI locale or forced to English. This usually doesn\u0027t matter but for a few locales like for example tr-TR, where there\u0027s i \u003c-\u003e İ and ı \u003c-\u003e I.\n\nIf function names are English then use static ScCompiler::GetCharClassEnglish() else use static ScCompiler::GetCharClassLocalized(). This will depend on https://gerrit.libreoffice.org/c/core/+/138733 being merged that makes the latter public as well.\n\nWhether English function names are active can be queried with SC_MOD()-\u003eGetFormulaOptions().GetUseEnglishFuncName().",
+      "revId": "6c0b8669e1f09a8301f3ebd1da21855d84abb2b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

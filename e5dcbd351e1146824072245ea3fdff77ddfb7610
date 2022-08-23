@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46af5b80_55a242a6",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1065,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-08-23T14:01:30Z",
+      "side": 1,
+      "message": "Then here start iterating from miAutoPosFormula, after which were all user defined names inserted. Here ScGlobal::getCharClass() is actually the best bet we can have.",
+      "range": {
+        "startLine": 1065,
+        "startChar": 35,
+        "endLine": 1065,
+        "endChar": 40
+      },
+      "revId": "e5dcbd351e1146824072245ea3fdff77ddfb7610",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
