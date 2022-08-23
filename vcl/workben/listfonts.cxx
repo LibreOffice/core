@@ -397,13 +397,8 @@ int ListFonts::Main()
                     std::cout << "\t"
                               << (feature.m_eType == vcl::font::FeatureType::OpenType ? "OpenType"
                                                                                       : "Graphite")
-                              << " Feature:\n\t\tId = { feature code = "
-                              << vcl::font::featureCodeAsString(feature.m_aID.m_aFeatureCode)
-                              << ", script code = "
-                              << vcl::font::featureCodeAsString(feature.m_aID.m_aScriptCode)
-                              << ", language code = "
-                              << vcl::font::featureCodeAsString(feature.m_aID.m_aLanguageCode)
-                              << " }\n";
+                              << " Feature:\n\t\t"
+                              << vcl::font::featureCodeAsString(feature.m_nCode) << "\n";
 
                     std::cout << "\t\tDescription: " << feature.m_aDefinition.getDescription()
                               << "\n";

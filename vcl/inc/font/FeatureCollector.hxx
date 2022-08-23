@@ -34,10 +34,6 @@ public:
     }
 
 private:
-    void collectForLanguage(hb_tag_t aTableTag, sal_uInt32 nScript, hb_tag_t aScriptTag,
-                            sal_uInt32 nLanguage, hb_tag_t aLanguageTag);
-
-    void collectForScript(hb_tag_t aTableTag, sal_uInt32 nScript, hb_tag_t aScriptTag);
     void collectForTable(hb_tag_t aTableTag);
     bool collectGraphite();
 
