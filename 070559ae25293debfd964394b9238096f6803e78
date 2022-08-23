@@ -16,6 +16,24 @@
       "message": "The changes look reasonable, but I can\u0027t be sure the interaction of \"pending invalidations\" with other changes will give the correct result. I\u0027d expect all invalidations to be immediate and synchronous. This delayed invalidation logic makes things async, which is very hard to understand and debug.\n\nI assume we have tests that reproduces this scenario we are fixing. If not, we really need to add one. Breaking communication assumptions is very easy and once broken, it\u0027s very hard to find out.",
       "revId": "070559ae25293debfd964394b9238096f6803e78",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d89ca729_f1a4964b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-08-23T09:51:57Z",
+      "side": 1,
+      "message": "Rebased.\n\n\u003e The changes look reasonable, but I can\u0027t be sure the interaction of \"pending invalidations\" with other changes will give the correct result. I\u0027d expect all invalidations to be immediate and synchronous. This delayed invalidation logic makes things async, which is very hard to understand and debug.\n\nThis patch does not really change anything about whether it\u0027s sync or async. Invalidations have been async for years, possibly from the start. Given the amount of invalidations core generates, it\u0027s a question if they even could be sync.\n\n\u003e I assume we have tests that reproduces this scenario we are fixing. If not, we really need to add one. Breaking communication assumptions is very easy and once broken, it\u0027s very hard to find out.\n\nWriting tests for such complicated setups is rather hard, but I can try.",
+      "parentUuid": "46688351_0db6737a",
+      "revId": "070559ae25293debfd964394b9238096f6803e78",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
