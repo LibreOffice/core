@@ -1453,7 +1453,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         sw::mark::IFieldmark* pFieldBM = GetShell().getIDocumentMarkAccess()->getFieldmarkFor(aPos);
         if ( !pFieldBM )
         {
-            --aPos.nContent;
+            aPos.AdjustContent(-1);
             pFieldBM = GetShell().getIDocumentMarkAccess()->getFieldmarkFor(aPos);
         }
 
@@ -2198,7 +2198,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 sw::mark::IFieldmark* pFieldBM = GetShell().getIDocumentMarkAccess()->getFieldmarkFor(aPos);
                 if ( !pFieldBM && aPos.GetContentIndex() > 0)
                 {
-                    --aPos.nContent;
+                    aPos.AdjustContent(-1);
                     pFieldBM = GetShell().getIDocumentMarkAccess()->getFieldmarkFor(aPos);
                 }
                 if ( pFieldBM && (pFieldBM->GetFieldname() == ODF_FORMDROPDOWN || pFieldBM->GetFieldname() == ODF_FORMDATE) )

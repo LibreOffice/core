@@ -186,10 +186,11 @@ void SwView::ExecLingu(SfxRequest &rReq)
                                 // check for unexpected error case
                                 OSL_ENSURE(pTextNode && pTextNode->GetText().getLength() >= nPointIndex,
                                     "text missing: corrupted node?" );
-                                if (!pTextNode || pTextNode->GetText().getLength() < nPointIndex)
-                                    nPointIndex = 0;
                                 // restore cursor to its original position
-                                m_pWrtShell->GetCursor()->GetPoint()->nContent.Assign( pTextNode, nPointIndex );
+                                if (!pTextNode || pTextNode->GetText().getLength() < nPointIndex)
+                                    m_pWrtShell->GetCursor()->GetPoint()->Assign( aPointNodeIndex );
+                                else
+                                    m_pWrtShell->GetCursor()->GetPoint()->Assign( *pTextNode, nPointIndex );
                             }
 
                             // enable all, restore view and cursor position
@@ -511,8 +512,8 @@ void SwView::InsertThesaurusSynonym( const OUString &rSynonmText, const OUString
 
         // adjust existing selection
         SwPaM *pCursor = m_pWrtShell->GetCursor();
-        pCursor->GetPoint()->nContent -= nRight;
-        pCursor->GetMark()->nContent += nLeft;
+        pCursor->GetPoint()->AdjustContent(-nRight);
+        pCursor->GetMark()->AdjustContent(nLeft);
     }
 
     m_pWrtShell->Insert( rSynonmText );
