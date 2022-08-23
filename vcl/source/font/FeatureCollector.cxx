@@ -69,9 +69,7 @@ bool FeatureCollector::collectGraphite()
                 aParameters.clear();
             }
 
-            m_rFontFeatures.emplace_back(
-                FeatureID{ nFeatureCode, HB_OT_TAG_DEFAULT_SCRIPT, HB_OT_TAG_DEFAULT_LANGUAGE },
-                vcl::font::FeatureType::Graphite);
+            m_rFontFeatures.emplace_back(nFeatureCode, vcl::font::FeatureType::Graphite);
             vcl::font::Feature& rFeature = m_rFontFeatures.back();
             rFeature.m_aDefinition
                 = vcl::font::FeatureDefinition(nFeatureCode, sLabel, eFeatureParameterType,
@@ -82,15 +80,13 @@ bool FeatureCollector::collectGraphite()
     return true;
 }
 
-void FeatureCollector::collectForLanguage(hb_tag_t aTableTag, sal_uInt32 nScript,
-                                          hb_tag_t aScriptTag, sal_uInt32 nLanguage,
-                                          hb_tag_t aLanguageTag)
+void FeatureCollector::collectForTable(hb_tag_t aTableTag)
 {
-    unsigned int nFeatureCount = hb_ot_layout_language_get_feature_tags(
-        m_pHbFace, aTableTag, nScript, nLanguage, 0, nullptr, nullptr);
+    unsigned int nFeatureCount
+        = hb_ot_layout_table_get_feature_tags(m_pHbFace, aTableTag, 0, nullptr, nullptr);
     std::vector<hb_tag_t> aFeatureTags(nFeatureCount);
-    hb_ot_layout_language_get_feature_tags(m_pHbFace, aTableTag, nScript, nLanguage, 0,
-                                           &nFeatureCount, aFeatureTags.data());
+    hb_ot_layout_table_get_feature_tags(m_pHbFace, aTableTag, 0, &nFeatureCount,
+                                        aFeatureTags.data());
     aFeatureTags.resize(nFeatureCount);
 
     for (hb_tag_t aFeatureTag : aFeatureTags)
@@ -100,41 +96,12 @@ void FeatureCollector::collectForLanguage(hb_tag_t aTableTag, sal_uInt32 nScript
 
         m_rFontFeatures.emplace_back();
         vcl::font::Feature& rFeature = m_rFontFeatures.back();
-        rFeature.m_aID = { aFeatureTag, aScriptTag, aLanguageTag };
+        rFeature.m_nCode = aFeatureTag;
 
         FeatureDefinition aDefinition = OpenTypeFeatureDefinitionList().getDefinition(aFeatureTag);
         if (aDefinition)
-        {
             rFeature.m_aDefinition = aDefinition;
-        }
     }
-}
-
-void FeatureCollector::collectForScript(hb_tag_t aTableTag, sal_uInt32 nScript, hb_tag_t aScriptTag)
-{
-    collectForLanguage(aTableTag, nScript, aScriptTag, HB_OT_LAYOUT_DEFAULT_LANGUAGE_INDEX,
-                       HB_OT_TAG_DEFAULT_LANGUAGE);
-
-    unsigned int nLanguageCount
-        = hb_ot_layout_script_get_language_tags(m_pHbFace, aTableTag, nScript, 0, nullptr, nullptr);
-    std::vector<hb_tag_t> aLanguageTags(nLanguageCount);
-    hb_ot_layout_script_get_language_tags(m_pHbFace, aTableTag, nScript, 0, &nLanguageCount,
-                                          aLanguageTags.data());
-    aLanguageTags.resize(nLanguageCount);
-    for (sal_uInt32 nLanguage = 0; nLanguage < sal_uInt32(nLanguageCount); ++nLanguage)
-        collectForLanguage(aTableTag, nScript, aScriptTag, nLanguage, aLanguageTags[nLanguage]);
-}
-
-void FeatureCollector::collectForTable(hb_tag_t aTableTag)
-{
-    unsigned int nScriptCount
-        = hb_ot_layout_table_get_script_tags(m_pHbFace, aTableTag, 0, nullptr, nullptr);
-    std::vector<hb_tag_t> aScriptTags(nScriptCount);
-    hb_ot_layout_table_get_script_tags(m_pHbFace, aTableTag, 0, &nScriptCount, aScriptTags.data());
-    aScriptTags.resize(nScriptCount);
-
-    for (sal_uInt32 nScript = 0; nScript < sal_uInt32(nScriptCount); ++nScript)
-        collectForScript(aTableTag, nScript, aScriptTags[nScript]);
 }
 
 bool FeatureCollector::collect()

@@ -85,19 +85,12 @@ public:
     operator bool() const;
 };
 
-struct VCL_DLLPUBLIC FeatureID
-{
-    uint32_t m_aFeatureCode;
-    uint32_t m_aScriptCode;
-    uint32_t m_aLanguageCode;
-};
-
 struct Feature
 {
     Feature();
-    Feature(FeatureID const& rID, FeatureType eType);
+    Feature(uint32_t const nCode, FeatureType eType);
 
-    FeatureID m_aID;
+    uint32_t m_nCode;
     FeatureType m_eType;
     FeatureDefinition m_aDefinition;
 };
