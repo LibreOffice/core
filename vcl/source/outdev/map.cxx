@@ -270,12 +270,12 @@ static tools::Long ImplLogicToPixel(tools::Long n, tools::Long nDPI, tools::Long
     return n;
 }
 
-static double ImplLogicToPixel(double n, tools::Long nDPI, tools::Long nMapNum,
+static double ImplLogicToSubPixel(tools::Long n, tools::Long nDPI, tools::Long nMapNum,
                                          tools::Long nMapDenom)
 {
     assert(nDPI > 0);
     assert(nMapDenom != 0);
-    return n * nMapNum * nDPI / nMapDenom;
+    return static_cast<double>(n) * nMapNum * nDPI / nMapDenom;
 }
 
 static tools::Long ImplPixelToLogic(tools::Long n, tools::Long nDPI, tools::Long nMapNum,
@@ -1871,41 +1871,41 @@ DeviceCoordinate OutputDevice::LogicWidthToDeviceCoordinate( tools::Long nWidth 
         return static_cast<DeviceCoordinate>(nWidth);
 
 #if VCL_FLOAT_DEVICE_PIXEL
-    return ImplLogicToPixel(static_cast<double>(nWidth), mnDPIX, maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX);
+    return ImplLogicToSubPixel(nWidth, mnDPIX, maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX);
 #else
     return ImplLogicToPixel(nWidth, mnDPIX, maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX);
 #endif
 }
 
-double OutputDevice::ImplLogicWidthToDeviceFontWidth(tools::Long nWidth) const
+double OutputDevice::ImplLogicWidthToDeviceSubPixel(tools::Long nWidth) const
 {
     if (!mbMap)
         return nWidth;
 
-    return ImplLogicToPixel(static_cast<double>(nWidth), mnDPIX,
-                            maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX);
+    return ImplLogicToSubPixel(nWidth, mnDPIX,
+                               maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX);
 }
 
-double OutputDevice::ImplLogicHeightToDeviceFontHeight(tools::Long nHeight) const
+double OutputDevice::ImplLogicHeightToDeviceSubPixel(tools::Long nHeight) const
 {
     if (!mbMap)
         return nHeight;
 
-    return ImplLogicToPixel(static_cast<double>(nHeight), mnDPIY,
-                            maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY);
+    return ImplLogicToSubPixel(nHeight, mnDPIY,
+                               maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY);
 }
 
-DevicePoint OutputDevice::ImplLogicToDeviceFontCoordinate(const Point& rPoint) const
+DevicePoint OutputDevice::ImplLogicToDeviceSubPixel(const Point& rPoint) const
 {
     if (!mbMap)
         return DevicePoint(rPoint.X() + mnOutOffX, rPoint.Y() + mnOutOffY);
 
-    return DevicePoint(ImplLogicToPixel(static_cast<double>(rPoint.X() + maMapRes.mnMapOfsX), mnDPIX,
-                                        maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX)
-                                        + mnOutOffX + mnOutOffOrigX,
-                       ImplLogicToPixel(static_cast<double>(rPoint.Y() + maMapRes.mnMapOfsY), mnDPIY,
-                                        maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY)
-                                        + mnOutOffY + mnOutOffOrigY);
+    return DevicePoint(ImplLogicToSubPixel(rPoint.X() + maMapRes.mnMapOfsX, mnDPIX,
+                                           maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX)
+                                           + mnOutOffX + mnOutOffOrigX,
+                       ImplLogicToSubPixel(rPoint.Y() + maMapRes.mnMapOfsY, mnDPIY,
+                                           maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY)
+                                           + mnOutOffY + mnOutOffOrigY);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1391,7 +1391,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
                 // without rounding, keeping accuracy for lower levels
                 bTextRenderModeForResolutionIndependentLayout = true;
                 for (int i = 0; i < nLen; ++i)
-                    xNaturalDXPixelArray[i] = ImplLogicWidthToDeviceFontWidth(pDXArray[i]);
+                    xNaturalDXPixelArray[i] = ImplLogicWidthToDeviceSubPixel(pDXArray[i]);
 
             }
             else
@@ -1444,7 +1444,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
     pSalLayout->AdjustLayout( aLayoutArgs );
 
     if (bTextRenderModeForResolutionIndependentLayout)
-        pSalLayout->DrawBase() = ImplLogicToDeviceFontCoordinate(rLogicalPos);
+        pSalLayout->DrawBase() = ImplLogicToDeviceSubPixel(rLogicalPos);
     else
     {
         Point aDevicePos = ImplLogicToDevicePixel(rLogicalPos);
