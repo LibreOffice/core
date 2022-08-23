@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b29ea0ce_c72e9109",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-08-23T17:42:17Z",
+      "side": 1,
+      "message": "A google search for CharBackgroundExt didn\u0027t turn up much - just one blog post about using it in a macro, and the automatic documentation that dumps every UNO command. So that sounds re-assuring that this can just be dropped.\n\nRelated to tdf#134432.",
+      "revId": "1f1d8307151411a40238ca07ba0f67247c578cc4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
