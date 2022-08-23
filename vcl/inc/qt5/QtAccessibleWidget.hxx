@@ -36,8 +36,7 @@ class XAccessibleTable;
 class QtFrame;
 class QtWidget;
 
-class QtAccessibleWidget final : public QObject,
-                                 public QAccessibleInterface,
+class QtAccessibleWidget final : public QAccessibleInterface,
                                  public QAccessibleActionInterface,
                                  public QAccessibleTextInterface,
                                  public QAccessibleEditableTextInterface,
@@ -45,8 +44,6 @@ class QtAccessibleWidget final : public QObject,
                                  public QAccessibleTableInterface,
                                  public QAccessibleValueInterface
 {
-    Q_OBJECT
-
 public:
     QtAccessibleWidget(const css::uno::Reference<css::accessibility::XAccessible> xAccessible,
                        QObject* pObject);
