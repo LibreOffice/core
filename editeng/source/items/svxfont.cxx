@@ -42,7 +42,7 @@ static tools::Long GetTextArray( const OutputDevice* pOut, const OUString& rStr,
 
 SvxFont::SvxFont()
 {
-    nKern = nEsc = 0;
+    nEsc = 0;
     nPropr = 100;
     eCaseMap = SvxCaseMap::NotMapped;
     SetLanguage(LANGUAGE_SYSTEM);
@@ -51,7 +51,7 @@ SvxFont::SvxFont()
 SvxFont::SvxFont( const vcl::Font &rFont )
     : Font( rFont )
 {
-    nKern = nEsc = 0;
+    nEsc = 0;
     nPropr = 100;
     eCaseMap = SvxCaseMap::NotMapped;
     SetLanguage(LANGUAGE_SYSTEM);
@@ -60,7 +60,6 @@ SvxFont::SvxFont( const vcl::Font &rFont )
 SvxFont::SvxFont( const SvxFont &rFont )
     : Font( rFont )
 {
-    nKern = rFont.GetFixKerning();
     nEsc  = rFont.GetEscapement();
     nPropr = rFont.GetPropr();
     eCaseMap = rFont.GetCaseMap();
@@ -409,7 +408,7 @@ vcl::Font SvxFont::ChgPhysFont(OutputDevice& rOut) const
 Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut, const OUString &rTxt,
                          const sal_Int32 nIdx, const sal_Int32 nLen ) const
 {
-    if ( !IsCaseMap() && !IsKern() )
+    if ( !IsCaseMap() && !IsFixKerning() )
         return Size( pOut->GetTextWidth( rTxt, nIdx, nLen ),
                      pOut->GetTextHeight() );
 
@@ -439,8 +438,9 @@ Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut, const OUString &rTxt,
         aTxtSize.setWidth(nWidth);
     }
 
-    if( IsKern() && ( nLen > 1 ) )
+    if( IsFixKerning() && ( nLen > 1 ) )
     {
+        auto nKern = GetFixKerning();
         std::vector<sal_Int32> aDXArray(nLen);
         GetTextArray(pOut, rTxt, &aDXArray, nIdx, nLen);
         tools::Long nOldValue = aDXArray[0];
@@ -461,7 +461,7 @@ Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut, const OUString &rTxt,
 
 Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut )
 {
-    if ( !IsCaseMap() && !IsKern() )
+    if ( !IsCaseMap() && !IsFixKerning() )
         return Size( pOut->GetTextWidth( "" ), pOut->GetTextHeight() );
 
     Size aTxtSize;
@@ -477,14 +477,14 @@ Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut )
 Size SvxFont::QuickGetTextSize( const OutputDevice *pOut, const OUString &rTxt,
                          const sal_Int32 nIdx, const sal_Int32 nLen, std::vector<sal_Int32>* pDXArray ) const
 {
-    if ( !IsCaseMap() && !IsKern() )
+    if ( !IsCaseMap() && !IsFixKerning() )
         return Size( GetTextArray( pOut, rTxt, pDXArray, nIdx, nLen ),
                      pOut->GetTextHeight() );
 
     std::vector<sal_Int32>  aDXArray;
 
     // We always need pDXArray to count the number of kern spaces
-    if (!pDXArray && IsKern() && nLen > 1)
+    if (!pDXArray && IsFixKerning() && nLen > 1)
     {
         pDXArray = &aDXArray;
         aDXArray.reserve(nLen);
@@ -498,8 +498,9 @@ Size SvxFont::QuickGetTextSize( const OutputDevice *pOut, const OUString &rTxt,
         aTxtSize.setWidth( GetTextArray( pOut, CalcCaseMap( rTxt ),
                            pDXArray, nIdx, nLen ) );
 
-    if( IsKern() && ( nLen > 1 ) )
+    if( IsFixKerning() && ( nLen > 1 ) )
     {
+        auto nKern = GetFixKerning();
         tools::Long nOldValue = (*pDXArray)[0];
         tools::Long nSpaceSum = nKern;
         (*pDXArray)[0] += nSpaceSum;
@@ -560,7 +561,7 @@ void SvxFont::QuickDrawText( OutputDevice *pOut,
 {
 
     // Font has to be selected in OutputDevice...
-    if ( !IsCaseMap() && !IsCapital() && !IsKern() && !IsEsc() )
+    if ( !IsCaseMap() && !IsCapital() && !IsFixKerning() && !IsEsc() )
     {
         DrawTextArray( pOut, rPos, rTxt, pDXArray, pKashidaArray, nIdx, nLen );
         return;
@@ -587,7 +588,7 @@ void SvxFont::QuickDrawText( OutputDevice *pOut,
     }
     else
     {
-        if ( IsKern() && pDXArray.empty() )
+        if ( IsFixKerning() && pDXArray.empty() )
         {
             Size aSize = GetPhysTxtSize( pOut, rTxt, nIdx, nLen );
 
@@ -687,7 +688,6 @@ SvxFont& SvxFont::operator=( const SvxFont& rFont )
     eCaseMap = rFont.eCaseMap;
     nEsc = rFont.nEsc;
     nPropr = rFont.nPropr;
-    nKern = rFont.nKern;
     return *this;
 }
 
@@ -744,7 +744,7 @@ Size SvxFont::GetCapitalSize( const OutputDevice *pOut, const OUString &rTxt,
                              const sal_Int32 nIdx, const sal_Int32 nLen) const
 {
     // Start:
-    SvxDoGetCapitalSize aDo( const_cast<SvxFont *>(this), pOut, rTxt, nIdx, nLen, nKern );
+    SvxDoGetCapitalSize aDo( const_cast<SvxFont *>(this), pOut, rTxt, nIdx, nLen, GetFixKerning() );
     DoOnCapitals( aDo );
     Size aTxtSize( aDo.GetSize() );
 
@@ -856,7 +856,7 @@ void SvxFont::DrawCapital( OutputDevice *pOut,
                const Point &rPos, const OUString &rTxt,
                const sal_Int32 nIdx, const sal_Int32 nLen ) const
 {
-    SvxDoDrawCapital aDo( const_cast<SvxFont *>(this),pOut,rTxt,nIdx,nLen,rPos,nKern );
+    SvxDoDrawCapital aDo( const_cast<SvxFont *>(this),pOut,rTxt,nIdx,nLen,rPos,GetFixKerning() );
     DoOnCapitals( aDo );
 }
 

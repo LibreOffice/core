@@ -30,12 +30,13 @@ enum class SalLayoutFlags
     DisableKerning = 0x0010,
     KerningAsian = 0x0020,
     Vertical = 0x0040,
+    DisableLigatures = 0x0200,
     ForFallback = 0x2000,
     GlyphItemsOnly = 0x4000,
 };
 namespace o3tl
 {
-template <> struct typed_flags<SalLayoutFlags> : is_typed_flags<SalLayoutFlags, 0x6077>
+template <> struct typed_flags<SalLayoutFlags> : is_typed_flags<SalLayoutFlags, 0x6277>
 {
 };
 }
