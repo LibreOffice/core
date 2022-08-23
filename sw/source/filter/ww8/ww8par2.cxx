@@ -592,6 +592,8 @@ static void SetBaseAnlv(SwNumFormat &rNum, WW8_ANLV const &rAV, sal_uInt8 nSwLev
         OUString sP = "." + rNum.GetSuffix();
         rNum.SetListFormat("", sP, nSwLevel); // ordinal number
     }
+    else
+        rNum.SetListFormat("", "", nSwLevel);
 }
 
 void SwWW8ImplReader::SetAnlvStrings(SwNumFormat &rNum, int nLevel, WW8_ANLV const &rAV,
