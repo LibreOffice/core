@@ -89,6 +89,7 @@
 #include <datamapper.hxx>
 #include <drwlayer.hxx>
 #include <sharedstringpoolpurge.hxx>
+#include <dociter.hxx>
 #include <config_features.h>
 
 using namespace com::sun::star;
@@ -1213,14 +1214,18 @@ ScSortedRangeCache& ScDocument::GetSortedRangeCache( const ScRange & rRange, con
     }
     // Avoid recursive calls because of some cells in the range being dirty and triggering
     // interpreting, which may call into this again. Threaded calculation makes sure
-    // no cells are dirty.
+    // no cells are dirty. If some cells in the range cannot be interpreted and remain
+    // dirty e.g. because of circular dependencies, create only an invalid empty cache to prevent
+    // a possible recursive deadlock.
+    bool invalid = false;
     if(!IsThreadedGroupCalcInProgress())
-        InterpretCellsIfNeeded(rRange);
+        if(!InterpretCellsIfNeeded(rRange))
+            invalid = true;
     std::unique_lock guard(mScLookupMutex);
     auto [findIt, bInserted] = mxScSortedRangeCache->aCacheMap.emplace(key, nullptr);
     if (bInserted)
     {
-        findIt->second = std::make_unique<ScSortedRangeCache>(this, rRange, param, pContext);
+        findIt->second = std::make_unique<ScSortedRangeCache>(this, rRange, param, pContext, invalid);
         StartListeningArea(rRange, false, findIt->second.get());
     }
     return *findIt->second;
