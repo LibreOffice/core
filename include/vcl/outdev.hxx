@@ -1718,6 +1718,7 @@ public:
      @returns Height in units of device pixels.
      */
     SAL_DLLPRIVATE tools::Long         ImplLogicHeightToDevicePixel( tools::Long nHeight ) const;
+    SAL_DLLPRIVATE double              ImplLogicHeightToDeviceFontHeight(tools::Long nHeight) const;
 
     /** Convert device pixels to a width in logical units.
 
@@ -1837,19 +1838,6 @@ private:
      @returns Device's Y pixel coordinate
      */
     SAL_DLLPRIVATE tools::Long         ImplLogicYToDevicePixel( tools::Long nY ) const;
-
-    /** Convert logical height to device pixels, with exact sub-pixel value.
-
-     To get the \em exact pixel height, it must calculate the Y-DPI of the device and the
-     map scaling factor.
-
-     @param         fLogicHeight     Exact height in logical units.
-
-     @returns Exact height in pixels - returns as a float to provide for subpixel value.
-     */
-    SAL_DLLPRIVATE float        ImplFloatLogicHeightToDevicePixel( float fLogicHeight ) const;
-    ///@}
-
 
     /** @name Native Widget Rendering functions
 
