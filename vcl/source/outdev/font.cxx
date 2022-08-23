@@ -170,9 +170,9 @@ bool OutputDevice::GetFontFeatures(std::vector<vcl::font::Feature>& rFontFeature
     if (!pHbFace)
         return false;
 
-    const LanguageType eOfficeLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
+    const LanguageTag& rOfficeLanguage = Application::GetSettings().GetUILanguageTag();
 
-    vcl::font::FeatureCollector aFeatureCollector(pHbFace, rFontFeatures, eOfficeLanguage);
+    vcl::font::FeatureCollector aFeatureCollector(pHbFace, rFontFeatures, rOfficeLanguage);
     aFeatureCollector.collect();
 
     return true;
