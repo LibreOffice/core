@@ -33,6 +33,64 @@
       "message": "Hi Tomaz, do you know who else might be able to review this patch?",
       "revId": "6b9a5f1ace3319f75b8ee7b5a419232b30e4560a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1676f50_fed51c19",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-08-23T06:29:13Z",
+      "side": 1,
+      "message": "No.. you can ask if someone is willing on IRC",
+      "parentUuid": "f68386d0_8b03591c",
+      "revId": "6b9a5f1ace3319f75b8ee7b5a419232b30e4560a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17083358_54979ba3",
+        "filename": "include/vcl/outdev.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-08-23T06:29:13Z",
+      "side": 1,
+      "message": "it\u0027s more standard to write \"VCL_DLLPUBLIC OUString\"",
+      "range": {
+        "startLine": 154,
+        "startChar": 0,
+        "endLine": 154,
+        "endChar": 22
+      },
+      "revId": "6b9a5f1ace3319f75b8ee7b5a419232b30e4560a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc370675_de678450",
+        "filename": "solenv/clang-format/excludelist",
+        "patchSetId": 1
+      },
+      "lineNbr": 14908,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-08-23T06:29:13Z",
+      "side": 1,
+      "message": "hm..? this file isn\u0027t even touched in this patch",
+      "revId": "6b9a5f1ace3319f75b8ee7b5a419232b30e4560a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
