@@ -18,9 +18,23 @@ class Test : public CppUnit::TestFixture
 {
 public:
     void test_rectangle();
+    void test_rectnormalize_alreadynormal();
+    void test_rectnormalize_zerorect();
+    void test_rectnormalize_reverse_topleft_bottomright();
+    void test_rectnormalize_topright_bottomleft();
+    void test_rectnormalize_bottomleft_topright();
+    void test_rectnormalize_zerowidth_top_bottom_reversed();
+    void test_rectnormalize_zeroheight_left_right_reversed();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(test_rectangle);
+    CPPUNIT_TEST(test_rectnormalize_zerorect);
+    CPPUNIT_TEST(test_rectnormalize_alreadynormal);
+    CPPUNIT_TEST(test_rectnormalize_reverse_topleft_bottomright);
+    CPPUNIT_TEST(test_rectnormalize_topright_bottomleft);
+    CPPUNIT_TEST(test_rectnormalize_bottomleft_topright);
+    CPPUNIT_TEST(test_rectnormalize_zerowidth_top_bottom_reversed);
+    CPPUNIT_TEST(test_rectnormalize_zeroheight_left_right_reversed);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -107,6 +121,90 @@ void Test::test_rectangle()
         CPPUNIT_ASSERT(rect.Overlaps(overlap));
         CPPUNIT_ASSERT(!rect.Overlaps(outside));
     }
+}
+
+void Test::test_rectnormalize_alreadynormal()
+{
+    Point aTopLeft(0, 0);
+    Point aBottomRight(1, 1);
+
+    tools::Rectangle aRect(aTopLeft, aBottomRight);
+    aRect.Normalize();
+
+    CPPUNIT_ASSERT_EQUAL(aRect.TopLeft(), aTopLeft);
+    CPPUNIT_ASSERT_EQUAL(aRect.BottomRight(), aBottomRight);
+}
+
+void Test::test_rectnormalize_zerorect()
+{
+    Point aTopLeft(53, 53);
+    Point aBottomRight(53, 53);
+
+    tools::Rectangle aRect(aTopLeft, aBottomRight);
+    aRect.Normalize();
+
+    CPPUNIT_ASSERT_EQUAL(aRect.TopLeft(), aTopLeft);
+    CPPUNIT_ASSERT_EQUAL(aRect.BottomRight(), aBottomRight);
+}
+
+void Test::test_rectnormalize_reverse_topleft_bottomright()
+{
+    Point aPoint1(1, 1);
+    Point aPoint2(0, 0);
+
+    tools::Rectangle aRect(aPoint1, aPoint2);
+    aRect.Normalize();
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("TopLeft() is wrong", Point(0, 0), aRect.TopLeft());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("BottomRight() is wrong", Point(1, 1), aRect.BottomRight());
+}
+
+void Test::test_rectnormalize_topright_bottomleft()
+{
+    Point aPoint1(1, 0);
+    Point aPoint2(0, 1);
+
+    tools::Rectangle aRect(aPoint1, aPoint2);
+    aRect.Normalize();
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("TopLeft() is wrong", Point(0, 0), aRect.TopLeft());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("BottomRight() is wrong", Point(1, 1), aRect.BottomRight());
+}
+
+void Test::test_rectnormalize_bottomleft_topright()
+{
+    Point aPoint1(0, 1);
+    Point aPoint2(1, 0);
+
+    tools::Rectangle aRect(aPoint1, aPoint2);
+    aRect.Normalize();
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("TopLeft() is wrong", Point(0, 0), aRect.TopLeft());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("BottomRight() is wrong", Point(1, 1), aRect.BottomRight());
+}
+
+void Test::test_rectnormalize_zerowidth_top_bottom_reversed()
+{
+    Point aPoint1(0, 1);
+    Point aPoint2(0, 0);
+
+    tools::Rectangle aRect(aPoint1, aPoint2);
+    aRect.Normalize();
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("TopLeft() is wrong", Point(0, 0), aRect.TopLeft());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("BottomRight() is wrong", Point(0, 1), aRect.BottomRight());
+}
+
+void Test::test_rectnormalize_zeroheight_left_right_reversed()
+{
+    Point aPoint1(1, 0);
+    Point aPoint2(0, 0);
+
+    tools::Rectangle aRect(aPoint1, aPoint2);
+    aRect.Normalize();
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("TopLeft() is wrong", Point(0, 0), aRect.TopLeft());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("BottomRight() is wrong", Point(1, 0), aRect.BottomRight());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
