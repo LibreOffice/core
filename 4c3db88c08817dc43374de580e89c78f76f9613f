@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "93a7ffef_8c5bd841",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-23T05:20:20Z",
+      "side": 1,
+      "message": "Note that this function is called \"AutoInput\" (see Tools-\u003eAutoInput)",
+      "range": {
+        "startLine": 7,
+        "startChar": 67,
+        "endLine": 7,
+        "endChar": 74
+      },
+      "revId": "4c3db88c08817dc43374de580e89c78f76f9613f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "7f65ffe1_46d58744",
@@ -14,6 +37,47 @@
       "writtenOn": "2022-08-22T17:07:14Z",
       "side": 1,
       "message": "Hi Mike! Is there some faster way to insert alle the possible characters of the formulas? Thank you in advance!",
+      "revId": "4c3db88c08817dc43374de580e89c78f76f9613f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c859d576_4bb7ace6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-23T05:20:20Z",
+      "side": 1,
+      "message": "I didn\u0027t check myself, but in this case, I would expect that performance should not matter much: this is a UI feature, and executes for a single (active) cell during the input, so even if it takes tens of milliseconds, it would be tolerable.\n\nDid you see a real performance issue?",
+      "parentUuid": "7f65ffe1_46d58744",
+      "revId": "4c3db88c08817dc43374de580e89c78f76f9613f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23ec4653_35fb879f",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1064,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-23T05:20:20Z",
+      "side": 1,
+      "message": "Same as above: that this function is called \"AutoInput\"",
+      "range": {
+        "startLine": 1064,
+        "startChar": 74,
+        "endLine": 1064,
+        "endChar": 81
+      },
       "revId": "4c3db88c08817dc43374de580e89c78f76f9613f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
