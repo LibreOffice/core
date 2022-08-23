@@ -50,12 +50,15 @@ static ScSortedRangeCache::ValueType toValueType(const ScQueryParam& param)
 }
 
 ScSortedRangeCache::ScSortedRangeCache(ScDocument* pDoc, const ScRange& rRange,
-                                       const ScQueryParam& param, ScInterpreterContext* context)
+                                       const ScQueryParam& param, ScInterpreterContext* context,
+                                       bool invalid)
     : maRange(rRange)
     , mpDoc(pDoc)
     , mValid(false)
     , mValueType(toValueType(param))
 {
+    if (invalid)
+        return; // leave empty
     assert(maRange.aStart.Col() == maRange.aEnd.Col());
     assert(maRange.aStart.Tab() == maRange.aEnd.Tab());
     SCTAB nTab = maRange.aStart.Tab();
