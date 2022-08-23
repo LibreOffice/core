@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4b9bfd3_9c36cba8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-23T13:24:52Z",
+      "side": 1,
+      "message": "This \"New file is added. Old file is restored\" is totally useless in the commit message. The commit message must describe what this change changes in the code, not what iterations you passed before you arrived in this state.",
+      "range": {
+        "startLine": 7,
+        "startChar": 38,
+        "endLine": 7,
+        "endChar": 77
+      },
+      "revId": "62591b5bcb687440f74d83b8cd1bf21603d0d9e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fcc29d34_4f0c8dff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-23T13:24:52Z",
+      "side": 1,
+      "message": "This needs a rebase now to resolve the merge conflict.",
+      "revId": "62591b5bcb687440f74d83b8cd1bf21603d0d9e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
