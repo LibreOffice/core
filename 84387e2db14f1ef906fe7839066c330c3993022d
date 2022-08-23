@@ -85,6 +85,24 @@
       "message": "This change does not improve readability. When you need an index anyway, there is no improvement in changing the loop to renge-based one, and keep index separately.",
       "revId": "84387e2db14f1ef906fe7839066c330c3993022d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ad8004e_b7cfdf6c",
+        "filename": "xmlsecurity/source/helper/xsecctl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-23T06:44:15Z",
+      "side": 1,
+      "message": "You still change this file - was this an overlook?\n\n(And note that the mode of this file was changed incorrectly, too.)",
+      "parentUuid": "22e11a62_3663cc84",
+      "revId": "84387e2db14f1ef906fe7839066c330c3993022d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ],
   "submitRequirementResults": []
