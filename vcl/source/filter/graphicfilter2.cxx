@@ -29,7 +29,6 @@
 #include <graphic/GraphicFormatDetector.hxx>
 #include "graphicfilter_internal.hxx"
 
-#define DATA_SIZE           640
 namespace
 {
 enum class MetafileType : sal_uInt16
@@ -439,129 +438,12 @@ bool GraphicDescriptor::ImpDetectPNG( SvStream& rStm, bool bExtendedInfo )
 
 bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, bool bExtendedInfo )
 {
-    bool    bRet = false;
-    sal_uInt8   cByte1 = 0;
-    sal_uInt8   cByte2 = 1;
-
     sal_Int32 nStmPos = rStm.Tell();
-    rStm.ReadUChar( cByte1 );
-    rStm.ReadUChar( cByte2 );
-    if ( cByte1 == cByte2 )
-    {
-        bool bDetectOk = false;
-
-        if ( cByte1 == 0x49 )
-        {
-            rStm.SetEndian( SvStreamEndian::LITTLE );
-            bDetectOk = true;
-        }
-        else if ( cByte1 == 0x4d )
-        {
-            rStm.SetEndian( SvStreamEndian::BIG );
-            bDetectOk = true;
-        }
-
-        if ( bDetectOk )
-        {
-            sal_uInt16  nTemp16 = 0;
-
-            rStm.ReadUInt16( nTemp16 );
-            if ( nTemp16 == 0x2a )
-            {
-                aMetadata.mnFormat = GraphicFileFormat::TIF;
-                bRet = true;
-
-                if ( bExtendedInfo )
-                {
-                    sal_uLong   nCount;
-                    sal_uLong   nMax = DATA_SIZE - 48;
-                    sal_uInt32  nTemp32 = 0;
-
-                    // Offset of the first IFD
-                    rStm.ReadUInt32( nTemp32 );
-                    nCount = nTemp32 + 2;
-                    rStm.SeekRel( nCount - 0x08 );
-
-                    if ( nCount < nMax )
-                    {
-                        bool bOk = false;
-
-                        // read tags till we find Tag256 ( Width )
-                        // do not read more bytes than DATA_SIZE
-                        rStm.ReadUInt16( nTemp16 );
-                        while ( nTemp16 != 256 )
-                        {
-                            bOk = nCount < nMax;
-                            if ( !bOk )
-                            {
-                                break;
-                            }
-                            rStm.SeekRel( 10 );
-                            rStm.ReadUInt16( nTemp16 );
-                            nCount += 12;
-                        }
-
-                        if ( bOk )
-                        {
-                            // width
-                            rStm.ReadUInt16( nTemp16 );
-                            rStm.SeekRel( 4 );
-                            if ( nTemp16 == 3 )
-                            {
-                                rStm.ReadUInt16( nTemp16 );
-                                aMetadata.maPixSize.setWidth( nTemp16 );
-                                rStm.SeekRel( 2 );
-                            }
-                            else
-                            {
-                                rStm.ReadUInt32( nTemp32 );
-                                aMetadata.maPixSize.setWidth( nTemp32 );
-                            }
-
-                            // height
-                            rStm.SeekRel( 2 );
-                            rStm.ReadUInt16( nTemp16 );
-                            rStm.SeekRel( 4 );
-                            if ( nTemp16 == 3 )
-                            {
-                                rStm.ReadUInt16( nTemp16 );
-                                aMetadata.maPixSize.setHeight( nTemp16 );
-                                rStm.SeekRel( 2 );
-                            }
-                            else
-                            {
-                                rStm.ReadUInt32( nTemp32 );
-                                aMetadata.maPixSize.setHeight( nTemp32 );
-                            }
-
-                            // Bits/Pixel
-                            rStm.ReadUInt16( nTemp16 );
-                            if ( nTemp16 == 258 )
-                            {
-                                rStm.SeekRel( 6 );
-                                rStm.ReadUInt16( nTemp16 );
-                                aMetadata.mnBitsPerPixel = nTemp16;
-                                rStm.SeekRel( 2 );
-                            }
-                            else
-                                rStm.SeekRel( -2 );
-
-                            // compression
-                            rStm.ReadUInt16( nTemp16 );
-                            if ( nTemp16 == 259 )
-                            {
-                                rStm.SeekRel( 6 );
-                                rStm.ReadUInt16( nTemp16 ); // compression
-                                rStm.SeekRel( 2 );
-                            }
-                            else
-                                rStm.SeekRel( -2 );
-                        }
-                    }
-                }
-            }
-        }
-    }
+    vcl::GraphicFormatDetector aDetector( rStm, aPathExt, bExtendedInfo );
+    bool bRet = aDetector.detect();
+    bRet &= aDetector.checkTIF();
+    if ( bRet )
+        aMetadata = aDetector.getMetadata();
     rStm.Seek( nStmPos );
     return bRet;
 }
