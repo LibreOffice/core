@@ -337,14 +337,6 @@ tools::Long OutputDevice::ImplLogicHeightToDevicePixel( tools::Long nHeight ) co
     return ImplLogicToPixel(nHeight, mnDPIY, maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY);
 }
 
-float OutputDevice::ImplFloatLogicHeightToDevicePixel( float fLogicHeight) const
-{
-    if( !mbMap)
-        return fLogicHeight;
-    float fPixelHeight = (fLogicHeight * mnDPIY * maMapRes.mnMapScNumY) / maMapRes.mnMapScDenomY;
-    return fPixelHeight;
-}
-
 tools::Long OutputDevice::ImplDevicePixelToLogicWidth( tools::Long nWidth ) const
 {
     if ( !mbMap )
@@ -1892,6 +1884,15 @@ double OutputDevice::ImplLogicWidthToDeviceFontWidth(tools::Long nWidth) const
 
     return ImplLogicToPixel(static_cast<double>(nWidth), mnDPIX,
                             maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX);
+}
+
+double OutputDevice::ImplLogicHeightToDeviceFontHeight(tools::Long nHeight) const
+{
+    if (!mbMap)
+        return nHeight;
+
+    return ImplLogicToPixel(static_cast<double>(nHeight), mnDPIY,
+                            maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY);
 }
 
 DevicePoint OutputDevice::ImplLogicToDeviceFontCoordinate(const Point& rPoint) const
