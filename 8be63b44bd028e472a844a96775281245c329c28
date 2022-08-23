@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bde014eb_f0cc2854",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-08-23T15:32:26Z",
+      "side": 1,
+      "message": "It seems ok but printing part may be tricky sometimes so prefer having some feedback.",
+      "revId": "8be63b44bd028e472a844a96775281245c329c28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
