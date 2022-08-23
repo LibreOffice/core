@@ -292,7 +292,7 @@ sub create_epm_header
     installer::packagelist::resolve_packagevariables(\$installer::globals::packageversion, $variableshashref, 0);
     if ( $variableshashref->{'PACKAGEREVISION'} ) { $installer::globals::packagerevision = $variableshashref->{'PACKAGEREVISION'}; }
 
-    $line = "%version" . " " . $installer::globals::packageversion . "\n";
+    $line = "%version" . " " . lc $installer::globals::packageversion . "\n";
     push(@epmheader, $line);
 
     $line = "%release" . " " . $installer::globals::packagerevision . "\n";
