@@ -22,7 +22,6 @@
 #include <tools/fract.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/zcodec.hxx>
-#include <vcl/TypeSerializer.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -625,76 +624,12 @@ bool GraphicDescriptor::ImpDetectPCT( SvStream& rStm, bool )
 
 bool GraphicDescriptor::ImpDetectSVM( SvStream& rStm, bool bExtendedInfo )
 {
-    sal_uInt32  n32 = 0;
-    bool    bRet = false;
-
     sal_Int32 nStmPos = rStm.Tell();
-    rStm.SetEndian( SvStreamEndian::LITTLE );
-    rStm.ReadUInt32( n32 );
-    if ( n32 == 0x44475653 )
-    {
-        sal_uInt8 cByte = 0;
-        rStm.ReadUChar( cByte );
-        if ( cByte == 0x49 )
-        {
-            aMetadata.mnFormat = GraphicFileFormat::SVM;
-            bRet = true;
-
-            if ( bExtendedInfo )
-            {
-                sal_uInt32  nTemp32;
-                sal_uInt16  nTemp16;
-
-                rStm.SeekRel( 0x04 );
-
-                // width
-                nTemp32 = 0;
-                rStm.ReadUInt32( nTemp32 );
-                aMetadata.maLogSize.setWidth( nTemp32 );
-
-                // height
-                nTemp32 = 0;
-                rStm.ReadUInt32( nTemp32 );
-                aMetadata.maLogSize.setHeight( nTemp32 );
-
-                // read MapUnit and determine PrefSize
-                nTemp16 = 0;
-                rStm.ReadUInt16( nTemp16 );
-                aMetadata.maLogSize = OutputDevice::LogicToLogic( aMetadata.maLogSize,
-                                                       MapMode( static_cast<MapUnit>(nTemp16) ),
-                                                       MapMode( MapUnit::Map100thMM ) );
-            }
-        }
-    }
-    else
-    {
-        rStm.SeekRel( -4 );
-        n32 = 0;
-        rStm.ReadUInt32( n32 );
-
-        if( n32 == 0x4D4C4356 )
-        {
-            sal_uInt16 nTmp16 = 0;
-
-            rStm.ReadUInt16( nTmp16 );
-
-            if( nTmp16 == 0x4654 )
-            {
-                aMetadata.mnFormat = GraphicFileFormat::SVM;
-                bRet = true;
-
-                if( bExtendedInfo )
-                {
-                    MapMode aMapMode;
-                    rStm.SeekRel( 0x06 );
-                    TypeSerializer aSerializer(rStm);
-                    aSerializer.readMapMode(aMapMode);
-                    aSerializer.readSize(aMetadata.maLogSize);
-                    aMetadata.maLogSize = OutputDevice::LogicToLogic( aMetadata.maLogSize, aMapMode, MapMode( MapUnit::Map100thMM ) );
-                }
-            }
-        }
-    }
+    vcl::GraphicFormatDetector aDetector( rStm, aPathExt, bExtendedInfo );
+    bool bRet = aDetector.detect();
+    bRet &= aDetector.checkSVM();
+    if ( bRet )
+        aMetadata = aDetector.getMetadata();
     rStm.Seek( nStmPos );
     return bRet;
 }
