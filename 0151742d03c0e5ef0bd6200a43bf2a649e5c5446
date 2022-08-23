@@ -16,6 +16,23 @@
       "message": "Hi Tomaz, took your comments into consideration - definitely needs to be changed from Justify() to Normalize().",
       "revId": "0151742d03c0e5ef0bd6200a43bf2a649e5c5446",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46aad978_b7b06ade",
+        "filename": "tools/qa/cppunit/test_rectangle.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-08-23T06:36:41Z",
+      "side": 1,
+      "message": "I think it would be better to have the tests in a separate commit from renaming...",
+      "revId": "0151742d03c0e5ef0bd6200a43bf2a649e5c5446",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
