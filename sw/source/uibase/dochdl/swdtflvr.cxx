@@ -1339,14 +1339,13 @@ SwPasteContext::~SwPasteContext()
                 *m_oPaM->GetMark() = *pCursor->GetPoint();
 
                 // Restore point.
-                ++m_oPaM->GetPoint()->nNode;
+                m_oPaM->GetPoint()->Adjust(SwNodeOffset(1));
                 SwNode& rNode = m_oPaM->GetPointNode();
                 if (!rNode.IsTextNode())
                     // Starting point is no longer text.
                     return;
 
-                m_oPaM->GetPoint()->nContent.Assign(static_cast<SwContentNode*>(&rNode),
-                                                    m_nStartContent);
+                m_oPaM->GetPoint()->SetContent(m_nStartContent);
 
                 aPropertyValue.Name = "TextRange";
                 const uno::Reference<text::XTextRange> xTextRange = SwXTextRange::CreateXTextRange(

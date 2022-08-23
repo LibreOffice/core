@@ -256,6 +256,11 @@ void SwPosition::AdjustContent( sal_Int32 nDelta )
     assert(nNode.GetNode().GetContentNode() && "only valid to call this if we point to an SwContentNode");
     nContent += nDelta;
 }
+void SwPosition::SetContent( sal_Int32 nContentIndex )
+{
+    assert(nNode.GetNode().GetContentNode() && "only valid to call this if we point to an SwContentNode");
+    nContent = nContentIndex;
+}
 void SwPosition::AssignStartIndex( const SwContentNode& rNd )
 {
     nNode = rNd;

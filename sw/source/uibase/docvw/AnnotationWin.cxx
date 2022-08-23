@@ -294,8 +294,7 @@ void SwAnnotationWin::UpdateData()
         if (rUndoRedo.DoesUndo())
         {
             SwTextField *const pTextField = mpFormatField->GetTextField();
-            SwPosition aPosition( pTextField->GetTextNode() );
-            aPosition.nContent = pTextField->GetStart();
+            SwPosition aPosition( pTextField->GetTextNode(), pTextField->GetStart() );
             rUndoRedo.AppendUndo(
                 std::make_unique<SwUndoFieldFromDoc>(aPosition, *pOldField, *mpField, nullptr, true));
         }
@@ -353,8 +352,7 @@ sal_uInt32 SwAnnotationWin::MoveCaret()
 sal_uInt32 SwAnnotationWin::CalcParent()
 {
     SwTextField* pTextField = mpFormatField->GetTextField();
-    SwPosition aPosition( pTextField->GetTextNode() );
-    aPosition.nContent = pTextField->GetStart();
+    SwPosition aPosition( pTextField->GetTextNode(), pTextField->GetStart() );
     SwTextAttr * const pTextAttr =
         pTextField->GetTextNode().GetTextAttrForCharAt(
             aPosition.GetContentIndex() - 1,
@@ -374,8 +372,7 @@ sal_uInt32 SwAnnotationWin::CountFollowing()
 {
     sal_uInt32 aCount = 1;  // we start with 1, so we have to subtract one at the end again
     SwTextField* pTextField = mpFormatField->GetTextField();
-    SwPosition aPosition( pTextField->GetTextNode() );
-    aPosition.nContent = pTextField->GetStart();
+    SwPosition aPosition( pTextField->GetTextNode(), pTextField->GetStart() );
 
     SwTextAttr * pTextAttr = pTextField->GetTextNode().GetTextAttrForCharAt(
                                         aPosition.GetContentIndex() + 1,
@@ -450,8 +447,7 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject const & rText)
     if (rUndoRedo.DoesUndo())
     {
         SwTextField *const pTextField = mpFormatField->GetTextField();
-        SwPosition aPosition( pTextField->GetTextNode() );
-        aPosition.nContent = pTextField->GetStart();
+        SwPosition aPosition( pTextField->GetTextNode(), pTextField->GetStart() );
         rUndoRedo.AppendUndo(
             std::make_unique<SwUndoFieldFromDoc>(aPosition, *pOldField, *mpField, nullptr, true));
     }
