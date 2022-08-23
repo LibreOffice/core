@@ -33,6 +33,24 @@
       "message": "I think it would be better to have the tests in a separate commit from renaming...",
       "revId": "0151742d03c0e5ef0bd6200a43bf2a649e5c5446",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87ee6b65_62608bea",
+        "filename": "tools/qa/cppunit/test_rectangle.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-08-23T09:46:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "46aad978_b7b06ade",
+      "revId": "0151742d03c0e5ef0bd6200a43bf2a649e5c5446",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
