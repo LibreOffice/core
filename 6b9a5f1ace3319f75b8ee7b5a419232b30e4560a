@@ -16,6 +16,23 @@
       "message": "Another easy one",
       "revId": "6b9a5f1ace3319f75b8ee7b5a419232b30e4560a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f68386d0_8b03591c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-08-23T00:52:53Z",
+      "side": 1,
+      "message": "Hi Tomaz, do you know who else might be able to review this patch?",
+      "revId": "6b9a5f1ace3319f75b8ee7b5a419232b30e4560a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
