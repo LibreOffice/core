@@ -16,6 +16,23 @@
       "message": "Hey Tomaz, this one has been in the queue for a long time. ",
       "revId": "b2718370236323e14926d11f4a63b07f26e8420f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4a1c9d4_68991ee6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 54
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-08-23T06:32:49Z",
+      "side": 1,
+      "message": "ah.. I suspected previous changes would cause a merge conflict\n",
+      "revId": "b2718370236323e14926d11f4a63b07f26e8420f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
