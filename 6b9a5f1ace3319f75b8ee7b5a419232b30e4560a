@@ -76,6 +76,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d26fe5d8_5c007616",
+        "filename": "include/vcl/outdev.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-08-23T09:44:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "17083358_54979ba3",
+      "range": {
+        "startLine": 154,
+        "startChar": 0,
+        "endLine": 154,
+        "endChar": 22
+      },
+      "revId": "6b9a5f1ace3319f75b8ee7b5a419232b30e4560a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dc370675_de678450",
@@ -89,6 +113,24 @@
       "writtenOn": "2022-08-23T06:29:13Z",
       "side": 1,
       "message": "hm..? this file isn\u0027t even touched in this patch",
+      "revId": "6b9a5f1ace3319f75b8ee7b5a419232b30e4560a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b86cdbbe_fabdc85c",
+        "filename": "solenv/clang-format/excludelist",
+        "patchSetId": 1
+      },
+      "lineNbr": 14908,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-08-23T09:44:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc370675_de678450",
       "revId": "6b9a5f1ace3319f75b8ee7b5a419232b30e4560a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
