@@ -52,6 +52,24 @@
       "parentUuid": "7bb6fa34_275a853c",
       "revId": "e77b8950477a080570d2247257d770113766c6c9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42d61c6b_e8474c07",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2022-08-23T18:25:56Z",
+      "side": 1,
+      "message": "Returning an empty dispatcher is surely a supported way to disable commands. But dispatch interception isn\u0027t just about disabling command; It allows to change command behavior or state dynamically, by returning a custom dispatcher. And the case in question surely falls into that category of a dynamically changing state. I would say that if some 3rd party code doesn\u0027t take into account the dynamic nature of this situation, then it\u0027s a bug in that 3rd party code, and we shouldn\u0027t put workarounds to accommodate it.\n\nLet\u0027s take an example from what we\u0027re doing internally: When there is no text selected we have .uno:Copy disabled. We aren\u0027t doing this by passing an empty dispatcher, because then we won\u0027t be able to enable it when a text is finally selected later on. Instead, we pass a valid dispatcher, which upon calling its addStatusListener method initially reports the disabled state, but later on will report an enabled state when the situation changes. I expect 3rd party to do the same.\n\nI don\u0027t have a good example code to reference right now. There\u0027s somewhat similar approach of dynamically changing the state taken in framework::StyleDispatcher (see framework/source/uielement/styletoolbarcontroller.cxx), but it doesn\u0027t use the interception framework. But anyway, what is needed is to implement XDispatch + selection listening (don\u0027t remember the exact interface for this). Then, when addStatusListener is called, record the caller, and call its statusChanged method with the initial status, based on the current selection. Later on when selection changes, call the caller\u0027s statusChanged method again with the updated status. That\u0027s all what needed.",
+      "parentUuid": "00690df0_2a4e1eb7",
+      "revId": "e77b8950477a080570d2247257d770113766c6c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ],
   "submitRequirementResults": []
