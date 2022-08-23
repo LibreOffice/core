@@ -354,7 +354,7 @@ SwContentType::SwContentType(SwWrtShell* pShell, ContentTypeId nType, sal_uInt8 
         {
             const bool bProtectedBM = m_pWrtShell->getIDocumentSettingAccess().get(
                         DocumentSettingId::PROTECT_BOOKMARKS);
-            m_bEdit = !bProtectedBM;
+            m_bEdit = true;
             m_bDelete = !bProtectedBM;
         }
         break;
