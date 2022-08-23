@@ -1177,6 +1177,8 @@ vcl::text::ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
         nLayoutFlags |= SalLayoutFlags::KerningAsian;
     if( maFont.IsVertical() )
         nLayoutFlags |= SalLayoutFlags::Vertical;
+    if( maFont.IsFixKerning() || mpFontInstance->GetFontSelectPattern().GetPitch() == PITCH_FIXED )
+        nLayoutFlags |= SalLayoutFlags::DisableLigatures;
 
     if( meTextLanguage ) //TODO: (mnTextLayoutMode & vcl::text::ComplexTextLayoutFlags::SubstituteDigits)
     {
