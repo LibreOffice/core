@@ -9,6 +9,7 @@
 
 #include <font/FeatureCollector.hxx>
 #include <font/OpenTypeFeatureDefinitionList.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #include <hb-ot.h>
 #include <hb-graphite2.h>
@@ -22,7 +23,7 @@ bool FeatureCollector::collectGraphite()
     if (grFace == nullptr)
         return false;
 
-    gr_uint16 nUILanguage = gr_uint16(m_eLanguageType);
+    gr_uint16 nUILanguage = gr_uint16(m_rLanguageTag.getLanguageType());
 
     gr_uint16 nNumberOfFeatures = gr_face_n_fref(grFace);
     gr_feature_val* pfeatureValues
@@ -80,6 +81,29 @@ bool FeatureCollector::collectGraphite()
     return true;
 }
 
+static OUString getName(hb_face_t* pHbFace, hb_ot_name_id_t aNameID, OString& rLanguage)
+{
+    auto aHbLang = hb_language_from_string(rLanguage.getStr(), rLanguage.getLength());
+    auto nName = hb_ot_name_get_utf16(pHbFace, aNameID, aHbLang, nullptr, nullptr);
+
+    if (!nName)
+    {
+        // Fallback to English if localized name is missing.
+        aHbLang = hb_language_from_string("en", 2);
+        nName = hb_ot_name_get_utf16(pHbFace, aNameID, aHbLang, nullptr, nullptr);
+    }
+
+    OUString sName;
+    if (nName)
+    {
+        std::vector<uint16_t> aBuf(++nName); // make space for terminating NUL.
+        hb_ot_name_get_utf16(pHbFace, aNameID, aHbLang, &nName, aBuf.data());
+        sName = OUString(reinterpret_cast<sal_Unicode*>(aBuf.data()), nName);
+    }
+
+    return sName;
+}
+
 void FeatureCollector::collectForTable(hb_tag_t aTableTag)
 {
     unsigned int nFeatureCount
@@ -99,6 +123,26 @@ void FeatureCollector::collectForTable(hb_tag_t aTableTag)
         rFeature.m_nCode = aFeatureTag;
 
         FeatureDefinition aDefinition = OpenTypeFeatureDefinitionList().getDefinition(aFeatureTag);
+
+        if (OpenTypeFeatureDefinitionListPrivate::isSpecialFeatureCode(aFeatureTag))
+        {
+            unsigned int nFeatureIdx;
+            if (hb_ot_layout_language_find_feature(m_pHbFace, aTableTag, 0,
+                                                   HB_OT_LAYOUT_DEFAULT_LANGUAGE_INDEX, aFeatureTag,
+                                                   &nFeatureIdx))
+            {
+                hb_ot_name_id_t aLabelID;
+                if (hb_ot_layout_feature_get_name_ids(m_pHbFace, aTableTag, nFeatureIdx, &aLabelID,
+                                                      nullptr, nullptr, nullptr, nullptr))
+                {
+                    OString sLanguage = m_rLanguageTag.getBcp47().toUtf8();
+                    OUString sLabel = getName(m_pHbFace, aLabelID, sLanguage);
+                    if (!sLabel.isEmpty())
+                        aDefinition = vcl::font::FeatureDefinition(aFeatureTag, sLabel);
+                }
+            }
+        }
+
         if (aDefinition)
             rFeature.m_aDefinition = aDefinition;
     }

@@ -25,16 +25,18 @@ public:
     {
     }
 
-    void testGetFontFeatures();
+    void testGetFontFeaturesGraphite();
+    void testGetFontFeaturesOpenType();
     void testParseFeature();
 
     CPPUNIT_TEST_SUITE(FontFeatureTest);
-    CPPUNIT_TEST(testGetFontFeatures);
+    CPPUNIT_TEST(testGetFontFeaturesGraphite);
+    CPPUNIT_TEST(testGetFontFeaturesOpenType);
     CPPUNIT_TEST(testParseFeature);
     CPPUNIT_TEST_SUITE_END();
 };
 
-void FontFeatureTest::testGetFontFeatures()
+void FontFeatureTest::testGetFontFeaturesGraphite()
 {
 #if HAVE_MORE_FONTS
     ScopedVclPtrInstance<VirtualDevice> aVDev(*Application::GetDefaultDevice(),
@@ -112,6 +114,55 @@ void FontFeatureTest::testGetFontFeatures()
             = rFracFeatureDefinition.getEnumParameters()[2];
         CPPUNIT_ASSERT_EQUAL(uint32_t(2), rParameter3.getCode());
         CPPUNIT_ASSERT(!rParameter2.getDescription().isEmpty());
+    }
+
+    aVDev.disposeAndClear();
+#endif // HAVE_MORE_FONTS
+}
+
+void FontFeatureTest::testGetFontFeaturesOpenType()
+{
+#if HAVE_MORE_FONTS
+    ScopedVclPtrInstance<VirtualDevice> aVDev(*Application::GetDefaultDevice(),
+                                              DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
+    aVDev->SetOutputSizePixel(Size(10, 10));
+
+    OUString aFontName("Amiri");
+    CPPUNIT_ASSERT(aVDev->IsFontAvailable(aFontName));
+
+    vcl::Font aFont = aVDev->GetFont();
+    aFont.SetFamilyName(aFontName);
+    aFont.SetWeight(FontWeight::WEIGHT_NORMAL);
+    aFont.SetItalic(FontItalic::ITALIC_NORMAL);
+    aFont.SetWidthType(FontWidth::WIDTH_NORMAL);
+    aVDev->SetFont(aFont);
+
+    std::vector<vcl::font::Feature> rFontFeatures;
+    CPPUNIT_ASSERT(aVDev->GetFontFeatures(rFontFeatures));
+
+    OUString aFeaturesString;
+    for (vcl::font::Feature const& rFeature : rFontFeatures)
+        aFeaturesString += vcl::font::featureCodeAsString(rFeature.m_nCode) + " ";
+
+    CPPUNIT_ASSERT_EQUAL(size_t(17), rFontFeatures.size());
+
+    CPPUNIT_ASSERT_EQUAL(OUString("calt calt dnom liga numr pnum ss01 ss02 "
+                                  "ss03 ss04 ss05 ss06 ss07 ss08 kern kern "
+                                  "ss05 "),
+                         aFeaturesString);
+
+    // Check ss01 feature
+    {
+        vcl::font::Feature& rFeature = rFontFeatures[6];
+        CPPUNIT_ASSERT_EQUAL(vcl::font::featureCode("ss01"), rFeature.m_nCode);
+
+        vcl::font::FeatureDefinition& rFeatureDefinition = rFeature.m_aDefinition;
+        CPPUNIT_ASSERT_EQUAL(vcl::font::featureCode("ss01"), rFeatureDefinition.getCode());
+        CPPUNIT_ASSERT_EQUAL(OUString("Low Baa dot following a Raa or Waw"),
+                             rFeatureDefinition.getDescription());
+        CPPUNIT_ASSERT_EQUAL(vcl::font::FeatureParameterType::BOOL, rFeatureDefinition.getType());
+
+        CPPUNIT_ASSERT_EQUAL(size_t(0), rFeatureDefinition.getEnumParameters().size());
     }
 
     aVDev.disposeAndClear();
