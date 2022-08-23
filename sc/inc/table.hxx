@@ -1057,7 +1057,7 @@ public:
     void FillMatrix( ScMatrix& rMat, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, svl::SharedStringPool* pPool ) const;
 
     void InterpretDirtyCells( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
-    void InterpretCellsIfNeeded( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
+    bool InterpretCellsIfNeeded( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
 
     void SetFormulaResults( SCCOL nCol, SCROW nRow, const double* pResults, size_t nLen );
 

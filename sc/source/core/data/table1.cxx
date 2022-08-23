@@ -2599,11 +2599,14 @@ void ScTable::InterpretDirtyCells( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW 
         aCol[nCol].InterpretDirtyCells(nRow1, nRow2);
 }
 
-void ScTable::InterpretCellsIfNeeded( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
+bool ScTable::InterpretCellsIfNeeded( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
 {
     nCol2 = ClampToAllocatedColumns(nCol2);
+    bool allInterpreted = true;
     for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
-        aCol[nCol].InterpretCellsIfNeeded(nRow1, nRow2);
+        if(!aCol[nCol].InterpretCellsIfNeeded(nRow1, nRow2))
+            allInterpreted = false;
+    return allInterpreted;
 }
 
 void ScTable::SetFormulaResults( SCCOL nCol, SCROW nRow, const double* pResults, size_t nLen )
