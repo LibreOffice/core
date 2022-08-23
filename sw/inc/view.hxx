@@ -212,6 +212,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     std::unique_ptr<SwDrawBase>    m_pDrawActual;
 
     const SwFrameFormat      *m_pLastTableFormat;
+    const SwFrameFormat* m_pLastFlyFormat;
 
     std::unique_ptr<SwFormatClipboard> m_pFormatClipboard; //holds data for format paintbrush
 

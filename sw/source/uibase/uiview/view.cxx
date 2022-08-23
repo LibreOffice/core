@@ -269,6 +269,19 @@ void SwView::SelectShell()
     SelectionType nNewSelectionType = m_pWrtShell->GetSelectionType()
                                 & ~SelectionType::TableCell;
 
+    // Determine if a different fly frame was selected.
+    bool bUpdateFly = false;
+    const SwFrameFormat* pCurFlyFormat = nullptr;
+    if (m_nSelectionType & SelectionType::Ole || m_nSelectionType & SelectionType::Graphic)
+    {
+        pCurFlyFormat = m_pWrtShell->GetFlyFrameFormat();
+    }
+    if (pCurFlyFormat && pCurFlyFormat != m_pLastFlyFormat)
+    {
+        bUpdateFly = true;
+    }
+    m_pLastFlyFormat = pCurFlyFormat;
+
     if ( m_pFormShell && m_pFormShell->IsActiveControl() )
         nNewSelectionType |= SelectionType::FormControl;
 
@@ -279,6 +292,20 @@ void SwView::SelectShell()
              m_nSelectionType & SelectionType::Graphic )
             // For graphs and OLE the verb can be modified of course!
             ImpSetVerb( nNewSelectionType );
+
+        if (bUpdateFly)
+        {
+            SfxViewFrame* pViewFrame = GetViewFrame();
+            if (pViewFrame)
+            {
+                uno::Reference<frame::XFrame> xFrame = pViewFrame->GetFrame().GetFrameInterface();
+                if (xFrame.is())
+                {
+                    // Invalidate cached dispatch objects.
+                    xFrame->contextChanged();
+                }
+            }
+        }
     }
     else
     {
@@ -729,6 +756,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
                             GetViewFrame()->GetBindings(),
                             WB_VSCROLL |  WB_EXTRAFIELD | WB_BORDER )),
     m_pLastTableFormat(nullptr),
+    m_pLastFlyFormat(nullptr),
     m_pFormatClipboard(new SwFormatClipboard()),
     m_nSelectionType( SelectionType::All ),
     m_nPageCnt(0),
