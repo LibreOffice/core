@@ -16,6 +16,24 @@
       "message": "Why can\u0027t the interceptor return an actual dispatch object, which will listen to selection changes and send appropriate enable/disable status updates? Invalidating all the ui (all toolbars, menubar, statusbar etc.) just because a different image was selected, sounds like an overkill.",
       "revId": "e77b8950477a080570d2247257d770113766c6c9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7bb6fa34_275a853c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-08-23T13:52:02Z",
+      "side": 1,
+      "message": "The trouble is that the dispatch interceptor can take the currently selected image into account, so we need to re-query the dispatch objects. See the testcase -- my real-world example is several images, where the toolbar button associated with .uno:SetBorderStyle is meant to be disabled when the image has a hyperlink set. Without this change, we don\u0027t re-query the dispatch objects, so if the first image you select (transitioning from text selection) has a link, the toolbar button is disabled, and it will remain disabled, even if you select a next image which doesn\u0027t have a hyperlink set. Similarly, there is missing update in the other direction: if you first select a without-hyperlink image first, then we keep the toolbar button enabled, and it\u0027ll be enabled even if you select a next image with a hyperlink instead.\n\nOr do you think there is a simpler way to make sure the enabled/disabled status of toolbar buttons is correct without calling contextChanged()?",
+      "parentUuid": "cc037d4a_56bd16e0",
+      "revId": "e77b8950477a080570d2247257d770113766c6c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
