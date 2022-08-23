@@ -16,6 +16,57 @@
       "message": "Just adding Maxim so that my month old commit doesn\u0027t get auto-abandoned. I\u0027m going to push the first in the series shortly if necessary.",
       "revId": "936c0a7fcbeb34d2ee7e19439fce16b01f9ae300",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a0b987d_58fb443d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2022-08-23T20:06:33Z",
+      "side": 1,
+      "message": "Thanks for working on this. I would like to add that .uno:BackColor is also used in the sidebar (see svx/uiconfig/ui/sidebartextpanel.ui). Might be nice to handle it as well.",
+      "revId": "936c0a7fcbeb34d2ee7e19439fce16b01f9ae300",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fae52a8_5a731743",
+        "filename": "reportdesign/source/ui/report/ReportController.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2022-08-23T20:06:33Z",
+      "side": 1,
+      "message": "Changing reportdesign isn\u0027t required, as it isn\u0027t affected by any sdi stuff that is used in Writer; it just reuses that #define for its own purposes. But of course it won\u0027t harm if you want to change this anyway.",
+      "revId": "936c0a7fcbeb34d2ee7e19439fce16b01f9ae300",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0beeb26e_f6cbd635",
+        "filename": "sw/sdi/swriter.sdi",
+        "patchSetId": 4
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2022-08-23T20:06:33Z",
+      "side": 1,
+      "message": "Is this really needed? I would assume that the entry from svx.sdi can work for Writer as well.",
+      "revId": "936c0a7fcbeb34d2ee7e19439fce16b01f9ae300",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
