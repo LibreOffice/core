@@ -33,6 +33,24 @@
       "message": "Hi Luboš,\nany objection if your patch gets reverted ?",
       "revId": "553e8ee519d60ecc6c5c5dd6c0387fe701e7588b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da19ac68_067f5f71",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-08-23T09:28:16Z",
+      "side": 1,
+      "message": "I\u0027m fine with reverting this for 7.4 only, given it\u0027s fixed properly in master.",
+      "parentUuid": "26e3847e_72a34a3a",
+      "revId": "553e8ee519d60ecc6c5c5dd6c0387fe701e7588b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
