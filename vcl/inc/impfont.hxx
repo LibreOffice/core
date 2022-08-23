@@ -119,6 +119,7 @@ private:
     FontRelief          meRelief;
     FontEmphasisMark    meEmphasisMark;
     FontKerning         meKerning;
+    short               mnSpacing;
     Size                maAverageFontSize;
     rtl_TextEncoding    meCharSet;
 

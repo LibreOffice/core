@@ -318,10 +318,14 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
         maFeatures.push_back({ HB_TAG('k','e','r','n'), 0, 0, static_cast<unsigned int>(-1) });
     }
 
-    if (rFontSelData.GetPitch() == PITCH_FIXED)
+    if (rArgs.mnFlags & SalLayoutFlags::DisableLigatures)
     {
         SAL_INFO("vcl.harfbuzz", "Disabling ligatures for font: " << rFontSelData.maTargetName);
+
+        // Both of these are optional ligatures, enabled by default but not for
+        // orthographically-required ligatures.
         maFeatures.push_back({ HB_TAG('l','i','g','a'), 0, 0, static_cast<unsigned int>(-1) });
+        maFeatures.push_back({ HB_TAG('c','l','i','g'), 0, 0, static_cast<unsigned int>(-1) });
     }
 
     ParseFeatures(rFontSelData.maTargetName);

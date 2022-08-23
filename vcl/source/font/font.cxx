@@ -246,6 +246,22 @@ bool Font::IsKerning() const
     return mpImplFont->meKerning != FontKerning::NONE;
 }
 
+void Font::SetFixKerning( short nSpacing )
+{
+    if (const_cast<const ImplType&>(mpImplFont)->mnSpacing != nSpacing)
+        mpImplFont->mnSpacing = nSpacing;
+}
+
+short Font::GetFixKerning() const
+{
+    return mpImplFont->mnSpacing;
+}
+
+bool Font::IsFixKerning() const
+{
+    return mpImplFont->mnSpacing != 0;
+}
+
 void Font::SetWeight( FontWeight eWeight )
 {
     if (const_cast<const ImplType&>(mpImplFont)->GetWeightNoAsk() != eWeight)
@@ -509,6 +525,12 @@ SvStream& ReadImplFont( SvStream& rIStm, ImplFont& rImplFont, tools::Long& rnNor
         rnNormedFontScaling = nNormedFontScaling;
     }
 
+    if( aCompat.GetVersion() >= 5 )
+    {
+        rIStm.ReadInt16( nTmps16 );
+        rImplFont.mnSpacing = nTmps16;
+    }
+
     // Relief
     // CJKContextLanguage
 
@@ -518,7 +540,8 @@ SvStream& ReadImplFont( SvStream& rIStm, ImplFont& rImplFont, tools::Long& rnNor
 SvStream& WriteImplFont( SvStream& rOStm, const ImplFont& rImplFont, tools::Long nNormedFontScaling )
 {
     // tdf#127471 increase to version 4
-    VersionCompatWrite aCompat( rOStm, 4 );
+    // tdf#66819 increase to version 5
+    VersionCompatWrite aCompat( rOStm, 5 );
 
     TypeSerializer aSerializer(rOStm);
     rOStm.WriteUniOrByteString( rImplFont.GetFamilyName(), rOStm.GetStreamCharSet() );
@@ -554,6 +577,8 @@ SvStream& WriteImplFont( SvStream& rOStm, const ImplFont& rImplFont, tools::Long
     // new in version 4, NormedFontScaling
     rOStm.WriteInt32(nNormedFontScaling);
 
+    // new in version 5
+    rOStm.WriteInt16( rImplFont.mnSpacing );
     return rOStm;
 }
 
@@ -931,6 +956,7 @@ ImplFont::ImplFont() :
     meRelief( FontRelief::NONE ),
     meEmphasisMark( FontEmphasisMark::NONE ),
     meKerning( FontKerning::FontSpecific ),
+    mnSpacing( 0 ),
     meCharSet( RTL_TEXTENCODING_DONTKNOW ),
     maLanguageTag( LANGUAGE_DONTKNOW ),
     maCJKLanguageTag( LANGUAGE_DONTKNOW ),
@@ -963,6 +989,7 @@ ImplFont::ImplFont( const ImplFont& rImplFont ) :
     meRelief( rImplFont.meRelief ),
     meEmphasisMark( rImplFont.meEmphasisMark ),
     meKerning( rImplFont.meKerning ),
+    mnSpacing( rImplFont.mnSpacing ),
     maAverageFontSize( rImplFont.maAverageFontSize ),
     meCharSet( rImplFont.meCharSet ),
     maLanguageTag( rImplFont.maLanguageTag ),
@@ -1026,6 +1053,7 @@ bool ImplFont::EqualIgnoreColor( const ImplFont& rOther ) const
     ||  (mbOutline      != rOther.mbOutline)
     ||  (mbShadow       != rOther.mbShadow)
     ||  (meKerning      != rOther.meKerning)
+    ||  (mnSpacing      != rOther.mnSpacing)
     ||  (mbTransparent  != rOther.mbTransparent) )
         return false;
 
@@ -1070,6 +1098,7 @@ size_t ImplFont::GetHashValueIgnoreColor() const
     o3tl::hash_combine( hash, mbOutline );
     o3tl::hash_combine( hash, mbShadow );
     o3tl::hash_combine( hash, meKerning );
+    o3tl::hash_combine( hash, mnSpacing );
     o3tl::hash_combine( hash, mbTransparent );
 
     return hash;
