@@ -22,6 +22,9 @@ endif
 $(eval $(call gb_UnpackedTarball_set_patchlevel,hunspell,1))
 
 $(eval $(call gb_UnpackedTarball_add_patches,hunspell, \
+	external/hunspell/0001-check-len-in-cpdpat_check-like-r1-blen-is-checked-63.patch \
+	external/hunspell/0001-improve-630-test-case-from-0m2.427s-0m1.836s-781.patch \
+	external/hunspell/0001-improve-630-test-case-from-0m1.836s-0m1.223s-785.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
