@@ -34,6 +34,24 @@
       "parentUuid": "cc037d4a_56bd16e0",
       "revId": "e77b8950477a080570d2247257d770113766c6c9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00690df0_2a4e1eb7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-08-23T14:00:27Z",
+      "side": 1,
+      "message": "Erm, I forgot to ask. My understanding is that returning an empty dispatcher in queryDispatch() is a supported way to communicate that we want to disable the command, e.g. our framework/source/dispatch/dispatchdisabler.cxx does this, and I assume that 3rd-party extension code does the same.\n\nStill, do you have an example where similar code does this disabling by \"sending appropriate enable/disable status updates\" instead?\n\nIf that\u0027s more efficient, we should somehow advertise that more towards extension authors. Thanks!",
+      "parentUuid": "7bb6fa34_275a853c",
+      "revId": "e77b8950477a080570d2247257d770113766c6c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
