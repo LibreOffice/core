@@ -1363,7 +1363,9 @@ public:
     void              SetTableOpDirty( const ScRange& );  // for Interpreter TableOp
     void              InterpretDirtyCells( const ScRangeList& rRanges );
     // Interprets cells that have NeedsInterpret(), i.e. the same like calling MaybeInterpret() on them.
-    void              InterpretCellsIfNeeded( const ScRangeList& rRanges );
+    // Returns false if some couldn't be interpreted (i.e. they still have NeedsInterpret()).
+    // Useful to ensure that the given cells will not need interpreting.
+    bool              InterpretCellsIfNeeded( const ScRangeList& rRanges );
     SC_DLLPUBLIC void CalcAll();
     SC_DLLPUBLIC void CalcAfterLoad( bool bStartListening = true );
     void              CompileAll();

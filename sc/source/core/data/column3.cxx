@@ -111,11 +111,12 @@ protected:
     void Interpret(ScFormulaCell* p)
     {
         // Interpret() takes a range in a formula group, so group those together.
-        if( firstCell != nullptr && p->GetCellGroup() == p->GetCellGroup()
-            && p->aPos.Row() == lastPos.Row() + 1 )
+        if( !groupCells.empty() && p->GetCellGroup() == groupCells.back()->GetCellGroup()
+            && p->aPos.Row() == groupCells.back()->aPos.Row() + 1 )
         {
-            assert( p->aPos.Tab() == lastPos.Tab() && p->aPos.Col() == lastPos.Col());
-            lastPos = p->aPos; // Extend range.
+            assert( p->aPos.Tab() == groupCells.back()->aPos.Tab()
+                && p->aPos.Col() == groupCells.back()->aPos.Col());
+            groupCells.push_back(p); // Extend range.
             return;
         }
         flushPending();
@@ -124,8 +125,7 @@ protected:
             p->Interpret();
             return;
         }
-        firstCell = p;
-        lastPos = p->aPos;
+        groupCells.push_back(p);
 
     }
     ~CellInterpreterBase()
@@ -135,14 +135,21 @@ protected:
 private:
     void flushPending()
     {
-        if(firstCell == nullptr)
+        if(groupCells.empty())
             return;
-        SCROW firstRow = firstCell->GetCellGroup()->mpTopCell->aPos.Row();
-        firstCell->Interpret(firstCell->aPos.Row() - firstRow, lastPos.Row() - firstRow);
-        firstCell = nullptr;
+        SCROW firstRow = groupCells.front()->GetCellGroup()->mpTopCell->aPos.Row();
+        if(!groupCells.front()->Interpret(
+            groupCells.front()->aPos.Row() - firstRow, groupCells.back()->aPos.Row() - firstRow))
+        {
+            // Interpret() will try to group-interpret the given cell range if possible, but if that
+            // is not possible, it will interpret just the given cell. So if group-interpreting
+            // wasn't possible, interpret them one by one.
+            for(ScFormulaCell* cell : groupCells)
+                cell->Interpret();
+        }
+        groupCells.clear();
     }
-    ScFormulaCell* firstCell = nullptr;
-    ScAddress lastPos;
+    std::vector<ScFormulaCell*> groupCells;
 };
 
 class DirtyCellInterpreter : public CellInterpreterBase
@@ -161,8 +168,16 @@ public:
     void operator() (size_t, ScFormulaCell* p)
     {
         if(p->NeedsInterpret())
+        {
             Interpret(p);
+            // In some cases such as circular dependencies Interpret()
+            // will not reset the dirty flag, check that in order to tell
+            // the caller that the cell range may trigger Interpret() again.
+            if(p->NeedsInterpret())
+                allInterpreted = false;
+        }
     }
+    bool allInterpreted = true;
 };
 
 }
@@ -176,13 +191,14 @@ void ScColumn::InterpretDirtyCells( SCROW nRow1, SCROW nRow2 )
     sc::ProcessFormula(maCells.begin(), maCells, nRow1, nRow2, aFunc);
 }
 
-void ScColumn::InterpretCellsIfNeeded( SCROW nRow1, SCROW nRow2 )
+bool ScColumn::InterpretCellsIfNeeded( SCROW nRow1, SCROW nRow2 )
 {
     if (!GetDoc().ValidRow(nRow1) || !GetDoc().ValidRow(nRow2) || nRow1 > nRow2)
-        return;
+        return false;
 
     NeedsInterpretCellInterpreter aFunc;
     sc::ProcessFormula(maCells.begin(), maCells, nRow1, nRow2, aFunc);
+    return aFunc.allInterpreted;
 }
 
 void ScColumn::DeleteContent( SCROW nRow, bool bBroadcast )
