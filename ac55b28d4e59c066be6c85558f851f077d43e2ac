@@ -103,6 +103,24 @@
       "parentUuid": "7e23c9fc_9c80c405",
       "revId": "ac55b28d4e59c066be6c85558f851f077d43e2ac",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f3be480_c8eaf0e9",
+        "filename": "chart2/source/view/inc/PlottingPositionHelper.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1003656
+      },
+      "writtenOn": "2022-08-23T07:14:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8da8c5b1_b0c36393",
+      "revId": "ac55b28d4e59c066be6c85558f851f077d43e2ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
