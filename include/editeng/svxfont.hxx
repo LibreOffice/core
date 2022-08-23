@@ -41,7 +41,6 @@ class EDITENG_DLLPUBLIC SvxFont : public vcl::Font
     SvxCaseMap   eCaseMap;      // Text Markup
     short nEsc;                 // Degree of Superscript/Subscript
     sal_uInt8  nPropr;          // Degree of reduction of the font height
-    short nKern;                // Kerning in Pt
 
 public:
     SvxFont();
@@ -59,17 +58,12 @@ public:
     void SetProprRel( const sal_uInt8 nNewPropr )
         { SetPropr( static_cast<sal_uInt8>( static_cast<tools::Long>(nNewPropr) * static_cast<tools::Long>(nPropr) / 100 ) ); }
 
-    // Kerning
-    short GetFixKerning() const { return nKern; }
-    void  SetFixKerning( const short nNewKern ) { nKern = nNewKern; }
-
     SvxCaseMap GetCaseMap() const { return eCaseMap; }
     void    SetCaseMap( const SvxCaseMap eNew ) { eCaseMap = eNew; }
 
     // Is-Methods:
     bool IsCaseMap() const { return SvxCaseMap::NotMapped != eCaseMap; }
     bool IsCapital() const { return SvxCaseMap::SmallCaps == eCaseMap; }
-    bool IsKern() const { return 0 != nKern; }
     bool IsEsc() const { return 0 != nEsc; }
 
     // Consider Upper case, Lower case letters etc.

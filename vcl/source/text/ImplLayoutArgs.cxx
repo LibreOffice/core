@@ -269,6 +269,7 @@ std::ostream& operator<<(std::ostream& s, vcl::text::ImplLayoutArgs const& rArgs
         TEST(DisableKerning);
         TEST(KerningAsian);
         TEST(Vertical);
+        TEST(DisableLigatures);
         TEST(ForFallback);
 #undef TEST
         s << "}";
