@@ -75,7 +75,7 @@ bool FeatureCollector::collectGraphite()
             vcl::font::Feature& rFeature = m_rFontFeatures.back();
             rFeature.m_aDefinition
                 = vcl::font::FeatureDefinition(nFeatureCode, sLabel, eFeatureParameterType,
-                                               std::move(aParameters), sal_uInt32(nValue));
+                                               std::move(aParameters), int32_t(nValue));
         }
     }
     gr_featureval_destroy(pfeatureValues);

@@ -54,14 +54,11 @@ FeatureParser::FeatureParser(std::u16string_view rFontName)
     } while (nIndex >= 0);
 }
 
-std::unordered_map<uint32_t, uint32_t> FeatureParser::getFeaturesMap() const
+std::unordered_map<uint32_t, int32_t> FeatureParser::getFeaturesMap() const
 {
-    std::unordered_map<uint32_t, uint32_t> aResultMap;
+    std::unordered_map<uint32_t, int32_t> aResultMap;
     for (auto const& rFeat : m_aFeatures)
-    {
-        if (rFeat.m_nValue != 0)
-            aResultMap.emplace(rFeat.m_nTag, rFeat.m_nValue);
-    }
+        aResultMap.emplace(rFeat.m_nTag, rFeat.m_nValue);
     return aResultMap;
 }
 

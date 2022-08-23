@@ -89,7 +89,7 @@ uint32_t FeatureParameter::getCode() const { return m_nCode; }
 
 FeatureDefinition::FeatureDefinition()
     : m_nCode(0)
-    , m_nDefault(0)
+    , m_nDefault(-1)
     , m_eType(FeatureParameterType::BOOL)
 {
 }
@@ -97,7 +97,7 @@ FeatureDefinition::FeatureDefinition()
 FeatureDefinition::FeatureDefinition(uint32_t nCode, OUString aDescription,
                                      FeatureParameterType eType,
                                      std::vector<FeatureParameter>&& rEnumParameters,
-                                     uint32_t nDefault)
+                                     int32_t nDefault)
     : m_sDescription(std::move(aDescription))
     , m_nCode(nCode)
     , m_nDefault(nDefault)
@@ -111,7 +111,7 @@ FeatureDefinition::FeatureDefinition(uint32_t nCode, TranslateId pDescriptionID,
     : m_pDescriptionID(pDescriptionID)
     , m_sNumericPart(std::move(aNumericPart))
     , m_nCode(nCode)
-    , m_nDefault(0)
+    , m_nDefault(-1)
     , m_eType(FeatureParameterType::BOOL)
 {
 }
@@ -120,7 +120,7 @@ FeatureDefinition::FeatureDefinition(uint32_t nCode, TranslateId pDescriptionID,
                                      std::vector<FeatureParameter> aEnumParameters)
     : m_pDescriptionID(pDescriptionID)
     , m_nCode(nCode)
-    , m_nDefault(0)
+    , m_nDefault(-1)
     , m_eType(FeatureParameterType::ENUM)
     , m_aEnumParameters(std::move(aEnumParameters))
 {
@@ -156,7 +156,7 @@ FeatureParameterType FeatureDefinition::getType() const { return m_eType; }
 
 FeatureDefinition::operator bool() const { return m_nCode != 0; }
 
-uint32_t FeatureDefinition::getDefault() const { return m_nDefault; }
+int32_t FeatureDefinition::getDefault() const { return m_nDefault; }
 } // end vcl::font namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -38,7 +38,7 @@ public:
 
     std::vector<FeatureSetting> const& getFeatures() const { return m_aFeatures; }
 
-    std::unordered_map<uint32_t, uint32_t> getFeaturesMap() const;
+    std::unordered_map<uint32_t, int32_t> getFeaturesMap() const;
 };
 
 } // namespace vcl::font
