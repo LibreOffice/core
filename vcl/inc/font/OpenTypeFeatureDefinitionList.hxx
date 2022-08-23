@@ -25,12 +25,12 @@ private:
 
     void init();
 
-    static bool isSpecialFeatureCode(sal_uInt32 nFeatureCode);
     static FeatureDefinition handleSpecialFeatureCode(sal_uInt32 nFeatureCode);
 
 public:
     OpenTypeFeatureDefinitionListPrivate();
     FeatureDefinition getDefinition(sal_uInt32 nFeatureCode);
+    static bool isSpecialFeatureCode(sal_uInt32 nFeatureCode);
     bool isRequired(sal_uInt32 nFeatureCode);
 };
 

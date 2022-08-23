@@ -9,6 +9,7 @@
 
 #include <font/FeatureCollector.hxx>
 #include <font/OpenTypeFeatureDefinitionList.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #include <hb-ot.h>
 #include <hb-graphite2.h>
@@ -22,7 +23,7 @@ bool FeatureCollector::collectGraphite()
     if (grFace == nullptr)
         return false;
 
-    gr_uint16 nUILanguage = gr_uint16(m_eLanguageType);
+    gr_uint16 nUILanguage = gr_uint16(m_rLanguageTag.getLanguageType());
 
     gr_uint16 nNumberOfFeatures = gr_face_n_fref(grFace);
     gr_feature_val* pfeatureValues
@@ -101,6 +102,34 @@ void FeatureCollector::collectForTable(hb_tag_t aTableTag)
         FeatureDefinition aDefinition = OpenTypeFeatureDefinitionList().getDefinition(aFeatureTag);
         if (aDefinition)
             rFeature.m_aDefinition = aDefinition;
+
+        if (OpenTypeFeatureDefinitionListPrivate::isSpecialFeatureCode(aFeatureTag))
+        {
+            unsigned int nFeatureIdx;
+            if (hb_ot_layout_language_find_feature(m_pHbFace, aTableTag, 0,
+                                                   HB_OT_LAYOUT_DEFAULT_LANGUAGE_INDEX, aFeatureTag,
+                                                   &nFeatureIdx))
+            {
+                hb_ot_name_id_t aLabelID;
+                if (hb_ot_layout_feature_get_name_ids(m_pHbFace, aTableTag, nFeatureIdx, &aLabelID,
+                                                      nullptr, nullptr, nullptr, nullptr))
+                {
+                    OString sLanguage = m_rLanguageTag.getBcp47().toUtf8();
+                    hb_language_t aLanguage
+                        = hb_language_from_string(sLanguage.getStr(), sLanguage.getLength());
+
+                    unsigned int nLabel
+                        = hb_ot_name_get_utf16(m_pHbFace, aLabelID, aLanguage, nullptr, nullptr);
+                    if (nLabel)
+                    {
+                        std::vector<uint16_t> aBuf(++nLabel); // make space for terminating NUL.
+                        hb_ot_name_get_utf16(m_pHbFace, aLabelID, aLanguage, &nLabel, aBuf.data());
+                        OUString sLabel(reinterpret_cast<sal_Unicode*>(aBuf.data()), nLabel);
+                        rFeature.m_aDefinition = vcl::font::FeatureDefinition(aFeatureTag, sLabel);
+                    }
+                }
+            }
+        }
     }
 }
 
