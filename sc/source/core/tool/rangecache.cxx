@@ -50,7 +50,8 @@ static ScSortedRangeCache::ValueType toValueType(const ScQueryParam& param)
 }
 
 ScSortedRangeCache::ScSortedRangeCache(ScDocument* pDoc, const ScRange& rRange,
-                                       const ScQueryParam& param, ScInterpreterContext* context)
+                                       const ScQueryParam& param, ScInterpreterContext* context,
+                                       bool invalid)
     : maRange(rRange)
     , mpDoc(pDoc)
     , mValid(false)
@@ -66,6 +67,9 @@ ScSortedRangeCache::ScSortedRangeCache(ScDocument* pDoc, const ScRange& rRange,
     const ScQueryEntry::Item& item = entry.GetQueryItem();
     mQueryOp = entry.eOp;
     mQueryType = item.meType;
+
+    if (invalid)
+        return; // leave empty
 
     SCROW startRow = maRange.aStart.Row();
     SCROW endRow = maRange.aEnd.Row();

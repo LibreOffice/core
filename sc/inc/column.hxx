@@ -719,7 +719,7 @@ public:
     bool IsDrawObjectsEmptyBlock(SCROW nStartRow, SCROW nEndRow) const;
 
     void InterpretDirtyCells( SCROW nRow1, SCROW nRow2 );
-    void InterpretCellsIfNeeded( SCROW nRow1, SCROW nRow2 );
+    bool InterpretCellsIfNeeded( SCROW nRow1, SCROW nRow2 );
 
     static void JoinNewFormulaCell( const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell );
 
