@@ -13,6 +13,7 @@
 #include <osl/file.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <vcl/scheduler.hxx>
 
 #include <com/sun/star/frame/XDispatchHelper.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -20,11 +21,13 @@
 #include <com/sun/star/frame/XStorable2.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
 #include <wrtsh.hxx>
 #include <swmodule.hxx>
+#include <view.hxx>
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/uibase/uiview/data/";
 
@@ -142,6 +145,171 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testKeepRatio)
     mbExported = true;
     xmlDocUniquePtr pXmlDoc = parseExport("settings.xml");
     assertXPathContent(pXmlDoc, "//config:config-item[@config:name='KeepRatio']", "true");
+}
+
+namespace
+{
+/// Interception implementation that disables .uno:Zoom on Image1, but not on Image2.
+struct ImageInterceptor : public cppu::WeakImplHelper<frame::XDispatchProviderInterceptor>
+{
+    uno::Reference<view::XSelectionSupplier> m_xSelectionSupplier;
+    uno::Reference<frame::XDispatchProvider> m_xMaster;
+    uno::Reference<frame::XDispatchProvider> m_xSlave;
+    int m_nEnabled = 0;
+    int m_nDisabled = 0;
+
+public:
+    ImageInterceptor(const uno::Reference<lang::XComponent>& xComponent);
+
+    // XDispatchProviderInterceptor
+    uno::Reference<frame::XDispatchProvider> SAL_CALL getMasterDispatchProvider() override;
+    uno::Reference<frame::XDispatchProvider> SAL_CALL getSlaveDispatchProvider() override;
+    void SAL_CALL setMasterDispatchProvider(
+        const uno::Reference<frame::XDispatchProvider>& xNewSupplier) override;
+    void SAL_CALL
+    setSlaveDispatchProvider(const uno::Reference<frame::XDispatchProvider>& xNewSupplier) override;
+
+    // XDispatchProvider
+    uno::Reference<frame::XDispatch> SAL_CALL queryDispatch(const util::URL& rURL,
+                                                            const OUString& rTargetFrameName,
+                                                            sal_Int32 SearchFlags) override;
+    uno::Sequence<uno::Reference<frame::XDispatch>> SAL_CALL
+    queryDispatches(const uno::Sequence<frame::DispatchDescriptor>& rRequests) override;
+};
+}
+
+ImageInterceptor::ImageInterceptor(const uno::Reference<lang::XComponent>& xComponent)
+{
+    uno::Reference<frame::XModel2> xModel(xComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xModel.is());
+    m_xSelectionSupplier.set(xModel->getCurrentController(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(m_xSelectionSupplier.is());
+}
+
+uno::Reference<frame::XDispatchProvider> ImageInterceptor::getMasterDispatchProvider()
+{
+    return m_xMaster;
+}
+
+uno::Reference<frame::XDispatchProvider> ImageInterceptor::getSlaveDispatchProvider()
+{
+    return m_xSlave;
+}
+
+void ImageInterceptor::setMasterDispatchProvider(
+    const uno::Reference<frame::XDispatchProvider>& xNewSupplier)
+{
+    m_xMaster = xNewSupplier;
+}
+
+void ImageInterceptor::setSlaveDispatchProvider(
+    const uno::Reference<frame::XDispatchProvider>& xNewSupplier)
+{
+    m_xSlave = xNewSupplier;
+}
+
+uno::Reference<frame::XDispatch> ImageInterceptor::queryDispatch(const util::URL& rURL,
+                                                                 const OUString& rTargetFrameName,
+                                                                 sal_Int32 nSearchFlags)
+{
+    // Disable the UNO command based on the currently selected image, i.e. this can't be cached when
+    // a different image is selected. Originally this was .uno:SetBorderStyle, but let's pick a
+    // command which is active when running cppunit tests:
+    if (rURL.Complete == ".uno:Zoom")
+    {
+        uno::Reference<container::XNamed> xImage;
+        m_xSelectionSupplier->getSelection() >>= xImage;
+        if (xImage.is() && xImage->getName() == "Image1")
+        {
+            ++m_nDisabled;
+            return {};
+        }
+
+        ++m_nEnabled;
+    }
+
+    return m_xSlave->queryDispatch(rURL, rTargetFrameName, nSearchFlags);
+}
+
+uno::Sequence<uno::Reference<frame::XDispatch>>
+ImageInterceptor::queryDispatches(const uno::Sequence<frame::DispatchDescriptor>& /*rRequests*/)
+{
+    return {};
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testSwitchBetweenImages)
+{
+    // Given a document with 2 images, and an interceptor catching an UNO command that specific to
+    // the current selection:
+    SwDoc* pDoc = createSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    for (int i = 0; i < 2; ++i)
+    {
+        uno::Reference<beans::XPropertySet> xTextGraphic(
+            xMSF->createInstance("com.sun.star.text.TextGraphicObject"), uno::UNO_QUERY);
+        xTextGraphic->setPropertyValue("AnchorType",
+                                       uno::Any(text::TextContentAnchorType_AS_CHARACTER));
+        xTextGraphic->setPropertyValue("Size", uno::Any(awt::Size(5000, 5000)));
+        uno::Reference<text::XTextContent> xTextContent(xTextGraphic, uno::UNO_QUERY);
+        xText->insertTextContent(xCursor, xTextContent, false);
+    }
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<frame::XDispatchProviderInterception> xRegistration(
+        xModel->getCurrentController()->getFrame(), uno::UNO_QUERY);
+    rtl::Reference pInterceptor(new ImageInterceptor(mxComponent));
+
+    xRegistration->registerDispatchProviderInterceptor(pInterceptor);
+    pInterceptor->m_nEnabled = 0;
+    pInterceptor->m_nDisabled = 0;
+
+    // When selecting the first image:
+    uno::Reference<text::XTextGraphicObjectsSupplier> xGraphicObjectsSupplier(mxComponent,
+                                                                              uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xGraphicObjects(
+        xGraphicObjectsSupplier->getGraphicObjects(), uno::UNO_QUERY);
+    pInterceptor->m_xSelectionSupplier->select(xGraphicObjects->getByIndex(0));
+    Scheduler::ProcessEventsToIdle();
+    SwView* pView = pDoc->GetDocShell()->GetView();
+    pView->StopShellTimer();
+
+    // Then make sure the UNO command is disabled:
+    CPPUNIT_ASSERT_EQUAL(0, pInterceptor->m_nEnabled);
+    CPPUNIT_ASSERT_GREATEREQUAL(1, pInterceptor->m_nDisabled);
+
+    // Given a clean state:
+    pInterceptor->m_nEnabled = 0;
+    pInterceptor->m_nDisabled = 0;
+
+    // When selecting the second image:
+    pInterceptor->m_xSelectionSupplier->select(xGraphicObjects->getByIndex(1));
+    Scheduler::ProcessEventsToIdle();
+    pView->StopShellTimer();
+
+    // Then make sure the UNO command is enabled:
+    CPPUNIT_ASSERT_GREATEREQUAL(1, pInterceptor->m_nEnabled);
+    CPPUNIT_ASSERT_EQUAL(0, pInterceptor->m_nDisabled);
+
+    // Given a clean state:
+    pInterceptor->m_nEnabled = 0;
+    pInterceptor->m_nDisabled = 0;
+
+    // When selecting the first image, again (this time not changing the selection type):
+    pInterceptor->m_xSelectionSupplier->select(xGraphicObjects->getByIndex(0));
+    Scheduler::ProcessEventsToIdle();
+    pView->StopShellTimer();
+
+    // Then make sure the UNO command is disabled:
+    CPPUNIT_ASSERT_EQUAL(0, pInterceptor->m_nEnabled);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected greater or equal than: 1
+    // - Actual  : 0
+    // i.e. selecting the first image didn't result in a disabled UNO command.
+    CPPUNIT_ASSERT_GREATEREQUAL(1, pInterceptor->m_nDisabled);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
