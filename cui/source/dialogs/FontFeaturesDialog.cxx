@@ -58,7 +58,7 @@ void FontFeaturesDialog::initialize()
 
     for (vcl::font::Feature const& rFontFeature : rFontFeatures)
     {
-        sal_uInt32 nFontFeatureCode = rFontFeature.m_aID.m_aFeatureCode;
+        sal_uInt32 nFontFeatureCode = rFontFeature.m_nCode;
         if (!aDoneFeatures.insert(nFontFeatureCode).second)
             continue;
         rFilteredFontFeatures.push_back(rFontFeature);
@@ -90,7 +90,7 @@ int FontFeaturesDialog::fillGrid(std::vector<vcl::font::Feature> const& rFontFea
     sal_Int32 i = 0;
     for (vcl::font::Feature const& rFontFeature : rFontFeatures)
     {
-        sal_uInt32 nFontFeatureCode = rFontFeature.m_aID.m_aFeatureCode;
+        sal_uInt32 nFontFeatureCode = rFontFeature.m_nCode;
 
         vcl::font::FeatureDefinition aDefinition;
         if (rFontFeature.m_aDefinition)

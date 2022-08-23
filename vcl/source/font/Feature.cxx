@@ -29,13 +29,13 @@ OUString featureCodeAsString(uint32_t nFeature)
 
 // Feature
 Feature::Feature()
-    : m_aID({ 0, 0, 0 })
+    : m_nCode(0)
     , m_eType(FeatureType::OpenType)
 {
 }
 
-Feature::Feature(FeatureID const& rID, FeatureType eType)
-    : m_aID(rID)
+Feature::Feature(uint32_t nCode, FeatureType eType)
+    : m_nCode(nCode)
     , m_eType(eType)
 {
 }
