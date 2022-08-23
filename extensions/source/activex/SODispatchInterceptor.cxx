@@ -48,11 +48,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP SODispatchInterceptor::InterfaceSupportsErrorI
 
     for (std::size_t i=0;i<SAL_N_ELEMENTS(arr);i++)
     {
-#ifdef _MSC_VER
         if (InlineIsEqualGUID(*arr[i],riid))
-#else
-        if (::ATL::InlineIsEqualGUID(*arr[i],riid))
-#endif
             return S_OK;
     }
     return S_FALSE;
