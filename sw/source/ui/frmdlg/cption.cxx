@@ -378,9 +378,12 @@ IMPL_LINK_NOARG(SwCaptionDialog, ModifyComboHdl, weld::ComboBox&, void)
 
 IMPL_LINK_NOARG(SwCaptionDialog, CaptionHdl, weld::Button&, void)
 {
-    SfxItemSet aSet(rView.GetDocShell()->GetDoc()->GetAttrPool());
-    SwCaptionOptDlg aDlg(m_xDialog.get(), aSet);
-    aDlg.run();
+    auto pSet = std::make_shared<SfxItemSet>(rView.GetDocShell()->GetDoc()->GetAttrPool());
+    auto pDlg = std::make_shared<SwCaptionOptDlg>(m_xDialog.get(), pSet);
+    SfxSingleTabDialogController::runAsync(pDlg, [pSet](sal_Int32){});
+    // although pSet isn't used in the callback we *do* need to save it
+    // If we don't, the dialog will crash when the OK button is pressed as the pointer will
+    // have been deleted
 }
 
 void SwCaptionDialog::DrawSample()

@@ -93,7 +93,7 @@ public:
 class SwCaptionOptDlg final : public SfxSingleTabDialogController
 {
 public:
-    SwCaptionOptDlg(weld::Window* pParent, const SfxItemSet& rSet);
+    SwCaptionOptDlg(weld::Window* pParent, const std::shared_ptr<SfxItemSet> rSet);
 };
 
 class SwCaptionPreview final : public weld::CustomWidgetController
