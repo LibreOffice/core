@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40735b31_28fefc79",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-08-23T20:33:36Z",
+      "side": 1,
+      "message": "\u003e error: ‘static const CharClass* ScCompiler::GetCharClassLocalized()’ is private\n\nhttps://gerrit.libreoffice.org/c/core/+/138733 is merged now so that should work if rebased.",
+      "revId": "c0eff5a760374faa652f7a2a77bc16713262e006",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
