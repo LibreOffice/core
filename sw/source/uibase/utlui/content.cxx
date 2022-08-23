@@ -349,7 +349,7 @@ void SwContentType::Init(bool* pbInvalidateWindow)
                 &lcl_IsUiVisibleBookmark);
             m_sTypeToken.clear();
             const bool bProtectedBM = m_pWrtShell->getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_BOOKMARKS);
-            m_bEdit = !bProtectedBM;
+            m_bEdit = true;
             m_bDelete = !bProtectedBM;
         }
         break;
