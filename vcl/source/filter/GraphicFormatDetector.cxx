@@ -27,6 +27,8 @@
 #include <tools/zcodec.hxx>
 #include <tools/fract.hxx>
 #include <filter/WebpReader.hxx>
+#include <vcl/TypeSerializer.hxx>
+#include <vcl/outdev.hxx>
 #include <utility>
 
 constexpr sal_uInt32 SVG_CHECK_SIZE = 2048;
@@ -881,18 +883,79 @@ bool GraphicFormatDetector::checkJPG()
 
 bool GraphicFormatDetector::checkSVM()
 {
-    if (mnFirstLong == 0x53564744 && maFirstBytes[4] == 0x49)
+    sal_uInt32 n32 = 0;
+    bool bRet = false;
+
+    sal_Int32 nStmPos = mrStream.Tell();
+    mrStream.SetEndian(SvStreamEndian::LITTLE);
+    mrStream.ReadUInt32(n32);
+    if (n32 == 0x44475653)
     {
-        maMetadata.mnFormat = GraphicFileFormat::SVM;
-        return true;
+        sal_uInt8 cByte = 0;
+        mrStream.ReadUChar(cByte);
+        if (cByte == 0x49)
+        {
+            maMetadata.mnFormat = GraphicFileFormat::SVM;
+            bRet = true;
+
+            if (mbExtendedInfo)
+            {
+                sal_uInt32 nTemp32;
+                sal_uInt16 nTemp16;
+
+                mrStream.SeekRel(0x04);
+
+                // width
+                nTemp32 = 0;
+                mrStream.ReadUInt32(nTemp32);
+                maMetadata.maLogSize.setWidth(nTemp32);
+
+                // height
+                nTemp32 = 0;
+                mrStream.ReadUInt32(nTemp32);
+                maMetadata.maLogSize.setHeight(nTemp32);
+
+                // read MapUnit and determine PrefSize
+                nTemp16 = 0;
+                mrStream.ReadUInt16(nTemp16);
+                maMetadata.maLogSize = OutputDevice::LogicToLogic(
+                    maMetadata.maLogSize, MapMode(static_cast<MapUnit>(nTemp16)),
+                    MapMode(MapUnit::Map100thMM));
+            }
+        }
     }
-    else if (maFirstBytes[0] == 0x56 && maFirstBytes[1] == 0x43 && maFirstBytes[2] == 0x4C
-             && maFirstBytes[3] == 0x4D && maFirstBytes[4] == 0x54 && maFirstBytes[5] == 0x46)
+    else
     {
-        maMetadata.mnFormat = GraphicFileFormat::SVM;
-        return true;
+        mrStream.SeekRel(-4);
+        n32 = 0;
+        mrStream.ReadUInt32(n32);
+
+        if (n32 == 0x4D4C4356)
+        {
+            sal_uInt16 nTmp16 = 0;
+
+            mrStream.ReadUInt16(nTmp16);
+
+            if (nTmp16 == 0x4654)
+            {
+                maMetadata.mnFormat = GraphicFileFormat::SVM;
+                bRet = true;
+
+                if (mbExtendedInfo)
+                {
+                    MapMode aMapMode;
+                    mrStream.SeekRel(0x06);
+                    TypeSerializer aSerializer(mrStream);
+                    aSerializer.readMapMode(aMapMode);
+                    aSerializer.readSize(maMetadata.maLogSize);
+                    maMetadata.maLogSize = OutputDevice::LogicToLogic(
+                        maMetadata.maLogSize, aMapMode, MapMode(MapUnit::Map100thMM));
+                }
+            }
+        }
     }
-    return false;
+    mrStream.Seek(nStmPos);
+    return bRet;
 }
 
 bool GraphicFormatDetector::checkPCD()
