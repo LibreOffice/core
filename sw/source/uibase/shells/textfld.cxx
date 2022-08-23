@@ -957,8 +957,7 @@ void SwTextShell::StateField( SfxItemSet &rSet )
                 if ((!pFieldBM || pFieldBM->GetFieldname() != ODF_FORMTEXT)
                     && aCursorPos.GetContentIndex() > 0)
                 {
-                    SwPosition aPos(aCursorPos);
-                    --aPos.nContent;
+                    SwPosition aPos(*aCursorPos.GetContentNode(), aCursorPos.GetContentIndex() - 1);
                     pFieldBM = GetShell().getIDocumentMarkAccess()->getFieldmarkFor(aPos);
                 }
                 if (pFieldBM && pFieldBM->GetFieldname() == ODF_FORMTEXT &&

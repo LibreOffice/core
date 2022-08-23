@@ -242,8 +242,7 @@ bool SwWrtShell::DelLeft()
     {
         // If we are just to the right to a fieldmark, then remove it completely
         const SwPosition* pCurPos = GetCursor()->GetPoint();
-        SwPosition aPrevChar(*pCurPos);
-        --aPrevChar.nContent;
+        SwPosition aPrevChar(*pCurPos->GetContentNode(), pCurPos->GetContentIndex() - 1);
         sw::mark::IFieldmark* pFm = getIDocumentMarkAccess()->getFieldmarkAt(aPrevChar);
         if (pFm && pFm->GetMarkEnd() == *pCurPos)
         {

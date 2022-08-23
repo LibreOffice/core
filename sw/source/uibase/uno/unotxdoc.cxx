@@ -3332,7 +3332,7 @@ void SwXTextDocument::executeFromFieldEvent(const StringMap& aArguments)
     sw::mark::IFieldmark* pFieldBM = m_pDocShell->GetWrtShell()->getIDocumentMarkAccess()->getFieldmarkFor(aPos);
     if ( !pFieldBM )
     {
-        --aPos.nContent;
+        aPos.AdjustContent(-1);
         pFieldBM = m_pDocShell->GetWrtShell()->getIDocumentMarkAccess()->getFieldmarkFor(aPos);
     }
     if (pFieldBM && pFieldBM->GetFieldname() == ODF_FORMDROPDOWN)
