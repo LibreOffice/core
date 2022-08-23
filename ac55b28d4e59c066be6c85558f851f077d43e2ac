@@ -67,6 +67,24 @@
       "message": "In several places in this patch (or rather, the code you\u0027re patching), we see not just a swap, but the following logic: \"if the second element should come before the first element, then swap them\". I suggest you write a function to do just that. It\u0027s essentially sorting two elements, but you obviously don\u0027t want to invoke std::sort for two elements... so maybe a `sort_pair()` or whatever, which takes two lvalue references and a comparator defaulting to std::less?",
       "revId": "ac55b28d4e59c066be6c85558f851f077d43e2ac",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e23c9fc_9c80c405",
+        "filename": "chart2/source/view/inc/PlottingPositionHelper.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1003656
+      },
+      "writtenOn": "2022-08-23T06:23:25Z",
+      "side": 1,
+      "message": "Where should I put this kind of function? Which folder or namespace?",
+      "parentUuid": "18934d12_616b0e7b",
+      "revId": "ac55b28d4e59c066be6c85558f851f077d43e2ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
