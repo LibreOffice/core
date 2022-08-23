@@ -62,6 +62,30 @@
       },
       "revId": "02d48767713f90ad6860336121a81a2ad293bed3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2b72732_ddc6c673",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3339,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-08-23T17:46:13Z",
+      "side": 1,
+      "message": "It is the enable-template flag so we have a watering-can applicator. Clarified in an earlier commit.",
+      "parentUuid": "2239f68d_7a143def",
+      "range": {
+        "startLine": 3339,
+        "startChar": 11,
+        "endLine": 3339,
+        "endChar": 40
+      },
+      "revId": "02d48767713f90ad6860336121a81a2ad293bed3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
