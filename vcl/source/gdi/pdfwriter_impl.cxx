@@ -6344,7 +6344,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         // ascent / descent to match the on-screen rendering.
         // This is the top left of the text without ascent / descent.
         DevicePoint aDrawPosition(rLayout.GetDrawPosition());
-        tools::Rectangle aRectangle(PixelToLogic(Point(aDrawPosition.getX(), aDrawPosition.getY())),
+        tools::Rectangle aRectangle(SubPixelToLogic(aDrawPosition),
                                     Size(ImplDevicePixelToLogicWidth(rLayout.GetTextWidth()), 0));
         aRectangle.AdjustTop(-aRefDevFontMetric.GetAscent());
         // This includes ascent / descent.
@@ -6355,7 +6355,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         {
             // Adapt rectangle for rotated text.
             tools::Polygon aPolygon(aRectangle);
-            aPolygon.Rotate(PixelToLogic(Point(aDrawPosition.getX(), aDrawPosition.getY())), pFontInstance->mnOrientation);
+            aPolygon.Rotate(SubPixelToLogic(aDrawPosition), pFontInstance->mnOrientation);
             drawPolygon(aPolygon);
         }
         else
@@ -6476,7 +6476,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         {
             DevicePoint aStartPt = rLayout.GetDrawPosition();
             int nWidth = rLayout.GetTextWidth() / rLayout.GetUnitsPerPixel();
-            drawTextLine( PixelToLogic(Point(aStartPt.getX(), aStartPt.getY()) ),
+            drawTextLine( SubPixelToLogic(aStartPt),
                           ImplDevicePixelToLogicWidth( nWidth ),
                           eStrikeout, eUnderline, eOverline, bUnderlineAbove );
         }
