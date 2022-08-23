@@ -16,6 +16,23 @@
       "message": "A google search for CharBackgroundExt didn\u0027t turn up much - just one blog post about using it in a macro, and the automatic documentation that dumps every UNO command. So that sounds re-assuring that this can just be dropped.\n\nRelated to tdf#134432.",
       "revId": "1f1d8307151411a40238ca07ba0f67247c578cc4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "316d714b_6854bfa0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2022-08-23T19:51:07Z",
+      "side": 1,
+      "message": "Might be nice to cleanup the sdi files also:\n\n- In swriter.sdi, the now unused BackColor parameter.\n- In _textsh.sdi, ExecMethod line.",
+      "revId": "1f1d8307151411a40238ca07ba0f67247c578cc4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
