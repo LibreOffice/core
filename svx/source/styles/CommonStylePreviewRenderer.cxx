@@ -53,6 +53,7 @@ CommonStylePreviewRenderer::CommonStylePreviewRenderer(
     , maFontColor(COL_AUTO)
     , maHighlightColor(COL_AUTO)
     , maBackgroundColor(COL_AUTO)
+    , mnHeight(0)
     , maStyleName(mpStyle->GetName())
 {
 }
