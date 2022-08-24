@@ -3647,7 +3647,7 @@ sal_Bool SAL_CALL FormController::approveRowChange(const RowChangeEvent& _rEvent
             }
 
             // TODO: in case of binary fields, this "getString" below is extremely expensive
-            if ( !rColInfo.xColumn->wasNull() || !rColInfo.xColumn->getString().isEmpty() )
+            if ( !rColInfo.xColumn->getString().isEmpty() || !rColInfo.xColumn->wasNull() )
                 continue;
 
             OUString sMessage( SvxResId( RID_ERR_FIELDREQUIRED ) );
