@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7691316b_28679c32",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-08-24T10:25:27Z",
+      "side": 1,
+      "message": "\u003e error: \"GetCharClassLocalized\" is a private member of \"ScCompiler\"\n\nYou need to rebase the change, otherwise this error won\u0027t go away.",
+      "revId": "c187b9e33ed22d8920e772cf77d9d6c7b9a29e9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dcc544b8_28b78345",
         "filename": "sc/source/ui/app/inputhdl.cxx",
         "patchSetId": 8
@@ -14,6 +31,24 @@
       "writtenOn": "2022-08-24T09:09:55Z",
       "side": 1,
       "message": "Should I create a new function so that \n\nOUString aFuncName(pCharClass-\u003euppercase(pDesc-\u003emxFuncName-\u003egetStr()));\n\nworsk?",
+      "revId": "c187b9e33ed22d8920e772cf77d9d6c7b9a29e9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8bcdcb04_dee04675",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1036,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-08-24T10:25:27Z",
+      "side": 1,
+      "message": "Hu? Ah why was there even still getStr() used.. No, just\n\n    OUString aFuncName( pCharClass-\u003euppercase( *(pDesc-\u003emxFuncName)));\n\nshould do.",
+      "parentUuid": "dcc544b8_28b78345",
       "revId": "c187b9e33ed22d8920e772cf77d9d6c7b9a29e9c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
