@@ -58,13 +58,6 @@ InspectorTextPanel::InspectorTextPanel(weld::Widget* pParent)
 static bool GetPropertyValues(std::u16string_view rPropName, const uno::Any& rAny,
                               OUString& rString)
 {
-    // Hide Asian and Complex properties
-    if (!SvtCJKOptions::IsCJKFontEnabled() && rPropName.find(u"Asian") != std::u16string_view::npos)
-        return false;
-    if (!SvtCTLOptions().IsCTLFontEnabled()
-        && rPropName.find(u"Complex") != std::u16string_view::npos)
-        return false;
-
     if (bool bValue; rAny >>= bValue)
     {
         rString = SvxResId(bValue ? RID_TRUE : RID_FALSE); // tdf#139136
