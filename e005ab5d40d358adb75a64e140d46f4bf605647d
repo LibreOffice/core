@@ -16,6 +16,24 @@
       "message": "Note that this basically undone the effect of the previous https://gerrit.libreoffice.org/c/core/+/60109/",
       "revId": "e005ab5d40d358adb75a64e140d46f4bf605647d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcac8250_376837f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-24T08:48:24Z",
+      "side": 1,
+      "message": "Note that XColumn::wasNull is documented [1] to require the precious call to a get* method. This change internally queries the *previous* column\u0027s wasNull.\n\n[1] https://api.libreoffice.org/docs/idl/ref/interfacecom_1_1sun_1_1star_1_1sdb_1_1XColumn.html#a0d482c20564f9119052b1962f830190e",
+      "parentUuid": "18f9f85b_0997470c",
+      "revId": "e005ab5d40d358adb75a64e140d46f4bf605647d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
