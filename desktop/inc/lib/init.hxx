@@ -13,6 +13,7 @@
 #include <unordered_map>
 #include <memory>
 #include <mutex>
+#include <set>
 #include <string_view>
 
 #include <boost/property_tree/ptree.hpp>
@@ -241,6 +242,7 @@ namespace desktop {
         std::shared_ptr< LibreOfficeKitDocumentClass > m_pDocumentClass;
         std::map<size_t, std::shared_ptr<CallbackFlushHandler>> mpCallbackFlushHandlers;
         const int mnDocumentId;
+        std::set<OUString> maFontsMissing;
 
         explicit LibLODocument_Impl(css::uno::Reference<css::lang::XComponent> xComponent,
                                     int nDocumentId);

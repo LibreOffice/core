@@ -2584,6 +2584,8 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
         aFilterOptions[3].Value <<= nUpdateDoc;
         */
 
+        OutputDevice::StartTrackingFontMappingUse();
+
         const int nThisDocumentId = nDocumentIdCounter++;
         SfxViewShell::SetCurrentDocId(ViewShellDocId(nThisDocumentId));
         uno::Reference<lang::XComponent> xComponent = xComponentLoader->loadComponentFromURL(
@@ -2607,6 +2609,49 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
             int nState = doc_getSignatureState(pDocument);
             pLib->mpCallback(LOK_CALLBACK_SIGNATURE_STATUS, OString::number(nState).getStr(), pLib->mpCallbackData);
         }
+
+        auto aFontMappingUseData = OutputDevice::FinishTrackingFontMappingUse();
+
+        // Filter out font substitutions that actually aren't any substitutions, like "Liberation
+        // Serif" -> "Liberation Serif/Regular". If even one of the "substitutions" of a font is to
+        // the same font, don't count that as a missing font.
+
+        for (std::size_t i = 0; i < aFontMappingUseData.size();)
+        {
+            // If the original font had an empty style and one of its replacement fonts has the same
+            // family name, we assume the font is present. The root problem here is that the code
+            // that collects font substitutions tends to get just empty styles for the font that is
+            // being substituded, as vcl::Font::GetStyleName() tents to return an empty string.
+            // (Italicness is instead indicated by what vcl::Font::GetItalic() returns and boldness
+            // by what vcl::Font::GetWeight() returns.)
+            if (aFontMappingUseData[i].mOriginalFont.indexOf('/') == -1)
+            {
+                bool bSubstitutedByTheSame = false;
+                for (const auto &j : aFontMappingUseData[i].mUsedFonts)
+                {
+                    if (j.startsWith(OUStringConcatenation(aFontMappingUseData[i].mOriginalFont + "/")))
+                    {
+                        bSubstitutedByTheSame = true;
+                        break;
+                    }
+                }
+
+                if (bSubstitutedByTheSame)
+                    aFontMappingUseData.erase(aFontMappingUseData.begin() + i);
+                else
+                    i++;
+            }
+            else
+            {
+                i++;
+            }
+        }
+
+        for (std::size_t i = 0; i < aFontMappingUseData.size(); ++i)
+        {
+            pDocument->maFontsMissing.insert(aFontMappingUseData[i].mOriginalFont);
+        }
+
         return pDocument;
     }
     catch (const uno::Exception& exception)
@@ -3800,6 +3845,21 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
         {
             pDocument->mpCallbackFlushHandlers[nView]->setViewId(pViewShell->GetViewShellId().get());
             pViewShell->setLibreOfficeKitViewCallback(pDocument->mpCallbackFlushHandlers[nView].get());
+        }
+
+        if (pDocument->maFontsMissing.size() != 0)
+        {
+            std::string sPayload = "{ \"fontsmissing\": [ ";
+            bool bFirst = true;
+            for (const auto &f : pDocument->maFontsMissing)
+            {
+                if (!bFirst)
+                    sPayload += ", ";
+                sPayload += "\"" + std::string(f.toUtf8().getStr()) + "\"";
+            }
+            sPayload += " ] }";
+            pCallback(LOK_CALLBACK_FONTS_MISSING, sPayload.c_str(), pData);
+            pDocument->maFontsMissing.clear();
         }
     }
     else
