@@ -27,11 +27,13 @@ public:
 
     void testGetFontFeaturesGraphite();
     void testGetFontFeaturesOpenType();
+    void testGetFontFeaturesOpenTypeEnum();
     void testParseFeature();
 
     CPPUNIT_TEST_SUITE(FontFeatureTest);
     CPPUNIT_TEST(testGetFontFeaturesGraphite);
     CPPUNIT_TEST(testGetFontFeaturesOpenType);
+    CPPUNIT_TEST(testGetFontFeaturesOpenTypeEnum);
     CPPUNIT_TEST(testParseFeature);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -163,6 +165,65 @@ void FontFeatureTest::testGetFontFeaturesOpenType()
         CPPUNIT_ASSERT_EQUAL(vcl::font::FeatureParameterType::BOOL, rFeatureDefinition.getType());
 
         CPPUNIT_ASSERT_EQUAL(size_t(0), rFeatureDefinition.getEnumParameters().size());
+    }
+
+    aVDev.disposeAndClear();
+#endif // HAVE_MORE_FONTS
+}
+
+void FontFeatureTest::testGetFontFeaturesOpenTypeEnum()
+{
+#if HAVE_MORE_FONTS
+    ScopedVclPtrInstance<VirtualDevice> aVDev(*Application::GetDefaultDevice(),
+                                              DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
+    aVDev->SetOutputSizePixel(Size(10, 10));
+
+    OUString aFontName("Reem Kufi");
+    CPPUNIT_ASSERT(aVDev->IsFontAvailable(aFontName));
+
+    vcl::Font aFont = aVDev->GetFont();
+    aFont.SetFamilyName(aFontName);
+    aFont.SetWeight(FontWeight::WEIGHT_NORMAL);
+    aFont.SetItalic(FontItalic::ITALIC_NORMAL);
+    aFont.SetWidthType(FontWidth::WIDTH_NORMAL);
+    aVDev->SetFont(aFont);
+
+    std::vector<vcl::font::Feature> rFontFeatures;
+    CPPUNIT_ASSERT(aVDev->GetFontFeatures(rFontFeatures));
+
+    OUString aFeaturesString;
+    for (vcl::font::Feature const& rFeature : rFontFeatures)
+        aFeaturesString += vcl::font::featureCodeAsString(rFeature.m_nCode) + " ";
+
+    CPPUNIT_ASSERT_EQUAL(size_t(10), rFontFeatures.size());
+
+    CPPUNIT_ASSERT_EQUAL(OUString("aalt case cv01 cv02 cv03 frac ordn sups "
+                                  "zero kern "),
+                         aFeaturesString);
+
+    // Check aalt feature
+    {
+        vcl::font::Feature& rFeature = rFontFeatures[0];
+        CPPUNIT_ASSERT_EQUAL(vcl::font::featureCode("aalt"), rFeature.m_nCode);
+
+        vcl::font::FeatureDefinition& rFeatureDefinition = rFeature.m_aDefinition;
+        CPPUNIT_ASSERT_EQUAL(vcl::font::featureCode("aalt"), rFeatureDefinition.getCode());
+        CPPUNIT_ASSERT(!rFeatureDefinition.getDescription().isEmpty());
+        CPPUNIT_ASSERT_EQUAL(vcl::font::FeatureParameterType::ENUM, rFeatureDefinition.getType());
+
+        CPPUNIT_ASSERT_EQUAL(size_t(3), rFeatureDefinition.getEnumParameters().size());
+
+        vcl::font::FeatureParameter const& rParameter1 = rFeatureDefinition.getEnumParameters()[0];
+        CPPUNIT_ASSERT_EQUAL(uint32_t(0), rParameter1.getCode());
+        CPPUNIT_ASSERT(!rParameter1.getDescription().isEmpty());
+
+        vcl::font::FeatureParameter const& rParameter2 = rFeatureDefinition.getEnumParameters()[1];
+        CPPUNIT_ASSERT_EQUAL(uint32_t(1), rParameter2.getCode());
+        CPPUNIT_ASSERT(!rParameter2.getDescription().isEmpty());
+
+        vcl::font::FeatureParameter const& rParameter3 = rFeatureDefinition.getEnumParameters()[2];
+        CPPUNIT_ASSERT_EQUAL(uint32_t(2), rParameter3.getCode());
+        CPPUNIT_ASSERT(!rParameter2.getDescription().isEmpty());
     }
 
     aVDev.disposeAndClear();
