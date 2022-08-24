@@ -10,6 +10,8 @@
 #include <QtAccessibleRegistry.hxx>
 #include <QtXAccessible.hxx>
 
+#include <cassert>
+
 std::map<XAccessible*, QObject*> QtAccessibleRegistry::m_aMapping = {};
 
 QObject* QtAccessibleRegistry::getQObject(css::uno::Reference<XAccessible> xAcc)
@@ -26,6 +28,12 @@ QObject* QtAccessibleRegistry::getQObject(css::uno::Reference<XAccessible> xAcc)
     QtXAccessible* pQtAcc = new QtXAccessible(xAcc);
     m_aMapping.emplace(xAcc.get(), pQtAcc);
     return pQtAcc;
+}
+
+void QtAccessibleRegistry::insert(css::uno::Reference<XAccessible> xAcc, QObject* pQObject)
+{
+    assert(pQObject);
+    m_aMapping.emplace(xAcc.get(), pQObject);
 }
 
 void QtAccessibleRegistry::remove(css::uno::Reference<XAccessible> xAcc)

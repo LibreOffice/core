@@ -755,7 +755,13 @@ QAccessibleInterface* QtAccessibleWidget::customFactory(const QString& classname
         vcl::Window* pWindow = pWidget->frame().GetWindow();
 
         if (pWindow)
-            return new QtAccessibleWidget(pWindow->GetAccessible(), object);
+        {
+            css::uno::Reference<XAccessible> xAcc = pWindow->GetAccessible();
+            // insert into registry so the association between the XAccessible and the QtWidget
+            // is remembered rather than creating a different QtXAccessible when a QObject is needed later
+            QtAccessibleRegistry::insert(xAcc, object);
+            return new QtAccessibleWidget(xAcc, object);
+        }
     }
     if (classname == QLatin1String("QtXAccessible") && object)
     {
