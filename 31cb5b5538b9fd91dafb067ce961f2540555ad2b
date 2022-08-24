@@ -16,6 +16,23 @@
       "message": "I suggest to go with this for now, since the situation that you can end up with different toolbar states based on what image you select first is clearly buggy. But in case we can improve e.g. framework/source/dispatch/dispatchdisabler.cxx in the future to be more efficient and we can somehow make sure that nobody disables commands by returning empty dispatch references, I have no problem with dropping this. I hope that\u0027s an acceptable compromise. :-)",
       "revId": "31cb5b5538b9fd91dafb067ce961f2540555ad2b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5db9787_a3fb8b79",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-08-24T06:23:26Z",
+      "side": 1,
+      "message": "Thanks, will consider adapting framework/source/dispatch/dispatchdisabler.cxx based on this, so 1) insertByName() and others have an immediate effect and 2) it can serve as a better example for extension authors to follow.",
+      "revId": "31cb5b5538b9fd91dafb067ce961f2540555ad2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
