@@ -1751,9 +1751,9 @@ SwXParaFrameEnumerationImpl::SwXParaFrameEnumerationImpl(
         if (PARAFRAME_PORTION_TEXTRANGE == eParaFrameMode)
         {
             //get all frames that are bound at paragraph or at character
-            for(const auto& pFlyFrame : rPaM.GetDoc().GetAllFlyFormats(&GetCursor(), false, true))
+            for(const SwPosFlyFrame& rFlyFrame : rPaM.GetDoc().GetAllFlyFormats(&GetCursor(), false, true))
             {
-                const auto pFrameFormat = const_cast<SwFrameFormat*>(&pFlyFrame->GetFormat());
+                const auto pFrameFormat = const_cast<SwFrameFormat*>(&rFlyFrame.GetFormat());
                 m_vFrames.push_back(std::make_shared<sw::FrameClient>(pFrameFormat));
             }
         }

@@ -156,9 +156,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121734)
     SwPosFlyFrames aPosFlyFrames = pDoc->GetAllFlyFormats(nullptr, false);
     // There is only one fly frame in the document: the one with the imported floating table
     CPPUNIT_ASSERT_EQUAL(size_t(1), aPosFlyFrames.size());
-    for (const auto& rPosFlyFrame : aPosFlyFrames)
+    for (const SwPosFlyFrame& rPosFlyFrame : aPosFlyFrames)
     {
-        const SwFrameFormat& rFormat = rPosFlyFrame->GetFormat();
+        const SwFrameFormat& rFormat = rPosFlyFrame.GetFormat();
         const SfxPoolItem* pItem = nullptr;
 
         // The LR and UL spacings and borders must all be set explicitly;
@@ -225,9 +225,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf122425_1)
     SwPosFlyFrames aPosFlyFrames = pDoc->GetAllFlyFormats(nullptr, false);
     // There are two fly frames in the document: for first page's header, and for other pages'
     CPPUNIT_ASSERT_EQUAL(size_t(2), aPosFlyFrames.size());
-    for (const auto& rPosFlyFrame : aPosFlyFrames)
+    for (const SwPosFlyFrame& rPosFlyFrame : aPosFlyFrames)
     {
-        const SwFrameFormat& rFormat = rPosFlyFrame->GetFormat();
+        const SwFrameFormat& rFormat = rPosFlyFrame.GetFormat();
         const SfxPoolItem* pItem = nullptr;
 
         // The LR and UL spacings and borders must all be set explicitly;

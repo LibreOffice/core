@@ -519,7 +519,7 @@ SwPosFlyFrames SwDoc::GetAllFlyFormats( const SwPaM* pCmpRange, bool bDrawAlso,
                 if( pCmpRange &&
                     !lcl_TstFlyRange( pCmpRange, pAPos, rAnchor.GetAnchorId() ))
                         continue;       // not a valid FlyFrame
-                aRetval.insert(std::make_shared<SwPosFlyFrame>(pAPos->nNode, pFly, aRetval.size()));
+                aRetval.insert(SwPosFlyFrame(pAPos->GetNode(), pFly, aRetval.size()));
             }
         }
     }
@@ -567,10 +567,10 @@ SwPosFlyFrames SwDoc::GetAllFlyFormats( const SwPaM* pCmpRange, bool bDrawAlso,
                     }
                     if ( pContentFrame )
                     {
-                        SwNodeIndex aIdx( pContentFrame->IsTextFrame()
-                            ? *static_cast<SwTextFrame const*>(pContentFrame)->GetTextNodeFirst()
-                            : *static_cast<SwNoTextFrame const*>(pContentFrame)->GetNode() );
-                        aRetval.insert(std::make_shared<SwPosFlyFrame>(aIdx, pFly, aRetval.size()));
+                        const SwNode* pNd( pContentFrame->IsTextFrame()
+                            ? static_cast<SwTextFrame const*>(pContentFrame)->GetTextNodeFirst()
+                            : static_cast<SwNoTextFrame const*>(pContentFrame)->GetNode() );
+                        aRetval.insert(SwPosFlyFrame(*pNd, pFly, aRetval.size()));
                     }
                 }
             }

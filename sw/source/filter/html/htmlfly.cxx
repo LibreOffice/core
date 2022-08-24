@@ -35,7 +35,7 @@ SwHTMLPosFlyFrame::SwHTMLPosFlyFrame( const SwPosFlyFrame& rPosFly,
                                   AllHtmlFlags nFlags ) :
     m_pFrameFormat( &rPosFly.GetFormat() ),
     m_pSdrObject( pSdrObj ),
-    m_aNodeIndex( rPosFly.GetNdIndex() ),
+    m_aNodeIndex( rPosFly.GetNode() ),
     m_nOrdNum( rPosFly.GetOrdNum() ),
     m_nContentIndex( 0 ),
     m_nAllFlags( nFlags )
