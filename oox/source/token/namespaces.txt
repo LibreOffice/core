@@ -45,6 +45,7 @@ ppt                     http://schemas.openxmlformats.org/presentationml/2006/ma
 
 # drawing ---------------------------------------------------------------------
 
+ahyp                    http://schemas.microsoft.com/office/drawing/2018/hyperlinkcolor
 dml                     http://schemas.openxmlformats.org/drawingml/2006/main
 dsp                     http://schemas.microsoft.com/office/drawing/2008/diagram
 dmlChart                http://schemas.openxmlformats.org/drawingml/2006/chart
