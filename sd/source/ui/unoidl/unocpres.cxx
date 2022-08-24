@@ -98,10 +98,10 @@ void SAL_CALL SdXCustomPresentation::insertByIndex( sal_Int32 Index, const uno::
 
     if(pPage)
     {
-        if( nullptr == mpModel )
+        if (!mpModel)
             mpModel = pPage->GetModel();
 
-        if( nullptr != mpModel && nullptr == mpSdCustomShow && mpModel->GetDoc() )
+        if (!mpSdCustomShow)
             mpSdCustomShow = new SdCustomShow;
 
         mpSdCustomShow->PagesVector().insert(mpSdCustomShow->PagesVector().begin() + Index,
