@@ -348,6 +348,11 @@ class GtkSalFrame final : public SalFrame
 
     static gboolean     signalWindowState( GtkWidget*, GdkEvent*, gpointer );
 #endif
+
+    static bool         signalZoomBegin(GtkGesture*, GdkEventSequence*, gpointer);
+    static bool         signalZoomUpdate(GtkGesture*, GdkEventSequence*, gpointer);
+    static bool         signalZoomEnd(GtkGesture*, GdkEventSequence*, gpointer);
+
 #if !GTK_CHECK_VERSION(4, 0, 0)
     static gboolean     signalConfigure( GtkWidget*, GdkEventConfigure*, gpointer );
 #endif
@@ -433,6 +438,8 @@ public:
     guint                           m_nActionGroupExportId;
     guint                           m_nHudAwarenessId;
     std::vector<gulong>             m_aMouseSignalIds;
+
+    GtkGesture                     *m_pZoomGesture;
 
     void grabPointer(bool bGrab, bool bKeyboardAlso, bool bOwnerEvents);
 
