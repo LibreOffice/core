@@ -2406,18 +2406,25 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
                                         sURL, bExtURL);
 
                 if (bExtURL)
-                    mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId);
+                    mpFS->startElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId);
                 else
-                    mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId,
+                    mpFS->startElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId,
                                           XML_action, "ppaction://hlinksldjump");
             }
             else
             {
                 sal_Int32 nIndex = sURL.indexOf('=');
                 std::u16string_view aDestination(sURL.subView(nIndex + 1));
-                mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), "", XML_action,
+                mpFS->startElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), "", XML_action,
                                       OUString::Concat("ppaction://hlinkshowjump?jump=") + aDestination);
             }
+            mpFS->startElementNS(XML_a, XML_extLst);
+            mpFS->startElementNS(XML_a, XML_ext, XML_uri, "{A12FA001-AC4F-418D-AE19-62706E023703}");
+            mpFS->singleElementNS(XML_ahyp, XML_hlinkClr, FSNS(XML_xmlns, XML_ahyp),
+                                  mpFB->getNamespaceURL(OOX_NS(ahyp)), XML_val, "tx");
+            mpFS->endElementNS(XML_a, XML_ext);
+            mpFS->endElementNS(XML_a, XML_extLst);
+            mpFS->endElementNS(XML_a, XML_hlinkClick);
         }
     }
     mpFS->endElementNS( XML_a, nElement );

@@ -45,6 +45,7 @@ ppt                     http://purl.oclc.org/ooxml/presentationml/main
 
 # drawing ---------------------------------------------------------------------
 
+ahyp                    http://schemas.microsoft.com/office/drawing/2018/hyperlinkcolor
 dml                     http://purl.oclc.org/ooxml/drawingml/main
 dsp                     http://schemas.microsoft.com/office/drawing/2008/diagram
 dmlChart                http://purl.oclc.org/ooxml/drawingml/chart

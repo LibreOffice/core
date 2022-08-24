@@ -501,6 +501,7 @@ afterLines
 ahLst
 ahPolar
 ahXY
+ahyp
 aiueo
 aiueoFullWidth
 alg
@@ -2709,6 +2710,7 @@ hiragana
 history
 hlink
 hlinkClick
+hlinkClr
 hlinkHover
 hlinkMouseOver
 hold
