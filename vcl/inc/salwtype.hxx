@@ -26,6 +26,7 @@
 #include <tools/solar.h>
 #include <tools/long.hxx>
 #include <vcl/GestureEvent.hxx>
+#include <vcl/GestureEventZoom.hxx>
 
 class LogicalFontInstance;
 class SalGraphics;
@@ -91,6 +92,7 @@ enum class SalEvent {
     LongPress,
     ExternalGesture,
     Gesture,
+    GestureZoom,
 };
 
 struct SalAbstractMouseEvent
@@ -261,6 +263,14 @@ struct SalGestureEvent
     double mfOffset;
     tools::Long mnX;
     tools::Long mnY;
+};
+
+struct SalGestureZoomEvent
+{
+    GestureEventZoomType meEventType = GestureEventZoomType::Begin;
+    tools::Long mnX = 0;
+    tools::Long mnY = 0;
+    double mfScaleDelta = 0;
 };
 
 typedef void (*SALTIMERPROC)();

@@ -32,6 +32,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/event.hxx>
 #include <vcl/GestureEvent.hxx>
+#include <vcl/GestureEventZoom.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/cursor.hxx>
@@ -1819,6 +1820,34 @@ static bool ImplHandleGestureEvent(vcl::Window* pWindow, const SalGestureEvent& 
     return aHandler.HandleEvent();
 }
 
+namespace {
+
+class HandleGestureZoomEvent : public HandleGestureEvent
+{
+private:
+    CommandGestureZoomData m_aGestureData;
+
+public:
+    HandleGestureZoomEvent(vcl::Window* pWindow, const SalGestureZoomEvent& rEvent)
+        : HandleGestureEvent(pWindow, Point(rEvent.mnX, rEvent.mnY))
+        , m_aGestureData(rEvent.mnX, rEvent.mnY, rEvent.meEventType, rEvent.mfScaleDelta)
+    {
+    }
+
+    virtual bool CallCommand(vcl::Window* pWindow, const Point& /*rMousePos*/) override
+    {
+        return ImplCallCommand(pWindow, CommandEventId::GestureZoom, &m_aGestureData);
+    }
+};
+
+}
+
+static bool ImplHandleGestureZoomEvent(vcl::Window* pWindow, const SalGestureZoomEvent& rEvent)
+{
+    HandleGestureZoomEvent aHandler(pWindow, rEvent);
+    return aHandler.HandleEvent();
+}
+
 static void ImplHandlePaint( vcl::Window* pWindow, const tools::Rectangle& rBoundRect, bool bImmediateUpdate )
 {
     // system paint events must be checked for re-mirroring
@@ -2871,6 +2900,12 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalEvent nEvent, const void* pE
         {
             auto const * aSalGestureEvent = static_cast<SalGestureEvent const *>(pEvent);
             bRet = ImplHandleGestureEvent(pWindow, *aSalGestureEvent);
+        }
+        break;
+        case SalEvent::GestureZoom:
+        {
+            const auto * pGestureEvent = static_cast<SalGestureZoomEvent const *>(pEvent);
+            bRet = ImplHandleGestureZoomEvent(pWindow, *pGestureEvent);
         }
         break;
         default:
