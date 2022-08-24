@@ -151,6 +151,15 @@ uno::Reference< graphic::XGraphic > const & SdrMediaObj::getSnapshot() const
 #if HAVE_FEATURE_AVMEDIA
     if( !m_xImpl->m_xCachedSnapshot.is() )
     {
+        Graphic aGraphic = m_xImpl->m_MediaProperties.getGraphic();
+        if (!aGraphic.IsNone())
+        {
+            // We have an explicit graphic for this media object, then go with that instead of
+            // generating our own one.
+            m_xImpl->m_xCachedSnapshot = aGraphic.GetXGraphic();
+            return m_xImpl->m_xCachedSnapshot;
+        }
+
         OUString aRealURL = m_xImpl->m_MediaProperties.getTempURL();
         if( aRealURL.isEmpty() )
             aRealURL = m_xImpl->m_MediaProperties.getURL();

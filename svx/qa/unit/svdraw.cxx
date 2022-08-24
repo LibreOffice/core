@@ -36,6 +36,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svl/itempool.hxx>
+#include <svx/svdomedia.hxx>
 
 #include <sdr/contact/objectcontactofobjlistpainter.hxx>
 
@@ -482,6 +483,28 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testMaterialSpecular)
     assertXPath(pXmlDoc, "(//light)[1]", "color", "#ababab");
     // The first light is harsh, the second light soft. So the 3D scene should have 6 lights (1+1+4).
     assertXPath(pXmlDoc, "//light", 6);
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testVideoSnapshot)
+{
+    // Given a slide with a media shape, containing a 4 sec video, red-green-blue-black being the 4
+    // seconds:
+    OUString aURL = m_directories.getURLFromSrc(u"svx/qa/unit/data/video-snapshot.pptx");
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.presentation.PresentationDocument");
+    SdrPage* pSdrPage = getFirstDrawPageWithAssert();
+    auto pSdrMediaObj = dynamic_cast<SdrMediaObj*>(pSdrPage->GetObj(0));
+
+    // When getting the red snapshot of the video:
+    Graphic aSnapshot(pSdrMediaObj->getSnapshot());
+
+    // Then make sure the color is correct:
+    const BitmapEx& rBitmap = aSnapshot.GetBitmapExRef();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: rgba[ff0000ff]
+    // - Actual  : rgba[000000ff]
+    // i.e. the preview was black, not red; since we seeked 3 secs into the video, while PowerPoint
+    // doesn't do that.
+    CPPUNIT_ASSERT_EQUAL(Color(0xff, 0x0, 0x0), rBitmap.GetPixelColor(0, 0));
 }
 }
 
