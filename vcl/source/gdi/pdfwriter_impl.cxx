@@ -5944,8 +5944,7 @@ void PDFWriterImpl::drawVerticalGlyphs(
         sal_Int32 nFontHeight )
 {
     tools::Long nXOffset = 0;
-    Point aCurPos( rGlyphs[0].m_aPos );
-    aCurPos = PixelToLogic( aCurPos );
+    Point aCurPos(SubPixelToLogic(rGlyphs[0].m_aPos));
     aCurPos += rAlignOffset;
     for( size_t i = 0; i < rGlyphs.size(); i++ )
     {
@@ -5969,9 +5968,9 @@ void PDFWriterImpl::drawVerticalGlyphs(
         if( i < rGlyphs.size()-1 )
         // #i120627# the text on the Y axis is reversed when export ppt file to PDF format
         {
-            tools::Long nOffsetX = rGlyphs[i+1].m_aPos.X() - rGlyphs[i].m_aPos.X();
-            tools::Long nOffsetY = rGlyphs[i+1].m_aPos.Y() - rGlyphs[i].m_aPos.Y();
-            nXOffset += static_cast<int>(sqrt(double(nOffsetX*nOffsetX + nOffsetY*nOffsetY)));
+            double nOffsetX = rGlyphs[i+1].m_aPos.getX() - rGlyphs[i].m_aPos.getX();
+            double nOffsetY = rGlyphs[i+1].m_aPos.getY() - rGlyphs[i].m_aPos.getY();
+            nXOffset += static_cast<int>(sqrt(nOffsetX*nOffsetX + nOffsetY*nOffsetY));
         }
         if (!rGlyphs[i].m_pGlyph->glyphId())
             continue;
@@ -6022,7 +6021,7 @@ void PDFWriterImpl::drawHorizontalGlyphs(
     for( size_t i = 1; i < rGlyphs.size(); i++ )
     {
         if( rGlyphs[i].m_nMappedFontId != rGlyphs[i-1].m_nMappedFontId ||
-            rGlyphs[i].m_aPos.Y() != rGlyphs[i-1].m_aPos.Y() )
+            rGlyphs[i].m_aPos.getY() != rGlyphs[i-1].m_aPos.getY() )
         {
             aRunEnds.push_back(i);
         }
@@ -6034,10 +6033,8 @@ void PDFWriterImpl::drawHorizontalGlyphs(
     sal_uInt32 nBeginRun = 0;
     for( size_t nRun = 0; nRun < aRunEnds.size(); nRun++ )
     {
-        // setup text matrix
-        Point aCurPos = rGlyphs[nBeginRun].m_aPos;
-        // back transformation to current coordinate system
-        aCurPos = PixelToLogic( aCurPos );
+        // setup text matrix back transformed to current coordinate system
+        Point aCurPos(SubPixelToLogic(rGlyphs[nBeginRun].m_aPos));
         aCurPos += rAlignOffset;
         // the first run can be set with "Td" operator
         // subsequent use of that operator would move
@@ -6079,9 +6076,9 @@ void PDFWriterImpl::drawHorizontalGlyphs(
         {
             appendHex( rGlyphs[nPos].m_nMappedGlyphId, aUnkernedLine );
             // check if default glyph positioning is sufficient
-            const Point aThisPos = aMat.transform( rGlyphs[nPos].m_aPos );
-            const Point aPrevPos = aMat.transform( rGlyphs[nPos-1].m_aPos );
-            double fAdvance = aThisPos.X() - aPrevPos.X();
+            const DevicePoint aThisPos = aMat.transform( rGlyphs[nPos].m_aPos );
+            const DevicePoint aPrevPos = aMat.transform( rGlyphs[nPos-1].m_aPos );
+            double fAdvance = aThisPos.getX() - aPrevPos.getX();
             fAdvance *= 1000.0 / nPixelFontHeight;
             const double fAdjustment = rGlyphs[nPos-1].m_nNativeWidth - fAdvance + 0.5;
             SAL_WARN_IF(
@@ -6320,7 +6317,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         if (bUseActualText || pGlyph->IsInCluster())
             nCharPos = pGlyph->charPos();
 
-        aGlyphs.emplace_back(Point(aPos.getX(), aPos.getY()),
+        aGlyphs.emplace_back(aPos,
                              pGlyph,
                              nGlyphWidth,
                              nMappedFontObject,
