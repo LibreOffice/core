@@ -68,6 +68,24 @@
       "message": "Thanks for confirming it is not QUITE a module, but a launcher.",
       "revId": "721823445893d1c2ed7898bdfce822ccad977ce2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "549c8894_3d969108",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-08-24T05:18:49Z",
+      "side": 1,
+      "message": "Launcher sounds good to me, just not a dialog. \"Launcher module\" to be precise :-)",
+      "parentUuid": "f34b03ca_d699114b",
+      "revId": "721823445893d1c2ed7898bdfce822ccad977ce2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
