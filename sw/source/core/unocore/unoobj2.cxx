@@ -127,8 +127,7 @@ struct FrameClientSortListLess
                 const auto nIdx =
                     rFormat.GetAnchor().GetContentAnchor()->GetContentIndex();
                 const auto nOrder = rFormat.GetAnchor().GetOrder();
-                FrameClientSortListEntry entry(nIdx, nOrder, std::make_shared<sw::FrameClient>(&rFormat));
-                rFrames.push_back(entry);
+                rFrames.emplace_back(nIdx, nOrder, std::make_unique<sw::FrameClient>(&rFormat));
             }
         }
     }
@@ -174,8 +173,7 @@ void CollectFrameAtNode( const SwNode& rNd,
                 const sal_Int32 nIndex = pAnchorPos->GetContentIndex();
                 sal_uInt32 nOrder = rAnchor.GetOrder();
 
-                FrameClientSortListEntry entry(nIndex, nOrder, std::make_shared<sw::FrameClient>(const_cast<SwFrameFormat*>(pFormat)));
-                rFrames.push_back(entry);
+                rFrames.emplace_back(nIndex, nOrder, std::make_unique<sw::FrameClient>(const_cast<SwFrameFormat*>(pFormat)));
             }
         }
         std::sort(rFrames.begin(), rFrames.end(), FrameClientSortListLess());
@@ -1707,14 +1705,14 @@ struct SwXParaFrameEnumerationImpl final : public SwXParaFrameEnumeration
         {
             // removing orphaned Clients
             const auto iter = std::remove_if(m_vFrames.begin(), m_vFrames.end(),
-                    [] (std::shared_ptr<sw::FrameClient>& rEntry) -> bool { return !rEntry->GetRegisteredIn(); });
+                    [] (std::unique_ptr<sw::FrameClient>& rEntry) -> bool { return !rEntry->GetRegisteredIn(); });
             m_vFrames.erase(iter, m_vFrames.end());
         }
     }
     void FillFrame();
     bool CreateNextObject();
     uno::Reference< text::XTextContent > m_xNextObject;
-    FrameClientList_t m_vFrames;
+    std::deque< std::unique_ptr<sw::FrameClient> > m_vFrames;
     ::sw::UnoCursorPointer m_pUnoCursor;
 };
 
@@ -1739,11 +1737,11 @@ SwXParaFrameEnumerationImpl::SwXParaFrameEnumerationImpl(
         ::CollectFrameAtNode(rPaM.GetPoint()->GetNode(), vFrames, false);
         std::transform(vFrames.begin(), vFrames.end(),
             std::back_inserter(m_vFrames),
-            [] (const FrameClientSortListEntry& rEntry) { return rEntry.pFrameClient; });
+            [] (FrameClientSortListEntry& rEntry) { return std::move(rEntry.pFrameClient); });
     }
     else if (pFormat)
     {
-        m_vFrames.push_back(std::make_shared<sw::FrameClient>(pFormat));
+        m_vFrames.push_back(std::make_unique<sw::FrameClient>(pFormat));
     }
     else if ((PARAFRAME_PORTION_CHAR == eParaFrameMode) ||
              (PARAFRAME_PORTION_TEXTRANGE == eParaFrameMode))
@@ -1754,7 +1752,7 @@ SwXParaFrameEnumerationImpl::SwXParaFrameEnumerationImpl(
             for(const SwPosFlyFrame& rFlyFrame : rPaM.GetDoc().GetAllFlyFormats(&GetCursor(), false, true))
             {
                 const auto pFrameFormat = const_cast<SwFrameFormat*>(&rFlyFrame.GetFormat());
-                m_vFrames.push_back(std::make_shared<sw::FrameClient>(pFrameFormat));
+                m_vFrames.push_back(std::make_unique<sw::FrameClient>(pFrameFormat));
             }
         }
         FillFrame();
@@ -1774,7 +1772,7 @@ void SwXParaFrameEnumerationImpl::FillFrame()
         return;
     const SwFormatFlyCnt& rFlyCnt = pTextAttr->GetFlyCnt();
     SwFrameFormat* const pFrameFormat = rFlyCnt.GetFrameFormat();
-    m_vFrames.push_back(std::make_shared<sw::FrameClient>(pFrameFormat));
+    m_vFrames.push_back(std::make_unique<sw::FrameClient>(pFrameFormat));
 }
 
 bool SwXParaFrameEnumerationImpl::CreateNextObject()
