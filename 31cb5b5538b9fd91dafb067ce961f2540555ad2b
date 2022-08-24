@@ -33,6 +33,23 @@
       "message": "Thanks, will consider adapting framework/source/dispatch/dispatchdisabler.cxx based on this, so 1) insertByName() and others have an immediate effect and 2) it can serve as a better example for extension authors to follow.",
       "revId": "31cb5b5538b9fd91dafb067ce961f2540555ad2b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "713139c4_689f72c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2022-08-24T08:08:32Z",
+      "side": 1,
+      "message": "fyi, searching the codebase reveals that we actually have a good example of changing the status based on selection. It\u0027s in SwXDispatch (sw/source/uibase/uno/unodispatch.cxx). You can see in SwXDispatch::selectionChanged how clients are updated via their statusChanged method on selection change.",
+      "revId": "31cb5b5538b9fd91dafb067ce961f2540555ad2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
