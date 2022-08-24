@@ -199,21 +199,17 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
     if (pFontOptions || bDisableAA || bResolutionIndependentLayoutEnabled)
     {
         cairo_hint_style_t eHintStyle = pFontOptions ? cairo_font_options_get_hint_style(pFontOptions) : CAIRO_HINT_STYLE_DEFAULT;
-        cairo_hint_metrics_t eHintMetricsStyle = pFontOptions ? cairo_font_options_get_hint_metrics(pFontOptions) : CAIRO_HINT_METRICS_DEFAULT;
-        bool bAllowedHintStyle = !bResolutionIndependentLayoutEnabled || (eHintStyle == CAIRO_HINT_STYLE_NONE);
-        bool bAllowedHintMetricStyle = !bResolutionIndependentLayoutEnabled || (eHintMetricsStyle == CAIRO_HINT_METRICS_OFF);
+        bool bAllowedHintStyle = !bResolutionIndependentLayoutEnabled || (eHintStyle == CAIRO_HINT_STYLE_NONE || eHintStyle == CAIRO_HINT_STYLE_SLIGHT);
 
-        if (bDisableAA || !bAllowedHintStyle || !bAllowedHintMetricStyle)
+        if (bDisableAA || !bAllowedHintStyle)
         {
             // Disable font AA in case global AA setting is supposed to affect
             // font rendering (not the default) and AA is disabled.
             cairo_font_options_t* pOptions = pFontOptions ? cairo_font_options_copy(pFontOptions) : cairo_font_options_create();
             if (bDisableAA)
                 cairo_font_options_set_antialias(pOptions, CAIRO_ANTIALIAS_NONE);
-            if (!bAllowedHintMetricStyle)
-                cairo_font_options_set_hint_metrics(pOptions, CAIRO_HINT_METRICS_OFF);
             if (!bAllowedHintStyle)
-                cairo_font_options_set_hint_style(pOptions, CAIRO_HINT_STYLE_NONE);
+                cairo_font_options_set_hint_style(pOptions, CAIRO_HINT_STYLE_SLIGHT);
             cairo_set_font_options(cr, pOptions);
             cairo_font_options_destroy(pOptions);
         }
