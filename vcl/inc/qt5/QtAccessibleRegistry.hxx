@@ -33,6 +33,7 @@ private:
 public:
     /** Returns the related QObject* for the XAccessible. Creates a new one if none exists yet. */
     static QObject* getQObject(css::uno::Reference<XAccessible> xAcc);
+    static void insert(css::uno::Reference<XAccessible> xAcc, QObject* pQObject);
     /** Removes the entry for the given XAccessible. */
     static void remove(css::uno::Reference<XAccessible> xAcc);
 };
