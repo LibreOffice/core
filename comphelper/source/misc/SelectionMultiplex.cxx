@@ -95,7 +95,16 @@ void SAL_CALL OSelectionChangeMultiplexer::selectionChanged( const  EventObject&
         m_pListener->_selectionChanged(_rEvent);
 }
 
+void OSelectionChangeMultiplexer::dispose()
+{
+    osl_atomic_increment(&m_refCount);
+    {
+        Reference< XSelectionChangeListener> xPreventDelete(this);
+        m_xSet->removeSelectionChangeListener(xPreventDelete);
+    }
+    osl_atomic_decrement(&m_refCount);
 }
 
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

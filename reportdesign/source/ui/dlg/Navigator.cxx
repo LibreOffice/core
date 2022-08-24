@@ -238,6 +238,7 @@ NavigatorTree::~NavigatorTree()
         delete pData;
         return false;
     });
+    m_pSelectionListener->dispose();
     m_pReportListener->dispose();
 }
 

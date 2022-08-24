@@ -81,6 +81,8 @@ namespace comphelper
         void        unlock();
         /// get the lock count
         sal_Int32   locked() const { return m_nLockCount; }
+
+        void dispose();
     };
 
 
