@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5cf5051_9b3cf1d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-08-24T13:38:44Z",
+      "side": 1,
+      "message": "I dislike the broad hammer hear. Blacklisting should take the driver into account at least, the user from the bugreport isn\u0027t even using the latest available driver for the graphics card.",
+      "revId": "1bf5f90eebb6e1c9fa21164474851da32446956a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
