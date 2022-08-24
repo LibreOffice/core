@@ -599,7 +599,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                 if (aRestorePos.GetContentIndex() > nMaxValidIndex)
                 {
                     SAL_WARN("sw.ww8", "Attempt to restore to invalid content position");
-                    aRestorePos.nContent.Assign(pNd, nMaxValidIndex);
+                    aRestorePos.SetContent(nMaxValidIndex);
                 }
 
                 *m_pPaM->GetPoint() = aRestorePos;

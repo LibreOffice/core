@@ -198,7 +198,7 @@ sal_uInt16 SwWW8ImplReader::End_Footnote()
     {
         sChar += OUStringChar(pText->GetText()[--nPos]);
         m_pPaM->SetMark();
-        --m_pPaM->GetMark()->nContent;
+        m_pPaM->GetMark()->AdjustContent(-1);
         std::shared_ptr<SwUnoCursor> xLastAnchorCursor(m_oLastAnchorPos ? m_rDoc.CreateUnoCursor(*m_oLastAnchorPos) : nullptr);
         m_oLastAnchorPos.reset();
         m_rDoc.getIDocumentContentOperations().DeleteRange( *m_pPaM );
@@ -251,9 +251,9 @@ sal_uInt16 SwWW8ImplReader::End_Footnote()
                 as usual. Might not be if the user has already deleted it, e.g.
                 #i14737#
             */
-            SwNodeIndex& rNIdx = m_pPaM->GetPoint()->nNode;
-            rNIdx = pSttIdx->GetIndex() + 1;
-            SwTextNode* pTNd = rNIdx.GetNode().GetTextNode();
+            SwPosition& rPaMPointPos = *m_pPaM->GetPoint();
+            rPaMPointPos.Assign(pSttIdx->GetIndex() + 1);
+            SwTextNode* pTNd = rPaMPointPos.GetNode().GetTextNode();
             if (pTNd && !pTNd->GetText().isEmpty() && !sChar.isEmpty())
             {
                 const OUString &rText = pTNd->GetText();
@@ -269,12 +269,12 @@ sal_uInt16 SwWW8ImplReader::End_Footnote()
                             nFirstLineIndent = pLRSpace->GetTextFirstLineOffset();
                     }
 
-                    m_pPaM->GetPoint()->nContent.Assign( pTNd, 0 );
+                    rPaMPointPos.SetContent(0);
                     m_pPaM->SetMark();
                     // Strip out aesthetic tabs we may have inserted on export #i24762#
                     if (nFirstLineIndent < 0 && rText.getLength() > 1 && rText[1] == 0x09)
-                        ++m_pPaM->GetMark()->nContent;
-                    ++m_pPaM->GetMark()->nContent;
+                        m_pPaM->GetMark()->AdjustContent(1);
+                    m_pPaM->GetMark()->AdjustContent(1);
                     m_xReffingStck->Delete(*m_pPaM);
                     m_rDoc.getIDocumentContentOperations().DeleteRange( *m_pPaM );
                     m_pPaM->DeleteMark();
@@ -2740,11 +2740,11 @@ void WW8TabDesc::ParkPaM()
     {
         do
         {
-            m_pIo->m_pPaM->GetPoint()->nNode = nSttNd;
+            m_pIo->m_pPaM->GetPoint()->Assign(nSttNd);
         }
         while (m_pIo->m_pPaM->GetPointNode().GetNodeType() != SwNodeType::Text && ++nSttNd < nEndNd);
 
-        m_pIo->m_pPaM->GetPoint()->nContent.Assign(m_pIo->m_pPaM->GetPointContentNode(), 0);
+        m_pIo->m_pPaM->GetPoint()->SetContent(0);
         m_pIo->m_rDoc.SetTextFormatColl(*m_pIo->m_pPaM, const_cast<SwTextFormatColl*>(m_pIo->m_pDfltTextFormatColl));
     }
 }
@@ -2983,10 +2983,10 @@ void WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
     {
         do
         {
-            m_pIo->m_pPaM->GetPoint()->nNode = nSttNd;
+            m_pIo->m_pPaM->GetPoint()->Assign(nSttNd);
         }
         while (m_pIo->m_pPaM->GetPointNode().GetNodeType() != SwNodeType::Text && ++nSttNd < nEndNd);
-        m_pIo->m_pPaM->GetPoint()->nContent.Assign(m_pIo->m_pPaM->GetPointContentNode(), 0);
+        m_pIo->m_pPaM->GetPoint()->SetContent(0);
         // Precautionally set now, otherwise the style is not set for cells
         // that are inserted for margin balancing.
         m_pIo->m_rDoc.SetTextFormatColl(*m_pIo->m_pPaM, const_cast<SwTextFormatColl*>(m_pIo->m_pDfltTextFormatColl));
@@ -2995,7 +2995,8 @@ void WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
     }
 
     // Better to turn Snap to Grid off for all paragraphs in tables
-    SwTextNode *pNd = m_pIo->m_pPaM->GetPointNode().GetTextNode();
+    SwPosition* pGridPos = m_pIo->m_pPaM->GetPoint();
+    SwTextNode *pNd = pGridPos->GetNode().GetTextNode();
     if(!pNd)
         return;
 
@@ -3008,12 +3009,10 @@ void WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
     SvxParaGridItem aGridItem( rSnapToGrid );
     aGridItem.SetValue(false);
 
-    SwPosition* pGridPos = m_pIo->m_pPaM->GetPoint();
-
     const sal_Int32 nEnd = pGridPos->GetContentIndex();
-    pGridPos->nContent.Assign(m_pIo->m_pPaM->GetPointContentNode(), 0);
+    pGridPos->SetContent(0);
     m_pIo->m_xCtrlStck->NewAttr(*pGridPos, aGridItem);
-    pGridPos->nContent.Assign(m_pIo->m_pPaM->GetPointContentNode(), nEnd);
+    pGridPos->SetContent(nEnd);
     m_pIo->m_xCtrlStck->SetAttr(*pGridPos, RES_PARATR_SNAPTOGRID);
 }
 
