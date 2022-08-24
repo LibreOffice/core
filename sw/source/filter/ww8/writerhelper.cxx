@@ -110,9 +110,9 @@ namespace
     {
         ww8::Frames aRet;
 
-        for(const auto& rpFly : rFlys)
+        for(const auto& rFly : rFlys)
         {
-            const SwFrameFormat &rEntry = rpFly->GetFormat();
+            const SwFrameFormat &rEntry = rFly.GetFormat();
 
             if (const SwPosition* pAnchor = rEntry.GetAnchor().GetContentAnchor())
             {
@@ -123,7 +123,7 @@ namespace
             }
             else
             {
-                SwPosition aPos(rpFly->GetNdIndex());
+                SwPosition aPos(rFly.GetNode());
                 aRet.emplace_back(rEntry, aPos);
             }
         }
