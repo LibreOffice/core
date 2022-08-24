@@ -579,14 +579,14 @@ struct PDFAddStream
 // helper structure for drawLayout and friends
 struct PDFGlyph
 {
-    Point const       m_aPos;
+    DevicePoint const m_aPos;
     const GlyphItem* m_pGlyph;
     sal_Int32 const   m_nNativeWidth;
     sal_Int32 const   m_nMappedFontId;
     sal_uInt8 const   m_nMappedGlyphId;
     int const         m_nCharPos;
 
-    PDFGlyph( const Point& rPos,
+    PDFGlyph( const DevicePoint& rPos,
               const GlyphItem* pGlyph,
               sal_Int32 nNativeWidth,
               sal_Int32 nFontId,
