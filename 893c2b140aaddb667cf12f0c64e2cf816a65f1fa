@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52dc52a1_90aaaf42",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-08-24T06:31:18Z",
+      "side": 1,
+      "message": "Blocked by Qt not actually providing a QAccessibleSelectionInterface yet.",
+      "revId": "893c2b140aaddb667cf12f0c64e2cf816a65f1fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
