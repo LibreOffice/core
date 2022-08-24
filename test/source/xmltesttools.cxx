@@ -383,6 +383,8 @@ void XmlTestTools::registerOOXMLNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
         BAD_CAST("http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("a"),
                        BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/main"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("ahyp"),
+                       BAD_CAST("http://schemas.microsoft.com/office/drawing/2018/hyperlinkcolor"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("pic"),
                        BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/picture"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("rels"),
