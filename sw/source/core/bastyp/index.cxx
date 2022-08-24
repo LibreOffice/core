@@ -329,7 +329,7 @@ sal_Int32 SwContentIndex::operator--()
 
 sal_Int32 SwContentIndex::operator+=( sal_Int32 const nVal )
 {
-    SAL_WARN_IF( !(m_nIndex <= SAL_MAX_INT32 - nVal), "sw.core",
+    SAL_WARN_IF( !(nVal > 0 ? m_nIndex <= SAL_MAX_INT32 - nVal : m_nIndex >= nVal), "sw.core",
                  "SwContentIndex SwContentIndex::operator+=(sal_Int32) wraps around" );
     return ChgValue( *this, m_nIndex + nVal ).m_nIndex;
 }
