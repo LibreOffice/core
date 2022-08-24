@@ -16,6 +16,24 @@
       "message": "Hi Hossein,\nIs it possible to have a unittest for this issue ?",
       "revId": "7f607032da97bfcc32dc3b923e50462422309c10",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd00099b_c9d945b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-08-24T22:18:50Z",
+      "side": 1,
+      "message": "Hi Xisco,\nI have added a UITest for it.",
+      "parentUuid": "63a66622_21711224",
+      "revId": "7f607032da97bfcc32dc3b923e50462422309c10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
