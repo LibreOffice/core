@@ -519,10 +519,6 @@ bool VclProcessor2D::RenderFillGraphicPrimitive2DImpl(
     const sal_Int32 nBWidth(std::max(sal_Int32(1), basegfx::fround(aGraphicRange.getWidth())));
     const sal_Int32 nBHeight(std::max(sal_Int32(1), basegfx::fround(aGraphicRange.getHeight())));
 
-    // only do something when bitmap fill has a size in discrete units
-    if (nBWidth <= 0 || nBHeight <= 0)
-        return true;
-
     // nBWidth, nBHeight is the pixel size of the needed bitmap. To not need to scale it
     // in vcl many times, create a size-optimized version
     const Size aNeededBitmapSizePixel(nBWidth, nBHeight);
