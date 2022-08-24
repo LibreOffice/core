@@ -1872,7 +1872,7 @@ void DocxExport::WriteMainText()
     // body
     m_pDocumentFS->startElementNS(XML_w, XML_body);
 
-    m_pCurPam->GetPoint()->nNode = m_rDoc.GetNodes().GetEndOfContent().StartOfSectionNode()->GetIndex();
+    m_pCurPam->GetPoint()->Assign(*m_rDoc.GetNodes().GetEndOfContent().StartOfSectionNode());
 
     // the text
     WriteText();

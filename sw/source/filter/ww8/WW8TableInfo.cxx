@@ -589,7 +589,7 @@ WW8TableInfo::processSwTableByLayout(const SwTable * pTable, RowEndInners_t &rLa
                         bDone = true;
                 }
 
-                aPam.GetPoint()->nNode++;
+                aPam.GetPoint()->Adjust(SwNodeOffset(1));
             }
             while (!bDone);
         }
@@ -708,7 +708,7 @@ WW8TableInfo::processTableBoxLines(const SwTableBox * pBox,
             if (aPaM.GetPoint()->GetNode() == aEndPaM.GetPoint()->GetNode())
                 bDone = true;
             else
-                aPaM.GetPoint()->nNode++;
+                aPaM.GetPoint()->Adjust(SwNodeOffset(1));
         }
     }
 
@@ -804,7 +804,7 @@ WW8TableInfo::processTableBox(const SwTable * pTable,
                     bDone = true;
             }
 
-            aPaM.GetPoint()->nNode++;
+            aPaM.GetPoint()->Adjust(SwNodeOffset(1));
         }
         while (!bDone);
 

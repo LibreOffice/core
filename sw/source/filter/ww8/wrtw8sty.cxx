@@ -1013,7 +1013,7 @@ MSWordSections::MSWordSections( MSWordExportBase& rExport )
         if ( SectionType::ToxContent == pSectNd->GetSection().GetType() )
         {
             pNd = pSectNd;
-            rExport.m_pCurPam->GetPoint()->nNode = *pNd;
+            rExport.m_pCurPam->GetPoint()->Assign(*pNd);
         }
 
         if ( SectionType::Content == pSectNd->GetSection().GetType() )
