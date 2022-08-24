@@ -821,7 +821,7 @@ void SwWW8ImplReader::HandleLineNumbering(const wwSection &rSection)
     }
 }
 
-wwSection::wwSection(const SwPosition &rPos) : maStart(rPos.nNode)
+wwSection::wwSection(const SwPosition &rPos) : maStart(rPos.GetNode())
     , mpSection(nullptr)
     , mpPage(nullptr)
     , meDir(SvxFrameDirection::Horizontal_LR_TB)
@@ -2543,14 +2543,14 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo, const WW8_TablePos *p
 
 void wwSectionManager::JoinNode(const SwPosition &rPos, const SwNode &rNode)
 {
-    if ((!maSegments.empty()) && (maSegments.back().maStart == rPos.nNode))
+    if ((!maSegments.empty()) && (maSegments.back().maStart == rPos.GetNode()))
         maSegments.back().maStart.Assign(rNode);
 }
 
 bool SwWW8ImplReader::JoinNode(SwPaM &rPam, bool bStealAttr)
 {
     bool bRet = false;
-    rPam.GetPoint()->nContent = 0; // go to start of paragraph
+    rPam.GetPoint()->SetContent(0); // go to start of paragraph
 
     SwNodeIndex aPref(rPam.GetPoint()->GetNode(), -1);
 
@@ -4554,7 +4554,7 @@ void SwWW8ImplReader::Read_LineBreakClear(sal_uInt16 /*nId*/, const sal_uInt8* p
         // Replace the linebreak char with a clearing break.
         --nPos;
         m_pPaM->SetMark();
-        --m_pPaM->GetMark()->nContent;
+        m_pPaM->GetMark()->AdjustContent(-1);
         m_rDoc.getIDocumentContentOperations().DeleteRange(*m_pPaM);
         m_pPaM->DeleteMark();
         SwFormatLineBreak aLineBreak(*m_oLineBreakClear);
