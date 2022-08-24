@@ -69,6 +69,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b17576e_7c157da9",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-24T10:24:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bede0e92_4de449ac",
+      "revId": "8a1b6e33051683166350c857666b90fef02eb112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "df9d0df7_4091a30e",
@@ -261,6 +279,30 @@
       "writtenOn": "2021-09-06T20:56:43Z",
       "side": 1,
       "message": "\u003e I don\u0027t know what API we are using to connect to Firebird\n\nThis one",
+      "range": {
+        "startLine": 277,
+        "startChar": 19,
+        "endLine": 277,
+        "endChar": 38
+      },
+      "revId": "8a1b6e33051683166350c857666b90fef02eb112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1bfcd5d_09c59f87",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-24T10:24:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4b8b3ef1_5a6c8826",
       "range": {
         "startLine": 277,
         "startChar": 19,

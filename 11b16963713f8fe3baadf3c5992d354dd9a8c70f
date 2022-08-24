@@ -33,6 +33,24 @@
       "message": "\u0027userUTF8\u0027 is a misleading name. It is an OUString, i.e. a sequence of 16-bit code units (it is UTF-16 string). A UTF-8 string only appears in OString when you convert using OUStringToOString.\n\nYou may avoid inventing a good name (we all know that naming is among the hardest things in computer science :)) - just call it \"value\".",
       "revId": "11b16963713f8fe3baadf3c5992d354dd9a8c70f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d2ec87f_52de8190",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-24T10:24:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "298a282c_e66135a0",
+      "revId": "11b16963713f8fe3baadf3c5992d354dd9a8c70f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
