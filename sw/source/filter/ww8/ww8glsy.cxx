@@ -56,7 +56,7 @@ WW8Glossary::WW8Glossary(tools::SvRef<SotStorageStream> &refStrm, sal_uInt8 nVer
     }
 }
 
-bool WW8Glossary::HasBareGraphicEnd(SwDoc *pDoc,SwNodeIndex const &rIdx)
+bool WW8Glossary::HasBareGraphicEnd(SwDoc *pDoc, SwNode const &rIdx)
 {
     bool bRet=false;
     for( sal_uInt16 nCnt = pDoc->GetSpzFrameFormats()->size(); nCnt; )
@@ -70,7 +70,7 @@ bool WW8Glossary::HasBareGraphicEnd(SwDoc *pDoc,SwNodeIndex const &rIdx)
         if (pAPos &&
             ((RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId()) ||
              (RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId())) &&
-            rIdx == pAPos->GetNodeIndex() )
+            rIdx == pAPos->GetNode() )
         {
             bRet=true;
             break;
@@ -115,29 +115,28 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
         do {
             SwPaM aPam( aStart );
             {
-                SwNodeIndex& rIdx = aPam.GetPoint()->nNode;
-                ++rIdx;
-                pCNd = rIdx.GetNode().GetTextNode();
+                SwPosition& rPos = *aPam.GetPoint();
+                rPos.Adjust(SwNodeOffset(1));
+                pCNd = rPos.GetNode().GetTextNode();
                 if( nullptr == pCNd )
                 {
-                    pCNd = pD->GetNodes().MakeTextNode( rIdx.GetNode(), pColl );
-                    rIdx = *pCNd;
+                    pCNd = pD->GetNodes().MakeTextNode( rPos.GetNode(), pColl );
+                    rPos.Assign(*pCNd);
                 }
             }
-            aPam.GetPoint()->nContent.Assign( pCNd, 0 );
             aPam.SetMark();
             {
-                SwNodeIndex& rIdx = aPam.GetPoint()->nNode;
-                rIdx = aStart.GetNode().EndOfSectionIndex() - 1;
-                if(( nullptr == ( pCNd = rIdx.GetNode().GetContentNode() ) )
-                        || HasBareGraphicEnd(pD,rIdx))
+                SwPosition& rPos = *aPam.GetPoint();
+                rPos.Assign(aStart.GetNode().EndOfSectionIndex() - 1);
+                if(( nullptr == ( pCNd = rPos.GetNode().GetContentNode() ) )
+                        || HasBareGraphicEnd(pD,rPos.GetNode()))
                 {
-                    ++rIdx;
-                    pCNd = pD->GetNodes().MakeTextNode( rIdx.GetNode(), pColl );
-                    rIdx = *pCNd;
+                    rPos.Adjust(SwNodeOffset(1));
+                    pCNd = pD->GetNodes().MakeTextNode( rPos.GetNode(), pColl );
+                    rPos.Assign(*pCNd);
                 }
             }
-            aPam.GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
+            aPam.GetPoint()->SetContent( pCNd->Len() );
 
             // now we have the right selection for one entry.  Copy this to
             // the defined TextBlock, but only if it is not an autocorrection
@@ -221,8 +220,6 @@ bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
                     pD->GetNodes().GoNext( &aIdx );
                 }
                 SwPaM aPamo( aIdx );
-                aPamo.GetPoint()->nContent.Assign(aIdx.GetNode().GetContentNode(),
-                    0);
                 std::unique_ptr<SwWW8ImplReader> xRdr(new SwWW8ImplReader(
                     m_xGlossary->m_nVersion, m_xStg.get(), m_rStrm.get(), *pD, rBlocks.GetBaseURL(),
                     true, false, *aPamo.GetPoint()));

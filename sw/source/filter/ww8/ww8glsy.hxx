@@ -81,7 +81,7 @@ private:
     static bool MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks, bool bSaveRelFile,
                             const std::vector<OUString>& rStrings,
                             const std::vector<ww::bytes>& rExtra);
-    static bool HasBareGraphicEnd(SwDoc *pD,SwNodeIndex const &rIdx);
+    static bool HasBareGraphicEnd(SwDoc *pD, SwNode const &rIdx);
 
     WW8Glossary(const WW8Glossary&) = delete;
     WW8Glossary& operator=(const WW8Glossary&) = delete;
