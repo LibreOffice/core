@@ -100,15 +100,15 @@ void FeatureCollector::collectForTable(hb_tag_t aTableTag)
         rFeature.m_nCode = aFeatureTag;
 
         FeatureDefinition aDefinition = OpenTypeFeatureDefinitionList().getDefinition(aFeatureTag);
-        if (aDefinition)
-            rFeature.m_aDefinition = aDefinition;
 
-        if (OpenTypeFeatureDefinitionListPrivate::isSpecialFeatureCode(aFeatureTag))
+        unsigned int nFeatureIdx;
+        if (hb_ot_layout_language_find_feature(m_pHbFace, aTableTag, 0,
+                                               HB_OT_LAYOUT_DEFAULT_LANGUAGE_INDEX, aFeatureTag,
+                                               &nFeatureIdx))
         {
-            unsigned int nFeatureIdx;
-            if (hb_ot_layout_language_find_feature(m_pHbFace, aTableTag, 0,
-                                                   HB_OT_LAYOUT_DEFAULT_LANGUAGE_INDEX, aFeatureTag,
-                                                   &nFeatureIdx))
+            OUString sLabel;
+            ;
+            if (OpenTypeFeatureDefinitionListPrivate::isSpecialFeatureCode(aFeatureTag))
             {
                 hb_ot_name_id_t aLabelID;
                 if (hb_ot_layout_feature_get_name_ids(m_pHbFace, aTableTag, nFeatureIdx, &aLabelID,
@@ -124,12 +124,45 @@ void FeatureCollector::collectForTable(hb_tag_t aTableTag)
                     {
                         std::vector<uint16_t> aBuf(++nLabel); // make space for terminating NUL.
                         hb_ot_name_get_utf16(m_pHbFace, aLabelID, aLanguage, &nLabel, aBuf.data());
-                        OUString sLabel(reinterpret_cast<sal_Unicode*>(aBuf.data()), nLabel);
-                        rFeature.m_aDefinition = vcl::font::FeatureDefinition(aFeatureTag, sLabel);
+                        sLabel = OUString(reinterpret_cast<sal_Unicode*>(aBuf.data()), nLabel);
+                        aDefinition = vcl::font::FeatureDefinition(aFeatureTag, sLabel);
                     }
                 }
             }
+
+            unsigned int nLookups = hb_ot_layout_feature_get_lookups(
+                m_pHbFace, aTableTag, nFeatureIdx, 0, nullptr, nullptr);
+            std::vector<unsigned int> aLookups(nLookups);
+            hb_ot_layout_feature_get_lookups(m_pHbFace, aTableTag, nFeatureIdx, 0, &nLookups,
+                                             aLookups.data());
+            unsigned int nAlternates = 0;
+            for (unsigned int nLookupIdx : aLookups)
+            {
+                hb_set_t* aGlyphs = hb_set_create();
+                hb_ot_layout_lookup_collect_glyphs(m_pHbFace, aTableTag, nLookupIdx, nullptr,
+                                                   aGlyphs, nullptr, nullptr);
+                hb_codepoint_t nGlyphIdx = HB_SET_VALUE_INVALID;
+                while (hb_set_next(aGlyphs, &nGlyphIdx))
+                {
+                    nAlternates = std::max(
+                        nAlternates, hb_ot_layout_lookup_get_glyph_alternates(
+                                         m_pHbFace, nLookupIdx, nGlyphIdx, 0, nullptr, nullptr));
+                }
+            }
+
+            if (nAlternates > 1)
+            {
+                std::vector<vcl::font::FeatureParameter> aParameters;
+                for (unsigned int i = 0; i < nAlternates + 1; i++)
+                    aParameters.emplace_back(uint32_t(i), OUString::number(i));
+                aDefinition = vcl::font::FeatureDefinition(
+                    aFeatureTag, aDefinition.getDescription(),
+                    vcl::font::FeatureParameterType::ENUM, std::move(aParameters), 0);
+            }
         }
+
+        if (aDefinition)
+            rFeature.m_aDefinition = aDefinition;
     }
 }
 
