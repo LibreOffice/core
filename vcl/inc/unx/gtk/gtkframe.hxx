@@ -353,6 +353,10 @@ class GtkSalFrame final : public SalFrame
     static gboolean     signalZoomUpdate(GtkGesture*, GdkEventSequence*, gpointer);
     static gboolean     signalZoomEnd(GtkGesture*, GdkEventSequence*, gpointer);
 
+    static gboolean     signalRotateBegin(GtkGesture*, GdkEventSequence*, gpointer);
+    static gboolean     signalRotateUpdate(GtkGesture*, GdkEventSequence*, gpointer);
+    static gboolean     signalRotateEnd(GtkGesture*, GdkEventSequence*, gpointer);
+
 #if !GTK_CHECK_VERSION(4, 0, 0)
     static gboolean     signalConfigure( GtkWidget*, GdkEventConfigure*, gpointer );
 #endif
@@ -440,6 +444,7 @@ public:
     std::vector<gulong>             m_aMouseSignalIds;
 
     GtkGesture                     *m_pZoomGesture;
+    GtkGesture                     *m_pRotateGesture;
 
     void grabPointer(bool bGrab, bool bKeyboardAlso, bool bOwnerEvents);
 
