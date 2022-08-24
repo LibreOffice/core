@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae6dac61_42eda684",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-08-24T10:52:40Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7691316b_28679c32",
+      "revId": "c187b9e33ed22d8920e772cf77d9d6c7b9a29e9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dcc544b8_28b78345",
@@ -49,6 +67,24 @@
       "side": 1,
       "message": "Hu? Ah why was there even still getStr() used.. No, just\n\n    OUString aFuncName( pCharClass-\u003euppercase( *(pDesc-\u003emxFuncName)));\n\nshould do.",
       "parentUuid": "dcc544b8_28b78345",
+      "revId": "c187b9e33ed22d8920e772cf77d9d6c7b9a29e9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1281263_6d08156c",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1036,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-08-24T10:52:40Z",
+      "side": 1,
+      "message": "Programming in a hurry during your day job is never a good choice 😊",
+      "parentUuid": "8bcdcb04_dee04675",
       "revId": "c187b9e33ed22d8920e772cf77d9d6c7b9a29e9c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
