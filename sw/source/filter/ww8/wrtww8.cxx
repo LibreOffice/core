@@ -1883,7 +1883,7 @@ void MSWordExportBase::SetCurPam(SwNodeOffset nStt, SwNodeOffset nEnd)
     if ( nStt != m_pCurPam->GetMark()->GetNodeIndex() &&
          m_rDoc.GetNodes()[ nStt ]->IsTableNode() )
     {
-        m_pCurPam->GetMark()->nNode = nStt;
+        m_pCurPam->GetMark()->Assign(nStt);
     }
 
     m_pOrigPam = m_pCurPam.get(); // ???
@@ -2919,7 +2919,7 @@ void MSWordExportBase::WriteText()
         if (pNextNode != nullptr)
             m_pCurPam->GetPoint()->Assign(*pNextNode);
         else
-            ++m_pCurPam->GetPoint()->nNode;
+            m_pCurPam->GetPoint()->Adjust(SwNodeOffset(1));
 
         SwNodeOffset nPos = m_pCurPam->GetPoint()->GetNodeIndex();
         ::SetProgressState( sal_Int32(nPos), m_pCurPam->GetDoc().GetDocShell() );
@@ -2934,7 +2934,7 @@ void WW8Export::WriteMainText()
 
     m_pFib->m_fcMin = Strm().Tell();
 
-    m_pCurPam->GetPoint()->nNode = m_rDoc.GetNodes().GetEndOfContent().StartOfSectionNode()->GetIndex();
+    m_pCurPam->GetPoint()->Assign(*m_rDoc.GetNodes().GetEndOfContent().StartOfSectionNode());
 
     WriteText();
 
@@ -3818,7 +3818,7 @@ ErrCode SwWW8Writer::WriteStorageImpl()
         SwTableNode* pTNd = m_pCurrentPam->GetPointNode().FindTableNode();
         if( pTNd && m_bWriteAll )
             // start with the table node !!
-            m_pCurrentPam->GetPoint()->nNode = *pTNd;
+            m_pCurrentPam->GetPoint()->Assign(*pTNd);
     }
 
     // Do the actual export

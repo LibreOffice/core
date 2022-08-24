@@ -500,13 +500,12 @@ void RtfExport::WriteMainText()
     SwTableNode* pTableNode = m_pCurPam->GetPointNode().FindTableNode();
     if (m_pWriter && m_pWriter->m_bWriteOnlyFirstTable && pTableNode != nullptr)
     {
-        m_pCurPam->GetPoint()->nNode = *pTableNode;
-        m_pCurPam->GetMark()->nNode = *(pTableNode->EndOfSectionNode());
+        m_pCurPam->GetPoint()->Assign(*pTableNode);
+        m_pCurPam->GetMark()->Assign(*pTableNode->EndOfSectionNode());
     }
     else
     {
-        m_pCurPam->GetPoint()->nNode
-            = m_rDoc.GetNodes().GetEndOfContent().StartOfSectionNode()->GetIndex();
+        m_pCurPam->GetPoint()->Assign(*m_rDoc.GetNodes().GetEndOfContent().StartOfSectionNode());
     }
 
     WriteText();
