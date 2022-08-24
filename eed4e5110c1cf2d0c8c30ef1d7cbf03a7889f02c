@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "93adde68_a42ef6f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-08-24T14:49:54Z",
+      "side": 1,
+      "message": "\u003e Patch Set 7:\n\u003e \n\u003e Build Failed \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/120971/ : FAILURE\n\u003e \n\u003e Visual studio complained about error C2059: syntax error: \"\u003c\u003c\" in file C:/cygwin/home/tdf/lode/jenkins/workspace/gerrit_windows@2/extensions/source/activex/SODispatchInterceptor.cxx(51) ( https://ci.libreoffice.org/job/gerrit_windows/133852/ )\n\nYou left the conflict markers in the file and did not resolve the conflict yet.",
+      "revId": "eed4e5110c1cf2d0c8c30ef1d7cbf03a7889f02c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
