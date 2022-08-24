@@ -298,10 +298,10 @@ bool DocumentDrawModelManager::Search(const SwPaM& rPaM, const SvxSearchItem& rS
 {
     SwPosFlyFrames aFrames = m_rDoc.GetAllFlyFormats(&rPaM, /*bDrawAlso=*/true);
 
-    for (const SwPosFlyFramePtr& pPosFlyFrame : aFrames)
+    for (const SwPosFlyFrame& rPosFlyFrame : aFrames)
     {
         // Filter for at-paragraph anchored draw frames.
-        const SwFrameFormat& rFrameFormat = pPosFlyFrame->GetFormat();
+        const SwFrameFormat& rFrameFormat = rPosFlyFrame.GetFormat();
         const SwFormatAnchor& rAnchor = rFrameFormat.GetAnchor();
         if (rAnchor.GetAnchorId() != RndStdIds::FLY_AT_PARA || rFrameFormat.Which() != RES_DRAWFRMFMT)
             continue;

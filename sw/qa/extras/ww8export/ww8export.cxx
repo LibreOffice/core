@@ -809,9 +809,9 @@ DECLARE_WW8EXPORT_TEST(testTdf122425_2, "tdf122425_2.doc")
     SwPosFlyFrames aPosFlyFrames = pDoc->GetAllFlyFormats(nullptr, false);
     // There is one fly frame in the document: the text box
     CPPUNIT_ASSERT_EQUAL(size_t(1), aPosFlyFrames.size());
-    for (const auto& rPosFlyFrame : aPosFlyFrames)
+    for (const SwPosFlyFrame& rPosFlyFrame : aPosFlyFrames)
     {
-        const SwFrameFormat& rFormat = rPosFlyFrame->GetFormat();
+        const SwFrameFormat& rFormat = rPosFlyFrame.GetFormat();
         const SfxPoolItem* pItem = nullptr;
 
         // Check for correct explicitly-set values of UL spacings. Previously this was "DEFAULT",
