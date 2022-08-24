@@ -178,6 +178,7 @@ void ViewShell::construct()
     mpView = nullptr;
     mpFrameView = nullptr;
     mpZoomList = nullptr;
+    mfLastZoomScale = 0;
     mbStartShowWithDialog = false;
     mnPrintedHandoutPageNum = 1;
     mnPrintedHandoutPageCount = 0;
@@ -748,6 +749,49 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
                     }
                 }
             }
+        }
+        break;
+
+        case CommandEventId::GestureZoom:
+        {
+            const CommandGestureZoomData* pData = rCEvt.GetGestureZoomData();
+
+            Reference<XSlideShowController> xSlideShowController(SlideShow::GetSlideShowController(GetViewShellBase()));
+
+            if (pData->meEventType == GestureEventZoomType::Begin)
+            {
+                mfLastZoomScale = pData->mfScaleDelta;
+                bDone = true;
+                break;
+            }
+
+            if (pData->meEventType == GestureEventZoomType::Update)
+            {
+                double deltaBetweenEvents = (pData->mfScaleDelta - mfLastZoomScale) / mfLastZoomScale;
+                mfLastZoomScale = pData->mfScaleDelta;
+
+                if (pData != nullptr && !GetDocSh()->IsUIActive() && !xSlideShowController.is())
+                {
+                    const ::tools::Long nOldZoom = GetActiveWindow()->GetZoom();
+                    ::tools::Long nNewZoom;
+                    Point aOldMousePos = GetActiveWindow()->PixelToLogic(rCEvt.GetMousePosPixel());
+
+                    nNewZoom = nOldZoom + deltaBetweenEvents * 100;
+                    nNewZoom = std::max<::tools::Long>(pWin->GetMinZoom(), nNewZoom);
+                    nNewZoom = std::min<::tools::Long>(pWin->GetMaxZoom(), nNewZoom);
+
+                    SetZoom(nNewZoom);
+
+                    // Keep mouse at same doc point before zoom
+                    Point aNewMousePos = GetActiveWindow()->PixelToLogic(rCEvt.GetMousePosPixel());
+                    SetWinViewPos(GetWinViewPos() - (aNewMousePos - aOldMousePos));
+
+                    Invalidate(SID_ATTR_ZOOM);
+                    Invalidate(SID_ATTR_ZOOMSLIDER);
+                }
+            }
+
+            bDone = true;
         }
         break;
 
