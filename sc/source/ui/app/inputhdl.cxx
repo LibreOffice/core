@@ -3458,10 +3458,14 @@ void ScInputHandler::CancelHandler()
 
     eMode = SC_INPUT_NONE;
     StopInputWinEngine( true );
+    SCCOL nMaxCol(MAXCOL);
     if (pExecuteSh)
+    {
         pExecuteSh->StopEditShell();
+        nMaxCol = pExecuteSh->GetViewData().GetDocument().MaxCol();
+    }
 
-    aCursorPos.Set(pExecuteSh->GetViewData().GetDocument().MaxCol()+1,0,0); // Invalid flag
+    aCursorPos.Set(nMaxCol+1,0,0); // Invalid flag
     mpEditEngine->SetTextCurrentDefaults(OUString());
 
     if ( !pLastState && pExecuteSh )
