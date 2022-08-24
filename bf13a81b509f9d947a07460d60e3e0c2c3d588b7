@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "130578ef_05f97d22",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-08-24T09:08:38Z",
+      "side": 1,
+      "message": "Some more black magic in relation to help files.\n\niiuc, you are also removing .uno:BackColor, which is used in at least one help file.\nhttps://help.libreoffice.org/7.5/en-US/text/shared/02/02160000.html\nMore generally, here is a search on where it appears in help.\n\nhttps://opengrok.libreoffice.org/search?project\u003dhelp\u0026full\u003dBackColor\u0026nn\u003d1\u0026si\u003dfull\u0026si\u003dfull\n\nI assume these changes do not affect the behavior (from the user pov) and therefore the help files do not need to be changed.  But maybe some labels need to be changed in the help files so that F1 works correctly. \n\nI do not know how these things work (e.g., the role of the help/helpers files) -- so I am only pointing out this possible side-effect. Presumably Olivier Hallot will be able to give a definitive opinion about this situation.",
+      "revId": "bf13a81b509f9d947a07460d60e3e0c2c3d588b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
