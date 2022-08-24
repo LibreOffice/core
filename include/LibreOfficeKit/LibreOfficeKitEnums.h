@@ -860,6 +860,27 @@ typedef enum
      * [<startColumn>, <startRow>, <endColumn>, <endRow>]
      */
     LOK_CALLBACK_PRINT_RANGES = 56,
+
+    /**
+     * Informs the LibreOfficeKit client that a font specified in the
+     * document is missing.
+     *
+     * This callback is emitted right after the document has been loaded.
+     *
+     * Payload example:
+     * {
+     *     "fontsmissing": [
+     *         "Some Random Font",
+     *         "Another Font"
+     *     ]
+     * }
+     *
+     * The names are those of the font family. Sadly it is currently
+     * not possible to know the name of the font style that is
+     * missing.
+     *
+     */
+    LOK_CALLBACK_FONTS_MISSING = 57,
 }
 LibreOfficeKitCallbackType;
 
@@ -1002,6 +1023,8 @@ static inline const char* lokCallbackTypeToString(int nType)
         return "LOK_CALLBACK_CONTENT_CONTROL";
     case LOK_CALLBACK_PRINT_RANGES:
         return "LOK_CALLBACK_PRINT_RANGES";
+    case LOK_CALLBACK_FONTS_MISSING:
+        return "LOK_CALLBACK_FONTS_MISSING";
     }
 
     assert(!"Unknown LibreOfficeKitCallbackType type.");
