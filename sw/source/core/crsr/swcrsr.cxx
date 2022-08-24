@@ -2088,7 +2088,9 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
             }
             bRet = !IsSelOvr( SwCursorSelOverFlags::Toggle | SwCursorSelOverFlags::ChangePos );
         }
-        else
+        else if (!pFrame->IsInFootnote()) // tdf#150457 Jump to the begin/end
+                                          // of the first/last line only if the
+                                          // cursor is not inside a footenote
         {
             sal_Int32 nOffset = 0;
 
@@ -2114,6 +2116,8 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
             }
 
         }
+        else
+            *GetPoint() = aOldPos;
 
         DoSetBidiLevelUpDown(); // calculate cursor bidi level
     }
