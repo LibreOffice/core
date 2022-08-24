@@ -27,6 +27,7 @@
 #include <tools/long.hxx>
 #include <vcl/GestureEvent.hxx>
 #include <vcl/GestureEventZoom.hxx>
+#include <vcl/GestureEventRotate.hxx>
 
 class LogicalFontInstance;
 class SalGraphics;
@@ -93,6 +94,7 @@ enum class SalEvent {
     ExternalGesture,
     Gesture,
     GestureZoom,
+    GestureRotate,
 };
 
 struct SalAbstractMouseEvent
@@ -271,6 +273,14 @@ struct SalGestureZoomEvent
     tools::Long mnX = 0;
     tools::Long mnY = 0;
     double mfScaleDelta = 0;
+};
+
+struct SalGestureRotateEvent
+{
+    GestureEventRotateType meEventType = GestureEventRotateType::Begin;
+    tools::Long mnX = 0;
+    tools::Long mnY = 0;
+    double mfAngleDelta = 0;
 };
 
 typedef void (*SALTIMERPROC)();
