@@ -40,38 +40,50 @@ class Tdf148620(UITestCase):
 
             self.assertEqual("One\nTwo\nThree\nFour\nFive\nsix", document.DrawPages[0].getByIndex(1).String)
 
+            xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+
             xArgs = mkPropertyValues({"KeyModifier": 0})
             self.xUITest.executeCommandWithParameters(".uno:OutlineUp", xArgs)
+            xToolkit.processEventsToIdle()
             self.assertEqual("One\nTwo\nThree\nFour\nsix\nFive", document.DrawPages[0].getByIndex(1).String)
 
             self.xUITest.executeCommandWithParameters(".uno:OutlineUp", xArgs)
+            xToolkit.processEventsToIdle()
             self.assertEqual("One\nTwo\nThree\nsix\nFour\nFive", document.DrawPages[0].getByIndex(1).String)
 
             self.xUITest.executeCommandWithParameters(".uno:OutlineUp", xArgs)
+            xToolkit.processEventsToIdle()
             self.assertEqual("One\nTwo\nsix\nThree\nFour\nFive", document.DrawPages[0].getByIndex(1).String)
 
             self.xUITest.executeCommandWithParameters(".uno:OutlineUp", xArgs)
+            xToolkit.processEventsToIdle()
             self.assertEqual("One\nsix\nTwo\nThree\nFour\nFive", document.DrawPages[0].getByIndex(1).String)
 
             self.xUITest.executeCommandWithParameters(".uno:OutlineUp", xArgs)
+            xToolkit.processEventsToIdle()
             self.assertEqual("six\nOne\nTwo\nThree\nFour\nFive", document.DrawPages[0].getByIndex(1).String)
 
             self.xUITest.executeCommandWithParameters(".uno:OutlineDown", xArgs)
+            xToolkit.processEventsToIdle()
 
             # Without the fix in place, this test would have failed with
             # AssertionError: 'One\nsix\nTwo\nThree\nFour\nFive' != 'One\nTwo\nsix\nThree\nFour\nFive'
             self.assertEqual("One\nsix\nTwo\nThree\nFour\nFive", document.DrawPages[0].getByIndex(1).String)
 
             self.xUITest.executeCommandWithParameters(".uno:OutlineDown", xArgs)
+            xToolkit.processEventsToIdle()
             self.assertEqual("One\nTwo\nsix\nThree\nFour\nFive", document.DrawPages[0].getByIndex(1).String)
 
             self.xUITest.executeCommandWithParameters(".uno:OutlineDown", xArgs)
+            xToolkit.processEventsToIdle()
             self.assertEqual("One\nTwo\nThree\nsix\nFour\nFive", document.DrawPages[0].getByIndex(1).String)
 
             self.xUITest.executeCommandWithParameters(".uno:OutlineDown", xArgs)
+            xToolkit.processEventsToIdle()
             self.assertEqual("One\nTwo\nThree\nFour\nsix\nFive", document.DrawPages[0].getByIndex(1).String)
 
             self.xUITest.executeCommandWithParameters(".uno:OutlineDown", xArgs)
+            xToolkit.processEventsToIdle()
             self.assertEqual("One\nTwo\nThree\nFour\nFive\nsix", document.DrawPages[0].getByIndex(1).String)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
