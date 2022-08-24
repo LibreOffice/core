@@ -203,5 +203,12 @@ const CommandGestureZoomData* CommandEvent::GetGestureZoomData() const
         return nullptr;
 }
 
+const CommandGestureRotateData* CommandEvent::GetGestureRotateData() const
+{
+    if (mnCommand == CommandEventId::GestureRotate)
+        return static_cast<const CommandGestureRotateData*>(mpData);
+    else
+        return nullptr;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
