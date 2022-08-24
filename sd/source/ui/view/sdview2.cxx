@@ -437,7 +437,9 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
     if( nLayer != SDRLAYER_NOTFOUND )
     {
         SdrLayerAdmin& rLayerAdmin = mrDoc.GetLayerAdmin();
-        aLayerName = rLayerAdmin.GetLayerPerID(nLayer)->GetName();
+        SdrLayer* pLayer = rLayerAdmin.GetLayerPerID(nLayer);
+        assert(pLayer && "layer missing");
+        aLayerName = pLayer->GetName();
     }
 
     if( mbIsDropAllowed && !pPV->IsLayerLocked( aLayerName ) && pPV->IsLayerVisible( aLayerName ) )
