@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dec69a23_ade4bece",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-08-24T15:17:44Z",
+      "side": 1,
+      "message": "it requires cypress and jsdialog change: https://github.com/CollaboraOnline/online/pull/5187",
+      "revId": "3f2396a446c9a814bc234d3ee77102f4686b6548",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
