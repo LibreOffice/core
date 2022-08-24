@@ -22,6 +22,7 @@
 #include <QtGui/QAccessibleInterface>
 
 #include <QtAccessibleEventListener.hxx>
+#include <QtAccessibleRegistry.hxx>
 #include <QtFrame.hxx>
 #include <QtTools.hxx>
 #include <QtWidget.hxx>
@@ -74,7 +75,11 @@ QtAccessibleWidget::QtAccessibleWidget(const Reference<XAccessible> xAccessible,
     }
 }
 
-void QtAccessibleWidget::invalidate() { m_xAccessible.clear(); }
+void QtAccessibleWidget::invalidate()
+{
+    QtAccessibleRegistry::remove(m_xAccessible);
+    m_xAccessible.clear();
+}
 
 Reference<XAccessibleContext> QtAccessibleWidget::getAccessibleContextImpl() const
 {
@@ -251,7 +256,8 @@ void lcl_appendRelation(QVector<QPair<QAccessibleInterface*, QAccessible::Relati
     {
         Reference<XAccessible> xAccessible(aRelation.TargetSet[i], uno::UNO_QUERY);
         relations->append(
-            { QAccessible::queryAccessibleInterface(new QtXAccessible(xAccessible)), aQRelation });
+            { QAccessible::queryAccessibleInterface(QtAccessibleRegistry::getQObject(xAccessible)),
+              aQRelation });
     }
 }
 }
@@ -315,7 +321,8 @@ QAccessibleInterface* QtAccessibleWidget::parent() const
         return nullptr;
 
     if (xAc->getAccessibleParent().is())
-        return QAccessible::queryAccessibleInterface(new QtXAccessible(xAc->getAccessibleParent()));
+        return QAccessible::queryAccessibleInterface(
+            QtAccessibleRegistry::getQObject(xAc->getAccessibleParent()));
 
     // go via the QObject hierarchy; some a11y objects like the application
     // (at the root of the a11y hierarchy) are handled solely by Qt and have
@@ -332,8 +339,8 @@ QAccessibleInterface* QtAccessibleWidget::child(int index) const
     Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
     if (!xAc.is())
         return nullptr;
-
-    return QAccessible::queryAccessibleInterface(new QtXAccessible(xAc->getAccessibleChild(index)));
+    return QAccessible::queryAccessibleInterface(
+        QtAccessibleRegistry::getQObject(xAc->getAccessibleChild(index)));
 }
 
 QString QtAccessibleWidget::text(QAccessible::Text text) const
@@ -736,7 +743,7 @@ QAccessibleInterface* QtAccessibleWidget::childAt(int x, int y) const
     // convert from screen to local coordinates
     QPoint aLocalCoords = QPoint(x, y) - rect().topLeft();
     return QAccessible::queryAccessibleInterface(
-        new QtXAccessible(xAccessibleComponent->getAccessibleAtPoint(
+        QtAccessibleRegistry::getQObject(xAccessibleComponent->getAccessibleAtPoint(
             awt::Point(aLocalCoords.x(), aLocalCoords.y()))));
 }
 
@@ -1458,7 +1465,8 @@ QAccessibleInterface* QtAccessibleWidget::caption() const
     Reference<XAccessibleTable> xTable(xAc, UNO_QUERY);
     if (!xTable.is())
         return nullptr;
-    return QAccessible::queryAccessibleInterface(new QtXAccessible(xTable->getAccessibleCaption()));
+    return QAccessible::queryAccessibleInterface(
+        QtAccessibleRegistry::getQObject(xTable->getAccessibleCaption()));
 }
 
 QAccessibleInterface* QtAccessibleWidget::cellAt(int row, int column) const
@@ -1471,7 +1479,7 @@ QAccessibleInterface* QtAccessibleWidget::cellAt(int row, int column) const
     if (!xTable.is())
         return nullptr;
     return QAccessible::queryAccessibleInterface(
-        new QtXAccessible(xTable->getAccessibleCellAt(row, column)));
+        QtAccessibleRegistry::getQObject(xTable->getAccessibleCellAt(row, column)));
 }
 
 int QtAccessibleWidget::columnCount() const
@@ -1603,7 +1611,7 @@ QList<QAccessibleInterface*> QtAccessibleWidget::selectedCells() const
     {
         Reference<XAccessible> xChild = xSelection->getSelectedAccessibleChild(i);
         QAccessibleInterface* pInterface
-            = QAccessible::queryAccessibleInterface(new QtXAccessible(xChild));
+            = QAccessible::queryAccessibleInterface(QtAccessibleRegistry::getQObject(xChild));
         aSelectedCells.push_back(pInterface);
     }
     return aSelectedCells;
@@ -1666,7 +1674,8 @@ QAccessibleInterface* QtAccessibleWidget::summary() const
     Reference<XAccessibleTable> xTable(xAc, UNO_QUERY);
     if (!xTable.is())
         return nullptr;
-    return QAccessible::queryAccessibleInterface(new QtXAccessible(xTable->getAccessibleSummary()));
+    return QAccessible::queryAccessibleInterface(
+        QtAccessibleRegistry::getQObject(xTable->getAccessibleSummary()));
 }
 
 bool QtAccessibleWidget::unselectColumn(int column)
@@ -1710,7 +1719,7 @@ QList<QAccessibleInterface*> QtAccessibleWidget::columnHeaderCells() const
     {
         Reference<XAccessible> xCell = xHeaders->getAccessibleCellAt(nRow, nCol);
         QAccessibleInterface* pInterface
-            = QAccessible::queryAccessibleInterface(new QtXAccessible(xCell));
+            = QAccessible::queryAccessibleInterface(QtAccessibleRegistry::getQObject(xCell));
         aHeaderCells.push_back(pInterface);
     }
     return aHeaderCells;
@@ -1776,7 +1785,7 @@ QList<QAccessibleInterface*> QtAccessibleWidget::rowHeaderCells() const
     {
         Reference<XAccessible> xCell = xHeaders->getAccessibleCellAt(nRow, nCol);
         QAccessibleInterface* pInterface
-            = QAccessible::queryAccessibleInterface(new QtXAccessible(xCell));
+            = QAccessible::queryAccessibleInterface(QtAccessibleRegistry::getQObject(xCell));
         aHeaderCells.push_back(pInterface);
     }
     return aHeaderCells;
@@ -1821,7 +1830,7 @@ QAccessibleInterface* QtAccessibleWidget::table() const
     if (!xTableAcc.is())
         return nullptr;
 
-    return QAccessible::queryAccessibleInterface(new QtXAccessible(xTableAcc));
+    return QAccessible::queryAccessibleInterface(QtAccessibleRegistry::getQObject(xTableAcc));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
