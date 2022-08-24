@@ -3661,6 +3661,76 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf148849)
     CPPUNIT_ASSERT_EQUAL(OUString("Row 2"), rNode.GetTextNode()->GetText());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf150576)
+{
+    // load a document with a table and an empty paragraph before the table
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf148849.fodt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // record changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    // hide changes
+    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    CPPUNIT_ASSERT(pWrtShell->GetLayout()->IsHideRedlines());
+
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+
+    // Check deletion of the first row, if the second row deleted already
+
+    // put cursor in the second table row
+    pWrtShell->Down(/*bSelect=*/false, /*nCount=*/2);
+    SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->GetNode();
+    CPPUNIT_ASSERT_EQUAL(OUString("Row 2"), rNode.GetTextNode()->GetText());
+
+    // delete the second table row
+    pWrtShell->DeleteRow();
+
+    // check cursor position (row 3)
+    SwNode& rNode2 = pWrtShell->GetCursor()->GetPoint()->GetNode();
+    CPPUNIT_ASSERT_EQUAL(OUString("Row 3"), rNode2.GetTextNode()->GetText());
+
+    // put cursor in the first row
+    pWrtShell->Up(/*bSelect=*/false, /*nCount=*/1);
+    SwNode& rNode3 = pWrtShell->GetCursor()->GetPoint()->GetNode();
+    CPPUNIT_ASSERT_EQUAL(OUString("12"), rNode3.GetTextNode()->GetText());
+
+    // delete the first row
+    pWrtShell->DeleteRow();
+
+    // This was empty (cursor jumped in the start of the document instead of
+    // the next not deleted row)
+    SwNode& rNode4 = pWrtShell->GetCursor()->GetPoint()->GetNode();
+    CPPUNIT_ASSERT_EQUAL(OUString("Row 3"), rNode4.GetTextNode()->GetText());
+
+    // Check skipping previous lines
+
+    // restore deleted rows
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+    SwNode& rNode5 = pWrtShell->GetCursor()->GetPoint()->GetNode();
+    CPPUNIT_ASSERT_EQUAL(OUString("Row 2"), rNode5.GetTextNode()->GetText());
+
+    // delete the second row
+    pWrtShell->DeleteRow();
+    SwNode& rNode7 = pWrtShell->GetCursor()->GetPoint()->GetNode();
+    CPPUNIT_ASSERT_EQUAL(OUString("Row 3"), rNode7.GetTextNode()->GetText());
+
+    // delete the third, i.e. last row
+    pWrtShell->DeleteRow();
+    SwNode& rNode8 = pWrtShell->GetCursor()->GetPoint()->GetNode();
+
+    // This was empty (cursor jumped in the start of the document instead of
+    // the previous not deleted row)
+    CPPUNIT_ASSERT_EQUAL(OUString("12"), rNode8.GetTextNode()->GetText());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132603)
 {
     createSwDoc();
