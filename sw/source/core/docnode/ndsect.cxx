@@ -919,8 +919,7 @@ SwSectionNode* SwNodes::InsertTextSection(SwNode& rNd,
     std::optional<SwNode2LayoutSaveUpperFrames> oNode2Layout;
     if( bInsFrame )
     {
-        SwNodeIndex aTmp( *pSectNd );
-        if( !pSectNd->GetNodes().FindPrvNxtFrameNode( aTmp, pSectNd->EndOfSectionNode() ) )
+        if( !pSectNd->GetNodes().FindPrvNxtFrameNode( *pSectNd, pSectNd->EndOfSectionNode() ) )
             // Collect all Uppers
             oNode2Layout.emplace(*pSectNd);
     }

@@ -134,8 +134,7 @@ SwTextNode *SwNodes::MakeTextNode( SwNode& rWhere,
             if( static_cast<SwSectionNode*>(pNd)->GetSection().IsHidden() ||
                 static_cast<SwSectionNode*>(pNd)->IsContentHidden() )
             {
-                SwNodeIndex aTmpIdx( *pNode );
-                pNd = FindPrvNxtFrameNode( aTmpIdx, pNode );
+                pNd = FindPrvNxtFrameNode( *pNode, pNode );
                 if( !pNd )
                     return pNode;
                 aTmp = *pNd;

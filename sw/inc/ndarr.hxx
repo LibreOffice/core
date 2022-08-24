@@ -311,10 +311,10 @@ public:
     const   SwDoc& GetDoc() const   { return m_rMyDoc; }
 
     /** Search previous / next content node or table node with frames.
-     Search is started backward with the one before rFrameIdx and
+     Search is started backward with the one before rFrameNd and
      forward after pEnd.
-     If no valid node is found, return 0. rFrameIdx points to the node with frames. **/
-    SwNode* FindPrvNxtFrameNode( SwNodeIndex& rFrameIdx,
+     If no valid node is found, return nullptr. **/
+    SwNode* FindPrvNxtFrameNode( const SwNode& rFrameNd,
                                 const SwNode* pEnd,
                                 SwRootFrame const* pLayout = nullptr) const;
 

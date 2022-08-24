@@ -1517,12 +1517,11 @@ static bool lcl_CheckHiddenSection( SwNodeIndex& rIdx )
     const SwSectionNode* pSectNd = rIdx.GetNode().FindSectionNode();
     if( pSectNd && pSectNd->GetSection().IsHiddenFlag() )
     {
-        SwNodeIndex aTmp( *pSectNd );
         const SwNode* pFrameNd =
-            rIdx.GetNodes().FindPrvNxtFrameNode( aTmp, pSectNd->EndOfSectionNode() );
+            rIdx.GetNodes().FindPrvNxtFrameNode( *pSectNd, pSectNd->EndOfSectionNode() );
         bOk = pFrameNd != nullptr;
         SAL_WARN_IF(!bOk, "sw.core", "found no Node with Frames");
-        rIdx = aTmp;
+        rIdx = *(bOk ? pFrameNd : pSectNd);
     }
     return bOk;
 }

@@ -366,8 +366,7 @@ void SwNodes::ChgNode( SwNodeIndex const & rDelPos, SwNodeOffset nSz,
 
     // get the frames:
     SwNodeIndex aIdx( *pPrevInsNd, 1 );
-    SwNodeIndex aFrameNdIdx( aIdx );
-    SwNode* pFrameNd = rNds.FindPrvNxtFrameNode( aFrameNdIdx,
+    SwNode* pFrameNd = rNds.FindPrvNxtFrameNode( aIdx.GetNode(),
                                     rNds[ rInsPos.GetIndex() - 1 ] );
 
     if( !pFrameNd )
@@ -2182,16 +2181,16 @@ SwContentNode* SwNodes::GoPrevSection( SwPosition * pIdx,
 
 //TODO: The inventor of the "single responsibility principle" will be crying if you ever show this code to him!
 /** find the next/previous ContentNode or table node that should have layout
- * frames that are siblings to the ones of the node at rFrameIdx.
+ * frames that are siblings to the ones of the node at rFrameNd.
  *
- * Search is started backward with the one before rFrameIdx and
+ * Search is started backward with the one before rFrameNd and
  * forward after pEnd.
  *
- * @param rFrameIdx in: node with frames to search in; out: found node
- * @param pEnd last node after rFrameIdx that should be excluded from search
+ * @param rFrameNd in: node with frames to search in; out: found node
+ * @param pEnd last node after rFrameNd that should be excluded from search
  * @return result node; 0 if not found
  */
-SwNode* SwNodes::FindPrvNxtFrameNode( SwNodeIndex& rFrameIdx,
+SwNode* SwNodes::FindPrvNxtFrameNode( const SwNode& rFrameNd,
         SwNode const*const pEnd,
         SwRootFrame const*const pLayout) const
 {
@@ -2202,20 +2201,20 @@ SwNode* SwNodes::FindPrvNxtFrameNode( SwNodeIndex& rFrameIdx,
     // no layout -> skip
     if( GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell() )
     {
-        SwNode *const pSttNd = &rFrameIdx.GetNode();
+        const SwNode *const pSttNd = &rFrameNd;
 
         // inside a hidden section?
-        SwSectionNode *const pSectNd = pSttNd->IsSectionNode()
+        const SwSectionNode *const pSectNd = pSttNd->IsSectionNode()
                     ? pSttNd->StartOfSectionNode()->FindSectionNode()
                     : pSttNd->FindSectionNode();
         if( !( pSectNd && pSectNd->GetSection().CalcHiddenFlag() ) )
         {
             // in a table in table situation we have to assure that we don't leave the
             // outer table cell when the inner table is looking for a PrvNxt...
-            SwTableNode *const pTableNd = pSttNd->IsTableNode()
+            const SwTableNode *const pTableNd = pSttNd->IsTableNode()
                     ? pSttNd->StartOfSectionNode()->FindTableNode()
                     : pSttNd->FindTableNode();
-            SwNodeIndex aIdx( rFrameIdx );
+            SwNodeIndex aIdx( rFrameNd );
 
             // search backward for a content or table node
 
@@ -2227,7 +2226,6 @@ SwNode* SwNodes::FindPrvNxtFrameNode( SwNodeIndex& rFrameIdx,
                 if (pFrameNd->IsContentNode())
                 {
                     // TODO why does this not check for nested tables like forward direction
-                    rFrameIdx = aIdx;
                     return pFrameNd;
                 }
                 else if (pFrameNd->IsEndNode() && pFrameNd->StartOfSectionNode()->IsTableNode())
@@ -2237,7 +2235,6 @@ SwNode* SwNodes::FindPrvNxtFrameNode( SwNodeIndex& rFrameIdx,
                         || pFrameNd->StartOfSectionNode()->GetRedlineMergeFlag() != SwNode::Merge::Hidden)
                     {
                         pFrameNd = pFrameNd->StartOfSectionNode();
-                        rFrameIdx = *pFrameNd;
                         return pFrameNd;
                     }
                     else
@@ -2251,7 +2248,7 @@ SwNode* SwNodes::FindPrvNxtFrameNode( SwNodeIndex& rFrameIdx,
                 {
                     pFrameNd = GoPrevSection( &aIdx, true, false );
                     if ( nullptr != pFrameNd && !(
-                            ::CheckNodesRange( aIdx.GetNode(), rFrameIdx.GetNode(), true ) &&
+                            ::CheckNodesRange( aIdx.GetNode(), rFrameNd, true ) &&
                             // Never out of the table at the start
                             pFrameNd->FindTableNode() == pTableNd &&
                             // Bug 37652: Never out of the table at the end
@@ -2286,11 +2283,6 @@ SwNode* SwNodes::FindPrvNxtFrameNode( SwNodeIndex& rFrameIdx,
                         pTableNode != pSttNd->StartOfSectionNode()->FindTableNode())
                     {
                         pFrameNd = pTableNode;
-                        rFrameIdx = *pFrameNd;
-                    }
-                    else
-                    {
-                        rFrameIdx = aIdx;
                     }
                     return pFrameNd;
                 }
@@ -2300,7 +2292,6 @@ SwNode* SwNodes::FindPrvNxtFrameNode( SwNodeIndex& rFrameIdx,
                         || !pLayout->HasMergedParas()
                         || pFrameNd->GetRedlineMergeFlag() != SwNode::Merge::Hidden)
                     {
-                        rFrameIdx = *pFrameNd;
                         return pFrameNd;
                     }
                     else
@@ -2315,7 +2306,7 @@ SwNode* SwNodes::FindPrvNxtFrameNode( SwNodeIndex& rFrameIdx,
                     pFrameNd = GoNextSection( &aIdx, true, false );
                     // NEVER leave the section when doing this!
                     if (pFrameNd
-                        && !(::CheckNodesRange(aIdx.GetNode(), rFrameIdx.GetNode(), true)
+                        && !(::CheckNodesRange(aIdx.GetNode(), rFrameNd, true)
                              && (pFrameNd->FindTableNode() == pTableNd &&
                                 // NEVER go out of the table cell at the end
                                 (!pFrameNd->FindTableNode() || pFrameNd->FindTableBoxStartNode()
@@ -2352,7 +2343,6 @@ SwNode* SwNodes::FindPrvNxtFrameNode( SwNodeIndex& rFrameIdx,
                         }
                         if( aIdx.GetNode().IsTableNode() )
                         {
-                            rFrameIdx = aIdx;
                             pFrameNd = &aIdx.GetNode();
                             assert(!"this isn't dead code?");
                         }

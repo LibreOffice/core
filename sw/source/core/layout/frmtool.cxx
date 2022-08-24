@@ -2014,15 +2014,14 @@ void MakeFrames( SwDoc *pDoc, SwNode &rSttIdx, SwNode &rEndIdx )
 {
     bObjsDirect = false;
 
-    SwNodeIndex aTmp( rSttIdx );
     SwNodeOffset nEndIdx = rEndIdx.GetIndex();
     // TODO for multiple layouts there should be a loop here
-    SwNode* pNd = pDoc->GetNodes().FindPrvNxtFrameNode( aTmp,
+    SwNode* pNd = pDoc->GetNodes().FindPrvNxtFrameNode( rSttIdx,
                     pDoc->GetNodes()[ nEndIdx-1 ],
                     pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
     if ( pNd )
     {
-        bool bApres = aTmp < rSttIdx;
+        bool bApres = *pNd < rSttIdx;
         SwNode2Layout aNode2Layout( *pNd, rSttIdx.GetIndex() );
         SwFrame* pFrame;
         sw::FrameMode eMode = sw::FrameMode::Existing;
