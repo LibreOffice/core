@@ -97,6 +97,7 @@
 #define STR_FONT_FEATURE_ID_VRT2          NC_("STR_FONT_FEATURE_ID_VRT2", "Vertical Alternates and Rotation")
 #define STR_FONT_FEATURE_ID_VRTR          NC_("STR_FONT_FEATURE_ID_VRTR", "Vertical Alternates for Rotation")
 #define STR_FONT_FEATURE_ID_ZERO          NC_("STR_FONT_FEATURE_ID_ZERO", "Slashed Zero")
+#define STR_FONT_FEATURE_PARAM_NONE       NC_("STR_FONT_FEATURE_PARAM_NONE", "None")
 
 #endif // INCLUDED_VCL_INC_STRINGS_HRC
 

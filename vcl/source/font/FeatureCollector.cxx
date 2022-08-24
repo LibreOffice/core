@@ -11,6 +11,9 @@
 #include <font/OpenTypeFeatureDefinitionList.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
+#include <font/OpenTypeFeatureStrings.hrc>
+#include <svdata.hxx>
+
 #include <hb-ot.h>
 #include <hb-graphite2.h>
 
@@ -100,19 +103,26 @@ void FeatureCollector::collectForTable(hb_tag_t aTableTag)
         rFeature.m_nCode = aFeatureTag;
 
         FeatureDefinition aDefinition = OpenTypeFeatureDefinitionList().getDefinition(aFeatureTag);
-        if (aDefinition)
-            rFeature.m_aDefinition = aDefinition;
+        std::vector<vcl::font::FeatureParameter> aParameters{
+            { 0, VclResId(STR_FONT_FEATURE_PARAM_NONE) }
+        };
 
-        if (OpenTypeFeatureDefinitionListPrivate::isSpecialFeatureCode(aFeatureTag))
+        unsigned int nFeatureIdx;
+        if (hb_ot_layout_language_find_feature(m_pHbFace, aTableTag, 0,
+                                               HB_OT_LAYOUT_DEFAULT_LANGUAGE_INDEX, aFeatureTag,
+                                               &nFeatureIdx))
         {
-            unsigned int nFeatureIdx;
-            if (hb_ot_layout_language_find_feature(m_pHbFace, aTableTag, 0,
-                                                   HB_OT_LAYOUT_DEFAULT_LANGUAGE_INDEX, aFeatureTag,
-                                                   &nFeatureIdx))
+            OUString sLabel;
+            if (OpenTypeFeatureDefinitionListPrivate::isSpecialFeatureCode(aFeatureTag))
             {
+                // ssXX and cvXX can have name ID defined for them, check for
+                // them and use as appropriate.
                 hb_ot_name_id_t aLabelID;
+                hb_ot_name_id_t aFirstParameterID;
+                unsigned nNamedParameters;
                 if (hb_ot_layout_feature_get_name_ids(m_pHbFace, aTableTag, nFeatureIdx, &aLabelID,
-                                                      nullptr, nullptr, nullptr, nullptr))
+                                                      nullptr, nullptr, &nNamedParameters,
+                                                      &aFirstParameterID))
                 {
                     OString sLanguage = m_rLanguageTag.getBcp47().toUtf8();
                     hb_language_t aLanguage
@@ -124,12 +134,67 @@ void FeatureCollector::collectForTable(hb_tag_t aTableTag)
                     {
                         std::vector<uint16_t> aBuf(++nLabel); // make space for terminating NUL.
                         hb_ot_name_get_utf16(m_pHbFace, aLabelID, aLanguage, &nLabel, aBuf.data());
-                        OUString sLabel(reinterpret_cast<sal_Unicode*>(aBuf.data()), nLabel);
-                        rFeature.m_aDefinition = vcl::font::FeatureDefinition(aFeatureTag, sLabel);
+                        sLabel = OUString(reinterpret_cast<sal_Unicode*>(aBuf.data()), nLabel);
+                        aDefinition = vcl::font::FeatureDefinition(aFeatureTag, sLabel);
+                    }
+
+                    // cvXX features can have name IDs for there parameters,
+                    // check for them and populate feature parameters as
+                    // appropriate.
+                    for (unsigned i = 0; i < nNamedParameters; i++)
+                    {
+                        hb_ot_name_id_t aNameID = aFirstParameterID + i;
+                        unsigned int nName
+                            = hb_ot_name_get_utf16(m_pHbFace, aNameID, aLanguage, nullptr, nullptr);
+                        if (nName)
+                        {
+                            std::vector<uint16_t> aBuf(++nName); // make space for terminating NUL.
+                            hb_ot_name_get_utf16(m_pHbFace, aNameID, aLanguage, &nName,
+                                                 aBuf.data());
+                            OUString sName(reinterpret_cast<sal_Unicode*>(aBuf.data()), nName);
+                            aParameters.emplace_back(uint32_t(i), sName);
+                        }
                     }
                 }
             }
+
+            // Collect lookups in this feature and input glyphs for each
+            // lookup, and calculate the max number of alternates they have.
+            unsigned int nLookups = hb_ot_layout_feature_get_lookups(
+                m_pHbFace, aTableTag, nFeatureIdx, 0, nullptr, nullptr);
+            std::vector<unsigned int> aLookups(nLookups);
+            hb_ot_layout_feature_get_lookups(m_pHbFace, aTableTag, nFeatureIdx, 0, &nLookups,
+                                             aLookups.data());
+            unsigned int nAlternates = 0;
+            for (unsigned int nLookupIdx : aLookups)
+            {
+                hb_set_t* aGlyphs = hb_set_create();
+                hb_ot_layout_lookup_collect_glyphs(m_pHbFace, aTableTag, nLookupIdx, nullptr,
+                                                   aGlyphs, nullptr, nullptr);
+                hb_codepoint_t nGlyphIdx = HB_SET_VALUE_INVALID;
+                while (hb_set_next(aGlyphs, &nGlyphIdx))
+                {
+                    nAlternates = std::max(
+                        nAlternates, hb_ot_layout_lookup_get_glyph_alternates(
+                                         m_pHbFace, nLookupIdx, nGlyphIdx, 0, nullptr, nullptr));
+                }
+            }
+
+            // Append the alternates to the feature parameters, keeping any
+            // existing ones calculated from cvXX features above.
+            for (unsigned int i = aParameters.size() - 1; i < nAlternates; i++)
+                aParameters.emplace_back(uint32_t(i + 1), OUString::number(i + 1));
+
+            if (aParameters.size() > 1)
+            {
+                aDefinition = vcl::font::FeatureDefinition(
+                    aFeatureTag, aDefinition.getDescription(),
+                    vcl::font::FeatureParameterType::ENUM, std::move(aParameters), 0);
+            }
         }
+
+        if (aDefinition)
+            rFeature.m_aDefinition = aDefinition;
     }
 }
 
