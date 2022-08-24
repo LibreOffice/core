@@ -1583,8 +1583,8 @@ bool SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
 
     // If the Table was alone in a Section, create the Frames via the Table's Upper
     std::optional<SwNode2LayoutSaveUpperFrames> oNode2Layout;
-    SwNodeIndex aFrameIdx( rRange.aStart );
-    SwNode* pFrameNd = FindPrvNxtFrameNode( aFrameIdx, &rRange.aEnd.GetNode() );
+    SwNode* pFrameNd = FindPrvNxtFrameNode( rRange.aStart.GetNode(), &rRange.aEnd.GetNode() );
+    SwNodeIndex aFrameIdx( pFrameNd ? *pFrameNd: rRange.aStart.GetNode() );
     if( !pFrameNd )
         // Collect all Uppers
         oNode2Layout.emplace(*pTableNd);
@@ -2382,10 +2382,13 @@ void SwTableNode::MakeFramesForAdjacentContentNode(const SwNodeIndex & rIdx)
 void SwTableNode::MakeOwnFrames(SwNodeIndex* pIdxBehind)
 {
     OSL_ENSURE( pIdxBehind, "No Index" );
-    *pIdxBehind = *this;
-    SwNode *pNd = GetNodes().FindPrvNxtFrameNode( *pIdxBehind, EndOfSectionNode() );
+    SwNode *pNd = GetNodes().FindPrvNxtFrameNode( *this, EndOfSectionNode() );
     if( !pNd )
-        return ;
+    {
+        *pIdxBehind = *this;
+        return;
+    }
+    *pIdxBehind = *pNd;
 
     SwFrame *pFrame( nullptr );
     SwLayoutFrame *pUpper( nullptr );
