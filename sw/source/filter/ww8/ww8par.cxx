@@ -6720,7 +6720,7 @@ bool SwWW8ImplReader::InEqualApo(int nLvl) const
 namespace sw::hack
 {
         Position::Position(const SwPosition &rPos)
-            : maPtNode(rPos.nNode), mnPtContent(rPos.GetContentIndex())
+            : maPtNode(rPos.GetNode()), mnPtContent(rPos.GetContentIndex())
         {
         }
 

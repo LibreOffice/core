@@ -2366,7 +2366,7 @@ void wwSectionManager::PrependedInlineNode(const SwPosition &rPos,
 {
     OSL_ENSURE(!maSegments.empty(),
         "should not be possible, must be at least one segment");
-    if ((!maSegments.empty()) && (maSegments.back().maStart == rPos.nNode))
+    if ((!maSegments.empty()) && (maSegments.back().maStart == rPos.GetNode()))
         maSegments.back().maStart.Assign(rNode);
 }
 
@@ -2649,13 +2649,13 @@ void WW8TabDesc::MergeCells()
                     if( rCell.bVertMerge && !rCell.bVertRestart )
                     {
                         SwPaM aPam( *m_pTabBox->GetSttNd(), 0 );
-                        aPam.GetPoint()->nNode++;
+                        aPam.GetPoint()->Adjust(SwNodeOffset(1));
                         SwTextNode* pNd = aPam.GetPointNode().GetTextNode();
                         while( pNd )
                         {
                             pNd->SetCountedInList( false );
 
-                            aPam.GetPoint()->nNode++;
+                            aPam.GetPoint()->Adjust(SwNodeOffset(1));
                             pNd = aPam.GetPointNode().GetTextNode();
                         }
                     }

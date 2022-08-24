@@ -529,7 +529,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
         case ww::eFORMTEXT:
         if (bUseEnhFields && m_pPaM!=nullptr && m_pPaM->GetPoint()!=nullptr) {
             SwPosition aEndPos = *m_pPaM->GetPoint();
-            SwPaM aFieldPam( m_aFieldStack.back().GetPtNode(), m_aFieldStack.back().GetPtContent(), aEndPos.nNode, aEndPos.GetContentIndex());
+            SwPaM aFieldPam( m_aFieldStack.back().GetPtNode().GetNode(), m_aFieldStack.back().GetPtContent(), aEndPos.GetNode(), aEndPos.GetContentIndex());
             IDocumentMarkAccess* pMarksAccess = m_rDoc.getIDocumentMarkAccess( );
             IFieldmark *pFieldmark = pMarksAccess->makeFieldBookmark(
                         aFieldPam, m_aFieldStack.back().GetBookmarkName(), ODF_FORMTEXT,
@@ -636,8 +636,8 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                     // Unhandled field with stored code
                     SwPosition aEndPos = *m_pPaM->GetPoint();
                     SwPaM aFieldPam(
-                            m_aFieldStack.back().GetPtNode(), m_aFieldStack.back().GetPtContent(),
-                            aEndPos.nNode, aEndPos.GetContentIndex());
+                            m_aFieldStack.back().GetPtNode().GetNode(), m_aFieldStack.back().GetPtContent(),
+                            aEndPos.GetNode(), aEndPos.GetContentIndex());
 
                     IDocumentMarkAccess* pMarksAccess = m_rDoc.getIDocumentMarkAccess( );
 
