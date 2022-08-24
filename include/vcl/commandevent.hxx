@@ -28,6 +28,7 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/GestureEvent.hxx>
+#include <vcl/GestureEventZoom.hxx>
 
 class CommandExtTextInputData;
 class CommandWheelData;
@@ -39,6 +40,7 @@ class CommandSelectionChangeData;
 class CommandSwipeData;
 class CommandLongPressData;
 class CommandGestureData;
+class CommandGestureZoomData;
 
 enum class CommandEventId;
 
@@ -90,6 +92,7 @@ public:
     const CommandSwipeData*             GetSwipeData() const;
     const CommandLongPressData*         GetLongPressData() const;
     const CommandGestureData*           GetGestureData() const;
+    const CommandGestureZoomData*       GetGestureZoomData() const;
 };
 
 class VCL_DLLPUBLIC CommandExtTextInputData
@@ -322,6 +325,22 @@ public:
     {}
 };
 
+class VCL_DLLPUBLIC CommandGestureZoomData
+{
+public:
+    const double mfX = 0;
+    const double mfY = 0;
+    const GestureEventZoomType meEventType = GestureEventZoomType::Begin;
+    const double mfScaleDelta = 0;
+
+    CommandGestureZoomData(double fX, double fY, GestureEventZoomType eEventType, double fScale)
+        : mfX(fX)
+        , mfY(fY)
+        , meEventType(eEventType)
+        , mfScaleDelta(fScale)
+    {}
+};
+
 enum class CommandEventId
 {
     NONE                    = 0,
@@ -346,6 +365,7 @@ enum class CommandEventId
     Swipe                   = 21,
     LongPress               = 22,
     Gesture                 = 23,
+    GestureZoom             = 24,
 };
 
 #endif // INCLUDED_VCL_COMMANDEVENT_HXX

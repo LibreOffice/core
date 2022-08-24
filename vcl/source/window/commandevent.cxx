@@ -195,5 +195,13 @@ const CommandGestureData* CommandEvent::GetGestureData() const
         return nullptr;
 }
 
+const CommandGestureZoomData* CommandEvent::GetGestureZoomData() const
+{
+    if (mnCommand == CommandEventId::GestureZoom)
+        return static_cast<const CommandGestureZoomData*>(mpData);
+    else
+        return nullptr;
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
