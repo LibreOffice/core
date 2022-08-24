@@ -714,6 +714,7 @@ GtkSalFrame::~GtkSalFrame()
         g_signal_handler_disconnect(G_OBJECT(pEventWidget), handler_id);
 
     g_clear_object(&m_pZoomGesture);
+    g_clear_object(&m_pRotateGesture);
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
     if( m_pFixedContainer )
@@ -1029,6 +1030,13 @@ void GtkSalFrame::InitCommon()
     g_signal_connect_after(m_pZoomGesture, "begin", G_CALLBACK(signalZoomBegin), this);
     g_signal_connect_after(m_pZoomGesture, "update", G_CALLBACK(signalZoomUpdate), this);
     g_signal_connect_after(m_pZoomGesture, "end", G_CALLBACK(signalZoomEnd), this);
+
+    m_pRotateGesture = gtk_gesture_rotate_new(GTK_WIDGET(pEventWidget));
+    gtk_event_controller_set_propagation_phase(GTK_EVENT_CONTROLLER(m_pRotateGesture),
+                                               GTK_PHASE_TARGET);
+    g_signal_connect(m_pRotateGesture, "begin", G_CALLBACK(signalRotateBegin), this);
+    g_signal_connect(m_pRotateGesture, "update", G_CALLBACK(signalRotateUpdate), this);
+    g_signal_connect(m_pRotateGesture, "end", G_CALLBACK(signalRotateEnd), this);
 
     //Drop Target Stuff
 #if GTK_CHECK_VERSION(4,0,0)
@@ -4545,6 +4553,23 @@ namespace
         pThis->CallCallbackExc(SalEvent::GestureZoom, &aEvent);
         return true;
     }
+
+    bool handleSignalRotate(GtkGesture* gesture, GdkEventSequence* sequence, gpointer frame,
+                            GestureEventRotateType eEventType)
+    {
+        gdouble x = 0;
+        gdouble y = 0;
+        gtk_gesture_get_point(gesture, sequence, &x, &y);
+
+        SalGestureRotateEvent aEvent;
+        aEvent.meEventType = eEventType;
+        aEvent.mnX = x;
+        aEvent.mnY = y;
+        aEvent.mfAngleDelta = gtk_gesture_rotate_get_angle_delta(GTK_GESTURE_ROTATE(gesture));
+        GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+        pThis->CallCallbackExc(SalEvent::GestureRotate, &aEvent);
+        return true;
+    }
 }
 
 bool GtkSalFrame::signalZoomBegin(GtkGesture* gesture, GdkEventSequence* sequence, gpointer frame)
@@ -4560,6 +4585,24 @@ bool GtkSalFrame::signalZoomUpdate(GtkGesture* gesture, GdkEventSequence* sequen
 bool GtkSalFrame::signalZoomEnd(GtkGesture* gesture, GdkEventSequence* sequence, gpointer frame)
 {
     return handleSignalZoom(gesture, sequence, frame, GestureEventZoomType::End);
+}
+
+bool GtkSalFrame::signalRotateBegin(GtkGesture* gesture, GdkEventSequence* sequence,
+                                    gpointer frame)
+{
+    return handleSignalRotate(gesture, sequence, frame, GestureEventRotateType::Begin);
+}
+
+bool GtkSalFrame::signalRotateUpdate(GtkGesture* gesture, GdkEventSequence* sequence,
+                                     gpointer frame)
+{
+    return handleSignalRotate(gesture, sequence, frame, GestureEventRotateType::Update);
+}
+
+bool GtkSalFrame::signalRotateEnd(GtkGesture* gesture, GdkEventSequence* sequence,
+                                  gpointer frame)
+{
+    return handleSignalRotate(gesture, sequence, frame, GestureEventRotateType::End);
 }
 
 namespace
