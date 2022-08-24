@@ -16,6 +16,23 @@
       "message": "I dislike the broad hammer hear. Blacklisting should take the driver into account at least, the user from the bugreport isn\u0027t even using the latest available driver for the graphics card.",
       "revId": "1bf5f90eebb6e1c9fa21164474851da32446956a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "334167cc_a20de37a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-08-24T14:40:33Z",
+      "side": 1,
+      "message": "For 7.4 I don\u0027t know but for 7.5 since 7.5.0 should be released at the beginning of 2023 (if we keep the same pace) and extended support of Windows 8.1 finishes at 2023/01/10 (cf https://en.wikipedia.org/wiki/Windows_8.1), I don\u0027t think it\u0027s a pb.\n\nNow, I\u0027ve got no strong opinion here, feel free to abandon this one and revert the one on master branch.",
+      "revId": "1bf5f90eebb6e1c9fa21164474851da32446956a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
