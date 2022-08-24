@@ -16,6 +16,24 @@
       "message": "Previously, we set GPGMEPP_LIBS\u003d-lgpgmepp if the progress_callback test succeeded. But with this removed, we never set it, so it\u0027ll be blank.\n\nWe can either hardcode GPGMEPP_LIBS\u003d\"-lgpgmepp\" for now (this is good enough given it\u0027s a small change from the original and it doesn\u0027t lose any flexibility) or we can migrate to using something like PKG_CHECK_MODULES (pkg-config).\n\nI suggest we just replace this line with GPGMEPP_LIBS\u003d\"-lgpgmepp\" for now.",
       "revId": "bc209dd6689816c2c1fa93c1bab289465b7419a8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc19a59e_5100324d",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 12544,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2022-08-24T05:56:09Z",
+      "side": 0,
+      "message": "yes, we do that it other cases as well",
+      "parentUuid": "6470c31d_43475da5",
+      "revId": "bc209dd6689816c2c1fa93c1bab289465b7419a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
