@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dcc544b8_28b78345",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1036,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-08-24T09:09:55Z",
+      "side": 1,
+      "message": "Should I create a new function so that \n\nOUString aFuncName(pCharClass-\u003euppercase(pDesc-\u003emxFuncName-\u003egetStr()));\n\nworsk?",
+      "revId": "c187b9e33ed22d8920e772cf77d9d6c7b9a29e9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
