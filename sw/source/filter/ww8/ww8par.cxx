@@ -2503,9 +2503,9 @@ bool SwWW8ImplReader::SetSpacing(SwPaM &rMyPam, int nSpace, bool bIsUpper )
                 aUL.SetLower( static_cast< sal_uInt16 >(nSpace) );
 
             const sal_Int32 nEnd = pSpacingPos->GetContentIndex();
-            rMyPam.GetPoint()->nContent.Assign(rMyPam.GetPointContentNode(), 0);
+            rMyPam.GetPoint()->SetContent(0);
             m_xCtrlStck->NewAttr(*pSpacingPos, aUL);
-            rMyPam.GetPoint()->nContent.Assign(rMyPam.GetPointContentNode(), nEnd);
+            rMyPam.GetPoint()->SetContent(nEnd);
             m_xCtrlStck->SetAttr(*pSpacingPos, RES_UL_SPACE);
             bRet = true;
         }
@@ -4454,11 +4454,7 @@ static void GiveNodePageDesc(SwNodeIndex const &rIdx, const SwFormatPageDesc &rP
     }
     else
     {
-        SwPosition aPamStart(rIdx);
-        aPamStart.nContent.Assign(
-            rIdx.GetNode().GetContentNode(), 0);
-        SwPaM aPage(aPamStart);
-
+        SwPaM aPage(rIdx);
         rDoc.getIDocumentContentOperations().InsertPoolItem(aPage, rPgDesc);
     }
 }
@@ -4620,9 +4616,7 @@ void wwSectionManager::InsertSegments()
                     mrReader.m_rDoc.GetNodes().MakeTextNode(aAnchor.GetNode(),
                     mrReader.m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TEXT ));
 
-                aSectPaM.GetPoint()->Assign(*pTextNd);
-                aSectPaM.GetPoint()->nContent.Assign(
-                    aSectPaM.GetPointContentNode(), 0);
+                aSectPaM.GetPoint()->Assign(*pTextNd, 0);
             }
 
             aSectPaM.SetMark();
@@ -6726,9 +6720,7 @@ namespace sw::hack
 
         Position::operator SwPosition() const
         {
-            SwPosition aRet(maPtNode);
-            aRet.nContent.Assign(maPtNode.GetNode().GetContentNode(), mnPtContent);
-            return aRet;
+            return SwPosition(maPtNode, maPtNode.GetNode().GetContentNode(), mnPtContent);
         }
 }
 
