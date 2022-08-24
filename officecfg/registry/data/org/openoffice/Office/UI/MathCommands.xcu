@@ -203,6 +203,11 @@
           <value xml:lang="en-US">~Others</value>
         </prop>
       </node>
+      <node oor:name=".uno:SidebarDeck.ElementsDeck" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Open the Elements Deck</value>
+        </prop>
+      </node>
     </node>
   </node>
 </oor:component-data>
