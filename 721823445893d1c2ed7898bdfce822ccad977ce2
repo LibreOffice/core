@@ -51,6 +51,23 @@
       "message": "Script magic it out of my skills but I support the idea. And \"Start Center\" is kind of a module, actually the only one you start on macOS.",
       "revId": "721823445893d1c2ed7898bdfce822ccad977ce2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f34b03ca_d699114b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-08-24T03:26:58Z",
+      "side": 1,
+      "message": "Thanks for confirming it is not QUITE a module, but a launcher.",
+      "revId": "721823445893d1c2ed7898bdfce822ccad977ce2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
