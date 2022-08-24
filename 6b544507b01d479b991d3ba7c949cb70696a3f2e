@@ -16,6 +16,24 @@
       "message": "smells like this caused\n\n  /sw/source/core/bastyp/index.cxx:332:5: runtime error: signed integer overflow: 2147483647 - -1 cannot be represented in type \u0027int\u0027\n      #0 0x7fe5802ebb64 in SwContentIndex::operator+\u003d(int) /sw/source/core/bastyp/index.cxx:332:5\n      #1 0x7fe5806e074a in SwPosition::AdjustContent(int) /sw/source/core/crsr/pam.cxx:257:14\n      #2 0x7fe588216c2f in SwWrtShell::InsertField2(SwField const\u0026, SwPaM*) /sw/source/uibase/wrtsh/wrtsh2.cxx:129:52\n      #3 0x7fe586ec8617 in SwFieldMgr::InsertField(SwInsertField_Data\u0026) /sw/source/uibase/fldui/fldmgr.cxx:1490:39\n      #4 0x7fe5881fdb27 in SwWrtShell::InsertPostIt(SwFieldMgr\u0026, SfxRequest const\u0026) /sw/source/uibase/wrtsh/wrtsh1.cxx:2284:19\n      #5 0x7fe5874aa847 in SwTextShell::ExecField(SfxRequest\u0026) /sw/source/uibase/shells/textfld.cxx:424:17\n      #6 0x7fe5874f6294 in SfxStubSwTextShellExecField(SfxShell*, SfxRequest\u0026) /workdir/SdiTarget/sw/sdi/swslots.hxx:3107:1\n      #7 0x7fe59fcfa949 in SfxDispatcher::Call_Impl(SfxShell\u0026, SfxSlot const\u0026, SfxRequest\u0026, bool) /sfx2/source/control/dispatch.cxx:254:9\n      #8 0x7fe59fd0fa3d in SfxDispatcher::Execute_(SfxShell\u0026, SfxSlot const\u0026, SfxRequest\u0026, SfxCallMode) /sfx2/source/control/dispatch.cxx:753:9\n      #9 0x7fe59fd121f7 in SfxDispatcher::Execute(unsigned short, SfxCallMode, SfxPoolItem const**, unsigned short, SfxPoolItem const**) /sfx2/source/control/dispatch.cxx:859:9\n      #10 0x7fe5abd9b874 in testImageCommentAtChar::TestBody() /sw/qa/extras/uiwriter/uiwriter5.cxx:1242:45\n\nduring CppunitTest_sw_uiwriter5 at \u003chttps://ci.libreoffice.org//job/lo_ubsan/2503/\u003e",
       "revId": "6b544507b01d479b991d3ba7c949cb70696a3f2e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d278dbd9_ab27606c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-08-24T09:39:05Z",
+      "side": 1,
+      "message": "fix here: https://gerrit.libreoffice.org/c/core/+/138756",
+      "parentUuid": "920b77eb_e6b5c04d",
+      "revId": "6b544507b01d479b991d3ba7c949cb70696a3f2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
