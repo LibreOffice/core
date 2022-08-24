@@ -416,6 +416,16 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
             }
             SwTableBox* pNextBox = pDelLine->FindNextBox( pTableNd->GetTable(),
                                                             pDelBox );
+            // skip deleted lines in Hide Changes mode with enabled change tracking
+            if ( bRecordAndHideChanges )
+            {
+                SwRedlineTable::size_type nRedlinePos = 0;
+                while( pNextBox && pNextBox->GetUpper()->IsDeleted(nRedlinePos) )
+                    pNextBox = pNextBox->GetUpper()->FindNextBox( pTableNd->GetTable(),
+                                    pNextBox->GetUpper()->GetTabBoxes().back() );
+            }
+
+            // skip protected cells
             while( pNextBox &&
                     pNextBox->GetFrameFormat()->GetProtect().IsContentProtected() )
                 pNextBox = pNextBox->FindNextBox( pTableNd->GetTable(), pNextBox );
@@ -428,6 +438,19 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
                     pDelBox = pDelBox->GetTabLines()[0]->GetTabBoxes()[0];
                 pNextBox = pDelLine->FindPreviousBox( pTableNd->GetTable(),
                                                             pDelBox );
+                // skip previous deleted lines in Hide Changes mode with enabled change tracking
+                if ( bRecordAndHideChanges )
+                {
+                    SwRedlineTable::size_type nRedlinePos = 0;
+                    while( pNextBox && pNextBox->GetUpper()->IsDeleted(nRedlinePos) )
+                    {
+                        pNextBox = pNextBox->GetUpper()->FindPreviousBox( pTableNd->GetTable(),
+                                        pNextBox->GetUpper()->GetTabBoxes()[0] );
+                        nRedlinePos = 0;
+                    }
+                }
+
+                // skip previous protected cells
                 while( pNextBox &&
                         pNextBox->GetFrameFormat()->GetProtect().IsContentProtected() )
                     pNextBox = pNextBox->FindPreviousBox( pTableNd->GetTable(), pNextBox );
