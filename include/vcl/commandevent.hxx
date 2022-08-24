@@ -29,6 +29,7 @@
 #include <rtl/ustring.hxx>
 #include <vcl/GestureEvent.hxx>
 #include <vcl/GestureEventZoom.hxx>
+#include <vcl/GestureEventRotate.hxx>
 
 class CommandExtTextInputData;
 class CommandWheelData;
@@ -41,6 +42,7 @@ class CommandSwipeData;
 class CommandLongPressData;
 class CommandGestureData;
 class CommandGestureZoomData;
+class CommandGestureRotateData;
 
 enum class CommandEventId;
 
@@ -93,6 +95,7 @@ public:
     const CommandLongPressData*         GetLongPressData() const;
     const CommandGestureData*           GetGestureData() const;
     const CommandGestureZoomData*       GetGestureZoomData() const;
+    const CommandGestureRotateData*     GetGestureRotateData() const;
 };
 
 class VCL_DLLPUBLIC CommandExtTextInputData
@@ -341,6 +344,23 @@ public:
     {}
 };
 
+class VCL_DLLPUBLIC CommandGestureRotateData
+{
+public:
+    const double mfX = 0;
+    const double mfY = 0;
+    const GestureEventRotateType meEventType = GestureEventRotateType::Begin;
+    const double mfAngleDelta = 0;
+
+    CommandGestureRotateData(double fX, double fY, GestureEventRotateType eEventType,
+                             double fAngleDelta)
+        : mfX(fX)
+        , mfY(fY)
+        , meEventType(eEventType)
+        , mfAngleDelta(fAngleDelta)
+    {}
+};
+
 enum class CommandEventId
 {
     NONE                    = 0,
@@ -366,6 +386,7 @@ enum class CommandEventId
     LongPress               = 22,
     Gesture                 = 23,
     GestureZoom             = 24,
+    GestureRotate           = 25,
 };
 
 #endif // INCLUDED_VCL_COMMANDEVENT_HXX
