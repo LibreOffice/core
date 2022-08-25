@@ -30,6 +30,7 @@
 #include <com/sun/star/accessibility/TextSegment.hpp>
 
 #include <QtGui/QAccessible>
+#include <QtGui/QAccessibleTextSelectionEvent>
 
 using namespace css;
 using namespace css::accessibility;
@@ -222,9 +223,21 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
                 new QAccessibleEvent(pQAccessibleInterface, QAccessible::VisibleDataChanged));
             return;
         case AccessibleEventId::TEXT_SELECTION_CHANGED:
+        {
+            QAccessibleTextInterface* pTextInterface = pQAccessibleInterface->textInterface();
+            if (!pTextInterface)
+            {
+                SAL_WARN("vcl.qt", "TEXT_SELECTION_CHANGED event received for object not "
+                                   "implementing text interface");
+                return;
+            }
+            int nStartOffset = 0;
+            int nEndOffset = 0;
+            pTextInterface->selection(0, &nStartOffset, &nEndOffset);
             QAccessible::updateAccessibility(
-                new QAccessibleEvent(pQAccessibleInterface, QAccessible::Selection));
+                new QAccessibleTextSelectionEvent(pQAccessibleInterface, nStartOffset, nEndOffset));
             return;
+        }
         case AccessibleEventId::TEXT_ATTRIBUTE_CHANGED:
             QAccessible::updateAccessibility(
                 new QAccessibleEvent(pQAccessibleInterface, QAccessible::AttributeChanged));
