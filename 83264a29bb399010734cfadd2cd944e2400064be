@@ -16,6 +16,24 @@
       "message": "Please use `const` here, as described in:\nhttps://dev.blog.documentfoundation.org/2022/03/08/use-range-based-for-loops-easyhack/",
       "revId": "83264a29bb399010734cfadd2cd944e2400064be",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82ddb2a3_62f19678",
+        "filename": "extensions/source/activex/SODispatchInterceptor.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1003640
+      },
+      "writtenOn": "2022-08-25T13:49:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "805014f5_8cc2c64f",
+      "revId": "83264a29bb399010734cfadd2cd944e2400064be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

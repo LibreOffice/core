@@ -193,6 +193,24 @@
       "parentUuid": "20e95a87_953179e8",
       "revId": "84387e2db14f1ef906fe7839066c330c3993022d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad6a7e36_74ec5941",
+        "filename": "xmlsecurity/source/helper/xsecctl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1003640
+      },
+      "writtenOn": "2022-08-25T13:49:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a8bc11b9_ae054cce",
+      "revId": "84387e2db14f1ef906fe7839066c330c3993022d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ],
   "submitRequirementResults": []
