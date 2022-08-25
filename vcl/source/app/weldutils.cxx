@@ -444,8 +444,8 @@ void DateFormatter::Init()
     SetOutputHdl(LINK(this, DateFormatter, FormatOutputHdl));
     SetInputHdl(LINK(this, DateFormatter, ParseInputHdl));
 
-    SetMin(Date(1, 1, 1900));
-    SetMax(Date(31, 12, 2200));
+    SetMin(Date(1, 1, 0001));
+    SetMax(Date(31, 12, 9999));
 }
 
 void DateFormatter::SetExtDateFormat(ExtDateFieldFormat eFormat)
