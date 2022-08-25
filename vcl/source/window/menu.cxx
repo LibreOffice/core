@@ -30,7 +30,6 @@
 #include <vcl/toolkit/floatwin.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/mnemonic.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandinfoprovider.hxx>
