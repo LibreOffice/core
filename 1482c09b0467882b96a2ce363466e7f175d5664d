@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f31251a_d994ce59",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2022-08-25T10:05:49Z",
+      "side": 1,
+      "message": "citing Sam in the master change (I don\u0027t have 1.18 yet myself): \"Looks good to me, tested \u0026 works as expected, thank you!\" -\u003e verified",
+      "revId": "1482c09b0467882b96a2ce363466e7f175d5664d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
