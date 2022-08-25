@@ -33,6 +33,24 @@
       "message": "please never manually update this file for such compatible changes",
       "revId": "a564a121acf9c4dc72aa969b42b669bacce8d3ac",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d400272_96c5a2d6",
+        "filename": "offapi/type_reference/offapi.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 15243,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2022-08-25T17:11:43Z",
+      "side": 1,
+      "message": "Oh, I didn\u0027t know. I will keep this in mind for the future. Thank you.",
+      "parentUuid": "70bc4556_34301616",
+      "revId": "a564a121acf9c4dc72aa969b42b669bacce8d3ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
