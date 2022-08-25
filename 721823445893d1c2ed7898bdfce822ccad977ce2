@@ -122,6 +122,24 @@
       "parentUuid": "af6292ff_9e5b4826",
       "revId": "721823445893d1c2ed7898bdfce822ccad977ce2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d67b4aba_25701c23",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-08-25T10:10:37Z",
+      "side": 1,
+      "message": "FreeCAD doesn\u0027t have .desktop entries for its workbenches like LibO does for its apps. Also, its start page is a tab view embedded in the overall UI.\n\nRe: the other examples, a welcome dialog is not a start center. The ones for Audacity and Inkscape seem to never appear again after they are dismissed/disabled (I\u0027m not seeing them).\n\nI still don\u0027t have a strong opinion about this change, but your examples are missing the mark.",
+      "parentUuid": "aded394b_4af36082",
+      "revId": "721823445893d1c2ed7898bdfce822ccad977ce2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
