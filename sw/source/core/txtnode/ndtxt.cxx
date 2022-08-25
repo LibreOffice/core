@@ -980,13 +980,12 @@ bool HasNumberingWhichNeedsLayoutUpdate(const SwTextNode& rTextNode)
 SwContentNode *SwTextNode::JoinNext()
 {
     SwNodes& rNds = GetNodes();
-    SwNodeIndex aIdx( *this );
-    if( SwContentNode::CanJoinNext( &aIdx ) )
+    if( SwContentNode* pNextNd = SwContentNode::CanJoinNext() )
     {
         SwDoc& rDoc = rNds.GetDoc();
         const std::shared_ptr<sw::mark::ContentIdxStore> pContentStore(sw::mark::ContentIdxStore::Create());
-        pContentStore->Save(rDoc, aIdx.GetIndex(), SAL_MAX_INT32);
-        SwTextNode *pTextNode = aIdx.GetNode().GetTextNode();
+        pContentStore->Save(rDoc, pNextNd->GetIndex(), SAL_MAX_INT32);
+        SwTextNode *pTextNode = pNextNd->GetTextNode();
         sal_Int32 nOldLen = m_Text.getLength();
 
         // METADATA: merge
@@ -1050,7 +1049,7 @@ SwContentNode *SwTextNode::JoinNext()
         if( pTextNode->HasAnyIndex() )
         {
             // move all ShellCursor/StackCursor/UnoCursor out of delete range
-            rDoc.CorrAbs( aIdx.GetNode(), SwPosition( *this ), nOldLen, true );
+            rDoc.CorrAbs( *pNextNd, SwPosition( *this ), nOldLen, true );
         }
         SwNode::Merge const eOldMergeFlag(pTextNode->GetRedlineMergeFlag());
         auto eRecreateMerged(eOldMergeFlag == SwNode::Merge::First
@@ -1071,7 +1070,7 @@ SwContentNode *SwTextNode::JoinNext()
         }
         bool bOldHasNumberingWhichNeedsLayoutUpdate = HasNumberingWhichNeedsLayoutUpdate(*pTextNode);
 
-        rNds.Delete(aIdx);
+        rNds.Delete(*pNextNd);
         SetWrong( std::move(pList) );
         SetGrammarCheck( std::move(pList3) );
         SetSmartTags( std::move(pList2) );
@@ -1095,13 +1094,12 @@ SwContentNode *SwTextNode::JoinNext()
 void SwTextNode::JoinPrev()
 {
     SwNodes& rNds = GetNodes();
-    SwNodeIndex aIdx( *this );
-    if( SwContentNode::CanJoinPrev( &aIdx ) )
+    if( SwContentNode* pNextNd = SwContentNode::CanJoinPrev() )
     {
         SwDoc& rDoc = rNds.GetDoc();
         const std::shared_ptr<sw::mark::ContentIdxStore> pContentStore(sw::mark::ContentIdxStore::Create());
-        pContentStore->Save( rDoc, aIdx.GetIndex(), SAL_MAX_INT32);
-        SwTextNode *pTextNode = aIdx.GetNode().GetTextNode();
+        pContentStore->Save( rDoc, pNextNd->GetIndex(), SAL_MAX_INT32);
+        SwTextNode *pTextNode = pNextNd->GetTextNode();
         const sal_Int32 nLen = pTextNode->Len();
 
         std::unique_ptr<SwWrongList> pList = pTextNode->ReleaseWrong();
@@ -1165,7 +1163,7 @@ void SwTextNode::JoinPrev()
         if( pTextNode->HasAnyIndex() )
         {
             // move all ShellCursor/StackCursor/UnoCursor out of delete range
-            rDoc.CorrAbs( aIdx.GetNode(), SwPosition( *this ), nLen, true );
+            rDoc.CorrAbs( *pNextNd, SwPosition( *this ), nLen, true );
         }
         SwNode::Merge const eOldMergeFlag(pTextNode->GetRedlineMergeFlag());
         if (eOldMergeFlag == SwNode::Merge::First
@@ -1173,7 +1171,7 @@ void SwTextNode::JoinPrev()
         {
             sw::MoveDeletedPrevFrames(*pTextNode, *this);
         }
-        rNds.Delete(aIdx);
+        rNds.Delete(*pNextNd);
         SetWrong( std::move(pList) );
         SetGrammarCheck( std::move(pList3) );
         SetSmartTags( std::move(pList2) );

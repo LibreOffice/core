@@ -651,12 +651,13 @@ void SwXMLImport::endDocument()
             // Revert the first split node.
             SwTextNode* pTextNode = m_oSttNdIdx->GetNode().GetTextNode();
             SwNodeIndex aNxtIdx( *m_oSttNdIdx );
-            if( pTextNode && pTextNode->CanJoinNext( &aNxtIdx ) &&
+            SwContentNode* pNextNd;
+            if( pTextNode && (pNextNd = pTextNode->CanJoinNext()) &&
                 m_oSttNdIdx->GetIndex() + 1 == aNxtIdx.GetIndex() )
             {
                 // If the PaM points to the first new node, move the PaM to the
                 // end of the previous node.
-                if( pPaM->GetPoint()->GetNode() == aNxtIdx.GetNode() )
+                if( pPaM->GetPoint()->GetNode() == *pNextNd )
                 {
                     pPaM->GetPoint()->Assign( *pTextNode,
                                             pTextNode->GetText().getLength());
@@ -741,9 +742,9 @@ void SwXMLImport::endDocument()
             {
                 // Id we're in insert mode, the empty node is joined with
                 // the next and the previous one.
-                if( pCurrNd->CanJoinNext( &pPos->nNode ))
+                if( SwContentNode* pNext = pCurrNd->CanJoinNext() )
                 {
-                    SwTextNode* pNextNd = pPos->GetNode().GetTextNode();
+                    SwTextNode* pNextNd = pNext->GetTextNode();
                     bool endNodeFound = pDoc->GetNodes()[nNodeIdx-1]->IsEndNode();
                     SwNode *pLastPar = pDoc->GetNodes()[nNodeIdx -2];
                     if ( !pLastPar->IsTextNode() ) {
@@ -754,7 +755,7 @@ void SwXMLImport::endDocument()
                         pNextNd->ChgFormatColl(pLastPar->GetTextNode()->GetTextColl());
                     }
 
-                    pPos->nContent.Assign( pNextNd, 0 );
+                    pPos->Assign( *pNextNd, 0 );
                     pPaM->SetMark(); pPaM->DeleteMark();
                     pNextNd->JoinPrev();
 

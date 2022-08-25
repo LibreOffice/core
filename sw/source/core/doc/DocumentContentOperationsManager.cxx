@@ -2701,11 +2701,12 @@ void DocumentContentOperationsManager::MoveAndJoin( SwPaM& rPaM, SwPosition& rPo
     if( bJoinText )
         ++aIdx;
     SwTextNode * pTextNd = aIdx.GetNode().GetTextNode();
-    SwNodeIndex aNxtIdx( aIdx );
-    if( pTextNd && pTextNd->CanJoinNext( &aNxtIdx ) )
+    if (!pTextNd)
+        return;
+    if( SwContentNode* pNextNd = pTextNd->CanJoinNext() )
     {
         {   // Block so SwContentIndex into node is deleted before Join
-            m_rDoc.CorrRel( aNxtIdx.GetNode(),
+            m_rDoc.CorrRel( *pNextNd,
                             SwPosition( *pTextNd, pTextNd->GetText().getLength() ),
                             0, true );
         }

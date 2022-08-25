@@ -1841,7 +1841,7 @@ static bool lcl_CheckMaxLength(SwNode const& rPrev, SwNode const& rNext)
 
 /// Can we join two Nodes?
 /// We can return the 2nd position in pIdx.
-bool SwContentNode::CanJoinNext( SwNodeIndex* pIdx ) const
+SwContentNode* SwContentNode::CanJoinNext() const
 {
     const SwNodes& rNds = GetNodes();
     SwNodeIndex aIdx( *this, 1 );
@@ -1853,19 +1853,17 @@ bool SwContentNode::CanJoinNext( SwNodeIndex* pIdx ) const
         ++aIdx;
 
     if (rNds.Count()-1 == aIdx.GetIndex())
-        return false;
+        return nullptr;
     if (!lcl_CheckMaxLength(*this, *pNd))
     {
-        return false;
+        return nullptr;
     }
-    if( pIdx )
-        *pIdx = aIdx;
-    return true;
+    return aIdx.GetNode().GetContentNode();
 }
 
 /// Can we join two Nodes?
 /// We can return the 2nd position in pIdx.
-bool SwContentNode::CanJoinPrev( SwNodeIndex* pIdx ) const
+SwContentNode* SwContentNode::CanJoinPrev() const
 {
     SwNodeIndex aIdx( *this, -1 );
 
@@ -1876,14 +1874,12 @@ bool SwContentNode::CanJoinPrev( SwNodeIndex* pIdx ) const
         --aIdx;
 
     if (SwNodeOffset(0) == aIdx.GetIndex())
-        return false;
+        return nullptr;
     if (!lcl_CheckMaxLength(*pNd, *this))
     {
-        return false;
+        return nullptr;
     }
-    if( pIdx )
-        *pIdx = aIdx;
-    return true;
+    return aIdx.GetNode().GetContentNode();
 }
 
 void SwContentNode::SetCondFormatColl(SwFormatColl* pColl)

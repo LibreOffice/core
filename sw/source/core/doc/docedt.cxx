@@ -356,12 +356,13 @@ void sw_GetJoinFlags( SwPaM& rPam, bool& rJoinText, bool& rJoinPrev )
 
 bool sw_JoinText( SwPaM& rPam, bool bJoinPrev )
 {
-    SwNodeIndex aIdx( rPam.GetPoint()->GetNode() );
-    SwTextNode *pTextNd = aIdx.GetNode().GetTextNode();
-    SwNodeIndex aOldIdx( aIdx );
+    SwTextNode *pTextNd = rPam.GetPoint()->GetNode().GetTextNode();
+    if (!pTextNd)
+        return false;
+    SwNodeIndex aOldIdx( *pTextNd );
     SwTextNode *pOldTextNd = pTextNd;
 
-    if( pTextNd && pTextNd->CanJoinNext( &aIdx ) )
+    if( SwContentNode* pNextNd = pTextNd->CanJoinNext() )
     {
         SwDoc& rDoc = rPam.GetDoc();
         if( bJoinPrev )
@@ -380,7 +381,7 @@ bool sw_JoinText( SwPaM& rPam, bool bJoinPrev )
                 // There, we copy the AUTO PageBreak from the GetMarkNode!
 
                 /* The MarkNode */
-                pTextNd = aIdx.GetNode().GetTextNode();
+                pTextNd = pNextNd->GetTextNode();
                 if (pTextNd->HasSwAttrSet())
                 {
                     if( SfxItemState::SET == pTextNd->GetpSwAttrSet()->GetItemState( RES_BREAK, false) )
@@ -413,12 +414,12 @@ bool sw_JoinText( SwPaM& rPam, bool bJoinPrev )
                 SwContentIndex aAlphaIdx(pTextNd);
                 pOldTextNd->CutText( pTextNd, aAlphaIdx, SwContentIndex(pOldTextNd),
                                     pOldTextNd->Len() );
-                SwPosition aAlphaPos( aIdx, aAlphaIdx );
+                SwPosition aAlphaPos( *pNextNd, aAlphaIdx );
                 rDoc.CorrRel( rPam.GetPoint()->GetNode(), aAlphaPos, 0, true );
 
                 // move all Bookmarks/TOXMarks
                 if( !pContentStore->Empty() )
-                    pContentStore->Restore( rDoc, aIdx.GetIndex() );
+                    pContentStore->Restore( rDoc, pNextNd->GetIndex() );
 
                 // If the passed PaM is not in the Cursor ring,
                 // treat it separately (e.g. when it's being called from AutoFormat)
@@ -442,7 +443,7 @@ bool sw_JoinText( SwPaM& rPam, bool bJoinPrev )
         }
         else
         {
-            SwTextNode* pDelNd = aIdx.GetNode().GetTextNode();
+            SwTextNode* pDelNd = pNextNd->GetTextNode();
             if( pTextNd->Len() )
                 pDelNd->FormatToTextAttr( pTextNd );
             else
@@ -471,7 +472,7 @@ bool sw_JoinText( SwPaM& rPam, bool bJoinPrev )
                 }
             }
 
-            rDoc.CorrRel( aIdx.GetNode(), *rPam.GetPoint(), 0, true );
+            rDoc.CorrRel( *pNextNd, *rPam.GetPoint(), 0, true );
             // #i100466# adjust given <rPam>, if it does not belong to the cursors
             if ( pDelNd == rPam.GetBound().GetContentNode() )
             {

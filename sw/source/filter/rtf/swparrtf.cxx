@@ -118,20 +118,20 @@ ErrCode SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& rPam
         // of the new content with the first new node. Or in other words:
         // Revert the first split node.
         SwTextNode* pTextNode = pSttNdIdx->GetNode().GetTextNode();
-        SwNodeIndex aNxtIdx(*pSttNdIdx);
-        if (pTextNode && pTextNode->CanJoinNext(&aNxtIdx)
-            && pSttNdIdx->GetIndex() + 1 == aNxtIdx.GetIndex())
+        SwContentNode* pNextNd;
+        if (pTextNode && (pNextNd = pTextNode->CanJoinNext())
+            && pSttNdIdx->GetIndex() + 1 == pNextNd->GetIndex())
         {
             // If the PaM points to the first new node, move the PaM to the
             // end of the previous node.
-            if (aPam.GetPoint()->GetNode() == aNxtIdx.GetNode())
+            if (aPam.GetPoint()->GetNode() == *pNextNd)
             {
                 aPam.GetPoint()->Assign(*pTextNode, pTextNode->GetText().getLength());
             }
             // If the first new node isn't empty, convert  the node's text
             // attributes into hints. Otherwise, set the new node's
             // paragraph style at the previous (empty) node.
-            SwTextNode* pDelNd = aNxtIdx.GetNode().GetTextNode();
+            SwTextNode* pDelNd = pNextNd->GetTextNode();
             if (pTextNode->GetText().getLength())
                 pDelNd->FormatToTextAttr(pTextNode);
             else
@@ -154,14 +154,14 @@ ErrCode SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& rPam
         // the new content with the last new node. Or in other words:
         // Revert the second split node.
         SwTextNode* pTextNode = pSttNdIdx2->GetNode().GetTextNode();
-        SwNodeIndex aPrevIdx(*pSttNdIdx2);
-        if (pTextNode && pTextNode->CanJoinPrev(&aPrevIdx)
-            && pSttNdIdx2->GetIndex() - 1 == aPrevIdx.GetIndex())
+        SwContentNode* pNextNd;
+        if (pTextNode && (pNextNd = pTextNode->CanJoinPrev())
+            && pSttNdIdx2->GetIndex() - 1 == pNextNd->GetIndex())
         {
             // If the last new node isn't empty, convert  the node's text
             // attributes into hints. Otherwise, set the new node's
             // paragraph style at the next (empty) node.
-            SwTextNode* pDelNd = aPrevIdx.GetNode().GetTextNode();
+            SwTextNode* pDelNd = pNextNd->GetTextNode();
             if (pTextNode->GetText().getLength())
                 pDelNd->FormatToTextAttr(pTextNode);
             else

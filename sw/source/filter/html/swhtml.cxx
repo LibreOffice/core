@@ -749,12 +749,12 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
         if( !IsNewDoc() && m_pSttNdIdx->GetIndex() )
         {
             SwTextNode* pTextNode = m_pSttNdIdx->GetNode().GetTextNode();
-            SwNodeIndex aNxtIdx( *m_pSttNdIdx );
-            if( pTextNode && pTextNode->CanJoinNext( &aNxtIdx ))
+            SwContentNode* pNextNd;
+            if( pTextNode && (pNextNd = pTextNode->CanJoinNext()) )
             {
                 const sal_Int32 nStt = pTextNode->GetText().getLength();
                 // when the cursor is still in the node, then set him at the end
-                if( m_pPam->GetPoint()->GetNode() == aNxtIdx.GetNode() )
+                if( m_pPam->GetPoint()->GetNode() == *pNextNd )
                 {
                     m_pPam->GetPoint()->Assign( *pTextNode, nStt );
                 }
@@ -780,7 +780,7 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
                 }
 #endif
                 // Keep character attribute!
-                SwTextNode* pDelNd = aNxtIdx.GetNode().GetTextNode();
+                SwTextNode* pDelNd = pNextNd->GetTextNode();
                 if (pTextNode->GetText().getLength())
                     pDelNd->FormatToTextAttr( pTextNode );
                 else
@@ -835,10 +835,10 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
             }
             else if( nullptr != ( pCurrentNd = m_xDoc->GetNodes()[ nNodeIdx ]->GetTextNode()) && !bHasFlysOrMarks )
             {
-                if( pCurrentNd->CanJoinNext( &pPos->nNode ))
+                if( SwContentNode* pNext = pCurrentNd->CanJoinNext() )
                 {
-                    SwTextNode* pNextNd = pPos->GetNode().GetTextNode();
-                    pPos->nContent.Assign( pNextNd, 0 );
+                    SwTextNode* pNextNd = pNext->GetTextNode();
+                    pPos->Assign( *pNextNd, 0 );
                     m_pPam->SetMark(); m_pPam->DeleteMark();
                     pNextNd->JoinPrev();
                 }
@@ -858,16 +858,16 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
             if( pPos->GetContentIndex() )                 // then there was no <p> at the end
                 m_pPam->Move( fnMoveForward, GoInNode );    // therefore to the next
             SwTextNode* pTextNode = pPos->GetNode().GetTextNode();
-            SwNodeIndex aPrvIdx( pPos->GetNode() );
-            if( pTextNode && pTextNode->CanJoinPrev( &aPrvIdx ) &&
-                *m_pSttNdIdx <= aPrvIdx )
+            SwContentNode* pNextNd;
+            if( pTextNode && (pNextNd = pTextNode->CanJoinPrev()) &&
+                *m_pSttNdIdx <= *pNextNd )
             {
                 // Normally here should take place a JoinNext, but all cursors and
                 // so are registered in pTextNode, so that it MUST remain.
 
                 // Convert paragraph to character attribute, from Prev adopt
                 // the paragraph attribute and the template!
-                SwTextNode* pPrev = aPrvIdx.GetNode().GetTextNode();
+                SwTextNode* pPrev = pNextNd->GetTextNode();
                 pTextNode->ChgFormatColl( pPrev->GetTextColl() );
                 pTextNode->FormatToTextAttr( pPrev );
                 pTextNode->ResetAllAttr();
