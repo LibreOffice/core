@@ -158,7 +158,7 @@ void FeatureCollector::collectForTable(hb_tag_t aTableTag)
                         hb_ot_name_id_t aNameID = aFirstParameterID + i;
                         OUString sName = getName(m_pHbFace, aNameID, sLanguage);
                         if (!sName.isEmpty())
-                            aParameters.emplace_back(uint32_t(i), sName);
+                            aParameters.emplace_back(uint32_t(i + 1), sName);
                     }
                 }
             }
