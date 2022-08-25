@@ -2390,6 +2390,12 @@ void SwNodes::ForEach( const SwNodeIndex& rStart, const SwNodeIndex& rEnd,
     ForEach( rStart.GetIndex(), rEnd.GetIndex(), fnForEach, pArgs );
 }
 
+void SwNodes::ForEach( SwNode& rStart, SwNode& rEnd,
+                    FnForEach_SwNodes fnForEach, void* pArgs )
+{
+    ForEach( rStart.GetIndex(), rEnd.GetIndex(), fnForEach, pArgs );
+}
+
 void SwNodes::RemoveNode( SwNodeOffset nDelPos, SwNodeOffset nSz, bool bDel )
 {
 #ifndef NDEBUG

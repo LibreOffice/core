@@ -145,6 +145,8 @@ public:
         ForEach( SwNodeOffset(0), Count(), fnForEach, pArgs );
     }
     void ForEach( SwNodeOffset nStt, SwNodeOffset nEnd, FnForEach_SwNodes fnForEach, void* pArgs );
+    void ForEach( SwNode& rStart, SwNode& rEnd,
+                    FnForEach_SwNodes fnForEach, void* pArgs );
     void ForEach( const SwNodeIndex& rStart, const SwNodeIndex& rEnd,
                     FnForEach_SwNodes fnForEach, void* pArgs );
 
