@@ -86,7 +86,7 @@ ODateModel::ODateModel(const Reference<XComponentContext>& _rxFactory)
     try
     {
         if ( m_xAggregateSet.is() )
-            m_xAggregateSet->setPropertyValue( PROPERTY_DATEMIN, Any(util::Date(1, 1, 1800)) );
+            m_xAggregateSet->setPropertyValue( PROPERTY_DATEMIN, Any(util::Date(1, 1, 0001)) );
     }
     catch( const Exception& )
     {
