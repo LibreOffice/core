@@ -2621,7 +2621,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
             // If the original font had an empty style and one of its replacement fonts has the same
             // family name, we assume the font is present. The root problem here is that the code
             // that collects font substitutions tends to get just empty styles for the font that is
-            // being substituded, as vcl::Font::GetStyleName() tents to return an empty string.
+            // being substituted, as vcl::Font::GetStyleName() tents to return an empty string.
             // (Italicness is instead indicated by what vcl::Font::GetItalic() returns and boldness
             // by what vcl::Font::GetWeight() returns.)
             if (aFontMappingUseData[i].mOriginalFont.indexOf('/') == -1)
