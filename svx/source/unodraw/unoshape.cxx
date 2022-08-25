@@ -972,14 +972,13 @@ void SvxShape::Notify( SfxBroadcaster&, const SfxHint& rHint ) noexcept
     // do cheap checks first, this method is hot
     if (rHint.GetId() != SfxHintId::ThisIsAnSdrHint)
         return;
-    const SdrHint* pSdrHint = static_cast<const SdrHint*>(&rHint);
-    if (pSdrHint->GetKind() != SdrHintKind::ModelCleared &&
-        pSdrHint->GetKind() != SdrHintKind::ObjectChange)
+    SdrObject* pSdrObject(mpSdrObjectWeakReference.get());
+    if( !pSdrObject )
         return;
-
+    const SdrHint* pSdrHint = static_cast<const SdrHint*>(&rHint);
     // #i55919# SdrHintKind::ObjectChange is only interesting if it's for this object
-    SdrObject* pSdrObject(GetSdrObject());
-    if ( !pSdrObject || pSdrHint->GetObject() != pSdrObject )
+    if ((pSdrHint->GetKind() != SdrHintKind::ModelCleared) &&
+         (pSdrHint->GetKind() != SdrHintKind::ObjectChange || pSdrHint->GetObject() != pSdrObject ))
         return;
 
     uno::Reference< uno::XInterface > xSelf( pSdrObject->getWeakUnoShape() );
