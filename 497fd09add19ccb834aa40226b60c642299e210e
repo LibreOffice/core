@@ -52,6 +52,24 @@
       "parentUuid": "895731b3_9a434c1a",
       "revId": "497fd09add19ccb834aa40226b60c642299e210e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9050e697_7bcf2645",
+        "filename": "sw/source/core/inc/unoparaframeenum.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-08-25T08:07:42Z",
+      "side": 1,
+      "message": "Hmmm, no, unique_ptr and make_unique don\u0027t need a control block, only shared_ptr does.\n\nunique_ptr is purely an ownership wrapper around a simple pointer, it doesn\u0027t have any more logic than that.",
+      "parentUuid": "69ec8459_42a5b0a0",
+      "revId": "497fd09add19ccb834aa40226b60c642299e210e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
