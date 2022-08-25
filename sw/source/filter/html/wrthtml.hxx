@@ -59,7 +59,6 @@ class SdrUnoObj;
 class SvxBrushItem;
 class SvxFontItem;
 class SwHTMLNumRuleInfo;
-class SwHTMLPosFlyFrames;
 class SwTextFootnote;
 enum class HtmlPosition;
 enum class HtmlTokenId : sal_Int16;
@@ -271,7 +270,7 @@ enum class Css1Background
 
 class SW_DLLPUBLIC SwHTMLWriter : public Writer
 {
-    std::unique_ptr<SwHTMLPosFlyFrames> m_pHTMLPosFlyFrames;
+    SwHTMLPosFlyFrames m_aHTMLPosFlyFrames;
     std::unique_ptr<SwHTMLNumRuleInfo> m_pNumRuleInfo;// current numbering
     std::unique_ptr<SwHTMLNumRuleInfo> m_pNextNumRuleInfo;
     sal_uInt32 m_nHTMLMode;               // description of export configuration
