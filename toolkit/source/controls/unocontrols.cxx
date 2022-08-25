@@ -3433,8 +3433,8 @@ stardiv_Toolkit_UnoControlDateFieldModel_get_implementation(
 
 UnoDateFieldControl::UnoDateFieldControl()
 {
-    mnFirst = util::Date( 1, 1, 1900 );
-    mnLast = util::Date( 31, 12, 2200 );
+    mnFirst = util::Date( 1, 1, 0001 );
+    mnLast = util::Date( 31, 12, 9999 );
     mbLongFormat = TRISTATE_INDET;
 }
 

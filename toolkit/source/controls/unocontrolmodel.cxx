@@ -226,8 +226,8 @@ css::uno::Any UnoControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
             case BASEPROPERTY_PUSHBUTTONTYPE:       aDefault <<= sal_Int16(0) /*PushButtonType::STANDARD*/; break;
             case BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR:aDefault <<= sal_Int16(awt::MouseWheelBehavior::SCROLL_FOCUS_ONLY); break;
 
-            case BASEPROPERTY_DATEMAX:              aDefault <<= util::Date( 31, 12, 2200 );    break;
-            case BASEPROPERTY_DATEMIN:              aDefault <<= util::Date( 1, 1, 1900 );  break;
+            case BASEPROPERTY_DATEMAX:              aDefault <<= util::Date( 31, 12, 9999 );    break;
+            case BASEPROPERTY_DATEMIN:              aDefault <<= util::Date( 1, 1, 0001 );  break;
             case BASEPROPERTY_TIMEMAX:              aDefault <<= util::Time(0, 0, 59, 23, false);  break;
             case BASEPROPERTY_TIMEMIN:              aDefault <<= util::Time();      break;
             case BASEPROPERTY_VALUEMAX_DOUBLE:      aDefault <<= double(1000000);  break;
