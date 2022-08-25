@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "63e33710_128c6e03",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-08-25T07:49:47Z",
+      "side": 1,
+      "message": "IIRC gtk docs always refer to even stable release nums and not odd unstable ones.",
+      "revId": "a3cda2395c2a1d85d85821cc333d555349c59a24",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
