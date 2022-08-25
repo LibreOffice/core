@@ -23,6 +23,7 @@
 
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <o3tl/string_view.hxx>
 #include <sfx2/objsh.hxx>
 #include <vcl/font.hxx>
 #include <tools/urlobj.hxx>
@@ -883,35 +884,35 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
 
 namespace {
 
-/** Encodes special parts of the URL, i.e. directory separators and volume names.
-    @param pTableName  Pointer to a table name to be encoded in this URL, or 0. */
-OUString lclEncodeDosUrl(
-    XclBiff eBiff, const OUString& rUrl, std::u16string_view rBase, const OUString* pTableName)
+/** Encodes special parts of the path, i.e. directory separators and volume names.
+    @param pTableName  Pointer to a table name to be encoded in this path, or 0. */
+OUString lclEncodeDosPath(
+    XclBiff eBiff, std::u16string_view path, std::u16string_view rBase, const OUString* pTableName)
 {
     OUStringBuffer aBuf;
 
-    if (!rUrl.isEmpty())
+    if (!path.empty())
     {
-        OUString aOldUrl = rUrl;
+        std::u16string_view aOldPath = path;
         aBuf.append(EXC_URLSTART_ENCODED);
 
-        if ( aOldUrl.getLength() > 2 && aOldUrl.startsWith("\\\\") )
+        if ( aOldPath.length() > 2 && o3tl::starts_with(aOldPath, u"\\\\") )
         {
             // UNC
             aBuf.append(EXC_URL_DOSDRIVE).append('@');
-            aOldUrl = aOldUrl.copy(2);
+            aOldPath = aOldPath.substr(2);
         }
-        else if ( aOldUrl.getLength() > 2 && aOldUrl.match(":\\", 1) )
+        else if ( aOldPath.length() > 2 && o3tl::starts_with(aOldPath.substr(1), u":\\") )
         {
             // drive letter
             sal_Unicode cThisDrive = rBase.empty() ? ' ' : rBase[0];
-            sal_Unicode cDrive = aOldUrl[0];
+            sal_Unicode cDrive = aOldPath[0];
             if (cThisDrive == cDrive)
                 // This document and the referenced document are under the same drive.
                 aBuf.append(EXC_URL_DRIVEROOT);
             else
                 aBuf.append(EXC_URL_DOSDRIVE).append(cDrive);
-            aOldUrl = aOldUrl.copy(3);
+            aOldPath = aOldPath.substr(3);
         }
         else
         {
@@ -920,24 +921,24 @@ OUString lclEncodeDosUrl(
         }
 
         // directories
-        sal_Int32 nPos = -1;
-        while((nPos = aOldUrl.indexOf('\\')) != -1)
+        auto nPos = std::u16string_view::npos;
+        while((nPos = aOldPath.find('\\')) != std::u16string_view::npos)
         {
-            if ( aOldUrl.startsWith("..") )
+            if ( o3tl::starts_with(aOldPath, u"..") )
                 // parent dir (NOTE: the MS-XLS spec doesn't mention this, and
                 // Excel seems confused by this token).
                 aBuf.append(EXC_URL_PARENTDIR);
             else
-                aBuf.append(aOldUrl.subView(0,nPos)).append(EXC_URL_SUBDIR);
+                aBuf.append(aOldPath.substr(0,nPos)).append(EXC_URL_SUBDIR);
 
-            aOldUrl = aOldUrl.copy(nPos + 1);
+            aOldPath = aOldPath.substr(nPos + 1);
         }
 
         // file name
         if (pTableName)    // enclose file name in brackets if table name follows
-            aBuf.append('[').append(aOldUrl).append(']');
+            aBuf.append('[').append(aOldPath).append(']');
         else
-            aBuf.append(aOldUrl);
+            aBuf.append(aOldPath);
     }
     else    // empty URL -> self reference
     {
@@ -971,9 +972,9 @@ OUString lclEncodeDosUrl(
 
 OUString XclExpUrlHelper::EncodeUrl( const XclExpRoot& rRoot, std::u16string_view rAbsUrl, const OUString* pTableName )
 {
-    OUString aDosUrl = INetURLObject(rAbsUrl).getFSysPath(FSysStyle::Dos);
+    OUString aDosPath = INetURLObject(rAbsUrl).getFSysPath(FSysStyle::Dos);
     OUString aDosBase = INetURLObject(rRoot.GetBasePath()).getFSysPath(FSysStyle::Dos);
-    return lclEncodeDosUrl(rRoot.GetBiff(), aDosUrl, aDosBase, pTableName);
+    return lclEncodeDosPath(rRoot.GetBiff(), aDosPath, aDosBase, pTableName);
 }
 
 OUString XclExpUrlHelper::EncodeDde( std::u16string_view rApplic, std::u16string_view rTopic )
