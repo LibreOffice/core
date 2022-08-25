@@ -33,6 +33,40 @@
       "message": "You have never tested the bug in the test - i.e., *saving*. Have you at least tried if the change fixed the problem when run interactively? (a hint: it did not) ",
       "revId": "edda970193e72782e3d07cc5bebe8a9851ba6365",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6070694d_7a0e9099",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-25T10:13:18Z",
+      "side": 1,
+      "message": "Note that https://gerrit.libreoffice.org/c/core/+/138801 made some changes to avoid URL/system path confusion, so you need to rebase.\n\nYou also need to make sure that you take \"Options/Load-Save/General - Save URLs relative to file system\" option into account.\n\nAlso check if you really need to pass both full and relative paths to the encoding function - I believe that you could just pass the relative one, because it would only be relative when it\u0027s on the same drive anyway.",
+      "revId": "edda970193e72782e3d07cc5bebe8a9851ba6365",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e97eb39b_fd1d5bb1",
+        "filename": "sc/qa/unit/bugfix-test.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 792,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-25T10:13:18Z",
+      "side": 1,
+      "message": "Here you have the original XLS document open, and now, after you tested that the paths link is OK, it\u0027s time to *save* this document to another directory (i.e., you would use the LibreOffice export filter, and test if it does the proper job with your changes).\n\nYou may use SfxObjectShell::SaveAs, which would need a SfxMedium describing the options (see ScBootstrapFixture::saveAndReload for a sample how to create such an object).",
+      "revId": "edda970193e72782e3d07cc5bebe8a9851ba6365",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
