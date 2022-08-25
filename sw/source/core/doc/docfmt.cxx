@@ -380,7 +380,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
     }
 
     if( aTmpStt < aTmpEnd )
-        GetNodes().ForEach( pStt->nNode, aTmpEnd, lcl_RstAttr, &aPara );
+        GetNodes().ForEach( pStt->GetNode(), aTmpEnd.GetNode(), lcl_RstAttr, &aPara );
     else if( !rRg.HasMark() )
     {
         aPara.bResetAll = false ;
@@ -392,7 +392,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
     {
         if( bAdd )
             ++aTmpEnd;
-        GetNodes().ForEach( pStt->nNode, aTmpEnd, sw::DocumentContentOperationsManager::lcl_RstTextAttr, &aPara );
+        GetNodes().ForEach( pStt->GetNode(), aTmpEnd.GetNode(), sw::DocumentContentOperationsManager::lcl_RstTextAttr, &aPara );
     }
 
     getIDocumentState().SetModified();

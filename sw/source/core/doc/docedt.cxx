@@ -808,7 +808,7 @@ uno::Reference< XHyphenatedWord >  SwDoc::Hyphenate(
 
     SwHyphArgs aHyphArg( pPam, rCursorPos, pPageCnt, pPageSt );
     SwNodeIndex aTmpIdx( pPam->GetMark()->GetNode(), 1 );
-    GetNodes().ForEach( pPam->GetPoint()->nNode, aTmpIdx,
+    GetNodes().ForEach( pPam->GetPoint()->GetNode(), aTmpIdx.GetNode(),
                     lcl_HyphenateNode, &aHyphArg );
     aHyphArg.SetPam( pPam );
     return aHyphArg.GetHyphWord();  // will be set by lcl_HyphenateNode
