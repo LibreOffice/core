@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05cd17a5_ede81286",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2022-08-25T06:10:53Z",
+      "side": 1,
+      "message": "Luboš, this is an okay way to use the two functions that you added last year, right?",
+      "revId": "7d26b3b0e43a9480d95603c1fcf992dba1ac793a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
