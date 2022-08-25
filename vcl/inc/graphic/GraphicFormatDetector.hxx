@@ -170,7 +170,9 @@ public:
     bool checkEPS();
     bool checkDXF();
     bool checkPCT();
-    bool checkPBMorPGMorPPM();
+    bool checkPBM();
+    bool checkPGM();
+    bool checkPPM();
     bool checkRAS();
     bool checkXPM();
     bool checkXBM();
