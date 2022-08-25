@@ -16,6 +16,23 @@
       "message": "Only for discussion",
       "revId": "a564a121acf9c4dc72aa969b42b669bacce8d3ac",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70bc4556_34301616",
+        "filename": "offapi/type_reference/offapi.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 15243,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-08-25T16:03:48Z",
+      "side": 1,
+      "message": "please never manually update this file for such compatible changes",
+      "revId": "a564a121acf9c4dc72aa969b42b669bacce8d3ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
