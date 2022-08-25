@@ -9,24 +9,19 @@
 
 #include <widgettestdlg.hxx>
 
-WidgetTestDialog::WidgetTestDialog(weld::Window *pParent)
-      : GenericDialogController(pParent, "cui/ui/widgettestdialog.ui", "WidgetTestDialog")
+WidgetTestDialog::WidgetTestDialog(weld::Window* pParent)
+    : GenericDialogController(pParent, "cui/ui/widgettestdialog.ui", "WidgetTestDialog")
 {
-    m_xOKButton = m_xBuilder->weld_button("ok_btn");
-    m_xCancelButton = m_xBuilder->weld_button("cancel_btn");
+    m_xOKButton = m_xBuilder->weld_button("ok");
+    m_xCancelButton = m_xBuilder->weld_button("cancel");
 
     m_xOKButton->connect_clicked(LINK(this, WidgetTestDialog, OkHdl));
     m_xCancelButton->connect_clicked(LINK(this, WidgetTestDialog, CancelHdl));
 }
 
-WidgetTestDialog::~WidgetTestDialog()
-{
-}
+WidgetTestDialog::~WidgetTestDialog() {}
 
-IMPL_LINK_NOARG(WidgetTestDialog, OkHdl, weld::Button&, void)
-{
-    m_xDialog->response(RET_OK);
-}
+IMPL_LINK_NOARG(WidgetTestDialog, OkHdl, weld::Button&, void) { m_xDialog->response(RET_OK); }
 
 IMPL_LINK_NOARG(WidgetTestDialog, CancelHdl, weld::Button&, void)
 {

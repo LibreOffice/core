@@ -17,7 +17,7 @@
             <property name="can-focus">False</property>
             <property name="layout-style">end</property>
             <child>
-              <object class="GtkButton" id="cancel_btn">
+              <object class="GtkButton" id="cancel">
                 <property name="label" translatable="no">Cancel</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
@@ -30,7 +30,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="ok_btn">
+              <object class="GtkButton" id="ok">
                 <property name="label" translatable="no">Ok</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
