@@ -70,6 +70,24 @@
       "parentUuid": "69ec8459_42a5b0a0",
       "revId": "497fd09add19ccb834aa40226b60c642299e210e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2f4deeb_f81cf5bb",
+        "filename": "sw/source/core/inc/unoparaframeenum.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-25T08:34:22Z",
+      "side": 1,
+      "message": "Ah - thanks, and sorry for confusion. Then I don\u0027t understand what you meant in \"except that sw::FrameClient is an object that cannot move around in memory\" - I thought that calling std::make_unique in the ctor itself would do the job, not that we should have the sw::FrameClient by value in the struct.",
+      "parentUuid": "9050e697_7bcf2645",
+      "revId": "497fd09add19ccb834aa40226b60c642299e210e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
