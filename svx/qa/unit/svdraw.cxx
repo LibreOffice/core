@@ -505,6 +505,12 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testVideoSnapshot)
     // i.e. the preview was black, not red; since we seeked 3 secs into the video, while PowerPoint
     // doesn't do that.
     CPPUNIT_ASSERT_EQUAL(Color(0xff, 0x0, 0x0), rBitmap.GetPixelColor(0, 0));
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 321
+    // - Actual  : 640
+    // i.e. ~25% crop from left and right should result in half width, but it was not reduced.
+    CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(321), rBitmap.GetSizePixel().getWidth());
 }
 }
 

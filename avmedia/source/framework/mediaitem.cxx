@@ -30,6 +30,7 @@
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XUriReference.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
+#include <com/sun/star/text/GraphicCrop.hpp>
 
 #include <sal/log.hxx>
 
@@ -64,6 +65,7 @@ struct MediaItem::Impl
     bool                    m_bMute;
     css::media::ZoomLevel m_eZoom;
     Graphic m_aGraphic;
+    text::GraphicCrop m_aCrop;
 
     explicit Impl(AVMediaSetMask nMaskSet)
         : m_nMaskSet( nMaskSet )
@@ -107,6 +109,7 @@ bool MediaItem::operator==( const SfxPoolItem& rItem ) const
         && m_pImpl->m_Referer == rOther.m_pImpl->m_Referer
         && m_pImpl->m_sMimeType == rOther.m_pImpl->m_sMimeType
         && m_pImpl->m_aGraphic == rOther.m_pImpl->m_aGraphic
+        && m_pImpl->m_aCrop == rOther.m_pImpl->m_aCrop
         && m_pImpl->m_eState == rOther.m_pImpl->m_eState
         && m_pImpl->m_fDuration == rOther.m_pImpl->m_fDuration
         && m_pImpl->m_fTime == rOther.m_pImpl->m_fTime
@@ -193,6 +196,9 @@ bool MediaItem::merge(const MediaItem& rMediaItem)
     if (nMaskSet & AVMediaSetMask::GRAPHIC)
         bChanged |= setGraphic(rMediaItem.getGraphic());
 
+    if (nMaskSet & AVMediaSetMask::CROP)
+        bChanged |= setCrop(rMediaItem.getCrop());
+
     if( AVMediaSetMask::STATE & nMaskSet )
         bChanged |= setState( rMediaItem.getState() );
 
@@ -274,6 +280,17 @@ bool MediaItem::setGraphic(const Graphic& rGraphic)
 }
 
 const Graphic & MediaItem::getGraphic() const { return m_pImpl->m_aGraphic; }
+
+bool MediaItem::setCrop(const text::GraphicCrop& rCrop)
+{
+    m_pImpl->m_nMaskSet |= AVMediaSetMask::CROP;
+    bool bChanged = rCrop != m_pImpl->m_aCrop;
+    if (bChanged)
+        m_pImpl->m_aCrop = rCrop;
+    return bChanged;
+}
+
+const text::GraphicCrop& MediaItem::getCrop() const { return m_pImpl->m_aCrop; }
 
 bool MediaItem::setState(MediaState eState)
 {
