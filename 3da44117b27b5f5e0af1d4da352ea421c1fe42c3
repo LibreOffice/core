@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3cd07c2_5fae87ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003336
+      },
+      "writtenOn": "2022-08-25T20:53:08Z",
+      "side": 1,
+      "message": "This patch maybe need some discuss. \nThese changes solve the problem of view data in a date field control in most databases, which usually date range goes from 1/1/0001 to 31/12/9999, but still maintains limits on the range of dates that can be viewed. \nA solution that removes all limits would be better, but I am not able to implement it without help.\nIn any case, the patch extends the range of supported dates to dates before 1/1/1600, which in my opinion is too limiting date, and on the other side it extends the range so that it allows to enter the \"magic\" date 9/9/9999 which is widely used by database users as the \"end of the world\" date (the forever date in ranges from-to).\nThis patch could solve too tdf#150587 extending the limits of \"Date min\" and \"Date max\" to more reasonable limits",
+      "revId": "3da44117b27b5f5e0af1d4da352ea421c1fe42c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
