@@ -783,7 +783,8 @@ bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
     if( ((pProperty->nWID >= OWN_ATTR_MEDIA_URL) && (pProperty->nWID <= OWN_ATTR_MEDIA_ZOOM))
         || (pProperty->nWID == OWN_ATTR_MEDIA_STREAM)
         || (pProperty->nWID == OWN_ATTR_MEDIA_MIMETYPE)
-        || (pProperty->nWID == OWN_ATTR_VALUE_GRAPHIC))
+        || (pProperty->nWID == OWN_ATTR_VALUE_GRAPHIC)
+        || (pProperty->nWID == SDRATTR_GRAFCROP))
     {
         SdrMediaObj* pMedia = static_cast< SdrMediaObj* >( GetSdrObject() );
         ::avmedia::MediaItem aItem;
@@ -886,6 +887,19 @@ bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
 #endif
         break;
 
+        case SDRATTR_GRAFCROP:
+#if HAVE_FEATURE_AVMEDIA
+        {
+            text::GraphicCrop aCrop;
+            if (rValue >>= aCrop)
+            {
+                bOk = true;
+                aItem.setCrop(aCrop);
+            }
+        }
+#endif
+        break;
+
         case OWN_ATTR_MEDIA_STREAM:
 #if HAVE_FEATURE_AVMEDIA
             try
@@ -942,7 +956,8 @@ bool SvxMediaShape::getPropertyValueImpl( const OUString& rName, const SfxItemPr
         || (pProperty->nWID == OWN_ATTR_MEDIA_TEMPFILEURL)
         || (pProperty->nWID == OWN_ATTR_MEDIA_MIMETYPE)
         || (pProperty->nWID == OWN_ATTR_FALLBACK_GRAPHIC)
-        || (pProperty->nWID == OWN_ATTR_VALUE_GRAPHIC))
+        || (pProperty->nWID == OWN_ATTR_VALUE_GRAPHIC)
+        || (pProperty->nWID == SDRATTR_GRAFCROP))
     {
         SdrMediaObj* pMedia = static_cast< SdrMediaObj* >( GetSdrObject() );
         const ::avmedia::MediaItem aItem( pMedia->getMediaProperties() );
@@ -1021,6 +1036,15 @@ bool SvxMediaShape::getPropertyValueImpl( const OUString& rName, const SfxItemPr
                 {
                     rValue <<= aGraphic.GetXGraphic();
                 }
+            }
+#endif
+            break;
+
+            case SDRATTR_GRAFCROP:
+#if HAVE_FEATURE_AVMEDIA
+            {
+                text::GraphicCrop aCrop = aItem.getCrop();
+                rValue <<= aCrop;
             }
 #endif
             break;
