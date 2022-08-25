@@ -1,0 +1,9 @@
+Verified+1: René Engelhard <rene@debian.org>
+Verified+1: Jenkins
+Code-Review+2: René Engelhard <rene@debian.org>
+Code-Review+1: Sam James <sam@gentoo.org>
+Submitted-by: René Engelhard <rene@debian.org>
+Submitted-at: Thu, 25 Aug 2022 12:06:11 +0200
+Reviewed-on: https://gerrit.libreoffice.org/c/core/+/138553
+Project: core
+Branch: refs/heads/libreoffice-7-4
