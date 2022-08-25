@@ -121,6 +121,24 @@
       "parentUuid": "8da8c5b1_b0c36393",
       "revId": "ac55b28d4e59c066be6c85558f851f077d43e2ac",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a334d087_d9edc0d4",
+        "filename": "chart2/source/view/inc/PlottingPositionHelper.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-08-25T08:30:46Z",
+      "side": 1,
+      "message": "Sometimes such comparison and swap could be replaced with `std::minmax` and structured binding or `std::tie`, e.g. line 75 in vcl/source/text/ImplLayoutRuns.cxx.",
+      "parentUuid": "6f3be480_c8eaf0e9",
+      "revId": "ac55b28d4e59c066be6c85558f851f077d43e2ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
