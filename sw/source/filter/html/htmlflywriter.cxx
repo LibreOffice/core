@@ -244,15 +244,12 @@ sal_uInt16 SwHTMLWriter::GuessFrameType( const SwFrameFormat& rFrameFormat,
                     // empty frame? Only if no frame is
                     // anchored to the text or start node.
                     bEmpty = true;
-                    if( m_pHTMLPosFlyFrames )
+                    for( auto & pHTMLPosFlyFrame : m_aHTMLPosFlyFrames )
                     {
-                        for( auto & pHTMLPosFlyFrame : *m_pHTMLPosFlyFrames )
-                        {
-                            SwNodeOffset nIdx = pHTMLPosFlyFrame->GetNdIndex().GetIndex();
-                            bEmpty = (nIdx != nStt) && (nIdx != nStt-1);
-                            if( !bEmpty || nIdx > nStt )
-                                break;
-                        }
+                        SwNodeOffset nIdx = pHTMLPosFlyFrame->GetNdIndex().GetIndex();
+                        bEmpty = (nIdx != nStt) && (nIdx != nStt-1);
+                        if( !bEmpty || nIdx > nStt )
+                            break;
                     }
                 }
                 if( bEmpty )
@@ -345,10 +342,7 @@ void SwHTMLWriter::CollectFlyFrames()
             break;
         }
 
-        if( !m_pHTMLPosFlyFrames )
-            m_pHTMLPosFlyFrames.reset(new SwHTMLPosFlyFrames);
-
-        m_pHTMLPosFlyFrames->insert( std::make_unique<SwHTMLPosFlyFrame>(rItem, pSdrObj, nMode) );
+        m_aHTMLPosFlyFrames.insert( std::make_unique<SwHTMLPosFlyFrame>(rItem, pSdrObj, nMode) );
     }
 }
 
@@ -359,20 +353,20 @@ bool SwHTMLWriter::OutFlyFrame( SwNodeOffset nNdIdx, sal_Int32 nContentIdx, Html
     // OutFlyFrame can be called recursively. Thus, sometimes it is
     // necessary to start over after a Fly was returned.
     bool bRestart = true;
-    while( m_pHTMLPosFlyFrames && bRestart )
+    while( !m_aHTMLPosFlyFrames.empty() && bRestart )
     {
         bFlysLeft = bRestart = false;
 
         // search for the beginning of the FlyFrames
         size_t i {0};
 
-        for( ; i < m_pHTMLPosFlyFrames->size() &&
-            (*m_pHTMLPosFlyFrames)[i]->GetNdIndex().GetIndex() < nNdIdx; i++ )
+        for( ; i < m_aHTMLPosFlyFrames.size() &&
+            m_aHTMLPosFlyFrames[i]->GetNdIndex().GetIndex() < nNdIdx; i++ )
             ;
-        for( ; !bRestart && i < m_pHTMLPosFlyFrames->size() &&
-            (*m_pHTMLPosFlyFrames)[i]->GetNdIndex().GetIndex() == nNdIdx; i++ )
+        for( ; !bRestart && i < m_aHTMLPosFlyFrames.size() &&
+            m_aHTMLPosFlyFrames[i]->GetNdIndex().GetIndex() == nNdIdx; i++ )
         {
-            SwHTMLPosFlyFrame *pPosFly = (*m_pHTMLPosFlyFrames)[i].get();
+            SwHTMLPosFlyFrame *pPosFly = m_aHTMLPosFlyFrames[i].get();
             if( ( HtmlPosition::Any == nPos ||
                   pPosFly->GetOutPos() == nPos ) &&
                 pPosFly->GetContentIndex() == nContentIdx )
@@ -380,11 +374,10 @@ bool SwHTMLWriter::OutFlyFrame( SwNodeOffset nNdIdx, sal_Int32 nContentIdx, Html
                 // It is important to remove it first, because additional
                 // elements or the whole array could be deleted on
                 // deeper recursion levels.
-                std::unique_ptr<SwHTMLPosFlyFrame> flyHolder = m_pHTMLPosFlyFrames->erase_extract(i);
+                std::unique_ptr<SwHTMLPosFlyFrame> flyHolder = m_aHTMLPosFlyFrames.erase_extract(i);
                 i--;
-                if( m_pHTMLPosFlyFrames->empty() )
+                if( m_aHTMLPosFlyFrames.empty() )
                 {
-                    m_pHTMLPosFlyFrames.reset();
                     bRestart = true;    // not really, only exit the loop
                 }
 

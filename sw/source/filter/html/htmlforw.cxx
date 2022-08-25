@@ -1302,23 +1302,20 @@ void SwHTMLWriter::GetControls()
     // With that array it's possible to find out where form::Forms must be
     // opened and closed.
 
-    if( m_pHTMLPosFlyFrames )
+    // collect the paragraph-bound controls
+    for( size_t i=0; i<m_aHTMLPosFlyFrames.size(); i++ )
     {
-        // collect the paragraph-bound controls
-        for( size_t i=0; i<m_pHTMLPosFlyFrames->size(); i++ )
-        {
-            const SwHTMLPosFlyFrame* pPosFlyFrame = (*m_pHTMLPosFlyFrames)[ i ].get();
-            if( HtmlOut::Control != pPosFlyFrame->GetOutFn() )
-                continue;
+        const SwHTMLPosFlyFrame* pPosFlyFrame = m_aHTMLPosFlyFrames[ i ].get();
+        if( HtmlOut::Control != pPosFlyFrame->GetOutFn() )
+            continue;
 
-            const SdrObject *pSdrObj = pPosFlyFrame->GetSdrObject();
-            OSL_ENSURE( pSdrObj, "Where is the SdrObject?" );
-            if( !pSdrObj )
-                continue;
+        const SdrObject *pSdrObj = pPosFlyFrame->GetSdrObject();
+        OSL_ENSURE( pSdrObj, "Where is the SdrObject?" );
+        if( !pSdrObj )
+            continue;
 
-            AddControl( m_aHTMLControls, dynamic_cast<const SdrUnoObj&>(*pSdrObj),
-                        pPosFlyFrame->GetNdIndex().GetIndex() );
-        }
+        AddControl( m_aHTMLControls, dynamic_cast<const SdrUnoObj&>(*pSdrObj),
+                    pPosFlyFrame->GetNdIndex().GetIndex() );
     }
 
     // and now the ones in a character-bound frame
