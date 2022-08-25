@@ -122,7 +122,6 @@ ErrCode ScFormatFilterPluginImpl::ScImportDif(SvStream& rIn, ScDocument* pDoc, c
 
         ScSetStringParam aStrParam; // used to set string value without number detection.
         aStrParam.setTextInput();
-        const OUString aData = rData.makeStringAndClear();
 
         while( eCurrent != D_EOD )
         {
@@ -130,6 +129,7 @@ ErrCode ScFormatFilterPluginImpl::ScImportDif(SvStream& rIn, ScDocument* pDoc, c
 
             aPrgrsBar.Progress();
             ScAddress aPos(nColCnt, nRowCnt, nBaseTab);
+            const OUString aData = rData.makeStringAndClear();
 
             switch( eCurrent )
             {
