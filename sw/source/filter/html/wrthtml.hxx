@@ -271,7 +271,7 @@ enum class Css1Background
 
 class SW_DLLPUBLIC SwHTMLWriter : public Writer
 {
-    std::unique_ptr<SwHTMLPosFlyFrames> m_pHTMLPosFlyFrames;
+    SwHTMLPosFlyFrames m_aHTMLPosFlyFrames;
     std::unique_ptr<SwHTMLNumRuleInfo> m_pNumRuleInfo;// current numbering
     std::unique_ptr<SwHTMLNumRuleInfo> m_pNextNumRuleInfo;
     sal_uInt32 m_nHTMLMode;               // description of export configuration
