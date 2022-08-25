@@ -3853,7 +3853,9 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
             bool bFirst = true;
             for (const auto &f : pDocument->maFontsMissing)
             {
-                if (!bFirst)
+                if (bFirst)
+                    bFirst = false;
+                else
                     sPayload += ", ";
                 sPayload += "\"" + std::string(f.toUtf8().getStr()) + "\"";
             }
