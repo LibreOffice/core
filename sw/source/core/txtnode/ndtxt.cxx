@@ -1050,7 +1050,7 @@ SwContentNode *SwTextNode::JoinNext()
         if( pTextNode->HasAnyIndex() )
         {
             // move all ShellCursor/StackCursor/UnoCursor out of delete range
-            rDoc.CorrAbs( aIdx, SwPosition( *this ), nOldLen, true );
+            rDoc.CorrAbs( aIdx.GetNode(), SwPosition( *this ), nOldLen, true );
         }
         SwNode::Merge const eOldMergeFlag(pTextNode->GetRedlineMergeFlag());
         auto eRecreateMerged(eOldMergeFlag == SwNode::Merge::First
@@ -1165,7 +1165,7 @@ void SwTextNode::JoinPrev()
         if( pTextNode->HasAnyIndex() )
         {
             // move all ShellCursor/StackCursor/UnoCursor out of delete range
-            rDoc.CorrAbs( aIdx, SwPosition( *this ), nLen, true );
+            rDoc.CorrAbs( aIdx.GetNode(), SwPosition( *this ), nLen, true );
         }
         SwNode::Merge const eOldMergeFlag(pTextNode->GetRedlineMergeFlag());
         if (eOldMergeFlag == SwNode::Merge::First

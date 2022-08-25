@@ -2232,7 +2232,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
                         pPos->Adjust(SwNodeOffset(1));
                     }
                 }
-                CorrRel( aIdx, aInsPos );
+                CorrRel( aIdx.GetNode(), aInsPos );
 
                 if (pCNd)
                     pCNd->JoinNext();

@@ -1282,7 +1282,7 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
                         pPam->Move( fnMoveBackward, GoInNode );
                         pPam->SetMark(); // Rewire both SwPositions
 
-                        pDoc->CorrAbs( aSave, *pPam->GetPoint(), 0, true );
+                        pDoc->CorrAbs( aSave.GetNode(), *pPam->GetPoint(), 0, true );
                         pDoc->GetNodes().Delete( aSave );
                     }
                     oCpyRg.reset();

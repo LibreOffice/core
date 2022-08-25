@@ -877,11 +877,11 @@ namespace sw::mark
     }
 
     void MarkManager::correctMarksAbsolute(
-        const SwNodeIndex& rOldNode,
+        const SwNode& rOldNode,
         const SwPosition& rNewPos,
         const sal_Int32 nOffset)
     {
-        const SwNode* const pOldNode = &rOldNode.GetNode();
+        const SwNode* const pOldNode = &rOldNode;
         SwPosition aNewPos(rNewPos);
         aNewPos.nContent += nOffset;
         bool isSortingNeeded = false;
@@ -922,9 +922,9 @@ namespace sw::mark
         lcl_DebugMarks(m_vAllMarks);
     }
 
-    void MarkManager::correctMarksRelative(const SwNodeIndex& rOldNode, const SwPosition& rNewPos, const sal_Int32 nOffset)
+    void MarkManager::correctMarksRelative(const SwNode& rOldNode, const SwPosition& rNewPos, const sal_Int32 nOffset)
     {
-        const SwNode* const pOldNode = &rOldNode.GetNode();
+        const SwNode* const pOldNode = &rOldNode;
         SwPosition aNewPos(rNewPos);
         aNewPos.nContent += nOffset;
         bool isSortingNeeded = false;

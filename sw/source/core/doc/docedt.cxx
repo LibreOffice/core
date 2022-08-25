@@ -414,7 +414,7 @@ bool sw_JoinText( SwPaM& rPam, bool bJoinPrev )
                 pOldTextNd->CutText( pTextNd, aAlphaIdx, SwContentIndex(pOldTextNd),
                                     pOldTextNd->Len() );
                 SwPosition aAlphaPos( aIdx, aAlphaIdx );
-                rDoc.CorrRel( rPam.GetPoint()->nNode, aAlphaPos, 0, true );
+                rDoc.CorrRel( rPam.GetPoint()->GetNode(), aAlphaPos, 0, true );
 
                 // move all Bookmarks/TOXMarks
                 if( !pContentStore->Empty() )
@@ -471,7 +471,7 @@ bool sw_JoinText( SwPaM& rPam, bool bJoinPrev )
                 }
             }
 
-            rDoc.CorrRel( aIdx, *rPam.GetPoint(), 0, true );
+            rDoc.CorrRel( aIdx.GetNode(), *rPam.GetPoint(), 0, true );
             // #i100466# adjust given <rPam>, if it does not belong to the cursors
             if ( pDelNd == rPam.GetBound().GetContentNode() )
             {

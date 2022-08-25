@@ -60,8 +60,8 @@ namespace sw::mark {
 
             virtual void repositionMark(::sw::mark::IMark* io_pMark, const SwPaM& rPaM) override;
             virtual bool renameMark(::sw::mark::IMark* io_pMark, const OUString& rNewName) override;
-            virtual void correctMarksAbsolute(const SwNodeIndex& rOldNode, const SwPosition& rNewPos, const sal_Int32 nOffset) override;
-            virtual void correctMarksRelative(const SwNodeIndex& rOldNode, const SwPosition& rNewPos, const sal_Int32 nOffset) override;
+            virtual void correctMarksAbsolute(const SwNode& rOldNode, const SwPosition& rNewPos, const sal_Int32 nOffset) override;
+            virtual void correctMarksRelative(const SwNode& rOldNode, const SwPosition& rNewPos, const sal_Int32 nOffset) override;
 
             virtual void deleteMarks(const SwNode& rStt,
                                     const SwNode& rEnd,

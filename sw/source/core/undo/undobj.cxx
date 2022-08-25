@@ -153,8 +153,7 @@ void SwUndo::RemoveIdxRel( SwNodeOffset nIdx, const SwPosition& rPos )
 {
     // Move only the Cursor. Bookmarks/TOXMarks/etc. are done by the corresponding
     // JoinNext/JoinPrev
-    SwNodeIndex aIdx( rPos.GetNode().GetNodes(), nIdx );
-    ::PaMCorrRel( aIdx, rPos );
+    ::PaMCorrRel( *rPos.GetNode().GetNodes()[nIdx], rPos );
 }
 
 SwUndo::SwUndo(SwUndoId const nId, const SwDoc* pDoc)
