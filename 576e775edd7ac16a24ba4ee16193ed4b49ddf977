@@ -22,6 +22,30 @@
       },
       "revId": "576e775edd7ac16a24ba4ee16193ed4b49ddf977",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4253e233_12a9f048",
+        "filename": "include/vcl/GestureEventZoom.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1003664
+      },
+      "writtenOn": "2022-08-25T22:05:49Z",
+      "side": 1,
+      "message": "Addressed, thanks!",
+      "parentUuid": "8459d76d_4288fbdb",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 41
+      },
+      "revId": "576e775edd7ac16a24ba4ee16193ed4b49ddf977",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
