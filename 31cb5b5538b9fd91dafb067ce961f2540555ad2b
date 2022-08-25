@@ -50,6 +50,23 @@
       "message": "fyi, searching the codebase reveals that we actually have a good example of changing the status based on selection. It\u0027s in SwXDispatch (sw/source/uibase/uno/unodispatch.cxx). You can see in SwXDispatch::selectionChanged how clients are updated via their statusChanged method on selection change.",
       "revId": "31cb5b5538b9fd91dafb067ce961f2540555ad2b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "523994ba_38aedbb3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-08-25T06:38:50Z",
+      "side": 1,
+      "message": "Thanks! If my assumption is correct that once a dispatcher is returned, then (in the toolbar case) svt::ToolboxController::bindListener() will call addStatusListener() on it, then I get the idea.",
+      "revId": "31cb5b5538b9fd91dafb067ce961f2540555ad2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
