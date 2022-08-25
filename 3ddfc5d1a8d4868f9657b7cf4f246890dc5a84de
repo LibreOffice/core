@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e281bb8d_5c105e36",
+        "filename": "oox/source/ppt/presentationfragmenthandler.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-08-25T19:38:55Z",
+      "side": 1,
+      "message": "Can flatten this a little using `std::find_if`.",
+      "revId": "3ddfc5d1a8d4868f9657b7cf4f246890dc5a84de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "702ae0c6_e9fb3023",
+        "filename": "oox/source/ppt/presentationfragmenthandler.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-08-25T19:38:55Z",
+      "side": 1,
+      "message": "`nCount` is used only inside of `if (bUseTitleAsSlideName)`. Can reduce its scope.",
+      "revId": "3ddfc5d1a8d4868f9657b7cf4f246890dc5a84de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
