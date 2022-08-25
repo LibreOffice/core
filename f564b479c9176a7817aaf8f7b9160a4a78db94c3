@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fdc047e8_9d2f6c54",
+        "filename": "svx/source/unodraw/unoshape.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 994,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-08-25T19:21:59Z",
+      "side": 1,
+      "message": "Can flatten even more with `return updateShapeKind();`.",
+      "revId": "f564b479c9176a7817aaf8f7b9160a4a78db94c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
