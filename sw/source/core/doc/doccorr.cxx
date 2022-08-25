@@ -73,13 +73,15 @@ namespace
         const sal_Int32 nCntIdx)
     {
         for(int nb = 0; nb < 2; ++nb)
-            if(&(pPam->GetBound(bool(nb)).GetNode()) == pOldNode)
+        {
+            SwPosition & rPos = pPam->GetBound(bool(nb));
+            if(&rPos.GetNode() == pOldNode)
             {
-                pPam->GetBound(bool(nb)).nNode = rNewPos.nNode;
-                pPam->GetBound(bool(nb)).nContent.Assign(
-                    rNewPos.GetNode().GetContentNode(),
-                    nCntIdx + pPam->GetBound(bool(nb)).GetContentIndex());
+                rPos.Assign( rNewPos.GetNode() );
+                if(rNewPos.GetNode().GetContentNode())
+                    rPos.AdjustContent(nCntIdx);
             }
+        }
     }
 }
 

@@ -1078,21 +1078,21 @@ SwChainRet SwDoc::Chainable( const SwFrameFormat &rSource, const SwFrameFormat &
     }
     else if( rSrcAnchor.GetContentAnchor() && rDstAnchor.GetContentAnchor() )
     {
-        const SwNodeIndex &rSrcIdx = rSrcAnchor.GetContentAnchor()->nNode,
-                            &rDstIdx = rDstAnchor.GetContentAnchor()->nNode;
+        const SwNode &rSrcNd = rSrcAnchor.GetContentAnchor()->GetNode(),
+                     &rDstNd = rDstAnchor.GetContentAnchor()->GetNode();
         const SwStartNode* pSttNd = nullptr;
-        if( rSrcIdx == rDstIdx ||
+        if( rSrcNd == rDstNd ||
             ( !pSttNd &&
-                nullptr != ( pSttNd = rSrcIdx.GetNode().FindFlyStartNode() ) &&
-                pSttNd == rDstIdx.GetNode().FindFlyStartNode() ) ||
+                nullptr != ( pSttNd = rSrcNd.FindFlyStartNode() ) &&
+                pSttNd == rDstNd.FindFlyStartNode() ) ||
             ( !pSttNd &&
-                nullptr != ( pSttNd = rSrcIdx.GetNode().FindFooterStartNode() ) &&
-                pSttNd == rDstIdx.GetNode().FindFooterStartNode() ) ||
+                nullptr != ( pSttNd = rSrcNd.FindFooterStartNode() ) &&
+                pSttNd == rDstNd.FindFooterStartNode() ) ||
             ( !pSttNd &&
-                nullptr != ( pSttNd = rSrcIdx.GetNode().FindHeaderStartNode() ) &&
-                pSttNd == rDstIdx.GetNode().FindHeaderStartNode() ) ||
-            ( !pSttNd && rDstIdx.GetIndex() > nEndOfExtras &&
-                            rSrcIdx.GetIndex() > nEndOfExtras ))
+                nullptr != ( pSttNd = rSrcNd.FindHeaderStartNode() ) &&
+                pSttNd == rDstNd.FindHeaderStartNode() ) ||
+            ( !pSttNd && rDstNd.GetIndex() > nEndOfExtras &&
+                            rSrcNd.GetIndex() > nEndOfExtras ))
             bAllowed = true;
     }
 
