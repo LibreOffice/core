@@ -18,6 +18,7 @@
  */
 
 #include <QtAccessibleEventListener.hxx>
+#include <QtAccessibleRegistry.hxx>
 #include <QtTools.hxx>
 
 #include <sal/log.hxx>
@@ -171,9 +172,23 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
                 new QAccessibleEvent(pQAccessibleInterface, QAccessible::ActionChanged));
             return;
         case AccessibleEventId::ACTIVE_DESCENDANT_CHANGED:
-            QAccessible::updateAccessibility(
-                new QAccessibleEvent(pQAccessibleInterface, QAccessible::ActiveDescendantChanged));
+        {
+            // Qt has a QAccessible::ActiveDescendantChanged event type, but events of
+            // that type are currently just ignored on Qt side and not forwarded to AT-SPI.
+            // Send a state change event for the focused state of the newly
+            // active descendant instead
+            uno::Reference<accessibility::XAccessible> xActiveAccessible;
+            aEvent.NewValue >>= xActiveAccessible;
+            if (!xActiveAccessible.is())
+                return;
+
+            QObject* pQtAcc = QtAccessibleRegistry::getQObject(xActiveAccessible);
+            QAccessibleInterface* pInterface = QAccessible::queryAccessibleInterface(pQtAcc);
+            QAccessible::State aState;
+            aState.focused = true;
+            QAccessible::updateAccessibility(new QAccessibleStateChangeEvent(pInterface, aState));
             return;
+        }
         case AccessibleEventId::CARET_CHANGED:
         {
             sal_Int32 nNewCursorPos = 0;
