@@ -16,6 +16,24 @@
       "message": "Luboš, this is an okay way to use the two functions that you added last year, right?",
       "revId": "7d26b3b0e43a9480d95603c1fcf992dba1ac793a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a3f1c5a_7407a0bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-08-25T08:32:34Z",
+      "side": 1,
+      "message": "Generally yes, but it assumes that no extension would have the feature active at the same time (which I don\u0027t know is a realistic problem here).",
+      "parentUuid": "05cd17a5_ede81286",
+      "revId": "7d26b3b0e43a9480d95603c1fcf992dba1ac793a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
