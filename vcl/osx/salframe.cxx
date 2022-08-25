@@ -1288,13 +1288,17 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     aStyleSettings.SetListBoxWindowHighlightColor( aMenuHighlightColor );
     aStyleSettings.SetListBoxWindowHighlightTextColor( aMenuHighlightTextColor );
 
+    // FIXME: Starting with macOS Big Sur, coloring has changed. Currently there is no documentation which system color should be
+    // used for some button states and for selected tab text. As a workaround the current OS version has to be considered. This code
+    // has to be reviewed once issue is covered by documentation.
+
     // Set text colors for buttons and their different status according to OS settings, typically white for selected buttons,
     // black otherwise
 
+    NSOperatingSystemVersion aOSVersion = { .majorVersion = 10, .minorVersion = 16, .patchVersion = 0 };
     Color aControlTextColor(getColor([NSColor controlTextColor], COL_BLACK, mpNSWindow));
     Color aSelectedControlTextColor(getColor([NSColor selectedControlTextColor], COL_BLACK, mpNSWindow));
     Color aAlternateSelectedControlTextColor(getColor([NSColor alternateSelectedControlTextColor], COL_WHITE, mpNSWindow));
-    aStyleSettings.SetDefaultButtonTextColor(aAlternateSelectedControlTextColor);
     aStyleSettings.SetButtonTextColor(aControlTextColor);
     aStyleSettings.SetDefaultActionButtonTextColor(aAlternateSelectedControlTextColor);
     aStyleSettings.SetActionButtonTextColor(aControlTextColor);
@@ -1305,20 +1309,24 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     aStyleSettings.SetActionButtonRolloverTextColor(aControlTextColor);
     aStyleSettings.SetFlatButtonRolloverTextColor(aControlTextColor);
     aStyleSettings.SetDefaultButtonPressedRolloverTextColor(aAlternateSelectedControlTextColor);
-    aStyleSettings.SetButtonPressedRolloverTextColor(aAlternateSelectedControlTextColor);
     aStyleSettings.SetDefaultActionButtonPressedRolloverTextColor(aAlternateSelectedControlTextColor);
-    aStyleSettings.SetActionButtonPressedRolloverTextColor(aAlternateSelectedControlTextColor);
     aStyleSettings.SetFlatButtonPressedRolloverTextColor(aControlTextColor);
+    if ([NSProcessInfo.processInfo isOperatingSystemAtLeastVersion: aOSVersion])
+    {
+        aStyleSettings.SetDefaultButtonTextColor(aAlternateSelectedControlTextColor);
+        aStyleSettings.SetButtonPressedRolloverTextColor(aSelectedControlTextColor);
+        aStyleSettings.SetActionButtonPressedRolloverTextColor(aSelectedControlTextColor);
+    }
+    else
+    {
+        aStyleSettings.SetButtonPressedRolloverTextColor(aAlternateSelectedControlTextColor);
+        aStyleSettings.SetActionButtonPressedRolloverTextColor(aAlternateSelectedControlTextColor);
+        aStyleSettings.SetDefaultButtonTextColor(aSelectedControlTextColor);
+    }
 
     // Set text colors for tabs according to OS settings
 
     aStyleSettings.SetTabTextColor(aControlTextColor);
-
-    // FIXME: Starting with macOS Big Sur, coloring has changed. Currently there is no documentation which system color should be
-    // used for selected tab text. As a workaround the current OS version has to be considered. This code has to be reviewed once
-    // issue is covered by documentation.
-
-    NSOperatingSystemVersion aOSVersion = { .majorVersion = 10, .minorVersion = 16, .patchVersion = 0 };
     if ([NSProcessInfo.processInfo isOperatingSystemAtLeastVersion: aOSVersion])
         aStyleSettings.SetTabHighlightTextColor(aSelectedControlTextColor);
     else
