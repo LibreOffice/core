@@ -804,8 +804,9 @@ static bool IsHeadingContained(const SwTextNode* pChptrNd, const SwNode& rNd)
         else
         {
             // Search for the next outline node which lies not within the current chapter node
-            while (pChptrNd->GetAttrOutlineLevel()
-                   < rONds[nPos]->GetTextNode()->GetAttrOutlineLevel())
+            while (nPos > 0
+                   && pChptrNd->GetAttrOutlineLevel()
+                          < rONds[nPos]->GetTextNode()->GetAttrOutlineLevel())
                 nPos--;
             bIsHeadingContained = pChptrNd == rONds[nPos]->GetTextNode();
         }
