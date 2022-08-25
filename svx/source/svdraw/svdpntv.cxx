@@ -639,28 +639,31 @@ void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFo
         // look for active TextEdit. As long as this cannot be painted to a VDev,
         // it cannot get part of buffering. In that case, output evtl. prerender
         // early and paint text edit to window.
-        if(IsTextEdit() && GetSdrPageView())
+        SdrPageView* pPageView = GetSdrPageView();
+        if(IsTextEdit() && pPageView)
         {
             if (!comphelper::LibreOfficeKit::isActive() || mbPaintTextEdit)
                 static_cast< SdrView* >(this)->TextEditDrawing(rPaintWindow);
         }
 
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::LibreOfficeKit::isActive() && mbPaintTextEdit && pPageView)
         {
             // Look for active text edits in other views showing the same page,
-            // and show them as well.
-            if (SdrPageView* pPageView = GetSdrPageView())
+            // and show them as well. Show only if Page/MasterPage mode is matching.
+            SdrViewIter aIter(pPageView->GetPage());
+            bool bRequireMasterPage = pPageView->GetPage() ? pPageView->GetPage()->IsMasterPage() : false;
+            for (SdrView* pView = aIter.FirstView(); pView; pView = aIter.NextView())
             {
-                SdrViewIter aIter(pPageView->GetPage());
-                for (SdrView* pView = aIter.FirstView(); pView; pView = aIter.NextView())
-                {
-                    if (pView == this)
-                        continue;
+                SdrPageView* pCurrentPageView = pView->GetSdrPageView();
+                bool bIsCurrentMasterPage = (pCurrentPageView && pCurrentPageView->GetPage()) ?
+                    pCurrentPageView->GetPage()->IsMasterPage() : false;
 
-                    if (pView->IsTextEdit() && pView->GetSdrPageView())
-                    {
-                        pView->TextEditDrawing(rPaintWindow);
-                    }
+                if (pView == this || bRequireMasterPage != bIsCurrentMasterPage)
+                    continue;
+
+                if (pView->IsTextEdit() && pView->GetSdrPageView())
+                {
+                    pView->TextEditDrawing(rPaintWindow);
                 }
             }
         }
