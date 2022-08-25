@@ -543,7 +543,17 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
                 if( nSelectionType & (SelectionType::Frame | SelectionType::Ole | SelectionType::Graphic) )
                     rWrtShell.SetFlyFrameAttr(*pTemplateItemSet);
                 else if ( !bNoCharacterFormats )
+                {
+                    const SfxPoolItem* pItem;
+                    SfxItemSetFixed<RES_CHRATR_CROSSEDOUT, RES_CHRATR_CROSSEDOUT> aSet(rWrtShell.GetAttrPool());
+                    rWrtShell.GetCurAttr(aSet);
+                    if (!pTemplateItemSet->HasItem(RES_CHRATR_CROSSEDOUT, &pItem))
+                    {
+                        rWrtShell.ResetAttr({ RES_CHRATR_CROSSEDOUT });
+                    }
+
                     rWrtShell.SetAttrSet(*pTemplateItemSet);
+                }
             }
         }
     }
