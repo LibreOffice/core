@@ -135,31 +135,30 @@ void FeatureCollector::collectForTable(hb_tag_t aTableTag)
                                                HB_OT_LAYOUT_DEFAULT_LANGUAGE_INDEX, aFeatureTag,
                                                &nFeatureIdx))
         {
-            if (OpenTypeFeatureDefinitionListPrivate::isSpecialFeatureCode(aFeatureTag))
+            // ssXX and cvXX can have name ID defined for them, check for
+            // them and use as appropriate.
+            hb_ot_name_id_t aLabelID;
+            hb_ot_name_id_t aFirstParameterID;
+            unsigned nNamedParameters;
+            if (hb_ot_layout_feature_get_name_ids(m_pHbFace, aTableTag, nFeatureIdx, &aLabelID,
+                                                  nullptr, nullptr, &nNamedParameters,
+                                                  &aFirstParameterID))
             {
-                // ssXX and cvXX can have name ID defined for them, check for
-                // them and use as appropriate.
-                hb_ot_name_id_t aLabelID;
-                hb_ot_name_id_t aFirstParameterID;
-                unsigned nNamedParameters;
-                if (hb_ot_layout_feature_get_name_ids(m_pHbFace, aTableTag, nFeatureIdx, &aLabelID,
-                                                      nullptr, nullptr, &nNamedParameters,
-                                                      &aFirstParameterID))
-                {
-                    OString sLanguage = m_rLanguageTag.getBcp47().toUtf8();
-                    OUString sLabel = getName(m_pHbFace, aLabelID, sLanguage);
-                    if (!sLabel.isEmpty())
-                        aDefinition = vcl::font::FeatureDefinition(aFeatureTag, sLabel);
+                OString sLanguage = m_rLanguageTag.getBcp47().toUtf8();
+                OUString sLabel = getName(m_pHbFace, aLabelID, sLanguage);
+                if (!sLabel.isEmpty())
+                    aDefinition = vcl::font::FeatureDefinition(aFeatureTag, sLabel);
 
-                    // cvXX features can have parameters name IDs, check for
-                    // them and populate feature parameters as appropriate.
-                    for (unsigned i = 0; i < nNamedParameters; i++)
-                    {
-                        hb_ot_name_id_t aNameID = aFirstParameterID + i;
-                        OUString sName = getName(m_pHbFace, aNameID, sLanguage);
-                        if (!sName.isEmpty())
-                            aParameters.emplace_back(uint32_t(i + 1), sName);
-                    }
+                // cvXX features can have parameters name IDs, check for
+                // them and populate feature parameters as appropriate.
+                for (unsigned i = 0; i < nNamedParameters; i++)
+                {
+                    hb_ot_name_id_t aNameID = aFirstParameterID + i;
+                    OUString sName = getName(m_pHbFace, aNameID, sLanguage);
+                    if (!sName.isEmpty())
+                        aParameters.emplace_back(uint32_t(i + 1), sName);
+                    else
+                        aParameters.emplace_back(uint32_t(i + 1), OUString::number(i + 1));
                 }
             }
 
