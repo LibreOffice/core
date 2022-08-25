@@ -16,6 +16,23 @@
       "message": "\u003e Patch Set 7:\n\u003e \n\u003e A polite ping, still working on this patch? Do not forget to rebase it first. See https://wiki.documentfoundation.org/Development/Review_bot\n\nReady for review",
       "revId": "edda970193e72782e3d07cc5bebe8a9851ba6365",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c460d88_d4205167",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-25T07:19:59Z",
+      "side": 1,
+      "message": "You have never tested the bug in the test - i.e., *saving*. Have you at least tried if the change fixed the problem when run interactively? (a hint: it did not) ",
+      "revId": "edda970193e72782e3d07cc5bebe8a9851ba6365",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
