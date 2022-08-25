@@ -359,6 +359,7 @@ static OString lcl_generateJSON(const SfxViewShell* pView, const boost::property
     boost::property_tree::ptree aMessageProps = rTree;
     aMessageProps.put("viewId", SfxLokHelper::getView(pView));
     aMessageProps.put("part", pView->getPart());
+    aMessageProps.put("mode", pView->getEditMode());
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aMessageProps, false /* pretty */);
     const std::string aString = aStream.str();
