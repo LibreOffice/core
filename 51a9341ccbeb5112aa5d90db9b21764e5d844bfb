@@ -24,6 +24,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c5d4704_48ae2b6b",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1039,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-08-25T21:03:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b1b7881_5b879570",
+      "range": {
+        "startLine": 1039,
+        "startChar": 48,
+        "endLine": 1039,
+        "endChar": 57
+      },
+      "revId": "51a9341ccbeb5112aa5d90db9b21764e5d844bfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "12b92c19_f22707b5",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-08-24T13:12:12Z",
       "side": 1,
       "message": "This paStrSet doesn\u0027t need to be on the heap, an automatic (stack allocated) instance should do, like\n\n    ScTypedCaseStrSet aStrSet;",
+      "range": {
+        "startLine": 1072,
+        "startChar": 4,
+        "endLine": 1073,
+        "endChar": 44
+      },
+      "revId": "51a9341ccbeb5112aa5d90db9b21764e5d844bfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6c10875_33387789",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1073,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-08-25T21:03:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "12b92c19_f22707b5",
       "range": {
         "startLine": 1072,
         "startChar": 4,

@@ -24,6 +24,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "771a0b82_378494e5",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1034,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-08-25T21:03:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a98f6c6_dc8740b4",
+      "range": {
+        "startLine": 1032,
+        "startChar": 24,
+        "endLine": 1034,
+        "endChar": 87
+      },
+      "revId": "82d516cb026db91ac09521343948f64c25806757",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "01bb12dd_977330d1",
@@ -55,6 +79,24 @@
       "side": 1,
       "message": "Ah darn, miAutoPosFormula is always end() so that can\u0027t work. Sorry, my bad.\nThat probably would need a temporary ScTypedCaseStrSet to obtain yet another rDoc.GetFormulaEntries() with just for this uppercasing. Sounds a bit like much overhead.\n\nAnother possibility would be to use only one temporary ScTypedCaseStrSet with rDoc.GetFormulaEntries(), and then in this loop uppercase all entries and insert the originals to pFormulaData and pFormulaDataPara. Would save a gathering cycle with GetFormulaEntries().",
       "parentUuid": "01bb12dd_977330d1",
+      "revId": "82d516cb026db91ac09521343948f64c25806757",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d7f7fd8_9f010155",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1073,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-08-25T21:03:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a6650e58_5d0bfed6",
       "revId": "82d516cb026db91ac09521343948f64c25806757",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8df25fa4_b25abe66",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-08-25T21:03:10Z",
+      "side": 1,
+      "message": "I cannot recreate the failing ui test on my local machine. Is this test even related to this change?",
+      "revId": "4af201ca6d13bf5e6d4d175909d1d8d686567c8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
