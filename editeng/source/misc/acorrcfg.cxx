@@ -22,9 +22,13 @@
 #include <o3tl/any.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
+#include <comphelper/diagnose_ex.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/ucbhelper.hxx>
+#include <svtools/langtab.hxx>
+#include <com/sun/star/sdbc/XResultSet.hpp>
+#include <com/sun/star/sdbc/XRow.hpp>
 
 #include <editeng/svxacorr.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -33,6 +37,76 @@ using namespace utl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
+
+/** An autocorrection file dropped into such directory may create a language
+    list entry if one didn't exist already.
+ */
+static void scanAutoCorrectDirForLanguageTags( const OUString& rURL )
+{
+    // Silently ignore all errors.
+    try
+    {
+        ::ucbhelper::Content aContent( rURL,
+                uno::Reference<ucb::XCommandEnvironment>(), comphelper::getProcessComponentContext());
+        if (aContent.isFolder())
+        {
+            // Title is file name here.
+            uno::Reference<sdbc::XResultSet> xResultSet = aContent.createCursor(
+                    {"Title"}, ::ucbhelper::INCLUDE_DOCUMENTS_ONLY);
+            uno::Reference<sdbc::XRow> xRow( xResultSet, UNO_QUERY);
+            if (xResultSet.is() && xRow.is())
+            {
+                while (xResultSet->next())
+                {
+                    try
+                    {
+                        const OUString aTitle( xRow->getString(1));
+                        if (aTitle.getLength() <= 9 || !(aTitle.startsWith("acor_") && aTitle.endsWith(".dat")))
+                            continue;
+
+                        const OUString aBcp47( aTitle.copy( 5, aTitle.getLength() - 9));
+                        OUString aCanonicalized;
+                        // Ignore invalid langtags and canonicalize for good,
+                        // allow private-use tags.
+                        if (!LanguageTag::isValidBcp47( aBcp47, &aCanonicalized))
+                            continue;
+
+                        const LanguageTag aLanguageTag( aCanonicalized);
+                        if (SvtLanguageTable::HasLanguageType( aLanguageTag.getLanguageType()))
+                            continue;
+
+                        // Insert language-only tags only if there is no known
+                        // matching fallback locale, otherwise we'd end up with
+                        // unwanted entries where a language autocorrection
+                        // file covers several locales. We do know a few
+                        // art-x-... though so exclude those and any other
+                        // private-use tag (which should not fallback, but
+                        // avoid).
+                        if (aLanguageTag.getCountry().isEmpty()
+                                && LanguageTag::isValidBcp47( aCanonicalized, nullptr, true))
+                        {
+                            LanguageTag aFallback( aLanguageTag);
+                            aFallback.makeFallback();
+                            if (aFallback.getLanguage() == aLanguageTag.getLanguage())
+                                continue;
+                        }
+
+                        // Finally add this one.
+                        SvtLanguageTable::AddLanguageTag( aLanguageTag);
+                    }
+                    catch (const uno::Exception&)
+                    {
+                        TOOLS_WARN_EXCEPTION("editeng", "Unable to get directory entry.");
+                    }
+                }
+            }
+        }
+    }
+    catch (const uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("editeng", "Unable to iterate directory.");
+    }
+}
 
 SvxAutoCorrCfg::SvxAutoCorrCfg() :
     aBaseConfig(*this),
@@ -60,6 +134,7 @@ SvxAutoCorrCfg::SvxAutoCorrCfg() :
     for( OUString* pS : { &sSharePath, &sUserPath } )
     {
         INetURLObject aPath( *pS );
+        scanAutoCorrectDirForLanguageTags( aPath.GetMainURL(INetURLObject::DecodeMechanism::ToIUri));
         aPath.insertName(u"acor");
         *pS = aPath.GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
     }
