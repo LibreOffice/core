@@ -5944,7 +5944,7 @@ void PDFWriterImpl::drawVerticalGlyphs(
         double fSkew,
         sal_Int32 nFontHeight )
 {
-    tools::Long nXOffset = 0;
+    double nXOffset = 0;
     Point aCurPos(SubPixelToLogic(rGlyphs[0].m_aPos, fAngle == 0.0));
     aCurPos += rAlignOffset;
     for( size_t i = 0; i < rGlyphs.size(); i++ )
@@ -5965,13 +5965,13 @@ void PDFWriterImpl::drawVerticalGlyphs(
             fSkewA = -fSkewB;
             fSkewB = 0.0;
         }
-        aDeltaPos += PixelToLogic( Point( static_cast<int>(static_cast<double>(nXOffset)/fXScale), 0 ) ) - PixelToLogic( Point() );
+        aDeltaPos += PixelToLogic( Point( static_cast<int>(nXOffset / fXScale), 0 ) ) - PixelToLogic( Point() );
         if( i < rGlyphs.size()-1 )
         // #i120627# the text on the Y axis is reversed when export ppt file to PDF format
         {
             double nOffsetX = rGlyphs[i+1].m_aPos.getX() - rGlyphs[i].m_aPos.getX();
             double nOffsetY = rGlyphs[i+1].m_aPos.getY() - rGlyphs[i].m_aPos.getY();
-            nXOffset += static_cast<int>(sqrt(nOffsetX*nOffsetX + nOffsetY*nOffsetY));
+            nXOffset += sqrt(nOffsetX*nOffsetX + nOffsetY*nOffsetY);
         }
         if (!rGlyphs[i].m_pGlyph->glyphId())
             continue;
