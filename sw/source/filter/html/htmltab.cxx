@@ -2645,13 +2645,10 @@ const SwStartNode *SwHTMLParser::InsertTableSection( sal_uInt16 nPoolId )
 SwStartNode *SwHTMLParser::InsertTempTableCaptionSection()
 {
     SwTextFormatColl *pColl = m_pCSS1Parser->GetTextCollFromPool( RES_POOLCOLL_TEXT );
-    SwNodeIndex& rIdx = m_pPam->GetPoint()->nNode;
-    rIdx = m_xDoc->GetNodes().GetEndOfExtras();
-    SwStartNode *pStNd = m_xDoc->GetNodes().MakeTextSection( rIdx.GetNode(),
+    SwStartNode *pStNd = m_xDoc->GetNodes().MakeTextSection( m_xDoc->GetNodes().GetEndOfExtras(),
                                           SwNormalStartNode, pColl );
 
-    rIdx = pStNd->GetIndex() + 1;
-    m_pPam->GetPoint()->nContent.Assign( rIdx.GetNode().GetTextNode(), 0 );
+    m_pPam->GetPoint()->Assign( pStNd->GetIndex() + 1);
 
     return pStNd;
 }

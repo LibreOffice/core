@@ -2470,7 +2470,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
                         // Placeholder for a single-point fieldmark.
 
                         SwPosition aMarkPos = *rWrt.m_pCurrentPam->GetPoint();
-                        aMarkPos.nContent += nStrPos - aMarkPos.GetContentIndex();
+                        aMarkPos.AdjustContent( nStrPos - aMarkPos.GetContentIndex() );
                         rHTMLWrt.OutPointFieldmarks(aMarkPos);
                     }
                     else
