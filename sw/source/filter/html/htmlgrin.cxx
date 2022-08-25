@@ -1476,9 +1476,7 @@ void SwHTMLParser::StripTrailingPara()
                     // #i81002# - refactoring
                     // Do not directly manipulate member of <SwBookmark>
                     {
-                        SwPosition aNewPos(*pNd);
-                        aNewPos.nContent.Assign(pNd, pNd->Len());
-                        const SwPaM aPaM(aNewPos);
+                        const SwPaM aPaM(*pNd, pNd->Len());
                         pMarkAccess->repositionMark(*ppMark, aPaM);
                     }
                 }
