@@ -2279,7 +2279,7 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
         // move bookmarks, redlines etc.
         if (aRg.aStart == aRg.aEnd) // only first CorrAbs variant handles this
         {
-            m_rDoc.CorrAbs( aRg.aStart, *rPam.GetPoint(), 0, true );
+            m_rDoc.CorrAbs( aRg.aStart.GetNode(), *rPam.GetPoint(), 0, true );
         }
         else
         {
@@ -2705,7 +2705,7 @@ void DocumentContentOperationsManager::MoveAndJoin( SwPaM& rPaM, SwPosition& rPo
     if( pTextNd && pTextNd->CanJoinNext( &aNxtIdx ) )
     {
         {   // Block so SwContentIndex into node is deleted before Join
-            m_rDoc.CorrRel( aNxtIdx,
+            m_rDoc.CorrRel( aNxtIdx.GetNode(),
                             SwPosition( *pTextNd, pTextNd->GetText().getLength() ),
                             0, true );
         }

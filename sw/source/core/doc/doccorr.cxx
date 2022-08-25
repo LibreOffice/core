@@ -165,12 +165,12 @@ void PaMCorrAbs( const SwPaM& rRange,
     }
 }
 
-void SwDoc::CorrAbs(const SwNodeIndex& rOldNode,
+void SwDoc::CorrAbs(const SwNode& rOldNode,
     const SwPosition& rNewPos,
     const sal_Int32 nOffset,
     bool bMoveCursor)
 {
-    SwContentNode *const pContentNode( rOldNode.GetNode().GetContentNode() );
+    const SwContentNode *const pContentNode( rOldNode.GetContentNode() );
     SwPaM const aPam(rOldNode, 0,
                      rOldNode, pContentNode ? pContentNode->Len() : 0);
     SwPosition aNewPos(rNewPos);
@@ -238,11 +238,11 @@ void SwDoc::CorrAbs(
     }
 }
 
-void PaMCorrRel( const SwNodeIndex &rOldNode,
+void PaMCorrRel( const SwNode &rOldNode,
                  const SwPosition &rNewPos,
                  const sal_Int32 nOffset )
 {
-    const SwNode* pOldNode = &rOldNode.GetNode();
+    const SwNode* pOldNode = &rOldNode;
     SwPosition aNewPos( rNewPos );
     const SwDoc& rDoc = pOldNode->GetDoc();
 
@@ -302,7 +302,7 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
     }
 }
 
-void SwDoc::CorrRel(const SwNodeIndex& rOldNode,
+void SwDoc::CorrRel(const SwNode& rOldNode,
     const SwPosition& rNewPos,
     const sal_Int32 nOffset,
     bool bMoveCursor)
@@ -315,7 +315,7 @@ void SwDoc::CorrRel(const SwNodeIndex& rOldNode,
         for(SwRangeRedline* p : rTable)
         {
             // lies on the position ??
-            lcl_PaMCorrRel1( p, &rOldNode.GetNode(), aNewPos, aNewPos.GetContentIndex() + nOffset );
+            lcl_PaMCorrRel1( p, &rOldNode, aNewPos, aNewPos.GetContentIndex() + nOffset );
         }
 
         // To-Do - need to add here 'SwExtraRedlineTable' also ?

@@ -999,7 +999,7 @@ public:
 
     // Set everything in rOldNode on rNewPos + Offset.
     void CorrAbs(
-        const SwNodeIndex& rOldNode,
+        const SwNode& rOldNode,
         const SwPosition& rNewPos,
         const sal_Int32 nOffset = 0,
         bool bMoveCursor = false );
@@ -1019,7 +1019,7 @@ public:
 
     // Set everything in rOldNode to relative Pos.
     void CorrRel(
-        const SwNodeIndex& rOldNode,
+        const SwNode& rOldNode,
         const SwPosition& rNewPos,
         const sal_Int32 nOffset = 0,
         bool bMoveCursor = false );

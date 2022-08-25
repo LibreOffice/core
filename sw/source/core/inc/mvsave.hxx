@@ -151,7 +151,7 @@ void PaMCorrAbs( const SwPaM& rRange,
                  const SwPosition& rNewPos );
 
 /// Sets all PaMs in OldNode to relative Pos
-void PaMCorrRel( const SwNodeIndex &rOldNode,
+void PaMCorrRel( const SwNode &rOldNode,
                  const SwPosition &rNewPos,
                  const sal_Int32 nOffset = 0 );
 

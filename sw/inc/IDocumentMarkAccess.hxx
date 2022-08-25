@@ -197,7 +197,7 @@ class IDocumentMarkAccess
             @param nOffset
             [in] the offset by which the mark gets positioned of rNewPos
         */
-        virtual void correctMarksAbsolute(const SwNodeIndex& rOldNode,
+        virtual void correctMarksAbsolute(const SwNode& rOldNode,
             const SwPosition& rNewPos,
             const sal_Int32 nOffset) =0;
 
@@ -215,7 +215,7 @@ class IDocumentMarkAccess
             [in] the offset by which the mark gets positioned of rNewPos in addition to
                  its old position in the paragraph
         */
-        virtual void correctMarksRelative(const SwNodeIndex& rOldNode,
+        virtual void correctMarksRelative(const SwNode& rOldNode,
             const SwPosition& rNewPos,
             const sal_Int32 nOffset) =0;
 
