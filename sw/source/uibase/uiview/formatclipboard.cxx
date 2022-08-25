@@ -27,6 +27,7 @@
 #include <frmfmt.hxx>
 #include <docstyle.hxx>
 #include <fchrfmt.hxx>
+#include <svl/itemset.hxx>
 #include <svx/svdview.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/shaditem.hxx>
@@ -557,7 +558,18 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
                 if( nSelectionType & (SelectionType::Frame | SelectionType::Ole | SelectionType::Graphic) )
                     rWrtShell.SetFlyFrameAttr(*pTemplateItemSet);
                 else if ( !bNoCharacterFormats )
+                {
+                    const SfxPoolItem* pItem;
+                    SfxItemSet aSet(rWrtShell.GetAttrPool(),
+                        { { RES_CHRATR_CROSSEDOUT, RES_CHRATR_CROSSEDOUT } });
+                    rWrtShell.GetCurAttr(aSet);
+                    if (!pTemplateItemSet->HasItem(RES_CHRATR_CROSSEDOUT, &pItem))
+                    {
+                        rWrtShell.ResetAttr({ RES_CHRATR_CROSSEDOUT });
+                    }
+
                     rWrtShell.SetAttrSet(*pTemplateItemSet);
+                }
             }
         }
     }
