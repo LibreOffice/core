@@ -957,10 +957,10 @@ void HwpReader::makeMasterStyles()
     PageSetting *pPrevSet = nullptr;
     PageSetting *pPage = nullptr;
 
-    if (nMax > SAL_MAX_UINT16 && utl::ConfigManager::IsFuzzing())
+    if (nMax > 2048 && utl::ConfigManager::IsFuzzing())
     {
-        SAL_WARN("filter.hwp", "too many pages: " << nMax << " clip to " << SAL_MAX_UINT16);
-        nMax = SAL_MAX_UINT16;
+        SAL_WARN("filter.hwp", "too many pages: " << nMax << " clip to " << 2048);
+        nMax = 2048;
     }
 
     for( i = 1; i <= nMax ; i++ )
