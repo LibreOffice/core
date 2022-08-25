@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f46f935e_dec9b53e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-25T12:23:04Z",
+      "side": 1,
+      "message": "Thank you! Sorry, I was confused by the rData never changing in the loop - I didn\u0027t check that it referenced something else, that actually did.",
+      "revId": "9c3c564659320fb24d2a9c230464f06cf855a136",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
