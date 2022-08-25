@@ -989,48 +989,27 @@ void SvxShape::Notify( SfxBroadcaster&, const SfxHint& rHint ) noexcept
         return;
     }
 
-    bool bClearMe = false;
-
-    switch( pSdrHint->GetKind() )
+    if (pSdrHint->GetKind() == SdrHintKind::ObjectChange)
     {
-        case SdrHintKind::ObjectChange:
-        {
-            updateShapeKind();
-            break;
-        }
-        case SdrHintKind::ModelCleared:
-        {
-            bClearMe = true;
-            break;
-        }
-        default:
-            break;
-    };
-
-    if( !bClearMe )
-        return;
-
-    if(!HasSdrObjectOwnership())
+        updateShapeKind();
+    }
+    else // (pSdrHint->GetKind() == SdrHintKind::ModelCleared)
     {
-        if(nullptr != pSdrObject)
+        if(!HasSdrObjectOwnership())
         {
             EndListening(pSdrObject->getSdrModelFromSdrObject());
             pSdrObject->setUnoShape(nullptr);
+
+            mpSdrObjectWeakReference.reset(nullptr);
+
+            // SdrModel *is* going down, try to Free SdrObject even
+            // when !HasSdrObjectOwnership
+            if(!pSdrObject->IsInserted())
+                SdrObject::Free(pSdrObject);
         }
 
-        mpSdrObjectWeakReference.reset(nullptr);
-
-        // SdrModel *is* going down, try to Free SdrObject even
-        // when !HasSdrObjectOwnership
-        if(nullptr != pSdrObject && !pSdrObject->IsInserted())
-        {
-            SdrObject::Free(pSdrObject);
-        }
-    }
-
-    if(!mpImpl->mbDisposing)
-    {
-        dispose();
+        if(!mpImpl->mbDisposing)
+            dispose();
     }
 }
 
