@@ -6442,7 +6442,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         bool bUnderlineAbove = m_aCurrentPDFState.m_aFont.IsUnderlineAbove();
         if( m_aCurrentPDFState.m_aFont.IsWordLineMode() )
         {
-            Point aStartPt;
+            DevicePoint aStartPt;
             DeviceCoordinate nWidth = 0;
             nIndex = 0;
             while (rLayout.GetNextGlyph(&pGlyph, aPos, nIndex))
@@ -6450,13 +6450,13 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
                 if (!pGlyph->IsSpacing())
                 {
                     if( !nWidth )
-                        aStartPt = Point(aPos.getX(), aPos.getY());
+                        aStartPt = aPos;
 
                     nWidth += pGlyph->newWidth();
                 }
                 else if( nWidth > 0 )
                 {
-                    drawTextLine( PixelToLogic( aStartPt ),
+                    drawTextLine( SubPixelToLogic(aStartPt, true),
                                   ImplDevicePixelToLogicWidth( nWidth ),
                                   eStrikeout, eUnderline, eOverline, bUnderlineAbove );
                     nWidth = 0;
@@ -6465,7 +6465,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
 
             if( nWidth > 0 )
             {
-                drawTextLine( PixelToLogic( aStartPt ),
+                drawTextLine( SubPixelToLogic(aStartPt, true),
                               ImplDevicePixelToLogicWidth( nWidth ),
                               eStrikeout, eUnderline, eOverline, bUnderlineAbove );
             }
