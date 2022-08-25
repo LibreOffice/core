@@ -99,7 +99,7 @@ namespace pcr
         m_xEntryFormatter.reset(new weld::DateFormatter(*m_xEntry));
 
         m_xEntryFormatter->SetStrictFormat(true);
-        m_xEntryFormatter->SetMin(::Date(1, 1, 1600));
+        m_xEntryFormatter->SetMin(::Date(1, 1, 0001));
         m_xEntryFormatter->SetMax(::Date(1, 1, 9999));
 
         m_xEntryFormatter->SetExtDateFormat(ExtDateFieldFormat::SystemShortYYYY);
