@@ -29,6 +29,11 @@
 
 #include <cairo.h>
 #include <cairo-ft.h>
+#if defined(CAIRO_HAS_SVG_SURFACE)
+#include <cairo-svg.h>
+#elif defined(CAIRO_HAS_PDF_SURFACE)
+#include <cairo-pdf.h>
+#endif
 
 #include <deque>
 
@@ -125,6 +130,36 @@ extern "C"
 }
 #endif
 
+CairoTextRender::CairoTextRender()
+{
+    // https://gitlab.freedesktop.org/cairo/cairo/-/merge_requests/235
+    // I don't want to have CAIRO_ROUND_GLYPH_POS_ON set in the cairo surfaces
+    // font_options when trying subpixel rendering, but that's a private
+    // feature of cairo_font_options_t, so tricky to achieve. Hack this by
+    // getting the font options of a backend known to set this private feature
+    // to CAIRO_ROUND_GLYPH_POS_OFF and then set to defaults the public
+    // features and the result can be merged with new font options to set
+    // CAIRO_ROUND_GLYPH_POS_OFF in those
+    mpRoundGlyphPosOffOptions = cairo_font_options_create();
+#if defined(CAIRO_HAS_SVG_SURFACE)
+    // svg, pdf and ps backends have CAIRO_ROUND_GLYPH_POS_OFF by default
+    cairo_surface_t* hack = cairo_svg_surface_create(nullptr, 1, 1);
+#elif defined(CAIRO_HAS_PDF_SURFACE)
+    cairo_surface_t* hack = cairo_pdf_surface_create(nullptr, 1, 1);
+#endif
+    cairo_surface_get_font_options(hack, mpRoundGlyphPosOffOptions);
+    cairo_surface_destroy(hack);
+    cairo_font_options_set_antialias(mpRoundGlyphPosOffOptions, CAIRO_ANTIALIAS_DEFAULT);
+    cairo_font_options_set_subpixel_order(mpRoundGlyphPosOffOptions, CAIRO_SUBPIXEL_ORDER_DEFAULT);
+    cairo_font_options_set_hint_style(mpRoundGlyphPosOffOptions, CAIRO_HINT_STYLE_DEFAULT);
+    cairo_font_options_set_hint_metrics(mpRoundGlyphPosOffOptions, CAIRO_HINT_METRICS_DEFAULT);
+}
+
+CairoTextRender::~CairoTextRender()
+{
+    cairo_font_options_destroy(mpRoundGlyphPosOffOptions);
+}
+
 void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalGraphics& rGraphics)
 {
     const FreetypeFontInstance& rInstance = static_cast<FreetypeFontInstance&>(rLayout.GetFont());
@@ -199,21 +234,22 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
     if (pFontOptions || bDisableAA || bResolutionIndependentLayoutEnabled)
     {
         cairo_hint_style_t eHintStyle = pFontOptions ? cairo_font_options_get_hint_style(pFontOptions) : CAIRO_HINT_STYLE_DEFAULT;
-        cairo_hint_metrics_t eHintMetricsStyle = pFontOptions ? cairo_font_options_get_hint_metrics(pFontOptions) : CAIRO_HINT_METRICS_DEFAULT;
-        bool bAllowedHintStyle = !bResolutionIndependentLayoutEnabled || (eHintStyle == CAIRO_HINT_STYLE_NONE);
-        bool bAllowedHintMetricStyle = !bResolutionIndependentLayoutEnabled || (eHintMetricsStyle == CAIRO_HINT_METRICS_OFF);
+        bool bAllowedHintStyle = !bResolutionIndependentLayoutEnabled || (eHintStyle == CAIRO_HINT_STYLE_NONE || eHintStyle == CAIRO_HINT_STYLE_SLIGHT);
 
-        if (bDisableAA || !bAllowedHintStyle || !bAllowedHintMetricStyle)
+        if (bDisableAA || !bAllowedHintStyle || bResolutionIndependentLayoutEnabled)
         {
             // Disable font AA in case global AA setting is supposed to affect
             // font rendering (not the default) and AA is disabled.
             cairo_font_options_t* pOptions = pFontOptions ? cairo_font_options_copy(pFontOptions) : cairo_font_options_create();
+
             if (bDisableAA)
                 cairo_font_options_set_antialias(pOptions, CAIRO_ANTIALIAS_NONE);
-            if (!bAllowedHintMetricStyle)
-                cairo_font_options_set_hint_metrics(pOptions, CAIRO_HINT_METRICS_OFF);
             if (!bAllowedHintStyle)
-                cairo_font_options_set_hint_style(pOptions, CAIRO_HINT_STYLE_NONE);
+                cairo_font_options_set_hint_style(pOptions, CAIRO_HINT_STYLE_SLIGHT);
+            // Disable private CAIRO_ROUND_GLYPH_POS_ON by merging with font options known to have
+            // CAIRO_ROUND_GLYPH_POS_OFF
+            if (bResolutionIndependentLayoutEnabled)
+                cairo_font_options_merge(pOptions, mpRoundGlyphPosOffOptions);
             cairo_set_font_options(cr, pOptions);
             cairo_font_options_destroy(pOptions);
         }
