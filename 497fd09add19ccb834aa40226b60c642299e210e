@@ -34,6 +34,24 @@
       "parentUuid": "6c7e59c0_84832814",
       "revId": "497fd09add19ccb834aa40226b60c642299e210e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69ec8459_42a5b0a0",
+        "filename": "sw/source/core/inc/unoparaframeenum.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-25T07:51:43Z",
+      "side": 1,
+      "message": "Hm, but that means that make_unique for it is actually a pessimization? Because it would allocate a single memory block for the object and the temporary unique ptr, and then immediately release the pointer, but would keep the block?",
+      "parentUuid": "895731b3_9a434c1a",
+      "revId": "497fd09add19ccb834aa40226b60c642299e210e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
