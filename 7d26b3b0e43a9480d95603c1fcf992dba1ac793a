@@ -34,6 +34,24 @@
       "parentUuid": "05cd17a5_ede81286",
       "revId": "7d26b3b0e43a9480d95603c1fcf992dba1ac793a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfd0e769_ecea3af0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2022-08-25T08:36:58Z",
+      "side": 1,
+      "message": "OK. I doubt there are ever any extensions in the Collabora Office used for a Collabora Online installations. At least not ones that would use that new UNO API.",
+      "parentUuid": "6a3f1c5a_7407a0bc",
+      "revId": "7d26b3b0e43a9480d95603c1fcf992dba1ac793a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
