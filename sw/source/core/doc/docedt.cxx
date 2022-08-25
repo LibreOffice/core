@@ -141,7 +141,7 @@ void SaveFlyInRange( const SwPaM& rPam, const SwPosition& rInsPos,
     const SwFormatAnchor* pAnchor;
 
     const SwPosition* pPos = rPam.Start();
-    const SwNodeIndex& rSttNdIdx = pPos->nNode;
+    const SwNode& rSttNd = pPos->GetNode();
 
     SwPosition atParaEnd(*rPam.End());
     if (bMoveAllFlys)
@@ -183,9 +183,9 @@ void SaveFlyInRange( const SwPaM& rPam, const SwPosition& rInsPos,
                 {
                     pHistory->AddChangeFlyAnchor(*pFormat);
                 }
-                SaveFly aSave( pAPos->GetNodeIndex() - rSttNdIdx.GetIndex(),
+                SaveFly aSave( pAPos->GetNodeIndex() - rSttNd.GetIndex(),
                     (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId())
-                        ? (pAPos->GetNode() == rSttNdIdx.GetNode())
+                        ? (pAPos->GetNode() == rSttNd)
                             ? pAPos->GetContentIndex() - rPam.Start()->GetContentIndex()
                             : pAPos->GetContentIndex()
                         : 0,

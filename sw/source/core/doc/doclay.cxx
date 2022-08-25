@@ -1635,8 +1635,7 @@ SvxFrameDirection SwDoc::GetTextDirection( const SwPosition& rPos,
                     if ((RndStdIds::FLY_AT_PAGE != pAnchor->GetAnchorId()) &&
                         pAnchor->GetContentAnchor())
                     {
-                        pFlyFormat = pAnchor->GetContentAnchor()->nNode.
-                                            GetNode().GetFlyFormat();
+                        pFlyFormat = pAnchor->GetContentAnchor()->GetNode().GetFlyFormat();
                     }
                     else
                         pFlyFormat = nullptr;

@@ -1672,10 +1672,10 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
             if (& GetEndOfContent() ==
                 & pTmp->GetPoint()->GetNode())
             {
-                --pTmp->GetPoint()->nNode;
+                pTmp->GetPoint()->Adjust(SwNodeOffset(-1));
                 SwContentNode *const pContentNode( pTmp->GetPointContentNode() );
-                pTmp->GetPoint()->nContent.Assign( pContentNode,
-                        pContentNode ? pContentNode->Len() : 0 );
+                if( pContentNode )
+                    pTmp->GetPoint()->SetContent( pContentNode->Len() );
                 // tdf#106218 try to avoid losing a paragraph break here:
                 if (pTmp->GetMark()->GetContentIndex() == 0)
                 {
@@ -1715,10 +1715,10 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
         if (& GetEndOfContent() ==
             & pTmp->GetPoint()->GetNode())
         {
-            --pTmp->GetPoint()->nNode;
+            pTmp->GetPoint()->Adjust(SwNodeOffset(-1));
             SwContentNode *const pContentNode( pTmp->GetPointContentNode() );
-            pTmp->GetPoint()->nContent.Assign( pContentNode,
-                    pContentNode ? pContentNode->Len() : 0 );
+            if( pContentNode )
+                pTmp->GetPoint()->SetContent( pContentNode->Len() );
             // tdf#106218 try to avoid losing a paragraph break here:
             if (pTmp->GetMark()->GetContentIndex() == 0)
             {
@@ -1929,10 +1929,10 @@ SaveMergeRedline::SaveMergeRedline( const SwNode& rDstNd,
     const SwPosition* pEnd = rSrcRedl.End();
 
     pDestRedl->SetMark();
-    pDestRedl->GetPoint()->nNode += pEnd->GetNodeIndex() -
-                                    pStt->GetNodeIndex();
-    pDestRedl->GetPoint()->nContent.Assign( pDestRedl->GetPointContentNode(),
-                                            pEnd->GetContentIndex() );
+    pDestRedl->GetPoint()->Adjust( pEnd->GetNodeIndex() -
+                                    pStt->GetNodeIndex() );
+    if( pDestRedl->GetPointContentNode() )
+        pDestRedl->GetPoint()->SetContent( pEnd->GetContentIndex() );
 }
 
 sal_uInt16 SaveMergeRedline::InsertRedline(SwPaM* pLastDestRedline)

@@ -362,7 +362,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
         ++aTmpEnd;
         bAdd = false;
     }
-    else if( pStt->nNode != pEnd->nNode || !pStt->GetContentIndex() )
+    else if( pStt->GetNode() != pEnd->GetNode() || !pStt->GetContentIndex() )
     {
         SwTextNode* pTNd = aTmpEnd.GetNode().GetTextNode();
         if( pTNd && pTNd->HasSwAttrSet() && pTNd->GetpSwAttrSet()->Count() )

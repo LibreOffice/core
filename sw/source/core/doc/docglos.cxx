@@ -164,10 +164,10 @@ bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const OUString& rEntry,
             aCpyPam.SetMark();
 
             // till the nodes array's end
-            aCpyPam.GetPoint()->nNode = pGDoc->GetNodes().GetEndOfContent().GetIndex()-SwNodeOffset(1);
+            aCpyPam.GetPoint()->Assign( pGDoc->GetNodes().GetEndOfContent().GetIndex()-SwNodeOffset(1) );
             pContentNd = aCpyPam.GetPointContentNode();
-            aCpyPam.GetPoint()->nContent.Assign(
-                    pContentNd, pContentNd ? pContentNd->Len() : 0 );
+            if (pContentNd)
+                aCpyPam.GetPoint()->SetContent( pContentNd->Len() );
 
             GetIDocumentUndoRedo().StartUndo( SwUndoId::INSGLOSSARY, nullptr );
             SwPaM *_pStartCursor = &rPaM, *_pStartCursor2 = _pStartCursor;
@@ -179,7 +179,7 @@ bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const OUString& rEntry,
 
                 if( pBoxSttNd && SwNodeOffset(2) == pBoxSttNd->EndOfSectionIndex() -
                                       pBoxSttNd->GetIndex() &&
-                    aCpyPam.GetPoint()->nNode != aCpyPam.GetMark()->nNode )
+                    aCpyPam.GetPoint()->GetNode() != aCpyPam.GetMark()->GetNode() )
                 {
                     // We copy more than one Node to the current Box.
                     // However, we have to remove the BoxAttributes then.
