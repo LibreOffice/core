@@ -88,6 +88,24 @@
       "parentUuid": "9050e697_7bcf2645",
       "revId": "497fd09add19ccb834aa40226b60c642299e210e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a46cc47_d02b8b9f",
+        "filename": "sw/source/core/inc/unoparaframeenum.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-08-25T09:15:50Z",
+      "side": 1,
+      "message": "Aha, the misunderstanding was on my side, yes, your first comment is correct, we could move the make_unique inside the constructor :-)",
+      "parentUuid": "c2f4deeb_f81cf5bb",
+      "revId": "497fd09add19ccb834aa40226b60c642299e210e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
