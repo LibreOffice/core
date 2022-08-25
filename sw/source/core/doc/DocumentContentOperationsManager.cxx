@@ -3616,6 +3616,17 @@ void DocumentContentOperationsManager::RemoveLeadingWhiteSpace(const SwPosition 
     }
 }
 
+void DocumentContentOperationsManager::RemoveLeadingWhiteSpace(SwPaM& rPaM )
+{
+    for (SwPaM& rSel :rPaM.GetRingContainer())
+    {
+        SwNodeOffset nStt = rSel.Start()->nNode.GetIndex();
+        SwNodeOffset nEnd = rSel.End()->nNode.GetIndex();
+        for (SwNodeOffset nPos = nStt; nPos<=nEnd; nPos++)
+            RemoveLeadingWhiteSpace(SwPosition(rSel.GetBound().GetNodes(), nPos));
+    }
+}
+
 // Copy method from SwDoc - "copy Flys in Flys"
 /// note: rRg/rInsPos *exclude* a partially selected start text node;
 ///       pCopiedPaM *includes* a partially selected start text node

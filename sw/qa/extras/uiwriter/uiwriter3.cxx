@@ -4587,14 +4587,19 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf97899)
     IDocumentContentOperations& rIDCO(pDoc->getIDocumentContentOperations());
 
     // Create an Ordered List
-    rIDCO.InsertString(*pCursor, "a");
+    rIDCO.InsertString(*pCursor, "\ta");
     pWrtShell->SplitNode();
-    rIDCO.InsertString(*pCursor, "b");
+    rIDCO.InsertString(*pCursor, "   b");
     pWrtShell->SplitNode();
-    rIDCO.InsertString(*pCursor, "c");
+    rIDCO.InsertString(*pCursor, "  \t  c");
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
     dispatchCommand(mxComponent, ".uno:DefaultNumbering", {});
+
+    // tdf#109285: RemoveLeadingWhiteSpace from all numbered paragraphs
+    getParagraph(1, "a");
+    getParagraph(2, "b");
+    getParagraph(3, "c");
 
     // Save it as DOCX & load it again
     reload("Office Open XML Text", "tdf97899-tmp.docx");

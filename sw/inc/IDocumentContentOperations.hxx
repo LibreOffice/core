@@ -250,6 +250,7 @@ public:
     /** Removes any leading white space from the paragraph
     */
     virtual void RemoveLeadingWhiteSpace(const SwPosition & rPos ) = 0;
+    virtual void RemoveLeadingWhiteSpace(SwPaM& rPaM) = 0;
 
 protected:
     virtual ~IDocumentContentOperations() {};

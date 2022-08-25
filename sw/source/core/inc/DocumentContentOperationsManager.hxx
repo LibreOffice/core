@@ -96,6 +96,7 @@ public:
         SwRootFrame const* pLayout = nullptr) override;
 
     void RemoveLeadingWhiteSpace(const SwPosition & rPos ) override;
+    void RemoveLeadingWhiteSpace(SwPaM& rPaM) override;
 
 
     //Non-Interface methods
