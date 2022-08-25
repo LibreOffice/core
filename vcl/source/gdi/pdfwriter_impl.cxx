@@ -5965,7 +5965,7 @@ void PDFWriterImpl::drawVerticalGlyphs(
             fSkewA = -fSkewB;
             fSkewB = 0.0;
         }
-        aDeltaPos += PixelToLogic( Point( static_cast<int>(nXOffset / fXScale), 0 ) ) - PixelToLogic( Point() );
+        aDeltaPos += SubPixelToLogic(DevicePoint(nXOffset / fXScale, 0), false) - SubPixelToLogic(DevicePoint(), true);
         if( i < rGlyphs.size()-1 )
         // #i120627# the text on the Y axis is reversed when export ppt file to PDF format
         {
