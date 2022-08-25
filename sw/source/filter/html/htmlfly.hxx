@@ -19,11 +19,10 @@
 
 #pragma once
 
-#include <o3tl/sorted_vector.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <sal/types.h>
 #include <ndindex.hxx>
-#include <memory>
+#include <set>
 
 class SdrObject;
 class SwFrameFormat;
@@ -121,10 +120,6 @@ public:
     HtmlPosition         GetOutPos() const       { return m_nAllFlags.nPosition; }
 };
 
-class SwHTMLPosFlyFrames
-    : public o3tl::sorted_vector<std::unique_ptr<SwHTMLPosFlyFrame>,
-                o3tl::less_uniqueptr_to<SwHTMLPosFlyFrame>,
-                o3tl::find_partialorder_ptrequals>
-{};
+typedef std::set<SwHTMLPosFlyFrame> SwHTMLPosFlyFrames;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

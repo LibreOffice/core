@@ -527,7 +527,7 @@ ErrCode SwHTMLWriter::WriteStream()
 
     // create table of the floating frames, but only when the whole
     // document is saved
-    m_pHTMLPosFlyFrames = nullptr;
+    m_aHTMLPosFlyFrames.clear();
     CollectFlyFrames();
     m_nLastParaToken = HtmlTokenId::NONE;
     GetControls();
@@ -589,8 +589,8 @@ ErrCode SwHTMLWriter::WriteStream()
         HTMLOutFuncs::Out_AsciiTag(Strm(), OStringConcatenation(GetNamespace() + OOO_STRING_SVTOOLS_HTML_division), false);
 
     // delete the table with floating frames
-    OSL_ENSURE( !m_pHTMLPosFlyFrames, "Were not all frames output?" );
-    m_pHTMLPosFlyFrames.reset();
+    OSL_ENSURE( m_aHTMLPosFlyFrames.empty(), "Were not all frames output?" );
+    m_aHTMLPosFlyFrames.clear();
 
     m_aHTMLControls.clear();
 
