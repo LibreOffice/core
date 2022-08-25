@@ -21,6 +21,8 @@
 
 #include <svx/svdomedia.hxx>
 
+#include <com/sun/star/text/GraphicCrop.hpp>
+
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 
@@ -154,6 +156,20 @@ uno::Reference< graphic::XGraphic > const & SdrMediaObj::getSnapshot() const
         Graphic aGraphic = m_xImpl->m_MediaProperties.getGraphic();
         if (!aGraphic.IsNone())
         {
+            Size aPref = aGraphic.GetPrefSize();
+            Size aPixel = aGraphic.GetSizePixel();
+            const text::GraphicCrop& rCrop = m_xImpl->m_MediaProperties.getCrop();
+            if (rCrop.Bottom > 0 || rCrop.Left > 0 || rCrop.Right > 0 || rCrop.Top > 0)
+            {
+                tools::Long nLeft = aPixel.getWidth() * rCrop.Left / aPref.getWidth();
+                tools::Long nTop = aPixel.getHeight() * rCrop.Top / aPref.getHeight();
+                tools::Long nRight = aPixel.getWidth() * rCrop.Right / aPref.getWidth();
+                tools::Long nBottom = aPixel.getHeight() * rCrop.Bottom / aPref.getHeight();
+                BitmapEx aBitmapEx = aGraphic.GetBitmapEx();
+                aBitmapEx.Crop({nLeft, nTop, aPixel.getWidth() - nRight, aPixel.getHeight() - nBottom});
+                aGraphic = aBitmapEx;
+            }
+
             // We have an explicit graphic for this media object, then go with that instead of
             // generating our own one.
             m_xImpl->m_xCachedSnapshot = aGraphic.GetXGraphic();
@@ -361,6 +377,11 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
     if (nMaskSet & AVMediaSetMask::GRAPHIC)
     {
         m_xImpl->m_MediaProperties.setGraphic(rNewProperties.getGraphic());
+    }
+
+    if (nMaskSet & AVMediaSetMask::CROP)
+    {
+        m_xImpl->m_MediaProperties.setCrop(rNewProperties.getCrop());
     }
 
     if( ( AVMediaSetMask::URL & nMaskSet ) &&
