@@ -6544,15 +6544,15 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     {
         if (pGlyph->IsSpacing())
         {
-            Point aAdjOffset = aOffset;
-            aAdjOffset.AdjustX((pGlyph->newWidth() - nEmphWidth) / 2 );
+            DevicePoint aAdjOffset(aOffset.X(), aOffset.Y());
+            aAdjOffset.adjustX((pGlyph->newWidth() - nEmphWidth) / 2);
             aAdjOffset = aRotScale.transform( aAdjOffset );
 
-            aAdjOffset -= Point( nEmphWidth2, nEmphHeight2 );
+            aAdjOffset -= DevicePoint(nEmphWidth2, nEmphHeight2);
 
-            Point aMarkPos(aPos.getX(), aPos.getY());
-            aMarkPos += aAdjOffset;
-            aMarkPos = PixelToLogic(aMarkPos);
+            DevicePoint aMarkDevPos(aPos);
+            aMarkDevPos += aAdjOffset;
+            Point aMarkPos = SubPixelToLogic(aMarkDevPos, true);
             drawEmphasisMark( aMarkPos.X(), aMarkPos.Y(),
                               aEmphPoly, bEmphPolyLine,
                               aEmphRect1, aEmphRect2 );
