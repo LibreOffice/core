@@ -199,7 +199,7 @@ bool peekGraphicFormat(SvStream& rStream, OUString& rFormatExtension, bool bTest
         || rFormatExtension.startsWith("PPM"))
     {
         bSomethingTested = true;
-        if (aDetector.checkPBMorPGMorPPM())
+        if (aDetector.checkPBM() || aDetector.checkPGM() || aDetector.checkPPM())
         {
             rFormatExtension = getImportFormatShortName(aDetector.getMetadata().mnFormat);
             return true;
@@ -1085,29 +1085,46 @@ bool GraphicFormatDetector::checkPCT()
     return false;
 }
 
-bool GraphicFormatDetector::checkPBMorPGMorPPM()
+bool GraphicFormatDetector::checkPBM()
 {
-    if (maFirstBytes[0] == 'P')
-    {
-        switch (maFirstBytes[1])
-        {
-            case '1':
-            case '4':
-                maMetadata.mnFormat = GraphicFileFormat::PBM;
-                return true;
+    bool bRet = false;
+    sal_Int32 nStmPos = mrStream.Tell();
+    sal_uInt8 nFirst = 0, nSecond = 0, nThird = 0;
+    mrStream.ReadUChar(nFirst).ReadUChar(nSecond).ReadUChar(nThird);
+    if (nFirst == 'P' && ((nSecond == '1') || (nSecond == '4')) && isspace(nThird))
+        bRet = true;
+    mrStream.Seek(nStmPos);
+    if (bRet)
+        maMetadata.mnFormat = GraphicFileFormat::PBM;
+    return bRet;
+}
 
-            case '2':
-            case '5':
-                maMetadata.mnFormat = GraphicFileFormat::PGM;
-                return true;
+bool GraphicFormatDetector::checkPGM()
+{
+    bool bRet = false;
+    sal_uInt8 nFirst = 0, nSecond = 0, nThird = 0;
+    sal_Int32 nStmPos = mrStream.Tell();
+    mrStream.ReadUChar(nFirst).ReadUChar(nSecond).ReadUChar(nThird);
+    if (nFirst == 'P' && ((nSecond == '2') || (nSecond == '5')) && isspace(nThird))
+        bRet = true;
+    mrStream.Seek(nStmPos);
+    if (bRet)
+        maMetadata.mnFormat = GraphicFileFormat::PGM;
+    return bRet;
+}
 
-            case '3':
-            case '6':
-                maMetadata.mnFormat = GraphicFileFormat::PPM;
-                return true;
-        }
-    }
-    return false;
+bool GraphicFormatDetector::checkPPM()
+{
+    bool bRet = false;
+    sal_uInt8 nFirst = 0, nSecond = 0, nThird = 0;
+    sal_Int32 nStmPos = mrStream.Tell();
+    mrStream.ReadUChar(nFirst).ReadUChar(nSecond).ReadUChar(nThird);
+    if (nFirst == 'P' && ((nSecond == '3') || (nSecond == '6')) && isspace(nThird))
+        bRet = true;
+    mrStream.Seek(nStmPos);
+    if (bRet)
+        maMetadata.mnFormat = GraphicFileFormat::PPM;
+    return bRet;
 }
 
 bool GraphicFormatDetector::checkRAS()

@@ -473,68 +473,37 @@ bool GraphicDescriptor::ImpDetectXPM( SvStream& rStm, bool )
 
 bool GraphicDescriptor::ImpDetectPBM( SvStream& rStm, bool )
 {
-    bool bRet = false;
-
-    // check file extension first, as this trumps the 2 ID bytes
-    if ( aPathExt.startsWith( "pbm" ) )
-        bRet = true;
-    else
-    {
-        sal_Int32 nStmPos = rStm.Tell();
-        sal_uInt8   nFirst = 0, nSecond = 0;
-        rStm.ReadUChar( nFirst ).ReadUChar( nSecond );
-        if ( nFirst == 'P' && ( ( nSecond == '1' ) || ( nSecond == '4' ) ) )
-            bRet = true;
-        rStm.Seek( nStmPos );
-    }
-
+    sal_Int32 nStmPos = rStm.Tell();
+    vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /* bExtendedInfo */ );
+    bool bRet = aDetector.detect();
+    bRet &= aDetector.checkPBM();
     if ( bRet )
-        aMetadata.mnFormat = GraphicFileFormat::PBM;
-
+        aMetadata = aDetector.getMetadata();
+    rStm.Seek( nStmPos );
     return bRet;
 }
 
 bool GraphicDescriptor::ImpDetectPGM( SvStream& rStm, bool )
 {
-    bool bRet = false;
-
-    if ( aPathExt.startsWith( "pgm" ) )
-        bRet = true;
-    else
-    {
-        sal_uInt8 nFirst = 0, nSecond = 0;
-        sal_Int32 nStmPos = rStm.Tell();
-        rStm.ReadUChar( nFirst ).ReadUChar( nSecond );
-        if ( nFirst == 'P' && ( ( nSecond == '2' ) || ( nSecond == '5' ) ) )
-            bRet = true;
-        rStm.Seek( nStmPos );
-    }
-
+    sal_Int32 nStmPos = rStm.Tell();
+    vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /* bExtendedInfo */ );
+    bool bRet = aDetector.detect();
+    bRet &= aDetector.checkPGM();
     if ( bRet )
-        aMetadata.mnFormat = GraphicFileFormat::PGM;
-
+        aMetadata = aDetector.getMetadata();
+    rStm.Seek( nStmPos );
     return bRet;
 }
 
 bool GraphicDescriptor::ImpDetectPPM( SvStream& rStm, bool )
 {
-    bool bRet = false;
-
-    if ( aPathExt.startsWith( "ppm" ) )
-        bRet = true;
-    else
-    {
-        sal_uInt8   nFirst = 0, nSecond = 0;
-        sal_Int32 nStmPos = rStm.Tell();
-        rStm.ReadUChar( nFirst ).ReadUChar( nSecond );
-        if ( nFirst == 'P' && ( ( nSecond == '3' ) || ( nSecond == '6' ) ) )
-            bRet = true;
-        rStm.Seek( nStmPos );
-    }
-
+    sal_Int32 nStmPos = rStm.Tell();
+    vcl::GraphicFormatDetector aDetector( rStm, aPathExt, false /* bExtendedInfo */ );
+    bool bRet = aDetector.detect();
+    bRet &= aDetector.checkPPM();
     if ( bRet )
-        aMetadata.mnFormat = GraphicFileFormat::PPM;
-
+        aMetadata = aDetector.getMetadata();
+    rStm.Seek( nStmPos );
     return bRet;
 }
 
