@@ -16,6 +16,24 @@
       "message": "It seems that everywhere this ctor is called, a new unique_ptr is created. So maybe it makes sense to pass a pointer to the format instead of unique_ptr to frame client, and construct the unique_ptr in place, this way eliding a creation and destruction of a temporary unique_ptr?",
       "revId": "497fd09add19ccb834aa40226b60c642299e210e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "895731b3_9a434c1a",
+        "filename": "sw/source/core/inc/unoparaframeenum.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-08-25T07:32:09Z",
+      "side": 1,
+      "message": "That would work, except that sw::FrameClient is an object that cannot move around in memory, needs to stay put.",
+      "parentUuid": "6c7e59c0_84832814",
+      "revId": "497fd09add19ccb834aa40226b60c642299e210e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
