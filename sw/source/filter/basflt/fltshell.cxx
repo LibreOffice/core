@@ -51,14 +51,14 @@
 
 using namespace com::sun::star;
 
-static SwContentNode* GetContentNode(SwDoc& rDoc, SwNodeIndex& rIdx, bool bNext)
+static SwContentNode* GetContentNode(SwDoc& rDoc, SwPosition& rPos, bool bNext)
 {
-    SwContentNode * pCNd = rIdx.GetNode().GetContentNode();
-    if(!pCNd && nullptr == (pCNd = bNext ? rDoc.GetNodes().GoNext(&rIdx)
-                                     : SwNodes::GoPrevious(&rIdx)))
+    SwContentNode * pCNd = rPos.GetNode().GetContentNode();
+    if(!pCNd && nullptr == (pCNd = bNext ? rDoc.GetNodes().GoNext(&rPos)
+                                     : SwNodes::GoPrevious(&rPos)))
     {
-        pCNd = bNext ? SwNodes::GoPrevious(&rIdx)
-                     : rDoc.GetNodes().GoNext(&rIdx);
+        pCNd = bNext ? SwNodes::GoPrevious(&rPos)
+                     : rDoc.GetNodes().GoNext(&rPos);
         OSL_ENSURE(pCNd, "no ContentNode found");
     }
     return pCNd;
@@ -123,13 +123,12 @@ bool SwFltStackEntry::MakeRegion(SwDoc& rDoc, SwPaM& rRegion, RegionMode const e
         return false;
     }
     // The content indices always apply to the node!
-    rRegion.GetPoint()->nNode = rMkPos.m_nNode.GetIndex() + 1;
-    SwContentNode* pCNd = GetContentNode(rDoc, rRegion.GetPoint()->nNode, true);
+    rRegion.GetPoint()->Assign( rMkPos.m_nNode.GetIndex() + 1 );
+    SwContentNode* pCNd = GetContentNode(rDoc, *rRegion.GetPoint(), true);
 
     SAL_WARN_IF(pCNd->Len() < rMkPos.m_nContent, "sw.ww8",
         "invalid content index " << rMkPos.m_nContent << " but text node has only " << pCNd->Len());
-    rRegion.GetPoint()->nContent.Assign(pCNd,
-            std::min<sal_Int32>(rMkPos.m_nContent, pCNd->Len()));
+    rRegion.GetPoint()->SetContent( std::min<sal_Int32>(rMkPos.m_nContent, pCNd->Len()) );
     rRegion.SetMark();
     if (rMkPos.m_nNode != rPtPos.m_nNode)
     {
@@ -137,13 +136,12 @@ bool SwFltStackEntry::MakeRegion(SwDoc& rDoc, SwPaM& rRegion, RegionMode const e
         SwNodes& rNodes = rRegion.GetPoint()->GetNodes();
         if (n >= rNodes.Count())
             return false;
-        rRegion.GetPoint()->nNode = n;
-        pCNd = GetContentNode(rDoc, rRegion.GetPoint()->nNode, false);
+        rRegion.GetPoint()->Assign(n);
+        pCNd = GetContentNode(rDoc, *rRegion.GetPoint(), false);
     }
     SAL_WARN_IF(pCNd->Len() < rPtPos.m_nContent, "sw.ww8",
         "invalid content index " << rPtPos.m_nContent << " but text node has only " << pCNd->Len());
-    rRegion.GetPoint()->nContent.Assign(pCNd,
-            std::min<sal_Int32>(rPtPos.m_nContent, pCNd->Len()));
+    rRegion.GetPoint()->SetContent( std::min<sal_Int32>(rPtPos.m_nContent, pCNd->Len()) );
     OSL_ENSURE( CheckNodesRange( rRegion.Start()->GetNode(),
                              rRegion.End()->GetNode(), true ),
              "attribute or similar crosses section-boundaries" );
@@ -438,9 +436,9 @@ static bool MakePoint(const SwFltStackEntry& rEntry, SwDoc& rDoc,
     if (nMk >= rMkNodes.Count())
         return false;
 
-    rRegion.GetPoint()->nNode = nMk;
-    SwContentNode* pCNd = GetContentNode(rDoc, rRegion.GetPoint()->nNode, true);
-    rRegion.GetPoint()->nContent.Assign(pCNd, rEntry.m_aMkPos.m_nContent);
+    rRegion.GetPoint()->Assign(nMk);
+    GetContentNode(rDoc, *rRegion.GetPoint(), true);
+    rRegion.GetPoint()->SetContent(rEntry.m_aMkPos.m_nContent);
     return true;
 }
 
