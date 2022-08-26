@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e56a748_adc7acf6",
+        "filename": "hwpfilter/source/hwpreader.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 3953,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-08-26T22:42:11Z",
+      "side": 1,
+      "message": "You have to make sure that the code behavior is kept with your change, and if changed, the new behavior is correct, according to the expected function.\nIn the previous version, it was assured that the `skewX` will remain in `[-π/2,π/2]` range. But, as you can see, `atan2` generate results in the `(-π,π]` range:\nhttps://en.wikipedia.org/wiki/Atan2#/media/File:Arctangent2.svg",
+      "revId": "11ae8438a9624f2f5dc64c89c467e006e5057bb8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
