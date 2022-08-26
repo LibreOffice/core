@@ -313,40 +313,6 @@ void FreetypeManager::InitFreetype()
         nDefaultPrioAntiAlias = pEnv[0] - '0';
 }
 
-namespace
-{
-    bool DoesAlmostHorizontalDrainRenderingPool()
-    {
-        FT_Int nMajor, nMinor, nPatch;
-        FT_Library_Version(aLibFT, &nMajor, &nMinor, &nPatch);
-        if (nMajor > 2)
-            return false;
-        if (nMajor == 2 && nMinor <= 8)
-            return true;
-        return false;
-    }
-}
-
-bool FreetypeFont::AlmostHorizontalDrainsRenderingPool(int nRatio, const vcl::font::FontSelectPattern& rFSD)
-{
-    static bool bAlmostHorizontalDrainsRenderingPool = DoesAlmostHorizontalDrainRenderingPool();
-    if (nRatio > 100 && rFSD.maTargetName == "OpenSymbol" && bAlmostHorizontalDrainsRenderingPool)
-    {
-        // tdf#127189 FreeType <= 2.8 will fail to render stretched horizontal
-        // brace glyphs in starmath at a fairly low stretch ratio. The failure
-        // will set CAIRO_STATUS_FREETYPE_ERROR on the surface which cannot be
-        // cleared, so all further painting to the surface fails.
-
-        // This appears fixed in >= freetype 2.9
-
-        // Restrict this bodge to a stretch ratio > ~10 of the OpenSymbol font
-        // where it has been seen in practice.
-        SAL_WARN("vcl", "rendering text would fail with stretch ratio of: " << nRatio << ", with FreeType <= 2.8");
-        return true;
-    }
-    return false;
-}
-
 FT_Face FreetypeFont::GetFtFace() const
 {
     FT_Activate_Size( maSizeFT );

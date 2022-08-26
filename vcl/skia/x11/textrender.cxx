@@ -40,9 +40,6 @@ void SkiaTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalGr
     if (nWidth == 0 || nHeight == 0)
         return;
 
-    if (FreetypeFont::AlmostHorizontalDrainsRenderingPool(nWidth * 10 / nHeight, rFSD))
-        return;
-
     if (!fontManager)
     {
         // Get the global FcConfig that our VCL fontconfig code uses, and refcount it.
