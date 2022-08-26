@@ -396,8 +396,8 @@ constants AccessibleEventId
 
     /** An item in a container has been removed from the selection.
 
-        <p>AccessibleEventObject::OldValue contains the item to be removed.</p>
-        <p>AccessibleEventObject::NewValue is empty.</p>
+        <p>AccessibleEventObject::OldValue is empty.</p>
+        <p>AccessibleEventObject::NewValue contains the item that has been removed.</p>
 
         @since LibreOffice 4.3
     */
