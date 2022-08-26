@@ -30,6 +30,7 @@
 #include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/securityoptions.hxx>
 #include <vcl/bitmapex.hxx>
@@ -298,6 +299,9 @@ void MediaWindowImpl::updateMediaItem( MediaItem& rItem ) const
 
 void MediaWindowImpl::executeMediaItem( const MediaItem& rItem )
 {
+    mpItem = &rItem;
+    comphelper::ScopeGuard g([this] { this->mpItem = nullptr; });
+
     const AVMediaSetMask nMaskSet = rItem.getMaskSet();
 
     // set URL first
@@ -418,7 +422,9 @@ void MediaWindowImpl::onURLChanged()
         uno::Sequence<uno::Any> aArgs{
             uno::Any(nParentWindowHandle),
             uno::Any(awt::Rectangle(aPoint.X(), aPoint.Y(), aSize.Width(), aSize.Height())),
-            uno::Any(reinterpret_cast<sal_IntPtr>(mpChildWindow.get()))
+            uno::Any(reinterpret_cast<sal_IntPtr>(mpChildWindow.get())),
+            // Media item contains media properties, e.g. cropping.
+            uno::Any(reinterpret_cast<sal_IntPtr>(mpItem))
         };
 
         try

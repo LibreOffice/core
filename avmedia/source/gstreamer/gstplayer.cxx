@@ -30,6 +30,8 @@
 #include <vector>
 #include <math.h>
 
+#include <com/sun/star/text/GraphicCrop.hpp>
+
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>
 #include <rtl/string.hxx>
@@ -37,6 +39,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
+#include <vcl/graph.hxx>
+#include <avmedia/mediaitem.hxx>
 
 #include "gstplayer.hxx"
 #include "gstframegrabber.hxx"
@@ -888,6 +892,32 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
 
         g_object_set(G_OBJECT(mpPlaybin), "video-sink", pVideosink, nullptr);
         g_object_set(G_OBJECT(mpPlaybin), "force-aspect-ratio", FALSE, nullptr);
+
+        if ((rArguments.getLength() >= 4) && (rArguments[3] >>= pIntPtr) && pIntPtr)
+        {
+            auto pItem = reinterpret_cast<const avmedia::MediaItem*>(pIntPtr);
+            Graphic aGraphic = pItem->getGraphic();
+            const text::GraphicCrop& rCrop = pItem->getCrop();
+            if (!aGraphic.IsNone() && (rCrop.Bottom > 0 || rCrop.Left > 0 || rCrop.Right > 0 || rCrop.Top > 0))
+            {
+                // The media item has a non-empty cropping set. Try to crop the video accordingly.
+                Size aPref = aGraphic.GetPrefSize();
+                Size aPixel = aGraphic.GetSizePixel();
+                tools::Long nLeft = aPixel.getWidth() * rCrop.Left / aPref.getWidth();
+                tools::Long nTop = aPixel.getHeight() * rCrop.Top / aPref.getHeight();
+                tools::Long nRight = aPixel.getWidth() * rCrop.Right / aPref.getWidth();
+                tools::Long nBottom = aPixel.getHeight() * rCrop.Bottom / aPref.getHeight();
+                GstElement* pVideoFilter = gst_element_factory_make("videocrop", nullptr);
+                if (pVideoFilter)
+                {
+                    g_object_set(G_OBJECT(pVideoFilter), "left", nLeft, nullptr);
+                    g_object_set(G_OBJECT(pVideoFilter), "top", nTop, nullptr);
+                    g_object_set(G_OBJECT(pVideoFilter), "right", nRight, nullptr);
+                    g_object_set(G_OBJECT(pVideoFilter), "bottom", nBottom, nullptr);
+                    g_object_set(G_OBJECT(mpPlaybin), "video-filter", pVideoFilter, nullptr);
+                }
+            }
+        }
 
         if (!mbUseGtkSink)
         {

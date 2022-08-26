@@ -150,6 +150,7 @@ private:
     VclPtr<MediaWindowControl> mpMediaWindowControl;
     std::unique_ptr<BitmapEx> mpEmptyBmpEx;
     std::unique_ptr<BitmapEx> mpAudioBmpEx;
+    const MediaItem* mpItem = nullptr;
 };
 
 }} // end namespace avmedia::priv
