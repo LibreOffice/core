@@ -335,6 +335,17 @@ Module gid_Module_Root_Extension_Dictionary_Et
     Styles = ();
 End
 
+Module gid_Module_Root_Extension_Dictionary_Fa
+    MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_FA );
+    Files = (gid_File_Extension_Dictionary_Fa);
+    InstallOrder = "2000";
+    Sortkey = "658";
+    Spellcheckerlanguage = "fa";
+    PackageInfo = "packinfo_office.txt";
+    ParentID = gid_Module_Dictionaries;
+    Styles = ();
+End
+
 Module gid_Module_Root_Extension_Dictionary_Fr
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_FR );
     Files = (gid_File_Extension_Dictionary_Fr);
