@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7336633_995a8d49",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-08-26T08:22:02Z",
+      "side": 1,
+      "message": "or in case if pSet is owned and cleared by SfxSingleTabDialogController - then we don\u0027t need shared_ptr",
+      "parentUuid": "65c4b375_77fd4240",
+      "revId": "8d23625c25b819c28883a1fbb0c919785397042b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "49228844_01fd598a",
