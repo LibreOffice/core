@@ -6092,9 +6092,10 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
                     rParam.eSearchType = DetectSearchType(rItem.maString.getString(), mrDoc);
             }
 
-            // Undo bRangeReduce if asked to match empty cells (which should be rare).
+            // Undo bRangeReduce if asked to match empty cells for COUNTIFS (which should be rare).
             assert(rEntry.GetQueryItems().size() == 1);
-            if((rEntry.IsQueryByEmpty() || rItem.mbMatchEmpty) && bRangeReduce)
+            const bool isCountIfs = (nParamCount % 2) == 0;
+            if(isCountIfs && (rEntry.IsQueryByEmpty() || rItem.mbMatchEmpty) && bRangeReduce)
             {
                 bRangeReduce = false;
                 // All criteria ranges are svDoubleRef's, so only vConditions needs adjusting.
