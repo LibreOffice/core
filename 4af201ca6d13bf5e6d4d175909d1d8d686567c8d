@@ -35,6 +35,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ac464cc_47cab4a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-08-26T19:39:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8df25fa4_b25abe66",
+      "revId": "4af201ca6d13bf5e6d4d175909d1d8d686567c8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e62148c3_73cdaab6",
@@ -48,6 +66,30 @@
       "writtenOn": "2022-08-26T10:08:40Z",
       "side": 1,
       "message": "std::next(paStrSet.end()) makes no sense, it would attempt to increment end() that is undefined behaviour. The condition should simply be\n\n    iter !\u003d paStrSet.end()\n\n(btw, paStrSet with the p... prefix would indicate a pointer which it is not, rather aStrSet).",
+      "range": {
+        "startLine": 1074,
+        "startChar": 47,
+        "endLine": 1074,
+        "endChar": 72
+      },
+      "revId": "4af201ca6d13bf5e6d4d175909d1d8d686567c8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fc91d6c_b02c1f00",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 1074,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-08-26T19:39:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e62148c3_73cdaab6",
       "range": {
         "startLine": 1074,
         "startChar": 47,
