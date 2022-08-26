@@ -2387,6 +2387,63 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testSectionDir)
     assertXPath(pXmlDoc, "//reqif-xhtml:div[@id='mysect']", "style", "dir: ltr");
 }
 
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testTdf114769)
+{
+    // Create document from scratch since relative urls to filesystem can be replaced
+    // by absolute during save/load
+    SwDoc* pDoc = createSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Insert("Hyperlink1");
+    pWrtShell->SplitNode();
+    pWrtShell->Insert("Hyperlink2");
+    pWrtShell->SplitNode();
+    pWrtShell->Insert("Hyperlink3");
+    pWrtShell->SplitNode();
+    pWrtShell->Insert("Hyperlink4");
+    pWrtShell->SplitNode();
+    pWrtShell->Insert("Hyperlink5");
+    pWrtShell->SplitNode();
+
+    // Normal external URL
+    uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1), 1), uno::UNO_QUERY);
+    xRun->setPropertyValue("HyperLinkURL", uno::Any(OUString("http://libreoffice.org/")));
+
+    // Bookmark reference
+    xRun.set(getRun(getParagraph(2), 1), uno::UNO_QUERY);
+    xRun->setPropertyValue("HyperLinkURL", uno::Any(OUString("#some_bookmark")));
+
+    // Filesystem absolute link
+    xRun.set(getRun(getParagraph(3), 1), uno::UNO_QUERY);
+    xRun->setPropertyValue("HyperLinkURL", uno::Any(OUString("C:\\test.txt")));
+
+    // Filesystem relative link
+    xRun.set(getRun(getParagraph(4), 1), uno::UNO_QUERY);
+    xRun->setPropertyValue("HyperLinkURL", uno::Any(OUString("..\\..\\test.odt")));
+
+    // Filesystem relative link
+    xRun.set(getRun(getParagraph(5), 1), uno::UNO_QUERY);
+    xRun->setPropertyValue("HyperLinkURL", uno::Any(OUString(".\\another.odt")));
+
+    // Export
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProperties
+        = { comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")) };
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+
+    htmlDocUniquePtr pHtmlDoc = parseHtml(maTempFile);
+    CPPUNIT_ASSERT(pHtmlDoc);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("http://libreoffice.org/"),
+                         getXPath(pHtmlDoc, "/html/body/p[1]/a", "href"));
+    CPPUNIT_ASSERT_EQUAL(OUString("#some_bookmark"),
+                         getXPath(pHtmlDoc, "/html/body/p[2]/a", "href"));
+    CPPUNIT_ASSERT_EQUAL(OUString("C:\\test.txt"), getXPath(pHtmlDoc, "/html/body/p[3]/a", "href"));
+    CPPUNIT_ASSERT_EQUAL(OUString("..\\..\\test.odt"),
+                         getXPath(pHtmlDoc, "/html/body/p[4]/a", "href"));
+    CPPUNIT_ASSERT_EQUAL(OUString(".\\another.odt"),
+                         getXPath(pHtmlDoc, "/html/body/p[5]/a", "href"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
