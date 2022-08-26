@@ -1682,7 +1682,7 @@ std::size_t TextEngine::SplitTextPortion( sal_uInt32 nPara, sal_Int32 nPos )
         }
     }
 
-    SAL_WARN_IF( !pTextPortion, "vcl", "SplitTextPortion: position outside of region!" );
+    assert(pTextPortion && "SplitTextPortion: position outside of region!");
 
     const sal_Int32 nOverlapp = nTmpPos - nPos;
     pTextPortion->GetLen() -= nOverlapp;
