@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd4a696a_592bca20",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-08-26T08:31:45Z",
+      "side": 1,
+      "message": "Generally LGTM, although I don\u0027t consider myself very knowledgeable on SdrObject.\n",
+      "revId": "2e1ac6a9ea301381b0852e1732cd12997e8f2373",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
