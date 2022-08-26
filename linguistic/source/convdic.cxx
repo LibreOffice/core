@@ -370,7 +370,7 @@ uno::Sequence< OUString > SAL_CALL ConvDic::getConversions(
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    if (!pFromRight && eDirection == ConversionDirection_FROM_RIGHT)
+    if (!pFromRight && eDirection != ConversionDirection_FROM_LEFT)
         return uno::Sequence< OUString >();
 
     if (bNeedEntries)
@@ -398,7 +398,7 @@ uno::Sequence< OUString > SAL_CALL ConvDic::getConversionEntries(
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    if (!pFromRight && eDirection == ConversionDirection_FROM_RIGHT)
+    if (!pFromRight && eDirection != ConversionDirection_FROM_LEFT)
         return uno::Sequence< OUString >();
 
     if (bNeedEntries)
