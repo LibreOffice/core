@@ -321,13 +321,39 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
                 new QAccessibleEvent(pQAccessibleInterface, QAccessible::TableSummaryChanged));
             return;
         case AccessibleEventId::SELECTION_CHANGED_ADD:
-            QAccessible::updateAccessibility(
-                new QAccessibleEvent(pQAccessibleInterface, QAccessible::SelectionAdd));
-            return;
         case AccessibleEventId::SELECTION_CHANGED_REMOVE:
-            QAccessible::updateAccessibility(
-                new QAccessibleEvent(pQAccessibleInterface, QAccessible::SelectionRemove));
+        {
+            QAccessible::Event eEventType;
+            if (aEvent.EventId == AccessibleEventId::SELECTION_CHANGED_ADD)
+                eEventType = QAccessible::SelectionAdd;
+            else
+                eEventType = QAccessible::SelectionRemove;
+
+            uno::Reference<accessibility::XAccessible> xChildAcc;
+            aEvent.NewValue >>= xChildAcc;
+            if (!xChildAcc.is())
+            {
+                SAL_WARN("vcl.qt",
+                         "Selection add/remove event without the (un)selected accessible set");
+                return;
+            }
+            Reference<XAccessibleContext> xContext = xChildAcc->getAccessibleContext();
+            if (!xContext.is())
+            {
+                SAL_WARN("vcl.qt", "No valid XAccessibleContext for (un)selected accessible.");
+                return;
+            }
+
+            // use the QAccessibleEvent ctor taking a QObject* instead of the one that takes QAccessibleInterface*
+            // to work around QTBUG-105988
+            QAccessibleEvent* pSelectionAddEvent
+                = new QAccessibleEvent(pQAccessibleInterface->object(), eEventType);
+            // Qt expects the index of the (un)selected child to be set in the event
+            sal_Int32 nChildIndex = xContext->getAccessibleIndexInParent();
+            pSelectionAddEvent->setChild(nChildIndex);
+            QAccessible::updateAccessibility(pSelectionAddEvent);
             return;
+        }
         case AccessibleEventId::SELECTION_CHANGED_WITHIN:
             QAccessible::updateAccessibility(
                 new QAccessibleEvent(pQAccessibleInterface, QAccessible::SelectionWithin));
