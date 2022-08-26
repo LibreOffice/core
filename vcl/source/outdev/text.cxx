@@ -889,7 +889,7 @@ tools::Long OutputDevice::GetTextWidth( const OUString& rStr, sal_Int32 nIndex, 
 {
 
     tools::Long nWidth = GetTextArray( rStr, nullptr, nIndex,
-            nLen, pLayoutCache, pSalLayoutCache );
+            nLen, false, pLayoutCache, pSalLayoutCache );
 
     return nWidth;
 }
@@ -956,7 +956,7 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
 }
 
 tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<sal_Int32>* pDXAry,
-                                 sal_Int32 nIndex, sal_Int32 nLen,
+                                 sal_Int32 nIndex, sal_Int32 nLen, bool bCaret,
                                  vcl::text::TextLayoutCache const*const pLayoutCache,
                                  SalLayoutGlyphs const*const pSalLayoutCache) const
 {
@@ -994,7 +994,7 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<sal_In
         xDXPixelArray.reset(new std::vector<DeviceCoordinate>(nLen));
     }
     std::vector<DeviceCoordinate>* pDXPixelArray = xDXPixelArray.get();
-    DeviceCoordinate nWidth = pSalLayout->FillDXArray(pDXPixelArray);
+    DeviceCoordinate nWidth = pSalLayout->FillDXArray(pDXPixelArray, bCaret ? rStr : OUString());
     int nWidthFactor = pSalLayout->GetUnitsPerPixel();
 
     // convert virtual char widths to virtual absolute positions
@@ -1039,7 +1039,7 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<sal_In
 
 #else /* ! VCL_FLOAT_DEVICE_PIXEL */
 
-    tools::Long nWidth = pSalLayout->FillDXArray( pDXAry );
+    tools::Long nWidth = pSalLayout->FillDXArray( pDXAry, bCaret ? rStr : OUString() );
     int nWidthFactor = pSalLayout->GetUnitsPerPixel();
 
     // convert virtual char widths to virtual absolute positions
