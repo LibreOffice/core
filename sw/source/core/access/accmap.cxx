@@ -2455,13 +2455,13 @@ void SwAccessibleMap::InvalidateAttr( const SwTextFrame& rTextFrame )
     {
         osl::MutexGuard aGuard( maMutex );
 
-        if( mpFrameMap )
-        {
-            SwAccessibleContextMap_Impl::iterator aIter =
-                mpFrameMap->find( aFrameOrObj.GetSwFrame() );
-            if( aIter != mpFrameMap->end() )
-                xAcc = (*aIter).second;
-        }
+        if (!mpFrameMap)
+            return;
+
+        SwAccessibleContextMap_Impl::iterator aIter =
+            mpFrameMap->find( aFrameOrObj.GetSwFrame() );
+        if( aIter != mpFrameMap->end() )
+            xAcc = (*aIter).second;
     }
 
     if( !xAcc.is() )
