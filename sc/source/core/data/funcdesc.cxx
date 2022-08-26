@@ -398,6 +398,7 @@ bool ScFuncDesc::compareByName(const ScFuncDesc* a, const ScFuncDesc* b)
 #define ENTRY(CODE) CODE, SAL_N_ELEMENTS(CODE)
 
 ScFunctionList::ScFunctionList( bool bEnglishFunctionNames )
+    : mbEnglishFunctionNames( bEnglishFunctionNames )
 {
     sal_Int32  nMaxFuncNameLen = 0; // Length of longest function name
 
@@ -958,7 +959,7 @@ ScFunctionList::ScFunctionList( bool bEnglishFunctionNames )
         pDesc = new ScFuncDesc;
         pDesc->nFIndex = nNextId++;
 
-        if ( pUnoAddIns->FillFunctionDesc( nFunc, *pDesc, bEnglishFunctionNames ) )
+        if ( pUnoAddIns->FillFunctionDesc( nFunc, *pDesc, mbEnglishFunctionNames ) )
         {
             tmpFuncVector.push_back(pDesc);
             nStrLen = pDesc->mxFuncName->getLength();
