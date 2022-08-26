@@ -219,11 +219,8 @@ OUString AboutDialog::GetMiscString() {
   OUString aCalcMode; // Calc calculation mode
 
 #if HAVE_FEATURE_OPENCL
-  bool bOpenCL = openclwrapper::GPUEnv::isOpenCLEnabled();
-  if (bOpenCL)
+  if (openclwrapper::GPUEnv::isOpenCLEnabled())
     aCalcMode += " CL";
-#else
-  const bool bOpenCL = false;
 #endif
 
   static const bool bThreadingProhibited =
@@ -231,7 +228,7 @@ OUString AboutDialog::GetMiscString() {
   bool bThreadedCalc = officecfg::Office::Calc::Formula::Calculation::
       UseThreadedCalculationForFormulaGroups::get();
 
-  if (!bThreadingProhibited && !bOpenCL && bThreadedCalc) {
+  if (!bThreadingProhibited && bThreadedCalc) {
     aCalcMode += " threaded";
   }
 
