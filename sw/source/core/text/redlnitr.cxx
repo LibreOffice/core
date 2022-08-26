@@ -647,6 +647,8 @@ SwRedlineItr::SwRedlineItr( const SwTextNode& rTextNd, SwFont& rFnt,
     , m_nNdIdx( rTextNd.GetIndex() )
     , m_nFirst( nRed )
     , m_nAct( SwRedlineTable::npos )
+    , m_nStart( COMPLETE_STRING )
+    , m_nEnd( COMPLETE_STRING )
     , m_bOn( false )
     , m_eMode( mode )
 {
