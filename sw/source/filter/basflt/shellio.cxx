@@ -203,13 +203,12 @@ ErrCode SwReader::Read( const Reader& rOptions )
             if( !pCNd && nullptr == ( pCNd = SwNodes::GoPrevious( &aEndPos ) ))
                 pCNd = mxDoc->GetNodes().GoNext( &aEndPos );
 
-            pPam->GetPoint()->nNode = aEndPos;
             const sal_Int32 nLen = pCNd->Len();
             if( nLen < nEndContent )
                 nEndContent = 0;
             else
                 nEndContent = nLen - nEndContent;
-            pPam->GetPoint()->nContent.Assign( pCNd, nEndContent );
+            pPam->GetPoint()->Assign( *pCNd, nEndContent );
 
             const SwStartNode* pTableBoxStart = pCNd->FindTableBoxStartNode();
             if ( pTableBoxStart )
@@ -225,13 +224,10 @@ ErrCode SwReader::Read( const Reader& rOptions )
         if( mpCursor )
         {
             *pUndoPam->GetMark() = *pPam->GetPoint();
-            ++pUndoPam->GetPoint()->nNode;
+            pUndoPam->GetPoint()->Adjust(SwNodeOffset(1));
             SwNode& rNd = pUndoPam->GetPointNode();
             if( rNd.IsContentNode() )
-                pUndoPam->GetPoint()->nContent.Assign(
-                                    static_cast<SwContentNode*>(&rNd), nSttContent );
-            else
-                pUndoPam->GetPoint()->nContent.Assign( nullptr, 0 );
+                pUndoPam->GetPoint()->SetContent( nSttContent );
 
             bool bChkHeaderFooter = rNd.FindHeaderStartNode() ||
                                    rNd.FindFooterStartNode();
