@@ -16,6 +16,24 @@
       "message": "Maxim: is it possible to implement a state method for this, that would set not a boolean item into the SfxItemSet, but a string item containing the name of the currently active deck? And where would that information be used?\n\nI am exploring an idea of some UI elements (toolbar buttons) connected to a specific \u0027.uno:SidebarDeck.DeckFoo\u0027, and want them to have a state coming from the respective state method.",
       "revId": "a80eefb7413245f81692c443b06f7d3a6a92f28c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3769a120_742f6082",
+        "filename": "sfx2/sdi/frmslots.sdi",
+        "patchSetId": 11
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2022-08-26T15:05:00Z",
+      "side": 1,
+      "message": "I don\u0027t quite understand what you\u0027re trying to achieve. If you could describe the exact behavior you want, that might be helpful.\n\nIn general, all .uno:SidebarDeck.* commands are really just one command, and therefore share the same state. That is, you can\u0027t have different states for only some of them. There is however a special case for toolbars (see GenericToolbarController::statusChanged and SubToolBarController::statusChanged) and menus (see MenuBarManager::statusChanged), that if the state is of a string type, and that string equals to the part of the command after the dot, then the given toolbar button will be toggled, and the menu item will get a checkmark.\n\nFor more complex cases you\u0027ll have to either create a special toolbar controller, or even a separate command. There are also some extreme solutions possible, like creating special dispatchers (like we do for style commands - see framework::StyleDispatcher), but I hope we don\u0027t need to get that far.",
+      "parentUuid": "88dfdec7_4fd8faaa",
+      "revId": "a80eefb7413245f81692c443b06f7d3a6a92f28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
