@@ -1529,6 +1529,12 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
         ? rInf.GetLen()
         : TextFrameIndex(rInf.GetText().getLength());
 
+    const TextFrameIndex nMsrLn = (TextFrameIndex(COMPLETE_STRING) != rInf.GetMeasureLen())
+        ? rInf.GetMeasureLen()
+        : TextFrameIndex(rInf.GetText().getLength());
+
+    bool bPartial(nMsrLn != nLn);
+
     // be sure to have the correct layout mode at the printer
     if ( m_pPrinter )
     {
@@ -1566,7 +1572,11 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
                                 GetFontLeading( rInf.GetShell(), rInf.GetOut() ) );
 
             std::vector<sal_Int32> aKernArray;
-            GetTextArray(*pOutDev, rInf, aKernArray, sal_Int32(rInf.GetLen()));
+            if (bPartial)
+                // FIXME(khaled): use different GetTextArray implementation here
+                GetTextArray(*pOutDev, rInf, aKernArray, sal_Int32(rInf.GetLen()));
+            else
+                GetTextArray(*pOutDev, rInf, aKernArray, sal_Int32(rInf.GetLen()));
             if (pGrid->IsSnapToChars())
             {
                 sw::Justify::SnapToGrid(aKernArray, rInf.GetText(), sal_Int32(rInf.GetIdx()),
@@ -1579,7 +1589,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
                         rInf.GetKern());
             }
 
-            aTextSize.setWidth(aKernArray[sal_Int32(rInf.GetLen()) - 1]);
+            aTextSize.setWidth(aKernArray[sal_Int32(rInf.GetMeasureLen()) - 1]);
             rInf.SetKanaDiff( 0 );
             return aTextSize;
         }
@@ -1608,8 +1618,13 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
         if( !GetScrFont()->IsSameInstance( rInf.GetOut().GetFont() ) )
             rInf.GetOut().SetFont( *m_pScrFont );
 
-        GetTextArray(*m_pPrinter, rInf.GetText(), aKernArray,
-                     sal_Int32(rInf.GetIdx()), sal_Int32(nLn));
+        if (bPartial)
+            // FIXME(khaled): use different GetTextArray implementation here
+            GetTextArray(*m_pPrinter, rInf.GetText(), aKernArray,
+                         sal_Int32(rInf.GetIdx()), sal_Int32(nLn));
+        else
+            GetTextArray(*m_pPrinter, rInf.GetText(), aKernArray,
+                         sal_Int32(rInf.GetIdx()), sal_Int32(nLn));
     }
     else
     {
@@ -1617,7 +1632,11 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
             rInf.GetOut().SetFont( *m_pPrtFont );
         aTextSize.setHeight( rInf.GetOut().GetTextHeight() );
 
-        GetTextArray(rInf.GetOut(), rInf, aKernArray, nLn.get());
+        if (bPartial)
+            // FIXME(khaled): use different GetTextArray implementation here
+            GetTextArray(rInf.GetOut(), rInf, aKernArray, nLn.get());
+        else
+            GetTextArray(rInf.GetOut(), rInf, aKernArray, nLn.get());
     }
 
     if (bCompress)
@@ -1628,16 +1647,16 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
     else
         rInf.SetKanaDiff( 0 );
 
-    if (nLn)
+    if (nMsrLn)
     {
-        aTextSize.setWidth(aKernArray[sal_Int32(nLn) - 1]);
+        aTextSize.setWidth(aKernArray[sal_Int32(nMsrLn) - 1]);
 
-        // Note that we can't simply use sal_Int(nLn) - 1 as nSpaceCount
+        // Note that we can't simply use sal_Int(nMsrLn) - 1 as nSpaceCount
         // because a glyph may be made up of more than one characters.
         sal_Int32 nSpaceCount = 0;
         tools::Long nOldValue = aKernArray[0];
 
-        for(sal_Int32 i = 1; i < sal_Int32(nLn); ++i)
+        for(sal_Int32 i = 1; i < sal_Int32(nMsrLn); ++i)
         {
             if (nOldValue != aKernArray[i])
             {

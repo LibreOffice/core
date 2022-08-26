@@ -154,6 +154,7 @@ protected:
     const OUString *m_pText;
     TextFrameIndex m_nIdx;
     TextFrameIndex m_nLen;
+    TextFrameIndex m_nMeasureLen;
     sal_uInt16 m_nKanaIdx;
     bool m_bOnWin     : 1;
     bool m_bNotEOL    : 1;
@@ -272,7 +273,9 @@ public:
     TextFrameIndex GetIdx() const { return m_nIdx; }
     void SetIdx(const TextFrameIndex nNew) { m_nIdx = nNew; }
     TextFrameIndex GetLen() const { return m_nLen; }
-    void SetLen(const TextFrameIndex nNew) { m_nLen = nNew; }
+    void SetLen(const TextFrameIndex nNew) { m_nLen = nNew; m_nMeasureLen = nNew; }
+    TextFrameIndex GetMeasureLen() const { return m_nMeasureLen; }
+    void SetMeasureLen(const TextFrameIndex nNew) { m_nMeasureLen = nNew; }
     void SetText( const OUString &rNew ){ m_pText = &rNew; }
 
     // No Bullets for the symbol font!
