@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15f0d908_a407a1ad",
+        "filename": "cui/source/dialogs/widgettestdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-08-26T08:16:40Z",
+      "side": 1,
+      "message": "can we try to get rid of thi handler and use \"default\" one based on response code?\n\nin the .ui file we need to setup correct response number (see in other dialogs)\nthis will allow us to test response codes",
+      "revId": "f7758a9ef092f20ba4dc3e6f0802aa5dbb36cb8e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
