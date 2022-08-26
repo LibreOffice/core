@@ -139,25 +139,25 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
     // especially if the effect is less than a pixel.
     if (std::abs(aFontScaling.getY() * fShearX) < 1)
     {
-        double fIgnoreRotate, fIgnoreShearX;
-
-        basegfx::B2DVector aFontSize, aTextTranslate;
-        rTextCandidate.getTextTransform().decompose(aFontSize, aTextTranslate, fIgnoreRotate,
-                                                    fIgnoreShearX);
-
-        if (basegfx::fTools::less(aFontSize.getX(), 0.0)
-            && basegfx::fTools::less(aFontSize.getY(), 0.0))
+        if (basegfx::fTools::less(aFontScaling.getX(), 0.0)
+            && basegfx::fTools::less(aFontScaling.getY(), 0.0))
         {
             // handle special case: If scale is negative in (x,y) (3rd quadrant), it can
             // be expressed as rotation by PI. Use this since the Font rendering will not
             // apply the negative scales in any form
-            aFontSize = basegfx::absolute(aFontSize);
+            aFontScaling = basegfx::absolute(aFontScaling);
             fRotate += M_PI;
         }
 
-        if (basegfx::fTools::more(aFontSize.getX(), 0.0)
-            && basegfx::fTools::more(aFontSize.getY(), 0.0))
+        if (basegfx::fTools::more(aFontScaling.getX(), 0.0)
+            && basegfx::fTools::more(aFontScaling.getY(), 0.0))
         {
+            double fIgnoreRotate, fIgnoreShearX;
+
+            basegfx::B2DVector aFontSize, aTextTranslate;
+            rTextCandidate.getTextTransform().decompose(aFontSize, aTextTranslate, fIgnoreRotate,
+                                                        fIgnoreShearX);
+
             // Get the VCL font
             vcl::Font aFont(primitive2d::getVclFontFromFontAttribute(
                 rTextCandidate.getFontAttribute(), aFontSize.getX(), aFontSize.getY(), fRotate,
