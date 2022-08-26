@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "831b3da9_ed9fa039",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003336
+      },
+      "writtenOn": "2022-08-26T18:51:43Z",
+      "side": 1,
+      "message": "\u003e Patch Set 4: Verified-1\n\u003e \n\u003e Build Failed \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/121157/ : FAILURE\n\u003e \n\u003e the test UITest_impress_tests2 failed ( https://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/121182/ )\n\nIt doesn\u0027t fail for me doing \"make UITest_impress_tests2\"",
+      "revId": "9aecf16113b139c66f143ad0f7c620987a96af28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
