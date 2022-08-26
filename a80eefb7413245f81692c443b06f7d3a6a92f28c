@@ -52,6 +52,24 @@
       "parentUuid": "3769a120_742f6082",
       "revId": "a80eefb7413245f81692c443b06f7d3a6a92f28c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b698eeb_76dc52d8",
+        "filename": "sfx2/sdi/frmslots.sdi",
+        "patchSetId": 11
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2022-08-26T15:46:24Z",
+      "side": 1,
+      "message": "OK, so setting a string state should just work for now.\n\nFor array of strings we have SfxStringListItem.",
+      "parentUuid": "753c8138_cf8cc2f0",
+      "revId": "a80eefb7413245f81692c443b06f7d3a6a92f28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
