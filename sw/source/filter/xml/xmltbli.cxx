@@ -2639,8 +2639,7 @@ void SwXMLTableContext::MakeTable()
     if( m_pTableNode->GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell() )
     {
         m_pTableNode->DelFrames();
-        SwNodeIndex aIdx( *m_pTableNode->EndOfSectionNode(), 1 );
-        m_pTableNode->MakeOwnFrames(&aIdx);
+        m_pTableNode->MakeOwnFrames();
     }
 }
 

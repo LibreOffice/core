@@ -542,8 +542,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
         }
     }
     // Insert Frames
-    GetNodes().GoNext( &aNdIdx ); // Go to the next ContentNode
-    pTableNd->MakeOwnFrames( &aNdIdx );
+    pTableNd->MakeOwnFrames();
 
     // To-Do - add 'SwExtraRedlineTable' also ?
     if( getIDocumentRedlineAccess().IsRedlineOn() || (!getIDocumentRedlineAccess().IsIgnoreRedline() && !getIDocumentRedlineAccess().GetRedlineTable().empty() ))
@@ -2381,14 +2380,15 @@ void SwTableNode::MakeFramesForAdjacentContentNode(const SwNodeIndex & rIdx)
  */
 void SwTableNode::MakeOwnFrames(SwNodeIndex* pIdxBehind)
 {
-    OSL_ENSURE( pIdxBehind, "No Index" );
     SwNode *pNd = GetNodes().FindPrvNxtFrameNode( *this, EndOfSectionNode() );
     if( !pNd )
     {
-        *pIdxBehind = *this;
+        if (pIdxBehind)
+            *pIdxBehind = *this;
         return;
     }
-    *pIdxBehind = *pNd;
+    if (pIdxBehind)
+        *pIdxBehind = *pNd;
 
     SwFrame *pFrame( nullptr );
     SwLayoutFrame *pUpper( nullptr );
@@ -2477,9 +2477,7 @@ void SwTableNode::SetNewTable( std::unique_ptr<SwTable> pNewTable, bool bNewFram
     m_pTable = std::move(pNewTable);
     if( bNewFrames )
     {
-        SwNodeIndex aIdx( *EndOfSectionNode());
-        GetNodes().GoNext( &aIdx );
-        MakeOwnFrames(&aIdx);
+        MakeOwnFrames();
     }
 }
 
@@ -3223,9 +3221,7 @@ void SwDoc::SplitTable( const SwPosition& rPos, SplitTable_HeadlineOption eHdlnM
         }
 
         // And insert Frames
-        SwNodeIndex aNdIdx( *pNew->EndOfSectionNode() );
-        GetNodes().GoNext( &aNdIdx ); // To the next ContentNode
-        pNew->MakeOwnFrames( &aNdIdx );
+        pNew->MakeOwnFrames();
 
         // Insert a paragraph between the Table
         GetNodes().MakeTextNode( *pNew,

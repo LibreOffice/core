@@ -2198,7 +2198,7 @@ bool SwTable::MakeCopy( SwDoc& rInsDoc, const SwPosition& rPos,
     // Clean up
     pNewTable->GCLines();
 
-    pTableNd->MakeOwnFrames( &aIdx );  // re-generate the Frames
+    pTableNd->MakeOwnFrames();  // re-generate the Frames
 
     CHECKTABLELAYOUT
 

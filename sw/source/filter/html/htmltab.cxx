@@ -4729,7 +4729,7 @@ void TableSaveStruct::MakeTable( sal_uInt16 nWidth, SwPosition& rPos, SwDoc *pDo
             SwNodeIndex aIdx( *pTableNd->EndOfSectionNode(), 1 );
             OSL_ENSURE( aIdx.GetIndex() <= pTCntxt->GetPos()->GetNodeIndex(),
                     "unexpected node for table layout" );
-            pTableNd->MakeOwnFrames(&aIdx);
+            pTableNd->MakeOwnFrames();
         }
     }
 

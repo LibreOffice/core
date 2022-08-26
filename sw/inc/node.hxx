@@ -522,7 +522,8 @@ public:
     SwTabFrame *MakeFrame( SwFrame* );
 
     /// Creates the frms for the table node (i.e. the TabFrames).
-    void MakeOwnFrames(SwNodeIndex* pIdxBehind);
+    /// pIdxBehind is optional parameter.
+    void MakeOwnFrames(SwNodeIndex* pIdxBehind = nullptr);
 
     /** Method deletes all views of document for the node.
        The content frames are removed from the respective layout. */
