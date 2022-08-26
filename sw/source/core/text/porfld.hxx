@@ -213,7 +213,7 @@ public:
 class SwCombinedPortion : public SwFieldPortion
 {
     sal_uInt16 m_aPos[6];     // up to six X positions
-    o3tl::enumarray<SwFontScript,sal_uInt16> m_aWidth = {}; // one width for every scripttype
+    o3tl::enumarray<SwFontScript,sal_uInt16> m_aWidth; // one width for every scripttype
     SwFontScript m_aScrType[6];  // scripttype of every character
     sal_uInt16 m_nUpPos;      // the Y position of the upper baseline
     sal_uInt16 m_nLowPos;     // the Y position of the lower baseline
