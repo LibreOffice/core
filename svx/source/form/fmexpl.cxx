@@ -117,6 +117,7 @@ void FmEntryDataList::removeNoDelete( FmEntryData* pItem )
         [&pItem](const std::unique_ptr<FmEntryData>& rEntryData) { return rEntryData.get() == pItem; });
     if (it != maEntryDataList.end())
     {
+        // coverity[leaked_storage] - deliberately not deleted, ownership transferred
         it->release();
         maEntryDataList.erase( it );
         return;
