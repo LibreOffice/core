@@ -109,7 +109,7 @@ uno::Reference<text::XTextCursor> SwXRedlineText::createTextCursor()
     bool bTable = pTableNode != nullptr;
     while( pTableNode != nullptr )
     {
-        rUnoCursor.GetPoint()->nNode = *(pTableNode->EndOfSectionNode());
+        rUnoCursor.GetPoint()->Assign( *pTableNode->EndOfSectionNode() );
         SwContentNode* pContentNode = GetDoc()->GetNodes().GoNext(rUnoCursor.GetPoint());
         pTableNode = pContentNode->FindTableNode();
     }
@@ -542,7 +542,7 @@ uno::Reference< text::XTextCursor >  SwXRedline::createTextCursor()
     SwTableNode* pTableNode = rUnoCursor.GetPointNode().FindTableNode();
     while( pTableNode )
     {
-        rUnoCursor.GetPoint()->nNode = *pTableNode->EndOfSectionNode();
+        rUnoCursor.GetPoint()->Assign( *pTableNode->EndOfSectionNode() );
         SwContentNode* pCont = GetDoc()->GetNodes().GoNext(rUnoCursor.GetPoint());
         pTableNode = pCont->FindTableNode();
     }

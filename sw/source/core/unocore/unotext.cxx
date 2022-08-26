@@ -1843,7 +1843,7 @@ SwXText::convertToTextFrame(
                 // In case the frame has a table only, the cursor points to the end of the first cell of the table.
                 SwPaM aPaM(*pFrameCursor->GetPaM()->GetPointNode().FindSttNodeByType(SwFlyStartNode)->EndOfSectionNode());
                 // Now we have the end of the frame -- the node before that will be the paragraph we want to remove.
-                --aPaM.GetPoint()->nNode;
+                aPaM.GetPoint()->Adjust(SwNodeOffset(-1));
                 m_pImpl->m_pDoc->getIDocumentContentOperations().DelFullPara(aPaM);
             }
         }
@@ -2042,11 +2042,11 @@ void SwXText::Impl::ConvertCell(
         // aEndCellPam has to point to the end of the new (previous) node
         aStartCellPam.DeleteMark();
         aStartCellPam.Move(fnMoveBackward, GoInNode);
-        aStartCellPam.GetPoint()->nContent = 0;
+        aStartCellPam.GetPoint()->SetContent(0);
         aEndCellPam.DeleteMark();
         aEndCellPam.Move(fnMoveBackward, GoInNode);
-        aEndCellPam.GetPoint()->nContent =
-            aEndCellPam.GetPointNode().GetTextNode()->Len();
+        aEndCellPam.GetPoint()->SetContent(
+            aEndCellPam.GetPointNode().GetTextNode()->Len() );
     }
 
     assert(aStartCellPam.Start()->GetContentIndex() == 0);
@@ -2506,7 +2506,7 @@ rtl::Reference<SwXTextCursor> SwXBodyText::CreateTextCursor(const bool bIgnoreTa
         SwTableNode * pTableNode = aPam.GetPointNode().FindTableNode();
         while (pTableNode)
         {
-            aPam.GetPoint()->nNode = *pTableNode->EndOfSectionNode();
+            aPam.GetPoint()->Assign( *pTableNode->EndOfSectionNode() );
             SwContentNode* pCont = GetDoc()->GetNodes().GoNext(aPam.GetPoint());
             pTableNode = pCont->FindTableNode();
         }
@@ -2761,7 +2761,7 @@ uno::Reference<text::XTextCursor> SwXHeadFootText::CreateTextCursor(const bool b
         SwTableNode* pTableNode = rUnoCursor.GetPointNode().FindTableNode();
         while (pTableNode)
         {
-            rUnoCursor.GetPoint()->nNode = *pTableNode->EndOfSectionNode();
+            rUnoCursor.GetPoint()->Assign(*pTableNode->EndOfSectionNode());
             SwContentNode* pCont = GetDoc()->GetNodes().GoNext(rUnoCursor.GetPoint());
             pTableNode = pCont->FindTableNode();
         }

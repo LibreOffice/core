@@ -2210,7 +2210,7 @@ uno::Reference<table::XCellRange> GetRangeByName(
     if(!pBRBox)
         return nullptr;
     pUnoCursor->SetMark();
-    pUnoCursor->GetPoint()->nNode = *pBRBox->GetSttNd();
+    pUnoCursor->GetPoint()->Assign( *pBRBox->GetSttNd() );
     pUnoCursor->Move( fnMoveForward, GoInNode );
     SwUnoTableCursor& rCursor = dynamic_cast<SwUnoTableCursor&>(*pUnoCursor);
     // HACK: remove pending actions for selecting old style tables
@@ -2577,7 +2577,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
 
                     const SwTableBox* pBRBox = lcl_FindCornerTableBox(rLines, false);
                     pUnoCursor->SetMark();
-                    pUnoCursor->GetPoint()->nNode = *pBRBox->GetSttNd();
+                    pUnoCursor->GetPoint()->Assign( *pBRBox->GetSttNd() );
                     pUnoCursor->Move( fnMoveForward, GoInNode );
                     SwUnoTableCursor& rCursor = dynamic_cast<SwUnoTableCursor&>(*pUnoCursor);
                     // HACK: remove pending actions for selecting old style tables
@@ -2775,7 +2775,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                     const SwTableBox* pBRBox = lcl_FindCornerTableBox(rLines, false);
                     pUnoCursor->SetMark();
                     const SwStartNode* pLastNd = pBRBox->GetSttNd();
-                    pUnoCursor->GetPoint()->nNode = *pLastNd;
+                    pUnoCursor->GetPoint()->Assign( *pLastNd );
 
                     pUnoCursor->Move( fnMoveForward, GoInNode );
                     SwUnoTableCursor& rCursor = dynamic_cast<SwUnoTableCursor&>(*pUnoCursor);
@@ -3286,7 +3286,7 @@ SwXCellRange::getCellRangeByPosition(
                 if(pBRBox)
                 {
                     pUnoCursor->SetMark();
-                    pUnoCursor->GetPoint()->nNode = *pBRBox->GetSttNd();
+                    pUnoCursor->GetPoint()->Assign( *pBRBox->GetSttNd() );
                     pUnoCursor->Move( fnMoveForward, GoInNode );
                     SwUnoTableCursor& rCursor = dynamic_cast<SwUnoTableCursor&>(*pUnoCursor);
                     // HACK: remove pending actions for selecting old style tables
@@ -3980,7 +3980,7 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     if(!pBLBox)
         throw uno::RuntimeException("Illegal arguments", static_cast<cppu::OWeakObject*>(this));
     pUnoCursor->SetMark();
-    pUnoCursor->GetPoint()->nNode = *pBLBox->GetSttNd();
+    pUnoCursor->GetPoint()->Assign( *pBLBox->GetSttNd() );
     pUnoCursor->Move(fnMoveForward, GoInNode);
     SwUnoTableCursor& rCursor = dynamic_cast<SwUnoTableCursor&>(*pUnoCursor);
     {
@@ -4137,7 +4137,7 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     if(!pTRBox)
         throw uno::RuntimeException("Cell not found", static_cast<cppu::OWeakObject*>(this));
     pUnoCursor->SetMark();
-    pUnoCursor->GetPoint()->nNode = *pTRBox->GetSttNd();
+    pUnoCursor->GetPoint()->Assign( *pTRBox->GetSttNd() );
     pUnoCursor->Move(fnMoveForward, GoInNode);
     SwUnoTableCursor& rCursor = dynamic_cast<SwUnoTableCursor&>(*pUnoCursor);
     {
