@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88dfdec7_4fd8faaa",
+        "filename": "sfx2/sdi/frmslots.sdi",
+        "patchSetId": 11
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-26T13:29:56Z",
+      "side": 1,
+      "message": "Maxim: is it possible to implement a state method for this, that would set not a boolean item into the SfxItemSet, but a string item containing the name of the currently active deck? And where would that information be used?\n\nI am exploring an idea of some UI elements (toolbar buttons) connected to a specific \u0027.uno:SidebarDeck.DeckFoo\u0027, and want them to have a state coming from the respective state method.",
+      "revId": "a80eefb7413245f81692c443b06f7d3a6a92f28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
