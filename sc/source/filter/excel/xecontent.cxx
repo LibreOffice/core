@@ -1673,7 +1673,7 @@ void lcl_SetValidationText(const OUString& rText, XclExpString& rValidationText)
 
 } // namespace
 
-XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
+XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uInt32 nScHandle ) :
     XclExpRecord( EXC_ID_DV ),
     XclExpRoot( rRoot ),
     mnFlags( 0 ),
@@ -1845,7 +1845,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
     else
     {
         OSL_FAIL( "XclExpDV::XclExpDV - missing core data" );
-        mnScHandle = ULONG_MAX;
+        mnScHandle = SAL_MAX_UINT32;
     }
 }
 
@@ -1861,7 +1861,7 @@ void XclExpDV::InsertCellRange( const ScRange& rRange )
 bool XclExpDV::Finalize()
 {
     GetAddressConverter().ConvertRangeList( maXclRanges, maScRanges, true );
-    return (mnScHandle != ULONG_MAX) && !maXclRanges.empty();
+    return (mnScHandle != SAL_MAX_UINT32) && !maXclRanges.empty();
 }
 
 void XclExpDV::WriteBody( XclExpStream& rStrm )
@@ -1938,7 +1938,7 @@ XclExpDval::~XclExpDval()
 {
 }
 
-void XclExpDval::InsertCellRange( const ScRange& rRange, sal_uLong nScHandle )
+void XclExpDval::InsertCellRange( const ScRange& rRange, sal_uInt32 nScHandle )
 {
     if( GetBiff() == EXC_BIFF8 )
     {
@@ -1983,7 +1983,7 @@ void XclExpDval::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->endElement( XML_dataValidations );
 }
 
-XclExpDV& XclExpDval::SearchOrCreateDv( sal_uLong nScHandle )
+XclExpDV& XclExpDval::SearchOrCreateDv( sal_uInt32 nScHandle )
 {
     // test last found record
     if( mxLastFoundDV && (mxLastFoundDV->GetScHandle() == nScHandle) )
@@ -1996,7 +1996,7 @@ XclExpDV& XclExpDval::SearchOrCreateDv( sal_uLong nScHandle )
         size_t nFirstPos = 0;
         size_t nLastPos = maDVList.GetSize() - 1;
         bool bLoop = true;
-        sal_uLong nCurrScHandle = ::std::numeric_limits< sal_uLong >::max();
+        sal_uInt32 nCurrScHandle = ::std::numeric_limits< sal_uInt32 >::max();
         while( (nFirstPos <= nLastPos) && bLoop )
         {
             nCurrPos = (nFirstPos + nLastPos) / 2;
