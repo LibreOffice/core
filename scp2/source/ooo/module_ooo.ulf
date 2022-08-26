@@ -154,6 +154,12 @@ en-US = "Estonian"
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_ET]
 en-US = "Estonian spelling dictionary, and hyphenation rules"
 
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_FA]
+en-US = "Persian"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_FA]
+en-US = "Persian Spell Checking Dictionary"
+
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_FR]
 en-US = "French"
 
