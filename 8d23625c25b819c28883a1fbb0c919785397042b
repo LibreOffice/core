@@ -86,6 +86,24 @@
       "parentUuid": "0692d442_6d3b7d7c",
       "revId": "8d23625c25b819c28883a1fbb0c919785397042b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44021280_928cb54b",
+        "filename": "sw/source/ui/frmdlg/cption.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1003648
+      },
+      "writtenOn": "2022-08-26T08:35:07Z",
+      "side": 1,
+      "message": "Update from call: No, it works in debug builds but not in production builds as production builds optimize out the pSet capture",
+      "parentUuid": "e377b3ed_b47f0afe",
+      "revId": "8d23625c25b819c28883a1fbb0c919785397042b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
