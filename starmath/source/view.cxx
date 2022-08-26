@@ -2226,8 +2226,8 @@ void SmViewShell::Notify( SfxBroadcaster& , const SfxHint& rHint )
 
 bool SmViewShell::IsInlineEditEnabled()
 {
-    return /* comphelper::LibreOfficeKit::isActive()
-           || */ officecfg::Office::Common::Misc::ExperimentalMode::get();
+    return comphelper::LibreOfficeKit::isActive()
+           || officecfg::Office::Common::Misc::ExperimentalMode::get();
 }
 
 void SmViewShell::ZoomByItemSet(const SfxItemSet *pSet)
