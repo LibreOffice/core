@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6cdad5db_0e9e0c50",
+        "filename": "xmloff/source/text/txtimp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2164,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-08-26T14:36:32Z",
+      "side": 1,
+      "message": "This assert fires (since its introduction) in one crashtesting case. To reproduce\n\nwget https://bugs.documentfoundation.org/attachment.cgi?id\u003d44103 -O ~/fdo34997-1.odt\n./instdir/program/soffice --headless --convert-to pdf ~/fdo34997-1.odt",
+      "revId": "463178fef5c22f1a04d10e54491852d56e2038b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
