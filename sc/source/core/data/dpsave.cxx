@@ -964,9 +964,9 @@ void ScDPSaveData::SetPosition( ScDPSaveDimension* pDim, tools::Long nNew )
         [&pDim](const std::unique_ptr<ScDPSaveDimension>& rxDim) { return pDim == rxDim.get(); });
     if (it != m_DimList.end())
     {
-        // Tell vector<unique_ptr> to give up ownership of this element.
-        // Don't delete this instance as it is re-inserted into the
-        // container later.
+        // Tell vector<unique_ptr> to give up ownership of this element.  Don't
+        // delete this instance as it is re-inserted into the container later.
+        // coverity[leaked_storage] - re-inserted into the container later
         it->release();
         m_DimList.erase(it);
     }
