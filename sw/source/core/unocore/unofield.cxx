@@ -2178,8 +2178,7 @@ SwXTextField::setPropertyValue(
             const SwTextField* pTextField = m_pImpl->GetFormatField()->GetTextField();
             if(!pTextField)
                 throw uno::RuntimeException();
-            SwPosition aPosition( pTextField->GetTextNode() );
-            aPosition.nContent = pTextField->GetStart();
+            SwPosition aPosition( pTextField->GetTextNode(), pTextField->GetStart() );
             pDoc->getIDocumentFieldsAccess().PutValueToField( aPosition, rValue, pEntry->nWID);
         }
 

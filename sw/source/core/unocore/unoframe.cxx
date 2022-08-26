@@ -1880,7 +1880,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                     else
                     {
                         SwPosition aPos = *pPosition;
-                        aPos.nNode = *pFlyFormat->GetContent().GetContentIdx();
+                        aPos.Assign( *pFlyFormat->GetContent().GetContentIdx() );
                         aAnchor.SetAnchor(&aPos);
                         aSet.Put(aAnchor);
                     }
@@ -3301,7 +3301,7 @@ uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursor()
     SwTableNode* pTableNode = aPam.GetPointNode().FindTableNode();
     while( pTableNode )
     {
-        aPam.GetPoint()->nNode = *pTableNode->EndOfSectionNode();
+        aPam.GetPoint()->Assign( *pTableNode->EndOfSectionNode() );
         SwContentNode* pCont = GetDoc()->GetNodes().GoNext(aPam.GetPoint());
         pTableNode = pCont->FindTableNode();
     }
