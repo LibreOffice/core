@@ -68,6 +68,24 @@
       "message": "pSet has to be a member of some class, later inside SfxSingleTabDialogController it is used only by inner pointer (pSet.get()) so shared ptr is destroyed after this block",
       "revId": "8d23625c25b819c28883a1fbb0c919785397042b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e377b3ed_b47f0afe",
+        "filename": "sw/source/ui/frmdlg/cption.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1003648
+      },
+      "writtenOn": "2022-08-26T08:24:06Z",
+      "side": 1,
+      "message": "Doesn\u0027t saving it in the runAsync solve this problem? I previously got a crash due to this, but I put it in the runAsync lambda to fix this",
+      "parentUuid": "0692d442_6d3b7d7c",
+      "revId": "8d23625c25b819c28883a1fbb0c919785397042b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
