@@ -18897,8 +18897,8 @@ SlideShow.prototype.exitSlideShowInApp = function()
 {
     if (window.webkit !== undefined &&
         window.webkit.messageHandlers !== undefined &&
-        window.webkit.messageHandlers.cool !== undefined)
-        window.webkit.messageHandlers.cool.postMessage('EXITSLIDESHOW', '*');
+        window.webkit.messageHandlers.lool !== undefined)
+        window.webkit.messageHandlers.lool.postMessage('EXITSLIDESHOW', '*');
 }
 
 SlideShow.prototype.displaySlide = function( nNewSlide, bSkipSlideTransition )
