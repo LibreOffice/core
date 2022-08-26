@@ -140,6 +140,10 @@ public:
     auto NonInteractive_UNLOCK(OUString const& rURI) -> void;
 };
 
+OString TryImportCookies(
+    ::com::sun::star::uno::Reference<::com::sun::star::uno::XComponentContext> const& xContext,
+    OUString const& rHost);
+
 } // namespace http_dav_ucp
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

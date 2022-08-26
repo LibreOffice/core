@@ -29,6 +29,20 @@ $(eval $(call gb_CppunitTest_use_library_objects,ucb_webdav_core, \
 	ucpdav1 \
 ))
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_CppunitTest_add_libs,ucb_webdav_core,\
+	$(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib/sqlite3.lib \
+))
+$(eval $(call gb_CppunitTest_use_externals,ucb_webdav_core,\
+	nss3 \
+))
+$(eval $(call gb_CppunitTest_use_system_win32_libs,ucb_webdav_core,\
+	crypt32 \
+	Ole32 \
+	shell32 \
+))
+endif
+
 $(eval $(call gb_CppunitTest_use_externals,ucb_webdav_core,\
 	boost_headers \
 	libxml2 \

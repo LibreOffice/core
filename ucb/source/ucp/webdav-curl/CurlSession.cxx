@@ -707,6 +707,19 @@ CurlSession::CurlSession(uno::Reference<uno::XComponentContext> const& xContext,
         rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_FORBID_REUSE, 1L);
         assert(rc == CURLE_OK);
     }
+#ifdef _WIN32
+    if (m_URI.GetScheme() == "https")
+    {
+        OString const cookies(TryImportCookies(m_xContext, m_URI.GetHost()));
+        if (!cookies.isEmpty())
+        {
+            rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_COOKIEFILE, "");
+            assert(rc == CURLE_OK);
+            rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_COOKIE, cookies.getStr());
+            assert(rc == CURLE_OK);
+        }
+    }
+#endif
 }
 
 CurlSession::~CurlSession() {}

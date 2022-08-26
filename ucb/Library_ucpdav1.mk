@@ -36,6 +36,24 @@ $(eval $(call gb_Library_use_externals,ucpdav1,\
        curl \
 ))
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_Library_set_include,ucpdav1,\
+    $$(INCLUDE) \
+	-I$(call gb_UnpackedTarball_get_dir,nss)/dist/private/nss \
+))
+$(eval $(call gb_Library_add_libs,ucpdav1,\
+	$(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib/sqlite3.lib \
+))
+$(eval $(call gb_Library_use_externals,ucpdav1,\
+	nss3 \
+))
+$(eval $(call gb_Library_use_system_win32_libs,ucpdav1,\
+	crypt32 \
+	Ole32 \
+	shell32 \
+))
+endif
+
 $(eval $(call gb_Library_add_exception_objects,ucpdav1,\
        ucb/source/ucp/webdav-curl/ContentProperties \
        ucb/source/ucp/webdav-curl/CurlSession \
@@ -45,6 +63,7 @@ $(eval $(call gb_Library_add_exception_objects,ucpdav1,\
        ucb/source/ucp/webdav-curl/DAVSessionFactory \
        ucb/source/ucp/webdav-curl/DAVTypes \
        ucb/source/ucp/webdav-curl/DateTimeHelper \
+       ucb/source/ucp/webdav-curl/ImportCookies \
        ucb/source/ucp/webdav-curl/PropfindCache \
        ucb/source/ucp/webdav-curl/SerfLockStore \
        ucb/source/ucp/webdav-curl/UCBDeadPropertyValue \
