@@ -995,8 +995,7 @@ void SaveTable::RestoreAttr( SwTable& rTable, bool bMdfyBox )
         {
             SwTableNode* pTableNode = rTable.GetTableNode();
             pTableNode->DelFrames();
-            SwNodeIndex aTableIdx( *pTableNode->EndOfSectionNode(), 1 );
-            pTableNode->MakeOwnFrames(&aTableIdx);
+            pTableNode->MakeOwnFrames();
         }
         else
         {
@@ -3014,8 +3013,7 @@ void SwUndoMergeTable::UndoImpl(::sw::UndoRedoContext & rContext)
     }
 
     // create frames for the new table
-    SwNodeIndex aTmpIdx( *pNew );
-    pNew->MakeOwnFrames(&aTmpIdx);
+    pNew->MakeOwnFrames();
 
     // position cursor somewhere in content
     SwContentNode* pCNd = pDoc->GetNodes().GoNext( &rIdx );

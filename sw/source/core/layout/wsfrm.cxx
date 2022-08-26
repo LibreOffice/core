@@ -4497,8 +4497,7 @@ static void UnHideRedlines(SwRootFrame & rLayout,
                 pTableNd->DelFrames(&rLayout);
                 if ( !pTableNd->GetTable().IsDeleted() )
                 {
-                    SwNodeIndex aIdx( *pTableNd->EndOfSectionNode(), 1 );
-                    pTableNd->MakeOwnFrames(&aIdx);
+                    pTableNd->MakeOwnFrames();
                 }
             }
         }
@@ -4507,8 +4506,7 @@ static void UnHideRedlines(SwRootFrame & rLayout,
         {
             SwTableNode * pTableNd = rNode.GetTableNode();
             pTableNd->DelFrames(&rLayout);
-            SwNodeIndex aIdx( *pTableNd->EndOfSectionNode(), 1 );
-            pTableNd->MakeOwnFrames(&aIdx);
+            pTableNd->MakeOwnFrames();
         }
 
         if (!rNode.IsCreateFrameWhenHidingRedlines())

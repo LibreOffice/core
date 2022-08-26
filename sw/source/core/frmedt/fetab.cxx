@@ -501,8 +501,7 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
                 pTableNd->DelFrames();
                 if ( !pTableNd->GetTable().IsDeleted() )
                 {
-                    SwNodeIndex aTableIdx( *pTableNd->EndOfSectionNode(), 1 );
-                    pTableNd->MakeOwnFrames(&aTableIdx);
+                    pTableNd->MakeOwnFrames();
                 }
 
                 EndAllActionAndCall();

@@ -587,8 +587,7 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                     }
                     if( bNewFrames )
                     {
-                        SwNodeIndex aTmp( aIdx );
-                        pTableNd->MakeOwnFrames(&aTmp);
+                        pTableNd->MakeOwnFrames();
                     }
                     aIdx -= nInsPos;
                     nInsPos = SwNodeOffset(0);
