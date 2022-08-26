@@ -822,7 +822,7 @@ SwXFieldmark::GetCommand(IFieldmark const& rMark)
 {
     SwPosition const sepPos(sw::mark::FindFieldSep(rMark));
     SwPosition start(rMark.GetMarkStart());
-    ++start.nContent;
+    start.AdjustContent(1);
     return SwXTextRange::CreateXTextRange(*GetDoc(), start, &sepPos);
 }
 
@@ -830,7 +830,7 @@ uno::Reference<text::XTextRange>
 SwXFieldmark::GetResult(IFieldmark const& rMark)
 {
     SwPosition sepPos(sw::mark::FindFieldSep(rMark));
-    ++sepPos.nContent;
+    sepPos.AdjustContent(1);
     SwPosition const& rEnd(rMark.GetMarkEnd());
     return SwXTextRange::CreateXTextRange(*GetDoc(), sepPos, &rEnd);
 }

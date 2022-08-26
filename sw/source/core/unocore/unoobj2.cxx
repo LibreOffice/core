@@ -558,7 +558,7 @@ SwXParagraphEnumerationImpl::NextElement_Impl()
         bool bMovedFromTable = false;
         if (CursorType::SelectionInTable != m_eCursorType && pTableNode)
         {
-            aNewCursor->GetPoint()->nNode = pTableNode->EndOfSectionIndex();
+            aNewCursor->GetPoint()->Assign( pTableNode->EndOfSectionIndex() );
             aNewCursor->Move(fnMoveForward, GoInNode);
             bMovedFromTable = true;
         }
@@ -587,7 +587,7 @@ SwXParagraphEnumerationImpl::NextElement_Impl()
         if (pTableNode && (&pTableNode->GetTable() != m_pOwnTable))
         {
             // this is a foreign table: go to end
-            rUnoCursor.GetPoint()->nNode = pTableNode->EndOfSectionIndex();
+            rUnoCursor.GetPoint()->Assign( pTableNode->EndOfSectionIndex() );
             if (!rUnoCursor.Move(fnMoveForward, GoInNode))
             {
                 return nullptr;
