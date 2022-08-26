@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d0c8990_348b054c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-08-26T14:22:27Z",
+      "side": 1,
+      "message": "I bisected a crashtesting assert to this commit.\n\nTo reproduce:\nwget https://bz.apache.org/ooo/attachment.cgi?id\u003d76380 -O ~/ooo117844-1.docx\n./instdir/program/soffice --headless --convert-to odt ~/ooo117844-1.docx\n",
+      "revId": "59785c0237f2bc5eaf9e9742bdf30136f3b3d2ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
