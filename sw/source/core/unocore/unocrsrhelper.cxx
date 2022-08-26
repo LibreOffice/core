@@ -1154,12 +1154,12 @@ void InsertFile(SwUnoCursor* pUnoCursor, const OUString& rURL,
     {
         ++aSave;
         pUnoCursor->SetMark();
-        pUnoCursor->GetMark()->nNode = aSave;
+        pUnoCursor->GetMark()->Assign( aSave );
 
         SwContentNode* pCntNode = aSave.GetNode().GetContentNode();
         if( !pCntNode )
             nContent = 0;
-        pUnoCursor->GetMark()->nContent.Assign( pCntNode, nContent );
+        pUnoCursor->GetMark()->SetContent( nContent );
     }
 }
 
@@ -1452,7 +1452,7 @@ void makeTableRowRedline( SwTableLine& rTableLine,
             pDoc->getIDocumentContentOperations().InsertString( aPaM,
                     OUStringChar(CH_TXT_TRACKED_DUMMY_CHAR) );
             aPaM.SetMark();
-            aPaM.GetMark()->nContent.Assign(aPaM.GetPointContentNode(), 0);
+            aPaM.GetMark()->SetContent(0);
             makeRedline(aPaM, RedlineType::TableRowInsert == eType
                     ? u"Insert"
                     : u"Delete", rRedlineProperties);

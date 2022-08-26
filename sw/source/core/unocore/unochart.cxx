@@ -393,7 +393,7 @@ static void GetFormatAndCreateCursorFromRangeRep(
             if(pBRBox)
             {
                 pUnoCursor->SetMark();
-                pUnoCursor->GetPoint()->nNode = *pBRBox->GetSttNd();
+                pUnoCursor->GetPoint()->Assign( *pBRBox->GetSttNd() );
                 pUnoCursor->Move( fnMoveForward, GoInNode );
                 SwUnoTableCursor& rCursor =
                     dynamic_cast<SwUnoTableCursor&>(*pUnoCursor);
@@ -2501,8 +2501,8 @@ void SwChartDataSequence::ExtendTo( bool bExtendCol,
         const SwTableBox *pNewStartBox = pTable->GetTableBox( aNewStartCell );
         const SwTableBox *pNewEndBox   = pTable->GetTableBox( aNewEndCell );
         pUnoTableCursor->SetMark();
-        pUnoTableCursor->GetPoint()->nNode = *pNewEndBox->GetSttNd();
-        pUnoTableCursor->GetMark()->nNode  = *pNewStartBox->GetSttNd();
+        pUnoTableCursor->GetPoint()->Assign( *pNewEndBox->GetSttNd() );
+        pUnoTableCursor->GetMark()->Assign( *pNewStartBox->GetSttNd() );
         pUnoTableCursor->Move( fnMoveForward, GoInNode );
         pUnoTableCursor->MakeBoxSels();
     }

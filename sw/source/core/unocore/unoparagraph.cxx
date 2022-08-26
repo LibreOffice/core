@@ -276,10 +276,10 @@ bool SwXParagraph::SelectPaM(SwPaM & rPaM)
         return false;
     }
 
-    *rPaM.GetPoint() = SwPosition( *pTextNode );
+    rPaM.GetPoint()->Assign( *pTextNode );
     // set selection to the whole paragraph
     rPaM.SetMark();
-    rPaM.GetMark()->nContent = pTextNode->GetText().getLength();
+    rPaM.GetMark()->SetContent( pTextNode->GetText().getLength() );
     return true;
 }
 
