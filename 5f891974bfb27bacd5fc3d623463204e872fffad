@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "82aa229a_1f49c7b0",
+        "filename": "cui/source/tabpages/tpline.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1490,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-08-26T08:49:08Z",
+      "side": 0,
+      "message": "The idea with ref-counting is that the object should die when the left reference goes away, so most of the time, it should die here.",
+      "parentUuid": "b6e150a3_5bca74d7",
+      "revId": "5f891974bfb27bacd5fc3d623463204e872fffad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1cdf1069_a189aad5",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-08-26T08:31:45Z",
       "side": 0,
       "message": "Wouldn\u0027t it make sense to keep this (or something similar)? Refcounting doesn\u0027t make all resource leaks go away, there may be leftover references in some places.",
+      "revId": "5f891974bfb27bacd5fc3d623463204e872fffad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5ef1fa7_798e91b3",
+        "filename": "include/svx/svdmodel.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-08-26T08:49:08Z",
+      "side": 0,
+      "message": "With ref-counting, the only leaks that should be left are chains of circular references, and this wouldn\u0027t help much with that. It also wouldn\u0027t be actually up-to-date, since the actual destruction may now occur somewhere else.\n\nAlthough I guess I could make it use WeakReferences, in which case it would at least report the existing of circular reference chains.\nI\u0027ll look into doing that.",
+      "parentUuid": "1cdf1069_a189aad5",
       "revId": "5f891974bfb27bacd5fc3d623463204e872fffad",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
