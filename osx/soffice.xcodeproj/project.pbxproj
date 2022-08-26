@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXFileReference section */
+		29FD821128BC548D00159078 /* text */ = {isa = PBXFileReference; lastKnownFileType = folder; name = text; path = ../sw/source/core/text; sourceTree = "<group>"; };
+		29FD821228BC54AB00159078 /* txtnode */ = {isa = PBXFileReference; lastKnownFileType = folder; name = txtnode; path = ../sw/source/core/txtnode; sourceTree = "<group>"; };
 		456E58CF277CB9C700FA12D2 /* unoshap2.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = unoshap2.cxx; path = ../svx/source/unodraw/unoshap2.cxx; sourceTree = "<group>"; };
 		456E58D1277CC33E00FA12D2 /* unopage.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = unopage.cxx; path = ../svx/source/unodraw/unopage.cxx; sourceTree = "<group>"; };
 		BE017B8725AF2ABE00244ED8 /* autostyl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = autostyl.cxx; path = ../sc/source/ui/docshell/autostyl.cxx; sourceTree = "<group>"; };
@@ -123,7 +125,6 @@
 		BE017BF825AF568900244ED8 /* solveroptions.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = solveroptions.cxx; path = ../sc/source/ui/miscdlgs/solveroptions.cxx; sourceTree = "<group>"; };
 		BE017BF925AF568900244ED8 /* mtrindlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = mtrindlg.cxx; path = ../sc/source/ui/miscdlgs/mtrindlg.cxx; sourceTree = "<group>"; };
 		BE017BFA25AF568900244ED8 /* linkarea.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = linkarea.cxx; path = ../sc/source/ui/miscdlgs/linkarea.cxx; sourceTree = "<group>"; };
-		BE017BFB25AF568900244ED8 /* shtabdlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = shtabdlg.cxx; path = ../sc/source/ui/miscdlgs/shtabdlg.cxx; sourceTree = "<group>"; };
 		BE017BFB25AF568900244ED8 /* gototabdlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gototabdlg.cxx; path = ../sc/source/ui/miscdlgs/gototabdlg.cxx; sourceTree = "<group>"; };
 		BE017BFC25AF568900244ED8 /* inscodlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = inscodlg.cxx; path = ../sc/source/ui/miscdlgs/inscodlg.cxx; sourceTree = "<group>"; };
 		BE017BFD25AF568A00244ED8 /* crdlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = crdlg.cxx; path = ../sc/source/ui/miscdlgs/crdlg.cxx; sourceTree = "<group>"; };
@@ -1281,7 +1282,7 @@
 				BE017C1D25AF568B00244ED8 /* retypepassdlg.cxx */,
 				BE017C0125AF568A00244ED8 /* scuiautofmt.cxx */,
 				BE017C1C25AF568B00244ED8 /* sharedocdlg.cxx */,
-				BE017BFB25AF568900244ED8 /* shtabdlg.cxx */,
+				BE017BFB25AF568900244ED8 /* gototabdlg.cxx */,
 				BE017C1F25AF568B00244ED8 /* simpref.cxx */,
 				BE017BF825AF568900244ED8 /* solveroptions.cxx */,
 				BE017C0C25AF568A00244ED8 /* solverutil.cxx */,
@@ -2365,6 +2366,8 @@
 		BEBF3E662465907000415E87 /* sw */ = {
 			isa = PBXGroup;
 			children = (
+				29FD821228BC54AB00159078 /* txtnode */,
+				29FD821128BC548D00159078 /* text */,
 				BEBF3E6E246593A300415E87 /* ui */,
 				BEBF3E672465907D00415E87 /* uibase */,
 			);

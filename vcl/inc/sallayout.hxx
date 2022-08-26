@@ -62,7 +62,7 @@ class MultiSalLayout final : public SalLayout
 public:
     void            DrawText(SalGraphics&) const override;
     sal_Int32       GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const override;
-    DeviceCoordinate FillDXArray(std::vector<DeviceCoordinate>* pDXArray) const override;
+    DeviceCoordinate FillDXArray(std::vector<DeviceCoordinate>* pDXArray, const OUString& rStr) const override;
     void            GetCaretPositions(int nArraySize, sal_Int32* pCaretXArray) const override;
     bool            GetNextGlyph(const GlyphItem** pGlyph, DevicePoint& rPos, int& nStart,
                                  const LogicalFontInstance** ppGlyphFont = nullptr,
@@ -118,7 +118,7 @@ public:
 
     // used by upper layers
     DeviceCoordinate GetTextWidth() const final override;
-    DeviceCoordinate FillDXArray(std::vector<DeviceCoordinate>* pDXArray) const final override;
+    DeviceCoordinate FillDXArray(std::vector<DeviceCoordinate>* pDXArray, const OUString& rStr) const final override;
     sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const final override;
     void            GetCaretPositions(int nArraySize, sal_Int32* pCaretXArray) const final override;
 
@@ -145,7 +145,8 @@ private:
     void            Justify(DeviceCoordinate nNewWidth);
     void            ApplyAsianKerning(const OUString& rStr);
 
-    void            GetCharWidths(std::vector<DeviceCoordinate>& rCharWidths) const;
+    void            GetCharWidths(std::vector<DeviceCoordinate>& rCharWidths,
+                                  const OUString& rStr) const;
 
     void            SetNeedFallback(vcl::text::ImplLayoutArgs&, sal_Int32, bool);
 

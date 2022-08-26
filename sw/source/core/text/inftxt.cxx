@@ -191,6 +191,7 @@ SwTextSizeInfo::SwTextSizeInfo()
 , m_pText(nullptr)
 , m_nIdx(0)
 , m_nLen(0)
+, m_nMeasureLen(COMPLETE_STRING)
 , m_nKanaIdx(0)
 , m_bOnWin    (false)
 , m_bNotEOL   (false)
@@ -221,6 +222,7 @@ SwTextSizeInfo::SwTextSizeInfo( const SwTextSizeInfo &rNew )
       m_pText(&rNew.GetText()),
       m_nIdx(rNew.GetIdx()),
       m_nLen(rNew.GetLen()),
+      m_nMeasureLen(rNew.GetMeasureLen()),
       m_nKanaIdx( rNew.GetKanaIdx() ),
       m_bOnWin( rNew.OnWin() ),
       m_bNotEOL( rNew.NotEOL() ),
@@ -309,7 +311,7 @@ void SwTextSizeInfo::CtorInitTextSizeInfo( OutputDevice* pRenderContext, SwTextF
     m_pText = &m_pFrame->GetText();
 
     m_nIdx = nNewIdx;
-    m_nLen = TextFrameIndex(COMPLETE_STRING);
+    m_nLen = m_nMeasureLen = TextFrameIndex(COMPLETE_STRING);
     m_bNotEOL = false;
     m_bStopUnderflow = m_bFootnoteInside = m_bOtherThanFootnoteInside = false;
     m_bMulti = m_bFirstMulti = m_bRuby = m_bHanging = m_bScriptSpace =
@@ -332,6 +334,7 @@ SwTextSizeInfo::SwTextSizeInfo( const SwTextSizeInfo &rNew, const OUString* pTex
       m_pText(pText),
       m_nIdx(nIndex),
       m_nLen(COMPLETE_STRING),
+      m_nMeasureLen(COMPLETE_STRING),
       m_nKanaIdx( rNew.GetKanaIdx() ),
       m_bOnWin( rNew.OnWin() ),
       m_bNotEOL( rNew.NotEOL() ),
@@ -407,6 +410,7 @@ SwPosSize SwTextSizeInfo::GetTextSize() const
                                 0 ;
 
     SwDrawTextInfo aDrawInf( m_pVsh, *m_pOut, &rSI, *m_pText, m_nIdx, m_nLen );
+    aDrawInf.SetMeasureLen( m_nMeasureLen );
     aDrawInf.SetFrame( m_pFrame );
     aDrawInf.SetFont( m_pFnt );
     aDrawInf.SetSnapToGrid( SnapToGrid() );
@@ -1826,6 +1830,7 @@ SwTextSlot::SwTextSlot(
     , m_pOldGrammarCheckList(nullptr)
     , nIdx(0)
     , nLen(0)
+    , nMeasureLen(0)
     , pInf(nullptr)
 {
     if( rCh.isEmpty() )
@@ -1845,11 +1850,15 @@ SwTextSlot::SwTextSlot(
     pInf = const_cast<SwTextSizeInfo*>(pNew);
     nIdx = pInf->GetIdx();
     nLen = pInf->GetLen();
+    nMeasureLen = pInf->GetMeasureLen();
     pOldText = &(pInf->GetText());
     m_pOldCachedVclData = pInf->GetCachedVclData();
     pInf->SetText( aText );
     pInf->SetIdx(TextFrameIndex(0));
     pInf->SetLen(bTextLen ? TextFrameIndex(pInf->GetText().getLength()) : pPor->GetLen());
+    if (nMeasureLen != TextFrameIndex(COMPLETE_STRING))
+        pInf->SetMeasureLen(TextFrameIndex(COMPLETE_STRING));
+
     pInf->SetCachedVclData(nullptr);
 
     // ST2
@@ -1923,6 +1932,7 @@ SwTextSlot::~SwTextSlot()
     pInf->SetText( *pOldText );
     pInf->SetIdx( nIdx );
     pInf->SetLen( nLen );
+    pInf->SetMeasureLen( nMeasureLen );
 
     // ST2
     // Restore old smart tag list

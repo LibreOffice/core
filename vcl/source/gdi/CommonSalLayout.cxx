@@ -26,6 +26,7 @@
 #include <vcl/unohelp.hxx>
 #include <vcl/font/Feature.hxx>
 #include <vcl/font/FeatureParser.hxx>
+#include <vcl/svapp.hxx>
 
 #include <ImplLayoutArgs.hxx>
 #include <TextLayoutCache.hxx>
@@ -638,19 +639,58 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
     return true;
 }
 
-void GenericSalLayout::GetCharWidths(std::vector<DeviceCoordinate>& rCharWidths) const
+void GenericSalLayout::GetCharWidths(std::vector<DeviceCoordinate>& rCharWidths, const OUString& rStr) const
 {
     const int nCharCount = mnEndCharPos - mnMinCharPos;
 
     rCharWidths.clear();
     rCharWidths.resize(nCharCount, 0);
 
+    css::uno::Reference<css::i18n::XBreakIterator> xBreak;
+    auto aLocale(maLanguageTag.getLocale());
+
     for (auto const& aGlyphItem : m_GlyphItems)
     {
-        const int nIndex = aGlyphItem.charPos() - mnMinCharPos;
-        if (nIndex >= nCharCount)
+        if (aGlyphItem.charPos() >= mnEndCharPos)
             continue;
-        rCharWidths[nIndex] += aGlyphItem.newWidth();
+        if (aGlyphItem.charCount() > 1 && aGlyphItem.newWidth() != 0 && !rStr.isEmpty())
+        {
+            // We are calculating DX array for cursor positions and this is a
+            // ligature, we want to distribute the glyph width over the
+            // ligature components.
+            if (!xBreak.is())
+                xBreak = mxBreak.is() ? mxBreak : vcl::unohelper::CreateBreakIterator();
+
+            sal_Int32 nDone;
+            sal_Int32 nPos = aGlyphItem.charPos();
+            unsigned int nGraphemeCount = 0;
+
+            // Count grapheme clusters in the ligatures.
+            while (nPos < aGlyphItem.charPos() + aGlyphItem.charCount())
+            {
+                nPos = xBreak->nextCharacters(rStr, nPos, aLocale,
+                    css::i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+                nGraphemeCount++;
+            }
+
+            // Set the width of each grapheme cluster.
+            nPos = aGlyphItem.charPos();
+            auto nWidth = aGlyphItem.newWidth() / nGraphemeCount;
+            // rounding difference
+            auto nDiff = aGlyphItem.newWidth() - (nWidth * nGraphemeCount);
+            for (unsigned int i = 0; i < nGraphemeCount; i++)
+            {
+                rCharWidths[nPos - mnMinCharPos] += nWidth;
+                // add rounding difference to last component to maintain
+                // ligature width.
+                if (i == nGraphemeCount - 1)
+                    rCharWidths[nPos - mnMinCharPos] += nDiff;
+                nPos = xBreak->nextCharacters(rStr, nPos, aLocale,
+                    css::i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+            }
+        }
+        else
+            rCharWidths[aGlyphItem.charPos() - mnMinCharPos] += aGlyphItem.newWidth();
     }
 }
 
@@ -665,7 +705,7 @@ void GenericSalLayout::ApplyDXArray(const double* pDXArray, const sal_Bool* pKas
     std::unique_ptr<double[]> const pNewCharWidths(new double[nCharCount]);
 
     // Get the natural character widths (i.e. before applying DX adjustments).
-    GetCharWidths(aOldCharWidths);
+    GetCharWidths(aOldCharWidths, {});
 
     // Calculate the character widths after DX adjustments.
     for (int i = 0; i < nCharCount; ++i)

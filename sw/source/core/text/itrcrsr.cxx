@@ -907,9 +907,21 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, TextFrameIndex const nOfst,
                     }
                     if ( pPor->PrtWidth() )
                     {
+                        // tdf#30731: To get the correct nOfst width, we need
+                        // to send the whole portion string to GetTextSize()
+                        // and ask it to return the width of nOfst by calling
+                        // SetMeasureLen(). Cutting the string at nOfst can
+                        // give the wrong width if nOfst is in e.g. the middle
+                        // of a ligature. See SwFntObj::DrawText().
                         TextFrameIndex const nOldLen = pPor->GetLen();
-                        pPor->SetLen( nOfst - aInf.GetIdx() );
                         aInf.SetLen( pPor->GetLen() );
+                        pPor->SetLen( nOfst - aInf.GetIdx() );
+                        aInf.SetMeasureLen(pPor->GetLen());
+                        if (aInf.GetLen() < aInf.GetMeasureLen())
+                        {
+                            pPor->SetLen(aInf.GetMeasureLen());
+                            aInf.SetLen(pPor->GetLen());
+                        }
                         if( nX || !pPor->InNumberGrp() )
                         {
                             SeekAndChg( aInf );
@@ -925,7 +937,12 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, TextFrameIndex const nOfst,
                             if( bWidth )
                             {
                                 pPor->SetLen(pPor->GetLen() + TextFrameIndex(1));
-                                aInf.SetLen( pPor->GetLen() );
+                                aInf.SetMeasureLen(pPor->GetLen());
+                                if (aInf.GetLen() < aInf.GetMeasureLen())
+                                {
+                                    pPor->SetLen(aInf.GetMeasureLen());
+                                    aInf.SetLen(pPor->GetLen());
+                                }
                                 aInf.SetOnWin( false ); // no BULLETs!
                                 nTmp += pPor->GetTextSize( aInf ).Width();
                                 aInf.SetOnWin( bOldOnWin );
@@ -1102,8 +1119,14 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, TextFrameIndex const nOfst,
                     {
                         const bool bOldOnWin = aInf.OnWin();
                         TextFrameIndex const nOldLen = pPor->GetLen();
-                        pPor->SetLen( TextFrameIndex(1) );
                         aInf.SetLen( pPor->GetLen() );
+                        pPor->SetLen( TextFrameIndex(1) );
+                        aInf.SetMeasureLen(pPor->GetLen());
+                        if (aInf.GetLen() < aInf.GetMeasureLen())
+                        {
+                            pPor->SetLen(aInf.GetMeasureLen());
+                            aInf.SetLen(pPor->GetLen());
+                        }
                         SeekAndChg( aInf );
                         aInf.SetOnWin( false ); // no BULLETs!
                         aInf.SetKanaComp( pKanaComp );

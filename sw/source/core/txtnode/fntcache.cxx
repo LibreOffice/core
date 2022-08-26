@@ -732,23 +732,27 @@ static void lcl_DrawLineForWrongListData(
 }
 
 static void GetTextArray(const OutputDevice& rDevice, const OUString& rStr, std::vector<sal_Int32>& rDXAry,
-                         sal_Int32 nIndex, sal_Int32 nLen, const vcl::text::TextLayoutCache* layoutCache = nullptr)
+                         sal_Int32 nIndex, sal_Int32 nLen, bool bCaret = false,
+                         const vcl::text::TextLayoutCache* layoutCache = nullptr)
 {
     const SalLayoutGlyphs* pLayoutCache = SalLayoutGlyphsCache::self()->GetLayoutGlyphs(&rDevice, rStr, nIndex, nLen,
         0, layoutCache);
-    rDevice.GetTextArray(rStr, &rDXAry, nIndex, nLen, layoutCache, pLayoutCache);
+    rDevice.GetTextArray(rStr, &rDXAry, nIndex, nLen, bCaret, layoutCache, pLayoutCache);
 }
 
-static void GetTextArray(const OutputDevice& rOutputDevice, const SwDrawTextInfo& rInf, std::vector<sal_Int32>& rDXAry)
+static void GetTextArray(const OutputDevice& rOutputDevice, const SwDrawTextInfo& rInf, std::vector<sal_Int32>& rDXAry,
+                         bool bCaret = false)
 {
-    return GetTextArray(rOutputDevice, rInf.GetText(), rDXAry, rInf.GetIdx().get(), rInf.GetLen().get(), rInf.GetVclCache());
+    return GetTextArray(rOutputDevice, rInf.GetText(), rDXAry, rInf.GetIdx().get(), rInf.GetLen().get(),
+                        bCaret, rInf.GetVclCache());
 }
 
-static void GetTextArray(const OutputDevice& rOutputDevice, const SwDrawTextInfo& rInf, std::vector<sal_Int32>& rDXAry, sal_Int32 nLen)
+static void GetTextArray(const OutputDevice& rOutputDevice, const SwDrawTextInfo& rInf, std::vector<sal_Int32>& rDXAry,
+                         sal_Int32 nLen, bool bCaret = false)
 {
     // Substring is fine.
     assert( nLen <= rInf.GetLen().get());
-    return GetTextArray(rOutputDevice, rInf.GetText(), rDXAry, rInf.GetIdx().get(), nLen, rInf.GetVclCache());
+    return GetTextArray(rOutputDevice, rInf.GetText(), rDXAry, rInf.GetIdx().get(), nLen, bCaret, rInf.GetVclCache());
 }
 
 void SwFntObj::DrawText( SwDrawTextInfo &rInf )
@@ -1529,6 +1533,15 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
         ? rInf.GetLen()
         : TextFrameIndex(rInf.GetText().getLength());
 
+    const TextFrameIndex nMsrLn = (TextFrameIndex(COMPLETE_STRING) != rInf.GetMeasureLen())
+        ? rInf.GetMeasureLen()
+        : nLn;
+
+    // If the measure length is different from the length, then we are
+    // measuring substring width for caret positioning, see SetMeasureLength()
+    // use in TextCursor::GetCharRect_().
+    bool bCaret(nMsrLn != nLn);
+
     // be sure to have the correct layout mode at the printer
     if ( m_pPrinter )
     {
@@ -1566,7 +1579,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
                                 GetFontLeading( rInf.GetShell(), rInf.GetOut() ) );
 
             std::vector<sal_Int32> aKernArray;
-            GetTextArray(*pOutDev, rInf, aKernArray, sal_Int32(rInf.GetLen()));
+            GetTextArray(*pOutDev, rInf, aKernArray, sal_Int32(nLn), bCaret);
             if (pGrid->IsSnapToChars())
             {
                 sw::Justify::SnapToGrid(aKernArray, rInf.GetText(), sal_Int32(rInf.GetIdx()),
@@ -1579,7 +1592,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
                         rInf.GetKern());
             }
 
-            aTextSize.setWidth(aKernArray[sal_Int32(rInf.GetLen()) - 1]);
+            aTextSize.setWidth(aKernArray[sal_Int32(nMsrLn) - 1]);
             rInf.SetKanaDiff( 0 );
             return aTextSize;
         }
@@ -1609,7 +1622,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
             rInf.GetOut().SetFont( *m_pScrFont );
 
         GetTextArray(*m_pPrinter, rInf.GetText(), aKernArray,
-                     sal_Int32(rInf.GetIdx()), sal_Int32(nLn));
+                     sal_Int32(rInf.GetIdx()), sal_Int32(nLn), bCaret);
     }
     else
     {
@@ -1617,7 +1630,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
             rInf.GetOut().SetFont( *m_pPrtFont );
         aTextSize.setHeight( rInf.GetOut().GetTextHeight() );
 
-        GetTextArray(rInf.GetOut(), rInf, aKernArray, nLn.get());
+        GetTextArray(rInf.GetOut(), rInf, aKernArray, nLn.get(), bCaret);
     }
 
     if (bCompress)
@@ -1628,16 +1641,16 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
     else
         rInf.SetKanaDiff( 0 );
 
-    if (nLn)
+    if (nMsrLn)
     {
-        aTextSize.setWidth(aKernArray[sal_Int32(nLn) - 1]);
+        aTextSize.setWidth(aKernArray[sal_Int32(nMsrLn) - 1]);
 
-        // Note that we can't simply use sal_Int(nLn) - 1 as nSpaceCount
+        // Note that we can't simply use sal_Int(nMsrLn) - 1 as nSpaceCount
         // because a glyph may be made up of more than one characters.
         sal_Int32 nSpaceCount = 0;
         tools::Long nOldValue = aKernArray[0];
 
-        for(sal_Int32 i = 1; i < sal_Int32(nLn); ++i)
+        for(sal_Int32 i = 1; i < sal_Int32(nMsrLn); ++i)
         {
             if (nOldValue != aKernArray[i])
             {

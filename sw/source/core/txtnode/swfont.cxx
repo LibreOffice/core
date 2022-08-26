@@ -986,8 +986,16 @@ Size SwSubFont::GetTextSize_( SwDrawTextInfo& rInf )
             ? TextFrameIndex(rInf.GetText().getLength())
             : rInf.GetLen();
     rInf.SetLen( nLn );
+
     if( IsCapital() && nLn )
+    {
+        if (rInf.GetMeasureLen() != TextFrameIndex(COMPLETE_STRING))
+        {
+            rInf.SetLen(rInf.GetMeasureLen());
+            rInf.SetMeasureLen(TextFrameIndex(COMPLETE_STRING));
+        }
         aTextSize = GetCapitalSize( rInf );
+    }
     else
     {
         SV_STAT( nGetTextSize );
@@ -1009,17 +1017,25 @@ Size SwSubFont::GetTextSize_( SwDrawTextInfo& rInf )
                 // a single snippet since its size may differ, too.
                 TextFrameIndex const nOldIdx(rInf.GetIdx());
                 TextFrameIndex const nOldLen(rInf.GetLen());
+                TextFrameIndex const nOldMeasureLen(rInf.GetMeasureLen());
                 const OUString aSnippet(oldStr.copy(sal_Int32(nOldIdx), sal_Int32(nOldLen)));
                 const OUString aNewText(CalcCaseMap(aSnippet));
 
                 rInf.SetText( aNewText );
                 rInf.SetIdx( TextFrameIndex(0) );
                 rInf.SetLen( TextFrameIndex(aNewText.getLength()) );
+                if (nOldMeasureLen != TextFrameIndex(COMPLETE_STRING))
+                {
+                    const OUString aMeasureSnippet(oldStr.copy(sal_Int32(nOldIdx), sal_Int32(nOldMeasureLen)));
+                    const OUString aNewMeasureText(CalcCaseMap(aMeasureSnippet));
+                    rInf.SetMeasureLen(TextFrameIndex(aNewMeasureText.getLength()));
+                }
 
                 aTextSize = pLastFont->GetTextSize( rInf );
 
                 rInf.SetIdx( nOldIdx );
                 rInf.SetLen( nOldLen );
+                rInf.SetMeasureLen(nOldMeasureLen);
             }
             else
             {

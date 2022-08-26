@@ -61,6 +61,7 @@ class SW_DLLPUBLIC SwDrawTextInfo
     tools::Long m_nKanaDiff;
     TextFrameIndex m_nIdx;
     TextFrameIndex m_nLen;
+    TextFrameIndex m_nMeasureLen;
     /// this is not a string index
     sal_Int32 m_nOfst;
     sal_uInt16 m_nWidth;
@@ -127,6 +128,7 @@ public:
         m_aText = rText;
         m_nIdx = nIdx;
         m_nLen = nLen;
+        m_nMeasureLen = TextFrameIndex(COMPLETE_STRING);
         m_nKern = 0;
         m_nCompress = 0;
         m_nWidth = nWidth;
@@ -272,6 +274,11 @@ public:
     TextFrameIndex GetLen() const
     {
         return m_nLen;
+    }
+
+    TextFrameIndex GetMeasureLen() const
+    {
+        return m_nMeasureLen;
     }
 
     sal_Int32 GetOffset() const
@@ -486,6 +493,12 @@ public:
     {
         assert( (nNew == TextFrameIndex(COMPLETE_STRING)) ? (m_nIdx.get() < m_aText.getLength()) : (m_nIdx + nNew).get() <= m_aText.getLength() );
         m_nLen = nNew;
+    }
+
+    void SetMeasureLen(TextFrameIndex const nNew)
+    {
+        assert( nNew == TextFrameIndex(COMPLETE_STRING) || nNew <= m_nLen );
+        m_nMeasureLen = nNew;
     }
 
     void SetOffset( sal_Int32 nNew )
