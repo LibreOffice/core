@@ -1022,7 +1022,11 @@ void GtkSalFrame::InitCommon()
     gtk_widget_add_controller(pEventWidget, pScrollController);
 #endif
 
+#if GTK_CHECK_VERSION(4,0,0)
+    m_pZoomGesture = gtk_gesture_zoom_new();
+#else
     m_pZoomGesture = gtk_gesture_zoom_new(GTK_WIDGET(pEventWidget));
+#endif
     gtk_event_controller_set_propagation_phase(GTK_EVENT_CONTROLLER(m_pZoomGesture),
                                                GTK_PHASE_TARGET);
     // Note that the default zoom gesture signal handler needs to run first to setup correct
@@ -1031,7 +1035,11 @@ void GtkSalFrame::InitCommon()
     g_signal_connect_after(m_pZoomGesture, "update", G_CALLBACK(signalZoomUpdate), this);
     g_signal_connect_after(m_pZoomGesture, "end", G_CALLBACK(signalZoomEnd), this);
 
+#if GTK_CHECK_VERSION(4,0,0)
+    m_pRotateGesture = gtk_gesture_rotate_new();
+#else
     m_pRotateGesture = gtk_gesture_rotate_new(GTK_WIDGET(pEventWidget));
+#endif
     gtk_event_controller_set_propagation_phase(GTK_EVENT_CONTROLLER(m_pRotateGesture),
                                                GTK_PHASE_TARGET);
     g_signal_connect(m_pRotateGesture, "begin", G_CALLBACK(signalRotateBegin), this);
