@@ -2121,6 +2121,7 @@ void EditDoc::Release(sal_Int32 nPos)
         SAL_WARN( "editeng", "EditDoc::Release - out of bounds pos " << nPos);
         return;
     }
+    // coverity[leaked_storage] - this is on purpose, ownership should be transferred to undo/redo
     (void)maContents[nPos].release();
     maContents.erase(maContents.begin() + nPos);
 }
