@@ -133,6 +133,7 @@ sal_UCS4 GetLocalizedChar( sal_UCS4 nChar, LanguageType eLang )
 SalLayout::SalLayout()
 :   mnMinCharPos( -1 ),
     mnEndCharPos( -1 ),
+    maLanguageTag( LANGUAGE_DONTKNOW ),
     mnUnitsPerPixel( 1 ),
     mnOrientation( 0 ),
     maDrawOffset( 0, 0 ),
@@ -147,6 +148,7 @@ void SalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
     mnMinCharPos  = rArgs.mnMinCharPos;
     mnEndCharPos  = rArgs.mnEndCharPos;
     mnOrientation = rArgs.mnOrientation;
+    maLanguageTag = rArgs.maLanguageTag;
 }
 
 DevicePoint SalLayout::GetDrawPosition(const DevicePoint& rRelative) const
@@ -263,10 +265,10 @@ SalLayoutGlyphs SalLayout::GetGlyphs() const
     return SalLayoutGlyphs(); // invalid
 }
 
-DeviceCoordinate GenericSalLayout::FillDXArray( std::vector<DeviceCoordinate>* pCharWidths ) const
+DeviceCoordinate GenericSalLayout::FillDXArray( std::vector<DeviceCoordinate>* pCharWidths, const OUString& rStr ) const
 {
     if (pCharWidths)
-        GetCharWidths(*pCharWidths);
+        GetCharWidths(*pCharWidths, rStr);
 
     return GetTextWidth();
 }
@@ -494,7 +496,7 @@ void GenericSalLayout::GetCaretPositions( int nMaxIndex, sal_Int32* pCaretXArray
 sal_Int32 GenericSalLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor ) const
 {
     std::vector<DeviceCoordinate> aCharWidths;
-    GetCharWidths(aCharWidths);
+    GetCharWidths(aCharWidths, {});
 
     DeviceCoordinate nWidth = 0;
     for( int i = mnMinCharPos; i < mnEndCharPos; ++i )
@@ -675,7 +677,7 @@ void MultiSalLayout::AdjustLayout( vcl::text::ImplLayoutArgs& rArgs )
             mpLayouts[n]->SalLayout::AdjustLayout( aMultiArgs );
         // then we can measure the unmodified metrics
         int nCharCount = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
-        FillDXArray( &aJustificationArray );
+        FillDXArray( &aJustificationArray, {} );
         // #i17359# multilayout is not simplified yet, so calculating the
         // unjustified width needs handholding; also count the number of
         // stretchable virtual char widths
@@ -1039,12 +1041,12 @@ sal_Int32 MultiSalLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoordi
     int nCharCount = mnEndCharPos - mnMinCharPos;
     std::vector<DeviceCoordinate> aCharWidths;
     std::vector<DeviceCoordinate> aFallbackCharWidths;
-    mpLayouts[0]->FillDXArray( &aCharWidths );
+    mpLayouts[0]->FillDXArray( &aCharWidths, {} );
 
     for( int n = 1; n < mnLevel; ++n )
     {
         SalLayout& rLayout = *mpLayouts[ n ];
-        rLayout.FillDXArray( &aFallbackCharWidths );
+        rLayout.FillDXArray( &aFallbackCharWidths, {} );
         double fUnitMul = mnUnitsPerPixel;
         fUnitMul /= rLayout.GetUnitsPerPixel();
         for( int i = 0; i < nCharCount; ++i )
@@ -1070,7 +1072,7 @@ sal_Int32 MultiSalLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoordi
     return -1;
 }
 
-DeviceCoordinate MultiSalLayout::FillDXArray( std::vector<DeviceCoordinate>* pCharWidths ) const
+DeviceCoordinate MultiSalLayout::FillDXArray( std::vector<DeviceCoordinate>* pCharWidths, const OUString& rStr ) const
 {
     DeviceCoordinate nMaxWidth = 0;
 
@@ -1086,7 +1088,7 @@ DeviceCoordinate MultiSalLayout::FillDXArray( std::vector<DeviceCoordinate>* pCh
     for( int n = mnLevel; --n >= 0; )
     {
         // query every fallback level
-        DeviceCoordinate nTextWidth = mpLayouts[n]->FillDXArray( &aTempWidths );
+        DeviceCoordinate nTextWidth = mpLayouts[n]->FillDXArray( &aTempWidths, rStr );
         if( !nTextWidth )
             continue;
         // merge results from current level

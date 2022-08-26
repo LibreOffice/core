@@ -908,8 +908,9 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, TextFrameIndex const nOfst,
                     if ( pPor->PrtWidth() )
                     {
                         TextFrameIndex const nOldLen = pPor->GetLen();
-                        pPor->SetLen( nOfst - aInf.GetIdx() );
+                        pPor->SetLen( aInf.GetLen() - aInf.GetIdx() );
                         aInf.SetLen( pPor->GetLen() );
+                        aInf.SetMeasureLen( nOfst - aInf.GetIdx() );
                         if( nX || !pPor->InNumberGrp() )
                         {
                             SeekAndChg( aInf );
@@ -924,8 +925,7 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, TextFrameIndex const nOfst,
                                 nX += pPor->CalcSpacing( nSpaceAdd, aInf );
                             if( bWidth )
                             {
-                                pPor->SetLen(pPor->GetLen() + TextFrameIndex(1));
-                                aInf.SetLen( pPor->GetLen() );
+                                aInf.SetMeasureLen( aInf.GetMeasureLen() + TextFrameIndex(1) );
                                 aInf.SetOnWin( false ); // no BULLETs!
                                 nTmp += pPor->GetTextSize( aInf ).Width();
                                 aInf.SetOnWin( bOldOnWin );
@@ -1102,8 +1102,9 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, TextFrameIndex const nOfst,
                     {
                         const bool bOldOnWin = aInf.OnWin();
                         TextFrameIndex const nOldLen = pPor->GetLen();
-                        pPor->SetLen( TextFrameIndex(1) );
+                        pPor->SetLen( aInf.GetLen() - aInf.GetIdx() );
                         aInf.SetLen( pPor->GetLen() );
+                        aInf.SetMeasureLen( TextFrameIndex(1) );
                         SeekAndChg( aInf );
                         aInf.SetOnWin( false ); // no BULLETs!
                         aInf.SetKanaComp( pKanaComp );
