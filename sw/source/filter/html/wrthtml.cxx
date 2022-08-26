@@ -1348,7 +1348,8 @@ OUString SwHTMLWriter::convertHyperlinkHRefValue(const OUString& rURL)
     {
         // Link is not started from "#", so looks like external link. Encode this URL.
         INetURLObject aURL(sURL);
-        sURL = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+        if (!aURL.HasError())
+            sURL = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
     }
     return URIHelper::simpleNormalizedMakeRelative( GetBaseURL(), sURL );
 }
