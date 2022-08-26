@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ef02a9f_28972d71",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-26T18:17:40Z",
+      "side": 1,
+      "message": "FTR: the reasons to limit the size are listed in https://bz.apache.org/ooo/show_bug.cgi?id\u003d4219#c32",
+      "revId": "9eb111333b7440fd166057a1c62840187aaf35a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
