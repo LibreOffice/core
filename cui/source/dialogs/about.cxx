@@ -231,7 +231,7 @@ OUString AboutDialog::GetMiscString() {
   bool bThreadedCalc = officecfg::Office::Calc::Formula::Calculation::
       UseThreadedCalculationForFormulaGroups::get();
 
-  if (!bThreadingProhibited && !bOpenCL && bThreadedCalc) {
+  if (!bThreadingProhibited && bThreadedCalc) {
     aCalcMode += " threaded";
   }
 
