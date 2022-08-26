@@ -36,6 +36,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "463b3ce2_025a4697",
+        "filename": "cui/source/tabpages/tpline.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1490,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-08-26T09:01:15Z",
+      "side": 0,
+      "message": "I know how refcounting works :). But my point is that here pObj is destructed only at the end of this block, so if something requires(?) the object to die here, it won\u0027t.",
+      "parentUuid": "82aa229a_1f49c7b0",
+      "revId": "5f891974bfb27bacd5fc3d623463204e872fffad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1cdf1069_a189aad5",
@@ -67,6 +85,24 @@
       "side": 0,
       "message": "With ref-counting, the only leaks that should be left are chains of circular references, and this wouldn\u0027t help much with that. It also wouldn\u0027t be actually up-to-date, since the actual destruction may now occur somewhere else.\n\nAlthough I guess I could make it use WeakReferences, in which case it would at least report the existing of circular reference chains.\nI\u0027ll look into doing that.",
       "parentUuid": "1cdf1069_a189aad5",
+      "revId": "5f891974bfb27bacd5fc3d623463204e872fffad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46fc44e9_54321d35",
+        "filename": "include/svx/svdmodel.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-08-26T09:01:15Z",
+      "side": 0,
+      "message": "SdrObject keeps a reference to SdrModel, so it seems to me that SdrObject\u0027s shouldn\u0027t outlive SdrModel, so IMO it would make sense for SdrModel dtor to check this. And yes, I meant this for debugging purposes.",
+      "parentUuid": "f5ef1fa7_798e91b3",
       "revId": "5f891974bfb27bacd5fc3d623463204e872fffad",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
