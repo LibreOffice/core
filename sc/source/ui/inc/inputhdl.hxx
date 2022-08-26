@@ -63,11 +63,21 @@ private:
     EditView*               pTableView;                 // associated active EditView
     EditView*               pTopView;                   // EditView in the input row
 
+    struct FunctionNames
+    {
+        ScTypedCaseStrSet     maFunctionData;
+        ScTypedCaseStrSet     maFunctionDataPara;
+        std::set<sal_Unicode> maFunctionChar;
+        sal_uInt32            mnListCount = 0;
+        bool                  mbEnglishFunctionNames = false;
+    } maFunctionNames;
+
     std::unique_ptr<ScTypedCaseStrSet> pColumnData;
     std::unique_ptr<ScTypedCaseStrSet> pFormulaData;
     std::unique_ptr<ScTypedCaseStrSet> pFormulaDataPara;
-    ScTypedCaseStrSet::const_iterator miAutoPosColumn;
-    ScTypedCaseStrSet::const_iterator miAutoPosFormula;
+    ScTypedCaseStrSet::const_iterator  miAutoPosColumn;
+    ScTypedCaseStrSet::const_iterator  miAutoPosFormula;
+    std::set<sal_Unicode>              maFormulaChar;
 
     VclPtr<vcl::Window>     pTipVisibleParent;
     void*                   nTipVisible;
@@ -126,8 +136,6 @@ private:
 
     std::unique_ptr<ScRangeFindList>
                             pRangeFindList;
-
-    ::std::set< sal_Unicode >    maFormulaChar;  //fdo 75264
 
 private:
     void            UpdateActiveView();

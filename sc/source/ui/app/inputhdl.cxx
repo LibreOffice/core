@@ -1020,29 +1020,41 @@ void ScInputHandler::GetFormulaData()
     else
         pFormulaDataPara.reset( new ScTypedCaseStrSet );
 
-    const CharClass* pCharClass = (SC_MOD()->GetFormulaOptions().GetUseEnglishFuncName()
-                                       ? ScCompiler::GetCharClassEnglish()
-                                       : ScCompiler::GetCharClassLocalized());
-
     const OUString aParenthesesReplacement( cParenthesesReplacement);
     const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
-    sal_uInt32 nListCount = pFuncList->GetCount();
-    for(sal_uInt32 i=0;i<nListCount;i++)
+    const sal_uInt32 nListCount = pFuncList->GetCount();
+    if (maFunctionNames.mnListCount != nListCount
+            || maFunctionNames.mbEnglishFunctionNames != pFuncList->IsEnglishFunctionNames())
     {
-        const ScFuncDesc* pDesc = pFuncList->GetFunction( i );
-        if ( pDesc->mxFuncName )
+        if (maFunctionNames.mnListCount)
+            maFunctionNames = FunctionNames();
+        maFunctionNames.mnListCount = nListCount;
+        maFunctionNames.mbEnglishFunctionNames = pFuncList->IsEnglishFunctionNames();
+        const CharClass* pCharClass = (maFunctionNames.mbEnglishFunctionNames
+                ? ScCompiler::GetCharClassEnglish()
+                : ScCompiler::GetCharClassLocalized());
+        for (sal_uInt32 i=0; i < nListCount; ++i)
         {
-            OUString aFuncName(pCharClass->uppercase(*(pDesc->mxFuncName)));
-            // fdo#75264 fill maFormulaChar with all characters used in formula names
-            for (sal_Int32 j = 0; j < aFuncName.getLength(); j++)
-                maFormulaChar.insert(aFuncName[j]);
-            pFormulaData->insert(ScTypedStrData(*(pDesc->mxFuncName) + aParenthesesReplacement, 0.0, 0.0,
-                                                ScTypedStrData::Standard));
-            pDesc->initArgumentInfo();
-            OUString aEntry = pDesc->getSignature();
-            pFormulaDataPara->insert(ScTypedStrData(aEntry, 0.0, 0.0, ScTypedStrData::Standard));
+            const ScFuncDesc* pDesc = pFuncList->GetFunction( i );
+            if ( pDesc->mxFuncName )
+            {
+                OUString aFuncName(pCharClass->uppercase(*(pDesc->mxFuncName)));
+                // fdo#75264 fill maFormulaChar with all characters used in formula names
+                for (sal_Int32 j = 0; j < aFuncName.getLength(); j++)
+                    maFunctionNames.maFunctionChar.insert(aFuncName[j]);
+                maFunctionNames.maFunctionData.insert(
+                        ScTypedStrData(*(pDesc->mxFuncName) + aParenthesesReplacement, 0.0, 0.0,
+                            ScTypedStrData::Standard));
+                pDesc->initArgumentInfo();
+                OUString aEntry = pDesc->getSignature();
+                maFunctionNames.maFunctionDataPara.insert(ScTypedStrData(aEntry, 0.0, 0.0, ScTypedStrData::Standard));
+            }
         }
     }
+
+    *pFormulaData     = maFunctionNames.maFunctionData;
+    *pFormulaDataPara = maFunctionNames.maFunctionDataPara;
+    maFormulaChar     = maFunctionNames.maFunctionChar;
 
     // Increase suggestion priority of MRU formulas
     const ScAppOptions& rOpt = SC_MOD()->GetAppOptions();

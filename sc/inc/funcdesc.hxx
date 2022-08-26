@@ -253,9 +253,12 @@ public:
 
     const ScFuncDesc* GetFunction( sal_uInt32 nIndex ) const;
 
+    bool IsEnglishFunctionNames() const { return mbEnglishFunctionNames; }
+
 private:
     ::std::vector<const ScFuncDesc*> aFunctionList; /**< List of functions */
     ::std::vector<const ScFuncDesc*>::iterator aFunctionListIter; /**< position in function list */
+    bool mbEnglishFunctionNames;
 };
 
 /**
