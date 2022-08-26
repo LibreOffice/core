@@ -34,6 +34,24 @@
       "parentUuid": "88dfdec7_4fd8faaa",
       "revId": "a80eefb7413245f81692c443b06f7d3a6a92f28c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "753c8138_cf8cc2f0",
+        "filename": "sfx2/sdi/frmslots.sdi",
+        "patchSetId": 11
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-08-26T15:18:44Z",
+      "side": 1,
+      "message": "Thanks!\n\nYes I understand that this is just a single command. I imagined that the state change for .uno:SidebarDeck would include the currently active deck name as the common-for-all state; which would allow to disable all those that do not match the state.\n\nThat was based on assumption that only one deck may be shown at a given time; but obviously, the goal (in tdf#85905) is to enable multiple decks visible in the same time. I guess then that we could use some array of strings (I am sure we can create a dedicated item for that, if not yet exist).",
+      "parentUuid": "3769a120_742f6082",
+      "revId": "a80eefb7413245f81692c443b06f7d3a6a92f28c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
