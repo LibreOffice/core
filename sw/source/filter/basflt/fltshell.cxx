@@ -608,7 +608,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                             // Adjust the start of the range to actually cover the comment, similar
                             // to what the UI and the UNO API does.
                             aRegion.SetMark();
-                            --aRegion.Start()->nContent;
+                            aRegion.Start()->AdjustContent(-1);
                         }
 
                         m_rDoc.getIDocumentMarkAccess()->makeAnnotationMark(aRegion, OUString());
