@@ -159,8 +159,8 @@ namespace
         else if (pCrossRefMark)
         {
             // Crossrefbookmarks only remember the start position but have to span the whole paragraph
-            oCrossRefEndPos.emplace(rEndPos);
-            oCrossRefEndPos->nContent = oCrossRefEndPos->GetNode().GetTextNode()->Len();
+            SwTextNode& rEndNd = *rEndPos.GetNode().GetTextNode();
+            oCrossRefEndPos.emplace(rEndNd, rEndNd.Len());
             pEndPos = &*oCrossRefEndPos;
         }
         if(pEndPos)
@@ -242,8 +242,8 @@ namespace
         }
 
         // no need to consider annotation marks starting after aEndOfPara
-        SwPosition aEndOfPara(*rUnoCursor.GetPoint());
-        aEndOfPara.nContent = aEndOfPara.GetNode().GetTextNode()->Len();
+        SwContentNode& rPtNd = *rUnoCursor.GetPoint()->GetNode().GetContentNode();
+        SwPosition aEndOfPara( rPtNd, rPtNd.Len() );
         const IDocumentMarkAccess::const_iterator_t pCandidatesEnd =
             pMarkAccess->findFirstAnnotationStartsAfter(aEndOfPara);
 
@@ -1099,7 +1099,7 @@ static void lcl_MoveCursor( SwUnoCursor * const pUnoCursor,
 
     if (nMovePos > nCurrentIndex)
     {
-        pUnoCursor->GetPoint()->nContent = nMovePos;
+        pUnoCursor->GetPoint()->SetContent( nMovePos );
     }
 }
 
