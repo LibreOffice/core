@@ -50,6 +50,29 @@
       "message": "`nCount` is used only inside of `if (bUseTitleAsSlideName)`. Can reduce its scope.",
       "revId": "3ddfc5d1a8d4868f9657b7cf4f246890dc5a84de",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5803633f_418a9159",
+        "filename": "oox/source/ppt/presentationfragmenthandler.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-08-26T09:09:24Z",
+      "side": 1,
+      "message": "I suggest to use the largest number within parenthesis instead of counting the items, if it\u0027s possible, that some of the numbers are missing, i.e. by deleting one of the numbered slides:\n\nSlide\nSlide (3)\n\nBad -\u003e\n\nSlide\nSlide (3)\nSlide (3)\n\nGood -\u003e\n\nSlide\nSlide (3)\nSlide (4)",
+      "range": {
+        "startLine": 141,
+        "startChar": 24,
+        "endLine": 143,
+        "endChar": 100
+      },
+      "revId": "3ddfc5d1a8d4868f9657b7cf4f246890dc5a84de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
