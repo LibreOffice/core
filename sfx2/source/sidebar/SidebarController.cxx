@@ -94,7 +94,8 @@ namespace
         if (rsDeckId == u"GalleryDeck")
             return ".uno:Gallery";
 
-        return "";
+        OString sUno = ".uno:SidebarDeck." + OUStringToOString(rsDeckId, RTL_TEXTENCODING_ASCII_US);
+        return std::string(sUno);
     }
 }
 
