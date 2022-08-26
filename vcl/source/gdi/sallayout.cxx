@@ -263,10 +263,10 @@ SalLayoutGlyphs SalLayout::GetGlyphs() const
     return SalLayoutGlyphs(); // invalid
 }
 
-DeviceCoordinate GenericSalLayout::FillDXArray( std::vector<DeviceCoordinate>* pCharWidths ) const
+DeviceCoordinate GenericSalLayout::FillDXArray( std::vector<DeviceCoordinate>* pCharWidths, bool bCaret ) const
 {
     if (pCharWidths)
-        GetCharWidths(*pCharWidths);
+        GetCharWidths(*pCharWidths, bCaret);
 
     return GetTextWidth();
 }
@@ -1070,7 +1070,7 @@ sal_Int32 MultiSalLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoordi
     return -1;
 }
 
-DeviceCoordinate MultiSalLayout::FillDXArray( std::vector<DeviceCoordinate>* pCharWidths ) const
+DeviceCoordinate MultiSalLayout::FillDXArray( std::vector<DeviceCoordinate>* pCharWidths, bool bCaret ) const
 {
     DeviceCoordinate nMaxWidth = 0;
 
@@ -1086,7 +1086,7 @@ DeviceCoordinate MultiSalLayout::FillDXArray( std::vector<DeviceCoordinate>* pCh
     for( int n = mnLevel; --n >= 0; )
     {
         // query every fallback level
-        DeviceCoordinate nTextWidth = mpLayouts[n]->FillDXArray( &aTempWidths );
+        DeviceCoordinate nTextWidth = mpLayouts[n]->FillDXArray( &aTempWidths, bCaret );
         if( !nTextWidth )
             continue;
         // merge results from current level

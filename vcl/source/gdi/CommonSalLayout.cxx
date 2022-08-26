@@ -638,7 +638,7 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
     return true;
 }
 
-void GenericSalLayout::GetCharWidths(std::vector<DeviceCoordinate>& rCharWidths) const
+void GenericSalLayout::GetCharWidths(std::vector<DeviceCoordinate>& rCharWidths, bool bCaret) const
 {
     const int nCharCount = mnEndCharPos - mnMinCharPos;
 
@@ -650,7 +650,14 @@ void GenericSalLayout::GetCharWidths(std::vector<DeviceCoordinate>& rCharWidths)
         const int nIndex = aGlyphItem.charPos() - mnMinCharPos;
         if (nIndex >= nCharCount)
             continue;
-        rCharWidths[nIndex] += aGlyphItem.newWidth();
+        if (bCaret && aGlyphItem.charCount() > 1)
+        {
+            // FIXME: use grapheme clusters
+            for (int i = 0; i < aGlyphItem.charCount(); i++)
+                rCharWidths[nIndex + i] += aGlyphItem.newWidth() / aGlyphItem.charCount();
+        }
+        else
+            rCharWidths[nIndex] += aGlyphItem.newWidth();
     }
 }
 
