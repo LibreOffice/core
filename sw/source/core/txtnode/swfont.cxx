@@ -985,8 +985,13 @@ Size SwSubFont::GetTextSize_( SwDrawTextInfo& rInf )
     TextFrameIndex const nLn = rInf.GetLen() == TextFrameIndex(COMPLETE_STRING)
             ? TextFrameIndex(rInf.GetText().getLength())
             : rInf.GetLen();
+    TextFrameIndex const nMsrLn = rInf.GetMeasureLen() == TextFrameIndex(COMPLETE_STRING)
+            ? TextFrameIndex(rInf.GetText().getLength())
+            : rInf.GetMeasureLen();
     rInf.SetLen( nLn );
+    rInf.SetMeasureLen( nMsrLn );
     if( IsCapital() && nLn )
+        // FIXME(khaled): use MeasureLen here
         aTextSize = GetCapitalSize( rInf );
     else
     {
@@ -1009,17 +1014,22 @@ Size SwSubFont::GetTextSize_( SwDrawTextInfo& rInf )
                 // a single snippet since its size may differ, too.
                 TextFrameIndex const nOldIdx(rInf.GetIdx());
                 TextFrameIndex const nOldLen(rInf.GetLen());
+                TextFrameIndex const nOldMeasureLen(rInf.GetMeasureLen());
                 const OUString aSnippet(oldStr.copy(sal_Int32(nOldIdx), sal_Int32(nOldLen)));
                 const OUString aNewText(CalcCaseMap(aSnippet));
+                const OUString aMeasureSnippet(oldStr.copy(sal_Int32(nOldIdx), sal_Int32(nOldMeasureLen)));
+                const OUString aNewMeasureText(CalcCaseMap(aMeasureSnippet));
 
                 rInf.SetText( aNewText );
                 rInf.SetIdx( TextFrameIndex(0) );
                 rInf.SetLen( TextFrameIndex(aNewText.getLength()) );
+                rInf.SetMeasureLen( TextFrameIndex(aNewMeasureText.getLength()) );
 
                 aTextSize = pLastFont->GetTextSize( rInf );
 
                 rInf.SetIdx( nOldIdx );
                 rInf.SetLen( nOldLen );
+                rInf.SetMeasureLen( nOldMeasureLen );
             }
             else
             {
