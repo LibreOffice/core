@@ -205,8 +205,6 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
     }
 
     int nRatio = nWidth * 10 / nHeight;
-    if (FreetypeFont::AlmostHorizontalDrainsRenderingPool(nRatio, rFSD))
-        return;
 
     /*
      * It might be ideal to cache surface and cairo context between calls and
