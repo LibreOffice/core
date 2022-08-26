@@ -418,11 +418,8 @@ FreetypeFont::FreetypeFont(FreetypeFontInstance& rFontInstance, std::shared_ptr<
         SAL_WARN("vcl", "FreetypeFont negative font width of: " << mnWidth);
         return;
     }
-    if (mfStretch > +148.0 || mfStretch < -148.0)
-    {
-        SAL_WARN("vcl", "FreetypeFont excessive stretch of: " << mfStretch);
-        return;
-    }
+
+    SAL_WARN_IF(mfStretch > +64.0 || mfStretch < -64.0, "vcl", "FreetypeFont excessive stretch of: " << mfStretch);
 
     if( !maFaceFT )
         return;
