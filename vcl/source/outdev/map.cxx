@@ -287,7 +287,7 @@ static tools::Long ImplSubPixelToLogic(bool bCheck, double n, tools::Long nDPI, 
 
     double nRes = n * nMapDenom / nMapNum / nDPI;
     tools::Long nRet(std::round(nRes));
-    assert(!bCheck || n == static_cast<double>(nRet) * nMapNum * nDPI / nMapDenom); (void)bCheck;
+    assert(!bCheck || rtl_math_approxValue(n) == rtl_math_approxValue(static_cast<double>(nRet) * nMapNum * nDPI / nMapDenom)); (void)bCheck;
     return nRet;
 }
 
