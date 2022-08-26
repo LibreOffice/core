@@ -730,10 +730,10 @@ bool SwCursorShell::MoveSection( SwWhichSection fnWhichSect,
 
 // position cursor
 
-static SwFrame* lcl_IsInHeaderFooter( const SwNodeIndex& rIdx, Point& rPt )
+static SwFrame* lcl_IsInHeaderFooter( SwNode& rNd, Point& rPt )
 {
     SwFrame* pFrame = nullptr;
-    SwContentNode* pCNd = rIdx.GetNode().GetContentNode();
+    SwContentNode* pCNd = rNd.GetContentNode();
     if( pCNd )
     {
         std::pair<Point, bool> tmp(rPt, false);
@@ -751,7 +751,7 @@ static SwFrame* lcl_IsInHeaderFooter( const SwNodeIndex& rIdx, Point& rPt )
 bool SwCursorShell::IsInHeaderFooter( bool* pbInHeader ) const
 {
     Point aPt;
-    SwFrame* pFrame = ::lcl_IsInHeaderFooter( m_pCurrentCursor->GetPoint()->nNode, aPt );
+    SwFrame* pFrame = ::lcl_IsInHeaderFooter( m_pCurrentCursor->GetPoint()->GetNode(), aPt );
     if( pFrame && pbInHeader )
         *pbInHeader = pFrame->IsHeaderFrame();
     return nullptr != pFrame;
@@ -795,7 +795,7 @@ int SwCursorShell::SetCursor( const Point &rLPt, bool bOnlyText, bool bBlock )
     if( CursorMoveState::RightMargin == aTmpState.m_eState )
         m_eMvState = CursorMoveState::RightMargin;
     // is the new position in header or footer?
-    SwFrame* pFrame = lcl_IsInHeaderFooter( aPos.nNode, aPt );
+    SwFrame* pFrame = lcl_IsInHeaderFooter( aPos.GetNode(), aPt );
     if( IsTableMode() && !pFrame && aPos.GetNode().StartOfSectionNode() ==
         pCursor->GetPoint()->GetNode().StartOfSectionNode() )
         // same table column and not in header/footer -> back
@@ -1144,7 +1144,7 @@ bool SwCursorShell::IsEndOfTable() const
     SwNodeIndex const lastNode(*pEndTableNode, -2);
     SAL_WARN_IF(!lastNode.GetNode().GetTextNode(), "sw.core",
             "text node expected");
-    return (lastNode == m_pCurrentCursor->GetPoint()->nNode);
+    return (lastNode == m_pCurrentCursor->GetPoint()->GetNode());
 }
 
 bool SwCursorShell::IsCursorInFootnote() const
@@ -1511,17 +1511,17 @@ void SwCursorShell::UpdateCursorPos()
 }
 
 // #i65475# - if Point/Mark in hidden sections, move them out
-static bool lcl_CheckHiddenSection( SwNodeIndex& rIdx )
+static bool lcl_CheckHiddenSection( SwPosition& rPos )
 {
     bool bOk = true;
-    const SwSectionNode* pSectNd = rIdx.GetNode().FindSectionNode();
+    const SwSectionNode* pSectNd = rPos.GetNode().FindSectionNode();
     if( pSectNd && pSectNd->GetSection().IsHiddenFlag() )
     {
         const SwNode* pFrameNd =
-            rIdx.GetNodes().FindPrvNxtFrameNode( *pSectNd, pSectNd->EndOfSectionNode() );
+            rPos.GetNodes().FindPrvNxtFrameNode( *pSectNd, pSectNd->EndOfSectionNode() );
         bOk = pFrameNd != nullptr;
         SAL_WARN_IF(!bOk, "sw.core", "found no Node with Frames");
-        rIdx = *(bOk ? pFrameNd : pSectNd);
+        rPos.Assign( *(bOk ? pFrameNd : pSectNd) );
     }
     return bOk;
 }
@@ -1600,7 +1600,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
     // then the table mode is active (also if it is already active: m_pTableCursor)
     SwPaM* pTstCursor = getShellCursor( true );
     if( pTstCursor->HasMark() && !m_pBlockCursor &&
-        SwDoc::IsIdxInTable( pTstCursor->GetPoint()->nNode ) &&
+        SwDoc::IsInTable( pTstCursor->GetPoint()->GetNode() ) &&
           ( m_pTableCursor ||
             pTstCursor->GetPointNode().StartOfSectionNode() !=
             pTstCursor->GetMarkNode().StartOfSectionNode() ) && !mbSelectAll)
@@ -1611,8 +1611,8 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
         SwPosition* pPos = pITmpCursor->GetPoint();
 
         // Bug 65475 (1999) - if Point/Mark in hidden sections, move them out
-        lcl_CheckHiddenSection( pPos->nNode );
-        lcl_CheckHiddenSection( pITmpCursor->GetMark()->nNode );
+        lcl_CheckHiddenSection( *pPos );
+        lcl_CheckHiddenSection( *pITmpCursor->GetMark() );
 
         // Move cursor out of hidden paragraphs
         if ( !GetViewOptions()->IsShowHiddenChar() )
@@ -2773,7 +2773,7 @@ bool SwCursorShell::IsStartOfDoc() const
     SwNodeIndex aIdx( GetDoc()->GetNodes().GetEndOfExtras(), 2 );
     if( !aIdx.GetNode().IsContentNode() )
         GetDoc()->GetNodes().GoNext( &aIdx );
-    return aIdx == m_pCurrentCursor->GetPoint()->nNode;
+    return aIdx == m_pCurrentCursor->GetPoint()->GetNode();
 }
 
 bool SwCursorShell::IsEndOfDoc() const
@@ -2783,7 +2783,7 @@ bool SwCursorShell::IsEndOfDoc() const
     if( !pCNd )
         pCNd = SwNodes::GoPrevious( &aIdx );
 
-    return aIdx == m_pCurrentCursor->GetPoint()->nNode &&
+    return aIdx == m_pCurrentCursor->GetPoint()->GetNode() &&
             pCNd->Len() == m_pCurrentCursor->GetPoint()->GetContentIndex();
 }
 
@@ -2895,18 +2895,18 @@ void SwCursorShell::ParkCursor( const SwNode &rIdx )
         {
             // the given node is in a table, thus park cursor to table node
             // (outside of the table)
-            aNew.GetPoint()->nNode = *pNode->StartOfSectionNode();
+            aNew.GetPoint()->Assign( *pNode->StartOfSectionNode() );
         }
         else
             // Also on the start node itself. Then we need to request the start
             // node always via its end node! (StartOfSelection of StartNode is
             // the parent)
-            aNew.GetPoint()->nNode = *pNode->EndOfSectionNode()->StartOfSectionNode();
+            aNew.GetPoint()->Assign( *pNode->EndOfSectionNode()->StartOfSectionNode() );
     }
     else
-        aNew.GetPoint()->nNode = *pNode->StartOfSectionNode();
+        aNew.GetPoint()->Assign( *pNode->StartOfSectionNode() );
     aNew.SetMark();
-    aNew.GetPoint()->nNode = *pNode->EndOfSectionNode();
+    aNew.GetPoint()->Assign(*pNode->EndOfSectionNode());
 
     // take care of all shells
     for(SwViewShell& rTmp : GetRingContainer())
@@ -2927,7 +2927,7 @@ void SwCursorShell::ParkCursor( const SwNode &rIdx )
                 {
                     pTCursor->GetPoint()->Assign(SwNodeOffset(0));
                     pTCursor->DeleteMark();
-                    pSh->m_pCurrentCursor->GetPoint()->nNode = *pTableNd;
+                    pSh->m_pCurrentCursor->GetPoint()->Assign( *pTableNd );
                 }
             }
         }
@@ -3137,10 +3137,10 @@ bool SwCursorShell::FindValidContentNode( bool bOnlyText )
         ClearMark();
 
     // first check for frames
-    SwNodeIndex& rNdIdx = m_pCurrentCursor->GetPoint()->nNode;
-    SwNodeOffset nNdIdx = rNdIdx.GetIndex(); // keep backup
+    SwPosition& rNdPos = *m_pCurrentCursor->GetPoint();
+    SwNodeOffset nNdIdx = rNdPos.GetNodeIndex(); // keep backup
     SwNodes& rNds = mxDoc->GetNodes();
-    SwContentNode* pCNd = rNdIdx.GetNode().GetContentNode();
+    SwContentNode* pCNd = rNdPos.GetNode().GetContentNode();
     const SwContentFrame * pFrame;
 
     if (pCNd && nullptr != (pFrame = pCNd->getLayoutFrame(GetLayout(), m_pCurrentCursor->GetPoint())) &&
@@ -3150,19 +3150,19 @@ bool SwCursorShell::FindValidContentNode( bool bOnlyText )
         // skip protected frame
         SwPaM aPam( *m_pCurrentCursor->GetPoint() );
         aPam.SetMark();
-        aPam.GetMark()->nNode = rNds.GetEndOfContent();
-        aPam.GetPoint()->nNode = *pCNd->EndOfSectionNode();
+        aPam.GetMark()->Assign( rNds.GetEndOfContent() );
+        aPam.GetPoint()->Assign( *pCNd->EndOfSectionNode() );
 
         bool bFirst = false;
         if( nullptr == (pCNd = ::GetNode( aPam, bFirst, fnMoveForward )))
         {
-            aPam.GetMark()->nNode = *rNds.GetEndOfPostIts().StartOfSectionNode();
+            aPam.GetMark()->Assign( *rNds.GetEndOfPostIts().StartOfSectionNode() );
             pCNd = ::GetNode( aPam, bFirst, fnMoveBackward );
         }
 
         if( !pCNd ) // should *never* happen
         {
-            rNdIdx = nNdIdx; // back to old node
+            rNdPos.Assign(nNdIdx); // back to old node
             return false;
         }
         *m_pCurrentCursor->GetPoint() = *aPam.GetPoint();
@@ -3170,25 +3170,24 @@ bool SwCursorShell::FindValidContentNode( bool bOnlyText )
     else if( bOnlyText && pCNd && pCNd->IsNoTextNode() )
     {
         // set to beginning of document
-        rNdIdx = mxDoc->GetNodes().GetEndOfExtras();
-        m_pCurrentCursor->GetPoint()->nContent.Assign( mxDoc->GetNodes().GoNext(
-                                                            &rNdIdx ), 0 );
-        nNdIdx = rNdIdx.GetIndex();
+        rNdPos.Assign( mxDoc->GetNodes().GetEndOfExtras() );
+        mxDoc->GetNodes().GoNext( &rNdPos );
+        nNdIdx = rNdPos.GetNodeIndex();
     }
 
     bool bOk = true;
 
     // #i9059# cursor may not stand in protected cells
     //         (unless cursor in protected areas is OK.)
-    const SwTableNode* pTableNode = rNdIdx.GetNode().FindTableNode();
+    const SwTableNode* pTableNode = rNdPos.GetNode().FindTableNode();
     if( !IsReadOnlyAvailable()  &&
-        pTableNode != nullptr  &&  rNdIdx.GetNode().IsProtect() )
+        pTableNode != nullptr  &&  rNdPos.GetNode().IsProtect() )
     {
         // we're in a table, and we're in a protected area, so we're
         // probably in a protected cell.
 
         // move forward into non-protected area.
-        SwPaM aPam( rNdIdx.GetNode(), 0 );
+        SwPaM aPam( rNdPos.GetNode(), 0 );
         while( aPam.GetPointNode().IsProtect() &&
                aPam.Move( fnMoveForward, GoInContent ) )
             ; // nothing to do in the loop; the aPam.Move does the moving!
@@ -3196,7 +3195,7 @@ bool SwCursorShell::FindValidContentNode( bool bOnlyText )
         // didn't work? then go backwards!
         if( aPam.GetPointNode().IsProtect() )
         {
-            SwPaM aTmpPaM( rNdIdx.GetNode(), 0 );
+            SwPaM aTmpPaM( rNdPos.GetNode(), 0 );
             aPam = aTmpPaM;
             while( aPam.GetPointNode().IsProtect() &&
                    aPam.Move( fnMoveBackward, GoInContent ) )
@@ -3211,7 +3210,7 @@ bool SwCursorShell::FindValidContentNode( bool bOnlyText )
     }
 
     // in a protected frame
-    const SwSectionNode* pSectNd = rNdIdx.GetNode().FindSectionNode();
+    const SwSectionNode* pSectNd = rNdPos.GetNode().FindSectionNode();
     if( pSectNd && ( pSectNd->GetSection().IsHiddenFlag() ||
         ( !IsReadOnlyAvailable() &&
            pSectNd->GetSection().IsProtectFlag() )) )
@@ -3226,10 +3225,10 @@ bool SwCursorShell::FindValidContentNode( bool bOnlyText )
                 for (;;)
                 {
                     if (bGoNextSection)
-                        pCNd = rNds.GoNextSection( &rNdIdx,
+                        pCNd = rNds.GoNextSection( &rNdPos,
                                             true, !IsReadOnlyAvailable() );
                     else
-                        pCNd = SwNodes::GoPrevSection( &rNdIdx,
+                        pCNd = SwNodes::GoPrevSection( &rNdPos,
                                             true, !IsReadOnlyAvailable() );
                     if ( pCNd == nullptr) break;
                     // moved inside a table -> check if it is protected
@@ -3258,7 +3257,7 @@ bool SwCursorShell::FindValidContentNode( bool bOnlyText )
                     }
                 }
 
-                if( bOk && rNdIdx.GetIndex() < rNds.GetEndOfExtras().GetIndex() )
+                if( bOk && rNdPos.GetNodeIndex() < rNds.GetEndOfExtras().GetIndex() )
                 {
                     // also check for Fly - might be protected as well
                     pFrame = pCNd->getLayoutFrame(GetLayout(), nullptr, nullptr);
@@ -3277,19 +3276,19 @@ bool SwCursorShell::FindValidContentNode( bool bOnlyText )
             {
                 if( !nLoopCnt )
                     bGoNextSection = false;
-                rNdIdx = nNdIdx;
+                rNdPos.Assign( nNdIdx );
             }
         }
     }
     if( bOk )
     {
-        pCNd = rNdIdx.GetNode().GetContentNode();
-        const sal_Int32 nContent = rNdIdx.GetIndex() < nNdIdx ? pCNd->Len() : 0;
-        m_pCurrentCursor->GetPoint()->nContent.Assign( pCNd, nContent );
+        pCNd = rNdPos.GetNode().GetContentNode();
+        const sal_Int32 nContent = rNdPos.GetNodeIndex() < nNdIdx ? pCNd->Len() : 0;
+        m_pCurrentCursor->GetPoint()->SetContent( nContent );
     }
     else
     {
-        pCNd = rNdIdx.GetNode().GetContentNode();
+        pCNd = rNdPos.GetNode().GetContentNode();
         // if cursor in hidden frame, always move it
         if (!pCNd || !pCNd->getLayoutFrame(GetLayout(), nullptr, nullptr))
         {
