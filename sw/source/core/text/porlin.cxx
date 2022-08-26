@@ -235,6 +235,13 @@ SwPosSize SwLinePortion::GetTextSize( const SwTextSizeInfo & ) const
     return SwPosSize();
 }
 
+SwTwips SwLinePortion::GetCharWidth( const SwTextSizeInfo &, TextFrameIndex const ) const
+{
+    OSL_ENSURE( false, "SwLinePortion::GetCharWidth: don't ask me about widths, "
+                   "I'm only a stupid SwLinePortion" );
+    return 0;
+}
+
 bool SwLinePortion::Format( SwTextFormatInfo &rInf )
 {
     if( rInf.X() > rInf.Width() )

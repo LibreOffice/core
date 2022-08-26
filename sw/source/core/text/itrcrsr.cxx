@@ -907,9 +907,6 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, TextFrameIndex const nOfst,
                     }
                     if ( pPor->PrtWidth() )
                     {
-                        TextFrameIndex const nOldLen = pPor->GetLen();
-                        pPor->SetLen( nOfst - aInf.GetIdx() );
-                        aInf.SetLen( pPor->GetLen() );
                         if( nX || !pPor->InNumberGrp() )
                         {
                             SeekAndChg( aInf );
@@ -918,23 +915,20 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, TextFrameIndex const nOfst,
                             SwTwips nTmp = nX;
                             aInf.SetKanaComp( pKanaComp );
                             aInf.SetKanaIdx( nKanaIdx );
-                            nX += pPor->GetTextSize( aInf ).Width();
+                            nX += pPor->GetCharWidth( aInf, nOfst );
                             aInf.SetOnWin( bOldOnWin );
                             if ( pPor->InSpaceGrp() && nSpaceAdd )
                                 nX += pPor->CalcSpacing( nSpaceAdd, aInf );
                             if( bWidth )
                             {
-                                pPor->SetLen(pPor->GetLen() + TextFrameIndex(1));
-                                aInf.SetLen( pPor->GetLen() );
                                 aInf.SetOnWin( false ); // no BULLETs!
-                                nTmp += pPor->GetTextSize( aInf ).Width();
+                                nTmp += pPor->GetCharWidth( aInf, nOfst + TextFrameIndex(1) );
                                 aInf.SetOnWin( bOldOnWin );
                                 if ( pPor->InSpaceGrp() && nSpaceAdd )
                                     nTmp += pPor->CalcSpacing(nSpaceAdd, aInf);
                                 pOrig->Width( nTmp - nX );
                             }
                         }
-                        pPor->SetLen( nOldLen );
 
                         // Shift the cursor with the right border width
                         // Note: nX remains positive because GetTextSize() also include the width of the right border
@@ -1101,18 +1095,14 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, TextFrameIndex const nOfst,
                     else
                     {
                         const bool bOldOnWin = aInf.OnWin();
-                        TextFrameIndex const nOldLen = pPor->GetLen();
-                        pPor->SetLen( TextFrameIndex(1) );
-                        aInf.SetLen( pPor->GetLen() );
                         SeekAndChg( aInf );
                         aInf.SetOnWin( false ); // no BULLETs!
                         aInf.SetKanaComp( pKanaComp );
                         aInf.SetKanaIdx( nKanaIdx );
-                        nTmp = pPor->GetTextSize( aInf ).Width();
+                        nTmp = pPor->GetCharWidth( aInf, nOfst );
                         aInf.SetOnWin( bOldOnWin );
                         if ( pPor->InSpaceGrp() && nSpaceAdd )
                             nTmp += pPor->CalcSpacing( nSpaceAdd, aInf );
-                        pPor->SetLen( nOldLen );
                     }
                     pOrig->Width( nTmp );
                 }

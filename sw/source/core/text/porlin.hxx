@@ -153,6 +153,8 @@ public:
     virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const;
     void CalcTextSize( const SwTextSizeInfo &rInfo );
 
+    virtual SwTwips GetCharWidth( const SwTextSizeInfo &rInfo, TextFrameIndex const nOfst ) const;
+
     // Output
     virtual void Paint( const SwTextPaintInfo &rInf ) const = 0;
     void PrePaint( const SwTextPaintInfo &rInf, const SwLinePortion *pLast ) const;

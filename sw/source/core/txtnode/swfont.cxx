@@ -1074,6 +1074,100 @@ Size SwSubFont::GetTextSize_( SwDrawTextInfo& rInf )
     return aTextSize;
 }
 
+tools::Long SwSubFont::GetCharWidth_( SwDrawTextInfo& rInf, TextFrameIndex const nOfst )
+{
+    // Robust: the font is supposed to be set already, but better safe than
+    // sorry...
+    if ( !pLastFont || pLastFont->GetOwner() != m_nFontCacheId ||
+         !IsSameInstance( rInf.GetpOut()->GetFont() ) )
+        ChgFnt( rInf.GetShell(), rInf.GetOut() );
+
+    SwDigitModeModifier aDigitModeModifier( rInf.GetOut(), rInf.GetFont()->GetLanguage() );
+
+    tools::Long nWidth = 0;
+    TextFrameIndex const nLn = rInf.GetLen() == TextFrameIndex(COMPLETE_STRING)
+            ? TextFrameIndex(rInf.GetText().getLength())
+            : rInf.GetLen();
+    rInf.SetLen( nLn );
+    if( IsCapital() && nLn )
+        nWidth = GetCapitalSize( rInf ).Width();
+    else
+    {
+        SV_STAT( nGetTextSize );
+        tools::Long nOldKern = rInf.GetKern();
+        const OUString oldText = rInf.GetText();
+        rInf.SetKern( CheckKerning() );
+        if ( !IsCaseMap() )
+            nWidth = pLastFont->GetCharWidth( rInf, nOfst );
+        else
+        {
+            const OUString aTmp = CalcCaseMap( rInf.GetText() );
+            const OUString oldStr = rInf.GetText();
+            bool bCaseMapLengthDiffers(aTmp.getLength() != oldStr.getLength());
+
+            if(bCaseMapLengthDiffers && rInf.GetLen())
+            {
+                // If the length of the original string and the CaseMapped one
+                // are different, it is necessary to handle the given text part as
+                // a single snippet since its size may differ, too.
+                TextFrameIndex const nOldIdx(rInf.GetIdx());
+                TextFrameIndex const nOldLen(rInf.GetLen());
+                const OUString aSnippet(oldStr.copy(sal_Int32(nOldIdx), sal_Int32(nOldLen)));
+                const OUString aNewText(CalcCaseMap(aSnippet));
+
+                rInf.SetText( aNewText );
+                rInf.SetIdx( TextFrameIndex(0) );
+                rInf.SetLen( TextFrameIndex(aNewText.getLength()) );
+
+                nWidth = pLastFont->GetCharWidth( rInf, nOfst );
+
+                rInf.SetIdx( nOldIdx );
+                rInf.SetLen( nOldLen );
+            }
+            else
+            {
+                rInf.SetText( aTmp );
+                nWidth = pLastFont->GetCharWidth( rInf, nOfst );
+            }
+
+            rInf.SetText(oldStr);
+        }
+        rInf.SetKern( nOldKern );
+        rInf.SetText(oldText);
+    }
+
+    if (TextFrameIndex(1) == rInf.GetLen()
+        && CH_TXT_ATR_FIELDSTART == rInf.GetText()[sal_Int32(rInf.GetIdx())])
+    {
+        assert(!"this is presumably dead code");
+        TextFrameIndex const nOldIdx(rInf.GetIdx());
+        TextFrameIndex const nOldLen(rInf.GetLen());
+        const OUString aNewText(CH_TXT_ATR_SUBST_FIELDSTART);
+        rInf.SetText( aNewText );
+        rInf.SetIdx( TextFrameIndex(0) );
+        rInf.SetLen( TextFrameIndex(aNewText.getLength()) );
+        nWidth = pLastFont->GetCharWidth( rInf, nOfst );
+        rInf.SetIdx( nOldIdx );
+        rInf.SetLen( nOldLen );
+    }
+    else if (TextFrameIndex(1) == rInf.GetLen()
+            && CH_TXT_ATR_FIELDEND == rInf.GetText()[sal_Int32(rInf.GetIdx())])
+    {
+        assert(!"this is presumably dead code");
+        TextFrameIndex const nOldIdx(rInf.GetIdx());
+        TextFrameIndex const nOldLen(rInf.GetLen());
+        const OUString aNewText(CH_TXT_ATR_SUBST_FIELDEND);
+        rInf.SetText( aNewText );
+        rInf.SetIdx( TextFrameIndex(0) );
+        rInf.SetLen( TextFrameIndex(aNewText.getLength()) );
+        nWidth = pLastFont->GetCharWidth( rInf, nOfst );
+        rInf.SetIdx( nOldIdx );
+        rInf.SetLen( nOldLen );
+    }
+
+    return nWidth;
+}
+
 void SwSubFont::DrawText_( SwDrawTextInfo &rInf, const bool bGrey )
 {
     rInf.SetGreyWave( bGrey );

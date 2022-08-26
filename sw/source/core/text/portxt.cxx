@@ -526,6 +526,17 @@ SwPosSize SwTextPortion::GetTextSize( const SwTextSizeInfo &rInf ) const
     return aSize;
 }
 
+SwTwips SwTextPortion::GetCharWidth( const SwTextSizeInfo &rInf, TextFrameIndex const nOfst ) const
+{
+    SwTwips nWidth = rInf.GetCharWidth(nOfst);
+    if( !GetJoinBorderWithPrev() )
+        nWidth += rInf.GetFont()->GetLeftBorderSpace();
+    if( !GetJoinBorderWithNext() )
+        nWidth += rInf.GetFont()->GetRightBorderSpace();
+
+    return nWidth;
+}
+
 void SwTextPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     if (rInf.OnWin() && TextFrameIndex(1) == rInf.GetLen()

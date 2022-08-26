@@ -256,6 +256,8 @@ public:
                                  TextFrameIndex nLen) const;
     inline SwPosSize GetTextSize( const OUString &rText ) const;
 
+    SwTwips GetCharWidth( TextFrameIndex const nOfst ) const;
+
     TextFrameIndex GetTextBreak( const tools::Long nLineWidth,
                             const TextFrameIndex nMaxLen,
                             const sal_uInt16 nComp,

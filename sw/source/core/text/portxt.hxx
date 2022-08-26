@@ -39,6 +39,7 @@ public:
     virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const override;
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
     virtual tools::Long CalcSpacing( tools::Long nSpaceAdd, const SwTextSizeInfo &rInf ) const override;
+    virtual SwTwips GetCharWidth( const SwTextSizeInfo &rInfo, TextFrameIndex const nOfst ) const override;
 
     // Counts the spaces for justified paragraph
     TextFrameIndex GetSpaceCnt(const SwTextSizeInfo &rInf, TextFrameIndex& rCnt) const;

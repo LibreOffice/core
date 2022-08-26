@@ -1822,6 +1822,127 @@ TextFrameIndex SwFntObj::GetModelPositionForViewPoint(SwDrawTextInfo &rInf)
     return nCnt;
 }
 
+tools::Long SwFntObj::GetCharWidth( SwDrawTextInfo& rInf, TextFrameIndex const nOfst )
+{
+    tools::Long nWidth = 0;
+
+    TextFrameIndex nLn = nOfst - rInf.GetIdx();
+    if (nLn == TextFrameIndex(COMPLETE_STRING))
+        nLn = TextFrameIndex(rInf.GetText().getLength());
+
+    // be sure to have the correct layout mode at the printer
+    if ( m_pPrinter )
+    {
+        m_pPrinter->SetLayoutMode( rInf.GetOut().GetLayoutMode() );
+        m_pPrinter->SetDigitLanguage( rInf.GetOut().GetDigitLanguage() );
+    }
+
+    if ( rInf.GetFrame() && nLn && rInf.SnapToGrid() && rInf.GetFont() &&
+         SwFontScript::CJK == rInf.GetFont()->GetActual() )
+    {
+        SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrame()->FindPageFrame()));
+        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() )
+        {
+            const SwDoc* pDoc = rInf.GetShell()->GetDoc();
+            const sal_uInt16 nGridWidth = GetGridWidth(*pGrid, *pDoc);
+
+            OutputDevice* pOutDev;
+
+            if ( m_pPrinter )
+            {
+                if( !m_pPrtFont->IsSameInstance( m_pPrinter->GetFont() ) )
+                    m_pPrinter->SetFont(*m_pPrtFont);
+                pOutDev = m_pPrinter;
+            }
+            else
+                pOutDev = rInf.GetpOut();
+
+            std::vector<sal_Int32> aKernArray;
+            GetTextArray(*pOutDev, rInf, aKernArray);
+            if (pGrid->IsSnapToChars())
+            {
+                sw::Justify::SnapToGrid(aKernArray, rInf.GetText(), sal_Int32(rInf.GetIdx()),
+                                  sal_Int32(rInf.GetLen()), nGridWidth, true);
+            }
+            else
+            {
+                // use 0 to calculate raw width without rInf.GetSpace().
+                sw::Justify::SnapToGridEdge(aKernArray, sal_Int32(rInf.GetLen()), nGridWidth, 0,
+                        rInf.GetKern());
+            }
+
+            nWidth = aKernArray[sal_Int32(nLn) - 1];
+            rInf.SetKanaDiff( 0 );
+            return nWidth;
+        }
+    }
+
+    const bool bCompress = rInf.GetKanaComp() && nLn &&
+                           rInf.GetFont() &&
+                           SwFontScript::CJK == rInf.GetFont()->GetActual() &&
+                           rInf.GetScriptInfo() &&
+                           rInf.GetScriptInfo()->CountCompChg() &&
+                           lcl_IsMonoSpaceFont( rInf.GetOut() );
+
+    OSL_ENSURE( !bCompress || ( rInf.GetScriptInfo() && rInf.GetScriptInfo()->
+            CountCompChg()), "Compression without info" );
+
+    // This is the part used e.g., for cursor travelling
+    // See condition for DrawText or DrawTextArray (bDirectPrint)
+    std::vector<sal_Int32> aKernArray;
+    if ( m_pPrinter && m_pPrinter.get() != rInf.GetpOut() )
+    {
+        if( !m_pPrtFont->IsSameInstance( m_pPrinter->GetFont() ) )
+            m_pPrinter->SetFont(*m_pPrtFont);
+
+        CreateScrFont( *rInf.GetShell(), rInf.GetOut() );
+        if( !GetScrFont()->IsSameInstance( rInf.GetOut().GetFont() ) )
+            rInf.GetOut().SetFont( *m_pScrFont );
+
+        GetTextArray(*m_pPrinter, rInf.GetText(), aKernArray,
+                     sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
+    }
+    else
+    {
+        if( !m_pPrtFont->IsSameInstance( rInf.GetOut().GetFont() ) )
+            rInf.GetOut().SetFont( *m_pPrtFont );
+
+        GetTextArray(rInf.GetOut(), rInf, aKernArray);
+    }
+
+    if (bCompress)
+    {
+        rInf.SetKanaDiff(rInf.GetScriptInfo()->Compress(aKernArray.data(), rInf.GetIdx(), rInf.GetLen(), rInf.GetKanaComp(),
+            o3tl::narrowing<sal_uInt16>(m_aFont.GetFontSize().Height()), lcl_IsFullstopCentered(rInf.GetOut())));
+    }
+    else
+        rInf.SetKanaDiff( 0 );
+
+    if (nLn)
+    {
+        nWidth = aKernArray[sal_Int32(nLn) - 1];
+
+        // Note that we can't simply use sal_Int(nLn) - 1 as nSpaceCount
+        // because a glyph may be made up of more than one characters.
+        sal_Int32 nSpaceCount = 0;
+        tools::Long nOldValue = aKernArray[0];
+
+        for(sal_Int32 i = 1; i < sal_Int32(nLn); ++i)
+        {
+            if (nOldValue != aKernArray[i])
+            {
+                ++nSpaceCount;
+                nOldValue = aKernArray[i];
+            }
+        }
+
+        if (rInf.GetKern())
+            nWidth += (nSpaceCount * rInf.GetKern());
+    }
+
+    return nWidth;
+}
+
 SwFntAccess::SwFntAccess( const void* & rnFontCacheId,
                 sal_uInt16 &rIndex, const void *pOwn, SwViewShell const *pSh,
                 bool bCheck ) :

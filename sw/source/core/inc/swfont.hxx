@@ -75,6 +75,7 @@ class SwSubFont final : public SvxFont
     sal_uInt16 GetHangingBaseline( SwViewShell const *pSh, const OutputDevice& rOut );
     Size GetTextSize_( SwDrawTextInfo& rInf );
     Size GetCapitalSize( SwDrawTextInfo& rInf );
+    tools::Long GetCharWidth_( SwDrawTextInfo& rInf, TextFrameIndex const nOfst );
     void DrawText_( SwDrawTextInfo &rInf, const bool bGrey );
     void DrawCapital( SwDrawTextInfo &rInf );
     void DrawStretchCapital( SwDrawTextInfo &rInf );
@@ -309,6 +310,9 @@ public:
 
     Size GetTextSize_( SwDrawTextInfo& rInf )
         { rInf.SetFont( this ); return m_aSub[m_nActual].GetTextSize_( rInf ); }
+
+    tools::Long GetCharWidth_( SwDrawTextInfo& rInf, TextFrameIndex const nOfst )
+        { rInf.SetFont( this ); return m_aSub[m_nActual].GetCharWidth_( rInf, nOfst ); }
 
     TextFrameIndex GetTextBreak( SwDrawTextInfo const & rInf, tools::Long nTextWidth );
 

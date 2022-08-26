@@ -414,6 +414,27 @@ SwPosSize SwTextSizeInfo::GetTextSize() const
     return SwPosSize(m_pFnt->GetTextSize_( aDrawInf ));
 }
 
+SwTwips SwTextSizeInfo::GetCharWidth( TextFrameIndex const nOfst ) const
+{
+    const SwScriptInfo& rSI =
+                     const_cast<SwParaPortion*>(GetParaPortion())->GetScriptInfo();
+
+    // in some cases, compression is not allowed or suppressed for
+    // performance reasons
+    sal_uInt16 nComp =( SwFontScript::CJK == GetFont()->GetActual() &&
+                    rSI.CountCompChg() &&
+                    ! IsMulti() ) ?
+                    GetKanaComp() :
+                                0 ;
+
+    SwDrawTextInfo aDrawInf( m_pVsh, *m_pOut, &rSI, *m_pText, m_nIdx, m_nLen );
+    aDrawInf.SetFrame( m_pFrame );
+    aDrawInf.SetFont( m_pFnt );
+    aDrawInf.SetSnapToGrid( SnapToGrid() );
+    aDrawInf.SetKanaComp( nComp );
+    return SwTwips(m_pFnt->GetCharWidth_( aDrawInf, nOfst ));
+}
+
 void SwTextSizeInfo::GetTextSize( const SwScriptInfo* pSI, const TextFrameIndex nIndex,
                                 const TextFrameIndex nLength, const sal_uInt16 nComp,
                                 sal_uInt16& nMinSize, sal_uInt16& nMaxSizeDiff,
