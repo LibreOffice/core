@@ -1355,7 +1355,7 @@ SwXDocumentIndex::getAnchor()
         SwPaM aPaM(*pIdx);
         aPaM.Move( fnMoveForward, GoInContent );
         aPaM.SetMark();
-        aPaM.GetPoint()->nNode = *pIdx->GetNode().EndOfSectionNode();
+        aPaM.GetPoint()->Assign( *pIdx->GetNode().EndOfSectionNode() );
         aPaM.Move( fnMoveBackward, GoInContent );
         xRet = SwXTextRange::CreateXTextRange(*pSectionFormat->GetDoc(),
             *aPaM.GetMark(), aPaM.GetPoint());
@@ -1729,10 +1729,10 @@ SwXDocumentIndexMark::setMarkEntry(const OUString& rIndexEntry)
         aPam.SetMark();
         if(pTextMark->End())
         {
-            aPam.GetPoint()->nContent = *pTextMark->End();
+            aPam.GetPoint()->SetContent( *pTextMark->End() );
         }
         else
-            ++aPam.GetPoint()->nContent;
+            aPam.GetPoint()->AdjustContent(1);
 
         m_pImpl->ReplaceTOXMark(*pType, aMark, aPam);
     }
@@ -1954,11 +1954,11 @@ SwXDocumentIndexMark::getAnchor()
     aPam.SetMark();
     if(pTextMark->End())
     {
-        aPam.GetPoint()->nContent = *pTextMark->End();
+        aPam.GetPoint()->SetContent( *pTextMark->End() );
     }
     else
     {
-        ++aPam.GetPoint()->nContent;
+        aPam.GetPoint()->AdjustContent(1);
     }
     const uno::Reference< frame::XModel > xModel =
         m_pImpl->m_pDoc->GetDocShell()->GetBaseModel();
@@ -2090,11 +2090,11 @@ SwXDocumentIndexMark::setPropertyValue(
         aPam.SetMark();
         if(pTextMark->End())
         {
-            aPam.GetPoint()->nContent = *pTextMark->End();
+            aPam.GetPoint()->SetContent(*pTextMark->End());
         }
         else
         {
-            ++aPam.GetPoint()->nContent;
+            aPam.GetPoint()->AdjustContent(1);
         }
 
         m_pImpl->ReplaceTOXMark(*pType, aMark, aPam);
