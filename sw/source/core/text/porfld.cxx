@@ -1071,6 +1071,9 @@ void SwTextFrame::StopAnimation( OutputDevice* pOut )
  */
 SwCombinedPortion::SwCombinedPortion( const OUString &rText )
     : SwFieldPortion( rText )
+    , aWidth{ static_cast<sal_uInt16>(0),
+                static_cast<sal_uInt16>(0),
+                static_cast<sal_uInt16>(0) }
     , nUpPos(0)
     , nLowPos(0)
     , nProportion(55)
