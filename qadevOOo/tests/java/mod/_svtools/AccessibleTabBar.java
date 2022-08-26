@@ -125,8 +125,6 @@ public class AccessibleTabBar extends TestCase {
             closer.close(true);
         } catch (com.sun.star.util.CloseVetoException e) {
             log.println("Couldn't close document " + e.getMessage());
-        } catch (NullPointerException e) {
-            log.println("Couldn't close document " + e.getMessage());
         }
     }
 }
