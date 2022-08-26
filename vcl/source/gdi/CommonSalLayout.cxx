@@ -26,6 +26,7 @@
 #include <vcl/unohelp.hxx>
 #include <vcl/font/Feature.hxx>
 #include <vcl/font/FeatureParser.hxx>
+#include <vcl/svapp.hxx>
 
 #include <ImplLayoutArgs.hxx>
 #include <TextLayoutCache.hxx>
@@ -638,19 +639,47 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
     return true;
 }
 
-void GenericSalLayout::GetCharWidths(std::vector<DeviceCoordinate>& rCharWidths) const
+void GenericSalLayout::GetCharWidths(std::vector<DeviceCoordinate>& rCharWidths, const OUString& rStr) const
 {
     const int nCharCount = mnEndCharPos - mnMinCharPos;
 
     rCharWidths.clear();
     rCharWidths.resize(nCharCount, 0);
 
+    css::uno::Reference<css::i18n::XBreakIterator> xBreak;
+    if (!rStr.isEmpty())
+        xBreak = mxBreak.is() ? mxBreak : vcl::unohelper::CreateBreakIterator();
+
+    //FIXME(khaled): get from rArgs.maLanguageTag
+    auto aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
+
     for (auto const& aGlyphItem : m_GlyphItems)
     {
-        const int nIndex = aGlyphItem.charPos() - mnMinCharPos;
-        if (nIndex >= nCharCount)
+        if (aGlyphItem.charPos() > mnEndCharPos)
             continue;
-        rCharWidths[nIndex] += aGlyphItem.newWidth();
+        if (xBreak.is() && aGlyphItem.charCount() > 1)
+        {
+            sal_Int32 nDone;
+            sal_Int32 nCount = 0;
+            sal_Int32 nPos = aGlyphItem.charPos();
+
+            while (nPos < aGlyphItem.charPos() + aGlyphItem.charCount())
+            {
+                nPos = xBreak->nextCharacters(rStr, nPos, aLocale,
+                    css::i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+                nCount++;
+            }
+
+            nPos = aGlyphItem.charPos();
+            for (int i = 0; i < nCount; i++)
+            {
+                rCharWidths[nPos - mnMinCharPos] += aGlyphItem.newWidth() / nCount;
+                nPos = xBreak->nextCharacters(rStr, nPos, aLocale,
+                    css::i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+            }
+        }
+        else
+            rCharWidths[aGlyphItem.charPos() - mnMinCharPos] += aGlyphItem.newWidth();
     }
 }
 
@@ -665,7 +694,7 @@ void GenericSalLayout::ApplyDXArray(const double* pDXArray, const sal_Bool* pKas
     std::unique_ptr<double[]> const pNewCharWidths(new double[nCharCount]);
 
     // Get the natural character widths (i.e. before applying DX adjustments).
-    GetCharWidths(aOldCharWidths);
+    GetCharWidths(aOldCharWidths, {});
 
     // Calculate the character widths after DX adjustments.
     for (int i = 0; i < nCharCount; ++i)
