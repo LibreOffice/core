@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65c4b375_77fd4240",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-08-26T08:20:21Z",
+      "side": 1,
+      "message": "I see crash in online, added some comment - what I think is the reason (tested on non debug build)",
+      "revId": "8d23625c25b819c28883a1fbb0c919785397042b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49228844_01fd598a",
+        "filename": "sw/source/ui/config/optload.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-08-26T08:20:21Z",
+      "side": 1,
+      "message": "in this class we should keep shared_ptr as member to keep it alive",
+      "revId": "8d23625c25b819c28883a1fbb0c919785397042b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0692d442_6d3b7d7c",
+        "filename": "sw/source/ui/frmdlg/cption.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-08-26T08:20:21Z",
+      "side": 1,
+      "message": "pSet has to be a member of some class, later inside SfxSingleTabDialogController it is used only by inner pointer (pSet.get()) so shared ptr is destroyed after this block",
+      "revId": "8d23625c25b819c28883a1fbb0c919785397042b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
