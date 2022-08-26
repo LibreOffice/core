@@ -339,10 +339,6 @@ public class DesktopTools
         {
             System.out.println("Couldn't close document");
         }
-        catch (NullPointerException e)
-        {
-            System.out.println("Couldn't close document");
-        }
         catch (com.sun.star.beans.PropertyVetoException e)
         {
             System.out.println("Couldn't close document");
