@@ -314,11 +314,11 @@ private:
 class XclExpDV : public XclExpRecord, protected XclExpRoot
 {
 public:
-    explicit            XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle );
+    explicit            XclExpDV( const XclExpRoot& rRoot, sal_uInt32 nScHandle );
     virtual             ~XclExpDV() override;
 
     /** Returns the core handle of the validation data. */
-    sal_uLong        GetScHandle() const { return mnScHandle; }
+    sal_uInt32          GetScHandle() const { return mnScHandle; }
 
     /** Inserts a new cell range into the cell range list. */
     void                InsertCellRange( const ScRange& rPos );
@@ -346,7 +346,7 @@ private:
     XclTokenArrayRef    mxTokArr2;      /// Formula for second condition.
     OUString            msFormula2;     /// OOXML Formula for second condition.
     sal_uInt32          mnFlags;        /// Miscellaneous flags.
-    sal_uLong               mnScHandle;     /// The core handle for quick list search.
+    sal_uInt32          mnScHandle;     /// The core handle for quick list search.
 };
 
 /** This class contains the DV record list following the DVAL record. */
@@ -357,7 +357,7 @@ public:
     virtual             ~XclExpDval() override;
 
     /** Inserts the cell range into the range list of the DV record with the specified handle. */
-    void                InsertCellRange( const ScRange& rRange, sal_uLong nScHandle );
+    void                InsertCellRange( const ScRange& rRange, sal_uInt32 nScHandle );
 
     /** Writes the DVAL record and the DV record list. */
     virtual void        Save( XclExpStream& rStrm ) override;
@@ -365,7 +365,7 @@ public:
 
 private:
     /** Searches for or creates a XclExpDV record object with the specified handle. */
-    XclExpDV&           SearchOrCreateDv( sal_uLong nScHandle );
+    XclExpDV&           SearchOrCreateDv( sal_uInt32 nScHandle );
 
     /** Writes the body of the DVAL record. */
     virtual void        WriteBody( XclExpStream& rStrm ) override;
