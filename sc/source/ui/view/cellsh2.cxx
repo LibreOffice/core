@@ -852,7 +852,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     SCROW nCurY = GetViewData().GetCurY();
                     SCTAB nTab = GetViewData().GetTabNo();
                     ScAddress aCursorPos( nCurX, nCurY, nTab );
-                    sal_uLong nIndex = rDoc.GetAttr(
+                    sal_uInt32 nIndex = rDoc.GetAttr(
                                 nCurX, nCurY, nTab, ATTR_VALIDDATA )->GetValue();
                     if ( nIndex )
                     {

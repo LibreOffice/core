@@ -1413,12 +1413,12 @@ struct ValDataTestParams
     OUString aErrorTitle;
     OUString aErrorMessage;
     ScValidErrorStyle eErrorStyle;
-    sal_uLong nExpectedIndex;
+    sal_uInt32 nExpectedIndex;
 
     ValDataTestParams( ScValidationMode eMode, ScConditionMode eOp,
                        const OUString& aExpr1, const OUString& aExpr2, ScDocument& rDoc,
                        const ScAddress& aPos, const OUString& aETitle, const OUString& aEMsg,
-                       ScValidErrorStyle eEStyle, sal_uLong nIndex ):
+                       ScValidErrorStyle eEStyle, sal_uInt32 nIndex ):
                             eValMode(eMode), eCondOp(eOp), aStrVal1(aExpr1),
                             aStrVal2(aExpr2), rDocument(rDoc), aPosition(aPos),
                             aErrorTitle(aETitle), aErrorMessage(aEMsg),

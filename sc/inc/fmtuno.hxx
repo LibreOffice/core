@@ -189,7 +189,7 @@ private:
 public:
 
                             ScTableValidationObj() = delete;
-                            ScTableValidationObj(const ScDocument& rDoc, sal_uLong nKey,
+                            ScTableValidationObj(const ScDocument& rDoc, sal_uInt32 nKey,
                                                 const formula::FormulaGrammar::Grammar eGrammar);
     virtual                 ~ScTableValidationObj() override;
 

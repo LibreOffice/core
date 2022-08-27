@@ -1116,11 +1116,11 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
             {
                 // Copy validity to the new document
 
-                sal_uLong nNewIndex = 0;
+                sal_uInt32 nNewIndex = 0;
                 ScValidationDataList* pSrcList = pSrcDoc->GetValidationList();
                 if ( pSrcList )
                 {
-                    sal_uLong nOldIndex = static_cast<const SfxUInt32Item*>(pSrcItem)->GetValue();
+                    sal_uInt32 nOldIndex = static_cast<const SfxUInt32Item*>(pSrcItem)->GetValue();
                     const ScValidationData* pOldData = pSrcList->GetData( nOldIndex );
                     if ( pOldData )
                         nNewIndex = pDestDoc->AddValidationEntry( *pOldData );

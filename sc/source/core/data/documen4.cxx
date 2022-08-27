@@ -878,7 +878,7 @@ void ScDocument::SetCondFormList( ScConditionalFormatList* pList, SCTAB nTab )
         maTabs[nTab]->SetCondFormList(pList);
 }
 
-const ScValidationData* ScDocument::GetValidationEntry( sal_uLong nIndex ) const
+const ScValidationData* ScDocument::GetValidationEntry( sal_uInt32 nIndex ) const
 {
     if ( pValidationList )
         return pValidationList->GetData( nIndex );

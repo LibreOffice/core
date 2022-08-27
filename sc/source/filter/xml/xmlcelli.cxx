@@ -791,7 +791,7 @@ void ScXMLTableRowCellContext::SetContentValidation( const ScRange& rScRange )
     if( !aValidation.sBaseCellAddress.isEmpty() )
         aScValidationData.SetSrcString( aValidation.sBaseCellAddress );
 
-    sal_uLong nIndex = pDoc->AddValidationEntry( aScValidationData );
+    sal_uInt32 nIndex = pDoc->AddValidationEntry( aScValidationData );
 
     ScPatternAttr aPattern( pDoc->GetPool() );
     aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALIDDATA, nIndex ) );

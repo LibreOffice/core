@@ -1867,7 +1867,7 @@ public:
 
     void                                    SetCondFormList( ScConditionalFormatList* pList, SCTAB nTab );
     SC_DLLPUBLIC sal_uLong                  AddValidationEntry( const ScValidationData& rNew );
-    SC_DLLPUBLIC const ScValidationData*    GetValidationEntry( sal_uLong nIndex ) const;
+    SC_DLLPUBLIC const ScValidationData*    GetValidationEntry( sal_uInt32 nIndex ) const;
 
     SC_DLLPUBLIC ScConditionalFormatList*   GetCondFormList( SCTAB nTab ) const;
 
